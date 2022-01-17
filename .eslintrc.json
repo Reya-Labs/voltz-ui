@@ -23,7 +23,18 @@
     "@typescript-eslint/no-explicit-any": "error",
     "no-shadow": "off",
     "@typescript-eslint/no-shadow": ["error"],
-    "no-console": ["error", { "allow": ["warn", "error"] }]
+    "no-console": ["error", { "allow": ["warn", "error"] }],
+    "react/jsx-filename-extension": [2, { "extensions": [".ts", ".tsx"] }],
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "**/*.test.ts",
+          "**/*.spec.ts",
+          "src/setupTests.ts"
+        ]
+      }
+    ]
   },
   "overrides": [
     {
