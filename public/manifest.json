@@ -1,0 +1,11 @@
+{
+  "short_name": "Voltz UI",
+  "name": "Voltz UI",
+  "icons": [
+
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

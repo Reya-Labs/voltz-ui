@@ -23,5 +23,15 @@
     "no-shadow": "off",
     "@typescript-eslint/no-shadow": ["error"],
     "no-console": ["error", { "allow": ["warn", "error"] }]
-  }
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/*.stories.*"
+      ],
+      "rules": {
+        "import/no-anonymous-default-export": "off"
+      }
+    }
+  ]
 }
