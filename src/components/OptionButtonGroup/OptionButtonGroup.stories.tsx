@@ -14,7 +14,9 @@ export default {
 } as ComponentMeta<typeof OptionButtonGroup>;
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: ComponentStory<typeof OptionButtonGroup> = (args) => <OptionButtonGroup {...args} />;
+const Template: ComponentStory<typeof OptionButtonGroup> = (args) => (
+  <OptionButtonGroup {...args} />
+);
 
 export const Basic = Template.bind({});
 Basic.args = {

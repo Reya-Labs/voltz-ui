@@ -17,6 +17,4 @@ export default {
 const Template: ComponentStory<typeof Slider> = (args) => <Slider {...args} />;
 
 export const Basic = Template.bind({});
-Basic.args = {
-
-};
+Basic.args = {};

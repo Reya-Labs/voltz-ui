@@ -27,7 +27,10 @@ Secondary.args = {
   children: 'APE',
 };
 
-const LabelTemplate: ComponentStory<typeof Button> = withLabel((args) => <Button {...args} />, 'hello');
+const LabelTemplate: ComponentStory<typeof Button> = withLabel(
+  (args) => <Button {...args} />,
+  'hello',
+);
 
 export const PrimaryWithLabel = LabelTemplate.bind({});
 PrimaryWithLabel.args = {

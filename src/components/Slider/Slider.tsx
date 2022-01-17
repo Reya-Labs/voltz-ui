@@ -7,9 +7,7 @@ import { colors } from '@theme';
 export type SliderProps = MuiSliderProps;
 
 const Slider: React.FunctionComponent<SliderProps> = ({ ...props }) => {
-  return (
-    <MuiSlider {...props} />
-  );
+  return <MuiSlider {...props} />;
 };
 
 export default styled(Slider)(({ theme }) => ({

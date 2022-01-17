@@ -6,11 +6,11 @@
   "scripts": {
     "build": "node scripts/build.js",
     "build-storybook": "build-storybook",
-    "eslint": "eslint 'src/**/*.ts'",
-    "eslint:fix": "eslint --fix 'src/**/*.ts'",
+    "eslint": "eslint 'src/**/*.{ts,tsx}'",
+    "eslint:fix": "eslint --fix 'src/**/*.{ts,tsx}'",
     "prepare": "husky install",
-    "prettier": "prettier 'src/**/*.ts'",
-    "prettier:fix": "prettier --write 'src/**/*.ts'",
+    "prettier": "prettier 'src/**/*.{ts,tsx}'",
+    "prettier:fix": "prettier --write 'src/**/*.{ts,tsx}'",
     "release": "semantic-release",
     "start": "node scripts/start.js",
     "storybook": "start-storybook -p 6006",
@@ -19,7 +19,7 @@
     "chromatic": "npx chromatic --project-token=e40b8c3e3eea"
   },
   "lint-staged": {
-    "src/**/*.ts": [
+    "src/**/*.{ts,tsx}": [
       "eslint --fix"
     ]
   },
@@ -113,6 +113,8 @@
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@mui/material": "^5.2.8",
+    "@mui/system": "^5.2.8",
+    "eslint-config-react-app": "^7.0.0",
     "luxon": "^2.3.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -160,10 +162,9 @@
     "css-minimizer-webpack-plugin": "^3.2.0",
     "dotenv": "^10.0.0",
     "dotenv-expand": "^5.1.0",
-    "eslint": "^8.7.0",
+    "eslint": "7.32.0",
     "eslint-config-airbnb": "18.2.1",
     "eslint-config-prettier": "8.3.0",
-    "eslint-config-react-app": "^7.0.0",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "4.0.0",

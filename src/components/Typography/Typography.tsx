@@ -7,9 +7,7 @@ import { colors } from '@theme';
 export type TypographyProps = MuiTypographyProps;
 
 const Typography: React.FunctionComponent<TypographyProps> = ({ ...props }) => {
-  return (
-    <MuiTypography {...props} />
-  );
+  return <MuiTypography {...props} />;
 };
 
 export default styled(Typography)(({ theme }) => ({

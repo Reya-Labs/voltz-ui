@@ -7,9 +7,7 @@ import { colors } from '@theme';
 export type InputProps = MuiInputProps;
 
 const Input: React.FunctionComponent<InputProps> = ({ ...props }) => {
-  return (
-    <MuiInput {...props} />
-  );
+  return <MuiInput {...props} />;
 };
 
 export default styled(Input)(({ theme }) => ({

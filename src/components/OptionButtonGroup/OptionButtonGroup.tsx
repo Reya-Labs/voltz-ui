@@ -10,7 +10,10 @@ export type OptionButtonGroupProps = {
   onChange: (option: string) => void;
 };
 
-const OptionButtonGroup: React.FunctionComponent<OptionButtonGroupProps> = ({ options, onChange }) => {
+const OptionButtonGroup: React.FunctionComponent<OptionButtonGroupProps> = ({
+  options,
+  onChange,
+}) => {
   const [activeOption, setOption] = useState(options[0]);
   const handleChange = (_event: React.MouseEvent<HTMLElement, MouseEvent>, value: string) => {
     setOption(value);
@@ -18,11 +21,7 @@ const OptionButtonGroup: React.FunctionComponent<OptionButtonGroupProps> = ({ op
   };
 
   return (
-    <ToggleButtonGroup
-      value={activeOption}
-      exclusive
-      onChange={handleChange}
-    >
+    <ToggleButtonGroup value={activeOption} exclusive onChange={handleChange}>
       {options.map((option: string) => (
         <ToggleButton key={option} value={option}>
           {option}
