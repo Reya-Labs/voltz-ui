@@ -4,3 +4,5 @@ yarn-error.log
 .npmrc
 .yalc
 yalc.lock
+storybook-static
+build-storybook.log
