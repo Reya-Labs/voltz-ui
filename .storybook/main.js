@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
   stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
   addons: [
@@ -18,6 +20,8 @@ module.exports = {
       test: /\.(sa|sc|c)ss$/,
       use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
     });
+    config.resolve.alias['@theme'] = path.resolve(path.dirname(__dirname), 'src/theme');
+    config.resolve.alias['@components'] = path.resolve(path.dirname(__dirname), 'src/components');
     return config;
   },
 };
