@@ -1,6 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
+import withLabel from '../withLabel/withLabel';
 import Button from './Button';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
@@ -23,5 +24,12 @@ Primary.args = {
 
 export const Secondary = Template.bind({});
 Secondary.args = {
+  children: 'APE',
+};
+
+const LabelTemplate: ComponentStory<typeof Button> = withLabel((args) => <Button {...args} />, 'hello');
+
+export const PrimaryWithLabel = LabelTemplate.bind({});
+PrimaryWithLabel.args = {
   children: 'APE',
 };

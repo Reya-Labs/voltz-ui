@@ -31,5 +31,5 @@ HeadingTwo.args = {
 export const Body = Template.bind({});
 Body.args = {
   children: 'Body',
-  variant: 'body',
+  variant: 'body1',
 };
