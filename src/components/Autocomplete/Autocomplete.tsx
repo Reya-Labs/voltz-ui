@@ -6,7 +6,7 @@ import MuiAutocomplete, {
 
 import { colors } from '@theme';
 
-export type AutocompleteProps = MuiAutocompleteProps<{}, true, true, true>;
+export type AutocompleteProps = MuiAutocompleteProps<Record<string, unknown>, true, true, true>;
 
 const Autocomplete: React.FunctionComponent<AutocompleteProps> = ({ ...props }) => {
   return <MuiAutocomplete {...props} />;
