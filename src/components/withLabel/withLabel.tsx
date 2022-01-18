@@ -1,6 +1,9 @@
 import React from 'react';
 
-const withLabel = <T,>(WrappedComponent: React.ComponentType<T>, label: React.ReactElement) => {
+const withLabel = <T,>(
+  WrappedComponent: React.ComponentType<T>,
+  label: React.ReactElement | string,
+) => {
   const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
   const ComponentWithLabel = (props: T) => {
