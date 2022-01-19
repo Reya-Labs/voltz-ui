@@ -1,9 +1,4 @@
-export { default as Autocomplete } from './Autocomplete/Autocomplete';
-export { default as Button } from './Button/Button';
-export { default as Card } from './Card/Card';
-export { default as Input } from './Input/Input';
-export { default as IntegerInput } from './IntegerInput/IntegerInput';
-export { default as OptionButtonGroup } from './OptionButtonGroup/OptionButtonGroup';
-export { default as Slider } from './Slider/Slider';
-export { default as TextField } from './TextField/TextField';
-export { default as Typography } from './Typography/Typography';
+export * from './atomic';
+export * from './composite';
+export * from './interface';
+export { default as withLabel } from './withLabel/withLabel';
