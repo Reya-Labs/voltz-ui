@@ -3,8 +3,8 @@ import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
 
 export type MaturityInformationProps = {
-  startDate: DateTime | null;
-  endDate: DateTime | null;
+  startDate?: DateTime;
+  endDate?: DateTime;
 };
 
 const MaturityInformation: React.FunctionComponent<MaturityInformationProps> = ({

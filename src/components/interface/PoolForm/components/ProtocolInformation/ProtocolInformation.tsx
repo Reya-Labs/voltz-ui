@@ -3,9 +3,9 @@ import Box from '@mui/material/Box';
 
 export type ProtocolInformationProps = {
   mode: 'liquidity-provider' | 'fixed-trader' | 'variable-trader';
-  protocol: string | null;
-  fixedApr: number | null;
-  variableApr: number | null;
+  protocol?: string;
+  fixedApr?: number;
+  variableApr?: number;
 };
 
 const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = ({

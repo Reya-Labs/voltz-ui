@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import withLabel from '../withLabel/withLabel';
+import withLabel from '../../withLabel/withLabel';
 import Button from './Button';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export

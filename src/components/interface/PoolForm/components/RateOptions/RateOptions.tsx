@@ -3,9 +3,9 @@ import Box from '@mui/material/Box';
 
 export type RateOptionsProps = {
   mode: 'liquidity-provider' | 'fixed-trader' | 'variable-trader';
-  defaultFixedLow?: number | null;
-  defaultFixedHigh?: number | null;
-  defaultLeverage?: number | null;
+  defaultFixedLow?: number;
+  defaultFixedHigh?: number;
+  defaultLeverage?: number;
   fixedLow?: number;
   fixedHigh?: number;
   leverage?: number;

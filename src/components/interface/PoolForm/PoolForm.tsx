@@ -15,16 +15,16 @@ import {
 export type PoolFormProps = {
   mode: 'liquidity-provider' | 'fixed-trader' | 'variable-trader';
   onChangeMode: (mode: string) => void;
-  protocol: string;
-  fixedApr: number | null;
-  variableApr: number | null;
-  startDate: DateTime | null;
-  endDate: DateTime | null;
-  defaultFixedLow?: number | null;
-  defaultFixedHigh?: number | null;
-  defaultLeverage?: number | null;
-  defaultMargin?: number | null;
-  defaultPartialCollateralization?: boolean | null;
+  protocol?: string;
+  fixedApr?: number;
+  variableApr?: number;
+  startDate?: DateTime;
+  endDate?: DateTime;
+  defaultFixedLow?: number;
+  defaultFixedHigh?: number;
+  defaultLeverage?: number;
+  defaultMargin?: number;
+  defaultPartialCollateralization?: boolean;
   maxMargin?: number;
   fixedLow?: number;
   fixedHigh?: number;
