@@ -27,6 +27,8 @@
     "paths": {
       "@theme": ["src/theme"],
       "@components/*": ["src/components"],
+      "@hooks": ["src/hooks"],
+      "@utilities": ["src/utilities"],
       "@routes": ["src/routes"]
     },
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
