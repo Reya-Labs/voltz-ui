@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled } from '@mui/system';
-import MuiInput, { InputProps as MuiInputProps } from '@mui/material/Input';
+import MuiInput, { FilledInputProps as MuiInputProps } from '@mui/material/FilledInput';
 
 import { colors } from '@theme';
 
@@ -11,5 +11,5 @@ const Input: React.FunctionComponent<InputProps> = ({ ...props }) => {
 };
 
 export default styled(Input)(({ theme }) => ({
-  color: colors.apeBlueGreenLight,
+  color: colors.vzBlueGreenLight,
 }));

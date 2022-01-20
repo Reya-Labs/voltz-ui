@@ -1,17 +1,31 @@
 import React from 'react';
+import FormControl from '@mui/material/FormControl';
 
-const withLabel = <T,>(
-  WrappedComponent: React.ComponentType<T>,
-  label: React.ReactElement | string,
-) => {
+import { InputLabel } from '../atomic';
+
+const withLabel = <T,>(WrappedComponent: React.ComponentType<T>) => {
   const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
+  type ComponentWithLabelProps = T & { label?: React.ReactElement | string };
 
-  const ComponentWithLabel = (props: T) => {
+  const ComponentWithLabel = ({ label, ...props }: ComponentWithLabelProps) => {
+    if (!label) {
+      return <WrappedComponent {...(props as T)} />;
+    }
+
+    if (React.isValidElement(label)) {
+      return (
+        <FormControl>
+          {label}
+          <WrappedComponent {...(props as T)} />
+        </FormControl>
+      );
+    }
+
     return (
-      <>
-        {label}
+      <FormControl>
+        <InputLabel>{label}</InputLabel>
         <WrappedComponent {...(props as T)} />
-      </>
+      </FormControl>
     );
   };
 

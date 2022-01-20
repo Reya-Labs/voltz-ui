@@ -2,7 +2,9 @@ import React from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
 
+import { Agents, VzMode } from '@theme';
 import { MaturityInformation } from '@components/composite';
+import { calculateNotionalAmount } from './utilities';
 import {
   MarginAmount,
   NotionalAmount,
@@ -12,9 +14,8 @@ import {
   SubmitPoolFormButton,
 } from './components';
 
-export type PoolFormProps = {
-  mode: 'liquidity-provider' | 'fixed-trader' | 'variable-trader';
-  onChangeMode: (mode: string) => void;
+export type PoolFormProps = VzMode & {
+  onChangeMode: (mode: Agents) => void;
   protocol?: string;
   fixedApr?: number;
   variableApr?: number;
@@ -36,7 +37,7 @@ export type PoolFormProps = {
   onChangeLeverage: (value: number) => void;
   onChangePartialCollateralization: (value: boolean) => void;
   onChangeMargin: (value: number) => void;
-  onSubmit: (values: unknown) => void;
+  onSubmit: (values: Record<string, unknown>) => void;
 };
 
 const PoolForm: React.FunctionComponent<PoolFormProps> = ({
@@ -65,13 +66,21 @@ const PoolForm: React.FunctionComponent<PoolFormProps> = ({
   onChangeMargin,
   onSubmit,
 }) => {
-  const notional = 0;
+  const notional = calculateNotionalAmount(margin, leverage);
   const maxNotional = 0;
   const handleMaxNotional = () => {};
-  const handleSubmit = () => {};
+  const handleSubmit = () =>
+    onSubmit({
+      mode,
+      fixedLow,
+      fixedHigh,
+      leverage,
+      margin,
+      partialCollateralization,
+    });
 
   return (
-    <Box sx={{ height: 300 }}>
+    <Box sx={{ padding: 3 }}>
       <ProtocolInformation
         mode={mode}
         protocol={protocol}

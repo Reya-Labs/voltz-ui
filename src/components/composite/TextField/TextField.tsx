@@ -1,15 +1,18 @@
 import React from 'react';
-import { styled } from '@mui/system';
 import MuiTextField, { TextFieldProps as MuiTextFieldProps } from '@mui/material/TextField';
 
-import { colors } from '@theme';
+import { Input } from '../../atomic';
 
 export type TextFieldProps = MuiTextFieldProps;
 
 const TextField: React.FunctionComponent<TextFieldProps> = ({ ...props }) => {
-  return <MuiTextField {...props} />;
+  return (
+    <MuiTextField
+      {...props}
+      inputProps={{ inputComponent: Input }}
+      InputLabelProps={{ shrink: true }}
+    />
+  );
 };
 
-export default styled(TextField)(({ theme }) => ({
-  color: colors.apeBlueGreenLight,
-}));
+export default TextField;

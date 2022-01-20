@@ -12,6 +12,6 @@ const Button: React.FunctionComponent<ButtonProps> = ({ ...props }) => {
 
 export default styled(Button)(({ theme }) => ({
   borderRadius: 4,
-  backgroundColor: colors.apeBlueGreenDark,
-  color: colors.apeBlueGreenLight,
+  backgroundColor: colors.vzBlueGreenDark,
+  color: colors.vzBlueGreenLight,
 }));
