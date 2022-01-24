@@ -1,17 +1,32 @@
 import React from 'react';
+import { SxProps, Theme } from '@mui/system';
+import chroma from 'chroma-js';
 import MuiButton, { ButtonProps as MuiButtonProps } from '@mui/material/Button';
-import { styled } from '@mui/system';
 
-import { colors } from '@theme';
+import { AgentProps } from '@theme';
 
-export type ButtonProps = MuiButtonProps;
+export type ButtonProps = MuiButtonProps & AgentProps;
 
-const Button: React.FunctionComponent<ButtonProps> = ({ ...props }) => {
-  return <MuiButton {...props} />;
+const Button: React.FunctionComponent<ButtonProps> = ({ agent, ...props }) => {
+  const styleOverrides: SxProps<Theme> = {
+    borderRadius: 1,
+  };
+  const agentStyleOverrides = (): SxProps<Theme> => {
+    if (!agent) {
+      return {};
+    }
+
+    return {
+      backgroundColor: (theme) => theme.agent[agent].dark,
+      color: (theme) => theme.agent[agent].light,
+      '&:hover': {
+        backgroundColor: (theme) => chroma(theme.agent[agent].dark).brighten(1).hex(),
+        color: (theme) => chroma(theme.agent[agent].light).brighten(1).hex(),
+      },
+    };
+  };
+
+  return <MuiButton {...props} sx={{ ...styleOverrides, ...agentStyleOverrides() }} />;
 };
 
-export default styled(Button)(({ theme }) => ({
-  borderRadius: 4,
-  backgroundColor: colors.vzBlueGreenDark,
-  color: colors.vzBlueGreenLight,
-}));
+export default Button;

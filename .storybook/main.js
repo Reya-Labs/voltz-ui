@@ -27,4 +27,7 @@ module.exports = {
     config.resolve.alias['@routes'] = path.resolve(path.dirname(__dirname), 'src/routes');
     return config;
   },
+  features: {
+    emotionAlias: false,
+  },
 };

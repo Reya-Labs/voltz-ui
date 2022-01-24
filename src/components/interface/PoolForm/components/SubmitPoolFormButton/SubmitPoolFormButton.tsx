@@ -1,18 +1,18 @@
 import React from 'react';
 
-import { Agents, VzMode } from '@theme';
+import { Agents, AgentProps } from '@theme';
 import { Button } from '@components/atomic';
 
-export type SubmitPoolFormButtonProps = VzMode & {
+export type SubmitPoolFormButtonProps = AgentProps & {
   onSubmit: () => void;
 };
 
 const SubmitPoolFormButton: React.FunctionComponent<SubmitPoolFormButtonProps> = ({
-  mode,
+  agent,
   onSubmit,
 }) => {
   const submitLabel = (): string | null => {
-    switch (mode) {
+    switch (agent) {
       case Agents.LIQUIDITY_PROVIDER:
         return 'Provide Liquidity';
 
@@ -27,7 +27,11 @@ const SubmitPoolFormButton: React.FunctionComponent<SubmitPoolFormButtonProps> =
     }
   };
 
-  return <Button onClick={onSubmit}>{submitLabel()}</Button>;
+  return (
+    <Button onClick={onSubmit} agent={agent}>
+      {submitLabel()}
+    </Button>
+  );
 };
 
 export default SubmitPoolFormButton;

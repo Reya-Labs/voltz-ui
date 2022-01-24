@@ -2,10 +2,10 @@ import React from 'react';
 import isUndefined from 'lodash/isUndefined';
 import Box from '@mui/material/Box';
 
-import { Agents, VzMode } from '@theme';
+import { Agents, AgentProps } from '@theme';
 import { TextField } from '@components/composite';
 
-export type RateOptionsProps = VzMode & {
+export type RateOptionsProps = AgentProps & {
   defaultFixedLow?: number;
   defaultFixedHigh?: number;
   defaultLeverage?: number;
@@ -18,7 +18,7 @@ export type RateOptionsProps = VzMode & {
 };
 
 const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
-  mode,
+  agent,
   defaultFixedLow,
   defaultFixedHigh,
   defaultLeverage,
@@ -45,7 +45,7 @@ const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
 
   return (
     <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-around' }}>
-      {mode === Agents.LIQUIDITY_PROVIDER && (
+      {agent === Agents.LIQUIDITY_PROVIDER && (
         <>
           <TextField
             label="Fixed low"

@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, SetStateAction } from 'react';
 
-const useStateMemo = <T>(input: T): [T, (value: T) => void] => {
+const useStateMemo = <T>(input: T): [T, (value: SetStateAction<T>) => void] => {
   const [value, setValue] = useState(input);
 
   useEffect(() => {

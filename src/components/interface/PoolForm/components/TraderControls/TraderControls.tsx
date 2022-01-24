@@ -2,35 +2,35 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import isUndefined from 'lodash/isUndefined';
 
-import { Agents, VzMode } from '@theme';
-import { OptionButtonGroup } from '@components/composite';
+import { Agents, AgentProps } from '@theme';
+import { ToggleButtonGroup } from '@components/composite';
 
-export type TraderControlsProps = VzMode & {
-  onChangeMode: (mode: Agents) => void;
+export type TraderControlsProps = AgentProps & {
+  onChangeAgent: (mode: Agents) => void;
   defaultPartialCollateralization?: boolean;
   partialCollateralization?: boolean;
   onChangePartialCollateralization: (value: boolean) => void;
 };
 
 const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
-  mode,
-  onChangeMode,
+  agent,
+  onChangeAgent,
   defaultPartialCollateralization,
   partialCollateralization,
   onChangePartialCollateralization,
 }) => {
-  if (mode === Agents.LIQUIDITY_PROVIDER) {
+  if (!agent || agent === Agents.LIQUIDITY_PROVIDER) {
     return null;
   }
 
-  const modeOptionTitles = {
+  const agentOptionTitles = {
     [Agents.FIXED_TRADER]: 'FIXED',
     [Agents.VARIABLE_TRADER]: 'VARIABLE',
   };
   const handleChangeMode = (option: string) => {
-    for (let [key, value] of Object.entries(modeOptionTitles)) {
+    for (const [key, value] of Object.entries(agentOptionTitles)) {
       if (value === option) {
-        onChangeMode(key as Agents);
+        onChangeAgent(key as Agents);
       }
     }
   };
@@ -47,13 +47,14 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-      <OptionButtonGroup
-        options={Object.values(modeOptionTitles)}
-        option={modeOptionTitles[mode]}
-        defaultOption={modeOptionTitles[Agents.FIXED_TRADER]}
-        onChange={handleChangeMode}
+      <ToggleButtonGroup
+        options={Object.values(agentOptionTitles)}
+        option={agentOptionTitles[agent]}
+        defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
+        onChangeOption={handleChangeMode}
+        agent={agent}
       />
-      <OptionButtonGroup
+      <ToggleButtonGroup
         options={Object.values(partialCollateralizationOptionTitles)}
         option={
           partialCollateralizationValue
@@ -61,7 +62,8 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
             : partialCollateralizationOptionTitles.NO
         }
         defaultOption={partialCollateralizationOptionTitles.YES}
-        onChange={handleChangePartialCollateralization}
+        onChangeOption={handleChangePartialCollateralization}
+        agent={agent}
       />
     </Box>
   );

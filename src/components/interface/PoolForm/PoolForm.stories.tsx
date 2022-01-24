@@ -12,7 +12,7 @@ export default {
 
 type PoolFormWrapperProps = Omit<
   PoolFormProps,
-  | 'onChangeMode'
+  | 'onChangeAgent'
   | 'onChangeFixedLow'
   | 'onChangeFixedHigh'
   | 'onChangeLeverage'
@@ -21,7 +21,7 @@ type PoolFormWrapperProps = Omit<
 >;
 
 const PoolFormWrapper: React.FunctionComponent<PoolFormWrapperProps> = ({ ...props }) => {
-  const [mode, setMode] = useStateMemo<PoolFormProps['mode']>(props.mode);
+  const [agent, setAgent] = useStateMemo<PoolFormProps['agent']>(props.agent);
   const [fixedLow, setFixedLow] = useStateMemo<PoolFormProps['fixedLow']>(props.fixedLow);
   const [fixedHigh, setFixedHigh] = useStateMemo<PoolFormProps['fixedHigh']>(props.fixedHigh);
   const [leverage, setLeverage] = useStateMemo<PoolFormProps['leverage']>(props.leverage);
@@ -34,8 +34,8 @@ const PoolFormWrapper: React.FunctionComponent<PoolFormWrapperProps> = ({ ...pro
   return (
     <PoolForm
       {...props}
-      mode={mode}
-      onChangeMode={setMode}
+      agent={agent}
+      onChangeAgent={setAgent}
       fixedLow={fixedLow}
       fixedHigh={fixedHigh}
       leverage={leverage}
