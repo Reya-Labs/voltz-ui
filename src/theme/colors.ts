@@ -10,6 +10,9 @@ const colors = {
   vzPurpleLight: '#E5E1F9',
   vzPurpleDark: '#1F1D2D',
   vzPurpleDarker: '#1B1929',
+  vzRedDark: '#100008',
+  vzPink: '#FF4AA9',
+  vzYellowDark: '#191406',
 };
 
 export default colors;

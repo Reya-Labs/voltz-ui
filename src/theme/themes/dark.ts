@@ -5,6 +5,17 @@ import colors from '../colors';
 import { Agents } from '../types';
 
 const dark = createTheme({
+  palette: {
+    mode: 'dark',
+    error: {
+      main: colors.vzPink,
+      dark: colors.vzRedDark,
+    },
+    warning: {
+      main: colors.vzGoldLight,
+      dark: colors.vzYellowDark,
+    },
+  },
   agent: {
     [Agents.FIXED_TRADER]: {
       light: colors.vzBlueGreenLight,
