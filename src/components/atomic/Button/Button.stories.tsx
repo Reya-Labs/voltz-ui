@@ -14,8 +14,3 @@ export const Primary = Template.bind({});
 Primary.args = {
   children: 'APE',
 };
-
-export const Secondary = Template.bind({});
-Secondary.args = {
-  children: 'APE',
-};

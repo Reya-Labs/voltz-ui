@@ -26,7 +26,9 @@ const Button: React.FunctionComponent<ButtonProps> = ({ agent, ...props }) => {
     };
   };
 
-  return <MuiButton {...props} sx={{ ...styleOverrides, ...agentStyleOverrides() }} />;
+  return (
+    <MuiButton disableRipple {...props} sx={{ ...styleOverrides, ...agentStyleOverrides() }} />
+  );
 };
 
 export default Button;
