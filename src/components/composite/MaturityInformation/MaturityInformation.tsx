@@ -20,7 +20,7 @@ const MaturityInformation: React.FunctionComponent<MaturityInformationProps> = (
         <Typography>Some date</Typography>
         <Typography>90%</Typography>
       </Box>
-      <Slider />
+      <Slider controlled />
     </Box>
   );
 };

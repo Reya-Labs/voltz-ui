@@ -1,5 +1,5 @@
 import React from 'react';
-import { SxProps, Theme } from '@mui/system';
+import { SystemStyleObject, Theme } from '@mui/system';
 import MuiSlider, { SliderProps as MuiSliderProps } from '@mui/material/Slider';
 
 export type SliderProps = MuiSliderProps & {
@@ -13,26 +13,39 @@ const Slider: React.FunctionComponent<SliderProps> = ({
   ...props
 }) => {
   const isDisabled = controlled ? controlled : disabled;
-  const colorStyleOverrides = (): SxProps<Theme> => {
-    if (!color) {
+  const controlledStyleOverrides = (): SystemStyleObject<Theme> => {
+    if (!controlled) {
       return {};
     }
 
     return {
       '& .MuiSlider-thumb': {
         display: 'none',
-      },
+      } as const,
+    };
+  };
+  const colorStyleOverrides = (): SystemStyleObject<Theme> => {
+    if (!color) {
+      return {};
+    }
+
+    return {
       '& .MuiSlider-track': {
         color: `${color}.light`,
       },
       '& .MuiSlider-rail': {
-        color: `${color}.dark`,
+        color: `${color}.main`,
       },
     };
   };
 
   return (
-    <MuiSlider {...props} color={color} disabled={isDisabled} sx={{ ...colorStyleOverrides() }} />
+    <MuiSlider
+      {...props}
+      color={color}
+      disabled={isDisabled}
+      sx={{ ...colorStyleOverrides(), ...controlledStyleOverrides() }}
+    />
   );
 };
 
