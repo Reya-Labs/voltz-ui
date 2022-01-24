@@ -7,6 +7,10 @@ import { Agents } from '../types';
 const dark = createTheme({
   palette: {
     mode: 'dark',
+    primary: {
+      light: colors.vzPurpleLight,
+      main: colors.vzGreyDarkish,
+    },
     error: {
       main: colors.vzPink,
       dark: colors.vzRedDark,
