@@ -1,4 +1,3 @@
-import chroma from 'chroma-js';
 import { createTheme } from '@mui/material/styles';
 
 import colors from '../colors';
@@ -12,8 +11,8 @@ const dark = createTheme({
       main: colors.vzGreyDarkish,
     },
     error: {
-      main: colors.vzPink,
-      dark: colors.vzRedDark,
+      main: colors.wildStrawberry.base,
+      dark: colors.wildStrawberry.darken040,
     },
     warning: {
       main: colors.vzGoldLight,
