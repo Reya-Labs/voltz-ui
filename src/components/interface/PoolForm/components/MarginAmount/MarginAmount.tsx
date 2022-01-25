@@ -2,7 +2,7 @@ import React from 'react';
 import isUndefined from 'lodash/isUndefined';
 import Box from '@mui/material/Box';
 
-import { TextField } from '@components/composite';
+import { IntegerField } from '@components/composite';
 
 export type MarginAmountProps = {
   protocol?: string;
@@ -26,7 +26,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
   };
 
   return (
-    <TextField
+    <IntegerField
       label="Margin amount"
       type="number"
       value={value}

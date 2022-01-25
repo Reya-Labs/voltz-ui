@@ -3,7 +3,7 @@ import isUndefined from 'lodash/isUndefined';
 import Box from '@mui/material/Box';
 
 import { Agents, AgentProps } from '@theme';
-import { TextField } from '@components/composite';
+import { IntegerField } from '@components/composite';
 
 export type RateOptionsProps = AgentProps & {
   defaultFixedLow?: number;
@@ -47,14 +47,14 @@ const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
     <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-around' }}>
       {agent === Agents.LIQUIDITY_PROVIDER && (
         <>
-          <TextField
+          <IntegerField
             label="Fixed low"
             type="number"
             variant="filled"
             value={fixedLowValue}
             onChange={handleChangeFixedLow}
           />
-          <TextField
+          <IntegerField
             label="Fixed high"
             type="number"
             variant="filled"
@@ -63,7 +63,7 @@ const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
           />
         </>
       )}
-      <TextField
+      <IntegerField
         label="Leverage"
         type="number"
         variant="filled"
