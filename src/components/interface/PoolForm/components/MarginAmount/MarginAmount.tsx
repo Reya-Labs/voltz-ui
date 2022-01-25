@@ -27,8 +27,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
 
   return (
     <TextField
-      variant="filled"
-      label="Margin Amount"
+      label="Margin amount"
       type="number"
       value={value}
       onChange={handleChange}

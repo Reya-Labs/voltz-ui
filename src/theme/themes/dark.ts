@@ -19,6 +19,9 @@ const dark = createTheme({
       main: colors.vzGoldLight,
       dark: colors.vzYellowDark,
     },
+    background: {
+      default: colors.vzGreyDarker,
+    },
   },
   agent: {
     [Agents.FIXED_TRADER]: {
@@ -32,6 +35,42 @@ const dark = createTheme({
     [Agents.LIQUIDITY_PROVIDER]: {
       light: colors.vzBlueGreenLight,
       dark: colors.vzBlueGreenDark,
+    },
+  },
+  components: {
+    MuiInputBase: {
+      styleOverrides: {
+        input: ({ ownerState, theme }) => {
+          const color = () => {
+            if (ownerState.disabled) {
+              return colors.vzGreyDark;
+            }
+
+            if (ownerState.error) {
+              return theme.palette.error.main;
+            }
+
+            return colors.vzGrey;
+          };
+          const borderColor = () => {
+            if (ownerState.disabled) {
+              return 'transparent';
+            }
+
+            if (ownerState.error) {
+              return theme.palette.error.main;
+            }
+
+            return colors.vzGreyDark;
+          };
+
+          return {
+            backgroundColor: colors.vzGreyDarkest,
+            borderColor: borderColor(),
+            color: color(),
+          };
+        },
+      },
     },
   },
 });

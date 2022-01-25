@@ -1,15 +1,26 @@
 import React from 'react';
-import { styled } from '@mui/system';
-import MuiInput, { FilledInputProps as MuiInputProps } from '@mui/material/FilledInput';
+import { SystemStyleObject, Theme } from '@mui/system';
+import InputBase, { InputBaseProps } from '@mui/material/InputBase';
 
-import { colors } from '@theme';
-
-export type InputProps = MuiInputProps;
+export type InputProps = InputBaseProps;
 
 const Input: React.FunctionComponent<InputProps> = ({ ...props }) => {
-  return <MuiInput {...props} />;
+  const commonOverrides: SystemStyleObject<Theme> = {
+    'label + &': {
+      marginTop: (theme) => theme.spacing(3),
+    },
+    '& .MuiInputBase-input': {
+      position: 'relative',
+      width: '100%',
+      borderWidth: 1,
+      borderStyle: 'solid',
+      borderRadius: 2,
+      fontSize: 24,
+      padding: (theme) => theme.spacing(2),
+    },
+  };
+
+  return <InputBase {...props} sx={{ ...commonOverrides }} />;
 };
 
-export default styled(Input)(({ theme }) => ({
-  color: colors.vzBlueGreenLight,
-}));
+export default Input;
