@@ -13,6 +13,9 @@ const Slider: React.FunctionComponent<SliderProps> = ({
   ...props
 }) => {
   const isDisabled = controlled ? controlled : disabled;
+  const commonOverrides: SystemStyleObject<Theme> = {
+    borderRadius: 0,
+  };
   const controlledStyleOverrides = (): SystemStyleObject<Theme> => {
     if (!controlled) {
       return {};
@@ -44,7 +47,7 @@ const Slider: React.FunctionComponent<SliderProps> = ({
       {...props}
       color={color}
       disabled={isDisabled}
-      sx={{ ...colorStyleOverrides(), ...controlledStyleOverrides() }}
+      sx={{ ...commonOverrides, ...colorStyleOverrides(), ...controlledStyleOverrides() }}
     />
   );
 };
