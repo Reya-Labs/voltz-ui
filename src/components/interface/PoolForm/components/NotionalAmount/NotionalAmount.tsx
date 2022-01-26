@@ -14,16 +14,7 @@ const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
   maxNotional,
   onMaxNotional,
 }) => {
-  return (
-    <IntegerField
-      variant="filled"
-      label="Notional amount"
-      type="number"
-      value={notional}
-      sx={{ width: '100%' }}
-      disabled
-    />
-  );
+  return <IntegerField label="Notional amount" value={notional} sx={{ width: '100%' }} disabled />;
 };
 
 export default NotionalAmount;

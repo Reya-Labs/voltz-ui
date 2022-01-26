@@ -1,8 +1,7 @@
-import { Agents } from '@theme';
-import { Button } from '@components/atomic';
+import { Typography } from '@components/atomic';
 
 const Home = () => {
-  return <Button agent={Agents.FIXED_TRADER}>Home</Button>;
+  return <Typography variant="h1">Home</Typography>;
 };
 
 export default Home;

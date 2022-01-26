@@ -19,6 +19,7 @@ module.exports = {
     config.module.rules.push({
       test: /\.(sa|sc|c)ss$/,
       use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
+      include: path.resolve(__dirname, '../src'),
     });
     config.resolve.alias['@theme'] = path.resolve(path.dirname(__dirname), 'src/theme');
     config.resolve.alias['@components'] = path.resolve(path.dirname(__dirname), 'src/components');
@@ -30,4 +31,5 @@ module.exports = {
   features: {
     emotionAlias: false,
   },
+  staticDirs: ['../src'],
 };

@@ -47,29 +47,15 @@ const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
     <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-around' }}>
       {agent === Agents.LIQUIDITY_PROVIDER && (
         <>
-          <IntegerField
-            label="Fixed low"
-            type="number"
-            variant="filled"
-            value={fixedLowValue}
-            onChange={handleChangeFixedLow}
-          />
+          <IntegerField label="Fixed low" value={fixedLowValue} onChange={handleChangeFixedLow} />
           <IntegerField
             label="Fixed high"
-            type="number"
-            variant="filled"
             value={fixedHighValue}
             onChange={handleChangeFixedHigh}
           />
         </>
       )}
-      <IntegerField
-        label="Leverage"
-        type="number"
-        variant="filled"
-        value={leverageValue}
-        onChange={handleChangeLeverage}
-      />
+      <IntegerField label="Leverage" value={leverageValue} onChange={handleChangeLeverage} />
     </Box>
   );
 };

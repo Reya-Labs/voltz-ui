@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
+import './fonts/PixelOperator/PixelOperatorMono8.ttf';
+import './index.css';
 import { ThemeProvider } from './theme';
 import { App } from './application';
 import reportWebVitals from './reportWebVitals';

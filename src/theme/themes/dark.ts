@@ -7,7 +7,7 @@ const dark = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      light: colors.vzPurpleLight,
+      light: colors.lavenderWeb.base,
       main: colors.vzGreyDarkish,
     },
     error: {
@@ -70,6 +70,22 @@ const dark = createTheme({
           };
         },
       },
+    },
+  },
+  typography: {
+    h1: {
+      fontFamily: 'PixelOperatorMono8',
+      fontWeight: 'bold',
+      fontSize: 32,
+      lineHeight: '160%',
+      color: colors.lavenderWeb.base,
+    },
+    h2: {
+      fontFamily: 'PixelOperatorMono8',
+      fontWeight: 'bold',
+      fontSize: 32,
+      lineHeight: '160%',
+      color: colors.lavenderWeb.base,
     },
   },
 });

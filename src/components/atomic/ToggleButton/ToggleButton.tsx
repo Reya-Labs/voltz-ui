@@ -1,5 +1,5 @@
 import React from 'react';
-import { SxProps, Theme } from '@mui/system';
+import { SystemStyleObject, Theme } from '@mui/system';
 import chroma from 'chroma-js';
 import MuiToggleButton, {
   ToggleButtonProps as MuiToggleButtonProps,
@@ -14,10 +14,10 @@ const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
   selected,
   ...props
 }) => {
-  const styleOverrides: SxProps<Theme> = {
+  const styleOverrides: SystemStyleObject<Theme> = {
     borderRadius: 1,
   };
-  const agentStyleOverrides = (): SxProps<Theme> => {
+  const agentStyleOverrides = (): SystemStyleObject<Theme> => {
     if (!agent) {
       return {};
     }
@@ -40,7 +40,7 @@ const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
       },
     };
   };
-  const stateStyleOverrides = (): SxProps<Theme> => {
+  const stateStyleOverrides = (): SystemStyleObject<Theme> => {
     if (!selected) {
       return {
         backgroundColor: colors.vzGreyDarker,
