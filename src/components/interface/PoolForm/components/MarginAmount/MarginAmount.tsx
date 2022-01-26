@@ -28,7 +28,6 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
   return (
     <IntegerField
       label="Margin amount"
-      type="number"
       value={value}
       onChange={handleChange}
       sx={{ width: '100%' }}

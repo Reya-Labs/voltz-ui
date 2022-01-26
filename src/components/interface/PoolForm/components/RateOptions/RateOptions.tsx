@@ -44,7 +44,15 @@ const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
   };
 
   return (
-    <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-around' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        width: '100%',
+        justifyContent: agent === Agents.LIQUIDITY_PROVIDER ? 'space-around' : 'end',
+        '& > *:not(:last-child)': { marginRight: (theme) => theme.spacing(10) },
+        flexDirection: agent === Agents.LIQUIDITY_PROVIDER ? 'row' : 'column',
+      }}
+    >
       {agent === Agents.LIQUIDITY_PROVIDER && (
         <>
           <IntegerField label="Fixed low" value={fixedLowValue} onChange={handleChangeFixedLow} />

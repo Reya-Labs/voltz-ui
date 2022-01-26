@@ -1,4 +1,5 @@
 import React from 'react';
+import { DateTime, Duration } from 'luxon';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { useStateMemo } from '@hooks';
@@ -54,4 +55,10 @@ const PoolFormWrapper: React.FunctionComponent<PoolFormWrapperProps> = ({ ...pro
 const Template: ComponentStory<typeof PoolForm> = (args) => <PoolFormWrapper {...args} />;
 
 export const Basic = Template.bind({});
-Basic.args = {};
+Basic.args = {
+  protocol: 'aUSDC',
+  fixedApr: 5,
+  variableApr: 15,
+  startDate: DateTime.now().minus(Duration.fromObject({ weeks: 2 })),
+  endDate: DateTime.now().plus(Duration.fromObject({ weeks: 5 })),
+};

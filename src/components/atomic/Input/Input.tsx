@@ -2,16 +2,16 @@ import React from 'react';
 import { SystemStyleObject, Theme } from '@mui/system';
 import InputBase, { InputBaseProps } from '@mui/material/InputBase';
 
+import { withLabel } from '../../utilities';
+
 export type InputProps = InputBaseProps;
 
 const Input: React.FunctionComponent<InputProps> = ({ ...props }) => {
   const commonOverrides: SystemStyleObject<Theme> = {
-    'label + &': {
-      marginTop: (theme) => theme.spacing(3),
+    '&.MuiInputBase-root': {
+      width: '100%',
     },
     '& .MuiInputBase-input': {
-      position: 'relative',
-      width: '100%',
       borderWidth: 1,
       borderStyle: 'solid',
       borderRadius: 2,
@@ -23,4 +23,4 @@ const Input: React.FunctionComponent<InputProps> = ({ ...props }) => {
   return <InputBase {...props} sx={{ ...commonOverrides }} />;
 };
 
-export default Input;
+export default withLabel<InputProps>(Input);

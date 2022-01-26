@@ -4,11 +4,12 @@ import InputLabel from '@mui/material/InputLabel';
 import Box from '@mui/material/Box';
 import isEmpty from 'lodash/isEmpty';
 import upperCase from 'lodash/upperCase';
+import isString from 'lodash/isString';
 
 import { useUniqueId } from '@hooks';
 
 export type WithLabelProps = {
-  label?: string;
+  label?: React.ReactNode;
   error?: boolean;
 };
 
@@ -21,7 +22,13 @@ const withLabel = <T,>(WrappedComponent: React.FunctionComponent<T>) => {
     ...props
   }) => {
     const id = useUniqueId();
-    const upperCaseLabel = upperCase(label);
+    const renderLabel = () => {
+      if (isString(label)) {
+        return upperCase(label);
+      }
+
+      return label;
+    };
 
     if (isEmpty(label)) {
       return <WrappedComponent {...(props as T)} />;
@@ -36,10 +43,11 @@ const withLabel = <T,>(WrappedComponent: React.FunctionComponent<T>) => {
           sx={{
             position: 'relative',
             transform: 'none',
-            marginBottom: (theme) => theme.spacing(1),
+            marginTop: (theme) => theme.spacing(1),
+            marginBottom: (theme) => theme.spacing(2),
           }}
         >
-          {upperCaseLabel}
+          {renderLabel()}
         </InputLabel>
         <Box sx={{ width: '100%' }}>
           <WrappedComponent {...(props as T)} id={id} />

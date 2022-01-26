@@ -28,7 +28,7 @@ const SubmitPoolFormButton: React.FunctionComponent<SubmitPoolFormButtonProps> =
   };
 
   return (
-    <Button onClick={onSubmit} agent={agent}>
+    <Button size="large" onClick={onSubmit} agent={agent}>
       {submitLabel()}
     </Button>
   );

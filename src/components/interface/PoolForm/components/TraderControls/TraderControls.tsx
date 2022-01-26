@@ -46,8 +46,16 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        marginRight: (theme) => theme.spacing(4),
+        '& > *:not(:last-child)': { marginBottom: (theme) => theme.spacing(4) },
+      }}
+    >
       <ToggleButtonGroup
+        label="Rates"
         options={Object.values(agentOptionTitles)}
         option={agentOptionTitles[agent]}
         defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
@@ -55,6 +63,7 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
         agent={agent}
       />
       <ToggleButtonGroup
+        label="Partial collateralization"
         options={Object.values(partialCollateralizationOptionTitles)}
         option={
           partialCollateralizationValue

@@ -20,24 +20,21 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
     <Box
       sx={{
         display: 'flex',
-        '& .MuiBox-root': {
+        '& .MuiFormControl-root': {
           paddingRight: 3,
           paddingBottom: 3,
         },
       }}
     >
-      <Box>
-        <Typography>Protocol</Typography>
-        <Typography variant="body1">{protocol}</Typography>
-      </Box>
-      <Box>
-        <Typography>Fixed APR</Typography>
-        <Typography variant="body1">{fixedApr}%</Typography>
-      </Box>
-      <Box>
-        <Typography>Variable APR</Typography>
-        <Typography variant="body1">{variableApr}%</Typography>
-      </Box>
+      <Typography label="protocol" variant="h3">
+        {protocol}
+      </Typography>
+      <Typography label="fixed apr" variant="h3">
+        {fixedApr}%
+      </Typography>
+      <Typography label="variable apr" variant="h3">
+        {variableApr}%
+      </Typography>
     </Box>
   );
 };

@@ -87,8 +87,19 @@ const PoolForm: React.FunctionComponent<PoolFormProps> = ({
         fixedApr={fixedApr}
         variableApr={variableApr}
       />
-      <MaturityInformation startDate={startDate} endDate={endDate} />
-      <Box sx={{}}>
+      <Box
+        sx={{
+          marginBottom: (theme) => theme.spacing(4),
+        }}
+      >
+        <MaturityInformation label="Maturity" startDate={startDate} endDate={endDate} />
+      </Box>
+      <Box
+        sx={{
+          marginBottom: (theme) => theme.spacing(4),
+          display: 'flex',
+        }}
+      >
         <TraderControls
           agent={agent}
           onChangeAgent={onChangeAgent}
@@ -109,18 +120,30 @@ const PoolForm: React.FunctionComponent<PoolFormProps> = ({
           onChangeLeverage={onChangeLeverage}
         />
       </Box>
-      <MarginAmount
-        protocol={protocol}
-        defaultMargin={defaultMargin}
-        maxMargin={maxMargin}
-        margin={margin}
-        onChangeMargin={onChangeMargin}
-      />
-      <NotionalAmount
-        notional={notional}
-        maxNotional={maxNotional}
-        onMaxNotional={handleMaxNotional}
-      />
+      <Box
+        sx={{
+          marginBottom: (theme) => theme.spacing(4),
+        }}
+      >
+        <MarginAmount
+          protocol={protocol}
+          defaultMargin={defaultMargin}
+          maxMargin={maxMargin}
+          margin={margin}
+          onChangeMargin={onChangeMargin}
+        />
+      </Box>
+      <Box
+        sx={{
+          marginBottom: (theme) => theme.spacing(4),
+        }}
+      >
+        <NotionalAmount
+          notional={notional}
+          maxNotional={maxNotional}
+          onMaxNotional={handleMaxNotional}
+        />
+      </Box>
       <SubmitPoolFormButton agent={agent} onSubmit={handleSubmit} />
     </Box>
   );
