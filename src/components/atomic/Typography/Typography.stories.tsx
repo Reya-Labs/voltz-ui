@@ -10,6 +10,8 @@ export default {
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {
     backgroundColor: { control: 'color' },
+    label: { control: 'text' },
+    error: { control: 'boolean' },
   },
 } as ComponentMeta<typeof Typography>;
 

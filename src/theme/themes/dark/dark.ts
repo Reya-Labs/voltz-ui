@@ -71,6 +71,16 @@ const dark = createTheme({
         },
       },
     },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          fontFamily: 'PixelOperatorMono8',
+          fontSize: 12,
+          lineHeight: '14px',
+          color: colors.lavenderWeb.base,
+        },
+      },
+    },
   },
   typography: {
     h1: {
@@ -79,6 +89,7 @@ const dark = createTheme({
       fontSize: 32,
       lineHeight: '160%',
       color: colors.lavenderWeb.base,
+      marginLeft: -3,
     },
     h2: {
       fontFamily: 'PixelOperatorMono8',
@@ -86,6 +97,7 @@ const dark = createTheme({
       fontSize: 24,
       lineHeight: '120%',
       color: colors.lavenderWeb.base,
+      marginLeft: -2,
     },
     h3: {
       fontFamily: 'DM Sans',
@@ -100,6 +112,7 @@ const dark = createTheme({
       fontSize: 20,
       lineHeight: '130%',
       color: colors.lavenderWeb.base,
+      marginLeft: -2,
     },
     h5: {
       fontFamily: 'DM Sans',
@@ -114,6 +127,7 @@ const dark = createTheme({
       fontSize: 18,
       lineHeight: '130%',
       color: colors.lavenderWeb.base,
+      marginLeft: -1,
     },
     subtitle1: {
       fontFamily: 'PixelOperatorMono8',
@@ -121,6 +135,7 @@ const dark = createTheme({
       fontSize: 16,
       lineHeight: '140%',
       color: colors.lavenderWeb.base,
+      marginLeft: -1,
     },
     subtitle2: {
       fontFamily: 'DM Sans',
@@ -142,6 +157,7 @@ const dark = createTheme({
       fontSize: 16,
       lineHeight: '160%',
       color: colors.lavenderWeb.base,
+      marginLeft: -1,
     },
   },
 });
