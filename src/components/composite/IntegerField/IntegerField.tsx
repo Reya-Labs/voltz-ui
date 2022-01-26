@@ -7,9 +7,21 @@ export type IntegerFieldProps = Omit<MuiTextFieldProps, 'variant'>;
 const IntegerField: React.FunctionComponent<IntegerFieldProps> = ({
   label,
   disabled,
+  error,
+  value,
+  onChange,
   ...props
 }) => {
-  return <Input label={label} disabled={disabled} type="number" />;
+  return (
+    <Input
+      label={label}
+      disabled={disabled}
+      error={error}
+      value={value}
+      onChange={onChange}
+      type="number"
+    />
+  );
 };
 
 export default IntegerField;
