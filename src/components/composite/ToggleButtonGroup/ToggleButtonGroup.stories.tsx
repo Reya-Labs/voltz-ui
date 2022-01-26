@@ -6,6 +6,9 @@ import ToggleButtonGroup from './ToggleButtonGroup';
 export default {
   title: 'Composite/ToggleButtonGroup',
   component: ToggleButtonGroup,
+  argTypes: {
+    label: { control: 'text' },
+  },
 } as ComponentMeta<typeof ToggleButtonGroup>;
 
 const Template: ComponentStory<typeof ToggleButtonGroup> = (args) => (

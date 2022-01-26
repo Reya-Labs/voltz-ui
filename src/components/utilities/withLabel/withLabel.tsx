@@ -23,22 +23,24 @@ const withLabel = <T,>(WrappedComponent: React.FunctionComponent<T>) => {
     const id = useUniqueId();
     const upperCaseLabel = upperCase(label);
 
+    if (isEmpty(label)) {
+      return <WrappedComponent {...(props as T)} />;
+    }
+
     return (
       <FormControl sx={{ width: '100%' }}>
-        {!isEmpty(label) && (
-          <InputLabel
-            shrink
-            htmlFor={id}
-            error={error}
-            sx={{
-              position: 'relative',
-              transform: 'none',
-              marginBottom: (theme) => theme.spacing(1),
-            }}
-          >
-            {upperCaseLabel}
-          </InputLabel>
-        )}
+        <InputLabel
+          shrink
+          htmlFor={id}
+          error={error}
+          sx={{
+            position: 'relative',
+            transform: 'none',
+            marginBottom: (theme) => theme.spacing(1),
+          }}
+        >
+          {upperCaseLabel}
+        </InputLabel>
         <Box sx={{ width: '100%' }}>
           <WrappedComponent {...(props as T)} id={id} />
         </Box>

@@ -77,7 +77,7 @@ const dark = createTheme({
           fontFamily: 'PixelOperatorMono8',
           fontSize: 12,
           lineHeight: '14px',
-          color: colors.lavenderWeb.base,
+          color: colors.lavenderWeb.darken010,
         },
       },
     },

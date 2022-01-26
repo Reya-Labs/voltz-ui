@@ -4,6 +4,7 @@ import MuiToggleButtonGroup, {
 } from '@mui/material/ToggleButtonGroup';
 
 import { AgentProps } from '@theme';
+import { withLabel } from '../../utilities';
 import { ToggleButton } from '../../atomic';
 
 export type ToggleButtonGroupProps = MuiToggleButtonGroupProps &
@@ -38,4 +39,4 @@ const ToggleButtonGroup: React.FunctionComponent<ToggleButtonGroupProps> = ({
   );
 };
 
-export default ToggleButtonGroup;
+export default withLabel<ToggleButtonGroupProps>(ToggleButtonGroup);

@@ -11,10 +11,11 @@ export const parameters = {
       date: /Date$/,
     },
   },
+  layout: 'fullscreen',
 };
 
 addDecorator((story) => (
   <ThemeProvider>
-    <Background>{story()}</Background>
+    <Background sx={{ paddingRight: 2 }}>{story()}</Background>
   </ThemeProvider>
 ));
