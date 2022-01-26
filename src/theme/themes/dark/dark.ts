@@ -1,7 +1,7 @@
 import { createTheme } from '@mui/material/styles';
 
-import colors from '../colors';
-import { Agents } from '../types';
+import colors from '../../colors';
+import { Agents } from '../../types';
 
 const dark = createTheme({
   palette: {
@@ -83,7 +83,63 @@ const dark = createTheme({
     h2: {
       fontFamily: 'PixelOperatorMono8',
       fontWeight: 'bold',
-      fontSize: 32,
+      fontSize: 24,
+      lineHeight: '120%',
+      color: colors.lavenderWeb.base,
+    },
+    h3: {
+      fontFamily: 'DM Sans',
+      fontWeight: 'bold',
+      fontSize: 24,
+      lineHeight: '120%',
+      color: colors.lavenderWeb.base,
+    },
+    h4: {
+      fontFamily: 'PixelOperatorMono8',
+      fontWeight: 'bold',
+      fontSize: 20,
+      lineHeight: '130%',
+      color: colors.lavenderWeb.base,
+    },
+    h5: {
+      fontFamily: 'DM Sans',
+      fontWeight: 'bold',
+      fontSize: 16,
+      lineHeight: '130%',
+      color: colors.lavenderWeb.base,
+    },
+    h6: {
+      fontFamily: 'PixelOperatorMono8',
+      fontWeight: 'normal',
+      fontSize: 18,
+      lineHeight: '130%',
+      color: colors.lavenderWeb.base,
+    },
+    subtitle1: {
+      fontFamily: 'PixelOperatorMono8',
+      fontWeight: 'normal',
+      fontSize: 16,
+      lineHeight: '140%',
+      color: colors.lavenderWeb.base,
+    },
+    subtitle2: {
+      fontFamily: 'DM Sans',
+      fontWeight: 'normal',
+      fontSize: 16,
+      lineHeight: '160%',
+      color: colors.lavenderWeb.base,
+    },
+    body1: {
+      fontFamily: 'DM Sans',
+      fontWeight: 'normal',
+      fontSize: 16,
+      lineHeight: '160%',
+      color: colors.lavenderWeb.base,
+    },
+    body2: {
+      fontFamily: 'PixelOperatorMono8',
+      fontWeight: 'normal',
+      fontSize: 16,
       lineHeight: '160%',
       color: colors.lavenderWeb.base,
     },

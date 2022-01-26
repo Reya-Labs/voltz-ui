@@ -28,8 +28,50 @@ HeadingTwo.args = {
   variant: 'h2',
 };
 
-export const Body = Template.bind({});
-Body.args = {
-  children: 'Body',
+export const HeadingThree = Template.bind({});
+HeadingThree.args = {
+  children: 'Heading 3',
+  variant: 'h3',
+};
+
+export const HeadingFour = Template.bind({});
+HeadingFour.args = {
+  children: 'Heading 4',
+  variant: 'h4',
+};
+
+export const HeadingFive = Template.bind({});
+HeadingFive.args = {
+  children: 'Heading 5',
+  variant: 'h5',
+};
+
+export const HeadingSix = Template.bind({});
+HeadingSix.args = {
+  children: 'Heading 6',
+  variant: 'h6',
+};
+
+export const SubtitleOne = Template.bind({});
+SubtitleOne.args = {
+  children: 'Subtitle 1',
+  variant: 'subtitle1',
+};
+
+export const SubtitleTwo = Template.bind({});
+SubtitleTwo.args = {
+  children: 'Subtitle 2',
+  variant: 'subtitle2',
+};
+
+export const BodyOne = Template.bind({});
+BodyOne.args = {
+  children: 'Body 1',
   variant: 'body1',
+};
+
+export const BodyTwo = Template.bind({});
+BodyTwo.args = {
+  children: 'Body 2',
+  variant: 'body2',
 };
