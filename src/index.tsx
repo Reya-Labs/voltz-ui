@@ -4,6 +4,8 @@ import { BrowserRouter } from 'react-router-dom';
 
 import './fonts/PixelOperator/PixelOperatorMono8.ttf';
 import './fonts/PixelOperator/PixelOperatorMono8-Bold.ttf';
+import './fonts/PixelOperator/PixelOperatorMono.ttf';
+import './fonts/PixelOperator/PixelOperatorMono-Bold.ttf';
 import './fonts/DM_Sans/DMSans-Bold.ttf';
 import './fonts/DM_Sans/DMSans-BoldItalic.ttf';
 import './fonts/DM_Sans/DMSans-Italic.ttf';

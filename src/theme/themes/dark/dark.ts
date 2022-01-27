@@ -38,6 +38,23 @@ const dark = createTheme({
     },
   },
   components: {
+    MuiButtonBase: {
+      styleOverrides: {
+        root: {
+          fontFamily: 'PixelOperatorMono',
+        },
+      },
+    },
+    MuiToggleButtonGroup: {
+      styleOverrides: {
+        grouped: ({ theme }) => ({
+          fontFamily: 'PixelOperatorMono',
+          fontSize: 14,
+          lineHeight: '14px',
+          padding: theme.spacing(2),
+        }),
+      },
+    },
     MuiInputBase: {
       styleOverrides: {
         input: ({ ownerState, theme }) => {
@@ -75,7 +92,7 @@ const dark = createTheme({
     MuiInputLabel: {
       styleOverrides: {
         root: {
-          fontFamily: 'PixelOperatorMono8',
+          fontFamily: 'PixelOperatorMono',
           fontSize: 12,
           lineHeight: '14px',
           color: colors.lavenderWeb.darken010,
@@ -85,7 +102,7 @@ const dark = createTheme({
   },
   typography: {
     h1: {
-      fontFamily: 'PixelOperatorMono8',
+      fontFamily: 'PixelOperatorMono',
       fontWeight: 'bold',
       fontSize: 32,
       lineHeight: '160%',
@@ -93,7 +110,7 @@ const dark = createTheme({
       marginLeft: -3,
     },
     h2: {
-      fontFamily: 'PixelOperatorMono8',
+      fontFamily: 'PixelOperatorMono',
       fontWeight: 'bold',
       fontSize: 24,
       lineHeight: '120%',
@@ -108,7 +125,7 @@ const dark = createTheme({
       color: colors.lavenderWeb.base,
     },
     h4: {
-      fontFamily: 'PixelOperatorMono8',
+      fontFamily: 'PixelOperatorMono',
       fontWeight: 'bold',
       fontSize: 20,
       lineHeight: '130%',
@@ -123,7 +140,7 @@ const dark = createTheme({
       color: colors.lavenderWeb.base,
     },
     h6: {
-      fontFamily: 'PixelOperatorMono8',
+      fontFamily: 'PixelOperatorMono',
       fontWeight: 'normal',
       fontSize: 18,
       lineHeight: '130%',
@@ -131,7 +148,7 @@ const dark = createTheme({
       marginLeft: -1,
     },
     subtitle1: {
-      fontFamily: 'PixelOperatorMono8',
+      fontFamily: 'PixelOperatorMono',
       fontWeight: 'normal',
       fontSize: 16,
       lineHeight: '140%',
@@ -153,7 +170,7 @@ const dark = createTheme({
       color: colors.lavenderWeb.base,
     },
     body2: {
-      fontFamily: 'PixelOperatorMono8',
+      fontFamily: 'PixelOperatorMono',
       fontWeight: 'normal',
       fontSize: 16,
       lineHeight: '160%',
