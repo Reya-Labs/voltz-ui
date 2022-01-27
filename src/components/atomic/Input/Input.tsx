@@ -6,7 +6,28 @@ import { withLabel } from '../../utilities';
 
 export type InputProps = InputBaseProps;
 
-const Input: React.FunctionComponent<InputProps> = ({ ...props }) => {
+const Input: React.FunctionComponent<InputProps> = ({ size, ...props }) => {
+  const getFontSize = (_theme: Theme) => {
+    if (size === 'small') {
+      return 14;
+    }
+
+    return 24;
+  };
+  const getPadding = (): SystemStyleObject<Theme> => {
+    if (size === 'small') {
+      return {
+        padding: (theme) => theme.spacing(4),
+      };
+    }
+
+    return {
+      paddingTop: (theme) => theme.spacing(6),
+      paddingBottom: (theme) => theme.spacing(6),
+      paddingLeft: (theme) => theme.spacing(4),
+      paddingRight: (theme) => theme.spacing(4),
+    };
+  };
   const commonOverrides: SystemStyleObject<Theme> = {
     '&.MuiInputBase-root': {
       width: '100%',
@@ -15,8 +36,9 @@ const Input: React.FunctionComponent<InputProps> = ({ ...props }) => {
       borderWidth: 1,
       borderStyle: 'solid',
       borderRadius: 2,
-      fontSize: 24,
-      padding: (theme) => theme.spacing(2),
+      fontFamily: 'PixelOperatorMono8',
+      fontSize: getFontSize,
+      ...getPadding(),
     },
   };
 

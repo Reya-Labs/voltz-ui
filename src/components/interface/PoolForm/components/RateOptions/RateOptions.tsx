@@ -55,15 +55,26 @@ const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
     >
       {agent === Agents.LIQUIDITY_PROVIDER && (
         <>
-          <IntegerField label="Fixed low" value={fixedLowValue} onChange={handleChangeFixedLow} />
           <IntegerField
+            size="small"
+            label="Fixed low"
+            value={fixedLowValue}
+            onChange={handleChangeFixedLow}
+          />
+          <IntegerField
+            size="small"
             label="Fixed high"
             value={fixedHighValue}
             onChange={handleChangeFixedHigh}
           />
         </>
       )}
-      <IntegerField label="Leverage" value={leverageValue} onChange={handleChangeLeverage} />
+      <IntegerField
+        size="small"
+        label="Leverage"
+        value={leverageValue}
+        onChange={handleChangeLeverage}
+      />
     </Box>
   );
 };

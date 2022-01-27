@@ -5,6 +5,7 @@ import { Input } from '../../atomic';
 export type IntegerFieldProps = Omit<MuiTextFieldProps, 'variant'>;
 
 const IntegerField: React.FunctionComponent<IntegerFieldProps> = ({
+  size,
   label,
   disabled,
   error,
@@ -14,6 +15,7 @@ const IntegerField: React.FunctionComponent<IntegerFieldProps> = ({
 }) => {
   return (
     <Input
+      size={size}
       label={label}
       disabled={disabled}
       error={error}

@@ -4,6 +4,7 @@ import colors from '../../colors';
 import { Agents } from '../../types';
 
 const dark = createTheme({
+  spacing: 4,
   palette: {
     mode: 'dark',
     primary: {
