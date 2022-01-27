@@ -14,10 +14,18 @@ const Input: React.FunctionComponent<InputProps> = ({ size, ...props }) => {
 
     return 24;
   };
+  const getMinHeight = (theme: Theme) => {
+    if (size === 'small') {
+      return theme.spacing(8);
+    }
+
+    return theme.spacing(8);
+  };
   const getPadding = (): SystemStyleObject<Theme> => {
     if (size === 'small') {
       return {
-        padding: (theme) => theme.spacing(4),
+        padding: (theme) => theme.spacing(1),
+        paddingLeft: (theme) => theme.spacing(2),
       };
     }
 
@@ -36,8 +44,9 @@ const Input: React.FunctionComponent<InputProps> = ({ size, ...props }) => {
       borderWidth: 1,
       borderStyle: 'solid',
       borderRadius: 2,
-      fontFamily: 'PixelOperatorMono8',
       fontSize: getFontSize,
+      lineHeight: 14,
+      maxHeight: getMinHeight,
       ...getPadding(),
     },
   };

@@ -38,7 +38,7 @@ const dark = createTheme({
     },
   },
   components: {
-    MuiButtonBase: {
+    MuiButton: {
       styleOverrides: {
         root: {
           fontFamily: 'PixelOperatorMono',
@@ -82,6 +82,7 @@ const dark = createTheme({
           };
 
           return {
+            fontFamily: 'PixelOperatorMono',
             backgroundColor: colors.vzGreyDarkest,
             borderColor: borderColor(),
             color: color(),

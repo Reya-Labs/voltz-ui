@@ -16,9 +16,10 @@ const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
 }) => {
   const styleOverrides: SystemStyleObject<Theme> = {
     '&.MuiToggleButtonGroup-grouped': {
-      zindex: -1,
+      minHeight: (theme) => theme.spacing(8),
+      zindex: '-1',
       '&.Mui-selected': {
-        zIndex: 1,
+        zIndex: '1',
       },
       '&:not(:first-of-type)': {
         borderTopLeftRadius: 0,
