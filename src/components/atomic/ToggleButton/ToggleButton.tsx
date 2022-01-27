@@ -15,7 +15,26 @@ const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
   ...props
 }) => {
   const styleOverrides: SystemStyleObject<Theme> = {
-    borderRadius: 1,
+    '&.MuiToggleButtonGroup-grouped': {
+      zindex: -1,
+      '&.Mui-selected': {
+        zIndex: 1,
+      },
+      '&:not(:first-of-type)': {
+        borderTopLeftRadius: 0,
+        borderBottomLeftRadius: 0,
+        '&.Mui-selected': {
+          borderRadius: 1,
+        },
+      },
+      '&:not(:last-of-type)': {
+        borderTopRightRadius: 0,
+        borderBottomRightRadius: 0,
+        '&.Mui-selected': {
+          borderRadius: 1,
+        },
+      },
+    },
   };
   const agentStyleOverrides = (): SystemStyleObject<Theme> => {
     if (!agent) {
@@ -36,6 +55,9 @@ const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
         '&:hover': {
           backgroundColor: (theme) => chroma(theme.agent[agent].dark).brighten(1).hex(),
           color: (theme) => chroma(theme.agent[agent].light).brighten(1).hex(),
+        },
+        '&:not(:first-of-type)': {
+          borderColor: (theme) => theme.agent[agent].light,
         },
       },
     };
