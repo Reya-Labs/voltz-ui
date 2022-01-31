@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-viktor-dev-155026-authRole",
+      "UnauthRoleArn": "arn:aws:iam::031466723998:role/amplify-viktor-dev-155026-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::031466723998:role/amplify-viktor-dev-155026-authRole",
+      "Region": "eu-west-1",
+      "DeploymentBucketName": "amplify-viktor-dev-155026-deployment",
+      "UnauthRoleName": "amplify-viktor-dev-155026-unauthRole",
+      "StackName": "amplify-viktor-dev-155026",
+      "StackId": "arn:aws:cloudformation:eu-west-1:031466723998:stack/amplify-viktor-dev-155026/22b08050-82a5-11ec-875b-021e18630e35",
+      "AmplifyAppId": "d2jroq03hslynq"
+    },
+    "categories": {
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d2jroq03hslynq",
+          "type": "manual"
+        }
+      }
+    }
+  }
+}
