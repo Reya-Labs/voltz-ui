@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
+import Amplify from 'aws-amplify';
 
 import './fonts/PixelOperator/PixelOperatorMono8.ttf';
 import './fonts/PixelOperator/PixelOperatorMono8-Bold.ttf';
@@ -16,6 +17,7 @@ import './index.css';
 import { ThemeProvider } from './theme';
 import { App } from './application';
 import reportWebVitals from './reportWebVitals';
+import awsExports from './aws-exports';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -29,3 +31,4 @@ ReactDOM.render(
 );
 
 reportWebVitals();
+Amplify.configure(awsExports);
