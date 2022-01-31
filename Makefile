@@ -1,3 +1,5 @@
+.PHONY: build
+
 install:
 	yarn
 	npx husky add .husky/pre-commit "yarn lint-staged"
