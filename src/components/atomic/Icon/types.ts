@@ -1,10 +1,17 @@
 import SvgIcon from '@mui/material/SvgIcon';
 
-import { InterfaceAlertInformationCircle, InterfaceAlertWarningCircle } from './icons';
+import {
+  Ethereum,
+  InterfaceAlertInformationCircle,
+  InterfaceAlertWarningCircle,
+  Metamask,
+} from './icons';
 
-export type Icons = 'warning-circle' | 'information-circle';
+export type Icons = 'ethereum' | 'warning-circle' | 'information-circle' | 'metamask';
 
 export const iconMap: Record<Icons, typeof SvgIcon> = {
-  'information-circle': InterfaceAlertInformationCircle,
-  'warning-circle': InterfaceAlertWarningCircle,
+  ethereum: Ethereum as typeof SvgIcon,
+  'information-circle': InterfaceAlertInformationCircle as typeof SvgIcon,
+  'warning-circle': InterfaceAlertWarningCircle as typeof SvgIcon,
+  metamask: Metamask as typeof SvgIcon,
 };

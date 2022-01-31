@@ -1,0 +1,25 @@
+<svg
+  width="50%"
+  height="100%"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg">
+  <path
+    d="m3.474.3-.076.257v7.448l.076.075 3.457-2.043L3.474.3Z"
+    fill="currentColor">
+  </path>
+
+  <path
+    d="M3.474.3.017 6.037 3.474 8.08V.3ZM3.474 8.735l-.042.051v2.654l.042.124 3.46-4.872-3.46 2.043Z"
+    fill="currentColor">
+  </path>
+
+  <path
+    d="M3.474 11.564v-2.83L.017 6.693l3.457 4.872ZM3.474 8.08 6.93 6.038 3.474 4.465v3.616Z"
+    fill="currentColor">
+  </path>
+
+  <path
+    d="M.017 6.037 3.474 8.08V4.465L.017 6.037Z"
+    fill="currentColor">
+  </path>
+</svg>
