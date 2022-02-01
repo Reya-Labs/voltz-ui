@@ -1,0 +1,24 @@
+name: Open pull request to staging or main branches
+on:
+  pull_request:
+    branches:
+      - main
+      - staging
+jobs:
+  staging-main-pr:
+    name: Staging or main pull request
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 'lts/*'
+      - name: Install dependencies
+        run: make install-ci
+      - name: Run tests
+        run: make test
