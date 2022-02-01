@@ -14,8 +14,5 @@ test:
 build:
 	yarn build
 
-build-release:
-	yarn build-release
-
 release:
 	yarn release

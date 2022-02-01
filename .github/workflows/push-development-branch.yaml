@@ -1,0 +1,24 @@
+name: Any development branch
+on:
+  push:
+    branches-ignore:
+      - main
+      - staging
+jobs:
+  development:
+    name: Development
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 'lts/*'
+      - name: Install dependencies
+        run: make install-ci
+      - name: Run tests
+        run: make test

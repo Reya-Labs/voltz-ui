@@ -12,7 +12,7 @@
     "release": "semantic-release",
     "start": "node scripts/start.js",
     "storybook": "start-storybook -p 6006",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
     "chromatic": "npx chromatic --project-token=e40b8c3e3eea"
   },
