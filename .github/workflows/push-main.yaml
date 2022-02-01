@@ -1,4 +1,4 @@
-name: Release
+name: Push to main branch
 on:
   push:
     branches:
@@ -21,10 +21,7 @@ jobs:
         run: make install-ci
       - name: Run tests
         run: make test
-      - name: Build release
-        run: make build-release
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: make release
