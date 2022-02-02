@@ -8,25 +8,33 @@ export type AgentProps = {
   agent?: Agents;
 };
 
-export type AgentColors = {
-  light: NonNullable<React.CSSProperties['color']>;
-  dark: NonNullable<React.CSSProperties['color']>;
+export type ColorSet = {
+  base: string;
+  darken010: string;
+  darken015: string;
+  darken020: string;
+  darken025: string;
+  darken030: string;
+  darken035: string;
+  darken040: string;
+  darken045: string;
+  darken050: string;
 };
 
-declare module '@mui/system' {
-  interface Theme {
-    agent: {
-      [Agents.FIXED_TRADER]: AgentColors;
-      [Agents.VARIABLE_TRADER]: AgentColors;
-      [Agents.LIQUIDITY_PROVIDER]: AgentColors;
-    };
+declare module '@mui/material/styles' {
+  interface Palette {
+    tertiary: Palette['primary'];
   }
+  interface PaletteOptions {
+    tertiary: PaletteOptions['primary'];
+  }
+  interface PaletteColor extends ColorSet {}
+  interface SimplePaletteColorOptions extends ColorSet {}
+}
 
-  interface ThemeOptions {
-    agent: {
-      [Agents.FIXED_TRADER]: AgentColors;
-      [Agents.VARIABLE_TRADER]: AgentColors;
-      [Agents.LIQUIDITY_PROVIDER]: AgentColors;
-    };
+declare module '@mui/material/Button' {
+  interface ButtonPropsVariantOverrides {
+    dark: true;
+    darker: true;
   }
 }

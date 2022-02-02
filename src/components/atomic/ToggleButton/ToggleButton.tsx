@@ -1,11 +1,10 @@
 import React from 'react';
 import { SystemStyleObject, Theme } from '@mui/system';
-import chroma from 'chroma-js';
 import MuiToggleButton, {
   ToggleButtonProps as MuiToggleButtonProps,
 } from '@mui/material/ToggleButton';
 
-import { colors, AgentProps } from '@theme';
+import { colors, AgentProps, Agents } from '@theme';
 
 export type ToggleButtonProps = MuiToggleButtonProps & AgentProps;
 
@@ -38,30 +37,71 @@ const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
     },
   };
   const agentStyleOverrides = (): SystemStyleObject<Theme> => {
-    if (!agent) {
-      return {};
-    }
+    switch (agent) {
+      case Agents.FIXED_TRADER: {
+        return {
+          backgroundColor: (theme) => theme.palette.primary.darken030,
+          color: (theme) => theme.palette.primary.light,
+          borderColor: (theme) => theme.palette.primary.light,
+          '&:hover': {
+            backgroundColor: (theme) => theme.palette.primary.darken030,
+            color: (theme) => theme.palette.primary.light,
+          },
+          '&.Mui-selected': {
+            backgroundColor: (theme) => theme.palette.primary.main,
+            '&:hover': {
+              backgroundColor: (theme) => theme.palette.primary.darken015,
+            },
+            '&:not(:first-of-type)': {
+              borderColor: (theme) => theme.palette.primary.light,
+            },
+          },
+        };
+      }
 
-    return {
-      backgroundColor: (theme) => theme.agent[agent].dark,
-      color: (theme) => theme.agent[agent].light,
-      borderColor: (theme) => theme.agent[agent].light,
-      '&:hover': {
-        backgroundColor: (theme) => theme.agent[agent].dark,
-        color: (theme) => theme.agent[agent].light,
-      },
-      '&.Mui-selected': {
-        backgroundColor: (theme) => theme.agent[agent].dark,
-        color: (theme) => theme.agent[agent].light,
-        '&:hover': {
-          backgroundColor: (theme) => chroma(theme.agent[agent].dark).brighten(1).hex(),
-          color: (theme) => chroma(theme.agent[agent].light).brighten(1).hex(),
-        },
-        '&:not(:first-of-type)': {
-          borderColor: (theme) => theme.agent[agent].light,
-        },
-      },
-    };
+      case Agents.VARIABLE_TRADER: {
+        return {
+          backgroundColor: (theme) => theme.palette.tertiary.darken030,
+          color: (theme) => theme.palette.secondary.light,
+          borderColor: (theme) => theme.palette.tertiary.light,
+          '&:hover': {
+            backgroundColor: (theme) => theme.palette.tertiary.darken030,
+          },
+          '&.Mui-selected': {
+            backgroundColor: (theme) => theme.palette.tertiary.main,
+            '&:hover': {
+              backgroundColor: (theme) => theme.palette.tertiary.darken015,
+            },
+            '&:not(:first-of-type)': {
+              borderColor: (theme) => theme.palette.tertiary.light,
+            },
+          },
+        };
+      }
+
+      case Agents.LIQUIDITY_PROVIDER: {
+        return {
+          backgroundColor: (theme) => theme.palette.secondary.dark,
+          color: (theme) => theme.palette.primary.light,
+          borderColor: (theme) => theme.palette.secondary.light,
+          '&:hover': {
+            backgroundColor: (theme) => theme.palette.secondary.darken035,
+          },
+          '&.Mui-selected': {
+            backgroundColor: (theme) => theme.palette.secondary.main,
+            '&:hover': {
+              backgroundColor: (theme) => theme.palette.secondary.darken015,
+            },
+            '&:not(:first-of-type)': {
+              borderColor: (theme) => theme.palette.secondary.light,
+            },
+          },
+        };
+      }
+
+      default:
+        return {};
+    }
   };
   const stateStyleOverrides = (): SystemStyleObject<Theme> => {
     if (!selected) {

@@ -1,13 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Agents } from '@theme';
+import { UseWalletResult } from '@hooks';
 import { Button } from '@components/atomic';
 import { Modal } from '@components/composite';
+import { WalletConnectButton } from './components';
 
-const WalletConnectModal: React.FunctionComponent = () => {
+export type WalletConnectModalProps = {
+  wallet: UseWalletResult;
+};
+
+const WalletConnectModal: React.FunctionComponent<WalletConnectModalProps> = ({ wallet }) => {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const handleClick = () => {
+    handleClose();
+    wallet.connect();
+  };
+
   return (
-    <Modal trigger="Connect wallet">
-      <Button agent={Agents.FIXED_TRADER}>Hello</Button>
+    <Modal
+      open={open}
+      onOpen={handleOpen}
+      onClose={handleClose}
+      trigger={<WalletConnectButton wallet={wallet} />}
+    >
+      <Button agent={Agents.FIXED_TRADER} onClick={handleClick}>
+        Hello
+      </Button>
     </Modal>
   );
 };
