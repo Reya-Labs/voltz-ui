@@ -19,32 +19,32 @@ const Button: React.FunctionComponent<ButtonProps> = ({ agent, ...props }) => {
 
     if (agent === Agents.FIXED_TRADER) {
       return {
-        backgroundColor: (theme) => theme.palette.primary.darken030,
-        color: (theme) => theme.palette.primary.light,
+        backgroundColor: 'primary.darken030',
+        color: 'primary.light',
         '&:hover': {
-          backgroundColor: (theme) => theme.palette.primary.darken030,
-          borderColor: (theme) => theme.palette.primary.light,
+          backgroundColor: 'primary.darken030',
+          borderColor: 'primary.light',
         },
       };
     }
 
     if (agent === Agents.VARIABLE_TRADER) {
       return {
-        backgroundColor: (theme) => theme.palette.tertiary.darken030,
-        color: (theme) => theme.palette.secondary.light,
+        backgroundColor: 'tertiary.darken030',
+        color: 'secondary.light',
         '&:hover': {
-          backgroundColor: (theme) => theme.palette.tertiary.darken030,
-          borderColor: (theme) => theme.palette.tertiary.light,
+          backgroundColor: 'tertiary.darken030',
+          borderColor: 'tertiary.light',
         },
       };
     }
 
     if (agent === Agents.LIQUIDITY_PROVIDER) {
       return {
-        backgroundColor: (theme) => theme.palette.secondary.dark,
-        color: (theme) => theme.palette.primary.light,
+        backgroundColor: 'secondary.dark',
+        color: 'primary.light',
         '&:hover': {
-          backgroundColor: (theme) => theme.palette.secondary.darken035,
+          backgroundColor: 'secondary.darken035',
         },
       };
     }
@@ -54,27 +54,27 @@ const Button: React.FunctionComponent<ButtonProps> = ({ agent, ...props }) => {
   const stateStyleOverrides = (): SystemStyleObject<Theme> => {
     if (props.disabled) {
       return {
-        backgroundColor: (theme) => theme.palette.secondary.dark,
-        color: (theme) => theme.palette.secondary.darken015,
+        backgroundColor: 'secondary.dark',
+        color: 'secondary.darken015',
       };
     }
 
     if (props.variant === 'dark') {
       return {
-        backgroundColor: (theme) => theme.palette.secondary.dark,
-        color: (theme) => theme.palette.secondary.light,
+        backgroundColor: 'secondary.dark',
+        color: 'secondary.light',
         '&:hover': {
-          backgroundColor: (theme) => theme.palette.secondary.darken030,
+          backgroundColor: 'secondary.darken030',
         },
       };
     }
 
     if (props.variant === 'darker') {
       return {
-        backgroundColor: (theme) => theme.palette.secondary.darken045,
-        color: (theme) => theme.palette.secondary.light,
+        backgroundColor: 'secondary.darken045',
+        color: 'secondary.light',
         '&:hover': {
-          backgroundColor: (theme) => theme.palette.secondary.darken035,
+          backgroundColor: 'secondary.darken035',
         },
       };
     }

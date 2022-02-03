@@ -14,7 +14,9 @@ const WalletConnect: React.FunctionComponent<WalletConnectProps> = ({ wallet }) 
     <Box sx={{ display: 'flex' }}>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Icon name="ethereum" color="secondary" fill="blue" />
-        <Typography variant="body2">Ethereum</Typography>
+        <Typography variant="body2" sx={{ marginLeft: (theme) => theme.spacing(2) }}>
+          Ethereum
+        </Typography>
       </Box>
       <WalletConnectModal wallet={wallet} />
     </Box>

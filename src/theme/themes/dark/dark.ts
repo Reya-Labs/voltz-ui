@@ -82,7 +82,7 @@ const dark = createTheme({
       darken050: colors.orangeYellow.darken050,
     },
     background: {
-      default: colors.vzGrey,
+      default: colors.vzGreyDarker,
     },
   },
   components: {

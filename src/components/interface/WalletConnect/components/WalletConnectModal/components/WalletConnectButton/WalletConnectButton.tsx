@@ -25,7 +25,7 @@ const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = (
 
   if (status === 'connected') {
     return (
-      <Box sx={{ marginLeft: (theme) => theme.spacing(2), display: 'flex' }}>
+      <Box sx={{ marginLeft: (theme) => theme.spacing(4), display: 'flex' }}>
         <Button variant="darker">{text}</Button>
         <Button
           variant="dark"
@@ -41,7 +41,7 @@ const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = (
   return (
     <Button
       variant="darker"
-      sx={{ marginLeft: (theme) => theme.spacing(2) }}
+      sx={{ marginLeft: (theme) => theme.spacing(4) }}
       onClick={onClick}
       startIcon={<Icon name="warning-circle" />}
     >

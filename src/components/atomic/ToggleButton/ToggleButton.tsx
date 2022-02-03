@@ -40,20 +40,20 @@ const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
     switch (agent) {
       case Agents.FIXED_TRADER: {
         return {
-          backgroundColor: (theme) => theme.palette.primary.darken030,
-          color: (theme) => theme.palette.primary.light,
-          borderColor: (theme) => theme.palette.primary.light,
+          backgroundColor: 'primary.darken030',
+          color: 'primary.light',
+          borderColor: 'primary.light',
           '&:hover': {
-            backgroundColor: (theme) => theme.palette.primary.darken030,
-            color: (theme) => theme.palette.primary.light,
+            backgroundColor: 'primary.darken030',
+            color: 'primary.light',
           },
           '&.Mui-selected': {
-            backgroundColor: (theme) => theme.palette.primary.main,
+            backgroundColor: 'primary.main',
             '&:hover': {
-              backgroundColor: (theme) => theme.palette.primary.darken015,
+              backgroundColor: 'primary.darken015',
             },
             '&:not(:first-of-type)': {
-              borderColor: (theme) => theme.palette.primary.light,
+              borderColor: 'primary.light',
             },
           },
         };
@@ -61,19 +61,19 @@ const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
 
       case Agents.VARIABLE_TRADER: {
         return {
-          backgroundColor: (theme) => theme.palette.tertiary.darken030,
-          color: (theme) => theme.palette.secondary.light,
-          borderColor: (theme) => theme.palette.tertiary.light,
+          backgroundColor: 'tertiary.darken030',
+          color: 'secondary.light',
+          borderColor: 'tertiary.light',
           '&:hover': {
-            backgroundColor: (theme) => theme.palette.tertiary.darken030,
+            backgroundColor: 'tertiary.darken030',
           },
           '&.Mui-selected': {
-            backgroundColor: (theme) => theme.palette.tertiary.main,
+            backgroundColor: 'tertiary.main',
             '&:hover': {
-              backgroundColor: (theme) => theme.palette.tertiary.darken015,
+              backgroundColor: 'tertiary.darken015',
             },
             '&:not(:first-of-type)': {
-              borderColor: (theme) => theme.palette.tertiary.light,
+              borderColor: 'tertiary.light',
             },
           },
         };
@@ -81,19 +81,19 @@ const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
 
       case Agents.LIQUIDITY_PROVIDER: {
         return {
-          backgroundColor: (theme) => theme.palette.secondary.dark,
-          color: (theme) => theme.palette.primary.light,
-          borderColor: (theme) => theme.palette.secondary.light,
+          backgroundColor: 'secondary.dark',
+          color: 'primary.light',
+          borderColor: 'secondary.light',
           '&:hover': {
-            backgroundColor: (theme) => theme.palette.secondary.darken035,
+            backgroundColor: 'secondary.darken035',
           },
           '&.Mui-selected': {
-            backgroundColor: (theme) => theme.palette.secondary.main,
+            backgroundColor: 'secondary.main',
             '&:hover': {
-              backgroundColor: (theme) => theme.palette.secondary.darken015,
+              backgroundColor: 'secondary.darken015',
             },
             '&:not(:first-of-type)': {
-              borderColor: (theme) => theme.palette.secondary.light,
+              borderColor: 'secondary.light',
             },
           },
         };

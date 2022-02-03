@@ -9,23 +9,23 @@ export default {
   component: Panel,
   argTypes: {
     content: { control: 'text' },
-    variant: { control: 'radio', options: ['h1', 'body1', 'body2'] },
+    typographyVariant: { control: 'radio', options: ['h1', 'body1', 'body2'] },
   },
 } as ComponentMeta<typeof Panel>;
 
 type TemplateArgs = {
-  variant: string;
+  typographyVariant: string;
   content: string;
 };
 
 const Template: ComponentStory<React.FunctionComponent<TemplateArgs>> = ({
   children,
-  variant,
+  typographyVariant,
   content,
   ...args
 }) => (
   <Panel {...args}>
-    <Typography variant={variant as TypographyProps['variant']}>{content}</Typography>
+    <Typography variant={typographyVariant as TypographyProps['variant']}>{content}</Typography>
   </Panel>
 );
 

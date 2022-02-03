@@ -1,26 +1,27 @@
 import React from 'react';
-import { SxProps, Theme } from '@mui/system';
+import { SystemStyleObject, Theme } from '@mui/system';
 import Box from '@mui/material/Box';
 
 export type PanelProps = {
-  type?: 'error' | 'warning' | 'info' | 'main' | 'dark' | 'darker';
+  variant?: 'error' | 'warning' | 'info' | 'main' | 'dark' | 'darker';
+  sx?: SystemStyleObject<Theme>;
 };
 
-const Panel: React.FunctionComponent<PanelProps> = ({ type, children }) => {
-  const commonOverrides: SxProps<Theme> = {
+const Panel: React.FunctionComponent<PanelProps> = ({ variant, sx, children }) => {
+  const commonOverrides: SystemStyleObject<Theme> = {
     border: 1,
     borderColor: 'transparent',
     borderRadius: 2,
     padding: (theme) => theme.spacing(2),
   };
-  const typeStyleOverrides = (): SxProps<Theme> => {
-    if (!type) {
+  const typeStyleOverrides = (): SystemStyleObject<Theme> => {
+    if (!variant) {
       return {
         backgroundColor: `primary.dark`,
       };
     }
 
-    switch (type) {
+    switch (variant) {
       case 'main':
         return {
           backgroundColor: `secondary.darken030`,
@@ -38,16 +39,16 @@ const Panel: React.FunctionComponent<PanelProps> = ({ type, children }) => {
 
       default:
         return {
-          backgroundColor: `${type}.main`,
-          borderColor: `${type}.light`,
+          backgroundColor: `${variant}.main`,
+          borderColor: `${variant}.light`,
           '& > *': {
-            color: `${type}.light`,
+            color: `${variant}.light`,
           },
         };
     }
   };
 
-  return <Box sx={{ ...commonOverrides, ...typeStyleOverrides() }}>{children}</Box>;
+  return <Box sx={{ ...commonOverrides, ...typeStyleOverrides(), ...sx }}>{children}</Box>;
 };
 
 export default Panel;
