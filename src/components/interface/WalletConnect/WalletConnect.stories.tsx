@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { useStateMemo, UseWalletResult } from '@hooks';
+import { useStateMemo, Wallet, UseWalletResult } from '@hooks';
 import WalletConnect from './WalletConnect';
 
 export default {
@@ -14,6 +14,7 @@ export default {
     },
     account: { control: 'text' },
     connect: { action: 'connect' },
+    name: { control: 'radio', options: ['metamask'] },
   },
 } as ComponentMeta<typeof WalletConnect>;
 
@@ -23,11 +24,14 @@ const WalletConnectWrapper: React.FunctionComponent<WalletConnectWrapperProps> =
   status,
   connect,
   account,
+  name,
 }) => {
   const wallet = { status, connect, account };
   const [updatedStatus, setUpdatedStatus] = useStateMemo(status);
-  const handleConnect = async () => {
-    connect();
+  const [updatedName, setUpdatedName] = useStateMemo(name);
+  const handleConnect = async (walletName: Wallet) => {
+    connect(walletName);
+    setUpdatedName(walletName);
 
     setUpdatedStatus('initializing');
 
@@ -42,7 +46,11 @@ const WalletConnectWrapper: React.FunctionComponent<WalletConnectWrapperProps> =
     return null;
   };
 
-  return <WalletConnect wallet={{ ...wallet, connect: handleConnect, status: updatedStatus }} />;
+  return (
+    <WalletConnect
+      wallet={{ ...wallet, connect: handleConnect, status: updatedStatus, name: updatedName }}
+    />
+  );
 };
 
 const Template: ComponentStory<typeof WalletConnectWrapper> = (args) => (

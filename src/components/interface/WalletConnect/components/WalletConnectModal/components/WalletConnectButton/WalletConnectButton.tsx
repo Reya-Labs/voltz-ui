@@ -11,7 +11,7 @@ export type WalletConnectButtonProps = {
 
 const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = ({
   onClick,
-  wallet: { status },
+  wallet: { status, name },
 }) => {
   const balance = 1000;
   const currency = 'ETH';
@@ -26,11 +26,15 @@ const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = (
   if (status === 'connected') {
     return (
       <Box sx={{ marginLeft: (theme) => theme.spacing(4), display: 'flex' }}>
-        <Button variant="darker">{text}</Button>
+        <Button variant="darker" onClick={onClick}>
+          {text}
+        </Button>
         <Button
           variant="dark"
           sx={{ zIndex: 1, left: (theme) => theme.spacing(-2) }}
           startIcon={<Icon name="warning-circle" />}
+          endIcon={name && <Icon name={name} />}
+          onClick={onClick}
         >
           ADDRESS
         </Button>

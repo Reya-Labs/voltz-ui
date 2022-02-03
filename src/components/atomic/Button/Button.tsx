@@ -4,9 +4,12 @@ import MuiButton, { ButtonProps as MuiButtonProps } from '@mui/material/Button';
 
 import { AgentProps, Agents } from '@theme';
 
-export type ButtonProps = MuiButtonProps & AgentProps;
+export type ButtonProps = MuiButtonProps &
+  AgentProps & {
+    selected?: boolean;
+  };
 
-const Button: React.FunctionComponent<ButtonProps> = ({ agent, ...props }) => {
+const Button: React.FunctionComponent<ButtonProps> = ({ agent, selected, ...props }) => {
   const styleOverrides: SystemStyleObject<Theme> = {
     border: 1,
     borderColor: 'transparent',
@@ -61,7 +64,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({ agent, ...props }) => {
 
     if (props.variant === 'dark') {
       return {
-        backgroundColor: 'secondary.dark',
+        backgroundColor: selected ? 'secondary.darken030' : 'secondary.dark',
         color: 'secondary.light',
         '&:hover': {
           backgroundColor: 'secondary.darken030',
@@ -71,7 +74,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({ agent, ...props }) => {
 
     if (props.variant === 'darker') {
       return {
-        backgroundColor: 'secondary.darken045',
+        backgroundColor: selected ? 'secondary.dark' : 'secondary.darken045',
         color: 'secondary.light',
         '&:hover': {
           backgroundColor: 'secondary.darken035',

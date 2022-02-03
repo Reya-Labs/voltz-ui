@@ -11,6 +11,8 @@ export type WalletConnectModalProps = {
   wallet: UseWalletResult;
 };
 
+const walletOptions = [{ title: 'Metamask', name: 'metamask' }];
+
 const WalletConnectModal: React.FunctionComponent<WalletConnectModalProps> = ({ wallet }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -46,7 +48,14 @@ const WalletConnectModal: React.FunctionComponent<WalletConnectModalProps> = ({ 
           .
         </Typography>
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          <WalletOptionButton title="Metamask" icon="metamask" onClick={handleClick('metamask')} />
+          {walletOptions.map(({ title, name }) => (
+            <WalletOptionButton
+              title={title}
+              icon={name as Wallet}
+              onClick={handleClick(name as Wallet)}
+              selected={name === wallet.name && wallet.status === 'connected'}
+            />
+          ))}
         </Box>
         <Typography
           variant="h2"

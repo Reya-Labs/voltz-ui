@@ -6,15 +6,17 @@ export type WalletOptionButtonProps = {
   onClick: () => void;
   title: string;
   icon: IconProps['name'];
+  selected: boolean;
 };
 
 const WalletOptionButton: React.FunctionComponent<WalletOptionButtonProps> = ({
   onClick,
   title,
   icon,
+  selected,
 }) => (
   <Button
-    onClick={onClick}
+    onClick={!selected ? onClick : undefined}
     variant="darker"
     sx={{
       width: '100%',
@@ -22,8 +24,12 @@ const WalletOptionButton: React.FunctionComponent<WalletOptionButtonProps> = ({
       justifyContent: 'space-between',
       padding: (theme) => theme.spacing(4),
     }}
+    selected={selected}
   >
-    <Typography variant="h6">{title}</Typography>
+    <Typography variant="h6">
+      {selected && '• '}
+      {title}
+    </Typography>
     <Icon name={icon} />
   </Button>
 );

@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useMetaMask } from 'metamask-react';
 
 export type WalletStatus =
@@ -8,7 +8,7 @@ export type WalletStatus =
   | 'connecting'
   | 'connected';
 
-export type Wallet = 'metamask' | 'coinbase';
+export type Wallet = 'metamask';
 
 export type WalletConnect = (wallet: Wallet) => Promise<string[] | null>;
 
@@ -16,9 +16,11 @@ export type UseWalletResult = {
   status: WalletStatus;
   connect: WalletConnect;
   account: string | null;
+  name: Wallet | null;
 };
 
 const useWallet = () => {
+  const [walletName, setWalletName] = useState<Wallet | null>(null);
   const {
     status: metamaskStatus,
     connect: metamaskConnect,
@@ -30,7 +32,9 @@ const useWallet = () => {
   }, [metamaskStatus]);
 
   const connect = useCallback(
-    (wallet: Wallet): WalletConnect => {
+    (connectedWalletName: Wallet): WalletConnect => {
+      setWalletName(connectedWalletName);
+
       return metamaskConnect;
     },
     [metamaskConnect],
@@ -40,6 +44,7 @@ const useWallet = () => {
     status,
     connect,
     account: metamaskAccount,
+    name: walletName,
   };
 };
 
