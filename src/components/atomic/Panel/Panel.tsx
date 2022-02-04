@@ -24,12 +24,12 @@ const Panel: React.FunctionComponent<PanelProps> = ({ variant, sx, children }) =
     switch (variant) {
       case 'main':
         return {
-          backgroundColor: `secondary.darken030`,
+          backgroundColor: `secondary.darken040`,
         };
 
       case 'dark':
         return {
-          backgroundColor: `secondary.darken040`,
+          backgroundColor: `secondary.darken045`,
         };
 
       case 'darker':

@@ -8,19 +8,19 @@ export type WalletStatus =
   | 'connecting'
   | 'connected';
 
-export type Wallet = 'metamask';
+export type WalletName = 'metamask';
 
-export type WalletConnect = (wallet: Wallet) => Promise<string[] | null>;
+export type WalletConnect = Promise<string[] | null>;
 
-export type UseWalletResult = {
+export type Wallet = {
   status: WalletStatus;
-  connect: WalletConnect;
+  connect: (walletName: WalletName) => WalletConnect;
   account: string | null;
-  name: Wallet | null;
+  name: WalletName | null;
 };
 
-const useWallet = () => {
-  const [walletName, setWalletName] = useState<Wallet | null>(null);
+const useWallet = (): Wallet => {
+  const [walletName, setWalletName] = useState<WalletName | null>(null);
   const {
     status: metamaskStatus,
     connect: metamaskConnect,
@@ -32,10 +32,10 @@ const useWallet = () => {
   }, [metamaskStatus]);
 
   const connect = useCallback(
-    (connectedWalletName: Wallet): WalletConnect => {
+    (connectedWalletName: WalletName): WalletConnect => {
       setWalletName(connectedWalletName);
 
-      return metamaskConnect;
+      return metamaskConnect();
     },
     [metamaskConnect],
   );

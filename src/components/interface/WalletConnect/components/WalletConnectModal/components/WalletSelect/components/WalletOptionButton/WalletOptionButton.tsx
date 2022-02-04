@@ -16,7 +16,7 @@ const WalletOptionButton: React.FunctionComponent<WalletOptionButtonProps> = ({
   selected,
 }) => (
   <Button
-    onClick={!selected ? onClick : undefined}
+    onClick={onClick}
     variant="darker"
     sx={{
       width: '100%',

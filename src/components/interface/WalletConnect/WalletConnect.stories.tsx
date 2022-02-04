@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { useStateMemo, Wallet, UseWalletResult } from '@hooks';
+import { useStateMemo, WalletName, Wallet } from '@hooks';
 import WalletConnect from './WalletConnect';
 
 export default {
@@ -14,11 +14,11 @@ export default {
     },
     account: { control: 'text' },
     connect: { action: 'connect' },
-    name: { control: 'radio', options: ['metamask'] },
+    name: { control: 'radio', options: ['metamask', null] },
   },
 } as ComponentMeta<typeof WalletConnect>;
 
-type WalletConnectWrapperProps = UseWalletResult;
+type WalletConnectWrapperProps = Wallet;
 
 const WalletConnectWrapper: React.FunctionComponent<WalletConnectWrapperProps> = ({
   status,
@@ -29,17 +29,17 @@ const WalletConnectWrapper: React.FunctionComponent<WalletConnectWrapperProps> =
   const wallet = { status, connect, account };
   const [updatedStatus, setUpdatedStatus] = useStateMemo(status);
   const [updatedName, setUpdatedName] = useStateMemo(name);
-  const handleConnect = async (walletName: Wallet) => {
+  const handleConnect = async (walletName: WalletName) => {
     connect(walletName);
     setUpdatedName(walletName);
 
     setUpdatedStatus('initializing');
 
-    await new Promise((f) => setTimeout(f, 1000));
+    await new Promise((f) => setTimeout(f, 1));
 
     setUpdatedStatus('connecting');
 
-    await new Promise((f) => setTimeout(f, 1000));
+    await new Promise((f) => setTimeout(f, 1));
 
     setUpdatedStatus('connected');
 

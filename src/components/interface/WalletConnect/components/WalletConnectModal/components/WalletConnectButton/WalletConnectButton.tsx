@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import Box from '@mui/material/Box';
 
-import { UseWalletResult } from '@hooks';
+import { Wallet } from '@hooks';
 import { Button, Icon } from '@components/atomic';
 
 export type WalletConnectButtonProps = {
   onClick?: () => void;
-  wallet: UseWalletResult;
+  wallet: Wallet;
 };
 
 const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = ({

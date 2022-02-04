@@ -1,26 +1,44 @@
-import React, { useState } from 'react';
-import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
+import React, { useState, useEffect } from 'react';
 
-import { UseWalletResult, Wallet } from '@hooks';
-import { Panel, Typography } from '@components/atomic';
+import { Wallet, WalletName } from '@hooks';
+import { Panel } from '@components/atomic';
 import { Modal } from '@components/composite';
-import { WalletConnectButton, WalletOptionButton } from './components';
+import { WalletConnectButton, WalletDisplay, WalletSelect } from './components';
 
 export type WalletConnectModalProps = {
-  wallet: UseWalletResult;
+  wallet: Wallet;
 };
-
-const walletOptions = [{ title: 'Metamask', name: 'metamask' }];
 
 const WalletConnectModal: React.FunctionComponent<WalletConnectModalProps> = ({ wallet }) => {
   const [open, setOpen] = useState(false);
+  const [selecting, setSelecting] = useState(true);
+  const handleChangeWallet = () => setSelecting(true);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const handleClick = (walletName: Wallet) => () => {
-    handleClose();
-    wallet.connect(walletName);
+  const handleClose = () => {
+    setSelecting(false);
+    setOpen(false);
   };
+  const handleSelectWallet = (walletName: WalletName) => {
+    handleClose();
+
+    if (wallet.name !== walletName) {
+      wallet.connect(walletName);
+    }
+  };
+
+  const renderContent = () => {
+    if (wallet.status === 'connected' && !selecting) {
+      return <WalletDisplay wallet={wallet} onChangeWallet={handleChangeWallet} />;
+    }
+
+    return <WalletSelect wallet={wallet} onSelectWallet={handleSelectWallet} />;
+  };
+
+  useEffect(() => {
+    if (wallet.status === 'connected') {
+      setSelecting(false);
+    }
+  }, [wallet.status]);
 
   return (
     <Modal
@@ -31,38 +49,16 @@ const WalletConnectModal: React.FunctionComponent<WalletConnectModalProps> = ({ 
     >
       <Panel
         variant="darker"
-        sx={{ maxWidth: 400, minHeight: 400, padding: (theme) => theme.spacing(6) }}
+        sx={{
+          minWidth: 400,
+          maxWidth: 400,
+          minHeight: 400,
+          padding: (theme) => theme.spacing(6),
+          display: 'flex',
+          flexDirection: 'column',
+        }}
       >
-        <Typography variant="h6" sx={{ marginBottom: (theme) => theme.spacing(6) }}>
-          CONNECT A WALLET
-        </Typography>
-        <Typography variant="body1" sx={{ marginBottom: (theme) => theme.spacing(6) }}>
-          By connecting a wallet, you agree to{' '}
-          <Link href="#" variant="body1" color="warning.light">
-            Voltz Labs Terms of Service
-          </Link>{' '}
-          and acknowledge that you have read and understand the{' '}
-          <Link href="#" variant="body1" color="warning.light">
-            Voltz Protocol Disclaimer
-          </Link>
-          .
-        </Typography>
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          {walletOptions.map(({ title, name }) => (
-            <WalletOptionButton
-              title={title}
-              icon={name as Wallet}
-              onClick={handleClick(name as Wallet)}
-              selected={name === wallet.name && wallet.status === 'connected'}
-            />
-          ))}
-        </Box>
-        <Typography
-          variant="h2"
-          sx={{ marginTop: (theme) => theme.spacing(22), textAlign: 'center' }}
-        >
-          MORE OPTIONS COMING SOON
-        </Typography>
+        {renderContent()}
       </Panel>
     </Modal>
   );
