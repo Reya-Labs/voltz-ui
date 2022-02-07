@@ -89,6 +89,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({ agent, selected, ...prop
         '&:hover': {
           backgroundColor: 'transparent',
           borderColor: 'transparent',
+          textDecoration: 'underline',
         },
       };
     }
