@@ -15,6 +15,7 @@ import './fonts/DM_Sans/DMSans-MediumItalic.ttf';
 import './fonts/DM_Sans/DMSans-Regular.ttf';
 import './index.css';
 import { ThemeProvider } from './theme';
+import { WalletProvider } from './components';
 import { App } from './application';
 import reportWebVitals from './reportWebVitals';
 import awsExports from './aws-exports';
@@ -22,9 +23,11 @@ import awsExports from './aws-exports';
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <WalletProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </WalletProvider>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root'),

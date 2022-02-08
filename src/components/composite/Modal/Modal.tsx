@@ -1,29 +1,45 @@
-import React, { useState, cloneElement } from 'react';
-import Box from '@mui/material/Box';
+import React, { cloneElement } from 'react';
 import MuiModal, { ModalProps as MuiModalProps } from '@mui/material/Modal';
 import isString from 'lodash/isString';
 
+import { useStateMemo } from '@hooks';
 import { Button } from '../../atomic';
+
+export type TriggerProps = {
+  onClick: () => void;
+};
 
 export type ModalProps = Omit<MuiModalProps, 'open'> & {
   open?: boolean;
-  trigger: React.ReactElement | string;
+  onOpen?: () => void;
+  trigger: React.FunctionComponent<TriggerProps> | React.ReactElement | string;
 };
 
 const Modal: React.FunctionComponent<ModalProps> = ({
-  trigger,
+  trigger: Trigger,
   open: defaultOpen = false,
+  onOpen,
   onClose,
   ...props
 }) => {
-  const [open, setOpen] = useState(defaultOpen);
-  const handleClickTrigger = () => setOpen(true);
-  const renderTrigger = () => {
-    if (isString(trigger)) {
-      return <Button onClick={handleClickTrigger}>{trigger}</Button>;
+  const [open, setOpen] = useStateMemo(defaultOpen);
+  const handleClickTrigger = () => {
+    if (onOpen) {
+      onOpen();
     }
 
-    return cloneElement(trigger, { onClick: handleClickTrigger });
+    setOpen(true);
+  };
+  const renderTrigger = () => {
+    if (isString(Trigger)) {
+      return <Button onClick={handleClickTrigger}>{Trigger}</Button>;
+    }
+
+    if (React.isValidElement(Trigger)) {
+      return cloneElement(Trigger, { onClick: handleClickTrigger });
+    }
+
+    return <Trigger onClick={handleClickTrigger} />;
   };
   const handleClose = (
     event: Record<string, unknown>,
