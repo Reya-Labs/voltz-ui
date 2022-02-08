@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { SystemStyleObject, Theme } from '@mui/system';
 import MuiButton, { ButtonProps as MuiButtonProps } from '@mui/material/Button';
 
@@ -7,9 +8,11 @@ import { AgentProps, Agents } from '@theme';
 export type ButtonProps = MuiButtonProps &
   AgentProps & {
     selected?: boolean;
+    link?: string;
   };
 
-const Button: React.FunctionComponent<ButtonProps> = ({ agent, selected, ...props }) => {
+const Button: React.FunctionComponent<ButtonProps> = ({ agent, selected, link, ...props }) => {
+  const navigate = useNavigate();
   const styleOverrides: SystemStyleObject<Theme> = {
     border: 1,
     borderColor: 'transparent',
@@ -96,10 +99,12 @@ const Button: React.FunctionComponent<ButtonProps> = ({ agent, selected, ...prop
 
     return {};
   };
+  const handleClick = () => navigate(link);
 
   return (
     <MuiButton
       disableRipple
+      onClick={handleClick}
       {...props}
       sx={{ ...styleOverrides, ...agentStyleOverrides(), ...stateStyleOverrides(), ...props.sx }}
     />

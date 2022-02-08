@@ -20,17 +20,21 @@ const Nav: React.FunctionComponent = () => {
         },
       }}
     >
-      <Icon name="voltz" sx={{ marginRight: (theme) => theme.spacing(4) }} />
-      <Button variant="text" sx={buttonSx} href="/swap">
+      <Icon
+        name="voltz"
+        sx={{ marginRight: (theme) => theme.spacing(4), cursor: 'pointer' }}
+        link="/"
+      />
+      <Button variant="text" sx={buttonSx}>
         SWAP
       </Button>
-      <Button variant="text" sx={buttonSx} href="/pools">
+      <Button variant="text" sx={buttonSx} link="/pools">
         POOLS
       </Button>
-      <Button variant="text" sx={buttonSx} href="/portfolio">
+      <Button variant="text" sx={buttonSx}>
         PORTFOLIO
       </Button>
-      <Button variant="text" sx={buttonSx} href="/farm">
+      <Button variant="text" sx={buttonSx}>
         LP FARM
       </Button>
     </Box>
