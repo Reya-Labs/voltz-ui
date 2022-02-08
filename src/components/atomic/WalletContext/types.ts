@@ -7,11 +7,11 @@ export type WalletStatus =
 
 export type WalletName = 'metamask';
 
-export type WalletConnect = Promise<string[] | null>;
+export type WalletConnectResult = Promise<string[] | null>;
 
 export type Wallet = {
   status: WalletStatus;
-  connect: (walletName: WalletName) => WalletConnect;
+  connect: (walletName: WalletName) => WalletConnectResult;
   account: string | null;
   name: WalletName | null;
 };

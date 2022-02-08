@@ -14,8 +14,6 @@ const Nav: React.FunctionComponent = () => {
       sx={{
         display: 'flex',
         alignItems: 'center',
-        marginLeft: (theme) => theme.spacing(4),
-        marginTop: (theme) => theme.spacing(4),
         '& > .MuiButton-root': {
           paddingLeft: '20px',
           paddingRight: '20px',
