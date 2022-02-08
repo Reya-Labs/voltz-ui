@@ -9,7 +9,7 @@ import Typography from '../../Typography/Typography';
 
 export type ButtonVariantsProps = {};
 
-const ButtonVariants: FunctionComponent<ButtonVariantsProps> = ({}) => {
+const ButtonVariants: FunctionComponent<ButtonVariantsProps> = () => {
   return (
     <Box>
       {(Object.keys(Themes) as Array<keyof typeof Themes>).map((key) => {

@@ -21,7 +21,10 @@ const WalletConnectModal: React.FunctionComponent<WalletConnectModalProps> = ({ 
     handleClose();
 
     if (wallet.name !== walletName) {
-      wallet.connect(walletName);
+      wallet.connect(walletName).then(
+        () => {},
+        () => {},
+      );
     }
   };
 

@@ -5,14 +5,14 @@ import Link from '@mui/material/Link';
 import { Typography, WalletName, Wallet } from '@components/atomic';
 import { WalletOptionButton } from './components';
 
-export type WalletSelect = {
+export type WalletSelectProps = {
   wallet: Wallet;
   onSelectWallet: (walletName: WalletName) => void;
 };
 
 export const walletOptions = [{ title: 'Metamask', name: 'metamask' }];
 
-const WalletSelect: React.FunctionComponent<WalletSelect> = ({ wallet, onSelectWallet }) => {
+const WalletSelect: React.FunctionComponent<WalletSelectProps> = ({ wallet, onSelectWallet }) => {
   return (
     <>
       <Typography variant="h6" sx={{ marginBottom: (theme) => theme.spacing(6) }}>

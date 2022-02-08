@@ -31,7 +31,10 @@ const WalletConnectWrapper: React.FunctionComponent<WalletConnectWrapperProps> =
   const [updatedStatus, setUpdatedStatus] = useStateMemo(status);
   const [updatedName, setUpdatedName] = useStateMemo(name);
   const handleConnect = async (walletName: WalletName) => {
-    connect(walletName);
+    connect(walletName).then(
+      () => {},
+      () => {},
+    );
     setUpdatedName(walletName);
 
     setUpdatedStatus('initializing');

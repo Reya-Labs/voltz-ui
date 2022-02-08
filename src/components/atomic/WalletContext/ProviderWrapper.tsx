@@ -32,13 +32,13 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
     if (name === 'metamask') {
       setStatus(metamaskStatus);
     }
-  }, [metamaskStatus]);
+  }, [name, setStatus, metamaskStatus]);
 
   useEffect(() => {
     if (name === 'metamask') {
       setAccount(metamaskAccount);
     }
-  }, [metamaskAccount]);
+  }, [name, setAccount, metamaskAccount]);
 
   const connect = useCallback(
     async (walletName: WalletName) => {
@@ -50,7 +50,7 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
 
       return Promise.resolve(null);
     },
-    [setStatus, setName, setAccount],
+    [setName, metamaskConnect],
   );
 
   const value = {

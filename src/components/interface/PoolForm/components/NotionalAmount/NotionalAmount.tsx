@@ -1,5 +1,4 @@
 import React from 'react';
-import Box from '@mui/material/Box';
 
 import { IntegerField } from '@components/composite';
 
@@ -9,11 +8,7 @@ export type NotionalAmountProps = {
   onMaxNotional: () => void;
 };
 
-const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
-  notional,
-  maxNotional,
-  onMaxNotional,
-}) => {
+const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({ notional }) => {
   return <IntegerField label="Notional amount" value={notional} sx={{ width: '100%' }} disabled />;
 };
 
