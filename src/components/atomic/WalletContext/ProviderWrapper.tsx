@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useMemo, useCallback, useEffect } from 'react';
 import { useMetaMask } from 'metamask-react';
 
-import { WalletStatus, WalletName } from './types';
+import { WalletStatus, WalletName, WalletEthereum } from './types';
 import WalletContext from './WalletContext';
 
 export type ProviderWrapperProps = {
@@ -11,6 +11,8 @@ export type ProviderWrapperProps = {
   setAccount: React.Dispatch<React.SetStateAction<string | null>>;
   name: WalletName | null;
   setName: React.Dispatch<React.SetStateAction<WalletName | null>>;
+  balance: number | null;
+  setBalance: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
 const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
@@ -20,12 +22,17 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
   setAccount,
   name,
   setName,
+  balance,
+  setBalance,
   children,
 }) => {
   const {
     status: metamaskStatus,
     connect: metamaskConnect,
     account: metamaskAccount,
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    ethereum: metamaskEthereum,
   } = useMetaMask();
 
   useEffect(() => {
@@ -52,12 +59,26 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
     },
     [setName, metamaskConnect],
   );
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const ethereum = useMemo((): WalletEthereum | null => {
+    switch (name) {
+      case 'metamask':
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return metamaskEthereum as WalletEthereum;
+
+      default:
+        return null;
+    }
+  }, [status]);
 
   const value = {
     status,
     connect,
     account,
     name,
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    ethereum,
+    balance,
   };
 
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;

@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import Box from '@mui/material/Box';
 
+import { elideAddress } from '@utilities';
 import { Wallet } from '@components/atomic';
 import { Button, Icon } from '@components/atomic';
 
@@ -11,22 +12,25 @@ export type WalletConnectButtonProps = {
 
 const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = ({
   onClick,
-  wallet: { status, name },
+  wallet: { status, name, account, balance },
 }) => {
-  const balance = 1000;
   const currency = 'ETH';
   const text = useMemo(() => {
+    if (!balance) {
+      return 'No balance';
+    }
+
     if (status === 'connected') {
-      return `${balance} ${currency}`;
+      return `${balance } ${currency}`;
     }
 
     return 'Connect wallet';
-  }, [status]);
+  }, [balance, status]);
 
   if (status === 'connected') {
     return (
       <Box sx={{ marginLeft: (theme) => theme.spacing(4), display: 'flex' }}>
-        <Button variant="darker" onClick={onClick}>
+        <Button variant="darker" onClick={onClick} sx={{ pointerEvents: 'none' }}>
           {text}
         </Button>
         <Button
@@ -36,7 +40,7 @@ const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = (
           endIcon={name && <Icon name={name} />}
           onClick={onClick}
         >
-          ADDRESS
+          {account && elideAddress(account)}
         </Button>
       </Box>
     );
