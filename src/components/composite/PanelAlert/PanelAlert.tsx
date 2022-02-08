@@ -3,18 +3,18 @@ import React from 'react';
 import { Panel, Typography } from '../../atomic';
 
 export type PanelAlertProps = {
-  type: 'error' | 'warning' | 'info';
+  variant: 'error' | 'warning' | 'info';
   title?: string;
   message: string;
 };
 
-const PanelAlert: React.FunctionComponent<PanelAlertProps> = ({ type, title, message }) => {
+const PanelAlert: React.FunctionComponent<PanelAlertProps> = ({ variant, title, message }) => {
   const renderTitle = () => {
     if (title) {
       return title;
     }
 
-    switch (type) {
+    switch (variant) {
       case 'error':
         return 'ERROR';
 
@@ -30,7 +30,7 @@ const PanelAlert: React.FunctionComponent<PanelAlertProps> = ({ type, title, mes
   };
 
   return (
-    <Panel type={type}>
+    <Panel variant={variant}>
       <Typography variant="h5">{renderTitle()}</Typography>
       <Typography variant="body1">{message}</Typography>
     </Panel>

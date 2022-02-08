@@ -1,6 +1,8 @@
 import chroma from 'chroma-js';
 import mapValues from 'lodash/mapValues';
 
+import { ColorSet } from './types';
+
 const baseColors = {
   lavenderWeb: '#E5E1F9',
   wildStrawberry: '#FF4AA9',
@@ -9,7 +11,7 @@ const baseColors = {
   ultramarineBlue: '#2667FF',
 };
 
-const generateColorMap = (color: string) => ({
+const generateColorMap = (color: string): ColorSet => ({
   base: color,
   darken010: chroma(color).darken(1).hex(),
   darken015: chroma(color).darken(1.5).hex(),

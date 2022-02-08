@@ -1,11 +1,10 @@
 import React from 'react';
 import { SystemStyleObject, Theme } from '@mui/system';
-import chroma from 'chroma-js';
 import MuiToggleButton, {
   ToggleButtonProps as MuiToggleButtonProps,
 } from '@mui/material/ToggleButton';
 
-import { colors, AgentProps } from '@theme';
+import { colors, AgentProps, Agents } from '@theme';
 
 export type ToggleButtonProps = MuiToggleButtonProps & AgentProps;
 
@@ -38,30 +37,71 @@ const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
     },
   };
   const agentStyleOverrides = (): SystemStyleObject<Theme> => {
-    if (!agent) {
-      return {};
-    }
+    switch (agent) {
+      case Agents.FIXED_TRADER: {
+        return {
+          backgroundColor: 'primary.darken030',
+          color: 'primary.light',
+          borderColor: 'primary.light',
+          '&:hover': {
+            backgroundColor: 'primary.darken030',
+            color: 'primary.light',
+          },
+          '&.Mui-selected': {
+            backgroundColor: 'primary.main',
+            '&:hover': {
+              backgroundColor: 'primary.darken015',
+            },
+            '&:not(:first-of-type)': {
+              borderColor: 'primary.light',
+            },
+          },
+        };
+      }
 
-    return {
-      backgroundColor: (theme) => theme.agent[agent].dark,
-      color: (theme) => theme.agent[agent].light,
-      borderColor: (theme) => theme.agent[agent].light,
-      '&:hover': {
-        backgroundColor: (theme) => theme.agent[agent].dark,
-        color: (theme) => theme.agent[agent].light,
-      },
-      '&.Mui-selected': {
-        backgroundColor: (theme) => theme.agent[agent].dark,
-        color: (theme) => theme.agent[agent].light,
-        '&:hover': {
-          backgroundColor: (theme) => chroma(theme.agent[agent].dark).brighten(1).hex(),
-          color: (theme) => chroma(theme.agent[agent].light).brighten(1).hex(),
-        },
-        '&:not(:first-of-type)': {
-          borderColor: (theme) => theme.agent[agent].light,
-        },
-      },
-    };
+      case Agents.VARIABLE_TRADER: {
+        return {
+          backgroundColor: 'tertiary.darken030',
+          color: 'secondary.light',
+          borderColor: 'tertiary.light',
+          '&:hover': {
+            backgroundColor: 'tertiary.darken030',
+          },
+          '&.Mui-selected': {
+            backgroundColor: 'tertiary.main',
+            '&:hover': {
+              backgroundColor: 'tertiary.darken015',
+            },
+            '&:not(:first-of-type)': {
+              borderColor: 'tertiary.light',
+            },
+          },
+        };
+      }
+
+      case Agents.LIQUIDITY_PROVIDER: {
+        return {
+          backgroundColor: 'secondary.dark',
+          color: 'primary.light',
+          borderColor: 'secondary.light',
+          '&:hover': {
+            backgroundColor: 'secondary.darken035',
+          },
+          '&.Mui-selected': {
+            backgroundColor: 'secondary.main',
+            '&:hover': {
+              backgroundColor: 'secondary.darken015',
+            },
+            '&:not(:first-of-type)': {
+              borderColor: 'secondary.light',
+            },
+          },
+        };
+      }
+
+      default:
+        return {};
+    }
   };
   const stateStyleOverrides = (): SystemStyleObject<Theme> => {
     if (!selected) {

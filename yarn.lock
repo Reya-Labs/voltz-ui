@@ -15236,6 +15236,11 @@ merge@^2.1.0:
   resolved "https://registry.yarnpkg.com/merge/-/merge-2.1.1.tgz#59ef4bf7e0b3e879186436e8481c06a6c162ca98"
   integrity sha512-jz+Cfrg9GWOZbQAnDQ4hlVnQky+341Yk5ru8bZSe6sIDTCIg8n9i/u7hSQGSVOF3C7lH6mGtqjkiT9G4wFLL0w==
 
+metamask-react@^2.1.3:
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/metamask-react/-/metamask-react-2.1.3.tgz#84b43cb6fd3aef742eb52205afd52510f8468cdd"
+  integrity sha512-wihGmj7JdrAXBitK7tO0/SyRyZV1tX/RoEktADdUI4yYlSa1a6EiDq6AeYxs17DdobEKehsIvo8qb7E1J+t5sw==
+
 methods@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/methods/-/methods-1.1.2.tgz#5529a4d67654134edcc5266656835b0f851afcee"
