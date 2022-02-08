@@ -21,7 +21,8 @@ const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = (
     }
 
     if (status === 'connected') {
-      return `${balance } ${currency}`;
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      return `${balance} ${currency}`;
     }
 
     return 'Connect wallet';
