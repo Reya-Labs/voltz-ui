@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Wallet, WalletName } from '@hooks';
-import { Panel } from '@components/atomic';
+import { Panel, Wallet, WalletName } from '@components/atomic';
 import { Modal } from '@components/composite';
 import { WalletConnectButton, WalletDisplay, WalletSelect } from './components';
 

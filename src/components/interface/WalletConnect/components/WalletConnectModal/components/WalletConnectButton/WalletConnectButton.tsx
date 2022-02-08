@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import Box from '@mui/material/Box';
 
-import { Wallet } from '@hooks';
+import { Wallet } from '@components/atomic';
 import { Button, Icon } from '@components/atomic';
 
 export type WalletConnectButtonProps = {

@@ -8,4 +8,6 @@ export { default as Panel } from './Panel/Panel';
 export { default as Slider } from './Slider/Slider';
 export { default as ToggleButton } from './ToggleButton/ToggleButton';
 export { default as Typography } from './Typography/Typography';
-export { default as WalletProvider } from './WalletProvider/WalletProvider';
+export { default as WalletProvider } from './WalletContext/WalletProvider';
+export { default as WalletContext } from './WalletContext/WalletContext';
+export type { WalletStatus, WalletName, WalletConnect, Wallet } from './WalletContext/types';

@@ -2,8 +2,7 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 
-import { WalletName, Wallet } from '@hooks';
-import { Typography } from '@components/atomic';
+import { Typography, WalletName, Wallet } from '@components/atomic';
 import { WalletOptionButton } from './components';
 
 export type WalletSelect = {

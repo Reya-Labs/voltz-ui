@@ -10,10 +10,10 @@ import {
 
 export type Icons = 'ethereum' | 'warning-circle' | 'information-circle' | 'metamask' | 'voltz';
 
-export const iconMap: Record<Icons, ElementType<any>> = {
-  ethereum: Ethereum,
-  'information-circle': InterfaceAlertInformationCircle,
-  'warning-circle': InterfaceAlertWarningCircle,
-  metamask: Metamask,
-  voltz: Voltz,
+export const iconMap: Record<Icons, ElementType> = {
+  ethereum: Ethereum as ElementType,
+  'information-circle': InterfaceAlertInformationCircle as ElementType,
+  'warning-circle': InterfaceAlertWarningCircle as ElementType,
+  metamask: Metamask as ElementType,
+  voltz: Voltz as ElementType,
 };

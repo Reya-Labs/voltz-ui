@@ -1,7 +1,8 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { useStateMemo, WalletName, Wallet } from '@hooks';
+import { WalletName, Wallet } from '@components/atomic';
+import { useStateMemo } from '@hooks';
 import WalletConnect from './WalletConnect';
 
 export default {

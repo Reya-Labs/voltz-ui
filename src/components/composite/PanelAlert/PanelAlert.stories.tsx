@@ -15,13 +15,13 @@ Basic.args = {};
 
 export const Error = Template.bind({});
 Error.args = {
-  type: 'error',
+  variant: 'error',
   message: 'This is an error message to let you know that something has gone wrong',
 };
 
 export const Danger = Template.bind({});
 Danger.args = {
-  type: 'warning',
+  variant: 'warning',
   message:
     'This is a danger message to warn you to check the data you have entered carefully before continuing',
 };
