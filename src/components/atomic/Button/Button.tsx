@@ -99,7 +99,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({ agent, selected, link, .
 
     return {};
   };
-  const handleClick = () => navigate(link);
+  const handleClick = () => link && navigate(link);
 
   return (
     <MuiButton

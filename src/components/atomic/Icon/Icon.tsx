@@ -33,7 +33,7 @@ const Icon: React.FunctionComponent<IconProps> = ({ name, sx, link, ...props }) 
 
     return [sx];
   };
-  const handleClick = () => navigate(link);
+  const handleClick = () => link && navigate(link);
 
   return (
     <SvgIcon component={NamedIcon} sx={[defaultSx, ...getSx()]} onClick={handleClick} {...props} />

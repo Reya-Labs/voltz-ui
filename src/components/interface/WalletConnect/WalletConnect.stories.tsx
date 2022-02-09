@@ -52,7 +52,14 @@ const WalletConnectWrapper: React.FunctionComponent<WalletConnectWrapperProps> =
 
   return (
     <WalletConnect
-      wallet={{ ...wallet, connect: handleConnect, status: updatedStatus, name: updatedName }}
+      wallet={{
+        ...wallet,
+        connect: handleConnect,
+        status: updatedStatus,
+        name: updatedName,
+        ethereum: null,
+        balance: null,
+      }}
     />
   );
 };

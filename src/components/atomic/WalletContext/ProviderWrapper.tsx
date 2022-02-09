@@ -69,7 +69,7 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
       default:
         return null;
     }
-  }, [status]);
+  }, [name, metamaskEthereum]);
 
   const value = {
     status,
