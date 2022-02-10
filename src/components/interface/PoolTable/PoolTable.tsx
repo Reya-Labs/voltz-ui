@@ -3,11 +3,11 @@ import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 
-import { AgentProps } from '@theme';
+import { AgentProps, Agents } from '@theme';
 import { Panel } from '@components/atomic';
 import { TableOrder, TableFields, Mode, TEMPORARY_Pool } from './types';
 import { transformData, getLabels, sortData, paginateData } from './utilities';
-import { PoolTableHead, PoolTableRow } from './components';
+import { PoolTableControls, PoolTableHead, PoolTableRow } from './components';
 
 export type PoolTableProps = AgentProps & {
   mode: Mode;
@@ -28,9 +28,16 @@ const PoolTable: React.FunctionComponent<PoolTableProps> = ({ agent, mode, data:
 
   const sortedData = sortData({ data, order, orderBy });
   const { data: paginatedData, pages } = paginateData({ data: sortedData, page, size });
+  const onChangeAgent = (value: Agents) => null;
 
   return (
     <Panel variant="dark">
+      <PoolTableControls
+        agent={agent}
+        mode={mode}
+        quantity={data.length}
+        onChangeAgent={onChangeAgent}
+      />
       <TableContainer>
         <Table
           sx={{ minWidth: 750, borderCollapse: 'separate', borderSpacing: '0px 8px' }}
