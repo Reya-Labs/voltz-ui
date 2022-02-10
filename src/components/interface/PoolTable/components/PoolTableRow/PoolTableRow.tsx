@@ -4,7 +4,7 @@ import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '@mui/system';
 
 import { AgentProps, Agents } from '@theme';
-import { Typography } from '@components/atomic';
+import { Button, Typography } from '@components/atomic';
 import { MaturityInformation } from '@components/composite';
 import { Mode, TableData, TableFields } from '../../types';
 
@@ -25,7 +25,10 @@ const PoolTableRow: React.FunctionComponent<PoolTableRowProps> = ({
   const commonOverrides: SystemStyleObject<Theme> = {
     '& .MuiTableCell-root': {
       borderColor: 'transparent',
-      padding: (theme) => theme.spacing(4),
+      paddingRight: (theme) => theme.spacing(4),
+      paddingLeft: (theme) => theme.spacing(4),
+      paddingTop: (theme) => theme.spacing(2),
+      paddingBottom: (theme) => theme.spacing(1),
       '&:first-of-type': {
         borderTopLeftRadius: 8,
         borderBottomLeftRadius: 8,
@@ -119,6 +122,9 @@ const PoolTableRow: React.FunctionComponent<PoolTableRowProps> = ({
 
         return <TableCell key={field}>{renderDisplay()}</TableCell>;
       })}
+      <TableCell align="center">
+        <Button variant="contained">Hello</Button>
+      </TableCell>
     </TableRow>
   );
 };

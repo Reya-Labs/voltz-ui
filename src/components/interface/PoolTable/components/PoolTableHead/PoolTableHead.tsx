@@ -1,10 +1,8 @@
 import React from 'react';
-import Box from '@mui/material/Box';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import { SystemStyleObject, Theme } from '@mui/system';
 
 import { TableOrder, TableFields } from '../../types';
 
@@ -50,6 +48,7 @@ const PoolTableHead: React.FunctionComponent<PoolTableHeadProps> = ({
             </TableSortLabel>
           </TableCell>
         ))}
+        <TableCell align="left" padding="normal"></TableCell>
       </TableRow>
     </TableHead>
   );

@@ -22,7 +22,7 @@ const PoolTable: React.FunctionComponent<PoolTableProps> = ({ agent, mode, data:
   const data = transformData({ data: rawData, mode });
   const labels = getLabels({ agent, mode });
   const handleSort = (field: TableFields) => {
-    setOrder(field === orderBy ? (order === 'asc' ? 'desc' : 'asc') : 'desc');
+    setOrder(field === orderBy ? (order === 'asc' ? 'desc' : 'asc') : 'asc');
     setOrderBy(field);
   };
 
@@ -32,7 +32,11 @@ const PoolTable: React.FunctionComponent<PoolTableProps> = ({ agent, mode, data:
   return (
     <Panel variant="dark">
       <TableContainer>
-        <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size="medium">
+        <Table
+          sx={{ minWidth: 750, borderCollapse: 'separate', borderSpacing: '0px 8px' }}
+          aria-labelledby="tableTitle"
+          size="medium"
+        >
           <PoolTableHead order={order} orderBy={orderBy} onSort={handleSort} labels={labels} />
           <TableBody>
             {paginatedData.map((datum) => (
