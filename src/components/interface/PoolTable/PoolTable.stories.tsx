@@ -2,6 +2,7 @@ import React from 'react';
 import { DateTime, Duration } from 'luxon';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
+import { AgentProvider } from '@components/contexts';
 import { TEMPORARY_Pool } from './types';
 import PoolTable from './PoolTable';
 
@@ -42,7 +43,11 @@ export default {
   },
 } as ComponentMeta<typeof PoolTable>;
 
-const Template: ComponentStory<typeof PoolTable> = (args) => <PoolTable {...args} />;
+const Template: ComponentStory<typeof PoolTable> = (args) => (
+  <AgentProvider>
+    <PoolTable {...args} />
+  </AgentProvider>
+);
 
 export const Basic = Template.bind({});
 Basic.args = {};
