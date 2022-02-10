@@ -1,4 +1,5 @@
 import { TableOrder, TableFields, TableData } from '../../types';
+import getComparator from './getComparator';
 
 export type SortDataArgs = {
   data: TableData[];
@@ -7,7 +8,7 @@ export type SortDataArgs = {
 };
 
 const sortData = ({ data, order, orderBy }: SortDataArgs): TableData[] => {
-  return data;
+  return data.sort(getComparator({ order, orderBy }));
 };
 
 export default sortData;

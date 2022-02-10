@@ -19,6 +19,19 @@ const data: TEMPORARY_Pool[] = [
       },
     ],
   },
+  {
+    protocol: 'cDAI',
+    startDate: DateTime.now().minus(Duration.fromObject({ weeks: 2 })),
+    endDate: DateTime.now().plus(Duration.fromObject({ weeks: 2 })),
+    fixedApr: 7,
+    variableApr: 10,
+    positions: [
+      {
+        margin: 100000,
+        notional: 10000,
+      },
+    ],
+  },
 ];
 
 export default {

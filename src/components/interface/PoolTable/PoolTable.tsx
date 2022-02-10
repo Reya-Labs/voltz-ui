@@ -22,7 +22,7 @@ const PoolTable: React.FunctionComponent<PoolTableProps> = ({ agent, mode, data:
   const data = transformData({ data: rawData, mode });
   const labels = getLabels({ agent, mode });
   const handleSort = (field: TableFields) => {
-    setOrder(field === orderBy ? 'asc' : 'desc');
+    setOrder(field === orderBy ? (order === 'asc' ? 'desc' : 'asc') : 'desc');
     setOrderBy(field);
   };
 
