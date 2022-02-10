@@ -4,6 +4,7 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
+import { SystemStyleObject, Theme } from '@mui/system';
 
 import { TableOrder, TableFields } from '../../types';
 
@@ -25,7 +26,14 @@ const PoolTableHead: React.FunctionComponent<PoolTableHeadProps> = ({
 
   return (
     <TableHead>
-      <TableRow>
+      <TableRow
+        sx={{
+          '& .MuiTableCell-root': {
+            borderColor: 'transparent',
+            padding: (theme) => theme.spacing(4),
+          },
+        }}
+      >
         {labels.map(([field, label]) => (
           <TableCell
             key={field}

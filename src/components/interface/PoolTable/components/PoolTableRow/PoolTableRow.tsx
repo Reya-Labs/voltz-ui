@@ -1,6 +1,7 @@
 import React from 'react';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
+import { SystemStyleObject, Theme } from '@mui/system';
 
 import { AgentProps, Agents } from '@theme';
 import { MaturityInformation } from '@components/composite';
@@ -19,9 +20,46 @@ const PoolTableRow: React.FunctionComponent<PoolTableRowProps> = ({
   labels,
 }) => {
   const key = 0;
+  const variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'main';
+  const commonOverrides: SystemStyleObject<Theme> = {
+    '& .MuiTableCell-root': {
+      borderColor: 'transparent',
+      padding: (theme) => theme.spacing(4),
+      '&:first-of-type': {
+        borderTopLeftRadius: 4,
+        borderBottomLeftRadius: 4,
+      },
+      '&:last-of-type': {
+        borderTopRightRadius: 4,
+        borderBottomRightRadius: 4,
+      },
+    },
+  };
+  const typeStyleOverrides = (): SystemStyleObject<Theme> => {
+    if (!variant) {
+      return {
+        backgroundColor: `primary.dark`,
+      };
+    }
+
+    switch (variant) {
+      case 'main':
+        return {
+          backgroundColor: `secondary.darken040`,
+        };
+
+      case 'darker':
+        return {
+          backgroundColor: `secondary.darken050`,
+        };
+
+      default:
+        return {};
+    }
+  };
 
   return (
-    <TableRow key={key}>
+    <TableRow key={key} sx={{ ...commonOverrides, ...typeStyleOverrides() }}>
       {labels.map(([field, _label]) => {
         const renderDisplay = () => {
           switch (field) {

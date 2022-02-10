@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
-import TableBody from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
 
 import { AgentProps } from '@theme';
 import { Panel } from '@components/atomic';
@@ -30,13 +30,15 @@ const PoolTable: React.FunctionComponent<PoolTableProps> = ({ agent, mode, data:
   const { data: paginatedData, pages } = paginateData({ data: sortedData, page, size });
 
   return (
-    <Panel>
+    <Panel variant="dark">
       <TableContainer>
         <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size="medium">
           <PoolTableHead order={order} orderBy={orderBy} onSort={handleSort} labels={labels} />
-          {paginatedData.map((datum) => (
-            <PoolTableRow datum={datum} agent={agent} mode={mode} labels={labels} />
-          ))}
+          <TableBody>
+            {paginatedData.map((datum) => (
+              <PoolTableRow datum={datum} agent={agent} mode={mode} labels={labels} />
+            ))}
+          </TableBody>
         </Table>
       </TableContainer>
     </Panel>
