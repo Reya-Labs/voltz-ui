@@ -2,7 +2,8 @@ import React from 'react';
 import { addDecorator } from '@storybook/react';
 import { BrowserRouter } from 'react-router-dom';
 
-import { Background, ThemeProvider } from '@theme';
+import { Background } from '@components/atomic';
+import { ThemeProvider } from '@theme';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },

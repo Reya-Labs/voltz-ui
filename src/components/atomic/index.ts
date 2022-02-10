@@ -1,3 +1,4 @@
+export { default as Background } from './Background/Background';
 export { default as Button } from './Button/Button';
 export { default as Card } from './Card/Card';
 export { default as FormHelperText } from './FormHelperText/FormHelperText';

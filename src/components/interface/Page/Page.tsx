@@ -1,7 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 
-import { Background } from '@theme';
+import { Background } from '@components/atomic';
 import { useWallet } from '@hooks';
 import Nav from '../Nav/Nav';
 import WalletConnect from '../WalletConnect/WalletConnect';
