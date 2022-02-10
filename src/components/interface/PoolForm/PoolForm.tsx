@@ -81,12 +81,7 @@ const PoolForm: React.FunctionComponent<PoolFormProps> = ({
 
   return (
     <Box sx={{ padding: 3 }}>
-      <ProtocolInformation
-        agent={agent}
-        protocol={protocol}
-        fixedApr={fixedApr}
-        variableApr={variableApr}
-      />
+      <ProtocolInformation protocol={protocol} fixedApr={fixedApr} variableApr={variableApr} />
       <Box
         sx={{
           marginBottom: (theme) => theme.spacing(4),
