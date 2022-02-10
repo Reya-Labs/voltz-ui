@@ -46,16 +46,18 @@ const PoolTableControls: React.FunctionComponent<PoolTableControlsProps> = ({ mo
   };
 
   return (
-    <Box>
+    <Box sx={{ display: 'flex' }}>
       {agent !== Agents.LIQUIDITY_PROVIDER && (
-        <ToggleButtonGroup
-          label="Positions"
-          options={Object.values(agentOptionTitles)}
-          option={agentOptionTitles[agent]}
-          defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
-          onChangeOption={handleChangeAgent}
-          agent={agent}
-        />
+        <Box sx={{ width: 'auto', marginRight: (theme) => theme.spacing(4) }}>
+          <ToggleButtonGroup
+            label="Positions"
+            options={Object.values(agentOptionTitles)}
+            option={agentOptionTitles[agent]}
+            defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
+            onChangeOption={handleChangeAgent}
+            agent={agent}
+          />
+        </Box>
       )}
       <Typography variant="body2" label={getTypographyLabel()}>
         {quantity}
