@@ -1,17 +1,15 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 
-import { AgentProps } from '@theme';
 import { Typography } from '@components/atomic';
 
-export type ProtocolInformationProps = AgentProps & {
+export type ProtocolInformationProps = {
   protocol?: string;
   fixedApr?: number;
   variableApr?: number;
 };
 
 const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = ({
-  agent,
   protocol,
   fixedApr,
   variableApr,

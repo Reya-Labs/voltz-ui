@@ -1,23 +1,19 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 
-import { AgentProps, Agents } from '@theme';
+import { Agents } from '@components/contexts';
 import { Typography } from '@components/atomic';
 import { ToggleButtonGroup } from '@components/composite';
+import { useAgent } from '@hooks';
 import { Mode } from '../../types';
 
-export type PoolTableControlsProps = AgentProps & {
+export type PoolTableControlsProps = {
   mode: Mode;
   quantity: number;
-  onChangeAgent: (agent: Agents) => void;
 };
 
-const PoolTableControls: React.FunctionComponent<PoolTableControlsProps> = ({
-  agent,
-  mode,
-  quantity,
-  onChangeAgent,
-}) => {
+const PoolTableControls: React.FunctionComponent<PoolTableControlsProps> = ({ mode, quantity }) => {
+  const { agent, onChangeAgent } = useAgent();
   if (mode === 'pools' || !agent) {
     return null;
   }

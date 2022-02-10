@@ -3,23 +3,20 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '@mui/system';
 
-import { AgentProps, Agents } from '@theme';
+import { Agents } from '@components/contexts';
 import { Button, Typography } from '@components/atomic';
 import { MaturityInformation } from '@components/composite';
+import { useAgent } from '@hooks';
 import { Mode, TableData, TableFields } from '../../types';
 
-export type PoolTableRowProps = AgentProps & {
+export type PoolTableRowProps = {
   mode: Mode;
   datum: TableData;
   labels: [TableFields, string][];
 };
 
-const PoolTableRow: React.FunctionComponent<PoolTableRowProps> = ({
-  agent,
-  mode,
-  datum,
-  labels,
-}) => {
+const PoolTableRow: React.FunctionComponent<PoolTableRowProps> = ({ mode, datum, labels }) => {
+  const { agent } = useAgent();
   const key = 0;
   const variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'main';
   const commonOverrides: SystemStyleObject<Theme> = {

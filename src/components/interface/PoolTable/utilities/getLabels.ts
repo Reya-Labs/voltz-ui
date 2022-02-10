@@ -1,4 +1,4 @@
-import { Agents } from '@theme';
+import { Agents } from '@components/contexts';
 import { Mode, TableFields } from '../types';
 
 export type GetLabelsArgs = {

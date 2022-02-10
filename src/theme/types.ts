@@ -1,13 +1,3 @@
-export enum Agents {
-  FIXED_TRADER = 'Fixed Trader',
-  VARIABLE_TRADER = 'Variable Trader',
-  LIQUIDITY_PROVIDER = 'Liquidity Provider',
-}
-
-export type AgentProps = {
-  agent?: Agents;
-};
-
 export type ColorSet = {
   base: string;
   darken010: string;

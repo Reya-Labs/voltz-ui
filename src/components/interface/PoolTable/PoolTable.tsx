@@ -3,8 +3,9 @@ import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 
-import { AgentProps, Agents } from '@theme';
+import { AgentProps, Agents } from '@components/contexts';
 import { Panel } from '@components/atomic';
+import { useAgentWithOverride } from '@hooks';
 import { TableOrder, TableFields, Mode, TEMPORARY_Pool } from './types';
 import { transformData, getLabels, sortData, paginateData } from './utilities';
 import { PoolTableControls, PoolTableHead, PoolTableRow } from './components';
@@ -14,7 +15,12 @@ export type PoolTableProps = AgentProps & {
   data: TEMPORARY_Pool[];
 };
 
-const PoolTable: React.FunctionComponent<PoolTableProps> = ({ agent, mode, data: rawData }) => {
+const PoolTable: React.FunctionComponent<PoolTableProps> = ({
+  agent: agentOverride,
+  mode,
+  data: rawData,
+}) => {
+  const { agent } = useAgentWithOverride(agentOverride);
   const [order, setOrder] = useState<TableOrder>('desc');
   const [orderBy, setOrderBy] = useState<TableFields>('protocol');
   const [page, setPage] = useState(0);
@@ -32,12 +38,7 @@ const PoolTable: React.FunctionComponent<PoolTableProps> = ({ agent, mode, data:
 
   return (
     <Panel variant="dark">
-      <PoolTableControls
-        agent={agent}
-        mode={mode}
-        quantity={data.length}
-        onChangeAgent={onChangeAgent}
-      />
+      <PoolTableControls mode={mode} quantity={data.length} />
       <TableContainer>
         <Table
           sx={{ minWidth: 750, borderCollapse: 'separate', borderSpacing: '0px 8px' }}
@@ -47,7 +48,7 @@ const PoolTable: React.FunctionComponent<PoolTableProps> = ({ agent, mode, data:
           <PoolTableHead order={order} orderBy={orderBy} onSort={handleSort} labels={labels} />
           <TableBody>
             {paginatedData.map((datum) => (
-              <PoolTableRow datum={datum} agent={agent} mode={mode} labels={labels} />
+              <PoolTableRow datum={datum} mode={mode} labels={labels} />
             ))}
           </TableBody>
         </Table>

@@ -1,14 +1,30 @@
-import { AgentSettings } from '@components/contexts';
+import { useEffect } from 'react';
+
+import { Agents, AgentSettings } from '@components/contexts';
 import useAgent from './useAgent';
 
-const useAgentWithOverride = (args: AgentSettings | undefined): AgentSettings => {
+export type AgentSettingsOverride = {
+  agent?: AgentSettings['agent'];
+  onChangeAgent?: AgentSettings['onChangeAgent'];
+};
+
+const useAgentWithOverride = (agentOverride: Agents | undefined): AgentSettings => {
   const { agent, onChangeAgent } = useAgent();
 
-  if (!args) {
+  useEffect(() => {
+    if (agentOverride) {
+      onChangeAgent(agentOverride);
+    }
+  }, [agentOverride]);
+
+  if (!agentOverride) {
     return { agent, onChangeAgent };
   }
 
-  return args;
+  return {
+    agent: agentOverride,
+    onChangeAgent,
+  };
 };
 
 export default useAgentWithOverride;

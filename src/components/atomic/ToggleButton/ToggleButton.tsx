@@ -4,15 +4,18 @@ import MuiToggleButton, {
   ToggleButtonProps as MuiToggleButtonProps,
 } from '@mui/material/ToggleButton';
 
-import { colors, AgentProps, Agents } from '@theme';
+import { colors } from '@theme';
+import { AgentProps, Agents } from '@components/contexts';
+import { useAgentWithOverride } from '@hooks';
 
 export type ToggleButtonProps = MuiToggleButtonProps & AgentProps;
 
 const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
-  agent,
+  agent: agentOverride,
   selected,
   ...props
 }) => {
+  const { agent } = useAgentWithOverride(agentOverride);
   const styleOverrides: SystemStyleObject<Theme> = {
     '&.MuiToggleButtonGroup-grouped': {
       minHeight: (theme) => theme.spacing(8),
