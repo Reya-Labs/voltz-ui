@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import Box from '@mui/material/Box';
 
 import { elideAddress } from '@utilities';
-import { Wallet } from '@components/atomic';
+import { Wallet } from '@components/contexts';
 import { Button, Icon } from '@components/atomic';
 
 export type WalletConnectButtonProps = {

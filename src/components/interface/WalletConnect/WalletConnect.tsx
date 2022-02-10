@@ -1,7 +1,8 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 
-import { Icon, Typography, Wallet } from '../../atomic';
+import { Wallet } from '../../contexts';
+import { Icon, Typography } from '../../atomic';
 import { WalletConnectModal } from './components';
 
 export type WalletConnectProps = {
