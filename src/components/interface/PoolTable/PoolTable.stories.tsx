@@ -2,7 +2,7 @@ import React from 'react';
 import { DateTime, Duration } from 'luxon';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { AgentProvider } from '@components/contexts';
+import { AgentProvider, Agents } from '@components/contexts';
 import { TEMPORARY_Pool } from './types';
 import PoolTable from './PoolTable';
 
@@ -17,6 +17,7 @@ const data: TEMPORARY_Pool[] = [
       {
         margin: 1000000,
         notional: 100000,
+        agent: Agents.VARIABLE_TRADER,
       },
     ],
   },
@@ -30,6 +31,7 @@ const data: TEMPORARY_Pool[] = [
       {
         margin: 100000,
         notional: 10000,
+        agent: Agents.FIXED_TRADER,
       },
     ],
   },

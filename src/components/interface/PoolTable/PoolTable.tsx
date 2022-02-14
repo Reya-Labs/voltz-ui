@@ -25,7 +25,7 @@ const PoolTable: React.FunctionComponent<PoolTableProps> = ({
   const [orderBy, setOrderBy] = useState<TableFields>('protocol');
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(10);
-  const data = transformData({ data: rawData, mode });
+  const data = transformData({ data: rawData, mode, agent });
   const labels = getLabels({ agent, mode });
   const handleSort = (field: TableFields) => {
     setOrder(field === orderBy ? (order === 'asc' ? 'desc' : 'asc') : 'asc');
@@ -37,7 +37,7 @@ const PoolTable: React.FunctionComponent<PoolTableProps> = ({
   const onChangeAgent = (value: Agents) => null;
 
   return (
-    <Panel variant="dark">
+    <Panel variant="dark" sx={{ minWidth: 800 }}>
       <PoolTableControls mode={mode} quantity={data.length} />
       <TableContainer>
         <Table
@@ -47,8 +47,8 @@ const PoolTable: React.FunctionComponent<PoolTableProps> = ({
         >
           <PoolTableHead order={order} orderBy={orderBy} onSort={handleSort} labels={labels} />
           <TableBody>
-            {paginatedData.map((datum) => (
-              <PoolTableRow datum={datum} mode={mode} labels={labels} />
+            {paginatedData.map((datum, index) => (
+              <PoolTableRow datum={datum} mode={mode} labels={labels} index={index} />
             ))}
           </TableBody>
         </Table>

@@ -13,11 +13,16 @@ export type PoolTableRowProps = {
   mode: Mode;
   datum: TableData;
   labels: [TableFields, string][];
+  index: number;
 };
 
-const PoolTableRow: React.FunctionComponent<PoolTableRowProps> = ({ mode, datum, labels }) => {
+const PoolTableRow: React.FunctionComponent<PoolTableRowProps> = ({
+  mode,
+  datum,
+  labels,
+  index,
+}) => {
   const { agent } = useAgent();
-  const key = 0;
   const variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'main';
   const commonOverrides: SystemStyleObject<Theme> = {
     '& .MuiTableCell-root': {
@@ -60,7 +65,7 @@ const PoolTableRow: React.FunctionComponent<PoolTableRowProps> = ({ mode, datum,
   };
 
   return (
-    <TableRow key={key} sx={{ ...commonOverrides, ...typeStyleOverrides() }}>
+    <TableRow key={index} sx={{ ...commonOverrides, ...typeStyleOverrides() }}>
       {labels.map(([field, label]) => {
         const renderDisplay = () => {
           if (field === 'maturity') {

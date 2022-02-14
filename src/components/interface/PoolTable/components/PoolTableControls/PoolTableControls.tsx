@@ -46,7 +46,7 @@ const PoolTableControls: React.FunctionComponent<PoolTableControlsProps> = ({ mo
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', minHeight: 60 }}>
       {agent !== Agents.LIQUIDITY_PROVIDER && (
         <Box sx={{ width: 'auto', marginRight: (theme) => theme.spacing(4) }}>
           <ToggleButtonGroup

@@ -1,5 +1,7 @@
 import { DateTime } from 'luxon';
 
+import { Agents } from '@components/contexts';
+
 export type TableOrder = 'asc' | 'desc';
 
 export type TableFields =
@@ -15,6 +17,7 @@ export type Mode = 'pools' | 'portfolio';
 export type TEMPORARY_Position = {
   margin: number;
   notional: number;
+  agent: Agents;
 };
 
 export type TEMPORARY_Pool = {

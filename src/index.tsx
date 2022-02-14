@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import Amplify from 'aws-amplify';
 
 import './fonts/PixelOperator/PixelOperatorMono8.ttf';
@@ -25,9 +25,9 @@ ReactDOM.render(
     <ThemeProvider>
       <WalletProvider>
         <AgentProvider>
-          <BrowserRouter>
+          <HashRouter>
             <App />
-          </BrowserRouter>
+          </HashRouter>
         </AgentProvider>
       </WalletProvider>
     </ThemeProvider>

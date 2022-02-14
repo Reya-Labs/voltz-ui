@@ -10,7 +10,7 @@ const Page: React.FunctionComponent = ({ children }) => {
   const wallet = useWallet();
 
   return (
-    <Background>
+    <Background sx={{ display: 'flex', flexDirection: 'column' }}>
       <Box
         sx={{
           display: 'flex',
@@ -21,7 +21,7 @@ const Page: React.FunctionComponent = ({ children }) => {
         <Nav />
         <WalletConnect wallet={wallet} />
       </Box>
-      <Box>{children}</Box>
+      <Box sx={{ flexGrow: 1 }}>{children}</Box>
     </Background>
   );
 };
