@@ -1,6 +1,5 @@
 import React from 'react';
 import isUndefined from 'lodash/isUndefined';
-import Box from '@mui/material/Box';
 
 import { IntegerField } from '@components/composite';
 
@@ -13,9 +12,7 @@ export type MarginAmountProps = {
 };
 
 const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
-  protocol,
   defaultMargin,
-  maxMargin,
   margin,
   onChangeMargin,
 }) => {

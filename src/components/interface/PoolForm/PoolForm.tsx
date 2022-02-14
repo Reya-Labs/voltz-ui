@@ -2,8 +2,9 @@ import React from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
 
-import { Agents, AgentProps } from '@theme';
+import { AgentProps } from '@components/contexts';
 import { MaturityInformation } from '@components/composite';
+import { useAgentWithOverride } from '@hooks';
 import { calculateNotionalAmount } from './utilities';
 import {
   MarginAmount,
@@ -15,7 +16,6 @@ import {
 } from './components';
 
 export type PoolFormProps = AgentProps & {
-  onChangeAgent: (agent: Agents) => void;
   protocol?: string;
   fixedApr?: number;
   variableApr?: number;
@@ -41,8 +41,7 @@ export type PoolFormProps = AgentProps & {
 };
 
 const PoolForm: React.FunctionComponent<PoolFormProps> = ({
-  agent,
-  onChangeAgent,
+  agent: agentOverride,
   protocol,
   fixedApr,
   variableApr,
@@ -66,6 +65,7 @@ const PoolForm: React.FunctionComponent<PoolFormProps> = ({
   onChangeMargin,
   onSubmit,
 }) => {
+  const { agent } = useAgentWithOverride(agentOverride);
   const notional = calculateNotionalAmount(margin, leverage);
   const maxNotional = 0;
   const handleMaxNotional = () => {};
@@ -81,12 +81,7 @@ const PoolForm: React.FunctionComponent<PoolFormProps> = ({
 
   return (
     <Box sx={{ padding: 3 }}>
-      <ProtocolInformation
-        agent={agent}
-        protocol={protocol}
-        fixedApr={fixedApr}
-        variableApr={variableApr}
-      />
+      <ProtocolInformation protocol={protocol} fixedApr={fixedApr} variableApr={variableApr} />
       <Box
         sx={{
           marginBottom: (theme) => theme.spacing(4),
@@ -101,14 +96,11 @@ const PoolForm: React.FunctionComponent<PoolFormProps> = ({
         }}
       >
         <TraderControls
-          agent={agent}
-          onChangeAgent={onChangeAgent}
           defaultPartialCollateralization={defaultPartialCollateralization}
           partialCollateralization={partialCollateralization}
           onChangePartialCollateralization={onChangePartialCollateralization}
         />
         <RateOptions
-          agent={agent}
           defaultFixedLow={defaultFixedLow}
           defaultFixedHigh={defaultFixedHigh}
           defaultLeverage={defaultLeverage}
@@ -144,7 +136,7 @@ const PoolForm: React.FunctionComponent<PoolFormProps> = ({
           onMaxNotional={handleMaxNotional}
         />
       </Box>
-      <SubmitPoolFormButton agent={agent} onSubmit={handleSubmit} />
+      <SubmitPoolFormButton onSubmit={handleSubmit} />
     </Box>
   );
 };

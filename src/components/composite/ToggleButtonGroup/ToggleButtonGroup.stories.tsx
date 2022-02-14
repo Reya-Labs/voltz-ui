@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { Agents } from '@theme';
+import { Agents, AgentProvider } from '@components/contexts';
 import ToggleButtonGroup from './ToggleButtonGroup';
 
 export default {
@@ -18,7 +18,9 @@ export default {
 } as ComponentMeta<typeof ToggleButtonGroup>;
 
 const Template: ComponentStory<typeof ToggleButtonGroup> = (args) => (
-  <ToggleButtonGroup {...args} />
+  <AgentProvider>
+    <ToggleButtonGroup {...args} />
+  </AgentProvider>
 );
 
 export const Basic = Template.bind({});

@@ -1,16 +1,15 @@
 import React from 'react';
 
-import { Agents, AgentProps } from '@theme';
+import { Agents } from '@components/contexts';
 import { Button } from '@components/atomic';
+import { useAgent } from '@hooks';
 
-export type SubmitPoolFormButtonProps = AgentProps & {
+export type SubmitPoolFormButtonProps = {
   onSubmit: () => void;
 };
 
-const SubmitPoolFormButton: React.FunctionComponent<SubmitPoolFormButtonProps> = ({
-  agent,
-  onSubmit,
-}) => {
+const SubmitPoolFormButton: React.FunctionComponent<SubmitPoolFormButtonProps> = ({ onSubmit }) => {
+  const { agent } = useAgent();
   const submitLabel = (): string | null => {
     switch (agent) {
       case Agents.LIQUIDITY_PROVIDER:
@@ -28,7 +27,7 @@ const SubmitPoolFormButton: React.FunctionComponent<SubmitPoolFormButtonProps> =
   };
 
   return (
-    <Button size="large" onClick={onSubmit} agent={agent}>
+    <Button size="large" onClick={onSubmit}>
       {submitLabel()}
     </Button>
   );

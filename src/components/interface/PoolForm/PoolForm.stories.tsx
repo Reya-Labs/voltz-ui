@@ -2,6 +2,7 @@ import React from 'react';
 import { DateTime, Duration } from 'luxon';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
+import { AgentProvider } from '@components/contexts';
 import { useStateMemo } from '@hooks';
 import PoolForm, { PoolFormProps } from './PoolForm';
 
@@ -22,7 +23,6 @@ type PoolFormWrapperProps = Omit<
 >;
 
 const PoolFormWrapper: React.FunctionComponent<PoolFormWrapperProps> = ({ ...props }) => {
-  const [agent, setAgent] = useStateMemo<PoolFormProps['agent']>(props.agent);
   const [fixedLow, setFixedLow] = useStateMemo<PoolFormProps['fixedLow']>(props.fixedLow);
   const [fixedHigh, setFixedHigh] = useStateMemo<PoolFormProps['fixedHigh']>(props.fixedHigh);
   const [leverage, setLeverage] = useStateMemo<PoolFormProps['leverage']>(props.leverage);
@@ -33,22 +33,22 @@ const PoolFormWrapper: React.FunctionComponent<PoolFormWrapperProps> = ({ ...pro
   const handleSubmit = (args: Record<string, unknown>) => props.onSubmit(args);
 
   return (
-    <PoolForm
-      {...props}
-      agent={agent}
-      onChangeAgent={setAgent}
-      fixedLow={fixedLow}
-      fixedHigh={fixedHigh}
-      leverage={leverage}
-      margin={margin}
-      partialCollateralization={partialCollateralization}
-      onChangeFixedLow={setFixedLow}
-      onChangeFixedHigh={setFixedHigh}
-      onChangeLeverage={setLeverage}
-      onChangeMargin={setMargin}
-      onChangePartialCollateralization={setPartialCollateralization}
-      onSubmit={handleSubmit}
-    />
+    <AgentProvider>
+      <PoolForm
+        {...props}
+        fixedLow={fixedLow}
+        fixedHigh={fixedHigh}
+        leverage={leverage}
+        margin={margin}
+        partialCollateralization={partialCollateralization}
+        onChangeFixedLow={setFixedLow}
+        onChangeFixedHigh={setFixedHigh}
+        onChangeLeverage={setLeverage}
+        onChangeMargin={setMargin}
+        onChangePartialCollateralization={setPartialCollateralization}
+        onSubmit={handleSubmit}
+      />
+    </AgentProvider>
   );
 };
 

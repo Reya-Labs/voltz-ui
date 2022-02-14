@@ -2,6 +2,7 @@ import React from 'react';
 import { SystemStyleObject, Theme } from '@mui/system';
 import Box from '@mui/material/Box';
 
+import { routes } from '@routes';
 import { Icon, Button } from '../../atomic';
 
 const Nav: React.FunctionComponent = () => {
@@ -14,25 +15,27 @@ const Nav: React.FunctionComponent = () => {
       sx={{
         display: 'flex',
         alignItems: 'center',
-        marginLeft: (theme) => theme.spacing(4),
-        marginTop: (theme) => theme.spacing(4),
         '& > .MuiButton-root': {
           paddingLeft: '20px',
           paddingRight: '20px',
         },
       }}
     >
-      <Icon name="voltz" sx={{ marginRight: (theme) => theme.spacing(4) }} />
-      <Button variant="text" sx={buttonSx} href="/swap">
+      <Icon
+        name="voltz"
+        sx={{ marginRight: (theme) => theme.spacing(4), cursor: 'pointer' }}
+        link={`/${routes.SWAP}`}
+      />
+      <Button variant="text" sx={buttonSx} link={`/${routes.SWAP}`}>
         SWAP
       </Button>
-      <Button variant="text" sx={buttonSx} href="/pools">
+      <Button variant="text" sx={buttonSx} link={`/${routes.POOLS}`}>
         POOLS
       </Button>
-      <Button variant="text" sx={buttonSx} href="/portfolio">
+      <Button variant="text" sx={buttonSx} link={`/${routes.PORTFOLIO}`}>
         PORTFOLIO
       </Button>
-      <Button variant="text" sx={buttonSx} href="/farm">
+      <Button variant="text" sx={buttonSx} link={`/${routes.LP_FARM}`}>
         LP FARM
       </Button>
     </Box>

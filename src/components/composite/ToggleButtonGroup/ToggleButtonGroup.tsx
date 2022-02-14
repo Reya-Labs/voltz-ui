@@ -3,7 +3,8 @@ import MuiToggleButtonGroup, {
   ToggleButtonGroupProps as MuiToggleButtonGroupProps,
 } from '@mui/material/ToggleButtonGroup';
 
-import { AgentProps } from '@theme';
+import { AgentProps } from '@components/contexts';
+import { useAgentWithOverride } from '@hooks';
 import { withLabel } from '../../utilities';
 import { ToggleButton } from '../../atomic';
 
@@ -16,12 +17,13 @@ export type ToggleButtonGroupProps = MuiToggleButtonGroupProps &
   };
 
 const ToggleButtonGroup: React.FunctionComponent<ToggleButtonGroupProps> = ({
-  agent,
+  agent: agentOverride,
   options,
   option,
   defaultOption,
   onChangeOption,
 }) => {
+  useAgentWithOverride(agentOverride);
   const [activeOption, setOption] = useState(option || defaultOption || options[0]);
   const handleChange = (_event: React.MouseEvent<HTMLElement, MouseEvent>, value: string) => {
     setOption(value);
@@ -31,7 +33,7 @@ const ToggleButtonGroup: React.FunctionComponent<ToggleButtonGroupProps> = ({
   return (
     <MuiToggleButtonGroup value={option || activeOption} exclusive onChange={handleChange}>
       {options.map((optionItem: string) => (
-        <ToggleButton key={optionItem} value={optionItem} agent={agent}>
+        <ToggleButton key={optionItem} value={optionItem}>
           {optionItem}
         </ToggleButton>
       ))}

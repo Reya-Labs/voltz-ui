@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { WalletName, Wallet } from '@components/atomic';
+import { WalletName, Wallet } from '@components/contexts';
 import { useStateMemo } from '@hooks';
 import WalletConnect from './WalletConnect';
 
@@ -31,7 +31,10 @@ const WalletConnectWrapper: React.FunctionComponent<WalletConnectWrapperProps> =
   const [updatedStatus, setUpdatedStatus] = useStateMemo(status);
   const [updatedName, setUpdatedName] = useStateMemo(name);
   const handleConnect = async (walletName: WalletName) => {
-    connect(walletName);
+    connect(walletName).then(
+      () => {},
+      () => {},
+    );
     setUpdatedName(walletName);
 
     setUpdatedStatus('initializing');
@@ -49,7 +52,14 @@ const WalletConnectWrapper: React.FunctionComponent<WalletConnectWrapperProps> =
 
   return (
     <WalletConnect
-      wallet={{ ...wallet, connect: handleConnect, status: updatedStatus, name: updatedName }}
+      wallet={{
+        ...wallet,
+        connect: handleConnect,
+        status: updatedStatus,
+        name: updatedName,
+        ethereum: null,
+        balance: null,
+      }}
     />
   );
 };

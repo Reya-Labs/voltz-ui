@@ -2,10 +2,11 @@ import React from 'react';
 import isUndefined from 'lodash/isUndefined';
 import Box from '@mui/material/Box';
 
-import { Agents, AgentProps } from '@theme';
+import { Agents } from '@components/contexts';
 import { IntegerField } from '@components/composite';
+import { useAgent } from '@hooks';
 
-export type RateOptionsProps = AgentProps & {
+export type RateOptionsProps = {
   defaultFixedLow?: number;
   defaultFixedHigh?: number;
   defaultLeverage?: number;
@@ -18,7 +19,6 @@ export type RateOptionsProps = AgentProps & {
 };
 
 const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
-  agent,
   defaultFixedLow,
   defaultFixedHigh,
   defaultLeverage,
@@ -29,6 +29,7 @@ const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
   onChangeFixedHigh,
   onChangeLeverage,
 }) => {
+  const { agent } = useAgent();
   const fixedLowValue = isUndefined(fixedLow) ? defaultFixedLow : fixedLow;
   const fixedHighValue = isUndefined(fixedHigh) ? defaultFixedHigh : fixedHigh;
   const leverageValue = isUndefined(leverage) ? defaultLeverage : leverage;
