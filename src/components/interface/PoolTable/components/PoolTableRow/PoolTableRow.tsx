@@ -24,23 +24,6 @@ const PoolTableRow: React.FunctionComponent<PoolTableRowProps> = ({
 }) => {
   const { agent } = useAgent();
   const variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'main';
-  const commonOverrides: SystemStyleObject<Theme> = {
-    '& .MuiTableCell-root': {
-      borderColor: 'transparent',
-      paddingRight: (theme) => theme.spacing(4),
-      paddingLeft: (theme) => theme.spacing(4),
-      paddingTop: (theme) => theme.spacing(2),
-      paddingBottom: (theme) => theme.spacing(1),
-      '&:first-of-type': {
-        borderTopLeftRadius: 8,
-        borderBottomLeftRadius: 8,
-      },
-      '&:last-of-type': {
-        borderTopRightRadius: 8,
-        borderBottomRightRadius: 8,
-      },
-    },
-  };
   const typeStyleOverrides = (): SystemStyleObject<Theme> => {
     if (!variant) {
       return {
@@ -65,7 +48,7 @@ const PoolTableRow: React.FunctionComponent<PoolTableRowProps> = ({
   };
 
   return (
-    <TableRow key={index} sx={{ ...commonOverrides, ...typeStyleOverrides() }}>
+    <TableRow key={index} sx={{ ...typeStyleOverrides() }}>
       {labels.map(([field, label]) => {
         const renderDisplay = () => {
           if (field === 'maturity') {
