@@ -107,7 +107,7 @@ const Home: React.FunctionComponent = () => {
 
         break;
     }
-  }, [pathname]);
+  }, [pathnameWithoutPrefix, onChangeAgent]);
 
   const pageTitle = useMemo(() => {
     switch (pathnameWithoutPrefix) {
@@ -126,7 +126,7 @@ const Home: React.FunctionComponent = () => {
       default:
         return null;
     }
-  }, [pathname]);
+  }, [pathnameWithoutPrefix]);
   const pageSubtitle = useMemo(() => {
     switch (pathnameWithoutPrefix) {
       case routes.SWAP:
@@ -138,7 +138,7 @@ const Home: React.FunctionComponent = () => {
       default:
         return null;
     }
-  }, [pathname]);
+  }, [pathnameWithoutPrefix]);
   const tableMode = useMemo(() => {
     switch (pathnameWithoutPrefix) {
       case routes.SWAP:
@@ -148,7 +148,7 @@ const Home: React.FunctionComponent = () => {
       default:
         return 'portfolio';
     }
-  }, [pathname]);
+  }, [pathnameWithoutPrefix]);
 
   return (
     <Page>

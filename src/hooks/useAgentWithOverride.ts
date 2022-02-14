@@ -15,7 +15,7 @@ const useAgentWithOverride = (agentOverride: Agents | undefined): AgentSettings 
     if (agentOverride) {
       onChangeAgent(agentOverride);
     }
-  }, [agentOverride]);
+  }, [agentOverride, onChangeAgent]);
 
   if (!agentOverride) {
     return { agent, onChangeAgent };
