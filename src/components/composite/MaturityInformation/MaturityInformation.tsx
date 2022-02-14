@@ -15,6 +15,8 @@ const MaturityInformation: React.FunctionComponent<MaturityInformationProps> = (
   startDate,
   endDate,
 }) => {
+  const startDateMillis = startDate?.toMillis();
+  const endDateMillis = endDate?.toMillis();
   const percentageComplete = useMemo((): number => {
     if (!startDate || !endDate) {
       return 0;
@@ -28,7 +30,8 @@ const MaturityInformation: React.FunctionComponent<MaturityInformationProps> = (
       .times(100);
 
     return percentage.trunc().toNumber();
-  }, [startDate?.toMillis(), endDate?.toMillis()]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startDateMillis, endDateMillis]);
   const formattedEndDate = endDate?.toLocaleString();
 
   return (

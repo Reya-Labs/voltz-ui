@@ -8,6 +8,7 @@ const WalletProvider: React.FunctionComponent = ({ children }) => {
   const [status, setStatus] = useState<WalletStatus>('initializing');
   const [account, setAccount] = useState<string | null>(null);
   const [name, setName] = useState<WalletName | null>(null);
+  const [balance, setBalance] = useState<number | null>(null);
 
   return (
     <MetaMaskProvider>
@@ -18,6 +19,8 @@ const WalletProvider: React.FunctionComponent = ({ children }) => {
         setAccount={setAccount}
         name={name}
         setName={setName}
+        balance={balance}
+        setBalance={setBalance}
       >
         {children}
       </ProviderWrapper>

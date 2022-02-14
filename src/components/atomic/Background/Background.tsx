@@ -9,7 +9,7 @@ export type BackgroundProps = {
 const Background: React.FunctionComponent<BackgroundProps> = ({ children, sx }) => (
   <Box
     sx={{
-      backgroundColor: 'background.default',
+      background: 'radial-gradient(86.39% 190.57% at 49.31% 50%, #000000 0%, #312859 100%)',
       width: '100vw',
       height: '100vh',
       position: 'fixed',

@@ -2,23 +2,22 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import isUndefined from 'lodash/isUndefined';
 
-import { Agents, AgentProps } from '@theme';
+import { Agents } from '@components/contexts';
 import { ToggleButtonGroup } from '@components/composite';
+import { useAgent } from '@hooks';
 
-export type TraderControlsProps = AgentProps & {
-  onChangeAgent: (mode: Agents) => void;
+export type TraderControlsProps = {
   defaultPartialCollateralization?: boolean;
   partialCollateralization?: boolean;
   onChangePartialCollateralization: (value: boolean) => void;
 };
 
 const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
-  agent,
-  onChangeAgent,
   defaultPartialCollateralization,
   partialCollateralization,
   onChangePartialCollateralization,
 }) => {
+  const { agent, onChangeAgent } = useAgent();
   if (!agent || agent === Agents.LIQUIDITY_PROVIDER) {
     return null;
   }

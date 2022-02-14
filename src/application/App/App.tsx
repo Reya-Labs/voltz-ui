@@ -1,14 +1,14 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 import { routes } from '@routes';
-import { Home, Pools } from './components';
+import { Home } from './components';
 
 const App = () => {
   return (
     <Routes>
       <Route path="/">
-        <Route index element={<Home />} />
-        <Route path={routes.POOLS} element={<Pools />} />
+        <Route index element={<Navigate to={routes.SWAP} />} />
+        <Route path="/:path" element={<Home />} />
       </Route>
     </Routes>
   );

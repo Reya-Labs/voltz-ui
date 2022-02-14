@@ -1,0 +1,10 @@
+<svg
+  width="4"
+  height="8"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg">
+  <path
+    d="M4 1.323 3.239.5 0 4l3.239 3.5L4 6.678 1.528 4 4 1.322Z"
+    fill="currentColor">
+  </path>
+</svg>

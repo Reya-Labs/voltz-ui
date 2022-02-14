@@ -24,7 +24,7 @@ const generateColorMap = (color: string): ColorSet => ({
   darken050: chroma(color).darken(5).hex(),
 });
 
-const newColors = mapValues(baseColors, (value) => generateColorMap(value));
+const newColors = mapValues(baseColors, (value: string) => generateColorMap(value));
 
 const colors = {
   ...newColors,
