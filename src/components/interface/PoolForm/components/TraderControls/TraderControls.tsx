@@ -7,12 +7,14 @@ import { ToggleButtonGroup } from '@components/composite';
 import { useAgent } from '@hooks';
 
 export type TraderControlsProps = {
+  isModifying?: boolean;
   defaultPartialCollateralization?: boolean;
   partialCollateralization?: boolean;
   onChangePartialCollateralization: (value: boolean) => void;
 };
 
 const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
+  isModifying,
   defaultPartialCollateralization,
   partialCollateralization,
   onChangePartialCollateralization,
@@ -53,14 +55,16 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
         '& > *:not(:last-child)': { marginBottom: (theme) => theme.spacing(4) },
       }}
     >
-      <ToggleButtonGroup
-        label="Rates"
-        options={Object.values(agentOptionTitles)}
-        option={agentOptionTitles[agent]}
-        defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
-        onChangeOption={handleChangeMode}
-        agent={agent}
-      />
+      {!isModifying && (
+        <ToggleButtonGroup
+          label="Rates"
+          options={Object.values(agentOptionTitles)}
+          option={agentOptionTitles[agent]}
+          defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
+          onChangeOption={handleChangeMode}
+          agent={agent}
+        />
+      )}
       <ToggleButtonGroup
         label="Partial collateralization"
         options={Object.values(partialCollateralizationOptionTitles)}

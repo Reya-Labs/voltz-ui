@@ -4,22 +4,23 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import { SystemStyleObject, Theme } from '@mui/system';
 
+import { data } from '@utilities';
 import { AgentProps } from '@components/contexts';
 import { Panel } from '@components/atomic';
 import { useAgentWithOverride } from '@hooks';
-import { TableOrder, TableFields, Mode, TEMPORARY_Pool } from './types';
-import { transformData, getLabels, sortData, paginateData } from './utilities';
 import { PoolTableControls, PoolTableFooter, PoolTableHead, PoolTableRow } from './components';
 
 export type PoolTableProps = AgentProps & {
-  mode: Mode;
-  data: TEMPORARY_Pool[];
+  mode: data.Mode;
+  data: data.TEMPORARY_Pool[];
+  onSelectVamm: (vammId: string, positionId?: string) => void;
 };
 
 const PoolTable: React.FunctionComponent<PoolTableProps> = ({
   agent: agentOverride,
   mode,
   data: rawData,
+  onSelectVamm,
 }) => {
   const commonOverrides: SystemStyleObject<Theme> = {
     '& .MuiTableCell-root': {
@@ -39,23 +40,23 @@ const PoolTable: React.FunctionComponent<PoolTableProps> = ({
     },
   };
   const { agent } = useAgentWithOverride(agentOverride);
-  const [order, setOrder] = useState<TableOrder>('desc');
-  const [orderBy, setOrderBy] = useState<TableFields>('protocol');
+  const [order, setOrder] = useState<data.TableOrder>('desc');
+  const [orderBy, setOrderBy] = useState<data.TableFields>('protocol');
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(10);
-  const data = transformData({ data: rawData, mode, agent });
-  const labels = getLabels({ agent, mode });
-  const handleSort = (field: TableFields) => {
+  const transformedData = data.transformData({ data: rawData, mode, agent });
+  const labels = data.getLabels({ agent, mode });
+  const handleSort = (field: data.TableFields) => {
     setOrder(field === orderBy ? (order === 'asc' ? 'desc' : 'asc') : 'asc');
     setOrderBy(field);
   };
 
-  const sortedData = sortData({ data, order, orderBy });
-  const { data: paginatedData, pages } = paginateData({ data: sortedData, page, size });
+  const sortedData = data.sortData({ data: transformedData, order, orderBy });
+  const { data: paginatedData, pages } = data.paginateData({ data: sortedData, page, size });
 
   return (
     <Panel variant="dark" sx={{ minWidth: 800 }}>
-      <PoolTableControls mode={mode} quantity={data.length} />
+      <PoolTableControls mode={mode} quantity={transformedData.length} />
       <TableContainer>
         <Table
           sx={{
@@ -70,7 +71,13 @@ const PoolTable: React.FunctionComponent<PoolTableProps> = ({
           <PoolTableHead order={order} orderBy={orderBy} onSort={handleSort} labels={labels} />
           <TableBody>
             {paginatedData.map((datum, index) => (
-              <PoolTableRow datum={datum} mode={mode} labels={labels} index={index} />
+              <PoolTableRow
+                datum={datum}
+                mode={mode}
+                labels={labels}
+                index={index}
+                onSelectVamm={onSelectVamm}
+              />
             ))}
           </TableBody>
           <PoolTableFooter
