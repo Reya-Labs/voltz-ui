@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
 
 import { AgentProps } from '@components/contexts';
-import { Button } from '@components/atomic';
+import { Button, Panel } from '@components/atomic';
 import { MaturityInformation } from '@components/composite';
 import { useAgentWithOverride } from '@hooks';
 import { calculateNotionalAmount } from './utilities';
@@ -85,7 +85,15 @@ const PoolForm: React.FunctionComponent<PoolFormProps> = ({
     });
 
   return (
-    <Box sx={{ padding: 3 }}>
+    <Panel
+      variant="darker"
+      sx={{
+        marginTop: 12,
+        padding: 6,
+        minWidth: (theme) => theme.spacing(100),
+        boxShadow: '0px 0px 60px rgba(255, 89, 156, 0.2)',
+      }}
+    >
       <ProtocolInformation protocol={protocol} fixedApr={fixedApr} variableApr={variableApr} />
       <Box
         sx={{
@@ -152,7 +160,7 @@ const PoolForm: React.FunctionComponent<PoolFormProps> = ({
           Cancel
         </Button>
       </Box>
-    </Box>
+    </Panel>
   );
 };
 
