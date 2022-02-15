@@ -1,5 +1,5 @@
 import { Agents } from '@components/contexts';
-import { Mode, TEMPORARY_Pool, TableData } from '../types';
+import { Mode, TEMPORARY_Pool, TableData } from './types';
 
 export type TransformDataArgs = {
   mode: Mode;
@@ -16,9 +16,10 @@ const transformData = ({ data, mode, agent }: TransformDataArgs): TableData[] =>
     const { positions, ...pool } = datum;
     const filteredPositions = positions.filter((position) => position.agent === agent);
 
-    const verbosePositions = filteredPositions.map((position) => ({
+    const verbosePositions = filteredPositions.map(({ id, ...position }) => ({
       ...pool,
       ...position,
+      positionId: id,
     }));
 
     return [...acc, ...verbosePositions];

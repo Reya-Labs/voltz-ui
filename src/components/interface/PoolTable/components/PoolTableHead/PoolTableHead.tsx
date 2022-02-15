@@ -5,13 +5,13 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import { SystemStyleObject, Theme } from '@mui/system';
 
-import { TableOrder, TableFields } from '../../types';
+import { data } from '@utilities';
 
 export type PoolTableHeadProps = {
-  order: TableOrder;
-  orderBy: TableFields;
-  onSort: (field: TableFields) => void;
-  labels: [TableFields, string][];
+  order: data.TableOrder;
+  orderBy: data.TableFields;
+  onSort: (field: data.TableFields) => void;
+  labels: [data.TableFields, string][];
 };
 
 const PoolTableHead: React.FunctionComponent<PoolTableHeadProps> = ({
@@ -20,7 +20,7 @@ const PoolTableHead: React.FunctionComponent<PoolTableHeadProps> = ({
   onSort,
   labels,
 }) => {
-  const createSortHandler = (field: TableFields) => (_event: React.MouseEvent<unknown>) =>
+  const createSortHandler = (field: data.TableFields) => (_event: React.MouseEvent<unknown>) =>
     onSort(field);
 
   const cellSx: SystemStyleObject<Theme> = {

@@ -3,17 +3,18 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '@mui/system';
 
+import { data } from '@utilities';
 import { Agents } from '@components/contexts';
 import { Button, Typography } from '@components/atomic';
 import { MaturityInformation } from '@components/composite';
 import { useAgent } from '@hooks';
-import { Mode, TableData, TableFields } from '../../types';
 
 export type PoolTableRowProps = {
-  mode: Mode;
-  datum: TableData;
-  labels: [TableFields, string][];
+  mode: data.Mode;
+  datum: data.TableData;
+  labels: [data.TableFields, string][];
   index: number;
+  onSelectVamm: (vammId: string, positionId?: string) => void;
 };
 
 const PoolTableRow: React.FunctionComponent<PoolTableRowProps> = ({
@@ -21,6 +22,7 @@ const PoolTableRow: React.FunctionComponent<PoolTableRowProps> = ({
   datum,
   labels,
   index,
+  onSelectVamm,
 }) => {
   const { agent } = useAgent();
   const variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'main';
@@ -45,6 +47,9 @@ const PoolTableRow: React.FunctionComponent<PoolTableRowProps> = ({
       default:
         return {};
     }
+  };
+  const handleClick = () => {
+    onSelectVamm(datum.id, datum.positionId);
   };
 
   return (
@@ -108,7 +113,9 @@ const PoolTableRow: React.FunctionComponent<PoolTableRowProps> = ({
         return <TableCell key={field}>{renderDisplay()}</TableCell>;
       })}
       <TableCell align="center">
-        <Button variant="contained">Hello</Button>
+        <Button variant="contained" onClick={handleClick}>
+          Hello
+        </Button>
       </TableCell>
     </TableRow>
   );

@@ -1,14 +1,14 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 
+import { data } from '@utilities';
 import { Agents } from '@components/contexts';
 import { Typography } from '@components/atomic';
 import { ToggleButtonGroup } from '@components/composite';
 import { useAgent } from '@hooks';
-import { Mode } from '../../types';
 
 export type PoolTableControlsProps = {
-  mode: Mode;
+  mode: data.Mode;
   quantity: number;
 };
 

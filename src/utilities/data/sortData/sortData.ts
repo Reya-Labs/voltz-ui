@@ -1,4 +1,4 @@
-import { TableOrder, TableFields, TableData } from '../../types';
+import { TableOrder, TableFields, TableData } from '../types';
 import getComparator from './getComparator';
 
 export type SortDataArgs = {
