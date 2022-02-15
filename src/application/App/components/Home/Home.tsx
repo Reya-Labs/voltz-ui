@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import { useLocation } from 'react-router-dom';
+import isNull from 'lodash/isNull';
 
 import { data } from '@utilities';
 import { Agents } from '@components/contexts';
@@ -82,6 +83,11 @@ const Home: React.FunctionComponent = () => {
     setVammId(selectedVammId);
     setPositionId(selectedPositionId || null);
   };
+  const handleReset = () => {
+    setFormActive(false);
+    setVammId(null);
+    setPositionId(null);
+  };
 
   return (
     <Page>
@@ -111,13 +117,14 @@ const Home: React.FunctionComponent = () => {
             <PoolTable data={data.data} mode={tableMode} onSelectVamm={handleSelectVamm} />
           </Box>
         )}
-        {formActive && vammId && positionId && (
+        {formActive && !isNull(vammId) && (
           <Box sx={{ height: '100%' }}>
             <ConnectedPoolForm
               vammId={vammId}
               positionId={positionId}
               data={data.data}
               mode={tableMode}
+              onReset={handleReset}
             />
           </Box>
         )}

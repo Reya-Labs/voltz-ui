@@ -3,6 +3,7 @@ import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
 
 import { AgentProps } from '@components/contexts';
+import { Button } from '@components/atomic';
 import { MaturityInformation } from '@components/composite';
 import { useAgentWithOverride } from '@hooks';
 import { calculateNotionalAmount } from './utilities';
@@ -16,6 +17,7 @@ import {
 } from './components';
 
 export type PoolFormProps = AgentProps & {
+  isModifying?: boolean;
   protocol?: string;
   fixedApr?: number;
   variableApr?: number;
@@ -38,10 +40,12 @@ export type PoolFormProps = AgentProps & {
   onChangePartialCollateralization: (value: boolean) => void;
   onChangeMargin: (value: number) => void;
   onSubmit: (values: Record<string, unknown>) => void;
+  onCancel: () => void;
 };
 
 const PoolForm: React.FunctionComponent<PoolFormProps> = ({
   agent: agentOverride,
+  isModifying = false,
   protocol,
   fixedApr,
   variableApr,
@@ -64,6 +68,7 @@ const PoolForm: React.FunctionComponent<PoolFormProps> = ({
   onChangePartialCollateralization,
   onChangeMargin,
   onSubmit,
+  onCancel,
 }) => {
   const { agent } = useAgentWithOverride(agentOverride);
   const notional = calculateNotionalAmount(margin, leverage);
@@ -96,6 +101,7 @@ const PoolForm: React.FunctionComponent<PoolFormProps> = ({
         }}
       >
         <TraderControls
+          isModifying={isModifying}
           defaultPartialCollateralization={defaultPartialCollateralization}
           partialCollateralization={partialCollateralization}
           onChangePartialCollateralization={onChangePartialCollateralization}
@@ -136,7 +142,16 @@ const PoolForm: React.FunctionComponent<PoolFormProps> = ({
           onMaxNotional={handleMaxNotional}
         />
       </Box>
-      <SubmitPoolFormButton onSubmit={handleSubmit} />
+      <Box sx={{ display: 'flex' }}>
+        <SubmitPoolFormButton onSubmit={handleSubmit} />
+        <Button
+          sx={{ marginLeft: (theme) => theme.spacing(4) }}
+          variant="darker"
+          onClick={onCancel}
+        >
+          Cancel
+        </Button>
+      </Box>
     </Box>
   );
 };

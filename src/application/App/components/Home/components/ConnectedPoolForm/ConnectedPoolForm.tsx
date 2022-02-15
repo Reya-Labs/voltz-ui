@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import isUndefined from 'lodash/isUndefined';
+import isNull from 'lodash/isNull';
 
 import { data } from '@utilities';
 import { PoolForm, PoolFormProps } from '@components/interface';
@@ -7,9 +7,10 @@ import { useAgent } from '@hooks';
 
 export type ConnectedPoolFormProps = {
   vammId: string;
-  positionId: string;
+  positionId: string | null;
   mode: data.Mode;
   data: data.TEMPORARY_Pool[];
+  onReset: () => void;
 };
 
 const ConnectedPoolForm: React.FunctionComponent<ConnectedPoolFormProps> = ({
@@ -17,6 +18,7 @@ const ConnectedPoolForm: React.FunctionComponent<ConnectedPoolFormProps> = ({
   positionId,
   mode,
   data: rawData,
+  onReset,
 }) => {
   const [fixedLow, setFixedLow] = useState<PoolFormProps['fixedLow']>();
   const [fixedHigh, setFixedHigh] = useState<PoolFormProps['fixedHigh']>();
@@ -32,7 +34,7 @@ const ConnectedPoolForm: React.FunctionComponent<ConnectedPoolFormProps> = ({
       return false;
     }
 
-    if (!isUndefined(positionId) && datumPositionId !== positionId) {
+    if (!isNull(positionId) && datumPositionId !== positionId) {
       return false;
     }
 
@@ -45,6 +47,7 @@ const ConnectedPoolForm: React.FunctionComponent<ConnectedPoolFormProps> = ({
 
   return (
     <PoolForm
+      isModifying={!isNull(positionId)}
       protocol={datum.protocol}
       fixedApr={datum.fixedApr}
       variableApr={datum.variableApr}
@@ -61,6 +64,7 @@ const ConnectedPoolForm: React.FunctionComponent<ConnectedPoolFormProps> = ({
       partialCollateralization={partialCollateralization}
       onChangePartialCollateralization={setPartialCollateralization}
       onSubmit={handleSubmit}
+      onCancel={onReset}
     />
   );
 };
