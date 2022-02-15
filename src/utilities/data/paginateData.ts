@@ -1,4 +1,4 @@
-import { TableData } from '../types';
+import { TableData } from './types';
 
 export type PaginateDataArgs = {
   data: TableData[];

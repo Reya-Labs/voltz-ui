@@ -15,12 +15,14 @@ export type TableFields =
 export type Mode = 'pools' | 'portfolio';
 
 export type TEMPORARY_Position = {
+  id: string;
   margin: number;
   notional: number;
   agent: Agents;
 };
 
 export type TEMPORARY_Pool = {
+  id: string;
   protocol: string;
   startDate: DateTime;
   endDate: DateTime;
@@ -30,6 +32,8 @@ export type TEMPORARY_Pool = {
 };
 
 export type TableData = {
+  id: string;
+  positionId?: string;
   protocol: string;
   startDate: DateTime;
   endDate: DateTime;
