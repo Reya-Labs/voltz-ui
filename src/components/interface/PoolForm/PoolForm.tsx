@@ -90,7 +90,7 @@ const PoolForm: React.FunctionComponent<PoolFormProps> = ({
       sx={{
         marginTop: 12,
         padding: 6,
-        minWidth: (theme) => theme.spacing(100),
+        width: (theme) => theme.spacing(80),
         boxShadow: '0px 0px 60px rgba(255, 89, 156, 0.2)',
       }}
     >

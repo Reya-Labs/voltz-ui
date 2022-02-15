@@ -26,7 +26,11 @@ const ConnectedPoolForm: React.FunctionComponent<ConnectedPoolFormProps> = ({
   const [margin, setMargin] = useState<PoolFormProps['margin']>();
   const [partialCollateralization, setPartialCollateralization] =
     useState<PoolFormProps['partialCollateralization']>();
-  const handleSubmit = (args: Record<string, unknown>) => console.warn(args);
+  const handleSubmit = (args: Record<string, unknown>) => {
+    console.warn(args);
+
+    onReset();
+  };
   const { agent } = useAgent();
   const transformedData = data.transformData({ data: rawData, mode, agent });
   const datum = transformedData.find(({ id: datumVammId, positionId: datumPositionId }) => {
