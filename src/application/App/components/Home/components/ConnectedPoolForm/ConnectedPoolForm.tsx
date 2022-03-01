@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
+import { routes } from '@routes';
 import { data } from '@utilities';
 import { PoolForm, PoolFormProps, PendingTransaction } from '@components/interface';
 
@@ -16,6 +18,8 @@ const ConnectedPoolForm: React.FunctionComponent<ConnectedPoolFormProps> = ({
   onReset,
   onSubmit,
 }) => {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
   const [fixedLow, setFixedLow] = useState<PoolFormProps['fixedLow']>();
   const [fixedHigh, setFixedHigh] = useState<PoolFormProps['fixedHigh']>();
   const [leverage, setLeverage] = useState<PoolFormProps['leverage']>();
@@ -23,14 +27,24 @@ const ConnectedPoolForm: React.FunctionComponent<ConnectedPoolFormProps> = ({
   const [partialCollateralization, setPartialCollateralization] =
     useState<PoolFormProps['partialCollateralization']>();
   const [submitting, setSubmitting] = useState(false);
-  const [transactionPending, setTransactionPending] = useState(true);
+  const [transactionPending, setTransactionPending] = useState(false);
   const handleSubmit = async (args: Record<string, unknown>) => {
     setSubmitting(true);
+    setTransactionPending(true);
 
     await onSubmit(args);
 
-    // setSubmitting(false);
-    // onReset();
+    setTransactionPending(false);
+  };
+  const handleComplete = () => {
+    setSubmitting(false);
+    onReset();
+
+    if (pathname === `/${routes.SWAP}`) {
+      navigate(`/${routes.PORTFOLIO}`);
+    } else {
+      navigate(`/${routes.LP_FARM}`);
+    }
   };
 
   if (!datum) {
@@ -45,6 +59,7 @@ const ConnectedPoolForm: React.FunctionComponent<ConnectedPoolFormProps> = ({
         fixedApr={datum.fixedApr}
         margin={margin}
         leverage={leverage}
+        onComplete={handleComplete}
       />
     );
   }

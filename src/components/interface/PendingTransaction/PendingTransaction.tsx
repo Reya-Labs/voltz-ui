@@ -13,6 +13,7 @@ export type PendingTransactionProps = {
   fixedApr?: number;
   leverage?: number;
   margin?: number;
+  onComplete: () => void;
 };
 
 const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
@@ -21,6 +22,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   fixedApr,
   leverage,
   margin,
+  onComplete,
 }) => {
   const { account } = useWallet();
   const renderStatus = () => {
@@ -93,7 +95,9 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
             paddingBottom: (theme) => theme.spacing(10),
           }}
         >
-          <Button variant="contained">Go to your portfolio</Button>
+          <Button variant="contained" onClick={onComplete}>
+            Go to your portfolio
+          </Button>
         </Box>
       </Box>
     );
