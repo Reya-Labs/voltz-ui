@@ -101,6 +101,8 @@ const Home: React.FunctionComponent = () => {
     return true;
   });
   const handleSubmit = async (args: Record<string, unknown>) => {
+    await Promise.resolve();
+
     console.warn({ args, datum });
   };
 

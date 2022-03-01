@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { data } from '@utilities';
-import { PoolForm, PoolFormProps } from '@components/interface';
+import { PoolForm, PoolFormProps, PendingTransaction } from '@components/interface';
 
 export type ConnectedPoolFormProps = {
   isModifying: boolean;
@@ -22,14 +22,29 @@ const ConnectedPoolForm: React.FunctionComponent<ConnectedPoolFormProps> = ({
   const [margin, setMargin] = useState<PoolFormProps['margin']>();
   const [partialCollateralization, setPartialCollateralization] =
     useState<PoolFormProps['partialCollateralization']>();
+  const [submitting, setSubmitting] = useState(false);
   const handleSubmit = async (args: Record<string, unknown>) => {
+    setSubmitting(true);
+
     await onSubmit(args);
 
-    onReset();
+    // setSubmitting(false);
+    // onReset();
   };
 
   if (!datum) {
     return null;
+  }
+
+  if (submitting) {
+    return (
+      <PendingTransaction
+        protocol={datum.protocol}
+        fixedApr={datum.fixedApr}
+        margin={margin}
+        leverage={leverage}
+      />
+    );
   }
 
   return (
