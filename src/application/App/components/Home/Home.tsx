@@ -15,7 +15,7 @@ const Home: React.FunctionComponent = () => {
   const [formActive, setFormActive] = useState(false);
   const [vammId, setVammId] = useState<string | null>(null);
   const [positionId, setPositionId] = useState<string | null>(null);
-  const { onChangeAgent } = useAgent();
+  const { agent, onChangeAgent } = useAgent();
   const { pathname } = useLocation();
   const pathnameWithoutPrefix = pathname.slice(1);
 
@@ -88,6 +88,21 @@ const Home: React.FunctionComponent = () => {
     setVammId(null);
     setPositionId(null);
   };
+  const transformedData = data.transformData({ data: data.data, mode: tableMode, agent });
+  const datum = transformedData.find(({ id: datumVammId, positionId: datumPositionId }) => {
+    if (datumVammId !== vammId) {
+      return false;
+    }
+
+    if (!isNull(positionId) && datumPositionId !== positionId) {
+      return false;
+    }
+
+    return true;
+  });
+  const handleSubmit = async (args: Record<string, unknown>) => {
+    console.warn({ args, datum });
+  };
 
   return (
     <Page>
@@ -120,11 +135,10 @@ const Home: React.FunctionComponent = () => {
         {formActive && !isNull(vammId) && (
           <Box sx={{ height: '100%' }}>
             <ConnectedPoolForm
-              vammId={vammId}
-              positionId={positionId}
-              data={data.data}
-              mode={tableMode}
+              isModifying={!isNull(positionId)}
+              datum={datum}
               onReset={handleReset}
+              onSubmit={handleSubmit}
             />
           </Box>
         )}

@@ -1,24 +1,20 @@
 import React, { useState } from 'react';
-import isNull from 'lodash/isNull';
 
 import { data } from '@utilities';
 import { PoolForm, PoolFormProps } from '@components/interface';
-import { useAgent } from '@hooks';
 
 export type ConnectedPoolFormProps = {
-  vammId: string;
-  positionId: string | null;
-  mode: data.Mode;
-  data: data.TEMPORARY_Pool[];
+  isModifying: boolean;
+  datum?: data.TableData;
   onReset: () => void;
+  onSubmit: (args: Record<string, unknown>) => Promise<void>;
 };
 
 const ConnectedPoolForm: React.FunctionComponent<ConnectedPoolFormProps> = ({
-  vammId,
-  positionId,
-  mode,
-  data: rawData,
+  isModifying,
+  datum,
   onReset,
+  onSubmit,
 }) => {
   const [fixedLow, setFixedLow] = useState<PoolFormProps['fixedLow']>();
   const [fixedHigh, setFixedHigh] = useState<PoolFormProps['fixedHigh']>();
@@ -26,24 +22,11 @@ const ConnectedPoolForm: React.FunctionComponent<ConnectedPoolFormProps> = ({
   const [margin, setMargin] = useState<PoolFormProps['margin']>();
   const [partialCollateralization, setPartialCollateralization] =
     useState<PoolFormProps['partialCollateralization']>();
-  const handleSubmit = (args: Record<string, unknown>) => {
-    console.warn(args);
+  const handleSubmit = async (args: Record<string, unknown>) => {
+    await onSubmit(args);
 
     onReset();
   };
-  const { agent } = useAgent();
-  const transformedData = data.transformData({ data: rawData, mode, agent });
-  const datum = transformedData.find(({ id: datumVammId, positionId: datumPositionId }) => {
-    if (datumVammId !== vammId) {
-      return false;
-    }
-
-    if (!isNull(positionId) && datumPositionId !== positionId) {
-      return false;
-    }
-
-    return true;
-  });
 
   if (!datum) {
     return null;
@@ -51,7 +34,7 @@ const ConnectedPoolForm: React.FunctionComponent<ConnectedPoolFormProps> = ({
 
   return (
     <PoolForm
-      isModifying={!isNull(positionId)}
+      isModifying={isModifying}
       protocol={datum.protocol}
       fixedApr={datum.fixedApr}
       variableApr={datum.variableApr}
