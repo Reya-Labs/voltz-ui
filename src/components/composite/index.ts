@@ -6,3 +6,4 @@ export { default as PanelAlert } from './PanelAlert/PanelAlert';
 export { default as ProtocolInformation } from './ProtocolInformation/ProtocolInformation';
 export { default as TextField } from './TextField/TextField';
 export { default as ToggleButtonGroup } from './ToggleButtonGroup/ToggleButtonGroup';
+export { default as WalletAddressDisplay } from './WalletAddressDisplay/WalletAddressDisplay';

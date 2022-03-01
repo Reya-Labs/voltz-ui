@@ -23,6 +23,7 @@ const ConnectedPoolForm: React.FunctionComponent<ConnectedPoolFormProps> = ({
   const [partialCollateralization, setPartialCollateralization] =
     useState<PoolFormProps['partialCollateralization']>();
   const [submitting, setSubmitting] = useState(false);
+  const [transactionPending, setTransactionPending] = useState(true);
   const handleSubmit = async (args: Record<string, unknown>) => {
     setSubmitting(true);
 
@@ -39,6 +40,7 @@ const ConnectedPoolForm: React.FunctionComponent<ConnectedPoolFormProps> = ({
   if (submitting) {
     return (
       <PendingTransaction
+        loading={transactionPending}
         protocol={datum.protocol}
         fixedApr={datum.fixedApr}
         margin={margin}
