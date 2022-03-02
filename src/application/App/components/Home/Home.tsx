@@ -31,10 +31,13 @@ const Home: React.FunctionComponent = () => {
 
         break;
 
-      default:
-        onChangeAgent(Agents.FIXED_TRADER);
+      default: {
+        if (agent === Agents.LIQUIDITY_PROVIDER) {
+          onChangeAgent(Agents.FIXED_TRADER);
+        }
 
         break;
+      }
     }
   }, [setFormActive, setVammId, setPositionId, pathnameWithoutPrefix, onChangeAgent]);
 
