@@ -4,9 +4,16 @@ import { MetaMaskProvider } from 'metamask-react';
 import { WalletStatus, WalletName } from './types';
 import ProviderWrapper from './ProviderWrapper';
 
-const WalletProvider: React.FunctionComponent = ({ children }) => {
+export type WalletProviderProps = {
+  accountOverride?: string;
+};
+
+const WalletProvider: React.FunctionComponent<WalletProviderProps> = ({
+  children,
+  accountOverride,
+}) => {
   const [status, setStatus] = useState<WalletStatus>('initializing');
-  const [account, setAccount] = useState<string | null>(null);
+  const [account, setAccount] = useState<string | null>(accountOverride || null);
   const [name, setName] = useState<WalletName | null>(null);
   const [balance, setBalance] = useState<number | null>(null);
 

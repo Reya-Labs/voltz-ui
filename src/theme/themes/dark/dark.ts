@@ -226,6 +226,14 @@ const dark = createTheme({
       color: colors.lavenderWeb.base,
       marginLeft: -1,
     },
+    caption: {
+      fontFamily: 'PixelOperatorMono',
+      fontWeight: 'normal',
+      fontSize: 12,
+      lineHeight: '100%',
+      color: colors.lavenderWeb.base,
+      marginLeft: -1,
+    },
   },
 });
 

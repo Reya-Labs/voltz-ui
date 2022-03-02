@@ -1,57 +1,81 @@
 import React, { useState } from 'react';
-import isNull from 'lodash/isNull';
+import { useLocation, useNavigate } from 'react-router-dom';
 
+import { routes } from '@routes';
 import { data } from '@utilities';
-import { PoolForm, PoolFormProps } from '@components/interface';
-import { useAgent } from '@hooks';
+import { PoolForm, PoolFormProps, PendingTransaction } from '@components/interface';
 
 export type ConnectedPoolFormProps = {
-  vammId: string;
-  positionId: string | null;
-  mode: data.Mode;
-  data: data.TEMPORARY_Pool[];
+  isModifying: boolean;
+  datum?: data.TableData;
   onReset: () => void;
+  onSubmit: (args: Record<string, unknown>) => Promise<void>;
 };
 
 const ConnectedPoolForm: React.FunctionComponent<ConnectedPoolFormProps> = ({
-  vammId,
-  positionId,
-  mode,
-  data: rawData,
+  isModifying,
+  datum,
   onReset,
+  onSubmit,
 }) => {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
   const [fixedLow, setFixedLow] = useState<PoolFormProps['fixedLow']>();
   const [fixedHigh, setFixedHigh] = useState<PoolFormProps['fixedHigh']>();
   const [leverage, setLeverage] = useState<PoolFormProps['leverage']>();
   const [margin, setMargin] = useState<PoolFormProps['margin']>();
   const [partialCollateralization, setPartialCollateralization] =
     useState<PoolFormProps['partialCollateralization']>();
-  const handleSubmit = (args: Record<string, unknown>) => {
-    console.warn(args);
+  const [submitting, setSubmitting] = useState(false);
+  const [transactionPending, setTransactionPending] = useState(false);
+  const handleSubmit = async (args: Record<string, unknown>) => {
+    setSubmitting(true);
+    setTransactionPending(true);
 
-    onReset();
+    await onSubmit(args);
+
+    setTransactionPending(false);
   };
-  const { agent } = useAgent();
-  const transformedData = data.transformData({ data: rawData, mode, agent });
-  const datum = transformedData.find(({ id: datumVammId, positionId: datumPositionId }) => {
-    if (datumVammId !== vammId) {
-      return false;
-    }
+  const handleComplete = () => {
+    setSubmitting(false);
+    onReset();
 
-    if (!isNull(positionId) && datumPositionId !== positionId) {
-      return false;
-    }
+    switch (pathname) {
+      case `/${routes.SWAP}`:
+      case `/${routes.PORTFOLIO}`: {
+        navigate(`/${routes.PORTFOLIO}`);
 
-    return true;
-  });
+        break;
+      }
+
+      default: {
+        navigate(`/${routes.LP_FARM}`);
+
+        break;
+      }
+    }
+  };
 
   if (!datum) {
     return null;
   }
 
+  if (submitting) {
+    return (
+      <PendingTransaction
+        loading={transactionPending}
+        protocol={datum.protocol}
+        fixedApr={datum.fixedApr}
+        margin={margin}
+        leverage={leverage}
+        onComplete={handleComplete}
+      />
+    );
+  }
+
   return (
     <PoolForm
-      isModifying={!isNull(positionId)}
+      isModifying={isModifying}
       protocol={datum.protocol}
       fixedApr={datum.fixedApr}
       variableApr={datum.variableApr}
