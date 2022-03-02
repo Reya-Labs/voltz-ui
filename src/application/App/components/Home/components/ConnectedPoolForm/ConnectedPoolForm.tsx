@@ -40,10 +40,19 @@ const ConnectedPoolForm: React.FunctionComponent<ConnectedPoolFormProps> = ({
     setSubmitting(false);
     onReset();
 
-    if (pathname === `/${routes.SWAP}`) {
-      navigate(`/${routes.PORTFOLIO}`);
-    } else {
-      navigate(`/${routes.LP_FARM}`);
+    switch (pathname) {
+      case `/${routes.SWAP}`:
+      case `/${routes.PORTFOLIO}`: {
+        navigate(`/${routes.PORTFOLIO}`);
+
+        break;
+      }
+
+      default: {
+        navigate(`/${routes.LP_FARM}`);
+
+        break;
+      }
     }
   };
 
