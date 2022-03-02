@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "@voltz/v1-sdk": {
+      "signature": "1b1c05c15c9a63fcb419aa174b327886",
+      "file": true
+    }
+  }
+}
