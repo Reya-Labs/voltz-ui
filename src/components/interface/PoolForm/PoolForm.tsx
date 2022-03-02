@@ -4,13 +4,12 @@ import Box from '@mui/material/Box';
 
 import { AgentProps } from '@components/contexts';
 import { Button, Panel } from '@components/atomic';
-import { MaturityInformation } from '@components/composite';
+import { ProtocolInformation, MaturityInformation } from '@components/composite';
 import { useAgentWithOverride } from '@hooks';
-import { calculateNotionalAmount } from './utilities';
+import { calculateNotionalAmount } from '@utilities';
 import {
   MarginAmount,
   NotionalAmount,
-  ProtocolInformation,
   RateOptions,
   TraderControls,
   SubmitPoolFormButton,
