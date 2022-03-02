@@ -1,0 +1,8 @@
+query GetWallets($orderBy: Wallet_orderBy!) {
+  wallets(first: 100, orderBy: $orderBy, orderDirection: asc) {
+    id
+    positions {
+      id
+    }
+  }
+}

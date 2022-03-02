@@ -535,7 +535,7 @@ export type Position = {
   liquidity: Scalars['BigInt'];
   margin: Scalars['BigInt'];
   mints: Array<Mint>;
-  owner: Scalars['String'];
+  owner: Wallet;
   snapshotCount: Scalars['BigInt'];
   snapshots: Array<PositionSnapshot>;
   swaps: Array<Swap>;
@@ -590,7 +590,6 @@ export type PositionSnapshot = {
   isSettled: Scalars['Boolean'];
   liquidity: Scalars['BigInt'];
   margin: Scalars['BigInt'];
-  owner: Scalars['String'];
   position: Position;
   variableTokenBalance: Scalars['BigInt'];
 };
@@ -644,20 +643,6 @@ export type PositionSnapshot_Filter = {
   margin_lte?: InputMaybe<Scalars['BigInt']>;
   margin_not?: InputMaybe<Scalars['BigInt']>;
   margin_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  owner?: InputMaybe<Scalars['String']>;
-  owner_contains?: InputMaybe<Scalars['String']>;
-  owner_ends_with?: InputMaybe<Scalars['String']>;
-  owner_gt?: InputMaybe<Scalars['String']>;
-  owner_gte?: InputMaybe<Scalars['String']>;
-  owner_in?: InputMaybe<Array<Scalars['String']>>;
-  owner_lt?: InputMaybe<Scalars['String']>;
-  owner_lte?: InputMaybe<Scalars['String']>;
-  owner_not?: InputMaybe<Scalars['String']>;
-  owner_not_contains?: InputMaybe<Scalars['String']>;
-  owner_not_ends_with?: InputMaybe<Scalars['String']>;
-  owner_not_in?: InputMaybe<Array<Scalars['String']>>;
-  owner_not_starts_with?: InputMaybe<Scalars['String']>;
-  owner_starts_with?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<Scalars['String']>;
   position_contains?: InputMaybe<Scalars['String']>;
   position_ends_with?: InputMaybe<Scalars['String']>;
@@ -690,7 +675,6 @@ export enum PositionSnapshot_OrderBy {
   IsSettled = 'isSettled',
   Liquidity = 'liquidity',
   Margin = 'margin',
-  Owner = 'owner',
   Position = 'position',
   VariableTokenBalance = 'variableTokenBalance'
 }
@@ -880,6 +864,8 @@ export type Query = {
   transactions: Array<Transaction>;
   underlyingToken?: Maybe<UnderlyingToken>;
   underlyingTokens: Array<UnderlyingToken>;
+  wallet?: Maybe<Wallet>;
+  wallets: Array<Wallet>;
 };
 
 
@@ -1103,6 +1089,24 @@ export type QueryUnderlyingTokensArgs = {
   where?: InputMaybe<UnderlyingToken_Filter>;
 };
 
+
+export type QueryWalletArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryWalletsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Wallet_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<Wallet_Filter>;
+};
+
 export type RateOracle = {
   __typename?: 'RateOracle';
   id: Scalars['ID'];
@@ -1167,6 +1171,8 @@ export type Subscription = {
   transactions: Array<Transaction>;
   underlyingToken?: Maybe<UnderlyingToken>;
   underlyingTokens: Array<UnderlyingToken>;
+  wallet?: Maybe<Wallet>;
+  wallets: Array<Wallet>;
 };
 
 
@@ -1388,6 +1394,24 @@ export type SubscriptionUnderlyingTokensArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<UnderlyingToken_Filter>;
+};
+
+
+export type SubscriptionWalletArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionWalletsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Wallet_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<Wallet_Filter>;
 };
 
 export type Swap = {
@@ -1679,6 +1703,47 @@ export enum UnderlyingToken_OrderBy {
   Name = 'name'
 }
 
+export type Wallet = {
+  __typename?: 'Wallet';
+  id: Scalars['ID'];
+  positionCount: Scalars['BigInt'];
+  positions: Array<Position>;
+};
+
+
+export type WalletPositionsArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Position_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<Position_Filter>;
+};
+
+export type Wallet_Filter = {
+  id?: InputMaybe<Scalars['ID']>;
+  id_gt?: InputMaybe<Scalars['ID']>;
+  id_gte?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  id_lt?: InputMaybe<Scalars['ID']>;
+  id_lte?: InputMaybe<Scalars['ID']>;
+  id_not?: InputMaybe<Scalars['ID']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  positionCount?: InputMaybe<Scalars['BigInt']>;
+  positionCount_gt?: InputMaybe<Scalars['BigInt']>;
+  positionCount_gte?: InputMaybe<Scalars['BigInt']>;
+  positionCount_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  positionCount_lt?: InputMaybe<Scalars['BigInt']>;
+  positionCount_lte?: InputMaybe<Scalars['BigInt']>;
+  positionCount_not?: InputMaybe<Scalars['BigInt']>;
+  positionCount_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+};
+
+export enum Wallet_OrderBy {
+  Id = 'id',
+  PositionCount = 'positionCount',
+  Positions = 'positions'
+}
+
 export type _Block_ = {
   __typename?: '_Block_';
   /** The hash of the block */
@@ -1737,14 +1802,14 @@ export type GetPositionSnapshotsQueryVariables = Exact<{
 }>;
 
 
-export type GetPositionSnapshotsQuery = { __typename?: 'Query', positionSnapshots: Array<{ __typename?: 'PositionSnapshot', id: string, createdTimestamp: any, owner: string, liquidity: any, margin: any, fixedTokenBalance: any, variableTokenBalance: any, isSettled: boolean, isEmpty: boolean, position: { __typename?: 'Position', id: string } }> };
+export type GetPositionSnapshotsQuery = { __typename?: 'Query', positionSnapshots: Array<{ __typename?: 'PositionSnapshot', id: string, createdTimestamp: any, liquidity: any, margin: any, fixedTokenBalance: any, variableTokenBalance: any, isSettled: boolean, isEmpty: boolean, position: { __typename?: 'Position', id: string } }> };
 
 export type GetPositionsQueryVariables = Exact<{
   orderBy: Position_OrderBy;
 }>;
 
 
-export type GetPositionsQuery = { __typename?: 'Query', positions: Array<{ __typename?: 'Position', id: string, createdTimestamp: any, updatedTimestamp: any, owner: string, liquidity: any, margin: any, fixedTokenBalance: any, variableTokenBalance: any, isLiquidityProvider: boolean, isSettled: boolean, isEmpty: boolean, snapshotCount: any, amm: { __typename?: 'AMM', id: string }, tickLower: { __typename?: 'Tick', id: string, value: any }, tickUpper: { __typename?: 'Tick', id: string, value: any } }> };
+export type GetPositionsQuery = { __typename?: 'Query', positions: Array<{ __typename?: 'Position', id: string, createdTimestamp: any, updatedTimestamp: any, liquidity: any, margin: any, fixedTokenBalance: any, variableTokenBalance: any, isLiquidityProvider: boolean, isSettled: boolean, isEmpty: boolean, snapshotCount: any, owner: { __typename?: 'Wallet', id: string }, amm: { __typename?: 'AMM', id: string }, tickLower: { __typename?: 'Tick', id: string, value: any }, tickUpper: { __typename?: 'Tick', id: string, value: any }, burns: Array<{ __typename?: 'Burn', id: string }>, mints: Array<{ __typename?: 'Mint', id: string }>, swaps: Array<{ __typename?: 'Swap', id: string }> }> };
 
 export type GetSwapsQueryVariables = Exact<{
   orderBy: Swap_OrderBy;
@@ -1752,6 +1817,20 @@ export type GetSwapsQueryVariables = Exact<{
 
 
 export type GetSwapsQuery = { __typename?: 'Query', swaps: Array<{ __typename?: 'Swap', id: string, sender: string, txIndex: any, sqrtPriceX96: any, liquidity: any, tick: any, transaction: { __typename?: 'Transaction', id: string, blockNumber: any, timestamp: any }, amm: { __typename?: 'AMM', id: string }, position: { __typename?: 'Position', id: string } }> };
+
+export type GetWalletQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetWalletQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, positions: Array<{ __typename?: 'Position', id: string }> } | null };
+
+export type GetWalletsQueryVariables = Exact<{
+  orderBy: Wallet_OrderBy;
+}>;
+
+
+export type GetWalletsQuery = { __typename?: 'Query', wallets: Array<{ __typename?: 'Wallet', id: string, positions: Array<{ __typename?: 'Position', id: string }> }> };
 
 
 export const GetAmMsDocument = gql`
@@ -1923,7 +2002,6 @@ export const GetPositionSnapshotsDocument = gql`
   positionSnapshots(first: 100, orderBy: $orderBy, orderDirection: asc) {
     id
     createdTimestamp
-    owner
     position {
       id
     }
@@ -1970,7 +2048,9 @@ export const GetPositionsDocument = gql`
     id
     createdTimestamp
     updatedTimestamp
-    owner
+    owner {
+      id
+    }
     amm {
       id
     }
@@ -1990,6 +2070,15 @@ export const GetPositionsDocument = gql`
     isSettled
     isEmpty
     snapshotCount
+    burns {
+      id
+    }
+    mints {
+      id
+    }
+    swaps {
+      id
+    }
   }
 }
     `;
@@ -2072,3 +2161,79 @@ export function useGetSwapsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetSwapsQueryHookResult = ReturnType<typeof useGetSwapsQuery>;
 export type GetSwapsLazyQueryHookResult = ReturnType<typeof useGetSwapsLazyQuery>;
 export type GetSwapsQueryResult = Apollo.QueryResult<GetSwapsQuery, GetSwapsQueryVariables>;
+export const GetWalletDocument = gql`
+    query GetWallet($id: ID!) {
+  wallet(id: $id) {
+    id
+    positions {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetWalletQuery__
+ *
+ * To run a query within a React component, call `useGetWalletQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWalletQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWalletQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetWalletQuery(baseOptions: Apollo.QueryHookOptions<GetWalletQuery, GetWalletQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetWalletQuery, GetWalletQueryVariables>(GetWalletDocument, options);
+      }
+export function useGetWalletLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetWalletQuery, GetWalletQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetWalletQuery, GetWalletQueryVariables>(GetWalletDocument, options);
+        }
+export type GetWalletQueryHookResult = ReturnType<typeof useGetWalletQuery>;
+export type GetWalletLazyQueryHookResult = ReturnType<typeof useGetWalletLazyQuery>;
+export type GetWalletQueryResult = Apollo.QueryResult<GetWalletQuery, GetWalletQueryVariables>;
+export const GetWalletsDocument = gql`
+    query GetWallets($orderBy: Wallet_orderBy!) {
+  wallets(first: 100, orderBy: $orderBy, orderDirection: asc) {
+    id
+    positions {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetWalletsQuery__
+ *
+ * To run a query within a React component, call `useGetWalletsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWalletsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWalletsQuery({
+ *   variables: {
+ *      orderBy: // value for 'orderBy'
+ *   },
+ * });
+ */
+export function useGetWalletsQuery(baseOptions: Apollo.QueryHookOptions<GetWalletsQuery, GetWalletsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetWalletsQuery, GetWalletsQueryVariables>(GetWalletsDocument, options);
+      }
+export function useGetWalletsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetWalletsQuery, GetWalletsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetWalletsQuery, GetWalletsQueryVariables>(GetWalletsDocument, options);
+        }
+export type GetWalletsQueryHookResult = ReturnType<typeof useGetWalletsQuery>;
+export type GetWalletsLazyQueryHookResult = ReturnType<typeof useGetWalletsLazyQuery>;
+export type GetWalletsQueryResult = Apollo.QueryResult<GetWalletsQuery, GetWalletsQueryVariables>;

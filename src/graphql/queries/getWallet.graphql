@@ -1,0 +1,8 @@
+query GetWallet($id: ID!) {
+  wallet(id: $id) {
+    id
+    positions {
+      id
+    }
+  }
+}

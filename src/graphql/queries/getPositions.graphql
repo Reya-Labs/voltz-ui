@@ -3,7 +3,9 @@ query GetPositions($orderBy: Position_orderBy!) {
     id
     createdTimestamp
     updatedTimestamp
-    owner
+    owner {
+      id
+    }
     amm {
       id
     }
@@ -23,5 +25,14 @@ query GetPositions($orderBy: Position_orderBy!) {
     isSettled
     isEmpty
     snapshotCount
+    burns {
+      id
+    }
+    mints {
+      id
+    }
+    swaps {
+      id
+    }
   }
 }
