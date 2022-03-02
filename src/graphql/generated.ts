@@ -1,3 +1,4 @@
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -5,6 +6,7 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -1823,7 +1825,7 @@ export type GetWalletQueryVariables = Exact<{
 }>;
 
 
-export type GetWalletQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, positions: Array<{ __typename?: 'Position', id: string }> } | null };
+export type GetWalletQuery = { __typename?: 'Query', wallet?: { __typename: 'Wallet', id: string, positionCount: any, positions: Array<{ __typename: 'Position', id: string }> } | null };
 
 export type GetWalletsQueryVariables = Exact<{
   orderBy: Wallet_OrderBy;
@@ -1831,6 +1833,444 @@ export type GetWalletsQueryVariables = Exact<{
 
 
 export type GetWalletsQuery = { __typename?: 'Query', wallets: Array<{ __typename?: 'Wallet', id: string, positions: Array<{ __typename?: 'Position', id: string }> }> };
+
+export type WithIndex<TObject> = TObject & Record<string, any>;
+export type ResolversObject<TObject> = WithIndex<TObject>;
+
+export type ResolverTypeWrapper<T> = Promise<T> | T;
+
+
+export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
+  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
+};
+export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
+
+export type ResolverFn<TResult, TParent, TContext, TArgs> = (
+  parent: TParent,
+  args: TArgs,
+  context: TContext,
+  info: GraphQLResolveInfo
+) => Promise<TResult> | TResult;
+
+export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (
+  parent: TParent,
+  args: TArgs,
+  context: TContext,
+  info: GraphQLResolveInfo
+) => AsyncIterable<TResult> | Promise<AsyncIterable<TResult>>;
+
+export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
+  parent: TParent,
+  args: TArgs,
+  context: TContext,
+  info: GraphQLResolveInfo
+) => TResult | Promise<TResult>;
+
+export interface SubscriptionSubscriberObject<TResult, TKey extends string, TParent, TContext, TArgs> {
+  subscribe: SubscriptionSubscribeFn<{ [key in TKey]: TResult }, TParent, TContext, TArgs>;
+  resolve?: SubscriptionResolveFn<TResult, { [key in TKey]: TResult }, TContext, TArgs>;
+}
+
+export interface SubscriptionResolverObject<TResult, TParent, TContext, TArgs> {
+  subscribe: SubscriptionSubscribeFn<any, TParent, TContext, TArgs>;
+  resolve: SubscriptionResolveFn<TResult, any, TContext, TArgs>;
+}
+
+export type SubscriptionObject<TResult, TKey extends string, TParent, TContext, TArgs> =
+  | SubscriptionSubscriberObject<TResult, TKey, TParent, TContext, TArgs>
+  | SubscriptionResolverObject<TResult, TParent, TContext, TArgs>;
+
+export type SubscriptionResolver<TResult, TKey extends string, TParent = {}, TContext = {}, TArgs = {}> =
+  | ((...args: any[]) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
+  | SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>;
+
+export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
+  parent: TParent,
+  context: TContext,
+  info: GraphQLResolveInfo
+) => Maybe<TTypes> | Promise<Maybe<TTypes>>;
+
+export type IsTypeOfResolverFn<T = {}, TContext = {}> = (obj: T, context: TContext, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
+
+export type NextResolverFn<T> = () => Promise<T>;
+
+export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs = {}> = (
+  next: NextResolverFn<TResult>,
+  parent: TParent,
+  args: TArgs,
+  context: TContext,
+  info: GraphQLResolveInfo
+) => TResult | Promise<TResult>;
+
+/** Mapping between all available schema types and the resolvers types */
+export type ResolversTypes = ResolversObject<{
+  AMM: ResolverTypeWrapper<Partial<Amm>>;
+  AMM_filter: ResolverTypeWrapper<Partial<Amm_Filter>>;
+  AMM_orderBy: ResolverTypeWrapper<Partial<Amm_OrderBy>>;
+  BigDecimal: ResolverTypeWrapper<Partial<Scalars['BigDecimal']>>;
+  BigInt: ResolverTypeWrapper<Partial<Scalars['BigInt']>>;
+  Block_height: ResolverTypeWrapper<Partial<Block_Height>>;
+  Boolean: ResolverTypeWrapper<Partial<Scalars['Boolean']>>;
+  Burn: ResolverTypeWrapper<Partial<Burn>>;
+  Burn_filter: ResolverTypeWrapper<Partial<Burn_Filter>>;
+  Burn_orderBy: ResolverTypeWrapper<Partial<Burn_OrderBy>>;
+  Bytes: ResolverTypeWrapper<Partial<Scalars['Bytes']>>;
+  Factory: ResolverTypeWrapper<Partial<Factory>>;
+  Factory_filter: ResolverTypeWrapper<Partial<Factory_Filter>>;
+  Factory_orderBy: ResolverTypeWrapper<Partial<Factory_OrderBy>>;
+  ID: ResolverTypeWrapper<Partial<Scalars['ID']>>;
+  Int: ResolverTypeWrapper<Partial<Scalars['Int']>>;
+  MarginEngine: ResolverTypeWrapper<Partial<MarginEngine>>;
+  MarginEngine_filter: ResolverTypeWrapper<Partial<MarginEngine_Filter>>;
+  MarginEngine_orderBy: ResolverTypeWrapper<Partial<MarginEngine_OrderBy>>;
+  Mint: ResolverTypeWrapper<Partial<Mint>>;
+  Mint_filter: ResolverTypeWrapper<Partial<Mint_Filter>>;
+  Mint_orderBy: ResolverTypeWrapper<Partial<Mint_OrderBy>>;
+  OrderDirection: ResolverTypeWrapper<Partial<OrderDirection>>;
+  Position: ResolverTypeWrapper<Partial<Position>>;
+  PositionSnapshot: ResolverTypeWrapper<Partial<PositionSnapshot>>;
+  PositionSnapshot_filter: ResolverTypeWrapper<Partial<PositionSnapshot_Filter>>;
+  PositionSnapshot_orderBy: ResolverTypeWrapper<Partial<PositionSnapshot_OrderBy>>;
+  Position_filter: ResolverTypeWrapper<Partial<Position_Filter>>;
+  Position_orderBy: ResolverTypeWrapper<Partial<Position_OrderBy>>;
+  Query: ResolverTypeWrapper<{}>;
+  RateOracle: ResolverTypeWrapper<Partial<RateOracle>>;
+  RateOracle_filter: ResolverTypeWrapper<Partial<RateOracle_Filter>>;
+  RateOracle_orderBy: ResolverTypeWrapper<Partial<RateOracle_OrderBy>>;
+  String: ResolverTypeWrapper<Partial<Scalars['String']>>;
+  Subscription: ResolverTypeWrapper<{}>;
+  Swap: ResolverTypeWrapper<Partial<Swap>>;
+  Swap_filter: ResolverTypeWrapper<Partial<Swap_Filter>>;
+  Swap_orderBy: ResolverTypeWrapper<Partial<Swap_OrderBy>>;
+  Tick: ResolverTypeWrapper<Partial<Tick>>;
+  Tick_filter: ResolverTypeWrapper<Partial<Tick_Filter>>;
+  Tick_orderBy: ResolverTypeWrapper<Partial<Tick_OrderBy>>;
+  Transaction: ResolverTypeWrapper<Partial<Transaction>>;
+  Transaction_filter: ResolverTypeWrapper<Partial<Transaction_Filter>>;
+  Transaction_orderBy: ResolverTypeWrapper<Partial<Transaction_OrderBy>>;
+  UnderlyingToken: ResolverTypeWrapper<Partial<UnderlyingToken>>;
+  UnderlyingToken_filter: ResolverTypeWrapper<Partial<UnderlyingToken_Filter>>;
+  UnderlyingToken_orderBy: ResolverTypeWrapper<Partial<UnderlyingToken_OrderBy>>;
+  Wallet: ResolverTypeWrapper<Partial<Wallet>>;
+  Wallet_filter: ResolverTypeWrapper<Partial<Wallet_Filter>>;
+  Wallet_orderBy: ResolverTypeWrapper<Partial<Wallet_OrderBy>>;
+  _Block_: ResolverTypeWrapper<Partial<_Block_>>;
+  _Meta_: ResolverTypeWrapper<Partial<_Meta_>>;
+  _SubgraphErrorPolicy_: ResolverTypeWrapper<Partial<_SubgraphErrorPolicy_>>;
+}>;
+
+/** Mapping between all available schema types and the resolvers parents */
+export type ResolversParentTypes = ResolversObject<{
+  AMM: Partial<Amm>;
+  AMM_filter: Partial<Amm_Filter>;
+  BigDecimal: Partial<Scalars['BigDecimal']>;
+  BigInt: Partial<Scalars['BigInt']>;
+  Block_height: Partial<Block_Height>;
+  Boolean: Partial<Scalars['Boolean']>;
+  Burn: Partial<Burn>;
+  Burn_filter: Partial<Burn_Filter>;
+  Bytes: Partial<Scalars['Bytes']>;
+  Factory: Partial<Factory>;
+  Factory_filter: Partial<Factory_Filter>;
+  ID: Partial<Scalars['ID']>;
+  Int: Partial<Scalars['Int']>;
+  MarginEngine: Partial<MarginEngine>;
+  MarginEngine_filter: Partial<MarginEngine_Filter>;
+  Mint: Partial<Mint>;
+  Mint_filter: Partial<Mint_Filter>;
+  Position: Partial<Position>;
+  PositionSnapshot: Partial<PositionSnapshot>;
+  PositionSnapshot_filter: Partial<PositionSnapshot_Filter>;
+  Position_filter: Partial<Position_Filter>;
+  Query: {};
+  RateOracle: Partial<RateOracle>;
+  RateOracle_filter: Partial<RateOracle_Filter>;
+  String: Partial<Scalars['String']>;
+  Subscription: {};
+  Swap: Partial<Swap>;
+  Swap_filter: Partial<Swap_Filter>;
+  Tick: Partial<Tick>;
+  Tick_filter: Partial<Tick_Filter>;
+  Transaction: Partial<Transaction>;
+  Transaction_filter: Partial<Transaction_Filter>;
+  UnderlyingToken: Partial<UnderlyingToken>;
+  UnderlyingToken_filter: Partial<UnderlyingToken_Filter>;
+  Wallet: Partial<Wallet>;
+  Wallet_filter: Partial<Wallet_Filter>;
+  _Block_: Partial<_Block_>;
+  _Meta_: Partial<_Meta_>;
+}>;
+
+export type DerivedFromDirectiveArgs = {
+  field?: Maybe<Scalars['String']>;
+};
+
+export type DerivedFromDirectiveResolver<Result, Parent, ContextType = any, Args = DerivedFromDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type EntityDirectiveArgs = { };
+
+export type EntityDirectiveResolver<Result, Parent, ContextType = any, Args = EntityDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type SubgraphIdDirectiveArgs = {
+  id?: Maybe<Scalars['String']>;
+};
+
+export type SubgraphIdDirectiveResolver<Result, Parent, ContextType = any, Args = SubgraphIdDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type AmmResolvers<ContextType = any, ParentType extends ResolversParentTypes['AMM'] = ResolversParentTypes['AMM']> = ResolversObject<{
+  burns?: Resolver<Array<ResolversTypes['Burn']>, ParentType, ContextType, RequireFields<AmmBurnsArgs, 'first' | 'skip'>>;
+  createdTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  fcmAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  liquidity?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  mints?: Resolver<Array<ResolversTypes['Mint']>, ParentType, ContextType, RequireFields<AmmMintsArgs, 'first' | 'skip'>>;
+  rateOracle?: Resolver<ResolversTypes['RateOracle'], ParentType, ContextType>;
+  sqrtPriceX96?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  swaps?: Resolver<Array<ResolversTypes['Swap']>, ParentType, ContextType, RequireFields<AmmSwapsArgs, 'first' | 'skip'>>;
+  termEndTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  termStartTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  tick?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  tickSpacing?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  txCount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  updatedTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export interface BigDecimalScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['BigDecimal'], any> {
+  name: 'BigDecimal';
+}
+
+export interface BigIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['BigInt'], any> {
+  name: 'BigInt';
+}
+
+export type BurnResolvers<ContextType = any, ParentType extends ResolversParentTypes['Burn'] = ResolversParentTypes['Burn']> = ResolversObject<{
+  amm?: Resolver<ResolversTypes['AMM'], ParentType, ContextType>;
+  amount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  position?: Resolver<ResolversTypes['Position'], ParentType, ContextType>;
+  sender?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tickLower?: Resolver<ResolversTypes['Tick'], ParentType, ContextType>;
+  tickUpper?: Resolver<ResolversTypes['Tick'], ParentType, ContextType>;
+  transaction?: Resolver<ResolversTypes['Transaction'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export interface BytesScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Bytes'], any> {
+  name: 'Bytes';
+}
+
+export type FactoryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Factory'] = ResolversParentTypes['Factory']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  owner?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type MarginEngineResolvers<ContextType = any, ParentType extends ResolversParentTypes['MarginEngine'] = ResolversParentTypes['MarginEngine']> = ResolversObject<{
+  amm?: Resolver<ResolversTypes['AMM'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type MintResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mint'] = ResolversParentTypes['Mint']> = ResolversObject<{
+  amm?: Resolver<ResolversTypes['AMM'], ParentType, ContextType>;
+  amount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  position?: Resolver<ResolversTypes['Position'], ParentType, ContextType>;
+  sender?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tickLower?: Resolver<ResolversTypes['Tick'], ParentType, ContextType>;
+  tickUpper?: Resolver<ResolversTypes['Tick'], ParentType, ContextType>;
+  transaction?: Resolver<ResolversTypes['Transaction'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type PositionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Position'] = ResolversParentTypes['Position']> = ResolversObject<{
+  amm?: Resolver<ResolversTypes['AMM'], ParentType, ContextType>;
+  burns?: Resolver<Array<ResolversTypes['Burn']>, ParentType, ContextType, RequireFields<PositionBurnsArgs, 'first' | 'skip'>>;
+  createdTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  fixedTokenBalance?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  isEmpty?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isLiquidityProvider?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isSettled?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  liquidity?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  margin?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  mints?: Resolver<Array<ResolversTypes['Mint']>, ParentType, ContextType, RequireFields<PositionMintsArgs, 'first' | 'skip'>>;
+  owner?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType>;
+  snapshotCount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  snapshots?: Resolver<Array<ResolversTypes['PositionSnapshot']>, ParentType, ContextType, RequireFields<PositionSnapshotsArgs, 'first' | 'skip'>>;
+  swaps?: Resolver<Array<ResolversTypes['Swap']>, ParentType, ContextType, RequireFields<PositionSwapsArgs, 'first' | 'skip'>>;
+  tickLower?: Resolver<ResolversTypes['Tick'], ParentType, ContextType>;
+  tickUpper?: Resolver<ResolversTypes['Tick'], ParentType, ContextType>;
+  updatedTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  variableTokenBalance?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type PositionSnapshotResolvers<ContextType = any, ParentType extends ResolversParentTypes['PositionSnapshot'] = ResolversParentTypes['PositionSnapshot']> = ResolversObject<{
+  createdTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  fixedTokenBalance?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  isEmpty?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isSettled?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  liquidity?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  margin?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  position?: Resolver<ResolversTypes['Position'], ParentType, ContextType>;
+  variableTokenBalance?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  _meta?: Resolver<Maybe<ResolversTypes['_Meta_']>, ParentType, ContextType, Partial<Query_MetaArgs>>;
+  amm?: Resolver<Maybe<ResolversTypes['AMM']>, ParentType, ContextType, RequireFields<QueryAmmArgs, 'id' | 'subgraphError'>>;
+  amms?: Resolver<Array<ResolversTypes['AMM']>, ParentType, ContextType, RequireFields<QueryAmmsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  burn?: Resolver<Maybe<ResolversTypes['Burn']>, ParentType, ContextType, RequireFields<QueryBurnArgs, 'id' | 'subgraphError'>>;
+  burns?: Resolver<Array<ResolversTypes['Burn']>, ParentType, ContextType, RequireFields<QueryBurnsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  factories?: Resolver<Array<ResolversTypes['Factory']>, ParentType, ContextType, RequireFields<QueryFactoriesArgs, 'first' | 'skip' | 'subgraphError'>>;
+  factory?: Resolver<Maybe<ResolversTypes['Factory']>, ParentType, ContextType, RequireFields<QueryFactoryArgs, 'id' | 'subgraphError'>>;
+  marginEngine?: Resolver<Maybe<ResolversTypes['MarginEngine']>, ParentType, ContextType, RequireFields<QueryMarginEngineArgs, 'id' | 'subgraphError'>>;
+  marginEngines?: Resolver<Array<ResolversTypes['MarginEngine']>, ParentType, ContextType, RequireFields<QueryMarginEnginesArgs, 'first' | 'skip' | 'subgraphError'>>;
+  mint?: Resolver<Maybe<ResolversTypes['Mint']>, ParentType, ContextType, RequireFields<QueryMintArgs, 'id' | 'subgraphError'>>;
+  mints?: Resolver<Array<ResolversTypes['Mint']>, ParentType, ContextType, RequireFields<QueryMintsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  position?: Resolver<Maybe<ResolversTypes['Position']>, ParentType, ContextType, RequireFields<QueryPositionArgs, 'id' | 'subgraphError'>>;
+  positionSnapshot?: Resolver<Maybe<ResolversTypes['PositionSnapshot']>, ParentType, ContextType, RequireFields<QueryPositionSnapshotArgs, 'id' | 'subgraphError'>>;
+  positionSnapshots?: Resolver<Array<ResolversTypes['PositionSnapshot']>, ParentType, ContextType, RequireFields<QueryPositionSnapshotsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  positions?: Resolver<Array<ResolversTypes['Position']>, ParentType, ContextType, RequireFields<QueryPositionsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  rateOracle?: Resolver<Maybe<ResolversTypes['RateOracle']>, ParentType, ContextType, RequireFields<QueryRateOracleArgs, 'id' | 'subgraphError'>>;
+  rateOracles?: Resolver<Array<ResolversTypes['RateOracle']>, ParentType, ContextType, RequireFields<QueryRateOraclesArgs, 'first' | 'skip' | 'subgraphError'>>;
+  swap?: Resolver<Maybe<ResolversTypes['Swap']>, ParentType, ContextType, RequireFields<QuerySwapArgs, 'id' | 'subgraphError'>>;
+  swaps?: Resolver<Array<ResolversTypes['Swap']>, ParentType, ContextType, RequireFields<QuerySwapsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  tick?: Resolver<Maybe<ResolversTypes['Tick']>, ParentType, ContextType, RequireFields<QueryTickArgs, 'id' | 'subgraphError'>>;
+  ticks?: Resolver<Array<ResolversTypes['Tick']>, ParentType, ContextType, RequireFields<QueryTicksArgs, 'first' | 'skip' | 'subgraphError'>>;
+  transaction?: Resolver<Maybe<ResolversTypes['Transaction']>, ParentType, ContextType, RequireFields<QueryTransactionArgs, 'id' | 'subgraphError'>>;
+  transactions?: Resolver<Array<ResolversTypes['Transaction']>, ParentType, ContextType, RequireFields<QueryTransactionsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  underlyingToken?: Resolver<Maybe<ResolversTypes['UnderlyingToken']>, ParentType, ContextType, RequireFields<QueryUnderlyingTokenArgs, 'id' | 'subgraphError'>>;
+  underlyingTokens?: Resolver<Array<ResolversTypes['UnderlyingToken']>, ParentType, ContextType, RequireFields<QueryUnderlyingTokensArgs, 'first' | 'skip' | 'subgraphError'>>;
+  wallet?: Resolver<Maybe<ResolversTypes['Wallet']>, ParentType, ContextType, RequireFields<QueryWalletArgs, 'id' | 'subgraphError'>>;
+  wallets?: Resolver<Array<ResolversTypes['Wallet']>, ParentType, ContextType, RequireFields<QueryWalletsArgs, 'first' | 'skip' | 'subgraphError'>>;
+}>;
+
+export type RateOracleResolvers<ContextType = any, ParentType extends ResolversParentTypes['RateOracle'] = ResolversParentTypes['RateOracle']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  token?: Resolver<ResolversTypes['UnderlyingToken'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
+  _meta?: SubscriptionResolver<Maybe<ResolversTypes['_Meta_']>, "_meta", ParentType, ContextType, Partial<Subscription_MetaArgs>>;
+  amm?: SubscriptionResolver<Maybe<ResolversTypes['AMM']>, "amm", ParentType, ContextType, RequireFields<SubscriptionAmmArgs, 'id' | 'subgraphError'>>;
+  amms?: SubscriptionResolver<Array<ResolversTypes['AMM']>, "amms", ParentType, ContextType, RequireFields<SubscriptionAmmsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  burn?: SubscriptionResolver<Maybe<ResolversTypes['Burn']>, "burn", ParentType, ContextType, RequireFields<SubscriptionBurnArgs, 'id' | 'subgraphError'>>;
+  burns?: SubscriptionResolver<Array<ResolversTypes['Burn']>, "burns", ParentType, ContextType, RequireFields<SubscriptionBurnsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  factories?: SubscriptionResolver<Array<ResolversTypes['Factory']>, "factories", ParentType, ContextType, RequireFields<SubscriptionFactoriesArgs, 'first' | 'skip' | 'subgraphError'>>;
+  factory?: SubscriptionResolver<Maybe<ResolversTypes['Factory']>, "factory", ParentType, ContextType, RequireFields<SubscriptionFactoryArgs, 'id' | 'subgraphError'>>;
+  marginEngine?: SubscriptionResolver<Maybe<ResolversTypes['MarginEngine']>, "marginEngine", ParentType, ContextType, RequireFields<SubscriptionMarginEngineArgs, 'id' | 'subgraphError'>>;
+  marginEngines?: SubscriptionResolver<Array<ResolversTypes['MarginEngine']>, "marginEngines", ParentType, ContextType, RequireFields<SubscriptionMarginEnginesArgs, 'first' | 'skip' | 'subgraphError'>>;
+  mint?: SubscriptionResolver<Maybe<ResolversTypes['Mint']>, "mint", ParentType, ContextType, RequireFields<SubscriptionMintArgs, 'id' | 'subgraphError'>>;
+  mints?: SubscriptionResolver<Array<ResolversTypes['Mint']>, "mints", ParentType, ContextType, RequireFields<SubscriptionMintsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  position?: SubscriptionResolver<Maybe<ResolversTypes['Position']>, "position", ParentType, ContextType, RequireFields<SubscriptionPositionArgs, 'id' | 'subgraphError'>>;
+  positionSnapshot?: SubscriptionResolver<Maybe<ResolversTypes['PositionSnapshot']>, "positionSnapshot", ParentType, ContextType, RequireFields<SubscriptionPositionSnapshotArgs, 'id' | 'subgraphError'>>;
+  positionSnapshots?: SubscriptionResolver<Array<ResolversTypes['PositionSnapshot']>, "positionSnapshots", ParentType, ContextType, RequireFields<SubscriptionPositionSnapshotsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  positions?: SubscriptionResolver<Array<ResolversTypes['Position']>, "positions", ParentType, ContextType, RequireFields<SubscriptionPositionsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  rateOracle?: SubscriptionResolver<Maybe<ResolversTypes['RateOracle']>, "rateOracle", ParentType, ContextType, RequireFields<SubscriptionRateOracleArgs, 'id' | 'subgraphError'>>;
+  rateOracles?: SubscriptionResolver<Array<ResolversTypes['RateOracle']>, "rateOracles", ParentType, ContextType, RequireFields<SubscriptionRateOraclesArgs, 'first' | 'skip' | 'subgraphError'>>;
+  swap?: SubscriptionResolver<Maybe<ResolversTypes['Swap']>, "swap", ParentType, ContextType, RequireFields<SubscriptionSwapArgs, 'id' | 'subgraphError'>>;
+  swaps?: SubscriptionResolver<Array<ResolversTypes['Swap']>, "swaps", ParentType, ContextType, RequireFields<SubscriptionSwapsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  tick?: SubscriptionResolver<Maybe<ResolversTypes['Tick']>, "tick", ParentType, ContextType, RequireFields<SubscriptionTickArgs, 'id' | 'subgraphError'>>;
+  ticks?: SubscriptionResolver<Array<ResolversTypes['Tick']>, "ticks", ParentType, ContextType, RequireFields<SubscriptionTicksArgs, 'first' | 'skip' | 'subgraphError'>>;
+  transaction?: SubscriptionResolver<Maybe<ResolversTypes['Transaction']>, "transaction", ParentType, ContextType, RequireFields<SubscriptionTransactionArgs, 'id' | 'subgraphError'>>;
+  transactions?: SubscriptionResolver<Array<ResolversTypes['Transaction']>, "transactions", ParentType, ContextType, RequireFields<SubscriptionTransactionsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  underlyingToken?: SubscriptionResolver<Maybe<ResolversTypes['UnderlyingToken']>, "underlyingToken", ParentType, ContextType, RequireFields<SubscriptionUnderlyingTokenArgs, 'id' | 'subgraphError'>>;
+  underlyingTokens?: SubscriptionResolver<Array<ResolversTypes['UnderlyingToken']>, "underlyingTokens", ParentType, ContextType, RequireFields<SubscriptionUnderlyingTokensArgs, 'first' | 'skip' | 'subgraphError'>>;
+  wallet?: SubscriptionResolver<Maybe<ResolversTypes['Wallet']>, "wallet", ParentType, ContextType, RequireFields<SubscriptionWalletArgs, 'id' | 'subgraphError'>>;
+  wallets?: SubscriptionResolver<Array<ResolversTypes['Wallet']>, "wallets", ParentType, ContextType, RequireFields<SubscriptionWalletsArgs, 'first' | 'skip' | 'subgraphError'>>;
+}>;
+
+export type SwapResolvers<ContextType = any, ParentType extends ResolversParentTypes['Swap'] = ResolversParentTypes['Swap']> = ResolversObject<{
+  amm?: Resolver<ResolversTypes['AMM'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  liquidity?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  position?: Resolver<ResolversTypes['Position'], ParentType, ContextType>;
+  sender?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  sqrtPriceX96?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  tick?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  transaction?: Resolver<ResolversTypes['Transaction'], ParentType, ContextType>;
+  txIndex?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type TickResolvers<ContextType = any, ParentType extends ResolversParentTypes['Tick'] = ResolversParentTypes['Tick']> = ResolversObject<{
+  amm?: Resolver<ResolversTypes['AMM'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type TransactionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Transaction'] = ResolversParentTypes['Transaction']> = ResolversObject<{
+  blockNumber?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  burns?: Resolver<Array<ResolversTypes['Burn']>, ParentType, ContextType, RequireFields<TransactionBurnsArgs, 'first' | 'skip'>>;
+  gasPrice?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  mints?: Resolver<Array<ResolversTypes['Mint']>, ParentType, ContextType, RequireFields<TransactionMintsArgs, 'first' | 'skip'>>;
+  swaps?: Resolver<Array<ResolversTypes['Swap']>, ParentType, ContextType, RequireFields<TransactionSwapsArgs, 'first' | 'skip'>>;
+  timestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type UnderlyingTokenResolvers<ContextType = any, ParentType extends ResolversParentTypes['UnderlyingToken'] = ResolversParentTypes['UnderlyingToken']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type WalletResolvers<ContextType = any, ParentType extends ResolversParentTypes['Wallet'] = ResolversParentTypes['Wallet']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  positionCount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  positions?: Resolver<Array<ResolversTypes['Position']>, ParentType, ContextType, RequireFields<WalletPositionsArgs, 'first' | 'skip'>>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type _Block_Resolvers<ContextType = any, ParentType extends ResolversParentTypes['_Block_'] = ResolversParentTypes['_Block_']> = ResolversObject<{
+  hash?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
+  number?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type _Meta_Resolvers<ContextType = any, ParentType extends ResolversParentTypes['_Meta_'] = ResolversParentTypes['_Meta_']> = ResolversObject<{
+  block?: Resolver<ResolversTypes['_Block_'], ParentType, ContextType>;
+  deployment?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  hasIndexingErrors?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type Resolvers<ContextType = any> = ResolversObject<{
+  AMM?: AmmResolvers<ContextType>;
+  BigDecimal?: GraphQLScalarType;
+  BigInt?: GraphQLScalarType;
+  Burn?: BurnResolvers<ContextType>;
+  Bytes?: GraphQLScalarType;
+  Factory?: FactoryResolvers<ContextType>;
+  MarginEngine?: MarginEngineResolvers<ContextType>;
+  Mint?: MintResolvers<ContextType>;
+  Position?: PositionResolvers<ContextType>;
+  PositionSnapshot?: PositionSnapshotResolvers<ContextType>;
+  Query?: QueryResolvers<ContextType>;
+  RateOracle?: RateOracleResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
+  Swap?: SwapResolvers<ContextType>;
+  Tick?: TickResolvers<ContextType>;
+  Transaction?: TransactionResolvers<ContextType>;
+  UnderlyingToken?: UnderlyingTokenResolvers<ContextType>;
+  Wallet?: WalletResolvers<ContextType>;
+  _Block_?: _Block_Resolvers<ContextType>;
+  _Meta_?: _Meta_Resolvers<ContextType>;
+}>;
+
+export type DirectiveResolvers<ContextType = any> = ResolversObject<{
+  derivedFrom?: DerivedFromDirectiveResolver<any, any, ContextType>;
+  entity?: EntityDirectiveResolver<any, any, ContextType>;
+  subgraphId?: SubgraphIdDirectiveResolver<any, any, ContextType>;
+}>;
 
 
 export const GetAmMsDocument = gql`
@@ -2164,8 +2604,11 @@ export type GetSwapsQueryResult = Apollo.QueryResult<GetSwapsQuery, GetSwapsQuer
 export const GetWalletDocument = gql`
     query GetWallet($id: ID!) {
   wallet(id: $id) {
+    __typename
     id
+    positionCount
     positions {
+      __typename
       id
     }
   }

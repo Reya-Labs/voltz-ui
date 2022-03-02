@@ -1,7 +1,10 @@
 query GetWallet($id: ID!) {
   wallet(id: $id) {
+    __typename
     id
+    positionCount
     positions {
+      __typename
       id
     }
   }

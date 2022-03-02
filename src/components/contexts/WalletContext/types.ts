@@ -1,3 +1,7 @@
+import { DeepPartial } from 'utility-types';
+
+import { Wallet as WalletData } from '@graphql';
+
 export type WalletStatus =
   | 'initializing'
   | 'unavailable'
@@ -25,4 +29,5 @@ export type Wallet = {
   name: WalletName | null;
   ethereum: WalletEthereum | null;
   balance: number | null;
+  data: DeepPartial<WalletData> | null;
 };

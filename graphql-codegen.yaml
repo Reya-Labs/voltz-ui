@@ -6,6 +6,9 @@ generates:
     plugins:
       - typescript
       - typescript-operations
+      - typescript-resolvers
       - typescript-react-apollo
     config:
       withHooks: true
+      useIndexSignature: true
+      defaultMapper: Partial<{T}>

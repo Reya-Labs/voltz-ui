@@ -1,6 +1,7 @@
 import React, { useMemo, useCallback, useEffect } from 'react';
 import { useMetaMask } from 'metamask-react';
 
+import { useGetWalletQuery } from '@graphql';
 import { WalletStatus, WalletName, WalletEthereum } from './types';
 import WalletContext from './WalletContext';
 
@@ -71,6 +72,8 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
     }
   }, [name, metamaskEthereum]);
 
+  const { data } = useGetWalletQuery({ variables: { id: account || '' } });
+
   const value = {
     status,
     connect,
@@ -79,6 +82,7 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     ethereum,
     balance,
+    data: data && data.wallet ? data.wallet : null,
   };
 
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;
