@@ -1,0 +1,16 @@
+query GetPositionSnapshots($orderBy: PositionSnapshot_orderBy!) {
+  positionSnapshots(first: 100, orderBy: $orderBy, orderDirection: asc) {
+    id
+    createdTimestamp
+    owner
+    position {
+      id
+    }
+    liquidity
+    margin
+    fixedTokenBalance
+    variableTokenBalance
+    isSettled
+    isEmpty
+  }
+}

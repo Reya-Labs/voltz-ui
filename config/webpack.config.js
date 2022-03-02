@@ -299,6 +299,7 @@ module.exports = function (webpackEnv) {
         'react-native': 'react-native-web',
         '@components': 'src/components',
         '@hooks': 'src/hooks',
+        '@graphql': 'src/graphql',
         '@utilities': 'src/utilities',
         '@theme': 'src/theme',
         '@routes': 'src/routes',

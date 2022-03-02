@@ -1,0 +1,27 @@
+query GetPositions($orderBy: Position_orderBy!) {
+  positions(first: 100, orderBy: $orderBy, orderDirection: asc) {
+    id
+    createdTimestamp
+    updatedTimestamp
+    owner
+    amm {
+      id
+    }
+    tickLower {
+      id
+      value
+    }
+    tickUpper {
+      id
+      value
+    }
+    liquidity
+    margin
+    fixedTokenBalance
+    variableTokenBalance
+    isLiquidityProvider
+    isSettled
+    isEmpty
+    snapshotCount
+  }
+}
