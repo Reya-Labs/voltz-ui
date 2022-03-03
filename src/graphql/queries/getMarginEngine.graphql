@@ -1,0 +1,5 @@
+query GetMarginEngine($amm: String!) {
+  marginEngine(amm: $amm) {
+    id
+  }
+}

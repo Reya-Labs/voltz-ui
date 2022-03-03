@@ -1,5 +1,5 @@
-import JSBI from 'jsbi'
-import { NEGATIVE_ONE, ZERO } from '../internalConstants'
+import JSBI from 'jsbi';
+import { NEGATIVE_ONE, ZERO } from '../constants';
 
 export abstract class LiquidityMath {
   /**
@@ -9,9 +9,9 @@ export abstract class LiquidityMath {
 
   public static addDelta(x: JSBI, y: JSBI): JSBI {
     if (JSBI.lessThan(y, ZERO)) {
-      return JSBI.subtract(x, JSBI.multiply(y, NEGATIVE_ONE))
+      return JSBI.subtract(x, JSBI.multiply(y, NEGATIVE_ONE));
     } else {
-      return JSBI.add(x, y)
+      return JSBI.add(x, y);
     }
   }
 }

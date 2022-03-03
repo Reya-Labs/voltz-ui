@@ -1,4 +1,4 @@
-import { getAddress } from '@ethersproject/address'
+import { getAddress } from '@ethersproject/address';
 
 /**
  * Validates an address and returns the parsed (checksummed) version of that address
@@ -6,9 +6,8 @@ import { getAddress } from '@ethersproject/address'
  */
 export function validateAndParseAddress(address: string): string {
   try {
-    return getAddress(address)
+    return getAddress(address);
   } catch (error) {
-    throw new Error(`${address} is not a valid address.`)
+    throw new Error(`${address} is not a valid address.`);
   }
 }
-

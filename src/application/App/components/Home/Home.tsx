@@ -5,7 +5,7 @@ import isNull from 'lodash/isNull';
 
 import { data } from '@utilities';
 import { Agents } from '@components/contexts';
-import { useAgent } from '@hooks';
+import { useAMMs, useAgent } from '@hooks';
 import { routes } from '@routes';
 import { Typography, Button } from '@components/atomic';
 import { Page, PoolTable } from '@components/interface';
@@ -91,6 +91,7 @@ const Home: React.FunctionComponent = () => {
     setVammId(null);
     setPositionId(null);
   };
+  const { amms, loading, error } = useAMMs();
   const transformedData = data.transformData({ data: data.data, mode: tableMode, agent });
   const datum = transformedData.find(({ id: datumVammId, positionId: datumPositionId }) => {
     if (datumVammId !== vammId) {

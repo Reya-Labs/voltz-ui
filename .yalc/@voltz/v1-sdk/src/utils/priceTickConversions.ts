@@ -1,10 +1,9 @@
 // import { Price, Token } from '@uniswap/sdk-core'
-import JSBI from 'jsbi'
-import { Price } from '../entities/fractions/price'
-import { Token } from '../entities/token'
-import { Q192 } from '../internalConstants'
-import { encodeSqrtRatioX96 } from './encodeSqrtRatioX96'
-import { TickMath } from './tickMath'
+import JSBI from 'jsbi';
+import { Price } from '../entities/fractions/price';
+import { Q192 } from '../constants';
+import { encodeSqrtRatioX96 } from './encodeSqrtRatioX96';
+import { TickMath } from './tickMath';
 
 /**
  * Returns a price object corresponding to the input tick and the base/quote token
@@ -13,13 +12,13 @@ import { TickMath } from './tickMath'
  * @param quoteToken the quote token of the price
  * @param tick the tick for which to return the price
  */
-export function tickToPrice(tick: number){
-  const sqrtRatioX96 = TickMath.getSqrtRatioAtTick(tick)
+export function tickToPrice(tick: number) {
+  const sqrtRatioX96 = TickMath.getSqrtRatioAtTick(tick);
 
-  const ratioX192 = JSBI.multiply(sqrtRatioX96, sqrtRatioX96)
+  const ratioX192 = JSBI.multiply(sqrtRatioX96, sqrtRatioX96);
 
   // todo: make sure the ratio is correct
-  return new Price(ratioX192, Q192)
+  return new Price(ratioX192, Q192);
 }
 
 /**
@@ -28,15 +27,13 @@ export function tickToPrice(tick: number){
  * i.e. the price of the returned tick is less than or equal to the input price
  */
 export function priceToClosestTick(price: Price): number {
+  // todo: check the logic
+  const sqrtRatioX96 = encodeSqrtRatioX96(price.numerator, price.denominator);
 
-
-  // todo: check the logic  
-  const sqrtRatioX96 = encodeSqrtRatioX96(price.numerator, price.denominator)
-
-  let tick = TickMath.getTickAtSqrtRatio(sqrtRatioX96)
-  const nextTickPrice = tickToPrice(tick + 1)
+  let tick = TickMath.getTickAtSqrtRatio(sqrtRatioX96);
+  const nextTickPrice = tickToPrice(tick + 1);
   if (!price.greaterThan(nextTickPrice)) {
-    tick++
+    tick++;
   }
-  return tick
+  return tick;
 }

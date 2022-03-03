@@ -1,5 +1,5 @@
 import JSBI from 'jsbi'
-import { ONE, ZERO } from '../internalConstants'
+import { ONE, ZERO } from '../constants'
 
 export abstract class FullMath {
   /**

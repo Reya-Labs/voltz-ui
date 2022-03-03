@@ -1,6 +1,7 @@
-import JSBI from 'jsbi'
-import { BigintIsh } from "../constants"
-import { sqrt } from './sqrt'
+import JSBI from 'jsbi';
+
+import { BigintIsh } from '../types';
+import { sqrt } from './sqrt';
 
 /**
  * Returns the sqrt ratio as a Q64.96 corresponding to a given ratio of amount1 and amount0
@@ -9,8 +10,8 @@ import { sqrt } from './sqrt'
  * @returns The sqrt ratio
  */
 export function encodeSqrtRatioX96(amount1: BigintIsh, amount0: BigintIsh): JSBI {
-  const numerator = JSBI.leftShift(JSBI.BigInt(amount1), JSBI.BigInt(192))
-  const denominator = JSBI.BigInt(amount0)
-  const ratioX192 = JSBI.divide(numerator, denominator)
-  return sqrt(ratioX192)
+  const numerator = JSBI.leftShift(JSBI.BigInt(amount1), JSBI.BigInt(192));
+  const denominator = JSBI.BigInt(amount0);
+  const ratioX192 = JSBI.divide(numerator, denominator);
+  return sqrt(ratioX192);
 }
