@@ -92,6 +92,9 @@ const Home: React.FunctionComponent = () => {
     setPositionId(null);
   };
   const { amms, loading, error } = useAMMs();
+
+  console.debug({ amms, loading, error });
+
   const transformedData = data.transformData({ data: data.data, mode: tableMode, agent });
   const datum = transformedData.find(({ id: datumVammId, positionId: datumPositionId }) => {
     if (datumVammId !== vammId) {

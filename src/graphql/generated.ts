@@ -27,6 +27,7 @@ export type Amm = {
   fcmAddress: Scalars['String'];
   id: Scalars['ID'];
   liquidity: Scalars['BigInt'];
+  marginEngineAddress: Scalars['String'];
   mints: Array<Mint>;
   rateOracle: RateOracle;
   sqrtPriceX96: Scalars['BigInt'];
@@ -105,6 +106,20 @@ export type Amm_Filter = {
   liquidity_lte?: InputMaybe<Scalars['BigInt']>;
   liquidity_not?: InputMaybe<Scalars['BigInt']>;
   liquidity_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  marginEngineAddress?: InputMaybe<Scalars['String']>;
+  marginEngineAddress_contains?: InputMaybe<Scalars['String']>;
+  marginEngineAddress_ends_with?: InputMaybe<Scalars['String']>;
+  marginEngineAddress_gt?: InputMaybe<Scalars['String']>;
+  marginEngineAddress_gte?: InputMaybe<Scalars['String']>;
+  marginEngineAddress_in?: InputMaybe<Array<Scalars['String']>>;
+  marginEngineAddress_lt?: InputMaybe<Scalars['String']>;
+  marginEngineAddress_lte?: InputMaybe<Scalars['String']>;
+  marginEngineAddress_not?: InputMaybe<Scalars['String']>;
+  marginEngineAddress_not_contains?: InputMaybe<Scalars['String']>;
+  marginEngineAddress_not_ends_with?: InputMaybe<Scalars['String']>;
+  marginEngineAddress_not_in?: InputMaybe<Array<Scalars['String']>>;
+  marginEngineAddress_not_starts_with?: InputMaybe<Scalars['String']>;
+  marginEngineAddress_starts_with?: InputMaybe<Scalars['String']>;
   rateOracle?: InputMaybe<Scalars['String']>;
   rateOracle_contains?: InputMaybe<Scalars['String']>;
   rateOracle_ends_with?: InputMaybe<Scalars['String']>;
@@ -183,6 +198,7 @@ export enum Amm_OrderBy {
   FcmAddress = 'fcmAddress',
   Id = 'id',
   Liquidity = 'liquidity',
+  MarginEngineAddress = 'marginEngineAddress',
   Mints = 'mints',
   RateOracle = 'rateOracle',
   SqrtPriceX96 = 'sqrtPriceX96',
@@ -1783,7 +1799,7 @@ export type GetAmMsQueryVariables = Exact<{
 }>;
 
 
-export type GetAmMsQuery = { __typename?: 'Query', amms: Array<{ __typename?: 'AMM', id: string, createdTimestamp: any, updatedTimestamp: any, fcmAddress: string, termStartTimestamp: any, termEndTimestamp: any, tickSpacing: any, sqrtPriceX96: any, liquidity: any, tick: any, txCount: any, rateOracle: { __typename?: 'RateOracle', id: string, token: { __typename?: 'UnderlyingToken', id: string, name: string } } }> };
+export type GetAmMsQuery = { __typename?: 'Query', amms: Array<{ __typename?: 'AMM', id: string, createdTimestamp: any, updatedTimestamp: any, fcmAddress: string, marginEngineAddress: string, termStartTimestamp: any, termEndTimestamp: any, tickSpacing: any, sqrtPriceX96: any, liquidity: any, tick: any, txCount: any, rateOracle: { __typename?: 'RateOracle', id: string, token: { __typename?: 'UnderlyingToken', id: string, name: string } } }> };
 
 export type GetBurnsQueryVariables = Exact<{
   orderBy: Burn_OrderBy;
@@ -2023,6 +2039,7 @@ export type AmmResolvers<ContextType = any, ParentType extends ResolversParentTy
   fcmAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   liquidity?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  marginEngineAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   mints?: Resolver<Array<ResolversTypes['Mint']>, ParentType, ContextType, RequireFields<AmmMintsArgs, 'first' | 'skip'>>;
   rateOracle?: Resolver<ResolversTypes['RateOracle'], ParentType, ContextType>;
   sqrtPriceX96?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
@@ -2280,6 +2297,7 @@ export const GetAmMsDocument = gql`
     createdTimestamp
     updatedTimestamp
     fcmAddress
+    marginEngineAddress
     rateOracle {
       id
       token {

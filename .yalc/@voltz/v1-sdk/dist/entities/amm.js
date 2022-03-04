@@ -46,18 +46,18 @@ var price_1 = require("./fractions/price");
 var typechain_1 = require("../typechain");
 var AMM = /** @class */ (function () {
     function AMM(_a) {
-        var id = _a.id, marginEngineAddress = _a.marginEngineAddress, fcmAddress = _a.fcmAddress, rateOracleAddress = _a.rateOracleAddress, protocolName = _a.protocolName, createdTimestamp = _a.createdTimestamp, updatedTimestamp = _a.updatedTimestamp, termStartTimestamp = _a.termStartTimestamp, termEndTimestamp = _a.termEndTimestamp, underlyingToken = _a.underlyingToken, sqrtRatioX96 = _a.sqrtRatioX96, liquidity = _a.liquidity, tick = _a.tick, tickSpacing = _a.tickSpacing, txCount = _a.txCount;
+        var id = _a.id, marginEngineAddress = _a.marginEngineAddress, fcmAddress = _a.fcmAddress, rateOracle = _a.rateOracle, protocolName = _a.protocolName, createdTimestamp = _a.createdTimestamp, updatedTimestamp = _a.updatedTimestamp, termStartTimestamp = _a.termStartTimestamp, termEndTimestamp = _a.termEndTimestamp, underlyingToken = _a.underlyingToken, sqrtPriceX96 = _a.sqrtPriceX96, liquidity = _a.liquidity, tick = _a.tick, tickSpacing = _a.tickSpacing, txCount = _a.txCount;
         this.id = id;
         this.marginEngineAddress = marginEngineAddress;
         this.fcmAddress = fcmAddress;
-        this.rateOracleAddress = rateOracleAddress;
+        this.rateOracle = rateOracle;
         this.protocolName = protocolName;
         this.createdTimestamp = createdTimestamp;
         this.updatedTimestamp = updatedTimestamp;
         this.termStartTimestamp = termStartTimestamp;
         this.termEndTimestamp = termEndTimestamp;
         this.underlyingToken = underlyingToken;
-        this.sqrtRatioX96 = jsbi_1.default.BigInt(sqrtRatioX96);
+        this.sqrtPriceX96 = jsbi_1.default.BigInt(sqrtPriceX96);
         this.liquidity = jsbi_1.default.BigInt(liquidity);
         this.tickSpacing = tickSpacing;
         this.tick = tick;
@@ -104,6 +104,22 @@ var AMM = /** @class */ (function () {
                     case 1:
                         _b.sent();
                         return [2 /*return*/, marginRequirement];
+                }
+            });
+        });
+    };
+    AMM.prototype.settlePosition = function (_a) {
+        var signer = _a.signer, owner = _a.owner, tickLower = _a.tickLower, tickUpper = _a.tickUpper;
+        return __awaiter(this, void 0, void 0, function () {
+            var marginEngineContract, settlePositionReceipt;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, signer);
+                        return [4 /*yield*/, marginEngineContract.settlePosition(tickLower, tickUpper, owner)];
+                    case 1:
+                        settlePositionReceipt = _b.sent();
+                        return [2 /*return*/, settlePositionReceipt];
                 }
             });
         });
@@ -178,7 +194,7 @@ var AMM = /** @class */ (function () {
     Object.defineProperty(AMM.prototype, "fixedRate", {
         get: function () {
             var _a;
-            return ((_a = this._fixedRate) !== null && _a !== void 0 ? _a : (this._fixedRate = new price_1.Price(jsbi_1.default.multiply(this.sqrtRatioX96, this.sqrtRatioX96), constants_1.Q192)));
+            return ((_a = this._fixedRate) !== null && _a !== void 0 ? _a : (this._fixedRate = new price_1.Price(jsbi_1.default.multiply(this.sqrtPriceX96, this.sqrtPriceX96), constants_1.Q192)));
         },
         enumerable: false,
         configurable: true
@@ -186,7 +202,7 @@ var AMM = /** @class */ (function () {
     Object.defineProperty(AMM.prototype, "price", {
         get: function () {
             var _a;
-            return ((_a = this._price) !== null && _a !== void 0 ? _a : (this._price = new price_1.Price(constants_1.Q192, jsbi_1.default.multiply(this.sqrtRatioX96, this.sqrtRatioX96))));
+            return ((_a = this._price) !== null && _a !== void 0 ? _a : (this._price = new price_1.Price(constants_1.Q192, jsbi_1.default.multiply(this.sqrtPriceX96, this.sqrtPriceX96))));
         },
         enumerable: false,
         configurable: true

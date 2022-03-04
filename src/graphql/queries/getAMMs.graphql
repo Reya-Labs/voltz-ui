@@ -4,6 +4,7 @@ query GetAMMs($orderBy: AMM_orderBy!) {
     createdTimestamp
     updatedTimestamp
     fcmAddress
+    marginEngineAddress
     rateOracle {
       id
       token {

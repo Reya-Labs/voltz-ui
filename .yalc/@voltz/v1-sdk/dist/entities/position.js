@@ -3,12 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Position = void 0;
 var jsbi_1 = __importDefault(require("jsbi"));
 var priceTickConversions_1 = require("../utils/priceTickConversions");
 var Position = /** @class */ (function () {
     function Position(_a) {
-        var amm = _a.amm, liquidity = _a.liquidity, tickLower = _a.tickLower, tickUpper = _a.tickUpper, isSettled = _a.isSettled, margin = _a.margin, fixedTokenBalance = _a.fixedTokenBalance, variableTokenBalance = _a.variableTokenBalance;
+        var id = _a.id, createdTimestamp = _a.createdTimestamp, updatedTimestamp = _a.updatedTimestamp, amm = _a.amm, liquidity = _a.liquidity, tickLower = _a.tickLower, tickUpper = _a.tickUpper, isSettled = _a.isSettled, margin = _a.margin, fixedTokenBalance = _a.fixedTokenBalance, variableTokenBalance = _a.variableTokenBalance, isLiquidityProvider = _a.isLiquidityProvider;
+        this.id = id;
         this.amm = amm;
         this.tickLower = tickLower;
         this.tickUpper = tickUpper;
@@ -17,6 +17,9 @@ var Position = /** @class */ (function () {
         this.margin = jsbi_1.default.BigInt(margin);
         this.fixedTokenBalance = fixedTokenBalance;
         this.variableTokenBalance = variableTokenBalance;
+        this.createdTimestamp = createdTimestamp;
+        this.updatedTimestamp = updatedTimestamp;
+        this.isLiquidityProvider = isLiquidityProvider;
     }
     Object.defineProperty(Position.prototype, "priceLower", {
         get: function () {
@@ -34,4 +37,4 @@ var Position = /** @class */ (function () {
     });
     return Position;
 }());
-exports.Position = Position;
+exports.default = Position;

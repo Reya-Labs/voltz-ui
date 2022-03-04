@@ -2,7 +2,10 @@ import JSBI from 'jsbi';
 import { BigintIsh } from '../types';
 import { Price } from './fractions/price';
 import AMM from './amm';
-interface PositionConstructorArgs {
+export declare type PositionConstructorArgs = {
+    id: string;
+    createdTimestamp: JSBI;
+    updatedTimestamp: JSBI;
     amm: AMM;
     tickLower: number;
     tickUpper: number;
@@ -11,8 +14,12 @@ interface PositionConstructorArgs {
     margin: JSBI;
     fixedTokenBalance: JSBI;
     variableTokenBalance: JSBI;
-}
-export declare class Position {
+    isLiquidityProvider: boolean;
+};
+declare class Position {
+    readonly id: string;
+    readonly createdTimestamp: JSBI;
+    readonly updatedTimestamp: JSBI;
     readonly amm: AMM;
     readonly tickLower: number;
     readonly tickUpper: number;
@@ -21,9 +28,10 @@ export declare class Position {
     margin: JSBI;
     fixedTokenBalance: JSBI;
     variableTokenBalance: JSBI;
-    constructor({ amm, liquidity, tickLower, tickUpper, isSettled, margin, fixedTokenBalance, variableTokenBalance, }: PositionConstructorArgs);
+    isLiquidityProvider: boolean;
+    constructor({ id, createdTimestamp, updatedTimestamp, amm, liquidity, tickLower, tickUpper, isSettled, margin, fixedTokenBalance, variableTokenBalance, isLiquidityProvider, }: PositionConstructorArgs);
     get priceLower(): Price;
     get priceUpper(): Price;
 }
-export {};
+export default Position;
 //# sourceMappingURL=position.d.ts.map

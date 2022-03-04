@@ -1,5 +1,5 @@
 import { DeepPartial } from 'utility-types';
-import { AMM } from '@voltz/v1-sdk';
+import { AMM, Token, RateOracle } from '@voltz/v1-sdk';
 
 import { useGetAmMsQuery, Amm_OrderBy, Amm } from '@graphql';
 
@@ -20,21 +20,17 @@ const useAMMs = (): UseAMMsResult => {
 
   const amms = data.amms.map(
     ({
-      id = 'id',
-      createdTimestamp,
-      updatedTimestamp,
-      fcmAddress,
-      rateOracle,
-      termStartTimestamp,
-      termEndTimestamp,
-      tickSpacing,
-      sqrtPriceX96,
-      liquidity,
-      tick,
-      txCount,
-    }: Partial<Amm>) =>
+      rateOracle: {
+        id: rateOracleAddress,
+        token: { id: tokenAddress, name: tokenName },
+      },
+      ...rest
+    }) =>
       new AMM({
-        id,
+        rateOracle: new RateOracle({ id: rateOracleAddress }),
+        protocolName: 'aUSDC',
+        underlyingToken: new Token({ id: tokenAddress, name: tokenName }),
+        ...rest,
       }),
   );
 

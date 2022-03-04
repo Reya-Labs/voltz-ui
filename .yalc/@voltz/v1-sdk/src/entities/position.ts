@@ -5,7 +5,10 @@ import { Price } from './fractions/price';
 import { tickToPrice } from '../utils/priceTickConversions';
 import AMM from './amm';
 
-interface PositionConstructorArgs {
+export type PositionConstructorArgs = {
+  id: string;
+  createdTimestamp: JSBI;
+  updatedTimestamp: JSBI;
   amm: AMM;
   tickLower: number;
   tickUpper: number;
@@ -14,9 +17,13 @@ interface PositionConstructorArgs {
   margin: JSBI;
   fixedTokenBalance: JSBI;
   variableTokenBalance: JSBI;
-}
+  isLiquidityProvider: boolean;
+};
 
-export class Position {
+class Position {
+  public readonly id: string;
+  public readonly createdTimestamp: JSBI;
+  public readonly updatedTimestamp: JSBI;
   public readonly amm: AMM;
   public readonly tickLower: number;
   public readonly tickUpper: number;
@@ -25,8 +32,12 @@ export class Position {
   public margin: JSBI;
   public fixedTokenBalance: JSBI;
   public variableTokenBalance: JSBI;
+  public isLiquidityProvider: boolean;
 
   public constructor({
+    id,
+    createdTimestamp,
+    updatedTimestamp,
     amm,
     liquidity,
     tickLower,
@@ -35,7 +46,9 @@ export class Position {
     margin,
     fixedTokenBalance,
     variableTokenBalance,
+    isLiquidityProvider,
   }: PositionConstructorArgs) {
+    this.id = id;
     this.amm = amm;
     this.tickLower = tickLower;
     this.tickUpper = tickUpper;
@@ -44,6 +57,9 @@ export class Position {
     this.margin = JSBI.BigInt(margin);
     this.fixedTokenBalance = fixedTokenBalance;
     this.variableTokenBalance = variableTokenBalance;
+    this.createdTimestamp = createdTimestamp;
+    this.updatedTimestamp = updatedTimestamp;
+    this.isLiquidityProvider = isLiquidityProvider;
   }
 
   public get priceLower(): Price {
@@ -54,3 +70,5 @@ export class Position {
     return tickToPrice(this.tickUpper);
   }
 }
+
+export default Position;
