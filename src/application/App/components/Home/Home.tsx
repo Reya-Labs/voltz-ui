@@ -8,7 +8,7 @@ import { Agents } from '@components/contexts';
 import { useAMMs, useAgent } from '@hooks';
 import { routes } from '@routes';
 import { Typography, Button } from '@components/atomic';
-import { Page, PoolTable } from '@components/interface';
+import { Page, AMMTable } from '@components/interface';
 import { ConnectedPoolForm } from './components';
 
 const Home: React.FunctionComponent = () => {
@@ -92,9 +92,6 @@ const Home: React.FunctionComponent = () => {
     setPositionId(null);
   };
   const { amms, loading, error } = useAMMs();
-
-  console.debug({ amms, loading, error });
-
   const transformedData = data.transformData({ data: data.data, mode: tableMode, agent });
   const datum = transformedData.find(({ id: datumVammId, positionId: datumPositionId }) => {
     if (datumVammId !== vammId) {
@@ -138,7 +135,7 @@ const Home: React.FunctionComponent = () => {
                 PROVIDE LIQUIDITY
               </Button>
             )}
-            <PoolTable data={data.data} mode={tableMode} onSelectVamm={handleSelectVamm} />
+            <AMMTable data={data.data} mode={tableMode} onSelectVamm={handleSelectVamm} />
           </Box>
         )}
         {formActive && !isNull(vammId) && (
