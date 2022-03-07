@@ -25,10 +25,10 @@ export class Price extends Fraction {
     format?: object,
     rounding?: Rounding,
   ): string {
-    return this.toSignificant(significantDigits, format, rounding);
+    return super.toSignificant(significantDigits, format, rounding);
   }
 
   public toFixed(decimalPlaces: number = 4, format?: object, rounding?: Rounding): string {
-    return this.toFixed(decimalPlaces, format, rounding);
+    return super.toFixed(decimalPlaces, format, rounding);
   }
 }

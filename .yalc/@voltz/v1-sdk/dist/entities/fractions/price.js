@@ -41,11 +41,11 @@ var Price = /** @class */ (function (_super) {
     };
     Price.prototype.toSignificant = function (significantDigits, format, rounding) {
         if (significantDigits === void 0) { significantDigits = 6; }
-        return this.toSignificant(significantDigits, format, rounding);
+        return _super.prototype.toSignificant.call(this, significantDigits, format, rounding);
     };
     Price.prototype.toFixed = function (decimalPlaces, format, rounding) {
         if (decimalPlaces === void 0) { decimalPlaces = 4; }
-        return this.toFixed(decimalPlaces, format, rounding);
+        return _super.prototype.toFixed.call(this, decimalPlaces, format, rounding);
     };
     return Price;
 }(fraction_1.Fraction));

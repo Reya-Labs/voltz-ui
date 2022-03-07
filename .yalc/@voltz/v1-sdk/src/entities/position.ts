@@ -2,14 +2,13 @@ import JSBI from 'jsbi';
 
 import { BigintIsh } from '../types';
 import { Price } from './fractions/price';
-import { tickToPrice } from '../utils/priceTickConversions';
-import AMM from './amm';
+import { tickToFixedRate, tickToPrice } from '../utils/priceTickConversions';
 
 export type PositionConstructorArgs = {
   id: string;
   createdTimestamp: JSBI;
   updatedTimestamp: JSBI;
-  amm: AMM;
+  ammId: string;
   tickLower: number;
   tickUpper: number;
   liquidity: BigintIsh;
@@ -18,27 +17,44 @@ export type PositionConstructorArgs = {
   fixedTokenBalance: JSBI;
   variableTokenBalance: JSBI;
   isLiquidityProvider: boolean;
+  owner: string;
+  isEmpty: boolean;
 };
 
 class Position {
   public readonly id: string;
+
   public readonly createdTimestamp: JSBI;
+
   public readonly updatedTimestamp: JSBI;
-  public readonly amm: AMM;
+
+  public readonly ammId: string;
+
   public readonly tickLower: number;
+
   public readonly tickUpper: number;
+
   public readonly liquidity: JSBI;
+
+  public readonly owner: string;
+
   public isSettled: boolean;
+
   public margin: JSBI;
+
   public fixedTokenBalance: JSBI;
+
   public variableTokenBalance: JSBI;
+
   public isLiquidityProvider: boolean;
+
+  public readonly isEmpty: boolean;
 
   public constructor({
     id,
     createdTimestamp,
     updatedTimestamp,
-    amm,
+    ammId,
     liquidity,
     tickLower,
     tickUpper,
@@ -47,9 +63,11 @@ class Position {
     fixedTokenBalance,
     variableTokenBalance,
     isLiquidityProvider,
+    owner,
+    isEmpty,
   }: PositionConstructorArgs) {
     this.id = id;
-    this.amm = amm;
+    this.ammId = ammId;
     this.tickLower = tickLower;
     this.tickUpper = tickUpper;
     this.liquidity = JSBI.BigInt(liquidity);
@@ -60,6 +78,8 @@ class Position {
     this.createdTimestamp = createdTimestamp;
     this.updatedTimestamp = updatedTimestamp;
     this.isLiquidityProvider = isLiquidityProvider;
+    this.owner = owner;
+    this.isEmpty = isEmpty;
   }
 
   public get priceLower(): Price {
@@ -69,6 +89,15 @@ class Position {
   public get priceUpper(): Price {
     return tickToPrice(this.tickUpper);
   }
+
+  public get fixedRateLower(): Price {
+    return tickToFixedRate(this.tickLower);
+  }
+
+  public get fixedRateUpper(): Price {
+    return tickToFixedRate(this.tickLower);
+  }
+
 }
 
 export default Position;

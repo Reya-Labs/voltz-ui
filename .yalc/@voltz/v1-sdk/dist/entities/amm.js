@@ -44,11 +44,13 @@ var ethers_1 = require("ethers");
 var constants_1 = require("../constants");
 var price_1 = require("./fractions/price");
 var typechain_1 = require("../typechain");
+var tickMath_1 = require("../utils/tickMath");
 var AMM = /** @class */ (function () {
     function AMM(_a) {
-        var id = _a.id, marginEngineAddress = _a.marginEngineAddress, fcmAddress = _a.fcmAddress, rateOracle = _a.rateOracle, protocolName = _a.protocolName, createdTimestamp = _a.createdTimestamp, updatedTimestamp = _a.updatedTimestamp, termStartTimestamp = _a.termStartTimestamp, termEndTimestamp = _a.termEndTimestamp, underlyingToken = _a.underlyingToken, sqrtPriceX96 = _a.sqrtPriceX96, liquidity = _a.liquidity, tick = _a.tick, tickSpacing = _a.tickSpacing, txCount = _a.txCount;
+        var id = _a.id, vammAddress = _a.vammAddress, marginEngineAddress = _a.marginEngineAddress, peripheryAddress = _a.peripheryAddress, fcmAddress = _a.fcmAddress, rateOracle = _a.rateOracle, protocolName = _a.protocolName, createdTimestamp = _a.createdTimestamp, updatedTimestamp = _a.updatedTimestamp, termStartTimestamp = _a.termStartTimestamp, termEndTimestamp = _a.termEndTimestamp, underlyingToken = _a.underlyingToken, sqrtPriceX96 = _a.sqrtPriceX96, liquidity = _a.liquidity, tick = _a.tick, tickSpacing = _a.tickSpacing, txCount = _a.txCount;
         this.id = id;
         this.marginEngineAddress = marginEngineAddress;
+        this.vammAddress = vammAddress;
         this.fcmAddress = fcmAddress;
         this.rateOracle = rateOracle;
         this.protocolName = protocolName;
@@ -62,6 +64,7 @@ var AMM = /** @class */ (function () {
         this.tickSpacing = tickSpacing;
         this.tick = tick;
         this.txCount = txCount;
+        this.peripheryAddress = peripheryAddress;
     }
     AMM.prototype.getMinimumMarginRequirement = function (_a) {
         var signer = _a.signer, recipient = _a.recipient, isFT = _a.isFT, notional = _a.notional, sqrtPriceLimitX96 = _a.sqrtPriceLimitX96, tickLower = _a.tickLower, tickUpper = _a.tickUpper;
@@ -71,7 +74,7 @@ var AMM = /** @class */ (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, signer);
+                        peripheryContract = typechain_1.Periphery__factory.connect(this.peripheryAddress, signer);
                         marginEngineAddress = this.marginEngineAddress;
                         swapPeripheryParams = {
                             marginEngineAddress: marginEngineAddress,
@@ -143,11 +146,23 @@ var AMM = /** @class */ (function () {
     AMM.prototype.mintOrBurn = function (_a) {
         var signer = _a.signer, recipient = _a.recipient, tickLower = _a.tickLower, tickUpper = _a.tickUpper, notional = _a.notional, isMint = _a.isMint;
         return __awaiter(this, void 0, void 0, function () {
-            var peripheryContract, marginEngineAddress, mintOrBurnParams, mintOrBurnReceipt;
+            var vammContract, vammVars, sqrtPriceLimitX96, peripheryContract, marginEngineAddress, mintOrBurnParams, mintOrBurnReceipt;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, signer);
+                        if (!isMint) return [3 /*break*/, 3];
+                        vammContract = typechain_1.VAMM__factory.connect(this.vammAddress, signer);
+                        return [4 /*yield*/, vammContract.vammVars()];
+                    case 1:
+                        vammVars = _b.sent();
+                        sqrtPriceLimitX96 = vammVars.sqrtPriceX96;
+                        if (!sqrtPriceLimitX96.eq(ethers_1.BigNumber.from(0))) return [3 /*break*/, 3];
+                        return [4 /*yield*/, vammContract.initializeVAMM(tickMath_1.TickMath.getSqrtRatioAtTick(tickLower).toString())];
+                    case 2:
+                        _b.sent();
+                        _b.label = 3;
+                    case 3:
+                        peripheryContract = typechain_1.Periphery__factory.connect(this.peripheryAddress, signer);
                         marginEngineAddress = this.marginEngineAddress;
                         mintOrBurnParams = {
                             marginEngineAddress: marginEngineAddress,
@@ -158,7 +173,7 @@ var AMM = /** @class */ (function () {
                             isMint: isMint,
                         };
                         return [4 /*yield*/, peripheryContract.mintOrBurn(mintOrBurnParams)];
-                    case 1:
+                    case 4:
                         mintOrBurnReceipt = _b.sent();
                         return [2 /*return*/, mintOrBurnReceipt];
                 }
@@ -172,7 +187,7 @@ var AMM = /** @class */ (function () {
             return __generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
-                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, signer);
+                        peripheryContract = typechain_1.Periphery__factory.connect(this.peripheryAddress, signer);
                         marginEngineAddress = this.marginEngineAddress;
                         swapPeripheryParams = {
                             marginEngineAddress: marginEngineAddress,

@@ -1,5 +1,5 @@
 import JSBI from 'jsbi';
-import { BigNumber, Signer } from 'ethers';
+import { BigNumber, ContractTransaction, Signer } from 'ethers';
 import { BigintIsh } from '../types';
 import { Price } from './fractions/price';
 import Token from './token';
@@ -7,6 +7,8 @@ import RateOracle from './rateOracle';
 export declare type AMMConstructorArgs = {
     id: string;
     marginEngineAddress: string;
+    vammAddress: string;
+    peripheryAddress: string;
     fcmAddress: string;
     rateOracle: RateOracle;
     protocolName: string;
@@ -63,7 +65,9 @@ export declare type AMMMintOrBurnArgs = {
 };
 declare class AMM {
     readonly id: string;
+    readonly vammAddress: string;
     readonly marginEngineAddress: string;
+    readonly peripheryAddress: string;
     readonly fcmAddress: string;
     readonly rateOracle: RateOracle;
     readonly protocolName: string;
@@ -79,12 +83,12 @@ declare class AMM {
     readonly txCount: number;
     private _fixedRate?;
     private _price?;
-    constructor({ id, marginEngineAddress, fcmAddress, rateOracle, protocolName, createdTimestamp, updatedTimestamp, termStartTimestamp, termEndTimestamp, underlyingToken, sqrtPriceX96, liquidity, tick, tickSpacing, txCount, }: AMMConstructorArgs);
+    constructor({ id, vammAddress, marginEngineAddress, peripheryAddress, fcmAddress, rateOracle, protocolName, createdTimestamp, updatedTimestamp, termStartTimestamp, termEndTimestamp, underlyingToken, sqrtPriceX96, liquidity, tick, tickSpacing, txCount, }: AMMConstructorArgs);
     getMinimumMarginRequirement({ signer, recipient, isFT, notional, sqrtPriceLimitX96, tickLower, tickUpper, }: AMMGetMinimumMarginRequirementArgs): Promise<BigNumber>;
-    settlePosition({ signer, owner, tickLower, tickUpper }: AMMSettlePositionArgs): Promise<import("ethers").ContractTransaction>;
-    updatePositionMargin({ signer, owner, tickLower, tickUpper, marginDelta, }: AMMUpdatePositionMarginArgs): Promise<import("ethers").ContractTransaction>;
-    mintOrBurn({ signer, recipient, tickLower, tickUpper, notional, isMint, }: AMMMintOrBurnArgs): Promise<import("ethers").ContractTransaction>;
-    swap({ signer, recipient, isFT, notional, sqrtPriceLimitX96, tickLower, tickUpper, }: AMMSwapArgs): Promise<import("ethers").ContractTransaction>;
+    settlePosition({ signer, owner, tickLower, tickUpper }: AMMSettlePositionArgs): Promise<ContractTransaction>;
+    updatePositionMargin({ signer, owner, tickLower, tickUpper, marginDelta, }: AMMUpdatePositionMarginArgs): Promise<ContractTransaction>;
+    mintOrBurn({ signer, recipient, tickLower, tickUpper, notional, isMint, }: AMMMintOrBurnArgs): Promise<ContractTransaction>;
+    swap({ signer, recipient, isFT, notional, sqrtPriceLimitX96, tickLower, tickUpper, }: AMMSwapArgs): Promise<ContractTransaction>;
     get fixedRate(): Price;
     get price(): Price;
 }
