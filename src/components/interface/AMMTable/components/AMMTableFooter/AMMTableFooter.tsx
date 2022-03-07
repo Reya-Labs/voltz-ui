@@ -9,7 +9,7 @@ export type AMMTableFooterProps = {
   pages: number;
   page: number;
   onChangePage: (page: number) => void;
-  size: number;
+  size: number | null;
   onChangeSize: (size: number) => void;
 };
 

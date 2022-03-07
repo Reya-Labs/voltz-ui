@@ -6,21 +6,17 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import { SystemStyleObject, Theme } from '@mui/system';
 
 import { data } from '@utilities';
+import { AMMTableFields } from '../../types';
+import { labels } from '../../constants';
 
 export type AMMTableHeadProps = {
   order: data.TableOrder;
-  orderBy: data.TableFields;
-  onSort: (field: data.TableFields) => void;
-  labels: [data.TableFields, string][];
+  orderBy: AMMTableFields;
+  onSort: (field: AMMTableFields) => void;
 };
 
-const AMMTableHead: React.FunctionComponent<AMMTableHeadProps> = ({
-  order,
-  orderBy,
-  onSort,
-  labels,
-}) => {
-  const createSortHandler = (field: data.TableFields) => (_event: React.MouseEvent<unknown>) =>
+const AMMTableHead: React.FunctionComponent<AMMTableHeadProps> = ({ order, orderBy, onSort }) => {
+  const createSortHandler = (field: AMMTableFields) => (_event: React.MouseEvent<unknown>) =>
     onSort(field);
 
   const cellSx: SystemStyleObject<Theme> = {

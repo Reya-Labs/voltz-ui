@@ -3,27 +3,20 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '@mui/system';
 
-import { data } from '@utilities';
 import { Agents } from '@components/contexts';
 import { Button, Typography } from '@components/atomic';
 import { MaturityInformation } from '@components/composite';
 import { useAgent } from '@hooks';
+import { AMMTableDatum } from '../../types';
+import { labels } from '../../constants';
 
 export type AMMTableRowProps = {
-  mode: data.Mode;
-  datum: data.TableData;
-  labels: [data.TableFields, string][];
+  datum: AMMTableDatum;
   index: number;
-  onSelectVamm: (vammId: string, positionId?: string) => void;
+  onSelect: (vammId: string) => void;
 };
 
-const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({
-  mode,
-  datum,
-  labels,
-  index,
-  onSelectVamm,
-}) => {
+const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, onSelect }) => {
   const { agent } = useAgent();
   const variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'main';
   const typeStyleOverrides = (): SystemStyleObject<Theme> => {
@@ -48,9 +41,7 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({
         return {};
     }
   };
-  const handleClick = () => {
-    onSelectVamm(datum.id, datum.positionId);
-  };
+  const handleClick = () => onSelect(datum.id);
 
   return (
     <TableRow key={index} sx={{ ...typeStyleOverrides() }}>
@@ -80,22 +71,6 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({
                 }
 
                 return `${datum.variableApr}%`;
-              }
-
-              case 'margin': {
-                if (!datum.margin) {
-                  return 'Margin';
-                }
-
-                return `$${datum.margin}`;
-              }
-
-              case 'notional': {
-                if (!datum.notional) {
-                  return 'Margin';
-                }
-
-                return `$${datum.notional}`;
               }
 
               default:

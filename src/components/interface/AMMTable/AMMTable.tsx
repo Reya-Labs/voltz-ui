@@ -1,26 +1,48 @@
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import { SystemStyleObject, Theme } from '@mui/system';
+import { AMM } from '@voltz/v1-sdk';
 
 import { data } from '@utilities';
 import { AgentProps } from '@components/contexts';
 import { Panel } from '@components/atomic';
 import { useAgentWithOverride } from '@hooks';
+import { AMMTableFields } from './types';
+import { labels } from './constants';
+import { mapAmmToAmmTableDatum } from './utilities';
 import { AMMTableControls, AMMTableFooter, AMMTableHead, AMMTableRow } from './components';
 
 export type AMMTableProps = AgentProps & {
   mode: data.Mode;
-  data: data.TEMPORARY_Pool[];
-  onSelectVamm: (vammId: string, positionId?: string) => void;
+  amms: AMM[];
+  order: data.TableOrder;
+  onSetOrder: (order: data.TableOrder) => void;
+  orderBy: AMMTableFields;
+  onSetOrderBy: (orderBy: AMMTableFields) => void;
+  page: number;
+  pages: number;
+  onSetPage: (page: number) => void;
+  size: number | null;
+  onSetSize: (size: number) => void;
+  onSelectItem: (vammId: string) => void;
 };
 
 const AMMTable: React.FunctionComponent<AMMTableProps> = ({
   agent: agentOverride,
   mode,
-  data: rawData,
-  onSelectVamm,
+  amms,
+  order,
+  onSetOrder,
+  orderBy,
+  onSetOrderBy,
+  page,
+  pages,
+  onSetPage,
+  size,
+  onSetSize,
+  onSelectItem,
 }) => {
   const commonOverrides: SystemStyleObject<Theme> = {
     '& .MuiTableCell-root': {
@@ -40,23 +62,17 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({
     },
   };
   const { agent } = useAgentWithOverride(agentOverride);
-  const [order, setOrder] = useState<data.TableOrder>('desc');
-  const [orderBy, setOrderBy] = useState<data.TableFields>('protocol');
-  const [page, setPage] = useState(0);
-  const [size, setSize] = useState(10);
-  const transformedData = data.transformData({ data: rawData, mode, agent });
-  const labels = data.getLabels({ agent, mode });
-  const handleSort = (field: data.TableFields) => {
-    setOrder(field === orderBy ? (order === 'asc' ? 'desc' : 'asc') : 'asc');
-    setOrderBy(field);
+  const handleSort = (field: AMMTableFields) => {
+    onSetOrder(field === orderBy ? (order === 'asc' ? 'desc' : 'asc') : 'asc');
+    onSetOrderBy(field);
   };
-
-  const sortedData = data.sortData({ data: transformedData, order, orderBy });
-  const { data: paginatedData, pages } = data.paginateData({ data: sortedData, page, size });
+  const tableData = useMemo(() => {
+    return amms.map(mapAmmToAmmTableDatum);
+  }, [order, page, size]);
 
   return (
     <Panel variant="dark" sx={{ minWidth: 800 }}>
-      <AMMTableControls mode={mode} quantity={transformedData.length} />
+      <AMMTableControls mode={mode} quantity={amms.length} />
       <TableContainer>
         <Table
           sx={{
@@ -68,25 +84,19 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({
           aria-labelledby="tableTitle"
           size="medium"
         >
-          <AMMTableHead order={order} orderBy={orderBy} onSort={handleSort} labels={labels} />
+          <AMMTableHead order={order} orderBy={orderBy} onSort={handleSort} />
           <TableBody>
-            {paginatedData.map((datum, index) => (
-              <AMMTableRow
-                datum={datum}
-                mode={mode}
-                labels={labels}
-                index={index}
-                onSelectVamm={onSelectVamm}
-              />
+            {tableData.map((datum, index) => (
+              <AMMTableRow datum={datum} index={index} onSelect={onSelectItem} />
             ))}
           </TableBody>
           <AMMTableFooter
             columns={labels.length + 1}
             pages={pages}
             page={page}
-            onChangePage={setPage}
+            onChangePage={onSetPage}
             size={size}
-            onChangeSize={setSize}
+            onChangeSize={onSetSize}
           />
         </Table>
       </TableContainer>
