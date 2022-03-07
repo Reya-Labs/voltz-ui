@@ -6,15 +6,13 @@ import { SystemStyleObject, Theme } from '@mui/system';
 import { AMM } from '@voltz/v1-sdk';
 
 import { data } from '@utilities';
-import { AgentProps } from '@components/contexts';
 import { Panel } from '@components/atomic';
-import { useAgentWithOverride } from '@hooks';
 import { AMMTableFields } from './types';
 import { labels } from './constants';
 import { mapAmmToAmmTableDatum } from './utilities';
 import { AMMTableControls, AMMTableFooter, AMMTableHead, AMMTableRow } from './components';
 
-export type AMMTableProps = AgentProps & {
+export type AMMTableProps = {
   mode: data.Mode;
   amms: AMM[];
   order: data.TableOrder;
@@ -30,7 +28,6 @@ export type AMMTableProps = AgentProps & {
 };
 
 const AMMTable: React.FunctionComponent<AMMTableProps> = ({
-  agent: agentOverride,
   mode,
   amms,
   order,
@@ -61,7 +58,6 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({
       },
     },
   };
-  const { agent } = useAgentWithOverride(agentOverride);
   const handleSort = (field: AMMTableFields) => {
     onSetOrder(field === orderBy ? (order === 'asc' ? 'desc' : 'asc') : 'asc');
     onSetOrderBy(field);
