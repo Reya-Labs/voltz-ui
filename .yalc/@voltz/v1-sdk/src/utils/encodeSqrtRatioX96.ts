@@ -1,6 +1,6 @@
 import JSBI from 'jsbi';
 
-import { BigintIsh } from '../types';
+import { BigIntish } from '../types';
 import { sqrt } from './sqrt';
 
 /**
@@ -9,7 +9,7 @@ import { sqrt } from './sqrt';
  * @param amount0 The denominator amount i.e., the amount of token0
  * @returns The sqrt ratio
  */
-export function encodeSqrtRatioX96(amount1: BigintIsh, amount0: BigintIsh): JSBI {
+export function encodeSqrtRatioX96(amount1: BigIntish, amount0: BigIntish): JSBI {
   const numerator = JSBI.leftShift(JSBI.BigInt(amount1), JSBI.BigInt(192));
   const denominator = JSBI.BigInt(amount0);
   const ratioX192 = JSBI.divide(numerator, denominator);

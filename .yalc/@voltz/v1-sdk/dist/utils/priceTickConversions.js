@@ -20,15 +20,11 @@ var tickMath_1 = require("./tickMath");
 function tickToPrice(tick) {
     var sqrtRatioX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tick);
     var ratioX192 = jsbi_1.default.multiply(sqrtRatioX96, sqrtRatioX96);
-    // todo: make sure the ratio is correct
     return new price_1.Price(ratioX192, constants_1.Q192);
 }
 exports.tickToPrice = tickToPrice;
 function priceToFixedRate(price) {
-    var priceNumerator = price.numerator;
-    var priceDenominator = price.denominator;
-    var priceNumeratorDivBy100 = jsbi_1.default.divide(priceNumerator, jsbi_1.default.BigInt(100)); // divide by 100 to conver 1% to 0.01
-    return new price_1.Price(priceDenominator, priceNumeratorDivBy100);
+    return new price_1.Price(price.denominator, price.numerator);
 }
 exports.priceToFixedRate = priceToFixedRate;
 /**

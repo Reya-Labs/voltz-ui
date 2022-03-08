@@ -7,10 +7,10 @@ export const MaxUint256 = JSBI.BigInt(
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000';
 
 // todo: needs to be adjusted
-export const FACTORY_ADDRESS = '0x1F98431c8aD98523631AE4a59f267346ea31F984';
+export const FACTORY_ADDRESS = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0';
 
 // todo: needs to be adjusted
-export const PERIPHERY_ADDRESS = '0x0000000000000000000000000000000000000000';
+export const PERIPHERY_ADDRESS = '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853';
 
 // todo: needs to be adjusted
 export const AMM_INIT_CODE_HASH =

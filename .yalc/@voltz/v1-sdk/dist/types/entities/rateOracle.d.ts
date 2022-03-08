@@ -1,12 +1,11 @@
-import { Signer } from "ethers";
 export declare type RateOracleConstructorArgs = {
     id: string;
+    protocolId: number;
 };
 declare class RateOracle {
     readonly id: string;
-    constructor({ id }: RateOracleConstructorArgs);
-    private _underlyingYieldBearingProtocolID;
-    underlyingYieldBearingProtocolName(signer: Signer): Promise<string>;
+    readonly protocol: string;
+    constructor({ id, protocolId }: RateOracleConstructorArgs);
 }
 export default RateOracle;
 //# sourceMappingURL=rateOracle.d.ts.map

@@ -1,9 +1,9 @@
 import JSBI from 'jsbi';
-import { BigintIsh } from '../types';
+import { BigIntish } from '../types';
 export interface TickConstructorArgs {
     index: number;
-    liquidityGross: BigintIsh;
-    liquidityNet: BigintIsh;
+    liquidityGross: BigIntish;
+    liquidityNet: BigIntish;
 }
 export declare class Tick {
     readonly index: number;

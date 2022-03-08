@@ -1,12 +1,12 @@
 import JSBI from 'jsbi';
 import invariant from 'tiny-invariant';
-import { BigintIsh } from '../types';
+import { BigIntish } from '../types';
 import { TickMath } from '../utils/tickMath';
 
 export interface TickConstructorArgs {
   index: number;
-  liquidityGross: BigintIsh;
-  liquidityNet: BigintIsh;
+  liquidityGross: BigIntish;
+  liquidityNet: BigIntish;
 }
 
 export class Tick {

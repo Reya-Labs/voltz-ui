@@ -17,19 +17,12 @@ export function tickToPrice(tick: number) {
 
   const ratioX192 = JSBI.multiply(sqrtRatioX96, sqrtRatioX96);
 
-  // todo: make sure the ratio is correct
   return new Price(ratioX192, Q192);
 }
 
 
 export function priceToFixedRate(price: Price) {
-
-  const priceNumerator = price.numerator
-  const priceDenominator = price.denominator
-
-  const priceNumeratorDivBy100 = JSBI.divide(priceNumerator, JSBI.BigInt(100)); // divide by 100 to conver 1% to 0.01
-
-  return new Price(priceDenominator, priceNumeratorDivBy100);
+  return new Price(price.denominator, price.numerator);
 }
 
 /**

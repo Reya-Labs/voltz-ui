@@ -1,10 +1,11 @@
 import JSBI from 'jsbi';
 import invariant from 'tiny-invariant';
 import toFormat from 'toformat';
+import Fractionjs from 'fraction.js';
 import _Decimal from 'decimal.js-light';
 import _Big, { RoundingMode } from 'big.js';
 
-import { BigintIsh, Rounding } from '../../types';
+import { BigIntish, Rounding } from '../../types';
 
 const Decimal = toFormat(_Decimal);
 const Big = toFormat(_Big);
@@ -25,12 +26,18 @@ export class Fraction {
   public readonly numerator: JSBI;
   public readonly denominator: JSBI;
 
-  public constructor(numerator: BigintIsh, denominator: BigintIsh = JSBI.BigInt(1)) {
+  public constructor(numerator: BigIntish, denominator: BigIntish = JSBI.BigInt(1)) {
     this.numerator = JSBI.BigInt(numerator);
     this.denominator = JSBI.BigInt(denominator);
   }
 
-  private static tryParseFraction(fractionish: BigintIsh | Fraction): Fraction {
+  public static fromNumber(value: number) {
+    const fraction = new Fractionjs(value);
+
+    return new Fraction(fraction.n, fraction.d);
+  }
+
+  private static tryParseFraction(fractionish: BigIntish | Fraction): Fraction {
     if (
       fractionish instanceof JSBI ||
       typeof fractionish === 'number' ||
@@ -56,7 +63,7 @@ export class Fraction {
     return new Fraction(this.denominator, this.numerator);
   }
 
-  public add(other: Fraction | BigintIsh): Fraction {
+  public add(other: Fraction | BigIntish): Fraction {
     const otherParsed = Fraction.tryParseFraction(other);
     if (JSBI.equal(this.denominator, otherParsed.denominator)) {
       return new Fraction(JSBI.add(this.numerator, otherParsed.numerator), this.denominator);
@@ -70,7 +77,7 @@ export class Fraction {
     );
   }
 
-  public subtract(other: Fraction | BigintIsh): Fraction {
+  public subtract(other: Fraction | BigIntish): Fraction {
     const otherParsed = Fraction.tryParseFraction(other);
     if (JSBI.equal(this.denominator, otherParsed.denominator)) {
       return new Fraction(JSBI.subtract(this.numerator, otherParsed.numerator), this.denominator);
@@ -84,7 +91,7 @@ export class Fraction {
     );
   }
 
-  public lessThan(other: Fraction | BigintIsh): boolean {
+  public lessThan(other: Fraction | BigIntish): boolean {
     const otherParsed = Fraction.tryParseFraction(other);
     return JSBI.lessThan(
       JSBI.multiply(this.numerator, otherParsed.denominator),
@@ -92,7 +99,7 @@ export class Fraction {
     );
   }
 
-  public equalTo(other: Fraction | BigintIsh): boolean {
+  public equalTo(other: Fraction | BigIntish): boolean {
     const otherParsed = Fraction.tryParseFraction(other);
     return JSBI.equal(
       JSBI.multiply(this.numerator, otherParsed.denominator),
@@ -100,7 +107,7 @@ export class Fraction {
     );
   }
 
-  public greaterThan(other: Fraction | BigintIsh): boolean {
+  public greaterThan(other: Fraction | BigIntish): boolean {
     const otherParsed = Fraction.tryParseFraction(other);
     return JSBI.greaterThan(
       JSBI.multiply(this.numerator, otherParsed.denominator),
@@ -108,7 +115,7 @@ export class Fraction {
     );
   }
 
-  public multiply(other: Fraction | BigintIsh): Fraction {
+  public multiply(other: Fraction | BigIntish): Fraction {
     const otherParsed = Fraction.tryParseFraction(other);
     return new Fraction(
       JSBI.multiply(this.numerator, otherParsed.numerator),
@@ -116,7 +123,7 @@ export class Fraction {
     );
   }
 
-  public divide(other: Fraction | BigintIsh): Fraction {
+  public divide(other: Fraction | BigIntish): Fraction {
     const otherParsed = Fraction.tryParseFraction(other);
     return new Fraction(
       JSBI.multiply(this.numerator, otherParsed.denominator),

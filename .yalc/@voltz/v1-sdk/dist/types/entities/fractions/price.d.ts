@@ -1,11 +1,12 @@
-import { BigintIsh, Rounding } from '../../types';
+import { BigIntish, Rounding } from '../../types';
 import { Fraction } from './fraction';
 export declare class Price extends Fraction {
     /**
      * Construct a price, either with the base and quote currency amount, or the
      * @param args
      */
-    constructor(...args: [BigintIsh, BigintIsh]);
+    constructor(...args: [BigIntish, BigIntish]);
+    static fromNumber(value: number): Price;
     /**
      * Flip the price (convert to the fixed rate)
      */

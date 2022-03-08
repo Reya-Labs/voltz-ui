@@ -1,6 +1,6 @@
 import JSBI from 'jsbi';
 
-import { BigintIsh } from '../types';
+import { BigIntish } from '../types';
 import { Price } from './fractions/price';
 import { tickToFixedRate, tickToPrice } from '../utils/priceTickConversions';
 
@@ -11,7 +11,7 @@ export type PositionConstructorArgs = {
   ammId: string;
   tickLower: number;
   tickUpper: number;
-  liquidity: BigintIsh;
+  liquidity: BigIntish;
   isSettled: boolean;
   margin: JSBI;
   fixedTokenBalance: JSBI;
@@ -97,7 +97,6 @@ class Position {
   public get fixedRateUpper(): Price {
     return tickToFixedRate(this.tickLower);
   }
-
 }
 
 export default Position;

@@ -33,6 +33,9 @@ var Price = /** @class */ (function (_super) {
         // flip them for the APR entity (fr = 1 / price)
         return _super.call(this, numerator, denominator) || this;
     }
+    Price.fromNumber = function (value) {
+        return _super.fromNumber.call(this, value);
+    };
     /**
      * Flip the price (convert to the fixed rate)
      */

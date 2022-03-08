@@ -1,7 +1,7 @@
 import JSBI from 'jsbi';
 
 import { Q96 } from '../constants';
-import { BigintIsh } from '../types';
+import { BigIntish } from '../types';
 
 /**
  * Returns an imprecise maximum amount of liquidity received for a given amount of token 0.
@@ -17,7 +17,7 @@ import { BigintIsh } from '../types';
 function maxLiquidityForAmount0Imprecise(
   sqrtRatioAX96: JSBI,
   sqrtRatioBX96: JSBI,
-  amount0: BigintIsh,
+  amount0: BigIntish,
 ): JSBI {
   if (JSBI.greaterThan(sqrtRatioAX96, sqrtRatioBX96)) {
     [sqrtRatioAX96, sqrtRatioBX96] = [sqrtRatioBX96, sqrtRatioAX96];
@@ -40,7 +40,7 @@ function maxLiquidityForAmount0Imprecise(
 function maxLiquidityForAmount0Precise(
   sqrtRatioAX96: JSBI,
   sqrtRatioBX96: JSBI,
-  amount0: BigintIsh,
+  amount0: BigIntish,
 ): JSBI {
   if (JSBI.greaterThan(sqrtRatioAX96, sqrtRatioBX96)) {
     [sqrtRatioAX96, sqrtRatioBX96] = [sqrtRatioBX96, sqrtRatioAX96];
@@ -65,7 +65,7 @@ function maxLiquidityForAmount0Precise(
 function maxLiquidityForAmount1(
   sqrtRatioAX96: JSBI,
   sqrtRatioBX96: JSBI,
-  amount1: BigintIsh,
+  amount1: BigIntish,
 ): JSBI {
   if (JSBI.greaterThan(sqrtRatioAX96, sqrtRatioBX96)) {
     [sqrtRatioAX96, sqrtRatioBX96] = [sqrtRatioBX96, sqrtRatioAX96];
@@ -91,8 +91,8 @@ export function maxLiquidityForAmounts(
   sqrtRatioCurrentX96: JSBI,
   sqrtRatioAX96: JSBI,
   sqrtRatioBX96: JSBI,
-  amount0: BigintIsh,
-  amount1: BigintIsh,
+  amount0: BigIntish,
+  amount1: BigIntish,
   useFullPrecision: boolean,
 ): JSBI {
   if (JSBI.greaterThan(sqrtRatioAX96, sqrtRatioBX96)) {

@@ -1,6 +1,6 @@
 import JSBI from 'jsbi';
 
-import { BigintIsh, Rounding } from '../../types';
+import { BigIntish, Rounding } from '../../types';
 import Fraction from './fraction';
 
 const ONE_HUNDRED = new Fraction(JSBI.BigInt(100));
@@ -19,19 +19,19 @@ class Percent extends Fraction {
    */
   public readonly isPercent: true = true;
 
-  add(other: Fraction | BigintIsh): Percent {
+  add(other: Fraction | BigIntish): Percent {
     return toPercent(super.add(other));
   }
 
-  subtract(other: Fraction | BigintIsh): Percent {
+  subtract(other: Fraction | BigIntish): Percent {
     return toPercent(super.subtract(other));
   }
 
-  multiply(other: Fraction | BigintIsh): Percent {
+  multiply(other: Fraction | BigIntish): Percent {
     return toPercent(super.multiply(other));
   }
 
-  divide(other: Fraction | BigintIsh): Percent {
+  divide(other: Fraction | BigIntish): Percent {
     return toPercent(super.divide(other));
   }
 

@@ -1,88 +1,93 @@
 import JSBI from 'jsbi';
 import { DateTime } from 'luxon';
-import { BigNumber, ContractTransaction, Signer } from 'ethers';
+import { BigNumber, BigNumberish, ContractTransaction, Signer } from 'ethers';
 
-import { BigintIsh } from '../types';
-import { Q192, PERIPHERY_ADDRESS } from '../constants';
+import { BigIntish, SwapPeripheryParams, MintOrBurnParams } from '../types';
+import { Q192, PERIPHERY_ADDRESS, FACTORY_ADDRESS } from '../constants';
 import { Price } from './fractions/price';
-import { Periphery__factory as peripheryFactory, MarginEngine__factory as marginEngineFactory, VAMM__factory as vammFactory } from '../typechain';
-import { SwapPeripheryParams, MintOrBurnParams } from '../utils/interfaces';
+import {
+  Periphery__factory as peripheryFactory,
+  MarginEngine__factory as marginEngineFactory,
+  VAMM__factory as vammFactory,
+  Factory__factory as factoryFactory
+} from '../typechain';
 import Token from './token';
 import RateOracle from './rateOracle';
 import { TickMath } from '../utils/tickMath';
 import timestampWadToDateTime from '../utils/timestampWadToDateTime';
+import { fixedRateToClosestTick, tickToFixedRate } from '../utils/priceTickConversions';
+import { nearestUsableTick } from '../utils/nearestUsableTick';
 
 export type AMMConstructorArgs = {
   id: string;
+  signer: Signer | null;
   marginEngineAddress: string;
   fcmAddress: string;
   rateOracle: RateOracle;
-  protocolName: string;
-  createdTimestamp: BigintIsh;
-  updatedTimestamp: BigintIsh;
-  termStartTimestamp: JSBI;
-  termEndTimestamp: JSBI;
+  createdTimestamp: BigIntish;
+  updatedTimestamp: BigIntish;
+  termStartTimestamp: BigIntish;
+  termEndTimestamp: BigIntish;
   underlyingToken: Token;
-  sqrtPriceX96: JSBI;
-  liquidity: JSBI;
-  tick: JSBI;
-  tickSpacing: JSBI;
+  sqrtPriceX96: BigIntish;
+  liquidity: BigIntish;
+  tick: BigIntish;
+  tickSpacing: BigIntish;
   txCount: number;
 };
 
 export type AMMGetMinimumMarginRequirementArgs = {
-  signer: Signer;
   recipient: string;
   isFT: boolean;
-  notional: BigNumber;
-  sqrtPriceLimitX96: BigNumber;
-  tickLower: number;
-  tickUpper: number;
+  notional: BigNumberish;
+  sqrtPriceLimitX96: BigNumberish;
+  tickLower: BigNumberish;
+  tickUpper: BigNumberish;
 };
 
 export type AMMUpdatePositionMarginArgs = {
-  signer: Signer;
   owner: string;
-  tickLower: number;
-  tickUpper: number;
-  marginDelta: BigNumber;
+  tickLower: BigNumberish;
+  tickUpper: BigNumberish;
+  marginDelta: BigNumberish;
 };
 
 export type AMMSettlePositionArgs = {
-  signer: Signer;
   owner: string;
-  tickLower: number;
-  tickUpper: number;
+  tickLower: BigNumberish;
+  tickUpper: BigNumberish;
 };
 
 export type AMMSwapArgs = {
-  signer: Signer;
   recipient: string;
   isFT: boolean;
-  notional: BigNumber;
-  sqrtPriceLimitX96: BigNumber;
+  notional: BigNumberish;
+  sqrtPriceLimitX96: BigNumberish;
   tickLower: 0;
   tickUpper: 0;
 };
 
 export type AMMMintOrBurnArgs = {
-  signer: Signer;
-  marginEngineAddress: string;
   recipient: string;
-  tickLower: number;
-  tickUpper: number;
-  notional: BigNumber;
+  tickLower: BigNumberish;
+  tickUpper: BigNumberish;
+  notional: BigNumberish;
   isMint: boolean;
 };
 
+export type ClosestTickAndFixedRate = {
+  closestUsableTick: number;
+  closestUsableFixedRate: Price;
+}
+
 class AMM {
   public readonly id: string;
+  public readonly signer: Signer | null;
   public readonly marginEngineAddress: string;
   public readonly fcmAddress: string;
   public readonly rateOracle: RateOracle;
-  public readonly protocolName: string;
-  public readonly createdTimestamp: BigintIsh;
-  public readonly updatedTimestamp: BigintIsh;
+  public readonly createdTimestamp: JSBI;
+  public readonly updatedTimestamp: JSBI;
   public readonly termStartTimestamp: JSBI;
   public readonly termEndTimestamp: JSBI;
   public readonly underlyingToken: Token;
@@ -90,16 +95,16 @@ class AMM {
   public readonly liquidity: JSBI;
   public readonly tickSpacing: JSBI;
   public readonly tick: JSBI;
-  public readonly txCount: number;
+  public readonly txCount: JSBI;
   private _fixedRate?: Price;
   private _price?: Price;
 
   public constructor({
     id,
+    signer,
     marginEngineAddress,
     fcmAddress,
     rateOracle,
-    protocolName,
     createdTimestamp,
     updatedTimestamp,
     termStartTimestamp,
@@ -112,36 +117,37 @@ class AMM {
     txCount,
   }: AMMConstructorArgs) {
     this.id = id;
+    this.signer = signer;
     this.marginEngineAddress = marginEngineAddress;
     this.fcmAddress = fcmAddress;
     this.rateOracle = rateOracle;
-    this.protocolName = protocolName;
-    this.createdTimestamp = createdTimestamp;
-    this.updatedTimestamp = updatedTimestamp;
-    this.termStartTimestamp = termStartTimestamp;
-    this.termEndTimestamp = termEndTimestamp;
+    this.createdTimestamp = JSBI.BigInt(createdTimestamp);
+    this.updatedTimestamp = JSBI.BigInt(updatedTimestamp);
+    this.termStartTimestamp = JSBI.BigInt(termStartTimestamp);
+    this.termEndTimestamp = JSBI.BigInt(termEndTimestamp);
     this.underlyingToken = underlyingToken;
     this.sqrtPriceX96 = JSBI.BigInt(sqrtPriceX96);
     this.liquidity = JSBI.BigInt(liquidity);
-    this.tickSpacing = tickSpacing;
-    this.tick = tick;
-    this.txCount = txCount;
+    this.tickSpacing = JSBI.BigInt(tickSpacing);
+    this.tick = JSBI.BigInt(tick);
+    this.txCount = JSBI.BigInt(txCount);
   }
 
-  public async getMinimumMarginRequirement({
-    signer,
+  public async getMinimumMarginRequirementPostSwap({
     recipient,
     isFT,
     notional,
     sqrtPriceLimitX96,
     tickLower,
     tickUpper,
-  }: AMMGetMinimumMarginRequirementArgs) : Promise<BigNumber> {
-    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, signer);
-    const marginEngineAddress: string = this.marginEngineAddress;
+  }: AMMGetMinimumMarginRequirementArgs) : Promise<BigNumber | void> {
+    if (!this.signer) {
+      return;
+    }
 
+    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.signer);
     const swapPeripheryParams: SwapPeripheryParams = {
-      marginEngineAddress,
+      marginEngineAddress: this.marginEngineAddress,
       recipient,
       isFT,
       notional,
@@ -174,8 +180,12 @@ class AMM {
     return marginRequirement;
   }
 
-  public async settlePosition({ signer, owner, tickLower, tickUpper }: AMMSettlePositionArgs) : Promise<ContractTransaction>  {
-    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, signer);
+  public async settlePosition({ owner, tickLower, tickUpper }: AMMSettlePositionArgs) : Promise<ContractTransaction | void>  {
+    if (!this.signer) {
+      return;
+    }
+
+    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
     const settlePositionReceipt = await marginEngineContract.settlePosition(
       tickLower,
       tickUpper,
@@ -185,13 +195,16 @@ class AMM {
   }
 
   public async updatePositionMargin({
-    signer,
     owner,
     tickLower,
     tickUpper,
     marginDelta,
-  }: AMMUpdatePositionMarginArgs) : Promise<ContractTransaction>  {
-    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, signer);
+  }: AMMUpdatePositionMarginArgs) : Promise<ContractTransaction | void>  {
+    if (!this.signer) {
+      return;
+    }
+
+    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
     const updatePositionMarginReceipt = await marginEngineContract.updatePositionMargin(
       owner,
       tickLower,
@@ -202,27 +215,40 @@ class AMM {
     return updatePositionMarginReceipt;
   }
 
+  public async mint({ tickLower, ...args }: Omit<AMMMintOrBurnArgs, 'isMint'>): Promise<ContractTransaction | void> {
+    if (!this.signer) {
+      return;
+    }
+
+    const vammContract = vammFactory.connect(this.id, this.signer);
+
+    if (JSBI.EQ(this.sqrtPriceX96, JSBI.BigInt(0))) {
+      await vammContract.initializeVAMM(TickMath.getSqrtRatioAtTick(BigNumber.from(tickLower).toNumber()).toString())
+    }
+
+    return this.mintOrBurn({ ...args, tickLower, isMint: true });
+  }
+
+  public async burn(args: Omit<AMMMintOrBurnArgs, 'isMint'>): Promise<ContractTransaction | void> {
+    return this.mintOrBurn({ ...args, isMint: false });
+  }
+
   public async mintOrBurn({
-    signer,
     recipient,
     tickLower,
     tickUpper,
     notional,
     isMint,
-  }: AMMMintOrBurnArgs) : Promise<ContractTransaction> {
-    if (isMint) {
-      const vammContract = vammFactory.connect(this.id, signer);
-
-      if (JSBI.EQ(this.sqrtPriceX96, JSBI.BigInt(0))) {
-        await vammContract.initializeVAMM(TickMath.getSqrtRatioAtTick(tickLower).toString())
-      }
+  }: AMMMintOrBurnArgs) : Promise<ContractTransaction | void> {
+    if (!this.signer) {
+      return;
     }
 
-    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, signer);
-    const marginEngineAddress: string = this.marginEngineAddress;
+    await this.approvePeriphery()
 
+    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.signer);
     const mintOrBurnParams: MintOrBurnParams = {
-      marginEngineAddress,
+      marginEngineAddress: this.marginEngineAddress,
       recipient,
       tickLower,
       tickUpper,
@@ -230,25 +256,46 @@ class AMM {
       isMint,
     };
 
-    const mintOrBurnReceipt: ContractTransaction = await peripheryContract.mintOrBurn(mintOrBurnParams);
+    return peripheryContract.mintOrBurn(mintOrBurnParams);
+  }
 
-    return mintOrBurnReceipt;
+  public async approvePeriphery(): Promise<ContractTransaction | void> {
+
+    if (!this.signer) {
+      return;
+    }
+
+    const factoryContract = factoryFactory.connect(FACTORY_ADDRESS, this.signer);
+    const signerAddress = await this.signer.getAddress();
+
+    // check if already approved
+    const isApproved = await factoryContract.isApproved(signerAddress, PERIPHERY_ADDRESS);
+
+    if (!isApproved) {
+      return await factoryContract.setApproval(PERIPHERY_ADDRESS, true);
+    } else {
+      return;
+    }
+
   }
 
   public async swap({
-    signer,
     recipient,
     isFT,
     notional,
     sqrtPriceLimitX96,
     tickLower = 0,
     tickUpper = 0,
-  }: AMMSwapArgs) {
-    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, signer);
-    const marginEngineAddress: string = this.marginEngineAddress;
+  }: AMMSwapArgs): Promise<ContractTransaction | void> {
+    if (!this.signer) {
+      return;
+    }
 
+    await this.approvePeriphery()
+
+    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.signer);
     const swapPeripheryParams: SwapPeripheryParams = {
-      marginEngineAddress,
+      marginEngineAddress: this.marginEngineAddress,
       recipient,
       isFT,
       notional,
@@ -256,9 +303,8 @@ class AMM {
       tickLower,
       tickUpper,
     };
-    const swapReceipt = await peripheryContract.swap(swapPeripheryParams);
 
-    return swapReceipt;
+    return peripheryContract.swap(swapPeripheryParams);
   }
 
   public get startDateTime(): DateTime {
@@ -291,6 +337,25 @@ class AMM {
 
   public get variableApr(): number {
     return 0;
+  }
+
+  public get protocol(): string {
+    const firstProtocolCharacter = this.rateOracle.protocol[0];
+    const tokenName = this.underlyingToken.name;
+
+    return `${firstProtocolCharacter.toLowerCase()}${tokenName}`;
+  }
+
+  public closestTickAndFixedRate(fixedRate: number): ClosestTickAndFixedRate {
+    const fixedRatePrice = Price.fromNumber(fixedRate);
+    const closestTick: number = fixedRateToClosestTick(fixedRatePrice);
+    const closestUsableTick: number = nearestUsableTick(closestTick, JSBI.toNumber(this.tickSpacing))
+    const closestUsableFixedRate: Price = tickToFixedRate(closestUsableTick)
+
+    return {
+      closestUsableTick,
+      closestUsableFixedRate,
+    };
   }
 }
 

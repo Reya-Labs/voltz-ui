@@ -8,6 +8,7 @@ exports.Fraction = void 0;
 var jsbi_1 = __importDefault(require("jsbi"));
 var tiny_invariant_1 = __importDefault(require("tiny-invariant"));
 var toformat_1 = __importDefault(require("toformat"));
+var fraction_js_1 = __importDefault(require("fraction.js"));
 var decimal_js_light_1 = __importDefault(require("decimal.js-light"));
 var big_js_1 = __importDefault(require("big.js"));
 var types_1 = require("../../types");
@@ -29,6 +30,10 @@ var Fraction = /** @class */ (function () {
         this.numerator = jsbi_1.default.BigInt(numerator);
         this.denominator = jsbi_1.default.BigInt(denominator);
     }
+    Fraction.fromNumber = function (value) {
+        var fraction = new fraction_js_1.default(value);
+        return new Fraction(fraction.n, fraction.d);
+    };
     Fraction.tryParseFraction = function (fractionish) {
         if (fractionish instanceof jsbi_1.default ||
             typeof fractionish === 'number' ||

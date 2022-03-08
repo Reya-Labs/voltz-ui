@@ -1,5 +1,5 @@
 import JSBI from 'jsbi';
-import { BigintIsh } from '../types';
+import { BigIntish } from '../types';
 import { Price } from './fractions/price';
 export declare type PositionConstructorArgs = {
     id: string;
@@ -8,7 +8,7 @@ export declare type PositionConstructorArgs = {
     ammId: string;
     tickLower: number;
     tickUpper: number;
-    liquidity: BigintIsh;
+    liquidity: BigIntish;
     isSettled: boolean;
     margin: JSBI;
     fixedTokenBalance: JSBI;
