@@ -1,4 +1,5 @@
 import JSBI from 'jsbi';
+import { DateTime } from 'luxon';
 import { BigNumber, ContractTransaction, Signer } from 'ethers';
 import { BigintIsh } from '../types';
 import { Price } from './fractions/price';
@@ -7,8 +8,6 @@ import RateOracle from './rateOracle';
 export declare type AMMConstructorArgs = {
     id: string;
     marginEngineAddress: string;
-    vammAddress: string;
-    peripheryAddress: string;
     fcmAddress: string;
     rateOracle: RateOracle;
     protocolName: string;
@@ -65,9 +64,7 @@ export declare type AMMMintOrBurnArgs = {
 };
 declare class AMM {
     readonly id: string;
-    readonly vammAddress: string;
     readonly marginEngineAddress: string;
-    readonly peripheryAddress: string;
     readonly fcmAddress: string;
     readonly rateOracle: RateOracle;
     readonly protocolName: string;
@@ -83,14 +80,18 @@ declare class AMM {
     readonly txCount: number;
     private _fixedRate?;
     private _price?;
-    constructor({ id, vammAddress, marginEngineAddress, peripheryAddress, fcmAddress, rateOracle, protocolName, createdTimestamp, updatedTimestamp, termStartTimestamp, termEndTimestamp, underlyingToken, sqrtPriceX96, liquidity, tick, tickSpacing, txCount, }: AMMConstructorArgs);
+    constructor({ id, marginEngineAddress, fcmAddress, rateOracle, protocolName, createdTimestamp, updatedTimestamp, termStartTimestamp, termEndTimestamp, underlyingToken, sqrtPriceX96, liquidity, tick, tickSpacing, txCount, }: AMMConstructorArgs);
     getMinimumMarginRequirement({ signer, recipient, isFT, notional, sqrtPriceLimitX96, tickLower, tickUpper, }: AMMGetMinimumMarginRequirementArgs): Promise<BigNumber>;
     settlePosition({ signer, owner, tickLower, tickUpper }: AMMSettlePositionArgs): Promise<ContractTransaction>;
     updatePositionMargin({ signer, owner, tickLower, tickUpper, marginDelta, }: AMMUpdatePositionMarginArgs): Promise<ContractTransaction>;
     mintOrBurn({ signer, recipient, tickLower, tickUpper, notional, isMint, }: AMMMintOrBurnArgs): Promise<ContractTransaction>;
     swap({ signer, recipient, isFT, notional, sqrtPriceLimitX96, tickLower, tickUpper, }: AMMSwapArgs): Promise<ContractTransaction>;
+    get startDateTime(): DateTime;
+    get endDateTime(): DateTime;
     get fixedRate(): Price;
+    get fixedApr(): number;
     get price(): Price;
+    get variableApr(): number;
 }
 export default AMM;
 //# sourceMappingURL=amm.d.ts.map

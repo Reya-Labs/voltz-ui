@@ -45,12 +45,12 @@ var constants_1 = require("../constants");
 var price_1 = require("./fractions/price");
 var typechain_1 = require("../typechain");
 var tickMath_1 = require("../utils/tickMath");
+var timestampWadToDateTime_1 = __importDefault(require("../utils/timestampWadToDateTime"));
 var AMM = /** @class */ (function () {
     function AMM(_a) {
-        var id = _a.id, vammAddress = _a.vammAddress, marginEngineAddress = _a.marginEngineAddress, peripheryAddress = _a.peripheryAddress, fcmAddress = _a.fcmAddress, rateOracle = _a.rateOracle, protocolName = _a.protocolName, createdTimestamp = _a.createdTimestamp, updatedTimestamp = _a.updatedTimestamp, termStartTimestamp = _a.termStartTimestamp, termEndTimestamp = _a.termEndTimestamp, underlyingToken = _a.underlyingToken, sqrtPriceX96 = _a.sqrtPriceX96, liquidity = _a.liquidity, tick = _a.tick, tickSpacing = _a.tickSpacing, txCount = _a.txCount;
+        var id = _a.id, marginEngineAddress = _a.marginEngineAddress, fcmAddress = _a.fcmAddress, rateOracle = _a.rateOracle, protocolName = _a.protocolName, createdTimestamp = _a.createdTimestamp, updatedTimestamp = _a.updatedTimestamp, termStartTimestamp = _a.termStartTimestamp, termEndTimestamp = _a.termEndTimestamp, underlyingToken = _a.underlyingToken, sqrtPriceX96 = _a.sqrtPriceX96, liquidity = _a.liquidity, tick = _a.tick, tickSpacing = _a.tickSpacing, txCount = _a.txCount;
         this.id = id;
         this.marginEngineAddress = marginEngineAddress;
-        this.vammAddress = vammAddress;
         this.fcmAddress = fcmAddress;
         this.rateOracle = rateOracle;
         this.protocolName = protocolName;
@@ -64,7 +64,6 @@ var AMM = /** @class */ (function () {
         this.tickSpacing = tickSpacing;
         this.tick = tick;
         this.txCount = txCount;
-        this.peripheryAddress = peripheryAddress;
     }
     AMM.prototype.getMinimumMarginRequirement = function (_a) {
         var signer = _a.signer, recipient = _a.recipient, isFT = _a.isFT, notional = _a.notional, sqrtPriceLimitX96 = _a.sqrtPriceLimitX96, tickLower = _a.tickLower, tickUpper = _a.tickUpper;
@@ -74,7 +73,7 @@ var AMM = /** @class */ (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        peripheryContract = typechain_1.Periphery__factory.connect(this.peripheryAddress, signer);
+                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, signer);
                         marginEngineAddress = this.marginEngineAddress;
                         swapPeripheryParams = {
                             marginEngineAddress: marginEngineAddress,
@@ -146,23 +145,19 @@ var AMM = /** @class */ (function () {
     AMM.prototype.mintOrBurn = function (_a) {
         var signer = _a.signer, recipient = _a.recipient, tickLower = _a.tickLower, tickUpper = _a.tickUpper, notional = _a.notional, isMint = _a.isMint;
         return __awaiter(this, void 0, void 0, function () {
-            var vammContract, vammVars, sqrtPriceLimitX96, peripheryContract, marginEngineAddress, mintOrBurnParams, mintOrBurnReceipt;
+            var vammContract, peripheryContract, marginEngineAddress, mintOrBurnParams, mintOrBurnReceipt;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        if (!isMint) return [3 /*break*/, 3];
-                        vammContract = typechain_1.VAMM__factory.connect(this.vammAddress, signer);
-                        return [4 /*yield*/, vammContract.vammVars()];
-                    case 1:
-                        vammVars = _b.sent();
-                        sqrtPriceLimitX96 = vammVars.sqrtPriceX96;
-                        if (!sqrtPriceLimitX96.eq(ethers_1.BigNumber.from(0))) return [3 /*break*/, 3];
+                        if (!isMint) return [3 /*break*/, 2];
+                        vammContract = typechain_1.VAMM__factory.connect(this.id, signer);
+                        if (!jsbi_1.default.EQ(this.sqrtPriceX96, jsbi_1.default.BigInt(0))) return [3 /*break*/, 2];
                         return [4 /*yield*/, vammContract.initializeVAMM(tickMath_1.TickMath.getSqrtRatioAtTick(tickLower).toString())];
-                    case 2:
+                    case 1:
                         _b.sent();
-                        _b.label = 3;
-                    case 3:
-                        peripheryContract = typechain_1.Periphery__factory.connect(this.peripheryAddress, signer);
+                        _b.label = 2;
+                    case 2:
+                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, signer);
                         marginEngineAddress = this.marginEngineAddress;
                         mintOrBurnParams = {
                             marginEngineAddress: marginEngineAddress,
@@ -173,7 +168,7 @@ var AMM = /** @class */ (function () {
                             isMint: isMint,
                         };
                         return [4 /*yield*/, peripheryContract.mintOrBurn(mintOrBurnParams)];
-                    case 4:
+                    case 3:
                         mintOrBurnReceipt = _b.sent();
                         return [2 /*return*/, mintOrBurnReceipt];
                 }
@@ -187,7 +182,7 @@ var AMM = /** @class */ (function () {
             return __generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
-                        peripheryContract = typechain_1.Periphery__factory.connect(this.peripheryAddress, signer);
+                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, signer);
                         marginEngineAddress = this.marginEngineAddress;
                         swapPeripheryParams = {
                             marginEngineAddress: marginEngineAddress,
@@ -206,18 +201,50 @@ var AMM = /** @class */ (function () {
             });
         });
     };
+    Object.defineProperty(AMM.prototype, "startDateTime", {
+        get: function () {
+            return (0, timestampWadToDateTime_1.default)(this.termStartTimestamp);
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(AMM.prototype, "endDateTime", {
+        get: function () {
+            return (0, timestampWadToDateTime_1.default)(this.termEndTimestamp);
+        },
+        enumerable: false,
+        configurable: true
+    });
     Object.defineProperty(AMM.prototype, "fixedRate", {
         get: function () {
-            var _a;
-            return ((_a = this._fixedRate) !== null && _a !== void 0 ? _a : (this._fixedRate = new price_1.Price(jsbi_1.default.multiply(this.sqrtPriceX96, this.sqrtPriceX96), constants_1.Q192)));
+            if (!this._fixedRate) {
+                this._fixedRate = new price_1.Price(jsbi_1.default.multiply(this.sqrtPriceX96, this.sqrtPriceX96), constants_1.Q192);
+            }
+            return this._fixedRate;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(AMM.prototype, "fixedApr", {
+        get: function () {
+            return parseInt(this.fixedRate.toFixed(2));
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(AMM.prototype, "price", {
         get: function () {
-            var _a;
-            return ((_a = this._price) !== null && _a !== void 0 ? _a : (this._price = new price_1.Price(constants_1.Q192, jsbi_1.default.multiply(this.sqrtPriceX96, this.sqrtPriceX96))));
+            if (!this._price) {
+                this._price = new price_1.Price(constants_1.Q192, jsbi_1.default.multiply(this.sqrtPriceX96, this.sqrtPriceX96));
+            }
+            return this._price;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(AMM.prototype, "variableApr", {
+        get: function () {
+            return 0;
         },
         enumerable: false,
         configurable: true
