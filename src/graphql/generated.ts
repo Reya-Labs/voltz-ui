@@ -1128,6 +1128,7 @@ export type QueryWalletsArgs = {
 export type RateOracle = {
   __typename?: 'RateOracle';
   id: Scalars['ID'];
+  protocolId: Scalars['BigInt'];
   token: UnderlyingToken;
 };
 
@@ -1140,6 +1141,14 @@ export type RateOracle_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  protocolId?: InputMaybe<Scalars['BigInt']>;
+  protocolId_gt?: InputMaybe<Scalars['BigInt']>;
+  protocolId_gte?: InputMaybe<Scalars['BigInt']>;
+  protocolId_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  protocolId_lt?: InputMaybe<Scalars['BigInt']>;
+  protocolId_lte?: InputMaybe<Scalars['BigInt']>;
+  protocolId_not?: InputMaybe<Scalars['BigInt']>;
+  protocolId_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   token?: InputMaybe<Scalars['String']>;
   token_contains?: InputMaybe<Scalars['String']>;
   token_ends_with?: InputMaybe<Scalars['String']>;
@@ -1158,6 +1167,7 @@ export type RateOracle_Filter = {
 
 export enum RateOracle_OrderBy {
   Id = 'id',
+  ProtocolId = 'protocolId',
   Token = 'token'
 }
 
@@ -1799,7 +1809,7 @@ export type GetAmMsQueryVariables = Exact<{
 }>;
 
 
-export type GetAmMsQuery = { __typename?: 'Query', amms: Array<{ __typename?: 'AMM', id: string, createdTimestamp: any, updatedTimestamp: any, fcmAddress: string, marginEngineAddress: string, termStartTimestamp: any, termEndTimestamp: any, tickSpacing: any, sqrtPriceX96: any, liquidity: any, tick: any, txCount: any, rateOracle: { __typename?: 'RateOracle', id: string, token: { __typename?: 'UnderlyingToken', id: string, name: string } } }> };
+export type GetAmMsQuery = { __typename?: 'Query', amms: Array<{ __typename?: 'AMM', id: string, createdTimestamp: any, updatedTimestamp: any, fcmAddress: string, marginEngineAddress: string, termStartTimestamp: any, termEndTimestamp: any, tickSpacing: any, sqrtPriceX96: any, liquidity: any, tick: any, txCount: any, rateOracle: { __typename?: 'RateOracle', id: string, protocolId: any, token: { __typename?: 'UnderlyingToken', id: string, name: string } } }> };
 
 export type GetBurnsQueryVariables = Exact<{
   orderBy: Burn_OrderBy;
@@ -2169,6 +2179,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type RateOracleResolvers<ContextType = any, ParentType extends ResolversParentTypes['RateOracle'] = ResolversParentTypes['RateOracle']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  protocolId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   token?: Resolver<ResolversTypes['UnderlyingToken'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -2300,6 +2311,7 @@ export const GetAmMsDocument = gql`
     marginEngineAddress
     rateOracle {
       id
+      protocolId
       token {
         id
         name

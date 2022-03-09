@@ -7,6 +7,7 @@ query GetAMMs($orderBy: AMM_orderBy!) {
     marginEngineAddress
     rateOracle {
       id
+      protocolId
       token {
         id
         name
