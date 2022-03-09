@@ -20,11 +20,11 @@ var tickMath_1 = require("./tickMath");
 function tickToPrice(tick) {
     var sqrtRatioX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tick);
     var ratioX192 = jsbi_1.default.multiply(sqrtRatioX96, sqrtRatioX96);
-    return new price_1.Price(ratioX192, constants_1.Q192);
+    return new price_1.Price(constants_1.Q192, ratioX192);
 }
 exports.tickToPrice = tickToPrice;
 function priceToFixedRate(price) {
-    return new price_1.Price(price.denominator, price.numerator);
+    return new price_1.Price(price.numerator, price.denominator);
 }
 exports.priceToFixedRate = priceToFixedRate;
 /**
@@ -48,17 +48,19 @@ function priceToClosestTick(price) {
     var sqrtRatioX96 = (0, encodeSqrtRatioX96_1.encodeSqrtRatioX96)(price.numerator, price.denominator);
     var tick = tickMath_1.TickMath.getTickAtSqrtRatio(sqrtRatioX96);
     var nextTickPrice = tickToPrice(tick + 1);
-    if (!price.greaterThan(nextTickPrice)) {
-        tick++;
+    // this solution is a bit hacky, can be optimised
+    if (tick < 0) {
+        if (!price.lessThan(nextTickPrice)) {
+            tick++;
+        }
     }
     return tick;
 }
 exports.priceToClosestTick = priceToClosestTick;
 function fixedRateToPrice(fixedRate) {
-    var fixedRateNumerator = fixedRate.numerator;
-    var fixedRateDenominator = fixedRate.denominator;
-    var fixedRateDenominatorMulBy100 = jsbi_1.default.multiply(fixedRateDenominator, jsbi_1.default.BigInt(100));
-    return new price_1.Price(fixedRateDenominatorMulBy100, fixedRateNumerator);
+    // the fixed rate is the reciprocal of the price
+    // NOTE: below the first argument to the Price constructor is the denominator and the second argument is the numerator 
+    return new price_1.Price(fixedRate.numerator, fixedRate.denominator);
 }
 exports.fixedRateToPrice = fixedRateToPrice;
 function fixedRateToClosestTick(fixedRate) {

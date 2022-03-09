@@ -175,6 +175,22 @@ var AMM = /** @class */ (function () {
         });
     };
     AMM.prototype.mint = function (_a) {
+        var recipient = _a.recipient, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, margin = _a.margin, leverage = _a.leverage;
+        return __awaiter(this, void 0, void 0, function () {
+            var tickUpper, tickLower;
+            return __generator(this, function (_b) {
+                tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
+                tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
+                return [2 /*return*/, this.mintUsingTicks({
+                        recipient: recipient,
+                        tickLower: tickLower,
+                        tickUpper: tickUpper,
+                        notional: margin * leverage,
+                    })];
+            });
+        });
+    };
+    AMM.prototype.mintUsingTicks = function (_a) {
         var tickLower = _a.tickLower, args = __rest(_a, ["tickLower"]);
         return __awaiter(this, void 0, void 0, function () {
             var vammContract;
@@ -190,19 +206,35 @@ var AMM = /** @class */ (function () {
                     case 1:
                         _b.sent();
                         _b.label = 2;
-                    case 2: return [2 /*return*/, this.mintOrBurn(__assign(__assign({}, args), { tickLower: tickLower, isMint: true }))];
+                    case 2: return [2 /*return*/, this.mintOrBurnUsingTicks(__assign(__assign({}, args), { tickLower: tickLower, isMint: true }))];
                 }
             });
         });
     };
-    AMM.prototype.burn = function (args) {
+    AMM.prototype.burn = function (_a) {
+        var recipient = _a.recipient, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, margin = _a.margin, leverage = _a.leverage;
         return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, this.mintOrBurn(__assign(__assign({}, args), { isMint: false }))];
+            var tickUpper, tickLower;
+            return __generator(this, function (_b) {
+                tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
+                tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
+                return [2 /*return*/, this.burnUsingTicks({
+                        recipient: recipient,
+                        tickLower: tickLower,
+                        tickUpper: tickUpper,
+                        notional: margin * leverage,
+                    })];
             });
         });
     };
-    AMM.prototype.mintOrBurn = function (_a) {
+    AMM.prototype.burnUsingTicks = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.mintOrBurnUsingTicks(__assign(__assign({}, args), { isMint: false }))];
+            });
+        });
+    };
+    AMM.prototype.mintOrBurnUsingTicks = function (_a) {
         var recipient = _a.recipient, tickLower = _a.tickLower, tickUpper = _a.tickUpper, notional = _a.notional, isMint = _a.isMint;
         return __awaiter(this, void 0, void 0, function () {
             var peripheryContract, mintOrBurnParams;

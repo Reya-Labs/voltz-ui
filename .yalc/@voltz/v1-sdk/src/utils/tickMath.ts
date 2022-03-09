@@ -19,7 +19,7 @@ export abstract class TickMath {
   /**
    * The minimum tick that can be used on any pool.
    */
-  public static MIN_TICK: number = -887272;
+  public static MIN_TICK: number = -69100;;
   /**
    * The maximum tick that can be used on any pool.
    */

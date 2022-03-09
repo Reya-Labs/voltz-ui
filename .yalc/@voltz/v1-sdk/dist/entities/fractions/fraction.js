@@ -118,6 +118,9 @@ var Fraction = /** @class */ (function () {
             .div(this.denominator.toString())
             .toFormat(decimalPlaces, format);
     };
+    Fraction.prototype.toNumber = function () {
+        return parseFloat(this.toFixed(2));
+    };
     Object.defineProperty(Fraction.prototype, "asFraction", {
         /**
          * Helper method for converting any super class back to a fraction

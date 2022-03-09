@@ -19,6 +19,7 @@ var TickMath = /** @class */ (function () {
      */
     function TickMath() {
     }
+    ;
     /**
      * Returns the sqrt ratio as a Q64.96 for the given tick. The sqrt ratio is computed as sqrt(1.0001)^tick
      * @param tick the tick for which to compute the sqrt ratio
@@ -110,7 +111,7 @@ var TickMath = /** @class */ (function () {
     /**
      * The minimum tick that can be used on any pool.
      */
-    TickMath.MIN_TICK = -887272;
+    TickMath.MIN_TICK = -69100;
     /**
      * The maximum tick that can be used on any pool.
      */

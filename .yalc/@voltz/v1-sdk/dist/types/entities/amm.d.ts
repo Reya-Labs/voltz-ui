@@ -51,6 +51,13 @@ export declare type AMMSwapArgs = {
 };
 export declare type AMMMintOrBurnArgs = {
     recipient: string;
+    fixedLow: number;
+    fixedHigh: number;
+    margin: number;
+    leverage: number;
+};
+export declare type AMMMintOrBurnUsingTicksArgs = {
+    recipient: string;
     tickLower: BigNumberish;
     tickUpper: BigNumberish;
     notional: BigNumberish;
@@ -82,9 +89,11 @@ declare class AMM {
     getMinimumMarginRequirementPostSwap({ recipient, isFT, notional, sqrtPriceLimitX96, tickLower, tickUpper, }: AMMGetMinimumMarginRequirementArgs): Promise<BigNumber | void>;
     settlePosition({ owner, tickLower, tickUpper }: AMMSettlePositionArgs): Promise<ContractTransaction | void>;
     updatePositionMargin({ owner, tickLower, tickUpper, marginDelta, }: AMMUpdatePositionMarginArgs): Promise<ContractTransaction | void>;
-    mint({ tickLower, ...args }: Omit<AMMMintOrBurnArgs, 'isMint'>): Promise<ContractTransaction | void>;
-    burn(args: Omit<AMMMintOrBurnArgs, 'isMint'>): Promise<ContractTransaction | void>;
-    mintOrBurn({ recipient, tickLower, tickUpper, notional, isMint, }: AMMMintOrBurnArgs): Promise<ContractTransaction | void>;
+    mint({ recipient, fixedLow, fixedHigh, margin, leverage }: AMMMintOrBurnArgs): Promise<ContractTransaction | void>;
+    mintUsingTicks({ tickLower, ...args }: Omit<AMMMintOrBurnUsingTicksArgs, 'isMint'>): Promise<ContractTransaction | void>;
+    burn({ recipient, fixedLow, fixedHigh, margin, leverage }: AMMMintOrBurnArgs): Promise<ContractTransaction | void>;
+    burnUsingTicks(args: Omit<AMMMintOrBurnUsingTicksArgs, 'isMint'>): Promise<ContractTransaction | void>;
+    mintOrBurnUsingTicks({ recipient, tickLower, tickUpper, notional, isMint, }: AMMMintOrBurnUsingTicksArgs): Promise<ContractTransaction | void>;
     approvePeriphery(): Promise<ContractTransaction | void>;
     swap({ recipient, isFT, notional, sqrtPriceLimitX96, tickLower, tickUpper, }: AMMSwapArgs): Promise<ContractTransaction | void>;
     get startDateTime(): DateTime;

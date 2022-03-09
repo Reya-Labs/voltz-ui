@@ -161,6 +161,10 @@ export class Fraction {
       .toFormat(decimalPlaces, format);
   }
 
+  public toNumber(): number {
+    return parseFloat(this.toFixed(2));
+  }
+
   /**
    * Helper method for converting any super class back to a fraction
    */

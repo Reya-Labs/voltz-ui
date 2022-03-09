@@ -69,6 +69,14 @@ export type AMMSwapArgs = {
 
 export type AMMMintOrBurnArgs = {
   recipient: string;
+  fixedLow: number;
+  fixedHigh: number;
+  margin: number;
+  leverage: number;
+};
+
+export type AMMMintOrBurnUsingTicksArgs = {
+  recipient: string;
   tickLower: BigNumberish;
   tickUpper: BigNumberish;
   notional: BigNumberish;
@@ -215,7 +223,19 @@ class AMM {
     return updatePositionMarginReceipt;
   }
 
-  public async mint({ tickLower, ...args }: Omit<AMMMintOrBurnArgs, 'isMint'>): Promise<ContractTransaction | void> {
+  public async mint({ recipient, fixedLow, fixedHigh, margin, leverage }: AMMMintOrBurnArgs): Promise<ContractTransaction | void> {
+    const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
+    const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
+
+    return this.mintUsingTicks({
+      recipient,
+      tickLower,
+      tickUpper,
+      notional: margin * leverage,
+    });
+  }
+
+  public async mintUsingTicks({ tickLower, ...args }: Omit<AMMMintOrBurnUsingTicksArgs, 'isMint'>): Promise<ContractTransaction | void> {
     if (!this.signer) {
       return;
     }
@@ -226,20 +246,32 @@ class AMM {
       await vammContract.initializeVAMM(TickMath.getSqrtRatioAtTick(BigNumber.from(tickLower).toNumber()).toString())
     }
 
-    return this.mintOrBurn({ ...args, tickLower, isMint: true });
+    return this.mintOrBurnUsingTicks({ ...args, tickLower, isMint: true });
   }
 
-  public async burn(args: Omit<AMMMintOrBurnArgs, 'isMint'>): Promise<ContractTransaction | void> {
-    return this.mintOrBurn({ ...args, isMint: false });
+  public async burn({ recipient, fixedLow, fixedHigh, margin, leverage }: AMMMintOrBurnArgs): Promise<ContractTransaction | void> {
+    const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
+    const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
+
+    return this.burnUsingTicks({
+      recipient,
+      tickLower,
+      tickUpper,
+      notional: margin * leverage,
+    });
   }
 
-  public async mintOrBurn({
+  public async burnUsingTicks(args: Omit<AMMMintOrBurnUsingTicksArgs, 'isMint'>): Promise<ContractTransaction | void> {
+    return this.mintOrBurnUsingTicks({ ...args, isMint: false });
+  }
+
+  public async mintOrBurnUsingTicks({
     recipient,
     tickLower,
     tickUpper,
     notional,
     isMint,
-  }: AMMMintOrBurnArgs) : Promise<ContractTransaction | void> {
+  }: AMMMintOrBurnUsingTicksArgs) : Promise<ContractTransaction | void> {
     if (!this.signer) {
       return;
     }
