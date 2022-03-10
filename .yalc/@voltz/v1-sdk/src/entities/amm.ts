@@ -9,7 +9,9 @@ import {
   Periphery__factory as peripheryFactory,
   MarginEngine__factory as marginEngineFactory,
   VAMM__factory as vammFactory,
-  Factory__factory as factoryFactory
+  Factory__factory as factoryFactory,
+  // todo: not very elegant to use the mock as a factory
+  ERC20Mock__factory as tokenFactory
 } from '../typechain';
 import Token from './token';
 import RateOracle from './rateOracle';
@@ -17,6 +19,7 @@ import { TickMath } from '../utils/tickMath';
 import timestampWadToDateTime from '../utils/timestampWadToDateTime';
 import { fixedRateToClosestTick, tickToFixedRate } from '../utils/priceTickConversions';
 import { nearestUsableTick } from '../utils/nearestUsableTick';
+import { Position } from '.';
 
 export type AMMConstructorArgs = {
   id: string;
@@ -212,6 +215,12 @@ class AMM {
       return;
     }
 
+    // approve the margin engine 
+    await this.approveMarginEngine(marginDelta);
+
+    tickLower = parseInt(tickLower.toString())
+    tickUpper = parseInt(tickUpper.toString())
+
     const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
     const updatePositionMarginReceipt = await marginEngineContract.updatePositionMargin(
       owner,
@@ -222,7 +231,7 @@ class AMM {
 
     return updatePositionMarginReceipt;
   }
-
+  
   public async mint({ recipient, fixedLow, fixedHigh, margin, leverage }: AMMMintOrBurnArgs): Promise<ContractTransaction | void> {
     const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
     const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
@@ -311,6 +320,24 @@ class AMM {
 
   }
 
+  public async approveMarginEngine(
+    marginDelta: BigNumberish
+  ) {
+
+    if (!this.signer) {
+      return;
+    }
+
+    if (!this.underlyingToken.id) {
+      return;
+    }
+
+    const token = tokenFactory.connect(this.underlyingToken.id, this.signer);
+
+    await token.approve(this.marginEngineAddress, marginDelta);
+
+  }
+
   public async swap({
     recipient,
     isFT,
@@ -321,6 +348,16 @@ class AMM {
   }: AMMSwapArgs): Promise<ContractTransaction | void> {
     if (!this.signer) {
       return;
+    }
+
+    if (sqrtPriceLimitX96.toString() === "0") {
+
+      if (isFT) {
+        sqrtPriceLimitX96 = TickMath.getSqrtRatioAtTick(TickMath.MAX_TICK - 1).toString()
+      } else {
+        sqrtPriceLimitX96 = TickMath.getSqrtRatioAtTick(TickMath.MIN_TICK + 1).toString()
+      }
+
     }
 
     await this.approvePeriphery()

@@ -95,6 +95,7 @@ declare class AMM {
     burnUsingTicks(args: Omit<AMMMintOrBurnUsingTicksArgs, 'isMint'>): Promise<ContractTransaction | void>;
     mintOrBurnUsingTicks({ recipient, tickLower, tickUpper, notional, isMint, }: AMMMintOrBurnUsingTicksArgs): Promise<ContractTransaction | void>;
     approvePeriphery(): Promise<ContractTransaction | void>;
+    approveMarginEngine(marginDelta: BigNumberish): Promise<void>;
     swap({ recipient, isFT, notional, sqrtPriceLimitX96, tickLower, tickUpper, }: AMMSwapArgs): Promise<ContractTransaction | void>;
     get startDateTime(): DateTime;
     get endDateTime(): DateTime;

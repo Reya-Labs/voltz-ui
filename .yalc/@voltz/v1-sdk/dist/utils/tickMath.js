@@ -119,11 +119,11 @@ var TickMath = /** @class */ (function () {
     /**
      * The sqrt ratio corresponding to the minimum tick that could be used on any pool.
      */
-    TickMath.MIN_SQRT_RATIO = jsbi_1.default.BigInt('4295128739');
+    TickMath.MIN_SQRT_RATIO = jsbi_1.default.BigInt('2503036416286949174936592462');
     /**
      * The sqrt ratio corresponding to the maximum tick that could be used on any pool.
      */
-    TickMath.MAX_SQRT_RATIO = jsbi_1.default.BigInt('1461446703485210103287273052203988822378723970342');
+    TickMath.MAX_SQRT_RATIO = jsbi_1.default.BigInt('2507794810551837817144115957740');
     return TickMath;
 }());
 exports.TickMath = TickMath;

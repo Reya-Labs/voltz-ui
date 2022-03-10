@@ -165,9 +165,16 @@ var AMM = /** @class */ (function () {
                         if (!this.signer) {
                             return [2 /*return*/];
                         }
+                        // approve the margin engine 
+                        return [4 /*yield*/, this.approveMarginEngine(marginDelta)];
+                    case 1:
+                        // approve the margin engine 
+                        _b.sent();
+                        tickLower = parseInt(tickLower.toString());
+                        tickUpper = parseInt(tickUpper.toString());
                         marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
                         return [4 /*yield*/, marginEngineContract.updatePositionMargin(owner, tickLower, tickUpper, marginDelta)];
-                    case 1:
+                    case 2:
                         updatePositionMarginReceipt = _b.sent();
                         return [2 /*return*/, updatePositionMarginReceipt];
                 }
@@ -285,6 +292,27 @@ var AMM = /** @class */ (function () {
             });
         });
     };
+    AMM.prototype.approveMarginEngine = function (marginDelta) {
+        return __awaiter(this, void 0, void 0, function () {
+            var token;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!this.signer) {
+                            return [2 /*return*/];
+                        }
+                        if (!this.underlyingToken.id) {
+                            return [2 /*return*/];
+                        }
+                        token = typechain_1.ERC20Mock__factory.connect(this.underlyingToken.id, this.signer);
+                        return [4 /*yield*/, token.approve(this.marginEngineAddress, marginDelta)];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
     AMM.prototype.swap = function (_a) {
         var recipient = _a.recipient, isFT = _a.isFT, notional = _a.notional, sqrtPriceLimitX96 = _a.sqrtPriceLimitX96, _b = _a.tickLower, tickLower = _b === void 0 ? 0 : _b, _c = _a.tickUpper, tickUpper = _c === void 0 ? 0 : _c;
         return __awaiter(this, void 0, void 0, function () {
@@ -294,6 +322,14 @@ var AMM = /** @class */ (function () {
                     case 0:
                         if (!this.signer) {
                             return [2 /*return*/];
+                        }
+                        if (sqrtPriceLimitX96.toString() === "0") {
+                            if (isFT) {
+                                sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickMath_1.TickMath.MAX_TICK - 1).toString();
+                            }
+                            else {
+                                sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickMath_1.TickMath.MIN_TICK + 1).toString();
+                            }
                         }
                         return [4 /*yield*/, this.approvePeriphery()];
                     case 1:
