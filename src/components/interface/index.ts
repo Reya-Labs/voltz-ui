@@ -5,5 +5,6 @@ export { default as Page } from './Page/Page';
 export { default as PendingTransaction } from './PendingTransaction/PendingTransaction';
 export { default as PoolForm } from './PoolForm/PoolForm';
 export type { PoolFormProps } from './PoolForm/PoolForm';
+export type { HandleSubmitPoolFormArgs } from './PoolForm/types';
 export { default as PoolTable } from './PoolTable/PoolTable';
 export { default as WalletConnect } from './WalletConnect/WalletConnect';

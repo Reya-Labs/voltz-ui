@@ -1,4 +1,5 @@
 import React from 'react';
+import isUndefined from 'lodash/isUndefined';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
 
@@ -7,6 +8,7 @@ import { Button, Panel } from '@components/atomic';
 import { ProtocolInformation, MaturityInformation } from '@components/composite';
 import { useAgentWithOverride } from '@hooks';
 import { calculateNotionalAmount } from '@utilities';
+import { HandleSubmitPoolFormArgs } from './types';
 import {
   MarginAmount,
   NotionalAmount,
@@ -38,7 +40,7 @@ export type PoolFormProps = AgentProps & {
   onChangeLeverage: (value: number) => void;
   onChangePartialCollateralization: (value: boolean) => void;
   onChangeMargin: (value: number) => void;
-  onSubmit: (values: Record<string, unknown>) => void;
+  onSubmit: (values: HandleSubmitPoolFormArgs) => Promise<void>;
   onCancel: () => void;
 };
 
@@ -73,15 +75,16 @@ const PoolForm: React.FunctionComponent<PoolFormProps> = ({
   const notional = calculateNotionalAmount(margin, leverage);
   const maxNotional = 0;
   const handleMaxNotional = () => {};
-  const handleSubmit = () =>
-    onSubmit({
+  const handleSubmit = async () => {
+    return onSubmit({
       agent,
       fixedLow,
       fixedHigh,
       leverage,
       margin,
-      partialCollateralization,
+      partialCollateralization: partialCollateralization || false,
     });
+  };
 
   return (
     <Panel
@@ -144,7 +147,7 @@ const PoolForm: React.FunctionComponent<PoolFormProps> = ({
         }}
       >
         <NotionalAmount
-          notional={notional}
+          notional={notional.toNumber()}
           maxNotional={maxNotional}
           onMaxNotional={handleMaxNotional}
         />

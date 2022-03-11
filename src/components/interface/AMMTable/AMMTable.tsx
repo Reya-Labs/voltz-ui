@@ -24,7 +24,7 @@ export type AMMTableProps = {
   onSetPage: (page: number) => void;
   size: number | null;
   onSetSize: (size: number) => void;
-  onSelectItem: (vammId: string) => void;
+  onSelectItem: (datum: AMM) => void;
 };
 
 const AMMTable: React.FunctionComponent<AMMTableProps> = ({
@@ -65,6 +65,9 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({
   const tableData = useMemo(() => {
     return amms.map(mapAmmToAmmTableDatum);
   }, [order, page, size]);
+  const handleSelectRow = (index: number) => () => {
+    onSelectItem(amms[index]);
+  };
 
   return (
     <Panel variant="dark" sx={{ minWidth: 800 }}>
@@ -83,7 +86,7 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({
           <AMMTableHead order={order} orderBy={orderBy} onSort={handleSort} />
           <TableBody>
             {tableData.map((datum, index) => (
-              <AMMTableRow datum={datum} index={index} onSelect={onSelectItem} />
+              <AMMTableRow datum={datum} index={index} onSelect={handleSelectRow(index)} />
             ))}
           </TableBody>
           <AMMTableFooter

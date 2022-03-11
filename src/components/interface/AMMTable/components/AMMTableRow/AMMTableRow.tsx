@@ -13,7 +13,7 @@ import { labels } from '../../constants';
 export type AMMTableRowProps = {
   datum: AMMTableDatum;
   index: number;
-  onSelect: (vammId: string) => void;
+  onSelect: () => void;
 };
 
 const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, onSelect }) => {
@@ -41,7 +41,7 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
         return {};
     }
   };
-  const handleClick = () => onSelect(datum.id);
+  const handleClick = () => onSelect();
 
   return (
     <TableRow key={index} sx={{ ...typeStyleOverrides() }}>

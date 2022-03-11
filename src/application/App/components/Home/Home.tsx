@@ -2,27 +2,25 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import { useLocation } from 'react-router-dom';
 import isNull from 'lodash/isNull';
+import { AMM } from '@voltz/v1-sdk';
 
-import { data } from '@utilities';
 import { Agents } from '@components/contexts';
-import { useAMMs, useAgent } from '@hooks';
+import { useAgent } from '@hooks';
 import { routes } from '@routes';
 import { Typography, Button } from '@components/atomic';
-import { Page, AMMTable } from '@components/interface';
-import { ConnectedPoolForm } from './components';
+import { Page } from '@components/interface';
+import { ConnectedAMMTable, ConnectedPoolForm } from './components';
 
 const Home: React.FunctionComponent = () => {
   const [formActive, setFormActive] = useState(false);
-  const [vammId, setVammId] = useState<string | null>(null);
-  const [positionId, setPositionId] = useState<string | null>(null);
+  const [amm, setAMM] = useState<AMM | null>(null);
   const { agent, onChangeAgent } = useAgent();
   const { pathname } = useLocation();
   const pathnameWithoutPrefix = pathname.slice(1);
 
   useEffect(() => {
     setFormActive(false);
-    setVammId(null);
-    setPositionId(null);
+    setAMM(null);
 
     switch (pathnameWithoutPrefix) {
       case routes.POOLS:
@@ -39,7 +37,7 @@ const Home: React.FunctionComponent = () => {
         break;
       }
     }
-  }, [setFormActive, setVammId, setPositionId, pathnameWithoutPrefix, onChangeAgent]);
+  }, [setFormActive, setAMM, pathnameWithoutPrefix, onChangeAgent]);
 
   const pageTitle = useMemo(() => {
     switch (pathnameWithoutPrefix) {
@@ -81,33 +79,13 @@ const Home: React.FunctionComponent = () => {
         return 'portfolio';
     }
   }, [pathnameWithoutPrefix]);
-  const handleSelectVamm = (selectedVammId: string, selectedPositionId?: string) => {
+  const handleSelectAmm = (selected: AMM) => {
     setFormActive(true);
-    setVammId(selectedVammId);
-    setPositionId(selectedPositionId || null);
+    setAMM(selected);
   };
   const handleReset = () => {
     setFormActive(false);
-    setVammId(null);
-    setPositionId(null);
-  };
-  const { amms, loading, error } = useAMMs();
-  const transformedData = data.transformData({ data: data.data, mode: tableMode, agent });
-  const datum = transformedData.find(({ id: datumVammId, positionId: datumPositionId }) => {
-    if (datumVammId !== vammId) {
-      return false;
-    }
-
-    if (!isNull(positionId) && datumPositionId !== positionId) {
-      return false;
-    }
-
-    return true;
-  });
-  const handleSubmit = async (args: Record<string, unknown>) => {
-    await Promise.resolve();
-
-    console.warn({ args, datum });
+    setAMM(null);
   };
 
   return (
@@ -135,17 +113,12 @@ const Home: React.FunctionComponent = () => {
                 PROVIDE LIQUIDITY
               </Button>
             )}
-            <AMMTable data={data.data} mode={tableMode} onSelectVamm={handleSelectVamm} />
+            <ConnectedAMMTable mode={tableMode} onSelectItem={handleSelectAmm} />
           </Box>
         )}
-        {formActive && !isNull(vammId) && (
+        {formActive && !isNull(amm) && (
           <Box sx={{ height: '100%' }}>
-            <ConnectedPoolForm
-              isModifying={!isNull(positionId)}
-              datum={datum}
-              onReset={handleReset}
-              onSubmit={handleSubmit}
-            />
+            <ConnectedPoolForm isModifying={false} amm={amm} onReset={handleReset} />
           </Box>
         )}
       </Box>

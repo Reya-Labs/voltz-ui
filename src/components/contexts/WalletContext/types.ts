@@ -1,4 +1,5 @@
 import { DeepPartial } from 'utility-types';
+import { ethers } from 'ethers';
 
 import { Wallet as WalletData } from '@graphql';
 
@@ -28,6 +29,7 @@ export type Wallet = {
   account: string | null;
   name: WalletName | null;
   ethereum: WalletEthereum | null;
+  signer: ethers.providers.JsonRpcSigner | null;
   balance: number | null;
   data: DeepPartial<WalletData> | null;
 };

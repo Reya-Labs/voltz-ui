@@ -122,7 +122,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
           }}
         >
           <Typography label="NOTIONAL AMOUNT" variant="body2">
-            {calculateNotionalAmount(margin, leverage)} {protocol}
+            {calculateNotionalAmount(margin, leverage).toNumber()} {protocol}
           </Typography>
         </Box>
         <Box

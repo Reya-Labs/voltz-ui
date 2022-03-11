@@ -116,6 +116,7 @@
     "aws-amplify": "^4.3.13",
     "chroma-js": "^2.1.2",
     "decimal.js": "^10.3.1",
+    "ethers": "^5.5.4",
     "graphql": "^16.3.0",
     "lodash": "^4.17.21",
     "luxon": "^2.3.0",
