@@ -82,7 +82,7 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
     return null;
   }, [ethereum]);
 
-  const { data } = useGetWalletQuery({ variables: { id: account || '' } });
+  const { data, loading, error } = useGetWalletQuery({ variables: { id: account || '' } });
 
   const value = {
     status,
@@ -93,7 +93,9 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
     ethereum,
     signer,
     balance,
-    data: data && data.wallet ? data.wallet : null,
+    wallet: data && data.wallet ? data.wallet : null,
+    loading,
+    error: !!error,
   };
 
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;

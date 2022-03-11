@@ -1,7 +1,6 @@
-import { DeepPartial } from 'utility-types';
 import { ethers } from 'ethers';
 
-import { Wallet as WalletData } from '@graphql';
+import { GetWalletQuery } from '@graphql';
 
 export type WalletStatus =
   | 'initializing'
@@ -31,5 +30,7 @@ export type Wallet = {
   ethereum: WalletEthereum | null;
   signer: ethers.providers.JsonRpcSigner | null;
   balance: number | null;
-  data: DeepPartial<WalletData> | null;
+  wallet: GetWalletQuery['wallet'] | null;
+  loading: boolean;
+  error: boolean;
 };
