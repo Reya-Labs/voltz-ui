@@ -7,9 +7,9 @@ var jsbi_1 = __importDefault(require("jsbi"));
 var priceTickConversions_1 = require("../utils/priceTickConversions");
 var Position = /** @class */ (function () {
     function Position(_a) {
-        var id = _a.id, createdTimestamp = _a.createdTimestamp, updatedTimestamp = _a.updatedTimestamp, ammId = _a.ammId, liquidity = _a.liquidity, tickLower = _a.tickLower, tickUpper = _a.tickUpper, isSettled = _a.isSettled, margin = _a.margin, fixedTokenBalance = _a.fixedTokenBalance, variableTokenBalance = _a.variableTokenBalance, isLiquidityProvider = _a.isLiquidityProvider, owner = _a.owner, isEmpty = _a.isEmpty;
+        var id = _a.id, createdTimestamp = _a.createdTimestamp, updatedTimestamp = _a.updatedTimestamp, amm = _a.amm, liquidity = _a.liquidity, tickLower = _a.tickLower, tickUpper = _a.tickUpper, isSettled = _a.isSettled, margin = _a.margin, fixedTokenBalance = _a.fixedTokenBalance, variableTokenBalance = _a.variableTokenBalance, isLiquidityProvider = _a.isLiquidityProvider, owner = _a.owner, isEmpty = _a.isEmpty;
         this.id = id;
-        this.ammId = ammId;
+        this.amm = amm;
         this.tickLower = tickLower;
         this.tickUpper = tickUpper;
         this.liquidity = jsbi_1.default.BigInt(liquidity);

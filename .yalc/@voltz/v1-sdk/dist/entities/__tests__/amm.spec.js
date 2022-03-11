@@ -74,10 +74,58 @@ describe('amm', function () {
             updatedTimestamp: '1646856471',
         });
         it('executes mint', function () { return __awaiter(void 0, void 0, void 0, function () {
-            var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, amm.mint({
+                    case 0: return [4 /*yield*/, amm.updateSqrtPriceX96()];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, amm.mint({
+                                recipient: wallet.address,
+                                fixedLow: 1,
+                                fixedHigh: 2,
+                                margin: 1,
+                                leverage: 10,
+                            })];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+    });
+    describe('burn', function () {
+        var vammAddress = '0xe451980132e65465d0a498c53f0b5227326dd73f';
+        var marginEngineAddress = '0x75537828f2ce51be7289709686a69cbfdbb714f1';
+        var provider = new ethers_1.providers.JsonRpcProvider('http://0.0.0.0:8545/');
+        var privateKey = '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80';
+        var wallet = new ethers_1.Wallet(privateKey, provider);
+        var amm = new amm_1.default({
+            id: vammAddress,
+            signer: wallet,
+            createdTimestamp: '1646856471',
+            fcmAddress: '0x5392a33f7f677f59e833febf4016cddd88ff9e67',
+            liquidity: '0',
+            marginEngineAddress: marginEngineAddress,
+            rateOracle: new rateOracle_1.default({
+                id: '0x0165878a594ca255338adfa4d48449f69242eb8f',
+                protocolId: 1,
+            }),
+            underlyingToken: new token_1.default({
+                id: '0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9',
+                name: 'USDC',
+            }),
+            sqrtPriceX96: '0',
+            termEndTimestamp: '1649458800000000000000000000',
+            termStartTimestamp: '1646856441000000000000000000',
+            tick: '0',
+            tickSpacing: '1000',
+            txCount: 0,
+            updatedTimestamp: '1646856471',
+        });
+        it('executes burn', function () { return __awaiter(void 0, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, amm.burn({
                             recipient: wallet.address,
                             fixedLow: 1,
                             fixedHigh: 2,
@@ -85,8 +133,7 @@ describe('amm', function () {
                             leverage: 1,
                         })];
                     case 1:
-                        result = _a.sent();
-                        console.debug(result);
+                        _a.sent();
                         return [2 /*return*/];
                 }
             });

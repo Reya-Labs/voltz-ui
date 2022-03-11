@@ -3,12 +3,13 @@ import JSBI from 'jsbi';
 import { BigIntish } from '../types';
 import { Price } from './fractions/price';
 import { tickToFixedRate, tickToPrice } from '../utils/priceTickConversions';
+import AMM from './amm';
 
 export type PositionConstructorArgs = {
   id: string;
   createdTimestamp: JSBI;
   updatedTimestamp: JSBI;
-  ammId: string;
+  amm: AMM;
   tickLower: number;
   tickUpper: number;
   liquidity: BigIntish;
@@ -28,7 +29,7 @@ class Position {
 
   public readonly updatedTimestamp: JSBI;
 
-  public readonly ammId: string;
+  public readonly amm: AMM;
 
   public readonly tickLower: number;
 
@@ -54,7 +55,7 @@ class Position {
     id,
     createdTimestamp,
     updatedTimestamp,
-    ammId,
+    amm,
     liquidity,
     tickLower,
     tickUpper,
@@ -67,7 +68,7 @@ class Position {
     isEmpty,
   }: PositionConstructorArgs) {
     this.id = id;
-    this.ammId = ammId;
+    this.amm = amm;
     this.tickLower = tickLower;
     this.tickUpper = tickUpper;
     this.liquidity = JSBI.BigInt(liquidity);

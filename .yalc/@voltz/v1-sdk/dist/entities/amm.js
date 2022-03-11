@@ -136,6 +136,54 @@ var AMM = /** @class */ (function () {
             });
         });
     };
+    AMM.prototype.getMinimumMarginRequirementPostMint = function (_a) {
+        var recipient = _a.recipient, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional;
+        return __awaiter(this, void 0, void 0, function () {
+            var tickUpper, tickLower, peripheryContract, mintOrBurnParams, marginRequirement;
+            var _this = this;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (!this.signer) {
+                            return [2 /*return*/];
+                        }
+                        tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
+                        tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
+                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        mintOrBurnParams = {
+                            marginEngineAddress: this.marginEngineAddress,
+                            recipient: recipient,
+                            tickLower: tickLower,
+                            tickUpper: tickUpper,
+                            notional: notional,
+                            isMint: true,
+                        };
+                        marginRequirement = ethers_1.BigNumber.from(0);
+                        return [4 /*yield*/, peripheryContract.callStatic.mintOrBurn(mintOrBurnParams).then(function (result) { return __awaiter(_this, void 0, void 0, function () {
+                                return __generator(this, function (_a) {
+                                    marginRequirement = result[0];
+                                    return [2 /*return*/];
+                                });
+                            }); }, function (error) {
+                                if (error.message.includes('MarginRequirementNotMet')) {
+                                    var args = error.message
+                                        .split('(')[1]
+                                        .split(')')[0]
+                                        .replaceAll(' ', '')
+                                        .split(',');
+                                    marginRequirement = ethers_1.BigNumber.from(args[0]);
+                                }
+                                else {
+                                    console.error(error.message);
+                                }
+                            })];
+                    case 1:
+                        _b.sent();
+                        return [2 /*return*/, marginRequirement];
+                }
+            });
+        });
+    };
     AMM.prototype.settlePosition = function (_a) {
         var owner = _a.owner, tickLower = _a.tickLower, tickUpper = _a.tickUpper;
         return __awaiter(this, void 0, void 0, function () {
@@ -165,10 +213,10 @@ var AMM = /** @class */ (function () {
                         if (!this.signer) {
                             return [2 /*return*/];
                         }
-                        // approve the margin engine 
+                        // approve the margin engine
                         return [4 /*yield*/, this.approveMarginEngine(marginDelta)];
                     case 1:
-                        // approve the margin engine 
+                        // approve the margin engine
                         _b.sent();
                         tickLower = parseInt(tickLower.toString());
                         tickUpper = parseInt(tickUpper.toString());
@@ -197,24 +245,57 @@ var AMM = /** @class */ (function () {
             });
         });
     };
-    AMM.prototype.mintUsingTicks = function (_a) {
-        var tickLower = _a.tickLower, args = __rest(_a, ["tickLower"]);
+    AMM.prototype.updateSqrtPriceX96 = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var vammContract;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var vammContract, _a, _b, _c;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
+                    case 0:
+                        if (!this.signer) {
+                            return [2 /*return*/];
+                        }
+                        vammContract = typechain_1.VAMM__factory.connect(this.id, this.signer);
+                        _a = this;
+                        _c = (_b = jsbi_1.default).BigInt;
+                        return [4 /*yield*/, vammContract.callStatic.vammVars()];
+                    case 1:
+                        _a.sqrtPriceX96 = _c.apply(_b, [(_d.sent())[0].toString()]);
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    AMM.prototype.initVamm = function (tickLower) {
+        return __awaiter(this, void 0, void 0, function () {
+            var vammContract, sqrtPriceX96;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
                         if (!this.signer) {
                             return [2 /*return*/];
                         }
                         vammContract = typechain_1.VAMM__factory.connect(this.id, this.signer);
                         if (!jsbi_1.default.EQ(this.sqrtPriceX96, jsbi_1.default.BigInt(0))) return [3 /*break*/, 2];
-                        return [4 /*yield*/, vammContract.initializeVAMM(tickMath_1.TickMath.getSqrtRatioAtTick(ethers_1.BigNumber.from(tickLower).toNumber()).toString())];
+                        sqrtPriceX96 = tickMath_1.TickMath.getSqrtRatioAtTick(ethers_1.BigNumber.from(tickLower).toNumber()).toString();
+                        return [4 /*yield*/, vammContract.initializeVAMM(sqrtPriceX96)];
                     case 1:
-                        _b.sent();
-                        _b.label = 2;
-                    case 2: return [2 /*return*/, this.mintOrBurnUsingTicks(__assign(__assign({}, args), { tickLower: tickLower, isMint: true }))];
+                        _a.sent();
+                        this.sqrtPriceX96 = jsbi_1.default.BigInt(sqrtPriceX96);
+                        _a.label = 2;
+                    case 2: return [2 /*return*/];
                 }
+            });
+        });
+    };
+    AMM.prototype.mintUsingTicks = function (_a) {
+        var tickLower = _a.tickLower, args = __rest(_a, ["tickLower"]);
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_b) {
+                if (!this.signer) {
+                    return [2 /*return*/];
+                }
+                this.initVamm(tickLower);
+                return [2 /*return*/, this.mintOrBurnUsingTicks(__assign(__assign({}, args), { tickLower: tickLower, isMint: true }))];
             });
         });
     };
@@ -251,6 +332,7 @@ var AMM = /** @class */ (function () {
                         if (!this.signer) {
                             return [2 /*return*/];
                         }
+                        console.log("approvePeriphery");
                         return [4 /*yield*/, this.approvePeriphery()];
                     case 1:
                         _b.sent();
@@ -263,6 +345,7 @@ var AMM = /** @class */ (function () {
                             notional: notional,
                             isMint: isMint,
                         };
+                        console.log("mintOrBurn");
                         return [2 /*return*/, peripheryContract.mintOrBurn(mintOrBurnParams)];
                 }
             });
@@ -323,7 +406,7 @@ var AMM = /** @class */ (function () {
                         if (!this.signer) {
                             return [2 /*return*/];
                         }
-                        if (sqrtPriceLimitX96.toString() === "0") {
+                        if (sqrtPriceLimitX96.toString() === '0') {
                             if (isFT) {
                                 sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickMath_1.TickMath.MAX_TICK - 1).toString();
                             }

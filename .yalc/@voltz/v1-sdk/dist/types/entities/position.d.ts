@@ -1,11 +1,12 @@
 import JSBI from 'jsbi';
 import { BigIntish } from '../types';
 import { Price } from './fractions/price';
+import AMM from './amm';
 export declare type PositionConstructorArgs = {
     id: string;
     createdTimestamp: JSBI;
     updatedTimestamp: JSBI;
-    ammId: string;
+    amm: AMM;
     tickLower: number;
     tickUpper: number;
     liquidity: BigIntish;
@@ -21,7 +22,7 @@ declare class Position {
     readonly id: string;
     readonly createdTimestamp: JSBI;
     readonly updatedTimestamp: JSBI;
-    readonly ammId: string;
+    readonly amm: AMM;
     readonly tickLower: number;
     readonly tickUpper: number;
     readonly liquidity: JSBI;
@@ -32,7 +33,7 @@ declare class Position {
     variableTokenBalance: JSBI;
     isLiquidityProvider: boolean;
     readonly isEmpty: boolean;
-    constructor({ id, createdTimestamp, updatedTimestamp, ammId, liquidity, tickLower, tickUpper, isSettled, margin, fixedTokenBalance, variableTokenBalance, isLiquidityProvider, owner, isEmpty, }: PositionConstructorArgs);
+    constructor({ id, createdTimestamp, updatedTimestamp, amm, liquidity, tickLower, tickUpper, isSettled, margin, fixedTokenBalance, variableTokenBalance, isLiquidityProvider, owner, isEmpty, }: PositionConstructorArgs);
     get priceLower(): Price;
     get priceUpper(): Price;
     get fixedRateLower(): Price;

@@ -30,6 +30,12 @@ export declare type AMMGetMinimumMarginRequirementArgs = {
     tickLower: BigNumberish;
     tickUpper: BigNumberish;
 };
+export declare type AMMGetMinimumMarginRequirementPostMintArgs = {
+    recipient: string;
+    fixedLow: number;
+    fixedHigh: number;
+    notional: BigNumberish;
+};
 export declare type AMMUpdatePositionMarginArgs = {
     owner: string;
     tickLower: BigNumberish;
@@ -78,7 +84,7 @@ declare class AMM {
     readonly termStartTimestamp: JSBI;
     readonly termEndTimestamp: JSBI;
     readonly underlyingToken: Token;
-    readonly sqrtPriceX96: JSBI;
+    sqrtPriceX96: JSBI;
     readonly liquidity: JSBI;
     readonly tickSpacing: JSBI;
     readonly tick: JSBI;
@@ -87,11 +93,14 @@ declare class AMM {
     private _price?;
     constructor({ id, signer, marginEngineAddress, fcmAddress, rateOracle, createdTimestamp, updatedTimestamp, termStartTimestamp, termEndTimestamp, underlyingToken, sqrtPriceX96, liquidity, tick, tickSpacing, txCount, }: AMMConstructorArgs);
     getMinimumMarginRequirementPostSwap({ recipient, isFT, notional, sqrtPriceLimitX96, tickLower, tickUpper, }: AMMGetMinimumMarginRequirementArgs): Promise<BigNumber | void>;
-    settlePosition({ owner, tickLower, tickUpper }: AMMSettlePositionArgs): Promise<ContractTransaction | void>;
+    getMinimumMarginRequirementPostMint({ recipient, fixedLow, fixedHigh, notional, }: AMMGetMinimumMarginRequirementPostMintArgs): Promise<BigNumber | void>;
+    settlePosition({ owner, tickLower, tickUpper, }: AMMSettlePositionArgs): Promise<ContractTransaction | void>;
     updatePositionMargin({ owner, tickLower, tickUpper, marginDelta, }: AMMUpdatePositionMarginArgs): Promise<ContractTransaction | void>;
-    mint({ recipient, fixedLow, fixedHigh, margin, leverage }: AMMMintOrBurnArgs): Promise<ContractTransaction | void>;
+    mint({ recipient, fixedLow, fixedHigh, margin, leverage, }: AMMMintOrBurnArgs): Promise<ContractTransaction | void>;
+    updateSqrtPriceX96(): Promise<void>;
+    initVamm(tickLower: BigNumberish): Promise<void>;
     mintUsingTicks({ tickLower, ...args }: Omit<AMMMintOrBurnUsingTicksArgs, 'isMint'>): Promise<ContractTransaction | void>;
-    burn({ recipient, fixedLow, fixedHigh, margin, leverage }: AMMMintOrBurnArgs): Promise<ContractTransaction | void>;
+    burn({ recipient, fixedLow, fixedHigh, margin, leverage, }: AMMMintOrBurnArgs): Promise<ContractTransaction | void>;
     burnUsingTicks(args: Omit<AMMMintOrBurnUsingTicksArgs, 'isMint'>): Promise<ContractTransaction | void>;
     mintOrBurnUsingTicks({ recipient, tickLower, tickUpper, notional, isMint, }: AMMMintOrBurnUsingTicksArgs): Promise<ContractTransaction | void>;
     approvePeriphery(): Promise<ContractTransaction | void>;
