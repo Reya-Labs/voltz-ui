@@ -1825,19 +1825,19 @@ export type GetMintsQueryVariables = Exact<{
 
 export type GetMintsQuery = { __typename?: 'Query', mints: Array<{ __typename?: 'Mint', id: string, sender: string, amount: any, transaction: { __typename?: 'Transaction', id: string, blockNumber: any, timestamp: any }, amm: { __typename?: 'AMM', id: string }, position: { __typename?: 'Position', id: string }, tickLower: { __typename?: 'Tick', id: string, value: any }, tickUpper: { __typename?: 'Tick', id: string, value: any } }> };
 
+export type GetPositionQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetPositionQuery = { __typename?: 'Query', position?: { __typename?: 'Position', id: string, createdTimestamp: any, updatedTimestamp: any, liquidity: any, margin: any, fixedTokenBalance: any, variableTokenBalance: any, isLiquidityProvider: boolean, isSettled: boolean, isEmpty: boolean, snapshotCount: any, owner: { __typename?: 'Wallet', id: string }, amm: { __typename?: 'AMM', id: string, termStartTimestamp: any, termEndTimestamp: any, rateOracle: { __typename?: 'RateOracle', id: string, protocolId: any, token: { __typename?: 'UnderlyingToken', id: string, name: string } } }, tickLower: { __typename?: 'Tick', id: string, value: any }, tickUpper: { __typename?: 'Tick', id: string, value: any }, burns: Array<{ __typename?: 'Burn', id: string }>, mints: Array<{ __typename?: 'Mint', id: string }>, swaps: Array<{ __typename?: 'Swap', id: string }> } | null };
+
 export type GetPositionSnapshotsQueryVariables = Exact<{
   orderBy: PositionSnapshot_OrderBy;
 }>;
 
 
 export type GetPositionSnapshotsQuery = { __typename?: 'Query', positionSnapshots: Array<{ __typename?: 'PositionSnapshot', id: string, createdTimestamp: any, liquidity: any, margin: any, fixedTokenBalance: any, variableTokenBalance: any, isSettled: boolean, isEmpty: boolean, position: { __typename?: 'Position', id: string } }> };
-
-export type GetPositionsQueryVariables = Exact<{
-  orderBy: Position_OrderBy;
-}>;
-
-
-export type GetPositionsQuery = { __typename?: 'Query', positions: Array<{ __typename?: 'Position', id: string, createdTimestamp: any, updatedTimestamp: any, liquidity: any, margin: any, fixedTokenBalance: any, variableTokenBalance: any, isLiquidityProvider: boolean, isSettled: boolean, isEmpty: boolean, snapshotCount: any, owner: { __typename?: 'Wallet', id: string }, amm: { __typename?: 'AMM', id: string }, tickLower: { __typename?: 'Tick', id: string, value: any }, tickUpper: { __typename?: 'Tick', id: string, value: any }, burns: Array<{ __typename?: 'Burn', id: string }>, mints: Array<{ __typename?: 'Mint', id: string }>, swaps: Array<{ __typename?: 'Swap', id: string }> }> };
 
 export type GetSwapsQueryVariables = Exact<{
   orderBy: Swap_OrderBy;
@@ -1851,7 +1851,7 @@ export type GetWalletQueryVariables = Exact<{
 }>;
 
 
-export type GetWalletQuery = { __typename?: 'Query', wallet?: { __typename: 'Wallet', id: string, positionCount: any, positions: Array<{ __typename: 'Position', id: string }> } | null };
+export type GetWalletQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, positionCount: any, positions: Array<{ __typename?: 'Position', id: string, createdTimestamp: any, updatedTimestamp: any, liquidity: any, margin: any, fixedTokenBalance: any, variableTokenBalance: any, isLiquidityProvider: boolean, isSettled: boolean, isEmpty: boolean, snapshotCount: any, owner: { __typename?: 'Wallet', id: string }, amm: { __typename?: 'AMM', id: string, createdTimestamp: any, updatedTimestamp: any, fcmAddress: string, marginEngineAddress: string, termStartTimestamp: any, termEndTimestamp: any, tickSpacing: any, sqrtPriceX96: any, liquidity: any, tick: any, txCount: any, rateOracle: { __typename?: 'RateOracle', id: string, protocolId: any, token: { __typename?: 'UnderlyingToken', id: string, name: string } } }, tickLower: { __typename?: 'Tick', id: string, value: any }, tickUpper: { __typename?: 'Tick', id: string, value: any }, burns: Array<{ __typename?: 'Burn', id: string }>, mints: Array<{ __typename?: 'Mint', id: string }>, swaps: Array<{ __typename?: 'Swap', id: string }> }> } | null };
 
 export type GetWalletsQueryVariables = Exact<{
   orderBy: Wallet_OrderBy;
@@ -2467,6 +2467,84 @@ export function useGetMintsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetMintsQueryHookResult = ReturnType<typeof useGetMintsQuery>;
 export type GetMintsLazyQueryHookResult = ReturnType<typeof useGetMintsLazyQuery>;
 export type GetMintsQueryResult = Apollo.QueryResult<GetMintsQuery, GetMintsQueryVariables>;
+export const GetPositionDocument = gql`
+    query GetPosition($id: ID!) {
+  position(id: $id) {
+    id
+    createdTimestamp
+    updatedTimestamp
+    owner {
+      id
+    }
+    amm {
+      id
+      termStartTimestamp
+      termEndTimestamp
+      rateOracle {
+        id
+        protocolId
+        token {
+          id
+          name
+        }
+      }
+    }
+    tickLower {
+      id
+      value
+    }
+    tickUpper {
+      id
+      value
+    }
+    liquidity
+    margin
+    fixedTokenBalance
+    variableTokenBalance
+    isLiquidityProvider
+    isSettled
+    isEmpty
+    snapshotCount
+    burns {
+      id
+    }
+    mints {
+      id
+    }
+    swaps {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetPositionQuery__
+ *
+ * To run a query within a React component, call `useGetPositionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPositionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPositionQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetPositionQuery(baseOptions: Apollo.QueryHookOptions<GetPositionQuery, GetPositionQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPositionQuery, GetPositionQueryVariables>(GetPositionDocument, options);
+      }
+export function useGetPositionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPositionQuery, GetPositionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPositionQuery, GetPositionQueryVariables>(GetPositionDocument, options);
+        }
+export type GetPositionQueryHookResult = ReturnType<typeof useGetPositionQuery>;
+export type GetPositionLazyQueryHookResult = ReturnType<typeof useGetPositionLazyQuery>;
+export type GetPositionQueryResult = Apollo.QueryResult<GetPositionQuery, GetPositionQueryVariables>;
 export const GetPositionSnapshotsDocument = gql`
     query GetPositionSnapshots($orderBy: PositionSnapshot_orderBy!) {
   positionSnapshots(first: 100, orderBy: $orderBy, orderDirection: asc) {
@@ -2512,74 +2590,6 @@ export function useGetPositionSnapshotsLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type GetPositionSnapshotsQueryHookResult = ReturnType<typeof useGetPositionSnapshotsQuery>;
 export type GetPositionSnapshotsLazyQueryHookResult = ReturnType<typeof useGetPositionSnapshotsLazyQuery>;
 export type GetPositionSnapshotsQueryResult = Apollo.QueryResult<GetPositionSnapshotsQuery, GetPositionSnapshotsQueryVariables>;
-export const GetPositionsDocument = gql`
-    query GetPositions($orderBy: Position_orderBy!) {
-  positions(first: 100, orderBy: $orderBy, orderDirection: asc) {
-    id
-    createdTimestamp
-    updatedTimestamp
-    owner {
-      id
-    }
-    amm {
-      id
-    }
-    tickLower {
-      id
-      value
-    }
-    tickUpper {
-      id
-      value
-    }
-    liquidity
-    margin
-    fixedTokenBalance
-    variableTokenBalance
-    isLiquidityProvider
-    isSettled
-    isEmpty
-    snapshotCount
-    burns {
-      id
-    }
-    mints {
-      id
-    }
-    swaps {
-      id
-    }
-  }
-}
-    `;
-
-/**
- * __useGetPositionsQuery__
- *
- * To run a query within a React component, call `useGetPositionsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetPositionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetPositionsQuery({
- *   variables: {
- *      orderBy: // value for 'orderBy'
- *   },
- * });
- */
-export function useGetPositionsQuery(baseOptions: Apollo.QueryHookOptions<GetPositionsQuery, GetPositionsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetPositionsQuery, GetPositionsQueryVariables>(GetPositionsDocument, options);
-      }
-export function useGetPositionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPositionsQuery, GetPositionsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetPositionsQuery, GetPositionsQueryVariables>(GetPositionsDocument, options);
-        }
-export type GetPositionsQueryHookResult = ReturnType<typeof useGetPositionsQuery>;
-export type GetPositionsLazyQueryHookResult = ReturnType<typeof useGetPositionsLazyQuery>;
-export type GetPositionsQueryResult = Apollo.QueryResult<GetPositionsQuery, GetPositionsQueryVariables>;
 export const GetSwapsDocument = gql`
     query GetSwaps($orderBy: Swap_orderBy!) {
   swaps(first: 100, orderBy: $orderBy, orderDirection: asc) {
@@ -2634,12 +2644,62 @@ export type GetSwapsQueryResult = Apollo.QueryResult<GetSwapsQuery, GetSwapsQuer
 export const GetWalletDocument = gql`
     query GetWallet($id: ID!) {
   wallet(id: $id) {
-    __typename
     id
     positionCount
     positions {
-      __typename
       id
+      createdTimestamp
+      updatedTimestamp
+      owner {
+        id
+      }
+      amm {
+        id
+        createdTimestamp
+        updatedTimestamp
+        fcmAddress
+        marginEngineAddress
+        rateOracle {
+          id
+          protocolId
+          token {
+            id
+            name
+          }
+        }
+        termStartTimestamp
+        termEndTimestamp
+        tickSpacing
+        sqrtPriceX96
+        liquidity
+        tick
+        txCount
+      }
+      tickLower {
+        id
+        value
+      }
+      tickUpper {
+        id
+        value
+      }
+      liquidity
+      margin
+      fixedTokenBalance
+      variableTokenBalance
+      isLiquidityProvider
+      isSettled
+      isEmpty
+      snapshotCount
+      burns {
+        id
+      }
+      mints {
+        id
+      }
+      swaps {
+        id
+      }
     }
   }
 }

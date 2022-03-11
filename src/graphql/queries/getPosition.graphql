@@ -1,5 +1,5 @@
-query GetPositions($orderBy: Position_orderBy!) {
-  positions(first: 100, orderBy: $orderBy, orderDirection: asc) {
+query GetPosition($id: ID!) {
+  position(id: $id) {
     id
     createdTimestamp
     updatedTimestamp
@@ -8,6 +8,16 @@ query GetPositions($orderBy: Position_orderBy!) {
     }
     amm {
       id
+      termStartTimestamp
+      termEndTimestamp
+      rateOracle {
+        id
+        protocolId
+        token {
+          id
+          name
+        }
+      }
     }
     tickLower {
       id
