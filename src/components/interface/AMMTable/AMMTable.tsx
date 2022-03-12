@@ -10,10 +10,9 @@ import { Panel } from '@components/atomic';
 import { AMMTableFields } from './types';
 import { labels } from './constants';
 import { mapAmmToAmmTableDatum } from './utilities';
-import { AMMTableControls, AMMTableFooter, AMMTableHead, AMMTableRow } from './components';
+import { AMMTableFooter, AMMTableHead, AMMTableRow } from './components';
 
 export type AMMTableProps = {
-  mode: data.Mode;
   amms: AMM[];
   order: data.TableOrder;
   onSetOrder: (order: data.TableOrder) => void;
@@ -28,7 +27,6 @@ export type AMMTableProps = {
 };
 
 const AMMTable: React.FunctionComponent<AMMTableProps> = ({
-  mode,
   amms,
   order,
   onSetOrder,
@@ -71,7 +69,6 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({
 
   return (
     <Panel variant="dark" sx={{ minWidth: 800 }}>
-      <AMMTableControls mode={mode} quantity={amms.length} />
       <TableContainer>
         <Table
           sx={{

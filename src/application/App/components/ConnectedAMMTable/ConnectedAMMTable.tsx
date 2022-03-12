@@ -6,14 +6,10 @@ import { useAMMs } from '@hooks';
 import { AMMTable, AMMTableFields } from '@components/interface';
 
 export type ConnectedAMMTableProps = {
-  mode: data.Mode;
   onSelectItem: (item: AMM) => void;
 };
 
-const ConnectedAMMTable: React.FunctionComponent<ConnectedAMMTableProps> = ({
-  mode,
-  onSelectItem,
-}) => {
+const ConnectedAMMTable: React.FunctionComponent<ConnectedAMMTableProps> = ({ onSelectItem }) => {
   const [order, setOrder] = useState<data.TableOrder>('desc');
   const [orderBy, setOrderBy] = useState<AMMTableFields>('maturity');
   const [page, setPage] = useState(0);
@@ -27,7 +23,6 @@ const ConnectedAMMTable: React.FunctionComponent<ConnectedAMMTableProps> = ({
 
   return (
     <AMMTable
-      mode={mode}
       amms={amms}
       order={order}
       onSetOrder={setOrder}

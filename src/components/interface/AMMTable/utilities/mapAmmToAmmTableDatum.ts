@@ -14,8 +14,7 @@ const mapAmmToAmmTableDatum = ({
     protocol,
     startDate: startDateTime,
     endDate: endDateTime,
-    // fixedApr: parseFloat(fixedRate.toFixed(2)), // todo: fix type
-    fixedApr: 15,
+    fixedApr: parseFloat(fixedRate.toFixed(2)),
     variableApr: 5,
   };
 };

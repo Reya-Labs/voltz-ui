@@ -89,7 +89,7 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
       })}
       <TableCell align="center">
         <Button variant="contained" onClick={handleClick}>
-          Hello
+          {agent === Agents.LIQUIDITY_PROVIDER ? 'PROVIDE LIQUIDITY' : 'SWAP'}
         </Button>
       </TableCell>
     </TableRow>
