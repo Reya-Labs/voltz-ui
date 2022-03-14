@@ -9,7 +9,16 @@ export declare class IFCM__factory {
             type: string;
         }[];
         name: string;
-        outputs: never[];
+        outputs: {
+            components: {
+                internalType: string;
+                name: string;
+                type: string;
+            }[];
+            internalType: string;
+            name: string;
+            type: string;
+        }[];
         stateMutability: string;
         type: string;
     } | {

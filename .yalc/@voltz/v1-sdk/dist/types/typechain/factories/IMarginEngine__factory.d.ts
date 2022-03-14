@@ -3,7 +3,11 @@ import { Provider } from "@ethersproject/providers";
 import type { IMarginEngine, IMarginEngineInterface } from "../IMarginEngine";
 export declare class IMarginEngine__factory {
     static readonly abi: ({
-        inputs: never[];
+        inputs: {
+            internalType: string;
+            name: string;
+            type: string;
+        }[];
         name: string;
         type: string;
         anonymous?: undefined;
@@ -39,17 +43,6 @@ export declare class IMarginEngine__factory {
         outputs?: undefined;
         stateMutability?: undefined;
     } | {
-        inputs: never[];
-        name: string;
-        outputs: {
-            internalType: string;
-            name: string;
-            type: string;
-        }[];
-        stateMutability: string;
-        type: string;
-        anonymous?: undefined;
-    } | {
         inputs: {
             internalType: string;
             name: string;
@@ -71,6 +64,21 @@ export declare class IMarginEngine__factory {
         anonymous?: undefined;
     } | {
         inputs: {
+            internalType: string;
+            name: string;
+            type: string;
+        }[];
+        name: string;
+        outputs: {
+            internalType: string;
+            name: string;
+            type: string;
+        }[];
+        stateMutability: string;
+        type: string;
+        anonymous?: undefined;
+    } | {
+        inputs: {
             components: {
                 internalType: string;
                 name: string;
@@ -81,7 +89,11 @@ export declare class IMarginEngine__factory {
             type: string;
         }[];
         name: string;
-        outputs: never[];
+        outputs: {
+            internalType: string;
+            name: string;
+            type: string;
+        }[];
         stateMutability: string;
         type: string;
         anonymous?: undefined;

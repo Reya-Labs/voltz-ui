@@ -160,7 +160,7 @@ const _abi = [
         type: "uint16",
       },
     ],
-    name: "increaseObservarionCardinalityNext",
+    name: "increaseObservationCardinalityNext",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

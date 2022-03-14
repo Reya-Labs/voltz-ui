@@ -60,6 +60,26 @@ export declare class IVAMM__factory {
         stateMutability: string;
         type: string;
         anonymous?: undefined;
+    } | {
+        inputs: {
+            internalType: string;
+            name: string;
+            type: string;
+        }[];
+        name: string;
+        outputs: {
+            components: {
+                internalType: string;
+                name: string;
+                type: string;
+            }[];
+            internalType: string;
+            name: string;
+            type: string;
+        }[];
+        stateMutability: string;
+        type: string;
+        anonymous?: undefined;
     })[];
     static createInterface(): IVAMMInterface;
     static connect(address: string, signerOrProvider: Signer | Provider): IVAMM;

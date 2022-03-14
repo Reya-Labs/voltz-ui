@@ -21,39 +21,56 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface E2ESetupInterface extends ethers.utils.Interface {
   functions: {
+    "FCMAddress()": FunctionFragment;
     "MEAddress()": FunctionFragment;
     "VAMMAddress()": FunctionFragment;
     "abs(int256)": FunctionFragment;
     "addPosition(address,int24,int24)": FunctionFragment;
     "addSwapSnapshot(address,int24,int24,int256,int256,uint256)": FunctionFragment;
+    "addYBATrader(address)": FunctionFragment;
     "allPositions(uint256)": FunctionFragment;
+    "allYBATraders(uint256)": FunctionFragment;
     "burn(address,int24,int24,uint128)": FunctionFragment;
     "continuousInvariants()": FunctionFragment;
+    "fcmFees()": FunctionFragment;
     "getGasConsumedAtLastTx()": FunctionFragment;
     "getPositionHistory(address,int24,int24)": FunctionFragment;
     "getPositionSwapsHistory(address,int24,int24)": FunctionFragment;
     "getSwapsHistory(address,int24,int24)": FunctionFragment;
     "indexAllPositions(bytes32)": FunctionFragment;
+    "indexAllYBATraders(address)": FunctionFragment;
     "initialCashflow()": FunctionFragment;
+    "initiateFullyCollateralisedFixedTakerSwap(address,uint256,uint160)": FunctionFragment;
     "invariantPostMaturity()": FunctionFragment;
     "keepInMindGas()": FunctionFragment;
     "liquidatePosition(int24,int24,address,int24,int24,address)": FunctionFragment;
     "liquidationRewards()": FunctionFragment;
     "mint(address,int24,int24,uint128)": FunctionFragment;
+    "mintOrBurnViaPeriphery((address,address,int24,int24,uint256,bool))": FunctionFragment;
+    "peripheryAddress()": FunctionFragment;
     "positionHistory(bytes32,uint256)": FunctionFragment;
     "positionSwapsHistory(bytes32,uint256)": FunctionFragment;
     "rateOracleAddress()": FunctionFragment;
+    "setFCMAddress(address)": FunctionFragment;
     "setMEAddress(address)": FunctionFragment;
+    "setPeripheryAddress(address)": FunctionFragment;
     "setRateOracleAddress(address)": FunctionFragment;
     "setVAMMAddress(address)": FunctionFragment;
     "settlementCashflowBasedOnSwapSnapshots(address,int24,int24)": FunctionFragment;
     "sizeAllPositions()": FunctionFragment;
+    "sizeAllYBATraders()": FunctionFragment;
     "sizeOfPositionHistory(bytes32)": FunctionFragment;
     "sizeOfPositionSwapsHistory(bytes32)": FunctionFragment;
     "swap((address,int256,uint160,int24,int24))": FunctionFragment;
+    "swapViaPeriphery((address,address,bool,uint256,uint160,int24,int24))": FunctionFragment;
+    "unwindFullyCollateralisedFixedTakerSwap(address,uint256,uint160)": FunctionFragment;
     "updatePositionMargin(address,int24,int24,int256)": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "FCMAddress",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "MEAddress", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "VAMMAddress",
@@ -76,7 +93,15 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "addYBATrader",
+    values: [string]
+  ): string;
+  encodeFunctionData(
     functionFragment: "allPositions",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "allYBATraders",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -87,6 +112,7 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     functionFragment: "continuousInvariants",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "fcmFees", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "getGasConsumedAtLastTx",
     values?: undefined
@@ -108,8 +134,16 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     values: [BytesLike]
   ): string;
   encodeFunctionData(
+    functionFragment: "indexAllYBATraders",
+    values: [string]
+  ): string;
+  encodeFunctionData(
     functionFragment: "initialCashflow",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "initiateFullyCollateralisedFixedTakerSwap",
+    values: [string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "invariantPostMaturity",
@@ -139,6 +173,23 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     values: [string, BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "mintOrBurnViaPeriphery",
+    values: [
+      {
+        marginEngineAddress: string;
+        recipient: string;
+        tickLower: BigNumberish;
+        tickUpper: BigNumberish;
+        notional: BigNumberish;
+        isMint: boolean;
+      }
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "peripheryAddress",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "positionHistory",
     values: [BytesLike, BigNumberish]
   ): string;
@@ -151,7 +202,15 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "setFCMAddress",
+    values: [string]
+  ): string;
+  encodeFunctionData(
     functionFragment: "setMEAddress",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setPeripheryAddress",
     values: [string]
   ): string;
   encodeFunctionData(
@@ -168,6 +227,10 @@ interface E2ESetupInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "sizeAllPositions",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "sizeAllYBATraders",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -191,10 +254,29 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "swapViaPeriphery",
+    values: [
+      {
+        marginEngineAddress: string;
+        recipient: string;
+        isFT: boolean;
+        notional: BigNumberish;
+        sqrtPriceLimitX96: BigNumberish;
+        tickLower: BigNumberish;
+        tickUpper: BigNumberish;
+      }
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "unwindFullyCollateralisedFixedTakerSwap",
+    values: [string, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "updatePositionMargin",
     values: [string, BigNumberish, BigNumberish, BigNumberish]
   ): string;
 
+  decodeFunctionResult(functionFragment: "FCMAddress", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "MEAddress", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "VAMMAddress",
@@ -210,7 +292,15 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "addYBATrader",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "allPositions",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "allYBATraders",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
@@ -218,6 +308,7 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     functionFragment: "continuousInvariants",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "fcmFees", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getGasConsumedAtLastTx",
     data: BytesLike
@@ -239,7 +330,15 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "indexAllYBATraders",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "initialCashflow",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "initiateFullyCollateralisedFixedTakerSwap",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -260,6 +359,14 @@ interface E2ESetupInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "mintOrBurnViaPeriphery",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "peripheryAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "positionHistory",
     data: BytesLike
   ): Result;
@@ -272,7 +379,15 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "setFCMAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "setMEAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setPeripheryAddress",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -292,6 +407,10 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "sizeAllYBATraders",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "sizeOfPositionHistory",
     data: BytesLike
   ): Result;
@@ -300,6 +419,14 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "swap", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "swapViaPeriphery",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "unwindFullyCollateralisedFixedTakerSwap",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "updatePositionMargin",
     data: BytesLike
@@ -352,6 +479,8 @@ export class E2ESetup extends BaseContract {
   interface: E2ESetupInterface;
 
   functions: {
+    FCMAddress(overrides?: CallOverrides): Promise<[string]>;
+
     MEAddress(overrides?: CallOverrides): Promise<[string]>;
 
     VAMMAddress(overrides?: CallOverrides): Promise<[string]>;
@@ -375,6 +504,11 @@ export class E2ESetup extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    addYBATrader(
+      trader: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     allPositions(
       arg0: BigNumberish,
       overrides?: CallOverrides
@@ -385,6 +519,11 @@ export class E2ESetup extends BaseContract {
         tickUpper: number;
       }
     >;
+
+    allYBATraders(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
     burn(
       recipient: string,
@@ -397,6 +536,8 @@ export class E2ESetup extends BaseContract {
     continuousInvariants(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    fcmFees(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getGasConsumedAtLastTx(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -468,7 +609,19 @@ export class E2ESetup extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    indexAllYBATraders(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     initialCashflow(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    initiateFullyCollateralisedFixedTakerSwap(
+      trader: string,
+      notional: BigNumberish,
+      sqrtPriceLimitX96: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     invariantPostMaturity(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -495,6 +648,20 @@ export class E2ESetup extends BaseContract {
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    mintOrBurnViaPeriphery(
+      params: {
+        marginEngineAddress: string;
+        recipient: string;
+        tickLower: BigNumberish;
+        tickUpper: BigNumberish;
+        notional: BigNumberish;
+        isMint: boolean;
+      },
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    peripheryAddress(overrides?: CallOverrides): Promise<[string]>;
 
     positionHistory(
       arg0: BytesLike,
@@ -548,8 +715,18 @@ export class E2ESetup extends BaseContract {
 
     rateOracleAddress(overrides?: CallOverrides): Promise<[string]>;
 
+    setFCMAddress(
+      _FCMAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setMEAddress(
       _MEAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setPeripheryAddress(
+      _peripheryAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -572,6 +749,8 @@ export class E2ESetup extends BaseContract {
 
     sizeAllPositions(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    sizeAllYBATraders(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     sizeOfPositionHistory(
       arg0: BytesLike,
       overrides?: CallOverrides
@@ -593,6 +772,26 @@ export class E2ESetup extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    swapViaPeriphery(
+      params: {
+        marginEngineAddress: string;
+        recipient: string;
+        isFT: boolean;
+        notional: BigNumberish;
+        sqrtPriceLimitX96: BigNumberish;
+        tickLower: BigNumberish;
+        tickUpper: BigNumberish;
+      },
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    unwindFullyCollateralisedFixedTakerSwap(
+      trader: string,
+      notionalToUnwind: BigNumberish,
+      sqrtPriceLimitX96: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     updatePositionMargin(
       _owner: string,
       tickLower: BigNumberish,
@@ -601,6 +800,8 @@ export class E2ESetup extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
+
+  FCMAddress(overrides?: CallOverrides): Promise<string>;
 
   MEAddress(overrides?: CallOverrides): Promise<string>;
 
@@ -625,6 +826,11 @@ export class E2ESetup extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  addYBATrader(
+    trader: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   allPositions(
     arg0: BigNumberish,
     overrides?: CallOverrides
@@ -635,6 +841,8 @@ export class E2ESetup extends BaseContract {
       tickUpper: number;
     }
   >;
+
+  allYBATraders(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
   burn(
     recipient: string,
@@ -647,6 +855,8 @@ export class E2ESetup extends BaseContract {
   continuousInvariants(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  fcmFees(overrides?: CallOverrides): Promise<BigNumber>;
 
   getGasConsumedAtLastTx(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -714,7 +924,19 @@ export class E2ESetup extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  indexAllYBATraders(
+    arg0: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   initialCashflow(overrides?: CallOverrides): Promise<BigNumber>;
+
+  initiateFullyCollateralisedFixedTakerSwap(
+    trader: string,
+    notional: BigNumberish,
+    sqrtPriceLimitX96: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   invariantPostMaturity(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -741,6 +963,20 @@ export class E2ESetup extends BaseContract {
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  mintOrBurnViaPeriphery(
+    params: {
+      marginEngineAddress: string;
+      recipient: string;
+      tickLower: BigNumberish;
+      tickUpper: BigNumberish;
+      notional: BigNumberish;
+      isMint: boolean;
+    },
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  peripheryAddress(overrides?: CallOverrides): Promise<string>;
 
   positionHistory(
     arg0: BytesLike,
@@ -794,8 +1030,18 @@ export class E2ESetup extends BaseContract {
 
   rateOracleAddress(overrides?: CallOverrides): Promise<string>;
 
+  setFCMAddress(
+    _FCMAddress: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   setMEAddress(
     _MEAddress: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setPeripheryAddress(
+    _peripheryAddress: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -818,6 +1064,8 @@ export class E2ESetup extends BaseContract {
 
   sizeAllPositions(overrides?: CallOverrides): Promise<BigNumber>;
 
+  sizeAllYBATraders(overrides?: CallOverrides): Promise<BigNumber>;
+
   sizeOfPositionHistory(
     arg0: BytesLike,
     overrides?: CallOverrides
@@ -839,6 +1087,26 @@ export class E2ESetup extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  swapViaPeriphery(
+    params: {
+      marginEngineAddress: string;
+      recipient: string;
+      isFT: boolean;
+      notional: BigNumberish;
+      sqrtPriceLimitX96: BigNumberish;
+      tickLower: BigNumberish;
+      tickUpper: BigNumberish;
+    },
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  unwindFullyCollateralisedFixedTakerSwap(
+    trader: string,
+    notionalToUnwind: BigNumberish,
+    sqrtPriceLimitX96: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   updatePositionMargin(
     _owner: string,
     tickLower: BigNumberish,
@@ -848,6 +1116,8 @@ export class E2ESetup extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    FCMAddress(overrides?: CallOverrides): Promise<string>;
+
     MEAddress(overrides?: CallOverrides): Promise<string>;
 
     VAMMAddress(overrides?: CallOverrides): Promise<string>;
@@ -871,6 +1141,8 @@ export class E2ESetup extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    addYBATrader(trader: string, overrides?: CallOverrides): Promise<void>;
+
     allPositions(
       arg0: BigNumberish,
       overrides?: CallOverrides
@@ -882,6 +1154,11 @@ export class E2ESetup extends BaseContract {
       }
     >;
 
+    allYBATraders(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
     burn(
       recipient: string,
       tickLower: BigNumberish,
@@ -891,6 +1168,8 @@ export class E2ESetup extends BaseContract {
     ): Promise<void>;
 
     continuousInvariants(overrides?: CallOverrides): Promise<void>;
+
+    fcmFees(overrides?: CallOverrides): Promise<BigNumber>;
 
     getGasConsumedAtLastTx(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -979,7 +1258,19 @@ export class E2ESetup extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    indexAllYBATraders(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     initialCashflow(overrides?: CallOverrides): Promise<BigNumber>;
+
+    initiateFullyCollateralisedFixedTakerSwap(
+      trader: string,
+      notional: BigNumberish,
+      sqrtPriceLimitX96: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     invariantPostMaturity(overrides?: CallOverrides): Promise<void>;
 
@@ -1004,6 +1295,20 @@ export class E2ESetup extends BaseContract {
       amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    mintOrBurnViaPeriphery(
+      params: {
+        marginEngineAddress: string;
+        recipient: string;
+        tickLower: BigNumberish;
+        tickUpper: BigNumberish;
+        notional: BigNumberish;
+        isMint: boolean;
+      },
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    peripheryAddress(overrides?: CallOverrides): Promise<string>;
 
     positionHistory(
       arg0: BytesLike,
@@ -1057,7 +1362,17 @@ export class E2ESetup extends BaseContract {
 
     rateOracleAddress(overrides?: CallOverrides): Promise<string>;
 
+    setFCMAddress(
+      _FCMAddress: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     setMEAddress(_MEAddress: string, overrides?: CallOverrides): Promise<void>;
+
+    setPeripheryAddress(
+      _peripheryAddress: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     setRateOracleAddress(
       _rateOracleAddress: string,
@@ -1077,6 +1392,8 @@ export class E2ESetup extends BaseContract {
     ): Promise<BigNumber>;
 
     sizeAllPositions(overrides?: CallOverrides): Promise<BigNumber>;
+
+    sizeAllYBATraders(overrides?: CallOverrides): Promise<BigNumber>;
 
     sizeOfPositionHistory(
       arg0: BytesLike,
@@ -1099,6 +1416,31 @@ export class E2ESetup extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    swapViaPeriphery(
+      params: {
+        marginEngineAddress: string;
+        recipient: string;
+        isFT: boolean;
+        notional: BigNumberish;
+        sqrtPriceLimitX96: BigNumberish;
+        tickLower: BigNumberish;
+        tickUpper: BigNumberish;
+      },
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber] & {
+        positionMarginRequirement: BigNumber;
+        cumulativeFeeIncurred: BigNumber;
+      }
+    >;
+
+    unwindFullyCollateralisedFixedTakerSwap(
+      trader: string,
+      notionalToUnwind: BigNumberish,
+      sqrtPriceLimitX96: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     updatePositionMargin(
       _owner: string,
       tickLower: BigNumberish,
@@ -1111,6 +1453,8 @@ export class E2ESetup extends BaseContract {
   filters: {};
 
   estimateGas: {
+    FCMAddress(overrides?: CallOverrides): Promise<BigNumber>;
+
     MEAddress(overrides?: CallOverrides): Promise<BigNumber>;
 
     VAMMAddress(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1134,7 +1478,17 @@ export class E2ESetup extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    addYBATrader(
+      trader: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     allPositions(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    allYBATraders(
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -1150,6 +1504,8 @@ export class E2ESetup extends BaseContract {
     continuousInvariants(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    fcmFees(overrides?: CallOverrides): Promise<BigNumber>;
 
     getGasConsumedAtLastTx(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1179,7 +1535,19 @@ export class E2ESetup extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    indexAllYBATraders(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     initialCashflow(overrides?: CallOverrides): Promise<BigNumber>;
+
+    initiateFullyCollateralisedFixedTakerSwap(
+      trader: string,
+      notional: BigNumberish,
+      sqrtPriceLimitX96: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     invariantPostMaturity(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1207,6 +1575,20 @@ export class E2ESetup extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    mintOrBurnViaPeriphery(
+      params: {
+        marginEngineAddress: string;
+        recipient: string;
+        tickLower: BigNumberish;
+        tickUpper: BigNumberish;
+        notional: BigNumberish;
+        isMint: boolean;
+      },
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    peripheryAddress(overrides?: CallOverrides): Promise<BigNumber>;
+
     positionHistory(
       arg0: BytesLike,
       arg1: BigNumberish,
@@ -1221,8 +1603,18 @@ export class E2ESetup extends BaseContract {
 
     rateOracleAddress(overrides?: CallOverrides): Promise<BigNumber>;
 
+    setFCMAddress(
+      _FCMAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setMEAddress(
       _MEAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setPeripheryAddress(
+      _peripheryAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1245,6 +1637,8 @@ export class E2ESetup extends BaseContract {
 
     sizeAllPositions(overrides?: CallOverrides): Promise<BigNumber>;
 
+    sizeAllYBATraders(overrides?: CallOverrides): Promise<BigNumber>;
+
     sizeOfPositionHistory(
       arg0: BytesLike,
       overrides?: CallOverrides
@@ -1266,6 +1660,26 @@ export class E2ESetup extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    swapViaPeriphery(
+      params: {
+        marginEngineAddress: string;
+        recipient: string;
+        isFT: boolean;
+        notional: BigNumberish;
+        sqrtPriceLimitX96: BigNumberish;
+        tickLower: BigNumberish;
+        tickUpper: BigNumberish;
+      },
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    unwindFullyCollateralisedFixedTakerSwap(
+      trader: string,
+      notionalToUnwind: BigNumberish,
+      sqrtPriceLimitX96: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     updatePositionMargin(
       _owner: string,
       tickLower: BigNumberish,
@@ -1276,6 +1690,8 @@ export class E2ESetup extends BaseContract {
   };
 
   populateTransaction: {
+    FCMAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     MEAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     VAMMAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -1302,7 +1718,17 @@ export class E2ESetup extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    addYBATrader(
+      trader: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     allPositions(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    allYBATraders(
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -1318,6 +1744,8 @@ export class E2ESetup extends BaseContract {
     continuousInvariants(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    fcmFees(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getGasConsumedAtLastTx(
       overrides?: CallOverrides
@@ -1349,7 +1777,19 @@ export class E2ESetup extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    indexAllYBATraders(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     initialCashflow(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    initiateFullyCollateralisedFixedTakerSwap(
+      trader: string,
+      notional: BigNumberish,
+      sqrtPriceLimitX96: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     invariantPostMaturity(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1379,6 +1819,20 @@ export class E2ESetup extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    mintOrBurnViaPeriphery(
+      params: {
+        marginEngineAddress: string;
+        recipient: string;
+        tickLower: BigNumberish;
+        tickUpper: BigNumberish;
+        notional: BigNumberish;
+        isMint: boolean;
+      },
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    peripheryAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     positionHistory(
       arg0: BytesLike,
       arg1: BigNumberish,
@@ -1393,8 +1847,18 @@ export class E2ESetup extends BaseContract {
 
     rateOracleAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    setFCMAddress(
+      _FCMAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     setMEAddress(
       _MEAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setPeripheryAddress(
+      _peripheryAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1417,6 +1881,8 @@ export class E2ESetup extends BaseContract {
 
     sizeAllPositions(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    sizeAllYBATraders(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     sizeOfPositionHistory(
       arg0: BytesLike,
       overrides?: CallOverrides
@@ -1435,6 +1901,26 @@ export class E2ESetup extends BaseContract {
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
       },
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    swapViaPeriphery(
+      params: {
+        marginEngineAddress: string;
+        recipient: string;
+        isFT: boolean;
+        notional: BigNumberish;
+        sqrtPriceLimitX96: BigNumberish;
+        tickLower: BigNumberish;
+        tickUpper: BigNumberish;
+      },
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    unwindFullyCollateralisedFixedTakerSwap(
+      trader: string,
+      notionalToUnwind: BigNumberish,
+      sqrtPriceLimitX96: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

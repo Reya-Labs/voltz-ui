@@ -20,6 +20,22 @@ var _abi = [
     {
         inputs: [
             {
+                internalType: "uint256",
+                name: "marginRequirement",
+                type: "uint256",
+            },
+        ],
+        name: "CannotLiquidate",
+        type: "error",
+    },
+    {
+        inputs: [],
+        name: "CannotSettleBeforeMaturity",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
                 internalType: "int256",
                 name: "amount0",
                 type: "int256",
@@ -56,6 +72,11 @@ var _abi = [
         type: "error",
     },
     {
+        inputs: [],
+        name: "InvalidMarginDelta",
+        type: "error",
+    },
+    {
         inputs: [
             {
                 internalType: "uint128",
@@ -80,6 +101,53 @@ var _abi = [
     {
         inputs: [
             {
+                internalType: "int256",
+                name: "marginRequirement",
+                type: "int256",
+            },
+        ],
+        name: "MarginLessThanMinimum",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
+                internalType: "int256",
+                name: "marginRequirement",
+                type: "int256",
+            },
+            {
+                internalType: "int24",
+                name: "tick",
+                type: "int24",
+            },
+            {
+                internalType: "int256",
+                name: "fixedTokenDelta",
+                type: "int256",
+            },
+            {
+                internalType: "int256",
+                name: "variableTokenDelta",
+                type: "int256",
+            },
+            {
+                internalType: "uint256",
+                name: "cumulativeFeeIncurred",
+                type: "uint256",
+            },
+            {
+                internalType: "int256",
+                name: "fixedTokenDeltaUnbalanced",
+                type: "int256",
+            },
+        ],
+        name: "MarginRequirementNotMet",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
                 internalType: "uint256",
                 name: "requested",
                 type: "uint256",
@@ -95,7 +163,42 @@ var _abi = [
     },
     {
         inputs: [],
+        name: "OnlyFCM",
+        type: "error",
+    },
+    {
+        inputs: [],
         name: "OnlyMarginEngine",
+        type: "error",
+    },
+    {
+        inputs: [],
+        name: "OnlyOwnerCanUpdatePosition",
+        type: "error",
+    },
+    {
+        inputs: [],
+        name: "OnlyVAMM",
+        type: "error",
+    },
+    {
+        inputs: [],
+        name: "PositionNetZero",
+        type: "error",
+    },
+    {
+        inputs: [],
+        name: "PositionNotSettled",
+        type: "error",
+    },
+    {
+        inputs: [],
+        name: "WithdrawalExceedsCurrentMargin",
+        type: "error",
+    },
+    {
+        inputs: [],
+        name: "closeToOrBeyondMaturity",
         type: "error",
     },
     {
@@ -302,7 +405,13 @@ var _abi = [
             },
         ],
         name: "burn",
-        outputs: [],
+        outputs: [
+            {
+                internalType: "int256",
+                name: "positionMarginRequirement",
+                type: "int256",
+            },
+        ],
         stateMutability: "nonpayable",
         type: "function",
     },
@@ -486,7 +595,13 @@ var _abi = [
             },
         ],
         name: "mint",
-        outputs: [],
+        outputs: [
+            {
+                internalType: "int256",
+                name: "positionMarginRequirement",
+                type: "int256",
+            },
+        ],
         stateMutability: "nonpayable",
         type: "function",
     },
@@ -586,6 +701,11 @@ var _abi = [
                 name: "_fixedTokenDeltaUnbalanced",
                 type: "int256",
             },
+            {
+                internalType: "int256",
+                name: "_marginRequirement",
+                type: "int256",
+            },
         ],
         stateMutability: "nonpayable",
         type: "function",
@@ -633,47 +753,41 @@ var _abi = [
         name: "ticks",
         outputs: [
             {
-                internalType: "uint128",
-                name: "liquidityGross",
-                type: "uint128",
-            },
-            {
-                internalType: "int128",
-                name: "liquidityNet",
-                type: "int128",
-            },
-            {
-                internalType: "int256",
-                name: "fixedTokenGrowthOutside",
-                type: "int256",
-            },
-            {
-                internalType: "int256",
-                name: "variableTokenGrowthOutside",
-                type: "int256",
-            },
-            {
-                internalType: "uint256",
-                name: "feeGrowthOutside",
-                type: "uint256",
-            },
-            {
-                internalType: "bool",
-                name: "initialized",
-                type: "bool",
-            },
-        ],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [],
-        name: "unlocked",
-        outputs: [
-            {
-                internalType: "bool",
+                components: [
+                    {
+                        internalType: "uint128",
+                        name: "liquidityGross",
+                        type: "uint128",
+                    },
+                    {
+                        internalType: "int128",
+                        name: "liquidityNet",
+                        type: "int128",
+                    },
+                    {
+                        internalType: "int256",
+                        name: "fixedTokenGrowthOutsideX128",
+                        type: "int256",
+                    },
+                    {
+                        internalType: "int256",
+                        name: "variableTokenGrowthOutsideX128",
+                        type: "int256",
+                    },
+                    {
+                        internalType: "uint256",
+                        name: "feeGrowthOutsideX128",
+                        type: "uint256",
+                    },
+                    {
+                        internalType: "bool",
+                        name: "initialized",
+                        type: "bool",
+                    },
+                ],
+                internalType: "struct Tick.Info",
                 name: "",
-                type: "bool",
+                type: "tuple",
             },
         ],
         stateMutability: "view",
@@ -697,19 +811,26 @@ var _abi = [
         name: "vammVars",
         outputs: [
             {
-                internalType: "uint160",
-                name: "sqrtPriceX96",
-                type: "uint160",
-            },
-            {
-                internalType: "int24",
-                name: "tick",
-                type: "int24",
-            },
-            {
-                internalType: "uint8",
-                name: "feeProtocol",
-                type: "uint8",
+                components: [
+                    {
+                        internalType: "uint160",
+                        name: "sqrtPriceX96",
+                        type: "uint160",
+                    },
+                    {
+                        internalType: "int24",
+                        name: "tick",
+                        type: "int24",
+                    },
+                    {
+                        internalType: "uint8",
+                        name: "feeProtocol",
+                        type: "uint8",
+                    },
+                ],
+                internalType: "struct IVAMM.VAMMVars",
+                name: "",
+                type: "tuple",
             },
         ],
         stateMutability: "view",

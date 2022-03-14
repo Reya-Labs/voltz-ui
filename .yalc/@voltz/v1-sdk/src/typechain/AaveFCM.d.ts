@@ -24,6 +24,7 @@ interface AaveFCMInterface extends ethers.utils.Interface {
   functions: {
     "aaveLendingPool()": FunctionFragment;
     "getTraderMarginInATokens(address)": FunctionFragment;
+    "getTraderWithYieldBearingAssets(address)": FunctionFragment;
     "initialize(address,address)": FunctionFragment;
     "initiateFullyCollateralisedFixedTakerSwap(uint256,uint160)": FunctionFragment;
     "marginEngine()": FunctionFragment;
@@ -49,6 +50,10 @@ interface AaveFCMInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "getTraderMarginInATokens",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getTraderWithYieldBearingAssets",
     values: [string]
   ): string;
   encodeFunctionData(
@@ -111,6 +116,10 @@ interface AaveFCMInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getTraderMarginInATokens",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getTraderWithYieldBearingAssets",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
@@ -257,6 +266,27 @@ export class AaveFCM extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { marginInYieldBearingTokens: BigNumber }>;
 
+    getTraderWithYieldBearingAssets(
+      trader: string,
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        [BigNumber, BigNumber, BigNumber, boolean] & {
+          marginInScaledYieldBearingTokens: BigNumber;
+          fixedTokenBalance: BigNumber;
+          variableTokenBalance: BigNumber;
+          isSettled: boolean;
+        }
+      ] & {
+        traderInfo: [BigNumber, BigNumber, BigNumber, boolean] & {
+          marginInScaledYieldBearingTokens: BigNumber;
+          fixedTokenBalance: BigNumber;
+          variableTokenBalance: BigNumber;
+          isSettled: boolean;
+        };
+      }
+    >;
+
     initialize(
       _vammAddress: string,
       _marginEngineAddress: string,
@@ -339,6 +369,18 @@ export class AaveFCM extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  getTraderWithYieldBearingAssets(
+    trader: string,
+    overrides?: CallOverrides
+  ): Promise<
+    [BigNumber, BigNumber, BigNumber, boolean] & {
+      marginInScaledYieldBearingTokens: BigNumber;
+      fixedTokenBalance: BigNumber;
+      variableTokenBalance: BigNumber;
+      isSettled: boolean;
+    }
+  >;
+
   initialize(
     _vammAddress: string,
     _marginEngineAddress: string,
@@ -420,6 +462,18 @@ export class AaveFCM extends BaseContract {
       traderAddress: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    getTraderWithYieldBearingAssets(
+      trader: string,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber, BigNumber, boolean] & {
+        marginInScaledYieldBearingTokens: BigNumber;
+        fixedTokenBalance: BigNumber;
+        variableTokenBalance: BigNumber;
+        isSettled: boolean;
+      }
+    >;
 
     initialize(
       _vammAddress: string,
@@ -588,6 +642,11 @@ export class AaveFCM extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getTraderWithYieldBearingAssets(
+      trader: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     initialize(
       _vammAddress: string,
       _marginEngineAddress: string,
@@ -658,6 +717,11 @@ export class AaveFCM extends BaseContract {
 
     getTraderMarginInATokens(
       traderAddress: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getTraderWithYieldBearingAssets(
+      trader: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

@@ -8,6 +8,201 @@ import type { IFactory, IFactoryInterface } from "../IFactory";
 
 const _abi = [
   {
+    inputs: [
+      {
+        internalType: "bool",
+        name: "unlocked",
+        type: "bool",
+      },
+    ],
+    name: "CanOnlyTradeIfUnlocked",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "marginRequirement",
+        type: "uint256",
+      },
+    ],
+    name: "CannotLiquidate",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "CannotSettleBeforeMaturity",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "int256",
+        name: "amount0",
+        type: "int256",
+      },
+      {
+        internalType: "int256",
+        name: "amount1",
+        type: "int256",
+      },
+    ],
+    name: "ExpectedOppositeSigns",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint160",
+        name: "sqrtPriceX96",
+        type: "uint160",
+      },
+    ],
+    name: "ExpectedSqrtPriceZeroBeforeInit",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "int256",
+        name: "amountSpecified",
+        type: "int256",
+      },
+    ],
+    name: "IRSNotionalAmountSpecifiedMustBeNonZero",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "InvalidMarginDelta",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint128",
+        name: "amount",
+        type: "uint128",
+      },
+    ],
+    name: "LiquidityDeltaMustBePositiveInBurn",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint128",
+        name: "amount",
+        type: "uint128",
+      },
+    ],
+    name: "LiquidityDeltaMustBePositiveInMint",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "int256",
+        name: "marginRequirement",
+        type: "int256",
+      },
+    ],
+    name: "MarginLessThanMinimum",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "int256",
+        name: "marginRequirement",
+        type: "int256",
+      },
+      {
+        internalType: "int24",
+        name: "tick",
+        type: "int24",
+      },
+      {
+        internalType: "int256",
+        name: "fixedTokenDelta",
+        type: "int256",
+      },
+      {
+        internalType: "int256",
+        name: "variableTokenDelta",
+        type: "int256",
+      },
+      {
+        internalType: "uint256",
+        name: "cumulativeFeeIncurred",
+        type: "uint256",
+      },
+      {
+        internalType: "int256",
+        name: "fixedTokenDeltaUnbalanced",
+        type: "int256",
+      },
+    ],
+    name: "MarginRequirementNotMet",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "requested",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "available",
+        type: "uint256",
+      },
+    ],
+    name: "NotEnoughFunds",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "OnlyFCM",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "OnlyMarginEngine",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "OnlyOwnerCanUpdatePosition",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "OnlyVAMM",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "PositionNetZero",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "PositionNotSettled",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "WithdrawalExceedsCurrentMargin",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "closeToOrBeyondMaturity",
+    type: "error",
+  },
+  {
     anonymous: false,
     inputs: [
       {
@@ -57,6 +252,12 @@ const _abi = [
         internalType: "address",
         name: "fcm",
         type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint8",
+        name: "yieldBearingProtocolID",
+        type: "uint8",
       },
     ],
     name: "IrsInstanceDeployed",
@@ -134,123 +335,6 @@ const _abi = [
       },
     ],
     stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_underlyingToken",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "_rateOracle",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_termStartTimestampWad",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_termEndTimestampWad",
-        type: "uint256",
-      },
-      {
-        internalType: "int24",
-        name: "_tickSpacing",
-        type: "int24",
-      },
-    ],
-    name: "getFCMAddress",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_underlyingToken",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "_rateOracle",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_termStartTimestampWad",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_termEndTimestampWad",
-        type: "uint256",
-      },
-      {
-        internalType: "int24",
-        name: "_tickSpacing",
-        type: "int24",
-      },
-    ],
-    name: "getMarginEngineAddress",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_underlyingToken",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "_rateOracle",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_termStartTimestampWad",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_termEndTimestampWad",
-        type: "uint256",
-      },
-      {
-        internalType: "int24",
-        name: "_tickSpacing",
-        type: "int24",
-      },
-    ],
-    name: "getVAMMAddress",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
     type: "function",
   },
   {

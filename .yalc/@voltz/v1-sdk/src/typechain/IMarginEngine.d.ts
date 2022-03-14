@@ -21,11 +21,13 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface IMarginEngineInterface extends ethers.utils.Interface {
   functions: {
+    "cacheMaxAgeInSeconds()": FunctionFragment;
     "collectProtocol(address,uint256)": FunctionFragment;
     "factory()": FunctionFragment;
     "fcm()": FunctionFragment;
     "getHistoricalApy()": FunctionFragment;
     "getPosition(address,int24,int24)": FunctionFragment;
+    "getPositionMarginRequirement(address,int24,int24,bool)": FunctionFragment;
     "initialize(address,address,uint256,uint256)": FunctionFragment;
     "liquidatePosition(int24,int24,address)": FunctionFragment;
     "liquidatorRewardWad()": FunctionFragment;
@@ -44,10 +46,14 @@ interface IMarginEngineInterface extends ethers.utils.Interface {
     "underlyingToken()": FunctionFragment;
     "updatePositionMargin(address,int24,int24,int256)": FunctionFragment;
     "updatePositionPostVAMMInducedMintBurn((address,int24,int24,int128))": FunctionFragment;
-    "updatePositionPostVAMMInducedSwap(address,int24,int24,int256,int256,uint256)": FunctionFragment;
+    "updatePositionPostVAMMInducedSwap(address,int24,int24,int256,int256,uint256,int256)": FunctionFragment;
     "vamm()": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "cacheMaxAgeInSeconds",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "collectProtocol",
     values: [string, BigNumberish]
@@ -61,6 +67,10 @@ interface IMarginEngineInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "getPosition",
     values: [string, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getPositionMarginRequirement",
+    values: [string, BigNumberish, BigNumberish, boolean]
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
@@ -164,11 +174,16 @@ interface IMarginEngineInterface extends ethers.utils.Interface {
       BigNumberish,
       BigNumberish,
       BigNumberish,
+      BigNumberish,
       BigNumberish
     ]
   ): string;
   encodeFunctionData(functionFragment: "vamm", values?: undefined): string;
 
+  decodeFunctionResult(
+    functionFragment: "cacheMaxAgeInSeconds",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "collectProtocol",
     data: BytesLike
@@ -181,6 +196,10 @@ interface IMarginEngineInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getPosition",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getPositionMarginRequirement",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
@@ -570,6 +589,8 @@ export class IMarginEngine extends BaseContract {
   interface: IMarginEngineInterface;
 
   functions: {
+    cacheMaxAgeInSeconds(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     collectProtocol(
       recipient: string,
       amount: BigNumberish,
@@ -636,6 +657,14 @@ export class IMarginEngine extends BaseContract {
         };
       }
     >;
+
+    getPositionMarginRequirement(
+      recipient: string,
+      tickLower: BigNumberish,
+      tickUpper: BigNumberish,
+      isLM: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     initialize(
       _underlyingToken: string,
@@ -751,11 +780,14 @@ export class IMarginEngine extends BaseContract {
       fixedTokenDelta: BigNumberish,
       variableTokenDelta: BigNumberish,
       cumulativeFeeIncurred: BigNumberish,
+      fixedTokenDeltaUnbalanced: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     vamm(overrides?: CallOverrides): Promise<[string]>;
   };
+
+  cacheMaxAgeInSeconds(overrides?: CallOverrides): Promise<BigNumber>;
 
   collectProtocol(
     recipient: string,
@@ -799,6 +831,14 @@ export class IMarginEngine extends BaseContract {
       rewardPerAmount: BigNumber;
     }
   >;
+
+  getPositionMarginRequirement(
+    recipient: string,
+    tickLower: BigNumberish,
+    tickUpper: BigNumberish,
+    isLM: boolean,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   initialize(
     _underlyingToken: string,
@@ -914,12 +954,15 @@ export class IMarginEngine extends BaseContract {
     fixedTokenDelta: BigNumberish,
     variableTokenDelta: BigNumberish,
     cumulativeFeeIncurred: BigNumberish,
+    fixedTokenDeltaUnbalanced: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   vamm(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
+    cacheMaxAgeInSeconds(overrides?: CallOverrides): Promise<BigNumber>;
+
     collectProtocol(
       recipient: string,
       amount: BigNumberish,
@@ -960,6 +1003,14 @@ export class IMarginEngine extends BaseContract {
         rewardPerAmount: BigNumber;
       }
     >;
+
+    getPositionMarginRequirement(
+      recipient: string,
+      tickLower: BigNumberish,
+      tickUpper: BigNumberish,
+      isLM: boolean,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     initialize(
       _underlyingToken: string,
@@ -1060,7 +1111,7 @@ export class IMarginEngine extends BaseContract {
         liquidityDelta: BigNumberish;
       },
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<BigNumber>;
 
     updatePositionPostVAMMInducedSwap(
       _owner: string,
@@ -1069,8 +1120,9 @@ export class IMarginEngine extends BaseContract {
       fixedTokenDelta: BigNumberish,
       variableTokenDelta: BigNumberish,
       cumulativeFeeIncurred: BigNumberish,
+      fixedTokenDeltaUnbalanced: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<BigNumber>;
 
     vamm(overrides?: CallOverrides): Promise<string>;
   };
@@ -1678,6 +1730,8 @@ export class IMarginEngine extends BaseContract {
   };
 
   estimateGas: {
+    cacheMaxAgeInSeconds(overrides?: CallOverrides): Promise<BigNumber>;
+
     collectProtocol(
       recipient: string,
       amount: BigNumberish,
@@ -1697,6 +1751,14 @@ export class IMarginEngine extends BaseContract {
       tickLower: BigNumberish,
       tickUpper: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getPositionMarginRequirement(
+      recipient: string,
+      tickLower: BigNumberish,
+      tickUpper: BigNumberish,
+      isLM: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     initialize(
@@ -1813,6 +1875,7 @@ export class IMarginEngine extends BaseContract {
       fixedTokenDelta: BigNumberish,
       variableTokenDelta: BigNumberish,
       cumulativeFeeIncurred: BigNumberish,
+      fixedTokenDeltaUnbalanced: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1820,6 +1883,10 @@ export class IMarginEngine extends BaseContract {
   };
 
   populateTransaction: {
+    cacheMaxAgeInSeconds(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     collectProtocol(
       recipient: string,
       amount: BigNumberish,
@@ -1839,6 +1906,14 @@ export class IMarginEngine extends BaseContract {
       tickLower: BigNumberish,
       tickUpper: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getPositionMarginRequirement(
+      recipient: string,
+      tickLower: BigNumberish,
+      tickUpper: BigNumberish,
+      isLM: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     initialize(
@@ -1961,6 +2036,7 @@ export class IMarginEngine extends BaseContract {
       fixedTokenDelta: BigNumberish,
       variableTokenDelta: BigNumberish,
       cumulativeFeeIncurred: BigNumberish,
+      fixedTokenDeltaUnbalanced: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

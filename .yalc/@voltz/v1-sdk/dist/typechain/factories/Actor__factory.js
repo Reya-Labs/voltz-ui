@@ -24,6 +24,201 @@ var _abi = [
     {
         inputs: [
             {
+                internalType: "bool",
+                name: "unlocked",
+                type: "bool",
+            },
+        ],
+        name: "CanOnlyTradeIfUnlocked",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "marginRequirement",
+                type: "uint256",
+            },
+        ],
+        name: "CannotLiquidate",
+        type: "error",
+    },
+    {
+        inputs: [],
+        name: "CannotSettleBeforeMaturity",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
+                internalType: "int256",
+                name: "amount0",
+                type: "int256",
+            },
+            {
+                internalType: "int256",
+                name: "amount1",
+                type: "int256",
+            },
+        ],
+        name: "ExpectedOppositeSigns",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint160",
+                name: "sqrtPriceX96",
+                type: "uint160",
+            },
+        ],
+        name: "ExpectedSqrtPriceZeroBeforeInit",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
+                internalType: "int256",
+                name: "amountSpecified",
+                type: "int256",
+            },
+        ],
+        name: "IRSNotionalAmountSpecifiedMustBeNonZero",
+        type: "error",
+    },
+    {
+        inputs: [],
+        name: "InvalidMarginDelta",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint128",
+                name: "amount",
+                type: "uint128",
+            },
+        ],
+        name: "LiquidityDeltaMustBePositiveInBurn",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint128",
+                name: "amount",
+                type: "uint128",
+            },
+        ],
+        name: "LiquidityDeltaMustBePositiveInMint",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
+                internalType: "int256",
+                name: "marginRequirement",
+                type: "int256",
+            },
+        ],
+        name: "MarginLessThanMinimum",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
+                internalType: "int256",
+                name: "marginRequirement",
+                type: "int256",
+            },
+            {
+                internalType: "int24",
+                name: "tick",
+                type: "int24",
+            },
+            {
+                internalType: "int256",
+                name: "fixedTokenDelta",
+                type: "int256",
+            },
+            {
+                internalType: "int256",
+                name: "variableTokenDelta",
+                type: "int256",
+            },
+            {
+                internalType: "uint256",
+                name: "cumulativeFeeIncurred",
+                type: "uint256",
+            },
+            {
+                internalType: "int256",
+                name: "fixedTokenDeltaUnbalanced",
+                type: "int256",
+            },
+        ],
+        name: "MarginRequirementNotMet",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "requested",
+                type: "uint256",
+            },
+            {
+                internalType: "uint256",
+                name: "available",
+                type: "uint256",
+            },
+        ],
+        name: "NotEnoughFunds",
+        type: "error",
+    },
+    {
+        inputs: [],
+        name: "OnlyFCM",
+        type: "error",
+    },
+    {
+        inputs: [],
+        name: "OnlyMarginEngine",
+        type: "error",
+    },
+    {
+        inputs: [],
+        name: "OnlyOwnerCanUpdatePosition",
+        type: "error",
+    },
+    {
+        inputs: [],
+        name: "OnlyVAMM",
+        type: "error",
+    },
+    {
+        inputs: [],
+        name: "PositionNetZero",
+        type: "error",
+    },
+    {
+        inputs: [],
+        name: "PositionNotSettled",
+        type: "error",
+    },
+    {
+        inputs: [],
+        name: "WithdrawalExceedsCurrentMargin",
+        type: "error",
+    },
+    {
+        inputs: [],
+        name: "closeToOrBeyondMaturity",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
                 internalType: "address",
                 name: "VAMMAddress",
                 type: "address",
@@ -50,6 +245,29 @@ var _abi = [
             },
         ],
         name: "burn",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "FCMAddress",
+                type: "address",
+            },
+            {
+                internalType: "uint256",
+                name: "notional",
+                type: "uint256",
+            },
+            {
+                internalType: "uint160",
+                name: "sqrtPriceLimitX96",
+                type: "uint160",
+            },
+        ],
+        name: "initiateFullyCollateralisedFixedTakerSwap",
         outputs: [],
         stateMutability: "nonpayable",
         type: "function",
@@ -111,6 +329,85 @@ var _abi = [
             },
         ],
         name: "mint",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "peripheryAddress",
+                type: "address",
+            },
+            {
+                components: [
+                    {
+                        internalType: "address",
+                        name: "marginEngineAddress",
+                        type: "address",
+                    },
+                    {
+                        internalType: "address",
+                        name: "recipient",
+                        type: "address",
+                    },
+                    {
+                        internalType: "int24",
+                        name: "tickLower",
+                        type: "int24",
+                    },
+                    {
+                        internalType: "int24",
+                        name: "tickUpper",
+                        type: "int24",
+                    },
+                    {
+                        internalType: "uint256",
+                        name: "notional",
+                        type: "uint256",
+                    },
+                    {
+                        internalType: "bool",
+                        name: "isMint",
+                        type: "bool",
+                    },
+                ],
+                internalType: "struct IPeriphery.MintOrBurnParams",
+                name: "params",
+                type: "tuple",
+            },
+        ],
+        name: "mintOrBurnViaPeriphery",
+        outputs: [
+            {
+                internalType: "int256",
+                name: "positionMarginRequirement",
+                type: "int256",
+            },
+        ],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "MEAddress",
+                type: "address",
+            },
+            {
+                internalType: "address",
+                name: "intAddress",
+                type: "address",
+            },
+            {
+                internalType: "bool",
+                name: "allowIntegration",
+                type: "bool",
+            },
+        ],
+        name: "setIntegrationApproval",
         outputs: [],
         stateMutability: "nonpayable",
         type: "function",
@@ -181,8 +478,112 @@ var _abi = [
         stateMutability: "nonpayable",
         type: "function",
     },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "peripheryAddress",
+                type: "address",
+            },
+            {
+                components: [
+                    {
+                        internalType: "address",
+                        name: "marginEngineAddress",
+                        type: "address",
+                    },
+                    {
+                        internalType: "address",
+                        name: "recipient",
+                        type: "address",
+                    },
+                    {
+                        internalType: "bool",
+                        name: "isFT",
+                        type: "bool",
+                    },
+                    {
+                        internalType: "uint256",
+                        name: "notional",
+                        type: "uint256",
+                    },
+                    {
+                        internalType: "uint160",
+                        name: "sqrtPriceLimitX96",
+                        type: "uint160",
+                    },
+                    {
+                        internalType: "int24",
+                        name: "tickLower",
+                        type: "int24",
+                    },
+                    {
+                        internalType: "int24",
+                        name: "tickUpper",
+                        type: "int24",
+                    },
+                ],
+                internalType: "struct IPeriphery.SwapPeripheryParams",
+                name: "params",
+                type: "tuple",
+            },
+        ],
+        name: "swapViaPeriphery",
+        outputs: [
+            {
+                internalType: "int256",
+                name: "_fixedTokenDelta",
+                type: "int256",
+            },
+            {
+                internalType: "int256",
+                name: "_variableTokenDelta",
+                type: "int256",
+            },
+            {
+                internalType: "uint256",
+                name: "_cumulativeFeeIncurred",
+                type: "uint256",
+            },
+            {
+                internalType: "int256",
+                name: "_fixedTokenDeltaUnbalanced",
+                type: "int256",
+            },
+            {
+                internalType: "int256",
+                name: "_marginRequirement",
+                type: "int256",
+            },
+        ],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "FCMAddress",
+                type: "address",
+            },
+            {
+                internalType: "uint256",
+                name: "notionalToUnwind",
+                type: "uint256",
+            },
+            {
+                internalType: "uint160",
+                name: "sqrtPriceLimitX96",
+                type: "uint160",
+            },
+        ],
+        name: "unwindFullyCollateralisedFixedTakerSwap",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
 ];
-var _bytecode = "0x608060405234801561001057600080fd5b506104fa806100206000396000f3fe608060405234801561001057600080fd5b506004361061004c5760003560e01c80631f2405b1146100515780637b4f532714610066578063cacdd72314610079578063cc981dda1461008c575b600080fd5b61006461005f3660046102bd565b6100c3565b005b6100646100743660046102bd565b61012e565b610064610087366004610334565b610160565b61009f61009a36600461038b565b6101d3565b60408051948552602085019390935291830152606082015260800160405180910390f35b604051631f2f089360e01b81526001600160a01b03861690631f2f0893906100f5908790879087908790600401610479565b600060405180830381600087803b15801561010f57600080fd5b505af1158015610123573d6000803e3d6000fd5b505050505050505050565b604051635c6651a760e11b81526001600160a01b0386169063b8cca34e906100f5908790879087908790600401610479565b604051631e9550cf60e21b8152600284810b600483015283900b60248201526001600160a01b038281166044830152851690637a55433c90606401600060405180830381600087803b1580156101b557600080fd5b505af11580156101c9573d6000803e3d6000fd5b5050505050505050565b604080516333bac73760e11b815282516001600160a01b0390811660048301526020840151602483015291830151821660448201526060830151600290810b60648301526080840151900b6084820152600091829182918291908716906367758e6e9060a401608060405180830381600087803b15801561025357600080fd5b505af1158015610267573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061028b9190610444565b9299919850965090945092505050565b80356102a6816104ac565b919050565b8035600281900b81146102a657600080fd5b600080600080600060a086880312156102d4578081fd5b85356102df816104ac565b945060208601356102ef816104ac565b93506102fd604087016102ab565b925061030b606087016102ab565b915060808601356001600160801b0381168114610326578182fd5b809150509295509295909350565b60008060008060808587031215610349578384fd5b8435610354816104ac565b9350610362602086016102ab565b9250610370604086016102ab565b91506060850135610380816104ac565b939692955090935050565b60008082840360c081121561039e578283fd5b83356103a9816104ac565b925060a0601f19820112156103bc578182fd5b5060405160a081016001600160401b03811182821017156103eb57634e487b7160e01b83526041600452602483fd5b6040526103fa6020850161029b565b8152604084013560208201526104126060850161029b565b6040820152610423608085016102ab565b606082015261043460a085016102ab565b6080820152809150509250929050565b60008060008060808587031215610459578384fd5b505082516020840151604085015160609095015191969095509092509050565b6001600160a01b03949094168452600292830b6020850152910b60408301526001600160801b0316606082015260800190565b6001600160a01b03811681146104c157600080fd5b5056fea264697066735822122060fcad869ef5a25fe08ea64d0061079dd1963720cacdde74fcee0c0bbe1c833f64736f6c63430008040033";
+var _bytecode = "0x608060405234801561001057600080fd5b50610be7806100206000396000f3fe608060405234801561001057600080fd5b50600436106100835760003560e01c806305b88be5146100885780631f2405b1146100ae57806340283698146100c357806369696dbf146100d65780637b4f5327146100e95780639a067e27146100fc578063cacdd72314610137578063cc981dda1461014a578063e9ae4bc81461017d575b600080fd5b61009b6100963660046107af565b610190565b6040519081526020015b60405180910390f35b6100c16100bc3660046106d9565b610254565b005b6100c16100d1366004610693565b6102e0565b6100c16100e43660046109d2565b6103c1565b6100c16100f73660046106d9565b610426565b61010f61010a366004610919565b610458565b604080519586526020860194909452928401919091526060830152608082015260a0016100a5565b6100c1610145366004610754565b61053d565b61015d610158366004610858565b61057d565b6040805194855260208501939093529183015260608201526080016100a5565b6100c161018b3660046109d2565b610646565b6040805163add915c960e01b815282516001600160a01b03908116600483015260208401518116602483015291830151600290810b60448301526060840151900b60648201526080830151608482015260a0830151151560a482015260009184169063add915c99060c401602060405180830381600087803b15801561021557600080fd5b505af1158015610229573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061024d9190610a2f565b9392505050565b604051631f2f089360e01b81526001600160a01b03861690631f2f089390610286908790879087908790600401610ada565b602060405180830381600087803b1580156102a057600080fd5b505af11580156102b4573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906102d89190610a2f565b505050505050565b6000836001600160a01b031663c45a01556040518163ffffffff1660e01b815260040160206040518083038186803b15801561031b57600080fd5b505afa15801561032f573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906103539190610a13565b604051630db9b71760e41b81526001600160a01b03858116600483015284151560248301529192509082169063db9b7170906044015b600060405180830381600087803b1580156103a357600080fd5b505af11580156103b7573d6000803e3d6000fd5b5050505050505050565b6040516355468a8b60e01b81526001600160a01b038416906355468a8b906103ef9085908590600401610b0d565b600060405180830381600087803b15801561040957600080fd5b505af115801561041d573d6000803e3d6000fd5b50505050505050565b604051635c6651a760e11b81526001600160a01b0386169063b8cca34e90610286908790879087908790600401610ada565b60408051630ebc11a960e01b815282516001600160a01b03908116600483015260208401518116602483015291830151151560448201526060830151606482015260808301518216608482015260a0830151600290810b60a483015260c0840151900b60c48201526000918291829182918291881690630ebc11a99060e40160c060405180830381600087803b1580156104f157600080fd5b505af1158015610505573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906105299190610a86565b50939b929a50909850965090945092505050565b604051631e9550cf60e21b8152600284810b600483015283900b60248201526001600160a01b038281166044830152851690637a55433c90606401610389565b604080516333bac73760e11b815282516001600160a01b0390811660048301526020840151602483015291830151821660448201526060830151600290810b60648301526080840151900b6084820152600091829182918291908716906367758e6e9060a40160a060405180830381600087803b1580156105fd57600080fd5b505af1158015610611573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906106359190610a47565b509299919850965090945092505050565b60405162dd089d60e21b81526001600160a01b038416906303742274906103ef9085908590600401610b0d565b8035801515811461068357600080fd5b919050565b803561068381610ba2565b6000806000606084860312156106a7578283fd5b83356106b281610b8a565b925060208401356106c281610b8a565b91506106d060408501610673565b90509250925092565b600080600080600060a086880312156106f0578081fd5b85356106fb81610b8a565b9450602086013561070b81610b8a565b9350604086013561071b81610ba2565b9250606086013561072b81610ba2565b915060808601356001600160801b0381168114610746578182fd5b809150509295509295909350565b60008060008060808587031215610769578384fd5b843561077481610b8a565b9350602085013561078481610ba2565b9250604085013561079481610ba2565b915060608501356107a481610b8a565b939692955090935050565b60008082840360e08112156107c2578283fd5b83356107cd81610b8a565b925060c0601f19820112156107e0578182fd5b506107e9610b24565b60208401356107f781610b8a565b8152604084013561080781610b8a565b6020820152606084013561081a81610ba2565b6040820152608084013561082d81610ba2565b606082015260a0840135608082015261084860c08501610673565b60a0820152809150509250929050565b60008082840360c081121561086b578283fd5b833561087681610b8a565b925060a0601f1982011215610889578182fd5b5060405160a081016001600160401b03811182821017156108b857634e487b7160e01b83526041600452602483fd5b60405260208401356108c981610b8a565b81526040840135602082015260608401356108e381610b8a565b604082015260808401356108f681610ba2565b606082015260a084013561090981610ba2565b6080820152919491935090915050565b60008082840361010081121561092d578283fd5b833561093881610b8a565b925060e0601f198201121561094b578182fd5b50610954610b5a565b602084013561096281610b8a565b8152604084013561097281610b8a565b602082015261098360608501610673565b60408201526080840135606082015260a08401356109a081610b8a565b60808201526109b160c08501610688565b60a08201526109c260e08501610688565b60c0820152809150509250929050565b6000806000606084860312156109e6578081fd5b83356109f181610b8a565b9250602084013591506040840135610a0881610b8a565b809150509250925092565b600060208284031215610a24578081fd5b815161024d81610b8a565b600060208284031215610a40578081fd5b5051919050565b600080600080600060a08688031215610a5e578283fd5b5050835160208501516040860151606087015160809097015192989197509594509092509050565b60008060008060008060c08789031215610a9e578384fd5b865195506020870151945060408701519350606087015192506080870151915060a0870151610acc81610ba2565b809150509295509295509295565b6001600160a01b03949094168452600292830b6020850152910b60408301526001600160801b0316606082015260800190565b9182526001600160a01b0316602082015260400190565b60405160c081016001600160401b0381118282101715610b5457634e487b7160e01b600052604160045260246000fd5b60405290565b60405160e081016001600160401b0381118282101715610b5457634e487b7160e01b600052604160045260246000fd5b6001600160a01b0381168114610b9f57600080fd5b50565b8060020b8114610b9f57600080fdfea26469706673582212207e104c5c5947700d073a3297c45b3a47767e2805304bb2e29c9e39ebdb50a2f264736f6c63430008040033";
 var Actor__factory = /** @class */ (function (_super) {
     __extends(Actor__factory, _super);
     function Actor__factory() {

@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -46,17 +35,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -90,15 +68,29 @@ var AMM = /** @class */ (function () {
         this.txCount = jsbi_1.default.BigInt(txCount);
     }
     AMM.prototype.getMinimumMarginRequirementPostSwap = function (_a) {
-        var recipient = _a.recipient, isFT = _a.isFT, notional = _a.notional, sqrtPriceLimitX96 = _a.sqrtPriceLimitX96, tickLower = _a.tickLower, tickUpper = _a.tickUpper;
+        var recipient = _a.recipient, isFT = _a.isFT, notional = _a.notional, fixedRateLimit = _a.fixedRateLimit, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh;
         return __awaiter(this, void 0, void 0, function () {
-            var peripheryContract, swapPeripheryParams, marginRequirement;
+            var tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, peripheryContract, swapPeripheryParams, marginRequirement;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         if (!this.signer) {
                             return [2 /*return*/];
+                        }
+                        tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
+                        tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
+                        if (fixedRateLimit) {
+                            tickLimit = this.closestTickAndFixedRate(fixedRateLimit).closestUsableTick;
+                            sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickLimit).toString();
+                        }
+                        else {
+                            if (isFT) {
+                                sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickMath_1.TickMath.MAX_TICK - 1).toString();
+                            }
+                            else {
+                                sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickMath_1.TickMath.MIN_TICK + 1).toString();
+                            }
                         }
                         peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
                         swapPeripheryParams = {
@@ -118,29 +110,98 @@ var AMM = /** @class */ (function () {
                                 });
                             }); }, function (error) {
                                 if (error.message.includes('MarginRequirementNotMet')) {
-                                    var args = error.message
+                                    var args = error.message.split("MarginRequirementNotMet")[1]
                                         .split('(')[1]
                                         .split(')')[0]
                                         .replaceAll(' ', '')
                                         .split(',');
+                                    console.log(error.message);
                                     marginRequirement = ethers_1.BigNumber.from(args[0]);
                                 }
                                 else {
-                                    console.error(error.message);
+                                    console.log(error.message);
                                 }
                             })];
                     case 1:
                         _b.sent();
-                        return [2 /*return*/, marginRequirement];
+                        return [2 /*return*/, parseFloat(ethers_1.utils.formatEther(marginRequirement))];
                 }
             });
         });
     };
-    AMM.prototype.getMinimumMarginRequirementPostMint = function (_a) {
-        var recipient = _a.recipient, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional;
+    AMM.prototype.getSlippagePostSwap = function (_a) {
+        var recipient = _a.recipient, isFT = _a.isFT, notional = _a.notional, fixedRateLimit = _a.fixedRateLimit, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, peripheryContract, mintOrBurnParams, marginRequirement;
+            var tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, peripheryContract, swapPeripheryParams, tickBefore, tickAfter, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw;
             var _this = this;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (!this.signer)
+                            return [2 /*return*/];
+                        tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
+                        tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
+                        if (fixedRateLimit) {
+                            tickLimit = this.closestTickAndFixedRate(fixedRateLimit).closestUsableTick;
+                            sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickLimit).toString();
+                        }
+                        else {
+                            if (isFT) {
+                                sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickMath_1.TickMath.MAX_TICK - 1).toString();
+                            }
+                            else {
+                                sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickMath_1.TickMath.MIN_TICK + 1).toString();
+                            }
+                        }
+                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        swapPeripheryParams = {
+                            marginEngineAddress: this.marginEngineAddress,
+                            recipient: recipient,
+                            isFT: isFT,
+                            notional: notional,
+                            sqrtPriceLimitX96: sqrtPriceLimitX96,
+                            tickLower: tickLower,
+                            tickUpper: tickUpper,
+                        };
+                        return [4 /*yield*/, peripheryContract.getCurrentTick(this.marginEngineAddress)];
+                    case 1:
+                        tickBefore = _b.sent();
+                        tickAfter = 0;
+                        return [4 /*yield*/, peripheryContract.callStatic.swap(swapPeripheryParams).then(function (result) { return __awaiter(_this, void 0, void 0, function () {
+                                return __generator(this, function (_a) {
+                                    tickAfter = parseInt(result[5]);
+                                    return [2 /*return*/];
+                                });
+                            }); }, function (error) {
+                                if (error.message.includes('MarginRequirementNotMet')) {
+                                    var args = error.message.split("MarginRequirementNotMet")[1]
+                                        .split('(')[1]
+                                        .split(')')[0]
+                                        .replaceAll(' ', '')
+                                        .split(',');
+                                    console.log(error.message);
+                                    tickAfter = parseInt(args[1]);
+                                }
+                                else {
+                                    console.log(error.message);
+                                }
+                            })];
+                    case 2:
+                        _b.sent();
+                        console.log("ticks:", tickBefore, tickAfter);
+                        fixedRateBefore = (0, priceTickConversions_1.tickToFixedRate)(tickBefore);
+                        fixedRateAfter = (0, priceTickConversions_1.tickToFixedRate)(tickAfter);
+                        fixedRateDelta = fixedRateAfter.subtract(fixedRateBefore);
+                        fixedRateDeltaRaw = fixedRateDelta.toNumber();
+                        return [2 /*return*/, fixedRateDeltaRaw];
+                }
+            });
+        });
+    };
+    AMM.prototype.settlePosition = function (_a) {
+        var owner = _a.owner, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh;
+        return __awaiter(this, void 0, void 0, function () {
+            var tickUpper, tickLower, marginEngineContract, settlePositionReceipt;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -149,51 +210,6 @@ var AMM = /** @class */ (function () {
                         }
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
-                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
-                        mintOrBurnParams = {
-                            marginEngineAddress: this.marginEngineAddress,
-                            recipient: recipient,
-                            tickLower: tickLower,
-                            tickUpper: tickUpper,
-                            notional: notional,
-                            isMint: true,
-                        };
-                        marginRequirement = ethers_1.BigNumber.from(0);
-                        return [4 /*yield*/, peripheryContract.callStatic.mintOrBurn(mintOrBurnParams).then(function (result) { return __awaiter(_this, void 0, void 0, function () {
-                                return __generator(this, function (_a) {
-                                    marginRequirement = result[0];
-                                    return [2 /*return*/];
-                                });
-                            }); }, function (error) {
-                                if (error.message.includes('MarginRequirementNotMet')) {
-                                    var args = error.message
-                                        .split('(')[1]
-                                        .split(')')[0]
-                                        .replaceAll(' ', '')
-                                        .split(',');
-                                    marginRequirement = ethers_1.BigNumber.from(args[0]);
-                                }
-                                else {
-                                    console.error(error.message);
-                                }
-                            })];
-                    case 1:
-                        _b.sent();
-                        return [2 /*return*/, marginRequirement];
-                }
-            });
-        });
-    };
-    AMM.prototype.settlePosition = function (_a) {
-        var owner = _a.owner, tickLower = _a.tickLower, tickUpper = _a.tickUpper;
-        return __awaiter(this, void 0, void 0, function () {
-            var marginEngineContract, settlePositionReceipt;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        if (!this.signer) {
-                            return [2 /*return*/];
-                        }
                         marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
                         return [4 /*yield*/, marginEngineContract.settlePosition(tickLower, tickUpper, owner)];
                     case 1:
@@ -204,22 +220,20 @@ var AMM = /** @class */ (function () {
         });
     };
     AMM.prototype.updatePositionMargin = function (_a) {
-        var owner = _a.owner, tickLower = _a.tickLower, tickUpper = _a.tickUpper, marginDelta = _a.marginDelta;
+        var owner = _a.owner, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, marginDelta = _a.marginDelta;
         return __awaiter(this, void 0, void 0, function () {
-            var marginEngineContract, updatePositionMarginReceipt;
+            var tickUpper, tickLower, marginEngineContract, updatePositionMarginReceipt;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         if (!this.signer) {
                             return [2 /*return*/];
                         }
-                        // approve the margin engine
+                        tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
+                        tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
                         return [4 /*yield*/, this.approveMarginEngine(marginDelta)];
                     case 1:
-                        // approve the margin engine
                         _b.sent();
-                        tickLower = parseInt(tickLower.toString());
-                        tickUpper = parseInt(tickUpper.toString());
                         marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
                         return [4 /*yield*/, marginEngineContract.updatePositionMargin(owner, tickLower, tickUpper, marginDelta)];
                     case 2:
@@ -229,110 +243,60 @@ var AMM = /** @class */ (function () {
             });
         });
     };
-    AMM.prototype.mint = function (_a) {
-        var recipient = _a.recipient, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, margin = _a.margin, leverage = _a.leverage;
+    AMM.prototype.liquidatePosition = function (_a) {
+        var owner = _a.owner, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower;
-            return __generator(this, function (_b) {
-                tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
-                tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
-                return [2 /*return*/, this.mintUsingTicks({
-                        recipient: recipient,
-                        tickLower: tickLower,
-                        tickUpper: tickUpper,
-                        notional: margin * leverage,
-                    })];
-            });
-        });
-    };
-    AMM.prototype.updateSqrtPriceX96 = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var vammContract, _a, _b, _c;
-            return __generator(this, function (_d) {
-                switch (_d.label) {
-                    case 0:
-                        if (!this.signer) {
-                            return [2 /*return*/];
-                        }
-                        vammContract = typechain_1.VAMM__factory.connect(this.id, this.signer);
-                        _a = this;
-                        _c = (_b = jsbi_1.default).BigInt;
-                        return [4 /*yield*/, vammContract.callStatic.vammVars()];
-                    case 1:
-                        _a.sqrtPriceX96 = _c.apply(_b, [(_d.sent())[0].toString()]);
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    AMM.prototype.initVamm = function (tickLower) {
-        return __awaiter(this, void 0, void 0, function () {
-            var vammContract, sqrtPriceX96;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (!this.signer) {
-                            return [2 /*return*/];
-                        }
-                        vammContract = typechain_1.VAMM__factory.connect(this.id, this.signer);
-                        if (!jsbi_1.default.EQ(this.sqrtPriceX96, jsbi_1.default.BigInt(0))) return [3 /*break*/, 2];
-                        sqrtPriceX96 = tickMath_1.TickMath.getSqrtRatioAtTick(ethers_1.BigNumber.from(tickLower).toNumber()).toString();
-                        return [4 /*yield*/, vammContract.initializeVAMM(sqrtPriceX96)];
-                    case 1:
-                        _a.sent();
-                        this.sqrtPriceX96 = jsbi_1.default.BigInt(sqrtPriceX96);
-                        _a.label = 2;
-                    case 2: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    AMM.prototype.mintUsingTicks = function (_a) {
-        var tickLower = _a.tickLower, args = __rest(_a, ["tickLower"]);
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_b) {
-                if (!this.signer) {
-                    return [2 /*return*/];
-                }
-                this.initVamm(tickLower);
-                return [2 /*return*/, this.mintOrBurnUsingTicks(__assign(__assign({}, args), { tickLower: tickLower, isMint: true }))];
-            });
-        });
-    };
-    AMM.prototype.burn = function (_a) {
-        var recipient = _a.recipient, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, margin = _a.margin, leverage = _a.leverage;
-        return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower;
-            return __generator(this, function (_b) {
-                tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
-                tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
-                return [2 /*return*/, this.burnUsingTicks({
-                        recipient: recipient,
-                        tickLower: tickLower,
-                        tickUpper: tickUpper,
-                        notional: margin * leverage,
-                    })];
-            });
-        });
-    };
-    AMM.prototype.burnUsingTicks = function (args) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, this.mintOrBurnUsingTicks(__assign(__assign({}, args), { isMint: false }))];
-            });
-        });
-    };
-    AMM.prototype.mintOrBurnUsingTicks = function (_a) {
-        var recipient = _a.recipient, tickLower = _a.tickLower, tickUpper = _a.tickUpper, notional = _a.notional, isMint = _a.isMint;
-        return __awaiter(this, void 0, void 0, function () {
-            var peripheryContract, mintOrBurnParams;
+            var tickUpper, tickLower, marginEngineContract, receipt;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         if (!this.signer) {
                             return [2 /*return*/];
                         }
-                        console.log("approvePeriphery");
+                        tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
+                        tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
+                        marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
+                        return [4 /*yield*/, marginEngineContract.liquidatePosition(tickLower, tickUpper, owner)];
+                    case 1:
+                        receipt = _b.sent();
+                        return [2 /*return*/, receipt];
+                }
+            });
+        });
+    };
+    AMM.prototype.getLiquidationThreshold = function (_a) {
+        var owner = _a.owner, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh;
+        return __awaiter(this, void 0, void 0, function () {
+            var tickUpper, tickLower, marginEngineContract, threshold;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (!this.signer) {
+                            return [2 /*return*/];
+                        }
+                        tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
+                        tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
+                        marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
+                        return [4 /*yield*/, marginEngineContract.callStatic.getPositionMarginRequirement(owner, tickLower, tickUpper, false)];
+                    case 1:
+                        threshold = _b.sent();
+                        return [2 /*return*/, parseFloat(ethers_1.utils.formatEther(threshold))];
+                }
+            });
+        });
+    };
+    AMM.prototype.getMinimumMarginRequirementPostMint = function (_a) {
+        var recipient = _a.recipient, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional;
+        return __awaiter(this, void 0, void 0, function () {
+            var tickUpper, tickLower, peripheryContract, mintOrBurnParams, marginRequirement;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (!this.signer) {
+                            return [2 /*return*/];
+                        }
+                        tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
+                        tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
                         return [4 /*yield*/, this.approvePeriphery()];
                     case 1:
                         _b.sent();
@@ -343,9 +307,88 @@ var AMM = /** @class */ (function () {
                             tickLower: tickLower,
                             tickUpper: tickUpper,
                             notional: notional,
-                            isMint: isMint,
+                            isMint: true,
                         };
-                        console.log("mintOrBurn");
+                        marginRequirement = ethers_1.BigNumber.from("0");
+                        return [4 /*yield*/, peripheryContract.callStatic.mintOrBurn(mintOrBurnParams)
+                                .then(function (result) {
+                                marginRequirement = ethers_1.BigNumber.from(result);
+                            }, function (error) {
+                                if (error.message.includes("MarginLessThanMinimum")) {
+                                    var args = error.message.split("MarginLessThanMinimum")[1]
+                                        .split("(")[1]
+                                        .split(")")[0]
+                                        .replaceAll(" ", "")
+                                        .split(",");
+                                    marginRequirement = ethers_1.BigNumber.from(args[0]);
+                                }
+                                else {
+                                    console.log(error);
+                                }
+                            })];
+                    case 2:
+                        _b.sent();
+                        return [2 /*return*/, parseFloat(ethers_1.utils.formatEther(marginRequirement))];
+                }
+            });
+        });
+    };
+    AMM.prototype.mint = function (_a) {
+        var recipient = _a.recipient, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional, margin = _a.margin;
+        return __awaiter(this, void 0, void 0, function () {
+            var tickUpper, tickLower, peripheryContract, mintOrBurnParams;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (!this.signer) {
+                            return [2 /*return*/];
+                        }
+                        return [4 /*yield*/, this.updatePositionMargin({ owner: recipient, fixedLow: fixedLow, fixedHigh: fixedHigh, marginDelta: margin })];
+                    case 1:
+                        _b.sent();
+                        tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
+                        tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
+                        return [4 /*yield*/, this.approvePeriphery()];
+                    case 2:
+                        _b.sent();
+                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        mintOrBurnParams = {
+                            marginEngineAddress: this.marginEngineAddress,
+                            recipient: recipient,
+                            tickLower: tickLower,
+                            tickUpper: tickUpper,
+                            notional: notional,
+                            isMint: true,
+                        };
+                        return [2 /*return*/, peripheryContract.mintOrBurn(mintOrBurnParams)];
+                }
+            });
+        });
+    };
+    AMM.prototype.burn = function (_a) {
+        var recipient = _a.recipient, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional;
+        return __awaiter(this, void 0, void 0, function () {
+            var tickUpper, tickLower, peripheryContract, mintOrBurnParams;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (!this.signer) {
+                            return [2 /*return*/];
+                        }
+                        tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
+                        tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
+                        return [4 /*yield*/, this.approvePeriphery()];
+                    case 1:
+                        _b.sent();
+                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        mintOrBurnParams = {
+                            marginEngineAddress: this.marginEngineAddress,
+                            recipient: recipient,
+                            tickLower: tickLower,
+                            tickUpper: tickUpper,
+                            notional: notional,
+                            isMint: false,
+                        };
                         return [2 /*return*/, peripheryContract.mintOrBurn(mintOrBurnParams)];
                 }
             });
@@ -357,9 +400,8 @@ var AMM = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!this.signer) {
+                        if (!this.signer)
                             return [2 /*return*/];
-                        }
                         factoryContract = typechain_1.Factory__factory.connect(constants_1.FACTORY_ADDRESS, this.signer);
                         return [4 /*yield*/, this.signer.getAddress()];
                     case 1:
@@ -369,6 +411,29 @@ var AMM = /** @class */ (function () {
                         isApproved = _a.sent();
                         if (!!isApproved) return [3 /*break*/, 4];
                         return [4 /*yield*/, factoryContract.setApproval(constants_1.PERIPHERY_ADDRESS, true)];
+                    case 3: return [2 /*return*/, _a.sent()];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    AMM.prototype.approveFCM = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var factoryContract, signerAddress, isApproved;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!this.signer)
+                            return [2 /*return*/];
+                        factoryContract = typechain_1.Factory__factory.connect(constants_1.FACTORY_ADDRESS, this.signer);
+                        return [4 /*yield*/, this.signer.getAddress()];
+                    case 1:
+                        signerAddress = _a.sent();
+                        return [4 /*yield*/, factoryContract.isApproved(signerAddress, this.fcmAddress)];
+                    case 2:
+                        isApproved = _a.sent();
+                        if (!!isApproved) return [3 /*break*/, 4];
+                        return [4 /*yield*/, factoryContract.setApproval(this.fcmAddress, true)];
                     case 3: return [2 /*return*/, _a.sent()];
                     case 4: return [2 /*return*/];
                 }
@@ -397,16 +462,22 @@ var AMM = /** @class */ (function () {
         });
     };
     AMM.prototype.swap = function (_a) {
-        var recipient = _a.recipient, isFT = _a.isFT, notional = _a.notional, sqrtPriceLimitX96 = _a.sqrtPriceLimitX96, _b = _a.tickLower, tickLower = _b === void 0 ? 0 : _b, _c = _a.tickUpper, tickUpper = _c === void 0 ? 0 : _c;
+        var recipient = _a.recipient, isFT = _a.isFT, notional = _a.notional, margin = _a.margin, fixedRateLimit = _a.fixedRateLimit, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh;
         return __awaiter(this, void 0, void 0, function () {
-            var peripheryContract, swapPeripheryParams;
-            return __generator(this, function (_d) {
-                switch (_d.label) {
+            var tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, peripheryContract, swapPeripheryParams;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
                         if (!this.signer) {
                             return [2 /*return*/];
                         }
-                        if (sqrtPriceLimitX96.toString() === '0') {
+                        tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
+                        tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
+                        if (fixedRateLimit) {
+                            tickLimit = this.closestTickAndFixedRate(fixedRateLimit).closestUsableTick;
+                            sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickLimit).toString();
+                        }
+                        else {
                             if (isFT) {
                                 sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickMath_1.TickMath.MAX_TICK - 1).toString();
                             }
@@ -416,7 +487,7 @@ var AMM = /** @class */ (function () {
                         }
                         return [4 /*yield*/, this.approvePeriphery()];
                     case 1:
-                        _d.sent();
+                        _b.sent();
                         peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
                         swapPeripheryParams = {
                             marginEngineAddress: this.marginEngineAddress,
@@ -428,6 +499,76 @@ var AMM = /** @class */ (function () {
                             tickUpper: tickUpper,
                         };
                         return [2 /*return*/, peripheryContract.swap(swapPeripheryParams)];
+                }
+            });
+        });
+    };
+    AMM.prototype.FCMswap = function (_a) {
+        var notional = _a.notional, fixedRateLimit = _a.fixedRateLimit;
+        return __awaiter(this, void 0, void 0, function () {
+            var sqrtPriceLimitX96, tickLimit, fcmContract;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (!this.signer) {
+                            return [2 /*return*/];
+                        }
+                        return [4 /*yield*/, this.approveFCM()];
+                    case 1:
+                        _b.sent();
+                        if (fixedRateLimit) {
+                            tickLimit = this.closestTickAndFixedRate(fixedRateLimit).closestUsableTick;
+                            sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickLimit).toString();
+                        }
+                        else {
+                            sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickMath_1.TickMath.MAX_TICK - 1).toString();
+                        }
+                        fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
+                        return [2 /*return*/, fcmContract.initiateFullyCollateralisedFixedTakerSwap(notional, sqrtPriceLimitX96)];
+                }
+            });
+        });
+    };
+    AMM.prototype.FCMunwind = function (_a) {
+        var notionalToUnwind = _a.notionalToUnwind, fixedRateLimit = _a.fixedRateLimit;
+        return __awaiter(this, void 0, void 0, function () {
+            var sqrtPriceLimitX96, tickLimit, fcmContract;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (!this.signer) {
+                            return [2 /*return*/];
+                        }
+                        if (fixedRateLimit) {
+                            tickLimit = this.closestTickAndFixedRate(fixedRateLimit).closestUsableTick;
+                            sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickLimit).toString();
+                        }
+                        else {
+                            sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickMath_1.TickMath.MIN_TICK + 1).toString();
+                        }
+                        return [4 /*yield*/, this.approveFCM()];
+                    case 1:
+                        _b.sent();
+                        fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
+                        return [2 /*return*/, fcmContract.unwindFullyCollateralisedFixedTakerSwap(notionalToUnwind, sqrtPriceLimitX96)];
+                }
+            });
+        });
+    };
+    AMM.prototype.settleFCMTrader = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var fcmContract, receipt;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!this.signer) {
+                            return [2 /*return*/];
+                        }
+                        fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
+                        return [4 /*yield*/, fcmContract.settleTrader()];
+                    case 1:
+                        receipt = _a.sent();
+                        return [2 /*return*/, receipt];
                 }
             });
         });

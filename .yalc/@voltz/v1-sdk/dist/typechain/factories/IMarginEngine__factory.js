@@ -7,8 +7,178 @@ exports.IMarginEngine__factory = void 0;
 var ethers_1 = require("ethers");
 var _abi = [
     {
+        inputs: [
+            {
+                internalType: "bool",
+                name: "unlocked",
+                type: "bool",
+            },
+        ],
+        name: "CanOnlyTradeIfUnlocked",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "marginRequirement",
+                type: "uint256",
+            },
+        ],
+        name: "CannotLiquidate",
+        type: "error",
+    },
+    {
         inputs: [],
+        name: "CannotSettleBeforeMaturity",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
+                internalType: "int256",
+                name: "amount0",
+                type: "int256",
+            },
+            {
+                internalType: "int256",
+                name: "amount1",
+                type: "int256",
+            },
+        ],
+        name: "ExpectedOppositeSigns",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint160",
+                name: "sqrtPriceX96",
+                type: "uint160",
+            },
+        ],
+        name: "ExpectedSqrtPriceZeroBeforeInit",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
+                internalType: "int256",
+                name: "amountSpecified",
+                type: "int256",
+            },
+        ],
+        name: "IRSNotionalAmountSpecifiedMustBeNonZero",
+        type: "error",
+    },
+    {
+        inputs: [],
+        name: "InvalidMarginDelta",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint128",
+                name: "amount",
+                type: "uint128",
+            },
+        ],
+        name: "LiquidityDeltaMustBePositiveInBurn",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint128",
+                name: "amount",
+                type: "uint128",
+            },
+        ],
+        name: "LiquidityDeltaMustBePositiveInMint",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
+                internalType: "int256",
+                name: "marginRequirement",
+                type: "int256",
+            },
+        ],
         name: "MarginLessThanMinimum",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
+                internalType: "int256",
+                name: "marginRequirement",
+                type: "int256",
+            },
+            {
+                internalType: "int24",
+                name: "tick",
+                type: "int24",
+            },
+            {
+                internalType: "int256",
+                name: "fixedTokenDelta",
+                type: "int256",
+            },
+            {
+                internalType: "int256",
+                name: "variableTokenDelta",
+                type: "int256",
+            },
+            {
+                internalType: "uint256",
+                name: "cumulativeFeeIncurred",
+                type: "uint256",
+            },
+            {
+                internalType: "int256",
+                name: "fixedTokenDeltaUnbalanced",
+                type: "int256",
+            },
+        ],
+        name: "MarginRequirementNotMet",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "requested",
+                type: "uint256",
+            },
+            {
+                internalType: "uint256",
+                name: "available",
+                type: "uint256",
+            },
+        ],
+        name: "NotEnoughFunds",
+        type: "error",
+    },
+    {
+        inputs: [],
+        name: "OnlyFCM",
+        type: "error",
+    },
+    {
+        inputs: [],
+        name: "OnlyMarginEngine",
+        type: "error",
+    },
+    {
+        inputs: [],
+        name: "OnlyOwnerCanUpdatePosition",
+        type: "error",
+    },
+    {
+        inputs: [],
+        name: "OnlyVAMM",
         type: "error",
     },
     {
@@ -24,6 +194,11 @@ var _abi = [
     {
         inputs: [],
         name: "WithdrawalExceedsCurrentMargin",
+        type: "error",
+    },
+    {
+        inputs: [],
+        name: "closeToOrBeyondMaturity",
         type: "error",
     },
     {
@@ -553,6 +728,19 @@ var _abi = [
         type: "event",
     },
     {
+        inputs: [],
+        name: "cacheMaxAgeInSeconds",
+        outputs: [
+            {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
         inputs: [
             {
                 internalType: "address",
@@ -683,6 +871,40 @@ var _abi = [
             },
         ],
         stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "recipient",
+                type: "address",
+            },
+            {
+                internalType: "int24",
+                name: "tickLower",
+                type: "int24",
+            },
+            {
+                internalType: "int24",
+                name: "tickUpper",
+                type: "int24",
+            },
+            {
+                internalType: "bool",
+                name: "isLM",
+                type: "bool",
+            },
+        ],
+        name: "getPositionMarginRequirement",
+        outputs: [
+            {
+                internalType: "uint256",
+                name: "margin",
+                type: "uint256",
+            },
+        ],
+        stateMutability: "nonpayable",
         type: "function",
     },
     {
@@ -1084,7 +1306,13 @@ var _abi = [
             },
         ],
         name: "updatePositionPostVAMMInducedMintBurn",
-        outputs: [],
+        outputs: [
+            {
+                internalType: "int256",
+                name: "positionMarginRequirement",
+                type: "int256",
+            },
+        ],
         stateMutability: "nonpayable",
         type: "function",
     },
@@ -1120,9 +1348,20 @@ var _abi = [
                 name: "cumulativeFeeIncurred",
                 type: "uint256",
             },
+            {
+                internalType: "int256",
+                name: "fixedTokenDeltaUnbalanced",
+                type: "int256",
+            },
         ],
         name: "updatePositionPostVAMMInducedSwap",
-        outputs: [],
+        outputs: [
+            {
+                internalType: "int256",
+                name: "positionMarginRequirement",
+                type: "int256",
+            },
+        ],
         stateMutability: "nonpayable",
         type: "function",
     },

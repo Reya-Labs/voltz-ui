@@ -53,7 +53,6 @@ interface TestVAMMInterface extends ethers.utils.Interface {
     "tickSpacing()": FunctionFragment;
     "ticks(int24)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "unlocked()": FunctionFragment;
     "updateProtocolFees(uint256)": FunctionFragment;
     "upgradeTo(address)": FunctionFragment;
     "upgradeToAndCall(address,bytes)": FunctionFragment;
@@ -185,7 +184,6 @@ interface TestVAMMInterface extends ethers.utils.Interface {
     functionFragment: "transferOwnership",
     values: [string]
   ): string;
-  encodeFunctionData(functionFragment: "unlocked", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "updateProtocolFees",
     values: [BigNumberish]
@@ -289,7 +287,6 @@ interface TestVAMMInterface extends ethers.utils.Interface {
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "unlocked", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "updateProtocolFees",
     data: BytesLike
@@ -483,7 +480,7 @@ export class TestVAMM extends BaseContract {
 
     initialize(
       _marginEngineAddress: string,
-      _tickSpacing: BigNumberish,
+      __tickSpacing: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -517,7 +514,7 @@ export class TestVAMM extends BaseContract {
     ): Promise<ContractTransaction>;
 
     setFee(
-      _feeWad: BigNumberish,
+      newFeeWad: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -527,12 +524,12 @@ export class TestVAMM extends BaseContract {
     ): Promise<ContractTransaction>;
 
     setFixedTokenGrowthGlobal(
-      _fixedTokenGrowthGlobalX128: BigNumberish,
+      newFixedTokenGrowthGlobalX128: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     setTestProtocolFees(
-      _protocolFees: BigNumberish,
+      newProtocolFees: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -550,7 +547,7 @@ export class TestVAMM extends BaseContract {
     ): Promise<ContractTransaction>;
 
     setVariableTokenGrowthGlobal(
-      _variableTokenGrowthGlobalX128: BigNumberish,
+      newVariableTokenGrowthGlobalX128: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -568,32 +565,32 @@ export class TestVAMM extends BaseContract {
     testGetAMMTermEndTimestamp(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     tickBitmap(
-      arg0: BigNumberish,
+      wordPosition: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
     tickSpacing(overrides?: CallOverrides): Promise<[number]>;
 
     ticks(
-      arg0: BigNumberish,
+      tick: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, boolean] & {
-        liquidityGross: BigNumber;
-        liquidityNet: BigNumber;
-        fixedTokenGrowthOutsideX128: BigNumber;
-        variableTokenGrowthOutsideX128: BigNumber;
-        feeGrowthOutsideX128: BigNumber;
-        initialized: boolean;
-      }
+      [
+        [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, boolean] & {
+          liquidityGross: BigNumber;
+          liquidityNet: BigNumber;
+          fixedTokenGrowthOutsideX128: BigNumber;
+          variableTokenGrowthOutsideX128: BigNumber;
+          feeGrowthOutsideX128: BigNumber;
+          initialized: boolean;
+        }
+      ]
     >;
 
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    unlocked(overrides?: CallOverrides): Promise<[boolean]>;
 
     updateProtocolFees(
       protocolFeesCollected: BigNumberish,
@@ -614,11 +611,13 @@ export class TestVAMM extends BaseContract {
     vammVars(
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, number, number] & {
-        sqrtPriceX96: BigNumber;
-        tick: number;
-        feeProtocol: number;
-      }
+      [
+        [BigNumber, number, number] & {
+          sqrtPriceX96: BigNumber;
+          tick: number;
+          feeProtocol: number;
+        }
+      ]
     >;
 
     variableTokenGrowthGlobalX128(
@@ -669,7 +668,7 @@ export class TestVAMM extends BaseContract {
 
   initialize(
     _marginEngineAddress: string,
-    _tickSpacing: BigNumberish,
+    __tickSpacing: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -703,7 +702,7 @@ export class TestVAMM extends BaseContract {
   ): Promise<ContractTransaction>;
 
   setFee(
-    _feeWad: BigNumberish,
+    newFeeWad: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -713,12 +712,12 @@ export class TestVAMM extends BaseContract {
   ): Promise<ContractTransaction>;
 
   setFixedTokenGrowthGlobal(
-    _fixedTokenGrowthGlobalX128: BigNumberish,
+    newFixedTokenGrowthGlobalX128: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   setTestProtocolFees(
-    _protocolFees: BigNumberish,
+    newProtocolFees: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -736,7 +735,7 @@ export class TestVAMM extends BaseContract {
   ): Promise<ContractTransaction>;
 
   setVariableTokenGrowthGlobal(
-    _variableTokenGrowthGlobalX128: BigNumberish,
+    newVariableTokenGrowthGlobalX128: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -753,12 +752,15 @@ export class TestVAMM extends BaseContract {
 
   testGetAMMTermEndTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
 
-  tickBitmap(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+  tickBitmap(
+    wordPosition: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   tickSpacing(overrides?: CallOverrides): Promise<number>;
 
   ticks(
-    arg0: BigNumberish,
+    tick: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
     [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, boolean] & {
@@ -775,8 +777,6 @@ export class TestVAMM extends BaseContract {
     newOwner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
-
-  unlocked(overrides?: CallOverrides): Promise<boolean>;
 
   updateProtocolFees(
     protocolFeesCollected: BigNumberish,
@@ -813,7 +813,7 @@ export class TestVAMM extends BaseContract {
       tickUpper: BigNumberish,
       amount: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<BigNumber>;
 
     checkMaturityDuration(
       overrides?: CallOverrides
@@ -850,7 +850,7 @@ export class TestVAMM extends BaseContract {
 
     initialize(
       _marginEngineAddress: string,
-      _tickSpacing: BigNumberish,
+      __tickSpacing: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -871,7 +871,7 @@ export class TestVAMM extends BaseContract {
       tickUpper: BigNumberish,
       amount: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -881,7 +881,7 @@ export class TestVAMM extends BaseContract {
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
-    setFee(_feeWad: BigNumberish, overrides?: CallOverrides): Promise<void>;
+    setFee(newFeeWad: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     setFeeProtocol(
       feeProtocol: BigNumberish,
@@ -889,12 +889,12 @@ export class TestVAMM extends BaseContract {
     ): Promise<void>;
 
     setFixedTokenGrowthGlobal(
-      _fixedTokenGrowthGlobalX128: BigNumberish,
+      newFixedTokenGrowthGlobalX128: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
     setTestProtocolFees(
-      _protocolFees: BigNumberish,
+      newProtocolFees: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -912,7 +912,7 @@ export class TestVAMM extends BaseContract {
     ): Promise<void>;
 
     setVariableTokenGrowthGlobal(
-      _variableTokenGrowthGlobalX128: BigNumberish,
+      newVariableTokenGrowthGlobalX128: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -926,25 +926,26 @@ export class TestVAMM extends BaseContract {
       },
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, BigNumber, BigNumber] & {
+      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
         _fixedTokenDelta: BigNumber;
         _variableTokenDelta: BigNumber;
         _cumulativeFeeIncurred: BigNumber;
         _fixedTokenDeltaUnbalanced: BigNumber;
+        _marginRequirement: BigNumber;
       }
     >;
 
     testGetAMMTermEndTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
 
     tickBitmap(
-      arg0: BigNumberish,
+      wordPosition: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     tickSpacing(overrides?: CallOverrides): Promise<number>;
 
     ticks(
-      arg0: BigNumberish,
+      tick: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, boolean] & {
@@ -961,8 +962,6 @@ export class TestVAMM extends BaseContract {
       newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    unlocked(overrides?: CallOverrides): Promise<boolean>;
 
     updateProtocolFees(
       protocolFeesCollected: BigNumberish,
@@ -1246,7 +1245,7 @@ export class TestVAMM extends BaseContract {
 
     initialize(
       _marginEngineAddress: string,
-      _tickSpacing: BigNumberish,
+      __tickSpacing: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1280,7 +1279,7 @@ export class TestVAMM extends BaseContract {
     ): Promise<BigNumber>;
 
     setFee(
-      _feeWad: BigNumberish,
+      newFeeWad: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1290,12 +1289,12 @@ export class TestVAMM extends BaseContract {
     ): Promise<BigNumber>;
 
     setFixedTokenGrowthGlobal(
-      _fixedTokenGrowthGlobalX128: BigNumberish,
+      newFixedTokenGrowthGlobalX128: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     setTestProtocolFees(
-      _protocolFees: BigNumberish,
+      newProtocolFees: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1313,7 +1312,7 @@ export class TestVAMM extends BaseContract {
     ): Promise<BigNumber>;
 
     setVariableTokenGrowthGlobal(
-      _variableTokenGrowthGlobalX128: BigNumberish,
+      newVariableTokenGrowthGlobalX128: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1331,20 +1330,18 @@ export class TestVAMM extends BaseContract {
     testGetAMMTermEndTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
 
     tickBitmap(
-      arg0: BigNumberish,
+      wordPosition: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     tickSpacing(overrides?: CallOverrides): Promise<BigNumber>;
 
-    ticks(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    ticks(tick: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
-
-    unlocked(overrides?: CallOverrides): Promise<BigNumber>;
 
     updateProtocolFees(
       protocolFeesCollected: BigNumberish,
@@ -1406,7 +1403,7 @@ export class TestVAMM extends BaseContract {
 
     initialize(
       _marginEngineAddress: string,
-      _tickSpacing: BigNumberish,
+      __tickSpacing: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1442,7 +1439,7 @@ export class TestVAMM extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     setFee(
-      _feeWad: BigNumberish,
+      newFeeWad: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1452,12 +1449,12 @@ export class TestVAMM extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     setFixedTokenGrowthGlobal(
-      _fixedTokenGrowthGlobalX128: BigNumberish,
+      newFixedTokenGrowthGlobalX128: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     setTestProtocolFees(
-      _protocolFees: BigNumberish,
+      newProtocolFees: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1475,7 +1472,7 @@ export class TestVAMM extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     setVariableTokenGrowthGlobal(
-      _variableTokenGrowthGlobalX128: BigNumberish,
+      newVariableTokenGrowthGlobalX128: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1495,14 +1492,14 @@ export class TestVAMM extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     tickBitmap(
-      arg0: BigNumberish,
+      wordPosition: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     tickSpacing(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     ticks(
-      arg0: BigNumberish,
+      tick: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1510,8 +1507,6 @@ export class TestVAMM extends BaseContract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
-
-    unlocked(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     updateProtocolFees(
       protocolFeesCollected: BigNumberish,

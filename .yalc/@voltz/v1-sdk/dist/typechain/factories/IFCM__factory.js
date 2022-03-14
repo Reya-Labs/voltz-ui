@@ -10,6 +10,47 @@ var _abi = [
         inputs: [
             {
                 internalType: "address",
+                name: "trader",
+                type: "address",
+            },
+        ],
+        name: "getTraderWithYieldBearingAssets",
+        outputs: [
+            {
+                components: [
+                    {
+                        internalType: "uint256",
+                        name: "marginInScaledYieldBearingTokens",
+                        type: "uint256",
+                    },
+                    {
+                        internalType: "int256",
+                        name: "fixedTokenBalance",
+                        type: "int256",
+                    },
+                    {
+                        internalType: "int256",
+                        name: "variableTokenBalance",
+                        type: "int256",
+                    },
+                    {
+                        internalType: "bool",
+                        name: "isSettled",
+                        type: "bool",
+                    },
+                ],
+                internalType: "struct TraderWithYieldBearingAssets.Info",
+                name: "traderInfo",
+                type: "tuple",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
                 name: "_vammAddress",
                 type: "address",
             },
@@ -91,19 +132,6 @@ var _abi = [
         name: "transferMarginToMarginEngineTrader",
         outputs: [],
         stateMutability: "nonpayable",
-        type: "function",
-    },
-    {
-        inputs: [],
-        name: "underlyingToken",
-        outputs: [
-            {
-                internalType: "contract IERC20Minimal",
-                name: "",
-                type: "address",
-            },
-        ],
-        stateMutability: "view",
         type: "function",
     },
     {

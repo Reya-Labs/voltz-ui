@@ -29,6 +29,7 @@ interface MarginEngineInterface extends ethers.utils.Interface {
     "getHistoricalApy()": FunctionFragment;
     "getHistoricalApyReadOnly()": FunctionFragment;
     "getPosition(address,int24,int24)": FunctionFragment;
+    "getPositionMarginRequirement(address,int24,int24,bool)": FunctionFragment;
     "initialize(address,address,uint256,uint256)": FunctionFragment;
     "liquidatePosition(int24,int24,address)": FunctionFragment;
     "liquidatorRewardWad()": FunctionFragment;
@@ -51,7 +52,7 @@ interface MarginEngineInterface extends ethers.utils.Interface {
     "underlyingToken()": FunctionFragment;
     "updatePositionMargin(address,int24,int24,int256)": FunctionFragment;
     "updatePositionPostVAMMInducedMintBurn((address,int24,int24,int128))": FunctionFragment;
-    "updatePositionPostVAMMInducedSwap(address,int24,int24,int256,int256,uint256)": FunctionFragment;
+    "updatePositionPostVAMMInducedSwap(address,int24,int24,int256,int256,uint256,int256)": FunctionFragment;
     "upgradeTo(address)": FunctionFragment;
     "upgradeToAndCall(address,bytes)": FunctionFragment;
     "vamm()": FunctionFragment;
@@ -78,6 +79,10 @@ interface MarginEngineInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "getPosition",
     values: [string, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getPositionMarginRequirement",
+    values: [string, BigNumberish, BigNumberish, boolean]
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
@@ -191,6 +196,7 @@ interface MarginEngineInterface extends ethers.utils.Interface {
       BigNumberish,
       BigNumberish,
       BigNumberish,
+      BigNumberish,
       BigNumberish
     ]
   ): string;
@@ -221,6 +227,10 @@ interface MarginEngineInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getPosition",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getPositionMarginRequirement",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
@@ -724,11 +734,19 @@ export class MarginEngine extends BaseContract {
       }
     >;
 
+    getPositionMarginRequirement(
+      recipient: string,
+      tickLower: BigNumberish,
+      tickUpper: BigNumberish,
+      isLM: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     initialize(
-      _underlyingToken: string,
+      __underlyingToken: string,
       _rateOracleAddress: string,
-      _termStartTimestampWad: BigNumberish,
-      _termEndTimestampWad: BigNumberish,
+      __termStartTimestampWad: BigNumberish,
+      __termEndTimestampWad: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -754,17 +772,17 @@ export class MarginEngine extends BaseContract {
     secondsAgo(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     setCacheMaxAgeInSeconds(
-      _cacheMaxAgeInSeconds: BigNumberish,
+      _newCacheMaxAgeInSeconds: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     setFCM(
-      _fcm: string,
+      _newFcm: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     setLiquidatorReward(
-      _liquidatorRewardWad: BigNumberish,
+      _newLiquidatorRewardWad: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -793,7 +811,7 @@ export class MarginEngine extends BaseContract {
     ): Promise<ContractTransaction>;
 
     setSecondsAgo(
-      _secondsAgo: BigNumberish,
+      _newSecondsAgo: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -851,6 +869,7 @@ export class MarginEngine extends BaseContract {
       fixedTokenDelta: BigNumberish,
       variableTokenDelta: BigNumberish,
       cumulativeFeeIncurred: BigNumberish,
+      fixedTokenDeltaUnbalanced: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -915,11 +934,19 @@ export class MarginEngine extends BaseContract {
     }
   >;
 
+  getPositionMarginRequirement(
+    recipient: string,
+    tickLower: BigNumberish,
+    tickUpper: BigNumberish,
+    isLM: boolean,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   initialize(
-    _underlyingToken: string,
+    __underlyingToken: string,
     _rateOracleAddress: string,
-    _termStartTimestampWad: BigNumberish,
-    _termEndTimestampWad: BigNumberish,
+    __termStartTimestampWad: BigNumberish,
+    __termEndTimestampWad: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -945,17 +972,17 @@ export class MarginEngine extends BaseContract {
   secondsAgo(overrides?: CallOverrides): Promise<BigNumber>;
 
   setCacheMaxAgeInSeconds(
-    _cacheMaxAgeInSeconds: BigNumberish,
+    _newCacheMaxAgeInSeconds: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   setFCM(
-    _fcm: string,
+    _newFcm: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   setLiquidatorReward(
-    _liquidatorRewardWad: BigNumberish,
+    _newLiquidatorRewardWad: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -984,7 +1011,7 @@ export class MarginEngine extends BaseContract {
   ): Promise<ContractTransaction>;
 
   setSecondsAgo(
-    _secondsAgo: BigNumberish,
+    _newSecondsAgo: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1042,6 +1069,7 @@ export class MarginEngine extends BaseContract {
     fixedTokenDelta: BigNumberish,
     variableTokenDelta: BigNumberish,
     cumulativeFeeIncurred: BigNumberish,
+    fixedTokenDeltaUnbalanced: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1104,11 +1132,19 @@ export class MarginEngine extends BaseContract {
       }
     >;
 
+    getPositionMarginRequirement(
+      recipient: string,
+      tickLower: BigNumberish,
+      tickUpper: BigNumberish,
+      isLM: boolean,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     initialize(
-      _underlyingToken: string,
+      __underlyingToken: string,
       _rateOracleAddress: string,
-      _termStartTimestampWad: BigNumberish,
-      _termEndTimestampWad: BigNumberish,
+      __termStartTimestampWad: BigNumberish,
+      __termEndTimestampWad: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1132,14 +1168,14 @@ export class MarginEngine extends BaseContract {
     secondsAgo(overrides?: CallOverrides): Promise<BigNumber>;
 
     setCacheMaxAgeInSeconds(
-      _cacheMaxAgeInSeconds: BigNumberish,
+      _newCacheMaxAgeInSeconds: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setFCM(_fcm: string, overrides?: CallOverrides): Promise<void>;
+    setFCM(_newFcm: string, overrides?: CallOverrides): Promise<void>;
 
     setLiquidatorReward(
-      _liquidatorRewardWad: BigNumberish,
+      _newLiquidatorRewardWad: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1168,7 +1204,7 @@ export class MarginEngine extends BaseContract {
     ): Promise<void>;
 
     setSecondsAgo(
-      _secondsAgo: BigNumberish,
+      _newSecondsAgo: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1214,7 +1250,7 @@ export class MarginEngine extends BaseContract {
         liquidityDelta: BigNumberish;
       },
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<BigNumber>;
 
     updatePositionPostVAMMInducedSwap(
       _owner: string,
@@ -1223,8 +1259,9 @@ export class MarginEngine extends BaseContract {
       fixedTokenDelta: BigNumberish,
       variableTokenDelta: BigNumberish,
       cumulativeFeeIncurred: BigNumberish,
+      fixedTokenDeltaUnbalanced: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<BigNumber>;
 
     upgradeTo(
       newImplementation: string,
@@ -1928,11 +1965,19 @@ export class MarginEngine extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getPositionMarginRequirement(
+      recipient: string,
+      tickLower: BigNumberish,
+      tickUpper: BigNumberish,
+      isLM: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     initialize(
-      _underlyingToken: string,
+      __underlyingToken: string,
       _rateOracleAddress: string,
-      _termStartTimestampWad: BigNumberish,
-      _termEndTimestampWad: BigNumberish,
+      __termStartTimestampWad: BigNumberish,
+      __termEndTimestampWad: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1958,17 +2003,17 @@ export class MarginEngine extends BaseContract {
     secondsAgo(overrides?: CallOverrides): Promise<BigNumber>;
 
     setCacheMaxAgeInSeconds(
-      _cacheMaxAgeInSeconds: BigNumberish,
+      _newCacheMaxAgeInSeconds: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     setFCM(
-      _fcm: string,
+      _newFcm: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     setLiquidatorReward(
-      _liquidatorRewardWad: BigNumberish,
+      _newLiquidatorRewardWad: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1997,7 +2042,7 @@ export class MarginEngine extends BaseContract {
     ): Promise<BigNumber>;
 
     setSecondsAgo(
-      _secondsAgo: BigNumberish,
+      _newSecondsAgo: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -2055,6 +2100,7 @@ export class MarginEngine extends BaseContract {
       fixedTokenDelta: BigNumberish,
       variableTokenDelta: BigNumberish,
       cumulativeFeeIncurred: BigNumberish,
+      fixedTokenDeltaUnbalanced: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -2102,11 +2148,19 @@ export class MarginEngine extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getPositionMarginRequirement(
+      recipient: string,
+      tickLower: BigNumberish,
+      tickUpper: BigNumberish,
+      isLM: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     initialize(
-      _underlyingToken: string,
+      __underlyingToken: string,
       _rateOracleAddress: string,
-      _termStartTimestampWad: BigNumberish,
-      _termEndTimestampWad: BigNumberish,
+      __termStartTimestampWad: BigNumberish,
+      __termEndTimestampWad: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -2134,17 +2188,17 @@ export class MarginEngine extends BaseContract {
     secondsAgo(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     setCacheMaxAgeInSeconds(
-      _cacheMaxAgeInSeconds: BigNumberish,
+      _newCacheMaxAgeInSeconds: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     setFCM(
-      _fcm: string,
+      _newFcm: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     setLiquidatorReward(
-      _liquidatorRewardWad: BigNumberish,
+      _newLiquidatorRewardWad: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -2173,7 +2227,7 @@ export class MarginEngine extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     setSecondsAgo(
-      _secondsAgo: BigNumberish,
+      _newSecondsAgo: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -2235,6 +2289,7 @@ export class MarginEngine extends BaseContract {
       fixedTokenDelta: BigNumberish,
       variableTokenDelta: BigNumberish,
       cumulativeFeeIncurred: BigNumberish,
+      fixedTokenDeltaUnbalanced: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

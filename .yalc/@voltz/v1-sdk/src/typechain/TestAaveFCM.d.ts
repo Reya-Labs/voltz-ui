@@ -12,6 +12,7 @@ import {
   BaseContract,
   ContractTransaction,
   Overrides,
+  PayableOverrides,
   CallOverrides,
 } from "ethers";
 import { BytesLike } from "@ethersproject/bytes";
@@ -21,8 +22,12 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface TestAaveFCMInterface extends ethers.utils.Interface {
   functions: {
+    "aaveLendingPool()": FunctionFragment;
+    "estimateSettlementCashflow(address,uint256,uint256,uint256)": FunctionFragment;
     "getAaveLendingPool()": FunctionFragment;
+    "getTraderMarginInATokens(address)": FunctionFragment;
     "getTraderMarginInYieldBearingTokensTest(address)": FunctionFragment;
+    "getTraderWithYieldBearingAssets(address)": FunctionFragment;
     "getUnderlyingYieldBearingToken()": FunctionFragment;
     "getVAMMAddress()": FunctionFragment;
     "initialize(address,address)": FunctionFragment;
@@ -30,20 +35,42 @@ interface TestAaveFCMInterface extends ethers.utils.Interface {
     "marginEngine()": FunctionFragment;
     "owner()": FunctionFragment;
     "paused()": FunctionFragment;
+    "rateOracle()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "settleTrader()": FunctionFragment;
     "traders(address)": FunctionFragment;
     "transferMarginToMarginEngineTrader(address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
+    "underlyingToken()": FunctionFragment;
+    "underlyingYieldBearingToken()": FunctionFragment;
     "unwindFullyCollateralisedFixedTakerSwap(uint256,uint160)": FunctionFragment;
+    "upgradeTo(address)": FunctionFragment;
+    "upgradeToAndCall(address,bytes)": FunctionFragment;
+    "vamm()": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "aaveLendingPool",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "estimateSettlementCashflow",
+    values: [string, BigNumberish, BigNumberish, BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "getAaveLendingPool",
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "getTraderMarginInATokens",
+    values: [string]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getTraderMarginInYieldBearingTokensTest",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getTraderWithYieldBearingAssets",
     values: [string]
   ): string;
   encodeFunctionData(
@@ -69,6 +96,10 @@ interface TestAaveFCMInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "rateOracle",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
   ): string;
@@ -86,16 +117,46 @@ interface TestAaveFCMInterface extends ethers.utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(
+    functionFragment: "underlyingToken",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "underlyingYieldBearingToken",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "unwindFullyCollateralisedFixedTakerSwap",
     values: [BigNumberish, BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "upgradeTo", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "upgradeToAndCall",
+    values: [string, BytesLike]
+  ): string;
+  encodeFunctionData(functionFragment: "vamm", values?: undefined): string;
 
+  decodeFunctionResult(
+    functionFragment: "aaveLendingPool",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "estimateSettlementCashflow",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "getAaveLendingPool",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "getTraderMarginInATokens",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getTraderMarginInYieldBearingTokensTest",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getTraderWithYieldBearingAssets",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -117,6 +178,7 @@ interface TestAaveFCMInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "rateOracle", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
@@ -135,24 +197,50 @@ interface TestAaveFCMInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "underlyingToken",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "underlyingYieldBearingToken",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "unwindFullyCollateralisedFixedTakerSwap",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "upgradeTo", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "upgradeToAndCall",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "vamm", data: BytesLike): Result;
 
   events: {
+    "AdminChanged(address,address)": EventFragment;
+    "BeaconUpgraded(address)": EventFragment;
     "InitiateFullyCollateralisedSwap(uint256,int256,int256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Paused(address)": EventFragment;
     "Unpaused(address)": EventFragment;
+    "Upgraded(address)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "AdminChanged"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "BeaconUpgraded"): EventFragment;
   getEvent(
     nameOrSignatureOrTopic: "InitiateFullyCollateralisedSwap"
   ): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Upgraded"): EventFragment;
 }
+
+export type AdminChangedEvent = TypedEvent<
+  [string, string] & { previousAdmin: string; newAdmin: string }
+>;
+
+export type BeaconUpgradedEvent = TypedEvent<[string] & { beacon: string }>;
 
 export type InitiateFullyCollateralisedSwapEvent = TypedEvent<
   [BigNumber, BigNumber, BigNumber] & {
@@ -169,6 +257,8 @@ export type OwnershipTransferredEvent = TypedEvent<
 export type PausedEvent = TypedEvent<[string] & { account: string }>;
 
 export type UnpausedEvent = TypedEvent<[string] & { account: string }>;
+
+export type UpgradedEvent = TypedEvent<[string] & { implementation: string }>;
 
 export class TestAaveFCM extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -214,12 +304,48 @@ export class TestAaveFCM extends BaseContract {
   interface: TestAaveFCMInterface;
 
   functions: {
+    aaveLendingPool(overrides?: CallOverrides): Promise<[string]>;
+
+    estimateSettlementCashflow(
+      traderAddress: string,
+      termStartTimestampWad: BigNumberish,
+      termEndTimestampWad: BigNumberish,
+      variableFactorWad: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     getAaveLendingPool(overrides?: CallOverrides): Promise<[string]>;
+
+    getTraderMarginInATokens(
+      traderAddress: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { marginInYieldBearingTokens: BigNumber }>;
 
     getTraderMarginInYieldBearingTokensTest(
       traderAddress: string,
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { marginInYieldBearingTokens: BigNumber }>;
+
+    getTraderWithYieldBearingAssets(
+      trader: string,
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        [BigNumber, BigNumber, BigNumber, boolean] & {
+          marginInScaledYieldBearingTokens: BigNumber;
+          fixedTokenBalance: BigNumber;
+          variableTokenBalance: BigNumber;
+          isSettled: boolean;
+        }
+      ] & {
+        traderInfo: [BigNumber, BigNumber, BigNumber, boolean] & {
+          marginInScaledYieldBearingTokens: BigNumber;
+          fixedTokenBalance: BigNumber;
+          variableTokenBalance: BigNumber;
+          isSettled: boolean;
+        };
+      }
+    >;
 
     getUnderlyingYieldBearingToken(
       overrides?: CallOverrides
@@ -244,6 +370,8 @@ export class TestAaveFCM extends BaseContract {
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     paused(overrides?: CallOverrides): Promise<[boolean]>;
+
+    rateOracle(overrides?: CallOverrides): Promise<[string]>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -276,19 +404,63 @@ export class TestAaveFCM extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    underlyingToken(overrides?: CallOverrides): Promise<[string]>;
+
+    underlyingYieldBearingToken(overrides?: CallOverrides): Promise<[string]>;
+
     unwindFullyCollateralisedFixedTakerSwap(
       notionalToUnwind: BigNumberish,
       sqrtPriceLimitX96: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    upgradeTo(
+      newImplementation: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    upgradeToAndCall(
+      newImplementation: string,
+      data: BytesLike,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    vamm(overrides?: CallOverrides): Promise<[string]>;
   };
 
+  aaveLendingPool(overrides?: CallOverrides): Promise<string>;
+
+  estimateSettlementCashflow(
+    traderAddress: string,
+    termStartTimestampWad: BigNumberish,
+    termEndTimestampWad: BigNumberish,
+    variableFactorWad: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   getAaveLendingPool(overrides?: CallOverrides): Promise<string>;
+
+  getTraderMarginInATokens(
+    traderAddress: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   getTraderMarginInYieldBearingTokensTest(
     traderAddress: string,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
+
+  getTraderWithYieldBearingAssets(
+    trader: string,
+    overrides?: CallOverrides
+  ): Promise<
+    [BigNumber, BigNumber, BigNumber, boolean] & {
+      marginInScaledYieldBearingTokens: BigNumber;
+      fixedTokenBalance: BigNumber;
+      variableTokenBalance: BigNumber;
+      isSettled: boolean;
+    }
+  >;
 
   getUnderlyingYieldBearingToken(overrides?: CallOverrides): Promise<string>;
 
@@ -311,6 +483,8 @@ export class TestAaveFCM extends BaseContract {
   owner(overrides?: CallOverrides): Promise<string>;
 
   paused(overrides?: CallOverrides): Promise<boolean>;
+
+  rateOracle(overrides?: CallOverrides): Promise<string>;
 
   renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -343,19 +517,63 @@ export class TestAaveFCM extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  underlyingToken(overrides?: CallOverrides): Promise<string>;
+
+  underlyingYieldBearingToken(overrides?: CallOverrides): Promise<string>;
+
   unwindFullyCollateralisedFixedTakerSwap(
     notionalToUnwind: BigNumberish,
     sqrtPriceLimitX96: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  upgradeTo(
+    newImplementation: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  upgradeToAndCall(
+    newImplementation: string,
+    data: BytesLike,
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  vamm(overrides?: CallOverrides): Promise<string>;
+
   callStatic: {
+    aaveLendingPool(overrides?: CallOverrides): Promise<string>;
+
+    estimateSettlementCashflow(
+      traderAddress: string,
+      termStartTimestampWad: BigNumberish,
+      termEndTimestampWad: BigNumberish,
+      variableFactorWad: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getAaveLendingPool(overrides?: CallOverrides): Promise<string>;
+
+    getTraderMarginInATokens(
+      traderAddress: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getTraderMarginInYieldBearingTokensTest(
       traderAddress: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    getTraderWithYieldBearingAssets(
+      trader: string,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber, BigNumber, boolean] & {
+        marginInScaledYieldBearingTokens: BigNumber;
+        fixedTokenBalance: BigNumber;
+        variableTokenBalance: BigNumber;
+        isSettled: boolean;
+      }
+    >;
 
     getUnderlyingYieldBearingToken(overrides?: CallOverrides): Promise<string>;
 
@@ -378,6 +596,8 @@ export class TestAaveFCM extends BaseContract {
     owner(overrides?: CallOverrides): Promise<string>;
 
     paused(overrides?: CallOverrides): Promise<boolean>;
+
+    rateOracle(overrides?: CallOverrides): Promise<string>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
@@ -406,14 +626,55 @@ export class TestAaveFCM extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    underlyingToken(overrides?: CallOverrides): Promise<string>;
+
+    underlyingYieldBearingToken(overrides?: CallOverrides): Promise<string>;
+
     unwindFullyCollateralisedFixedTakerSwap(
       notionalToUnwind: BigNumberish,
       sqrtPriceLimitX96: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    upgradeTo(
+      newImplementation: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    upgradeToAndCall(
+      newImplementation: string,
+      data: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    vamm(overrides?: CallOverrides): Promise<string>;
   };
 
   filters: {
+    "AdminChanged(address,address)"(
+      previousAdmin?: null,
+      newAdmin?: null
+    ): TypedEventFilter<
+      [string, string],
+      { previousAdmin: string; newAdmin: string }
+    >;
+
+    AdminChanged(
+      previousAdmin?: null,
+      newAdmin?: null
+    ): TypedEventFilter<
+      [string, string],
+      { previousAdmin: string; newAdmin: string }
+    >;
+
+    "BeaconUpgraded(address)"(
+      beacon?: string | null
+    ): TypedEventFilter<[string], { beacon: string }>;
+
+    BeaconUpgraded(
+      beacon?: string | null
+    ): TypedEventFilter<[string], { beacon: string }>;
+
     "InitiateFullyCollateralisedSwap(uint256,int256,int256)"(
       marginInScaledYieldBearingTokens?: null,
       fixedTokenBalance?: null,
@@ -467,13 +728,41 @@ export class TestAaveFCM extends BaseContract {
     ): TypedEventFilter<[string], { account: string }>;
 
     Unpaused(account?: null): TypedEventFilter<[string], { account: string }>;
+
+    "Upgraded(address)"(
+      implementation?: string | null
+    ): TypedEventFilter<[string], { implementation: string }>;
+
+    Upgraded(
+      implementation?: string | null
+    ): TypedEventFilter<[string], { implementation: string }>;
   };
 
   estimateGas: {
+    aaveLendingPool(overrides?: CallOverrides): Promise<BigNumber>;
+
+    estimateSettlementCashflow(
+      traderAddress: string,
+      termStartTimestampWad: BigNumberish,
+      termEndTimestampWad: BigNumberish,
+      variableFactorWad: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getAaveLendingPool(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getTraderMarginInATokens(
+      traderAddress: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getTraderMarginInYieldBearingTokensTest(
       traderAddress: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getTraderWithYieldBearingAssets(
+      trader: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -501,6 +790,8 @@ export class TestAaveFCM extends BaseContract {
 
     paused(overrides?: CallOverrides): Promise<BigNumber>;
 
+    rateOracle(overrides?: CallOverrides): Promise<BigNumber>;
+
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -522,20 +813,57 @@ export class TestAaveFCM extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    underlyingToken(overrides?: CallOverrides): Promise<BigNumber>;
+
+    underlyingYieldBearingToken(overrides?: CallOverrides): Promise<BigNumber>;
+
     unwindFullyCollateralisedFixedTakerSwap(
       notionalToUnwind: BigNumberish,
       sqrtPriceLimitX96: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    upgradeTo(
+      newImplementation: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    upgradeToAndCall(
+      newImplementation: string,
+      data: BytesLike,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    vamm(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    aaveLendingPool(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    estimateSettlementCashflow(
+      traderAddress: string,
+      termStartTimestampWad: BigNumberish,
+      termEndTimestampWad: BigNumberish,
+      variableFactorWad: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getAaveLendingPool(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getTraderMarginInATokens(
+      traderAddress: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     getTraderMarginInYieldBearingTokensTest(
       traderAddress: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getTraderWithYieldBearingAssets(
+      trader: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -563,6 +891,8 @@ export class TestAaveFCM extends BaseContract {
 
     paused(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    rateOracle(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
@@ -587,10 +917,29 @@ export class TestAaveFCM extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    underlyingToken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    underlyingYieldBearingToken(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     unwindFullyCollateralisedFixedTakerSwap(
       notionalToUnwind: BigNumberish,
       sqrtPriceLimitX96: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    upgradeTo(
+      newImplementation: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    upgradeToAndCall(
+      newImplementation: string,
+      data: BytesLike,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    vamm(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

@@ -21,10 +21,22 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface PeripheryInterface extends ethers.utils.Interface {
   functions: {
+    "getCurrentTick(address)": FunctionFragment;
+    "getMarginEngine(address)": FunctionFragment;
+    "getVAMM(address)": FunctionFragment;
     "mintOrBurn((address,address,int24,int24,uint256,bool))": FunctionFragment;
     "swap((address,address,bool,uint256,uint160,int24,int24))": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "getCurrentTick",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getMarginEngine",
+    values: [string]
+  ): string;
+  encodeFunctionData(functionFragment: "getVAMM", values: [string]): string;
   encodeFunctionData(
     functionFragment: "mintOrBurn",
     values: [
@@ -53,6 +65,15 @@ interface PeripheryInterface extends ethers.utils.Interface {
     ]
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "getCurrentTick",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getMarginEngine",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "getVAMM", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mintOrBurn", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "swap", data: BytesLike): Result;
 
@@ -103,6 +124,21 @@ export class Periphery extends BaseContract {
   interface: PeripheryInterface;
 
   functions: {
+    getCurrentTick(
+      marginEngineAddress: string,
+      overrides?: CallOverrides
+    ): Promise<[number] & { currentTick: number }>;
+
+    getMarginEngine(
+      marginEngineAddress: string,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    getVAMM(
+      marginEngineAddress: string,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
     mintOrBurn(
       params: {
         marginEngineAddress: string;
@@ -128,6 +164,21 @@ export class Periphery extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
+
+  getCurrentTick(
+    marginEngineAddress: string,
+    overrides?: CallOverrides
+  ): Promise<number>;
+
+  getMarginEngine(
+    marginEngineAddress: string,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  getVAMM(
+    marginEngineAddress: string,
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   mintOrBurn(
     params: {
@@ -155,6 +206,21 @@ export class Periphery extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    getCurrentTick(
+      marginEngineAddress: string,
+      overrides?: CallOverrides
+    ): Promise<number>;
+
+    getMarginEngine(
+      marginEngineAddress: string,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    getVAMM(
+      marginEngineAddress: string,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
     mintOrBurn(
       params: {
         marginEngineAddress: string;
@@ -165,7 +231,7 @@ export class Periphery extends BaseContract {
         isMint: boolean;
       },
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<BigNumber>;
 
     swap(
       params: {
@@ -178,12 +244,36 @@ export class Periphery extends BaseContract {
         tickUpper: BigNumberish;
       },
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<
+      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, number] & {
+        _fixedTokenDelta: BigNumber;
+        _variableTokenDelta: BigNumber;
+        _cumulativeFeeIncurred: BigNumber;
+        _fixedTokenDeltaUnbalanced: BigNumber;
+        _marginRequirement: BigNumber;
+        _tickAfter: number;
+      }
+    >;
   };
 
   filters: {};
 
   estimateGas: {
+    getCurrentTick(
+      marginEngineAddress: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getMarginEngine(
+      marginEngineAddress: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getVAMM(
+      marginEngineAddress: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     mintOrBurn(
       params: {
         marginEngineAddress: string;
@@ -211,6 +301,21 @@ export class Periphery extends BaseContract {
   };
 
   populateTransaction: {
+    getCurrentTick(
+      marginEngineAddress: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getMarginEngine(
+      marginEngineAddress: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getVAMM(
+      marginEngineAddress: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     mintOrBurn(
       params: {
         marginEngineAddress: string;

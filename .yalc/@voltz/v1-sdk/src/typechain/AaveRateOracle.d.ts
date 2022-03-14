@@ -24,7 +24,7 @@ interface AaveRateOracleInterface extends ethers.utils.Interface {
     "aaveLendingPool()": FunctionFragment;
     "getApyFromTo(uint256,uint256)": FunctionFragment;
     "getRateFromTo(uint256,uint256)": FunctionFragment;
-    "increaseObservarionCardinalityNext(uint16)": FunctionFragment;
+    "increaseObservationCardinalityNext(uint16)": FunctionFragment;
     "interpolateRateValue(uint256,uint256,uint256)": FunctionFragment;
     "minSecondsSinceLastUpdate()": FunctionFragment;
     "observations(uint256)": FunctionFragment;
@@ -54,7 +54,7 @@ interface AaveRateOracleInterface extends ethers.utils.Interface {
     values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "increaseObservarionCardinalityNext",
+    functionFragment: "increaseObservationCardinalityNext",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -124,7 +124,7 @@ interface AaveRateOracleInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "increaseObservarionCardinalityNext",
+    functionFragment: "increaseObservationCardinalityNext",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -277,7 +277,7 @@ export class AaveRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    increaseObservarionCardinalityNext(
+    increaseObservationCardinalityNext(
       rateCardinalityNext: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -371,7 +371,7 @@ export class AaveRateOracle extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  increaseObservarionCardinalityNext(
+  increaseObservationCardinalityNext(
     rateCardinalityNext: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -463,7 +463,7 @@ export class AaveRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    increaseObservarionCardinalityNext(
+    increaseObservationCardinalityNext(
       rateCardinalityNext: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -644,7 +644,7 @@ export class AaveRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    increaseObservarionCardinalityNext(
+    increaseObservationCardinalityNext(
       rateCardinalityNext: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -725,7 +725,7 @@ export class AaveRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    increaseObservarionCardinalityNext(
+    increaseObservationCardinalityNext(
       rateCardinalityNext: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;

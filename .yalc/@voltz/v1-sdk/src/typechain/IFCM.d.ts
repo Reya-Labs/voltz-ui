@@ -21,17 +21,21 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface IFCMInterface extends ethers.utils.Interface {
   functions: {
+    "getTraderWithYieldBearingAssets(address)": FunctionFragment;
     "initialize(address,address)": FunctionFragment;
     "initiateFullyCollateralisedFixedTakerSwap(uint256,uint160)": FunctionFragment;
     "marginEngine()": FunctionFragment;
     "rateOracle()": FunctionFragment;
     "settleTrader()": FunctionFragment;
     "transferMarginToMarginEngineTrader(address,uint256)": FunctionFragment;
-    "underlyingToken()": FunctionFragment;
     "unwindFullyCollateralisedFixedTakerSwap(uint256,uint160)": FunctionFragment;
     "vamm()": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "getTraderWithYieldBearingAssets",
+    values: [string]
+  ): string;
   encodeFunctionData(
     functionFragment: "initialize",
     values: [string, string]
@@ -57,15 +61,15 @@ interface IFCMInterface extends ethers.utils.Interface {
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "underlyingToken",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "unwindFullyCollateralisedFixedTakerSwap",
     values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "vamm", values?: undefined): string;
 
+  decodeFunctionResult(
+    functionFragment: "getTraderWithYieldBearingAssets",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "initiateFullyCollateralisedFixedTakerSwap",
@@ -82,10 +86,6 @@ interface IFCMInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "transferMarginToMarginEngineTrader",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "underlyingToken",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -141,6 +141,27 @@ export class IFCM extends BaseContract {
   interface: IFCMInterface;
 
   functions: {
+    getTraderWithYieldBearingAssets(
+      trader: string,
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        [BigNumber, BigNumber, BigNumber, boolean] & {
+          marginInScaledYieldBearingTokens: BigNumber;
+          fixedTokenBalance: BigNumber;
+          variableTokenBalance: BigNumber;
+          isSettled: boolean;
+        }
+      ] & {
+        traderInfo: [BigNumber, BigNumber, BigNumber, boolean] & {
+          marginInScaledYieldBearingTokens: BigNumber;
+          fixedTokenBalance: BigNumber;
+          variableTokenBalance: BigNumber;
+          isSettled: boolean;
+        };
+      }
+    >;
+
     initialize(
       _vammAddress: string,
       _marginEngineAddress: string,
@@ -167,8 +188,6 @@ export class IFCM extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    underlyingToken(overrides?: CallOverrides): Promise<[string]>;
-
     unwindFullyCollateralisedFixedTakerSwap(
       notionalToUnwind: BigNumberish,
       sqrtPriceLimitX96: BigNumberish,
@@ -177,6 +196,18 @@ export class IFCM extends BaseContract {
 
     vamm(overrides?: CallOverrides): Promise<[string]>;
   };
+
+  getTraderWithYieldBearingAssets(
+    trader: string,
+    overrides?: CallOverrides
+  ): Promise<
+    [BigNumber, BigNumber, BigNumber, boolean] & {
+      marginInScaledYieldBearingTokens: BigNumber;
+      fixedTokenBalance: BigNumber;
+      variableTokenBalance: BigNumber;
+      isSettled: boolean;
+    }
+  >;
 
   initialize(
     _vammAddress: string,
@@ -204,8 +235,6 @@ export class IFCM extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  underlyingToken(overrides?: CallOverrides): Promise<string>;
-
   unwindFullyCollateralisedFixedTakerSwap(
     notionalToUnwind: BigNumberish,
     sqrtPriceLimitX96: BigNumberish,
@@ -215,6 +244,18 @@ export class IFCM extends BaseContract {
   vamm(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
+    getTraderWithYieldBearingAssets(
+      trader: string,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber, BigNumber, boolean] & {
+        marginInScaledYieldBearingTokens: BigNumber;
+        fixedTokenBalance: BigNumber;
+        variableTokenBalance: BigNumber;
+        isSettled: boolean;
+      }
+    >;
+
     initialize(
       _vammAddress: string,
       _marginEngineAddress: string,
@@ -239,8 +280,6 @@ export class IFCM extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    underlyingToken(overrides?: CallOverrides): Promise<string>;
-
     unwindFullyCollateralisedFixedTakerSwap(
       notionalToUnwind: BigNumberish,
       sqrtPriceLimitX96: BigNumberish,
@@ -253,6 +292,11 @@ export class IFCM extends BaseContract {
   filters: {};
 
   estimateGas: {
+    getTraderWithYieldBearingAssets(
+      trader: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     initialize(
       _vammAddress: string,
       _marginEngineAddress: string,
@@ -279,8 +323,6 @@ export class IFCM extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    underlyingToken(overrides?: CallOverrides): Promise<BigNumber>;
-
     unwindFullyCollateralisedFixedTakerSwap(
       notionalToUnwind: BigNumberish,
       sqrtPriceLimitX96: BigNumberish,
@@ -291,6 +333,11 @@ export class IFCM extends BaseContract {
   };
 
   populateTransaction: {
+    getTraderWithYieldBearingAssets(
+      trader: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     initialize(
       _vammAddress: string,
       _marginEngineAddress: string,
@@ -316,8 +363,6 @@ export class IFCM extends BaseContract {
       marginDeltaInUnderlyingTokens: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
-
-    underlyingToken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     unwindFullyCollateralisedFixedTakerSwap(
       notionalToUnwind: BigNumberish,

@@ -1,6 +1,6 @@
 import JSBI from 'jsbi';
 import { DateTime } from 'luxon';
-import { BigNumber, BigNumberish, ContractTransaction, Signer } from 'ethers';
+import { BigNumberish, ContractTransaction, Signer } from 'ethers';
 import { BigIntish } from '../types';
 import { Price } from './fractions/price';
 import Token from './token';
@@ -26,49 +26,51 @@ export declare type AMMGetMinimumMarginRequirementArgs = {
     recipient: string;
     isFT: boolean;
     notional: BigNumberish;
-    sqrtPriceLimitX96: BigNumberish;
-    tickLower: BigNumberish;
-    tickUpper: BigNumberish;
-};
-export declare type AMMGetMinimumMarginRequirementPostMintArgs = {
-    recipient: string;
+    fixedRateLimit?: number;
     fixedLow: number;
     fixedHigh: number;
-    notional: BigNumberish;
 };
 export declare type AMMUpdatePositionMarginArgs = {
     owner: string;
-    tickLower: BigNumberish;
-    tickUpper: BigNumberish;
+    fixedLow: number;
+    fixedHigh: number;
     marginDelta: BigNumberish;
+};
+export declare type AMMLiquidatePositionArgs = {
+    owner: string;
+    fixedLow: number;
+    fixedHigh: number;
 };
 export declare type AMMSettlePositionArgs = {
     owner: string;
-    tickLower: BigNumberish;
-    tickUpper: BigNumberish;
+    fixedLow: number;
+    fixedHigh: number;
 };
 export declare type AMMSwapArgs = {
     recipient: string;
     isFT: boolean;
-    notional: BigNumberish;
-    sqrtPriceLimitX96: BigNumberish;
-    tickLower: 0;
-    tickUpper: 0;
+    notional: number;
+    margin: number;
+    fixedRateLimit?: number;
+    fixedLow: number;
+    fixedHigh: number;
 };
-export declare type AMMMintOrBurnArgs = {
+export declare type FCMSwapArgs = {
+    notional: BigNumberish;
+    fixedRateLimit?: number;
+};
+export declare type FCMUnwindArgs = {
+    notionalToUnwind: BigNumberish;
+    fixedRateLimit?: number;
+};
+export declare type AMMMintArgs = {
     recipient: string;
     fixedLow: number;
     fixedHigh: number;
+    notional: number;
     margin: number;
-    leverage: number;
 };
-export declare type AMMMintOrBurnUsingTicksArgs = {
-    recipient: string;
-    tickLower: BigNumberish;
-    tickUpper: BigNumberish;
-    notional: BigNumberish;
-    isMint: boolean;
-};
+export declare type AMMBurnArgs = Omit<AMMMintArgs, 'margin'>;
 export declare type ClosestTickAndFixedRate = {
     closestUsableTick: number;
     closestUsableFixedRate: Price;
@@ -92,20 +94,22 @@ declare class AMM {
     private _fixedRate?;
     private _price?;
     constructor({ id, signer, marginEngineAddress, fcmAddress, rateOracle, createdTimestamp, updatedTimestamp, termStartTimestamp, termEndTimestamp, underlyingToken, sqrtPriceX96, liquidity, tick, tickSpacing, txCount, }: AMMConstructorArgs);
-    getMinimumMarginRequirementPostSwap({ recipient, isFT, notional, sqrtPriceLimitX96, tickLower, tickUpper, }: AMMGetMinimumMarginRequirementArgs): Promise<BigNumber | void>;
-    getMinimumMarginRequirementPostMint({ recipient, fixedLow, fixedHigh, notional, }: AMMGetMinimumMarginRequirementPostMintArgs): Promise<BigNumber | void>;
-    settlePosition({ owner, tickLower, tickUpper, }: AMMSettlePositionArgs): Promise<ContractTransaction | void>;
-    updatePositionMargin({ owner, tickLower, tickUpper, marginDelta, }: AMMUpdatePositionMarginArgs): Promise<ContractTransaction | void>;
-    mint({ recipient, fixedLow, fixedHigh, margin, leverage, }: AMMMintOrBurnArgs): Promise<ContractTransaction | void>;
-    updateSqrtPriceX96(): Promise<void>;
-    initVamm(tickLower: BigNumberish): Promise<void>;
-    mintUsingTicks({ tickLower, ...args }: Omit<AMMMintOrBurnUsingTicksArgs, 'isMint'>): Promise<ContractTransaction | void>;
-    burn({ recipient, fixedLow, fixedHigh, margin, leverage, }: AMMMintOrBurnArgs): Promise<ContractTransaction | void>;
-    burnUsingTicks(args: Omit<AMMMintOrBurnUsingTicksArgs, 'isMint'>): Promise<ContractTransaction | void>;
-    mintOrBurnUsingTicks({ recipient, tickLower, tickUpper, notional, isMint, }: AMMMintOrBurnUsingTicksArgs): Promise<ContractTransaction | void>;
+    getMinimumMarginRequirementPostSwap({ recipient, isFT, notional, fixedRateLimit, fixedLow, fixedHigh, }: AMMGetMinimumMarginRequirementArgs): Promise<number | void>;
+    getSlippagePostSwap({ recipient, isFT, notional, fixedRateLimit, fixedLow, fixedHigh, }: AMMGetMinimumMarginRequirementArgs): Promise<number | void>;
+    settlePosition({ owner, fixedLow, fixedHigh }: AMMSettlePositionArgs): Promise<ContractTransaction | void>;
+    updatePositionMargin({ owner, fixedLow, fixedHigh, marginDelta, }: AMMUpdatePositionMarginArgs): Promise<ContractTransaction | void>;
+    liquidatePosition({ owner, fixedLow, fixedHigh, }: AMMLiquidatePositionArgs): Promise<ContractTransaction | void>;
+    getLiquidationThreshold({ owner, fixedLow, fixedHigh, }: AMMLiquidatePositionArgs): Promise<number | void>;
+    getMinimumMarginRequirementPostMint({ recipient, fixedLow, fixedHigh, notional }: AMMMintArgs): Promise<number | void>;
+    mint({ recipient, fixedLow, fixedHigh, notional, margin }: AMMMintArgs): Promise<ContractTransaction | void>;
+    burn({ recipient, fixedLow, fixedHigh, notional }: AMMBurnArgs): Promise<ContractTransaction | void>;
     approvePeriphery(): Promise<ContractTransaction | void>;
+    approveFCM(): Promise<ContractTransaction | void>;
     approveMarginEngine(marginDelta: BigNumberish): Promise<void>;
-    swap({ recipient, isFT, notional, sqrtPriceLimitX96, tickLower, tickUpper, }: AMMSwapArgs): Promise<ContractTransaction | void>;
+    swap({ recipient, isFT, notional, margin, fixedRateLimit, fixedLow, fixedHigh, }: AMMSwapArgs): Promise<ContractTransaction | void>;
+    FCMswap({ notional, fixedRateLimit }: FCMSwapArgs): Promise<ContractTransaction | void>;
+    FCMunwind({ notionalToUnwind, fixedRateLimit }: FCMUnwindArgs): Promise<ContractTransaction | void>;
+    settleFCMTrader(): Promise<ContractTransaction | void>;
     get startDateTime(): DateTime;
     get endDateTime(): DateTime;
     get fixedRate(): Price;

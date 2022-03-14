@@ -45,7 +45,6 @@ interface VAMMInterface extends ethers.utils.Interface {
     "tickSpacing()": FunctionFragment;
     "ticks(int24)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "unlocked()": FunctionFragment;
     "updateProtocolFees(uint256)": FunctionFragment;
     "upgradeTo(address)": FunctionFragment;
     "upgradeToAndCall(address,bytes)": FunctionFragment;
@@ -135,7 +134,6 @@ interface VAMMInterface extends ethers.utils.Interface {
     functionFragment: "transferOwnership",
     values: [string]
   ): string;
-  encodeFunctionData(functionFragment: "unlocked", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "updateProtocolFees",
     values: [BigNumberish]
@@ -207,7 +205,6 @@ interface VAMMInterface extends ethers.utils.Interface {
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "unlocked", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "updateProtocolFees",
     data: BytesLike
@@ -386,7 +383,7 @@ export class VAMM extends BaseContract {
 
     initialize(
       _marginEngineAddress: string,
-      _tickSpacing: BigNumberish,
+      __tickSpacing: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -420,7 +417,7 @@ export class VAMM extends BaseContract {
     ): Promise<ContractTransaction>;
 
     setFee(
-      _feeWad: BigNumberish,
+      newFeeWad: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -441,32 +438,32 @@ export class VAMM extends BaseContract {
     ): Promise<ContractTransaction>;
 
     tickBitmap(
-      arg0: BigNumberish,
+      wordPosition: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
     tickSpacing(overrides?: CallOverrides): Promise<[number]>;
 
     ticks(
-      arg0: BigNumberish,
+      tick: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, boolean] & {
-        liquidityGross: BigNumber;
-        liquidityNet: BigNumber;
-        fixedTokenGrowthOutsideX128: BigNumber;
-        variableTokenGrowthOutsideX128: BigNumber;
-        feeGrowthOutsideX128: BigNumber;
-        initialized: boolean;
-      }
+      [
+        [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, boolean] & {
+          liquidityGross: BigNumber;
+          liquidityNet: BigNumber;
+          fixedTokenGrowthOutsideX128: BigNumber;
+          variableTokenGrowthOutsideX128: BigNumber;
+          feeGrowthOutsideX128: BigNumber;
+          initialized: boolean;
+        }
+      ]
     >;
 
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    unlocked(overrides?: CallOverrides): Promise<[boolean]>;
 
     updateProtocolFees(
       protocolFeesCollected: BigNumberish,
@@ -487,11 +484,13 @@ export class VAMM extends BaseContract {
     vammVars(
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, number, number] & {
-        sqrtPriceX96: BigNumber;
-        tick: number;
-        feeProtocol: number;
-      }
+      [
+        [BigNumber, number, number] & {
+          sqrtPriceX96: BigNumber;
+          tick: number;
+          feeProtocol: number;
+        }
+      ]
     >;
 
     variableTokenGrowthGlobalX128(
@@ -529,7 +528,7 @@ export class VAMM extends BaseContract {
 
   initialize(
     _marginEngineAddress: string,
-    _tickSpacing: BigNumberish,
+    __tickSpacing: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -563,7 +562,7 @@ export class VAMM extends BaseContract {
   ): Promise<ContractTransaction>;
 
   setFee(
-    _feeWad: BigNumberish,
+    newFeeWad: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -583,12 +582,15 @@ export class VAMM extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  tickBitmap(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+  tickBitmap(
+    wordPosition: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   tickSpacing(overrides?: CallOverrides): Promise<number>;
 
   ticks(
-    arg0: BigNumberish,
+    tick: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
     [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, boolean] & {
@@ -605,8 +607,6 @@ export class VAMM extends BaseContract {
     newOwner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
-
-  unlocked(overrides?: CallOverrides): Promise<boolean>;
 
   updateProtocolFees(
     protocolFeesCollected: BigNumberish,
@@ -643,7 +643,7 @@ export class VAMM extends BaseContract {
       tickUpper: BigNumberish,
       amount: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<BigNumber>;
 
     computeGrowthInside(
       tickLower: BigNumberish,
@@ -667,7 +667,7 @@ export class VAMM extends BaseContract {
 
     initialize(
       _marginEngineAddress: string,
-      _tickSpacing: BigNumberish,
+      __tickSpacing: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -688,7 +688,7 @@ export class VAMM extends BaseContract {
       tickUpper: BigNumberish,
       amount: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -698,7 +698,7 @@ export class VAMM extends BaseContract {
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
-    setFee(_feeWad: BigNumberish, overrides?: CallOverrides): Promise<void>;
+    setFee(newFeeWad: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     setFeeProtocol(
       feeProtocol: BigNumberish,
@@ -715,23 +715,24 @@ export class VAMM extends BaseContract {
       },
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, BigNumber, BigNumber] & {
+      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
         _fixedTokenDelta: BigNumber;
         _variableTokenDelta: BigNumber;
         _cumulativeFeeIncurred: BigNumber;
         _fixedTokenDeltaUnbalanced: BigNumber;
+        _marginRequirement: BigNumber;
       }
     >;
 
     tickBitmap(
-      arg0: BigNumberish,
+      wordPosition: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     tickSpacing(overrides?: CallOverrides): Promise<number>;
 
     ticks(
-      arg0: BigNumberish,
+      tick: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, boolean] & {
@@ -748,8 +749,6 @@ export class VAMM extends BaseContract {
       newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    unlocked(overrides?: CallOverrides): Promise<boolean>;
 
     updateProtocolFees(
       protocolFeesCollected: BigNumberish,
@@ -1027,7 +1026,7 @@ export class VAMM extends BaseContract {
 
     initialize(
       _marginEngineAddress: string,
-      _tickSpacing: BigNumberish,
+      __tickSpacing: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1061,7 +1060,7 @@ export class VAMM extends BaseContract {
     ): Promise<BigNumber>;
 
     setFee(
-      _feeWad: BigNumberish,
+      newFeeWad: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1082,20 +1081,18 @@ export class VAMM extends BaseContract {
     ): Promise<BigNumber>;
 
     tickBitmap(
-      arg0: BigNumberish,
+      wordPosition: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     tickSpacing(overrides?: CallOverrides): Promise<BigNumber>;
 
-    ticks(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    ticks(tick: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
-
-    unlocked(overrides?: CallOverrides): Promise<BigNumber>;
 
     updateProtocolFees(
       protocolFeesCollected: BigNumberish,
@@ -1149,7 +1146,7 @@ export class VAMM extends BaseContract {
 
     initialize(
       _marginEngineAddress: string,
-      _tickSpacing: BigNumberish,
+      __tickSpacing: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1185,7 +1182,7 @@ export class VAMM extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     setFee(
-      _feeWad: BigNumberish,
+      newFeeWad: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1206,14 +1203,14 @@ export class VAMM extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     tickBitmap(
-      arg0: BigNumberish,
+      wordPosition: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     tickSpacing(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     ticks(
-      arg0: BigNumberish,
+      tick: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1221,8 +1218,6 @@ export class VAMM extends BaseContract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
-
-    unlocked(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     updateProtocolFees(
       protocolFeesCollected: BigNumberish,
