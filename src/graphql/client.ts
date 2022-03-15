@@ -1,7 +1,7 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 
 const client = new ApolloClient({
-  uri: 'http://127.0.0.1:8000/subgraphs/name/nicholaspiano/v1-subgraph',
+  uri: process.env.REACT_APP_SUBGRAPH_URL,
   cache: new InMemoryCache(),
 });
 
