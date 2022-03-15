@@ -5,6 +5,7 @@ yarn-error.log
 storybook-static
 build-storybook.log
 .DS_Store
+.env*
 
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend

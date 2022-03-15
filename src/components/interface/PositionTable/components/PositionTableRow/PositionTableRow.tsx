@@ -63,7 +63,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
 
           const getContent = () => {
             switch (field) {
-              case 'protocol':
+              case 'pool':
                 return datum.protocol;
 
               case 'fixedApr':
