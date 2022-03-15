@@ -4,6 +4,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { AgentProvider } from '@components/contexts';
 import { useStateMemo } from '@hooks';
+import { HandleSubmitPoolFormArgs } from './types';
 import PoolForm, { PoolFormProps } from './PoolForm';
 
 export default {
@@ -30,7 +31,7 @@ const PoolFormWrapper: React.FunctionComponent<PoolFormWrapperProps> = ({ ...pro
   const [partialCollateralization, setPartialCollateralization] = useStateMemo<
     PoolFormProps['partialCollateralization']
   >(props.partialCollateralization);
-  const handleSubmit = (args: Record<string, unknown>) => props.onSubmit(args);
+  const handleSubmit = (args: HandleSubmitPoolFormArgs) => props.onSubmit(args);
 
   return (
     <AgentProvider>

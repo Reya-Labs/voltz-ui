@@ -14,6 +14,7 @@ import './fonts/DM_Sans/DMSans-Medium.ttf';
 import './fonts/DM_Sans/DMSans-MediumItalic.ttf';
 import './fonts/DM_Sans/DMSans-Regular.ttf';
 import './index.css';
+import { VoltzGraphProvider } from './graphql';
 import { ThemeProvider } from './theme';
 import { AgentProvider, WalletProvider } from './components';
 import { App } from './application';
@@ -23,13 +24,15 @@ import awsExports from './aws-exports';
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider>
-      <WalletProvider>
-        <AgentProvider>
-          <HashRouter>
-            <App />
-          </HashRouter>
-        </AgentProvider>
-      </WalletProvider>
+      <VoltzGraphProvider>
+        <WalletProvider>
+          <AgentProvider>
+            <HashRouter>
+              <App />
+            </HashRouter>
+          </AgentProvider>
+        </WalletProvider>
+      </VoltzGraphProvider>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root'),

@@ -1,0 +1,24 @@
+query GetAMMs($orderBy: AMM_orderBy!) {
+  amms(first: 100, orderBy: $orderBy, orderDirection: asc) {
+    id
+    createdTimestamp
+    updatedTimestamp
+    fcmAddress
+    marginEngineAddress
+    rateOracle {
+      id
+      protocolId
+      token {
+        id
+        name
+      }
+    }
+    termStartTimestamp
+    termEndTimestamp
+    tickSpacing
+    sqrtPriceX96
+    liquidity
+    tick
+    txCount
+  }
+}

@@ -1,0 +1,61 @@
+query GetWallet($id: ID!) {
+  wallet(id: $id) {
+    id
+    positionCount
+    positions {
+      id
+      createdTimestamp
+      updatedTimestamp
+      owner {
+        id
+      }
+      amm {
+        id
+        createdTimestamp
+        updatedTimestamp
+        fcmAddress
+        marginEngineAddress
+        rateOracle {
+          id
+          protocolId
+          token {
+            id
+            name
+          }
+        }
+        termStartTimestamp
+        termEndTimestamp
+        tickSpacing
+        sqrtPriceX96
+        liquidity
+        tick
+        txCount
+      }
+      tickLower {
+        id
+        value
+      }
+      tickUpper {
+        id
+        value
+      }
+      liquidity
+      margin
+      fixedTokenBalance
+      variableTokenBalance
+      isLiquidityProvider
+      isSettled
+      isEmpty
+      snapshotCount
+      burns {
+        id
+      }
+      mints {
+        id
+      }
+      swaps {
+        id
+      }
+    }
+  }
+}

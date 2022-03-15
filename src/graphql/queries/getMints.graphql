@@ -1,0 +1,26 @@
+query GetMints($orderBy: Mint_orderBy!) {
+  mints(first: 100, orderBy: $orderBy, orderDirection: asc) {
+    id
+    transaction {
+      id
+      blockNumber
+      timestamp
+    }
+    amm {
+      id
+    }
+    position {
+      id
+    }
+    sender
+    tickLower {
+      id
+      value
+    }
+    tickUpper {
+      id
+      value
+    }
+    amount
+  }
+}

@@ -1,0 +1,14 @@
+overwrite: true
+schema: http://127.0.0.1:8000/subgraphs/name/nicholaspiano/v1-subgraph
+documents: './src/graphql/**/*.graphql'
+generates:
+  src/graphql/generated.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-resolvers
+      - typescript-react-apollo
+    config:
+      withHooks: true
+      useIndexSignature: true
+      defaultMapper: Partial<{T}>

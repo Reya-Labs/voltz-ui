@@ -11,6 +11,7 @@
     "browser": true,
     "es2021": true
   },
+  "ignorePatterns": ["src/graphql/generated.ts"],
   "rules": {
     "no-unused-vars": "off",
     "no-use-before-define": "off",

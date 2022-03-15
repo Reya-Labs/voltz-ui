@@ -2,8 +2,6 @@ node_modules
 build
 yarn-error.log
 .npmrc
-.yalc
-yalc.lock
 storybook-static
 build-storybook.log
 .DS_Store
@@ -16,7 +14,7 @@ amplify/mock-data
 amplify/backend/amplify-meta.json
 amplify/backend/.temp
 build/
-dist/
+/dist/
 node_modules/
 aws-exports.js
 awsconfiguration.json

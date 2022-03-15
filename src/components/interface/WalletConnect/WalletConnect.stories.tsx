@@ -58,7 +58,9 @@ const WalletConnectWrapper: React.FunctionComponent<WalletConnectWrapperProps> =
         status: updatedStatus,
         name: updatedName,
         ethereum: null,
+        signer: null,
         balance: null,
+        data: null,
       }}
     />
   );

@@ -1,3 +1,7 @@
+import { ethers } from 'ethers';
+
+import { GetWalletQuery } from '@graphql';
+
 export type WalletStatus =
   | 'initializing'
   | 'unavailable'
@@ -24,5 +28,9 @@ export type Wallet = {
   account: string | null;
   name: WalletName | null;
   ethereum: WalletEthereum | null;
+  signer: ethers.providers.JsonRpcSigner | null;
   balance: number | null;
+  wallet: GetWalletQuery['wallet'] | null;
+  loading: boolean;
+  error: boolean;
 };

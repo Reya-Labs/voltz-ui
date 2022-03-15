@@ -1,6 +1,8 @@
 import React, { useMemo, useCallback, useEffect } from 'react';
 import { useMetaMask } from 'metamask-react';
+import { ethers } from 'ethers';
 
+import { useGetWalletQuery } from '@graphql';
 import { WalletStatus, WalletName, WalletEthereum } from './types';
 import WalletContext from './WalletContext';
 
@@ -70,6 +72,17 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
         return null;
     }
   }, [name, metamaskEthereum]);
+  const signer = useMemo((): ethers.providers.JsonRpcSigner | null => {
+    if (ethereum) {
+      const provider = new ethers.providers.Web3Provider(ethereum, 'any');
+
+      return provider.getSigner();
+    }
+
+    return null;
+  }, [ethereum]);
+
+  const { data, loading, error } = useGetWalletQuery({ variables: { id: account || '' } });
 
   const value = {
     status,
@@ -78,7 +91,11 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
     name,
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     ethereum,
+    signer,
     balance,
+    wallet: data && data.wallet ? data.wallet : null,
+    loading,
+    error: !!error,
   };
 
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;

@@ -1,14 +1,15 @@
+import { BigNumber } from 'ethers';
 import isUndefined from 'lodash/isUndefined';
 
 const calculateNotionalAmount = (
   margin: number | undefined,
   leverage: number | undefined,
-): number | undefined => {
+): BigNumber => {
   if (isUndefined(margin) || isUndefined(leverage)) {
-    return undefined;
+    return BigNumber.from(0);
   }
 
-  return margin * leverage;
+  return BigNumber.from(margin * leverage);
 };
 
 export default calculateNotionalAmount;
