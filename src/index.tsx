@@ -19,7 +19,12 @@ import { ThemeProvider } from './theme';
 import { AgentProvider, WalletProvider } from './components';
 import { App } from './application';
 import reportWebVitals from './reportWebVitals';
-import awsExports from './aws-exports';
+
+try {
+  const awsExports = require('./aws-exports');
+
+  Amplify.configure(awsExports);
+} catch (_error) {}
 
 ReactDOM.render(
   <React.StrictMode>
@@ -39,4 +44,3 @@ ReactDOM.render(
 );
 
 reportWebVitals();
-Amplify.configure(awsExports);
