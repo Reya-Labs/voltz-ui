@@ -31,7 +31,7 @@ const useAMMs = (): UseAMMsResult => {
         }) =>
           new AMM({
             signer,
-            rateOracle: new RateOracle({ id: rateOracleAddress, protocolId }),
+            rateOracle: new RateOracle({ id: rateOracleAddress, protocolId: protocolId as number }),
             underlyingToken: new Token({ id: tokenAddress, name: tokenName }),
             ...rest,
           }),

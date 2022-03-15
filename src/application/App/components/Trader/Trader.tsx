@@ -2,90 +2,58 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import { useLocation } from 'react-router-dom';
 import isNull from 'lodash/isNull';
-import { AMM } from '@voltz/v1-sdk';
+import { AMM, Position } from '@voltz/v1-sdk';
 
 import { Agents } from '@components/contexts';
 import { useAgent } from '@hooks';
 import { routes } from '@routes';
 import { Typography, Button } from '@components/atomic';
 import { Page } from '@components/interface';
-import { ConnectedAMMTable, ConnectedPoolForm } from './components';
+import ConnectedAMMTable from '../ConnectedAMMTable/ConnectedAMMTable';
+import ConnectedPositionTable from '../ConnectedPositionTable/ConnectedPositionTable';
+import { ConnectedSwapForm } from './components';
 
-const Home: React.FunctionComponent = () => {
+const Trader: React.FunctionComponent = () => {
   const [formActive, setFormActive] = useState(false);
   const [amm, setAMM] = useState<AMM | null>(null);
-  const { agent, onChangeAgent } = useAgent();
+  const [position, setPosition] = useState<Position | null>(null);
+  const { onChangeAgent } = useAgent();
   const { pathname } = useLocation();
   const pathnameWithoutPrefix = pathname.slice(1);
 
   useEffect(() => {
     setFormActive(false);
     setAMM(null);
-
-    switch (pathnameWithoutPrefix) {
-      case routes.POOLS:
-      case routes.LP_FARM:
-        onChangeAgent(Agents.LIQUIDITY_PROVIDER);
-
-        break;
-
-      default: {
-        if (agent === Agents.LIQUIDITY_PROVIDER) {
-          onChangeAgent(Agents.FIXED_TRADER);
-        }
-
-        break;
-      }
-    }
+    setPosition(null);
+    onChangeAgent(Agents.FIXED_TRADER);
   }, [setFormActive, setAMM, pathnameWithoutPrefix, onChangeAgent]);
 
   const pageTitle = useMemo(() => {
     switch (pathnameWithoutPrefix) {
       case routes.SWAP:
-        return 'Swap Fix or Variable Rates';
+        return 'Swap Fixed or Variable Rates';
 
       case routes.PORTFOLIO:
         return 'PORTFOLIO';
 
-      case routes.POOLS:
-        return 'Provide Liquidity';
-
-      case routes.LP_FARM:
-        return 'LP FARM';
-
       default:
         return null;
-    }
-  }, [pathnameWithoutPrefix]);
-  const pageSubtitle = useMemo(() => {
-    switch (pathnameWithoutPrefix) {
-      case routes.SWAP:
-        return 'Our model allows for sophisticated trading strategies and produces highly attractive fixed rates of return for investors.';
-
-      case routes.POOLS:
-        return 'Our model allows for sophisticated trading strategies and produces highly attractive fixed rates of return for investors.';
-
-      default:
-        return null;
-    }
-  }, [pathnameWithoutPrefix]);
-  const tableMode = useMemo(() => {
-    switch (pathnameWithoutPrefix) {
-      case routes.SWAP:
-      case routes.POOLS:
-        return 'pools';
-
-      default:
-        return 'portfolio';
     }
   }, [pathnameWithoutPrefix]);
   const handleSelectAmm = (selected: AMM) => {
     setFormActive(true);
     setAMM(selected);
+    setPosition(null);
+  };
+  const handleSelectPosition = (selected: Position) => {
+    setFormActive(true);
+    setAMM(null);
+    setPosition(selected);
   };
   const handleReset = () => {
     setFormActive(false);
     setAMM(null);
+    setPosition(null);
   };
 
   return (
@@ -101,7 +69,8 @@ const Home: React.FunctionComponent = () => {
                 marginBottom: (theme) => theme.spacing(4),
               }}
             >
-              {pageSubtitle}
+              Our model allows for sophisticated trading strategies and produces highly attractive
+              fixed rates of return for investors.
             </Typography>
             {pathnameWithoutPrefix === routes.SWAP && (
               <Button
@@ -113,12 +82,16 @@ const Home: React.FunctionComponent = () => {
                 PROVIDE LIQUIDITY
               </Button>
             )}
-            <ConnectedAMMTable mode={tableMode} onSelectItem={handleSelectAmm} />
+            {pathnameWithoutPrefix === routes.SWAP ? (
+              <ConnectedAMMTable onSelectItem={handleSelectAmm} />
+            ) : (
+              <ConnectedPositionTable onSelectItem={handleSelectPosition} />
+            )}
           </Box>
         )}
         {formActive && !isNull(amm) && (
           <Box sx={{ height: '100%' }}>
-            <ConnectedPoolForm isModifying={false} amm={amm} onReset={handleReset} />
+            <ConnectedSwapForm amm={amm} position={position} onReset={handleReset} />
           </Box>
         )}
       </Box>
@@ -126,4 +99,4 @@ const Home: React.FunctionComponent = () => {
   );
 };
 
-export default Home;
+export default Trader;

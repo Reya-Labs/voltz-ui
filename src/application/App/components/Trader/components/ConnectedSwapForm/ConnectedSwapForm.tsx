@@ -1,72 +1,77 @@
 import React, { useState } from 'react';
+import isNull from 'lodash/isNull';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { AMM } from '@voltz/v1-sdk';
+import { AMM, Position } from '@voltz/v1-sdk';
 
 import { routes } from '@routes';
-import { useWallet } from '@hooks';
+import { useWallet, useAgent } from '@hooks';
+import { Agents } from '@components/contexts';
 import {
-  PoolForm,
-  PoolFormProps,
-  HandleSubmitPoolFormArgs,
+  SwapForm,
+  SwapFormProps,
+  HandleSubmitSwapFormArgs,
   PendingTransaction,
 } from '@components/interface';
 
-export type ConnectedPoolFormProps = {
-  isModifying: boolean;
+export type ConnectedSwapFormProps = {
   amm: AMM | null;
+  position: Position | null;
   onReset: () => void;
 };
 
-const ConnectedPoolForm: React.FunctionComponent<ConnectedPoolFormProps> = ({
-  isModifying,
-  amm,
+const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
+  amm: defaultAMM,
+  position,
   onReset,
 }) => {
+  const { agent } = useAgent();
+  const amm = !isNull(defaultAMM) ? defaultAMM : position?.amm;
   const { account } = useWallet();
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const [fixedLow, setFixedLow] = useState<PoolFormProps['fixedLow']>();
+  const [fixedLow, setFixedLow] = useState<SwapFormProps['fixedLow']>();
   const handleSetFixedLow = (newFixedLow: number) => {
     if (!amm) {
       return;
     }
 
-    const { closestUsableFixedRate, closestUsableTick } = amm.closestTickAndFixedRate(newFixedLow);
-    console.debug('TICK UPPER', closestUsableTick);
+    const { closestUsableFixedRate } = amm.closestTickAndFixedRate(newFixedLow);
 
     setFixedLow(closestUsableFixedRate.toNumber());
   };
-  const [fixedHigh, setFixedHigh] = useState<PoolFormProps['fixedHigh']>();
+  const [fixedHigh, setFixedHigh] = useState<SwapFormProps['fixedHigh']>();
   const handleSetFixedHigh = (newFixedHigh: number) => {
     if (!amm) {
       return;
     }
 
-    const { closestUsableFixedRate, closestUsableTick } = amm.closestTickAndFixedRate(newFixedHigh);
-    console.debug('TICK LOWER', closestUsableTick);
+    const { closestUsableFixedRate } = amm.closestTickAndFixedRate(newFixedHigh);
 
     setFixedHigh(closestUsableFixedRate.toNumber());
   };
-  const [leverage, setLeverage] = useState<PoolFormProps['leverage']>();
-  const [margin, setMargin] = useState<PoolFormProps['margin']>();
+  const [notional, setNotional] = useState<SwapFormProps['notional']>();
+  const [margin, setMargin] = useState<SwapFormProps['margin']>();
   const [partialCollateralization, setPartialCollateralization] =
-    useState<PoolFormProps['partialCollateralization']>();
+    useState<SwapFormProps['partialCollateralization']>();
   const [submitting, setSubmitting] = useState(false);
   const [transactionPending, setTransactionPending] = useState(false);
-  const handleSubmit = async (args: HandleSubmitPoolFormArgs) => {
+  const handleSubmit = async (args: HandleSubmitSwapFormArgs) => {
     setSubmitting(true);
     setTransactionPending(true);
 
     if (amm && account) {
-      const result = await amm.mint({
-        recipient: account,
-        fixedLow: args.fixedLow || 1,
-        fixedHigh: args.fixedHigh || 2,
-        margin: args.margin || 10,
-        leverage: args.leverage || 10,
-      });
+      try {
+        const result = await amm.swap({
+          isFT: agent === Agents.FIXED_TRADER,
+          recipient: account,
+          fixedLow: args.fixedLow || 1,
+          fixedHigh: args.fixedHigh || 2,
+          notional: args.notional || 1,
+          margin: args.margin || 1,
+        });
 
-      console.debug(result);
+        console.debug(result);
+      } catch (mintError) {}
     }
 
     setTransactionPending(false);
@@ -101,16 +106,15 @@ const ConnectedPoolForm: React.FunctionComponent<ConnectedPoolFormProps> = ({
         loading={transactionPending}
         protocol={amm.protocol}
         fixedApr={10}
-        margin={margin}
-        leverage={leverage}
-        onComplete={handleComplete}
+        leverage={0}
+        margin={0}
+        onComplete={() => null}
       />
     );
   }
 
   return (
-    <PoolForm
-      isModifying={isModifying}
+    <SwapForm
       protocol={amm.protocol}
       fixedApr={10}
       variableApr={15}
@@ -120,16 +124,16 @@ const ConnectedPoolForm: React.FunctionComponent<ConnectedPoolFormProps> = ({
       onChangeFixedLow={handleSetFixedLow}
       fixedHigh={fixedHigh}
       onChangeFixedHigh={handleSetFixedHigh}
-      leverage={leverage}
-      onChangeLeverage={setLeverage}
+      notional={notional}
+      onChangeNotional={setNotional}
       margin={margin}
-      onChangeMargin={setMargin}
       partialCollateralization={partialCollateralization}
       onChangePartialCollateralization={setPartialCollateralization}
+      onChangeMargin={setMargin}
       onSubmit={handleSubmit}
       onCancel={onReset}
     />
   );
 };
 
-export default ConnectedPoolForm;
+export default ConnectedSwapForm;
