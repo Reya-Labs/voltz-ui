@@ -85,66 +85,55 @@ describe('amm', function () {
             });
         }); });
         it.skip('fcm', function () { return __awaiter(void 0, void 0, void 0, function () {
-            var fixedLow, fixedHigh, margin, notional, mint_req;
+            var fixedLow, fixedHigh, mint_req;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         fixedLow = 1;
                         fixedHigh = 2;
-                        margin = 10000;
-                        notional = 1000;
                         return [4 /*yield*/, amm.getMinimumMarginRequirementPostMint({
                                 recipient: wallet.address,
                                 fixedLow: fixedLow,
                                 fixedHigh: fixedHigh,
-                                margin: margin,
-                                notional: notional,
+                                margin: 0,
+                                notional: 100000,
                             })];
                     case 1:
                         mint_req = _a.sent();
                         console.log("pre-mint req", mint_req);
-                        return [4 /*yield*/, amm.updatePositionMargin({
-                                owner: wallet.address,
-                                fixedLow: fixedLow,
-                                fixedHigh: fixedHigh,
-                                marginDelta: mint_req + 10
-                            })];
-                    case 2:
-                        _a.sent();
-                        console.log("minter position margin updated");
                         return [4 /*yield*/, amm.mint({
                                 recipient: wallet.address,
                                 fixedLow: fixedLow,
                                 fixedHigh: fixedHigh,
-                                margin: margin,
-                                notional: notional,
+                                margin: mint_req + 10,
+                                notional: 100000,
                             })];
-                    case 3:
+                    case 2:
                         _a.sent();
                         console.log("mint done");
                         return [4 /*yield*/, amm.FCMswap({
                                 notional: 50000
                             })];
-                    case 4:
+                    case 3:
                         _a.sent();
                         console.log("fcm swap done");
                         return [4 /*yield*/, amm.FCMunwind({
                                 notionalToUnwind: 50000
                             })];
-                    case 5:
+                    case 4:
                         _a.sent();
                         console.log("fcm unwind done");
                         return [4 /*yield*/, amm.FCMswap({
                                 notional: 50000
                             })];
-                    case 6:
+                    case 5:
                         _a.sent();
                         console.log("fcm swap 2 done");
                         return [2 /*return*/];
                 }
             });
         }); });
-        it('fcm settlement', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it.skip('fcm settlement', function () { return __awaiter(void 0, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, amm.settleFCMTrader()];
@@ -156,7 +145,7 @@ describe('amm', function () {
             });
         }); });
         it.skip('mints and swaps', function () { return __awaiter(void 0, void 0, void 0, function () {
-            var fixedLowMinter, fixedHighMinter, fixedLowSwapper, fixedHighSwapper, margin, notional, mint_req, swap_req, swap_slippage, liquidation_threshold;
+            var fixedLowMinter, fixedHighMinter, fixedLowSwapper, fixedHighSwapper, mint_req, swap_req, swap_slippage, liquidation_threshold;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -164,35 +153,24 @@ describe('amm', function () {
                         fixedHighMinter = 2;
                         fixedLowSwapper = 3;
                         fixedHighSwapper = 6;
-                        margin = 10000;
-                        notional = 1000;
                         return [4 /*yield*/, amm.getMinimumMarginRequirementPostMint({
                                 recipient: wallet.address,
                                 fixedLow: fixedLowMinter,
                                 fixedHigh: fixedHighMinter,
-                                margin: margin,
-                                notional: notional,
+                                margin: 0,
+                                notional: 100000,
                             })];
                     case 1:
                         mint_req = _a.sent();
                         console.log("pre-mint req", mint_req);
-                        return [4 /*yield*/, amm.updatePositionMargin({
-                                owner: wallet.address,
-                                fixedLow: fixedLowMinter,
-                                fixedHigh: fixedHighMinter,
-                                marginDelta: mint_req + 10
-                            })];
-                    case 2:
-                        _a.sent();
-                        console.log("minter position margin updated");
                         return [4 /*yield*/, amm.mint({
                                 recipient: wallet.address,
                                 fixedLow: fixedLowMinter,
                                 fixedHigh: fixedHighMinter,
-                                margin: margin,
-                                notional: notional,
+                                margin: mint_req + 10,
+                                notional: 100000,
                             })];
-                    case 3:
+                    case 2:
                         _a.sent();
                         console.log("mint done");
                         return [4 /*yield*/, amm.getMinimumMarginRequirementPostSwap({
@@ -202,7 +180,7 @@ describe('amm', function () {
                                 fixedLow: fixedLowSwapper,
                                 fixedHigh: fixedHighSwapper
                             })];
-                    case 4:
+                    case 3:
                         swap_req = _a.sent();
                         console.log("pre-swap req", swap_req);
                         return [4 /*yield*/, amm.getSlippagePostSwap({
@@ -212,27 +190,18 @@ describe('amm', function () {
                                 fixedLow: fixedLowSwapper,
                                 fixedHigh: fixedHighSwapper
                             })];
-                    case 5:
+                    case 4:
                         swap_slippage = _a.sent();
                         console.log("pre-swap slippage", swap_slippage);
-                        return [4 /*yield*/, amm.updatePositionMargin({
-                                owner: wallet.address,
-                                fixedLow: fixedLowSwapper,
-                                fixedHigh: fixedHighSwapper,
-                                marginDelta: swap_req + 10
-                            })];
-                    case 6:
-                        _a.sent();
-                        console.log("swapper position margin updated");
                         return [4 /*yield*/, amm.swap({
                                 recipient: wallet.address,
                                 isFT: false,
                                 notional: 50000,
                                 fixedLow: fixedLowSwapper,
                                 fixedHigh: fixedHighSwapper,
-                                margin: margin,
+                                margin: swap_req + 10,
                             })];
-                    case 7:
+                    case 5:
                         _a.sent();
                         console.log("swap done");
                         return [4 /*yield*/, amm.getLiquidationThreshold({
@@ -240,7 +209,7 @@ describe('amm', function () {
                                 fixedLow: fixedLowMinter,
                                 fixedHigh: fixedHighMinter
                             })];
-                    case 8:
+                    case 6:
                         liquidation_threshold = _a.sent();
                         console.log("liquidation threshold", liquidation_threshold);
                         return [2 /*return*/];
@@ -275,5 +244,42 @@ describe('amm', function () {
                 }
             });
         }); });
+    });
+    describe('amm getters', function () {
+        var amm;
+        var wallet;
+        beforeAll(function () {
+            var vammAddress = '0xe451980132e65465d0a498c53f0b5227326dd73f';
+            var marginEngineAddress = '0x75537828f2ce51be7289709686a69cbfdbb714f1';
+            var provider = new ethers_1.providers.JsonRpcProvider('http://0.0.0.0:8545/');
+            var privateKey = '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80';
+            wallet = new ethers_1.Wallet(privateKey, provider);
+            amm = new amm_1.default({
+                id: vammAddress,
+                signer: wallet,
+                createdTimestamp: '1646856471',
+                fcmAddress: '0x5392a33f7f677f59e833febf4016cddd88ff9e67',
+                liquidity: '0',
+                marginEngineAddress: marginEngineAddress,
+                rateOracle: new rateOracle_1.default({
+                    id: '0x0165878a594ca255338adfa4d48449f69242eb8f',
+                    protocolId: 1,
+                }),
+                underlyingToken: new token_1.default({
+                    id: '0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9',
+                    name: 'USDC',
+                }),
+                sqrtPriceX96: 0,
+                termEndTimestamp: '1649458800000000000000000000',
+                termStartTimestamp: '1646856441000000000000000000',
+                tick: '0',
+                tickSpacing: '1000',
+                txCount: 0,
+                updatedTimestamp: '1646856471',
+            });
+        });
+        it('gets fixed rate from 0 sqrtPriceX96', function () {
+            expect(amm.fixedRate.toNumber()).toEqual(0);
+        });
     });
 });

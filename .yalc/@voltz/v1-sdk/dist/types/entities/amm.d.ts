@@ -112,6 +112,7 @@ declare class AMM {
     settleFCMTrader(): Promise<ContractTransaction | void>;
     get startDateTime(): DateTime;
     get endDateTime(): DateTime;
+    get initialized(): boolean;
     get fixedRate(): Price;
     get fixedApr(): number;
     get price(): Price;

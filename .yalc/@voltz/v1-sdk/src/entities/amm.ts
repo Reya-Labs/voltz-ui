@@ -9,6 +9,7 @@ import {
   Periphery__factory as peripheryFactory,
   MarginEngine__factory as marginEngineFactory,
   Factory__factory as factoryFactory,
+  VAMM__factory as vammFactory,
   // todo: not very elegant to use the mock as a factory
   ERC20Mock__factory as tokenFactory,
   AaveFCM__factory as fcmFactory
@@ -19,6 +20,7 @@ import { TickMath } from '../utils/tickMath';
 import timestampWadToDateTime from '../utils/timestampWadToDateTime';
 import { fixedRateToClosestTick, tickToFixedRate } from '../utils/priceTickConversions';
 import { nearestUsableTick } from '../utils/nearestUsableTick';
+import { toBn } from 'evm-bn';
 
 export type AMMConstructorArgs = {
   id: string;
@@ -187,7 +189,7 @@ class AMM {
       marginEngineAddress: this.marginEngineAddress,
       recipient,
       isFT,
-      notional,
+      notional: toBn(notional.toString()),
       sqrtPriceLimitX96,
       tickLower,
       tickUpper,
@@ -249,7 +251,7 @@ class AMM {
       marginEngineAddress: this.marginEngineAddress,
       recipient,
       isFT,
-      notional,
+      notional: toBn(notional.toString()),
       sqrtPriceLimitX96,
       tickLower,
       tickUpper,
@@ -319,14 +321,14 @@ class AMM {
     const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
     const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
 
-    await this.approveMarginEngine(marginDelta);
+    await this.approveMarginEngine(toBn(marginDelta.toString()));
 
     const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
     const updatePositionMarginReceipt = await marginEngineContract.updatePositionMargin(
       owner,
       tickLower,
       tickUpper,
-      marginDelta,
+      toBn(marginDelta.toString())
     );
 
     return updatePositionMarginReceipt;
@@ -394,7 +396,7 @@ class AMM {
       recipient,
       tickLower,
       tickUpper,
-      notional,
+      notional: toBn(notional.toString()),
       isMint: true,
     };
 
@@ -427,6 +429,12 @@ class AMM {
       return;
     }
 
+    if (!this.initialized) {
+      const vammContract = vammFactory.connect(this.id, this.signer);
+
+      await vammContract.initializeVAMM(TickMath.getSqrtRatioAtTick(0).toString());
+    }
+
     await this.updatePositionMargin({ owner: recipient, fixedLow, fixedHigh, marginDelta: margin });
 
     const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
@@ -441,7 +449,7 @@ class AMM {
       recipient,
       tickLower,
       tickUpper,
-      notional,
+      notional: toBn(notional.toString()),
       isMint: true,
     };
 
@@ -465,7 +473,7 @@ class AMM {
       recipient,
       tickLower,
       tickUpper,
-      notional,
+      notional: toBn(notional.toString()),
       isMint: false,
     };
 
@@ -532,6 +540,8 @@ class AMM {
       return;
     }
 
+    await this.updatePositionMargin({ owner: recipient, fixedLow, fixedHigh, marginDelta: margin });
+
     const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
     const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
 
@@ -556,7 +566,7 @@ class AMM {
       marginEngineAddress: this.marginEngineAddress,
       recipient,
       isFT,
-      notional,
+      notional: toBn(notional.toString()),
       sqrtPriceLimitX96,
       tickLower,
       tickUpper,
@@ -585,7 +595,7 @@ class AMM {
     }
 
     const fcmContract = fcmFactory.connect(this.fcmAddress, this.signer);
-    return fcmContract.initiateFullyCollateralisedFixedTakerSwap(notional, sqrtPriceLimitX96);
+    return fcmContract.initiateFullyCollateralisedFixedTakerSwap(toBn(notional.toString()), sqrtPriceLimitX96);
   }
 
   public async FCMunwind({
@@ -608,7 +618,7 @@ class AMM {
     await this.approveFCM();
 
     const fcmContract = fcmFactory.connect(this.fcmAddress, this.signer);
-    return fcmContract.unwindFullyCollateralisedFixedTakerSwap(notionalToUnwind, sqrtPriceLimitX96);
+    return fcmContract.unwindFullyCollateralisedFixedTakerSwap(toBn(notionalToUnwind.toString()), sqrtPriceLimitX96);
   }
 
   public async settleFCMTrader() : Promise<ContractTransaction | void>  {
@@ -629,8 +639,16 @@ class AMM {
     return timestampWadToDateTime(this.termEndTimestamp);
   }
 
+  public get initialized(): boolean {
+    return !JSBI.EQ(this.sqrtPriceX96, JSBI.BigInt(0));
+  }
+
   public get fixedRate(): Price {
     if (!this._fixedRate) {
+      if (!this.initialized) {
+        return new Price(1, 0);
+      }
+
       this._fixedRate = new Price(JSBI.multiply(this.sqrtPriceX96, this.sqrtPriceX96), Q192);
     }
 

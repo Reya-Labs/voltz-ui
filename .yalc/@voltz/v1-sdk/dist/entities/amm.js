@@ -48,6 +48,7 @@ var tickMath_1 = require("../utils/tickMath");
 var timestampWadToDateTime_1 = __importDefault(require("../utils/timestampWadToDateTime"));
 var priceTickConversions_1 = require("../utils/priceTickConversions");
 var nearestUsableTick_1 = require("../utils/nearestUsableTick");
+var evm_bn_1 = require("evm-bn");
 var AMM = /** @class */ (function () {
     function AMM(_a) {
         var id = _a.id, signer = _a.signer, marginEngineAddress = _a.marginEngineAddress, fcmAddress = _a.fcmAddress, rateOracle = _a.rateOracle, createdTimestamp = _a.createdTimestamp, updatedTimestamp = _a.updatedTimestamp, termStartTimestamp = _a.termStartTimestamp, termEndTimestamp = _a.termEndTimestamp, underlyingToken = _a.underlyingToken, sqrtPriceX96 = _a.sqrtPriceX96, liquidity = _a.liquidity, tick = _a.tick, tickSpacing = _a.tickSpacing, txCount = _a.txCount;
@@ -97,7 +98,7 @@ var AMM = /** @class */ (function () {
                             marginEngineAddress: this.marginEngineAddress,
                             recipient: recipient,
                             isFT: isFT,
-                            notional: notional,
+                            notional: (0, evm_bn_1.toBn)(notional.toString()),
                             sqrtPriceLimitX96: sqrtPriceLimitX96,
                             tickLower: tickLower,
                             tickUpper: tickUpper,
@@ -158,7 +159,7 @@ var AMM = /** @class */ (function () {
                             marginEngineAddress: this.marginEngineAddress,
                             recipient: recipient,
                             isFT: isFT,
-                            notional: notional,
+                            notional: (0, evm_bn_1.toBn)(notional.toString()),
                             sqrtPriceLimitX96: sqrtPriceLimitX96,
                             tickLower: tickLower,
                             tickUpper: tickUpper,
@@ -231,11 +232,11 @@ var AMM = /** @class */ (function () {
                         }
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
-                        return [4 /*yield*/, this.approveMarginEngine(marginDelta)];
+                        return [4 /*yield*/, this.approveMarginEngine((0, evm_bn_1.toBn)(marginDelta.toString()))];
                     case 1:
                         _b.sent();
                         marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
-                        return [4 /*yield*/, marginEngineContract.updatePositionMargin(owner, tickLower, tickUpper, marginDelta)];
+                        return [4 /*yield*/, marginEngineContract.updatePositionMargin(owner, tickLower, tickUpper, (0, evm_bn_1.toBn)(marginDelta.toString()))];
                     case 2:
                         updatePositionMarginReceipt = _b.sent();
                         return [2 /*return*/, updatePositionMarginReceipt];
@@ -306,7 +307,7 @@ var AMM = /** @class */ (function () {
                             recipient: recipient,
                             tickLower: tickLower,
                             tickUpper: tickUpper,
-                            notional: notional,
+                            notional: (0, evm_bn_1.toBn)(notional.toString()),
                             isMint: true,
                         };
                         marginRequirement = ethers_1.BigNumber.from("0");
@@ -336,20 +337,26 @@ var AMM = /** @class */ (function () {
     AMM.prototype.mint = function (_a) {
         var recipient = _a.recipient, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional, margin = _a.margin;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, peripheryContract, mintOrBurnParams;
+            var vammContract, tickUpper, tickLower, peripheryContract, mintOrBurnParams;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         if (!this.signer) {
                             return [2 /*return*/];
                         }
-                        return [4 /*yield*/, this.updatePositionMargin({ owner: recipient, fixedLow: fixedLow, fixedHigh: fixedHigh, marginDelta: margin })];
+                        if (!!this.initialized) return [3 /*break*/, 2];
+                        vammContract = typechain_1.VAMM__factory.connect(this.id, this.signer);
+                        return [4 /*yield*/, vammContract.initializeVAMM(tickMath_1.TickMath.getSqrtRatioAtTick(0).toString())];
                     case 1:
+                        _b.sent();
+                        _b.label = 2;
+                    case 2: return [4 /*yield*/, this.updatePositionMargin({ owner: recipient, fixedLow: fixedLow, fixedHigh: fixedHigh, marginDelta: margin })];
+                    case 3:
                         _b.sent();
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
                         return [4 /*yield*/, this.approvePeriphery()];
-                    case 2:
+                    case 4:
                         _b.sent();
                         peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
                         mintOrBurnParams = {
@@ -357,7 +364,7 @@ var AMM = /** @class */ (function () {
                             recipient: recipient,
                             tickLower: tickLower,
                             tickUpper: tickUpper,
-                            notional: notional,
+                            notional: (0, evm_bn_1.toBn)(notional.toString()),
                             isMint: true,
                         };
                         return [2 /*return*/, peripheryContract.mintOrBurn(mintOrBurnParams)];
@@ -386,7 +393,7 @@ var AMM = /** @class */ (function () {
                             recipient: recipient,
                             tickLower: tickLower,
                             tickUpper: tickUpper,
-                            notional: notional,
+                            notional: (0, evm_bn_1.toBn)(notional.toString()),
                             isMint: false,
                         };
                         return [2 /*return*/, peripheryContract.mintOrBurn(mintOrBurnParams)];
@@ -471,6 +478,9 @@ var AMM = /** @class */ (function () {
                         if (!this.signer) {
                             return [2 /*return*/];
                         }
+                        return [4 /*yield*/, this.updatePositionMargin({ owner: recipient, fixedLow: fixedLow, fixedHigh: fixedHigh, marginDelta: margin })];
+                    case 1:
+                        _b.sent();
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
                         if (fixedRateLimit) {
@@ -486,14 +496,14 @@ var AMM = /** @class */ (function () {
                             }
                         }
                         return [4 /*yield*/, this.approvePeriphery()];
-                    case 1:
+                    case 2:
                         _b.sent();
                         peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
                         swapPeripheryParams = {
                             marginEngineAddress: this.marginEngineAddress,
                             recipient: recipient,
                             isFT: isFT,
-                            notional: notional,
+                            notional: (0, evm_bn_1.toBn)(notional.toString()),
                             sqrtPriceLimitX96: sqrtPriceLimitX96,
                             tickLower: tickLower,
                             tickUpper: tickUpper,
@@ -524,7 +534,7 @@ var AMM = /** @class */ (function () {
                             sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickMath_1.TickMath.MAX_TICK - 1).toString();
                         }
                         fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
-                        return [2 /*return*/, fcmContract.initiateFullyCollateralisedFixedTakerSwap(notional, sqrtPriceLimitX96)];
+                        return [2 /*return*/, fcmContract.initiateFullyCollateralisedFixedTakerSwap((0, evm_bn_1.toBn)(notional.toString()), sqrtPriceLimitX96)];
                 }
             });
         });
@@ -550,7 +560,7 @@ var AMM = /** @class */ (function () {
                     case 1:
                         _b.sent();
                         fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
-                        return [2 /*return*/, fcmContract.unwindFullyCollateralisedFixedTakerSwap(notionalToUnwind, sqrtPriceLimitX96)];
+                        return [2 /*return*/, fcmContract.unwindFullyCollateralisedFixedTakerSwap((0, evm_bn_1.toBn)(notionalToUnwind.toString()), sqrtPriceLimitX96)];
                 }
             });
         });
@@ -587,9 +597,19 @@ var AMM = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(AMM.prototype, "initialized", {
+        get: function () {
+            return !jsbi_1.default.EQ(this.sqrtPriceX96, jsbi_1.default.BigInt(0));
+        },
+        enumerable: false,
+        configurable: true
+    });
     Object.defineProperty(AMM.prototype, "fixedRate", {
         get: function () {
             if (!this._fixedRate) {
+                if (!this.initialized) {
+                    return new price_1.Price(1, 0);
+                }
                 this._fixedRate = new price_1.Price(jsbi_1.default.multiply(this.sqrtPriceX96, this.sqrtPriceX96), constants_1.Q192);
             }
             return this._fixedRate;
