@@ -22,6 +22,7 @@ import reportWebVitals from './reportWebVitals';
 
 try {
   if (process.env.NODE_ENV !== 'development') {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const awsExports = require('./aws-exports');
 
     Amplify.configure(awsExports);

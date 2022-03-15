@@ -1,7 +1,7 @@
 # Installation
 
 1. Run `yarn`
-2. Create `.env` file in the `voltz-ui` directory with the following:
+2. Ensure that you have a `.env` file in the `voltz-ui` directory with the following:
 
 ```
 REACT_APP_SUBGRAPH_URL= <<URL OF LOCAL SUBGRAPH>>
