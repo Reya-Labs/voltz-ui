@@ -21,9 +21,11 @@ import { App } from './application';
 import reportWebVitals from './reportWebVitals';
 
 try {
-  const awsExports = require('./aws-exports');
+  if (process.env.NODE_ENV !== 'development') {
+    const awsExports = require('./aws-exports');
 
-  Amplify.configure(awsExports);
+    Amplify.configure(awsExports);
+  }
 } catch (_error) {}
 
 ReactDOM.render(
