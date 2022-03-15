@@ -15,22 +15,14 @@ export default {
 
 type MintBurnFormWrapperProps = Omit<
   MintBurnFormProps,
-  | 'onChangeAgent'
-  | 'onChangeFixedLow'
-  | 'onChangeFixedHigh'
-  | 'onChangeLeverage'
-  | 'onChangePartialCollateralization'
-  | 'onChangeMargin'
+  'onChangeAgent' | 'onChangeFixedLow' | 'onChangeFixedHigh' | 'onChangeNotional' | 'onChangeMargin'
 >;
 
 const MintBurnFormWrapper: React.FunctionComponent<MintBurnFormWrapperProps> = ({ ...props }) => {
   const [fixedLow, setFixedLow] = useStateMemo<MintBurnFormProps['fixedLow']>(props.fixedLow);
   const [fixedHigh, setFixedHigh] = useStateMemo<MintBurnFormProps['fixedHigh']>(props.fixedHigh);
-  const [leverage, setLeverage] = useStateMemo<MintBurnFormProps['leverage']>(props.leverage);
+  const [notional, setNotional] = useStateMemo<MintBurnFormProps['notional']>(props.notional);
   const [margin, setMargin] = useStateMemo<MintBurnFormProps['margin']>(props.margin);
-  const [partialCollateralization, setPartialCollateralization] = useStateMemo<
-    MintBurnFormProps['partialCollateralization']
-  >(props.partialCollateralization);
   const handleSubmit = (args: HandleSubmitMintBurnFormArgs) => props.onSubmit(args);
 
   return (
@@ -39,14 +31,12 @@ const MintBurnFormWrapper: React.FunctionComponent<MintBurnFormWrapperProps> = (
         {...props}
         fixedLow={fixedLow}
         fixedHigh={fixedHigh}
-        leverage={leverage}
+        notional={notional}
         margin={margin}
-        partialCollateralization={partialCollateralization}
         onChangeFixedLow={setFixedLow}
         onChangeFixedHigh={setFixedHigh}
-        onChangeLeverage={setLeverage}
+        onChangeNotional={setNotional}
         onChangeMargin={setMargin}
-        onChangePartialCollateralization={setPartialCollateralization}
         onSubmit={handleSubmit}
       />
     </AgentProvider>
