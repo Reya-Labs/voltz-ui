@@ -1,4 +1,3 @@
-import JSBI from 'jsbi';
 import { Position } from '@voltz/v1-sdk';
 
 import { PositionTableDatum } from '../types';
@@ -6,8 +5,8 @@ import { PositionTableDatum } from '../types';
 const mapPositionToPositionTableDatum = ({
   id,
   amm,
-  liquidity,
-  margin,
+  notional,
+  effectiveMargin,
 }: Position): PositionTableDatum => {
   return {
     id,
@@ -15,8 +14,8 @@ const mapPositionToPositionTableDatum = ({
     startDate: amm.startDateTime,
     endDate: amm.endDateTime,
     fixedApr: amm.fixedRate.toNumber(),
-    notional: JSBI.toNumber(liquidity),
-    margin: JSBI.toNumber(margin),
+    notional: notional,
+    margin: effectiveMargin,
   };
 };
 

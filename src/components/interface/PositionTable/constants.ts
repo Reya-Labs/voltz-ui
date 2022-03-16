@@ -2,7 +2,7 @@ import { PositionTableFields } from './types';
 
 export const PositionTableLabels: Record<PositionTableFields, string> = {
   pool: 'Pool',
-  notional: 'Liquidity',
+  notional: 'Notional',
   margin: 'Margin',
   fixedApr: 'Fixed APR',
   maturity: 'Maturity',
