@@ -44,13 +44,12 @@ var token_1 = __importDefault(require("../token"));
 var rateOracle_1 = __importDefault(require("../rateOracle"));
 var amm_1 = __importDefault(require("../amm"));
 var tickMath_1 = require("../../utils/tickMath");
-var typechain_1 = require("../../typechain");
 describe('amm', function () {
     describe('amm init', function () {
         var amm;
         var wallet;
         beforeAll(function () { return __awaiter(void 0, void 0, void 0, function () {
-            var vammAddress, marginEngineAddress, provider, privateKey, vammContract;
+            var vammAddress, marginEngineAddress, provider, privateKey;
             return __generator(this, function (_a) {
                 vammAddress = '0xe451980132e65465d0a498c53f0b5227326dd73f';
                 marginEngineAddress = '0x75537828f2ce51be7289709686a69cbfdbb714f1';
@@ -80,7 +79,6 @@ describe('amm', function () {
                     txCount: 0,
                     updatedTimestamp: '1646856471',
                 });
-                vammContract = typechain_1.VAMM__factory.connect(vammAddress, wallet);
                 return [2 /*return*/];
             });
         }); });
@@ -144,7 +142,7 @@ describe('amm', function () {
                 }
             });
         }); });
-        it.skip('mints and swaps', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('mints and swaps', function () { return __awaiter(void 0, void 0, void 0, function () {
             var fixedLowMinter, fixedHighMinter, fixedLowSwapper, fixedHighSwapper, mint_req, swap_req, swap_slippage, liquidation_threshold;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -278,7 +276,7 @@ describe('amm', function () {
                 updatedTimestamp: '1646856471',
             });
         });
-        it('gets fixed rate from 0 sqrtPriceX96', function () {
+        it.skip('gets fixed rate from 0 sqrtPriceX96', function () {
             expect(amm.fixedRate.toNumber()).toEqual(0);
             console.log(amm.endDateTime);
         });
