@@ -1,15 +1,10 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 
-import { Wallet } from '../../contexts';
 import { Icon, Typography } from '../../atomic';
 import { WalletConnectModal } from './components';
 
-export type WalletConnectProps = {
-  wallet: Wallet;
-};
-
-const WalletConnect: React.FunctionComponent<WalletConnectProps> = ({ wallet }) => {
+const WalletConnect: React.FunctionComponent = () => {
   return (
     <Box sx={{ display: 'flex' }}>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -18,7 +13,7 @@ const WalletConnect: React.FunctionComponent<WalletConnectProps> = ({ wallet }) 
           Ethereum
         </Typography>
       </Box>
-      <WalletConnectModal wallet={wallet} />
+      <WalletConnectModal />
     </Box>
   );
 };

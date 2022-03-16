@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-import { Wallet, WalletName } from '@components/contexts';
+import { useWallet } from '@hooks';
+import { WalletName } from '@components/contexts';
 import { Panel } from '@components/atomic';
 import { Modal } from '@components/composite';
 import { WalletConnectButton, WalletDisplay, WalletSelect } from './components';
 
-export type WalletConnectModalProps = {
-  wallet: Wallet;
-};
-
-const WalletConnectModal: React.FunctionComponent<WalletConnectModalProps> = ({ wallet }) => {
+const WalletConnectModal: React.FunctionComponent = () => {
+  const wallet = useWallet();
   const [open, setOpen] = useState(false);
   const [selecting, setSelecting] = useState(true);
   const handleChangeWallet = () => setSelecting(true);
@@ -17,6 +15,7 @@ const WalletConnectModal: React.FunctionComponent<WalletConnectModalProps> = ({ 
   const handleClose = () => {
     setSelecting(false);
     setOpen(false);
+    wallet.setRequired(false);
   };
   const handleSelectWallet = (walletName: WalletName) => {
     handleClose();
@@ -42,6 +41,13 @@ const WalletConnectModal: React.FunctionComponent<WalletConnectModalProps> = ({ 
       setSelecting(false);
     }
   }, [wallet.status]);
+
+  useEffect(() => {
+    if (wallet.required) {
+      setOpen(true);
+      setSelecting(true);
+    }
+  }, [wallet.required]);
 
   return (
     <Modal
