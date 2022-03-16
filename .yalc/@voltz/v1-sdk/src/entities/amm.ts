@@ -667,8 +667,11 @@ class AMM {
     return this._price;
   }
 
-  public get variableApr(): number {
-    return 0;
+  public async variableApy(): Promise<number | void> {
+    if (!this.signer) return;
+    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
+    const historicalApy = await marginEngineContract.callStatic.getHistoricalApy();
+    return parseFloat(utils.formatEther(historicalApy));
   }
 
   public get protocol(): string {
@@ -691,10 +694,6 @@ class AMM {
       closestUsableTick,
       closestUsableFixedRate,
     };
-  }
-
-  public get useless(): string {
-    return "ui";
   }
 }
 

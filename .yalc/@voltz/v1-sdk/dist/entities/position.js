@@ -57,32 +57,34 @@ var Position = /** @class */ (function () {
     });
     Object.defineProperty(Position.prototype, "notional", {
         get: function () {
-            console.log(jsbi_1.default.toNumber(this.liquidity));
             var sqrtPriceLowerX96 = new price_1.Price(constants_1.Q96, tickMath_1.TickMath.getSqrtRatioAtTick(this.tickLower));
             var sqrtPriceUpperX96 = new price_1.Price(constants_1.Q96, tickMath_1.TickMath.getSqrtRatioAtTick(this.tickUpper));
-            console.log(sqrtPriceUpperX96.toNumber(), sqrtPriceLowerX96.toNumber());
-            return (sqrtPriceUpperX96.subtract(sqrtPriceLowerX96)).multiply(this.liquidity).divide(price_1.Price.fromNumber(Math.pow(10, 18))).toNumber();
+            return sqrtPriceUpperX96
+                .subtract(sqrtPriceLowerX96)
+                .multiply(this.liquidity)
+                .divide(price_1.Price.fromNumber(Math.pow(10, 18)))
+                .toNumber();
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Position.prototype, "effectiveMargin", {
         get: function () {
-            return jsbi_1.default.toNumber(this.margin) / (Math.pow(10, 18));
+            return jsbi_1.default.toNumber(this.margin) / Math.pow(10, 18);
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Position.prototype, "effectiveFixedTokenBalance", {
         get: function () {
-            return jsbi_1.default.toNumber(this.fixedTokenBalance) / (Math.pow(10, 18));
+            return jsbi_1.default.toNumber(this.fixedTokenBalance) / Math.pow(10, 18);
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Position.prototype, "effectiveVariableTokenBalance", {
         get: function () {
-            return jsbi_1.default.toNumber(this.variableTokenBalance) / (Math.pow(10, 18));
+            return jsbi_1.default.toNumber(this.variableTokenBalance) / Math.pow(10, 18);
         },
         enumerable: false,
         configurable: true

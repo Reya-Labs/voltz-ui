@@ -1,6 +1,6 @@
 import JSBI from 'jsbi';
-import { BigIntish } from '../types';
 import { DateTime } from 'luxon';
+import { BigIntish } from '../types';
 import { Price } from './fractions/price';
 import AMM from './amm';
 export declare type PositionConstructorArgs = {

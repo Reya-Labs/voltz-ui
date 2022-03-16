@@ -634,13 +634,23 @@ var AMM = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(AMM.prototype, "variableApr", {
-        get: function () {
-            return 0;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    AMM.prototype.variableApy = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var marginEngineContract, historicalApy;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!this.signer)
+                            return [2 /*return*/];
+                        marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
+                        return [4 /*yield*/, marginEngineContract.callStatic.getHistoricalApy()];
+                    case 1:
+                        historicalApy = _a.sent();
+                        return [2 /*return*/, parseFloat(ethers_1.utils.formatEther(historicalApy))];
+                }
+            });
+        });
+    };
     Object.defineProperty(AMM.prototype, "protocol", {
         get: function () {
             var firstProtocolCharacter = this.rateOracle.protocol[0];
@@ -660,13 +670,6 @@ var AMM = /** @class */ (function () {
             closestUsableFixedRate: closestUsableFixedRate,
         };
     };
-    Object.defineProperty(AMM.prototype, "useless", {
-        get: function () {
-            return "ui";
-        },
-        enumerable: false,
-        configurable: true
-    });
     return AMM;
 }());
 exports.default = AMM;

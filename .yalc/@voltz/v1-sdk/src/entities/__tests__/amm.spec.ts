@@ -43,7 +43,7 @@ describe('amm', () => {
         updatedTimestamp: '1646856471',
       });
 
-      const vammContract = vammFactory.connect(vammAddress, wallet);
+      // const vammContract = vammFactory.connect(vammAddress, wallet);
       // await vammContract.initializeVAMM(TickMath.getSqrtRatioAtTick(0).toString()); // for periphery tests
       // await vammContract.initializeVAMM(TickMath.getSqrtRatioAtTick(-7000).toString()); // for fcm tests
     });
@@ -91,7 +91,7 @@ describe('amm', () => {
       console.log("fcm settlement done");
     });
 
-    it.skip('mints and swaps', async () => {
+    it('mints and swaps', async () => {
       const fixedLowMinter = 1
       const fixedHighMinter = 2
       const fixedLowSwapper = 3
@@ -208,7 +208,7 @@ describe('amm', () => {
       });
     });
 
-    it('gets fixed rate from 0 sqrtPriceX96', () => {
+    it.skip('gets fixed rate from 0 sqrtPriceX96', () => {
       expect(amm.fixedRate.toNumber()).toEqual(0);
       console.log(amm.endDateTime);
     });
