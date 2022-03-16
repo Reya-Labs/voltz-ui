@@ -2,9 +2,11 @@ import React from 'react';
 import isUndefined from 'lodash/isUndefined';
 import Box from '@mui/material/Box';
 
+import { useAgentWithOverride } from '@hooks';
+import { AgentProps, Agents } from '@components/contexts';
 import IntegerField from '../IntegerField/IntegerField';
 
-export type RateOptionsProps = {
+export type RateOptionsProps = AgentProps & {
   defaultFixedLow?: number;
   defaultFixedHigh?: number;
   fixedLow?: number;
@@ -14,6 +16,7 @@ export type RateOptionsProps = {
 };
 
 const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
+  agent: agentOverride,
   defaultFixedLow,
   defaultFixedHigh,
   fixedLow,
@@ -21,6 +24,7 @@ const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
   onChangeFixedLow,
   onChangeFixedHigh,
 }) => {
+  const { agent } = useAgentWithOverride(agentOverride);
   const fixedLowValue = isUndefined(fixedLow) ? defaultFixedLow : fixedLow;
   const fixedHighValue = isUndefined(fixedHigh) ? defaultFixedHigh : fixedHigh;
 
@@ -38,7 +42,7 @@ const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
         width: '100%',
         justifyContent: 'space-around',
         '& > *:not(:last-child)': { marginRight: (theme) => theme.spacing(10) },
-        flexDirection: 'row',
+        flexDirection: agent === Agents.LIQUIDITY_PROVIDER ? 'row' : 'column',
       }}
     >
       <IntegerField
