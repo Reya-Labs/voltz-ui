@@ -1,5 +1,6 @@
 import JSBI from 'jsbi';
 import { BigIntish } from '../types';
+import { DateTime } from 'luxon';
 import { Price } from './fractions/price';
 import AMM from './amm';
 export declare type PositionConstructorArgs = {
@@ -38,6 +39,12 @@ declare class Position {
     get priceUpper(): Price;
     get fixedRateLower(): Price;
     get fixedRateUpper(): Price;
+    get notional(): number;
+    get effectiveMargin(): number;
+    get effectiveFixedTokenBalance(): number;
+    get effectiveVariableTokenBalance(): number;
+    get createdDateTime(): DateTime;
+    get updatedDateTime(): DateTime;
 }
 export default Position;
 //# sourceMappingURL=position.d.ts.map

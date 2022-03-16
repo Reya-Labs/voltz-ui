@@ -4,7 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var jsbi_1 = __importDefault(require("jsbi"));
+var luxon_1 = require("luxon");
+var price_1 = require("./fractions/price");
 var priceTickConversions_1 = require("../utils/priceTickConversions");
+var tickMath_1 = require("../utils/tickMath");
+var constants_1 = require("../constants");
 var Position = /** @class */ (function () {
     function Position(_a) {
         var id = _a.id, createdTimestamp = _a.createdTimestamp, updatedTimestamp = _a.updatedTimestamp, amm = _a.amm, liquidity = _a.liquidity, tickLower = _a.tickLower, tickUpper = _a.tickUpper, isSettled = _a.isSettled, margin = _a.margin, fixedTokenBalance = _a.fixedTokenBalance, variableTokenBalance = _a.variableTokenBalance, isLiquidityProvider = _a.isLiquidityProvider, owner = _a.owner, isEmpty = _a.isEmpty;
@@ -39,7 +43,7 @@ var Position = /** @class */ (function () {
     });
     Object.defineProperty(Position.prototype, "fixedRateLower", {
         get: function () {
-            return (0, priceTickConversions_1.tickToFixedRate)(this.tickLower);
+            return (0, priceTickConversions_1.tickToFixedRate)(this.tickUpper);
         },
         enumerable: false,
         configurable: true
@@ -47,6 +51,52 @@ var Position = /** @class */ (function () {
     Object.defineProperty(Position.prototype, "fixedRateUpper", {
         get: function () {
             return (0, priceTickConversions_1.tickToFixedRate)(this.tickLower);
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Position.prototype, "notional", {
+        get: function () {
+            console.log(jsbi_1.default.toNumber(this.liquidity));
+            var sqrtPriceLowerX96 = new price_1.Price(constants_1.Q96, tickMath_1.TickMath.getSqrtRatioAtTick(this.tickLower));
+            var sqrtPriceUpperX96 = new price_1.Price(constants_1.Q96, tickMath_1.TickMath.getSqrtRatioAtTick(this.tickUpper));
+            console.log(sqrtPriceUpperX96.toNumber(), sqrtPriceLowerX96.toNumber());
+            return (sqrtPriceUpperX96.subtract(sqrtPriceLowerX96)).multiply(this.liquidity).divide(price_1.Price.fromNumber(Math.pow(10, 18))).toNumber();
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Position.prototype, "effectiveMargin", {
+        get: function () {
+            return jsbi_1.default.toNumber(this.margin) / (Math.pow(10, 18));
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Position.prototype, "effectiveFixedTokenBalance", {
+        get: function () {
+            return jsbi_1.default.toNumber(this.fixedTokenBalance) / (Math.pow(10, 18));
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Position.prototype, "effectiveVariableTokenBalance", {
+        get: function () {
+            return jsbi_1.default.toNumber(this.variableTokenBalance) / (Math.pow(10, 18));
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Position.prototype, "createdDateTime", {
+        get: function () {
+            return luxon_1.DateTime.fromMillis(jsbi_1.default.toNumber(this.createdTimestamp));
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Position.prototype, "updatedDateTime", {
+        get: function () {
+            return luxon_1.DateTime.fromMillis(jsbi_1.default.toNumber(this.updatedTimestamp));
         },
         enumerable: false,
         configurable: true

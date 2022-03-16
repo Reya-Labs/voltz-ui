@@ -692,6 +692,10 @@ class AMM {
       closestUsableFixedRate,
     };
   }
+
+  public get useless(): string {
+    return "ui";
+  }
 }
 
 export default AMM;

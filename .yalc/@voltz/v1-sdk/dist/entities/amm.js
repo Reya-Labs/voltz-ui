@@ -660,6 +660,13 @@ var AMM = /** @class */ (function () {
             closestUsableFixedRate: closestUsableFixedRate,
         };
     };
+    Object.defineProperty(AMM.prototype, "useless", {
+        get: function () {
+            return "ui";
+        },
+        enumerable: false,
+        configurable: true
+    });
     return AMM;
 }());
 exports.default = AMM;
