@@ -30,7 +30,10 @@ export type Wallet = {
   ethereum: WalletEthereum | null;
   signer: ethers.providers.JsonRpcSigner | null;
   balance: number | null;
+  setBalance: (balance: number) => void;
   wallet: GetWalletQuery['wallet'] | null;
   loading: boolean;
   error: boolean;
+  required: boolean;
+  setRequired: (required: boolean) => void;
 };

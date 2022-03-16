@@ -12,9 +12,12 @@ const WalletContext = createContext<Wallet>({
   ethereum: null,
   signer: null,
   balance: null,
+  setBalance: (_balance: number) => undefined,
   wallet: null,
   loading: false,
   error: false,
+  required: false,
+  setRequired: (_required: boolean) => undefined,
 });
 
 export default WalletContext;

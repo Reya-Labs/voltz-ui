@@ -2,11 +2,12 @@ import React from 'react';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '@mui/system';
+import isNull from 'lodash/isNull';
 
 import { Agents } from '@components/contexts';
 import { Button, Typography } from '@components/atomic';
 import { MaturityInformation } from '@components/composite';
-import { useAgent } from '@hooks';
+import { useAgent, useWallet } from '@hooks';
 import { AMMTableDatum } from '../../types';
 import { labels } from '../../constants';
 
@@ -17,6 +18,7 @@ export type AMMTableRowProps = {
 };
 
 const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, onSelect }) => {
+  const wallet = useWallet();
   const { agent } = useAgent();
   const variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'main';
   const typeStyleOverrides = (): SystemStyleObject<Theme> => {
@@ -41,7 +43,13 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
         return {};
     }
   };
-  const handleClick = () => onSelect();
+  const handleClick = () => {
+    if (isNull(wallet.account)) {
+      wallet.setRequired(true);
+    } else {
+      onSelect();
+    }
+  };
 
   return (
     <TableRow key={index} sx={{ ...typeStyleOverrides() }}>

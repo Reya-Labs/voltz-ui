@@ -15,6 +15,8 @@ export type ProviderWrapperProps = {
   setName: React.Dispatch<React.SetStateAction<WalletName | null>>;
   balance: number | null;
   setBalance: React.Dispatch<React.SetStateAction<number | null>>;
+  required: boolean;
+  setRequired: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
@@ -26,6 +28,8 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
   setName,
   balance,
   setBalance,
+  required,
+  setRequired,
   children,
 }) => {
   const {
@@ -93,9 +97,12 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
     ethereum,
     signer,
     balance,
+    setBalance,
     wallet: data && data.wallet ? data.wallet : null,
     loading,
     error: !!error,
+    required,
+    setRequired,
   };
 
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;
