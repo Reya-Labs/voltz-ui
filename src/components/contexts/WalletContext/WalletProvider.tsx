@@ -16,6 +16,7 @@ const WalletProvider: React.FunctionComponent<WalletProviderProps> = ({
   const [account, setAccount] = useState<string | null>(accountOverride || null);
   const [name, setName] = useState<WalletName | null>(null);
   const [balance, setBalance] = useState<number | null>(null);
+  const [required, setRequired] = useState<boolean>(false);
 
   return (
     <MetaMaskProvider>
@@ -28,6 +29,8 @@ const WalletProvider: React.FunctionComponent<WalletProviderProps> = ({
         setName={setName}
         balance={balance}
         setBalance={setBalance}
+        required={required}
+        setRequired={setRequired}
       >
         {children}
       </ProviderWrapper>
