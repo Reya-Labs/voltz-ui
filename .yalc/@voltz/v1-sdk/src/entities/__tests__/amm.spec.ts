@@ -210,6 +210,7 @@ describe('amm', () => {
 
     it('gets fixed rate from 0 sqrtPriceX96', () => {
       expect(amm.fixedRate.toNumber()).toEqual(0);
+      console.log(amm.endDateTime);
     });
   });
 });
