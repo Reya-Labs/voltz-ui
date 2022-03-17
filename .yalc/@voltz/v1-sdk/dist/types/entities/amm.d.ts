@@ -5,9 +5,11 @@ import { BigIntish } from '../types';
 import { Price } from './fractions/price';
 import Token from './token';
 import RateOracle from './rateOracle';
+import { providers } from 'ethers';
 export declare type AMMConstructorArgs = {
     id: string;
     signer: Signer | null;
+    provider: providers.JsonRpcProvider | null;
     marginEngineAddress: string;
     fcmAddress: string;
     rateOracle: RateOracle;
@@ -78,6 +80,7 @@ export declare type ClosestTickAndFixedRate = {
 declare class AMM {
     readonly id: string;
     readonly signer: Signer | null;
+    readonly provider: providers.JsonRpcProvider | null;
     readonly marginEngineAddress: string;
     readonly fcmAddress: string;
     readonly rateOracle: RateOracle;
@@ -93,7 +96,7 @@ declare class AMM {
     readonly txCount: JSBI;
     private _fixedRate?;
     private _price?;
-    constructor({ id, signer, marginEngineAddress, fcmAddress, rateOracle, createdTimestamp, updatedTimestamp, termStartTimestamp, termEndTimestamp, underlyingToken, sqrtPriceX96, liquidity, tick, tickSpacing, txCount, }: AMMConstructorArgs);
+    constructor({ id, signer, provider, marginEngineAddress, fcmAddress, rateOracle, createdTimestamp, updatedTimestamp, termStartTimestamp, termEndTimestamp, underlyingToken, sqrtPriceX96, liquidity, tick, tickSpacing, txCount, }: AMMConstructorArgs);
     getMinimumMarginRequirementPostSwap({ recipient, isFT, notional, fixedRateLimit, fixedLow, fixedHigh, }: AMMGetMinimumMarginRequirementArgs): Promise<number | void>;
     getSlippagePostSwap({ recipient, isFT, notional, fixedRateLimit, fixedLow, fixedHigh, }: AMMGetMinimumMarginRequirementArgs): Promise<number | void>;
     settlePosition({ owner, fixedLow, fixedHigh }: AMMSettlePositionArgs): Promise<ContractTransaction | void>;

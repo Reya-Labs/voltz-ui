@@ -60,6 +60,7 @@ describe('amm', function () {
                 amm = new amm_1.default({
                     id: vammAddress,
                     signer: wallet,
+                    provider: provider,
                     createdTimestamp: '1646856471',
                     fcmAddress: '0x5392a33f7f677f59e833febf4016cddd88ff9e67',
                     liquidity: '0',
@@ -257,6 +258,7 @@ describe('amm', function () {
             amm = new amm_1.default({
                 id: vammAddress,
                 signer: wallet,
+                provider: provider,
                 createdTimestamp: '1646856471',
                 fcmAddress: '0x5392a33f7f677f59e833febf4016cddd88ff9e67',
                 liquidity: '0',

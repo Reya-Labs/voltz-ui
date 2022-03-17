@@ -4,6 +4,7 @@ import isNull from 'lodash/isNull';
 import { Position, AMM, Token, RateOracle } from '@voltz/v1-sdk';
 
 import { useWallet } from '@hooks';
+import { providers } from 'ethers';
 
 export type usePositionsArgs = {};
 
@@ -18,6 +19,7 @@ const usePositions = (): usePositionsResult => {
   const isSignerAvailable = !isNull(signer);
 
   const positions = useMemo(() => {
+    const provider = new providers.JsonRpcProvider('http://0.0.0.0:8545/');
     if (wallet && wallet.positions && !loading && !error) {
       return wallet.positions.map(
         ({
@@ -37,6 +39,7 @@ const usePositions = (): usePositionsResult => {
           new Position({
             amm: new AMM({
               signer,
+              provider,
               rateOracle: new RateOracle({
                 id: rateOracleAddress,
                 protocolId: protocolId as number,

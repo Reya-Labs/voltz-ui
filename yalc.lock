@@ -2,7 +2,11 @@
   "version": "v1",
   "packages": {
     "@voltz/v1-sdk": {
+<<<<<<< Updated upstream
       "signature": "e06885d09ab6ef7e1d27e7265a6b3c93",
+=======
+      "signature": "81dd05afbe6a5c22d301578ccf344498",
+>>>>>>> Stashed changes
       "file": true
     }
   }

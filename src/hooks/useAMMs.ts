@@ -4,6 +4,7 @@ import { AMM, Token, RateOracle } from '@voltz/v1-sdk';
 
 import { useWallet } from '@hooks';
 import { useGetAmMsQuery, Amm_OrderBy } from '@graphql';
+import { providers } from 'ethers';
 
 export type UseAMMsArgs = {};
 
@@ -17,6 +18,7 @@ const useAMMs = (): UseAMMsResult => {
   const { signer } = useWallet();
   const isSignerAvailable = !isNull(signer);
   const { data, loading, error } = useGetAmMsQuery({ variables: { orderBy: Amm_OrderBy.Id } });
+  const provider = new providers.JsonRpcProvider('http://0.0.0.0:8545/');
 
   const amms = useMemo(() => {
     if (data && !loading && !error) {
@@ -31,6 +33,7 @@ const useAMMs = (): UseAMMsResult => {
         }) =>
           new AMM({
             signer,
+            provider,
             rateOracle: new RateOracle({ id: rateOracleAddress, protocolId: protocolId as number }),
             underlyingToken: new Token({ id: tokenAddress, name: tokenName }),
             ...rest,

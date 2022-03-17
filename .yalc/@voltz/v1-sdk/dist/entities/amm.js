@@ -51,9 +51,10 @@ var nearestUsableTick_1 = require("../utils/nearestUsableTick");
 var evm_bn_1 = require("evm-bn");
 var AMM = /** @class */ (function () {
     function AMM(_a) {
-        var id = _a.id, signer = _a.signer, marginEngineAddress = _a.marginEngineAddress, fcmAddress = _a.fcmAddress, rateOracle = _a.rateOracle, createdTimestamp = _a.createdTimestamp, updatedTimestamp = _a.updatedTimestamp, termStartTimestamp = _a.termStartTimestamp, termEndTimestamp = _a.termEndTimestamp, underlyingToken = _a.underlyingToken, sqrtPriceX96 = _a.sqrtPriceX96, liquidity = _a.liquidity, tick = _a.tick, tickSpacing = _a.tickSpacing, txCount = _a.txCount;
+        var id = _a.id, signer = _a.signer, provider = _a.provider, marginEngineAddress = _a.marginEngineAddress, fcmAddress = _a.fcmAddress, rateOracle = _a.rateOracle, createdTimestamp = _a.createdTimestamp, updatedTimestamp = _a.updatedTimestamp, termStartTimestamp = _a.termStartTimestamp, termEndTimestamp = _a.termEndTimestamp, underlyingToken = _a.underlyingToken, sqrtPriceX96 = _a.sqrtPriceX96, liquidity = _a.liquidity, tick = _a.tick, tickSpacing = _a.tickSpacing, txCount = _a.txCount;
         this.id = id;
         this.signer = signer;
+        this.provider = provider;
         this.marginEngineAddress = marginEngineAddress;
         this.fcmAddress = fcmAddress;
         this.rateOracle = rateOracle;
@@ -310,11 +311,13 @@ var AMM = /** @class */ (function () {
                             notional: (0, evm_bn_1.toBn)(notional.toString()),
                             isMint: true,
                         };
+                        console.log(mintOrBurnParams);
                         marginRequirement = ethers_1.BigNumber.from("0");
                         return [4 /*yield*/, peripheryContract.callStatic.mintOrBurn(mintOrBurnParams)
                                 .then(function (result) {
                                 marginRequirement = ethers_1.BigNumber.from(result);
                             }, function (error) {
+                                console.log("there is an error");
                                 if (error.message.includes("MarginLessThanMinimum")) {
                                     var args = error.message.split("MarginLessThanMinimum")[1]
                                         .split("(")[1]
@@ -634,6 +637,7 @@ var AMM = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+<<<<<<< Updated upstream
     Object.defineProperty(AMM.prototype, "variableApr", {
         get: function () {
             return 0;
@@ -641,6 +645,27 @@ var AMM = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+=======
+    AMM.prototype.variableApy = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var marginEngineContract, historicalApy;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!this.provider) {
+                            console.log("no provider");
+                            return [2 /*return*/];
+                        }
+                        marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.provider);
+                        return [4 /*yield*/, marginEngineContract.callStatic.getHistoricalApy()];
+                    case 1:
+                        historicalApy = _a.sent();
+                        return [2 /*return*/, parseFloat(ethers_1.utils.formatEther(historicalApy))];
+                }
+            });
+        });
+    };
+>>>>>>> Stashed changes
     Object.defineProperty(AMM.prototype, "protocol", {
         get: function () {
             var firstProtocolCharacter = this.rateOracle.protocol[0];
