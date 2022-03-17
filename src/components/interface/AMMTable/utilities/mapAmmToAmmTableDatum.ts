@@ -15,7 +15,6 @@ const mapAmmToAmmTableDatum = ({
     startDate: startDateTime,
     endDate: endDateTime,
     fixedApr: fixedRate.toNumber(),
-    variableApr: 5,
   };
 };
 

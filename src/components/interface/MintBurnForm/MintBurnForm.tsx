@@ -18,7 +18,7 @@ import { SubmitMintBurnFormButton } from './components';
 export type MintBurnFormProps = AgentProps & {
   protocol?: string;
   fixedApr?: number;
-  variableApr?: number;
+  variableApy?: number;
   startDate?: DateTime;
   endDate?: DateTime;
   defaultFixedLow?: number;
@@ -41,7 +41,7 @@ export type MintBurnFormProps = AgentProps & {
 const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   protocol,
   fixedApr,
-  variableApr,
+  variableApy,
   startDate,
   endDate,
   defaultFixedLow,
@@ -80,7 +80,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         boxShadow: '0px 0px 60px rgba(255, 89, 156, 0.2)',
       }}
     >
-      <ProtocolInformation protocol={protocol} fixedApr={fixedApr} variableApr={variableApr} />
+      <ProtocolInformation protocol={protocol} fixedApr={fixedApr} variableApy={variableApy} />
       <Box
         sx={{
           marginBottom: (theme) => theme.spacing(4),

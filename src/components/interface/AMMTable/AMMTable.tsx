@@ -6,6 +6,7 @@ import { SystemStyleObject, Theme } from '@mui/system';
 import { AMM } from '@voltz/v1-sdk';
 
 import { data } from '@utilities';
+import { AMMProvider } from '@components/contexts';
 import { Panel } from '@components/atomic';
 import { AMMTableFields } from './types';
 import { labels } from './constants';
@@ -83,7 +84,9 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({
           <AMMTableHead order={order} orderBy={orderBy} onSort={handleSort} />
           <TableBody>
             {tableData.map((datum, index) => (
-              <AMMTableRow datum={datum} index={index} onSelect={handleSelectRow(index)} />
+              <AMMProvider amm={amms[index]}>
+                <AMMTableRow datum={datum} index={index} onSelect={handleSelectRow(index)} />
+              </AMMProvider>
             ))}
           </TableBody>
           <AMMTableFooter

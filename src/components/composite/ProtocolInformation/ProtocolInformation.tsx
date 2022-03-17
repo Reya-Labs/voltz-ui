@@ -6,13 +6,13 @@ import { Typography } from '../../atomic';
 export type ProtocolInformationProps = {
   protocol?: string;
   fixedApr?: number;
-  variableApr?: number;
+  variableApy?: number;
 };
 
 const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = ({
   protocol,
   fixedApr,
-  variableApr,
+  variableApy,
 }) => {
   return (
     <Box
@@ -32,9 +32,9 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
           {fixedApr}%
         </Typography>
       )}
-      {variableApr && (
-        <Typography label="variable apr" variant="h3">
-          {variableApr}%
+      {variableApy && (
+        <Typography label="variable apy" variant="h3">
+          {variableApy}%
         </Typography>
       )}
     </Box>
