@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 
-export type AMMTableFields = 'protocol' | 'maturity' | 'fixedApr' | 'variableApr';
+export type AMMTableFields = 'protocol' | 'maturity' | 'fixedApr' | 'variableApy';
 
 export type AMMTableDatum = {
   id: string;
@@ -8,5 +8,5 @@ export type AMMTableDatum = {
   startDate: DateTime;
   endDate: DateTime;
   fixedApr: number;
-  variableApr: number;
+  variableApy?: number;
 };

@@ -112,7 +112,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     <MintBurnForm
       protocol={amm.protocol}
       fixedApr={10}
-      variableApr={15}
+      variableApy={15}
       startDate={amm.startDateTime}
       endDate={amm.endDateTime}
       fixedLow={fixedLow}

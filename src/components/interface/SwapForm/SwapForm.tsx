@@ -20,7 +20,7 @@ export type SwapFormProps = AgentProps & {
   isModifying?: boolean;
   protocol?: string;
   fixedApr?: number;
-  variableApr?: number;
+  variableApy?: number;
   startDate?: DateTime;
   endDate?: DateTime;
   defaultFixedLow?: number;
@@ -48,7 +48,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   isModifying = false,
   protocol,
   fixedApr,
-  variableApr,
+  variableApy,
   startDate,
   endDate,
   defaultFixedLow,
@@ -95,7 +95,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         boxShadow: '0px 0px 60px rgba(255, 89, 156, 0.2)',
       }}
     >
-      <ProtocolInformation protocol={protocol} fixedApr={fixedApr} variableApr={variableApr} />
+      <ProtocolInformation protocol={protocol} fixedApr={fixedApr} variableApy={variableApy} />
       <Box
         sx={{
           marginBottom: (theme) => theme.spacing(4),

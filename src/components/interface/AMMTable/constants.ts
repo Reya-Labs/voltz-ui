@@ -3,13 +3,13 @@ import { AMMTableFields } from './types';
 export const AMMTableLabels: Record<AMMTableFields, string> = {
   protocol: 'Pool',
   fixedApr: 'Fixed APR',
-  variableApr: 'Variable APR',
+  variableApy: 'Variable APY',
   maturity: 'Maturity',
 };
 
 export const labels: [AMMTableFields, string][] = [
   ['protocol', AMMTableLabels.protocol],
   ['fixedApr', AMMTableLabels.fixedApr],
-  ['variableApr', AMMTableLabels.variableApr],
+  ['variableApy', AMMTableLabels.variableApy],
   ['maturity', AMMTableLabels.maturity],
 ];

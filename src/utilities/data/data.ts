@@ -9,7 +9,7 @@ const data = [
     startDate: DateTime.now().minus(Duration.fromObject({ weeks: 1 })),
     endDate: DateTime.now().plus(Duration.fromObject({ weeks: 3 })),
     fixedApr: 5,
-    variableApr: 15,
+    variableApy: 15,
     positions: [
       {
         id: '222fd72e-ed01-4fe6-b9ca-a237f05c988d',
@@ -37,7 +37,7 @@ const data = [
     startDate: DateTime.now().minus(Duration.fromObject({ weeks: 2 })),
     endDate: DateTime.now().plus(Duration.fromObject({ weeks: 2 })),
     fixedApr: 7,
-    variableApr: 10,
+    variableApy: 10,
     positions: [
       {
         id: 'f330efe9-d850-43c2-9b7d-4c8fa9f4f43c',
@@ -65,7 +65,7 @@ const data = [
     startDate: DateTime.now().minus(Duration.fromObject({ weeks: 3 })),
     endDate: DateTime.now().plus(Duration.fromObject({ weeks: 7 })),
     fixedApr: 4,
-    variableApr: 11,
+    variableApy: 11,
     positions: [
       {
         id: 'eddbde97-750a-4887-805e-511b882d10fa',
