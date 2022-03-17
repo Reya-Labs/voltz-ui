@@ -25,12 +25,8 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
       try {
         const variableApyResult = await amm.variableApy();
 
-        console.debug({ variableApyResult });
-
         setVariableApy(variableApyResult || null);
       } catch (error) {
-        console.debug({ error });
-
         setVariableApyError(true);
         setVariableApy(null);
       }
