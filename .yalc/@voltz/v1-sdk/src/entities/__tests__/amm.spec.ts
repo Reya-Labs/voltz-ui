@@ -22,6 +22,7 @@ describe('amm', () => {
       amm = new AMM({
         id: vammAddress,
         signer: wallet,
+        provider: provider,
         createdTimestamp: '1646856471',
         fcmAddress: '0x5392a33f7f677f59e833febf4016cddd88ff9e67',
         liquidity: '0',
@@ -43,7 +44,7 @@ describe('amm', () => {
         updatedTimestamp: '1646856471',
       });
 
-      // const vammContract = vammFactory.connect(vammAddress, wallet);
+      const vammContract = vammFactory.connect(vammAddress, wallet);
       // await vammContract.initializeVAMM(TickMath.getSqrtRatioAtTick(0).toString()); // for periphery tests
       // await vammContract.initializeVAMM(TickMath.getSqrtRatioAtTick(-7000).toString()); // for fcm tests
     });
@@ -70,17 +71,17 @@ describe('amm', () => {
       });
       console.log("mint done");
 
-      await amm.FCMswap({
+      await amm.FCMSwap({
         notional: 50000
       });
       console.log("fcm swap done");
 
-      await amm.FCMunwind({
+      await amm.FCMUnwind({
         notionalToUnwind: 50000
       });
       console.log("fcm unwind done");
 
-      await amm.FCMswap({
+      await amm.FCMSwap({
         notional: 50000
       });
       console.log("fcm swap 2 done");
@@ -186,6 +187,7 @@ describe('amm', () => {
       amm = new AMM({
         id: vammAddress,
         signer: wallet,
+        provider: provider,
         createdTimestamp: '1646856471',
         fcmAddress: '0x5392a33f7f677f59e833febf4016cddd88ff9e67',
         liquidity: '0',
