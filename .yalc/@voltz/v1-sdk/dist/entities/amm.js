@@ -608,7 +608,7 @@ var AMM = /** @class */ (function () {
     });
     Object.defineProperty(AMM.prototype, "fixedApr", {
         get: function () {
-            return parseInt(this.fixedRate.toFixed(2));
+            return this.fixedRate.toNumber();
         },
         enumerable: false,
         configurable: true

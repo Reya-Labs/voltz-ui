@@ -70,10 +70,10 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
                 return `${datum.fixedApr}%`;
 
               case 'notional':
-                return datum.notional;
+                return datum.notional.toFixed(2);
 
               case 'margin':
-                return datum.margin;
+                return datum.margin.toFixed(2);
 
               default:
                 return null;

@@ -2,17 +2,16 @@ import React from 'react';
 import Box from '@mui/material/Box';
 
 import { Typography } from '../../atomic';
+import { VariableAPY } from './components';
 
 export type ProtocolInformationProps = {
   protocol?: string;
   fixedApr?: number;
-  variableApy?: number;
 };
 
 const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = ({
   protocol,
   fixedApr,
-  variableApy,
 }) => {
   return (
     <Box
@@ -29,14 +28,10 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
       </Typography>
       {fixedApr && (
         <Typography label="fixed apr" variant="h3">
-          {fixedApr}%
+          {fixedApr.toFixed(2)}%
         </Typography>
-      )}
-      {variableApy && (
-        <Typography label="variable apy" variant="h3">
-          {variableApy}%
-        </Typography>
-      )}
+      )},
+      <VariableAPY />
     </Box>
   );
 };

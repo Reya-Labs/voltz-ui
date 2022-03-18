@@ -27,7 +27,7 @@ interface IFactoryInterface extends ethers.utils.Interface {
     "masterMarginEngine()": FunctionFragment;
     "masterVAMM()": FunctionFragment;
     "setApproval(address,bool)": FunctionFragment;
-    "setMasterFCM(address,uint8)": FunctionFragment;
+    "setMasterFCM(address,address)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -56,7 +56,7 @@ interface IFactoryInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "setMasterFCM",
-    values: [string, BigNumberish]
+    values: [string, string]
   ): string;
 
   decodeFunctionResult(
@@ -80,23 +80,13 @@ interface IFactoryInterface extends ethers.utils.Interface {
   ): Result;
 
   events: {
-    "ApprovalSet(address,address,bool)": EventFragment;
     "IrsInstanceDeployed(address,address,uint256,uint256,int24,address,address,address,uint8)": EventFragment;
     "MasterFCMSet(address,address,uint8)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "ApprovalSet"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "IrsInstanceDeployed"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "MasterFCMSet"): EventFragment;
 }
-
-export type ApprovalSetEvent = TypedEvent<
-  [string, string, boolean] & {
-    owner: string;
-    intAddress: string;
-    isApproved: boolean;
-  }
->;
 
 export type IrsInstanceDeployedEvent = TypedEvent<
   [
@@ -205,8 +195,8 @@ export class IFactory extends BaseContract {
     ): Promise<ContractTransaction>;
 
     setMasterFCM(
-      masterFCM: string,
-      yieldBearingProtocolID: BigNumberish,
+      masterFCMAddress: string,
+      _rateOracle: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
@@ -242,8 +232,8 @@ export class IFactory extends BaseContract {
   ): Promise<ContractTransaction>;
 
   setMasterFCM(
-    masterFCM: string,
-    yieldBearingProtocolID: BigNumberish,
+    masterFCMAddress: string,
+    _rateOracle: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -285,31 +275,13 @@ export class IFactory extends BaseContract {
     ): Promise<void>;
 
     setMasterFCM(
-      masterFCM: string,
-      yieldBearingProtocolID: BigNumberish,
+      masterFCMAddress: string,
+      _rateOracle: string,
       overrides?: CallOverrides
     ): Promise<void>;
   };
 
   filters: {
-    "ApprovalSet(address,address,bool)"(
-      owner?: string | null,
-      intAddress?: string | null,
-      isApproved?: boolean | null
-    ): TypedEventFilter<
-      [string, string, boolean],
-      { owner: string; intAddress: string; isApproved: boolean }
-    >;
-
-    ApprovalSet(
-      owner?: string | null,
-      intAddress?: string | null,
-      isApproved?: boolean | null
-    ): TypedEventFilter<
-      [string, string, boolean],
-      { owner: string; intAddress: string; isApproved: boolean }
-    >;
-
     "IrsInstanceDeployed(address,address,uint256,uint256,int24,address,address,address,uint8)"(
       underlyingToken?: string | null,
       rateOracle?: string | null,
@@ -439,8 +411,8 @@ export class IFactory extends BaseContract {
     ): Promise<BigNumber>;
 
     setMasterFCM(
-      masterFCM: string,
-      yieldBearingProtocolID: BigNumberish,
+      masterFCMAddress: string,
+      _rateOracle: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
@@ -479,8 +451,8 @@ export class IFactory extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     setMasterFCM(
-      masterFCM: string,
-      yieldBearingProtocolID: BigNumberish,
+      masterFCMAddress: string,
+      _rateOracle: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

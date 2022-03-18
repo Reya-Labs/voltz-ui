@@ -7,6 +7,11 @@ const AMMContext = createContext<AMMDispatch>({
   variableApy: null,
   variableApyLoading: false,
   variableApyError: false,
+
+  loadMinimumMarginAmount: () => null,
+  minimumMarginAmount: null,
+  minimumMarginAmountLoading: false,
+  minimumMarginAmountError: false,
 });
 
 export default AMMContext;

@@ -8,11 +8,6 @@ import type { IFactory, IFactoryInterface } from "../IFactory";
 
 const _abi = [
   {
-    inputs: [],
-    name: "AavePoolGetReserveNormalizedIncomeReturnedZero",
-    type: "error",
-  },
-  {
     inputs: [
       {
         internalType: "bool",
@@ -37,22 +32,6 @@ const _abi = [
   {
     inputs: [],
     name: "CannotSettleBeforeMaturity",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "x",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "y",
-        type: "uint256",
-      },
-    ],
-    name: "DebugError",
     type: "error",
   },
   {
@@ -170,17 +149,6 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "int256",
-        name: "marginRequirement",
-        type: "int256",
-      },
-    ],
-    name: "MarginRequirementNotMetFCM",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
         internalType: "uint256",
         name: "requested",
         type: "uint256",
@@ -240,37 +208,12 @@ const _abi = [
       {
         indexed: true,
         internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "intAddress",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "bool",
-        name: "isApproved",
-        type: "bool",
-      },
-    ],
-    name: "ApprovalSet",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "contract IERC20Minimal",
         name: "underlyingToken",
         type: "address",
       },
       {
         indexed: true,
-        internalType: "contract IRateOracle",
+        internalType: "address",
         name: "rateOracle",
         type: "address",
       },
@@ -294,19 +237,19 @@ const _abi = [
       },
       {
         indexed: false,
-        internalType: "contract IMarginEngine",
+        internalType: "address",
         name: "marginEngine",
         type: "address",
       },
       {
         indexed: false,
-        internalType: "contract IVAMM",
+        internalType: "address",
         name: "vamm",
         type: "address",
       },
       {
         indexed: false,
-        internalType: "contract IFCM",
+        internalType: "address",
         name: "fcm",
         type: "address",
       },
@@ -325,13 +268,13 @@ const _abi = [
     inputs: [
       {
         indexed: false,
-        internalType: "contract IFCM",
+        internalType: "address",
         name: "masterFCMAddressOld",
         type: "address",
       },
       {
         indexed: false,
-        internalType: "contract IFCM",
+        internalType: "address",
         name: "masterFCMAddress",
         type: "address",
       },
@@ -348,12 +291,12 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "contract IERC20Minimal",
+        internalType: "address",
         name: "_underlyingToken",
         type: "address",
       },
       {
-        internalType: "contract IRateOracle",
+        internalType: "address",
         name: "_rateOracle",
         type: "address",
       },
@@ -376,17 +319,17 @@ const _abi = [
     name: "deployIrsInstance",
     outputs: [
       {
-        internalType: "contract IMarginEngine",
+        internalType: "address",
         name: "marginEngineProxy",
         type: "address",
       },
       {
-        internalType: "contract IVAMM",
+        internalType: "address",
         name: "vammProxy",
         type: "address",
       },
       {
-        internalType: "contract IFCM",
+        internalType: "address",
         name: "fcmProxy",
         type: "address",
       },
@@ -429,8 +372,8 @@ const _abi = [
     name: "masterFCMs",
     outputs: [
       {
-        internalType: "contract IFCM",
-        name: "masterFCM",
+        internalType: "address",
+        name: "masterFCMAddress",
         type: "address",
       },
     ],
@@ -442,7 +385,7 @@ const _abi = [
     name: "masterMarginEngine",
     outputs: [
       {
-        internalType: "contract IMarginEngine",
+        internalType: "address",
         name: "",
         type: "address",
       },
@@ -455,7 +398,7 @@ const _abi = [
     name: "masterVAMM",
     outputs: [
       {
-        internalType: "contract IVAMM",
+        internalType: "address",
         name: "",
         type: "address",
       },
@@ -484,14 +427,14 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "contract IFCM",
-        name: "masterFCM",
+        internalType: "address",
+        name: "masterFCMAddress",
         type: "address",
       },
       {
-        internalType: "uint8",
-        name: "yieldBearingProtocolID",
-        type: "uint8",
+        internalType: "address",
+        name: "_rateOracle",
+        type: "address",
       },
     ],
     name: "setMasterFCM",

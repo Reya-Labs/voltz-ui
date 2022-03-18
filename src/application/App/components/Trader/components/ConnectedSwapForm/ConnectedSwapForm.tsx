@@ -3,7 +3,7 @@ import isNull from 'lodash/isNull';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AMM, Position } from '@voltz/v1-sdk';
 
-import { routes } from '@routes';
+import { AMMProvider } from '@components/contexts';
 import { useWallet, useAgent } from '@hooks';
 import { Agents } from '@components/contexts';
 import {
@@ -76,25 +76,6 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
 
     setTransactionPending(false);
   };
-  const handleComplete = () => {
-    setSubmitting(false);
-    onReset();
-
-    switch (pathname) {
-      case `/${routes.SWAP}`:
-      case `/${routes.PORTFOLIO}`: {
-        navigate(`/${routes.PORTFOLIO}`);
-
-        break;
-      }
-
-      default: {
-        navigate(`/${routes.LP_FARM}`);
-
-        break;
-      }
-    }
-  };
 
   if (!amm) {
     return null;
@@ -105,7 +86,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
       <PendingTransaction
         loading={transactionPending}
         protocol={amm.protocol}
-        fixedApr={10}
+        fixedApr={amm.fixedApr}
         leverage={0}
         margin={0}
         onComplete={() => null}
@@ -114,25 +95,26 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
   }
 
   return (
-    <SwapForm
-      protocol={amm.protocol}
-      fixedApr={10}
-      variableApy={15}
-      startDate={amm.startDateTime}
-      endDate={amm.endDateTime}
-      fixedLow={fixedLow}
-      onChangeFixedLow={handleSetFixedLow}
-      fixedHigh={fixedHigh}
-      onChangeFixedHigh={handleSetFixedHigh}
-      notional={notional}
-      onChangeNotional={setNotional}
-      margin={margin}
-      partialCollateralization={partialCollateralization}
-      onChangePartialCollateralization={setPartialCollateralization}
-      onChangeMargin={setMargin}
-      onSubmit={handleSubmit}
-      onCancel={onReset}
-    />
+    <AMMProvider amm={amm}>
+      <SwapForm
+        protocol={amm.protocol}
+        fixedApr={amm.fixedApr}
+        startDate={amm.startDateTime}
+        endDate={amm.endDateTime}
+        fixedLow={fixedLow}
+        onChangeFixedLow={handleSetFixedLow}
+        fixedHigh={fixedHigh}
+        onChangeFixedHigh={handleSetFixedHigh}
+        notional={notional}
+        onChangeNotional={setNotional}
+        margin={margin}
+        partialCollateralization={partialCollateralization}
+        onChangePartialCollateralization={setPartialCollateralization}
+        onChangeMargin={setMargin}
+        onSubmit={handleSubmit}
+        onCancel={onReset}
+      />
+    </AMMProvider>
   );
 };
 

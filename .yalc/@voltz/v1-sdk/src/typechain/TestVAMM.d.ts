@@ -479,7 +479,7 @@ export class TestVAMM extends BaseContract {
     getProtocolFees(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     initialize(
-      __marginEngine: string,
+      _marginEngineAddress: string,
       __tickSpacing: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -667,7 +667,7 @@ export class TestVAMM extends BaseContract {
   getProtocolFees(overrides?: CallOverrides): Promise<BigNumber>;
 
   initialize(
-    __marginEngine: string,
+    _marginEngineAddress: string,
     __tickSpacing: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -849,7 +849,7 @@ export class TestVAMM extends BaseContract {
     getProtocolFees(overrides?: CallOverrides): Promise<BigNumber>;
 
     initialize(
-      __marginEngine: string,
+      _marginEngineAddress: string,
       __tickSpacing: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -1244,7 +1244,7 @@ export class TestVAMM extends BaseContract {
     getProtocolFees(overrides?: CallOverrides): Promise<BigNumber>;
 
     initialize(
-      __marginEngine: string,
+      _marginEngineAddress: string,
       __tickSpacing: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -1402,7 +1402,7 @@ export class TestVAMM extends BaseContract {
     getProtocolFees(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     initialize(
-      __marginEngine: string,
+      _marginEngineAddress: string,
       __tickSpacing: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;

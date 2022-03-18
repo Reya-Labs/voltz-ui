@@ -3,6 +3,7 @@ import isNull from 'lodash/isNull';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AMM, Position } from '@voltz/v1-sdk';
 
+import { AMMProvider } from '@components/contexts';
 import { routes } from '@routes';
 import { useWallet } from '@hooks';
 import {
@@ -28,6 +29,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const [fixedLow, setFixedLow] = useState<MintBurnFormProps['fixedLow']>();
+
   const handleSetFixedLow = (newFixedLow: number) => {
     if (!amm) {
       return;
@@ -100,7 +102,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
       <PendingTransaction
         loading={transactionPending}
         protocol={amm.protocol}
-        fixedApr={10}
+        fixedApr={amm.fixedApr}
         leverage={0}
         margin={0}
         onComplete={handleComplete}
@@ -109,23 +111,30 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   }
 
   return (
-    <MintBurnForm
-      protocol={amm.protocol}
-      fixedApr={10}
-      variableApy={15}
-      startDate={amm.startDateTime}
-      endDate={amm.endDateTime}
-      fixedLow={fixedLow}
-      onChangeFixedLow={handleSetFixedLow}
-      fixedHigh={fixedHigh}
-      onChangeFixedHigh={handleSetFixedHigh}
-      notional={notional}
-      onChangeNotional={setNotional}
-      margin={margin}
-      onChangeMargin={setMargin}
-      onSubmit={handleSubmit}
-      onCancel={onReset}
-    />
+    <AMMProvider 
+      amm={amm}
+      fixedLow={fixedLow || 1}
+      fixedHigh={fixedHigh || 2}
+      notional={notional || 0}
+      margin={margin || 0}
+    >
+      <MintBurnForm
+        protocol={amm.protocol}
+        fixedApr={amm.fixedApr}
+        startDate={amm.startDateTime}
+        endDate={amm.endDateTime}
+        fixedLow={fixedLow}
+        onChangeFixedLow={handleSetFixedLow}
+        fixedHigh={fixedHigh}
+        onChangeFixedHigh={handleSetFixedHigh}
+        notional={notional}
+        onChangeNotional={setNotional}
+        margin={margin}
+        onChangeMargin={setMargin}
+        onSubmit={handleSubmit}
+        onCancel={onReset}
+      /> 
+    </AMMProvider>
   );
 };
 

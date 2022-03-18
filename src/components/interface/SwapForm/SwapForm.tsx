@@ -20,7 +20,6 @@ export type SwapFormProps = AgentProps & {
   isModifying?: boolean;
   protocol?: string;
   fixedApr?: number;
-  variableApy?: number;
   startDate?: DateTime;
   endDate?: DateTime;
   defaultFixedLow?: number;
@@ -48,7 +47,6 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   isModifying = false,
   protocol,
   fixedApr,
-  variableApy,
   startDate,
   endDate,
   defaultFixedLow,
@@ -71,9 +69,6 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   onCancel,
 }) => {
   const { agent } = useAgentWithOverride(agentOverride);
-  const minimumMargin = 0;
-  const maxNotional = 0;
-  const handleMaxNotional = () => {};
   const handleSubmit = async () => {
     return onSubmit({
       agent,
@@ -95,7 +90,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         boxShadow: '0px 0px 60px rgba(255, 89, 156, 0.2)',
       }}
     >
-      <ProtocolInformation protocol={protocol} fixedApr={fixedApr} variableApy={variableApy} />
+      <ProtocolInformation protocol={protocol} fixedApr={fixedApr} />
       <Box
         sx={{
           marginBottom: (theme) => theme.spacing(4),
@@ -140,7 +135,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           marginBottom: (theme) => theme.spacing(4),
         }}
       >
-        <MinimumMarginAmount minimumMargin={minimumMargin} />
+        <MinimumMarginAmount/>
       </Box>
       <Box
         sx={{

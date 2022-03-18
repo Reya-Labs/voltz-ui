@@ -27,11 +27,9 @@ interface ActorInterface extends ethers.utils.Interface {
     "mint(address,address,int24,int24,uint128)": FunctionFragment;
     "mintOrBurnViaPeriphery(address,(address,address,int24,int24,uint256,bool))": FunctionFragment;
     "setIntegrationApproval(address,address,bool)": FunctionFragment;
-    "settleYBATrader(address)": FunctionFragment;
     "swap(address,(address,int256,uint160,int24,int24))": FunctionFragment;
     "swapViaPeriphery(address,(address,address,bool,uint256,uint160,int24,int24))": FunctionFragment;
     "unwindFullyCollateralisedFixedTakerSwap(address,uint256,uint160)": FunctionFragment;
-    "updatePositionMargin(address,address,int24,int24,int256)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -69,10 +67,6 @@ interface ActorInterface extends ethers.utils.Interface {
     values: [string, string, boolean]
   ): string;
   encodeFunctionData(
-    functionFragment: "settleYBATrader",
-    values: [string]
-  ): string;
-  encodeFunctionData(
     functionFragment: "swap",
     values: [
       string,
@@ -104,10 +98,6 @@ interface ActorInterface extends ethers.utils.Interface {
     functionFragment: "unwindFullyCollateralisedFixedTakerSwap",
     values: [string, BigNumberish, BigNumberish]
   ): string;
-  encodeFunctionData(
-    functionFragment: "updatePositionMargin",
-    values: [string, string, BigNumberish, BigNumberish, BigNumberish]
-  ): string;
 
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
   decodeFunctionResult(
@@ -127,10 +117,6 @@ interface ActorInterface extends ethers.utils.Interface {
     functionFragment: "setIntegrationApproval",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "settleYBATrader",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "swap", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "swapViaPeriphery",
@@ -138,10 +124,6 @@ interface ActorInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "unwindFullyCollateralisedFixedTakerSwap",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "updatePositionMargin",
     data: BytesLike
   ): Result;
 
@@ -245,11 +227,6 @@ export class Actor extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    settleYBATrader(
-      FCMAddress: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     swap(
       VAMMAddress: string,
       params: {
@@ -280,15 +257,6 @@ export class Actor extends BaseContract {
       FCMAddress: string,
       notionalToUnwind: BigNumberish,
       sqrtPriceLimitX96: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    updatePositionMargin(
-      MEAddress: string,
-      _owner: string,
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
-      marginDelta: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
@@ -346,11 +314,6 @@ export class Actor extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  settleYBATrader(
-    FCMAddress: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   swap(
     VAMMAddress: string,
     params: {
@@ -381,15 +344,6 @@ export class Actor extends BaseContract {
     FCMAddress: string,
     notionalToUnwind: BigNumberish,
     sqrtPriceLimitX96: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  updatePositionMargin(
-    MEAddress: string,
-    _owner: string,
-    tickLower: BigNumberish,
-    tickUpper: BigNumberish,
-    marginDelta: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -447,11 +401,6 @@ export class Actor extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    settleYBATrader(
-      FCMAddress: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     swap(
       VAMMAddress: string,
       params: {
@@ -497,15 +446,6 @@ export class Actor extends BaseContract {
       FCMAddress: string,
       notionalToUnwind: BigNumberish,
       sqrtPriceLimitX96: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    updatePositionMargin(
-      MEAddress: string,
-      _owner: string,
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
-      marginDelta: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
   };
@@ -566,11 +506,6 @@ export class Actor extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    settleYBATrader(
-      FCMAddress: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     swap(
       VAMMAddress: string,
       params: {
@@ -601,15 +536,6 @@ export class Actor extends BaseContract {
       FCMAddress: string,
       notionalToUnwind: BigNumberish,
       sqrtPriceLimitX96: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    updatePositionMargin(
-      MEAddress: string,
-      _owner: string,
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
-      marginDelta: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
@@ -668,11 +594,6 @@ export class Actor extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    settleYBATrader(
-      FCMAddress: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     swap(
       VAMMAddress: string,
       params: {
@@ -703,15 +624,6 @@ export class Actor extends BaseContract {
       FCMAddress: string,
       notionalToUnwind: BigNumberish,
       sqrtPriceLimitX96: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    updatePositionMargin(
-      MEAddress: string,
-      _owner: string,
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
-      marginDelta: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

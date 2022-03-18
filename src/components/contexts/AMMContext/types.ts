@@ -3,4 +3,9 @@ export type AMMDispatch = {
   variableApy: number | null;
   variableApyLoading: boolean;
   variableApyError: boolean;
+
+  loadMinimumMarginAmount: () => void;
+  minimumMarginAmount: number | null;
+  minimumMarginAmountLoading: boolean;
+  minimumMarginAmountError: boolean;
 };

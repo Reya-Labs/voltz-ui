@@ -651,7 +651,7 @@ class AMM {
   }
 
   public get fixedApr(): number {
-    return parseInt(this.fixedRate.toFixed(2));
+    return this.fixedRate.toNumber();
   }
 
   public get price(): Price {

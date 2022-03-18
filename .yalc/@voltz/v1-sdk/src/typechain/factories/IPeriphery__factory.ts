@@ -8,11 +8,6 @@ import type { IPeriphery, IPeripheryInterface } from "../IPeriphery";
 
 const _abi = [
   {
-    inputs: [],
-    name: "AavePoolGetReserveNormalizedIncomeReturnedZero",
-    type: "error",
-  },
-  {
     inputs: [
       {
         internalType: "bool",
@@ -37,22 +32,6 @@ const _abi = [
   {
     inputs: [],
     name: "CannotSettleBeforeMaturity",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "x",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "y",
-        type: "uint256",
-      },
-    ],
-    name: "DebugError",
     type: "error",
   },
   {
@@ -165,17 +144,6 @@ const _abi = [
       },
     ],
     name: "MarginRequirementNotMet",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "int256",
-        name: "marginRequirement",
-        type: "int256",
-      },
-    ],
-    name: "MarginRequirementNotMetFCM",
     type: "error",
   },
   {

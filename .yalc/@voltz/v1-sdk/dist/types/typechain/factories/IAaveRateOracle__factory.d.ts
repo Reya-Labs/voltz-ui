@@ -3,17 +3,6 @@ import { Provider } from "@ethersproject/providers";
 import type { IAaveRateOracle, IAaveRateOracleInterface } from "../IAaveRateOracle";
 export declare class IAaveRateOracle__factory {
     static readonly abi: ({
-        inputs: {
-            internalType: string;
-            name: string;
-            type: string;
-        }[];
-        name: string;
-        type: string;
-        anonymous?: undefined;
-        outputs?: undefined;
-        stateMutability?: undefined;
-    } | {
         anonymous: boolean;
         inputs: {
             indexed: boolean;

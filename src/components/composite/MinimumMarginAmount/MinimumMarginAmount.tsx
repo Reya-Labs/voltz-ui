@@ -1,16 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-import IntegerField from '../IntegerField/IntegerField';
+import { useAMMContext } from '@hooks';
+import { Typography } from '@components/atomic';
 
-export type MinimumMarginAmountProps = {
-  minimumMargin?: number;
-};
+export type MinimumMarginAmountProps = {};
 
 const MinimumMarginAmount: React.FunctionComponent<MinimumMarginAmountProps> = ({
-  minimumMargin,
 }) => {
+  const { loadMinimumMarginAmount, minimumMarginAmount, minimumMarginAmountLoading } = useAMMContext();
+
+  useEffect(() => {
+    loadMinimumMarginAmount();
+  }, [minimumMarginAmountLoading]);
+
   return (
-    <IntegerField label="Required margin" value={minimumMargin} sx={{ width: '100%' }} disabled />
+      <Typography variant="h3" label="Minimum Margin Amount">
+        {minimumMarginAmountLoading ? 'Loading...' : (minimumMarginAmount) ? minimumMarginAmount.toFixed(2) : "0" || "0"}
+      </Typography>
   );
 };
 
