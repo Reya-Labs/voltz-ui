@@ -11,7 +11,7 @@ const MinimumMarginAmount: React.FunctionComponent<MinimumMarginAmountProps> = (
 
   useEffect(() => {
     loadMinimumMarginAmount();
-  }, [minimumMarginAmountLoading]);
+  }, [loadMinimumMarginAmount]);
 
   return (
       <Typography variant="h3" label="Minimum Margin Amount">
