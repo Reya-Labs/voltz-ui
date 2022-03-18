@@ -10,6 +10,7 @@ import { MaturityInformation } from '@components/composite';
 import { useAgent, useWallet } from '@hooks';
 import { AMMTableDatum } from '../../types';
 import { labels } from '../../constants';
+import { VariableAPY } from './components';
 
 export type AMMTableRowProps = {
   datum: AMMTableDatum;
@@ -54,6 +55,10 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
   return (
     <TableRow key={index} sx={{ ...typeStyleOverrides() }}>
       {labels.map(([field, label]) => {
+        if (field === 'variableApy') {
+          return <VariableAPY />;
+        }
+
         const renderDisplay = () => {
           if (field === 'maturity') {
             return (
@@ -72,14 +77,6 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
 
               case 'fixedApr':
                 return `${datum.fixedApr}%`;
-
-              case 'variableApr': {
-                if (!datum.variableApr) {
-                  return 'Variable APR';
-                }
-
-                return `${datum.variableApr}%`;
-              }
 
               default:
                 return null;

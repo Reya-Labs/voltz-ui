@@ -13,7 +13,7 @@ const getLabels = ({ agent, mode }: GetLabelsArgs): [TableFields, string][] => {
       ['notional', 'NOTIONAL'],
       ['margin', 'MARGIN'],
       agent === Agents.VARIABLE_TRADER
-        ? ['variableApr', 'VARIABLE APR']
+        ? ['variableApy', 'VARIABLE APY']
         : ['fixedApr', 'FIXED APR'],
       ['maturity', 'MATURITY'],
     ];
@@ -22,7 +22,7 @@ const getLabels = ({ agent, mode }: GetLabelsArgs): [TableFields, string][] => {
   return [
     ['protocol', 'POOL'],
     ['fixedApr', 'FIXED APR'],
-    ['variableApr', 'VARIABLE APR'],
+    ['variableApy', 'VARIABLE APY'],
     ['maturity', 'MATURITY'],
   ];
 };

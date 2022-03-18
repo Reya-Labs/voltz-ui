@@ -22,6 +22,7 @@ describe('amm', () => {
       amm = new AMM({
         id: vammAddress,
         signer: wallet,
+        provider: provider,
         createdTimestamp: '1646856471',
         fcmAddress: '0x5392a33f7f677f59e833febf4016cddd88ff9e67',
         liquidity: '0',
@@ -70,17 +71,17 @@ describe('amm', () => {
       });
       console.log("mint done");
 
-      await amm.FCMswap({
+      await amm.FCMSwap({
         notional: 50000
       });
       console.log("fcm swap done");
 
-      await amm.FCMunwind({
+      await amm.FCMUnwind({
         notionalToUnwind: 50000
       });
       console.log("fcm unwind done");
 
-      await amm.FCMswap({
+      await amm.FCMSwap({
         notional: 50000
       });
       console.log("fcm swap 2 done");
@@ -91,7 +92,7 @@ describe('amm', () => {
       console.log("fcm settlement done");
     });
 
-    it.skip('mints and swaps', async () => {
+    it('mints and swaps', async () => {
       const fixedLowMinter = 1
       const fixedHighMinter = 2
       const fixedLowSwapper = 3
@@ -186,6 +187,7 @@ describe('amm', () => {
       amm = new AMM({
         id: vammAddress,
         signer: wallet,
+        provider: provider,
         createdTimestamp: '1646856471',
         fcmAddress: '0x5392a33f7f677f59e833febf4016cddd88ff9e67',
         liquidity: '0',
@@ -208,7 +210,7 @@ describe('amm', () => {
       });
     });
 
-    it('gets fixed rate from 0 sqrtPriceX96', () => {
+    it.skip('gets fixed rate from 0 sqrtPriceX96', () => {
       expect(amm.fixedRate.toNumber()).toEqual(0);
       console.log(amm.endDateTime);
     });

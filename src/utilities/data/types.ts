@@ -8,7 +8,7 @@ export type TableFields =
   | 'protocol'
   | 'maturity'
   | 'fixedApr'
-  | 'variableApr'
+  | 'variableApy'
   | 'margin'
   | 'notional';
 
@@ -27,7 +27,7 @@ export type TEMPORARY_Pool = {
   startDate: DateTime;
   endDate: DateTime;
   fixedApr: number;
-  variableApr: number;
+  variableApy: number;
   positions: TEMPORARY_Position[];
 };
 
@@ -38,7 +38,7 @@ export type TableData = {
   startDate: DateTime;
   endDate: DateTime;
   fixedApr: number;
-  variableApr?: number;
+  variableApy?: number;
   margin?: number;
   notional?: number;
 };

@@ -60,6 +60,7 @@ describe('amm', function () {
                 amm = new amm_1.default({
                     id: vammAddress,
                     signer: wallet,
+                    provider: provider,
                     createdTimestamp: '1646856471',
                     fcmAddress: '0x5392a33f7f677f59e833febf4016cddd88ff9e67',
                     liquidity: '0',
@@ -111,19 +112,19 @@ describe('amm', function () {
                     case 2:
                         _a.sent();
                         console.log("mint done");
-                        return [4 /*yield*/, amm.FCMswap({
+                        return [4 /*yield*/, amm.FCMSwap({
                                 notional: 50000
                             })];
                     case 3:
                         _a.sent();
                         console.log("fcm swap done");
-                        return [4 /*yield*/, amm.FCMunwind({
+                        return [4 /*yield*/, amm.FCMUnwind({
                                 notionalToUnwind: 50000
                             })];
                     case 4:
                         _a.sent();
                         console.log("fcm unwind done");
-                        return [4 /*yield*/, amm.FCMswap({
+                        return [4 /*yield*/, amm.FCMSwap({
                                 notional: 50000
                             })];
                     case 5:
@@ -144,7 +145,7 @@ describe('amm', function () {
                 }
             });
         }); });
-        it.skip('mints and swaps', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('mints and swaps', function () { return __awaiter(void 0, void 0, void 0, function () {
             var fixedLowMinter, fixedHighMinter, fixedLowSwapper, fixedHighSwapper, mint_req, swap_req, swap_slippage, liquidation_threshold;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -257,6 +258,7 @@ describe('amm', function () {
             amm = new amm_1.default({
                 id: vammAddress,
                 signer: wallet,
+                provider: provider,
                 createdTimestamp: '1646856471',
                 fcmAddress: '0x5392a33f7f677f59e833febf4016cddd88ff9e67',
                 liquidity: '0',
@@ -278,7 +280,7 @@ describe('amm', function () {
                 updatedTimestamp: '1646856471',
             });
         });
-        it('gets fixed rate from 0 sqrtPriceX96', function () {
+        it.skip('gets fixed rate from 0 sqrtPriceX96', function () {
             expect(amm.fixedRate.toNumber()).toEqual(0);
             console.log(amm.endDateTime);
         });
