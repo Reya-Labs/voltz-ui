@@ -2,6 +2,7 @@ import JSBI from 'jsbi';
 import { useMemo } from 'react';
 import isNull from 'lodash/isNull';
 import { Position, AMM, Token, RateOracle } from '@voltz/v1-sdk';
+import { providers } from 'ethers';
 
 import { useWallet } from '@hooks';
 
@@ -37,6 +38,9 @@ const usePositions = (): usePositionsResult => {
           new Position({
             amm: new AMM({
               signer,
+              provider: providers.getDefaultProvider(
+                process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK,
+              ),
               rateOracle: new RateOracle({
                 id: rateOracleAddress,
                 protocolId: protocolId as number,
