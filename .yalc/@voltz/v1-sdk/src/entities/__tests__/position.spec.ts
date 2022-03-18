@@ -27,6 +27,7 @@ describe('amm', () => {
       amm = new AMM({
         id: vammAddress,
         signer: wallet,
+        provider: provider,
         createdTimestamp: '1649458800',
         fcmAddress: '0x5392a33f7f677f59e833febf4016cddd88ff9e67',
         liquidity: '0',

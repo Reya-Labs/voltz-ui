@@ -21,10 +21,12 @@ import timestampWadToDateTime from '../utils/timestampWadToDateTime';
 import { fixedRateToClosestTick, tickToFixedRate } from '../utils/priceTickConversions';
 import { nearestUsableTick } from '../utils/nearestUsableTick';
 import { toBn } from 'evm-bn';
+import { providers } from 'ethers';
 
 export type AMMConstructorArgs = {
   id: string;
   signer: Signer | null;
+  provider?: providers.Provider;
   marginEngineAddress: string;
   fcmAddress: string;
   rateOracle: RateOracle;
@@ -106,6 +108,7 @@ export type ClosestTickAndFixedRate = {
 class AMM {
   public readonly id: string;
   public readonly signer: Signer | null;
+  public readonly provider?: providers.Provider;
   public readonly marginEngineAddress: string;
   public readonly fcmAddress: string;
   public readonly rateOracle: RateOracle;
@@ -125,6 +128,7 @@ class AMM {
   public constructor({
     id,
     signer,
+    provider,
     marginEngineAddress,
     fcmAddress,
     rateOracle,
@@ -141,6 +145,7 @@ class AMM {
   }: AMMConstructorArgs) {
     this.id = id;
     this.signer = signer;
+    this.provider = provider || signer?.provider;
     this.marginEngineAddress = marginEngineAddress;
     this.fcmAddress = fcmAddress;
     this.rateOracle = rateOracle;
@@ -209,10 +214,7 @@ class AMM {
             .replaceAll(' ', '')
             .split(',');
 
-          console.log(error.message);
           marginRequirement = BigNumber.from(args[0]);
-        } else {
-          console.log(error.message);
         }
       },
     );
@@ -272,15 +274,10 @@ class AMM {
             .replaceAll(' ', '')
             .split(',');
 
-          console.log(error.message);
           tickAfter = parseInt(args[1]);
-        } else {
-          console.log(error.message);
         }
       },
     );
-
-    console.log("ticks:", tickBefore, tickAfter);
 
     const fixedRateBefore = tickToFixedRate(tickBefore);
     const fixedRateAfter = tickToFixedRate(tickAfter);
@@ -415,8 +412,6 @@ class AMM {
               .split(",");
 
             marginRequirement = BigNumber.from(args[0]);
-          } else {
-            console.log(error);
           }
         }
       );
@@ -575,7 +570,7 @@ class AMM {
     return peripheryContract.swap(swapPeripheryParams);
   }
 
-  public async FCMswap({
+  public async FCMSwap({
     notional,
     fixedRateLimit
   }: FCMSwapArgs): Promise<ContractTransaction | void> {
@@ -598,7 +593,7 @@ class AMM {
     return fcmContract.initiateFullyCollateralisedFixedTakerSwap(toBn(notional.toString()), sqrtPriceLimitX96);
   }
 
-  public async FCMunwind({
+  public async FCMUnwind({
     notionalToUnwind,
     fixedRateLimit
   }: FCMUnwindArgs): Promise<ContractTransaction | void> {
@@ -667,9 +662,12 @@ class AMM {
     return this._price;
   }
 
-  public async variableApy(): Promise<number | void> {
-    if (!this.signer) return;
-    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
+  public async getVariableApy(): Promise<number | void> {
+    if (!this.provider) {
+      return;
+    }
+
+    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.provider);
     const historicalApy = await marginEngineContract.callStatic.getHistoricalApy();
     return parseFloat(utils.formatEther(historicalApy));
   }

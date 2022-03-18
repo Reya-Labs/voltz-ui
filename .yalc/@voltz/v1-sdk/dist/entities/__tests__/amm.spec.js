@@ -44,12 +44,13 @@ var token_1 = __importDefault(require("../token"));
 var rateOracle_1 = __importDefault(require("../rateOracle"));
 var amm_1 = __importDefault(require("../amm"));
 var tickMath_1 = require("../../utils/tickMath");
+var typechain_1 = require("../../typechain");
 describe('amm', function () {
     describe('amm init', function () {
         var amm;
         var wallet;
         beforeAll(function () { return __awaiter(void 0, void 0, void 0, function () {
-            var vammAddress, marginEngineAddress, provider, privateKey;
+            var vammAddress, marginEngineAddress, provider, privateKey, vammContract;
             return __generator(this, function (_a) {
                 vammAddress = '0xe451980132e65465d0a498c53f0b5227326dd73f';
                 marginEngineAddress = '0x75537828f2ce51be7289709686a69cbfdbb714f1';
@@ -59,6 +60,7 @@ describe('amm', function () {
                 amm = new amm_1.default({
                     id: vammAddress,
                     signer: wallet,
+                    provider: provider,
                     createdTimestamp: '1646856471',
                     fcmAddress: '0x5392a33f7f677f59e833febf4016cddd88ff9e67',
                     liquidity: '0',
@@ -79,6 +81,7 @@ describe('amm', function () {
                     txCount: 0,
                     updatedTimestamp: '1646856471',
                 });
+                vammContract = typechain_1.VAMM__factory.connect(vammAddress, wallet);
                 return [2 /*return*/];
             });
         }); });
@@ -109,19 +112,19 @@ describe('amm', function () {
                     case 2:
                         _a.sent();
                         console.log("mint done");
-                        return [4 /*yield*/, amm.FCMswap({
+                        return [4 /*yield*/, amm.FCMSwap({
                                 notional: 50000
                             })];
                     case 3:
                         _a.sent();
                         console.log("fcm swap done");
-                        return [4 /*yield*/, amm.FCMunwind({
+                        return [4 /*yield*/, amm.FCMUnwind({
                                 notionalToUnwind: 50000
                             })];
                     case 4:
                         _a.sent();
                         console.log("fcm unwind done");
-                        return [4 /*yield*/, amm.FCMswap({
+                        return [4 /*yield*/, amm.FCMSwap({
                                 notional: 50000
                             })];
                     case 5:
@@ -255,6 +258,7 @@ describe('amm', function () {
             amm = new amm_1.default({
                 id: vammAddress,
                 signer: wallet,
+                provider: provider,
                 createdTimestamp: '1646856471',
                 fcmAddress: '0x5392a33f7f677f59e833febf4016cddd88ff9e67',
                 liquidity: '0',

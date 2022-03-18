@@ -51,9 +51,10 @@ var nearestUsableTick_1 = require("../utils/nearestUsableTick");
 var evm_bn_1 = require("evm-bn");
 var AMM = /** @class */ (function () {
     function AMM(_a) {
-        var id = _a.id, signer = _a.signer, marginEngineAddress = _a.marginEngineAddress, fcmAddress = _a.fcmAddress, rateOracle = _a.rateOracle, createdTimestamp = _a.createdTimestamp, updatedTimestamp = _a.updatedTimestamp, termStartTimestamp = _a.termStartTimestamp, termEndTimestamp = _a.termEndTimestamp, underlyingToken = _a.underlyingToken, sqrtPriceX96 = _a.sqrtPriceX96, liquidity = _a.liquidity, tick = _a.tick, tickSpacing = _a.tickSpacing, txCount = _a.txCount;
+        var id = _a.id, signer = _a.signer, provider = _a.provider, marginEngineAddress = _a.marginEngineAddress, fcmAddress = _a.fcmAddress, rateOracle = _a.rateOracle, createdTimestamp = _a.createdTimestamp, updatedTimestamp = _a.updatedTimestamp, termStartTimestamp = _a.termStartTimestamp, termEndTimestamp = _a.termEndTimestamp, underlyingToken = _a.underlyingToken, sqrtPriceX96 = _a.sqrtPriceX96, liquidity = _a.liquidity, tick = _a.tick, tickSpacing = _a.tickSpacing, txCount = _a.txCount;
         this.id = id;
         this.signer = signer;
+        this.provider = provider || (signer === null || signer === void 0 ? void 0 : signer.provider);
         this.marginEngineAddress = marginEngineAddress;
         this.fcmAddress = fcmAddress;
         this.rateOracle = rateOracle;
@@ -116,11 +117,7 @@ var AMM = /** @class */ (function () {
                                         .split(')')[0]
                                         .replaceAll(' ', '')
                                         .split(',');
-                                    console.log(error.message);
                                     marginRequirement = ethers_1.BigNumber.from(args[0]);
-                                }
-                                else {
-                                    console.log(error.message);
                                 }
                             })];
                     case 1:
@@ -180,16 +177,11 @@ var AMM = /** @class */ (function () {
                                         .split(')')[0]
                                         .replaceAll(' ', '')
                                         .split(',');
-                                    console.log(error.message);
                                     tickAfter = parseInt(args[1]);
-                                }
-                                else {
-                                    console.log(error.message);
                                 }
                             })];
                     case 2:
                         _b.sent();
-                        console.log("ticks:", tickBefore, tickAfter);
                         fixedRateBefore = (0, priceTickConversions_1.tickToFixedRate)(tickBefore);
                         fixedRateAfter = (0, priceTickConversions_1.tickToFixedRate)(tickAfter);
                         fixedRateDelta = fixedRateAfter.subtract(fixedRateBefore);
@@ -322,9 +314,6 @@ var AMM = /** @class */ (function () {
                                         .replaceAll(" ", "")
                                         .split(",");
                                     marginRequirement = ethers_1.BigNumber.from(args[0]);
-                                }
-                                else {
-                                    console.log(error);
                                 }
                             })];
                     case 2:
@@ -513,7 +502,7 @@ var AMM = /** @class */ (function () {
             });
         });
     };
-    AMM.prototype.FCMswap = function (_a) {
+    AMM.prototype.FCMSwap = function (_a) {
         var notional = _a.notional, fixedRateLimit = _a.fixedRateLimit;
         return __awaiter(this, void 0, void 0, function () {
             var sqrtPriceLimitX96, tickLimit, fcmContract;
@@ -539,7 +528,7 @@ var AMM = /** @class */ (function () {
             });
         });
     };
-    AMM.prototype.FCMunwind = function (_a) {
+    AMM.prototype.FCMUnwind = function (_a) {
         var notionalToUnwind = _a.notionalToUnwind, fixedRateLimit = _a.fixedRateLimit;
         return __awaiter(this, void 0, void 0, function () {
             var sqrtPriceLimitX96, tickLimit, fcmContract;
@@ -634,15 +623,16 @@ var AMM = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    AMM.prototype.variableApy = function () {
+    AMM.prototype.getVariableApy = function () {
         return __awaiter(this, void 0, void 0, function () {
             var marginEngineContract, historicalApy;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!this.signer)
+                        if (!this.provider) {
                             return [2 /*return*/];
-                        marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
+                        }
+                        marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.provider);
                         return [4 /*yield*/, marginEngineContract.callStatic.getHistoricalApy()];
                     case 1:
                         historicalApy = _a.sent();
