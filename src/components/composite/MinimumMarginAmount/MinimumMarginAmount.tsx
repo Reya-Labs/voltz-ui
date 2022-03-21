@@ -1,16 +1,45 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import isUndefined from 'lodash/isUndefined';
 
-import IntegerField from '../IntegerField/IntegerField';
+import { useAMMContext } from '@hooks';
+import { Typography } from '@components/atomic';
 
 export type MinimumMarginAmountProps = {
-  minimumMargin?: number;
+  fixedLow?: number;
+  fixedHigh?: number;
+  notional?: number;
 };
 
 const MinimumMarginAmount: React.FunctionComponent<MinimumMarginAmountProps> = ({
-  minimumMargin,
+  fixedLow,
+  fixedHigh,
+  notional,
 }) => {
+  const { loadMinimumMarginAmount, minimumMarginAmountLoading, minimumMarginAmount } =
+    useAMMContext();
+
+  useEffect(() => {
+    if (!isUndefined(fixedLow) && !isUndefined(fixedHigh) && !isUndefined(notional)) {
+      loadMinimumMarginAmount({ fixedLow, fixedHigh, notional });
+    }
+  }, [loadMinimumMarginAmount, fixedLow, fixedHigh, notional]);
+
+  const renderMarginAmount = () => {
+    if (minimumMarginAmountLoading) {
+      return 'Loading...';
+    }
+
+    if (!minimumMarginAmount) {
+      return '0';
+    }
+
+    return minimumMarginAmount.toFixed(2);
+  };
+
   return (
-    <IntegerField label="Required margin" value={minimumMargin} sx={{ width: '100%' }} disabled />
+    <Typography variant="h3" label="Minimum Margin Amount">
+      {renderMarginAmount()}
+    </Typography>
   );
 };
 

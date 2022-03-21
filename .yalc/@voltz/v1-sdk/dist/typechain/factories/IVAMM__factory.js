@@ -7,11 +7,6 @@ exports.IVAMM__factory = void 0;
 var ethers_1 = require("ethers");
 var _abi = [
     {
-        inputs: [],
-        name: "AavePoolGetReserveNormalizedIncomeReturnedZero",
-        type: "error",
-    },
-    {
         inputs: [
             {
                 internalType: "bool",
@@ -36,22 +31,6 @@ var _abi = [
     {
         inputs: [],
         name: "CannotSettleBeforeMaturity",
-        type: "error",
-    },
-    {
-        inputs: [
-            {
-                internalType: "uint256",
-                name: "x",
-                type: "uint256",
-            },
-            {
-                internalType: "uint256",
-                name: "y",
-                type: "uint256",
-            },
-        ],
-        name: "DebugError",
         type: "error",
     },
     {
@@ -164,17 +143,6 @@ var _abi = [
             },
         ],
         name: "MarginRequirementNotMet",
-        type: "error",
-    },
-    {
-        inputs: [
-            {
-                internalType: "int256",
-                name: "marginRequirement",
-                type: "int256",
-            },
-        ],
-        name: "MarginRequirementNotMetFCM",
         type: "error",
     },
     {
@@ -536,13 +504,13 @@ var _abi = [
     {
         inputs: [
             {
-                internalType: "contract IMarginEngine",
-                name: "__marginEngine",
+                internalType: "address",
+                name: "_marginEngineAddress",
                 type: "address",
             },
             {
                 internalType: "int24",
-                name: "__tickSpacing",
+                name: "_tickSpacing",
                 type: "int24",
             },
         ],

@@ -317,8 +317,8 @@ export class IVAMM extends BaseContract {
     fixedTokenGrowthGlobalX128(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     initialize(
-      __marginEngine: string,
-      __tickSpacing: BigNumberish,
+      _marginEngineAddress: string,
+      _tickSpacing: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -438,8 +438,8 @@ export class IVAMM extends BaseContract {
   fixedTokenGrowthGlobalX128(overrides?: CallOverrides): Promise<BigNumber>;
 
   initialize(
-    __marginEngine: string,
-    __tickSpacing: BigNumberish,
+    _marginEngineAddress: string,
+    _tickSpacing: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -553,8 +553,8 @@ export class IVAMM extends BaseContract {
     fixedTokenGrowthGlobalX128(overrides?: CallOverrides): Promise<BigNumber>;
 
     initialize(
-      __marginEngine: string,
-      __tickSpacing: BigNumberish,
+      _marginEngineAddress: string,
+      _tickSpacing: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -830,8 +830,8 @@ export class IVAMM extends BaseContract {
     fixedTokenGrowthGlobalX128(overrides?: CallOverrides): Promise<BigNumber>;
 
     initialize(
-      __marginEngine: string,
-      __tickSpacing: BigNumberish,
+      _marginEngineAddress: string,
+      _tickSpacing: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -926,8 +926,8 @@ export class IVAMM extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     initialize(
-      __marginEngine: string,
-      __tickSpacing: BigNumberish,
+      _marginEngineAddress: string,
+      _tickSpacing: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

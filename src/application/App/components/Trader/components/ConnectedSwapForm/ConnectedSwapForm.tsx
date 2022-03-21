@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { AMM, Position } from '@voltz/v1-sdk';
 
 import { routes } from '@routes';
+import { AMMProvider } from '@components/contexts';
 import { useWallet, useAgent } from '@hooks';
 import { Agents } from '@components/contexts';
 import {
@@ -68,7 +69,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
       <PendingTransaction
         loading={transactionPending}
         protocol={amm.protocol}
-        fixedApr={10}
+        fixedApr={amm.fixedApr}
         leverage={0}
         margin={0}
         onComplete={handleComplete}
@@ -77,21 +78,22 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
   }
 
   return (
-    <SwapForm
-      protocol={amm.protocol}
-      fixedApr={10}
-      variableApy={15}
-      startDate={amm.startDateTime}
-      endDate={amm.endDateTime}
-      notional={notional}
-      onChangeNotional={setNotional}
-      margin={margin}
-      partialCollateralization={partialCollateralization}
-      onChangePartialCollateralization={setPartialCollateralization}
-      onChangeMargin={setMargin}
-      onSubmit={handleSubmit}
-      onCancel={onReset}
-    />
+    <AMMProvider amm={amm}>
+      <SwapForm
+        protocol={amm.protocol}
+        fixedApr={amm.fixedApr}
+        startDate={amm.startDateTime}
+        endDate={amm.endDateTime}
+        notional={notional}
+        onChangeNotional={setNotional}
+        margin={margin}
+        partialCollateralization={partialCollateralization}
+        onChangePartialCollateralization={setPartialCollateralization}
+        onChangeMargin={setMargin}
+        onSubmit={handleSubmit}
+        onCancel={onReset}
+      />
+    </AMMProvider>
   );
 };
 

@@ -145,7 +145,7 @@ describe('amm', function () {
                 }
             });
         }); });
-        it('mints and swaps', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it.skip('mints and swaps', function () { return __awaiter(void 0, void 0, void 0, function () {
             var fixedLowMinter, fixedHighMinter, fixedLowSwapper, fixedHighSwapper, mint_req, swap_req, swap_slippage, liquidation_threshold;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -241,6 +241,27 @@ describe('amm', function () {
                             })];
                     case 2:
                         _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('mints and swaps', function () { return __awaiter(void 0, void 0, void 0, function () {
+            var fixedLowMinter, fixedHighMinter, mint_req;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        fixedLowMinter = 1;
+                        fixedHighMinter = 2.01;
+                        return [4 /*yield*/, amm.getMinimumMarginRequirementPostMint({
+                                recipient: wallet.address,
+                                fixedLow: fixedLowMinter,
+                                fixedHigh: fixedHighMinter,
+                                margin: 0,
+                                notional: 100000,
+                            })];
+                    case 1:
+                        mint_req = _a.sent();
+                        console.log("pre-mint req", mint_req);
                         return [2 /*return*/];
                 }
             });

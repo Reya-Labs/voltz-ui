@@ -3,17 +3,6 @@ import { Provider } from "@ethersproject/providers";
 import type { IRateOracle, IRateOracleInterface } from "../IRateOracle";
 export declare class IRateOracle__factory {
     static readonly abi: ({
-        inputs: {
-            internalType: string;
-            name: string;
-            type: string;
-        }[];
-        name: string;
-        type: string;
-        anonymous?: undefined;
-        outputs?: undefined;
-        stateMutability?: undefined;
-    } | {
         anonymous: boolean;
         inputs: {
             indexed: boolean;

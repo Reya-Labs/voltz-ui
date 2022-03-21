@@ -18,7 +18,6 @@ import { SubmitMintBurnFormButton } from './components';
 export type MintBurnFormProps = AgentProps & {
   protocol?: string;
   fixedApr?: number;
-  variableApy?: number;
   startDate?: DateTime;
   endDate?: DateTime;
   defaultFixedLow?: number;
@@ -41,7 +40,6 @@ export type MintBurnFormProps = AgentProps & {
 const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   protocol,
   fixedApr,
-  variableApy,
   startDate,
   endDate,
   defaultFixedLow,
@@ -68,7 +66,6 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
       margin,
     });
   };
-  const minimumMargin = 0;
 
   return (
     <Panel
@@ -80,7 +77,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         boxShadow: '0px 0px 60px rgba(255, 89, 156, 0.2)',
       }}
     >
-      <ProtocolInformation protocol={protocol} fixedApr={fixedApr} variableApy={variableApy} />
+      <ProtocolInformation protocol={protocol} fixedApr={fixedApr} />
       <Box
         sx={{
           marginBottom: (theme) => theme.spacing(4),
@@ -119,7 +116,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
           marginBottom: (theme) => theme.spacing(4),
         }}
       >
-        <MinimumMarginAmount minimumMargin={minimumMargin} />
+        <MinimumMarginAmount fixedLow={fixedLow} fixedHigh={fixedHigh} notional={notional} />
       </Box>
       <Box
         sx={{

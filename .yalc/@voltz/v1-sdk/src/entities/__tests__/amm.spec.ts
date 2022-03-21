@@ -92,7 +92,7 @@ describe('amm', () => {
       console.log("fcm settlement done");
     });
 
-    it('mints and swaps', async () => {
+    it.skip('mints and swaps', async () => {
       const fixedLowMinter = 1
       const fixedHighMinter = 2
       const fixedLowSwapper = 3
@@ -171,6 +171,20 @@ describe('amm', () => {
         fixedLow: fixedLowSwapper,
         fixedHigh: fixedHighSwapper
       });
+    });
+
+    it('mints and swaps', async () => {
+      const fixedLowMinter = 1
+      const fixedHighMinter = 2.01
+
+      const mint_req = await amm.getMinimumMarginRequirementPostMint({
+        recipient: wallet.address,
+        fixedLow: fixedLowMinter,
+        fixedHigh: fixedHighMinter,
+        margin: 0,
+        notional: 100000,
+      }) as number;
+      console.log("pre-mint req", mint_req);
     });
   });
 
