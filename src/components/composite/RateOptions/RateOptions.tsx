@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import isUndefined from 'lodash/isUndefined';
 import Box from '@mui/material/Box';
 
-import IntegerField from '../IntegerField/IntegerField';
+import { useAgentWithOverride } from '@hooks';
+import { AgentProps, Agents } from '@components/contexts';
+import DebouncedIntegerField from '../DebouncedIntegerField/DebouncedIntegerField';
 
-export type RateOptionsProps = {
+export type RateOptionsProps = AgentProps & {
   defaultFixedLow?: number;
   defaultFixedHigh?: number;
   fixedLow?: number;
@@ -14,6 +16,7 @@ export type RateOptionsProps = {
 };
 
 const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
+  agent: agentOverride,
   defaultFixedLow,
   defaultFixedHigh,
   fixedLow,
@@ -21,15 +24,22 @@ const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
   onChangeFixedLow,
   onChangeFixedHigh,
 }) => {
+  const { agent } = useAgentWithOverride(agentOverride);
   const fixedLowValue = isUndefined(fixedLow) ? defaultFixedLow : fixedLow;
   const fixedHighValue = isUndefined(fixedHigh) ? defaultFixedHigh : fixedHigh;
 
-  const handleChangeFixedLow = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChangeFixedLow(parseInt(event.target.value));
-  };
-  const handleChangeFixedHigh = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChangeFixedHigh(parseInt(event.target.value));
-  };
+  const handleChangeFixedLow = useCallback(
+    (newFixedLow: string | undefined) => {
+      onChangeFixedLow(parseFloat(newFixedLow || '1'));
+    },
+    [onChangeFixedLow],
+  );
+  const handleChangeFixedHigh = useCallback(
+    (newFixedHigh: string | undefined) => {
+      onChangeFixedHigh(parseFloat(newFixedHigh || '1'));
+    },
+    [onChangeFixedHigh],
+  );
 
   return (
     <Box
@@ -38,16 +48,16 @@ const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
         width: '100%',
         justifyContent: 'space-around',
         '& > *:not(:last-child)': { marginRight: (theme) => theme.spacing(10) },
-        flexDirection: 'row',
+        flexDirection: agent === Agents.LIQUIDITY_PROVIDER ? 'row' : 'column',
       }}
     >
-      <IntegerField
+      <DebouncedIntegerField
         size="small"
         label="Fixed low"
         value={fixedLowValue}
         onChange={handleChangeFixedLow}
       />
-      <IntegerField
+      <DebouncedIntegerField
         size="small"
         label="Fixed high"
         value={fixedHighValue}

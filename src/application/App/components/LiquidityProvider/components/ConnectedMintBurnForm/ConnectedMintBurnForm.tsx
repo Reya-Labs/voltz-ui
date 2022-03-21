@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import isNull from 'lodash/isNull';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AMM, Position } from '@voltz/v1-sdk';
@@ -12,6 +12,7 @@ import {
   HandleSubmitMintBurnFormArgs,
   PendingTransaction,
 } from '@components/interface';
+import { updateFixedRate } from './utilities';
 
 export type ConnectedMintBurnFormProps = {
   amm: AMM | null;
@@ -30,25 +31,16 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   const navigate = useNavigate();
   const [fixedLow, setFixedLow] = useState<MintBurnFormProps['fixedLow']>();
 
-  const handleSetFixedLow = (newFixedLow: number) => {
-    if (!amm) {
-      return;
-    }
+  const handleSetFixedLow = useCallback(
+    updateFixedRate({ amm, fixedRate: fixedLow, setFixedRate: setFixedLow }),
+    [amm, fixedLow, setFixedLow],
+  );
 
-    const { closestUsableFixedRate } = amm.closestTickAndFixedRate(newFixedLow);
-
-    setFixedLow(closestUsableFixedRate.toNumber());
-  };
   const [fixedHigh, setFixedHigh] = useState<MintBurnFormProps['fixedHigh']>();
-  const handleSetFixedHigh = (newFixedHigh: number) => {
-    if (!amm) {
-      return;
-    }
-
-    const { closestUsableFixedRate } = amm.closestTickAndFixedRate(newFixedHigh);
-
-    setFixedHigh(closestUsableFixedRate.toNumber());
-  };
+  const handleSetFixedHigh = useCallback(
+    updateFixedRate({ amm, fixedRate: fixedHigh, setFixedRate: setFixedHigh }),
+    [amm, fixedHigh, setFixedHigh],
+  );
   const [notional, setNotional] = useState<MintBurnFormProps['notional']>();
   const [margin, setMargin] = useState<MintBurnFormProps['margin']>();
   const [submitting, setSubmitting] = useState(false);
