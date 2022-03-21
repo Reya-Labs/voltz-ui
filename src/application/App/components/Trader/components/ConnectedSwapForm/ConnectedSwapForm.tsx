@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import isNull from 'lodash/isNull';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AMM, Position } from '@voltz/v1-sdk';
 
+import { routes } from '@routes';
 import { AMMProvider } from '@components/contexts';
 import { useWallet, useAgent } from '@hooks';
 import { Agents } from '@components/contexts';
@@ -27,28 +28,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
   const { agent } = useAgent();
   const amm = !isNull(defaultAMM) ? defaultAMM : position?.amm;
   const { account } = useWallet();
-  const { pathname } = useLocation();
   const navigate = useNavigate();
-  const [fixedLow, setFixedLow] = useState<SwapFormProps['fixedLow']>();
-  const handleSetFixedLow = (newFixedLow: number) => {
-    if (!amm) {
-      return;
-    }
-
-    const { closestUsableFixedRate } = amm.closestTickAndFixedRate(newFixedLow);
-
-    setFixedLow(closestUsableFixedRate.toNumber());
-  };
-  const [fixedHigh, setFixedHigh] = useState<SwapFormProps['fixedHigh']>();
-  const handleSetFixedHigh = (newFixedHigh: number) => {
-    if (!amm) {
-      return;
-    }
-
-    const { closestUsableFixedRate } = amm.closestTickAndFixedRate(newFixedHigh);
-
-    setFixedHigh(closestUsableFixedRate.toNumber());
-  };
   const [notional, setNotional] = useState<SwapFormProps['notional']>();
   const [margin, setMargin] = useState<SwapFormProps['margin']>();
   const [partialCollateralization, setPartialCollateralization] =
@@ -64,17 +44,20 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
         const result = await amm.swap({
           isFT: agent === Agents.FIXED_TRADER,
           recipient: account,
-          fixedLow: args.fixedLow || 1,
-          fixedHigh: args.fixedHigh || 2,
+          fixedLow: 1, // todo: set values
+          fixedHigh: 2,
           notional: args.notional || 1,
           margin: args.margin || 1,
         });
-
-        console.debug(result);
-      } catch (mintError) {}
+      } catch (swapError) {}
     }
 
     setTransactionPending(false);
+  };
+  const handleComplete = () => {
+    setSubmitting(false);
+    onReset();
+    navigate(`/${routes.PORTFOLIO}`);
   };
 
   if (!amm) {
@@ -89,7 +72,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
         fixedApr={amm.fixedApr}
         leverage={0}
         margin={0}
-        onComplete={() => null}
+        onComplete={handleComplete}
       />
     );
   }
@@ -101,10 +84,6 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
         fixedApr={amm.fixedApr}
         startDate={amm.startDateTime}
         endDate={amm.endDateTime}
-        fixedLow={fixedLow}
-        onChangeFixedLow={handleSetFixedLow}
-        fixedHigh={fixedHigh}
-        onChangeFixedHigh={handleSetFixedHigh}
         notional={notional}
         onChangeNotional={setNotional}
         margin={margin}

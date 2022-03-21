@@ -7,7 +7,6 @@ import { Button, Panel } from '@components/atomic';
 import {
   ProtocolInformation,
   MaturityInformation,
-  RateOptions,
   NotionalAmount,
   MarginAmount,
   MinimumMarginAmount,
@@ -22,19 +21,13 @@ export type SwapFormProps = AgentProps & {
   fixedApr?: number;
   startDate?: DateTime;
   endDate?: DateTime;
-  defaultFixedLow?: number;
-  defaultFixedHigh?: number;
   defaultNotional?: number;
   defaultMargin?: number;
   defaultPartialCollateralization?: boolean;
   maxMargin?: number;
-  fixedLow?: number;
-  fixedHigh?: number;
   notional?: number;
   margin?: number;
   partialCollateralization?: boolean;
-  onChangeFixedLow: (value: number) => void;
-  onChangeFixedHigh: (value: number) => void;
   onChangeNotional: (value: number) => void;
   onChangePartialCollateralization: (value: boolean) => void;
   onChangeMargin: (value: number) => void;
@@ -49,19 +42,13 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   fixedApr,
   startDate,
   endDate,
-  defaultFixedLow,
-  defaultFixedHigh,
   defaultNotional,
   defaultMargin,
   defaultPartialCollateralization,
   maxMargin,
-  fixedLow,
-  fixedHigh,
   notional,
   margin,
   partialCollateralization,
-  onChangeFixedLow,
-  onChangeFixedHigh,
   onChangeNotional,
   onChangePartialCollateralization,
   onChangeMargin,
@@ -72,8 +59,6 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   const handleSubmit = async () => {
     return onSubmit({
       agent,
-      fixedLow,
-      fixedHigh,
       notional,
       margin,
       partialCollateralization: partialCollateralization || false,
@@ -109,14 +94,6 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           defaultPartialCollateralization={defaultPartialCollateralization}
           partialCollateralization={partialCollateralization}
           onChangePartialCollateralization={onChangePartialCollateralization}
-        />
-        <RateOptions
-          defaultFixedLow={defaultFixedLow}
-          defaultFixedHigh={defaultFixedHigh}
-          fixedLow={fixedLow}
-          fixedHigh={fixedHigh}
-          onChangeFixedLow={onChangeFixedLow}
-          onChangeFixedHigh={onChangeFixedHigh}
         />
       </Box>
       <Box

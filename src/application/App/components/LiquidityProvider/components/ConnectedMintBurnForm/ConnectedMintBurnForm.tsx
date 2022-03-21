@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import isNull from 'lodash/isNull';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AMM, Position } from '@voltz/v1-sdk';
 
 import { AMMProvider } from '@components/contexts';
@@ -27,7 +27,6 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
 }) => {
   const amm = !isNull(defaultAMM) ? defaultAMM : position?.amm;
   const { account } = useWallet();
-  const { pathname } = useLocation();
   const navigate = useNavigate();
   const [fixedLow, setFixedLow] = useState<MintBurnFormProps['fixedLow']>();
 
@@ -68,21 +67,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   const handleComplete = () => {
     setSubmitting(false);
     onReset();
-
-    switch (pathname) {
-      case `/${routes.SWAP}`:
-      case `/${routes.PORTFOLIO}`: {
-        navigate(`/${routes.PORTFOLIO}`);
-
-        break;
-      }
-
-      default: {
-        navigate(`/${routes.LP_FARM}`);
-
-        break;
-      }
-    }
+    navigate(`/${routes.POOLS}`);
   };
 
   if (!amm) {
