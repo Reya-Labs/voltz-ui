@@ -377,16 +377,14 @@ class AMM {
   }
 
   public async getMinimumMarginRequirementPostMint({ recipient, fixedLow, fixedHigh, notional }: AMMMintArgs): Promise<number | void> {
-    if (!this.signer) {
+    if (!this.provider) {
       return;
     }
 
     const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
     const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
 
-    await this.approvePeriphery()
-
-    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.signer);
+    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.provider);
 
     const mintOrBurnParams: MintOrBurnParams = {
       marginEngineAddress: this.marginEngineAddress,
@@ -398,23 +396,27 @@ class AMM {
     };
 
     let marginRequirement = BigNumber.from("0");
-    await peripheryContract.callStatic.mintOrBurn(mintOrBurnParams)
-      .then(
-        (result) => {
-          marginRequirement = BigNumber.from(result);
-        },
-        (error) => {
-          if (error.message.includes("MarginLessThanMinimum")) {
-            const args: string[] = error.message.split("MarginLessThanMinimum")[1]
-              .split("(")[1]
-              .split(")")[0]
-              .replaceAll(" ", "")
-              .split(",");
+    try {
+      await peripheryContract.callStatic.mintOrBurn(mintOrBurnParams)
+        .then(
+          (result) => {
+            console.log("on result");
+            marginRequirement = BigNumber.from(result);
+          },
+          (error) => {
+            if (error.toString().includes("MarginLessThanMinimum")) {
+              const args: string[] = error.message.split("MarginLessThanMinimum")[1]
+                .split("(")[1]
+                .split(")")[0]
+                .replaceAll(" ", "")
+                .split(",");
 
-            marginRequirement = BigNumber.from(args[0]);
+              marginRequirement = BigNumber.from(args[0]);
+            }
           }
-        }
-      );
+        )
+    }
+    catch (error) {console.log("error", error);}
 
     return parseFloat(utils.formatEther(marginRequirement));
   }
