@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { WalletName, Wallet } from '@components/contexts';
+import { WalletName, Wallet, WalletProvider } from '@components/contexts';
 import { useStateMemo } from '@hooks';
 import WalletConnect from './WalletConnect';
 
@@ -50,22 +50,7 @@ const WalletConnectWrapper: React.FunctionComponent<WalletConnectWrapperProps> =
     return null;
   };
 
-  return (
-    <WalletConnect
-      wallet={{
-        ...wallet,
-        connect: handleConnect,
-        status: updatedStatus,
-        name: updatedName,
-        ethereum: null,
-        signer: null,
-        balance: null,
-        wallet: null,
-        loading: true,
-        error: false,
-      }}
-    />
-  );
+  return <WalletConnect />;
 };
 
 const Template: ComponentStory<typeof WalletConnectWrapper> = (args) => (
