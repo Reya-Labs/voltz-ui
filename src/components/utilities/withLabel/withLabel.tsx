@@ -45,6 +45,7 @@ const withLabel = <T,>(WrappedComponent: React.FunctionComponent<T>) => {
             transform: 'none',
             marginTop: (theme) => theme.spacing(1),
             marginBottom: (theme) => theme.spacing(2),
+            overflow: 'visible',
           }}
         >
           {renderLabel()}
