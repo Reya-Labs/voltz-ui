@@ -15,17 +15,15 @@ const IntegerField: React.FunctionComponent<IntegerFieldProps> = ({
   ...props
 }) => {
   return (
-    <>
-      <Input
-        size={size}
-        label={label}
-        disabled={disabled}
-        error={error}
-        value={value}
-        onChange={onChange}
-        type="number"
-      />
-    </>
+    <Input
+      size={size}
+      label={label}
+      disabled={disabled}
+      error={error}
+      value={value}
+      onChange={onChange}
+      type="number"
+    />
   );
 };
 

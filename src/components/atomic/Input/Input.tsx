@@ -45,20 +45,9 @@ const Input: React.FunctionComponent<InputProps> = ({ size, ...props }) => {
       borderStyle: 'solid',
       borderRadius: 2,
       fontSize: getFontSize,
-      lineHeight: 14,
+      lineHeight: '14px',
       maxHeight: getMinHeight,
       ...getPadding(),
-      '&[type=number]': {
-        '-moz-appearance': 'textfield',
-      },
-      '&::-webkit-outer-spin-button': {
-        '-webkit-appearance': 'none',
-        margin: 0,
-      },
-      '&::-webkit-inner-spin-button': {
-        '-webkit-appearance': 'none',
-        margin: 0,
-      },
     },
   };
 
