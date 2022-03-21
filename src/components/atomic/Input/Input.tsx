@@ -48,6 +48,17 @@ const Input: React.FunctionComponent<InputProps> = ({ size, ...props }) => {
       lineHeight: 14,
       maxHeight: getMinHeight,
       ...getPadding(),
+      '&[type=number]': {
+        '-moz-appearance': 'textfield',
+      },
+      '&::-webkit-outer-spin-button': {
+        '-webkit-appearance': 'none',
+        margin: 0,
+      },
+      '&::-webkit-inner-spin-button': {
+        '-webkit-appearance': 'none',
+        margin: 0,
+      },
     },
   };
 
