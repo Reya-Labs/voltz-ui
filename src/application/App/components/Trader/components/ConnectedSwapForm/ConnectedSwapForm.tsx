@@ -43,7 +43,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
         const result = await amm.swap({
           isFT: agent === Agents.FIXED_TRADER,
           recipient: account,
-          fixedLow: 1,
+          fixedLow: 1, // todo: set values
           fixedHigh: 2,
           notional: args.notional || 1,
           margin: args.margin || 1,
