@@ -1,5 +1,6 @@
 import React from 'react';
 import { TextFieldProps as MuiTextFieldProps } from '@mui/material/TextField';
+
 import { Input } from '../../atomic';
 
 export type IntegerFieldProps = Omit<MuiTextFieldProps, 'variant'>;
