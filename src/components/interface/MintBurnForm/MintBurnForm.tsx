@@ -77,7 +77,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         boxShadow: '0px 0px 60px rgba(255, 89, 156, 0.2)',
       }}
     >
-      <ProtocolInformation protocol={protocol} fixedApr={fixedApr}/>
+      <ProtocolInformation protocol={protocol} fixedApr={fixedApr} />
       <Box
         sx={{
           marginBottom: (theme) => theme.spacing(4),
@@ -116,7 +116,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
           marginBottom: (theme) => theme.spacing(4),
         }}
       >
-        <MinimumMarginAmount />
+        <MinimumMarginAmount fixedLow={fixedLow} fixedHigh={fixedHigh} notional={notional} />
       </Box>
       <Box
         sx={{

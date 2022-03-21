@@ -111,13 +111,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   }
 
   return (
-    <AMMProvider 
-      amm={amm}
-      fixedLow={fixedLow || 1}
-      fixedHigh={fixedHigh || 2}
-      notional={notional || 0}
-      margin={margin || 0}
-    >
+    <AMMProvider amm={amm}>
       <MintBurnForm
         protocol={amm.protocol}
         fixedApr={amm.fixedApr}
@@ -133,7 +127,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
         onChangeMargin={setMargin}
         onSubmit={handleSubmit}
         onCancel={onReset}
-      /> 
+      />
     </AMMProvider>
   );
 };
