@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import isUndefined from 'lodash/isUndefined';
 import Box from '@mui/material/Box';
 
-import { useAgentWithOverride, useDebounce } from '@hooks';
+import { useAgentWithOverride } from '@hooks';
 import { AgentProps, Agents } from '@components/contexts';
 import DebouncedIntegerField from '../DebouncedIntegerField/DebouncedIntegerField';
 
@@ -28,12 +28,18 @@ const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
   const fixedLowValue = isUndefined(fixedLow) ? defaultFixedLow : fixedLow;
   const fixedHighValue = isUndefined(fixedHigh) ? defaultFixedHigh : fixedHigh;
 
-  const handleChangeFixedLow = (newFixedLow: string | undefined) => {
-    onChangeFixedLow(parseFloat(newFixedLow || '1'));
-  };
-  const handleChangeFixedHigh = (newFixedHigh: string | undefined) => {
-    onChangeFixedHigh(parseFloat(newFixedHigh || '1'));
-  };
+  const handleChangeFixedLow = useCallback(
+    (newFixedLow: string | undefined) => {
+      onChangeFixedLow(parseFloat(newFixedLow || '1'));
+    },
+    [onChangeFixedLow],
+  );
+  const handleChangeFixedHigh = useCallback(
+    (newFixedHigh: string | undefined) => {
+      onChangeFixedHigh(parseFloat(newFixedHigh || '1'));
+    },
+    [onChangeFixedHigh],
+  );
 
   return (
     <Box

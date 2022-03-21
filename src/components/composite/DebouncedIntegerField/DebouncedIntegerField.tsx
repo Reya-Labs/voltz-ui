@@ -13,7 +13,7 @@ const DebouncedIntegerField: React.FunctionComponent<DebouncedIntegerFieldProps>
   onChange,
   ...props
 }) => {
-  const stringValue = isUndefined(value) ? value : `${value}`;
+  const stringValue = isUndefined(value) ? value : `${value as string}`;
   const [editableValue, setEditableValue] = useState<string | undefined>(stringValue);
   const debouncedValue = useDebounce(editableValue);
 
@@ -25,7 +25,7 @@ const DebouncedIntegerField: React.FunctionComponent<DebouncedIntegerFieldProps>
     if (debouncedValue !== stringValue) {
       onChange(debouncedValue);
     }
-  }, [debouncedValue, onChange]);
+  }, [debouncedValue]);
 
   useEffect(() => {
     setEditableValue(stringValue);
