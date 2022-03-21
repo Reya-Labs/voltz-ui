@@ -382,7 +382,7 @@ export class VAMM extends BaseContract {
     fixedTokenGrowthGlobalX128(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     initialize(
-      __marginEngine: string,
+      _marginEngineAddress: string,
       __tickSpacing: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -527,7 +527,7 @@ export class VAMM extends BaseContract {
   fixedTokenGrowthGlobalX128(overrides?: CallOverrides): Promise<BigNumber>;
 
   initialize(
-    __marginEngine: string,
+    _marginEngineAddress: string,
     __tickSpacing: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -666,7 +666,7 @@ export class VAMM extends BaseContract {
     fixedTokenGrowthGlobalX128(overrides?: CallOverrides): Promise<BigNumber>;
 
     initialize(
-      __marginEngine: string,
+      _marginEngineAddress: string,
       __tickSpacing: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -1025,7 +1025,7 @@ export class VAMM extends BaseContract {
     fixedTokenGrowthGlobalX128(overrides?: CallOverrides): Promise<BigNumber>;
 
     initialize(
-      __marginEngine: string,
+      _marginEngineAddress: string,
       __tickSpacing: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -1145,7 +1145,7 @@ export class VAMM extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     initialize(
-      __marginEngine: string,
+      _marginEngineAddress: string,
       __tickSpacing: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;

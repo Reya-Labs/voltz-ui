@@ -49,7 +49,6 @@ export const Basic = Template.bind({});
 Basic.args = {
   protocol: 'aUSDC',
   fixedApr: 5,
-  variableApy: 15,
   startDate: DateTime.now().minus(Duration.fromObject({ weeks: 2 })),
   endDate: DateTime.now().plus(Duration.fromObject({ weeks: 5 })),
 };

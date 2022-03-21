@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import TableCell from '@mui/material/TableCell';
 
 import { useAMMContext } from '@hooks';
 import { Typography } from '@components/atomic';
@@ -14,11 +13,9 @@ const VariableAPY: React.FunctionComponent<VariableAPYProps> = () => {
   }, [loadVariableApy]);
 
   return (
-    <TableCell>
-      <Typography variant="body2" label="Variable APY">
+      <Typography variant="h3" label="Variable APY">
         {variableApyLoading ? 'Loading...' : `${(variableApy) ? (variableApy*100).toFixed(2) : "0" || "0"}%`}
       </Typography>
-    </TableCell>
   );
 };
 

@@ -22,7 +22,7 @@ const MaturityInformation: React.FunctionComponent<MaturityInformationProps> = (
       return 0;
     }
 
-    const totalSeparation = startDate.diff(endDate);
+    const totalSeparation = endDate.diff(startDate);
     const separationfromStart = startDate.diffNow();
 
     const percentage = new Decimal(separationfromStart.milliseconds)

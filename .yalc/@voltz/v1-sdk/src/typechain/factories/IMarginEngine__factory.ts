@@ -8,11 +8,6 @@ import type { IMarginEngine, IMarginEngineInterface } from "../IMarginEngine";
 
 const _abi = [
   {
-    inputs: [],
-    name: "AavePoolGetReserveNormalizedIncomeReturnedZero",
-    type: "error",
-  },
-  {
     inputs: [
       {
         internalType: "bool",
@@ -37,22 +32,6 @@ const _abi = [
   {
     inputs: [],
     name: "CannotSettleBeforeMaturity",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "x",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "y",
-        type: "uint256",
-      },
-    ],
-    name: "DebugError",
     type: "error",
   },
   {
@@ -165,17 +144,6 @@ const _abi = [
       },
     ],
     name: "MarginRequirementNotMet",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "int256",
-        name: "marginRequirement",
-        type: "int256",
-      },
-    ],
-    name: "MarginRequirementNotMetFCM",
     type: "error",
   },
   {
@@ -903,7 +871,7 @@ const _abi = [
         type: "tuple",
       },
     ],
-    stateMutability: "nonpayable",
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -943,23 +911,23 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "contract IERC20Minimal",
-        name: "__underlyingToken",
+        internalType: "address",
+        name: "_underlyingToken",
         type: "address",
       },
       {
-        internalType: "contract IRateOracle",
-        name: "__rateOracle",
+        internalType: "address",
+        name: "_rateOracleAddress",
         type: "address",
       },
       {
         internalType: "uint256",
-        name: "__termStartTimestampWad",
+        name: "_termStartTimestampWad",
         type: "uint256",
       },
       {
         internalType: "uint256",
-        name: "__termEndTimestampWad",
+        name: "_termEndTimestampWad",
         type: "uint256",
       },
     ],
@@ -1046,8 +1014,8 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "contract IFCM",
-        name: "_newFCM",
+        internalType: "address",
+        name: "_fcm",
         type: "address",
       },
     ],
@@ -1190,8 +1158,8 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "contract IVAMM",
-        name: "_vAMM",
+        internalType: "address",
+        name: "_vAMMAddress",
         type: "address",
       },
     ],
