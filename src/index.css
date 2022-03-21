@@ -5,57 +5,57 @@ body {
 @font-face {
   font-family: "PixelOperatorMono8";
   src: local("PixelOperatorMono8"),
-    url("./fonts/PixelOperator/PixelOperatorMono8.ttf") format("truetype");
+    url("./fonts/PixelOperator/PixelOperatorMono8.woff") format("truetype");
   font-weight: normal;
 }
 @font-face {
   font-family: "PixelOperatorMono8";
   src: local("PixelOperatorMono8-Bold"),
-    url("./fonts/PixelOperator/PixelOperatorMono8-Bold.ttf") format("truetype");
+    url("./fonts/PixelOperator/PixelOperatorMono8-Bold.woff") format("truetype");
   font-weight: bold;
 }
 @font-face {
   font-family: "PixelOperatorMono";
   src: local("PixelOperatorMono"),
-    url("./fonts/PixelOperator/PixelOperatorMono.ttf") format("truetype");
+    url("./fonts/PixelOperator/PixelOperatorMono.woff") format("truetype");
   font-weight: normal;
 }
 @font-face {
   font-family: "PixelOperatorMono";
   src: local("PixelOperatorMono-Bold"),
-    url("./fonts/PixelOperator/PixelOperatorMono-Bold.ttf") format("truetype");
+    url("./fonts/PixelOperator/PixelOperatorMono-Bold.woff") format("truetype");
   font-weight: bold;
 }
 @font-face {
   font-family: "DM Sans";
-  src: url("./fonts/DM_Sans/DMSans-Regular.ttf") format("truetype");
+  src: url("./fonts/DM_Sans/DMSans-Regular.woff") format("truetype");
   font-weight: normal;
 }
 @font-face {
   font-family: "DM Sans";
-  src: url("./fonts/DM_Sans/DMSans-Bold.ttf") format("truetype");
+  src: url("./fonts/DM_Sans/DMSans-Bold.woff") format("truetype");
   font-weight: bold;
 }
 @font-face {
   font-family: "DM Sans";
-  src: url("./fonts/DM_Sans/DMSans-BoldItalic.ttf") format("truetype");
+  src: url("./fonts/DM_Sans/DMSans-BoldItalic.woff") format("truetype");
   font-weight: bold;
   font-style: italic;
 }
 @font-face {
   font-family: "DM Sans";
-  src: url("./fonts/DM_Sans/DMSans-Italic.ttf") format("truetype");
+  src: url("./fonts/DM_Sans/DMSans-Italic.woff") format("truetype");
   font-weight: normal;
   font-style: italic;
 }
 @font-face {
   font-family: "DM Sans";
-  src: url("./fonts/DM_Sans/DMSans-Medium.ttf") format("truetype");
+  src: url("./fonts/DM_Sans/DMSans-Medium.woff") format("truetype");
   font-weight: 500;
 }
 @font-face {
   font-family: "DM Sans";
-  src: url("./fonts/DM_Sans/DMSans-MediumItalic.ttf") format("truetype");
+  src: url("./fonts/DM_Sans/DMSans-MediumItalic.woff") format("truetype");
   font-weight: 500;
   font-style: italic;
 }
