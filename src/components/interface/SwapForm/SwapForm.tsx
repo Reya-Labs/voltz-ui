@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import { AgentProps } from '@components/contexts';
 import { Button, Panel } from '@components/atomic';
 import {
+  IconLabel,
   ProtocolInformation,
   MaturityInformation,
   NotionalAmount,
@@ -81,7 +82,11 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           marginBottom: (theme) => theme.spacing(4),
         }}
       >
-        <MaturityInformation label="Maturity" startDate={startDate} endDate={endDate} />
+        <MaturityInformation
+          label={<IconLabel label="maturity" icon="information-circle" info="Something" />}
+          startDate={startDate}
+          endDate={endDate}
+        />
       </Box>
       <Box
         sx={{
@@ -112,7 +117,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           marginBottom: (theme) => theme.spacing(4),
         }}
       >
-        <MinimumMarginAmount/>
+        <MinimumMarginAmount />
       </Box>
       <Box
         sx={{

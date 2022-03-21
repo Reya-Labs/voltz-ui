@@ -3,6 +3,7 @@ import isUndefined from 'lodash/isUndefined';
 
 import { useAMMContext } from '@hooks';
 import { Typography } from '@components/atomic';
+import IconLabel from '../IconLabel/IconLabel';
 
 export type MinimumMarginAmountProps = {
   fixedLow?: number;
@@ -37,7 +38,10 @@ const MinimumMarginAmount: React.FunctionComponent<MinimumMarginAmountProps> = (
   };
 
   return (
-    <Typography variant="h3" label="Minimum Margin Amount">
+    <Typography
+      variant="h3"
+      label={<IconLabel label="minimum margin amount" icon="information-circle" info="Something" />}
+    >
       {renderMarginAmount()}
     </Typography>
   );

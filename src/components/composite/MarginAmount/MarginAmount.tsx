@@ -1,6 +1,7 @@
 import React from 'react';
 import isUndefined from 'lodash/isUndefined';
 
+import IconLabel from '../IconLabel/IconLabel';
 import IntegerField from '../IntegerField/IntegerField';
 
 export type MarginAmountProps = {
@@ -23,7 +24,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
 
   return (
     <IntegerField
-      label="Margin amount"
+      label={<IconLabel label="margin amount" icon="information-circle" info="Something" />}
       value={value}
       onChange={handleChange}
       sx={{ width: '100%' }}
