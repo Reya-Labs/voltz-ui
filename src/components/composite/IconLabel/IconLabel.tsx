@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import Box from '@mui/material/Box';
 import Popover from '@mui/material/Popover';
 import isNull from 'lodash/isNull';
 import upperCase from 'lodash/upperCase';
 
-import { Icon, Icons, Typography } from '@components/atomic';
+import { Icon, Icons, Panel, Typography } from '@components/atomic';
 
 export type IconLabelProps = {
   label: string;
@@ -37,8 +38,16 @@ const IconLabel: React.FunctionComponent<IconLabelProps> = ({ label, icon, info 
           id="mouse-over-popover"
           sx={{
             pointerEvents: 'none',
+            '&.MuiPaper-root': {
+              backgroundColor: 'transparent',
+              color: 'unset',
+              backgroundImage: 'unset',
+              boxShadow: 'unset',
+              borderRadius: 0,
+              overflow: 'hidden',
+            },
           }}
-          open={true}
+          open={open}
           anchorEl={anchor}
           anchorOrigin={{
             vertical: 'top',
@@ -51,7 +60,27 @@ const IconLabel: React.FunctionComponent<IconLabelProps> = ({ label, icon, info 
           onClose={handlePopoverClose}
           disableRestoreFocus
         >
-          <Typography sx={{ p: 1 }}>{info}</Typography>
+          <Panel variant="dark" sx={{ borderRadius: 1, maxWidth: 200 }}>
+            <Typography variant="caption">{info}</Typography>
+          </Panel>
+          <Box
+            sx={{
+              position: 'relative',
+              mt: '10px',
+              '&::before': {
+                backgroundColor: 'secondary.darken045',
+                content: '""',
+                display: 'block',
+                position: 'absolute',
+                width: 12,
+                height: 12,
+                top: -16,
+                zIndex: -1,
+                transform: 'rotate(45deg)',
+                left: 'calc(50% - 6px)',
+              },
+            }}
+          />
         </Popover>
       )}
     </>

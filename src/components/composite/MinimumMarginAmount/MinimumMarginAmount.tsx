@@ -40,7 +40,13 @@ const MinimumMarginAmount: React.FunctionComponent<MinimumMarginAmountProps> = (
   return (
     <Typography
       variant="h3"
-      label={<IconLabel label="minimum margin amount" icon="information-circle" info="Something" />}
+      label={
+        <IconLabel
+          label="minimum margin amount"
+          icon="information-circle"
+          info="Lorem Ipsum is standard dummy text, or placeholder text, used to visualize what text would look like, such as font, typography and layout. It is easier to identify visual aspects using lorem ipsum as opposed to writing or other filler text. For those of you who don't know what Lorem Ipsum looks like or have never seen it before, here it is:"
+        />
+      }
     >
       {renderMarginAmount()}
     </Typography>
