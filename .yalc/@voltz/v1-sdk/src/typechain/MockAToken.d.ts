@@ -25,6 +25,7 @@ interface MockATokenInterface extends ethers.utils.Interface {
     "UNDERLYING_ASSET_ADDRESS()": FunctionFragment;
     "allowance(address,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
+    "approveInternal(address,address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "burn(address,address,uint256,uint256)": FunctionFragment;
     "decimals()": FunctionFragment;
@@ -53,6 +54,10 @@ interface MockATokenInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "approve",
     values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "approveInternal",
+    values: [string, string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
   encodeFunctionData(
@@ -106,6 +111,10 @@ interface MockATokenInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "approveInternal",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
@@ -223,6 +232,13 @@ export class MockAToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    approveInternal(
+      owner: string,
+      spender: string,
+      value: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     balanceOf(user: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     burn(
@@ -302,6 +318,13 @@ export class MockAToken extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  approveInternal(
+    owner: string,
+    spender: string,
+    value: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   balanceOf(user: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   burn(
@@ -377,6 +400,13 @@ export class MockAToken extends BaseContract {
       amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    approveInternal(
+      owner: string,
+      spender: string,
+      value: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     balanceOf(user: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -496,6 +526,13 @@ export class MockAToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    approveInternal(
+      owner: string,
+      spender: string,
+      value: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     balanceOf(user: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     burn(
@@ -575,6 +612,13 @@ export class MockAToken extends BaseContract {
     approve(
       spender: string,
       amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    approveInternal(
+      owner: string,
+      spender: string,
+      value: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

@@ -56,6 +56,7 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     "setPeripheryAddress(address)": FunctionFragment;
     "setRateOracleAddress(address)": FunctionFragment;
     "setVAMMAddress(address)": FunctionFragment;
+    "settleYBATrader(address)": FunctionFragment;
     "settlementCashflowBasedOnSwapSnapshots(address,int24,int24)": FunctionFragment;
     "sizeAllPositions()": FunctionFragment;
     "sizeAllYBATraders()": FunctionFragment;
@@ -219,6 +220,10 @@ interface E2ESetupInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "setVAMMAddress",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "settleYBATrader",
     values: [string]
   ): string;
   encodeFunctionData(
@@ -399,6 +404,10 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "settleYBATrader",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "settlementCashflowBasedOnSwapSnapshots",
     data: BytesLike
   ): Result;
@@ -574,8 +583,29 @@ export class E2ESetup extends BaseContract {
       owner: string,
       tickLower: BigNumberish,
       tickUpper: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        ([
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          boolean,
+          BigNumber,
+          BigNumber
+        ] & {
+          reserveNormalizedIncomeAtSwap: BigNumber;
+          swapInitiationTimestampWad: BigNumber;
+          termEndTimestampWad: BigNumber;
+          notional: BigNumber;
+          isFT: boolean;
+          fixedRateWad: BigNumber;
+          feePaidInUnderlyingTokens: BigNumber;
+        })[],
+        BigNumber
+      ]
+    >;
 
     getSwapsHistory(
       owner: string,
@@ -740,12 +770,17 @@ export class E2ESetup extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    settleYBATrader(
+      trader: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     settlementCashflowBasedOnSwapSnapshots(
       _owner: string,
       tickLower: BigNumberish,
       tickUpper: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     sizeAllPositions(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -891,8 +926,29 @@ export class E2ESetup extends BaseContract {
     owner: string,
     tickLower: BigNumberish,
     tickUpper: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+    overrides?: CallOverrides
+  ): Promise<
+    [
+      ([
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        boolean,
+        BigNumber,
+        BigNumber
+      ] & {
+        reserveNormalizedIncomeAtSwap: BigNumber;
+        swapInitiationTimestampWad: BigNumber;
+        termEndTimestampWad: BigNumber;
+        notional: BigNumber;
+        isFT: boolean;
+        fixedRateWad: BigNumber;
+        feePaidInUnderlyingTokens: BigNumber;
+      })[],
+      BigNumber
+    ]
+  >;
 
   getSwapsHistory(
     owner: string,
@@ -1055,12 +1111,17 @@ export class E2ESetup extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  settleYBATrader(
+    trader: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   settlementCashflowBasedOnSwapSnapshots(
     _owner: string,
     tickLower: BigNumberish,
     tickUpper: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   sizeAllPositions(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1384,6 +1445,8 @@ export class E2ESetup extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    settleYBATrader(trader: string, overrides?: CallOverrides): Promise<void>;
+
     settlementCashflowBasedOnSwapSnapshots(
       _owner: string,
       tickLower: BigNumberish,
@@ -1520,7 +1583,7 @@ export class E2ESetup extends BaseContract {
       owner: string,
       tickLower: BigNumberish,
       tickUpper: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     getSwapsHistory(
@@ -1628,11 +1691,16 @@ export class E2ESetup extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    settleYBATrader(
+      trader: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     settlementCashflowBasedOnSwapSnapshots(
       _owner: string,
       tickLower: BigNumberish,
       tickUpper: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     sizeAllPositions(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1762,7 +1830,7 @@ export class E2ESetup extends BaseContract {
       owner: string,
       tickLower: BigNumberish,
       tickUpper: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     getSwapsHistory(
@@ -1872,11 +1940,16 @@ export class E2ESetup extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    settleYBATrader(
+      trader: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     settlementCashflowBasedOnSwapSnapshots(
       _owner: string,
       tickLower: BigNumberish,
       tickUpper: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     sizeAllPositions(overrides?: CallOverrides): Promise<PopulatedTransaction>;

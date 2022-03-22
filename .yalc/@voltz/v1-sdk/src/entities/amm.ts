@@ -169,7 +169,7 @@ class AMM {
     fixedLow,
     fixedHigh,
   }: AMMGetMinimumMarginRequirementArgs) : Promise<number | void> {
-    if (!this.signer) {
+    if (!this.provider) {
       return;
     }
 
@@ -189,7 +189,7 @@ class AMM {
       }
     }
 
-    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.signer);
+    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.provider);
     const swapPeripheryParams: SwapPeripheryParams = {
       marginEngineAddress: this.marginEngineAddress,
       recipient,
@@ -396,11 +396,9 @@ class AMM {
     };
 
     let marginRequirement = BigNumber.from("0");
-    try {
       await peripheryContract.callStatic.mintOrBurn(mintOrBurnParams)
         .then(
           (result) => {
-            console.log("on result");
             marginRequirement = BigNumber.from(result);
           },
           (error) => {
@@ -414,9 +412,7 @@ class AMM {
               marginRequirement = BigNumber.from(args[0]);
             }
           }
-        )
-    }
-    catch (error) {console.log("error", error);}
+        );
 
     return parseFloat(utils.formatEther(marginRequirement));
   }

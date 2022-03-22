@@ -9,6 +9,16 @@ export declare class IFCM__factory {
             type: string;
         }[];
         name: string;
+        type: string;
+        outputs?: undefined;
+        stateMutability?: undefined;
+    } | {
+        inputs: {
+            internalType: string;
+            name: string;
+            type: string;
+        }[];
+        name: string;
         outputs: {
             components: {
                 internalType: string;
