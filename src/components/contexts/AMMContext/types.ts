@@ -1,3 +1,5 @@
+import { UseAsyncFunctionResult } from '@hooks';
+
 export type MinimumMarginAmountMintBurnPayload = {
   fixedLow: number;
   fixedHigh: number;
@@ -12,10 +14,7 @@ export type MinimumMarginAmountSwapPayload = {
 };
 
 export type AMMDispatch = {
-  loadVariableApy: () => void;
-  variableApy: number | null;
-  variableApyLoading: boolean;
-  variableApyError: boolean;
+  variableApy: UseAsyncFunctionResult<unknown, number | void>;
 
   loadMinimumMarginAmountMintBurn: (payload: MinimumMarginAmountMintBurnPayload) => void;
   minimumMarginAmountMintBurn: number | null;

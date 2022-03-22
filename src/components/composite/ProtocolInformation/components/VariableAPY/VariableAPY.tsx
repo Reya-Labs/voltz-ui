@@ -3,19 +3,30 @@ import React, { useEffect } from 'react';
 import { useAMMContext } from '@hooks';
 import { Typography } from '@components/atomic';
 
-export type VariableAPYProps = {};
-
-const VariableAPY: React.FunctionComponent<VariableAPYProps> = () => {
-  const { loadVariableApy, variableApy, variableApyLoading } = useAMMContext();
+const VariableAPY: React.FunctionComponent = () => {
+  const { variableApy } = useAMMContext();
+  const { result, loading, call } = variableApy;
 
   useEffect(() => {
-    loadVariableApy();
-  }, [loadVariableApy]);
+    call();
+  }, [call]);
+
+  const renderValue = () => {
+    if (loading) {
+      return 'Loading...';
+    }
+
+    if (!result) {
+      return '0%';
+    }
+
+    return `${(result * 100).toFixed(2)}%`;
+  };
 
   return (
-      <Typography variant="h3" label="Variable APY">
-        {variableApyLoading ? 'Loading...' : `${(variableApy) ? (variableApy*100).toFixed(2) : "0" || "0"}%`}
-      </Typography>
+    <Typography variant="h3" label="Variable APY">
+      {renderValue()}
+    </Typography>
   );
 };
 
