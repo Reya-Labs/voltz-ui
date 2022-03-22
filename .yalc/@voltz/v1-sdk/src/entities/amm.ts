@@ -98,6 +98,13 @@ export type AMMMintArgs = {
   margin: number;
 };
 
+export type InfoPostSwap = {
+  marginRequirement: number;
+  availableNotional: number;
+  fee: number;
+  slippage: number;
+}
+
 export type AMMBurnArgs = Omit<AMMMintArgs, 'margin'>;
 
 export type ClosestTickAndFixedRate = {
@@ -161,17 +168,15 @@ class AMM {
     this.txCount = JSBI.BigInt(txCount);
   }
 
-  public async getMinimumMarginRequirementPostSwap({
+  public async getInfoPostSwap({
     recipient,
     isFT,
     notional,
     fixedRateLimit,
     fixedLow,
     fixedHigh,
-  }: AMMGetMinimumMarginRequirementArgs) : Promise<number | void> {
-    if (!this.signer) {
-      return;
-    }
+  }: AMMGetMinimumMarginRequirementArgs) : Promise<InfoPostSwap | void> {
+    if (!this.provider) return;
 
     const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
     const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
@@ -189,66 +194,7 @@ class AMM {
       }
     }
 
-    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.signer);
-    const swapPeripheryParams: SwapPeripheryParams = {
-      marginEngineAddress: this.marginEngineAddress,
-      recipient,
-      isFT,
-      notional: toBn(notional.toString()),
-      sqrtPriceLimitX96,
-      tickLower,
-      tickUpper,
-    };
-
-    let marginRequirement: BigNumber = BigNumber.from(0);
-
-    await peripheryContract.callStatic.swap(swapPeripheryParams).then(
-      async (result: any) => {
-        marginRequirement = result[4];
-      },
-      (error) => {
-        if (error.message.includes('MarginRequirementNotMet')) {
-          const args: string[] = error.message.split("MarginRequirementNotMet")[1]
-            .split('(')[1]
-            .split(')')[0]
-            .replaceAll(' ', '')
-            .split(',');
-
-          marginRequirement = BigNumber.from(args[0]);
-        }
-      },
-    );
-
-    return parseFloat(utils.formatEther(marginRequirement));
-  }
-
-  public async getSlippagePostSwap({
-    recipient,
-    isFT,
-    notional,
-    fixedRateLimit,
-    fixedLow,
-    fixedHigh,
-  }: AMMGetMinimumMarginRequirementArgs) : Promise<number | void> {
-    if (!this.signer) return;
-
-    const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
-    const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
-
-    let sqrtPriceLimitX96;
-    if (fixedRateLimit) {
-      const { closestUsableTick: tickLimit } = this.closestTickAndFixedRate(fixedRateLimit);
-      sqrtPriceLimitX96 = TickMath.getSqrtRatioAtTick(tickLimit).toString();
-    }
-    else {
-      if (isFT) {
-        sqrtPriceLimitX96 = TickMath.getSqrtRatioAtTick(TickMath.MAX_TICK - 1).toString()
-      } else {
-        sqrtPriceLimitX96 = TickMath.getSqrtRatioAtTick(TickMath.MIN_TICK + 1).toString()
-      }
-    }
-
-    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.signer);
+    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.provider);
     const swapPeripheryParams: SwapPeripheryParams = {
       marginEngineAddress: this.marginEngineAddress,
       recipient,
@@ -261,20 +207,29 @@ class AMM {
 
     let tickBefore = await peripheryContract.getCurrentTick(this.marginEngineAddress);
     let tickAfter = 0;
+    let marginRequirement: BigNumber = BigNumber.from(0);
+    let fee = BigNumber.from(0);
+    let availableNotional = BigNumber.from(0);
 
     await peripheryContract.callStatic.swap(swapPeripheryParams).then(
       async (result: any) => {
+        availableNotional = result[1];
+        fee = result[2];
+        marginRequirement = result[4];
         tickAfter = parseInt(result[5]);
       },
       (error) => {
-        if (error.message.includes('MarginRequirementNotMet')) {
+        if (error.toString().includes('MarginRequirementNotMet')) {
           const args: string[] = error.message.split("MarginRequirementNotMet")[1]
             .split('(')[1]
             .split(')')[0]
             .replaceAll(' ', '')
             .split(',');
 
+          marginRequirement = BigNumber.from(args[0]);
           tickAfter = parseInt(args[1]);
+          fee = BigNumber.from(args[3]);
+          availableNotional = BigNumber.from(args[4]);
         }
       },
     );
@@ -285,7 +240,12 @@ class AMM {
     const fixedRateDelta = fixedRateAfter.subtract(fixedRateBefore);
     const fixedRateDeltaRaw = fixedRateDelta.toNumber();
 
-    return fixedRateDeltaRaw;
+    return {
+      marginRequirement: parseFloat(utils.formatEther(marginRequirement)),
+      availableNotional: parseFloat(utils.formatEther(availableNotional)),
+      fee: parseFloat(utils.formatEther(fee)),
+      slippage: fixedRateDeltaRaw,
+    }
   }
 
   public async settlePosition({ owner, fixedLow, fixedHigh }: AMMSettlePositionArgs) : Promise<ContractTransaction | void>  {
@@ -396,11 +356,9 @@ class AMM {
     };
 
     let marginRequirement = BigNumber.from("0");
-    try {
       await peripheryContract.callStatic.mintOrBurn(mintOrBurnParams)
         .then(
           (result) => {
-            console.log("on result");
             marginRequirement = BigNumber.from(result);
           },
           (error) => {
@@ -414,9 +372,7 @@ class AMM {
               marginRequirement = BigNumber.from(args[0]);
             }
           }
-        )
-    }
-    catch (error) {console.log("error", error);}
+        );
 
     return parseFloat(utils.formatEther(marginRequirement));
   }

@@ -10,7 +10,7 @@ import {
   RateOptions,
   NotionalAmount,
   MarginAmount,
-  MinimumMarginAmount,
+  MinimumMarginAmountSwap,
 } from '@components/composite';
 import { useAgentWithOverride } from '@hooks';
 import { HandleSubmitSwapFormArgs } from './types';
@@ -135,7 +135,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           marginBottom: (theme) => theme.spacing(4),
         }}
       >
-        <MinimumMarginAmount/>
+        <MinimumMarginAmountSwap fixedLow={fixedLow} fixedHigh={fixedHigh} notional={notional} isFT={true} />
       </Box>
       <Box
         sx={{

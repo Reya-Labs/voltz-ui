@@ -69,73 +69,15 @@ var AMM = /** @class */ (function () {
         this.tick = jsbi_1.default.BigInt(tick);
         this.txCount = jsbi_1.default.BigInt(txCount);
     }
-    AMM.prototype.getMinimumMarginRequirementPostSwap = function (_a) {
+    AMM.prototype.getInfoPostSwap = function (_a) {
         var recipient = _a.recipient, isFT = _a.isFT, notional = _a.notional, fixedRateLimit = _a.fixedRateLimit, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, peripheryContract, swapPeripheryParams, marginRequirement;
+            var tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, peripheryContract, swapPeripheryParams, tickBefore, tickAfter, marginRequirement, fee, availableNotional, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        if (!this.signer) {
-                            return [2 /*return*/];
-                        }
-                        tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
-                        tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
-                        if (fixedRateLimit) {
-                            tickLimit = this.closestTickAndFixedRate(fixedRateLimit).closestUsableTick;
-                            sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickLimit).toString();
-                        }
-                        else {
-                            if (isFT) {
-                                sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickMath_1.TickMath.MAX_TICK - 1).toString();
-                            }
-                            else {
-                                sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickMath_1.TickMath.MIN_TICK + 1).toString();
-                            }
-                        }
-                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
-                        swapPeripheryParams = {
-                            marginEngineAddress: this.marginEngineAddress,
-                            recipient: recipient,
-                            isFT: isFT,
-                            notional: (0, evm_bn_1.toBn)(notional.toString()),
-                            sqrtPriceLimitX96: sqrtPriceLimitX96,
-                            tickLower: tickLower,
-                            tickUpper: tickUpper,
-                        };
-                        marginRequirement = ethers_1.BigNumber.from(0);
-                        return [4 /*yield*/, peripheryContract.callStatic.swap(swapPeripheryParams).then(function (result) { return __awaiter(_this, void 0, void 0, function () {
-                                return __generator(this, function (_a) {
-                                    marginRequirement = result[4];
-                                    return [2 /*return*/];
-                                });
-                            }); }, function (error) {
-                                if (error.message.includes('MarginRequirementNotMet')) {
-                                    var args = error.message.split("MarginRequirementNotMet")[1]
-                                        .split('(')[1]
-                                        .split(')')[0]
-                                        .replaceAll(' ', '')
-                                        .split(',');
-                                    marginRequirement = ethers_1.BigNumber.from(args[0]);
-                                }
-                            })];
-                    case 1:
-                        _b.sent();
-                        return [2 /*return*/, parseFloat(ethers_1.utils.formatEther(marginRequirement))];
-                }
-            });
-        });
-    };
-    AMM.prototype.getSlippagePostSwap = function (_a) {
-        var recipient = _a.recipient, isFT = _a.isFT, notional = _a.notional, fixedRateLimit = _a.fixedRateLimit, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh;
-        return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, peripheryContract, swapPeripheryParams, tickBefore, tickAfter, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw;
-            var _this = this;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        if (!this.signer)
+                        if (!this.provider)
                             return [2 /*return*/];
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
@@ -151,7 +93,7 @@ var AMM = /** @class */ (function () {
                                 sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickMath_1.TickMath.MIN_TICK + 1).toString();
                             }
                         }
-                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.provider);
                         swapPeripheryParams = {
                             marginEngineAddress: this.marginEngineAddress,
                             recipient: recipient,
@@ -165,19 +107,28 @@ var AMM = /** @class */ (function () {
                     case 1:
                         tickBefore = _b.sent();
                         tickAfter = 0;
+                        marginRequirement = ethers_1.BigNumber.from(0);
+                        fee = ethers_1.BigNumber.from(0);
+                        availableNotional = ethers_1.BigNumber.from(0);
                         return [4 /*yield*/, peripheryContract.callStatic.swap(swapPeripheryParams).then(function (result) { return __awaiter(_this, void 0, void 0, function () {
                                 return __generator(this, function (_a) {
+                                    availableNotional = result[1];
+                                    fee = result[2];
+                                    marginRequirement = result[4];
                                     tickAfter = parseInt(result[5]);
                                     return [2 /*return*/];
                                 });
                             }); }, function (error) {
-                                if (error.message.includes('MarginRequirementNotMet')) {
+                                if (error.toString().includes('MarginRequirementNotMet')) {
                                     var args = error.message.split("MarginRequirementNotMet")[1]
                                         .split('(')[1]
                                         .split(')')[0]
                                         .replaceAll(' ', '')
                                         .split(',');
+                                    marginRequirement = ethers_1.BigNumber.from(args[0]);
                                     tickAfter = parseInt(args[1]);
+                                    fee = ethers_1.BigNumber.from(args[3]);
+                                    availableNotional = ethers_1.BigNumber.from(args[4]);
                                 }
                             })];
                     case 2:
@@ -186,7 +137,12 @@ var AMM = /** @class */ (function () {
                         fixedRateAfter = (0, priceTickConversions_1.tickToFixedRate)(tickAfter);
                         fixedRateDelta = fixedRateAfter.subtract(fixedRateBefore);
                         fixedRateDeltaRaw = fixedRateDelta.toNumber();
-                        return [2 /*return*/, fixedRateDeltaRaw];
+                        return [2 /*return*/, {
+                                marginRequirement: parseFloat(ethers_1.utils.formatEther(marginRequirement)),
+                                availableNotional: parseFloat(ethers_1.utils.formatEther(availableNotional)),
+                                fee: parseFloat(ethers_1.utils.formatEther(fee)),
+                                slippage: fixedRateDeltaRaw,
+                            }];
                 }
             });
         });
@@ -281,7 +237,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.getMinimumMarginRequirementPostMint = function (_a) {
         var recipient = _a.recipient, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, peripheryContract, mintOrBurnParams, marginRequirement, error_1;
+            var tickUpper, tickLower, peripheryContract, mintOrBurnParams, marginRequirement;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -300,9 +256,6 @@ var AMM = /** @class */ (function () {
                             isMint: true,
                         };
                         marginRequirement = ethers_1.BigNumber.from("0");
-                        _b.label = 1;
-                    case 1:
-                        _b.trys.push([1, 3, , 4]);
                         return [4 /*yield*/, peripheryContract.callStatic.mintOrBurn(mintOrBurnParams)
                                 .then(function (result) {
                                 marginRequirement = ethers_1.BigNumber.from(result);
@@ -316,13 +269,9 @@ var AMM = /** @class */ (function () {
                                     marginRequirement = ethers_1.BigNumber.from(args[0]);
                                 }
                             })];
-                    case 2:
+                    case 1:
                         _b.sent();
-                        return [3 /*break*/, 4];
-                    case 3:
-                        error_1 = _b.sent();
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/, parseFloat(ethers_1.utils.formatEther(marginRequirement))];
+                        return [2 /*return*/, parseFloat(ethers_1.utils.formatEther(marginRequirement))];
                 }
             });
         });

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { AMM } from '@voltz/v1-sdk';
 
-import { MinimumMarginAmountPayload } from './types';
+import { MinimumMarginAmountMintBurnPayload, MinimumMarginAmountSwapPayload } from './types';
 import AMMContext from './AMMContext';
+import { InfoPostSwap } from '@voltz/v1-sdk/dist/types/entities/amm';
 
 export type AMMProviderProps = {
   amm: AMM;
@@ -41,39 +42,39 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
     }
   }, [variableApyShouldLoad, !!amm.signer]);
 
-  const [minimumMarginAmount, setMinimumMarginAmount] = useState<number | null>(null);
-  const [minimumMarginAmountPayload, setMinimumMarginAmountPayload] =
-    useState<MinimumMarginAmountPayload | null>(null);
-  const [minimumMarginAmountShouldLoad, setMinimumMarginAmountShouldLoad] = useState(false);
-  const [minimumMarginAmountLoading, setMinimumMarginAmountLoading] = useState(false);
-  const [minimumMarginAmountError, setMinimumMarginAmountError] = useState(false);
-  const handleLoadMinimumMarginAmount = useCallback(
-    ({ fixedLow, fixedHigh, notional }: MinimumMarginAmountPayload) => {
-      setMinimumMarginAmountLoading(false);
-      setMinimumMarginAmountError(false);
-      setMinimumMarginAmountShouldLoad(true);
-      setMinimumMarginAmountPayload({ fixedLow, fixedHigh, notional });
+  const [minimumMarginAmountMintBurn, setMinimumMarginAmountMintBurn] = useState<number | null>(null);
+  const [minimumMarginAmountMintBurnPayload, setMinimumMarginAmountMintBurnPayload] =
+    useState<MinimumMarginAmountMintBurnPayload | null>(null);
+  const [minimumMarginAmountMintBurnShouldLoad, setMinimumMarginAmountMintBurnShouldLoad] = useState(false);
+  const [minimumMarginAmountMintBurnLoading, setMinimumMarginAmountMintBurnLoading] = useState(false);
+  const [minimumMarginAmountMintBurnError, setMinimumMarginAmountMintBurnError] = useState(false);
+  const handleLoadMinimumMarginAmountMintBurn = useCallback(
+    ({ fixedLow, fixedHigh, notional }: MinimumMarginAmountMintBurnPayload) => {
+      setMinimumMarginAmountMintBurnLoading(false);
+      setMinimumMarginAmountMintBurnError(false);
+      setMinimumMarginAmountMintBurnShouldLoad(true);
+      setMinimumMarginAmountMintBurnPayload({ fixedLow, fixedHigh, notional });
     },
     [
-      setMinimumMarginAmountLoading,
-      setMinimumMarginAmountError,
-      setMinimumMarginAmountShouldLoad,
-      setMinimumMarginAmountPayload,
+      setMinimumMarginAmountMintBurnLoading,
+      setMinimumMarginAmountMintBurnError,
+      setMinimumMarginAmountMintBurnShouldLoad,
+      setMinimumMarginAmountMintBurnPayload,
     ],
   );
 
   useEffect(() => {
     const load = async () => {
-      setMinimumMarginAmountLoading(true);
+      setMinimumMarginAmountMintBurnLoading(true);
 
       try {
         const recipient = await amm.signer?.getAddress();
 
-        if (!recipient || !minimumMarginAmountPayload) {
+        if (!recipient || !minimumMarginAmountMintBurnPayload) {
           return;
         }
 
-        const { fixedLow, fixedHigh, notional } = minimumMarginAmountPayload;
+        const { fixedLow, fixedHigh, notional } = minimumMarginAmountMintBurnPayload;
 
        const result = await amm.getMinimumMarginRequirementPostMint({
             recipient,
@@ -82,35 +83,105 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
             notional,
             margin: 0,
           });
-        setMinimumMarginAmount(result || null);
+        setMinimumMarginAmountMintBurn(result || null);
       } catch (error) {
-        setMinimumMarginAmountError(true);
-        setMinimumMarginAmount(null);
+        setMinimumMarginAmountMintBurnError(true);
+        setMinimumMarginAmountMintBurn(null);
       }
 
-      setMinimumMarginAmountLoading(false);
-      setMinimumMarginAmountShouldLoad(false);
-      setMinimumMarginAmountPayload(null);
+      setMinimumMarginAmountMintBurnLoading(false);
+      setMinimumMarginAmountMintBurnShouldLoad(false);
+      setMinimumMarginAmountMintBurnPayload(null);
     };
 
     if (
-      minimumMarginAmountShouldLoad &&
-      minimumMarginAmountPayload &&
-      !minimumMarginAmountLoading
+      minimumMarginAmountMintBurnShouldLoad &&
+      minimumMarginAmountMintBurnPayload &&
+      !minimumMarginAmountMintBurnLoading
     ) {
       load();
     }
-  }, [minimumMarginAmountShouldLoad, minimumMarginAmountPayload, !!amm.signer]);
+  }, [minimumMarginAmountMintBurnShouldLoad, minimumMarginAmountMintBurnPayload, !!amm.signer]);
+
+  const [minimumMarginAmountSwap, setMinimumMarginAmountSwap] = useState<number | null>(null);
+  const [minimumMarginAmountSwapPayload, setMinimumMarginAmountSwapPayload] =
+    useState<MinimumMarginAmountSwapPayload | null>(null);
+  const [minimumMarginAmountSwapShouldLoad, setMinimumMarginAmountSwapShouldLoad] = useState(false);
+  const [minimumMarginAmountSwapLoading, setMinimumMarginAmountSwapLoading] = useState(false);
+  const [minimumMarginAmountSwapError, setMinimumMarginAmountSwapError] = useState(false);
+  const handleLoadMinimumMarginAmountSwap = useCallback(
+    ({ fixedLow, fixedHigh, notional, isFT }: MinimumMarginAmountSwapPayload) => {
+      setMinimumMarginAmountSwapLoading(false);
+      setMinimumMarginAmountSwapError(false);
+      setMinimumMarginAmountSwapShouldLoad(true);
+      setMinimumMarginAmountSwapPayload({ fixedLow, fixedHigh, notional, isFT });
+    },
+    [
+      setMinimumMarginAmountSwapLoading,
+      setMinimumMarginAmountSwapError,
+      setMinimumMarginAmountSwapShouldLoad,
+      setMinimumMarginAmountSwapPayload,
+    ],
+  );
+
+  useEffect(() => {
+    const load = async () => {
+      setMinimumMarginAmountSwapLoading(true);
+
+      try {
+        const recipient = await amm.signer?.getAddress();
+
+        if (!recipient || !minimumMarginAmountSwapPayload) {
+          return;
+        }
+
+        const { fixedLow, fixedHigh, notional, isFT } = minimumMarginAmountSwapPayload;
+
+       const result = (await amm.getInfoPostSwap({
+            recipient,
+            isFT: isFT,
+            fixedLow,
+            fixedHigh,
+            notional,
+          })) as InfoPostSwap;
+        setMinimumMarginAmountSwap(result.marginRequirement || null);
+      } catch (error) {
+        setMinimumMarginAmountSwapError(true);
+        setMinimumMarginAmountSwap(null);
+      }
+
+      setMinimumMarginAmountSwapLoading(false);
+      setMinimumMarginAmountSwapShouldLoad(false);
+      setMinimumMarginAmountSwapPayload(null);
+    };
+
+    let x = 0;
+    if (x==0) {x+=1;}
+
+    if (
+      minimumMarginAmountSwapShouldLoad &&
+      minimumMarginAmountSwapPayload &&
+      !minimumMarginAmountSwapLoading
+    ) {
+      load();
+    }
+  }, [minimumMarginAmountSwapShouldLoad, minimumMarginAmountSwapPayload, !!amm.signer]);
 
   const value = {
     loadVariableApy: handleLoadVariableApy,
     variableApy,
     variableApyLoading,
     variableApyError,
-    loadMinimumMarginAmount: handleLoadMinimumMarginAmount,
-    minimumMarginAmount,
-    minimumMarginAmountLoading,
-    minimumMarginAmountError,
+
+    loadMinimumMarginAmountMintBurn: handleLoadMinimumMarginAmountMintBurn,
+    minimumMarginAmountMintBurn,
+    minimumMarginAmountMintBurnLoading,
+    minimumMarginAmountMintBurnError,
+
+    loadMinimumMarginAmountSwap: handleLoadMinimumMarginAmountSwap,
+    minimumMarginAmountSwap,
+    minimumMarginAmountSwapLoading,
+    minimumMarginAmountSwapError,
   };
 
   return <AMMContext.Provider value={value}>{children}</AMMContext.Provider>;

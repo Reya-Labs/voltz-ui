@@ -685,54 +685,8 @@ export class MarginEngine extends BaseContract {
       _owner: string,
       tickLower: BigNumberish,
       tickUpper: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        [
-          boolean,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber
-        ] & {
-          isSettled: boolean;
-          _liquidity: BigNumber;
-          margin: BigNumber;
-          fixedTokenGrowthInsideLastX128: BigNumber;
-          variableTokenGrowthInsideLastX128: BigNumber;
-          fixedTokenBalance: BigNumber;
-          variableTokenBalance: BigNumber;
-          feeGrowthInsideLastX128: BigNumber;
-          rewardPerAmount: BigNumber;
-        }
-      ] & {
-        positionMemory: [
-          boolean,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber
-        ] & {
-          isSettled: boolean;
-          _liquidity: BigNumber;
-          margin: BigNumber;
-          fixedTokenGrowthInsideLastX128: BigNumber;
-          variableTokenGrowthInsideLastX128: BigNumber;
-          fixedTokenBalance: BigNumber;
-          variableTokenBalance: BigNumber;
-          feeGrowthInsideLastX128: BigNumber;
-          rewardPerAmount: BigNumber;
-        };
-      }
-    >;
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     getPositionMarginRequirement(
       recipient: string,
@@ -744,7 +698,7 @@ export class MarginEngine extends BaseContract {
 
     initialize(
       __underlyingToken: string,
-      _rateOracleAddress: string,
+      __rateOracle: string,
       __termStartTimestampWad: BigNumberish,
       __termEndTimestampWad: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -777,7 +731,7 @@ export class MarginEngine extends BaseContract {
     ): Promise<ContractTransaction>;
 
     setFCM(
-      _newFcm: string,
+      _newFCM: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -816,7 +770,7 @@ export class MarginEngine extends BaseContract {
     ): Promise<ContractTransaction>;
 
     setVAMM(
-      _vAMMAddress: string,
+      _vAMM: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -909,30 +863,8 @@ export class MarginEngine extends BaseContract {
     _owner: string,
     tickLower: BigNumberish,
     tickUpper: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<
-    [
-      boolean,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber
-    ] & {
-      isSettled: boolean;
-      _liquidity: BigNumber;
-      margin: BigNumber;
-      fixedTokenGrowthInsideLastX128: BigNumber;
-      variableTokenGrowthInsideLastX128: BigNumber;
-      fixedTokenBalance: BigNumber;
-      variableTokenBalance: BigNumber;
-      feeGrowthInsideLastX128: BigNumber;
-      rewardPerAmount: BigNumber;
-    }
-  >;
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   getPositionMarginRequirement(
     recipient: string,
@@ -944,7 +876,7 @@ export class MarginEngine extends BaseContract {
 
   initialize(
     __underlyingToken: string,
-    _rateOracleAddress: string,
+    __rateOracle: string,
     __termStartTimestampWad: BigNumberish,
     __termEndTimestampWad: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -977,7 +909,7 @@ export class MarginEngine extends BaseContract {
   ): Promise<ContractTransaction>;
 
   setFCM(
-    _newFcm: string,
+    _newFCM: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1016,7 +948,7 @@ export class MarginEngine extends BaseContract {
   ): Promise<ContractTransaction>;
 
   setVAMM(
-    _vAMMAddress: string,
+    _vAMM: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1142,7 +1074,7 @@ export class MarginEngine extends BaseContract {
 
     initialize(
       __underlyingToken: string,
-      _rateOracleAddress: string,
+      __rateOracle: string,
       __termStartTimestampWad: BigNumberish,
       __termEndTimestampWad: BigNumberish,
       overrides?: CallOverrides
@@ -1172,7 +1104,7 @@ export class MarginEngine extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setFCM(_newFcm: string, overrides?: CallOverrides): Promise<void>;
+    setFCM(_newFCM: string, overrides?: CallOverrides): Promise<void>;
 
     setLiquidatorReward(
       _newLiquidatorRewardWad: BigNumberish,
@@ -1208,7 +1140,7 @@ export class MarginEngine extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setVAMM(_vAMMAddress: string, overrides?: CallOverrides): Promise<void>;
+    setVAMM(_vAMM: string, overrides?: CallOverrides): Promise<void>;
 
     settlePosition(
       tickLower: BigNumberish,
@@ -1962,7 +1894,7 @@ export class MarginEngine extends BaseContract {
       _owner: string,
       tickLower: BigNumberish,
       tickUpper: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     getPositionMarginRequirement(
@@ -1975,7 +1907,7 @@ export class MarginEngine extends BaseContract {
 
     initialize(
       __underlyingToken: string,
-      _rateOracleAddress: string,
+      __rateOracle: string,
       __termStartTimestampWad: BigNumberish,
       __termEndTimestampWad: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -2008,7 +1940,7 @@ export class MarginEngine extends BaseContract {
     ): Promise<BigNumber>;
 
     setFCM(
-      _newFcm: string,
+      _newFCM: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -2047,7 +1979,7 @@ export class MarginEngine extends BaseContract {
     ): Promise<BigNumber>;
 
     setVAMM(
-      _vAMMAddress: string,
+      _vAMM: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -2145,7 +2077,7 @@ export class MarginEngine extends BaseContract {
       _owner: string,
       tickLower: BigNumberish,
       tickUpper: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     getPositionMarginRequirement(
@@ -2158,7 +2090,7 @@ export class MarginEngine extends BaseContract {
 
     initialize(
       __underlyingToken: string,
-      _rateOracleAddress: string,
+      __rateOracle: string,
       __termStartTimestampWad: BigNumberish,
       __termEndTimestampWad: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -2193,7 +2125,7 @@ export class MarginEngine extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     setFCM(
-      _newFcm: string,
+      _newFCM: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -2232,7 +2164,7 @@ export class MarginEngine extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     setVAMM(
-      _vAMMAddress: string,
+      _vAMM: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

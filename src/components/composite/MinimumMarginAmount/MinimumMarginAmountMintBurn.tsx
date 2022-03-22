@@ -4,36 +4,36 @@ import isUndefined from 'lodash/isUndefined';
 import { useAMMContext } from '@hooks';
 import { Typography } from '@components/atomic';
 
-export type MinimumMarginAmountProps = {
+export type MinimumMarginAmountMintBurnProps = {
   fixedLow?: number;
   fixedHigh?: number;
   notional?: number;
 };
 
-const MinimumMarginAmount: React.FunctionComponent<MinimumMarginAmountProps> = ({
+const MinimumMarginAmountMintBurn: React.FunctionComponent<MinimumMarginAmountMintBurnProps> = ({
   fixedLow,
   fixedHigh,
   notional,
 }) => {
-  const { loadMinimumMarginAmount, minimumMarginAmountLoading, minimumMarginAmount } =
+  const { loadMinimumMarginAmountMintBurn, minimumMarginAmountMintBurnLoading, minimumMarginAmountMintBurn } =
     useAMMContext();
 
   useEffect(() => {
     if (!isUndefined(fixedLow) && !isUndefined(fixedHigh) && !isUndefined(notional)) {
-      loadMinimumMarginAmount({ fixedLow, fixedHigh, notional });
+      loadMinimumMarginAmountMintBurn({ fixedLow, fixedHigh, notional });
     }
-  }, [loadMinimumMarginAmount, fixedLow, fixedHigh, notional]);
+  }, [loadMinimumMarginAmountMintBurn, fixedLow, fixedHigh, notional]);
 
   const renderMarginAmount = () => {
-    if (minimumMarginAmountLoading) {
+    if (minimumMarginAmountMintBurnLoading) {
       return 'Loading...';
     }
 
-    if (!minimumMarginAmount) {
+    if (!minimumMarginAmountMintBurn) {
       return '0';
     }
 
-    return minimumMarginAmount.toFixed(2);
+    return minimumMarginAmountMintBurn.toFixed(2);
   };
 
   return (
@@ -43,4 +43,4 @@ const MinimumMarginAmount: React.FunctionComponent<MinimumMarginAmountProps> = (
   );
 };
 
-export default MinimumMarginAmount;
+export default MinimumMarginAmountMintBurn;

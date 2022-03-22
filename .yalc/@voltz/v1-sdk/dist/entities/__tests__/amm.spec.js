@@ -145,15 +145,15 @@ describe('amm', function () {
                 }
             });
         }); });
-        it.skip('mints and swaps', function () { return __awaiter(void 0, void 0, void 0, function () {
-            var fixedLowMinter, fixedHighMinter, fixedLowSwapper, fixedHighSwapper, mint_req, swap_req, swap_slippage, liquidation_threshold;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+        it('mints and swaps', function () { return __awaiter(void 0, void 0, void 0, function () {
+            var fixedLowMinter, fixedHighMinter, fixedLowSwapper, fixedHighSwapper, mint_req, _a, swap_req, swap_notional, swap_fee, swap_slippage;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        fixedLowMinter = 1;
-                        fixedHighMinter = 2;
-                        fixedLowSwapper = 3;
-                        fixedHighSwapper = 6;
+                        fixedLowMinter = 8;
+                        fixedHighMinter = 12;
+                        fixedLowSwapper = 9;
+                        fixedHighSwapper = 12;
                         return [4 /*yield*/, amm.getMinimumMarginRequirementPostMint({
                                 recipient: wallet.address,
                                 fixedLow: fixedLowMinter,
@@ -162,7 +162,7 @@ describe('amm', function () {
                                 notional: 100000,
                             })];
                     case 1:
-                        mint_req = _a.sent();
+                        mint_req = _b.sent();
                         console.log("pre-mint req", mint_req);
                         return [4 /*yield*/, amm.mint({
                                 recipient: wallet.address,
@@ -172,47 +172,61 @@ describe('amm', function () {
                                 notional: 100000,
                             })];
                     case 2:
-                        _a.sent();
+                        _b.sent();
                         console.log("mint done");
-                        return [4 /*yield*/, amm.getMinimumMarginRequirementPostSwap({
+                        return [4 /*yield*/, amm.getInfoPostSwap({
                                 recipient: wallet.address,
-                                isFT: false,
+                                isFT: true,
                                 notional: 50000,
                                 fixedLow: fixedLowSwapper,
                                 fixedHigh: fixedHighSwapper
                             })];
                     case 3:
-                        swap_req = _a.sent();
+                        _a = _b.sent(), swap_req = _a.marginRequirement, swap_notional = _a.availableNotional, swap_fee = _a.fee, swap_slippage = _a.slippage;
                         console.log("pre-swap req", swap_req);
-                        return [4 /*yield*/, amm.getSlippagePostSwap({
-                                recipient: wallet.address,
-                                isFT: false,
-                                notional: 50000,
-                                fixedLow: fixedLowSwapper,
-                                fixedHigh: fixedHighSwapper
-                            })];
-                    case 4:
-                        swap_slippage = _a.sent();
+                        console.log("pre-swap notional", swap_notional);
+                        console.log("pre-swap fee", swap_fee);
                         console.log("pre-swap slippage", swap_slippage);
                         return [4 /*yield*/, amm.swap({
                                 recipient: wallet.address,
-                                isFT: false,
+                                isFT: true,
                                 notional: 50000,
                                 fixedLow: fixedLowSwapper,
                                 fixedHigh: fixedHighSwapper,
                                 margin: swap_req + 10,
                             })];
-                    case 5:
-                        _a.sent();
+                    case 4:
+                        _b.sent();
                         console.log("swap done");
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it.skip('liquidation thresholds', function () { return __awaiter(void 0, void 0, void 0, function () {
+            var fixedLowMinter, fixedHighMinter, fixedLowSwapper, fixedHighSwapper, liquidation_threshold_position, liquidation_threshold_trader;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        fixedLowMinter = 1;
+                        fixedHighMinter = 2;
+                        fixedLowSwapper = 3;
+                        fixedHighSwapper = 6;
                         return [4 /*yield*/, amm.getLiquidationThreshold({
                                 owner: wallet.address,
                                 fixedLow: fixedLowMinter,
                                 fixedHigh: fixedHighMinter
                             })];
-                    case 6:
-                        liquidation_threshold = _a.sent();
-                        console.log("liquidation threshold", liquidation_threshold);
+                    case 1:
+                        liquidation_threshold_position = _a.sent();
+                        console.log("liquidation threshold position", liquidation_threshold_position);
+                        return [4 /*yield*/, amm.getLiquidationThreshold({
+                                owner: wallet.address,
+                                fixedLow: fixedLowSwapper,
+                                fixedHigh: fixedHighSwapper
+                            })];
+                    case 2:
+                        liquidation_threshold_trader = _a.sent();
+                        console.log("liquidation threshold trader", liquidation_threshold_trader);
                         return [2 /*return*/];
                 }
             });
@@ -241,27 +255,6 @@ describe('amm', function () {
                             })];
                     case 2:
                         _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        it('mints and swaps', function () { return __awaiter(void 0, void 0, void 0, function () {
-            var fixedLowMinter, fixedHighMinter, mint_req;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        fixedLowMinter = 1;
-                        fixedHighMinter = 2.01;
-                        return [4 /*yield*/, amm.getMinimumMarginRequirementPostMint({
-                                recipient: wallet.address,
-                                fixedLow: fixedLowMinter,
-                                fixedHigh: fixedHighMinter,
-                                margin: 0,
-                                notional: 100000,
-                            })];
-                    case 1:
-                        mint_req = _a.sent();
-                        console.log("pre-mint req", mint_req);
                         return [2 /*return*/];
                 }
             });
