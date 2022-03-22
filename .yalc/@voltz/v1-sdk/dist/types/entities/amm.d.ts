@@ -24,7 +24,7 @@ export declare type AMMConstructorArgs = {
     tickSpacing: BigIntish;
     txCount: number;
 };
-export declare type AMMGetMinimumMarginRequirementArgs = {
+export declare type AMMGetInfoPostSwapArgs = {
     recipient: string;
     isFT: boolean;
     notional: BigNumberish;
@@ -72,6 +72,7 @@ export declare type AMMMintArgs = {
     notional: number;
     margin: number;
 };
+export declare type AMMGetMinimumMarginRequirementPostMintArgs = AMMMintArgs;
 export declare type InfoPostSwap = {
     marginRequirement: number;
     availableNotional: number;
@@ -103,12 +104,12 @@ declare class AMM {
     private _fixedRate?;
     private _price?;
     constructor({ id, signer, provider, marginEngineAddress, fcmAddress, rateOracle, createdTimestamp, updatedTimestamp, termStartTimestamp, termEndTimestamp, underlyingToken, sqrtPriceX96, liquidity, tick, tickSpacing, txCount, }: AMMConstructorArgs);
-    getInfoPostSwap({ recipient, isFT, notional, fixedRateLimit, fixedLow, fixedHigh, }: AMMGetMinimumMarginRequirementArgs): Promise<InfoPostSwap | void>;
+    getInfoPostSwap({ recipient, isFT, notional, fixedRateLimit, fixedLow, fixedHigh, }: AMMGetInfoPostSwapArgs): Promise<InfoPostSwap | void>;
     settlePosition({ owner, fixedLow, fixedHigh }: AMMSettlePositionArgs): Promise<ContractTransaction | void>;
     updatePositionMargin({ owner, fixedLow, fixedHigh, marginDelta, }: AMMUpdatePositionMarginArgs): Promise<ContractTransaction | void>;
     liquidatePosition({ owner, fixedLow, fixedHigh, }: AMMLiquidatePositionArgs): Promise<ContractTransaction | void>;
     getLiquidationThreshold({ owner, fixedLow, fixedHigh, }: AMMLiquidatePositionArgs): Promise<number | void>;
-    getMinimumMarginRequirementPostMint({ recipient, fixedLow, fixedHigh, notional }: AMMMintArgs): Promise<number | void>;
+    getMinimumMarginRequirementPostMint({ recipient, fixedLow, fixedHigh, notional }: AMMGetMinimumMarginRequirementPostMintArgs): Promise<number | void>;
     mint({ recipient, fixedLow, fixedHigh, notional, margin }: AMMMintArgs): Promise<ContractTransaction | void>;
     burn({ recipient, fixedLow, fixedHigh, notional }: AMMBurnArgs): Promise<ContractTransaction | void>;
     approvePeriphery(): Promise<ContractTransaction | void>;

@@ -42,7 +42,7 @@ export type AMMConstructorArgs = {
   txCount: number;
 };
 
-export type AMMGetMinimumMarginRequirementArgs = {
+export type AMMGetInfoPostSwapArgs = {
   recipient: string;
   isFT: boolean;
   notional: BigNumberish;
@@ -97,6 +97,8 @@ export type AMMMintArgs = {
   notional: number;
   margin: number;
 };
+
+export type AMMGetMinimumMarginRequirementPostMintArgs = AMMMintArgs;
 
 export type InfoPostSwap = {
   marginRequirement: number;
@@ -175,7 +177,7 @@ class AMM {
     fixedRateLimit,
     fixedLow,
     fixedHigh,
-  }: AMMGetMinimumMarginRequirementArgs) : Promise<InfoPostSwap | void> {
+  }: AMMGetInfoPostSwapArgs) : Promise<InfoPostSwap | void> {
     if (!this.provider) return;
 
     const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
@@ -336,7 +338,7 @@ class AMM {
     return parseFloat(utils.formatEther(threshold));
   }
 
-  public async getMinimumMarginRequirementPostMint({ recipient, fixedLow, fixedHigh, notional }: AMMMintArgs): Promise<number | void> {
+  public async getMinimumMarginRequirementPostMint({ recipient, fixedLow, fixedHigh, notional }: AMMGetMinimumMarginRequirementPostMintArgs): Promise<number | void> {
     if (!this.provider) {
       return;
     }
