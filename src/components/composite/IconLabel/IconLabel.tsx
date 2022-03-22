@@ -65,6 +65,10 @@ const IconLabel: React.FunctionComponent<IconLabelProps> = ({ label, icon, info 
           </Panel>
           <Box
             sx={{
+              backgroundColor: 'transparent',
+              color: 'unset',
+              backgroundImage: 'unset',
+              boxShadow: 'unset',
               position: 'relative',
               mt: '10px',
               '&::before': {
