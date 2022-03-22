@@ -15,7 +15,7 @@ const DebouncedIntegerField: React.FunctionComponent<DebouncedIntegerFieldProps>
 }) => {
   const stringValue = isUndefined(value) ? value : `${value as string}`;
   const [editableValue, setEditableValue] = useState<string | undefined>(stringValue);
-  const debouncedValue = useDebounce(editableValue);
+  const debouncedValue: string | undefined = useDebounce(editableValue);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditableValue(event.target.value);

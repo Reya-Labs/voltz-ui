@@ -1,17 +1,17 @@
 import { useState, useEffect, useRef } from 'react';
 
-const useDebounce = <T>(value: T, duration: number = 300) => {
+const useDebounce = <T>(value: T, duration: number = 300): T => {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
-  const timeoutRef = useRef<any>();
+  const timeoutRef = useRef<number>();
 
   useEffect(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
 
-    timeoutRef.current = setTimeout(() => setDebouncedValue(value), duration);
+    timeoutRef.current = window.setTimeout(() => setDebouncedValue(value), duration);
 
-    return () => clearTimeout(timeoutRef.current);
+    return () => window.clearTimeout(timeoutRef.current);
   }, [value, timeoutRef]);
 
   return debouncedValue;
