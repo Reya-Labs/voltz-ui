@@ -16,16 +16,16 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
   const [orderBy, setOrderBy] = useState<PositionTableFields>('maturity');
   const [page, setPage] = useState(0);
   const [size, setSize] = useState<number | null>(null);
-  const { positions, loading, error } = usePositions();
+  const { positionsByAgent, loading, error } = usePositions();
   const pages = 0;
 
-  if (!positions || loading || error) {
+  if (!positionsByAgent || loading || error) {
     return null;
   }
 
   return (
     <PositionTable
-      positions={positions}
+      positions={positionsByAgent}
       order={order}
       onSetOrder={setOrder}
       orderBy={orderBy}

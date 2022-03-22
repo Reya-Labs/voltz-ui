@@ -4,17 +4,18 @@ import isNull from 'lodash/isNull';
 import { Position, AMM, Token, RateOracle } from '@voltz/v1-sdk';
 import { providers } from 'ethers';
 
-import { useWallet } from '@hooks';
-
-export type usePositionsArgs = {};
+import { useAgent, useWallet } from '@hooks';
+import { Agents } from '@components/contexts';
 
 export type usePositionsResult = {
   positions?: Position[];
+  positionsByAgent?: Position[];
   loading: boolean;
   error: boolean;
 };
 
 const usePositions = (): usePositionsResult => {
+  const { agent } = useAgent();
   const { signer, wallet, loading, error } = useWallet();
   const isSignerAvailable = !isNull(signer);
 
@@ -56,8 +57,22 @@ const usePositions = (): usePositionsResult => {
       );
     }
   }, [loading, error, isSignerAvailable]);
+  const positionsByAgent = useMemo(() => {
+    return positions?.filter(({ isLiquidityProvider, effectiveFixedTokenBalance }) => {
+      switch (agent) {
+        case Agents.LIQUIDITY_PROVIDER:
+          return isLiquidityProvider;
 
-  return { positions, loading, error };
+        case Agents.FIXED_TRADER:
+          return effectiveFixedTokenBalance > 0;
+
+        case Agents.VARIABLE_TRADER:
+          return effectiveFixedTokenBalance < 0;
+      }
+    });
+  }, [positions, agent]);
+
+  return { positions, positionsByAgent, loading, error };
 };
 
 export default usePositions;
