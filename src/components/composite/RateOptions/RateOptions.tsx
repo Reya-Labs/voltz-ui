@@ -3,6 +3,7 @@ import isUndefined from 'lodash/isUndefined';
 import Box from '@mui/material/Box';
 
 import DebouncedIntegerField from '../DebouncedIntegerField/DebouncedIntegerField';
+import IconLabel from '../IconLabel/IconLabel';
 
 export type RateOptionsProps = {
   defaultFixedLow?: number;
@@ -49,13 +50,13 @@ const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
     >
       <DebouncedIntegerField
         size="small"
-        label="Fixed low"
+        label={<IconLabel label="fixed low" icon="information-circle" info="Something" />}
         value={fixedLowValue}
         onChange={handleChangeFixedLow}
       />
       <DebouncedIntegerField
         size="small"
-        label="Fixed high"
+        label={<IconLabel label="fixed high" icon="information-circle" info="Something" />}
         value={fixedHighValue}
         onChange={handleChangeFixedHigh}
       />
