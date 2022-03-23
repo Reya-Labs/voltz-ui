@@ -261,7 +261,6 @@ var AMM = /** @class */ (function () {
                             isMint: true,
                         };
                         marginRequirement = ethers_1.BigNumber.from("0");
-                        console.log(mintOrBurnParams);
                         return [4 /*yield*/, peripheryContract.callStatic.mintOrBurn(mintOrBurnParams)
                                 .then(function (result) {
                                 marginRequirement = ethers_1.BigNumber.from(result);

@@ -248,7 +248,7 @@ class AMM {
     const scaledMarginRequirement = parseFloat(utils.formatEther(marginRequirement));
 
     const additionalMargin = (scaledMarginRequirement > scaledCurrentMargin) ? scaledMarginRequirement - scaledCurrentMargin : 0;
-    
+
     return {
       marginRequirement: additionalMargin,
       availableNotional: parseFloat(utils.formatEther(availableNotional)),
@@ -364,7 +364,6 @@ class AMM {
     };
 
     let marginRequirement = BigNumber.from("0");
-    console.log(mintOrBurnParams);
       await peripheryContract.callStatic.mintOrBurn(mintOrBurnParams)
         .then(
           (result) => {
