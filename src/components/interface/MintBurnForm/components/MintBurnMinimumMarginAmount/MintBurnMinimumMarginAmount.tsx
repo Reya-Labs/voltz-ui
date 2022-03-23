@@ -3,7 +3,7 @@ import isUndefined from 'lodash/isUndefined';
 
 import { useAMMContext } from '@hooks';
 import { Typography } from '@components/atomic';
-import IconLabel from '../IconLabel/IconLabel';
+import { IconLabel } from '@components/composite';
 
 export type MintBurnMinimumMarginAmountProps = {
   fixedLow?: number;
