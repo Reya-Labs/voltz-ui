@@ -77,7 +77,7 @@ var AMM = /** @class */ (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        if (!this.signer) {
+                        if (!this.provider) {
                             return [2 /*return*/];
                         }
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
@@ -94,7 +94,7 @@ var AMM = /** @class */ (function () {
                                 sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickMath_1.TickMath.MIN_TICK + 1).toString();
                             }
                         }
-                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.provider);
                         swapPeripheryParams = {
                             marginEngineAddress: this.marginEngineAddress,
                             recipient: recipient,
@@ -281,7 +281,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.getMinimumMarginRequirementPostMint = function (_a) {
         var recipient = _a.recipient, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, peripheryContract, mintOrBurnParams, marginRequirement, error_1;
+            var tickUpper, tickLower, peripheryContract, mintOrBurnParams, marginRequirement;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -300,9 +300,6 @@ var AMM = /** @class */ (function () {
                             isMint: true,
                         };
                         marginRequirement = ethers_1.BigNumber.from("0");
-                        _b.label = 1;
-                    case 1:
-                        _b.trys.push([1, 3, , 4]);
                         return [4 /*yield*/, peripheryContract.callStatic.mintOrBurn(mintOrBurnParams)
                                 .then(function (result) {
                                 marginRequirement = ethers_1.BigNumber.from(result);
@@ -316,13 +313,9 @@ var AMM = /** @class */ (function () {
                                     marginRequirement = ethers_1.BigNumber.from(args[0]);
                                 }
                             })];
-                    case 2:
+                    case 1:
                         _b.sent();
-                        return [3 /*break*/, 4];
-                    case 3:
-                        error_1 = _b.sent();
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/, parseFloat(ethers_1.utils.formatEther(marginRequirement))];
+                        return [2 /*return*/, parseFloat(ethers_1.utils.formatEther(marginRequirement))];
                 }
             });
         });

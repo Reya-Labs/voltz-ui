@@ -7,6 +7,11 @@ exports.IFactory__factory = void 0;
 var ethers_1 = require("ethers");
 var _abi = [
     {
+        inputs: [],
+        name: "AavePoolGetReserveNormalizedIncomeReturnedZero",
+        type: "error",
+    },
+    {
         inputs: [
             {
                 internalType: "bool",
@@ -31,6 +36,22 @@ var _abi = [
     {
         inputs: [],
         name: "CannotSettleBeforeMaturity",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "x",
+                type: "uint256",
+            },
+            {
+                internalType: "uint256",
+                name: "y",
+                type: "uint256",
+            },
+        ],
+        name: "DebugError",
         type: "error",
     },
     {
@@ -148,6 +169,17 @@ var _abi = [
     {
         inputs: [
             {
+                internalType: "int256",
+                name: "marginRequirement",
+                type: "int256",
+            },
+        ],
+        name: "MarginRequirementNotMetFCM",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
                 internalType: "uint256",
                 name: "requested",
                 type: "uint256",
@@ -207,12 +239,37 @@ var _abi = [
             {
                 indexed: true,
                 internalType: "address",
-                name: "underlyingToken",
+                name: "owner",
                 type: "address",
             },
             {
                 indexed: true,
                 internalType: "address",
+                name: "intAddress",
+                type: "address",
+            },
+            {
+                indexed: true,
+                internalType: "bool",
+                name: "isApproved",
+                type: "bool",
+            },
+        ],
+        name: "ApprovalSet",
+        type: "event",
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: true,
+                internalType: "contract IERC20Minimal",
+                name: "underlyingToken",
+                type: "address",
+            },
+            {
+                indexed: true,
+                internalType: "contract IRateOracle",
                 name: "rateOracle",
                 type: "address",
             },
@@ -236,19 +293,19 @@ var _abi = [
             },
             {
                 indexed: false,
-                internalType: "address",
+                internalType: "contract IMarginEngine",
                 name: "marginEngine",
                 type: "address",
             },
             {
                 indexed: false,
-                internalType: "address",
+                internalType: "contract IVAMM",
                 name: "vamm",
                 type: "address",
             },
             {
                 indexed: false,
-                internalType: "address",
+                internalType: "contract IFCM",
                 name: "fcm",
                 type: "address",
             },
@@ -267,13 +324,13 @@ var _abi = [
         inputs: [
             {
                 indexed: false,
-                internalType: "address",
+                internalType: "contract IFCM",
                 name: "masterFCMAddressOld",
                 type: "address",
             },
             {
                 indexed: false,
-                internalType: "address",
+                internalType: "contract IFCM",
                 name: "masterFCMAddress",
                 type: "address",
             },
@@ -290,12 +347,12 @@ var _abi = [
     {
         inputs: [
             {
-                internalType: "address",
+                internalType: "contract IERC20Minimal",
                 name: "_underlyingToken",
                 type: "address",
             },
             {
-                internalType: "address",
+                internalType: "contract IRateOracle",
                 name: "_rateOracle",
                 type: "address",
             },
@@ -318,17 +375,17 @@ var _abi = [
         name: "deployIrsInstance",
         outputs: [
             {
-                internalType: "address",
+                internalType: "contract IMarginEngine",
                 name: "marginEngineProxy",
                 type: "address",
             },
             {
-                internalType: "address",
+                internalType: "contract IVAMM",
                 name: "vammProxy",
                 type: "address",
             },
             {
-                internalType: "address",
+                internalType: "contract IFCM",
                 name: "fcmProxy",
                 type: "address",
             },
@@ -371,8 +428,8 @@ var _abi = [
         name: "masterFCMs",
         outputs: [
             {
-                internalType: "address",
-                name: "masterFCMAddress",
+                internalType: "contract IFCM",
+                name: "masterFCM",
                 type: "address",
             },
         ],
@@ -384,7 +441,7 @@ var _abi = [
         name: "masterMarginEngine",
         outputs: [
             {
-                internalType: "address",
+                internalType: "contract IMarginEngine",
                 name: "",
                 type: "address",
             },
@@ -397,7 +454,7 @@ var _abi = [
         name: "masterVAMM",
         outputs: [
             {
-                internalType: "address",
+                internalType: "contract IVAMM",
                 name: "",
                 type: "address",
             },
@@ -426,14 +483,14 @@ var _abi = [
     {
         inputs: [
             {
-                internalType: "address",
-                name: "masterFCMAddress",
+                internalType: "contract IFCM",
+                name: "masterFCM",
                 type: "address",
             },
             {
-                internalType: "address",
-                name: "_rateOracle",
-                type: "address",
+                internalType: "uint8",
+                name: "yieldBearingProtocolID",
+                type: "uint8",
             },
         ],
         name: "setMasterFCM",

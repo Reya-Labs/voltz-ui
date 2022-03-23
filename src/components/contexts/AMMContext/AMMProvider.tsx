@@ -75,13 +75,13 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
 
         const { fixedLow, fixedHigh, notional } = minimumMarginAmountPayload;
 
-       const result = await amm.getMinimumMarginRequirementPostMint({
-            recipient,
-            fixedLow,
-            fixedHigh,
-            notional,
-            margin: 0,
-          });
+        const result = await amm.getMinimumMarginRequirementPostMint({
+          recipient,
+          fixedLow,
+          fixedHigh,
+          notional,
+          margin: 0,
+        });
         setMinimumMarginAmount(result || null);
       } catch (error) {
         setMinimumMarginAmountError(true);
