@@ -1,10 +1,16 @@
+import { AMMGetInfoPostSwapArgs, AMMGetMinimumMarginRequirementPostMintArgs } from '@voltz/v1-sdk';
+
 import { UseAsyncFunctionResult } from '@hooks';
 
-export type MinimumMarginAmountMintBurnPayload = {
-  fixedLow: number;
-  fixedHigh: number;
-  notional: number;
-};
+export type MintMinimumMarginRequirementPayload = Omit<
+  AMMGetMinimumMarginRequirementPostMintArgs,
+  'recipient' | 'margin'
+>;
+
+export type SwapMinimumMarginRequirementPayload = Omit<
+  AMMGetInfoPostSwapArgs,
+  'recipient' | 'isFT'
+>;
 
 export type MinimumMarginAmountSwapPayload = {
   fixedLow: number;
@@ -15,14 +21,12 @@ export type MinimumMarginAmountSwapPayload = {
 
 export type AMMDispatch = {
   variableApy: UseAsyncFunctionResult<unknown, number | void>;
-
-  loadMinimumMarginAmountMintBurn: (payload: MinimumMarginAmountMintBurnPayload) => void;
-  minimumMarginAmountMintBurn: number | null;
-  minimumMarginAmountMintBurnLoading: boolean;
-  minimumMarginAmountMintBurnError: boolean;
-
-  loadMinimumMarginAmountSwap: (payload: MinimumMarginAmountSwapPayload) => void;
-  minimumMarginAmountSwap: number | null;
-  minimumMarginAmountSwapLoading: boolean;
-  minimumMarginAmountSwapError: boolean;
+  mintMinimumMarginRequirement: UseAsyncFunctionResult<
+    MintMinimumMarginRequirementPayload,
+    number | void
+  >;
+  swapMinimumMarginRequirement: UseAsyncFunctionResult<
+    SwapMinimumMarginRequirementPayload,
+    number | void
+  >;
 };

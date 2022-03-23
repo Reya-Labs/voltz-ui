@@ -3,8 +3,6 @@ export { default as IntegerField } from './IntegerField/IntegerField';
 export { default as MarginAmount } from './MarginAmount/MarginAmount';
 export { default as MaturityInformation } from './MaturityInformation/MaturityInformation';
 export { default as Modal } from './Modal/Modal';
-export { default as MinimumMarginAmountMintBurn} from './MinimumMarginAmount/MinimumMarginAmountMintBurn';
-export { default as MinimumMarginAmountSwap} from './MinimumMarginAmount/MinimumMarginAmountSwap';
 export { default as NotionalAmount } from './NotionalAmount/NotionalAmount';
 export { default as PanelAlert } from './PanelAlert/PanelAlert';
 export { default as ProtocolInformation } from './ProtocolInformation/ProtocolInformation';

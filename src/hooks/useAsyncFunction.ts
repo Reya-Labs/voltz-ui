@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
-import isNull from 'lodash/isNull';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 
 export type UseAsyncFunctionResult<ArgsType, ResultType> = {
   result: ResultType | null;
@@ -9,10 +8,10 @@ export type UseAsyncFunctionResult<ArgsType, ResultType> = {
 };
 
 const useAsyncFunction = <ArgsType, ResultType>(
-  asyncFunction: (args?: ArgsType) => Promise<ResultType>,
+  asyncFunction: (args: ArgsType) => Promise<ResultType>,
   lock?: () => void,
 ): UseAsyncFunctionResult<ArgsType, ResultType> => {
-  const [args, setArgs] = useState<ArgsType | undefined | null>(null);
+  const [args, setArgs] = useState<ArgsType>();
   const [result, setResult] = useState<ResultType | null>(null);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -30,13 +29,14 @@ const useAsyncFunction = <ArgsType, ResultType>(
 
   useEffect(() => {
     const load = async () => {
-      if (isNull(args)) {
-        return;
-      }
-
       setLoading(true);
 
       try {
+        // Some explanation: TypeScript will not allow a declared type like
+        // ArgsType to represent an "empty" value, or no arguments, to be
+        // passed to a function.
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const data = await asyncFunction(args);
 
         setResult(data);
@@ -54,12 +54,15 @@ const useAsyncFunction = <ArgsType, ResultType>(
     }
   }, [called, lock]);
 
-  return {
-    result,
-    error,
-    loading,
-    call,
-  };
+  return useMemo(
+    () => ({
+      result,
+      error,
+      loading,
+      call,
+    }),
+    [result, error, loading, call],
+  );
 };
 
 export default useAsyncFunction;

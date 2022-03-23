@@ -4,36 +4,37 @@ import isUndefined from 'lodash/isUndefined';
 import { useAMMContext } from '@hooks';
 import { Typography } from '@components/atomic';
 
-export type MinimumMarginAmountMintBurnProps = {
+export type SwapMinimumMarginAmountProps = {
   fixedLow?: number;
   fixedHigh?: number;
   notional?: number;
+  isFT?: boolean;
 };
 
-const MinimumMarginAmountMintBurn: React.FunctionComponent<MinimumMarginAmountMintBurnProps> = ({
+const SwapMinimumMarginAmount: React.FunctionComponent<SwapMinimumMarginAmountProps> = ({
   fixedLow,
   fixedHigh,
   notional,
 }) => {
-  const { loadMinimumMarginAmountMintBurn, minimumMarginAmountMintBurnLoading, minimumMarginAmountMintBurn } =
-    useAMMContext();
+  const { swapMinimumMarginRequirement } = useAMMContext();
+  const { result, loading, call } = swapMinimumMarginRequirement;
 
   useEffect(() => {
     if (!isUndefined(fixedLow) && !isUndefined(fixedHigh) && !isUndefined(notional)) {
-      loadMinimumMarginAmountMintBurn({ fixedLow, fixedHigh, notional });
+      call({ fixedLow, fixedHigh, notional });
     }
-  }, [loadMinimumMarginAmountMintBurn, fixedLow, fixedHigh, notional]);
+  }, [call, fixedLow, fixedHigh, notional]);
 
   const renderMarginAmount = () => {
-    if (minimumMarginAmountMintBurnLoading) {
+    if (loading) {
       return 'Loading...';
     }
 
-    if (!minimumMarginAmountMintBurn) {
+    if (!result) {
       return '0';
     }
 
-    return minimumMarginAmountMintBurn.toFixed(2);
+    return result.toFixed(2);
   };
 
   return (
@@ -43,4 +44,4 @@ const MinimumMarginAmountMintBurn: React.FunctionComponent<MinimumMarginAmountMi
   );
 };
 
-export default MinimumMarginAmountMintBurn;
+export default SwapMinimumMarginAmount;
