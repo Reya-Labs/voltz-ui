@@ -1,7 +1,8 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 
-import { Typography } from '../../atomic';
+import { Typography } from '@components/atomic';
+import IconLabel from '../IconLabel/IconLabel';
 import { VariableAPY } from './components';
 
 export type ProtocolInformationProps = {
@@ -23,14 +24,21 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
         },
       }}
     >
-      <Typography label="protocol" variant="h3">
+      <Typography
+        label={<IconLabel label="protocol" icon="information-circle" info="Something" />}
+        variant="h3"
+      >
         {protocol}
       </Typography>
       {fixedApr && (
-        <Typography label="fixed apr" variant="h3">
+        <Typography
+          label={<IconLabel label="fixed apr" icon="information-circle" info="Something" />}
+          variant="h3"
+        >
           {fixedApr.toFixed(2)}%
         </Typography>
-      )},
+      )}
+      ,
       <VariableAPY />
     </Box>
   );

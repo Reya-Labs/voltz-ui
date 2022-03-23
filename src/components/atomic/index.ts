@@ -4,6 +4,7 @@ export { default as Card } from './Card/Card';
 export { default as FormHelperText } from './FormHelperText/FormHelperText';
 export { default as Icon } from './Icon/Icon';
 export type { IconProps } from './Icon/Icon';
+export type { Icons } from './Icon/types';
 export { default as Input } from './Input/Input';
 export { default as Panel } from './Panel/Panel';
 export { default as Slider } from './Slider/Slider';

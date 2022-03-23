@@ -3,8 +3,8 @@ import { DateTime } from 'luxon';
 import Decimal from 'decimal.js';
 import Box from '@mui/material/Box';
 
+import { Typography, Slider } from '@components/atomic';
 import { withLabel } from '../../utilities';
-import { Typography, Slider } from '../../atomic';
 
 export type MaturityInformationProps = {
   startDate?: DateTime;

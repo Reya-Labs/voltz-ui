@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import isUndefined from 'lodash/isUndefined';
 import Box from '@mui/material/Box';
 
-import IntegerField from '../IntegerField/IntegerField';
+import DebouncedIntegerField from '../DebouncedIntegerField/DebouncedIntegerField';
+import IconLabel from '../IconLabel/IconLabel';
 
 export type RateOptionsProps = {
   defaultFixedLow?: number;
@@ -24,12 +25,18 @@ const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
   const fixedLowValue = isUndefined(fixedLow) ? defaultFixedLow : fixedLow;
   const fixedHighValue = isUndefined(fixedHigh) ? defaultFixedHigh : fixedHigh;
 
-  const handleChangeFixedLow = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChangeFixedLow(parseInt(event.target.value));
-  };
-  const handleChangeFixedHigh = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChangeFixedHigh(parseInt(event.target.value));
-  };
+  const handleChangeFixedLow = useCallback(
+    (newFixedLow: string | undefined) => {
+      onChangeFixedLow(parseFloat(newFixedLow || '1'));
+    },
+    [onChangeFixedLow],
+  );
+  const handleChangeFixedHigh = useCallback(
+    (newFixedHigh: string | undefined) => {
+      onChangeFixedHigh(parseFloat(newFixedHigh || '1'));
+    },
+    [onChangeFixedHigh],
+  );
 
   return (
     <Box
@@ -41,15 +48,15 @@ const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
         flexDirection: 'row',
       }}
     >
-      <IntegerField
+      <DebouncedIntegerField
         size="small"
-        label="Fixed low"
+        label={<IconLabel label="fixed low" icon="information-circle" info="Something" />}
         value={fixedLowValue}
         onChange={handleChangeFixedLow}
       />
-      <IntegerField
+      <DebouncedIntegerField
         size="small"
-        label="Fixed high"
+        label={<IconLabel label="fixed high" icon="information-circle" info="Something" />}
         value={fixedHighValue}
         onChange={handleChangeFixedHigh}
       />

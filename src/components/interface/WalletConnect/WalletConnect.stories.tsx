@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { WalletName, Wallet } from '@components/contexts';
+import { WalletName, Wallet, WalletProvider } from '@components/contexts';
 import { useStateMemo } from '@hooks';
 import WalletConnect from './WalletConnect';
 

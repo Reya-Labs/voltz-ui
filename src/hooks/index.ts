@@ -4,6 +4,7 @@ export { default as useAMMContext } from './useAMMContext';
 export { default as useAMMs } from './useAMMs';
 export { default as useAsyncFunction } from './useAsyncFunction';
 export type { UseAsyncFunctionResult } from './useAsyncFunction';
+export { default as useDebounce } from './useDebounce';
 export { default as usePositions } from './usePositions';
 export { default as useStateMemo } from './useStateMemo';
 export { default as useUniqueId } from './useUniqueId';

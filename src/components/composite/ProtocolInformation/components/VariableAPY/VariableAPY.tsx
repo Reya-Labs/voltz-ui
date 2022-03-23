@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 
 import { useAMMContext } from '@hooks';
 import { Typography } from '@components/atomic';
+import IconLabel from '../../../IconLabel/IconLabel';
 
 const VariableAPY: React.FunctionComponent = () => {
   const { variableApy } = useAMMContext();
@@ -24,7 +25,10 @@ const VariableAPY: React.FunctionComponent = () => {
   };
 
   return (
-    <Typography variant="h3" label="Variable APY">
+    <Typography
+      variant="h3"
+      label={<IconLabel label="variable apy" icon="information-circle" info="Something" />}
+    >
       {renderValue()}
     </Typography>
   );

@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import isUndefined from 'lodash/isUndefined';
 
 import { Agents } from '@components/contexts';
-import { ToggleButtonGroup } from '@components/composite';
+import { IconLabel, ToggleButtonGroup } from '@components/composite';
 import { useAgent } from '@hooks';
 
 export type TraderControlsProps = {
@@ -57,7 +57,7 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
     >
       {!isModifying && (
         <ToggleButtonGroup
-          label="Rates"
+          label={<IconLabel label="rates" icon="information-circle" info="Something" />}
           options={Object.values(agentOptionTitles)}
           option={agentOptionTitles[agent]}
           defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
@@ -66,7 +66,9 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
         />
       )}
       <ToggleButtonGroup
-        label="Partial collateralization"
+        label={
+          <IconLabel label="partial collateralization" icon="information-circle" info="Something" />
+        }
         options={Object.values(partialCollateralizationOptionTitles)}
         option={
           partialCollateralizationValue

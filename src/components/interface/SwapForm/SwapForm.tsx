@@ -5,9 +5,9 @@ import Box from '@mui/material/Box';
 import { AgentProps } from '@components/contexts';
 import { Button, Panel } from '@components/atomic';
 import {
+  IconLabel,
   ProtocolInformation,
   MaturityInformation,
-  RateOptions,
   NotionalAmount,
   MarginAmount,
 } from '@components/composite';
@@ -21,19 +21,13 @@ export type SwapFormProps = AgentProps & {
   fixedApr?: number;
   startDate?: DateTime;
   endDate?: DateTime;
-  defaultFixedLow?: number;
-  defaultFixedHigh?: number;
   defaultNotional?: number;
   defaultMargin?: number;
   defaultPartialCollateralization?: boolean;
   maxMargin?: number;
-  fixedLow?: number;
-  fixedHigh?: number;
   notional?: number;
   margin?: number;
   partialCollateralization?: boolean;
-  onChangeFixedLow: (value: number) => void;
-  onChangeFixedHigh: (value: number) => void;
   onChangeNotional: (value: number) => void;
   onChangePartialCollateralization: (value: boolean) => void;
   onChangeMargin: (value: number) => void;
@@ -48,19 +42,13 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   fixedApr,
   startDate,
   endDate,
-  defaultFixedLow,
-  defaultFixedHigh,
   defaultNotional,
   defaultMargin,
   defaultPartialCollateralization,
   maxMargin,
-  fixedLow,
-  fixedHigh,
   notional,
   margin,
   partialCollateralization,
-  onChangeFixedLow,
-  onChangeFixedHigh,
   onChangeNotional,
   onChangePartialCollateralization,
   onChangeMargin,
@@ -71,8 +59,6 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   const handleSubmit = async () => {
     return onSubmit({
       agent,
-      fixedLow,
-      fixedHigh,
       notional,
       margin,
       partialCollateralization: partialCollateralization || false,
@@ -95,7 +81,11 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           marginBottom: (theme) => theme.spacing(4),
         }}
       >
-        <MaturityInformation label="Maturity" startDate={startDate} endDate={endDate} />
+        <MaturityInformation
+          label={<IconLabel label="maturity" icon="information-circle" info="Something" />}
+          startDate={startDate}
+          endDate={endDate}
+        />
       </Box>
       <Box
         sx={{
@@ -108,14 +98,6 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           defaultPartialCollateralization={defaultPartialCollateralization}
           partialCollateralization={partialCollateralization}
           onChangePartialCollateralization={onChangePartialCollateralization}
-        />
-        <RateOptions
-          defaultFixedLow={defaultFixedLow}
-          defaultFixedHigh={defaultFixedHigh}
-          fixedLow={fixedLow}
-          fixedHigh={fixedHigh}
-          onChangeFixedLow={onChangeFixedLow}
-          onChangeFixedHigh={onChangeFixedHigh}
         />
       </Box>
       <Box
@@ -134,12 +116,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           marginBottom: (theme) => theme.spacing(4),
         }}
       >
-        <SwapMinimumMarginAmount
-          fixedLow={fixedLow}
-          fixedHigh={fixedHigh}
-          notional={notional}
-          isFT={true}
-        />
+        <SwapMinimumMarginAmount fixedLow={1} fixedHigh={2} notional={notional} />
       </Box>
       <Box
         sx={{

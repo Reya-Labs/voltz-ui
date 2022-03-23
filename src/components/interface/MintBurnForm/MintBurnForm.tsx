@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import { AgentProps } from '@components/contexts';
 import { Button, Panel } from '@components/atomic';
 import {
+  IconLabel,
   ProtocolInformation,
   MaturityInformation,
   RateOptions,
@@ -82,7 +83,11 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
           marginBottom: (theme) => theme.spacing(4),
         }}
       >
-        <MaturityInformation label="Maturity" startDate={startDate} endDate={endDate} />
+        <MaturityInformation
+          label={<IconLabel label="maturity" icon="information-circle" info="Something" />}
+          startDate={startDate}
+          endDate={endDate}
+        />
       </Box>
       <Box
         sx={{

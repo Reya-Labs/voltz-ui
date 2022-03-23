@@ -1,6 +1,7 @@
 import React from 'react';
 import isUndefined from 'lodash/isUndefined';
 
+import IconLabel from '../IconLabel/IconLabel';
 import IntegerField from '../IntegerField/IntegerField';
 
 export type NotionalAmountProps = {
@@ -22,7 +23,7 @@ const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
 
   return (
     <IntegerField
-      label="Notional"
+      label={<IconLabel label="provided liquidity" icon="information-circle" info="Something" />}
       value={value}
       onChange={handleChange}
       sx={{ width: '100%' }}
