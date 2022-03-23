@@ -7,7 +7,6 @@ import { TickMath } from '../../utils/tickMath';
 import {
   VAMM__factory as vammFactory,
 } from '../../typechain';
-import { isBytes } from 'ethers/lib/utils';
 
 describe('amm', () => {
   describe('amm init', () => {
@@ -46,7 +45,7 @@ describe('amm', () => {
       });
 
       const vammContract = vammFactory.connect(vammAddress, wallet);
-      // await vammContract.initializeVAMM(TickMath.getSqrtRatioAtTick(0).toString()); // for periphery tests
+      await vammContract.initializeVAMM(TickMath.getSqrtRatioAtTick(0).toString()); // for periphery tests
       // await vammContract.initializeVAMM(TickMath.getSqrtRatioAtTick(-7000).toString()); // for fcm tests
     });
 
@@ -93,11 +92,11 @@ describe('amm', () => {
       console.log("fcm settlement done");
     });
 
-    it('mints and swaps', async () => {
-      const fixedLowMinter = 8
-      const fixedHighMinter = 12
-      const fixedLowSwapper = 9
-      const fixedHighSwapper = 12
+    it.skip('mints and swaps', async () => {
+      const fixedLowMinter = 1
+      const fixedHighMinter = 2
+      const fixedLowSwapper = 3
+      const fixedHighSwapper = 6
 
       const mint_req = await amm.getMinimumMarginRequirementPostMint({
         recipient: wallet.address,
@@ -122,7 +121,7 @@ describe('amm', () => {
             fee: swap_fee,
             slippage: swap_slippage } = await amm.getInfoPostSwap({
         recipient: wallet.address,
-        isFT: true,
+        isFT: false,
         notional: 50000,
         fixedLow: fixedLowSwapper,
         fixedHigh: fixedHighSwapper
@@ -135,7 +134,7 @@ describe('amm', () => {
 
       await amm.swap({
         recipient: wallet.address,
-        isFT: true,
+        isFT: false,
         notional: 50000,
         fixedLow: fixedLowSwapper,
         fixedHigh: fixedHighSwapper,

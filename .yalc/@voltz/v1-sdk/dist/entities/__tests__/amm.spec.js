@@ -52,37 +52,43 @@ describe('amm', function () {
         beforeAll(function () { return __awaiter(void 0, void 0, void 0, function () {
             var vammAddress, marginEngineAddress, provider, privateKey, vammContract;
             return __generator(this, function (_a) {
-                vammAddress = '0xe451980132e65465d0a498c53f0b5227326dd73f';
-                marginEngineAddress = '0x75537828f2ce51be7289709686a69cbfdbb714f1';
-                provider = new ethers_1.providers.JsonRpcProvider('http://0.0.0.0:8545/');
-                privateKey = '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80';
-                wallet = new ethers_1.Wallet(privateKey, provider);
-                amm = new amm_1.default({
-                    id: vammAddress,
-                    signer: wallet,
-                    provider: provider,
-                    createdTimestamp: '1646856471',
-                    fcmAddress: '0x5392a33f7f677f59e833febf4016cddd88ff9e67',
-                    liquidity: '0',
-                    marginEngineAddress: marginEngineAddress,
-                    rateOracle: new rateOracle_1.default({
-                        id: '0x0165878a594ca255338adfa4d48449f69242eb8f',
-                        protocolId: 1,
-                    }),
-                    underlyingToken: new token_1.default({
-                        id: '0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9',
-                        name: 'USDC',
-                    }),
-                    sqrtPriceX96: tickMath_1.TickMath.getSqrtRatioAtTick(0).toString(),
-                    termEndTimestamp: '1649458800000000000000000000',
-                    termStartTimestamp: '1646856441000000000000000000',
-                    tick: '0',
-                    tickSpacing: '1000',
-                    txCount: 0,
-                    updatedTimestamp: '1646856471',
-                });
-                vammContract = typechain_1.VAMM__factory.connect(vammAddress, wallet);
-                return [2 /*return*/];
+                switch (_a.label) {
+                    case 0:
+                        vammAddress = '0xe451980132e65465d0a498c53f0b5227326dd73f';
+                        marginEngineAddress = '0x75537828f2ce51be7289709686a69cbfdbb714f1';
+                        provider = new ethers_1.providers.JsonRpcProvider('http://0.0.0.0:8545/');
+                        privateKey = '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80';
+                        wallet = new ethers_1.Wallet(privateKey, provider);
+                        amm = new amm_1.default({
+                            id: vammAddress,
+                            signer: wallet,
+                            provider: provider,
+                            createdTimestamp: '1646856471',
+                            fcmAddress: '0x5392a33f7f677f59e833febf4016cddd88ff9e67',
+                            liquidity: '0',
+                            marginEngineAddress: marginEngineAddress,
+                            rateOracle: new rateOracle_1.default({
+                                id: '0x0165878a594ca255338adfa4d48449f69242eb8f',
+                                protocolId: 1,
+                            }),
+                            underlyingToken: new token_1.default({
+                                id: '0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9',
+                                name: 'USDC',
+                            }),
+                            sqrtPriceX96: tickMath_1.TickMath.getSqrtRatioAtTick(0).toString(),
+                            termEndTimestamp: '1649458800000000000000000000',
+                            termStartTimestamp: '1646856441000000000000000000',
+                            tick: '0',
+                            tickSpacing: '1000',
+                            txCount: 0,
+                            updatedTimestamp: '1646856471',
+                        });
+                        vammContract = typechain_1.VAMM__factory.connect(vammAddress, wallet);
+                        return [4 /*yield*/, vammContract.initializeVAMM(tickMath_1.TickMath.getSqrtRatioAtTick(0).toString())];
+                    case 1:
+                        _a.sent(); // for periphery tests
+                        return [2 /*return*/];
+                }
             });
         }); });
         it.skip('fcm', function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -145,15 +151,15 @@ describe('amm', function () {
                 }
             });
         }); });
-        it('mints and swaps', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it.skip('mints and swaps', function () { return __awaiter(void 0, void 0, void 0, function () {
             var fixedLowMinter, fixedHighMinter, fixedLowSwapper, fixedHighSwapper, mint_req, _a, swap_req, swap_notional, swap_fee, swap_slippage;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        fixedLowMinter = 8;
-                        fixedHighMinter = 12;
-                        fixedLowSwapper = 9;
-                        fixedHighSwapper = 12;
+                        fixedLowMinter = 1;
+                        fixedHighMinter = 2;
+                        fixedLowSwapper = 3;
+                        fixedHighSwapper = 6;
                         return [4 /*yield*/, amm.getMinimumMarginRequirementPostMint({
                                 recipient: wallet.address,
                                 fixedLow: fixedLowMinter,
@@ -176,7 +182,7 @@ describe('amm', function () {
                         console.log("mint done");
                         return [4 /*yield*/, amm.getInfoPostSwap({
                                 recipient: wallet.address,
-                                isFT: true,
+                                isFT: false,
                                 notional: 50000,
                                 fixedLow: fixedLowSwapper,
                                 fixedHigh: fixedHighSwapper
@@ -189,7 +195,7 @@ describe('amm', function () {
                         console.log("pre-swap slippage", swap_slippage);
                         return [4 /*yield*/, amm.swap({
                                 recipient: wallet.address,
-                                isFT: true,
+                                isFT: false,
                                 notional: 50000,
                                 fixedLow: fixedLowSwapper,
                                 fixedHigh: fixedHighSwapper,

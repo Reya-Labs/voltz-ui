@@ -38,7 +38,7 @@ const SwapMinimumMarginAmount: React.FunctionComponent<SwapMinimumMarginAmountPr
   };
 
   return (
-    <Typography variant="h3" label="Minimum Margin Amount">
+    <Typography variant="h3" label="Additional Margin Amount">
       {renderMarginAmount()}
     </Typography>
   );

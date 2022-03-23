@@ -277,13 +277,13 @@ var _abi = [
     {
         inputs: [
             {
-                internalType: "address",
-                name: "_vammAddress",
+                internalType: "contract IVAMM",
+                name: "__vamm",
                 type: "address",
             },
             {
-                internalType: "address",
-                name: "_marginEngineAddress",
+                internalType: "contract IMarginEngine",
+                name: "__marginEngine",
                 type: "address",
             },
         ],

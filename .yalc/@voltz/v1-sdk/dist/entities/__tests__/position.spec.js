@@ -104,7 +104,7 @@ describe('amm', function () {
                 return [2 /*return*/];
             });
         }); });
-        it('position', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it.skip('position', function () { return __awaiter(void 0, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 console.log(position.effectiveMargin);
                 console.log(position.fixedRateLower.toNumber());

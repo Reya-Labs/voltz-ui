@@ -72,7 +72,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.getInfoPostSwap = function (_a) {
         var recipient = _a.recipient, isFT = _a.isFT, notional = _a.notional, fixedRateLimit = _a.fixedRateLimit, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, peripheryContract, swapPeripheryParams, tickBefore, tickAfter, marginRequirement, fee, availableNotional, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw;
+            var tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, peripheryContract, swapPeripheryParams, tickBefore, tickAfter, marginRequirement, fee, availableNotional, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw, marginEngineContract, currentMargin, scaledCurrentMargin, scaledMarginRequirement, additionalMargin;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
@@ -95,8 +95,7 @@ var AMM = /** @class */ (function () {
                         }
                         peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.provider);
                         swapPeripheryParams = {
-                            marginEngineAddress: this.marginEngineAddress,
-                            recipient: recipient,
+                            marginEngine: this.marginEngineAddress,
                             isFT: isFT,
                             notional: (0, evm_bn_1.toBn)(notional.toString()),
                             sqrtPriceLimitX96: sqrtPriceLimitX96,
@@ -137,8 +136,15 @@ var AMM = /** @class */ (function () {
                         fixedRateAfter = (0, priceTickConversions_1.tickToFixedRate)(tickAfter);
                         fixedRateDelta = fixedRateAfter.subtract(fixedRateBefore);
                         fixedRateDeltaRaw = fixedRateDelta.toNumber();
+                        marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.provider);
+                        return [4 /*yield*/, marginEngineContract.callStatic.getPosition(recipient, tickLower, tickUpper)];
+                    case 3:
+                        currentMargin = (_b.sent()).margin;
+                        scaledCurrentMargin = parseFloat(ethers_1.utils.formatEther(currentMargin));
+                        scaledMarginRequirement = parseFloat(ethers_1.utils.formatEther(marginRequirement));
+                        additionalMargin = (scaledMarginRequirement > scaledCurrentMargin) ? scaledMarginRequirement - scaledCurrentMargin : 0;
                         return [2 /*return*/, {
-                                marginRequirement: parseFloat(ethers_1.utils.formatEther(marginRequirement)),
+                                marginRequirement: additionalMargin,
                                 availableNotional: parseFloat(ethers_1.utils.formatEther(availableNotional)),
                                 fee: parseFloat(ethers_1.utils.formatEther(fee)),
                                 slippage: fixedRateDeltaRaw,
@@ -160,7 +166,7 @@ var AMM = /** @class */ (function () {
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
                         marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
-                        return [4 /*yield*/, marginEngineContract.settlePosition(tickLower, tickUpper, owner)];
+                        return [4 /*yield*/, marginEngineContract.settlePosition(owner, tickLower, tickUpper)];
                     case 1:
                         settlePositionReceipt = _b.sent();
                         return [2 /*return*/, settlePositionReceipt];
@@ -205,7 +211,7 @@ var AMM = /** @class */ (function () {
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
                         marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
-                        return [4 /*yield*/, marginEngineContract.liquidatePosition(tickLower, tickUpper, owner)];
+                        return [4 /*yield*/, marginEngineContract.liquidatePosition(owner, tickLower, tickUpper)];
                     case 1:
                         receipt = _b.sent();
                         return [2 /*return*/, receipt];
@@ -237,7 +243,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.getMinimumMarginRequirementPostMint = function (_a) {
         var recipient = _a.recipient, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, peripheryContract, mintOrBurnParams, marginRequirement;
+            var tickUpper, tickLower, peripheryContract, mintOrBurnParams, marginRequirement, marginEngineContract, currentMargin, scaledCurrentMargin, scaledMarginRequirement;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -248,14 +254,14 @@ var AMM = /** @class */ (function () {
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
                         peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.provider);
                         mintOrBurnParams = {
-                            marginEngineAddress: this.marginEngineAddress,
-                            recipient: recipient,
+                            marginEngine: this.marginEngineAddress,
                             tickLower: tickLower,
                             tickUpper: tickUpper,
                             notional: (0, evm_bn_1.toBn)(notional.toString()),
                             isMint: true,
                         };
                         marginRequirement = ethers_1.BigNumber.from("0");
+                        console.log(mintOrBurnParams);
                         return [4 /*yield*/, peripheryContract.callStatic.mintOrBurn(mintOrBurnParams)
                                 .then(function (result) {
                                 marginRequirement = ethers_1.BigNumber.from(result);
@@ -271,7 +277,19 @@ var AMM = /** @class */ (function () {
                             })];
                     case 1:
                         _b.sent();
-                        return [2 /*return*/, parseFloat(ethers_1.utils.formatEther(marginRequirement))];
+                        marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.provider);
+                        return [4 /*yield*/, marginEngineContract.callStatic.getPosition(recipient, tickLower, tickUpper)];
+                    case 2:
+                        currentMargin = (_b.sent()).margin;
+                        scaledCurrentMargin = parseFloat(ethers_1.utils.formatEther(currentMargin));
+                        scaledMarginRequirement = parseFloat(ethers_1.utils.formatEther(marginRequirement));
+                        if (scaledMarginRequirement > scaledCurrentMargin) {
+                            return [2 /*return*/, scaledMarginRequirement - scaledCurrentMargin];
+                        }
+                        else {
+                            return [2 /*return*/, 0];
+                        }
+                        return [2 /*return*/];
                 }
             });
         });
@@ -302,8 +320,7 @@ var AMM = /** @class */ (function () {
                         _b.sent();
                         peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
                         mintOrBurnParams = {
-                            marginEngineAddress: this.marginEngineAddress,
-                            recipient: recipient,
+                            marginEngine: this.marginEngineAddress,
                             tickLower: tickLower,
                             tickUpper: tickUpper,
                             notional: (0, evm_bn_1.toBn)(notional.toString()),
@@ -315,7 +332,7 @@ var AMM = /** @class */ (function () {
         });
     };
     AMM.prototype.burn = function (_a) {
-        var recipient = _a.recipient, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional;
+        var fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional;
         return __awaiter(this, void 0, void 0, function () {
             var tickUpper, tickLower, peripheryContract, mintOrBurnParams;
             return __generator(this, function (_b) {
@@ -331,8 +348,7 @@ var AMM = /** @class */ (function () {
                         _b.sent();
                         peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
                         mintOrBurnParams = {
-                            marginEngineAddress: this.marginEngineAddress,
-                            recipient: recipient,
+                            marginEngine: this.marginEngineAddress,
                             tickLower: tickLower,
                             tickUpper: tickUpper,
                             notional: (0, evm_bn_1.toBn)(notional.toString()),
@@ -442,8 +458,7 @@ var AMM = /** @class */ (function () {
                         _b.sent();
                         peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
                         swapPeripheryParams = {
-                            marginEngineAddress: this.marginEngineAddress,
-                            recipient: recipient,
+                            marginEngine: this.marginEngineAddress,
                             isFT: isFT,
                             notional: (0, evm_bn_1.toBn)(notional.toString()),
                             sqrtPriceLimitX96: sqrtPriceLimitX96,

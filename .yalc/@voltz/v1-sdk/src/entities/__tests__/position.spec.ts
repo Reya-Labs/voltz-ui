@@ -70,7 +70,7 @@ describe('amm', () => {
       // await vammContract.initializeVAMM(TickMath.getSqrtRatioAtTick(0).toString()); // for periphery tests
     });
 
-    it('position', async () => {
+    it.skip('position', async () => {
       console.log(position.effectiveMargin);
       console.log(position.fixedRateLower.toNumber());
       console.log(position.fixedRateUpper.toNumber());

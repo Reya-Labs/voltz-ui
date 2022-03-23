@@ -111,7 +111,7 @@ declare class AMM {
     getLiquidationThreshold({ owner, fixedLow, fixedHigh, }: AMMLiquidatePositionArgs): Promise<number | void>;
     getMinimumMarginRequirementPostMint({ recipient, fixedLow, fixedHigh, notional }: AMMGetMinimumMarginRequirementPostMintArgs): Promise<number | void>;
     mint({ recipient, fixedLow, fixedHigh, notional, margin }: AMMMintArgs): Promise<ContractTransaction | void>;
-    burn({ recipient, fixedLow, fixedHigh, notional }: AMMBurnArgs): Promise<ContractTransaction | void>;
+    burn({ fixedLow, fixedHigh, notional }: AMMBurnArgs): Promise<ContractTransaction | void>;
     approvePeriphery(): Promise<ContractTransaction | void>;
     approveFCM(): Promise<ContractTransaction | void>;
     approveMarginEngine(marginDelta: BigNumberish): Promise<void>;
