@@ -27,7 +27,7 @@ const usePositions = (): usePositionsResult => {
             rateOracle: {
               id: rateOracleAddress,
               protocolId,
-              token: { id: tokenAddress, name: tokenName },
+              token: { id: tokenAddress, name: tokenName, decimals },
             },
             ...restOfAmm
           },
@@ -46,7 +46,7 @@ const usePositions = (): usePositionsResult => {
                 id: rateOracleAddress,
                 protocolId: protocolId as number,
               }),
-              underlyingToken: new Token({ id: tokenAddress, name: tokenName }),
+              underlyingToken: new Token({ id: tokenAddress, name: tokenName, decimals }),
               ...restOfAmm,
             }),
             tickLower: JSBI.toNumber(JSBI.BigInt(tickLowerValue as string)),
