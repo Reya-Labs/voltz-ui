@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import isNull from 'lodash/isNull';
 import { useNavigate } from 'react-router-dom';
-import { AMM, Position } from '@voltz/v1-sdk';
+import { Position } from '@voltz/v1-sdk';
 
 import { routes } from '@routes';
 import { AMMProvider } from '@components/contexts';
-import { useWallet, useAgent } from '@hooks';
+import { useWallet, useAgent, AugmentedAMM } from '@hooks';
 import { Agents } from '@components/contexts';
 import {
   SwapForm,
@@ -15,7 +15,7 @@ import {
 } from '@components/interface';
 
 export type ConnectedSwapFormProps = {
-  amm: AMM | null;
+  amm: AugmentedAMM | null;
   position: Position | null;
   onReset: () => void;
 };

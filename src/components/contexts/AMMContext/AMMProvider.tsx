@@ -1,13 +1,12 @@
 import React, { useMemo } from 'react';
-import { AMM } from '@voltz/v1-sdk';
 
-import { useAsyncFunction, useAgent } from '@hooks';
+import { useAsyncFunction, useAgent, AugmentedAMM } from '@hooks';
 import { Agents } from '@components/contexts';
 import { MintMinimumMarginRequirementPayload, SwapMinimumMarginRequirementPayload } from './types';
 import AMMContext from './AMMContext';
 
 export type AMMProviderProps = {
-  amm: AMM;
+  amm: AugmentedAMM;
 };
 
 const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children }) => {

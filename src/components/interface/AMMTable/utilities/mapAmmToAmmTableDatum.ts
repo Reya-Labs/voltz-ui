@@ -1,5 +1,4 @@
-import { AMM } from '@voltz/v1-sdk';
-
+import { AugmentedAMM } from '@hooks';
 import { AMMTableDatum } from '../types';
 
 const mapAmmToAmmTableDatum = ({
@@ -8,7 +7,7 @@ const mapAmmToAmmTableDatum = ({
   startDateTime,
   endDateTime,
   fixedRate,
-}: AMM): AMMTableDatum => {
+}: AugmentedAMM): AMMTableDatum => {
   return {
     id,
     protocol,

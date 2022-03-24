@@ -1,11 +1,11 @@
 import React, { useState, useCallback } from 'react';
 import isNull from 'lodash/isNull';
 import { useNavigate } from 'react-router-dom';
-import { AMM, Position } from '@voltz/v1-sdk';
+import { Position } from '@voltz/v1-sdk';
 
 import { AMMProvider } from '@components/contexts';
 import { routes } from '@routes';
-import { useWallet } from '@hooks';
+import { useWallet, AugmentedAMM } from '@hooks';
 import {
   MintBurnForm,
   MintBurnFormProps,
@@ -15,7 +15,7 @@ import {
 import { updateFixedRate } from './utilities';
 
 export type ConnectedMintBurnFormProps = {
-  amm: AMM | null;
+  amm: AugmentedAMM | null;
   position: Position | null;
   onReset: () => void;
 };

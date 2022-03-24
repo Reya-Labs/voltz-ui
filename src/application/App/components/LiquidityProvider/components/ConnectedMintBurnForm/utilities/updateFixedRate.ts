@@ -1,8 +1,9 @@
-import { AMM } from '@voltz/v1-sdk';
 import isNull from 'lodash/isNull';
 
+import { AugmentedAMM } from '@hooks';
+
 export type UpdateFixedRateArgs = {
-  amm?: AMM;
+  amm?: AugmentedAMM;
   fixedRate?: number;
   setFixedRate: (value: number) => void;
 };

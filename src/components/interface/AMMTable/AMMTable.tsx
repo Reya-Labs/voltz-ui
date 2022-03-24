@@ -3,9 +3,9 @@ import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import { SystemStyleObject, Theme } from '@mui/system';
-import { AMM } from '@voltz/v1-sdk';
 
 import { data } from '@utilities';
+import { AugmentedAMM } from '@hooks';
 import { AMMProvider } from '@components/contexts';
 import { Panel } from '@components/atomic';
 import { AMMTableFields } from './types';
@@ -14,7 +14,7 @@ import { mapAmmToAmmTableDatum } from './utilities';
 import { AMMTableFooter, AMMTableHead, AMMTableRow } from './components';
 
 export type AMMTableProps = {
-  amms: AMM[];
+  amms: AugmentedAMM[];
   order: data.TableOrder;
   onSetOrder: (order: data.TableOrder) => void;
   orderBy: AMMTableFields;
@@ -24,7 +24,7 @@ export type AMMTableProps = {
   onSetPage: (page: number) => void;
   size: number | null;
   onSetSize: (size: number) => void;
-  onSelectItem: (datum: AMM) => void;
+  onSelectItem: (datum: AugmentedAMM) => void;
 };
 
 const AMMTable: React.FunctionComponent<AMMTableProps> = ({
