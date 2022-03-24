@@ -48,7 +48,7 @@ describe('amm', () => {
       });
 
       const vammContract = vammFactory.connect(vammAddress, wallet);
-      await vammContract.initializeVAMM(TickMath.getSqrtRatioAtTick(0).toString()); // for periphery tests
+      // await vammContract.initializeVAMM(TickMath.getSqrtRatioAtTick(0).toString()); // for periphery tests
       // await vammContract.initializeVAMM(TickMath.getSqrtRatioAtTick(-7000).toString()); // for fcm tests
     });
 
@@ -95,7 +95,7 @@ describe('amm', () => {
       console.log("fcm settlement done");
     });
 
-    it('mints and swaps', async () => {
+    it.skip('mints and swaps', async () => {
       const fixedLowMinter = 8
       const fixedHighMinter = 12
       const fixedLowSwapper = 3
@@ -126,12 +126,11 @@ describe('amm', () => {
       
       console.log(_notional.toString());
 
-      // MarginLessThanMinimum(618177714030561395808)
       await amm.mint({
         recipient: wallet.address,
         fixedLow: fixedLowMinter,
         fixedHigh: fixedHighMinter,
-        margin: 620,
+        margin: 625,
         notional: 100000,
       });
       console.log("mint done");
@@ -158,7 +157,7 @@ describe('amm', () => {
         notional: 50000,
         fixedLow: fixedLowSwapper,
         fixedHigh: fixedHighSwapper,
-        margin: swap_req + 10,
+        margin: 1000,
       });
       console.log("swap done");
     });
