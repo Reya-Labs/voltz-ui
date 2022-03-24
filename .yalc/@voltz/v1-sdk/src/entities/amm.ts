@@ -178,7 +178,9 @@ class AMM {
     fixedLow,
     fixedHigh,
   }: AMMGetInfoPostSwapArgs) : Promise<InfoPostSwap | void> {
-    if (!this.provider) return;
+    if (!this.provider) {
+      return;
+    }
 
     const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
     const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
@@ -199,7 +201,7 @@ class AMM {
     const _notionalFraction = Price.fromNumber(notional);
     const _notionalTA = TokenAmount.fromFractionalAmount(this.underlyingToken, _notionalFraction.numerator, _notionalFraction.denominator);
     const _notional = _notionalTA.scale()
-  
+
     const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.provider);
     const swapPeripheryParams: SwapPeripheryParams = {
       marginEngine: this.marginEngineAddress,
@@ -247,7 +249,7 @@ class AMM {
 
     const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.provider);
     const currentMargin = (await marginEngineContract.callStatic.getPosition(recipient, tickLower, tickUpper)).margin;
-    
+
     const scaledCurrentMargin = parseFloat(utils.formatEther(currentMargin));
     const scaledMarginRequirement = parseFloat(utils.formatEther(marginRequirement));
 
@@ -362,11 +364,22 @@ class AMM {
       return;
     }
 
+    if (!this.initialized) {
+      if (!this.signer) {
+        return;
+      }
+
+      const vammContract = vammFactory.connect(this.id, this.signer);
+
+      // todo: add logic to initialize at a more reasonable price
+      await vammContract.initializeVAMM(TickMath.getSqrtRatioAtTick(0).toString());
+    }
+
     const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
     const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
 
     const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.provider);
-    
+
     const _notionalFraction = Price.fromNumber(notional);
     const _notionalTA = TokenAmount.fromFractionalAmount(this.underlyingToken, _notionalFraction.numerator, _notionalFraction.denominator);
     const _notional = _notionalTA.scale()
@@ -400,7 +413,7 @@ class AMM {
 
     const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.provider);
     const currentMargin = (await marginEngineContract.callStatic.getPosition(recipient, tickLower, tickUpper)).margin;
-    
+
     const scaledCurrentMargin = parseFloat(utils.formatEther(currentMargin));
     const scaledMarginRequirement = parseFloat(utils.formatEther(marginRequirement));
 
@@ -597,7 +610,7 @@ class AMM {
     const _notionalFraction = Price.fromNumber(notional);
     const _notionalTA = TokenAmount.fromFractionalAmount(this.underlyingToken, _notionalFraction.numerator, _notionalFraction.denominator);
     const _notional = _notionalTA.scale()
-    
+
     return fcmContract.initiateFullyCollateralisedFixedTakerSwap(_notional, sqrtPriceLimitX96);
   }
 
@@ -621,7 +634,7 @@ class AMM {
     await this.approveFCM();
 
     const fcmContract = fcmFactory.connect(this.fcmAddress, this.signer);
-    
+
     const _notionalFraction = Price.fromNumber(notionalToUnwind);
     const _notionalTA = TokenAmount.fromFractionalAmount(this.underlyingToken, _notionalFraction.numerator, _notionalFraction.denominator);
     const _notional = _notionalTA.scale()
