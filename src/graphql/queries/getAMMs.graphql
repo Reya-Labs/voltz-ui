@@ -11,6 +11,7 @@ query GetAMMs($orderBy: AMM_orderBy!) {
       token {
         id
         name
+        decimals
       }
     }
     termStartTimestamp
