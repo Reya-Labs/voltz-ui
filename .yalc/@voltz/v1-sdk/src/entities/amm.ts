@@ -171,16 +171,17 @@ class AMM {
   }
 
   public async getInfoPostSwap({
-    recipient,
     isFT,
     notional,
     fixedRateLimit,
     fixedLow,
     fixedHigh,
   }: AMMGetInfoPostSwapArgs) : Promise<InfoPostSwap | void> {
-    if (!this.provider) {
+    if (!this.signer) {
       return;
     }
+
+    const signerAddress = await this.signer.getAddress();
 
     const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
     const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
@@ -202,7 +203,7 @@ class AMM {
     const _notionalTA = TokenAmount.fromFractionalAmount(this.underlyingToken, _notionalFraction.numerator, _notionalFraction.denominator);
     const _notional = _notionalTA.scale()
 
-    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.provider);
+    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.signer);
     const swapPeripheryParams: SwapPeripheryParams = {
       marginEngine: this.marginEngineAddress,
       isFT,
@@ -226,8 +227,8 @@ class AMM {
         tickAfter = parseInt(result[5]);
       },
       (error) => {
-        if (error.toString().includes('MarginRequirementNotMet')) {
-          const args: string[] = error.message.split("MarginRequirementNotMet")[1]
+        if (error.data.message.includes('MarginRequirementNotMet')) {
+          const args: string[] = error.data.message.split("MarginRequirementNotMet")[1]
             .split('(')[1]
             .split(')')[0]
             .replaceAll(' ', '')
@@ -247,8 +248,8 @@ class AMM {
     const fixedRateDelta = fixedRateAfter.subtract(fixedRateBefore);
     const fixedRateDeltaRaw = fixedRateDelta.toNumber();
 
-    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.provider);
-    const currentMargin = (await marginEngineContract.callStatic.getPosition(recipient, tickLower, tickUpper)).margin;
+    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
+    const currentMargin = (await marginEngineContract.callStatic.getPosition(signerAddress, tickLower, tickUpper)).margin;
 
     const scaledCurrentMargin = parseFloat(utils.formatEther(currentMargin));
     const scaledMarginRequirement = parseFloat(utils.formatEther(marginRequirement));
@@ -359,8 +360,8 @@ class AMM {
     return parseFloat(utils.formatEther(threshold));
   }
 
-  public async getMinimumMarginRequirementPostMint({ recipient, fixedLow, fixedHigh, notional }: AMMGetMinimumMarginRequirementPostMintArgs): Promise<number | void> {
-    if (!this.provider) {
+  public async getMinimumMarginRequirementPostMint({ fixedLow, fixedHigh, notional }: AMMGetMinimumMarginRequirementPostMintArgs): Promise<number | void> {
+    if (!this.signer) {
       return;
     }
 
@@ -375,10 +376,12 @@ class AMM {
       await vammContract.initializeVAMM(TickMath.getSqrtRatioAtTick(0).toString());
     }
 
+    const signerAddress = await this.signer.getAddress();
+
     const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
     const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
 
-    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.provider);
+    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.signer);
 
     const _notionalFraction = Price.fromNumber(notional);
     const _notionalTA = TokenAmount.fromFractionalAmount(this.underlyingToken, _notionalFraction.numerator, _notionalFraction.denominator);
@@ -399,8 +402,8 @@ class AMM {
             marginRequirement = BigNumber.from(result);
           },
           (error) => {
-            if (error.toString().includes("MarginLessThanMinimum")) {
-              const args: string[] = error.message.split("MarginLessThanMinimum")[1]
+            if (error.data.message.includes("MarginLessThanMinimum")) {
+              const args: string[] = error.data.message.split("MarginLessThanMinimum")[1]
                 .split("(")[1]
                 .split(")")[0]
                 .replaceAll(" ", "")
@@ -411,8 +414,8 @@ class AMM {
           }
         );
 
-    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.provider);
-    const currentMargin = (await marginEngineContract.callStatic.getPosition(recipient, tickLower, tickUpper)).margin;
+    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
+    const currentMargin = (await marginEngineContract.callStatic.getPosition(signerAddress, tickLower, tickUpper)).margin;
 
     const scaledCurrentMargin = parseFloat(utils.formatEther(currentMargin));
     const scaledMarginRequirement = parseFloat(utils.formatEther(marginRequirement));
