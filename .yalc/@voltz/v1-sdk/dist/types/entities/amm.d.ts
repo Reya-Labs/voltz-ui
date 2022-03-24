@@ -27,7 +27,7 @@ export declare type AMMConstructorArgs = {
 export declare type AMMGetInfoPostSwapArgs = {
     recipient: string;
     isFT: boolean;
-    notional: BigNumberish;
+    notional: number;
     fixedRateLimit?: number;
     fixedLow: number;
     fixedHigh: number;
@@ -36,7 +36,7 @@ export declare type AMMUpdatePositionMarginArgs = {
     owner: string;
     fixedLow: number;
     fixedHigh: number;
-    marginDelta: BigNumberish;
+    marginDelta: number;
 };
 export declare type AMMLiquidatePositionArgs = {
     owner: string;
@@ -58,11 +58,11 @@ export declare type AMMSwapArgs = {
     fixedHigh: number;
 };
 export declare type FCMSwapArgs = {
-    notional: BigNumberish;
+    notional: number;
     fixedRateLimit?: number;
 };
 export declare type FCMUnwindArgs = {
-    notionalToUnwind: BigNumberish;
+    notionalToUnwind: number;
     fixedRateLimit?: number;
 };
 export declare type AMMMintArgs = {

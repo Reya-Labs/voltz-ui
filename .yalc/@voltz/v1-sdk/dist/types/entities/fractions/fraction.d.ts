@@ -4,7 +4,7 @@ export declare class Fraction {
     readonly numerator: JSBI;
     readonly denominator: JSBI;
     constructor(numerator: BigIntish, denominator?: BigIntish);
-    static fromNumber(value: number): Fraction;
+    static fromNumber(value: number | string): Fraction;
     private static tryParseFraction;
     get quotient(): JSBI;
     get remainder(): Fraction;

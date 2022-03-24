@@ -7,6 +7,8 @@ import { TickMath } from '../../utils/tickMath';
 import {
   VAMM__factory as vammFactory,
 } from '../../typechain';
+import { Price } from '../fractions/price';
+import { TokenAmount } from '../fractions/tokenAmount';
 
 describe('amm', () => {
   describe('amm init', () => {
@@ -34,6 +36,7 @@ describe('amm', () => {
         underlyingToken: new Token({
           id: '0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9',
           name: 'USDC',
+          decimals: 18
         }),
         sqrtPriceX96: TickMath.getSqrtRatioAtTick(0).toString(),
         termEndTimestamp: '1649458800000000000000000000',
@@ -45,7 +48,7 @@ describe('amm', () => {
       });
 
       const vammContract = vammFactory.connect(vammAddress, wallet);
-      // await vammContract.initializeVAMM(TickMath.getSqrtRatioAtTick(0).toString()); // for periphery tests
+      await vammContract.initializeVAMM(TickMath.getSqrtRatioAtTick(0).toString()); // for periphery tests
       // await vammContract.initializeVAMM(TickMath.getSqrtRatioAtTick(-7000).toString()); // for fcm tests
     });
 
@@ -107,11 +110,28 @@ describe('amm', () => {
       }) as number;
       console.log("pre-mint req", mint_req);
 
+      const underlyingToken = new Token(
+        {
+          id: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+          name: "Voltz",
+          decimals: 18
+        }
+      );
+
+      const _notionalFraction = Price.fromNumber(100000.5);
+      const _notionalTA = TokenAmount.fromFractionalAmount(underlyingToken, _notionalFraction.numerator, _notionalFraction.denominator);
+      console.log("_notionalTA", _notionalTA.numerator, _notionalTA.denominator);
+
+      const _notional = _notionalTA.scale()
+      
+      console.log(_notional.toString());
+
+      // MarginLessThanMinimum(618177714030561395808)
       await amm.mint({
         recipient: wallet.address,
         fixedLow: fixedLowMinter,
         fixedHigh: fixedHighMinter,
-        margin: mint_req + 10,
+        margin: 620,
         notional: 100000,
       });
       console.log("mint done");
@@ -211,6 +231,7 @@ describe('amm', () => {
         underlyingToken: new Token({
           id: '0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9',
           name: 'USDC',
+          decimals: 18
         }),
         sqrtPriceX96: 0,
         termEndTimestamp: '1649458800000000000000000000',

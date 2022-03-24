@@ -48,7 +48,7 @@ var tickMath_1 = require("../utils/tickMath");
 var timestampWadToDateTime_1 = __importDefault(require("../utils/timestampWadToDateTime"));
 var priceTickConversions_1 = require("../utils/priceTickConversions");
 var nearestUsableTick_1 = require("../utils/nearestUsableTick");
-var evm_bn_1 = require("evm-bn");
+var tokenAmount_1 = require("./fractions/tokenAmount");
 var AMM = /** @class */ (function () {
     function AMM(_a) {
         var id = _a.id, signer = _a.signer, provider = _a.provider, marginEngineAddress = _a.marginEngineAddress, fcmAddress = _a.fcmAddress, rateOracle = _a.rateOracle, createdTimestamp = _a.createdTimestamp, updatedTimestamp = _a.updatedTimestamp, termStartTimestamp = _a.termStartTimestamp, termEndTimestamp = _a.termEndTimestamp, underlyingToken = _a.underlyingToken, sqrtPriceX96 = _a.sqrtPriceX96, liquidity = _a.liquidity, tick = _a.tick, tickSpacing = _a.tickSpacing, txCount = _a.txCount;
@@ -72,7 +72,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.getInfoPostSwap = function (_a) {
         var recipient = _a.recipient, isFT = _a.isFT, notional = _a.notional, fixedRateLimit = _a.fixedRateLimit, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, peripheryContract, swapPeripheryParams, tickBefore, tickAfter, marginRequirement, fee, availableNotional, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw, marginEngineContract, currentMargin, scaledCurrentMargin, scaledMarginRequirement, additionalMargin;
+            var tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, _notionalFraction, _notionalTA, _notional, peripheryContract, swapPeripheryParams, tickBefore, tickAfter, marginRequirement, fee, availableNotional, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw, marginEngineContract, currentMargin, scaledCurrentMargin, scaledMarginRequirement, additionalMargin;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
@@ -93,11 +93,14 @@ var AMM = /** @class */ (function () {
                                 sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickMath_1.TickMath.MIN_TICK + 1).toString();
                             }
                         }
+                        _notionalFraction = price_1.Price.fromNumber(notional);
+                        _notionalTA = tokenAmount_1.TokenAmount.fromFractionalAmount(this.underlyingToken, _notionalFraction.numerator, _notionalFraction.denominator);
+                        _notional = _notionalTA.scale();
                         peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.provider);
                         swapPeripheryParams = {
                             marginEngine: this.marginEngineAddress,
                             isFT: isFT,
-                            notional: (0, evm_bn_1.toBn)(notional.toString()),
+                            notional: _notional,
                             sqrtPriceLimitX96: sqrtPriceLimitX96,
                             tickLower: tickLower,
                             tickUpper: tickUpper,
@@ -177,20 +180,26 @@ var AMM = /** @class */ (function () {
     AMM.prototype.updatePositionMargin = function (_a) {
         var owner = _a.owner, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, marginDelta = _a.marginDelta;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, marginEngineContract, updatePositionMarginReceipt;
+            var tickUpper, tickLower, _marginDeltaFraction, _marginDeltaTA, _marginDelta, marginEngineContract, updatePositionMarginReceipt;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         if (!this.signer) {
                             return [2 /*return*/];
                         }
+                        if (marginDelta === 0) {
+                            return [2 /*return*/];
+                        }
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
-                        return [4 /*yield*/, this.approveMarginEngine((0, evm_bn_1.toBn)(marginDelta.toString()))];
+                        _marginDeltaFraction = price_1.Price.fromNumber(marginDelta);
+                        _marginDeltaTA = tokenAmount_1.TokenAmount.fromFractionalAmount(this.underlyingToken, _marginDeltaFraction.numerator, _marginDeltaFraction.denominator);
+                        _marginDelta = _marginDeltaTA.scale();
+                        return [4 /*yield*/, this.approveMarginEngine(_marginDelta)];
                     case 1:
                         _b.sent();
                         marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
-                        return [4 /*yield*/, marginEngineContract.updatePositionMargin(owner, tickLower, tickUpper, (0, evm_bn_1.toBn)(marginDelta.toString()))];
+                        return [4 /*yield*/, marginEngineContract.updatePositionMargin(owner, tickLower, tickUpper, _marginDelta)];
                     case 2:
                         updatePositionMarginReceipt = _b.sent();
                         return [2 /*return*/, updatePositionMarginReceipt];
@@ -243,7 +252,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.getMinimumMarginRequirementPostMint = function (_a) {
         var recipient = _a.recipient, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, peripheryContract, mintOrBurnParams, marginRequirement, marginEngineContract, currentMargin, scaledCurrentMargin, scaledMarginRequirement;
+            var tickUpper, tickLower, peripheryContract, _notionalFraction, _notionalTA, _notional, mintOrBurnParams, marginRequirement, marginEngineContract, currentMargin, scaledCurrentMargin, scaledMarginRequirement;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -253,11 +262,14 @@ var AMM = /** @class */ (function () {
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
                         peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.provider);
+                        _notionalFraction = price_1.Price.fromNumber(notional);
+                        _notionalTA = tokenAmount_1.TokenAmount.fromFractionalAmount(this.underlyingToken, _notionalFraction.numerator, _notionalFraction.denominator);
+                        _notional = _notionalTA.scale();
                         mintOrBurnParams = {
                             marginEngine: this.marginEngineAddress,
                             tickLower: tickLower,
                             tickUpper: tickUpper,
-                            notional: (0, evm_bn_1.toBn)(notional.toString()),
+                            notional: _notional,
                             isMint: true,
                         };
                         marginRequirement = ethers_1.BigNumber.from("0");
@@ -296,7 +308,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.mint = function (_a) {
         var recipient = _a.recipient, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional, margin = _a.margin;
         return __awaiter(this, void 0, void 0, function () {
-            var vammContract, tickUpper, tickLower, peripheryContract, mintOrBurnParams;
+            var vammContract, tickUpper, tickLower, peripheryContract, _notionalFraction, _notionalTA, _notional, mintOrBurnParams;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -318,11 +330,14 @@ var AMM = /** @class */ (function () {
                     case 4:
                         _b.sent();
                         peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        _notionalFraction = price_1.Price.fromNumber(notional);
+                        _notionalTA = tokenAmount_1.TokenAmount.fromFractionalAmount(this.underlyingToken, _notionalFraction.numerator, _notionalFraction.denominator);
+                        _notional = _notionalTA.scale();
                         mintOrBurnParams = {
                             marginEngine: this.marginEngineAddress,
                             tickLower: tickLower,
                             tickUpper: tickUpper,
-                            notional: (0, evm_bn_1.toBn)(notional.toString()),
+                            notional: _notional,
                             isMint: true,
                         };
                         return [2 /*return*/, peripheryContract.mintOrBurn(mintOrBurnParams)];
@@ -333,7 +348,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.burn = function (_a) {
         var fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, peripheryContract, mintOrBurnParams;
+            var tickUpper, tickLower, peripheryContract, _notionalFraction, _notionalTA, _notional, mintOrBurnParams;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -346,11 +361,14 @@ var AMM = /** @class */ (function () {
                     case 1:
                         _b.sent();
                         peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        _notionalFraction = price_1.Price.fromNumber(notional);
+                        _notionalTA = tokenAmount_1.TokenAmount.fromFractionalAmount(this.underlyingToken, _notionalFraction.numerator, _notionalFraction.denominator);
+                        _notional = _notionalTA.scale();
                         mintOrBurnParams = {
                             marginEngine: this.marginEngineAddress,
                             tickLower: tickLower,
                             tickUpper: tickUpper,
-                            notional: (0, evm_bn_1.toBn)(notional.toString()),
+                            notional: _notional,
                             isMint: false,
                         };
                         return [2 /*return*/, peripheryContract.mintOrBurn(mintOrBurnParams)];
@@ -428,7 +446,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.swap = function (_a) {
         var recipient = _a.recipient, isFT = _a.isFT, notional = _a.notional, margin = _a.margin, fixedRateLimit = _a.fixedRateLimit, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, peripheryContract, swapPeripheryParams;
+            var tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, peripheryContract, _notionalFraction, _notionalTA, _notional, swapPeripheryParams;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -456,10 +474,13 @@ var AMM = /** @class */ (function () {
                     case 2:
                         _b.sent();
                         peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        _notionalFraction = price_1.Price.fromNumber(notional);
+                        _notionalTA = tokenAmount_1.TokenAmount.fromFractionalAmount(this.underlyingToken, _notionalFraction.numerator, _notionalFraction.denominator);
+                        _notional = _notionalTA.scale();
                         swapPeripheryParams = {
                             marginEngine: this.marginEngineAddress,
                             isFT: isFT,
-                            notional: (0, evm_bn_1.toBn)(notional.toString()),
+                            notional: _notional,
                             sqrtPriceLimitX96: sqrtPriceLimitX96,
                             tickLower: tickLower,
                             tickUpper: tickUpper,
@@ -472,7 +493,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.FCMSwap = function (_a) {
         var notional = _a.notional, fixedRateLimit = _a.fixedRateLimit;
         return __awaiter(this, void 0, void 0, function () {
-            var sqrtPriceLimitX96, tickLimit, fcmContract;
+            var sqrtPriceLimitX96, tickLimit, fcmContract, _notionalFraction, _notionalTA, _notional;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -490,7 +511,10 @@ var AMM = /** @class */ (function () {
                             sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickMath_1.TickMath.MAX_TICK - 1).toString();
                         }
                         fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
-                        return [2 /*return*/, fcmContract.initiateFullyCollateralisedFixedTakerSwap((0, evm_bn_1.toBn)(notional.toString()), sqrtPriceLimitX96)];
+                        _notionalFraction = price_1.Price.fromNumber(notional);
+                        _notionalTA = tokenAmount_1.TokenAmount.fromFractionalAmount(this.underlyingToken, _notionalFraction.numerator, _notionalFraction.denominator);
+                        _notional = _notionalTA.scale();
+                        return [2 /*return*/, fcmContract.initiateFullyCollateralisedFixedTakerSwap(_notional, sqrtPriceLimitX96)];
                 }
             });
         });
@@ -498,7 +522,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.FCMUnwind = function (_a) {
         var notionalToUnwind = _a.notionalToUnwind, fixedRateLimit = _a.fixedRateLimit;
         return __awaiter(this, void 0, void 0, function () {
-            var sqrtPriceLimitX96, tickLimit, fcmContract;
+            var sqrtPriceLimitX96, tickLimit, fcmContract, _notionalFraction, _notionalTA, _notional;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -516,7 +540,10 @@ var AMM = /** @class */ (function () {
                     case 1:
                         _b.sent();
                         fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
-                        return [2 /*return*/, fcmContract.unwindFullyCollateralisedFixedTakerSwap((0, evm_bn_1.toBn)(notionalToUnwind.toString()), sqrtPriceLimitX96)];
+                        _notionalFraction = price_1.Price.fromNumber(notionalToUnwind);
+                        _notionalTA = tokenAmount_1.TokenAmount.fromFractionalAmount(this.underlyingToken, _notionalFraction.numerator, _notionalFraction.denominator);
+                        _notional = _notionalTA.scale();
+                        return [2 /*return*/, fcmContract.unwindFullyCollateralisedFixedTakerSwap(_notional, sqrtPriceLimitX96)];
                 }
             });
         });

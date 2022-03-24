@@ -39,6 +39,7 @@ describe('amm', () => {
         underlyingToken: new Token({
           id: '0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9',
           name: 'USDC',
+          decimals: 18
         }),
         sqrtPriceX96: TickMath.getSqrtRatioAtTick(0).toString(),
         termEndTimestamp:   '1649458800000000000000000000',
@@ -70,13 +71,15 @@ describe('amm', () => {
       // await vammContract.initializeVAMM(TickMath.getSqrtRatioAtTick(0).toString()); // for periphery tests
     });
 
-    it.skip('position', async () => {
+    it('position', async () => {
       console.log(position.effectiveMargin);
       console.log(position.fixedRateLower.toNumber());
       console.log(position.fixedRateUpper.toNumber());
       console.log(position.createdDateTime);
       console.log(position.updatedDateTime);
       console.log(position.notional);
+      console.log(position.effectiveFixedTokenBalance);
+      console.log(position.effectiveVariableTokenBalance);
     });
   });
 });

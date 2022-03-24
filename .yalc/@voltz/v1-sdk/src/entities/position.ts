@@ -114,15 +114,15 @@ class Position {
   }
 
   public get effectiveMargin(): number {
-    return JSBI.toNumber(this.margin) / 10 ** 18;
+    return JSBI.toNumber(JSBI.divide(this.margin, JSBI.BigInt(10 ** 18)));
   }
 
   public get effectiveFixedTokenBalance(): number {
-    return JSBI.toNumber(this.fixedTokenBalance) / 10 ** 18;
+    return JSBI.toNumber(JSBI.divide(this.fixedTokenBalance, JSBI.BigInt(10 ** 18)));
   }
 
   public get effectiveVariableTokenBalance(): number {
-    return JSBI.toNumber(this.variableTokenBalance) / 10 ** 18;
+    return JSBI.toNumber(JSBI.divide(this.variableTokenBalance, JSBI.BigInt(10 ** 18)));
   }
 
   public get createdDateTime(): DateTime {

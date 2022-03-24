@@ -9,4 +9,10 @@ export declare const ZERO: JSBI;
 export declare const ONE: JSBI;
 export declare const Q96: JSBI;
 export declare const Q192: JSBI;
+export declare type BigintIsh = JSBI | string | number;
+export declare enum Rounding {
+    ROUND_DOWN = 0,
+    ROUND_HALF_UP = 1,
+    ROUND_UP = 2
+}
 //# sourceMappingURL=constants.d.ts.map
