@@ -22,6 +22,7 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface TestVAMMInterface extends ethers.utils.Interface {
   functions: {
+    "MAX_FEE()": FunctionFragment;
     "burn(address,int24,int24,uint128)": FunctionFragment;
     "checkMaturityDuration()": FunctionFragment;
     "computeGrowthInside(int24,int24)": FunctionFragment;
@@ -60,6 +61,7 @@ interface TestVAMMInterface extends ethers.utils.Interface {
     "variableTokenGrowthGlobalX128()": FunctionFragment;
   };
 
+  encodeFunctionData(functionFragment: "MAX_FEE", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "burn",
     values: [string, BigNumberish, BigNumberish, BigNumberish]
@@ -199,6 +201,7 @@ interface TestVAMMInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
 
+  decodeFunctionResult(functionFragment: "MAX_FEE", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "checkMaturityDuration",
@@ -435,6 +438,8 @@ export class TestVAMM extends BaseContract {
   interface: TestVAMMInterface;
 
   functions: {
+    MAX_FEE(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     burn(
       recipient: string,
       tickLower: BigNumberish,
@@ -625,6 +630,8 @@ export class TestVAMM extends BaseContract {
     ): Promise<[BigNumber]>;
   };
 
+  MAX_FEE(overrides?: CallOverrides): Promise<BigNumber>;
+
   burn(
     recipient: string,
     tickLower: BigNumberish,
@@ -807,6 +814,8 @@ export class TestVAMM extends BaseContract {
   variableTokenGrowthGlobalX128(overrides?: CallOverrides): Promise<BigNumber>;
 
   callStatic: {
+    MAX_FEE(overrides?: CallOverrides): Promise<BigNumber>;
+
     burn(
       recipient: string,
       tickLower: BigNumberish,
@@ -1215,6 +1224,8 @@ export class TestVAMM extends BaseContract {
   };
 
   estimateGas: {
+    MAX_FEE(overrides?: CallOverrides): Promise<BigNumber>;
+
     burn(
       recipient: string,
       tickLower: BigNumberish,
@@ -1367,6 +1378,8 @@ export class TestVAMM extends BaseContract {
   };
 
   populateTransaction: {
+    MAX_FEE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     burn(
       recipient: string,
       tickLower: BigNumberish,

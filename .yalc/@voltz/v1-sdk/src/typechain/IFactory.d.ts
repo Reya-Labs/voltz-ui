@@ -28,6 +28,8 @@ interface IFactoryInterface extends ethers.utils.Interface {
     "masterVAMM()": FunctionFragment;
     "setApproval(address,bool)": FunctionFragment;
     "setMasterFCM(address,uint8)": FunctionFragment;
+    "setMasterMarginEngine(address)": FunctionFragment;
+    "setMasterVAMM(address)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -58,6 +60,14 @@ interface IFactoryInterface extends ethers.utils.Interface {
     functionFragment: "setMasterFCM",
     values: [string, BigNumberish]
   ): string;
+  encodeFunctionData(
+    functionFragment: "setMasterMarginEngine",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setMasterVAMM",
+    values: [string]
+  ): string;
 
   decodeFunctionResult(
     functionFragment: "deployIrsInstance",
@@ -78,11 +88,19 @@ interface IFactoryInterface extends ethers.utils.Interface {
     functionFragment: "setMasterFCM",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "setMasterMarginEngine",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setMasterVAMM",
+    data: BytesLike
+  ): Result;
 
   events: {
     "ApprovalSet(address,address,bool)": EventFragment;
     "IrsInstanceDeployed(address,address,uint256,uint256,int24,address,address,address,uint8)": EventFragment;
-    "MasterFCMSet(address,address,uint8)": EventFragment;
+    "MasterFCMSet(address,uint8)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "ApprovalSet"): EventFragment;
@@ -123,8 +141,7 @@ export type IrsInstanceDeployedEvent = TypedEvent<
 >;
 
 export type MasterFCMSetEvent = TypedEvent<
-  [string, string, number] & {
-    masterFCMAddressOld: string;
+  [string, number] & {
     masterFCMAddress: string;
     yieldBearingProtocolID: number;
   }
@@ -209,6 +226,16 @@ export class IFactory extends BaseContract {
       yieldBearingProtocolID: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    setMasterMarginEngine(
+      _masterMarginEngine: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setMasterVAMM(
+      _masterVAMM: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
   };
 
   deployIrsInstance(
@@ -244,6 +271,16 @@ export class IFactory extends BaseContract {
   setMasterFCM(
     masterFCM: string,
     yieldBearingProtocolID: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setMasterMarginEngine(
+    _masterMarginEngine: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setMasterVAMM(
+    _masterVAMM: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -287,6 +324,16 @@ export class IFactory extends BaseContract {
     setMasterFCM(
       masterFCM: string,
       yieldBearingProtocolID: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setMasterMarginEngine(
+      _masterMarginEngine: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setMasterVAMM(
+      _masterVAMM: string,
       overrides?: CallOverrides
     ): Promise<void>;
   };
@@ -380,30 +427,20 @@ export class IFactory extends BaseContract {
       }
     >;
 
-    "MasterFCMSet(address,address,uint8)"(
-      masterFCMAddressOld?: null,
+    "MasterFCMSet(address,uint8)"(
       masterFCMAddress?: null,
       yieldBearingProtocolID?: null
     ): TypedEventFilter<
-      [string, string, number],
-      {
-        masterFCMAddressOld: string;
-        masterFCMAddress: string;
-        yieldBearingProtocolID: number;
-      }
+      [string, number],
+      { masterFCMAddress: string; yieldBearingProtocolID: number }
     >;
 
     MasterFCMSet(
-      masterFCMAddressOld?: null,
       masterFCMAddress?: null,
       yieldBearingProtocolID?: null
     ): TypedEventFilter<
-      [string, string, number],
-      {
-        masterFCMAddressOld: string;
-        masterFCMAddress: string;
-        yieldBearingProtocolID: number;
-      }
+      [string, number],
+      { masterFCMAddress: string; yieldBearingProtocolID: number }
     >;
   };
 
@@ -441,6 +478,16 @@ export class IFactory extends BaseContract {
     setMasterFCM(
       masterFCM: string,
       yieldBearingProtocolID: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setMasterMarginEngine(
+      _masterMarginEngine: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setMasterVAMM(
+      _masterVAMM: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
@@ -481,6 +528,16 @@ export class IFactory extends BaseContract {
     setMasterFCM(
       masterFCM: string,
       yieldBearingProtocolID: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setMasterMarginEngine(
+      _masterMarginEngine: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setMasterVAMM(
+      _masterVAMM: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

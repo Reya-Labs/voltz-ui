@@ -25,11 +25,11 @@ interface ActorInterface extends ethers.utils.Interface {
     "initiateFullyCollateralisedFixedTakerSwap(address,uint256,uint160)": FunctionFragment;
     "liquidatePosition(address,int24,int24,address)": FunctionFragment;
     "mint(address,address,int24,int24,uint128)": FunctionFragment;
-    "mintOrBurnViaPeriphery(address,(address,address,int24,int24,uint256,bool))": FunctionFragment;
+    "mintOrBurnViaPeriphery(address,(address,int24,int24,uint256,bool))": FunctionFragment;
     "setIntegrationApproval(address,address,bool)": FunctionFragment;
     "settleYBATrader(address)": FunctionFragment;
     "swap(address,(address,int256,uint160,int24,int24))": FunctionFragment;
-    "swapViaPeriphery(address,(address,address,bool,uint256,uint160,int24,int24))": FunctionFragment;
+    "swapViaPeriphery(address,(address,bool,uint256,uint160,int24,int24))": FunctionFragment;
     "unwindFullyCollateralisedFixedTakerSwap(address,uint256,uint160)": FunctionFragment;
     "updatePositionMargin(address,address,int24,int24,int256)": FunctionFragment;
   };
@@ -55,8 +55,7 @@ interface ActorInterface extends ethers.utils.Interface {
     values: [
       string,
       {
-        marginEngineAddress: string;
-        recipient: string;
+        marginEngine: string;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
         notional: BigNumberish;
@@ -90,8 +89,7 @@ interface ActorInterface extends ethers.utils.Interface {
     values: [
       string,
       {
-        marginEngineAddress: string;
-        recipient: string;
+        marginEngine: string;
         isFT: boolean;
         notional: BigNumberish;
         sqrtPriceLimitX96: BigNumberish;
@@ -228,8 +226,7 @@ export class Actor extends BaseContract {
     mintOrBurnViaPeriphery(
       peripheryAddress: string,
       params: {
-        marginEngineAddress: string;
-        recipient: string;
+        marginEngine: string;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
         notional: BigNumberish;
@@ -265,8 +262,7 @@ export class Actor extends BaseContract {
     swapViaPeriphery(
       peripheryAddress: string,
       params: {
-        marginEngineAddress: string;
-        recipient: string;
+        marginEngine: string;
         isFT: boolean;
         notional: BigNumberish;
         sqrtPriceLimitX96: BigNumberish;
@@ -329,8 +325,7 @@ export class Actor extends BaseContract {
   mintOrBurnViaPeriphery(
     peripheryAddress: string,
     params: {
-      marginEngineAddress: string;
-      recipient: string;
+      marginEngine: string;
       tickLower: BigNumberish;
       tickUpper: BigNumberish;
       notional: BigNumberish;
@@ -366,8 +361,7 @@ export class Actor extends BaseContract {
   swapViaPeriphery(
     peripheryAddress: string,
     params: {
-      marginEngineAddress: string;
-      recipient: string;
+      marginEngine: string;
       isFT: boolean;
       notional: BigNumberish;
       sqrtPriceLimitX96: BigNumberish;
@@ -430,8 +424,7 @@ export class Actor extends BaseContract {
     mintOrBurnViaPeriphery(
       peripheryAddress: string,
       params: {
-        marginEngineAddress: string;
-        recipient: string;
+        marginEngine: string;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
         notional: BigNumberish;
@@ -474,8 +467,7 @@ export class Actor extends BaseContract {
     swapViaPeriphery(
       peripheryAddress: string,
       params: {
-        marginEngineAddress: string;
-        recipient: string;
+        marginEngine: string;
         isFT: boolean;
         notional: BigNumberish;
         sqrtPriceLimitX96: BigNumberish;
@@ -549,8 +541,7 @@ export class Actor extends BaseContract {
     mintOrBurnViaPeriphery(
       peripheryAddress: string,
       params: {
-        marginEngineAddress: string;
-        recipient: string;
+        marginEngine: string;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
         notional: BigNumberish;
@@ -586,8 +577,7 @@ export class Actor extends BaseContract {
     swapViaPeriphery(
       peripheryAddress: string,
       params: {
-        marginEngineAddress: string;
-        recipient: string;
+        marginEngine: string;
         isFT: boolean;
         notional: BigNumberish;
         sqrtPriceLimitX96: BigNumberish;
@@ -651,8 +641,7 @@ export class Actor extends BaseContract {
     mintOrBurnViaPeriphery(
       peripheryAddress: string,
       params: {
-        marginEngineAddress: string;
-        recipient: string;
+        marginEngine: string;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
         notional: BigNumberish;
@@ -688,8 +677,7 @@ export class Actor extends BaseContract {
     swapViaPeriphery(
       peripheryAddress: string,
       params: {
-        marginEngineAddress: string;
-        recipient: string;
+        marginEngine: string;
         isFT: boolean;
         notional: BigNumberish;
         sqrtPriceLimitX96: BigNumberish;

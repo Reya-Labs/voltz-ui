@@ -125,24 +125,6 @@ const _abi = [
         type: "address",
       },
       {
-        internalType: "address",
-        name: "aTokenAddress",
-        type: "address",
-      },
-    ],
-    name: "initReserve",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "asset",
-        type: "address",
-      },
-      {
         internalType: "uint256",
         name: "amount",
         type: "uint256",

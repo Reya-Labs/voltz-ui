@@ -15,8 +15,7 @@ export enum Rounding {
 }
 
 export type SwapPeripheryParams = {
-  marginEngineAddress: string;
-  recipient: string;
+  marginEngine: string;
   isFT: boolean;
   notional: BigNumberish;
   sqrtPriceLimitX96: BigNumberish;
@@ -25,8 +24,7 @@ export type SwapPeripheryParams = {
 };
 
 export type MintOrBurnParams = {
-  marginEngineAddress: string;
-  recipient: string;
+  marginEngine: string;
   tickLower: BigNumberish;
   tickUpper: BigNumberish;
   notional: BigNumberish;

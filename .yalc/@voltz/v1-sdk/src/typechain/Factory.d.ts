@@ -30,6 +30,8 @@ interface FactoryInterface extends ethers.utils.Interface {
     "renounceOwnership()": FunctionFragment;
     "setApproval(address,bool)": FunctionFragment;
     "setMasterFCM(address,uint8)": FunctionFragment;
+    "setMasterMarginEngine(address)": FunctionFragment;
+    "setMasterVAMM(address)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
   };
 
@@ -67,6 +69,14 @@ interface FactoryInterface extends ethers.utils.Interface {
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "setMasterMarginEngine",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setMasterVAMM",
+    values: [string]
+  ): string;
+  encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [string]
   ): string;
@@ -96,6 +106,14 @@ interface FactoryInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "setMasterMarginEngine",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setMasterVAMM",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
@@ -103,7 +121,7 @@ interface FactoryInterface extends ethers.utils.Interface {
   events: {
     "ApprovalSet(address,address,bool)": EventFragment;
     "IrsInstanceDeployed(address,address,uint256,uint256,int24,address,address,address,uint8)": EventFragment;
-    "MasterFCMSet(address,address,uint8)": EventFragment;
+    "MasterFCMSet(address,uint8)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
   };
 
@@ -146,8 +164,7 @@ export type IrsInstanceDeployedEvent = TypedEvent<
 >;
 
 export type MasterFCMSetEvent = TypedEvent<
-  [string, string, number] & {
-    masterFCMAddressOld: string;
+  [string, number] & {
     masterFCMAddress: string;
     yieldBearingProtocolID: number;
   }
@@ -238,8 +255,18 @@ export class Factory extends BaseContract {
     ): Promise<ContractTransaction>;
 
     setMasterFCM(
-      masterFCM: string,
-      yieldBearingProtocolID: BigNumberish,
+      _masterFCM: string,
+      _yieldBearingProtocolID: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setMasterMarginEngine(
+      _masterMarginEngine: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setMasterVAMM(
+      _masterVAMM: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -283,8 +310,18 @@ export class Factory extends BaseContract {
   ): Promise<ContractTransaction>;
 
   setMasterFCM(
-    masterFCM: string,
-    yieldBearingProtocolID: BigNumberish,
+    _masterFCM: string,
+    _yieldBearingProtocolID: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setMasterMarginEngine(
+    _masterMarginEngine: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setMasterVAMM(
+    _masterVAMM: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -332,8 +369,18 @@ export class Factory extends BaseContract {
     ): Promise<void>;
 
     setMasterFCM(
-      masterFCM: string,
-      yieldBearingProtocolID: BigNumberish,
+      _masterFCM: string,
+      _yieldBearingProtocolID: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setMasterMarginEngine(
+      _masterMarginEngine: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setMasterVAMM(
+      _masterVAMM: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -432,30 +479,20 @@ export class Factory extends BaseContract {
       }
     >;
 
-    "MasterFCMSet(address,address,uint8)"(
-      masterFCMAddressOld?: null,
+    "MasterFCMSet(address,uint8)"(
       masterFCMAddress?: null,
       yieldBearingProtocolID?: null
     ): TypedEventFilter<
-      [string, string, number],
-      {
-        masterFCMAddressOld: string;
-        masterFCMAddress: string;
-        yieldBearingProtocolID: number;
-      }
+      [string, number],
+      { masterFCMAddress: string; yieldBearingProtocolID: number }
     >;
 
     MasterFCMSet(
-      masterFCMAddressOld?: null,
       masterFCMAddress?: null,
       yieldBearingProtocolID?: null
     ): TypedEventFilter<
-      [string, string, number],
-      {
-        masterFCMAddressOld: string;
-        masterFCMAddress: string;
-        yieldBearingProtocolID: number;
-      }
+      [string, number],
+      { masterFCMAddress: string; yieldBearingProtocolID: number }
     >;
 
     "OwnershipTransferred(address,address)"(
@@ -513,8 +550,18 @@ export class Factory extends BaseContract {
     ): Promise<BigNumber>;
 
     setMasterFCM(
-      masterFCM: string,
-      yieldBearingProtocolID: BigNumberish,
+      _masterFCM: string,
+      _yieldBearingProtocolID: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setMasterMarginEngine(
+      _masterMarginEngine: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setMasterVAMM(
+      _masterVAMM: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -564,8 +611,18 @@ export class Factory extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     setMasterFCM(
-      masterFCM: string,
-      yieldBearingProtocolID: BigNumberish,
+      _masterFCM: string,
+      _yieldBearingProtocolID: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setMasterMarginEngine(
+      _masterMarginEngine: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setMasterVAMM(
+      _masterVAMM: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

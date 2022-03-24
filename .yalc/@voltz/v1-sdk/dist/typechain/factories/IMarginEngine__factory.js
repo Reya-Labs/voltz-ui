@@ -239,12 +239,6 @@ var _abi = [
             {
                 indexed: false,
                 internalType: "uint256",
-                name: "cacheMaxAgeInSecondsOld",
-                type: "uint256",
-            },
-            {
-                indexed: false,
-                internalType: "uint256",
                 name: "cacheMaxAgeInSeconds",
                 type: "uint256",
             },
@@ -262,7 +256,7 @@ var _abi = [
                 type: "address",
             },
             {
-                indexed: false,
+                indexed: true,
                 internalType: "address",
                 name: "recipient",
                 type: "address",
@@ -281,13 +275,7 @@ var _abi = [
         anonymous: false,
         inputs: [
             {
-                indexed: false,
-                internalType: "contract IFCM",
-                name: "fcmOld",
-                type: "address",
-            },
-            {
-                indexed: false,
+                indexed: true,
                 internalType: "contract IFCM",
                 name: "fcm",
                 type: "address",
@@ -302,12 +290,6 @@ var _abi = [
             {
                 indexed: false,
                 internalType: "uint256",
-                name: "secondsAgoOld",
-                type: "uint256",
-            },
-            {
-                indexed: false,
-                internalType: "uint256",
                 name: "secondsAgo",
                 type: "uint256",
             },
@@ -319,19 +301,19 @@ var _abi = [
         anonymous: false,
         inputs: [
             {
-                indexed: false,
+                indexed: true,
                 internalType: "address",
                 name: "owner",
                 type: "address",
             },
             {
-                indexed: false,
+                indexed: true,
                 internalType: "int24",
                 name: "tickLower",
                 type: "int24",
             },
             {
-                indexed: false,
+                indexed: true,
                 internalType: "int24",
                 name: "tickUpper",
                 type: "int24",
@@ -367,12 +349,6 @@ var _abi = [
     {
         anonymous: false,
         inputs: [
-            {
-                indexed: false,
-                internalType: "uint256",
-                name: "liquidatorRewardWadOld",
-                type: "uint256",
-            },
             {
                 indexed: false,
                 internalType: "uint256",
@@ -481,104 +457,6 @@ var _abi = [
                 ],
                 indexed: false,
                 internalType: "struct IMarginEngine.MarginCalculatorParameters",
-                name: "marginCalculatorParametersOld",
-                type: "tuple",
-            },
-            {
-                components: [
-                    {
-                        internalType: "uint256",
-                        name: "apyUpperMultiplierWad",
-                        type: "uint256",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "apyLowerMultiplierWad",
-                        type: "uint256",
-                    },
-                    {
-                        internalType: "int256",
-                        name: "sigmaSquaredWad",
-                        type: "int256",
-                    },
-                    {
-                        internalType: "int256",
-                        name: "alphaWad",
-                        type: "int256",
-                    },
-                    {
-                        internalType: "int256",
-                        name: "betaWad",
-                        type: "int256",
-                    },
-                    {
-                        internalType: "int256",
-                        name: "xiUpperWad",
-                        type: "int256",
-                    },
-                    {
-                        internalType: "int256",
-                        name: "xiLowerWad",
-                        type: "int256",
-                    },
-                    {
-                        internalType: "int256",
-                        name: "tMaxWad",
-                        type: "int256",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "devMulLeftUnwindLMWad",
-                        type: "uint256",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "devMulRightUnwindLMWad",
-                        type: "uint256",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "devMulLeftUnwindIMWad",
-                        type: "uint256",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "devMulRightUnwindIMWad",
-                        type: "uint256",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "fixedRateDeviationMinLeftUnwindLMWad",
-                        type: "uint256",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "fixedRateDeviationMinRightUnwindLMWad",
-                        type: "uint256",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "fixedRateDeviationMinLeftUnwindIMWad",
-                        type: "uint256",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "fixedRateDeviationMinRightUnwindIMWad",
-                        type: "uint256",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "gammaWad",
-                        type: "uint256",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "minMarginToIncentiviseLiquidators",
-                        type: "uint256",
-                    },
-                ],
-                indexed: false,
-                internalType: "struct IMarginEngine.MarginCalculatorParameters",
                 name: "marginCalculatorParameters",
                 type: "tuple",
             },
@@ -590,19 +468,19 @@ var _abi = [
         anonymous: false,
         inputs: [
             {
-                indexed: false,
+                indexed: true,
                 internalType: "address",
                 name: "owner",
                 type: "address",
             },
             {
-                indexed: false,
+                indexed: true,
                 internalType: "int24",
                 name: "tickLower",
                 type: "int24",
             },
             {
-                indexed: false,
+                indexed: true,
                 internalType: "int24",
                 name: "tickUpper",
                 type: "int24",
@@ -627,6 +505,12 @@ var _abi = [
             },
             {
                 indexed: false,
+                internalType: "int256",
+                name: "settlementCashflow",
+                type: "int256",
+            },
+            {
+                indexed: false,
                 internalType: "bool",
                 name: "isSettled",
                 type: "bool",
@@ -639,19 +523,19 @@ var _abi = [
         anonymous: false,
         inputs: [
             {
-                indexed: false,
+                indexed: true,
                 internalType: "address",
                 name: "owner",
                 type: "address",
             },
             {
-                indexed: false,
+                indexed: true,
                 internalType: "int24",
                 name: "tickLower",
                 type: "int24",
             },
             {
-                indexed: false,
+                indexed: true,
                 internalType: "int24",
                 name: "tickUpper",
                 type: "int24",
@@ -670,19 +554,19 @@ var _abi = [
         anonymous: false,
         inputs: [
             {
-                indexed: false,
+                indexed: true,
                 internalType: "address",
                 name: "owner",
                 type: "address",
             },
             {
-                indexed: false,
+                indexed: true,
                 internalType: "int24",
                 name: "tickLower",
                 type: "int24",
             },
             {
-                indexed: false,
+                indexed: true,
                 internalType: "int24",
                 name: "tickUpper",
                 type: "int24",
@@ -701,19 +585,19 @@ var _abi = [
         anonymous: false,
         inputs: [
             {
-                indexed: false,
+                indexed: true,
                 internalType: "address",
                 name: "owner",
                 type: "address",
             },
             {
-                indexed: false,
+                indexed: true,
                 internalType: "int24",
                 name: "tickLower",
                 type: "int24",
             },
             {
-                indexed: false,
+                indexed: true,
                 internalType: "int24",
                 name: "tickUpper",
                 type: "int24",
@@ -744,13 +628,7 @@ var _abi = [
         anonymous: false,
         inputs: [
             {
-                indexed: false,
-                internalType: "contract IVAMM",
-                name: "vammOld",
-                type: "address",
-            },
-            {
-                indexed: false,
+                indexed: true,
                 internalType: "contract IVAMM",
                 name: "vamm",
                 type: "address",
@@ -776,12 +654,12 @@ var _abi = [
         inputs: [
             {
                 internalType: "address",
-                name: "recipient",
+                name: "_recipient",
                 type: "address",
             },
             {
                 internalType: "uint256",
-                name: "amount",
+                name: "_amount",
                 type: "uint256",
             },
         ],
@@ -838,12 +716,12 @@ var _abi = [
             },
             {
                 internalType: "int24",
-                name: "tickLower",
+                name: "_tickLower",
                 type: "int24",
             },
             {
                 internalType: "int24",
-                name: "tickUpper",
+                name: "_tickUpper",
                 type: "int24",
             },
         ],
@@ -909,22 +787,22 @@ var _abi = [
         inputs: [
             {
                 internalType: "address",
-                name: "recipient",
+                name: "_recipient",
                 type: "address",
             },
             {
                 internalType: "int24",
-                name: "tickLower",
+                name: "_tickLower",
                 type: "int24",
             },
             {
                 internalType: "int24",
-                name: "tickUpper",
+                name: "_tickUpper",
                 type: "int24",
             },
             {
                 internalType: "bool",
-                name: "isLM",
+                name: "_isLM",
                 type: "bool",
             },
         ],
@@ -932,7 +810,7 @@ var _abi = [
         outputs: [
             {
                 internalType: "uint256",
-                name: "margin",
+                name: "_margin",
                 type: "uint256",
             },
         ],
@@ -970,23 +848,29 @@ var _abi = [
     {
         inputs: [
             {
-                internalType: "int24",
-                name: "tickLower",
-                type: "int24",
-            },
-            {
-                internalType: "int24",
-                name: "tickUpper",
-                type: "int24",
-            },
-            {
                 internalType: "address",
                 name: "_owner",
                 type: "address",
             },
+            {
+                internalType: "int24",
+                name: "_tickLower",
+                type: "int24",
+            },
+            {
+                internalType: "int24",
+                name: "_tickUpper",
+                type: "int24",
+            },
         ],
         name: "liquidatePosition",
-        outputs: [],
+        outputs: [
+            {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
         stateMutability: "nonpayable",
         type: "function",
     },
@@ -1005,12 +889,12 @@ var _abi = [
     },
     {
         inputs: [],
-        name: "rateOracle",
+        name: "lookbackWindowInSeconds",
         outputs: [
             {
-                internalType: "contract IRateOracle",
+                internalType: "uint256",
                 name: "",
-                type: "address",
+                type: "uint256",
             },
         ],
         stateMutability: "view",
@@ -1018,12 +902,12 @@ var _abi = [
     },
     {
         inputs: [],
-        name: "secondsAgo",
+        name: "rateOracle",
         outputs: [
             {
-                internalType: "uint256",
+                internalType: "contract IRateOracle",
                 name: "",
-                type: "uint256",
+                type: "address",
             },
         ],
         stateMutability: "view",
@@ -1064,6 +948,19 @@ var _abi = [
             },
         ],
         name: "setLiquidatorReward",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "_secondsAgo",
+                type: "uint256",
+            },
+        ],
+        name: "setLookbackWindowInSeconds",
         outputs: [],
         stateMutability: "nonpayable",
         type: "function",
@@ -1176,19 +1073,6 @@ var _abi = [
     {
         inputs: [
             {
-                internalType: "uint256",
-                name: "_secondsAgo",
-                type: "uint256",
-            },
-        ],
-        name: "setSecondsAgo",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-    },
-    {
-        inputs: [
-            {
                 internalType: "contract IVAMM",
                 name: "_vAMM",
                 type: "address",
@@ -1202,19 +1086,19 @@ var _abi = [
     {
         inputs: [
             {
-                internalType: "int24",
-                name: "tickLower",
-                type: "int24",
-            },
-            {
-                internalType: "int24",
-                name: "tickUpper",
-                type: "int24",
-            },
-            {
                 internalType: "address",
                 name: "_owner",
                 type: "address",
+            },
+            {
+                internalType: "int24",
+                name: "_tickLower",
+                type: "int24",
+            },
+            {
+                internalType: "int24",
+                name: "_tickUpper",
+                type: "int24",
             },
         ],
         name: "settlePosition",
@@ -1257,7 +1141,7 @@ var _abi = [
             },
             {
                 internalType: "uint256",
-                name: "marginDelta",
+                name: "_marginDelta",
                 type: "uint256",
             },
         ],
@@ -1288,12 +1172,12 @@ var _abi = [
             },
             {
                 internalType: "int24",
-                name: "tickLower",
+                name: "_tickLower",
                 type: "int24",
             },
             {
                 internalType: "int24",
-                name: "tickUpper",
+                name: "_tickUpper",
                 type: "int24",
             },
             {
@@ -1333,7 +1217,7 @@ var _abi = [
                     },
                 ],
                 internalType: "struct IPositionStructs.ModifyPositionParams",
-                name: "params",
+                name: "_params",
                 type: "tuple",
             },
         ],
@@ -1341,7 +1225,7 @@ var _abi = [
         outputs: [
             {
                 internalType: "int256",
-                name: "positionMarginRequirement",
+                name: "_positionMarginRequirement",
                 type: "int256",
             },
         ],
@@ -1357,32 +1241,32 @@ var _abi = [
             },
             {
                 internalType: "int24",
-                name: "tickLower",
+                name: "_tickLower",
                 type: "int24",
             },
             {
                 internalType: "int24",
-                name: "tickUpper",
+                name: "_tickUpper",
                 type: "int24",
             },
             {
                 internalType: "int256",
-                name: "fixedTokenDelta",
+                name: "_fixedTokenDelta",
                 type: "int256",
             },
             {
                 internalType: "int256",
-                name: "variableTokenDelta",
+                name: "_variableTokenDelta",
                 type: "int256",
             },
             {
                 internalType: "uint256",
-                name: "cumulativeFeeIncurred",
+                name: "_cumulativeFeeIncurred",
                 type: "uint256",
             },
             {
                 internalType: "int256",
-                name: "fixedTokenDeltaUnbalanced",
+                name: "_fixedTokenDeltaUnbalanced",
                 type: "int256",
             },
         ],
@@ -1390,7 +1274,7 @@ var _abi = [
         outputs: [
             {
                 internalType: "int256",
-                name: "positionMarginRequirement",
+                name: "_positionMarginRequirement",
                 type: "int256",
             },
         ],

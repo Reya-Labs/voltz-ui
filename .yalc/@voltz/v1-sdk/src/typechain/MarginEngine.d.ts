@@ -22,6 +22,10 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface MarginEngineInterface extends ethers.utils.Interface {
   functions: {
+    "MAX_CACHE_MAX_AGE_IN_SECONDS()": FunctionFragment;
+    "MAX_LIQUIDATOR_REWARD_WAD()": FunctionFragment;
+    "MAX_LOOKBACK_WINDOW_IN_SECONDS()": FunctionFragment;
+    "MIN_LOOKBACK_WINDOW_IN_SECONDS()": FunctionFragment;
     "cacheMaxAgeInSeconds()": FunctionFragment;
     "collectProtocol(address,uint256)": FunctionFragment;
     "factory()": FunctionFragment;
@@ -31,20 +35,20 @@ interface MarginEngineInterface extends ethers.utils.Interface {
     "getPosition(address,int24,int24)": FunctionFragment;
     "getPositionMarginRequirement(address,int24,int24,bool)": FunctionFragment;
     "initialize(address,address,uint256,uint256)": FunctionFragment;
-    "liquidatePosition(int24,int24,address)": FunctionFragment;
+    "liquidatePosition(address,int24,int24)": FunctionFragment;
     "liquidatorRewardWad()": FunctionFragment;
+    "lookbackWindowInSeconds()": FunctionFragment;
     "owner()": FunctionFragment;
     "paused()": FunctionFragment;
     "rateOracle()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
-    "secondsAgo()": FunctionFragment;
     "setCacheMaxAgeInSeconds(uint256)": FunctionFragment;
     "setFCM(address)": FunctionFragment;
     "setLiquidatorReward(uint256)": FunctionFragment;
+    "setLookbackWindowInSeconds(uint256)": FunctionFragment;
     "setMarginCalculatorParameters((uint256,uint256,int256,int256,int256,int256,int256,int256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256))": FunctionFragment;
-    "setSecondsAgo(uint256)": FunctionFragment;
     "setVAMM(address)": FunctionFragment;
-    "settlePosition(int24,int24,address)": FunctionFragment;
+    "settlePosition(address,int24,int24)": FunctionFragment;
     "termEndTimestampWad()": FunctionFragment;
     "termStartTimestampWad()": FunctionFragment;
     "transferMarginToFCMTrader(address,uint256)": FunctionFragment;
@@ -58,6 +62,22 @@ interface MarginEngineInterface extends ethers.utils.Interface {
     "vamm()": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "MAX_CACHE_MAX_AGE_IN_SECONDS",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "MAX_LIQUIDATOR_REWARD_WAD",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "MAX_LOOKBACK_WINDOW_IN_SECONDS",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "MIN_LOOKBACK_WINDOW_IN_SECONDS",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "cacheMaxAgeInSeconds",
     values?: undefined
@@ -90,10 +110,14 @@ interface MarginEngineInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "liquidatePosition",
-    values: [BigNumberish, BigNumberish, string]
+    values: [string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "liquidatorRewardWad",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "lookbackWindowInSeconds",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
@@ -107,16 +131,16 @@ interface MarginEngineInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "secondsAgo",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "setCacheMaxAgeInSeconds",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "setFCM", values: [string]): string;
   encodeFunctionData(
     functionFragment: "setLiquidatorReward",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setLookbackWindowInSeconds",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -144,14 +168,10 @@ interface MarginEngineInterface extends ethers.utils.Interface {
       }
     ]
   ): string;
-  encodeFunctionData(
-    functionFragment: "setSecondsAgo",
-    values: [BigNumberish]
-  ): string;
   encodeFunctionData(functionFragment: "setVAMM", values: [string]): string;
   encodeFunctionData(
     functionFragment: "settlePosition",
-    values: [BigNumberish, BigNumberish, string]
+    values: [string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "termEndTimestampWad",
@@ -208,6 +228,22 @@ interface MarginEngineInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "vamm", values?: undefined): string;
 
   decodeFunctionResult(
+    functionFragment: "MAX_CACHE_MAX_AGE_IN_SECONDS",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "MAX_LIQUIDATOR_REWARD_WAD",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "MAX_LOOKBACK_WINDOW_IN_SECONDS",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "MIN_LOOKBACK_WINDOW_IN_SECONDS",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "cacheMaxAgeInSeconds",
     data: BytesLike
   ): Result;
@@ -242,6 +278,10 @@ interface MarginEngineInterface extends ethers.utils.Interface {
     functionFragment: "liquidatorRewardWad",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "lookbackWindowInSeconds",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "rateOracle", data: BytesLike): Result;
@@ -249,7 +289,6 @@ interface MarginEngineInterface extends ethers.utils.Interface {
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "secondsAgo", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setCacheMaxAgeInSeconds",
     data: BytesLike
@@ -260,11 +299,11 @@ interface MarginEngineInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "setMarginCalculatorParameters",
+    functionFragment: "setLookbackWindowInSeconds",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "setSecondsAgo",
+    functionFragment: "setMarginCalculatorParameters",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "setVAMM", data: BytesLike): Result;
@@ -314,22 +353,22 @@ interface MarginEngineInterface extends ethers.utils.Interface {
   events: {
     "AdminChanged(address,address)": EventFragment;
     "BeaconUpgraded(address)": EventFragment;
-    "CacheMaxAgeSet(uint256,uint256)": EventFragment;
+    "CacheMaxAgeSet(uint256)": EventFragment;
     "CollectProtocol(address,address,uint256)": EventFragment;
-    "FCMSet(address,address)": EventFragment;
-    "HistoricalApyWindowSet(uint256,uint256)": EventFragment;
+    "FCMSet(address)": EventFragment;
+    "HistoricalApyWindowSet(uint256)": EventFragment;
     "LiquidatePosition(address,int24,int24,int256,int256,int256,uint128)": EventFragment;
-    "LiquidatorRewardSet(uint256,uint256)": EventFragment;
-    "MarginCalculatorParametersSet(tuple,tuple)": EventFragment;
+    "LiquidatorRewardSet(uint256)": EventFragment;
+    "MarginCalculatorParametersSet(tuple)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Paused(address)": EventFragment;
-    "SettlePosition(address,int24,int24,int256,int256,int256,bool)": EventFragment;
+    "SettlePosition(address,int24,int24,int256,int256,int256,int256,bool)": EventFragment;
     "Unpaused(address)": EventFragment;
     "UpdatePositionMargin(address,int24,int24,int256)": EventFragment;
     "UpdatePositionPostMintBurn(address,int24,int24,uint128)": EventFragment;
     "UpdatePositionPostSwap(address,int24,int24,int256,int256,int256)": EventFragment;
     "Upgraded(address)": EventFragment;
-    "VAMMSet(address,address)": EventFragment;
+    "VAMMSet(address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "AdminChanged"): EventFragment;
@@ -361,10 +400,7 @@ export type AdminChangedEvent = TypedEvent<
 export type BeaconUpgradedEvent = TypedEvent<[string] & { beacon: string }>;
 
 export type CacheMaxAgeSetEvent = TypedEvent<
-  [BigNumber, BigNumber] & {
-    cacheMaxAgeInSecondsOld: BigNumber;
-    cacheMaxAgeInSeconds: BigNumber;
-  }
+  [BigNumber] & { cacheMaxAgeInSeconds: BigNumber }
 >;
 
 export type CollectProtocolEvent = TypedEvent<
@@ -375,12 +411,10 @@ export type CollectProtocolEvent = TypedEvent<
   }
 >;
 
-export type FCMSetEvent = TypedEvent<
-  [string, string] & { fcmOld: string; fcm: string }
->;
+export type FCMSetEvent = TypedEvent<[string] & { fcm: string }>;
 
 export type HistoricalApyWindowSetEvent = TypedEvent<
-  [BigNumber, BigNumber] & { secondsAgoOld: BigNumber; secondsAgo: BigNumber }
+  [BigNumber] & { secondsAgo: BigNumber }
 >;
 
 export type LiquidatePositionEvent = TypedEvent<
@@ -396,10 +430,7 @@ export type LiquidatePositionEvent = TypedEvent<
 >;
 
 export type LiquidatorRewardSetEvent = TypedEvent<
-  [BigNumber, BigNumber] & {
-    liquidatorRewardWadOld: BigNumber;
-    liquidatorRewardWad: BigNumber;
-  }
+  [BigNumber] & { liquidatorRewardWad: BigNumber }
 >;
 
 export type MarginCalculatorParametersSetEvent = TypedEvent<
@@ -442,86 +473,8 @@ export type MarginCalculatorParametersSetEvent = TypedEvent<
       fixedRateDeviationMinRightUnwindIMWad: BigNumber;
       gammaWad: BigNumber;
       minMarginToIncentiviseLiquidators: BigNumber;
-    },
-    [
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber
-    ] & {
-      apyUpperMultiplierWad: BigNumber;
-      apyLowerMultiplierWad: BigNumber;
-      sigmaSquaredWad: BigNumber;
-      alphaWad: BigNumber;
-      betaWad: BigNumber;
-      xiUpperWad: BigNumber;
-      xiLowerWad: BigNumber;
-      tMaxWad: BigNumber;
-      devMulLeftUnwindLMWad: BigNumber;
-      devMulRightUnwindLMWad: BigNumber;
-      devMulLeftUnwindIMWad: BigNumber;
-      devMulRightUnwindIMWad: BigNumber;
-      fixedRateDeviationMinLeftUnwindLMWad: BigNumber;
-      fixedRateDeviationMinRightUnwindLMWad: BigNumber;
-      fixedRateDeviationMinLeftUnwindIMWad: BigNumber;
-      fixedRateDeviationMinRightUnwindIMWad: BigNumber;
-      gammaWad: BigNumber;
-      minMarginToIncentiviseLiquidators: BigNumber;
     }
   ] & {
-    marginCalculatorParametersOld: [
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber
-    ] & {
-      apyUpperMultiplierWad: BigNumber;
-      apyLowerMultiplierWad: BigNumber;
-      sigmaSquaredWad: BigNumber;
-      alphaWad: BigNumber;
-      betaWad: BigNumber;
-      xiUpperWad: BigNumber;
-      xiLowerWad: BigNumber;
-      tMaxWad: BigNumber;
-      devMulLeftUnwindLMWad: BigNumber;
-      devMulRightUnwindLMWad: BigNumber;
-      devMulLeftUnwindIMWad: BigNumber;
-      devMulRightUnwindIMWad: BigNumber;
-      fixedRateDeviationMinLeftUnwindLMWad: BigNumber;
-      fixedRateDeviationMinRightUnwindLMWad: BigNumber;
-      fixedRateDeviationMinLeftUnwindIMWad: BigNumber;
-      fixedRateDeviationMinRightUnwindIMWad: BigNumber;
-      gammaWad: BigNumber;
-      minMarginToIncentiviseLiquidators: BigNumber;
-    };
     marginCalculatorParameters: [
       BigNumber,
       BigNumber,
@@ -571,13 +524,23 @@ export type OwnershipTransferredEvent = TypedEvent<
 export type PausedEvent = TypedEvent<[string] & { account: string }>;
 
 export type SettlePositionEvent = TypedEvent<
-  [string, number, number, BigNumber, BigNumber, BigNumber, boolean] & {
+  [
+    string,
+    number,
+    number,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    boolean
+  ] & {
     owner: string;
     tickLower: number;
     tickUpper: number;
     fixedTokenBalance: BigNumber;
     variableTokenBalance: BigNumber;
     margin: BigNumber;
+    settlementCashflow: BigNumber;
     isSettled: boolean;
   }
 >;
@@ -615,9 +578,7 @@ export type UpdatePositionPostSwapEvent = TypedEvent<
 
 export type UpgradedEvent = TypedEvent<[string] & { implementation: string }>;
 
-export type VAMMSetEvent = TypedEvent<
-  [string, string] & { vammOld: string; vamm: string }
->;
+export type VAMMSetEvent = TypedEvent<[string] & { vamm: string }>;
 
 export class MarginEngine extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -663,11 +624,25 @@ export class MarginEngine extends BaseContract {
   interface: MarginEngineInterface;
 
   functions: {
+    MAX_CACHE_MAX_AGE_IN_SECONDS(
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    MAX_LIQUIDATOR_REWARD_WAD(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    MAX_LOOKBACK_WINDOW_IN_SECONDS(
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    MIN_LOOKBACK_WINDOW_IN_SECONDS(
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     cacheMaxAgeInSeconds(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     collectProtocol(
-      recipient: string,
-      amount: BigNumberish,
+      _recipient: string,
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -683,16 +658,16 @@ export class MarginEngine extends BaseContract {
 
     getPosition(
       _owner: string,
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     getPositionMarginRequirement(
-      recipient: string,
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
-      isLM: boolean,
+      _recipient: string,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
+      _isLM: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -705,13 +680,15 @@ export class MarginEngine extends BaseContract {
     ): Promise<ContractTransaction>;
 
     liquidatePosition(
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
       _owner: string,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     liquidatorRewardWad(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    lookbackWindowInSeconds(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
@@ -722,8 +699,6 @@ export class MarginEngine extends BaseContract {
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    secondsAgo(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     setCacheMaxAgeInSeconds(
       _newCacheMaxAgeInSeconds: BigNumberish,
@@ -737,6 +712,11 @@ export class MarginEngine extends BaseContract {
 
     setLiquidatorReward(
       _newLiquidatorRewardWad: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setLookbackWindowInSeconds(
+      _newSecondsAgo: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -764,20 +744,15 @@ export class MarginEngine extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    setSecondsAgo(
-      _newSecondsAgo: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     setVAMM(
       _vAMM: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     settlePosition(
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
       _owner: string,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -787,7 +762,7 @@ export class MarginEngine extends BaseContract {
 
     transferMarginToFCMTrader(
       _account: string,
-      marginDelta: BigNumberish,
+      _marginDelta: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -800,14 +775,14 @@ export class MarginEngine extends BaseContract {
 
     updatePositionMargin(
       _owner: string,
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
-      marginDelta: BigNumberish,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
+      _marginDelta: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     updatePositionPostVAMMInducedMintBurn(
-      params: {
+      _params: {
         owner: string;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
@@ -818,12 +793,12 @@ export class MarginEngine extends BaseContract {
 
     updatePositionPostVAMMInducedSwap(
       _owner: string,
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
-      fixedTokenDelta: BigNumberish,
-      variableTokenDelta: BigNumberish,
-      cumulativeFeeIncurred: BigNumberish,
-      fixedTokenDeltaUnbalanced: BigNumberish,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
+      _fixedTokenDelta: BigNumberish,
+      _variableTokenDelta: BigNumberish,
+      _cumulativeFeeIncurred: BigNumberish,
+      _fixedTokenDeltaUnbalanced: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -841,11 +816,19 @@ export class MarginEngine extends BaseContract {
     vamm(overrides?: CallOverrides): Promise<[string]>;
   };
 
+  MAX_CACHE_MAX_AGE_IN_SECONDS(overrides?: CallOverrides): Promise<BigNumber>;
+
+  MAX_LIQUIDATOR_REWARD_WAD(overrides?: CallOverrides): Promise<BigNumber>;
+
+  MAX_LOOKBACK_WINDOW_IN_SECONDS(overrides?: CallOverrides): Promise<BigNumber>;
+
+  MIN_LOOKBACK_WINDOW_IN_SECONDS(overrides?: CallOverrides): Promise<BigNumber>;
+
   cacheMaxAgeInSeconds(overrides?: CallOverrides): Promise<BigNumber>;
 
   collectProtocol(
-    recipient: string,
-    amount: BigNumberish,
+    _recipient: string,
+    _amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -861,16 +844,16 @@ export class MarginEngine extends BaseContract {
 
   getPosition(
     _owner: string,
-    tickLower: BigNumberish,
-    tickUpper: BigNumberish,
+    _tickLower: BigNumberish,
+    _tickUpper: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   getPositionMarginRequirement(
-    recipient: string,
-    tickLower: BigNumberish,
-    tickUpper: BigNumberish,
-    isLM: boolean,
+    _recipient: string,
+    _tickLower: BigNumberish,
+    _tickUpper: BigNumberish,
+    _isLM: boolean,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -883,13 +866,15 @@ export class MarginEngine extends BaseContract {
   ): Promise<ContractTransaction>;
 
   liquidatePosition(
-    tickLower: BigNumberish,
-    tickUpper: BigNumberish,
     _owner: string,
+    _tickLower: BigNumberish,
+    _tickUpper: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   liquidatorRewardWad(overrides?: CallOverrides): Promise<BigNumber>;
+
+  lookbackWindowInSeconds(overrides?: CallOverrides): Promise<BigNumber>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
@@ -900,8 +885,6 @@ export class MarginEngine extends BaseContract {
   renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
-
-  secondsAgo(overrides?: CallOverrides): Promise<BigNumber>;
 
   setCacheMaxAgeInSeconds(
     _newCacheMaxAgeInSeconds: BigNumberish,
@@ -915,6 +898,11 @@ export class MarginEngine extends BaseContract {
 
   setLiquidatorReward(
     _newLiquidatorRewardWad: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setLookbackWindowInSeconds(
+    _newSecondsAgo: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -942,20 +930,15 @@ export class MarginEngine extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  setSecondsAgo(
-    _newSecondsAgo: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   setVAMM(
     _vAMM: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   settlePosition(
-    tickLower: BigNumberish,
-    tickUpper: BigNumberish,
     _owner: string,
+    _tickLower: BigNumberish,
+    _tickUpper: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -965,7 +948,7 @@ export class MarginEngine extends BaseContract {
 
   transferMarginToFCMTrader(
     _account: string,
-    marginDelta: BigNumberish,
+    _marginDelta: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -978,14 +961,14 @@ export class MarginEngine extends BaseContract {
 
   updatePositionMargin(
     _owner: string,
-    tickLower: BigNumberish,
-    tickUpper: BigNumberish,
-    marginDelta: BigNumberish,
+    _tickLower: BigNumberish,
+    _tickUpper: BigNumberish,
+    _marginDelta: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   updatePositionPostVAMMInducedMintBurn(
-    params: {
+    _params: {
       owner: string;
       tickLower: BigNumberish;
       tickUpper: BigNumberish;
@@ -996,12 +979,12 @@ export class MarginEngine extends BaseContract {
 
   updatePositionPostVAMMInducedSwap(
     _owner: string,
-    tickLower: BigNumberish,
-    tickUpper: BigNumberish,
-    fixedTokenDelta: BigNumberish,
-    variableTokenDelta: BigNumberish,
-    cumulativeFeeIncurred: BigNumberish,
-    fixedTokenDeltaUnbalanced: BigNumberish,
+    _tickLower: BigNumberish,
+    _tickUpper: BigNumberish,
+    _fixedTokenDelta: BigNumberish,
+    _variableTokenDelta: BigNumberish,
+    _cumulativeFeeIncurred: BigNumberish,
+    _fixedTokenDeltaUnbalanced: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1019,11 +1002,23 @@ export class MarginEngine extends BaseContract {
   vamm(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
+    MAX_CACHE_MAX_AGE_IN_SECONDS(overrides?: CallOverrides): Promise<BigNumber>;
+
+    MAX_LIQUIDATOR_REWARD_WAD(overrides?: CallOverrides): Promise<BigNumber>;
+
+    MAX_LOOKBACK_WINDOW_IN_SECONDS(
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    MIN_LOOKBACK_WINDOW_IN_SECONDS(
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     cacheMaxAgeInSeconds(overrides?: CallOverrides): Promise<BigNumber>;
 
     collectProtocol(
-      recipient: string,
-      amount: BigNumberish,
+      _recipient: string,
+      _amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1037,8 +1032,8 @@ export class MarginEngine extends BaseContract {
 
     getPosition(
       _owner: string,
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
       [
@@ -1065,10 +1060,10 @@ export class MarginEngine extends BaseContract {
     >;
 
     getPositionMarginRequirement(
-      recipient: string,
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
-      isLM: boolean,
+      _recipient: string,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
+      _isLM: boolean,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1081,13 +1076,15 @@ export class MarginEngine extends BaseContract {
     ): Promise<void>;
 
     liquidatePosition(
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
       _owner: string,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<BigNumber>;
 
     liquidatorRewardWad(overrides?: CallOverrides): Promise<BigNumber>;
+
+    lookbackWindowInSeconds(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -1096,8 +1093,6 @@ export class MarginEngine extends BaseContract {
     rateOracle(overrides?: CallOverrides): Promise<string>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
-
-    secondsAgo(overrides?: CallOverrides): Promise<BigNumber>;
 
     setCacheMaxAgeInSeconds(
       _newCacheMaxAgeInSeconds: BigNumberish,
@@ -1108,6 +1103,11 @@ export class MarginEngine extends BaseContract {
 
     setLiquidatorReward(
       _newLiquidatorRewardWad: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setLookbackWindowInSeconds(
+      _newSecondsAgo: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1135,17 +1135,12 @@ export class MarginEngine extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setSecondsAgo(
-      _newSecondsAgo: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     setVAMM(_vAMM: string, overrides?: CallOverrides): Promise<void>;
 
     settlePosition(
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
       _owner: string,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1155,7 +1150,7 @@ export class MarginEngine extends BaseContract {
 
     transferMarginToFCMTrader(
       _account: string,
-      marginDelta: BigNumberish,
+      _marginDelta: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1168,14 +1163,14 @@ export class MarginEngine extends BaseContract {
 
     updatePositionMargin(
       _owner: string,
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
-      marginDelta: BigNumberish,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
+      _marginDelta: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
     updatePositionPostVAMMInducedMintBurn(
-      params: {
+      _params: {
         owner: string;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
@@ -1186,12 +1181,12 @@ export class MarginEngine extends BaseContract {
 
     updatePositionPostVAMMInducedSwap(
       _owner: string,
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
-      fixedTokenDelta: BigNumberish,
-      variableTokenDelta: BigNumberish,
-      cumulativeFeeIncurred: BigNumberish,
-      fixedTokenDeltaUnbalanced: BigNumberish,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
+      _fixedTokenDelta: BigNumberish,
+      _variableTokenDelta: BigNumberish,
+      _cumulativeFeeIncurred: BigNumberish,
+      _fixedTokenDeltaUnbalanced: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1234,25 +1229,17 @@ export class MarginEngine extends BaseContract {
       beacon?: string | null
     ): TypedEventFilter<[string], { beacon: string }>;
 
-    "CacheMaxAgeSet(uint256,uint256)"(
-      cacheMaxAgeInSecondsOld?: null,
+    "CacheMaxAgeSet(uint256)"(
       cacheMaxAgeInSeconds?: null
-    ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { cacheMaxAgeInSecondsOld: BigNumber; cacheMaxAgeInSeconds: BigNumber }
-    >;
+    ): TypedEventFilter<[BigNumber], { cacheMaxAgeInSeconds: BigNumber }>;
 
     CacheMaxAgeSet(
-      cacheMaxAgeInSecondsOld?: null,
       cacheMaxAgeInSeconds?: null
-    ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { cacheMaxAgeInSecondsOld: BigNumber; cacheMaxAgeInSeconds: BigNumber }
-    >;
+    ): TypedEventFilter<[BigNumber], { cacheMaxAgeInSeconds: BigNumber }>;
 
     "CollectProtocol(address,address,uint256)"(
       sender?: null,
-      recipient?: null,
+      recipient?: string | null,
       amount?: null
     ): TypedEventFilter<
       [string, string, BigNumber],
@@ -1261,43 +1248,31 @@ export class MarginEngine extends BaseContract {
 
     CollectProtocol(
       sender?: null,
-      recipient?: null,
+      recipient?: string | null,
       amount?: null
     ): TypedEventFilter<
       [string, string, BigNumber],
       { sender: string; recipient: string; amount: BigNumber }
     >;
 
-    "FCMSet(address,address)"(
-      fcmOld?: null,
-      fcm?: null
-    ): TypedEventFilter<[string, string], { fcmOld: string; fcm: string }>;
+    "FCMSet(address)"(
+      fcm?: string | null
+    ): TypedEventFilter<[string], { fcm: string }>;
 
-    FCMSet(
-      fcmOld?: null,
-      fcm?: null
-    ): TypedEventFilter<[string, string], { fcmOld: string; fcm: string }>;
+    FCMSet(fcm?: string | null): TypedEventFilter<[string], { fcm: string }>;
 
-    "HistoricalApyWindowSet(uint256,uint256)"(
-      secondsAgoOld?: null,
+    "HistoricalApyWindowSet(uint256)"(
       secondsAgo?: null
-    ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { secondsAgoOld: BigNumber; secondsAgo: BigNumber }
-    >;
+    ): TypedEventFilter<[BigNumber], { secondsAgo: BigNumber }>;
 
     HistoricalApyWindowSet(
-      secondsAgoOld?: null,
       secondsAgo?: null
-    ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { secondsAgoOld: BigNumber; secondsAgo: BigNumber }
-    >;
+    ): TypedEventFilter<[BigNumber], { secondsAgo: BigNumber }>;
 
     "LiquidatePosition(address,int24,int24,int256,int256,int256,uint128)"(
-      owner?: null,
-      tickLower?: null,
-      tickUpper?: null,
+      owner?: string | null,
+      tickLower?: BigNumberish | null,
+      tickUpper?: BigNumberish | null,
       fixedTokenBalance?: null,
       variableTokenBalance?: null,
       margin?: null,
@@ -1316,9 +1291,9 @@ export class MarginEngine extends BaseContract {
     >;
 
     LiquidatePosition(
-      owner?: null,
-      tickLower?: null,
-      tickUpper?: null,
+      owner?: string | null,
+      tickLower?: BigNumberish | null,
+      tickUpper?: BigNumberish | null,
       fixedTokenBalance?: null,
       variableTokenBalance?: null,
       margin?: null,
@@ -1336,24 +1311,15 @@ export class MarginEngine extends BaseContract {
       }
     >;
 
-    "LiquidatorRewardSet(uint256,uint256)"(
-      liquidatorRewardWadOld?: null,
+    "LiquidatorRewardSet(uint256)"(
       liquidatorRewardWad?: null
-    ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { liquidatorRewardWadOld: BigNumber; liquidatorRewardWad: BigNumber }
-    >;
+    ): TypedEventFilter<[BigNumber], { liquidatorRewardWad: BigNumber }>;
 
     LiquidatorRewardSet(
-      liquidatorRewardWadOld?: null,
       liquidatorRewardWad?: null
-    ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { liquidatorRewardWadOld: BigNumber; liquidatorRewardWad: BigNumber }
-    >;
+    ): TypedEventFilter<[BigNumber], { liquidatorRewardWad: BigNumber }>;
 
-    "MarginCalculatorParametersSet(tuple,tuple)"(
-      marginCalculatorParametersOld?: null,
+    "MarginCalculatorParametersSet(tuple)"(
       marginCalculatorParameters?: null
     ): TypedEventFilter<
       [
@@ -1395,87 +1361,9 @@ export class MarginEngine extends BaseContract {
           fixedRateDeviationMinRightUnwindIMWad: BigNumber;
           gammaWad: BigNumber;
           minMarginToIncentiviseLiquidators: BigNumber;
-        },
-        [
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber
-        ] & {
-          apyUpperMultiplierWad: BigNumber;
-          apyLowerMultiplierWad: BigNumber;
-          sigmaSquaredWad: BigNumber;
-          alphaWad: BigNumber;
-          betaWad: BigNumber;
-          xiUpperWad: BigNumber;
-          xiLowerWad: BigNumber;
-          tMaxWad: BigNumber;
-          devMulLeftUnwindLMWad: BigNumber;
-          devMulRightUnwindLMWad: BigNumber;
-          devMulLeftUnwindIMWad: BigNumber;
-          devMulRightUnwindIMWad: BigNumber;
-          fixedRateDeviationMinLeftUnwindLMWad: BigNumber;
-          fixedRateDeviationMinRightUnwindLMWad: BigNumber;
-          fixedRateDeviationMinLeftUnwindIMWad: BigNumber;
-          fixedRateDeviationMinRightUnwindIMWad: BigNumber;
-          gammaWad: BigNumber;
-          minMarginToIncentiviseLiquidators: BigNumber;
         }
       ],
       {
-        marginCalculatorParametersOld: [
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber
-        ] & {
-          apyUpperMultiplierWad: BigNumber;
-          apyLowerMultiplierWad: BigNumber;
-          sigmaSquaredWad: BigNumber;
-          alphaWad: BigNumber;
-          betaWad: BigNumber;
-          xiUpperWad: BigNumber;
-          xiLowerWad: BigNumber;
-          tMaxWad: BigNumber;
-          devMulLeftUnwindLMWad: BigNumber;
-          devMulRightUnwindLMWad: BigNumber;
-          devMulLeftUnwindIMWad: BigNumber;
-          devMulRightUnwindIMWad: BigNumber;
-          fixedRateDeviationMinLeftUnwindLMWad: BigNumber;
-          fixedRateDeviationMinRightUnwindLMWad: BigNumber;
-          fixedRateDeviationMinLeftUnwindIMWad: BigNumber;
-          fixedRateDeviationMinRightUnwindIMWad: BigNumber;
-          gammaWad: BigNumber;
-          minMarginToIncentiviseLiquidators: BigNumber;
-        };
         marginCalculatorParameters: [
           BigNumber,
           BigNumber,
@@ -1519,7 +1407,6 @@ export class MarginEngine extends BaseContract {
     >;
 
     MarginCalculatorParametersSet(
-      marginCalculatorParametersOld?: null,
       marginCalculatorParameters?: null
     ): TypedEventFilter<
       [
@@ -1561,87 +1448,9 @@ export class MarginEngine extends BaseContract {
           fixedRateDeviationMinRightUnwindIMWad: BigNumber;
           gammaWad: BigNumber;
           minMarginToIncentiviseLiquidators: BigNumber;
-        },
-        [
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber
-        ] & {
-          apyUpperMultiplierWad: BigNumber;
-          apyLowerMultiplierWad: BigNumber;
-          sigmaSquaredWad: BigNumber;
-          alphaWad: BigNumber;
-          betaWad: BigNumber;
-          xiUpperWad: BigNumber;
-          xiLowerWad: BigNumber;
-          tMaxWad: BigNumber;
-          devMulLeftUnwindLMWad: BigNumber;
-          devMulRightUnwindLMWad: BigNumber;
-          devMulLeftUnwindIMWad: BigNumber;
-          devMulRightUnwindIMWad: BigNumber;
-          fixedRateDeviationMinLeftUnwindLMWad: BigNumber;
-          fixedRateDeviationMinRightUnwindLMWad: BigNumber;
-          fixedRateDeviationMinLeftUnwindIMWad: BigNumber;
-          fixedRateDeviationMinRightUnwindIMWad: BigNumber;
-          gammaWad: BigNumber;
-          minMarginToIncentiviseLiquidators: BigNumber;
         }
       ],
       {
-        marginCalculatorParametersOld: [
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber
-        ] & {
-          apyUpperMultiplierWad: BigNumber;
-          apyLowerMultiplierWad: BigNumber;
-          sigmaSquaredWad: BigNumber;
-          alphaWad: BigNumber;
-          betaWad: BigNumber;
-          xiUpperWad: BigNumber;
-          xiLowerWad: BigNumber;
-          tMaxWad: BigNumber;
-          devMulLeftUnwindLMWad: BigNumber;
-          devMulRightUnwindLMWad: BigNumber;
-          devMulLeftUnwindIMWad: BigNumber;
-          devMulRightUnwindIMWad: BigNumber;
-          fixedRateDeviationMinLeftUnwindLMWad: BigNumber;
-          fixedRateDeviationMinRightUnwindLMWad: BigNumber;
-          fixedRateDeviationMinLeftUnwindIMWad: BigNumber;
-          fixedRateDeviationMinRightUnwindIMWad: BigNumber;
-          gammaWad: BigNumber;
-          minMarginToIncentiviseLiquidators: BigNumber;
-        };
         marginCalculatorParameters: [
           BigNumber,
           BigNumber,
@@ -1706,16 +1515,26 @@ export class MarginEngine extends BaseContract {
 
     Paused(account?: null): TypedEventFilter<[string], { account: string }>;
 
-    "SettlePosition(address,int24,int24,int256,int256,int256,bool)"(
-      owner?: null,
-      tickLower?: null,
-      tickUpper?: null,
+    "SettlePosition(address,int24,int24,int256,int256,int256,int256,bool)"(
+      owner?: string | null,
+      tickLower?: BigNumberish | null,
+      tickUpper?: BigNumberish | null,
       fixedTokenBalance?: null,
       variableTokenBalance?: null,
       margin?: null,
+      settlementCashflow?: null,
       isSettled?: null
     ): TypedEventFilter<
-      [string, number, number, BigNumber, BigNumber, BigNumber, boolean],
+      [
+        string,
+        number,
+        number,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        boolean
+      ],
       {
         owner: string;
         tickLower: number;
@@ -1723,20 +1542,31 @@ export class MarginEngine extends BaseContract {
         fixedTokenBalance: BigNumber;
         variableTokenBalance: BigNumber;
         margin: BigNumber;
+        settlementCashflow: BigNumber;
         isSettled: boolean;
       }
     >;
 
     SettlePosition(
-      owner?: null,
-      tickLower?: null,
-      tickUpper?: null,
+      owner?: string | null,
+      tickLower?: BigNumberish | null,
+      tickUpper?: BigNumberish | null,
       fixedTokenBalance?: null,
       variableTokenBalance?: null,
       margin?: null,
+      settlementCashflow?: null,
       isSettled?: null
     ): TypedEventFilter<
-      [string, number, number, BigNumber, BigNumber, BigNumber, boolean],
+      [
+        string,
+        number,
+        number,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        boolean
+      ],
       {
         owner: string;
         tickLower: number;
@@ -1744,6 +1574,7 @@ export class MarginEngine extends BaseContract {
         fixedTokenBalance: BigNumber;
         variableTokenBalance: BigNumber;
         margin: BigNumber;
+        settlementCashflow: BigNumber;
         isSettled: boolean;
       }
     >;
@@ -1755,9 +1586,9 @@ export class MarginEngine extends BaseContract {
     Unpaused(account?: null): TypedEventFilter<[string], { account: string }>;
 
     "UpdatePositionMargin(address,int24,int24,int256)"(
-      owner?: null,
-      tickLower?: null,
-      tickUpper?: null,
+      owner?: string | null,
+      tickLower?: BigNumberish | null,
+      tickUpper?: BigNumberish | null,
       positionMargin?: null
     ): TypedEventFilter<
       [string, number, number, BigNumber],
@@ -1770,9 +1601,9 @@ export class MarginEngine extends BaseContract {
     >;
 
     UpdatePositionMargin(
-      owner?: null,
-      tickLower?: null,
-      tickUpper?: null,
+      owner?: string | null,
+      tickLower?: BigNumberish | null,
+      tickUpper?: BigNumberish | null,
       positionMargin?: null
     ): TypedEventFilter<
       [string, number, number, BigNumber],
@@ -1785,9 +1616,9 @@ export class MarginEngine extends BaseContract {
     >;
 
     "UpdatePositionPostMintBurn(address,int24,int24,uint128)"(
-      owner?: null,
-      tickLower?: null,
-      tickUpper?: null,
+      owner?: string | null,
+      tickLower?: BigNumberish | null,
+      tickUpper?: BigNumberish | null,
       liquidity?: null
     ): TypedEventFilter<
       [string, number, number, BigNumber],
@@ -1800,9 +1631,9 @@ export class MarginEngine extends BaseContract {
     >;
 
     UpdatePositionPostMintBurn(
-      owner?: null,
-      tickLower?: null,
-      tickUpper?: null,
+      owner?: string | null,
+      tickLower?: BigNumberish | null,
+      tickUpper?: BigNumberish | null,
       liquidity?: null
     ): TypedEventFilter<
       [string, number, number, BigNumber],
@@ -1815,9 +1646,9 @@ export class MarginEngine extends BaseContract {
     >;
 
     "UpdatePositionPostSwap(address,int24,int24,int256,int256,int256)"(
-      owner?: null,
-      tickLower?: null,
-      tickUpper?: null,
+      owner?: string | null,
+      tickLower?: BigNumberish | null,
+      tickUpper?: BigNumberish | null,
       fixedTokenBalance?: null,
       variableTokenBalance?: null,
       margin?: null
@@ -1834,9 +1665,9 @@ export class MarginEngine extends BaseContract {
     >;
 
     UpdatePositionPostSwap(
-      owner?: null,
-      tickLower?: null,
-      tickUpper?: null,
+      owner?: string | null,
+      tickLower?: BigNumberish | null,
+      tickUpper?: BigNumberish | null,
       fixedTokenBalance?: null,
       variableTokenBalance?: null,
       margin?: null
@@ -1860,23 +1691,31 @@ export class MarginEngine extends BaseContract {
       implementation?: string | null
     ): TypedEventFilter<[string], { implementation: string }>;
 
-    "VAMMSet(address,address)"(
-      vammOld?: null,
-      vamm?: null
-    ): TypedEventFilter<[string, string], { vammOld: string; vamm: string }>;
+    "VAMMSet(address)"(
+      vamm?: string | null
+    ): TypedEventFilter<[string], { vamm: string }>;
 
-    VAMMSet(
-      vammOld?: null,
-      vamm?: null
-    ): TypedEventFilter<[string, string], { vammOld: string; vamm: string }>;
+    VAMMSet(vamm?: string | null): TypedEventFilter<[string], { vamm: string }>;
   };
 
   estimateGas: {
+    MAX_CACHE_MAX_AGE_IN_SECONDS(overrides?: CallOverrides): Promise<BigNumber>;
+
+    MAX_LIQUIDATOR_REWARD_WAD(overrides?: CallOverrides): Promise<BigNumber>;
+
+    MAX_LOOKBACK_WINDOW_IN_SECONDS(
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    MIN_LOOKBACK_WINDOW_IN_SECONDS(
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     cacheMaxAgeInSeconds(overrides?: CallOverrides): Promise<BigNumber>;
 
     collectProtocol(
-      recipient: string,
-      amount: BigNumberish,
+      _recipient: string,
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1892,16 +1731,16 @@ export class MarginEngine extends BaseContract {
 
     getPosition(
       _owner: string,
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     getPositionMarginRequirement(
-      recipient: string,
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
-      isLM: boolean,
+      _recipient: string,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
+      _isLM: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1914,13 +1753,15 @@ export class MarginEngine extends BaseContract {
     ): Promise<BigNumber>;
 
     liquidatePosition(
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
       _owner: string,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     liquidatorRewardWad(overrides?: CallOverrides): Promise<BigNumber>;
+
+    lookbackWindowInSeconds(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1931,8 +1772,6 @@ export class MarginEngine extends BaseContract {
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
-
-    secondsAgo(overrides?: CallOverrides): Promise<BigNumber>;
 
     setCacheMaxAgeInSeconds(
       _newCacheMaxAgeInSeconds: BigNumberish,
@@ -1946,6 +1785,11 @@ export class MarginEngine extends BaseContract {
 
     setLiquidatorReward(
       _newLiquidatorRewardWad: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setLookbackWindowInSeconds(
+      _newSecondsAgo: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1973,20 +1817,15 @@ export class MarginEngine extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    setSecondsAgo(
-      _newSecondsAgo: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     setVAMM(
       _vAMM: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     settlePosition(
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
       _owner: string,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1996,7 +1835,7 @@ export class MarginEngine extends BaseContract {
 
     transferMarginToFCMTrader(
       _account: string,
-      marginDelta: BigNumberish,
+      _marginDelta: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -2009,14 +1848,14 @@ export class MarginEngine extends BaseContract {
 
     updatePositionMargin(
       _owner: string,
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
-      marginDelta: BigNumberish,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
+      _marginDelta: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     updatePositionPostVAMMInducedMintBurn(
-      params: {
+      _params: {
         owner: string;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
@@ -2027,12 +1866,12 @@ export class MarginEngine extends BaseContract {
 
     updatePositionPostVAMMInducedSwap(
       _owner: string,
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
-      fixedTokenDelta: BigNumberish,
-      variableTokenDelta: BigNumberish,
-      cumulativeFeeIncurred: BigNumberish,
-      fixedTokenDeltaUnbalanced: BigNumberish,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
+      _fixedTokenDelta: BigNumberish,
+      _variableTokenDelta: BigNumberish,
+      _cumulativeFeeIncurred: BigNumberish,
+      _fixedTokenDeltaUnbalanced: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -2051,13 +1890,29 @@ export class MarginEngine extends BaseContract {
   };
 
   populateTransaction: {
+    MAX_CACHE_MAX_AGE_IN_SECONDS(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    MAX_LIQUIDATOR_REWARD_WAD(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    MAX_LOOKBACK_WINDOW_IN_SECONDS(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    MIN_LOOKBACK_WINDOW_IN_SECONDS(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     cacheMaxAgeInSeconds(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     collectProtocol(
-      recipient: string,
-      amount: BigNumberish,
+      _recipient: string,
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -2075,16 +1930,16 @@ export class MarginEngine extends BaseContract {
 
     getPosition(
       _owner: string,
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     getPositionMarginRequirement(
-      recipient: string,
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
-      isLM: boolean,
+      _recipient: string,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
+      _isLM: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -2097,13 +1952,17 @@ export class MarginEngine extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     liquidatePosition(
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
       _owner: string,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     liquidatorRewardWad(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    lookbackWindowInSeconds(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -2117,8 +1976,6 @@ export class MarginEngine extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    secondsAgo(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     setCacheMaxAgeInSeconds(
       _newCacheMaxAgeInSeconds: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -2131,6 +1988,11 @@ export class MarginEngine extends BaseContract {
 
     setLiquidatorReward(
       _newLiquidatorRewardWad: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setLookbackWindowInSeconds(
+      _newSecondsAgo: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -2158,20 +2020,15 @@ export class MarginEngine extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    setSecondsAgo(
-      _newSecondsAgo: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     setVAMM(
       _vAMM: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     settlePosition(
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
       _owner: string,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -2185,7 +2042,7 @@ export class MarginEngine extends BaseContract {
 
     transferMarginToFCMTrader(
       _account: string,
-      marginDelta: BigNumberish,
+      _marginDelta: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -2198,14 +2055,14 @@ export class MarginEngine extends BaseContract {
 
     updatePositionMargin(
       _owner: string,
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
-      marginDelta: BigNumberish,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
+      _marginDelta: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     updatePositionPostVAMMInducedMintBurn(
-      params: {
+      _params: {
         owner: string;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
@@ -2216,12 +2073,12 @@ export class MarginEngine extends BaseContract {
 
     updatePositionPostVAMMInducedSwap(
       _owner: string,
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
-      fixedTokenDelta: BigNumberish,
-      variableTokenDelta: BigNumberish,
-      cumulativeFeeIncurred: BigNumberish,
-      fixedTokenDeltaUnbalanced: BigNumberish,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
+      _fixedTokenDelta: BigNumberish,
+      _variableTokenDelta: BigNumberish,
+      _cumulativeFeeIncurred: BigNumberish,
+      _fixedTokenDeltaUnbalanced: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

@@ -11,8 +11,7 @@ export declare enum Rounding {
     ROUND_UP = 2
 }
 export declare type SwapPeripheryParams = {
-    marginEngineAddress: string;
-    recipient: string;
+    marginEngine: string;
     isFT: boolean;
     notional: BigNumberish;
     sqrtPriceLimitX96: BigNumberish;
@@ -20,8 +19,7 @@ export declare type SwapPeripheryParams = {
     tickUpper: BigNumberish;
 };
 export declare type MintOrBurnParams = {
-    marginEngineAddress: string;
-    recipient: string;
+    marginEngine: string;
     tickLower: BigNumberish;
     tickUpper: BigNumberish;
     notional: BigNumberish;

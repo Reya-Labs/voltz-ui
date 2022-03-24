@@ -237,36 +237,17 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "marginEngineAddress",
-        type: "address",
-      },
-    ],
-    name: "getMarginEngine",
-    outputs: [
-      {
         internalType: "contract IMarginEngine",
-        name: "",
+        name: "marginEngine",
         type: "address",
       },
     ],
-    stateMutability: "pure",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "marginEngineAddress",
-        type: "address",
-      },
-    ],
-    name: "getVAMM",
+    name: "getCurrentTick",
     outputs: [
       {
-        internalType: "contract IVAMM",
-        name: "",
-        type: "address",
+        internalType: "int24",
+        name: "currentTick",
+        type: "int24",
       },
     ],
     stateMutability: "view",
@@ -277,13 +258,8 @@ const _abi = [
       {
         components: [
           {
-            internalType: "address",
-            name: "marginEngineAddress",
-            type: "address",
-          },
-          {
-            internalType: "address",
-            name: "recipient",
+            internalType: "contract IMarginEngine",
+            name: "marginEngine",
             type: "address",
           },
           {
@@ -328,13 +304,8 @@ const _abi = [
       {
         components: [
           {
-            internalType: "address",
-            name: "marginEngineAddress",
-            type: "address",
-          },
-          {
-            internalType: "address",
-            name: "recipient",
+            internalType: "contract IMarginEngine",
+            name: "marginEngine",
             type: "address",
           },
           {

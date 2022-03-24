@@ -218,7 +218,7 @@ interface TestAaveFCMInterface extends ethers.utils.Interface {
   events: {
     "AdminChanged(address,address)": EventFragment;
     "BeaconUpgraded(address)": EventFragment;
-    "InitiateFullyCollateralisedSwap(uint256,int256,int256)": EventFragment;
+    "FullyCollateralisedSwap(address,uint256,int256,int256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Paused(address)": EventFragment;
     "Unpaused(address)": EventFragment;
@@ -227,9 +227,7 @@ interface TestAaveFCMInterface extends ethers.utils.Interface {
 
   getEvent(nameOrSignatureOrTopic: "AdminChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "BeaconUpgraded"): EventFragment;
-  getEvent(
-    nameOrSignatureOrTopic: "InitiateFullyCollateralisedSwap"
-  ): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "FullyCollateralisedSwap"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
@@ -242,8 +240,9 @@ export type AdminChangedEvent = TypedEvent<
 
 export type BeaconUpgradedEvent = TypedEvent<[string] & { beacon: string }>;
 
-export type InitiateFullyCollateralisedSwapEvent = TypedEvent<
-  [BigNumber, BigNumber, BigNumber] & {
+export type FullyCollateralisedSwapEvent = TypedEvent<
+  [string, BigNumber, BigNumber, BigNumber] & {
+    trader: string;
     marginInScaledYieldBearingTokens: BigNumber;
     fixedTokenBalance: BigNumber;
     variableTokenBalance: BigNumber;
@@ -354,8 +353,8 @@ export class TestAaveFCM extends BaseContract {
     getVAMMAddress(overrides?: CallOverrides): Promise<[string]>;
 
     initialize(
-      _vammAddress: string,
-      _marginEngineAddress: string,
+      __vamm: string,
+      __marginEngine: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -467,8 +466,8 @@ export class TestAaveFCM extends BaseContract {
   getVAMMAddress(overrides?: CallOverrides): Promise<string>;
 
   initialize(
-    _vammAddress: string,
-    _marginEngineAddress: string,
+    __vamm: string,
+    __marginEngine: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -580,8 +579,8 @@ export class TestAaveFCM extends BaseContract {
     getVAMMAddress(overrides?: CallOverrides): Promise<string>;
 
     initialize(
-      _vammAddress: string,
-      _marginEngineAddress: string,
+      __vamm: string,
+      __marginEngine: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -675,26 +674,30 @@ export class TestAaveFCM extends BaseContract {
       beacon?: string | null
     ): TypedEventFilter<[string], { beacon: string }>;
 
-    "InitiateFullyCollateralisedSwap(uint256,int256,int256)"(
+    "FullyCollateralisedSwap(address,uint256,int256,int256)"(
+      trader?: string | null,
       marginInScaledYieldBearingTokens?: null,
       fixedTokenBalance?: null,
       variableTokenBalance?: null
     ): TypedEventFilter<
-      [BigNumber, BigNumber, BigNumber],
+      [string, BigNumber, BigNumber, BigNumber],
       {
+        trader: string;
         marginInScaledYieldBearingTokens: BigNumber;
         fixedTokenBalance: BigNumber;
         variableTokenBalance: BigNumber;
       }
     >;
 
-    InitiateFullyCollateralisedSwap(
+    FullyCollateralisedSwap(
+      trader?: string | null,
       marginInScaledYieldBearingTokens?: null,
       fixedTokenBalance?: null,
       variableTokenBalance?: null
     ): TypedEventFilter<
-      [BigNumber, BigNumber, BigNumber],
+      [string, BigNumber, BigNumber, BigNumber],
       {
+        trader: string;
         marginInScaledYieldBearingTokens: BigNumber;
         fixedTokenBalance: BigNumber;
         variableTokenBalance: BigNumber;
@@ -773,8 +776,8 @@ export class TestAaveFCM extends BaseContract {
     getVAMMAddress(overrides?: CallOverrides): Promise<BigNumber>;
 
     initialize(
-      _vammAddress: string,
-      _marginEngineAddress: string,
+      __vamm: string,
+      __marginEngine: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -874,8 +877,8 @@ export class TestAaveFCM extends BaseContract {
     getVAMMAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     initialize(
-      _vammAddress: string,
-      _marginEngineAddress: string,
+      __vamm: string,
+      __marginEngine: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

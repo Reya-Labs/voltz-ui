@@ -20,17 +20,20 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface MarginCalculatorInterface extends ethers.utils.Interface {
   functions: {
-    "ONE_WEI()": FunctionFragment;
+    "ONE()": FunctionFragment;
+    "ONE_UINT()": FunctionFragment;
     "SECONDS_IN_YEAR()": FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: "ONE_WEI", values?: undefined): string;
+  encodeFunctionData(functionFragment: "ONE", values?: undefined): string;
+  encodeFunctionData(functionFragment: "ONE_UINT", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "SECONDS_IN_YEAR",
     values?: undefined
   ): string;
 
-  decodeFunctionResult(functionFragment: "ONE_WEI", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "ONE", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "ONE_UINT", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "SECONDS_IN_YEAR",
     data: BytesLike
@@ -83,17 +86,23 @@ export class MarginCalculator extends BaseContract {
   interface: MarginCalculatorInterface;
 
   functions: {
-    ONE_WEI(overrides?: CallOverrides): Promise<[BigNumber]>;
+    ONE(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    ONE_UINT(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     SECONDS_IN_YEAR(overrides?: CallOverrides): Promise<[BigNumber]>;
   };
 
-  ONE_WEI(overrides?: CallOverrides): Promise<BigNumber>;
+  ONE(overrides?: CallOverrides): Promise<BigNumber>;
+
+  ONE_UINT(overrides?: CallOverrides): Promise<BigNumber>;
 
   SECONDS_IN_YEAR(overrides?: CallOverrides): Promise<BigNumber>;
 
   callStatic: {
-    ONE_WEI(overrides?: CallOverrides): Promise<BigNumber>;
+    ONE(overrides?: CallOverrides): Promise<BigNumber>;
+
+    ONE_UINT(overrides?: CallOverrides): Promise<BigNumber>;
 
     SECONDS_IN_YEAR(overrides?: CallOverrides): Promise<BigNumber>;
   };
@@ -101,13 +110,17 @@ export class MarginCalculator extends BaseContract {
   filters: {};
 
   estimateGas: {
-    ONE_WEI(overrides?: CallOverrides): Promise<BigNumber>;
+    ONE(overrides?: CallOverrides): Promise<BigNumber>;
+
+    ONE_UINT(overrides?: CallOverrides): Promise<BigNumber>;
 
     SECONDS_IN_YEAR(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    ONE_WEI(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    ONE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    ONE_UINT(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     SECONDS_IN_YEAR(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };

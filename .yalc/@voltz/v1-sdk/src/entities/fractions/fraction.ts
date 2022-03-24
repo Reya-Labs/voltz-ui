@@ -31,7 +31,7 @@ export class Fraction {
     this.denominator = JSBI.BigInt(denominator);
   }
 
-  public static fromNumber(value: number) {
+  public static fromNumber(value: number | string) {
     const fraction = new Fractionjs(value);
 
     return new Fraction(fraction.n, fraction.d);

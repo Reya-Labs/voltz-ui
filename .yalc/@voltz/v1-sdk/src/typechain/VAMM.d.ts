@@ -22,6 +22,7 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface VAMMInterface extends ethers.utils.Interface {
   functions: {
+    "MAX_FEE()": FunctionFragment;
     "burn(address,int24,int24,uint128)": FunctionFragment;
     "computeGrowthInside(int24,int24)": FunctionFragment;
     "factory()": FunctionFragment;
@@ -52,6 +53,7 @@ interface VAMMInterface extends ethers.utils.Interface {
     "variableTokenGrowthGlobalX128()": FunctionFragment;
   };
 
+  encodeFunctionData(functionFragment: "MAX_FEE", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "burn",
     values: [string, BigNumberish, BigNumberish, BigNumberish]
@@ -149,6 +151,7 @@ interface VAMMInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
 
+  decodeFunctionResult(functionFragment: "MAX_FEE", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "computeGrowthInside",
@@ -353,6 +356,8 @@ export class VAMM extends BaseContract {
   interface: VAMMInterface;
 
   functions: {
+    MAX_FEE(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     burn(
       recipient: string,
       tickLower: BigNumberish,
@@ -498,6 +503,8 @@ export class VAMM extends BaseContract {
     ): Promise<[BigNumber]>;
   };
 
+  MAX_FEE(overrides?: CallOverrides): Promise<BigNumber>;
+
   burn(
     recipient: string,
     tickLower: BigNumberish,
@@ -637,6 +644,8 @@ export class VAMM extends BaseContract {
   variableTokenGrowthGlobalX128(overrides?: CallOverrides): Promise<BigNumber>;
 
   callStatic: {
+    MAX_FEE(overrides?: CallOverrides): Promise<BigNumber>;
+
     burn(
       recipient: string,
       tickLower: BigNumberish,
@@ -1002,6 +1011,8 @@ export class VAMM extends BaseContract {
   };
 
   estimateGas: {
+    MAX_FEE(overrides?: CallOverrides): Promise<BigNumber>;
+
     burn(
       recipient: string,
       tickLower: BigNumberish,
@@ -1118,6 +1129,8 @@ export class VAMM extends BaseContract {
   };
 
   populateTransaction: {
+    MAX_FEE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     burn(
       recipient: string,
       tickLower: BigNumberish,
