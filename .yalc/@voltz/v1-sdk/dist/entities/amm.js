@@ -77,8 +77,9 @@ var AMM = /** @class */ (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        if (!this.provider)
+                        if (!this.provider) {
                             return [2 /*return*/];
+                        }
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
                         if (fixedRateLimit) {
@@ -252,13 +253,25 @@ var AMM = /** @class */ (function () {
     AMM.prototype.getMinimumMarginRequirementPostMint = function (_a) {
         var recipient = _a.recipient, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, peripheryContract, _notionalFraction, _notionalTA, _notional, mintOrBurnParams, marginRequirement, marginEngineContract, currentMargin, scaledCurrentMargin, scaledMarginRequirement;
+            var vammContract, tickUpper, tickLower, peripheryContract, _notionalFraction, _notionalTA, _notional, mintOrBurnParams, marginRequirement, marginEngineContract, currentMargin, scaledCurrentMargin, scaledMarginRequirement;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         if (!this.provider) {
                             return [2 /*return*/];
                         }
+                        if (!!this.initialized) return [3 /*break*/, 2];
+                        if (!this.signer) {
+                            return [2 /*return*/];
+                        }
+                        vammContract = typechain_1.VAMM__factory.connect(this.id, this.signer);
+                        // todo: add logic to initialize at a more reasonable price
+                        return [4 /*yield*/, vammContract.initializeVAMM(tickMath_1.TickMath.getSqrtRatioAtTick(0).toString())];
+                    case 1:
+                        // todo: add logic to initialize at a more reasonable price
+                        _b.sent();
+                        _b.label = 2;
+                    case 2:
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
                         peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.provider);
@@ -286,11 +299,11 @@ var AMM = /** @class */ (function () {
                                     marginRequirement = ethers_1.BigNumber.from(args[0]);
                                 }
                             })];
-                    case 1:
+                    case 3:
                         _b.sent();
                         marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.provider);
                         return [4 /*yield*/, marginEngineContract.callStatic.getPosition(recipient, tickLower, tickUpper)];
-                    case 2:
+                    case 4:
                         currentMargin = (_b.sent()).margin;
                         scaledCurrentMargin = parseFloat(ethers_1.utils.formatEther(currentMargin));
                         scaledMarginRequirement = parseFloat(ethers_1.utils.formatEther(marginRequirement));
