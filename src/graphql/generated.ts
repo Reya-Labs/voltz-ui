@@ -1697,11 +1697,20 @@ export enum Transaction_OrderBy {
 
 export type UnderlyingToken = {
   __typename?: 'UnderlyingToken';
+  decimals: Scalars['BigInt'];
   id: Scalars['ID'];
   name: Scalars['String'];
 };
 
 export type UnderlyingToken_Filter = {
+  decimals?: InputMaybe<Scalars['BigInt']>;
+  decimals_gt?: InputMaybe<Scalars['BigInt']>;
+  decimals_gte?: InputMaybe<Scalars['BigInt']>;
+  decimals_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  decimals_lt?: InputMaybe<Scalars['BigInt']>;
+  decimals_lte?: InputMaybe<Scalars['BigInt']>;
+  decimals_not?: InputMaybe<Scalars['BigInt']>;
+  decimals_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   id?: InputMaybe<Scalars['ID']>;
   id_gt?: InputMaybe<Scalars['ID']>;
   id_gte?: InputMaybe<Scalars['ID']>;
@@ -1727,6 +1736,7 @@ export type UnderlyingToken_Filter = {
 };
 
 export enum UnderlyingToken_OrderBy {
+  Decimals = 'decimals',
   Id = 'id',
   Name = 'name'
 }
@@ -1809,7 +1819,7 @@ export type GetAmMsQueryVariables = Exact<{
 }>;
 
 
-export type GetAmMsQuery = { __typename?: 'Query', amms: Array<{ __typename?: 'AMM', id: string, createdTimestamp: any, updatedTimestamp: any, fcmAddress: string, marginEngineAddress: string, termStartTimestamp: any, termEndTimestamp: any, tickSpacing: any, sqrtPriceX96: any, liquidity: any, tick: any, txCount: any, rateOracle: { __typename?: 'RateOracle', id: string, protocolId: any, token: { __typename?: 'UnderlyingToken', id: string, name: string } } }> };
+export type GetAmMsQuery = { __typename?: 'Query', amms: Array<{ __typename?: 'AMM', id: string, createdTimestamp: any, updatedTimestamp: any, fcmAddress: string, marginEngineAddress: string, termStartTimestamp: any, termEndTimestamp: any, tickSpacing: any, sqrtPriceX96: any, liquidity: any, tick: any, txCount: any, rateOracle: { __typename?: 'RateOracle', id: string, protocolId: any, token: { __typename?: 'UnderlyingToken', id: string, name: string, decimals: any } } }> };
 
 export type GetBurnsQueryVariables = Exact<{
   orderBy: Burn_OrderBy;
@@ -1830,7 +1840,7 @@ export type GetPositionQueryVariables = Exact<{
 }>;
 
 
-export type GetPositionQuery = { __typename?: 'Query', position?: { __typename?: 'Position', id: string, createdTimestamp: any, updatedTimestamp: any, liquidity: any, margin: any, fixedTokenBalance: any, variableTokenBalance: any, isLiquidityProvider: boolean, isSettled: boolean, isEmpty: boolean, snapshotCount: any, owner: { __typename?: 'Wallet', id: string }, amm: { __typename?: 'AMM', id: string, termStartTimestamp: any, termEndTimestamp: any, rateOracle: { __typename?: 'RateOracle', id: string, protocolId: any, token: { __typename?: 'UnderlyingToken', id: string, name: string } } }, tickLower: { __typename?: 'Tick', id: string, value: any }, tickUpper: { __typename?: 'Tick', id: string, value: any }, burns: Array<{ __typename?: 'Burn', id: string }>, mints: Array<{ __typename?: 'Mint', id: string }>, swaps: Array<{ __typename?: 'Swap', id: string }> } | null };
+export type GetPositionQuery = { __typename?: 'Query', position?: { __typename?: 'Position', id: string, createdTimestamp: any, updatedTimestamp: any, liquidity: any, margin: any, fixedTokenBalance: any, variableTokenBalance: any, isLiquidityProvider: boolean, isSettled: boolean, isEmpty: boolean, snapshotCount: any, owner: { __typename?: 'Wallet', id: string }, amm: { __typename?: 'AMM', id: string, termStartTimestamp: any, termEndTimestamp: any, rateOracle: { __typename?: 'RateOracle', id: string, protocolId: any, token: { __typename?: 'UnderlyingToken', id: string, name: string, decimals: any } } }, tickLower: { __typename?: 'Tick', id: string, value: any }, tickUpper: { __typename?: 'Tick', id: string, value: any }, burns: Array<{ __typename?: 'Burn', id: string }>, mints: Array<{ __typename?: 'Mint', id: string }>, swaps: Array<{ __typename?: 'Swap', id: string }> } | null };
 
 export type GetPositionSnapshotsQueryVariables = Exact<{
   orderBy: PositionSnapshot_OrderBy;
@@ -1851,7 +1861,7 @@ export type GetWalletQueryVariables = Exact<{
 }>;
 
 
-export type GetWalletQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, positionCount: any, positions: Array<{ __typename?: 'Position', id: string, createdTimestamp: any, updatedTimestamp: any, liquidity: any, margin: any, fixedTokenBalance: any, variableTokenBalance: any, isLiquidityProvider: boolean, isSettled: boolean, isEmpty: boolean, snapshotCount: any, owner: { __typename?: 'Wallet', id: string }, amm: { __typename?: 'AMM', id: string, createdTimestamp: any, updatedTimestamp: any, fcmAddress: string, marginEngineAddress: string, termStartTimestamp: any, termEndTimestamp: any, tickSpacing: any, sqrtPriceX96: any, liquidity: any, tick: any, txCount: any, rateOracle: { __typename?: 'RateOracle', id: string, protocolId: any, token: { __typename?: 'UnderlyingToken', id: string, name: string } } }, tickLower: { __typename?: 'Tick', id: string, value: any }, tickUpper: { __typename?: 'Tick', id: string, value: any }, burns: Array<{ __typename?: 'Burn', id: string }>, mints: Array<{ __typename?: 'Mint', id: string }>, swaps: Array<{ __typename?: 'Swap', id: string }> }> } | null };
+export type GetWalletQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, positionCount: any, positions: Array<{ __typename?: 'Position', id: string, createdTimestamp: any, updatedTimestamp: any, liquidity: any, margin: any, fixedTokenBalance: any, variableTokenBalance: any, isLiquidityProvider: boolean, isSettled: boolean, isEmpty: boolean, snapshotCount: any, owner: { __typename?: 'Wallet', id: string }, amm: { __typename?: 'AMM', id: string, createdTimestamp: any, updatedTimestamp: any, fcmAddress: string, marginEngineAddress: string, termStartTimestamp: any, termEndTimestamp: any, tickSpacing: any, sqrtPriceX96: any, liquidity: any, tick: any, txCount: any, rateOracle: { __typename?: 'RateOracle', id: string, protocolId: any, token: { __typename?: 'UnderlyingToken', id: string, name: string, decimals: any } } }, tickLower: { __typename?: 'Tick', id: string, value: any }, tickUpper: { __typename?: 'Tick', id: string, value: any }, burns: Array<{ __typename?: 'Burn', id: string }>, mints: Array<{ __typename?: 'Mint', id: string }>, swaps: Array<{ __typename?: 'Swap', id: string }> }> } | null };
 
 export type GetWalletsQueryVariables = Exact<{
   orderBy: Wallet_OrderBy;
@@ -2246,6 +2256,7 @@ export type TransactionResolvers<ContextType = any, ParentType extends Resolvers
 }>;
 
 export type UnderlyingTokenResolvers<ContextType = any, ParentType extends ResolversParentTypes['UnderlyingToken'] = ResolversParentTypes['UnderlyingToken']> = ResolversObject<{
+  decimals?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -2315,6 +2326,7 @@ export const GetAmMsDocument = gql`
       token {
         id
         name
+        decimals
       }
     }
     termStartTimestamp
@@ -2486,6 +2498,7 @@ export const GetPositionDocument = gql`
         token {
           id
           name
+          decimals
         }
       }
     }
@@ -2665,6 +2678,7 @@ export const GetWalletDocument = gql`
           token {
             id
             name
+            decimals
           }
         }
         termStartTimestamp
