@@ -80,8 +80,8 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
         loading={transactionPending}
         protocol={amm.protocol}
         fixedApr={amm.fixedApr}
-        leverage={0}
-        margin={0}
+        notional={notional}
+        margin={margin}
         onComplete={handleComplete}
       />
     );

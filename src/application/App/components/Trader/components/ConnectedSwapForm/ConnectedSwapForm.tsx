@@ -70,7 +70,6 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
         loading={transactionPending}
         protocol={amm.protocol}
         fixedApr={amm.fixedApr}
-        leverage={0}
         margin={0}
         onComplete={handleComplete}
       />

@@ -1,7 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useMemo } from 'react';
 import { AMM } from '@voltz/v1-sdk';
 
-import { MinimumMarginAmountPayload } from './types';
+import { useAsyncFunction, useAgent } from '@hooks';
+import { Agents } from '@components/contexts';
+import { MintMinimumMarginRequirementPayload, SwapMinimumMarginRequirementPayload } from './types';
 import AMMContext from './AMMContext';
 
 export type AMMProviderProps = {
@@ -9,108 +11,54 @@ export type AMMProviderProps = {
 };
 
 const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children }) => {
-  const [variableApy, setVariableApy] = useState<number | null>(null);
-  const [variableApyShouldLoad, setVariableApyShouldLoad] = useState(false);
-  const [variableApyLoading, setVariableApyLoading] = useState(false);
-  const [variableApyError, setVariableApyError] = useState(false);
-  const handleLoadVariableApy = useCallback(() => {
-    setVariableApyLoading(false);
-    setVariableApyError(false);
-    setVariableApyShouldLoad(true);
-  }, [setVariableApyLoading, setVariableApyError, setVariableApyShouldLoad]);
+  const { agent } = useAgent();
+  const variableApy = useAsyncFunction(
+    amm.getVariableApy.bind(amm),
+    useMemo(() => undefined, [!!amm.provider]),
+  );
+  const mintMinimumMarginRequirement = useAsyncFunction(
+    async (args: MintMinimumMarginRequirementPayload) => {
+      const recipient = await amm.signer?.getAddress();
 
-  useEffect(() => {
-    const load = async () => {
-      setVariableApyLoading(true);
-
-      try {
-        const variableApyResult = await amm.getVariableApy();
-
-        setVariableApy(variableApyResult || null);
-      } catch (error) {
-        setVariableApyError(true);
-        setVariableApy(null);
+      if (!recipient) {
+        return;
       }
 
-      setVariableApyLoading(false);
-      setVariableApyShouldLoad(false);
-    };
-
-    if (variableApyShouldLoad && !variableApyLoading) {
-      load();
-    }
-  }, [variableApyShouldLoad, !!amm.signer]);
-
-  const [minimumMarginAmount, setMinimumMarginAmount] = useState<number | null>(null);
-  const [minimumMarginAmountPayload, setMinimumMarginAmountPayload] =
-    useState<MinimumMarginAmountPayload | null>(null);
-  const [minimumMarginAmountShouldLoad, setMinimumMarginAmountShouldLoad] = useState(false);
-  const [minimumMarginAmountLoading, setMinimumMarginAmountLoading] = useState(false);
-  const [minimumMarginAmountError, setMinimumMarginAmountError] = useState(false);
-  const handleLoadMinimumMarginAmount = useCallback(
-    ({ fixedLow, fixedHigh, notional }: MinimumMarginAmountPayload) => {
-      setMinimumMarginAmountLoading(false);
-      setMinimumMarginAmountError(false);
-      setMinimumMarginAmountShouldLoad(true);
-      setMinimumMarginAmountPayload({ fixedLow, fixedHigh, notional });
+      return amm.getMinimumMarginRequirementPostMint({
+        ...args,
+        recipient,
+        margin: 0,
+      });
     },
-    [
-      setMinimumMarginAmountLoading,
-      setMinimumMarginAmountError,
-      setMinimumMarginAmountShouldLoad,
-      setMinimumMarginAmountPayload,
-    ],
+    useMemo(() => undefined, [!!amm.signer]),
+  );
+  const swapMinimumMarginRequirement = useAsyncFunction(
+    async (args: SwapMinimumMarginRequirementPayload) => {
+      const recipient = await amm.signer?.getAddress();
+
+      if (!recipient) {
+        return;
+      }
+
+      const result = await amm.getInfoPostSwap({
+        ...args,
+        isFT: agent === Agents.FIXED_TRADER,
+        recipient,
+      });
+
+      if (!result) {
+        return;
+      }
+
+      return result.marginRequirement;
+    },
+    useMemo(() => undefined, [!!amm.signer, agent]),
   );
 
-  useEffect(() => {
-    const load = async () => {
-      setMinimumMarginAmountLoading(true);
-
-      try {
-        const recipient = await amm.signer?.getAddress();
-
-        if (!recipient || !minimumMarginAmountPayload) {
-          return;
-        }
-
-        const { fixedLow, fixedHigh, notional } = minimumMarginAmountPayload;
-
-        const result = await amm.getMinimumMarginRequirementPostMint({
-          recipient,
-          fixedLow,
-          fixedHigh,
-          notional,
-          margin: 0,
-        });
-        setMinimumMarginAmount(result || null);
-      } catch (error) {
-        setMinimumMarginAmountError(true);
-        setMinimumMarginAmount(null);
-      }
-
-      setMinimumMarginAmountLoading(false);
-      setMinimumMarginAmountShouldLoad(false);
-      setMinimumMarginAmountPayload(null);
-    };
-
-    if (
-      minimumMarginAmountShouldLoad &&
-      minimumMarginAmountPayload &&
-      !minimumMarginAmountLoading
-    ) {
-      load();
-    }
-  }, [minimumMarginAmountShouldLoad, minimumMarginAmountPayload, !!amm.signer]);
-
   const value = {
-    loadVariableApy: handleLoadVariableApy,
     variableApy,
-    variableApyLoading,
-    variableApyError,
-    loadMinimumMarginAmount: handleLoadMinimumMarginAmount,
-    minimumMarginAmount,
-    minimumMarginAmountLoading,
-    minimumMarginAmountError,
+    mintMinimumMarginRequirement,
+    swapMinimumMarginRequirement,
   };
 
   return <AMMContext.Provider value={value}>{children}</AMMContext.Provider>;

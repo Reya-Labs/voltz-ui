@@ -11,10 +11,9 @@ import {
   RateOptions,
   MarginAmount,
   NotionalAmount,
-  MinimumMarginAmount,
 } from '@components/composite';
 import { HandleSubmitMintBurnFormArgs } from './types';
-import { SubmitMintBurnFormButton } from './components';
+import { MintBurnMinimumMarginAmount, SubmitMintBurnFormButton } from './components';
 
 export type MintBurnFormProps = AgentProps & {
   protocol?: string;
@@ -121,7 +120,11 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
           marginBottom: (theme) => theme.spacing(4),
         }}
       >
-        <MinimumMarginAmount fixedLow={fixedLow} fixedHigh={fixedHigh} notional={notional} />
+        <MintBurnMinimumMarginAmount
+          fixedLow={fixedLow}
+          fixedHigh={fixedHigh}
+          notional={notional}
+        />
       </Box>
       <Box
         sx={{

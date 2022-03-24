@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 
 import { useWallet } from '@hooks';
-import { calculateNotionalAmount } from '@utilities';
 import { Button, Panel, Typography } from '@components/atomic';
 import { ProtocolInformation, WalletAddressDisplay } from '@components/composite';
 
@@ -11,7 +10,7 @@ export type PendingTransactionProps = {
   loading: boolean;
   protocol?: string;
   fixedApr?: number;
-  leverage?: number;
+  notional?: number;
   margin?: number;
   onComplete: () => void;
 };
@@ -20,7 +19,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   loading,
   protocol,
   fixedApr,
-  leverage,
+  notional,
   margin,
   onComplete,
 }) => {
@@ -122,7 +121,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
           }}
         >
           <Typography label="NOTIONAL AMOUNT" variant="body2">
-            {calculateNotionalAmount(margin, leverage).toNumber()} {protocol}
+            {notional} {protocol}
           </Typography>
         </Box>
         <Box

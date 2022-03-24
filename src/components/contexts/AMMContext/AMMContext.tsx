@@ -1,17 +1,30 @@
 import { createContext } from 'react';
 
-import { AMMDispatch } from './types';
+import {
+  MintMinimumMarginRequirementPayload,
+  SwapMinimumMarginRequirementPayload,
+  AMMDispatch,
+} from './types';
 
 const AMMContext = createContext<AMMDispatch>({
-  loadVariableApy: () => null,
-  variableApy: null,
-  variableApyLoading: false,
-  variableApyError: false,
-
-  loadMinimumMarginAmount: () => null,
-  minimumMarginAmount: null,
-  minimumMarginAmountLoading: false,
-  minimumMarginAmountError: false,
+  variableApy: {
+    result: undefined,
+    error: false,
+    loading: false,
+    call: () => undefined,
+  },
+  mintMinimumMarginRequirement: {
+    result: undefined,
+    error: false,
+    loading: false,
+    call: (_args?: MintMinimumMarginRequirementPayload) => undefined,
+  },
+  swapMinimumMarginRequirement: {
+    result: undefined,
+    error: false,
+    loading: false,
+    call: (_args?: SwapMinimumMarginRequirementPayload) => undefined,
+  },
 });
 
 export default AMMContext;

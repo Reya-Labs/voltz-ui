@@ -6,6 +6,7 @@ storybook-static
 build-storybook.log
 .DS_Store
 .env*
+package-lock.json
 
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend

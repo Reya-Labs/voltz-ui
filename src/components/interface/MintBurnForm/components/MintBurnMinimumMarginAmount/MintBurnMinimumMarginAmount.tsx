@@ -3,38 +3,38 @@ import isUndefined from 'lodash/isUndefined';
 
 import { useAMMContext } from '@hooks';
 import { Typography } from '@components/atomic';
-import IconLabel from '../IconLabel/IconLabel';
+import { IconLabel } from '@components/composite';
 
-export type MinimumMarginAmountProps = {
+export type MintBurnMinimumMarginAmountProps = {
   fixedLow?: number;
   fixedHigh?: number;
   notional?: number;
 };
 
-const MinimumMarginAmount: React.FunctionComponent<MinimumMarginAmountProps> = ({
+const MintBurnMinimumMarginAmount: React.FunctionComponent<MintBurnMinimumMarginAmountProps> = ({
   fixedLow,
   fixedHigh,
   notional,
 }) => {
-  const { loadMinimumMarginAmount, minimumMarginAmountLoading, minimumMarginAmount } =
-    useAMMContext();
+  const { mintMinimumMarginRequirement } = useAMMContext();
+  const { result, loading, call } = mintMinimumMarginRequirement;
 
   useEffect(() => {
     if (!isUndefined(fixedLow) && !isUndefined(fixedHigh) && !isUndefined(notional)) {
-      loadMinimumMarginAmount({ fixedLow, fixedHigh, notional });
+      call({ fixedLow, fixedHigh, notional });
     }
-  }, [loadMinimumMarginAmount, fixedLow, fixedHigh, notional]);
+  }, [call, fixedLow, fixedHigh, notional]);
 
   const renderMarginAmount = () => {
-    if (minimumMarginAmountLoading) {
+    if (loading) {
       return 'Loading...';
     }
 
-    if (!minimumMarginAmount) {
+    if (!result) {
       return '0';
     }
 
-    return minimumMarginAmount.toFixed(2);
+    return result.toFixed(2);
   };
 
   return (
@@ -42,7 +42,7 @@ const MinimumMarginAmount: React.FunctionComponent<MinimumMarginAmountProps> = (
       variant="h3"
       label={
         <IconLabel
-          label="minimum margin amount"
+          label="additional margin amount"
           icon="information-circle"
           info="Lorem Ipsum is standard dummy text, or placeholder text, used to visualize what text would look like, such as font, typography and layout. It is easier to identify visual aspects using lorem ipsum as opposed to writing or other filler text. For those of you who don't know what Lorem Ipsum looks like or have never seen it before, here it is:"
         />
@@ -53,4 +53,4 @@ const MinimumMarginAmount: React.FunctionComponent<MinimumMarginAmountProps> = (
   );
 };
 
-export default MinimumMarginAmount;
+export default MintBurnMinimumMarginAmount;
