@@ -70,21 +70,21 @@ var Position = /** @class */ (function () {
     });
     Object.defineProperty(Position.prototype, "effectiveMargin", {
         get: function () {
-            return jsbi_1.default.toNumber(this.margin) / Math.pow(10, 18);
+            return jsbi_1.default.toNumber(jsbi_1.default.divide(this.margin, jsbi_1.default.BigInt(Math.pow(10, 18))));
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Position.prototype, "effectiveFixedTokenBalance", {
         get: function () {
-            return jsbi_1.default.toNumber(this.fixedTokenBalance) / Math.pow(10, 18);
+            return jsbi_1.default.toNumber(jsbi_1.default.divide(this.fixedTokenBalance, jsbi_1.default.BigInt(Math.pow(10, 18))));
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Position.prototype, "effectiveVariableTokenBalance", {
         get: function () {
-            return jsbi_1.default.toNumber(this.variableTokenBalance) / Math.pow(10, 18);
+            return jsbi_1.default.toNumber(jsbi_1.default.divide(this.variableTokenBalance, jsbi_1.default.BigInt(Math.pow(10, 18))));
         },
         enumerable: false,
         configurable: true

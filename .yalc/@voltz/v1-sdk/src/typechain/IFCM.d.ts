@@ -163,8 +163,8 @@ export class IFCM extends BaseContract {
     >;
 
     initialize(
-      _vammAddress: string,
-      _marginEngineAddress: string,
+      __vamm: string,
+      __marginEngine: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -210,8 +210,8 @@ export class IFCM extends BaseContract {
   >;
 
   initialize(
-    _vammAddress: string,
-    _marginEngineAddress: string,
+    __vamm: string,
+    __marginEngine: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -257,8 +257,8 @@ export class IFCM extends BaseContract {
     >;
 
     initialize(
-      _vammAddress: string,
-      _marginEngineAddress: string,
+      __vamm: string,
+      __marginEngine: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -298,8 +298,8 @@ export class IFCM extends BaseContract {
     ): Promise<BigNumber>;
 
     initialize(
-      _vammAddress: string,
-      _marginEngineAddress: string,
+      __vamm: string,
+      __marginEngine: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -339,8 +339,8 @@ export class IFCM extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     initialize(
-      _vammAddress: string,
-      _marginEngineAddress: string,
+      __vamm: string,
+      __marginEngine: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

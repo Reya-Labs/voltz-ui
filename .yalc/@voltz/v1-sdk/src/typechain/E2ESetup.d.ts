@@ -46,7 +46,7 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     "liquidatePosition(int24,int24,address,int24,int24,address)": FunctionFragment;
     "liquidationRewards()": FunctionFragment;
     "mint(address,int24,int24,uint128)": FunctionFragment;
-    "mintOrBurnViaPeriphery((address,address,int24,int24,uint256,bool))": FunctionFragment;
+    "mintOrBurnViaPeriphery((address,int24,int24,uint256,bool))": FunctionFragment;
     "peripheryAddress()": FunctionFragment;
     "positionHistory(bytes32,uint256)": FunctionFragment;
     "positionSwapsHistory(bytes32,uint256)": FunctionFragment;
@@ -63,7 +63,7 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     "sizeOfPositionHistory(bytes32)": FunctionFragment;
     "sizeOfPositionSwapsHistory(bytes32)": FunctionFragment;
     "swap((address,int256,uint160,int24,int24))": FunctionFragment;
-    "swapViaPeriphery((address,address,bool,uint256,uint160,int24,int24))": FunctionFragment;
+    "swapViaPeriphery((address,bool,uint256,uint160,int24,int24))": FunctionFragment;
     "unwindFullyCollateralisedFixedTakerSwap(address,uint256,uint160)": FunctionFragment;
     "updatePositionMargin(address,int24,int24,int256)": FunctionFragment;
   };
@@ -177,8 +177,7 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     functionFragment: "mintOrBurnViaPeriphery",
     values: [
       {
-        marginEngineAddress: string;
-        recipient: string;
+        marginEngine: string;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
         notional: BigNumberish;
@@ -262,8 +261,7 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     functionFragment: "swapViaPeriphery",
     values: [
       {
-        marginEngineAddress: string;
-        recipient: string;
+        marginEngine: string;
         isFT: boolean;
         notional: BigNumberish;
         sqrtPriceLimitX96: BigNumberish;
@@ -681,8 +679,7 @@ export class E2ESetup extends BaseContract {
 
     mintOrBurnViaPeriphery(
       params: {
-        marginEngineAddress: string;
-        recipient: string;
+        marginEngine: string;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
         notional: BigNumberish;
@@ -809,8 +806,7 @@ export class E2ESetup extends BaseContract {
 
     swapViaPeriphery(
       params: {
-        marginEngineAddress: string;
-        recipient: string;
+        marginEngine: string;
         isFT: boolean;
         notional: BigNumberish;
         sqrtPriceLimitX96: BigNumberish;
@@ -1022,8 +1018,7 @@ export class E2ESetup extends BaseContract {
 
   mintOrBurnViaPeriphery(
     params: {
-      marginEngineAddress: string;
-      recipient: string;
+      marginEngine: string;
       tickLower: BigNumberish;
       tickUpper: BigNumberish;
       notional: BigNumberish;
@@ -1150,8 +1145,7 @@ export class E2ESetup extends BaseContract {
 
   swapViaPeriphery(
     params: {
-      marginEngineAddress: string;
-      recipient: string;
+      marginEngine: string;
       isFT: boolean;
       notional: BigNumberish;
       sqrtPriceLimitX96: BigNumberish;
@@ -1359,8 +1353,7 @@ export class E2ESetup extends BaseContract {
 
     mintOrBurnViaPeriphery(
       params: {
-        marginEngineAddress: string;
-        recipient: string;
+        marginEngine: string;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
         notional: BigNumberish;
@@ -1481,8 +1474,7 @@ export class E2ESetup extends BaseContract {
 
     swapViaPeriphery(
       params: {
-        marginEngineAddress: string;
-        recipient: string;
+        marginEngine: string;
         isFT: boolean;
         notional: BigNumberish;
         sqrtPriceLimitX96: BigNumberish;
@@ -1640,8 +1632,7 @@ export class E2ESetup extends BaseContract {
 
     mintOrBurnViaPeriphery(
       params: {
-        marginEngineAddress: string;
-        recipient: string;
+        marginEngine: string;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
         notional: BigNumberish;
@@ -1730,8 +1721,7 @@ export class E2ESetup extends BaseContract {
 
     swapViaPeriphery(
       params: {
-        marginEngineAddress: string;
-        recipient: string;
+        marginEngine: string;
         isFT: boolean;
         notional: BigNumberish;
         sqrtPriceLimitX96: BigNumberish;
@@ -1889,8 +1879,7 @@ export class E2ESetup extends BaseContract {
 
     mintOrBurnViaPeriphery(
       params: {
-        marginEngineAddress: string;
-        recipient: string;
+        marginEngine: string;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
         notional: BigNumberish;
@@ -1979,8 +1968,7 @@ export class E2ESetup extends BaseContract {
 
     swapViaPeriphery(
       params: {
-        marginEngineAddress: string;
-        recipient: string;
+        marginEngine: string;
         isFT: boolean;
         notional: BigNumberish;
         sqrtPriceLimitX96: BigNumberish;

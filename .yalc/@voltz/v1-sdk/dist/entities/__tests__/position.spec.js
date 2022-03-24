@@ -75,6 +75,7 @@ describe('amm', function () {
                     underlyingToken: new token_1.default({
                         id: '0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9',
                         name: 'USDC',
+                        decimals: 18
                     }),
                     sqrtPriceX96: tickMath_1.TickMath.getSqrtRatioAtTick(0).toString(),
                     termEndTimestamp: '1649458800000000000000000000',
@@ -112,6 +113,8 @@ describe('amm', function () {
                 console.log(position.createdDateTime);
                 console.log(position.updatedDateTime);
                 console.log(position.notional);
+                console.log(position.effectiveFixedTokenBalance);
+                console.log(position.effectiveVariableTokenBalance);
                 return [2 /*return*/];
             });
         }); });

@@ -326,12 +326,6 @@ const _abi = [
       {
         indexed: false,
         internalType: "contract IFCM",
-        name: "masterFCMAddressOld",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "contract IFCM",
         name: "masterFCMAddress",
         type: "address",
       },
@@ -495,6 +489,32 @@ const _abi = [
       },
     ],
     name: "setMasterFCM",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "contract IMarginEngine",
+        name: "_masterMarginEngine",
+        type: "address",
+      },
+    ],
+    name: "setMasterMarginEngine",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "contract IVAMM",
+        name: "_masterVAMM",
+        type: "address",
+      },
+    ],
+    name: "setMasterVAMM",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

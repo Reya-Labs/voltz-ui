@@ -21,6 +21,7 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface AaveRateOracleInterface extends ethers.utils.Interface {
   functions: {
+    "ONE_IN_WAD()": FunctionFragment;
     "aaveLendingPool()": FunctionFragment;
     "getApyFromTo(uint256,uint256)": FunctionFragment;
     "getRateFromTo(uint256,uint256)": FunctionFragment;
@@ -41,6 +42,10 @@ interface AaveRateOracleInterface extends ethers.utils.Interface {
     "writeOracleEntry()": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "ONE_IN_WAD",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "aaveLendingPool",
     values?: undefined
@@ -111,6 +116,7 @@ interface AaveRateOracleInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
 
+  decodeFunctionResult(functionFragment: "ONE_IN_WAD", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "aaveLendingPool",
     data: BytesLike
@@ -263,6 +269,8 @@ export class AaveRateOracle extends BaseContract {
   interface: AaveRateOracleInterface;
 
   functions: {
+    ONE_IN_WAD(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     aaveLendingPool(overrides?: CallOverrides): Promise<[string]>;
 
     getApyFromTo(
@@ -357,6 +365,8 @@ export class AaveRateOracle extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
+  ONE_IN_WAD(overrides?: CallOverrides): Promise<BigNumber>;
+
   aaveLendingPool(overrides?: CallOverrides): Promise<string>;
 
   getApyFromTo(
@@ -449,6 +459,8 @@ export class AaveRateOracle extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    ONE_IN_WAD(overrides?: CallOverrides): Promise<BigNumber>;
+
     aaveLendingPool(overrides?: CallOverrides): Promise<string>;
 
     getApyFromTo(
@@ -630,6 +642,8 @@ export class AaveRateOracle extends BaseContract {
   };
 
   estimateGas: {
+    ONE_IN_WAD(overrides?: CallOverrides): Promise<BigNumber>;
+
     aaveLendingPool(overrides?: CallOverrides): Promise<BigNumber>;
 
     getApyFromTo(
@@ -711,6 +725,8 @@ export class AaveRateOracle extends BaseContract {
   };
 
   populateTransaction: {
+    ONE_IN_WAD(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     aaveLendingPool(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getApyFromTo(

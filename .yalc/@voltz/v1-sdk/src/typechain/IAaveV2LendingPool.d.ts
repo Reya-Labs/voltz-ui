@@ -23,7 +23,6 @@ interface IAaveV2LendingPoolInterface extends ethers.utils.Interface {
   functions: {
     "getReserveData(address)": FunctionFragment;
     "getReserveNormalizedIncome(address)": FunctionFragment;
-    "initReserve(address,address)": FunctionFragment;
     "withdraw(address,uint256,address)": FunctionFragment;
   };
 
@@ -36,10 +35,6 @@ interface IAaveV2LendingPoolInterface extends ethers.utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "initReserve",
-    values: [string, string]
-  ): string;
-  encodeFunctionData(
     functionFragment: "withdraw",
     values: [string, BigNumberish, string]
   ): string;
@@ -50,10 +45,6 @@ interface IAaveV2LendingPoolInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getReserveNormalizedIncome",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "initReserve",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
@@ -145,12 +136,6 @@ export class IAaveV2LendingPool extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    initReserve(
-      asset: string,
-      aTokenAddress: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     withdraw(
       asset: string,
       amount: BigNumberish,
@@ -196,12 +181,6 @@ export class IAaveV2LendingPool extends BaseContract {
     underlyingAsset: string,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
-
-  initReserve(
-    asset: string,
-    aTokenAddress: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
 
   withdraw(
     asset: string,
@@ -249,12 +228,6 @@ export class IAaveV2LendingPool extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    initReserve(
-      asset: string,
-      aTokenAddress: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     withdraw(
       asset: string,
       amount: BigNumberish,
@@ -276,12 +249,6 @@ export class IAaveV2LendingPool extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    initReserve(
-      asset: string,
-      aTokenAddress: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     withdraw(
       asset: string,
       amount: BigNumberish,
@@ -299,12 +266,6 @@ export class IAaveV2LendingPool extends BaseContract {
     getReserveNormalizedIncome(
       underlyingAsset: string,
       overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    initReserve(
-      asset: string,
-      aTokenAddress: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     withdraw(
