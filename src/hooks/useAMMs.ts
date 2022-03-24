@@ -34,7 +34,11 @@ const useAMMs = (): UseAMMsResult => {
             signer,
             provider: providers.getDefaultProvider(process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK),
             rateOracle: new RateOracle({ id: rateOracleAddress, protocolId: protocolId as number }),
-            underlyingToken: new Token({ id: tokenAddress, name: tokenName, decimals }),
+            underlyingToken: new Token({
+              id: tokenAddress,
+              name: tokenName,
+              decimals: decimals as number,
+            }),
             ...rest,
           }),
       );
