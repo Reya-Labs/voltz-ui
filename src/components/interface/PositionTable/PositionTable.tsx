@@ -65,9 +65,10 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
     onSetOrder(field === orderBy ? (order === 'asc' ? 'desc' : 'asc') : 'asc');
     onSetOrderBy(field);
   };
+  const positionIds = positions.map(({ id }) => id).join('');
   const tableData = useMemo(() => {
     return positions.map(mapPositionToPositionTableDatum);
-  }, [order, page, size]);
+  }, [positionIds, order, page, size]);
   const handleSelectRow = (index: number) => () => {
     onSelectItem(positions[index]);
   };
@@ -89,7 +90,12 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
           <PositionTableHead order={order} orderBy={orderBy} onSort={handleSort} />
           <TableBody>
             {tableData.map((datum, index) => (
-              <PositionTableRow datum={datum} index={index} onSelect={handleSelectRow(index)} />
+              <PositionTableRow
+                key={datum.id}
+                datum={datum}
+                index={index}
+                onSelect={handleSelectRow(index)}
+              />
             ))}
           </TableBody>
           <PositionTableFooter
