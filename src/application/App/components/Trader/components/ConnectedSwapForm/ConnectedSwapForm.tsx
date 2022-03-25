@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import isNull from 'lodash/isNull';
 import { useNavigate } from 'react-router-dom';
 import { Position } from '@voltz/v1-sdk';
@@ -26,7 +26,17 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
   onReset,
 }) => {
   const { agent } = useAgent();
-  const amm = !isNull(defaultAMM) ? defaultAMM : position?.amm;
+  const amm = useMemo(() => {
+    if (!isNull(defaultAMM)) {
+      return defaultAMM;
+    }
+
+    if (position) {
+      return position.amm as AugmentedAMM;
+    }
+
+    return undefined;
+  }, [defaultAMM, position]);
   const { account } = useWallet();
   const navigate = useNavigate();
   const [notional, setNotional] = useState<SwapFormProps['notional']>();
