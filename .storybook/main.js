@@ -24,6 +24,7 @@ module.exports = {
     config.resolve.alias['@theme'] = path.resolve(path.dirname(__dirname), 'src/theme');
     config.resolve.alias['@components'] = path.resolve(path.dirname(__dirname), 'src/components');
     config.resolve.alias['@hooks'] = path.resolve(path.dirname(__dirname), 'src/hooks');
+    config.resolve.alias['@store'] = path.resolve(path.dirname(__dirname), 'src/store');
     config.resolve.alias['@graphql'] = path.resolve(path.dirname(__dirname), 'src/graphql');
     config.resolve.alias['@utilities'] = path.resolve(path.dirname(__dirname), 'src/utilities');
     config.resolve.alias['@routes'] = path.resolve(path.dirname(__dirname), 'src/routes');
