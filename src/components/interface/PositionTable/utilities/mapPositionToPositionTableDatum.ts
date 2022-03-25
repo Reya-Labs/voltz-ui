@@ -1,22 +1,26 @@
 import { Position } from '@voltz/v1-sdk';
 
+import { Agents } from '@components/contexts';
 import { PositionTableDatum } from '../types';
 
-const mapPositionToPositionTableDatum = ({
-  id,
-  amm,
-  effectiveMargin,
-  effectiveVariableTokenBalance,
-}: Position): PositionTableDatum => {
-  return {
+const mapPositionToPositionTableDatum =
+  (agent: Agents) =>
+  ({
     id,
-    protocol: amm.protocol,
-    startDate: amm.startDateTime,
-    endDate: amm.endDateTime,
-    fixedApr: amm.fixedRate.toNumber(),
-    notional: effectiveVariableTokenBalance,
-    margin: effectiveMargin,
+    amm,
+    notional,
+    effectiveMargin,
+    effectiveVariableTokenBalance,
+  }: Position): PositionTableDatum => {
+    return {
+      id,
+      protocol: amm.protocol,
+      startDate: amm.startDateTime,
+      endDate: amm.endDateTime,
+      fixedApr: amm.fixedRate.toNumber(),
+      notional: agent === Agents.LIQUIDITY_PROVIDER ? notional : effectiveVariableTokenBalance,
+      margin: effectiveMargin,
+    };
   };
-};
 
 export default mapPositionToPositionTableDatum;
