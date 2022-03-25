@@ -5,8 +5,8 @@ import { PositionTableDatum } from '../types';
 const mapPositionToPositionTableDatum = ({
   id,
   amm,
-  notional,
   effectiveMargin,
+  effectiveVariableTokenBalance,
 }: Position): PositionTableDatum => {
   return {
     id,
@@ -14,7 +14,7 @@ const mapPositionToPositionTableDatum = ({
     startDate: amm.startDateTime,
     endDate: amm.endDateTime,
     fixedApr: amm.fixedRate.toNumber(),
-    notional: notional,
+    notional: effectiveVariableTokenBalance,
     margin: effectiveMargin,
   };
 };
