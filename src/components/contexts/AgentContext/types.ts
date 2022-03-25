@@ -5,7 +5,7 @@ export enum Agents {
 }
 
 export type AgentSettings = {
-  agent: Agents | undefined;
+  agent: Agents;
   onChangeAgent: (agent: Agents) => void;
 };
 

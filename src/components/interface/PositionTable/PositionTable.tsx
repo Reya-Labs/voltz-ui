@@ -6,6 +6,7 @@ import { SystemStyleObject, Theme } from '@mui/system';
 import { Position } from '@voltz/v1-sdk';
 
 import { data } from '@utilities';
+import { useAgent } from '@hooks';
 import { Panel } from '@components/atomic';
 import { PositionTableFields } from './types';
 import { labels } from './constants';
@@ -61,13 +62,14 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
       },
     },
   };
+  const { agent } = useAgent();
   const handleSort = (field: PositionTableFields) => {
     onSetOrder(field === orderBy ? (order === 'asc' ? 'desc' : 'asc') : 'asc');
     onSetOrderBy(field);
   };
   const positionIds = positions.map(({ id }) => id).join('');
   const tableData = useMemo(() => {
-    return positions.map(mapPositionToPositionTableDatum);
+    return positions.map(mapPositionToPositionTableDatum(agent));
   }, [positionIds, order, page, size]);
   const handleSelectRow = (index: number) => () => {
     onSelectItem(positions[index]);

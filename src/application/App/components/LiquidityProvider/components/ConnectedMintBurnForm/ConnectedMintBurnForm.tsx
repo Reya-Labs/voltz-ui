@@ -67,7 +67,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   const handleComplete = () => {
     setSubmitting(false);
     onReset();
-    navigate(`/${routes.POOLS}`);
+    navigate(`/${routes.LP_FARM}`);
   };
 
   if (!amm) {
