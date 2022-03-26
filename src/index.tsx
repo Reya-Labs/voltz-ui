@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter } from 'react-router-dom';
+import { Provider as ReduxProvider } from 'react-redux';
 import Amplify from 'aws-amplify';
 
 import './fonts/PixelOperator/PixelOperatorMono8.woff';
@@ -14,6 +15,7 @@ import './fonts/DM_Sans/DMSans-Medium.woff';
 import './fonts/DM_Sans/DMSans-MediumItalic.woff';
 import './fonts/DM_Sans/DMSans-Regular.woff';
 import './index.css';
+import store from './store';
 import { VoltzGraphProvider } from './graphql';
 import { ThemeProvider } from './theme';
 import { AgentProvider, WalletProvider } from './components';
@@ -32,15 +34,17 @@ try {
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider>
-      <VoltzGraphProvider>
-        <WalletProvider>
-          <AgentProvider>
-            <HashRouter>
-              <App />
-            </HashRouter>
-          </AgentProvider>
-        </WalletProvider>
-      </VoltzGraphProvider>
+      <ReduxProvider store={store}>
+        <VoltzGraphProvider>
+          <WalletProvider>
+            <AgentProvider>
+              <HashRouter>
+                <App />
+              </HashRouter>
+            </AgentProvider>
+          </WalletProvider>
+        </VoltzGraphProvider>
+      </ReduxProvider>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root'),

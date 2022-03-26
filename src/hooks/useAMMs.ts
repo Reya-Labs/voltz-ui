@@ -3,9 +3,9 @@ import isNull from 'lodash/isNull';
 import { Token, RateOracle } from '@voltz/v1-sdk';
 import { providers } from 'ethers';
 
-import { useWallet } from '@hooks';
+import { AugmentedAMM } from '@utilities';
 import { useGetAmMsQuery, Amm_OrderBy } from '@graphql';
-import AugmentedAMM from './augmentedAmm';
+import useWallet from './useWallet';
 
 export type UseAMMsArgs = {};
 

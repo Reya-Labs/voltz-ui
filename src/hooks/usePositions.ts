@@ -4,7 +4,8 @@ import isNull from 'lodash/isNull';
 import { Position, Token, RateOracle } from '@voltz/v1-sdk';
 import { providers } from 'ethers';
 
-import { useAgent, useWallet, AugmentedAMM } from '@hooks';
+import { AugmentedAMM } from '@utilities';
+import { useAgent, useWallet } from '@hooks';
 import { Agents } from '@components/contexts';
 
 export type usePositionsResult = {
