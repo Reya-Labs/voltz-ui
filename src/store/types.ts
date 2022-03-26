@@ -1,7 +1,7 @@
 import { Agents } from '@components/contexts';
 
 export type WindowWithEthereum = typeof window & {
-  ethererum: any;
+  ethereum: any;
 };
 
 export type TransactionUpdate = {

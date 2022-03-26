@@ -3,15 +3,11 @@ import { Token, RateOracle } from '@voltz/v1-sdk';
 
 import { AugmentedAMM } from '@utilities';
 import { SerializedAMM } from '../types';
-import getSigner from './getSigner';
 
-const deserializeAmm = (serializedAmm: SerializedAMM): AugmentedAMM | null => {
-  const signer = getSigner();
-
-  if (!signer) {
-    return null;
-  }
-
+const deserializeAmm = (
+  serializedAmm: SerializedAMM,
+  signer: providers.JsonRpcSigner,
+): AugmentedAMM => {
   const {
     rateOracle: {
       id: rateOracleAddress,

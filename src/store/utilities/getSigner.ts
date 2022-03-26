@@ -2,8 +2,8 @@ import { ethers } from 'ethers';
 
 import { WindowWithEthereum } from '../types';
 
-const getSigner = (): ethers.providers.JsonRpcSigner | null => {
-  const ethereum = (window as WindowWithEthereum).ethererum;
+function* getSigner() {
+  const ethereum = (window as WindowWithEthereum).ethereum;
 
   if (!ethereum) {
     return null;
@@ -12,6 +12,6 @@ const getSigner = (): ethers.providers.JsonRpcSigner | null => {
   const provider = new ethers.providers.Web3Provider(ethereum, 'any');
 
   return provider.getSigner();
-};
+}
 
 export default getSigner;

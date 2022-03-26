@@ -1,4 +1,4 @@
-import { ContractTransaction } from 'ethers';
+import { ContractTransaction, providers } from 'ethers';
 import { call, put } from 'redux-saga/effects';
 import { DateTime } from 'luxon';
 
@@ -7,17 +7,17 @@ import { deserializeAmm, getSigner } from '../../utilities';
 import * as actions from '../../actions';
 
 function* mintSaga(action: MintAction) {
-  const signer = getSigner();
-  const amm = deserializeAmm(action.payload.amm);
+  const signer: providers.JsonRpcSigner = yield getSigner();
+  const amm = deserializeAmm(action.payload.amm, signer);
 
   if (!signer || !amm) {
     return;
   }
 
-  const recipient: string = yield call(signer.getAddress);
+  const recipient: string = yield call([signer, 'getAddress']);
   const { id, fixedLow, fixedHigh, notional, margin } = action.payload.transaction;
 
-  const result: ContractTransaction | void = yield call(amm.mint, {
+  const result: ContractTransaction | void = yield call([amm, 'mint'], {
     recipient,
     fixedLow,
     fixedHigh,
