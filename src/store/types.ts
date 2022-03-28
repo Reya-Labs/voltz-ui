@@ -8,16 +8,18 @@ export type TransactionUpdate = {
   id: string;
   txid?: string;
   failedAt?: string;
+  failureMessage?: string;
   succeededAt?: string;
 };
 
 export type Transaction = TransactionUpdate & {
   agent: Agents;
   ammId: string;
-  fixedLow: number;
-  fixedHigh: number;
+  fixedLow?: number;
+  fixedHigh?: number;
   notional: number;
   margin: number;
+  partialCollateralization?: boolean;
 };
 
 export type State = {

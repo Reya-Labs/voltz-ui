@@ -1,4 +1,4 @@
-import { AugmentedAMM } from '@hooks';
+import { AugmentedAMM } from '@utilities';
 import { SerializedAMM } from '../types';
 
 const serializeAmm = (amm: AugmentedAMM): SerializedAMM => ({

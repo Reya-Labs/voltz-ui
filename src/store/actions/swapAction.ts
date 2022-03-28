@@ -1,10 +1,15 @@
-import { SwapAction, SerializedAMM, Transaction } from '../types';
+import { AugmentedAMM } from '@utilities';
+import { SwapAction, Transaction } from '../types';
+import { serializeAmm, createId } from '../utilities';
 
-const swapAction = (amm: SerializedAMM, transaction: Transaction): SwapAction => ({
+const swapAction = (amm: AugmentedAMM, transaction: Omit<Transaction, 'id'>): SwapAction => ({
   type: 'swap',
   payload: {
-    amm,
-    transaction,
+    amm: serializeAmm(amm),
+    transaction: {
+      ...transaction,
+      id: createId(transaction),
+    },
   },
 });
 
