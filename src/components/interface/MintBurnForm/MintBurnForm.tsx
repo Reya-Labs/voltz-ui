@@ -1,6 +1,7 @@
 import React from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
+import isUndefined from 'lodash/isUndefined';
 
 import { AgentProps } from '@components/contexts';
 import { Button, Panel } from '@components/atomic';
@@ -33,7 +34,7 @@ export type MintBurnFormProps = AgentProps & {
   onChangeFixedHigh: (value: number) => void;
   onChangeNotional: (value: number) => void;
   onChangeMargin: (value: number) => void;
-  onSubmit: (values: HandleSubmitMintBurnFormArgs) => Promise<void>;
+  onSubmit: (values: HandleSubmitMintBurnFormArgs) => void;
   onCancel: () => void;
 };
 
@@ -58,7 +59,16 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
+    if (
+      isUndefined(fixedLow) ||
+      isUndefined(fixedHigh) ||
+      isUndefined(notional) ||
+      isUndefined(margin)
+    ) {
+      return;
+    }
+
     return onSubmit({
       fixedLow,
       fixedHigh,

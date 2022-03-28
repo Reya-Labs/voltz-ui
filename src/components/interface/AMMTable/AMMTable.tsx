@@ -4,8 +4,7 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import { SystemStyleObject, Theme } from '@mui/system';
 
-import { data } from '@utilities';
-import { AugmentedAMM } from '@hooks';
+import { data, AugmentedAMM } from '@utilities';
 import { AMMProvider } from '@components/contexts';
 import { Panel } from '@components/atomic';
 import { AMMTableFields } from './types';

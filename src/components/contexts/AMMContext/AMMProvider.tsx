@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 
-import { useAsyncFunction, useAgent, AugmentedAMM } from '@hooks';
+import { AugmentedAMM } from '@utilities';
+import { useAsyncFunction, useAgent } from '@hooks';
 import { Agents } from '@components/contexts';
 import { MintMinimumMarginRequirementPayload, SwapMinimumMarginRequirementPayload } from './types';
 import AMMContext from './AMMContext';
@@ -25,7 +26,6 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
 
       return amm.getMinimumMarginRequirementPostMint({
         ...args,
-        recipient,
         margin: 0,
       });
     },
@@ -42,7 +42,6 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
       const result = await amm.getInfoPostSwap({
         ...args,
         isFT: agent === Agents.FIXED_TRADER,
-        recipient,
       });
 
       if (!result) {

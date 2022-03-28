@@ -2,30 +2,32 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 
-import { useWallet } from '@hooks';
+import { AugmentedAMM } from '@utilities';
+import { useWallet, useSelector } from '@hooks';
+import { selectors } from '@store';
 import { Button, Panel, Typography } from '@components/atomic';
 import { ProtocolInformation, WalletAddressDisplay } from '@components/composite';
 
 export type PendingTransactionProps = {
-  loading: boolean;
-  protocol?: string;
-  fixedApr?: number;
-  notional?: number;
-  margin?: number;
+  amm: AugmentedAMM;
+  transactionId?: string;
   onComplete: () => void;
 };
 
 const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
-  loading,
-  protocol,
-  fixedApr,
-  notional,
-  margin,
+  amm,
+  transactionId,
   onComplete,
 }) => {
   const { account } = useWallet();
+  const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
+
+  if (!activeTransaction) {
+    return null;
+  }
+
   const renderStatus = () => {
-    if (loading) {
+    if (!activeTransaction || (!activeTransaction.failedAt && !activeTransaction.succeededAt)) {
       return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Box
@@ -114,14 +116,14 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
     >
       {renderStatus()}
       <Panel variant="main" sx={{ padding: 6 }}>
-        <ProtocolInformation protocol={protocol} fixedApr={fixedApr} />
+        <ProtocolInformation protocol={amm.protocol} fixedApr={amm.fixedApr} />
         <Box
           sx={{
             marginBottom: (theme) => theme.spacing(4),
           }}
         >
           <Typography label="NOTIONAL AMOUNT" variant="body2">
-            {notional} {protocol}
+            {activeTransaction.notional} {amm.protocol}
           </Typography>
         </Box>
         <Box
@@ -130,7 +132,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
           }}
         >
           <Typography label="MARGIN" variant="body2">
-            {margin} {protocol}
+            {activeTransaction.margin} {amm.protocol}
           </Typography>
         </Box>
       </Panel>

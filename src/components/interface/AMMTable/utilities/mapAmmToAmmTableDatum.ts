@@ -1,4 +1,4 @@
-import { AugmentedAMM } from '@hooks';
+import { AugmentedAMM } from '@utilities';
 import { AMMTableDatum } from '../types';
 
 const mapAmmToAmmTableDatum = ({

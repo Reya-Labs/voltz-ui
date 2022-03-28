@@ -4,8 +4,9 @@ import { useLocation } from 'react-router-dom';
 import isNull from 'lodash/isNull';
 import { Position } from '@voltz/v1-sdk';
 
+import { AugmentedAMM } from '@utilities';
 import { Agents } from '@components/contexts';
-import { useAgent, AugmentedAMM } from '@hooks';
+import { useAgent } from '@hooks';
 import { routes } from '@routes';
 import { Typography, Button } from '@components/atomic';
 import { Page } from '@components/interface';

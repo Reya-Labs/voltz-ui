@@ -1,11 +1,11 @@
-import React, { useMemo, useState, useCallback } from 'react';
-import isNull from 'lodash/isNull';
+import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Position } from '@voltz/v1-sdk';
 
-import { AMMProvider } from '@components/contexts';
+import { AugmentedAMM } from '@utilities';
 import { routes } from '@routes';
-import { useWallet, AugmentedAMM } from '@hooks';
+import { actions, selectors } from '@store';
+import { useAgent, useDispatch, useSelector } from '@hooks';
+import { AMMProvider } from '@components/contexts';
 import {
   MintBurnForm,
   MintBurnFormProps,
@@ -15,31 +15,17 @@ import {
 import { updateFixedRate } from './utilities';
 
 export type ConnectedMintBurnFormProps = {
-  amm: AugmentedAMM | null;
-  position: Position | null;
+  amm: AugmentedAMM;
   onReset: () => void;
 };
 
 const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps> = ({
-  amm: defaultAMM,
-  position,
+  amm,
   onReset,
 }) => {
-  const amm = useMemo(() => {
-    if (!isNull(defaultAMM)) {
-      return defaultAMM;
-    }
-
-    if (position) {
-      return position.amm as AugmentedAMM;
-    }
-
-    return undefined;
-  }, [defaultAMM, position]);
-  const { account } = useWallet();
+  const { agent } = useAgent();
   const navigate = useNavigate();
   const [fixedLow, setFixedLow] = useState<MintBurnFormProps['fixedLow']>();
-
   const handleSetFixedLow = useCallback(
     updateFixedRate({ amm, fixedRate: fixedLow, setFixedRate: setFixedLow }),
     [amm, fixedLow, setFixedLow],
@@ -52,30 +38,20 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   );
   const [notional, setNotional] = useState<MintBurnFormProps['notional']>();
   const [margin, setMargin] = useState<MintBurnFormProps['margin']>();
-  const [submitting, setSubmitting] = useState(false);
-  const [transactionPending, setTransactionPending] = useState(false);
-  const handleSubmit = async (args: HandleSubmitMintBurnFormArgs) => {
-    setSubmitting(true);
-    setTransactionPending(true);
+  const [transactionId, setTransactionId] = useState<string | undefined>();
+  const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
+  const dispatch = useDispatch();
+  const handleSubmit = useCallback(
+    (args: HandleSubmitMintBurnFormArgs) => {
+      const transaction = { ...args, ammId: amm.id, agent };
+      const mint = actions.mintAction(amm, transaction);
 
-    if (amm && account) {
-      try {
-        const result = await amm.mint({
-          recipient: account,
-          fixedLow: args.fixedLow || 1,
-          fixedHigh: args.fixedHigh || 2,
-          notional: args.notional || 1,
-          margin: args.margin || 1,
-        });
-
-        console.debug(result);
-      } catch (mintError) {}
-    }
-
-    setTransactionPending(false);
-  };
+      setTransactionId(mint.payload.transaction.id);
+      dispatch(mint);
+    },
+    [setTransactionId, dispatch, agent, amm.id],
+  );
   const handleComplete = () => {
-    setSubmitting(false);
     onReset();
     navigate(`/${routes.LP_FARM}`);
   };
@@ -84,16 +60,9 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     return null;
   }
 
-  if (submitting) {
+  if (activeTransaction) {
     return (
-      <PendingTransaction
-        loading={transactionPending}
-        protocol={amm.protocol}
-        fixedApr={amm.fixedApr}
-        notional={notional}
-        margin={margin}
-        onComplete={handleComplete}
-      />
+      <PendingTransaction amm={amm} transactionId={transactionId} onComplete={handleComplete} />
     );
   }
 

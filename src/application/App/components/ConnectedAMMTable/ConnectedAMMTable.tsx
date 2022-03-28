@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-import { data } from '@utilities';
-import { useAMMs, AugmentedAMM } from '@hooks';
+import { data, AugmentedAMM } from '@utilities';
+import { useAMMs } from '@hooks';
 import { AMMTable, AMMTableFields } from '@components/interface';
 
 export type ConnectedAMMTableProps = {

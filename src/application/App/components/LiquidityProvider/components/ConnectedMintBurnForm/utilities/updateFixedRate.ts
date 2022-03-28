@@ -1,6 +1,6 @@
 import isNull from 'lodash/isNull';
 
-import { AugmentedAMM } from '@hooks';
+import { AugmentedAMM } from '@utilities';
 
 export type UpdateFixedRateArgs = {
   amm?: AugmentedAMM;

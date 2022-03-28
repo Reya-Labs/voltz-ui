@@ -4,8 +4,9 @@ import { useLocation } from 'react-router-dom';
 import isNull from 'lodash/isNull';
 import { Position } from '@voltz/v1-sdk';
 
+import { AugmentedAMM } from '@utilities';
 import { Agents } from '@components/contexts';
-import { useAgent, AugmentedAMM } from '@hooks';
+import { useAgent } from '@hooks';
 import { routes } from '@routes';
 import { Typography } from '@components/atomic';
 import { Page } from '@components/interface';
@@ -20,6 +21,13 @@ const LiquidityProvider: React.FunctionComponent = () => {
   const { onChangeAgent } = useAgent();
   const { pathname } = useLocation();
   const pathnameWithoutPrefix = pathname.slice(1);
+  const effectiveAmm = useMemo(() => {
+    if (position) {
+      return position.amm as AugmentedAMM;
+    }
+
+    return amm;
+  }, [amm, position]);
 
   useEffect(() => {
     setFormActive(false);
@@ -79,9 +87,9 @@ const LiquidityProvider: React.FunctionComponent = () => {
             )}
           </Box>
         )}
-        {formActive && (!isNull(amm) || !isNull(position)) && (
+        {formActive && !isNull(effectiveAmm) && (
           <Box sx={{ height: '100%' }}>
-            <ConnectedMintBurnForm amm={amm} position={position} onReset={handleReset} />
+            <ConnectedMintBurnForm amm={effectiveAmm} onReset={handleReset} />
           </Box>
         )}
       </Box>
