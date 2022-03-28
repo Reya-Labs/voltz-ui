@@ -15,4 +15,20 @@ export declare enum Rounding {
     ROUND_HALF_UP = 1,
     ROUND_UP = 2
 }
+/**
+ * The minimum tick that can be used on any pool.
+ */
+export declare const MIN_TICK = -69100;
+/**
+ * The maximum tick that can be used on any pool.
+ */
+export declare const MAX_TICK = 69100;
+/**
+ * The minimum tick that can be used on any pool.
+ */
+export declare const MIN_FIXED_RATE = 0.001;
+/**
+ * The maximum tick that can be used on any pool.
+ */
+export declare const MAX_FIXED_RATE = 1001;
 //# sourceMappingURL=constants.d.ts.map

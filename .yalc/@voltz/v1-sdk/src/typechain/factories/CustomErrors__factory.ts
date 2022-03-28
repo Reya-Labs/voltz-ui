@@ -83,13 +83,7 @@ const _abi = [
     type: "error",
   },
   {
-    inputs: [
-      {
-        internalType: "int256",
-        name: "amountSpecified",
-        type: "int256",
-      },
-    ],
+    inputs: [],
     name: "IRSNotionalAmountSpecifiedMustBeNonZero",
     type: "error",
   },
@@ -192,6 +186,11 @@ const _abi = [
       },
     ],
     name: "NotEnoughFunds",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "OOO",
     type: "error",
   },
   {

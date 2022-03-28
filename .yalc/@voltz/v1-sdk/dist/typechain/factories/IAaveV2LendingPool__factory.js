@@ -9,7 +9,7 @@ var _abi = [
     {
         inputs: [
             {
-                internalType: "address",
+                internalType: "contract IERC20Minimal",
                 name: "asset",
                 type: "address",
             },
@@ -97,7 +97,7 @@ var _abi = [
     {
         inputs: [
             {
-                internalType: "address",
+                internalType: "contract IERC20Minimal",
                 name: "underlyingAsset",
                 type: "address",
             },
@@ -116,7 +116,7 @@ var _abi = [
     {
         inputs: [
             {
-                internalType: "address",
+                internalType: "contract IERC20Minimal",
                 name: "asset",
                 type: "address",
             },

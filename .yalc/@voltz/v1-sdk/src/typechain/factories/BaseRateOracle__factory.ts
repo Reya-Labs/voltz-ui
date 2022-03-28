@@ -86,13 +86,7 @@ const _abi = [
     type: "error",
   },
   {
-    inputs: [
-      {
-        internalType: "int256",
-        name: "amountSpecified",
-        type: "int256",
-      },
-    ],
+    inputs: [],
     name: "IRSNotionalAmountSpecifiedMustBeNonZero",
     type: "error",
   },
@@ -199,6 +193,11 @@ const _abi = [
   },
   {
     inputs: [],
+    name: "OOO",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "OnlyFCM",
     type: "error",
   },
@@ -291,31 +290,12 @@ const _abi = [
     inputs: [
       {
         indexed: false,
-        internalType: "uint16",
-        name: "observationCardinalityNextOld",
-        type: "uint16",
-      },
-      {
-        indexed: false,
-        internalType: "uint16",
-        name: "observationCardinalityNextNew",
-        type: "uint16",
-      },
-    ],
-    name: "IncreaserateCardinalityNext",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
         internalType: "uint256",
         name: "_minSecondsSinceLastUpdate",
         type: "uint256",
       },
     ],
-    name: "MinSecondsSinceLastUpdateSet",
+    name: "MinSecondsSinceLastUpdate",
     type: "event",
   },
   {
@@ -364,7 +344,7 @@ const _abi = [
         type: "uint16",
       },
     ],
-    name: "OracleBufferWrite",
+    name: "OracleBufferUpdate",
     type: "event",
   },
   {
@@ -385,6 +365,32 @@ const _abi = [
     ],
     name: "OwnershipTransferred",
     type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint16",
+        name: "observationCardinalityNextNew",
+        type: "uint16",
+      },
+    ],
+    name: "RateCardinalityNext",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "UNDERLYING_YIELD_BEARING_PROTOCOL_ID",
+    outputs: [
+      {
+        internalType: "uint8",
+        name: "yieldBearingProtocolID",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
   },
   {
     inputs: [
@@ -587,22 +593,9 @@ const _abi = [
     name: "underlying",
     outputs: [
       {
-        internalType: "address",
+        internalType: "contract IERC20Minimal",
         name: "",
         type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "underlyingYieldBearingProtocolID",
-    outputs: [
-      {
-        internalType: "uint8",
-        name: "yieldBearingProtocolID",
-        type: "uint8",
       },
     ],
     stateMutability: "view",

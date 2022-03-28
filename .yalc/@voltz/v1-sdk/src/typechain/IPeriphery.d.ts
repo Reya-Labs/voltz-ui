@@ -22,8 +22,8 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 interface IPeripheryInterface extends ethers.utils.Interface {
   functions: {
     "getCurrentTick(address)": FunctionFragment;
-    "mintOrBurn((address,int24,int24,uint256,bool))": FunctionFragment;
-    "swap((address,bool,uint256,uint160,int24,int24))": FunctionFragment;
+    "mintOrBurn((address,int24,int24,uint256,bool,uint256))": FunctionFragment;
+    "swap((address,bool,uint256,uint160,int24,int24,uint256))": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -39,6 +39,7 @@ interface IPeripheryInterface extends ethers.utils.Interface {
         tickUpper: BigNumberish;
         notional: BigNumberish;
         isMint: boolean;
+        marginDelta: BigNumberish;
       }
     ]
   ): string;
@@ -52,6 +53,7 @@ interface IPeripheryInterface extends ethers.utils.Interface {
         sqrtPriceLimitX96: BigNumberish;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
+        marginDelta: BigNumberish;
       }
     ]
   ): string;
@@ -122,6 +124,7 @@ export class IPeriphery extends BaseContract {
         tickUpper: BigNumberish;
         notional: BigNumberish;
         isMint: boolean;
+        marginDelta: BigNumberish;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -134,6 +137,7 @@ export class IPeriphery extends BaseContract {
         sqrtPriceLimitX96: BigNumberish;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
+        marginDelta: BigNumberish;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -151,6 +155,7 @@ export class IPeriphery extends BaseContract {
       tickUpper: BigNumberish;
       notional: BigNumberish;
       isMint: boolean;
+      marginDelta: BigNumberish;
     },
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -163,6 +168,7 @@ export class IPeriphery extends BaseContract {
       sqrtPriceLimitX96: BigNumberish;
       tickLower: BigNumberish;
       tickUpper: BigNumberish;
+      marginDelta: BigNumberish;
     },
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -180,6 +186,7 @@ export class IPeriphery extends BaseContract {
         tickUpper: BigNumberish;
         notional: BigNumberish;
         isMint: boolean;
+        marginDelta: BigNumberish;
       },
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -192,6 +199,7 @@ export class IPeriphery extends BaseContract {
         sqrtPriceLimitX96: BigNumberish;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
+        marginDelta: BigNumberish;
       },
       overrides?: CallOverrides
     ): Promise<
@@ -221,6 +229,7 @@ export class IPeriphery extends BaseContract {
         tickUpper: BigNumberish;
         notional: BigNumberish;
         isMint: boolean;
+        marginDelta: BigNumberish;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -233,6 +242,7 @@ export class IPeriphery extends BaseContract {
         sqrtPriceLimitX96: BigNumberish;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
+        marginDelta: BigNumberish;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -251,6 +261,7 @@ export class IPeriphery extends BaseContract {
         tickUpper: BigNumberish;
         notional: BigNumberish;
         isMint: boolean;
+        marginDelta: BigNumberish;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
@@ -263,6 +274,7 @@ export class IPeriphery extends BaseContract {
         sqrtPriceLimitX96: BigNumberish;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
+        marginDelta: BigNumberish;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;

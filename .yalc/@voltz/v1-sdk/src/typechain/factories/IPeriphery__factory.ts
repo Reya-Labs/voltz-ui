@@ -83,13 +83,7 @@ const _abi = [
     type: "error",
   },
   {
-    inputs: [
-      {
-        internalType: "int256",
-        name: "amountSpecified",
-        type: "int256",
-      },
-    ],
+    inputs: [],
     name: "IRSNotionalAmountSpecifiedMustBeNonZero",
     type: "error",
   },
@@ -196,6 +190,11 @@ const _abi = [
   },
   {
     inputs: [],
+    name: "OOO",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "OnlyFCM",
     type: "error",
   },
@@ -282,6 +281,11 @@ const _abi = [
             name: "isMint",
             type: "bool",
           },
+          {
+            internalType: "uint256",
+            name: "marginDelta",
+            type: "uint256",
+          },
         ],
         internalType: "struct IPeriphery.MintOrBurnParams",
         name: "params",
@@ -332,6 +336,11 @@ const _abi = [
             internalType: "int24",
             name: "tickUpper",
             type: "int24",
+          },
+          {
+            internalType: "uint256",
+            name: "marginDelta",
+            type: "uint256",
           },
         ],
         internalType: "struct IPeriphery.SwapPeripheryParams",
