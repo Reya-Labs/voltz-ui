@@ -183,7 +183,7 @@ export class IFCM extends BaseContract {
     ): Promise<ContractTransaction>;
 
     transferMarginToMarginEngineTrader(
-      _account: string,
+      account: string,
       marginDeltaInUnderlyingTokens: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -230,7 +230,7 @@ export class IFCM extends BaseContract {
   ): Promise<ContractTransaction>;
 
   transferMarginToMarginEngineTrader(
-    _account: string,
+    account: string,
     marginDeltaInUnderlyingTokens: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -272,10 +272,10 @@ export class IFCM extends BaseContract {
 
     rateOracle(overrides?: CallOverrides): Promise<string>;
 
-    settleTrader(overrides?: CallOverrides): Promise<void>;
+    settleTrader(overrides?: CallOverrides): Promise<BigNumber>;
 
     transferMarginToMarginEngineTrader(
-      _account: string,
+      account: string,
       marginDeltaInUnderlyingTokens: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -318,7 +318,7 @@ export class IFCM extends BaseContract {
     ): Promise<BigNumber>;
 
     transferMarginToMarginEngineTrader(
-      _account: string,
+      account: string,
       marginDeltaInUnderlyingTokens: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -359,7 +359,7 @@ export class IFCM extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     transferMarginToMarginEngineTrader(
-      _account: string,
+      account: string,
       marginDeltaInUnderlyingTokens: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;

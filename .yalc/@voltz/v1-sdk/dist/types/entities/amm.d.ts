@@ -25,7 +25,6 @@ export declare type AMMConstructorArgs = {
     txCount: number;
 };
 export declare type AMMGetInfoPostSwapArgs = {
-    recipient: string;
     isFT: boolean;
     notional: number;
     fixedRateLimit?: number;
@@ -49,13 +48,13 @@ export declare type AMMSettlePositionArgs = {
     fixedHigh: number;
 };
 export declare type AMMSwapArgs = {
-    recipient: string;
     isFT: boolean;
     notional: number;
     margin: number;
     fixedRateLimit?: number;
     fixedLow: number;
     fixedHigh: number;
+    validationOnly?: boolean;
 };
 export declare type FCMSwapArgs = {
     notional: number;
@@ -66,11 +65,11 @@ export declare type FCMUnwindArgs = {
     fixedRateLimit?: number;
 };
 export declare type AMMMintArgs = {
-    recipient: string;
     fixedLow: number;
     fixedHigh: number;
     notional: number;
     margin: number;
+    validationOnly?: boolean;
 };
 export declare type AMMGetMinimumMarginRequirementPostMintArgs = AMMMintArgs;
 export declare type InfoPostSwap = {
@@ -105,19 +104,19 @@ declare class AMM {
     private _price?;
     constructor({ id, signer, provider, marginEngineAddress, fcmAddress, rateOracle, createdTimestamp, updatedTimestamp, termStartTimestamp, termEndTimestamp, underlyingToken, sqrtPriceX96, liquidity, tick, tickSpacing, txCount, }: AMMConstructorArgs);
     getInfoPostSwap({ isFT, notional, fixedRateLimit, fixedLow, fixedHigh, }: AMMGetInfoPostSwapArgs): Promise<InfoPostSwap | void>;
-    settlePosition({ owner, fixedLow, fixedHigh }: AMMSettlePositionArgs): Promise<ContractTransaction | void>;
+    settlePosition({ owner, fixedLow, fixedHigh, }: AMMSettlePositionArgs): Promise<ContractTransaction | void>;
+    private scale;
     updatePositionMargin({ owner, fixedLow, fixedHigh, marginDelta, }: AMMUpdatePositionMarginArgs): Promise<ContractTransaction | void>;
     liquidatePosition({ owner, fixedLow, fixedHigh, }: AMMLiquidatePositionArgs): Promise<ContractTransaction | void>;
     getLiquidationThreshold({ owner, fixedLow, fixedHigh, }: AMMLiquidatePositionArgs): Promise<number | void>;
-    getMinimumMarginRequirementPostMint({ fixedLow, fixedHigh, notional }: AMMGetMinimumMarginRequirementPostMintArgs): Promise<number | void>;
-    mint({ recipient, fixedLow, fixedHigh, notional, margin }: AMMMintArgs): Promise<ContractTransaction | void>;
-    burn({ fixedLow, fixedHigh, notional }: AMMBurnArgs): Promise<ContractTransaction | void>;
-    approvePeriphery(): Promise<ContractTransaction | void>;
+    getMinimumMarginRequirementPostMint({ fixedLow, fixedHigh, notional, }: AMMGetMinimumMarginRequirementPostMintArgs): Promise<number | void>;
+    mint({ fixedLow, fixedHigh, notional, margin, validationOnly }: AMMMintArgs): Promise<ContractTransaction | void>;
+    burn({ fixedLow, fixedHigh, notional, validationOnly }: AMMBurnArgs): Promise<ContractTransaction | void>;
     approveFCM(): Promise<ContractTransaction | void>;
-    approveMarginEngine(marginDelta: BigNumberish): Promise<void>;
-    swap({ recipient, isFT, notional, margin, fixedRateLimit, fixedLow, fixedHigh, }: AMMSwapArgs): Promise<ContractTransaction | void>;
-    FCMSwap({ notional, fixedRateLimit }: FCMSwapArgs): Promise<ContractTransaction | void>;
-    FCMUnwind({ notionalToUnwind, fixedRateLimit }: FCMUnwindArgs): Promise<ContractTransaction | void>;
+    approveERC20(marginDelta: BigNumberish, addressToApprove: string): Promise<void>;
+    swap({ isFT, notional, margin, fixedRateLimit, fixedLow, fixedHigh, validationOnly }: AMMSwapArgs): Promise<void>;
+    FCMSwap({ notional, fixedRateLimit, }: FCMSwapArgs): Promise<ContractTransaction | void>;
+    FCMUnwind({ notionalToUnwind, fixedRateLimit, }: FCMUnwindArgs): Promise<ContractTransaction | void>;
     settleFCMTrader(): Promise<ContractTransaction | void>;
     get startDateTime(): DateTime;
     get endDateTime(): DateTime;

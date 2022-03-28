@@ -327,7 +327,7 @@ export class AaveFCM extends BaseContract {
     >;
 
     transferMarginToMarginEngineTrader(
-      _account: string,
+      account: string,
       marginDeltaInUnderlyingTokens: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -421,7 +421,7 @@ export class AaveFCM extends BaseContract {
   >;
 
   transferMarginToMarginEngineTrader(
-    _account: string,
+    account: string,
     marginDeltaInUnderlyingTokens: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -496,7 +496,7 @@ export class AaveFCM extends BaseContract {
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
-    settleTrader(overrides?: CallOverrides): Promise<void>;
+    settleTrader(overrides?: CallOverrides): Promise<BigNumber>;
 
     traders(
       arg0: string,
@@ -511,7 +511,7 @@ export class AaveFCM extends BaseContract {
     >;
 
     transferMarginToMarginEngineTrader(
-      _account: string,
+      account: string,
       marginDeltaInUnderlyingTokens: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -681,7 +681,7 @@ export class AaveFCM extends BaseContract {
     traders(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     transferMarginToMarginEngineTrader(
-      _account: string,
+      account: string,
       marginDeltaInUnderlyingTokens: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -762,7 +762,7 @@ export class AaveFCM extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     transferMarginToMarginEngineTrader(
-      _account: string,
+      account: string,
       marginDeltaInUnderlyingTokens: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;

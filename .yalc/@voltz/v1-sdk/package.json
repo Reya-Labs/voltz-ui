@@ -19,7 +19,8 @@
     "eslint:fix": "eslint --fix 'src/**/*.ts'",
     "test": "jest",
     "test:watch": "jest --watch",
-    "release": "semantic-release"
+    "release": "semantic-release",
+    "irs-setup": "jest src/entities/__tests__/setup.spec.ts"
   },
   "dependencies": {
     "@metamask/detect-provider": "^1.2.0",
@@ -64,5 +65,5 @@
       ]
     ]
   },
-  "yalcSig": "afba75ce6fbc567d80108b01a37e7ddf"
+  "yalcSig": "1c279712c21c8c428973b6c991199c24"
 }

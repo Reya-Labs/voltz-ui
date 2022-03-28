@@ -21,6 +21,7 @@ export type SwapPeripheryParams = {
   sqrtPriceLimitX96: BigNumberish;
   tickLower: BigNumberish;
   tickUpper: BigNumberish;
+  marginDelta: BigNumberish;
 };
 
 export type MintOrBurnParams = {
@@ -29,4 +30,5 @@ export type MintOrBurnParams = {
   tickUpper: BigNumberish;
   notional: BigNumberish;
   isMint: boolean;
+  marginDelta: BigNumberish;
 };

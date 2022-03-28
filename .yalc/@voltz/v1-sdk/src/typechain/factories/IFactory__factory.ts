@@ -83,13 +83,7 @@ const _abi = [
     type: "error",
   },
   {
-    inputs: [
-      {
-        internalType: "int256",
-        name: "amountSpecified",
-        type: "int256",
-      },
-    ],
+    inputs: [],
     name: "IRSNotionalAmountSpecifiedMustBeNonZero",
     type: "error",
   },
@@ -196,6 +190,11 @@ const _abi = [
   },
   {
     inputs: [],
+    name: "OOO",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "OnlyFCM",
     type: "error",
   },
@@ -256,7 +255,7 @@ const _abi = [
         type: "bool",
       },
     ],
-    name: "ApprovalSet",
+    name: "Approval",
     type: "event",
   },
   {
@@ -316,8 +315,14 @@ const _abi = [
         name: "yieldBearingProtocolID",
         type: "uint8",
       },
+      {
+        indexed: false,
+        internalType: "uint8",
+        name: "underlyingTokenDecimals",
+        type: "uint8",
+      },
     ],
-    name: "IrsInstanceDeployed",
+    name: "IrsInstance",
     type: "event",
   },
   {
@@ -336,7 +341,20 @@ const _abi = [
         type: "uint8",
       },
     ],
-    name: "MasterFCMSet",
+    name: "MasterFCM",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "contract IPeriphery",
+        name: "periphery",
+        type: "address",
+      },
+    ],
+    name: "PeripheryUpdate",
     type: "event",
   },
   {
@@ -428,7 +446,7 @@ const _abi = [
         type: "address",
       },
     ],
-    stateMutability: "nonpayable",
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -450,6 +468,19 @@ const _abi = [
     outputs: [
       {
         internalType: "contract IVAMM",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "periphery",
+    outputs: [
+      {
+        internalType: "contract IPeriphery",
         name: "",
         type: "address",
       },
@@ -515,6 +546,19 @@ const _abi = [
       },
     ],
     name: "setMasterVAMM",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "contract IPeriphery",
+        name: "_periphery",
+        type: "address",
+      },
+    ],
+    name: "setPeriphery",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

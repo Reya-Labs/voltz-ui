@@ -527,44 +527,44 @@ interface TestMarginEngineInterface extends ethers.utils.Interface {
   events: {
     "AdminChanged(address,address)": EventFragment;
     "BeaconUpgraded(address)": EventFragment;
-    "CacheMaxAgeSet(uint256)": EventFragment;
-    "CollectProtocol(address,address,uint256)": EventFragment;
-    "FCMSet(address)": EventFragment;
-    "HistoricalApyWindowSet(uint256)": EventFragment;
-    "LiquidatePosition(address,int24,int24,int256,int256,int256,uint128)": EventFragment;
-    "LiquidatorRewardSet(uint256)": EventFragment;
-    "MarginCalculatorParametersSet(tuple)": EventFragment;
+    "CacheMaxAgeSetting(uint256)": EventFragment;
+    "FCMSetting(address)": EventFragment;
+    "HistoricalApyWindowSetting(uint256)": EventFragment;
+    "LiquidatorRewardSetting(uint256)": EventFragment;
+    "MarginCalculatorParametersSetting(tuple)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Paused(address)": EventFragment;
-    "SettlePosition(address,int24,int24,int256,int256,int256,int256,bool)": EventFragment;
+    "PositionLiquidation(address,int24,int24,int256,int256,int256,uint128)": EventFragment;
+    "PositionMarginUpdate(address,int24,int24,int256)": EventFragment;
+    "PositionPostMintBurnUpdate(address,int24,int24,uint128)": EventFragment;
+    "PositionPostSwapUpdate(address,int24,int24,int256,int256,int256)": EventFragment;
+    "PositionSettlement(address,int24,int24,int256,int256,int256,int256,bool)": EventFragment;
+    "ProtocolCollection(address,address,uint256)": EventFragment;
     "Unpaused(address)": EventFragment;
-    "UpdatePositionMargin(address,int24,int24,int256)": EventFragment;
-    "UpdatePositionPostMintBurn(address,int24,int24,uint128)": EventFragment;
-    "UpdatePositionPostSwap(address,int24,int24,int256,int256,int256)": EventFragment;
     "Upgraded(address)": EventFragment;
-    "VAMMSet(address)": EventFragment;
+    "VAMMSetting(address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "AdminChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "BeaconUpgraded"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "CacheMaxAgeSet"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "CollectProtocol"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "FCMSet"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "HistoricalApyWindowSet"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "LiquidatePosition"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "LiquidatorRewardSet"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "CacheMaxAgeSetting"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "FCMSetting"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "HistoricalApyWindowSetting"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "LiquidatorRewardSetting"): EventFragment;
   getEvent(
-    nameOrSignatureOrTopic: "MarginCalculatorParametersSet"
+    nameOrSignatureOrTopic: "MarginCalculatorParametersSetting"
   ): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "SettlePosition"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "PositionLiquidation"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "PositionMarginUpdate"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "PositionPostMintBurnUpdate"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "PositionPostSwapUpdate"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "PositionSettlement"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ProtocolCollection"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "UpdatePositionMargin"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "UpdatePositionPostMintBurn"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "UpdatePositionPostSwap"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Upgraded"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "VAMMSet"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "VAMMSetting"): EventFragment;
 }
 
 export type AdminChangedEvent = TypedEvent<
@@ -573,41 +573,21 @@ export type AdminChangedEvent = TypedEvent<
 
 export type BeaconUpgradedEvent = TypedEvent<[string] & { beacon: string }>;
 
-export type CacheMaxAgeSetEvent = TypedEvent<
+export type CacheMaxAgeSettingEvent = TypedEvent<
   [BigNumber] & { cacheMaxAgeInSeconds: BigNumber }
 >;
 
-export type CollectProtocolEvent = TypedEvent<
-  [string, string, BigNumber] & {
-    sender: string;
-    recipient: string;
-    amount: BigNumber;
-  }
->;
+export type FCMSettingEvent = TypedEvent<[string] & { fcm: string }>;
 
-export type FCMSetEvent = TypedEvent<[string] & { fcm: string }>;
-
-export type HistoricalApyWindowSetEvent = TypedEvent<
+export type HistoricalApyWindowSettingEvent = TypedEvent<
   [BigNumber] & { secondsAgo: BigNumber }
 >;
 
-export type LiquidatePositionEvent = TypedEvent<
-  [string, number, number, BigNumber, BigNumber, BigNumber, BigNumber] & {
-    owner: string;
-    tickLower: number;
-    tickUpper: number;
-    fixedTokenBalance: BigNumber;
-    variableTokenBalance: BigNumber;
-    margin: BigNumber;
-    liquidity: BigNumber;
-  }
->;
-
-export type LiquidatorRewardSetEvent = TypedEvent<
+export type LiquidatorRewardSettingEvent = TypedEvent<
   [BigNumber] & { liquidatorRewardWad: BigNumber }
 >;
 
-export type MarginCalculatorParametersSetEvent = TypedEvent<
+export type MarginCalculatorParametersSettingEvent = TypedEvent<
   [
     [
       BigNumber,
@@ -697,7 +677,48 @@ export type OwnershipTransferredEvent = TypedEvent<
 
 export type PausedEvent = TypedEvent<[string] & { account: string }>;
 
-export type SettlePositionEvent = TypedEvent<
+export type PositionLiquidationEvent = TypedEvent<
+  [string, number, number, BigNumber, BigNumber, BigNumber, BigNumber] & {
+    owner: string;
+    tickLower: number;
+    tickUpper: number;
+    fixedTokenBalance: BigNumber;
+    variableTokenBalance: BigNumber;
+    margin: BigNumber;
+    liquidity: BigNumber;
+  }
+>;
+
+export type PositionMarginUpdateEvent = TypedEvent<
+  [string, number, number, BigNumber] & {
+    owner: string;
+    tickLower: number;
+    tickUpper: number;
+    positionMargin: BigNumber;
+  }
+>;
+
+export type PositionPostMintBurnUpdateEvent = TypedEvent<
+  [string, number, number, BigNumber] & {
+    owner: string;
+    tickLower: number;
+    tickUpper: number;
+    liquidity: BigNumber;
+  }
+>;
+
+export type PositionPostSwapUpdateEvent = TypedEvent<
+  [string, number, number, BigNumber, BigNumber, BigNumber] & {
+    owner: string;
+    tickLower: number;
+    tickUpper: number;
+    fixedTokenBalance: BigNumber;
+    variableTokenBalance: BigNumber;
+    margin: BigNumber;
+  }
+>;
+
+export type PositionSettlementEvent = TypedEvent<
   [
     string,
     number,
@@ -719,40 +740,19 @@ export type SettlePositionEvent = TypedEvent<
   }
 >;
 
+export type ProtocolCollectionEvent = TypedEvent<
+  [string, string, BigNumber] & {
+    sender: string;
+    recipient: string;
+    amount: BigNumber;
+  }
+>;
+
 export type UnpausedEvent = TypedEvent<[string] & { account: string }>;
-
-export type UpdatePositionMarginEvent = TypedEvent<
-  [string, number, number, BigNumber] & {
-    owner: string;
-    tickLower: number;
-    tickUpper: number;
-    positionMargin: BigNumber;
-  }
->;
-
-export type UpdatePositionPostMintBurnEvent = TypedEvent<
-  [string, number, number, BigNumber] & {
-    owner: string;
-    tickLower: number;
-    tickUpper: number;
-    liquidity: BigNumber;
-  }
->;
-
-export type UpdatePositionPostSwapEvent = TypedEvent<
-  [string, number, number, BigNumber, BigNumber, BigNumber] & {
-    owner: string;
-    tickLower: number;
-    tickUpper: number;
-    fixedTokenBalance: BigNumber;
-    variableTokenBalance: BigNumber;
-    margin: BigNumber;
-  }
->;
 
 export type UpgradedEvent = TypedEvent<[string] & { implementation: string }>;
 
-export type VAMMSetEvent = TypedEvent<[string] & { vamm: string }>;
+export type VAMMSettingEvent = TypedEvent<[string] & { vamm: string }>;
 
 export class TestMarginEngine extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -1729,97 +1729,39 @@ export class TestMarginEngine extends BaseContract {
       beacon?: string | null
     ): TypedEventFilter<[string], { beacon: string }>;
 
-    "CacheMaxAgeSet(uint256)"(
+    "CacheMaxAgeSetting(uint256)"(
       cacheMaxAgeInSeconds?: null
     ): TypedEventFilter<[BigNumber], { cacheMaxAgeInSeconds: BigNumber }>;
 
-    CacheMaxAgeSet(
+    CacheMaxAgeSetting(
       cacheMaxAgeInSeconds?: null
     ): TypedEventFilter<[BigNumber], { cacheMaxAgeInSeconds: BigNumber }>;
 
-    "CollectProtocol(address,address,uint256)"(
-      sender?: null,
-      recipient?: string | null,
-      amount?: null
-    ): TypedEventFilter<
-      [string, string, BigNumber],
-      { sender: string; recipient: string; amount: BigNumber }
-    >;
-
-    CollectProtocol(
-      sender?: null,
-      recipient?: string | null,
-      amount?: null
-    ): TypedEventFilter<
-      [string, string, BigNumber],
-      { sender: string; recipient: string; amount: BigNumber }
-    >;
-
-    "FCMSet(address)"(
+    "FCMSetting(address)"(
       fcm?: string | null
     ): TypedEventFilter<[string], { fcm: string }>;
 
-    FCMSet(fcm?: string | null): TypedEventFilter<[string], { fcm: string }>;
+    FCMSetting(
+      fcm?: string | null
+    ): TypedEventFilter<[string], { fcm: string }>;
 
-    "HistoricalApyWindowSet(uint256)"(
+    "HistoricalApyWindowSetting(uint256)"(
       secondsAgo?: null
     ): TypedEventFilter<[BigNumber], { secondsAgo: BigNumber }>;
 
-    HistoricalApyWindowSet(
+    HistoricalApyWindowSetting(
       secondsAgo?: null
     ): TypedEventFilter<[BigNumber], { secondsAgo: BigNumber }>;
 
-    "LiquidatePosition(address,int24,int24,int256,int256,int256,uint128)"(
-      owner?: string | null,
-      tickLower?: BigNumberish | null,
-      tickUpper?: BigNumberish | null,
-      fixedTokenBalance?: null,
-      variableTokenBalance?: null,
-      margin?: null,
-      liquidity?: null
-    ): TypedEventFilter<
-      [string, number, number, BigNumber, BigNumber, BigNumber, BigNumber],
-      {
-        owner: string;
-        tickLower: number;
-        tickUpper: number;
-        fixedTokenBalance: BigNumber;
-        variableTokenBalance: BigNumber;
-        margin: BigNumber;
-        liquidity: BigNumber;
-      }
-    >;
-
-    LiquidatePosition(
-      owner?: string | null,
-      tickLower?: BigNumberish | null,
-      tickUpper?: BigNumberish | null,
-      fixedTokenBalance?: null,
-      variableTokenBalance?: null,
-      margin?: null,
-      liquidity?: null
-    ): TypedEventFilter<
-      [string, number, number, BigNumber, BigNumber, BigNumber, BigNumber],
-      {
-        owner: string;
-        tickLower: number;
-        tickUpper: number;
-        fixedTokenBalance: BigNumber;
-        variableTokenBalance: BigNumber;
-        margin: BigNumber;
-        liquidity: BigNumber;
-      }
-    >;
-
-    "LiquidatorRewardSet(uint256)"(
+    "LiquidatorRewardSetting(uint256)"(
       liquidatorRewardWad?: null
     ): TypedEventFilter<[BigNumber], { liquidatorRewardWad: BigNumber }>;
 
-    LiquidatorRewardSet(
+    LiquidatorRewardSetting(
       liquidatorRewardWad?: null
     ): TypedEventFilter<[BigNumber], { liquidatorRewardWad: BigNumber }>;
 
-    "MarginCalculatorParametersSet(tuple)"(
+    "MarginCalculatorParametersSetting(tuple)"(
       marginCalculatorParameters?: null
     ): TypedEventFilter<
       [
@@ -1906,7 +1848,7 @@ export class TestMarginEngine extends BaseContract {
       }
     >;
 
-    MarginCalculatorParametersSet(
+    MarginCalculatorParametersSetting(
       marginCalculatorParameters?: null
     ): TypedEventFilter<
       [
@@ -2015,7 +1957,147 @@ export class TestMarginEngine extends BaseContract {
 
     Paused(account?: null): TypedEventFilter<[string], { account: string }>;
 
-    "SettlePosition(address,int24,int24,int256,int256,int256,int256,bool)"(
+    "PositionLiquidation(address,int24,int24,int256,int256,int256,uint128)"(
+      owner?: string | null,
+      tickLower?: BigNumberish | null,
+      tickUpper?: BigNumberish | null,
+      fixedTokenBalance?: null,
+      variableTokenBalance?: null,
+      margin?: null,
+      liquidity?: null
+    ): TypedEventFilter<
+      [string, number, number, BigNumber, BigNumber, BigNumber, BigNumber],
+      {
+        owner: string;
+        tickLower: number;
+        tickUpper: number;
+        fixedTokenBalance: BigNumber;
+        variableTokenBalance: BigNumber;
+        margin: BigNumber;
+        liquidity: BigNumber;
+      }
+    >;
+
+    PositionLiquidation(
+      owner?: string | null,
+      tickLower?: BigNumberish | null,
+      tickUpper?: BigNumberish | null,
+      fixedTokenBalance?: null,
+      variableTokenBalance?: null,
+      margin?: null,
+      liquidity?: null
+    ): TypedEventFilter<
+      [string, number, number, BigNumber, BigNumber, BigNumber, BigNumber],
+      {
+        owner: string;
+        tickLower: number;
+        tickUpper: number;
+        fixedTokenBalance: BigNumber;
+        variableTokenBalance: BigNumber;
+        margin: BigNumber;
+        liquidity: BigNumber;
+      }
+    >;
+
+    "PositionMarginUpdate(address,int24,int24,int256)"(
+      owner?: string | null,
+      tickLower?: BigNumberish | null,
+      tickUpper?: BigNumberish | null,
+      positionMargin?: null
+    ): TypedEventFilter<
+      [string, number, number, BigNumber],
+      {
+        owner: string;
+        tickLower: number;
+        tickUpper: number;
+        positionMargin: BigNumber;
+      }
+    >;
+
+    PositionMarginUpdate(
+      owner?: string | null,
+      tickLower?: BigNumberish | null,
+      tickUpper?: BigNumberish | null,
+      positionMargin?: null
+    ): TypedEventFilter<
+      [string, number, number, BigNumber],
+      {
+        owner: string;
+        tickLower: number;
+        tickUpper: number;
+        positionMargin: BigNumber;
+      }
+    >;
+
+    "PositionPostMintBurnUpdate(address,int24,int24,uint128)"(
+      owner?: string | null,
+      tickLower?: BigNumberish | null,
+      tickUpper?: BigNumberish | null,
+      liquidity?: null
+    ): TypedEventFilter<
+      [string, number, number, BigNumber],
+      {
+        owner: string;
+        tickLower: number;
+        tickUpper: number;
+        liquidity: BigNumber;
+      }
+    >;
+
+    PositionPostMintBurnUpdate(
+      owner?: string | null,
+      tickLower?: BigNumberish | null,
+      tickUpper?: BigNumberish | null,
+      liquidity?: null
+    ): TypedEventFilter<
+      [string, number, number, BigNumber],
+      {
+        owner: string;
+        tickLower: number;
+        tickUpper: number;
+        liquidity: BigNumber;
+      }
+    >;
+
+    "PositionPostSwapUpdate(address,int24,int24,int256,int256,int256)"(
+      owner?: string | null,
+      tickLower?: BigNumberish | null,
+      tickUpper?: BigNumberish | null,
+      fixedTokenBalance?: null,
+      variableTokenBalance?: null,
+      margin?: null
+    ): TypedEventFilter<
+      [string, number, number, BigNumber, BigNumber, BigNumber],
+      {
+        owner: string;
+        tickLower: number;
+        tickUpper: number;
+        fixedTokenBalance: BigNumber;
+        variableTokenBalance: BigNumber;
+        margin: BigNumber;
+      }
+    >;
+
+    PositionPostSwapUpdate(
+      owner?: string | null,
+      tickLower?: BigNumberish | null,
+      tickUpper?: BigNumberish | null,
+      fixedTokenBalance?: null,
+      variableTokenBalance?: null,
+      margin?: null
+    ): TypedEventFilter<
+      [string, number, number, BigNumber, BigNumber, BigNumber],
+      {
+        owner: string;
+        tickLower: number;
+        tickUpper: number;
+        fixedTokenBalance: BigNumber;
+        variableTokenBalance: BigNumber;
+        margin: BigNumber;
+      }
+    >;
+
+    "PositionSettlement(address,int24,int24,int256,int256,int256,int256,bool)"(
       owner?: string | null,
       tickLower?: BigNumberish | null,
       tickUpper?: BigNumberish | null,
@@ -2047,7 +2129,7 @@ export class TestMarginEngine extends BaseContract {
       }
     >;
 
-    SettlePosition(
+    PositionSettlement(
       owner?: string | null,
       tickLower?: BigNumberish | null,
       tickUpper?: BigNumberish | null,
@@ -2077,6 +2159,24 @@ export class TestMarginEngine extends BaseContract {
         settlementCashflow: BigNumber;
         isSettled: boolean;
       }
+    >;
+
+    "ProtocolCollection(address,address,uint256)"(
+      sender?: null,
+      recipient?: string | null,
+      amount?: null
+    ): TypedEventFilter<
+      [string, string, BigNumber],
+      { sender: string; recipient: string; amount: BigNumber }
+    >;
+
+    ProtocolCollection(
+      sender?: null,
+      recipient?: string | null,
+      amount?: null
+    ): TypedEventFilter<
+      [string, string, BigNumber],
+      { sender: string; recipient: string; amount: BigNumber }
     >;
 
     "Unpaused(address)"(
@@ -2084,104 +2184,6 @@ export class TestMarginEngine extends BaseContract {
     ): TypedEventFilter<[string], { account: string }>;
 
     Unpaused(account?: null): TypedEventFilter<[string], { account: string }>;
-
-    "UpdatePositionMargin(address,int24,int24,int256)"(
-      owner?: string | null,
-      tickLower?: BigNumberish | null,
-      tickUpper?: BigNumberish | null,
-      positionMargin?: null
-    ): TypedEventFilter<
-      [string, number, number, BigNumber],
-      {
-        owner: string;
-        tickLower: number;
-        tickUpper: number;
-        positionMargin: BigNumber;
-      }
-    >;
-
-    UpdatePositionMargin(
-      owner?: string | null,
-      tickLower?: BigNumberish | null,
-      tickUpper?: BigNumberish | null,
-      positionMargin?: null
-    ): TypedEventFilter<
-      [string, number, number, BigNumber],
-      {
-        owner: string;
-        tickLower: number;
-        tickUpper: number;
-        positionMargin: BigNumber;
-      }
-    >;
-
-    "UpdatePositionPostMintBurn(address,int24,int24,uint128)"(
-      owner?: string | null,
-      tickLower?: BigNumberish | null,
-      tickUpper?: BigNumberish | null,
-      liquidity?: null
-    ): TypedEventFilter<
-      [string, number, number, BigNumber],
-      {
-        owner: string;
-        tickLower: number;
-        tickUpper: number;
-        liquidity: BigNumber;
-      }
-    >;
-
-    UpdatePositionPostMintBurn(
-      owner?: string | null,
-      tickLower?: BigNumberish | null,
-      tickUpper?: BigNumberish | null,
-      liquidity?: null
-    ): TypedEventFilter<
-      [string, number, number, BigNumber],
-      {
-        owner: string;
-        tickLower: number;
-        tickUpper: number;
-        liquidity: BigNumber;
-      }
-    >;
-
-    "UpdatePositionPostSwap(address,int24,int24,int256,int256,int256)"(
-      owner?: string | null,
-      tickLower?: BigNumberish | null,
-      tickUpper?: BigNumberish | null,
-      fixedTokenBalance?: null,
-      variableTokenBalance?: null,
-      margin?: null
-    ): TypedEventFilter<
-      [string, number, number, BigNumber, BigNumber, BigNumber],
-      {
-        owner: string;
-        tickLower: number;
-        tickUpper: number;
-        fixedTokenBalance: BigNumber;
-        variableTokenBalance: BigNumber;
-        margin: BigNumber;
-      }
-    >;
-
-    UpdatePositionPostSwap(
-      owner?: string | null,
-      tickLower?: BigNumberish | null,
-      tickUpper?: BigNumberish | null,
-      fixedTokenBalance?: null,
-      variableTokenBalance?: null,
-      margin?: null
-    ): TypedEventFilter<
-      [string, number, number, BigNumber, BigNumber, BigNumber],
-      {
-        owner: string;
-        tickLower: number;
-        tickUpper: number;
-        fixedTokenBalance: BigNumber;
-        variableTokenBalance: BigNumber;
-        margin: BigNumber;
-      }
-    >;
 
     "Upgraded(address)"(
       implementation?: string | null
@@ -2191,11 +2193,13 @@ export class TestMarginEngine extends BaseContract {
       implementation?: string | null
     ): TypedEventFilter<[string], { implementation: string }>;
 
-    "VAMMSet(address)"(
+    "VAMMSetting(address)"(
       vamm?: string | null
     ): TypedEventFilter<[string], { vamm: string }>;
 
-    VAMMSet(vamm?: string | null): TypedEventFilter<[string], { vamm: string }>;
+    VAMMSetting(
+      vamm?: string | null
+    ): TypedEventFilter<[string], { vamm: string }>;
   };
 
   estimateGas: {

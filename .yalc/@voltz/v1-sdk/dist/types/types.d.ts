@@ -17,6 +17,7 @@ export declare type SwapPeripheryParams = {
     sqrtPriceLimitX96: BigNumberish;
     tickLower: BigNumberish;
     tickUpper: BigNumberish;
+    marginDelta: BigNumberish;
 };
 export declare type MintOrBurnParams = {
     marginEngine: string;
@@ -24,5 +25,6 @@ export declare type MintOrBurnParams = {
     tickUpper: BigNumberish;
     notional: BigNumberish;
     isMint: boolean;
+    marginDelta: BigNumberish;
 };
 //# sourceMappingURL=types.d.ts.map

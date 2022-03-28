@@ -21,18 +21,22 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface IRateOracleInterface extends ethers.utils.Interface {
   functions: {
+    "UNDERLYING_YIELD_BEARING_PROTOCOL_ID()": FunctionFragment;
     "getApyFromTo(uint256,uint256)": FunctionFragment;
     "getRateFromTo(uint256,uint256)": FunctionFragment;
     "increaseObservationCardinalityNext(uint16)": FunctionFragment;
     "minSecondsSinceLastUpdate()": FunctionFragment;
     "setMinSecondsSinceLastUpdate(uint256)": FunctionFragment;
     "underlying()": FunctionFragment;
-    "underlyingYieldBearingProtocolID()": FunctionFragment;
     "variableFactor(uint256,uint256)": FunctionFragment;
     "variableFactorNoCache(uint256,uint256)": FunctionFragment;
     "writeOracleEntry()": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "UNDERLYING_YIELD_BEARING_PROTOCOL_ID",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "getApyFromTo",
     values: [BigNumberish, BigNumberish]
@@ -58,10 +62,6 @@ interface IRateOracleInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "underlyingYieldBearingProtocolID",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "variableFactor",
     values: [BigNumberish, BigNumberish]
   ): string;
@@ -74,6 +74,10 @@ interface IRateOracleInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "UNDERLYING_YIELD_BEARING_PROTOCOL_ID",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "getApyFromTo",
     data: BytesLike
@@ -96,10 +100,6 @@ interface IRateOracleInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "underlying", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "underlyingYieldBearingProtocolID",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "variableFactor",
     data: BytesLike
   ): Result;
@@ -113,32 +113,21 @@ interface IRateOracleInterface extends ethers.utils.Interface {
   ): Result;
 
   events: {
-    "IncreaserateCardinalityNext(uint16,uint16)": EventFragment;
-    "MinSecondsSinceLastUpdateSet(uint256)": EventFragment;
-    "OracleBufferWrite(uint256,address,uint16,uint32,uint256,uint16,uint16)": EventFragment;
+    "MinSecondsSinceLastUpdate(uint256)": EventFragment;
+    "OracleBufferUpdate(uint256,address,uint16,uint32,uint256,uint16,uint16)": EventFragment;
+    "RateCardinalityNext(uint16)": EventFragment;
   };
 
-  getEvent(
-    nameOrSignatureOrTopic: "IncreaserateCardinalityNext"
-  ): EventFragment;
-  getEvent(
-    nameOrSignatureOrTopic: "MinSecondsSinceLastUpdateSet"
-  ): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "OracleBufferWrite"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "MinSecondsSinceLastUpdate"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OracleBufferUpdate"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "RateCardinalityNext"): EventFragment;
 }
 
-export type IncreaserateCardinalityNextEvent = TypedEvent<
-  [number, number] & {
-    observationCardinalityNextOld: number;
-    observationCardinalityNextNew: number;
-  }
->;
-
-export type MinSecondsSinceLastUpdateSetEvent = TypedEvent<
+export type MinSecondsSinceLastUpdateEvent = TypedEvent<
   [BigNumber] & { _minSecondsSinceLastUpdate: BigNumber }
 >;
 
-export type OracleBufferWriteEvent = TypedEvent<
+export type OracleBufferUpdateEvent = TypedEvent<
   [BigNumber, string, number, number, BigNumber, number, number] & {
     blockTimestampScaled: BigNumber;
     source: string;
@@ -148,6 +137,10 @@ export type OracleBufferWriteEvent = TypedEvent<
     cardinality: number;
     cardinalityNext: number;
   }
+>;
+
+export type RateCardinalityNextEvent = TypedEvent<
+  [number] & { observationCardinalityNextNew: number }
 >;
 
 export class IRateOracle extends BaseContract {
@@ -194,6 +187,10 @@ export class IRateOracle extends BaseContract {
   interface: IRateOracleInterface;
 
   functions: {
+    UNDERLYING_YIELD_BEARING_PROTOCOL_ID(
+      overrides?: CallOverrides
+    ): Promise<[number] & { yieldBearingProtocolID: number }>;
+
     getApyFromTo(
       from: BigNumberish,
       to: BigNumberish,
@@ -220,10 +217,6 @@ export class IRateOracle extends BaseContract {
 
     underlying(overrides?: CallOverrides): Promise<[string]>;
 
-    underlyingYieldBearingProtocolID(
-      overrides?: CallOverrides
-    ): Promise<[number] & { yieldBearingProtocolID: number }>;
-
     variableFactor(
       termStartTimestamp: BigNumberish,
       termEndTimestamp: BigNumberish,
@@ -240,6 +233,10 @@ export class IRateOracle extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
+
+  UNDERLYING_YIELD_BEARING_PROTOCOL_ID(
+    overrides?: CallOverrides
+  ): Promise<number>;
 
   getApyFromTo(
     from: BigNumberish,
@@ -267,8 +264,6 @@ export class IRateOracle extends BaseContract {
 
   underlying(overrides?: CallOverrides): Promise<string>;
 
-  underlyingYieldBearingProtocolID(overrides?: CallOverrides): Promise<number>;
-
   variableFactor(
     termStartTimestamp: BigNumberish,
     termEndTimestamp: BigNumberish,
@@ -286,6 +281,10 @@ export class IRateOracle extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    UNDERLYING_YIELD_BEARING_PROTOCOL_ID(
+      overrides?: CallOverrides
+    ): Promise<number>;
+
     getApyFromTo(
       from: BigNumberish,
       to: BigNumberish,
@@ -312,10 +311,6 @@ export class IRateOracle extends BaseContract {
 
     underlying(overrides?: CallOverrides): Promise<string>;
 
-    underlyingYieldBearingProtocolID(
-      overrides?: CallOverrides
-    ): Promise<number>;
-
     variableFactor(
       termStartTimestamp: BigNumberish,
       termEndTimestamp: BigNumberish,
@@ -332,37 +327,15 @@ export class IRateOracle extends BaseContract {
   };
 
   filters: {
-    "IncreaserateCardinalityNext(uint16,uint16)"(
-      observationCardinalityNextOld?: null,
-      observationCardinalityNextNew?: null
-    ): TypedEventFilter<
-      [number, number],
-      {
-        observationCardinalityNextOld: number;
-        observationCardinalityNextNew: number;
-      }
-    >;
-
-    IncreaserateCardinalityNext(
-      observationCardinalityNextOld?: null,
-      observationCardinalityNextNew?: null
-    ): TypedEventFilter<
-      [number, number],
-      {
-        observationCardinalityNextOld: number;
-        observationCardinalityNextNew: number;
-      }
-    >;
-
-    "MinSecondsSinceLastUpdateSet(uint256)"(
+    "MinSecondsSinceLastUpdate(uint256)"(
       _minSecondsSinceLastUpdate?: null
     ): TypedEventFilter<[BigNumber], { _minSecondsSinceLastUpdate: BigNumber }>;
 
-    MinSecondsSinceLastUpdateSet(
+    MinSecondsSinceLastUpdate(
       _minSecondsSinceLastUpdate?: null
     ): TypedEventFilter<[BigNumber], { _minSecondsSinceLastUpdate: BigNumber }>;
 
-    "OracleBufferWrite(uint256,address,uint16,uint32,uint256,uint16,uint16)"(
+    "OracleBufferUpdate(uint256,address,uint16,uint32,uint256,uint16,uint16)"(
       blockTimestampScaled?: null,
       source?: null,
       index?: null,
@@ -383,7 +356,7 @@ export class IRateOracle extends BaseContract {
       }
     >;
 
-    OracleBufferWrite(
+    OracleBufferUpdate(
       blockTimestampScaled?: null,
       source?: null,
       index?: null,
@@ -403,9 +376,21 @@ export class IRateOracle extends BaseContract {
         cardinalityNext: number;
       }
     >;
+
+    "RateCardinalityNext(uint16)"(
+      observationCardinalityNextNew?: null
+    ): TypedEventFilter<[number], { observationCardinalityNextNew: number }>;
+
+    RateCardinalityNext(
+      observationCardinalityNextNew?: null
+    ): TypedEventFilter<[number], { observationCardinalityNextNew: number }>;
   };
 
   estimateGas: {
+    UNDERLYING_YIELD_BEARING_PROTOCOL_ID(
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getApyFromTo(
       from: BigNumberish,
       to: BigNumberish,
@@ -432,10 +417,6 @@ export class IRateOracle extends BaseContract {
 
     underlying(overrides?: CallOverrides): Promise<BigNumber>;
 
-    underlyingYieldBearingProtocolID(
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     variableFactor(
       termStartTimestamp: BigNumberish,
       termEndTimestamp: BigNumberish,
@@ -454,6 +435,10 @@ export class IRateOracle extends BaseContract {
   };
 
   populateTransaction: {
+    UNDERLYING_YIELD_BEARING_PROTOCOL_ID(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getApyFromTo(
       from: BigNumberish,
       to: BigNumberish,
@@ -481,10 +466,6 @@ export class IRateOracle extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     underlying(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    underlyingYieldBearingProtocolID(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
 
     variableFactor(
       termStartTimestamp: BigNumberish,

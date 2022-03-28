@@ -11,7 +11,7 @@ var _abi = [
         name: "UNDERLYING_ASSET_ADDRESS",
         outputs: [
             {
-                internalType: "address",
+                internalType: "contract IERC20Minimal",
                 name: "",
                 type: "address",
             },
