@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Rounding = exports.Q192 = exports.Q96 = exports.ONE = exports.ZERO = exports.NEGATIVE_ONE = exports.AMM_INIT_CODE_HASH = exports.PERIPHERY_ADDRESS = exports.FACTORY_ADDRESS = exports.ADDRESS_ZERO = exports.MaxUint256 = void 0;
+exports.MAX_FIXED_RATE = exports.MIN_FIXED_RATE = exports.MAX_TICK = exports.MIN_TICK = exports.Rounding = exports.Q192 = exports.Q96 = exports.ONE = exports.ZERO = exports.NEGATIVE_ONE = exports.AMM_INIT_CODE_HASH = exports.PERIPHERY_ADDRESS = exports.FACTORY_ADDRESS = exports.ADDRESS_ZERO = exports.MaxUint256 = void 0;
 var jsbi_1 = __importDefault(require("jsbi"));
 exports.MaxUint256 = jsbi_1.default.BigInt('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff');
 exports.ADDRESS_ZERO = '0x0000000000000000000000000000000000000000';
@@ -26,3 +26,19 @@ var Rounding;
     Rounding[Rounding["ROUND_HALF_UP"] = 1] = "ROUND_HALF_UP";
     Rounding[Rounding["ROUND_UP"] = 2] = "ROUND_UP";
 })(Rounding = exports.Rounding || (exports.Rounding = {}));
+/**
+ * The minimum tick that can be used on any pool.
+ */
+exports.MIN_TICK = -69100;
+/**
+ * The maximum tick that can be used on any pool.
+ */
+exports.MAX_TICK = 69100;
+/**
+ * The minimum tick that can be used on any pool.
+ */
+exports.MIN_FIXED_RATE = 0.001;
+/**
+ * The maximum tick that can be used on any pool.
+ */
+exports.MAX_FIXED_RATE = 1001;

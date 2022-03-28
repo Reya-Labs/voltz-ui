@@ -83,13 +83,7 @@ const _abi = [
     type: "error",
   },
   {
-    inputs: [
-      {
-        internalType: "int256",
-        name: "amountSpecified",
-        type: "int256",
-      },
-    ],
+    inputs: [],
     name: "IRSNotionalAmountSpecifiedMustBeNonZero",
     type: "error",
   },
@@ -196,6 +190,11 @@ const _abi = [
   },
   {
     inputs: [],
+    name: "OOO",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "OnlyFCM",
     type: "error",
   },
@@ -277,17 +276,11 @@ const _abi = [
       {
         indexed: false,
         internalType: "uint256",
-        name: "feeWadOld",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
         name: "feeWad",
         type: "uint256",
       },
     ],
-    name: "FeeSet",
+    name: "Fee",
     type: "event",
   },
   {
@@ -295,18 +288,12 @@ const _abi = [
     inputs: [
       {
         indexed: false,
-        internalType: "uint160",
-        name: "sqrtPriceX96",
-        type: "uint160",
-      },
-      {
-        indexed: false,
-        internalType: "int24",
-        name: "tick",
-        type: "int24",
+        internalType: "uint8",
+        name: "feeProtocol",
+        type: "uint8",
       },
     ],
-    name: "InitializeVAMM",
+    name: "FeeProtocol",
     type: "event",
   },
   {
@@ -344,25 +331,6 @@ const _abi = [
       },
     ],
     name: "Mint",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "uint8",
-        name: "feeProtocolOld",
-        type: "uint8",
-      },
-      {
-        indexed: false,
-        internalType: "uint8",
-        name: "feeProtocol",
-        type: "uint8",
-      },
-    ],
-    name: "SetFeeProtocol",
     type: "event",
   },
   {
@@ -412,6 +380,25 @@ const _abi = [
       },
     ],
     name: "Swap",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint160",
+        name: "sqrtPriceX96",
+        type: "uint160",
+      },
+      {
+        indexed: false,
+        internalType: "int24",
+        name: "tick",
+        type: "int24",
+      },
+    ],
+    name: "VAMMInitialization",
     type: "event",
   },
   {

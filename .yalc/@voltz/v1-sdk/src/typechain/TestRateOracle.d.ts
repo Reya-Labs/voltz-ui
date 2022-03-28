@@ -22,6 +22,7 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 interface TestRateOracleInterface extends ethers.utils.Interface {
   functions: {
     "ONE_IN_WAD()": FunctionFragment;
+    "UNDERLYING_YIELD_BEARING_PROTOCOL_ID()": FunctionFragment;
     "aaveLendingPool()": FunctionFragment;
     "binarySearch(uint32)": FunctionFragment;
     "getApyFromTo(uint256,uint256)": FunctionFragment;
@@ -51,7 +52,6 @@ interface TestRateOracleInterface extends ethers.utils.Interface {
     "tick()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "underlying()": FunctionFragment;
-    "underlyingYieldBearingProtocolID()": FunctionFragment;
     "variableFactor(uint256,uint256)": FunctionFragment;
     "variableFactorNoCache(uint256,uint256)": FunctionFragment;
     "writeOracleEntry()": FunctionFragment;
@@ -59,6 +59,10 @@ interface TestRateOracleInterface extends ethers.utils.Interface {
 
   encodeFunctionData(
     functionFragment: "ONE_IN_WAD",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "UNDERLYING_YIELD_BEARING_PROTOCOL_ID",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -169,10 +173,6 @@ interface TestRateOracleInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "underlyingYieldBearingProtocolID",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "variableFactor",
     values: [BigNumberish, BigNumberish]
   ): string;
@@ -186,6 +186,10 @@ interface TestRateOracleInterface extends ethers.utils.Interface {
   ): string;
 
   decodeFunctionResult(functionFragment: "ONE_IN_WAD", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "UNDERLYING_YIELD_BEARING_PROTOCOL_ID",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "aaveLendingPool",
     data: BytesLike
@@ -282,10 +286,6 @@ interface TestRateOracleInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "underlying", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "underlyingYieldBearingProtocolID",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "variableFactor",
     data: BytesLike
   ): Result;
@@ -299,34 +299,23 @@ interface TestRateOracleInterface extends ethers.utils.Interface {
   ): Result;
 
   events: {
-    "IncreaserateCardinalityNext(uint16,uint16)": EventFragment;
-    "MinSecondsSinceLastUpdateSet(uint256)": EventFragment;
-    "OracleBufferWrite(uint256,address,uint16,uint32,uint256,uint16,uint16)": EventFragment;
+    "MinSecondsSinceLastUpdate(uint256)": EventFragment;
+    "OracleBufferUpdate(uint256,address,uint16,uint32,uint256,uint16,uint16)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
+    "RateCardinalityNext(uint16)": EventFragment;
   };
 
-  getEvent(
-    nameOrSignatureOrTopic: "IncreaserateCardinalityNext"
-  ): EventFragment;
-  getEvent(
-    nameOrSignatureOrTopic: "MinSecondsSinceLastUpdateSet"
-  ): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "OracleBufferWrite"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "MinSecondsSinceLastUpdate"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OracleBufferUpdate"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "RateCardinalityNext"): EventFragment;
 }
 
-export type IncreaserateCardinalityNextEvent = TypedEvent<
-  [number, number] & {
-    observationCardinalityNextOld: number;
-    observationCardinalityNextNew: number;
-  }
->;
-
-export type MinSecondsSinceLastUpdateSetEvent = TypedEvent<
+export type MinSecondsSinceLastUpdateEvent = TypedEvent<
   [BigNumber] & { _minSecondsSinceLastUpdate: BigNumber }
 >;
 
-export type OracleBufferWriteEvent = TypedEvent<
+export type OracleBufferUpdateEvent = TypedEvent<
   [BigNumber, string, number, number, BigNumber, number, number] & {
     blockTimestampScaled: BigNumber;
     source: string;
@@ -340,6 +329,10 @@ export type OracleBufferWriteEvent = TypedEvent<
 
 export type OwnershipTransferredEvent = TypedEvent<
   [string, string] & { previousOwner: string; newOwner: string }
+>;
+
+export type RateCardinalityNextEvent = TypedEvent<
+  [number] & { observationCardinalityNextNew: number }
 >;
 
 export class TestRateOracle extends BaseContract {
@@ -387,6 +380,10 @@ export class TestRateOracle extends BaseContract {
 
   functions: {
     ONE_IN_WAD(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    UNDERLYING_YIELD_BEARING_PROTOCOL_ID(
+      overrides?: CallOverrides
+    ): Promise<[number]>;
 
     aaveLendingPool(overrides?: CallOverrides): Promise<[string]>;
 
@@ -542,10 +539,6 @@ export class TestRateOracle extends BaseContract {
 
     underlying(overrides?: CallOverrides): Promise<[string]>;
 
-    underlyingYieldBearingProtocolID(
-      overrides?: CallOverrides
-    ): Promise<[number]>;
-
     variableFactor(
       termStartTimestampInWeiSeconds: BigNumberish,
       termEndTimestampInWeiSeconds: BigNumberish,
@@ -564,6 +557,10 @@ export class TestRateOracle extends BaseContract {
   };
 
   ONE_IN_WAD(overrides?: CallOverrides): Promise<BigNumber>;
+
+  UNDERLYING_YIELD_BEARING_PROTOCOL_ID(
+    overrides?: CallOverrides
+  ): Promise<number>;
 
   aaveLendingPool(overrides?: CallOverrides): Promise<string>;
 
@@ -719,8 +716,6 @@ export class TestRateOracle extends BaseContract {
 
   underlying(overrides?: CallOverrides): Promise<string>;
 
-  underlyingYieldBearingProtocolID(overrides?: CallOverrides): Promise<number>;
-
   variableFactor(
     termStartTimestampInWeiSeconds: BigNumberish,
     termEndTimestampInWeiSeconds: BigNumberish,
@@ -739,6 +734,10 @@ export class TestRateOracle extends BaseContract {
 
   callStatic: {
     ONE_IN_WAD(overrides?: CallOverrides): Promise<BigNumber>;
+
+    UNDERLYING_YIELD_BEARING_PROTOCOL_ID(
+      overrides?: CallOverrides
+    ): Promise<number>;
 
     aaveLendingPool(overrides?: CallOverrides): Promise<string>;
 
@@ -892,10 +891,6 @@ export class TestRateOracle extends BaseContract {
 
     underlying(overrides?: CallOverrides): Promise<string>;
 
-    underlyingYieldBearingProtocolID(
-      overrides?: CallOverrides
-    ): Promise<number>;
-
     variableFactor(
       termStartTimestampInWeiSeconds: BigNumberish,
       termEndTimestampInWeiSeconds: BigNumberish,
@@ -912,37 +907,15 @@ export class TestRateOracle extends BaseContract {
   };
 
   filters: {
-    "IncreaserateCardinalityNext(uint16,uint16)"(
-      observationCardinalityNextOld?: null,
-      observationCardinalityNextNew?: null
-    ): TypedEventFilter<
-      [number, number],
-      {
-        observationCardinalityNextOld: number;
-        observationCardinalityNextNew: number;
-      }
-    >;
-
-    IncreaserateCardinalityNext(
-      observationCardinalityNextOld?: null,
-      observationCardinalityNextNew?: null
-    ): TypedEventFilter<
-      [number, number],
-      {
-        observationCardinalityNextOld: number;
-        observationCardinalityNextNew: number;
-      }
-    >;
-
-    "MinSecondsSinceLastUpdateSet(uint256)"(
+    "MinSecondsSinceLastUpdate(uint256)"(
       _minSecondsSinceLastUpdate?: null
     ): TypedEventFilter<[BigNumber], { _minSecondsSinceLastUpdate: BigNumber }>;
 
-    MinSecondsSinceLastUpdateSet(
+    MinSecondsSinceLastUpdate(
       _minSecondsSinceLastUpdate?: null
     ): TypedEventFilter<[BigNumber], { _minSecondsSinceLastUpdate: BigNumber }>;
 
-    "OracleBufferWrite(uint256,address,uint16,uint32,uint256,uint16,uint16)"(
+    "OracleBufferUpdate(uint256,address,uint16,uint32,uint256,uint16,uint16)"(
       blockTimestampScaled?: null,
       source?: null,
       index?: null,
@@ -963,7 +936,7 @@ export class TestRateOracle extends BaseContract {
       }
     >;
 
-    OracleBufferWrite(
+    OracleBufferUpdate(
       blockTimestampScaled?: null,
       source?: null,
       index?: null,
@@ -999,10 +972,22 @@ export class TestRateOracle extends BaseContract {
       [string, string],
       { previousOwner: string; newOwner: string }
     >;
+
+    "RateCardinalityNext(uint16)"(
+      observationCardinalityNextNew?: null
+    ): TypedEventFilter<[number], { observationCardinalityNextNew: number }>;
+
+    RateCardinalityNext(
+      observationCardinalityNextNew?: null
+    ): TypedEventFilter<[number], { observationCardinalityNextNew: number }>;
   };
 
   estimateGas: {
     ONE_IN_WAD(overrides?: CallOverrides): Promise<BigNumber>;
+
+    UNDERLYING_YIELD_BEARING_PROTOCOL_ID(
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     aaveLendingPool(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1117,10 +1102,6 @@ export class TestRateOracle extends BaseContract {
 
     underlying(overrides?: CallOverrides): Promise<BigNumber>;
 
-    underlyingYieldBearingProtocolID(
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     variableFactor(
       termStartTimestampInWeiSeconds: BigNumberish,
       termEndTimestampInWeiSeconds: BigNumberish,
@@ -1140,6 +1121,10 @@ export class TestRateOracle extends BaseContract {
 
   populateTransaction: {
     ONE_IN_WAD(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    UNDERLYING_YIELD_BEARING_PROTOCOL_ID(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     aaveLendingPool(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1264,10 +1249,6 @@ export class TestRateOracle extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     underlying(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    underlyingYieldBearingProtocolID(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
 
     variableFactor(
       termStartTimestampInWeiSeconds: BigNumberish,

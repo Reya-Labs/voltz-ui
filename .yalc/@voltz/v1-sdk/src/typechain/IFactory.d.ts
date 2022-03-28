@@ -26,10 +26,12 @@ interface IFactoryInterface extends ethers.utils.Interface {
     "masterFCMs(uint8)": FunctionFragment;
     "masterMarginEngine()": FunctionFragment;
     "masterVAMM()": FunctionFragment;
+    "periphery()": FunctionFragment;
     "setApproval(address,bool)": FunctionFragment;
     "setMasterFCM(address,uint8)": FunctionFragment;
     "setMasterMarginEngine(address)": FunctionFragment;
     "setMasterVAMM(address)": FunctionFragment;
+    "setPeriphery(address)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -52,6 +54,7 @@ interface IFactoryInterface extends ethers.utils.Interface {
     functionFragment: "masterVAMM",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "periphery", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "setApproval",
     values: [string, boolean]
@@ -68,6 +71,10 @@ interface IFactoryInterface extends ethers.utils.Interface {
     functionFragment: "setMasterVAMM",
     values: [string]
   ): string;
+  encodeFunctionData(
+    functionFragment: "setPeriphery",
+    values: [string]
+  ): string;
 
   decodeFunctionResult(
     functionFragment: "deployIrsInstance",
@@ -80,6 +87,7 @@ interface IFactoryInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "masterVAMM", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "periphery", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setApproval",
     data: BytesLike
@@ -96,19 +104,25 @@ interface IFactoryInterface extends ethers.utils.Interface {
     functionFragment: "setMasterVAMM",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "setPeriphery",
+    data: BytesLike
+  ): Result;
 
   events: {
-    "ApprovalSet(address,address,bool)": EventFragment;
-    "IrsInstanceDeployed(address,address,uint256,uint256,int24,address,address,address,uint8)": EventFragment;
-    "MasterFCMSet(address,uint8)": EventFragment;
+    "Approval(address,address,bool)": EventFragment;
+    "IrsInstance(address,address,uint256,uint256,int24,address,address,address,uint8,uint8)": EventFragment;
+    "MasterFCM(address,uint8)": EventFragment;
+    "PeripheryUpdate(address)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "ApprovalSet"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "IrsInstanceDeployed"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "MasterFCMSet"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "IrsInstance"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "MasterFCM"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "PeripheryUpdate"): EventFragment;
 }
 
-export type ApprovalSetEvent = TypedEvent<
+export type ApprovalEvent = TypedEvent<
   [string, string, boolean] & {
     owner: string;
     intAddress: string;
@@ -116,7 +130,7 @@ export type ApprovalSetEvent = TypedEvent<
   }
 >;
 
-export type IrsInstanceDeployedEvent = TypedEvent<
+export type IrsInstanceEvent = TypedEvent<
   [
     string,
     string,
@@ -126,6 +140,7 @@ export type IrsInstanceDeployedEvent = TypedEvent<
     string,
     string,
     string,
+    number,
     number
   ] & {
     underlyingToken: string;
@@ -137,15 +152,18 @@ export type IrsInstanceDeployedEvent = TypedEvent<
     vamm: string;
     fcm: string;
     yieldBearingProtocolID: number;
+    underlyingTokenDecimals: number;
   }
 >;
 
-export type MasterFCMSetEvent = TypedEvent<
+export type MasterFCMEvent = TypedEvent<
   [string, number] & {
     masterFCMAddress: string;
     yieldBearingProtocolID: number;
   }
 >;
+
+export type PeripheryUpdateEvent = TypedEvent<[string] & { periphery: string }>;
 
 export class IFactory extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -208,12 +226,14 @@ export class IFactory extends BaseContract {
 
     masterFCMs(
       yieldBearingProtocolID: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+      overrides?: CallOverrides
+    ): Promise<[string] & { masterFCM: string }>;
 
     masterMarginEngine(overrides?: CallOverrides): Promise<[string]>;
 
     masterVAMM(overrides?: CallOverrides): Promise<[string]>;
+
+    periphery(overrides?: CallOverrides): Promise<[string]>;
 
     setApproval(
       intAddress: string,
@@ -236,6 +256,11 @@ export class IFactory extends BaseContract {
       _masterVAMM: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    setPeriphery(
+      _periphery: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
   };
 
   deployIrsInstance(
@@ -255,12 +280,14 @@ export class IFactory extends BaseContract {
 
   masterFCMs(
     yieldBearingProtocolID: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   masterMarginEngine(overrides?: CallOverrides): Promise<string>;
 
   masterVAMM(overrides?: CallOverrides): Promise<string>;
+
+  periphery(overrides?: CallOverrides): Promise<string>;
 
   setApproval(
     intAddress: string,
@@ -281,6 +308,11 @@ export class IFactory extends BaseContract {
 
   setMasterVAMM(
     _masterVAMM: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setPeriphery(
+    _periphery: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -315,6 +347,8 @@ export class IFactory extends BaseContract {
 
     masterVAMM(overrides?: CallOverrides): Promise<string>;
 
+    periphery(overrides?: CallOverrides): Promise<string>;
+
     setApproval(
       intAddress: string,
       allowIntegration: boolean,
@@ -336,10 +370,12 @@ export class IFactory extends BaseContract {
       _masterVAMM: string,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    setPeriphery(_periphery: string, overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {
-    "ApprovalSet(address,address,bool)"(
+    "Approval(address,address,bool)"(
       owner?: string | null,
       intAddress?: string | null,
       isApproved?: boolean | null
@@ -348,7 +384,7 @@ export class IFactory extends BaseContract {
       { owner: string; intAddress: string; isApproved: boolean }
     >;
 
-    ApprovalSet(
+    Approval(
       owner?: string | null,
       intAddress?: string | null,
       isApproved?: boolean | null
@@ -357,7 +393,7 @@ export class IFactory extends BaseContract {
       { owner: string; intAddress: string; isApproved: boolean }
     >;
 
-    "IrsInstanceDeployed(address,address,uint256,uint256,int24,address,address,address,uint8)"(
+    "IrsInstance(address,address,uint256,uint256,int24,address,address,address,uint8,uint8)"(
       underlyingToken?: string | null,
       rateOracle?: string | null,
       termStartTimestampWad?: null,
@@ -366,7 +402,8 @@ export class IFactory extends BaseContract {
       marginEngine?: null,
       vamm?: null,
       fcm?: null,
-      yieldBearingProtocolID?: null
+      yieldBearingProtocolID?: null,
+      underlyingTokenDecimals?: null
     ): TypedEventFilter<
       [
         string,
@@ -377,6 +414,7 @@ export class IFactory extends BaseContract {
         string,
         string,
         string,
+        number,
         number
       ],
       {
@@ -389,10 +427,11 @@ export class IFactory extends BaseContract {
         vamm: string;
         fcm: string;
         yieldBearingProtocolID: number;
+        underlyingTokenDecimals: number;
       }
     >;
 
-    IrsInstanceDeployed(
+    IrsInstance(
       underlyingToken?: string | null,
       rateOracle?: string | null,
       termStartTimestampWad?: null,
@@ -401,7 +440,8 @@ export class IFactory extends BaseContract {
       marginEngine?: null,
       vamm?: null,
       fcm?: null,
-      yieldBearingProtocolID?: null
+      yieldBearingProtocolID?: null,
+      underlyingTokenDecimals?: null
     ): TypedEventFilter<
       [
         string,
@@ -412,6 +452,7 @@ export class IFactory extends BaseContract {
         string,
         string,
         string,
+        number,
         number
       ],
       {
@@ -424,10 +465,11 @@ export class IFactory extends BaseContract {
         vamm: string;
         fcm: string;
         yieldBearingProtocolID: number;
+        underlyingTokenDecimals: number;
       }
     >;
 
-    "MasterFCMSet(address,uint8)"(
+    "MasterFCM(address,uint8)"(
       masterFCMAddress?: null,
       yieldBearingProtocolID?: null
     ): TypedEventFilter<
@@ -435,13 +477,21 @@ export class IFactory extends BaseContract {
       { masterFCMAddress: string; yieldBearingProtocolID: number }
     >;
 
-    MasterFCMSet(
+    MasterFCM(
       masterFCMAddress?: null,
       yieldBearingProtocolID?: null
     ): TypedEventFilter<
       [string, number],
       { masterFCMAddress: string; yieldBearingProtocolID: number }
     >;
+
+    "PeripheryUpdate(address)"(
+      periphery?: null
+    ): TypedEventFilter<[string], { periphery: string }>;
+
+    PeripheryUpdate(
+      periphery?: null
+    ): TypedEventFilter<[string], { periphery: string }>;
   };
 
   estimateGas: {
@@ -462,12 +512,14 @@ export class IFactory extends BaseContract {
 
     masterFCMs(
       yieldBearingProtocolID: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     masterMarginEngine(overrides?: CallOverrides): Promise<BigNumber>;
 
     masterVAMM(overrides?: CallOverrides): Promise<BigNumber>;
+
+    periphery(overrides?: CallOverrides): Promise<BigNumber>;
 
     setApproval(
       intAddress: string,
@@ -488,6 +540,11 @@ export class IFactory extends BaseContract {
 
     setMasterVAMM(
       _masterVAMM: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setPeriphery(
+      _periphery: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
@@ -510,7 +567,7 @@ export class IFactory extends BaseContract {
 
     masterFCMs(
       yieldBearingProtocolID: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     masterMarginEngine(
@@ -518,6 +575,8 @@ export class IFactory extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     masterVAMM(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    periphery(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     setApproval(
       intAddress: string,
@@ -538,6 +597,11 @@ export class IFactory extends BaseContract {
 
     setMasterVAMM(
       _masterVAMM: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setPeriphery(
+      _periphery: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

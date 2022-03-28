@@ -46,7 +46,7 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     "liquidatePosition(int24,int24,address,int24,int24,address)": FunctionFragment;
     "liquidationRewards()": FunctionFragment;
     "mint(address,int24,int24,uint128)": FunctionFragment;
-    "mintOrBurnViaPeriphery((address,int24,int24,uint256,bool))": FunctionFragment;
+    "mintOrBurnViaPeriphery((address,int24,int24,uint256,bool,uint256))": FunctionFragment;
     "peripheryAddress()": FunctionFragment;
     "positionHistory(bytes32,uint256)": FunctionFragment;
     "positionSwapsHistory(bytes32,uint256)": FunctionFragment;
@@ -63,7 +63,7 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     "sizeOfPositionHistory(bytes32)": FunctionFragment;
     "sizeOfPositionSwapsHistory(bytes32)": FunctionFragment;
     "swap((address,int256,uint160,int24,int24))": FunctionFragment;
-    "swapViaPeriphery((address,bool,uint256,uint160,int24,int24))": FunctionFragment;
+    "swapViaPeriphery((address,bool,uint256,uint160,int24,int24,uint256))": FunctionFragment;
     "unwindFullyCollateralisedFixedTakerSwap(address,uint256,uint160)": FunctionFragment;
     "updatePositionMargin(address,int24,int24,int256)": FunctionFragment;
   };
@@ -182,6 +182,7 @@ interface E2ESetupInterface extends ethers.utils.Interface {
         tickUpper: BigNumberish;
         notional: BigNumberish;
         isMint: boolean;
+        marginDelta: BigNumberish;
       }
     ]
   ): string;
@@ -267,6 +268,7 @@ interface E2ESetupInterface extends ethers.utils.Interface {
         sqrtPriceLimitX96: BigNumberish;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
+        marginDelta: BigNumberish;
       }
     ]
   ): string;
@@ -684,6 +686,7 @@ export class E2ESetup extends BaseContract {
         tickUpper: BigNumberish;
         notional: BigNumberish;
         isMint: boolean;
+        marginDelta: BigNumberish;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -812,6 +815,7 @@ export class E2ESetup extends BaseContract {
         sqrtPriceLimitX96: BigNumberish;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
+        marginDelta: BigNumberish;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -1023,6 +1027,7 @@ export class E2ESetup extends BaseContract {
       tickUpper: BigNumberish;
       notional: BigNumberish;
       isMint: boolean;
+      marginDelta: BigNumberish;
     },
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -1151,6 +1156,7 @@ export class E2ESetup extends BaseContract {
       sqrtPriceLimitX96: BigNumberish;
       tickLower: BigNumberish;
       tickUpper: BigNumberish;
+      marginDelta: BigNumberish;
     },
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -1358,6 +1364,7 @@ export class E2ESetup extends BaseContract {
         tickUpper: BigNumberish;
         notional: BigNumberish;
         isMint: boolean;
+        marginDelta: BigNumberish;
       },
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -1480,6 +1487,7 @@ export class E2ESetup extends BaseContract {
         sqrtPriceLimitX96: BigNumberish;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
+        marginDelta: BigNumberish;
       },
       overrides?: CallOverrides
     ): Promise<
@@ -1637,6 +1645,7 @@ export class E2ESetup extends BaseContract {
         tickUpper: BigNumberish;
         notional: BigNumberish;
         isMint: boolean;
+        marginDelta: BigNumberish;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -1727,6 +1736,7 @@ export class E2ESetup extends BaseContract {
         sqrtPriceLimitX96: BigNumberish;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
+        marginDelta: BigNumberish;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -1884,6 +1894,7 @@ export class E2ESetup extends BaseContract {
         tickUpper: BigNumberish;
         notional: BigNumberish;
         isMint: boolean;
+        marginDelta: BigNumberish;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
@@ -1974,6 +1985,7 @@ export class E2ESetup extends BaseContract {
         sqrtPriceLimitX96: BigNumberish;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
+        marginDelta: BigNumberish;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;

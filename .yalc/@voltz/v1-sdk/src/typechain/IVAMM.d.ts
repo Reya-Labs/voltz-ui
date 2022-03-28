@@ -185,19 +185,19 @@ interface IVAMMInterface extends ethers.utils.Interface {
 
   events: {
     "Burn(address,address,int24,int24,uint128)": EventFragment;
-    "FeeSet(uint256,uint256)": EventFragment;
-    "InitializeVAMM(uint160,int24)": EventFragment;
+    "Fee(uint256)": EventFragment;
+    "FeeProtocol(uint8)": EventFragment;
     "Mint(address,address,int24,int24,uint128)": EventFragment;
-    "SetFeeProtocol(uint8,uint8)": EventFragment;
     "Swap(address,address,uint160,uint128,int24,int24,int24)": EventFragment;
+    "VAMMInitialization(uint160,int24)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Burn"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "FeeSet"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "InitializeVAMM"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Fee"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "FeeProtocol"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Mint"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "SetFeeProtocol"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Swap"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "VAMMInitialization"): EventFragment;
 }
 
 export type BurnEvent = TypedEvent<
@@ -210,13 +210,9 @@ export type BurnEvent = TypedEvent<
   }
 >;
 
-export type FeeSetEvent = TypedEvent<
-  [BigNumber, BigNumber] & { feeWadOld: BigNumber; feeWad: BigNumber }
->;
+export type FeeEvent = TypedEvent<[BigNumber] & { feeWad: BigNumber }>;
 
-export type InitializeVAMMEvent = TypedEvent<
-  [BigNumber, number] & { sqrtPriceX96: BigNumber; tick: number }
->;
+export type FeeProtocolEvent = TypedEvent<[number] & { feeProtocol: number }>;
 
 export type MintEvent = TypedEvent<
   [string, string, number, number, BigNumber] & {
@@ -226,10 +222,6 @@ export type MintEvent = TypedEvent<
     tickUpper: number;
     amount: BigNumber;
   }
->;
-
-export type SetFeeProtocolEvent = TypedEvent<
-  [number, number] & { feeProtocolOld: number; feeProtocol: number }
 >;
 
 export type SwapEvent = TypedEvent<
@@ -242,6 +234,10 @@ export type SwapEvent = TypedEvent<
     tickLower: number;
     tickUpper: number;
   }
+>;
+
+export type VAMMInitializationEvent = TypedEvent<
+  [BigNumber, number] & { sqrtPriceX96: BigNumber; tick: number }
 >;
 
 export class IVAMM extends BaseContract {
@@ -681,37 +677,19 @@ export class IVAMM extends BaseContract {
       }
     >;
 
-    "FeeSet(uint256,uint256)"(
-      feeWadOld?: null,
+    "Fee(uint256)"(
       feeWad?: null
-    ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { feeWadOld: BigNumber; feeWad: BigNumber }
-    >;
+    ): TypedEventFilter<[BigNumber], { feeWad: BigNumber }>;
 
-    FeeSet(
-      feeWadOld?: null,
-      feeWad?: null
-    ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { feeWadOld: BigNumber; feeWad: BigNumber }
-    >;
+    Fee(feeWad?: null): TypedEventFilter<[BigNumber], { feeWad: BigNumber }>;
 
-    "InitializeVAMM(uint160,int24)"(
-      sqrtPriceX96?: null,
-      tick?: null
-    ): TypedEventFilter<
-      [BigNumber, number],
-      { sqrtPriceX96: BigNumber; tick: number }
-    >;
+    "FeeProtocol(uint8)"(
+      feeProtocol?: null
+    ): TypedEventFilter<[number], { feeProtocol: number }>;
 
-    InitializeVAMM(
-      sqrtPriceX96?: null,
-      tick?: null
-    ): TypedEventFilter<
-      [BigNumber, number],
-      { sqrtPriceX96: BigNumber; tick: number }
-    >;
+    FeeProtocol(
+      feeProtocol?: null
+    ): TypedEventFilter<[number], { feeProtocol: number }>;
 
     "Mint(address,address,int24,int24,uint128)"(
       sender?: null,
@@ -745,22 +723,6 @@ export class IVAMM extends BaseContract {
         tickUpper: number;
         amount: BigNumber;
       }
-    >;
-
-    "SetFeeProtocol(uint8,uint8)"(
-      feeProtocolOld?: null,
-      feeProtocol?: null
-    ): TypedEventFilter<
-      [number, number],
-      { feeProtocolOld: number; feeProtocol: number }
-    >;
-
-    SetFeeProtocol(
-      feeProtocolOld?: null,
-      feeProtocol?: null
-    ): TypedEventFilter<
-      [number, number],
-      { feeProtocolOld: number; feeProtocol: number }
     >;
 
     "Swap(address,address,uint160,uint128,int24,int24,int24)"(
@@ -803,6 +765,22 @@ export class IVAMM extends BaseContract {
         tickLower: number;
         tickUpper: number;
       }
+    >;
+
+    "VAMMInitialization(uint160,int24)"(
+      sqrtPriceX96?: null,
+      tick?: null
+    ): TypedEventFilter<
+      [BigNumber, number],
+      { sqrtPriceX96: BigNumber; tick: number }
+    >;
+
+    VAMMInitialization(
+      sqrtPriceX96?: null,
+      tick?: null
+    ): TypedEventFilter<
+      [BigNumber, number],
+      { sqrtPriceX96: BigNumber; tick: number }
     >;
   };
 

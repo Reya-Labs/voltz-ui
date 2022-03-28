@@ -25,11 +25,11 @@ interface ActorInterface extends ethers.utils.Interface {
     "initiateFullyCollateralisedFixedTakerSwap(address,uint256,uint160)": FunctionFragment;
     "liquidatePosition(address,int24,int24,address)": FunctionFragment;
     "mint(address,address,int24,int24,uint128)": FunctionFragment;
-    "mintOrBurnViaPeriphery(address,(address,int24,int24,uint256,bool))": FunctionFragment;
+    "mintOrBurnViaPeriphery(address,(address,int24,int24,uint256,bool,uint256))": FunctionFragment;
     "setIntegrationApproval(address,address,bool)": FunctionFragment;
     "settleYBATrader(address)": FunctionFragment;
     "swap(address,(address,int256,uint160,int24,int24))": FunctionFragment;
-    "swapViaPeriphery(address,(address,bool,uint256,uint160,int24,int24))": FunctionFragment;
+    "swapViaPeriphery(address,(address,bool,uint256,uint160,int24,int24,uint256))": FunctionFragment;
     "unwindFullyCollateralisedFixedTakerSwap(address,uint256,uint160)": FunctionFragment;
     "updatePositionMargin(address,address,int24,int24,int256)": FunctionFragment;
   };
@@ -60,6 +60,7 @@ interface ActorInterface extends ethers.utils.Interface {
         tickUpper: BigNumberish;
         notional: BigNumberish;
         isMint: boolean;
+        marginDelta: BigNumberish;
       }
     ]
   ): string;
@@ -95,6 +96,7 @@ interface ActorInterface extends ethers.utils.Interface {
         sqrtPriceLimitX96: BigNumberish;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
+        marginDelta: BigNumberish;
       }
     ]
   ): string;
@@ -231,6 +233,7 @@ export class Actor extends BaseContract {
         tickUpper: BigNumberish;
         notional: BigNumberish;
         isMint: boolean;
+        marginDelta: BigNumberish;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -268,6 +271,7 @@ export class Actor extends BaseContract {
         sqrtPriceLimitX96: BigNumberish;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
+        marginDelta: BigNumberish;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -330,6 +334,7 @@ export class Actor extends BaseContract {
       tickUpper: BigNumberish;
       notional: BigNumberish;
       isMint: boolean;
+      marginDelta: BigNumberish;
     },
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -367,6 +372,7 @@ export class Actor extends BaseContract {
       sqrtPriceLimitX96: BigNumberish;
       tickLower: BigNumberish;
       tickUpper: BigNumberish;
+      marginDelta: BigNumberish;
     },
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -429,6 +435,7 @@ export class Actor extends BaseContract {
         tickUpper: BigNumberish;
         notional: BigNumberish;
         isMint: boolean;
+        marginDelta: BigNumberish;
       },
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -473,6 +480,7 @@ export class Actor extends BaseContract {
         sqrtPriceLimitX96: BigNumberish;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
+        marginDelta: BigNumberish;
       },
       overrides?: CallOverrides
     ): Promise<
@@ -546,6 +554,7 @@ export class Actor extends BaseContract {
         tickUpper: BigNumberish;
         notional: BigNumberish;
         isMint: boolean;
+        marginDelta: BigNumberish;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -583,6 +592,7 @@ export class Actor extends BaseContract {
         sqrtPriceLimitX96: BigNumberish;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
+        marginDelta: BigNumberish;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -646,6 +656,7 @@ export class Actor extends BaseContract {
         tickUpper: BigNumberish;
         notional: BigNumberish;
         isMint: boolean;
+        marginDelta: BigNumberish;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
@@ -683,6 +694,7 @@ export class Actor extends BaseContract {
         sqrtPriceLimitX96: BigNumberish;
         tickLower: BigNumberish;
         tickUpper: BigNumberish;
+        marginDelta: BigNumberish;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
