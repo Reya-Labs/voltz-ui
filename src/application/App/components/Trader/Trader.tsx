@@ -92,7 +92,7 @@ const Trader: React.FunctionComponent = () => {
         )}
         {formActive && !isNull(amm) && (
           <Box sx={{ height: '100%' }}>
-            <ConnectedSwapForm amm={amm} position={position} onReset={handleReset} />
+            <ConnectedSwapForm amm={amm} onReset={handleReset} />
           </Box>
         )}
       </Box>
