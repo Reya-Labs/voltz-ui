@@ -12,9 +12,6 @@ const SubmitSwapFormButton: React.FunctionComponent<SubmitSwapFormButtonProps> =
   const { agent } = useAgent();
   const submitLabel = (): string | null => {
     switch (agent) {
-      case Agents.LIQUIDITY_PROVIDER:
-        return 'Provide Liquidity';
-
       case Agents.FIXED_TRADER:
         return 'Take that fixed rate';
 
