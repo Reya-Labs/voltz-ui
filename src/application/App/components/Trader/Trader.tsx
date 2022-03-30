@@ -2,8 +2,9 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import { useLocation } from 'react-router-dom';
 import isNull from 'lodash/isNull';
-import { AMM, Position } from '@voltz/v1-sdk';
+import { Position } from '@voltz/v1-sdk';
 
+import { AugmentedAMM } from '@utilities';
 import { Agents } from '@components/contexts';
 import { useAgent } from '@hooks';
 import { routes } from '@routes';
@@ -15,7 +16,7 @@ import { ConnectedSwapForm } from './components';
 
 const Trader: React.FunctionComponent = () => {
   const [formActive, setFormActive] = useState(false);
-  const [amm, setAMM] = useState<AMM | null>(null);
+  const [amm, setAMM] = useState<AugmentedAMM | null>(null);
   const [position, setPosition] = useState<Position | null>(null);
   const { onChangeAgent } = useAgent();
   const { pathname } = useLocation();
@@ -40,7 +41,7 @@ const Trader: React.FunctionComponent = () => {
         return null;
     }
   }, [pathnameWithoutPrefix]);
-  const handleSelectAmm = (selected: AMM) => {
+  const handleSelectAmm = (selected: AugmentedAMM) => {
     setFormActive(true);
     setAMM(selected);
     setPosition(null);
@@ -91,7 +92,7 @@ const Trader: React.FunctionComponent = () => {
         )}
         {formActive && !isNull(amm) && (
           <Box sx={{ height: '100%' }}>
-            <ConnectedSwapForm amm={amm} position={position} onReset={handleReset} />
+            <ConnectedSwapForm amm={amm} onReset={handleReset} />
           </Box>
         )}
       </Box>

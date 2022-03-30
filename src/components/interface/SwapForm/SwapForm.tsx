@@ -1,8 +1,8 @@
 import React from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
+import isUndefined from 'lodash/isUndefined';
 
-import { AgentProps } from '@components/contexts';
 import { Button, Panel } from '@components/atomic';
 import {
   IconLabel,
@@ -11,11 +11,10 @@ import {
   NotionalAmount,
   MarginAmount,
 } from '@components/composite';
-import { useAgentWithOverride } from '@hooks';
 import { HandleSubmitSwapFormArgs } from './types';
 import { TraderControls, SwapMinimumMarginAmount, SubmitSwapFormButton } from './components';
 
-export type SwapFormProps = AgentProps & {
+export type SwapFormProps = {
   isModifying?: boolean;
   protocol?: string;
   fixedApr?: number;
@@ -31,12 +30,11 @@ export type SwapFormProps = AgentProps & {
   onChangeNotional: (value: number) => void;
   onChangePartialCollateralization: (value: boolean) => void;
   onChangeMargin: (value: number) => void;
-  onSubmit: (values: HandleSubmitSwapFormArgs) => Promise<void>;
+  onSubmit: (values: HandleSubmitSwapFormArgs) => void;
   onCancel: () => void;
 };
 
 const SwapForm: React.FunctionComponent<SwapFormProps> = ({
-  agent: agentOverride,
   isModifying = false,
   protocol,
   fixedApr,
@@ -55,13 +53,15 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
-  const { agent } = useAgentWithOverride(agentOverride);
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
+    if (isUndefined(notional) || isUndefined(margin) || isUndefined(partialCollateralization)) {
+      return;
+    }
+
     return onSubmit({
-      agent,
       notional,
       margin,
-      partialCollateralization: partialCollateralization || false,
+      partialCollateralization,
     });
   };
 

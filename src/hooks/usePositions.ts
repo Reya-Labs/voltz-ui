@@ -1,9 +1,10 @@
 import JSBI from 'jsbi';
 import { useMemo } from 'react';
 import isNull from 'lodash/isNull';
-import { Position, AMM, Token, RateOracle } from '@voltz/v1-sdk';
+import { Position, Token, RateOracle } from '@voltz/v1-sdk';
 import { providers } from 'ethers';
 
+import { AugmentedAMM } from '@utilities';
 import { useAgent, useWallet } from '@hooks';
 import { Agents } from '@components/contexts';
 
@@ -37,7 +38,7 @@ const usePositions = (): usePositionsResult => {
           ...restOfPosition
         }) =>
           new Position({
-            amm: new AMM({
+            amm: new AugmentedAMM({
               signer,
               provider: providers.getDefaultProvider(
                 process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK,

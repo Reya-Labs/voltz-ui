@@ -1,15 +1,16 @@
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import isNull from 'lodash/isNull';
-import { AMM, Token, RateOracle } from '@voltz/v1-sdk';
+import { Token, RateOracle } from '@voltz/v1-sdk';
 import { providers } from 'ethers';
 
-import { useWallet } from '@hooks';
+import { AugmentedAMM } from '@utilities';
 import { useGetAmMsQuery, Amm_OrderBy } from '@graphql';
+import useWallet from './useWallet';
 
 export type UseAMMsArgs = {};
 
 export type UseAMMsResult = {
-  amms?: AMM[];
+  amms?: AugmentedAMM[];
   loading: boolean;
   error: boolean;
 };
@@ -17,7 +18,12 @@ export type UseAMMsResult = {
 const useAMMs = (): UseAMMsResult => {
   const { signer } = useWallet();
   const isSignerAvailable = !isNull(signer);
-  const { data, loading, error } = useGetAmMsQuery({ variables: { orderBy: Amm_OrderBy.Id } });
+  const { data, loading, error, refetch } = useGetAmMsQuery({
+    variables: { orderBy: Amm_OrderBy.Id },
+  });
+  const handleRefetch = useCallback(async () => {
+    await refetch();
+  }, [refetch]);
 
   const amms = useMemo(() => {
     if (data && !loading && !error) {
@@ -30,7 +36,8 @@ const useAMMs = (): UseAMMsResult => {
           },
           ...rest
         }) =>
-          new AMM({
+          new AugmentedAMM({
+            refetch: handleRefetch,
             signer,
             provider: providers.getDefaultProvider(process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK),
             rateOracle: new RateOracle({ id: rateOracleAddress, protocolId: protocolId as number }),
@@ -43,7 +50,7 @@ const useAMMs = (): UseAMMsResult => {
           }),
       );
     }
-  }, [loading, error, isSignerAvailable]);
+  }, [loading, error, isSignerAvailable, handleRefetch]);
 
   return { amms, loading, error: !!error };
 };

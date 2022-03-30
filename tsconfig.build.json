@@ -15,6 +15,7 @@
       "@theme": ["src/theme"],
       "@components/*": ["src/components"],
       "@hooks": ["src/hooks"],
+      "@store": ["src/store"],
       "@graphql": ["src/graphql"],
       "@utilities": ["src/utilities"],
       "@routes": ["src/routes"]
