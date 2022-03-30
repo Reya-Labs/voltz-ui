@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Box from '@mui/material/Box';
 import isUndefined from 'lodash/isUndefined';
 
@@ -19,6 +19,12 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
   partialCollateralization,
   onChangePartialCollateralization,
 }) => {
+  useEffect(() => {
+    if (isUndefined(partialCollateralizationValue)) {
+      onChangePartialCollateralization(false);
+    }
+  }, []);
+
   const { agent, onChangeAgent } = useAgent();
   if (!agent || agent === Agents.LIQUIDITY_PROVIDER) {
     return null;
