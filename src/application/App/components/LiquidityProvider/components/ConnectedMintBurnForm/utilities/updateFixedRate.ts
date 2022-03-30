@@ -31,8 +31,6 @@ const updateFixedRate =
       count += 1;
     }
 
-    console.debug({ number: closestUsableFixedRate.toNumber() });
-
     setFixedRate(closestUsableFixedRate.toNumber());
   };
 
