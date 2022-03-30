@@ -2,7 +2,9 @@ import React, { useCallback } from 'react';
 import isUndefined from 'lodash/isUndefined';
 import Box from '@mui/material/Box';
 
-import DebouncedIntegerField from '../DebouncedIntegerField/DebouncedIntegerField';
+import DebouncedIntegerField, {
+  DebouncedIntegerFieldDetails,
+} from '../DebouncedIntegerField/DebouncedIntegerField';
 import IconLabel from '../IconLabel/IconLabel';
 
 export type RateOptionsProps = {
@@ -10,8 +12,8 @@ export type RateOptionsProps = {
   defaultFixedHigh?: number;
   fixedLow?: number;
   fixedHigh?: number;
-  onChangeFixedLow: (value: number) => void;
-  onChangeFixedHigh: (value: number) => void;
+  onChangeFixedLow: (value: number, increment: boolean) => void;
+  onChangeFixedHigh: (value: number, increment: boolean) => void;
 };
 
 const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
@@ -26,14 +28,14 @@ const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
   const fixedHighValue = isUndefined(fixedHigh) ? defaultFixedHigh : fixedHigh;
 
   const handleChangeFixedLow = useCallback(
-    (newFixedLow: string | undefined) => {
-      onChangeFixedLow(parseFloat(newFixedLow || '1'));
+    (newFixedLow: string | undefined, details?: DebouncedIntegerFieldDetails) => {
+      onChangeFixedLow(parseFloat(newFixedLow || '1'), details?.increment || false);
     },
     [onChangeFixedLow],
   );
   const handleChangeFixedHigh = useCallback(
-    (newFixedHigh: string | undefined) => {
-      onChangeFixedHigh(parseFloat(newFixedHigh || '1'));
+    (newFixedHigh: string | undefined, details?: DebouncedIntegerFieldDetails) => {
+      onChangeFixedHigh(parseFloat(newFixedHigh || '1'), details?.increment || false);
     },
     [onChangeFixedHigh],
   );
