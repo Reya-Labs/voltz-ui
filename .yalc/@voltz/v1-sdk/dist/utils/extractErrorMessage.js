@@ -21,6 +21,9 @@ var getError = function (message) {
     if (message.includes('LOK')) {
         return 'The pool has not been initialized yet';
     }
+    if (message.includes('CanOnlyTradeIfUnlocked')) {
+        return 'The pool has not been initialized yet';
+    }
     if (message.includes('closeToOrBeyondMaturity')) {
         return 'The pool is close to or beyond maturity';
     }
