@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { AugmentedAMM } from '@utilities';
 import { useAsyncFunction, useAgent } from '@hooks';
 import { Agents } from '@components/contexts';
-import { MintMinimumMarginRequirementPayload, SwapMinimumMarginRequirementPayload } from './types';
+import { MintMinimumMarginRequirementPayload, SwapInfoPayload } from './types';
 import AMMContext from './AMMContext';
 
 export type AMMProviderProps = {
@@ -31,8 +31,8 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
     },
     useMemo(() => undefined, [!!amm.signer]),
   );
-  const swapMinimumMarginRequirement = useAsyncFunction(
-    async (args: SwapMinimumMarginRequirementPayload) => {
+  const swapInfo = useAsyncFunction(
+    async (args: SwapInfoPayload) => {
       const recipient = await amm.signer?.getAddress();
 
       if (!recipient) {
@@ -42,13 +42,15 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
       const result = await amm.getInfoPostSwap({
         ...args,
         isFT: agent === Agents.FIXED_TRADER,
+        fixedLow: 1,
+        fixedHigh: 2,
       });
 
       if (!result) {
         return;
       }
 
-      return result.marginRequirement;
+      return result;
     },
     useMemo(() => undefined, [!!amm.signer, agent]),
   );
@@ -56,7 +58,7 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
   const value = {
     variableApy,
     mintMinimumMarginRequirement,
-    swapMinimumMarginRequirement,
+    swapInfo,
   };
 
   return <AMMContext.Provider value={value}>{children}</AMMContext.Provider>;
