@@ -4,10 +4,11 @@ import { DateTime } from 'luxon';
 
 import { Agents } from '@components/contexts';
 import { SwapAction } from '../../types';
-import { deserializeAmm, getSigner } from '../../utilities';
+import { deserializeAmm, getSigner, getMessageError } from '../../utilities';
 import * as actions from '../../actions';
 
 function* swapSaga(action: SwapAction) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const signer: providers.JsonRpcSigner | null = yield getSigner();
 
   if (!signer) {
@@ -24,6 +25,7 @@ function* swapSaga(action: SwapAction) {
 
   let result: ContractTransaction | void;
   try {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     result = yield call([amm, 'swap'], {
       isFT: agent === Agents.FIXED_TRADER,
       notional,
@@ -36,7 +38,7 @@ function* swapSaga(action: SwapAction) {
       actions.updateTransaction({
         id,
         failedAt: DateTime.now().toISO(),
-        failureMessage: JSON.stringify(error),
+        failureMessage: getMessageError(error)
       }),
     );
 

@@ -3,10 +3,11 @@ import { call, put } from 'redux-saga/effects';
 import { DateTime } from 'luxon';
 
 import { MintAction } from '../../types';
-import { deserializeAmm, getSigner } from '../../utilities';
+import { deserializeAmm, getMessageError, getSigner } from '../../utilities';
 import * as actions from '../../actions';
 
 function* mintSaga(action: MintAction) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const signer: providers.JsonRpcSigner | null = yield getSigner();
 
   if (!signer) {
@@ -27,6 +28,7 @@ function* mintSaga(action: MintAction) {
 
   let result: ContractTransaction | void;
   try {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     result = yield call([amm, 'mint'], {
       fixedLow,
       fixedHigh,
@@ -38,7 +40,7 @@ function* mintSaga(action: MintAction) {
       actions.updateTransaction({
         id,
         failedAt: DateTime.now().toISO(),
-        failureMessage: JSON.stringify(error),
+        failureMessage: getMessageError(error),
       }),
     );
 
