@@ -1,8 +1,10 @@
-import React, { useMemo, useCallback, useEffect } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { useMetaMask } from 'metamask-react';
 import { ethers } from 'ethers';
 
 import { useGetWalletQuery } from '@graphql';
+import { selectors } from '@store';
+import { useSelector } from '@hooks';
 import { WalletStatus, WalletName, WalletEthereum } from './types';
 import WalletContext from './WalletContext';
 
@@ -32,6 +34,7 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
   setRequired,
   children,
 }) => {
+  const [polling, setPolling] = useState(false);
   const {
     status: metamaskStatus,
     connect: metamaskConnect,
@@ -86,7 +89,18 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
     return null;
   }, [ethereum]);
 
-  const { data, loading, error } = useGetWalletQuery({ variables: { id: account || '' } });
+  const pollInterval = polling ? 5000 : undefined;
+  const { data, loading, error } = useGetWalletQuery({
+    variables: { id: account || '' },
+    pollInterval,
+  });
+
+  const activeTransactions = useSelector(selectors.transactionsSelector);
+  const shouldPoll = activeTransactions.length > 0;
+
+  useEffect(() => {
+    setPolling(shouldPoll);
+  }, [shouldPoll, setPolling]);
 
   const value = {
     status,
