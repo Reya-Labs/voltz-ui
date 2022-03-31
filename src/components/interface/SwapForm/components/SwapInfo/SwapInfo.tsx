@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import isUndefined from 'lodash/isUndefined';
+import Box from '@mui/material/Box';
 
 import { useAMMContext } from '@hooks';
 import { Typography } from '@components/atomic';
@@ -18,23 +19,30 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({ notional }) => {
     }
   }, [call, notional]);
 
-  const renderMarginAmount = () => {
+  const renderSwapInfo = () => {
     if (loading) {
       return 'Loading...';
     }
 
     if (!result) {
-      return '0';
+      return 'No data';
     }
 
-    return result.marginRequirement.toFixed(2);
+    return (
+      <>
+        <Typography variant="body2" label="Swap info">
+          Available notional: {result.availableNotional.toFixed(2)}
+        </Typography>
+        <Typography variant="body2">Estimated slippage: {result.slippage.toFixed(2)}%</Typography>
+        <Typography variant="body2">Fee: {result.fee.toFixed(2)}</Typography>
+        <Typography variant="body2">
+          Minimum margin amount: {result.marginRequirement.toFixed(2)}
+        </Typography>
+      </>
+    );
   };
 
-  return (
-    <Typography variant="h3" label="Swap info">
-      {renderMarginAmount()}
-    </Typography>
-  );
+  return <Box>{renderSwapInfo()}</Box>;
 };
 
 export default SwapInfo;
