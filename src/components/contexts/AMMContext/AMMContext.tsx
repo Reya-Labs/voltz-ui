@@ -1,11 +1,6 @@
 import { createContext } from 'react';
 
-import {
-  MintMinimumMarginRequirementPayload,
-  SwapMinimumMarginRequirementPayload,
-  SwapInfoPayload,
-  AMMDispatch,
-} from './types';
+import { MintMinimumMarginRequirementPayload, SwapInfoPayload, AMMDispatch } from './types';
 
 const AMMContext = createContext<AMMDispatch>({
   variableApy: {
@@ -19,12 +14,6 @@ const AMMContext = createContext<AMMDispatch>({
     error: false,
     loading: false,
     call: (_args?: MintMinimumMarginRequirementPayload) => undefined,
-  },
-  swapMinimumMarginRequirement: {
-    result: undefined,
-    error: false,
-    loading: false,
-    call: (_args?: SwapMinimumMarginRequirementPayload) => undefined,
   },
   swapInfo: {
     result: undefined,

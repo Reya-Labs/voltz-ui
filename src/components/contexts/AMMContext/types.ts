@@ -11,11 +11,6 @@ export type MintMinimumMarginRequirementPayload = Omit<
   'recipient' | 'margin'
 >;
 
-export type SwapMinimumMarginRequirementPayload = Omit<
-  AMMGetInfoPostSwapArgs,
-  'recipient' | 'isFT'
->;
-
 export type SwapInfoPayload = Omit<
   AMMGetInfoPostSwapArgs,
   'recipient' | 'isFT' | 'fixedLow' | 'fixedHigh'
@@ -32,10 +27,6 @@ export type AMMDispatch = {
   variableApy: UseAsyncFunctionResult<unknown, number | void>;
   mintMinimumMarginRequirement: UseAsyncFunctionResult<
     MintMinimumMarginRequirementPayload,
-    number | void
-  >;
-  swapMinimumMarginRequirement: UseAsyncFunctionResult<
-    SwapMinimumMarginRequirementPayload,
     number | void
   >;
   swapInfo: UseAsyncFunctionResult<SwapInfoPayload, InfoPostSwap | void>;
