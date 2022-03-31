@@ -906,6 +906,13 @@ class AMM {
   }
 
   public closestTickAndFixedRate(fixedRate: number): ClosestTickAndFixedRate {
+    if (fixedRate < MIN_FIXED_RATE) {
+      fixedRate = MIN_FIXED_RATE;
+    }
+    if (fixedRate > MAX_FIXED_RATE) {
+      fixedRate = MAX_FIXED_RATE;
+    }
+
     const fixedRatePrice = Price.fromNumber(fixedRate);
     const closestTick: number = fixedRateToClosestTick(fixedRatePrice);
     const closestUsableTick: number = nearestUsableTick(
@@ -918,6 +925,12 @@ class AMM {
       closestUsableTick,
       closestUsableFixedRate,
     };
+  }
+
+  public getNextUsableFixedRate(fixedRate: number, count: number): number {
+    let { closestUsableTick } = this.closestTickAndFixedRate(fixedRate);
+    closestUsableTick -= count * JSBI.toNumber(this.tickSpacing);
+    return tickToFixedRate(closestUsableTick).toNumber();
   }
 }
 

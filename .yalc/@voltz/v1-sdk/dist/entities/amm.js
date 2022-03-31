@@ -810,6 +810,12 @@ var AMM = /** @class */ (function () {
         });
     };
     AMM.prototype.closestTickAndFixedRate = function (fixedRate) {
+        if (fixedRate < constants_1.MIN_FIXED_RATE) {
+            fixedRate = constants_1.MIN_FIXED_RATE;
+        }
+        if (fixedRate > constants_1.MAX_FIXED_RATE) {
+            fixedRate = constants_1.MAX_FIXED_RATE;
+        }
         var fixedRatePrice = price_1.Price.fromNumber(fixedRate);
         var closestTick = (0, priceTickConversions_1.fixedRateToClosestTick)(fixedRatePrice);
         var closestUsableTick = (0, nearestUsableTick_1.nearestUsableTick)(closestTick, jsbi_1.default.toNumber(this.tickSpacing));
@@ -818,6 +824,11 @@ var AMM = /** @class */ (function () {
             closestUsableTick: closestUsableTick,
             closestUsableFixedRate: closestUsableFixedRate,
         };
+    };
+    AMM.prototype.getNextUsableFixedRate = function (fixedRate, count) {
+        var closestUsableTick = this.closestTickAndFixedRate(fixedRate).closestUsableTick;
+        closestUsableTick -= count * jsbi_1.default.toNumber(this.tickSpacing);
+        return (0, priceTickConversions_1.tickToFixedRate)(closestUsableTick).toNumber();
     };
     return AMM;
 }());
