@@ -27,8 +27,6 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
     return null;
   }
 
-  console.debug({ activeTransaction });
-
   const renderStatus = () => {
     if (!activeTransaction.failedAt && !activeTransaction.succeededAt) {
       return (
