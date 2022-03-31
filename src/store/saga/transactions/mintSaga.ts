@@ -3,8 +3,9 @@ import { call, put } from 'redux-saga/effects';
 import { DateTime } from 'luxon';
 
 import { MintAction } from '../../types';
-import { deserializeAmm, getMessageError, getSigner } from '../../utilities';
+import { deserializeAmm, getSigner } from '../../utilities';
 import * as actions from '../../actions';
+import { getErrorMessage } from '@utilities';
 
 function* mintSaga(action: MintAction) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -40,7 +41,7 @@ function* mintSaga(action: MintAction) {
       actions.updateTransaction({
         id,
         failedAt: DateTime.now().toISO(),
-        failureMessage: getMessageError(error),
+        failureMessage: getErrorMessage(error),
       }),
     );
 

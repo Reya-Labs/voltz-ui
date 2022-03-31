@@ -3,8 +3,9 @@ import { call, put } from 'redux-saga/effects';
 import { DateTime } from 'luxon';
 
 import { Agents } from '@components/contexts';
+import { getErrorMessage } from '@utilities';
 import { SwapAction } from '../../types';
-import { deserializeAmm, getSigner, getMessageError } from '../../utilities';
+import { deserializeAmm, getSigner } from '../../utilities';
 import * as actions from '../../actions';
 
 function* swapSaga(action: SwapAction) {
@@ -38,7 +39,7 @@ function* swapSaga(action: SwapAction) {
       actions.updateTransaction({
         id,
         failedAt: DateTime.now().toISO(),
-        failureMessage: getMessageError(error)
+        failureMessage: getErrorMessage(error)
       }),
     );
 

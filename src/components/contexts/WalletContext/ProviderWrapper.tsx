@@ -5,7 +5,7 @@ import { ethers } from 'ethers';
 import { useGetWalletQuery } from '@graphql';
 import { WalletStatus, WalletName, WalletEthereum } from './types';
 import WalletContext from './WalletContext';
-import { getMessageError } from '@store';
+import { getErrorMessage } from '@utilities';
 
 export type ProviderWrapperProps = {
   status: WalletStatus;
@@ -63,9 +63,8 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
       if (walletName === 'metamask') {
         try {
           return await metamaskConnect();
-        }
-        catch (error) {
-          setWalletError(getMessageError(error));
+        } catch (error) {
+          setWalletError(getErrorMessage(error));
           return null;
         }
       }
@@ -90,9 +89,8 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
       try {
         const provider = new ethers.providers.Web3Provider(ethereum, 'any');
         return provider.getSigner();
-      }
-      catch (error) {
-        setWalletError(getMessageError(error));
+      } catch (error) {
+        setWalletError(getErrorMessage(error));
         return null;
       }
     }
