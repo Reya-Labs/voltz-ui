@@ -89,7 +89,7 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
     return null;
   }, [ethereum]);
 
-  const pollInterval = polling ? 5000 : undefined;
+  const pollInterval = polling ? 500 : undefined;
   const { data, loading, error } = useGetWalletQuery({
     variables: { id: account || '' },
     pollInterval,
