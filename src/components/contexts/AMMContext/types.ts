@@ -1,4 +1,8 @@
-import { AMMGetInfoPostSwapArgs, AMMGetMinimumMarginRequirementPostMintArgs } from '@voltz/v1-sdk';
+import {
+  AMMGetInfoPostSwapArgs,
+  AMMGetMinimumMarginRequirementPostMintArgs,
+  InfoPostSwap,
+} from '@voltz/v1-sdk';
 
 import { UseAsyncFunctionResult } from '@hooks';
 
@@ -10,6 +14,11 @@ export type MintMinimumMarginRequirementPayload = Omit<
 export type SwapMinimumMarginRequirementPayload = Omit<
   AMMGetInfoPostSwapArgs,
   'recipient' | 'isFT'
+>;
+
+export type SwapInfoPayload = Omit<
+  AMMGetInfoPostSwapArgs,
+  'recipient' | 'isFT' | 'fixedLow' | 'fixedHigh'
 >;
 
 export type MinimumMarginAmountSwapPayload = {
@@ -29,4 +38,5 @@ export type AMMDispatch = {
     SwapMinimumMarginRequirementPayload,
     number | void
   >;
+  swapInfo: UseAsyncFunctionResult<SwapInfoPayload, InfoPostSwap | void>;
 };
