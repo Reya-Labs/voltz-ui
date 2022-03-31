@@ -12,7 +12,7 @@ import {
   MarginAmount,
 } from '@components/composite';
 import { HandleSubmitSwapFormArgs } from './types';
-import { TraderControls, SwapMinimumMarginAmount, SubmitSwapFormButton } from './components';
+import { TraderControls, SwapInfo, SubmitSwapFormButton } from './components';
 
 export type SwapFormProps = {
   isModifying?: boolean;
@@ -116,7 +116,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           marginBottom: (theme) => theme.spacing(4),
         }}
       >
-        <SwapMinimumMarginAmount fixedLow={1} fixedHigh={2} notional={notional} />
+        <SwapInfo notional={notional} />
       </Box>
       <Box
         sx={{
