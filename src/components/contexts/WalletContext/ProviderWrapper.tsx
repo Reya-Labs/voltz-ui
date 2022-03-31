@@ -90,17 +90,21 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
   }, [ethereum]);
 
   const pollInterval = polling ? 500 : undefined;
-  const { data, loading, error } = useGetWalletQuery({
+  const { data, loading, error, stopPolling } = useGetWalletQuery({
     variables: { id: account || '' },
     pollInterval,
   });
 
-  const activeTransactions = useSelector(selectors.transactionsSelector);
-  const shouldPoll = activeTransactions.length > 0;
+  const unresolvedTransactions = useSelector(selectors.unresolvedTransactionsSelector);
+  const shouldPoll = unresolvedTransactions.length > 0;
 
   useEffect(() => {
     setPolling(shouldPoll);
-  }, [shouldPoll, setPolling]);
+
+    if (!shouldPoll) {
+      stopPolling();
+    }
+  }, [shouldPoll, setPolling, stopPolling]);
 
   const value = {
     status,

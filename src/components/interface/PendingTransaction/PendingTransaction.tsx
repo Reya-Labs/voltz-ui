@@ -27,8 +27,10 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
     return null;
   }
 
+  console.debug({ activeTransaction });
+
   const renderStatus = () => {
-    if (!activeTransaction || (!activeTransaction.failedAt && !activeTransaction.succeededAt)) {
+    if (!activeTransaction.failedAt && !activeTransaction.succeededAt) {
       return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Box

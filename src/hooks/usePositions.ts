@@ -3,6 +3,7 @@ import { useMemo, useEffect } from 'react';
 import isNull from 'lodash/isNull';
 import { Position, Token, RateOracle } from '@voltz/v1-sdk';
 import { providers } from 'ethers';
+import { DateTime } from 'luxon';
 
 import { AugmentedAMM } from '@utilities';
 import { actions, selectors } from '@store';
@@ -78,14 +79,15 @@ const usePositions = (): usePositionsResult => {
       }
     });
   }, [positions, agent]);
-  const activeTransactions = useSelector(selectors.transactionsSelector);
+
+  const unresolvedTransactions = useSelector(selectors.unresolvedTransactionsSelector);
   const shouldTryToCloseTransactions =
-    activeTransactions.length > 0 && positions && positions.length > 0;
+    unresolvedTransactions.length > 0 && positions && positions.length > 0;
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (shouldTryToCloseTransactions) {
-      activeTransactions.forEach((activeTransaction) => {
+      unresolvedTransactions.forEach((unresolvedTransaction) => {
         const matchingPosition = positions.find(
           ({
             amm: { id: ammId },
@@ -94,23 +96,26 @@ const usePositions = (): usePositionsResult => {
             effectiveFixedTokenBalance,
             isLiquidityProvider,
           }) => {
-            if (ammId !== activeTransaction.ammId) {
+            if (ammId !== unresolvedTransaction.ammId) {
               return false;
             }
 
-            if (isLiquidityProvider && activeTransaction.agent !== Agents.LIQUIDITY_PROVIDER) {
+            if (isLiquidityProvider && unresolvedTransaction.agent !== Agents.LIQUIDITY_PROVIDER) {
               return false;
             }
 
-            if (effectiveFixedTokenBalance > 0 && activeTransaction.agent !== Agents.FIXED_TRADER) {
+            if (
+              effectiveFixedTokenBalance > 0 &&
+              unresolvedTransaction.agent !== Agents.FIXED_TRADER
+            ) {
               return false;
             }
 
-            if (fixedRateLower.toNumber() !== activeTransaction.fixedLow) {
+            if (fixedRateLower.toNumber() !== unresolvedTransaction.fixedLow) {
               return false;
             }
 
-            if (fixedRateUpper.toNumber() !== activeTransaction.fixedHigh) {
+            if (fixedRateUpper.toNumber() !== unresolvedTransaction.fixedHigh) {
               return false;
             }
 
@@ -119,7 +124,12 @@ const usePositions = (): usePositionsResult => {
         );
 
         if (matchingPosition) {
-          dispatch(actions.closeTransaction(activeTransaction.id));
+          dispatch(
+            actions.updateTransaction({
+              id: unresolvedTransaction.id,
+              resolvedAt: DateTime.now().toISO(),
+            }),
+          );
         }
       });
     }

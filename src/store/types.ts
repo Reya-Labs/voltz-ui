@@ -1,6 +1,7 @@
 import { Agents } from '@components/contexts';
 
 export type WindowWithEthereum = typeof window & {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ethereum: any;
 };
 
@@ -10,6 +11,7 @@ export type TransactionUpdate = {
   failedAt?: string;
   failureMessage?: string;
   succeededAt?: string;
+  resolvedAt?: string;
 };
 
 export type Transaction = TransactionUpdate & {
@@ -38,11 +40,11 @@ export type SerializedAMM = {
   sqrtPriceX96: string;
   liquidity: string;
   tick: string;
-  txCount: any;
+  txCount: string;
   rateOracle: {
     id: string;
-    protocolId: any;
-    token: { id: string; name: string; decimals: any };
+    protocolId: string;
+    token: { id: string; name: string; decimals: string };
   };
 };
 
