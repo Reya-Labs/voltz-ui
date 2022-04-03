@@ -99,12 +99,12 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
   const shouldPoll = unresolvedTransactions.length > 0;
 
   useEffect(() => {
-    setPolling(shouldPoll);
+    setPolling(shouldPoll && !error);
 
-    if (!shouldPoll) {
+    if (!shouldPoll || error) {
       stopPolling();
     }
-  }, [shouldPoll, setPolling, stopPolling]);
+  }, [error, shouldPoll, setPolling, stopPolling]);
 
   const value = {
     status,
