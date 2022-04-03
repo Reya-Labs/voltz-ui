@@ -5,7 +5,8 @@ import Link from '@mui/material/Link';
 import { AugmentedAMM } from '@utilities';
 import { useWallet, useSelector, usePositions } from '@hooks';
 import { selectors } from '@store';
-import { Button, Panel, Typography } from '@components/atomic';
+import { AMMProvider } from '@components/contexts';
+import { Button, Panel, Typography, Loading } from '@components/atomic';
 import { ProtocolInformation, WalletAddressDisplay } from '@components/composite';
 
 export type PendingTransactionProps = {
@@ -27,8 +28,12 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
     return null;
   }
 
+  const transactionLink = activeTransaction.txid
+    ? `https://etherscan.io/tx/${activeTransaction.txid}`
+    : undefined;
+
   const renderStatus = () => {
-    if (!activeTransaction.failedAt && !activeTransaction.succeededAt) {
+    if (activeTransaction.resolvedAt) {
       return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Box
@@ -37,29 +42,116 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               paddingBottom: (theme) => theme.spacing(8),
             }}
           >
-            <Typography variant="h4">Loading...</Typography>
+            <Box sx={{ height: 30, width: 30 }}>
+              <img src="/images/done.png" alt="Done" height="100%" width="100%" />
+            </Box>
           </Box>
           <Box
             sx={{
               paddingBottom: (theme) => theme.spacing(2),
             }}
           >
-            <Typography variant="subtitle1">WAITING FOR CONFIRMATION</Typography>
+            <Typography variant="subtitle1">TRANSACTION CONFIRMED</Typography>
           </Box>
           <Box
             sx={{
-              paddingBottom: (theme) => theme.spacing(2),
+              paddingBottom: (theme) => theme.spacing(8),
             }}
           >
-            <WalletAddressDisplay address={account} />
+            <Link href="#" variant="caption" color="primary.light">
+              View on etherscan
+            </Link>
           </Box>
           <Box
             sx={{
               paddingBottom: (theme) => theme.spacing(10),
             }}
           >
+            <Button variant="contained" onClick={onComplete}>
+              Go to your portfolio
+            </Button>
+          </Box>
+        </Box>
+      );
+    }
+
+    if (activeTransaction.failedAt) {
+      return (
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Box
+            sx={{
+              paddingTop: (theme) => theme.spacing(6),
+              paddingBottom: (theme) => theme.spacing(8),
+            }}
+          >
+            <Box sx={{ height: 30, width: 30 }}>
+              <img src="/images/failed.png" alt="Done" height="100%" width="100%" />
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              paddingBottom: (theme) => theme.spacing(2),
+            }}
+          >
+            <Typography variant="subtitle1">TRANSACTION FAILED</Typography>
+          </Box>
+          <Box
+            sx={{
+              paddingBottom: (theme) => theme.spacing(8),
+            }}
+          >
+            <Typography variant="body2" color="error">
+              An error occurred
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              paddingBottom: (theme) => theme.spacing(10),
+            }}
+          >
+            <Button variant="contained" onClick={onComplete}>
+              Go to your portfolio
+            </Button>
+          </Box>
+        </Box>
+      );
+    }
+
+    if (activeTransaction.succeededAt) {
+      return (
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Box
+            sx={{
+              paddingTop: (theme) => theme.spacing(6),
+              paddingBottom: (theme) => theme.spacing(8),
+            }}
+          >
+            <Loading />
+          </Box>
+          <Box
+            sx={{
+              paddingBottom: (theme) => theme.spacing(2),
+            }}
+          >
+            <Typography variant="h6">TRANSACTION CONFIRMED</Typography>
+          </Box>
+          <Box
+            sx={{
+              paddingBottom: (theme) => theme.spacing(8),
+            }}
+          >
+            <Link href={transactionLink} target="_blank" variant="caption" color="primary.light">
+              View on etherscan
+            </Link>
+          </Box>
+          <Box
+            sx={{
+              paddingBottom: (theme) => theme.spacing(10),
+              textAlign: 'center',
+            }}
+          >
             <Typography variant="caption" color="secondary">
-              Confirm this transaction in your wallet
+              Wait a few moments for the blockchain data to synchronize
             </Typography>
           </Box>
         </Box>
@@ -74,32 +166,30 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
             paddingBottom: (theme) => theme.spacing(8),
           }}
         >
-          <Typography variant="h4">Done</Typography>
+          <Loading />
         </Box>
         <Box
           sx={{
             paddingBottom: (theme) => theme.spacing(2),
           }}
         >
-          <Typography variant="subtitle1">TRANSACTION CONFIRMED</Typography>
+          <Typography variant="h6">WAITING FOR CONFIRMATION</Typography>
         </Box>
         <Box
           sx={{
-            paddingBottom: (theme) => theme.spacing(8),
+            paddingBottom: (theme) => theme.spacing(2),
           }}
         >
-          <Link href="#" variant="caption" color="primary.light">
-            View on etherscan
-          </Link>
+          <WalletAddressDisplay address={account} />
         </Box>
         <Box
           sx={{
             paddingBottom: (theme) => theme.spacing(10),
           }}
         >
-          <Button variant="contained" onClick={onComplete}>
-            Go to your portfolio
-          </Button>
+          <Typography variant="caption" color="secondary">
+            Confirm this transaction in your wallet
+          </Typography>
         </Box>
       </Box>
     );
@@ -117,7 +207,9 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
     >
       {renderStatus()}
       <Panel variant="main" sx={{ padding: 6 }}>
-        <ProtocolInformation protocol={amm.protocol} fixedApr={amm.fixedApr} />
+        <AMMProvider amm={amm}>
+          <ProtocolInformation protocol={amm.protocol} fixedApr={amm.fixedApr} />
+        </AMMProvider>
         <Box
           sx={{
             marginBottom: (theme) => theme.spacing(4),

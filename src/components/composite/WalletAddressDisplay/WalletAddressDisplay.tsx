@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { elideAddress } from '@utilities';
 import { Typography } from '@components/atomic';
 
 export type WalletAddressDisplayProps = {
@@ -16,7 +17,7 @@ const WalletAddressDisplay: React.FunctionComponent<WalletAddressDisplayProps> =
       variant="body1"
       sx={{ marginLeft: (theme) => theme.spacing(4), fontWeight: 'bold' }}
     >
-      {address}
+      {elideAddress(address)}
     </Typography>
   );
 };
