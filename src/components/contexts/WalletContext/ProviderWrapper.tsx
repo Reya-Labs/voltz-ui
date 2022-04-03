@@ -7,6 +7,7 @@ import { selectors } from '@store';
 import { useSelector } from '@hooks';
 import { WalletStatus, WalletName, WalletEthereum } from './types';
 import WalletContext from './WalletContext';
+import { getErrorMessage } from '@utilities';
 
 export type ProviderWrapperProps = {
   status: WalletStatus;
@@ -35,6 +36,7 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
   children,
 }) => {
   const [polling, setPolling] = useState(false);
+  const [walletError, setWalletError] = useState<String | null>(null);
   const {
     status: metamaskStatus,
     connect: metamaskConnect,
@@ -61,10 +63,15 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
       setName(walletName);
 
       if (walletName === 'metamask') {
-        return metamaskConnect();
+        try {
+          return await metamaskConnect();
+        } catch (error) {
+          setWalletError(getErrorMessage(error));
+          return null;
+        }
       }
 
-      return Promise.resolve(null);
+      return null;
     },
     [setName, metamaskConnect],
   );
@@ -81,9 +88,13 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
   }, [name, metamaskEthereum]);
   const signer = useMemo((): ethers.providers.JsonRpcSigner | null => {
     if (ethereum) {
-      const provider = new ethers.providers.Web3Provider(ethereum, 'any');
-
-      return provider.getSigner();
+      try {
+        const provider = new ethers.providers.Web3Provider(ethereum, 'any');
+        return provider.getSigner();
+      } catch (error) {
+        setWalletError(getErrorMessage(error));
+        return null;
+      }
     }
 
     return null;
