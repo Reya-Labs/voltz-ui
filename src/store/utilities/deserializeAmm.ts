@@ -14,17 +14,19 @@ const deserializeAmm = (
       protocolId,
       token: { id: tokenAddress, name: tokenName, decimals },
     },
+    txCount,
     ...rest
   } = serializedAmm;
   const amm = new AugmentedAMM({
     signer,
     provider: providers.getDefaultProvider(process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK),
-    rateOracle: new RateOracle({ id: rateOracleAddress, protocolId: protocolId as number }),
+    rateOracle: new RateOracle({ id: rateOracleAddress, protocolId: parseInt(protocolId, 10) }),
     underlyingToken: new Token({
       id: tokenAddress,
       name: tokenName,
-      decimals: decimals as number,
+      decimals: parseInt(decimals, 10),
     }),
+    txCount: parseInt(txCount, 10),
     ...rest,
   });
 
