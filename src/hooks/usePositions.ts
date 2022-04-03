@@ -1,11 +1,13 @@
 import JSBI from 'jsbi';
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import isNull from 'lodash/isNull';
 import { Position, Token, RateOracle } from '@voltz/v1-sdk';
 import { providers } from 'ethers';
+import { DateTime } from 'luxon';
 
 import { AugmentedAMM } from '@utilities';
-import { useAgent, useWallet } from '@hooks';
+import { actions, selectors } from '@store';
+import { useAgent, useWallet, useSelector, useDispatch } from '@hooks';
 import { Agents } from '@components/contexts';
 
 export type usePositionsResult = {
@@ -19,6 +21,7 @@ const usePositions = (): usePositionsResult => {
   const { agent } = useAgent();
   const { signer, wallet, loading, error } = useWallet();
   const isSignerAvailable = !isNull(signer);
+  const positionCount = wallet?.positions.length;
 
   const positions = useMemo(() => {
     if (wallet && wallet.positions && !loading && !error) {
@@ -61,7 +64,7 @@ const usePositions = (): usePositionsResult => {
           }),
       );
     }
-  }, [loading, error, isSignerAvailable]);
+  }, [positionCount, loading, error, isSignerAvailable]);
   const positionsByAgent = useMemo(() => {
     return positions?.filter(({ isLiquidityProvider, effectiveFixedTokenBalance }) => {
       switch (agent) {
@@ -76,6 +79,61 @@ const usePositions = (): usePositionsResult => {
       }
     });
   }, [positions, agent]);
+
+  const unresolvedTransactions = useSelector(selectors.unresolvedTransactionsSelector);
+  const shouldTryToCloseTransactions =
+    unresolvedTransactions.length > 0 && positions && positions.length > 0;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (shouldTryToCloseTransactions) {
+      unresolvedTransactions.forEach((unresolvedTransaction) => {
+        const matchingPosition = positions.find(
+          ({
+            amm: { id: ammId },
+            fixedRateLower,
+            fixedRateUpper,
+            effectiveFixedTokenBalance,
+            isLiquidityProvider,
+          }) => {
+            if (ammId !== unresolvedTransaction.ammId) {
+              return false;
+            }
+
+            if (isLiquidityProvider && unresolvedTransaction.agent !== Agents.LIQUIDITY_PROVIDER) {
+              return false;
+            }
+
+            if (
+              effectiveFixedTokenBalance > 0 &&
+              unresolvedTransaction.agent !== Agents.FIXED_TRADER
+            ) {
+              return false;
+            }
+
+            if (fixedRateLower.toNumber() !== unresolvedTransaction.fixedLow) {
+              return false;
+            }
+
+            if (fixedRateUpper.toNumber() !== unresolvedTransaction.fixedHigh) {
+              return false;
+            }
+
+            return true;
+          },
+        );
+
+        if (matchingPosition) {
+          dispatch(
+            actions.updateTransaction({
+              id: unresolvedTransaction.id,
+              resolvedAt: DateTime.now().toISO(),
+            }),
+          );
+        }
+      });
+    }
+  }, [shouldTryToCloseTransactions, positions, dispatch]);
 
   return { positions, positionsByAgent, loading, error };
 };

@@ -3,15 +3,23 @@ import { createSelectorCreator, defaultMemoize } from 'reselect';
 import { State } from '../../types';
 import stateSelector from '../stateSelector';
 
-const concatenateIds = (transactions: State['transactions']) => {
-  return transactions.map(({ id }) => id).join('.');
+const concatenateSummaries = (transactions: State['transactions']) => {
+  const summaries = transactions.map(({ id, succeededAt, failedAt, resolvedAt }) => {
+    const succeeded = succeededAt ? '1' : '0';
+    const failed = failedAt ? '1' : '0';
+    const resolved = resolvedAt ? '1' : '0';
+
+    return `${id}${succeeded}${failed}${resolved}`;
+  });
+
+  return summaries.join('.');
 };
 
-const idsEqual = (previous: State, next: State) => {
-  return concatenateIds(previous.transactions) === concatenateIds(next.transactions);
+const transactionsEqual = (previous: State, next: State) => {
+  return concatenateSummaries(previous.transactions) === concatenateSummaries(next.transactions);
 };
 
-const transactionsSelectorCreator = createSelectorCreator(defaultMemoize, idsEqual);
+const transactionsSelectorCreator = createSelectorCreator(defaultMemoize, transactionsEqual);
 
 const transactionsSelector = transactionsSelectorCreator(
   stateSelector,

@@ -1,5 +1,6 @@
 import React from 'react';
 import Box from '@mui/material/Box';
+import isUndefined from 'lodash/isUndefined';
 
 import { Typography } from '@components/atomic';
 import IconLabel from '../IconLabel/IconLabel';
@@ -30,7 +31,7 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
       >
         {protocol}
       </Typography>
-      {fixedApr && (
+      {!isUndefined(fixedApr) && (
         <Typography
           label={<IconLabel label="fixed apr" icon="information-circle" info="Something" />}
           variant="h3"
@@ -38,7 +39,6 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
           {fixedApr.toFixed(2)}%
         </Typography>
       )}
-      ,
       <VariableAPY />
     </Box>
   );

@@ -1,8 +1,10 @@
-import React, { useMemo, useCallback, useEffect, useState } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { useMetaMask } from 'metamask-react';
 import { ethers } from 'ethers';
 
 import { useGetWalletQuery } from '@graphql';
+import { selectors } from '@store';
+import { useSelector } from '@hooks';
 import { WalletStatus, WalletName, WalletEthereum } from './types';
 import WalletContext from './WalletContext';
 import { getErrorMessage } from '@utilities';
@@ -33,8 +35,8 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
   setRequired,
   children,
 }) => {
+  const [polling, setPolling] = useState(false);
   const [walletError, setWalletError] = useState<String | null>(null);
-
   const {
     status: metamaskStatus,
     connect: metamaskConnect,
@@ -98,7 +100,22 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
     return null;
   }, [ethereum]);
 
-  const { data, loading, error } = useGetWalletQuery({ variables: { id: account || '' } });
+  const pollInterval = polling ? 500 : undefined;
+  const { data, loading, error, stopPolling } = useGetWalletQuery({
+    variables: { id: account || '' },
+    pollInterval,
+  });
+
+  const unresolvedTransactions = useSelector(selectors.unresolvedTransactionsSelector);
+  const shouldPoll = unresolvedTransactions.length > 0;
+
+  useEffect(() => {
+    setPolling(shouldPoll && !error);
+
+    if (!shouldPoll || error) {
+      stopPolling();
+    }
+  }, [error, shouldPoll, setPolling, stopPolling]);
 
   const value = {
     status,

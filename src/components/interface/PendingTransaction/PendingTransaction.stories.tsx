@@ -1,8 +1,6 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { WalletProvider } from '@components/contexts';
-
 import PendingTransaction, { PendingTransactionProps } from './PendingTransaction';
 
 export default {
@@ -18,11 +16,7 @@ const PendingTransactionWrapper: React.FunctionComponent<PendingTransactionWrapp
   address,
   ...rest
 }) => {
-  return (
-    <WalletProvider accountOverride={address}>
-      <PendingTransaction {...rest} />
-    </WalletProvider>
-  );
+  return <PendingTransaction {...rest} />;
 };
 
 const Template: ComponentStory<typeof PendingTransaction> = (args) => (
