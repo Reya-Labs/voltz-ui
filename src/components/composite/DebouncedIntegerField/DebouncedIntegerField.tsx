@@ -28,11 +28,10 @@ const DebouncedIntegerField: React.FunctionComponent<DebouncedIntegerFieldProps>
         return null;
       }
 
-      event.preventDefault();
-
       return parseInt(event.target.value) > parseInt(stringValue || '0');
     };
 
+    setEditableValue(event.target.value);
     setDetails({ increment: getIncrement() });
   };
 
