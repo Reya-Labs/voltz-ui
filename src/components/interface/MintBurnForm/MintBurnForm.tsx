@@ -30,8 +30,8 @@ export type MintBurnFormProps = AgentProps & {
   fixedHigh?: number;
   notional?: number;
   margin?: number;
-  onChangeFixedLow: (value: number, increment: boolean) => void;
-  onChangeFixedHigh: (value: number, increment: boolean) => void;
+  onChangeFixedLow: (value: number, increment: boolean | null) => void;
+  onChangeFixedHigh: (value: number, increment: boolean | null) => void;
   onChangeNotional: (value: number) => void;
   onChangeMargin: (value: number) => void;
   onSubmit: (values: HandleSubmitMintBurnFormArgs) => void;
