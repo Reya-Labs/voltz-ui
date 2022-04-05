@@ -35,7 +35,14 @@ exports.priceToFixedRate = priceToFixedRate;
  * @param tick the tick for which to return the price
  */
 function tickToFixedRate(tick) {
-    var price = tickToPrice(tick);
+    var inRangeTick = tick;
+    if (tick < constants_1.MIN_TICK) {
+        inRangeTick = constants_1.MIN_TICK;
+    }
+    if (tick > constants_1.MAX_TICK) {
+        inRangeTick = constants_1.MAX_TICK;
+    }
+    var price = tickToPrice(inRangeTick);
     return priceToFixedRate(price);
 }
 exports.tickToFixedRate = tickToFixedRate;
@@ -51,7 +58,7 @@ function priceToClosestTick(price) {
     // this solution is a bit hacky, can be optimised
     if (tick < 0) {
         if (!price.lessThan(nextTickPrice)) {
-            tick++;
+            tick += 1;
         }
     }
     return tick;
@@ -59,7 +66,7 @@ function priceToClosestTick(price) {
 exports.priceToClosestTick = priceToClosestTick;
 function fixedRateToPrice(fixedRate) {
     // the fixed rate is the reciprocal of the price
-    // NOTE: below the first argument to the Price constructor is the denominator and the second argument is the numerator 
+    // NOTE: below the first argument to the Price constructor is the denominator and the second argument is the numerator
     return new price_1.Price(fixedRate.numerator, fixedRate.denominator);
 }
 exports.fixedRateToPrice = fixedRateToPrice;

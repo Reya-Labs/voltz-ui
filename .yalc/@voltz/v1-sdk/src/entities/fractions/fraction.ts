@@ -24,6 +24,7 @@ const toFixedRounding = {
 
 export class Fraction {
   public readonly numerator: JSBI;
+
   public readonly denominator: JSBI;
 
   public constructor(numerator: BigIntish, denominator: BigIntish = JSBI.BigInt(1)) {
@@ -133,6 +134,7 @@ export class Fraction {
 
   public toSignificant(
     significantDigits: number,
+    // eslint-disable-next-line @typescript-eslint/ban-types
     format: object = { groupSeparator: '' },
     rounding: Rounding = Rounding.ROUND_HALF_UP,
   ): string {
@@ -148,6 +150,7 @@ export class Fraction {
 
   public toFixed(
     decimalPlaces: number,
+    // eslint-disable-next-line @typescript-eslint/ban-types
     format: object = { groupSeparator: '' },
     rounding: Rounding = Rounding.ROUND_HALF_UP,
   ): string {
@@ -162,7 +165,7 @@ export class Fraction {
   }
 
   public toNumber(): number {
-    return parseFloat(this.toFixed(2));
+    return parseFloat(this.toFixed(3));
   }
 
   /**
