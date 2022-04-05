@@ -5,7 +5,7 @@ import { useDebounce } from '@hooks';
 import IntegerField, { IntegerFieldProps } from '../IntegerField/IntegerField';
 
 export type DebouncedIntegerFieldDetails = {
-  increment: boolean;
+  increment: boolean | null;
 };
 
 export type DebouncedIntegerFieldProps = Omit<IntegerFieldProps, 'onChange'> & {
@@ -23,10 +23,17 @@ const DebouncedIntegerField: React.FunctionComponent<DebouncedIntegerFieldProps>
   const debouncedValue: string | undefined = useDebounce(editableValue);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const increment = (event.nativeEvent as InputEvent).inputType !== 'insertText';
+    const getIncrement = () => {
+      if ((event.nativeEvent as InputEvent).inputType === 'insertText') {
+        return null;
+      }
 
-    setEditableValue(event.target.value);
-    setDetails({ increment });
+      event.preventDefault();
+
+      return parseInt(event.target.value) > parseInt(stringValue || '0');
+    };
+
+    setDetails({ increment: getIncrement() });
   };
 
   useEffect(() => {
