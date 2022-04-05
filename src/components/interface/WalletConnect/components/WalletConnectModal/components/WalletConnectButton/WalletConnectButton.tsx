@@ -17,7 +17,7 @@ const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = (
   const currency = 'ETH';
   const text = useMemo(() => {
     if (!balance) {
-      return 'No balance';
+      return 'Connect Wallet';
     }
 
     if (status === 'connected') {
