@@ -1,3 +1,5 @@
+import isNull from 'lodash/isNull';
+
 import { AugmentedAMM } from '@utilities';
 
 export type UpdateFixedRateArgs = {
@@ -7,31 +9,22 @@ export type UpdateFixedRateArgs = {
 };
 
 const updateFixedRate =
-  ({ amm, fixedRate, setFixedRate }: UpdateFixedRateArgs) =>
-  (newFixedRate: number, increment: boolean) => {
+  ({ amm, setFixedRate }: UpdateFixedRateArgs) =>
+  (newFixedRate: number, increment: boolean | null) => {
     if (!amm) {
       return;
     }
 
-    const modifier = newFixedRate > (fixedRate || 0) ? 1 : -1;
-    let count = 0;
-    let closestUsableFixedRate = null;
-
-    while (true) {
-      ({ closestUsableFixedRate } = amm.closestTickAndFixedRate(newFixedRate + count * modifier));
-
-      if (!increment) {
-        break;
+    const getCount = () => {
+      if (isNull(increment)) {
+        return 0;
       }
 
-      if (closestUsableFixedRate.toNumber() !== fixedRate) {
-        break;
-      }
+      return increment ? 1 : -1;
+    };
 
-      count += 1;
-    }
-
-    setFixedRate(closestUsableFixedRate.toNumber());
+    const nextFixedRate = amm.getNextUsableFixedRate(newFixedRate, getCount());
+    setFixedRate(nextFixedRate);
   };
 
 export default updateFixedRate;

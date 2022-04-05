@@ -127,6 +127,7 @@ declare class AMM {
     get protocol(): string;
     getVariableApy(): Promise<number>;
     closestTickAndFixedRate(fixedRate: number): ClosestTickAndFixedRate;
+    getNextUsableFixedRate(fixedRate: number, count: number): number;
 }
 export default AMM;
 //# sourceMappingURL=amm.d.ts.map

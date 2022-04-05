@@ -96,7 +96,9 @@ var Fraction = /** @class */ (function () {
         var otherParsed = Fraction.tryParseFraction(other);
         return new Fraction(jsbi_1.default.multiply(this.numerator, otherParsed.denominator), jsbi_1.default.multiply(this.denominator, otherParsed.numerator));
     };
-    Fraction.prototype.toSignificant = function (significantDigits, format, rounding) {
+    Fraction.prototype.toSignificant = function (significantDigits, 
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    format, rounding) {
         if (format === void 0) { format = { groupSeparator: '' }; }
         if (rounding === void 0) { rounding = types_1.Rounding.ROUND_HALF_UP; }
         (0, tiny_invariant_1.default)(Number.isInteger(significantDigits), "".concat(significantDigits, " is not an integer."));
@@ -107,7 +109,9 @@ var Fraction = /** @class */ (function () {
             .toSignificantDigits(significantDigits);
         return quotient.toFormat(quotient.decimalPlaces(), format);
     };
-    Fraction.prototype.toFixed = function (decimalPlaces, format, rounding) {
+    Fraction.prototype.toFixed = function (decimalPlaces, 
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    format, rounding) {
         if (format === void 0) { format = { groupSeparator: '' }; }
         if (rounding === void 0) { rounding = types_1.Rounding.ROUND_HALF_UP; }
         (0, tiny_invariant_1.default)(Number.isInteger(decimalPlaces), "".concat(decimalPlaces, " is not an integer."));
@@ -119,7 +123,7 @@ var Fraction = /** @class */ (function () {
             .toFormat(decimalPlaces, format);
     };
     Fraction.prototype.toNumber = function () {
-        return parseFloat(this.toFixed(2));
+        return parseFloat(this.toFixed(3));
     };
     Object.defineProperty(Fraction.prototype, "asFraction", {
         /**

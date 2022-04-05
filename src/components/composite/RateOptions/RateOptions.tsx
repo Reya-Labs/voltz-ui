@@ -12,8 +12,8 @@ export type RateOptionsProps = {
   defaultFixedHigh?: number;
   fixedLow?: number;
   fixedHigh?: number;
-  onChangeFixedLow: (value: number, increment: boolean) => void;
-  onChangeFixedHigh: (value: number, increment: boolean) => void;
+  onChangeFixedLow: (value: number, increment: boolean | null) => void;
+  onChangeFixedHigh: (value: number, increment: boolean | null) => void;
 };
 
 const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
@@ -29,13 +29,13 @@ const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
 
   const handleChangeFixedLow = useCallback(
     (newFixedLow: string | undefined, details?: DebouncedIntegerFieldDetails) => {
-      onChangeFixedLow(parseFloat(newFixedLow || '1'), details?.increment || false);
+      onChangeFixedLow(parseFloat(newFixedLow || '1'), details?.increment || null);
     },
     [onChangeFixedLow],
   );
   const handleChangeFixedHigh = useCallback(
     (newFixedHigh: string | undefined, details?: DebouncedIntegerFieldDetails) => {
-      onChangeFixedHigh(parseFloat(newFixedHigh || '1'), details?.increment || false);
+      onChangeFixedHigh(parseFloat(newFixedHigh || '1'), details?.increment || null);
     },
     [onChangeFixedHigh],
   );
