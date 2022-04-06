@@ -11,20 +11,20 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 
 const Nav: React.FunctionComponent = () => {
   const buttonSx: SystemStyleObject<Theme> = {
-    color: 'secondary.dark',
+    color: 'secondary.light',
     
     '&:hover': {
       textDecoration: 'none',
       backgroundColor: 'transparent',
       color: 'secondary.light'
-
     },
   };
 
-  
   const popoverOverride: SystemStyleObject<Theme> = {
     '& .MuiPaper-root': {
       backgroundColor: 'transparent',
+      backgroundImage: "none",
+      background: "none",
     },
   };
 
