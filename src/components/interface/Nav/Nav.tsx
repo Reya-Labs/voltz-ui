@@ -8,13 +8,13 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 
 
 
+
 const Nav: React.FunctionComponent = () => {
   const buttonSx: SystemStyleObject<Theme> = {
     color: 'secondary.light',
   };
 
-  // this is the solution!
-
+  
   const popoverOverride: SystemStyleObject<Theme> = {
     '& .MuiPaper-root': {
       backgroundColor: 'transparent',
@@ -61,20 +61,21 @@ const Nav: React.FunctionComponent = () => {
         },
       }}
     >
-      <Icon
+
+      {/* Old svg logo that has a bottom cutoff, unclear what the cause is */}
+      {/* <Icon
         name="voltz"
         sx={{ marginRight: (theme) => theme.spacing(4), cursor: 'pointer' }}
         link={`/${routes.SWAP}`}
-      />
+      /> */}
+
+      {/* todo: add the correct logo in place of png */}
+      
+      <Box>
+        <img src={require('./voltz.png')} alt="voltz logo" ></img>
+      </Box>
 
       
-      {/* <Box>
-        <img> </img>
-      </Box> */}
-
-      {/* todo: add the logo as a png inside the box */}
-
-
       {/* todo: below logic can be simplified by wrapping duplicate code below into a reusable component */}
       <Button aria-describedby={id} sx={buttonSx} variant="text" onClick={handleClick}>
         TRADERS
