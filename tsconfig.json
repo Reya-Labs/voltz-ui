@@ -102,8 +102,7 @@
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
   "include": [
-    "src",
-    "d.ts"
+    "src"
   ],
   "exclude": [
     "src/graphql/generated.ts"
