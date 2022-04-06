@@ -49,6 +49,7 @@ const Nav: React.FunctionComponent = () => {
   const open2 = Boolean(anchorEl2);
   const id2 = open ? 'simple-popover' : undefined;
   
+  const voltzLogo = require('./voltz.png') as string;
 
   return (
     <Box
@@ -72,7 +73,7 @@ const Nav: React.FunctionComponent = () => {
       {/* todo: add the correct logo in place of png */}
       
       <Box>
-        <img src={require('./voltz.png')} alt="voltz logo" ></img>
+        <img src={voltzLogo} alt="voltz logo" ></img>
       </Box>
 
       
