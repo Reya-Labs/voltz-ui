@@ -1,16 +1,25 @@
 import React from 'react';
 import { SystemStyleObject, Theme } from '@mui/system';
 import Box from '@mui/material/Box';
-
 import { routes } from '@routes';
 import { Icon, Button } from '../../atomic';
 import Popover from '@mui/material/Popover';
+
 
 
 const Nav: React.FunctionComponent = () => {
   const buttonSx: SystemStyleObject<Theme> = {
     color: 'secondary.light',
   };
+
+  // this is the solution!
+
+  const popoverOverride: SystemStyleObject<Theme> = {
+    '& .MuiPaper-root': {
+      backgroundColor: 'transparent',
+    },
+  };
+
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   
@@ -77,6 +86,8 @@ const Nav: React.FunctionComponent = () => {
           vertical: 'bottom',
           horizontal: 'left',
         }}
+
+        sx={{ ...popoverOverride }}
       >
 
         <Button variant="text" sx={buttonSx} link={`/${routes.SWAP}`}>
@@ -102,6 +113,8 @@ const Nav: React.FunctionComponent = () => {
           vertical: 'bottom',
           horizontal: 'left',
         }}
+
+        sx={{ ...popoverOverride }}
       >
 
         <Button variant="text" sx={buttonSx} link={`/${routes.POOLS}`}>
