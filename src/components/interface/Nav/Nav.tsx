@@ -11,7 +11,14 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 
 const Nav: React.FunctionComponent = () => {
   const buttonSx: SystemStyleObject<Theme> = {
-    color: 'secondary.light',
+    color: 'secondary.dark',
+    
+    '&:hover': {
+      textDecoration: 'none',
+      backgroundColor: 'transparent',
+      color: 'secondary.light'
+
+    },
   };
 
   
