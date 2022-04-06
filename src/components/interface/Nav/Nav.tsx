@@ -4,11 +4,41 @@ import Box from '@mui/material/Box';
 
 import { routes } from '@routes';
 import { Icon, Button } from '../../atomic';
+import Popover from '@mui/material/Popover';
+
 
 const Nav: React.FunctionComponent = () => {
   const buttonSx: SystemStyleObject<Theme> = {
     color: 'secondary.light',
   };
+
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
+
+
+  const [anchorEl2, setAnchorEl2] = React.useState<HTMLButtonElement | null>(null);
+  
+  const handleClick2 = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl2(event.currentTarget);
+  };
+
+  const handleClose2 = () => {
+    setAnchorEl2(null);
+  };
+  
+  const open2 = Boolean(anchorEl2);
+  const id2 = open ? 'simple-popover' : undefined;
+  
 
   return (
     <Box
@@ -34,18 +64,57 @@ const Nav: React.FunctionComponent = () => {
 
       {/* todo: add the logo as a png inside the box */}
 
-      <Button variant="text" sx={buttonSx} link={`/${routes.SWAP}`}>
-        SWAP
+      {/* todo: below logic can be simplified by wrapping duplicate code below into a reusable component */}
+      <Button aria-describedby={id} sx={buttonSx} variant="text" onClick={handleClick}>
+        TRADERS
       </Button>
-      <Button variant="text" sx={buttonSx} link={`/${routes.POOLS}`}>
-        POOLS
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
+
+        <Button variant="text" sx={buttonSx} link={`/${routes.SWAP}`}>
+          TRADER POOLS
+        </Button>
+
+        <Button variant="text" sx={buttonSx} link={`/${routes.PORTFOLIO}`}>
+          PORTFOLIO
+        </Button>
+
+      </Popover>
+
+      
+      <Button aria-describedby={id2} sx={buttonSx} variant="text" onClick={handleClick2}>
+        POSITIONS
       </Button>
-      <Button variant="text" sx={buttonSx} link={`/${routes.PORTFOLIO}`}>
-        PORTFOLIO
-      </Button>
-      <Button variant="text" sx={buttonSx} link={`/${routes.LP_FARM}`}>
-        LP FARM
-      </Button>
+      <Popover
+        id={id2}
+        open={open2}
+        anchorEl={anchorEl2}
+        onClose={handleClose2}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
+
+        <Button variant="text" sx={buttonSx} link={`/${routes.POOLS}`}>
+            LP POOLS
+        </Button>
+          
+        <Button variant="text" sx={buttonSx} link={`/${routes.LP_FARM}`}>
+          POSITIONS
+        </Button>
+
+      </Popover>
+
+
     </Box>
   );
 };
