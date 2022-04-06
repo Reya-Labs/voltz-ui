@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import { routes } from '@routes';
 import { Icon, Button } from '../../atomic';
 import Popover from '@mui/material/Popover';
+import ButtonGroup from '@mui/material/ButtonGroup';
 
 
 
@@ -73,6 +74,7 @@ const Nav: React.FunctionComponent = () => {
 
       {/* todo: add the logo as a png inside the box */}
 
+
       {/* todo: below logic can be simplified by wrapping duplicate code below into a reusable component */}
       <Button aria-describedby={id} sx={buttonSx} variant="text" onClick={handleClick}>
         TRADERS
@@ -90,6 +92,11 @@ const Nav: React.FunctionComponent = () => {
         sx={{ ...popoverOverride }}
       >
 
+      <ButtonGroup
+        orientation="vertical"
+        aria-label="vertical outlined button group"
+      >
+        
         <Button variant="text" sx={buttonSx} link={`/${routes.SWAP}`}>
           TRADER POOLS
         </Button>
@@ -97,6 +104,8 @@ const Nav: React.FunctionComponent = () => {
         <Button variant="text" sx={buttonSx} link={`/${routes.PORTFOLIO}`}>
           PORTFOLIO
         </Button>
+
+      </ButtonGroup>
 
       </Popover>
 
@@ -117,6 +126,12 @@ const Nav: React.FunctionComponent = () => {
         sx={{ ...popoverOverride }}
       >
 
+      <ButtonGroup
+        orientation="vertical"
+        aria-label="vertical outlined button group"
+      >
+
+
         <Button variant="text" sx={buttonSx} link={`/${routes.POOLS}`}>
             LP POOLS
         </Button>
@@ -124,6 +139,8 @@ const Nav: React.FunctionComponent = () => {
         <Button variant="text" sx={buttonSx} link={`/${routes.LP_FARM}`}>
           POSITIONS
         </Button>
+
+      </ButtonGroup>
 
       </Popover>
 
