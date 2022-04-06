@@ -26,6 +26,14 @@ const Nav: React.FunctionComponent = () => {
         sx={{ marginRight: (theme) => theme.spacing(4), cursor: 'pointer' }}
         link={`/${routes.SWAP}`}
       />
+
+      
+      {/* <Box>
+        <img> </img>
+      </Box> */}
+
+      {/* todo: add the logo as a png inside the box */}
+
       <Button variant="text" sx={buttonSx} link={`/${routes.SWAP}`}>
         SWAP
       </Button>

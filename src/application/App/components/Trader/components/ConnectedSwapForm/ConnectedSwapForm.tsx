@@ -26,7 +26,9 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ am
   const [partialCollateralization, setPartialCollateralization] =
     useState<SwapFormProps['partialCollateralization']>();
   const [transactionId, setTransactionId] = useState<string | undefined>();
-  const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
+  const activeTransaction = useSelector(selectors.transactionSelector)(transactionId); // contains a failureMessage attribute that will contain whatever came out from the sdk
+  // activeTransaction.failureMessage = "No margin", could also be a big horrible object, needs a little more work to parse it correctly
+
   const dispatch = useDispatch();
   const handleSubmit = useCallback(
     (args: HandleSubmitSwapFormArgs) => {

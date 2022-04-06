@@ -26,6 +26,8 @@ const generateColorMap = (color: string): ColorSet => ({
 
 const newColors = mapValues(baseColors, (value: string) => generateColorMap(value));
 
+
+// all the colours in the UI are one of these
 const colors = {
   ...newColors,
   vzGrey: '#A6A2B4',

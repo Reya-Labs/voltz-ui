@@ -30,6 +30,8 @@ const Button: React.FunctionComponent<ButtonProps> = ({
       return {};
     }
 
+
+    // selecting different colours from the pallet to style the component
     if (agent === Agents.FIXED_TRADER) {
       return {
         backgroundColor: 'primary.darken030',

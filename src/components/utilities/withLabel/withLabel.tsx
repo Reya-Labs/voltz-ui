@@ -13,6 +13,7 @@ export type WithLabelProps = {
   error?: boolean;
 };
 
+// wrapper that gives the label and optionally does the tooltip
 const withLabel = <T,>(WrappedComponent: React.FunctionComponent<T>) => {
   const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
@@ -33,7 +34,7 @@ const withLabel = <T,>(WrappedComponent: React.FunctionComponent<T>) => {
     if (isEmpty(label)) {
       return <WrappedComponent {...(props as T)} />;
     }
-
+    
     return (
       <FormControl sx={{ width: '100%' }}>
         <InputLabel
