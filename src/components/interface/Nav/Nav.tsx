@@ -2,7 +2,7 @@ import React from 'react';
 import { SystemStyleObject, Theme } from '@mui/system';
 import Box from '@mui/material/Box';
 import { routes } from '@routes';
-import { Icon, Button } from '../../atomic';
+import { Button } from '../../atomic';
 import Popover from '@mui/material/Popover';
 import ButtonGroup from '@mui/material/ButtonGroup';
 
