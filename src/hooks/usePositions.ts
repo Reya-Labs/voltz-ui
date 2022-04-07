@@ -85,6 +85,7 @@ const usePositions = (): usePositionsResult => {
     unresolvedTransactions.length > 0 && positions && positions.length > 0;
   const dispatch = useDispatch();
 
+  // [might be broken]
   useEffect(() => {
     if (shouldTryToCloseTransactions) {
       unresolvedTransactions.forEach((unresolvedTransaction) => {

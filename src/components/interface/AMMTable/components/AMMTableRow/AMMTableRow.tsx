@@ -18,10 +18,20 @@ export type AMMTableRowProps = {
   onSelect: () => void;
 };
 
+
+// todo: panel component, adjust the styling
 const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, onSelect }) => {
   const wallet = useWallet();
   const { agent } = useAgent();
   const variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'main';
+  
+  // add object to sx prop
+  // todo:
+  // 
+  // const anotherObject = {
+  //   margin: ... 
+  // }
+
   const typeStyleOverrides = (): SystemStyleObject<Theme> => {
     if (!variant) {
       return {
@@ -44,6 +54,8 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
         return {};
     }
   };
+
+
   const handleClick = () => {
     if (isNull(wallet.account)) {
       wallet.setRequired(true);
@@ -53,7 +65,8 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
   };
 
   return (
-    <TableRow key={index} sx={{ ...typeStyleOverrides() }}>
+      // todo: <TableRow key={index} sx={{...anotherObject,  ...typeStyleOverrides() }}>
+      <TableRow key={index} sx={{...typeStyleOverrides() }}>
       {labels.map(([field, label]) => {
         if (field === 'variableApy') {
           return <VariableAPY />;
