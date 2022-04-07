@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import { elideAddress } from '@utilities';
 import { Wallet } from '@components/contexts';
 import { Button, Icon } from '@components/atomic';
+import CircleIcon from '@mui/icons-material/Circle';
 
 export type WalletConnectButtonProps = {
   onClick?: () => void;
@@ -34,7 +35,7 @@ const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = (
         <Button
           variant="dark"
           sx={{ zIndex: 1, left: (theme) => theme.spacing(-2)}}
-          startIcon={<Icon name="warning-circle" />}
+          startIcon={<CircleIcon sx={{ width: 4, height: 4, borderRadius: 200, color: "#00d395" }} />}
           endIcon={name && <Icon name={name} />}
           onClick={onClick}
         >
@@ -48,9 +49,10 @@ const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = (
     <Button
       variant="darker"
       sx={{ marginLeft: (theme) => theme.spacing(4) }}
+      startIcon={<CircleIcon sx={{ width: 4, height: 4, borderRadius: 200, color: "#ff4aa9" }} />}
       onClick={onClick}
-      startIcon={<Icon name="warning-circle" />}
     >
+      
       {text}
     </Button>
   );
