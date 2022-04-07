@@ -23,7 +23,7 @@ const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
 
   return (
     <IntegerField
-      label={<IconLabel label="provided liquidity" icon="information-circle" info="Something" />}
+      label={<IconLabel label="provided liquidity" icon="information-circle" info="Choose the notional amount of liquidity you wish to provide. Learn more." />}
       value={value}
       onChange={handleChange}
       sx={{ width: '100%' }}
