@@ -37,6 +37,17 @@ const Nav: React.FunctionComponent = () => {
   };
 
 
+  // todo: duplicate
+  const popoverOverride2: SystemStyleObject<Theme> = {
+    '& .MuiPaper-root': {
+      backgroundColor: 'transparent',
+      backgroundImage: "none",
+      background: "none",
+      marginLeft: 3
+    },
+  };
+
+
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -140,7 +151,7 @@ const Nav: React.FunctionComponent = () => {
           horizontal: 'left',
         }}
 
-        sx={{ ...popoverOverride }}
+        sx={{ ...popoverOverride2 }}
       >
 
       <ButtonGroup
