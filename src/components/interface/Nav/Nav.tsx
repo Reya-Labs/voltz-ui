@@ -78,7 +78,7 @@ const Nav: React.FunctionComponent = () => {
       {/* todo: add the correct logo in place of png */}
       
       <Box>
-        <img src={voltzLogo} alt="voltz logo" ></img>
+        <img src={voltzLogo} alt="voltz logo" height={35} ></img>
       </Box>
 
       
