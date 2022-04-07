@@ -101,7 +101,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
             }}
           >
             <Typography variant="body2" color="error">
-              An error occurred
+              {activeTransaction.failureMessage || "Unrecognized error"}
             </Typography>
           </Box>
           <Box
