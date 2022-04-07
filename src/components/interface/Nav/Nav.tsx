@@ -8,14 +8,24 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 
 
 const Nav: React.FunctionComponent = () => {
+  
+  
   const buttonSx: SystemStyleObject<Theme> = {
-    color: 'secondary.light',
+    // color: 'secondary.light',
+    color: "#B3AFC6",
     
     '&:hover': {
       textDecoration: 'none',
       backgroundColor: 'transparent',
       color: 'secondary.light'
     },
+
+    '&:active': {
+      textDecoration: 'none',
+      backgroundColor: 'transparent',
+      color: 'secondary.light'
+    },
+
   };
 
   const popoverOverride: SystemStyleObject<Theme> = {
