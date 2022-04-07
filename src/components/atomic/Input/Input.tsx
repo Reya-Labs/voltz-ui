@@ -48,6 +48,16 @@ const Input: React.FunctionComponent<InputProps> = ({ size, ...props }) => {
       lineHeight: '14px',
       maxHeight: getMinHeight,
       ...getPadding(),
+      "::-webkit-outer-spin-button": { 
+        "-webkit-appearance": "none", 
+        "-moz-appearance": "none",
+        "appearance": "none"
+      },
+      "::-webkit-inner-spin-button": {
+        "-webkit-appearance": "none",
+        "-moz-appearance": "none",
+        "appearance": "none"
+      }
     },
   };
 
