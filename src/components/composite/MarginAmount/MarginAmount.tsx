@@ -19,7 +19,8 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
 }) => {
   const value = isUndefined(margin) ? defaultMargin : margin;
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChangeMargin(parseInt(event.target.value, 10));
+    // onChangeMargin(parseFloat(parseFloat(event.target.value).toFixed(2)));
+    onChangeMargin(parseFloat(event.target.value));
   };
 
   return (

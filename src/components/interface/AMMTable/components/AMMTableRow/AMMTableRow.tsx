@@ -89,7 +89,7 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
                 return datum.protocol;
 
               case 'fixedApr':
-                return `${datum.fixedApr}%`;
+                return `${datum.fixedApr.toFixed(2)}%`;
 
               default:
                 return null;
