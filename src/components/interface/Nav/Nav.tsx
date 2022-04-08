@@ -106,6 +106,7 @@ const Nav: React.FunctionComponent = () => {
           horizontal: 'left',
         }}
         sx={{ ...popoverOverride }}
+        elevation={0}
       >
         <ButtonGroup orientation="vertical" aria-label="vertical outlined button group">
           <Button variant="text" sx={buttonSx} link={`/${routes.SWAP}`}>
@@ -131,6 +132,7 @@ const Nav: React.FunctionComponent = () => {
           horizontal: 'left',
         }}
         sx={{ ...popoverOverride2 }}
+        elevation={0}
       >
         <ButtonGroup orientation="vertical" aria-label="vertical outlined button group">
           <Button variant="text" sx={buttonSx} link={`/${routes.POOLS}`}>
