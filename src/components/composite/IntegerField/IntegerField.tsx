@@ -12,7 +12,6 @@ const IntegerField: React.FunctionComponent<IntegerFieldProps> = ({
   error,
   value,
   onChange,
-  ...props
 }) => {
   return (
     <Input
