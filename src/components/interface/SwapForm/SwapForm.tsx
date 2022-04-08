@@ -82,7 +82,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         }}
       >
         <MaturityInformation
-          label={<IconLabel label="maturity" icon="information-circle" info="Something" />}
+          label={<IconLabel label="maturity" icon="information-circle" info="The proportion between the time elapsed since the initiation of the pool and the entire duration." />}
           startDate={startDate}
           endDate={endDate}
         />

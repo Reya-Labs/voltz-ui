@@ -24,7 +24,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
 
   return (
     <IntegerField
-      label={<IconLabel label="margin amount" icon="information-circle" info="Something" />}
+      label={<IconLabel label="margin amount" icon="information-circle" info="Additional margin amount is defined based on your notional. You are required to deposit margin in order to execute this trade. Learn more." />}
       value={value}
       onChange={handleChange}
       sx={{ width: '100%' }}
