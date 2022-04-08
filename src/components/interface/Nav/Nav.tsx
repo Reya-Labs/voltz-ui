@@ -7,6 +7,13 @@ import Popover from '@mui/material/Popover';
 import ButtonGroup from '@mui/material/ButtonGroup';
 
 const Nav: React.FunctionComponent = () => {
+  
+  const buttonGroupSx: SystemStyleObject<Theme> = {    
+    '& .MuiButtonGroup-grouped:not(:last-of-type):hover': {
+      borderBottomColor: 'transparent'
+    },
+  };
+  
   const buttonSx: SystemStyleObject<Theme> = {
     // color: 'secondary.light',
     color: '#B3AFC6',
@@ -108,7 +115,7 @@ const Nav: React.FunctionComponent = () => {
         sx={{ ...popoverOverride }}
         elevation={0}
       >
-        <ButtonGroup orientation="vertical" aria-label="vertical outlined button group">
+        <ButtonGroup orientation="vertical" sx={buttonGroupSx}  aria-label="vertical outlined button group">
           <Button variant="text" sx={buttonSx} link={`/${routes.SWAP}`}>
             TRADER POOLS
           </Button>
@@ -134,7 +141,7 @@ const Nav: React.FunctionComponent = () => {
         sx={{ ...popoverOverride2 }}
         elevation={0}
       >
-        <ButtonGroup orientation="vertical" aria-label="vertical outlined button group">
+        <ButtonGroup orientation="vertical" sx={buttonGroupSx} aria-label="vertical outlined button group">
           <Button variant="text" sx={buttonSx} link={`/${routes.POOLS}`}>
             LP POOLS
           </Button>
