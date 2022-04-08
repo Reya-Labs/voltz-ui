@@ -13,7 +13,7 @@ export type WalletConnectButtonProps = {
 
 const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = ({
   onClick,
-  wallet: { status, name, account, balance },
+  wallet: { status, name, account, balance, walletError },
 }) => {
   const currency = 'ETH';
   const text = useMemo(() => {
@@ -28,6 +28,21 @@ const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = (
 
     return 'Connect wallet';
   }, [balance, status]);
+
+  if (walletError) {
+    return (
+      <Box sx={{ marginLeft: (theme) => theme.spacing(4), display: 'flex' }}>
+        <Button
+          variant="red"
+          sx={{ zIndex: 1, left: (theme) => theme.spacing(-2) }}
+          startIcon={<CircleIcon sx={{ width: 4, height: 4, borderRadius: 200, color: "#ff4aa9" }} />}
+        // onClick={onClick} todo: enable when data such as recent transactions is properly implemented
+        >
+          {walletError}
+        </Button>
+      </Box>
+    );
+  }
 
   if (status === 'connected') {
     return (

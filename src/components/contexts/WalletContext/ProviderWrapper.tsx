@@ -36,7 +36,7 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
   children,
 }) => {
   const [polling, setPolling] = useState(false);
-  const [walletError, setWalletError] = useState<String | null>(null);
+  const [walletError, setWalletError] = useState<string | null>(null);
   const {
     status: metamaskStatus,
     connect: metamaskConnect,
@@ -66,7 +66,11 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
         try {
           return await metamaskConnect();
         } catch (error) {
-          setWalletError(getErrorMessage(error));
+          let errorMessage = getErrorMessage(error);
+          if (errorMessage.endsWith(".")) {
+            errorMessage = errorMessage.slice(0, -1);
+          }
+          setWalletError(errorMessage);
           return null;
         }
       }
@@ -132,6 +136,7 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
     error: !!error,
     required,
     setRequired,
+    walletError,
   };
 
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;

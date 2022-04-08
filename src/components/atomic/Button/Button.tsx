@@ -74,6 +74,18 @@ const Button: React.FunctionComponent<ButtonProps> = ({
       };
     }
 
+    if (props.variant === 'red') {
+      return {
+        backgroundColor: selected ? 'secondary.darken030' : 'secondary.dark',
+        color: '#ff4aa9',
+        '&:hover': {
+          backgroundColor: 'secondary.darken030',
+        },
+        borderWidth: 1,
+        borderColor: '#ff4aa9'
+      };
+    }
+
     if (props.variant === 'dark') {
       return {
         backgroundColor: selected ? 'secondary.darken030' : 'secondary.dark',

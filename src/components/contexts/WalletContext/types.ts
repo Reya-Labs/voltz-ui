@@ -36,4 +36,5 @@ export type Wallet = {
   error: boolean;
   required: boolean;
   setRequired: (required: boolean) => void;
+  walletError: string | null;
 };

@@ -3,6 +3,8 @@ import isUndefined from 'lodash/isUndefined';
 
 import IconLabel from '../IconLabel/IconLabel';
 import IntegerField from '../IntegerField/IntegerField';
+import { useAgent } from '@hooks';
+import { Agents } from 'src/components/contexts';
 
 export type NotionalAmountProps = {
   protocol?: string;
@@ -18,12 +20,27 @@ const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
 }) => {
   const value = isUndefined(notional) ? defaultNotional : notional;
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChangeNotional(parseInt(event.target.value, 10));
+    onChangeNotional(parseFloat(event.target.value));
   };
+  const { agent } = useAgent();
+
+  const getLabel = () => {
+    if (agent === Agents.LIQUIDITY_PROVIDER) {
+      return "provided liquidity";
+    }
+    return "notional traded";
+  }
+
+  const getInfo = () => {
+    if (agent === Agents.LIQUIDITY_PROVIDER) {
+      return "Choose the notional amount of liquidity you wish to provide. Learn more.";
+    }
+    return "Choose the notional you wish to trade. The notional amount is the total size of your trade. Learn more.";
+  }
 
   return (
     <IntegerField
-      label={<IconLabel label="provided liquidity" icon="information-circle" info="Choose the notional amount of liquidity you wish to provide. Learn more." />}
+      label={<IconLabel label={getLabel()} icon="information-circle" info={getInfo()} />}
       value={value}
       onChange={handleChange}
       sx={{ width: '100%' }}
