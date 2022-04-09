@@ -1,7 +1,7 @@
 import JSBI from 'jsbi';
 import { providers } from 'ethers';
 import { DateTime } from 'luxon';
-import { BigNumberish, ContractReceipt, Signer } from 'ethers';
+import { BigNumber, BigNumberish, ContractReceipt, Signer } from 'ethers';
 import { BigIntish } from '../types';
 import RateOracle from './rateOracle';
 import Token from './token';
@@ -105,7 +105,8 @@ declare class AMM {
     constructor({ id, signer, provider, marginEngineAddress, fcmAddress, rateOracle, createdTimestamp, updatedTimestamp, termStartTimestamp, termEndTimestamp, underlyingToken, sqrtPriceX96, liquidity, tick, tickSpacing, txCount, }: AMMConstructorArgs);
     getInfoPostSwap({ isFT, notional, fixedRateLimit, fixedLow, fixedHigh, }: AMMGetInfoPostSwapArgs): Promise<InfoPostSwap>;
     settlePosition({ owner, fixedLow, fixedHigh, }: AMMSettlePositionArgs): Promise<ContractReceipt>;
-    private scale;
+    scale(value: number): string;
+    descale(value: BigNumber): number;
     updatePositionMargin({ owner, fixedLow, fixedHigh, marginDelta, }: AMMUpdatePositionMarginArgs): Promise<ContractReceipt>;
     liquidatePosition({ owner, fixedLow, fixedHigh, }: AMMLiquidatePositionArgs): Promise<ContractReceipt>;
     getLiquidationThreshold({ owner, fixedLow, fixedHigh, }: AMMLiquidatePositionArgs): Promise<number>;

@@ -74,7 +74,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.getInfoPostSwap = function (_a) {
         var isFT = _a.isFT, notional = _a.notional, fixedRateLimit = _a.fixedRateLimit, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh;
         return __awaiter(this, void 0, void 0, function () {
-            var signerAddress, tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, scaledNotional, peripheryContract, swapPeripheryParams, tickBefore, tickAfter, marginRequirement, fee, availableNotional, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw, marginEngineContract, currentMargin, scaledCurrentMargin, scaledMarginRequirement, additionalMargin;
+            var signerAddress, tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, scaledNotional, peripheryContract, swapPeripheryParams, tickBefore, tickAfter, marginRequirement, fee, availableNotional, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw, marginEngineContract, currentMargin, scaledCurrentMargin, scaledMarginRequirement, scaledAvailableNotional, scaledFee, additionalMargin;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -164,15 +164,17 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, marginEngineContract.callStatic.getPosition(signerAddress, tickLower, tickUpper)];
                     case 4:
                         currentMargin = (_b.sent()).margin;
-                        scaledCurrentMargin = parseFloat(ethers_1.utils.formatEther(currentMargin));
-                        scaledMarginRequirement = parseFloat(ethers_1.utils.formatEther(marginRequirement));
+                        scaledCurrentMargin = this.descale(currentMargin);
+                        scaledMarginRequirement = this.descale(marginRequirement);
+                        scaledAvailableNotional = this.descale(availableNotional);
+                        scaledFee = this.descale(fee);
                         additionalMargin = scaledMarginRequirement > scaledCurrentMargin
                             ? scaledMarginRequirement - scaledCurrentMargin
                             : 0;
                         return [2 /*return*/, {
                                 marginRequirement: additionalMargin,
-                                availableNotional: parseFloat(ethers_1.utils.formatEther(availableNotional)),
-                                fee: parseFloat(ethers_1.utils.formatEther(fee)),
+                                availableNotional: scaledAvailableNotional,
+                                fee: scaledFee,
                                 slippage: fixedRateDeltaRaw,
                             }];
                 }
@@ -205,6 +207,9 @@ var AMM = /** @class */ (function () {
         var tokenAmount = tokenAmount_1.TokenAmount.fromFractionalAmount(this.underlyingToken, price.numerator, price.denominator);
         var scaledValue = tokenAmount.scale();
         return scaledValue;
+    };
+    AMM.prototype.descale = function (value) {
+        return value.toNumber() / (Math.pow(10, this.underlyingToken.decimals));
     };
     AMM.prototype.updatePositionMargin = function (_a) {
         var owner = _a.owner, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, marginDelta = _a.marginDelta;
@@ -271,7 +276,7 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, marginEngineContract.callStatic.getPositionMarginRequirement(owner, tickLower, tickUpper, false)];
                     case 1:
                         threshold = _b.sent();
-                        return [2 /*return*/, parseFloat(ethers_1.utils.formatEther(threshold))];
+                        return [2 /*return*/, this.descale(threshold)];
                 }
             });
         });
@@ -340,8 +345,8 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, marginEngineContract.callStatic.getPosition(signerAddress, tickLower, tickUpper)];
                     case 3:
                         currentMargin = (_b.sent()).margin;
-                        scaledCurrentMargin = parseFloat(ethers_1.utils.formatEther(currentMargin));
-                        scaledMarginRequirement = parseFloat(ethers_1.utils.formatEther(marginRequirement));
+                        scaledCurrentMargin = this.descale(currentMargin);
+                        scaledMarginRequirement = this.descale(marginRequirement);
                         if (scaledMarginRequirement > scaledCurrentMargin) {
                             return [2 /*return*/, scaledMarginRequirement - scaledCurrentMargin];
                         }

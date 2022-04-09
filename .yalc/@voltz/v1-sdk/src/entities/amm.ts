@@ -282,8 +282,10 @@ class AMM {
       await marginEngineContract.callStatic.getPosition(signerAddress, tickLower, tickUpper)
     ).margin;
 
-    const scaledCurrentMargin = parseFloat(utils.formatEther(currentMargin));
-    const scaledMarginRequirement = parseFloat(utils.formatEther(marginRequirement));
+    const scaledCurrentMargin = this.descale(currentMargin);
+    const scaledMarginRequirement = this.descale(marginRequirement);
+    const scaledAvailableNotional = this.descale(availableNotional);
+    const scaledFee = this.descale(fee);
 
     const additionalMargin =
       scaledMarginRequirement > scaledCurrentMargin
@@ -292,8 +294,8 @@ class AMM {
 
     return {
       marginRequirement: additionalMargin,
-      availableNotional: parseFloat(utils.formatEther(availableNotional)),
-      fee: parseFloat(utils.formatEther(fee)),
+      availableNotional: scaledAvailableNotional,
+      fee: scaledFee,
       slippage: fixedRateDeltaRaw,
     };
   }
@@ -320,7 +322,7 @@ class AMM {
     return settlePositionTransaction.wait();
   }
 
-  private scale(value: number): string {
+  public scale(value: number): string {
     const price = Price.fromNumber(value);
     const tokenAmount = TokenAmount.fromFractionalAmount(
       this.underlyingToken,
@@ -330,6 +332,10 @@ class AMM {
     const scaledValue = tokenAmount.scale();
 
     return scaledValue;
+  }
+
+  public descale(value: BigNumber): number {
+    return value.toNumber() / (10 ** this.underlyingToken.decimals);
   }
 
   public async updatePositionMargin({
@@ -401,7 +407,7 @@ class AMM {
       false,
     );
 
-    return parseFloat(utils.formatEther(threshold));
+    return this.descale(threshold);
   }
 
   public async getMinimumMarginRequirementPostMint({
@@ -475,8 +481,8 @@ class AMM {
       await marginEngineContract.callStatic.getPosition(signerAddress, tickLower, tickUpper)
     ).margin;
 
-    const scaledCurrentMargin = parseFloat(utils.formatEther(currentMargin));
-    const scaledMarginRequirement = parseFloat(utils.formatEther(marginRequirement));
+    const scaledCurrentMargin = this.descale(currentMargin);
+    const scaledMarginRequirement = this.descale(marginRequirement);
 
     if (scaledMarginRequirement > scaledCurrentMargin) {
       return scaledMarginRequirement - scaledCurrentMargin;
@@ -927,8 +933,8 @@ class AMM {
     };
   }
 
-  public getNextUsableFixedRate(fixedRate: number, count: number) : number {
-    let { closestUsableTick } =  this.closestTickAndFixedRate(fixedRate);
+  public getNextUsableFixedRate(fixedRate: number, count: number): number {
+    let { closestUsableTick } = this.closestTickAndFixedRate(fixedRate);
     closestUsableTick -= count * JSBI.toNumber(this.tickSpacing);
     return tickToFixedRate(closestUsableTick).toNumber();
   }
