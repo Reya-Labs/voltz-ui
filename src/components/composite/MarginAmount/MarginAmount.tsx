@@ -23,9 +23,17 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
     onChangeMargin(parseInt(newValue, 10));
   };
 
+  // todo: below is a workaround when deriving the token name from the protocol name, needs to be fixed
+
+  let underlyingTokenName: string = '';
+
+  if (protocol) {
+    underlyingTokenName = protocol.substring(1);
+  }
+
   return (
     <MaskedIntegerField
-      affix={protocol || ''}
+      affix={underlyingTokenName}
       label={
         <IconLabel
           label="margin amount"
