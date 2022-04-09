@@ -147,7 +147,7 @@ var AMM = /** @class */ (function () {
                                     if (errSig === "MarginRequirementNotMet") {
                                         try {
                                             var iface = new ethers_1.ethers.utils.Interface(["error MarginRequirementNotMet(int256 marginRequirement,int24 tick,int256 fixedTokenDelta,int256 variableTokenDelta,uint256 cumulativeFeeIncurred,int256 fixedTokenDeltaUnbalanced)"]);
-                                            var result = iface.decodeErrorResult("MarginRequirementNotMetFCM", reason);
+                                            var result = iface.decodeErrorResult("MarginRequirementNotMet", reason);
                                             marginRequirement = result.marginRequirement;
                                             tickAfter = result.tick;
                                             fee = result.cumulativeFeeIncurred;

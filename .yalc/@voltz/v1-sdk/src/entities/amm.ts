@@ -261,7 +261,7 @@ class AMM {
             try {
               const iface = new ethers.utils.Interface(["error MarginRequirementNotMet(int256 marginRequirement,int24 tick,int256 fixedTokenDelta,int256 variableTokenDelta,uint256 cumulativeFeeIncurred,int256 fixedTokenDeltaUnbalanced)"]);
               const result = iface.decodeErrorResult(
-                "MarginRequirementNotMetFCM",
+                "MarginRequirementNotMet",
                 reason
               );
 
