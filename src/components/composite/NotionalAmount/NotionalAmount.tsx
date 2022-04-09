@@ -2,7 +2,7 @@ import React from 'react';
 import isUndefined from 'lodash/isUndefined';
 
 import IconLabel from '../IconLabel/IconLabel';
-import IntegerField from '../IntegerField/IntegerField';
+import MaskedIntegerField from '../MaskedIntegerField/MaskedIntegerField';
 
 export type NotionalAmountProps = {
   protocol?: string;
@@ -12,17 +12,19 @@ export type NotionalAmountProps = {
 };
 
 const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
+  protocol,
   defaultNotional,
   notional,
   onChangeNotional,
 }) => {
   const value = isUndefined(notional) ? defaultNotional : notional;
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChangeNotional(parseInt(event.target.value, 10));
+  const handleChange = (newValue: string) => {
+    onChangeNotional(parseInt(newValue, 10));
   };
 
   return (
-    <IntegerField
+    <MaskedIntegerField
+      affix={protocol || ''}
       label={<IconLabel label="provided liquidity" icon="information-circle" info="Something" />}
       value={value}
       onChange={handleChange}

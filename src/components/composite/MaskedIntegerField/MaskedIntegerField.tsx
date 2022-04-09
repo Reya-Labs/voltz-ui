@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useIMask } from 'react-imask';
 
-import { Input, InputProps } from '../../atomic';
+import { Input } from '../../atomic';
 
-export type MaskedIntegerFieldProps = Omit<InputProps, 'onChange'> & {
+export type MaskedIntegerFieldProps = Omit<React.ComponentProps<typeof Input>, 'onChange'> & {
   affix: string;
   onChange?: (value: string) => void;
 };
@@ -14,8 +14,8 @@ const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
   ...props
 }) => {
   const { ref, unmaskedValue } = useIMask({
-    mask: `nn ${affix}`,
-    lazy: false, // make placeholder always visible
+    mask: `nn ${affix.replaceAll('a', '\\a')}`,
+    lazy: false,
     blocks: {
       nn: {
         mask: Number,

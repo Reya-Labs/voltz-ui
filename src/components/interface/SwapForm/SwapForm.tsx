@@ -106,6 +106,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         }}
       >
         <NotionalAmount
+          protocol={protocol}
           defaultNotional={defaultNotional}
           notional={notional}
           onChangeNotional={onChangeNotional}

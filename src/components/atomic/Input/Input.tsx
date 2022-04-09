@@ -7,8 +7,6 @@ import { withLabel } from '../../utilities';
 export type InputProps = InputBaseProps;
 
 const Input: React.FunctionComponent<InputProps> = ({ size, ...props }) => {
-  console.debug('INPUT REF', props.inputRef);
-
   const getFontSize = (_theme: Theme) => {
     if (size === 'small') {
       return 14;

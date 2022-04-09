@@ -2,7 +2,7 @@ import React from 'react';
 import isUndefined from 'lodash/isUndefined';
 
 import IconLabel from '../IconLabel/IconLabel';
-import IntegerField from '../IntegerField/IntegerField';
+import MaskedIntegerField from '../MaskedIntegerField/MaskedIntegerField';
 
 export type MarginAmountProps = {
   protocol?: string;
@@ -13,17 +13,19 @@ export type MarginAmountProps = {
 };
 
 const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
+  protocol,
   defaultMargin,
   margin,
   onChangeMargin,
 }) => {
   const value = isUndefined(margin) ? defaultMargin : margin;
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChangeMargin(parseInt(event.target.value, 10));
+  const handleChange = (newValue: string) => {
+    onChangeMargin(parseInt(newValue, 10));
   };
 
   return (
-    <IntegerField
+    <MaskedIntegerField
+      affix={protocol || ''}
       label={<IconLabel label="margin amount" icon="information-circle" info="Something" />}
       value={value}
       onChange={handleChange}

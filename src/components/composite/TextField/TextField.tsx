@@ -9,17 +9,22 @@ import { Input } from '../../atomic';
 
 export type TextFieldProps = Omit<MuiTextFieldProps, 'variant'>;
 
-const TextField: React.FunctionComponent<TextFieldProps> = ({ disabled, error, label }) => {
+const TextField: React.FunctionComponent<TextFieldProps> = ({
+  disabled,
+  error,
+  label,
+  inputRef,
+}) => {
   const inputId = useUniqueId();
 
   return (
-    <FormControl variant="standard">
+    <FormControl variant="outlined">
       {!isEmpty(label) && (
         <InputLabel shrink htmlFor={inputId} error={error}>
           {label}
         </InputLabel>
       )}
-      <Input id={inputId} disabled={disabled} error={error} />
+      <Input id={inputId} disabled={disabled} error={error} inputRef={inputRef} />
     </FormControl>
   );
 };

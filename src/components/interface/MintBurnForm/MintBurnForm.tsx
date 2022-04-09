@@ -120,6 +120,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         }}
       >
         <NotionalAmount
+          protocol={protocol}
           defaultNotional={defaultNotional}
           notional={notional}
           onChangeNotional={onChangeNotional}
