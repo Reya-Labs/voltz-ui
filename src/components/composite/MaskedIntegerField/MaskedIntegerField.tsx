@@ -10,11 +10,13 @@ export type MaskedIntegerFieldProps = Omit<React.ComponentProps<typeof Input>, '
 
 const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
   affix,
+  value: externalValue,
   onChange,
   ...props
 }) => {
+  const mask = `nn ${(affix || '').replaceAll('a', '\\a')}`;
   const { ref, unmaskedValue } = useIMask({
-    mask: `nn ${affix.replaceAll('a', '\\a')}`,
+    mask,
     lazy: false,
     blocks: {
       nn: {
