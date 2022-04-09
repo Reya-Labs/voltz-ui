@@ -1,226 +1,66 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getError = exports.extractErrorMessage = void 0;
+exports.getErrorSignature = void 0;
 var ethers_1 = require("ethers");
-var extractErrorMessage = function (error) {
-    if (!error) {
-        return null;
+var getErrorSignature = function (error) {
+    var errors = [
+        /// @dev No need to unwind a net zero position
+        "error PositionNetZero()",
+        "error MarginLessThanMinimum(int256 marginRequirement)",
+        /// @dev We can't withdraw more margin than we have
+        "error WithdrawalExceedsCurrentMargin()",
+        /// @dev Position must be settled after AMM has reached maturity
+        "error PositionNotSettled()",
+        /// The resulting margin does not meet minimum requirements
+        "error MarginRequirementNotMet(int256 marginRequirement,int24 tick,int256 fixedTokenDelta,int256 variableTokenDelta,uint256 cumulativeFeeIncurred,int256 fixedTokenDeltaUnbalanced)",
+        /// The position/trader needs to be below the liquidation threshold to be liquidated
+        "error CannotLiquidate()",
+        /// Only the position/trade owner can update the LP/Trader margin
+        "error OnlyOwnerCanUpdatePosition()",
+        "error OnlyVAMM()",
+        "error OnlyFCM()",
+        /// Margin delta must not equal zero
+        "error InvalidMarginDelta()",
+        /// Positions and Traders cannot be settled before the applicable interest rate swap has matured
+        "error CannotSettleBeforeMaturity()",
+        "error closeToOrBeyondMaturity()",
+        /// @dev There are not enough funds available for the requested operation
+        "error NotEnoughFunds(uint256 requested, uint256 available)",
+        /// @dev The two values were expected to have oppostite sigs, but do not
+        "error ExpectedOppositeSigns(int256 amount0, int256 amount1)",
+        /// @dev Error which is reverted if the sqrt price of the vamm is non-zero before a vamm is initialized
+        "error ExpectedSqrtPriceZeroBeforeInit(uint160 sqrtPriceX96)",
+        /// @dev Error which ensures the liquidity delta is positive if a given LP wishes to mint further liquidity in the vamm
+        "error LiquidityDeltaMustBePositiveInMint(uint128 amount)",
+        /// @dev Error which ensures the liquidity delta is positive if a given LP wishes to burn liquidity in the vamm
+        "error LiquidityDeltaMustBePositiveInBurn(uint128 amount)",
+        /// @dev Error which ensures the amount of notional specified when initiating an IRS contract (via the swap function in the vamm) is non-zero
+        "error IRSNotionalAmountSpecifiedMustBeNonZero()",
+        /// @dev Error which ensures the VAMM is unlocked
+        "error CanOnlyTradeIfUnlocked(bool unlocked)",
+        /// @dev only the margin engine can run a certain function
+        "error OnlyMarginEngine()",
+        /// The resulting margin does not meet minimum requirements
+        "error MarginRequirementNotMetFCM(int256 marginRequirement)",
+        /// @dev getReserveNormalizedIncome() returned zero for underlying asset. Oracle only supports active Aave-V2 assets.
+        "error AavePoolGetReserveNormalizedIncomeReturnedZero()",
+        /// @dev currentTime < queriedTime
+        "error OOO()",
+    ];
+    var iface = new ethers_1.ethers.utils.Interface(errors);
+    var errorSignatures = [];
+    for (var _i = 0, errors_1 = errors; _i < errors_1.length; _i++) {
+        var err = errors_1[_i];
+        errorSignatures.push(err.split("(")[0].slice(6));
     }
-    if (!error.message && !error.data.message) {
-        return null;
-    }
-    if (error.data) {
-        if (error.data.message) {
-            return error.data.message.toString();
+    for (var _a = 0, errorSignatures_1 = errorSignatures; _a < errorSignatures_1.length; _a++) {
+        var errSig = errorSignatures_1[_a];
+        try {
+            iface.decodeErrorResult(errSig, error);
+            return errSig;
         }
-        else {
-            var rawReason = error.data.toString();
-            var reasonWithSignature = rawReason.replace("Reverted ", "");
-            var selector = reasonWithSignature.slice(2, 10);
-            var reasonWithoutSignature = reasonWithSignature.slice(0, 2) + reasonWithSignature.slice(10);
-            if (selector === "6b4fff24") {
-                var args = ethers_1.ethers.utils.defaultAbiCoder.decode(["uint256"], reasonWithoutSignature);
-                return "MarginLessThanMinimum(" + args.toString() + ")";
-            }
-            return "Error";
-        }
-    }
-    if (error.data.message) {
-        return error.data.message.toString();
-    }
-    if (error.message) {
-        return error.message.toString();
+        catch (_) { }
     }
     return null;
 };
-exports.extractErrorMessage = extractErrorMessage;
-var getError = function (message) {
-    if (message.includes('LOK')) {
-        return 'The pool has not been initialized yet';
-    }
-    if (message.includes('CanOnlyTradeIfUnlocked')) {
-        return 'The pool has not been initialized yet';
-    }
-    if (message.includes('closeToOrBeyondMaturity')) {
-        return 'The pool is close to or beyond maturity';
-    }
-    if (message.includes('TLU')) {
-        return 'Lower Fixed Rate must be smaller than Upper Fixed Rate!';
-    }
-    if (message.includes('TLM')) {
-        return 'Lower Fixed Rate is too low!';
-    }
-    if (message.includes('TUM')) {
-        return 'Upper Fixed Rate is too high!';
-    }
-    if (message.includes('only sender or approved integration')) {
-        return 'No approval to act on this address behalf';
-    }
-    if (message.includes('MS or ME')) {
-        return 'No approval to act on this address behalf';
-    }
-    if (message.includes('only msg.sender or approved can mint')) {
-        return 'No approval to act on this address behalf';
-    }
-    if (message.includes('E<=S')) {
-        return 'Internal error: The timestamps of the pool are not correct';
-    }
-    if (message.includes('B.T<S')) {
-        return 'Internal error: Operations need current timestamp to be before maturity';
-    }
-    if (message.includes('endTime must be >= currentTime')) {
-        return 'Internal error: Operations need current timestamp to be before maturity';
-    }
-    if (message.includes('parameters not set')) {
-        return 'Internal error: Margin Calculator parameters not set';
-    }
-    if (message.includes('SPL')) {
-        return 'No notional available in that direction';
-    }
-    if (message.includes('MarginRequirementNotMet')) {
-        return 'No enough margin for this operation';
-    }
-    if (message.includes('NP')) {
-        return 'Active positions should have positive liquidity';
-    }
-    if (message.includes('LO')) {
-        return 'Internal Error: Liquidity exceeds maximum amount per tick';
-    }
-    if (message.includes('not enough liquidity to burn')) {
-        return 'Not enough liquidity to burn';
-    }
-    if (message.includes('PositionNotSettled')) {
-        return 'The position needs to be settled first';
-    }
-    if (message.includes('WithdrawalExceedsCurrentMargin')) {
-        return 'No enough margin to withdraw';
-    }
-    if (message.includes('MarginLessThanMinimum')) {
-        return 'No enough margin for this operation';
-    }
-    if (message.includes('InvalidMarginDelta')) {
-        return 'Amount of notional must be greater than 0!';
-    }
-    if (message.includes('LiquidityDeltaMustBePositiveInMint')) {
-        return 'Internal error: Liquidity for mint should be positive';
-    }
-    if (message.includes('LiquidityDeltaMustBePositiveInBurn')) {
-        return 'Internal error: Liquidity for burn should be positive';
-    }
-    if (message.includes('IRSNotionalAmountSpecifiedMustBeNonZero')) {
-        return 'Amount of notional must be greater than 0!';
-    }
-    if (message.includes('tick must be properly spaced')) {
-        return 'Internal error: Ticks must be properly spaced!';
-    }
-    if (message.includes('TSOFLOW')) {
-        return 'Internal error: Timestamp overflows';
-    }
-    if (message.includes('already settled')) {
-        return 'Position already settled';
-    }
-    if (message.includes('from > to')) {
-        return 'Internal error: Rates disorder when getting rate in the rate oracle';
-    }
-    if (message.includes('Misordered dates')) {
-        return 'Internal error: Rates disorder when getting apy in the rate oracle';
-    }
-    if (message.includes('UNITS')) {
-        return 'Internal error: Timestamps not initialized when getting variable factor';
-    }
-    if (message.includes('>216')) {
-        return 'Internal error: Observation overflows in the rate oracle';
-    }
-    if (message.includes('New size of oracle buffer should be positive')) {
-        return 'New size of oracle buffer should be positive';
-    }
-    if (message.includes('OLD')) {
-        return 'Internal error: Oracle buffer overflows';
-    }
-    if (message.includes('x must be > 0')) {
-        return 'Internal error: the value must be positive in BitMath';
-    }
-    if (message.includes('SafeMath: addition overflow')) {
-        return 'Internal error: addition overflow';
-    }
-    if (message.includes('SafeMath: subtraction overflow')) {
-        return 'Internal error: subtraction overflow';
-    }
-    if (message.includes('SafeMath: multiplication overflow')) {
-        return 'Internal error: multiplication overflow';
-    }
-    if (message.includes('ERC20: transfer from the zero address')) {
-        return 'Internal error: ERC20: transfer from the zero address';
-    }
-    if (message.includes('ERC20: transfer to the zero address')) {
-        return 'Internal error: ERC20: transfer to the zero address';
-    }
-    if (message.includes('ERC20: transfer amount exceeds balance')) {
-        return 'ERC20: transfer amount exceeds balance';
-    }
-    if (message.includes('ERC20: mint to the zero address')) {
-        return 'ERC20: mint to the zero address';
-    }
-    if (message.includes('ERC20: burn from the zero address')) {
-        return 'ERC20: burn from the zero address';
-    }
-    if (message.includes('ERC20: burn amount exceeds balance')) {
-        return 'ERC20: burn amount exceeds balance';
-    }
-    if (message.includes('ERC20: approve from the zero address')) {
-        return 'ERC20: approve from the zero address';
-    }
-    if (message.includes('ERC20: approve to the zero address')) {
-        return 'ERC20: approve to the zero address';
-    }
-    if (message.includes('CT_CALLER_MUST_BE_LENDING_POOL')) {
-        return 'Internal error: Caller must lending pool';
-    }
-    if (message.includes('CT_INVALID_MINT_AMOUNT')) {
-        return 'Internal error: Invalid aToken amount to mint';
-    }
-    if (message.includes('CT_INVALID_BURN_AMOUNT')) {
-        return 'Internal error: Invalid aToken amount to burn';
-    }
-    if (message.includes('Division by zero')) {
-        return 'Internal error: Division by zero in aToken';
-    }
-    if (message.includes('overflow')) {
-        return 'Internal error: Overflow in aToken';
-    }
-    if (message.includes('overflow in toUint160')) {
-        return 'Internal error: Overflow when casting to Uint160';
-    }
-    if (message.includes('overflow in toInt128')) {
-        return 'Internal error: Overflow when casting to Int128';
-    }
-    if (message.includes('overflow in toInt256')) {
-        return 'Internal error: Overflow when casting to Int256';
-    }
-    if (message.includes('denominator underflows')) {
-        return 'Internal error: Denominator underflows in SqrtPriceMath';
-    }
-    if (message.includes('starting px must be > quotient')) {
-        return 'Internal error: Next price should be higher than current price in SqrtPriceMath';
-    }
-    if (message.includes('starting price must be > 0')) {
-        return 'Internal error: Starting price not initialized in SqrtPriceMath';
-    }
-    if (message.includes('liquidity must be > 0')) {
-        return 'Internal error: Liquidity must be positive in tick range';
-    }
-    if (message.includes('tick outside of range')) {
-        return 'Internal error: Tick outside of range in TickMath';
-    }
-    if (message.includes('price outside of range')) {
-        return 'Internal error: Price outside of range in TickMath';
-    }
-    if (message.includes('Wad Ray Math: 49')) {
-        return 'Internal error: addition overflow in WadRayMath';
-    }
-    if (message.includes('Wad Ray Math: 50')) {
-        return 'Internal error: division by zero in WadRayMath';
-    }
-    return 'Unrecognized error';
-};
-exports.getError = getError;
+exports.getErrorSignature = getErrorSignature;
