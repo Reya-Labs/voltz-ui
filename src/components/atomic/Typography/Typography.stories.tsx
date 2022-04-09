@@ -1,6 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
+import { Agents, AgentProvider } from '@components/contexts';
 import Typography from './Typography';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
@@ -12,11 +13,20 @@ export default {
     backgroundColor: { control: 'color' },
     label: { control: 'text' },
     error: { control: 'boolean' },
+    agentStyling: { control: 'boolean' },
+    agent: {
+      control: 'radio',
+      options: [Agents.FIXED_TRADER, Agents.VARIABLE_TRADER, Agents.LIQUIDITY_PROVIDER],
+    },
   },
 } as ComponentMeta<typeof Typography>;
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: ComponentStory<typeof Typography> = (args) => <Typography {...args} />;
+const Template: ComponentStory<typeof Typography> = (args) => (
+  <AgentProvider>
+    <Typography {...args} />
+  </AgentProvider>
+);
 
 export const HeadingOne = Template.bind({});
 HeadingOne.args = {
