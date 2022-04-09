@@ -26,9 +26,17 @@ const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
     onChangeNotional(parseInt(newValue, 10));
   };
 
+  // todo: below is a workaround when deriving the token name from the protocol name, needs to be fixed
+
+  let underlyingTokenName: string = '';
+
+  if (protocol) {
+    underlyingTokenName = protocol.substring(1);
+  }
+
   return (
     <MaskedIntegerField
-      affix={protocol || ''}
+      affix={underlyingTokenName}
       label={<IconLabel label={label} icon="information-circle" info={info} />}
       value={value}
       onChange={handleChange}
