@@ -7,10 +7,10 @@ exports.MAX_FIXED_RATE = exports.MIN_FIXED_RATE = exports.MAX_TICK = exports.MIN
 var jsbi_1 = __importDefault(require("jsbi"));
 exports.MaxUint256 = jsbi_1.default.BigInt('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff');
 exports.ADDRESS_ZERO = '0x0000000000000000000000000000000000000000';
-// todo: needs to be adjusted
-exports.FACTORY_ADDRESS = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0';
-// todo: needs to be adjusted
-exports.PERIPHERY_ADDRESS = '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853';
+// Latest kovan deployment address of the factory
+exports.FACTORY_ADDRESS = '0xAF47e8353729E5be6cA4f605dd176B7Fc80EDA08';
+// Latest kovan deployment address of the periphery
+exports.PERIPHERY_ADDRESS = '0x4d1e13111412725D458D106A36524B9c13E98D98';
 // todo: needs to be adjusted
 exports.AMM_INIT_CODE_HASH = '0xe34f199b19b2b4f47f68442619d555527d244f78a3297ea89325f843f87b8b54';
 // constants used internally but not expected to be used externally
