@@ -6,13 +6,15 @@ export const MaxUint256 = JSBI.BigInt(
 
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000';
 
-// todo: needs to be adjusted
-// export const FACTORY_ADDRESS = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0'; // localhost
-export const FACTORY_ADDRESS = '0x0Acae90cc4927bAd5BA6a51754771582783a95bb'; // kovan
+// Latest kovan deployment address of the factory
+export const FACTORY_ADDRESS = '0xAF47e8353729E5be6cA4f605dd176B7Fc80EDA08';
+
+// Latest kovan deployment address of the periphery
+export const PERIPHERY_ADDRESS = '0x4d1e13111412725D458D106A36524B9c13E98D98';
 
 // todo: needs to be adjusted
-// export const PERIPHERY_ADDRESS = '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853'; // localhost
-export const PERIPHERY_ADDRESS = '0x4cb93ed60a3Dd9013979c6251C14117e02A6DfA1'; // kovan
+export const AMM_INIT_CODE_HASH =
+  '0xe34f199b19b2b4f47f68442619d555527d244f78a3297ea89325f843f87b8b54';
 
 // constants used internally but not expected to be used externally
 export const NEGATIVE_ONE = JSBI.BigInt(-1);

@@ -21,11 +21,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TokenAmount = void 0;
 var tiny_invariant_1 = __importDefault(require("tiny-invariant"));
 var jsbi_1 = __importDefault(require("jsbi"));
-var big_js_1 = __importDefault(require("big.js"));
-var toformat_1 = __importDefault(require("toformat"));
 var constants_1 = require("../../constants");
 var fraction_1 = require("./fraction");
-var Big = (0, toformat_1.default)(big_js_1.default);
 var TokenAmount = /** @class */ (function (_super) {
     __extends(TokenAmount, _super);
     function TokenAmount(token, numerator, denominator) {

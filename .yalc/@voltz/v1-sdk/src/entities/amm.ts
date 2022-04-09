@@ -1,8 +1,7 @@
 import JSBI from 'jsbi';
-import { providers } from 'ethers';
+import { ethers, providers } from 'ethers';
 import { DateTime } from 'luxon';
 import { BigNumber, BigNumberish, ContractReceipt, Signer, utils } from 'ethers';
-import isNull from 'lodash/isNull';
 
 import { BigIntish, SwapPeripheryParams, MintOrBurnParams } from '../types';
 import {
@@ -25,10 +24,10 @@ import { TickMath } from '../utils/tickMath';
 import timestampWadToDateTime from '../utils/timestampWadToDateTime';
 import { fixedRateToClosestTick, tickToFixedRate } from '../utils/priceTickConversions';
 import { nearestUsableTick } from '../utils/nearestUsableTick';
-import { extractErrorMessage, getError } from '../utils/extractErrorMessage';
 import Token from './token';
 import { Price } from './fractions/price';
 import { TokenAmount } from './fractions/tokenAmount';
+import { getErrorSignature } from '../utils/extractErrorMessage';
 
 export type AMMConstructorArgs = {
   id: string;
@@ -247,26 +246,36 @@ class AMM {
         tickAfter = parseInt(result[5]);
       },
       (error: any) => {
-        const message = extractErrorMessage(error);
-
-        if (isNull(message)) {
-          throw new Error('Cannot decode additional margin amount');
+        let errSig;
+        let reason;
+        try {
+          reason = error.data.toString().replace("Reverted ", "");
+          errSig = getErrorSignature(reason);
+        }
+        catch (_) {
+          throw new Error("Cannot decode trade information");
         }
 
-        if (message.includes('MarginRequirementNotMet')) {
-          const args: string[] = message
-            .split('MarginRequirementNotMet')[1]
-            .split('(')[1]
-            .split(')')[0]
-            .replaceAll(' ', '')
-            .split(',');
+        if (errSig) {
+          if (errSig === "MarginRequirementNotMet") {
+            try {
+              const iface = new ethers.utils.Interface(["error MarginRequirementNotMet(int256 marginRequirement,int24 tick,int256 fixedTokenDelta,int256 variableTokenDelta,uint256 cumulativeFeeIncurred,int256 fixedTokenDeltaUnbalanced)"]);
+              const result = iface.decodeErrorResult(
+                "MarginRequirementNotMetFCM",
+                reason
+              );
 
-          marginRequirement = BigNumber.from(args[0]);
-          tickAfter = parseInt(args[1]);
-          fee = BigNumber.from(args[4]);
-          availableNotional = BigNumber.from(args[3]);
-        } else {
-          throw new Error('Additional margin amount cannot be established');
+              marginRequirement = result.marginRequirement;
+              tickAfter = result.tick;
+              fee = result.cumulativeFeeIncurred;
+              availableNotional = result.variableTokenDelta;
+            } catch (_) {
+              throw new Error("Cannot decode trade information");
+            }
+          }
+        }
+        else {
+          throw new Error("Cannot decode trade information");
         }
       },
     );
@@ -455,23 +464,33 @@ class AMM {
         marginRequirement = BigNumber.from(result);
       },
       (error) => {
-        const message = extractErrorMessage(error);
-
-        if (isNull(message)) {
-          throw new Error('Cannot decode additional margin amount');
+        let errSig;
+        let reason;
+        try {
+          reason = error.data.toString().replace("Reverted ", "");
+          errSig = getErrorSignature(reason);
+        }
+        catch (_) {
+          throw new Error("Cannot decode additional margin amount");
         }
 
-        if (message.includes('MarginLessThanMinimum')) {
-          const args: string[] = message
-            .split('MarginLessThanMinimum')[1]
-            .split('(')[1]
-            .split(')')[0]
-            .replaceAll(' ', '')
-            .split(',');
+        if (errSig) {
+          if (errSig === "MarginLessThanMinimum") {
+            try {
+              const iface = new ethers.utils.Interface(["error MarginLessThanMinimum(int256 marginRequirement)"]);
+              const result = iface.decodeErrorResult(
+                "MarginLessThanMinimum",
+                reason
+              );
 
-          marginRequirement = BigNumber.from(args[0]);
-        } else {
-          throw new Error('Additional margin amount cannot be established');
+              marginRequirement = result.marginRequirement;
+            } catch (_) {
+              throw new Error("Cannot decode additional margin amount");
+            }
+          }
+        }
+        else {
+          throw new Error("Cannot decode additional margin amount");
         }
       },
     );
@@ -549,23 +568,39 @@ class AMM {
     };
 
     await peripheryContract.callStatic.mintOrBurn(mintOrBurnParams).catch((error) => {
-      const message = extractErrorMessage(error);
-
-      if (isNull(message)) {
-        throw new Error('The failure reason cannot be decoded');
+      let errSig;
+      try {
+        const reason = error.data.toString().replace("Reverted ", "");
+        errSig = getErrorSignature(reason);
+      }
+      catch (_) {
+        throw new Error("Unrecognized error");
       }
 
-      throw new Error(getError(message));
+      if (errSig) {
+        throw new Error(errSig);
+      }
+      else {
+        throw new Error("Unrecognized error");
+      }
     });
 
     const mintTransaction = await peripheryContract.mintOrBurn(mintOrBurnParams).catch((error) => {
-      const message = extractErrorMessage(error);
-
-      if (isNull(message)) {
-        throw new Error('The failure reason cannot be decoded');
+      let errSig;
+      try {
+        const reason = error.data.toString().replace("Reverted ", "");
+        errSig = getErrorSignature(reason);
+      }
+      catch (_) {
+        throw new Error("Unrecognized error");
       }
 
-      throw new Error(getError(message));
+      if (errSig) {
+        throw new Error(errSig);
+      }
+      else {
+        throw new Error("Unrecognized error");
+      }
     });
 
     return mintTransaction.wait();
@@ -618,23 +653,39 @@ class AMM {
     };
 
     await peripheryContract.callStatic.mintOrBurn(mintOrBurnParams).catch((error) => {
-      const message = extractErrorMessage(error);
-
-      if (isNull(message)) {
-        throw new Error('The failure reason cannot be decoded');
+      let errSig;
+      try {
+        const reason = error.data.toString().replace("Reverted ", "");
+        errSig = getErrorSignature(reason);
+      }
+      catch (_) {
+        throw new Error("Unrecognized error");
       }
 
-      throw new Error(getError(message));
+      if (errSig) {
+        throw new Error(errSig);
+      }
+      else {
+        throw new Error("Unrecognized error");
+      }
     });
 
     const burnTransaction = await peripheryContract.mintOrBurn(mintOrBurnParams).catch((error) => {
-      const message = extractErrorMessage(error);
-
-      if (isNull(message)) {
-        throw new Error('The failure reason cannot be decoded');
+      let errSig;
+      try {
+        const reason = error.data.toString().replace("Reverted ", "");
+        errSig = getErrorSignature(reason);
+      }
+      catch (_) {
+        throw new Error("Unrecognized error");
       }
 
-      throw new Error(getError(message));
+      if (errSig) {
+        throw new Error(errSig);
+      }
+      else {
+        throw new Error("Unrecognized error");
+      }
     });
 
     return burnTransaction.wait();
@@ -755,24 +806,39 @@ class AMM {
     };
 
     await peripheryContract.callStatic.swap(swapPeripheryParams).catch(async (error: any) => {
-      const message = extractErrorMessage(error);
-
-      if (isNull(message)) {
-        throw new Error('The failure reason cannot be decoded');
+      let errSig;
+      try {
+        const reason = error.data.toString().replace("Reverted ", "");
+        errSig = getErrorSignature(reason);
+      }
+      catch (_) {
+        throw new Error("Unrecognized error");
       }
 
-      const errorMessage = getError(message);
-      throw new Error(errorMessage);
+      if (errSig) {
+        throw new Error(errSig);
+      }
+      else {
+        throw new Error("Unrecognized error");
+      }
     });
 
     const swapTransaction = await peripheryContract.swap(swapPeripheryParams).catch((error) => {
-      const message = extractErrorMessage(error);
-
-      if (isNull(message)) {
-        throw new Error('The failure reason cannot be decoded');
+      let errSig;
+      try {
+        const reason = error.data.toString().replace("Reverted ", "");
+        errSig = getErrorSignature(reason);
+      }
+      catch (_) {
+        throw new Error("Unrecognized error");
       }
 
-      throw new Error(getError(message));
+      if (errSig) {
+        throw new Error(errSig);
+      }
+      else {
+        throw new Error("Unrecognized error");
+      }
     });
 
     return swapTransaction.wait();

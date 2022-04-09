@@ -1,12 +1,8 @@
 import invariant from 'tiny-invariant';
 import JSBI from 'jsbi';
-import _Big from 'big.js';
-import toFormat from 'toformat';
 import Token from '../token';
 import { BigintIsh, MaxUint256 } from '../../constants';
 import { Fraction } from './fraction';
-
-const Big = toFormat(_Big);
 
 export class TokenAmount<T extends Token> extends Fraction {
   public readonly token: T;

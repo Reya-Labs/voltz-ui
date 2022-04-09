@@ -1,3 +1,2 @@
-export declare const extractErrorMessage: (error: any) => string | null;
-export declare const getError: (message: string) => string;
+export declare const getErrorSignature: (error: string) => string | null;
 //# sourceMappingURL=extractErrorMessage.d.ts.map
