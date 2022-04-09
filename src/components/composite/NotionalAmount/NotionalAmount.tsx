@@ -2,11 +2,11 @@ import React from 'react';
 import isUndefined from 'lodash/isUndefined';
 
 import IconLabel from '../IconLabel/IconLabel';
-import IntegerField from '../IntegerField/IntegerField';
-import { useAgent } from '@hooks';
-import { Agents } from 'src/components/contexts';
+import MaskedIntegerField from '../MaskedIntegerField/MaskedIntegerField';
 
 export type NotionalAmountProps = {
+  label: string;
+  info: string;
   protocol?: string;
   defaultNotional?: number;
   notional?: number;
@@ -14,33 +14,22 @@ export type NotionalAmountProps = {
 };
 
 const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
+  label,
+  info,
+  protocol,
   defaultNotional,
   notional,
   onChangeNotional,
 }) => {
   const value = isUndefined(notional) ? defaultNotional : notional;
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChangeNotional(parseFloat(event.target.value));
+  const handleChange = (newValue: string) => {
+    onChangeNotional(parseInt(newValue, 10));
   };
-  const { agent } = useAgent();
-
-  const getLabel = () => {
-    if (agent === Agents.LIQUIDITY_PROVIDER) {
-      return "provided liquidity";
-    }
-    return "notional traded";
-  }
-
-  const getInfo = () => {
-    if (agent === Agents.LIQUIDITY_PROVIDER) {
-      return "Choose the notional amount of liquidity you wish to provide. Learn more.";
-    }
-    return "Choose the notional you wish to trade. The notional amount is the total size of your trade. Learn more.";
-  }
 
   return (
-    <IntegerField
-      label={<IconLabel label={getLabel()} icon="information-circle" info={getInfo()} />}
+    <MaskedIntegerField
+      affix={protocol || ''}
+      label={<IconLabel label={label} icon="information-circle" info={info} />}
       value={value}
       onChange={handleChange}
       sx={{ width: '100%' }}

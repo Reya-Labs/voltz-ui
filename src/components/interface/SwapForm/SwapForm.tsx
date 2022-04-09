@@ -82,7 +82,13 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         }}
       >
         <MaturityInformation
-          label={<IconLabel label="maturity" icon="information-circle" info="The proportion between the time elapsed since the initiation of the pool and the entire duration." />}
+          label={
+            <IconLabel
+              label="maturity"
+              icon="information-circle"
+              info="The proportion between the time elapsed since the initiation of the pool and the entire duration."
+            />
+          }
           startDate={startDate}
           endDate={endDate}
         />
@@ -106,6 +112,9 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         }}
       >
         <NotionalAmount
+          label="notional traded"
+          info="Choose the notional you wish to trade. The notional amount is the total size of your trade. Learn more."
+          protocol={protocol}
           defaultNotional={defaultNotional}
           notional={notional}
           onChangeNotional={onChangeNotional}

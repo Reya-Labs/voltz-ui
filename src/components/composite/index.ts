@@ -4,6 +4,7 @@ export type { DebouncedIntegerFieldDetails } from './DebouncedIntegerField/Debou
 export { default as IconLabel } from './IconLabel/IconLabel';
 export { default as IntegerField } from './IntegerField/IntegerField';
 export { default as MarginAmount } from './MarginAmount/MarginAmount';
+export { default as MaskedIntegerField } from './MaskedIntegerField/MaskedIntegerField';
 export { default as MaturityInformation } from './MaturityInformation/MaturityInformation';
 export { default as Modal } from './Modal/Modal';
 export { default as NotionalAmount } from './NotionalAmount/NotionalAmount';
