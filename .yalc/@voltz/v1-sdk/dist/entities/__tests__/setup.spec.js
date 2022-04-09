@@ -44,9 +44,16 @@ var token_1 = __importDefault(require("../token"));
 var rateOracle_1 = __importDefault(require("../rateOracle"));
 var amm_1 = __importDefault(require("../amm"));
 var tickMath_1 = require("../../utils/tickMath");
+<<<<<<< HEAD
 jest.setTimeout(60000);
 it('setup rich irs instance', function () { return __awaiter(void 0, void 0, void 0, function () {
     var amm_wallet, amm_other, wallet, other, vammAddress, marginEngineAddress, provider, privateKey, fixedLowMinter, fixedHighMinter, fixedLowSwapper1, fixedHighSwapper1, fixedLowSwapper2, fixedHighSwapper2, mint_req, swap_req1, swap_req2;
+=======
+var typechain_1 = require("../../typechain");
+jest.setTimeout(60000);
+it('setup rich irs instance', function () { return __awaiter(void 0, void 0, void 0, function () {
+    var amm_wallet, amm_other, wallet, other, vammAddress, marginEngineAddress, provider, privateKey, vammContract, fixedLowMinter, fixedHighMinter, fixedLowSwapper1, fixedHighSwapper1, fixedLowSwapper2, fixedHighSwapper2, mint_req, swap_req1, swap_req2;
+>>>>>>> 604ba6d93bf48147c2cfee6fcdc3ea7056ef0c1d
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:

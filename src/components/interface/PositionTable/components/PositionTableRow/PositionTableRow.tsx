@@ -67,7 +67,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
                 return datum.protocol;
 
               case 'fixedApr':
-                return `${datum.fixedApr}%`;
+                return `${datum.fixedApr.toFixed(2)}%`;
 
               case 'notional':
                 return datum.notional.toFixed(2);
