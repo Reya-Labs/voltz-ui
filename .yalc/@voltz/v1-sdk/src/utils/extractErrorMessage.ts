@@ -1,3 +1,5 @@
+import { ethers } from "ethers";
+
 export const extractErrorMessage = (error: any): string | null => {
   if (!error) {
     return null;
@@ -5,6 +7,25 @@ export const extractErrorMessage = (error: any): string | null => {
 
   if (!error.message && !error.data.message) {
     return null;
+  }
+
+  if (error.data) {
+    if (error.data.message) {
+      return error.data.message.toString();
+    }
+    else {
+      const rawReason = error.data.toString();
+      const reasonWithSignature = rawReason.replace("Reverted ", "");
+      const selector = reasonWithSignature.slice(2, 10);
+      const reasonWithoutSignature = reasonWithSignature.slice(0, 2) + reasonWithSignature.slice(10);
+
+      if (selector === "6b4fff24") {
+        const args = ethers.utils.defaultAbiCoder.decode(["uint256"], reasonWithoutSignature);
+        return "MarginLessThanMinimum(" + args.toString() + ")";
+      }
+
+      return "Error";
+    }
   }
 
   if (error.data.message) {
@@ -71,7 +92,7 @@ export const getError = (message: string): string => {
     return 'Internal error: Margin Calculator parameters not set';
   }
 
-   if (message.includes('SPL')) {
+  if (message.includes('SPL')) {
     return 'No notional available in that direction';
   }
 
@@ -206,7 +227,7 @@ export const getError = (message: string): string => {
   if (message.includes('CT_CALLER_MUST_BE_LENDING_POOL')) {
     return 'Internal error: Caller must lending pool';
   }
-  
+
   if (message.includes('CT_INVALID_MINT_AMOUNT')) {
     return 'Internal error: Invalid aToken amount to mint';
   }

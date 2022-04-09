@@ -1,5 +1,5 @@
 import JSBI from 'jsbi';
-import Token from "../token";
+import Token from '../token';
 import { BigintIsh } from '../../constants';
 import { Fraction } from './fraction';
 export declare class TokenAmount<T extends Token> extends Fraction {

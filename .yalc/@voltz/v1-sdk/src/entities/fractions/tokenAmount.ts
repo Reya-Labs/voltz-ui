@@ -1,16 +1,13 @@
 import invariant from 'tiny-invariant';
 import JSBI from 'jsbi';
-import Token from "../token";
-import _Big from 'big.js';
-import toFormat from 'toformat';
+import Token from '../token';
 import { BigintIsh, MaxUint256 } from '../../constants';
 import { Fraction } from './fraction';
 
-const Big = toFormat(_Big)
-
 export class TokenAmount<T extends Token> extends Fraction {
-  public readonly token: T
-  public readonly decimalScale: JSBI
+  public readonly token: T;
+
+  public readonly decimalScale: JSBI;
 
   /**
    * Returns a new token amount instance from the unitless amount of token, i.e. the raw amount
@@ -18,7 +15,7 @@ export class TokenAmount<T extends Token> extends Fraction {
    * @param rawAmount the raw token or ether amount
    */
   public static fromRawAmount<T extends Token>(token: T, rawAmount: BigintIsh): TokenAmount<T> {
-    return new TokenAmount(token, rawAmount)
+    return new TokenAmount(token, rawAmount);
   }
 
   /**
@@ -30,24 +27,20 @@ export class TokenAmount<T extends Token> extends Fraction {
   public static fromFractionalAmount<T extends Token>(
     token: T,
     numerator: BigintIsh,
-    denominator: BigintIsh
+    denominator: BigintIsh,
   ): TokenAmount<T> {
-    return new TokenAmount(token, numerator, denominator)
+    return new TokenAmount(token, numerator, denominator);
   }
 
   protected constructor(token: T, numerator: BigintIsh, denominator?: BigintIsh) {
-    super(numerator, denominator)
-    invariant(JSBI.lessThanOrEqual(this.quotient, MaxUint256), 'AMOUNT')
-    this.token = token
-    this.decimalScale = JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(token.decimals))
+    super(numerator, denominator);
+    invariant(JSBI.lessThanOrEqual(this.quotient, MaxUint256), 'AMOUNT');
+    this.token = token;
+    this.decimalScale = JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(token.decimals));
   }
 
-  public scale(
-    decimalPlaces: number = this.token.decimals,
-  ): string {
-    invariant(decimalPlaces <= this.token.decimals, 'DECIMALS')
-    return super.multiply(this.decimalScale).quotient.toString()
+  public scale(decimalPlaces: number = this.token.decimals): string {
+    invariant(decimalPlaces <= this.token.decimals, 'DECIMALS');
+    return super.multiply(this.decimalScale).quotient.toString();
   }
-
-
 }

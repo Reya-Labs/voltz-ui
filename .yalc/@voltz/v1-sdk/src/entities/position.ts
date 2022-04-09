@@ -1,6 +1,7 @@
 import JSBI from 'jsbi';
 
 import { DateTime } from 'luxon';
+import { BigNumber } from 'ethers';
 import { BigIntish } from '../types';
 import { Price } from './fractions/price';
 import { tickToFixedRate, tickToPrice } from '../utils/priceTickConversions';
@@ -109,22 +110,22 @@ class Position {
     return sqrtPriceUpperX96
       .subtract(sqrtPriceLowerX96)
       .multiply(this.liquidity)
-      .divide(Price.fromNumber(10 ** 18))
+      .divide(Price.fromNumber(10 ** this.amm.underlyingToken.decimals))
       .toNumber();
   }
 
   public get effectiveMargin(): number {
-    const result = JSBI.toNumber(JSBI.BigInt(this.margin)) / 10 ** 18;
+    const result = this.amm.descale(BigNumber.from(this.margin.toString()));
     return result;
   }
 
   public get effectiveFixedTokenBalance(): number {
-    const result = JSBI.toNumber(JSBI.BigInt(this.fixedTokenBalance)) / 10 ** 18;
+    const result = this.amm.descale(BigNumber.from(this.fixedTokenBalance.toString()));
     return result;
   }
 
   public get effectiveVariableTokenBalance(): number {
-    const result = JSBI.toNumber(JSBI.BigInt(this.variableTokenBalance)) / 10 ** 18;
+    const result = this.amm.descale(BigNumber.from(this.variableTokenBalance.toString()));
     return result;
   }
 

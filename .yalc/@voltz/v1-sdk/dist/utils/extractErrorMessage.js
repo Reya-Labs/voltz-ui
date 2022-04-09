@@ -1,12 +1,29 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getError = exports.extractErrorMessage = void 0;
+var ethers_1 = require("ethers");
 var extractErrorMessage = function (error) {
     if (!error) {
         return null;
     }
     if (!error.message && !error.data.message) {
         return null;
+    }
+    if (error.data) {
+        if (error.data.message) {
+            return error.data.message.toString();
+        }
+        else {
+            var rawReason = error.data.toString();
+            var reasonWithSignature = rawReason.replace("Reverted ", "");
+            var selector = reasonWithSignature.slice(2, 10);
+            var reasonWithoutSignature = reasonWithSignature.slice(0, 2) + reasonWithSignature.slice(10);
+            if (selector === "6b4fff24") {
+                var args = ethers_1.ethers.utils.defaultAbiCoder.decode(["uint256"], reasonWithoutSignature);
+                return "MarginLessThanMinimum(" + args.toString() + ")";
+            }
+            return "Error";
+        }
     }
     if (error.data.message) {
         return error.data.message.toString();
