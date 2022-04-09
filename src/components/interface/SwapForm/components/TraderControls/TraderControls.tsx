@@ -63,7 +63,7 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
     >
       {!isModifying && (
         <ToggleButtonGroup
-          label={<IconLabel label="rates" icon="information-circle" info="Something" />}
+          label={<IconLabel label="rates" icon="information-circle" info="Choose between taking a fixed or variable position. Learn more." />}
           options={Object.values(agentOptionTitles)}
           option={agentOptionTitles[agent]}
           defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
@@ -73,7 +73,7 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
       )}
       <ToggleButtonGroup
         label={
-          <IconLabel label="partial collateralization" icon="information-circle" info="Something" />
+          <IconLabel label="partial collateralization" icon="information-circle" info="Trading with partial collateralization  means you need to deposit less margin to cover your position. However, it also means you may be at more risk of getting liquidated if the market moves against you. Learn more." />
         }
         options={Object.values(partialCollateralizationOptionTitles)}
         option={

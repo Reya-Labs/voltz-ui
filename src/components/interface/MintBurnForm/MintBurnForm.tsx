@@ -94,7 +94,13 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         }}
       >
         <MaturityInformation
-          label={<IconLabel label="maturity" icon="information-circle" info="Something" />}
+          label={
+            <IconLabel
+              label="maturity"
+              icon="information-circle"
+              info="The proportion between the time elapsed since the initiation of the pool and the entire duration."
+            />
+          }
           startDate={startDate}
           endDate={endDate}
         />
@@ -120,6 +126,8 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         }}
       >
         <NotionalAmount
+          label="provided liquidity"
+          info="Choose the notional amount of liquidity you wish to provide. Learn more."
           protocol={protocol}
           defaultNotional={defaultNotional}
           notional={notional}

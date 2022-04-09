@@ -22,9 +22,9 @@ const MaturityInformation: React.FunctionComponent<MaturityInformationProps> = (
       return 0;
     }
 
-    const totalSeparation = endDate.diff(startDate);
+    // Durations here are both negative (due to diffNow) but that cancels out when calculating percentage
+    const totalSeparation = startDate.diff(endDate);
     const separationfromStart = startDate.diffNow();
-
     const percentage = new Decimal(separationfromStart.milliseconds)
       .dividedBy(new Decimal(totalSeparation.milliseconds))
       .times(100);

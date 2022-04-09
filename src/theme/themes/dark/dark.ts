@@ -2,6 +2,13 @@ import { createTheme } from '@mui/material/styles';
 
 import colors from '../../colors';
 
+// AB notes:
+// this defines all the cokour overrides for different parts of the UI
+// changes the colours for all of the UI
+// the colours for agents: FT, VT and LP
+// colours organised into themes, themes used in compoents and currently 1 theme
+// also have a global context
+
 const dark = createTheme({
   spacing: 4,
   palette: {

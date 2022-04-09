@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import { elideAddress } from '@utilities';
 import { Wallet } from '@components/contexts';
 import { Button, Icon } from '@components/atomic';
+import CircleIcon from '@mui/icons-material/Circle';
 
 export type WalletConnectButtonProps = {
   onClick?: () => void;
@@ -12,12 +13,12 @@ export type WalletConnectButtonProps = {
 
 const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = ({
   onClick,
-  wallet: { status, name, account, balance },
+  wallet: { status, name, account, balance, walletError },
 }) => {
   const currency = 'ETH';
   const text = useMemo(() => {
     if (!balance) {
-      return 'No balance';
+      return 'Connect Wallet';
     }
 
     if (status === 'connected') {
@@ -28,18 +29,30 @@ const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = (
     return 'Connect wallet';
   }, [balance, status]);
 
+  if (walletError) {
+    return (
+      <Box sx={{ marginLeft: (theme) => theme.spacing(4), display: 'flex' }}>
+        <Button
+          variant="red"
+          sx={{ zIndex: 1, left: (theme) => theme.spacing(-2) }}
+          startIcon={<CircleIcon sx={{ width: 4, height: 4, borderRadius: 200, color: "#ff4aa9" }} />}
+        // onClick={onClick} todo: enable when data such as recent transactions is properly implemented
+        >
+          {walletError}
+        </Button>
+      </Box>
+    );
+  }
+
   if (status === 'connected') {
     return (
       <Box sx={{ marginLeft: (theme) => theme.spacing(4), display: 'flex' }}>
-        <Button variant="darker" onClick={onClick} sx={{ pointerEvents: 'none' }}>
-          {text}
-        </Button>
         <Button
           variant="dark"
-          sx={{ zIndex: 1, left: (theme) => theme.spacing(-2) }}
-          startIcon={<Icon name="warning-circle" />}
+          sx={{ zIndex: 1, left: (theme) => theme.spacing(-2)}}
+          startIcon={<CircleIcon sx={{ width: 4, height: 4, borderRadius: 200, color: "#00d395" }} />}
           endIcon={name && <Icon name={name} />}
-          onClick={onClick}
+          // onClick={onClick} todo: enable when data such as recent transactions is properly implemented
         >
           {account && elideAddress(account)}
         </Button>
@@ -51,9 +64,10 @@ const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = (
     <Button
       variant="darker"
       sx={{ marginLeft: (theme) => theme.spacing(4) }}
+      startIcon={<CircleIcon sx={{ width: 4, height: 4, borderRadius: 200, color: "#ff4aa9" }} />}
       onClick={onClick}
-      startIcon={<Icon name="warning-circle" />}
     >
+      
       {text}
     </Button>
   );

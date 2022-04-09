@@ -5,6 +5,8 @@ import IconLabel from '../IconLabel/IconLabel';
 import MaskedIntegerField from '../MaskedIntegerField/MaskedIntegerField';
 
 export type NotionalAmountProps = {
+  label: string;
+  info: string;
   protocol?: string;
   defaultNotional?: number;
   notional?: number;
@@ -12,6 +14,8 @@ export type NotionalAmountProps = {
 };
 
 const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
+  label,
+  info,
   protocol,
   defaultNotional,
   notional,
@@ -25,7 +29,7 @@ const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
   return (
     <MaskedIntegerField
       affix={protocol || ''}
-      label={<IconLabel label="provided liquidity" icon="information-circle" info="Something" />}
+      label={<IconLabel label={label} icon="information-circle" info={info} />}
       value={value}
       onChange={handleChange}
       sx={{ width: '100%' }}

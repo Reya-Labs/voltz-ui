@@ -30,6 +30,8 @@ const Button: React.FunctionComponent<ButtonProps> = ({
       return {};
     }
 
+
+    // selecting different colours from the pallet to style the component
     if (agent === Agents.FIXED_TRADER) {
       return {
         backgroundColor: 'primary.darken030',
@@ -69,6 +71,18 @@ const Button: React.FunctionComponent<ButtonProps> = ({
       return {
         backgroundColor: 'secondary.dark',
         color: 'secondary.darken015',
+      };
+    }
+
+    if (props.variant === 'red') {
+      return {
+        backgroundColor: selected ? 'secondary.darken030' : 'secondary.dark',
+        color: '#ff4aa9',
+        '&:hover': {
+          backgroundColor: 'secondary.darken030',
+        },
+        borderWidth: 1,
+        borderColor: '#ff4aa9'
       };
     }
 

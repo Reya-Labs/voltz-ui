@@ -22,6 +22,8 @@ import { AgentProvider, WalletProvider } from './components';
 import { App } from './application';
 import reportWebVitals from './reportWebVitals';
 
+// the root of the react app 
+
 try {
   if (process.env.NODE_ENV !== 'development') {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

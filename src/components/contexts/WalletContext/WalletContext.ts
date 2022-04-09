@@ -18,6 +18,7 @@ const WalletContext = createContext<Wallet>({
   error: false,
   required: false,
   setRequired: (_required: boolean) => undefined,
+  walletError: null
 });
 
 export default WalletContext;

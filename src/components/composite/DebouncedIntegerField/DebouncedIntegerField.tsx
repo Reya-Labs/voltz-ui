@@ -28,7 +28,7 @@ const DebouncedIntegerField: React.FunctionComponent<DebouncedIntegerFieldProps>
         return null;
       }
 
-      return parseInt(event.target.value) > parseInt(stringValue || '0');
+      return parseFloat(event.target.value) > parseFloat(stringValue || '0');
     };
 
     setEditableValue(event.target.value);

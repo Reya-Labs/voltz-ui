@@ -5,15 +5,21 @@ export type WindowWithEthereum = typeof window & {
   ethereum: any;
 };
 
+
+// things that can occur after the transaction has been mined or fails
 export type TransactionUpdate = {
   id: string;
   txid?: string;
   failedAt?: string;
   failureMessage?: string;
   succeededAt?: string;
+  // refers to when the transaction has been loaded from the subgraoh, it will mark it as resolved, means there is a corresponding position that matches that (not strictly speaking true)
+  // if value != reject
   resolvedAt?: string;
 };
 
+
+// defines a mint or a swap
 export type Transaction = TransactionUpdate & {
   agent: Agents;
   ammId: string;

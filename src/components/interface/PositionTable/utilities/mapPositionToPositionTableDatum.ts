@@ -18,7 +18,7 @@ const mapPositionToPositionTableDatum =
       startDate: amm.startDateTime,
       endDate: amm.endDateTime,
       fixedApr: amm.fixedRate.toNumber(),
-      notional: agent === Agents.LIQUIDITY_PROVIDER ? notional : effectiveVariableTokenBalance,
+      notional: agent === Agents.LIQUIDITY_PROVIDER ? notional : (agent === Agents.VARIABLE_TRADER ? effectiveVariableTokenBalance : -effectiveVariableTokenBalance),
       margin: effectiveMargin,
     };
   };
