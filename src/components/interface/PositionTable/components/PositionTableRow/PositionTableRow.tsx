@@ -100,11 +100,22 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
             }
           };
 
-          return (
-            <Typography variant="body2" label={label}>
-              {getContent()}
-            </Typography>
-          );
+
+          // todo: optimise code below
+          if (field === 'fixedLower' || field === 'fixedUpper') {
+            return (
+              <Typography agentStyling variant="body2" label={label}>
+                {getContent()}
+              </Typography>
+            );
+          } else {
+            return (
+              <Typography variant="body2" label={label}>
+                {getContent()}
+              </Typography>
+            );
+          }
+
         };
 
         return <TableCell key={field}>{renderDisplay()}</TableCell>;
