@@ -38,7 +38,7 @@ const IconLabel: React.FunctionComponent<IconLabelProps> = ({ label, icon, info 
           id="mouse-over-popover"
           sx={{
             pointerEvents: 'none',
-            '&.MuiPaper-root': {
+            '& .MuiPaper-root': {
               backgroundColor: 'transparent',
               color: 'unset',
               backgroundImage: 'unset',
