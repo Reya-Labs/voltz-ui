@@ -27,7 +27,7 @@ const PositionTableControls: React.FunctionComponent<PositionTableControlsProps>
         return 'VARIABLE RATE POSITIONS';
 
       case Agents.LIQUIDITY_PROVIDER:
-        return 'ACTIVE FARMS';
+        return 'ACTIVE POSITIONS';
 
       default:
         return undefined;
@@ -59,7 +59,7 @@ const PositionTableControls: React.FunctionComponent<PositionTableControlsProps>
           />
         </Box>
       )}
-      <Typography variant="body2" label={getTypographyLabel()}>
+      <Typography agentStyling variant="body2" label={getTypographyLabel()}>
         {quantity}
       </Typography>
     </Box>
