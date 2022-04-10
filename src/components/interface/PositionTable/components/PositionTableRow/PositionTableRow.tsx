@@ -69,11 +69,15 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
               case 'fixedApr':
                 return `${datum.fixedApr.toFixed(2)}%`;
 
+              case 'fixedTokenBalance':
+                return `${datum.fixedTokenBalance.toFixed(2)}`;
+
               case 'notional':
                 return datum.notional.toFixed(2);
 
               case 'margin':
-                return datum.margin.toFixed(2);
+                const token = datum.protocol.substring(1);
+                return `${datum.margin.toFixed(2)} ${token}`;
 
               default:
                 return null;
@@ -93,7 +97,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
       {/* todo: bring back when needed */}
       {/* <TableCell align="center">
         <Button variant="contained" onClick={handleClick}>
-          Hello
+          Hello 
         </Button>
       </TableCell> */}
     </TableRow>

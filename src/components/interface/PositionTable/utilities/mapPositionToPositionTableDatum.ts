@@ -11,6 +11,7 @@ const mapPositionToPositionTableDatum =
     notional,
     effectiveMargin,
     effectiveVariableTokenBalance,
+    effectiveFixedTokenBalance
   }: Position): PositionTableDatum => {
     return {
       id,
@@ -19,6 +20,7 @@ const mapPositionToPositionTableDatum =
       endDate: amm.endDateTime,
       fixedApr: amm.fixedRate.toNumber(),
       notional: agent === Agents.LIQUIDITY_PROVIDER ? notional : (agent === Agents.VARIABLE_TRADER ? effectiveVariableTokenBalance : -effectiveVariableTokenBalance),
+      fixedTokenBalance: effectiveFixedTokenBalance,
       margin: effectiveMargin,
     };
   };
