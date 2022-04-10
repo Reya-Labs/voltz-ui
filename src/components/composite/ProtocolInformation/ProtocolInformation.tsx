@@ -35,6 +35,7 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
         <Typography
           label={<IconLabel label="fixed apr" icon="information-circle" info=" The current fixed Annual Percentage Rate of the pool." />}
           variant="h3"
+          agentStyling
         >
           {fixedApr.toFixed(2)}%
         </Typography>
