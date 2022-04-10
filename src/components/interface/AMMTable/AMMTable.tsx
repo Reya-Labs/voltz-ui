@@ -11,6 +11,9 @@ import { AMMTableFields } from './types';
 import { labels } from './constants';
 import { mapAmmToAmmTableDatum } from './utilities';
 import { AMMTableFooter, AMMTableHead, AMMTableRow } from './components';
+import { useAgent } from '@hooks';
+import { Agents } from '@components/contexts';
+
 
 export type AMMTableProps = {
   amms: AugmentedAMM[];
@@ -67,8 +70,11 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({
     onSelectItem(amms[index]);
   };
 
+  const { agent } = useAgent();
+  const _variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'dark';
+
   return (
-    <Panel variant="dark" sx={{ minWidth: 800 }}>
+    <Panel variant={_variant} sx={{ minWidth: 800 }}>
       <TableContainer>
         <Table
           sx={{
