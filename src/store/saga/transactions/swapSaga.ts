@@ -1,4 +1,4 @@
-import { ContractTransaction, providers } from 'ethers';
+import { ContractReceipt, providers } from 'ethers';
 import { call, put } from 'redux-saga/effects';
 import { DateTime } from 'luxon';
 
@@ -24,7 +24,7 @@ function* swapSaga(action: SwapAction) {
 
   const { id, agent, notional, margin } = action.payload.transaction;
 
-  let result: ContractTransaction | void;
+  let result: ContractReceipt | void;
   try {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     result = yield call([amm, 'swap'], {
@@ -52,7 +52,7 @@ function* swapSaga(action: SwapAction) {
     );
   } else {
     yield put(
-      actions.updateTransaction({ id, succeededAt: DateTime.now().toISO(), txid: result.hash }),
+      actions.updateTransaction({ id, succeededAt: DateTime.now().toISO(), txid: result.transactionHash }),
     );
   }
 }
