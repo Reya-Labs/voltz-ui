@@ -1,6 +1,6 @@
 export const routes = {
-  LP_FARM: 'lp-farm',
-  POOLS: 'pools',
+  LP_FARM: 'lp-positions',
+  POOLS: 'lp-pools',
   PORTFOLIO: 'portfolio',
-  SWAP: 'swap',
+  SWAP: 'trader-pools',
 };
