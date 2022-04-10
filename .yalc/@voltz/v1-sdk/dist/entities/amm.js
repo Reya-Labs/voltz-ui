@@ -444,7 +444,9 @@ var AMM = /** @class */ (function () {
                             })];
                     case 5:
                         _b.sent();
-                        return [4 /*yield*/, peripheryContract.mintOrBurn(mintOrBurnParams).catch(function (error) {
+                        return [4 /*yield*/, peripheryContract.mintOrBurn(mintOrBurnParams, {
+                                gasLimit: 1000000,
+                            }).catch(function (error) {
                                 var errSig;
                                 try {
                                     var reason = error.data.toString().replace("Reverted ", "");
@@ -688,7 +690,9 @@ var AMM = /** @class */ (function () {
                             }); })];
                     case 5:
                         _b.sent();
-                        return [4 /*yield*/, peripheryContract.swap(swapPeripheryParams).catch(function (error) {
+                        return [4 /*yield*/, peripheryContract.swap(swapPeripheryParams, {
+                                gasLimit: 1000000,
+                            }).catch(function (error) {
                                 var errSig;
                                 try {
                                     var reason = error.data.toString().replace("Reverted ", "");

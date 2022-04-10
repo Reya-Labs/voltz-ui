@@ -585,7 +585,9 @@ class AMM {
       }
     });
 
-    const mintTransaction = await peripheryContract.mintOrBurn(mintOrBurnParams).catch((error) => {
+    const mintTransaction = await peripheryContract.mintOrBurn(mintOrBurnParams, {
+      gasLimit: 1000000,
+    }).catch((error) => {
       let errSig;
       try {
         const reason = error.data.toString().replace("Reverted ", "");
@@ -823,7 +825,9 @@ class AMM {
       }
     });
 
-    const swapTransaction = await peripheryContract.swap(swapPeripheryParams).catch((error) => {
+    const swapTransaction = await peripheryContract.swap(swapPeripheryParams, {
+      gasLimit: 1000000,
+    }).catch((error) => {
       let errSig;
       try {
         const reason = error.data.toString().replace("Reverted ", "");
