@@ -26,7 +26,7 @@ const VariableAPY: React.FunctionComponent = () => {
 
   return (
     <TableCell>
-      <Typography variant="body2" label="Variable APY">
+      <Typography variant="body2" label="Variable APY" agentStyling>
         {renderValue()}
       </Typography>
     </TableCell>

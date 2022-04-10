@@ -28,6 +28,7 @@ const VariableAPY: React.FunctionComponent = () => {
     <Typography
       variant="h3"
       label={<IconLabel label="variable apy" icon="information-circle" info="The historical Annual Percentage Yield of the pool. The value is computed by aggregating the historical rates of the underlying rate oracle over a fixed look-back window. Learn more." />}
+      agentStyling
     >
       {renderValue()}
     </Typography>
