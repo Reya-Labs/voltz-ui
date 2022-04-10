@@ -87,7 +87,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   }
 
   return (
-    <Panel variant="dark" sx={{ minWidth: 800 }}>
+    <Panel variant="dark" sx={{ minWidth: 800, marginTop: 12 }}>
       <PositionTableControls quantity={positions.length} />
       <TableContainer>
         <Table
