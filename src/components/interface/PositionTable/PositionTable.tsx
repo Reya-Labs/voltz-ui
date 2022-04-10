@@ -9,7 +9,8 @@ import { data } from '@utilities';
 import { useAgent } from '@hooks';
 import { Panel } from '@components/atomic';
 import { PositionTableFields } from './types';
-import { labels } from './constants';
+import { lpLabels } from './constants';
+import { traderLabels } from './constants';
 import { mapPositionToPositionTableDatum } from './utilities';
 import {
   PositionTableControls,
@@ -17,6 +18,7 @@ import {
   PositionTableHead,
   PositionTableRow,
 } from './components';
+import { Agents } from '@components/contexts';
 
 export type PositionTableProps = {
   positions: Position[];
@@ -30,6 +32,7 @@ export type PositionTableProps = {
   size: number | null;
   onSetSize: (size: number) => void;
   onSelectItem: (datum: Position) => void;
+  agent: Agents
 };
 
 const PositionTable: React.FunctionComponent<PositionTableProps> = ({
@@ -75,6 +78,14 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
     onSelectItem(positions[index]);
   };
 
+  let labels: [PositionTableFields, string][];
+
+  if (agent === Agents.LIQUIDITY_PROVIDER) {
+    labels = lpLabels;
+  } else {
+    labels = traderLabels;
+  }
+
   return (
     <Panel variant="dark" sx={{ minWidth: 800 }}>
       <PositionTableControls quantity={positions.length} />
@@ -89,7 +100,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
           aria-labelledby="tableTitle"
           size="medium"
         >
-          <PositionTableHead order={order} orderBy={orderBy} onSort={handleSort} />
+          <PositionTableHead order={order} orderBy={orderBy} onSort={handleSort} agent={agent} />
           <TableBody>
             {tableData.map((datum, index) => (
               <PositionTableRow

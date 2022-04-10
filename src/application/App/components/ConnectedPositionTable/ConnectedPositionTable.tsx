@@ -4,13 +4,16 @@ import { Position } from '@voltz/v1-sdk';
 import { data } from '@utilities';
 import { usePositions } from '@hooks';
 import { PositionTable, PositionTableFields } from '@components/interface';
+import { Agents } from '@components/contexts';
 
 export type ConnectedAMMTableProps = {
   onSelectItem: (item: Position) => void;
+  agent: Agents
 };
 
 const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = ({
   onSelectItem,
+  agent
 }) => {
   const [order, setOrder] = useState<data.TableOrder>('desc');
   const [orderBy, setOrderBy] = useState<PositionTableFields>('maturity');
@@ -36,6 +39,7 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
       size={size}
       onSetSize={setSize}
       onSelectItem={onSelectItem}
+      agent={agent}
     />
   );
 };

@@ -7,15 +7,18 @@ import { SystemStyleObject, Theme } from '@mui/system';
 
 import { data } from '@utilities';
 import { PositionTableFields } from '../../types';
-import { labels } from '../../constants';
+import { lpLabels } from '../../constants';
+import { traderLabels } from '../../constants';
+import { Agents } from '@components/contexts';
 
 export type PositionTableHeadProps = {
   order: data.TableOrder;
   orderBy: PositionTableFields;
   onSort: (field: PositionTableFields) => void;
+  agent: Agents;
 };
 
-const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({ order, orderBy, onSort }) => {
+const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({ order, orderBy, onSort, agent }) => {
   const createSortHandler = (field: PositionTableFields) => (_event: React.MouseEvent<unknown>) =>
     onSort(field);
 
@@ -27,6 +30,14 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({ or
       paddingRight: (theme) => theme.spacing(4),
     },
   };
+
+  let labels: [PositionTableFields, string][];
+  
+  if (agent === Agents.LIQUIDITY_PROVIDER) {
+    labels = lpLabels;
+  } else {
+    labels = traderLabels;
+  }
 
   return (
     <TableHead>

@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon';
+import { Agents } from '@components/contexts';
 
 export type PositionTableFields = 'pool' | 'notional' | 'margin' | 'maturity' | 'fixedApr' | 'fixedTokenBalance' | 'fixedUpper' | 'fixedLower';
 
@@ -13,4 +14,5 @@ export type PositionTableDatum = {
   startDate: DateTime;
   endDate: DateTime;
   fixedApr: number;
+  agent: Agents
 };

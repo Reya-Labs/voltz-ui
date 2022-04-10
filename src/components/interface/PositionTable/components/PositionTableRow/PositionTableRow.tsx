@@ -8,7 +8,9 @@ import { Button, Typography } from '@components/atomic';
 import { MaturityInformation } from '@components/composite';
 import { useAgent } from '@hooks';
 import { PositionTableDatum } from '../../types';
-import { labels } from '../../constants';
+import { lpLabels } from '../../constants';
+import { traderLabels } from '../../constants';
+import { PositionTableFields } from '../../types';
 
 export type PositionTableRowProps = {
   datum: PositionTableDatum;
@@ -46,6 +48,14 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     }
   };
   const handleClick = () => onSelect();
+
+  let labels: [PositionTableFields, string][];
+  
+  if (datum.agent === Agents.LIQUIDITY_PROVIDER) {
+    labels = lpLabels;
+  } else {
+    labels = traderLabels;
+  }
 
   return (
     <TableRow key={index} sx={{ ...typeStyleOverrides() }}>

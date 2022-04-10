@@ -86,7 +86,7 @@ const Trader: React.FunctionComponent = () => {
             {pathnameWithoutPrefix === routes.SWAP ? (
               <ConnectedAMMTable onSelectItem={handleSelectAmm} />
             ) : (
-              <ConnectedPositionTable onSelectItem={handleSelectPosition} />
+              <ConnectedPositionTable onSelectItem={handleSelectPosition} agent={Agents.FIXED_TRADER}/> // Agents.FIXED_TRADER by convention, Agents.VARIABLE_TRADER would also work 
             )}
           </Box>
         )}

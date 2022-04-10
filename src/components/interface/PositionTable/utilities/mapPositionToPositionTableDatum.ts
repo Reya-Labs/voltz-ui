@@ -26,6 +26,7 @@ const mapPositionToPositionTableDatum =
       notional: agent === Agents.LIQUIDITY_PROVIDER ? notional : (agent === Agents.VARIABLE_TRADER ? effectiveVariableTokenBalance : -effectiveVariableTokenBalance),
       fixedTokenBalance: effectiveFixedTokenBalance,
       margin: effectiveMargin,
+      agent: agent
     };
   };
 

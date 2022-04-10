@@ -11,7 +11,18 @@ export const PositionTableLabels: Record<PositionTableFields, string> = {
   maturity: 'Maturity',
 };
 
-export const labels: [PositionTableFields, string][] = [
+export const lpLabels: [PositionTableFields, string][] = [
+  ['pool', PositionTableLabels.pool],
+  ['fixedLower', PositionTableLabels.fixedLower],
+  ['fixedUpper', PositionTableLabels.fixedUpper],
+  ['notional', PositionTableLabels.notional],
+  // ['fixedTokenBalance', PositionTableLabels.fixedTokenBalance],
+  ['margin', PositionTableLabels.margin],
+  // ['fixedApr', PositionTableLabels.fixedApr],
+  ['maturity', PositionTableLabels.maturity],
+];
+
+export const traderLabels: [PositionTableFields, string][] = [
   ['pool', PositionTableLabels.pool],
   ['fixedLower', PositionTableLabels.fixedLower],
   ['fixedUpper', PositionTableLabels.fixedUpper],
