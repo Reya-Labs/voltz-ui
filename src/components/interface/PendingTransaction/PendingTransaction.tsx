@@ -126,7 +126,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               paddingBottom: (theme) => theme.spacing(8),
             }}
           >
-            <Loading />
+            {/* <Loading /> */}
           </Box>
           <Box
             sx={{
