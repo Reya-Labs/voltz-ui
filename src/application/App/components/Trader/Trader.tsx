@@ -32,10 +32,10 @@ const Trader: React.FunctionComponent = () => {
   const pageTitle = useMemo(() => {
     switch (pathnameWithoutPrefix) {
       case routes.SWAP:
-        return 'Swap Fixed or Variable Rates';
+        return 'Trade Fixed or Variable Rates';
 
       case routes.PORTFOLIO:
-        return 'PORTFOLIO';
+        return 'PORTFOLIO SUMMARY';
 
       default:
         return null;
@@ -63,17 +63,17 @@ const Trader: React.FunctionComponent = () => {
         {!formActive && (
           <Box sx={{ height: '100%' }}>
             <Typography variant="h1">{pageTitle}</Typography>
-            <Typography
+            {/* <Typography
               variant="body1"
               sx={{
                 maxWidth: (theme) => theme.spacing(90),
                 marginBottom: (theme) => theme.spacing(4),
               }}
             >
-              Our model allows for sophisticated trading strategies and produces highly attractive
-              fixed rates of return for investors.
-            </Typography>
-            {pathnameWithoutPrefix === routes.SWAP && (
+              Portfolio Summary
+            </Typography> */}
+            {/* todo: bring this back once we have content for traders to link */}
+            {/* {pathnameWithoutPrefix === routes.SWAP && (
               <Button
                 variant="text"
                 size="large"
@@ -82,7 +82,7 @@ const Trader: React.FunctionComponent = () => {
               >
                 PROVIDE LIQUIDITY
               </Button>
-            )}
+            )} */}
             {pathnameWithoutPrefix === routes.SWAP ? (
               <ConnectedAMMTable onSelectItem={handleSelectAmm} />
             ) : (

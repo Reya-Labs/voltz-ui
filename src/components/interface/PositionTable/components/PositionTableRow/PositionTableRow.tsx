@@ -89,11 +89,13 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
 
         return <TableCell key={field}>{renderDisplay()}</TableCell>;
       })}
-      <TableCell align="center">
+
+      {/* todo: bring back when needed */}
+      {/* <TableCell align="center">
         <Button variant="contained" onClick={handleClick}>
           Hello
         </Button>
-      </TableCell>
+      </TableCell> */}
     </TableRow>
   );
 };

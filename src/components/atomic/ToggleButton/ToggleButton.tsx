@@ -23,37 +23,38 @@ const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
       '&.Mui-selected': {
         zIndex: '1',
       },
-      '&:not(:first-of-type)': {
-        borderTopLeftRadius: 0,
-        borderBottomLeftRadius: 0,
-        '&.Mui-selected': {
-          borderRadius: 1,
-        },
-      },
-      '&:not(:last-of-type)': {
-        borderTopRightRadius: 0,
-        borderBottomRightRadius: 0,
-        '&.Mui-selected': {
-          borderRadius: 1,
-        },
-      },
+      // todo: ideally round the corners
+      // '&:not(:first-of-type)': {
+      //   borderTopLeftRadius: 0,
+      //   borderBottomLeftRadius: 0,
+      //   '&.Mui-selected': {
+      //     borderRadius: 1,
+      //   },
+      // },
+      // '&:not(:last-of-type)': {
+      //   borderTopRightRadius: 0,
+      //   borderBottomRightRadius: 0,
+      //   '&.Mui-selected': {
+      //     borderRadius: 1,
+      //   },
+      // },
     },
   };
   const agentStyleOverrides = (): SystemStyleObject<Theme> => {
     switch (agent) {
       case Agents.FIXED_TRADER: {
         return {
-          backgroundColor: 'primary.darken030',
-          color: 'primary.light',
+          backgroundColor: 'primary.darken010',
+          color: 'primary.darken030',
           borderColor: 'primary.light',
-          '&:hover': {
-            backgroundColor: 'primary.darken030',
-            color: 'primary.light',
-          },
+          // '&:hover': {
+          //   backgroundColor: 'primary.light',
+          //   color: 'primary.light',
+          // },
           '&.Mui-selected': {
-            backgroundColor: 'primary.main',
+            backgroundColor: 'primary.darken030',
             '&:hover': {
-              backgroundColor: 'primary.darken015',
+              backgroundColor: 'primary.darken030',
             },
             '&:not(:first-of-type)': {
               borderColor: 'primary.light',
@@ -64,16 +65,16 @@ const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
 
       case Agents.VARIABLE_TRADER: {
         return {
-          backgroundColor: 'tertiary.darken030',
+          backgroundColor: 'tertiary.base',
           color: 'secondary.light',
-          borderColor: 'tertiary.light',
-          '&:hover': {
-            backgroundColor: 'tertiary.darken030',
-          },
+          borderColor: 'primary.light',
+          // '&:hover': {
+          //   backgroundColor: 'primary.light',
+          // },
           '&.Mui-selected': {
-            backgroundColor: 'tertiary.main',
+            backgroundColor: 'tertiary.base',
             '&:hover': {
-              backgroundColor: 'tertiary.darken015',
+              backgroundColor: 'tertiary.base',
             },
             '&:not(:first-of-type)': {
               borderColor: 'tertiary.light',

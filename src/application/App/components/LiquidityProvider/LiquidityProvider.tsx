@@ -42,7 +42,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
         return 'Provide Liquidity';
 
       case routes.LP_FARM:
-        return 'LP FARM';
+        return 'YOUR LP POSITIONS';
 
       default:
         return null;
@@ -75,10 +75,10 @@ const LiquidityProvider: React.FunctionComponent = () => {
               sx={{
                 maxWidth: (theme) => theme.spacing(90),
                 marginBottom: (theme) => theme.spacing(4),
+                marginTop: (theme) => theme.spacing(2),
               }}
             >
-              Our model allows for sophisticated trading strategies and produces highly attractive
-              fixed rates of return for investors.
+              Choose a pool and provide liquidity within your chosen ranges.
             </Typography>
             {pathnameWithoutPrefix === routes.POOLS ? (
               <ConnectedAMMTable onSelectItem={handleSelectAmm} />

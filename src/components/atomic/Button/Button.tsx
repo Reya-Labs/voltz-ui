@@ -45,10 +45,10 @@ const Button: React.FunctionComponent<ButtonProps> = ({
 
     if (agent === Agents.VARIABLE_TRADER) {
       return {
-        backgroundColor: 'tertiary.darken030',
+        backgroundColor: 'tertiary.light',
         color: 'secondary.light',
         '&:hover': {
-          backgroundColor: 'tertiary.darken030',
+          backgroundColor: 'tertiary.darken010',
           borderColor: 'tertiary.light',
         },
       };

@@ -25,24 +25,24 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({ notional }) => {
     }
 
     if (!result) {
-      return 'No data';
+      return '';
     }
 
     return (
       <>
-        <Typography variant="body2" label="Swap info">
+        <Typography agentStyling variant="body2" label="Swap info">
           Available notional: {((result.availableNotional < 0) ? -result.availableNotional : result.availableNotional).toFixed(2)}
         </Typography>
-        <Typography variant="body2">Estimated slippage: {((result.slippage < 0) ? -result.slippage : result.slippage).toFixed(2)}%</Typography>
-        <Typography variant="body2">Fee: {((result.fee < 0) ? -result.fee : result.fee).toFixed(2)}</Typography>
-        <Typography variant="body2">
-          Minimum margin amount: {result.marginRequirement.toFixed(2)}
+        <Typography agentStyling variant="body2">Estimated slippage: {((result.slippage < 0) ? -result.slippage : result.slippage).toFixed(2)}%</Typography>
+        <Typography agentStyling variant="body2">Fee: {((result.fee < 0) ? -result.fee : result.fee).toFixed(2)} </Typography>
+        <Typography agentStyling variant="body2">
+          Additional margin required: {result.marginRequirement.toFixed(2)}
         </Typography>
       </>
     );
   };
 
-  return <Box>{renderSwapInfo()}</Box>;
+  return <Typography agentStyling variant="body2"> {renderSwapInfo()} </Typography>
 };
 
 export default SwapInfo;

@@ -26,7 +26,7 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
       }}
     >
       <Typography
-        label={<IconLabel label="protocol" icon="information-circle" info="The underlying bearing token." />}
+        label={<IconLabel label="pool" icon="information-circle" info="The underlying yield bearing token." />}
         variant="h3"
       >
         {protocol}

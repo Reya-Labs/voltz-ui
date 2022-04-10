@@ -31,7 +31,7 @@ const Typography: React.FunctionComponent<TypographyProps> = ({
 
     if (agent === Agents.VARIABLE_TRADER) {
       return {
-        color: 'tertiary.base',
+        color: 'tertiary.light',
       };
     }
 

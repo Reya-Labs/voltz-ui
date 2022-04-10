@@ -30,8 +30,8 @@ const Input: React.FunctionComponent<InputProps> = ({ size, ...props }) => {
     }
 
     return {
-      paddingTop: (theme) => theme.spacing(6),
-      paddingBottom: (theme) => theme.spacing(6),
+      paddingTop: (theme) => theme.spacing(4),
+      paddingBottom: (theme) => theme.spacing(4),
       paddingLeft: (theme) => theme.spacing(4),
       paddingRight: (theme) => theme.spacing(4),
     };
@@ -40,10 +40,12 @@ const Input: React.FunctionComponent<InputProps> = ({ size, ...props }) => {
     '&.MuiInputBase-root': {
       width: '100%',
     },
+    
     '& .MuiInputBase-input': {
-      borderWidth: 1,
-      borderStyle: 'solid',
-      borderRadius: 2,
+      // borderWidth: 1,
+      // borderStyle: 'solid',
+      backgroundColor: "secondary.darken040",
+      borderRadius: 1,
       fontSize: getFontSize,
       lineHeight: '14px',
       maxHeight: getMinHeight,

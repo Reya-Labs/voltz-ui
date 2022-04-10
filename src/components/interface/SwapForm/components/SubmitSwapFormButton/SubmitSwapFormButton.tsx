@@ -13,10 +13,10 @@ const SubmitSwapFormButton: React.FunctionComponent<SubmitSwapFormButtonProps> =
   const submitLabel = (): string | null => {
     switch (agent) {
       case Agents.FIXED_TRADER:
-        return 'Take that fixed rate';
+        return 'Trade Fixed Rate';
 
       case Agents.VARIABLE_TRADER:
-        return 'Take that variable rate';
+        return 'Trade Variable Rate';
 
       default:
         return null;

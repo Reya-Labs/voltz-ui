@@ -45,7 +45,7 @@ const Nav: React.FunctionComponent = () => {
       backgroundColor: 'transparent',
       backgroundImage: 'none',
       background: 'none',
-      marginLeft: 3,
+      marginLeft: 12,
     },
   };
 
@@ -127,7 +127,7 @@ const Nav: React.FunctionComponent = () => {
       </Popover>
 
       <Button aria-describedby={id2} sx={buttonSx} variant="text" onClick={handleClick2}>
-        POSITIONS
+        LIQUIDITY PROVIDERS
       </Button>
       <Popover
         id={id2}

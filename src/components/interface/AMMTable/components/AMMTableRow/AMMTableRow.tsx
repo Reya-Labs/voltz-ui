@@ -47,7 +47,7 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
 
       case 'darker':
         return {
-          backgroundColor: `secondary.darken050`,
+          backgroundColor: `secondary.darken045`,
         };
 
       default:
@@ -107,7 +107,7 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
       })}
       <TableCell align="center">
         <Button variant="contained" onClick={handleClick}>
-          {agent === Agents.LIQUIDITY_PROVIDER ? 'PROVIDE LIQUIDITY' : 'SWAP'}
+          {agent === Agents.LIQUIDITY_PROVIDER ? 'PROVIDE LIQUIDITY' : 'TRADE'}
         </Button>
       </TableCell>
     </TableRow>
