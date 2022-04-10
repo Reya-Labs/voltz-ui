@@ -2,7 +2,8 @@ import React from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
 import isUndefined from 'lodash/isUndefined';
-
+import { useAgent } from '@hooks';
+import { Agents } from '@components/contexts';
 import { Button, Panel } from '@components/atomic';
 import {
   IconLabel,
@@ -65,6 +66,14 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
     });
   };
 
+  const { agent } = useAgent();
+
+  let _boxShadow = '0px 0px 88px rgba(38, 103, 255, 0.20)';
+
+  if (agent === Agents.FIXED_TRADER) {
+    _boxShadow = '0px 0px 88px rgba(0, 131, 155, 0.2)';
+  }
+
   return (
     <Panel
       variant="main"
@@ -72,7 +81,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         marginTop: 12,
         padding: 6,
         width: (theme) => theme.spacing(80),
-        boxShadow: '0px 0px 60px rgba(255, 89, 156, 0.2)',
+        boxShadow: _boxShadow,
         backgroundColor: "secondary.darken045"
       }}
     >
