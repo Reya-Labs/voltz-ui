@@ -71,6 +71,12 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
 
               case 'fixedTokenBalance':
                 return `${datum.fixedTokenBalance.toFixed(2)}`;
+              
+              case 'fixedUpper':
+                return `${datum.fixedUpper.toFixed(2)}%`;
+              
+              case 'fixedLower':
+                return `${datum.fixedLower.toFixed(2)}%`;
 
               case 'notional':
                 return datum.notional.toFixed(2);
