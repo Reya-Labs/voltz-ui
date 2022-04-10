@@ -29,7 +29,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   }
 
   const transactionLink = activeTransaction.txid
-    ? `https://etherscan.io/tx/${activeTransaction.txid}`
+    ? `https://kovan.etherscan.io/tx/${activeTransaction.txid}`
     : undefined;
 
   const renderStatus = () => {
@@ -58,7 +58,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               paddingBottom: (theme) => theme.spacing(8),
             }}
           >
-            <Link href="#" variant="caption" color="primary.light">
+            <Link href={transactionLink} variant="caption" color="primary.light">
               View on etherscan
             </Link>
           </Box>
