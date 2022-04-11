@@ -44,7 +44,7 @@ const MintBurnMinimumMarginAmount: React.FunctionComponent<MintBurnMinimumMargin
         <IconLabel
           label="additional margin amount"
           icon="information-circle"
-          info="Additional margin amount is defined based on your notional. You are required to deposit margin in order to execute this trade. Learn more."
+          info="Additional margin amount is defined based on your notional. You are required to deposit margin in order to execute this trade."
         />
       }
     >

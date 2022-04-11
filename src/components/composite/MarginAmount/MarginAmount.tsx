@@ -38,7 +38,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
         <IconLabel
           label="margin deposited"
           icon="information-circle"
-          info="Additional margin amount is defined based on your notional. You are required to deposit margin in order to execute this trade. Learn more."
+          info="Additional margin amount is defined based on your notional. You are required to deposit margin in order to execute this trade."
         />
       }
       value={value}

@@ -127,7 +127,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
       >
         <NotionalAmount
           label="provided liquidity"
-          info="Choose the notional amount of liquidity you wish to provide. Learn more."
+          info="Choose the notional amount of liquidity you wish to provide."
           protocol={protocol}
           defaultNotional={defaultNotional}
           notional={notional}
