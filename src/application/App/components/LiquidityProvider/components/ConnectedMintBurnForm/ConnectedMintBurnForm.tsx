@@ -77,9 +77,9 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
         onChangeFixedLow={handleSetFixedLow}
         fixedHigh={fixedHigh}
         onChangeFixedHigh={handleSetFixedHigh}
-        notional={notional}
+        notional={notional || 0}
         onChangeNotional={setNotional}
-        margin={margin}
+        margin={margin || 0}
         onChangeMargin={setMargin}
         onSubmit={handleSubmit}
         onCancel={onReset}
