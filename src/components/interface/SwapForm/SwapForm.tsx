@@ -54,8 +54,15 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
+  
+  
   const handleSubmit = () => {
-    if (isUndefined(notional) || isUndefined(margin) || isUndefined(partialCollateralization)) {
+
+    if (isUndefined(notional) || isUndefined(margin) || isUndefined(partialCollateralization) ) {
+      return;
+    }
+
+    if (isNaN(notional) || isNaN(margin)) {
       return;
     }
 
