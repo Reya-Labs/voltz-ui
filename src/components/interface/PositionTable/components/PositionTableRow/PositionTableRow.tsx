@@ -72,6 +72,8 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
           }
 
           const getContent = () => {
+            const token = datum.protocol.substring(1);
+            
             switch (field) {
               case 'pool':
                 return datum.protocol;
@@ -89,10 +91,9 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
                 return `${datum.fixedLower.toFixed(2)}%`;
 
               case 'notional':
-                return datum.notional.toFixed(2);
-
+                
+                return `${datum.notional.toFixed(2)} ${token}`;
               case 'margin':
-                const token = datum.protocol.substring(1);
                 return `${datum.margin.toFixed(2)} ${token}`;
 
               default:
