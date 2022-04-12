@@ -25,19 +25,31 @@ const Panel: React.FunctionComponent<PanelProps> = ({ variant, sx, children }) =
       case 'main':
         return {
           backgroundColor: `secondary.darken040`,
-          borderRadius: 4
+          borderRadius: 4,
+          paddingTop: (theme) => theme.spacing(4),
+          paddingBottom: (theme) => theme.spacing(6),
+          paddingLeft: (theme) => theme.spacing(6),
+          paddingRight: (theme) => theme.spacing(6),
         };
 
       case 'dark':
         return {
           backgroundColor: `secondary.darken045`,
-          borderRadius: 4
+          borderRadius: 4,
+          paddingTop: (theme) => theme.spacing(4),
+          paddingBottom: (theme) => theme.spacing(6),
+          paddingLeft: (theme) => theme.spacing(6),
+          paddingRight: (theme) => theme.spacing(6),
         };
 
       case 'darker':
         return {
           backgroundColor: `secondary.darken050`,
-          borderRadius: 4
+          borderRadius: 4,
+          paddingTop: (theme) => theme.spacing(4),
+          paddingBottom: (theme) => theme.spacing(6),
+          paddingLeft: (theme) => theme.spacing(6),
+          paddingRight: (theme) => theme.spacing(6),
         };
 
       default:
