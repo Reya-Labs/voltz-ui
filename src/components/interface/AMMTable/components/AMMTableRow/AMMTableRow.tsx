@@ -99,7 +99,9 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
           };
 
           return (
-            <Typography variant="body2" label={label} agentStyling={field=="fixedApr"}>
+            <Typography variant="body2" label={label} agentStyling={field=="fixedApr"} sx={{
+              fontSize: 18
+            }}>
               {getContent()}
             </Typography>
           );

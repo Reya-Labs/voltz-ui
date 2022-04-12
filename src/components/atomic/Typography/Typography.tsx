@@ -18,6 +18,7 @@ const Typography: React.FunctionComponent<TypographyProps> = ({
   ...props
 }) => {
   const { agent } = useAgentWithOverride(agentOverride);
+    
   const agentStyleOverrides = (): SystemStyleObject<Theme> => {
     if (!agent || !agentStyling) {
       return {};
