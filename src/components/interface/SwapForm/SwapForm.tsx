@@ -130,7 +130,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         }}
       >
         <NotionalAmount
-          label="notional traded"
+          label="notional amount"
           info="Choose the notional you wish to trade. The notional amount is the total size of your trade."
           protocol={protocol}
           defaultNotional={defaultNotional}
