@@ -85,6 +85,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         padding: 6,
         width: (theme) => theme.spacing(80),
         boxShadow: '0px 0px 60px rgba(255, 89, 156, 0.2)',
+        borderRadius: 2
       }}
     >
       <ProtocolInformation protocol={protocol} fixedApr={fixedApr} />

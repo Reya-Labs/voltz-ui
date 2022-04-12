@@ -89,7 +89,8 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         padding: 6,
         width: (theme) => theme.spacing(80),
         boxShadow: _boxShadow,
-        backgroundColor: "secondary.darken045"
+        backgroundColor: "secondary.darken045",
+        borderRadius: 2
       }}
     >
       <ProtocolInformation protocol={protocol} fixedApr={fixedApr} />
