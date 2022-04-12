@@ -4,6 +4,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import { SystemStyleObject, Theme } from '@mui/system';
+import { Typography } from '@components/atomic';
 
 import { data } from '@utilities';
 import { AMMTableFields } from '../../types';
@@ -44,7 +45,18 @@ const AMMTableHead: React.FunctionComponent<AMMTableHeadProps> = ({ order, order
               direction={orderBy === field ? order : 'asc'}
               onClick={createSortHandler(field)}
             >
+              {/* {label} */}
+              <Typography
+              variant="subtitle1"
+              sx={{
+                textTransform: "uppercase",
+                fontWeight: 400, 
+                fontSize: 12,
+                color: "#5A576D"
+              }}
+              >
               {label}
+            </Typography>
             </TableSortLabel>
           </TableCell>
         ))}
