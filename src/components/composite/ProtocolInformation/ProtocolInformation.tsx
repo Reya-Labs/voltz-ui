@@ -26,14 +26,14 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
       }}
     >
       <Typography
-        label={<IconLabel label="pool" icon="information-circle" info="The underlying yield bearing token." />}
+        label={<IconLabel label="pool" icon="information-circle" info="The underlying yield bearing token." removeIcon />}
         variant="h3"
       >
         {protocol}
       </Typography>
       {!isUndefined(fixedApr) && (
         <Typography
-          label={<IconLabel label="fixed apr" icon="information-circle" info=" The current fixed Annual Percentage Rate of the pool." />}
+          label={<IconLabel label="fixed apr" icon="information-circle" info=" The current fixed Annual Percentage Rate of the pool." removeIcon/>}
           variant="h3"
           agentStyling
         >

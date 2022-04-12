@@ -63,15 +63,15 @@ const Trader: React.FunctionComponent = () => {
         {!formActive && (
           <Box sx={{ height: '100%' }}>
             <Typography variant="h1">{pageTitle}</Typography>
-            {/* <Typography
+            <Typography
               variant="body1"
               sx={{
                 maxWidth: (theme) => theme.spacing(90),
                 marginBottom: (theme) => theme.spacing(4),
               }}
             >
-              Portfolio Summary
-            </Typography> */}
+              Choose a pool and decide whether to trade fixed or variable rates. 
+            </Typography>
             {/* todo: bring this back once we have content for traders to link */}
             {/* {pathnameWithoutPrefix === routes.SWAP && (
               <Button
