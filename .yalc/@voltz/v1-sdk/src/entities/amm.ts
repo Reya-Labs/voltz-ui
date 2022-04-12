@@ -981,6 +981,24 @@ class AMM {
     return parseFloat(utils.formatEther(historicalApy));
   }
 
+  public async getEstimatedCashflow(fixedRateLower: number, fixedRateUpper: number): Promise<number> {
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
+    }
+
+    const signerAddress = await this.signer.getAddress();
+
+    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.signer);
+    const estimatedCashflow = await peripheryContract.callStatic.estimatedCashflowAtMaturity(
+      this.marginEngineAddress,
+      signerAddress,
+      this.closestTickAndFixedRate(fixedRateUpper).closestUsableTick,
+      this.closestTickAndFixedRate(fixedRateLower).closestUsableTick,
+    );
+
+    return this.descale(estimatedCashflow);
+  }
+
   public closestTickAndFixedRate(fixedRate: number): ClosestTickAndFixedRate {
     if (fixedRate < MIN_FIXED_RATE) {
       fixedRate = MIN_FIXED_RATE;

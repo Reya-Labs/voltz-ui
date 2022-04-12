@@ -5,9 +5,10 @@ import TableBody from '@mui/material/TableBody';
 import { SystemStyleObject, Theme } from '@mui/system';
 import { Position } from '@voltz/v1-sdk';
 
-import { data } from '@utilities';
+import { AugmentedAMM, data } from '@utilities';
 import { useAgent } from '@hooks';
 import { Panel } from '@components/atomic';
+import { AMMProvider } from '@components/contexts';
 import { PositionTableFields } from './types';
 import { lpLabels } from './constants';
 import { traderLabels } from './constants';
@@ -103,12 +104,14 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
           <PositionTableHead order={order} orderBy={orderBy} onSort={handleSort} agent={agent} />
           <TableBody>
             {tableData.map((datum, index) => (
+              <AMMProvider amm={(positions[index].amm as AugmentedAMM)}>
               <PositionTableRow
                 key={datum.id}
                 datum={datum}
                 index={index}
                 onSelect={handleSelectRow(index)}
               />
+              </AMMProvider>
             ))}
           </TableBody>
           <PositionTableFooter

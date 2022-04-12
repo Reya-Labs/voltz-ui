@@ -40,7 +40,7 @@ var ethers_1 = require("ethers");
 var src_1 = require("../../src");
 var tickMath_1 = require("../../src/utils/tickMath");
 var setup = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var vammAddress, marginEngineAddress, provider, privateKey, wallet, other, ammWallet, ammOther, fixedLows, fixedHighs, notionals, i, fixedLow, fixedHigh, notional, mintMarginRequirement, error_1;
+    var vammAddress, marginEngineAddress, provider, privateKey, wallet, other, ammWallet, fixedLows, fixedHighs, notionals, i, fixedLow, fixedHigh, notional, mintMarginRequirement, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -53,31 +53,6 @@ var setup = function () { return __awaiter(void 0, void 0, void 0, function () {
                 ammWallet = new src_1.AMM({
                     id: vammAddress,
                     signer: wallet,
-                    provider: provider,
-                    createdTimestamp: '1646856471',
-                    fcmAddress: '0x5392a33f7f677f59e833febf4016cddd88ff9e67',
-                    liquidity: '0',
-                    marginEngineAddress: marginEngineAddress,
-                    rateOracle: new src_1.RateOracle({
-                        id: '0x0165878a594ca255338adfa4d48449f69242eb8f',
-                        protocolId: 1,
-                    }),
-                    underlyingToken: new src_1.Token({
-                        id: '0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9',
-                        name: 'USDC',
-                        decimals: 18,
-                    }),
-                    sqrtPriceX96: tickMath_1.TickMath.getSqrtRatioAtTick(0).toString(),
-                    termEndTimestamp: '1649458800000000000000000000',
-                    termStartTimestamp: '1646856441000000000000000000',
-                    tick: '0',
-                    tickSpacing: '1000',
-                    txCount: 0,
-                    updatedTimestamp: '1646856471',
-                });
-                ammOther = new src_1.AMM({
-                    id: vammAddress,
-                    signer: other,
                     provider: provider,
                     createdTimestamp: '1646856471',
                     fcmAddress: '0x5392a33f7f677f59e833febf4016cddd88ff9e67',
@@ -134,7 +109,7 @@ var setup = function () { return __awaiter(void 0, void 0, void 0, function () {
             case 5:
                 error_1 = _a.sent();
                 console.log(error_1.message);
-                if (error_1.message.toString().includes("Cannot read properties of undefined")) {
+                if (error_1.message.toString().includes("Unrecognized error")) {
                     return [3 /*break*/, 7];
                 }
                 return [3 /*break*/, 6];

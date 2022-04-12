@@ -23,6 +23,11 @@ export type MinimumMarginAmountSwapPayload = {
   isFT: boolean;
 };
 
+export type EstimatedCashflowPayload = {
+  tickLower: number;
+  tickUpper: number;
+};
+
 export type AMMDispatch = {
   variableApy: UseAsyncFunctionResult<unknown, number | void>;
   mintMinimumMarginRequirement: UseAsyncFunctionResult<
@@ -30,4 +35,5 @@ export type AMMDispatch = {
     number | void
   >;
   swapInfo: UseAsyncFunctionResult<SwapInfoPayload, InfoPostSwap | void>;
+  estimatedCashflow: UseAsyncFunctionResult<EstimatedCashflowPayload, number | void>;
 };

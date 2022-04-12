@@ -887,6 +887,27 @@ var AMM = /** @class */ (function () {
             });
         });
     };
+    AMM.prototype.getEstimatedCashflow = function (fixedRateLower, fixedRateUpper) {
+        return __awaiter(this, void 0, void 0, function () {
+            var signerAddress, peripheryContract, estimatedCashflow;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!this.signer) {
+                            throw new Error('Wallet not connected');
+                        }
+                        return [4 /*yield*/, this.signer.getAddress()];
+                    case 1:
+                        signerAddress = _a.sent();
+                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        return [4 /*yield*/, peripheryContract.callStatic.estimatedCashflowAtMaturity(this.marginEngineAddress, signerAddress, this.closestTickAndFixedRate(fixedRateUpper).closestUsableTick, this.closestTickAndFixedRate(fixedRateLower).closestUsableTick)];
+                    case 2:
+                        estimatedCashflow = _a.sent();
+                        return [2 /*return*/, this.descale(estimatedCashflow)];
+                }
+            });
+        });
+    };
     AMM.prototype.closestTickAndFixedRate = function (fixedRate) {
         if (fixedRate < constants_1.MIN_FIXED_RATE) {
             fixedRate = constants_1.MIN_FIXED_RATE;

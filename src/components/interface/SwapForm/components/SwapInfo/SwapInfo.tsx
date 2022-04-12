@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import isUndefined from 'lodash/isUndefined';
-import Box from '@mui/material/Box';
 
 import { useAMMContext } from '@hooks';
 import { Typography } from '@components/atomic';

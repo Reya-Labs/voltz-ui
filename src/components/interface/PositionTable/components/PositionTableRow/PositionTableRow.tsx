@@ -4,13 +4,14 @@ import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '@mui/system';
 
 import { Agents } from '@components/contexts';
-import { Button, Typography } from '@components/atomic';
+import { Typography } from '@components/atomic';
 import { MaturityInformation } from '@components/composite';
 import { useAgent } from '@hooks';
 import { PositionTableDatum } from '../../types';
 import { lpLabels } from '../../constants';
 import { traderLabels } from '../../constants';
 import { PositionTableFields } from '../../types';
+import { EstimatedCashflow } from './components';
 
 export type PositionTableRowProps = {
   datum: PositionTableDatum;
@@ -49,7 +50,6 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
         return {};
     }
   };
-  const handleClick = () => onSelect();
 
   let labels: [PositionTableFields, string][];
   
@@ -73,6 +73,10 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
             );
           }
 
+          if (field === 'estimatedCashflow') {
+            return <EstimatedCashflow tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} />;
+          }
+
           const getContent = () => {
             const token = datum.protocol.substring(1);
             
@@ -82,9 +86,6 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
 
               case 'fixedApr':
                 return `${datum.fixedApr.toFixed(2)}%`;
-
-              case 'fixedTokenBalance':
-                return `${datum.fixedTokenBalance.toFixed(2)}`;
               
               case 'fixedUpper':
                 return `${datum.fixedUpper.toFixed(2)}%`;

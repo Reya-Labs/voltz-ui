@@ -10,7 +10,7 @@ export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000';
 export const FACTORY_ADDRESS = '0xAF47e8353729E5be6cA4f605dd176B7Fc80EDA08';
 
 // Latest kovan deployment address of the periphery
-export const PERIPHERY_ADDRESS = '0x4d1e13111412725D458D106A36524B9c13E98D98';
+export const PERIPHERY_ADDRESS = '0x57E674032784932Ac981e177B9f9287f57d1Eda0';
 
 // todo: needs to be adjusted
 export const AMM_INIT_CODE_HASH =

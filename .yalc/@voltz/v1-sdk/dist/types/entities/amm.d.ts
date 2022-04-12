@@ -127,6 +127,7 @@ declare class AMM {
     get price(): Price;
     get protocol(): string;
     getVariableApy(): Promise<number>;
+    getEstimatedCashflow(fixedRateLower: number, fixedRateUpper: number): Promise<number>;
     closestTickAndFixedRate(fixedRate: number): ClosestTickAndFixedRate;
     getNextUsableFixedRate(fixedRate: number, count: number): number;
 }

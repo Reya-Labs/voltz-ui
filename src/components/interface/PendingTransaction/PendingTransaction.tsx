@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 
 import { AugmentedAMM } from '@utilities';
-import { useWallet, useSelector, usePositions } from '@hooks';
+import { useWallet, useSelector } from '@hooks';
 import { selectors } from '@store';
 import { AMMProvider } from '@components/contexts';
 import { Button, Panel, Typography, Loading } from '@components/atomic';
@@ -20,7 +20,6 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   transactionId,
   onComplete,
 }) => {
-  usePositions();
   const { account } = useWallet();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
 
