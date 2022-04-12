@@ -100,6 +100,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
               label="maturity"
               icon="information-circle"
               info="The proportion between the time elapsed since the initiation of the pool and the entire duration."
+              removeIcon
             />
           }
           startDate={startDate}

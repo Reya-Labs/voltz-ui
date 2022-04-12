@@ -52,13 +52,13 @@ const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
     >
       <DebouncedIntegerField
         size="small"
-        label={<IconLabel label="fixed low" icon="information-circle" info="Choose the lowest fixed rate range you wish to deposit liquidity within." />}
+        label={<IconLabel label="fixed low" icon="information-circle" info="The lower rate of the fixed rate range within which to deposit liquidity" />}
         value={fixedLowValue}
         onChange={handleChangeFixedLow}
       />
       <DebouncedIntegerField
         size="small"
-        label={<IconLabel label="fixed high" icon="information-circle" info="Choose the highest fixed rate range you wish to deposit liquidity within." />}
+        label={<IconLabel label="fixed high" icon="information-circle" info="The upper rate of the fixed rate range within which to deposit liquidity" />}
         value={fixedHighValue}
         onChange={handleChangeFixedHigh}
       />

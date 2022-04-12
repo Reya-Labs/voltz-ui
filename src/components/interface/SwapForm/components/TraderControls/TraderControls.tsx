@@ -63,7 +63,7 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
     >
       {!isModifying && (
         <ToggleButtonGroup
-          label={<IconLabel label="rates" icon="information-circle" info="Choose between taking a fixed or variable position." />}
+          label={<IconLabel label="rates" icon="information-circle" info="Choose between taking a fixed or variable position." removeIcon />}
           options={Object.values(agentOptionTitles)}
           option={agentOptionTitles[agent]}
           defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
