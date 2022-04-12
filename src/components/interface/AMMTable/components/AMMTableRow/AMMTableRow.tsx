@@ -108,7 +108,15 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
         return <TableCell key={field}>{renderDisplay()}</TableCell>;
       })}
       <TableCell align="center">
-        <Button variant="contained" onClick={handleClick}>
+        <Button variant="contained" onClick={handleClick} sx={{
+          paddingTop: (theme) => theme.spacing(3),
+          paddingBottom: (theme) => theme.spacing(3),
+          paddingLeft: (theme) => theme.spacing(4),
+          paddingRight: (theme) => theme.spacing(4),
+          fontSize: 18,
+          lineHeight: 1,
+          boxShadow: 'none',
+        }}>
           {agent === Agents.LIQUIDITY_PROVIDER ? 'PROVIDE LIQUIDITY' : 'TRADE'}
         </Button>
       </TableCell>

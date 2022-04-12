@@ -39,6 +39,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
         '&:hover': {
           backgroundColor: 'primary.darken030',
           borderColor: 'primary.light',
+          boxShadow: '0px 4px 20px 0px #4de5ff33',
         },
       };
     }
@@ -50,6 +51,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
         '&:hover': {
           backgroundColor: 'tertiary.darken010',
           borderColor: 'tertiary.light',
+          boxShadow: '0px 4px 20px 0px #2667FF4D',
         },
       };
     }
@@ -60,6 +62,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
         color: 'primary.light',
         '&:hover': {
           backgroundColor: 'secondary.darken035',
+          boxShadow: '0px 4px 20px 0px #4DE5FF40',
         },
       };
     }
