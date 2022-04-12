@@ -43,11 +43,13 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
       case 'main':
         return {
           backgroundColor: `secondary.darken040`,
+          borderRadius: 2
         };
 
       case 'darker':
         return {
           backgroundColor: `secondary.darken045`,
+          borderRadius: 2
         };
 
       default:

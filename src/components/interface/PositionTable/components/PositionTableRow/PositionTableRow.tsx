@@ -36,11 +36,13 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
       case 'main':
         return {
           backgroundColor: `secondary.darken040`,
+          borderRadius: 2
         };
 
       case 'darker':
         return {
           backgroundColor: `secondary.darken050`,
+          borderRadius: 2
         };
 
       default:
