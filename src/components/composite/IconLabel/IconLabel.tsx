@@ -68,7 +68,12 @@ const IconLabel: React.FunctionComponent<IconLabelProps> = ({ label, icon, info,
           disableRestoreFocus
         >
           <Panel variant="dark" sx={{ borderRadius: 1, maxWidth: 200 }}>
-            <Typography variant="caption">{info}</Typography>
+            <Typography variant="caption" sx={{
+              fontFamily: "DM Sans",
+              fontStyle: "normal",
+              fontSize: 12,
+              lineHeight: "150%"
+            }}>{info}</Typography>
           </Panel>
           <Box
             sx={{
