@@ -114,7 +114,7 @@ declare class AMM {
     mint({ fixedLow, fixedHigh, notional, margin, validationOnly, }: AMMMintArgs): Promise<ContractReceipt | void>;
     burn({ fixedLow, fixedHigh, notional, validationOnly, }: AMMBurnArgs): Promise<ContractReceipt | void>;
     approveFCM(): Promise<ContractReceipt | void>;
-    approveERC20(marginDelta: BigNumberish, addressToApprove: string): Promise<ContractReceipt | void>;
+    approveERC20(amountToApprove: BigNumberish, addressToApprove: string): Promise<ContractReceipt | void>;
     swap({ isFT, notional, margin, fixedRateLimit, fixedLow, fixedHigh, validationOnly, }: AMMSwapArgs): Promise<ContractReceipt | void>;
     FCMSwap({ notional, fixedRateLimit, }: FCMSwapArgs): Promise<ContractReceipt>;
     FCMUnwind({ notionalToUnwind, fixedRateLimit, }: FCMUnwindArgs): Promise<ContractReceipt>;

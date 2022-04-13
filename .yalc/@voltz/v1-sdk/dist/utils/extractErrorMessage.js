@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getErrorSignature = void 0;
+exports.getErrorMessage = exports.getErrorSignature = void 0;
 var ethers_1 = require("ethers");
 var getErrorSignature = function (error) {
     var errors = [
@@ -64,3 +64,54 @@ var getErrorSignature = function (error) {
     return null;
 };
 exports.getErrorSignature = getErrorSignature;
+var getErrorMessage = function (errSig) {
+    var errorMapping = {
+        /// @dev No need to unwind a net zero position
+        "PositionNetZero": "No need to unwind a net zero position",
+        "MarginLessThanMinimum": "No enough margin to perform this operation",
+        /// @dev We can't withdraw more margin than we have
+        "WithdrawalExceedsCurrentMargin": "Withdrawal exceeds current margin",
+        /// @dev Position must be settled after AMM has reached maturity
+        "PositionNotSettled": "Position must be settled to perform this operation",
+        /// The resulting margin does not meet minimum requirements
+        "MarginRequirementNotMet": "No enough margin to perform this operation",
+        /// The position/trader needs to be below the liquidation threshold to be liquidated
+        "CannotLiquidate": "Position is not liquidatable",
+        /// Only the position/trade owner can update the LP/Trader margin
+        "OnlyOwnerCanUpdatePosition": "No approval to update this position",
+        "OnlyVAMM": "No approval for this operation",
+        "OnlyFCM": "No approval for this operation",
+        /// Margin delta must not equal zero
+        "InvalidMarginDelta": "Amount of margin must be greater than 0",
+        /// Positions and Traders cannot be settled before the applicable interest rate swap has matured
+        "CannotSettleBeforeMaturity": "Cannot settle before maturity",
+        "closeToOrBeyondMaturity": "This operation is not allowed since the pool is close or beyond maturity",
+        /// @dev There are not enough funds available for the requested operation
+        "NotEnoughFunds": "No enough funds to perform this operation",
+        /// @dev The two values were expected to have oppostite sigs, but do not
+        "ExpectedOppositeSigns": "Internal error",
+        /// @dev Error which is reverted if the sqrt price of the vamm is non-zero before a vamm is initialized
+        "ExpectedSqrtPriceZeroBeforeInit": "Internal error",
+        /// @dev Error which ensures the liquidity delta is positive if a given LP wishes to mint further liquidity in the vamm
+        "LiquidityDeltaMustBePositiveInMint": 'Amount of notional must be greater than 0',
+        /// @dev Error which ensures the liquidity delta is positive if a given LP wishes to burn liquidity in the vamm
+        "LiquidityDeltaMustBePositiveInBurn": 'Amount of notional must be greater than 0',
+        /// @dev Error which ensures the amount of notional specified when initiating an IRS contract (via the swap function in the vamm) is non-zero
+        "IRSNotionalAmountSpecifiedMustBeNonZero": 'Amount of notional must be greater than 0',
+        /// @dev Error which ensures the VAMM is unlocked
+        "CanOnlyTradeIfUnlocked": 'This operation is allowed after the pool is initialized',
+        /// @dev only the margin engine can run a certain function
+        "OnlyMarginEngine": "No approval for this operation",
+        /// The resulting margin does not meet minimum requirements
+        "MarginRequirementNotMetFCM": 'No enough margin to perform this operation',
+        /// @dev getReserveNormalizedIncome returned zero for underlying asset. Oracle only supports active Aave-V2 assets.
+        "AavePoolGetReserveNormalizedIncomeReturnedZero": 'Internal error',
+        /// @dev currentTime < queriedTime
+        "OOO": 'Internal error',
+    };
+    if (errSig in errorMapping) {
+        return errorMapping[errSig];
+    }
+    return "Unrecognized error";
+};
+exports.getErrorMessage = getErrorMessage;

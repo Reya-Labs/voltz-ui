@@ -27,7 +27,7 @@ import { nearestUsableTick } from '../utils/nearestUsableTick';
 import Token from './token';
 import { Price } from './fractions/price';
 import { TokenAmount } from './fractions/tokenAmount';
-import { getErrorSignature } from '../utils/extractErrorMessage';
+import { getErrorMessage, getErrorSignature } from '../utils/extractErrorMessage';
 
 export type AMMConstructorArgs = {
   id: string;
@@ -183,23 +183,23 @@ class AMM {
     fixedHigh,
   }: AMMGetInfoPostSwapArgs): Promise<InfoPostSwap> {
     if (!this.signer) {
-      throw new Error('Wallet not connected!');
+      throw new Error('Wallet not connected');
     }
 
     if (fixedLow >= fixedHigh) {
-      throw new Error('Lower Fixed Rate must be smaller than Upper Fixed Rate!');
+      throw new Error('Lower Rate must be smaller than Upper Rate');
     }
 
     if (fixedLow < MIN_FIXED_RATE) {
-      throw new Error('Lower Fixed Rate is too low!');
+      throw new Error('Lower Rate is too low');
     }
 
     if (fixedHigh > MAX_FIXED_RATE) {
-      throw new Error('Upper Fixed Rate is too high!');
+      throw new Error('Upper Rate is too high');
     }
 
     if (notional <= 0) {
-      throw new Error('Amount of notional must be greater than 0!');
+      throw new Error('Amount of notional must be greater than 0');
     }
 
     const signerAddress = await this.signer.getAddress();
@@ -315,7 +315,7 @@ class AMM {
     fixedHigh,
   }: AMMSettlePositionArgs): Promise<ContractReceipt> {
     if (!this.signer) {
-      throw new Error('Wallet not connected!');
+      throw new Error('Wallet not connected');
     }
 
     const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
@@ -328,7 +328,13 @@ class AMM {
       tickUpper,
     );
 
-    return settlePositionTransaction.wait();
+    try {
+      const receipt = await settlePositionTransaction.wait();
+      return receipt;
+    }
+    catch (error) {
+      throw new Error("Transaction Confirmation Error");
+    }
   }
 
   public scale(value: number): string {
@@ -354,11 +360,11 @@ class AMM {
     marginDelta,
   }: AMMUpdatePositionMarginArgs): Promise<ContractReceipt> {
     if (!this.signer) {
-      throw new Error('Wallet not connected!');
+      throw new Error('Wallet not connected');
     }
 
     if (marginDelta === 0) {
-      throw new Error('No margin delta to update!');
+      throw new Error('No margin delta to update');
     }
 
     const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
@@ -375,7 +381,13 @@ class AMM {
       scaledMarginDelta,
     );
 
-    return updatePositionMarginTransaction.wait();
+    try {
+      const receipt = await updatePositionMarginTransaction.wait();
+      return receipt;
+    }
+    catch (error) {
+      throw new Error("Transaction Confirmation Error");
+    }
   }
 
   public async liquidatePosition({
@@ -384,7 +396,7 @@ class AMM {
     fixedHigh,
   }: AMMLiquidatePositionArgs): Promise<ContractReceipt> {
     if (!this.signer) {
-      throw new Error('Wallet not connected!');
+      throw new Error('Wallet not connected');
     }
 
     const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
@@ -393,7 +405,13 @@ class AMM {
     const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
     const liquidatePositionTransaction = await marginEngineContract.liquidatePosition(owner, tickLower, tickUpper);
 
-    return liquidatePositionTransaction.wait();
+    try {
+      const receipt = await liquidatePositionTransaction.wait();
+      return receipt;
+    }
+    catch (error) {
+      throw new Error("Transaction Confirmation Error");
+    }
   }
 
   public async getLiquidationThreshold({
@@ -402,7 +420,7 @@ class AMM {
     fixedHigh,
   }: AMMLiquidatePositionArgs): Promise<number> {
     if (!this.signer) {
-      throw new Error('Wallet not connected!');
+      throw new Error('Wallet not connected');
     }
 
     const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
@@ -425,23 +443,23 @@ class AMM {
     notional,
   }: AMMGetMinimumMarginRequirementPostMintArgs): Promise<number> {
     if (!this.signer) {
-      throw new Error('Wallet not connected!');
+      throw new Error('Wallet not connected');
     }
 
     if (fixedLow >= fixedHigh) {
-      throw new Error('Lower Fixed Rate must be smaller than Upper Fixed Rate!');
+      throw new Error('Lower Rate must be smaller than Upper Rate');
     }
 
     if (fixedLow < MIN_FIXED_RATE) {
-      throw new Error('Lower Fixed Rate is too low!');
+      throw new Error('Lower Rate is too low');
     }
 
     if (fixedHigh > MAX_FIXED_RATE) {
-      throw new Error('Upper Fixed Rate is too high!');
+      throw new Error('Upper Rate is too high');
     }
 
     if (notional <= 0) {
-      throw new Error('Amount of notional must be greater than 0!');
+      throw new Error('Amount of notional must be greater than 0');
     }
 
     const signerAddress = await this.signer.getAddress();
@@ -518,27 +536,27 @@ class AMM {
     validationOnly,
   }: AMMMintArgs): Promise<ContractReceipt | void> {
     if (!this.signer) {
-      throw new Error('Wallet not connected!');
+      throw new Error('Wallet not connected');
     }
 
     if (fixedLow >= fixedHigh) {
-      throw new Error('Lower Fixed Rate must be smaller than Upper Fixed Rate!');
+      throw new Error('Lower Rate must be smaller than Upper Rate');
     }
 
     if (fixedLow < MIN_FIXED_RATE) {
-      throw new Error('Lower Fixed Rate is too low!');
+      throw new Error('Lower Rate is too low');
     }
 
     if (fixedHigh > MAX_FIXED_RATE) {
-      throw new Error('Upper Fixed Rate is too high!');
+      throw new Error('Upper Rate is too high');
     }
 
     if (notional <= 0) {
-      throw new Error('Amount of notional must be greater than 0!');
+      throw new Error('Amount of notional must be greater than 0');
     }
 
     if (margin < 0) {
-      throw new Error('Amount of margin cannot be negative!');
+      throw new Error('Amount of margin cannot be negative');
     }
 
     if (validationOnly) {
@@ -578,7 +596,7 @@ class AMM {
       }
 
       if (errSig) {
-        throw new Error(errSig);
+        throw new Error(getErrorMessage(errSig));
       }
       else {
         throw new Error("Unrecognized error");
@@ -598,14 +616,20 @@ class AMM {
       }
 
       if (errSig) {
-        throw new Error(errSig);
+        throw new Error(getErrorMessage(errSig));
       }
       else {
         throw new Error("Unrecognized error");
       }
     });
 
-    return mintTransaction.wait();
+    try {
+      const receipt = await mintTransaction.wait();
+      return receipt;
+    }
+    catch (error) {
+      throw new Error("Transaction Confirmation Error");
+    }
   }
 
   public async burn({
@@ -615,23 +639,23 @@ class AMM {
     validationOnly,
   }: AMMBurnArgs): Promise<ContractReceipt | void> {
     if (!this.signer) {
-      throw new Error('Wallet not connected!');
+      throw new Error('Wallet not connected');
     }
 
     if (fixedLow >= fixedHigh) {
-      throw new Error('Lower Fixed Rate must be smaller than Upper Fixed Rate!');
+      throw new Error('Lower Rate must be smaller than Upper Rate');
     }
 
     if (fixedLow < MIN_FIXED_RATE) {
-      throw new Error('Lower Fixed Rate is too low!');
+      throw new Error('Lower Rate is too low');
     }
 
     if (fixedHigh > MAX_FIXED_RATE) {
-      throw new Error('Upper Fixed Rate is too high!');
+      throw new Error('Upper Rate is too high');
     }
 
     if (notional <= 0) {
-      throw new Error('Amount of notional must be greater than 0!');
+      throw new Error('Amount of notional must be greater than 0');
     }
 
     if (validationOnly) {
@@ -665,7 +689,7 @@ class AMM {
       }
 
       if (errSig) {
-        throw new Error(errSig);
+        throw new Error(getErrorMessage(errSig));
       }
       else {
         throw new Error("Unrecognized error");
@@ -683,19 +707,25 @@ class AMM {
       }
 
       if (errSig) {
-        throw new Error(errSig);
+        throw new Error(getErrorMessage(errSig));
       }
       else {
         throw new Error("Unrecognized error");
       }
     });
 
-    return burnTransaction.wait();
+    try {
+      const receipt = await burnTransaction.wait();
+      return receipt;
+    }
+    catch (error) {
+      throw new Error("Transaction Confirmation Error");
+    }
   }
 
   public async approveFCM(): Promise<ContractReceipt | void> {
     if (!this.signer) {
-      throw new Error('Wallet not connected!');
+      throw new Error('Wallet not connected');
     }
 
     const factoryContract = factoryFactory.connect(FACTORY_ADDRESS, this.signer);
@@ -708,31 +738,44 @@ class AMM {
 
     const approvalTransaction = await factoryContract.setApproval(this.fcmAddress, true);
 
-    return approvalTransaction.wait();
+    try {
+      const receipt = await approvalTransaction.wait();
+      return receipt;
+    }
+    catch (error) {
+      throw new Error("Transaction Confirmation Error");
+    }
   }
 
   public async approveERC20(
-    marginDelta: BigNumberish,
+    amountToApprove: BigNumberish,
     addressToApprove: string,
   ): Promise<ContractReceipt | void> {
     if (!this.signer) {
-      throw new Error('Wallet not connected!');
+      throw new Error('Wallet not connected');
     }
 
     if (!this.underlyingToken.id) {
-      throw new Error('No underlying token!');
+      throw new Error('No underlying token');
     }
 
     const token = tokenFactory.connect(this.underlyingToken.id, this.signer);
     const currentApproval = await token.allowance(await this.signer.getAddress(), addressToApprove);
 
-    if (BigNumber.from(marginDelta).lt(currentApproval)) {
+    const amountToApproveBN = BigNumber.from(amountToApprove).mul(1.01);
+    if (amountToApproveBN.lt(currentApproval.mul(1.01))) {
       return;
     }
 
-    const approvalTransaction = await token.approve(addressToApprove, marginDelta);
+    const approvalTransaction = await token.approve(addressToApprove, amountToApproveBN);
 
-    return approvalTransaction.wait();
+    try {
+      const receipt = await approvalTransaction.wait();
+      return receipt;
+    }
+    catch (error) {
+      throw new Error("Transaction Confirmation Error");
+    }
   }
 
   public async swap({
@@ -745,27 +788,27 @@ class AMM {
     validationOnly,
   }: AMMSwapArgs): Promise<ContractReceipt | void> {
     if (!this.signer) {
-      throw new Error('Wallet not connected!');
+      throw new Error('Wallet not connected');
     }
 
     if (fixedLow >= fixedHigh) {
-      throw new Error('Lower Fixed Rate must be smaller than Upper Fixed Rate!');
+      throw new Error('Lower Rate must be smaller than Upper Rate');
     }
 
     if (fixedLow < MIN_FIXED_RATE) {
-      throw new Error('Lower Fixed Rate is too low!');
+      throw new Error('Lower Rate is too low');
     }
 
     if (fixedHigh > MAX_FIXED_RATE) {
-      throw new Error('Upper Fixed Rate is too high!');
+      throw new Error('Upper Rate is too high');
     }
 
     if (notional <= 0) {
-      throw new Error('Amount of notional must be greater than 0!');
+      throw new Error('Amount of notional must be greater than 0');
     }
 
     if (margin < 0) {
-      throw new Error('Amount of margin cannot be negative!');
+      throw new Error('Amount of margin cannot be negative');
     }
 
     if (validationOnly) {
@@ -818,7 +861,7 @@ class AMM {
       }
 
       if (errSig) {
-        throw new Error(errSig);
+        throw new Error(getErrorMessage(errSig));
       }
       else {
         throw new Error("Unrecognized error");
@@ -838,14 +881,20 @@ class AMM {
       }
 
       if (errSig) {
-        throw new Error(errSig);
+        throw new Error(getErrorMessage(errSig));
       }
       else {
         throw new Error("Unrecognized error");
       }
     });
 
-    return swapTransaction.wait();
+    try {
+      const receipt = await swapTransaction.wait();
+      return receipt;
+    }
+    catch (error) {
+      throw new Error("Transaction Confirmation Error");
+    }
   }
 
   public async FCMSwap({
@@ -853,7 +902,7 @@ class AMM {
     fixedRateLimit,
   }: FCMSwapArgs): Promise<ContractReceipt> {
     if (!this.signer) {
-      throw new Error('Wallet not connected!');
+      throw new Error('Wallet not connected');
     }
 
     try {
@@ -878,7 +927,13 @@ class AMM {
       sqrtPriceLimitX96,
     );
 
-    return fcmSwapTransaction.wait();
+    try {
+      const receipt = await fcmSwapTransaction.wait();
+      return receipt;
+    }
+    catch (error) {
+      throw new Error("Transaction Confirmation Error");
+    }
   }
 
   public async FCMUnwind({
@@ -886,7 +941,7 @@ class AMM {
     fixedRateLimit,
   }: FCMUnwindArgs): Promise<ContractReceipt> {
     if (!this.signer) {
-      throw new Error('Wallet not connected!');
+      throw new Error('Wallet not connected');
     }
 
     let sqrtPriceLimitX96;
@@ -910,18 +965,30 @@ class AMM {
       sqrtPriceLimitX96,
     );
 
-    return fcmUnwindTransaction.wait();
+    try {
+      const receipt = await fcmUnwindTransaction.wait();
+      return receipt;
+    }
+    catch (error) {
+      throw new Error("Transaction Confirmation Error");
+    }
   }
 
   public async settleFCMTrader(): Promise<ContractReceipt> {
     if (!this.signer) {
-      throw new Error('Wallet not connected!');
+      throw new Error('Wallet not connected');
     }
 
     const fcmContract = fcmFactory.connect(this.fcmAddress, this.signer);
     const fcmSettleTraderTransaction = await fcmContract.settleTrader();
 
-    return fcmSettleTraderTransaction.wait();
+    try {
+      const receipt = await fcmSettleTraderTransaction.wait();
+      return receipt;
+    }
+    catch (error) {
+      throw new Error("Transaction Confirmation Error");
+    }
   }
 
   public get startDateTime(): DateTime {
@@ -969,7 +1036,7 @@ class AMM {
 
   public async getVariableApy(): Promise<number> {
     if (!this.provider) {
-      throw new Error('Blockchain not connected!');
+      throw new Error('Blockchain not connected');
     }
 
     const marginEngineContract = marginEngineFactory.connect(

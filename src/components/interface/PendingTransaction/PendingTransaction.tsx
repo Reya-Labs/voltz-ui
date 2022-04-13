@@ -99,7 +99,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               paddingBottom: (theme) => theme.spacing(8),
             }}
           >
-            <Typography variant="body2" color="error">
+            <Typography variant="body2" align="center" color="error">
               {activeTransaction.failureMessage || "Unrecognized error"}
             </Typography>
           </Box>

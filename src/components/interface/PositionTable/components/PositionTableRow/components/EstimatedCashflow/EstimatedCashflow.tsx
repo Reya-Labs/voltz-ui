@@ -8,9 +8,10 @@ import { isUndefined } from 'lodash';
 export type EstimatedCashflowProps = {
   tickLower?: number;
   tickUpper?: number;
+  token: string;
 };
 
-const EstimatedCashflow: React.FunctionComponent<EstimatedCashflowProps> = ({tickLower, tickUpper}) => {
+const EstimatedCashflow: React.FunctionComponent<EstimatedCashflowProps> = ({tickLower, tickUpper, token}) => {
   const { estimatedCashflow } = useAMMContext();
   const { result, loading, call } = estimatedCashflow;
 
@@ -29,12 +30,13 @@ const EstimatedCashflow: React.FunctionComponent<EstimatedCashflowProps> = ({tic
       return 'No data';
     }
 
-    return `${result.toFixed(2)} USDC`;
+    
+    return `${result.toFixed(2)} ${token}`;
   };
 
   return (
     <TableCell>
-      <Typography variant="body2" label="Estimated Cashflow" sx={{fontSize: 18}}>
+      <Typography variant="body2" label="Estimated Cashflow" sx={{ fontSize: 18 }}>
         {renderValue()}
       </Typography>
     </TableCell>

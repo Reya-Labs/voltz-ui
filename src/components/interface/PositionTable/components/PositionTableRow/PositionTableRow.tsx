@@ -63,6 +63,8 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     <TableRow key={index} sx={{ ...typeStyleOverrides() }}>
       {labels.map(([field, label]) => {
         const renderDisplay = () => {
+          const token = datum.protocol.substring(1);
+
           if (field === 'maturity') {
             return (
               <MaturityInformation
@@ -74,12 +76,10 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
           }
 
           if (field === 'estimatedCashflow') {
-            return <EstimatedCashflow tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} />;
+            return <EstimatedCashflow tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} token={token} />;
           }
 
           const getContent = () => {
-            const token = datum.protocol.substring(1);
-            
             switch (field) {
               case 'pool':
                 return datum.protocol;

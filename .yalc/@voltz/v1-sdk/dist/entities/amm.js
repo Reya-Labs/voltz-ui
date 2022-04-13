@@ -79,19 +79,19 @@ var AMM = /** @class */ (function () {
                 switch (_b.label) {
                     case 0:
                         if (!this.signer) {
-                            throw new Error('Wallet not connected!');
+                            throw new Error('Wallet not connected');
                         }
                         if (fixedLow >= fixedHigh) {
-                            throw new Error('Lower Fixed Rate must be smaller than Upper Fixed Rate!');
+                            throw new Error('Lower Rate must be smaller than Upper Rate');
                         }
                         if (fixedLow < constants_1.MIN_FIXED_RATE) {
-                            throw new Error('Lower Fixed Rate is too low!');
+                            throw new Error('Lower Rate is too low');
                         }
                         if (fixedHigh > constants_1.MAX_FIXED_RATE) {
-                            throw new Error('Upper Fixed Rate is too high!');
+                            throw new Error('Upper Rate is too high');
                         }
                         if (notional <= 0) {
-                            throw new Error('Amount of notional must be greater than 0!');
+                            throw new Error('Amount of notional must be greater than 0');
                         }
                         return [4 /*yield*/, this.signer.getAddress()];
                     case 1:
@@ -192,12 +192,12 @@ var AMM = /** @class */ (function () {
     AMM.prototype.settlePosition = function (_a) {
         var owner = _a.owner, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, marginEngineContract, settlePositionTransaction;
+            var tickUpper, tickLower, marginEngineContract, settlePositionTransaction, receipt, error_1;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         if (!this.signer) {
-                            throw new Error('Wallet not connected!');
+                            throw new Error('Wallet not connected');
                         }
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
@@ -205,7 +205,17 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, marginEngineContract.settlePosition(owner, tickLower, tickUpper)];
                     case 1:
                         settlePositionTransaction = _b.sent();
-                        return [2 /*return*/, settlePositionTransaction.wait()];
+                        _b.label = 2;
+                    case 2:
+                        _b.trys.push([2, 4, , 5]);
+                        return [4 /*yield*/, settlePositionTransaction.wait()];
+                    case 3:
+                        receipt = _b.sent();
+                        return [2 /*return*/, receipt];
+                    case 4:
+                        error_1 = _b.sent();
+                        throw new Error("Transaction Confirmation Error");
+                    case 5: return [2 /*return*/];
                 }
             });
         });
@@ -222,15 +232,15 @@ var AMM = /** @class */ (function () {
     AMM.prototype.updatePositionMargin = function (_a) {
         var owner = _a.owner, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, marginDelta = _a.marginDelta;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, scaledMarginDelta, marginEngineContract, updatePositionMarginTransaction;
+            var tickUpper, tickLower, scaledMarginDelta, marginEngineContract, updatePositionMarginTransaction, receipt, error_2;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         if (!this.signer) {
-                            throw new Error('Wallet not connected!');
+                            throw new Error('Wallet not connected');
                         }
                         if (marginDelta === 0) {
-                            throw new Error('No margin delta to update!');
+                            throw new Error('No margin delta to update');
                         }
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
@@ -242,7 +252,17 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, marginEngineContract.updatePositionMargin(owner, tickLower, tickUpper, scaledMarginDelta)];
                     case 2:
                         updatePositionMarginTransaction = _b.sent();
-                        return [2 /*return*/, updatePositionMarginTransaction.wait()];
+                        _b.label = 3;
+                    case 3:
+                        _b.trys.push([3, 5, , 6]);
+                        return [4 /*yield*/, updatePositionMarginTransaction.wait()];
+                    case 4:
+                        receipt = _b.sent();
+                        return [2 /*return*/, receipt];
+                    case 5:
+                        error_2 = _b.sent();
+                        throw new Error("Transaction Confirmation Error");
+                    case 6: return [2 /*return*/];
                 }
             });
         });
@@ -250,12 +270,12 @@ var AMM = /** @class */ (function () {
     AMM.prototype.liquidatePosition = function (_a) {
         var owner = _a.owner, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, marginEngineContract, liquidatePositionTransaction;
+            var tickUpper, tickLower, marginEngineContract, liquidatePositionTransaction, receipt, error_3;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         if (!this.signer) {
-                            throw new Error('Wallet not connected!');
+                            throw new Error('Wallet not connected');
                         }
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
@@ -263,7 +283,17 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, marginEngineContract.liquidatePosition(owner, tickLower, tickUpper)];
                     case 1:
                         liquidatePositionTransaction = _b.sent();
-                        return [2 /*return*/, liquidatePositionTransaction.wait()];
+                        _b.label = 2;
+                    case 2:
+                        _b.trys.push([2, 4, , 5]);
+                        return [4 /*yield*/, liquidatePositionTransaction.wait()];
+                    case 3:
+                        receipt = _b.sent();
+                        return [2 /*return*/, receipt];
+                    case 4:
+                        error_3 = _b.sent();
+                        throw new Error("Transaction Confirmation Error");
+                    case 5: return [2 /*return*/];
                 }
             });
         });
@@ -276,7 +306,7 @@ var AMM = /** @class */ (function () {
                 switch (_b.label) {
                     case 0:
                         if (!this.signer) {
-                            throw new Error('Wallet not connected!');
+                            throw new Error('Wallet not connected');
                         }
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
@@ -297,19 +327,19 @@ var AMM = /** @class */ (function () {
                 switch (_b.label) {
                     case 0:
                         if (!this.signer) {
-                            throw new Error('Wallet not connected!');
+                            throw new Error('Wallet not connected');
                         }
                         if (fixedLow >= fixedHigh) {
-                            throw new Error('Lower Fixed Rate must be smaller than Upper Fixed Rate!');
+                            throw new Error('Lower Rate must be smaller than Upper Rate');
                         }
                         if (fixedLow < constants_1.MIN_FIXED_RATE) {
-                            throw new Error('Lower Fixed Rate is too low!');
+                            throw new Error('Lower Rate is too low');
                         }
                         if (fixedHigh > constants_1.MAX_FIXED_RATE) {
-                            throw new Error('Upper Fixed Rate is too high!');
+                            throw new Error('Upper Rate is too high');
                         }
                         if (notional <= 0) {
-                            throw new Error('Amount of notional must be greater than 0!');
+                            throw new Error('Amount of notional must be greater than 0');
                         }
                         return [4 /*yield*/, this.signer.getAddress()];
                     case 1:
@@ -377,27 +407,27 @@ var AMM = /** @class */ (function () {
     AMM.prototype.mint = function (_a) {
         var fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional, margin = _a.margin, validationOnly = _a.validationOnly;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, peripheryContract, _notional, _marginDelta, approvalError_1, mintOrBurnParams, mintTransaction;
+            var tickUpper, tickLower, peripheryContract, _notional, _marginDelta, approvalError_1, mintOrBurnParams, mintTransaction, receipt, error_4;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         if (!this.signer) {
-                            throw new Error('Wallet not connected!');
+                            throw new Error('Wallet not connected');
                         }
                         if (fixedLow >= fixedHigh) {
-                            throw new Error('Lower Fixed Rate must be smaller than Upper Fixed Rate!');
+                            throw new Error('Lower Rate must be smaller than Upper Rate');
                         }
                         if (fixedLow < constants_1.MIN_FIXED_RATE) {
-                            throw new Error('Lower Fixed Rate is too low!');
+                            throw new Error('Lower Rate is too low');
                         }
                         if (fixedHigh > constants_1.MAX_FIXED_RATE) {
-                            throw new Error('Upper Fixed Rate is too high!');
+                            throw new Error('Upper Rate is too high');
                         }
                         if (notional <= 0) {
-                            throw new Error('Amount of notional must be greater than 0!');
+                            throw new Error('Amount of notional must be greater than 0');
                         }
                         if (margin < 0) {
-                            throw new Error('Amount of margin cannot be negative!');
+                            throw new Error('Amount of margin cannot be negative');
                         }
                         if (validationOnly) {
                             return [2 /*return*/];
@@ -436,7 +466,7 @@ var AMM = /** @class */ (function () {
                                     throw new Error("Unrecognized error");
                                 }
                                 if (errSig) {
-                                    throw new Error(errSig);
+                                    throw new Error((0, extractErrorMessage_1.getErrorMessage)(errSig));
                                 }
                                 else {
                                     throw new Error("Unrecognized error");
@@ -456,7 +486,7 @@ var AMM = /** @class */ (function () {
                                     throw new Error("Unrecognized error");
                                 }
                                 if (errSig) {
-                                    throw new Error(errSig);
+                                    throw new Error((0, extractErrorMessage_1.getErrorMessage)(errSig));
                                 }
                                 else {
                                     throw new Error("Unrecognized error");
@@ -464,7 +494,17 @@ var AMM = /** @class */ (function () {
                             })];
                     case 6:
                         mintTransaction = _b.sent();
-                        return [2 /*return*/, mintTransaction.wait()];
+                        _b.label = 7;
+                    case 7:
+                        _b.trys.push([7, 9, , 10]);
+                        return [4 /*yield*/, mintTransaction.wait()];
+                    case 8:
+                        receipt = _b.sent();
+                        return [2 /*return*/, receipt];
+                    case 9:
+                        error_4 = _b.sent();
+                        throw new Error("Transaction Confirmation Error");
+                    case 10: return [2 /*return*/];
                 }
             });
         });
@@ -472,24 +512,24 @@ var AMM = /** @class */ (function () {
     AMM.prototype.burn = function (_a) {
         var fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional, validationOnly = _a.validationOnly;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, peripheryContract, _notional, mintOrBurnParams, burnTransaction;
+            var tickUpper, tickLower, peripheryContract, _notional, mintOrBurnParams, burnTransaction, receipt, error_5;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         if (!this.signer) {
-                            throw new Error('Wallet not connected!');
+                            throw new Error('Wallet not connected');
                         }
                         if (fixedLow >= fixedHigh) {
-                            throw new Error('Lower Fixed Rate must be smaller than Upper Fixed Rate!');
+                            throw new Error('Lower Rate must be smaller than Upper Rate');
                         }
                         if (fixedLow < constants_1.MIN_FIXED_RATE) {
-                            throw new Error('Lower Fixed Rate is too low!');
+                            throw new Error('Lower Rate is too low');
                         }
                         if (fixedHigh > constants_1.MAX_FIXED_RATE) {
-                            throw new Error('Upper Fixed Rate is too high!');
+                            throw new Error('Upper Rate is too high');
                         }
                         if (notional <= 0) {
-                            throw new Error('Amount of notional must be greater than 0!');
+                            throw new Error('Amount of notional must be greater than 0');
                         }
                         if (validationOnly) {
                             return [2 /*return*/];
@@ -516,7 +556,7 @@ var AMM = /** @class */ (function () {
                                     throw new Error("Unrecognized error");
                                 }
                                 if (errSig) {
-                                    throw new Error(errSig);
+                                    throw new Error((0, extractErrorMessage_1.getErrorMessage)(errSig));
                                 }
                                 else {
                                     throw new Error("Unrecognized error");
@@ -534,7 +574,7 @@ var AMM = /** @class */ (function () {
                                     throw new Error("Unrecognized error");
                                 }
                                 if (errSig) {
-                                    throw new Error(errSig);
+                                    throw new Error((0, extractErrorMessage_1.getErrorMessage)(errSig));
                                 }
                                 else {
                                     throw new Error("Unrecognized error");
@@ -542,19 +582,29 @@ var AMM = /** @class */ (function () {
                             })];
                     case 2:
                         burnTransaction = _b.sent();
-                        return [2 /*return*/, burnTransaction.wait()];
+                        _b.label = 3;
+                    case 3:
+                        _b.trys.push([3, 5, , 6]);
+                        return [4 /*yield*/, burnTransaction.wait()];
+                    case 4:
+                        receipt = _b.sent();
+                        return [2 /*return*/, receipt];
+                    case 5:
+                        error_5 = _b.sent();
+                        throw new Error("Transaction Confirmation Error");
+                    case 6: return [2 /*return*/];
                 }
             });
         });
     };
     AMM.prototype.approveFCM = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var factoryContract, signerAddress, isApproved, approvalTransaction;
+            var factoryContract, signerAddress, isApproved, approvalTransaction, receipt, error_6;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         if (!this.signer) {
-                            throw new Error('Wallet not connected!');
+                            throw new Error('Wallet not connected');
                         }
                         factoryContract = typechain_1.Factory__factory.connect(constants_1.FACTORY_ADDRESS, this.signer);
                         return [4 /*yield*/, this.signer.getAddress()];
@@ -569,22 +619,32 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, factoryContract.setApproval(this.fcmAddress, true)];
                     case 3:
                         approvalTransaction = _a.sent();
-                        return [2 /*return*/, approvalTransaction.wait()];
+                        _a.label = 4;
+                    case 4:
+                        _a.trys.push([4, 6, , 7]);
+                        return [4 /*yield*/, approvalTransaction.wait()];
+                    case 5:
+                        receipt = _a.sent();
+                        return [2 /*return*/, receipt];
+                    case 6:
+                        error_6 = _a.sent();
+                        throw new Error("Transaction Confirmation Error");
+                    case 7: return [2 /*return*/];
                 }
             });
         });
     };
-    AMM.prototype.approveERC20 = function (marginDelta, addressToApprove) {
+    AMM.prototype.approveERC20 = function (amountToApprove, addressToApprove) {
         return __awaiter(this, void 0, void 0, function () {
-            var token, currentApproval, _a, _b, approvalTransaction;
+            var token, currentApproval, _a, _b, amountToApproveBN, approvalTransaction, receipt, error_7;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
                         if (!this.signer) {
-                            throw new Error('Wallet not connected!');
+                            throw new Error('Wallet not connected');
                         }
                         if (!this.underlyingToken.id) {
-                            throw new Error('No underlying token!');
+                            throw new Error('No underlying token');
                         }
                         token = typechain_1.ERC20Mock__factory.connect(this.underlyingToken.id, this.signer);
                         _b = (_a = token).allowance;
@@ -592,13 +652,24 @@ var AMM = /** @class */ (function () {
                     case 1: return [4 /*yield*/, _b.apply(_a, [_c.sent(), addressToApprove])];
                     case 2:
                         currentApproval = _c.sent();
-                        if (ethers_2.BigNumber.from(marginDelta).lt(currentApproval)) {
+                        amountToApproveBN = ethers_2.BigNumber.from(amountToApprove).mul(1.01);
+                        if (amountToApproveBN.lt(currentApproval.mul(1.01))) {
                             return [2 /*return*/];
                         }
-                        return [4 /*yield*/, token.approve(addressToApprove, marginDelta)];
+                        return [4 /*yield*/, token.approve(addressToApprove, amountToApproveBN)];
                     case 3:
                         approvalTransaction = _c.sent();
-                        return [2 /*return*/, approvalTransaction.wait()];
+                        _c.label = 4;
+                    case 4:
+                        _c.trys.push([4, 6, , 7]);
+                        return [4 /*yield*/, approvalTransaction.wait()];
+                    case 5:
+                        receipt = _c.sent();
+                        return [2 /*return*/, receipt];
+                    case 6:
+                        error_7 = _c.sent();
+                        throw new Error("Transaction Confirmation Error");
+                    case 7: return [2 /*return*/];
                 }
             });
         });
@@ -606,28 +677,28 @@ var AMM = /** @class */ (function () {
     AMM.prototype.swap = function (_a) {
         var isFT = _a.isFT, notional = _a.notional, margin = _a.margin, fixedRateLimit = _a.fixedRateLimit, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, validationOnly = _a.validationOnly;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, peripheryContract, scaledNotional, scaledMarginDelta, approvalError_2, swapPeripheryParams, swapTransaction;
+            var tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, peripheryContract, scaledNotional, scaledMarginDelta, approvalError_2, swapPeripheryParams, swapTransaction, receipt, error_8;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         if (!this.signer) {
-                            throw new Error('Wallet not connected!');
+                            throw new Error('Wallet not connected');
                         }
                         if (fixedLow >= fixedHigh) {
-                            throw new Error('Lower Fixed Rate must be smaller than Upper Fixed Rate!');
+                            throw new Error('Lower Rate must be smaller than Upper Rate');
                         }
                         if (fixedLow < constants_1.MIN_FIXED_RATE) {
-                            throw new Error('Lower Fixed Rate is too low!');
+                            throw new Error('Lower Rate is too low');
                         }
                         if (fixedHigh > constants_1.MAX_FIXED_RATE) {
-                            throw new Error('Upper Fixed Rate is too high!');
+                            throw new Error('Upper Rate is too high');
                         }
                         if (notional <= 0) {
-                            throw new Error('Amount of notional must be greater than 0!');
+                            throw new Error('Amount of notional must be greater than 0');
                         }
                         if (margin < 0) {
-                            throw new Error('Amount of margin cannot be negative!');
+                            throw new Error('Amount of margin cannot be negative');
                         }
                         if (validationOnly) {
                             return [2 /*return*/];
@@ -680,7 +751,7 @@ var AMM = /** @class */ (function () {
                                         throw new Error("Unrecognized error");
                                     }
                                     if (errSig) {
-                                        throw new Error(errSig);
+                                        throw new Error((0, extractErrorMessage_1.getErrorMessage)(errSig));
                                     }
                                     else {
                                         throw new Error("Unrecognized error");
@@ -702,7 +773,7 @@ var AMM = /** @class */ (function () {
                                     throw new Error("Unrecognized error");
                                 }
                                 if (errSig) {
-                                    throw new Error(errSig);
+                                    throw new Error((0, extractErrorMessage_1.getErrorMessage)(errSig));
                                 }
                                 else {
                                     throw new Error("Unrecognized error");
@@ -710,7 +781,17 @@ var AMM = /** @class */ (function () {
                             })];
                     case 6:
                         swapTransaction = _b.sent();
-                        return [2 /*return*/, swapTransaction.wait()];
+                        _b.label = 7;
+                    case 7:
+                        _b.trys.push([7, 9, , 10]);
+                        return [4 /*yield*/, swapTransaction.wait()];
+                    case 8:
+                        receipt = _b.sent();
+                        return [2 /*return*/, receipt];
+                    case 9:
+                        error_8 = _b.sent();
+                        throw new Error("Transaction Confirmation Error");
+                    case 10: return [2 /*return*/];
                 }
             });
         });
@@ -718,12 +799,12 @@ var AMM = /** @class */ (function () {
     AMM.prototype.FCMSwap = function (_a) {
         var notional = _a.notional, fixedRateLimit = _a.fixedRateLimit;
         return __awaiter(this, void 0, void 0, function () {
-            var approvalError_3, sqrtPriceLimitX96, tickLimit, fcmContract, scaledNotional, fcmSwapTransaction;
+            var approvalError_3, sqrtPriceLimitX96, tickLimit, fcmContract, scaledNotional, fcmSwapTransaction, receipt, error_9;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         if (!this.signer) {
-                            throw new Error('Wallet not connected!');
+                            throw new Error('Wallet not connected');
                         }
                         _b.label = 1;
                     case 1:
@@ -748,7 +829,17 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, fcmContract.initiateFullyCollateralisedFixedTakerSwap(scaledNotional, sqrtPriceLimitX96)];
                     case 5:
                         fcmSwapTransaction = _b.sent();
-                        return [2 /*return*/, fcmSwapTransaction.wait()];
+                        _b.label = 6;
+                    case 6:
+                        _b.trys.push([6, 8, , 9]);
+                        return [4 /*yield*/, fcmSwapTransaction.wait()];
+                    case 7:
+                        receipt = _b.sent();
+                        return [2 /*return*/, receipt];
+                    case 8:
+                        error_9 = _b.sent();
+                        throw new Error("Transaction Confirmation Error");
+                    case 9: return [2 /*return*/];
                 }
             });
         });
@@ -756,12 +847,12 @@ var AMM = /** @class */ (function () {
     AMM.prototype.FCMUnwind = function (_a) {
         var notionalToUnwind = _a.notionalToUnwind, fixedRateLimit = _a.fixedRateLimit;
         return __awaiter(this, void 0, void 0, function () {
-            var sqrtPriceLimitX96, tickLimit, approvalError_4, fcmContract, scaledNotional, fcmUnwindTransaction;
+            var sqrtPriceLimitX96, tickLimit, approvalError_4, fcmContract, scaledNotional, fcmUnwindTransaction, receipt, error_10;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         if (!this.signer) {
-                            throw new Error('Wallet not connected!');
+                            throw new Error('Wallet not connected');
                         }
                         if (fixedRateLimit) {
                             tickLimit = this.closestTickAndFixedRate(fixedRateLimit).closestUsableTick;
@@ -786,25 +877,45 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, fcmContract.unwindFullyCollateralisedFixedTakerSwap(scaledNotional, sqrtPriceLimitX96)];
                     case 5:
                         fcmUnwindTransaction = _b.sent();
-                        return [2 /*return*/, fcmUnwindTransaction.wait()];
+                        _b.label = 6;
+                    case 6:
+                        _b.trys.push([6, 8, , 9]);
+                        return [4 /*yield*/, fcmUnwindTransaction.wait()];
+                    case 7:
+                        receipt = _b.sent();
+                        return [2 /*return*/, receipt];
+                    case 8:
+                        error_10 = _b.sent();
+                        throw new Error("Transaction Confirmation Error");
+                    case 9: return [2 /*return*/];
                 }
             });
         });
     };
     AMM.prototype.settleFCMTrader = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var fcmContract, fcmSettleTraderTransaction;
+            var fcmContract, fcmSettleTraderTransaction, receipt, error_11;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         if (!this.signer) {
-                            throw new Error('Wallet not connected!');
+                            throw new Error('Wallet not connected');
                         }
                         fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
                         return [4 /*yield*/, fcmContract.settleTrader()];
                     case 1:
                         fcmSettleTraderTransaction = _a.sent();
-                        return [2 /*return*/, fcmSettleTraderTransaction.wait()];
+                        _a.label = 2;
+                    case 2:
+                        _a.trys.push([2, 4, , 5]);
+                        return [4 /*yield*/, fcmSettleTraderTransaction.wait()];
+                    case 3:
+                        receipt = _a.sent();
+                        return [2 /*return*/, receipt];
+                    case 4:
+                        error_11 = _a.sent();
+                        throw new Error("Transaction Confirmation Error");
+                    case 5: return [2 /*return*/];
                 }
             });
         });
@@ -876,7 +987,7 @@ var AMM = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         if (!this.provider) {
-                            throw new Error('Blockchain not connected!');
+                            throw new Error('Blockchain not connected');
                         }
                         marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.provider);
                         return [4 /*yield*/, marginEngineContract.callStatic.getHistoricalApy()];
