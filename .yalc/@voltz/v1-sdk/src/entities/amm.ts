@@ -762,8 +762,8 @@ class AMM {
     const token = tokenFactory.connect(this.underlyingToken.id, this.signer);
     const currentApproval = await token.allowance(await this.signer.getAddress(), addressToApprove);
 
-    const amountToApproveBN = BigNumber.from(amountToApprove).mul(1.01);
-    if (amountToApproveBN.lt(currentApproval.mul(1.01))) {
+    const amountToApproveBN = BigNumber.from(amountToApprove).mul(BigNumber.from("101")).div(BigNumber.from("100"));
+    if (amountToApproveBN.lt(currentApproval.mul(BigNumber.from("101")).div(BigNumber.from("100")))) {
       return;
     }
 

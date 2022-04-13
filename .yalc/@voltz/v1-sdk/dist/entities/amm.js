@@ -652,8 +652,8 @@ var AMM = /** @class */ (function () {
                     case 1: return [4 /*yield*/, _b.apply(_a, [_c.sent(), addressToApprove])];
                     case 2:
                         currentApproval = _c.sent();
-                        amountToApproveBN = ethers_2.BigNumber.from(amountToApprove).mul(1.01);
-                        if (amountToApproveBN.lt(currentApproval.mul(1.01))) {
+                        amountToApproveBN = ethers_2.BigNumber.from(amountToApprove).mul(ethers_2.BigNumber.from("101")).div(ethers_2.BigNumber.from("100"));
+                        if (amountToApproveBN.lt(currentApproval.mul(ethers_2.BigNumber.from("101")).div(ethers_2.BigNumber.from("100")))) {
                             return [2 /*return*/];
                         }
                         return [4 /*yield*/, token.approve(addressToApprove, amountToApproveBN)];
