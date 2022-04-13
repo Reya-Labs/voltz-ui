@@ -215,7 +215,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
           }}
         >
           <Typography label="NOTIONAL AMOUNT" variant="body2">
-            {activeTransaction.notional} {amm.protocol}
+            {activeTransaction.notional} {amm.underlyingToken.name}
           </Typography>
         </Box>
         <Box
@@ -224,7 +224,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
           }}
         >
           <Typography label="MARGIN" variant="body2">
-            {activeTransaction.margin} {amm.protocol}
+            {activeTransaction.margin} {amm.underlyingToken.name}
           </Typography>
         </Box>
       </Panel>
