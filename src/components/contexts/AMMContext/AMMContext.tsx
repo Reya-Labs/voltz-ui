@@ -1,9 +1,15 @@
 import { createContext } from 'react';
 
-import { MintMinimumMarginRequirementPayload, SwapInfoPayload, AMMDispatch, EstimatedCashflowPayload } from './types';
+import { MintMinimumMarginRequirementPayload, SwapInfoPayload, AMMDispatch, EstimatedCashflowPayload, CurrentMarginPayload } from './types';
 
 const AMMContext = createContext<AMMDispatch>({
   variableApy: {
+    result: undefined,
+    error: false,
+    loading: false,
+    call: () => undefined,
+  },
+  fixedApr: {
     result: undefined,
     error: false,
     loading: false,
@@ -26,6 +32,12 @@ const AMMContext = createContext<AMMDispatch>({
     error: false,
     loading: false,
     call: (_args?: EstimatedCashflowPayload) => undefined,
+  },
+  currentMargin: {
+    result: undefined,
+    error: false,
+    loading: false,
+    call: (_args?: CurrentMarginPayload) => undefined,
   },
 });
 

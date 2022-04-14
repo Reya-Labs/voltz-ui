@@ -74,7 +74,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.getInfoPostSwap = function (_a) {
         var isFT = _a.isFT, notional = _a.notional, fixedRateLimit = _a.fixedRateLimit, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh;
         return __awaiter(this, void 0, void 0, function () {
-            var signerAddress, tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, scaledNotional, peripheryContract, swapPeripheryParams, tickBefore, tickAfter, marginRequirement, fee, availableNotional, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw, marginEngineContract, currentMargin, scaledCurrentMargin, scaledMarginRequirement, scaledAvailableNotional, scaledFee, additionalMargin;
+            var signerAddress, tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, scaledNotional, peripheryContract, swapPeripheryParams, tickBefore, tickAfter, marginRequirement, fee, availableNotional, fixedTokenDeltaUnbalanced, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw, marginEngineContract, currentMargin, scaledCurrentMargin, scaledMarginRequirement, scaledAvailableNotional, scaledFee, additionalMargin, averageFixedRate;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -128,9 +128,11 @@ var AMM = /** @class */ (function () {
                         marginRequirement = ethers_2.BigNumber.from(0);
                         fee = ethers_2.BigNumber.from(0);
                         availableNotional = ethers_2.BigNumber.from(0);
+                        fixedTokenDeltaUnbalanced = ethers_2.BigNumber.from(0);
                         return [4 /*yield*/, peripheryContract.callStatic.swap(swapPeripheryParams).then(function (result) {
                                 availableNotional = result[1];
                                 fee = result[2];
+                                fixedTokenDeltaUnbalanced = result[3];
                                 marginRequirement = result[4];
                                 tickAfter = parseInt(result[5]);
                             }, function (error) {
@@ -152,6 +154,7 @@ var AMM = /** @class */ (function () {
                                             tickAfter = result.tick;
                                             fee = result.cumulativeFeeIncurred;
                                             availableNotional = result.variableTokenDelta;
+                                            fixedTokenDeltaUnbalanced = result.fixedTokenDeltaUnbalanced;
                                         }
                                         catch (_) {
                                             throw new Error("Cannot decode trade information");
@@ -179,11 +182,13 @@ var AMM = /** @class */ (function () {
                         additionalMargin = scaledMarginRequirement > scaledCurrentMargin
                             ? scaledMarginRequirement - scaledCurrentMargin
                             : 0;
+                        averageFixedRate = fixedTokenDeltaUnbalanced.mul(ethers_2.BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
                         return [2 /*return*/, {
                                 marginRequirement: additionalMargin,
-                                availableNotional: scaledAvailableNotional,
-                                fee: scaledFee,
-                                slippage: fixedRateDeltaRaw,
+                                availableNotional: scaledAvailableNotional < 0 ? -scaledAvailableNotional : scaledAvailableNotional,
+                                fee: scaledFee < 0 ? -scaledFee : scaledFee,
+                                slippage: fixedRateDeltaRaw < 0 ? -fixedRateDeltaRaw : fixedRateDeltaRaw,
+                                averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
                             }];
                 }
             });
@@ -227,7 +232,12 @@ var AMM = /** @class */ (function () {
         return scaledValue;
     };
     AMM.prototype.descale = function (value) {
-        return value.toNumber() / (Math.pow(10, this.underlyingToken.decimals));
+        if (this.underlyingToken.decimals <= 3) {
+            return value.toNumber() / (Math.pow(10, this.underlyingToken.decimals));
+        }
+        else {
+            return value.div(ethers_2.BigNumber.from(10).pow(this.underlyingToken.decimals - 3)).toNumber() / 1000;
+        }
     };
     AMM.prototype.updatePositionMargin = function (_a) {
         var owner = _a.owner, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, marginDelta = _a.marginDelta;
@@ -954,13 +964,25 @@ var AMM = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(AMM.prototype, "fixedApr", {
-        get: function () {
-            return this.fixedRate.toNumber();
-        },
-        enumerable: false,
-        configurable: true
-    });
+    AMM.prototype.fixedApr = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var peripheryContract, currentTick, apr;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!this.provider) {
+                            throw new Error('Blockchain not connected');
+                        }
+                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.provider);
+                        return [4 /*yield*/, peripheryContract.callStatic.getCurrentTick(this.marginEngineAddress)];
+                    case 1:
+                        currentTick = _a.sent();
+                        apr = (0, priceTickConversions_1.tickToFixedRate)(currentTick).toNumber();
+                        return [2 /*return*/, apr];
+                }
+            });
+        });
+    };
     Object.defineProperty(AMM.prototype, "price", {
         get: function () {
             if (!this._price) {
@@ -1015,6 +1037,27 @@ var AMM = /** @class */ (function () {
                     case 2:
                         estimatedCashflow = _a.sent();
                         return [2 /*return*/, this.descale(estimatedCashflow)];
+                }
+            });
+        });
+    };
+    AMM.prototype.getCurrentMargin = function (fixedRateLower, fixedRateUpper) {
+        return __awaiter(this, void 0, void 0, function () {
+            var signerAddress, marginEngineContract, margin;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!this.signer) {
+                            throw new Error('Wallet not connected');
+                        }
+                        return [4 /*yield*/, this.signer.getAddress()];
+                    case 1:
+                        signerAddress = _a.sent();
+                        marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
+                        return [4 /*yield*/, marginEngineContract.callStatic.getPosition(signerAddress, this.closestTickAndFixedRate(fixedRateUpper).closestUsableTick, this.closestTickAndFixedRate(fixedRateLower).closestUsableTick)];
+                    case 2:
+                        margin = (_a.sent()).margin;
+                        return [2 /*return*/, this.descale(margin)];
                 }
             });
         });

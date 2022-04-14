@@ -11,7 +11,7 @@ import { PositionTableDatum } from '../../types';
 import { lpLabels } from '../../constants';
 import { traderLabels } from '../../constants';
 import { PositionTableFields } from '../../types';
-import { EstimatedCashflow } from './components';
+import { EstimatedCashflow, FixedAPR, CurrentMargin } from './components';
 
 export type PositionTableRowProps = {
   datum: PositionTableDatum;
@@ -79,13 +79,18 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
             return <EstimatedCashflow tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} token={token} />;
           }
 
+          if (field === 'margin') {
+            return <CurrentMargin tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} token={token} />;
+          }
+
+          if (field === 'fixedApr') {
+            return <FixedAPR />;
+          }
+
           const getContent = () => {
             switch (field) {
               case 'pool':
                 return datum.protocol;
-
-              case 'fixedApr':
-                return `${datum.fixedApr.toFixed(2)}%`;
               
               case 'fixedUpper':
                 return `${datum.fixedUpper.toFixed(2)}%`;
@@ -94,10 +99,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
                 return `${datum.fixedLower.toFixed(2)}%`;
 
               case 'notional':
-                
                 return `${datum.notional.toFixed(2)} ${token}`;
-              case 'margin':
-                return `${datum.margin.toFixed(2)} ${token}`;
 
               default:
                 return null;

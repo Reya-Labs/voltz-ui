@@ -10,7 +10,7 @@ import { MaturityInformation } from '@components/composite';
 import { useAgent, useWallet } from '@hooks';
 import { AMMTableDatum } from '../../types';
 import { labels } from '../../constants';
-import { VariableAPY } from './components';
+import { VariableAPY, FixedAPR } from './components';
 
 export type AMMTableRowProps = {
   datum: AMMTableDatum;
@@ -74,6 +74,10 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
           return <VariableAPY />;
         }
 
+        if (field === 'fixedApr') {
+          return <FixedAPR />;
+        }
+
         const renderDisplay = () => {
           if (field === 'maturity') {
             return (
@@ -90,16 +94,13 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
               case 'protocol':
                 return datum.protocol;
 
-              case 'fixedApr':
-                return `${datum.fixedApr.toFixed(2)}%`;
-
               default:
                 return null;
             }
           };
 
           return (
-            <Typography variant="body2" label={label} agentStyling={field=="fixedApr"} sx={{
+            <Typography variant="body2" label={label} sx={{
               fontSize: 18
             }}>
               {getContent()}

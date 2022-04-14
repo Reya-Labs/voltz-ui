@@ -38,7 +38,6 @@ export type SwapFormProps = {
 const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   isModifying = false,
   protocol,
-  fixedApr,
   startDate,
   endDate,
   defaultNotional,
@@ -93,7 +92,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         borderRadius: 2
       }}
     >
-      <ProtocolInformation protocol={protocol} fixedApr={fixedApr} />
+      <ProtocolInformation protocol={protocol}/>
       <Box
         sx={{
           marginBottom: (theme) => theme.spacing(4),

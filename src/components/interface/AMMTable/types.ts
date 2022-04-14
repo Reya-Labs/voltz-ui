@@ -7,6 +7,4 @@ export type AMMTableDatum = {
   protocol: string;
   startDate: DateTime;
   endDate: DateTime;
-  fixedApr: number;
-  variableApy?: number;
 };

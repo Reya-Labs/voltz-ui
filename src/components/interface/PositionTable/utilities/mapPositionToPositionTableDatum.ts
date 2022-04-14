@@ -5,29 +5,27 @@ import { PositionTableDatum } from '../types';
 
 const mapPositionToPositionTableDatum =
   (agent: Agents) =>
-  ({
-    id,
-    amm,
-    notional,
-    effectiveMargin,
-    effectiveVariableTokenBalance,
-    effectiveFixedTokenBalance,
-    fixedRateUpper, 
-    fixedRateLower
-  }: Position): PositionTableDatum => {
-    return {
+    ({
       id,
-      protocol: amm.protocol,
-      startDate: amm.startDateTime,
-      endDate: amm.endDateTime,
-      fixedApr: amm.fixedRate.toNumber(),
-      fixedLower: fixedRateLower.toNumber(),
-      fixedUpper: fixedRateUpper.toNumber(),
-      notional: agent === Agents.LIQUIDITY_PROVIDER ? notional : (agent === Agents.VARIABLE_TRADER ? effectiveVariableTokenBalance : -effectiveVariableTokenBalance),
-      fixedTokenBalance: effectiveFixedTokenBalance,
-      margin: effectiveMargin,
-      agent: agent
+      amm,
+      notional,
+      effectiveVariableTokenBalance,
+      effectiveFixedTokenBalance,
+      fixedRateUpper,
+      fixedRateLower
+    }: Position): PositionTableDatum => {
+      return {
+        id,
+        protocol: amm.protocol,
+        startDate: amm.startDateTime,
+        endDate: amm.endDateTime,
+        fixedApr: amm.fixedRate.toNumber(),
+        fixedLower: fixedRateLower.toNumber(),
+        fixedUpper: fixedRateUpper.toNumber(),
+        notional: agent === Agents.LIQUIDITY_PROVIDER ? notional : (agent === Agents.VARIABLE_TRADER ? effectiveVariableTokenBalance : -effectiveVariableTokenBalance),
+        fixedTokenBalance: effectiveFixedTokenBalance,
+        agent: agent
+      };
     };
-  };
 
 export default mapPositionToPositionTableDatum;

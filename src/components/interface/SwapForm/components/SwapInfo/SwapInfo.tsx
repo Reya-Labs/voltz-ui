@@ -30,10 +30,13 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({ notional }) => {
     return (
       <>
         <Typography agentStyling variant="body2" label="Swap info">
-          Available notional: {((result.availableNotional < 0) ? -result.availableNotional : result.availableNotional).toFixed(2)}
+          Available notional: {result.availableNotional.toFixed(2)}
         </Typography>
-        <Typography agentStyling variant="body2">Estimated slippage: {((result.slippage < 0) ? -result.slippage : result.slippage).toFixed(2)}%</Typography>
-        <Typography agentStyling variant="body2">Fee: {((result.fee < 0) ? -result.fee : result.fee).toFixed(2)} </Typography>
+        <Typography agentStyling variant="body2">
+          Average fixed rate: {result.averageFixedRate.toFixed(2)}%
+        </Typography>
+        <Typography agentStyling variant="body2">Estimated slippage: {result.slippage.toFixed(2)}%</Typography>
+        <Typography agentStyling variant="body2">Fee: {result.fee.toFixed(2)} </Typography>
         <Typography agentStyling variant="body2">
           Additional margin required: {result.marginRequirement.toFixed(2)}
         </Typography>

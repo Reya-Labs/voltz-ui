@@ -1,19 +1,16 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import isUndefined from 'lodash/isUndefined';
 
 import { Typography } from '@components/atomic';
 import IconLabel from '../IconLabel/IconLabel';
-import { VariableAPY } from './components';
+import { VariableAPY, FixedAPR } from './components';
 
 export type ProtocolInformationProps = {
   protocol?: string;
-  fixedApr?: number;
 };
 
 const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = ({
   protocol,
-  fixedApr,
 }) => {
   return (
     <Box
@@ -31,15 +28,7 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
       >
         {protocol}
       </Typography>
-      {!isUndefined(fixedApr) && (
-        <Typography
-          label={<IconLabel label="fixed apr" icon="information-circle" info=" The current fixed Annual Percentage Rate of the pool." removeIcon/>}
-          variant="h3"
-          agentStyling
-        >
-          {fixedApr.toFixed(2)}%
-        </Typography>
-      )}
+      <FixedAPR />
       <VariableAPY />
     </Box>
   );

@@ -40,7 +40,6 @@ export type MintBurnFormProps = AgentProps & {
 
 const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   protocol,
-  fixedApr,
   startDate,
   endDate,
   defaultFixedLow,
@@ -88,7 +87,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         borderRadius: 2
       }}
     >
-      <ProtocolInformation protocol={protocol} fixedApr={fixedApr} />
+      <ProtocolInformation protocol={protocol} />
       <Box
         sx={{
           marginBottom: (theme) => theme.spacing(4),

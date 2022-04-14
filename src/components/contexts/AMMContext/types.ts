@@ -28,12 +28,19 @@ export type EstimatedCashflowPayload = {
   tickUpper: number;
 };
 
+export type CurrentMarginPayload = {
+  tickLower: number;
+  tickUpper: number;
+};
+
 export type AMMDispatch = {
   variableApy: UseAsyncFunctionResult<unknown, number | void>;
+  fixedApr: UseAsyncFunctionResult<unknown, number | void>;
   mintMinimumMarginRequirement: UseAsyncFunctionResult<
     MintMinimumMarginRequirementPayload,
     number | void
   >;
   swapInfo: UseAsyncFunctionResult<SwapInfoPayload, InfoPostSwap | void>;
   estimatedCashflow: UseAsyncFunctionResult<EstimatedCashflowPayload, number | void>;
+  currentMargin: UseAsyncFunctionResult<CurrentMarginPayload, number | void>;
 };

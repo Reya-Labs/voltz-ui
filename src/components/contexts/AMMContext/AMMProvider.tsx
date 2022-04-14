@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { AugmentedAMM } from '@utilities';
 import { useAsyncFunction, useAgent } from '@hooks';
 import { Agents } from '@components/contexts';
-import { EstimatedCashflowPayload, MintMinimumMarginRequirementPayload, SwapInfoPayload } from './types';
+import { CurrentMarginPayload, EstimatedCashflowPayload, MintMinimumMarginRequirementPayload, SwapInfoPayload } from './types';
 import AMMContext from './AMMContext';
 
 export type AMMProviderProps = {
@@ -14,6 +14,10 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
   const { agent } = useAgent();
   const variableApy = useAsyncFunction(
     amm.getVariableApy.bind(amm),
+    useMemo(() => undefined, [!!amm.provider]),
+  );
+  const fixedApr = useAsyncFunction(
+    amm.fixedApr.bind(amm),
     useMemo(() => undefined, [!!amm.provider]),
   );
   const mintMinimumMarginRequirement = useAsyncFunction(
@@ -74,11 +78,32 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
     useMemo(() => undefined, [!!amm.signer, agent]),
   );
 
+  const currentMargin = useAsyncFunction(
+    async (args: CurrentMarginPayload) => {
+      const recipient = await amm.signer?.getAddress();
+
+      if (!recipient) {
+        return;
+      }
+
+      const result = await amm.getCurrentMargin(args.tickLower, args.tickUpper);
+
+      if (!result) {
+        return;
+      }
+
+      return result;
+    },
+    useMemo(() => undefined, [!!amm.signer, agent]),
+  );
+
   const value = {
     variableApy,
+    fixedApr,
     mintMinimumMarginRequirement,
     swapInfo,
-    estimatedCashflow
+    estimatedCashflow,
+    currentMargin
   };
 
   return <AMMContext.Provider value={value}>{children}</AMMContext.Provider>;

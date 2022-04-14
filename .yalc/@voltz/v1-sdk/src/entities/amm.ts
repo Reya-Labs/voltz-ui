@@ -110,6 +110,7 @@ export type InfoPostSwap = {
   availableNotional: number;
   fee: number;
   slippage: number;
+  averageFixedRate: number;
 };
 
 export type AMMBurnArgs = Omit<AMMMintArgs, 'margin'>;
@@ -237,11 +238,13 @@ class AMM {
     let marginRequirement: BigNumber = BigNumber.from(0);
     let fee = BigNumber.from(0);
     let availableNotional = BigNumber.from(0);
+    let fixedTokenDeltaUnbalanced = BigNumber.from(0);
 
     await peripheryContract.callStatic.swap(swapPeripheryParams).then(
       (result: any) => {
         availableNotional = result[1];
         fee = result[2];
+        fixedTokenDeltaUnbalanced = result[3];
         marginRequirement = result[4];
         tickAfter = parseInt(result[5]);
       },
@@ -269,6 +272,7 @@ class AMM {
               tickAfter = result.tick;
               fee = result.cumulativeFeeIncurred;
               availableNotional = result.variableTokenDelta;
+              fixedTokenDeltaUnbalanced = result.fixedTokenDeltaUnbalanced;
             } catch (_) {
               throw new Error("Cannot decode trade information");
             }
@@ -301,11 +305,14 @@ class AMM {
         ? scaledMarginRequirement - scaledCurrentMargin
         : 0;
 
+    const averageFixedRate = fixedTokenDeltaUnbalanced.mul(BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
+
     return {
       marginRequirement: additionalMargin,
-      availableNotional: scaledAvailableNotional,
-      fee: scaledFee,
-      slippage: fixedRateDeltaRaw,
+      availableNotional: scaledAvailableNotional < 0 ? -scaledAvailableNotional : scaledAvailableNotional,
+      fee: scaledFee < 0 ? -scaledFee : scaledFee,
+      slippage: fixedRateDeltaRaw < 0 ? -fixedRateDeltaRaw : fixedRateDeltaRaw,
+      averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
     };
   }
 
@@ -350,7 +357,12 @@ class AMM {
   }
 
   public descale(value: BigNumber): number {
-    return value.toNumber() / (10 ** this.underlyingToken.decimals);
+    if (this.underlyingToken.decimals <= 3) {
+      return value.toNumber() / (10 ** this.underlyingToken.decimals);
+    }
+    else {
+      return value.div(BigNumber.from(10).pow(this.underlyingToken.decimals - 3)).toNumber() / 1000;
+    }
   }
 
   public async updatePositionMargin({
@@ -1015,8 +1027,16 @@ class AMM {
     return this._fixedRate;
   }
 
-  public get fixedApr(): number {
-    return this.fixedRate.toNumber();
+  public async fixedApr(): Promise<number> {
+    if (!this.provider) {
+      throw new Error('Blockchain not connected');
+    }
+
+    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.provider);
+    const currentTick = await peripheryContract.callStatic.getCurrentTick(this.marginEngineAddress);
+    const apr = tickToFixedRate(currentTick).toNumber();
+
+    return apr;
   }
 
   public get price(): Price {
@@ -1064,6 +1084,27 @@ class AMM {
     );
 
     return this.descale(estimatedCashflow);
+  }
+
+  public async getCurrentMargin(fixedRateLower: number, fixedRateUpper: number): Promise<number> {
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
+    }
+
+    const signerAddress = await this.signer.getAddress();
+
+    const marginEngineContract = marginEngineFactory.connect(
+      this.marginEngineAddress,
+      this.signer,
+    );
+
+    const margin = (await marginEngineContract.callStatic.getPosition(
+      signerAddress,
+      this.closestTickAndFixedRate(fixedRateUpper).closestUsableTick,
+      this.closestTickAndFixedRate(fixedRateLower).closestUsableTick,
+    )).margin;
+
+    return this.descale(margin);
   }
 
   public closestTickAndFixedRate(fixedRate: number): ClosestTickAndFixedRate {

@@ -207,7 +207,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
       {renderStatus()}
       <Panel variant="main" sx={{ padding: 6 }}>
         <AMMProvider amm={amm}>
-          <ProtocolInformation protocol={amm.protocol} fixedApr={amm.fixedApr} />
+          <ProtocolInformation protocol={amm.protocol} />
         </AMMProvider>
         <Box
           sx={{
