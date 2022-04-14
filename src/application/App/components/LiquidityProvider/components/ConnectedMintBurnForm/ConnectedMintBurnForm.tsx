@@ -70,7 +70,6 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     <AMMProvider amm={amm}>
       <MintBurnForm
         protocol={amm.protocol}
-        fixedApr={amm.fixedApr}
         startDate={amm.startDateTime}
         endDate={amm.endDateTime}
         fixedLow={fixedLow}

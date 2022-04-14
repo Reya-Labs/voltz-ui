@@ -10,7 +10,6 @@ export type PositionTableDatum = {
   protocol: string;
   notional: number;
   fixedTokenBalance: number;
-  margin: number;
   startDate: DateTime;
   endDate: DateTime;
   fixedApr: number;

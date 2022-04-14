@@ -77,6 +77,7 @@ export declare type InfoPostSwap = {
     availableNotional: number;
     fee: number;
     slippage: number;
+    averageFixedRate: number;
 };
 export declare type AMMBurnArgs = Omit<AMMMintArgs, 'margin'>;
 export declare type ClosestTickAndFixedRate = {
@@ -123,11 +124,12 @@ declare class AMM {
     get endDateTime(): DateTime;
     get initialized(): boolean;
     get fixedRate(): Price;
-    get fixedApr(): number;
+    fixedApr(): Promise<number>;
     get price(): Price;
     get protocol(): string;
     getVariableApy(): Promise<number>;
     getEstimatedCashflow(fixedRateLower: number, fixedRateUpper: number): Promise<number>;
+    getCurrentMargin(fixedRateLower: number, fixedRateUpper: number): Promise<number>;
     closestTickAndFixedRate(fixedRate: number): ClosestTickAndFixedRate;
     getNextUsableFixedRate(fixedRate: number, count: number): number;
 }

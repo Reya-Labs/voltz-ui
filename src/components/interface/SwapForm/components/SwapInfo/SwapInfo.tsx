@@ -62,6 +62,15 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({ notional, underlying
 
         <Box sx={rowStyles}>
           <Typography variant="body2">
+            AVERAGE FIXED RATE:
+          </Typography>
+          <Typography agentStyling variant="body2" sx={valueStyles}>
+            {Math.abs(result.averageFixedRate).toFixed(2)} %
+          </Typography>
+        </Box>
+
+        <Box sx={rowStyles}>
+          <Typography variant="body2">
             FEES:
           </Typography>
           <Typography agentStyling variant="body2" sx={valueStyles}>

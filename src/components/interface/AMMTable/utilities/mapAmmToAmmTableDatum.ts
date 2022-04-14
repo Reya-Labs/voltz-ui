@@ -6,14 +6,12 @@ const mapAmmToAmmTableDatum = ({
   protocol,
   startDateTime,
   endDateTime,
-  fixedRate,
 }: AugmentedAMM): AMMTableDatum => {
   return {
     id,
     protocol,
     startDate: startDateTime,
     endDate: endDateTime,
-    fixedApr: fixedRate.toNumber(),
   };
 };
 
