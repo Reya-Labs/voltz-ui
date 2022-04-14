@@ -18,6 +18,7 @@ import { TraderControls, SwapInfo, SubmitSwapFormButton } from './components';
 export type SwapFormProps = {
   isModifying?: boolean;
   protocol?: string;
+  underlyingTokenName?: string;
   fixedApr?: number;
   startDate?: DateTime;
   endDate?: DateTime;
@@ -38,6 +39,7 @@ export type SwapFormProps = {
 const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   isModifying = false,
   protocol,
+  underlyingTokenName,
   fixedApr,
   startDate,
   endDate,
@@ -87,7 +89,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
       sx={{
         marginTop: 12,
         padding: 6,
-        width: (theme) => theme.spacing(80),
+        width: (theme) => theme.spacing(85),
         boxShadow: _boxShadow,
         backgroundColor: "secondary.darken045",
         borderRadius: 2
@@ -144,13 +146,6 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           marginBottom: (theme) => theme.spacing(4),
         }}
       >
-        <SwapInfo notional={notional} />
-      </Box>
-      <Box
-        sx={{
-          marginBottom: (theme) => theme.spacing(4),
-        }}
-      >
         <MarginAmount
           protocol={protocol}
           defaultMargin={defaultMargin}
@@ -158,6 +153,13 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           margin={margin}
           onChangeMargin={onChangeMargin}
         />
+      </Box>
+      <Box
+        sx={{
+          marginBottom: (theme) => theme.spacing(4),
+        }}
+      >
+        <SwapInfo notional={notional} underlyingTokenName={underlyingTokenName} />
       </Box>
       <Box sx={{ display: 'flex' }}>
         <SubmitSwapFormButton onSubmit={handleSubmit} />
