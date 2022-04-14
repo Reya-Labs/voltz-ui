@@ -52,6 +52,7 @@ const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
           //   color: 'primary.light',
           // },
           '&.Mui-selected': {
+            color: 'primary.light',
             backgroundColor: 'primary.darken030',
             '&:hover': {
               backgroundColor: 'primary.darken030',
@@ -77,7 +78,7 @@ const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
               backgroundColor: 'tertiary.base',
             },
             '&:not(:first-of-type)': {
-              borderColor: 'tertiary.light',
+              borderColor: 'secondary.light',
             },
           },
         };

@@ -16,9 +16,12 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
     <Box
       sx={{
         display: 'flex',
-        '& .MuiFormControl-root': {
+        marginBottom: (theme) => theme.spacing(6),
+        '.MuiFormControl-root': {
           paddingRight: 3,
-          paddingBottom: 3,
+          '&:last-child': {
+            paddingRight: 0,
+          }
         },
       }}
     >

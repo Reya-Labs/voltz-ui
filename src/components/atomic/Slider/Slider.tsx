@@ -22,6 +22,9 @@ const Slider: React.FunctionComponent<SliderProps> = ({
     }
 
     return {
+      display: 'block',
+      padding: 0,
+      marginTop: (theme) => theme.spacing(1),
       '& .MuiSlider-thumb': {
         display: 'none',
       } as const,

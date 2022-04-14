@@ -155,6 +155,20 @@ const dark = createTheme({
         },
       },
     },
+    MuiSlider: {
+      styleOverrides: {
+        rail: {
+          backgroundColor: colors.lavenderWeb.darken030,
+          opacity: 1
+        },
+        track: {
+          backgroundColor: colors.lavenderWeb.base,
+          opacity: 1,
+          borderTop: 0,
+          borderBottom: 0,
+        },
+      }
+    }
   },
   typography: {
     h1: {
