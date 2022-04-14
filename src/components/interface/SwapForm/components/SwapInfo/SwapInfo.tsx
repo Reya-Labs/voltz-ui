@@ -3,14 +3,32 @@ import isUndefined from 'lodash/isUndefined';
 
 import { useAMMContext } from '@hooks';
 import { Typography } from '@components/atomic';
+import { IconLabel } from '@components/composite';
+import { Box, SystemStyleObject, Theme } from '@mui/system';
+import colors from '../../../../../theme/colors';
 
 export type SwapInfoProps = {
   notional?: number;
+  underlyingTokenName?: string; 
 };
 
-const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({ notional }) => {
+const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({ notional, underlyingTokenName }) => {
   const { swapInfo } = useAMMContext();
   const { result, loading, call } = swapInfo;
+  const containerStyles: SystemStyleObject<Theme> = {
+    border: `1px solid ${colors.lavenderWeb.darken040}`,
+    borderRadius: (theme) => theme.spacing(1),
+    padding: (theme) => theme.spacing(4),
+  };
+  const rowStyles: SystemStyleObject<Theme> = {
+    display: 'flex',
+    alignItems: 'end',
+    justifyContent: 'space-between',
+    width: '100%',
+  };
+  const valueStyles: SystemStyleObject<Theme> = {
+    whiteSpace: 'nowrap',
+  };
 
   useEffect(() => {
     if (!isUndefined(notional)) {
@@ -20,31 +38,59 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({ notional }) => {
 
   const renderSwapInfo = () => {
     if (loading) {
-      return 'Loading...';
+      return <Typography agentStyling variant="body2">Loading...</Typography>
     }
 
     if (!result) {
-      return '';
+      return null;
     }
 
     return (
-      <>
-        <Typography agentStyling variant="body2" label="Swap info">
-          Available notional: {result.availableNotional.toFixed(2)}
-        </Typography>
-        <Typography agentStyling variant="body2">
-          Average fixed rate: {result.averageFixedRate.toFixed(2)}%
-        </Typography>
-        <Typography agentStyling variant="body2">Estimated slippage: {result.slippage.toFixed(2)}%</Typography>
-        <Typography agentStyling variant="body2">Fee: {result.fee.toFixed(2)} </Typography>
-        <Typography agentStyling variant="body2">
-          Additional margin required: {result.marginRequirement.toFixed(2)}
-        </Typography>
-      </>
+      <Box sx={containerStyles}>
+        <Box sx={rowStyles}>
+          <Typography variant="body2" label={<IconLabel
+          label="trade information"
+          icon="information-circle"
+          info="Trade information"
+        />}>
+            NOTIONAL AVAILABLE:
+          </Typography>
+          <Typography agentStyling variant="body2" sx={valueStyles}>
+            {Math.abs(result.availableNotional).toFixed(2)} {underlyingTokenName}
+          </Typography>
+        </Box>
+
+        <Box sx={rowStyles}>
+          <Typography variant="body2">
+            FEES:
+          </Typography>
+          <Typography agentStyling variant="body2" sx={valueStyles}>
+            {Math.abs(result.fee).toFixed(2)} {underlyingTokenName}
+          </Typography>
+        </Box>
+
+        <Box sx={rowStyles}>
+          <Typography variant="body2">
+            ESTIMATED SLIPPAGE:
+          </Typography>
+          <Typography agentStyling variant="body2" sx={valueStyles}>
+            {Math.abs(result.slippage).toFixed(2)} %
+          </Typography>
+        </Box>
+
+        <Box sx={rowStyles}>
+          <Typography variant="body2">
+            ADDITIONAL MARGIN REQUIRED:
+          </Typography>
+          <Typography agentStyling variant="body2" sx={valueStyles}>
+            {result.marginRequirement.toFixed(2)} {underlyingTokenName}
+          </Typography>
+        </Box>
+      </Box>
     );
   };
 
-  return <Typography agentStyling variant="body2"> {renderSwapInfo()} </Typography>
+  return renderSwapInfo()
 };
 
 export default SwapInfo;

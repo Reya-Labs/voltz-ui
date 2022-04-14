@@ -59,6 +59,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ am
     <AMMProvider amm={amm}>
       <SwapForm
         protocol={amm.protocol}
+        underlyingTokenName={amm.underlyingToken.name}
         startDate={amm.startDateTime}
         endDate={amm.endDateTime}
         notional={notional || 0}
