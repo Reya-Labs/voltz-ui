@@ -26,6 +26,10 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ am
   const [margin, setMargin] = useState<SwapFormProps['margin']>();
   const [partialCollateralization, setPartialCollateralization] =
     useState<SwapFormProps['partialCollateralization']>();
+
+  const [addOrRemoveMargin, setAddOrRemoveMargin] =
+    useState<SwapFormProps['addOrRemoveMargin']>();
+
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId); // contains a failureMessage attribute that will contain whatever came out from the sdk
   // activeTransaction.failureMessage = "No margin", could also be a big horrible object, needs a little more work to parse it correctly
@@ -67,9 +71,11 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ am
         onChangeNotional={setNotional}
         margin={margin || 0}
         partialCollateralization={partialCollateralization}
+        addOrRemoveMargin={addOrRemoveMargin}
         marginEditMode
         onChangePartialCollateralization={setPartialCollateralization}
         onChangeMargin={setMargin}
+        onAddOrRemoveMargin={setAddOrRemoveMargin}
         onSubmit={handleSubmit}
         onCancel={onReset}
       />

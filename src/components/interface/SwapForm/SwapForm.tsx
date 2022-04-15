@@ -13,7 +13,7 @@ import {
   MarginAmount,
 } from '@components/composite';
 import { HandleSubmitSwapFormArgs } from './types';
-import { TraderControls, SwapInfo, SubmitSwapFormButton } from './components';
+import { TraderControls, MarginControls, SwapInfo, SubmitSwapFormButton } from './components';
 
 export type SwapFormProps = {
   isModifying?: boolean;
@@ -25,13 +25,16 @@ export type SwapFormProps = {
   defaultNotional?: number;
   defaultMargin?: number;
   defaultPartialCollateralization?: boolean;
+  defaultAddOrRemoveMargin?: boolean;
   maxMargin?: number;
   notional?: number;
   margin?: number;
   partialCollateralization?: boolean;
+  addOrRemoveMargin?: boolean;
   marginEditMode?: boolean;
   onChangeNotional: (value: number) => void;
   onChangePartialCollateralization: (value: boolean) => void;
+  onAddOrRemoveMargin: (value: boolean) => void;
   onChangeMargin: (value: number) => void;
   onSubmit: (values: HandleSubmitSwapFormArgs) => void;
   onCancel: () => void;
@@ -46,14 +49,17 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   defaultNotional,
   defaultMargin,
   defaultPartialCollateralization,
+  defaultAddOrRemoveMargin,
   maxMargin,
   notional,
   margin,
   partialCollateralization,
+  addOrRemoveMargin,
   marginEditMode
   ,
   onChangeNotional,
   onChangePartialCollateralization,
+  onAddOrRemoveMargin,
   onChangeMargin,
   onSubmit,
   onCancel,
@@ -116,19 +122,43 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           endDate={endDate}
         />
       </Box>
-      <Box
-        sx={{
-          marginBottom: (theme) => theme.spacing(4),
-          display: 'flex',
-        }}
-      >
-        <TraderControls
-          isModifying={isModifying}
-          defaultPartialCollateralization={defaultPartialCollateralization}
-          partialCollateralization={partialCollateralization}
-          onChangePartialCollateralization={onChangePartialCollateralization}
-        />
-      </Box>
+ 
+        {
+          marginEditMode && (
+            <Box
+            sx={{
+              marginBottom: (theme) => theme.spacing(4),
+              display: 'flex',
+            }}
+          >
+            <MarginControls 
+              defaultAddMargin={defaultAddOrRemoveMargin}
+              addMargin={addOrRemoveMargin}
+              onAddOrRemoveMargin={onAddOrRemoveMargin}
+            >
+            </MarginControls>
+            
+            </Box>
+          )
+        }  
+
+        {
+          !marginEditMode && (
+            <Box
+            sx={{
+              marginBottom: (theme) => theme.spacing(4),
+              display: 'flex',
+            }}
+          >
+            <TraderControls
+            isModifying={isModifying}
+            defaultPartialCollateralization={defaultPartialCollateralization}
+            partialCollateralization={partialCollateralization}
+            onChangePartialCollateralization={onChangePartialCollateralization}
+          />
+            </Box>
+          )
+        }
 
       {
         !marginEditMode && (
