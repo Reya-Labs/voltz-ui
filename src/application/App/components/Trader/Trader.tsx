@@ -19,7 +19,7 @@ const Trader: React.FunctionComponent = () => {
   const [amm, setAMM] = useState<AugmentedAMM | null>(null);
   const [position, setPosition] = useState<Position | null>(null);
   const { onChangeAgent } = useAgent();
-  const { pathname } = useLocation();
+  const { pathname, key } = useLocation();
   const pathnameWithoutPrefix = pathname.slice(1);
 
   useEffect(() => {
@@ -28,6 +28,10 @@ const Trader: React.FunctionComponent = () => {
     setPosition(null);
     onChangeAgent(Agents.FIXED_TRADER);
   }, [setFormActive, setAMM, pathnameWithoutPrefix, onChangeAgent]);
+
+  useEffect(() => {
+    handleReset();
+  }, [key]);
 
   const pageTitle = useMemo(() => {
     switch (pathnameWithoutPrefix) {
