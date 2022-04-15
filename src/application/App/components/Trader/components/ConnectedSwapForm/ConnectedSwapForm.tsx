@@ -15,10 +15,11 @@ import {
 
 export type ConnectedSwapFormProps = {
   amm: AugmentedAMM;
+  marginEditMode?: boolean;
   onReset: () => void;
 };
 
-const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ amm, onReset }) => {
+const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ amm, onReset, marginEditMode }) => {
   const { agent } = useAgent();
   const navigate = useNavigate();
   const [notional, setNotional] = useState<SwapFormProps['notional']>();
@@ -66,6 +67,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ am
         onChangeNotional={setNotional}
         margin={margin || 0}
         partialCollateralization={partialCollateralization}
+        marginEditMode
         onChangePartialCollateralization={setPartialCollateralization}
         onChangeMargin={setMargin}
         onSubmit={handleSubmit}

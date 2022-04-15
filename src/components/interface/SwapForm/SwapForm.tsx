@@ -29,6 +29,7 @@ export type SwapFormProps = {
   notional?: number;
   margin?: number;
   partialCollateralization?: boolean;
+  marginEditMode?: boolean;
   onChangeNotional: (value: number) => void;
   onChangePartialCollateralization: (value: boolean) => void;
   onChangeMargin: (value: number) => void;
@@ -49,6 +50,8 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   notional,
   margin,
   partialCollateralization,
+  marginEditMode
+  ,
   onChangeNotional,
   onChangePartialCollateralization,
   onChangeMargin,
@@ -126,20 +129,26 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           onChangePartialCollateralization={onChangePartialCollateralization}
         />
       </Box>
-      <Box
-        sx={{
-          marginBottom: (theme) => theme.spacing(4),
-        }}
-      >
-        <NotionalAmount
-          label="notional amount"
-          info="Choose the notional you wish to trade. The notional amount is the total size of your trade."
-          protocol={protocol}
-          defaultNotional={defaultNotional}
-          notional={notional}
-          onChangeNotional={onChangeNotional}
-        />
-      </Box>
+
+      {
+        !marginEditMode && (
+          <Box
+          sx={{
+            marginBottom: (theme) => theme.spacing(4),
+          }}
+        >
+          <NotionalAmount
+            label="notional amount"
+            info="Choose the notional you wish to trade. The notional amount is the total size of your trade."
+            protocol={protocol}
+            defaultNotional={defaultNotional}
+            notional={notional}
+            onChangeNotional={onChangeNotional}
+          />
+        </Box>
+        )
+      }
+
       <Box
         sx={{
           marginBottom: (theme) => theme.spacing(4),

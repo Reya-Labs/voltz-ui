@@ -102,7 +102,16 @@ const Trader: React.FunctionComponent = () => {
             )}
           </Box>
         )}
-        {formActive && !isNull(effectiveAmm) && (
+        
+        {/* todo: below is a bit hacky */}
+
+        {formActive && !isNull(effectiveAmm) && !isNull(position) && (
+          <Box sx={{ height: '100%' }}>
+            <ConnectedSwapForm amm={effectiveAmm} onReset={handleReset} marginEditMode />
+          </Box>
+        )}
+
+        {formActive && !isNull(effectiveAmm) && isNull(position) && (
           <Box sx={{ height: '100%' }}>
             <ConnectedSwapForm amm={effectiveAmm} onReset={handleReset} />
           </Box>
