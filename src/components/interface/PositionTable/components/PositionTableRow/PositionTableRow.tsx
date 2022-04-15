@@ -80,7 +80,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
           }
 
           if (field === 'margin') {
-            return <CurrentMargin tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} token={token} />;
+            return <CurrentMargin tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} token={token} onSelect={onSelect} />;
           }
 
           if (field === 'fixedApr') {

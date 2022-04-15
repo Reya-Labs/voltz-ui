@@ -1,18 +1,20 @@
 import React, { useEffect } from 'react';
 import TableCell from '@mui/material/TableCell';
 
-import { useAMMContext } from '@hooks';
+import { useAMMContext, useWallet } from '@hooks';
 import { Typography } from '@components/atomic';
 import { isUndefined } from 'lodash';
 import { Button } from 'src/components/atomic';
+import isNull from 'lodash/isNull';
 
 export type CurrentMarginProps = {
   tickLower?: number;
   tickUpper?: number;
   token: string;
+  onSelect: () => void;
 };
 
-const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({tickLower, tickUpper, token}) => {
+const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({tickLower, tickUpper, token, onSelect}) => {
   const { currentMargin } = useAMMContext();
   const { result, loading, call } = currentMargin;
 
@@ -33,6 +35,17 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({tickLower, 
 
     
     return `${result.toFixed(2)} ${token}`;
+  };
+
+  const wallet = useWallet();
+
+  const handleClick = () => {
+    if (isNull(wallet.account)) {
+      wallet.setRequired(true);
+    } else {
+      // todo: fix
+      onSelect();
+    }
   };
 
   return (
@@ -57,7 +70,7 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({tickLower, 
           borderColor: '#FF4AA9',
           background: "transparent",
         },
-      }} onClick={() => {}}>
+      }} onClick={handleClick}>
           Edit 
       </Button>
     </TableCell>
