@@ -24,8 +24,8 @@ export const lpLabels: [PositionTableFields, string][] = [
 
 export const traderLabels: [PositionTableFields, string][] = [
   ['pool', PositionTableLabels.pool],
-  ['fixedLower', PositionTableLabels.fixedLower],
-  ['fixedUpper', PositionTableLabels.fixedUpper],
+  // ['fixedLower', PositionTableLabels.fixedLower],
+  // ['fixedUpper', PositionTableLabels.fixedUpper],
   ['notional', PositionTableLabels.notional],
   ['estimatedCashflow', PositionTableLabels.estimatedCashflow],
   ['margin', PositionTableLabels.margin],
