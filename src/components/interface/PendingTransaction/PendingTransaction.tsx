@@ -149,9 +149,12 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               textAlign: 'center',
             }}
           >
-            <Typography variant="caption" color="secondary">
+            {/* <Typography variant="caption" color="secondary">
               Wait a few moments for the blockchain data to synchronize
-            </Typography>
+            </Typography> */}
+            <Button variant="contained" onClick={onComplete}>
+              Go to your portfolio
+            </Button>
           </Box>
         </Box>
       );
