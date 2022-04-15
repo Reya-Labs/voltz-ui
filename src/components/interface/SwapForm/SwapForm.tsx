@@ -14,6 +14,7 @@ import {
 } from '@components/composite';
 import { HandleSubmitSwapFormArgs } from './types';
 import { TraderControls, MarginControls, SwapInfo, SubmitSwapFormButton } from './components';
+import { isNull } from 'lodash';
 
 export type SwapFormProps = {
   isModifying?: boolean;
@@ -64,7 +65,6 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
-  
   
   const handleSubmit = () => {
 
@@ -189,6 +189,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           defaultMargin={defaultMargin}
           maxMargin={maxMargin}
           margin={margin}
+          isAdditional={addOrRemoveMargin}
           onChangeMargin={onChangeMargin}
         />
       </Box>
