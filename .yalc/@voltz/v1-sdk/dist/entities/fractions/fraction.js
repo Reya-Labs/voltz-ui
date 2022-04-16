@@ -32,7 +32,7 @@ var Fraction = /** @class */ (function () {
     }
     Fraction.fromNumber = function (value) {
         var fraction = new fraction_js_1.default(value);
-        return new Fraction(fraction.n, fraction.d);
+        return new Fraction(fraction.n * fraction.s, fraction.d);
     };
     Fraction.tryParseFraction = function (fractionish) {
         if (fractionish instanceof jsbi_1.default ||
