@@ -27,7 +27,6 @@ function* updatePositionMarginSaga(action: UpdatePositionMarginAction) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     result = yield call(
       [amm, "updatePositionMargin"], {
-        owner: signer._address,
         marginDelta: margin,
         fixedLow: 1,
         fixedHigh: 2.01,
