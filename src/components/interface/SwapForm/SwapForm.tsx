@@ -82,6 +82,23 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
     });
   };
 
+  const handleSubmitMarginOnly = () => {
+
+    if (isUndefined(margin) || isNaN(margin) ) {
+      return;
+    }
+
+    const marginDelta = margin;
+
+    // todo: it would be more elegant to have a different onSubmit for position margin updates since in this case notional and partial collateralization
+    // are redundunt inputs
+    return onSubmit({
+      notional: 0,
+      margin: marginDelta,
+      partialCollateralization: false,
+    });
+  };
+
   const { agent } = useAgent();
 
   let _boxShadow = '0px 0px 88px rgba(38, 103, 255, 0.20)';
@@ -200,7 +217,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         <SwapInfo notional={notional} underlyingTokenName={underlyingTokenName} />
       </Box>
       <Box sx={{ display: 'flex' }}>
-        <SubmitSwapFormButton onSubmit={handleSubmit} />
+        <SubmitSwapFormButton onSubmit={ marginEditMode ? handleSubmitMarginOnly : handleSubmit} />
         <Button
           sx={{ marginLeft: (theme) => theme.spacing(4) }}
           variant="darker"
