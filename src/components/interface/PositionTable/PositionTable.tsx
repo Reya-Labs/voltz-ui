@@ -75,6 +75,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   const tableData = useMemo(() => {
     return positions.map(mapPositionToPositionTableDatum(agent));
   }, [positionIds, order, page, size]);
+  
   const handleSelectRow = (index: number) => () => {
     onSelectItem(positions[index]);
   };

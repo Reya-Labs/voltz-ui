@@ -57,7 +57,7 @@ export type AMMGetInfoPostSwapArgs = {
 };
 
 export type AMMUpdatePositionMarginArgs = {
-  owner: string;
+  owner?: string;
   fixedLow: number;
   fixedHigh: number;
   marginDelta: number;
@@ -85,12 +85,12 @@ export type AMMSwapArgs = {
   validationOnly?: boolean;
 };
 
-export type FCMSwapArgs = {
+export type fcmSwapArgs = {
   notional: number;
   fixedRateLimit?: number;
 };
 
-export type FCMUnwindArgs = {
+export type fcmUnwindArgs = {
   notionalToUnwind: number;
   fixedRateLimit?: number;
 };
@@ -370,7 +370,20 @@ class AMM {
     fixedLow,
     fixedHigh,
     marginDelta,
-  }: AMMUpdatePositionMarginArgs): Promise<ContractReceipt> {
+  }: AMMUpdatePositionMarginArgs): Promise<ContractReceipt | void> {
+
+    if (!this.signer) {
+      return;
+    }
+
+    let effectiveOwner: string;
+
+    if (!owner) {
+      effectiveOwner = await this.signer?.getAddress()
+    } else {
+      effectiveOwner = owner;
+    }
+
     if (!this.signer) {
       throw new Error('Wallet not connected');
     }
@@ -387,7 +400,7 @@ class AMM {
 
     const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
     const updatePositionMarginTransaction = await marginEngineContract.updatePositionMargin(
-      owner,
+      effectiveOwner,
       tickLower,
       tickUpper,
       scaledMarginDelta,
@@ -909,10 +922,10 @@ class AMM {
     }
   }
 
-  public async FCMSwap({
+  public async fcmSwap({
     notional,
     fixedRateLimit,
-  }: FCMSwapArgs): Promise<ContractReceipt> {
+  }: fcmSwapArgs): Promise<ContractReceipt> {
     if (!this.signer) {
       throw new Error('Wallet not connected');
     }
@@ -948,10 +961,10 @@ class AMM {
     }
   }
 
-  public async FCMUnwind({
+  public async fcmUnwind({
     notionalToUnwind,
     fixedRateLimit,
-  }: FCMUnwindArgs): Promise<ContractReceipt> {
+  }: fcmUnwindArgs): Promise<ContractReceipt> {
     if (!this.signer) {
       throw new Error('Wallet not connected');
     }

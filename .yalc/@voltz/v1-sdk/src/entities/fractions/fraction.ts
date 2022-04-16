@@ -34,8 +34,7 @@ export class Fraction {
 
   public static fromNumber(value: number | string) {
     const fraction = new Fractionjs(value);
-
-    return new Fraction(fraction.n, fraction.d);
+    return new Fraction(fraction.n * fraction.s, fraction.d);
   }
 
   private static tryParseFraction(fractionish: BigIntish | Fraction): Fraction {

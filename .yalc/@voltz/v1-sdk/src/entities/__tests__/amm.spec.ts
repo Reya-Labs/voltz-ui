@@ -93,7 +93,6 @@ describe('amm', () => {
       })) as number;
       console.log('pre-mint req', mint_req);
 
-
       await amm_wallet.mint({
         fixedLow: fixedLow,
         fixedHigh: fixedHigh,
@@ -102,17 +101,17 @@ describe('amm', () => {
       });
       console.log('mint done');
 
-      await amm_other.FCMSwap({
+      await amm_other.fcmSwap({
         notional: 50000,
       });
       console.log('fcm swap done');
 
-      await amm_other.FCMUnwind({
+      await amm_other.fcmUnwind({
         notionalToUnwind: 50000,
       });
       console.log('fcm unwind done');
 
-      await amm_other.FCMSwap({
+      await amm_other.fcmSwap({
         notional: 50000,
       });
       console.log('fcm swap 2 done');
@@ -123,7 +122,37 @@ describe('amm', () => {
       console.log('fcm settlement done');
     });
 
-    it('mints and swaps', async () => {
+    it("update position margin", async () => {
+
+      const fixedLow = 8;
+      const fixedHigh = 12;
+
+      await amm_wallet.updatePositionMargin(
+        {
+          owner: wallet.address,
+          fixedLow: fixedLow,
+          fixedHigh: fixedHigh,
+          marginDelta: 2.0
+        }
+      );
+
+
+      await amm_wallet.updatePositionMargin(
+        {
+          owner: wallet.address,
+          fixedLow: fixedLow,
+          fixedHigh: fixedHigh,
+          marginDelta: -1.0
+        }
+      );
+
+
+
+      console.log("hi");
+
+    })
+    
+    it.skip('mints and swaps', async () => {
       const fixedLowMinter = 8;
       const fixedHighMinter = 12;
       const fixedLowSwapper = 3;

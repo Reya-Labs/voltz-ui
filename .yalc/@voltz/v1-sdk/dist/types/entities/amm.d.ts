@@ -32,7 +32,7 @@ export declare type AMMGetInfoPostSwapArgs = {
     fixedHigh: number;
 };
 export declare type AMMUpdatePositionMarginArgs = {
-    owner: string;
+    owner?: string;
     fixedLow: number;
     fixedHigh: number;
     marginDelta: number;
@@ -56,11 +56,11 @@ export declare type AMMSwapArgs = {
     fixedHigh: number;
     validationOnly?: boolean;
 };
-export declare type FCMSwapArgs = {
+export declare type fcmSwapArgs = {
     notional: number;
     fixedRateLimit?: number;
 };
-export declare type FCMUnwindArgs = {
+export declare type fcmUnwindArgs = {
     notionalToUnwind: number;
     fixedRateLimit?: number;
 };
@@ -108,7 +108,7 @@ declare class AMM {
     settlePosition({ owner, fixedLow, fixedHigh, }: AMMSettlePositionArgs): Promise<ContractReceipt>;
     scale(value: number): string;
     descale(value: BigNumber): number;
-    updatePositionMargin({ owner, fixedLow, fixedHigh, marginDelta, }: AMMUpdatePositionMarginArgs): Promise<ContractReceipt>;
+    updatePositionMargin({ owner, fixedLow, fixedHigh, marginDelta, }: AMMUpdatePositionMarginArgs): Promise<ContractReceipt | void>;
     liquidatePosition({ owner, fixedLow, fixedHigh, }: AMMLiquidatePositionArgs): Promise<ContractReceipt>;
     getLiquidationThreshold({ owner, fixedLow, fixedHigh, }: AMMLiquidatePositionArgs): Promise<number>;
     getMinimumMarginRequirementPostMint({ fixedLow, fixedHigh, notional, }: AMMGetMinimumMarginRequirementPostMintArgs): Promise<number>;
@@ -117,8 +117,8 @@ declare class AMM {
     approveFCM(): Promise<ContractReceipt | void>;
     approveERC20(amountToApprove: BigNumberish, addressToApprove: string): Promise<ContractReceipt | void>;
     swap({ isFT, notional, margin, fixedRateLimit, fixedLow, fixedHigh, validationOnly, }: AMMSwapArgs): Promise<ContractReceipt | void>;
-    FCMSwap({ notional, fixedRateLimit, }: FCMSwapArgs): Promise<ContractReceipt>;
-    FCMUnwind({ notionalToUnwind, fixedRateLimit, }: FCMUnwindArgs): Promise<ContractReceipt>;
+    fcmSwap({ notional, fixedRateLimit, }: fcmSwapArgs): Promise<ContractReceipt>;
+    fcmUnwind({ notionalToUnwind, fixedRateLimit, }: fcmUnwindArgs): Promise<ContractReceipt>;
     settleFCMTrader(): Promise<ContractReceipt>;
     get startDateTime(): DateTime;
     get endDateTime(): DateTime;

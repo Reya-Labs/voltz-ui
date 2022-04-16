@@ -9,6 +9,7 @@ export type MarginAmountProps = {
   defaultMargin?: number;
   maxMargin?: number;
   margin?: number;
+  isAdditional?: boolean;
   onChangeMargin: (value: number) => void;
 };
 
@@ -16,6 +17,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
   protocol,
   defaultMargin,
   margin,
+  isAdditional,
   onChangeMargin,
 }) => {
   const value = isUndefined(margin) ? defaultMargin : margin;
@@ -24,6 +26,14 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
   };
 
   // todo: below is a workaround when deriving the token name from the protocol name, needs to be fixed
+
+  let isAdditionalMarginAmount: boolean;
+
+  if (isUndefined(isAdditional)) {
+    isAdditionalMarginAmount = false;
+  } else {
+    isAdditionalMarginAmount = isAdditional;
+  }
 
   let underlyingTokenName: string = '';
 
@@ -36,9 +46,11 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
       affix={underlyingTokenName}
       label={
         <IconLabel
-          label="additional margin amount"
+          label={ isAdditional ? "additional margin amount" : "margin amount to withdraw" } 
           icon="information-circle"
-          info="Your minimum required margin is defined based on your leverage and notional amount traded. You are required to deposit margin in order to execute a trade."
+          info={ isAdditional ? 
+            "Your minimum required margin is defined based on your leverage and notional amount traded. You are required to deposit margin in order to execute a trade." : 
+            "Margin in underlying tokens to withdraw from the margin account." }
         />
       }
       value={value}

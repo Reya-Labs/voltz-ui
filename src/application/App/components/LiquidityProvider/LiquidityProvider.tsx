@@ -38,7 +38,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
 
   useEffect(() => {
     handleReset();
-  }, [key]);
+}, [key]);
 
   const pageTitle = useMemo(() => {
     switch (pathnameWithoutPrefix) {

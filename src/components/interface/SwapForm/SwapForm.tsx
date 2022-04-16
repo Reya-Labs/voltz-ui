@@ -13,7 +13,7 @@ import {
   MarginAmount,
 } from '@components/composite';
 import { HandleSubmitSwapFormArgs } from './types';
-import { TraderControls, SwapInfo, SubmitSwapFormButton } from './components';
+import { TraderControls, MarginControls, SwapInfo, SubmitSwapFormButton } from './components';
 
 export type SwapFormProps = {
   isModifying?: boolean;
@@ -25,12 +25,16 @@ export type SwapFormProps = {
   defaultNotional?: number;
   defaultMargin?: number;
   defaultPartialCollateralization?: boolean;
+  defaultAddOrRemoveMargin?: boolean;
   maxMargin?: number;
   notional?: number;
   margin?: number;
   partialCollateralization?: boolean;
+  addOrRemoveMargin?: boolean;
+  marginEditMode?: boolean;
   onChangeNotional: (value: number) => void;
   onChangePartialCollateralization: (value: boolean) => void;
+  onAddOrRemoveMargin: (value: boolean) => void;
   onChangeMargin: (value: number) => void;
   onSubmit: (values: HandleSubmitSwapFormArgs) => void;
   onCancel: () => void;
@@ -45,17 +49,21 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   defaultNotional,
   defaultMargin,
   defaultPartialCollateralization,
+  defaultAddOrRemoveMargin,
   maxMargin,
   notional,
   margin,
   partialCollateralization,
+  addOrRemoveMargin,
+  marginEditMode
+  ,
   onChangeNotional,
   onChangePartialCollateralization,
+  onAddOrRemoveMargin,
   onChangeMargin,
   onSubmit,
   onCancel,
 }) => {
-  
   
   const handleSubmit = () => {
 
@@ -71,6 +79,27 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
       notional,
       margin,
       partialCollateralization,
+    });
+  };
+
+  const handleSubmitMarginOnly = () => {
+
+    if (isUndefined(margin) || isNaN(margin) ) {
+      return;
+    }
+
+    let marginDelta = Math.abs(margin);
+
+    if (!addOrRemoveMargin) {
+      marginDelta *= -1.0;
+    }
+
+    // todo: it would be more elegant to have a different onSubmit for position margin updates since in this case notional and partial collateralization
+    // are redundunt inputs
+    return onSubmit({
+      notional: 0,
+      margin: marginDelta,
+      partialCollateralization: false,
     });
   };
 
@@ -113,33 +142,63 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           endDate={endDate}
         />
       </Box>
-      <Box
-        sx={{
-          marginBottom: (theme) => theme.spacing(4),
-          display: 'flex',
-        }}
-      >
-        <TraderControls
-          isModifying={isModifying}
-          defaultPartialCollateralization={defaultPartialCollateralization}
-          partialCollateralization={partialCollateralization}
-          onChangePartialCollateralization={onChangePartialCollateralization}
-        />
-      </Box>
-      <Box
-        sx={{
-          marginBottom: (theme) => theme.spacing(4),
-        }}
-      >
-        <NotionalAmount
-          label="notional amount"
-          info="Choose the notional you wish to trade. The notional amount is the total size of your trade."
-          protocol={protocol}
-          defaultNotional={defaultNotional}
-          notional={notional}
-          onChangeNotional={onChangeNotional}
-        />
-      </Box>
+ 
+        {
+          marginEditMode && (
+            <Box
+            sx={{
+              marginBottom: (theme) => theme.spacing(4),
+              display: 'flex',
+            }}
+          >
+            <MarginControls 
+              defaultAddMargin={defaultAddOrRemoveMargin}
+              addMargin={addOrRemoveMargin}
+              onAddOrRemoveMargin={onAddOrRemoveMargin}
+            >
+            </MarginControls>
+            
+            </Box>
+          )
+        }  
+
+        {
+          !marginEditMode && (
+            <Box
+            sx={{
+              marginBottom: (theme) => theme.spacing(4),
+              display: 'flex',
+            }}
+          >
+            <TraderControls
+            isModifying={isModifying}
+            defaultPartialCollateralization={defaultPartialCollateralization}
+            partialCollateralization={partialCollateralization}
+            onChangePartialCollateralization={onChangePartialCollateralization}
+          />
+            </Box>
+          )
+        }
+
+      {
+        !marginEditMode && (
+          <Box
+          sx={{
+            marginBottom: (theme) => theme.spacing(4),
+          }}
+        >
+          <NotionalAmount
+            label="notional amount"
+            info="Choose the notional you wish to trade. The notional amount is the total size of your trade."
+            protocol={protocol}
+            defaultNotional={defaultNotional}
+            notional={notional}
+            onChangeNotional={onChangeNotional}
+          />
+        </Box>
+        )
+      }
+
       <Box
         sx={{
           marginBottom: (theme) => theme.spacing(4),
@@ -150,6 +209,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           defaultMargin={defaultMargin}
           maxMargin={maxMargin}
           margin={margin}
+          isAdditional={addOrRemoveMargin}
           onChangeMargin={onChangeMargin}
         />
       </Box>
@@ -161,7 +221,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         <SwapInfo notional={notional} underlyingTokenName={underlyingTokenName} />
       </Box>
       <Box sx={{ display: 'flex' }}>
-        <SubmitSwapFormButton onSubmit={handleSubmit} />
+        <SubmitSwapFormButton onSubmit={ marginEditMode ? handleSubmitMarginOnly : handleSubmit} marginEditMode={marginEditMode} />
         <Button
           sx={{ marginLeft: (theme) => theme.spacing(4) }}
           variant="darker"

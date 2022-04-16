@@ -80,7 +80,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
           }
 
           if (field === 'margin') {
-            return <CurrentMargin tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} token={token} />;
+            return <CurrentMargin tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} token={token} onSelect={onSelect} />;
           }
 
           if (field === 'fixedApr') {
@@ -107,7 +107,6 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
           };
 
 
-          // todo: optimise code below
           if (field === 'fixedLower' || field === 'fixedUpper') {
             return (
               <Typography agentStyling variant="body2" label={label} sx={{fontSize: 18}}>
