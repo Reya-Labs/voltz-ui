@@ -14,7 +14,6 @@ import {
 } from '@components/composite';
 import { HandleSubmitSwapFormArgs } from './types';
 import { TraderControls, MarginControls, SwapInfo, SubmitSwapFormButton } from './components';
-import { isNull } from 'lodash';
 
 export type SwapFormProps = {
   isModifying?: boolean;

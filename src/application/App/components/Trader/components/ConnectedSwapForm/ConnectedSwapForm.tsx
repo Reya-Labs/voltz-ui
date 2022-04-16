@@ -72,7 +72,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ am
         margin={margin || 0}
         partialCollateralization={partialCollateralization}
         addOrRemoveMargin={addOrRemoveMargin}
-        marginEditMode
+        marginEditMode={marginEditMode}
         onChangePartialCollateralization={setPartialCollateralization}
         onChangeMargin={setMargin}
         onAddOrRemoveMargin={setAddOrRemoveMargin}

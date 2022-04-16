@@ -58,6 +58,7 @@ export type ActionType =
   | 'mint'
   | 'burn'
   | 'swap'
+  | 'updatePositionMargin'
   | 'add-transaction'
   | 'close-transaction'
   | 'update-transaction';
@@ -86,6 +87,10 @@ export type SwapAction = TransactionAction & {
   type: 'swap';
 };
 
+export type UpdatePositionMarginAction = TransactionAction & {
+  type: 'updatePositionMargin';
+};
+
 export type CloseTransactionAction = BaseAction & {
   type: 'close-transaction';
   payload: {
@@ -104,5 +109,6 @@ export type Action =
   | MintAction
   | BurnAction
   | SwapAction
+  | UpdatePositionMarginAction
   | CloseTransactionAction
   | UpdateTransactionAction;
