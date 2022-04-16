@@ -88,7 +88,11 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
       return;
     }
 
-    const marginDelta = margin;
+    let marginDelta = Math.abs(margin);
+
+    if (!addOrRemoveMargin) {
+      marginDelta *= -1.0;
+    }
 
     // todo: it would be more elegant to have a different onSubmit for position margin updates since in this case notional and partial collateralization
     // are redundunt inputs
@@ -217,7 +221,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         <SwapInfo notional={notional} underlyingTokenName={underlyingTokenName} />
       </Box>
       <Box sx={{ display: 'flex' }}>
-        <SubmitSwapFormButton onSubmit={ marginEditMode ? handleSubmitMarginOnly : handleSubmit} />
+        <SubmitSwapFormButton onSubmit={ marginEditMode ? handleSubmitMarginOnly : handleSubmit} marginEditMode={marginEditMode} />
         <Button
           sx={{ marginLeft: (theme) => theme.spacing(4) }}
           variant="darker"

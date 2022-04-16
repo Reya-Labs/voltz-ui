@@ -102,17 +102,17 @@ describe('amm', () => {
       });
       console.log('mint done');
 
-      await amm_other.FCMSwap({
+      await amm_other.fcmSwap({
         notional: 50000,
       });
       console.log('fcm swap done');
 
-      await amm_other.FCMUnwind({
+      await amm_other.fcmUnwind({
         notionalToUnwind: 50000,
       });
       console.log('fcm unwind done');
 
-      await amm_other.FCMSwap({
+      await amm_other.fcmSwap({
         notional: 50000,
       });
       console.log('fcm swap 2 done');

@@ -240,12 +240,25 @@ var AMM = /** @class */ (function () {
         }
     };
     AMM.prototype.updatePositionMargin = function (_a) {
+        var _b;
         var owner = _a.owner, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, marginDelta = _a.marginDelta;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, scaledMarginDelta, marginEngineContract, updatePositionMarginTransaction, receipt, error_2;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var effectiveOwner, tickUpper, tickLower, scaledMarginDelta, marginEngineContract, updatePositionMarginTransaction, receipt, error_2;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
+                        if (!this.signer) {
+                            return [2 /*return*/];
+                        }
+                        if (!!owner) return [3 /*break*/, 2];
+                        return [4 /*yield*/, ((_b = this.signer) === null || _b === void 0 ? void 0 : _b.getAddress())];
+                    case 1:
+                        effectiveOwner = _c.sent();
+                        return [3 /*break*/, 3];
+                    case 2:
+                        effectiveOwner = owner;
+                        _c.label = 3;
+                    case 3:
                         if (!this.signer) {
                             throw new Error('Wallet not connected');
                         }
@@ -256,23 +269,23 @@ var AMM = /** @class */ (function () {
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
                         scaledMarginDelta = this.scale(marginDelta);
                         return [4 /*yield*/, this.approveERC20(scaledMarginDelta, this.marginEngineAddress)];
-                    case 1:
-                        _b.sent();
-                        marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
-                        return [4 /*yield*/, marginEngineContract.updatePositionMargin(owner, tickLower, tickUpper, scaledMarginDelta)];
-                    case 2:
-                        updatePositionMarginTransaction = _b.sent();
-                        _b.label = 3;
-                    case 3:
-                        _b.trys.push([3, 5, , 6]);
-                        return [4 /*yield*/, updatePositionMarginTransaction.wait()];
                     case 4:
-                        receipt = _b.sent();
-                        return [2 /*return*/, receipt];
+                        _c.sent();
+                        marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
+                        return [4 /*yield*/, marginEngineContract.updatePositionMargin(effectiveOwner, tickLower, tickUpper, scaledMarginDelta)];
                     case 5:
-                        error_2 = _b.sent();
+                        updatePositionMarginTransaction = _c.sent();
+                        _c.label = 6;
+                    case 6:
+                        _c.trys.push([6, 8, , 9]);
+                        return [4 /*yield*/, updatePositionMarginTransaction.wait()];
+                    case 7:
+                        receipt = _c.sent();
+                        return [2 /*return*/, receipt];
+                    case 8:
+                        error_2 = _c.sent();
                         throw new Error("Transaction Confirmation Error");
-                    case 6: return [2 /*return*/];
+                    case 9: return [2 /*return*/];
                 }
             });
         });
@@ -806,7 +819,7 @@ var AMM = /** @class */ (function () {
             });
         });
     };
-    AMM.prototype.FCMSwap = function (_a) {
+    AMM.prototype.fcmSwap = function (_a) {
         var notional = _a.notional, fixedRateLimit = _a.fixedRateLimit;
         return __awaiter(this, void 0, void 0, function () {
             var approvalError_3, sqrtPriceLimitX96, tickLimit, fcmContract, scaledNotional, fcmSwapTransaction, receipt, error_9;
@@ -854,7 +867,7 @@ var AMM = /** @class */ (function () {
             });
         });
     };
-    AMM.prototype.FCMUnwind = function (_a) {
+    AMM.prototype.fcmUnwind = function (_a) {
         var notionalToUnwind = _a.notionalToUnwind, fixedRateLimit = _a.fixedRateLimit;
         return __awaiter(this, void 0, void 0, function () {
             var sqrtPriceLimitX96, tickLimit, approvalError_4, fcmContract, scaledNotional, fcmUnwindTransaction, receipt, error_10;

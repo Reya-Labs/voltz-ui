@@ -5,11 +5,13 @@ import { Button } from '@components/atomic';
 import { useAgent } from '@hooks';
 
 export type SubmitSwapFormButtonProps = {
+  marginEditMode?: boolean;
   onSubmit: () => void;
 };
 
-const SubmitSwapFormButton: React.FunctionComponent<SubmitSwapFormButtonProps> = ({ onSubmit }) => {
+const SubmitSwapFormButton: React.FunctionComponent<SubmitSwapFormButtonProps> = ({ marginEditMode, onSubmit }) => {
   const { agent } = useAgent();
+  
   const submitLabel = (): string | null => {
     switch (agent) {
       case Agents.FIXED_TRADER:
@@ -22,10 +24,11 @@ const SubmitSwapFormButton: React.FunctionComponent<SubmitSwapFormButtonProps> =
         return null;
     }
   };
+  
 
   return (
     <Button size="large" onClick={onSubmit}>
-      {submitLabel()}
+      {marginEditMode ? "Update Margin" : submitLabel()}
     </Button>
   );
 };
