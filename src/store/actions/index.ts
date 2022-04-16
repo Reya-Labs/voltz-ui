@@ -3,3 +3,4 @@ export { default as closeTransaction } from './closeTransactionAction';
 export { default as mintAction } from './mintAction';
 export { default as swapAction } from './swapAction';
 export { default as updateTransaction } from './updateTransactionAction';
+export { default as updatePositionMargin } from './updatePositionMarginAction';
