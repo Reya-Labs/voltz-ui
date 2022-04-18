@@ -195,11 +195,12 @@ var AMM = /** @class */ (function () {
         });
     };
     AMM.prototype.settlePosition = function (_a) {
+        var _b;
         var owner = _a.owner, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, marginEngineContract, settlePositionTransaction, receipt, error_1;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var tickUpper, tickLower, marginEngineContract, effectiveOwner, settlePositionTransaction, receipt, error_1;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
                         if (!this.signer) {
                             throw new Error('Wallet not connected');
@@ -207,20 +208,28 @@ var AMM = /** @class */ (function () {
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
                         marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
-                        return [4 /*yield*/, marginEngineContract.settlePosition(owner, tickLower, tickUpper)];
+                        if (!!owner) return [3 /*break*/, 2];
+                        return [4 /*yield*/, ((_b = this.signer) === null || _b === void 0 ? void 0 : _b.getAddress())];
                     case 1:
-                        settlePositionTransaction = _b.sent();
-                        _b.label = 2;
+                        effectiveOwner = _c.sent();
+                        return [3 /*break*/, 3];
                     case 2:
-                        _b.trys.push([2, 4, , 5]);
-                        return [4 /*yield*/, settlePositionTransaction.wait()];
-                    case 3:
-                        receipt = _b.sent();
-                        return [2 /*return*/, receipt];
+                        effectiveOwner = owner;
+                        _c.label = 3;
+                    case 3: return [4 /*yield*/, marginEngineContract.settlePosition(effectiveOwner, tickLower, tickUpper)];
                     case 4:
-                        error_1 = _b.sent();
+                        settlePositionTransaction = _c.sent();
+                        _c.label = 5;
+                    case 5:
+                        _c.trys.push([5, 7, , 8]);
+                        return [4 /*yield*/, settlePositionTransaction.wait()];
+                    case 6:
+                        receipt = _c.sent();
+                        return [2 /*return*/, receipt];
+                    case 7:
+                        error_1 = _c.sent();
                         throw new Error("Transaction Confirmation Error");
-                    case 5: return [2 /*return*/];
+                    case 8: return [2 /*return*/];
                 }
             });
         });

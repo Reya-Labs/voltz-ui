@@ -34,6 +34,7 @@ export type PositionTableProps = {
   onSetSize: (size: number) => void;
   onSelectItem: (datum: Position) => void;
   agent: Agents
+  handleSubmit: () => void;
 };
 
 const PositionTable: React.FunctionComponent<PositionTableProps> = ({
@@ -48,6 +49,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   size,
   onSetSize,
   onSelectItem,
+  handleSubmit
 }) => {
   const commonOverrides: SystemStyleObject<Theme> = {
     '& .MuiTableCell-root': {
@@ -111,6 +113,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                 datum={datum}
                 index={index}
                 onSelect={handleSelectRow(index)}
+                handleSubmit={handleSubmit}
               />
               </AMMProvider>
             ))}

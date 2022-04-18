@@ -87,7 +87,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
             {pathnameWithoutPrefix === routes.POOLS ? (
               <ConnectedAMMTable onSelectItem={handleSelectAmm} />
             ) : (
-              <ConnectedPositionTable onSelectItem={handleSelectPosition}  agent={Agents.LIQUIDITY_PROVIDER} />
+              <ConnectedPositionTable amm={effectiveAmm} onSelectItem={handleSelectPosition}  agent={Agents.LIQUIDITY_PROVIDER} />
             )}
           </Box>
         )}

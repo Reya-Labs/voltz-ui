@@ -1,28 +1,31 @@
-import React from 'react';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '@mui/system';
-
 import { Agents } from '@components/contexts';
-import { Typography } from '@components/atomic';
+import { Typography, Button } from '@components/atomic';
 import { MaturityInformation } from '@components/composite';
-import { useAgent } from '@hooks';
 import { PositionTableDatum } from '../../types';
 import { lpLabels } from '../../constants';
 import { traderLabels } from '../../constants';
 import { PositionTableFields } from '../../types';
 import { EstimatedCashflow, FixedAPR, CurrentMargin } from './components';
+import React from 'react';
+import { useAgent } from '@hooks';
+
+
 
 export type PositionTableRowProps = {
   datum: PositionTableDatum;
   index: number;
   onSelect: () => void;
+  handleSubmit: () => void;
 };
 
 const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
   datum,
   index,
   onSelect,
+  handleSubmit
 }) => {
   const { agent } = useAgent();
   const variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'main';
@@ -126,12 +129,11 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
         return <TableCell key={field}>{renderDisplay()}</TableCell>;
       })}
 
-      {/* todo: bring back when needed */}
-      {/* <TableCell align="center">
-        <Button variant="contained" onClick={handleClick}>
-          Hello 
+      <TableCell align="center">
+        <Button variant="contained" onClick={handleSubmit}>
+          Settle 
         </Button>
-      </TableCell> */}
+      </TableCell>
     </TableRow>
   );
 };
