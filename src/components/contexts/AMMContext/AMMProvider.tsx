@@ -34,6 +34,7 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
       });
     },
     useMemo(() => undefined, [!!amm.signer]),
+    100
   );
   const swapInfo = useAsyncFunction(
     async (args: SwapInfoPayload) => {
