@@ -40,11 +40,11 @@ const AMMTableHead: React.FunctionComponent<AMMTableHeadProps> = ({ order, order
             sortDirection={orderBy === field ? order : false}
             sx={cellSx}
           >
-            <TableSortLabel
+            {/* <TableSortLabel
               active={orderBy === field}
               direction={orderBy === field ? order : 'asc'}
               onClick={createSortHandler(field)}
-            >
+            > */}
               {/* {label} */}
               <Typography
               variant="subtitle1"
@@ -57,7 +57,7 @@ const AMMTableHead: React.FunctionComponent<AMMTableHeadProps> = ({ order, order
               >
               {label}
             </Typography>
-            </TableSortLabel>
+            {/* </TableSortLabel> */}
           </TableCell>
         ))}
         <TableCell align="left" padding="normal" sx={cellSx}></TableCell>
