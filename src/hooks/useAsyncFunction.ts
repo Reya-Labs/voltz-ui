@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 
 export type UseAsyncFunctionResult<ArgsType, ResultType> = {
   result: ResultType | null;
@@ -26,6 +26,7 @@ const useAsyncFunction = <ArgsType, ResultType>(
     },
     [setArgs, setResult, setError, setLoading, setCalled],
   );
+  const request = useRef<Promise<ResultType>>();
 
   useEffect(() => {
     const load = async () => {
@@ -37,9 +38,15 @@ const useAsyncFunction = <ArgsType, ResultType>(
         // passed to a function.
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        const data = await asyncFunction(args);
+        const req = asyncFunction(args);
+        request.current = req;
+        const data = await request.current;
 
-        setResult(data);
+        // We need to stop older (cancelled) requests from overwriting the current data
+        // req.current will always point to the latest request, where as req will get stale.
+        if(req === request.current) {
+          setResult(data);
+        }
       } catch (_error) {
         setResult(null);
         setError(true);
@@ -52,7 +59,7 @@ const useAsyncFunction = <ArgsType, ResultType>(
     if (called && !loading) {
       load();
     }
-  }, [called, lock]);
+  }, [called, args, lock]);
 
   return useMemo(
     () => ({
