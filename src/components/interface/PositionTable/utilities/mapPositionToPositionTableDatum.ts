@@ -19,7 +19,7 @@ const mapPositionToPositionTableDatum =
         protocol: amm.protocol,
         startDate: amm.startDateTime,
         endDate: amm.endDateTime,
-        fixedApr: amm.fixedRate.toNumber(),
+        fixedApr: 0,
         fixedLower: fixedRateLower.toNumber(),
         fixedUpper: fixedRateUpper.toNumber(),
         notional: agent === Agents.LIQUIDITY_PROVIDER ? notional : (agent === Agents.VARIABLE_TRADER ? effectiveVariableTokenBalance : -effectiveVariableTokenBalance),
