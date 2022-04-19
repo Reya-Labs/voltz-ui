@@ -17,6 +17,7 @@ const Nav: React.FunctionComponent = () => {
   const buttonSx: SystemStyleObject<Theme> = {
     // color: 'secondary.light',
     color: '#B3AFC6',
+    padding: (theme) => `${theme.spacing(2)} ${theme.spacing(4)}`,
 
     '&:hover': {
       textDecoration: 'none',
@@ -36,6 +37,9 @@ const Nav: React.FunctionComponent = () => {
       backgroundColor: 'transparent',
       backgroundImage: 'none',
       background: 'none',
+      backdropFilter: 'blur(8px)',
+      borderRadius: '4px',
+      border: '1px solid rgba(15,12,29,.24)',
     },
   };
 
@@ -45,6 +49,9 @@ const Nav: React.FunctionComponent = () => {
       backgroundColor: 'transparent',
       backgroundImage: 'none',
       background: 'none',
+      backdropFilter: 'blur(8px)',
+      borderRadius: '4px',
+      border: '1px solid rgba(15,12,29,.24)',
       marginLeft: 12,
     },
   };
