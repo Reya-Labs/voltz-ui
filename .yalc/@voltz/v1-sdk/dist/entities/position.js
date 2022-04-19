@@ -12,21 +12,27 @@ var tickMath_1 = require("../utils/tickMath");
 var constants_1 = require("../constants");
 var Position = /** @class */ (function () {
     function Position(_a) {
-        var id = _a.id, createdTimestamp = _a.createdTimestamp, updatedTimestamp = _a.updatedTimestamp, amm = _a.amm, liquidity = _a.liquidity, tickLower = _a.tickLower, tickUpper = _a.tickUpper, isSettled = _a.isSettled, margin = _a.margin, fixedTokenBalance = _a.fixedTokenBalance, variableTokenBalance = _a.variableTokenBalance, isLiquidityProvider = _a.isLiquidityProvider, owner = _a.owner, isEmpty = _a.isEmpty;
+        var id = _a.id, createdTimestamp = _a.createdTimestamp, amm = _a.amm, owner = _a.owner, tickLower = _a.tickLower, tickUpper = _a.tickUpper, updatedTimestamp = _a.updatedTimestamp, liquidity = _a.liquidity, margin = _a.margin, fixedTokenBalance = _a.fixedTokenBalance, variableTokenBalance = _a.variableTokenBalance, accumulatedFees = _a.accumulatedFees, isLiquidityProvider = _a.isLiquidityProvider, isSettled = _a.isSettled, mints = _a.mints, burns = _a.burns, swaps = _a.swaps, marginUpdates = _a.marginUpdates, liquidations = _a.liquidations, settlements = _a.settlements;
         this.id = id;
+        this.createdTimestamp = createdTimestamp;
         this.amm = amm;
+        this.owner = owner;
         this.tickLower = tickLower;
         this.tickUpper = tickUpper;
-        this.liquidity = jsbi_1.default.BigInt(liquidity);
-        this.isSettled = isSettled;
-        this.margin = jsbi_1.default.BigInt(margin);
+        this.updatedTimestamp = updatedTimestamp;
+        this.liquidity = liquidity;
+        this.margin = margin;
         this.fixedTokenBalance = fixedTokenBalance;
         this.variableTokenBalance = variableTokenBalance;
-        this.createdTimestamp = createdTimestamp;
-        this.updatedTimestamp = updatedTimestamp;
+        this.accumulatedFees = accumulatedFees;
         this.isLiquidityProvider = isLiquidityProvider;
-        this.owner = owner;
-        this.isEmpty = isEmpty;
+        this.isSettled = isSettled;
+        this.mints = mints;
+        this.burns = burns;
+        this.swaps = swaps;
+        this.marginUpdates = marginUpdates;
+        this.liquidations = liquidations;
+        this.settlements = settlements;
     }
     Object.defineProperty(Position.prototype, "priceLower", {
         get: function () {

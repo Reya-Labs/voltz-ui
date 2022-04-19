@@ -10,6 +10,19 @@ export declare class IFCM__factory {
         }[];
         name: string;
         type: string;
+        anonymous?: undefined;
+        outputs?: undefined;
+        stateMutability?: undefined;
+    } | {
+        anonymous: boolean;
+        inputs: {
+            indexed: boolean;
+            internalType: string;
+            name: string;
+            type: string;
+        }[];
+        name: string;
+        type: string;
         outputs?: undefined;
         stateMutability?: undefined;
     } | {
@@ -31,8 +44,13 @@ export declare class IFCM__factory {
         }[];
         stateMutability: string;
         type: string;
+        anonymous?: undefined;
     } | {
-        inputs: never[];
+        inputs: {
+            internalType: string;
+            name: string;
+            type: string;
+        }[];
         name: string;
         outputs: {
             internalType: string;
@@ -41,6 +59,7 @@ export declare class IFCM__factory {
         }[];
         stateMutability: string;
         type: string;
+        anonymous?: undefined;
     })[];
     static createInterface(): IFCMInterface;
     static connect(address: string, signerOrProvider: Signer | Provider): IFCM;

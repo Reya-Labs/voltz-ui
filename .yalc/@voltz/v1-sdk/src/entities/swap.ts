@@ -1,18 +1,18 @@
 import JSBI from 'jsbi';
 
 export type SwapConstructorArgs = {
-  // todo:  need more data in here (e.g the fixed delta unbalanced and variable delta, cumulative fees)
   id: string;
   transactionId: string;
-  transactionBlockNumber: number;
-  transactionTimestamp: number;
+  transactionTimestamp: JSBI;
   ammId: string;
   positionId: string;
   sender: string;
-  txIndex: number;
-  sqrtPriceX96: JSBI;
-  liquidity: JSBI;
-  tick: number;
+  desiredNotional: JSBI;
+  sqrtPriceLimitX96: JSBI;
+  cumulativeFeeIncurred: JSBI;
+  fixedTokenDelta: JSBI;
+  variableTokenDelta: JSBI;
+  fixedTokenDeltaUnbalanced: JSBI;
 };
 
 class Swap {
@@ -20,9 +20,7 @@ class Swap {
 
   public readonly transactionId: string;
 
-  public readonly transactionBlockNumber: number;
-
-  public readonly transactionTimestamp: number;
+  public readonly transactionTimestamp: JSBI;
 
   public readonly ammId: string;
 
@@ -30,38 +28,44 @@ class Swap {
 
   public readonly sender: string;
 
-  public readonly txIndex: number;
+  public readonly desiredNotional: JSBI;
 
-  public readonly sqrtPriceX96: JSBI;
+  public readonly sqrtPriceLimitX96: JSBI;
 
-  public readonly liquidity: JSBI;
+  public readonly cumulativeFeeIncurred: JSBI;
 
-  public readonly tick: number;
+  public readonly fixedTokenDelta: JSBI;
+
+  public readonly variableTokenDelta: JSBI;
+
+  public readonly fixedTokenDeltaUnbalanced: JSBI;
 
   public constructor({
     id,
     transactionId,
-    transactionBlockNumber,
     transactionTimestamp,
     ammId,
     positionId,
     sender,
-    txIndex,
-    sqrtPriceX96,
-    liquidity,
-    tick,
+    desiredNotional,
+    sqrtPriceLimitX96,
+    cumulativeFeeIncurred,
+    fixedTokenDelta,
+    variableTokenDelta,
+    fixedTokenDeltaUnbalanced,
   }: SwapConstructorArgs) {
     this.id = id;
     this.transactionId = transactionId;
-    this.transactionBlockNumber = transactionBlockNumber;
     this.transactionTimestamp = transactionTimestamp;
     this.ammId = ammId;
     this.positionId = positionId;
     this.sender = sender;
-    this.txIndex = txIndex;
-    this.sqrtPriceX96 = sqrtPriceX96;
-    this.liquidity = liquidity;
-    this.tick = tick;
+    this.desiredNotional = desiredNotional;
+    this.sqrtPriceLimitX96 = sqrtPriceLimitX96;
+    this.cumulativeFeeIncurred = cumulativeFeeIncurred;
+    this.fixedTokenDelta = fixedTokenDelta;
+    this.variableTokenDelta = variableTokenDelta;
+    this.fixedTokenDeltaUnbalanced = fixedTokenDeltaUnbalanced;
   }
 }
 

@@ -10,6 +10,19 @@ export declare class IPeriphery__factory {
         }[];
         name: string;
         type: string;
+        anonymous?: undefined;
+        outputs?: undefined;
+        stateMutability?: undefined;
+    } | {
+        anonymous: boolean;
+        inputs: {
+            indexed: boolean;
+            internalType: string;
+            name: string;
+            type: string;
+        }[];
+        name: string;
+        type: string;
         outputs?: undefined;
         stateMutability?: undefined;
     } | {
@@ -26,6 +39,7 @@ export declare class IPeriphery__factory {
         }[];
         stateMutability: string;
         type: string;
+        anonymous?: undefined;
     } | {
         inputs: {
             components: {
@@ -45,6 +59,7 @@ export declare class IPeriphery__factory {
         }[];
         stateMutability: string;
         type: string;
+        anonymous?: undefined;
     })[];
     static createInterface(): IPeripheryInterface;
     static connect(address: string, signerOrProvider: Signer | Provider): IPeriphery;

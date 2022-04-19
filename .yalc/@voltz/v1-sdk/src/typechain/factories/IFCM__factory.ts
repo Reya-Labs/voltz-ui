@@ -36,6 +36,22 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "x",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "y",
+        type: "uint256",
+      },
+    ],
+    name: "DebugError",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
         internalType: "int256",
         name: "amount0",
         type: "int256",
@@ -212,6 +228,154 @@ const _abi = [
     type: "error",
   },
   {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "trader",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "marginInScaledYieldBearingTokens",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "int256",
+        name: "fixedTokenBalance",
+        type: "int256",
+      },
+      {
+        indexed: false,
+        internalType: "int256",
+        name: "variableTokenBalance",
+        type: "int256",
+      },
+    ],
+    name: "FCMTraderUpdate",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "trader",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "desiredNotional",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint160",
+        name: "sqrtPriceLimitX96",
+        type: "uint160",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "cumulativeFeeIncurred",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "int256",
+        name: "fixedTokenDelta",
+        type: "int256",
+      },
+      {
+        indexed: false,
+        internalType: "int256",
+        name: "variableTokenDelta",
+        type: "int256",
+      },
+      {
+        indexed: false,
+        internalType: "int256",
+        name: "fixedTokenDeltaUnbalanced",
+        type: "int256",
+      },
+    ],
+    name: "FullyCollateralisedSwap",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "trader",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "desiredNotional",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint160",
+        name: "sqrtPriceLimitX96",
+        type: "uint160",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "cumulativeFeeIncurred",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "int256",
+        name: "fixedTokenDelta",
+        type: "int256",
+      },
+      {
+        indexed: false,
+        internalType: "int256",
+        name: "variableTokenDelta",
+        type: "int256",
+      },
+      {
+        indexed: false,
+        internalType: "int256",
+        name: "fixedTokenDeltaUnbalanced",
+        type: "int256",
+      },
+    ],
+    name: "FullyCollateralisedUnwind",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "trader",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "int256",
+        name: "settlementCashflow",
+        type: "int256",
+      },
+    ],
+    name: "fcmPositionSettlement",
+    type: "event",
+  },
+  {
     inputs: [
       {
         internalType: "address",
@@ -284,7 +448,28 @@ const _abi = [
       },
     ],
     name: "initiateFullyCollateralisedFixedTakerSwap",
-    outputs: [],
+    outputs: [
+      {
+        internalType: "int256",
+        name: "fixedTokenDelta",
+        type: "int256",
+      },
+      {
+        internalType: "int256",
+        name: "variableTokenDelta",
+        type: "int256",
+      },
+      {
+        internalType: "uint256",
+        name: "cumulativeFeeIncurred",
+        type: "uint256",
+      },
+      {
+        internalType: "int256",
+        name: "fixedTokenDeltaUnbalanced",
+        type: "int256",
+      },
+    ],
     stateMutability: "nonpayable",
     type: "function",
   },
@@ -359,7 +544,28 @@ const _abi = [
       },
     ],
     name: "unwindFullyCollateralisedFixedTakerSwap",
-    outputs: [],
+    outputs: [
+      {
+        internalType: "int256",
+        name: "fixedTokenDelta",
+        type: "int256",
+      },
+      {
+        internalType: "int256",
+        name: "variableTokenDelta",
+        type: "int256",
+      },
+      {
+        internalType: "uint256",
+        name: "cumulativeFeeIncurred",
+        type: "uint256",
+      },
+      {
+        internalType: "int256",
+        name: "fixedTokenDeltaUnbalanced",
+        type: "int256",
+      },
+    ],
     stateMutability: "nonpayable",
     type: "function",
   },

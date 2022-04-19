@@ -44,9 +44,10 @@ var token_1 = __importDefault(require("../token"));
 var rateOracle_1 = __importDefault(require("../rateOracle"));
 var amm_1 = __importDefault(require("../amm"));
 var tickMath_1 = require("../../utils/tickMath");
+var typechain_1 = require("../../typechain");
 jest.setTimeout(60000);
 it('setup rich irs instance', function () { return __awaiter(void 0, void 0, void 0, function () {
-    var amm_wallet, amm_other, wallet, other, vammAddress, marginEngineAddress, provider, privateKey, fixedLowMinter, fixedHighMinter, fixedLowSwapper1, fixedHighSwapper1, fixedLowSwapper2, fixedHighSwapper2, mint_req, swap_req1, swap_req2;
+    var amm_wallet, amm_other, wallet, other, vammAddress, marginEngineAddress, provider, privateKey, vammContract, fixedLowMinter, fixedHighMinter, fixedLowSwapper1, fixedHighSwapper1, fixedLowSwapper2, fixedHighSwapper2, mint_req, swap_req1, swap_req2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -106,6 +107,7 @@ it('setup rich irs instance', function () { return __awaiter(void 0, void 0, voi
                     txCount: 0,
                     updatedTimestamp: '1646856471',
                 });
+                vammContract = typechain_1.VAMM__factory.connect(vammAddress, wallet);
                 fixedLowMinter = 8;
                 fixedHighMinter = 12;
                 fixedLowSwapper1 = 3;

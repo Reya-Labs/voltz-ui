@@ -23,7 +23,10 @@ interface PeripheryInterface extends ethers.utils.Interface {
   functions: {
     "estimatedCashflowAtMaturity(address,address,int24,int24)": FunctionFragment;
     "getCurrentTick(address)": FunctionFragment;
+    "lpNotionalCaps(address)": FunctionFragment;
+    "lpNotionalCumulatives(address)": FunctionFragment;
     "mintOrBurn((address,int24,int24,uint256,bool,uint256))": FunctionFragment;
+    "setLPNotionalCap(address,uint256)": FunctionFragment;
     "swap((address,bool,uint256,uint160,int24,int24,uint256))": FunctionFragment;
   };
 
@@ -33,6 +36,14 @@ interface PeripheryInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "getCurrentTick",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "lpNotionalCaps",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "lpNotionalCumulatives",
     values: [string]
   ): string;
   encodeFunctionData(
@@ -47,6 +58,10 @@ interface PeripheryInterface extends ethers.utils.Interface {
         marginDelta: BigNumberish;
       }
     ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setLPNotionalCap",
+    values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "swap",
@@ -71,11 +86,31 @@ interface PeripheryInterface extends ethers.utils.Interface {
     functionFragment: "getCurrentTick",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "lpNotionalCaps",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "lpNotionalCumulatives",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "mintOrBurn", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setLPNotionalCap",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "swap", data: BytesLike): Result;
 
-  events: {};
+  events: {
+    "NotionalCap(address,uint256)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "NotionalCap"): EventFragment;
 }
+
+export type NotionalCapEvent = TypedEvent<
+  [string, BigNumber] & { _marginEngine: string; _lpNotionalCapNew: BigNumber }
+>;
 
 export class Periphery extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -134,6 +169,16 @@ export class Periphery extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[number] & { currentTick: number }>;
 
+    lpNotionalCaps(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    lpNotionalCumulatives(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     mintOrBurn(
       params: {
         marginEngine: string;
@@ -143,6 +188,12 @@ export class Periphery extends BaseContract {
         isMint: boolean;
         marginDelta: BigNumberish;
       },
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setLPNotionalCap(
+      _marginEngine: string,
+      _lpNotionalCapNew: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -173,6 +224,13 @@ export class Periphery extends BaseContract {
     overrides?: CallOverrides
   ): Promise<number>;
 
+  lpNotionalCaps(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+  lpNotionalCumulatives(
+    arg0: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   mintOrBurn(
     params: {
       marginEngine: string;
@@ -182,6 +240,12 @@ export class Periphery extends BaseContract {
       isMint: boolean;
       marginDelta: BigNumberish;
     },
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setLPNotionalCap(
+    _marginEngine: string,
+    _lpNotionalCapNew: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -212,6 +276,13 @@ export class Periphery extends BaseContract {
       overrides?: CallOverrides
     ): Promise<number>;
 
+    lpNotionalCaps(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    lpNotionalCumulatives(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     mintOrBurn(
       params: {
         marginEngine: string;
@@ -223,6 +294,12 @@ export class Periphery extends BaseContract {
       },
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    setLPNotionalCap(
+      _marginEngine: string,
+      _lpNotionalCapNew: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     swap(
       params: {
@@ -247,7 +324,23 @@ export class Periphery extends BaseContract {
     >;
   };
 
-  filters: {};
+  filters: {
+    "NotionalCap(address,uint256)"(
+      _marginEngine?: null,
+      _lpNotionalCapNew?: null
+    ): TypedEventFilter<
+      [string, BigNumber],
+      { _marginEngine: string; _lpNotionalCapNew: BigNumber }
+    >;
+
+    NotionalCap(
+      _marginEngine?: null,
+      _lpNotionalCapNew?: null
+    ): TypedEventFilter<
+      [string, BigNumber],
+      { _marginEngine: string; _lpNotionalCapNew: BigNumber }
+    >;
+  };
 
   estimateGas: {
     estimatedCashflowAtMaturity(
@@ -263,6 +356,13 @@ export class Periphery extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    lpNotionalCaps(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    lpNotionalCumulatives(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     mintOrBurn(
       params: {
         marginEngine: string;
@@ -272,6 +372,12 @@ export class Periphery extends BaseContract {
         isMint: boolean;
         marginDelta: BigNumberish;
       },
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setLPNotionalCap(
+      _marginEngine: string,
+      _lpNotionalCapNew: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -303,6 +409,16 @@ export class Periphery extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    lpNotionalCaps(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    lpNotionalCumulatives(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     mintOrBurn(
       params: {
         marginEngine: string;
@@ -312,6 +428,12 @@ export class Periphery extends BaseContract {
         isMint: boolean;
         marginDelta: BigNumberish;
       },
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setLPNotionalCap(
+      _marginEngine: string,
+      _lpNotionalCapNew: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

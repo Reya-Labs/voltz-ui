@@ -2,28 +2,39 @@ import JSBI from 'jsbi';
 
 import { DateTime } from 'luxon';
 import { BigNumber } from 'ethers';
-import { BigIntish } from '../types';
 import { Price } from './fractions/price';
 import { tickToFixedRate, tickToPrice } from '../utils/priceTickConversions';
 import AMM from './amm';
 import { TickMath } from '../utils/tickMath';
 import { Q96 } from '../constants';
+import Mint from './mint';
+import Liquidation from './liquidation';
+import Settlement from './settlement';
+import { Swap } from '.';
+import Burn from './burn';
+import MarginUpdate from './marginUpdate';
 
 export type PositionConstructorArgs = {
   id: string;
   createdTimestamp: JSBI;
-  updatedTimestamp: JSBI;
   amm: AMM;
+  owner: string;
   tickLower: number;
   tickUpper: number;
-  liquidity: BigIntish;
-  isSettled: boolean;
+  updatedTimestamp: JSBI;
+  liquidity: JSBI;
   margin: JSBI;
   fixedTokenBalance: JSBI;
   variableTokenBalance: JSBI;
+  accumulatedFees: JSBI;
   isLiquidityProvider: boolean;
-  owner: string;
-  isEmpty: boolean;
+  isSettled: boolean;
+  mints: Array<Mint>;
+  burns: Array<Burn>;
+  swaps: Array<Swap>;
+  marginUpdates: Array<MarginUpdate>;
+  liquidations: Array<Liquidation>;
+  settlements: Array<Settlement>;
 };
 
 class Position {
@@ -31,60 +42,84 @@ class Position {
 
   public readonly createdTimestamp: JSBI;
 
-  public readonly updatedTimestamp: JSBI;
-
   public readonly amm: AMM;
+
+  public readonly owner: string;
 
   public readonly tickLower: number;
 
   public readonly tickUpper: number;
 
+  public readonly updatedTimestamp: JSBI;
+
   public readonly liquidity: JSBI;
 
-  public readonly owner: string;
+  public readonly margin: JSBI;
 
-  public isSettled: boolean;
+  public readonly fixedTokenBalance: JSBI;
 
-  public margin: JSBI;
+  public readonly variableTokenBalance: JSBI;
 
-  public fixedTokenBalance: JSBI;
+  public readonly accumulatedFees: JSBI;
 
-  public variableTokenBalance: JSBI;
+  public readonly isLiquidityProvider: boolean;
 
-  public isLiquidityProvider: boolean;
+  public readonly isSettled: boolean;
 
-  public readonly isEmpty: boolean;
+  public readonly mints: Array<Mint>;
+
+  public readonly burns: Array<Burn>;
+
+  public readonly swaps: Array<Swap>;
+
+  public readonly marginUpdates: Array<MarginUpdate>;
+
+  public readonly liquidations: Array<Liquidation>;
+
+  public readonly settlements: Array<Settlement>;
 
   public constructor({
     id,
     createdTimestamp,
-    updatedTimestamp,
     amm,
-    liquidity,
+    owner,
     tickLower,
     tickUpper,
-    isSettled,
+    updatedTimestamp,
+    liquidity,
     margin,
     fixedTokenBalance,
     variableTokenBalance,
+    accumulatedFees,
     isLiquidityProvider,
-    owner,
-    isEmpty,
+    isSettled,
+    mints,
+    burns,
+    swaps,
+    marginUpdates,
+    liquidations,
+    settlements,
   }: PositionConstructorArgs) {
     this.id = id;
+    this.createdTimestamp = createdTimestamp;
     this.amm = amm;
+    this.owner = owner;
     this.tickLower = tickLower;
     this.tickUpper = tickUpper;
-    this.liquidity = JSBI.BigInt(liquidity);
-    this.isSettled = isSettled;
-    this.margin = JSBI.BigInt(margin);
+    this.updatedTimestamp = updatedTimestamp;
+    this.liquidity = liquidity;
+    this.margin = margin;
     this.fixedTokenBalance = fixedTokenBalance;
     this.variableTokenBalance = variableTokenBalance;
-    this.createdTimestamp = createdTimestamp;
-    this.updatedTimestamp = updatedTimestamp;
+    this.accumulatedFees = accumulatedFees;
     this.isLiquidityProvider = isLiquidityProvider;
-    this.owner = owner;
-    this.isEmpty = isEmpty;
+    this.isSettled = isSettled;
+    this.mints = mints;
+    this.burns = burns;
+    this.swaps = swaps;
+    this.marginUpdates = marginUpdates;
+    this.liquidations = liquidations;
+    this.settlements = settlements;
   }
 
   public get priceLower(): Price {

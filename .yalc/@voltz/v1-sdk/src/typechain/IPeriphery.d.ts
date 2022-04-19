@@ -23,6 +23,8 @@ interface IPeripheryInterface extends ethers.utils.Interface {
   functions: {
     "estimatedCashflowAtMaturity(address,address,int24,int24)": FunctionFragment;
     "getCurrentTick(address)": FunctionFragment;
+    "lpNotionalCaps(address)": FunctionFragment;
+    "lpNotionalCumulatives(address)": FunctionFragment;
     "mintOrBurn((address,int24,int24,uint256,bool,uint256))": FunctionFragment;
     "swap((address,bool,uint256,uint160,int24,int24,uint256))": FunctionFragment;
   };
@@ -33,6 +35,14 @@ interface IPeripheryInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "getCurrentTick",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "lpNotionalCaps",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "lpNotionalCumulatives",
     values: [string]
   ): string;
   encodeFunctionData(
@@ -71,11 +81,27 @@ interface IPeripheryInterface extends ethers.utils.Interface {
     functionFragment: "getCurrentTick",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "lpNotionalCaps",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "lpNotionalCumulatives",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "mintOrBurn", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "swap", data: BytesLike): Result;
 
-  events: {};
+  events: {
+    "NotionalCap(address,uint256)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "NotionalCap"): EventFragment;
 }
+
+export type NotionalCapEvent = TypedEvent<
+  [string, BigNumber] & { _marginEngine: string; _lpNotionalCapNew: BigNumber }
+>;
 
 export class IPeriphery extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -134,6 +160,16 @@ export class IPeriphery extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[number] & { currentTick: number }>;
 
+    lpNotionalCaps(
+      _marginEngine: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    lpNotionalCumulatives(
+      _marginEngine: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     mintOrBurn(
       params: {
         marginEngine: string;
@@ -172,6 +208,16 @@ export class IPeriphery extends BaseContract {
     marginEngine: string,
     overrides?: CallOverrides
   ): Promise<number>;
+
+  lpNotionalCaps(
+    _marginEngine: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  lpNotionalCumulatives(
+    _marginEngine: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   mintOrBurn(
     params: {
@@ -212,6 +258,16 @@ export class IPeriphery extends BaseContract {
       overrides?: CallOverrides
     ): Promise<number>;
 
+    lpNotionalCaps(
+      _marginEngine: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    lpNotionalCumulatives(
+      _marginEngine: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     mintOrBurn(
       params: {
         marginEngine: string;
@@ -247,7 +303,23 @@ export class IPeriphery extends BaseContract {
     >;
   };
 
-  filters: {};
+  filters: {
+    "NotionalCap(address,uint256)"(
+      _marginEngine?: null,
+      _lpNotionalCapNew?: null
+    ): TypedEventFilter<
+      [string, BigNumber],
+      { _marginEngine: string; _lpNotionalCapNew: BigNumber }
+    >;
+
+    NotionalCap(
+      _marginEngine?: null,
+      _lpNotionalCapNew?: null
+    ): TypedEventFilter<
+      [string, BigNumber],
+      { _marginEngine: string; _lpNotionalCapNew: BigNumber }
+    >;
+  };
 
   estimateGas: {
     estimatedCashflowAtMaturity(
@@ -261,6 +333,16 @@ export class IPeriphery extends BaseContract {
     getCurrentTick(
       marginEngine: string,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    lpNotionalCaps(
+      _marginEngine: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    lpNotionalCumulatives(
+      _marginEngine: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     mintOrBurn(
@@ -301,6 +383,16 @@ export class IPeriphery extends BaseContract {
     getCurrentTick(
       marginEngine: string,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    lpNotionalCaps(
+      _marginEngine: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    lpNotionalCumulatives(
+      _marginEngine: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     mintOrBurn(

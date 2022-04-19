@@ -35,6 +35,22 @@ var _abi = [
     {
         inputs: [
             {
+                internalType: "uint256",
+                name: "x",
+                type: "uint256",
+            },
+            {
+                internalType: "uint256",
+                name: "y",
+                type: "uint256",
+            },
+        ],
+        name: "DebugError",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
                 internalType: "int256",
                 name: "amount0",
                 type: "int256",
@@ -278,6 +294,19 @@ var _abi = [
         inputs: [
             {
                 indexed: false,
+                internalType: "bool",
+                name: "__isAlpha",
+                type: "bool",
+            },
+        ],
+        name: "IsAlpha",
+        type: "event",
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: false,
                 internalType: "address",
                 name: "sender",
                 type: "address",
@@ -314,7 +343,7 @@ var _abi = [
         anonymous: false,
         inputs: [
             {
-                indexed: true,
+                indexed: false,
                 internalType: "address",
                 name: "sender",
                 type: "address",
@@ -326,34 +355,52 @@ var _abi = [
                 type: "address",
             },
             {
-                indexed: false,
-                internalType: "uint160",
-                name: "sqrtPriceX96",
-                type: "uint160",
-            },
-            {
-                indexed: false,
-                internalType: "uint128",
-                name: "liquidity",
-                type: "uint128",
-            },
-            {
-                indexed: false,
-                internalType: "int24",
-                name: "tick",
-                type: "int24",
-            },
-            {
-                indexed: false,
+                indexed: true,
                 internalType: "int24",
                 name: "tickLower",
                 type: "int24",
             },
             {
-                indexed: false,
+                indexed: true,
                 internalType: "int24",
                 name: "tickUpper",
                 type: "int24",
+            },
+            {
+                indexed: false,
+                internalType: "int256",
+                name: "desiredNotional",
+                type: "int256",
+            },
+            {
+                indexed: false,
+                internalType: "uint160",
+                name: "sqrtPriceLimitX96",
+                type: "uint160",
+            },
+            {
+                indexed: false,
+                internalType: "uint256",
+                name: "cumulativeFeeIncurred",
+                type: "uint256",
+            },
+            {
+                indexed: false,
+                internalType: "int256",
+                name: "fixedTokenDelta",
+                type: "int256",
+            },
+            {
+                indexed: false,
+                internalType: "int256",
+                name: "variableTokenDelta",
+                type: "int256",
+            },
+            {
+                indexed: false,
+                internalType: "int256",
+                name: "fixedTokenDeltaUnbalanced",
+                type: "int256",
             },
         ],
         name: "Swap",
@@ -376,6 +423,19 @@ var _abi = [
             },
         ],
         name: "VAMMInitialization",
+        type: "event",
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: false,
+                internalType: "int24",
+                name: "tick",
+                type: "int24",
+            },
+        ],
+        name: "VAMMPriceChange",
         type: "event",
     },
     {
@@ -531,6 +591,19 @@ var _abi = [
     },
     {
         inputs: [],
+        name: "isAlpha",
+        outputs: [
+            {
+                internalType: "bool",
+                name: "",
+                type: "bool",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [],
         name: "liquidity",
         outputs: [
             {
@@ -644,6 +717,19 @@ var _abi = [
     {
         inputs: [
             {
+                internalType: "bool",
+                name: "__isAlpha",
+                type: "bool",
+            },
+        ],
+        name: "setIsAlpha",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
                 components: [
                     {
                         internalType: "address",
@@ -680,27 +766,27 @@ var _abi = [
         outputs: [
             {
                 internalType: "int256",
-                name: "_fixedTokenDelta",
+                name: "fixedTokenDelta",
                 type: "int256",
             },
             {
                 internalType: "int256",
-                name: "_variableTokenDelta",
+                name: "variableTokenDelta",
                 type: "int256",
             },
             {
                 internalType: "uint256",
-                name: "_cumulativeFeeIncurred",
+                name: "cumulativeFeeIncurred",
                 type: "uint256",
             },
             {
                 internalType: "int256",
-                name: "_fixedTokenDeltaUnbalanced",
+                name: "fixedTokenDeltaUnbalanced",
                 type: "int256",
             },
             {
                 internalType: "int256",
-                name: "_marginRequirement",
+                name: "marginRequirement",
                 type: "int256",
             },
         ],

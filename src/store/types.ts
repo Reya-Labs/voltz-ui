@@ -36,15 +36,12 @@ export type State = {
 
 export type SerializedAMM = {
   id: string;
-  createdTimestamp: string;
   updatedTimestamp: string;
   fcmAddress: string;
   marginEngineAddress: string;
   termStartTimestamp: string;
   termEndTimestamp: string;
   tickSpacing: string;
-  sqrtPriceX96: string;
-  liquidity: string;
   tick: string;
   txCount: string;
   rateOracle: {

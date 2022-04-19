@@ -94,8 +94,55 @@ interface IFCMInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "vamm", data: BytesLike): Result;
 
-  events: {};
+  events: {
+    "FCMTraderUpdate(address,uint256,int256,int256)": EventFragment;
+    "FullyCollateralisedSwap(address,uint256,uint160,uint256,int256,int256,int256)": EventFragment;
+    "FullyCollateralisedUnwind(address,uint256,uint160,uint256,int256,int256,int256)": EventFragment;
+    "fcmPositionSettlement(address,int256)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "FCMTraderUpdate"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "FullyCollateralisedSwap"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "FullyCollateralisedUnwind"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "fcmPositionSettlement"): EventFragment;
 }
+
+export type FCMTraderUpdateEvent = TypedEvent<
+  [string, BigNumber, BigNumber, BigNumber] & {
+    trader: string;
+    marginInScaledYieldBearingTokens: BigNumber;
+    fixedTokenBalance: BigNumber;
+    variableTokenBalance: BigNumber;
+  }
+>;
+
+export type FullyCollateralisedSwapEvent = TypedEvent<
+  [string, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
+    trader: string;
+    desiredNotional: BigNumber;
+    sqrtPriceLimitX96: BigNumber;
+    cumulativeFeeIncurred: BigNumber;
+    fixedTokenDelta: BigNumber;
+    variableTokenDelta: BigNumber;
+    fixedTokenDeltaUnbalanced: BigNumber;
+  }
+>;
+
+export type FullyCollateralisedUnwindEvent = TypedEvent<
+  [string, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
+    trader: string;
+    desiredNotional: BigNumber;
+    sqrtPriceLimitX96: BigNumber;
+    cumulativeFeeIncurred: BigNumber;
+    fixedTokenDelta: BigNumber;
+    variableTokenDelta: BigNumber;
+    fixedTokenDeltaUnbalanced: BigNumber;
+  }
+>;
+
+export type fcmPositionSettlementEvent = TypedEvent<
+  [string, BigNumber] & { trader: string; settlementCashflow: BigNumber }
+>;
 
 export class IFCM extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -266,7 +313,14 @@ export class IFCM extends BaseContract {
       notional: BigNumberish,
       sqrtPriceLimitX96: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<
+      [BigNumber, BigNumber, BigNumber, BigNumber] & {
+        fixedTokenDelta: BigNumber;
+        variableTokenDelta: BigNumber;
+        cumulativeFeeIncurred: BigNumber;
+        fixedTokenDeltaUnbalanced: BigNumber;
+      }
+    >;
 
     marginEngine(overrides?: CallOverrides): Promise<string>;
 
@@ -284,12 +338,181 @@ export class IFCM extends BaseContract {
       notionalToUnwind: BigNumberish,
       sqrtPriceLimitX96: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<
+      [BigNumber, BigNumber, BigNumber, BigNumber] & {
+        fixedTokenDelta: BigNumber;
+        variableTokenDelta: BigNumber;
+        cumulativeFeeIncurred: BigNumber;
+        fixedTokenDeltaUnbalanced: BigNumber;
+      }
+    >;
 
     vamm(overrides?: CallOverrides): Promise<string>;
   };
 
-  filters: {};
+  filters: {
+    "FCMTraderUpdate(address,uint256,int256,int256)"(
+      trader?: string | null,
+      marginInScaledYieldBearingTokens?: null,
+      fixedTokenBalance?: null,
+      variableTokenBalance?: null
+    ): TypedEventFilter<
+      [string, BigNumber, BigNumber, BigNumber],
+      {
+        trader: string;
+        marginInScaledYieldBearingTokens: BigNumber;
+        fixedTokenBalance: BigNumber;
+        variableTokenBalance: BigNumber;
+      }
+    >;
+
+    FCMTraderUpdate(
+      trader?: string | null,
+      marginInScaledYieldBearingTokens?: null,
+      fixedTokenBalance?: null,
+      variableTokenBalance?: null
+    ): TypedEventFilter<
+      [string, BigNumber, BigNumber, BigNumber],
+      {
+        trader: string;
+        marginInScaledYieldBearingTokens: BigNumber;
+        fixedTokenBalance: BigNumber;
+        variableTokenBalance: BigNumber;
+      }
+    >;
+
+    "FullyCollateralisedSwap(address,uint256,uint160,uint256,int256,int256,int256)"(
+      trader?: string | null,
+      desiredNotional?: null,
+      sqrtPriceLimitX96?: null,
+      cumulativeFeeIncurred?: null,
+      fixedTokenDelta?: null,
+      variableTokenDelta?: null,
+      fixedTokenDeltaUnbalanced?: null
+    ): TypedEventFilter<
+      [
+        string,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber
+      ],
+      {
+        trader: string;
+        desiredNotional: BigNumber;
+        sqrtPriceLimitX96: BigNumber;
+        cumulativeFeeIncurred: BigNumber;
+        fixedTokenDelta: BigNumber;
+        variableTokenDelta: BigNumber;
+        fixedTokenDeltaUnbalanced: BigNumber;
+      }
+    >;
+
+    FullyCollateralisedSwap(
+      trader?: string | null,
+      desiredNotional?: null,
+      sqrtPriceLimitX96?: null,
+      cumulativeFeeIncurred?: null,
+      fixedTokenDelta?: null,
+      variableTokenDelta?: null,
+      fixedTokenDeltaUnbalanced?: null
+    ): TypedEventFilter<
+      [
+        string,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber
+      ],
+      {
+        trader: string;
+        desiredNotional: BigNumber;
+        sqrtPriceLimitX96: BigNumber;
+        cumulativeFeeIncurred: BigNumber;
+        fixedTokenDelta: BigNumber;
+        variableTokenDelta: BigNumber;
+        fixedTokenDeltaUnbalanced: BigNumber;
+      }
+    >;
+
+    "FullyCollateralisedUnwind(address,uint256,uint160,uint256,int256,int256,int256)"(
+      trader?: string | null,
+      desiredNotional?: null,
+      sqrtPriceLimitX96?: null,
+      cumulativeFeeIncurred?: null,
+      fixedTokenDelta?: null,
+      variableTokenDelta?: null,
+      fixedTokenDeltaUnbalanced?: null
+    ): TypedEventFilter<
+      [
+        string,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber
+      ],
+      {
+        trader: string;
+        desiredNotional: BigNumber;
+        sqrtPriceLimitX96: BigNumber;
+        cumulativeFeeIncurred: BigNumber;
+        fixedTokenDelta: BigNumber;
+        variableTokenDelta: BigNumber;
+        fixedTokenDeltaUnbalanced: BigNumber;
+      }
+    >;
+
+    FullyCollateralisedUnwind(
+      trader?: string | null,
+      desiredNotional?: null,
+      sqrtPriceLimitX96?: null,
+      cumulativeFeeIncurred?: null,
+      fixedTokenDelta?: null,
+      variableTokenDelta?: null,
+      fixedTokenDeltaUnbalanced?: null
+    ): TypedEventFilter<
+      [
+        string,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber
+      ],
+      {
+        trader: string;
+        desiredNotional: BigNumber;
+        sqrtPriceLimitX96: BigNumber;
+        cumulativeFeeIncurred: BigNumber;
+        fixedTokenDelta: BigNumber;
+        variableTokenDelta: BigNumber;
+        fixedTokenDeltaUnbalanced: BigNumber;
+      }
+    >;
+
+    "fcmPositionSettlement(address,int256)"(
+      trader?: string | null,
+      settlementCashflow?: null
+    ): TypedEventFilter<
+      [string, BigNumber],
+      { trader: string; settlementCashflow: BigNumber }
+    >;
+
+    fcmPositionSettlement(
+      trader?: string | null,
+      settlementCashflow?: null
+    ): TypedEventFilter<
+      [string, BigNumber],
+      { trader: string; settlementCashflow: BigNumber }
+    >;
+  };
 
   estimateGas: {
     getTraderWithYieldBearingAssets(

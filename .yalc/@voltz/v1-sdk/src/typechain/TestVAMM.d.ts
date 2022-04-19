@@ -34,6 +34,7 @@ interface TestVAMMInterface extends ethers.utils.Interface {
     "getProtocolFees()": FunctionFragment;
     "initialize(address,int24)": FunctionFragment;
     "initializeVAMM(uint160)": FunctionFragment;
+    "isAlpha()": FunctionFragment;
     "liquidity()": FunctionFragment;
     "marginEngine()": FunctionFragment;
     "maxLiquidityPerTick()": FunctionFragment;
@@ -45,6 +46,7 @@ interface TestVAMMInterface extends ethers.utils.Interface {
     "setFee(uint256)": FunctionFragment;
     "setFeeProtocol(uint8)": FunctionFragment;
     "setFixedTokenGrowthGlobal(int256)": FunctionFragment;
+    "setIsAlpha(bool)": FunctionFragment;
     "setTestProtocolFees(uint256)": FunctionFragment;
     "setTickTest(int24,(uint128,int128,int256,int256,uint256,bool))": FunctionFragment;
     "setVariableTokenGrowthGlobal(int256)": FunctionFragment;
@@ -100,6 +102,7 @@ interface TestVAMMInterface extends ethers.utils.Interface {
     functionFragment: "initializeVAMM",
     values: [BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "isAlpha", values?: undefined): string;
   encodeFunctionData(functionFragment: "liquidity", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "marginEngine",
@@ -135,6 +138,7 @@ interface TestVAMMInterface extends ethers.utils.Interface {
     functionFragment: "setFixedTokenGrowthGlobal",
     values: [BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "setIsAlpha", values: [boolean]): string;
   encodeFunctionData(
     functionFragment: "setTestProtocolFees",
     values: [BigNumberish]
@@ -234,6 +238,7 @@ interface TestVAMMInterface extends ethers.utils.Interface {
     functionFragment: "initializeVAMM",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "isAlpha", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "liquidity", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "marginEngine",
@@ -263,6 +268,7 @@ interface TestVAMMInterface extends ethers.utils.Interface {
     functionFragment: "setFixedTokenGrowthGlobal",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setIsAlpha", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setTestProtocolFees",
     data: BytesLike
@@ -311,13 +317,15 @@ interface TestVAMMInterface extends ethers.utils.Interface {
     "Burn(address,address,int24,int24,uint128)": EventFragment;
     "Fee(uint256)": EventFragment;
     "FeeProtocol(uint8)": EventFragment;
+    "IsAlpha(bool)": EventFragment;
     "Mint(address,address,int24,int24,uint128)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Paused(address)": EventFragment;
-    "Swap(address,address,uint160,uint128,int24,int24,int24)": EventFragment;
+    "Swap(address,address,int24,int24,int256,uint160,uint256,int256,int256,int256)": EventFragment;
     "Unpaused(address)": EventFragment;
     "Upgraded(address)": EventFragment;
     "VAMMInitialization(uint160,int24)": EventFragment;
+    "VAMMPriceChange(int24)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "AdminChanged"): EventFragment;
@@ -325,6 +333,7 @@ interface TestVAMMInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "Burn"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Fee"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "FeeProtocol"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "IsAlpha"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Mint"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
@@ -332,6 +341,7 @@ interface TestVAMMInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Upgraded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "VAMMInitialization"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "VAMMPriceChange"): EventFragment;
 }
 
 export type AdminChangedEvent = TypedEvent<
@@ -354,6 +364,8 @@ export type FeeEvent = TypedEvent<[BigNumber] & { feeWad: BigNumber }>;
 
 export type FeeProtocolEvent = TypedEvent<[number] & { feeProtocol: number }>;
 
+export type IsAlphaEvent = TypedEvent<[boolean] & { __isAlpha: boolean }>;
+
 export type MintEvent = TypedEvent<
   [string, string, number, number, BigNumber] & {
     sender: string;
@@ -371,14 +383,28 @@ export type OwnershipTransferredEvent = TypedEvent<
 export type PausedEvent = TypedEvent<[string] & { account: string }>;
 
 export type SwapEvent = TypedEvent<
-  [string, string, BigNumber, BigNumber, number, number, number] & {
+  [
+    string,
+    string,
+    number,
+    number,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber
+  ] & {
     sender: string;
     recipient: string;
-    sqrtPriceX96: BigNumber;
-    liquidity: BigNumber;
-    tick: number;
     tickLower: number;
     tickUpper: number;
+    desiredNotional: BigNumber;
+    sqrtPriceLimitX96: BigNumber;
+    cumulativeFeeIncurred: BigNumber;
+    fixedTokenDelta: BigNumber;
+    variableTokenDelta: BigNumber;
+    fixedTokenDeltaUnbalanced: BigNumber;
   }
 >;
 
@@ -389,6 +415,8 @@ export type UpgradedEvent = TypedEvent<[string] & { implementation: string }>;
 export type VAMMInitializationEvent = TypedEvent<
   [BigNumber, number] & { sqrtPriceX96: BigNumber; tick: number }
 >;
+
+export type VAMMPriceChangeEvent = TypedEvent<[number] & { tick: number }>;
 
 export class TestVAMM extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -490,6 +518,8 @@ export class TestVAMM extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    isAlpha(overrides?: CallOverrides): Promise<[boolean]>;
+
     liquidity(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     marginEngine(overrides?: CallOverrides): Promise<[string]>;
@@ -526,6 +556,11 @@ export class TestVAMM extends BaseContract {
 
     setFixedTokenGrowthGlobal(
       newFixedTokenGrowthGlobalX128: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setIsAlpha(
+      __isAlpha: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -680,6 +715,8 @@ export class TestVAMM extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  isAlpha(overrides?: CallOverrides): Promise<boolean>;
+
   liquidity(overrides?: CallOverrides): Promise<BigNumber>;
 
   marginEngine(overrides?: CallOverrides): Promise<string>;
@@ -716,6 +753,11 @@ export class TestVAMM extends BaseContract {
 
   setFixedTokenGrowthGlobal(
     newFixedTokenGrowthGlobalX128: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setIsAlpha(
+    __isAlpha: boolean,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -864,6 +906,8 @@ export class TestVAMM extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    isAlpha(overrides?: CallOverrides): Promise<boolean>;
+
     liquidity(overrides?: CallOverrides): Promise<BigNumber>;
 
     marginEngine(overrides?: CallOverrides): Promise<string>;
@@ -897,6 +941,8 @@ export class TestVAMM extends BaseContract {
       newFixedTokenGrowthGlobalX128: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    setIsAlpha(__isAlpha: boolean, overrides?: CallOverrides): Promise<void>;
 
     setTestProtocolFees(
       newProtocolFees: BigNumberish,
@@ -932,11 +978,11 @@ export class TestVAMM extends BaseContract {
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
-        _fixedTokenDelta: BigNumber;
-        _variableTokenDelta: BigNumber;
-        _cumulativeFeeIncurred: BigNumber;
-        _fixedTokenDeltaUnbalanced: BigNumber;
-        _marginRequirement: BigNumber;
+        fixedTokenDelta: BigNumber;
+        variableTokenDelta: BigNumber;
+        cumulativeFeeIncurred: BigNumber;
+        fixedTokenDeltaUnbalanced: BigNumber;
+        marginRequirement: BigNumber;
       }
     >;
 
@@ -1072,6 +1118,14 @@ export class TestVAMM extends BaseContract {
       feeProtocol?: null
     ): TypedEventFilter<[number], { feeProtocol: number }>;
 
+    "IsAlpha(bool)"(
+      __isAlpha?: null
+    ): TypedEventFilter<[boolean], { __isAlpha: boolean }>;
+
+    IsAlpha(
+      __isAlpha?: null
+    ): TypedEventFilter<[boolean], { __isAlpha: boolean }>;
+
     "Mint(address,address,int24,int24,uint128)"(
       sender?: null,
       owner?: string | null,
@@ -1128,45 +1182,79 @@ export class TestVAMM extends BaseContract {
 
     Paused(account?: null): TypedEventFilter<[string], { account: string }>;
 
-    "Swap(address,address,uint160,uint128,int24,int24,int24)"(
-      sender?: string | null,
+    "Swap(address,address,int24,int24,int256,uint160,uint256,int256,int256,int256)"(
+      sender?: null,
       recipient?: string | null,
-      sqrtPriceX96?: null,
-      liquidity?: null,
-      tick?: null,
-      tickLower?: null,
-      tickUpper?: null
+      tickLower?: BigNumberish | null,
+      tickUpper?: BigNumberish | null,
+      desiredNotional?: null,
+      sqrtPriceLimitX96?: null,
+      cumulativeFeeIncurred?: null,
+      fixedTokenDelta?: null,
+      variableTokenDelta?: null,
+      fixedTokenDeltaUnbalanced?: null
     ): TypedEventFilter<
-      [string, string, BigNumber, BigNumber, number, number, number],
+      [
+        string,
+        string,
+        number,
+        number,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber
+      ],
       {
         sender: string;
         recipient: string;
-        sqrtPriceX96: BigNumber;
-        liquidity: BigNumber;
-        tick: number;
         tickLower: number;
         tickUpper: number;
+        desiredNotional: BigNumber;
+        sqrtPriceLimitX96: BigNumber;
+        cumulativeFeeIncurred: BigNumber;
+        fixedTokenDelta: BigNumber;
+        variableTokenDelta: BigNumber;
+        fixedTokenDeltaUnbalanced: BigNumber;
       }
     >;
 
     Swap(
-      sender?: string | null,
+      sender?: null,
       recipient?: string | null,
-      sqrtPriceX96?: null,
-      liquidity?: null,
-      tick?: null,
-      tickLower?: null,
-      tickUpper?: null
+      tickLower?: BigNumberish | null,
+      tickUpper?: BigNumberish | null,
+      desiredNotional?: null,
+      sqrtPriceLimitX96?: null,
+      cumulativeFeeIncurred?: null,
+      fixedTokenDelta?: null,
+      variableTokenDelta?: null,
+      fixedTokenDeltaUnbalanced?: null
     ): TypedEventFilter<
-      [string, string, BigNumber, BigNumber, number, number, number],
+      [
+        string,
+        string,
+        number,
+        number,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber
+      ],
       {
         sender: string;
         recipient: string;
-        sqrtPriceX96: BigNumber;
-        liquidity: BigNumber;
-        tick: number;
         tickLower: number;
         tickUpper: number;
+        desiredNotional: BigNumber;
+        sqrtPriceLimitX96: BigNumber;
+        cumulativeFeeIncurred: BigNumber;
+        fixedTokenDelta: BigNumber;
+        variableTokenDelta: BigNumber;
+        fixedTokenDeltaUnbalanced: BigNumber;
       }
     >;
 
@@ -1199,6 +1287,12 @@ export class TestVAMM extends BaseContract {
       [BigNumber, number],
       { sqrtPriceX96: BigNumber; tick: number }
     >;
+
+    "VAMMPriceChange(int24)"(
+      tick?: null
+    ): TypedEventFilter<[number], { tick: number }>;
+
+    VAMMPriceChange(tick?: null): TypedEventFilter<[number], { tick: number }>;
   };
 
   estimateGas: {
@@ -1243,6 +1337,8 @@ export class TestVAMM extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    isAlpha(overrides?: CallOverrides): Promise<BigNumber>;
+
     liquidity(overrides?: CallOverrides): Promise<BigNumber>;
 
     marginEngine(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1279,6 +1375,11 @@ export class TestVAMM extends BaseContract {
 
     setFixedTokenGrowthGlobal(
       newFixedTokenGrowthGlobalX128: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setIsAlpha(
+      __isAlpha: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1403,6 +1504,8 @@ export class TestVAMM extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    isAlpha(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     liquidity(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     marginEngine(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -1441,6 +1544,11 @@ export class TestVAMM extends BaseContract {
 
     setFixedTokenGrowthGlobal(
       newFixedTokenGrowthGlobalX128: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setIsAlpha(
+      __isAlpha: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

@@ -44,7 +44,6 @@ interface TestRateOracleInterface extends ethers.utils.Interface {
     "setMinSecondsSinceLastUpdate(uint256)": FunctionFragment;
     "settlementRateCache(uint32,uint32)": FunctionFragment;
     "testComputeApyFromRate(uint256,uint256)": FunctionFragment;
-    "testGetRateFromTo(uint256,uint256)": FunctionFragment;
     "testGetSurroundingRates(uint32)": FunctionFragment;
     "testGrow(uint16)": FunctionFragment;
     "testObserveSingle(uint32)": FunctionFragment;
@@ -140,10 +139,6 @@ interface TestRateOracleInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "testComputeApyFromRate",
-    values: [BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "testGetRateFromTo",
     values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
@@ -255,10 +250,6 @@ interface TestRateOracleInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "testComputeApyFromRate",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "testGetRateFromTo",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -498,12 +489,6 @@ export class TestRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    testGetRateFromTo(
-      from: BigNumberish,
-      to: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     testGetSurroundingRates(
       target: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -673,12 +658,6 @@ export class TestRateOracle extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  testGetRateFromTo(
-    from: BigNumberish,
-    to: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   testGetSurroundingRates(
     target: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -843,12 +822,6 @@ export class TestRateOracle extends BaseContract {
     testComputeApyFromRate(
       rateFromTo: BigNumberish,
       timeInYears: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    testGetRateFromTo(
-      from: BigNumberish,
-      to: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1055,12 +1028,6 @@ export class TestRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    testGetRateFromTo(
-      from: BigNumberish,
-      to: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     testGetSurroundingRates(
       target: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1199,12 +1166,6 @@ export class TestRateOracle extends BaseContract {
       rateFromTo: BigNumberish,
       timeInYears: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    testGetRateFromTo(
-      from: BigNumberish,
-      to: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     testGetSurroundingRates(

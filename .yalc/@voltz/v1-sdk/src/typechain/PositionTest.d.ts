@@ -166,6 +166,7 @@ export class PositionTest extends BaseContract {
         BigNumber,
         BigNumber,
         BigNumber,
+        BigNumber,
         BigNumber
       ] & {
         isSettled: boolean;
@@ -177,6 +178,7 @@ export class PositionTest extends BaseContract {
         variableTokenBalance: BigNumber;
         feeGrowthInsideLastX128: BigNumber;
         rewardPerAmount: BigNumber;
+        accumulatedFees: BigNumber;
       }
     >;
 
@@ -236,6 +238,7 @@ export class PositionTest extends BaseContract {
       BigNumber,
       BigNumber,
       BigNumber,
+      BigNumber,
       BigNumber
     ] & {
       isSettled: boolean;
@@ -247,6 +250,7 @@ export class PositionTest extends BaseContract {
       variableTokenBalance: BigNumber;
       feeGrowthInsideLastX128: BigNumber;
       rewardPerAmount: BigNumber;
+      accumulatedFees: BigNumber;
     }
   >;
 
@@ -306,6 +310,7 @@ export class PositionTest extends BaseContract {
         BigNumber,
         BigNumber,
         BigNumber,
+        BigNumber,
         BigNumber
       ] & {
         isSettled: boolean;
@@ -317,6 +322,7 @@ export class PositionTest extends BaseContract {
         variableTokenBalance: BigNumber;
         feeGrowthInsideLastX128: BigNumber;
         rewardPerAmount: BigNumber;
+        accumulatedFees: BigNumber;
       }
     >;
 

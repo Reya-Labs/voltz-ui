@@ -1,7 +1,7 @@
 import JSBI from 'jsbi';
 import { useMemo, useEffect } from 'react';
 import isNull from 'lodash/isNull';
-import { Position, Token, RateOracle } from '@voltz/v1-sdk';
+import { Position, Token, RateOracle, Mint, Burn, Swap, MarginUpdate, Liquidation, Settlement } from '@voltz/v1-sdk';
 import { providers } from 'ethers';
 import { DateTime } from 'luxon';
 
@@ -27,21 +27,62 @@ const usePositions = (): usePositionsResult => {
     if (wallet && wallet.positions && !loading && !error) {
       return wallet.positions.map(
         ({
+          id: positionId,
+          createdTimestamp: positionCreatedTimestamp,
           amm: {
+            id: ammId,
+            fcm: {
+              id: fcmAddress
+            },
+            marginEngine: {
+              id: marginEngineAddress
+            },
             rateOracle: {
               id: rateOracleAddress,
               protocolId,
               token: { id: tokenAddress, name: tokenName, decimals },
             },
-            ...restOfAmm
+            tickSpacing,
+            termStartTimestamp,
+            termEndTimestamp,
+            updatedTimestamp: ammUpdatedTimestamp,
+            tick,
+            txCount
           },
-          tickLower: { value: tickLowerValue },
-          tickUpper: { value: tickUpperValue },
           owner: { id: ownerAddress },
-          ...restOfPosition
+          tickLower,
+          tickUpper,
+          updatedTimestamp: positionUpdatedTimestamp,
+          liquidity,
+          margin,
+          fixedTokenBalance,
+          variableTokenBalance,
+          accumulatedFees,
+          isLiquidityProvider,
+          isSettled,
+          mints,
+          burns,
+          swaps,
+          marginUpdates,
+          liquidations,
+          settlements
         }) =>
           new Position({
+            id: positionId,
+            createdTimestamp: positionCreatedTimestamp as JSBI,
+            updatedTimestamp: positionUpdatedTimestamp as JSBI,
+            tickLower: tickLower as number,
+            tickUpper: tickUpper as number,
+            liquidity: liquidity as JSBI,
+            margin: margin as JSBI,
+            fixedTokenBalance: fixedTokenBalance as JSBI,
+            variableTokenBalance: variableTokenBalance as JSBI,
+            accumulatedFees: accumulatedFees as JSBI,
+            isLiquidityProvider,
+            isSettled,
+            owner: ownerAddress,
             amm: new AugmentedAMM({
+              id: ammId,
               signer,
               provider: providers.getDefaultProvider(
                 process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK,
@@ -55,12 +96,74 @@ const usePositions = (): usePositionsResult => {
                 name: tokenName,
                 decimals: decimals as number,
               }),
-              ...restOfAmm,
+              marginEngineAddress,
+              fcmAddress,
+              updatedTimestamp: ammUpdatedTimestamp as JSBI,
+              termStartTimestamp: termStartTimestamp as JSBI,
+              termEndTimestamp: termEndTimestamp as JSBI,
+              tick: tick as number,
+              tickSpacing: tickSpacing as number,
+              txCount: txCount as number
             }),
-            tickLower: JSBI.toNumber(JSBI.BigInt(tickLowerValue as string)),
-            tickUpper: JSBI.toNumber(JSBI.BigInt(tickUpperValue as string)),
-            owner: ownerAddress,
-            ...restOfPosition,
+            mints: mints.map((args) => new Mint({
+              id: args.id,
+              transactionId: args.transaction.id,
+              transactionTimestamp: args.transaction.createdTimestamp as JSBI,
+              ammId,
+              positionId: positionId,
+              sender: args.sender,
+              amount: args.amount as JSBI,
+            })),
+            burns: burns.map((args) => new Burn({
+              id: args.id,
+              transactionId: args.transaction.id,
+              transactionTimestamp: args.transaction.createdTimestamp as JSBI,
+              ammId,
+              positionId: positionId,
+              sender: args.sender,
+              amount: args.amount as JSBI,
+            })),
+            swaps: swaps.map((args) => new Swap({
+              id: args.id,
+              transactionId: args.transaction.id,
+              transactionTimestamp: args.transaction.createdTimestamp as JSBI,
+              ammId,
+              positionId: positionId,
+              sender: args.sender,
+              desiredNotional: args.desiredNotional as JSBI,
+              sqrtPriceLimitX96: args.sqrtPriceLimitX96 as JSBI,
+              cumulativeFeeIncurred: args.cumulativeFeeIncurred as JSBI,
+              fixedTokenDelta: args.fixedTokenDelta as JSBI,
+              variableTokenDelta: args.variableTokenDelta as JSBI,
+              fixedTokenDeltaUnbalanced: args.fixedTokenDeltaUnbalanced as JSBI
+            })),
+            marginUpdates: marginUpdates.map((args) => new MarginUpdate({
+              id: args.id,
+              transactionId: args.transaction.id,
+              transactionTimestamp: args.transaction.createdTimestamp as JSBI,
+              ammId,
+              positionId: positionId,
+              depositer: args.depositer ,
+              marginDelta: args.marginDelta as JSBI
+            })),
+            liquidations: liquidations.map((args) => new Liquidation({
+              id: args.id,
+              transactionId: args.transaction.id,
+              transactionTimestamp: args.transaction.createdTimestamp as JSBI,
+              ammId,
+              positionId: positionId,
+              liquidator: args.liquidator,
+              reward: args.reward as JSBI,
+              notionalUnwound: args.notionalUnwound as JSBI,
+            })),
+            settlements: settlements.map((args) => new Settlement({
+              id: args.id,
+              transactionId: args.transaction.id,
+              transactionTimestamp: args.transaction.createdTimestamp as JSBI,
+              ammId,
+              positionId: positionId,
+              settlementCashflow: args.settlementCashflow as JSBI
+            })),
           }),
       );
     }

@@ -39,7 +39,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var jsbi_1 = __importDefault(require("jsbi"));
 var ethers_1 = require("ethers");
 var ethers_2 = require("ethers");
 var constants_1 = require("../constants");
@@ -53,23 +52,20 @@ var tokenAmount_1 = require("./fractions/tokenAmount");
 var extractErrorMessage_1 = require("../utils/extractErrorMessage");
 var AMM = /** @class */ (function () {
     function AMM(_a) {
-        var id = _a.id, signer = _a.signer, provider = _a.provider, marginEngineAddress = _a.marginEngineAddress, fcmAddress = _a.fcmAddress, rateOracle = _a.rateOracle, createdTimestamp = _a.createdTimestamp, updatedTimestamp = _a.updatedTimestamp, termStartTimestamp = _a.termStartTimestamp, termEndTimestamp = _a.termEndTimestamp, underlyingToken = _a.underlyingToken, sqrtPriceX96 = _a.sqrtPriceX96, liquidity = _a.liquidity, tick = _a.tick, tickSpacing = _a.tickSpacing, txCount = _a.txCount;
+        var id = _a.id, signer = _a.signer, provider = _a.provider, marginEngineAddress = _a.marginEngineAddress, fcmAddress = _a.fcmAddress, rateOracle = _a.rateOracle, updatedTimestamp = _a.updatedTimestamp, termStartTimestamp = _a.termStartTimestamp, termEndTimestamp = _a.termEndTimestamp, underlyingToken = _a.underlyingToken, tick = _a.tick, tickSpacing = _a.tickSpacing, txCount = _a.txCount;
         this.id = id;
         this.signer = signer;
         this.provider = provider || (signer === null || signer === void 0 ? void 0 : signer.provider);
         this.marginEngineAddress = marginEngineAddress;
         this.fcmAddress = fcmAddress;
         this.rateOracle = rateOracle;
-        this.createdTimestamp = jsbi_1.default.BigInt(createdTimestamp);
-        this.updatedTimestamp = jsbi_1.default.BigInt(updatedTimestamp);
-        this.termStartTimestamp = jsbi_1.default.BigInt(termStartTimestamp);
-        this.termEndTimestamp = jsbi_1.default.BigInt(termEndTimestamp);
+        this.updatedTimestamp = updatedTimestamp;
+        this.termStartTimestamp = termStartTimestamp;
+        this.termEndTimestamp = termEndTimestamp;
         this.underlyingToken = underlyingToken;
-        this.sqrtPriceX96 = jsbi_1.default.BigInt(sqrtPriceX96);
-        this.liquidity = jsbi_1.default.BigInt(liquidity);
-        this.tickSpacing = jsbi_1.default.BigInt(tickSpacing);
-        this.tick = jsbi_1.default.BigInt(tick);
-        this.txCount = jsbi_1.default.BigInt(txCount);
+        this.tickSpacing = tickSpacing;
+        this.tick = tick;
+        this.txCount = txCount;
     }
     AMM.prototype.getInfoPostSwap = function (_a) {
         var isFT = _a.isFT, notional = _a.notional, fixedRateLimit = _a.fixedRateLimit, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh;
@@ -957,26 +953,6 @@ var AMM = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(AMM.prototype, "initialized", {
-        get: function () {
-            return !jsbi_1.default.EQ(this.sqrtPriceX96, jsbi_1.default.BigInt(0));
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AMM.prototype, "fixedRate", {
-        get: function () {
-            if (!this._fixedRate) {
-                if (!this.initialized) {
-                    return new price_1.Price(1, 0);
-                }
-                this._fixedRate = new price_1.Price(jsbi_1.default.multiply(this.sqrtPriceX96, this.sqrtPriceX96), constants_1.Q192);
-            }
-            return this._fixedRate;
-        },
-        enumerable: false,
-        configurable: true
-    });
     AMM.prototype.fixedApr = function () {
         return __awaiter(this, void 0, void 0, function () {
             var peripheryContract, currentTick, apr;
@@ -996,16 +972,6 @@ var AMM = /** @class */ (function () {
             });
         });
     };
-    Object.defineProperty(AMM.prototype, "price", {
-        get: function () {
-            if (!this._price) {
-                this._price = new price_1.Price(constants_1.Q192, jsbi_1.default.multiply(this.sqrtPriceX96, this.sqrtPriceX96));
-            }
-            return this._price;
-        },
-        enumerable: false,
-        configurable: true
-    });
     Object.defineProperty(AMM.prototype, "protocol", {
         get: function () {
             var firstProtocolCharacter = this.rateOracle.protocol[0];
@@ -1084,7 +1050,7 @@ var AMM = /** @class */ (function () {
         }
         var fixedRatePrice = price_1.Price.fromNumber(fixedRate);
         var closestTick = (0, priceTickConversions_1.fixedRateToClosestTick)(fixedRatePrice);
-        var closestUsableTick = (0, nearestUsableTick_1.nearestUsableTick)(closestTick, jsbi_1.default.toNumber(this.tickSpacing));
+        var closestUsableTick = (0, nearestUsableTick_1.nearestUsableTick)(closestTick, this.tickSpacing);
         var closestUsableFixedRate = (0, priceTickConversions_1.tickToFixedRate)(closestUsableTick);
         return {
             closestUsableTick: closestUsableTick,
@@ -1093,7 +1059,7 @@ var AMM = /** @class */ (function () {
     };
     AMM.prototype.getNextUsableFixedRate = function (fixedRate, count) {
         var closestUsableTick = this.closestTickAndFixedRate(fixedRate).closestUsableTick;
-        closestUsableTick -= count * jsbi_1.default.toNumber(this.tickSpacing);
+        closestUsableTick -= count * this.tickSpacing;
         return (0, priceTickConversions_1.tickToFixedRate)(closestUsableTick).toNumber();
     };
     return AMM;

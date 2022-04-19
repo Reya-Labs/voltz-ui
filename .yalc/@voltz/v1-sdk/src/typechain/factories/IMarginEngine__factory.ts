@@ -36,6 +36,22 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "x",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "y",
+        type: "uint256",
+      },
+    ],
+    name: "DebugError",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
         internalType: "int256",
         name: "amount0",
         type: "int256",
@@ -243,6 +259,19 @@ const _abi = [
       {
         indexed: false,
         internalType: "uint256",
+        name: "value",
+        type: "uint256",
+      },
+    ],
+    name: "HistoricalApy",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
         name: "secondsAgo",
         type: "uint256",
       },
@@ -391,33 +420,21 @@ const _abi = [
       },
       {
         indexed: false,
-        internalType: "int256",
-        name: "fixedTokenBalance",
-        type: "int256",
-      },
-      {
-        indexed: false,
-        internalType: "int256",
-        name: "variableTokenBalance",
-        type: "int256",
-      },
-      {
-        indexed: false,
-        internalType: "int256",
-        name: "margin",
-        type: "int256",
-      },
-      {
-        indexed: false,
-        internalType: "uint128",
-        name: "liquidity",
-        type: "uint128",
-      },
-      {
-        indexed: false,
         internalType: "address",
         name: "liquidator",
         type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "int256",
+        name: "notionalUnwound",
+        type: "int256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "liquidatorReward",
+        type: "uint256",
       },
     ],
     name: "PositionLiquidation",
@@ -426,6 +443,12 @@ const _abi = [
   {
     anonymous: false,
     inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
       {
         indexed: true,
         internalType: "address",
@@ -447,7 +470,7 @@ const _abi = [
       {
         indexed: false,
         internalType: "int256",
-        name: "positionMargin",
+        name: "marginDelta",
         type: "int256",
       },
     ],
@@ -477,110 +500,67 @@ const _abi = [
       },
       {
         indexed: false,
-        internalType: "uint128",
-        name: "liquidity",
-        type: "uint128",
-      },
-    ],
-    name: "PositionPostMintBurnUpdate",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "int24",
-        name: "tickLower",
-        type: "int24",
-      },
-      {
-        indexed: true,
-        internalType: "int24",
-        name: "tickUpper",
-        type: "int24",
-      },
-      {
-        indexed: false,
-        internalType: "int256",
-        name: "fixedTokenBalance",
-        type: "int256",
-      },
-      {
-        indexed: false,
-        internalType: "int256",
-        name: "variableTokenBalance",
-        type: "int256",
-      },
-      {
-        indexed: false,
-        internalType: "int256",
-        name: "margin",
-        type: "int256",
-      },
-    ],
-    name: "PositionPostSwapUpdate",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "int24",
-        name: "tickLower",
-        type: "int24",
-      },
-      {
-        indexed: true,
-        internalType: "int24",
-        name: "tickUpper",
-        type: "int24",
-      },
-      {
-        indexed: false,
-        internalType: "int256",
-        name: "fixedTokenBalance",
-        type: "int256",
-      },
-      {
-        indexed: false,
-        internalType: "int256",
-        name: "variableTokenBalance",
-        type: "int256",
-      },
-      {
-        indexed: false,
-        internalType: "int256",
-        name: "margin",
-        type: "int256",
-      },
-      {
-        indexed: false,
         internalType: "int256",
         name: "settlementCashflow",
         type: "int256",
       },
-      {
-        indexed: false,
-        internalType: "bool",
-        name: "isSettled",
-        type: "bool",
-      },
     ],
     name: "PositionSettlement",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "int24",
+        name: "tickLower",
+        type: "int24",
+      },
+      {
+        indexed: true,
+        internalType: "int24",
+        name: "tickUpper",
+        type: "int24",
+      },
+      {
+        indexed: false,
+        internalType: "uint128",
+        name: "_liquidity",
+        type: "uint128",
+      },
+      {
+        indexed: false,
+        internalType: "int256",
+        name: "margin",
+        type: "int256",
+      },
+      {
+        indexed: false,
+        internalType: "int256",
+        name: "fixedTokenBalance",
+        type: "int256",
+      },
+      {
+        indexed: false,
+        internalType: "int256",
+        name: "variableTokenBalance",
+        type: "int256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "accumulatedFees",
+        type: "uint256",
+      },
+    ],
+    name: "PositionUpdate",
     type: "event",
   },
   {
@@ -758,6 +738,11 @@ const _abi = [
             name: "rewardPerAmount",
             type: "uint256",
           },
+          {
+            internalType: "uint256",
+            name: "accumulatedFees",
+            type: "uint256",
+          },
         ],
         internalType: "struct Position.Info",
         name: "position",
@@ -794,7 +779,7 @@ const _abi = [
     outputs: [
       {
         internalType: "uint256",
-        name: "_margin",
+        name: "",
         type: "uint256",
       },
     ],

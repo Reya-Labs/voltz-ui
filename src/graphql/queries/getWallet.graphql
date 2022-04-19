@@ -5,16 +5,16 @@ query GetWallet($id: ID!) {
     positions {
       id
       createdTimestamp
-      updatedTimestamp
-      owner {
-        id
-      }
       amm {
         id
         createdTimestamp
-        updatedTimestamp
-        fcmAddress
-        marginEngineAddress
+
+        fcm {
+          id
+        }
+        marginEngine {
+          id
+        }
         rateOracle {
           id
           protocolId
@@ -24,38 +24,176 @@ query GetWallet($id: ID!) {
             decimals
           }
         }
+
+        tickSpacing
         termStartTimestamp
         termEndTimestamp
-        tickSpacing
-        sqrtPriceX96
-        liquidity
+
+        updatedTimestamp
         tick
+
         txCount
       }
-      tickLower {
+
+      owner {
         id
-        value
       }
-      tickUpper {
-        id
-        value
-      }
+      tickLower
+      tickUpper
+
+      updatedTimestamp
+
       liquidity
       margin
       fixedTokenBalance
       variableTokenBalance
+      accumulatedFees
+
       isLiquidityProvider
       isSettled
-      isEmpty
-      snapshotCount
-      burns {
-        id
-      }
+      
       mints {
         id
+        sender
+        transaction {
+          id
+          createdTimestamp
+        }
+        amount
+      }
+      burns {
+        id 
+        sender
+        transaction {
+          id
+          createdTimestamp
+        }
+        amount
       }
       swaps {
+        id 
+        sender
+        transaction {
+          id
+          createdTimestamp
+        }
+        desiredNotional
+        sqrtPriceLimitX96
+        cumulativeFeeIncurred
+        fixedTokenDelta
+        variableTokenDelta
+        fixedTokenDeltaUnbalanced
+      }
+      marginUpdates {
+        id 
+        transaction {
+          id
+          createdTimestamp
+        }
+        depositer
+        marginDelta
+      }
+      liquidations {
         id
+        transaction {
+          id
+          createdTimestamp
+        }
+        liquidator
+        reward
+        notionalUnwound
+      }
+      settlements {
+        id 
+        transaction {
+          id
+          createdTimestamp
+        }
+        settlementCashflow
+      }
+    }
+
+    fcmPositionCount
+    fcmPositions {
+      id
+      createdTimestamp
+      amm {
+        id
+        createdTimestamp
+
+        fcm {
+          id
+        }
+        marginEngine {
+          id
+        }
+        rateOracle {
+          id
+          protocolId
+          token {
+            id
+            name
+            decimals
+          }
+        }
+
+        tickSpacing
+        termStartTimestamp
+        termEndTimestamp
+
+        updatedTimestamp
+        tick
+
+        txCount
+      }
+
+      owner {
+        id
+      }
+
+      updatedTimestamp
+
+      fixedTokenBalance
+      variableTokenBalance
+      marginInScaledYieldBearingTokens
+
+      isSettled
+
+      fcmSwaps {
+        id 
+        transaction {
+          id
+          createdTimestamp
+        }
+        desiredNotional
+        sqrtPriceLimitX96
+        cumulativeFeeIncurred
+        fixedTokenDelta
+        variableTokenDelta
+        fixedTokenDeltaUnbalanced
+      }
+
+      fcmUnwinds {
+        id 
+        transaction {
+          id
+          createdTimestamp
+        }
+        desiredNotional
+        sqrtPriceLimitX96
+        cumulativeFeeIncurred
+        fixedTokenDelta
+        variableTokenDelta
+        fixedTokenDeltaUnbalanced
+      }
+
+      fcmSettlements {
+        id 
+        transaction {
+          id
+          createdTimestamp
+        }
+        settlementCashflow
       }
     }
   }

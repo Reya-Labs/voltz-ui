@@ -35,6 +35,22 @@ var _abi = [
     {
         inputs: [
             {
+                internalType: "uint256",
+                name: "x",
+                type: "uint256",
+            },
+            {
+                internalType: "uint256",
+                name: "y",
+                type: "uint256",
+            },
+        ],
+        name: "DebugError",
+        type: "error",
+    },
+    {
+        inputs: [
+            {
                 internalType: "int256",
                 name: "amount0",
                 type: "int256",
@@ -211,6 +227,25 @@ var _abi = [
         type: "error",
     },
     {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: false,
+                internalType: "contract IMarginEngine",
+                name: "_marginEngine",
+                type: "address",
+            },
+            {
+                indexed: false,
+                internalType: "uint256",
+                name: "_lpNotionalCapNew",
+                type: "uint256",
+            },
+        ],
+        name: "NotionalCap",
+        type: "event",
+    },
+    {
         inputs: [
             {
                 internalType: "contract IMarginEngine",
@@ -261,6 +296,44 @@ var _abi = [
             },
         ],
         stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "contract IMarginEngine",
+                name: "_marginEngine",
+                type: "address",
+            },
+        ],
+        name: "lpNotionalCaps",
+        outputs: [
+            {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "contract IMarginEngine",
+                name: "_marginEngine",
+                type: "address",
+            },
+        ],
+        name: "lpNotionalCumulatives",
+        outputs: [
+            {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
+        stateMutability: "nonpayable",
         type: "function",
     },
     {
