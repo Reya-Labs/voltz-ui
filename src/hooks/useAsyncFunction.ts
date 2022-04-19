@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import useDebounceFunc from './useDebounceFunc';
 
 export type UseAsyncFunctionResult<ArgsType, ResultType> = {
   result: ResultType | null;
@@ -10,6 +11,7 @@ export type UseAsyncFunctionResult<ArgsType, ResultType> = {
 const useAsyncFunction = <ArgsType, ResultType>(
   asyncFunction: (args: ArgsType) => Promise<ResultType>,
   lock?: () => void,
+  debounceDelay = 0,
 ): UseAsyncFunctionResult<ArgsType, ResultType> => {
   const [args, setArgs] = useState<ArgsType>();
   const [result, setResult] = useState<ResultType | null>(null);
@@ -28,36 +30,37 @@ const useAsyncFunction = <ArgsType, ResultType>(
   );
   const request = useRef<Promise<ResultType>>();
 
-  useEffect(() => {
-    const load = async () => {
-      setLoading(true);
+  const load = async () => {
+    setLoading(true);
 
-      try {
-        // Some explanation: TypeScript will not allow a declared type like
-        // ArgsType to represent an "empty" value, or no arguments, to be
-        // passed to a function.
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        const req = asyncFunction(args);
-        request.current = req;
-        const data = await request.current;
+    try {
+      // Some explanation: TypeScript will not allow a declared type like
+      // ArgsType to represent an "empty" value, or no arguments, to be
+      // passed to a function.
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const req = asyncFunction(args);
+      request.current = req;
+      const data = await request.current;
 
-        // We need to stop older (cancelled) requests from overwriting the current data
-        // req.current will always point to the latest request, where as req will get stale.
-        if(req === request.current) {
-          setResult(data);
-        }
-      } catch (_error) {
-        setResult(null);
-        setError(true);
+      // We need to stop older (cancelled) requests from overwriting the current data
+      // req.current will always point to the latest request, where as req will get stale.
+      if(req === request.current) {
+        setResult(data);
       }
+    } catch (_error) {
+      setResult(null);
+      setError(true);
+    }
 
-      setLoading(false);
-      setCalled(false);
-    };
+    setLoading(false);
+    setCalled(false);
+  };
+  const debouncedLoad = useDebounceFunc(load, debounceDelay);
 
+  useEffect(() => {
     if (called && !loading) {
-      load();
+      debouncedLoad();
     }
   }, [called, args, lock]);
 
