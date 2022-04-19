@@ -90,7 +90,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
       <ProtocolInformation protocol={protocol} />
       <Box
         sx={{
-          marginBottom: (theme) => theme.spacing(4),
+          marginBottom: (theme) => theme.spacing(6),
         }}
       >
         <MaturityInformation
@@ -108,7 +108,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
       </Box>
       <Box
         sx={{
-          marginBottom: (theme) => theme.spacing(4),
+          marginBottom: (theme) => theme.spacing(6),
           display: 'flex',
         }}
       >
@@ -123,7 +123,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
       </Box>
       <Box
         sx={{
-          marginBottom: (theme) => theme.spacing(4),
+          marginBottom: (theme) => theme.spacing(6),
         }}
       >
         <NotionalAmount
@@ -137,7 +137,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
       </Box>
       <Box
         sx={{
-          marginBottom: (theme) => theme.spacing(4),
+          marginBottom: (theme) => theme.spacing(6),
         }}
       >
         <MintBurnMinimumMarginAmount
@@ -148,7 +148,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
       </Box>
       <Box
         sx={{
-          marginBottom: (theme) => theme.spacing(4),
+          marginBottom: (theme) => theme.spacing(6),
         }}
       >
         <MarginAmount
@@ -162,7 +162,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
       <Box sx={{ display: 'flex' }}>
         <SubmitMintBurnFormButton onSubmit={handleSubmit} />
         <Button
-          sx={{ marginLeft: (theme) => theme.spacing(4) }}
+          sx={{ marginLeft: (theme) => theme.spacing(6) }}
           variant="darker"
           onClick={onCancel}
         >
