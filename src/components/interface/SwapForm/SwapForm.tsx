@@ -126,7 +126,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
       <ProtocolInformation protocol={protocol}/>
       <Box
         sx={{
-          marginBottom: (theme) => theme.spacing(4),
+          marginBottom: (theme) => theme.spacing(6),
         }}
       >
         <MaturityInformation
@@ -147,7 +147,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           marginEditMode && (
             <Box
             sx={{
-              marginBottom: (theme) => theme.spacing(4),
+              marginBottom: (theme) => theme.spacing(6),
               display: 'flex',
             }}
           >
@@ -166,7 +166,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           !marginEditMode && (
             <Box
             sx={{
-              marginBottom: (theme) => theme.spacing(4),
+              marginBottom: (theme) => theme.spacing(6),
               display: 'flex',
             }}
           >
@@ -184,7 +184,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         !marginEditMode && (
           <Box
           sx={{
-            marginBottom: (theme) => theme.spacing(4),
+            marginBottom: (theme) => theme.spacing(6),
           }}
         >
           <NotionalAmount
@@ -201,7 +201,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
 
       <Box
         sx={{
-          marginBottom: (theme) => theme.spacing(4),
+          marginBottom: (theme) => theme.spacing(6),
         }}
       >
         <MarginAmount
@@ -215,7 +215,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
       </Box>
       <Box
         sx={{
-          marginBottom: (theme) => theme.spacing(4),
+          marginBottom: (theme) => theme.spacing(6),
         }}
       >
         <SwapInfo notional={notional} underlyingTokenName={underlyingTokenName} />
