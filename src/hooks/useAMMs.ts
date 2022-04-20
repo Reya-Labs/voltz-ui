@@ -70,9 +70,9 @@ const useAMMs = (): UseAMMsResult => {
             updatedTimestamp: ammUpdatedTimestamp as JSBI,
             termStartTimestamp: termStartTimestamp as JSBI,
             termEndTimestamp: termEndTimestamp as JSBI,
-            tick: tick as number,
-            tickSpacing: tickSpacing as number,
-            txCount: txCount as number
+            tick: parseInt(tick as string, 10),
+            tickSpacing: parseInt(tickSpacing as string, 10),
+            txCount: parseInt(txCount as string, 10),
           }),
       );
     }

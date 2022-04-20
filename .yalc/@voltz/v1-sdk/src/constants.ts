@@ -7,10 +7,12 @@ export const MaxUint256 = JSBI.BigInt(
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000';
 
 // Latest kovan deployment address of the factory
-export const FACTORY_ADDRESS = '0xAF47e8353729E5be6cA4f605dd176B7Fc80EDA08';
+// export const FACTORY_ADDRESS = '0xAF47e8353729E5be6cA4f605dd176B7Fc80EDA08';
+export const FACTORY_ADDRESS = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0';
 
 // Latest kovan deployment address of the periphery
-export const PERIPHERY_ADDRESS = '0x57E674032784932Ac981e177B9f9287f57d1Eda0';
+// export const PERIPHERY_ADDRESS = '0x57E674032784932Ac981e177B9f9287f57d1Eda0';
+export const PERIPHERY_ADDRESS = '0xc6e7DF5E7b4f2A278906862b61205850344D4e7d';
 
 // todo: needs to be adjusted
 export const AMM_INIT_CODE_HASH =

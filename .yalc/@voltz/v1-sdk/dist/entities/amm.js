@@ -369,8 +369,8 @@ var AMM = /** @class */ (function () {
                         scaledNotional = this.scale(notional);
                         mintOrBurnParams = {
                             marginEngine: this.marginEngineAddress,
-                            tickLower: tickLower,
-                            tickUpper: tickUpper,
+                            tickLower: tickLower.toString(),
+                            tickUpper: tickUpper.toString(),
                             notional: scaledNotional,
                             isMint: true,
                             marginDelta: '0',

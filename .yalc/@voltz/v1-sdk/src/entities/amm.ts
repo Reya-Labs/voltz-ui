@@ -479,8 +479,8 @@ class AMM {
     const scaledNotional = this.scale(notional);
     const mintOrBurnParams: MintOrBurnParams = {
       marginEngine: this.marginEngineAddress,
-      tickLower,
-      tickUpper,
+      tickLower: tickLower.toString(),
+      tickUpper: tickUpper.toString(),
       notional: scaledNotional,
       isMint: true,
       marginDelta: '0',

@@ -71,8 +71,8 @@ const usePositions = (): usePositionsResult => {
             id: positionId,
             createdTimestamp: positionCreatedTimestamp as JSBI,
             updatedTimestamp: positionUpdatedTimestamp as JSBI,
-            tickLower: tickLower as number,
-            tickUpper: tickUpper as number,
+            tickLower: parseInt(tickLower as string),
+            tickUpper: parseInt(tickUpper as string),
             liquidity: liquidity as JSBI,
             margin: margin as JSBI,
             fixedTokenBalance: fixedTokenBalance as JSBI,
@@ -101,9 +101,9 @@ const usePositions = (): usePositionsResult => {
               updatedTimestamp: ammUpdatedTimestamp as JSBI,
               termStartTimestamp: termStartTimestamp as JSBI,
               termEndTimestamp: termEndTimestamp as JSBI,
-              tick: tick as number,
-              tickSpacing: tickSpacing as number,
-              txCount: txCount as number
+              tick: parseInt(tick as string),
+              tickSpacing: parseInt(tickSpacing as string),
+              txCount: parseInt(txCount as string),
             }),
             mints: mints.map((args) => new Mint({
               id: args.id,
