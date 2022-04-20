@@ -1,7 +1,7 @@
 export { default as AMM } from './amm';
 export type {
   AMMConstructorArgs,
-  AMMGetMinimumMarginRequirementPostMintArgs,
+  AMMGetInfoPostMintArgs,
   AMMGetInfoPostSwapArgs,
   AMMUpdatePositionMarginArgs,
   AMMLiquidatePositionArgs,

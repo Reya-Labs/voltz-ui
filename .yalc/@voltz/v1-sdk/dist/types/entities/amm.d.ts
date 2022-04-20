@@ -9,6 +9,7 @@ export declare type AMMConstructorArgs = {
     id: string;
     signer: Signer | null;
     provider?: providers.Provider;
+    environment: string;
     marginEngineAddress: string;
     fcmAddress: string;
     rateOracle: RateOracle;
@@ -67,7 +68,11 @@ export declare type AMMMintArgs = {
     margin: number;
     validationOnly?: boolean;
 };
-export declare type AMMGetMinimumMarginRequirementPostMintArgs = AMMMintArgs;
+export declare type AMMGetInfoPostMintArgs = {
+    fixedLow: number;
+    fixedHigh: number;
+    notional: number;
+};
 export declare type InfoPostSwap = {
     marginRequirement: number;
     availableNotional: number;
@@ -84,6 +89,7 @@ declare class AMM {
     readonly id: string;
     readonly signer: Signer | null;
     readonly provider?: providers.Provider;
+    readonly environment: string;
     readonly marginEngineAddress: string;
     readonly fcmAddress: string;
     readonly rateOracle: RateOracle;
@@ -94,7 +100,7 @@ declare class AMM {
     readonly tickSpacing: number;
     readonly tick: number;
     readonly txCount: number;
-    constructor({ id, signer, provider, marginEngineAddress, fcmAddress, rateOracle, updatedTimestamp, termStartTimestamp, termEndTimestamp, underlyingToken, tick, tickSpacing, txCount, }: AMMConstructorArgs);
+    constructor({ id, signer, provider, environment, marginEngineAddress, fcmAddress, rateOracle, updatedTimestamp, termStartTimestamp, termEndTimestamp, underlyingToken, tick, tickSpacing, txCount, }: AMMConstructorArgs);
     getInfoPostSwap({ isFT, notional, fixedRateLimit, fixedLow, fixedHigh, }: AMMGetInfoPostSwapArgs): Promise<InfoPostSwap>;
     settlePosition({ owner, fixedLow, fixedHigh, }: AMMSettlePositionArgs): Promise<ContractReceipt>;
     scale(value: number): string;
@@ -102,7 +108,7 @@ declare class AMM {
     updatePositionMargin({ owner, fixedLow, fixedHigh, marginDelta, }: AMMUpdatePositionMarginArgs): Promise<ContractReceipt | void>;
     liquidatePosition({ owner, fixedLow, fixedHigh, }: AMMLiquidatePositionArgs): Promise<ContractReceipt>;
     getLiquidationThreshold({ owner, fixedLow, fixedHigh, }: AMMLiquidatePositionArgs): Promise<number>;
-    getMinimumMarginRequirementPostMint({ fixedLow, fixedHigh, notional, }: AMMGetMinimumMarginRequirementPostMintArgs): Promise<number>;
+    getInfoPostMint({ fixedLow, fixedHigh, notional, }: AMMGetInfoPostMintArgs): Promise<number>;
     mint({ fixedLow, fixedHigh, notional, margin, validationOnly, }: AMMMintArgs): Promise<ContractReceipt | void>;
     burn({ fixedLow, fixedHigh, notional, validationOnly, }: AMMBurnArgs): Promise<ContractReceipt | void>;
     approveFCM(): Promise<ContractReceipt | void>;

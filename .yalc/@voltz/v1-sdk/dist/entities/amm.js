@@ -40,7 +40,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var ethers_1 = require("ethers");
-var ethers_2 = require("ethers");
 var constants_1 = require("../constants");
 var typechain_1 = require("../typechain");
 var tickMath_1 = require("../utils/tickMath");
@@ -49,13 +48,14 @@ var priceTickConversions_1 = require("../utils/priceTickConversions");
 var nearestUsableTick_1 = require("../utils/nearestUsableTick");
 var price_1 = require("./fractions/price");
 var tokenAmount_1 = require("./fractions/tokenAmount");
-var extractErrorMessage_1 = require("../utils/extractErrorMessage");
+var errorHandling_1 = require("../utils/errors/errorHandling");
 var AMM = /** @class */ (function () {
     function AMM(_a) {
-        var id = _a.id, signer = _a.signer, provider = _a.provider, marginEngineAddress = _a.marginEngineAddress, fcmAddress = _a.fcmAddress, rateOracle = _a.rateOracle, updatedTimestamp = _a.updatedTimestamp, termStartTimestamp = _a.termStartTimestamp, termEndTimestamp = _a.termEndTimestamp, underlyingToken = _a.underlyingToken, tick = _a.tick, tickSpacing = _a.tickSpacing, txCount = _a.txCount;
+        var id = _a.id, signer = _a.signer, provider = _a.provider, environment = _a.environment, marginEngineAddress = _a.marginEngineAddress, fcmAddress = _a.fcmAddress, rateOracle = _a.rateOracle, updatedTimestamp = _a.updatedTimestamp, termStartTimestamp = _a.termStartTimestamp, termEndTimestamp = _a.termEndTimestamp, underlyingToken = _a.underlyingToken, tick = _a.tick, tickSpacing = _a.tickSpacing, txCount = _a.txCount;
         this.id = id;
         this.signer = signer;
         this.provider = provider || (signer === null || signer === void 0 ? void 0 : signer.provider);
+        this.environment = environment;
         this.marginEngineAddress = marginEngineAddress;
         this.fcmAddress = fcmAddress;
         this.rateOracle = rateOracle;
@@ -71,6 +71,7 @@ var AMM = /** @class */ (function () {
         var isFT = _a.isFT, notional = _a.notional, fixedRateLimit = _a.fixedRateLimit, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh;
         return __awaiter(this, void 0, void 0, function () {
             var signerAddress, tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, scaledNotional, peripheryContract, swapPeripheryParams, tickBefore, tickAfter, marginRequirement, fee, availableNotional, fixedTokenDeltaUnbalanced, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw, marginEngineContract, currentMargin, scaledCurrentMargin, scaledMarginRequirement, scaledAvailableNotional, scaledFee, additionalMargin, averageFixedRate;
+            var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -121,10 +122,10 @@ var AMM = /** @class */ (function () {
                     case 2:
                         tickBefore = _b.sent();
                         tickAfter = 0;
-                        marginRequirement = ethers_2.BigNumber.from(0);
-                        fee = ethers_2.BigNumber.from(0);
-                        availableNotional = ethers_2.BigNumber.from(0);
-                        fixedTokenDeltaUnbalanced = ethers_2.BigNumber.from(0);
+                        marginRequirement = ethers_1.BigNumber.from(0);
+                        fee = ethers_1.BigNumber.from(0);
+                        availableNotional = ethers_1.BigNumber.from(0);
+                        fixedTokenDeltaUnbalanced = ethers_1.BigNumber.from(0);
                         return [4 /*yield*/, peripheryContract.callStatic.swap(swapPeripheryParams).then(function (result) {
                                 availableNotional = result[1];
                                 fee = result[2];
@@ -132,34 +133,12 @@ var AMM = /** @class */ (function () {
                                 marginRequirement = result[4];
                                 tickAfter = parseInt(result[5]);
                             }, function (error) {
-                                var errSig;
-                                var reason;
-                                try {
-                                    reason = error.data.toString().replace("Reverted ", "");
-                                    errSig = (0, extractErrorMessage_1.getErrorSignature)(reason);
-                                }
-                                catch (_) {
-                                    throw new Error("Cannot decode trade information");
-                                }
-                                if (errSig) {
-                                    if (errSig === "MarginRequirementNotMet") {
-                                        try {
-                                            var iface = new ethers_1.ethers.utils.Interface(["error MarginRequirementNotMet(int256 marginRequirement,int24 tick,int256 fixedTokenDelta,int256 variableTokenDelta,uint256 cumulativeFeeIncurred,int256 fixedTokenDeltaUnbalanced)"]);
-                                            var result = iface.decodeErrorResult("MarginRequirementNotMet", reason);
-                                            marginRequirement = result.marginRequirement;
-                                            tickAfter = result.tick;
-                                            fee = result.cumulativeFeeIncurred;
-                                            availableNotional = result.variableTokenDelta;
-                                            fixedTokenDeltaUnbalanced = result.fixedTokenDeltaUnbalanced;
-                                        }
-                                        catch (_) {
-                                            throw new Error("Cannot decode trade information");
-                                        }
-                                    }
-                                }
-                                else {
-                                    throw new Error("Cannot decode trade information");
-                                }
+                                var result = (0, errorHandling_1.decodeInfoPostSwap)(error, _this.environment);
+                                marginRequirement = result.marginRequirement;
+                                tickAfter = result.tick;
+                                fee = result.fee;
+                                availableNotional = result.availableNotional;
+                                fixedTokenDeltaUnbalanced = result.fixedTokenDeltaUnbalanced;
                             })];
                     case 3:
                         _b.sent();
@@ -178,7 +157,7 @@ var AMM = /** @class */ (function () {
                         additionalMargin = scaledMarginRequirement > scaledCurrentMargin
                             ? scaledMarginRequirement - scaledCurrentMargin
                             : 0;
-                        averageFixedRate = fixedTokenDeltaUnbalanced.mul(ethers_2.BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
+                        averageFixedRate = fixedTokenDeltaUnbalanced.mul(ethers_1.BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
                         return [2 /*return*/, {
                                 marginRequirement: additionalMargin,
                                 availableNotional: scaledAvailableNotional < 0 ? -scaledAvailableNotional : scaledAvailableNotional,
@@ -232,7 +211,7 @@ var AMM = /** @class */ (function () {
             return value.toNumber() / (Math.pow(10, this.underlyingToken.decimals));
         }
         else {
-            return value.div(ethers_2.BigNumber.from(10).pow(this.underlyingToken.decimals - 3)).toNumber() / 1000;
+            return value.div(ethers_1.BigNumber.from(10).pow(this.underlyingToken.decimals - 3)).toNumber() / 1000;
         }
     };
     AMM.prototype.updatePositionMargin = function (_a) {
@@ -338,10 +317,11 @@ var AMM = /** @class */ (function () {
             });
         });
     };
-    AMM.prototype.getMinimumMarginRequirementPostMint = function (_a) {
+    AMM.prototype.getInfoPostMint = function (_a) {
         var fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional;
         return __awaiter(this, void 0, void 0, function () {
             var signerAddress, tickUpper, tickLower, peripheryContract, scaledNotional, mintOrBurnParams, marginRequirement, marginEngineContract, currentMargin, scaledCurrentMargin, scaledMarginRequirement;
+            var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -369,40 +349,18 @@ var AMM = /** @class */ (function () {
                         scaledNotional = this.scale(notional);
                         mintOrBurnParams = {
                             marginEngine: this.marginEngineAddress,
-                            tickLower: tickLower.toString(),
-                            tickUpper: tickUpper.toString(),
+                            tickLower: tickLower,
+                            tickUpper: tickUpper,
                             notional: scaledNotional,
                             isMint: true,
                             marginDelta: '0',
                         };
-                        marginRequirement = ethers_2.BigNumber.from('0');
+                        marginRequirement = ethers_1.BigNumber.from('0');
                         return [4 /*yield*/, peripheryContract.callStatic.mintOrBurn(mintOrBurnParams).then(function (result) {
-                                marginRequirement = ethers_2.BigNumber.from(result);
+                                marginRequirement = ethers_1.BigNumber.from(result);
                             }, function (error) {
-                                var errSig;
-                                var reason;
-                                try {
-                                    reason = error.data.toString().replace("Reverted ", "");
-                                    errSig = (0, extractErrorMessage_1.getErrorSignature)(reason);
-                                }
-                                catch (_) {
-                                    throw new Error("Cannot decode additional margin amount");
-                                }
-                                if (errSig) {
-                                    if (errSig === "MarginLessThanMinimum") {
-                                        try {
-                                            var iface = new ethers_1.ethers.utils.Interface(["error MarginLessThanMinimum(int256 marginRequirement)"]);
-                                            var result = iface.decodeErrorResult("MarginLessThanMinimum", reason);
-                                            marginRequirement = result.marginRequirement;
-                                        }
-                                        catch (_) {
-                                            throw new Error("Cannot decode additional margin amount");
-                                        }
-                                    }
-                                }
-                                else {
-                                    throw new Error("Cannot decode additional margin amount");
-                                }
+                                var result = (0, errorHandling_1.decodeInfoPostMint)(error, _this.environment);
+                                marginRequirement = result.marginRequirement;
                             })];
                     case 2:
                         _b.sent();
@@ -427,6 +385,7 @@ var AMM = /** @class */ (function () {
         var fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional, margin = _a.margin, validationOnly = _a.validationOnly;
         return __awaiter(this, void 0, void 0, function () {
             var tickUpper, tickLower, peripheryContract, _notional, _marginDelta, approvalError_1, mintOrBurnParams, mintTransaction, receipt, error_4;
+            var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -476,40 +435,16 @@ var AMM = /** @class */ (function () {
                             marginDelta: _marginDelta,
                         };
                         return [4 /*yield*/, peripheryContract.callStatic.mintOrBurn(mintOrBurnParams).catch(function (error) {
-                                var errSig;
-                                try {
-                                    var reason = error.data.toString().replace("Reverted ", "");
-                                    errSig = (0, extractErrorMessage_1.getErrorSignature)(reason);
-                                }
-                                catch (_) {
-                                    throw new Error("Unrecognized error");
-                                }
-                                if (errSig) {
-                                    throw new Error((0, extractErrorMessage_1.getErrorMessage)(errSig));
-                                }
-                                else {
-                                    throw new Error("Unrecognized error");
-                                }
+                                var errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, _this.environment);
+                                throw new Error(errorMessage);
                             })];
                     case 5:
                         _b.sent();
                         return [4 /*yield*/, peripheryContract.mintOrBurn(mintOrBurnParams, {
                                 gasLimit: 1000000,
                             }).catch(function (error) {
-                                var errSig;
-                                try {
-                                    var reason = error.data.toString().replace("Reverted ", "");
-                                    errSig = (0, extractErrorMessage_1.getErrorSignature)(reason);
-                                }
-                                catch (_) {
-                                    throw new Error("Unrecognized error");
-                                }
-                                if (errSig) {
-                                    throw new Error((0, extractErrorMessage_1.getErrorMessage)(errSig));
-                                }
-                                else {
-                                    throw new Error("Unrecognized error");
-                                }
+                                var errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, _this.environment);
+                                throw new Error(errorMessage);
                             })];
                     case 6:
                         mintTransaction = _b.sent();
@@ -532,6 +467,7 @@ var AMM = /** @class */ (function () {
         var fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional, validationOnly = _a.validationOnly;
         return __awaiter(this, void 0, void 0, function () {
             var tickUpper, tickLower, peripheryContract, _notional, mintOrBurnParams, burnTransaction, receipt, error_5;
+            var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -566,38 +502,14 @@ var AMM = /** @class */ (function () {
                             marginDelta: '0',
                         };
                         return [4 /*yield*/, peripheryContract.callStatic.mintOrBurn(mintOrBurnParams).catch(function (error) {
-                                var errSig;
-                                try {
-                                    var reason = error.data.toString().replace("Reverted ", "");
-                                    errSig = (0, extractErrorMessage_1.getErrorSignature)(reason);
-                                }
-                                catch (_) {
-                                    throw new Error("Unrecognized error");
-                                }
-                                if (errSig) {
-                                    throw new Error((0, extractErrorMessage_1.getErrorMessage)(errSig));
-                                }
-                                else {
-                                    throw new Error("Unrecognized error");
-                                }
+                                var errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, _this.environment);
+                                throw new Error(errorMessage);
                             })];
                     case 1:
                         _b.sent();
                         return [4 /*yield*/, peripheryContract.mintOrBurn(mintOrBurnParams).catch(function (error) {
-                                var errSig;
-                                try {
-                                    var reason = error.data.toString().replace("Reverted ", "");
-                                    errSig = (0, extractErrorMessage_1.getErrorSignature)(reason);
-                                }
-                                catch (_) {
-                                    throw new Error("Unrecognized error");
-                                }
-                                if (errSig) {
-                                    throw new Error((0, extractErrorMessage_1.getErrorMessage)(errSig));
-                                }
-                                else {
-                                    throw new Error("Unrecognized error");
-                                }
+                                var errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, _this.environment);
+                                throw new Error(errorMessage);
                             })];
                     case 2:
                         burnTransaction = _b.sent();
@@ -671,8 +583,8 @@ var AMM = /** @class */ (function () {
                     case 1: return [4 /*yield*/, _b.apply(_a, [_c.sent(), addressToApprove])];
                     case 2:
                         currentApproval = _c.sent();
-                        amountToApproveBN = ethers_2.BigNumber.from(amountToApprove).mul(ethers_2.BigNumber.from("101")).div(ethers_2.BigNumber.from("100"));
-                        if (amountToApproveBN.lt(currentApproval.mul(ethers_2.BigNumber.from("101")).div(ethers_2.BigNumber.from("100")))) {
+                        amountToApproveBN = ethers_1.BigNumber.from(amountToApprove).mul(ethers_1.BigNumber.from("101")).div(ethers_1.BigNumber.from("100"));
+                        if (amountToApproveBN.lt(currentApproval.mul(ethers_1.BigNumber.from("101")).div(ethers_1.BigNumber.from("100")))) {
                             return [2 /*return*/];
                         }
                         return [4 /*yield*/, token.approve(addressToApprove, amountToApproveBN)];
@@ -760,22 +672,10 @@ var AMM = /** @class */ (function () {
                             marginDelta: scaledMarginDelta,
                         };
                         return [4 /*yield*/, peripheryContract.callStatic.swap(swapPeripheryParams).catch(function (error) { return __awaiter(_this, void 0, void 0, function () {
-                                var errSig, reason;
+                                var errorMessage;
                                 return __generator(this, function (_a) {
-                                    try {
-                                        reason = error.data.toString().replace("Reverted ", "");
-                                        errSig = (0, extractErrorMessage_1.getErrorSignature)(reason);
-                                    }
-                                    catch (_) {
-                                        throw new Error("Unrecognized error");
-                                    }
-                                    if (errSig) {
-                                        throw new Error((0, extractErrorMessage_1.getErrorMessage)(errSig));
-                                    }
-                                    else {
-                                        throw new Error("Unrecognized error");
-                                    }
-                                    return [2 /*return*/];
+                                    errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, this.environment);
+                                    throw new Error(errorMessage);
                                 });
                             }); })];
                     case 5:
@@ -783,20 +683,8 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, peripheryContract.swap(swapPeripheryParams, {
                                 gasLimit: 1000000,
                             }).catch(function (error) {
-                                var errSig;
-                                try {
-                                    var reason = error.data.toString().replace("Reverted ", "");
-                                    errSig = (0, extractErrorMessage_1.getErrorSignature)(reason);
-                                }
-                                catch (_) {
-                                    throw new Error("Unrecognized error");
-                                }
-                                if (errSig) {
-                                    throw new Error((0, extractErrorMessage_1.getErrorMessage)(errSig));
-                                }
-                                else {
-                                    throw new Error("Unrecognized error");
-                                }
+                                var errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, _this.environment);
+                                throw new Error(errorMessage);
                             })];
                     case 6:
                         swapTransaction = _b.sent();
@@ -994,7 +882,7 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, marginEngineContract.callStatic.getHistoricalApy()];
                     case 1:
                         historicalApy = _a.sent();
-                        return [2 /*return*/, parseFloat(ethers_2.utils.formatEther(historicalApy))];
+                        return [2 /*return*/, parseFloat(ethers_1.utils.formatEther(historicalApy))];
                 }
             });
         });

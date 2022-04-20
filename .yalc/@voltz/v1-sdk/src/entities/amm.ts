@@ -1,5 +1,5 @@
 import JSBI from 'jsbi';
-import { ethers, providers } from 'ethers';
+import { providers } from 'ethers';
 import { DateTime } from 'luxon';
 import { BigNumber, BigNumberish, ContractReceipt, Signer, utils } from 'ethers';
 
@@ -26,12 +26,13 @@ import { nearestUsableTick } from '../utils/nearestUsableTick';
 import Token from './token';
 import { Price } from './fractions/price';
 import { TokenAmount } from './fractions/tokenAmount';
-import { getErrorMessage, getErrorSignature } from '../utils/extractErrorMessage';
+import { decodeInfoPostMint, decodeInfoPostSwap, getReadableErrorMessage } from '../utils/errors/errorHandling';
 
 export type AMMConstructorArgs = {
   id: string;
   signer: Signer | null;
   provider?: providers.Provider;
+  environment: string;
   marginEngineAddress: string;
   fcmAddress: string;
   rateOracle: RateOracle;
@@ -99,7 +100,11 @@ export type AMMMintArgs = {
   validationOnly?: boolean;
 };
 
-export type AMMGetMinimumMarginRequirementPostMintArgs = AMMMintArgs;
+export type AMMGetInfoPostMintArgs = {
+  fixedLow: number;
+  fixedHigh: number;
+  notional: number;
+}
 
 export type InfoPostSwap = {
   marginRequirement: number;
@@ -120,6 +125,7 @@ class AMM {
   public readonly id: string;
   public readonly signer: Signer | null;
   public readonly provider?: providers.Provider;
+  public readonly environment: string;
   public readonly marginEngineAddress: string;
   public readonly fcmAddress: string;
   public readonly rateOracle: RateOracle;
@@ -135,6 +141,7 @@ class AMM {
     id,
     signer,
     provider,
+    environment,
     marginEngineAddress,
     fcmAddress,
     rateOracle,
@@ -149,6 +156,7 @@ class AMM {
     this.id = id;
     this.signer = signer;
     this.provider = provider || signer?.provider;
+    this.environment = environment;
     this.marginEngineAddress = marginEngineAddress;
     this.fcmAddress = fcmAddress;
     this.rateOracle = rateOracle;
@@ -234,38 +242,12 @@ class AMM {
         tickAfter = parseInt(result[5]);
       },
       (error: any) => {
-        let errSig;
-        let reason;
-        try {
-          reason = error.data.toString().replace("Reverted ", "");
-          errSig = getErrorSignature(reason);
-        }
-        catch (_) {
-          throw new Error("Cannot decode trade information");
-        }
-
-        if (errSig) {
-          if (errSig === "MarginRequirementNotMet") {
-            try {
-              const iface = new ethers.utils.Interface(["error MarginRequirementNotMet(int256 marginRequirement,int24 tick,int256 fixedTokenDelta,int256 variableTokenDelta,uint256 cumulativeFeeIncurred,int256 fixedTokenDeltaUnbalanced)"]);
-              const result = iface.decodeErrorResult(
-                "MarginRequirementNotMet",
-                reason
-              );
-
-              marginRequirement = result.marginRequirement;
-              tickAfter = result.tick;
-              fee = result.cumulativeFeeIncurred;
-              availableNotional = result.variableTokenDelta;
-              fixedTokenDeltaUnbalanced = result.fixedTokenDeltaUnbalanced;
-            } catch (_) {
-              throw new Error("Cannot decode trade information");
-            }
-          }
-        }
-        else {
-          throw new Error("Cannot decode trade information");
-        }
+        const result = decodeInfoPostSwap(error, this.environment);
+        marginRequirement = result.marginRequirement;
+        tickAfter = result.tick;
+        fee = result.fee;
+        availableNotional = result.availableNotional;
+        fixedTokenDeltaUnbalanced = result.fixedTokenDeltaUnbalanced;
       },
     );
 
@@ -447,11 +429,11 @@ class AMM {
     return this.descale(threshold);
   }
 
-  public async getMinimumMarginRequirementPostMint({
+  public async getInfoPostMint({
     fixedLow,
     fixedHigh,
     notional,
-  }: AMMGetMinimumMarginRequirementPostMintArgs): Promise<number> {
+  }: AMMGetInfoPostMintArgs): Promise<number> {
     if (!this.signer) {
       throw new Error('Wallet not connected');
     }
@@ -479,8 +461,8 @@ class AMM {
     const scaledNotional = this.scale(notional);
     const mintOrBurnParams: MintOrBurnParams = {
       marginEngine: this.marginEngineAddress,
-      tickLower: tickLower.toString(),
-      tickUpper: tickUpper.toString(),
+      tickLower: tickLower,
+      tickUpper: tickUpper,
       notional: scaledNotional,
       isMint: true,
       marginDelta: '0',
@@ -492,34 +474,8 @@ class AMM {
         marginRequirement = BigNumber.from(result);
       },
       (error) => {
-        let errSig;
-        let reason;
-        try {
-          reason = error.data.toString().replace("Reverted ", "");
-          errSig = getErrorSignature(reason);
-        }
-        catch (_) {
-          throw new Error("Cannot decode additional margin amount");
-        }
-
-        if (errSig) {
-          if (errSig === "MarginLessThanMinimum") {
-            try {
-              const iface = new ethers.utils.Interface(["error MarginLessThanMinimum(int256 marginRequirement)"]);
-              const result = iface.decodeErrorResult(
-                "MarginLessThanMinimum",
-                reason
-              );
-
-              marginRequirement = result.marginRequirement;
-            } catch (_) {
-              throw new Error("Cannot decode additional margin amount");
-            }
-          }
-        }
-        else {
-          throw new Error("Cannot decode additional margin amount");
-        }
+        const result = decodeInfoPostMint(error, this.environment);
+        marginRequirement = result.marginRequirement;
       },
     );
 
@@ -596,41 +552,15 @@ class AMM {
     };
 
     await peripheryContract.callStatic.mintOrBurn(mintOrBurnParams).catch((error) => {
-      let errSig;
-      try {
-        const reason = error.data.toString().replace("Reverted ", "");
-        errSig = getErrorSignature(reason);
-      }
-      catch (_) {
-        throw new Error("Unrecognized error");
-      }
-
-      if (errSig) {
-        throw new Error(getErrorMessage(errSig));
-      }
-      else {
-        throw new Error("Unrecognized error");
-      }
+      const errorMessage = getReadableErrorMessage(error, this.environment);
+      throw new Error(errorMessage);
     });
 
     const mintTransaction = await peripheryContract.mintOrBurn(mintOrBurnParams, {
       gasLimit: 1000000,
     }).catch((error) => {
-      let errSig;
-      try {
-        const reason = error.data.toString().replace("Reverted ", "");
-        errSig = getErrorSignature(reason);
-      }
-      catch (_) {
-        throw new Error("Unrecognized error");
-      }
-
-      if (errSig) {
-        throw new Error(getErrorMessage(errSig));
-      }
-      else {
-        throw new Error("Unrecognized error");
-      }
+      const errorMessage = getReadableErrorMessage(error, this.environment);
+      throw new Error(errorMessage);
     });
 
     try {
@@ -689,39 +619,13 @@ class AMM {
     };
 
     await peripheryContract.callStatic.mintOrBurn(mintOrBurnParams).catch((error) => {
-      let errSig;
-      try {
-        const reason = error.data.toString().replace("Reverted ", "");
-        errSig = getErrorSignature(reason);
-      }
-      catch (_) {
-        throw new Error("Unrecognized error");
-      }
-
-      if (errSig) {
-        throw new Error(getErrorMessage(errSig));
-      }
-      else {
-        throw new Error("Unrecognized error");
-      }
+      const errorMessage = getReadableErrorMessage(error, this.environment);
+      throw new Error(errorMessage);
     });
 
     const burnTransaction = await peripheryContract.mintOrBurn(mintOrBurnParams).catch((error) => {
-      let errSig;
-      try {
-        const reason = error.data.toString().replace("Reverted ", "");
-        errSig = getErrorSignature(reason);
-      }
-      catch (_) {
-        throw new Error("Unrecognized error");
-      }
-
-      if (errSig) {
-        throw new Error(getErrorMessage(errSig));
-      }
-      else {
-        throw new Error("Unrecognized error");
-      }
+      const errorMessage = getReadableErrorMessage(error, this.environment);
+      throw new Error(errorMessage);
     });
 
     try {
@@ -861,41 +765,15 @@ class AMM {
     };
 
     await peripheryContract.callStatic.swap(swapPeripheryParams).catch(async (error: any) => {
-      let errSig;
-      try {
-        const reason = error.data.toString().replace("Reverted ", "");
-        errSig = getErrorSignature(reason);
-      }
-      catch (_) {
-        throw new Error("Unrecognized error");
-      }
-
-      if (errSig) {
-        throw new Error(getErrorMessage(errSig));
-      }
-      else {
-        throw new Error("Unrecognized error");
-      }
+      const errorMessage = getReadableErrorMessage(error, this.environment);
+      throw new Error(errorMessage);
     });
 
     const swapTransaction = await peripheryContract.swap(swapPeripheryParams, {
       gasLimit: 1000000,
     }).catch((error) => {
-      let errSig;
-      try {
-        const reason = error.data.toString().replace("Reverted ", "");
-        errSig = getErrorSignature(reason);
-      }
-      catch (_) {
-        throw new Error("Unrecognized error");
-      }
-
-      if (errSig) {
-        throw new Error(getErrorMessage(errSig));
-      }
-      else {
-        throw new Error("Unrecognized error");
-      }
+      const errorMessage = getReadableErrorMessage(error, this.environment);
+      throw new Error(errorMessage);
     });
 
     try {

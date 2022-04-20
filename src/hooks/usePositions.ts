@@ -87,6 +87,7 @@ const usePositions = (): usePositionsResult => {
               provider: providers.getDefaultProvider(
                 process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK,
               ),
+              environment: 'LOCALHOST_UI',
               rateOracle: new RateOracle({
                 id: rateOracleAddress,
                 protocolId: protocolId as number,
