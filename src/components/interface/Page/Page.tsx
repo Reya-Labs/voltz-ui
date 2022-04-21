@@ -17,7 +17,7 @@ const Page: React.FunctionComponent = ({ children }) => (
       <Nav />
       <WalletConnect />
     </Box>
-    <Box sx={{ flexGrow: 1, overflowY: 'scroll' }}>{children}</Box>
+    <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>{children}</Box>
   </Background>
 );
 
