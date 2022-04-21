@@ -60,6 +60,7 @@ declare class Position {
     get effectiveMargin(): number;
     get effectiveFixedTokenBalance(): number;
     get effectiveVariableTokenBalance(): number;
+    get effectiveAccumulatedFees(): number;
     get createdDateTime(): DateTime;
     get updatedDateTime(): DateTime;
 }

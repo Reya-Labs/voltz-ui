@@ -99,6 +99,14 @@ var Position = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(Position.prototype, "effectiveAccumulatedFees", {
+        get: function () {
+            var result = this.amm.descale(ethers_1.BigNumber.from(this.accumulatedFees.toString()));
+            return result;
+        },
+        enumerable: false,
+        configurable: true
+    });
     Object.defineProperty(Position.prototype, "createdDateTime", {
         get: function () {
             return luxon_1.DateTime.fromMillis(jsbi_1.default.toNumber(this.createdTimestamp));

@@ -193,8 +193,10 @@ export const getErrorSignature = (error: any, environment: string): string => {
     }
     case 'KOVAN': {
       try {
-        const decodedError = iface.parseError(error);
-        return decodedError.signature;
+        const reason = error.data.toString().replace('Reverted ', '');
+        const decodedError = iface.parseError(reason);
+        const errSig = decodedError.signature.split('(')[0];
+        return errSig;
       } catch {
         throw new Error('Unrecognized error type');
       }

@@ -164,6 +164,11 @@ class Position {
     return result;
   }
 
+  public get effectiveAccumulatedFees(): number {
+    const result = this.amm.descale(BigNumber.from(this.accumulatedFees.toString()));
+    return result;
+  }
+
   public get createdDateTime(): DateTime {
     return DateTime.fromMillis(JSBI.toNumber(this.createdTimestamp));
   }

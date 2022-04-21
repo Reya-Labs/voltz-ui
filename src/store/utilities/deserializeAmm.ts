@@ -29,7 +29,7 @@ const deserializeAmm = (
     id,
     signer,
     provider: providers.getDefaultProvider(process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK),
-    environment: 'LOCALHOST_UI',
+    environment: 'KOVAN',
     updatedTimestamp: JSBI.BigInt(updatedTimestamp),
     fcmAddress,
     termStartTimestamp: JSBI.BigInt(termStartTimestamp),

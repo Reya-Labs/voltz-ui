@@ -150,8 +150,10 @@ var getErrorSignature = function (error, environment) {
         }
         case 'KOVAN': {
             try {
-                var decodedError = exports.iface.parseError(error);
-                return decodedError.signature;
+                var reason = error.data.toString().replace('Reverted ', '');
+                var decodedError = exports.iface.parseError(reason);
+                var errSig = decodedError.signature.split('(')[0];
+                return errSig;
             }
             catch (_c) {
                 throw new Error('Unrecognized error type');

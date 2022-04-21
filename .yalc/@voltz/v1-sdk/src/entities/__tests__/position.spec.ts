@@ -3,8 +3,6 @@ import { providers, Wallet } from 'ethers';
 import Token from '../token';
 import RateOracle from '../rateOracle';
 import AMM from '../amm';
-import { TickMath } from '../../utils/tickMath';
-import { VAMM__factory as vammFactory } from '../../typechain';
 import Position from '../position';
 import JSBI from 'jsbi';
 
@@ -25,9 +23,8 @@ describe('amm', () => {
         id: vammAddress,
         signer: wallet,
         provider: provider,
-        createdTimestamp: '1649458800',
+        environment: "LOCALHOST_SDK",
         fcmAddress: '0x5392a33f7f677f59e833febf4016cddd88ff9e67',
-        liquidity: '0',
         marginEngineAddress,
         rateOracle: new RateOracle({
           id: '0x0165878a594ca255338adfa4d48449f69242eb8f',
@@ -38,13 +35,12 @@ describe('amm', () => {
           name: 'USDC',
           decimals: 18,
         }),
-        sqrtPriceX96: TickMath.getSqrtRatioAtTick(0).toString(),
-        termEndTimestamp: '1649458800000000000000000000',
-        termStartTimestamp: '1646856441000000000000000000',
-        tick: '0',
-        tickSpacing: '1000',
+        termEndTimestamp: JSBI.BigInt('1649458800000000000000000000'),
+        termStartTimestamp: JSBI.BigInt('1646856441000000000000000000'),
+        tick: 0,
+        tickSpacing: 1000,
         txCount: 0,
-        updatedTimestamp: '1646856441',
+        updatedTimestamp: JSBI.BigInt('1646856441'),
       });
 
       position = new Position({
@@ -54,29 +50,30 @@ describe('amm', () => {
         amm: amm,
         tickLower: -7000,
         tickUpper: 0,
-        liquidity: '1000000000000000000000000',
+        liquidity: JSBI.BigInt('1000000000000000000000000'),
         isSettled: false,
         margin: JSBI.BigInt('100000000000000000000000'),
         fixedTokenBalance: JSBI.BigInt('1000000000000000000000'),
         variableTokenBalance: JSBI.BigInt('-1000000000000000000000'),
         isLiquidityProvider: true,
-        owner: 'string',
-        isEmpty: false,
+        owner: 'owner',
+        accumulatedFees: JSBI.BigInt('1000000000000000000000'),
+        mints: [],
+        burns: [],
+        swaps: [],
+        marginUpdates: [],
+        liquidations: [],
+        settlements: [],
       });
-
-      const vammContract = vammFactory.connect(vammAddress, wallet);
-      // await vammContract.initializeVAMM(TickMath.getSqrtRatioAtTick(0).toString()); // for periphery tests
     });
 
     it('position', async () => {
-      // console.log(position.effectiveMargin);
-      // console.log(position.fixedRateLower.toNumber());
-      // console.log(position.fixedRateUpper.toNumber());
-      // console.log(position.createdDateTime);
-      // console.log(position.updatedDateTime);
-      // console.log(position.notional);
-      // console.log(position.effectiveFixedTokenBalance);
-      // console.log(position.effectiveVariableTokenBalance);
+      expect(position.effectiveMargin).toBe(100000);
+      expect(position.fixedRateLower.toNumber()).toBeCloseTo(1);
+      expect(position.fixedRateUpper.toNumber()).toBeCloseTo(2.01);
+      expect(position.effectiveFixedTokenBalance).toBe(1000);
+      expect(position.effectiveVariableTokenBalance).toBe(-1000);
+      expect(position.effectiveAccumulatedFees).toBe(1000);
     });
   });
 });
