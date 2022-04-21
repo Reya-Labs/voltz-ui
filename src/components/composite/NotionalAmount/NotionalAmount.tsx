@@ -36,11 +36,10 @@ const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
 
   return (
     <MaskedIntegerField
-      affix={underlyingTokenName}
+      suffix={underlyingTokenName}
       label={<IconLabel label={label} icon="information-circle" info={info} />}
       value={value}
       onChange={handleChange}
-      sx={{ width: '100%' }}
     />
   );
 };
