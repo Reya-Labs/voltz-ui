@@ -185,7 +185,8 @@ const dark = createTheme({
           color: colors.lavenderWeb.darken010,
           position: 'static',
           textTransform: 'uppercase',
-          transform: 'none'
+          transform: 'none',
+          overflow: 'visible',
         },
       },
     },
