@@ -58,13 +58,18 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ am
     navigate(`/${routes.PORTFOLIO}`);
   };
 
+  const handleGoBack = () => {
+    const action = actions.closeTransaction(transactionId as string);
+    dispatch(action);
+  }
+
   if (!amm) {
     return null;
   }
 
   if (activeTransaction) {
     return (
-      <PendingTransaction amm={amm} transactionId={transactionId} onComplete={handleComplete} />
+      <PendingTransaction amm={amm} transactionId={transactionId} onComplete={handleComplete} onBack={handleGoBack} />
     );
   }
 

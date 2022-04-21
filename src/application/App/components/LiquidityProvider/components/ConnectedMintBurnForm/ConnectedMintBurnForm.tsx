@@ -56,13 +56,18 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     navigate(`/${routes.LP_FARM}`);
   };
 
+  const handleGoBack = () => {
+    const action = actions.closeTransaction(transactionId as string);
+    dispatch(action);
+  }
+
   if (!amm) {
     return null;
   }
 
   if (activeTransaction) {
     return (
-      <PendingTransaction amm={amm} transactionId={transactionId} onComplete={handleComplete} />
+      <PendingTransaction amm={amm} transactionId={transactionId} onComplete={handleComplete} onBack={handleGoBack} />
     );
   }
 
