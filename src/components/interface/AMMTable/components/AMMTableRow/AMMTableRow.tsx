@@ -42,7 +42,7 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
     switch (variant) {
       case 'main':
         return {
-          backgroundColor: `secondary.darken040`,
+          backgroundColor: `secondary.darken040`, // this affects the colour of the Pool table rows
           borderRadius: 2
         };
 

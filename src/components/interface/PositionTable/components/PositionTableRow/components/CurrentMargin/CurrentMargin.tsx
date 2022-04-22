@@ -55,7 +55,6 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({tickLower, 
         {renderValue()}
       </Typography>
 
-      {displayEditButton ? (
         <Button sx={{
           display: "flex",
           paddingTop: (theme) => theme.spacing(0),
@@ -76,7 +75,7 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({tickLower, 
         }} onClick={handleClick}>
             Edit 
         </Button>
-      ) : <></>}
+
 
     </TableCell>
   );

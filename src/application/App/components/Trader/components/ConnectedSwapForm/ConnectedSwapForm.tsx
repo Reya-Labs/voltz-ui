@@ -19,7 +19,11 @@ export type ConnectedSwapFormProps = {
   onReset: () => void;
 };
 
-const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ amm, onReset, marginEditMode }) => {
+const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ 
+  amm,
+  onReset, 
+  marginEditMode 
+}) => {
   const { agent } = useAgent();
   const navigate = useNavigate();
   const [notional, setNotional] = useState<SwapFormProps['notional']>();
