@@ -71,7 +71,7 @@ const Trader: React.FunctionComponent = () => {
 
   return (
     <Page>
-      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+      <Box sx={{ width: '100%', maxWidth: '900px', margin: (theme) => `${theme.spacing(4)} auto 0` }}>
         {!formActive && (
           <Box sx={{ height: '100%' }}>
             <PageTitleDesc 
@@ -98,7 +98,7 @@ const Trader: React.FunctionComponent = () => {
         )}
 
         {formActive && !isNull(effectiveAmm) && (
-          <Box sx={{ height: '100%' }}>
+          <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
             <ConnectedSwapForm 
               amm={effectiveAmm} 
               marginEditMode={marginEditMode} 

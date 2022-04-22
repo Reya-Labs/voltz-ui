@@ -17,7 +17,7 @@ import PageTitleDesc from 'src/components/interface/Page/PageTitleDesc/PageTitle
 const LiquidityProvider: React.FunctionComponent = () => {
   const [formActive, setFormActive] = useState(false);
   const [amm, setAMM] = useState<AugmentedAMM | null>(null);
-  const [position, setPosition] = useState<Position | null>(null);
+  const [position, setPosition] = useState<Position | undefined>();
   const { onChangeAgent } = useAgent();
   const { pathname, key } = useLocation();
   const pathnameWithoutPrefix = pathname.slice(1);
@@ -26,10 +26,12 @@ const LiquidityProvider: React.FunctionComponent = () => {
     return (position?.amm as AugmentedAMM) || amm;
   }, [amm, position]);
 
+  const marginEditMode = formActive && !isNull(effectiveAmm) && Boolean(position);
+
   useEffect(() => {
     setFormActive(false);
     setAMM(null);
-    setPosition(null);
+    setPosition(undefined);
     onChangeAgent(Agents.LIQUIDITY_PROVIDER);
   }, [setFormActive, setAMM, pathnameWithoutPrefix, onChangeAgent]);
 
@@ -53,7 +55,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
   const handleSelectAmm = (selected: AugmentedAMM) => {
     setFormActive(true);
     setAMM(selected);
-    setPosition(null);
+    setPosition(undefined);
   };
   const handleSelectPosition = (selected: Position) => {
     setFormActive(true);
@@ -63,12 +65,12 @@ const LiquidityProvider: React.FunctionComponent = () => {
   const handleReset = () => {
     setFormActive(false);
     setAMM(null);
-    setPosition(null);
+    setPosition(undefined);
   };
 
   return (
     <Page>
-      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+      <Box sx={{ width: '100%', maxWidth: '900px', margin: (theme) => `${theme.spacing(4)} auto 0` }}>
         {!formActive && ( //if form not active then
           <Box sx={{ height: '100%' }}>
             <PageTitleDesc 
@@ -79,19 +81,19 @@ const LiquidityProvider: React.FunctionComponent = () => {
             {pathnameWithoutPrefix === routes.POOLS ? (
               <ConnectedAMMTable onSelectItem={handleSelectAmm} />
             ) : (
-              <ConnectedPositionTable onSelectItem={handleSelectPosition}  agent={Agents.LIQUIDITY_PROVIDER} />
+              <ConnectedPositionTable onSelectItem={handleSelectPosition} agent={Agents.LIQUIDITY_PROVIDER} />
             )}
           </Box>
         )}
-        {formActive && !isNull(effectiveAmm) && !isNull(position) && (
-          <Box sx={{ height: '100%' }}>
-            <ConnectedMintBurnForm amm={effectiveAmm} onReset={handleReset} marginEditMode position={position} /> 
-          </Box>
-        )}  
 
-        {formActive && !isNull(effectiveAmm) && isNull(position) && (
-          <Box sx={{ height: '100%' }}>
-            <ConnectedMintBurnForm amm={effectiveAmm} onReset={handleReset} /> 
+        {formActive && !isNull(effectiveAmm) && (
+          <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
+            <ConnectedMintBurnForm 
+              amm={effectiveAmm} 
+              marginEditMode={marginEditMode}
+              onReset={handleReset} 
+              position={position} 
+            /> 
           </Box>
         )}
       </Box>
