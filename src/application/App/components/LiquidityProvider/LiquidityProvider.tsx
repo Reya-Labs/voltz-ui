@@ -8,11 +8,11 @@ import { AugmentedAMM } from '@utilities';
 import { Agents } from '@components/contexts';
 import { useAgent } from '@hooks';
 import { routes } from '@routes';
-import { Typography } from '@components/atomic';
 import { Page } from '@components/interface';
 import ConnectedAMMTable from '../ConnectedAMMTable/ConnectedAMMTable';
 import ConnectedPositionTable from '../ConnectedPositionTable/ConnectedPositionTable';
 import { ConnectedMintBurnForm } from './components';
+import PageTitleDesc from 'src/components/interface/Page/PageTitleDesc/PageTitleDesc';
 
 const LiquidityProvider: React.FunctionComponent = () => {
   const [formActive, setFormActive] = useState(false);
@@ -49,9 +49,10 @@ const LiquidityProvider: React.FunctionComponent = () => {
         return 'YOUR LP POSITIONS';
 
       default:
-        return null;
+        return '';
     }
   }, [pathnameWithoutPrefix]);
+
   const handleSelectAmm = (selected: AugmentedAMM) => {
     setFormActive(true);
     setAMM(selected);
@@ -73,17 +74,11 @@ const LiquidityProvider: React.FunctionComponent = () => {
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
         {!formActive && ( //if form not active then
           <Box sx={{ height: '100%' }}>
-            <Typography variant="h1">{pageTitle}</Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                maxWidth: (theme) => theme.spacing(90),
-                marginBottom: (theme) => theme.spacing(4),
-                marginTop: (theme) => theme.spacing(2),
-              }}
-            >
-              Choose a pool and provide liquidity within your chosen ranges.
-            </Typography>
+            <PageTitleDesc 
+              title={pageTitle} 
+              desc='Choose a pool and provide liquidity within your chosen ranges.' 
+            />
+
             {pathnameWithoutPrefix === routes.POOLS ? (
               <ConnectedAMMTable onSelectItem={handleSelectAmm} />
             ) : (

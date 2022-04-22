@@ -13,6 +13,7 @@ import { Page } from '@components/interface';
 import ConnectedAMMTable from '../ConnectedAMMTable/ConnectedAMMTable';
 import ConnectedPositionTable from '../ConnectedPositionTable/ConnectedPositionTable';
 import { ConnectedSwapForm } from './components';
+import PageTitleDesc from 'src/components/interface/Page/PageTitleDesc/PageTitleDesc';
 
 const Trader: React.FunctionComponent = () => {
   const [formActive, setFormActive] = useState(false);
@@ -50,9 +51,10 @@ const Trader: React.FunctionComponent = () => {
         return 'PORTFOLIO SUMMARY';
 
       default:
-        return null;
+        return '';
     }
   }, [pathnameWithoutPrefix]);
+
   const handleSelectAmm = (selected: AugmentedAMM) => {
     setFormActive(true);
     setAMM(selected);
@@ -74,16 +76,10 @@ const Trader: React.FunctionComponent = () => {
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
         {!formActive && (
           <Box sx={{ height: '100%' }}>
-            <Typography variant="h1">{pageTitle}</Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                maxWidth: (theme) => theme.spacing(90),
-                marginBottom: (theme) => theme.spacing(4),
-              }}
-            >
-              Choose a pool and decide whether to trade fixed or variable rates. 
-            </Typography>
+            <PageTitleDesc 
+              title={pageTitle} 
+              desc='Choose a pool and decide whether to trade fixed or variable rates.' 
+            />
             {/* todo: bring this back once we have content for traders to link */}
             {/* {pathnameWithoutPrefix === routes.SWAP && (
               <Button
