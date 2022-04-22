@@ -21,12 +21,9 @@ const LiquidityProvider: React.FunctionComponent = () => {
   const { onChangeAgent } = useAgent();
   const { pathname, key } = useLocation();
   const pathnameWithoutPrefix = pathname.slice(1);
-  const effectiveAmm = useMemo(() => {
-    if (position) {
-      return position.amm as AugmentedAMM;
-    }
 
-    return amm;
+  const effectiveAmm = useMemo(() => {
+    return (position?.amm as AugmentedAMM) || amm;
   }, [amm, position]);
 
   useEffect(() => {
@@ -38,7 +35,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
 
   useEffect(() => {
     handleReset();
-}, [key]);
+  }, [key]);
 
   const pageTitle = useMemo(() => {
     switch (pathnameWithoutPrefix) {

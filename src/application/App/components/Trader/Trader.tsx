@@ -24,12 +24,10 @@ const Trader: React.FunctionComponent = () => {
   const pathnameWithoutPrefix = pathname.slice(1);
 
   const effectiveAmm = useMemo(() => {
-    if (position) {
-      return position.amm as AugmentedAMM;
-    }
-
-    return amm;
+    return (position?.amm as AugmentedAMM) || amm;
   }, [amm, position]);
+
+  const marginEditMode = formActive && !isNull(effectiveAmm) && !isNull(position);
 
   useEffect(() => {
     setFormActive(false);
@@ -98,18 +96,14 @@ const Trader: React.FunctionComponent = () => {
             )}
           </Box>
         )}
-        
-        {/* todo: below is a bit hacky */}
 
-        {formActive && !isNull(effectiveAmm) && !isNull(position) && (
+        {formActive && !isNull(effectiveAmm) && (
           <Box sx={{ height: '100%' }}>
-            <ConnectedSwapForm amm={effectiveAmm} onReset={handleReset} marginEditMode />
-          </Box>
-        )}
-
-        {formActive && !isNull(effectiveAmm) && isNull(position) && (
-          <Box sx={{ height: '100%' }}>
-            <ConnectedSwapForm amm={effectiveAmm} onReset={handleReset} />
+            <ConnectedSwapForm 
+              amm={effectiveAmm} 
+              marginEditMode={marginEditMode} 
+              onReset={handleReset} 
+            />
           </Box>
         )}
       </Box>
