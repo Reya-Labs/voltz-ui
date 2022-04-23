@@ -8,9 +8,10 @@ export default {
   component: MaskedIntegerField,
   argTypes: {
     disabled: { control: 'boolean' },
-    label: { control: 'text' },
+    label: { control: 'text', defaultValue: 'Notional margin' },
+    placeholder: { control: 'text', defaultValue: 'USDC' },
+    suffix: { control: 'text', defaultValue: 'USDC' },
     error: { control: 'boolean' },
-    mask: { control: 'text' },
   },
 } as ComponentMeta<typeof MaskedIntegerField>;
 
