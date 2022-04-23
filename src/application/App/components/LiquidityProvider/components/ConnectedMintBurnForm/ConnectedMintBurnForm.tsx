@@ -13,15 +13,19 @@ import {
   PendingTransaction,
 } from '@components/interface';
 import { updateFixedRate } from './utilities';
-
+import { Position } from '@voltz/v1-sdk/dist/types/entities';
 export type ConnectedMintBurnFormProps = {
   amm: AugmentedAMM;
+  marginEditMode?: boolean;
   onReset: () => void;
+  position?: Position;
 };
 
 const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps> = ({
   amm,
   onReset,
+  marginEditMode,
+  position
 }) => {
   const { agent } = useAgent();
   const navigate = useNavigate();
@@ -30,6 +34,9 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     updateFixedRate({ amm, fixedRate: fixedLow, setFixedRate: setFixedLow }),
     [amm, fixedLow, setFixedLow],
   );
+
+  const [addOrRemoveMargin, setAddOrRemoveMargin] =
+  useState<MintBurnFormProps['addOrRemoveMargin']>();  
 
   const [fixedHigh, setFixedHigh] = useState<MintBurnFormProps['fixedHigh']>();
   const handleSetFixedHigh = useCallback(
@@ -44,10 +51,18 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   const handleSubmit = useCallback(
     (args: HandleSubmitMintBurnFormArgs) => {
       const transaction = { ...args, ammId: amm.id, agent };
+     
+    if (marginEditMode) {
+      const updatePositionMargin = actions.updatePositionMarginAction(amm, transaction);
+      setTransactionId(updatePositionMargin.payload.transaction.id);
+        // todo: if remove margin, change margin to -margin (delta)
+      dispatch(updatePositionMargin);
+    } else {  
       const mint = actions.mintAction(amm, transaction);
-
       setTransactionId(mint.payload.transaction.id);
       dispatch(mint);
+      }  
+      
     },
     [setTransactionId, dispatch, agent, amm.id],
   );
@@ -72,9 +87,9 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
         protocol={amm.protocol}
         startDate={amm.startDateTime}
         endDate={amm.endDateTime}
-        fixedLow={fixedLow}
         onChangeFixedLow={handleSetFixedLow}
-        fixedHigh={fixedHigh}
+        fixedLow={position ? parseFloat(position.fixedRateLower.toFixed() ) : fixedLow}
+        fixedHigh={position ? parseFloat(position.fixedRateUpper.toFixed() ) : fixedHigh}
         onChangeFixedHigh={handleSetFixedHigh}
         notional={notional || 0}
         onChangeNotional={setNotional}
@@ -82,9 +97,14 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
         onChangeMargin={setMargin}
         onSubmit={handleSubmit}
         onCancel={onReset}
+        marginEditMode={marginEditMode}
+        onAddOrRemoveMargin={setAddOrRemoveMargin} // this adds the toggle add/remove to the form
+        addOrRemoveMargin={addOrRemoveMargin} // this allows you to switch between add and remove on the toggle
       />
     </AMMProvider>
   );
 };
 
 export default ConnectedMintBurnForm;
+
+//needs marginEditMode

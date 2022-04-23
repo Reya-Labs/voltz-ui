@@ -71,7 +71,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
   return (
     <Page>
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        {!formActive && (
+        {!formActive && ( //if form not active then
           <Box sx={{ height: '100%' }}>
             <Typography variant="h1">{pageTitle}</Typography>
             <Typography
@@ -91,9 +91,15 @@ const LiquidityProvider: React.FunctionComponent = () => {
             )}
           </Box>
         )}
-        {formActive && !isNull(effectiveAmm) && (
+        {formActive && !isNull(effectiveAmm) && !isNull(position) && (
           <Box sx={{ height: '100%' }}>
-            <ConnectedMintBurnForm amm={effectiveAmm} onReset={handleReset} />
+            <ConnectedMintBurnForm amm={effectiveAmm} onReset={handleReset} marginEditMode position={position} /> 
+          </Box>
+        )}  
+
+        {formActive && !isNull(effectiveAmm) && isNull(position) && (
+          <Box sx={{ height: '100%' }}>
+            <ConnectedMintBurnForm amm={effectiveAmm} onReset={handleReset} /> 
           </Box>
         )}
       </Box>
@@ -102,3 +108,4 @@ const LiquidityProvider: React.FunctionComponent = () => {
 };
 
 export default LiquidityProvider;
+//need cases for marginEditMode
