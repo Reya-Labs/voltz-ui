@@ -68,13 +68,13 @@ const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
             outline: 'none',
           },
           "::-webkit-outer-spin-button": { 
-            "-webkit-appearance": "none", 
-            "-moz-appearance": "none",
+            "webkitAppearance": "none", 
+            "mozAppearance": "none",
             "appearance": "none"
           },
           "::-webkit-inner-spin-button": {
-            "-webkit-appearance": "none",
-            "-moz-appearance": "none",
+            "webkitAppearance": "none",
+            "mozAppearance": "none",
             "appearance": "none"
           },
         }}
