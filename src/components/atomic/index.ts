@@ -12,3 +12,4 @@ export { default as Panel } from './Panel/Panel';
 export { default as Slider } from './Slider/Slider';
 export { default as ToggleButton } from './ToggleButton/ToggleButton';
 export { default as Typography } from './Typography/Typography';
+export { default as RouteLink } from './RouteLink/RouteLink';

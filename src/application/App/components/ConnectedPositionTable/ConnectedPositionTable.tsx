@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Position } from '@voltz/v1-sdk';
+import { useNavigate } from 'react-router-dom';
 
 import { data } from '@utilities';
 import { usePositions } from '@hooks';
 import { PositionTable, PositionTableFields } from '@components/interface';
+import { Panel } from '@components/atomic';
 import { Agents } from '@components/contexts';
+import { routes } from '@routes';
+import { RouteLink } from '@components/atomic';
 
 export type ConnectedAMMTableProps = {
   onSelectItem: (item: Position) => void;
@@ -21,9 +25,26 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
   const [size, setSize] = useState<number | null>(null);
   const { positionsByAgent, loading, error } = usePositions();
   const pages = 0;
+  const navigate = useNavigate();
 
-  if (!positionsByAgent || loading || error) {
+  if(loading || error) {
     return null;
+  }
+
+  if (!positionsByAgent) {
+    return (
+      <Panel variant='dark' sx={{textAlign: 'center', marginTop: 10 }}>
+        <Panel variant='main' sx={{
+          width: '100%', 
+          maxWidth: '900px', 
+          textAlign: 'center',
+        }}>
+          <RouteLink to={agent === Agents.LIQUIDITY_PROVIDER ? `/${routes.POOLS}` : `/${routes.SWAP}`}>
+            OPEN YOUR FIRST POSITION
+          </RouteLink>
+        </Panel>
+      </Panel>
+    )
   }
 
   return (
@@ -45,3 +66,4 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
 };
 
 export default ConnectedPositionTable;
+

@@ -3,16 +3,23 @@ import { SystemStyleObject, Theme } from '@mui/system';
 import Box from '@mui/material/Box';
 
 export type PanelProps = {
-  variant?: 'error' | 'warning' | 'info' | 'main' | 'dark' | 'darker';
+  variant?: 'error' | 'warning' | 'info' | 'iconLabel' | 'main' | 'dark' | 'darker' ;
+  borderRadius?: 'small' | 'large';
+  padding?: 'small' | 'large' | 'container'; 
   sx?: SystemStyleObject<Theme>;
 };
 
-const Panel: React.FunctionComponent<PanelProps> = ({ variant, sx, children }) => {
+const Panel: React.FunctionComponent<PanelProps> = ({ variant, borderRadius = 'small', padding = 'large', sx, children }) => {
   const commonOverrides: SystemStyleObject<Theme> = {
     border: 1,
     borderColor: 'transparent',
-    borderRadius: 2,
-    padding: (theme) => theme.spacing(2),
+    borderRadius: borderRadius === 'small' ? '8px' : '16px',
+    boxSizing: 'border-box',
+    padding: (theme) => {
+      if (padding === 'small') return theme.spacing(4);
+      if (padding === 'large') return theme.spacing(6);
+      return `${theme.spacing(4)} ${theme.spacing(6)} ${theme.spacing(6)}`;
+    },
   };
   const typeStyleOverrides = (): SystemStyleObject<Theme> => {
     if (!variant) {
@@ -25,31 +32,30 @@ const Panel: React.FunctionComponent<PanelProps> = ({ variant, sx, children }) =
       case 'main':
         return {
           backgroundColor: `secondary.darken040`,
-          borderRadius: 4,
-          paddingTop: (theme) => theme.spacing(4),
-          paddingBottom: (theme) => theme.spacing(6),
-          paddingLeft: (theme) => theme.spacing(6),
-          paddingRight: (theme) => theme.spacing(6),
         };
 
       case 'dark':
         return {
           backgroundColor: `secondary.darken045`,
-          borderRadius: 4,
-          paddingTop: (theme) => theme.spacing(4),
-          paddingBottom: (theme) => theme.spacing(6),
-          paddingLeft: (theme) => theme.spacing(6),
-          paddingRight: (theme) => theme.spacing(6),
         };
 
       case 'darker':
         return {
           backgroundColor: `secondary.darken050`,
-          borderRadius: 4,
-          paddingTop: (theme) => theme.spacing(4),
-          paddingBottom: (theme) => theme.spacing(6),
-          paddingLeft: (theme) => theme.spacing(6),
-          paddingRight: (theme) => theme.spacing(6),
+        };
+      
+      case 'iconLabel':
+        return {
+          borderRadius: 1, 
+          padding: (theme) => `${theme.spacing(3)} ${theme.spacing(4)}`,
+          maxWidth: 200, 
+          backgroundColor: "#0F0C1D",
+          borderColor: "#383545", 
+          borderStyle: "solid", 
+          boxShadow: '0px 4px 15px rgba(229, 225, 249, 0.1)',
+          '& > *': {
+            color: `${variant}.light`,
+          },
         };
 
       default:
