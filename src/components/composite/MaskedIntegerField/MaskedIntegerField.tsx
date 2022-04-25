@@ -1,28 +1,32 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useCallback } from 'react';
 import CurrencyInput, { CurrencyInputProps } from 'react-currency-input-field';
 import { InputBaseProps } from '@mui/material/InputBase';
 import { Box, FormControl, InputLabel } from '@mui/material';
 import colors from '../../../theme/colors';
 import isEmpty from 'lodash/isEmpty';
 import { useUniqueId } from '@hooks';
+import { OverrideTypes } from '@utilities';
 
-export type MaskedIntegerFieldProps = Omit<React.ComponentProps<typeof CurrencyInput>, 'onChange'> & {
+export type MaskedIntegerFieldProps = OverrideTypes<CurrencyInputProps, {
   error?: InputBaseProps['error'],
   label?: ReactNode,
   onChange?: (value: string) => void;
-  size?: InputBaseProps['size'];
-};
+  inputSize?: InputBaseProps['size'];
+}>;
 
 const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
   error,
   label,
   onChange,
-  size = 'medium',
+  inputSize = 'medium',
   suffix,
-  value,
   ...props
 }) => {
   const inputId = useUniqueId();
+
+  const handleChange = (val?: string) => {
+    if(onChange) onChange(val || '0');
+  };
 
   return (
     <FormControl variant="outlined" sx={{width: '100%'}}>
@@ -50,9 +54,9 @@ const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
             return colors.vzGrey;
           },
           minHeight: (theme) => theme.spacing(8),
-          fontSize: () => size === 'small' ? '14px' : '24px',
+          fontSize: () => inputSize === 'small' ? '14px' : '24px',
           padding: (theme) => {
-            if (size === 'small') {
+            if (inputSize === 'small') {
               return `${theme.spacing(1)} ${theme.spacing(1)} ${theme.spacing(1)} ${theme.spacing(2)}`;
             } else {
               return theme.spacing(4);
@@ -80,12 +84,11 @@ const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
         }}
       }>
         <CurrencyInput
-          {...props}
           id={inputId}
-          value={value}
           decimalsLimit={2}
-          onValueChange={(val) => { onChange && onChange(val || '0')}}
+          onValueChange={handleChange}
           suffix={` ${suffix || ''}`}
+          {...props}
         />
       </Box>
     </FormControl>

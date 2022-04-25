@@ -43,6 +43,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     updateFixedRate({ amm, fixedRate: fixedHigh, setFixedRate: setFixedHigh }),
     [amm, fixedHigh, setFixedHigh],
   );
+
   const [notional, setNotional] = useState<MintBurnFormProps['notional']>();
   const [margin, setMargin] = useState<MintBurnFormProps['margin']>();
   const [transactionId, setTransactionId] = useState<string | undefined>();
