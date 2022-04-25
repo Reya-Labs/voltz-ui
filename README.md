@@ -4,8 +4,12 @@
 2. Ensure that you have a `.env` file in the `voltz-ui` directory with the following:
 
 ```
-REACT_APP_SUBGRAPH_URL= <<URL OF LOCAL SUBGRAPH>>
-REACT_APP_DEFAULT_PROVIDER_NETWORK=<<RPC ENDPOINT FOR BLOCKCHAIN>```
+REACT_APP_SUBGRAPH_URL=<<URL OF LOCAL SUBGRAPH>>
+REACT_APP_DEFAULT_PROVIDER_NETWORK=<<RPC ENDPOINT FOR BLOCKCHAIN>
+REACT_APP_METAMASK_NETWORK_ID=<<NETWORK ID>>
+```
+
+`REACT_APP_METAMASK_NETWORK_ID` is used by the app to check that the connected Metamask wallet is using the correct network. Use `1` for Ethereum Mainnet (live), or `42` for Kovan Testnet (dev). See https://eth.wiki/json-rpc/API#net_version for more network IDs.
 
 # Run
 

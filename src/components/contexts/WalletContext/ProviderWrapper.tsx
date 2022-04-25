@@ -37,6 +37,7 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
 }) => {
   const [polling, setPolling] = useState(false);
   const [walletError, setWalletError] = useState<string | null>(null);
+  const [networkId, setNetworkId] = useState<string>();
   const {
     status: metamaskStatus,
     connect: metamaskConnect,
@@ -121,6 +122,23 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
     }
   }, [error, shouldPoll, setPolling, stopPolling]);
 
+  useEffect(() => {
+    const provider = signer?.provider;
+    if (provider) {
+      // See https://eth.wiki/json-rpc/API#net_version for response info
+      provider.send('net_version', [])
+        .then((resp: string) => {
+          setNetworkId(resp);
+          if(!resp || resp !== process.env.REACT_APP_METAMASK_NETWORK_ID) {
+            setWalletError('Wrong network');
+          }
+        })
+        .catch(() => {
+          setNetworkId(undefined);
+        })
+    }
+  }, [signer]);
+
   const value = {
     status,
     connect,
@@ -137,6 +155,7 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
     required,
     setRequired,
     walletError,
+    networkId,
   };
 
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;
