@@ -22,7 +22,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
 }) => {
   const value = isUndefined(margin) ? defaultMargin : margin;
   const handleChange = (newValue: string) => {
-    onChangeMargin(parseInt(newValue, 10));
+    onChangeMargin(parseFloat(newValue));
   };
 
   // todo: below is a workaround when deriving the token name from the protocol name, needs to be fixed
@@ -43,6 +43,8 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
 
   return (
     <MaskedIntegerField
+      allowDecimals
+      allowNegativeValue={false}
       suffix={underlyingTokenName}
       label={
         <IconLabel
@@ -53,7 +55,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
             "Margin in underlying tokens to withdraw from the margin account." }
         />
       }
-      value={value}
+      defaultValue={value}
       onChange={handleChange}
     />
   );
