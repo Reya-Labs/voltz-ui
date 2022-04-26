@@ -43,7 +43,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
 
   return (
     <MaskedIntegerField
-      affix={underlyingTokenName}
+      suffix={underlyingTokenName}
       label={
         <IconLabel
           label={ isAdditional ? "additional margin amount" : "margin amount to withdraw" } 
@@ -55,7 +55,6 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
       }
       value={value}
       onChange={handleChange}
-      sx={{ width: '100%' }}
     />
   );
 };

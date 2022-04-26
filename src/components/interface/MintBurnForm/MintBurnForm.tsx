@@ -15,6 +15,9 @@ import {
 } from '@components/composite';
 import { HandleSubmitMintBurnFormArgs } from './types';
 import { MintBurnMinimumMarginAmount, SubmitMintBurnFormButton } from './components';
+import { MarginControls } from '../SwapForm/components';
+import { positions } from '@mui/system';
+import { Position } from '@voltz/v1-sdk/dist/types/entities';
 
 export type MintBurnFormProps = AgentProps & {
   protocol?: string;
@@ -30,12 +33,18 @@ export type MintBurnFormProps = AgentProps & {
   fixedHigh?: number;
   notional?: number;
   margin?: number;
+  marginEditMode?: boolean;
+  defaultAddOrRemoveMargin?: boolean;
+  addOrRemoveMargin?: boolean;
+  position?: number;
+
   onChangeFixedLow: (value: number, increment: boolean | null) => void;
   onChangeFixedHigh: (value: number, increment: boolean | null) => void;
   onChangeNotional: (value: number) => void;
   onChangeMargin: (value: number) => void;
   onSubmit: (values: HandleSubmitMintBurnFormArgs) => void;
   onCancel: () => void;
+  onAddOrRemoveMargin: (value: boolean) => void;
 };
 
 const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
@@ -51,12 +60,18 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   fixedHigh,
   notional,
   margin,
+  marginEditMode,
+  defaultAddOrRemoveMargin,
+  addOrRemoveMargin,
+  position
+  ,
   onChangeFixedLow,
   onChangeFixedHigh,
   onChangeNotional,
   onChangeMargin,
   onSubmit,
   onCancel,
+  onAddOrRemoveMargin,
 }) => {
   const handleSubmit = () => {
     if (
@@ -76,21 +91,39 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
     });
   };
 
+  const handleSubmitMarginOnly = () => {
+
+    if (isUndefined(margin) || isNaN(margin) ) {
+      return;
+    }
+
+    let marginDelta = Math.abs(margin);
+
+    if (!addOrRemoveMargin) {
+      marginDelta *= -1.0;
+    }
+
+    return onSubmit({
+      fixedLow: fixedLow!,   
+      fixedHigh: fixedHigh!, 
+      notional: notional!,
+      margin: marginDelta,
+    });
+  };
+
   return (
     <Panel
       variant="darker"
       sx={{
         marginTop: 12,
-        padding: 6,
         width: (theme) => theme.spacing(80),
         boxShadow: '0px 0px 60px rgba(255, 89, 156, 0.2)',
-        borderRadius: 2
       }}
     >
       <ProtocolInformation protocol={protocol} />
       <Box
         sx={{
-          marginBottom: (theme) => theme.spacing(4),
+          marginBottom: (theme) => theme.spacing(6),
         }}
       >
         <MaturityInformation
@@ -106,9 +139,29 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
           endDate={endDate}
         />
       </Box>
+      
+      {
+          marginEditMode && (
+            <Box
+            sx={{
+              marginBottom: (theme) => theme.spacing(6),
+              display: 'flex',
+            }}
+          >
+            <MarginControls 
+              defaultAddMargin={defaultAddOrRemoveMargin}
+              addMargin={addOrRemoveMargin}
+              onAddOrRemoveMargin={onAddOrRemoveMargin}
+            >
+            </MarginControls>
+            
+            </Box>
+          )
+        }  
+
       <Box
         sx={{
-          marginBottom: (theme) => theme.spacing(4),
+          marginBottom: (theme) => theme.spacing(6),
           display: 'flex',
         }}
       >
@@ -121,9 +174,13 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
           onChangeFixedHigh={onChangeFixedHigh}
         />
       </Box>
+      
+    {
+        !marginEditMode && (
+
       <Box
         sx={{
-          marginBottom: (theme) => theme.spacing(4),
+          marginBottom: (theme) => theme.spacing(6),
         }}
       >
         <NotionalAmount
@@ -135,9 +192,14 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
           onChangeNotional={onChangeNotional}
         />
       </Box>
+          )
+        }
+
+      {
+        !marginEditMode && ( 
       <Box
         sx={{
-          marginBottom: (theme) => theme.spacing(4),
+          marginBottom: (theme) => theme.spacing(6),
         }}
       >
         <MintBurnMinimumMarginAmount
@@ -146,9 +208,12 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
           notional={notional}
         />
       </Box>
+       )
+      }
+
       <Box
         sx={{
-          marginBottom: (theme) => theme.spacing(4),
+          marginBottom: (theme) => theme.spacing(6),
         }}
       >
         <MarginAmount
@@ -156,13 +221,15 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
           defaultMargin={defaultMargin}
           maxMargin={maxMargin}
           margin={margin}
+          isAdditional={addOrRemoveMargin}
           onChangeMargin={onChangeMargin}
         />
       </Box>
+
       <Box sx={{ display: 'flex' }}>
-        <SubmitMintBurnFormButton onSubmit={handleSubmit} />
+        <SubmitMintBurnFormButton onSubmit={marginEditMode ? handleSubmitMarginOnly : handleSubmit} />
         <Button
-          sx={{ marginLeft: (theme) => theme.spacing(4) }}
+          sx={{ marginLeft: (theme) => theme.spacing(6) }}
           variant="darker"
           onClick={onCancel}
         >

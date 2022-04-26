@@ -34,6 +34,7 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
       });
     },
     useMemo(() => undefined, [!!amm.signer]),
+    100
   );
   const swapInfo = useAsyncFunction(
     async (args: SwapInfoPayload) => {
@@ -57,6 +58,7 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
       return result;
     },
     useMemo(() => undefined, [!!amm.signer, agent]),
+    100
   );
 
   const estimatedCashflow = useAsyncFunction(

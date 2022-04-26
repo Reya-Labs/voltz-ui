@@ -39,13 +39,13 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     switch (variant) {
       case 'main':
         return {
-          backgroundColor: `secondary.darken040`,
+          backgroundColor: `secondary.darken040`, // this affects the colour of the position rows in the trader positions
           borderRadius: 2
         };
 
       case 'darker':
         return {
-          backgroundColor: `secondary.darken050`,
+          backgroundColor: `secondary.darken050`, // this affects the colour of the positions rows in the LP positions 
           borderRadius: 2
         };
 
@@ -81,7 +81,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
           if (field === 'estimatedCashflow') {
             return <EstimatedCashflow tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} token={token} />;
           }
-
+          // The below lines are responsible for the current margin column of the LP positions: this component contains the Edit button as well. 
           if (field === 'margin') {
             return <CurrentMargin tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} token={token} onSelect={onSelect} displayEditButton={ agent !== Agents.LIQUIDITY_PROVIDER} />;
           }

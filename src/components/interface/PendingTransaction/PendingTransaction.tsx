@@ -12,12 +12,14 @@ import { ProtocolInformation, WalletAddressDisplay } from '@components/composite
 export type PendingTransactionProps = {
   amm: AugmentedAMM;
   transactionId?: string;
+  onBack: () => void;
   onComplete: () => void;
 };
 
 const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   amm,
   transactionId,
+  onBack,
   onComplete,
 }) => {
   const { account } = useWallet();
@@ -108,8 +110,8 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               paddingBottom: (theme) => theme.spacing(10),
             }}
           >
-            <Button variant="contained" onClick={onComplete}>
-              Go to your portfolio
+            <Button variant="contained" onClick={onBack}>
+              Back
             </Button>
           </Box>
         </Box>
@@ -202,13 +204,12 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
       variant="dark"
       sx={{
         marginTop: 12,
-        padding: 6,
         width: (theme) => theme.spacing(80),
         boxShadow: '0px 0px 60px rgba(255, 89, 156, 0.2)',
       }}
     >
       {renderStatus()}
-      <Panel variant="main" sx={{ padding: 6 }}>
+      <Panel variant="main">
         <AMMProvider amm={amm}>
           <ProtocolInformation protocol={amm.protocol} />
         </AMMProvider>

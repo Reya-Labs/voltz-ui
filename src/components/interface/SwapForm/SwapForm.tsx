@@ -64,7 +64,6 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
-  
   const handleSubmit = () => {
 
     if (isUndefined(notional) || isUndefined(margin) || isUndefined(partialCollateralization) ) {
@@ -113,20 +112,17 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
 
   return (
     <Panel
-      variant="main"
+      variant="dark"
       sx={{
         marginTop: 12,
-        padding: 6,
         width: (theme) => theme.spacing(85),
         boxShadow: _boxShadow,
-        backgroundColor: "secondary.darken045",
-        borderRadius: 2
       }}
     >
       <ProtocolInformation protocol={protocol}/>
       <Box
         sx={{
-          marginBottom: (theme) => theme.spacing(4),
+          marginBottom: (theme) => theme.spacing(6),
         }}
       >
         <MaturityInformation
@@ -147,7 +143,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           marginEditMode && (
             <Box
             sx={{
-              marginBottom: (theme) => theme.spacing(4),
+              marginBottom: (theme) => theme.spacing(6),
               display: 'flex',
             }}
           >
@@ -166,7 +162,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           !marginEditMode && (
             <Box
             sx={{
-              marginBottom: (theme) => theme.spacing(4),
+              marginBottom: (theme) => theme.spacing(6),
               display: 'flex',
             }}
           >
@@ -184,7 +180,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         !marginEditMode && (
           <Box
           sx={{
-            marginBottom: (theme) => theme.spacing(4),
+            marginBottom: (theme) => theme.spacing(6),
           }}
         >
           <NotionalAmount
@@ -201,7 +197,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
 
       <Box
         sx={{
-          marginBottom: (theme) => theme.spacing(4),
+          marginBottom: (theme) => theme.spacing(6),
         }}
       >
         <MarginAmount
@@ -215,7 +211,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
       </Box>
       <Box
         sx={{
-          marginBottom: (theme) => theme.spacing(4),
+          marginBottom: (theme) => theme.spacing(6),
         }}
       >
         <SwapInfo notional={notional} underlyingTokenName={underlyingTokenName} />
