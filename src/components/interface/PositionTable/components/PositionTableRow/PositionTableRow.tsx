@@ -11,6 +11,7 @@ import { PositionTableFields } from '../../types';
 import { EstimatedCashflow, FixedAPR, CurrentMargin } from './components';
 import React from 'react';
 import { useAgent } from '@hooks';
+import { DateTime } from 'luxon';
 
 
 
@@ -129,11 +130,16 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
         return <TableCell key={field}>{renderDisplay()}</TableCell>;
       })}
 
-      <TableCell align="center">
-        <Button variant="contained" onClick={handleSubmit}>
+      {DateTime.now() >= datum.endDate && (
+            <TableCell align="center">
+            <Button variant="contained" onClick={handleSubmit}>
+              Settle 
           Settle 
-        </Button>
-      </TableCell>
+              Settle 
+            </Button>
+          </TableCell>
+        )
+      }
     </TableRow>
   );
 };

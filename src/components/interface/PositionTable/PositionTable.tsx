@@ -34,7 +34,7 @@ export type PositionTableProps = {
   onSetSize: (size: number) => void;
   onSelectItem: (datum: Position) => void;
   agent: Agents
-  handleSubmit: () => void;
+  handleSubmit: (position: Position) => void;
 };
 
 const PositionTable: React.FunctionComponent<PositionTableProps> = ({
@@ -113,7 +113,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                 datum={datum}
                 index={index}
                 onSelect={handleSelectRow(index)}
-                handleSubmit={handleSubmit}
+                handleSubmit={() => handleSubmit(positions[index])}
               />
               </AMMProvider>
             ))}

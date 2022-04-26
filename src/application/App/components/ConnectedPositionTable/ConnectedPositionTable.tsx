@@ -35,17 +35,15 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
   const dispatch = useDispatch();
   
   const handleSubmit = useCallback(
-    () => {
-      // todo: settle transaction type should be different
-      const transaction = { notional: 0, margin: 0,  ammId: amm.id, agent };
-    
-      const settlePosition = actions.settlePositionAction(amm, transaction);
+    (position: Position) => {
+
+      const positionAmm = position.amm as AugmentedAMM;
+      const transaction = { notional: 0, margin: 0,  ammId: positionAmm.id, agent };
+      const settlePosition = actions.settlePositionAction(positionAmm, transaction);
       
       setTransactionId(settlePosition.payload.transaction.id);
       dispatch(settlePosition);
-
-    },
-    [setTransactionId, dispatch, agent, amm.id],
+    },  [setTransactionId, dispatch, agent, amm?.id],
   );
 
   const navigate = useNavigate();
