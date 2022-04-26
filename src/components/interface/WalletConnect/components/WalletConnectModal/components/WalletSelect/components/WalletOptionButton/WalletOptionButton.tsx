@@ -30,7 +30,7 @@ const WalletOptionButton: React.FunctionComponent<WalletOptionButtonProps> = ({
       {selected && '• '}
       {title}
     </Typography>
-    <Icon name={icon} />
+    <Icon name={icon} sx={{width: 22}} />
   </Button>
 );
 

@@ -51,7 +51,7 @@ const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = (
           variant="dark"
           sx={{ zIndex: 1, left: (theme) => theme.spacing(-2)}}
           startIcon={<CircleIcon sx={{ width: 4, height: 4, borderRadius: 200, color: "#00d395" }} />}
-          endIcon={name && <Icon name={name} />}
+          endIcon={name && <Icon name={name} sx={{width: 16}} />}
           // onClick={onClick} todo: enable when data such as recent transactions is properly implemented
         >
           {account && elideAddress(account)}

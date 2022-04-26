@@ -15,6 +15,16 @@ const Icon: React.FunctionComponent<IconProps> = ({ name, sx, link, ...props }) 
   const navigate = useNavigate();
   const NamedIcon = iconMap[name];
 
+  const extraProps = (iconName: Icons) => {
+    switch(iconName) {
+      case 'metamask':
+        return {
+          viewBox: "0 0 23 22"
+        }
+    }
+    return {};
+  };
+
   if (!NamedIcon) {
     return null;
   }
@@ -36,7 +46,13 @@ const Icon: React.FunctionComponent<IconProps> = ({ name, sx, link, ...props }) 
   const handleClick = () => link && navigate(link);
 
   return (
-    <SvgIcon component={NamedIcon} sx={[defaultSx, ...getSx()]} onClick={handleClick} {...props} />
+    <SvgIcon 
+      component={NamedIcon} 
+      sx={[defaultSx, ...getSx()]} 
+      onClick={handleClick} 
+      {...extraProps(name)}
+      {...props}
+    />
   );
 };
 
