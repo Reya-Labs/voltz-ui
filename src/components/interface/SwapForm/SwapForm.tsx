@@ -115,7 +115,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
       variant="dark"
       sx={{
         marginTop: 12,
-        width: (theme) => theme.spacing(85),
+        width: (theme) => theme.spacing(97),
         boxShadow: _boxShadow,
       }}
     >
