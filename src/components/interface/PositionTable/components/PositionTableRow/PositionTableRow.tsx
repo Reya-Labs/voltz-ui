@@ -1,6 +1,6 @@
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import { SystemStyleObject, Theme } from '@mui/system';
+import { positions, SystemStyleObject, Theme } from '@mui/system';
 import { Agents } from '@components/contexts';
 import { Typography, Button } from '@components/atomic';
 import { MaturityInformation } from '@components/composite';
@@ -19,14 +19,14 @@ export type PositionTableRowProps = {
   datum: PositionTableDatum;
   index: number;
   onSelect: () => void;
-  handleSubmit: () => void;
+  handleSettle: () => void;
 };
 
 const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
   datum,
   index,
   onSelect,
-  handleSubmit
+  handleSettle
 }) => {
   const { agent } = useAgent();
   const variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'main';
@@ -70,15 +70,32 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
           const token = datum.protocol.substring(1);
 
           if (field === 'maturity') {
+            if (DateTime.now() >= datum.endDate) {
+              if (datum.settled) {
+                return <TableCell align="center">
+                <Button variant="contained" disabled={datum.settled}>
+                  <Typography agentStyling variant="body2">SETTLED</Typography>
+                </Button>
+              </TableCell>
+              } else {
+                return <TableCell align="center">
+                  <Button variant="contained" onClick={handleSettle}>
+                    <Typography agentStyling variant="body2">SETTLE</Typography>
+                  </Button>
+                </TableCell>
+              }
+
+            } else {
+
             return (
               <MaturityInformation
                 label={label}
                 startDate={datum.startDate}
                 endDate={datum.endDate}
               />
-            );
+            ); 
+            }            
           }
-
           if (field === 'estimatedCashflow') {
             return <EstimatedCashflow tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} token={token} />;
           }
@@ -130,16 +147,6 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
         return <TableCell key={field}>{renderDisplay()}</TableCell>;
       })}
 
-      {DateTime.now() >= datum.endDate && (
-            <TableCell align="center">
-            <Button variant="contained" onClick={handleSubmit}>
-              Settle 
-          Settle 
-              Settle 
-            </Button>
-          </TableCell>
-        )
-      }
     </TableRow>
   );
 };

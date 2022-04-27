@@ -31,10 +31,11 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
   const { positionsByAgent, loading, error } = usePositions();
   const pages = 0;
   const [transactionId, setTransactionId] = useState<string | undefined>();
+  const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
 
   const dispatch = useDispatch();
   
-  const handleSubmit = useCallback(
+  const handleSettle = useCallback(
     (position: Position) => {
 
       const positionAmm = position.amm as AugmentedAMM;
@@ -81,7 +82,7 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
       size={size}
       onSetSize={setSize}
       onSelectItem={onSelectItem}
-      handleSubmit={handleSubmit}
+      handleSettle={handleSettle}
       agent={agent}
     />
   );

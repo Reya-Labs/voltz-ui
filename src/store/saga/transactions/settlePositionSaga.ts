@@ -16,19 +16,20 @@ function* settlePositionSaga(action: SettlePositionAction) {
 
   const amm = deserializeAmm(action.payload.amm, signer);
 
-  if (!amm) {
+  if (!amm || !amm.signer) {
     return;
   }
 
-  const { id,  margin } = action.payload.transaction;
+  const { id,  fixedLow, fixedHigh } = action.payload.transaction;
 
   let result: ContractReceipt | void;
   try {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     result = yield call(
       [amm, "settlePosition"], {
-        fixedLow: 1,
-        fixedHigh: 2.01,
+        owner: amm.signer.getAddress(),
+        fixedLow: fixedLow,
+        fixedHigh: fixedHigh,
       }
 
     );
