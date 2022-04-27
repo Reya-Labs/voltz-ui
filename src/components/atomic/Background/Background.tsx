@@ -13,7 +13,6 @@ const Background: React.FunctionComponent<BackgroundProps> = ({ children, sx }) 
       width: '100vw',
       height: '100vh',
       position: 'fixed',
-      padding: (theme) => theme.spacing(2),
       boxSizing: 'border-box',
       ...sx,
     }}

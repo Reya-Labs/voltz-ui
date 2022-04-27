@@ -71,7 +71,7 @@ const Trader: React.FunctionComponent = () => {
 
   return (
     <Page>
-      <Box sx={{ width: '100%', maxWidth: '900px', margin: (theme) => `${theme.spacing(4)} auto 0` }}>
+      <Box sx={{ width: '100%', maxWidth: '900px', margin: '0 auto' }}>
         {!formActive && (
           <Box sx={{ height: '100%' }}>
             <PageTitleDesc 
