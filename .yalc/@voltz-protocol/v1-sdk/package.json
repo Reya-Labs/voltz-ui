@@ -1,5 +1,5 @@
 {
-  "name": "@voltz/v1-sdk",
+  "name": "@voltz-protocol/v1-sdk",
   "version": "1.0.0",
   "description": "A TypeScript wrapper for the Voltz smart contract",
   "main": "dist/index.js",
@@ -65,5 +65,5 @@
       ]
     ]
   },
-  "yalcSig": "b62a21d38addcdecc8c9b85a1fd8c78c"
+  "yalcSig": "894b49ae8c246df11f559a6413be884d"
 }

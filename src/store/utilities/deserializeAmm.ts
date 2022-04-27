@@ -1,5 +1,5 @@
 import { providers } from 'ethers';
-import { Token, RateOracle } from '@voltz/v1-sdk';
+import { Token, RateOracle } from '@voltz-protocol/v1-sdk';
 
 import { AugmentedAMM } from '@utilities';
 import { SerializedAMM } from '../types';

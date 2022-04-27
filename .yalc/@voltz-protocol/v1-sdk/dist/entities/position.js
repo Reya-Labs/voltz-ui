@@ -12,7 +12,7 @@ var tickMath_1 = require("../utils/tickMath");
 var constants_1 = require("../constants");
 var Position = /** @class */ (function () {
     function Position(_a) {
-        var id = _a.id, createdTimestamp = _a.createdTimestamp, amm = _a.amm, owner = _a.owner, tickLower = _a.tickLower, tickUpper = _a.tickUpper, updatedTimestamp = _a.updatedTimestamp, liquidity = _a.liquidity, margin = _a.margin, fixedTokenBalance = _a.fixedTokenBalance, variableTokenBalance = _a.variableTokenBalance, accumulatedFees = _a.accumulatedFees, isLiquidityProvider = _a.isLiquidityProvider, isSettled = _a.isSettled, mints = _a.mints, burns = _a.burns, swaps = _a.swaps, marginUpdates = _a.marginUpdates, liquidations = _a.liquidations, settlements = _a.settlements;
+        var id = _a.id, createdTimestamp = _a.createdTimestamp, amm = _a.amm, owner = _a.owner, tickLower = _a.tickLower, tickUpper = _a.tickUpper, updatedTimestamp = _a.updatedTimestamp, liquidity = _a.liquidity, margin = _a.margin, fixedTokenBalance = _a.fixedTokenBalance, variableTokenBalance = _a.variableTokenBalance, accumulatedFees = _a.accumulatedFees, positionType = _a.positionType, isSettled = _a.isSettled, mints = _a.mints, burns = _a.burns, swaps = _a.swaps, marginUpdates = _a.marginUpdates, liquidations = _a.liquidations, settlements = _a.settlements;
         this.id = id;
         this.createdTimestamp = createdTimestamp;
         this.amm = amm;
@@ -25,7 +25,7 @@ var Position = /** @class */ (function () {
         this.fixedTokenBalance = fixedTokenBalance;
         this.variableTokenBalance = variableTokenBalance;
         this.accumulatedFees = accumulatedFees;
-        this.isLiquidityProvider = isLiquidityProvider;
+        this.positionType = positionType;
         this.isSettled = isSettled;
         this.mints = mints;
         this.burns = burns;

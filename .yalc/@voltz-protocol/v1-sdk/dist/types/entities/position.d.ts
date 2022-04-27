@@ -21,7 +21,7 @@ export declare type PositionConstructorArgs = {
     fixedTokenBalance: JSBI;
     variableTokenBalance: JSBI;
     accumulatedFees: JSBI;
-    isLiquidityProvider: boolean;
+    positionType: number;
     isSettled: boolean;
     mints: Array<Mint>;
     burns: Array<Burn>;
@@ -43,7 +43,7 @@ declare class Position {
     readonly fixedTokenBalance: JSBI;
     readonly variableTokenBalance: JSBI;
     readonly accumulatedFees: JSBI;
-    readonly isLiquidityProvider: boolean;
+    readonly positionType: number;
     readonly isSettled: boolean;
     readonly mints: Array<Mint>;
     readonly burns: Array<Burn>;
@@ -51,7 +51,7 @@ declare class Position {
     readonly marginUpdates: Array<MarginUpdate>;
     readonly liquidations: Array<Liquidation>;
     readonly settlements: Array<Settlement>;
-    constructor({ id, createdTimestamp, amm, owner, tickLower, tickUpper, updatedTimestamp, liquidity, margin, fixedTokenBalance, variableTokenBalance, accumulatedFees, isLiquidityProvider, isSettled, mints, burns, swaps, marginUpdates, liquidations, settlements, }: PositionConstructorArgs);
+    constructor({ id, createdTimestamp, amm, owner, tickLower, tickUpper, updatedTimestamp, liquidity, margin, fixedTokenBalance, variableTokenBalance, accumulatedFees, positionType, isSettled, mints, burns, swaps, marginUpdates, liquidations, settlements, }: PositionConstructorArgs);
     get priceLower(): Price;
     get priceUpper(): Price;
     get fixedRateLower(): Price;

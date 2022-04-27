@@ -1,7 +1,7 @@
 import JSBI from 'jsbi';
 import { useMemo, useEffect } from 'react';
 import isNull from 'lodash/isNull';
-import { Position, Token, RateOracle, Mint, Burn, Swap, MarginUpdate, Liquidation, Settlement } from '@voltz/v1-sdk';
+import { Position, Token, RateOracle, Mint, Burn, Swap, MarginUpdate, Liquidation, Settlement } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 import { DateTime } from 'luxon';
 
@@ -78,7 +78,7 @@ const usePositions = (): usePositionsResult => {
             fixedTokenBalance: fixedTokenBalance as JSBI,
             variableTokenBalance: variableTokenBalance as JSBI,
             accumulatedFees: accumulatedFees as JSBI,
-            isLiquidityProvider: (positionType as JSBI).toString() === "1",
+            positionType: parseInt(positionType as string),
             isSettled,
             owner: ownerAddress,
             amm: new AugmentedAMM({
@@ -170,16 +170,16 @@ const usePositions = (): usePositionsResult => {
     }
   }, [positionCount, loading, error, isSignerAvailable]);
   const positionsByAgent = useMemo(() => {
-    return positions?.filter(({ isLiquidityProvider, effectiveFixedTokenBalance }) => {
+    return positions?.filter(({ positionType }) => {
       switch (agent) {
         case Agents.LIQUIDITY_PROVIDER:
-          return isLiquidityProvider;
+          return positionType === 3;
 
         case Agents.FIXED_TRADER:
-          return true;
+          return positionType === 1;
 
         case Agents.VARIABLE_TRADER:
-          return true;
+          return positionType === 2;
       }
     });
   }, [positions, agent]);
@@ -199,13 +199,13 @@ const usePositions = (): usePositionsResult => {
             fixedRateLower,
             fixedRateUpper,
             effectiveFixedTokenBalance,
-            isLiquidityProvider,
+            positionType,
           }) => {
             if (ammId !== unresolvedTransaction.ammId) {
               return false;
             }
 
-            if (isLiquidityProvider && unresolvedTransaction.agent !== Agents.LIQUIDITY_PROVIDER) {
+            if (positionType === 3 && unresolvedTransaction.agent !== Agents.LIQUIDITY_PROVIDER) {
               return false;
             }
 

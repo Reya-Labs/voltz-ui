@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Position } from '@voltz/v1-sdk';
+import { Position } from '@voltz-protocol/v1-sdk';
 
 import { data } from '@utilities';
 import { usePositions } from '@hooks';

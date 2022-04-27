@@ -27,7 +27,7 @@ export type PositionConstructorArgs = {
   fixedTokenBalance: JSBI;
   variableTokenBalance: JSBI;
   accumulatedFees: JSBI;
-  isLiquidityProvider: boolean;
+  positionType: number;
   isSettled: boolean;
   mints: Array<Mint>;
   burns: Array<Burn>;
@@ -62,7 +62,7 @@ class Position {
 
   public readonly accumulatedFees: JSBI;
 
-  public readonly isLiquidityProvider: boolean;
+  public readonly positionType: number;
 
   public readonly isSettled: boolean;
 
@@ -91,7 +91,7 @@ class Position {
     fixedTokenBalance,
     variableTokenBalance,
     accumulatedFees,
-    isLiquidityProvider,
+    positionType,
     isSettled,
     mints,
     burns,
@@ -112,7 +112,7 @@ class Position {
     this.fixedTokenBalance = fixedTokenBalance;
     this.variableTokenBalance = variableTokenBalance;
     this.accumulatedFees = accumulatedFees;
-    this.isLiquidityProvider = isLiquidityProvider;
+    this.positionType = positionType;
     this.isSettled = isSettled;
     this.mints = mints;
     this.burns = burns;

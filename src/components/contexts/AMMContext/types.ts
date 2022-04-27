@@ -2,7 +2,7 @@ import {
   AMMGetInfoPostSwapArgs,
   AMMGetInfoPostMintArgs,
   InfoPostSwap,
-} from '@voltz/v1-sdk';
+} from '@voltz-protocol/v1-sdk';
 
 import { UseAsyncFunctionResult } from '@hooks';
 

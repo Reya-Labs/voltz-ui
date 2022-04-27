@@ -1,6 +1,6 @@
 import { useMemo, useCallback } from 'react';
 import isNull from 'lodash/isNull';
-import { Token, RateOracle } from '@voltz/v1-sdk';
+import { Token, RateOracle } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
 import { AugmentedAMM } from '@utilities';

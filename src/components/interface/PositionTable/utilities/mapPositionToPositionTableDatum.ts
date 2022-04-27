@@ -1,4 +1,4 @@
-import { Position } from '@voltz/v1-sdk';
+import { Position } from '@voltz-protocol/v1-sdk';
 
 import { Agents } from '@components/contexts';
 import { PositionTableDatum } from '../types';
