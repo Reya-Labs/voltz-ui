@@ -7,7 +7,6 @@ query GetWallet($id: ID!) {
       createdTimestamp
       amm {
         id
-        createdTimestamp
 
         fcm {
           id
@@ -49,7 +48,7 @@ query GetWallet($id: ID!) {
       variableTokenBalance
       accumulatedFees
 
-      isLiquidityProvider
+      positionType
       isSettled
       
       mints {

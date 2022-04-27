@@ -58,7 +58,7 @@ const usePositions = (): usePositionsResult => {
           fixedTokenBalance,
           variableTokenBalance,
           accumulatedFees,
-          isLiquidityProvider,
+          positionType,
           isSettled,
           mints,
           burns,
@@ -78,7 +78,7 @@ const usePositions = (): usePositionsResult => {
             fixedTokenBalance: fixedTokenBalance as JSBI,
             variableTokenBalance: variableTokenBalance as JSBI,
             accumulatedFees: accumulatedFees as JSBI,
-            isLiquidityProvider,
+            isLiquidityProvider: (positionType as JSBI).toString() === "1",
             isSettled,
             owner: ownerAddress,
             amm: new AugmentedAMM({
@@ -176,10 +176,10 @@ const usePositions = (): usePositionsResult => {
           return isLiquidityProvider;
 
         case Agents.FIXED_TRADER:
-          return effectiveFixedTokenBalance > 0;
+          return true;
 
         case Agents.VARIABLE_TRADER:
-          return effectiveFixedTokenBalance < 0;
+          return true;
       }
     });
   }, [positions, agent]);
