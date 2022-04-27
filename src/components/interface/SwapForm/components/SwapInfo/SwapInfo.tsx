@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import isUndefined from 'lodash/isUndefined';
 import SummaryPanel from '../../../../atomic/SummaryPanel/SummaryPanel';
 import { IconLabel } from '@components/composite';
-import { useAMMContext } from '@hooks';
+import { useAgent, useAMMContext } from '@hooks';
 
 export type SwapInfoProps = {
   notional?: number;
@@ -10,6 +10,7 @@ export type SwapInfoProps = {
 };
 
 const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({ notional, underlyingTokenName = '' }) => {
+  const { agent } = useAgent();
   const { swapInfo } = useAMMContext();
   const { result, loading, call } = swapInfo;
 
@@ -46,7 +47,7 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({ notional, underlying
     if (!isUndefined(notional)) {
       call({ notional });
     }
-  }, [call, notional]);
+  }, [call, notional, agent]);
 
   return <SummaryPanel label={label} loading={loading} rows={rows} />
 };
