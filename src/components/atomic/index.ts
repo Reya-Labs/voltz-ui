@@ -13,3 +13,5 @@ export { default as Slider } from './Slider/Slider';
 export { default as ToggleButton } from './ToggleButton/ToggleButton';
 export { default as Typography } from './Typography/Typography';
 export { default as RouteLink } from './RouteLink/RouteLink';
+export { default as Neons } from './Neons/Neons';
+export type { NeonsProps } from './Neons/Neons';
