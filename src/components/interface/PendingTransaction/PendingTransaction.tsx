@@ -8,6 +8,7 @@ import { selectors } from '@store';
 import { AMMProvider } from '@components/contexts';
 import { Button, Panel, Typography, Loading } from '@components/atomic';
 import { ProtocolInformation, WalletAddressDisplay } from '@components/composite';
+import { formatCurrency } from '@utilities';
 
 export type PendingTransactionProps = {
   amm: AugmentedAMM;
@@ -219,7 +220,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
           }}
         >
           <Typography label="NOTIONAL AMOUNT" variant="body2">
-            {activeTransaction.notional} {amm.underlyingToken.name}
+            {formatCurrency(activeTransaction.notional, true)} {amm.underlyingToken.name}
           </Typography>
         </Box>
         <Box
@@ -228,7 +229,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
           }}
         >
           <Typography label="MARGIN" variant="body2">
-            {activeTransaction.margin} {amm.underlyingToken.name}
+            {formatCurrency(activeTransaction.margin, true)} {amm.underlyingToken.name}
           </Typography>
         </Box>
       </Panel>
