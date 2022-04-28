@@ -70,7 +70,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
 
   return (
     <Page>
-      <Box sx={{ width: '100%', maxWidth: '900px', margin: (theme) => `${theme.spacing(4)} auto 0` }}>
+      <Box sx={{ width: '100%', maxWidth: '900px', margin: '0 auto' }}>
         {!formActive && ( //if form not active then
           <Box sx={{ height: '100%' }}>
             <PageTitleDesc 
