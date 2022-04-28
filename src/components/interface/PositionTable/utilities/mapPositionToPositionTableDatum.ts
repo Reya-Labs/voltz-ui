@@ -12,7 +12,8 @@ const mapPositionToPositionTableDatum =
       effectiveVariableTokenBalance,
       effectiveFixedTokenBalance,
       fixedRateUpper,
-      fixedRateLower
+      fixedRateLower,
+      isSettled
     }: Position): PositionTableDatum => {
       return {
         id,
@@ -24,7 +25,8 @@ const mapPositionToPositionTableDatum =
         fixedUpper: fixedRateUpper.toNumber(),
         notional: agent === Agents.LIQUIDITY_PROVIDER ? notional : (agent === Agents.VARIABLE_TRADER ? effectiveVariableTokenBalance : -effectiveVariableTokenBalance),
         fixedTokenBalance: effectiveFixedTokenBalance,
-        agent: agent
+        agent: agent,
+        settled: isSettled
       };
     };
 

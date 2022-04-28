@@ -46,7 +46,6 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
       if (marginEditMode) {
         const updatePositionMargin = actions.updatePositionMarginAction(amm, transaction);
         setTransactionId(updatePositionMargin.payload.transaction.id);
-        // todo: if remove margin, change margin to -margin (delta)
         dispatch(updatePositionMargin);
       } else {
         const swap = actions.swapAction(amm, transaction);

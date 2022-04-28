@@ -4,3 +4,4 @@ export { default as mintAction } from './mintAction';
 export { default as swapAction } from './swapAction';
 export { default as updateTransaction } from './updateTransactionAction';
 export { default as updatePositionMarginAction } from './updatePositionMarginAction';
+export { default as settlePositionAction } from './settlePositionAction';
