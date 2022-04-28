@@ -23,7 +23,7 @@ const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
 }) => {
   const value = isUndefined(notional) ? defaultNotional : notional;
   const handleChange = (newValue: string) => {
-    onChangeNotional(parseInt(newValue, 10));
+    onChangeNotional(parseFloat(newValue));
   };
 
   // todo: below is a workaround when deriving the token name from the protocol name, needs to be fixed
@@ -36,9 +36,11 @@ const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
 
   return (
     <MaskedIntegerField
+      allowDecimals
+      allowNegativeValue={false}
       suffix={underlyingTokenName}
       label={<IconLabel label={label} icon="information-circle" info={info} />}
-      value={value}
+      defaultValue={value}
       onChange={handleChange}
     />
   );
