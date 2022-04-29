@@ -91,21 +91,21 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   }
 
   return (
-    <Panel variant="dark" borderRadius='large' padding='container' sx={{ minWidth: 800, marginTop: 10 }}>
+    <Panel variant="dark" borderRadius='large' padding='container' sx={{ minWidth: 800, marginTop: 10, paddingBottom: 0 }}>
       <PositionTableControls quantity={positions.length} />
       <TableContainer>
         <Table
           sx={{
             minWidth: 750,
             borderCollapse: 'separate',
-            borderSpacing: '0px 8px',
+            borderSpacing: '0px 16px',
             ...commonOverrides,
           }}
           aria-labelledby="tableTitle"
           size="medium"
         >
           <PositionTableHead order={order} orderBy={orderBy} onSort={handleSort} agent={agent} />
-          <TableBody>
+          <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
             {tableData.map((datum, index) => (
               <AMMProvider amm={(positions[index].amm as AugmentedAMM)}>
               <PositionTableRow

@@ -74,20 +74,20 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({
   const _variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'dark';
 
   return (
-    <Panel variant={_variant} borderRadius='large' padding='container' sx={{ minWidth: 800, marginTop: 10 }}>
+    <Panel variant={_variant} borderRadius='large' padding='container' sx={{ minWidth: 800, marginTop: 10, paddingTop: 0, paddingBottom: 0 }}>
       <TableContainer>
         <Table
           sx={{
             minWidth: 750,
             borderCollapse: 'separate',
-            borderSpacing: '0px 8px',
+            borderSpacing: '0px 16px',
             ...commonOverrides,
           }}
           aria-labelledby="tableTitle"
           size="medium"
         >
           <AMMTableHead order={order} orderBy={orderBy} onSort={handleSort} />
-          <TableBody>
+          <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
             {tableData.map((datum, index) => (
               <AMMProvider amm={amms[index]}>
                 <AMMTableRow datum={datum} index={index} onSelect={handleSelectRow(index)} />
