@@ -8,10 +8,10 @@ export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000';
 
 // Latest kovan deployment address of the factory
 // export const FACTORY_ADDRESS = '0xAF47e8353729E5be6cA4f605dd176B7Fc80EDA08';
-export const FACTORY_ADDRESS = '0x4cd7e3fF2bF87E848d2f2F178f613e1391e189B1';
+export const FACTORY_ADDRESS = '0x07091fF74E2682514d860Ff9F4315b90525952b0';
 
 // Latest kovan deployment address of the periphery
-export const PERIPHERY_ADDRESS = '0x8614B5fa62BBB45be5B320E1B6727E5828B5b513';
+export const PERIPHERY_ADDRESS = '0xcf0144e092f2B80B11aD72CF87C71d1090F97746';
 // export const PERIPHERY_ADDRESS = '0xc6e7DF5E7b4f2A278906862b61205850344D4e7d';
 
 // constants used internally but not expected to be used externally

@@ -1,8 +1,8 @@
 import JSBI from 'jsbi';
 export declare const MaxUint256: JSBI;
 export declare const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000";
-export declare const FACTORY_ADDRESS = "0x4cd7e3fF2bF87E848d2f2F178f613e1391e189B1";
-export declare const PERIPHERY_ADDRESS = "0x8614B5fa62BBB45be5B320E1B6727E5828B5b513";
+export declare const FACTORY_ADDRESS = "0x07091fF74E2682514d860Ff9F4315b90525952b0";
+export declare const PERIPHERY_ADDRESS = "0xcf0144e092f2B80B11aD72CF87C71d1090F97746";
 export declare const NEGATIVE_ONE: JSBI;
 export declare const ZERO: JSBI;
 export declare const ONE: JSBI;

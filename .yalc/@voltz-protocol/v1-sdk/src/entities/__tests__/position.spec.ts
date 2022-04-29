@@ -55,7 +55,7 @@ describe('amm', () => {
         margin: JSBI.BigInt('100000000000000000000000'),
         fixedTokenBalance: JSBI.BigInt('1000000000000000000000'),
         variableTokenBalance: JSBI.BigInt('-1000000000000000000000'),
-        agent: 3,
+        isLiquidityProvider: true,
         owner: 'owner',
         accumulatedFees: JSBI.BigInt('1000000000000000000000'),
         mints: [],
