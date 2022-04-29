@@ -28,6 +28,7 @@ const Trader: React.FunctionComponent = () => {
   }, [amm, position]);
 
   const marginEditMode = formActive && !isNull(effectiveAmm) && !isNull(position);
+  const fcmMode = // How to make this depend on what is being clicked on the toggle button 
 
   useEffect(() => {
     setFormActive(false);
