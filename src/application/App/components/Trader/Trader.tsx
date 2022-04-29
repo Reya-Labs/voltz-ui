@@ -70,7 +70,7 @@ const Trader: React.FunctionComponent = () => {
   };
 
   return (
-    <Page>
+    <Page backgroundView={formActive ? 'form' : 'table'}>
       <Box sx={{ width: '100%', maxWidth: '900px', margin: '0 auto' }}>
         {!formActive && (
           <Box sx={{ height: '100%' }}>
