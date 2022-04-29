@@ -32,7 +32,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
     useState<SwapFormProps['partialCollateralization']>();
 
   const [addOrRemoveMargin, setAddOrRemoveMargin] =
-    useState<SwapFormProps['addOrRemoveMargin']>();
+    useState<SwapFormProps['addOrRemoveMargin']>(true);
 
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId); // contains a failureMessage attribute that will contain whatever came out from the sdk

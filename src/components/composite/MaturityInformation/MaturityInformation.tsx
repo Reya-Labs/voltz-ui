@@ -32,7 +32,11 @@ const MaturityInformation: React.FunctionComponent<MaturityInformationProps> = (
     return percentage.trunc().toNumber();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startDateMillis, endDateMillis]);
-  const formattedEndDate = endDate?.toLocaleString();
+
+  const formattedEndDate = endDate ? endDate.toLocaleString(
+    { day: '2-digit', month: 'short', year: 'numeric' }, 
+    { locale: 'en-GB' }
+  ) : '';
 
   return (
     <Box sx={{ width: '100%' }}>

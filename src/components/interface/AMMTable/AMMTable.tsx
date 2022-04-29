@@ -47,8 +47,8 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({
       borderColor: 'transparent',
       paddingRight: (theme) => theme.spacing(4),
       paddingLeft: (theme) => theme.spacing(4),
-      paddingTop: (theme) => theme.spacing(2),
-      paddingBottom: (theme) => theme.spacing(1),
+      paddingTop: (theme) => theme.spacing(3),
+      paddingBottom: (theme) => theme.spacing(4),
       '&:first-of-type': {
         borderTopLeftRadius: 8,
         borderBottomLeftRadius: 8,
@@ -57,6 +57,9 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({
         borderTopRightRadius: 8,
         borderBottomRightRadius: 8,
       },
+    },
+    '.MuiInputLabel-root': {
+      marginBottom: (theme) => theme.spacing(1)
     },
   };
   const handleSort = (field: AMMTableFields) => {
@@ -74,20 +77,20 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({
   const _variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'dark';
 
   return (
-    <Panel variant={_variant} borderRadius='large' padding='container' sx={{ minWidth: 800, marginTop: 10 }}>
+    <Panel variant={_variant} borderRadius='large' padding='container' sx={{ minWidth: 800, marginTop: 10, paddingTop: 0, paddingBottom: 0 }}>
       <TableContainer>
         <Table
           sx={{
             minWidth: 750,
             borderCollapse: 'separate',
-            borderSpacing: '0px 8px',
+            borderSpacing: '0px 16px',
             ...commonOverrides,
           }}
           aria-labelledby="tableTitle"
           size="medium"
         >
           <AMMTableHead order={order} orderBy={orderBy} onSort={handleSort} />
-          <TableBody>
+          <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
             {tableData.map((datum, index) => (
               <AMMProvider amm={amms[index]}>
                 <AMMTableRow datum={datum} index={index} onSelect={handleSelectRow(index)} />
