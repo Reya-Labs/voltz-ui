@@ -30,10 +30,12 @@ export type SwapFormProps = {
   notional?: number;
   margin?: number;
   partialCollateralization?: boolean;
+  fcmMode?: boolean;
   addOrRemoveMargin?: boolean;
   marginEditMode?: boolean;
   onChangeNotional: (value: number) => void;
   onChangePartialCollateralization: (value: boolean) => void;
+  onChangeFcmMode: (value: boolean) => void;
   onAddOrRemoveMargin: (value: boolean) => void;
   onChangeMargin: (value: number) => void;
   onSubmit: (values: HandleSubmitSwapFormArgs) => void;
@@ -54,11 +56,13 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   notional,
   margin,
   partialCollateralization,
+  fcmMode,
   addOrRemoveMargin,
   marginEditMode
   ,
   onChangeNotional,
   onChangePartialCollateralization,
+  onChangeFcmMode,
   onAddOrRemoveMargin,
   onChangeMargin,
   onSubmit,
@@ -80,25 +84,6 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
       partialCollateralization,
     });
   };
-
-  // const handleFCMSubmit = () => {
-
-  //   if (isUndefined(notional) || isUndefined(partialCollateralization) ) {
-  //     return;
-  //   }
-
-  //   if (isNaN(notional) ) {
-  //     return;
-  //   }
-
-  //   return onSubmit( {
-  //     notional,
-  //     margin: 0,
-  //     partialCollateralization: false
-  //   })  
-  // }
-
-
 
   const handleSubmitMarginOnly = () => {
 
@@ -189,7 +174,9 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
             isModifying={isModifying}
             defaultPartialCollateralization={defaultPartialCollateralization}
             partialCollateralization={partialCollateralization}
+            fcmMode={fcmMode}
             onChangePartialCollateralization={onChangePartialCollateralization}
+            onChangeFcmMode={onChangeFcmMode}
           />
             </Box>
           )

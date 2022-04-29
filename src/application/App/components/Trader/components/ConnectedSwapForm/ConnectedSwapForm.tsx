@@ -12,6 +12,7 @@ import {
   HandleSubmitSwapFormArgs,
   PendingTransaction,
 } from '@components/interface';
+import { TraderControlsProps } from 'src/components/interface/SwapForm/components/TraderControls/TraderControls';
 
 export type ConnectedSwapFormProps = {
   amm: AugmentedAMM;
@@ -22,7 +23,7 @@ export type ConnectedSwapFormProps = {
 const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ 
   amm,
   onReset, 
-  marginEditMode 
+  marginEditMode,
 }) => {
   const { agent } = useAgent();
   const navigate = useNavigate();
@@ -31,13 +32,16 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
   const [partialCollateralization, setPartialCollateralization] =
     useState<SwapFormProps['partialCollateralization']>(true);
 
+  const [fcmMode, setFcmMode] = 
+    useState<TraderControlsProps['fcmMode']>(); 
+
   const [addOrRemoveMargin, setAddOrRemoveMargin] =
     useState<SwapFormProps['addOrRemoveMargin']>();
 
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId); // contains a failureMessage attribute that will contain whatever came out from the sdk
   // activeTransaction.failureMessage = "No margin", could also be a big horrible object, needs a little more work to parse it correctly
-
+  
   const dispatch = useDispatch();
   const handleSubmit = useCallback(
     (args: HandleSubmitSwapFormArgs) => {
@@ -56,20 +60,20 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
           dispatch(swap);
         } else {
 
-          // if (fcmMode) {
-            const fcmSwap = actions.fcmSwapAction(amm, transaction);
-            setTransactionId(fcmSwap.payload.transaction.id)
-            dispatch(fcmSwap)
-          // } else {
-            // const fcmUnwind = actions.fcmUnwindAction(amm, transaction);
-            // setTransactionId(fcmUnwind.payload.transaction.id)
-            // dispatch(fcmUnwind)
-          // }
+            if (fcmMode) {
+              const fcmSwap = actions.fcmSwapAction(amm, transaction);
+              setTransactionId(fcmSwap.payload.transaction.id)
+              dispatch(fcmSwap)
+            } else {
+                const fcmUnwind = actions.fcmUnwindAction(amm, transaction);
+                setTransactionId(fcmUnwind.payload.transaction.id)
+                dispatch(fcmUnwind)
+            }
+          }
         }
-      }
 
     },
-    [setTransactionId, dispatch, agent, amm.id, partialCollateralization],
+    [setTransactionId, dispatch, agent, amm.id, partialCollateralization, fcmMode],
   );
   const handleComplete = () => {
     onReset();
@@ -102,9 +106,11 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
         onChangeNotional={setNotional}
         margin={margin || 0}
         partialCollateralization={partialCollateralization}
+        fcmMode={fcmMode}
         addOrRemoveMargin={addOrRemoveMargin}
         marginEditMode={marginEditMode}
         onChangePartialCollateralization={setPartialCollateralization}
+        onChangeFcmMode={setFcmMode}
         onChangeMargin={setMargin}
         onAddOrRemoveMargin={setAddOrRemoveMargin}
         onSubmit={handleSubmit}

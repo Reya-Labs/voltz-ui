@@ -10,15 +10,20 @@ export type TraderControlsProps = {
   isModifying?: boolean;
   defaultPartialCollateralization?: boolean;
   partialCollateralization?: boolean;
+  fcmMode?: boolean;
   onChangePartialCollateralization: (value: boolean) => void;
+  onChangeFcmMode: (value: boolean) => void;
 };
 
 const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
   isModifying,
   defaultPartialCollateralization,
   partialCollateralization,
+  fcmMode,
   onChangePartialCollateralization,
+  onChangeFcmMode,
 }) => {
+  // Keeping this in as we might need it when refactoring how partial collateralisation mode is enabled
   // useEffect(() => {
   //   if (isUndefined(partialCollateralizationValue)) {
   //     onChangePartialCollateralization(true);
@@ -48,24 +53,21 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
     }
   };
 
-  const fcmHandleChangeMode = (option: string) => {
-    for (const [key, value] of Object.entries(fcmOptionTitles)) {
-      if (value === option) {
-        onChangeAgent(key as Agents);
-      }
-    }
-  };
   const partialCollateralizationValue = isUndefined(partialCollateralization)
     ? defaultPartialCollateralization
     : partialCollateralization;
+
   const partialCollateralizationOptionTitles = {
     YES: 'Yes',
-    NO: 'No (Fully Collateralise ser pls',
+    NO: 'No',
   };
   const handleChangePartialCollateralization = (option: string) => {
     onChangePartialCollateralization(option === partialCollateralizationOptionTitles.YES);
   };
 
+  const handleChangeFcmMode = (option: string) => {
+    onChangeFcmMode(option === fcmOptionTitles[Agents.FIXED_TRADER]);
+  }
   return (
     <Box
       sx={{
@@ -76,7 +78,6 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
       }}
     >
      
-      {/* todo: bring the below button group back once fcm is ready, meaning there is a now a need for this toggle */}
       <ToggleButtonGroup
         label={
           <IconLabel label="partial collateralization" icon="information-circle" info="Trading with partial collateralization  means you need to deposit less margin to cover your position. However, it also means you may be at more risk of getting liquidated if the market moves against you." />
@@ -96,9 +97,9 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
         <ToggleButtonGroup
           label={<IconLabel label="rates" icon="information-circle" info="Choose between entering a fully collateralised swap or unwinding your position" />}
           options={Object.values(fcmOptionTitles)}
-          option={fcmOptionTitles[agent]}
+          option={fcmMode ? fcmOptionTitles[Agents.FIXED_TRADER] : fcmOptionTitles[Agents.VARIABLE_TRADER]}
           defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
-          onChangeOption={fcmHandleChangeMode}
+          onChangeOption={handleChangeFcmMode}
           agent={agent}
         />
       )}
