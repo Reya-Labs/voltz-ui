@@ -29,7 +29,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
   const [notional, setNotional] = useState<SwapFormProps['notional']>();
   const [margin, setMargin] = useState<SwapFormProps['margin']>();
   const [partialCollateralization, setPartialCollateralization] =
-    useState<SwapFormProps['partialCollateralization']>();
+    useState<SwapFormProps['partialCollateralization']>(true);
 
   const [addOrRemoveMargin, setAddOrRemoveMargin] =
     useState<SwapFormProps['addOrRemoveMargin']>();
@@ -55,15 +55,21 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
           setTransactionId(swap.payload.transaction.id);
           dispatch(swap);
         } else {
-          
-          const fcmSwap = actions.fcmSwapAction(amm, transaction);
-          setTransactionId(fcmSwap.payload.transaction.id)
-          dispatch(fcmSwap)
+
+          // if (fcmMode) {
+            const fcmSwap = actions.fcmSwapAction(amm, transaction);
+            setTransactionId(fcmSwap.payload.transaction.id)
+            dispatch(fcmSwap)
+          // } else {
+            // const fcmUnwind = actions.fcmUnwindAction(amm, transaction);
+            // setTransactionId(fcmUnwind.payload.transaction.id)
+            // dispatch(fcmUnwind)
+          // }
         }
       }
 
     },
-    [setTransactionId, dispatch, agent, amm.id],
+    [setTransactionId, dispatch, agent, amm.id, partialCollateralization],
   );
   const handleComplete = () => {
     onReset();

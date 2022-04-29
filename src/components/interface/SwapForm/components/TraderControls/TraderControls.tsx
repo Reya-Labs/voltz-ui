@@ -19,11 +19,11 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
   partialCollateralization,
   onChangePartialCollateralization,
 }) => {
-  useEffect(() => {
-    if (isUndefined(partialCollateralizationValue)) {
-      onChangePartialCollateralization(false);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (isUndefined(partialCollateralizationValue)) {
+  //     onChangePartialCollateralization(true);
+  //   }
+  // }, []);
 
   const { agent, onChangeAgent } = useAgent();
   if (!agent || agent === Agents.LIQUIDITY_PROVIDER) {

@@ -28,7 +28,7 @@ export type Transaction = TransactionUpdate & {
   notional: number;
   margin: number;
   partialCollateralization?: boolean;
-  fixedRateLimit?: number;
+  notionalToUnwind?: number; // If this is optional it acts up. 
 };
 
 export type State = {
@@ -60,6 +60,7 @@ export type ActionType =
   | 'burn'
   | 'swap'
   | 'fcmSwap'
+  | 'fcmUnwind'
   | 'updatePositionMargin'
   | 'settlePosition'  
   | 'add-transaction'
@@ -94,6 +95,10 @@ export type FCMSwapAction = TransactionAction & {
   type: 'fcmSwap';
 };
 
+export type FCMUnwindAction = TransactionAction & {
+  type: 'fcmUnwind';
+};
+
 export type UpdatePositionMarginAction = TransactionAction & {
   type: 'updatePositionMargin';
 };
@@ -121,6 +126,7 @@ export type Action =
   | BurnAction
   | SwapAction
   | FCMSwapAction
+  | FCMUnwindAction
   | UpdatePositionMarginAction
   | SettlePositionAction
   | CloseTransactionAction

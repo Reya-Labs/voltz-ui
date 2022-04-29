@@ -5,6 +5,7 @@ import settlePositionSaga from './settlePositionSaga';
 import swapSaga from './swapSaga';
 import updatePositionMarginSaga from './updatePositionMarginSaga';
 import fcmSwapSaga from './fcmSwapSaga';
+import fcmUnwindSaga from './fcmUnwindSaga';
 
 function* transactionsSaga() {
   yield takeLatest('mint', mintSaga);
@@ -12,6 +13,7 @@ function* transactionsSaga() {
   yield takeLatest('updatePositionMargin', updatePositionMarginSaga);
   yield takeLatest('settlePosition', settlePositionSaga);
   yield takeLatest('fcmSwap', fcmSwapSaga);
+  yield takeLatest('fcmUnwind', fcmUnwindSaga);
 }
 
 export default transactionsSaga;
