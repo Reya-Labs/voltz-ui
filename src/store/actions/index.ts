@@ -5,3 +5,4 @@ export { default as swapAction } from './swapAction';
 export { default as updateTransaction } from './updateTransactionAction';
 export { default as updatePositionMarginAction } from './updatePositionMarginAction';
 export { default as settlePositionAction } from './settlePositionAction';
+export { default as fcmSwapAction } from './fcmSwapAction';

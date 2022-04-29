@@ -28,6 +28,7 @@ export type Transaction = TransactionUpdate & {
   notional: number;
   margin: number;
   partialCollateralization?: boolean;
+  fixedRateLimit?: number;
 };
 
 export type State = {
@@ -58,6 +59,7 @@ export type ActionType =
   | 'mint'
   | 'burn'
   | 'swap'
+  | 'fcmSwap'
   | 'updatePositionMargin'
   | 'settlePosition'  
   | 'add-transaction'
@@ -88,6 +90,10 @@ export type SwapAction = TransactionAction & {
   type: 'swap';
 };
 
+export type FCMSwapAction = TransactionAction & {
+  type: 'fcmSwap';
+};
+
 export type UpdatePositionMarginAction = TransactionAction & {
   type: 'updatePositionMargin';
 };
@@ -114,6 +120,7 @@ export type Action =
   | MintAction
   | BurnAction
   | SwapAction
+  | FCMSwapAction
   | UpdatePositionMarginAction
   | SettlePositionAction
   | CloseTransactionAction

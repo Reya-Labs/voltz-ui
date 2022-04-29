@@ -48,9 +48,18 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
         setTransactionId(updatePositionMargin.payload.transaction.id);
         dispatch(updatePositionMargin);
       } else {
-        const swap = actions.swapAction(amm, transaction);
-        setTransactionId(swap.payload.transaction.id);
-        dispatch(swap);
+
+        if (partialCollateralization) {
+
+          const swap = actions.swapAction(amm, transaction);
+          setTransactionId(swap.payload.transaction.id);
+          dispatch(swap);
+        } else {
+          
+          const fcmSwap = actions.fcmSwapAction(amm, transaction);
+          setTransactionId(fcmSwap.payload.transaction.id)
+          dispatch(fcmSwap)
+        }
       }
 
     },

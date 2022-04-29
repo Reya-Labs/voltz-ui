@@ -28,6 +28,7 @@ const Trader: React.FunctionComponent = () => {
   }, [amm, position]);
 
   const marginEditMode = formActive && !isNull(effectiveAmm) && !isNull(position);
+  const fcmMode = 
 
   useEffect(() => {
     setFormActive(false);

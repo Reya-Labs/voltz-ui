@@ -81,6 +81,25 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
     });
   };
 
+  // const handleFCMSubmit = () => {
+
+  //   if (isUndefined(notional) || isUndefined(partialCollateralization) ) {
+  //     return;
+  //   }
+
+  //   if (isNaN(notional) ) {
+  //     return;
+  //   }
+
+  //   return onSubmit( {
+  //     notional,
+  //     margin: 0,
+  //     partialCollateralization: false
+  //   })  
+  // }
+
+
+
   const handleSubmitMarginOnly = () => {
 
     if (isUndefined(margin) || isNaN(margin) ) {
@@ -177,7 +196,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         }
 
       {
-        !marginEditMode && (
+        !marginEditMode &&  (
           <Box
           sx={{
             marginBottom: (theme) => theme.spacing(6),
@@ -195,6 +214,8 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         )
       }
 
+      {
+      partialCollateralization && (
       <Box
         sx={{
           marginBottom: (theme) => theme.spacing(6),
@@ -209,6 +230,9 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           onChangeMargin={onChangeMargin}
         />
       </Box>
+      )
+        }
+
       <Box
         sx={{
           marginBottom: (theme) => theme.spacing(6),
@@ -216,6 +240,9 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
       >
         <SwapInfo notional={notional} underlyingTokenName={underlyingTokenName} />
       </Box>
+
+      {
+      partialCollateralization && (  
       <Box sx={{ display: 'flex' }}>
         <SubmitSwapFormButton onSubmit={ marginEditMode ? handleSubmitMarginOnly : handleSubmit} marginEditMode={marginEditMode} />
         <Button
@@ -226,6 +253,22 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           Cancel
         </Button>
       </Box>
+      )}
+
+      {
+      !partialCollateralization && (  
+      <Box sx={{ display: 'flex' }}>
+      <SubmitSwapFormButton onSubmit={handleSubmit} />
+      <Button
+        sx={{ marginLeft: (theme) => theme.spacing(4) }}
+        variant="darker"
+        onClick={onCancel}
+      >
+        Cancel
+      </Button>
+    </Box>
+      )};
+  
     </Panel>
   );
 };
