@@ -26,6 +26,8 @@ const AMMTableHead: React.FunctionComponent<AMMTableHeadProps> = ({ order, order
       padding: 0,
       paddingLeft: (theme) => theme.spacing(4),
       paddingRight: (theme) => theme.spacing(4),
+      paddingTop: (theme) => theme.spacing(1),
+      paddingBottom: (theme) => theme.spacing(1),
     },
   };
 
