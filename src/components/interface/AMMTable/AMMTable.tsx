@@ -58,6 +58,9 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({
         borderBottomRightRadius: 8,
       },
     },
+    '.MuiInputLabel-root': {
+      marginBottom: (theme) => theme.spacing(1)
+    },
   };
   const handleSort = (field: AMMTableFields) => {
     onSetOrder(field === orderBy ? (order === 'asc' ? 'desc' : 'asc') : 'asc');

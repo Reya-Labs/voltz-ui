@@ -67,6 +67,9 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
         borderBottomRightRadius: 8,
       },
     },
+    '.MuiInputLabel-root': {
+      marginBottom: (theme) => theme.spacing(1)
+    },
   };
   const { agent } = useAgent();
   const handleSort = (field: PositionTableFields) => {
