@@ -13,7 +13,7 @@ import {
   PendingTransaction,
 } from '@components/interface';
 import { updateFixedRate } from './utilities';
-import { Position } from '@voltz/v1-sdk/dist/types/entities';
+import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
 export type ConnectedMintBurnFormProps = {
   amm: AugmentedAMM;
   marginEditMode?: boolean;

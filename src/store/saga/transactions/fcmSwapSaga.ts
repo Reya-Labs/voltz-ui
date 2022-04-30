@@ -2,7 +2,6 @@ import { ContractReceipt, providers } from 'ethers';
 import { call, put } from 'redux-saga/effects';
 import { DateTime } from 'luxon';
 
-import { Agents } from '@components/contexts';
 import { getErrorMessage } from '@utilities';
 import { FCMSwapAction } from '../../types';
 import { deserializeAmm, getSigner } from '../../utilities';
