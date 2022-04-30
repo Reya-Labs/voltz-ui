@@ -30,10 +30,12 @@ export type SwapFormProps = {
   notional?: number;
   margin?: number;
   partialCollateralization?: boolean;
+  fcmMode?: boolean;
   addOrRemoveMargin?: boolean;
   marginEditMode?: boolean;
   onChangeNotional: (value: number) => void;
   onChangePartialCollateralization: (value: boolean) => void;
+  onChangeFcmMode: (value: boolean) => void;
   onAddOrRemoveMargin: (value: boolean) => void;
   onChangeMargin: (value: number) => void;
   onSubmit: (values: HandleSubmitSwapFormArgs) => void;
@@ -54,17 +56,18 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   notional,
   margin,
   partialCollateralization,
+  fcmMode,
   addOrRemoveMargin,
   marginEditMode
   ,
   onChangeNotional,
   onChangePartialCollateralization,
+  onChangeFcmMode,
   onAddOrRemoveMargin,
   onChangeMargin,
   onSubmit,
   onCancel,
 }) => {
-  
   const handleSubmit = () => {
 
     if (isUndefined(notional) || isUndefined(margin) || isUndefined(partialCollateralization) ) {
@@ -113,14 +116,11 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
 
   return (
     <Panel
-      variant="main"
+      variant="dark"
       sx={{
         marginTop: 12,
-        padding: 6,
-        width: (theme) => theme.spacing(85),
+        width: (theme) => theme.spacing(97),
         boxShadow: _boxShadow,
-        backgroundColor: "secondary.darken045",
-        borderRadius: 2
       }}
     >
       <ProtocolInformation protocol={protocol}/>
@@ -174,14 +174,16 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
             isModifying={isModifying}
             defaultPartialCollateralization={defaultPartialCollateralization}
             partialCollateralization={partialCollateralization}
+            fcmMode={fcmMode}
             onChangePartialCollateralization={onChangePartialCollateralization}
+            onChangeFcmMode={onChangeFcmMode}
           />
             </Box>
           )
         }
 
       {
-        !marginEditMode && (
+        !marginEditMode &&  (
           <Box
           sx={{
             marginBottom: (theme) => theme.spacing(6),
@@ -199,6 +201,8 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         )
       }
 
+      {
+      partialCollateralization && (
       <Box
         sx={{
           marginBottom: (theme) => theme.spacing(6),
@@ -213,6 +217,9 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           onChangeMargin={onChangeMargin}
         />
       </Box>
+      )
+        }
+
       <Box
         sx={{
           marginBottom: (theme) => theme.spacing(6),
@@ -220,6 +227,9 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
       >
         <SwapInfo notional={notional} underlyingTokenName={underlyingTokenName} />
       </Box>
+
+      {
+      partialCollateralization && (  
       <Box sx={{ display: 'flex' }}>
         <SubmitSwapFormButton onSubmit={ marginEditMode ? handleSubmitMarginOnly : handleSubmit} marginEditMode={marginEditMode} />
         <Button
@@ -230,6 +240,22 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           Cancel
         </Button>
       </Box>
+      )}
+
+      {
+      !partialCollateralization && (  
+      <Box sx={{ display: 'flex' }}>
+      <SubmitSwapFormButton onSubmit={handleSubmit} />
+      <Button
+        sx={{ marginLeft: (theme) => theme.spacing(4) }}
+        variant="darker"
+        onClick={onCancel}
+      >
+        Cancel
+      </Button>
+    </Box>
+      )};
+  
     </Panel>
   );
 };

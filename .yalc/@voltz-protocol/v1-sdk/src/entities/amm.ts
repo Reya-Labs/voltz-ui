@@ -67,7 +67,7 @@ export type AMMLiquidatePositionArgs = {
 };
 
 export type AMMSettlePositionArgs = {
-  owner: string;
+  owner?: string;
   fixedLow: number;
   fixedHigh: number;
 };
@@ -303,8 +303,16 @@ class AMM {
     const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
     const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
 
+    let effectiveOwner: string;
+
+    if (!owner) {
+      effectiveOwner = await this.signer?.getAddress()
+    } else {
+      effectiveOwner = owner;
+    }
+
     const settlePositionTransaction = await marginEngineContract.settlePosition(
-      owner,
+      effectiveOwner,
       tickLower,
       tickUpper,
       this.overrides

@@ -34,6 +34,7 @@ export type PositionTableProps = {
   onSetSize: (size: number) => void;
   onSelectItem: (datum: Position) => void;
   agent: Agents
+  handleSettle: (position: Position) => void;
 };
 
 const PositionTable: React.FunctionComponent<PositionTableProps> = ({
@@ -48,6 +49,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   size,
   onSetSize,
   onSelectItem,
+  handleSettle
 }) => {
   const commonOverrides: SystemStyleObject<Theme> = {
     '& .MuiTableCell-root': {
@@ -64,6 +66,9 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
         borderTopRightRadius: 8,
         borderBottomRightRadius: 8,
       },
+    },
+    '.MuiInputLabel-root': {
+      marginBottom: (theme) => theme.spacing(1)
     },
   };
   const { agent } = useAgent();
@@ -89,21 +94,21 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   }
 
   return (
-    <Panel variant="dark" sx={{ minWidth: 800, marginTop: 12 }}>
+    <Panel variant="dark" borderRadius='large' padding='container' sx={{ minWidth: 800, marginTop: 10, paddingBottom: 0 }}>
       <PositionTableControls quantity={positions.length} />
       <TableContainer>
         <Table
           sx={{
             minWidth: 750,
             borderCollapse: 'separate',
-            borderSpacing: '0px 8px',
+            borderSpacing: '0px 16px',
             ...commonOverrides,
           }}
           aria-labelledby="tableTitle"
           size="medium"
         >
           <PositionTableHead order={order} orderBy={orderBy} onSort={handleSort} agent={agent} />
-          <TableBody>
+          <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
             {tableData.map((datum, index) => (
               <AMMProvider amm={(positions[index].amm as AugmentedAMM)}>
               <PositionTableRow
@@ -111,6 +116,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                 datum={datum}
                 index={index}
                 onSelect={handleSelectRow(index)}
+                handleSettle={() => handleSettle(positions[index])}
               />
               </AMMProvider>
             ))}

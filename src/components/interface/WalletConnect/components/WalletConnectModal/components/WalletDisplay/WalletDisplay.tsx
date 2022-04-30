@@ -22,7 +22,7 @@ const WalletDisplay: React.FunctionComponent<WalletDisplayProps> = ({ wallet, on
       </Typography>
       <Panel
         variant="dark"
-        sx={{ padding: (theme) => theme.spacing(6), display: 'flex', flexDirection: 'column' }}
+        sx={{ display: 'flex', flexDirection: 'column' }}
       >
         <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
           <Typography variant="h2">CONNECTED WITH {wallet.name.toUpperCase()}</Typography>

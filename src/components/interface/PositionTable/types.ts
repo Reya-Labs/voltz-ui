@@ -13,5 +13,6 @@ export type PositionTableDatum = {
   startDate: DateTime;
   endDate: DateTime;
   fixedApr: number;
-  agent: Agents
+  agent: Agents;
+  settled: boolean
 };

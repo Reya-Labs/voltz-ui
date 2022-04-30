@@ -67,8 +67,7 @@ const IconLabel: React.FunctionComponent<IconLabelProps> = ({ label, icon, info,
           onClose={handlePopoverClose}
           disableRestoreFocus
         >
-          <Panel variant="dark" sx={{ borderRadius: 1, maxWidth: 200, backgroundColor: "#0F0C1D",
-           borderColor: "#383545", borderStyle: "solid", boxShadow: '0px 4px 15px rgba(229, 225, 249, 0.1)',  }}>
+          <Panel variant="iconLabel">
             <Typography variant="caption" sx={{
               fontFamily: "DM Sans",
               fontStyle: "normal",

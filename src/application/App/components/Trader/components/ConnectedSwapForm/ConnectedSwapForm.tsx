@@ -12,6 +12,7 @@ import {
   HandleSubmitSwapFormArgs,
   PendingTransaction,
 } from '@components/interface';
+import { TraderControlsProps } from 'src/components/interface/SwapForm/components/TraderControls/TraderControls';
 
 export type ConnectedSwapFormProps = {
   amm: AugmentedAMM;
@@ -19,21 +20,28 @@ export type ConnectedSwapFormProps = {
   onReset: () => void;
 };
 
-const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ amm, onReset, marginEditMode }) => {
+const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ 
+  amm,
+  onReset, 
+  marginEditMode,
+}) => {
   const { agent } = useAgent();
   const navigate = useNavigate();
   const [notional, setNotional] = useState<SwapFormProps['notional']>();
   const [margin, setMargin] = useState<SwapFormProps['margin']>();
   const [partialCollateralization, setPartialCollateralization] =
-    useState<SwapFormProps['partialCollateralization']>();
+    useState<SwapFormProps['partialCollateralization']>(true);
+
+  const [fcmMode, setFcmMode] = 
+    useState<TraderControlsProps['fcmMode']>(); 
 
   const [addOrRemoveMargin, setAddOrRemoveMargin] =
-    useState<SwapFormProps['addOrRemoveMargin']>();
+    useState<SwapFormProps['addOrRemoveMargin']>(true);
 
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId); // contains a failureMessage attribute that will contain whatever came out from the sdk
   // activeTransaction.failureMessage = "No margin", could also be a big horrible object, needs a little more work to parse it correctly
-
+  
   const dispatch = useDispatch();
   const handleSubmit = useCallback(
     (args: HandleSubmitSwapFormArgs) => {
@@ -42,21 +50,40 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ am
       if (marginEditMode) {
         const updatePositionMargin = actions.updatePositionMarginAction(amm, transaction);
         setTransactionId(updatePositionMargin.payload.transaction.id);
-        // todo: if remove margin, change margin to -margin (delta)
         dispatch(updatePositionMargin);
       } else {
-        const swap = actions.swapAction(amm, transaction);
-        setTransactionId(swap.payload.transaction.id);
-        dispatch(swap);
-      }
+
+        if (partialCollateralization) {
+
+          const swap = actions.swapAction(amm, transaction);
+          setTransactionId(swap.payload.transaction.id);
+          dispatch(swap);
+        } else {
+
+            if (fcmMode) {
+              const fcmSwap = actions.fcmSwapAction(amm, transaction);
+              setTransactionId(fcmSwap.payload.transaction.id)
+              dispatch(fcmSwap)
+            } else {
+                const fcmUnwind = actions.fcmUnwindAction(amm, transaction);
+                setTransactionId(fcmUnwind.payload.transaction.id)
+                dispatch(fcmUnwind)
+            }
+          }
+        }
 
     },
-    [setTransactionId, dispatch, agent, amm.id],
+    [setTransactionId, dispatch, agent, amm.id, partialCollateralization, fcmMode],
   );
   const handleComplete = () => {
     onReset();
     navigate(`/${routes.PORTFOLIO}`);
   };
+
+  const handleGoBack = () => {
+    const action = actions.closeTransaction(transactionId as string);
+    dispatch(action);
+  }
 
   if (!amm) {
     return null;
@@ -64,7 +91,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ am
 
   if (activeTransaction) {
     return (
-      <PendingTransaction amm={amm} transactionId={transactionId} onComplete={handleComplete} />
+      <PendingTransaction amm={amm} transactionId={transactionId} onComplete={handleComplete} onBack={handleGoBack} />
     );
   }
 
@@ -79,9 +106,11 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ am
         onChangeNotional={setNotional}
         margin={margin || 0}
         partialCollateralization={partialCollateralization}
+        fcmMode={fcmMode}
         addOrRemoveMargin={addOrRemoveMargin}
         marginEditMode={marginEditMode}
         onChangePartialCollateralization={setPartialCollateralization}
+        onChangeFcmMode={setFcmMode}
         onChangeMargin={setMargin}
         onAddOrRemoveMargin={setAddOrRemoveMargin}
         onSubmit={handleSubmit}

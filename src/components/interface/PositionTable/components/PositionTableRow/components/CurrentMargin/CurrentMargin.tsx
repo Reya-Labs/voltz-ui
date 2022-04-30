@@ -4,7 +4,7 @@ import TableCell from '@mui/material/TableCell';
 import { useAMMContext, useWallet } from '@hooks';
 import { Typography } from '@components/atomic';
 import { isUndefined } from 'lodash';
-import { Button } from 'src/components/atomic';
+import { Button } from '@components/atomic';
 import isNull from 'lodash/isNull';
 
 export type CurrentMarginProps = {
@@ -55,7 +55,6 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({tickLower, 
         {renderValue()}
       </Typography>
 
-      {displayEditButton ? (
         <Button sx={{
           display: "flex",
           paddingTop: (theme) => theme.spacing(0),
@@ -76,7 +75,7 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({tickLower, 
         }} onClick={handleClick}>
             Edit 
         </Button>
-      ) : <></>}
+
 
     </TableCell>
   );

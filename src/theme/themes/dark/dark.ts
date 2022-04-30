@@ -112,6 +112,9 @@ const dark = createTheme({
     },
     MuiInputBase: {
       styleOverrides: {
+        root: {
+          width: '100%',
+        },
         input: ({ ownerState, theme }) => {
           const color = () => {
             if (ownerState.disabled) {
@@ -135,12 +138,39 @@ const dark = createTheme({
 
             return colors.vzGreyDark;
           };
+          const padding = () => {
+            if (ownerState.size === 'small') {
+              return {
+                padding: theme.spacing(1),
+                paddingLeft: theme.spacing(2),
+              };
+            }
+        
+            return {
+              padding: theme.spacing(4),
+            };
+          };
 
           return {
             fontFamily: 'PixelOperatorMono',
-            backgroundColor: colors.vzGreyDarkest,
+            backgroundColor: theme.palette.secondary.darken040,
             borderColor: borderColor(),
+            borderRadius: theme.spacing(1),
+            lineHeight: '14px',
             color: color(),
+            minHeight: theme.spacing(8),
+            fontSize: ownerState.size === 'small' ? 14 : 24,
+            ...padding(),
+            "::-webkit-outer-spin-button": { 
+              "-webkit-appearance": "none", 
+              "-moz-appearance": "none",
+              "appearance": "none"
+            },
+            "::-webkit-inner-spin-button": {
+              "-webkit-appearance": "none",
+              "-moz-appearance": "none",
+              "appearance": "none"
+            }
           };
         },
       },
@@ -149,9 +179,14 @@ const dark = createTheme({
       styleOverrides: {
         root: {
           fontFamily: 'PixelOperatorMono',
-          fontSize: 12,
-          lineHeight: '14px',
+          fontSize: '12px',
+          lineHeight: 1.2,
+          marginBottom: '8px',
           color: colors.lavenderWeb.darken010,
+          position: 'static',
+          textTransform: 'uppercase',
+          transform: 'none',
+          overflow: 'visible',
         },
       },
     },

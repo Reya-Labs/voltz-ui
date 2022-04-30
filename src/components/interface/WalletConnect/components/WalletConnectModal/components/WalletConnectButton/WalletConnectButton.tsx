@@ -34,7 +34,7 @@ const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = (
       <Box sx={{ marginLeft: (theme) => theme.spacing(4), display: 'flex' }}>
         <Button
           variant="red"
-          sx={{ zIndex: 1, left: (theme) => theme.spacing(-2) }}
+          sx={{ zIndex: 1, left: (theme) => theme.spacing(-2), fontSize: 16 }}
           startIcon={<CircleIcon sx={{ width: 4, height: 4, borderRadius: 200, color: "#ff4aa9" }} />}
         // onClick={onClick} todo: enable when data such as recent transactions is properly implemented
         >
@@ -49,9 +49,9 @@ const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = (
       <Box sx={{ marginLeft: (theme) => theme.spacing(4), display: 'flex' }}>
         <Button
           variant="dark"
-          sx={{ zIndex: 1, left: (theme) => theme.spacing(-2)}}
+          sx={{ zIndex: 1, left: (theme) => theme.spacing(-2), fontSize: 16 }}
           startIcon={<CircleIcon sx={{ width: 4, height: 4, borderRadius: 200, color: "#00d395" }} />}
-          endIcon={name && <Icon name={name} />}
+          endIcon={name && <Icon name={name} sx={{width: 16}} />}
           // onClick={onClick} todo: enable when data such as recent transactions is properly implemented
         >
           {account && elideAddress(account)}
@@ -63,7 +63,7 @@ const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = (
   return (
     <Button
       variant="darker"
-      sx={{ marginLeft: (theme) => theme.spacing(4) }}
+      sx={{ marginLeft: (theme) => theme.spacing(4), fontSize: 16 }}
       startIcon={<CircleIcon sx={{ width: 4, height: 4, borderRadius: 200, color: "#ff4aa9" }} />}
       onClick={onClick}
     >

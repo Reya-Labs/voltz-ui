@@ -13,6 +13,7 @@ const transactionsReducer = (state: State['transactions'], action: Action) => {
     case 'burn':
     case 'swap':
     case 'updatePositionMargin':
+    case 'settlePosition':
       return addTransactionReducer(state, action);
 
     case 'close-transaction':

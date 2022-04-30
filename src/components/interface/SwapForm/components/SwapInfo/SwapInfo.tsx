@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import isUndefined from 'lodash/isUndefined';
 import SummaryPanel from '../../../../atomic/SummaryPanel/SummaryPanel';
 import { IconLabel } from '@components/composite';
-import { useAMMContext } from '@hooks';
+import { useAgent, useAMMContext } from '@hooks';
+import { formatCurrency, formatNumber } from '@utilities';
 
 export type SwapInfoProps = {
   notional?: number;
@@ -10,6 +11,7 @@ export type SwapInfoProps = {
 };
 
 const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({ notional, underlyingTokenName = '' }) => {
+  const { agent } = useAgent();
   const { swapInfo } = useAMMContext();
   const { result, loading, call } = swapInfo;
 
@@ -22,23 +24,23 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({ notional, underlying
   const rows = result ? [
     {
       label: 'NOTIONAL AVAILABLE:', 
-      value: `${Math.abs(result.availableNotional).toFixed(2)} ${underlyingTokenName}`
+      value: `${formatCurrency(Math.abs(result.availableNotional), true)} ${underlyingTokenName}`
     },
     {
       label: 'AVERAGE FIXED RATE:', 
-      value: `${Math.abs(result.averageFixedRate).toFixed(2)} %`
+      value: `${formatNumber(Math.abs(result.averageFixedRate))} %`
     },
     {
       label: 'FEES:', 
-      value: `${Math.abs(result.fee).toFixed(2)} ${underlyingTokenName}`
+      value: `${formatCurrency(Math.abs(result.fee), true)} ${underlyingTokenName}`
     },
     {
       label: 'ESTIMATED SLIPPAGE:', 
-      value: `${Math.abs(result.slippage).toFixed(2)} %`
+      value: `${formatNumber(Math.abs(result.slippage))} %`
     },
     {
       label: 'ADDITIONAL MARGIN REQUIRED:', 
-      value: `${result.marginRequirement.toFixed(2)} ${underlyingTokenName}`
+      value: `${formatCurrency(result.marginRequirement, true)} ${underlyingTokenName}`
     },
   ] : undefined;
 
@@ -46,7 +48,7 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({ notional, underlying
     if (!isUndefined(notional)) {
       call({ notional });
     }
-  }, [call, notional]);
+  }, [call, notional, agent]);
 
   return <SummaryPanel label={label} loading={loading} rows={rows} />
 };

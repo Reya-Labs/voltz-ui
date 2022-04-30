@@ -8,16 +8,19 @@ import { selectors } from '@store';
 import { AMMProvider } from '@components/contexts';
 import { Button, Panel, Typography, Loading } from '@components/atomic';
 import { ProtocolInformation, WalletAddressDisplay } from '@components/composite';
+import { formatCurrency } from '@utilities';
 
 export type PendingTransactionProps = {
   amm: AugmentedAMM;
   transactionId?: string;
+  onBack: () => void;
   onComplete: () => void;
 };
 
 const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   amm,
   transactionId,
+  onBack,
   onComplete,
 }) => {
   const { account } = useWallet();
@@ -108,8 +111,8 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               paddingBottom: (theme) => theme.spacing(10),
             }}
           >
-            <Button variant="contained" onClick={onComplete}>
-              Go to your portfolio
+            <Button variant="contained" onClick={onBack}>
+              Back
             </Button>
           </Box>
         </Box>
@@ -202,13 +205,12 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
       variant="dark"
       sx={{
         marginTop: 12,
-        padding: 6,
-        width: (theme) => theme.spacing(80),
+        width: (theme) => theme.spacing(97),
         boxShadow: '0px 0px 60px rgba(255, 89, 156, 0.2)',
       }}
     >
       {renderStatus()}
-      <Panel variant="main" sx={{ padding: 6 }}>
+      <Panel variant="main">
         <AMMProvider amm={amm}>
           <ProtocolInformation protocol={amm.protocol} />
         </AMMProvider>
@@ -218,7 +220,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
           }}
         >
           <Typography label="NOTIONAL AMOUNT" variant="body2">
-            {activeTransaction.notional} {amm.underlyingToken.name}
+            {formatCurrency(activeTransaction.notional, true)} {amm.underlyingToken.name}
           </Typography>
         </Box>
         <Box
@@ -227,7 +229,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
           }}
         >
           <Typography label="MARGIN" variant="body2">
-            {activeTransaction.margin} {amm.underlyingToken.name}
+            {formatCurrency(activeTransaction.margin, true)} {amm.underlyingToken.name}
           </Typography>
         </Box>
       </Panel>

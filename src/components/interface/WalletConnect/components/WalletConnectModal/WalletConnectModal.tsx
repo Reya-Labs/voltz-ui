@@ -59,7 +59,6 @@ const WalletConnectModal: React.FunctionComponent = () => {
           minWidth: 400,
           maxWidth: 400,
           minHeight: 400,
-          padding: (theme) => theme.spacing(6),
           display: 'flex',
           flexDirection: 'column',
         }}

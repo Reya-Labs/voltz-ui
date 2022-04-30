@@ -13,6 +13,7 @@ import { Page } from '@components/interface';
 import ConnectedAMMTable from '../ConnectedAMMTable/ConnectedAMMTable';
 import ConnectedPositionTable from '../ConnectedPositionTable/ConnectedPositionTable';
 import { ConnectedSwapForm } from './components';
+import PageTitleDesc from 'src/components/interface/Page/PageTitleDesc/PageTitleDesc';
 
 const Trader: React.FunctionComponent = () => {
   const [formActive, setFormActive] = useState(false);
@@ -23,12 +24,11 @@ const Trader: React.FunctionComponent = () => {
   const pathnameWithoutPrefix = pathname.slice(1);
 
   const effectiveAmm = useMemo(() => {
-    if (position) {
-      return position.amm as AugmentedAMM;
-    }
-
-    return amm;
+    return (position?.amm as AugmentedAMM) || amm;
   }, [amm, position]);
+
+  const marginEditMode = formActive && !isNull(effectiveAmm) && !isNull(position);
+  const fcmMode = // How to make this depend on what is being clicked on the toggle button 
 
   useEffect(() => {
     setFormActive(false);
@@ -50,9 +50,10 @@ const Trader: React.FunctionComponent = () => {
         return 'PORTFOLIO SUMMARY';
 
       default:
-        return null;
+        return '';
     }
   }, [pathnameWithoutPrefix]);
+
   const handleSelectAmm = (selected: AugmentedAMM) => {
     setFormActive(true);
     setAMM(selected);
@@ -70,20 +71,14 @@ const Trader: React.FunctionComponent = () => {
   };
 
   return (
-    <Page>
-      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+    <Page backgroundView={formActive ? 'form' : 'table'}>
+      <Box sx={{ width: '100%', maxWidth: '900px', margin: '0 auto' }}>
         {!formActive && (
           <Box sx={{ height: '100%' }}>
-            <Typography variant="h1">{pageTitle}</Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                maxWidth: (theme) => theme.spacing(90),
-                marginBottom: (theme) => theme.spacing(4),
-              }}
-            >
-              Choose a pool and decide whether to trade fixed or variable rates. 
-            </Typography>
+            <PageTitleDesc 
+              title={pageTitle} 
+              desc='Choose a pool and decide whether to trade fixed or variable rates.' 
+            />
             {/* todo: bring this back once we have content for traders to link */}
             {/* {pathnameWithoutPrefix === routes.SWAP && (
               <Button
@@ -102,18 +97,14 @@ const Trader: React.FunctionComponent = () => {
             )}
           </Box>
         )}
-        
-        {/* todo: below is a bit hacky */}
 
-        {formActive && !isNull(effectiveAmm) && !isNull(position) && (
-          <Box sx={{ height: '100%' }}>
-            <ConnectedSwapForm amm={effectiveAmm} onReset={handleReset} marginEditMode />
-          </Box>
-        )}
-
-        {formActive && !isNull(effectiveAmm) && isNull(position) && (
-          <Box sx={{ height: '100%' }}>
-            <ConnectedSwapForm amm={effectiveAmm} onReset={handleReset} />
+        {formActive && !isNull(effectiveAmm) && (
+          <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
+            <ConnectedSwapForm 
+              amm={effectiveAmm} 
+              marginEditMode={marginEditMode} 
+              onReset={handleReset} 
+            />
           </Box>
         )}
       </Box>

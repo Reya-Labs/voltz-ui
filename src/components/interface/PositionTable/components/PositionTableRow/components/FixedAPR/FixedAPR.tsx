@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import { useAMMContext } from '@hooks';
 import { Typography } from '@components/atomic';
-import IconLabel from '@components/composite/IconLabel/IconLabel';
+import { IconLabel } from '@components/composite';
 
 const FixedAPR: React.FunctionComponent = () => {
   const { fixedApr } = useAMMContext();
