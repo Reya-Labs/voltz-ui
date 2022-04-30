@@ -40,7 +40,7 @@ export declare type AMMLiquidatePositionArgs = {
     fixedHigh: number;
 };
 export declare type AMMSettlePositionArgs = {
-    owner: string;
+    owner?: string;
     fixedLow: number;
     fixedHigh: number;
 };

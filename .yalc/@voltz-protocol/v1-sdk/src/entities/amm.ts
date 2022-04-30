@@ -67,7 +67,7 @@ export type AMMLiquidatePositionArgs = {
 };
 
 export type AMMSettlePositionArgs = {
-  owner: string;
+  owner?: string;
   fixedLow: number;
   fixedHigh: number;
 };
@@ -299,12 +299,14 @@ class AMM {
       throw new Error('Wallet not connected');
     }
 
+    const effectiveOwner = (!owner) ? await this.signer.getAddress() : owner;
+
     const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
     const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
     const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
 
     const settlePositionTransaction = await marginEngineContract.settlePosition(
-      owner,
+      effectiveOwner,
       tickLower,
       tickUpper,
       this.overrides
@@ -351,13 +353,7 @@ class AMM {
       return;
     }
 
-    let effectiveOwner: string;
-
-    if (!owner) {
-      effectiveOwner = await this.signer?.getAddress()
-    } else {
-      effectiveOwner = owner;
-    }
+    const effectiveOwner = (!owner) ? await this.signer.getAddress() : owner;
 
     if (!this.signer) {
       throw new Error('Wallet not connected');

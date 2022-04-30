@@ -2,11 +2,11 @@ import { ContractReceipt, providers } from 'ethers';
 import { call, put } from 'redux-saga/effects';
 import { DateTime } from 'luxon';
 
-import { Agents } from '@components/contexts';
 import { getErrorMessage } from '@utilities';
 import { FCMUnwindAction } from '../../types';
 import { deserializeAmm, getSigner } from '../../utilities';
 import * as actions from '../../actions';
+import { isUndefined } from 'lodash';
 
 
 function* fcmUnwindSaga(action: FCMUnwindAction) {
@@ -24,6 +24,7 @@ function* fcmUnwindSaga(action: FCMUnwindAction) {
     }
 
     const {id, notionalToUnwind} = action.payload.transaction; 
+    if (isUndefined(notionalToUnwind)) return;
 
     let result: ContractReceipt | void;
     try {
