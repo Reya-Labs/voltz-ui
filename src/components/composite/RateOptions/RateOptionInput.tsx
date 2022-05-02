@@ -23,6 +23,7 @@ const RateOptionsInput: React.FunctionComponent<RateOptionsProps> = ({
       return defaultVal.toString();
     }
   };
+  
   const [inputValue, setInputValue] = useState<string | undefined>(defaultInputValue());
 
   const handleChange = useCallback(
