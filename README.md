@@ -22,4 +22,5 @@ REACT_APP_METAMASK_NETWORK_ID=<<NETWORK ID>>
 3. Run `yarn`
 4. Run `yarn start`
 
+
 (Or if you can find a way around the caching problem, stopping and starting `yarn start` should be sufficient)

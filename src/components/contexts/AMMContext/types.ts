@@ -1,13 +1,13 @@
 import {
   AMMGetInfoPostSwapArgs,
-  AMMGetMinimumMarginRequirementPostMintArgs,
+  AMMGetInfoPostMintArgs,
   InfoPostSwap,
-} from '@voltz/v1-sdk';
+} from '@voltz-protocol/v1-sdk';
 
 import { UseAsyncFunctionResult } from '@hooks';
 
 export type MintMinimumMarginRequirementPayload = Omit<
-  AMMGetMinimumMarginRequirementPostMintArgs,
+  AMMGetInfoPostMintArgs,
   'recipient' | 'margin'
 >;
 

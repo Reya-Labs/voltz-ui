@@ -5,6 +5,7 @@ import { getErrorMessage } from '@utilities';
 import { SettlePositionAction } from '../../types';
 import { deserializeAmm, getSigner } from '../../utilities';
 import * as actions from '../../actions';
+import { isUndefined } from 'lodash';
 
 function* settlePositionSaga(action: SettlePositionAction) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -22,12 +23,15 @@ function* settlePositionSaga(action: SettlePositionAction) {
 
   const { id,  fixedLow, fixedHigh } = action.payload.transaction;
 
+  if (isUndefined(fixedLow) || isUndefined(fixedHigh)) {
+    return;
+  }
+
   let result: ContractReceipt | void;
   try {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     result = yield call(
       [amm, "settlePosition"], {
-        owner: amm.signer.getAddress(),
         fixedLow: fixedLow,
         fixedHigh: fixedHigh,
       }

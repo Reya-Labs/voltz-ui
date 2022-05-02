@@ -42,7 +42,6 @@ const RateOptionsInput: React.FunctionComponent<RateOptionsProps> = ({
   const handleBlur = useCallback(
     () => {
       // eslint-disable-next-line
-      console.log('blur set', value);
       setInputValue(value?.toString());
     }, 
     [setInputValue, value]

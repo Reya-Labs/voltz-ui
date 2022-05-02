@@ -113,7 +113,7 @@
     "@mui/icons-material": "^5.6.0",
     "@mui/material": "^5.2.8",
     "@mui/system": "^5.2.8",
-    "@voltz/v1-sdk": "file:.yalc/@voltz/v1-sdk",
+    "@voltz-protocol/v1-sdk": "file:.yalc/@voltz-protocol/v1-sdk",
     "aws-amplify": "^4.3.13",
     "chroma-js": "^2.1.2",
     "decimal.js": "^10.3.1",

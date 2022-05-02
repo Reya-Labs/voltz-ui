@@ -28,10 +28,7 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
         return;
       }
 
-      return amm.getMinimumMarginRequirementPostMint({
-        ...args,
-        margin: 0,
-      });
+      return amm.getInfoPostMint({...args});
     },
     useMemo(() => undefined, [!!amm.signer]),
     100

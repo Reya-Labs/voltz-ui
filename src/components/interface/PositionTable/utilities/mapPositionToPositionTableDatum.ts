@@ -1,4 +1,4 @@
-import { Position } from '@voltz/v1-sdk';
+import { Position } from '@voltz-protocol/v1-sdk';
 
 import { Agents } from '@components/contexts';
 import { PositionTableDatum } from '../types';
@@ -20,7 +20,7 @@ const mapPositionToPositionTableDatum =
         protocol: amm.protocol,
         startDate: amm.startDateTime,
         endDate: amm.endDateTime,
-        fixedApr: amm.fixedRate.toNumber(),
+        fixedApr: 0,
         fixedLower: fixedRateLower.toNumber(),
         fixedUpper: fixedRateUpper.toNumber(),
         notional: agent === Agents.LIQUIDITY_PROVIDER ? notional : (agent === Agents.VARIABLE_TRADER ? effectiveVariableTokenBalance : -effectiveVariableTokenBalance),

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import { useLocation } from 'react-router-dom';
 import isNull from 'lodash/isNull';
-import { Position } from '@voltz/v1-sdk';
+import { Position } from '@voltz-protocol/v1-sdk';
 
 import { AugmentedAMM } from '@utilities';
 import { Agents } from '@components/contexts';

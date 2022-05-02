@@ -1,5 +1,5 @@
+import { Position } from '@voltz-protocol/v1-sdk';
 import React, { useCallback, useState } from 'react';
-import { Position } from '@voltz/v1-sdk';
 import { useNavigate } from 'react-router-dom';
 
 import { data } from '@utilities';
