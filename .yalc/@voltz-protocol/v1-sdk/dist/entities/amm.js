@@ -49,6 +49,7 @@ var nearestUsableTick_1 = require("../utils/nearestUsableTick");
 var price_1 = require("./fractions/price");
 var tokenAmount_1 = require("./fractions/tokenAmount");
 var errorHandling_1 = require("../utils/errors/errorHandling");
+var evm_bn_1 = require("evm-bn");
 var AMM = /** @class */ (function () {
     function AMM(_a) {
         var id = _a.id, signer = _a.signer, provider = _a.provider, environment = _a.environment, marginEngineAddress = _a.marginEngineAddress, fcmAddress = _a.fcmAddress, rateOracle = _a.rateOracle, updatedTimestamp = _a.updatedTimestamp, termStartTimestamp = _a.termStartTimestamp, termEndTimestamp = _a.termEndTimestamp, underlyingToken = _a.underlyingToken, tick = _a.tick, tickSpacing = _a.tickSpacing, txCount = _a.txCount;
@@ -253,10 +254,13 @@ var AMM = /** @class */ (function () {
                         if (marginDelta === 0) {
                             throw new Error('No margin delta to update');
                         }
+                        if (!this.underlyingToken.id) {
+                            throw new Error('No underlying error');
+                        }
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
                         scaledMarginDelta = this.scale(marginDelta);
-                        return [4 /*yield*/, this.approveERC20(scaledMarginDelta, this.marginEngineAddress)];
+                        return [4 /*yield*/, this.approveERC20(this.underlyingToken.id, scaledMarginDelta, this.marginEngineAddress)];
                     case 4:
                         _c.sent();
                         marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
@@ -420,6 +424,9 @@ var AMM = /** @class */ (function () {
                         if (margin < 0) {
                             throw new Error('Amount of margin cannot be negative');
                         }
+                        if (!this.underlyingToken.id) {
+                            throw new Error('No underlying error');
+                        }
                         if (validationOnly) {
                             return [2 /*return*/];
                         }
@@ -431,7 +438,7 @@ var AMM = /** @class */ (function () {
                         _b.label = 1;
                     case 1:
                         _b.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, this.approveERC20(_marginDelta, peripheryContract.address)];
+                        return [4 /*yield*/, this.approveERC20(this.underlyingToken.id, _marginDelta, peripheryContract.address)];
                     case 2:
                         _b.sent();
                         return [3 /*break*/, 4];
@@ -576,7 +583,7 @@ var AMM = /** @class */ (function () {
             });
         });
     };
-    AMM.prototype.approveERC20 = function (amountToApprove, addressToApprove) {
+    AMM.prototype.approveERC20 = function (tokenAddress, amountToApprove, addressToApprove) {
         return __awaiter(this, void 0, void 0, function () {
             var token, currentApproval, _a, _b, amountToApproveBN, approvalTransaction, receipt, error_7;
             return __generator(this, function (_c) {
@@ -585,10 +592,7 @@ var AMM = /** @class */ (function () {
                         if (!this.signer) {
                             throw new Error('Wallet not connected');
                         }
-                        if (!this.underlyingToken.id) {
-                            throw new Error('No underlying token');
-                        }
-                        token = typechain_1.ERC20Mock__factory.connect(this.underlyingToken.id, this.signer);
+                        token = typechain_1.ERC20Mock__factory.connect(tokenAddress, this.signer);
                         _b = (_a = token).allowance;
                         return [4 /*yield*/, this.signer.getAddress()];
                     case 1: return [4 /*yield*/, _b.apply(_a, [_c.sent(), addressToApprove])];
@@ -642,6 +646,9 @@ var AMM = /** @class */ (function () {
                         if (margin < 0) {
                             throw new Error('Amount of margin cannot be negative');
                         }
+                        if (!this.underlyingToken.id) {
+                            throw new Error('No underlying error');
+                        }
                         if (validationOnly) {
                             return [2 /*return*/];
                         }
@@ -665,7 +672,7 @@ var AMM = /** @class */ (function () {
                         _b.label = 1;
                     case 1:
                         _b.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, this.approveERC20(scaledMarginDelta, peripheryContract.address)];
+                        return [4 /*yield*/, this.approveERC20(this.underlyingToken.id, scaledMarginDelta, peripheryContract.address)];
                     case 2:
                         _b.sent();
                         return [3 /*break*/, 4];
@@ -715,12 +722,15 @@ var AMM = /** @class */ (function () {
     AMM.prototype.fcmSwap = function (_a) {
         var notional = _a.notional, fixedRateLimit = _a.fixedRateLimit;
         return __awaiter(this, void 0, void 0, function () {
-            var approvalError_3, sqrtPriceLimitX96, tickLimit, fcmContract, scaledNotional, fcmSwapTransaction, receipt, error_9;
+            var approvalError_3, sqrtPriceLimitX96, tickLimit, fcmContract, scaledNotional, vammContract, feeWad, maxFee, yieldBearingTokenAddress, fcmSwapTransaction, receipt, error_9;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         if (!this.signer) {
                             throw new Error('Wallet not connected');
+                        }
+                        if (!this.underlyingToken.id) {
+                            throw new Error('No underlying error');
                         }
                         _b.label = 1;
                     case 1:
@@ -742,23 +752,34 @@ var AMM = /** @class */ (function () {
                         }
                         fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
                         scaledNotional = this.scale(notional);
-                        return [4 /*yield*/, this.approveERC20(scaledNotional, this.fcmAddress)];
+                        vammContract = typechain_1.VAMM__factory.connect(this.id, this.signer);
+                        return [4 /*yield*/, vammContract.feeWad()];
                     case 5:
+                        feeWad = _b.sent();
+                        maxFee = ethers_1.BigNumber.from(scaledNotional).mul(feeWad).div((0, evm_bn_1.toBn)("10"));
+                        return [4 /*yield*/, this.approveERC20(this.underlyingToken.id, maxFee, this.fcmAddress)];
+                    case 6:
+                        _b.sent();
+                        return [4 /*yield*/, fcmContract.underlyingYieldBearingToken()];
+                    case 7:
+                        yieldBearingTokenAddress = _b.sent();
+                        return [4 /*yield*/, this.approveERC20(yieldBearingTokenAddress, scaledNotional, this.fcmAddress)];
+                    case 8:
                         _b.sent();
                         return [4 /*yield*/, fcmContract.initiateFullyCollateralisedFixedTakerSwap(scaledNotional, sqrtPriceLimitX96, this.overrides)];
-                    case 6:
+                    case 9:
                         fcmSwapTransaction = _b.sent();
-                        _b.label = 7;
-                    case 7:
-                        _b.trys.push([7, 9, , 10]);
+                        _b.label = 10;
+                    case 10:
+                        _b.trys.push([10, 12, , 13]);
                         return [4 /*yield*/, fcmSwapTransaction.wait()];
-                    case 8:
+                    case 11:
                         receipt = _b.sent();
                         return [2 /*return*/, receipt];
-                    case 9:
+                    case 12:
                         error_9 = _b.sent();
                         throw new Error("Transaction Confirmation Error");
-                    case 10: return [2 /*return*/];
+                    case 13: return [2 /*return*/];
                 }
             });
         });
@@ -766,12 +787,15 @@ var AMM = /** @class */ (function () {
     AMM.prototype.fcmUnwind = function (_a) {
         var notionalToUnwind = _a.notionalToUnwind, fixedRateLimit = _a.fixedRateLimit;
         return __awaiter(this, void 0, void 0, function () {
-            var sqrtPriceLimitX96, tickLimit, approvalError_4, fcmContract, scaledNotional, fcmUnwindTransaction, receipt, error_10;
+            var sqrtPriceLimitX96, tickLimit, approvalError_4, fcmContract, scaledNotional, vammContract, feeWad, maxFee, fcmUnwindTransaction, receipt, error_10;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         if (!this.signer) {
                             throw new Error('Wallet not connected');
+                        }
+                        if (!this.underlyingToken.id) {
+                            throw new Error('No underlying error');
                         }
                         if (fixedRateLimit) {
                             tickLimit = this.closestTickAndFixedRate(fixedRateLimit).closestUsableTick;
@@ -793,20 +817,28 @@ var AMM = /** @class */ (function () {
                     case 4:
                         fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
                         scaledNotional = this.scale(notionalToUnwind);
-                        return [4 /*yield*/, fcmContract.unwindFullyCollateralisedFixedTakerSwap(scaledNotional, sqrtPriceLimitX96, this.overrides)];
+                        vammContract = typechain_1.VAMM__factory.connect(this.id, this.signer);
+                        return [4 /*yield*/, vammContract.feeWad()];
                     case 5:
-                        fcmUnwindTransaction = _b.sent();
-                        _b.label = 6;
+                        feeWad = _b.sent();
+                        maxFee = ethers_1.BigNumber.from(scaledNotional).mul(feeWad).div((0, evm_bn_1.toBn)("10"));
+                        return [4 /*yield*/, this.approveERC20(this.underlyingToken.id, maxFee, this.fcmAddress)];
                     case 6:
-                        _b.trys.push([6, 8, , 9]);
-                        return [4 /*yield*/, fcmUnwindTransaction.wait()];
+                        _b.sent();
+                        return [4 /*yield*/, fcmContract.unwindFullyCollateralisedFixedTakerSwap(scaledNotional, sqrtPriceLimitX96, this.overrides)];
                     case 7:
+                        fcmUnwindTransaction = _b.sent();
+                        _b.label = 8;
+                    case 8:
+                        _b.trys.push([8, 10, , 11]);
+                        return [4 /*yield*/, fcmUnwindTransaction.wait()];
+                    case 9:
                         receipt = _b.sent();
                         return [2 /*return*/, receipt];
-                    case 8:
+                    case 10:
                         error_10 = _b.sent();
                         throw new Error("Transaction Confirmation Error");
-                    case 9: return [2 /*return*/];
+                    case 11: return [2 /*return*/];
                 }
             });
         });

@@ -23,14 +23,14 @@ function* fcmUnwindSaga(action: FCMUnwindAction) {
         return;
     }
 
-    const {id, notionalToUnwind} = action.payload.transaction; 
-    if (isUndefined(notionalToUnwind)) return;
+    const {id, notional} = action.payload.transaction; 
+    if (isUndefined(notional)) return;
 
     let result: ContractReceipt | void;
     try {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         result = yield call([amm, 'fcmUnwind'], {
-            notionalToUnwind,
+            notionalToUnwind: notional,
         } );
     } catch (error) {
         yield put(

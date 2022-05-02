@@ -1,5 +1,5 @@
 import JSBI from 'jsbi';
-import { providers } from 'ethers';
+import { ethers, providers } from 'ethers';
 import { DateTime } from 'luxon';
 import { BigNumber, BigNumberish, ContractReceipt, Signer, utils } from 'ethers';
 
@@ -14,6 +14,7 @@ import {
   Periphery__factory as peripheryFactory,
   MarginEngine__factory as marginEngineFactory,
   Factory__factory as factoryFactory,
+  VAMM__factory as vammFactory,
   // todo: not very elegant to use the mock as a factory
   ERC20Mock__factory as tokenFactory,
   AaveFCM__factory as fcmFactory,
@@ -27,6 +28,7 @@ import Token from './token';
 import { Price } from './fractions/price';
 import { TokenAmount } from './fractions/tokenAmount';
 import { decodeInfoPostMint, decodeInfoPostSwap, getReadableErrorMessage } from '../utils/errors/errorHandling';
+import { toBn } from 'evm-bn';
 
 export type AMMConstructorArgs = {
   id: string;
@@ -363,11 +365,15 @@ class AMM {
       throw new Error('No margin delta to update');
     }
 
+    if (!this.underlyingToken.id) {
+      throw new Error('No underlying error');
+    }
+
     const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
     const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
     const scaledMarginDelta = this.scale(marginDelta);
 
-    await this.approveERC20(scaledMarginDelta, this.marginEngineAddress);
+    await this.approveERC20(this.underlyingToken.id, scaledMarginDelta, this.marginEngineAddress);
 
     const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
     const updatePositionMarginTransaction = await marginEngineContract.updatePositionMargin(
@@ -530,6 +536,10 @@ class AMM {
       throw new Error('Amount of margin cannot be negative');
     }
 
+    if (!this.underlyingToken.id) {
+      throw new Error('No underlying error');
+    }
+
     if (validationOnly) {
       return;
     }
@@ -542,7 +552,7 @@ class AMM {
     const _marginDelta = this.scale(margin);
 
     try {
-      await this.approveERC20(_marginDelta, peripheryContract.address);
+      await this.approveERC20(this.underlyingToken.id, _marginDelta, peripheryContract.address);
     } catch (approvalError) {
       throw approvalError;
     }
@@ -665,6 +675,7 @@ class AMM {
   }
 
   public async approveERC20(
+    tokenAddress: string,
     amountToApprove: BigNumberish,
     addressToApprove: string,
   ): Promise<ContractReceipt | void> {
@@ -672,11 +683,7 @@ class AMM {
       throw new Error('Wallet not connected');
     }
 
-    if (!this.underlyingToken.id) {
-      throw new Error('No underlying token');
-    }
-
-    const token = tokenFactory.connect(this.underlyingToken.id, this.signer);
+    const token = tokenFactory.connect(tokenAddress, this.signer);
     const currentApproval = await token.allowance(await this.signer.getAddress(), addressToApprove);
 
     const amountToApproveBN = BigNumber.from(amountToApprove).mul(BigNumber.from("101")).div(BigNumber.from("100"));
@@ -728,6 +735,10 @@ class AMM {
       throw new Error('Amount of margin cannot be negative');
     }
 
+    if (!this.underlyingToken.id) {
+      throw new Error('No underlying error');
+    }
+
     if (validationOnly) {
       return;
     }
@@ -752,7 +763,7 @@ class AMM {
     const scaledMarginDelta = this.scale(margin);
 
     try {
-      await this.approveERC20(scaledMarginDelta, peripheryContract.address);
+      await this.approveERC20(this.underlyingToken.id, scaledMarginDelta, peripheryContract.address);
     } catch (approvalError) {
       throw approvalError;
     }
@@ -794,6 +805,10 @@ class AMM {
       throw new Error('Wallet not connected');
     }
 
+    if (!this.underlyingToken.id) {
+      throw new Error('No underlying error');
+    }
+
     try {
       await this.approveFCM();
     } catch (approvalError) {
@@ -811,7 +826,14 @@ class AMM {
     const fcmContract = fcmFactory.connect(this.fcmAddress, this.signer);
     const scaledNotional = this.scale(notional);
 
-    await this.approveERC20(scaledNotional, this.fcmAddress);
+    let vammContract = vammFactory.connect(this.id, this.signer);
+    let feeWad = await vammContract.feeWad();
+    let maxFee = BigNumber.from(scaledNotional).mul(feeWad).div(toBn("10"));
+
+    await this.approveERC20(this.underlyingToken.id, maxFee, this.fcmAddress);
+
+    const yieldBearingTokenAddress = await fcmContract.underlyingYieldBearingToken();
+    await this.approveERC20(yieldBearingTokenAddress, scaledNotional, this.fcmAddress);
 
     const fcmSwapTransaction = await fcmContract.initiateFullyCollateralisedFixedTakerSwap(
       scaledNotional,
@@ -836,6 +858,10 @@ class AMM {
       throw new Error('Wallet not connected');
     }
 
+    if (!this.underlyingToken.id) {
+      throw new Error('No underlying error');
+    }
+
     let sqrtPriceLimitX96;
     if (fixedRateLimit) {
       const { closestUsableTick: tickLimit } = this.closestTickAndFixedRate(fixedRateLimit);
@@ -852,6 +878,13 @@ class AMM {
 
     const fcmContract = fcmFactory.connect(this.fcmAddress, this.signer);
     const scaledNotional = this.scale(notionalToUnwind);
+
+    let vammContract = vammFactory.connect(this.id, this.signer);
+    let feeWad = await vammContract.feeWad();
+    let maxFee = BigNumber.from(scaledNotional).mul(feeWad).div(toBn("10"));
+
+    await this.approveERC20(this.underlyingToken.id, maxFee, this.fcmAddress);
+
     const fcmUnwindTransaction = await fcmContract.unwindFullyCollateralisedFixedTakerSwap(
       scaledNotional,
       sqrtPriceLimitX96,
