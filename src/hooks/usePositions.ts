@@ -1,7 +1,7 @@
 import JSBI from 'jsbi';
 import { useMemo, useEffect } from 'react';
 import isNull from 'lodash/isNull';
-import { Position, Token, RateOracle } from '@voltz/v1-sdk';
+import { Position, Token, RateOracle, Mint, Burn, Swap, MarginUpdate, Liquidation, Settlement, FCMPosition, FCMSwap, FCMUnwind, FCMSettlement } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 import { DateTime } from 'luxon';
 
@@ -22,30 +22,59 @@ const usePositions = (): usePositionsResult => {
   const { signer, wallet, loading, error } = useWallet();
   const isSignerAvailable = !isNull(signer);
   const positionCount = wallet?.positions.length;
+  const fcmPositionCount = wallet?.fcmPositions.length;
 
-  const positions = useMemo(() => {
-    if (wallet && wallet.positions && !loading && !error) {
-      return wallet.positions.map(
+  const fcmPositions = useMemo(() => {
+    if (wallet && wallet.fcmPositions && !loading && !error) {
+      return wallet.fcmPositions.map(
         ({
+          id: positionId,
+          createdTimestamp: positionCreatedTimestamp,
           amm: {
+            id: ammId,
+            fcm: {
+              id: fcmAddress
+            },
+            marginEngine: {
+              id: marginEngineAddress
+            },
             rateOracle: {
               id: rateOracleAddress,
               protocolId,
               token: { id: tokenAddress, name: tokenName, decimals },
             },
-            ...restOfAmm
+            tickSpacing,
+            termStartTimestamp,
+            termEndTimestamp,
+            updatedTimestamp: ammUpdatedTimestamp,
+            tick,
+            txCount
           },
-          tickLower: { value: tickLowerValue },
-          tickUpper: { value: tickUpperValue },
           owner: { id: ownerAddress },
-          ...restOfPosition
+          updatedTimestamp: positionUpdatedTimestamp,
+          fixedTokenBalance,
+          variableTokenBalance,
+          isSettled,
+          marginInScaledYieldBearingTokens,
+          fcmSwaps,
+          fcmUnwinds,
+          fcmSettlements
         }) =>
-          new Position({
+          new FCMPosition({
+            id: positionId,
+            createdTimestamp: positionCreatedTimestamp as JSBI,
+            updatedTimestamp: positionUpdatedTimestamp as JSBI,
+            fixedTokenBalance: fixedTokenBalance as JSBI,
+            variableTokenBalance: variableTokenBalance as JSBI,
+            isSettled,
+            owner: ownerAddress,
             amm: new AugmentedAMM({
+              id: ammId,
               signer,
               provider: providers.getDefaultProvider(
                 process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK,
               ),
+              environment: 'KOVAN',
               rateOracle: new RateOracle({
                 id: rateOracleAddress,
                 protocolId: protocolId as number,
@@ -55,27 +84,213 @@ const usePositions = (): usePositionsResult => {
                 name: tokenName,
                 decimals: decimals as number,
               }),
-              ...restOfAmm,
+              marginEngineAddress,
+              fcmAddress,
+              updatedTimestamp: ammUpdatedTimestamp as JSBI,
+              termStartTimestamp: termStartTimestamp as JSBI,
+              termEndTimestamp: termEndTimestamp as JSBI,
+              tick: parseInt(tick as string),
+              tickSpacing: parseInt(tickSpacing as string),
+              txCount: parseInt(txCount as string),
+              
             }),
-            tickLower: JSBI.toNumber(JSBI.BigInt(tickLowerValue as string)),
-            tickUpper: JSBI.toNumber(JSBI.BigInt(tickUpperValue as string)),
+            marginInScaledYieldBearingTokens: marginInScaledYieldBearingTokens as JSBI,
+            fcmSwaps: fcmSwaps.map((args) => new FCMSwap({
+              id: args.id,
+              transactionId: args.transaction.id,
+              transactionTimestamp: args.transaction.createdTimestamp as JSBI,
+              ammId,
+              fcmPositionId: positionId,
+              desiredNotional: args.desiredNotional as JSBI,
+              sqrtPriceLimitX96: args.sqrtPriceLimitX96 as JSBI,
+              cumulativeFeeIncurred: args.cumulativeFeeIncurred as JSBI,
+              fixedTokenDelta: args.fixedTokenDelta as JSBI,
+              variableTokenDelta: args.variableTokenDelta as JSBI,
+              fixedTokenDeltaUnbalanced: args.fixedTokenDeltaUnbalanced as JSBI
+            })),
+            fcmUnwinds: fcmUnwinds.map((args) => new FCMUnwind({
+              id: args.id,
+              transactionId: args.transaction.id,
+              transactionTimestamp: args.transaction.createdTimestamp as JSBI,
+              ammId,
+              fcmPositionId: positionId,
+              desiredNotional: args.desiredNotional as JSBI,
+              sqrtPriceLimitX96: args.sqrtPriceLimitX96 as JSBI,
+              cumulativeFeeIncurred: args.cumulativeFeeIncurred as JSBI,
+              fixedTokenDelta: args.fixedTokenDelta as JSBI,
+              variableTokenDelta: args.variableTokenDelta as JSBI,
+              fixedTokenDeltaUnbalanced: args.fixedTokenDeltaUnbalanced as JSBI
+            })),
+            fcmSettlements: fcmSettlements.map((args) => new FCMSettlement({
+              id: args.id,
+              transactionId: args.transaction.id,
+              transactionTimestamp: args.transaction.createdTimestamp as JSBI,
+              ammId,
+              fcmPositionId: positionId,
+              settlementCashflow: args.settlementCashflow as JSBI
+            }))
+          }),
+      );
+    }
+  }, [fcmPositionCount, loading, error, isSignerAvailable]);
+
+  const positions = useMemo(() => {
+    if (wallet && wallet.positions && !loading && !error) {
+      return wallet.positions.map(
+        ({
+          id: positionId,
+          createdTimestamp: positionCreatedTimestamp,
+          amm: {
+            id: ammId,
+            fcm: {
+              id: fcmAddress
+            },
+            marginEngine: {
+              id: marginEngineAddress
+            },
+            rateOracle: {
+              id: rateOracleAddress,
+              protocolId,
+              token: { id: tokenAddress, name: tokenName, decimals },
+            },
+            tickSpacing,
+            termStartTimestamp,
+            termEndTimestamp,
+            updatedTimestamp: ammUpdatedTimestamp,
+            tick,
+            txCount
+          },
+          owner: { id: ownerAddress },
+          tickLower,
+          tickUpper,
+          updatedTimestamp: positionUpdatedTimestamp,
+          liquidity,
+          margin,
+          fixedTokenBalance,
+          variableTokenBalance,
+          accumulatedFees,
+          positionType,
+          isSettled,
+          mints,
+          burns,
+          swaps,
+          marginUpdates,
+          liquidations,
+          settlements
+        }) =>
+          new Position({
+            id: positionId,
+            createdTimestamp: positionCreatedTimestamp as JSBI,
+            updatedTimestamp: positionUpdatedTimestamp as JSBI,
+            tickLower: parseInt(tickLower as string),
+            tickUpper: parseInt(tickUpper as string),
+            liquidity: liquidity as JSBI,
+            margin: margin as JSBI,
+            fixedTokenBalance: fixedTokenBalance as JSBI,
+            variableTokenBalance: variableTokenBalance as JSBI,
+            accumulatedFees: accumulatedFees as JSBI,
+            positionType: parseInt(positionType as string),
+            isSettled,
             owner: ownerAddress,
-            ...restOfPosition,
+            amm: new AugmentedAMM({
+              id: ammId,
+              signer,
+              provider: providers.getDefaultProvider(
+                process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK,
+              ),
+              environment: 'KOVAN',
+              rateOracle: new RateOracle({
+                id: rateOracleAddress,
+                protocolId: protocolId as number,
+              }),
+              underlyingToken: new Token({
+                id: tokenAddress,
+                name: tokenName,
+                decimals: decimals as number,
+              }),
+              marginEngineAddress,
+              fcmAddress,
+              updatedTimestamp: ammUpdatedTimestamp as JSBI,
+              termStartTimestamp: termStartTimestamp as JSBI,
+              termEndTimestamp: termEndTimestamp as JSBI,
+              tick: parseInt(tick as string),
+              tickSpacing: parseInt(tickSpacing as string),
+              txCount: parseInt(txCount as string),
+            }),
+            mints: mints.map((args) => new Mint({
+              id: args.id,
+              transactionId: args.transaction.id,
+              transactionTimestamp: args.transaction.createdTimestamp as JSBI,
+              ammId,
+              positionId: positionId,
+              sender: args.sender,
+              amount: args.amount as JSBI,
+            })),
+            burns: burns.map((args) => new Burn({
+              id: args.id,
+              transactionId: args.transaction.id,
+              transactionTimestamp: args.transaction.createdTimestamp as JSBI,
+              ammId,
+              positionId: positionId,
+              sender: args.sender,
+              amount: args.amount as JSBI,
+            })),
+            swaps: swaps.map((args) => new Swap({
+              id: args.id,
+              transactionId: args.transaction.id,
+              transactionTimestamp: args.transaction.createdTimestamp as JSBI,
+              ammId,
+              positionId: positionId,
+              sender: args.sender,
+              desiredNotional: args.desiredNotional as JSBI,
+              sqrtPriceLimitX96: args.sqrtPriceLimitX96 as JSBI,
+              cumulativeFeeIncurred: args.cumulativeFeeIncurred as JSBI,
+              fixedTokenDelta: args.fixedTokenDelta as JSBI,
+              variableTokenDelta: args.variableTokenDelta as JSBI,
+              fixedTokenDeltaUnbalanced: args.fixedTokenDeltaUnbalanced as JSBI
+            })),
+            marginUpdates: marginUpdates.map((args) => new MarginUpdate({
+              id: args.id,
+              transactionId: args.transaction.id,
+              transactionTimestamp: args.transaction.createdTimestamp as JSBI,
+              ammId,
+              positionId: positionId,
+              depositer: args.depositer ,
+              marginDelta: args.marginDelta as JSBI
+            })),
+            liquidations: liquidations.map((args) => new Liquidation({
+              id: args.id,
+              transactionId: args.transaction.id,
+              transactionTimestamp: args.transaction.createdTimestamp as JSBI,
+              ammId,
+              positionId: positionId,
+              liquidator: args.liquidator,
+              reward: args.reward as JSBI,
+              notionalUnwound: args.notionalUnwound as JSBI,
+            })),
+            settlements: settlements.map((args) => new Settlement({
+              id: args.id,
+              transactionId: args.transaction.id,
+              transactionTimestamp: args.transaction.createdTimestamp as JSBI,
+              ammId,
+              positionId: positionId,
+              settlementCashflow: args.settlementCashflow as JSBI
+            })),
           }),
       );
     }
   }, [positionCount, loading, error, isSignerAvailable]);
   const positionsByAgent = useMemo(() => {
-    return positions?.filter(({ isLiquidityProvider, effectiveFixedTokenBalance }) => {
+    return positions?.filter(({ positionType }) => {
       switch (agent) {
         case Agents.LIQUIDITY_PROVIDER:
-          return isLiquidityProvider;
+          return positionType === 3;
 
         case Agents.FIXED_TRADER:
-          return effectiveFixedTokenBalance > 0;
+          return positionType === 1;
 
         case Agents.VARIABLE_TRADER:
-          return effectiveFixedTokenBalance < 0;
+          return positionType === 2;
       }
     });
   }, [positions, agent]);
@@ -95,13 +310,13 @@ const usePositions = (): usePositionsResult => {
             fixedRateLower,
             fixedRateUpper,
             effectiveFixedTokenBalance,
-            isLiquidityProvider,
+            positionType,
           }) => {
             if (ammId !== unresolvedTransaction.ammId) {
               return false;
             }
 
-            if (isLiquidityProvider && unresolvedTransaction.agent !== Agents.LIQUIDITY_PROVIDER) {
+            if (positionType === 3 && unresolvedTransaction.agent !== Agents.LIQUIDITY_PROVIDER) {
               return false;
             }
 

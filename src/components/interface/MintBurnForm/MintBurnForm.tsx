@@ -16,8 +16,6 @@ import {
 import { HandleSubmitMintBurnFormArgs } from './types';
 import { MintBurnMinimumMarginAmount, SubmitMintBurnFormButton } from './components';
 import { MarginControls } from '../SwapForm/components';
-import { positions } from '@mui/system';
-import { Position } from '@voltz/v1-sdk/dist/types/entities';
 
 export type MintBurnFormProps = AgentProps & {
   protocol?: string;

@@ -1,5 +1,5 @@
 overwrite: true
-schema: http://127.0.0.1:8000/subgraphs/name/nicholaspiano/v1-subgraph
+schema: https://api.thegraph.com/subgraphs/name/voltzprotocol/voltz-kovan
 documents: './src/graphql/**/*.graphql'
 generates:
   src/graphql/generated.ts:

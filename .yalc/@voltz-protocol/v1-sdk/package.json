@@ -1,0 +1,69 @@
+{
+  "name": "@voltz-protocol/v1-sdk",
+  "version": "1.0.0",
+  "description": "A TypeScript wrapper for the Voltz smart contract",
+  "main": "dist/index.js",
+  "types": "dist/types",
+  "license": "MIT",
+  "files": [
+    "src/**/*",
+    "dist/**/*",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "build-release": "tsc -p tsconfig.dist.json",
+    "prettier": "prettier 'src/**/*.ts'",
+    "prettier:fix": "prettier --write 'src/**/*.ts'",
+    "eslint": "eslint 'src/**/*.ts'",
+    "eslint:fix": "eslint --fix 'src/**/*.ts'",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "release": "semantic-release",
+    "irs-setup": "ts-node scripts/setup.ts"
+  },
+  "dependencies": {
+    "@metamask/detect-provider": "^1.2.0",
+    "big.js": "^6.1.1",
+    "decimal.js-light": "^2.5.1",
+    "ethers": "^5.5.2",
+    "evm-bn": "^1.1.1",
+    "fraction.js": "^4.2.0",
+    "jsbi": "^4.2.0",
+    "lodash": "^4.17.21",
+    "luxon": "^2.3.0",
+    "tiny-invariant": "^1.2.0",
+    "toformat": "^2.0.0",
+    "yalc": "^1.0.0-pre.53"
+  },
+  "lint-staged": {
+    "src/**/*.ts": [
+      "eslint --fix"
+    ]
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "release": {
+    "branches": [
+      "master"
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/npm",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "dist/**/*.{js,css}",
+            "docs",
+            "package.json"
+          ],
+          "message": "chore: Release ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+        }
+      ]
+    ]
+  },
+  "yalcSig": "8f13b9fcab602ad32dc4943c477b8d8a"
+}

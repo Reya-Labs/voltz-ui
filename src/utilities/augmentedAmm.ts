@@ -1,4 +1,4 @@
-import { AMM, AMMConstructorArgs } from '@voltz/v1-sdk';
+import { AMM, AMMConstructorArgs } from '@voltz-protocol/v1-sdk';
 
 export type AugmentedAMMConstructorArgs = AMMConstructorArgs & {
   refetch?: () => Promise<void>;

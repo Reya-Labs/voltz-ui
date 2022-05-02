@@ -24,13 +24,14 @@ export type Amm = {
   __typename?: 'AMM';
   burns: Array<Burn>;
   createdTimestamp: Scalars['BigInt'];
-  fcmAddress: Scalars['String'];
+  fcm: Fcm;
   id: Scalars['ID'];
-  liquidity: Scalars['BigInt'];
-  marginEngineAddress: Scalars['String'];
+  liquidations: Array<Liquidation>;
+  marginEngine: MarginEngine;
+  marginUpdates: Array<MarginUpdate>;
   mints: Array<Mint>;
   rateOracle: RateOracle;
-  sqrtPriceX96: Scalars['BigInt'];
+  settlements: Array<Settlement>;
   swaps: Array<Swap>;
   termEndTimestamp: Scalars['BigInt'];
   termStartTimestamp: Scalars['BigInt'];
@@ -50,12 +51,39 @@ export type AmmBurnsArgs = {
 };
 
 
+export type AmmLiquidationsArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Liquidation_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<Liquidation_Filter>;
+};
+
+
+export type AmmMarginUpdatesArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<MarginUpdate_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<MarginUpdate_Filter>;
+};
+
+
 export type AmmMintsArgs = {
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Mint_OrderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<Mint_Filter>;
+};
+
+
+export type AmmSettlementsArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Settlement_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<Settlement_Filter>;
 };
 
 
@@ -68,6 +96,8 @@ export type AmmSwapsArgs = {
 };
 
 export type Amm_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
   createdTimestamp?: InputMaybe<Scalars['BigInt']>;
   createdTimestamp_gt?: InputMaybe<Scalars['BigInt']>;
   createdTimestamp_gte?: InputMaybe<Scalars['BigInt']>;
@@ -76,20 +106,26 @@ export type Amm_Filter = {
   createdTimestamp_lte?: InputMaybe<Scalars['BigInt']>;
   createdTimestamp_not?: InputMaybe<Scalars['BigInt']>;
   createdTimestamp_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  fcmAddress?: InputMaybe<Scalars['String']>;
-  fcmAddress_contains?: InputMaybe<Scalars['String']>;
-  fcmAddress_ends_with?: InputMaybe<Scalars['String']>;
-  fcmAddress_gt?: InputMaybe<Scalars['String']>;
-  fcmAddress_gte?: InputMaybe<Scalars['String']>;
-  fcmAddress_in?: InputMaybe<Array<Scalars['String']>>;
-  fcmAddress_lt?: InputMaybe<Scalars['String']>;
-  fcmAddress_lte?: InputMaybe<Scalars['String']>;
-  fcmAddress_not?: InputMaybe<Scalars['String']>;
-  fcmAddress_not_contains?: InputMaybe<Scalars['String']>;
-  fcmAddress_not_ends_with?: InputMaybe<Scalars['String']>;
-  fcmAddress_not_in?: InputMaybe<Array<Scalars['String']>>;
-  fcmAddress_not_starts_with?: InputMaybe<Scalars['String']>;
-  fcmAddress_starts_with?: InputMaybe<Scalars['String']>;
+  fcm?: InputMaybe<Scalars['String']>;
+  fcm_contains?: InputMaybe<Scalars['String']>;
+  fcm_contains_nocase?: InputMaybe<Scalars['String']>;
+  fcm_ends_with?: InputMaybe<Scalars['String']>;
+  fcm_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  fcm_gt?: InputMaybe<Scalars['String']>;
+  fcm_gte?: InputMaybe<Scalars['String']>;
+  fcm_in?: InputMaybe<Array<Scalars['String']>>;
+  fcm_lt?: InputMaybe<Scalars['String']>;
+  fcm_lte?: InputMaybe<Scalars['String']>;
+  fcm_not?: InputMaybe<Scalars['String']>;
+  fcm_not_contains?: InputMaybe<Scalars['String']>;
+  fcm_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  fcm_not_ends_with?: InputMaybe<Scalars['String']>;
+  fcm_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  fcm_not_in?: InputMaybe<Array<Scalars['String']>>;
+  fcm_not_starts_with?: InputMaybe<Scalars['String']>;
+  fcm_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  fcm_starts_with?: InputMaybe<Scalars['String']>;
+  fcm_starts_with_nocase?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['ID']>;
   id_gt?: InputMaybe<Scalars['ID']>;
   id_gte?: InputMaybe<Scalars['ID']>;
@@ -98,31 +134,31 @@ export type Amm_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
-  liquidity?: InputMaybe<Scalars['BigInt']>;
-  liquidity_gt?: InputMaybe<Scalars['BigInt']>;
-  liquidity_gte?: InputMaybe<Scalars['BigInt']>;
-  liquidity_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  liquidity_lt?: InputMaybe<Scalars['BigInt']>;
-  liquidity_lte?: InputMaybe<Scalars['BigInt']>;
-  liquidity_not?: InputMaybe<Scalars['BigInt']>;
-  liquidity_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  marginEngineAddress?: InputMaybe<Scalars['String']>;
-  marginEngineAddress_contains?: InputMaybe<Scalars['String']>;
-  marginEngineAddress_ends_with?: InputMaybe<Scalars['String']>;
-  marginEngineAddress_gt?: InputMaybe<Scalars['String']>;
-  marginEngineAddress_gte?: InputMaybe<Scalars['String']>;
-  marginEngineAddress_in?: InputMaybe<Array<Scalars['String']>>;
-  marginEngineAddress_lt?: InputMaybe<Scalars['String']>;
-  marginEngineAddress_lte?: InputMaybe<Scalars['String']>;
-  marginEngineAddress_not?: InputMaybe<Scalars['String']>;
-  marginEngineAddress_not_contains?: InputMaybe<Scalars['String']>;
-  marginEngineAddress_not_ends_with?: InputMaybe<Scalars['String']>;
-  marginEngineAddress_not_in?: InputMaybe<Array<Scalars['String']>>;
-  marginEngineAddress_not_starts_with?: InputMaybe<Scalars['String']>;
-  marginEngineAddress_starts_with?: InputMaybe<Scalars['String']>;
+  marginEngine?: InputMaybe<Scalars['String']>;
+  marginEngine_contains?: InputMaybe<Scalars['String']>;
+  marginEngine_contains_nocase?: InputMaybe<Scalars['String']>;
+  marginEngine_ends_with?: InputMaybe<Scalars['String']>;
+  marginEngine_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  marginEngine_gt?: InputMaybe<Scalars['String']>;
+  marginEngine_gte?: InputMaybe<Scalars['String']>;
+  marginEngine_in?: InputMaybe<Array<Scalars['String']>>;
+  marginEngine_lt?: InputMaybe<Scalars['String']>;
+  marginEngine_lte?: InputMaybe<Scalars['String']>;
+  marginEngine_not?: InputMaybe<Scalars['String']>;
+  marginEngine_not_contains?: InputMaybe<Scalars['String']>;
+  marginEngine_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  marginEngine_not_ends_with?: InputMaybe<Scalars['String']>;
+  marginEngine_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  marginEngine_not_in?: InputMaybe<Array<Scalars['String']>>;
+  marginEngine_not_starts_with?: InputMaybe<Scalars['String']>;
+  marginEngine_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  marginEngine_starts_with?: InputMaybe<Scalars['String']>;
+  marginEngine_starts_with_nocase?: InputMaybe<Scalars['String']>;
   rateOracle?: InputMaybe<Scalars['String']>;
   rateOracle_contains?: InputMaybe<Scalars['String']>;
+  rateOracle_contains_nocase?: InputMaybe<Scalars['String']>;
   rateOracle_ends_with?: InputMaybe<Scalars['String']>;
+  rateOracle_ends_with_nocase?: InputMaybe<Scalars['String']>;
   rateOracle_gt?: InputMaybe<Scalars['String']>;
   rateOracle_gte?: InputMaybe<Scalars['String']>;
   rateOracle_in?: InputMaybe<Array<Scalars['String']>>;
@@ -130,18 +166,14 @@ export type Amm_Filter = {
   rateOracle_lte?: InputMaybe<Scalars['String']>;
   rateOracle_not?: InputMaybe<Scalars['String']>;
   rateOracle_not_contains?: InputMaybe<Scalars['String']>;
+  rateOracle_not_contains_nocase?: InputMaybe<Scalars['String']>;
   rateOracle_not_ends_with?: InputMaybe<Scalars['String']>;
+  rateOracle_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   rateOracle_not_in?: InputMaybe<Array<Scalars['String']>>;
   rateOracle_not_starts_with?: InputMaybe<Scalars['String']>;
+  rateOracle_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   rateOracle_starts_with?: InputMaybe<Scalars['String']>;
-  sqrtPriceX96?: InputMaybe<Scalars['BigInt']>;
-  sqrtPriceX96_gt?: InputMaybe<Scalars['BigInt']>;
-  sqrtPriceX96_gte?: InputMaybe<Scalars['BigInt']>;
-  sqrtPriceX96_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  sqrtPriceX96_lt?: InputMaybe<Scalars['BigInt']>;
-  sqrtPriceX96_lte?: InputMaybe<Scalars['BigInt']>;
-  sqrtPriceX96_not?: InputMaybe<Scalars['BigInt']>;
-  sqrtPriceX96_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  rateOracle_starts_with_nocase?: InputMaybe<Scalars['String']>;
   termEndTimestamp?: InputMaybe<Scalars['BigInt']>;
   termEndTimestamp_gt?: InputMaybe<Scalars['BigInt']>;
   termEndTimestamp_gte?: InputMaybe<Scalars['BigInt']>;
@@ -195,13 +227,14 @@ export type Amm_Filter = {
 export enum Amm_OrderBy {
   Burns = 'burns',
   CreatedTimestamp = 'createdTimestamp',
-  FcmAddress = 'fcmAddress',
+  Fcm = 'fcm',
   Id = 'id',
-  Liquidity = 'liquidity',
-  MarginEngineAddress = 'marginEngineAddress',
+  Liquidations = 'liquidations',
+  MarginEngine = 'marginEngine',
+  MarginUpdates = 'marginUpdates',
   Mints = 'mints',
   RateOracle = 'rateOracle',
-  SqrtPriceX96 = 'sqrtPriceX96',
+  Settlements = 'settlements',
   Swaps = 'swaps',
   TermEndTimestamp = 'termEndTimestamp',
   TermStartTimestamp = 'termStartTimestamp',
@@ -210,6 +243,10 @@ export enum Amm_OrderBy {
   TxCount = 'txCount',
   UpdatedTimestamp = 'updatedTimestamp'
 }
+
+export type BlockChangedFilter = {
+  number_gte: Scalars['Int'];
+};
 
 export type Block_Height = {
   hash?: InputMaybe<Scalars['Bytes']>;
@@ -224,15 +261,17 @@ export type Burn = {
   id: Scalars['ID'];
   position: Position;
   sender: Scalars['String'];
-  tickLower: Tick;
-  tickUpper: Tick;
   transaction: Transaction;
 };
 
 export type Burn_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
   amm?: InputMaybe<Scalars['String']>;
   amm_contains?: InputMaybe<Scalars['String']>;
+  amm_contains_nocase?: InputMaybe<Scalars['String']>;
   amm_ends_with?: InputMaybe<Scalars['String']>;
+  amm_ends_with_nocase?: InputMaybe<Scalars['String']>;
   amm_gt?: InputMaybe<Scalars['String']>;
   amm_gte?: InputMaybe<Scalars['String']>;
   amm_in?: InputMaybe<Array<Scalars['String']>>;
@@ -240,10 +279,14 @@ export type Burn_Filter = {
   amm_lte?: InputMaybe<Scalars['String']>;
   amm_not?: InputMaybe<Scalars['String']>;
   amm_not_contains?: InputMaybe<Scalars['String']>;
+  amm_not_contains_nocase?: InputMaybe<Scalars['String']>;
   amm_not_ends_with?: InputMaybe<Scalars['String']>;
+  amm_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   amm_not_in?: InputMaybe<Array<Scalars['String']>>;
   amm_not_starts_with?: InputMaybe<Scalars['String']>;
+  amm_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   amm_starts_with?: InputMaybe<Scalars['String']>;
+  amm_starts_with_nocase?: InputMaybe<Scalars['String']>;
   amount?: InputMaybe<Scalars['BigInt']>;
   amount_gt?: InputMaybe<Scalars['BigInt']>;
   amount_gte?: InputMaybe<Scalars['BigInt']>;
@@ -262,7 +305,9 @@ export type Burn_Filter = {
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
   position?: InputMaybe<Scalars['String']>;
   position_contains?: InputMaybe<Scalars['String']>;
+  position_contains_nocase?: InputMaybe<Scalars['String']>;
   position_ends_with?: InputMaybe<Scalars['String']>;
+  position_ends_with_nocase?: InputMaybe<Scalars['String']>;
   position_gt?: InputMaybe<Scalars['String']>;
   position_gte?: InputMaybe<Scalars['String']>;
   position_in?: InputMaybe<Array<Scalars['String']>>;
@@ -270,13 +315,19 @@ export type Burn_Filter = {
   position_lte?: InputMaybe<Scalars['String']>;
   position_not?: InputMaybe<Scalars['String']>;
   position_not_contains?: InputMaybe<Scalars['String']>;
+  position_not_contains_nocase?: InputMaybe<Scalars['String']>;
   position_not_ends_with?: InputMaybe<Scalars['String']>;
+  position_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   position_not_in?: InputMaybe<Array<Scalars['String']>>;
   position_not_starts_with?: InputMaybe<Scalars['String']>;
+  position_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   position_starts_with?: InputMaybe<Scalars['String']>;
+  position_starts_with_nocase?: InputMaybe<Scalars['String']>;
   sender?: InputMaybe<Scalars['String']>;
   sender_contains?: InputMaybe<Scalars['String']>;
+  sender_contains_nocase?: InputMaybe<Scalars['String']>;
   sender_ends_with?: InputMaybe<Scalars['String']>;
+  sender_ends_with_nocase?: InputMaybe<Scalars['String']>;
   sender_gt?: InputMaybe<Scalars['String']>;
   sender_gte?: InputMaybe<Scalars['String']>;
   sender_in?: InputMaybe<Array<Scalars['String']>>;
@@ -284,41 +335,19 @@ export type Burn_Filter = {
   sender_lte?: InputMaybe<Scalars['String']>;
   sender_not?: InputMaybe<Scalars['String']>;
   sender_not_contains?: InputMaybe<Scalars['String']>;
+  sender_not_contains_nocase?: InputMaybe<Scalars['String']>;
   sender_not_ends_with?: InputMaybe<Scalars['String']>;
+  sender_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   sender_not_in?: InputMaybe<Array<Scalars['String']>>;
   sender_not_starts_with?: InputMaybe<Scalars['String']>;
+  sender_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   sender_starts_with?: InputMaybe<Scalars['String']>;
-  tickLower?: InputMaybe<Scalars['String']>;
-  tickLower_contains?: InputMaybe<Scalars['String']>;
-  tickLower_ends_with?: InputMaybe<Scalars['String']>;
-  tickLower_gt?: InputMaybe<Scalars['String']>;
-  tickLower_gte?: InputMaybe<Scalars['String']>;
-  tickLower_in?: InputMaybe<Array<Scalars['String']>>;
-  tickLower_lt?: InputMaybe<Scalars['String']>;
-  tickLower_lte?: InputMaybe<Scalars['String']>;
-  tickLower_not?: InputMaybe<Scalars['String']>;
-  tickLower_not_contains?: InputMaybe<Scalars['String']>;
-  tickLower_not_ends_with?: InputMaybe<Scalars['String']>;
-  tickLower_not_in?: InputMaybe<Array<Scalars['String']>>;
-  tickLower_not_starts_with?: InputMaybe<Scalars['String']>;
-  tickLower_starts_with?: InputMaybe<Scalars['String']>;
-  tickUpper?: InputMaybe<Scalars['String']>;
-  tickUpper_contains?: InputMaybe<Scalars['String']>;
-  tickUpper_ends_with?: InputMaybe<Scalars['String']>;
-  tickUpper_gt?: InputMaybe<Scalars['String']>;
-  tickUpper_gte?: InputMaybe<Scalars['String']>;
-  tickUpper_in?: InputMaybe<Array<Scalars['String']>>;
-  tickUpper_lt?: InputMaybe<Scalars['String']>;
-  tickUpper_lte?: InputMaybe<Scalars['String']>;
-  tickUpper_not?: InputMaybe<Scalars['String']>;
-  tickUpper_not_contains?: InputMaybe<Scalars['String']>;
-  tickUpper_not_ends_with?: InputMaybe<Scalars['String']>;
-  tickUpper_not_in?: InputMaybe<Array<Scalars['String']>>;
-  tickUpper_not_starts_with?: InputMaybe<Scalars['String']>;
-  tickUpper_starts_with?: InputMaybe<Scalars['String']>;
+  sender_starts_with_nocase?: InputMaybe<Scalars['String']>;
   transaction?: InputMaybe<Scalars['String']>;
   transaction_contains?: InputMaybe<Scalars['String']>;
+  transaction_contains_nocase?: InputMaybe<Scalars['String']>;
   transaction_ends_with?: InputMaybe<Scalars['String']>;
+  transaction_ends_with_nocase?: InputMaybe<Scalars['String']>;
   transaction_gt?: InputMaybe<Scalars['String']>;
   transaction_gte?: InputMaybe<Scalars['String']>;
   transaction_in?: InputMaybe<Array<Scalars['String']>>;
@@ -326,10 +355,14 @@ export type Burn_Filter = {
   transaction_lte?: InputMaybe<Scalars['String']>;
   transaction_not?: InputMaybe<Scalars['String']>;
   transaction_not_contains?: InputMaybe<Scalars['String']>;
+  transaction_not_contains_nocase?: InputMaybe<Scalars['String']>;
   transaction_not_ends_with?: InputMaybe<Scalars['String']>;
+  transaction_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   transaction_not_in?: InputMaybe<Array<Scalars['String']>>;
   transaction_not_starts_with?: InputMaybe<Scalars['String']>;
+  transaction_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   transaction_starts_with?: InputMaybe<Scalars['String']>;
+  transaction_starts_with_nocase?: InputMaybe<Scalars['String']>;
 };
 
 export enum Burn_OrderBy {
@@ -338,9 +371,711 @@ export enum Burn_OrderBy {
   Id = 'id',
   Position = 'position',
   Sender = 'sender',
-  TickLower = 'tickLower',
-  TickUpper = 'tickUpper',
   Transaction = 'transaction'
+}
+
+export type Fcm = {
+  __typename?: 'FCM';
+  amm: Amm;
+  id: Scalars['ID'];
+};
+
+export type FcmPosition = {
+  __typename?: 'FCMPosition';
+  amm: Amm;
+  createdTimestamp: Scalars['BigInt'];
+  fcmSettlements: Array<FcmSettlement>;
+  fcmSwaps: Array<FcmSwap>;
+  fcmUnwinds: Array<FcmUnwind>;
+  fixedTokenBalance: Scalars['BigInt'];
+  id: Scalars['ID'];
+  isSettled: Scalars['Boolean'];
+  marginInScaledYieldBearingTokens: Scalars['BigInt'];
+  owner: Wallet;
+  snapshotCount: Scalars['BigInt'];
+  snapshots: Array<FcmPositionSnapshot>;
+  updatedTimestamp: Scalars['BigInt'];
+  variableTokenBalance: Scalars['BigInt'];
+};
+
+
+export type FcmPositionFcmSettlementsArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<FcmSettlement_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<FcmSettlement_Filter>;
+};
+
+
+export type FcmPositionFcmSwapsArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<FcmSwap_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<FcmSwap_Filter>;
+};
+
+
+export type FcmPositionFcmUnwindsArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<FcmUnwind_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<FcmUnwind_Filter>;
+};
+
+
+export type FcmPositionSnapshotsArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<FcmPositionSnapshot_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<FcmPositionSnapshot_Filter>;
+};
+
+export type FcmPositionSnapshot = {
+  __typename?: 'FCMPositionSnapshot';
+  createdTimestamp: Scalars['BigInt'];
+  fcmPosition: FcmPosition;
+  fixedTokenBalance: Scalars['BigInt'];
+  id: Scalars['ID'];
+  isSettled: Scalars['Boolean'];
+  marginInScaledYieldBearingTokens: Scalars['BigInt'];
+  variableTokenBalance: Scalars['BigInt'];
+};
+
+export type FcmPositionSnapshot_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  createdTimestamp?: InputMaybe<Scalars['BigInt']>;
+  createdTimestamp_gt?: InputMaybe<Scalars['BigInt']>;
+  createdTimestamp_gte?: InputMaybe<Scalars['BigInt']>;
+  createdTimestamp_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  createdTimestamp_lt?: InputMaybe<Scalars['BigInt']>;
+  createdTimestamp_lte?: InputMaybe<Scalars['BigInt']>;
+  createdTimestamp_not?: InputMaybe<Scalars['BigInt']>;
+  createdTimestamp_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fcmPosition?: InputMaybe<Scalars['String']>;
+  fcmPosition_contains?: InputMaybe<Scalars['String']>;
+  fcmPosition_contains_nocase?: InputMaybe<Scalars['String']>;
+  fcmPosition_ends_with?: InputMaybe<Scalars['String']>;
+  fcmPosition_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  fcmPosition_gt?: InputMaybe<Scalars['String']>;
+  fcmPosition_gte?: InputMaybe<Scalars['String']>;
+  fcmPosition_in?: InputMaybe<Array<Scalars['String']>>;
+  fcmPosition_lt?: InputMaybe<Scalars['String']>;
+  fcmPosition_lte?: InputMaybe<Scalars['String']>;
+  fcmPosition_not?: InputMaybe<Scalars['String']>;
+  fcmPosition_not_contains?: InputMaybe<Scalars['String']>;
+  fcmPosition_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  fcmPosition_not_ends_with?: InputMaybe<Scalars['String']>;
+  fcmPosition_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  fcmPosition_not_in?: InputMaybe<Array<Scalars['String']>>;
+  fcmPosition_not_starts_with?: InputMaybe<Scalars['String']>;
+  fcmPosition_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  fcmPosition_starts_with?: InputMaybe<Scalars['String']>;
+  fcmPosition_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  fixedTokenBalance?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenBalance_gt?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenBalance_gte?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenBalance_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fixedTokenBalance_lt?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenBalance_lte?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenBalance_not?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenBalance_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  id?: InputMaybe<Scalars['ID']>;
+  id_gt?: InputMaybe<Scalars['ID']>;
+  id_gte?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  id_lt?: InputMaybe<Scalars['ID']>;
+  id_lte?: InputMaybe<Scalars['ID']>;
+  id_not?: InputMaybe<Scalars['ID']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  isSettled?: InputMaybe<Scalars['Boolean']>;
+  isSettled_in?: InputMaybe<Array<Scalars['Boolean']>>;
+  isSettled_not?: InputMaybe<Scalars['Boolean']>;
+  isSettled_not_in?: InputMaybe<Array<Scalars['Boolean']>>;
+  marginInScaledYieldBearingTokens?: InputMaybe<Scalars['BigInt']>;
+  marginInScaledYieldBearingTokens_gt?: InputMaybe<Scalars['BigInt']>;
+  marginInScaledYieldBearingTokens_gte?: InputMaybe<Scalars['BigInt']>;
+  marginInScaledYieldBearingTokens_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  marginInScaledYieldBearingTokens_lt?: InputMaybe<Scalars['BigInt']>;
+  marginInScaledYieldBearingTokens_lte?: InputMaybe<Scalars['BigInt']>;
+  marginInScaledYieldBearingTokens_not?: InputMaybe<Scalars['BigInt']>;
+  marginInScaledYieldBearingTokens_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  variableTokenBalance?: InputMaybe<Scalars['BigInt']>;
+  variableTokenBalance_gt?: InputMaybe<Scalars['BigInt']>;
+  variableTokenBalance_gte?: InputMaybe<Scalars['BigInt']>;
+  variableTokenBalance_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  variableTokenBalance_lt?: InputMaybe<Scalars['BigInt']>;
+  variableTokenBalance_lte?: InputMaybe<Scalars['BigInt']>;
+  variableTokenBalance_not?: InputMaybe<Scalars['BigInt']>;
+  variableTokenBalance_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+};
+
+export enum FcmPositionSnapshot_OrderBy {
+  CreatedTimestamp = 'createdTimestamp',
+  FcmPosition = 'fcmPosition',
+  FixedTokenBalance = 'fixedTokenBalance',
+  Id = 'id',
+  IsSettled = 'isSettled',
+  MarginInScaledYieldBearingTokens = 'marginInScaledYieldBearingTokens',
+  VariableTokenBalance = 'variableTokenBalance'
+}
+
+export type FcmPosition_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  amm?: InputMaybe<Scalars['String']>;
+  amm_contains?: InputMaybe<Scalars['String']>;
+  amm_contains_nocase?: InputMaybe<Scalars['String']>;
+  amm_ends_with?: InputMaybe<Scalars['String']>;
+  amm_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_gt?: InputMaybe<Scalars['String']>;
+  amm_gte?: InputMaybe<Scalars['String']>;
+  amm_in?: InputMaybe<Array<Scalars['String']>>;
+  amm_lt?: InputMaybe<Scalars['String']>;
+  amm_lte?: InputMaybe<Scalars['String']>;
+  amm_not?: InputMaybe<Scalars['String']>;
+  amm_not_contains?: InputMaybe<Scalars['String']>;
+  amm_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  amm_not_ends_with?: InputMaybe<Scalars['String']>;
+  amm_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_not_in?: InputMaybe<Array<Scalars['String']>>;
+  amm_not_starts_with?: InputMaybe<Scalars['String']>;
+  amm_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_starts_with?: InputMaybe<Scalars['String']>;
+  amm_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  createdTimestamp?: InputMaybe<Scalars['BigInt']>;
+  createdTimestamp_gt?: InputMaybe<Scalars['BigInt']>;
+  createdTimestamp_gte?: InputMaybe<Scalars['BigInt']>;
+  createdTimestamp_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  createdTimestamp_lt?: InputMaybe<Scalars['BigInt']>;
+  createdTimestamp_lte?: InputMaybe<Scalars['BigInt']>;
+  createdTimestamp_not?: InputMaybe<Scalars['BigInt']>;
+  createdTimestamp_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fixedTokenBalance?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenBalance_gt?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenBalance_gte?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenBalance_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fixedTokenBalance_lt?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenBalance_lte?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenBalance_not?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenBalance_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  id?: InputMaybe<Scalars['ID']>;
+  id_gt?: InputMaybe<Scalars['ID']>;
+  id_gte?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  id_lt?: InputMaybe<Scalars['ID']>;
+  id_lte?: InputMaybe<Scalars['ID']>;
+  id_not?: InputMaybe<Scalars['ID']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  isSettled?: InputMaybe<Scalars['Boolean']>;
+  isSettled_in?: InputMaybe<Array<Scalars['Boolean']>>;
+  isSettled_not?: InputMaybe<Scalars['Boolean']>;
+  isSettled_not_in?: InputMaybe<Array<Scalars['Boolean']>>;
+  marginInScaledYieldBearingTokens?: InputMaybe<Scalars['BigInt']>;
+  marginInScaledYieldBearingTokens_gt?: InputMaybe<Scalars['BigInt']>;
+  marginInScaledYieldBearingTokens_gte?: InputMaybe<Scalars['BigInt']>;
+  marginInScaledYieldBearingTokens_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  marginInScaledYieldBearingTokens_lt?: InputMaybe<Scalars['BigInt']>;
+  marginInScaledYieldBearingTokens_lte?: InputMaybe<Scalars['BigInt']>;
+  marginInScaledYieldBearingTokens_not?: InputMaybe<Scalars['BigInt']>;
+  marginInScaledYieldBearingTokens_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  owner?: InputMaybe<Scalars['String']>;
+  owner_contains?: InputMaybe<Scalars['String']>;
+  owner_contains_nocase?: InputMaybe<Scalars['String']>;
+  owner_ends_with?: InputMaybe<Scalars['String']>;
+  owner_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_gt?: InputMaybe<Scalars['String']>;
+  owner_gte?: InputMaybe<Scalars['String']>;
+  owner_in?: InputMaybe<Array<Scalars['String']>>;
+  owner_lt?: InputMaybe<Scalars['String']>;
+  owner_lte?: InputMaybe<Scalars['String']>;
+  owner_not?: InputMaybe<Scalars['String']>;
+  owner_not_contains?: InputMaybe<Scalars['String']>;
+  owner_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  owner_not_ends_with?: InputMaybe<Scalars['String']>;
+  owner_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_not_in?: InputMaybe<Array<Scalars['String']>>;
+  owner_not_starts_with?: InputMaybe<Scalars['String']>;
+  owner_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_starts_with?: InputMaybe<Scalars['String']>;
+  owner_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  snapshotCount?: InputMaybe<Scalars['BigInt']>;
+  snapshotCount_gt?: InputMaybe<Scalars['BigInt']>;
+  snapshotCount_gte?: InputMaybe<Scalars['BigInt']>;
+  snapshotCount_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  snapshotCount_lt?: InputMaybe<Scalars['BigInt']>;
+  snapshotCount_lte?: InputMaybe<Scalars['BigInt']>;
+  snapshotCount_not?: InputMaybe<Scalars['BigInt']>;
+  snapshotCount_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  updatedTimestamp?: InputMaybe<Scalars['BigInt']>;
+  updatedTimestamp_gt?: InputMaybe<Scalars['BigInt']>;
+  updatedTimestamp_gte?: InputMaybe<Scalars['BigInt']>;
+  updatedTimestamp_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  updatedTimestamp_lt?: InputMaybe<Scalars['BigInt']>;
+  updatedTimestamp_lte?: InputMaybe<Scalars['BigInt']>;
+  updatedTimestamp_not?: InputMaybe<Scalars['BigInt']>;
+  updatedTimestamp_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  variableTokenBalance?: InputMaybe<Scalars['BigInt']>;
+  variableTokenBalance_gt?: InputMaybe<Scalars['BigInt']>;
+  variableTokenBalance_gte?: InputMaybe<Scalars['BigInt']>;
+  variableTokenBalance_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  variableTokenBalance_lt?: InputMaybe<Scalars['BigInt']>;
+  variableTokenBalance_lte?: InputMaybe<Scalars['BigInt']>;
+  variableTokenBalance_not?: InputMaybe<Scalars['BigInt']>;
+  variableTokenBalance_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+};
+
+export enum FcmPosition_OrderBy {
+  Amm = 'amm',
+  CreatedTimestamp = 'createdTimestamp',
+  FcmSettlements = 'fcmSettlements',
+  FcmSwaps = 'fcmSwaps',
+  FcmUnwinds = 'fcmUnwinds',
+  FixedTokenBalance = 'fixedTokenBalance',
+  Id = 'id',
+  IsSettled = 'isSettled',
+  MarginInScaledYieldBearingTokens = 'marginInScaledYieldBearingTokens',
+  Owner = 'owner',
+  SnapshotCount = 'snapshotCount',
+  Snapshots = 'snapshots',
+  UpdatedTimestamp = 'updatedTimestamp',
+  VariableTokenBalance = 'variableTokenBalance'
+}
+
+export type FcmSettlement = {
+  __typename?: 'FCMSettlement';
+  amm: Amm;
+  fcmPosition: FcmPosition;
+  id: Scalars['ID'];
+  settlementCashflow: Scalars['BigInt'];
+  transaction: Transaction;
+};
+
+export type FcmSettlement_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  amm?: InputMaybe<Scalars['String']>;
+  amm_contains?: InputMaybe<Scalars['String']>;
+  amm_contains_nocase?: InputMaybe<Scalars['String']>;
+  amm_ends_with?: InputMaybe<Scalars['String']>;
+  amm_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_gt?: InputMaybe<Scalars['String']>;
+  amm_gte?: InputMaybe<Scalars['String']>;
+  amm_in?: InputMaybe<Array<Scalars['String']>>;
+  amm_lt?: InputMaybe<Scalars['String']>;
+  amm_lte?: InputMaybe<Scalars['String']>;
+  amm_not?: InputMaybe<Scalars['String']>;
+  amm_not_contains?: InputMaybe<Scalars['String']>;
+  amm_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  amm_not_ends_with?: InputMaybe<Scalars['String']>;
+  amm_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_not_in?: InputMaybe<Array<Scalars['String']>>;
+  amm_not_starts_with?: InputMaybe<Scalars['String']>;
+  amm_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_starts_with?: InputMaybe<Scalars['String']>;
+  amm_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  fcmPosition?: InputMaybe<Scalars['String']>;
+  fcmPosition_contains?: InputMaybe<Scalars['String']>;
+  fcmPosition_contains_nocase?: InputMaybe<Scalars['String']>;
+  fcmPosition_ends_with?: InputMaybe<Scalars['String']>;
+  fcmPosition_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  fcmPosition_gt?: InputMaybe<Scalars['String']>;
+  fcmPosition_gte?: InputMaybe<Scalars['String']>;
+  fcmPosition_in?: InputMaybe<Array<Scalars['String']>>;
+  fcmPosition_lt?: InputMaybe<Scalars['String']>;
+  fcmPosition_lte?: InputMaybe<Scalars['String']>;
+  fcmPosition_not?: InputMaybe<Scalars['String']>;
+  fcmPosition_not_contains?: InputMaybe<Scalars['String']>;
+  fcmPosition_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  fcmPosition_not_ends_with?: InputMaybe<Scalars['String']>;
+  fcmPosition_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  fcmPosition_not_in?: InputMaybe<Array<Scalars['String']>>;
+  fcmPosition_not_starts_with?: InputMaybe<Scalars['String']>;
+  fcmPosition_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  fcmPosition_starts_with?: InputMaybe<Scalars['String']>;
+  fcmPosition_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+  id_gt?: InputMaybe<Scalars['ID']>;
+  id_gte?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  id_lt?: InputMaybe<Scalars['ID']>;
+  id_lte?: InputMaybe<Scalars['ID']>;
+  id_not?: InputMaybe<Scalars['ID']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  settlementCashflow?: InputMaybe<Scalars['BigInt']>;
+  settlementCashflow_gt?: InputMaybe<Scalars['BigInt']>;
+  settlementCashflow_gte?: InputMaybe<Scalars['BigInt']>;
+  settlementCashflow_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  settlementCashflow_lt?: InputMaybe<Scalars['BigInt']>;
+  settlementCashflow_lte?: InputMaybe<Scalars['BigInt']>;
+  settlementCashflow_not?: InputMaybe<Scalars['BigInt']>;
+  settlementCashflow_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  transaction?: InputMaybe<Scalars['String']>;
+  transaction_contains?: InputMaybe<Scalars['String']>;
+  transaction_contains_nocase?: InputMaybe<Scalars['String']>;
+  transaction_ends_with?: InputMaybe<Scalars['String']>;
+  transaction_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  transaction_gt?: InputMaybe<Scalars['String']>;
+  transaction_gte?: InputMaybe<Scalars['String']>;
+  transaction_in?: InputMaybe<Array<Scalars['String']>>;
+  transaction_lt?: InputMaybe<Scalars['String']>;
+  transaction_lte?: InputMaybe<Scalars['String']>;
+  transaction_not?: InputMaybe<Scalars['String']>;
+  transaction_not_contains?: InputMaybe<Scalars['String']>;
+  transaction_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  transaction_not_ends_with?: InputMaybe<Scalars['String']>;
+  transaction_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  transaction_not_in?: InputMaybe<Array<Scalars['String']>>;
+  transaction_not_starts_with?: InputMaybe<Scalars['String']>;
+  transaction_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  transaction_starts_with?: InputMaybe<Scalars['String']>;
+  transaction_starts_with_nocase?: InputMaybe<Scalars['String']>;
+};
+
+export enum FcmSettlement_OrderBy {
+  Amm = 'amm',
+  FcmPosition = 'fcmPosition',
+  Id = 'id',
+  SettlementCashflow = 'settlementCashflow',
+  Transaction = 'transaction'
+}
+
+export type FcmSwap = {
+  __typename?: 'FCMSwap';
+  amm: Amm;
+  cumulativeFeeIncurred: Scalars['BigInt'];
+  desiredNotional: Scalars['BigInt'];
+  fcmPosition: FcmPosition;
+  fixedTokenDelta: Scalars['BigInt'];
+  fixedTokenDeltaUnbalanced: Scalars['BigInt'];
+  id: Scalars['ID'];
+  sqrtPriceLimitX96: Scalars['BigInt'];
+  transaction: Transaction;
+  variableTokenDelta: Scalars['BigInt'];
+};
+
+export type FcmSwap_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  amm?: InputMaybe<Scalars['String']>;
+  amm_contains?: InputMaybe<Scalars['String']>;
+  amm_contains_nocase?: InputMaybe<Scalars['String']>;
+  amm_ends_with?: InputMaybe<Scalars['String']>;
+  amm_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_gt?: InputMaybe<Scalars['String']>;
+  amm_gte?: InputMaybe<Scalars['String']>;
+  amm_in?: InputMaybe<Array<Scalars['String']>>;
+  amm_lt?: InputMaybe<Scalars['String']>;
+  amm_lte?: InputMaybe<Scalars['String']>;
+  amm_not?: InputMaybe<Scalars['String']>;
+  amm_not_contains?: InputMaybe<Scalars['String']>;
+  amm_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  amm_not_ends_with?: InputMaybe<Scalars['String']>;
+  amm_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_not_in?: InputMaybe<Array<Scalars['String']>>;
+  amm_not_starts_with?: InputMaybe<Scalars['String']>;
+  amm_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_starts_with?: InputMaybe<Scalars['String']>;
+  amm_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  cumulativeFeeIncurred?: InputMaybe<Scalars['BigInt']>;
+  cumulativeFeeIncurred_gt?: InputMaybe<Scalars['BigInt']>;
+  cumulativeFeeIncurred_gte?: InputMaybe<Scalars['BigInt']>;
+  cumulativeFeeIncurred_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  cumulativeFeeIncurred_lt?: InputMaybe<Scalars['BigInt']>;
+  cumulativeFeeIncurred_lte?: InputMaybe<Scalars['BigInt']>;
+  cumulativeFeeIncurred_not?: InputMaybe<Scalars['BigInt']>;
+  cumulativeFeeIncurred_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  desiredNotional?: InputMaybe<Scalars['BigInt']>;
+  desiredNotional_gt?: InputMaybe<Scalars['BigInt']>;
+  desiredNotional_gte?: InputMaybe<Scalars['BigInt']>;
+  desiredNotional_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  desiredNotional_lt?: InputMaybe<Scalars['BigInt']>;
+  desiredNotional_lte?: InputMaybe<Scalars['BigInt']>;
+  desiredNotional_not?: InputMaybe<Scalars['BigInt']>;
+  desiredNotional_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fcmPosition?: InputMaybe<Scalars['String']>;
+  fcmPosition_contains?: InputMaybe<Scalars['String']>;
+  fcmPosition_contains_nocase?: InputMaybe<Scalars['String']>;
+  fcmPosition_ends_with?: InputMaybe<Scalars['String']>;
+  fcmPosition_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  fcmPosition_gt?: InputMaybe<Scalars['String']>;
+  fcmPosition_gte?: InputMaybe<Scalars['String']>;
+  fcmPosition_in?: InputMaybe<Array<Scalars['String']>>;
+  fcmPosition_lt?: InputMaybe<Scalars['String']>;
+  fcmPosition_lte?: InputMaybe<Scalars['String']>;
+  fcmPosition_not?: InputMaybe<Scalars['String']>;
+  fcmPosition_not_contains?: InputMaybe<Scalars['String']>;
+  fcmPosition_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  fcmPosition_not_ends_with?: InputMaybe<Scalars['String']>;
+  fcmPosition_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  fcmPosition_not_in?: InputMaybe<Array<Scalars['String']>>;
+  fcmPosition_not_starts_with?: InputMaybe<Scalars['String']>;
+  fcmPosition_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  fcmPosition_starts_with?: InputMaybe<Scalars['String']>;
+  fcmPosition_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  fixedTokenDelta?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDeltaUnbalanced?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDeltaUnbalanced_gt?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDeltaUnbalanced_gte?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDeltaUnbalanced_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fixedTokenDeltaUnbalanced_lt?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDeltaUnbalanced_lte?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDeltaUnbalanced_not?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDeltaUnbalanced_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fixedTokenDelta_gt?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDelta_gte?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDelta_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fixedTokenDelta_lt?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDelta_lte?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDelta_not?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDelta_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  id?: InputMaybe<Scalars['ID']>;
+  id_gt?: InputMaybe<Scalars['ID']>;
+  id_gte?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  id_lt?: InputMaybe<Scalars['ID']>;
+  id_lte?: InputMaybe<Scalars['ID']>;
+  id_not?: InputMaybe<Scalars['ID']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  sqrtPriceLimitX96?: InputMaybe<Scalars['BigInt']>;
+  sqrtPriceLimitX96_gt?: InputMaybe<Scalars['BigInt']>;
+  sqrtPriceLimitX96_gte?: InputMaybe<Scalars['BigInt']>;
+  sqrtPriceLimitX96_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  sqrtPriceLimitX96_lt?: InputMaybe<Scalars['BigInt']>;
+  sqrtPriceLimitX96_lte?: InputMaybe<Scalars['BigInt']>;
+  sqrtPriceLimitX96_not?: InputMaybe<Scalars['BigInt']>;
+  sqrtPriceLimitX96_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  transaction?: InputMaybe<Scalars['String']>;
+  transaction_contains?: InputMaybe<Scalars['String']>;
+  transaction_contains_nocase?: InputMaybe<Scalars['String']>;
+  transaction_ends_with?: InputMaybe<Scalars['String']>;
+  transaction_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  transaction_gt?: InputMaybe<Scalars['String']>;
+  transaction_gte?: InputMaybe<Scalars['String']>;
+  transaction_in?: InputMaybe<Array<Scalars['String']>>;
+  transaction_lt?: InputMaybe<Scalars['String']>;
+  transaction_lte?: InputMaybe<Scalars['String']>;
+  transaction_not?: InputMaybe<Scalars['String']>;
+  transaction_not_contains?: InputMaybe<Scalars['String']>;
+  transaction_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  transaction_not_ends_with?: InputMaybe<Scalars['String']>;
+  transaction_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  transaction_not_in?: InputMaybe<Array<Scalars['String']>>;
+  transaction_not_starts_with?: InputMaybe<Scalars['String']>;
+  transaction_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  transaction_starts_with?: InputMaybe<Scalars['String']>;
+  transaction_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  variableTokenDelta?: InputMaybe<Scalars['BigInt']>;
+  variableTokenDelta_gt?: InputMaybe<Scalars['BigInt']>;
+  variableTokenDelta_gte?: InputMaybe<Scalars['BigInt']>;
+  variableTokenDelta_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  variableTokenDelta_lt?: InputMaybe<Scalars['BigInt']>;
+  variableTokenDelta_lte?: InputMaybe<Scalars['BigInt']>;
+  variableTokenDelta_not?: InputMaybe<Scalars['BigInt']>;
+  variableTokenDelta_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+};
+
+export enum FcmSwap_OrderBy {
+  Amm = 'amm',
+  CumulativeFeeIncurred = 'cumulativeFeeIncurred',
+  DesiredNotional = 'desiredNotional',
+  FcmPosition = 'fcmPosition',
+  FixedTokenDelta = 'fixedTokenDelta',
+  FixedTokenDeltaUnbalanced = 'fixedTokenDeltaUnbalanced',
+  Id = 'id',
+  SqrtPriceLimitX96 = 'sqrtPriceLimitX96',
+  Transaction = 'transaction',
+  VariableTokenDelta = 'variableTokenDelta'
+}
+
+export type FcmUnwind = {
+  __typename?: 'FCMUnwind';
+  amm: Amm;
+  cumulativeFeeIncurred: Scalars['BigInt'];
+  desiredNotional: Scalars['BigInt'];
+  fcmPosition: FcmPosition;
+  fixedTokenDelta: Scalars['BigInt'];
+  fixedTokenDeltaUnbalanced: Scalars['BigInt'];
+  id: Scalars['ID'];
+  sqrtPriceLimitX96: Scalars['BigInt'];
+  transaction: Transaction;
+  variableTokenDelta: Scalars['BigInt'];
+};
+
+export type FcmUnwind_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  amm?: InputMaybe<Scalars['String']>;
+  amm_contains?: InputMaybe<Scalars['String']>;
+  amm_contains_nocase?: InputMaybe<Scalars['String']>;
+  amm_ends_with?: InputMaybe<Scalars['String']>;
+  amm_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_gt?: InputMaybe<Scalars['String']>;
+  amm_gte?: InputMaybe<Scalars['String']>;
+  amm_in?: InputMaybe<Array<Scalars['String']>>;
+  amm_lt?: InputMaybe<Scalars['String']>;
+  amm_lte?: InputMaybe<Scalars['String']>;
+  amm_not?: InputMaybe<Scalars['String']>;
+  amm_not_contains?: InputMaybe<Scalars['String']>;
+  amm_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  amm_not_ends_with?: InputMaybe<Scalars['String']>;
+  amm_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_not_in?: InputMaybe<Array<Scalars['String']>>;
+  amm_not_starts_with?: InputMaybe<Scalars['String']>;
+  amm_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_starts_with?: InputMaybe<Scalars['String']>;
+  amm_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  cumulativeFeeIncurred?: InputMaybe<Scalars['BigInt']>;
+  cumulativeFeeIncurred_gt?: InputMaybe<Scalars['BigInt']>;
+  cumulativeFeeIncurred_gte?: InputMaybe<Scalars['BigInt']>;
+  cumulativeFeeIncurred_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  cumulativeFeeIncurred_lt?: InputMaybe<Scalars['BigInt']>;
+  cumulativeFeeIncurred_lte?: InputMaybe<Scalars['BigInt']>;
+  cumulativeFeeIncurred_not?: InputMaybe<Scalars['BigInt']>;
+  cumulativeFeeIncurred_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  desiredNotional?: InputMaybe<Scalars['BigInt']>;
+  desiredNotional_gt?: InputMaybe<Scalars['BigInt']>;
+  desiredNotional_gte?: InputMaybe<Scalars['BigInt']>;
+  desiredNotional_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  desiredNotional_lt?: InputMaybe<Scalars['BigInt']>;
+  desiredNotional_lte?: InputMaybe<Scalars['BigInt']>;
+  desiredNotional_not?: InputMaybe<Scalars['BigInt']>;
+  desiredNotional_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fcmPosition?: InputMaybe<Scalars['String']>;
+  fcmPosition_contains?: InputMaybe<Scalars['String']>;
+  fcmPosition_contains_nocase?: InputMaybe<Scalars['String']>;
+  fcmPosition_ends_with?: InputMaybe<Scalars['String']>;
+  fcmPosition_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  fcmPosition_gt?: InputMaybe<Scalars['String']>;
+  fcmPosition_gte?: InputMaybe<Scalars['String']>;
+  fcmPosition_in?: InputMaybe<Array<Scalars['String']>>;
+  fcmPosition_lt?: InputMaybe<Scalars['String']>;
+  fcmPosition_lte?: InputMaybe<Scalars['String']>;
+  fcmPosition_not?: InputMaybe<Scalars['String']>;
+  fcmPosition_not_contains?: InputMaybe<Scalars['String']>;
+  fcmPosition_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  fcmPosition_not_ends_with?: InputMaybe<Scalars['String']>;
+  fcmPosition_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  fcmPosition_not_in?: InputMaybe<Array<Scalars['String']>>;
+  fcmPosition_not_starts_with?: InputMaybe<Scalars['String']>;
+  fcmPosition_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  fcmPosition_starts_with?: InputMaybe<Scalars['String']>;
+  fcmPosition_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  fixedTokenDelta?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDeltaUnbalanced?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDeltaUnbalanced_gt?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDeltaUnbalanced_gte?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDeltaUnbalanced_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fixedTokenDeltaUnbalanced_lt?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDeltaUnbalanced_lte?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDeltaUnbalanced_not?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDeltaUnbalanced_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fixedTokenDelta_gt?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDelta_gte?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDelta_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fixedTokenDelta_lt?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDelta_lte?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDelta_not?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDelta_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  id?: InputMaybe<Scalars['ID']>;
+  id_gt?: InputMaybe<Scalars['ID']>;
+  id_gte?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  id_lt?: InputMaybe<Scalars['ID']>;
+  id_lte?: InputMaybe<Scalars['ID']>;
+  id_not?: InputMaybe<Scalars['ID']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  sqrtPriceLimitX96?: InputMaybe<Scalars['BigInt']>;
+  sqrtPriceLimitX96_gt?: InputMaybe<Scalars['BigInt']>;
+  sqrtPriceLimitX96_gte?: InputMaybe<Scalars['BigInt']>;
+  sqrtPriceLimitX96_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  sqrtPriceLimitX96_lt?: InputMaybe<Scalars['BigInt']>;
+  sqrtPriceLimitX96_lte?: InputMaybe<Scalars['BigInt']>;
+  sqrtPriceLimitX96_not?: InputMaybe<Scalars['BigInt']>;
+  sqrtPriceLimitX96_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  transaction?: InputMaybe<Scalars['String']>;
+  transaction_contains?: InputMaybe<Scalars['String']>;
+  transaction_contains_nocase?: InputMaybe<Scalars['String']>;
+  transaction_ends_with?: InputMaybe<Scalars['String']>;
+  transaction_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  transaction_gt?: InputMaybe<Scalars['String']>;
+  transaction_gte?: InputMaybe<Scalars['String']>;
+  transaction_in?: InputMaybe<Array<Scalars['String']>>;
+  transaction_lt?: InputMaybe<Scalars['String']>;
+  transaction_lte?: InputMaybe<Scalars['String']>;
+  transaction_not?: InputMaybe<Scalars['String']>;
+  transaction_not_contains?: InputMaybe<Scalars['String']>;
+  transaction_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  transaction_not_ends_with?: InputMaybe<Scalars['String']>;
+  transaction_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  transaction_not_in?: InputMaybe<Array<Scalars['String']>>;
+  transaction_not_starts_with?: InputMaybe<Scalars['String']>;
+  transaction_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  transaction_starts_with?: InputMaybe<Scalars['String']>;
+  transaction_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  variableTokenDelta?: InputMaybe<Scalars['BigInt']>;
+  variableTokenDelta_gt?: InputMaybe<Scalars['BigInt']>;
+  variableTokenDelta_gte?: InputMaybe<Scalars['BigInt']>;
+  variableTokenDelta_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  variableTokenDelta_lt?: InputMaybe<Scalars['BigInt']>;
+  variableTokenDelta_lte?: InputMaybe<Scalars['BigInt']>;
+  variableTokenDelta_not?: InputMaybe<Scalars['BigInt']>;
+  variableTokenDelta_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+};
+
+export enum FcmUnwind_OrderBy {
+  Amm = 'amm',
+  CumulativeFeeIncurred = 'cumulativeFeeIncurred',
+  DesiredNotional = 'desiredNotional',
+  FcmPosition = 'fcmPosition',
+  FixedTokenDelta = 'fixedTokenDelta',
+  FixedTokenDeltaUnbalanced = 'fixedTokenDeltaUnbalanced',
+  Id = 'id',
+  SqrtPriceLimitX96 = 'sqrtPriceLimitX96',
+  Transaction = 'transaction',
+  VariableTokenDelta = 'variableTokenDelta'
+}
+
+export type Fcm_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  amm?: InputMaybe<Scalars['String']>;
+  amm_contains?: InputMaybe<Scalars['String']>;
+  amm_contains_nocase?: InputMaybe<Scalars['String']>;
+  amm_ends_with?: InputMaybe<Scalars['String']>;
+  amm_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_gt?: InputMaybe<Scalars['String']>;
+  amm_gte?: InputMaybe<Scalars['String']>;
+  amm_in?: InputMaybe<Array<Scalars['String']>>;
+  amm_lt?: InputMaybe<Scalars['String']>;
+  amm_lte?: InputMaybe<Scalars['String']>;
+  amm_not?: InputMaybe<Scalars['String']>;
+  amm_not_contains?: InputMaybe<Scalars['String']>;
+  amm_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  amm_not_ends_with?: InputMaybe<Scalars['String']>;
+  amm_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_not_in?: InputMaybe<Array<Scalars['String']>>;
+  amm_not_starts_with?: InputMaybe<Scalars['String']>;
+  amm_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_starts_with?: InputMaybe<Scalars['String']>;
+  amm_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+  id_gt?: InputMaybe<Scalars['ID']>;
+  id_gte?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  id_lt?: InputMaybe<Scalars['ID']>;
+  id_lte?: InputMaybe<Scalars['ID']>;
+  id_not?: InputMaybe<Scalars['ID']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+};
+
+export enum Fcm_OrderBy {
+  Amm = 'amm',
+  Id = 'id'
 }
 
 export type Factory = {
@@ -350,6 +1085,8 @@ export type Factory = {
 };
 
 export type Factory_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
   id?: InputMaybe<Scalars['ID']>;
   id_gt?: InputMaybe<Scalars['ID']>;
   id_gte?: InputMaybe<Scalars['ID']>;
@@ -373,16 +1110,25 @@ export enum Factory_OrderBy {
   Owner = 'owner'
 }
 
-export type MarginEngine = {
-  __typename?: 'MarginEngine';
+export type Liquidation = {
+  __typename?: 'Liquidation';
   amm: Amm;
   id: Scalars['ID'];
+  liquidator: Scalars['String'];
+  notionalUnwound: Scalars['BigInt'];
+  position: Position;
+  reward: Scalars['BigInt'];
+  transaction: Transaction;
 };
 
-export type MarginEngine_Filter = {
+export type Liquidation_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
   amm?: InputMaybe<Scalars['String']>;
   amm_contains?: InputMaybe<Scalars['String']>;
+  amm_contains_nocase?: InputMaybe<Scalars['String']>;
   amm_ends_with?: InputMaybe<Scalars['String']>;
+  amm_ends_with_nocase?: InputMaybe<Scalars['String']>;
   amm_gt?: InputMaybe<Scalars['String']>;
   amm_gte?: InputMaybe<Scalars['String']>;
   amm_in?: InputMaybe<Array<Scalars['String']>>;
@@ -390,10 +1136,139 @@ export type MarginEngine_Filter = {
   amm_lte?: InputMaybe<Scalars['String']>;
   amm_not?: InputMaybe<Scalars['String']>;
   amm_not_contains?: InputMaybe<Scalars['String']>;
+  amm_not_contains_nocase?: InputMaybe<Scalars['String']>;
   amm_not_ends_with?: InputMaybe<Scalars['String']>;
+  amm_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   amm_not_in?: InputMaybe<Array<Scalars['String']>>;
   amm_not_starts_with?: InputMaybe<Scalars['String']>;
+  amm_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   amm_starts_with?: InputMaybe<Scalars['String']>;
+  amm_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+  id_gt?: InputMaybe<Scalars['ID']>;
+  id_gte?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  id_lt?: InputMaybe<Scalars['ID']>;
+  id_lte?: InputMaybe<Scalars['ID']>;
+  id_not?: InputMaybe<Scalars['ID']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  liquidator?: InputMaybe<Scalars['String']>;
+  liquidator_contains?: InputMaybe<Scalars['String']>;
+  liquidator_contains_nocase?: InputMaybe<Scalars['String']>;
+  liquidator_ends_with?: InputMaybe<Scalars['String']>;
+  liquidator_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  liquidator_gt?: InputMaybe<Scalars['String']>;
+  liquidator_gte?: InputMaybe<Scalars['String']>;
+  liquidator_in?: InputMaybe<Array<Scalars['String']>>;
+  liquidator_lt?: InputMaybe<Scalars['String']>;
+  liquidator_lte?: InputMaybe<Scalars['String']>;
+  liquidator_not?: InputMaybe<Scalars['String']>;
+  liquidator_not_contains?: InputMaybe<Scalars['String']>;
+  liquidator_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  liquidator_not_ends_with?: InputMaybe<Scalars['String']>;
+  liquidator_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  liquidator_not_in?: InputMaybe<Array<Scalars['String']>>;
+  liquidator_not_starts_with?: InputMaybe<Scalars['String']>;
+  liquidator_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  liquidator_starts_with?: InputMaybe<Scalars['String']>;
+  liquidator_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  notionalUnwound?: InputMaybe<Scalars['BigInt']>;
+  notionalUnwound_gt?: InputMaybe<Scalars['BigInt']>;
+  notionalUnwound_gte?: InputMaybe<Scalars['BigInt']>;
+  notionalUnwound_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  notionalUnwound_lt?: InputMaybe<Scalars['BigInt']>;
+  notionalUnwound_lte?: InputMaybe<Scalars['BigInt']>;
+  notionalUnwound_not?: InputMaybe<Scalars['BigInt']>;
+  notionalUnwound_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  position?: InputMaybe<Scalars['String']>;
+  position_contains?: InputMaybe<Scalars['String']>;
+  position_contains_nocase?: InputMaybe<Scalars['String']>;
+  position_ends_with?: InputMaybe<Scalars['String']>;
+  position_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  position_gt?: InputMaybe<Scalars['String']>;
+  position_gte?: InputMaybe<Scalars['String']>;
+  position_in?: InputMaybe<Array<Scalars['String']>>;
+  position_lt?: InputMaybe<Scalars['String']>;
+  position_lte?: InputMaybe<Scalars['String']>;
+  position_not?: InputMaybe<Scalars['String']>;
+  position_not_contains?: InputMaybe<Scalars['String']>;
+  position_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  position_not_ends_with?: InputMaybe<Scalars['String']>;
+  position_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  position_not_in?: InputMaybe<Array<Scalars['String']>>;
+  position_not_starts_with?: InputMaybe<Scalars['String']>;
+  position_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  position_starts_with?: InputMaybe<Scalars['String']>;
+  position_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  reward?: InputMaybe<Scalars['BigInt']>;
+  reward_gt?: InputMaybe<Scalars['BigInt']>;
+  reward_gte?: InputMaybe<Scalars['BigInt']>;
+  reward_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  reward_lt?: InputMaybe<Scalars['BigInt']>;
+  reward_lte?: InputMaybe<Scalars['BigInt']>;
+  reward_not?: InputMaybe<Scalars['BigInt']>;
+  reward_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  transaction?: InputMaybe<Scalars['String']>;
+  transaction_contains?: InputMaybe<Scalars['String']>;
+  transaction_contains_nocase?: InputMaybe<Scalars['String']>;
+  transaction_ends_with?: InputMaybe<Scalars['String']>;
+  transaction_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  transaction_gt?: InputMaybe<Scalars['String']>;
+  transaction_gte?: InputMaybe<Scalars['String']>;
+  transaction_in?: InputMaybe<Array<Scalars['String']>>;
+  transaction_lt?: InputMaybe<Scalars['String']>;
+  transaction_lte?: InputMaybe<Scalars['String']>;
+  transaction_not?: InputMaybe<Scalars['String']>;
+  transaction_not_contains?: InputMaybe<Scalars['String']>;
+  transaction_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  transaction_not_ends_with?: InputMaybe<Scalars['String']>;
+  transaction_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  transaction_not_in?: InputMaybe<Array<Scalars['String']>>;
+  transaction_not_starts_with?: InputMaybe<Scalars['String']>;
+  transaction_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  transaction_starts_with?: InputMaybe<Scalars['String']>;
+  transaction_starts_with_nocase?: InputMaybe<Scalars['String']>;
+};
+
+export enum Liquidation_OrderBy {
+  Amm = 'amm',
+  Id = 'id',
+  Liquidator = 'liquidator',
+  NotionalUnwound = 'notionalUnwound',
+  Position = 'position',
+  Reward = 'reward',
+  Transaction = 'transaction'
+}
+
+export type MarginEngine = {
+  __typename?: 'MarginEngine';
+  amm: Amm;
+  id: Scalars['ID'];
+};
+
+export type MarginEngine_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  amm?: InputMaybe<Scalars['String']>;
+  amm_contains?: InputMaybe<Scalars['String']>;
+  amm_contains_nocase?: InputMaybe<Scalars['String']>;
+  amm_ends_with?: InputMaybe<Scalars['String']>;
+  amm_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_gt?: InputMaybe<Scalars['String']>;
+  amm_gte?: InputMaybe<Scalars['String']>;
+  amm_in?: InputMaybe<Array<Scalars['String']>>;
+  amm_lt?: InputMaybe<Scalars['String']>;
+  amm_lte?: InputMaybe<Scalars['String']>;
+  amm_not?: InputMaybe<Scalars['String']>;
+  amm_not_contains?: InputMaybe<Scalars['String']>;
+  amm_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  amm_not_ends_with?: InputMaybe<Scalars['String']>;
+  amm_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_not_in?: InputMaybe<Array<Scalars['String']>>;
+  amm_not_starts_with?: InputMaybe<Scalars['String']>;
+  amm_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_starts_with?: InputMaybe<Scalars['String']>;
+  amm_starts_with_nocase?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['ID']>;
   id_gt?: InputMaybe<Scalars['ID']>;
   id_gte?: InputMaybe<Scalars['ID']>;
@@ -409,22 +1284,24 @@ export enum MarginEngine_OrderBy {
   Id = 'id'
 }
 
-export type Mint = {
-  __typename?: 'Mint';
+export type MarginUpdate = {
+  __typename?: 'MarginUpdate';
   amm: Amm;
-  amount: Scalars['BigInt'];
+  depositer: Scalars['String'];
   id: Scalars['ID'];
+  marginDelta: Scalars['BigInt'];
   position: Position;
-  sender: Scalars['String'];
-  tickLower: Tick;
-  tickUpper: Tick;
   transaction: Transaction;
 };
 
-export type Mint_Filter = {
+export type MarginUpdate_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
   amm?: InputMaybe<Scalars['String']>;
   amm_contains?: InputMaybe<Scalars['String']>;
+  amm_contains_nocase?: InputMaybe<Scalars['String']>;
   amm_ends_with?: InputMaybe<Scalars['String']>;
+  amm_ends_with_nocase?: InputMaybe<Scalars['String']>;
   amm_gt?: InputMaybe<Scalars['String']>;
   amm_gte?: InputMaybe<Scalars['String']>;
   amm_in?: InputMaybe<Array<Scalars['String']>>;
@@ -432,10 +1309,134 @@ export type Mint_Filter = {
   amm_lte?: InputMaybe<Scalars['String']>;
   amm_not?: InputMaybe<Scalars['String']>;
   amm_not_contains?: InputMaybe<Scalars['String']>;
+  amm_not_contains_nocase?: InputMaybe<Scalars['String']>;
   amm_not_ends_with?: InputMaybe<Scalars['String']>;
+  amm_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   amm_not_in?: InputMaybe<Array<Scalars['String']>>;
   amm_not_starts_with?: InputMaybe<Scalars['String']>;
+  amm_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   amm_starts_with?: InputMaybe<Scalars['String']>;
+  amm_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  depositer?: InputMaybe<Scalars['String']>;
+  depositer_contains?: InputMaybe<Scalars['String']>;
+  depositer_contains_nocase?: InputMaybe<Scalars['String']>;
+  depositer_ends_with?: InputMaybe<Scalars['String']>;
+  depositer_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  depositer_gt?: InputMaybe<Scalars['String']>;
+  depositer_gte?: InputMaybe<Scalars['String']>;
+  depositer_in?: InputMaybe<Array<Scalars['String']>>;
+  depositer_lt?: InputMaybe<Scalars['String']>;
+  depositer_lte?: InputMaybe<Scalars['String']>;
+  depositer_not?: InputMaybe<Scalars['String']>;
+  depositer_not_contains?: InputMaybe<Scalars['String']>;
+  depositer_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  depositer_not_ends_with?: InputMaybe<Scalars['String']>;
+  depositer_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  depositer_not_in?: InputMaybe<Array<Scalars['String']>>;
+  depositer_not_starts_with?: InputMaybe<Scalars['String']>;
+  depositer_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  depositer_starts_with?: InputMaybe<Scalars['String']>;
+  depositer_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+  id_gt?: InputMaybe<Scalars['ID']>;
+  id_gte?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  id_lt?: InputMaybe<Scalars['ID']>;
+  id_lte?: InputMaybe<Scalars['ID']>;
+  id_not?: InputMaybe<Scalars['ID']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  marginDelta?: InputMaybe<Scalars['BigInt']>;
+  marginDelta_gt?: InputMaybe<Scalars['BigInt']>;
+  marginDelta_gte?: InputMaybe<Scalars['BigInt']>;
+  marginDelta_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  marginDelta_lt?: InputMaybe<Scalars['BigInt']>;
+  marginDelta_lte?: InputMaybe<Scalars['BigInt']>;
+  marginDelta_not?: InputMaybe<Scalars['BigInt']>;
+  marginDelta_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  position?: InputMaybe<Scalars['String']>;
+  position_contains?: InputMaybe<Scalars['String']>;
+  position_contains_nocase?: InputMaybe<Scalars['String']>;
+  position_ends_with?: InputMaybe<Scalars['String']>;
+  position_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  position_gt?: InputMaybe<Scalars['String']>;
+  position_gte?: InputMaybe<Scalars['String']>;
+  position_in?: InputMaybe<Array<Scalars['String']>>;
+  position_lt?: InputMaybe<Scalars['String']>;
+  position_lte?: InputMaybe<Scalars['String']>;
+  position_not?: InputMaybe<Scalars['String']>;
+  position_not_contains?: InputMaybe<Scalars['String']>;
+  position_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  position_not_ends_with?: InputMaybe<Scalars['String']>;
+  position_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  position_not_in?: InputMaybe<Array<Scalars['String']>>;
+  position_not_starts_with?: InputMaybe<Scalars['String']>;
+  position_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  position_starts_with?: InputMaybe<Scalars['String']>;
+  position_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  transaction?: InputMaybe<Scalars['String']>;
+  transaction_contains?: InputMaybe<Scalars['String']>;
+  transaction_contains_nocase?: InputMaybe<Scalars['String']>;
+  transaction_ends_with?: InputMaybe<Scalars['String']>;
+  transaction_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  transaction_gt?: InputMaybe<Scalars['String']>;
+  transaction_gte?: InputMaybe<Scalars['String']>;
+  transaction_in?: InputMaybe<Array<Scalars['String']>>;
+  transaction_lt?: InputMaybe<Scalars['String']>;
+  transaction_lte?: InputMaybe<Scalars['String']>;
+  transaction_not?: InputMaybe<Scalars['String']>;
+  transaction_not_contains?: InputMaybe<Scalars['String']>;
+  transaction_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  transaction_not_ends_with?: InputMaybe<Scalars['String']>;
+  transaction_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  transaction_not_in?: InputMaybe<Array<Scalars['String']>>;
+  transaction_not_starts_with?: InputMaybe<Scalars['String']>;
+  transaction_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  transaction_starts_with?: InputMaybe<Scalars['String']>;
+  transaction_starts_with_nocase?: InputMaybe<Scalars['String']>;
+};
+
+export enum MarginUpdate_OrderBy {
+  Amm = 'amm',
+  Depositer = 'depositer',
+  Id = 'id',
+  MarginDelta = 'marginDelta',
+  Position = 'position',
+  Transaction = 'transaction'
+}
+
+export type Mint = {
+  __typename?: 'Mint';
+  amm: Amm;
+  amount: Scalars['BigInt'];
+  id: Scalars['ID'];
+  position: Position;
+  sender: Scalars['String'];
+  transaction: Transaction;
+};
+
+export type Mint_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  amm?: InputMaybe<Scalars['String']>;
+  amm_contains?: InputMaybe<Scalars['String']>;
+  amm_contains_nocase?: InputMaybe<Scalars['String']>;
+  amm_ends_with?: InputMaybe<Scalars['String']>;
+  amm_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_gt?: InputMaybe<Scalars['String']>;
+  amm_gte?: InputMaybe<Scalars['String']>;
+  amm_in?: InputMaybe<Array<Scalars['String']>>;
+  amm_lt?: InputMaybe<Scalars['String']>;
+  amm_lte?: InputMaybe<Scalars['String']>;
+  amm_not?: InputMaybe<Scalars['String']>;
+  amm_not_contains?: InputMaybe<Scalars['String']>;
+  amm_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  amm_not_ends_with?: InputMaybe<Scalars['String']>;
+  amm_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_not_in?: InputMaybe<Array<Scalars['String']>>;
+  amm_not_starts_with?: InputMaybe<Scalars['String']>;
+  amm_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_starts_with?: InputMaybe<Scalars['String']>;
+  amm_starts_with_nocase?: InputMaybe<Scalars['String']>;
   amount?: InputMaybe<Scalars['BigInt']>;
   amount_gt?: InputMaybe<Scalars['BigInt']>;
   amount_gte?: InputMaybe<Scalars['BigInt']>;
@@ -454,7 +1455,9 @@ export type Mint_Filter = {
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
   position?: InputMaybe<Scalars['String']>;
   position_contains?: InputMaybe<Scalars['String']>;
+  position_contains_nocase?: InputMaybe<Scalars['String']>;
   position_ends_with?: InputMaybe<Scalars['String']>;
+  position_ends_with_nocase?: InputMaybe<Scalars['String']>;
   position_gt?: InputMaybe<Scalars['String']>;
   position_gte?: InputMaybe<Scalars['String']>;
   position_in?: InputMaybe<Array<Scalars['String']>>;
@@ -462,13 +1465,19 @@ export type Mint_Filter = {
   position_lte?: InputMaybe<Scalars['String']>;
   position_not?: InputMaybe<Scalars['String']>;
   position_not_contains?: InputMaybe<Scalars['String']>;
+  position_not_contains_nocase?: InputMaybe<Scalars['String']>;
   position_not_ends_with?: InputMaybe<Scalars['String']>;
+  position_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   position_not_in?: InputMaybe<Array<Scalars['String']>>;
   position_not_starts_with?: InputMaybe<Scalars['String']>;
+  position_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   position_starts_with?: InputMaybe<Scalars['String']>;
+  position_starts_with_nocase?: InputMaybe<Scalars['String']>;
   sender?: InputMaybe<Scalars['String']>;
   sender_contains?: InputMaybe<Scalars['String']>;
+  sender_contains_nocase?: InputMaybe<Scalars['String']>;
   sender_ends_with?: InputMaybe<Scalars['String']>;
+  sender_ends_with_nocase?: InputMaybe<Scalars['String']>;
   sender_gt?: InputMaybe<Scalars['String']>;
   sender_gte?: InputMaybe<Scalars['String']>;
   sender_in?: InputMaybe<Array<Scalars['String']>>;
@@ -476,41 +1485,19 @@ export type Mint_Filter = {
   sender_lte?: InputMaybe<Scalars['String']>;
   sender_not?: InputMaybe<Scalars['String']>;
   sender_not_contains?: InputMaybe<Scalars['String']>;
+  sender_not_contains_nocase?: InputMaybe<Scalars['String']>;
   sender_not_ends_with?: InputMaybe<Scalars['String']>;
+  sender_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   sender_not_in?: InputMaybe<Array<Scalars['String']>>;
   sender_not_starts_with?: InputMaybe<Scalars['String']>;
+  sender_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   sender_starts_with?: InputMaybe<Scalars['String']>;
-  tickLower?: InputMaybe<Scalars['String']>;
-  tickLower_contains?: InputMaybe<Scalars['String']>;
-  tickLower_ends_with?: InputMaybe<Scalars['String']>;
-  tickLower_gt?: InputMaybe<Scalars['String']>;
-  tickLower_gte?: InputMaybe<Scalars['String']>;
-  tickLower_in?: InputMaybe<Array<Scalars['String']>>;
-  tickLower_lt?: InputMaybe<Scalars['String']>;
-  tickLower_lte?: InputMaybe<Scalars['String']>;
-  tickLower_not?: InputMaybe<Scalars['String']>;
-  tickLower_not_contains?: InputMaybe<Scalars['String']>;
-  tickLower_not_ends_with?: InputMaybe<Scalars['String']>;
-  tickLower_not_in?: InputMaybe<Array<Scalars['String']>>;
-  tickLower_not_starts_with?: InputMaybe<Scalars['String']>;
-  tickLower_starts_with?: InputMaybe<Scalars['String']>;
-  tickUpper?: InputMaybe<Scalars['String']>;
-  tickUpper_contains?: InputMaybe<Scalars['String']>;
-  tickUpper_ends_with?: InputMaybe<Scalars['String']>;
-  tickUpper_gt?: InputMaybe<Scalars['String']>;
-  tickUpper_gte?: InputMaybe<Scalars['String']>;
-  tickUpper_in?: InputMaybe<Array<Scalars['String']>>;
-  tickUpper_lt?: InputMaybe<Scalars['String']>;
-  tickUpper_lte?: InputMaybe<Scalars['String']>;
-  tickUpper_not?: InputMaybe<Scalars['String']>;
-  tickUpper_not_contains?: InputMaybe<Scalars['String']>;
-  tickUpper_not_ends_with?: InputMaybe<Scalars['String']>;
-  tickUpper_not_in?: InputMaybe<Array<Scalars['String']>>;
-  tickUpper_not_starts_with?: InputMaybe<Scalars['String']>;
-  tickUpper_starts_with?: InputMaybe<Scalars['String']>;
+  sender_starts_with_nocase?: InputMaybe<Scalars['String']>;
   transaction?: InputMaybe<Scalars['String']>;
   transaction_contains?: InputMaybe<Scalars['String']>;
+  transaction_contains_nocase?: InputMaybe<Scalars['String']>;
   transaction_ends_with?: InputMaybe<Scalars['String']>;
+  transaction_ends_with_nocase?: InputMaybe<Scalars['String']>;
   transaction_gt?: InputMaybe<Scalars['String']>;
   transaction_gte?: InputMaybe<Scalars['String']>;
   transaction_in?: InputMaybe<Array<Scalars['String']>>;
@@ -518,10 +1505,14 @@ export type Mint_Filter = {
   transaction_lte?: InputMaybe<Scalars['String']>;
   transaction_not?: InputMaybe<Scalars['String']>;
   transaction_not_contains?: InputMaybe<Scalars['String']>;
+  transaction_not_contains_nocase?: InputMaybe<Scalars['String']>;
   transaction_not_ends_with?: InputMaybe<Scalars['String']>;
+  transaction_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   transaction_not_in?: InputMaybe<Array<Scalars['String']>>;
   transaction_not_starts_with?: InputMaybe<Scalars['String']>;
+  transaction_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   transaction_starts_with?: InputMaybe<Scalars['String']>;
+  transaction_starts_with_nocase?: InputMaybe<Scalars['String']>;
 };
 
 export enum Mint_OrderBy {
@@ -530,11 +1521,10 @@ export enum Mint_OrderBy {
   Id = 'id',
   Position = 'position',
   Sender = 'sender',
-  TickLower = 'tickLower',
-  TickUpper = 'tickUpper',
   Transaction = 'transaction'
 }
 
+/** Defines the order direction, either ascending or descending */
 export enum OrderDirection {
   Asc = 'asc',
   Desc = 'desc'
@@ -542,23 +1532,26 @@ export enum OrderDirection {
 
 export type Position = {
   __typename?: 'Position';
+  accumulatedFees: Scalars['BigInt'];
   amm: Amm;
   burns: Array<Burn>;
   createdTimestamp: Scalars['BigInt'];
   fixedTokenBalance: Scalars['BigInt'];
   id: Scalars['ID'];
-  isEmpty: Scalars['Boolean'];
-  isLiquidityProvider: Scalars['Boolean'];
   isSettled: Scalars['Boolean'];
+  liquidations: Array<Liquidation>;
   liquidity: Scalars['BigInt'];
   margin: Scalars['BigInt'];
+  marginUpdates: Array<MarginUpdate>;
   mints: Array<Mint>;
   owner: Wallet;
+  positionType: Scalars['BigInt'];
+  settlements: Array<Settlement>;
   snapshotCount: Scalars['BigInt'];
   snapshots: Array<PositionSnapshot>;
   swaps: Array<Swap>;
-  tickLower: Tick;
-  tickUpper: Tick;
+  tickLower: Scalars['BigInt'];
+  tickUpper: Scalars['BigInt'];
   updatedTimestamp: Scalars['BigInt'];
   variableTokenBalance: Scalars['BigInt'];
 };
@@ -573,12 +1566,39 @@ export type PositionBurnsArgs = {
 };
 
 
+export type PositionLiquidationsArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Liquidation_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<Liquidation_Filter>;
+};
+
+
+export type PositionMarginUpdatesArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<MarginUpdate_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<MarginUpdate_Filter>;
+};
+
+
 export type PositionMintsArgs = {
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Mint_OrderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<Mint_Filter>;
+};
+
+
+export type PositionSettlementsArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Settlement_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<Settlement_Filter>;
 };
 
 
@@ -601,18 +1621,29 @@ export type PositionSwapsArgs = {
 
 export type PositionSnapshot = {
   __typename?: 'PositionSnapshot';
+  accumulatedFees: Scalars['BigInt'];
   createdTimestamp: Scalars['BigInt'];
   fixedTokenBalance: Scalars['BigInt'];
   id: Scalars['ID'];
-  isEmpty: Scalars['Boolean'];
   isSettled: Scalars['Boolean'];
   liquidity: Scalars['BigInt'];
   margin: Scalars['BigInt'];
   position: Position;
+  positionType: Scalars['BigInt'];
   variableTokenBalance: Scalars['BigInt'];
 };
 
 export type PositionSnapshot_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  accumulatedFees?: InputMaybe<Scalars['BigInt']>;
+  accumulatedFees_gt?: InputMaybe<Scalars['BigInt']>;
+  accumulatedFees_gte?: InputMaybe<Scalars['BigInt']>;
+  accumulatedFees_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  accumulatedFees_lt?: InputMaybe<Scalars['BigInt']>;
+  accumulatedFees_lte?: InputMaybe<Scalars['BigInt']>;
+  accumulatedFees_not?: InputMaybe<Scalars['BigInt']>;
+  accumulatedFees_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   createdTimestamp?: InputMaybe<Scalars['BigInt']>;
   createdTimestamp_gt?: InputMaybe<Scalars['BigInt']>;
   createdTimestamp_gte?: InputMaybe<Scalars['BigInt']>;
@@ -637,10 +1668,6 @@ export type PositionSnapshot_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
-  isEmpty?: InputMaybe<Scalars['Boolean']>;
-  isEmpty_in?: InputMaybe<Array<Scalars['Boolean']>>;
-  isEmpty_not?: InputMaybe<Scalars['Boolean']>;
-  isEmpty_not_in?: InputMaybe<Array<Scalars['Boolean']>>;
   isSettled?: InputMaybe<Scalars['Boolean']>;
   isSettled_in?: InputMaybe<Array<Scalars['Boolean']>>;
   isSettled_not?: InputMaybe<Scalars['Boolean']>;
@@ -662,8 +1689,18 @@ export type PositionSnapshot_Filter = {
   margin_not?: InputMaybe<Scalars['BigInt']>;
   margin_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   position?: InputMaybe<Scalars['String']>;
+  positionType?: InputMaybe<Scalars['BigInt']>;
+  positionType_gt?: InputMaybe<Scalars['BigInt']>;
+  positionType_gte?: InputMaybe<Scalars['BigInt']>;
+  positionType_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  positionType_lt?: InputMaybe<Scalars['BigInt']>;
+  positionType_lte?: InputMaybe<Scalars['BigInt']>;
+  positionType_not?: InputMaybe<Scalars['BigInt']>;
+  positionType_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   position_contains?: InputMaybe<Scalars['String']>;
+  position_contains_nocase?: InputMaybe<Scalars['String']>;
   position_ends_with?: InputMaybe<Scalars['String']>;
+  position_ends_with_nocase?: InputMaybe<Scalars['String']>;
   position_gt?: InputMaybe<Scalars['String']>;
   position_gte?: InputMaybe<Scalars['String']>;
   position_in?: InputMaybe<Array<Scalars['String']>>;
@@ -671,10 +1708,14 @@ export type PositionSnapshot_Filter = {
   position_lte?: InputMaybe<Scalars['String']>;
   position_not?: InputMaybe<Scalars['String']>;
   position_not_contains?: InputMaybe<Scalars['String']>;
+  position_not_contains_nocase?: InputMaybe<Scalars['String']>;
   position_not_ends_with?: InputMaybe<Scalars['String']>;
+  position_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   position_not_in?: InputMaybe<Array<Scalars['String']>>;
   position_not_starts_with?: InputMaybe<Scalars['String']>;
+  position_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   position_starts_with?: InputMaybe<Scalars['String']>;
+  position_starts_with_nocase?: InputMaybe<Scalars['String']>;
   variableTokenBalance?: InputMaybe<Scalars['BigInt']>;
   variableTokenBalance_gt?: InputMaybe<Scalars['BigInt']>;
   variableTokenBalance_gte?: InputMaybe<Scalars['BigInt']>;
@@ -686,21 +1727,34 @@ export type PositionSnapshot_Filter = {
 };
 
 export enum PositionSnapshot_OrderBy {
+  AccumulatedFees = 'accumulatedFees',
   CreatedTimestamp = 'createdTimestamp',
   FixedTokenBalance = 'fixedTokenBalance',
   Id = 'id',
-  IsEmpty = 'isEmpty',
   IsSettled = 'isSettled',
   Liquidity = 'liquidity',
   Margin = 'margin',
   Position = 'position',
+  PositionType = 'positionType',
   VariableTokenBalance = 'variableTokenBalance'
 }
 
 export type Position_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  accumulatedFees?: InputMaybe<Scalars['BigInt']>;
+  accumulatedFees_gt?: InputMaybe<Scalars['BigInt']>;
+  accumulatedFees_gte?: InputMaybe<Scalars['BigInt']>;
+  accumulatedFees_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  accumulatedFees_lt?: InputMaybe<Scalars['BigInt']>;
+  accumulatedFees_lte?: InputMaybe<Scalars['BigInt']>;
+  accumulatedFees_not?: InputMaybe<Scalars['BigInt']>;
+  accumulatedFees_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   amm?: InputMaybe<Scalars['String']>;
   amm_contains?: InputMaybe<Scalars['String']>;
+  amm_contains_nocase?: InputMaybe<Scalars['String']>;
   amm_ends_with?: InputMaybe<Scalars['String']>;
+  amm_ends_with_nocase?: InputMaybe<Scalars['String']>;
   amm_gt?: InputMaybe<Scalars['String']>;
   amm_gte?: InputMaybe<Scalars['String']>;
   amm_in?: InputMaybe<Array<Scalars['String']>>;
@@ -708,10 +1762,14 @@ export type Position_Filter = {
   amm_lte?: InputMaybe<Scalars['String']>;
   amm_not?: InputMaybe<Scalars['String']>;
   amm_not_contains?: InputMaybe<Scalars['String']>;
+  amm_not_contains_nocase?: InputMaybe<Scalars['String']>;
   amm_not_ends_with?: InputMaybe<Scalars['String']>;
+  amm_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   amm_not_in?: InputMaybe<Array<Scalars['String']>>;
   amm_not_starts_with?: InputMaybe<Scalars['String']>;
+  amm_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   amm_starts_with?: InputMaybe<Scalars['String']>;
+  amm_starts_with_nocase?: InputMaybe<Scalars['String']>;
   createdTimestamp?: InputMaybe<Scalars['BigInt']>;
   createdTimestamp_gt?: InputMaybe<Scalars['BigInt']>;
   createdTimestamp_gte?: InputMaybe<Scalars['BigInt']>;
@@ -736,14 +1794,6 @@ export type Position_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
-  isEmpty?: InputMaybe<Scalars['Boolean']>;
-  isEmpty_in?: InputMaybe<Array<Scalars['Boolean']>>;
-  isEmpty_not?: InputMaybe<Scalars['Boolean']>;
-  isEmpty_not_in?: InputMaybe<Array<Scalars['Boolean']>>;
-  isLiquidityProvider?: InputMaybe<Scalars['Boolean']>;
-  isLiquidityProvider_in?: InputMaybe<Array<Scalars['Boolean']>>;
-  isLiquidityProvider_not?: InputMaybe<Scalars['Boolean']>;
-  isLiquidityProvider_not_in?: InputMaybe<Array<Scalars['Boolean']>>;
   isSettled?: InputMaybe<Scalars['Boolean']>;
   isSettled_in?: InputMaybe<Array<Scalars['Boolean']>>;
   isSettled_not?: InputMaybe<Scalars['Boolean']>;
@@ -766,7 +1816,9 @@ export type Position_Filter = {
   margin_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   owner?: InputMaybe<Scalars['String']>;
   owner_contains?: InputMaybe<Scalars['String']>;
+  owner_contains_nocase?: InputMaybe<Scalars['String']>;
   owner_ends_with?: InputMaybe<Scalars['String']>;
+  owner_ends_with_nocase?: InputMaybe<Scalars['String']>;
   owner_gt?: InputMaybe<Scalars['String']>;
   owner_gte?: InputMaybe<Scalars['String']>;
   owner_in?: InputMaybe<Array<Scalars['String']>>;
@@ -774,10 +1826,22 @@ export type Position_Filter = {
   owner_lte?: InputMaybe<Scalars['String']>;
   owner_not?: InputMaybe<Scalars['String']>;
   owner_not_contains?: InputMaybe<Scalars['String']>;
+  owner_not_contains_nocase?: InputMaybe<Scalars['String']>;
   owner_not_ends_with?: InputMaybe<Scalars['String']>;
+  owner_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   owner_not_in?: InputMaybe<Array<Scalars['String']>>;
   owner_not_starts_with?: InputMaybe<Scalars['String']>;
+  owner_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   owner_starts_with?: InputMaybe<Scalars['String']>;
+  owner_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  positionType?: InputMaybe<Scalars['BigInt']>;
+  positionType_gt?: InputMaybe<Scalars['BigInt']>;
+  positionType_gte?: InputMaybe<Scalars['BigInt']>;
+  positionType_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  positionType_lt?: InputMaybe<Scalars['BigInt']>;
+  positionType_lte?: InputMaybe<Scalars['BigInt']>;
+  positionType_not?: InputMaybe<Scalars['BigInt']>;
+  positionType_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   snapshotCount?: InputMaybe<Scalars['BigInt']>;
   snapshotCount_gt?: InputMaybe<Scalars['BigInt']>;
   snapshotCount_gte?: InputMaybe<Scalars['BigInt']>;
@@ -786,34 +1850,22 @@ export type Position_Filter = {
   snapshotCount_lte?: InputMaybe<Scalars['BigInt']>;
   snapshotCount_not?: InputMaybe<Scalars['BigInt']>;
   snapshotCount_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  tickLower?: InputMaybe<Scalars['String']>;
-  tickLower_contains?: InputMaybe<Scalars['String']>;
-  tickLower_ends_with?: InputMaybe<Scalars['String']>;
-  tickLower_gt?: InputMaybe<Scalars['String']>;
-  tickLower_gte?: InputMaybe<Scalars['String']>;
-  tickLower_in?: InputMaybe<Array<Scalars['String']>>;
-  tickLower_lt?: InputMaybe<Scalars['String']>;
-  tickLower_lte?: InputMaybe<Scalars['String']>;
-  tickLower_not?: InputMaybe<Scalars['String']>;
-  tickLower_not_contains?: InputMaybe<Scalars['String']>;
-  tickLower_not_ends_with?: InputMaybe<Scalars['String']>;
-  tickLower_not_in?: InputMaybe<Array<Scalars['String']>>;
-  tickLower_not_starts_with?: InputMaybe<Scalars['String']>;
-  tickLower_starts_with?: InputMaybe<Scalars['String']>;
-  tickUpper?: InputMaybe<Scalars['String']>;
-  tickUpper_contains?: InputMaybe<Scalars['String']>;
-  tickUpper_ends_with?: InputMaybe<Scalars['String']>;
-  tickUpper_gt?: InputMaybe<Scalars['String']>;
-  tickUpper_gte?: InputMaybe<Scalars['String']>;
-  tickUpper_in?: InputMaybe<Array<Scalars['String']>>;
-  tickUpper_lt?: InputMaybe<Scalars['String']>;
-  tickUpper_lte?: InputMaybe<Scalars['String']>;
-  tickUpper_not?: InputMaybe<Scalars['String']>;
-  tickUpper_not_contains?: InputMaybe<Scalars['String']>;
-  tickUpper_not_ends_with?: InputMaybe<Scalars['String']>;
-  tickUpper_not_in?: InputMaybe<Array<Scalars['String']>>;
-  tickUpper_not_starts_with?: InputMaybe<Scalars['String']>;
-  tickUpper_starts_with?: InputMaybe<Scalars['String']>;
+  tickLower?: InputMaybe<Scalars['BigInt']>;
+  tickLower_gt?: InputMaybe<Scalars['BigInt']>;
+  tickLower_gte?: InputMaybe<Scalars['BigInt']>;
+  tickLower_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  tickLower_lt?: InputMaybe<Scalars['BigInt']>;
+  tickLower_lte?: InputMaybe<Scalars['BigInt']>;
+  tickLower_not?: InputMaybe<Scalars['BigInt']>;
+  tickLower_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  tickUpper?: InputMaybe<Scalars['BigInt']>;
+  tickUpper_gt?: InputMaybe<Scalars['BigInt']>;
+  tickUpper_gte?: InputMaybe<Scalars['BigInt']>;
+  tickUpper_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  tickUpper_lt?: InputMaybe<Scalars['BigInt']>;
+  tickUpper_lte?: InputMaybe<Scalars['BigInt']>;
+  tickUpper_not?: InputMaybe<Scalars['BigInt']>;
+  tickUpper_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   updatedTimestamp?: InputMaybe<Scalars['BigInt']>;
   updatedTimestamp_gt?: InputMaybe<Scalars['BigInt']>;
   updatedTimestamp_gte?: InputMaybe<Scalars['BigInt']>;
@@ -833,18 +1885,21 @@ export type Position_Filter = {
 };
 
 export enum Position_OrderBy {
+  AccumulatedFees = 'accumulatedFees',
   Amm = 'amm',
   Burns = 'burns',
   CreatedTimestamp = 'createdTimestamp',
   FixedTokenBalance = 'fixedTokenBalance',
   Id = 'id',
-  IsEmpty = 'isEmpty',
-  IsLiquidityProvider = 'isLiquidityProvider',
   IsSettled = 'isSettled',
+  Liquidations = 'liquidations',
   Liquidity = 'liquidity',
   Margin = 'margin',
+  MarginUpdates = 'marginUpdates',
   Mints = 'mints',
   Owner = 'owner',
+  PositionType = 'positionType',
+  Settlements = 'settlements',
   SnapshotCount = 'snapshotCount',
   Snapshots = 'snapshots',
   Swaps = 'swaps',
@@ -864,8 +1919,24 @@ export type Query = {
   burns: Array<Burn>;
   factories: Array<Factory>;
   factory?: Maybe<Factory>;
+  fcm?: Maybe<Fcm>;
+  fcmposition?: Maybe<FcmPosition>;
+  fcmpositionSnapshot?: Maybe<FcmPositionSnapshot>;
+  fcmpositionSnapshots: Array<FcmPositionSnapshot>;
+  fcmpositions: Array<FcmPosition>;
+  fcms: Array<Fcm>;
+  fcmsettlement?: Maybe<FcmSettlement>;
+  fcmsettlements: Array<FcmSettlement>;
+  fcmswap?: Maybe<FcmSwap>;
+  fcmswaps: Array<FcmSwap>;
+  fcmunwind?: Maybe<FcmUnwind>;
+  fcmunwinds: Array<FcmUnwind>;
+  liquidation?: Maybe<Liquidation>;
+  liquidations: Array<Liquidation>;
   marginEngine?: Maybe<MarginEngine>;
   marginEngines: Array<MarginEngine>;
+  marginUpdate?: Maybe<MarginUpdate>;
+  marginUpdates: Array<MarginUpdate>;
   mint?: Maybe<Mint>;
   mints: Array<Mint>;
   position?: Maybe<Position>;
@@ -874,10 +1945,10 @@ export type Query = {
   positions: Array<Position>;
   rateOracle?: Maybe<RateOracle>;
   rateOracles: Array<RateOracle>;
+  settlement?: Maybe<Settlement>;
+  settlements: Array<Settlement>;
   swap?: Maybe<Swap>;
   swaps: Array<Swap>;
-  tick?: Maybe<Tick>;
-  ticks: Array<Tick>;
   transaction?: Maybe<Transaction>;
   transactions: Array<Transaction>;
   underlyingToken?: Maybe<UnderlyingToken>;
@@ -946,6 +2017,132 @@ export type QueryFactoryArgs = {
 };
 
 
+export type QueryFcmArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryFcmpositionArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryFcmpositionSnapshotArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryFcmpositionSnapshotsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<FcmPositionSnapshot_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<FcmPositionSnapshot_Filter>;
+};
+
+
+export type QueryFcmpositionsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<FcmPosition_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<FcmPosition_Filter>;
+};
+
+
+export type QueryFcmsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Fcm_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<Fcm_Filter>;
+};
+
+
+export type QueryFcmsettlementArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryFcmsettlementsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<FcmSettlement_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<FcmSettlement_Filter>;
+};
+
+
+export type QueryFcmswapArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryFcmswapsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<FcmSwap_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<FcmSwap_Filter>;
+};
+
+
+export type QueryFcmunwindArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryFcmunwindsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<FcmUnwind_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<FcmUnwind_Filter>;
+};
+
+
+export type QueryLiquidationArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryLiquidationsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Liquidation_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<Liquidation_Filter>;
+};
+
+
 export type QueryMarginEngineArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
@@ -961,6 +2158,24 @@ export type QueryMarginEnginesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<MarginEngine_Filter>;
+};
+
+
+export type QueryMarginUpdateArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryMarginUpdatesArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<MarginUpdate_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<MarginUpdate_Filter>;
 };
 
 
@@ -1036,6 +2251,24 @@ export type QueryRateOraclesArgs = {
 };
 
 
+export type QuerySettlementArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerySettlementsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Settlement_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<Settlement_Filter>;
+};
+
+
 export type QuerySwapArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
@@ -1051,24 +2284,6 @@ export type QuerySwapsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<Swap_Filter>;
-};
-
-
-export type QueryTickArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryTicksArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Tick_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Tick_Filter>;
 };
 
 
@@ -1133,6 +2348,8 @@ export type RateOracle = {
 };
 
 export type RateOracle_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
   id?: InputMaybe<Scalars['ID']>;
   id_gt?: InputMaybe<Scalars['ID']>;
   id_gte?: InputMaybe<Scalars['ID']>;
@@ -1151,7 +2368,9 @@ export type RateOracle_Filter = {
   protocolId_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   token?: InputMaybe<Scalars['String']>;
   token_contains?: InputMaybe<Scalars['String']>;
+  token_contains_nocase?: InputMaybe<Scalars['String']>;
   token_ends_with?: InputMaybe<Scalars['String']>;
+  token_ends_with_nocase?: InputMaybe<Scalars['String']>;
   token_gt?: InputMaybe<Scalars['String']>;
   token_gte?: InputMaybe<Scalars['String']>;
   token_in?: InputMaybe<Array<Scalars['String']>>;
@@ -1159,16 +2378,118 @@ export type RateOracle_Filter = {
   token_lte?: InputMaybe<Scalars['String']>;
   token_not?: InputMaybe<Scalars['String']>;
   token_not_contains?: InputMaybe<Scalars['String']>;
+  token_not_contains_nocase?: InputMaybe<Scalars['String']>;
   token_not_ends_with?: InputMaybe<Scalars['String']>;
+  token_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   token_not_in?: InputMaybe<Array<Scalars['String']>>;
   token_not_starts_with?: InputMaybe<Scalars['String']>;
+  token_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   token_starts_with?: InputMaybe<Scalars['String']>;
+  token_starts_with_nocase?: InputMaybe<Scalars['String']>;
 };
 
 export enum RateOracle_OrderBy {
   Id = 'id',
   ProtocolId = 'protocolId',
   Token = 'token'
+}
+
+export type Settlement = {
+  __typename?: 'Settlement';
+  amm: Amm;
+  id: Scalars['ID'];
+  position: Position;
+  settlementCashflow: Scalars['BigInt'];
+  transaction: Transaction;
+};
+
+export type Settlement_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  amm?: InputMaybe<Scalars['String']>;
+  amm_contains?: InputMaybe<Scalars['String']>;
+  amm_contains_nocase?: InputMaybe<Scalars['String']>;
+  amm_ends_with?: InputMaybe<Scalars['String']>;
+  amm_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_gt?: InputMaybe<Scalars['String']>;
+  amm_gte?: InputMaybe<Scalars['String']>;
+  amm_in?: InputMaybe<Array<Scalars['String']>>;
+  amm_lt?: InputMaybe<Scalars['String']>;
+  amm_lte?: InputMaybe<Scalars['String']>;
+  amm_not?: InputMaybe<Scalars['String']>;
+  amm_not_contains?: InputMaybe<Scalars['String']>;
+  amm_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  amm_not_ends_with?: InputMaybe<Scalars['String']>;
+  amm_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_not_in?: InputMaybe<Array<Scalars['String']>>;
+  amm_not_starts_with?: InputMaybe<Scalars['String']>;
+  amm_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_starts_with?: InputMaybe<Scalars['String']>;
+  amm_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+  id_gt?: InputMaybe<Scalars['ID']>;
+  id_gte?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  id_lt?: InputMaybe<Scalars['ID']>;
+  id_lte?: InputMaybe<Scalars['ID']>;
+  id_not?: InputMaybe<Scalars['ID']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  position?: InputMaybe<Scalars['String']>;
+  position_contains?: InputMaybe<Scalars['String']>;
+  position_contains_nocase?: InputMaybe<Scalars['String']>;
+  position_ends_with?: InputMaybe<Scalars['String']>;
+  position_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  position_gt?: InputMaybe<Scalars['String']>;
+  position_gte?: InputMaybe<Scalars['String']>;
+  position_in?: InputMaybe<Array<Scalars['String']>>;
+  position_lt?: InputMaybe<Scalars['String']>;
+  position_lte?: InputMaybe<Scalars['String']>;
+  position_not?: InputMaybe<Scalars['String']>;
+  position_not_contains?: InputMaybe<Scalars['String']>;
+  position_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  position_not_ends_with?: InputMaybe<Scalars['String']>;
+  position_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  position_not_in?: InputMaybe<Array<Scalars['String']>>;
+  position_not_starts_with?: InputMaybe<Scalars['String']>;
+  position_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  position_starts_with?: InputMaybe<Scalars['String']>;
+  position_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  settlementCashflow?: InputMaybe<Scalars['BigInt']>;
+  settlementCashflow_gt?: InputMaybe<Scalars['BigInt']>;
+  settlementCashflow_gte?: InputMaybe<Scalars['BigInt']>;
+  settlementCashflow_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  settlementCashflow_lt?: InputMaybe<Scalars['BigInt']>;
+  settlementCashflow_lte?: InputMaybe<Scalars['BigInt']>;
+  settlementCashflow_not?: InputMaybe<Scalars['BigInt']>;
+  settlementCashflow_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  transaction?: InputMaybe<Scalars['String']>;
+  transaction_contains?: InputMaybe<Scalars['String']>;
+  transaction_contains_nocase?: InputMaybe<Scalars['String']>;
+  transaction_ends_with?: InputMaybe<Scalars['String']>;
+  transaction_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  transaction_gt?: InputMaybe<Scalars['String']>;
+  transaction_gte?: InputMaybe<Scalars['String']>;
+  transaction_in?: InputMaybe<Array<Scalars['String']>>;
+  transaction_lt?: InputMaybe<Scalars['String']>;
+  transaction_lte?: InputMaybe<Scalars['String']>;
+  transaction_not?: InputMaybe<Scalars['String']>;
+  transaction_not_contains?: InputMaybe<Scalars['String']>;
+  transaction_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  transaction_not_ends_with?: InputMaybe<Scalars['String']>;
+  transaction_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  transaction_not_in?: InputMaybe<Array<Scalars['String']>>;
+  transaction_not_starts_with?: InputMaybe<Scalars['String']>;
+  transaction_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  transaction_starts_with?: InputMaybe<Scalars['String']>;
+  transaction_starts_with_nocase?: InputMaybe<Scalars['String']>;
+};
+
+export enum Settlement_OrderBy {
+  Amm = 'amm',
+  Id = 'id',
+  Position = 'position',
+  SettlementCashflow = 'settlementCashflow',
+  Transaction = 'transaction'
 }
 
 export type Subscription = {
@@ -1181,8 +2502,24 @@ export type Subscription = {
   burns: Array<Burn>;
   factories: Array<Factory>;
   factory?: Maybe<Factory>;
+  fcm?: Maybe<Fcm>;
+  fcmposition?: Maybe<FcmPosition>;
+  fcmpositionSnapshot?: Maybe<FcmPositionSnapshot>;
+  fcmpositionSnapshots: Array<FcmPositionSnapshot>;
+  fcmpositions: Array<FcmPosition>;
+  fcms: Array<Fcm>;
+  fcmsettlement?: Maybe<FcmSettlement>;
+  fcmsettlements: Array<FcmSettlement>;
+  fcmswap?: Maybe<FcmSwap>;
+  fcmswaps: Array<FcmSwap>;
+  fcmunwind?: Maybe<FcmUnwind>;
+  fcmunwinds: Array<FcmUnwind>;
+  liquidation?: Maybe<Liquidation>;
+  liquidations: Array<Liquidation>;
   marginEngine?: Maybe<MarginEngine>;
   marginEngines: Array<MarginEngine>;
+  marginUpdate?: Maybe<MarginUpdate>;
+  marginUpdates: Array<MarginUpdate>;
   mint?: Maybe<Mint>;
   mints: Array<Mint>;
   position?: Maybe<Position>;
@@ -1191,10 +2528,10 @@ export type Subscription = {
   positions: Array<Position>;
   rateOracle?: Maybe<RateOracle>;
   rateOracles: Array<RateOracle>;
+  settlement?: Maybe<Settlement>;
+  settlements: Array<Settlement>;
   swap?: Maybe<Swap>;
   swaps: Array<Swap>;
-  tick?: Maybe<Tick>;
-  ticks: Array<Tick>;
   transaction?: Maybe<Transaction>;
   transactions: Array<Transaction>;
   underlyingToken?: Maybe<UnderlyingToken>;
@@ -1263,6 +2600,132 @@ export type SubscriptionFactoryArgs = {
 };
 
 
+export type SubscriptionFcmArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionFcmpositionArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionFcmpositionSnapshotArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionFcmpositionSnapshotsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<FcmPositionSnapshot_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<FcmPositionSnapshot_Filter>;
+};
+
+
+export type SubscriptionFcmpositionsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<FcmPosition_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<FcmPosition_Filter>;
+};
+
+
+export type SubscriptionFcmsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Fcm_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<Fcm_Filter>;
+};
+
+
+export type SubscriptionFcmsettlementArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionFcmsettlementsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<FcmSettlement_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<FcmSettlement_Filter>;
+};
+
+
+export type SubscriptionFcmswapArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionFcmswapsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<FcmSwap_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<FcmSwap_Filter>;
+};
+
+
+export type SubscriptionFcmunwindArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionFcmunwindsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<FcmUnwind_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<FcmUnwind_Filter>;
+};
+
+
+export type SubscriptionLiquidationArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionLiquidationsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Liquidation_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<Liquidation_Filter>;
+};
+
+
 export type SubscriptionMarginEngineArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
@@ -1278,6 +2741,24 @@ export type SubscriptionMarginEnginesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<MarginEngine_Filter>;
+};
+
+
+export type SubscriptionMarginUpdateArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionMarginUpdatesArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<MarginUpdate_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<MarginUpdate_Filter>;
 };
 
 
@@ -1353,6 +2834,24 @@ export type SubscriptionRateOraclesArgs = {
 };
 
 
+export type SubscriptionSettlementArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionSettlementsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Settlement_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<Settlement_Filter>;
+};
+
+
 export type SubscriptionSwapArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
@@ -1368,24 +2867,6 @@ export type SubscriptionSwapsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<Swap_Filter>;
-};
-
-
-export type SubscriptionTickArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionTicksArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Tick_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Tick_Filter>;
 };
 
 
@@ -1445,20 +2926,26 @@ export type SubscriptionWalletsArgs = {
 export type Swap = {
   __typename?: 'Swap';
   amm: Amm;
+  cumulativeFeeIncurred: Scalars['BigInt'];
+  desiredNotional: Scalars['BigInt'];
+  fixedTokenDelta: Scalars['BigInt'];
+  fixedTokenDeltaUnbalanced: Scalars['BigInt'];
   id: Scalars['ID'];
-  liquidity: Scalars['BigInt'];
   position: Position;
   sender: Scalars['String'];
-  sqrtPriceX96: Scalars['BigInt'];
-  tick: Scalars['BigInt'];
+  sqrtPriceLimitX96: Scalars['BigInt'];
   transaction: Transaction;
-  txIndex: Scalars['BigInt'];
+  variableTokenDelta: Scalars['BigInt'];
 };
 
 export type Swap_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
   amm?: InputMaybe<Scalars['String']>;
   amm_contains?: InputMaybe<Scalars['String']>;
+  amm_contains_nocase?: InputMaybe<Scalars['String']>;
   amm_ends_with?: InputMaybe<Scalars['String']>;
+  amm_ends_with_nocase?: InputMaybe<Scalars['String']>;
   amm_gt?: InputMaybe<Scalars['String']>;
   amm_gte?: InputMaybe<Scalars['String']>;
   amm_in?: InputMaybe<Array<Scalars['String']>>;
@@ -1466,10 +2953,46 @@ export type Swap_Filter = {
   amm_lte?: InputMaybe<Scalars['String']>;
   amm_not?: InputMaybe<Scalars['String']>;
   amm_not_contains?: InputMaybe<Scalars['String']>;
+  amm_not_contains_nocase?: InputMaybe<Scalars['String']>;
   amm_not_ends_with?: InputMaybe<Scalars['String']>;
+  amm_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   amm_not_in?: InputMaybe<Array<Scalars['String']>>;
   amm_not_starts_with?: InputMaybe<Scalars['String']>;
+  amm_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   amm_starts_with?: InputMaybe<Scalars['String']>;
+  amm_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  cumulativeFeeIncurred?: InputMaybe<Scalars['BigInt']>;
+  cumulativeFeeIncurred_gt?: InputMaybe<Scalars['BigInt']>;
+  cumulativeFeeIncurred_gte?: InputMaybe<Scalars['BigInt']>;
+  cumulativeFeeIncurred_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  cumulativeFeeIncurred_lt?: InputMaybe<Scalars['BigInt']>;
+  cumulativeFeeIncurred_lte?: InputMaybe<Scalars['BigInt']>;
+  cumulativeFeeIncurred_not?: InputMaybe<Scalars['BigInt']>;
+  cumulativeFeeIncurred_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  desiredNotional?: InputMaybe<Scalars['BigInt']>;
+  desiredNotional_gt?: InputMaybe<Scalars['BigInt']>;
+  desiredNotional_gte?: InputMaybe<Scalars['BigInt']>;
+  desiredNotional_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  desiredNotional_lt?: InputMaybe<Scalars['BigInt']>;
+  desiredNotional_lte?: InputMaybe<Scalars['BigInt']>;
+  desiredNotional_not?: InputMaybe<Scalars['BigInt']>;
+  desiredNotional_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fixedTokenDelta?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDeltaUnbalanced?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDeltaUnbalanced_gt?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDeltaUnbalanced_gte?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDeltaUnbalanced_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fixedTokenDeltaUnbalanced_lt?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDeltaUnbalanced_lte?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDeltaUnbalanced_not?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDeltaUnbalanced_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fixedTokenDelta_gt?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDelta_gte?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDelta_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fixedTokenDelta_lt?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDelta_lte?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDelta_not?: InputMaybe<Scalars['BigInt']>;
+  fixedTokenDelta_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   id?: InputMaybe<Scalars['ID']>;
   id_gt?: InputMaybe<Scalars['ID']>;
   id_gte?: InputMaybe<Scalars['ID']>;
@@ -1478,17 +3001,11 @@ export type Swap_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
-  liquidity?: InputMaybe<Scalars['BigInt']>;
-  liquidity_gt?: InputMaybe<Scalars['BigInt']>;
-  liquidity_gte?: InputMaybe<Scalars['BigInt']>;
-  liquidity_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  liquidity_lt?: InputMaybe<Scalars['BigInt']>;
-  liquidity_lte?: InputMaybe<Scalars['BigInt']>;
-  liquidity_not?: InputMaybe<Scalars['BigInt']>;
-  liquidity_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   position?: InputMaybe<Scalars['String']>;
   position_contains?: InputMaybe<Scalars['String']>;
+  position_contains_nocase?: InputMaybe<Scalars['String']>;
   position_ends_with?: InputMaybe<Scalars['String']>;
+  position_ends_with_nocase?: InputMaybe<Scalars['String']>;
   position_gt?: InputMaybe<Scalars['String']>;
   position_gte?: InputMaybe<Scalars['String']>;
   position_in?: InputMaybe<Array<Scalars['String']>>;
@@ -1496,13 +3013,19 @@ export type Swap_Filter = {
   position_lte?: InputMaybe<Scalars['String']>;
   position_not?: InputMaybe<Scalars['String']>;
   position_not_contains?: InputMaybe<Scalars['String']>;
+  position_not_contains_nocase?: InputMaybe<Scalars['String']>;
   position_not_ends_with?: InputMaybe<Scalars['String']>;
+  position_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   position_not_in?: InputMaybe<Array<Scalars['String']>>;
   position_not_starts_with?: InputMaybe<Scalars['String']>;
+  position_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   position_starts_with?: InputMaybe<Scalars['String']>;
+  position_starts_with_nocase?: InputMaybe<Scalars['String']>;
   sender?: InputMaybe<Scalars['String']>;
   sender_contains?: InputMaybe<Scalars['String']>;
+  sender_contains_nocase?: InputMaybe<Scalars['String']>;
   sender_ends_with?: InputMaybe<Scalars['String']>;
+  sender_ends_with_nocase?: InputMaybe<Scalars['String']>;
   sender_gt?: InputMaybe<Scalars['String']>;
   sender_gte?: InputMaybe<Scalars['String']>;
   sender_in?: InputMaybe<Array<Scalars['String']>>;
@@ -1510,29 +3033,27 @@ export type Swap_Filter = {
   sender_lte?: InputMaybe<Scalars['String']>;
   sender_not?: InputMaybe<Scalars['String']>;
   sender_not_contains?: InputMaybe<Scalars['String']>;
+  sender_not_contains_nocase?: InputMaybe<Scalars['String']>;
   sender_not_ends_with?: InputMaybe<Scalars['String']>;
+  sender_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   sender_not_in?: InputMaybe<Array<Scalars['String']>>;
   sender_not_starts_with?: InputMaybe<Scalars['String']>;
+  sender_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   sender_starts_with?: InputMaybe<Scalars['String']>;
-  sqrtPriceX96?: InputMaybe<Scalars['BigInt']>;
-  sqrtPriceX96_gt?: InputMaybe<Scalars['BigInt']>;
-  sqrtPriceX96_gte?: InputMaybe<Scalars['BigInt']>;
-  sqrtPriceX96_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  sqrtPriceX96_lt?: InputMaybe<Scalars['BigInt']>;
-  sqrtPriceX96_lte?: InputMaybe<Scalars['BigInt']>;
-  sqrtPriceX96_not?: InputMaybe<Scalars['BigInt']>;
-  sqrtPriceX96_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  tick?: InputMaybe<Scalars['BigInt']>;
-  tick_gt?: InputMaybe<Scalars['BigInt']>;
-  tick_gte?: InputMaybe<Scalars['BigInt']>;
-  tick_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  tick_lt?: InputMaybe<Scalars['BigInt']>;
-  tick_lte?: InputMaybe<Scalars['BigInt']>;
-  tick_not?: InputMaybe<Scalars['BigInt']>;
-  tick_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  sender_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  sqrtPriceLimitX96?: InputMaybe<Scalars['BigInt']>;
+  sqrtPriceLimitX96_gt?: InputMaybe<Scalars['BigInt']>;
+  sqrtPriceLimitX96_gte?: InputMaybe<Scalars['BigInt']>;
+  sqrtPriceLimitX96_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  sqrtPriceLimitX96_lt?: InputMaybe<Scalars['BigInt']>;
+  sqrtPriceLimitX96_lte?: InputMaybe<Scalars['BigInt']>;
+  sqrtPriceLimitX96_not?: InputMaybe<Scalars['BigInt']>;
+  sqrtPriceLimitX96_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   transaction?: InputMaybe<Scalars['String']>;
   transaction_contains?: InputMaybe<Scalars['String']>;
+  transaction_contains_nocase?: InputMaybe<Scalars['String']>;
   transaction_ends_with?: InputMaybe<Scalars['String']>;
+  transaction_ends_with_nocase?: InputMaybe<Scalars['String']>;
   transaction_gt?: InputMaybe<Scalars['String']>;
   transaction_gte?: InputMaybe<Scalars['String']>;
   transaction_in?: InputMaybe<Array<Scalars['String']>>;
@@ -1540,87 +3061,51 @@ export type Swap_Filter = {
   transaction_lte?: InputMaybe<Scalars['String']>;
   transaction_not?: InputMaybe<Scalars['String']>;
   transaction_not_contains?: InputMaybe<Scalars['String']>;
+  transaction_not_contains_nocase?: InputMaybe<Scalars['String']>;
   transaction_not_ends_with?: InputMaybe<Scalars['String']>;
+  transaction_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   transaction_not_in?: InputMaybe<Array<Scalars['String']>>;
   transaction_not_starts_with?: InputMaybe<Scalars['String']>;
+  transaction_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   transaction_starts_with?: InputMaybe<Scalars['String']>;
-  txIndex?: InputMaybe<Scalars['BigInt']>;
-  txIndex_gt?: InputMaybe<Scalars['BigInt']>;
-  txIndex_gte?: InputMaybe<Scalars['BigInt']>;
-  txIndex_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  txIndex_lt?: InputMaybe<Scalars['BigInt']>;
-  txIndex_lte?: InputMaybe<Scalars['BigInt']>;
-  txIndex_not?: InputMaybe<Scalars['BigInt']>;
-  txIndex_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  transaction_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  variableTokenDelta?: InputMaybe<Scalars['BigInt']>;
+  variableTokenDelta_gt?: InputMaybe<Scalars['BigInt']>;
+  variableTokenDelta_gte?: InputMaybe<Scalars['BigInt']>;
+  variableTokenDelta_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  variableTokenDelta_lt?: InputMaybe<Scalars['BigInt']>;
+  variableTokenDelta_lte?: InputMaybe<Scalars['BigInt']>;
+  variableTokenDelta_not?: InputMaybe<Scalars['BigInt']>;
+  variableTokenDelta_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
 };
 
 export enum Swap_OrderBy {
   Amm = 'amm',
+  CumulativeFeeIncurred = 'cumulativeFeeIncurred',
+  DesiredNotional = 'desiredNotional',
+  FixedTokenDelta = 'fixedTokenDelta',
+  FixedTokenDeltaUnbalanced = 'fixedTokenDeltaUnbalanced',
   Id = 'id',
-  Liquidity = 'liquidity',
   Position = 'position',
   Sender = 'sender',
-  SqrtPriceX96 = 'sqrtPriceX96',
-  Tick = 'tick',
+  SqrtPriceLimitX96 = 'sqrtPriceLimitX96',
   Transaction = 'transaction',
-  TxIndex = 'txIndex'
-}
-
-export type Tick = {
-  __typename?: 'Tick';
-  amm: Amm;
-  id: Scalars['ID'];
-  value: Scalars['BigInt'];
-};
-
-export type Tick_Filter = {
-  amm?: InputMaybe<Scalars['String']>;
-  amm_contains?: InputMaybe<Scalars['String']>;
-  amm_ends_with?: InputMaybe<Scalars['String']>;
-  amm_gt?: InputMaybe<Scalars['String']>;
-  amm_gte?: InputMaybe<Scalars['String']>;
-  amm_in?: InputMaybe<Array<Scalars['String']>>;
-  amm_lt?: InputMaybe<Scalars['String']>;
-  amm_lte?: InputMaybe<Scalars['String']>;
-  amm_not?: InputMaybe<Scalars['String']>;
-  amm_not_contains?: InputMaybe<Scalars['String']>;
-  amm_not_ends_with?: InputMaybe<Scalars['String']>;
-  amm_not_in?: InputMaybe<Array<Scalars['String']>>;
-  amm_not_starts_with?: InputMaybe<Scalars['String']>;
-  amm_starts_with?: InputMaybe<Scalars['String']>;
-  id?: InputMaybe<Scalars['ID']>;
-  id_gt?: InputMaybe<Scalars['ID']>;
-  id_gte?: InputMaybe<Scalars['ID']>;
-  id_in?: InputMaybe<Array<Scalars['ID']>>;
-  id_lt?: InputMaybe<Scalars['ID']>;
-  id_lte?: InputMaybe<Scalars['ID']>;
-  id_not?: InputMaybe<Scalars['ID']>;
-  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
-  value?: InputMaybe<Scalars['BigInt']>;
-  value_gt?: InputMaybe<Scalars['BigInt']>;
-  value_gte?: InputMaybe<Scalars['BigInt']>;
-  value_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  value_lt?: InputMaybe<Scalars['BigInt']>;
-  value_lte?: InputMaybe<Scalars['BigInt']>;
-  value_not?: InputMaybe<Scalars['BigInt']>;
-  value_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
-};
-
-export enum Tick_OrderBy {
-  Amm = 'amm',
-  Id = 'id',
-  Value = 'value'
+  VariableTokenDelta = 'variableTokenDelta'
 }
 
 export type Transaction = {
   __typename?: 'Transaction';
+  amm: Amm;
   blockNumber: Scalars['BigInt'];
   burns: Array<Burn>;
+  createdTimestamp: Scalars['BigInt'];
   gasPrice: Scalars['BigInt'];
   id: Scalars['ID'];
+  liquidations: Array<Liquidation>;
+  marginUpdates: Array<MarginUpdate>;
   mints: Array<Mint>;
+  settlements: Array<Settlement>;
   swaps: Array<Swap>;
-  timestamp: Scalars['BigInt'];
 };
 
 
@@ -1633,12 +3118,39 @@ export type TransactionBurnsArgs = {
 };
 
 
+export type TransactionLiquidationsArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Liquidation_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<Liquidation_Filter>;
+};
+
+
+export type TransactionMarginUpdatesArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<MarginUpdate_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<MarginUpdate_Filter>;
+};
+
+
 export type TransactionMintsArgs = {
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Mint_OrderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<Mint_Filter>;
+};
+
+
+export type TransactionSettlementsArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Settlement_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<Settlement_Filter>;
 };
 
 
@@ -1651,6 +3163,28 @@ export type TransactionSwapsArgs = {
 };
 
 export type Transaction_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  amm?: InputMaybe<Scalars['String']>;
+  amm_contains?: InputMaybe<Scalars['String']>;
+  amm_contains_nocase?: InputMaybe<Scalars['String']>;
+  amm_ends_with?: InputMaybe<Scalars['String']>;
+  amm_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_gt?: InputMaybe<Scalars['String']>;
+  amm_gte?: InputMaybe<Scalars['String']>;
+  amm_in?: InputMaybe<Array<Scalars['String']>>;
+  amm_lt?: InputMaybe<Scalars['String']>;
+  amm_lte?: InputMaybe<Scalars['String']>;
+  amm_not?: InputMaybe<Scalars['String']>;
+  amm_not_contains?: InputMaybe<Scalars['String']>;
+  amm_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  amm_not_ends_with?: InputMaybe<Scalars['String']>;
+  amm_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_not_in?: InputMaybe<Array<Scalars['String']>>;
+  amm_not_starts_with?: InputMaybe<Scalars['String']>;
+  amm_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_starts_with?: InputMaybe<Scalars['String']>;
+  amm_starts_with_nocase?: InputMaybe<Scalars['String']>;
   blockNumber?: InputMaybe<Scalars['BigInt']>;
   blockNumber_gt?: InputMaybe<Scalars['BigInt']>;
   blockNumber_gte?: InputMaybe<Scalars['BigInt']>;
@@ -1659,6 +3193,14 @@ export type Transaction_Filter = {
   blockNumber_lte?: InputMaybe<Scalars['BigInt']>;
   blockNumber_not?: InputMaybe<Scalars['BigInt']>;
   blockNumber_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  createdTimestamp?: InputMaybe<Scalars['BigInt']>;
+  createdTimestamp_gt?: InputMaybe<Scalars['BigInt']>;
+  createdTimestamp_gte?: InputMaybe<Scalars['BigInt']>;
+  createdTimestamp_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  createdTimestamp_lt?: InputMaybe<Scalars['BigInt']>;
+  createdTimestamp_lte?: InputMaybe<Scalars['BigInt']>;
+  createdTimestamp_not?: InputMaybe<Scalars['BigInt']>;
+  createdTimestamp_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   gasPrice?: InputMaybe<Scalars['BigInt']>;
   gasPrice_gt?: InputMaybe<Scalars['BigInt']>;
   gasPrice_gte?: InputMaybe<Scalars['BigInt']>;
@@ -1675,24 +3217,20 @@ export type Transaction_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
-  timestamp?: InputMaybe<Scalars['BigInt']>;
-  timestamp_gt?: InputMaybe<Scalars['BigInt']>;
-  timestamp_gte?: InputMaybe<Scalars['BigInt']>;
-  timestamp_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  timestamp_lt?: InputMaybe<Scalars['BigInt']>;
-  timestamp_lte?: InputMaybe<Scalars['BigInt']>;
-  timestamp_not?: InputMaybe<Scalars['BigInt']>;
-  timestamp_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
 };
 
 export enum Transaction_OrderBy {
+  Amm = 'amm',
   BlockNumber = 'blockNumber',
   Burns = 'burns',
+  CreatedTimestamp = 'createdTimestamp',
   GasPrice = 'gasPrice',
   Id = 'id',
+  Liquidations = 'liquidations',
+  MarginUpdates = 'marginUpdates',
   Mints = 'mints',
-  Swaps = 'swaps',
-  Timestamp = 'timestamp'
+  Settlements = 'settlements',
+  Swaps = 'swaps'
 }
 
 export type UnderlyingToken = {
@@ -1703,6 +3241,8 @@ export type UnderlyingToken = {
 };
 
 export type UnderlyingToken_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
   decimals?: InputMaybe<Scalars['BigInt']>;
   decimals_gt?: InputMaybe<Scalars['BigInt']>;
   decimals_gte?: InputMaybe<Scalars['BigInt']>;
@@ -1721,7 +3261,9 @@ export type UnderlyingToken_Filter = {
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
   name?: InputMaybe<Scalars['String']>;
   name_contains?: InputMaybe<Scalars['String']>;
+  name_contains_nocase?: InputMaybe<Scalars['String']>;
   name_ends_with?: InputMaybe<Scalars['String']>;
+  name_ends_with_nocase?: InputMaybe<Scalars['String']>;
   name_gt?: InputMaybe<Scalars['String']>;
   name_gte?: InputMaybe<Scalars['String']>;
   name_in?: InputMaybe<Array<Scalars['String']>>;
@@ -1729,10 +3271,14 @@ export type UnderlyingToken_Filter = {
   name_lte?: InputMaybe<Scalars['String']>;
   name_not?: InputMaybe<Scalars['String']>;
   name_not_contains?: InputMaybe<Scalars['String']>;
+  name_not_contains_nocase?: InputMaybe<Scalars['String']>;
   name_not_ends_with?: InputMaybe<Scalars['String']>;
+  name_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   name_not_in?: InputMaybe<Array<Scalars['String']>>;
   name_not_starts_with?: InputMaybe<Scalars['String']>;
+  name_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   name_starts_with?: InputMaybe<Scalars['String']>;
+  name_starts_with_nocase?: InputMaybe<Scalars['String']>;
 };
 
 export enum UnderlyingToken_OrderBy {
@@ -1743,9 +3289,20 @@ export enum UnderlyingToken_OrderBy {
 
 export type Wallet = {
   __typename?: 'Wallet';
+  fcmPositionCount: Scalars['BigInt'];
+  fcmPositions: Array<FcmPosition>;
   id: Scalars['ID'];
   positionCount: Scalars['BigInt'];
   positions: Array<Position>;
+};
+
+
+export type WalletFcmPositionsArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<FcmPosition_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<FcmPosition_Filter>;
 };
 
 
@@ -1758,6 +3315,16 @@ export type WalletPositionsArgs = {
 };
 
 export type Wallet_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  fcmPositionCount?: InputMaybe<Scalars['BigInt']>;
+  fcmPositionCount_gt?: InputMaybe<Scalars['BigInt']>;
+  fcmPositionCount_gte?: InputMaybe<Scalars['BigInt']>;
+  fcmPositionCount_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fcmPositionCount_lt?: InputMaybe<Scalars['BigInt']>;
+  fcmPositionCount_lte?: InputMaybe<Scalars['BigInt']>;
+  fcmPositionCount_not?: InputMaybe<Scalars['BigInt']>;
+  fcmPositionCount_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   id?: InputMaybe<Scalars['ID']>;
   id_gt?: InputMaybe<Scalars['ID']>;
   id_gte?: InputMaybe<Scalars['ID']>;
@@ -1777,6 +3344,8 @@ export type Wallet_Filter = {
 };
 
 export enum Wallet_OrderBy {
+  FcmPositionCount = 'fcmPositionCount',
+  FcmPositions = 'fcmPositions',
   Id = 'id',
   PositionCount = 'positionCount',
   Positions = 'positions'
@@ -1819,56 +3388,14 @@ export type GetAmMsQueryVariables = Exact<{
 }>;
 
 
-export type GetAmMsQuery = { __typename?: 'Query', amms: Array<{ __typename?: 'AMM', id: string, createdTimestamp: any, updatedTimestamp: any, fcmAddress: string, marginEngineAddress: string, termStartTimestamp: any, termEndTimestamp: any, tickSpacing: any, sqrtPriceX96: any, liquidity: any, tick: any, txCount: any, rateOracle: { __typename?: 'RateOracle', id: string, protocolId: any, token: { __typename?: 'UnderlyingToken', id: string, name: string, decimals: any } } }> };
-
-export type GetBurnsQueryVariables = Exact<{
-  orderBy: Burn_OrderBy;
-}>;
-
-
-export type GetBurnsQuery = { __typename?: 'Query', burns: Array<{ __typename?: 'Burn', id: string, sender: string, amount: any, transaction: { __typename?: 'Transaction', id: string, blockNumber: any, timestamp: any }, amm: { __typename?: 'AMM', id: string }, position: { __typename?: 'Position', id: string }, tickLower: { __typename?: 'Tick', id: string, value: any }, tickUpper: { __typename?: 'Tick', id: string, value: any } }> };
-
-export type GetMintsQueryVariables = Exact<{
-  orderBy: Mint_OrderBy;
-}>;
-
-
-export type GetMintsQuery = { __typename?: 'Query', mints: Array<{ __typename?: 'Mint', id: string, sender: string, amount: any, transaction: { __typename?: 'Transaction', id: string, blockNumber: any, timestamp: any }, amm: { __typename?: 'AMM', id: string }, position: { __typename?: 'Position', id: string }, tickLower: { __typename?: 'Tick', id: string, value: any }, tickUpper: { __typename?: 'Tick', id: string, value: any } }> };
-
-export type GetPositionQueryVariables = Exact<{
-  id: Scalars['ID'];
-}>;
-
-
-export type GetPositionQuery = { __typename?: 'Query', position?: { __typename?: 'Position', id: string, createdTimestamp: any, updatedTimestamp: any, liquidity: any, margin: any, fixedTokenBalance: any, variableTokenBalance: any, isLiquidityProvider: boolean, isSettled: boolean, isEmpty: boolean, snapshotCount: any, owner: { __typename?: 'Wallet', id: string }, amm: { __typename?: 'AMM', id: string, termStartTimestamp: any, termEndTimestamp: any, rateOracle: { __typename?: 'RateOracle', id: string, protocolId: any, token: { __typename?: 'UnderlyingToken', id: string, name: string, decimals: any } } }, tickLower: { __typename?: 'Tick', id: string, value: any }, tickUpper: { __typename?: 'Tick', id: string, value: any }, burns: Array<{ __typename?: 'Burn', id: string }>, mints: Array<{ __typename?: 'Mint', id: string }>, swaps: Array<{ __typename?: 'Swap', id: string }> } | null };
-
-export type GetPositionSnapshotsQueryVariables = Exact<{
-  orderBy: PositionSnapshot_OrderBy;
-}>;
-
-
-export type GetPositionSnapshotsQuery = { __typename?: 'Query', positionSnapshots: Array<{ __typename?: 'PositionSnapshot', id: string, createdTimestamp: any, liquidity: any, margin: any, fixedTokenBalance: any, variableTokenBalance: any, isSettled: boolean, isEmpty: boolean, position: { __typename?: 'Position', id: string } }> };
-
-export type GetSwapsQueryVariables = Exact<{
-  orderBy: Swap_OrderBy;
-}>;
-
-
-export type GetSwapsQuery = { __typename?: 'Query', swaps: Array<{ __typename?: 'Swap', id: string, sender: string, txIndex: any, sqrtPriceX96: any, liquidity: any, tick: any, transaction: { __typename?: 'Transaction', id: string, blockNumber: any, timestamp: any }, amm: { __typename?: 'AMM', id: string }, position: { __typename?: 'Position', id: string } }> };
+export type GetAmMsQuery = { __typename?: 'Query', amms: Array<{ __typename?: 'AMM', id: string, createdTimestamp: any, tickSpacing: any, termStartTimestamp: any, termEndTimestamp: any, updatedTimestamp: any, tick: any, txCount: any, fcm: { __typename?: 'FCM', id: string }, marginEngine: { __typename?: 'MarginEngine', id: string }, rateOracle: { __typename?: 'RateOracle', id: string, protocolId: any, token: { __typename?: 'UnderlyingToken', id: string, name: string, decimals: any } } }> };
 
 export type GetWalletQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type GetWalletQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, positionCount: any, positions: Array<{ __typename?: 'Position', id: string, createdTimestamp: any, updatedTimestamp: any, liquidity: any, margin: any, fixedTokenBalance: any, variableTokenBalance: any, isLiquidityProvider: boolean, isSettled: boolean, isEmpty: boolean, snapshotCount: any, owner: { __typename?: 'Wallet', id: string }, amm: { __typename?: 'AMM', id: string, createdTimestamp: any, updatedTimestamp: any, fcmAddress: string, marginEngineAddress: string, termStartTimestamp: any, termEndTimestamp: any, tickSpacing: any, sqrtPriceX96: any, liquidity: any, tick: any, txCount: any, rateOracle: { __typename?: 'RateOracle', id: string, protocolId: any, token: { __typename?: 'UnderlyingToken', id: string, name: string, decimals: any } } }, tickLower: { __typename?: 'Tick', id: string, value: any }, tickUpper: { __typename?: 'Tick', id: string, value: any }, burns: Array<{ __typename?: 'Burn', id: string }>, mints: Array<{ __typename?: 'Mint', id: string }>, swaps: Array<{ __typename?: 'Swap', id: string }> }> } | null };
-
-export type GetWalletsQueryVariables = Exact<{
-  orderBy: Wallet_OrderBy;
-}>;
-
-
-export type GetWalletsQuery = { __typename?: 'Query', wallets: Array<{ __typename?: 'Wallet', id: string, positions: Array<{ __typename?: 'Position', id: string }> }> };
+export type GetWalletQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, positionCount: any, fcmPositionCount: any, positions: Array<{ __typename?: 'Position', id: string, createdTimestamp: any, tickLower: any, tickUpper: any, updatedTimestamp: any, liquidity: any, margin: any, fixedTokenBalance: any, variableTokenBalance: any, accumulatedFees: any, positionType: any, isSettled: boolean, amm: { __typename?: 'AMM', id: string, createdTimestamp: any, tickSpacing: any, termStartTimestamp: any, termEndTimestamp: any, updatedTimestamp: any, tick: any, txCount: any, fcm: { __typename?: 'FCM', id: string }, marginEngine: { __typename?: 'MarginEngine', id: string }, rateOracle: { __typename?: 'RateOracle', id: string, protocolId: any, token: { __typename?: 'UnderlyingToken', id: string, name: string, decimals: any } } }, owner: { __typename?: 'Wallet', id: string }, mints: Array<{ __typename?: 'Mint', id: string, sender: string, amount: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }>, burns: Array<{ __typename?: 'Burn', id: string, sender: string, amount: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }>, swaps: Array<{ __typename?: 'Swap', id: string, sender: string, desiredNotional: any, sqrtPriceLimitX96: any, cumulativeFeeIncurred: any, fixedTokenDelta: any, variableTokenDelta: any, fixedTokenDeltaUnbalanced: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }>, marginUpdates: Array<{ __typename?: 'MarginUpdate', id: string, depositer: string, marginDelta: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }>, liquidations: Array<{ __typename?: 'Liquidation', id: string, liquidator: string, reward: any, notionalUnwound: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }>, settlements: Array<{ __typename?: 'Settlement', id: string, settlementCashflow: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }> }>, fcmPositions: Array<{ __typename?: 'FCMPosition', id: string, createdTimestamp: any, updatedTimestamp: any, fixedTokenBalance: any, variableTokenBalance: any, marginInScaledYieldBearingTokens: any, isSettled: boolean, amm: { __typename?: 'AMM', id: string, createdTimestamp: any, tickSpacing: any, termStartTimestamp: any, termEndTimestamp: any, updatedTimestamp: any, tick: any, txCount: any, fcm: { __typename?: 'FCM', id: string }, marginEngine: { __typename?: 'MarginEngine', id: string }, rateOracle: { __typename?: 'RateOracle', id: string, protocolId: any, token: { __typename?: 'UnderlyingToken', id: string, name: string, decimals: any } } }, owner: { __typename?: 'Wallet', id: string }, fcmSwaps: Array<{ __typename?: 'FCMSwap', id: string, desiredNotional: any, sqrtPriceLimitX96: any, cumulativeFeeIncurred: any, fixedTokenDelta: any, variableTokenDelta: any, fixedTokenDeltaUnbalanced: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }>, fcmUnwinds: Array<{ __typename?: 'FCMUnwind', id: string, desiredNotional: any, sqrtPriceLimitX96: any, cumulativeFeeIncurred: any, fixedTokenDelta: any, variableTokenDelta: any, fixedTokenDeltaUnbalanced: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }>, fcmSettlements: Array<{ __typename?: 'FCMSettlement', id: string, settlementCashflow: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }> }> } | null };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
@@ -1945,20 +3472,45 @@ export type ResolversTypes = ResolversObject<{
   AMM_orderBy: ResolverTypeWrapper<Partial<Amm_OrderBy>>;
   BigDecimal: ResolverTypeWrapper<Partial<Scalars['BigDecimal']>>;
   BigInt: ResolverTypeWrapper<Partial<Scalars['BigInt']>>;
+  BlockChangedFilter: ResolverTypeWrapper<Partial<BlockChangedFilter>>;
   Block_height: ResolverTypeWrapper<Partial<Block_Height>>;
   Boolean: ResolverTypeWrapper<Partial<Scalars['Boolean']>>;
   Burn: ResolverTypeWrapper<Partial<Burn>>;
   Burn_filter: ResolverTypeWrapper<Partial<Burn_Filter>>;
   Burn_orderBy: ResolverTypeWrapper<Partial<Burn_OrderBy>>;
   Bytes: ResolverTypeWrapper<Partial<Scalars['Bytes']>>;
+  FCM: ResolverTypeWrapper<Partial<Fcm>>;
+  FCMPosition: ResolverTypeWrapper<Partial<FcmPosition>>;
+  FCMPositionSnapshot: ResolverTypeWrapper<Partial<FcmPositionSnapshot>>;
+  FCMPositionSnapshot_filter: ResolverTypeWrapper<Partial<FcmPositionSnapshot_Filter>>;
+  FCMPositionSnapshot_orderBy: ResolverTypeWrapper<Partial<FcmPositionSnapshot_OrderBy>>;
+  FCMPosition_filter: ResolverTypeWrapper<Partial<FcmPosition_Filter>>;
+  FCMPosition_orderBy: ResolverTypeWrapper<Partial<FcmPosition_OrderBy>>;
+  FCMSettlement: ResolverTypeWrapper<Partial<FcmSettlement>>;
+  FCMSettlement_filter: ResolverTypeWrapper<Partial<FcmSettlement_Filter>>;
+  FCMSettlement_orderBy: ResolverTypeWrapper<Partial<FcmSettlement_OrderBy>>;
+  FCMSwap: ResolverTypeWrapper<Partial<FcmSwap>>;
+  FCMSwap_filter: ResolverTypeWrapper<Partial<FcmSwap_Filter>>;
+  FCMSwap_orderBy: ResolverTypeWrapper<Partial<FcmSwap_OrderBy>>;
+  FCMUnwind: ResolverTypeWrapper<Partial<FcmUnwind>>;
+  FCMUnwind_filter: ResolverTypeWrapper<Partial<FcmUnwind_Filter>>;
+  FCMUnwind_orderBy: ResolverTypeWrapper<Partial<FcmUnwind_OrderBy>>;
+  FCM_filter: ResolverTypeWrapper<Partial<Fcm_Filter>>;
+  FCM_orderBy: ResolverTypeWrapper<Partial<Fcm_OrderBy>>;
   Factory: ResolverTypeWrapper<Partial<Factory>>;
   Factory_filter: ResolverTypeWrapper<Partial<Factory_Filter>>;
   Factory_orderBy: ResolverTypeWrapper<Partial<Factory_OrderBy>>;
   ID: ResolverTypeWrapper<Partial<Scalars['ID']>>;
   Int: ResolverTypeWrapper<Partial<Scalars['Int']>>;
+  Liquidation: ResolverTypeWrapper<Partial<Liquidation>>;
+  Liquidation_filter: ResolverTypeWrapper<Partial<Liquidation_Filter>>;
+  Liquidation_orderBy: ResolverTypeWrapper<Partial<Liquidation_OrderBy>>;
   MarginEngine: ResolverTypeWrapper<Partial<MarginEngine>>;
   MarginEngine_filter: ResolverTypeWrapper<Partial<MarginEngine_Filter>>;
   MarginEngine_orderBy: ResolverTypeWrapper<Partial<MarginEngine_OrderBy>>;
+  MarginUpdate: ResolverTypeWrapper<Partial<MarginUpdate>>;
+  MarginUpdate_filter: ResolverTypeWrapper<Partial<MarginUpdate_Filter>>;
+  MarginUpdate_orderBy: ResolverTypeWrapper<Partial<MarginUpdate_OrderBy>>;
   Mint: ResolverTypeWrapper<Partial<Mint>>;
   Mint_filter: ResolverTypeWrapper<Partial<Mint_Filter>>;
   Mint_orderBy: ResolverTypeWrapper<Partial<Mint_OrderBy>>;
@@ -1973,14 +3525,14 @@ export type ResolversTypes = ResolversObject<{
   RateOracle: ResolverTypeWrapper<Partial<RateOracle>>;
   RateOracle_filter: ResolverTypeWrapper<Partial<RateOracle_Filter>>;
   RateOracle_orderBy: ResolverTypeWrapper<Partial<RateOracle_OrderBy>>;
+  Settlement: ResolverTypeWrapper<Partial<Settlement>>;
+  Settlement_filter: ResolverTypeWrapper<Partial<Settlement_Filter>>;
+  Settlement_orderBy: ResolverTypeWrapper<Partial<Settlement_OrderBy>>;
   String: ResolverTypeWrapper<Partial<Scalars['String']>>;
   Subscription: ResolverTypeWrapper<{}>;
   Swap: ResolverTypeWrapper<Partial<Swap>>;
   Swap_filter: ResolverTypeWrapper<Partial<Swap_Filter>>;
   Swap_orderBy: ResolverTypeWrapper<Partial<Swap_OrderBy>>;
-  Tick: ResolverTypeWrapper<Partial<Tick>>;
-  Tick_filter: ResolverTypeWrapper<Partial<Tick_Filter>>;
-  Tick_orderBy: ResolverTypeWrapper<Partial<Tick_OrderBy>>;
   Transaction: ResolverTypeWrapper<Partial<Transaction>>;
   Transaction_filter: ResolverTypeWrapper<Partial<Transaction_Filter>>;
   Transaction_orderBy: ResolverTypeWrapper<Partial<Transaction_OrderBy>>;
@@ -2001,17 +3553,34 @@ export type ResolversParentTypes = ResolversObject<{
   AMM_filter: Partial<Amm_Filter>;
   BigDecimal: Partial<Scalars['BigDecimal']>;
   BigInt: Partial<Scalars['BigInt']>;
+  BlockChangedFilter: Partial<BlockChangedFilter>;
   Block_height: Partial<Block_Height>;
   Boolean: Partial<Scalars['Boolean']>;
   Burn: Partial<Burn>;
   Burn_filter: Partial<Burn_Filter>;
   Bytes: Partial<Scalars['Bytes']>;
+  FCM: Partial<Fcm>;
+  FCMPosition: Partial<FcmPosition>;
+  FCMPositionSnapshot: Partial<FcmPositionSnapshot>;
+  FCMPositionSnapshot_filter: Partial<FcmPositionSnapshot_Filter>;
+  FCMPosition_filter: Partial<FcmPosition_Filter>;
+  FCMSettlement: Partial<FcmSettlement>;
+  FCMSettlement_filter: Partial<FcmSettlement_Filter>;
+  FCMSwap: Partial<FcmSwap>;
+  FCMSwap_filter: Partial<FcmSwap_Filter>;
+  FCMUnwind: Partial<FcmUnwind>;
+  FCMUnwind_filter: Partial<FcmUnwind_Filter>;
+  FCM_filter: Partial<Fcm_Filter>;
   Factory: Partial<Factory>;
   Factory_filter: Partial<Factory_Filter>;
   ID: Partial<Scalars['ID']>;
   Int: Partial<Scalars['Int']>;
+  Liquidation: Partial<Liquidation>;
+  Liquidation_filter: Partial<Liquidation_Filter>;
   MarginEngine: Partial<MarginEngine>;
   MarginEngine_filter: Partial<MarginEngine_Filter>;
+  MarginUpdate: Partial<MarginUpdate>;
+  MarginUpdate_filter: Partial<MarginUpdate_Filter>;
   Mint: Partial<Mint>;
   Mint_filter: Partial<Mint_Filter>;
   Position: Partial<Position>;
@@ -2021,12 +3590,12 @@ export type ResolversParentTypes = ResolversObject<{
   Query: {};
   RateOracle: Partial<RateOracle>;
   RateOracle_filter: Partial<RateOracle_Filter>;
+  Settlement: Partial<Settlement>;
+  Settlement_filter: Partial<Settlement_Filter>;
   String: Partial<Scalars['String']>;
   Subscription: {};
   Swap: Partial<Swap>;
   Swap_filter: Partial<Swap_Filter>;
-  Tick: Partial<Tick>;
-  Tick_filter: Partial<Tick_Filter>;
   Transaction: Partial<Transaction>;
   Transaction_filter: Partial<Transaction_Filter>;
   UnderlyingToken: Partial<UnderlyingToken>;
@@ -2038,7 +3607,7 @@ export type ResolversParentTypes = ResolversObject<{
 }>;
 
 export type DerivedFromDirectiveArgs = {
-  field?: Maybe<Scalars['String']>;
+  field: Scalars['String'];
 };
 
 export type DerivedFromDirectiveResolver<Result, Parent, ContextType = any, Args = DerivedFromDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
@@ -2048,7 +3617,7 @@ export type EntityDirectiveArgs = { };
 export type EntityDirectiveResolver<Result, Parent, ContextType = any, Args = EntityDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type SubgraphIdDirectiveArgs = {
-  id?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
 };
 
 export type SubgraphIdDirectiveResolver<Result, Parent, ContextType = any, Args = SubgraphIdDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
@@ -2056,13 +3625,14 @@ export type SubgraphIdDirectiveResolver<Result, Parent, ContextType = any, Args 
 export type AmmResolvers<ContextType = any, ParentType extends ResolversParentTypes['AMM'] = ResolversParentTypes['AMM']> = ResolversObject<{
   burns?: Resolver<Array<ResolversTypes['Burn']>, ParentType, ContextType, RequireFields<AmmBurnsArgs, 'first' | 'skip'>>;
   createdTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  fcmAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  fcm?: Resolver<ResolversTypes['FCM'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  liquidity?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  marginEngineAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  liquidations?: Resolver<Array<ResolversTypes['Liquidation']>, ParentType, ContextType, RequireFields<AmmLiquidationsArgs, 'first' | 'skip'>>;
+  marginEngine?: Resolver<ResolversTypes['MarginEngine'], ParentType, ContextType>;
+  marginUpdates?: Resolver<Array<ResolversTypes['MarginUpdate']>, ParentType, ContextType, RequireFields<AmmMarginUpdatesArgs, 'first' | 'skip'>>;
   mints?: Resolver<Array<ResolversTypes['Mint']>, ParentType, ContextType, RequireFields<AmmMintsArgs, 'first' | 'skip'>>;
   rateOracle?: Resolver<ResolversTypes['RateOracle'], ParentType, ContextType>;
-  sqrtPriceX96?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  settlements?: Resolver<Array<ResolversTypes['Settlement']>, ParentType, ContextType, RequireFields<AmmSettlementsArgs, 'first' | 'skip'>>;
   swaps?: Resolver<Array<ResolversTypes['Swap']>, ParentType, ContextType, RequireFields<AmmSwapsArgs, 'first' | 'skip'>>;
   termEndTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   termStartTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
@@ -2087,8 +3657,6 @@ export type BurnResolvers<ContextType = any, ParentType extends ResolversParentT
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   position?: Resolver<ResolversTypes['Position'], ParentType, ContextType>;
   sender?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  tickLower?: Resolver<ResolversTypes['Tick'], ParentType, ContextType>;
-  tickUpper?: Resolver<ResolversTypes['Tick'], ParentType, ContextType>;
   transaction?: Resolver<ResolversTypes['Transaction'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -2097,9 +3665,92 @@ export interface BytesScalarConfig extends GraphQLScalarTypeConfig<ResolversType
   name: 'Bytes';
 }
 
+export type FcmResolvers<ContextType = any, ParentType extends ResolversParentTypes['FCM'] = ResolversParentTypes['FCM']> = ResolversObject<{
+  amm?: Resolver<ResolversTypes['AMM'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type FcmPositionResolvers<ContextType = any, ParentType extends ResolversParentTypes['FCMPosition'] = ResolversParentTypes['FCMPosition']> = ResolversObject<{
+  amm?: Resolver<ResolversTypes['AMM'], ParentType, ContextType>;
+  createdTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  fcmSettlements?: Resolver<Array<ResolversTypes['FCMSettlement']>, ParentType, ContextType, RequireFields<FcmPositionFcmSettlementsArgs, 'first' | 'skip'>>;
+  fcmSwaps?: Resolver<Array<ResolversTypes['FCMSwap']>, ParentType, ContextType, RequireFields<FcmPositionFcmSwapsArgs, 'first' | 'skip'>>;
+  fcmUnwinds?: Resolver<Array<ResolversTypes['FCMUnwind']>, ParentType, ContextType, RequireFields<FcmPositionFcmUnwindsArgs, 'first' | 'skip'>>;
+  fixedTokenBalance?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  isSettled?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  marginInScaledYieldBearingTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  owner?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType>;
+  snapshotCount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  snapshots?: Resolver<Array<ResolversTypes['FCMPositionSnapshot']>, ParentType, ContextType, RequireFields<FcmPositionSnapshotsArgs, 'first' | 'skip'>>;
+  updatedTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  variableTokenBalance?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type FcmPositionSnapshotResolvers<ContextType = any, ParentType extends ResolversParentTypes['FCMPositionSnapshot'] = ResolversParentTypes['FCMPositionSnapshot']> = ResolversObject<{
+  createdTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  fcmPosition?: Resolver<ResolversTypes['FCMPosition'], ParentType, ContextType>;
+  fixedTokenBalance?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  isSettled?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  marginInScaledYieldBearingTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  variableTokenBalance?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type FcmSettlementResolvers<ContextType = any, ParentType extends ResolversParentTypes['FCMSettlement'] = ResolversParentTypes['FCMSettlement']> = ResolversObject<{
+  amm?: Resolver<ResolversTypes['AMM'], ParentType, ContextType>;
+  fcmPosition?: Resolver<ResolversTypes['FCMPosition'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  settlementCashflow?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  transaction?: Resolver<ResolversTypes['Transaction'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type FcmSwapResolvers<ContextType = any, ParentType extends ResolversParentTypes['FCMSwap'] = ResolversParentTypes['FCMSwap']> = ResolversObject<{
+  amm?: Resolver<ResolversTypes['AMM'], ParentType, ContextType>;
+  cumulativeFeeIncurred?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  desiredNotional?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  fcmPosition?: Resolver<ResolversTypes['FCMPosition'], ParentType, ContextType>;
+  fixedTokenDelta?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  fixedTokenDeltaUnbalanced?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  sqrtPriceLimitX96?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  transaction?: Resolver<ResolversTypes['Transaction'], ParentType, ContextType>;
+  variableTokenDelta?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type FcmUnwindResolvers<ContextType = any, ParentType extends ResolversParentTypes['FCMUnwind'] = ResolversParentTypes['FCMUnwind']> = ResolversObject<{
+  amm?: Resolver<ResolversTypes['AMM'], ParentType, ContextType>;
+  cumulativeFeeIncurred?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  desiredNotional?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  fcmPosition?: Resolver<ResolversTypes['FCMPosition'], ParentType, ContextType>;
+  fixedTokenDelta?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  fixedTokenDeltaUnbalanced?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  sqrtPriceLimitX96?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  transaction?: Resolver<ResolversTypes['Transaction'], ParentType, ContextType>;
+  variableTokenDelta?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type FactoryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Factory'] = ResolversParentTypes['Factory']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   owner?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type LiquidationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Liquidation'] = ResolversParentTypes['Liquidation']> = ResolversObject<{
+  amm?: Resolver<ResolversTypes['AMM'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  liquidator?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  notionalUnwound?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  position?: Resolver<ResolversTypes['Position'], ParentType, ContextType>;
+  reward?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  transaction?: Resolver<ResolversTypes['Transaction'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -2109,50 +3760,62 @@ export type MarginEngineResolvers<ContextType = any, ParentType extends Resolver
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type MarginUpdateResolvers<ContextType = any, ParentType extends ResolversParentTypes['MarginUpdate'] = ResolversParentTypes['MarginUpdate']> = ResolversObject<{
+  amm?: Resolver<ResolversTypes['AMM'], ParentType, ContextType>;
+  depositer?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  marginDelta?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  position?: Resolver<ResolversTypes['Position'], ParentType, ContextType>;
+  transaction?: Resolver<ResolversTypes['Transaction'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type MintResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mint'] = ResolversParentTypes['Mint']> = ResolversObject<{
   amm?: Resolver<ResolversTypes['AMM'], ParentType, ContextType>;
   amount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   position?: Resolver<ResolversTypes['Position'], ParentType, ContextType>;
   sender?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  tickLower?: Resolver<ResolversTypes['Tick'], ParentType, ContextType>;
-  tickUpper?: Resolver<ResolversTypes['Tick'], ParentType, ContextType>;
   transaction?: Resolver<ResolversTypes['Transaction'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type PositionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Position'] = ResolversParentTypes['Position']> = ResolversObject<{
+  accumulatedFees?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   amm?: Resolver<ResolversTypes['AMM'], ParentType, ContextType>;
   burns?: Resolver<Array<ResolversTypes['Burn']>, ParentType, ContextType, RequireFields<PositionBurnsArgs, 'first' | 'skip'>>;
   createdTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   fixedTokenBalance?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  isEmpty?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  isLiquidityProvider?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   isSettled?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  liquidations?: Resolver<Array<ResolversTypes['Liquidation']>, ParentType, ContextType, RequireFields<PositionLiquidationsArgs, 'first' | 'skip'>>;
   liquidity?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   margin?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  marginUpdates?: Resolver<Array<ResolversTypes['MarginUpdate']>, ParentType, ContextType, RequireFields<PositionMarginUpdatesArgs, 'first' | 'skip'>>;
   mints?: Resolver<Array<ResolversTypes['Mint']>, ParentType, ContextType, RequireFields<PositionMintsArgs, 'first' | 'skip'>>;
   owner?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType>;
+  positionType?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  settlements?: Resolver<Array<ResolversTypes['Settlement']>, ParentType, ContextType, RequireFields<PositionSettlementsArgs, 'first' | 'skip'>>;
   snapshotCount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   snapshots?: Resolver<Array<ResolversTypes['PositionSnapshot']>, ParentType, ContextType, RequireFields<PositionSnapshotsArgs, 'first' | 'skip'>>;
   swaps?: Resolver<Array<ResolversTypes['Swap']>, ParentType, ContextType, RequireFields<PositionSwapsArgs, 'first' | 'skip'>>;
-  tickLower?: Resolver<ResolversTypes['Tick'], ParentType, ContextType>;
-  tickUpper?: Resolver<ResolversTypes['Tick'], ParentType, ContextType>;
+  tickLower?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  tickUpper?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   updatedTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   variableTokenBalance?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type PositionSnapshotResolvers<ContextType = any, ParentType extends ResolversParentTypes['PositionSnapshot'] = ResolversParentTypes['PositionSnapshot']> = ResolversObject<{
+  accumulatedFees?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   createdTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   fixedTokenBalance?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  isEmpty?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   isSettled?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   liquidity?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   margin?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   position?: Resolver<ResolversTypes['Position'], ParentType, ContextType>;
+  positionType?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   variableTokenBalance?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -2165,8 +3828,24 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   burns?: Resolver<Array<ResolversTypes['Burn']>, ParentType, ContextType, RequireFields<QueryBurnsArgs, 'first' | 'skip' | 'subgraphError'>>;
   factories?: Resolver<Array<ResolversTypes['Factory']>, ParentType, ContextType, RequireFields<QueryFactoriesArgs, 'first' | 'skip' | 'subgraphError'>>;
   factory?: Resolver<Maybe<ResolversTypes['Factory']>, ParentType, ContextType, RequireFields<QueryFactoryArgs, 'id' | 'subgraphError'>>;
+  fcm?: Resolver<Maybe<ResolversTypes['FCM']>, ParentType, ContextType, RequireFields<QueryFcmArgs, 'id' | 'subgraphError'>>;
+  fcmposition?: Resolver<Maybe<ResolversTypes['FCMPosition']>, ParentType, ContextType, RequireFields<QueryFcmpositionArgs, 'id' | 'subgraphError'>>;
+  fcmpositionSnapshot?: Resolver<Maybe<ResolversTypes['FCMPositionSnapshot']>, ParentType, ContextType, RequireFields<QueryFcmpositionSnapshotArgs, 'id' | 'subgraphError'>>;
+  fcmpositionSnapshots?: Resolver<Array<ResolversTypes['FCMPositionSnapshot']>, ParentType, ContextType, RequireFields<QueryFcmpositionSnapshotsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  fcmpositions?: Resolver<Array<ResolversTypes['FCMPosition']>, ParentType, ContextType, RequireFields<QueryFcmpositionsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  fcms?: Resolver<Array<ResolversTypes['FCM']>, ParentType, ContextType, RequireFields<QueryFcmsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  fcmsettlement?: Resolver<Maybe<ResolversTypes['FCMSettlement']>, ParentType, ContextType, RequireFields<QueryFcmsettlementArgs, 'id' | 'subgraphError'>>;
+  fcmsettlements?: Resolver<Array<ResolversTypes['FCMSettlement']>, ParentType, ContextType, RequireFields<QueryFcmsettlementsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  fcmswap?: Resolver<Maybe<ResolversTypes['FCMSwap']>, ParentType, ContextType, RequireFields<QueryFcmswapArgs, 'id' | 'subgraphError'>>;
+  fcmswaps?: Resolver<Array<ResolversTypes['FCMSwap']>, ParentType, ContextType, RequireFields<QueryFcmswapsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  fcmunwind?: Resolver<Maybe<ResolversTypes['FCMUnwind']>, ParentType, ContextType, RequireFields<QueryFcmunwindArgs, 'id' | 'subgraphError'>>;
+  fcmunwinds?: Resolver<Array<ResolversTypes['FCMUnwind']>, ParentType, ContextType, RequireFields<QueryFcmunwindsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  liquidation?: Resolver<Maybe<ResolversTypes['Liquidation']>, ParentType, ContextType, RequireFields<QueryLiquidationArgs, 'id' | 'subgraphError'>>;
+  liquidations?: Resolver<Array<ResolversTypes['Liquidation']>, ParentType, ContextType, RequireFields<QueryLiquidationsArgs, 'first' | 'skip' | 'subgraphError'>>;
   marginEngine?: Resolver<Maybe<ResolversTypes['MarginEngine']>, ParentType, ContextType, RequireFields<QueryMarginEngineArgs, 'id' | 'subgraphError'>>;
   marginEngines?: Resolver<Array<ResolversTypes['MarginEngine']>, ParentType, ContextType, RequireFields<QueryMarginEnginesArgs, 'first' | 'skip' | 'subgraphError'>>;
+  marginUpdate?: Resolver<Maybe<ResolversTypes['MarginUpdate']>, ParentType, ContextType, RequireFields<QueryMarginUpdateArgs, 'id' | 'subgraphError'>>;
+  marginUpdates?: Resolver<Array<ResolversTypes['MarginUpdate']>, ParentType, ContextType, RequireFields<QueryMarginUpdatesArgs, 'first' | 'skip' | 'subgraphError'>>;
   mint?: Resolver<Maybe<ResolversTypes['Mint']>, ParentType, ContextType, RequireFields<QueryMintArgs, 'id' | 'subgraphError'>>;
   mints?: Resolver<Array<ResolversTypes['Mint']>, ParentType, ContextType, RequireFields<QueryMintsArgs, 'first' | 'skip' | 'subgraphError'>>;
   position?: Resolver<Maybe<ResolversTypes['Position']>, ParentType, ContextType, RequireFields<QueryPositionArgs, 'id' | 'subgraphError'>>;
@@ -2175,10 +3854,10 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   positions?: Resolver<Array<ResolversTypes['Position']>, ParentType, ContextType, RequireFields<QueryPositionsArgs, 'first' | 'skip' | 'subgraphError'>>;
   rateOracle?: Resolver<Maybe<ResolversTypes['RateOracle']>, ParentType, ContextType, RequireFields<QueryRateOracleArgs, 'id' | 'subgraphError'>>;
   rateOracles?: Resolver<Array<ResolversTypes['RateOracle']>, ParentType, ContextType, RequireFields<QueryRateOraclesArgs, 'first' | 'skip' | 'subgraphError'>>;
+  settlement?: Resolver<Maybe<ResolversTypes['Settlement']>, ParentType, ContextType, RequireFields<QuerySettlementArgs, 'id' | 'subgraphError'>>;
+  settlements?: Resolver<Array<ResolversTypes['Settlement']>, ParentType, ContextType, RequireFields<QuerySettlementsArgs, 'first' | 'skip' | 'subgraphError'>>;
   swap?: Resolver<Maybe<ResolversTypes['Swap']>, ParentType, ContextType, RequireFields<QuerySwapArgs, 'id' | 'subgraphError'>>;
   swaps?: Resolver<Array<ResolversTypes['Swap']>, ParentType, ContextType, RequireFields<QuerySwapsArgs, 'first' | 'skip' | 'subgraphError'>>;
-  tick?: Resolver<Maybe<ResolversTypes['Tick']>, ParentType, ContextType, RequireFields<QueryTickArgs, 'id' | 'subgraphError'>>;
-  ticks?: Resolver<Array<ResolversTypes['Tick']>, ParentType, ContextType, RequireFields<QueryTicksArgs, 'first' | 'skip' | 'subgraphError'>>;
   transaction?: Resolver<Maybe<ResolversTypes['Transaction']>, ParentType, ContextType, RequireFields<QueryTransactionArgs, 'id' | 'subgraphError'>>;
   transactions?: Resolver<Array<ResolversTypes['Transaction']>, ParentType, ContextType, RequireFields<QueryTransactionsArgs, 'first' | 'skip' | 'subgraphError'>>;
   underlyingToken?: Resolver<Maybe<ResolversTypes['UnderlyingToken']>, ParentType, ContextType, RequireFields<QueryUnderlyingTokenArgs, 'id' | 'subgraphError'>>;
@@ -2194,6 +3873,15 @@ export type RateOracleResolvers<ContextType = any, ParentType extends ResolversP
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type SettlementResolvers<ContextType = any, ParentType extends ResolversParentTypes['Settlement'] = ResolversParentTypes['Settlement']> = ResolversObject<{
+  amm?: Resolver<ResolversTypes['AMM'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  position?: Resolver<ResolversTypes['Position'], ParentType, ContextType>;
+  settlementCashflow?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  transaction?: Resolver<ResolversTypes['Transaction'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
   _meta?: SubscriptionResolver<Maybe<ResolversTypes['_Meta_']>, "_meta", ParentType, ContextType, Partial<Subscription_MetaArgs>>;
   amm?: SubscriptionResolver<Maybe<ResolversTypes['AMM']>, "amm", ParentType, ContextType, RequireFields<SubscriptionAmmArgs, 'id' | 'subgraphError'>>;
@@ -2202,8 +3890,24 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
   burns?: SubscriptionResolver<Array<ResolversTypes['Burn']>, "burns", ParentType, ContextType, RequireFields<SubscriptionBurnsArgs, 'first' | 'skip' | 'subgraphError'>>;
   factories?: SubscriptionResolver<Array<ResolversTypes['Factory']>, "factories", ParentType, ContextType, RequireFields<SubscriptionFactoriesArgs, 'first' | 'skip' | 'subgraphError'>>;
   factory?: SubscriptionResolver<Maybe<ResolversTypes['Factory']>, "factory", ParentType, ContextType, RequireFields<SubscriptionFactoryArgs, 'id' | 'subgraphError'>>;
+  fcm?: SubscriptionResolver<Maybe<ResolversTypes['FCM']>, "fcm", ParentType, ContextType, RequireFields<SubscriptionFcmArgs, 'id' | 'subgraphError'>>;
+  fcmposition?: SubscriptionResolver<Maybe<ResolversTypes['FCMPosition']>, "fcmposition", ParentType, ContextType, RequireFields<SubscriptionFcmpositionArgs, 'id' | 'subgraphError'>>;
+  fcmpositionSnapshot?: SubscriptionResolver<Maybe<ResolversTypes['FCMPositionSnapshot']>, "fcmpositionSnapshot", ParentType, ContextType, RequireFields<SubscriptionFcmpositionSnapshotArgs, 'id' | 'subgraphError'>>;
+  fcmpositionSnapshots?: SubscriptionResolver<Array<ResolversTypes['FCMPositionSnapshot']>, "fcmpositionSnapshots", ParentType, ContextType, RequireFields<SubscriptionFcmpositionSnapshotsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  fcmpositions?: SubscriptionResolver<Array<ResolversTypes['FCMPosition']>, "fcmpositions", ParentType, ContextType, RequireFields<SubscriptionFcmpositionsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  fcms?: SubscriptionResolver<Array<ResolversTypes['FCM']>, "fcms", ParentType, ContextType, RequireFields<SubscriptionFcmsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  fcmsettlement?: SubscriptionResolver<Maybe<ResolversTypes['FCMSettlement']>, "fcmsettlement", ParentType, ContextType, RequireFields<SubscriptionFcmsettlementArgs, 'id' | 'subgraphError'>>;
+  fcmsettlements?: SubscriptionResolver<Array<ResolversTypes['FCMSettlement']>, "fcmsettlements", ParentType, ContextType, RequireFields<SubscriptionFcmsettlementsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  fcmswap?: SubscriptionResolver<Maybe<ResolversTypes['FCMSwap']>, "fcmswap", ParentType, ContextType, RequireFields<SubscriptionFcmswapArgs, 'id' | 'subgraphError'>>;
+  fcmswaps?: SubscriptionResolver<Array<ResolversTypes['FCMSwap']>, "fcmswaps", ParentType, ContextType, RequireFields<SubscriptionFcmswapsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  fcmunwind?: SubscriptionResolver<Maybe<ResolversTypes['FCMUnwind']>, "fcmunwind", ParentType, ContextType, RequireFields<SubscriptionFcmunwindArgs, 'id' | 'subgraphError'>>;
+  fcmunwinds?: SubscriptionResolver<Array<ResolversTypes['FCMUnwind']>, "fcmunwinds", ParentType, ContextType, RequireFields<SubscriptionFcmunwindsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  liquidation?: SubscriptionResolver<Maybe<ResolversTypes['Liquidation']>, "liquidation", ParentType, ContextType, RequireFields<SubscriptionLiquidationArgs, 'id' | 'subgraphError'>>;
+  liquidations?: SubscriptionResolver<Array<ResolversTypes['Liquidation']>, "liquidations", ParentType, ContextType, RequireFields<SubscriptionLiquidationsArgs, 'first' | 'skip' | 'subgraphError'>>;
   marginEngine?: SubscriptionResolver<Maybe<ResolversTypes['MarginEngine']>, "marginEngine", ParentType, ContextType, RequireFields<SubscriptionMarginEngineArgs, 'id' | 'subgraphError'>>;
   marginEngines?: SubscriptionResolver<Array<ResolversTypes['MarginEngine']>, "marginEngines", ParentType, ContextType, RequireFields<SubscriptionMarginEnginesArgs, 'first' | 'skip' | 'subgraphError'>>;
+  marginUpdate?: SubscriptionResolver<Maybe<ResolversTypes['MarginUpdate']>, "marginUpdate", ParentType, ContextType, RequireFields<SubscriptionMarginUpdateArgs, 'id' | 'subgraphError'>>;
+  marginUpdates?: SubscriptionResolver<Array<ResolversTypes['MarginUpdate']>, "marginUpdates", ParentType, ContextType, RequireFields<SubscriptionMarginUpdatesArgs, 'first' | 'skip' | 'subgraphError'>>;
   mint?: SubscriptionResolver<Maybe<ResolversTypes['Mint']>, "mint", ParentType, ContextType, RequireFields<SubscriptionMintArgs, 'id' | 'subgraphError'>>;
   mints?: SubscriptionResolver<Array<ResolversTypes['Mint']>, "mints", ParentType, ContextType, RequireFields<SubscriptionMintsArgs, 'first' | 'skip' | 'subgraphError'>>;
   position?: SubscriptionResolver<Maybe<ResolversTypes['Position']>, "position", ParentType, ContextType, RequireFields<SubscriptionPositionArgs, 'id' | 'subgraphError'>>;
@@ -2212,10 +3916,10 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
   positions?: SubscriptionResolver<Array<ResolversTypes['Position']>, "positions", ParentType, ContextType, RequireFields<SubscriptionPositionsArgs, 'first' | 'skip' | 'subgraphError'>>;
   rateOracle?: SubscriptionResolver<Maybe<ResolversTypes['RateOracle']>, "rateOracle", ParentType, ContextType, RequireFields<SubscriptionRateOracleArgs, 'id' | 'subgraphError'>>;
   rateOracles?: SubscriptionResolver<Array<ResolversTypes['RateOracle']>, "rateOracles", ParentType, ContextType, RequireFields<SubscriptionRateOraclesArgs, 'first' | 'skip' | 'subgraphError'>>;
+  settlement?: SubscriptionResolver<Maybe<ResolversTypes['Settlement']>, "settlement", ParentType, ContextType, RequireFields<SubscriptionSettlementArgs, 'id' | 'subgraphError'>>;
+  settlements?: SubscriptionResolver<Array<ResolversTypes['Settlement']>, "settlements", ParentType, ContextType, RequireFields<SubscriptionSettlementsArgs, 'first' | 'skip' | 'subgraphError'>>;
   swap?: SubscriptionResolver<Maybe<ResolversTypes['Swap']>, "swap", ParentType, ContextType, RequireFields<SubscriptionSwapArgs, 'id' | 'subgraphError'>>;
   swaps?: SubscriptionResolver<Array<ResolversTypes['Swap']>, "swaps", ParentType, ContextType, RequireFields<SubscriptionSwapsArgs, 'first' | 'skip' | 'subgraphError'>>;
-  tick?: SubscriptionResolver<Maybe<ResolversTypes['Tick']>, "tick", ParentType, ContextType, RequireFields<SubscriptionTickArgs, 'id' | 'subgraphError'>>;
-  ticks?: SubscriptionResolver<Array<ResolversTypes['Tick']>, "ticks", ParentType, ContextType, RequireFields<SubscriptionTicksArgs, 'first' | 'skip' | 'subgraphError'>>;
   transaction?: SubscriptionResolver<Maybe<ResolversTypes['Transaction']>, "transaction", ParentType, ContextType, RequireFields<SubscriptionTransactionArgs, 'id' | 'subgraphError'>>;
   transactions?: SubscriptionResolver<Array<ResolversTypes['Transaction']>, "transactions", ParentType, ContextType, RequireFields<SubscriptionTransactionsArgs, 'first' | 'skip' | 'subgraphError'>>;
   underlyingToken?: SubscriptionResolver<Maybe<ResolversTypes['UnderlyingToken']>, "underlyingToken", ParentType, ContextType, RequireFields<SubscriptionUnderlyingTokenArgs, 'id' | 'subgraphError'>>;
@@ -2226,32 +3930,31 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
 
 export type SwapResolvers<ContextType = any, ParentType extends ResolversParentTypes['Swap'] = ResolversParentTypes['Swap']> = ResolversObject<{
   amm?: Resolver<ResolversTypes['AMM'], ParentType, ContextType>;
+  cumulativeFeeIncurred?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  desiredNotional?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  fixedTokenDelta?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  fixedTokenDeltaUnbalanced?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  liquidity?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   position?: Resolver<ResolversTypes['Position'], ParentType, ContextType>;
   sender?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  sqrtPriceX96?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  tick?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  sqrtPriceLimitX96?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   transaction?: Resolver<ResolversTypes['Transaction'], ParentType, ContextType>;
-  txIndex?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type TickResolvers<ContextType = any, ParentType extends ResolversParentTypes['Tick'] = ResolversParentTypes['Tick']> = ResolversObject<{
-  amm?: Resolver<ResolversTypes['AMM'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  value?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  variableTokenDelta?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type TransactionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Transaction'] = ResolversParentTypes['Transaction']> = ResolversObject<{
+  amm?: Resolver<ResolversTypes['AMM'], ParentType, ContextType>;
   blockNumber?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   burns?: Resolver<Array<ResolversTypes['Burn']>, ParentType, ContextType, RequireFields<TransactionBurnsArgs, 'first' | 'skip'>>;
+  createdTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   gasPrice?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  liquidations?: Resolver<Array<ResolversTypes['Liquidation']>, ParentType, ContextType, RequireFields<TransactionLiquidationsArgs, 'first' | 'skip'>>;
+  marginUpdates?: Resolver<Array<ResolversTypes['MarginUpdate']>, ParentType, ContextType, RequireFields<TransactionMarginUpdatesArgs, 'first' | 'skip'>>;
   mints?: Resolver<Array<ResolversTypes['Mint']>, ParentType, ContextType, RequireFields<TransactionMintsArgs, 'first' | 'skip'>>;
+  settlements?: Resolver<Array<ResolversTypes['Settlement']>, ParentType, ContextType, RequireFields<TransactionSettlementsArgs, 'first' | 'skip'>>;
   swaps?: Resolver<Array<ResolversTypes['Swap']>, ParentType, ContextType, RequireFields<TransactionSwapsArgs, 'first' | 'skip'>>;
-  timestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -2263,6 +3966,8 @@ export type UnderlyingTokenResolvers<ContextType = any, ParentType extends Resol
 }>;
 
 export type WalletResolvers<ContextType = any, ParentType extends ResolversParentTypes['Wallet'] = ResolversParentTypes['Wallet']> = ResolversObject<{
+  fcmPositionCount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  fcmPositions?: Resolver<Array<ResolversTypes['FCMPosition']>, ParentType, ContextType, RequireFields<WalletFcmPositionsArgs, 'first' | 'skip'>>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   positionCount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   positions?: Resolver<Array<ResolversTypes['Position']>, ParentType, ContextType, RequireFields<WalletPositionsArgs, 'first' | 'skip'>>;
@@ -2288,16 +3993,24 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   BigInt?: GraphQLScalarType;
   Burn?: BurnResolvers<ContextType>;
   Bytes?: GraphQLScalarType;
+  FCM?: FcmResolvers<ContextType>;
+  FCMPosition?: FcmPositionResolvers<ContextType>;
+  FCMPositionSnapshot?: FcmPositionSnapshotResolvers<ContextType>;
+  FCMSettlement?: FcmSettlementResolvers<ContextType>;
+  FCMSwap?: FcmSwapResolvers<ContextType>;
+  FCMUnwind?: FcmUnwindResolvers<ContextType>;
   Factory?: FactoryResolvers<ContextType>;
+  Liquidation?: LiquidationResolvers<ContextType>;
   MarginEngine?: MarginEngineResolvers<ContextType>;
+  MarginUpdate?: MarginUpdateResolvers<ContextType>;
   Mint?: MintResolvers<ContextType>;
   Position?: PositionResolvers<ContextType>;
   PositionSnapshot?: PositionSnapshotResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   RateOracle?: RateOracleResolvers<ContextType>;
+  Settlement?: SettlementResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   Swap?: SwapResolvers<ContextType>;
-  Tick?: TickResolvers<ContextType>;
   Transaction?: TransactionResolvers<ContextType>;
   UnderlyingToken?: UnderlyingTokenResolvers<ContextType>;
   Wallet?: WalletResolvers<ContextType>;
@@ -2317,9 +4030,12 @@ export const GetAmMsDocument = gql`
   amms(first: 100, orderBy: $orderBy, orderDirection: asc) {
     id
     createdTimestamp
-    updatedTimestamp
-    fcmAddress
-    marginEngineAddress
+    fcm {
+      id
+    }
+    marginEngine {
+      id
+    }
     rateOracle {
       id
       protocolId
@@ -2329,11 +4045,10 @@ export const GetAmMsDocument = gql`
         decimals
       }
     }
+    tickSpacing
     termStartTimestamp
     termEndTimestamp
-    tickSpacing
-    sqrtPriceX96
-    liquidity
+    updatedTimestamp
     tick
     txCount
   }
@@ -2367,293 +4082,6 @@ export function useGetAmMsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetAmMsQueryHookResult = ReturnType<typeof useGetAmMsQuery>;
 export type GetAmMsLazyQueryHookResult = ReturnType<typeof useGetAmMsLazyQuery>;
 export type GetAmMsQueryResult = Apollo.QueryResult<GetAmMsQuery, GetAmMsQueryVariables>;
-export const GetBurnsDocument = gql`
-    query GetBurns($orderBy: Burn_orderBy!) {
-  burns(first: 100, orderBy: $orderBy, orderDirection: asc) {
-    id
-    transaction {
-      id
-      blockNumber
-      timestamp
-    }
-    amm {
-      id
-    }
-    position {
-      id
-    }
-    sender
-    tickLower {
-      id
-      value
-    }
-    tickUpper {
-      id
-      value
-    }
-    amount
-  }
-}
-    `;
-
-/**
- * __useGetBurnsQuery__
- *
- * To run a query within a React component, call `useGetBurnsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetBurnsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetBurnsQuery({
- *   variables: {
- *      orderBy: // value for 'orderBy'
- *   },
- * });
- */
-export function useGetBurnsQuery(baseOptions: Apollo.QueryHookOptions<GetBurnsQuery, GetBurnsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetBurnsQuery, GetBurnsQueryVariables>(GetBurnsDocument, options);
-      }
-export function useGetBurnsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurnsQuery, GetBurnsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetBurnsQuery, GetBurnsQueryVariables>(GetBurnsDocument, options);
-        }
-export type GetBurnsQueryHookResult = ReturnType<typeof useGetBurnsQuery>;
-export type GetBurnsLazyQueryHookResult = ReturnType<typeof useGetBurnsLazyQuery>;
-export type GetBurnsQueryResult = Apollo.QueryResult<GetBurnsQuery, GetBurnsQueryVariables>;
-export const GetMintsDocument = gql`
-    query GetMints($orderBy: Mint_orderBy!) {
-  mints(first: 100, orderBy: $orderBy, orderDirection: asc) {
-    id
-    transaction {
-      id
-      blockNumber
-      timestamp
-    }
-    amm {
-      id
-    }
-    position {
-      id
-    }
-    sender
-    tickLower {
-      id
-      value
-    }
-    tickUpper {
-      id
-      value
-    }
-    amount
-  }
-}
-    `;
-
-/**
- * __useGetMintsQuery__
- *
- * To run a query within a React component, call `useGetMintsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetMintsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetMintsQuery({
- *   variables: {
- *      orderBy: // value for 'orderBy'
- *   },
- * });
- */
-export function useGetMintsQuery(baseOptions: Apollo.QueryHookOptions<GetMintsQuery, GetMintsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetMintsQuery, GetMintsQueryVariables>(GetMintsDocument, options);
-      }
-export function useGetMintsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMintsQuery, GetMintsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetMintsQuery, GetMintsQueryVariables>(GetMintsDocument, options);
-        }
-export type GetMintsQueryHookResult = ReturnType<typeof useGetMintsQuery>;
-export type GetMintsLazyQueryHookResult = ReturnType<typeof useGetMintsLazyQuery>;
-export type GetMintsQueryResult = Apollo.QueryResult<GetMintsQuery, GetMintsQueryVariables>;
-export const GetPositionDocument = gql`
-    query GetPosition($id: ID!) {
-  position(id: $id) {
-    id
-    createdTimestamp
-    updatedTimestamp
-    owner {
-      id
-    }
-    amm {
-      id
-      termStartTimestamp
-      termEndTimestamp
-      rateOracle {
-        id
-        protocolId
-        token {
-          id
-          name
-          decimals
-        }
-      }
-    }
-    tickLower {
-      id
-      value
-    }
-    tickUpper {
-      id
-      value
-    }
-    liquidity
-    margin
-    fixedTokenBalance
-    variableTokenBalance
-    isLiquidityProvider
-    isSettled
-    isEmpty
-    snapshotCount
-    burns {
-      id
-    }
-    mints {
-      id
-    }
-    swaps {
-      id
-    }
-  }
-}
-    `;
-
-/**
- * __useGetPositionQuery__
- *
- * To run a query within a React component, call `useGetPositionQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetPositionQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetPositionQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetPositionQuery(baseOptions: Apollo.QueryHookOptions<GetPositionQuery, GetPositionQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetPositionQuery, GetPositionQueryVariables>(GetPositionDocument, options);
-      }
-export function useGetPositionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPositionQuery, GetPositionQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetPositionQuery, GetPositionQueryVariables>(GetPositionDocument, options);
-        }
-export type GetPositionQueryHookResult = ReturnType<typeof useGetPositionQuery>;
-export type GetPositionLazyQueryHookResult = ReturnType<typeof useGetPositionLazyQuery>;
-export type GetPositionQueryResult = Apollo.QueryResult<GetPositionQuery, GetPositionQueryVariables>;
-export const GetPositionSnapshotsDocument = gql`
-    query GetPositionSnapshots($orderBy: PositionSnapshot_orderBy!) {
-  positionSnapshots(first: 100, orderBy: $orderBy, orderDirection: asc) {
-    id
-    createdTimestamp
-    position {
-      id
-    }
-    liquidity
-    margin
-    fixedTokenBalance
-    variableTokenBalance
-    isSettled
-    isEmpty
-  }
-}
-    `;
-
-/**
- * __useGetPositionSnapshotsQuery__
- *
- * To run a query within a React component, call `useGetPositionSnapshotsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetPositionSnapshotsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetPositionSnapshotsQuery({
- *   variables: {
- *      orderBy: // value for 'orderBy'
- *   },
- * });
- */
-export function useGetPositionSnapshotsQuery(baseOptions: Apollo.QueryHookOptions<GetPositionSnapshotsQuery, GetPositionSnapshotsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetPositionSnapshotsQuery, GetPositionSnapshotsQueryVariables>(GetPositionSnapshotsDocument, options);
-      }
-export function useGetPositionSnapshotsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPositionSnapshotsQuery, GetPositionSnapshotsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetPositionSnapshotsQuery, GetPositionSnapshotsQueryVariables>(GetPositionSnapshotsDocument, options);
-        }
-export type GetPositionSnapshotsQueryHookResult = ReturnType<typeof useGetPositionSnapshotsQuery>;
-export type GetPositionSnapshotsLazyQueryHookResult = ReturnType<typeof useGetPositionSnapshotsLazyQuery>;
-export type GetPositionSnapshotsQueryResult = Apollo.QueryResult<GetPositionSnapshotsQuery, GetPositionSnapshotsQueryVariables>;
-export const GetSwapsDocument = gql`
-    query GetSwaps($orderBy: Swap_orderBy!) {
-  swaps(first: 100, orderBy: $orderBy, orderDirection: asc) {
-    id
-    transaction {
-      id
-      blockNumber
-      timestamp
-    }
-    amm {
-      id
-    }
-    position {
-      id
-    }
-    sender
-    txIndex
-    sqrtPriceX96
-    liquidity
-    tick
-  }
-}
-    `;
-
-/**
- * __useGetSwapsQuery__
- *
- * To run a query within a React component, call `useGetSwapsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetSwapsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetSwapsQuery({
- *   variables: {
- *      orderBy: // value for 'orderBy'
- *   },
- * });
- */
-export function useGetSwapsQuery(baseOptions: Apollo.QueryHookOptions<GetSwapsQuery, GetSwapsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetSwapsQuery, GetSwapsQueryVariables>(GetSwapsDocument, options);
-      }
-export function useGetSwapsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSwapsQuery, GetSwapsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetSwapsQuery, GetSwapsQueryVariables>(GetSwapsDocument, options);
-        }
-export type GetSwapsQueryHookResult = ReturnType<typeof useGetSwapsQuery>;
-export type GetSwapsLazyQueryHookResult = ReturnType<typeof useGetSwapsLazyQuery>;
-export type GetSwapsQueryResult = Apollo.QueryResult<GetSwapsQuery, GetSwapsQueryVariables>;
 export const GetWalletDocument = gql`
     query GetWallet($id: ID!) {
   wallet(id: $id) {
@@ -2662,16 +4090,15 @@ export const GetWalletDocument = gql`
     positions {
       id
       createdTimestamp
-      updatedTimestamp
-      owner {
-        id
-      }
       amm {
         id
         createdTimestamp
-        updatedTimestamp
-        fcmAddress
-        marginEngineAddress
+        fcm {
+          id
+        }
+        marginEngine {
+          id
+        }
         rateOracle {
           id
           protocolId
@@ -2681,38 +4108,156 @@ export const GetWalletDocument = gql`
             decimals
           }
         }
+        tickSpacing
         termStartTimestamp
         termEndTimestamp
-        tickSpacing
-        sqrtPriceX96
-        liquidity
+        updatedTimestamp
         tick
         txCount
       }
-      tickLower {
+      owner {
         id
-        value
       }
-      tickUpper {
-        id
-        value
-      }
+      tickLower
+      tickUpper
+      updatedTimestamp
       liquidity
       margin
       fixedTokenBalance
       variableTokenBalance
-      isLiquidityProvider
+      accumulatedFees
+      positionType
       isSettled
-      isEmpty
-      snapshotCount
-      burns {
-        id
-      }
       mints {
         id
+        sender
+        transaction {
+          id
+          createdTimestamp
+        }
+        amount
+      }
+      burns {
+        id
+        sender
+        transaction {
+          id
+          createdTimestamp
+        }
+        amount
       }
       swaps {
         id
+        sender
+        transaction {
+          id
+          createdTimestamp
+        }
+        desiredNotional
+        sqrtPriceLimitX96
+        cumulativeFeeIncurred
+        fixedTokenDelta
+        variableTokenDelta
+        fixedTokenDeltaUnbalanced
+      }
+      marginUpdates {
+        id
+        transaction {
+          id
+          createdTimestamp
+        }
+        depositer
+        marginDelta
+      }
+      liquidations {
+        id
+        transaction {
+          id
+          createdTimestamp
+        }
+        liquidator
+        reward
+        notionalUnwound
+      }
+      settlements {
+        id
+        transaction {
+          id
+          createdTimestamp
+        }
+        settlementCashflow
+      }
+    }
+    fcmPositionCount
+    fcmPositions {
+      id
+      createdTimestamp
+      amm {
+        id
+        createdTimestamp
+        fcm {
+          id
+        }
+        marginEngine {
+          id
+        }
+        rateOracle {
+          id
+          protocolId
+          token {
+            id
+            name
+            decimals
+          }
+        }
+        tickSpacing
+        termStartTimestamp
+        termEndTimestamp
+        updatedTimestamp
+        tick
+        txCount
+      }
+      owner {
+        id
+      }
+      updatedTimestamp
+      fixedTokenBalance
+      variableTokenBalance
+      marginInScaledYieldBearingTokens
+      isSettled
+      fcmSwaps {
+        id
+        transaction {
+          id
+          createdTimestamp
+        }
+        desiredNotional
+        sqrtPriceLimitX96
+        cumulativeFeeIncurred
+        fixedTokenDelta
+        variableTokenDelta
+        fixedTokenDeltaUnbalanced
+      }
+      fcmUnwinds {
+        id
+        transaction {
+          id
+          createdTimestamp
+        }
+        desiredNotional
+        sqrtPriceLimitX96
+        cumulativeFeeIncurred
+        fixedTokenDelta
+        variableTokenDelta
+        fixedTokenDeltaUnbalanced
+      }
+      fcmSettlements {
+        id
+        transaction {
+          id
+          createdTimestamp
+        }
+        settlementCashflow
       }
     }
   }
@@ -2746,41 +4291,3 @@ export function useGetWalletLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type GetWalletQueryHookResult = ReturnType<typeof useGetWalletQuery>;
 export type GetWalletLazyQueryHookResult = ReturnType<typeof useGetWalletLazyQuery>;
 export type GetWalletQueryResult = Apollo.QueryResult<GetWalletQuery, GetWalletQueryVariables>;
-export const GetWalletsDocument = gql`
-    query GetWallets($orderBy: Wallet_orderBy!) {
-  wallets(first: 100, orderBy: $orderBy, orderDirection: asc) {
-    id
-    positions {
-      id
-    }
-  }
-}
-    `;
-
-/**
- * __useGetWalletsQuery__
- *
- * To run a query within a React component, call `useGetWalletsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetWalletsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetWalletsQuery({
- *   variables: {
- *      orderBy: // value for 'orderBy'
- *   },
- * });
- */
-export function useGetWalletsQuery(baseOptions: Apollo.QueryHookOptions<GetWalletsQuery, GetWalletsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetWalletsQuery, GetWalletsQueryVariables>(GetWalletsDocument, options);
-      }
-export function useGetWalletsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetWalletsQuery, GetWalletsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetWalletsQuery, GetWalletsQueryVariables>(GetWalletsDocument, options);
-        }
-export type GetWalletsQueryHookResult = ReturnType<typeof useGetWalletsQuery>;
-export type GetWalletsLazyQueryHookResult = ReturnType<typeof useGetWalletsLazyQuery>;
-export type GetWalletsQueryResult = Apollo.QueryResult<GetWalletsQuery, GetWalletsQueryVariables>;

@@ -3,7 +3,7 @@ import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import { SystemStyleObject, Theme } from '@mui/system';
-import { Position } from '@voltz/v1-sdk';
+import { Position } from '@voltz-protocol/v1-sdk';
 
 import { AugmentedAMM, data } from '@utilities';
 import { useAgent } from '@hooks';

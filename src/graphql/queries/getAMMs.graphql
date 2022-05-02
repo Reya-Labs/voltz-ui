@@ -2,9 +2,12 @@ query GetAMMs($orderBy: AMM_orderBy!) {
   amms(first: 100, orderBy: $orderBy, orderDirection: asc) {
     id
     createdTimestamp
-    updatedTimestamp
-    fcmAddress
-    marginEngineAddress
+    fcm {
+      id
+    }
+    marginEngine {
+      id
+    }
     rateOracle {
       id
       protocolId
@@ -14,12 +17,14 @@ query GetAMMs($orderBy: AMM_orderBy!) {
         decimals
       }
     }
+
+    tickSpacing
     termStartTimestamp
     termEndTimestamp
-    tickSpacing
-    sqrtPriceX96
-    liquidity
+
+    updatedTimestamp
     tick
+
     txCount
   }
 }

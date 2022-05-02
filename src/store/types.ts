@@ -28,7 +28,6 @@ export type Transaction = TransactionUpdate & {
   notional: number;
   margin: number;
   partialCollateralization?: boolean;
-  notionalToUnwind?: number; // If this is optional it acts up. 
 };
 
 export type State = {
@@ -37,15 +36,12 @@ export type State = {
 
 export type SerializedAMM = {
   id: string;
-  createdTimestamp: string;
   updatedTimestamp: string;
   fcmAddress: string;
   marginEngineAddress: string;
   termStartTimestamp: string;
   termEndTimestamp: string;
   tickSpacing: string;
-  sqrtPriceX96: string;
-  liquidity: string;
   tick: string;
   txCount: string;
   rateOracle: {
