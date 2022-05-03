@@ -12,6 +12,7 @@ import { EstimatedCashflow, FixedAPR, CurrentMargin, Notional } from './componen
 import React from 'react';
 import { useAgent } from '@hooks';
 import { DateTime } from 'luxon';
+import { Agent } from 'http';
 
 
 
@@ -105,7 +106,14 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
           }
 
           if (field === 'notional') {
-            return <Notional notional={datum.notional.toFixed(2)} token={token} onSelect={ () => onSelect('liquidity') } displayEditButton={ agent !== Agents.LIQUIDITY_PROVIDER} />;
+            if (agent === Agents.LIQUIDITY_PROVIDER) {
+              return <Notional notional={datum.notional.toFixed(2)} token={token} onSelect={() => onSelect('liquidity')} displayEditButton={agent !== Agents.LIQUIDITY_PROVIDER} />;
+            }
+            else {
+              return <Typography variant="body2" label={label} sx={{ fontSize: 18 }}>
+                {datum.notional.toFixed(2)} {token}
+              </Typography>
+            }
           }
 
           if (field === 'fixedApr') {

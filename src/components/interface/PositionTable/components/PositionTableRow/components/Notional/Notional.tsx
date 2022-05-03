@@ -4,6 +4,7 @@ import { useWallet } from '@hooks';
 import { Typography } from '@components/atomic';
 import { Button } from '@components/atomic';
 import isNull from 'lodash/isNull';
+import { isUndefined } from 'lodash';
 export type NotionalProps = {
     notional?: string;
     displayEditButton?: boolean;
@@ -15,20 +16,11 @@ export type NotionalProps = {
 const Notional: React.FunctionComponent<NotionalProps> = ({ notional, displayEditButton, token, onSelect}) => {
 
       const renderNotionalAmount = () => {
-    
-        return notional;
+        if (isUndefined(notional)) {
+          return 'No data';
+        }
+        return `${notional} ${token}`;
       };
-    
-      // const wallet = useWallet();
-    
-      // const handleClick = () => {
-      //   if (isNull(wallet.account)) {
-      //     wallet.setRequired(true);
-      //   } else {
-      //     // todo: fix
-      //     onSelect();
-      //   }
-      // };
 
       return (
         <TableCell>
@@ -54,7 +46,7 @@ const Notional: React.FunctionComponent<NotionalProps> = ({ notional, displayEdi
                 background: "transparent",
               },
             }} onClick={onSelect}> 
-                Edit (Liquidity)
+                Edit
             </Button>
     
     
