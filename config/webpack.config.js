@@ -304,6 +304,7 @@ module.exports = function (webpackEnv) {
         '@utilities': 'src/utilities',
         '@theme': 'src/theme',
         '@routes': 'src/routes',
+        '@factories': 'src/factories',
         // Allows for better profiling with ReactDevTools
         ...(isEnvProductionProfile && {
           'react-dom$': 'react-dom/profiling',
