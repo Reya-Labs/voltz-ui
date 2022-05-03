@@ -6,7 +6,11 @@ import {
   Ethereum,
   InterfaceAlertInformationCircle,
   InterfaceAlertWarningCircle,
+  Liquidation,
+  MarginUpdate,
   Metamask,
+  Settle,
+  Swap,
   Voltz,
 } from './icons';
 
@@ -17,7 +21,11 @@ export type Icons =
   | 'warning-circle'
   | 'information-circle'
   | 'metamask'
-  | 'voltz';
+  | 'voltz'
+  | 'tx-liquidation'
+  | 'tx-margin-update'
+  | 'tx-settle'
+  | 'tx-swap';
 
 export const iconMap: Record<Icons, ElementType> = {
   'arrow-left': ArrowLeft as ElementType,
@@ -27,4 +35,8 @@ export const iconMap: Record<Icons, ElementType> = {
   'warning-circle': InterfaceAlertWarningCircle as ElementType,
   metamask: Metamask as ElementType,
   voltz: Voltz as ElementType,
+  'tx-liquidation': Liquidation as ElementType,
+  'tx-margin-update': MarginUpdate as ElementType,
+  'tx-settle': Settle as ElementType,
+  'tx-swap': Swap as ElementType,
 };
