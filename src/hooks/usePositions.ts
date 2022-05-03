@@ -299,6 +299,17 @@ const usePositions = (): usePositionsResult => {
     }
   }, [positionCount, loading, error, isSignerAvailable]);
   const positions = (mePositions) ? ((fcmPositions) ? mePositions.concat(fcmPositions) : mePositions) : fcmPositions;
+  if (positions) {
+    positions.sort((a, b) => {
+      if (JSBI.GT(a.createdTimestamp, b.createdTimestamp)) {
+        return 1;
+      }
+      if (JSBI.GT(b.createdTimestamp, a.createdTimestamp)) {
+        return -1;
+      }
+      return 0;
+    })
+  }
 
   const positionsByAgent = useMemo(() => {
     return positions?.filter(({ positionType }) => {
