@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 import { routes } from '@routes';
-import { LiquidityProvider, Trader } from './components';
+import { LiquidityProvider, Trader, TrmPOST } from './components';
 
 const App = () => (
   <Routes>
@@ -11,6 +11,7 @@ const App = () => (
       <Route path={routes.PORTFOLIO} element={<Trader />} />
       <Route path={routes.POOLS} element={<LiquidityProvider />} />
       <Route path={routes.LP_FARM} element={<LiquidityProvider />} />
+      <Route path={routes.TRM_POST} element={<TrmPOST />} />
     </Route>
   </Routes>
 );

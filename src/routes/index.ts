@@ -3,4 +3,5 @@ export const routes = {
   POOLS: 'lp-pools',
   PORTFOLIO: 'portfolio',
   SWAP: 'trader-pools',
+  TRM_POST: 'trm-post'
 };
