@@ -1,4 +1,4 @@
-import { BigNumber, ethers } from 'ethers';
+import { BigNumber, ethers, utils } from 'ethers';
 import * as factory from './Factory.json';
 
 export const iface = new ethers.utils.Interface(factory.abi);
@@ -193,7 +193,10 @@ export const getErrorSignature = (error: any, environment: string): string => {
     }
     case 'KOVAN': {
       try {
-        const reason = error.data.toString().replace('Reverted ', '');
+        const reason = error.data.toString().replace('Reverted ', '') as string;
+        if (reason.startsWith('0x08c379a0')) {
+          return 'Error';
+        }
         const decodedError = iface.parseError(reason);
         const errSig = decodedError.signature.split('(')[0];
         return errSig;
@@ -210,6 +213,21 @@ export const getErrorSignature = (error: any, environment: string): string => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getReadableErrorMessage = (error: any, environment: string): string => {
   const errSig = getErrorSignature(error, environment);
+  if (errSig === 'Error') {
+    let reason = error.data.toString().replace('Reverted ', '') as string;
+    reason = `0x${reason.substring(10)}`;
+    try {
+      const rawErrorMessage = utils.defaultAbiCoder.decode(['string'], reason)[0];
+
+      if (rawErrorMessage in errorMessageMapping) {
+        return errorMessageMapping[rawErrorMessage];
+      }
+
+      return `Unrecognized error (Raw error: ${rawErrorMessage})`;
+    } catch (_) {
+      return 'Unrecognized error';
+    }
+  }
   if (errSig in errorMessageMapping) {
     return errorMessageMapping[errSig];
   }

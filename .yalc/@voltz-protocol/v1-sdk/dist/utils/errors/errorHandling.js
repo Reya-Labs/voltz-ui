@@ -151,6 +151,9 @@ var getErrorSignature = function (error, environment) {
         case 'KOVAN': {
             try {
                 var reason = error.data.toString().replace('Reverted ', '');
+                if (reason.startsWith('0x08c379a0')) {
+                    return 'Error';
+                }
                 var decodedError = exports.iface.parseError(reason);
                 var errSig = decodedError.signature.split('(')[0];
                 return errSig;
@@ -168,6 +171,20 @@ exports.getErrorSignature = getErrorSignature;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 var getReadableErrorMessage = function (error, environment) {
     var errSig = (0, exports.getErrorSignature)(error, environment);
+    if (errSig === 'Error') {
+        var reason = error.data.toString().replace('Reverted ', '');
+        reason = "0x".concat(reason.substring(10));
+        try {
+            var rawErrorMessage = ethers_1.utils.defaultAbiCoder.decode(['string'], reason)[0];
+            if (rawErrorMessage in exports.errorMessageMapping) {
+                return exports.errorMessageMapping[rawErrorMessage];
+            }
+            return "Unrecognized error (Raw error: ".concat(rawErrorMessage, ")");
+        }
+        catch (_) {
+            return 'Unrecognized error';
+        }
+    }
     if (errSig in exports.errorMessageMapping) {
         return exports.errorMessageMapping[errSig];
     }
