@@ -96,12 +96,21 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
             ); 
             }            
           }
-          if (field === 'estimatedCashflow') {
-            return <EstimatedCashflow tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} token={token} />;
+          if (datum.source.includes("ME")) {
+            if (field === 'estimatedCashflow') {
+              return <EstimatedCashflow tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} token={token} />;
+            }
+          }
+          else {
+            if (field === 'estimatedCashflow') {
+              return <Typography variant="body2" label="Estimated Cashflow" sx={{ fontSize: 18 }}>
+                {"s00n"}
+              </Typography>
+            }
           }
           // The below lines are responsible for the current margin column of the LP positions: this component contains the Edit button as well. 
           if (field === 'margin') {
-            return <CurrentMargin tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} token={token} onSelect={onSelect} displayEditButton={ agent !== Agents.LIQUIDITY_PROVIDER} />;
+            return <CurrentMargin source={datum.source} tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} protocol={datum.protocol} onSelect={onSelect} displayEditButton={ agent !== Agents.LIQUIDITY_PROVIDER} />;
           }
 
           if (field === 'fixedApr') {
@@ -111,7 +120,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
           const getContent = () => {
             switch (field) {
               case 'pool':
-                return datum.protocol;
+                return (datum.source.includes("FCM")) ? "FCM : " + datum.protocol : datum.protocol;
               
               case 'fixedUpper':
                 return `${datum.fixedUpper.toFixed(2)}%`;

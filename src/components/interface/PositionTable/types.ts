@@ -4,6 +4,7 @@ import { Agents } from '@components/contexts';
 export type PositionTableFields = 'pool' | 'notional' | 'margin' | 'maturity' | 'fixedApr' | 'estimatedCashflow' | 'fixedUpper' | 'fixedLower';
 
 export type PositionTableDatum = {
+  source: string;
   id: string;
   fixedUpper: number;
   fixedLower: number;
@@ -14,5 +15,5 @@ export type PositionTableDatum = {
   endDate: DateTime;
   fixedApr: number;
   agent: Agents;
-  settled: boolean
+  settled: boolean;
 };

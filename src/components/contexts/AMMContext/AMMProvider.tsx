@@ -85,7 +85,7 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
         return;
       }
 
-      const result = await amm.getCurrentMargin(args.tickLower, args.tickUpper);
+      const result = await amm.getCurrentMargin(args.source, args.tickLower, args.tickUpper);
 
       if (!result) {
         return;

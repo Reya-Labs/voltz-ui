@@ -8,20 +8,21 @@ import { Button } from '@components/atomic';
 import isNull from 'lodash/isNull';
 
 export type CurrentMarginProps = {
+  source?: string;
   tickLower?: number;
   tickUpper?: number;
   displayEditButton?: boolean;
-  token: string;
+  protocol: string;
   onSelect: () => void;
 };
 
-const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({tickLower, tickUpper, displayEditButton, token, onSelect}) => {
+const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({source, tickLower, tickUpper, displayEditButton, protocol, onSelect}) => {
   const { currentMargin } = useAMMContext();
   const { result, loading, call } = currentMargin;
 
   useEffect(() => {
-    if (!isUndefined(tickLower) && !isUndefined(tickUpper)) {
-      call({ tickLower, tickUpper });
+    if (!isUndefined(source) && !isUndefined(tickLower) && !isUndefined(tickUpper)) {
+      call({ source, tickLower, tickUpper });
     }
   }, [call, tickLower, tickUpper]);
 
@@ -34,6 +35,15 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({tickLower, 
       return 'No data';
     }
 
+    if (!source) {
+      return 'Cannot get source of positions';
+    }
+
+    if (source.includes("FCM")) {
+      return `${result.toFixed(2)} ${protocol}`;
+    }
+
+    const token = protocol.substring(1);
     
     return `${result.toFixed(2)} ${token}`;
   };

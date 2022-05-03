@@ -2,33 +2,49 @@ import JSBI from 'jsbi';
 
 import { DateTime } from 'luxon';
 import { BigNumber } from 'ethers';
-import { Price } from './fractions/price';
-import { tickToFixedRate, tickToPrice } from '../utils/priceTickConversions';
 import AMM from './amm';
-import { TickMath } from '../utils/tickMath';
-import { Q96 } from '../constants';
-import Mint from './mint';
-import Liquidation from './liquidation';
-import Settlement from './settlement';
-import { Swap } from '.';
+import FCMSwap from './fcmSwap';
+import FCMUnwind from './fcmUnwind';
+import FCMSettlement from './fcmSettlement';
 import Burn from './burn';
+import Liquidation from './liquidation';
 import MarginUpdate from './marginUpdate';
+import Mint from './mint';
+import Settlement from './settlement';
+import Swap from './swap';
+import { Q96 } from '../constants';
+import { tickToPrice, tickToFixedRate } from '../utils/priceTickConversions';
+import { TickMath } from '../utils/tickMath';
+import { Price } from './fractions/price';
 
-export type PositionConstructorArgs = {
+export type FCMPositionConstructorArgs = {
+  source: string;
   id: string;
   createdTimestamp: JSBI;
   amm: AMM;
   owner: string;
-  tickLower: number;
-  tickUpper: number;
   updatedTimestamp: JSBI;
-  liquidity: JSBI;
-  margin: JSBI;
+
   fixedTokenBalance: JSBI;
   variableTokenBalance: JSBI;
+  isSettled: boolean;
+
+  // specific to FCM
+  marginInScaledYieldBearingTokens: JSBI;
+
+  fcmSwaps: Array<FCMSwap>;
+  fcmUnwinds: Array<FCMUnwind>;
+  fcmSettlements: Array<FCMSettlement>;
+
+  // specific to ME
+
+  tickLower: number;
+  tickUpper: number;
+  liquidity: JSBI;
+  margin: JSBI;
   accumulatedFees: JSBI;
   positionType: number;
-  isSettled: boolean;
+
   mints: Array<Mint>;
   burns: Array<Burn>;
   swaps: Array<Swap>;
@@ -38,6 +54,8 @@ export type PositionConstructorArgs = {
 };
 
 class Position {
+  public readonly source: string;
+
   public readonly id: string;
 
   public readonly createdTimestamp: JSBI;
@@ -46,25 +64,33 @@ class Position {
 
   public readonly owner: string;
 
-  public readonly tickLower: number;
-
-  public readonly tickUpper: number;
-
   public readonly updatedTimestamp: JSBI;
 
-  public readonly liquidity: JSBI;
-
-  public readonly margin: JSBI;
+  public readonly marginInScaledYieldBearingTokens: JSBI;
 
   public readonly fixedTokenBalance: JSBI;
 
   public readonly variableTokenBalance: JSBI;
 
+  public readonly isSettled: boolean;
+
+  public readonly fcmSwaps: Array<FCMSwap>;
+
+  public readonly fcmUnwinds: Array<FCMUnwind>;
+
+  public readonly fcmSettlements: Array<FCMSettlement>;
+
+  public readonly tickLower: number;
+
+  public readonly tickUpper: number;
+
+  public readonly liquidity: JSBI;
+
+  public readonly margin: JSBI;
+
   public readonly accumulatedFees: JSBI;
 
   public readonly positionType: number;
-
-  public readonly isSettled: boolean;
 
   public readonly mints: Array<Mint>;
 
@@ -79,47 +105,60 @@ class Position {
   public readonly settlements: Array<Settlement>;
 
   public constructor({
+    source,
     id,
     createdTimestamp,
     amm,
     owner,
-    tickLower,
-    tickUpper,
     updatedTimestamp,
-    liquidity,
-    margin,
+    marginInScaledYieldBearingTokens,
     fixedTokenBalance,
     variableTokenBalance,
+    isSettled,
+    fcmSwaps,
+    fcmUnwinds,
+    fcmSettlements,
+    tickLower,
+    tickUpper,
+    liquidity,
+    margin,
     accumulatedFees,
     positionType,
-    isSettled,
     mints,
     burns,
     swaps,
     marginUpdates,
     liquidations,
     settlements,
-  }: PositionConstructorArgs) {
+  }: FCMPositionConstructorArgs) {
+    this.source = source;
     this.id = id;
     this.createdTimestamp = createdTimestamp;
     this.amm = amm;
     this.owner = owner;
-    this.tickLower = tickLower;
-    this.tickUpper = tickUpper;
     this.updatedTimestamp = updatedTimestamp;
-    this.liquidity = liquidity;
-    this.margin = margin;
+    this.marginInScaledYieldBearingTokens = marginInScaledYieldBearingTokens;
     this.fixedTokenBalance = fixedTokenBalance;
     this.variableTokenBalance = variableTokenBalance;
-    this.accumulatedFees = accumulatedFees;
-    this.positionType = positionType;
     this.isSettled = isSettled;
+
+    this.fcmSwaps = fcmSwaps;
+    this.fcmUnwinds = fcmUnwinds;
+    this.fcmSettlements = fcmSettlements;
+
     this.mints = mints;
     this.burns = burns;
-    this.swaps = swaps;
     this.marginUpdates = marginUpdates;
     this.liquidations = liquidations;
     this.settlements = settlements;
+    this.swaps = swaps;
+
+    this.margin = margin;
+    this.liquidity = liquidity;
+    this.tickLower = tickLower;
+    this.tickUpper = tickUpper;
+    this.accumulatedFees = accumulatedFees;
+    this.positionType = positionType;
   }
 
   public get priceLower(): Price {
@@ -150,6 +189,13 @@ class Position {
   }
 
   public get effectiveMargin(): number {
+    if (this.source.includes('FCM')) {
+      const result = this.amm.descale(
+        BigNumber.from(this.marginInScaledYieldBearingTokens.toString()),
+      );
+      return result;
+    }
+
     const result = this.amm.descale(BigNumber.from(this.margin.toString()));
     return result;
   }
