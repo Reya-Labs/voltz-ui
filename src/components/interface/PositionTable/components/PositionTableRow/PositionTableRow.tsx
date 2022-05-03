@@ -8,7 +8,7 @@ import { PositionTableDatum } from '../../types';
 import { lpLabels } from '../../constants';
 import { traderLabels } from '../../constants';
 import { PositionTableFields } from '../../types';
-import { EstimatedCashflow, FixedAPR, CurrentMargin } from './components';
+import { EstimatedCashflow, FixedAPR, CurrentMargin, Notional } from './components';
 import React from 'react';
 import { useAgent } from '@hooks';
 import { DateTime } from 'luxon';
@@ -104,6 +104,10 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
             return <CurrentMargin tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} token={token} onSelect={onSelect} displayEditButton={ agent !== Agents.LIQUIDITY_PROVIDER} />;
           }
 
+          if (field === 'notional') {
+            return <Notional notional={datum.notional.toFixed(2)} token={token} onSelect={onSelect} displayEditButton={ agent !== Agents.LIQUIDITY_PROVIDER} />;
+          }
+
           if (field === 'fixedApr') {
             return <FixedAPR />;
           }
@@ -119,8 +123,8 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
               case 'fixedLower':
                 return `${datum.fixedLower.toFixed(2)}%`;
 
-              case 'notional':
-                return `${datum.notional.toFixed(2)} ${token}`;
+              // case 'notional':
+              //   return `${datum.notional.toFixed(2)} ${token}`;
 
               default:
                 return null;

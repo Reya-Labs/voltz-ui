@@ -14,7 +14,7 @@ import {
   NotionalAmount,
 } from '@components/composite';
 import { HandleSubmitMintBurnFormArgs } from './types';
-import { MintBurnMinimumMarginAmount, SubmitMintBurnFormButton } from './components';
+import { MintBurnMinimumMarginAmount, SubmitMintBurnFormButton, BurnControls } from './components';
 import { MarginControls } from '../SwapForm/components';
 import { positions } from '@mui/system';
 import { Position } from '@voltz/v1-sdk/dist/types/entities';
@@ -34,8 +34,11 @@ export type MintBurnFormProps = AgentProps & {
   notional?: number;
   margin?: number;
   marginEditMode?: boolean;
+  liquidityEditMode?: boolean;
   defaultAddOrRemoveMargin?: boolean;
+  defaultAddOrBurnLiquidity?: boolean;
   addOrRemoveMargin?: boolean;
+  addOrBurnLiquidity?: boolean;
   position?: number;
 
   onChangeFixedLow: (value: number, increment: boolean | null) => void;
@@ -45,6 +48,7 @@ export type MintBurnFormProps = AgentProps & {
   onSubmit: (values: HandleSubmitMintBurnFormArgs) => void;
   onCancel: () => void;
   onAddOrRemoveMargin: (value: boolean) => void;
+  onAddOrBurnLiquidity: (value: boolean) => void;
 };
 
 const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
@@ -61,8 +65,11 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   notional,
   margin,
   marginEditMode,
+  liquidityEditMode,
   defaultAddOrRemoveMargin,
+  defaultAddOrBurnLiquidity,
   addOrRemoveMargin,
+  addOrBurnLiquidity,
   position
   ,
   onChangeFixedLow,
@@ -72,6 +79,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   onSubmit,
   onCancel,
   onAddOrRemoveMargin,
+  onAddOrBurnLiquidity,
 }) => {
   const handleSubmit = () => {
     if (
@@ -141,6 +149,28 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
       </Box>
       
       {
+
+        liquidityEditMode && (
+          <Box
+          sx={{
+            marginBottom: (theme) => theme.spacing(6),
+            display: 'flex',
+          }}
+        >
+          <BurnControls 
+            defaultBurnLiquidity={defaultAddOrBurnLiquidity}
+            burnLiquidity={addOrBurnLiquidity}
+            onAddOrBurnLiquidity={onAddOrBurnLiquidity}
+          >
+          </BurnControls>
+          
+          </Box>
+        )
+      }    
+
+
+
+      {
           marginEditMode && (
             <Box
             sx={{
@@ -195,8 +225,8 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
           )
         }
 
-      {
-        !marginEditMode && ( 
+      {// I think the below && liquidEditMode means that if LEM is on then don't show it
+        !marginEditMode && liquidityEditMode && ( 
       <Box
         sx={{
           marginBottom: (theme) => theme.spacing(6),
@@ -211,7 +241,9 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
        )
       }
 
-      <Box
+      {
+        liquidityEditMode && (
+          <Box
         sx={{
           marginBottom: (theme) => theme.spacing(6),
         }}
@@ -225,6 +257,8 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
           onChangeMargin={onChangeMargin}
         />
       </Box>
+        )
+      }
 
       <Box sx={{ display: 'flex' }}>
         <SubmitMintBurnFormButton onSubmit={marginEditMode ? handleSubmitMarginOnly : handleSubmit} />

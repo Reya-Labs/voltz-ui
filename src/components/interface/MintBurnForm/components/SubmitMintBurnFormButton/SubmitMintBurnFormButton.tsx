@@ -6,14 +6,22 @@ import { useAgent } from '@hooks';
 
 export type SubmitMintBurnFormButtonProps = {
   onSubmit: () => void;
+  liquidityEditMode?: boolean;
 };
-
-const SubmitMintBurnFormButton: React.FunctionComponent<SubmitMintBurnFormButtonProps> = ({ onSubmit }) => {
+//The liquidityEditMode boolean is not changing; debug please
+const SubmitMintBurnFormButton: React.FunctionComponent<SubmitMintBurnFormButtonProps> = ({ 
+  liquidityEditMode,
+  onSubmit 
+}) => {
   const { agent } = useAgent();
   const submitLabel = (): string | null => {
     switch (agent) {
       case Agents.LIQUIDITY_PROVIDER:
-        return 'Provide Liquidity';
+        if (liquidityEditMode) {
+        return 'Burn Liquidity';
+      } else {
+          return 'Provide Liquidity';
+        }
 
       case Agents.FIXED_TRADER:
         return 'Trade Fixed Rate';

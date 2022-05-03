@@ -17,6 +17,7 @@ import { Position } from '@voltz/v1-sdk/dist/types/entities';
 export type ConnectedMintBurnFormProps = {
   amm: AugmentedAMM;
   marginEditMode?: boolean;
+  liquidityEditMode?: boolean;
   onReset: () => void;
   position?: Position;
 };
@@ -25,6 +26,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   amm,
   onReset,
   marginEditMode,
+  liquidityEditMode,
   position
 }) => {
   const { agent } = useAgent();
@@ -36,7 +38,10 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   );
 
   const [addOrRemoveMargin, setAddOrRemoveMargin] =
-  useState<MintBurnFormProps['addOrRemoveMargin']>();  
+  useState<MintBurnFormProps['addOrRemoveMargin']>();
+
+  const [addOrBurnLiquidity, setAddOrBurnLiquidity] =
+  useState<MintBurnFormProps['addOrBurnLiquidity']>();
 
   const [fixedHigh, setFixedHigh] = useState<MintBurnFormProps['fixedHigh']>();
   const handleSetFixedHigh = useCallback(
@@ -52,20 +57,28 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   const handleSubmit = useCallback(
     (args: HandleSubmitMintBurnFormArgs) => {
       const transaction = { ...args, ammId: amm.id, agent };
-     
+ 
     if (marginEditMode) {
       const updatePositionMargin = actions.updatePositionMarginAction(amm, transaction);
       setTransactionId(updatePositionMargin.payload.transaction.id);
         // todo: if remove margin, change margin to -margin (delta)
       dispatch(updatePositionMargin);
-    } else {  
+    } else {
+
+      if (liquidityEditMode) {
+        const updatePositionLiquidity = actions.burnAction(amm, transaction);
+        setTransactionId(updatePositionLiquidity.payload.transaction.id);
+        dispatch(updatePositionLiquidity);
+
+      }  else {
       const mint = actions.mintAction(amm, transaction);
       setTransactionId(mint.payload.transaction.id);
       dispatch(mint);
-      }  
+      } 
+    }  
       
     },
-    [setTransactionId, dispatch, agent, amm.id],
+    [setTransactionId, dispatch, agent, amm.id, liquidityEditMode],
   );
   const handleComplete = () => {
     onReset();
@@ -87,6 +100,14 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     );
   }
 
+  // Debugging lines to check if toggle changes value of onAddOrBurnLiquidity
+  const handleBurnChange = (input: boolean) => {
+    // eslint-disable-next-line
+    console.log('Change', input)
+    setAddOrBurnLiquidity(input)
+
+  }
+
   return (
     <AMMProvider amm={amm}>
       <MintBurnForm
@@ -104,13 +125,14 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
         onSubmit={handleSubmit}
         onCancel={onReset}
         marginEditMode={marginEditMode}
+        liquidityEditMode={liquidityEditMode}
         onAddOrRemoveMargin={setAddOrRemoveMargin} // this adds the toggle add/remove to the form
         addOrRemoveMargin={addOrRemoveMargin} // this allows you to switch between add and remove on the toggle
+        onAddOrBurnLiquidity={handleBurnChange}
+        addOrBurnLiquidity={addOrBurnLiquidity}
       />
     </AMMProvider>
   );
 };
 
 export default ConnectedMintBurnForm;
-
-//needs marginEditMode

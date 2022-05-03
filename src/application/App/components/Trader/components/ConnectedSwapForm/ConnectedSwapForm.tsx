@@ -17,6 +17,7 @@ import { TraderControlsProps } from 'src/components/interface/SwapForm/component
 export type ConnectedSwapFormProps = {
   amm: AugmentedAMM;
   marginEditMode?: boolean;
+  liquidityEditMode?: boolean;
   onReset: () => void;
 };
 
@@ -24,6 +25,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
   amm,
   onReset, 
   marginEditMode,
+  liquidityEditMode,
 }) => {
   const { agent } = useAgent();
   const navigate = useNavigate();
