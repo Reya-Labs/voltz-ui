@@ -29,6 +29,7 @@ export type EstimatedCashflowPayload = {
 };
 
 export type CurrentMarginPayload = {
+  source: string;
   tickLower: number;
   tickUpper: number;
 };

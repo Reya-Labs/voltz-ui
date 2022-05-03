@@ -952,9 +952,9 @@ var AMM = /** @class */ (function () {
             });
         });
     };
-    AMM.prototype.getCurrentMargin = function (fixedRateLower, fixedRateUpper) {
+    AMM.prototype.getCurrentMargin = function (source, fixedRateLower, fixedRateUpper) {
         return __awaiter(this, void 0, void 0, function () {
-            var signerAddress, marginEngineContract, margin;
+            var signerAddress, fcmContract, margin_1, marginEngineContract, margin;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -964,9 +964,16 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, this.signer.getAddress()];
                     case 1:
                         signerAddress = _a.sent();
+                        if (!source.includes("FCM")) return [3 /*break*/, 3];
+                        fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
+                        return [4 /*yield*/, fcmContract.getTraderMarginInATokens(signerAddress)];
+                    case 2:
+                        margin_1 = (_a.sent());
+                        return [2 /*return*/, this.descale(margin_1)];
+                    case 3:
                         marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
                         return [4 /*yield*/, marginEngineContract.callStatic.getPosition(signerAddress, this.closestTickAndFixedRate(fixedRateUpper).closestUsableTick, this.closestTickAndFixedRate(fixedRateLower).closestUsableTick)];
-                    case 2:
+                    case 4:
                         margin = (_a.sent()).margin;
                         return [2 /*return*/, this.descale(margin)];
                 }

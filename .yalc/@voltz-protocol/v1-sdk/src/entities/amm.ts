@@ -976,12 +976,18 @@ class AMM {
     return this.descale(estimatedCashflow);
   }
 
-  public async getCurrentMargin(fixedRateLower: number, fixedRateUpper: number): Promise<number> {
+  public async getCurrentMargin(source: string, fixedRateLower: number, fixedRateUpper: number): Promise<number> {
     if (!this.signer) {
       throw new Error('Wallet not connected');
     }
 
     const signerAddress = await this.signer.getAddress();
+
+    if (source.includes("FCM")) {
+      const fcmContract = fcmFactory.connect(this.fcmAddress, this.signer);
+      const margin = (await fcmContract.getTraderMarginInATokens(signerAddress));
+      return this.descale(margin);
+    }
 
     const marginEngineContract = marginEngineFactory.connect(
       this.marginEngineAddress,

@@ -1,7 +1,7 @@
 import JSBI from 'jsbi';
 import { useMemo, useEffect } from 'react';
 import isNull from 'lodash/isNull';
-import { Position, Token, RateOracle, Mint, Burn, Swap, MarginUpdate, Liquidation, Settlement, FCMPosition, FCMSwap, FCMUnwind, FCMSettlement } from '@voltz-protocol/v1-sdk';
+import { Position, Token, RateOracle, Mint, Burn, Swap, MarginUpdate, Liquidation, Settlement, FCMSwap, FCMUnwind, FCMSettlement } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 import { DateTime } from 'luxon';
 
@@ -60,7 +60,7 @@ const usePositions = (): usePositionsResult => {
           fcmUnwinds,
           fcmSettlements
         }) =>
-          new FCMPosition({
+          new Position({
             id: positionId,
             createdTimestamp: positionCreatedTimestamp as JSBI,
             updatedTimestamp: positionUpdatedTimestamp as JSBI,
@@ -128,13 +128,26 @@ const usePositions = (): usePositionsResult => {
               ammId,
               fcmPositionId: positionId,
               settlementCashflow: args.settlementCashflow as JSBI
-            }))
+            })),
+            swaps: [],
+            mints: [],
+            burns: [],
+            marginUpdates: [],
+            settlements: [],
+            liquidations: [],
+            liquidity: JSBI.BigInt(0),
+            accumulatedFees: JSBI.BigInt(0),
+            positionType: 1,
+            tickLower: 0,
+            tickUpper: 0,
+            margin: JSBI.BigInt(0),
+            source: "FCM",
           }),
       );
     }
   }, [fcmPositionCount, loading, error, isSignerAvailable]);
 
-  const positions = useMemo(() => {
+  const mePositions = useMemo(() => {
     if (wallet && wallet.positions && !loading && !error) {
       return wallet.positions.map(
         ({
@@ -276,10 +289,28 @@ const usePositions = (): usePositionsResult => {
               positionId: positionId,
               settlementCashflow: args.settlementCashflow as JSBI
             })),
+            fcmSwaps: [],
+            fcmUnwinds: [],
+            fcmSettlements: [],
+            marginInScaledYieldBearingTokens: JSBI.BigInt(0),
+            source: "ME",
           }),
       );
     }
   }, [positionCount, loading, error, isSignerAvailable]);
+  const positions = (mePositions) ? ((fcmPositions) ? mePositions.concat(fcmPositions) : mePositions) : fcmPositions;
+  if (positions) {
+    positions.sort((a, b) => {
+      if (JSBI.GT(a.createdTimestamp, b.createdTimestamp)) {
+        return 1;
+      }
+      if (JSBI.GT(b.createdTimestamp, a.createdTimestamp)) {
+        return -1;
+      }
+      return 0;
+    })
+  }
+
   const positionsByAgent = useMemo(() => {
     return positions?.filter(({ positionType }) => {
       switch (agent) {

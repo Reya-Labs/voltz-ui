@@ -13,9 +13,11 @@ const mapPositionToPositionTableDatum =
       effectiveFixedTokenBalance,
       fixedRateUpper,
       fixedRateLower,
-      isSettled
+      isSettled,
+      source
     }: Position): PositionTableDatum => {
       return {
+        source,
         id,
         protocol: amm.protocol,
         startDate: amm.startDateTime,
