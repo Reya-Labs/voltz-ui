@@ -7,7 +7,7 @@ import { usePositions } from '@hooks';
 import { PositionTable, PositionTableFields } from '@components/interface';
 import { Panel } from '@components/atomic';
 import { Agents } from '@components/contexts';
-import { actions, selectors } from '@store';
+import { actions, selectors, Transaction } from '@store';
 import { useAgent, useDispatch, useSelector } from '@hooks';
 import { AugmentedAMM } from '@utilities';
 import { routes } from '@routes';
@@ -39,7 +39,15 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
     (position: Position) => {
 
       const positionAmm = position.amm as AugmentedAMM;
-      const transaction = { notional: 0, margin: 0,  ammId: positionAmm.id, agent };
+      const transaction = {
+        notional: 0, 
+        margin: 0,  
+        ammId: positionAmm.id, 
+        agent, 
+        source: position.source, 
+        fixedLow: position.fixedRateLower.toNumber(), 
+        fixedHigh: position.fixedRateUpper.toNumber()
+      };
       const settlePosition = actions.settlePositionAction(positionAmm, transaction);
       
       setTransactionId(settlePosition.payload.transaction.id);

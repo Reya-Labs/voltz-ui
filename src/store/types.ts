@@ -25,6 +25,7 @@ export type Transaction = TransactionUpdate & {
   ammId: string;
   fixedLow?: number;
   fixedHigh?: number;
+  source?: string;
   notional: number;
   margin: number;
   partialCollateralization?: boolean;

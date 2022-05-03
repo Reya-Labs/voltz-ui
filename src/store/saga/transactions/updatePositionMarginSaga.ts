@@ -5,6 +5,7 @@ import { getErrorMessage } from '@utilities';
 import { UpdatePositionMarginAction } from '../../types';
 import { deserializeAmm, getSigner } from '../../utilities';
 import * as actions from '../../actions';
+import { isUndefined } from 'lodash';
 
 function* updatePositionMarginSaga(action: UpdatePositionMarginAction) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -20,7 +21,11 @@ function* updatePositionMarginSaga(action: UpdatePositionMarginAction) {
     return;
   }
 
-  const { id,  margin } = action.payload.transaction;
+  const { id,  margin, fixedLow, fixedHigh } = action.payload.transaction;
+
+  if (isUndefined(fixedLow) || isUndefined(fixedHigh)) {
+    return;
+  }
 
   let result: ContractReceipt | void;
   try {
@@ -28,8 +33,8 @@ function* updatePositionMarginSaga(action: UpdatePositionMarginAction) {
     result = yield call(
       [amm, "updatePositionMargin"], {
         marginDelta: margin,
-        fixedLow: 1,
-        fixedHigh: 2.01,
+        fixedLow: fixedLow,
+        fixedHigh: fixedHigh,
       }
 
     );

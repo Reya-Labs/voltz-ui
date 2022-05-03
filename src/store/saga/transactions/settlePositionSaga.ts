@@ -21,22 +21,27 @@ function* settlePositionSaga(action: SettlePositionAction) {
     return;
   }
 
-  const { id,  fixedLow, fixedHigh } = action.payload.transaction;
+  const { id,  fixedLow, fixedHigh, source } = action.payload.transaction;
 
-  if (isUndefined(fixedLow) || isUndefined(fixedHigh)) {
+  if (isUndefined(fixedLow) || isUndefined(fixedHigh) || isUndefined(source)) {
     return;
   }
 
   let result: ContractReceipt | void;
   try {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    result = yield call(
-      [amm, "settlePosition"], {
+    if (source.includes("FCM")) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      result = yield call([amm, "settleFCMTrader"]);
+    }
+    else {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      result = yield call(
+        [amm, "settlePosition"], {
         fixedLow: fixedLow,
         fixedHigh: fixedHigh,
       }
-
-    );
+      );
+    }
   } catch (error) {
     yield put(
       actions.updateTransaction({
