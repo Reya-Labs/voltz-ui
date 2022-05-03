@@ -32,7 +32,7 @@ export type PositionTableProps = {
   onSetPage: (page: number) => void;
   size: number | null;
   onSetSize: (size: number) => void;
-  onSelectItem: (datum: Position) => void;
+  onSelectItem: (datum: Position, mode: 'margin' | 'liquidity') => void;
   agent: Agents
   handleSettle: (position: Position) => void;
 };
@@ -81,8 +81,8 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
     return positions.map(mapPositionToPositionTableDatum(agent));
   }, [positionIds, order, page, size]);
   
-  const handleSelectRow = (index: number) => () => {
-    onSelectItem(positions[index]);
+  const handleSelectRow = (index: number, mode: 'margin' | 'liquidity') => {
+    onSelectItem(positions[index], mode);
   };
 
   let labels: [PositionTableFields, string][];
@@ -115,7 +115,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                 key={datum.id}
                 datum={datum}
                 index={index}
-                onSelect={handleSelectRow(index)}
+                onSelect={(mode: 'margin' | 'liquidity') => handleSelectRow(index, mode)}
                 handleSettle={() => handleSettle(positions[index])}
               />
               </AMMProvider>

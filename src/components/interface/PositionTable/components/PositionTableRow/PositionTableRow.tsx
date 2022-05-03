@@ -18,7 +18,7 @@ import { DateTime } from 'luxon';
 export type PositionTableRowProps = {
   datum: PositionTableDatum;
   index: number;
-  onSelect: () => void;
+  onSelect: (mode: 'margin' | 'liquidity') => void;
   handleSettle: () => void;
 };
 
@@ -101,11 +101,11 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
           }
           // The below lines are responsible for the current margin column of the LP positions: this component contains the Edit button as well. 
           if (field === 'margin') {
-            return <CurrentMargin tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} token={token} onSelect={onSelect} displayEditButton={ agent !== Agents.LIQUIDITY_PROVIDER} />;
+            return <CurrentMargin tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} token={token} onSelect={ () => onSelect('margin') } displayEditButton={ agent !== Agents.LIQUIDITY_PROVIDER} />;
           }
 
           if (field === 'notional') {
-            return <Notional notional={datum.notional.toFixed(2)} token={token} onSelect={onSelect} displayEditButton={ agent !== Agents.LIQUIDITY_PROVIDER} />;
+            return <Notional notional={datum.notional.toFixed(2)} token={token} onSelect={ () => onSelect('liquidity') } displayEditButton={ agent !== Agents.LIQUIDITY_PROVIDER} />;
           }
 
           if (field === 'fixedApr') {
@@ -122,9 +122,6 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
               
               case 'fixedLower':
                 return `${datum.fixedLower.toFixed(2)}%`;
-
-              // case 'notional':
-              //   return `${datum.notional.toFixed(2)} ${token}`;
 
               default:
                 return null;

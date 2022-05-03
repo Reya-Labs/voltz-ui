@@ -225,8 +225,8 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
           )
         }
 
-      {// I think the below && liquidEditMode means that if LEM is on then don't show it
-        !marginEditMode && liquidityEditMode && ( 
+      {
+        !marginEditMode && !liquidityEditMode && ( 
       <Box
         sx={{
           marginBottom: (theme) => theme.spacing(6),
@@ -242,7 +242,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
       }
 
       {
-        liquidityEditMode && (
+        !liquidityEditMode && (
           <Box
         sx={{
           marginBottom: (theme) => theme.spacing(6),

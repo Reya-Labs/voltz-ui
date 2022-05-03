@@ -64,21 +64,26 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
         // todo: if remove margin, change margin to -margin (delta)
       dispatch(updatePositionMargin);
     } else {
+      // // eslint-disable-next-line
+      // console.log('addOrBurnLiq', addOrBurnLiquidity)
+      if (addOrBurnLiquidity || !liquidityEditMode) {
+        // ADDING LIQUIDITY
+        const mint = actions.mintAction(amm, transaction);
+        setTransactionId(mint.payload.transaction.id);
+        dispatch(mint);
 
-      if (liquidityEditMode) {
+      }  else {
+        // BURN LIQUIDITY
         const updatePositionLiquidity = actions.burnAction(amm, transaction);
         setTransactionId(updatePositionLiquidity.payload.transaction.id);
         dispatch(updatePositionLiquidity);
 
-      }  else {
-      const mint = actions.mintAction(amm, transaction);
-      setTransactionId(mint.payload.transaction.id);
-      dispatch(mint);
+
       } 
     }  
       
     },
-    [setTransactionId, dispatch, agent, amm.id, liquidityEditMode],
+    [setTransactionId, dispatch, agent, amm.id, liquidityEditMode, marginEditMode, addOrBurnLiquidity],
   );
   const handleComplete = () => {
     onReset();
@@ -100,13 +105,12 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     );
   }
 
-  // Debugging lines to check if toggle changes value of onAddOrBurnLiquidity
-  const handleBurnChange = (input: boolean) => {
-    // eslint-disable-next-line
-    console.log('Change', input)
-    setAddOrBurnLiquidity(input)
-
-  }
+  // Debugging lines to check if toggle changes value of onAddOrBurnLiquidity: keep for debugging liquidity burning toggle
+  // const handleBurnChange = (input: boolean) => {
+  //   // eslint-disable-next-line
+  //   console.log('Change', input)
+  //   setAddOrBurnLiquidity(input)
+  // }
 
   return (
     <AMMProvider amm={amm}>
@@ -126,9 +130,9 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
         onCancel={onReset}
         marginEditMode={marginEditMode}
         liquidityEditMode={liquidityEditMode}
-        onAddOrRemoveMargin={setAddOrRemoveMargin} // this adds the toggle add/remove to the form
-        addOrRemoveMargin={addOrRemoveMargin} // this allows you to switch between add and remove on the toggle
-        onAddOrBurnLiquidity={handleBurnChange}
+        onAddOrRemoveMargin={setAddOrRemoveMargin} 
+        addOrRemoveMargin={addOrRemoveMargin} 
+        onAddOrBurnLiquidity={setAddOrBurnLiquidity}
         addOrBurnLiquidity={addOrBurnLiquidity}
       />
     </AMMProvider>

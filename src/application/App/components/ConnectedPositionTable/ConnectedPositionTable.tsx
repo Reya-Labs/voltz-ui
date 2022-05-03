@@ -14,7 +14,7 @@ import { routes } from '@routes';
 import { RouteLink } from '@components/atomic';
 
 export type ConnectedAMMTableProps = {
-  onSelectItem: (item: Position) => void;
+  onSelectItem: (item: Position, mode: 'margin' | 'liquidity') => void;
   agent: Agents
   amm?: AugmentedAMM;
 };

@@ -16,7 +16,9 @@ import PageTitleDesc from 'src/components/interface/Page/PageTitleDesc/PageTitle
 
 const LiquidityProvider: React.FunctionComponent = () => {
   const [formActive, setFormActive] = useState(false);
-  const [burnFormActive, setBurnFormActive] = useState(false);
+  const [editMode, setEditMode] = useState<'margin' | 'liquidity'>();
+
+  // const [burnFormActive, setBurnFormActive] = useState(false);
   const [amm, setAMM] = useState<AugmentedAMM | null>(null);
   const [position, setPosition] = useState<Position | undefined>();
   const { onChangeAgent } = useAgent();
@@ -27,15 +29,15 @@ const LiquidityProvider: React.FunctionComponent = () => {
     return (position?.amm as AugmentedAMM) || amm;
   }, [amm, position]);
 
-  const marginEditMode = formActive && !isNull(effectiveAmm) && Boolean(position);
-  const liquidityEditMode = burnFormActive && !isNull(effectiveAmm) && Boolean(position);
+  const marginEditMode = formActive && !isNull(effectiveAmm) && Boolean(position) && editMode === 'margin';
+  const liquidityEditMode = formActive && !isNull(effectiveAmm) && Boolean(position) && editMode === 'liquidity';
 
-  // eslint-disable-next-line
-  console.log('liq edit mode', liquidityEditMode);
-    // eslint-disable-next-line
-  console.log('margin edit mode', marginEditMode);
+  // Keep for debugging the liquidity burning mechanism 
+  // // eslint-disable-next-line
+  // console.log('liq edit mode', liquidityEditMode);
+  //   // eslint-disable-next-line
+  // console.log('margin edit mode', marginEditMode);
   
-  // const liquidityEditModeValue = liquidityEditMode ? !liquidityEditMode : marginEditMode 
 
   useEffect(() => {
     setFormActive(false);
@@ -67,13 +69,8 @@ const LiquidityProvider: React.FunctionComponent = () => {
     setPosition(undefined);
   };
 
-  // const handleSelectPositionBurn = (selected: Position) => {
-  //   setBurnFormActive(true);
-  //   setAMM(null);
-  //   setPosition(selected);
-  // };
-
-  const handleSelectPosition = (selected: Position) => {
+  const handleSelectPosition = (selected: Position, mode: 'margin' | 'liquidity') => {
+    setEditMode(mode);
     setFormActive(true);
     setAMM(null);
     setPosition(selected);
