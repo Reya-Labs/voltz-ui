@@ -21,6 +21,11 @@ export const Basic = Template.bind({});
 Basic.args = {
   position: {
     source: 'ME',
+    amm: {
+      underlyingToken: {
+        name: 'GIL'
+      }
+    },
     swaps: [
       {
         id: 1,

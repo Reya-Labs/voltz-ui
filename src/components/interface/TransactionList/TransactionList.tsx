@@ -49,7 +49,12 @@ const TransactionList = ({ position }: TransactionListProps) => {
 
   return (
     <List sx={listStyles}>
-      {transactions.map(tx => <TransactionListItem transaction={tx} />)}
+      {transactions.map(tx => (
+        <TransactionListItem 
+          transaction={tx} 
+          token={position.amm.underlyingToken.name} 
+        />
+      ))}
     </List>
   )
 }

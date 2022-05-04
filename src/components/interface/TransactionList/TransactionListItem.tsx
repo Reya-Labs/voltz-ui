@@ -9,10 +9,11 @@ import { Icon } from '@components/atomic';
 import JSBI from 'jsbi';
 
 interface TransactionListItemProps {
+  token?: string;
   transaction: MEPositionTransaction | FCMPositionTransaction;
 }
 
-const TransactionListItem = ({ transaction }: TransactionListItemProps) => {
+const TransactionListItem = ({ token, transaction }: TransactionListItemProps) => {
   const rowStyles: SystemStyleObject<Theme> = {
     width: '100%',
     padding: (theme) => `0 ${theme.spacing(5)}`,
@@ -32,7 +33,8 @@ const TransactionListItem = ({ transaction }: TransactionListItemProps) => {
   }
 
   const labelStyles: SystemStyleObject<Theme> = {
-    fontSize: '14px',
+    fontSize: '12px',
+    lineHeight: '14px',
     color: colors.lavenderWeb.darken020,
     marginRight: (theme) => theme.spacing(2)
   };
@@ -48,14 +50,14 @@ const TransactionListItem = ({ transaction }: TransactionListItemProps) => {
       <Box sx={cellStyles}>
         <Typography variant='body2' sx={labelStyles}>unwound</Typography>
         <Typography variant='body2' sx={{color: colors.wildStrawberry.base}}>
-          {formatCurrency(JSBI.toNumber(tx.notionalUnwound) / 100)}
+          {formatCurrency(JSBI.toNumber(tx.notionalUnwound) / 100)} {token}
         </Typography>
       </Box>
       <Box sx={cellStyles}>
         <Typography variant='body2' sx={labelStyles}>cashflow</Typography>
         <Typography variant='body2' sx={{color: colors.wildStrawberry.base}}>
           {JSBI.GT(tx.reward, 0) && '+'}
-          {formatCurrency(JSBI.toNumber(tx.reward) / 100)}
+          {formatCurrency(JSBI.toNumber(tx.reward) / 100)} {token}
         </Typography>
       </Box>
     </>
@@ -72,7 +74,7 @@ const TransactionListItem = ({ transaction }: TransactionListItemProps) => {
       <Box sx={cellStyles}>
         <Typography variant='body2' sx={labelStyles}>margin delta</Typography>
         <Typography variant='body2'>
-          {formatCurrency(JSBI.toNumber(tx.marginDelta) / 100)}
+          {formatCurrency(JSBI.toNumber(tx.marginDelta) / 100)} {token}
         </Typography>
       </Box>
     </>
@@ -90,7 +92,7 @@ const TransactionListItem = ({ transaction }: TransactionListItemProps) => {
         <Typography variant='body2' sx={labelStyles}>cashflow</Typography>
         <Typography variant='body2'>
           {JSBI.GT(tx.settlementCashflow, 0) && '+'}
-          {formatCurrency(JSBI.toNumber(tx.settlementCashflow) / 100)}
+          {formatCurrency(JSBI.toNumber(tx.settlementCashflow) / 100)} {token}
         </Typography>
       </Box>
     </>
@@ -107,7 +109,7 @@ const TransactionListItem = ({ transaction }: TransactionListItemProps) => {
       <Box sx={cellStyles}>
         <Typography variant='body2' sx={labelStyles}>notional</Typography>
         <Typography variant='body2'>
-          {formatCurrency(JSBI.toNumber(tx.desiredNotional) / 100)}
+          {formatCurrency(JSBI.toNumber(tx.desiredNotional) / 100)} {token}
         </Typography>
       </Box>
       <Box sx={cellStyles}>
@@ -119,7 +121,7 @@ const TransactionListItem = ({ transaction }: TransactionListItemProps) => {
       <Box sx={cellStyles}>
         <Typography variant='body2' sx={labelStyles}>fees</Typography>
         <Typography variant='body2'>
-          {formatCurrency(JSBI.toNumber(tx.cumulativeFeeIncurred) / 100)}
+          {formatCurrency(JSBI.toNumber(tx.cumulativeFeeIncurred) / 100)} ???
         </Typography>
       </Box>
     </>
