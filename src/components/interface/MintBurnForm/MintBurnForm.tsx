@@ -116,7 +116,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
     fixedLow: fixedLow!,   
     fixedHigh: fixedHigh!, 
     notional: burntNotional,
-    margin: 0,
+    margin: margin || 0,
   });
 
   };

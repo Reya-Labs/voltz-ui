@@ -101,7 +101,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
 
   if (activeTransaction) {
     return (
-      <PendingTransaction amm={amm} addOrBurnLiquidity={addOrBurnLiquidity} transactionId={transactionId} onComplete={handleComplete} onBack={handleGoBack} />
+      <PendingTransaction amm={amm} marginEditMode={marginEditMode} addOrBurnLiquidity={addOrBurnLiquidity} transactionId={transactionId} onComplete={handleComplete} onBack={handleGoBack} />
     );
   }
 

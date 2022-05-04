@@ -9,10 +9,12 @@ import { AMMProvider } from '@components/contexts';
 import { Button, Panel, Typography, Loading } from '@components/atomic';
 import { ProtocolInformation, WalletAddressDisplay } from '@components/composite';
 import { formatCurrency } from '@utilities';
+import { isUndefined } from 'lodash';
 
 export type PendingTransactionProps = {
   amm: AugmentedAMM;
   transactionId?: string;
+  marginEditMode?: boolean;
   addOrBurnLiquidity?: boolean;
   onBack: () => void;
   onComplete: () => void;
@@ -22,6 +24,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   amm,
   transactionId,
   addOrBurnLiquidity,
+  marginEditMode,
   onBack,
   onComplete,
 }) => {
@@ -216,7 +219,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
         <AMMProvider amm={amm}>
           <ProtocolInformation protocol={amm.protocol} />
         </AMMProvider>
-        <Box
+        {(isUndefined(marginEditMode) || !marginEditMode) && (<Box
           sx={{
             marginBottom: (theme) => theme.spacing(4),
           }}
@@ -224,10 +227,11 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
           <Typography label="NOTIONAL AMOUNT" variant="body2">
             {formatCurrency(activeTransaction.notional, true)} {amm.underlyingToken.name}
           </Typography>
-        </Box>
+        </Box>)
+        }
         
         {
-          addOrBurnLiquidity && (
+          (isUndefined(addOrBurnLiquidity) || addOrBurnLiquidity) && (
         <Box
           sx={{
             marginBottom: (theme) => theme.spacing(4),

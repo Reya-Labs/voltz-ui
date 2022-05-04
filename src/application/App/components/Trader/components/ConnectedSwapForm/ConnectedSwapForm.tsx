@@ -93,7 +93,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
 
   if (activeTransaction) {
     return (
-      <PendingTransaction amm={amm} transactionId={transactionId} onComplete={handleComplete} onBack={handleGoBack} />
+      <PendingTransaction amm={amm} marginEditMode={marginEditMode} transactionId={transactionId} onComplete={handleComplete} onBack={handleGoBack} />
     );
   }
 
