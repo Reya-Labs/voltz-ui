@@ -108,7 +108,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   // Debugging lines to check if toggle changes value of onAddOrBurnLiquidity: keep for debugging liquidity burning toggle
   // const handleBurnChange = (input: boolean) => {
   //   // eslint-disable-next-line
-  //   console.log('Change', input)
+  //   console.log('Change to', input)
   //   setAddOrBurnLiquidity(input)
   // }
 

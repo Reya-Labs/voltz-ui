@@ -35,7 +35,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
   // Keep for debugging the liquidity burning mechanism 
   // // eslint-disable-next-line
   // console.log('liq edit mode', liquidityEditMode);
-  //   // eslint-disable-next-line
+  // // eslint-disable-next-line
   // console.log('margin edit mode', marginEditMode);
   
 

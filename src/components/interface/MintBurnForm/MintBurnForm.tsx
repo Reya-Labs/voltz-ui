@@ -99,6 +99,29 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
     });
   };
 
+
+  // const handleSubmitLiquidityOnly = () => {
+
+  //   if (isUndefined(notional) || isNaN(notional) ) {
+  //     return;
+  //   }
+
+  // let burntNotional = Math.abs(notional);
+
+  // if (!addOrBurnLiquidity) {
+  //   burntNotional *= -1.0;
+  // }
+
+  // return onSubmit({
+  //   fixedLow: fixedLow!,   
+  //   fixedHigh: fixedHigh!, 
+  //   notional: burntNotional,
+  //   margin: 0,
+  // });
+
+  // };
+
+
   const handleSubmitMarginOnly = () => {
 
     if (isUndefined(margin) || isNaN(margin) ) {
@@ -159,7 +182,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         >
           <BurnControls 
             defaultBurnLiquidity={defaultAddOrBurnLiquidity}
-            burnLiquidity={addOrBurnLiquidity}
+            burnLiquidity={addOrBurnLiquidity} // Here burnLiquidity should really be called addLiquidity
             onAddOrBurnLiquidity={onAddOrBurnLiquidity}
           >
           </BurnControls>
@@ -214,7 +237,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         }}
       >
         <NotionalAmount
-          label="provided liquidity"
+          label={ (!liquidityEditMode || addOrBurnLiquidity) ? "provided liquidty" : "removed liquidity"} 
           info="Choose the notional amount of liquidity you wish to provide."
           protocol={protocol}
           defaultNotional={defaultNotional}
@@ -226,7 +249,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         }
 
       {
-        !marginEditMode && !liquidityEditMode && ( 
+       (!marginEditMode && !liquidityEditMode || addOrBurnLiquidity ) && ( 
       <Box
         sx={{
           marginBottom: (theme) => theme.spacing(6),
@@ -242,7 +265,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
       }
 
       {
-        !liquidityEditMode && (
+        (!liquidityEditMode || addOrBurnLiquidity) && ( 
           <Box
         sx={{
           marginBottom: (theme) => theme.spacing(6),
