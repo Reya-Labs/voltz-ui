@@ -8,17 +8,18 @@ import { PositionTableDatum } from '../../types';
 import { lpLabels } from '../../constants';
 import { traderLabels } from '../../constants';
 import { PositionTableFields } from '../../types';
-import { EstimatedCashflow, FixedAPR, CurrentMargin } from './components';
+import { EstimatedCashflow, FixedAPR, CurrentMargin, Notional } from './components';
 import React from 'react';
 import { useAgent } from '@hooks';
 import { DateTime } from 'luxon';
+import { Agent } from 'http';
 
 
 
 export type PositionTableRowProps = {
   datum: PositionTableDatum;
   index: number;
-  onSelect: () => void;
+  onSelect: (mode: 'margin' | 'liquidity') => void;
   handleSettle: () => void;
 };
 
@@ -110,7 +111,18 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
           // }
           // The below lines are responsible for the current margin column of the LP positions: this component contains the Edit button as well. 
           if (field === 'margin') {
-            return <CurrentMargin source={datum.source} tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} protocol={datum.protocol} onSelect={onSelect} displayEditButton={ agent !== Agents.LIQUIDITY_PROVIDER} />;
+            return <CurrentMargin source={datum.source} tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} protocol={datum.protocol} onSelect={ () => onSelect('margin') } displayEditButton={ agent !== Agents.LIQUIDITY_PROVIDER} />;
+          }
+
+          if (field === 'notional') {
+            if (agent === Agents.LIQUIDITY_PROVIDER) {
+              return <Notional notional={datum.notional.toFixed(2)} token={token} onSelect={() => onSelect('liquidity')} displayEditButton={agent !== Agents.LIQUIDITY_PROVIDER} />;
+            }
+            else {
+              return <Typography variant="body2" label={label} sx={{ fontSize: 18 }}>
+                {datum.notional.toFixed(2)} {token}
+              </Typography>
+            }
           }
 
           if (field === 'fixedApr') {
@@ -127,9 +139,6 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
               
               case 'fixedLower':
                 return `${datum.fixedLower.toFixed(2)}%`;
-
-              case 'notional':
-                return `${datum.notional.toFixed(2)} ${token}`;
 
               default:
                 return null;

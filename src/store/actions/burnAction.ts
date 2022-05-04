@@ -1,10 +1,15 @@
-import { BurnAction, SerializedAMM, Transaction } from '../types';
+import { AugmentedAMM } from '@utilities';
+import { BurnAction, Transaction } from '../types';
+import { serializeAmm, createId } from '../utilities';
 
-const burnAction = (amm: SerializedAMM, transaction: Transaction): BurnAction => ({
+const burnAction = (amm: AugmentedAMM, transaction: Omit<Transaction, 'id'>): BurnAction => ({
   type: 'burn',
   payload: {
-    amm,
-    transaction,
+    amm: serializeAmm(amm),
+    transaction: {
+      ...transaction,
+      id: createId(transaction),
+    },
   },
 });
 
