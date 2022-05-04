@@ -20,6 +20,7 @@ import {
   PositionTableRow,
 } from './components';
 import { Agents } from '@components/contexts';
+import TransactionList from '../TransactionList/TransactionList';
 
 export type PositionTableProps = {
   positions: Position[];
@@ -118,6 +119,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                 onSelect={(mode: 'margin' | 'liquidity') => handleSelectRow(index, mode)}
                 handleSettle={() => handleSettle(positions[index])}
               />
+              <TransactionList position={positions[index]} />
               </AMMProvider>
             ))}
           </TableBody>

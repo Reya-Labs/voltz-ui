@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 
 import { Typography, Slider } from '@components/atomic';
 import { withLabel } from '../../utilities';
+import { formatDateTime } from '@utilities';
 
 export type MaturityInformationProps = {
   startDate?: DateTime;
@@ -33,10 +34,7 @@ const MaturityInformation: React.FunctionComponent<MaturityInformationProps> = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startDateMillis, endDateMillis]);
 
-  const formattedEndDate = endDate ? endDate.toLocaleString(
-    { day: '2-digit', month: 'short', year: 'numeric' }, 
-    { locale: 'en-GB' }
-  ) : '';
+  const formattedEndDate = endDate ? formatDateTime(endDate) : '';
 
   return (
     <Box sx={{ width: '100%' }}>

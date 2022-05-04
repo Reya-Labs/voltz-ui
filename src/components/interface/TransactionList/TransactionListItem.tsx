@@ -1,5 +1,19 @@
 import React from 'react';
-import { FCMPositionTransaction, FCMSettlementTransaction, FCMSwapTransaction, LiquidationTransaction, MarginUpdateTransaction, MEPositionTransaction, SettlementTransaction, SwapTransaction, TransactionType } from './types';
+import { 
+  FCMPositionTransaction, 
+  FCMSettlementTransaction, 
+  FCMSwapTransaction, 
+  FCMUnwindTransaction, 
+  LiquidationTransaction, 
+  MarginUpdateTransaction, 
+  TraderPositionTransaction, 
+  SettlementTransaction, 
+  SwapTransaction, 
+  TransactionType, 
+  MintTransaction, 
+  BurnTransaction, 
+  LPPositionTransaction
+} from './types';
 import { Box, ListItem } from '@mui/material';
 import { SystemStyleObject, Theme } from '@mui/system';
 import { Typography } from '@components/atomic';
@@ -10,34 +24,56 @@ import JSBI from 'jsbi';
 
 interface TransactionListItemProps {
   token?: string;
-  transaction: MEPositionTransaction | FCMPositionTransaction;
+  transaction: TraderPositionTransaction | FCMPositionTransaction | LPPositionTransaction;
 }
 
+const rowStyles: SystemStyleObject<Theme> = {
+  width: '100%',
+  padding: (theme) => `0 ${theme.spacing(5)}`,
+  borderTop: `1px solid ${colors.lavenderWeb.darken050}`,
+  textTransform: 'uppercase',
+
+  '&:first-child': {
+    borderTop: 'none'
+  }
+}
+
+const cellStyles: SystemStyleObject<Theme> = {
+  color: '#fff',
+  padding: (theme) => `${theme.spacing(2)} ${theme.spacing(3)}`,
+  display: 'flex',
+  alignItems: 'center'
+}
+
+const labelStyles: SystemStyleObject<Theme> = {
+  fontSize: '12px',
+  lineHeight: '14px',
+  color: colors.lavenderWeb.darken020,
+  marginRight: (theme) => theme.spacing(2)
+};
+
 const TransactionListItem = ({ token, transaction }: TransactionListItemProps) => {
-  const rowStyles: SystemStyleObject<Theme> = {
-    width: '100%',
-    padding: (theme) => `0 ${theme.spacing(5)}`,
-    borderTop: `1px solid ${colors.lavenderWeb.darken050}`,
-    textTransform: 'uppercase',
+  const getBurnTransactionContent = (tx: BurnTransaction) => (
+    <>
+      <Box sx={cellStyles}>
+        <Icon name='tx-liquidation' />
+      </Box>
+      <Box sx={cellStyles}>
+        <Typography variant='body2'>BURN</Typography>
+      </Box>
+    </>
+  );
 
-    '&:first-child': {
-      borderTop: 'none'
-    }
-  }
-
-  const cellStyles: SystemStyleObject<Theme> = {
-    color: '#fff',
-    padding: (theme) => `${theme.spacing(2)} ${theme.spacing(3)}`,
-    display: 'flex',
-    alignItems: 'center'
-  }
-
-  const labelStyles: SystemStyleObject<Theme> = {
-    fontSize: '12px',
-    lineHeight: '14px',
-    color: colors.lavenderWeb.darken020,
-    marginRight: (theme) => theme.spacing(2)
-  };
+  const getMintTransactionContent = (tx: MintTransaction) => (
+    <>
+      <Box sx={cellStyles}>
+        <Icon name='tx-liquidation' />
+      </Box>
+      <Box sx={cellStyles}>
+        <Typography variant='body2'>MINT</Typography>
+      </Box>
+    </>
+  );
 
   const getLiquidationTransactionContent = (tx: LiquidationTransaction) => (
     <>
@@ -127,7 +163,36 @@ const TransactionListItem = ({ token, transaction }: TransactionListItemProps) =
     </>
   );
 
-  const getTransactionContent = (tx: MEPositionTransaction | FCMPositionTransaction) => {
+  const getUnwindTransactionContent = (tx: FCMUnwindTransaction) => (
+    <>
+      <Box sx={cellStyles}>
+        <Icon name='tx-swap' />
+      </Box>
+      <Box sx={cellStyles}>
+        <Typography variant='body2'>UNWIND</Typography>
+      </Box>
+      <Box sx={cellStyles}>
+        <Typography variant='body2' sx={labelStyles}>notional</Typography>
+        <Typography variant='body2'>
+          {formatCurrency(JSBI.toNumber(tx.desiredNotional) / 100)} {token}
+        </Typography>
+      </Box>
+      <Box sx={cellStyles}>
+        <Typography variant='body2' sx={labelStyles}>avg fix</Typography>
+        <Typography variant='body2'>
+          {formatCurrency(JSBI.toNumber(tx.fixedTokenDelta) / 100)} %
+        </Typography>
+      </Box>
+      <Box sx={cellStyles}>
+        <Typography variant='body2' sx={labelStyles}>fees</Typography>
+        <Typography variant='body2'>
+          {formatCurrency(JSBI.toNumber(tx.cumulativeFeeIncurred) / 100)} ???
+        </Typography>
+      </Box>
+    </>
+  );
+
+  const getTransactionContent = (tx: TraderPositionTransaction | FCMPositionTransaction | LPPositionTransaction) => {
     switch(tx.type) {
       case TransactionType.SWAP:
       case TransactionType.FCM_SWAP:
@@ -139,15 +204,19 @@ const TransactionListItem = ({ token, transaction }: TransactionListItemProps) =
         return getMarginUpdateTransactionContent(tx);
       case TransactionType.LIQUIDATION:
         return getLiquidationTransactionContent(tx);
-      // case TransactionType.FCM_UNWIND:
-      //   return getMarginUpdateTransactionContent(tx);
+      case TransactionType.FCM_UNWIND:
+        return getUnwindTransactionContent(tx);
+      case TransactionType.MINT:
+        return getMintTransactionContent(tx);
+      case TransactionType.BURN:
+        return getBurnTransactionContent(tx);
+      default:
+        return null;
     }
-
-    return null;
   }
 
   return (
-    <ListItem key={transaction.id} sx={rowStyles}>
+    <ListItem sx={rowStyles}>
       <Box sx={cellStyles}>
         <Typography variant='body2' sx={{color: colors.lavenderWeb.darken020, textTransform: 'uppercase'}}>
           {formatTimestamp(transaction.transactionTimestamp)}

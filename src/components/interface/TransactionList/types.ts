@@ -1,13 +1,15 @@
 import { Position } from "@voltz-protocol/v1-sdk";
 
 export enum TransactionType {
-  SWAP,
-  MARGIN_UPDATE,
-  SETTLEMENT,
-  LIQUIDATION,
-  FCM_SWAP,
-  FCM_UNWIND,
-  FCM_SETTLEMENT,
+  SWAP = 'SWAP',
+  MARGIN_UPDATE = 'MARGIN_UPDATE',
+  SETTLEMENT = 'SETTLEMENT',
+  LIQUIDATION = 'LIQUIDATION',
+  FCM_SWAP = 'FCM_SWAP',
+  FCM_UNWIND = 'FCM_UNWIND',
+  FCM_SETTLEMENT = 'FCM_SETTLEMENT',
+  MINT = 'MINT',
+  BURN = 'BURN'
 };
 
 export type SwapTransaction = Position['swaps'][number] & {
@@ -31,8 +33,14 @@ export type FCMUnwindTransaction = Position['fcmUnwinds'][number] & {
 export type FCMSettlementTransaction = Position['fcmSettlements'][number] & {
   type: TransactionType.FCM_SETTLEMENT
 };
+export type MintTransaction = Position['mints'][number] & {
+  type: TransactionType.MINT
+};
+export type BurnTransaction = Position['burns'][number] & {
+  type: TransactionType.BURN
+};
 
-export type MEPositionTransaction = (
+export type TraderPositionTransaction = (
   SwapTransaction | 
   MarginUpdateTransaction | 
   SettlementTransaction | 
@@ -42,4 +50,11 @@ export type FCMPositionTransaction = (
   FCMSwapTransaction | 
   FCMUnwindTransaction | 
   FCMSettlementTransaction
+);
+export type LPPositionTransaction = (
+  MintTransaction |
+  BurnTransaction |
+  MarginUpdateTransaction | 
+  SettlementTransaction | 
+  LiquidationTransaction
 );
