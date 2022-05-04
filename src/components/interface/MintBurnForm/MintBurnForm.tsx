@@ -100,26 +100,26 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   };
 
 
-  // const handleSubmitLiquidityOnly = () => {
+  const handleSubmitLiquidityOnly = () => {
 
-  //   if (isUndefined(notional) || isNaN(notional) ) {
-  //     return;
-  //   }
+    if (isUndefined(notional) || isNaN(notional) ) {
+      return;
+    }
 
-  // let burntNotional = Math.abs(notional);
+  let burntNotional = Math.abs(notional);
 
-  // if (!addOrBurnLiquidity) {
-  //   burntNotional *= -1.0;
-  // }
+  if (!addOrBurnLiquidity) {
+    burntNotional *= -1.0;
+  }
 
-  // return onSubmit({
-  //   fixedLow: fixedLow!,   
-  //   fixedHigh: fixedHigh!, 
-  //   notional: burntNotional,
-  //   margin: 0,
-  // });
+  return onSubmit({
+    fixedLow: fixedLow!,   
+    fixedHigh: fixedHigh!, 
+    notional: burntNotional,
+    margin: 0,
+  });
 
-  // };
+  };
 
 
   const handleSubmitMarginOnly = () => {
@@ -284,7 +284,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
       }
 
       <Box sx={{ display: 'flex' }}>
-        <SubmitMintBurnFormButton onSubmit={marginEditMode ? handleSubmitMarginOnly : handleSubmit} />
+        <SubmitMintBurnFormButton onSubmit={marginEditMode ? handleSubmitMarginOnly : (liquidityEditMode ? handleSubmitLiquidityOnly : handleSubmit) } /> 
         <Button
           sx={{ marginLeft: (theme) => theme.spacing(6) }}
           variant="darker"

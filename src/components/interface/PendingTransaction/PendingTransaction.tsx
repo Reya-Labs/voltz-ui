@@ -13,6 +13,7 @@ import { formatCurrency } from '@utilities';
 export type PendingTransactionProps = {
   amm: AugmentedAMM;
   transactionId?: string;
+  addOrBurnLiquidity?: boolean;
   onBack: () => void;
   onComplete: () => void;
 };
@@ -20,6 +21,7 @@ export type PendingTransactionProps = {
 const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   amm,
   transactionId,
+  addOrBurnLiquidity,
   onBack,
   onComplete,
 }) => {
@@ -223,6 +225,9 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
             {formatCurrency(activeTransaction.notional, true)} {amm.underlyingToken.name}
           </Typography>
         </Box>
+        
+        {
+          addOrBurnLiquidity && (
         <Box
           sx={{
             marginBottom: (theme) => theme.spacing(4),
@@ -232,6 +237,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
             {formatCurrency(activeTransaction.margin, true)} {amm.underlyingToken.name}
           </Typography>
         </Box>
+        )}
       </Panel>
     </Panel>
   );

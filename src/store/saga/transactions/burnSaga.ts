@@ -23,9 +23,11 @@ function* burnSaga(action: BurnAction) {
 
     const { id, fixedLow, fixedHigh, notional} = action.payload.transaction;
 
-    if (!fixedLow || !fixedHigh) {
+    if (!fixedLow || !fixedHigh || notional > 0 ) {
         return;
-    }
+    } 
+
+    const burntNotional = -notional;
 
     let result: ContractReceipt | void;
     try {
@@ -33,7 +35,7 @@ function* burnSaga(action: BurnAction) {
         result = yield  call ([amm, 'burn'], {
             fixedLow,
             fixedHigh,
-            notional
+            notional: burntNotional
         });
     } catch (error) {
         yield put(
