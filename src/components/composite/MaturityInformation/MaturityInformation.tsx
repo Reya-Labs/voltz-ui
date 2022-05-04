@@ -41,8 +41,8 @@ const MaturityInformation: React.FunctionComponent<MaturityInformationProps> = (
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography variant="h6">{formattedEndDate}</Typography>
-        <Typography variant="h6">&nbsp;&nbsp;{percentageComplete}%</Typography>
+        <Typography variant="h6">{(percentageComplete >= 100) ? "COMPLETED" : formattedEndDate}</Typography>
+        <Typography variant="h6">&nbsp;&nbsp;{Math.min(percentageComplete, 100)}%</Typography>
       </Box>
       <Slider controlled value={percentageComplete} />
     </Box>

@@ -13,6 +13,7 @@ import { mapAmmToAmmTableDatum } from './utilities';
 import { AMMTableFooter, AMMTableHead, AMMTableRow } from './components';
 import { useAgent } from '@hooks';
 import { Agents } from '@components/contexts';
+import { DateTime } from 'luxon';
 
 
 export type AMMTableProps = {
@@ -91,11 +92,13 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({
         >
           <AMMTableHead order={order} orderBy={orderBy} onSort={handleSort} />
           <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
-            {tableData.map((datum, index) => (
-              <AMMProvider amm={amms[index]}>
-                <AMMTableRow datum={datum} index={index} onSelect={handleSelectRow(index)} />
-              </AMMProvider>
-            ))}
+            {tableData.map((datum, index) => {
+              if (DateTime.now() < datum.endDate) {
+                return <AMMProvider amm={amms[index]}>
+                  <AMMTableRow datum={datum} index={index} onSelect={handleSelectRow(index)} />
+                </AMMProvider>
+              }
+          })}
           </TableBody>
           <AMMTableFooter
             columns={labels.length + 1}
