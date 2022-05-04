@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import { Agents } from '@components/contexts';
 
-export type PositionTableFields = 'pool' | 'notional' | 'margin' | 'maturity' | 'fixedApr' | 'estimatedCashflow' | 'fixedUpper' | 'fixedLower';
+export type PositionTableFields = 'pool' | 'notional' | 'margin' | 'maturity' | 'fixedApr' | 'fixedUpper' | 'fixedLower';
 
 export type PositionTableDatum = {
   source: string;

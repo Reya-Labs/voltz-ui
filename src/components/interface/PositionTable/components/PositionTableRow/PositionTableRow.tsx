@@ -96,18 +96,18 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
             ); 
             }            
           }
-          if (datum.source.includes("ME")) {
-            if (field === 'estimatedCashflow') {
-              return <EstimatedCashflow tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} token={token} />;
-            }
-          }
-          else {
-            if (field === 'estimatedCashflow') {
-              return <Typography variant="body2" label="Estimated Cashflow" sx={{ fontSize: 18 }}>
-                {"s00n"}
-              </Typography>
-            }
-          }
+          // if (datum.source.includes("ME")) {
+          //   if (field === 'estimatedCashflow') {
+          //     return <EstimatedCashflow tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} token={token} />;
+          //   }
+          // }
+          // else {
+          //   if (field === 'estimatedCashflow') {
+          //     return <Typography variant="body2" label="Estimated Cashflow" sx={{ fontSize: 18 }}>
+          //       {"s00n"}
+          //     </Typography>
+          //   }
+          // }
           // The below lines are responsible for the current margin column of the LP positions: this component contains the Edit button as well. 
           if (field === 'margin') {
             return <CurrentMargin source={datum.source} tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} protocol={datum.protocol} onSelect={onSelect} displayEditButton={ agent !== Agents.LIQUIDITY_PROVIDER} />;
