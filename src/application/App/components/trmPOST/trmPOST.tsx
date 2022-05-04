@@ -1,27 +1,46 @@
 import { useWallet } from '@hooks';
-import React from 'react';
+import React, { useEffect } from 'react';
 
-// const TrmPOST: React.FunctionComponent = () => {
+async function postWalletData(walletId: string) {
+    const result = await fetch('https://api.trmlabs.com/public/v2/screening/addresses', {
+            method: 'POST',
+            // mode: 'no-cors',
+            headers: { 
+                    'Accept': 'application/json',
+                    'Content-type': 'application/json',
+                    Authorization: 'Basic ' + btoa('<api key>:<api key>')
+                    },
+                    body: JSON.stringify([ {
+                            address: walletId,
+                            chain: 'ethereum' } ])
+        });
 
-// 	const wallet = useWallet();
-// 	async function postWalletData() {
-// 			const result = await fetch('https://api.trmlabs.com/public/v2/screening/addresses', {
-// 					method: 'POST',
-// 					mode: 'no-cors',
-// 					headers: { 
-// 							'Accept': 'application/json',
-// 							'Content-type': 'application/json',
-// 							Authorization: 'Basic ' + Buffer.from('bf651cf7-a699-483c-9fab-93aedd74536c:bf651cf7-a699-483c-9fab-93aedd74536c').toString('base64')
-// 							},
-// 							body: JSON.stringify({
-// 									walletAddress: wallet.connect, })
-// 				});
+        if(result.ok) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            const data = await result.json();
+            // eslint-disable-next-line
+            console.log(data);
+         } else {
+           const txt = await result.text();
+           // eslint-disable-next-line
+           console.log(txt);
+         }
+}
 
-// 		const data = await result.json();
-// 		console.log(data)
-			
-// 		}
-// 		postWalletData();
+const TrmPOST: React.FunctionComponent = () => {
 
-// }
-// export default TrmPOST;
+	const wallet = useWallet();
+
+    useEffect( () => {
+        if (wallet.account) {
+            postWalletData(wallet.account)
+        }    
+    }, [wallet?.account]) // ? covers if wallet is not defined
+return null; //if I don't want to render anything I have to return null
+
+}
+
+export default TrmPOST;
+
+// when someone tries to connect, send their address to trm, check, allow connection if safe: correct way 
+// when someone connects, let them connect but also check whether their address is sactioned: bad way 
