@@ -1,25 +1,27 @@
 import React from 'react';
 import { FCMPositionTransaction, TraderPositionTransaction, TransactionType, LPPositionTransaction } from './types';
+import { Position } from '@voltz-protocol/v1-sdk';
 import { Box, ListItem } from '@mui/material';
 import { SystemStyleObject, Theme } from '@mui/system';
-import { Typography } from '@components/atomic';
 import colors from '../../../theme/colors';
-import { Icon } from '@components/atomic';
-import { Position } from '@voltz-protocol/v1-sdk';
+import { Button, Icon, Typography } from '@components/atomic';
 import { getTransactionData } from './services';
 
 interface TransactionListItemProps {
+  listId?: string | number;
+  onOpenClose?: () => void;
+  open?: boolean;
   position: Position;
   transaction: TraderPositionTransaction | FCMPositionTransaction | LPPositionTransaction;
 }
 
 const rowStyles: SystemStyleObject<Theme> = {
   width: '100%',
-  padding: (theme) => `0 ${theme.spacing(5)}`,
-  borderTop: `1px solid ${colors.lavenderWeb.darken050}`,
+  padding: '0',
+  borderTop: `1px solid ${colors.lavenderWeb.darken045}`,
   textTransform: 'uppercase',
 
-  '&:first-child': {
+  '&:first-of-type': {
     borderTop: 'none'
   }
 }
@@ -28,7 +30,15 @@ const cellStyles: SystemStyleObject<Theme> = {
   color: '#fff',
   padding: (theme) => `${theme.spacing(2)} ${theme.spacing(3)}`,
   display: 'flex',
-  alignItems: 'center'
+  alignItems: 'center',
+
+  '&:first-of-type': {
+    paddingLeft: '2px'
+  },
+
+  '&:last-of-type': {
+    paddingRight: '2px'
+  }
 }
 
 const labelStyles: SystemStyleObject<Theme> = {
@@ -43,7 +53,13 @@ const iconStyles: SystemStyleObject<Theme> = {
   height: '16px'
 };
 
-const TransactionListItem = ({ position, transaction }: TransactionListItemProps) => {
+const openCloseStyles: SystemStyleObject<Theme> = {
+  color: colors.lavenderWeb.base, 
+  marginLeft: 'auto',
+  minWidth: 'auto'
+};
+
+const TransactionListItem = ({ listId, onOpenClose, open = false, position, transaction }: TransactionListItemProps) => {
   const data = getTransactionData(position, transaction);
   const isLiquidation = transaction.type === TransactionType.LIQUIDATION;
 
@@ -70,6 +86,11 @@ const TransactionListItem = ({ position, transaction }: TransactionListItemProps
           </Typography>
         </Box>
       ))}
+      {onOpenClose && (
+        <Button onClick={onOpenClose} variant='text' sx={openCloseStyles} aria-expanded={open} aria-controls={listId?.toString()}>
+          {open ? 'X' : 'TX History'}
+        </Button>
+      )}
     </ListItem>
   );
 }
