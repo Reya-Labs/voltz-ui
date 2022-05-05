@@ -14,7 +14,7 @@ module.exports = {
   webpackFinal: async (config) => {
     config.module.rules.push({
       test: /\.svg$/,
-      loader: '@svgr/webpack',
+      use: ['@svgr/webpack', 'file-loader'],
     });
     config.module.rules.push({
       test: /\.(sa|sc|c)ss$/,
