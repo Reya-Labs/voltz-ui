@@ -17,8 +17,8 @@ const Template: ComponentStory<typeof TransactionList> = (args) => (
   <TransactionList {...args} />
 );
 
-export const FixedPosition = Template.bind({});
-FixedPosition.args = {
+export const FixedVariablePosition = Template.bind({});
+FixedVariablePosition.args = {
   position: {
     source: 'ME',
     positionType: 1,
@@ -31,8 +31,8 @@ FixedPosition.args = {
       {
         id: 1,
         transactionTimestamp: JSBI.BigInt(1651574608),
-        desiredNotional: JSBI.BigInt(105384842),
-        fixedTokenDelta: JSBI.BigInt(355),
+        desiredNotional: JSBI.BigInt(1053848420000000000000000),
+        fixedTokenDelta: JSBI.BigInt(3550000000000000000),
         cumulativeFeeIncurred: JSBI.BigInt(1534),
       }
     ],
@@ -40,22 +40,22 @@ FixedPosition.args = {
       {
         id: 2,
         transactionTimestamp: JSBI.BigInt(1621574608),
-        marginDelta: JSBI.BigInt(129338),
+        marginDelta: JSBI.BigInt(1293380000000000000000),
       }
     ],
     settlements: [
       {
         id: 3,
         transactionTimestamp: JSBI.BigInt(1631574608),
-        settlementCashflow: JSBI.BigInt(105384842),
+        settlementCashflow: JSBI.BigInt(1053848420000000000000000),
       }
     ],
     liquidations: [
       {
         id: 4,
         transactionTimestamp: JSBI.BigInt(1611574608),
-        notionalUnwound: JSBI.BigInt(129338),
-        reward: JSBI.BigInt(-129338),
+        notionalUnwound: JSBI.BigInt(1293380000000000000000),
+        reward: JSBI.BigInt(-1293380000000000000000),
       }
     ]
   } as unknown as Position,
@@ -74,25 +74,25 @@ FCMPosition.args = {
       {
         id: 1,
         transactionTimestamp: JSBI.BigInt(1651574608),
-        desiredNotional: JSBI.BigInt(105384842),
-        fixedTokenDelta: JSBI.BigInt(355),
-        cumulativeFeeIncurred: JSBI.BigInt(1534),
+        desiredNotional: JSBI.BigInt(1053848420000000000000000),
+        fixedTokenDelta: JSBI.BigInt(3550000000000000000),
+        cumulativeFeeIncurred: JSBI.BigInt(15340000000000000000),
       }
     ],
     fcmUnwinds: [
       {
         id: 2,
         transactionTimestamp: JSBI.BigInt(1621574608),
-        desiredNotional: JSBI.BigInt(105384842),
-        fixedTokenDelta: JSBI.BigInt(355),
-        cumulativeFeeIncurred: JSBI.BigInt(1534),
+        desiredNotional: JSBI.BigInt(1053848420000000000000000),
+        fixedTokenDelta: JSBI.BigInt(3550000000000000000),
+        cumulativeFeeIncurred: JSBI.BigInt(15340000000000000000),
       }
     ],
     fcmSettlements: [
       {
         id: 3,
         transactionTimestamp: JSBI.BigInt(1631574608),
-        settlementCashflow: JSBI.BigInt(105384842),
+        settlementCashflow: JSBI.BigInt(1053848420000000000000000),
       }
     ]
   } as unknown as Position,
@@ -112,34 +112,36 @@ LPPosition.args = {
       {
         id: 1,
         transactionTimestamp: JSBI.BigInt(1651574608),
+        amount: JSBI.BigInt(1053848420000000000000000),
       }
     ],
     burns: [
       {
         id: 2,
         transactionTimestamp: JSBI.BigInt(1641574608),
+        amount: JSBI.BigInt(1053848420000000000000000),
       }
     ],
     marginUpdates: [
       {
         id: 3,
         transactionTimestamp: JSBI.BigInt(1621574608),
-        marginDelta: JSBI.BigInt(129338),
+        marginDelta: JSBI.BigInt(1293380000000000000000),
       }
     ],
     settlements: [
       {
         id: 4,
         transactionTimestamp: JSBI.BigInt(1631574608),
-        settlementCashflow: JSBI.BigInt(105384842),
+        settlementCashflow: JSBI.BigInt(1053848420000000000000000),
       }
     ],
     liquidations: [
       {
         id: 5,
         transactionTimestamp: JSBI.BigInt(1611574608),
-        notionalUnwound: JSBI.BigInt(129338),
-        reward: JSBI.BigInt(-129338),
+        notionalUnwound: JSBI.BigInt(1293380000000000000000),
+        reward: JSBI.BigInt(-1293380000000000000000),
       }
     ]
   } as unknown as Position,

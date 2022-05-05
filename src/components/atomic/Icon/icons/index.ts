@@ -6,7 +6,9 @@ export { ReactComponent as InterfaceAlertWarningCircle } from './interface alert
 export { ReactComponent as Metamask } from './metamask.svg';
 export { ReactComponent as Voltz } from './voltz.svg';
 
+export { ReactComponent as Burn } from './transactions/burn.svg';
 export { ReactComponent as Liquidation } from './transactions/liquidation.svg';
 export { ReactComponent as MarginUpdate } from './transactions/margin-update.svg';
+export { ReactComponent as Mint } from './transactions/mint.svg';
 export { ReactComponent as Settle } from './transactions/settle.svg';
 export { ReactComponent as Swap } from './transactions/swap.svg';

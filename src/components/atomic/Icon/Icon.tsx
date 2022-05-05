@@ -21,6 +21,15 @@ const Icon: React.FunctionComponent<IconProps> = ({ name, sx, link, ...props }) 
         return {
           viewBox: "0 0 23 22"
         }
+      case 'tx-burn':
+      case 'tx-liquidation':
+      case 'tx-margin-update':
+      case 'tx-mint':
+      case 'tx-settle':
+      case 'tx-swap':
+        return {
+          viewBox: "0 0 16 16"
+        }
     }
     return {};
   };

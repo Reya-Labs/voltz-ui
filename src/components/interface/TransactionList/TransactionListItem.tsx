@@ -52,14 +52,25 @@ const labelStyles: SystemStyleObject<Theme> = {
   marginRight: (theme) => theme.spacing(2)
 };
 
+const iconStyles: SystemStyleObject<Theme> = {
+  width: '16px',
+  height: '16px'
+};
+
 const TransactionListItem = ({ token, transaction }: TransactionListItemProps) => {
   const getBurnTransactionContent = (tx: BurnTransaction) => (
     <>
       <Box sx={cellStyles}>
-        <Icon name='tx-liquidation' />
+        <Icon name='tx-burn' sx={iconStyles} />
       </Box>
       <Box sx={cellStyles}>
         <Typography variant='body2'>BURN</Typography>
+      </Box>
+      <Box sx={cellStyles}>
+        <Typography variant='body2' sx={labelStyles}>notional</Typography>
+        <Typography variant='body2'>
+          {formatCurrency(JSBI.toNumber(tx.amount) / Math.pow(10, 18))} {token}
+        </Typography>
       </Box>
     </>
   );
@@ -67,10 +78,16 @@ const TransactionListItem = ({ token, transaction }: TransactionListItemProps) =
   const getMintTransactionContent = (tx: MintTransaction) => (
     <>
       <Box sx={cellStyles}>
-        <Icon name='tx-liquidation' />
+        <Icon name='tx-mint' sx={iconStyles} />
       </Box>
       <Box sx={cellStyles}>
         <Typography variant='body2'>MINT</Typography>
+      </Box>
+      <Box sx={cellStyles}>
+        <Typography variant='body2' sx={labelStyles}>notional</Typography>
+        <Typography variant='body2'>
+          {formatCurrency(JSBI.toNumber(tx.amount) / Math.pow(10, 18))} {token}
+        </Typography>
       </Box>
     </>
   );
@@ -78,22 +95,22 @@ const TransactionListItem = ({ token, transaction }: TransactionListItemProps) =
   const getLiquidationTransactionContent = (tx: LiquidationTransaction) => (
     <>
       <Box sx={cellStyles}>
-        <Icon name='tx-liquidation' />
+        <Icon name='tx-liquidation' sx={iconStyles} />
       </Box>
       <Box sx={cellStyles}>
-        <Typography variant='body2' sx={{color: colors.wildStrawberry.base}}>LIQUIDATION</Typography>
+        <Typography variant='body2' sx={{color: colors.vzCustomRed1}}>LIQUIDATION</Typography>
       </Box>
       <Box sx={cellStyles}>
         <Typography variant='body2' sx={labelStyles}>unwound</Typography>
-        <Typography variant='body2' sx={{color: colors.wildStrawberry.base}}>
-          {formatCurrency(JSBI.toNumber(tx.notionalUnwound) / 100)} {token}
+        <Typography variant='body2' sx={{color: colors.vzCustomRed1}}>
+          {formatCurrency(JSBI.toNumber(tx.notionalUnwound) / Math.pow(10, 18))} {token}
         </Typography>
       </Box>
       <Box sx={cellStyles}>
         <Typography variant='body2' sx={labelStyles}>cashflow</Typography>
-        <Typography variant='body2' sx={{color: colors.wildStrawberry.base}}>
+        <Typography variant='body2' sx={{color: colors.vzCustomRed1}}>
           {JSBI.GT(tx.reward, 0) && '+'}
-          {formatCurrency(JSBI.toNumber(tx.reward) / 100)} {token}
+          {formatCurrency(JSBI.toNumber(tx.reward) / Math.pow(10, 18))} {token}
         </Typography>
       </Box>
     </>
@@ -102,7 +119,7 @@ const TransactionListItem = ({ token, transaction }: TransactionListItemProps) =
   const getMarginUpdateTransactionContent = (tx: MarginUpdateTransaction) => (
     <>
       <Box sx={cellStyles}>
-        <Icon name='tx-margin-update' />
+        <Icon name='tx-margin-update' sx={iconStyles} />
       </Box>
       <Box sx={cellStyles}>
         <Typography variant='body2'>MARGIN UPDATE</Typography>
@@ -110,7 +127,7 @@ const TransactionListItem = ({ token, transaction }: TransactionListItemProps) =
       <Box sx={cellStyles}>
         <Typography variant='body2' sx={labelStyles}>margin delta</Typography>
         <Typography variant='body2'>
-          {formatCurrency(JSBI.toNumber(tx.marginDelta) / 100)} {token}
+          {formatCurrency(JSBI.toNumber(tx.marginDelta) / Math.pow(10, 18))} {token}
         </Typography>
       </Box>
     </>
@@ -119,7 +136,7 @@ const TransactionListItem = ({ token, transaction }: TransactionListItemProps) =
   const getSettlementTransactionContent = (tx: SettlementTransaction | FCMSettlementTransaction) => (
     <>
       <Box sx={cellStyles}>
-        <Icon name='tx-settle' />
+        <Icon name='tx-settle' sx={iconStyles} />
       </Box>
       <Box sx={cellStyles}>
         <Typography variant='body2'>SETTLE</Typography>
@@ -128,7 +145,7 @@ const TransactionListItem = ({ token, transaction }: TransactionListItemProps) =
         <Typography variant='body2' sx={labelStyles}>cashflow</Typography>
         <Typography variant='body2'>
           {JSBI.GT(tx.settlementCashflow, 0) && '+'}
-          {formatCurrency(JSBI.toNumber(tx.settlementCashflow) / 100)} {token}
+          {formatCurrency(JSBI.toNumber(tx.settlementCashflow) / Math.pow(10, 18))} {token}
         </Typography>
       </Box>
     </>
@@ -137,7 +154,7 @@ const TransactionListItem = ({ token, transaction }: TransactionListItemProps) =
   const getSwapTransactionContent = (tx: SwapTransaction | FCMSwapTransaction) => (
     <>
       <Box sx={cellStyles}>
-        <Icon name='tx-swap' />
+        <Icon name='tx-swap' sx={iconStyles} />
       </Box>
       <Box sx={cellStyles}>
         <Typography variant='body2'>SWAP</Typography>
@@ -145,19 +162,19 @@ const TransactionListItem = ({ token, transaction }: TransactionListItemProps) =
       <Box sx={cellStyles}>
         <Typography variant='body2' sx={labelStyles}>notional</Typography>
         <Typography variant='body2'>
-          {formatCurrency(JSBI.toNumber(tx.desiredNotional) / 100)} {token}
+          {formatCurrency(JSBI.toNumber(tx.desiredNotional) / Math.pow(10, 18))} {token}
         </Typography>
       </Box>
       <Box sx={cellStyles}>
         <Typography variant='body2' sx={labelStyles}>avg fix</Typography>
         <Typography variant='body2'>
-          {formatCurrency(JSBI.toNumber(tx.fixedTokenDelta) / 100)} %
+          {formatCurrency(JSBI.toNumber(tx.fixedTokenDelta) / Math.pow(10, 18))} %
         </Typography>
       </Box>
       <Box sx={cellStyles}>
         <Typography variant='body2' sx={labelStyles}>fees</Typography>
         <Typography variant='body2'>
-          {formatCurrency(JSBI.toNumber(tx.cumulativeFeeIncurred) / 100)} ???
+          {formatCurrency(JSBI.toNumber(tx.cumulativeFeeIncurred) / Math.pow(10, 18))} {token}
         </Typography>
       </Box>
     </>
@@ -166,7 +183,7 @@ const TransactionListItem = ({ token, transaction }: TransactionListItemProps) =
   const getUnwindTransactionContent = (tx: FCMUnwindTransaction) => (
     <>
       <Box sx={cellStyles}>
-        <Icon name='tx-swap' />
+        <Icon name='tx-swap' sx={iconStyles} />
       </Box>
       <Box sx={cellStyles}>
         <Typography variant='body2'>UNWIND</Typography>
@@ -174,19 +191,19 @@ const TransactionListItem = ({ token, transaction }: TransactionListItemProps) =
       <Box sx={cellStyles}>
         <Typography variant='body2' sx={labelStyles}>notional</Typography>
         <Typography variant='body2'>
-          {formatCurrency(JSBI.toNumber(tx.desiredNotional) / 100)} {token}
+          {formatCurrency(JSBI.toNumber(tx.desiredNotional) / Math.pow(10, 18))} {token}
         </Typography>
       </Box>
       <Box sx={cellStyles}>
         <Typography variant='body2' sx={labelStyles}>avg fix</Typography>
         <Typography variant='body2'>
-          {formatCurrency(JSBI.toNumber(tx.fixedTokenDelta) / 100)} %
+          {formatCurrency(JSBI.toNumber(tx.fixedTokenDelta) / Math.pow(10, 18))} %
         </Typography>
       </Box>
       <Box sx={cellStyles}>
         <Typography variant='body2' sx={labelStyles}>fees</Typography>
         <Typography variant='body2'>
-          {formatCurrency(JSBI.toNumber(tx.cumulativeFeeIncurred) / 100)} ???
+          {formatCurrency(JSBI.toNumber(tx.cumulativeFeeIncurred) / Math.pow(10, 18))} {token}
         </Typography>
       </Box>
     </>
