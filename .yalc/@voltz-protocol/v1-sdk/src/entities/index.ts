@@ -13,6 +13,7 @@ export type {
   InfoPostSwap,
   AMMBurnArgs,
   ClosestTickAndFixedRate,
+  PositionInfo,
 } from './amm';
 export { default as Position } from './position';
 export { default as Token } from './token';

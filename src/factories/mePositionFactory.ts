@@ -36,7 +36,9 @@ export const MEPositionFactory = (positionData: MEPositionQueryData, signer: Wal
       termEndTimestamp,
       updatedTimestamp: ammUpdatedTimestamp,
       tick,
-      txCount
+      txCount,
+      totalNotionalTraded: ammTotalNotionalTraded,
+      totalLiquidity,
     },
     owner: { id: ownerAddress },
     tickLower,
@@ -49,6 +51,8 @@ export const MEPositionFactory = (positionData: MEPositionQueryData, signer: Wal
     accumulatedFees,
     positionType,
     isSettled,
+    totalNotionalTraded: positionTotalNotionalTraded,
+    sumOfWeightedFixedRate,
     mints,
     burns,
     swaps,
@@ -95,6 +99,8 @@ export const MEPositionFactory = (positionData: MEPositionQueryData, signer: Wal
       tick: parseInt(tick as string),
       tickSpacing: parseInt(tickSpacing as string),
       txCount: parseInt(txCount as string),
+      totalNotionalTraded: ammTotalNotionalTraded as JSBI,
+      totalLiquidity: totalLiquidity as JSBI,
     }),
     mints: mints.map((args) => new Mint({
       id: args.id,
@@ -160,5 +166,7 @@ export const MEPositionFactory = (positionData: MEPositionQueryData, signer: Wal
     fcmSettlements: [],
     marginInScaledYieldBearingTokens: JSBI.BigInt(0),
     source: "ME",
+    totalNotionalTraded: positionTotalNotionalTraded as JSBI,
+    sumOfWeightedFixedRate: sumOfWeightedFixedRate as JSBI,
   });
 }

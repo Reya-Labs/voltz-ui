@@ -50,6 +50,8 @@ export type SerializedAMM = {
     protocolId: string;
     token: { id: string; name: string; decimals: string };
   };
+  totalLiquidity: string;
+  totalNotionalTraded: string;
 };
 
 export type ActionType =

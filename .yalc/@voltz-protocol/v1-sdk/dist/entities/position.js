@@ -12,7 +12,7 @@ var tickMath_1 = require("../utils/tickMath");
 var price_1 = require("./fractions/price");
 var Position = /** @class */ (function () {
     function Position(_a) {
-        var source = _a.source, id = _a.id, createdTimestamp = _a.createdTimestamp, amm = _a.amm, owner = _a.owner, updatedTimestamp = _a.updatedTimestamp, marginInScaledYieldBearingTokens = _a.marginInScaledYieldBearingTokens, fixedTokenBalance = _a.fixedTokenBalance, variableTokenBalance = _a.variableTokenBalance, isSettled = _a.isSettled, fcmSwaps = _a.fcmSwaps, fcmUnwinds = _a.fcmUnwinds, fcmSettlements = _a.fcmSettlements, tickLower = _a.tickLower, tickUpper = _a.tickUpper, liquidity = _a.liquidity, margin = _a.margin, accumulatedFees = _a.accumulatedFees, positionType = _a.positionType, mints = _a.mints, burns = _a.burns, swaps = _a.swaps, marginUpdates = _a.marginUpdates, liquidations = _a.liquidations, settlements = _a.settlements;
+        var source = _a.source, id = _a.id, createdTimestamp = _a.createdTimestamp, amm = _a.amm, owner = _a.owner, updatedTimestamp = _a.updatedTimestamp, marginInScaledYieldBearingTokens = _a.marginInScaledYieldBearingTokens, fixedTokenBalance = _a.fixedTokenBalance, variableTokenBalance = _a.variableTokenBalance, isSettled = _a.isSettled, fcmSwaps = _a.fcmSwaps, fcmUnwinds = _a.fcmUnwinds, fcmSettlements = _a.fcmSettlements, tickLower = _a.tickLower, tickUpper = _a.tickUpper, liquidity = _a.liquidity, margin = _a.margin, accumulatedFees = _a.accumulatedFees, positionType = _a.positionType, mints = _a.mints, burns = _a.burns, swaps = _a.swaps, marginUpdates = _a.marginUpdates, liquidations = _a.liquidations, settlements = _a.settlements, totalNotionalTraded = _a.totalNotionalTraded, sumOfWeightedFixedRate = _a.sumOfWeightedFixedRate;
         this.source = source;
         this.id = id;
         this.createdTimestamp = createdTimestamp;
@@ -38,6 +38,8 @@ var Position = /** @class */ (function () {
         this.tickUpper = tickUpper;
         this.accumulatedFees = accumulatedFees;
         this.positionType = positionType;
+        this.totalNotionalTraded = totalNotionalTraded;
+        this.sumOfWeightedFixedRate = sumOfWeightedFixedRate;
     }
     Object.defineProperty(Position.prototype, "priceLower", {
         get: function () {
@@ -126,6 +128,20 @@ var Position = /** @class */ (function () {
     Object.defineProperty(Position.prototype, "updatedDateTime", {
         get: function () {
             return luxon_1.DateTime.fromMillis(jsbi_1.default.toNumber(this.updatedTimestamp));
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Position.prototype, "averageFixedRate", {
+        get: function () {
+            var sumOfWeightedFixedRateBn = ethers_1.BigNumber.from(this.sumOfWeightedFixedRate.toString());
+            var totalNotionalTradedBn = ethers_1.BigNumber.from(this.totalNotionalTraded.toString());
+            if (totalNotionalTradedBn.eq(ethers_1.BigNumber.from(0))) {
+                return undefined;
+            }
+            var averageFixedRate = sumOfWeightedFixedRateBn.mul(ethers_1.BigNumber.from(1000)).div(totalNotionalTradedBn).toNumber() /
+                1000;
+            return Math.abs(averageFixedRate);
         },
         enumerable: false,
         configurable: true

@@ -2,6 +2,7 @@ import { Position } from '@voltz-protocol/v1-sdk';
 
 import { Agents } from '@components/contexts';
 import { PositionTableDatum } from '../types';
+import { isUndefined } from 'lodash';
 
 const mapPositionToPositionTableDatum =
   (agent: Agents) =>
@@ -14,7 +15,8 @@ const mapPositionToPositionTableDatum =
       fixedRateUpper,
       fixedRateLower,
       isSettled,
-      source
+      source,
+      averageFixedRate
     }: Position): PositionTableDatum => {
       return {
         source,
@@ -28,7 +30,8 @@ const mapPositionToPositionTableDatum =
         notional: agent === Agents.LIQUIDITY_PROVIDER ? notional : (agent === Agents.VARIABLE_TRADER ? effectiveVariableTokenBalance : -effectiveVariableTokenBalance),
         fixedTokenBalance: effectiveFixedTokenBalance,
         agent: agent,
-        settled: isSettled
+        settled: isSettled,
+        averageFixedRate: isUndefined(averageFixedRate) ? "-" : (averageFixedRate.toFixed(2) + "%"),
       };
     };
 

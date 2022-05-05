@@ -22,6 +22,9 @@ query GetAMMs($orderBy: AMM_orderBy!) {
     termStartTimestamp
     termEndTimestamp
 
+    totalNotionalTraded
+    totalLiquidity
+
     updatedTimestamp
     tick
 

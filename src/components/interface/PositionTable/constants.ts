@@ -5,8 +5,8 @@ export const PositionTableLabels: Record<PositionTableFields, string> = {
   fixedLower: 'Fixed Rate Lower',
   fixedUpper: 'Fixed Rate Upper',
   notional: 'Notional',
-  // estimatedCashflow: 'Estimated Cashflow',
   margin: 'Margin',
+  accruedRates: 'Receiving/Paying',
   fixedApr: 'Fixed APR',
   maturity: 'Maturity',
 };
@@ -27,8 +27,8 @@ export const traderLabels: [PositionTableFields, string][] = [
   // ['fixedLower', PositionTableLabels.fixedLower],
   // ['fixedUpper', PositionTableLabels.fixedUpper],
   ['notional', PositionTableLabels.notional],
-  // ['estimatedCashflow', PositionTableLabels.estimatedCashflow],
   ['margin', PositionTableLabels.margin],
+  // ['accruedRates', PositionTableLabels.accruedRates],
   // ['fixedApr', PositionTableLabels.fixedApr],
   ['maturity', PositionTableLabels.maturity],
 ];

@@ -17,7 +17,7 @@ import { tickToPrice, tickToFixedRate } from '../utils/priceTickConversions';
 import { TickMath } from '../utils/tickMath';
 import { Price } from './fractions/price';
 
-export type FCMPositionConstructorArgs = {
+export type PositionConstructorArgs = {
   source: string;
   id: string;
   createdTimestamp: JSBI;
@@ -44,6 +44,9 @@ export type FCMPositionConstructorArgs = {
   margin: JSBI;
   accumulatedFees: JSBI;
   positionType: number;
+
+  totalNotionalTraded: JSBI;
+  sumOfWeightedFixedRate: JSBI;
 
   mints: Array<Mint>;
   burns: Array<Burn>;
@@ -104,6 +107,10 @@ class Position {
 
   public readonly settlements: Array<Settlement>;
 
+  public readonly totalNotionalTraded: JSBI;
+
+  public readonly sumOfWeightedFixedRate: JSBI;
+
   public constructor({
     source,
     id,
@@ -130,7 +137,9 @@ class Position {
     marginUpdates,
     liquidations,
     settlements,
-  }: FCMPositionConstructorArgs) {
+    totalNotionalTraded,
+    sumOfWeightedFixedRate,
+  }: PositionConstructorArgs) {
     this.source = source;
     this.id = id;
     this.createdTimestamp = createdTimestamp;
@@ -159,6 +168,9 @@ class Position {
     this.tickUpper = tickUpper;
     this.accumulatedFees = accumulatedFees;
     this.positionType = positionType;
+
+    this.totalNotionalTraded = totalNotionalTraded;
+    this.sumOfWeightedFixedRate = sumOfWeightedFixedRate;
   }
 
   public get priceLower(): Price {
@@ -221,6 +233,18 @@ class Position {
 
   public get updatedDateTime(): DateTime {
     return DateTime.fromMillis(JSBI.toNumber(this.updatedTimestamp));
+  }
+
+  public get averageFixedRate(): number | undefined {
+    const sumOfWeightedFixedRateBn = BigNumber.from(this.sumOfWeightedFixedRate.toString());
+    const totalNotionalTradedBn = BigNumber.from(this.totalNotionalTraded.toString());
+    if (totalNotionalTradedBn.eq(BigNumber.from(0))) {
+      return undefined;
+    }
+    const averageFixedRate =
+      sumOfWeightedFixedRateBn.mul(BigNumber.from(1000)).div(totalNotionalTradedBn).toNumber() /
+      1000;
+    return Math.abs(averageFixedRate);
   }
 }
 

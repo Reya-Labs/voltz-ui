@@ -27,5 +27,8 @@ declare module '@mui/material/Button' {
     dark: true;
     darker: true;
     red: true;
+    healthy: true;
+    warning: true;
+    danger: true;
   }
 }

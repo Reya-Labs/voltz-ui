@@ -1,5 +1,5 @@
 import JSBI from 'jsbi';
-import { ethers, providers } from 'ethers';
+import { providers } from 'ethers';
 import { DateTime } from 'luxon';
 import { BigNumber, BigNumberish, ContractReceipt, Signer, utils } from 'ethers';
 
@@ -45,6 +45,8 @@ export type AMMConstructorArgs = {
   tick: number;
   tickSpacing: number;
   txCount: number;
+  totalNotionalTraded: JSBI;
+  totalLiquidity: JSBI;
 };
 
 export type AMMGetInfoPostSwapArgs = {
@@ -123,6 +125,13 @@ export type ClosestTickAndFixedRate = {
   closestUsableFixedRate: Price;
 };
 
+export type PositionInfo = {
+  margin: number;
+  fees?: number;
+  liquidationThreshold?: number;
+  safetyThreshold?: number;
+}
+
 class AMM {
   public readonly id: string;
   public readonly signer: Signer | null;
@@ -138,6 +147,8 @@ class AMM {
   public readonly tickSpacing: number;
   public readonly tick: number;
   public readonly txCount: number;
+  public readonly totalNotionalTraded: JSBI;
+  public readonly totalLiquidity: JSBI;
   public readonly overrides: {
     gasLimit: number;
   }
@@ -157,6 +168,8 @@ class AMM {
     tick,
     tickSpacing,
     txCount,
+    totalNotionalTraded,
+    totalLiquidity
   }: AMMConstructorArgs) {
     this.id = id;
     this.signer = signer;
@@ -172,6 +185,8 @@ class AMM {
     this.tickSpacing = tickSpacing;
     this.tick = tick;
     this.txCount = txCount;
+    this.totalNotionalTraded = totalNotionalTraded;
+    this.totalLiquidity = totalLiquidity;
 
     this.overrides = {
       gasLimit: 10000000,
@@ -415,29 +430,6 @@ class AMM {
     catch (error) {
       throw new Error("Transaction Confirmation Error");
     }
-  }
-
-  public async getLiquidationThreshold({
-    owner,
-    fixedLow,
-    fixedHigh,
-  }: AMMLiquidatePositionArgs): Promise<number> {
-    if (!this.signer) {
-      throw new Error('Wallet not connected');
-    }
-
-    const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
-    const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
-
-    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
-    const threshold = await marginEngineContract.callStatic.getPositionMarginRequirement(
-      owner,
-      tickLower,
-      tickUpper,
-      false,
-    );
-
-    return this.descale(threshold);
   }
 
   public async getInfoPostMint({
@@ -958,25 +950,7 @@ class AMM {
     return parseFloat(utils.formatEther(historicalApy));
   }
 
-  public async getEstimatedCashflow(fixedRateLower: number, fixedRateUpper: number): Promise<number> {
-    if (!this.signer) {
-      throw new Error('Wallet not connected');
-    }
-
-    const signerAddress = await this.signer.getAddress();
-
-    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.signer);
-    const estimatedCashflow = await peripheryContract.callStatic.estimatedCashflowAtMaturity(
-      this.marginEngineAddress,
-      signerAddress,
-      this.closestTickAndFixedRate(fixedRateUpper).closestUsableTick,
-      this.closestTickAndFixedRate(fixedRateLower).closestUsableTick,
-    );
-
-    return this.descale(estimatedCashflow);
-  }
-
-  public async getCurrentMargin(source: string, fixedRateLower: number, fixedRateUpper: number): Promise<number> {
+  public async getPositionInformation(source: string, fixedRateLower: number, fixedRateUpper: number): Promise<PositionInfo> {
     if (!this.signer) {
       throw new Error('Wallet not connected');
     }
@@ -986,21 +960,54 @@ class AMM {
     if (source.includes("FCM")) {
       const fcmContract = fcmFactory.connect(this.fcmAddress, this.signer);
       const margin = (await fcmContract.getTraderMarginInATokens(signerAddress));
-      return this.descale(margin);
+      return {
+        margin: this.descale(margin)
+      };
     }
+
+    const tickLower = this.closestTickAndFixedRate(fixedRateUpper).closestUsableTick;
+    const tickUpper = this.closestTickAndFixedRate(fixedRateLower).closestUsableTick;
 
     const marginEngineContract = marginEngineFactory.connect(
       this.marginEngineAddress,
       this.signer,
     );
 
-    const margin = (await marginEngineContract.callStatic.getPosition(
-      signerAddress,
-      this.closestTickAndFixedRate(fixedRateUpper).closestUsableTick,
-      this.closestTickAndFixedRate(fixedRateLower).closestUsableTick,
-    )).margin;
+    let results: PositionInfo = {
+      margin: 0
+    };
 
-    return this.descale(margin);
+    const rawPositionInfo = await marginEngineContract.callStatic.getPosition(
+      signerAddress,
+      tickLower,
+      tickUpper,
+    );
+    results.margin = this.descale(rawPositionInfo.margin);
+    results.fees = this.descale(rawPositionInfo.accumulatedFees);
+
+    try {
+      const liquidationThreshold = await marginEngineContract.callStatic.getPositionMarginRequirement(
+        signerAddress,
+        tickLower,
+        tickUpper,
+        true
+      );
+      results.liquidationThreshold = this.descale(liquidationThreshold);
+    }
+    catch (_) { }
+
+    try {
+      const safetyThreshold = await marginEngineContract.callStatic.getPositionMarginRequirement(
+        signerAddress,
+        tickLower,
+        tickUpper,
+        true
+      );
+      results.safetyThreshold = this.descale(safetyThreshold);
+    }
+    catch (_) { }
+
+    return results;
   }
 
   public closestTickAndFixedRate(fixedRate: number): ClosestTickAndFixedRate {

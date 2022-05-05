@@ -52,7 +52,7 @@ var errorHandling_1 = require("../utils/errors/errorHandling");
 var evm_bn_1 = require("evm-bn");
 var AMM = /** @class */ (function () {
     function AMM(_a) {
-        var id = _a.id, signer = _a.signer, provider = _a.provider, environment = _a.environment, marginEngineAddress = _a.marginEngineAddress, fcmAddress = _a.fcmAddress, rateOracle = _a.rateOracle, updatedTimestamp = _a.updatedTimestamp, termStartTimestamp = _a.termStartTimestamp, termEndTimestamp = _a.termEndTimestamp, underlyingToken = _a.underlyingToken, tick = _a.tick, tickSpacing = _a.tickSpacing, txCount = _a.txCount;
+        var id = _a.id, signer = _a.signer, provider = _a.provider, environment = _a.environment, marginEngineAddress = _a.marginEngineAddress, fcmAddress = _a.fcmAddress, rateOracle = _a.rateOracle, updatedTimestamp = _a.updatedTimestamp, termStartTimestamp = _a.termStartTimestamp, termEndTimestamp = _a.termEndTimestamp, underlyingToken = _a.underlyingToken, tick = _a.tick, tickSpacing = _a.tickSpacing, txCount = _a.txCount, totalNotionalTraded = _a.totalNotionalTraded, totalLiquidity = _a.totalLiquidity;
         this.id = id;
         this.signer = signer;
         this.provider = provider || (signer === null || signer === void 0 ? void 0 : signer.provider);
@@ -67,6 +67,8 @@ var AMM = /** @class */ (function () {
         this.tickSpacing = tickSpacing;
         this.tick = tick;
         this.txCount = txCount;
+        this.totalNotionalTraded = totalNotionalTraded;
+        this.totalLiquidity = totalLiquidity;
         this.overrides = {
             gasLimit: 10000000,
         };
@@ -309,27 +311,6 @@ var AMM = /** @class */ (function () {
                         error_3 = _b.sent();
                         throw new Error("Transaction Confirmation Error");
                     case 5: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    AMM.prototype.getLiquidationThreshold = function (_a) {
-        var owner = _a.owner, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh;
-        return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, marginEngineContract, threshold;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        if (!this.signer) {
-                            throw new Error('Wallet not connected');
-                        }
-                        tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
-                        tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
-                        marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
-                        return [4 /*yield*/, marginEngineContract.callStatic.getPositionMarginRequirement(owner, tickLower, tickUpper, false)];
-                    case 1:
-                        threshold = _b.sent();
-                        return [2 /*return*/, this.descale(threshold)];
                 }
             });
         });
@@ -931,30 +912,9 @@ var AMM = /** @class */ (function () {
             });
         });
     };
-    AMM.prototype.getEstimatedCashflow = function (fixedRateLower, fixedRateUpper) {
+    AMM.prototype.getPositionInformation = function (source, fixedRateLower, fixedRateUpper) {
         return __awaiter(this, void 0, void 0, function () {
-            var signerAddress, peripheryContract, estimatedCashflow;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (!this.signer) {
-                            throw new Error('Wallet not connected');
-                        }
-                        return [4 /*yield*/, this.signer.getAddress()];
-                    case 1:
-                        signerAddress = _a.sent();
-                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
-                        return [4 /*yield*/, peripheryContract.callStatic.estimatedCashflowAtMaturity(this.marginEngineAddress, signerAddress, this.closestTickAndFixedRate(fixedRateUpper).closestUsableTick, this.closestTickAndFixedRate(fixedRateLower).closestUsableTick)];
-                    case 2:
-                        estimatedCashflow = _a.sent();
-                        return [2 /*return*/, this.descale(estimatedCashflow)];
-                }
-            });
-        });
-    };
-    AMM.prototype.getCurrentMargin = function (source, fixedRateLower, fixedRateUpper) {
-        return __awaiter(this, void 0, void 0, function () {
-            var signerAddress, fcmContract, margin_1, marginEngineContract, margin;
+            var signerAddress, fcmContract, margin, tickLower, tickUpper, marginEngineContract, results, rawPositionInfo, liquidationThreshold, _1, safetyThreshold, _2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -968,14 +928,44 @@ var AMM = /** @class */ (function () {
                         fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
                         return [4 /*yield*/, fcmContract.getTraderMarginInATokens(signerAddress)];
                     case 2:
-                        margin_1 = (_a.sent());
-                        return [2 /*return*/, this.descale(margin_1)];
+                        margin = (_a.sent());
+                        return [2 /*return*/, {
+                                margin: this.descale(margin)
+                            }];
                     case 3:
+                        tickLower = this.closestTickAndFixedRate(fixedRateUpper).closestUsableTick;
+                        tickUpper = this.closestTickAndFixedRate(fixedRateLower).closestUsableTick;
                         marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
-                        return [4 /*yield*/, marginEngineContract.callStatic.getPosition(signerAddress, this.closestTickAndFixedRate(fixedRateUpper).closestUsableTick, this.closestTickAndFixedRate(fixedRateLower).closestUsableTick)];
+                        results = {
+                            margin: 0
+                        };
+                        return [4 /*yield*/, marginEngineContract.callStatic.getPosition(signerAddress, tickLower, tickUpper)];
                     case 4:
-                        margin = (_a.sent()).margin;
-                        return [2 /*return*/, this.descale(margin)];
+                        rawPositionInfo = _a.sent();
+                        results.margin = this.descale(rawPositionInfo.margin);
+                        results.fees = this.descale(rawPositionInfo.accumulatedFees);
+                        _a.label = 5;
+                    case 5:
+                        _a.trys.push([5, 7, , 8]);
+                        return [4 /*yield*/, marginEngineContract.callStatic.getPositionMarginRequirement(signerAddress, tickLower, tickUpper, true)];
+                    case 6:
+                        liquidationThreshold = _a.sent();
+                        results.liquidationThreshold = this.descale(liquidationThreshold);
+                        return [3 /*break*/, 8];
+                    case 7:
+                        _1 = _a.sent();
+                        return [3 /*break*/, 8];
+                    case 8:
+                        _a.trys.push([8, 10, , 11]);
+                        return [4 /*yield*/, marginEngineContract.callStatic.getPositionMarginRequirement(signerAddress, tickLower, tickUpper, true)];
+                    case 9:
+                        safetyThreshold = _a.sent();
+                        results.safetyThreshold = this.descale(safetyThreshold);
+                        return [3 /*break*/, 11];
+                    case 10:
+                        _2 = _a.sent();
+                        return [3 /*break*/, 11];
+                    case 11: return [2 /*return*/, results];
                 }
             });
         });

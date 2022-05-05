@@ -5,7 +5,6 @@ import { getErrorMessage } from '@utilities';
 import { UpdatePositionMarginAction } from '../../types';
 import { deserializeAmm, getSigner } from '../../utilities';
 import * as actions from '../../actions';
-import { isUndefined } from 'lodash';
 
 function* updatePositionMarginSaga(action: UpdatePositionMarginAction) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

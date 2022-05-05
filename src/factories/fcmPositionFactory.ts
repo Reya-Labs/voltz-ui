@@ -36,13 +36,17 @@ export const FCMPositionFactory = (positionData: FCMPositionQueryData, signer: W
       termEndTimestamp,
       updatedTimestamp: ammUpdatedTimestamp,
       tick,
-      txCount
+      txCount,
+      totalNotionalTraded: ammTotalNotionalTraded,
+      totalLiquidity,
     },
     owner: { id: ownerAddress },
     updatedTimestamp: positionUpdatedTimestamp,
     fixedTokenBalance,
     variableTokenBalance,
     isSettled,
+    totalNotionalTraded: positionTotalNotionalTraded,
+    sumOfWeightedFixedRate,
     marginInScaledYieldBearingTokens,
     fcmSwaps,
     fcmUnwinds,
@@ -81,7 +85,8 @@ export const FCMPositionFactory = (positionData: FCMPositionQueryData, signer: W
       tick: parseInt(tick as string),
       tickSpacing: parseInt(tickSpacing as string),
       txCount: parseInt(txCount as string),
-      
+      totalNotionalTraded: ammTotalNotionalTraded as JSBI,
+      totalLiquidity: totalLiquidity as JSBI,
     }),
     marginInScaledYieldBearingTokens: marginInScaledYieldBearingTokens as JSBI,
     fcmSwaps: fcmSwaps.map((args) => new FCMSwap({
@@ -131,5 +136,7 @@ export const FCMPositionFactory = (positionData: FCMPositionQueryData, signer: W
     tickUpper: 0,
     margin: JSBI.BigInt(0),
     source: "FCM",
+    totalNotionalTraded: positionTotalNotionalTraded as JSBI,
+    sumOfWeightedFixedRate: sumOfWeightedFixedRate as JSBI,
   });
 };

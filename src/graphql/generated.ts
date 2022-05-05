@@ -37,6 +37,8 @@ export type Amm = {
   termStartTimestamp: Scalars['BigInt'];
   tick: Scalars['BigInt'];
   tickSpacing: Scalars['BigInt'];
+  totalLiquidity: Scalars['BigInt'];
+  totalNotionalTraded: Scalars['BigInt'];
   txCount: Scalars['BigInt'];
   updatedTimestamp: Scalars['BigInt'];
 };
@@ -206,6 +208,22 @@ export type Amm_Filter = {
   tick_lte?: InputMaybe<Scalars['BigInt']>;
   tick_not?: InputMaybe<Scalars['BigInt']>;
   tick_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  totalLiquidity?: InputMaybe<Scalars['BigInt']>;
+  totalLiquidity_gt?: InputMaybe<Scalars['BigInt']>;
+  totalLiquidity_gte?: InputMaybe<Scalars['BigInt']>;
+  totalLiquidity_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  totalLiquidity_lt?: InputMaybe<Scalars['BigInt']>;
+  totalLiquidity_lte?: InputMaybe<Scalars['BigInt']>;
+  totalLiquidity_not?: InputMaybe<Scalars['BigInt']>;
+  totalLiquidity_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  totalNotionalTraded?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_gt?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_gte?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  totalNotionalTraded_lt?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_lte?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_not?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   txCount?: InputMaybe<Scalars['BigInt']>;
   txCount_gt?: InputMaybe<Scalars['BigInt']>;
   txCount_gte?: InputMaybe<Scalars['BigInt']>;
@@ -240,6 +258,8 @@ export enum Amm_OrderBy {
   TermStartTimestamp = 'termStartTimestamp',
   Tick = 'tick',
   TickSpacing = 'tickSpacing',
+  TotalLiquidity = 'totalLiquidity',
+  TotalNotionalTraded = 'totalNotionalTraded',
   TxCount = 'txCount',
   UpdatedTimestamp = 'updatedTimestamp'
 }
@@ -394,6 +414,8 @@ export type FcmPosition = {
   owner: Wallet;
   snapshotCount: Scalars['BigInt'];
   snapshots: Array<FcmPositionSnapshot>;
+  sumOfWeightedFixedRate: Scalars['BigInt'];
+  totalNotionalTraded: Scalars['BigInt'];
   updatedTimestamp: Scalars['BigInt'];
   variableTokenBalance: Scalars['BigInt'];
 };
@@ -442,6 +464,8 @@ export type FcmPositionSnapshot = {
   id: Scalars['ID'];
   isSettled: Scalars['Boolean'];
   marginInScaledYieldBearingTokens: Scalars['BigInt'];
+  sumOfWeightedFixedRate: Scalars['BigInt'];
+  totalNotionalTraded: Scalars['BigInt'];
   variableTokenBalance: Scalars['BigInt'];
 };
 
@@ -504,6 +528,22 @@ export type FcmPositionSnapshot_Filter = {
   marginInScaledYieldBearingTokens_lte?: InputMaybe<Scalars['BigInt']>;
   marginInScaledYieldBearingTokens_not?: InputMaybe<Scalars['BigInt']>;
   marginInScaledYieldBearingTokens_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  sumOfWeightedFixedRate?: InputMaybe<Scalars['BigInt']>;
+  sumOfWeightedFixedRate_gt?: InputMaybe<Scalars['BigInt']>;
+  sumOfWeightedFixedRate_gte?: InputMaybe<Scalars['BigInt']>;
+  sumOfWeightedFixedRate_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  sumOfWeightedFixedRate_lt?: InputMaybe<Scalars['BigInt']>;
+  sumOfWeightedFixedRate_lte?: InputMaybe<Scalars['BigInt']>;
+  sumOfWeightedFixedRate_not?: InputMaybe<Scalars['BigInt']>;
+  sumOfWeightedFixedRate_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  totalNotionalTraded?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_gt?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_gte?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  totalNotionalTraded_lt?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_lte?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_not?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   variableTokenBalance?: InputMaybe<Scalars['BigInt']>;
   variableTokenBalance_gt?: InputMaybe<Scalars['BigInt']>;
   variableTokenBalance_gte?: InputMaybe<Scalars['BigInt']>;
@@ -521,6 +561,8 @@ export enum FcmPositionSnapshot_OrderBy {
   Id = 'id',
   IsSettled = 'isSettled',
   MarginInScaledYieldBearingTokens = 'marginInScaledYieldBearingTokens',
+  SumOfWeightedFixedRate = 'sumOfWeightedFixedRate',
+  TotalNotionalTraded = 'totalNotionalTraded',
   VariableTokenBalance = 'variableTokenBalance'
 }
 
@@ -611,6 +653,22 @@ export type FcmPosition_Filter = {
   snapshotCount_lte?: InputMaybe<Scalars['BigInt']>;
   snapshotCount_not?: InputMaybe<Scalars['BigInt']>;
   snapshotCount_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  sumOfWeightedFixedRate?: InputMaybe<Scalars['BigInt']>;
+  sumOfWeightedFixedRate_gt?: InputMaybe<Scalars['BigInt']>;
+  sumOfWeightedFixedRate_gte?: InputMaybe<Scalars['BigInt']>;
+  sumOfWeightedFixedRate_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  sumOfWeightedFixedRate_lt?: InputMaybe<Scalars['BigInt']>;
+  sumOfWeightedFixedRate_lte?: InputMaybe<Scalars['BigInt']>;
+  sumOfWeightedFixedRate_not?: InputMaybe<Scalars['BigInt']>;
+  sumOfWeightedFixedRate_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  totalNotionalTraded?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_gt?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_gte?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  totalNotionalTraded_lt?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_lte?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_not?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   updatedTimestamp?: InputMaybe<Scalars['BigInt']>;
   updatedTimestamp_gt?: InputMaybe<Scalars['BigInt']>;
   updatedTimestamp_gte?: InputMaybe<Scalars['BigInt']>;
@@ -642,6 +700,8 @@ export enum FcmPosition_OrderBy {
   Owner = 'owner',
   SnapshotCount = 'snapshotCount',
   Snapshots = 'snapshots',
+  SumOfWeightedFixedRate = 'sumOfWeightedFixedRate',
+  TotalNotionalTraded = 'totalNotionalTraded',
   UpdatedTimestamp = 'updatedTimestamp',
   VariableTokenBalance = 'variableTokenBalance'
 }
@@ -1549,9 +1609,11 @@ export type Position = {
   settlements: Array<Settlement>;
   snapshotCount: Scalars['BigInt'];
   snapshots: Array<PositionSnapshot>;
+  sumOfWeightedFixedRate: Scalars['BigInt'];
   swaps: Array<Swap>;
   tickLower: Scalars['BigInt'];
   tickUpper: Scalars['BigInt'];
+  totalNotionalTraded: Scalars['BigInt'];
   updatedTimestamp: Scalars['BigInt'];
   variableTokenBalance: Scalars['BigInt'];
 };
@@ -1630,6 +1692,8 @@ export type PositionSnapshot = {
   margin: Scalars['BigInt'];
   position: Position;
   positionType: Scalars['BigInt'];
+  sumOfWeightedFixedRate: Scalars['BigInt'];
+  totalNotionalTraded: Scalars['BigInt'];
   variableTokenBalance: Scalars['BigInt'];
 };
 
@@ -1716,6 +1780,22 @@ export type PositionSnapshot_Filter = {
   position_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   position_starts_with?: InputMaybe<Scalars['String']>;
   position_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  sumOfWeightedFixedRate?: InputMaybe<Scalars['BigInt']>;
+  sumOfWeightedFixedRate_gt?: InputMaybe<Scalars['BigInt']>;
+  sumOfWeightedFixedRate_gte?: InputMaybe<Scalars['BigInt']>;
+  sumOfWeightedFixedRate_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  sumOfWeightedFixedRate_lt?: InputMaybe<Scalars['BigInt']>;
+  sumOfWeightedFixedRate_lte?: InputMaybe<Scalars['BigInt']>;
+  sumOfWeightedFixedRate_not?: InputMaybe<Scalars['BigInt']>;
+  sumOfWeightedFixedRate_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  totalNotionalTraded?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_gt?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_gte?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  totalNotionalTraded_lt?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_lte?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_not?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   variableTokenBalance?: InputMaybe<Scalars['BigInt']>;
   variableTokenBalance_gt?: InputMaybe<Scalars['BigInt']>;
   variableTokenBalance_gte?: InputMaybe<Scalars['BigInt']>;
@@ -1736,6 +1816,8 @@ export enum PositionSnapshot_OrderBy {
   Margin = 'margin',
   Position = 'position',
   PositionType = 'positionType',
+  SumOfWeightedFixedRate = 'sumOfWeightedFixedRate',
+  TotalNotionalTraded = 'totalNotionalTraded',
   VariableTokenBalance = 'variableTokenBalance'
 }
 
@@ -1850,6 +1932,14 @@ export type Position_Filter = {
   snapshotCount_lte?: InputMaybe<Scalars['BigInt']>;
   snapshotCount_not?: InputMaybe<Scalars['BigInt']>;
   snapshotCount_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  sumOfWeightedFixedRate?: InputMaybe<Scalars['BigInt']>;
+  sumOfWeightedFixedRate_gt?: InputMaybe<Scalars['BigInt']>;
+  sumOfWeightedFixedRate_gte?: InputMaybe<Scalars['BigInt']>;
+  sumOfWeightedFixedRate_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  sumOfWeightedFixedRate_lt?: InputMaybe<Scalars['BigInt']>;
+  sumOfWeightedFixedRate_lte?: InputMaybe<Scalars['BigInt']>;
+  sumOfWeightedFixedRate_not?: InputMaybe<Scalars['BigInt']>;
+  sumOfWeightedFixedRate_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   tickLower?: InputMaybe<Scalars['BigInt']>;
   tickLower_gt?: InputMaybe<Scalars['BigInt']>;
   tickLower_gte?: InputMaybe<Scalars['BigInt']>;
@@ -1866,6 +1956,14 @@ export type Position_Filter = {
   tickUpper_lte?: InputMaybe<Scalars['BigInt']>;
   tickUpper_not?: InputMaybe<Scalars['BigInt']>;
   tickUpper_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  totalNotionalTraded?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_gt?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_gte?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  totalNotionalTraded_lt?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_lte?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_not?: InputMaybe<Scalars['BigInt']>;
+  totalNotionalTraded_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   updatedTimestamp?: InputMaybe<Scalars['BigInt']>;
   updatedTimestamp_gt?: InputMaybe<Scalars['BigInt']>;
   updatedTimestamp_gte?: InputMaybe<Scalars['BigInt']>;
@@ -1902,9 +2000,11 @@ export enum Position_OrderBy {
   Settlements = 'settlements',
   SnapshotCount = 'snapshotCount',
   Snapshots = 'snapshots',
+  SumOfWeightedFixedRate = 'sumOfWeightedFixedRate',
   Swaps = 'swaps',
   TickLower = 'tickLower',
   TickUpper = 'tickUpper',
+  TotalNotionalTraded = 'totalNotionalTraded',
   UpdatedTimestamp = 'updatedTimestamp',
   VariableTokenBalance = 'variableTokenBalance'
 }
@@ -3388,14 +3488,14 @@ export type GetAmMsQueryVariables = Exact<{
 }>;
 
 
-export type GetAmMsQuery = { __typename?: 'Query', amms: Array<{ __typename?: 'AMM', id: string, createdTimestamp: any, tickSpacing: any, termStartTimestamp: any, termEndTimestamp: any, updatedTimestamp: any, tick: any, txCount: any, fcm: { __typename?: 'FCM', id: string }, marginEngine: { __typename?: 'MarginEngine', id: string }, rateOracle: { __typename?: 'RateOracle', id: string, protocolId: any, token: { __typename?: 'UnderlyingToken', id: string, name: string, decimals: any } } }> };
+export type GetAmMsQuery = { __typename?: 'Query', amms: Array<{ __typename?: 'AMM', id: string, createdTimestamp: any, tickSpacing: any, termStartTimestamp: any, termEndTimestamp: any, totalNotionalTraded: any, totalLiquidity: any, updatedTimestamp: any, tick: any, txCount: any, fcm: { __typename?: 'FCM', id: string }, marginEngine: { __typename?: 'MarginEngine', id: string }, rateOracle: { __typename?: 'RateOracle', id: string, protocolId: any, token: { __typename?: 'UnderlyingToken', id: string, name: string, decimals: any } } }> };
 
 export type GetWalletQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type GetWalletQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, positionCount: any, fcmPositionCount: any, positions: Array<{ __typename?: 'Position', id: string, createdTimestamp: any, tickLower: any, tickUpper: any, updatedTimestamp: any, liquidity: any, margin: any, fixedTokenBalance: any, variableTokenBalance: any, accumulatedFees: any, positionType: any, isSettled: boolean, amm: { __typename?: 'AMM', id: string, createdTimestamp: any, tickSpacing: any, termStartTimestamp: any, termEndTimestamp: any, updatedTimestamp: any, tick: any, txCount: any, fcm: { __typename?: 'FCM', id: string }, marginEngine: { __typename?: 'MarginEngine', id: string }, rateOracle: { __typename?: 'RateOracle', id: string, protocolId: any, token: { __typename?: 'UnderlyingToken', id: string, name: string, decimals: any } } }, owner: { __typename?: 'Wallet', id: string }, mints: Array<{ __typename?: 'Mint', id: string, sender: string, amount: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }>, burns: Array<{ __typename?: 'Burn', id: string, sender: string, amount: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }>, swaps: Array<{ __typename?: 'Swap', id: string, sender: string, desiredNotional: any, sqrtPriceLimitX96: any, cumulativeFeeIncurred: any, fixedTokenDelta: any, variableTokenDelta: any, fixedTokenDeltaUnbalanced: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }>, marginUpdates: Array<{ __typename?: 'MarginUpdate', id: string, depositer: string, marginDelta: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }>, liquidations: Array<{ __typename?: 'Liquidation', id: string, liquidator: string, reward: any, notionalUnwound: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }>, settlements: Array<{ __typename?: 'Settlement', id: string, settlementCashflow: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }> }>, fcmPositions: Array<{ __typename?: 'FCMPosition', id: string, createdTimestamp: any, updatedTimestamp: any, fixedTokenBalance: any, variableTokenBalance: any, marginInScaledYieldBearingTokens: any, isSettled: boolean, amm: { __typename?: 'AMM', id: string, createdTimestamp: any, tickSpacing: any, termStartTimestamp: any, termEndTimestamp: any, updatedTimestamp: any, tick: any, txCount: any, fcm: { __typename?: 'FCM', id: string }, marginEngine: { __typename?: 'MarginEngine', id: string }, rateOracle: { __typename?: 'RateOracle', id: string, protocolId: any, token: { __typename?: 'UnderlyingToken', id: string, name: string, decimals: any } } }, owner: { __typename?: 'Wallet', id: string }, fcmSwaps: Array<{ __typename?: 'FCMSwap', id: string, desiredNotional: any, sqrtPriceLimitX96: any, cumulativeFeeIncurred: any, fixedTokenDelta: any, variableTokenDelta: any, fixedTokenDeltaUnbalanced: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }>, fcmUnwinds: Array<{ __typename?: 'FCMUnwind', id: string, desiredNotional: any, sqrtPriceLimitX96: any, cumulativeFeeIncurred: any, fixedTokenDelta: any, variableTokenDelta: any, fixedTokenDeltaUnbalanced: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }>, fcmSettlements: Array<{ __typename?: 'FCMSettlement', id: string, settlementCashflow: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }> }> } | null };
+export type GetWalletQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, positionCount: any, fcmPositionCount: any, positions: Array<{ __typename?: 'Position', id: string, createdTimestamp: any, tickLower: any, tickUpper: any, updatedTimestamp: any, liquidity: any, margin: any, fixedTokenBalance: any, variableTokenBalance: any, accumulatedFees: any, totalNotionalTraded: any, sumOfWeightedFixedRate: any, positionType: any, isSettled: boolean, amm: { __typename?: 'AMM', id: string, tickSpacing: any, termStartTimestamp: any, termEndTimestamp: any, totalNotionalTraded: any, totalLiquidity: any, updatedTimestamp: any, tick: any, txCount: any, fcm: { __typename?: 'FCM', id: string }, marginEngine: { __typename?: 'MarginEngine', id: string }, rateOracle: { __typename?: 'RateOracle', id: string, protocolId: any, token: { __typename?: 'UnderlyingToken', id: string, name: string, decimals: any } } }, owner: { __typename?: 'Wallet', id: string }, mints: Array<{ __typename?: 'Mint', id: string, sender: string, amount: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }>, burns: Array<{ __typename?: 'Burn', id: string, sender: string, amount: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }>, swaps: Array<{ __typename?: 'Swap', id: string, sender: string, desiredNotional: any, sqrtPriceLimitX96: any, cumulativeFeeIncurred: any, fixedTokenDelta: any, variableTokenDelta: any, fixedTokenDeltaUnbalanced: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }>, marginUpdates: Array<{ __typename?: 'MarginUpdate', id: string, depositer: string, marginDelta: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }>, liquidations: Array<{ __typename?: 'Liquidation', id: string, liquidator: string, reward: any, notionalUnwound: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }>, settlements: Array<{ __typename?: 'Settlement', id: string, settlementCashflow: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }> }>, fcmPositions: Array<{ __typename?: 'FCMPosition', id: string, createdTimestamp: any, updatedTimestamp: any, fixedTokenBalance: any, variableTokenBalance: any, marginInScaledYieldBearingTokens: any, isSettled: boolean, totalNotionalTraded: any, sumOfWeightedFixedRate: any, amm: { __typename?: 'AMM', id: string, createdTimestamp: any, tickSpacing: any, termStartTimestamp: any, termEndTimestamp: any, totalNotionalTraded: any, totalLiquidity: any, updatedTimestamp: any, tick: any, txCount: any, fcm: { __typename?: 'FCM', id: string }, marginEngine: { __typename?: 'MarginEngine', id: string }, rateOracle: { __typename?: 'RateOracle', id: string, protocolId: any, token: { __typename?: 'UnderlyingToken', id: string, name: string, decimals: any } } }, owner: { __typename?: 'Wallet', id: string }, fcmSwaps: Array<{ __typename?: 'FCMSwap', id: string, desiredNotional: any, sqrtPriceLimitX96: any, cumulativeFeeIncurred: any, fixedTokenDelta: any, variableTokenDelta: any, fixedTokenDeltaUnbalanced: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }>, fcmUnwinds: Array<{ __typename?: 'FCMUnwind', id: string, desiredNotional: any, sqrtPriceLimitX96: any, cumulativeFeeIncurred: any, fixedTokenDelta: any, variableTokenDelta: any, fixedTokenDeltaUnbalanced: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }>, fcmSettlements: Array<{ __typename?: 'FCMSettlement', id: string, settlementCashflow: any, transaction: { __typename?: 'Transaction', id: string, createdTimestamp: any } }> }> } | null };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
@@ -3638,6 +3738,8 @@ export type AmmResolvers<ContextType = any, ParentType extends ResolversParentTy
   termStartTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   tick?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   tickSpacing?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  totalLiquidity?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  totalNotionalTraded?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   txCount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   updatedTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -3684,6 +3786,8 @@ export type FcmPositionResolvers<ContextType = any, ParentType extends Resolvers
   owner?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType>;
   snapshotCount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   snapshots?: Resolver<Array<ResolversTypes['FCMPositionSnapshot']>, ParentType, ContextType, RequireFields<FcmPositionSnapshotsArgs, 'first' | 'skip'>>;
+  sumOfWeightedFixedRate?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  totalNotionalTraded?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   updatedTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   variableTokenBalance?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -3696,6 +3800,8 @@ export type FcmPositionSnapshotResolvers<ContextType = any, ParentType extends R
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   isSettled?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   marginInScaledYieldBearingTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  sumOfWeightedFixedRate?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  totalNotionalTraded?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   variableTokenBalance?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -3798,9 +3904,11 @@ export type PositionResolvers<ContextType = any, ParentType extends ResolversPar
   settlements?: Resolver<Array<ResolversTypes['Settlement']>, ParentType, ContextType, RequireFields<PositionSettlementsArgs, 'first' | 'skip'>>;
   snapshotCount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   snapshots?: Resolver<Array<ResolversTypes['PositionSnapshot']>, ParentType, ContextType, RequireFields<PositionSnapshotsArgs, 'first' | 'skip'>>;
+  sumOfWeightedFixedRate?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   swaps?: Resolver<Array<ResolversTypes['Swap']>, ParentType, ContextType, RequireFields<PositionSwapsArgs, 'first' | 'skip'>>;
   tickLower?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   tickUpper?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  totalNotionalTraded?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   updatedTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   variableTokenBalance?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -3816,6 +3924,8 @@ export type PositionSnapshotResolvers<ContextType = any, ParentType extends Reso
   margin?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   position?: Resolver<ResolversTypes['Position'], ParentType, ContextType>;
   positionType?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  sumOfWeightedFixedRate?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  totalNotionalTraded?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   variableTokenBalance?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -4048,6 +4158,8 @@ export const GetAmMsDocument = gql`
     tickSpacing
     termStartTimestamp
     termEndTimestamp
+    totalNotionalTraded
+    totalLiquidity
     updatedTimestamp
     tick
     txCount
@@ -4092,7 +4204,6 @@ export const GetWalletDocument = gql`
       createdTimestamp
       amm {
         id
-        createdTimestamp
         fcm {
           id
         }
@@ -4111,6 +4222,8 @@ export const GetWalletDocument = gql`
         tickSpacing
         termStartTimestamp
         termEndTimestamp
+        totalNotionalTraded
+        totalLiquidity
         updatedTimestamp
         tick
         txCount
@@ -4126,6 +4239,8 @@ export const GetWalletDocument = gql`
       fixedTokenBalance
       variableTokenBalance
       accumulatedFees
+      totalNotionalTraded
+      sumOfWeightedFixedRate
       positionType
       isSettled
       mints {
@@ -4213,6 +4328,8 @@ export const GetWalletDocument = gql`
         tickSpacing
         termStartTimestamp
         termEndTimestamp
+        totalNotionalTraded
+        totalLiquidity
         updatedTimestamp
         tick
         txCount
@@ -4225,6 +4342,8 @@ export const GetWalletDocument = gql`
       variableTokenBalance
       marginInScaledYieldBearingTokens
       isSettled
+      totalNotionalTraded
+      sumOfWeightedFixedRate
       fcmSwaps {
         id
         transaction {

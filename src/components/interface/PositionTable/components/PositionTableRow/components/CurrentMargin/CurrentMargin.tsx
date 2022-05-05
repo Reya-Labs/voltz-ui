@@ -1,60 +1,23 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import TableCell from '@mui/material/TableCell';
 
-import { useAMMContext, useWallet } from '@hooks';
+import { useWallet } from '@hooks';
 import { Typography } from '@components/atomic';
-import { isUndefined } from 'lodash';
 import { Button } from '@components/atomic';
 import isNull from 'lodash/isNull';
 
 export type CurrentMarginProps = {
-  source?: string;
-  tickLower?: number;
-  tickUpper?: number;
-  displayEditButton?: boolean;
-  protocol: string;
+  renderValue: () => string;
   onSelect: () => void;
 };
 
-const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({source, tickLower, tickUpper, displayEditButton, protocol, onSelect}) => {
-  const { currentMargin } = useAMMContext();
-  const { result, loading, call } = currentMargin;
-
-  useEffect(() => {
-    if (!isUndefined(source) && !isUndefined(tickLower) && !isUndefined(tickUpper)) {
-      call({ source, tickLower, tickUpper });
-    }
-  }, [call, tickLower, tickUpper]);
-
-  const renderValue = () => {
-    if (loading) {
-      return 'Loading...';
-    }
-
-    if (!result) {
-      return 'No data';
-    }
-
-    if (!source) {
-      return 'Cannot get source of positions';
-    }
-
-    if (source.includes("FCM")) {
-      return `${result.toFixed(2)} ${protocol}`;
-    }
-
-    const token = protocol.substring(1);
-    
-    return `${result.toFixed(2)} ${token}`;
-  };
-
+const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({renderValue, onSelect}) => {
   const wallet = useWallet();
 
   const handleClick = () => {
     if (isNull(wallet.account)) {
       wallet.setRequired(true);
     } else {
-      // todo: fix
       onSelect();
     }
   };
@@ -90,7 +53,6 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({source, tic
     </TableCell>
   );
 };
-
 
 // border: 1px solid #5C0026;
 // box-sizing: border-box;

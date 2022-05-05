@@ -89,6 +89,42 @@ const Button: React.FunctionComponent<ButtonProps> = ({
       };
     }
 
+    if (props.variant === 'healthy') {
+      return {
+        backgroundColor: 'secondary.dark',
+        '&:hover': {
+          backgroundColor: 'transparent',
+        },
+        color: '#40F99B',
+        borderWidth: 1,
+        borderColor: '#40F99B'
+      };
+    }
+
+    if (props.variant === 'warning') {
+      return {
+        backgroundColor: 'secondary.dark',
+        '&:hover': {
+          backgroundColor: 'transparent',
+        },
+        color: '#F1D302',
+        borderWidth: 1,
+        borderColor: '#F1D302'
+      };
+    }
+
+    if (props.variant === 'danger') {
+      return {
+        backgroundColor: 'secondary.dark',
+        '&:hover': {
+          backgroundColor: 'transparent',
+        },
+        color: '#F61067',
+        borderWidth: 1,
+        borderColor: '#F61067'
+      };
+    }
+
     if (props.variant === 'dark') {
       return {
         backgroundColor: selected ? 'secondary.darken030' : 'secondary.dark',

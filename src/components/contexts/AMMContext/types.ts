@@ -2,6 +2,7 @@ import {
   AMMGetInfoPostSwapArgs,
   AMMGetInfoPostMintArgs,
   InfoPostSwap,
+  PositionInfo
 } from '@voltz-protocol/v1-sdk';
 
 import { UseAsyncFunctionResult } from '@hooks';
@@ -23,12 +24,7 @@ export type MinimumMarginAmountSwapPayload = {
   isFT: boolean;
 };
 
-export type EstimatedCashflowPayload = {
-  tickLower: number;
-  tickUpper: number;
-};
-
-export type CurrentMarginPayload = {
+export type PositionInfoPayload = {
   source: string;
   tickLower: number;
   tickUpper: number;
@@ -42,6 +38,5 @@ export type AMMDispatch = {
     number | void
   >;
   swapInfo: UseAsyncFunctionResult<SwapInfoPayload, InfoPostSwap | void>;
-  estimatedCashflow: UseAsyncFunctionResult<EstimatedCashflowPayload, number | void>;
-  currentMargin: UseAsyncFunctionResult<CurrentMarginPayload, number | void>;
+  positionInfo: UseAsyncFunctionResult<PositionInfoPayload, PositionInfo | void>;
 };
