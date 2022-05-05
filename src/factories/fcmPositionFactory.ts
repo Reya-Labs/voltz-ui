@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+  /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument */
 
 import JSBI from 'jsbi';
 import { GetWalletQuery } from '@graphql'
@@ -55,10 +55,10 @@ export const FCMPositionFactory = (positionData: FCMPositionQueryData, signer: W
           
   return new Position({
     id: positionId,
-    createdTimestamp: positionCreatedTimestamp as JSBI,
-    updatedTimestamp: positionUpdatedTimestamp as JSBI,
-    fixedTokenBalance: fixedTokenBalance as JSBI,
-    variableTokenBalance: variableTokenBalance as JSBI,
+    createdTimestamp: JSBI.BigInt(positionCreatedTimestamp),
+    updatedTimestamp: JSBI.BigInt(positionUpdatedTimestamp),
+    fixedTokenBalance: JSBI.BigInt(fixedTokenBalance),
+    variableTokenBalance: JSBI.BigInt(variableTokenBalance),
     isSettled,
     owner: ownerAddress,
     amm: new AugmentedAMM({
@@ -79,49 +79,49 @@ export const FCMPositionFactory = (positionData: FCMPositionQueryData, signer: W
       }),
       marginEngineAddress,
       fcmAddress,
-      updatedTimestamp: ammUpdatedTimestamp as JSBI,
-      termStartTimestamp: termStartTimestamp as JSBI,
-      termEndTimestamp: termEndTimestamp as JSBI,
+      updatedTimestamp: JSBI.BigInt(ammUpdatedTimestamp),
+      termStartTimestamp: JSBI.BigInt(termStartTimestamp),
+      termEndTimestamp: JSBI.BigInt(termEndTimestamp),
       tick: parseInt(tick as string),
       tickSpacing: parseInt(tickSpacing as string),
       txCount: parseInt(txCount as string),
       totalNotionalTraded: ammTotalNotionalTraded as JSBI,
       totalLiquidity: totalLiquidity as JSBI,
     }),
-    marginInScaledYieldBearingTokens: marginInScaledYieldBearingTokens as JSBI,
+    marginInScaledYieldBearingTokens: JSBI.BigInt(marginInScaledYieldBearingTokens),
     fcmSwaps: fcmSwaps.map((args) => new FCMSwap({
       id: args.id,
       transactionId: args.transaction.id,
-      transactionTimestamp: args.transaction.createdTimestamp as JSBI,
+      transactionTimestamp: JSBI.BigInt(args.transaction.createdTimestamp),
       ammId,
       fcmPositionId: positionId,
-      desiredNotional: args.desiredNotional as JSBI,
-      sqrtPriceLimitX96: args.sqrtPriceLimitX96 as JSBI,
-      cumulativeFeeIncurred: args.cumulativeFeeIncurred as JSBI,
-      fixedTokenDelta: args.fixedTokenDelta as JSBI,
-      variableTokenDelta: args.variableTokenDelta as JSBI,
-      fixedTokenDeltaUnbalanced: args.fixedTokenDeltaUnbalanced as JSBI
+      desiredNotional: JSBI.BigInt(args.desiredNotional),
+      sqrtPriceLimitX96: JSBI.BigInt(args.sqrtPriceLimitX96),
+      cumulativeFeeIncurred: JSBI.BigInt(args.cumulativeFeeIncurred),
+      fixedTokenDelta: JSBI.BigInt(args.fixedTokenDelta),
+      variableTokenDelta: JSBI.BigInt(args.variableTokenDelta),
+      fixedTokenDeltaUnbalanced: JSBI.BigInt(args.fixedTokenDeltaUnbalanced)
     })),
     fcmUnwinds: fcmUnwinds.map((args) => new FCMUnwind({
       id: args.id,
       transactionId: args.transaction.id,
-      transactionTimestamp: args.transaction.createdTimestamp as JSBI,
+      transactionTimestamp: JSBI.BigInt(args.transaction.createdTimestamp),
       ammId,
       fcmPositionId: positionId,
-      desiredNotional: args.desiredNotional as JSBI,
-      sqrtPriceLimitX96: args.sqrtPriceLimitX96 as JSBI,
-      cumulativeFeeIncurred: args.cumulativeFeeIncurred as JSBI,
-      fixedTokenDelta: args.fixedTokenDelta as JSBI,
-      variableTokenDelta: args.variableTokenDelta as JSBI,
-      fixedTokenDeltaUnbalanced: args.fixedTokenDeltaUnbalanced as JSBI
+      desiredNotional: JSBI.BigInt(args.desiredNotional),
+      sqrtPriceLimitX96: JSBI.BigInt(args.sqrtPriceLimitX96),
+      cumulativeFeeIncurred: JSBI.BigInt(args.cumulativeFeeIncurred),
+      fixedTokenDelta: JSBI.BigInt(args.fixedTokenDelta),
+      variableTokenDelta: JSBI.BigInt(args.variableTokenDelta),
+      fixedTokenDeltaUnbalanced: JSBI.BigInt(args.fixedTokenDeltaUnbalanced)
     })),
     fcmSettlements: fcmSettlements.map((args) => new FCMSettlement({
       id: args.id,
       transactionId: args.transaction.id,
-      transactionTimestamp: args.transaction.createdTimestamp as JSBI,
+      transactionTimestamp: JSBI.BigInt(args.transaction.createdTimestamp),
       ammId,
       fcmPositionId: positionId,
-      settlementCashflow: args.settlementCashflow as JSBI
+      settlementCashflow: JSBI.BigInt(args.settlementCashflow)
     })),
     swaps: [],
     mints: [],

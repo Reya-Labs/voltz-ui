@@ -20,6 +20,8 @@ import {
   PositionTableRow,
 } from './components';
 import { Agents } from '@components/contexts';
+import TransactionList from '../TransactionList/TransactionList';
+import { TableRow, TableCell } from '@mui/material';
 
 export type PositionTableProps = {
   positions: Position[];
@@ -111,13 +113,18 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
           <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
             {tableData.map((datum, index) => (
               <AMMProvider amm={(positions[index].amm as AugmentedAMM)}>
-              <PositionTableRow
-                key={datum.id}
-                datum={datum}
-                index={index}
-                onSelect={(mode: 'margin' | 'liquidity') => handleSelectRow(index, mode)}
-                handleSettle={() => handleSettle(positions[index])}
-              />
+                <PositionTableRow
+                  key={datum.id}
+                  datum={datum}
+                  index={index}
+                  onSelect={(mode: 'margin' | 'liquidity') => handleSelectRow(index, mode)}
+                  handleSettle={() => handleSettle(positions[index])}
+                />
+                <TableRow>
+                  <TableCell colSpan={agent === Agents.LIQUIDITY_PROVIDER ? 6 : 4}>
+                    <TransactionList position={positions[index]} />
+                  </TableCell>
+                </TableRow>
               </AMMProvider>
             ))}
           </TableBody>
