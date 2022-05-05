@@ -17,8 +17,8 @@ const Template: ComponentStory<typeof TransactionList> = (args) => (
   <TransactionList {...args} />
 );
 
-export const FixedVariablePosition = Template.bind({});
-FixedVariablePosition.args = {
+export const FixedPosition = Template.bind({});
+FixedPosition.args = {
   position: {
     source: 'ME',
     positionType: 1,
@@ -33,7 +33,53 @@ FixedVariablePosition.args = {
         transactionTimestamp: JSBI.BigInt(1651574608),
         desiredNotional: JSBI.BigInt(1053848420000000000000000),
         fixedTokenDelta: JSBI.BigInt(3550000000000000000),
-        cumulativeFeeIncurred: JSBI.BigInt(1534),
+        cumulativeFeeIncurred: JSBI.BigInt(15340000000000000000),
+        variableTokenDelta: JSBI.BigInt(-15340000000000000000),
+      }
+    ],
+    marginUpdates: [
+      {
+        id: 2,
+        transactionTimestamp: JSBI.BigInt(1621574608),
+        marginDelta: JSBI.BigInt(1293380000000000000000),
+      }
+    ],
+    settlements: [
+      {
+        id: 3,
+        transactionTimestamp: JSBI.BigInt(1631574608),
+        settlementCashflow: JSBI.BigInt(1053848420000000000000000),
+      }
+    ],
+    liquidations: [
+      {
+        id: 4,
+        transactionTimestamp: JSBI.BigInt(1611574608),
+        notionalUnwound: JSBI.BigInt(1293380000000000000000),
+        reward: JSBI.BigInt(-1293380000000000000000),
+      }
+    ]
+  } as unknown as Position,
+};
+
+export const VariablePosition = Template.bind({});
+VariablePosition.args = {
+  position: {
+    source: 'ME',
+    positionType: 2,
+    amm: {
+      underlyingToken: {
+        name: 'GIL'
+      }
+    },
+    swaps: [
+      {
+        id: 1,
+        transactionTimestamp: JSBI.BigInt(1651574608),
+        desiredNotional: JSBI.BigInt(1053848420000000000000000),
+        fixedTokenDelta: JSBI.BigInt(3550000000000000000),
+        cumulativeFeeIncurred: JSBI.BigInt(15340000000000000000),
+        variableTokenDelta: JSBI.BigInt(15340000000000000000),
       }
     ],
     marginUpdates: [

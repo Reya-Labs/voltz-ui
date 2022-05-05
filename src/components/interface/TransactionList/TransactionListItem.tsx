@@ -1,22 +1,8 @@
 import React from 'react';
-import { 
-  FCMPositionTransaction, 
-  FCMSettlementTransaction, 
-  FCMSwapTransaction, 
-  FCMUnwindTransaction, 
-  LiquidationTransaction, 
-  MarginUpdateTransaction, 
-  TraderPositionTransaction, 
-  SettlementTransaction, 
-  SwapTransaction, 
-  TransactionType, 
-  MintTransaction, 
-  BurnTransaction, 
-  LPPositionTransaction
-} from './types';
+import { FCMPositionTransaction, TraderPositionTransaction, TransactionType, LPPositionTransaction} from './types';
 import { Box, ListItem } from '@mui/material';
 import { SystemStyleObject, Theme } from '@mui/system';
-import { Typography } from '@components/atomic';
+import { Icons, Typography } from '@components/atomic';
 import colors from '../../../theme/colors';
 import { formatCurrency, formatTimestamp } from '@utilities';
 import { Icon } from '@components/atomic';
@@ -57,180 +43,120 @@ const iconStyles: SystemStyleObject<Theme> = {
   height: '16px'
 };
 
-const TransactionListItem = ({ token, transaction }: TransactionListItemProps) => {
-  const getBurnTransactionContent = (tx: BurnTransaction) => (
-    <>
-      <Box sx={cellStyles}>
-        <Icon name='tx-burn' sx={iconStyles} />
-      </Box>
-      <Box sx={cellStyles}>
-        <Typography variant='body2'>BURN</Typography>
-      </Box>
-      <Box sx={cellStyles}>
-        <Typography variant='body2' sx={labelStyles}>notional</Typography>
-        <Typography variant='body2'>
-          {formatCurrency(JSBI.toNumber(tx.amount) / Math.pow(10, 18))} {token}
-        </Typography>
-      </Box>
-    </>
-  );
+const TransactionListItem = ({ token = '', transaction }: TransactionListItemProps) => {
+  const getTransactionData = (tx: TransactionListItemProps['transaction']) => {
+    const iconMap:Record<TransactionType, Icons> = {
+      [TransactionType.BURN]: 'tx-burn',
+      [TransactionType.FCM_SWAP]: 'tx-swap',
+      [TransactionType.FCM_SETTLEMENT]: 'tx-settle',
+      [TransactionType.FCM_UNWIND]: 'tx-swap',
+      [TransactionType.LIQUIDATION]: 'tx-liquidation',
+      [TransactionType.MARGIN_UPDATE]: 'tx-margin-update',
+      [TransactionType.MINT]: 'tx-mint',
+      [TransactionType.SETTLEMENT]: 'tx-settle',
+      [TransactionType.SWAP]: 'tx-swap',
+    };
 
-  const getMintTransactionContent = (tx: MintTransaction) => (
-    <>
-      <Box sx={cellStyles}>
-        <Icon name='tx-mint' sx={iconStyles} />
-      </Box>
-      <Box sx={cellStyles}>
-        <Typography variant='body2'>MINT</Typography>
-      </Box>
-      <Box sx={cellStyles}>
-        <Typography variant='body2' sx={labelStyles}>notional</Typography>
-        <Typography variant='body2'>
-          {formatCurrency(JSBI.toNumber(tx.amount) / Math.pow(10, 18))} {token}
-        </Typography>
-      </Box>
-    </>
-  );
+    const getLabel = () => {
+      switch(tx.type) {
+        case TransactionType.BURN: return 'BURN';
+        case TransactionType.FCM_SWAP: return 'SWAP (FT)';
+        case TransactionType.FCM_SETTLEMENT: return 'SETTLE';
+        case TransactionType.FCM_UNWIND: return 'UNWIND (VT)';
+        case TransactionType.LIQUIDATION: return 'LIQUIDATION';
+        case TransactionType.MARGIN_UPDATE: return 'MARGIN UPDATE';
+        case TransactionType.MINT: return 'MINT';
+        case TransactionType.SETTLEMENT: return 'SETTLE';
+        case TransactionType.SWAP: return `SWAP ${JSBI.GT(tx.variableTokenDelta, 0) ? 'VT' : 'FT'}`;
+      }
+    };
 
-  const getLiquidationTransactionContent = (tx: LiquidationTransaction) => (
-    <>
-      <Box sx={cellStyles}>
-        <Icon name='tx-liquidation' sx={iconStyles} />
-      </Box>
-      <Box sx={cellStyles}>
-        <Typography variant='body2' sx={{color: colors.vzCustomRed1}}>LIQUIDATION</Typography>
-      </Box>
-      <Box sx={cellStyles}>
-        <Typography variant='body2' sx={labelStyles}>unwound</Typography>
-        <Typography variant='body2' sx={{color: colors.vzCustomRed1}}>
-          {formatCurrency(JSBI.toNumber(tx.notionalUnwound) / Math.pow(10, 18))} {token}
-        </Typography>
-      </Box>
-      <Box sx={cellStyles}>
-        <Typography variant='body2' sx={labelStyles}>cashflow</Typography>
-        <Typography variant='body2' sx={{color: colors.vzCustomRed1}}>
-          {JSBI.GT(tx.reward, 0) && '+'}
-          {formatCurrency(JSBI.toNumber(tx.reward) / Math.pow(10, 18))} {token}
-        </Typography>
-      </Box>
-    </>
-  );
+    const baseData = {
+      icon: iconMap[tx.type],
+      label: getLabel(),
+      type: tx.type,
+      items: []
+    }
 
-  const getMarginUpdateTransactionContent = (tx: MarginUpdateTransaction) => (
-    <>
-      <Box sx={cellStyles}>
-        <Icon name='tx-margin-update' sx={iconStyles} />
-      </Box>
-      <Box sx={cellStyles}>
-        <Typography variant='body2'>MARGIN UPDATE</Typography>
-      </Box>
-      <Box sx={cellStyles}>
-        <Typography variant='body2' sx={labelStyles}>margin delta</Typography>
-        <Typography variant='body2'>
-          {formatCurrency(JSBI.toNumber(tx.marginDelta) / Math.pow(10, 18))} {token}
-        </Typography>
-      </Box>
-    </>
-  );
-
-  const getSettlementTransactionContent = (tx: SettlementTransaction | FCMSettlementTransaction) => (
-    <>
-      <Box sx={cellStyles}>
-        <Icon name='tx-settle' sx={iconStyles} />
-      </Box>
-      <Box sx={cellStyles}>
-        <Typography variant='body2'>SETTLE</Typography>
-      </Box>
-      <Box sx={cellStyles}>
-        <Typography variant='body2' sx={labelStyles}>cashflow</Typography>
-        <Typography variant='body2'>
-          {JSBI.GT(tx.settlementCashflow, 0) && '+'}
-          {formatCurrency(JSBI.toNumber(tx.settlementCashflow) / Math.pow(10, 18))} {token}
-        </Typography>
-      </Box>
-    </>
-  );
-
-  const getSwapTransactionContent = (tx: SwapTransaction | FCMSwapTransaction) => (
-    <>
-      <Box sx={cellStyles}>
-        <Icon name='tx-swap' sx={iconStyles} />
-      </Box>
-      <Box sx={cellStyles}>
-        <Typography variant='body2'>SWAP</Typography>
-      </Box>
-      <Box sx={cellStyles}>
-        <Typography variant='body2' sx={labelStyles}>notional</Typography>
-        <Typography variant='body2'>
-          {formatCurrency(JSBI.toNumber(tx.desiredNotional) / Math.pow(10, 18))} {token}
-        </Typography>
-      </Box>
-      <Box sx={cellStyles}>
-        <Typography variant='body2' sx={labelStyles}>avg fix</Typography>
-        <Typography variant='body2'>
-          {formatCurrency(JSBI.toNumber(tx.fixedTokenDelta) / Math.pow(10, 18))} %
-        </Typography>
-      </Box>
-      <Box sx={cellStyles}>
-        <Typography variant='body2' sx={labelStyles}>fees</Typography>
-        <Typography variant='body2'>
-          {formatCurrency(JSBI.toNumber(tx.cumulativeFeeIncurred) / Math.pow(10, 18))} {token}
-        </Typography>
-      </Box>
-    </>
-  );
-
-  const getUnwindTransactionContent = (tx: FCMUnwindTransaction) => (
-    <>
-      <Box sx={cellStyles}>
-        <Icon name='tx-swap' sx={iconStyles} />
-      </Box>
-      <Box sx={cellStyles}>
-        <Typography variant='body2'>UNWIND</Typography>
-      </Box>
-      <Box sx={cellStyles}>
-        <Typography variant='body2' sx={labelStyles}>notional</Typography>
-        <Typography variant='body2'>
-          {formatCurrency(JSBI.toNumber(tx.desiredNotional) / Math.pow(10, 18))} {token}
-        </Typography>
-      </Box>
-      <Box sx={cellStyles}>
-        <Typography variant='body2' sx={labelStyles}>avg fix</Typography>
-        <Typography variant='body2'>
-          {formatCurrency(JSBI.toNumber(tx.fixedTokenDelta) / Math.pow(10, 18))} %
-        </Typography>
-      </Box>
-      <Box sx={cellStyles}>
-        <Typography variant='body2' sx={labelStyles}>fees</Typography>
-        <Typography variant='body2'>
-          {formatCurrency(JSBI.toNumber(tx.cumulativeFeeIncurred) / Math.pow(10, 18))} {token}
-        </Typography>
-      </Box>
-    </>
-  );
-
-  const getTransactionContent = (tx: TraderPositionTransaction | FCMPositionTransaction | LPPositionTransaction) => {
     switch(tx.type) {
       case TransactionType.SWAP:
       case TransactionType.FCM_SWAP:
-        return getSwapTransactionContent(tx);
+      case TransactionType.FCM_UNWIND:
+        return {
+          ...baseData,
+          items: [
+            {
+              label: 'notional', 
+              value: `${formatCurrency(JSBI.toNumber(tx.desiredNotional) / Math.pow(10, 18))} ${token}`
+            },
+            {
+              label: 'avg fix', 
+              value: `${formatCurrency(JSBI.toNumber(tx.fixedTokenDelta) / Math.pow(10, 18))} %`
+            },
+            {
+              label: 'fees', 
+              value: `${formatCurrency(JSBI.toNumber(tx.cumulativeFeeIncurred) / Math.pow(10, 18))} ${token}`
+            },
+          ]
+        }
+
       case TransactionType.SETTLEMENT:
       case TransactionType.FCM_SETTLEMENT:
-        return getSettlementTransactionContent(tx);
+        return {
+          ...baseData,
+          items: [
+            {
+              label: 'cashflow', 
+              value: `${formatCurrency(JSBI.toNumber(tx.settlementCashflow) / Math.pow(10, 18), false, true)} ${token}`
+            },
+          ]
+        }
+
       case TransactionType.MARGIN_UPDATE:
-        return getMarginUpdateTransactionContent(tx);
+        return {
+          ...baseData,
+          items: [
+            {
+              label: 'margin delta', 
+              value: `${formatCurrency(JSBI.toNumber(tx.marginDelta) / Math.pow(10, 18))} ${token}`
+            },
+          ]
+        }
+
       case TransactionType.LIQUIDATION:
-        return getLiquidationTransactionContent(tx);
-      case TransactionType.FCM_UNWIND:
-        return getUnwindTransactionContent(tx);
+        return {
+          ...baseData,
+          items: [
+            {
+              label: 'unwound', 
+              value: `${formatCurrency(JSBI.toNumber(tx.notionalUnwound) / Math.pow(10, 18))} ${token}`
+            },
+            {
+              label: 'cashflow', 
+              value: `${formatCurrency(JSBI.toNumber(tx.reward) / Math.pow(10, 18), false, true)} ${token}`
+            },
+          ]
+        }
+
       case TransactionType.MINT:
-        return getMintTransactionContent(tx);
       case TransactionType.BURN:
-        return getBurnTransactionContent(tx);
+        return {
+          ...baseData,
+          items: [
+            {
+              label: 'notional', 
+              value: `${formatCurrency(JSBI.toNumber(tx.amount) / Math.pow(10, 18))} ${token}`
+            }
+          ]
+        }
+
       default:
-        return null;
+        return baseData;
     }
   }
+
+  const data = getTransactionData(transaction);
+  const isLiquidation = transaction.type === TransactionType.LIQUIDATION;
 
   return (
     <ListItem sx={rowStyles}>
@@ -239,7 +165,22 @@ const TransactionListItem = ({ token, transaction }: TransactionListItemProps) =
           {formatTimestamp(transaction.transactionTimestamp)}
         </Typography>
       </Box>
-      {getTransactionContent(transaction)}
+      <Box sx={cellStyles}>
+        <Icon name={data.icon} sx={iconStyles} />
+      </Box>
+      <Box sx={cellStyles}>
+        <Typography variant='body2' sx={isLiquidation ? {color: colors.vzCustomRed1} : undefined}>
+          {data.label}
+        </Typography>
+      </Box>
+      {data.items.map(item => (
+        <Box sx={cellStyles} key={item.label}>
+          <Typography variant='body2' sx={labelStyles}>{item.label}</Typography>
+          <Typography variant='body2' sx={isLiquidation ? {color: colors.vzCustomRed1} : undefined}>
+            {item.value}
+          </Typography>
+        </Box>
+      ))}
     </ListItem>
   );
 }
