@@ -1,15 +1,17 @@
 import React from 'react';
-import { FCMPositionTransaction, TraderPositionTransaction, TransactionType, LPPositionTransaction} from './types';
+import { FCMPositionTransaction, TraderPositionTransaction, TransactionType, LPPositionTransaction } from './types';
 import { Box, ListItem } from '@mui/material';
 import { SystemStyleObject, Theme } from '@mui/system';
 import { Icons, Typography } from '@components/atomic';
 import colors from '../../../theme/colors';
-import { formatCurrency, formatTimestamp } from '@utilities';
+import { formatCurrency, formatNumber, formatTimestamp } from '@utilities';
 import { Icon } from '@components/atomic';
 import JSBI from 'jsbi';
+import { Position } from '@voltz-protocol/v1-sdk';
+import { BigNumber } from 'ethers';
 
 interface TransactionListItemProps {
-  token?: string;
+  position: Position;
   transaction: TraderPositionTransaction | FCMPositionTransaction | LPPositionTransaction;
 }
 
@@ -43,7 +45,17 @@ const iconStyles: SystemStyleObject<Theme> = {
   height: '16px'
 };
 
-const TransactionListItem = ({ token = '', transaction }: TransactionListItemProps) => {
+const TransactionListItem = ({ position, transaction }: TransactionListItemProps) => {
+  const token = position.amm.underlyingToken.name || '';
+
+  const getDescaledValue = (num: JSBI) => {
+    return position.amm.descale(BigNumber.from(num.toString()))
+  }
+
+  const getAvgFix = (fixedTokenDeltaUnbalanced: JSBI, variableTokenDelta: JSBI) => {
+    return JSBI.toNumber(JSBI.divide(JSBI.multiply(fixedTokenDeltaUnbalanced, JSBI.BigInt(1000)), variableTokenDelta)) / 1000;
+  }
+
   const getTransactionData = (tx: TransactionListItemProps['transaction']) => {
     const iconMap:Record<TransactionType, Icons> = {
       [TransactionType.BURN]: 'tx-burn',
@@ -87,15 +99,15 @@ const TransactionListItem = ({ token = '', transaction }: TransactionListItemPro
           items: [
             {
               label: 'notional', 
-              value: `${formatCurrency(JSBI.toNumber(tx.desiredNotional) / Math.pow(10, 18))} ${token}`
+              value: `${formatCurrency(getDescaledValue(tx.desiredNotional))} ${token}`
             },
             {
               label: 'avg fix', 
-              value: `${formatCurrency(JSBI.toNumber(tx.fixedTokenDelta) / Math.pow(10, 18))} %`
+              value: `${formatNumber(getAvgFix(tx.fixedTokenDeltaUnbalanced, tx.variableTokenDelta))} %`
             },
             {
               label: 'fees', 
-              value: `${formatCurrency(JSBI.toNumber(tx.cumulativeFeeIncurred) / Math.pow(10, 18))} ${token}`
+              value: `${formatCurrency(getDescaledValue(tx.cumulativeFeeIncurred))} ${token}`
             },
           ]
         }
@@ -107,7 +119,7 @@ const TransactionListItem = ({ token = '', transaction }: TransactionListItemPro
           items: [
             {
               label: 'cashflow', 
-              value: `${formatCurrency(JSBI.toNumber(tx.settlementCashflow) / Math.pow(10, 18), false, true)} ${token}`
+              value: `${formatCurrency(getDescaledValue(tx.settlementCashflow), false, true)} ${token}`
             },
           ]
         }
@@ -118,7 +130,7 @@ const TransactionListItem = ({ token = '', transaction }: TransactionListItemPro
           items: [
             {
               label: 'margin delta', 
-              value: `${formatCurrency(JSBI.toNumber(tx.marginDelta) / Math.pow(10, 18))} ${token}`
+              value: `${formatCurrency(getDescaledValue(tx.marginDelta))} ${token}`
             },
           ]
         }
@@ -129,11 +141,11 @@ const TransactionListItem = ({ token = '', transaction }: TransactionListItemPro
           items: [
             {
               label: 'unwound', 
-              value: `${formatCurrency(JSBI.toNumber(tx.notionalUnwound) / Math.pow(10, 18))} ${token}`
+              value: `${formatCurrency(getDescaledValue(tx.notionalUnwound))} ${token}`
             },
             {
               label: 'cashflow', 
-              value: `${formatCurrency(JSBI.toNumber(tx.reward) / Math.pow(10, 18), false, true)} ${token}`
+              value: `${formatCurrency(getDescaledValue(tx.reward), false, true)} ${token}`
             },
           ]
         }
@@ -145,7 +157,7 @@ const TransactionListItem = ({ token = '', transaction }: TransactionListItemPro
           items: [
             {
               label: 'notional', 
-              value: `${formatCurrency(JSBI.toNumber(tx.amount) / Math.pow(10, 18))} ${token}`
+              value: `${formatCurrency(getDescaledValue(tx.amount))} ${token}`
             }
           ]
         }

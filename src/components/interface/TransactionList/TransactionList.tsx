@@ -2,7 +2,7 @@ import React from 'react';
 import { Position } from '@voltz-protocol/v1-sdk';
 import { FCMPositionTransaction, LPPositionTransaction, TraderPositionTransaction, TransactionType } from './types';
 import { List } from '@mui/material';
-import { SystemStyleObject, Theme } from '@mui/system';
+import { borderRadius, SystemStyleObject, Theme } from '@mui/system';
 import TransactionListItem from './TransactionListItem';
 import colors from '../../../theme/colors';
 import JSBI from 'jsbi';
@@ -52,17 +52,14 @@ const TransactionList = ({ position }: TransactionListProps) => {
     width: '100%', 
     padding: (theme) => `0 ${theme.spacing(4)}`,
     background: colors.lavenderWeb.darken040,
-    boxSizing: 'border-box'
+    boxSizing: 'border-box',
+    borderRadius: `8px`,
   }
 
   return (
     <List sx={listStyles}>
       {transactions.map(tx => (
-        <TransactionListItem 
-          transaction={tx} 
-          token={position.amm.underlyingToken.name} 
-          key={tx.id}
-        />
+        <TransactionListItem position={position} transaction={tx} key={tx.id} />
       ))}
     </List>
   )

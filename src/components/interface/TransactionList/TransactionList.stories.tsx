@@ -4,18 +4,22 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import TransactionList from './TransactionList';
 import { Position } from '@voltz-protocol/v1-sdk';
 import JSBI from 'jsbi';
+import { BigNumber } from 'ethers';
 
 export default {
   title: 'Interface/TransactionList',
   component: TransactionList,
-  args: {
-    data: [],
-  },
+  args: {},
 } as ComponentMeta<typeof TransactionList>;
 
 const Template: ComponentStory<typeof TransactionList> = (args) => (
   <TransactionList {...args} />
 );
+
+const descale = (num: BigNumber) => {
+  const output = num.div(BigNumber.from('10').pow(16));
+  return output.toNumber() / 100;
+};
 
 export const FixedPosition = Template.bind({});
 FixedPosition.args = {
@@ -23,6 +27,7 @@ FixedPosition.args = {
     source: 'ME',
     positionType: 1,
     amm: {
+      descale,
       underlyingToken: {
         name: 'GIL'
       }
@@ -32,7 +37,7 @@ FixedPosition.args = {
         id: 1,
         transactionTimestamp: JSBI.BigInt(1651574608),
         desiredNotional: JSBI.BigInt(1053848420000000000000000),
-        fixedTokenDelta: JSBI.BigInt(3550000000000000000),
+        fixedTokenDeltaUnbalanced: JSBI.BigInt(3550000000000000000),
         cumulativeFeeIncurred: JSBI.BigInt(15340000000000000000),
         variableTokenDelta: JSBI.BigInt(-15340000000000000000),
       }
@@ -68,6 +73,7 @@ VariablePosition.args = {
     source: 'ME',
     positionType: 2,
     amm: {
+      descale,
       underlyingToken: {
         name: 'GIL'
       }
@@ -77,7 +83,7 @@ VariablePosition.args = {
         id: 1,
         transactionTimestamp: JSBI.BigInt(1651574608),
         desiredNotional: JSBI.BigInt(1053848420000000000000000),
-        fixedTokenDelta: JSBI.BigInt(3550000000000000000),
+        fixedTokenDeltaUnbalanced: JSBI.BigInt(3550000000000000000),
         cumulativeFeeIncurred: JSBI.BigInt(15340000000000000000),
         variableTokenDelta: JSBI.BigInt(15340000000000000000),
       }
@@ -112,6 +118,7 @@ FCMPosition.args = {
   position: {
     source: 'FCM',
     amm: {
+      descale,
       underlyingToken: {
         name: 'GIL'
       }
@@ -121,8 +128,9 @@ FCMPosition.args = {
         id: 1,
         transactionTimestamp: JSBI.BigInt(1651574608),
         desiredNotional: JSBI.BigInt(1053848420000000000000000),
-        fixedTokenDelta: JSBI.BigInt(3550000000000000000),
+        fixedTokenDeltaUnbalanced: JSBI.BigInt(3550000000000000000),
         cumulativeFeeIncurred: JSBI.BigInt(15340000000000000000),
+        variableTokenDelta: JSBI.BigInt(15340000000000000000),
       }
     ],
     fcmUnwinds: [
@@ -130,8 +138,9 @@ FCMPosition.args = {
         id: 2,
         transactionTimestamp: JSBI.BigInt(1621574608),
         desiredNotional: JSBI.BigInt(1053848420000000000000000),
-        fixedTokenDelta: JSBI.BigInt(3550000000000000000),
+        fixedTokenDeltaUnbalanced: JSBI.BigInt(3550000000000000000),
         cumulativeFeeIncurred: JSBI.BigInt(15340000000000000000),
+        variableTokenDelta: JSBI.BigInt(15340000000000000000),
       }
     ],
     fcmSettlements: [
@@ -150,6 +159,7 @@ LPPosition.args = {
     source: 'ME',
     positionType: 3,
     amm: {
+      descale,
       underlyingToken: {
         name: 'GIL'
       }
