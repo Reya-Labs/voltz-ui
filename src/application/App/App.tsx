@@ -1,10 +1,9 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 import { routes } from '@routes';
-import { LiquidityProvider, Trader, TrmPOST } from './components';
+import { LiquidityProvider, Trader } from './components';
 
 const App = () => (
-  <>
    <Routes>
     <Route path="/">
       <Route index element={<Navigate to={routes.SWAP} />} />
@@ -14,9 +13,6 @@ const App = () => (
       <Route path={routes.LP_FARM} element={<LiquidityProvider />} />
     </Route>
   </Routes>
-  
-  <TrmPOST/> 
-   </>
 );
 
 export default App;
