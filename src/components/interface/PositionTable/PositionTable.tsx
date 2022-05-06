@@ -14,7 +14,6 @@ import { lpLabels } from './constants';
 import { traderLabels } from './constants';
 import { mapPositionToPositionTableDatum } from './utilities';
 import {
-  PositionTableControls,
   PositionTableFooter,
   PositionTableHead,
   PositionTableRow,
@@ -97,7 +96,6 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
 
   return (
     <Panel variant="dark" borderRadius='large' padding='container' sx={{ minWidth: 800, marginTop: 10, paddingBottom: 0 }}>
-      <PositionTableControls quantity={positions.length} />
       <TableContainer>
         <Table
           sx={{
