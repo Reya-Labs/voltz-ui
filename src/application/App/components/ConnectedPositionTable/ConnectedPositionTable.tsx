@@ -28,7 +28,7 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
   const [orderBy, setOrderBy] = useState<PositionTableFields>('maturity');
   const [page, setPage] = useState(0);
   const [size, setSize] = useState<number | null>(null);
-  const { positionsByAgent, loading, error } = usePositions();
+  const { positionsByAgentGroup, loading, error } = usePositions();
   const pages = 0;
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
@@ -61,7 +61,7 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
     return null;
   }
 
-  if (!positionsByAgent) {
+  if (!positionsByAgentGroup) {
     return (
       <Panel variant='dark' sx={{textAlign: 'center', marginTop: 10 }}>
         <Panel variant='main' sx={{
@@ -79,7 +79,7 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
 
   return (
     <PositionTable
-      positions={positionsByAgent}
+      positions={positionsByAgentGroup}
       order={order}
       onSetOrder={setOrder}
       orderBy={orderBy}
