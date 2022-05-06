@@ -6,14 +6,14 @@ import { Position } from '@voltz-protocol/v1-sdk';
 
 import { AugmentedAMM } from '@utilities';
 import { Agents } from '@components/contexts';
+import { PageTitleDesc } from '@components/composite';
+import { Panel } from '@components/atomic';
 import { useAgent } from '@hooks';
 import { routes } from '@routes';
-import { Typography, Button } from '@components/atomic';
 import { Page } from '@components/interface';
 import ConnectedAMMTable from '../ConnectedAMMTable/ConnectedAMMTable';
 import ConnectedPositionTable from '../ConnectedPositionTable/ConnectedPositionTable';
 import { ConnectedSwapForm } from './components';
-import PageTitleDesc from 'src/components/interface/Page/PageTitleDesc/PageTitleDesc';
 
 const Trader: React.FunctionComponent = () => {
   const [formActive, setFormActive] = useState(false);
@@ -41,19 +41,6 @@ const Trader: React.FunctionComponent = () => {
     handleReset();
   }, [key]);
 
-  const pageTitle = useMemo(() => {
-    switch (pathnameWithoutPrefix) {
-      case routes.SWAP:
-        return 'Trade Fixed or Variable Rates';
-
-      case routes.PORTFOLIO:
-        return 'PORTFOLIO SUMMARY';
-
-      default:
-        return '';
-    }
-  }, [pathnameWithoutPrefix]);
-
   const handleSelectAmm = (selected: AugmentedAMM) => {
     setFormActive(true);
     setAMM(selected);
@@ -72,30 +59,25 @@ const Trader: React.FunctionComponent = () => {
 
   return (
     <Page backgroundView={formActive ? 'form' : 'table'}>
-      <Box sx={{ width: '100%', maxWidth: '900px', margin: '0 auto' }}>
+      <Box sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
         {!formActive && (
-          <Box sx={{ height: '100%' }}>
-            <PageTitleDesc 
-              title={pageTitle} 
-              desc='Choose a pool and decide whether to trade fixed or variable rates.' 
-            />
-            {/* todo: bring this back once we have content for traders to link */}
-            {/* {pathnameWithoutPrefix === routes.SWAP && (
-              <Button
-                variant="text"
-                size="large"
-                sx={{ marginBottom: (theme) => theme.spacing(8) }}
-                link={`/${routes.POOLS}`}
-              >
-                PROVIDE LIQUIDITY
-              </Button>
-            )} */}
+          <>
             {pathnameWithoutPrefix === routes.SWAP ? (
-              <ConnectedAMMTable onSelectItem={handleSelectAmm} />
+              <>
+                <Box sx={{ marginBottom: (theme) => theme.spacing(12) }}>
+                  <PageTitleDesc 
+                    title='Trade Fixed or Variable Rates' 
+                    desc='Choose a pool and decide whether to trade fixed or variable rates.' 
+                  />
+                </Box>
+                <ConnectedAMMTable onSelectItem={handleSelectAmm} />
+              </>
             ) : (
-              <ConnectedPositionTable onSelectItem={handleSelectPosition} agent={Agents.FIXED_TRADER}/> // Agents.FIXED_TRADER by convention, Agents.VARIABLE_TRADER would also work 
+              <Panel variant='dark'>
+                <ConnectedPositionTable onSelectItem={handleSelectPosition} agent={Agents.FIXED_TRADER}/>
+              </Panel>
             )}
-          </Box>
+          </>
         )}
 
         {formActive && !isNull(effectiveAmm) && (

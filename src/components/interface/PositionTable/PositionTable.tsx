@@ -95,48 +95,46 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   }
 
   return (
-    <Panel variant="dark" borderRadius='large' padding='container' sx={{ minWidth: 800, marginTop: 10, paddingBottom: 0 }}>
-      <TableContainer>
-        <Table
-          sx={{
-            minWidth: 750,
-            borderCollapse: 'separate',
-            borderSpacing: '0px 16px',
-            ...commonOverrides,
-          }}
-          aria-labelledby="tableTitle"
-          size="medium"
-        >
-          <PositionTableHead order={order} orderBy={orderBy} onSort={handleSort} agent={agent} />
-          <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
-            {tableData.map((datum, index) => (
-              <AMMProvider amm={(positions[index].amm as AugmentedAMM)}>
-                <PositionTableRow
-                  key={datum.id}
-                  datum={datum}
-                  index={index}
-                  onSelect={(mode: 'margin' | 'liquidity') => handleSelectRow(index, mode)}
-                  handleSettle={() => handleSettle(positions[index])}
-                />
-                <TableRow>
-                  <TableCell colSpan={agent === Agents.LIQUIDITY_PROVIDER ? 6 : 4}>
-                    <TransactionList position={positions[index]} />
-                  </TableCell>
-                </TableRow>
-              </AMMProvider>
-            ))}
-          </TableBody>
-          <PositionTableFooter
-            columns={labels.length + 1}
-            pages={pages}
-            page={page}
-            onChangePage={onSetPage}
-            size={size}
-            onChangeSize={onSetSize}
-          />
-        </Table>
-      </TableContainer>
-    </Panel>
+    <TableContainer>
+      <Table
+        sx={{
+          minWidth: 750,
+          borderCollapse: 'separate',
+          borderSpacing: '0px 16px',
+          ...commonOverrides,
+        }}
+        aria-labelledby="tableTitle"
+        size="medium"
+      >
+        <PositionTableHead order={order} orderBy={orderBy} onSort={handleSort} agent={agent} />
+        <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
+          {tableData.map((datum, index) => (
+            <AMMProvider amm={(positions[index].amm as AugmentedAMM)}>
+              <PositionTableRow
+                key={datum.id}
+                datum={datum}
+                index={index}
+                onSelect={(mode: 'margin' | 'liquidity') => handleSelectRow(index, mode)}
+                handleSettle={() => handleSettle(positions[index])}
+              />
+              <TableRow>
+                <TableCell colSpan={agent === Agents.LIQUIDITY_PROVIDER ? 6 : 4}>
+                  <TransactionList position={positions[index]} />
+                </TableCell>
+              </TableRow>
+            </AMMProvider>
+          ))}
+        </TableBody>
+        <PositionTableFooter
+          columns={labels.length + 1}
+          pages={pages}
+          page={page}
+          onChangePage={onSetPage}
+          size={size}
+          onChangeSize={onSetSize}
+        />
+      </Table>
+    </TableContainer>
   );
 };
 

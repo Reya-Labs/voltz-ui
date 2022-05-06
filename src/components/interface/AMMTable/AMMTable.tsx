@@ -78,7 +78,7 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({
   const _variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'dark';
 
   return (
-    <Panel variant={_variant} borderRadius='large' padding='container' sx={{ minWidth: 800, marginTop: 10, paddingTop: 0, paddingBottom: 0 }}>
+    <Panel variant={_variant} borderRadius='large' padding='container' sx={{ minWidth: 800, paddingTop: 0, paddingBottom: 0 }}>
       <TableContainer>
         <Table
           sx={{

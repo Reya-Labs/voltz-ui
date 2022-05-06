@@ -9,10 +9,11 @@ import { Agents } from '@components/contexts';
 import { useAgent } from '@hooks';
 import { routes } from '@routes';
 import { Page } from '@components/interface';
+import { Panel } from '@components/atomic';
+import { PageTitleDesc } from '@components/composite';
 import ConnectedAMMTable from '../ConnectedAMMTable/ConnectedAMMTable';
 import ConnectedPositionTable from '../ConnectedPositionTable/ConnectedPositionTable';
 import { ConnectedMintBurnForm } from './components';
-import PageTitleDesc from 'src/components/interface/Page/PageTitleDesc/PageTitleDesc';
 
 const LiquidityProvider: React.FunctionComponent = () => {
   const [formActive, setFormActive] = useState(false);
@@ -50,19 +51,6 @@ const LiquidityProvider: React.FunctionComponent = () => {
     handleReset();
   }, [key]);
 
-  const pageTitle = useMemo(() => {
-    switch (pathnameWithoutPrefix) {
-      case routes.POOLS:
-        return 'Provide Liquidity';
-
-      case routes.LP_FARM:
-        return 'YOUR LP POSITIONS';
-
-      default:
-        return '';
-    }
-  }, [pathnameWithoutPrefix]);
-
   const handleSelectAmm = (selected: AugmentedAMM) => {
     setFormActive(true);
     setAMM(selected);
@@ -83,20 +71,25 @@ const LiquidityProvider: React.FunctionComponent = () => {
 
   return (
     <Page backgroundView={formActive ? 'form' : 'table'}>
-      <Box sx={{ width: '100%', maxWidth: '900px', margin: '0 auto' }}>
+      <Box sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
         {!formActive && ( //if form not active then
-          <Box sx={{ height: '100%' }}>
-            <PageTitleDesc 
-              title={pageTitle} 
-              desc='Choose a pool and provide liquidity within your chosen ranges.' 
-            />
-
+          <>
             {pathnameWithoutPrefix === routes.POOLS ? (
-              <ConnectedAMMTable onSelectItem={handleSelectAmm} />
+              <>
+                <Box sx={{ marginBottom: (theme) => theme.spacing(12) }}>
+                  <PageTitleDesc 
+                    title='Provide Liquidity' 
+                    desc='Choose a pool and provide liquidity within your chosen ranges.' 
+                  />
+                </Box>
+                <ConnectedAMMTable onSelectItem={handleSelectAmm} />
+              </>
             ) : (
-              <ConnectedPositionTable amm={effectiveAmm} onSelectItem={handleSelectPosition}  agent={Agents.LIQUIDITY_PROVIDER} />
+              <Panel variant='dark'>
+                <ConnectedPositionTable amm={effectiveAmm} onSelectItem={handleSelectPosition}  agent={Agents.LIQUIDITY_PROVIDER} />
+              </Panel>
             )}
-          </Box>
+          </>
         )}
 
         {formActive && !isNull(effectiveAmm) && (

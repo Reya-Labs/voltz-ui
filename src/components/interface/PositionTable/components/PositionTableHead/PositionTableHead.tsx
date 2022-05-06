@@ -31,13 +31,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({ or
     },
   };
 
-  let labels: [PositionTableFields, string][];
-  
-  if (agent === Agents.LIQUIDITY_PROVIDER) {
-    labels = lpLabels;
-  } else {
-    labels = traderLabels;
-  }
+  const labels = agent === Agents.LIQUIDITY_PROVIDER ? lpLabels : traderLabels;
 
   return (
     <TableHead>
@@ -59,7 +53,6 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({ or
             {/* </TableSortLabel> */}
           </TableCell>
         ))}
-        <TableCell align="left" padding="normal" sx={cellSx}></TableCell>
       </TableRow>
     </TableHead>
   );
