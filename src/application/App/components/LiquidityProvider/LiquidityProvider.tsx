@@ -30,6 +30,21 @@ const LiquidityProvider: React.FunctionComponent = () => {
     return (position?.amm as AugmentedAMM) || amm;
   }, [amm, position]);
 
+  const getRenderMode = () => {
+    if (!formActive) {
+      if (pathnameWithoutPrefix === routes.POOLS) {
+        return 'pools';
+      } else {
+        return 'portfolio';
+      }
+    }
+
+    if (formActive && !isNull(effectiveAmm)) {
+      return 'form'
+    }
+  };
+
+  const renderMode = getRenderMode();
   const marginEditMode = formActive && !isNull(effectiveAmm) && Boolean(position) && editMode === 'margin';
   const liquidityEditMode = formActive && !isNull(effectiveAmm) && Boolean(position) && editMode === 'liquidity';
 
@@ -38,7 +53,6 @@ const LiquidityProvider: React.FunctionComponent = () => {
   // console.log('liq edit mode', liquidityEditMode);
   // // eslint-disable-next-line
   // console.log('margin edit mode', marginEditMode);
-  
 
   useEffect(() => {
     setFormActive(false);
@@ -71,39 +85,35 @@ const LiquidityProvider: React.FunctionComponent = () => {
 
   return (
     <Page backgroundView={formActive ? 'form' : 'table'}>
-      <Box sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
-        {!formActive && ( //if form not active then
-          <>
-            {pathnameWithoutPrefix === routes.POOLS ? (
-              <>
-                <Box sx={{ marginBottom: (theme) => theme.spacing(12) }}>
-                  <PageTitleDesc 
-                    title='Provide Liquidity' 
-                    desc='Choose a pool and provide liquidity within your chosen ranges.' 
-                  />
-                </Box>
-                <ConnectedAMMTable onSelectItem={handleSelectAmm} />
-              </>
-            ) : (
-              <Panel variant='dark'>
-                <ConnectedPositionTable amm={effectiveAmm} onSelectItem={handleSelectPosition}  agent={Agents.LIQUIDITY_PROVIDER} />
-              </Panel>
-            )}
-          </>
-        )}
-
-        {formActive && !isNull(effectiveAmm) && (
-          <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
-            <ConnectedMintBurnForm 
-              amm={effectiveAmm} 
-              marginEditMode={marginEditMode}
-              liquidityEditMode={liquidityEditMode}
-              onReset={handleReset} 
-              position={position} 
-            /> 
+      {renderMode === 'pools' && (
+        <Box sx={{ width: '100%', maxWidth: '870px', margin: '0 auto' }}>
+          <Box sx={{ marginBottom: (theme) => theme.spacing(12) }}>
+            <PageTitleDesc 
+              title='Provide Liquidity' 
+              desc='Choose a pool and provide liquidity within your chosen ranges.' 
+            />
           </Box>
-        )}
-      </Box>
+          <ConnectedAMMTable onSelectItem={handleSelectAmm} />
+        </Box>
+      )}
+
+      {renderMode === 'portfolio' && (
+        <Panel variant='dark' sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
+          <ConnectedPositionTable amm={effectiveAmm} onSelectItem={handleSelectPosition}  agent={Agents.LIQUIDITY_PROVIDER} />
+        </Panel>
+      )}
+
+      {renderMode === 'form' && (
+        <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
+          <ConnectedMintBurnForm 
+            amm={effectiveAmm} 
+            marginEditMode={marginEditMode}
+            liquidityEditMode={liquidityEditMode}
+            onReset={handleReset} 
+            position={position} 
+          /> 
+        </Box>
+      )}
     </Page>
   );
 };

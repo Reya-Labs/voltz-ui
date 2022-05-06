@@ -27,6 +27,21 @@ const Trader: React.FunctionComponent = () => {
     return (position?.amm as AugmentedAMM) || amm;
   }, [amm, position]);
 
+  const getRenderMode = () => {
+    if (!formActive) {
+      if (pathnameWithoutPrefix === routes.SWAP) {
+        return 'pools';
+      } else {
+        return 'portfolio';
+      }
+    }
+
+    if (formActive && !isNull(effectiveAmm)) {
+      return 'form'
+    }
+  };
+
+  const renderMode = getRenderMode();
   const marginEditMode = formActive && !isNull(effectiveAmm) && !isNull(position);
   // const fcmMode = // How to make this depend on what is being clicked on the toggle button 
 
@@ -59,37 +74,34 @@ const Trader: React.FunctionComponent = () => {
 
   return (
     <Page backgroundView={formActive ? 'form' : 'table'}>
-      <Box sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
-        {!formActive && (
-          <>
-            {pathnameWithoutPrefix === routes.SWAP ? (
-              <>
-                <Box sx={{ marginBottom: (theme) => theme.spacing(12) }}>
-                  <PageTitleDesc 
-                    title='Trade Fixed or Variable Rates' 
-                    desc='Choose a pool and decide whether to trade fixed or variable rates.' 
-                  />
-                </Box>
-                <ConnectedAMMTable onSelectItem={handleSelectAmm} />
-              </>
-            ) : (
-              <Panel variant='dark'>
-                <ConnectedPositionTable onSelectItem={handleSelectPosition} agent={Agents.FIXED_TRADER}/>
-              </Panel>
-            )}
-          </>
-        )}
 
-        {formActive && !isNull(effectiveAmm) && (
-          <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
-            <ConnectedSwapForm 
-              amm={effectiveAmm} 
-              marginEditMode={marginEditMode} 
-              onReset={handleReset} 
+      {renderMode === 'pools' && (
+        <Box sx={{ width: '100%', maxWidth: '768px', margin: '0 auto' }}>
+          <Box sx={{ marginBottom: (theme) => theme.spacing(12) }}>
+            <PageTitleDesc 
+              title='Trade Fixed or Variable Rates' 
+              desc='Choose a pool and decide whether to trade fixed or variable rates.' 
             />
           </Box>
-        )}
-      </Box>
+          <ConnectedAMMTable onSelectItem={handleSelectAmm} />
+        </Box>
+      )}
+
+      {renderMode === 'portfolio' && (
+        <Panel variant='dark' sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
+          <ConnectedPositionTable onSelectItem={handleSelectPosition} agent={Agents.FIXED_TRADER}/>
+        </Panel>
+      )}
+
+      {renderMode === 'form' && (
+        <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
+          <ConnectedSwapForm 
+            amm={effectiveAmm} 
+            marginEditMode={marginEditMode} 
+            onReset={handleReset} 
+          />
+        </Box>
+      )}
     </Page>
   );
 };
