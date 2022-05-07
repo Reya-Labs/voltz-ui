@@ -38,7 +38,10 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     console.log("in effect...");
-    console.log(positionsByAgent);
+    console.log("agent", agent.toString());
+    console.log("error", error.toString());
+    console.log("loading", loading.toString());
+    console.log("position by agent:", positionsByAgent);
     if (!loading && !error && positionsByAgent) {
       setPositionInformationLoading(true);
       Promise.allSettled(positionsByAgent.map(p => p.amm.getPositionInformation(p)))
@@ -60,7 +63,7 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
     }
     console.log("exiting effect...");
     console.log();
-  }, [agent, error, loading]);
+  }, [agent, error, loading, !!positionsByAgent]);
   
   const handleSettle = useCallback(
     (position: Position) => {

@@ -1001,7 +1001,7 @@ var AMM = /** @class */ (function () {
                     case 2:
                         lastBlock = _e.sent();
                         _b = (_a = ethers_1.BigNumber).from;
-                        return [4 /*yield*/, this.provider.getBlock(lastBlock - 1)];
+                        return [4 /*yield*/, this.provider.getBlock(lastBlock - 4)];
                     case 3:
                         lastBlockTimestamp = _b.apply(_a, [(_e.sent()).timestamp]);
                         beforeMaturity = lastBlockTimestamp.lt(ethers_1.BigNumber.from(this.termEndTimestamp.toString()));

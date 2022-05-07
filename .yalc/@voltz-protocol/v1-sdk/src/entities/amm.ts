@@ -1043,7 +1043,7 @@ class AMM {
 
     const signerAddress = await this.signer.getAddress();
     const lastBlock = await this.provider.getBlockNumber();
-    const lastBlockTimestamp = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
+    const lastBlockTimestamp = BigNumber.from((await this.provider.getBlock(lastBlock - 4)).timestamp);
 
     const beforeMaturity = lastBlockTimestamp.lt(BigNumber.from(this.termEndTimestamp.toString()));
 
