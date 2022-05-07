@@ -38,29 +38,9 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
   
   const { agent } = useAgent();
   const variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'main';
-  const typeStyleOverrides = (): SystemStyleObject<Theme> => {
-    if (!variant) {
-      return {
-        backgroundColor: `primary.dark`,
-      };
-    }
-
-    switch (variant) {
-      case 'main':
-        return {
-          backgroundColor: `secondary.darken040`, // this affects the colour of the position rows in the trader positions
-          borderRadius: 2
-        };
-
-      case 'darker':
-        return {
-          backgroundColor: `secondary.darken050`, // this affects the colour of the positions rows in the LP positions 
-          borderRadius: 2
-        };
-
-      default:
-        return {};
-    }
+  const typeStyleOverrides: SystemStyleObject<Theme> = {
+    backgroundColor: `secondary.darken050`, // this affects the colour of the positions rows in the LP positions 
+    borderRadius: 2
   };
 
   let labels: [PositionTableFields, string][];
@@ -72,7 +52,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
   }
 
   return (
-    <TableRow key={index} sx={{ ...typeStyleOverrides() }}>
+    <TableRow key={index} sx={{ ...typeStyleOverrides }}>
       {labels.map(([field, label]) => {
         const renderDisplay = () => {
           const token = datum.protocol.substring(1);

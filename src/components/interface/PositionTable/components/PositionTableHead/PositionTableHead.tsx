@@ -1,60 +1,94 @@
 import React from 'react';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
 import { SystemStyleObject, Theme } from '@mui/system';
-
-import { data } from '@utilities';
-import { PositionTableFields } from '../../types';
-import { lpLabels } from '../../constants';
-import { traderLabels } from '../../constants';
-import { Agents } from '@components/contexts';
+import { Box } from '@mui/material';
+import { colors } from '@theme';
+import { formatCurrency, formatNumber } from '@utilities';
+import PositionBadge from '../PositionBadge';
+import { Typography } from 'src/components/atomic';
+import { isUndefined } from 'lodash';
 
 export type PositionTableHeadProps = {
-  order: data.TableOrder;
-  orderBy: PositionTableFields;
-  onSort: (field: PositionTableFields) => void;
-  agent: Agents;
+  currencyCode?: string;
+  currencySymbol?: string;
+  currentFixedRate?: number;
+  currentFixedRatePositive?: boolean;
+  fcmBadge?: boolean;
+  fees?: number;
+  feesPositive?: boolean;
+  positionType: number;
 };
 
-const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({ order, orderBy, onSort, agent }) => {
-  const createSortHandler = (field: PositionTableFields) => (_event: React.MouseEvent<unknown>) =>
-    onSort(field);
+const containerStyles: SystemStyleObject<Theme> = { 
+  display: 'flex', 
+  justifyContent: 'space-between', 
+  alignItems: 'center', 
+  padding: (theme) => `${theme.spacing(4)} 0`
+};
 
-  const cellSx: SystemStyleObject<Theme> = {
-    '&.MuiTableCell-root': {
-      borderBottom: 0,
-      padding: 0,
-      paddingLeft: (theme) => theme.spacing(4),
-      paddingRight: (theme) => theme.spacing(4),
-    },
+const labelStyles: SystemStyleObject<Theme> = { 
+  fontSize: '14px', 
+  lineHeight: '1', 
+  textTransform: 'uppercase'
+};
+
+const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
+  currencyCode = '',
+  currencySymbol = '',
+  currentFixedRate, 
+  currentFixedRatePositive = true, 
+  fcmBadge = false,
+  fees, 
+  feesPositive = true,
+  positionType,
+}) => {
+  const getPositionBadgeVariant = () => {
+    switch(positionType) {
+      case 1:
+        return 'FT';
+      case 2:
+        return 'VT';
+      case 3:
+        return 'LP';
+    }
   };
 
-  const labels = agent === Agents.LIQUIDITY_PROVIDER ? lpLabels : traderLabels;
+  const getTextColor = (positive: boolean) => {
+    return positive ? colors.vzCustomGreen1 : colors.vzCustomRed1;
+  }
 
   return (
-    <TableHead>
-      <TableRow>
-        {labels.map(([field, label]) => (
-          <TableCell
-            key={field}
-            align="left"
-            padding="normal"
-            sortDirection={orderBy === field ? order : false}
-            sx={cellSx}
-          >
-            {/* <TableSortLabel
-              active={orderBy === field}
-              direction={orderBy === field ? order : 'asc'}
-              onClick={createSortHandler(field)}
-            > */}
-              {label}
-            {/* </TableSortLabel> */}
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
+    <Box sx={containerStyles}>
+      <Box sx={{ display: 'flex' }}>
+        <PositionBadge variant={getPositionBadgeVariant()} />
+
+        {fcmBadge && (
+          <PositionBadge variant='FC' sx={{ marginLeft: (theme) => theme.spacing(2) }} />
+        )}
+
+        {!isUndefined(fees) && (
+          <Box sx={{ padding: (theme) => `${theme.spacing(1)} ${theme.spacing(2)}`, marginLeft: (theme) => theme.spacing(4) }}>
+            <Typography variant='body2' sx={{ ...labelStyles }}>
+              Fees: 
+              <Box component='span' sx={{ color: getTextColor(feesPositive) }}>
+                {' '}
+                {!feesPositive && '-'}
+                {currencySymbol}{formatCurrency(Math.abs(fees))}
+                {' '}
+                {currencyCode}
+              </Box>
+            </Typography>
+          </Box>
+        )}
+      </Box>
+
+      <Box sx={{ display: 'flex' }}>
+        {!isUndefined(currentFixedRate) && (
+          <Typography variant='body2' sx={{ ...labelStyles, color: getTextColor(currentFixedRatePositive) }}>
+            &bull; Current fixed rate: {formatNumber(currentFixedRate)}%
+          </Typography>
+        )}
+      </Box>
+    </Box>
   );
 };
 
