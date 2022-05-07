@@ -3,7 +3,7 @@ import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import { SystemStyleObject, Theme } from '@mui/system';
-import { Position } from '@voltz-protocol/v1-sdk';
+import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 
 import { AugmentedAMM, data } from '@utilities';
 import { useAgent } from '@hooks';
@@ -25,6 +25,7 @@ import { TableRow, TableCell } from '@mui/material';
 
 export type PositionTableProps = {
   positions: Position[];
+  positionInformation: PositionInfo[];
   order: data.TableOrder;
   onSetOrder: (order: data.TableOrder) => void;
   orderBy: PositionTableFields;
@@ -41,6 +42,7 @@ export type PositionTableProps = {
 
 const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   positions,
+  positionInformation,
   order,
   onSetOrder,
   orderBy,
@@ -94,6 +96,8 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   } else {
     labels = traderLabels;
   }
+  
+  console.log("positionInformation", positionInformation);
 
   return (
     <Panel variant="dark" borderRadius='large' padding='container' sx={{ minWidth: 800, marginTop: 10, paddingBottom: 0 }}>

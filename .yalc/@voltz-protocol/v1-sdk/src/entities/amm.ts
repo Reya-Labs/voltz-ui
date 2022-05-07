@@ -1042,7 +1042,8 @@ class AMM {
     };
 
     const signerAddress = await this.signer.getAddress();
-    let lastBlockTimestamp = BigNumber.from((await this.provider.getBlock("latest")).timestamp);
+    const lastBlock = await this.provider.getBlockNumber();
+    const lastBlockTimestamp = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
 
     const beforeMaturity = lastBlockTimestamp.lt(BigNumber.from(this.termEndTimestamp.toString()));
 
@@ -1096,26 +1097,28 @@ class AMM {
       results.margin = this.descale(rawPositionInfo.margin);
       results.fees = this.descale(rawPositionInfo.accumulatedFees);
 
-      try {
-        const liquidationThreshold = await marginEngineContract.callStatic.getPositionMarginRequirement(
-          signerAddress,
-          tickLower,
-          tickUpper,
-          true
-        );
-        results.liquidationThreshold = this.descale(liquidationThreshold);
-      } catch (_) { }
+      if (beforeMaturity) {
+        try {
+          const liquidationThreshold = await marginEngineContract.callStatic.getPositionMarginRequirement(
+            signerAddress,
+            tickLower,
+            tickUpper,
+            true
+          );
+          results.liquidationThreshold = this.descale(liquidationThreshold);
+        } catch (_) { }
 
-      try {
-        const safetyThreshold = await marginEngineContract.callStatic.getPositionMarginRequirement(
-          signerAddress,
-          tickLower,
-          tickUpper,
-          false
-        );
-        results.safetyThreshold = this.descale(safetyThreshold);
+        try {
+          const safetyThreshold = await marginEngineContract.callStatic.getPositionMarginRequirement(
+            signerAddress,
+            tickLower,
+            tickUpper,
+            false
+          );
+          results.safetyThreshold = this.descale(safetyThreshold);
+        }
+        catch (_) { }
       }
-      catch (_) { }
     }
 
     return results;

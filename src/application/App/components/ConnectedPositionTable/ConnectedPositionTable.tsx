@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { data } from '@utilities';
 import { usePositions } from '@hooks';
@@ -11,7 +12,6 @@ import { useDispatch } from '@hooks';
 import { AugmentedAMM } from '@utilities';
 import { routes } from '@routes';
 import { RouteLink } from '@components/atomic';
-import { useEffect } from '@storybook/addons';
 
 export type ConnectedAMMTableProps = {
   onSelectItem: (item: Position, mode: 'margin' | 'liquidity') => void;
@@ -21,8 +21,7 @@ export type ConnectedAMMTableProps = {
 
 const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = ({
   onSelectItem,
-  agent,
-  amm
+  agent
 }) => {
   const [order, setOrder] = useState<data.TableOrder>('desc');
   const [orderBy, setOrderBy] = useState<PositionTableFields>('maturity');
@@ -32,6 +31,36 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
   const pages = 0;
 
   const dispatch = useDispatch();
+
+  const [positionInformation, setPositionInformation] = useState<PositionInfo[]>([]);
+  const [positionInformationLoading, setPositionInformationLoading] = useState<boolean>(false);
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    console.log("in effect...");
+    console.log(positionsByAgent);
+    if (!loading && !error && positionsByAgent) {
+      setPositionInformationLoading(true);
+      Promise.allSettled(positionsByAgent.map(p => p.amm.getPositionInformation(p)))
+        .then((responses) => {
+          const pi = responses.map((r) => {
+            if (r.status === "rejected") {
+              throw new Error(r.status);
+            }
+            else {
+              return r.value;
+            }
+          });
+
+          console.log("pi");
+          setPositionInformation(pi);
+          setPositionInformationLoading(false);
+        })
+        .catch((err) => console.log(err));
+    }
+    console.log("exiting effect...");
+    console.log();
+  }, [agent, error, loading]);
   
   const handleSettle = useCallback(
     (position: Position) => {
@@ -52,7 +81,7 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
     },  [dispatch, agent],
   );
 
-  if(loading || error) {
+  if(loading || error || positionInformationLoading) {
     return null;
   }
 
@@ -72,18 +101,10 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
     )
   }
 
-  const [positionInformation, setPositionInformation] = useState<>();
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffect(() => {
-    for (const p of positionsByAgent) {
-      const positionInformation = p.amm.getPositionInformation(p);
-    }
-  }, []);
-
   return (
     <PositionTable
       positions={positionsByAgent}
+      positionInformation={positionInformation}
       order={order}
       onSetOrder={setOrder}
       orderBy={orderBy}
