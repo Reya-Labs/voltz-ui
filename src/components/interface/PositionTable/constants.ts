@@ -28,7 +28,7 @@ export const traderLabels: [PositionTableFields, string][] = [
   // ['fixedUpper', PositionTableLabels.fixedUpper],
   ['notional', PositionTableLabels.notional],
   ['margin', PositionTableLabels.margin],
-  // ['accruedRates', PositionTableLabels.accruedRates],
+  ['accruedRates', PositionTableLabels.accruedRates],
   // ['fixedApr', PositionTableLabels.fixedApr],
   ['maturity', PositionTableLabels.maturity],
 ];

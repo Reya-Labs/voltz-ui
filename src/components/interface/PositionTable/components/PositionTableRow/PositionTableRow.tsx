@@ -13,8 +13,10 @@ import React, { useEffect } from 'react';
 import { useAgent, useAMMContext } from '@hooks';
 import { DateTime } from 'luxon';
 import { isUndefined } from 'lodash';
+import { Position } from '@voltz-protocol/v1-sdk';
 
 export type PositionTableRowProps = {
+  position: Position;
   datum: PositionTableDatum;
   index: number;
   onSelect: (mode: 'margin' | 'liquidity') => void;
@@ -22,6 +24,7 @@ export type PositionTableRowProps = {
 };
 
 const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
+  position,
   datum,
   index,
   onSelect,
@@ -31,10 +34,8 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
   const { result: positionInfoResult, loading: loadingPositionInfo, call: callPositionInfo } = positionInfo;
 
   useEffect(() => {
-    if (!isUndefined(datum.source) && !isUndefined(datum.fixedLower) && !isUndefined(datum.fixedUpper)) {
-      callPositionInfo({ source: datum.source, tickLower: datum.fixedLower, tickUpper: datum.fixedUpper });
-    }
-  }, [callPositionInfo, datum]);
+    callPositionInfo({ position });
+  }, [callPositionInfo, position]);
   
   const { agent } = useAgent();
   const variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'main';
@@ -106,9 +107,27 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
           }
 
           if (field === 'accruedRates') {
+            const renderValue = () => {
+                if (loadingPositionInfo) {
+                  return 'Loading...';
+                }
+
+                if (!positionInfoResult) {
+                  return 'No data';
+                }
+                
+              if (positionInfoResult.variableRateSinceLastSwap && positionInfoResult.fixedRateSinceLastSwap) {
+                return `${positionInfoResult.fixedRateSinceLastSwap.toFixed(2)}% / ${positionInfoResult.variableRateSinceLastSwap.toFixed(2)}%`;
+              }
+              else {
+                return `- / -`;
+              }
+            
+            }
+          
             return (<TableCell align="center">
               <Typography variant="body2" label={label} sx={{ fontSize: 18 }}>
-                {datum.averageFixedRate}{"%"} 
+                {renderValue()}
               </Typography>
             </TableCell>);
           }
@@ -201,12 +220,8 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
               if (!datum.source) {
                 return 'Cannot get source of position';
               }
-
-              if (datum.source.includes("FCM")) {
-                return `${positionInfoResult.margin.toFixed(2)} ${datum.protocol}`;
-              }
               
-              return `${positionInfoResult.margin.toFixed(2)} ${token}`;
+              return `${positionInfoResult.margin.toFixed(2)} ${token} | cashflow: ${positionInfoResult.accruedCashflow.toFixed(2)} ${token}`;
             };
             return <CurrentMargin renderValue={renderValue} onSelect={ () => onSelect('margin') } />;
           }

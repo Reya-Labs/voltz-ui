@@ -1,17 +1,17 @@
-import { Position } from '@voltz-protocol/v1-sdk';
+import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 import React, { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { data } from '@utilities';
 import { usePositions } from '@hooks';
 import { PositionTable, PositionTableFields } from '@components/interface';
 import { Panel } from '@components/atomic';
 import { Agents } from '@components/contexts';
-import { actions, selectors, Transaction } from '@store';
-import { useAgent, useDispatch, useSelector } from '@hooks';
+import { actions } from '@store';
+import { useDispatch } from '@hooks';
 import { AugmentedAMM } from '@utilities';
 import { routes } from '@routes';
 import { RouteLink } from '@components/atomic';
+import { useEffect } from '@storybook/addons';
 
 export type ConnectedAMMTableProps = {
   onSelectItem: (item: Position, mode: 'margin' | 'liquidity') => void;
@@ -30,8 +30,6 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
   const [size, setSize] = useState<number | null>(null);
   const { positionsByAgent, loading, error } = usePositions();
   const pages = 0;
-  const [transactionId, setTransactionId] = useState<string | undefined>();
-  const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
 
   const dispatch = useDispatch();
   
@@ -49,13 +47,10 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
         fixedHigh: position.fixedRateUpper.toNumber()
       };
       const settlePosition = actions.settlePositionAction(positionAmm, transaction);
-      
-      setTransactionId(settlePosition.payload.transaction.id);
+    
       dispatch(settlePosition);
-    },  [setTransactionId, dispatch, agent, amm?.id],
+    },  [dispatch, agent],
   );
-
-  const navigate = useNavigate();
 
   if(loading || error) {
     return null;
@@ -76,6 +71,15 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
       </Panel>
     )
   }
+
+  const [positionInformation, setPositionInformation] = useState<>();
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    for (const p of positionsByAgent) {
+      const positionInformation = p.amm.getPositionInformation(p);
+    }
+  }, []);
 
   return (
     <PositionTable

@@ -5,6 +5,7 @@ import { BigNumber, BigNumberish, ContractReceipt, Signer } from 'ethers';
 import RateOracle from './rateOracle';
 import Token from './token';
 import { Price } from './fractions/price';
+import Position from './position';
 export declare type AMMConstructorArgs = {
     id: string;
     signer: Signer | null;
@@ -92,6 +93,9 @@ export declare type PositionInfo = {
     fees?: number;
     liquidationThreshold?: number;
     safetyThreshold?: number;
+    accruedCashflow: number;
+    variableRateSinceLastSwap?: number;
+    fixedRateSinceLastSwap?: number;
 };
 declare class AMM {
     readonly id: string;
@@ -134,7 +138,19 @@ declare class AMM {
     fixedApr(): Promise<number>;
     get protocol(): string;
     getVariableApy(): Promise<number>;
-    getPositionInformation(source: string, fixedRateLower: number, fixedRateUpper: number): Promise<PositionInfo>;
+    getAllSwaps(position: Position): {
+        fDelta: BigNumber;
+        vDelta: BigNumber;
+        timestamp: BigNumber;
+    }[];
+    getAccruedCashflow(allSwaps: {
+        fDelta: BigNumber;
+        vDelta: BigNumber;
+        timestamp: BigNumber;
+    }[], atMaturity: boolean): Promise<number>;
+    getPositionInformation(position: Position): Promise<PositionInfo>;
+    getVariableFactor(termStartTimestamp: BigNumber, termEndTimestamp: BigNumber): Promise<number>;
+    getApy(termStartTimestamp: BigNumber, termEndTimestamp: BigNumber): Promise<number>;
     closestTickAndFixedRate(fixedRate: number): ClosestTickAndFixedRate;
     getNextUsableFixedRate(fixedRate: number, count: number): number;
 }

@@ -30,4 +30,5 @@ export declare const MIN_FIXED_RATE = 0.001;
  * The maximum tick that can be used on any pool.
  */
 export declare const MAX_FIXED_RATE = 1001;
+export declare const ONE_YEAR_IN_SECONDS = 31536000;
 //# sourceMappingURL=constants.d.ts.map

@@ -114,6 +114,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
             {tableData.map((datum, index) => (
               <AMMProvider amm={(positions[index].amm as AugmentedAMM)}>
                 <PositionTableRow
+                  position = {positions[index]}
                   key={datum.id}
                   datum={datum}
                   index={index}
