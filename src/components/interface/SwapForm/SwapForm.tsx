@@ -254,7 +254,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         Cancel
       </Button>
     </Box>
-      )};
+      )}
   
     </Panel>
   );
