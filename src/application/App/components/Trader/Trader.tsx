@@ -6,14 +6,14 @@ import { Position } from '@voltz-protocol/v1-sdk';
 
 import { AugmentedAMM } from '@utilities';
 import { Agents } from '@components/contexts';
+import { PageTitleDesc } from '@components/composite';
+import { Panel } from '@components/atomic';
 import { useAgent } from '@hooks';
 import { routes } from '@routes';
-import { Typography, Button } from '@components/atomic';
 import { Page } from '@components/interface';
 import ConnectedAMMTable from '../ConnectedAMMTable/ConnectedAMMTable';
 import ConnectedPositionTable from '../ConnectedPositionTable/ConnectedPositionTable';
 import { ConnectedSwapForm } from './components';
-import PageTitleDesc from 'src/components/interface/Page/PageTitleDesc/PageTitleDesc';
 
 const Trader: React.FunctionComponent = () => {
   const [formActive, setFormActive] = useState(false);
@@ -27,6 +27,21 @@ const Trader: React.FunctionComponent = () => {
     return (position?.amm as AugmentedAMM) || amm;
   }, [amm, position]);
 
+  const getRenderMode = () => {
+    if (!formActive) {
+      if (pathnameWithoutPrefix === routes.SWAP) {
+        return 'pools';
+      } else {
+        return 'portfolio';
+      }
+    }
+
+    if (formActive && !isNull(effectiveAmm)) {
+      return 'form'
+    }
+  };
+
+  const renderMode = getRenderMode();
   const marginEditMode = formActive && !isNull(effectiveAmm) && !isNull(position);
   // const fcmMode = // How to make this depend on what is being clicked on the toggle button 
 
@@ -40,19 +55,6 @@ const Trader: React.FunctionComponent = () => {
   useEffect(() => {
     handleReset();
   }, [key]);
-
-  const pageTitle = useMemo(() => {
-    switch (pathnameWithoutPrefix) {
-      case routes.SWAP:
-        return 'Trade Fixed or Variable Rates';
-
-      case routes.PORTFOLIO:
-        return 'PORTFOLIO SUMMARY';
-
-      default:
-        return '';
-    }
-  }, [pathnameWithoutPrefix]);
 
   const handleSelectAmm = (selected: AugmentedAMM) => {
     setFormActive(true);
@@ -72,42 +74,34 @@ const Trader: React.FunctionComponent = () => {
 
   return (
     <Page backgroundView={formActive ? 'form' : 'table'}>
-      <Box sx={{ width: '100%', maxWidth: '900px', margin: '0 auto' }}>
-        {!formActive && (
-          <Box sx={{ height: '100%' }}>
+
+      {renderMode === 'pools' && (
+        <Box sx={{ width: '100%', maxWidth: '768px', margin: '0 auto' }}>
+          <Box sx={{ marginBottom: (theme) => theme.spacing(12) }}>
             <PageTitleDesc 
-              title={pageTitle} 
+              title='Trade Fixed or Variable Rates' 
               desc='Choose a pool and decide whether to trade fixed or variable rates.' 
             />
-            {/* todo: bring this back once we have content for traders to link */}
-            {/* {pathnameWithoutPrefix === routes.SWAP && (
-              <Button
-                variant="text"
-                size="large"
-                sx={{ marginBottom: (theme) => theme.spacing(8) }}
-                link={`/${routes.POOLS}`}
-              >
-                PROVIDE LIQUIDITY
-              </Button>
-            )} */}
-            {pathnameWithoutPrefix === routes.SWAP ? (
-              <ConnectedAMMTable onSelectItem={handleSelectAmm} />
-            ) : (
-              <ConnectedPositionTable onSelectItem={handleSelectPosition} agent={Agents.FIXED_TRADER}/> // Agents.FIXED_TRADER by convention, Agents.VARIABLE_TRADER would also work 
-            )}
           </Box>
-        )}
+          <ConnectedAMMTable onSelectItem={handleSelectAmm} />
+        </Box>
+      )}
 
-        {formActive && !isNull(effectiveAmm) && (
-          <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
-            <ConnectedSwapForm 
-              amm={effectiveAmm} 
-              marginEditMode={marginEditMode} 
-              onReset={handleReset} 
-            />
-          </Box>
-        )}
-      </Box>
+      {renderMode === 'portfolio' && (
+        <Panel variant='dark' sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
+          <ConnectedPositionTable onSelectItem={handleSelectPosition} agent={Agents.FIXED_TRADER}/>
+        </Panel>
+      )}
+
+      {renderMode === 'form' && (
+        <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
+          <ConnectedSwapForm 
+            amm={effectiveAmm} 
+            marginEditMode={marginEditMode} 
+            onReset={handleReset} 
+          />
+        </Box>
+      )}
     </Page>
   );
 };

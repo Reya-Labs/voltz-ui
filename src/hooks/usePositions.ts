@@ -12,6 +12,7 @@ import { FCMPositionFactory, MEPositionFactory } from '@factories';
 export type usePositionsResult = {
   positions?: Position[];
   positionsByAgent?: Position[];
+  positionsByAgentGroup?: Position[];
   loading: boolean;
   error: boolean;
 };
@@ -59,6 +60,16 @@ const usePositions = (): usePositionsResult => {
 
         case Agents.VARIABLE_TRADER:
           return positionType === 2;
+      }
+    });
+  }, [positions, agent]);
+
+  const positionsByAgentGroup = useMemo(() => {
+    return positions?.filter(({ positionType }) => {
+      if (agent === Agents.LIQUIDITY_PROVIDER) {
+        return positionType === 3;
+      } else {
+        return (positionType === 1 || positionType === 2);
       }
     });
   }, [positions, agent]);
@@ -119,7 +130,7 @@ const usePositions = (): usePositionsResult => {
     }
   }, [shouldTryToCloseTransactions, positions, dispatch]);
 
-  return { positions, positionsByAgent, loading, error };
+  return { positions, positionsByAgent, positionsByAgentGroup, loading, error };
 };
 
 export default usePositions;
