@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import { colors } from '@theme';
 import { formatCurrency, formatNumber } from '@utilities';
 import PositionBadge from '../PositionBadge';
-import { Typography } from 'src/components/atomic';
+import { Typography } from '@components/atomic';
 import { isUndefined } from 'lodash';
 
 export type PositionTableHeadProps = {

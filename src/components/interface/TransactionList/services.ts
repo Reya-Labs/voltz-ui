@@ -2,7 +2,7 @@ import { formatCurrency, formatNumber, formatTimestamp } from "@utilities";
 import { Position } from "@voltz-protocol/v1-sdk";
 import { BigNumber } from "ethers";
 import JSBI from "jsbi";
-import { Icons } from "src/components/atomic";
+import { Icons } from "@components/atomic";
 import { TransactionType, TraderPositionTransaction, LPPositionTransaction, FCMPositionTransaction } from "./types";
 
 /**
