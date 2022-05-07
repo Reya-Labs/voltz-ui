@@ -78,11 +78,10 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({
   const _variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'dark';
 
   return (
-    <Panel variant={_variant} borderRadius='large' padding='container' sx={{ minWidth: 800, paddingTop: 0, paddingBottom: 0 }}>
+    <Panel variant={_variant} borderRadius='large' padding='container' sx={{ paddingTop: 0, paddingBottom: 0 }}>
       <TableContainer>
         <Table
           sx={{
-            minWidth: 750,
             borderCollapse: 'separate',
             borderSpacing: '0px 16px',
             ...commonOverrides,

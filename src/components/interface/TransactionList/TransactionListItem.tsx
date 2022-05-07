@@ -53,15 +53,16 @@ const iconStyles: SystemStyleObject<Theme> = {
   height: '16px'
 };
 
-const openCloseStyles: SystemStyleObject<Theme> = {
-  color: colors.lavenderWeb.base, 
-  marginLeft: 'auto',
-  minWidth: 'auto'
-};
-
 const TransactionListItem = ({ listId, onOpenClose, open = false, position, transaction }: TransactionListItemProps) => {
   const data = getTransactionData(position, transaction);
   const isLiquidation = transaction.type === TransactionType.LIQUIDATION;
+
+  const openCloseStyles: SystemStyleObject<Theme> = {
+    color: colors.lavenderWeb.base, 
+    marginLeft: 'auto',
+    minWidth: 'auto',
+    paddingRight: open ? undefined : '0'
+  };
 
   return (
     <ListItem sx={rowStyles}>
