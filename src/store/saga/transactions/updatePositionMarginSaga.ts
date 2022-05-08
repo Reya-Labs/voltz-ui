@@ -3,7 +3,7 @@ import { call, put } from 'redux-saga/effects';
 import { DateTime } from 'luxon';
 import { getErrorMessage } from '@utilities';
 import { UpdatePositionMarginAction } from '../../types';
-import { deserializeAmm, getSigner } from '../../utilities';
+import { deserializeAmm, getSigner, postTransactionData, serializeAmm } from '../../utilities';
 import * as actions from '../../actions';
 import { isUndefined } from 'lodash';
 
@@ -21,8 +21,8 @@ function* updatePositionMarginSaga(action: UpdatePositionMarginAction) {
     return;
   }
 
-  const { id,  margin, fixedLow, fixedHigh } = action.payload.transaction;
-
+  const { id, margin, fixedLow, fixedHigh } = action.payload.transaction;
+  const ammInformation = serializeAmm(amm)
   if (isUndefined(fixedLow) || isUndefined(fixedHigh)) {
     return;
   }
@@ -32,12 +32,52 @@ function* updatePositionMarginSaga(action: UpdatePositionMarginAction) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     result = yield call(
       [amm, "updatePositionMargin"], {
-        marginDelta: margin,
-        fixedLow: fixedLow,
-        fixedHigh: fixedHigh,
+      marginDelta: margin,
+      fixedLow: fixedLow,
+      fixedHigh: fixedHigh,
+    });
+
+    //  CALLING API FOR TX MONITORING HERE
+    if (margin > 0) {
+      if (amm.signer) {
+        amm.signer.getAddress().then((signerAddress) => {
+          if (result) {
+            postTransactionData(
+              signerAddress,
+              ammInformation.rateOracle.token.name.toLowerCase(),
+              margin.toString(),
+              ammInformation.marginEngineAddress,
+              id,
+              result.transactionHash,
+              DateTime.now().toISO(),
+              'CRYPTO_DEPOSIT'
+            ).then()
+          }
+        })
       }
 
-    );
+    } else {
+      if (amm.signer) {
+        amm.signer.getAddress().then((signerAddress) => {
+          if (result) {
+            postTransactionData(
+              signerAddress,
+              ammInformation.rateOracle.token.name.toLowerCase(),
+              margin.toString(),
+              signerAddress, // destination address is the wallet user
+              id,
+              result.transactionHash,
+              DateTime.now().toISO(),
+              'CRYPTO_WITHDRAWAL'
+            ).then()
+          }
+        })
+      }
+
+    }
+
+
+
   } catch (error) {
     yield put(
       actions.updateTransaction({
