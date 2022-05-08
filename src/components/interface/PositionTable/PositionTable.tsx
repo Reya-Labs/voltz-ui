@@ -1,20 +1,18 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import { SystemStyleObject, Theme } from '@mui/system';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 
-import { AugmentedAMM, data } from '@utilities';
-import { useAgent } from '@hooks';
+import { data } from '@utilities';
 import { Panel } from '@components/atomic';
-import { AMMProvider } from '@components/contexts';
 import { PositionTableFields } from './types';
-import { mapPositionToPositionTableDatum } from './utilities';
 import { PositionTableHead, PositionTableRow } from './components';
 import { Agents } from '@components/contexts';
 import TransactionList from '../TransactionList/TransactionList';
 import { List, ListItem } from '@mui/material';
+import { useAgent } from '@hooks';
 
 export type PositionTableProps = {
   positions: Position[];
@@ -36,18 +34,11 @@ export type PositionTableProps = {
 const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   positions,
   positionInformation,
-  order,
-  onSetOrder,
-  orderBy,
-  onSetOrderBy,
-  page,
-  pages,
-  onSetPage,
-  size,
-  onSetSize,
   onSelectItem,
   handleSettle
 }) => {
+  const { agent } = useAgent();
+  
   const commonOverrides: SystemStyleObject<Theme> = {
     '& .MuiTableCell-root': {
       borderColor: 'transparent',
@@ -78,16 +69,6 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
       marginTop: '0'
     }
   }
-
-  const { agent } = useAgent();
-  const handleSort = (field: PositionTableFields) => {
-    onSetOrder(field === orderBy ? (order === 'asc' ? 'desc' : 'asc') : 'asc');
-    onSetOrderBy(field);
-  };
-  const positionIds = positions.map(({ id }) => id).join('');
-  const tableData = useMemo(() => {
-    return positions.map(mapPositionToPositionTableDatum(agent));
-  }, [positionIds, order, page, size]);
   
   const handleSelectRow = (index: number, mode: 'margin' | 'liquidity') => {
     onSelectItem(positions[index], mode);
@@ -97,38 +78,40 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
     <>
       {positions.length > 0 && (
         <List sx={{ padding: '0', margin: '0' }}>
-          {tableData.map((datum, index) => (
+          {positions.map((pos, index) => (
             <ListItem sx={listItemStyles}>
               <Panel variant='main' sx={{ width: '100%', padding: (theme) => `0 ${theme.spacing(4)}` }}>
                 
                 <PositionTableHead
                   currencyCode='USD'
                   currencySymbol='$'
-                  fcmBadge={positions[index].source === 'FCM'}
-                  fees={3000}
+                  fcmBadge={pos.source === 'FCM'}
+                  fees={agent === Agents.LIQUIDITY_PROVIDER ? positionInformation[index].fees : undefined}
                   feesPositive={true}
-                  currentFixedRate={4}
-                  currentFixedRatePositive={false}
-                  positionType={positions[index].positionType}
+                  beforeMaturity={positionInformation[index].beforeMaturity}
+                  healthFactor={positionInformation[index].healthFactor}
+                  currentFixedRate={(agent === Agents.LIQUIDITY_PROVIDER) ? positionInformation[index].fixedApr : undefined}
+                  positionType={pos.positionType}
                 />
 
                 <TableContainer>
                   <Table size="medium" sx={{ ...commonOverrides }}>
                     <TableBody>
-                      <AMMProvider amm={(positions[index].amm as AugmentedAMM)}>
+                      {/* <AMMProvider amm={(pos.amm as AugmentedAMM)}> */}
                         <PositionTableRow
-                          key={datum.id}
-                          datum={datum}
+                          position={pos}
+                          positionInfo={positionInformation[index]}
+                          key={pos.id}
                           index={index}
                           onSelect={(mode: 'margin' | 'liquidity') => handleSelectRow(index, mode)}
-                          handleSettle={() => handleSettle(positions[index])}
+                          handleSettle={() => handleSettle(pos)}
                         />
-                      </AMMProvider>
+                      {/* </AMMProvider> */}
                     </TableBody>
                   </Table>
                 </TableContainer>
 
-                <TransactionList position={positions[index]} />
+                <TransactionList position={pos} />
 
               </Panel>
             </ListItem>

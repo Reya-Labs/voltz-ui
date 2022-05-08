@@ -6,16 +6,19 @@ import { formatCurrency, formatNumber } from '@utilities';
 import PositionBadge from '../PositionBadge';
 import { Typography } from '@components/atomic';
 import { isUndefined } from 'lodash';
+import { Button } from '@components/atomic';
+import CircleIcon from '@mui/icons-material/Circle';
 
 export type PositionTableHeadProps = {
   currencyCode?: string;
   currencySymbol?: string;
   currentFixedRate?: number;
-  currentFixedRatePositive?: boolean;
   fcmBadge?: boolean;
   fees?: number;
   feesPositive?: boolean;
   positionType: number;
+  healthFactor?: number;
+  beforeMaturity: boolean;
 };
 
 const containerStyles: SystemStyleObject<Theme> = { 
@@ -35,11 +38,12 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
   currencyCode = '',
   currencySymbol = '',
   currentFixedRate, 
-  currentFixedRatePositive = true, 
   fcmBadge = false,
   fees, 
   feesPositive = true,
   positionType,
+  healthFactor,
+  beforeMaturity
 }) => {
   const getPositionBadgeVariant = () => {
     switch(positionType) {
@@ -82,12 +86,34 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
       </Box>
 
       <Box sx={{ display: 'flex' }}>
-        {!isUndefined(currentFixedRate) && (
-          <Typography variant='body2' sx={{ ...labelStyles, color: getTextColor(currentFixedRatePositive) }}>
+        {beforeMaturity && !isUndefined(currentFixedRate) && !isUndefined(healthFactor) && (
+          <Typography variant='body2' sx={{ ...labelStyles, color: (healthFactor === 1) ? '#F61067' : (healthFactor === 2 ? '#F1D302' : '#00d395') }}>
             &bull; Current fixed rate: {formatNumber(currentFixedRate)}%
           </Typography>
         )}
       </Box>
+      {
+        beforeMaturity && isUndefined(currentFixedRate) && !isUndefined(healthFactor) && (
+          <Box sx={{ marginLeft: (theme) => theme.spacing(4), display: 'flex' }}>
+            <Button
+              variant={(healthFactor === 1) ? 'danger' : (healthFactor === 2 ? 'warning' : 'healthy')}
+              sx={{ zIndex: 1, left: (theme) => theme.spacing(-2), fontSize: 16, borderWidth: 0 }}
+              startIcon={
+                <CircleIcon 
+                  sx={{ 
+                    width: 4, 
+                    height: 4, 
+                    borderRadius: 200, 
+                    color: (healthFactor === 1) ? '#F61067' : (healthFactor === 2 ? '#F1D302' : '#00d395'),
+                  }} 
+                />
+              }
+            >
+              {(healthFactor === 1) ? 'DANGER' : (healthFactor === 2 ? 'WARNING' : 'HEALTHY')}
+            </Button>
+          </Box>
+        )
+      }
     </Box>
   );
 };

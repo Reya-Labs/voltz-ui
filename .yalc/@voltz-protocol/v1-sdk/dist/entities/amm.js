@@ -50,6 +50,7 @@ var price_1 = require("./fractions/price");
 var tokenAmount_1 = require("./fractions/tokenAmount");
 var errorHandling_1 = require("../utils/errors/errorHandling");
 var evm_bn_1 = require("evm-bn");
+var lodash_1 = require("lodash");
 var AMM = /** @class */ (function () {
     function AMM(_a) {
         var id = _a.id, signer = _a.signer, provider = _a.provider, environment = _a.environment, marginEngineAddress = _a.marginEngineAddress, fcmAddress = _a.fcmAddress, rateOracle = _a.rateOracle, updatedTimestamp = _a.updatedTimestamp, termStartTimestamp = _a.termStartTimestamp, termEndTimestamp = _a.termEndTimestamp, underlyingToken = _a.underlyingToken, tick = _a.tick, tickSpacing = _a.tickSpacing, txCount = _a.txCount, totalNotionalTraded = _a.totalNotionalTraded, totalLiquidity = _a.totalLiquidity;
@@ -980,9 +981,9 @@ var AMM = /** @class */ (function () {
     };
     AMM.prototype.getPositionInformation = function (position) {
         return __awaiter(this, void 0, void 0, function () {
-            var results, signerAddress, lastBlock, lastBlockTimestamp, _a, _b, beforeMaturity, allSwaps, lenSwaps, rateOracleContract, lastSwapTimestamp, variableApySinceLastSwap, _c, _d, fcmContract, margin, tickLower, tickUpper, marginEngineContract, rawPositionInfo, liquidationThreshold, _1, safetyThreshold, _2;
-            return __generator(this, function (_e) {
-                switch (_e.label) {
+            var results, signerAddress, lastBlock, lastBlockTimestamp, _a, _b, beforeMaturity, _c, allSwaps, lenSwaps, rateOracleContract, lastSwapTimestamp, variableApySinceLastSwap, _d, _e, fcmContract, margin, tickLower, tickUpper, marginEngineContract, rawPositionInfo, liquidationThreshold, _1, safetyThreshold, _2;
+            return __generator(this, function (_f) {
+                switch (_f.label) {
                     case 0:
                         if (!this.signer) {
                             throw new Error('Wallet not connected');
@@ -992,84 +993,106 @@ var AMM = /** @class */ (function () {
                         }
                         results = {
                             margin: 0,
-                            accruedCashflow: 0
+                            accruedCashflow: 0,
+                            beforeMaturity: false
                         };
                         return [4 /*yield*/, this.signer.getAddress()];
                     case 1:
-                        signerAddress = _e.sent();
+                        signerAddress = _f.sent();
                         return [4 /*yield*/, this.provider.getBlockNumber()];
                     case 2:
-                        lastBlock = _e.sent();
+                        lastBlock = _f.sent();
                         _b = (_a = ethers_1.BigNumber).from;
                         return [4 /*yield*/, this.provider.getBlock(lastBlock - 4)];
                     case 3:
-                        lastBlockTimestamp = _b.apply(_a, [(_e.sent()).timestamp]);
-                        beforeMaturity = lastBlockTimestamp.lt(ethers_1.BigNumber.from(this.termEndTimestamp.toString()));
+                        lastBlockTimestamp = _b.apply(_a, [(_f.sent()).timestamp]);
+                        console.log("lastBlockTimestamp:", lastBlockTimestamp);
+                        console.log("amm term end timestamp:", this.termEndTimestamp.toString());
+                        beforeMaturity = (lastBlockTimestamp.mul(ethers_1.BigNumber.from(10).pow(18))).lt(ethers_1.BigNumber.from(this.termEndTimestamp.toString()));
+                        results.beforeMaturity = beforeMaturity;
+                        if (!beforeMaturity) return [3 /*break*/, 5];
+                        _c = results;
+                        return [4 /*yield*/, this.fixedApr()];
+                    case 4:
+                        _c.fixedApr = _f.sent();
+                        _f.label = 5;
+                    case 5:
                         allSwaps = this.getAllSwaps(position);
                         lenSwaps = allSwaps.length;
-                        if (!(lenSwaps > 0)) return [3 /*break*/, 9];
-                        if (!beforeMaturity) return [3 /*break*/, 7];
-                        if (!(lenSwaps > 0)) return [3 /*break*/, 6];
+                        if (!(lenSwaps > 0)) return [3 /*break*/, 11];
+                        if (!beforeMaturity) return [3 /*break*/, 9];
+                        if (!(lenSwaps > 0)) return [3 /*break*/, 8];
                         rateOracleContract = typechain_1.BaseRateOracle__factory.connect(this.rateOracle.id, this.signer);
                         lastSwapTimestamp = allSwaps[lenSwaps - 1].timestamp;
+                        console.log("last swap timestamp:", lastSwapTimestamp);
                         return [4 /*yield*/, rateOracleContract.callStatic.getApyFromTo(lastSwapTimestamp, lastBlockTimestamp)];
-                    case 4:
-                        variableApySinceLastSwap = _e.sent();
+                    case 6:
+                        variableApySinceLastSwap = _f.sent();
                         results.variableRateSinceLastSwap = variableApySinceLastSwap.div(ethers_1.BigNumber.from(10).pow(12)).toNumber() / 10000;
                         results.fixedRateSinceLastSwap = position.averageFixedRate;
-                        _c = results;
-                        return [4 /*yield*/, this.getAccruedCashflow(allSwaps, false)];
-                    case 5:
-                        _c.accruedCashflow = _e.sent();
-                        _e.label = 6;
-                    case 6: return [3 /*break*/, 9];
-                    case 7:
-                        if (!!position.isSettled) return [3 /*break*/, 9];
                         _d = results;
-                        return [4 /*yield*/, this.getAccruedCashflow(allSwaps, true)];
-                    case 8:
-                        _d.accruedCashflow = _e.sent();
-                        _e.label = 9;
+                        return [4 /*yield*/, this.getAccruedCashflow(allSwaps, false)];
+                    case 7:
+                        _d.accruedCashflow = _f.sent();
+                        _f.label = 8;
+                    case 8: return [3 /*break*/, 11];
                     case 9:
-                        if (!position.source.includes("FCM")) return [3 /*break*/, 11];
+                        if (!!position.isSettled) return [3 /*break*/, 11];
+                        _e = results;
+                        return [4 /*yield*/, this.getAccruedCashflow(allSwaps, true)];
+                    case 10:
+                        _e.accruedCashflow = _f.sent();
+                        _f.label = 11;
+                    case 11:
+                        if (!position.source.includes("FCM")) return [3 /*break*/, 13];
                         fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
                         return [4 /*yield*/, fcmContract.getTraderMarginInATokens(signerAddress)];
-                    case 10:
-                        margin = (_e.sent());
+                    case 12:
+                        margin = (_f.sent());
                         results.margin = this.descale(margin);
-                        return [3 /*break*/, 19];
-                    case 11:
+                        if (beforeMaturity) {
+                            results.healthFactor = 3;
+                        }
+                        return [3 /*break*/, 22];
+                    case 13:
                         tickLower = position.tickLower;
                         tickUpper = position.tickUpper;
                         marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
                         return [4 /*yield*/, marginEngineContract.callStatic.getPosition(signerAddress, tickLower, tickUpper)];
-                    case 12:
-                        rawPositionInfo = _e.sent();
+                    case 14:
+                        rawPositionInfo = _f.sent();
                         results.margin = this.descale(rawPositionInfo.margin);
                         results.fees = this.descale(rawPositionInfo.accumulatedFees);
-                        if (!beforeMaturity) return [3 /*break*/, 19];
-                        _e.label = 13;
-                    case 13:
-                        _e.trys.push([13, 15, , 16]);
-                        return [4 /*yield*/, marginEngineContract.callStatic.getPositionMarginRequirement(signerAddress, tickLower, tickUpper, true)];
-                    case 14:
-                        liquidationThreshold = _e.sent();
-                        results.liquidationThreshold = this.descale(liquidationThreshold);
-                        return [3 /*break*/, 16];
+                        if (!beforeMaturity) return [3 /*break*/, 22];
+                        _f.label = 15;
                     case 15:
-                        _1 = _e.sent();
-                        return [3 /*break*/, 16];
+                        _f.trys.push([15, 17, , 18]);
+                        return [4 /*yield*/, marginEngineContract.callStatic.getPositionMarginRequirement(signerAddress, tickLower, tickUpper, true)];
                     case 16:
-                        _e.trys.push([16, 18, , 19]);
-                        return [4 /*yield*/, marginEngineContract.callStatic.getPositionMarginRequirement(signerAddress, tickLower, tickUpper, false)];
+                        liquidationThreshold = _f.sent();
+                        results.liquidationThreshold = this.descale(liquidationThreshold);
+                        return [3 /*break*/, 18];
                     case 17:
-                        safetyThreshold = _e.sent();
-                        results.safetyThreshold = this.descale(safetyThreshold);
-                        return [3 /*break*/, 19];
+                        _1 = _f.sent();
+                        return [3 /*break*/, 18];
                     case 18:
-                        _2 = _e.sent();
-                        return [3 /*break*/, 19];
-                    case 19: return [2 /*return*/, results];
+                        _f.trys.push([18, 20, , 21]);
+                        return [4 /*yield*/, marginEngineContract.callStatic.getPositionMarginRequirement(signerAddress, tickLower, tickUpper, false)];
+                    case 19:
+                        safetyThreshold = _f.sent();
+                        results.safetyThreshold = this.descale(safetyThreshold);
+                        return [3 /*break*/, 21];
+                    case 20:
+                        _2 = _f.sent();
+                        return [3 /*break*/, 21];
+                    case 21:
+                        if (!(0, lodash_1.isUndefined)(results.liquidationThreshold) && !(0, lodash_1.isUndefined)(results.safetyThreshold)) {
+                            results.healthFactor = (results.margin < results.liquidationThreshold) ? 1 : (results.margin < results.safetyThreshold ? 2 : 3);
+                        }
+                        _f.label = 22;
+                    case 22:
+                        console.log();
+                        return [2 /*return*/, results];
                 }
             });
         });

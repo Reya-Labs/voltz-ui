@@ -4,20 +4,18 @@ import { SystemStyleObject, Theme } from '@mui/system';
 import { Agents } from '@components/contexts';
 import { Typography, Button } from '@components/atomic';
 import { MaturityInformation } from '@components/composite';
-import { PositionTableDatum } from '../../types';
 import { lpLabels } from '../../constants';
 import { traderLabels } from '../../constants';
 import { PositionTableFields } from '../../types';
-import { FixedAPR, Notional, HealthFactor, CurrentMargin, Fees } from './components';
-import React, { useEffect } from 'react';
-import { useAgent, useAMMContext } from '@hooks';
+import { FixedAPR, Notional, CurrentMargin } from './components';
+import React from 'react';
+import { useAgent } from '@hooks';
 import { DateTime } from 'luxon';
-import { isUndefined } from 'lodash';
-import { Position } from '@voltz-protocol/v1-sdk';
+import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 
 export type PositionTableRowProps = {
   position: Position;
-  datum: PositionTableDatum;
+  positionInfo: PositionInfo;
   index: number;
   onSelect: (mode: 'margin' | 'liquidity') => void;
   handleSettle: () => void;
@@ -25,20 +23,13 @@ export type PositionTableRowProps = {
 
 const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
   position,
-  datum,
+  positionInfo,
   index,
   onSelect,
   handleSettle
 }) => {
-  const { positionInfo } = useAMMContext();
-  const { result: positionInfoResult, loading: loadingPositionInfo, call: callPositionInfo } = positionInfo;
-
-  useEffect(() => {
-    callPositionInfo({ position });
-  }, [callPositionInfo, position]);
-  
   const { agent } = useAgent();
-  const variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'main';
+
   const typeStyleOverrides: SystemStyleObject<Theme> = {
     backgroundColor: `secondary.darken050`, // this affects the colour of the positions rows in the LP positions 
     borderRadius: 2
@@ -46,7 +37,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
 
   let labels: [PositionTableFields, string][];
   
-  if (datum.agent === Agents.LIQUIDITY_PROVIDER) {
+  if (agent === Agents.LIQUIDITY_PROVIDER) {
     labels = lpLabels;
   } else {
     labels = traderLabels;
@@ -56,13 +47,13 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     <TableRow key={index} sx={{ ...typeStyleOverrides }}>
       {labels.map(([field, label]) => {
         const renderDisplay = () => {
-          const token = datum.protocol.substring(1);
+          const token = position.amm.protocol.substring(1);
 
           if (field === 'maturity') {
-            if (DateTime.now() >= datum.endDate) {
-              if (datum.settled) {
+            if (DateTime.now() >= position.amm.endDateTime) {
+              if (position.isSettled) {
                 return <TableCell align="center">
-                <Button variant="contained" disabled={datum.settled}>
+                <Button variant="contained" disabled={position.isSettled}>
                   <Typography agentStyling variant="body2">SETTLED</Typography>
                 </Button>
               </TableCell>
@@ -79,8 +70,8 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
             return (
               <MaturityInformation
                 label={label}
-                startDate={datum.startDate}
-                endDate={datum.endDate}
+                startDate={position.amm.startDateTime}
+                endDate={position.amm.endDateTime}
               />
             ); 
             }            
@@ -88,21 +79,19 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
 
           if (field === 'accruedRates') {
             const renderValue = () => {
-                if (loadingPositionInfo) {
-                  return 'Loading...';
+            
+              if (positionInfo.variableRateSinceLastSwap && positionInfo.fixedRateSinceLastSwap) {
+                if (position.positionType === 1) {
+                  return `${positionInfo.fixedRateSinceLastSwap.toFixed(2)}% / ${positionInfo.variableRateSinceLastSwap.toFixed(2)}%`;
                 }
-
-                if (!positionInfoResult) {
-                  return 'No data';
+                else {
+                  return `${positionInfo.variableRateSinceLastSwap.toFixed(2)}% / ${positionInfo.fixedRateSinceLastSwap.toFixed(2)}%`;
                 }
                 
-              if (positionInfoResult.variableRateSinceLastSwap && positionInfoResult.fixedRateSinceLastSwap) {
-                return `${positionInfoResult.fixedRateSinceLastSwap.toFixed(2)}% / ${positionInfoResult.variableRateSinceLastSwap.toFixed(2)}%`;
               }
               else {
                 return `- / -`;
               }
-            
             }
           
             return (<TableCell align="center">
@@ -112,107 +101,17 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
             </TableCell>);
           }
 
-          // if (field === 'margin') {
-          //   const renderValue = () => {
-          //     if (loadingPositionInfo) {
-          //       return 'Loading...';
-          //     }
-
-          //     if (!positionInfoResult) {
-          //       return 'No data';
-          //     }
-
-          //     if (!datum.source) {
-          //       return 'No source';
-          //     }
-
-          //     if (DateTime.now() <= datum.endDate) {
-          //       if (positionInfoResult.liquidationThreshold && positionInfoResult.safetyThreshold) {
-          //         if (positionInfoResult.margin < positionInfoResult.liquidationThreshold) {
-          //           return 'DANGER';
-          //         }
-          //         else if (positionInfoResult.margin < positionInfoResult.safetyThreshold) {
-          //           return 'WARNING';
-          //         }
-          //         else {
-          //           return 'HEALTHY';
-          //         }
-          //       }
-          //       else {
-          //         return 'NO DISPLAY';
-          //       }
-          //     }
-          //     else {
-          //       if (datum.settled) {
-          //         return 'NO DISPLAY';
-          //       }
-          //       else {
-          //         return 'NO DISPLAY';
-          //       }
-          //     }
-          //   };
-          //   const status = renderValue();
-          //   if (!status.includes('NO DISPLAY')) {
-          //     return (
-          //       <HealthFactor status={status} />
-          //     );
-          //   }
-          // }
-
-          // if (field === 'margin') {
-          //   const renderValue = () => {
-          //     if (loadingPositionInfo) {
-          //       return 'Loading...';
-          //     }
-
-          //     if (!positionInfoResult) {
-          //       return 'No data';
-          //     }
-
-          //     if (!datum.source) {
-          //       return 'Cannot get source of position';
-          //     }
-
-          //     let accumulatedFees: string = "No data";
-          //     if (!isUndefined(positionInfoResult.fees)) {
-          //       accumulatedFees = `${positionInfoResult.fees.toFixed(2)} ${token}`;
-          //     }
-
-          //     if (datum.source.includes("FCM")) {
-          //       return `FCM: no fees`;
-          //     }
-
-          //     return `${accumulatedFees}`;
-          //   };
-          //   return <Fees value={renderValue()} />;
-          // }
-
           if (field === 'margin') {
-            const renderValue = () => {
-              if (loadingPositionInfo) {
-                return 'Loading...';
-              }
-
-              if (!positionInfoResult) {
-                return 'No data';
-              }
-
-              if (!datum.source) {
-                return 'Cannot get source of position';
-              }
-              
-              return `${positionInfoResult.margin.toFixed(2)} ${token} | cashflow: ${positionInfoResult.accruedCashflow.toFixed(2)} ${token}`;
-            };
-            return <CurrentMargin renderValue={renderValue} onSelect={ () => onSelect('margin') } />;
+            return <CurrentMargin accruedCashflow={positionInfo.accruedCashflow} margin={positionInfo.margin} token={token} onSelect={ () => onSelect('margin') } />;
           }
 
           if (field === 'notional') {
             if (agent === Agents.LIQUIDITY_PROVIDER) {
-              return <Notional notional={datum.notional.toFixed(2)} token={token} onSelect={() => onSelect('liquidity')} displayEditButton={agent !== Agents.LIQUIDITY_PROVIDER} />;
+              return <Notional notional={position.notional.toFixed(2)} token={token} onSelect={() => onSelect('liquidity')} displayEditButton={agent !== Agents.LIQUIDITY_PROVIDER} />;
             }
             else {
               return <Typography variant="body2" label={label} sx={{ fontSize: 18 }}>
-                {datum.notional.toFixed(2)} {token}
+                {Math.abs(position.effectiveVariableTokenBalance).toFixed(2)} {token}
               </Typography>
             }
           }
@@ -224,13 +123,10 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
           const getContent = () => {
             switch (field) {
               case 'pool':
-                return (datum.source.includes("FCM")) ? "FCM : " + datum.protocol : datum.protocol;
+                return (position.source.includes("FCM")) ? "FCM : " + position.amm.protocol : position.amm.protocol;
               
-              case 'fixedUpper':
-                return `${datum.fixedUpper.toFixed(2)}%`;
-              
-              case 'fixedLower':
-                return `${datum.fixedLower.toFixed(2)}%`;
+              case 'rateRange':
+                return `${position.fixedRateLower.toNumber().toFixed(2)}% / ${position.fixedRateUpper.toNumber().toFixed(2)}%`;
 
               default:
                 return null;
@@ -238,9 +134,9 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
           };
 
 
-          if (field === 'fixedLower' || field === 'fixedUpper') {
+          if (field === 'rateRange') {
             return (
-              <Typography agentStyling variant="body2" label={label} sx={{fontSize: 18}}>
+              <Typography variant="body2" label={label} sx={{fontSize: 18}}>
                 {getContent()}
               </Typography>
             );
@@ -254,6 +150,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
 
         };
 
+        console.log("key:", field);
         return <TableCell key={field}>{renderDisplay()}</TableCell>;
       })}
 

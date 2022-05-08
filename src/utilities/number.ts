@@ -23,5 +23,5 @@ export const hasDecimal = (num: number): boolean => !!(num % 1);
  * @param num - the number to process
  */
  export const formatNumber = (num: number): string => {
-  return num.toLocaleString('en-US', { maximumFractionDigits: 3 });
+  return num.toLocaleString('en-US', { maximumFractionDigits: 2 });
 }

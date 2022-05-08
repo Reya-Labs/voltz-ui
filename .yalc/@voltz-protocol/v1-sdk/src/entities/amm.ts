@@ -32,6 +32,7 @@ import { TokenAmount } from './fractions/tokenAmount';
 import { decodeInfoPostMint, decodeInfoPostSwap, getReadableErrorMessage } from '../utils/errors/errorHandling';
 import { toBn } from 'evm-bn';
 import Position from './position';
+import { isUndefined } from 'lodash';
 
 export type AMMConstructorArgs = {
   id: string;
@@ -136,6 +137,9 @@ export type PositionInfo = {
   accruedCashflow: number;
   variableRateSinceLastSwap?: number;
   fixedRateSinceLastSwap?: number;
+  beforeMaturity: boolean;
+  fixedApr?: number;
+  healthFactor?: number;
 }
 
 class AMM {
@@ -1038,14 +1042,24 @@ class AMM {
 
     let results: PositionInfo = {
       margin: 0,
-      accruedCashflow: 0
+      accruedCashflow: 0,
+      beforeMaturity: false
     };
 
     const signerAddress = await this.signer.getAddress();
     const lastBlock = await this.provider.getBlockNumber();
     const lastBlockTimestamp = BigNumber.from((await this.provider.getBlock(lastBlock - 4)).timestamp);
 
-    const beforeMaturity = lastBlockTimestamp.lt(BigNumber.from(this.termEndTimestamp.toString()));
+    console.log("lastBlockTimestamp:", lastBlockTimestamp);
+    console.log("amm term end timestamp:", this.termEndTimestamp.toString());
+
+    const beforeMaturity = (lastBlockTimestamp.mul(BigNumber.from(10).pow(18))).lt(BigNumber.from(this.termEndTimestamp.toString()));
+    results.beforeMaturity = beforeMaturity;
+
+    // fixed apr
+    if (beforeMaturity) {
+      results.fixedApr = await this.fixedApr();
+    }
 
     const allSwaps = this.getAllSwaps(position);
     const lenSwaps = allSwaps.length;
@@ -1058,6 +1072,7 @@ class AMM {
           const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.signer);
 
           const lastSwapTimestamp = allSwaps[lenSwaps - 1].timestamp;
+          console.log("last swap timestamp:", lastSwapTimestamp);
           const variableApySinceLastSwap = await rateOracleContract.callStatic.getApyFromTo(lastSwapTimestamp, lastBlockTimestamp);
           results.variableRateSinceLastSwap = variableApySinceLastSwap.div(BigNumber.from(10).pow(12)).toNumber() / 10000;
 
@@ -1079,6 +1094,10 @@ class AMM {
       const fcmContract = fcmFactory.connect(this.fcmAddress, this.signer);
       const margin = (await fcmContract.getTraderMarginInATokens(signerAddress));
       results.margin = this.descale(margin);
+
+      if (beforeMaturity) {
+        results.healthFactor = 3;
+      }
     }
     else {
       const tickLower = position.tickLower;
@@ -1118,9 +1137,14 @@ class AMM {
           results.safetyThreshold = this.descale(safetyThreshold);
         }
         catch (_) { }
+
+        if (!isUndefined(results.liquidationThreshold) && !isUndefined(results.safetyThreshold)) {
+          results.healthFactor = (results.margin < results.liquidationThreshold) ? 1 : (results.margin < results.safetyThreshold ? 2 : 3);
+        }
       }
     }
 
+    console.log();
     return results;
   }
 

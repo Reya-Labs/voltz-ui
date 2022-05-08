@@ -96,6 +96,9 @@ export declare type PositionInfo = {
     accruedCashflow: number;
     variableRateSinceLastSwap?: number;
     fixedRateSinceLastSwap?: number;
+    beforeMaturity: boolean;
+    fixedApr?: number;
+    healthFactor?: number;
 };
 declare class AMM {
     readonly id: string;

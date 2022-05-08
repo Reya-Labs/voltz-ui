@@ -7,11 +7,13 @@ import { Button } from '@components/atomic';
 import isNull from 'lodash/isNull';
 
 export type CurrentMarginProps = {
-  renderValue: () => string;
+  margin: number;
+  accruedCashflow?: number;
+  token: string;
   onSelect: () => void;
 };
 
-const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({renderValue, onSelect}) => {
+const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({ margin, accruedCashflow, token, onSelect}) => {
   const wallet = useWallet();
 
   const handleClick = () => {
@@ -24,8 +26,8 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({renderValue
 
   return (
     <TableCell>
-      <Typography variant="body2" label="Current Margin" sx={{ fontSize: 18 }}>
-        {renderValue()}
+      <Typography variant="body2" label={"Margin"} sx={{ fontSize: 18 }}>
+        {`${margin.toFixed(2)} ${token}`}
       </Typography>
 
         <Button sx={{
