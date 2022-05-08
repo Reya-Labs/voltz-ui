@@ -13,8 +13,10 @@ import React, { useEffect } from 'react';
 import { useAgent, useAMMContext } from '@hooks';
 import { DateTime } from 'luxon';
 import { isUndefined } from 'lodash';
+import { Position } from '@voltz-protocol/v1-sdk';
 
 export type PositionTableRowProps = {
+  position: Position;
   datum: PositionTableDatum;
   index: number;
   onSelect: (mode: 'margin' | 'liquidity') => void;
@@ -22,6 +24,7 @@ export type PositionTableRowProps = {
 };
 
 const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
+  position,
   datum,
   index,
   onSelect,
@@ -31,9 +34,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
   const { result: positionInfoResult, loading: loadingPositionInfo, call: callPositionInfo } = positionInfo;
 
   useEffect(() => {
-    if (!isUndefined(datum.source) && !isUndefined(datum.fixedLower) && !isUndefined(datum.fixedUpper)) {
-      callPositionInfo({ source: datum.source, tickLower: datum.fixedLower, tickUpper: datum.fixedUpper });
-    }
+    callPositionInfo(position);
   }, [callPositionInfo, datum]);
   
   const { agent } = useAgent();

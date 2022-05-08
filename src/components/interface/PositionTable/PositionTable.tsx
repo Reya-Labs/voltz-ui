@@ -116,6 +116,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                       <AMMProvider amm={(positions[index].amm as AugmentedAMM)}>
                         <PositionTableRow
                           key={datum.id}
+                          position={positions[index]}
                           datum={datum}
                           index={index}
                           onSelect={(mode: 'margin' | 'liquidity') => handleSelectRow(index, mode)}

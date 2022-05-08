@@ -7,12 +7,10 @@ export const MaxUint256 = JSBI.BigInt(
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000';
 
 // Latest kovan deployment address of the factory
-// export const FACTORY_ADDRESS = '0xAF47e8353729E5be6cA4f605dd176B7Fc80EDA08';
-export const FACTORY_ADDRESS = '0x07091fF74E2682514d860Ff9F4315b90525952b0';
+export const FACTORY_ADDRESS = '0x71b5020bF90327F2241Cc7D66B60C72CEf9cC39b';
 
 // Latest kovan deployment address of the periphery
-export const PERIPHERY_ADDRESS = '0xcf0144e092f2B80B11aD72CF87C71d1090F97746';
-// export const PERIPHERY_ADDRESS = '0xc6e7DF5E7b4f2A278906862b61205850344D4e7d';
+export const PERIPHERY_ADDRESS = '0x411b190015978F01e6d57e551455B317bf26233f';
 
 // constants used internally but not expected to be used externally
 export const NEGATIVE_ONE = JSBI.BigInt(-1);
@@ -49,3 +47,5 @@ export const MIN_FIXED_RATE = 0.001;
  * The maximum tick that can be used on any pool.
  */
 export const MAX_FIXED_RATE = 1001;
+
+export const ONE_YEAR_IN_SECONDS = 31536000;
