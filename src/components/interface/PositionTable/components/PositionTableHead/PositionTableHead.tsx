@@ -6,7 +6,6 @@ import { formatCurrency, formatNumber } from '@utilities';
 import PositionBadge from '../PositionBadge';
 import { Typography } from '@components/atomic';
 import { isUndefined } from 'lodash';
-import { Button } from '@components/atomic';
 import CircleIcon from '@mui/icons-material/Circle';
 
 export type PositionTableHeadProps = {
@@ -31,7 +30,9 @@ const containerStyles: SystemStyleObject<Theme> = {
 const labelStyles: SystemStyleObject<Theme> = { 
   fontSize: '14px', 
   lineHeight: '1', 
-  textTransform: 'uppercase'
+  textTransform: 'uppercase',
+  display: 'flex',
+  verticalAlign: 'middle'
 };
 
 const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
@@ -54,6 +55,10 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
       case 3:
         return 'LP';
     }
+  };
+
+  const getHealthTextColor = () => {
+    return (healthFactor === 1) ? '#F61067' : (healthFactor === 2 ? '#F1D302' : '#00d395');
   };
 
   const getTextColor = (positive: boolean) => {
@@ -87,33 +92,38 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
 
       <Box sx={{ display: 'flex' }}>
         {beforeMaturity && !isUndefined(currentFixedRate) && !isUndefined(healthFactor) && (
-          <Typography variant='body2' sx={{ ...labelStyles, color: (healthFactor === 1) ? '#F61067' : (healthFactor === 2 ? '#F1D302' : '#00d395') }}>
-            &bull; Current fixed rate: {formatNumber(currentFixedRate)}%
-          </Typography>
+          <Box sx={{ padding: (theme) => `${theme.spacing(1)} ${theme.spacing(2)}`, marginLeft: (theme) => theme.spacing(2) }}>
+            <Typography variant='body2' sx={{ ...labelStyles, color: getHealthTextColor() }}>
+              <CircleIcon 
+                sx={{ 
+                  width: 4, 
+                  height: 4, 
+                  borderRadius: 200, 
+                  color: getHealthTextColor(),
+                }} 
+              />
+              Current fixed rate: {formatNumber(currentFixedRate)}%
+            </Typography>
+          </Box>
+        )}
+
+        {beforeMaturity && isUndefined(currentFixedRate) && !isUndefined(healthFactor) && (
+          <Box sx={{ padding: (theme) => `${theme.spacing(1)} ${theme.spacing(2)}`, marginLeft: (theme) => theme.spacing(2) }}>
+            <Typography variant='body2' sx={{ ...labelStyles, color: getHealthTextColor() }}>
+              <CircleIcon 
+                sx={{ 
+                  width: 4, 
+                  height: 14, 
+                  borderRadius: '16px',
+                  marginRight: (theme) => theme.spacing(2), 
+                  color: getHealthTextColor(),
+                }} 
+              />
+              {(healthFactor === 1) ? 'DANGER' : (healthFactor === 2 ? 'WARNING' : 'HEALTHY')}
+            </Typography>
+          </Box>
         )}
       </Box>
-      {
-        beforeMaturity && isUndefined(currentFixedRate) && !isUndefined(healthFactor) && (
-          <Box sx={{ marginLeft: (theme) => theme.spacing(4), display: 'flex' }}>
-            <Button
-              variant={(healthFactor === 1) ? 'danger' : (healthFactor === 2 ? 'warning' : 'healthy')}
-              sx={{ zIndex: 1, left: (theme) => theme.spacing(-2), fontSize: 16, borderWidth: 0 }}
-              startIcon={
-                <CircleIcon 
-                  sx={{ 
-                    width: 4, 
-                    height: 4, 
-                    borderRadius: 200, 
-                    color: (healthFactor === 1) ? '#F61067' : (healthFactor === 2 ? '#F1D302' : '#00d395'),
-                  }} 
-                />
-              }
-            >
-              {(healthFactor === 1) ? 'DANGER' : (healthFactor === 2 ? 'WARNING' : 'HEALTHY')}
-            </Button>
-          </Box>
-        )
-      }
     </Box>
   );
 };

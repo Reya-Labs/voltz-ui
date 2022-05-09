@@ -82,7 +82,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
             const info = positionInformation[pos.id];
 
             return (
-              <ListItem sx={listItemStyles}>
+              <ListItem sx={listItemStyles} key={pos.id}>
                 <Panel variant='main' sx={{ width: '100%', padding: (theme) => `0 ${theme.spacing(4)}` }}>
                   
                   <PositionTableHead
