@@ -3,9 +3,9 @@ import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { data } from '@utilities';
-import { usePositions } from '@hooks';
+import { usePositions, useWallet } from '@hooks';
 import { PortfolioHeader, PositionTable, PositionTableFields } from '@components/interface';
-import { Panel, RouteLink, Typography } from '@components/atomic';
+import { Button, Loading, Panel, RouteLink, Typography } from '@components/atomic';
 import { Agents } from '@components/contexts';
 import { actions } from '@store';
 import { useDispatch } from '@hooks';
@@ -13,6 +13,7 @@ import { AugmentedAMM } from '@utilities';
 import { routes } from '@routes';
 import { Box } from '@mui/material';
 import { getHealthCounters, getNetPayingRate, getNetReceivingRate, getTotalAccruedCashflow, getTotalMargin, getTotalNotional } from './services';
+import { colors } from '@theme';
 
 export type ConnectedAMMTableProps = {
   onSelectItem: (item: Position, mode: 'margin' | 'liquidity') => void;
@@ -30,24 +31,34 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
   const [size, setSize] = useState<number | null>(null);
   const { positionsByAgentGroup, loading, error } = usePositions();
   const pages = 0;
+  const { wallet } = useWallet();
 
   const dispatch = useDispatch();
 
   const [positionInformation, setPositionInformation] = useState<Record<Position['id'], PositionInfo>>({});
   const [positionInformationLoading, setPositionInformationLoading] = useState<boolean>(true);
+  const [positionInformationError, setPositionInformationError] = useState<boolean>(false);
 
-  useEffect(() => {
+  const loadExtraPositionInformation = () => {
     if (!loading && !error && positionsByAgentGroup) {
       setPositionInformationLoading(true);
       Promise.allSettled(positionsByAgentGroup.map(p => p.amm.getPositionInformation(p)))
         .then((responses) => {
-          const piData:Record<Position['id'], PositionInfo> = {};
-          responses.forEach((resp, i) => {
-            if (resp.status === 'fulfilled') {
-              piData[positionsByAgentGroup[i].id] = resp.value;
-            }
-          })
-          setPositionInformation(piData);
+          const piError = !!responses.find(resp => resp.status === 'rejected');
+
+          if(piError) {
+            setPositionInformationError(true);
+          } else {
+            const piData:Record<Position['id'], PositionInfo> = {};
+            responses.forEach((resp, i) => {
+              if (resp.status === 'fulfilled') {
+                piData[positionsByAgentGroup[i].id] = resp.value;
+              }
+            });
+  
+            setPositionInformation(piData);
+            setPositionInformationError(false);
+          }
         })
         .catch((err) => {
           // console.log("error in effect:", err);
@@ -56,7 +67,15 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
           setPositionInformationLoading(false);
         })
     }
+  };
+
+  useEffect(() => {
+    loadExtraPositionInformation();
   }, [agent, error, loading, !!positionsByAgentGroup]);
+
+  const handleRetry = useCallback(() => {
+    loadExtraPositionInformation();
+  }, [loadExtraPositionInformation]);
   
   const handleSettle = useCallback(
     (position: Position) => {
@@ -77,26 +96,42 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
     },  [dispatch, agent],
   );
 
-  if(loading || positionInformationLoading) {
-    return <Typography>Loading...</Typography>;
+  if(loading || (positionsByAgentGroup?.length && positionInformationLoading)) {
+    return (
+      <Panel variant='grey-dashed' sx={{ width: '100%' }}>
+        <Loading sx={{ margin: '0 auto' }} />
+      </Panel>
+    )
   }
 
-  if(error) {
-    return null;
+  if(positionInformationError) {
+    return (
+      <Panel variant='error' sx={{ width: '100%', textAlign: 'center' }}>
+        <Typography variant='h6' sx={{ color: colors.vzCustomRed1, lineHeight: '14px' }}>
+          <Button variant='text' onClick={handleRetry} sx={{ fontSize: 'inherit', color: 'inherit', padding: '0', lineHeight: 'inherit' }}>
+            FAILED TO LOAD: RETRY?
+          </Button>
+        </Typography>
+      </Panel>
+    );
+  }
+
+  if(error || !wallet) {
+    return (
+      <Panel variant='main' sx={{ width: '100%', textAlign: 'center' }}>
+        <Typography variant='h6' sx={{ color: colors.skyBlueCrayola.base }}>
+          CONNECT YOUR WALLET
+        </Typography>
+      </Panel>
+    )
   }
 
   if (!positionsByAgentGroup) {
     return (
-      <Panel variant='dark' sx={{textAlign: 'center' }}>
-        <Panel variant='main' sx={{
-          width: '100%', 
-          maxWidth: '900px', 
-          textAlign: 'center',
-        }}>
-          <RouteLink to={agent === Agents.LIQUIDITY_PROVIDER ? `/${routes.POOLS}` : `/${routes.SWAP}`}>
-            OPEN YOUR FIRST POSITION
-          </RouteLink>
-        </Panel>
+      <Panel variant='main' sx={{ width: '100%', textAlign: 'center' }}>
+        <RouteLink to={agent === Agents.LIQUIDITY_PROVIDER ? `/${routes.POOLS}` : `/${routes.SWAP}`}>
+          OPEN YOUR FIRST POSITION
+        </RouteLink>
       </Panel>
     )
   }
