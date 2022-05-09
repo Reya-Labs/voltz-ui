@@ -5,6 +5,7 @@ import { useAsyncFunction, useAgent } from '@hooks';
 import { Agents } from '@components/contexts';
 import { MintMinimumMarginRequirementPayload, SwapInfoPayload } from './types';
 import AMMContext from './AMMContext';
+import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 
 export type AMMProviderProps = {
   amm: AugmentedAMM;
@@ -58,7 +59,7 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
     100
   );
 
-  const positionInfo = useAsyncFunction(
+  const positionInfo = useAsyncFunction<Position, PositionInfo | undefined>(
     async (position) => {
       const recipient = await amm.signer?.getAddress();
 
