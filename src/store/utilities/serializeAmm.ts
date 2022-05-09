@@ -20,6 +20,8 @@ const serializeAmm = (amm: AugmentedAMM): SerializedAMM => ({
       decimals: amm.underlyingToken.decimals.toString(),
     },
   },
+  totalLiquidity: amm.totalLiquidity.toString(),
+  totalNotionalTraded: amm.totalNotionalTraded.toString(),
 });
 
 export default serializeAmm;

@@ -3,8 +3,9 @@ import React, { useMemo } from 'react';
 import { AugmentedAMM } from '@utilities';
 import { useAsyncFunction, useAgent } from '@hooks';
 import { Agents } from '@components/contexts';
-import { CurrentMarginPayload, EstimatedCashflowPayload, MintMinimumMarginRequirementPayload, SwapInfoPayload } from './types';
+import { MintMinimumMarginRequirementPayload, SwapInfoPayload } from './types';
 import AMMContext from './AMMContext';
+import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
 
 export type AMMProviderProps = {
   amm: AugmentedAMM;
@@ -28,7 +29,7 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
         return;
       }
 
-      return amm.getInfoPostMint({...args});
+      return amm.getInfoPostMint({ ...args });
     },
     useMemo(() => undefined, [!!amm.signer]),
     100
@@ -58,35 +59,15 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
     100
   );
 
-  const estimatedCashflow = useAsyncFunction(
-    async (args: EstimatedCashflowPayload) => {
+  const positionInfo = useAsyncFunction(
+    async (position: Position) => {
       const recipient = await amm.signer?.getAddress();
 
       if (!recipient) {
         return;
       }
 
-      const result = await amm.getEstimatedCashflow(args.tickLower, args.tickUpper);
-
-      if (!result) {
-        return;
-      }
-
-      return result;
-    },
-    useMemo(() => undefined, [!!amm.signer, agent]),
-  );
-
-  const currentMargin = useAsyncFunction(
-    async (args: CurrentMarginPayload) => {
-      const recipient = await amm.signer?.getAddress();
-
-      if (!recipient) {
-        return;
-      }
-
-      const result = await amm.getCurrentMargin(args.source, args.tickLower, args.tickUpper);
-
+      const result = await amm.getPositionInformation(position);
       if (!result) {
         return;
       }
@@ -101,8 +82,7 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
     fixedApr,
     mintMinimumMarginRequirement,
     swapInfo,
-    estimatedCashflow,
-    currentMargin
+    positionInfo
   };
 
   return <AMMContext.Provider value={value}>{children}</AMMContext.Provider>;

@@ -47,7 +47,9 @@ const useAMMs = (): UseAMMsResult => {
           termEndTimestamp,
           updatedTimestamp: ammUpdatedTimestamp,
           tick,
-          txCount
+          txCount,
+          totalNotionalTraded,
+          totalLiquidity,
         }) =>
           new AugmentedAMM({
             refetch: handleRefetch,
@@ -74,6 +76,8 @@ const useAMMs = (): UseAMMsResult => {
             tick: parseInt(tick as string, 10),
             tickSpacing: parseInt(tickSpacing as string, 10),
             txCount: parseInt(txCount as string, 10),
+            totalNotionalTraded: totalNotionalTraded as JSBI,
+            totalLiquidity: totalLiquidity as JSBI,
           }),
       );
     }

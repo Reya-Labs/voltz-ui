@@ -5,6 +5,7 @@ import { BigNumber, BigNumberish, ContractReceipt, Signer } from 'ethers';
 import RateOracle from './rateOracle';
 import Token from './token';
 import { Price } from './fractions/price';
+import Position from './position';
 export declare type AMMConstructorArgs = {
     id: string;
     signer: Signer | null;
@@ -20,6 +21,8 @@ export declare type AMMConstructorArgs = {
     tick: number;
     tickSpacing: number;
     txCount: number;
+    totalNotionalTraded: JSBI;
+    totalLiquidity: JSBI;
 };
 export declare type AMMGetInfoPostSwapArgs = {
     isFT: boolean;
@@ -85,6 +88,18 @@ export declare type ClosestTickAndFixedRate = {
     closestUsableTick: number;
     closestUsableFixedRate: Price;
 };
+export declare type PositionInfo = {
+    margin: number;
+    fees?: number;
+    liquidationThreshold?: number;
+    safetyThreshold?: number;
+    accruedCashflow: number;
+    variableRateSinceLastSwap?: number;
+    fixedRateSinceLastSwap?: number;
+    beforeMaturity: boolean;
+    fixedApr?: number;
+    healthFactor?: number;
+};
 declare class AMM {
     readonly id: string;
     readonly signer: Signer | null;
@@ -100,17 +115,18 @@ declare class AMM {
     readonly tickSpacing: number;
     readonly tick: number;
     readonly txCount: number;
+    readonly totalNotionalTraded: JSBI;
+    readonly totalLiquidity: JSBI;
     readonly overrides: {
         gasLimit: number;
     };
-    constructor({ id, signer, provider, environment, marginEngineAddress, fcmAddress, rateOracle, updatedTimestamp, termStartTimestamp, termEndTimestamp, underlyingToken, tick, tickSpacing, txCount, }: AMMConstructorArgs);
+    constructor({ id, signer, provider, environment, marginEngineAddress, fcmAddress, rateOracle, updatedTimestamp, termStartTimestamp, termEndTimestamp, underlyingToken, tick, tickSpacing, txCount, totalNotionalTraded, totalLiquidity }: AMMConstructorArgs);
     getInfoPostSwap({ isFT, notional, fixedRateLimit, fixedLow, fixedHigh, }: AMMGetInfoPostSwapArgs): Promise<InfoPostSwap>;
     settlePosition({ owner, fixedLow, fixedHigh, }: AMMSettlePositionArgs): Promise<ContractReceipt>;
     scale(value: number): string;
     descale(value: BigNumber): number;
     updatePositionMargin({ owner, fixedLow, fixedHigh, marginDelta, }: AMMUpdatePositionMarginArgs): Promise<ContractReceipt | void>;
     liquidatePosition({ owner, fixedLow, fixedHigh, }: AMMLiquidatePositionArgs): Promise<ContractReceipt>;
-    getLiquidationThreshold({ owner, fixedLow, fixedHigh, }: AMMLiquidatePositionArgs): Promise<number>;
     getInfoPostMint({ fixedLow, fixedHigh, notional, }: AMMGetInfoPostMintArgs): Promise<number>;
     mint({ fixedLow, fixedHigh, notional, margin, validationOnly, }: AMMMintArgs): Promise<ContractReceipt | void>;
     burn({ fixedLow, fixedHigh, notional, validationOnly, }: AMMBurnArgs): Promise<ContractReceipt | void>;
@@ -125,8 +141,19 @@ declare class AMM {
     fixedApr(): Promise<number>;
     get protocol(): string;
     getVariableApy(): Promise<number>;
-    getEstimatedCashflow(fixedRateLower: number, fixedRateUpper: number): Promise<number>;
-    getCurrentMargin(source: string, fixedRateLower: number, fixedRateUpper: number): Promise<number>;
+    getAllSwaps(position: Position): {
+        fDelta: BigNumber;
+        vDelta: BigNumber;
+        timestamp: BigNumber;
+    }[];
+    getAccruedCashflow(allSwaps: {
+        fDelta: BigNumber;
+        vDelta: BigNumber;
+        timestamp: BigNumber;
+    }[], atMaturity: boolean): Promise<number>;
+    getPositionInformation(position: Position): Promise<PositionInfo>;
+    getVariableFactor(termStartTimestamp: BigNumber, termEndTimestamp: BigNumber): Promise<number>;
+    getApy(termStartTimestamp: BigNumber, termEndTimestamp: BigNumber): Promise<number>;
     closestTickAndFixedRate(fixedRate: number): ClosestTickAndFixedRate;
     getNextUsableFixedRate(fixedRate: number, count: number): number;
 }

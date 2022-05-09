@@ -24,6 +24,8 @@ const deserializeAmm = (
       token: { id: tokenAddress, name: tokenName, decimals },
     },
     txCount,
+    totalLiquidity,
+    totalNotionalTraded
   } = serializedAmm;
   const amm = new AugmentedAMM({
     id,
@@ -44,6 +46,8 @@ const deserializeAmm = (
       decimals: parseInt(decimals, 10),
     }),
     txCount: parseInt(txCount, 10),
+    totalNotionalTraded: JSBI.BigInt(totalNotionalTraded),
+    totalLiquidity: JSBI.BigInt(totalLiquidity),
   });
 
   return amm;

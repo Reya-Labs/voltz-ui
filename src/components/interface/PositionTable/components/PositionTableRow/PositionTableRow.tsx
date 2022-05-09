@@ -1,6 +1,6 @@
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import { positions, SystemStyleObject, Theme } from '@mui/system';
+import { SystemStyleObject, Theme } from '@mui/system';
 import { Agents } from '@components/contexts';
 import { Typography, Button } from '@components/atomic';
 import { MaturityInformation } from '@components/composite';
@@ -8,15 +8,15 @@ import { PositionTableDatum } from '../../types';
 import { lpLabels } from '../../constants';
 import { traderLabels } from '../../constants';
 import { PositionTableFields } from '../../types';
-import { EstimatedCashflow, FixedAPR, CurrentMargin, Notional } from './components';
-import React from 'react';
-import { useAgent } from '@hooks';
+import { FixedAPR, Notional, HealthFactor, CurrentMargin, Fees } from './components';
+import React, { useEffect } from 'react';
+import { useAgent, useAMMContext } from '@hooks';
 import { DateTime } from 'luxon';
-import { Agent } from 'http';
-
-
+import { isUndefined } from 'lodash';
+import { Position } from '@voltz-protocol/v1-sdk';
 
 export type PositionTableRowProps = {
+  position: Position;
   datum: PositionTableDatum;
   index: number;
   onSelect: (mode: 'margin' | 'liquidity') => void;
@@ -24,36 +24,24 @@ export type PositionTableRowProps = {
 };
 
 const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
+  position,
   datum,
   index,
   onSelect,
   handleSettle
 }) => {
+  const { positionInfo } = useAMMContext();
+  const { result: positionInfoResult, loading: loadingPositionInfo, call: callPositionInfo } = positionInfo;
+
+  useEffect(() => {
+    callPositionInfo(position);
+  }, [callPositionInfo, datum]);
+  
   const { agent } = useAgent();
   const variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'main';
-  const typeStyleOverrides = (): SystemStyleObject<Theme> => {
-    if (!variant) {
-      return {
-        backgroundColor: `primary.dark`,
-      };
-    }
-
-    switch (variant) {
-      case 'main':
-        return {
-          backgroundColor: `secondary.darken040`, // this affects the colour of the position rows in the trader positions
-          borderRadius: 2
-        };
-
-      case 'darker':
-        return {
-          backgroundColor: `secondary.darken050`, // this affects the colour of the positions rows in the LP positions 
-          borderRadius: 2
-        };
-
-      default:
-        return {};
-    }
+  const typeStyleOverrides: SystemStyleObject<Theme> = {
+    backgroundColor: `secondary.darken050`, // this affects the colour of the positions rows in the LP positions 
+    borderRadius: 2
   };
 
   let labels: [PositionTableFields, string][];
@@ -65,7 +53,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
   }
 
   return (
-    <TableRow key={index} sx={{ ...typeStyleOverrides() }}>
+    <TableRow key={index} sx={{ ...typeStyleOverrides }}>
       {labels.map(([field, label]) => {
         const renderDisplay = () => {
           const token = datum.protocol.substring(1);
@@ -97,21 +85,111 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
             ); 
             }            
           }
-          // if (datum.source.includes("ME")) {
-          //   if (field === 'estimatedCashflow') {
-          //     return <EstimatedCashflow tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} token={token} />;
+
+          if (field === 'accruedRates') {
+            return (<TableCell align="center">
+              <Typography variant="body2" label={label} sx={{ fontSize: 18 }}>
+                {datum.averageFixedRate}{"%"} 
+              </Typography>
+            </TableCell>);
+          }
+
+          // if (field === 'margin') {
+          //   const renderValue = () => {
+          //     if (loadingPositionInfo) {
+          //       return 'Loading...';
+          //     }
+
+          //     if (!positionInfoResult) {
+          //       return 'No data';
+          //     }
+
+          //     if (!datum.source) {
+          //       return 'No source';
+          //     }
+
+          //     if (DateTime.now() <= datum.endDate) {
+          //       if (positionInfoResult.liquidationThreshold && positionInfoResult.safetyThreshold) {
+          //         if (positionInfoResult.margin < positionInfoResult.liquidationThreshold) {
+          //           return 'DANGER';
+          //         }
+          //         else if (positionInfoResult.margin < positionInfoResult.safetyThreshold) {
+          //           return 'WARNING';
+          //         }
+          //         else {
+          //           return 'HEALTHY';
+          //         }
+          //       }
+          //       else {
+          //         return 'NO DISPLAY';
+          //       }
+          //     }
+          //     else {
+          //       if (datum.settled) {
+          //         return 'NO DISPLAY';
+          //       }
+          //       else {
+          //         return 'NO DISPLAY';
+          //       }
+          //     }
+          //   };
+          //   const status = renderValue();
+          //   if (!status.includes('NO DISPLAY')) {
+          //     return (
+          //       <HealthFactor status={status} />
+          //     );
           //   }
           // }
-          // else {
-          //   if (field === 'estimatedCashflow') {
-          //     return <Typography variant="body2" label="Estimated Cashflow" sx={{ fontSize: 18 }}>
-          //       {"s00n"}
-          //     </Typography>
-          //   }
+
+          // if (field === 'margin') {
+          //   const renderValue = () => {
+          //     if (loadingPositionInfo) {
+          //       return 'Loading...';
+          //     }
+
+          //     if (!positionInfoResult) {
+          //       return 'No data';
+          //     }
+
+          //     if (!datum.source) {
+          //       return 'Cannot get source of position';
+          //     }
+
+          //     let accumulatedFees: string = "No data";
+          //     if (!isUndefined(positionInfoResult.fees)) {
+          //       accumulatedFees = `${positionInfoResult.fees.toFixed(2)} ${token}`;
+          //     }
+
+          //     if (datum.source.includes("FCM")) {
+          //       return `FCM: no fees`;
+          //     }
+
+          //     return `${accumulatedFees}`;
+          //   };
+          //   return <Fees value={renderValue()} />;
           // }
-          // The below lines are responsible for the current margin column of the LP positions: this component contains the Edit button as well. 
+
           if (field === 'margin') {
-            return <CurrentMargin source={datum.source} tickLower={datum.fixedLower} tickUpper={datum.fixedUpper} protocol={datum.protocol} onSelect={ () => onSelect('margin') } displayEditButton={ agent !== Agents.LIQUIDITY_PROVIDER} />;
+            const renderValue = () => {
+              if (loadingPositionInfo) {
+                return 'Loading...';
+              }
+
+              if (!positionInfoResult) {
+                return 'No data';
+              }
+
+              if (!datum.source) {
+                return 'Cannot get source of position';
+              }
+
+              if (datum.source.includes("FCM")) {
+                return `${positionInfoResult.margin.toFixed(2)} ${datum.protocol}`;
+              }
+              
+              return `${positionInfoResult.margin.toFixed(2)} ${token}`;
+            };
+            return <CurrentMargin renderValue={renderValue} onSelect={ () => onSelect('margin') } />;
           }
 
           if (field === 'notional') {

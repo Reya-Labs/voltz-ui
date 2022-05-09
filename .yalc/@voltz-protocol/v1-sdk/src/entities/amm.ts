@@ -1,5 +1,5 @@
 import JSBI from 'jsbi';
-import { ethers, providers } from 'ethers';
+import { providers } from 'ethers';
 import { DateTime } from 'luxon';
 import { BigNumber, BigNumberish, ContractReceipt, Signer, utils } from 'ethers';
 
@@ -9,6 +9,7 @@ import {
   FACTORY_ADDRESS,
   MIN_FIXED_RATE,
   MAX_FIXED_RATE,
+  ONE_YEAR_IN_SECONDS,
 } from '../constants';
 import {
   Periphery__factory as peripheryFactory,
@@ -18,6 +19,7 @@ import {
   // todo: not very elegant to use the mock as a factory
   ERC20Mock__factory as tokenFactory,
   AaveFCM__factory as fcmFactory,
+  BaseRateOracle__factory,
 } from '../typechain';
 import RateOracle from './rateOracle';
 import { TickMath } from '../utils/tickMath';
@@ -29,6 +31,8 @@ import { Price } from './fractions/price';
 import { TokenAmount } from './fractions/tokenAmount';
 import { decodeInfoPostMint, decodeInfoPostSwap, getReadableErrorMessage } from '../utils/errors/errorHandling';
 import { toBn } from 'evm-bn';
+import Position from './position';
+import { isUndefined } from 'lodash';
 
 export type AMMConstructorArgs = {
   id: string;
@@ -45,6 +49,8 @@ export type AMMConstructorArgs = {
   tick: number;
   tickSpacing: number;
   txCount: number;
+  totalNotionalTraded: JSBI;
+  totalLiquidity: JSBI;
 };
 
 export type AMMGetInfoPostSwapArgs = {
@@ -123,6 +129,19 @@ export type ClosestTickAndFixedRate = {
   closestUsableFixedRate: Price;
 };
 
+export type PositionInfo = {
+  margin: number;
+  fees?: number;
+  liquidationThreshold?: number;
+  safetyThreshold?: number;
+  accruedCashflow: number;
+  variableRateSinceLastSwap?: number;
+  fixedRateSinceLastSwap?: number;
+  beforeMaturity: boolean;
+  fixedApr?: number;
+  healthFactor?: number;
+}
+
 class AMM {
   public readonly id: string;
   public readonly signer: Signer | null;
@@ -138,6 +157,8 @@ class AMM {
   public readonly tickSpacing: number;
   public readonly tick: number;
   public readonly txCount: number;
+  public readonly totalNotionalTraded: JSBI;
+  public readonly totalLiquidity: JSBI;
   public readonly overrides: {
     gasLimit: number;
   }
@@ -157,6 +178,8 @@ class AMM {
     tick,
     tickSpacing,
     txCount,
+    totalNotionalTraded,
+    totalLiquidity
   }: AMMConstructorArgs) {
     this.id = id;
     this.signer = signer;
@@ -172,6 +195,8 @@ class AMM {
     this.tickSpacing = tickSpacing;
     this.tick = tick;
     this.txCount = txCount;
+    this.totalNotionalTraded = totalNotionalTraded;
+    this.totalLiquidity = totalLiquidity;
 
     this.overrides = {
       gasLimit: 10000000,
@@ -415,29 +440,6 @@ class AMM {
     catch (error) {
       throw new Error("Transaction Confirmation Error");
     }
-  }
-
-  public async getLiquidationThreshold({
-    owner,
-    fixedLow,
-    fixedHigh,
-  }: AMMLiquidatePositionArgs): Promise<number> {
-    if (!this.signer) {
-      throw new Error('Wallet not connected');
-    }
-
-    const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
-    const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
-
-    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
-    const threshold = await marginEngineContract.callStatic.getPositionMarginRequirement(
-      owner,
-      tickLower,
-      tickUpper,
-      false,
-    );
-
-    return this.descale(threshold);
   }
 
   public async getInfoPostMint({
@@ -958,49 +960,212 @@ class AMM {
     return parseFloat(utils.formatEther(historicalApy));
   }
 
-  public async getEstimatedCashflow(fixedRateLower: number, fixedRateUpper: number): Promise<number> {
-    if (!this.signer) {
-      throw new Error('Wallet not connected');
+  public getAllSwaps(position: Position) {
+    const allSwaps: {
+      fDelta: BigNumber,
+      vDelta: BigNumber,
+      timestamp: BigNumber
+    }[] = [];
+
+    for (let s of position.swaps) {
+      allSwaps.push({
+        fDelta: BigNumber.from(s.fixedTokenDeltaUnbalanced.toString()),
+        vDelta: BigNumber.from(s.variableTokenDelta.toString()),
+        timestamp: BigNumber.from(s.transactionTimestamp.toString())
+      })
     }
 
-    const signerAddress = await this.signer.getAddress();
+    for (let s of position.fcmSwaps) {
+      allSwaps.push({
+        fDelta: BigNumber.from(s.fixedTokenDeltaUnbalanced.toString()),
+        vDelta: BigNumber.from(s.variableTokenDelta.toString()),
+        timestamp: BigNumber.from(s.transactionTimestamp.toString())
+      })
+    }
 
-    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.signer);
-    const estimatedCashflow = await peripheryContract.callStatic.estimatedCashflowAtMaturity(
-      this.marginEngineAddress,
-      signerAddress,
-      this.closestTickAndFixedRate(fixedRateUpper).closestUsableTick,
-      this.closestTickAndFixedRate(fixedRateLower).closestUsableTick,
-    );
+    for (let s of position.fcmUnwinds) {
+      allSwaps.push({
+        fDelta: BigNumber.from(s.fixedTokenDeltaUnbalanced.toString()),
+        vDelta: BigNumber.from(s.variableTokenDelta.toString()),
+        timestamp: BigNumber.from(s.transactionTimestamp.toString())
+      })
+    }
 
-    return this.descale(estimatedCashflow);
+    allSwaps.sort((a, b) => a.timestamp.sub(b.timestamp).toNumber());
+
+    return allSwaps;
   }
 
-  public async getCurrentMargin(source: string, fixedRateLower: number, fixedRateUpper: number): Promise<number> {
+  public async getAccruedCashflow(allSwaps: {
+    fDelta: BigNumber,
+    vDelta: BigNumber,
+    timestamp: BigNumber
+  }[], atMaturity: boolean): Promise<number> {
     if (!this.signer) {
       throw new Error('Wallet not connected');
     }
 
-    const signerAddress = await this.signer.getAddress();
+    let accruedCashflow = BigNumber.from(0);
+    let lenSwaps = allSwaps.length;
 
-    if (source.includes("FCM")) {
-      const fcmContract = fcmFactory.connect(this.fcmAddress, this.signer);
-      const margin = (await fcmContract.getTraderMarginInATokens(signerAddress));
-      return this.descale(margin);
+    let untilTimestamp = (atMaturity) ? BigNumber.from(this.termEndTimestamp.toString()) : allSwaps[lenSwaps - 1].timestamp;
+    untilTimestamp = untilTimestamp.mul(BigNumber.from(10).pow(18));
+
+    const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.signer);
+
+    const excludeLast = (atMaturity) ? 0 : 1;
+    for (let i = 0; i + excludeLast < lenSwaps; i++) {
+      const currentSwapTimestamp = allSwaps[i].timestamp.mul(BigNumber.from(10).pow(18));
+
+      const normalizedTime = (untilTimestamp.sub(currentSwapTimestamp)).div(BigNumber.from(ONE_YEAR_IN_SECONDS))
+
+      const variableFactorBetweenSwaps = await rateOracleContract.callStatic.variableFactor(currentSwapTimestamp, untilTimestamp);
+
+      const fixedCashflow = allSwaps[i].fDelta.mul(normalizedTime).div(BigNumber.from(100)).div(BigNumber.from(10).pow(18));
+      const variableCashflow = allSwaps[i].vDelta.mul(variableFactorBetweenSwaps).div(BigNumber.from(10).pow(18));
+
+      const cashflow = fixedCashflow.add(variableCashflow);
+      accruedCashflow = accruedCashflow.add(cashflow);
     }
 
-    const marginEngineContract = marginEngineFactory.connect(
-      this.marginEngineAddress,
-      this.signer,
-    );
+    return this.descale(accruedCashflow);
+  }
 
-    const margin = (await marginEngineContract.callStatic.getPosition(
-      signerAddress,
-      this.closestTickAndFixedRate(fixedRateUpper).closestUsableTick,
-      this.closestTickAndFixedRate(fixedRateLower).closestUsableTick,
-    )).margin;
+  public async getPositionInformation(position: Position): Promise<PositionInfo> {
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
+    }
 
-    return this.descale(margin);
+    if (!this.provider) {
+      throw new Error('Blockchain not connected');
+    }
+
+    let results: PositionInfo = {
+      margin: 0,
+      accruedCashflow: 0,
+      beforeMaturity: false
+    };
+
+    const signerAddress = await this.signer.getAddress();
+    const lastBlock = await this.provider.getBlockNumber();
+    const lastBlockTimestamp = BigNumber.from((await this.provider.getBlock(lastBlock - 4)).timestamp);
+
+    const beforeMaturity = (lastBlockTimestamp.mul(BigNumber.from(10).pow(18))).lt(BigNumber.from(this.termEndTimestamp.toString()));
+    results.beforeMaturity = beforeMaturity;
+
+    // fixed apr
+    if (beforeMaturity) {
+      results.fixedApr = await this.fixedApr();
+    }
+
+    const allSwaps = this.getAllSwaps(position);
+    const lenSwaps = allSwaps.length;
+
+    // variable apy and accrued cashflow
+
+    if (lenSwaps > 0) {
+      if (beforeMaturity) {
+        if (lenSwaps > 0) {
+          const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.signer);
+
+          const lastSwapTimestamp = allSwaps[lenSwaps - 1].timestamp;
+          const variableApySinceLastSwap = await rateOracleContract.callStatic.getApyFromTo(lastSwapTimestamp, lastBlockTimestamp);
+          results.variableRateSinceLastSwap = variableApySinceLastSwap.div(BigNumber.from(10).pow(12)).toNumber() / 10000;
+
+          results.fixedRateSinceLastSwap = position.averageFixedRate;
+
+          results.accruedCashflow = await this.getAccruedCashflow(allSwaps, false);
+        }
+      }
+      else {
+        if (!position.isSettled) {
+          results.accruedCashflow = await this.getAccruedCashflow(allSwaps, true);
+        }
+      }
+    }
+
+    // margin and fees information
+
+    if (position.source.includes("FCM")) {
+      const fcmContract = fcmFactory.connect(this.fcmAddress, this.signer);
+      const margin = (await fcmContract.getTraderMarginInATokens(signerAddress));
+      results.margin = this.descale(margin);
+
+      if (beforeMaturity) {
+        results.healthFactor = 3;
+      }
+    }
+    else {
+      const tickLower = position.tickLower;
+      const tickUpper = position.tickUpper;
+
+      const marginEngineContract = marginEngineFactory.connect(
+        this.marginEngineAddress,
+        this.signer,
+      );
+
+      const rawPositionInfo = await marginEngineContract.callStatic.getPosition(
+        signerAddress,
+        tickLower,
+        tickUpper,
+      );
+      results.margin = this.descale(rawPositionInfo.margin);
+      results.fees = this.descale(rawPositionInfo.accumulatedFees);
+
+      if (beforeMaturity) {
+        try {
+          const liquidationThreshold = await marginEngineContract.callStatic.getPositionMarginRequirement(
+            signerAddress,
+            tickLower,
+            tickUpper,
+            true
+          );
+          results.liquidationThreshold = this.descale(liquidationThreshold);
+        } catch (_) { }
+
+        try {
+          const safetyThreshold = await marginEngineContract.callStatic.getPositionMarginRequirement(
+            signerAddress,
+            tickLower,
+            tickUpper,
+            false
+          );
+          results.safetyThreshold = this.descale(safetyThreshold);
+        }
+        catch (_) { }
+
+        if (!isUndefined(results.liquidationThreshold) && !isUndefined(results.safetyThreshold)) {
+          results.healthFactor = (results.margin < results.liquidationThreshold) ? 1 : (results.margin < results.safetyThreshold ? 2 : 3);
+        }
+      }
+    }
+
+    return results;
+  }
+
+  public async getVariableFactor(termStartTimestamp: BigNumber, termEndTimestamp: BigNumber): Promise<number> {
+    if (!this.provider) {
+      throw new Error('Blockchain not connected');
+    }
+    const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
+    try {
+      const result = await rateOracleContract.callStatic.variableFactor(termStartTimestamp, termEndTimestamp);
+      const resultScaled = result.div(BigNumber.from(10).pow(12)).toNumber() / 1000000;
+      return resultScaled;
+    }
+    catch (error) {
+      throw new Error("Cannot get variable factor");
+    }
+  }
+
+  public async getApy(termStartTimestamp: BigNumber, termEndTimestamp: BigNumber): Promise<number> {
+    if (!this.provider) {
+      throw new Error('Blockchain not connected');
+    }
+    const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
+    const result = await rateOracleContract.callStatic.getApyFromTo(termStartTimestamp, termEndTimestamp);
+    const resultScaled = result.div(BigNumber.from(10).pow(12)).toNumber() / 1000000;
+    return resultScaled;
   }
 
   public closestTickAndFixedRate(fixedRate: number): ClosestTickAndFixedRate {

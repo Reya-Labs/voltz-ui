@@ -46,6 +46,9 @@ const colors = {
   vzRedDark: '#100008',
   vzPink: '#FF4AA9',
   vzYellowDark: '#191406',
+  vzCustomRed1: '#F61067',
+  vzCustomYellow1: '#F1D302',
+  vzCustomGreen1: '#40F99B',
 };
 
 export default colors;

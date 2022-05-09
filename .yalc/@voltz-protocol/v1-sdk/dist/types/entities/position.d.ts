@@ -11,7 +11,7 @@ import Mint from './mint';
 import Settlement from './settlement';
 import Swap from './swap';
 import { Price } from './fractions/price';
-export declare type FCMPositionConstructorArgs = {
+export declare type PositionConstructorArgs = {
     source: string;
     id: string;
     createdTimestamp: JSBI;
@@ -31,6 +31,8 @@ export declare type FCMPositionConstructorArgs = {
     margin: JSBI;
     accumulatedFees: JSBI;
     positionType: number;
+    totalNotionalTraded: JSBI;
+    sumOfWeightedFixedRate: JSBI;
     mints: Array<Mint>;
     burns: Array<Burn>;
     swaps: Array<Swap>;
@@ -64,7 +66,9 @@ declare class Position {
     readonly marginUpdates: Array<MarginUpdate>;
     readonly liquidations: Array<Liquidation>;
     readonly settlements: Array<Settlement>;
-    constructor({ source, id, createdTimestamp, amm, owner, updatedTimestamp, marginInScaledYieldBearingTokens, fixedTokenBalance, variableTokenBalance, isSettled, fcmSwaps, fcmUnwinds, fcmSettlements, tickLower, tickUpper, liquidity, margin, accumulatedFees, positionType, mints, burns, swaps, marginUpdates, liquidations, settlements, }: FCMPositionConstructorArgs);
+    readonly totalNotionalTraded: JSBI;
+    readonly sumOfWeightedFixedRate: JSBI;
+    constructor({ source, id, createdTimestamp, amm, owner, updatedTimestamp, marginInScaledYieldBearingTokens, fixedTokenBalance, variableTokenBalance, isSettled, fcmSwaps, fcmUnwinds, fcmSettlements, tickLower, tickUpper, liquidity, margin, accumulatedFees, positionType, mints, burns, swaps, marginUpdates, liquidations, settlements, totalNotionalTraded, sumOfWeightedFixedRate, }: PositionConstructorArgs);
     get priceLower(): Price;
     get priceUpper(): Price;
     get fixedRateLower(): Price;
@@ -76,6 +80,7 @@ declare class Position {
     get effectiveAccumulatedFees(): number;
     get createdDateTime(): DateTime;
     get updatedDateTime(): DateTime;
+    get averageFixedRate(): number | undefined;
 }
 export default Position;
 //# sourceMappingURL=position.d.ts.map

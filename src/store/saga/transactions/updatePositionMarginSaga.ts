@@ -33,8 +33,8 @@ function* updatePositionMarginSaga(action: UpdatePositionMarginAction) {
     result = yield call(
       [amm, "updatePositionMargin"], {
       marginDelta: margin,
-      fixedLow: fixedLow,
-      fixedHigh: fixedHigh,
+      fixedLow: fixedLow || 1,
+      fixedHigh: fixedHigh || 2.01,
     });
 
     //  CALLING API FOR TX MONITORING HERE

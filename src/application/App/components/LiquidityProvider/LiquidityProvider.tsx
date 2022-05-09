@@ -9,10 +9,11 @@ import { Agents } from '@components/contexts';
 import { useAgent } from '@hooks';
 import { routes } from '@routes';
 import { Page } from '@components/interface';
+import { Panel } from '@components/atomic';
+import { PageTitleDesc } from '@components/composite';
 import ConnectedAMMTable from '../ConnectedAMMTable/ConnectedAMMTable';
 import ConnectedPositionTable from '../ConnectedPositionTable/ConnectedPositionTable';
 import { ConnectedMintBurnForm } from './components';
-import PageTitleDesc from 'src/components/interface/Page/PageTitleDesc/PageTitleDesc';
 
 const LiquidityProvider: React.FunctionComponent = () => {
   const [formActive, setFormActive] = useState(false);
@@ -29,6 +30,21 @@ const LiquidityProvider: React.FunctionComponent = () => {
     return (position?.amm as AugmentedAMM) || amm;
   }, [amm, position]);
 
+  const getRenderMode = () => {
+    if (!formActive) {
+      if (pathnameWithoutPrefix === routes.POOLS) {
+        return 'pools';
+      } else {
+        return 'portfolio';
+      }
+    }
+
+    if (formActive && !isNull(effectiveAmm)) {
+      return 'form'
+    }
+  };
+
+  const renderMode = getRenderMode();
   const marginEditMode = formActive && !isNull(effectiveAmm) && Boolean(position) && editMode === 'margin';
   const liquidityEditMode = formActive && !isNull(effectiveAmm) && Boolean(position) && editMode === 'liquidity';
 
@@ -37,7 +53,6 @@ const LiquidityProvider: React.FunctionComponent = () => {
   // console.log('liq edit mode', liquidityEditMode);
   // // eslint-disable-next-line
   // console.log('margin edit mode', marginEditMode);
-  
 
   useEffect(() => {
     setFormActive(false);
@@ -49,19 +64,6 @@ const LiquidityProvider: React.FunctionComponent = () => {
   useEffect(() => {
     handleReset();
   }, [key]);
-
-  const pageTitle = useMemo(() => {
-    switch (pathnameWithoutPrefix) {
-      case routes.POOLS:
-        return 'Provide Liquidity';
-
-      case routes.LP_FARM:
-        return 'YOUR LP POSITIONS';
-
-      default:
-        return '';
-    }
-  }, [pathnameWithoutPrefix]);
 
   const handleSelectAmm = (selected: AugmentedAMM) => {
     setFormActive(true);
@@ -83,34 +85,35 @@ const LiquidityProvider: React.FunctionComponent = () => {
 
   return (
     <Page backgroundView={formActive ? 'form' : 'table'}>
-      <Box sx={{ width: '100%', maxWidth: '900px', margin: '0 auto' }}>
-        {!formActive && ( //if form not active then
-          <Box sx={{ height: '100%' }}>
+      {renderMode === 'pools' && (
+        <Box sx={{ width: '100%', maxWidth: '870px', margin: '0 auto' }}>
+          <Box sx={{ marginBottom: (theme) => theme.spacing(12) }}>
             <PageTitleDesc 
-              title={pageTitle} 
+              title='Provide Liquidity' 
               desc='Choose a pool and provide liquidity within your chosen ranges.' 
             />
-
-            {pathnameWithoutPrefix === routes.POOLS ? (
-              <ConnectedAMMTable onSelectItem={handleSelectAmm} />
-            ) : (
-              <ConnectedPositionTable amm={effectiveAmm} onSelectItem={handleSelectPosition}  agent={Agents.LIQUIDITY_PROVIDER} />
-            )}
           </Box>
-        )}
+          <ConnectedAMMTable onSelectItem={handleSelectAmm} />
+        </Box>
+      )}
 
-        {formActive && !isNull(effectiveAmm) && (
-          <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
-            <ConnectedMintBurnForm 
-              amm={effectiveAmm} 
-              marginEditMode={marginEditMode}
-              liquidityEditMode={liquidityEditMode}
-              onReset={handleReset} 
-              position={position} 
-            /> 
-          </Box>
-        )}
-      </Box>
+      {renderMode === 'portfolio' && (
+        <Panel variant='dark' sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
+          <ConnectedPositionTable amm={effectiveAmm} onSelectItem={handleSelectPosition}  agent={Agents.LIQUIDITY_PROVIDER} />
+        </Panel>
+      )}
+
+      {renderMode === 'form' && (
+        <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
+          <ConnectedMintBurnForm 
+            amm={effectiveAmm} 
+            marginEditMode={marginEditMode}
+            liquidityEditMode={liquidityEditMode}
+            onReset={handleReset} 
+            position={position} 
+          /> 
+        </Box>
+      )}
     </Page>
   );
 };
