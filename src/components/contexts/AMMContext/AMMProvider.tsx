@@ -5,6 +5,7 @@ import { useAsyncFunction, useAgent } from '@hooks';
 import { Agents } from '@components/contexts';
 import { MintMinimumMarginRequirementPayload, SwapInfoPayload } from './types';
 import AMMContext from './AMMContext';
+import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
 
 export type AMMProviderProps = {
   amm: AugmentedAMM;
@@ -28,7 +29,7 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
         return;
       }
 
-      return amm.getInfoPostMint({...args});
+      return amm.getInfoPostMint({ ...args });
     },
     useMemo(() => undefined, [!!amm.signer]),
     100
@@ -59,7 +60,7 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
   );
 
   const positionInfo = useAsyncFunction(
-    async (position) => {
+    async (position: Position) => {
       const recipient = await amm.signer?.getAddress();
 
       if (!recipient) {
@@ -67,7 +68,6 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
       }
 
       const result = await amm.getPositionInformation(position);
-
       if (!result) {
         return;
       }
