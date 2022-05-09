@@ -15,7 +15,7 @@ import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 
 export type PositionTableRowProps = {
   position: Position;
-  positionInfo: PositionInfo;
+  positionInfo?: PositionInfo;
   index: number;
   onSelect: (mode: 'margin' | 'liquidity') => void;
   handleSettle: () => void;
@@ -80,12 +80,12 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
           if (field === 'accruedRates') {
             const renderValue = () => {
             
-              if (positionInfo.variableRateSinceLastSwap && positionInfo.fixedRateSinceLastSwap) {
+              if (positionInfo?.variableRateSinceLastSwap && positionInfo?.fixedRateSinceLastSwap) {
                 if (position.positionType === 1) {
-                  return `${positionInfo.fixedRateSinceLastSwap.toFixed(2)}% / ${positionInfo.variableRateSinceLastSwap.toFixed(2)}%`;
+                  return `${positionInfo?.fixedRateSinceLastSwap.toFixed(2)}% / ${positionInfo?.variableRateSinceLastSwap.toFixed(2)}%`;
                 }
                 else {
-                  return `${positionInfo.variableRateSinceLastSwap.toFixed(2)}% / ${positionInfo.fixedRateSinceLastSwap.toFixed(2)}%`;
+                  return `${positionInfo?.variableRateSinceLastSwap.toFixed(2)}% / ${positionInfo?.fixedRateSinceLastSwap.toFixed(2)}%`;
                 }
                 
               }
@@ -102,7 +102,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
           }
 
           if (field === 'margin') {
-            return <CurrentMargin accruedCashflow={positionInfo.accruedCashflow} margin={positionInfo.margin} token={token} onSelect={ () => onSelect('margin') } />;
+            return <CurrentMargin accruedCashflow={positionInfo?.accruedCashflow} margin={positionInfo?.margin} token={token} onSelect={ () => onSelect('margin') } />;
           }
 
           if (field === 'notional') {
@@ -150,7 +150,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
 
         };
 
-        console.log("key:", field);
+        // console.log("key:", field);
         return <TableCell key={field}>{renderDisplay()}</TableCell>;
       })}
 

@@ -16,7 +16,7 @@ import { useAgent } from '@hooks';
 
 export type PositionTableProps = {
   positions: Position[];
-  positionInformation: PositionInfo[];
+  positionInformation: Record<Position['id'], PositionInfo>;
   order: data.TableOrder;
   onSetOrder: (order: data.TableOrder) => void;
   orderBy: PositionTableFields;
@@ -78,44 +78,48 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
     <>
       {positions.length > 0 && (
         <List sx={{ padding: '0', margin: '0' }}>
-          {positions.map((pos, index) => (
-            <ListItem sx={listItemStyles}>
-              <Panel variant='main' sx={{ width: '100%', padding: (theme) => `0 ${theme.spacing(4)}` }}>
-                
-                <PositionTableHead
-                  currencyCode='USD'
-                  currencySymbol='$'
-                  fcmBadge={pos.source === 'FCM'}
-                  fees={agent === Agents.LIQUIDITY_PROVIDER ? positionInformation[index].fees : undefined}
-                  feesPositive={true}
-                  beforeMaturity={positionInformation[index].beforeMaturity}
-                  healthFactor={positionInformation[index].healthFactor}
-                  currentFixedRate={(agent === Agents.LIQUIDITY_PROVIDER) ? positionInformation[index].fixedApr : undefined}
-                  positionType={pos.positionType}
-                />
+          {positions.map((pos, index) => {
+            const info = positionInformation[pos.id];
 
-                <TableContainer>
-                  <Table size="medium" sx={{ ...commonOverrides }}>
-                    <TableBody>
-                      {/* <AMMProvider amm={(pos.amm as AugmentedAMM)}> */}
-                        <PositionTableRow
-                          position={pos}
-                          positionInfo={positionInformation[index]}
-                          key={pos.id}
-                          index={index}
-                          onSelect={(mode: 'margin' | 'liquidity') => handleSelectRow(index, mode)}
-                          handleSettle={() => handleSettle(pos)}
-                        />
-                      {/* </AMMProvider> */}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+            return (
+              <ListItem sx={listItemStyles}>
+                <Panel variant='main' sx={{ width: '100%', padding: (theme) => `0 ${theme.spacing(4)}` }}>
+                  
+                  <PositionTableHead
+                    currencyCode='USD'
+                    currencySymbol='$'
+                    fcmBadge={pos.source === 'FCM'}
+                    fees={agent === Agents.LIQUIDITY_PROVIDER ? info?.fees : undefined}
+                    feesPositive={true}
+                    beforeMaturity={info?.beforeMaturity}
+                    healthFactor={info?.healthFactor}
+                    currentFixedRate={(agent === Agents.LIQUIDITY_PROVIDER) ? info?.fixedApr : undefined}
+                    positionType={pos.positionType}
+                  />
 
-                <TransactionList position={pos} />
+                  <TableContainer>
+                    <Table size="medium" sx={{ ...commonOverrides }}>
+                      <TableBody>
+                        {/* <AMMProvider amm={(pos.amm as AugmentedAMM)}> */}
+                          <PositionTableRow
+                            position={pos}
+                            positionInfo={info}
+                            key={pos.id}
+                            index={index}
+                            onSelect={(mode: 'margin' | 'liquidity') => handleSelectRow(index, mode)}
+                            handleSettle={() => handleSettle(pos)}
+                          />
+                        {/* </AMMProvider> */}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
 
-              </Panel>
-            </ListItem>
-          ))}
+                  <TransactionList position={pos} />
+
+                </Panel>
+              </ListItem>
+            )}
+          )}
         </List>
       )}
     </>
