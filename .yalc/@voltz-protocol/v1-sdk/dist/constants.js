@@ -8,11 +8,9 @@ var jsbi_1 = __importDefault(require("jsbi"));
 exports.MaxUint256 = jsbi_1.default.BigInt('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff');
 exports.ADDRESS_ZERO = '0x0000000000000000000000000000000000000000';
 // Latest kovan deployment address of the factory
-// export const FACTORY_ADDRESS = '0xAF47e8353729E5be6cA4f605dd176B7Fc80EDA08';
 exports.FACTORY_ADDRESS = '0x07091fF74E2682514d860Ff9F4315b90525952b0';
 // Latest kovan deployment address of the periphery
 exports.PERIPHERY_ADDRESS = '0xcf0144e092f2B80B11aD72CF87C71d1090F97746';
-// export const PERIPHERY_ADDRESS = '0xc6e7DF5E7b4f2A278906862b61205850344D4e7d';
 // constants used internally but not expected to be used externally
 exports.NEGATIVE_ONE = jsbi_1.default.BigInt(-1);
 exports.ZERO = jsbi_1.default.BigInt(0);

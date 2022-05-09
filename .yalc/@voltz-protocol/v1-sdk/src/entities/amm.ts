@@ -1008,8 +1008,9 @@ class AMM {
     let accruedCashflow = BigNumber.from(0);
     let lenSwaps = allSwaps.length;
 
-    let untilTimestamp = (atMaturity) ? BigNumber.from(this.termEndTimestamp.toString()) : allSwaps[lenSwaps - 1].timestamp;
-    untilTimestamp = untilTimestamp.mul(BigNumber.from(10).pow(18));
+    let untilTimestamp = (atMaturity)
+      ? BigNumber.from(this.termEndTimestamp.toString())
+      : allSwaps[lenSwaps - 1].timestamp.mul(BigNumber.from(10).pow(18));
 
     const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.signer);
 
@@ -1050,9 +1051,6 @@ class AMM {
     const lastBlock = await this.provider.getBlockNumber();
     const lastBlockTimestamp = BigNumber.from((await this.provider.getBlock(lastBlock - 4)).timestamp);
 
-    console.log("lastBlockTimestamp:", lastBlockTimestamp);
-    console.log("amm term end timestamp:", this.termEndTimestamp.toString());
-
     const beforeMaturity = (lastBlockTimestamp.mul(BigNumber.from(10).pow(18))).lt(BigNumber.from(this.termEndTimestamp.toString()));
     results.beforeMaturity = beforeMaturity;
 
@@ -1072,7 +1070,6 @@ class AMM {
           const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.signer);
 
           const lastSwapTimestamp = allSwaps[lenSwaps - 1].timestamp;
-          console.log("last swap timestamp:", lastSwapTimestamp);
           const variableApySinceLastSwap = await rateOracleContract.callStatic.getApyFromTo(lastSwapTimestamp, lastBlockTimestamp);
           results.variableRateSinceLastSwap = variableApySinceLastSwap.div(BigNumber.from(10).pow(12)).toNumber() / 10000;
 
@@ -1144,7 +1141,6 @@ class AMM {
       }
     }
 
-    console.log();
     return results;
   }
 
@@ -1159,7 +1155,6 @@ class AMM {
       return resultScaled;
     }
     catch (error) {
-      console.log("Cannot get variable factor");
       throw new Error("Cannot get variable factor");
     }
   }

@@ -953,8 +953,9 @@ var AMM = /** @class */ (function () {
                         }
                         accruedCashflow = ethers_1.BigNumber.from(0);
                         lenSwaps = allSwaps.length;
-                        untilTimestamp = (atMaturity) ? ethers_1.BigNumber.from(this.termEndTimestamp.toString()) : allSwaps[lenSwaps - 1].timestamp;
-                        untilTimestamp = untilTimestamp.mul(ethers_1.BigNumber.from(10).pow(18));
+                        untilTimestamp = (atMaturity)
+                            ? ethers_1.BigNumber.from(this.termEndTimestamp.toString())
+                            : allSwaps[lenSwaps - 1].timestamp.mul(ethers_1.BigNumber.from(10).pow(18));
                         rateOracleContract = typechain_1.BaseRateOracle__factory.connect(this.rateOracle.id, this.signer);
                         excludeLast = (atMaturity) ? 0 : 1;
                         i = 0;
@@ -1006,8 +1007,6 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, this.provider.getBlock(lastBlock - 4)];
                     case 3:
                         lastBlockTimestamp = _b.apply(_a, [(_f.sent()).timestamp]);
-                        console.log("lastBlockTimestamp:", lastBlockTimestamp);
-                        console.log("amm term end timestamp:", this.termEndTimestamp.toString());
                         beforeMaturity = (lastBlockTimestamp.mul(ethers_1.BigNumber.from(10).pow(18))).lt(ethers_1.BigNumber.from(this.termEndTimestamp.toString()));
                         results.beforeMaturity = beforeMaturity;
                         if (!beforeMaturity) return [3 /*break*/, 5];
@@ -1024,7 +1023,6 @@ var AMM = /** @class */ (function () {
                         if (!(lenSwaps > 0)) return [3 /*break*/, 8];
                         rateOracleContract = typechain_1.BaseRateOracle__factory.connect(this.rateOracle.id, this.signer);
                         lastSwapTimestamp = allSwaps[lenSwaps - 1].timestamp;
-                        console.log("last swap timestamp:", lastSwapTimestamp);
                         return [4 /*yield*/, rateOracleContract.callStatic.getApyFromTo(lastSwapTimestamp, lastBlockTimestamp)];
                     case 6:
                         variableApySinceLastSwap = _f.sent();
@@ -1090,9 +1088,7 @@ var AMM = /** @class */ (function () {
                             results.healthFactor = (results.margin < results.liquidationThreshold) ? 1 : (results.margin < results.safetyThreshold ? 2 : 3);
                         }
                         _f.label = 22;
-                    case 22:
-                        console.log();
-                        return [2 /*return*/, results];
+                    case 22: return [2 /*return*/, results];
                 }
             });
         });
@@ -1117,7 +1113,6 @@ var AMM = /** @class */ (function () {
                         return [2 /*return*/, resultScaled];
                     case 3:
                         error_12 = _a.sent();
-                        console.log("Cannot get variable factor");
                         throw new Error("Cannot get variable factor");
                     case 4: return [2 /*return*/];
                 }
