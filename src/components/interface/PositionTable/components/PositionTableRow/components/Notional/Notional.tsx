@@ -1,55 +1,48 @@
-import TableCell from '@mui/material/TableCell';
-
-import { Typography } from '@components/atomic';
-import { Button } from '@components/atomic';
+import React from 'react';
+import { Button, Typography } from '@components/atomic';
 import { isUndefined } from 'lodash';
+import { SystemStyleObject, Theme } from '@mui/system';
+
 export type NotionalProps = {
-    notional?: string;
-    displayEditButton?: boolean;
-    token: string;
-    onSelect?: () => void;
-  };
+  notional?: string;
+  onEdit?: () => void;
+  token: string;
+};
 
+const buttonStyles: SystemStyleObject<Theme> = { 
+  display: "flex",
+  paddingTop: (theme) => theme.spacing(0),
+  paddingBottom: (theme) => theme.spacing(0),
+  paddingLeft: (theme) => theme.spacing(0),
+  paddingRight: (theme) => theme.spacing(0),
+  borderStyle: "solid",
+  borderColor: "#5C0026",
+  borderRadius: 1,
+  flex: "none",
+  width: "100%",
+  background: "transparent",
+  color: "#FF4AA9",
 
-const Notional: React.FunctionComponent<NotionalProps> = ({ notional, token, onSelect}) => {
+  '&:hover': {
+    borderColor: '#FF4AA9',
+    background: "transparent",
+  }
+};
 
-      const renderNotionalAmount = () => {
-        if (isUndefined(notional)) {
-          return 'No data';
-        }
-        return `${notional} ${token}`;
-      };
+const Notional: React.FunctionComponent<NotionalProps> = ({ notional, onEdit, token }) => {
+  return (
+    <>
+      <Typography variant="body2" label="Notional" sx={{ fontSize: 18 }}>
+        {isUndefined(notional) ? 'No data' : `${notional} ${token}`}
+      </Typography>
 
-      return (
-        <TableCell>
-          <Typography variant="body2" label="Notional" sx={{ fontSize: 18 }}>
-            {renderNotionalAmount()}
-          </Typography>
-    
-          {!isUndefined(onSelect) && (<Button sx={{
-              display: "flex",
-              paddingTop: (theme) => theme.spacing(0),
-              paddingBottom: (theme) => theme.spacing(0),
-              paddingLeft: (theme) => theme.spacing(0),
-              paddingRight: (theme) => theme.spacing(0),
-              borderStyle: "solid",
-              borderColor: "#5C0026",
-              borderRadius: 1,
-              flex: "none",
-              width: "100%",
-              background: "transparent",
-              color: "#FF4AA9",
-              '&:hover': {
-                borderColor: '#FF4AA9',
-                background: "transparent",
-              },
-            }} onClick={onSelect}> 
-                Edit
-            </Button>)}
-    
-    
-        </TableCell>
-      );
+      {onEdit && (
+        <Button sx={buttonStyles} onClick={onEdit}> 
+          Edit
+        </Button>
+      )}
+    </>
+  );
 };
     
-    export default Notional;
+export default Notional;
