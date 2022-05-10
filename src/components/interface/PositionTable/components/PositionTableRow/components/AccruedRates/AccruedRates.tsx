@@ -1,4 +1,3 @@
-import React from 'react';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 import { Typography } from '@components/atomic';
 

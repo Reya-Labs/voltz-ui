@@ -45,7 +45,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     const token = position.amm.protocol.substring(1);
     
     if (field === 'accruedRates') {
-      <AccruedRates position={position} positionInfo={positionInfo} />
+      return (<AccruedRates position={position} positionInfo={positionInfo} />);
     }
 
     if (field === 'fixedApr') {
