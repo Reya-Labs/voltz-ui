@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
 import { useWallet } from '@hooks';
-import { WalletName } from '@components/contexts';
 import { Panel } from '@components/atomic';
 import { Modal } from '@components/composite';
 import { WalletConnectButton, WalletDisplay, WalletSelect } from './components';
+import { WalletName } from 'src/components/contexts';
 
 const WalletConnectModal: React.FunctionComponent = () => {
   const wallet = useWallet();
@@ -17,12 +17,9 @@ const WalletConnectModal: React.FunctionComponent = () => {
     setOpen(false);
     wallet.setRequired(false);
   };
-  const handleSelectWallet = (walletName: WalletName) => {
+  const handleSelectWallet = (name: WalletName) => {
     handleClose();
-
-    if (wallet.name !== walletName) {
-      wallet.connect(walletName);
-    }
+    wallet.connect(name);
   };
 
   const renderContent = () => {

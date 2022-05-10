@@ -9,25 +9,20 @@ export type WalletStatus =
   | 'connecting'
   | 'connected';
 
-export type WalletName = 'metamask';
-
-export type WalletConnectResult = Promise<string[] | null>;
+export type WalletName = 
+  | 'metamask'
+  | 'walletConnect';
 
 export type EthereumRequestArguments = {
   method: string;
   params?: unknown[] | object;
 };
 
-export type WalletEthereum = {
-  request: (args: EthereumRequestArguments) => Promise<unknown>;
-};
-
 export type Wallet = {
   status: WalletStatus;
-  connect: (walletName: WalletName) => WalletConnectResult;
+  connect: (name: WalletName) => Promise<void>;
   account: string | null;
   name: WalletName | null;
-  ethereum: WalletEthereum | null;
   signer: ethers.providers.JsonRpcSigner | null;
   balance: number | null;
   setBalance: (balance: number) => void;
@@ -39,3 +34,33 @@ export type Wallet = {
   walletError: string | null;
   networkId?: string;
 };
+
+export interface WalletRiskAssessment {
+  accountExternalId: string;
+  address: string;
+  addressRiskIndicators: (AddressRiskIndicatorsEntity)[];
+  addressSubmitted: string;
+  chain: string;
+  entities: (EntitiesEntity)[];
+  trmAppUrl: string;
+}
+export interface AddressRiskIndicatorsEntity {
+  category: string;
+  categoryId: string;
+  categoryRiskScoreLevel: number;
+  categoryRiskScoreLevelLabel: string;
+  incomingVolumeUsd: string;
+  outgoingVolumeUsd: string;
+  riskType: string;
+  totalVolumeUsd: string;
+}
+export interface EntitiesEntity {
+  category: string;
+  categoryId: string;
+  entity: string;
+  riskScoreLevel: number;
+  riskScoreLevelLabel: string;
+  trmAppUrl: string;
+  trmUrn: string;
+}
+

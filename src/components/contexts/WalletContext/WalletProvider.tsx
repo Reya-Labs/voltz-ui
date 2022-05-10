@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { MetaMaskProvider } from 'metamask-react';
 
-import { WalletStatus, WalletName } from './types';
+import { WalletName, WalletStatus } from './types';
 import ProviderWrapper from './ProviderWrapper';
 
 export type WalletProviderProps = {
@@ -19,22 +18,20 @@ const WalletProvider: React.FunctionComponent<WalletProviderProps> = ({
   const [required, setRequired] = useState<boolean>(false);
 
   return (
-    <MetaMaskProvider>
-      <ProviderWrapper
-        status={status}
-        setStatus={setStatus}
-        account={account}
-        setAccount={setAccount}
-        name={name}
-        setName={setName}
-        balance={balance}
-        setBalance={setBalance}
-        required={required}
-        setRequired={setRequired}
-      >
-        {children}
-      </ProviderWrapper>
-    </MetaMaskProvider>
+    <ProviderWrapper
+      status={status}
+      setStatus={setStatus}
+      account={account}
+      setAccount={setAccount}
+      name={name}
+      setName={setName}
+      balance={balance}
+      setBalance={setBalance}
+      required={required}
+      setRequired={setRequired}
+    >
+      {children}
+    </ProviderWrapper>
   );
 };
 

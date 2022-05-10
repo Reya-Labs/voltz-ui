@@ -14,31 +14,34 @@ import {
   Settle,
   Swap,
   Voltz,
+  WalletConnect,
 } from './icons';
 
 export type Icons =
   | 'arrow-left'
   | 'arrow-right'
   | 'ethereum'
-  | 'warning-circle'
   | 'information-circle'
   | 'metamask'
-  | 'voltz'
   | 'tx-burn'
   | 'tx-liquidation'
   | 'tx-margin-update'
   | 'tx-mint'
   | 'tx-settle'
-  | 'tx-swap';
+  | 'tx-swap'
+  | 'voltz'
+  | 'walletConnect'
+  | 'warning-circle';
 
 export const iconMap: Record<Icons, ElementType> = {
   'arrow-left': ArrowLeft as ElementType,
   'arrow-right': ArrowRight as ElementType,
   ethereum: Ethereum as ElementType,
   'information-circle': InterfaceAlertInformationCircle as ElementType,
-  'warning-circle': InterfaceAlertWarningCircle as ElementType,
   metamask: Metamask as ElementType,
   voltz: Voltz as ElementType,
+  'walletConnect': WalletConnect as ElementType,
+  'warning-circle': InterfaceAlertWarningCircle as ElementType,
   'tx-burn': Burn as ElementType,
   'tx-liquidation': Liquidation as ElementType,
   'tx-margin-update': MarginUpdate as ElementType,

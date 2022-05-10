@@ -1,8 +1,12 @@
 import { Agents } from '@components/contexts';
+import { ethers } from 'ethers';
 
-export type WindowWithEthereum = typeof window & {
+export type WindowWithWallet = typeof window & {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ethereum: any;
+  wallet?: {
+    provider: ethers.providers.Web3Provider,
+    signer: ethers.providers.JsonRpcSigner
+  }
 };
 
 

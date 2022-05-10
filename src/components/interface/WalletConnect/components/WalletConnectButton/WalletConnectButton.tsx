@@ -6,6 +6,9 @@ import { Wallet } from '@components/contexts';
 import { Button, Icon } from '@components/atomic';
 import CircleIcon from '@mui/icons-material/Circle';
 
+import './web3modal.scss';
+import { Icons } from 'src/components/atomic';
+
 export type WalletConnectButtonProps = {
   onClick?: () => void;
   wallet: Wallet;
@@ -36,7 +39,7 @@ const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = (
           variant="red"
           sx={{ zIndex: 1, left: (theme) => theme.spacing(-2), fontSize: 16 }}
           startIcon={<CircleIcon sx={{ width: 4, height: 4, borderRadius: 200, color: "#ff4aa9" }} />}
-        // onClick={onClick} todo: enable when data such as recent transactions is properly implemented
+          onClick={onClick}
         >
           {walletError}
         </Button>
@@ -51,7 +54,7 @@ const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = (
           variant="dark"
           sx={{ zIndex: 1, left: (theme) => theme.spacing(-2), fontSize: 16 }}
           startIcon={<CircleIcon sx={{ width: 4, height: 4, borderRadius: 200, color: "#00d395" }} />}
-          endIcon={name && <Icon name={name} sx={{width: 16}} />}
+          endIcon={name && <Icon name={name as Icons} sx={{width: 16}} />}
           // onClick={onClick} todo: enable when data such as recent transactions is properly implemented
         >
           {account && elideAddress(account)}

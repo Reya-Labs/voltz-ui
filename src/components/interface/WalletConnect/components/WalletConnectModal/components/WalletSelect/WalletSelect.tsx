@@ -2,16 +2,25 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 
-import { WalletName, Wallet } from '@components/contexts';
-import { Typography } from '@components/atomic';
+import { Wallet } from '@components/contexts';
+import { Icons, Typography } from '@components/atomic';
 import { WalletOptionButton } from './components';
+import { WalletName } from '@components/contexts';
+
+type WalletOption = {
+  title: string;
+  name: WalletName;
+}
 
 export type WalletSelectProps = {
   wallet: Wallet;
-  onSelectWallet: (walletName: WalletName) => void;
+  onSelectWallet: (name: WalletName) => void;
 };
 
-export const walletOptions = [{ title: 'Metamask', name: 'metamask' }];
+export const walletOptions:WalletOption[] = [
+  { title: 'Metamask', name: 'metamask' },
+  { title: 'WalletConnect', name: 'walletConnect' }
+];
 
 const WalletSelect: React.FunctionComponent<WalletSelectProps> = ({ wallet, onSelectWallet }) => {
   return (
@@ -35,8 +44,8 @@ const WalletSelect: React.FunctionComponent<WalletSelectProps> = ({ wallet, onSe
         {walletOptions.map(({ title, name }) => (
           <WalletOptionButton
             title={title}
-            icon={name as WalletName}
-            onClick={() => onSelectWallet(name as WalletName)}
+            icon={name as Icons}
+            onClick={() => onSelectWallet(name)}
             selected={name === wallet.name && wallet.status === 'connected'}
           />
         ))}
