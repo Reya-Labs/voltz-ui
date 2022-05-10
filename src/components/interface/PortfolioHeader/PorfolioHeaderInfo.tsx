@@ -84,7 +84,8 @@ const PortfolioHeaderInfo = ({
       {!isUndefined(feesApy) && (
         <ListItem sx={listItemStyles}>
           <PortfolioHeaderValue label='Fees APY'>
-            <PortfolioHeaderBox>{formatNumber(feesApy)} %</PortfolioHeaderBox>
+            <PortfolioHeaderBox>s00n</PortfolioHeaderBox>
+            {/* <PortfolioHeaderBox>{formatNumber(feesApy)} %</PortfolioHeaderBox> */}
           </PortfolioHeaderValue>
         </ListItem>
       )}

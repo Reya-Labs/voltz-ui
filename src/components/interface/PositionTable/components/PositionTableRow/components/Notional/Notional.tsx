@@ -1,19 +1,17 @@
 import TableCell from '@mui/material/TableCell';
 
-import { useWallet } from '@hooks';
 import { Typography } from '@components/atomic';
 import { Button } from '@components/atomic';
-import isNull from 'lodash/isNull';
 import { isUndefined } from 'lodash';
 export type NotionalProps = {
     notional?: string;
     displayEditButton?: boolean;
     token: string;
-    onSelect: () => void;
+    onSelect?: () => void;
   };
 
 
-const Notional: React.FunctionComponent<NotionalProps> = ({ notional, displayEditButton, token, onSelect}) => {
+const Notional: React.FunctionComponent<NotionalProps> = ({ notional, token, onSelect}) => {
 
       const renderNotionalAmount = () => {
         if (isUndefined(notional)) {
@@ -28,7 +26,7 @@ const Notional: React.FunctionComponent<NotionalProps> = ({ notional, displayEdi
             {renderNotionalAmount()}
           </Typography>
     
-            <Button sx={{
+          {!isUndefined(onSelect) && (<Button sx={{
               display: "flex",
               paddingTop: (theme) => theme.spacing(0),
               paddingBottom: (theme) => theme.spacing(0),
@@ -47,7 +45,7 @@ const Notional: React.FunctionComponent<NotionalProps> = ({ notional, displayEdi
               },
             }} onClick={onSelect}> 
                 Edit
-            </Button>
+            </Button>)}
     
     
         </TableCell>
