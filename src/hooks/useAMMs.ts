@@ -61,7 +61,7 @@ const useAMMs = (): UseAMMsResult => {
             environment: 'KOVAN',
             rateOracle: new RateOracle({
               id: rateOracleAddress,
-              protocolId: protocolId as number,
+              protocolId: parseInt(protocolId as string),
             }),
             underlyingToken: new Token({
               id: tokenAddress,

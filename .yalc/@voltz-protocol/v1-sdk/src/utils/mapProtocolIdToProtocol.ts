@@ -3,6 +3,10 @@ const mapProtocolIdToProtocol = (protocolId: number): string => {
     return 'AAVE V2';
   }
 
+  if (protocolId === 2) {
+    return 'COMPOUND';
+  }
+
   return 'AAVE V2';
 };
 

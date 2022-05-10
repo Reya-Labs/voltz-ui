@@ -84,7 +84,7 @@ export const MEPositionFactory = (positionData: MEPositionQueryData, signer: Wal
       environment: 'KOVAN',
       rateOracle: new RateOracle({
         id: rateOracleAddress,
-        protocolId: protocolId as number,
+        protocolId: parseInt(protocolId as string),
       }),
       underlyingToken: new Token({
         id: tokenAddress,
