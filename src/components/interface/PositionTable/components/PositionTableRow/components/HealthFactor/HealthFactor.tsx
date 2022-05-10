@@ -32,7 +32,7 @@ const HealthFactor: React.FunctionComponent<HealthFactorProps> = ({status}) => {
           <Button
             variant='warning'
             sx={{ zIndex: 1, left: (theme) => theme.spacing(-2), fontSize: 16, borderWidth: 0 }}
-            startIcon={<CircleIcon sx={{ width: 4, height: 4, borderRadius: 200, color: "#00d395" }} />}
+            startIcon={<CircleIcon sx={{ width: 4, height: 4, borderRadius: 200, color: "#F1D302" }} />}
           >
             {status}
           </Button>

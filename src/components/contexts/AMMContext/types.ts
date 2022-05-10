@@ -25,6 +25,10 @@ export type MinimumMarginAmountSwapPayload = {
   isFT: boolean;
 };
 
+export type PositionInfoPayload = {
+  position: Position;
+};
+
 export type AMMDispatch = {
   variableApy: UseAsyncFunctionResult<unknown, number | void>;
   fixedApr: UseAsyncFunctionResult<unknown, number | void>;

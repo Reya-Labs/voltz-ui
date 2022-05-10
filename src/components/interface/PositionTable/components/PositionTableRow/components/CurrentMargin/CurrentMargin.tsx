@@ -5,13 +5,16 @@ import { useWallet } from '@hooks';
 import { Typography } from '@components/atomic';
 import { Button } from '@components/atomic';
 import isNull from 'lodash/isNull';
+import { isUndefined } from 'lodash';
 
 export type CurrentMarginProps = {
-  renderValue: () => string;
+  margin?: number;
+  accruedCashflow?: number;
+  token: string;
   onSelect: () => void;
 };
 
-const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({renderValue, onSelect}) => {
+const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({ margin, accruedCashflow, token, onSelect}) => {
   const wallet = useWallet();
 
   const handleClick = () => {
@@ -24,8 +27,8 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({renderValue
 
   return (
     <TableCell>
-      <Typography variant="body2" label="Current Margin" sx={{ fontSize: 18 }}>
-        {renderValue()}
+      <Typography variant="body2" label={"Margin"} sx={{ fontSize: 18 }}>
+        {!isUndefined(margin) ? `${margin.toFixed(2)} ${token}` : 'No Data'}
       </Typography>
 
         <Button sx={{

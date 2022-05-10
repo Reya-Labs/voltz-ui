@@ -6,16 +6,18 @@ import { formatCurrency, formatNumber } from '@utilities';
 import PositionBadge from '../PositionBadge';
 import { Typography } from '@components/atomic';
 import { isUndefined } from 'lodash';
+import CircleIcon from '@mui/icons-material/Circle';
 
 export type PositionTableHeadProps = {
   currencyCode?: string;
   currencySymbol?: string;
   currentFixedRate?: number;
-  currentFixedRatePositive?: boolean;
   fcmBadge?: boolean;
   fees?: number;
   feesPositive?: boolean;
   positionType: number;
+  healthFactor?: number;
+  beforeMaturity: boolean;
 };
 
 const containerStyles: SystemStyleObject<Theme> = { 
@@ -28,18 +30,21 @@ const containerStyles: SystemStyleObject<Theme> = {
 const labelStyles: SystemStyleObject<Theme> = { 
   fontSize: '14px', 
   lineHeight: '1', 
-  textTransform: 'uppercase'
+  textTransform: 'uppercase',
+  display: 'flex',
+  verticalAlign: 'middle'
 };
 
 const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
   currencyCode = '',
   currencySymbol = '',
   currentFixedRate, 
-  currentFixedRatePositive = true, 
   fcmBadge = false,
   fees, 
   feesPositive = true,
   positionType,
+  healthFactor,
+  beforeMaturity
 }) => {
   const getPositionBadgeVariant = () => {
     switch(positionType) {
@@ -50,6 +55,10 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
       case 3:
         return 'LP';
     }
+  };
+
+  const getHealthTextColor = () => {
+    return (healthFactor === 1) ? '#F61067' : (healthFactor === 2 ? '#F1D302' : '#00d395');
   };
 
   const getTextColor = (positive: boolean) => {
@@ -82,10 +91,37 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
       </Box>
 
       <Box sx={{ display: 'flex' }}>
-        {!isUndefined(currentFixedRate) && (
-          <Typography variant='body2' sx={{ ...labelStyles, color: getTextColor(currentFixedRatePositive) }}>
-            &bull; Current fixed rate: {formatNumber(currentFixedRate)}%
-          </Typography>
+        {beforeMaturity && !isUndefined(currentFixedRate) && !isUndefined(healthFactor) && (
+          <Box sx={{ padding: (theme) => `${theme.spacing(1)} ${theme.spacing(2)}`, marginLeft: (theme) => theme.spacing(2) }}>
+            <Typography variant='body2' sx={{ ...labelStyles, color: getHealthTextColor() }}>
+              <CircleIcon 
+                sx={{ 
+                  width: 4, 
+                  height: 4, 
+                  borderRadius: 200, 
+                  color: getHealthTextColor(),
+                }} 
+              />
+              Current fixed rate: {formatNumber(currentFixedRate)}%
+            </Typography>
+          </Box>
+        )}
+
+        {beforeMaturity && isUndefined(currentFixedRate) && !isUndefined(healthFactor) && (
+          <Box sx={{ padding: (theme) => `${theme.spacing(1)} ${theme.spacing(2)}`, marginLeft: (theme) => theme.spacing(2) }}>
+            <Typography variant='body2' sx={{ ...labelStyles, color: getHealthTextColor() }}>
+              <CircleIcon 
+                sx={{ 
+                  width: 4, 
+                  height: 14, 
+                  borderRadius: '16px',
+                  marginRight: (theme) => theme.spacing(2), 
+                  color: getHealthTextColor(),
+                }} 
+              />
+              {(healthFactor === 1) ? 'DANGER' : (healthFactor === 2 ? 'WARNING' : 'HEALTHY')}
+            </Typography>
+          </Box>
         )}
       </Box>
     </Box>

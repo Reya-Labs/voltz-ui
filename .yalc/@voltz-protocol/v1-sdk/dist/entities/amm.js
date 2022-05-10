@@ -953,8 +953,9 @@ var AMM = /** @class */ (function () {
                         }
                         accruedCashflow = ethers_1.BigNumber.from(0);
                         lenSwaps = allSwaps.length;
-                        untilTimestamp = (atMaturity) ? ethers_1.BigNumber.from(this.termEndTimestamp.toString()) : allSwaps[lenSwaps - 1].timestamp;
-                        untilTimestamp = untilTimestamp.mul(ethers_1.BigNumber.from(10).pow(18));
+                        untilTimestamp = (atMaturity)
+                            ? ethers_1.BigNumber.from(this.termEndTimestamp.toString())
+                            : allSwaps[lenSwaps - 1].timestamp.mul(ethers_1.BigNumber.from(10).pow(18));
                         rateOracleContract = typechain_1.BaseRateOracle__factory.connect(this.rateOracle.id, this.signer);
                         excludeLast = (atMaturity) ? 0 : 1;
                         i = 0;

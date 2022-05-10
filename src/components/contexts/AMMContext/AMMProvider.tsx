@@ -68,6 +68,7 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
       }
 
       const result = await amm.getPositionInformation(position);
+
       if (!result) {
         return;
       }

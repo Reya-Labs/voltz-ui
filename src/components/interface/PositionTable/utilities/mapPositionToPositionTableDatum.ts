@@ -1,7 +1,6 @@
 import { Position } from '@voltz-protocol/v1-sdk';
 
 import { Agents } from '@components/contexts';
-import { PositionTableDatum } from '../types';
 import { isUndefined } from 'lodash';
 
 const mapPositionToPositionTableDatum =
@@ -17,7 +16,7 @@ const mapPositionToPositionTableDatum =
       isSettled,
       source,
       averageFixedRate
-    }: Position): PositionTableDatum => {
+    }: Position) => {
       return {
         source,
         id,

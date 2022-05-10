@@ -41,7 +41,7 @@ const PortfolioHeaderInfo = ({
     <>
       Net margin 
       {!isUndefined(netMarginDiff) && (
-        <Box component='span' sx={{ color: netMarginDiff > 0 ? colors.vzCustomGreen1 : colors.vzCustomRed1 }}>
+        <Box component='span' sx={{ color: netMarginDiff >= 0 ? colors.vzCustomGreen1 : colors.vzCustomRed1 }}>
           {' '}
           {netMarginDiff > 0 && '+'}
           {netMarginDiff < 0 && '-'}
@@ -84,7 +84,8 @@ const PortfolioHeaderInfo = ({
       {!isUndefined(feesApy) && (
         <ListItem sx={listItemStyles}>
           <PortfolioHeaderValue label='Fees APY'>
-            <PortfolioHeaderBox>{formatNumber(feesApy)} %</PortfolioHeaderBox>
+            <PortfolioHeaderBox>s00n</PortfolioHeaderBox>
+            {/* <PortfolioHeaderBox>{formatNumber(feesApy)} %</PortfolioHeaderBox> */}
           </PortfolioHeaderValue>
         </ListItem>
       )}

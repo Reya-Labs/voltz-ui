@@ -2,22 +2,17 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '@mui/system';
 import { Agents } from '@components/contexts';
-import { Typography, Button } from '@components/atomic';
-import { MaturityInformation } from '@components/composite';
-import { PositionTableDatum } from '../../types';
+import { Typography } from '@components/atomic';
 import { lpLabels } from '../../constants';
 import { traderLabels } from '../../constants';
-import { PositionTableFields } from '../../types';
-import { FixedAPR, Notional, HealthFactor, CurrentMargin, Fees } from './components';
-import React, { useEffect } from 'react';
-import { useAgent, useAMMContext } from '@hooks';
-import { DateTime } from 'luxon';
-import { isUndefined } from 'lodash';
-import { Position } from '@voltz-protocol/v1-sdk';
+import { FixedAPR, Notional, CurrentMargin, Maturity, AccruedRates } from './components';
+import React from 'react';
+import { useAgent } from '@hooks';
+import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 
 export type PositionTableRowProps = {
   position: Position;
-  datum: PositionTableDatum;
+  positionInfo?: PositionInfo;
   index: number;
   onSelect: (mode: 'margin' | 'liquidity') => void;
   handleSettle: () => void;
@@ -25,224 +20,90 @@ export type PositionTableRowProps = {
 
 const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
   position,
-  datum,
+  positionInfo,
   index,
   onSelect,
   handleSettle
 }) => {
-  const { positionInfo } = useAMMContext();
-  const { result: positionInfoResult, loading: loadingPositionInfo, call: callPositionInfo } = positionInfo;
-
-  useEffect(() => {
-    callPositionInfo(position);
-  }, [callPositionInfo, datum]);
-  
   const { agent } = useAgent();
-  const variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'main';
+  const labels = agent === Agents.LIQUIDITY_PROVIDER ? lpLabels : traderLabels;
+
   const typeStyleOverrides: SystemStyleObject<Theme> = {
     backgroundColor: `secondary.darken050`, // this affects the colour of the positions rows in the LP positions 
     borderRadius: 2
   };
 
-  let labels: [PositionTableFields, string][];
-  
-  if (datum.agent === Agents.LIQUIDITY_PROVIDER) {
-    labels = lpLabels;
-  } else {
-    labels = traderLabels;
+  const handleEditMargin = () => {
+    onSelect('margin');
   }
+
+  const handleEditNotional = () => {
+    onSelect('liquidity');
+  }
+
+  const renderTableCell = (field: string, label: string) => {
+    const token = position.amm.protocol.substring(1);
+    
+    if (field === 'accruedRates') {
+      <AccruedRates position={position} positionInfo={positionInfo} />
+    }
+
+    if (field === 'fixedApr') {
+      return <FixedAPR />;
+    }
+
+    if (field === 'margin') {
+      return (
+        <CurrentMargin 
+          accruedCashflow={positionInfo?.accruedCashflow} 
+          margin={positionInfo?.margin} 
+          token={token} 
+          onSelect={handleEditMargin} 
+        />
+      );
+    }
+
+    if (field === 'maturity') {
+      return <Maturity onSettle={handleSettle} position={position} />
+    }
+
+    if (field === 'notional') {
+      return (
+        <Notional 
+          notional={agent === Agents.LIQUIDITY_PROVIDER ? position.notional.toFixed(2) : Math.abs(position.effectiveVariableTokenBalance).toFixed(2)} 
+          token={token} 
+        />
+      )
+    }
+    
+    if (field === 'pool') {
+      return (
+        <Typography variant="h5" label={label}>
+          {position.source.includes("FCM") ? `FCM : ${position.amm.protocol}` : position.amm.protocol}
+        </Typography>
+      );
+    }
+
+    if (field === 'rateRange') {
+      return (
+        <Typography variant="h5" label={label}>
+          {position.fixedRateLower.toNumber().toFixed(2)}% / {position.fixedRateUpper.toNumber().toFixed(2)}%
+        </Typography>
+      );
+    }
+
+    return null;
+  };
 
   return (
     <TableRow key={index} sx={{ ...typeStyleOverrides }}>
       {labels.map(([field, label]) => {
-        const renderDisplay = () => {
-          const token = datum.protocol.substring(1);
-
-          if (field === 'maturity') {
-            if (DateTime.now() >= datum.endDate) {
-              if (datum.settled) {
-                return <TableCell align="center">
-                <Button variant="contained" disabled={datum.settled}>
-                  <Typography agentStyling variant="body2">SETTLED</Typography>
-                </Button>
-              </TableCell>
-              } else {
-                return <TableCell align="center">
-                  <Button variant="contained" onClick={handleSettle}>
-                    <Typography agentStyling variant="body2">SETTLE</Typography>
-                  </Button>
-                </TableCell>
-              }
-
-            } else {
-
-            return (
-              <MaturityInformation
-                label={label}
-                startDate={datum.startDate}
-                endDate={datum.endDate}
-              />
-            ); 
-            }            
-          }
-
-          if (field === 'accruedRates') {
-            return (<TableCell align="center">
-              <Typography variant="body2" label={label} sx={{ fontSize: 18 }}>
-                {datum.averageFixedRate}{"%"} 
-              </Typography>
-            </TableCell>);
-          }
-
-          // if (field === 'margin') {
-          //   const renderValue = () => {
-          //     if (loadingPositionInfo) {
-          //       return 'Loading...';
-          //     }
-
-          //     if (!positionInfoResult) {
-          //       return 'No data';
-          //     }
-
-          //     if (!datum.source) {
-          //       return 'No source';
-          //     }
-
-          //     if (DateTime.now() <= datum.endDate) {
-          //       if (positionInfoResult.liquidationThreshold && positionInfoResult.safetyThreshold) {
-          //         if (positionInfoResult.margin < positionInfoResult.liquidationThreshold) {
-          //           return 'DANGER';
-          //         }
-          //         else if (positionInfoResult.margin < positionInfoResult.safetyThreshold) {
-          //           return 'WARNING';
-          //         }
-          //         else {
-          //           return 'HEALTHY';
-          //         }
-          //       }
-          //       else {
-          //         return 'NO DISPLAY';
-          //       }
-          //     }
-          //     else {
-          //       if (datum.settled) {
-          //         return 'NO DISPLAY';
-          //       }
-          //       else {
-          //         return 'NO DISPLAY';
-          //       }
-          //     }
-          //   };
-          //   const status = renderValue();
-          //   if (!status.includes('NO DISPLAY')) {
-          //     return (
-          //       <HealthFactor status={status} />
-          //     );
-          //   }
-          // }
-
-          // if (field === 'margin') {
-          //   const renderValue = () => {
-          //     if (loadingPositionInfo) {
-          //       return 'Loading...';
-          //     }
-
-          //     if (!positionInfoResult) {
-          //       return 'No data';
-          //     }
-
-          //     if (!datum.source) {
-          //       return 'Cannot get source of position';
-          //     }
-
-          //     let accumulatedFees: string = "No data";
-          //     if (!isUndefined(positionInfoResult.fees)) {
-          //       accumulatedFees = `${positionInfoResult.fees.toFixed(2)} ${token}`;
-          //     }
-
-          //     if (datum.source.includes("FCM")) {
-          //       return `FCM: no fees`;
-          //     }
-
-          //     return `${accumulatedFees}`;
-          //   };
-          //   return <Fees value={renderValue()} />;
-          // }
-
-          if (field === 'margin') {
-            const renderValue = () => {
-              if (loadingPositionInfo) {
-                return 'Loading...';
-              }
-
-              if (!positionInfoResult) {
-                return 'No data';
-              }
-
-              if (!datum.source) {
-                return 'Cannot get source of position';
-              }
-
-              if (datum.source.includes("FCM")) {
-                return `${positionInfoResult.margin.toFixed(2)} ${datum.protocol}`;
-              }
-              
-              return `${positionInfoResult.margin.toFixed(2)} ${token}`;
-            };
-            return <CurrentMargin renderValue={renderValue} onSelect={ () => onSelect('margin') } />;
-          }
-
-          if (field === 'notional') {
-            if (agent === Agents.LIQUIDITY_PROVIDER) {
-              return <Notional notional={datum.notional.toFixed(2)} token={token} onSelect={() => onSelect('liquidity')} displayEditButton={agent !== Agents.LIQUIDITY_PROVIDER} />;
-            }
-            else {
-              return <Typography variant="body2" label={label} sx={{ fontSize: 18 }}>
-                {datum.notional.toFixed(2)} {token}
-              </Typography>
-            }
-          }
-
-          if (field === 'fixedApr') {
-            return <FixedAPR />;
-          }
-
-          const getContent = () => {
-            switch (field) {
-              case 'pool':
-                return (datum.source.includes("FCM")) ? "FCM : " + datum.protocol : datum.protocol;
-              
-              case 'fixedUpper':
-                return `${datum.fixedUpper.toFixed(2)}%`;
-              
-              case 'fixedLower':
-                return `${datum.fixedLower.toFixed(2)}%`;
-
-              default:
-                return null;
-            }
-          };
-
-
-          if (field === 'fixedLower' || field === 'fixedUpper') {
-            return (
-              <Typography agentStyling variant="body2" label={label} sx={{fontSize: 18}}>
-                {getContent()}
-              </Typography>
-            );
-          } else {
-            return (
-              <Typography variant="body2" label={label} sx={{fontSize: 18}}>
-                {getContent()}
-              </Typography>
-            );
-          }
-
-        };
-
-        return <TableCell key={field}>{renderDisplay()}</TableCell>;
+        return (
+          <TableCell key={field}>
+            {renderTableCell(field, label)}
+          </TableCell>
+        );
       })}
-
     </TableRow>
   );
 };

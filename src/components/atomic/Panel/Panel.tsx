@@ -1,9 +1,10 @@
 import React from 'react';
 import { SystemStyleObject, Theme } from '@mui/system';
 import Box from '@mui/material/Box';
+import { colors } from '@theme';
 
 export type PanelProps = {
-  variant?: 'error' | 'warning' | 'info' | 'iconLabel' | 'main' | 'dark' | 'darker' ;
+  variant?: 'error' | 'warning' | 'info' | 'iconLabel' | 'main' | 'grey-dashed' | 'dark' | 'darker' ;
   borderRadius?: 'small' | 'large';
   padding?: 'small' | 'large' | 'container'; 
   sx?: SystemStyleObject<Theme>;
@@ -56,6 +57,23 @@ const Panel: React.FunctionComponent<PanelProps> = ({ variant, borderRadius = 's
           '& > *': {
             color: `${variant}.light`,
           },
+        };
+
+      case 'error': 
+        return {
+          background: 'transparent',
+          border: `2px dashed ${colors.vzCustomRed1}`,
+          borderColor: colors.vzCustomRed1,
+          color: colors.vzCustomRed1,
+          textAlign: 'center',
+        };
+      
+      case 'grey-dashed': 
+        return {
+          background: 'transparent',
+          border: `2px dashed ${colors.lavenderWeb.darken035}`,
+          borderColor: colors.lavenderWeb.darken035,
+          textAlign: 'center',
         };
 
       default:
