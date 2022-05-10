@@ -1008,9 +1008,8 @@ class AMM {
     let accruedCashflow = BigNumber.from(0);
     let lenSwaps = allSwaps.length;
 
-    let untilTimestamp = (atMaturity)
-      ? BigNumber.from(this.termEndTimestamp.toString())
-      : allSwaps[lenSwaps - 1].timestamp.mul(BigNumber.from(10).pow(18));
+    let untilTimestamp = (atMaturity) ? BigNumber.from(this.termEndTimestamp.toString()) : allSwaps[lenSwaps - 1].timestamp;
+    untilTimestamp = untilTimestamp.mul(BigNumber.from(10).pow(18));
 
     const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.signer);
 

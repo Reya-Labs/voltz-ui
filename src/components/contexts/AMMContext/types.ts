@@ -37,5 +37,5 @@ export type AMMDispatch = {
     number | void
   >;
   swapInfo: UseAsyncFunctionResult<SwapInfoPayload, InfoPostSwap | void>;
-  positionInfo: UseAsyncFunctionResult<PositionInfoPayload, PositionInfo | void>;
+  positionInfo: UseAsyncFunctionResult<Position, PositionInfo | void>;
 };

@@ -1,6 +1,7 @@
+import { Position } from '@voltz-protocol/v1-sdk';
 import { createContext } from 'react';
 
-import { MintMinimumMarginRequirementPayload, SwapInfoPayload, AMMDispatch, PositionInfoPayload } from './types';
+import { MintMinimumMarginRequirementPayload, SwapInfoPayload, AMMDispatch } from './types';
 
 const AMMContext = createContext<AMMDispatch>({
   variableApy: {
@@ -31,7 +32,7 @@ const AMMContext = createContext<AMMDispatch>({
     result: undefined,
     error: false,
     loading: false,
-    call: (_args?: PositionInfoPayload) => undefined,
+    call: (_args?: Position) => undefined,
   },
 });
 
