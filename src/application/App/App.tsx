@@ -4,7 +4,7 @@ import { routes } from '@routes';
 import { LiquidityProvider, Trader } from './components';
 
 const App = () => (
-  <Routes>
+   <Routes>
     <Route path="/">
       <Route index element={<Navigate to={routes.SWAP} />} />
       <Route path={routes.SWAP} element={<Trader />} />

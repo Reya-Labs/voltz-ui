@@ -3,7 +3,7 @@ import { call, put } from 'redux-saga/effects';
 import { DateTime } from 'luxon';
 
 import { MintAction } from '../../types';
-import { deserializeAmm, getSigner } from '../../utilities';
+import { deserializeAmm, getSigner, postTransactionData, serializeAmm } from '../../utilities';
 import * as actions from '../../actions';
 import { getErrorMessage } from '@utilities';
 
@@ -22,7 +22,7 @@ function* mintSaga(action: MintAction) {
   }
 
   const { id, fixedLow, fixedHigh, notional, margin } = action.payload.transaction;
-
+  const ammInformation = serializeAmm(amm)
   if (!fixedLow || !fixedHigh) {
     return;
   }
@@ -36,6 +36,24 @@ function* mintSaga(action: MintAction) {
       notional,
       margin,
     });
+
+    //  CALLING API FOR TX MONITORING HERE
+    if (amm.signer) {
+      amm.signer.getAddress().then((signerAddress) => {
+        if (result) {
+          postTransactionData(
+            signerAddress,
+            ammInformation.rateOracle.token.name.toLowerCase(),
+            margin.toString(),
+            ammInformation.marginEngineAddress,
+            id,
+            result.transactionHash,
+            DateTime.now().toISO(),
+            'CRYPTO_DEPOSIT'
+          ).then()
+        }
+      })
+    }
   } catch (error) {
     yield put(
       actions.updateTransaction({
