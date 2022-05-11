@@ -11,7 +11,7 @@ import { useSelector } from '@hooks';
 import { WalletName, WalletStatus } from './types';
 import WalletContext from './WalletContext';
 import { getErrorMessage } from '@utilities';
-import { checkForCorrectNetwork, checkForRiskyWallet, getWalletProvider } from './services';
+import { checkForCorrectNetwork, checkForRiskyWallet, checkForTOSSignature, getTOSText, getWalletProvider } from './services';
 
 export type ProviderWrapperProps = {
   status: WalletStatus;
@@ -52,8 +52,9 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
         if(newProvider) {
           const newSigner = newProvider.getSigner();
           const walletAddress = await newSigner.getAddress();
-          
+                             
           // Do checks that could stop us allowing the wallet to connect
+          await checkForTOSSignature(newSigner, walletAddress);
           await checkForCorrectNetwork(newProvider);
           await checkForRiskyWallet(walletAddress);
             
@@ -73,11 +74,12 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
         }
       } 
       catch (error) {
-        let errorMessage = getErrorMessage(error);
+        let errorMessage = getErrorMessage(error).trim();
         if (errorMessage.endsWith(".")) {
           errorMessage = errorMessage.slice(0, -1);
         }
-        setWalletError(errorMessage);
+
+        setWalletError(errorMessage || null);
         (window as WindowWithWallet).wallet = undefined;
         setSigner(null);
         setAccount(null);

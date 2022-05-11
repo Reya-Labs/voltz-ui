@@ -26,6 +26,51 @@ export const checkForRiskyWallet = async (walletAddress: string) => {
 };
 
 /**
+ * Will make the wallet open a prompt, asking the user to agree to the T&Cs. It will throw an
+ * error if the user disagrees / closes the window. The signature is stored in localStorage to
+ * avoid having to sign the terms every time you connect your wallet.
+ * @param signer - The ethers signer
+ */
+export const checkForTOSSignature = async (signer: ethers.providers.JsonRpcSigner, walletAddress: string) => {
+  const existingSignatureKey = `TOS_SIGNATURE_${walletAddress}`;
+  const existingSignature = localStorage.getItem(existingSignatureKey);
+  const signerAddress = await signer.getAddress();
+  let termsAccepted = false;
+
+  if(existingSignature) {
+    const existingTOSSignerAddress = ethers.utils.verifyMessage(getTOSText(), existingSignature);
+    if(existingTOSSignerAddress === signerAddress) {
+      termsAccepted = true;
+    }
+  }
+
+  if(!termsAccepted) {
+    try {
+      const signature = await signer.signMessage(getTOSText());
+      localStorage.setItem(existingSignatureKey, signature);
+    } catch(e) {
+      throw new Error(' ');
+    }
+  }
+}
+
+/**
+ * Returns the terms of service text that users have to agree to to connect their wallet.
+ * Note - Any changes, including whitespace, will mean a new signature is required.
+ */
+export const getTOSText = () => {
+  const text = `
+Please sign this message to log in. This won't cost you any ETH!
+
+By signing, you accept Voltz's Terms of Service, which you can find here:
+${process.env.REACT_APP_TOS_URL || ''}
+
+If you're connecting a hardware wallet, you'll need to sign the message on your device too.`;
+
+  return text.trim();
+};
+
+/**
  * Attemps to get an ethers-wrapped provider for the given wallet name
  * @param name - The wallet name (E.G: metamask)
  */
