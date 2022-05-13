@@ -16,23 +16,23 @@ export const inputStyles = (disabled?: boolean, error?: boolean, inputSize?: str
   borderStyle: 'solid',
   borderWidth: () => error ? '1px' : '0',
   borderRadius: (theme) => theme.spacing(1),
-  lineHeight: 1.2,
   color: (theme) => {
     if (disabled) return colors.vzGreyDark;
     if (error) return theme.palette.error.darken015;
     return colors.vzGrey;
   },
-  minHeight: (theme) => theme.spacing(8),
-  height: (theme) => theme.spacing(8),
-  fontSize: () => inputSize === 'small' ? '14px' : '24px',
+  minHeight: 'auto !important',
+  height: 'auto !important',
+  fontSize: () => inputSize === 'small' ? '16px' : '24px',
+  lineHeight:() => '14px',
   padding: (theme) => {
     if (inputSize === 'small') {
-      return `${theme.spacing(1)} ${theme.spacing(1)} ${theme.spacing(1)} ${theme.spacing(2)}`;
+      return `${theme.spacing(2)} ${theme.spacing(4)}`;
     } else {
       return theme.spacing(4);
     }
   },
-  boxSizing: 'content-box',
+  boxSizing: 'border-box',
   width: '100%',
   '::placeholder': {
     color: (theme) => {

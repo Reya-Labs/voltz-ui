@@ -22,7 +22,8 @@ const errorLabelStyles: SystemStyleObject<Theme> = {
   color: colors.wildStrawberry.darken010,
   fontSize: '12px',
   lineHeight: '1.2',
-  marginTop: (theme) => theme.spacing(1)
+  marginTop: (theme) => theme.spacing(1),
+  textTransform: 'uppercase'
 }
 
 const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
