@@ -6,16 +6,28 @@ import colors from '../../../theme/colors';
 import isEmpty from 'lodash/isEmpty';
 import { useUniqueId } from '@hooks';
 import { OverrideTypes } from '@utilities';
+import { SystemStyleObject, Theme } from '@mui/system';
+import { Typography } from '@components/atomic';
+import { inputStyles } from '@theme';
 
 export type MaskedIntegerFieldProps = OverrideTypes<CurrencyInputProps, {
   error?: InputBaseProps['error'],
+  errorText?: string;
   label?: ReactNode,
   onChange?: (value: string) => void;
   inputSize?: InputBaseProps['size'];
 }>;
 
+const errorLabelStyles: SystemStyleObject<Theme> = {
+  color: colors.wildStrawberry.darken010,
+  fontSize: '12px',
+  lineHeight: '1.2',
+  marginTop: (theme) => theme.spacing(1)
+}
+
 const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
   error,
+  errorText,
   label,
   onChange,
   inputSize = 'medium',
@@ -31,58 +43,17 @@ const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
   return (
     <FormControl variant="outlined" sx={{width: '100%'}}>
       {!isEmpty(label) && (
-        <InputLabel shrink htmlFor={inputId} error={error}>
+        <InputLabel shrink htmlFor={inputId} error={error} sx={{ 
+          color: (theme) => error ? `${theme.palette.error.darken010} !important` : undefined 
+        }}>
           {label}
         </InputLabel>
       )}
 
       <Box sx={{
         width: '100%',
-        input: {
-          fontFamily: 'PixelOperatorMono',
-          backgroundColor: (theme) => theme.palette.secondary.darken040,
-          borderColor: (theme) => {
-            if (props.disabled) return 'transparent';
-            if (error) return theme.palette.error.main;
-            return colors.vzGreyDark;
-          },
-          borderRadius: (theme) => theme.spacing(1),
-          lineHeight: 1.2,
-          color: (theme) => {
-            if (props.disabled) return colors.vzGreyDark;
-            if (error) return theme.palette.error.main;
-            return colors.vzGrey;
-          },
-          minHeight: (theme) => theme.spacing(8),
-          fontSize: () => inputSize === 'small' ? '14px' : '24px',
-          padding: (theme) => {
-            if (inputSize === 'small') {
-              return `${theme.spacing(1)} ${theme.spacing(1)} ${theme.spacing(1)} ${theme.spacing(2)}`;
-            } else {
-              return theme.spacing(4);
-            }
-          },
-          boxSizing: 'border-box',
-          width: '100%',
-          border: 0,
-          '::placeholder': {
-            color: colors.vzGrey,
-          },
-          '&:focus-visible': {
-            outline: 'none',
-          },
-          "::-webkit-outer-spin-button": { 
-            "webkitAppearance": "none", 
-            "mozAppearance": "none",
-            "appearance": "none"
-          },
-          "::-webkit-inner-spin-button": {
-            "webkitAppearance": "none",
-            "mozAppearance": "none",
-            "appearance": "none"
-          },
-        }}
-      }>
+        input: inputStyles(props.disabled, error, inputSize)
+      }}>
         <CurrencyInput
           id={inputId}
           decimalsLimit={2}
@@ -91,6 +62,11 @@ const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
           {...props}
         />
       </Box>
+      {error && errorText && (
+        <Typography variant='body2' sx={errorLabelStyles}>
+          {errorText}
+        </Typography>
+      )}
     </FormControl>
   );
 };
