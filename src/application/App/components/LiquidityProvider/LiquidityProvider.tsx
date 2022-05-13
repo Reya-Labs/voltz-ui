@@ -19,7 +19,6 @@ const LiquidityProvider: React.FunctionComponent = () => {
   const [formActive, setFormActive] = useState(false);
   const [editMode, setEditMode] = useState<'margin' | 'liquidity'>();
 
-  // const [burnFormActive, setBurnFormActive] = useState(false);
   const [amm, setAMM] = useState<AugmentedAMM | null>(null);
   const [position, setPosition] = useState<Position | undefined>();
   const { onChangeAgent } = useAgent();
@@ -45,14 +44,8 @@ const LiquidityProvider: React.FunctionComponent = () => {
   };
 
   const renderMode = getRenderMode();
-  const marginEditMode = formActive && !isNull(effectiveAmm) && Boolean(position) && editMode === 'margin';
-  const liquidityEditMode = formActive && !isNull(effectiveAmm) && Boolean(position) && editMode === 'liquidity';
-
-  // Keep for debugging the liquidity burning mechanism 
-  // // eslint-disable-next-line
-  // console.log('liq edit mode', liquidityEditMode);
-  // // eslint-disable-next-line
-  // console.log('margin edit mode', marginEditMode);
+  const isEditingMargin = formActive && !isNull(effectiveAmm) && Boolean(position) && editMode === 'margin';
+  const isEditingLiquidity = formActive && !isNull(effectiveAmm) && Boolean(position) && editMode === 'liquidity';
 
   useEffect(() => {
     setFormActive(false);
@@ -99,7 +92,11 @@ const LiquidityProvider: React.FunctionComponent = () => {
 
       {renderMode === 'portfolio' && (
         <Panel variant='dark' sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
-          <ConnectedPositionTable amm={effectiveAmm} onSelectItem={handleSelectPosition}  agent={Agents.LIQUIDITY_PROVIDER} />
+          <ConnectedPositionTable 
+            amm={effectiveAmm}
+            onSelectItem={handleSelectPosition}
+            agent={Agents.LIQUIDITY_PROVIDER}
+          />
         </Panel>
       )}
 
@@ -107,8 +104,8 @@ const LiquidityProvider: React.FunctionComponent = () => {
         <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
           <ConnectedMintBurnForm 
             amm={effectiveAmm} 
-            marginEditMode={marginEditMode}
-            liquidityEditMode={liquidityEditMode}
+            isEditingMargin={isEditingMargin}
+            isEditingLiquidity={isEditingLiquidity}
             onReset={handleReset} 
             position={position} 
           /> 

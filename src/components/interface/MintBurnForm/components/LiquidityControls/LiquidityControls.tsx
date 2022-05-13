@@ -1,18 +1,18 @@
 import React, { useCallback } from 'react';
 import Box from '@mui/material/Box';
 import { IconLabel, ToggleButtonGroup } from '@components/composite';
-import { MintBurnFormMarginAction } from '@hooks';
+import { MintBurnFormLiquidityAction } from '@hooks';
 
-export type MarginControlsProps = {
-  onChange: (value: MintBurnFormMarginAction) => void;
-  value: MintBurnFormMarginAction;
+export type LiquidityControlsProps = {
+  onChange: (value: MintBurnFormLiquidityAction) => void;
+  value: MintBurnFormLiquidityAction;
 };
 
-const MarginControls = ({ onChange, value }: MarginControlsProps) => {
-  const iconLabel = <IconLabel label="Add or Remove Margin" icon="information-circle" info="" removeIcon />
+const LiquidityControls = ({ onChange, value }: LiquidityControlsProps) => {
+  const iconLabel = <IconLabel label="Add or Burn Liquidity" icon="information-circle" info="" removeIcon />;
 
   const handleChange = useCallback((newValue: string) => {
-    onChange(newValue as MintBurnFormMarginAction);
+    onChange(newValue as MintBurnFormLiquidityAction)
   }, [onChange]);
 
   return (
@@ -26,7 +26,7 @@ const MarginControls = ({ onChange, value }: MarginControlsProps) => {
     >
       <ToggleButtonGroup
         label={iconLabel}
-        options={Object.values(MintBurnFormMarginAction)}
+        options={Object.values(MintBurnFormLiquidityAction)}
         option={value}
         onChangeOption={handleChange}
       />
@@ -34,4 +34,4 @@ const MarginControls = ({ onChange, value }: MarginControlsProps) => {
   );
 };
 
-export default MarginControls;
+export default LiquidityControls;

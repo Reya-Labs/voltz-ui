@@ -1,7 +1,6 @@
 import React from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
-import isUndefined from 'lodash/isUndefined';
 
 import { AgentProps } from '@components/contexts';
 import { Button, Panel } from '@components/atomic';
@@ -13,132 +12,47 @@ import {
   MarginAmount,
   NotionalAmount,
 } from '@components/composite';
-import { HandleSubmitMintBurnFormArgs } from './types';
-import { MintBurnMinimumMarginAmount, SubmitMintBurnFormButton, BurnControls } from './components';
+import { MintBurnMinimumMarginAmount, LiquidityControls } from './components';
 import { MarginControls } from '../SwapForm/components';
+import { MintBurnFormLiquidityAction, MintBurnFormMarginAction, MintBurnFormState } from '@hooks';
 
 export type MintBurnFormProps = AgentProps & {
   protocol?: string;
   fixedApr?: number;
   startDate?: DateTime;
   endDate?: DateTime;
-  defaultFixedLow?: number;
-  defaultFixedHigh?: number;
-  defaultNotional?: number;
-  defaultMargin?: number;
   maxMargin?: number;
-  fixedLow?: number;
-  fixedHigh?: number;
-  notional?: number;
-  margin?: number;
-  marginEditMode?: boolean;
-  liquidityEditMode?: boolean;
-  defaultAddOrRemoveMargin?: boolean;
-  defaultAddOrBurnLiquidity?: boolean;
-  addOrRemoveMargin?: boolean;
-  addOrBurnLiquidity?: boolean;
-  position?: number;
-
+  isEditingMargin?: boolean;
+  isEditingLiquidity?: boolean;
+  formState: MintBurnFormState;
   onChangeFixedLow: (value: number, increment: boolean | null) => void;
   onChangeFixedHigh: (value: number, increment: boolean | null) => void;
   onChangeNotional: (value: number) => void;
   onChangeMargin: (value: number) => void;
-  onSubmit: (values: HandleSubmitMintBurnFormArgs) => void;
+  onSubmit: () => void;
   onCancel: () => void;
-  onAddOrRemoveMargin: (value: boolean) => void;
-  onAddOrBurnLiquidity: (value: boolean) => void;
+  onChangeMarginAction: (value: MintBurnFormMarginAction) => void;
+  onChangeLiquidityAction: (value: MintBurnFormLiquidityAction) => void;
 };
 
 const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   protocol,
   startDate,
   endDate,
-  defaultFixedLow,
-  defaultFixedHigh,
-  defaultNotional,
-  defaultMargin,
   maxMargin,
-  fixedLow,
-  fixedHigh,
-  notional,
-  margin,
-  marginEditMode,
-  liquidityEditMode,
-  defaultAddOrRemoveMargin,
-  defaultAddOrBurnLiquidity,
-  addOrRemoveMargin,
-  addOrBurnLiquidity,
-  position
-  ,
+  isEditingMargin = false,
+  isEditingLiquidity = false,
+  formState,
   onChangeFixedLow,
   onChangeFixedHigh,
   onChangeNotional,
   onChangeMargin,
   onSubmit,
   onCancel,
-  onAddOrRemoveMargin,
-  onAddOrBurnLiquidity,
+  onChangeMarginAction,
+  onChangeLiquidityAction,
 }) => {
-  const handleSubmit = () => {
-    if (
-      isUndefined(fixedLow) ||
-      isUndefined(fixedHigh) ||
-      isUndefined(notional) ||
-      isUndefined(margin)
-    ) {
-      return;
-    }
-
-    return onSubmit({
-      fixedLow,
-      fixedHigh,
-      notional,
-      margin,
-    });
-  };
-
-
-  const handleSubmitLiquidityOnly = () => {
-
-    if (isUndefined(notional) || isNaN(notional) ) {
-      return;
-    }
-
-  let burntNotional = Math.abs(notional);
-
-  if (!addOrBurnLiquidity) {
-    burntNotional *= -1.0;
-  }
-
-  return onSubmit({
-    fixedLow: fixedLow!,   
-    fixedHigh: fixedHigh!, 
-    notional: burntNotional,
-    margin: margin || 0,
-  });
-
-  };
-
-
-  const handleSubmitMarginOnly = () => {
-
-    if (isUndefined(margin) || isNaN(margin) ) {
-      return;
-    }
-
-    let marginDelta = Math.abs(margin);
-
-    if (!addOrRemoveMargin) {
-      marginDelta *= -1.0;
-    }
-
-    return onSubmit({
-      fixedLow: fixedLow!,   
-      fixedHigh: fixedHigh!, 
-      notional: notional!,
-      margin: marginDelta,
-    });
-  };
+  const isAddingLiquidity = !isEditingLiquidity || formState.liquidityAction === MintBurnFormLiquidityAction.ADD;
 
   return (
     <Panel
@@ -169,46 +83,33 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         />
       </Box>
       
-      {
-
-        liquidityEditMode && (
-          <Box
+      {isEditingLiquidity && (
+        <Box
           sx={{
             marginBottom: (theme) => theme.spacing(6),
             display: 'flex',
           }}
         >
-          <BurnControls 
-            defaultBurnLiquidity={defaultAddOrBurnLiquidity}
-            burnLiquidity={addOrBurnLiquidity} // Here burnLiquidity should really be called addLiquidity
-            onAddOrBurnLiquidity={onAddOrBurnLiquidity}
-          >
-          </BurnControls>
-          
-          </Box>
-        )
-      }    
+          <LiquidityControls 
+            value={formState.liquidityAction}
+            onChange={onChangeLiquidityAction}
+          />          
+        </Box>
+      )}
 
-
-
-      {
-          marginEditMode && (
-            <Box
-            sx={{
-              marginBottom: (theme) => theme.spacing(6),
-              display: 'flex',
-            }}
-          >
-            <MarginControls 
-              defaultAddMargin={defaultAddOrRemoveMargin}
-              addMargin={addOrRemoveMargin}
-              onAddOrRemoveMargin={onAddOrRemoveMargin}
-            >
-            </MarginControls>
-            
-            </Box>
-          )
-        }  
+      {isEditingMargin && (
+        <Box
+          sx={{
+            marginBottom: (theme) => theme.spacing(6),
+            display: 'flex',
+          }}
+        >
+          <MarginControls 
+            value={formState.marginAction}
+            onChange={onChangeMarginAction} 
+          />
+        </Box>
+      )}  
 
       <Box
         sx={{
@@ -217,72 +118,63 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         }}
       >
         <RateOptions
-          defaultFixedLow={defaultFixedLow}
-          defaultFixedHigh={defaultFixedHigh}
-          fixedLow={fixedLow}
-          fixedHigh={fixedHigh}
+          fixedLow={formState.fixedLow}
+          fixedHigh={formState.fixedHigh}
           onChangeFixedLow={onChangeFixedLow}
           onChangeFixedHigh={onChangeFixedHigh}
         />
       </Box>
       
-    {
-        !marginEditMode && (
+      {!isEditingMargin && (
+        <Box
+          sx={{
+            marginBottom: (theme) => theme.spacing(6),
+          }}
+        >
+          <NotionalAmount
+            label={ isAddingLiquidity ? "provided liquidity" : "removed liquidity"} 
+            info={`Choose the notional amount of liquidity you wish to ${isAddingLiquidity ? 'provide' : 'remove'}.`}
+            protocol={protocol}
+            notional={formState.notional}
+            onChangeNotional={onChangeNotional}
+          />
+        </Box>
+      )}
 
-      <Box
-        sx={{
-          marginBottom: (theme) => theme.spacing(6),
-        }}
-      >
-        <NotionalAmount
-          label={ (!liquidityEditMode || addOrBurnLiquidity) ? "provided liquidty" : "removed liquidity"} 
-          info="Choose the notional amount of liquidity you wish to provide."
-          protocol={protocol}
-          defaultNotional={defaultNotional}
-          notional={notional}
-          onChangeNotional={onChangeNotional}
-        />
-      </Box>
-          )
-        }
+      {(!isEditingMargin && isAddingLiquidity) && ( 
+        <Box
+          sx={{
+            marginBottom: (theme) => theme.spacing(6),
+          }}
+        >
+          <MintBurnMinimumMarginAmount
+            fixedLow={formState.fixedLow}
+            fixedHigh={formState.fixedHigh}
+            notional={formState.notional}
+          />
+        </Box>
+      )}
 
-      {
-       (!marginEditMode && !liquidityEditMode || addOrBurnLiquidity ) && ( 
-      <Box
-        sx={{
-          marginBottom: (theme) => theme.spacing(6),
-        }}
-      >
-        <MintBurnMinimumMarginAmount
-          fixedLow={fixedLow}
-          fixedHigh={fixedHigh}
-          notional={notional}
-        />
-      </Box>
-       )
-      }
-
-      {
-        (!liquidityEditMode || addOrBurnLiquidity) && ( 
-          <Box
-        sx={{
-          marginBottom: (theme) => theme.spacing(6),
-        }}
-      >
-        <MarginAmount
-          protocol={protocol}
-          defaultMargin={defaultMargin}
-          maxMargin={maxMargin}
-          margin={margin}
-          isAdditional={addOrRemoveMargin}
-          onChangeMargin={onChangeMargin}
-        />
-      </Box>
-        )
-      }
+      {(!isEditingLiquidity || formState.liquidityAction === MintBurnFormLiquidityAction.ADD) && ( // check me
+        <Box
+          sx={{
+            marginBottom: (theme) => theme.spacing(6),
+          }}
+        >
+          <MarginAmount
+            protocol={protocol}
+            maxMargin={maxMargin}
+            margin={formState.margin}
+            isAdditional={formState.marginAction === MintBurnFormMarginAction.ADD}
+            onChangeMargin={onChangeMargin}
+          />
+        </Box>
+      )}
 
       <Box sx={{ display: 'flex' }}>
-        <SubmitMintBurnFormButton onSubmit={marginEditMode ? handleSubmitMarginOnly : (liquidityEditMode ? handleSubmitLiquidityOnly : handleSubmit) } /> 
+        <Button size="large" onClick={onSubmit}>
+          {isAddingLiquidity ? 'Provide Liquidity' : 'Burn Liquidity'}
+        </Button>
         <Button
           sx={{ marginLeft: (theme) => theme.spacing(6) }}
           variant="darker"
