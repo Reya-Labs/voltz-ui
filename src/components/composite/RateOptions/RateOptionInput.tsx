@@ -29,8 +29,8 @@ const RateOptionsInput: React.FunctionComponent<RateOptionsProps> = ({
   const handleChange = useCallback(
     (newValue: string | undefined) => {
       setInputValue(newValue);
-      const oldParsedValue = parseFloat(inputValue || '1');
-      const newParsedValue = parseFloat(newValue || '1');
+      const oldParsedValue = parseFloat(inputValue || '');
+      const newParsedValue = parseFloat(newValue || '');
 
       if(newParsedValue !== oldParsedValue) {
         onChange(newParsedValue, null);
