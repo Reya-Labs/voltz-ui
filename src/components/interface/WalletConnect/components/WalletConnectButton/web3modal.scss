@@ -1,0 +1,23 @@
+
+.web3modal-modal-card {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+
+    &:before {
+        content: 'Connect a wallet';
+    }
+}
+
+.web3modal-provider-container {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.web3modal-provider-description {
+    display: none;
+}
+
+.web3modal-provider-name {
+    text-align: left;
+}

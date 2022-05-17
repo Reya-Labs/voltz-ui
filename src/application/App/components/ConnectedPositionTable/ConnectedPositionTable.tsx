@@ -31,7 +31,7 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
   const [size, setSize] = useState<number | null>(null);
   const { positionsByAgentGroup, loading, error } = usePositions();
   const pages = 0;
-  const { wallet } = useWallet();
+  const { status } = useWallet();
 
   const dispatch = useDispatch();
 
@@ -96,7 +96,7 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
     },  [dispatch, agent],
   );
 
-  if(loading || (positionsByAgentGroup?.length && positionInformationLoading)) {
+  if(loading || status === 'connecting' || (positionsByAgentGroup?.length && positionInformationLoading)) {
     return (
       <Panel variant='grey-dashed' sx={{ width: '100%' }}>
         <Loading sx={{ margin: '0 auto' }} />
@@ -116,7 +116,7 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
     );
   }
 
-  if(error || !wallet) {
+  if(error || status !== 'connected') {
     return (
       <Panel variant='main' sx={{ width: '100%', textAlign: 'center' }}>
         <Typography variant='h6' sx={{ color: colors.skyBlueCrayola.base }}>

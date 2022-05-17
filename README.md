@@ -6,10 +6,20 @@
 ```
 REACT_APP_SUBGRAPH_URL=<<URL OF LOCAL SUBGRAPH>>
 REACT_APP_DEFAULT_PROVIDER_NETWORK=<<RPC ENDPOINT FOR BLOCKCHAIN>
-REACT_APP_METAMASK_NETWORK_ID=<<NETWORK ID>>
+REACT_APP_REQUIRED_ETHEREUM_NETWORK=<<ETHEREUM_NETWORK_NAME>>
+REACT_APP_WALLETCONNECT_INFURA_ID=<<INFURA ID>>
+REACT_APP_TOS_URL=https://www.voltz.xyz/t-cs
+REACT_APP_TRM_API_KEY=<<TRM_API_KEY>>
 ```
 
-`REACT_APP_METAMASK_NETWORK_ID` is used by the app to check that the connected Metamask wallet is using the correct network. Use `1` for Ethereum Mainnet (live), or `42` for Kovan Testnet (dev). See https://eth.wiki/json-rpc/API#net_version for more network IDs.
+`REACT_APP_REQUIRED_ETHEREUM_NETWORK` is used by the app to check that the connected Metamask wallet is using the correct network. Use `mainnet` for Ethereum Mainnet (live), or `kovan` for Kovan Testnet (dev).
+
+`REACT_APP_WALLETCONNECT_INFURA_ID` is used by the app when attempting to use the WalletConnect wallet option. Sign up for an account at https://infura.io/ and then create a new project. The 'infura id' is the same as the 'project id' in the keys section.
+
+`REACT_APP_TOS_URL` This is the URL displayed in the terms of service (TOS) message that users must agree to before they can connect their wallet to the app.
+
+`REACT_APP_TRM_API_KEY` This key is used to get a risk assessment from TRM for a wallet that is being connected to the app. This key is optional for development as if the risk assessment request fails, the app just skips the check.
+
 
 # Run
 

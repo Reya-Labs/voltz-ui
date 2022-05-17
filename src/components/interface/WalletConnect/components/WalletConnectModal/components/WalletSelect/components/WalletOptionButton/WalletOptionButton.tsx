@@ -23,6 +23,11 @@ const WalletOptionButton: React.FunctionComponent<WalletOptionButtonProps> = ({
       display: 'flex',
       justifyContent: 'space-between',
       padding: (theme) => theme.spacing(4),
+      marginTop: (theme) => theme.spacing(4),
+
+      '&:first-of-type': {
+        marginTop: '0'
+      }
     }}
     selected={selected}
   >
