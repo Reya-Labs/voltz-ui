@@ -1,8 +1,8 @@
 import React from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
-import isUndefined from 'lodash/isUndefined';
-import { useAgent } from '@hooks';
+import { SystemStyleObject, Theme } from '@mui/system';
+import { MintBurnFormMarginAction, SwapFormState, useAgent } from '@hooks';
 import { Agents } from '@components/contexts';
 import { Button, Panel } from '@components/atomic';
 import {
@@ -12,107 +12,52 @@ import {
   NotionalAmount,
   MarginAmount,
 } from '@components/composite';
-import { HandleSubmitSwapFormArgs } from './types';
-import { TraderControls, MarginControls, SwapInfo, SubmitSwapFormButton } from './components';
+import { TraderControls, MarginControls, SwapInfo } from './components';
 
 export type SwapFormProps = {
-  isModifying?: boolean;
-  protocol?: string;
-  underlyingTokenName?: string;
-  fixedApr?: number;
-  startDate?: DateTime;
   endDate?: DateTime;
-  defaultNotional?: number;
-  defaultMargin?: number;
-  defaultPartialCollateralization?: boolean;
-  defaultAddOrRemoveMargin?: boolean;
+  formState: SwapFormState;
   maxMargin?: number;
-  notional?: number;
-  margin?: number;
-  partialCollateralization?: boolean;
-  fcmMode?: boolean;
-  addOrRemoveMargin?: boolean;
   marginEditMode?: boolean;
+  onCancel: () => void;
+  onChangeFcmMode: (value: boolean) => void;
+  onChangeMargin: (value: number) => void;
+  onChangeMarginAction: (value: MintBurnFormMarginAction) => void;
   onChangeNotional: (value: number) => void;
   onChangePartialCollateralization: (value: boolean) => void;
-  onChangeFcmMode: (value: boolean) => void;
-  onAddOrRemoveMargin: (value: boolean) => void;
-  onChangeMargin: (value: number) => void;
-  onSubmit: (values: HandleSubmitSwapFormArgs) => void;
-  onCancel: () => void;
+  onSubmit: () => void;
+  protocol?: string;
+  startDate?: DateTime;
+  underlyingTokenName?: string;
 };
 
 const SwapForm: React.FunctionComponent<SwapFormProps> = ({
-  isModifying = false,
-  protocol,
-  underlyingTokenName,
-  startDate,
   endDate,
-  defaultNotional,
-  defaultMargin,
-  defaultPartialCollateralization,
-  defaultAddOrRemoveMargin,
+  formState,
   maxMargin,
-  notional,
-  margin,
-  partialCollateralization,
-  fcmMode,
-  addOrRemoveMargin,
-  marginEditMode
-  ,
+  marginEditMode,
+  onCancel,
+  onChangeFcmMode,
+  onChangeMargin,
+  onChangeMarginAction,
   onChangeNotional,
   onChangePartialCollateralization,
-  onChangeFcmMode,
-  onAddOrRemoveMargin,
-  onChangeMargin,
   onSubmit,
-  onCancel,
+  protocol,
+  startDate,
+  underlyingTokenName,
 }) => {
-  const handleSubmit = () => {
-
-    if (isUndefined(notional) || isUndefined(margin) || isUndefined(partialCollateralization) ) {
-      return;
-    }
-
-    if (isNaN(notional) || isNaN(margin)) {
-      return;
-    }
-
-    return onSubmit({
-      notional,
-      margin,
-      partialCollateralization,
-    });
-  };
-
-  const handleSubmitMarginOnly = () => {
-
-    if (isUndefined(margin) || isNaN(margin) ) {
-      return;
-    }
-
-    let marginDelta = Math.abs(margin);
-
-    if (!addOrRemoveMargin) {
-      marginDelta *= -1.0;
-    }
-
-    // todo: it would be more elegant to have a different onSubmit for position margin updates since in this case notional and partial collateralization
-    // are redundunt inputs
-    return onSubmit({
-      notional: 0,
-      margin: marginDelta,
-      partialCollateralization: false,
-    });
-  };
-
   const { agent } = useAgent();
 
-  let _boxShadow = '0px 0px 88px rgba(38, 103, 255, 0.20)';
-
-  if (agent === Agents.FIXED_TRADER) {
-    _boxShadow = '0px 0px 88px rgba(0, 131, 155, 0.2)';
+  const bottomSpacing: SystemStyleObject<Theme> = {
+    marginBottom: (theme) => theme.spacing(6)
   }
+
+  const getSubmitLabel = () => {
+    if (marginEditMode) return "Update Margin";
+    if(agent === Agents.FIXED_TRADER) return 'Trade Fixed Rate';
+    return 'Trade Variable Rate';
+  };
 
   return (
     <Panel
@@ -120,15 +65,14 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
       sx={{
         marginTop: 12,
         width: (theme) => theme.spacing(97),
-        boxShadow: _boxShadow,
+        boxShadow: () => agent === Agents.FIXED_TRADER 
+          ? '0px 0px 88px rgba(0, 131, 155, 0.2)' 
+          : '0px 0px 88px rgba(38, 103, 255, 0.20)',
       }}
     >
       <ProtocolInformation protocol={protocol}/>
-      <Box
-        sx={{
-          marginBottom: (theme) => theme.spacing(6),
-        }}
-      >
+
+      <Box sx={bottomSpacing}>
         <MaturityInformation
           label={
             <IconLabel
@@ -143,95 +87,58 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         />
       </Box>
  
-        {
-          marginEditMode && (
-            <Box
-            sx={{
-              marginBottom: (theme) => theme.spacing(6),
-              display: 'flex',
-            }}
-          >
-            <MarginControls 
-              defaultAddMargin={defaultAddOrRemoveMargin}
-              addMargin={addOrRemoveMargin}
-              onAddOrRemoveMargin={onAddOrRemoveMargin}
-            >
-            </MarginControls>
-            
-            </Box>
-          )
-        }  
+      {marginEditMode && (
+        <Box sx={{ ...bottomSpacing, display: 'flex' }}>
+          <MarginControls 
+            value={formState.marginAction}
+            onChange={onChangeMarginAction}
+          />
+        </Box>
+      )}  
 
-        {
-          !marginEditMode && (
-            <Box
-            sx={{
-              marginBottom: (theme) => theme.spacing(6),
-              display: 'flex',
-            }}
-          >
-            <TraderControls
-            isModifying={isModifying}
-            defaultPartialCollateralization={defaultPartialCollateralization}
-            partialCollateralization={partialCollateralization}
-            fcmMode={fcmMode}
+      {!marginEditMode && (
+        <Box sx={{ ...bottomSpacing, display: 'flex' }}>
+          <TraderControls
+            partialCollateralization={formState.partialCollateralization}
+            fcmMode={formState.fcmMode}
             onChangePartialCollateralization={onChangePartialCollateralization}
             onChangeFcmMode={onChangeFcmMode}
           />
-            </Box>
-          )
-        }
+        </Box>
+      )}
 
-      {
-        !marginEditMode &&  (
-          <Box
-          sx={{
-            marginBottom: (theme) => theme.spacing(6),
-          }}
-        >
+      {!marginEditMode && (
+        <Box sx={bottomSpacing}>
           <NotionalAmount
             label="notional amount"
             info="Choose the notional you wish to trade. The notional amount is the total size of your trade."
             protocol={protocol}
-            defaultNotional={defaultNotional}
-            notional={notional}
+            notional={formState.notional}
             onChangeNotional={onChangeNotional}
           />
         </Box>
-        )
-      }
+      )}
 
-      {
-      partialCollateralization && (
-      <Box
-        sx={{
-          marginBottom: (theme) => theme.spacing(6),
-        }}
-      >
-        <MarginAmount
-          protocol={protocol}
-          defaultMargin={defaultMargin}
-          maxMargin={maxMargin}
-          margin={margin}
-          isAdditional={addOrRemoveMargin}
-          onChangeMargin={onChangeMargin}
-        />
-      </Box>
-      )
-        }
+      {formState.partialCollateralization && (
+        <Box sx={bottomSpacing}>
+          <MarginAmount
+            protocol={protocol}
+            maxMargin={maxMargin}
+            margin={formState.margin}
+            isAdditional={formState.marginAction === MintBurnFormMarginAction.ADD}
+            onChangeMargin={onChangeMargin}
+          />
+        </Box>
+      )}
 
-      <Box
-        sx={{
-          marginBottom: (theme) => theme.spacing(6),
-        }}
-      >
-        <SwapInfo notional={notional} underlyingTokenName={underlyingTokenName} />
+      <Box sx={bottomSpacing}>
+        <SwapInfo notional={formState.notional} underlyingTokenName={underlyingTokenName} />
       </Box>
 
-      {
-      partialCollateralization && (  
       <Box sx={{ display: 'flex' }}>
-        <SubmitSwapFormButton onSubmit={ marginEditMode ? handleSubmitMarginOnly : handleSubmit} marginEditMode={marginEditMode} />
+        <Button size="large" onClick={onSubmit}>
+          {getSubmitLabel()}
+        </Button>
         <Button
           sx={{ marginLeft: (theme) => theme.spacing(4) }}
           variant="darker"
@@ -240,21 +147,6 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           Cancel
         </Button>
       </Box>
-      )}
-
-      {
-      !partialCollateralization && (  
-      <Box sx={{ display: 'flex' }}>
-      <SubmitSwapFormButton onSubmit={handleSubmit} />
-      <Button
-        sx={{ marginLeft: (theme) => theme.spacing(4) }}
-        variant="darker"
-        onClick={onCancel}
-      >
-        Cancel
-      </Button>
-    </Box>
-      )}
   
     </Panel>
   );
