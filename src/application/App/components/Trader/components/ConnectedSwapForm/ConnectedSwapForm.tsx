@@ -12,14 +12,14 @@ import { isUndefined } from 'lodash';
 
 export type ConnectedSwapFormProps = {
   amm: AugmentedAMM;
-  marginEditMode?: boolean;
+  isEditingMargin?: boolean;
   onReset: () => void;
 };
 
 const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ 
   amm,
   onReset, 
-  marginEditMode,
+  isEditingMargin,
 }) => {
   const { agent } = useAgent();
   const dispatch = useDispatch();
@@ -31,7 +31,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId); // contains a failureMessage attribute that will contain whatever came out from the sdk
 
-  const isRemovingMargin = marginEditMode && form.state.marginAction === MintBurnFormMarginAction.REMOVE;
+  const isRemovingMargin = isEditingMargin && form.state.marginAction === MintBurnFormMarginAction.REMOVE;
 
   const handleSubmit = () => {
     if (isUndefined(form.state.notional)) return;
@@ -47,7 +47,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
     };
   
     let action;
-    if (marginEditMode) {
+    if (isEditingMargin) {
       action = actions.updatePositionMarginAction(amm, transaction);
     } 
     else if (form.state.partialCollateralization) {
@@ -81,7 +81,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
     return (
       <PendingTransaction 
         amm={amm} 
-        isEditingMargin={marginEditMode} 
+        isEditingMargin={isEditingMargin} 
         transactionId={transactionId} 
         onComplete={handleComplete} 
         onBack={handleGoBack} 
@@ -94,7 +94,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
       <SwapForm
         formState={form.state}
         endDate={amm.endDateTime}
-        marginEditMode={marginEditMode}
+        isEditingMargin={isEditingMargin}
         onCancel={onReset}
         onChangeFcmMode={form.setFcmMode}
         onChangeMargin={form.setMargin}

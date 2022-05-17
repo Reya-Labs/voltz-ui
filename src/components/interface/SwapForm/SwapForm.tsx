@@ -18,7 +18,7 @@ export type SwapFormProps = {
   endDate?: DateTime;
   formState: SwapFormState;
   maxMargin?: number;
-  marginEditMode?: boolean;
+  isEditingMargin?: boolean;
   onCancel: () => void;
   onChangeFcmMode: (value: boolean) => void;
   onChangeMargin: (value: number) => void;
@@ -35,7 +35,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   endDate,
   formState,
   maxMargin,
-  marginEditMode,
+  isEditingMargin,
   onCancel,
   onChangeFcmMode,
   onChangeMargin,
@@ -47,14 +47,13 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   startDate,
   underlyingTokenName,
 }) => {
-  const { agent } = useAgent();
-
+  const { agent, onChangeAgent } = useAgent();
   const bottomSpacing: SystemStyleObject<Theme> = {
     marginBottom: (theme) => theme.spacing(6)
   }
 
   const getSubmitLabel = () => {
-    if (marginEditMode) return "Update Margin";
+    if (isEditingMargin) return "Update Margin";
     if(agent === Agents.FIXED_TRADER) return 'Trade Fixed Rate';
     return 'Trade Variable Rate';
   };
@@ -87,7 +86,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         />
       </Box>
  
-      {marginEditMode && (
+      {isEditingMargin && (
         <Box sx={{ ...bottomSpacing, display: 'flex' }}>
           <MarginControls 
             value={formState.marginAction}
@@ -96,18 +95,20 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         </Box>
       )}  
 
-      {!marginEditMode && (
+      {!isEditingMargin && (
         <Box sx={{ ...bottomSpacing, display: 'flex' }}>
           <TraderControls
+            agent={agent}
             partialCollateralization={formState.partialCollateralization}
             fcmMode={formState.fcmMode}
+            onChangeAgent={onChangeAgent}
             onChangePartialCollateralization={onChangePartialCollateralization}
             onChangeFcmMode={onChangeFcmMode}
           />
         </Box>
       )}
 
-      {!marginEditMode && (
+      {!isEditingMargin && (
         <Box sx={bottomSpacing}>
           <NotionalAmount
             label="notional amount"

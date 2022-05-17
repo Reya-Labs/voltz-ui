@@ -154,7 +154,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         </Box>
       )}
 
-      {(!isEditingLiquidity || formState.liquidityAction === MintBurnFormLiquidityAction.ADD) && ( // check me
+      {(!isEditingLiquidity || formState.liquidityAction === MintBurnFormLiquidityAction.ADD) && (
         <Box
           sx={{
             marginBottom: (theme) => theme.spacing(6),
