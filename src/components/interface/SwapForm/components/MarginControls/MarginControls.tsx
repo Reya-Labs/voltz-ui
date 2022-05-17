@@ -12,7 +12,7 @@ const MarginControls = ({ onChange, value }: MarginControlsProps) => {
   const iconLabel = <IconLabel label="Add or Remove Margin" icon="information-circle" info="" removeIcon />
 
   const handleChange = useCallback((newValue: string) => {
-    onChange(newValue as MintBurnFormMarginAction);
+    if(newValue) onChange(newValue as MintBurnFormMarginAction);
   }, [onChange]);
 
   return (

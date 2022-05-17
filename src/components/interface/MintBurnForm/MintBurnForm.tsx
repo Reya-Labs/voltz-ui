@@ -2,7 +2,6 @@ import React from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
 
-import { AgentProps } from '@components/contexts';
 import { Button, Panel } from '@components/atomic';
 import {
   IconLabel,
@@ -16,7 +15,7 @@ import { MintBurnMinimumMarginAmount, LiquidityControls } from './components';
 import { MarginControls } from '../SwapForm/components';
 import { MintBurnFormLiquidityAction, MintBurnFormMarginAction, MintBurnFormState } from '@hooks';
 
-export type MintBurnFormProps = AgentProps & {
+export type MintBurnFormProps = {
   protocol?: string;
   fixedApr?: number;
   startDate?: DateTime;

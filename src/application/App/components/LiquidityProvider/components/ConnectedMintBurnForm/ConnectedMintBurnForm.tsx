@@ -7,7 +7,7 @@ import { routes } from '@routes';
 import { actions, selectors } from '@store';
 import { MintBurnFormLiquidityAction, MintBurnFormMarginAction, useAgent, useDispatch, useMintBurnForm, useSelector } from '@hooks';
 import { AMMProvider } from '@components/contexts';
-import { MintBurnForm, HandleSubmitMintBurnFormArgs, PendingTransaction } from '@components/interface';
+import { MintBurnForm, PendingTransaction } from '@components/interface';
 import { updateFixedRate } from './utilities';
 import { isUndefined } from 'lodash';
 

@@ -12,7 +12,7 @@ const LiquidityControls = ({ onChange, value }: LiquidityControlsProps) => {
   const iconLabel = <IconLabel label="Add or Burn Liquidity" icon="information-circle" info="" removeIcon />;
 
   const handleChange = useCallback((newValue: string) => {
-    onChange(newValue as MintBurnFormLiquidityAction)
+    if(newValue) onChange(newValue as MintBurnFormLiquidityAction)
   }, [onChange]);
 
   return (
