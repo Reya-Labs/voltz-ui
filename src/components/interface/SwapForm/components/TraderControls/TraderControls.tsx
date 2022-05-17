@@ -4,22 +4,25 @@ import isUndefined from 'lodash/isUndefined';
 
 import { Agents } from '@components/contexts';
 import { IconLabel, ToggleButtonGroup } from '@components/composite';
-import { useAgent } from '@hooks';
 
 export type TraderControlsProps = {
+  agent: Agents;
   isModifying?: boolean;
   defaultPartialCollateralization?: boolean;
   partialCollateralization?: boolean;
   fcmMode?: boolean;
+  onChangeAgent: (agent: Agents) => void;
   onChangePartialCollateralization: (value: boolean) => void;
   onChangeFcmMode: (value: boolean) => void;
 };
 
 const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
+  agent,
   isModifying,
   defaultPartialCollateralization,
   partialCollateralization,
   fcmMode,
+  onChangeAgent,
   onChangePartialCollateralization,
   onChangeFcmMode,
 }) => {
@@ -30,7 +33,6 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
   //   }
   // }, []);
 
-  const { agent, onChangeAgent } = useAgent();
   if (!agent || agent === Agents.LIQUIDITY_PROVIDER) {
     return null;
   }

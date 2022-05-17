@@ -5,78 +5,64 @@ import { routes } from '@routes';
 import { AugmentedAMM } from '@utilities';
 import { AMMProvider } from '@components/contexts';
 import { actions, selectors } from '@store';
-import { useAgent, useDispatch, useSelector } from '@hooks';
-import {
-  SwapForm,
-  SwapFormProps,
-  HandleSubmitSwapFormArgs,
-  PendingTransaction,
-} from '@components/interface';
-import { TraderControlsProps } from 'src/components/interface/SwapForm/components/TraderControls/TraderControls';
+import { MintBurnFormMarginAction, useAgent, useDispatch, useSelector } from '@hooks';
+import { SwapForm, PendingTransaction } from '@components/interface';
+import useSwapForm from 'src/hooks/useSwapForm';
+import { isUndefined } from 'lodash';
 
 export type ConnectedSwapFormProps = {
   amm: AugmentedAMM;
-  marginEditMode?: boolean;
-  liquidityEditMode?: boolean;
+  isEditingMargin?: boolean;
   onReset: () => void;
 };
 
 const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ 
   amm,
   onReset, 
-  marginEditMode,
-  liquidityEditMode,
+  isEditingMargin,
 }) => {
   const { agent } = useAgent();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [notional, setNotional] = useState<SwapFormProps['notional']>();
-  const [margin, setMargin] = useState<SwapFormProps['margin']>();
-  const [partialCollateralization, setPartialCollateralization] =
-    useState<SwapFormProps['partialCollateralization']>(true);
 
-  const [fcmMode, setFcmMode] = 
-    useState<TraderControlsProps['fcmMode']>(); 
-
-  const [addOrRemoveMargin, setAddOrRemoveMargin] =
-    useState<SwapFormProps['addOrRemoveMargin']>(true);
+  const defaultValues = {};
+  const form = useSwapForm(defaultValues);
 
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId); // contains a failureMessage attribute that will contain whatever came out from the sdk
-  // activeTransaction.failureMessage = "No margin", could also be a big horrible object, needs a little more work to parse it correctly
+
+  const isRemovingMargin = isEditingMargin && form.state.marginAction === MintBurnFormMarginAction.REMOVE;
+
+  const handleSubmit = () => {
+    if (isUndefined(form.state.notional)) return;
+    if (isUndefined(form.state.margin)) return;
+    if (isUndefined(form.state.partialCollateralization)) return;
+
+    const transaction = { 
+      agent,
+      ammId: amm.id,
+      margin: Math.abs(form.state.margin) * (isRemovingMargin ? -1 : 1),
+      notional: form.state.notional,
+      partialCollateralization: form.state.partialCollateralization
+    };
   
-  const dispatch = useDispatch();
-  const handleSubmit = useCallback(
-    (args: HandleSubmitSwapFormArgs) => {
-      const transaction = { ...args, ammId: amm.id, agent };
-    
-      if (marginEditMode) {
-        const updatePositionMargin = actions.updatePositionMarginAction(amm, transaction);
-        setTransactionId(updatePositionMargin.payload.transaction.id);
-        dispatch(updatePositionMargin);
-      } else {
+    let action;
+    if (isEditingMargin) {
+      action = actions.updatePositionMarginAction(amm, transaction);
+    } 
+    else if (form.state.partialCollateralization) {
+      action = actions.swapAction(amm, transaction);
+    } 
+    else if (form.state.fcmMode) {
+      action = actions.fcmSwapAction(amm, transaction);
+    } else {
+      action = actions.fcmUnwindAction(amm, transaction);
+    }
 
-        if (partialCollateralization) {
+    setTransactionId(action.payload.transaction.id)
+    dispatch(action)
+  };
 
-          const swap = actions.swapAction(amm, transaction);
-          setTransactionId(swap.payload.transaction.id);
-          dispatch(swap);
-        } else {
-
-            if (fcmMode) {
-              const fcmSwap = actions.fcmSwapAction(amm, transaction);
-              setTransactionId(fcmSwap.payload.transaction.id)
-              dispatch(fcmSwap)
-            } else {
-                const fcmUnwind = actions.fcmUnwindAction(amm, transaction);
-                setTransactionId(fcmUnwind.payload.transaction.id)
-                dispatch(fcmUnwind)
-            }
-          }
-        }
-
-    },
-    [setTransactionId, dispatch, agent, amm.id, partialCollateralization, fcmMode],
-  );
   const handleComplete = () => {
     onReset();
     navigate(`/${routes.PORTFOLIO}`);
@@ -93,30 +79,32 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
 
   if (activeTransaction) {
     return (
-      <PendingTransaction amm={amm} marginEditMode={marginEditMode} transactionId={transactionId} onComplete={handleComplete} onBack={handleGoBack} />
+      <PendingTransaction 
+        amm={amm} 
+        isEditingMargin={isEditingMargin} 
+        transactionId={transactionId} 
+        onComplete={handleComplete} 
+        onBack={handleGoBack} 
+      />
     );
   }
 
   return (
     <AMMProvider amm={amm}>
       <SwapForm
-        protocol={amm.protocol}
-        underlyingTokenName={amm.underlyingToken.name}
-        startDate={amm.startDateTime}
+        formState={form.state}
         endDate={amm.endDateTime}
-        notional={notional || 0}
-        onChangeNotional={setNotional}
-        margin={margin || 0}
-        partialCollateralization={partialCollateralization}
-        fcmMode={fcmMode}
-        addOrRemoveMargin={addOrRemoveMargin}
-        marginEditMode={marginEditMode}
-        onChangePartialCollateralization={setPartialCollateralization}
-        onChangeFcmMode={setFcmMode}
-        onChangeMargin={setMargin}
-        onAddOrRemoveMargin={setAddOrRemoveMargin}
-        onSubmit={handleSubmit}
+        isEditingMargin={isEditingMargin}
         onCancel={onReset}
+        onChangeFcmMode={form.setFcmMode}
+        onChangeMargin={form.setMargin}
+        onChangeMarginAction={form.setMarginAction}
+        onChangeNotional={form.setNotional}
+        onChangePartialCollateralization={form.setPartialCollateralization}
+        onSubmit={handleSubmit}
+        protocol={amm.protocol}
+        startDate={amm.startDateTime}
+        underlyingTokenName={amm.underlyingToken.name}
       />
     </AMMProvider>
   );

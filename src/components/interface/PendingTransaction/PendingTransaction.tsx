@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 
 import { AugmentedAMM } from '@utilities';
-import { useWallet, useSelector } from '@hooks';
+import { useWallet, useSelector, MintBurnFormLiquidityAction } from '@hooks';
 import { selectors } from '@store';
 import { AMMProvider } from '@components/contexts';
 import { Button, Panel, Typography, Loading } from '@components/atomic';
@@ -14,8 +14,8 @@ import { isUndefined } from 'lodash';
 export type PendingTransactionProps = {
   amm: AugmentedAMM;
   transactionId?: string;
-  marginEditMode?: boolean;
-  addOrBurnLiquidity?: boolean;
+  isEditingMargin?: boolean;
+  liquidityAction?: MintBurnFormLiquidityAction;
   onBack: () => void;
   onComplete: () => void;
 };
@@ -23,8 +23,8 @@ export type PendingTransactionProps = {
 const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   amm,
   transactionId,
-  addOrBurnLiquidity,
-  marginEditMode,
+  liquidityAction,
+  isEditingMargin,
   onBack,
   onComplete,
 }) => {
@@ -219,7 +219,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
         <AMMProvider amm={amm}>
           <ProtocolInformation protocol={amm.protocol} />
         </AMMProvider>
-        {(isUndefined(marginEditMode) || !marginEditMode) && (<Box
+        {(isUndefined(isEditingMargin) || !isEditingMargin) && (<Box
           sx={{
             marginBottom: (theme) => theme.spacing(4),
           }}
@@ -231,7 +231,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
         }
         
         {
-          (isUndefined(addOrBurnLiquidity) || addOrBurnLiquidity) && (
+          (isUndefined(liquidityAction) || liquidityAction) && (
         <Box
           sx={{
             marginBottom: (theme) => theme.spacing(4),

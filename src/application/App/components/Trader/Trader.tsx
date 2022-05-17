@@ -42,8 +42,7 @@ const Trader: React.FunctionComponent = () => {
   };
 
   const renderMode = getRenderMode();
-  const marginEditMode = formActive && !isNull(effectiveAmm) && !isNull(position);
-  // const fcmMode = // How to make this depend on what is being clicked on the toggle button 
+  const isEditingMargin = formActive && !isNull(effectiveAmm) && !isNull(position);
 
   useEffect(() => {
     setFormActive(false);
@@ -97,7 +96,7 @@ const Trader: React.FunctionComponent = () => {
         <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
           <ConnectedSwapForm 
             amm={effectiveAmm} 
-            marginEditMode={marginEditMode} 
+            isEditingMargin={isEditingMargin} 
             onReset={handleReset} 
           />
         </Box>

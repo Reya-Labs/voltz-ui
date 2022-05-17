@@ -1,23 +1,20 @@
 import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
 
 import { AugmentedAMM } from '@utilities';
 import { routes } from '@routes';
 import { actions, selectors } from '@store';
-import { useAgent, useDispatch, useSelector } from '@hooks';
+import { MintBurnFormLiquidityAction, MintBurnFormMarginAction, useAgent, useDispatch, useMintBurnForm, useSelector } from '@hooks';
 import { AMMProvider } from '@components/contexts';
-import {
-  MintBurnForm,
-  MintBurnFormProps,
-  HandleSubmitMintBurnFormArgs,
-  PendingTransaction,
-} from '@components/interface';
+import { MintBurnForm, PendingTransaction } from '@components/interface';
 import { updateFixedRate } from './utilities';
-import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
+import { isUndefined } from 'lodash';
+
 export type ConnectedMintBurnFormProps = {
   amm: AugmentedAMM;
-  marginEditMode?: boolean;
-  liquidityEditMode?: boolean;
+  isEditingMargin?: boolean;
+  isEditingLiquidity?: boolean;
   onReset: () => void;
   position?: Position;
 };
@@ -25,66 +22,65 @@ export type ConnectedMintBurnFormProps = {
 const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps> = ({
   amm,
   onReset,
-  marginEditMode,
-  liquidityEditMode,
+  isEditingMargin,
+  isEditingLiquidity,
   position
 }) => {
   const { agent } = useAgent();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [fixedLow, setFixedLow] = useState<MintBurnFormProps['fixedLow']>();
-  const handleSetFixedLow = useCallback(
-    updateFixedRate({ amm, fixedRate: fixedLow, setFixedRate: setFixedLow }),
-    [amm, fixedLow, setFixedLow],
-  );
+  
+  const defaultValues = {
+    fixedLow: position ? parseFloat(position.fixedRateLower.toFixed() ) : undefined,
+    fixedHigh: position ? parseFloat(position.fixedRateUpper.toFixed() ) : undefined
+  }
+  const form = useMintBurnForm(defaultValues);
 
-  const [addOrRemoveMargin, setAddOrRemoveMargin] =
-  useState<MintBurnFormProps['addOrRemoveMargin']>();
-
-  const [addOrBurnLiquidity, setAddOrBurnLiquidity] =
-  useState<MintBurnFormProps['addOrBurnLiquidity']>();
-
-  const [fixedHigh, setFixedHigh] = useState<MintBurnFormProps['fixedHigh']>();
-  const handleSetFixedHigh = useCallback(
-    updateFixedRate({ amm, fixedRate: fixedHigh, setFixedRate: setFixedHigh }),
-    [amm, fixedHigh, setFixedHigh],
-  );
-
-  const [notional, setNotional] = useState<MintBurnFormProps['notional']>();
-  const [margin, setMargin] = useState<MintBurnFormProps['margin']>();
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
-  const dispatch = useDispatch();
-  const handleSubmit = useCallback(
-    (args: HandleSubmitMintBurnFormArgs) => {
-      const transaction = { ...args, ammId: amm.id, agent };
- 
-    if (marginEditMode) {
-      const updatePositionMargin = actions.updatePositionMarginAction(amm, transaction);
-      setTransactionId(updatePositionMargin.payload.transaction.id);
-        // todo: if remove margin, change margin to -margin (delta)
-      dispatch(updatePositionMargin);
-    } else {
-      // // eslint-disable-next-line
-      // console.log('addOrBurnLiq', addOrBurnLiquidity)
-      if (addOrBurnLiquidity || !liquidityEditMode) {
-        // ADDING LIQUIDITY
-        const mint = actions.mintAction(amm, transaction);
-        setTransactionId(mint.payload.transaction.id);
-        dispatch(mint);
+  const isBurningLiquidity = (isEditingLiquidity && form.state.liquidityAction === MintBurnFormLiquidityAction.BURN);
+  const isRemovingMargin = (isEditingMargin && form.state.marginAction === MintBurnFormMarginAction.REMOVE);
 
-      }  else {
-        // BURN LIQUIDITY
-        const updatePositionLiquidity = actions.burnAction(amm, transaction);
-        setTransactionId(updatePositionLiquidity.payload.transaction.id);
-        dispatch(updatePositionLiquidity);
-
-
-      } 
-    }  
-      
-    },
-    [setTransactionId, dispatch, agent, amm.id, liquidityEditMode, marginEditMode, addOrBurnLiquidity],
+  const handleSetFixedHigh = useCallback(
+    updateFixedRate({ amm, fixedRate: form.state.fixedHigh, setFixedRate: form.setFixedHigh }),
+    [amm, form.state.fixedHigh, form.setFixedHigh],
   );
+
+  const handleSetFixedLow = useCallback(
+    updateFixedRate({ amm, fixedRate: form.state.fixedLow, setFixedRate: form.setFixedLow }),
+    [amm, form.state.fixedLow, form.setFixedLow],
+  );
+
+  const handleSubmit = () => {
+    if (isUndefined(form.state.fixedHigh)) return;
+    if (isUndefined(form.state.fixedLow)) return;
+    if (isUndefined(form.state.margin)) return;
+    if (isUndefined(form.state.notional)) return;
+
+    const transaction = { 
+      ammId: amm.id, 
+      agent,
+      fixedLow: form.state.fixedLow,
+      fixedHigh: form.state.fixedHigh,
+      margin: Math.abs(form.state.margin) * (isRemovingMargin ? -1 : 1),
+      notional: Math.abs(form.state.notional) * (isBurningLiquidity ? -1 : 1),
+    };
+
+    let action;
+    if (isEditingMargin) {
+      action = actions.updatePositionMarginAction(amm, transaction);
+    } 
+    else if (!isEditingLiquidity || form.state.liquidityAction === MintBurnFormLiquidityAction.ADD) {
+      action = actions.mintAction(amm, transaction);
+    } 
+    else {
+      action = actions.burnAction(amm, transaction);
+    } 
+      
+    setTransactionId(action.payload.transaction.id);
+    dispatch(action);
+  };
+
   const handleComplete = () => {
     onReset();
     navigate(`/${routes.LP_FARM}`);
@@ -101,39 +97,34 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
 
   if (activeTransaction) {
     return (
-      <PendingTransaction amm={amm} marginEditMode={marginEditMode} addOrBurnLiquidity={addOrBurnLiquidity} transactionId={transactionId} onComplete={handleComplete} onBack={handleGoBack} />
+      <PendingTransaction 
+        amm={amm} 
+        isEditingMargin={isEditingMargin} 
+        liquidityAction={form.state.liquidityAction} 
+        transactionId={transactionId} 
+        onComplete={handleComplete} 
+        onBack={handleGoBack} 
+      />
     );
   }
-
-  // Debugging lines to check if toggle changes value of onAddOrBurnLiquidity: keep for debugging liquidity burning toggle
-  // const handleBurnChange = (input: boolean) => {
-  //   // eslint-disable-next-line
-  //   console.log('Change to', input)
-  //   setAddOrBurnLiquidity(input)
-  // }
 
   return (
     <AMMProvider amm={amm}>
       <MintBurnForm
+        endDate={amm.endDateTime}
+        formState={form.state}
+        isEditingLiquidity={isEditingLiquidity}
+        isEditingMargin={isEditingMargin}
+        onCancel={onReset}
+        onChangeFixedLow={handleSetFixedLow}
+        onChangeFixedHigh={handleSetFixedHigh}
+        onChangeLiquidityAction={form.setLiquidityAction}
+        onChangeMargin={form.setMargin}
+        onChangeMarginAction={form.setMarginAction} 
+        onChangeNotional={form.setNotional}
+        onSubmit={handleSubmit}
         protocol={amm.protocol}
         startDate={amm.startDateTime}
-        endDate={amm.endDateTime}
-        onChangeFixedLow={handleSetFixedLow}
-        fixedLow={position ? parseFloat(position.fixedRateLower.toFixed() ) : fixedLow}
-        fixedHigh={position ? parseFloat(position.fixedRateUpper.toFixed() ) : fixedHigh}
-        onChangeFixedHigh={handleSetFixedHigh}
-        notional={notional || 0}
-        onChangeNotional={setNotional}
-        margin={margin || 0}
-        onChangeMargin={setMargin}
-        onSubmit={handleSubmit}
-        onCancel={onReset}
-        marginEditMode={marginEditMode}
-        liquidityEditMode={liquidityEditMode}
-        onAddOrRemoveMargin={setAddOrRemoveMargin} 
-        addOrRemoveMargin={addOrRemoveMargin} 
-        onAddOrBurnLiquidity={setAddOrBurnLiquidity}
-        addOrBurnLiquidity={addOrBurnLiquidity}
       />
     </AMMProvider>
   );
