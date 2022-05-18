@@ -15,7 +15,7 @@ export type TextFieldProps = OverrideTypes<Omit<MuiTextFieldProps, 'variant'>, {
 }>;
 
 const errorLabelStyles: SystemStyleObject<Theme> = {
-  color: colors.wildStrawberry.darken010,
+  color: colors.wildStrawberry.base,
   fontSize: '12px',
   lineHeight: '1.2',
   marginTop: (theme) => theme.spacing(1)

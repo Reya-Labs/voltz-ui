@@ -19,7 +19,7 @@ export type MaskedIntegerFieldProps = OverrideTypes<CurrencyInputProps, {
 }>;
 
 const errorLabelStyles: SystemStyleObject<Theme> = {
-  color: colors.wildStrawberry.darken010,
+  color: colors.wildStrawberry.base,
   fontSize: '12px',
   lineHeight: '1.2',
   marginTop: (theme) => theme.spacing(1),
@@ -45,7 +45,7 @@ const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
     <FormControl variant="outlined" sx={{width: '100%'}}>
       {!isEmpty(label) && (
         <InputLabel shrink htmlFor={inputId} error={error} sx={{ 
-          color: (theme) => error ? `${theme.palette.error.darken010} !important` : undefined 
+          color: (theme) => error ? `${theme.palette.error.base} !important` : undefined 
         }}>
           {label}
         </InputLabel>

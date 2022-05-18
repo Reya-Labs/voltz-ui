@@ -10,7 +10,7 @@ export const inputStyles = (disabled?: boolean, error?: boolean, inputSize?: str
   backgroundColor: (theme) => theme.palette.secondary.darken040,
   borderColor: (theme) => {
     if (disabled) return 'transparent';
-    if (error) return theme.palette.error.darken020;
+    if (error) return theme.palette.error.darken010;
     return colors.vzGreyDark;
   },
   borderStyle: 'solid',
@@ -18,7 +18,7 @@ export const inputStyles = (disabled?: boolean, error?: boolean, inputSize?: str
   borderRadius: (theme) => theme.spacing(1),
   color: (theme) => {
     if (disabled) return colors.vzGreyDark;
-    if (error) return theme.palette.error.darken015;
+    if (error) return theme.palette.error.base;
     return colors.vzGrey;
   },
   minHeight: 'auto !important',
@@ -37,7 +37,7 @@ export const inputStyles = (disabled?: boolean, error?: boolean, inputSize?: str
   '::placeholder': {
     color: (theme) => {
       if (disabled) return colors.vzGreyDark;
-      if (error) return theme.palette.error.darken015;
+      if (error) return theme.palette.error.base;
       return colors.vzGrey;
     },
   },
