@@ -11,6 +11,7 @@ export type MarginAmountProps = {
   margin?: number;
   isAdditional?: boolean;
   onChangeMargin: (value: number) => void;
+  error?: string;
 };
 
 const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
@@ -19,6 +20,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
   margin,
   isAdditional,
   onChangeMargin,
+  error
 }) => {
   const value = isUndefined(margin) ? defaultMargin : margin;
   const handleChange = (newValue: string) => {
@@ -57,6 +59,8 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
       }
       defaultValue={value}
       onChange={handleChange}
+      error={!!error}
+      errorText={error}
     />
   );
 };

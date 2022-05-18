@@ -24,6 +24,7 @@ export type MintBurnFormProps = {
   isEditingMargin?: boolean;
   isEditingLiquidity?: boolean;
   formState: MintBurnFormState;
+  errors: Record<string, string>;
   onChangeFixedLow: (value: number, increment: boolean | null) => void;
   onChangeFixedHigh: (value: number, increment: boolean | null) => void;
   onChangeNotional: (value: number) => void;
@@ -42,6 +43,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   isEditingMargin = false,
   isEditingLiquidity = false,
   formState,
+  errors,
   onChangeFixedLow,
   onChangeFixedHigh,
   onChangeNotional,
@@ -118,7 +120,9 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
       >
         <RateOptions
           fixedLow={formState.fixedLow}
+          fixedLowError={errors['fixedLow']}
           fixedHigh={formState.fixedHigh}
+          fixedHighError={errors['fixedHigh']}
           onChangeFixedLow={onChangeFixedLow}
           onChangeFixedHigh={onChangeFixedHigh}
         />
@@ -136,6 +140,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
             protocol={protocol}
             notional={formState.notional}
             onChangeNotional={onChangeNotional}
+            error={errors['notional']}
           />
         </Box>
       )}
@@ -166,6 +171,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
             margin={formState.margin}
             isAdditional={formState.marginAction === MintBurnFormMarginAction.ADD}
             onChangeMargin={onChangeMargin}
+            error={errors['margin']}
           />
         </Box>
       )}

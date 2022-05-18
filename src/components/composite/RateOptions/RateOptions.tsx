@@ -6,7 +6,9 @@ export type RateOptionsProps = {
   defaultFixedLow?: number;
   defaultFixedHigh?: number;
   fixedLow?: number;
+  fixedLowError?: string;
   fixedHigh?: number;
+  fixedHighError?: string;
   onChangeFixedLow: (value: number, increment: boolean | null) => void;
   onChangeFixedHigh: (value: number, increment: boolean | null) => void;
 };
@@ -15,7 +17,9 @@ const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
   defaultFixedLow,
   defaultFixedHigh,
   fixedLow,
+  fixedLowError,
   fixedHigh,
+  fixedHighError,
   onChangeFixedLow,
   onChangeFixedHigh,
 }) => {
@@ -31,6 +35,7 @@ const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
     >
       <RateOptionsInput
         defaultValue={defaultFixedLow}
+        error={fixedLowError}
         hint="The lower rate of the fixed rate range within which to deposit liquidity"
         label="fixed low"
         onChange={onChangeFixedLow}
@@ -38,6 +43,7 @@ const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
       />
       <RateOptionsInput
         defaultValue={defaultFixedHigh}
+        error={fixedHighError}
         hint="The upper rate of the fixed rate range within which to deposit liquidity"
         label="fixed high"
         onChange={onChangeFixedHigh}
