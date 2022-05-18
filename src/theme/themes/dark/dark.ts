@@ -160,6 +160,7 @@ const dark = createTheme({
             color: color(),
             minHeight: theme.spacing(8),
             fontSize: ownerState.size === 'small' ? 14 : 24,
+            cursor: ownerState.disabled ? 'not-allowed' : undefined,
             ...padding(),
             "::-webkit-outer-spin-button": { 
               "-webkit-appearance": "none", 
