@@ -325,11 +325,7 @@ module.exports = function (webpackEnv) {
           babelRuntimeEntry,
           babelRuntimeEntryHelpers,
           babelRuntimeRegenerator,
-        ]),
-        new webpack.ProvidePlugin({
-          process: "process/browser",
-          Buffer: ["buffer", "Buffer"],
-        }),
+        ])
       ],
       fallback: {
         "buffer": require.resolve("buffer"),
