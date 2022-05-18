@@ -3,15 +3,18 @@ import { createContext } from 'react';
 import { Wallet, WalletName } from './types';
 
 const defaultConnect = (name: WalletName) => Promise.resolve();
+const defaultDisconnect = () => {};
+const defaultGetTokenBalance = () => Promise.resolve();
 
 const WalletContext = createContext<Wallet>({
   status: 'initializing',
   connect: defaultConnect,
+  disconnect: defaultDisconnect,
   account: null,
   name: null,
   signer: null,
-  balance: null,
-  setBalance: (_balance: number) => undefined,
+  balance: {},
+  getTokenBalance: defaultGetTokenBalance,
   wallet: null,
   loading: false,
   error: false,

@@ -1,15 +1,15 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
+import { Position, Token } from '@voltz-protocol/v1-sdk/dist/types/entities';
+import { BigNumber } from 'ethers';
 
 import { AugmentedAMM } from '@utilities';
 import { routes } from '@routes';
 import { actions, selectors } from '@store';
-import { MintBurnFormLiquidityAction, MintBurnFormMarginAction, useAgent, useDispatch, useMintBurnForm, useSelector } from '@hooks';
+import { MintBurnFormLiquidityAction, MintBurnFormMarginAction, useAgent, useDispatch, useMintBurnForm, useSelector, useWallet } from '@hooks';
 import { AMMProvider } from '@components/contexts';
 import { MintBurnForm, PendingTransaction } from '@components/interface';
 import { updateFixedRate } from './utilities';
-import { isUndefined } from 'lodash';
 
 export type ConnectedMintBurnFormProps = {
   amm: AugmentedAMM;
@@ -29,6 +29,8 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   const { agent } = useAgent();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { getTokenBalance } = useWallet();
+  const token = useRef<Token>();
   
   const defaultValues = {
     fixedLow: position ? parseFloat(position.fixedRateLower.toFixed() ) : undefined,
@@ -36,10 +38,21 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   }
   const form = useMintBurnForm(defaultValues);
 
+  const [balance, setBalance] = useState<BigNumber>();
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
   const isBurningLiquidity = (isEditingLiquidity && form.state.liquidityAction === MintBurnFormLiquidityAction.BURN);
   const isRemovingMargin = (isEditingMargin && form.state.marginAction === MintBurnFormMarginAction.REMOVE);
+
+  const handleComplete = () => {
+    onReset();
+    navigate(`/${routes.LP_FARM}`);
+  };
+
+  const handleGoBack = () => {
+    const action = actions.closeTransaction(transactionId as string);
+    dispatch(action);
+  }
 
   const handleSetFixedHigh = useCallback(
     updateFixedRate({ amm, fixedRate: form.state.fixedHigh, setFixedRate: form.setFixedHigh }),
@@ -52,18 +65,16 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   );
 
   const handleSubmit = () => {
-    if (isUndefined(form.state.fixedHigh)) return;
-    if (isUndefined(form.state.fixedLow)) return;
-    if (isUndefined(form.state.margin)) return;
-    if (isUndefined(form.state.notional)) return;
+    // validate the form - dont go any further if validation fails
+    if(!form.validate(amm, !!isEditingMargin, !!isEditingLiquidity, balance)) return;
 
     const transaction = { 
       ammId: amm.id, 
       agent,
       fixedLow: form.state.fixedLow,
       fixedHigh: form.state.fixedHigh,
-      margin: Math.abs(form.state.margin) * (isRemovingMargin ? -1 : 1),
-      notional: Math.abs(form.state.notional) * (isBurningLiquidity ? -1 : 1),
+      margin: Math.abs(form.state.margin as number) * (isRemovingMargin ? -1 : 1),
+      notional: Math.abs(form.state.notional as number) * (isBurningLiquidity ? -1 : 1),
     };
 
     let action;
@@ -81,15 +92,20 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     dispatch(action);
   };
 
-  const handleComplete = () => {
-    onReset();
-    navigate(`/${routes.LP_FARM}`);
-  };
-
-  const handleGoBack = () => {
-    const action = actions.closeTransaction(transactionId as string);
-    dispatch(action);
-  }
+  // Load the users balance of the required token so we can use it for validation later
+  useEffect(() => {
+    if(token.current?.id !== amm.underlyingToken.id) {
+      token.current = amm.underlyingToken;
+      // eslint-disable-next-line
+      getTokenBalance(amm.underlyingToken)
+        .then((currentBalance: BigNumber | void) => {
+          setBalance(currentBalance || undefined);
+        })
+        .catch(() => {
+          setBalance(undefined);
+        })
+    }
+  }, [amm.underlyingToken.id, getTokenBalance]);
 
   if (!amm) {
     return null;
@@ -113,6 +129,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
       <MintBurnForm
         endDate={amm.endDateTime}
         formState={form.state}
+        errors={form.errors}
         isEditingLiquidity={isEditingLiquidity}
         isEditingMargin={isEditingMargin}
         onCancel={onReset}

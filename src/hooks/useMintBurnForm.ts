@@ -1,3 +1,5 @@
+import { AugmentedAMM } from "@utilities";
+import { BigNumber } from "ethers";
 import { isUndefined } from "lodash";
 import { Dispatch, SetStateAction, useState } from "react";
 
@@ -29,7 +31,7 @@ export type MintBurnForm = {
   setMarginAction: Dispatch<SetStateAction<MintBurnFormState['marginAction']>>;
   setNotional: Dispatch<SetStateAction<MintBurnFormState['notional']>>;
   state: MintBurnFormState,
-  validate: () => void;
+  validate: (amm: AugmentedAMM, isEditingMargin: boolean, isEditingLiquidity: boolean, balance?: BigNumber) => boolean;
 };
 
 export const useMintBurnForm = (defaultValues: Partial<MintBurnFormState> = {}): MintBurnForm => {
@@ -49,8 +51,61 @@ export const useMintBurnForm = (defaultValues: Partial<MintBurnFormState> = {}):
 
   const [errors, setErrors] = useState<MintBurnForm['errors']>({});
 
-  const validate = () => {
-    setErrors({});
+  const validate = (amm: AugmentedAMM, isEditingMargin: boolean, isEditingLiquidity: boolean, balance?: BigNumber) => {
+    const err: Record<string, string> = {};
+
+    // New position mode
+    if(!isEditingMargin && !isEditingLiquidity) {
+      if(isUndefined(fixedLow)) {
+        err['fixedLow'] = 'Please enter a value';
+      }
+  
+      if(isUndefined(fixedHigh)) {
+        err['fixedHigh'] = 'Please enter a value';
+      }
+        
+      if(!isUndefined(fixedLow) && !isUndefined(fixedHigh) && fixedLow >= fixedHigh) {
+        err['fixedLow'] = 'Lower Rate must be smaller than Upper Rate';
+      }
+
+      if(!isUndefined(notional) && notional !== 0 && !isUndefined(margin) && !isUndefined(balance)) {
+        if(amm.descale(balance) < (margin + notional)) {
+          err['notional'] = 'Insufficient funds';
+
+          // Only set the error on the margin field if the value !== 0
+          if (margin !== 0) {
+            err['margin'] = 'Insufficient funds';
+          }
+        }
+      }
+    }
+
+    // edit margin mode
+    if(isEditingMargin) {
+      if(isUndefined(margin) || margin === 0) {
+        err['margin'] = 'Please enter an amount';
+      }
+      else if(!isUndefined(balance)) {
+        if(amm.descale(balance) < margin) {
+          err['margin'] = 'Insufficient funds';
+        }
+      }
+    }
+
+    // edit liquidity mode
+    if(isEditingLiquidity) {
+      if(isUndefined(notional) || notional === 0) {
+        err['notional'] = 'Please enter an amount';
+      } 
+      else if(!isUndefined(balance)) {
+        if(amm.descale(balance) < notional) {
+          err['notional'] = 'Insufficient funds';
+        }
+      }
+    }
+
+    setErrors(err);
+    return Object.keys(err).length === 0;
   }
 
   return {

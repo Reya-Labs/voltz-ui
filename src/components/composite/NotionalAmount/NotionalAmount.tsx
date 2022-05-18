@@ -11,6 +11,7 @@ export type NotionalAmountProps = {
   defaultNotional?: number;
   notional?: number;
   onChangeNotional: (value: number) => void;
+  error?: string;
 };
 
 const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
@@ -20,6 +21,7 @@ const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
   defaultNotional,
   notional,
   onChangeNotional,
+  error,
 }) => {
   const value = isUndefined(notional) ? defaultNotional : notional;
   const handleChange = (newValue: string) => {
@@ -42,6 +44,8 @@ const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
       label={<IconLabel label={label} icon="information-circle" info={info} />}
       defaultValue={value}
       onChange={handleChange}
+      error={!!error}
+      errorText={error}
     />
   );
 };

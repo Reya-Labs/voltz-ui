@@ -64,12 +64,12 @@ const dark = createTheme({
       darken010: colors.wildStrawberry.darken010,
       darken015: colors.wildStrawberry.darken015,
       darken020: colors.wildStrawberry.darken020,
-      main: colors.wildStrawberry.darken020,
+      main: colors.wildStrawberry.base,
       darken025: colors.wildStrawberry.darken025,
       darken030: colors.wildStrawberry.darken030,
       darken035: colors.wildStrawberry.darken035,
       darken040: colors.wildStrawberry.darken040,
-      dark: colors.wildStrawberry.darken040,
+      dark: colors.wildStrawberry.darken020,
       darken045: colors.wildStrawberry.darken045,
       darken050: colors.wildStrawberry.darken050,
     },
@@ -122,7 +122,7 @@ const dark = createTheme({
             }
 
             if (ownerState.error) {
-              return theme.palette.error.main;
+              return theme.palette.error.base;
             }
 
             return colors.vzGrey;
@@ -133,7 +133,7 @@ const dark = createTheme({
             }
 
             if (ownerState.error) {
-              return theme.palette.error.main;
+              return theme.palette.error.darken010;
             }
 
             return colors.vzGreyDark;

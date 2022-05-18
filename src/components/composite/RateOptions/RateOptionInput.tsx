@@ -4,6 +4,7 @@ import MaskedIntegerField from '../MaskedIntegerField/MaskedIntegerField';
 
 export type RateOptionsProps = {
   defaultValue?: number;
+  error?: string;
   hint: string;
   label: string;
   onChange: (value: number, increment: boolean | null) => void;
@@ -12,6 +13,7 @@ export type RateOptionsProps = {
 
 const RateOptionsInput: React.FunctionComponent<RateOptionsProps> = ({
   defaultValue,
+  error,
   hint,
   label,
   onChange,
@@ -52,6 +54,8 @@ const RateOptionsInput: React.FunctionComponent<RateOptionsProps> = ({
       allowDecimals
       allowNegativeValue={false}
       decimalsLimit={3}
+      error={!!error}
+      errorText={error}
       inputSize="small"
       suffix='%'
       label={<IconLabel label={label} icon="information-circle" info={hint} />}
