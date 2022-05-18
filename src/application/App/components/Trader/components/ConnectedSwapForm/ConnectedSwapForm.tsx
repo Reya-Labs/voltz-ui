@@ -56,7 +56,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
     else if (form.state.fcmMode) {
       action = actions.fcmSwapAction(amm, transaction);
     } else {
-      action = actions.fcmUnwindAction(amm, transaction);
+      action = actions.fcmSwapAction(amm, transaction); // this used to be actions.fcmUnwindAction, for now this is a quick and hacky fix to the issue but needs to be refactored properly - Sol
     }
 
     setTransactionId(action.payload.transaction.id)
