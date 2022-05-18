@@ -2,8 +2,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
-import { ethers } from 'ethers';
+import React, { useState, useCallback, useEffect } from 'react';
+import { BigNumber, ethers } from 'ethers';
 
 import { useGetWalletQuery } from '@graphql';
 import { selectors, WindowWithWallet } from '@store';
@@ -11,7 +11,8 @@ import { useSelector } from '@hooks';
 import { WalletName, WalletStatus } from './types';
 import WalletContext from './WalletContext';
 import { getErrorMessage } from '@utilities';
-import { checkForCorrectNetwork, checkForRiskyWallet, checkForTOSSignature, getTOSText, getWalletProvider } from './services';
+import * as services from './services';
+import { Token } from '@voltz-protocol/v1-sdk';
 
 export type ProviderWrapperProps = {
   status: WalletStatus;
@@ -20,8 +21,8 @@ export type ProviderWrapperProps = {
   setAccount: React.Dispatch<React.SetStateAction<string | null>>;
   name: WalletName | null;
   setName: React.Dispatch<React.SetStateAction<WalletName | null>>;
-  balance: number | null;
-  setBalance: React.Dispatch<React.SetStateAction<number | null>>;
+  balance: Record<string, BigNumber>;
+  setBalance: React.Dispatch<React.SetStateAction<Record<string, BigNumber>>>;
   required: boolean;
   setRequired: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -40,23 +41,33 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
   children,
 }) => {
   const [polling, setPolling] = useState(false);
-  const [walletError, setWalletError] = useState<string | null>(null);
+  const [provider, setProvider] = useState<ethers.providers.JsonRpcProvider | null>(null);
   const [signer, setSigner] = useState<ethers.providers.JsonRpcSigner | null>(null);
+  const [walletError, setWalletError] = useState<string | null>(null);
+
+  const disconnect = useCallback((errorMessage: string | null = null) => {
+    setWalletError(errorMessage);
+    (window as WindowWithWallet).wallet = undefined;
+    setSigner(null);
+    setAccount(null);
+    setStatus('notConnected');
+    setBalance({});
+  }, [setAccount, setBalance, setStatus]);
 
   const connect = useCallback(
     async (walletName: WalletName) => {
       try {
         setStatus('connecting');
-        const newProvider = await getWalletProvider(walletName);
+        const newProvider = await services.getWalletProvider(walletName);
 
         if(newProvider) {
           const newSigner = newProvider.getSigner();
           const walletAddress = await newSigner.getAddress();
                              
           // Do checks that could stop us allowing the wallet to connect
-          await checkForTOSSignature(newSigner, walletAddress);
-          await checkForCorrectNetwork(newProvider);
-          await checkForRiskyWallet(walletAddress);
+          await services.checkForTOSSignature(newSigner, walletAddress);
+          await services.checkForCorrectNetwork(newProvider);
+          await services.checkForRiskyWallet(walletAddress);
             
           // IMPORTANT! - Set the provider and signer globally so that the redux store can use them
           (window as WindowWithWallet).wallet = {
@@ -64,8 +75,10 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
             signer: newSigner
           };
   
+          setProvider(newProvider);
           setSigner(newSigner);
           setAccount(walletAddress.toLowerCase()); // metamask wallet data will not load unless walletAddress is all lower case - why?
+          setBalance({});
           setStatus('connected');
           setWalletError(null);
         }
@@ -79,14 +92,18 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
           errorMessage = errorMessage.slice(0, -1);
         }
 
-        setWalletError(errorMessage || null);
-        (window as WindowWithWallet).wallet = undefined;
-        setSigner(null);
-        setAccount(null);
-        setStatus('notConnected');
+        disconnect(errorMessage || null);
       }
     }, 
-  [setName]);
+  [disconnect, setAccount, setBalance, setStatus]);
+
+  const getTokenBalance = useCallback(async (token: Token) => {
+    if(provider && token.name && token.id && account) {
+      const tokenBalance = await services.getTokenBalance(provider, token.id, account)
+      setBalance({ ...balance, [token.name]: tokenBalance });
+      return tokenBalance;
+    }
+  }, [provider, setBalance, balance]);
 
   const pollInterval = polling ? 500 : undefined;
   const { data, loading, error, stopPolling } = useGetWalletQuery({
@@ -108,11 +125,12 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
   const value = {
     status,
     connect,
+    disconnect,
     account,
     name,
     signer,
     balance,
-    setBalance,
+    getTokenBalance,
     wallet: data && data.wallet ? data.wallet : null,
     loading,
     error: !!error,

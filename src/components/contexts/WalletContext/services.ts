@@ -1,7 +1,7 @@
 import { WalletName, WalletRiskAssessment } from "./types";
 import detectEthereumProvider from '@metamask/detect-provider';
 import WalletConnectProvider from "@walletconnect/web3-provider";
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 
 /**
  * Will throw an error if the connected ethereum network does not match required network set in .env file
@@ -52,6 +52,22 @@ export const checkForTOSSignature = async (signer: ethers.providers.JsonRpcSigne
       throw new Error(' ');
     }
   }
+}
+
+/**
+ * Gets the balance for a specific contract ID (you can pass in token IDs here)
+ * @param provider - The ethers-wrapped provider
+ * @param tokenId - the ID of the contract (token) you wish to check for
+ * @param accountId - the ID of the account (wallet) to check
+ */
+export const getTokenBalance = async (provider: ethers.providers.JsonRpcProvider, tokenId: string, accountId: string) => {
+  const contract = new ethers.Contract(tokenId, [
+    "function balanceOf(address _owner) public view returns (uint256 balance)",
+  ], provider);
+  
+  // eslint-disable-next-line
+  const currentBalance:string = await contract.balanceOf(accountId);
+  return BigNumber.from(currentBalance);
 }
 
 /**

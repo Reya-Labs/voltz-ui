@@ -1,6 +1,6 @@
-import { ethers } from 'ethers';
-
+import { BigNumber, ethers } from 'ethers';
 import { GetWalletQuery } from '@graphql';
+import { Token } from '@voltz-protocol/v1-sdk';
 
 export type WalletStatus =
   | 'initializing'
@@ -21,11 +21,12 @@ export type EthereumRequestArguments = {
 export type Wallet = {
   status: WalletStatus;
   connect: (name: WalletName) => Promise<void>;
+  disconnect: () => void;
+  getTokenBalance: (token: Token) => Promise<BigNumber | void>
   account: string | null;
   name: WalletName | null;
   signer: ethers.providers.JsonRpcSigner | null;
-  balance: number | null;
-  setBalance: (balance: number) => void;
+  balance: Record<string, BigNumber>;
   wallet: GetWalletQuery['wallet'] | null;
   loading: boolean;
   error: boolean;
