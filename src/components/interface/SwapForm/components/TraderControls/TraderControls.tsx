@@ -80,9 +80,31 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
       }}
     >
      
+
+      
+      {/* {!partialCollateralization && (
+        <ToggleButtonGroup
+          label={<IconLabel label="rates" icon="information-circle" info="Choose between entering a fully collateralised swap or unwinding your position" />}
+          options={Object.values(fcmOptionTitles)}
+          option={fcmMode ? fcmOptionTitles[Agents.FIXED_TRADER] : fcmOptionTitles[Agents.VARIABLE_TRADER]}
+          defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
+          onChangeOption={handleChangeFcmMode}
+          agent={agent}
+        />
+      )} */}
+
+        <ToggleButtonGroup
+          label={<IconLabel label="rates" icon="information-circle" info="Choose between taking a fixed or variable position." />}
+          options={Object.values(agentOptionTitles)}
+          option={agentOptionTitles[agent]}
+          defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
+          onChangeOption={handleChangeMode}
+          agent={agent}
+        />
+
       <ToggleButtonGroup
         label={
-          <IconLabel label="partial collateralization" icon="information-circle" info="Trading with partial collateralization  means you need to deposit less margin to cover your position. However, it also means you may be at more risk of getting liquidated if the market moves against you." />
+          <IconLabel label="TRADE WITH LEVERAGE" icon="information-circle" info="Trading with leverage means you need to deposit less margin to cover your position. However, it also means you may be at more risk of getting liquidated if the market moves against you. Learn more." />
         }
         options={Object.values(partialCollateralizationOptionTitles)}
         option={
@@ -94,28 +116,6 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
         onChangeOption={handleChangePartialCollateralization}
         agent={agent}
       />
-
-      {!partialCollateralization && (
-        <ToggleButtonGroup
-          label={<IconLabel label="rates" icon="information-circle" info="Choose between entering a fully collateralised swap or unwinding your position" />}
-          options={Object.values(fcmOptionTitles)}
-          option={fcmMode ? fcmOptionTitles[Agents.FIXED_TRADER] : fcmOptionTitles[Agents.VARIABLE_TRADER]}
-          defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
-          onChangeOption={handleChangeFcmMode}
-          agent={agent}
-        />
-      )}
-
-      {partialCollateralization && (
-        <ToggleButtonGroup
-          label={<IconLabel label="rates" icon="information-circle" info="Choose between taking a fixed or variable position." />}
-          options={Object.values(agentOptionTitles)}
-          option={agentOptionTitles[agent]}
-          defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
-          onChangeOption={handleChangeMode}
-          agent={agent}
-        />
-      )}
     </Box>
   );
 };
