@@ -66,7 +66,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
 
   const handleSubmit = () => {
     // validate the form - dont go any further if validation fails
-    if(!form.validate(amm, balance)) return;
+    if(!form.validate(amm, !!isEditingMargin, !!isEditingLiquidity, balance)) return;
 
     const transaction = { 
       ammId: amm.id, 
