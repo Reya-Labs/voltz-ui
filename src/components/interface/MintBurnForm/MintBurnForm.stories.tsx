@@ -5,6 +5,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { AgentProvider, Agents } from '@components/contexts';
 import MintBurnForm from './MintBurnForm';
 import { useMintBurnForm } from '@hooks';
+import { AugmentedAMM } from '@utilities';
 
 export default {
   title: 'Interface/MintBurnForm',
@@ -25,6 +26,7 @@ const NewPositionMintBurnForm: React.FunctionComponent = (args) => {
   return (
     <MintBurnForm 
       {...args} 
+      errors={form.errors}
       formState={form.state} 
       onCancel={() => alert('cancel')}
       onChangeFixedLow={form.setFixedLow}
@@ -33,7 +35,7 @@ const NewPositionMintBurnForm: React.FunctionComponent = (args) => {
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
-      onSubmit={() => alert('submit')}
+      onSubmit={() => form.validate(null as unknown as AugmentedAMM, false, false)}
     />
   );
 };
@@ -57,6 +59,7 @@ const EditingMarginMintBurnForm: React.FunctionComponent = (args) => {
   return (
     <MintBurnForm 
       {...args} 
+      errors={form.errors}
       formState={form.state} 
       onCancel={() => alert('cancel')}
       onChangeFixedLow={form.setFixedLow}
@@ -65,7 +68,7 @@ const EditingMarginMintBurnForm: React.FunctionComponent = (args) => {
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
-      onSubmit={() => alert('submit')}
+      onSubmit={() => form.validate(null as unknown as AugmentedAMM, true, false)}
     />
   );
 };
@@ -90,6 +93,7 @@ const EditingLiquidityMintBurnForm: React.FunctionComponent = (args) => {
   return (
     <MintBurnForm 
       {...args} 
+      errors={form.errors}
       formState={form.state} 
       onCancel={() => alert('cancel')}
       onChangeFixedLow={form.setFixedLow}
@@ -98,7 +102,7 @@ const EditingLiquidityMintBurnForm: React.FunctionComponent = (args) => {
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
-      onSubmit={() => alert('submit')}
+      onSubmit={() => form.validate(null as unknown as AugmentedAMM, false, true)}
     />
   );
 };
