@@ -5,6 +5,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { AgentProvider, Agents } from '@components/contexts';
 import SwapForm from './SwapForm';
 import { useSwapForm } from '@hooks';
+import { AugmentedAMM } from '@utilities';
 
 export default {
   title: 'Interface/SwapForm',
@@ -14,6 +15,13 @@ export default {
   },
 } as ComponentMeta<typeof SwapForm>;
 
+const mockAmm = ({
+  underlyingToken: {
+    id: '0x123456789',
+    name: 'gil'
+  }
+} as unknown) as AugmentedAMM;
+
 // Creating a new position
 const NewPositionTemplate: ComponentStory<typeof SwapForm> = (args) => (
   <AgentProvider>
@@ -21,18 +29,19 @@ const NewPositionTemplate: ComponentStory<typeof SwapForm> = (args) => (
   </AgentProvider>
 );
 const NewPositionSwapForm: React.FunctionComponent = (args) => {
-  const form = useSwapForm();
+  const form = useSwapForm(mockAmm);
 
   return (
     <SwapForm 
       {...args} 
+      errors={form.errors}
       formState={form.state} 
       onCancel={() => alert('cancel')}
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
       onChangePartialCollateralization={form.setPartialCollateralization}
-      onSubmit={() => alert('submit')}
+      onSubmit={() => form.validate(false)}
     />
   );
 };
@@ -51,11 +60,12 @@ const EditingMarginTemplate: ComponentStory<typeof SwapForm> = (args) => (
   </AgentProvider>
 );
 const EditingMarginSwapForm: React.FunctionComponent = (args) => {
-  const form = useSwapForm();
+  const form = useSwapForm(mockAmm);
 
   return (
     <SwapForm 
       {...args} 
+      errors={form.errors}
       formState={form.state}
       isEditingMargin 
       onCancel={() => alert('cancel')}
@@ -63,7 +73,7 @@ const EditingMarginSwapForm: React.FunctionComponent = (args) => {
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
       onChangePartialCollateralization={form.setPartialCollateralization}
-      onSubmit={() => alert('submit')}
+      onSubmit={() => form.validate(true)}
     />
   );
 };
