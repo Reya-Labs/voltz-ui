@@ -8,7 +8,6 @@ import { actions, selectors } from '@store';
 import { MintBurnFormMarginAction, useAgent, useDispatch, useSelector } from '@hooks';
 import { SwapForm, PendingTransaction } from '@components/interface';
 import useSwapForm from 'src/hooks/useSwapForm';
-import { isUndefined } from 'lodash';
 
 export type ConnectedSwapFormProps = {
   amm: AugmentedAMM;
@@ -18,15 +17,15 @@ export type ConnectedSwapFormProps = {
 
 const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ 
   amm,
-  onReset, 
   isEditingMargin,
+  onReset,
 }) => {
   const { agent } = useAgent();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const defaultValues = {};
-  const form = useSwapForm(defaultValues);
+  const form = useSwapForm(amm, defaultValues);
 
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId); // contains a failureMessage attribute that will contain whatever came out from the sdk
@@ -34,15 +33,14 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
   const isRemovingMargin = isEditingMargin && form.state.marginAction === MintBurnFormMarginAction.REMOVE;
 
   const handleSubmit = () => {
-    if (isUndefined(form.state.notional)) return;
-    if (isUndefined(form.state.margin)) return;
-    if (isUndefined(form.state.partialCollateralization)) return;
+    // validate form - do not go any further if validation fails
+    if(!form.validate(!!isEditingMargin)) return;
 
     const transaction = { 
       agent,
       ammId: amm.id,
-      margin: Math.abs(form.state.margin) * (isRemovingMargin ? -1 : 1),
-      notional: form.state.notional,
+      margin: Math.abs(form.state.margin as number) * (isRemovingMargin ? -1 : 1),
+      notional: form.state.notional as number,
       partialCollateralization: form.state.partialCollateralization
     };
   
@@ -55,7 +53,8 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
     } 
     else if (agent === Agents.FIXED_TRADER) {
       action = actions.fcmSwapAction(amm, transaction);
-    } else {
+    } 
+    else {
       action = actions.fcmUnwindAction(amm, transaction); 
     }
 
@@ -76,7 +75,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
   if (!amm) {
     return null;
   }
-
+  
   if (activeTransaction) {
     return (
       <PendingTransaction 
@@ -93,6 +92,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
     <AMMProvider amm={amm}>
       <SwapForm
         formState={form.state}
+        errors={form.errors}
         endDate={amm.endDateTime}
         isEditingMargin={isEditingMargin}
         onCancel={onReset}

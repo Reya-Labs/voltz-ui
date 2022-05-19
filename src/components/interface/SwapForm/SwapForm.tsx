@@ -16,6 +16,7 @@ import { TraderControls, MarginControls, SwapInfo } from './components';
 
 export type SwapFormProps = {
   endDate?: DateTime;
+  errors: Record<string, string>;
   formState: SwapFormState;
   maxMargin?: number;
   isEditingMargin?: boolean;
@@ -32,6 +33,7 @@ export type SwapFormProps = {
 
 const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   endDate,
+  errors,
   formState,
   maxMargin,
   isEditingMargin,
@@ -107,6 +109,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
       {!isEditingMargin && (
         <Box sx={bottomSpacing}>
           <NotionalAmount
+            error={errors['notional']}
             label="notional amount"
             info="Choose the notional you wish to trade. The notional amount is the total size of your trade."
             protocol={protocol}
@@ -119,6 +122,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
       {formState.partialCollateralization && (
         <Box sx={bottomSpacing}>
           <MarginAmount
+            error={errors['margin']}
             protocol={protocol}
             maxMargin={maxMargin}
             margin={formState.margin}
