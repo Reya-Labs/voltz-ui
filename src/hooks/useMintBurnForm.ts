@@ -1,7 +1,9 @@
 import { AugmentedAMM } from "@utilities";
 import { BigNumber } from "ethers";
+import { Token } from "@voltz-protocol/v1-sdk";
 import { isUndefined } from "lodash";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import useWallet from "./useWallet";
 
 export enum MintBurnFormLiquidityAction {
   ADD='add',
@@ -23,6 +25,7 @@ export type MintBurnFormState = {
 };
 
 export type MintBurnForm = {
+  balance?: BigNumber;
   errors: Record<string, string>,
   setFixedHigh: Dispatch<SetStateAction<MintBurnFormState['fixedHigh']>>;
   setFixedLow: Dispatch<SetStateAction<MintBurnFormState['fixedLow']>>;
@@ -31,10 +34,10 @@ export type MintBurnForm = {
   setMarginAction: Dispatch<SetStateAction<MintBurnFormState['marginAction']>>;
   setNotional: Dispatch<SetStateAction<MintBurnFormState['notional']>>;
   state: MintBurnFormState,
-  validate: (amm: AugmentedAMM, isEditingMargin: boolean, isEditingLiquidity: boolean, balance?: BigNumber) => boolean;
+  validate: (isEditingMargin: boolean, isEditingLiquidity: boolean) => boolean;
 };
 
-export const useMintBurnForm = (defaultValues: Partial<MintBurnFormState> = {}): MintBurnForm => {
+export const useMintBurnForm = (amm: AugmentedAMM, defaultValues: Partial<MintBurnFormState> = {}): MintBurnForm => {
   const defaultFixedHigh = !isUndefined(defaultValues.fixedHigh) ? defaultValues.fixedHigh : undefined;
   const defaultFixedLow = !isUndefined(defaultValues.fixedLow) ? defaultValues.fixedLow : undefined;
   const defaultLiquidityAction = defaultValues.liquidityAction || MintBurnFormLiquidityAction.ADD;
@@ -49,19 +52,37 @@ export const useMintBurnForm = (defaultValues: Partial<MintBurnFormState> = {}):
   const [marginAction, setMarginAction] = useState<MintBurnFormMarginAction>(defaultMarginAction);
   const [notional, setNotional] = useState<MintBurnFormState['notional']>(defaultNotional);
 
+  const [balance, setBalance] = useState<BigNumber>();
   const [errors, setErrors] = useState<MintBurnForm['errors']>({});
+  const { getTokenBalance } = useWallet();
+  const token = useRef<Token>();
 
-  const validate = (amm: AugmentedAMM, isEditingMargin: boolean, isEditingLiquidity: boolean, balance?: BigNumber) => {
+  // Load the users balance of the required token so we can use it for validation later
+  useEffect(() => {
+    if(token.current?.id !== amm.underlyingToken.id) {
+      token.current = amm.underlyingToken;
+      // eslint-disable-next-line
+      getTokenBalance(amm.underlyingToken)
+        .then((currentBalance: BigNumber | void) => {
+          setBalance(currentBalance || undefined);
+        })
+        .catch(() => {
+          setBalance(undefined);
+        })
+    }
+  }, [amm.underlyingToken.id, getTokenBalance]);
+
+  const validate = (isEditingMargin: boolean, isEditingLiquidity: boolean) => {
     if(!isEditingMargin && !isEditingLiquidity) {
-      return validateNewPosition(amm, balance);
+      return validateNewPosition();
     } else if(isEditingMargin) {
-      return validateEditMargin(amm, balance);
+      return validateEditMargin();
     } else {
-      return validateEditLiquidity(amm, balance);
+      return validateEditLiquidity();
     }
   }
 
-  const validateNewPosition = (amm: AugmentedAMM, balance?: BigNumber) => {
+  const validateNewPosition = () => {
     const err: Record<string, string> = {};
 
     if(isUndefined(fixedLow)) {
@@ -100,7 +121,7 @@ export const useMintBurnForm = (defaultValues: Partial<MintBurnFormState> = {}):
     return Object.keys(err).length === 0;
   };
 
-  const validateEditMargin = (amm: AugmentedAMM, balance?: BigNumber) => {
+  const validateEditMargin = () => {
     const err: Record<string, string> = {};
 
     if(isUndefined(margin) || margin === 0) {
@@ -121,7 +142,7 @@ export const useMintBurnForm = (defaultValues: Partial<MintBurnFormState> = {}):
     return Object.keys(err).length === 0;
   };
 
-  const validateEditLiquidity = (amm: AugmentedAMM, balance?: BigNumber) => {
+  const validateEditLiquidity = () => {
     const err: Record<string, string> = {};
 
     if(isUndefined(notional) || notional === 0) {
@@ -152,6 +173,7 @@ export const useMintBurnForm = (defaultValues: Partial<MintBurnFormState> = {}):
   };
 
   return {
+    balance,
     errors,
     setFixedHigh,
     setFixedLow,

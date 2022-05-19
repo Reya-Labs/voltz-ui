@@ -1,12 +1,11 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Position, Token } from '@voltz-protocol/v1-sdk/dist/types/entities';
-import { BigNumber } from 'ethers';
+import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
 
 import { AugmentedAMM } from '@utilities';
 import { routes } from '@routes';
 import { actions, selectors } from '@store';
-import { MintBurnFormLiquidityAction, MintBurnFormMarginAction, useAgent, useDispatch, useMintBurnForm, useSelector, useWallet } from '@hooks';
+import { MintBurnFormLiquidityAction, MintBurnFormMarginAction, useAgent, useDispatch, useMintBurnForm, useSelector } from '@hooks';
 import { AMMProvider } from '@components/contexts';
 import { MintBurnForm, PendingTransaction } from '@components/interface';
 import { updateFixedRate } from './utilities';
@@ -29,16 +28,13 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   const { agent } = useAgent();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { getTokenBalance } = useWallet();
-  const token = useRef<Token>();
   
   const defaultValues = {
     fixedLow: position ? parseFloat(position.fixedRateLower.toFixed() ) : undefined,
     fixedHigh: position ? parseFloat(position.fixedRateUpper.toFixed() ) : undefined
   }
-  const form = useMintBurnForm(defaultValues);
+  const form = useMintBurnForm(amm, defaultValues);
 
-  const [balance, setBalance] = useState<BigNumber>();
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
   const isBurningLiquidity = (isEditingLiquidity && form.state.liquidityAction === MintBurnFormLiquidityAction.BURN);
@@ -66,7 +62,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
 
   const handleSubmit = () => {
     // validate the form - dont go any further if validation fails
-    if(!form.validate(amm, !!isEditingMargin, !!isEditingLiquidity, balance)) return;
+    if(!form.validate(!!isEditingMargin, !!isEditingLiquidity)) return;
 
     const transaction = { 
       ammId: amm.id, 
@@ -91,21 +87,6 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     setTransactionId(action.payload.transaction.id);
     dispatch(action);
   };
-
-  // Load the users balance of the required token so we can use it for validation later
-  useEffect(() => {
-    if(token.current?.id !== amm.underlyingToken.id) {
-      token.current = amm.underlyingToken;
-      // eslint-disable-next-line
-      getTokenBalance(amm.underlyingToken)
-        .then((currentBalance: BigNumber | void) => {
-          setBalance(currentBalance || undefined);
-        })
-        .catch(() => {
-          setBalance(undefined);
-        })
-    }
-  }, [amm.underlyingToken.id, getTokenBalance]);
 
   if (!amm) {
     return null;

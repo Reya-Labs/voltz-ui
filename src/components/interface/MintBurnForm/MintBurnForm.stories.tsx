@@ -15,6 +15,13 @@ export default {
   },
 } as ComponentMeta<typeof MintBurnForm>;
 
+const mockAmm = ({
+  underlyingToken: {
+    id: '0x123456789',
+    name: 'gil'
+  }
+} as unknown) as AugmentedAMM;
+
 // Creating a new position
 const NewPositionTemplate: ComponentStory<typeof MintBurnForm> = (args) => (
   <AgentProvider defaultAgent={Agents.LIQUIDITY_PROVIDER}>
@@ -22,7 +29,7 @@ const NewPositionTemplate: ComponentStory<typeof MintBurnForm> = (args) => (
   </AgentProvider>
 );
 const NewPositionMintBurnForm: React.FunctionComponent = (args) => {
-  const form = useMintBurnForm();
+  const form = useMintBurnForm(mockAmm);
   return (
     <MintBurnForm 
       {...args} 
@@ -35,7 +42,7 @@ const NewPositionMintBurnForm: React.FunctionComponent = (args) => {
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
-      onSubmit={() => form.validate(null as unknown as AugmentedAMM, false, false)}
+      onSubmit={() => form.validate(false, false)}
     />
   );
 };
@@ -55,7 +62,7 @@ const EditingMarginTemplate: ComponentStory<typeof MintBurnForm> = (args) => (
   </AgentProvider>
 );
 const EditingMarginMintBurnForm: React.FunctionComponent = (args) => {
-  const form = useMintBurnForm({ fixedLow: 2, fixedHigh: 6 });
+  const form = useMintBurnForm(mockAmm, { fixedLow: 2, fixedHigh: 6 });
   return (
     <MintBurnForm 
       {...args} 
@@ -68,7 +75,7 @@ const EditingMarginMintBurnForm: React.FunctionComponent = (args) => {
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
-      onSubmit={() => form.validate(null as unknown as AugmentedAMM, true, false)}
+      onSubmit={() => form.validate(true, false)}
     />
   );
 };
@@ -89,7 +96,7 @@ const EditingLiquidityTemplate: ComponentStory<typeof MintBurnForm> = (args) => 
   </AgentProvider>
 );
 const EditingLiquidityMintBurnForm: React.FunctionComponent = (args) => {
-  const form = useMintBurnForm({ fixedLow: 2, fixedHigh: 6 });
+  const form = useMintBurnForm(mockAmm, { fixedLow: 2, fixedHigh: 6 });
   return (
     <MintBurnForm 
       {...args} 
@@ -102,7 +109,7 @@ const EditingLiquidityMintBurnForm: React.FunctionComponent = (args) => {
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
-      onSubmit={() => form.validate(null as unknown as AugmentedAMM, false, true)}
+      onSubmit={() => form.validate(false, true)}
     />
   );
 };
