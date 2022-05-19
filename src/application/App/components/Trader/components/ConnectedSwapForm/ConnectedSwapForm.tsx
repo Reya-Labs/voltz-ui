@@ -1,9 +1,9 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { routes } from '@routes';
 import { AugmentedAMM } from '@utilities';
-import { AMMProvider } from '@components/contexts';
+import { Agents, AMMProvider } from '@components/contexts';
 import { actions, selectors } from '@store';
 import { MintBurnFormMarginAction, useAgent, useDispatch, useSelector } from '@hooks';
 import { SwapForm, PendingTransaction } from '@components/interface';
@@ -53,7 +53,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
     else if (form.state.partialCollateralization) {
       action = actions.swapAction(amm, transaction);
     } 
-    else if (form.state.fcmMode) {
+    else if (agent === Agents.FIXED_TRADER) {
       action = actions.fcmSwapAction(amm, transaction);
     } else {
       action = actions.fcmUnwindAction(amm, transaction); 
@@ -96,7 +96,6 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
         endDate={amm.endDateTime}
         isEditingMargin={isEditingMargin}
         onCancel={onReset}
-        onChangeFcmMode={form.setFcmMode}
         onChangeMargin={form.setMargin}
         onChangeMarginAction={form.setMarginAction}
         onChangeNotional={form.setNotional}

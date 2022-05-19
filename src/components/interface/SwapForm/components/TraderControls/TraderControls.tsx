@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import isUndefined from 'lodash/isUndefined';
 
@@ -10,10 +10,8 @@ export type TraderControlsProps = {
   isModifying?: boolean;
   defaultPartialCollateralization?: boolean;
   partialCollateralization?: boolean;
-  fcmMode?: boolean;
   onChangeAgent: (agent: Agents) => void;
   onChangePartialCollateralization: (value: boolean) => void;
-  onChangeFcmMode: (value: boolean) => void;
 };
 
 const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
@@ -21,17 +19,9 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
   isModifying,
   defaultPartialCollateralization,
   partialCollateralization,
-  fcmMode,
   onChangeAgent,
   onChangePartialCollateralization,
-  onChangeFcmMode,
 }) => {
-  // Keeping this in as we might need it when refactoring how partial collateralisation mode is enabled
-  // useEffect(() => {
-  //   if (isUndefined(partialCollateralizationValue)) {
-  //     onChangePartialCollateralization(true);
-  //   }
-  // }, []);
 
   if (!agent || agent === Agents.LIQUIDITY_PROVIDER) {
     return null;
@@ -42,10 +32,6 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
     [Agents.VARIABLE_TRADER]: 'VARIABLE',
   };
 
-  const fcmOptionTitles = { 
-    [Agents.FIXED_TRADER]: 'SWAP',
-    [Agents.VARIABLE_TRADER]: 'UNWIND'
-  };
 
   const handleChangeMode = (option: string) => {
     for (const [key, value] of Object.entries(agentOptionTitles)) {
@@ -67,9 +53,6 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
     onChangePartialCollateralization(option === partialCollateralizationOptionTitles.YES);
   };
 
-  const handleChangeFcmMode = (option: string) => {
-    onChangeFcmMode(option === fcmOptionTitles[Agents.FIXED_TRADER]);
-  }
   return (
     <Box
       sx={{
@@ -79,19 +62,6 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
         '& > *:not(:last-child)': { marginBottom: (theme) => theme.spacing(4) },
       }}
     >
-     
-
-      
-      {/* {!partialCollateralization && (
-        <ToggleButtonGroup
-          label={<IconLabel label="rates" icon="information-circle" info="Choose between entering a fully collateralised swap or unwinding your position" />}
-          options={Object.values(fcmOptionTitles)}
-          option={fcmMode ? fcmOptionTitles[Agents.FIXED_TRADER] : fcmOptionTitles[Agents.VARIABLE_TRADER]}
-          defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
-          onChangeOption={handleChangeFcmMode}
-          agent={agent}
-        />
-      )} */}
 
       <ToggleButtonGroup
         label={
@@ -108,15 +78,14 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
         agent={agent}
       />
 
-        <ToggleButtonGroup
-          label={<IconLabel label="rates" icon="information-circle" info="Choose between taking a fixed or variable position." />}
-          options={Object.values(agentOptionTitles)}
-          option={agentOptionTitles[agent]}
-          defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
-          onChangeOption={handleChangeMode}
-          agent={agent}
-        />
-
+      <ToggleButtonGroup
+        label={<IconLabel label="rates" icon="information-circle" info="Choose between taking a fixed or variable position." />}
+        options={Object.values(agentOptionTitles)}
+        option={agentOptionTitles[agent]}
+        defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
+        onChangeOption={handleChangeMode}
+        agent={agent}
+      />
 
     </Box>
   );

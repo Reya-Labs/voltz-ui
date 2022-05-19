@@ -28,7 +28,6 @@ const NewPositionSwapForm: React.FunctionComponent = (args) => {
       {...args} 
       formState={form.state} 
       onCancel={() => alert('cancel')}
-      onChangeFcmMode={form.setFcmMode}
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
@@ -60,7 +59,6 @@ const EditingMarginSwapForm: React.FunctionComponent = (args) => {
       formState={form.state}
       isEditingMargin 
       onCancel={() => alert('cancel')}
-      onChangeFcmMode={form.setFcmMode}
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
