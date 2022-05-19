@@ -41,47 +41,20 @@ const WalletDisplay: React.FunctionComponent<WalletDisplayProps> = ({ wallet, on
         >
           <Icon
             name="information-circle"
-            color="error"
+            color="info"
             sx={{ position: 'relative', top: '-2px' }}
           />
           <Box sx={{ display: 'flex', alignItems: 'baseline' }}>
-            <Typography
-              variant="body1"
-              sx={{ marginLeft: (theme) => theme.spacing(4), fontWeight: 'bold' }}
-            >
-              ADDRESS
-            </Typography>
             <Button
               variant="text"
               color="error"
-              sx={{ marginLeft: (theme) => theme.spacing(4) }}
+              sx={{ marginLeft: (theme) => theme.spacing(1), fontSize: 18, top: '-2px' }}
               onClick={onChangeWallet}
             >
-              CHANGE
+              CHANGE WALLET
             </Button>
           </Box>
         </Box>
-        <Box>
-          <Button variant="text" startIcon={<Icon name="information-circle" />} color="secondary">
-            Copy address
-          </Button>
-          <Button variant="text" startIcon={<Icon name="information-circle" />} color="secondary">
-            View in explorer
-          </Button>
-        </Box>
-        <Panel
-          variant="main"
-          sx={{ padding: (theme) => theme.spacing(1), display: 'flex', flexDirection: 'column' }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
-            <Typography variant="h6" sx={{ marginLeft: (theme) => theme.spacing(4) }}>
-              RECENT TRANSACTIONS
-            </Typography>
-            <Button variant="text" color="error" sx={{ marginLeft: (theme) => theme.spacing(4) }}>
-              CLEAR
-            </Button>
-          </Box>
-        </Panel>
       </Panel>
     </>
   );
