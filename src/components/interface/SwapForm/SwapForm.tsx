@@ -20,7 +20,6 @@ export type SwapFormProps = {
   maxMargin?: number;
   isEditingMargin?: boolean;
   onCancel: () => void;
-  onChangeFcmMode: (value: boolean) => void;
   onChangeMargin: (value: number) => void;
   onChangeMarginAction: (value: MintBurnFormMarginAction) => void;
   onChangeNotional: (value: number) => void;
@@ -37,7 +36,6 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   maxMargin,
   isEditingMargin,
   onCancel,
-  onChangeFcmMode,
   onChangeMargin,
   onChangeMarginAction,
   onChangeNotional,
@@ -100,10 +98,8 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           <TraderControls
             agent={agent}
             partialCollateralization={formState.partialCollateralization}
-            fcmMode={formState.fcmMode}
             onChangeAgent={onChangeAgent}
             onChangePartialCollateralization={onChangePartialCollateralization}
-            onChangeFcmMode={onChangeFcmMode}
           />
         </Box>
       )}
