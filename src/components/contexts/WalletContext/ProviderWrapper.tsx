@@ -49,6 +49,7 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
     setWalletError(errorMessage);
     (window as WindowWithWallet).wallet = undefined;
     setSigner(null);
+    setName(null);
     setAccount(null);
     setStatus('notConnected');
     setBalance({});
@@ -77,6 +78,7 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
   
           setProvider(newProvider);
           setSigner(newSigner);
+          setName(walletName);
           setAccount(walletAddress.toLowerCase()); // metamask wallet data will not load unless walletAddress is all lower case - why?
           setBalance({});
           setStatus('connected');
