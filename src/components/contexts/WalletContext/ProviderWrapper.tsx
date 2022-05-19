@@ -75,7 +75,7 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
             provider: newProvider,
             signer: newSigner
           };
-  
+          localStorage.setItem('connectedWalletName', walletName );
           setProvider(newProvider);
           setSigner(newSigner);
           setName(walletName);
@@ -98,6 +98,20 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
       }
     }, 
   [disconnect, setAccount, setBalance, setStatus]);
+
+  useEffect(() => {
+    const connectWalletOnPageReload = async () => {
+      const walletName = localStorage.getItem('connectedWalletName') as WalletName;
+
+      if (walletName) {
+        try {
+            await connect(walletName)
+        } catch (error) {
+        }
+      }
+    }
+    connectWalletOnPageReload()
+  }, []);
 
   const getTokenBalance = useCallback(async (token: Token) => {
     if(provider && token.name && token.id && account) {
