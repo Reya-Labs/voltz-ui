@@ -61,16 +61,15 @@ export const useMintBurnForm = (amm: AugmentedAMM, defaultValues: Partial<MintBu
   useEffect(() => {
     if(token.current?.id !== amm.underlyingToken.id) {
       token.current = amm.underlyingToken;
-      // eslint-disable-next-line
       getTokenBalance(amm.underlyingToken)
-        .then((currentBalance: BigNumber | void) => {
-          setBalance(currentBalance || undefined);
+        .then((currentBalance) => {
+          setBalance(currentBalance);
         })
         .catch(() => {
           setBalance(undefined);
         })
     }
-  }, [amm.underlyingToken.id, getTokenBalance]);
+  }, [amm.underlyingToken, amm.underlyingToken.id, getTokenBalance]);
 
   const validate = (isEditingMargin: boolean, isEditingLiquidity: boolean) => {
     if(!isEditingMargin && !isEditingLiquidity) {

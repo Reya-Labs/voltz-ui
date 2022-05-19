@@ -113,10 +113,10 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
   const getTokenBalance = useCallback(async (token: Token) => {
     if(provider && token.name && token.id && account) {
       const tokenBalance = await services.getTokenBalance(provider, token.id, account)
-      setBalance({ ...balance, [token.name]: tokenBalance });
+      if(tokenBalance) setBalance({ ...balance, [token.name]: tokenBalance });
       return tokenBalance;
     }
-  }, [provider, setBalance, balance]);
+  }, [account, provider, setBalance, balance]);
 
   const pollInterval = polling ? 500 : undefined;
   const { data, loading, error, stopPolling } = useGetWalletQuery({

@@ -22,7 +22,7 @@ export type Wallet = {
   status: WalletStatus;
   connect: (name: WalletName) => Promise<void>;
   disconnect: () => void;
-  getTokenBalance: (token: Token) => Promise<BigNumber | void>
+  getTokenBalance: (token: Token) => Promise<BigNumber | undefined>
   account: string | null;
   name: WalletName | null;
   signer: ethers.providers.JsonRpcSigner | null;
