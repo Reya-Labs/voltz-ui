@@ -93,15 +93,6 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
         />
       )} */}
 
-        <ToggleButtonGroup
-          label={<IconLabel label="rates" icon="information-circle" info="Choose between taking a fixed or variable position." />}
-          options={Object.values(agentOptionTitles)}
-          option={agentOptionTitles[agent]}
-          defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
-          onChangeOption={handleChangeMode}
-          agent={agent}
-        />
-
       <ToggleButtonGroup
         label={
           <IconLabel label="TRADE WITH LEVERAGE" icon="information-circle" info="Trading with leverage means you need to deposit less margin to cover your position. However, it also means you may be at more risk of getting liquidated if the market moves against you. Learn more." />
@@ -116,6 +107,17 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
         onChangeOption={handleChangePartialCollateralization}
         agent={agent}
       />
+
+        <ToggleButtonGroup
+          label={<IconLabel label="rates" icon="information-circle" info="Choose between taking a fixed or variable position." />}
+          options={Object.values(agentOptionTitles)}
+          option={agentOptionTitles[agent]}
+          defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
+          onChangeOption={handleChangeMode}
+          agent={agent}
+        />
+
+
     </Box>
   );
 };
