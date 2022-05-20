@@ -46,13 +46,15 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
   const [walletError, setWalletError] = useState<string | null>(null);
 
   const disconnect = useCallback((errorMessage: string | null = null) => {
-    setWalletError(errorMessage);
     (window as WindowWithWallet).wallet = undefined;
+    setProvider(null);
     setSigner(null);
     setName(null);
+    localStorage.removeItem('connectedWalletName');
     setAccount(null);
-    setStatus('notConnected');
     setBalance({});
+    setStatus('notConnected');
+    setWalletError(errorMessage);
   }, [setAccount, setBalance, setStatus]);
 
   const connect = useCallback(
@@ -75,10 +77,11 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
             provider: newProvider,
             signer: newSigner
           };
-          localStorage.setItem('connectedWalletName', walletName );
+
           setProvider(newProvider);
           setSigner(newSigner);
           setName(walletName);
+          localStorage.setItem('connectedWalletName', walletName);
           setAccount(walletAddress.toLowerCase()); // metamask wallet data will not load unless walletAddress is all lower case - why?
           setBalance({});
           setStatus('connected');
@@ -99,18 +102,12 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
     }, 
   [disconnect, setAccount, setBalance, setStatus]);
 
+  // Reconnect wallet on page load
   useEffect(() => {
-    const connectWalletOnPageReload = async () => {
-      const walletName = localStorage.getItem('connectedWalletName') as WalletName;
-
-      if (walletName) {
-        try {
-            await connect(walletName)
-        } catch (error) {
-        }
-      }
+    const walletName = localStorage.getItem('connectedWalletName') as WalletName;
+    if (walletName) {
+      connect(walletName)
     }
-    connectWalletOnPageReload()
   }, []);
 
   const getTokenBalance = useCallback(async (token: Token) => {
