@@ -676,11 +676,12 @@ class AMM {
     }
   }
 
-  public async approveERC20(
+  public async needToAprroveERC20(
     tokenAddress: string,
     amountToApprove: BigNumberish,
-    addressToApprove: string,
-  ): Promise<ContractReceipt | void> {
+    addressToApprove: string
+  ): Promise<boolean | void> {
+
     if (!this.signer) {
       throw new Error('Wallet not connected');
     }
@@ -688,19 +689,41 @@ class AMM {
     const token = tokenFactory.connect(tokenAddress, this.signer);
     const currentApproval = await token.allowance(await this.signer.getAddress(), addressToApprove);
 
-    const amountToApproveBN = BigNumber.from(amountToApprove).mul(BigNumber.from("101")).div(BigNumber.from("100"));
-    if (amountToApproveBN.lt(currentApproval)) {
+    /// minimum threshold of allowance is 100.5%
+    const amountToApproveBn = BigNumber.from(amountToApprove).mul(BigNumber.from("1005")).div(BigNumber.from("1000"));
+    if (currentApproval.gt(amountToApproveBn)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  public async approveERC20(
+    tokenAddress: string,
+    amountToApprove: BigNumberish,
+    addressToApprove: string,
+  ): Promise<ContractReceipt | void> {
+
+    if (!this.needToAprroveERC20(tokenAddress, amountToApprove, addressToApprove)) {
       return;
     }
 
-    const approvalTransaction = await token.approve(addressToApprove, amountToApproveBN, this.overrides);
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
+    }
+
+    const token = tokenFactory.connect(tokenAddress, this.signer);
+
+    /// approve 101% (to avoid sending multiple transactions if approval amound slightly changes)
+    const amountToApproveBn = BigNumber.from(amountToApprove).mul(BigNumber.from("1010")).div(BigNumber.from("1000"));
+    const approvalTransaction = await token.approve(addressToApprove, amountToApproveBn, this.overrides);
 
     try {
       const receipt = await approvalTransaction.wait();
       return receipt;
     }
     catch (error) {
-      throw new Error("Transaction Confirmation Error");
+      throw new Error("Token approval failed");
     }
   }
 

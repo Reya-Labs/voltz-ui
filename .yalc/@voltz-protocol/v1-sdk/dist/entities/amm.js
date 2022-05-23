@@ -565,9 +565,9 @@ var AMM = /** @class */ (function () {
             });
         });
     };
-    AMM.prototype.approveERC20 = function (tokenAddress, amountToApprove, addressToApprove) {
+    AMM.prototype.needToAprroveERC20 = function (tokenAddress, amountToApprove, addressToApprove) {
         return __awaiter(this, void 0, void 0, function () {
-            var token, currentApproval, _a, _b, amountToApproveBN, approvalTransaction, receipt, error_7;
+            var token, currentApproval, _a, _b, amountToApproveBn;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
@@ -580,24 +580,43 @@ var AMM = /** @class */ (function () {
                     case 1: return [4 /*yield*/, _b.apply(_a, [_c.sent(), addressToApprove])];
                     case 2:
                         currentApproval = _c.sent();
-                        amountToApproveBN = ethers_1.BigNumber.from(amountToApprove).mul(ethers_1.BigNumber.from("101")).div(ethers_1.BigNumber.from("100"));
-                        if (amountToApproveBN.lt(currentApproval)) {
+                        amountToApproveBn = ethers_1.BigNumber.from(amountToApprove).mul(ethers_1.BigNumber.from("1005")).div(ethers_1.BigNumber.from("1000"));
+                        if (currentApproval.gt(amountToApproveBn)) {
+                            return [2 /*return*/, false];
+                        }
+                        return [2 /*return*/, true];
+                }
+            });
+        });
+    };
+    AMM.prototype.approveERC20 = function (tokenAddress, amountToApprove, addressToApprove) {
+        return __awaiter(this, void 0, void 0, function () {
+            var token, amountToApproveBn, approvalTransaction, receipt, error_7;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!this.needToAprroveERC20(tokenAddress, amountToApprove, addressToApprove)) {
                             return [2 /*return*/];
                         }
-                        return [4 /*yield*/, token.approve(addressToApprove, amountToApproveBN, this.overrides)];
-                    case 3:
-                        approvalTransaction = _c.sent();
-                        _c.label = 4;
-                    case 4:
-                        _c.trys.push([4, 6, , 7]);
+                        if (!this.signer) {
+                            throw new Error('Wallet not connected');
+                        }
+                        token = typechain_1.ERC20Mock__factory.connect(tokenAddress, this.signer);
+                        amountToApproveBn = ethers_1.BigNumber.from(amountToApprove).mul(ethers_1.BigNumber.from("1010")).div(ethers_1.BigNumber.from("1000"));
+                        return [4 /*yield*/, token.approve(addressToApprove, amountToApproveBn, this.overrides)];
+                    case 1:
+                        approvalTransaction = _a.sent();
+                        _a.label = 2;
+                    case 2:
+                        _a.trys.push([2, 4, , 5]);
                         return [4 /*yield*/, approvalTransaction.wait()];
-                    case 5:
-                        receipt = _c.sent();
+                    case 3:
+                        receipt = _a.sent();
                         return [2 /*return*/, receipt];
-                    case 6:
-                        error_7 = _c.sent();
-                        throw new Error("Transaction Confirmation Error");
-                    case 7: return [2 /*return*/];
+                    case 4:
+                        error_7 = _a.sent();
+                        throw new Error("Token approval failed");
+                    case 5: return [2 /*return*/];
                 }
             });
         });
