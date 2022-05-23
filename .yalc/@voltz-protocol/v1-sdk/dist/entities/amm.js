@@ -591,11 +591,13 @@ var AMM = /** @class */ (function () {
     };
     AMM.prototype.approveERC20 = function (tokenAddress, amountToApprove, addressToApprove) {
         return __awaiter(this, void 0, void 0, function () {
-            var token, amountToApproveBn, approvalTransaction, receipt, error_7;
+            var needToApprove, token, amountToApproveBn, approvalTransaction, receipt, error_7;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        if (!this.needToAprroveERC20(tokenAddress, amountToApprove, addressToApprove)) {
+                    case 0: return [4 /*yield*/, this.needToAprroveERC20(tokenAddress, amountToApprove, addressToApprove)];
+                    case 1:
+                        needToApprove = _a.sent();
+                        if (!needToApprove) {
                             return [2 /*return*/];
                         }
                         if (!this.signer) {
@@ -604,19 +606,19 @@ var AMM = /** @class */ (function () {
                         token = typechain_1.ERC20Mock__factory.connect(tokenAddress, this.signer);
                         amountToApproveBn = ethers_1.BigNumber.from(amountToApprove).mul(ethers_1.BigNumber.from("1010")).div(ethers_1.BigNumber.from("1000"));
                         return [4 /*yield*/, token.approve(addressToApprove, amountToApproveBn, this.overrides)];
-                    case 1:
-                        approvalTransaction = _a.sent();
-                        _a.label = 2;
                     case 2:
-                        _a.trys.push([2, 4, , 5]);
-                        return [4 /*yield*/, approvalTransaction.wait()];
+                        approvalTransaction = _a.sent();
+                        _a.label = 3;
                     case 3:
+                        _a.trys.push([3, 5, , 6]);
+                        return [4 /*yield*/, approvalTransaction.wait()];
+                    case 4:
                         receipt = _a.sent();
                         return [2 /*return*/, receipt];
-                    case 4:
+                    case 5:
                         error_7 = _a.sent();
                         throw new Error("Token approval failed");
-                    case 5: return [2 /*return*/];
+                    case 6: return [2 /*return*/];
                 }
             });
         });

@@ -704,7 +704,8 @@ class AMM {
     addressToApprove: string,
   ): Promise<ContractReceipt | void> {
 
-    if (!this.needToAprroveERC20(tokenAddress, amountToApprove, addressToApprove)) {
+    const needToApprove = await this.needToAprroveERC20(tokenAddress, amountToApprove, addressToApprove);
+    if (!needToApprove) {
       return;
     }
 
