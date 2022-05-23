@@ -4,7 +4,7 @@ import { DateTime } from 'luxon';
 
 import { getErrorMessage } from '@utilities';
 import { FCMUnwindAction } from '../../types';
-import { deserializeAmm, getSigner, postTransactionData, serializeAmm } from '../../utilities';
+import { deserializeAmm, getSigner } from '../../utilities';
 import * as actions from '../../actions';
 import { isUndefined } from 'lodash';
 
@@ -18,7 +18,6 @@ function* fcmUnwindSaga(action: FCMUnwindAction) {
     }
 
     const amm = deserializeAmm(action.payload.amm, signer);
-    const ammInformation = serializeAmm(amm)
     if (!amm) {
         return;
     }
@@ -33,23 +32,6 @@ function* fcmUnwindSaga(action: FCMUnwindAction) {
             notionalToUnwind: notional,
         });
 
-        //  CALLING API FOR TX MONITORING HERE
-        if (amm.signer) {
-            amm.signer.getAddress().then((signerAddress) => {
-                if (result) {
-                    postTransactionData(
-                        signerAddress,
-                        ammInformation.rateOracle.token.name.toLowerCase(),
-                        margin.toString(),
-                        ammInformation.fcmAddress,
-                        id,
-                        result.transactionHash,
-                        DateTime.now().toISO(),
-                        'CRYPTO_WITHDRAWAL'
-                    ).then()
-                }
-            })
-        }
     } catch (error) {
         yield put(
             actions.updateTransaction({
