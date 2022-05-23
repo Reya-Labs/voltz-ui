@@ -2,9 +2,9 @@ import React from 'react';
 import { DateTime, Duration } from 'luxon';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { AgentProvider, Agents } from '@components/contexts';
+import { AgentProvider } from '@components/contexts';
 import SwapForm from './SwapForm';
-import { useSwapForm } from '@hooks';
+import { useSwapForm, useTokenApproval } from '@hooks';
 import { AugmentedAMM } from '@utilities';
 
 export default {
@@ -22,6 +22,20 @@ const mockAmm = ({
   }
 } as unknown) as AugmentedAMM;
 
+const mockTokenApprovals = {
+  approving: false,
+  approveFCM: () => Promise.resolve(),
+  approveUnderlyingTokenForFCM: () => Promise.resolve(),
+  approveUnderlyingTokenForPeriphery: () => Promise.resolve(),
+  approveYieldBearingTokenForFCM: () => Promise.resolve(),
+  checkingApprovals: false,
+  FCMApproved: true,
+  underlyingTokenApprovedForFCM: true,
+  underlyingTokenApprovedForPeriphery: true,
+  yieldBearingTokenApprovedForFCM: true
+} as ReturnType<typeof useTokenApproval>
+
+
 // Creating a new position
 const NewPositionTemplate: ComponentStory<typeof SwapForm> = (args) => (
   <AgentProvider>
@@ -29,19 +43,24 @@ const NewPositionTemplate: ComponentStory<typeof SwapForm> = (args) => (
   </AgentProvider>
 );
 const NewPositionSwapForm: React.FunctionComponent = (args) => {
-  const form = useSwapForm(mockAmm);
+  const isEditingMargin = false;
+  const form = useSwapForm(mockAmm, isEditingMargin);
 
   return (
     <SwapForm 
       {...args} 
       errors={form.errors}
       formState={form.state} 
+      isEditingMargin={isEditingMargin}
+      isFormValid={form.isValid}
       onCancel={() => alert('cancel')}
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
       onChangePartialCollateralization={form.setPartialCollateralization}
-      onSubmit={() => form.validate(false)}
+      onSubmit={() => form.validate()}
+      submitButtonText="Submit"
+      tokenApprovals={mockTokenApprovals}
     />
   );
 };
@@ -60,20 +79,24 @@ const EditingMarginTemplate: ComponentStory<typeof SwapForm> = (args) => (
   </AgentProvider>
 );
 const EditingMarginSwapForm: React.FunctionComponent = (args) => {
-  const form = useSwapForm(mockAmm);
+  const isEditingMargin = true;
+  const form = useSwapForm(mockAmm, isEditingMargin);
 
   return (
     <SwapForm 
       {...args} 
       errors={form.errors}
       formState={form.state}
-      isEditingMargin 
+      isEditingMargin={isEditingMargin}
+      isFormValid={form.isValid}
       onCancel={() => alert('cancel')}
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
       onChangePartialCollateralization={form.setPartialCollateralization}
-      onSubmit={() => form.validate(true)}
+      onSubmit={() => form.validate()}
+      submitButtonText="Submit"
+      tokenApprovals={mockTokenApprovals}
     />
   );
 };

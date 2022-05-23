@@ -3,7 +3,7 @@ import { AugmentedAMM } from "@utilities";
 import { Token } from "@voltz-protocol/v1-sdk";
 import { BigNumber } from "ethers";
 import { isUndefined } from "lodash";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MintBurnFormMarginAction } from "./useMintBurnForm";
 
 export type SwapFormState = {
@@ -13,18 +13,19 @@ export type SwapFormState = {
   partialCollateralization: boolean;
 };
 
-export type SwapForm = {
+export type SwapFormData = {
   balance: BigNumber | undefined;
   errors: Record<string, string>,
-  setMargin: Dispatch<SetStateAction<SwapFormState['margin']>>;
-  setMarginAction: Dispatch<SetStateAction<SwapFormState['marginAction']>>;
-  setNotional: Dispatch<SetStateAction<SwapFormState['notional']>>;
-  setPartialCollateralization: Dispatch<SetStateAction<SwapFormState['partialCollateralization']>>;
-  state: SwapFormState,
-  validate: (isEditingMargin: boolean) => boolean;
+  isValid: boolean;
+  setMargin: (value: SwapFormState['margin']) => void;
+  setMarginAction: (value: SwapFormState['marginAction']) => void;
+  setNotional: (value: SwapFormState['notional']) => void;
+  setPartialCollateralization: (value: SwapFormState['partialCollateralization']) => void;
+  state: SwapFormState;
+  validate: () => boolean;
 };
 
-export const useSwapForm = (amm: AugmentedAMM, defaultValues: Partial<SwapFormState> = {}): SwapForm => {
+export const useSwapForm = (amm: AugmentedAMM, isEditingMargin: boolean, defaultValues: Partial<SwapFormState> = {}): SwapFormData => {
   const defaultMargin = !isUndefined(defaultValues.margin) ? defaultValues.margin : 0;
   const defaultMarginAction = defaultValues.marginAction || MintBurnFormMarginAction.ADD;
   const defaultNotional = !isUndefined(defaultValues.notional) ? defaultValues.notional : 0;
@@ -38,9 +39,11 @@ export const useSwapForm = (amm: AugmentedAMM, defaultValues: Partial<SwapFormSt
   const [partialCollateralization, setPartialCollateralization] = useState<boolean>(defaultPartialCollateralization);
 
   const [balance, setBalance] = useState<BigNumber>();
-  const [errors, setErrors] = useState<SwapForm['errors']>({});
+  const [errors, setErrors] = useState<SwapFormData['errors']>({});
   const { getTokenBalance } = useWallet();
+  const [isValid, setIsValid] = useState<boolean>(false);
   const token = useRef<Token>();
+  const touched = useRef<string[]>([]);
 
   // Load the users balance of the required token so we can use it for validation later
   useEffect(() => {
@@ -56,7 +59,35 @@ export const useSwapForm = (amm: AugmentedAMM, defaultValues: Partial<SwapFormSt
     }
   }, [amm.underlyingToken, amm.underlyingToken.id, getTokenBalance]);
 
-  const validate = (isEditingMargin: boolean,) => {
+  // validate the form after values change
+  useEffect(() => {
+    if(touched.current.length) {
+      validate();
+    }
+  }, [margin, marginAction, notional, partialCollateralization])
+
+
+  const updateMargin = (value: SwapFormState['margin']) => {
+    touched.current.push('margin');
+    setMargin(value);
+  }
+
+  const updateMarginAction = (value: SwapFormState['marginAction']) => {
+    touched.current.push('marginAction');
+    setMarginAction(value);
+  }
+
+  const updateNotional = (value: SwapFormState['notional']) => {
+    touched.current.push('notional');
+    setNotional(value);
+  }
+
+  const updatePartialCollateralization = (value: SwapFormState['partialCollateralization']) => {
+    touched.current.push('partialCollateralization');
+    setPartialCollateralization(value);
+  }
+
+  const validate = () => {
     if(!isEditingMargin) {
       return validateNewPosition();
     } else {
@@ -66,33 +97,44 @@ export const useSwapForm = (amm: AugmentedAMM, defaultValues: Partial<SwapFormSt
 
   const validateNewPosition = () => {
     const err: Record<string, string> = {};
+    let valid = true;
 
     if(isUndefined(notional) || notional === 0) {
-      err['notional'] = 'Please enter an amount';
-    } 
+      valid = false;
+      if(touched.current.includes('notional')) {
+        err['notional'] = 'Please enter an amount';
+      }
+    }
 
     setErrors(err);
-    return Object.keys(err).length === 0;
+    setIsValid(valid);
+    return valid;
   };
 
   const validateEditMargin = () => {
     const err: Record<string, string> = {};
+    let valid = true;
 
     if(isUndefined(margin) || margin === 0) {
-      err['margin'] = 'Please enter an amount';
+      valid = false;
+      if(touched.current.includes('margin')) {
+        err['margin'] = 'Please enter an amount';
+      }
     }
     
     setErrors(err);
-    return Object.keys(err).length === 0;
+    setIsValid(valid)
+    return valid;
   };
 
   return {
     balance,
     errors,
-    setMargin,
-    setMarginAction,
-    setNotional,
-    setPartialCollateralization,
+    isValid,
+    setMargin: updateMargin,
+    setMarginAction: updateMarginAction,
+    setNotional: updateNotional,
+    setPartialCollateralization: updatePartialCollateralization,
     state: {
       margin,
       marginAction,
