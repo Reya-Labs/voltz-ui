@@ -3,7 +3,7 @@ import { call, put } from 'redux-saga/effects';
 import { DateTime } from 'luxon';
 
 import { BurnAction } from '../../types';
-import { deserializeAmm, getSigner, postTransactionData, serializeAmm } from '../../utilities';
+import { deserializeAmm, getSigner } from '../../utilities';
 import * as actions from '../../actions';
 import { getErrorMessage } from '@utilities';
 
@@ -21,8 +21,7 @@ function* burnSaga(action: BurnAction) {
         return;
     }
 
-    const { id, fixedLow, fixedHigh, notional, margin } = action.payload.transaction;
-    const ammInformation = serializeAmm(amm)
+    const { id, fixedLow, fixedHigh, notional } = action.payload.transaction;
     if (!fixedLow || !fixedHigh || notional > 0) {
         return;
     }
@@ -38,23 +37,6 @@ function* burnSaga(action: BurnAction) {
             notional: burntNotional
         });
 
-        //  CALLING API FOR TX MONITORING HERE
-        if (amm.signer) {
-            amm.signer.getAddress().then((signerAddress) => {
-                if (result) {
-                    postTransactionData(
-                        signerAddress,
-                        ammInformation.rateOracle.token.name.toLowerCase(),
-                        margin.toString(),
-                        ammInformation.marginEngineAddress,
-                        id,
-                        result.transactionHash,
-                        DateTime.now().toISO(),
-                        'CRYPTO_WITHDRAWAL'
-                    ).then()
-                }
-            })
-        }
     } catch (error) {
         yield put(
             actions.updateTransaction({

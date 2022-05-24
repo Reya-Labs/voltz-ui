@@ -3,7 +3,7 @@ import { call, put } from 'redux-saga/effects';
 import { DateTime } from 'luxon';
 import { getErrorMessage } from '@utilities';
 import { SettlePositionAction } from '../../types';
-import { deserializeAmm, getSigner, postTransactionData, serializeAmm } from '../../utilities';
+import { deserializeAmm, getSigner } from '../../utilities';
 import * as actions from '../../actions';
 import { isUndefined } from 'lodash';
 
@@ -16,7 +16,6 @@ function* settlePositionSaga(action: SettlePositionAction) {
   }
 
   const amm = deserializeAmm(action.payload.amm, signer);
-  const ammInformation = serializeAmm(amm)
 
   if (!amm || !amm.signer) {
     return;
@@ -44,23 +43,6 @@ function* settlePositionSaga(action: SettlePositionAction) {
       );
     }
 
-    //  CALLING API FOR TX MONITORING HERE
-    if (amm.signer) {
-      amm.signer.getAddress().then((signerAddress) => {
-        if (result) {
-          postTransactionData(
-            signerAddress,
-            ammInformation.rateOracle.token.name.toLowerCase(),
-            margin.toString(),
-            signerAddress, // Destination address is user wallet for settling positions
-            id,
-            result.transactionHash,
-            DateTime.now().toISO(),
-            'CRYPTO_WITHDRAWAL'
-          ).then()
-        }
-      })
-    }
   } catch (error) {
     yield put(
       actions.updateTransaction({
