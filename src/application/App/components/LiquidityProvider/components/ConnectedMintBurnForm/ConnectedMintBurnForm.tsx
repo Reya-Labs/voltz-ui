@@ -21,8 +21,8 @@ export type ConnectedMintBurnFormProps = {
 const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps> = ({
   amm,
   onReset,
-  isEditingMargin,
-  isEditingLiquidity,
+  isEditingMargin = false,
+  isEditingLiquidity = false,
   position
 }) => {
   const { agent } = useAgent();
@@ -33,7 +33,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     fixedLow: position ? parseFloat(position.fixedRateLower.toFixed() ) : undefined,
     fixedHigh: position ? parseFloat(position.fixedRateUpper.toFixed() ) : undefined
   }
-  const form = useMintBurnForm(amm, defaultValues);
+  const form = useMintBurnForm(amm, isEditingMargin, isEditingLiquidity, defaultValues);
   const tokenApprovals = useTokenApproval(amm);
 
   const [transactionId, setTransactionId] = useState<string | undefined>();
@@ -62,8 +62,8 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   );
 
   const handleSubmit = () => {
-    // validate the form - dont go any further if validation fails
-    if(!form.validate(!!isEditingMargin, !!isEditingLiquidity)) return;
+    // dont go any further if form is not valid
+    if(!form.isValid) return;
 
     const transaction = { 
       ammId: amm.id, 
@@ -114,6 +114,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
         errors={form.errors}
         isEditingLiquidity={isEditingLiquidity}
         isEditingMargin={isEditingMargin}
+        isFormValid={form.isValid}
         onCancel={onReset}
         onChangeFixedLow={handleSetFixedLow}
         onChangeFixedHigh={handleSetFixedHigh}
