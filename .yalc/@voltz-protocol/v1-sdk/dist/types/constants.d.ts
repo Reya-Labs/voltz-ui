@@ -2,6 +2,7 @@ import { BigNumber } from 'ethers';
 import JSBI from 'jsbi';
 export declare const MaxUint256: JSBI;
 export declare const MaxUint256Bn: BigNumber;
+export declare const TresholdApprovalBn: BigNumber;
 export declare const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000";
 export declare const FACTORY_ADDRESS = "0x71b5020bF90327F2241Cc7D66B60C72CEf9cC39b";
 export declare const PERIPHERY_ADDRESS = "0x411b190015978F01e6d57e551455B317bf26233f";

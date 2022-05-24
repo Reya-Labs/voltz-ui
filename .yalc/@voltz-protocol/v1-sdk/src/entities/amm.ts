@@ -11,6 +11,7 @@ import {
   MAX_FIXED_RATE,
   ONE_YEAR_IN_SECONDS,
   MaxUint256Bn,
+  TresholdApprovalBn,
 } from '../constants';
 import {
   Periphery__factory as peripheryFactory,
@@ -956,7 +957,7 @@ class AMM {
     const token = tokenFactory.connect(tokenAddress, this.signer);
     const allowance = await token.allowance(signerAddress, PERIPHERY_ADDRESS, this.overrides);
 
-    return allowance.gte(MaxUint256Bn);
+    return allowance.gte(TresholdApprovalBn);
   }
 
   public async approveUnderlyingTokenForPeriphery(): Promise<ContractReceipt | void> {
@@ -1002,11 +1003,11 @@ class AMM {
     const token = tokenFactory.connect(tokenAddress, this.signer);
     const allowance = await token.allowance(signerAddress, this.fcmAddress, this.overrides);
 
-    return allowance.gte(MaxUint256Bn);
+    return allowance.gte(TresholdApprovalBn);
   }
 
   public async approveUnderlyingTokenForFCM(): Promise<ContractReceipt | void> {
-    const isApproved = await this.isUnderlyingTokenApprovedForPeriphery();
+    const isApproved = await this.isUnderlyingTokenApprovedForFCM();
     if (isApproved) {
       return;
     }
@@ -1051,7 +1052,7 @@ class AMM {
     const token = tokenFactory.connect(tokenAddress, this.signer);
     const allowance = await token.allowance(signerAddress, this.fcmAddress, this.overrides);
 
-    return allowance.gte(MaxUint256Bn);
+    return allowance.gte(TresholdApprovalBn);
   }
 
   // protocol name
@@ -1064,7 +1065,7 @@ class AMM {
   }
 
   public async approveYieldBearingTokenForFCM(): Promise<ContractReceipt | void> {
-    const isApproved = await this.isUnderlyingTokenApprovedForPeriphery();
+    const isApproved = await this.isYieldBearingTokenApprovedForFCM();
     if (isApproved) {
       return;
     }

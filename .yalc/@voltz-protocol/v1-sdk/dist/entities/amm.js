@@ -864,7 +864,7 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, token.allowance(signerAddress, constants_1.PERIPHERY_ADDRESS, this.overrides)];
                     case 2:
                         allowance = _a.sent();
-                        return [2 /*return*/, allowance.gte(constants_1.MaxUint256Bn)];
+                        return [2 /*return*/, allowance.gte(constants_1.TresholdApprovalBn)];
                 }
             });
         });
@@ -927,7 +927,7 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, token.allowance(signerAddress, this.fcmAddress, this.overrides)];
                     case 2:
                         allowance = _a.sent();
-                        return [2 /*return*/, allowance.gte(constants_1.MaxUint256Bn)];
+                        return [2 /*return*/, allowance.gte(constants_1.TresholdApprovalBn)];
                 }
             });
         });
@@ -937,7 +937,7 @@ var AMM = /** @class */ (function () {
             var isApproved, tokenAddress, token, approvalTransaction, receipt, error_12;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.isUnderlyingTokenApprovedForPeriphery()];
+                    case 0: return [4 /*yield*/, this.isUnderlyingTokenApprovedForFCM()];
                     case 1:
                         isApproved = _a.sent();
                         if (isApproved) {
@@ -993,7 +993,7 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, token.allowance(signerAddress, this.fcmAddress, this.overrides)];
                     case 3:
                         allowance = _a.sent();
-                        return [2 /*return*/, allowance.gte(constants_1.MaxUint256Bn)];
+                        return [2 /*return*/, allowance.gte(constants_1.TresholdApprovalBn)];
                 }
             });
         });
@@ -1013,7 +1013,7 @@ var AMM = /** @class */ (function () {
             var isApproved, fcmContract, tokenAddress, token, approvalTransaction, receipt, error_13;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.isUnderlyingTokenApprovedForPeriphery()];
+                    case 0: return [4 /*yield*/, this.isYieldBearingTokenApprovedForFCM()];
                     case 1:
                         isApproved = _a.sent();
                         if (isApproved) {
