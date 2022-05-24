@@ -1,7 +1,12 @@
+import { BigNumber } from 'ethers';
 import JSBI from 'jsbi';
 
 export const MaxUint256 = JSBI.BigInt(
   '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+);
+
+export const MaxUint256Bn = BigNumber.from(
+  '115792089237316195423570985008687907853269984665640564039457584007913129639935',
 );
 
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000';

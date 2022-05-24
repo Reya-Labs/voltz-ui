@@ -1,7 +1,7 @@
 import JSBI from 'jsbi';
 import { providers } from 'ethers';
 import { DateTime } from 'luxon';
-import { BigNumber, BigNumberish, ContractReceipt, Signer, utils } from 'ethers';
+import { BigNumber, ContractReceipt, Signer, utils } from 'ethers';
 
 import { SwapPeripheryParams, MintOrBurnParams } from '../types';
 import {
@@ -10,12 +10,12 @@ import {
   MIN_FIXED_RATE,
   MAX_FIXED_RATE,
   ONE_YEAR_IN_SECONDS,
+  MaxUint256Bn,
 } from '../constants';
 import {
   Periphery__factory as peripheryFactory,
   MarginEngine__factory as marginEngineFactory,
   Factory__factory as factoryFactory,
-  VAMM__factory as vammFactory,
   // todo: not very elegant to use the mock as a factory
   ERC20Mock__factory as tokenFactory,
   AaveFCM__factory as fcmFactory,
@@ -30,7 +30,6 @@ import Token from './token';
 import { Price } from './fractions/price';
 import { TokenAmount } from './fractions/tokenAmount';
 import { decodeInfoPostMint, decodeInfoPostSwap, getReadableErrorMessage } from '../utils/errors/errorHandling';
-import { toBn } from 'evm-bn';
 import Position from './position';
 import { isUndefined } from 'lodash';
 
@@ -53,29 +52,12 @@ export type AMMConstructorArgs = {
   totalLiquidity: JSBI;
 };
 
+// swap
+
 export type AMMGetInfoPostSwapArgs = {
   isFT: boolean;
   notional: number;
   fixedRateLimit?: number;
-  fixedLow: number;
-  fixedHigh: number;
-};
-
-export type AMMUpdatePositionMarginArgs = {
-  owner?: string;
-  fixedLow: number;
-  fixedHigh: number;
-  marginDelta: number;
-};
-
-export type AMMLiquidatePositionArgs = {
-  owner: string;
-  fixedLow: number;
-  fixedHigh: number;
-};
-
-export type AMMSettlePositionArgs = {
-  owner?: string;
   fixedLow: number;
   fixedHigh: number;
 };
@@ -90,15 +72,15 @@ export type AMMSwapArgs = {
   validationOnly?: boolean;
 };
 
-export type fcmSwapArgs = {
-  notional: number;
-  fixedRateLimit?: number;
+export type InfoPostSwap = {
+  marginRequirement: number;
+  availableNotional: number;
+  fee: number;
+  slippage: number;
+  averageFixedRate: number;
 };
 
-export type fcmUnwindArgs = {
-  notionalToUnwind: number;
-  fixedRateLimit?: number;
-};
+// mint
 
 export type AMMMintArgs = {
   fixedLow: number;
@@ -114,20 +96,50 @@ export type AMMGetInfoPostMintArgs = {
   notional: number;
 }
 
-export type InfoPostSwap = {
-  marginRequirement: number;
-  availableNotional: number;
-  fee: number;
-  slippage: number;
-  averageFixedRate: number;
-};
+// burn
 
 export type AMMBurnArgs = Omit<AMMMintArgs, 'margin'>;
 
-export type ClosestTickAndFixedRate = {
-  closestUsableTick: number;
-  closestUsableFixedRate: Price;
+// update position margin
+
+export type AMMUpdatePositionMarginArgs = {
+  owner?: string;
+  fixedLow: number;
+  fixedHigh: number;
+  marginDelta: number;
 };
+
+// liquidation
+
+export type AMMLiquidatePositionArgs = {
+  owner: string;
+  fixedLow: number;
+  fixedHigh: number;
+};
+
+// settlement
+
+export type AMMSettlePositionArgs = {
+  owner?: string;
+  fixedLow: number;
+  fixedHigh: number;
+};
+
+// fcm swap 
+
+export type fcmSwapArgs = {
+  notional: number;
+  fixedRateLimit?: number;
+};
+
+// fcm unwind
+
+export type fcmUnwindArgs = {
+  notionalToUnwind: number;
+  fixedRateLimit?: number;
+};
+
+// dynamic information about position
 
 export type PositionInfo = {
   margin: number;
@@ -141,6 +153,11 @@ export type PositionInfo = {
   fixedApr?: number;
   healthFactor?: number;
 }
+
+export type ClosestTickAndFixedRate = {
+  closestUsableTick: number;
+  closestUsableFixedRate: Price;
+};
 
 class AMM {
   public readonly id: string;
@@ -202,6 +219,8 @@ class AMM {
       gasLimit: 10000000,
     }
   }
+
+  // swap
 
   public async getInfoPostSwap({
     isFT,
@@ -317,100 +336,93 @@ class AMM {
     };
   }
 
-  public async settlePosition({
-    owner,
+  public async swap({
+    isFT,
+    notional,
+    margin,
+    fixedRateLimit,
     fixedLow,
     fixedHigh,
-  }: AMMSettlePositionArgs): Promise<ContractReceipt> {
+    validationOnly,
+  }: AMMSwapArgs): Promise<ContractReceipt | void> {
     if (!this.signer) {
       throw new Error('Wallet not connected');
     }
 
-    const effectiveOwner = (!owner) ? await this.signer.getAddress() : owner;
-
-    const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
-    const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
-    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
-
-    const settlePositionTransaction = await marginEngineContract.settlePosition(
-      effectiveOwner,
-      tickLower,
-      tickUpper,
-      this.overrides
-    );
-
-    try {
-      const receipt = await settlePositionTransaction.wait();
-      return receipt;
-    }
-    catch (error) {
-      throw new Error("Transaction Confirmation Error");
-    }
-  }
-
-  public scale(value: number): string {
-    const price = Price.fromNumber(value);
-    const tokenAmount = TokenAmount.fromFractionalAmount(
-      this.underlyingToken,
-      price.numerator,
-      price.denominator,
-    );
-    const scaledValue = tokenAmount.scale();
-
-    return scaledValue;
-  }
-
-  public descale(value: BigNumber): number {
-    if (this.underlyingToken.decimals <= 3) {
-      return value.toNumber() / (10 ** this.underlyingToken.decimals);
-    }
-    else {
-      return value.div(BigNumber.from(10).pow(this.underlyingToken.decimals - 3)).toNumber() / 1000;
-    }
-  }
-
-  public async updatePositionMargin({
-    owner,
-    fixedLow,
-    fixedHigh,
-    marginDelta,
-  }: AMMUpdatePositionMarginArgs): Promise<ContractReceipt | void> {
-
-    if (!this.signer) {
-      return;
+    if (fixedLow >= fixedHigh) {
+      throw new Error('Lower Rate must be smaller than Upper Rate');
     }
 
-    const effectiveOwner = (!owner) ? await this.signer.getAddress() : owner;
-
-    if (!this.signer) {
-      throw new Error('Wallet not connected');
+    if (fixedLow < MIN_FIXED_RATE) {
+      throw new Error('Lower Rate is too low');
     }
 
-    if (marginDelta === 0) {
-      throw new Error('No margin delta to update');
+    if (fixedHigh > MAX_FIXED_RATE) {
+      throw new Error('Upper Rate is too high');
+    }
+
+    if (notional <= 0) {
+      throw new Error('Amount of notional must be greater than 0');
+    }
+
+    if (margin < 0) {
+      throw new Error('Amount of margin cannot be negative');
     }
 
     if (!this.underlyingToken.id) {
       throw new Error('No underlying error');
     }
 
+    if (validationOnly) {
+      return;
+    }
+
     const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
     const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
-    const scaledMarginDelta = this.scale(marginDelta);
 
-    await this.approveERC20(this.underlyingToken.id, scaledMarginDelta, this.marginEngineAddress);
+    let sqrtPriceLimitX96;
+    if (fixedRateLimit) {
+      const { closestUsableTick: tickLimit } = this.closestTickAndFixedRate(fixedRateLimit);
+      sqrtPriceLimitX96 = TickMath.getSqrtRatioAtTick(tickLimit).toString();
+    } else {
+      if (isFT) {
+        sqrtPriceLimitX96 = TickMath.getSqrtRatioAtTick(TickMath.MAX_TICK - 1).toString();
+      } else {
+        sqrtPriceLimitX96 = TickMath.getSqrtRatioAtTick(TickMath.MIN_TICK + 1).toString();
+      }
+    }
 
-    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
-    const updatePositionMarginTransaction = await marginEngineContract.updatePositionMargin(
-      effectiveOwner,
+    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.signer);
+    const scaledNotional = this.scale(notional);
+    const scaledMarginDelta = this.scale(margin);
+
+    const isUnderlyingTokenApprovedForPeriphery = await this.isUnderlyingTokenApprovedForPeriphery();
+    if (!isUnderlyingTokenApprovedForPeriphery) {
+      await this.approveUnderlyingTokenForPeriphery();
+    }
+
+    const swapPeripheryParams: SwapPeripheryParams = {
+      marginEngine: this.marginEngineAddress,
+      isFT,
+      notional: scaledNotional,
+      sqrtPriceLimitX96,
       tickLower,
       tickUpper,
-      scaledMarginDelta,
-      this.overrides
-    );
+      marginDelta: scaledMarginDelta,
+    };
+
+    await peripheryContract.callStatic.swap(swapPeripheryParams).catch(async (error: any) => {
+      const errorMessage = getReadableErrorMessage(error, this.environment);
+      throw new Error(errorMessage);
+    });
+
+    const swapTransaction = await peripheryContract.swap(swapPeripheryParams, this.overrides).catch((error) => {
+      const errorMessage = getReadableErrorMessage(error, this.environment);
+      throw new Error(errorMessage);
+    });
 
     try {
-      const receipt = await updatePositionMarginTransaction.wait();
+      const receipt = await swapTransaction.wait();
       return receipt;
     }
     catch (error) {
@@ -418,29 +430,7 @@ class AMM {
     }
   }
 
-  public async liquidatePosition({
-    owner,
-    fixedLow,
-    fixedHigh,
-  }: AMMLiquidatePositionArgs): Promise<ContractReceipt> {
-    if (!this.signer) {
-      throw new Error('Wallet not connected');
-    }
-
-    const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
-    const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
-
-    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
-    const liquidatePositionTransaction = await marginEngineContract.liquidatePosition(owner, tickLower, tickUpper, this.overrides);
-
-    try {
-      const receipt = await liquidatePositionTransaction.wait();
-      return receipt;
-    }
-    catch (error) {
-      throw new Error("Transaction Confirmation Error");
-    }
-  }
+  // mint
 
   public async getInfoPostMint({
     fixedLow,
@@ -553,10 +543,9 @@ class AMM {
     const _notional = this.scale(notional);
     const _marginDelta = this.scale(margin);
 
-    try {
-      await this.approveERC20(this.underlyingToken.id, _marginDelta, peripheryContract.address);
-    } catch (approvalError) {
-      throw approvalError;
+    const isUnderlyingTokenApprovedForPeriphery = await this.isUnderlyingTokenApprovedForPeriphery();
+    if (!isUnderlyingTokenApprovedForPeriphery) {
+      await this.approveUnderlyingTokenForPeriphery();
     }
 
     const mintOrBurnParams: MintOrBurnParams = {
@@ -586,6 +575,8 @@ class AMM {
       throw new Error("Transaction Confirmation Error");
     }
   }
+
+  // burn
 
   public async burn({
     fixedLow,
@@ -652,176 +643,120 @@ class AMM {
     }
   }
 
-  public async approveFCM(): Promise<ContractReceipt | void> {
-    if (!this.signer) {
-      throw new Error('Wallet not connected');
-    }
+  // update position margin
 
-    const factoryContract = factoryFactory.connect(FACTORY_ADDRESS, this.signer);
-    const signerAddress = await this.signer.getAddress();
-    const isApproved = await factoryContract.isApproved(signerAddress, this.fcmAddress);
-
-    if (isApproved) {
-      return;
-    }
-
-    const approvalTransaction = await factoryContract.setApproval(this.fcmAddress, true, this.overrides);
-
-    try {
-      const receipt = await approvalTransaction.wait();
-      return receipt;
-    }
-    catch (error) {
-      throw new Error("Transaction Confirmation Error");
-    }
-  }
-
-  public async needToAprroveERC20(
-    tokenAddress: string,
-    amountToApprove: BigNumberish,
-    addressToApprove: string
-  ): Promise<boolean | void> {
-
-    if (!this.signer) {
-      throw new Error('Wallet not connected');
-    }
-
-    const token = tokenFactory.connect(tokenAddress, this.signer);
-    const currentApproval = await token.allowance(await this.signer.getAddress(), addressToApprove);
-
-    /// minimum threshold of allowance is 100.5%
-    const amountToApproveBn = BigNumber.from(amountToApprove).mul(BigNumber.from("1005")).div(BigNumber.from("1000"));
-    if (currentApproval.gt(amountToApproveBn)) {
-      return false;
-    }
-
-    return true;
-  }
-
-  public async approveERC20(
-    tokenAddress: string,
-    amountToApprove: BigNumberish,
-    addressToApprove: string,
-  ): Promise<ContractReceipt | void> {
-
-    const needToApprove = await this.needToAprroveERC20(tokenAddress, amountToApprove, addressToApprove);
-    if (!needToApprove) {
-      return;
-    }
-
-    if (!this.signer) {
-      throw new Error('Wallet not connected');
-    }
-
-    const token = tokenFactory.connect(tokenAddress, this.signer);
-
-    /// approve 101% (to avoid sending multiple transactions if approval amound slightly changes)
-    const amountToApproveBn = BigNumber.from(amountToApprove).mul(BigNumber.from("1010")).div(BigNumber.from("1000"));
-    const approvalTransaction = await token.approve(addressToApprove, amountToApproveBn, this.overrides);
-
-    try {
-      const receipt = await approvalTransaction.wait();
-      return receipt;
-    }
-    catch (error) {
-      throw new Error("Token approval failed");
-    }
-  }
-
-  public async swap({
-    isFT,
-    notional,
-    margin,
-    fixedRateLimit,
+  public async updatePositionMargin({
+    owner,
     fixedLow,
     fixedHigh,
-    validationOnly,
-  }: AMMSwapArgs): Promise<ContractReceipt | void> {
+    marginDelta,
+  }: AMMUpdatePositionMarginArgs): Promise<ContractReceipt | void> {
+
+    if (!this.signer) {
+      return;
+    }
+
+    const effectiveOwner = (!owner) ? await this.signer.getAddress() : owner;
+
     if (!this.signer) {
       throw new Error('Wallet not connected');
     }
 
-    if (fixedLow >= fixedHigh) {
-      throw new Error('Lower Rate must be smaller than Upper Rate');
-    }
-
-    if (fixedLow < MIN_FIXED_RATE) {
-      throw new Error('Lower Rate is too low');
-    }
-
-    if (fixedHigh > MAX_FIXED_RATE) {
-      throw new Error('Upper Rate is too high');
-    }
-
-    if (notional <= 0) {
-      throw new Error('Amount of notional must be greater than 0');
-    }
-
-    if (margin < 0) {
-      throw new Error('Amount of margin cannot be negative');
+    if (marginDelta === 0) {
+      throw new Error('No margin delta to update');
     }
 
     if (!this.underlyingToken.id) {
       throw new Error('No underlying error');
     }
 
-    if (validationOnly) {
-      return;
-    }
-
     const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
     const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
+    const scaledMarginDelta = this.scale(marginDelta);
 
-    let sqrtPriceLimitX96;
-    if (fixedRateLimit) {
-      const { closestUsableTick: tickLimit } = this.closestTickAndFixedRate(fixedRateLimit);
-      sqrtPriceLimitX96 = TickMath.getSqrtRatioAtTick(tickLimit).toString();
-    } else {
-      if (isFT) {
-        sqrtPriceLimitX96 = TickMath.getSqrtRatioAtTick(TickMath.MAX_TICK - 1).toString();
-      } else {
-        sqrtPriceLimitX96 = TickMath.getSqrtRatioAtTick(TickMath.MIN_TICK + 1).toString();
-      }
+    const isUnderlyingTokenApprovedForPeriphery = await this.isUnderlyingTokenApprovedForPeriphery();
+    if (!isUnderlyingTokenApprovedForPeriphery) {
+      await this.approveUnderlyingTokenForPeriphery();
     }
 
-    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.signer);
-    const scaledNotional = this.scale(notional);
-    const scaledMarginDelta = this.scale(margin);
-
-    try {
-      await this.approveERC20(this.underlyingToken.id, scaledMarginDelta, peripheryContract.address);
-    } catch (approvalError) {
-      throw approvalError;
-    }
-
-    const swapPeripheryParams: SwapPeripheryParams = {
-      marginEngine: this.marginEngineAddress,
-      isFT,
-      notional: scaledNotional,
-      sqrtPriceLimitX96,
+    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
+    const updatePositionMarginTransaction = await marginEngineContract.updatePositionMargin(
+      effectiveOwner,
       tickLower,
       tickUpper,
-      marginDelta: scaledMarginDelta,
-    };
-
-    await peripheryContract.callStatic.swap(swapPeripheryParams).catch(async (error: any) => {
-      const errorMessage = getReadableErrorMessage(error, this.environment);
-      throw new Error(errorMessage);
-    });
-
-    const swapTransaction = await peripheryContract.swap(swapPeripheryParams, this.overrides).catch((error) => {
-      const errorMessage = getReadableErrorMessage(error, this.environment);
-      throw new Error(errorMessage);
-    });
+      scaledMarginDelta,
+      this.overrides
+    );
 
     try {
-      const receipt = await swapTransaction.wait();
+      const receipt = await updatePositionMarginTransaction.wait();
       return receipt;
     }
     catch (error) {
       throw new Error("Transaction Confirmation Error");
     }
   }
+
+  // liquidation 
+
+  public async liquidatePosition({
+    owner,
+    fixedLow,
+    fixedHigh,
+  }: AMMLiquidatePositionArgs): Promise<ContractReceipt> {
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
+    }
+
+    const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
+    const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
+
+    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
+    const liquidatePositionTransaction = await marginEngineContract.liquidatePosition(owner, tickLower, tickUpper, this.overrides);
+
+    try {
+      const receipt = await liquidatePositionTransaction.wait();
+      return receipt;
+    }
+    catch (error) {
+      throw new Error("Transaction Confirmation Error");
+    }
+  }
+
+  // settlement
+
+  public async settlePosition({
+    owner,
+    fixedLow,
+    fixedHigh,
+  }: AMMSettlePositionArgs): Promise<ContractReceipt> {
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
+    }
+
+    const effectiveOwner = (!owner) ? await this.signer.getAddress() : owner;
+
+    const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
+    const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
+    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
+
+    const settlePositionTransaction = await marginEngineContract.settlePosition(
+      effectiveOwner,
+      tickLower,
+      tickUpper,
+      this.overrides
+    );
+
+    try {
+      const receipt = await settlePositionTransaction.wait();
+      return receipt;
+    }
+    catch (error) {
+      throw new Error("Transaction Confirmation Error");
+    }
+  }
+
+  // FCM swap
 
   public async fcmSwap({
     notional,
@@ -835,10 +770,9 @@ class AMM {
       throw new Error('No underlying error');
     }
 
-    try {
+    const isFCMApproved = await this.isFCMApproved();
+    if (!isFCMApproved) {
       await this.approveFCM();
-    } catch (approvalError) {
-      throw approvalError;
     }
 
     let sqrtPriceLimitX96;
@@ -852,14 +786,15 @@ class AMM {
     const fcmContract = fcmFactory.connect(this.fcmAddress, this.signer);
     const scaledNotional = this.scale(notional);
 
-    let vammContract = vammFactory.connect(this.id, this.signer);
-    let feeWad = await vammContract.feeWad();
-    let maxFee = BigNumber.from(scaledNotional).mul(feeWad).div(toBn("10"));
+    const isUnderlyingTokenApprovedForFCM = await this.isUnderlyingTokenApprovedForFCM();
+    if (!isUnderlyingTokenApprovedForFCM) {
+      await this.approveUnderlyingTokenForFCM();
+    }
 
-    await this.approveERC20(this.underlyingToken.id, maxFee, this.fcmAddress);
-
-    const yieldBearingTokenAddress = await fcmContract.underlyingYieldBearingToken();
-    await this.approveERC20(yieldBearingTokenAddress, scaledNotional, this.fcmAddress);
+    const isYieldBearingTokenApprovedForFCM = await this.isYieldBearingTokenApprovedForFCM();
+    if (!isYieldBearingTokenApprovedForFCM) {
+      await this.approveUnderlyingTokenForFCM();
+    }
 
     const fcmSwapTransaction = await fcmContract.initiateFullyCollateralisedFixedTakerSwap(
       scaledNotional,
@@ -875,6 +810,8 @@ class AMM {
       throw new Error("Transaction Confirmation Error");
     }
   }
+
+  // FCM unwind
 
   public async fcmUnwind({
     notionalToUnwind,
@@ -896,20 +833,18 @@ class AMM {
       sqrtPriceLimitX96 = TickMath.getSqrtRatioAtTick(TickMath.MIN_TICK + 1).toString();
     }
 
-    try {
+    const isFCMApproved = await this.isFCMApproved();
+    if (!isFCMApproved) {
       await this.approveFCM();
-    } catch (approvalError) {
-      throw approvalError;
     }
 
     const fcmContract = fcmFactory.connect(this.fcmAddress, this.signer);
     const scaledNotional = this.scale(notionalToUnwind);
 
-    let vammContract = vammFactory.connect(this.id, this.signer);
-    let feeWad = await vammContract.feeWad();
-    let maxFee = BigNumber.from(scaledNotional).mul(feeWad).div(toBn("10"));
-
-    await this.approveERC20(this.underlyingToken.id, maxFee, this.fcmAddress);
+    const isUnderlyingTokenApprovedForFCM = await this.isUnderlyingTokenApprovedForFCM();
+    if (!isUnderlyingTokenApprovedForFCM) {
+      await this.approveUnderlyingTokenForFCM();
+    }
 
     const fcmUnwindTransaction = await fcmContract.unwindFullyCollateralisedFixedTakerSwap(
       scaledNotional,
@@ -925,6 +860,8 @@ class AMM {
       throw new Error("Transaction Confirmation Error");
     }
   }
+
+  // FCM settlement
 
   public async settleFCMTrader(): Promise<ContractReceipt> {
     if (!this.signer) {
@@ -943,6 +880,220 @@ class AMM {
     }
   }
 
+  // scale/descale according to underlying token
+
+  public scale(value: number): string {
+    const price = Price.fromNumber(value);
+    const tokenAmount = TokenAmount.fromFractionalAmount(
+      this.underlyingToken,
+      price.numerator,
+      price.denominator,
+    );
+    const scaledValue = tokenAmount.scale();
+
+    return scaledValue;
+  }
+
+  public descale(value: BigNumber): number {
+    if (this.underlyingToken.decimals <= 3) {
+      return value.toNumber() / (10 ** this.underlyingToken.decimals);
+    }
+    else {
+      return value.div(BigNumber.from(10).pow(this.underlyingToken.decimals - 3)).toNumber() / 1000;
+    }
+  }
+
+  // fcm approval
+
+  public async isFCMApproved(): Promise<boolean | void> {
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
+    }
+
+    const factoryContract = factoryFactory.connect(FACTORY_ADDRESS, this.signer);
+    const signerAddress = await this.signer.getAddress();
+    const isApproved = await factoryContract.isApproved(signerAddress, this.fcmAddress);
+
+    return isApproved;
+  }
+
+  public async approveFCM(): Promise<ContractReceipt | void> {
+    const isApproved = await this.isFCMApproved();
+
+    if (isApproved) {
+      return;
+    }
+
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
+    }
+
+    const factoryContract = factoryFactory.connect(FACTORY_ADDRESS, this.signer);
+    const approvalTransaction = await factoryContract.setApproval(this.fcmAddress, true, this.overrides);
+
+    try {
+      const receipt = await approvalTransaction.wait();
+      return receipt;
+    }
+    catch (error) {
+      throw new Error("Transaction Confirmation Error");
+    }
+  }
+
+  // underlying token approval for periphery
+
+  public async isUnderlyingTokenApprovedForPeriphery(): Promise<boolean | void> {
+    if (!this.underlyingToken.id) {
+      throw new Error("No underlying token");
+    }
+
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
+    }
+
+    const signerAddress = await this.signer.getAddress();
+    const tokenAddress = this.underlyingToken.id;
+    const token = tokenFactory.connect(tokenAddress, this.signer);
+    const allowance = await token.allowance(signerAddress, PERIPHERY_ADDRESS, this.overrides);
+
+    return allowance.gte(MaxUint256Bn);
+  }
+
+  public async approveUnderlyingTokenForPeriphery(): Promise<ContractReceipt | void> {
+    const isApproved = await this.isUnderlyingTokenApprovedForPeriphery();
+    if (isApproved) {
+      return;
+    }
+
+    if (!this.underlyingToken.id) {
+      throw new Error("No underlying token");
+    }
+
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
+    }
+
+    const tokenAddress = this.underlyingToken.id;
+    const token = tokenFactory.connect(tokenAddress, this.signer);
+    const approvalTransaction = await token.approve(PERIPHERY_ADDRESS, MaxUint256Bn, this.overrides);
+
+    try {
+      const receipt = await approvalTransaction.wait();
+      return receipt;
+    }
+    catch (error) {
+      throw new Error("Token approval failed");
+    }
+  }
+
+  // underlying token approval for fcm
+
+  public async isUnderlyingTokenApprovedForFCM(): Promise<boolean | void> {
+    if (!this.underlyingToken.id) {
+      throw new Error("No underlying token");
+    }
+
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
+    }
+
+    const signerAddress = await this.signer.getAddress();
+    const tokenAddress = this.underlyingToken.id;
+    const token = tokenFactory.connect(tokenAddress, this.signer);
+    const allowance = await token.allowance(signerAddress, this.fcmAddress, this.overrides);
+
+    return allowance.gte(MaxUint256Bn);
+  }
+
+  public async approveUnderlyingTokenForFCM(): Promise<ContractReceipt | void> {
+    const isApproved = await this.isUnderlyingTokenApprovedForPeriphery();
+    if (isApproved) {
+      return;
+    }
+
+    if (!this.underlyingToken.id) {
+      throw new Error("No underlying token");
+    }
+
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
+    }
+
+    const tokenAddress = this.underlyingToken.id;
+    const token = tokenFactory.connect(tokenAddress, this.signer);
+    const approvalTransaction = await token.approve(this.fcmAddress, MaxUint256Bn, this.overrides);
+
+    try {
+      const receipt = await approvalTransaction.wait();
+      return receipt;
+    }
+    catch (error) {
+      throw new Error("Token approval failed");
+    }
+  }
+
+  // yield bearing token approval for fcm
+
+  public async isYieldBearingTokenApprovedForFCM(): Promise<boolean | void> {
+    if (!this.underlyingToken.id) {
+      throw new Error("No underlying token");
+    }
+
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
+    }
+
+    const signerAddress = await this.signer.getAddress();
+
+    const fcmContract = fcmFactory.connect(this.fcmAddress, this.signer);
+    const tokenAddress = await fcmContract.underlyingYieldBearingToken();
+
+    const token = tokenFactory.connect(tokenAddress, this.signer);
+    const allowance = await token.allowance(signerAddress, this.fcmAddress, this.overrides);
+
+    return allowance.gte(MaxUint256Bn);
+  }
+
+  // protocol name
+
+  public get protocol(): string {
+    const firstProtocolCharacter = this.rateOracle.protocol[0];
+    const tokenName = this.underlyingToken.name;
+
+    return `${firstProtocolCharacter.toLowerCase()}${tokenName}`;
+  }
+
+  public async approveYieldBearingTokenForFCM(): Promise<ContractReceipt | void> {
+    const isApproved = await this.isUnderlyingTokenApprovedForPeriphery();
+    if (isApproved) {
+      return;
+    }
+
+    if (!this.underlyingToken.id) {
+      throw new Error("No underlying token");
+    }
+
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
+    }
+
+    const fcmContract = fcmFactory.connect(this.fcmAddress, this.signer);
+    const tokenAddress = await fcmContract.underlyingYieldBearingToken();
+
+    const token = tokenFactory.connect(tokenAddress, this.signer);
+    const approvalTransaction = await token.approve(this.fcmAddress, MaxUint256Bn, this.overrides);
+
+    try {
+      const receipt = await approvalTransaction.wait();
+      return receipt;
+    }
+    catch (error) {
+      throw new Error("Token approval failed");
+    }
+  }
+
+  // start and end dates
+
   public get startDateTime(): DateTime {
     return timestampWadToDateTime(this.termStartTimestamp);
   }
@@ -951,7 +1102,9 @@ class AMM {
     return timestampWadToDateTime(this.termEndTimestamp);
   }
 
-  public async fixedApr(): Promise<number> {
+  // get position information
+
+  public async getFixedApr(): Promise<number> {
     if (!this.provider) {
       throw new Error('Blockchain not connected');
     }
@@ -961,13 +1114,6 @@ class AMM {
     const apr = tickToFixedRate(currentTick).toNumber();
 
     return apr;
-  }
-
-  public get protocol(): string {
-    const firstProtocolCharacter = this.rateOracle.protocol[0];
-    const tokenName = this.underlyingToken.name;
-
-    return `${firstProtocolCharacter.toLowerCase()}${tokenName}`;
   }
 
   public async getVariableApy(): Promise<number> {
@@ -1056,6 +1202,31 @@ class AMM {
     return this.descale(accruedCashflow);
   }
 
+  public async getVariableFactor(termStartTimestamp: BigNumber, termEndTimestamp: BigNumber): Promise<number> {
+    if (!this.provider) {
+      throw new Error('Blockchain not connected');
+    }
+    const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
+    try {
+      const result = await rateOracleContract.callStatic.variableFactor(termStartTimestamp, termEndTimestamp);
+      const resultScaled = result.div(BigNumber.from(10).pow(12)).toNumber() / 1000000;
+      return resultScaled;
+    }
+    catch (error) {
+      throw new Error("Cannot get variable factor");
+    }
+  }
+
+  public async getApy(termStartTimestamp: BigNumber, termEndTimestamp: BigNumber): Promise<number> {
+    if (!this.provider) {
+      throw new Error('Blockchain not connected');
+    }
+    const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
+    const result = await rateOracleContract.callStatic.getApyFromTo(termStartTimestamp, termEndTimestamp);
+    const resultScaled = result.div(BigNumber.from(10).pow(12)).toNumber() / 1000000;
+    return resultScaled;
+  }
+
   public async getPositionInformation(position: Position): Promise<PositionInfo> {
     if (!this.signer) {
       throw new Error('Wallet not connected');
@@ -1080,7 +1251,7 @@ class AMM {
 
     // fixed apr
     if (beforeMaturity) {
-      results.fixedApr = await this.fixedApr();
+      results.fixedApr = await this.getFixedApr();
     }
 
     const allSwaps = this.getAllSwaps(position);
@@ -1168,30 +1339,7 @@ class AMM {
     return results;
   }
 
-  public async getVariableFactor(termStartTimestamp: BigNumber, termEndTimestamp: BigNumber): Promise<number> {
-    if (!this.provider) {
-      throw new Error('Blockchain not connected');
-    }
-    const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
-    try {
-      const result = await rateOracleContract.callStatic.variableFactor(termStartTimestamp, termEndTimestamp);
-      const resultScaled = result.div(BigNumber.from(10).pow(12)).toNumber() / 1000000;
-      return resultScaled;
-    }
-    catch (error) {
-      throw new Error("Cannot get variable factor");
-    }
-  }
-
-  public async getApy(termStartTimestamp: BigNumber, termEndTimestamp: BigNumber): Promise<number> {
-    if (!this.provider) {
-      throw new Error('Blockchain not connected');
-    }
-    const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
-    const result = await rateOracleContract.callStatic.getApyFromTo(termStartTimestamp, termEndTimestamp);
-    const resultScaled = result.div(BigNumber.from(10).pow(12)).toNumber() / 1000000;
-    return resultScaled;
-  }
+  // tick functionalities
 
   public closestTickAndFixedRate(fixedRate: number): ClosestTickAndFixedRate {
     if (fixedRate < MIN_FIXED_RATE) {
