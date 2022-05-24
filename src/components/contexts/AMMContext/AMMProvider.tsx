@@ -18,7 +18,7 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
     useMemo(() => undefined, [!!amm.provider]),
   );
   const fixedApr = useAsyncFunction(
-    amm.fixedApr.bind(amm),
+    amm.getFixedApr.bind(amm),
     useMemo(() => undefined, [!!amm.provider]),
   );
   const mintMinimumMarginRequirement = useAsyncFunction(
