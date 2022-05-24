@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
 import { SystemStyleObject, Theme } from '@mui/system';
@@ -13,6 +13,7 @@ import {
   MarginAmount,
 } from '@components/composite';
 import { TraderControls, MarginControls, SwapInfo } from './components';
+import { useTokenApproval } from '@hooks';
 
 export type SwapFormProps = {
   endDate?: DateTime;
@@ -20,6 +21,7 @@ export type SwapFormProps = {
   formState: SwapFormState;
   maxMargin?: number;
   isEditingMargin?: boolean;
+  isFormValid: boolean;
   onCancel: () => void;
   onChangeMargin: (value: number) => void;
   onChangeMarginAction: (value: MintBurnFormMarginAction) => void;
@@ -28,6 +30,8 @@ export type SwapFormProps = {
   onSubmit: () => void;
   protocol?: string;
   startDate?: DateTime;
+  submitButtonText: ReactNode;
+  tokenApprovals: ReturnType<typeof useTokenApproval>;
   underlyingTokenName?: string;
 };
 
@@ -37,6 +41,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   formState,
   maxMargin,
   isEditingMargin,
+  isFormValid,
   onCancel,
   onChangeMargin,
   onChangeMarginAction,
@@ -45,18 +50,14 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   onSubmit,
   protocol,
   startDate,
+  submitButtonText,
+  tokenApprovals,
   underlyingTokenName,
 }) => {
   const { agent, onChangeAgent } = useAgent();
   const bottomSpacing: SystemStyleObject<Theme> = {
     marginBottom: (theme) => theme.spacing(6)
   }
-
-  const getSubmitLabel = () => {
-    if (isEditingMargin) return "Update Margin";
-    if(agent === Agents.FIXED_TRADER) return 'Trade Fixed Rate';
-    return 'Trade Variable Rate';
-  };
 
   return (
     <Panel
@@ -137,15 +138,21 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
       </Box>
 
       <Box sx={{ display: 'flex' }}>
-        <Button size="large" onClick={onSubmit}>
-          {getSubmitLabel()}
+        <Button 
+          disabled={!isFormValid || tokenApprovals.checkingApprovals || tokenApprovals.approving} 
+          onClick={onSubmit} 
+          size="large" 
+          sx={{ flexGrow: 1 }}
+        >
+          {submitButtonText}
         </Button>
+
         <Button
-          sx={{ marginLeft: (theme) => theme.spacing(4) }}
-          variant="darker"
+          sx={{ marginLeft: (theme) => theme.spacing(7), flexGrow: 0 }}
+          variant="dark"
           onClick={onCancel}
         >
-          Cancel
+          Back
         </Button>
       </Box>
   

@@ -9,6 +9,7 @@ export { default as useDispatch } from './useDispatch';
 export { default as usePositions } from './usePositions';
 export { default as useSelector } from './useSelector';
 export { default as useStateMemo } from './useStateMemo';
+export { default as useTokenApproval } from './useTokenApproval';
 export { default as useUniqueId } from './useUniqueId';
 export { default as useWallet } from './useWallet';
 export * from './useMintBurnForm';

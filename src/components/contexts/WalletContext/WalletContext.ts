@@ -4,7 +4,7 @@ import { Wallet, WalletName } from './types';
 
 const defaultConnect = (name: WalletName) => Promise.resolve();
 const defaultDisconnect = () => {};
-const defaultGetTokenBalance = () => Promise.resolve();
+const defaultGetTokenBalance = () => Promise.resolve(undefined);
 
 const WalletContext = createContext<Wallet>({
   status: 'initializing',

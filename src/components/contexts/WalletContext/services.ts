@@ -1,7 +1,8 @@
 import { WalletName, WalletRiskAssessment } from "./types";
 import detectEthereumProvider from '@metamask/detect-provider';
 import WalletConnectProvider from "@walletconnect/web3-provider";
-import { BigNumber, ethers } from "ethers";
+import { BigNumber, ethers, Contract } from "ethers";
+import { OverrideTypes } from "@utilities";
 
 /**
  * Will throw an error if the connected ethereum network does not match required network set in .env file
@@ -61,13 +62,16 @@ export const checkForTOSSignature = async (signer: ethers.providers.JsonRpcSigne
  * @param accountId - the ID of the account (wallet) to check
  */
 export const getTokenBalance = async (provider: ethers.providers.JsonRpcProvider, tokenId: string, accountId: string) => {
-  const contract = new ethers.Contract(tokenId, [
-    "function balanceOf(address _owner) public view returns (uint256 balance)",
-  ], provider);
+  type TokenContract = OverrideTypes<Contract, { balanceOf: (id: string) => Promise<string> }>;
+  const abi = ["function balanceOf(address _owner) public view returns (uint256 balance)"];
+  const contract = new ethers.Contract(tokenId, abi, provider) as unknown as TokenContract;
   
-  // eslint-disable-next-line
-  const currentBalance:string = await contract.balanceOf(accountId);
-  return BigNumber.from(currentBalance);
+  try {
+    const currentBalance = await contract.balanceOf(accountId);
+    return BigNumber.from(currentBalance);
+  } catch(e) {
+    return undefined;
+  }
 }
 
 /**
