@@ -2,9 +2,9 @@ import React, { ReactNode } from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
 import { SystemStyleObject, Theme } from '@mui/system';
-import { MintBurnFormMarginAction, SwapFormState, useAgent } from '@hooks';
+import { MintBurnFormMarginAction, SwapFormState, useAgent, useTokenApproval } from '@hooks';
 import { Agents } from '@components/contexts';
-import { Button, Panel } from '@components/atomic';
+import { Button, Panel, Typography } from '@components/atomic';
 import {
   IconLabel,
   ProtocolInformation,
@@ -13,7 +13,7 @@ import {
   MarginAmount,
 } from '@components/composite';
 import { TraderControls, MarginControls, SwapInfo } from './components';
-import { useTokenApproval } from '@hooks';
+import { colors } from '@theme';
 
 export type SwapFormProps = {
   endDate?: DateTime;
@@ -30,6 +30,7 @@ export type SwapFormProps = {
   onSubmit: () => void;
   protocol?: string;
   startDate?: DateTime;
+  submitButtonHint: ReactNode;
   submitButtonText: ReactNode;
   tokenApprovals: ReturnType<typeof useTokenApproval>;
   underlyingTokenName?: string;
@@ -50,6 +51,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   onSubmit,
   protocol,
   startDate,
+  submitButtonHint,
   submitButtonText,
   tokenApprovals,
   underlyingTokenName,
@@ -155,6 +157,10 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           Back
         </Button>
       </Box>
+
+      <Typography variant='body2' sx={{ marginTop: (theme) => theme.spacing(2), color: colors.lavenderWeb.darken015 }}>
+        {submitButtonHint}
+      </Typography>
   
     </Panel>
   );

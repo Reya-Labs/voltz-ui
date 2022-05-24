@@ -59,6 +59,7 @@ const NewPositionSwapForm: React.FunctionComponent = (args) => {
       onChangeNotional={form.setNotional}
       onChangePartialCollateralization={form.setPartialCollateralization}
       onSubmit={() => form.validate()}
+      submitButtonHint="Submit hint text here"
       submitButtonText="Submit"
       tokenApprovals={mockTokenApprovals}
     />
@@ -95,6 +96,7 @@ const EditingMarginSwapForm: React.FunctionComponent = (args) => {
       onChangeNotional={form.setNotional}
       onChangePartialCollateralization={form.setPartialCollateralization}
       onSubmit={() => form.validate()}
+      submitButtonHint="Submit hint text here"
       submitButtonText="Submit"
       tokenApprovals={mockTokenApprovals}
     />
