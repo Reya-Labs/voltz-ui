@@ -42,7 +42,7 @@ export const getSubmitButtonText = (isEditingMargin: boolean, tokenApprovals: Re
     return 'Approving...';
   }
 
-  if(formAction === SwapFormActions.FCM_SWAP) {
+  if (formAction === SwapFormActions.FCM_SWAP || formAction === SwapFormActions.FCM_UNWIND) {
     if (!tokenApprovals.FCMApproved) {
       return 'Approve FCM';
     }

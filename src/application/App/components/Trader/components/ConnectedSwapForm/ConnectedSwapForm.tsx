@@ -40,7 +40,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
   const handleSubmit = () => {
     if(!form.isValid) return;
 
-    if(formAction === SwapFormActions.FCM_SWAP) {
+    if (formAction === SwapFormActions.FCM_SWAP || formAction === SwapFormActions.FCM_UNWIND) {
       if(!tokenApprovals.FCMApproved) {
         tokenApprovals.approveFCM();
         return;
