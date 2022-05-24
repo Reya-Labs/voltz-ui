@@ -29,12 +29,18 @@ const NewPositionTemplate: ComponentStory<typeof MintBurnForm> = (args) => (
   </AgentProvider>
 );
 const NewPositionMintBurnForm: React.FunctionComponent = (args) => {
-  const form = useMintBurnForm(mockAmm);
+  const isEditingMargin = false;
+  const isEditingLiquidity = false;
+  const form = useMintBurnForm(mockAmm, isEditingMargin, isEditingLiquidity);
+
   return (
     <MintBurnForm 
       {...args} 
       errors={form.errors}
-      formState={form.state} 
+      formState={form.state}
+      isEditingMargin={isEditingMargin}
+      isEditingLiquidity={isEditingLiquidity}
+      isFormValid={form.isValid}
       onCancel={() => alert('cancel')}
       onChangeFixedLow={form.setFixedLow}
       onChangeFixedHigh={form.setFixedHigh}
@@ -62,12 +68,18 @@ const EditingMarginTemplate: ComponentStory<typeof MintBurnForm> = (args) => (
   </AgentProvider>
 );
 const EditingMarginMintBurnForm: React.FunctionComponent = (args) => {
-  const form = useMintBurnForm(mockAmm, { fixedLow: 2, fixedHigh: 6 });
+  const isEditingMargin = true;
+  const isEditingLiquidity = false;
+  const form = useMintBurnForm(mockAmm, isEditingMargin, isEditingLiquidity, { fixedLow: 2, fixedHigh: 6 });
+
   return (
     <MintBurnForm 
       {...args} 
       errors={form.errors}
       formState={form.state} 
+      isFormValid={form.isValid}
+      isEditingMargin={isEditingMargin}
+      isEditingLiquidity={isEditingLiquidity}
       onCancel={() => alert('cancel')}
       onChangeFixedLow={form.setFixedLow}
       onChangeFixedHigh={form.setFixedHigh}
@@ -86,7 +98,6 @@ EditingMargin.args = {
   fixedApr: 5,
   startDate: DateTime.now().minus(Duration.fromObject({ weeks: 2 })),
   endDate: DateTime.now().plus(Duration.fromObject({ weeks: 5 })),
-  isEditingMargin: true
 };
 
 // Editing the liquidity of a position
@@ -96,12 +107,18 @@ const EditingLiquidityTemplate: ComponentStory<typeof MintBurnForm> = (args) => 
   </AgentProvider>
 );
 const EditingLiquidityMintBurnForm: React.FunctionComponent = (args) => {
-  const form = useMintBurnForm(mockAmm, { fixedLow: 2, fixedHigh: 6 });
+  const isEditingMargin = false;
+  const isEditingLiquidity = true;
+  const form = useMintBurnForm(mockAmm, isEditingMargin, isEditingLiquidity, { fixedLow: 2, fixedHigh: 6 });
+
   return (
     <MintBurnForm 
       {...args} 
       errors={form.errors}
       formState={form.state} 
+      isEditingMargin={isEditingMargin}
+      isEditingLiquidity={isEditingLiquidity}
+      isFormValid={form.isValid}
       onCancel={() => alert('cancel')}
       onChangeFixedLow={form.setFixedLow}
       onChangeFixedHigh={form.setFixedHigh}
@@ -120,5 +137,4 @@ EditingLiquidity.args = {
   fixedApr: 5,
   startDate: DateTime.now().minus(Duration.fromObject({ weeks: 2 })),
   endDate: DateTime.now().plus(Duration.fromObject({ weeks: 5 })),
-  isEditingLiquidity: true
 };

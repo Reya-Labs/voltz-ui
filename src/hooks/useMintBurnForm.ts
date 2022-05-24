@@ -27,17 +27,18 @@ export type MintBurnFormState = {
 export type MintBurnForm = {
   balance?: BigNumber;
   errors: Record<string, string>,
-  setFixedHigh: Dispatch<SetStateAction<MintBurnFormState['fixedHigh']>>;
-  setFixedLow: Dispatch<SetStateAction<MintBurnFormState['fixedLow']>>;
-  setLiquidityAction: Dispatch<SetStateAction<MintBurnFormState['liquidityAction']>>;
-  setMargin: Dispatch<SetStateAction<MintBurnFormState['margin']>>;
-  setMarginAction: Dispatch<SetStateAction<MintBurnFormState['marginAction']>>;
-  setNotional: Dispatch<SetStateAction<MintBurnFormState['notional']>>;
+  isValid: boolean;
+  setFixedHigh: (value: MintBurnFormState['fixedHigh']) => void;
+  setFixedLow: (value: MintBurnFormState['fixedLow']) => void;
+  setLiquidityAction: (value: MintBurnFormState['liquidityAction']) => void;
+  setMargin: (value: MintBurnFormState['margin']) => void;
+  setMarginAction: (value: MintBurnFormState['marginAction']) => void;
+  setNotional: (value: MintBurnFormState['notional']) => void;
   state: MintBurnFormState,
   validate: (isEditingMargin: boolean, isEditingLiquidity: boolean) => boolean;
 };
 
-export const useMintBurnForm = (amm: AugmentedAMM, defaultValues: Partial<MintBurnFormState> = {}): MintBurnForm => {
+export const useMintBurnForm = (amm: AugmentedAMM, isEditingMargin: boolean, isEditingLiquidity: boolean, defaultValues: Partial<MintBurnFormState> = {}): MintBurnForm => {
   const defaultFixedHigh = !isUndefined(defaultValues.fixedHigh) ? defaultValues.fixedHigh : undefined;
   const defaultFixedLow = !isUndefined(defaultValues.fixedLow) ? defaultValues.fixedLow : undefined;
   const defaultLiquidityAction = defaultValues.liquidityAction || MintBurnFormLiquidityAction.ADD;
@@ -55,7 +56,9 @@ export const useMintBurnForm = (amm: AugmentedAMM, defaultValues: Partial<MintBu
   const [balance, setBalance] = useState<BigNumber>();
   const [errors, setErrors] = useState<MintBurnForm['errors']>({});
   const { getTokenBalance } = useWallet();
+  const [isValid, setIsValid] = useState<boolean>(false);
   const token = useRef<Token>();
+  const touched = useRef<string[]>([]);
 
   // Load the users balance of the required token so we can use it for validation later
   useEffect(() => {
@@ -71,7 +74,56 @@ export const useMintBurnForm = (amm: AugmentedAMM, defaultValues: Partial<MintBu
     }
   }, [amm.underlyingToken, amm.underlyingToken.id, getTokenBalance]);
 
-  const validate = (isEditingMargin: boolean, isEditingLiquidity: boolean) => {
+  // validate the form after values change
+  useEffect(() => {
+    if(touched.current.length) {
+      validate();
+    }
+  }, [fixedHigh, fixedLow, liquidityAction, margin, marginAction, notional]);
+
+  const updateFixedHigh = (value: MintBurnFormState['fixedHigh']) => {
+    if(!touched.current.includes('fixedHigh')) {
+      touched.current.push('fixedHigh');
+    } 
+    setFixedHigh(value);
+  }
+
+  const updateFixedLow = (value: MintBurnFormState['fixedLow']) => {
+    if(!touched.current.includes('fixedLow')) {
+      touched.current.push('fixedLow');
+    }
+    setFixedLow(value);
+  }
+
+  const updateLiquidityAction = (value: MintBurnFormState['liquidityAction']) => {
+    if(!touched.current.includes('liquidityAction')) {
+      touched.current.push('liquidityAction');
+    }
+    setLiquidityAction(value);
+  }
+
+  const updateMargin = (value: MintBurnFormState['margin']) => {
+    if(!touched.current.includes('margin')) {
+      touched.current.push('margin');
+    }
+    setMargin(value);
+  }
+
+  const updateMarginAction = (value: MintBurnFormState['marginAction']) => {
+    if(!touched.current.includes('marginAction')) {
+      touched.current.push('marginAction');
+    }
+    setMarginAction(value);
+  }
+
+  const updateNotional = (value: MintBurnFormState['notional']) => {
+    if(!touched.current.includes('notional')) {
+      touched.current.push('notional');
+    }
+    setNotional(value);
+  }
+
+  const validate = () => {
     if(!isEditingMargin && !isEditingLiquidity) {
       return validateNewPosition();
     } else if(isEditingMargin) {
@@ -83,30 +135,47 @@ export const useMintBurnForm = (amm: AugmentedAMM, defaultValues: Partial<MintBu
 
   const validateNewPosition = () => {
     const err: Record<string, string> = {};
+    let valid = true;
 
     if(isUndefined(fixedLow)) {
-      err['fixedLow'] = 'Please enter a value';
+      valid = false;
+      if(touched.current.includes('fixedLow')) {
+        err['fixedLow'] = 'Please enter a value';
+      }
     }
 
     if(isUndefined(fixedHigh)) {
-      err['fixedHigh'] = 'Please enter a value';
+      valid = false;
+      if(touched.current.includes('fixedHigh')) {
+        err['fixedHigh'] = 'Please enter a value';
+      }
     }
       
     if(!isUndefined(fixedLow) && !isUndefined(fixedHigh) && fixedLow >= fixedHigh) {
-      err['fixedLow'] = 'Lower Rate must be smaller than Upper Rate';
+      valid = false;
+      if(touched.current.includes('fixedHigh') || touched.current.includes('fixedLow')) {
+        err['fixedLow'] = 'Lower Rate must be smaller than Upper Rate';
+      }
     }
 
     if(isUndefined(notional) || notional === 0) {
-      err['notional'] = 'Please enter an amount';
+      valid = false;
+      if(touched.current.includes('notional')) {
+        err['notional'] = 'Please enter an amount';
+      }
     } 
 
     if(isUndefined(margin)) {
-      err['margin'] = 'Please enter an amount';
+      valid = false;
+      if(touched.current.includes('margin')) {
+        err['margin'] = 'Please enter an amount';
+      }
     }
 
     // check user has sufficient funds
     if(!isUndefined(notional) && notional !== 0 && !isUndefined(margin) && !isUndefined(balance)) {
       if(amm.descale(balance) < (margin + notional)) {
+        valid = false;
         err['notional'] = 'Insufficient funds';
 
         // Only set the error on the margin field if the value !== 0
@@ -117,14 +186,19 @@ export const useMintBurnForm = (amm: AugmentedAMM, defaultValues: Partial<MintBu
     }
 
     setErrors(err);
-    return Object.keys(err).length === 0;
+    setIsValid(valid);
+    return valid;
   };
 
   const validateEditMargin = () => {
     const err: Record<string, string> = {};
+    let valid = true;
 
     if(isUndefined(margin) || margin === 0) {
-      err['margin'] = 'Please enter an amount';
+      valid = false;
+      if(touched.current.includes('margin')) {
+        err['margin'] = 'Please enter an amount';
+      }
     }
 
     // If adding margin
@@ -132,30 +206,42 @@ export const useMintBurnForm = (amm: AugmentedAMM, defaultValues: Partial<MintBu
       // check user has sufficient funds
       if(!isUndefined(balance) && !isUndefined(margin)) {
         if(amm.descale(balance) < margin) {
-          err['margin'] = 'Insufficient funds';
+          valid = false;
+          if(touched.current.includes('margin')) {
+            err['margin'] = 'Insufficient funds';
+          }
         }
       }
     }
     
     setErrors(err);
-    return Object.keys(err).length === 0;
+    setIsValid(valid);
+    return valid;
   };
 
   const validateEditLiquidity = () => {
     const err: Record<string, string> = {};
+    let valid = true;
 
     if(isUndefined(notional) || notional === 0) {
-      err['notional'] = 'Please enter an amount';
+      valid = false;
+      if(touched.current.includes('notional')) {
+        err['notional'] = 'Please enter an amount';
+      }
     } 
 
     if(isUndefined(margin)) {
-      err['margin'] = 'Please enter an amount';
+      valid = false;
+      if(touched.current.includes('margin')) {
+        err['margin'] = 'Please enter an amount';
+      }
     }
 
     // If adding liquidity
     if(liquidityAction === MintBurnFormLiquidityAction.ADD) {
       // check user has sufficient funds
       if(!isUndefined(notional) && notional !== 0 && !isUndefined(margin) && !isUndefined(balance)) {
+        valid = false;
         if(amm.descale(balance) < (margin + notional)) {
           err['notional'] = 'Insufficient funds';
 
@@ -168,18 +254,20 @@ export const useMintBurnForm = (amm: AugmentedAMM, defaultValues: Partial<MintBu
     }
     
     setErrors(err);
-    return Object.keys(err).length === 0;
+    setIsValid(valid);
+    return valid;
   };
 
   return {
     balance,
     errors,
-    setFixedHigh,
-    setFixedLow,
-    setLiquidityAction,
-    setMargin,
-    setMarginAction,
-    setNotional,
+    isValid,
+    setFixedHigh: updateFixedHigh,
+    setFixedLow: updateFixedLow,
+    setLiquidityAction: updateLiquidityAction,
+    setMargin: updateMargin,
+    setMarginAction: updateMarginAction,
+    setNotional: updateNotional,
     state: {
       fixedHigh,
       fixedLow,

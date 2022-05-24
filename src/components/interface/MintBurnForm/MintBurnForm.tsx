@@ -23,6 +23,7 @@ export type MintBurnFormProps = {
   maxMargin?: number;
   isEditingMargin?: boolean;
   isEditingLiquidity?: boolean;
+  isFormValid: boolean;
   formState: MintBurnFormState;
   errors: Record<string, string>;
   onChangeFixedLow: (value: number, increment: boolean | null) => void;
@@ -42,6 +43,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   maxMargin,
   isEditingMargin = false,
   isEditingLiquidity = false,
+  isFormValid,
   formState,
   errors,
   onChangeFixedLow,
@@ -177,15 +179,15 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
       )}
 
       <Box sx={{ display: 'flex' }}>
-        <Button size="large" onClick={onSubmit}>
+        <Button disabled={!isFormValid} size="large" onClick={onSubmit} sx={{ flexGrow: 1 }}>
           {isAddingLiquidity ? 'Provide Liquidity' : 'Burn Liquidity'}
         </Button>
         <Button
-          sx={{ marginLeft: (theme) => theme.spacing(6) }}
-          variant="darker"
+          sx={{ marginLeft: (theme) => theme.spacing(6), flexGrow: 0 }}
+          variant="dark"
           onClick={onCancel}
         >
-          Cancel
+          Back
         </Button>
       </Box>
     </Panel>
