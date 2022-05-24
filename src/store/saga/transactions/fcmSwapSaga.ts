@@ -4,7 +4,7 @@ import { DateTime } from 'luxon';
 
 import { getErrorMessage } from '@utilities';
 import { FCMSwapAction } from '../../types';
-import { deserializeAmm, getSigner, postTransactionData, serializeAmm } from '../../utilities';
+import { deserializeAmm, getSigner} from '../../utilities';
 import * as actions from '../../actions';
 
 
@@ -22,8 +22,7 @@ function* fcmSwapSaga(action: FCMSwapAction) {
         return;
     }
 
-    const { id, notional, margin } = action.payload.transaction;
-    const ammInformation = serializeAmm(amm)
+    const { id, notional } = action.payload.transaction;
 
     let result: ContractReceipt | void;
     try {
@@ -31,25 +30,6 @@ function* fcmSwapSaga(action: FCMSwapAction) {
         result = yield call([amm, 'fcmSwap'], {
             notional,
         });
-        //  CALLING API FOR TX MONITORING HERE
-        if (amm.signer) {
-            amm.signer.getAddress().then((signerAddress) => {
-                if (result) {
-                    postTransactionData(
-                        signerAddress,
-                        ammInformation.rateOracle.token.name.toLowerCase(),
-                        margin.toString(),
-                        ammInformation.fcmAddress, // THIS NEEDS TO BE FCM CONTRACT
-                        id,
-                        result.transactionHash,
-                        DateTime.now().toISO(),
-                        'CRYPTO_DEPOSIT'
-                    ).then()
-                }
-            })
-        }
-
-
 
     } catch (error) {
         yield put(
