@@ -8,7 +8,7 @@ import { actions, selectors } from '@store';
 import { MintBurnFormMarginAction, useAgent, useDispatch, useSelector, useTokenApproval } from '@hooks';
 import { SwapForm, PendingTransaction } from '@components/interface';
 import useSwapForm from 'src/hooks/useSwapForm';
-import { getFormAction, getSubmitAction, getSubmitButtonText } from './services';
+import { getFormAction, getSubmitAction, getSubmitButtonHint, getSubmitButtonText } from './services';
 import { SwapFormActions } from './types';
 
 export type ConnectedSwapFormProps = {
@@ -35,6 +35,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
 
   const formAction = getFormAction(isEditingMargin, form.state.partialCollateralization, agent);
   const isRemovingMargin = isEditingMargin && form.state.marginAction === MintBurnFormMarginAction.REMOVE;
+  const submitButtonHint = getSubmitButtonHint(amm, formAction, form.errors, form.isValid, tokenApprovals);
   const submitButtonText = getSubmitButtonText(isEditingMargin, tokenApprovals, amm, formAction, agent);
 
   const handleSubmit = () => {
@@ -105,6 +106,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
         onSubmit={handleSubmit}
         protocol={amm.protocol}
         startDate={amm.startDateTime}
+        submitButtonHint={submitButtonHint}
         submitButtonText={submitButtonText}
         tokenApprovals={tokenApprovals}
         underlyingTokenName={amm.underlyingToken.name}

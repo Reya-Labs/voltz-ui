@@ -1,18 +1,43 @@
 import { useCallback, useEffect, useState } from 'react';
 import { AugmentedAMM } from '@utilities';
+import { isUndefined } from 'lodash';
+
+export enum ApprovalType {
+  FCM='FCM',
+  UTOKEN_FCM='underlyingTokenFCM',
+  YBTOKEN_FCM='yieldBearingTokenFCM',
+  UTOKEN_PERIPHERY='UnderlyingTokenPeriphery'
+};
+
+export type ApprovalErrorResponse = {
+  code: number; 
+  message: string;
+};
 
 const useTokenApproval = (amm: AugmentedAMM) => {
   const [checkingApprovals, setCheckingApprovals] = useState(false);
   const [approving, setApproving] = useState(false);
+  const [lastApproval, setLastApproval] = useState<ApprovalType>();
+  const [lastError, setLastError] = useState<ApprovalErrorResponse>();
 
   const [FCMApproved, setFCMApproved] = useState(false);
   const [underlyingTokenApprovedForFCM, setUnderlyingTokenApprovedForFCM] = useState(false);
   const [underlyingTokenApprovedForPeriphery, setUnderlyingTokenApprovedForPeriphery] = useState(false);
   const [yieldBearingTokenApprovedForFCM, setYieldBearingTokenApprovedForFCM] = useState(false);
 
+  const handleApprovalError = (err: ApprovalErrorResponse) => {
+    setLastError({
+      code: !isUndefined(err?.code) ? err.code : 0,
+      message: !isUndefined(err?.message) ? err.message : 'An unknown error has occurred',
+    })
+  }
+
   // Check if we need approval for any tokens (user might have approved these already)
   useEffect(() => {
     setCheckingApprovals(true);
+    setLastApproval(undefined);
+    setLastError(undefined);
+
     Promise.allSettled([
       amm.isFCMApproved(),
       amm.isUnderlyingTokenApprovedForFCM(),
@@ -44,11 +69,14 @@ const useTokenApproval = (amm: AugmentedAMM) => {
 
   const approveFCM = useCallback(async () => {
     setApproving(true);
+    setLastError(undefined);
     try {
       const approved = await amm.approveFCM();
       setFCMApproved(!!approved);
+      setLastApproval(ApprovalType.FCM);
       setApproving(false);
     } catch(e) {
+      handleApprovalError(e as ApprovalErrorResponse);
       setFCMApproved(false);
       setApproving(false);
     }
@@ -56,11 +84,14 @@ const useTokenApproval = (amm: AugmentedAMM) => {
 
   const approveUnderlyingTokenForFCM = useCallback(async () => {
     setApproving(true);
+    setLastError(undefined);
     try {
       const approved = await amm.approveUnderlyingTokenForFCM();
       setUnderlyingTokenApprovedForFCM(!!approved);
+      setLastApproval(ApprovalType.UTOKEN_FCM);
       setApproving(false);
     } catch(e) {
+      handleApprovalError(e as ApprovalErrorResponse);
       setUnderlyingTokenApprovedForFCM(false);
       setApproving(false);
     }
@@ -68,11 +99,14 @@ const useTokenApproval = (amm: AugmentedAMM) => {
 
   const approveUnderlyingTokenForPeriphery = useCallback(async () => {
     setApproving(true);
+    setLastError(undefined);
     try {
       const approved = await amm.approveUnderlyingTokenForPeriphery();
       setUnderlyingTokenApprovedForPeriphery(!!approved);
+      setLastApproval(ApprovalType.UTOKEN_PERIPHERY);
       setApproving(false);
     } catch(e) {
+      handleApprovalError(e as ApprovalErrorResponse);
       setUnderlyingTokenApprovedForPeriphery(false);
       setApproving(false);
     }
@@ -80,11 +114,14 @@ const useTokenApproval = (amm: AugmentedAMM) => {
 
   const approveYieldBearingTokenForFCM = useCallback(async () => {
     setApproving(true);
+    setLastError(undefined);
     try {
       const approved = await amm.approveYieldBearingTokenForFCM();
       setYieldBearingTokenApprovedForFCM(!!approved);
+      setLastApproval(ApprovalType.YBTOKEN_FCM);
       setApproving(false);
     } catch(e) {
+      handleApprovalError(e as ApprovalErrorResponse);
       setYieldBearingTokenApprovedForFCM(false);
       setApproving(false);
     }
@@ -97,6 +134,8 @@ const useTokenApproval = (amm: AugmentedAMM) => {
     approveUnderlyingTokenForPeriphery,
     approveYieldBearingTokenForFCM,
     checkingApprovals,
+    lastApproval,
+    lastError,
     FCMApproved,
     underlyingTokenApprovedForFCM,
     underlyingTokenApprovedForPeriphery,
