@@ -4,7 +4,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { AgentProvider, Agents } from '@components/contexts';
 import MintBurnForm from './MintBurnForm';
-import { useMintBurnForm } from '@hooks';
+import { useMintBurnForm, useTokenApproval } from '@hooks';
 import { AugmentedAMM } from '@utilities';
 
 export default {
@@ -21,6 +21,19 @@ const mockAmm = ({
     name: 'gil'
   }
 } as unknown) as AugmentedAMM;
+
+const mockTokenApprovals = {
+  approving: false,
+  approveFCM: () => Promise.resolve(),
+  approveUnderlyingTokenForFCM: () => Promise.resolve(),
+  approveUnderlyingTokenForPeriphery: () => Promise.resolve(),
+  approveYieldBearingTokenForFCM: () => Promise.resolve(),
+  checkingApprovals: false,
+  FCMApproved: true,
+  underlyingTokenApprovedForFCM: true,
+  underlyingTokenApprovedForPeriphery: true,
+  yieldBearingTokenApprovedForFCM: true
+} as ReturnType<typeof useTokenApproval>
 
 // Creating a new position
 const NewPositionTemplate: ComponentStory<typeof MintBurnForm> = (args) => (
@@ -49,6 +62,8 @@ const NewPositionMintBurnForm: React.FunctionComponent = (args) => {
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
       onSubmit={() => form.validate(false, false)}
+      submitButtonText="Submit"
+      tokenApprovals={mockTokenApprovals}
     />
   );
 };
@@ -88,6 +103,8 @@ const EditingMarginMintBurnForm: React.FunctionComponent = (args) => {
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
       onSubmit={() => form.validate(true, false)}
+      submitButtonText="Submit"
+      tokenApprovals={mockTokenApprovals}
     />
   );
 };
@@ -127,6 +144,8 @@ const EditingLiquidityMintBurnForm: React.FunctionComponent = (args) => {
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
       onSubmit={() => form.validate(false, true)}
+      submitButtonText="Submit"
+      tokenApprovals={mockTokenApprovals}
     />
   );
 };

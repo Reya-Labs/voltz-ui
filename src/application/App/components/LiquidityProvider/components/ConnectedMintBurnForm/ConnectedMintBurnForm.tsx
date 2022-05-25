@@ -5,10 +5,11 @@ import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
 import { AugmentedAMM } from '@utilities';
 import { routes } from '@routes';
 import { actions, selectors } from '@store';
-import { MintBurnFormLiquidityAction, MintBurnFormMarginAction, useAgent, useDispatch, useMintBurnForm, useSelector, useTokenApproval } from '@hooks';
+import { useAgent, useDispatch, useMintBurnForm, useSelector, useTokenApproval } from '@hooks';
 import { AMMProvider } from '@components/contexts';
 import { MintBurnForm, PendingTransaction } from '@components/interface';
 import { updateFixedRate } from './utilities';
+import { getFormAction, getSubmitAction, getSubmitButtonText } from './services';
 
 export type ConnectedMintBurnFormProps = {
   amm: AugmentedAMM;
@@ -34,12 +35,12 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     fixedHigh: position ? parseFloat(position.fixedRateUpper.toFixed() ) : undefined
   }
   const form = useMintBurnForm(amm, isEditingMargin, isEditingLiquidity, defaultValues);
-  const tokenApprovals = useTokenApproval(amm);
+  const tokenApprovals = useTokenApproval(amm, true);
 
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
-  const isBurningLiquidity = (isEditingLiquidity && form.state.liquidityAction === MintBurnFormLiquidityAction.BURN);
-  const isRemovingMargin = (isEditingMargin && form.state.marginAction === MintBurnFormMarginAction.REMOVE);
+  const formAction = getFormAction(isEditingMargin, isEditingLiquidity, form.state.liquidityAction);
+  const submitButtonText = getSubmitButtonText(isEditingLiquidity, tokenApprovals, amm, form.state.liquidityAction);
 
   const handleComplete = () => {
     onReset();
@@ -62,29 +63,14 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   );
 
   const handleSubmit = () => {
-    // dont go any further if form is not valid
     if(!form.isValid) return;
 
-    const transaction = { 
-      ammId: amm.id, 
-      agent,
-      fixedLow: form.state.fixedLow,
-      fixedHigh: form.state.fixedHigh,
-      margin: Math.abs(form.state.margin as number) * (isRemovingMargin ? -1 : 1),
-      notional: Math.abs(form.state.notional as number) * (isBurningLiquidity ? -1 : 1),
-    };
+    if(!tokenApprovals.underlyingTokenApprovedForPeriphery) {
+      tokenApprovals.approveUnderlyingTokenForPeriphery();
+      return;
+    }
 
-    let action;
-    if (isEditingMargin) {
-      action = actions.updatePositionMarginAction(amm, transaction);
-    } 
-    else if (!isEditingLiquidity || form.state.liquidityAction === MintBurnFormLiquidityAction.ADD) {
-      action = actions.mintAction(amm, transaction);
-    } 
-    else {
-      action = actions.burnAction(amm, transaction);
-    } 
-      
+    const action = getSubmitAction(amm, formAction, form.state, agent, isEditingLiquidity, isEditingMargin);
     setTransactionId(action.payload.transaction.id);
     dispatch(action);
   };
@@ -125,6 +111,8 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
         onSubmit={handleSubmit}
         protocol={amm.protocol}
         startDate={amm.startDateTime}
+        submitButtonText={submitButtonText}
+        tokenApprovals={tokenApprovals}
       />
     </AMMProvider>
   );
