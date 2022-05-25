@@ -14,6 +14,7 @@ import {
 } from '@components/composite';
 import { TraderControls, MarginControls, SwapInfo } from './components';
 import { colors } from '@theme';
+import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 
 export type SwapFormProps = {
   endDate?: DateTime;
@@ -30,6 +31,8 @@ export type SwapFormProps = {
   onSubmit: () => void;
   protocol?: string;
   startDate?: DateTime;
+  swapInfo: InfoPostSwap | void | null;
+  swapInfoLoading: boolean;
   submitButtonHint: ReactNode;
   submitButtonText: ReactNode;
   tokenApprovals: ReturnType<typeof useTokenApproval>;
@@ -53,6 +56,8 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   startDate,
   submitButtonHint,
   submitButtonText,
+  swapInfo,
+  swapInfoLoading,
   tokenApprovals,
   underlyingTokenName,
 }) => {
@@ -136,7 +141,11 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
       )}
 
       <Box sx={bottomSpacing}>
-        <SwapInfo notional={formState.notional} underlyingTokenName={underlyingTokenName} />
+        <SwapInfo 
+          data={swapInfo} 
+          loading={swapInfoLoading} 
+          underlyingTokenName={underlyingTokenName} 
+        />
       </Box>
 
       <Box sx={{ display: 'flex' }}>

@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { routes } from '@routes';
 import { AugmentedAMM } from '@utilities';
-import { AMMProvider } from '@components/contexts';
 import { actions, selectors } from '@store';
-import { MintBurnFormMarginAction, useAgent, useDispatch, useSelector, useTokenApproval } from '@hooks';
+import { MintBurnFormMarginAction, useAgent, useAMMContext, useDispatch, useSelector, useTokenApproval } from '@hooks';
 import { SwapForm, PendingTransaction } from '@components/interface';
 import useSwapForm from 'src/hooks/useSwapForm';
 import { getFormAction, getSubmitAction, getSubmitButtonHint, getSubmitButtonText } from './services';
 import { SwapFormActions } from './types';
+import { isUndefined } from 'lodash';
 
 export type ConnectedSwapFormProps = {
   amm: AugmentedAMM;
@@ -25,9 +25,10 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
   const { agent } = useAgent();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { swapInfo: { call: loadSwapInfo, loading: swapInfoLoading, result: swapInfoData } } = useAMMContext();
 
   const defaultValues = {};
-  const form = useSwapForm(amm, isEditingMargin, defaultValues);
+  const form = useSwapForm(amm, isEditingMargin, swapInfoData?.marginRequirement, defaultValues);
   const tokenApprovals = useTokenApproval(amm);
 
   const [transactionId, setTransactionId] = useState<string | undefined>();
@@ -74,6 +75,13 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
     dispatch(action);
   }
 
+  // Load the swap summary info
+  useEffect(() => {
+    if (!isUndefined(form.state.notional) && form.state.notional !== 0) {
+      loadSwapInfo({ notional: form.state.notional });
+    }
+  }, [loadSwapInfo, form.state.notional, agent]);
+
   if (!amm) {
     return null;
   }
@@ -91,27 +99,27 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
   }
 
   return (
-    <AMMProvider amm={amm}>
-      <SwapForm
-        endDate={amm.endDateTime}
-        errors={form.errors}
-        formState={form.state}
-        isEditingMargin={isEditingMargin}
-        isFormValid={form.isValid}
-        onCancel={onReset}
-        onChangeMargin={form.setMargin}
-        onChangeMarginAction={form.setMarginAction}
-        onChangeNotional={form.setNotional}
-        onChangePartialCollateralization={form.setPartialCollateralization}
-        onSubmit={handleSubmit}
-        protocol={amm.protocol}
-        startDate={amm.startDateTime}
-        submitButtonHint={submitButtonHint}
-        submitButtonText={submitButtonText}
-        tokenApprovals={tokenApprovals}
-        underlyingTokenName={amm.underlyingToken.name}
-      />
-    </AMMProvider>
+    <SwapForm
+      endDate={amm.endDateTime}
+      errors={form.errors}
+      formState={form.state}
+      isEditingMargin={isEditingMargin}
+      isFormValid={form.isValid}
+      onCancel={onReset}
+      onChangeMargin={form.setMargin}
+      onChangeMarginAction={form.setMarginAction}
+      onChangeNotional={form.setNotional}
+      onChangePartialCollateralization={form.setPartialCollateralization}
+      onSubmit={handleSubmit}
+      protocol={amm.protocol}
+      startDate={amm.startDateTime}
+      swapInfo={swapInfoData}
+      swapInfoLoading={swapInfoLoading}
+      submitButtonHint={submitButtonHint}
+      submitButtonText={submitButtonText}
+      tokenApprovals={tokenApprovals}
+      underlyingTokenName={amm.underlyingToken.name}
+    />
   );
 };
 

@@ -38,7 +38,13 @@ export type MintBurnForm = {
   validate: (isEditingMargin: boolean, isEditingLiquidity: boolean) => boolean;
 };
 
-export const useMintBurnForm = (amm: AugmentedAMM, isEditingMargin: boolean, isEditingLiquidity: boolean, defaultValues: Partial<MintBurnFormState> = {}): MintBurnForm => {
+export const useMintBurnForm = (
+  amm: AugmentedAMM, 
+  isEditingMargin: boolean, 
+  isEditingLiquidity: boolean, 
+  minimumRequiredMargin: number | undefined, 
+  defaultValues: Partial<MintBurnFormState> = {}
+): MintBurnForm => {
   const defaultFixedHigh = !isUndefined(defaultValues.fixedHigh) ? defaultValues.fixedHigh : undefined;
   const defaultFixedLow = !isUndefined(defaultValues.fixedLow) ? defaultValues.fixedLow : undefined;
   const defaultLiquidityAction = defaultValues.liquidityAction || MintBurnFormLiquidityAction.ADD;
@@ -79,7 +85,7 @@ export const useMintBurnForm = (amm: AugmentedAMM, isEditingMargin: boolean, isE
     if(touched.current.length) {
       validate();
     }
-  }, [fixedHigh, fixedLow, liquidityAction, margin, marginAction, notional]);
+  }, [fixedHigh, fixedLow, liquidityAction, margin, marginAction, notional, minimumRequiredMargin]);
 
   const updateFixedHigh = (value: MintBurnFormState['fixedHigh']) => {
     if(!touched.current.includes('fixedHigh')) {
@@ -165,7 +171,7 @@ export const useMintBurnForm = (amm: AugmentedAMM, isEditingMargin: boolean, isE
       }
     } 
 
-    if(isUndefined(margin)) {
+    if(isUndefined(margin) || margin === 0) {
       valid = false;
       if(touched.current.includes('margin')) {
         err['margin'] = 'Please enter an amount';
@@ -182,6 +188,14 @@ export const useMintBurnForm = (amm: AugmentedAMM, isEditingMargin: boolean, isE
         if (margin !== 0) {
           err['margin'] = 'Insufficient funds';
         }
+      }
+    }
+
+    // Check that the input margin is >= minimum required margin
+    if(!isUndefined(minimumRequiredMargin) && !isUndefined(margin) && margin !== 0 && margin < minimumRequiredMargin) {
+      valid = false;
+      if(touched.current.includes('margin')) {
+        err['margin'] = 'Not enough margin';
       }
     }
 

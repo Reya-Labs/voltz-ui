@@ -25,7 +25,7 @@ export type SwapFormData = {
   validate: () => boolean;
 };
 
-export const useSwapForm = (amm: AugmentedAMM, isEditingMargin: boolean, defaultValues: Partial<SwapFormState> = {}): SwapFormData => {
+export const useSwapForm = (amm: AugmentedAMM, isEditingMargin: boolean, minimumRequiredMargin: number | undefined, defaultValues: Partial<SwapFormState> = {}): SwapFormData => {
   const defaultMargin = !isUndefined(defaultValues.margin) ? defaultValues.margin : 0;
   const defaultMarginAction = defaultValues.marginAction || MintBurnFormMarginAction.ADD;
   const defaultNotional = !isUndefined(defaultValues.notional) ? defaultValues.notional : 0;
@@ -64,7 +64,7 @@ export const useSwapForm = (amm: AugmentedAMM, isEditingMargin: boolean, default
     if(touched.current.length) {
       validate();
     }
-  }, [margin, marginAction, notional, partialCollateralization])
+  }, [margin, marginAction, notional, partialCollateralization, minimumRequiredMargin])
 
 
   const updateMargin = (value: SwapFormState['margin']) => {
@@ -103,6 +103,21 @@ export const useSwapForm = (amm: AugmentedAMM, isEditingMargin: boolean, default
       valid = false;
       if(touched.current.includes('notional')) {
         err['notional'] = 'Please enter an amount';
+      }
+    }
+
+    if(isUndefined(margin) || margin === 0) {
+      valid = false;
+      if(touched.current.includes('margin')) {
+        err['margin'] = 'Please enter an amount';
+      }
+    }
+
+    // Check that the input margin is >= minimum required margin
+    if(!isUndefined(minimumRequiredMargin) && !isUndefined(margin) && margin !== 0 && margin < minimumRequiredMargin) {
+      valid = false;
+      if(touched.current.includes('margin')) {
+        err['margin'] = 'Not enough margin';
       }
     }
 

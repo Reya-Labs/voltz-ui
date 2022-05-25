@@ -1,15 +1,15 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
 
 import { AugmentedAMM } from '@utilities';
 import { routes } from '@routes';
 import { actions, selectors } from '@store';
-import { useAgent, useDispatch, useMintBurnForm, useSelector, useTokenApproval } from '@hooks';
-import { AMMProvider } from '@components/contexts';
+import { useAgent, useAMMContext, useDispatch, useMintBurnForm, useSelector, useTokenApproval } from '@hooks';
 import { MintBurnForm, PendingTransaction } from '@components/interface';
 import { updateFixedRate } from './utilities';
 import { getFormAction, getSubmitAction, getSubmitButtonHint, getSubmitButtonText } from './services';
+import { isUndefined } from 'lodash';
 
 export type ConnectedMintBurnFormProps = {
   amm: AugmentedAMM;
@@ -29,12 +29,13 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   const { agent } = useAgent();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { mintMinimumMarginRequirement: { call: loadMintInfo, loading: mintInfoLoading, result: mintInfoData } } = useAMMContext();
   
   const defaultValues = {
     fixedLow: position ? parseFloat(position.fixedRateLower.toFixed() ) : undefined,
     fixedHigh: position ? parseFloat(position.fixedRateUpper.toFixed() ) : undefined
   }
-  const form = useMintBurnForm(amm, isEditingMargin, isEditingLiquidity, defaultValues);
+  const form = useMintBurnForm(amm, isEditingMargin, isEditingLiquidity, mintInfoData || undefined, defaultValues);
   const tokenApprovals = useTokenApproval(amm, true);
 
   const [transactionId, setTransactionId] = useState<string | undefined>();
@@ -76,6 +77,21 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     dispatch(action);
   };
 
+  // Load the mint summary info
+  useEffect(() => {
+    if (
+      !isUndefined(form.state.notional) && form.state.notional !== 0 &&
+      !isUndefined(form.state.fixedLow) && form.state.fixedLow !== 0 &&
+      !isUndefined(form.state.fixedHigh) && form.state.fixedHigh !== 0
+    ) {
+      loadMintInfo({ 
+        fixedLow: form.state.fixedLow, 
+        fixedHigh: form.state.fixedHigh, 
+        notional: form.state.notional 
+      });
+    }
+  }, [loadMintInfo, form.state.notional, form.state.fixedLow, form.state.fixedHigh]);
+
   if (!amm) {
     return null;
   }
@@ -94,29 +110,27 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   }
 
   return (
-    <AMMProvider amm={amm}>
-      <MintBurnForm
-        endDate={amm.endDateTime}
-        formState={form.state}
-        errors={form.errors}
-        isEditingLiquidity={isEditingLiquidity}
-        isEditingMargin={isEditingMargin}
-        isFormValid={form.isValid}
-        onCancel={onReset}
-        onChangeFixedLow={handleSetFixedLow}
-        onChangeFixedHigh={handleSetFixedHigh}
-        onChangeLiquidityAction={form.setLiquidityAction}
-        onChangeMargin={form.setMargin}
-        onChangeMarginAction={form.setMarginAction} 
-        onChangeNotional={form.setNotional}
-        onSubmit={handleSubmit}
-        protocol={amm.protocol}
-        startDate={amm.startDateTime}
-        submitButtonHint={submitButtonHint}
-        submitButtonText={submitButtonText}
-        tokenApprovals={tokenApprovals}
-      />
-    </AMMProvider>
+    <MintBurnForm
+      endDate={amm.endDateTime}
+      formState={form.state}
+      errors={form.errors}
+      isEditingLiquidity={isEditingLiquidity}
+      isEditingMargin={isEditingMargin}
+      isFormValid={form.isValid}
+      onCancel={onReset}
+      onChangeFixedLow={handleSetFixedLow}
+      onChangeFixedHigh={handleSetFixedHigh}
+      onChangeLiquidityAction={form.setLiquidityAction}
+      onChangeMargin={form.setMargin}
+      onChangeMarginAction={form.setMarginAction} 
+      onChangeNotional={form.setNotional}
+      onSubmit={handleSubmit}
+      protocol={amm.protocol}
+      startDate={amm.startDateTime}
+      submitButtonHint={submitButtonHint}
+      submitButtonText={submitButtonText}
+      tokenApprovals={tokenApprovals}
+    />
   );
 };
 

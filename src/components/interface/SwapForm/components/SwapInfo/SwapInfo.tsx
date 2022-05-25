@@ -1,19 +1,16 @@
-import React, { useEffect } from 'react';
-import isUndefined from 'lodash/isUndefined';
+import React from 'react';
 import SummaryPanel from '../../../../atomic/SummaryPanel/SummaryPanel';
 import { IconLabel } from '@components/composite';
-import { useAgent, useAMMContext } from '@hooks';
 import { formatCurrency, formatNumber } from '@utilities';
+import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 
 export type SwapInfoProps = {
-  notional?: number;
+  data: InfoPostSwap | void | null;
+  loading: boolean;
   underlyingTokenName?: string; 
 };
 
-const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({ notional, underlyingTokenName = '' }) => {
-  const { agent } = useAgent();
-  const { swapInfo } = useAMMContext();
-  const { result, loading, call } = swapInfo;
+const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({ data, loading, underlyingTokenName = '' }) => {
 
   const label = <IconLabel
     label="trade information"
@@ -21,34 +18,28 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({ notional, underlying
     info="Trade information"
   />;
 
-  const rows = result ? [
+  const rows = data ? [
     {
       label: 'NOTIONAL AVAILABLE:', 
-      value: `${formatCurrency(Math.abs(result.availableNotional), true)} ${underlyingTokenName}`
+      value: `${formatCurrency(Math.abs(data.availableNotional), true)} ${underlyingTokenName}`
     },
     {
       label: 'AVERAGE FIXED RATE:', 
-      value: `${formatNumber(Math.abs(result.averageFixedRate))} %`
+      value: `${formatNumber(Math.abs(data.averageFixedRate))} %`
     },
     {
       label: 'FEES:', 
-      value: `${formatCurrency(Math.abs(result.fee), true)} ${underlyingTokenName}`
+      value: `${formatCurrency(Math.abs(data.fee), true)} ${underlyingTokenName}`
     },
     {
       label: 'ESTIMATED SLIPPAGE:', 
-      value: `${formatNumber(Math.abs(result.slippage))} %`
+      value: `${formatNumber(Math.abs(data.slippage))} %`
     },
     {
       label: 'ADDITIONAL MARGIN REQUIRED:', 
-      value: `${formatCurrency(result.marginRequirement, true)} ${underlyingTokenName}`
+      value: `${formatCurrency(data.marginRequirement, true)} ${underlyingTokenName}`
     },
   ] : undefined;
-
-  useEffect(() => {
-    if (!isUndefined(notional)) {
-      call({ notional });
-    }
-  }, [call, notional, agent]);
 
   return <SummaryPanel label={label} loading={loading} rows={rows} />
 };

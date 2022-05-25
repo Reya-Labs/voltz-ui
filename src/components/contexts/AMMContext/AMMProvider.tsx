@@ -42,6 +42,7 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
         return;
       }
 
+      // hard coded values here are the defaults we use for traders, they overlap with a reasonable range (which causes confusion)
       const result = await amm.getInfoPostSwap({
         ...args,
         isFT: agent === Agents.FIXED_TRADER,
