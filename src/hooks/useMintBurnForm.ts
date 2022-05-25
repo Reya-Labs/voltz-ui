@@ -171,7 +171,7 @@ export const useMintBurnForm = (
       }
     } 
 
-    if(isUndefined(margin)) {
+    if(isUndefined(margin) || margin === 0) {
       valid = false;
       if(touched.current.includes('margin')) {
         err['margin'] = 'Please enter an amount';
