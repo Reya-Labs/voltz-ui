@@ -71,8 +71,8 @@ const useTokenApproval = (amm: AugmentedAMM, skipFCMChecks = false) => {
     setApproving(true);
     setLastError(undefined);
     try {
-      const approved = await amm.approveFCM();
-      setFCMApproved(!!approved);
+      await amm.approveFCM();
+      setFCMApproved(true);
       setLastApproval(ApprovalType.FCM);
       setApproving(false);
     } catch(e) {
@@ -86,8 +86,8 @@ const useTokenApproval = (amm: AugmentedAMM, skipFCMChecks = false) => {
     setApproving(true);
     setLastError(undefined);
     try {
-      const approved = await amm.approveUnderlyingTokenForFCM();
-      setUnderlyingTokenApprovedForFCM(!!approved);
+      await amm.approveUnderlyingTokenForFCM();
+      setUnderlyingTokenApprovedForFCM(true);
       setLastApproval(ApprovalType.UTOKEN_FCM);
       setApproving(false);
     } catch(e) {
@@ -101,8 +101,8 @@ const useTokenApproval = (amm: AugmentedAMM, skipFCMChecks = false) => {
     setApproving(true);
     setLastError(undefined);
     try {
-      const approved = await amm.approveUnderlyingTokenForPeriphery();
-      setUnderlyingTokenApprovedForPeriphery(!!approved);
+      await amm.approveUnderlyingTokenForPeriphery();
+      setUnderlyingTokenApprovedForPeriphery(true);
       setLastApproval(ApprovalType.UTOKEN_PERIPHERY);
       setApproving(false);
     } catch(e) {
@@ -116,8 +116,8 @@ const useTokenApproval = (amm: AugmentedAMM, skipFCMChecks = false) => {
     setApproving(true);
     setLastError(undefined);
     try {
-      const approved = await amm.approveYieldBearingTokenForFCM();
-      setYieldBearingTokenApprovedForFCM(!!approved);
+      await amm.approveYieldBearingTokenForFCM();
+      setYieldBearingTokenApprovedForFCM(true);
       setLastApproval(ApprovalType.YBTOKEN_FCM);
       setApproving(false);
     } catch(e) {
