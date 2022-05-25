@@ -6,6 +6,7 @@ import { AugmentedAMM } from '@utilities';
 import { actions, selectors } from '@store';
 import { MintBurnFormMarginAction, useAgent, useAMMContext, useDispatch, useSelector, useTokenApproval, useWallet } from '@hooks';
 import { SwapForm, PendingTransaction } from '@components/interface';
+import { Agents } from '@components/contexts';
 import useSwapForm from 'src/hooks/useSwapForm';
 import { getFormAction, getSubmitAction, getSubmitButtonHint, getSubmitButtonText } from './services';
 import { SwapFormActions } from './types';
@@ -24,7 +25,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
   isEditingMargin = false,
   onReset,
 }) => {
-  const { agent } = useAgent();
+  const { agent, onChangeAgent } = useAgent();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { swapInfo: { call: loadSwapInfo, loading: swapInfoLoading, result: swapInfoData } } = useAMMContext();
@@ -70,6 +71,13 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
     setTransactionId(action.payload.transaction.id)
     dispatch(action)
   };
+
+  const handleChangePartialCollateralization = (value: boolean) => {
+    form.setPartialCollateralization(value);
+    if(value === false) {
+      onChangeAgent(Agents.FIXED_TRADER);
+    }
+  }
 
   const handleComplete = () => {
     onReset();
@@ -129,7 +137,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction}
       onChangeNotional={form.setNotional}
-      onChangePartialCollateralization={form.setPartialCollateralization}
+      onChangePartialCollateralization={handleChangePartialCollateralization}
       onSubmit={handleSubmit}
       protocol={amm.protocol}
       startDate={amm.startDateTime}
