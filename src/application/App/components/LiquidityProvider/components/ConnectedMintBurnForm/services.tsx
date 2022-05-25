@@ -87,19 +87,22 @@ export const getSubmitButtonHint = (amm: AugmentedAMM, formErrors: MintBurnForm[
 
 /**
  * Gets the text to show on the submit button
+ * @param isEditingMargin - boolean flag for edit margin mode
  * @param isEditingLiquidity - boolean flag for edit liquidity mode
  * @param tokenApprovals - the token approvals state for this form
  * @param amm - the amm class instance for this form
- * @param liquidityAction - the liquidity action selected on the form
+ * @param formState - the form state
  */
  export const getSubmitButtonText = (
+  isEditingMargin: boolean, 
   isEditingLiquidity: boolean, 
   tokenApprovals: ReturnType<typeof useTokenApproval>, 
   amm: AugmentedAMM, 
-  liquidityAction: MintBurnFormLiquidityAction
+  formState: MintBurnFormState
 ) => {
-  const isAddingLiquidity = !isEditingLiquidity || liquidityAction === MintBurnFormLiquidityAction.ADD;
-  
+  const isAddingLiquidity = !isEditingLiquidity || formState.liquidityAction === MintBurnFormLiquidityAction.ADD;
+  const isAddingMargin = isEditingMargin && formState.marginAction === MintBurnFormMarginAction.ADD;
+
   if (tokenApprovals.checkingApprovals) {
     return 'Initialising...';
   }
@@ -109,6 +112,10 @@ export const getSubmitButtonHint = (amm: AugmentedAMM, formErrors: MintBurnForm[
 
   if (!tokenApprovals.underlyingTokenApprovedForPeriphery) {
     return <Box>Approve <Text>{amm.underlyingToken.name || ''}</Text></Box>;
+  }
+
+  if(isEditingMargin) {
+    return isAddingMargin ? 'Deposit Margin' : 'Withdraw Margin';
   }
 
   return isAddingLiquidity ? 'Provide Liquidity' : 'Burn Liquidity';

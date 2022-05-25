@@ -47,7 +47,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
   const formAction = getFormAction(isEditingMargin, isEditingLiquidity, form.state.liquidityAction);
   const submitButtonHint = getSubmitButtonHint(amm, form.errors, form.isValid, tokenApprovals);
-  const submitButtonText = getSubmitButtonText(isEditingLiquidity, tokenApprovals, amm, form.state.liquidityAction);
+  const submitButtonText = getSubmitButtonText(isEditingMargin, isEditingLiquidity, tokenApprovals, amm, form.state);
 
   const handleComplete = () => {
     onReset();
