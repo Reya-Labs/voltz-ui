@@ -106,6 +106,13 @@ export const useSwapForm = (amm: AugmentedAMM, isEditingMargin: boolean, minimum
       }
     }
 
+    if(isUndefined(margin) || margin === 0) {
+      valid = false;
+      if(touched.current.includes('margin')) {
+        err['margin'] = 'Please enter an amount';
+      }
+    }
+
     // Check that the input margin is >= minimum required margin
     if(!isUndefined(minimumRequiredMargin) && !isUndefined(margin) && margin !== 0 && margin < minimumRequiredMargin) {
       valid = false;
