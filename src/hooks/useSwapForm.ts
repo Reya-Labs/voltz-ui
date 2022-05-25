@@ -55,22 +55,30 @@ export const useSwapForm = (
   }, [margin, marginAction, notional, partialCollateralization, minimumRequiredMargin, fees])
 
   const updateMargin = (value: SwapFormState['margin']) => {
-    touched.current.push('margin');
+    if(!touched.current.includes('margin')) {
+      touched.current.push('margin');
+    }
     setMargin(value);
   }
 
   const updateMarginAction = (value: SwapFormState['marginAction']) => {
-    touched.current.push('marginAction');
+    if(!touched.current.includes('marginAction')) {
+      touched.current.push('marginAction');
+    }
     setMarginAction(value);
   }
 
   const updateNotional = (value: SwapFormState['notional']) => {
-    touched.current.push('notional');
+    if(!touched.current.includes('notional')) {
+      touched.current.push('notional');
+    }
     setNotional(value);
   }
 
   const updatePartialCollateralization = (value: SwapFormState['partialCollateralization']) => {
-    touched.current.push('partialCollateralization');
+    if(!touched.current.includes('partialCollateralization')) {
+      touched.current.push('partialCollateralization');
+    }
     setPartialCollateralization(value);
   }
 
