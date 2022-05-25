@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Agents } from "@components/*";
-import { useTokenApproval, MintBurnFormState, MintBurnFormLiquidityAction, MintBurnFormMarginAction } from "@hooks";
+import { useTokenApproval, MintBurnFormState, MintBurnFormLiquidityAction, MintBurnFormMarginAction, MintBurnForm } from "@hooks";
 import { Box } from "@mui/system";
 import { actions } from "@store";
 import { AugmentedAMM } from "@utilities";
@@ -40,6 +40,50 @@ const Text = ({ bold, children, green, red }: TextProps) => (
     return MintBurnFormActions.BURN;
   }
 };
+
+/**
+ * Gets the hint text to show below the submit button
+ * @param formState - the state of the form fields
+ * @param isFormValid - boolean flag wether the form is valid or not
+ * @param tokenApprovals - the token approvals state for this form
+ */
+export const getSubmitButtonHint = (amm: AugmentedAMM, formErrors: MintBurnForm['errors'], isFormValid: boolean, tokenApprovals: ReturnType<typeof useTokenApproval>) => {
+  // Please note that the order these are in is important, you need the conditions that take precidence
+  // to be nearer the top.
+
+  // Token approvals - Something happening
+  if(tokenApprovals.checkingApprovals) {
+    return 'Initialising, please wait...';
+  }
+  if(tokenApprovals.approving) {
+    return 'Waiting for confirmation...';
+  }
+  if(tokenApprovals.lastError) {
+    return <Text red>{tokenApprovals.lastError.message}</Text>
+  }
+  
+  // Token approvals - user needs to approve a token
+  if(isFormValid) {
+    if(!tokenApprovals.underlyingTokenApprovedForPeriphery) {
+      return `Please approve ${amm.underlyingToken.name || ''}`;
+    }
+  }
+
+  // Form validation
+  if (!isFormValid) {
+    if(formErrors.balance) {
+      return `You do not have enough ${amm.underlyingToken.name || ''}`;
+    }
+    if(!Object.keys(formErrors).length) {
+      return 'Input your parameters';
+    }
+    return 'Please fix form errors to continue';
+  }
+
+  if (isFormValid) {
+    return <>{tokenApprovals.lastApproval && <><Text green>Tokens approved</Text>. </>}Let's trade</>;
+  }
+}
 
 /**
  * Gets the text to show on the submit button

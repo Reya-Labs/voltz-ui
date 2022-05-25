@@ -1,8 +1,7 @@
 import React, { ReactNode } from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
-
-import { Button, Panel } from '@components/atomic';
+import { Button, Panel, Typography } from '@components/atomic';
 import {
   IconLabel,
   ProtocolInformation,
@@ -14,6 +13,7 @@ import {
 import { MintBurnMinimumMarginAmount, LiquidityControls } from './components';
 import { MarginControls } from '../SwapForm/components';
 import { MintBurnFormLiquidityAction, MintBurnFormMarginAction, MintBurnFormState, useTokenApproval } from '@hooks';
+import { colors } from '@theme';
 
 export type MintBurnFormProps = {
   protocol?: string;
@@ -34,6 +34,7 @@ export type MintBurnFormProps = {
   onCancel: () => void;
   onChangeMarginAction: (value: MintBurnFormMarginAction) => void;
   onChangeLiquidityAction: (value: MintBurnFormLiquidityAction) => void;
+  submitButtonHint: ReactNode;
   submitButtonText: ReactNode;
   tokenApprovals: ReturnType<typeof useTokenApproval>;
 };
@@ -56,6 +57,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   onCancel,
   onChangeMarginAction,
   onChangeLiquidityAction,
+  submitButtonHint,
   submitButtonText,
   tokenApprovals
 }) => {
@@ -199,6 +201,15 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
           Back
         </Button>
       </Box>
+
+      <Typography variant='body2' sx={{ 
+        marginTop: (theme) => theme.spacing(2), 
+        color: colors.lavenderWeb.darken015,
+        fontSize: '12px'
+      }}>
+        {submitButtonHint}
+      </Typography>
+      
     </Panel>
   );
 };

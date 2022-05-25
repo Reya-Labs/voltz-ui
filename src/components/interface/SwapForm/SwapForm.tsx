@@ -158,7 +158,11 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         </Button>
       </Box>
 
-      <Typography variant='body2' sx={{ marginTop: (theme) => theme.spacing(2), color: colors.lavenderWeb.darken015 }}>
+      <Typography variant='body2' sx={{ 
+        marginTop: (theme) => theme.spacing(2), 
+        color: colors.lavenderWeb.darken015,
+        fontSize: '12px'
+      }}>
         {submitButtonHint}
       </Typography>
   

@@ -9,7 +9,7 @@ import { useAgent, useDispatch, useMintBurnForm, useSelector, useTokenApproval }
 import { AMMProvider } from '@components/contexts';
 import { MintBurnForm, PendingTransaction } from '@components/interface';
 import { updateFixedRate } from './utilities';
-import { getFormAction, getSubmitAction, getSubmitButtonText } from './services';
+import { getFormAction, getSubmitAction, getSubmitButtonHint, getSubmitButtonText } from './services';
 
 export type ConnectedMintBurnFormProps = {
   amm: AugmentedAMM;
@@ -40,6 +40,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
   const formAction = getFormAction(isEditingMargin, isEditingLiquidity, form.state.liquidityAction);
+  const submitButtonHint = getSubmitButtonHint(amm, form.errors, form.isValid, tokenApprovals);
   const submitButtonText = getSubmitButtonText(isEditingLiquidity, tokenApprovals, amm, form.state.liquidityAction);
 
   const handleComplete = () => {
@@ -111,6 +112,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
         onSubmit={handleSubmit}
         protocol={amm.protocol}
         startDate={amm.startDateTime}
+        submitButtonHint={submitButtonHint}
         submitButtonText={submitButtonText}
         tokenApprovals={tokenApprovals}
       />

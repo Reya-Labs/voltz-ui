@@ -62,6 +62,7 @@ const NewPositionMintBurnForm: React.FunctionComponent = (args) => {
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
       onSubmit={() => form.validate(false, false)}
+      submitButtonHint="Submit hint text here"
       submitButtonText="Submit"
       tokenApprovals={mockTokenApprovals}
     />
@@ -103,6 +104,7 @@ const EditingMarginMintBurnForm: React.FunctionComponent = (args) => {
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
       onSubmit={() => form.validate(true, false)}
+      submitButtonHint="Submit hint text here"
       submitButtonText="Submit"
       tokenApprovals={mockTokenApprovals}
     />
@@ -144,6 +146,7 @@ const EditingLiquidityMintBurnForm: React.FunctionComponent = (args) => {
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
       onSubmit={() => form.validate(false, true)}
+      submitButtonHint="Submit hint text here"
       submitButtonText="Submit"
       tokenApprovals={mockTokenApprovals}
     />
