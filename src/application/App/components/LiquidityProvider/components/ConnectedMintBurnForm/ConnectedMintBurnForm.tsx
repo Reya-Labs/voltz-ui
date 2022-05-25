@@ -1,15 +1,16 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
+import { Position, Token } from '@voltz-protocol/v1-sdk/dist/types/entities';
 
 import { AugmentedAMM } from '@utilities';
 import { routes } from '@routes';
 import { actions, selectors } from '@store';
-import { useAgent, useAMMContext, useDispatch, useMintBurnForm, useSelector, useTokenApproval } from '@hooks';
+import { useAgent, useAMMContext, useDispatch, useMintBurnForm, useSelector, useTokenApproval, useWallet } from '@hooks';
 import { MintBurnForm, PendingTransaction } from '@components/interface';
 import { updateFixedRate } from './utilities';
 import { getFormAction, getSubmitAction, getSubmitButtonHint, getSubmitButtonText } from './services';
 import { isUndefined } from 'lodash';
+import { BigNumber } from 'ethers';
 
 export type ConnectedMintBurnFormProps = {
   amm: AugmentedAMM;
@@ -29,13 +30,17 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   const { agent } = useAgent();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { mintMinimumMarginRequirement: { call: loadMintInfo, loading: mintInfoLoading, result: mintInfoData } } = useAMMContext();
+  const { mintMinimumMarginRequirement: { call: loadMintInfo, loading: minRequiredMarginLoading, result: minRequiredMargin } } = useAMMContext();
   
+  const [balance, setBalance] = useState<BigNumber>();
+  const { getTokenBalance } = useWallet();
+  const token = useRef<Token>();
+
   const defaultValues = {
     fixedLow: position ? parseFloat(position.fixedRateLower.toFixed() ) : undefined,
     fixedHigh: position ? parseFloat(position.fixedRateUpper.toFixed() ) : undefined
   }
-  const form = useMintBurnForm(amm, isEditingMargin, isEditingLiquidity, mintInfoData || undefined, defaultValues);
+  const form = useMintBurnForm(amm, isEditingMargin, isEditingLiquidity, balance, minRequiredMargin || undefined, defaultValues);
   const tokenApprovals = useTokenApproval(amm, true);
 
   const [transactionId, setTransactionId] = useState<string | undefined>();
@@ -77,6 +82,20 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     dispatch(action);
   };
 
+  // Load the users balance of the required token 
+  useEffect(() => {
+    if(token.current?.id !== amm.underlyingToken.id) {
+      token.current = amm.underlyingToken;
+      getTokenBalance(amm.underlyingToken)
+        .then((currentBalance) => {
+          setBalance(currentBalance);
+        })
+        .catch(() => {
+          setBalance(undefined);
+        })
+    }
+  }, [amm.underlyingToken, amm.underlyingToken.id, getTokenBalance]);
+
   // Load the mint summary info
   useEffect(() => {
     if (
@@ -111,12 +130,15 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
 
   return (
     <MintBurnForm
+      balance={balance ? amm.descale(balance) : undefined}
       endDate={amm.endDateTime}
       formState={form.state}
       errors={form.errors}
       isEditingLiquidity={isEditingLiquidity}
       isEditingMargin={isEditingMargin}
       isFormValid={form.isValid}
+      minRequiredMargin={minRequiredMargin || undefined}
+      minRequiredMarginLoading={minRequiredMarginLoading}
       onCancel={onReset}
       onChangeFixedLow={handleSetFixedLow}
       onChangeFixedHigh={handleSetFixedHigh}
@@ -130,6 +152,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
       submitButtonHint={submitButtonHint}
       submitButtonText={submitButtonText}
       tokenApprovals={tokenApprovals}
+      underlyingTokenName={amm.underlyingToken.name}
     />
   );
 };

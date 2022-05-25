@@ -140,13 +140,15 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         </Box>
       )}
 
-      <Box sx={bottomSpacing}>
-        <SwapInfo 
-          data={swapInfo} 
-          loading={swapInfoLoading} 
-          underlyingTokenName={underlyingTokenName} 
-        />
-      </Box>
+      {(swapInfo || swapInfoLoading) && (
+        <Box sx={bottomSpacing}>
+          <SwapInfo 
+            data={swapInfo} 
+            loading={swapInfoLoading} 
+            underlyingTokenName={underlyingTokenName} 
+          />
+        </Box>
+      )}
 
       <Box sx={{ display: 'flex' }}>
         <Button 

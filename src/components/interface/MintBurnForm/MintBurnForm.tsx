@@ -10,12 +10,14 @@ import {
   MarginAmount,
   NotionalAmount,
 } from '@components/composite';
-import { MintBurnMinimumMarginAmount, LiquidityControls } from './components';
+import { LiquidityControls, MintInfo } from './components';
 import { MarginControls } from '../SwapForm/components';
 import { MintBurnFormLiquidityAction, MintBurnFormMarginAction, MintBurnFormState, useTokenApproval } from '@hooks';
 import { colors } from '@theme';
+import { isUndefined } from 'lodash';
 
 export type MintBurnFormProps = {
+  balance?: number; 
   protocol?: string;
   fixedApr?: number;
   startDate?: DateTime;
@@ -26,6 +28,8 @@ export type MintBurnFormProps = {
   isFormValid: boolean;
   formState: MintBurnFormState;
   errors: Record<string, string>;
+  minRequiredMargin?: number;
+  minRequiredMarginLoading: boolean;
   onChangeFixedLow: (value: number, increment: boolean | null) => void;
   onChangeFixedHigh: (value: number, increment: boolean | null) => void;
   onChangeNotional: (value: number) => void;
@@ -37,9 +41,11 @@ export type MintBurnFormProps = {
   submitButtonHint: ReactNode;
   submitButtonText: ReactNode;
   tokenApprovals: ReturnType<typeof useTokenApproval>;
+  underlyingTokenName?: string;
 };
 
 const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
+  balance,
   protocol,
   startDate,
   endDate,
@@ -49,6 +55,8 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   isFormValid,
   formState,
   errors,
+  minRequiredMargin,
+  minRequiredMarginLoading,
   onChangeFixedLow,
   onChangeFixedHigh,
   onChangeNotional,
@@ -59,7 +67,8 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   onChangeLiquidityAction,
   submitButtonHint,
   submitButtonText,
-  tokenApprovals
+  tokenApprovals,
+  underlyingTokenName = ''
 }) => {
   const isAddingLiquidity = !isEditingLiquidity || formState.liquidityAction === MintBurnFormLiquidityAction.ADD;
 
@@ -153,20 +162,6 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         </Box>
       )}
 
-      {(!isEditingMargin && isAddingLiquidity) && ( 
-        <Box
-          sx={{
-            marginBottom: (theme) => theme.spacing(6),
-          }}
-        >
-          <MintBurnMinimumMarginAmount
-            fixedLow={formState.fixedLow}
-            fixedHigh={formState.fixedHigh}
-            notional={formState.notional}
-          />
-        </Box>
-      )}
-
       {(!isEditingLiquidity || formState.liquidityAction === MintBurnFormLiquidityAction.ADD) && (
         <Box
           sx={{
@@ -180,6 +175,17 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
             isAdditional={formState.marginAction === MintBurnFormMarginAction.ADD}
             onChangeMargin={onChangeMargin}
             error={errors['margin']}
+          />
+        </Box>
+      )}
+
+      {(!isEditingMargin && isAddingLiquidity && (!isUndefined(minRequiredMargin) || minRequiredMarginLoading)) && (
+        <Box sx={{ marginBottom: (theme) => theme.spacing(6) }}>
+          <MintInfo 
+            balance={balance}
+            minRequiredMargin={minRequiredMargin}
+            loading={minRequiredMarginLoading} 
+            underlyingTokenName={underlyingTokenName} 
           />
         </Box>
       )}

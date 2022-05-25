@@ -6,6 +6,7 @@ import { AgentProvider, Agents } from '@components/contexts';
 import MintBurnForm from './MintBurnForm';
 import { useMintBurnForm, useTokenApproval } from '@hooks';
 import { AugmentedAMM } from '@utilities';
+import { BigNumber } from 'ethers';
 
 export default {
   title: 'Interface/MintBurnForm',
@@ -42,18 +43,24 @@ const NewPositionTemplate: ComponentStory<typeof MintBurnForm> = (args) => (
   </AgentProvider>
 );
 const NewPositionMintBurnForm: React.FunctionComponent = (args) => {
+  const balance = 100000;
   const isEditingMargin = false;
   const isEditingLiquidity = false;
-  const form = useMintBurnForm(mockAmm, isEditingMargin, isEditingLiquidity);
+  const minRequiredMargin = 100;
+
+  const form = useMintBurnForm(mockAmm, isEditingMargin, isEditingLiquidity, BigNumber.from(balance), minRequiredMargin);
 
   return (
     <MintBurnForm 
       {...args} 
+      balance={balance}
       errors={form.errors}
       formState={form.state}
       isEditingMargin={isEditingMargin}
       isEditingLiquidity={isEditingLiquidity}
       isFormValid={form.isValid}
+      minRequiredMargin={minRequiredMargin}
+      minRequiredMarginLoading={false}
       onCancel={() => alert('cancel')}
       onChangeFixedLow={form.setFixedLow}
       onChangeFixedHigh={form.setFixedHigh}
@@ -84,18 +91,24 @@ const EditingMarginTemplate: ComponentStory<typeof MintBurnForm> = (args) => (
   </AgentProvider>
 );
 const EditingMarginMintBurnForm: React.FunctionComponent = (args) => {
+  const balance = 100000;
   const isEditingMargin = true;
   const isEditingLiquidity = false;
-  const form = useMintBurnForm(mockAmm, isEditingMargin, isEditingLiquidity, { fixedLow: 2, fixedHigh: 6 });
+  const minRequiredMargin = 100;
+
+  const form = useMintBurnForm(mockAmm, isEditingMargin, isEditingLiquidity, BigNumber.from(balance), minRequiredMargin, { fixedLow: 2, fixedHigh: 6 });
 
   return (
     <MintBurnForm 
       {...args} 
+      balance={balance}
       errors={form.errors}
       formState={form.state} 
       isFormValid={form.isValid}
       isEditingMargin={isEditingMargin}
       isEditingLiquidity={isEditingLiquidity}
+      minRequiredMargin={minRequiredMargin}
+      minRequiredMarginLoading={false}
       onCancel={() => alert('cancel')}
       onChangeFixedLow={form.setFixedLow}
       onChangeFixedHigh={form.setFixedHigh}
@@ -126,18 +139,24 @@ const EditingLiquidityTemplate: ComponentStory<typeof MintBurnForm> = (args) => 
   </AgentProvider>
 );
 const EditingLiquidityMintBurnForm: React.FunctionComponent = (args) => {
+  const balance = 100000;
   const isEditingMargin = false;
   const isEditingLiquidity = true;
-  const form = useMintBurnForm(mockAmm, isEditingMargin, isEditingLiquidity, { fixedLow: 2, fixedHigh: 6 });
+  const minRequiredMargin = 100;
+
+  const form = useMintBurnForm(mockAmm, isEditingMargin, isEditingLiquidity, BigNumber.from(balance), minRequiredMargin, { fixedLow: 2, fixedHigh: 6 });
 
   return (
     <MintBurnForm 
       {...args} 
+      balance={balance}
       errors={form.errors}
       formState={form.state} 
       isEditingMargin={isEditingMargin}
       isEditingLiquidity={isEditingLiquidity}
       isFormValid={form.isValid}
+      minRequiredMargin={minRequiredMargin}
+      minRequiredMarginLoading={false}
       onCancel={() => alert('cancel')}
       onChangeFixedLow={form.setFixedLow}
       onChangeFixedHigh={form.setFixedHigh}

@@ -6,6 +6,8 @@ import { AgentProvider } from '@components/contexts';
 import SwapForm from './SwapForm';
 import { useSwapForm, useTokenApproval } from '@hooks';
 import { AugmentedAMM } from '@utilities';
+import { BigNumber } from 'ethers';
+import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 
 export default {
   title: 'Interface/SwapForm',
@@ -21,6 +23,14 @@ const mockAmm = ({
     name: 'gil'
   }
 } as unknown) as AugmentedAMM;
+
+const mockSwapData = ({
+  marginRequirement: 55,
+  availableNotional: 4000,
+  fee: 6.66,
+  slippage: 4,
+  averageFixedRate: 3,
+} as unknown) as InfoPostSwap;
 
 const mockTokenApprovals = {
   approving: false,
@@ -43,8 +53,11 @@ const NewPositionTemplate: ComponentStory<typeof SwapForm> = (args) => (
   </AgentProvider>
 );
 const NewPositionSwapForm: React.FunctionComponent = (args) => {
+  const balance = 100000;
   const isEditingMargin = false;
-  const form = useSwapForm(mockAmm, isEditingMargin);
+  const minRequiredMargin = 100;
+
+  const form = useSwapForm(mockAmm, isEditingMargin, BigNumber.from(balance), minRequiredMargin);
 
   return (
     <SwapForm 
@@ -61,6 +74,8 @@ const NewPositionSwapForm: React.FunctionComponent = (args) => {
       onSubmit={() => form.validate()}
       submitButtonHint="Submit hint text here"
       submitButtonText="Submit"
+      swapInfo={mockSwapData}
+      swapInfoLoading={false}
       tokenApprovals={mockTokenApprovals}
     />
   );
@@ -80,8 +95,11 @@ const EditingMarginTemplate: ComponentStory<typeof SwapForm> = (args) => (
   </AgentProvider>
 );
 const EditingMarginSwapForm: React.FunctionComponent = (args) => {
+  const balance = 100000;
   const isEditingMargin = true;
-  const form = useSwapForm(mockAmm, isEditingMargin);
+  const minRequiredMargin = 100;
+
+  const form = useSwapForm(mockAmm, isEditingMargin, BigNumber.from(balance), minRequiredMargin);
 
   return (
     <SwapForm 
@@ -98,6 +116,8 @@ const EditingMarginSwapForm: React.FunctionComponent = (args) => {
       onSubmit={() => form.validate()}
       submitButtonHint="Submit hint text here"
       submitButtonText="Submit"
+      swapInfo={mockSwapData}
+      swapInfoLoading={false}
       tokenApprovals={mockTokenApprovals}
     />
   );

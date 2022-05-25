@@ -1,9 +1,7 @@
 import { AugmentedAMM } from "@utilities";
 import { BigNumber } from "ethers";
-import { Token } from "@voltz-protocol/v1-sdk";
 import { isUndefined } from "lodash";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import useWallet from "./useWallet";
+import { useEffect, useRef, useState } from "react";
 
 export enum MintBurnFormLiquidityAction {
   ADD='add',
@@ -25,7 +23,6 @@ export type MintBurnFormState = {
 };
 
 export type MintBurnForm = {
-  balance?: BigNumber;
   errors: Record<string, string>,
   isValid: boolean;
   setFixedHigh: (value: MintBurnFormState['fixedHigh']) => void;
@@ -42,6 +39,7 @@ export const useMintBurnForm = (
   amm: AugmentedAMM, 
   isEditingMargin: boolean, 
   isEditingLiquidity: boolean, 
+  balance: BigNumber | undefined,
   minimumRequiredMargin: number | undefined, 
   defaultValues: Partial<MintBurnFormState> = {}
 ): MintBurnForm => {
@@ -59,26 +57,9 @@ export const useMintBurnForm = (
   const [marginAction, setMarginAction] = useState<MintBurnFormMarginAction>(defaultMarginAction);
   const [notional, setNotional] = useState<MintBurnFormState['notional']>(defaultNotional);
 
-  const [balance, setBalance] = useState<BigNumber>();
   const [errors, setErrors] = useState<MintBurnForm['errors']>({});
-  const { getTokenBalance } = useWallet();
   const [isValid, setIsValid] = useState<boolean>(false);
-  const token = useRef<Token>();
   const touched = useRef<string[]>([]);
-
-  // Load the users balance of the required token so we can use it for validation later
-  useEffect(() => {
-    if(token.current?.id !== amm.underlyingToken.id) {
-      token.current = amm.underlyingToken;
-      getTokenBalance(amm.underlyingToken)
-        .then((currentBalance) => {
-          setBalance(currentBalance);
-        })
-        .catch(() => {
-          setBalance(undefined);
-        })
-    }
-  }, [amm.underlyingToken, amm.underlyingToken.id, getTokenBalance]);
 
   // validate the form after values change
   useEffect(() => {
@@ -273,7 +254,6 @@ export const useMintBurnForm = (
   };
 
   return {
-    balance,
     errors,
     isValid,
     setFixedHigh: updateFixedHigh,

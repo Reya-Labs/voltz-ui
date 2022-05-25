@@ -1,6 +1,4 @@
-import { useWallet } from "@hooks";
 import { AugmentedAMM } from "@utilities";
-import { Token } from "@voltz-protocol/v1-sdk";
 import { BigNumber } from "ethers";
 import { isUndefined } from "lodash";
 import { useEffect, useRef, useState } from "react";
@@ -14,7 +12,6 @@ export type SwapFormState = {
 };
 
 export type SwapFormData = {
-  balance: BigNumber | undefined;
   errors: Record<string, string>,
   isValid: boolean;
   setMargin: (value: SwapFormState['margin']) => void;
@@ -25,7 +22,13 @@ export type SwapFormData = {
   validate: () => boolean;
 };
 
-export const useSwapForm = (amm: AugmentedAMM, isEditingMargin: boolean, minimumRequiredMargin: number | undefined, defaultValues: Partial<SwapFormState> = {}): SwapFormData => {
+export const useSwapForm = (
+  amm: AugmentedAMM, 
+  isEditingMargin: boolean, 
+  balance: BigNumber | undefined, 
+  minimumRequiredMargin: number | undefined, 
+  defaultValues: Partial<SwapFormState> = {}
+): SwapFormData => {
   const defaultMargin = !isUndefined(defaultValues.margin) ? defaultValues.margin : 0;
   const defaultMarginAction = defaultValues.marginAction || MintBurnFormMarginAction.ADD;
   const defaultNotional = !isUndefined(defaultValues.notional) ? defaultValues.notional : 0;
@@ -38,26 +41,9 @@ export const useSwapForm = (amm: AugmentedAMM, isEditingMargin: boolean, minimum
   const [notional, setNotional] = useState<SwapFormState['notional']>(defaultNotional);
   const [partialCollateralization, setPartialCollateralization] = useState<boolean>(defaultPartialCollateralization);
 
-  const [balance, setBalance] = useState<BigNumber>();
   const [errors, setErrors] = useState<SwapFormData['errors']>({});
-  const { getTokenBalance } = useWallet();
   const [isValid, setIsValid] = useState<boolean>(false);
-  const token = useRef<Token>();
   const touched = useRef<string[]>([]);
-
-  // Load the users balance of the required token so we can use it for validation later
-  useEffect(() => {
-    if(token.current?.id !== amm.underlyingToken.id) {
-      token.current = amm.underlyingToken;
-      getTokenBalance(amm.underlyingToken)
-        .then((currentBalance) => {
-          setBalance(currentBalance);
-        })
-        .catch(() => {
-          setBalance(undefined);
-        })
-    }
-  }, [amm.underlyingToken, amm.underlyingToken.id, getTokenBalance]);
 
   // validate the form after values change
   useEffect(() => {
@@ -143,7 +129,6 @@ export const useSwapForm = (amm: AugmentedAMM, isEditingMargin: boolean, minimum
   };
 
   return {
-    balance,
     errors,
     isValid,
     setMargin: updateMargin,
