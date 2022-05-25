@@ -135,6 +135,7 @@ export const getSubmitButtonHint = (amm: AugmentedAMM, formAction: SwapFormActio
     if(!Object.keys(formErrors).length) {
       return 'Input your margin'
     }
+    return 'Please fix form errors to continue';
   }
 
   if (isFormValid) {
