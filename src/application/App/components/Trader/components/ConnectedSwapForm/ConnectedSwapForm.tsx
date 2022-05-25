@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { routes } from '@routes';
 import { AugmentedAMM } from '@utilities';
 import { actions, selectors } from '@store';
-import { MintBurnFormMarginAction, useAgent, useAMMContext, useDispatch, useSelector, useTokenApproval } from '@hooks';
+import { MintBurnFormMarginAction, useAgent, useAMMContext, useDispatch, useSelector, useTokenApproval, useWallet } from '@hooks';
 import { SwapForm, PendingTransaction } from '@components/interface';
 import useSwapForm from 'src/hooks/useSwapForm';
 import { getFormAction, getSubmitAction, getSubmitButtonHint, getSubmitButtonText } from './services';
 import { SwapFormActions } from './types';
 import { isUndefined } from 'lodash';
+import { BigNumber } from 'ethers';
+import { Token } from '@voltz-protocol/v1-sdk';
 
 export type ConnectedSwapFormProps = {
   amm: AugmentedAMM;
@@ -27,8 +29,12 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
   const navigate = useNavigate();
   const { swapInfo: { call: loadSwapInfo, loading: swapInfoLoading, result: swapInfoData } } = useAMMContext();
 
+  const [balance, setBalance] = useState<BigNumber>();
+  const { getTokenBalance } = useWallet();
+  const token = useRef<Token>();
+
   const defaultValues = {};
-  const form = useSwapForm(amm, isEditingMargin, swapInfoData?.marginRequirement, defaultValues);
+  const form = useSwapForm(amm, isEditingMargin, balance, swapInfoData?.marginRequirement, defaultValues);
   const tokenApprovals = useTokenApproval(amm);
 
   const [transactionId, setTransactionId] = useState<string | undefined>();
@@ -74,6 +80,20 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
     const action = actions.closeTransaction(transactionId as string);
     dispatch(action);
   }
+
+  // Load the users balance of the required token 
+  useEffect(() => {
+    if(token.current?.id !== amm.underlyingToken.id) {
+      token.current = amm.underlyingToken;
+      getTokenBalance(amm.underlyingToken)
+        .then((currentBalance) => {
+          setBalance(currentBalance);
+        })
+        .catch(() => {
+          setBalance(undefined);
+        })
+    }
+  }, [amm.underlyingToken, amm.underlyingToken.id, getTokenBalance]);
 
   // Load the swap summary info
   useEffect(() => {
