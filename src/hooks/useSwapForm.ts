@@ -92,7 +92,7 @@ export const useSwapForm = (
       }
     }
 
-    if(isUndefined(margin) || margin === 0) {
+    if((isUndefined(margin) || margin === 0) && partialCollateralization) {
       valid = false;
       if(touched.current.includes('margin')) {
         err['margin'] = 'Please enter an amount';
