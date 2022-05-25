@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
 
@@ -13,7 +13,7 @@ import {
 } from '@components/composite';
 import { MintBurnMinimumMarginAmount, LiquidityControls } from './components';
 import { MarginControls } from '../SwapForm/components';
-import { MintBurnFormLiquidityAction, MintBurnFormMarginAction, MintBurnFormState } from '@hooks';
+import { MintBurnFormLiquidityAction, MintBurnFormMarginAction, MintBurnFormState, useTokenApproval } from '@hooks';
 
 export type MintBurnFormProps = {
   protocol?: string;
@@ -34,6 +34,8 @@ export type MintBurnFormProps = {
   onCancel: () => void;
   onChangeMarginAction: (value: MintBurnFormMarginAction) => void;
   onChangeLiquidityAction: (value: MintBurnFormLiquidityAction) => void;
+  submitButtonText: ReactNode;
+  tokenApprovals: ReturnType<typeof useTokenApproval>;
 };
 
 const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
@@ -54,6 +56,8 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   onCancel,
   onChangeMarginAction,
   onChangeLiquidityAction,
+  submitButtonText,
+  tokenApprovals
 }) => {
   const isAddingLiquidity = !isEditingLiquidity || formState.liquidityAction === MintBurnFormLiquidityAction.ADD;
 
@@ -179,8 +183,13 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
       )}
 
       <Box sx={{ display: 'flex' }}>
-        <Button disabled={!isFormValid} size="large" onClick={onSubmit} sx={{ flexGrow: 1 }}>
-          {isAddingLiquidity ? 'Provide Liquidity' : 'Burn Liquidity'}
+        <Button 
+          disabled={!isFormValid || tokenApprovals.checkingApprovals || tokenApprovals.approving} 
+          size="large" 
+          onClick={onSubmit} 
+          sx={{ flexGrow: 1 }}
+        >
+          {submitButtonText}
         </Button>
         <Button
           sx={{ marginLeft: (theme) => theme.spacing(6), flexGrow: 0 }}

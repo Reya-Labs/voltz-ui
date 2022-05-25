@@ -14,7 +14,7 @@ export type ApprovalErrorResponse = {
   message: string;
 };
 
-const useTokenApproval = (amm: AugmentedAMM) => {
+const useTokenApproval = (amm: AugmentedAMM, skipFCMChecks = false) => {
   const [checkingApprovals, setCheckingApprovals] = useState(false);
   const [approving, setApproving] = useState(false);
   const [lastApproval, setLastApproval] = useState<ApprovalType>();
@@ -39,10 +39,10 @@ const useTokenApproval = (amm: AugmentedAMM) => {
     setLastError(undefined);
 
     Promise.allSettled([
-      amm.isFCMApproved(),
-      amm.isUnderlyingTokenApprovedForFCM(),
+      skipFCMChecks ? Promise.resolve(true) : amm.isFCMApproved(),
+      skipFCMChecks ? Promise.resolve(true) : amm.isUnderlyingTokenApprovedForFCM(),
       amm.isUnderlyingTokenApprovedForPeriphery(),
-      amm.isYieldBearingTokenApprovedForFCM()
+      skipFCMChecks ? Promise.resolve(true) : amm.isYieldBearingTokenApprovedForFCM()
     ])
       .then((responses) => {
         setFCMApproved(responses[0].status === 'fulfilled' ? !!responses[0].value : false);
