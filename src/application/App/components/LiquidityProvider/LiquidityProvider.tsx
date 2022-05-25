@@ -5,7 +5,7 @@ import isNull from 'lodash/isNull';
 import { Position } from '@voltz-protocol/v1-sdk';
 
 import { AugmentedAMM } from '@utilities';
-import { Agents } from '@components/contexts';
+import { Agents, AMMProvider } from '@components/contexts';
 import { useAgent } from '@hooks';
 import { routes } from '@routes';
 import { Page } from '@components/interface';
@@ -102,13 +102,15 @@ const LiquidityProvider: React.FunctionComponent = () => {
 
       {renderMode === 'form' && (
         <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
-          <ConnectedMintBurnForm 
-            amm={effectiveAmm} 
-            isEditingMargin={isEditingMargin}
-            isEditingLiquidity={isEditingLiquidity}
-            onReset={handleReset} 
-            position={position} 
-          /> 
+          <AMMProvider amm={effectiveAmm}>
+            <ConnectedMintBurnForm 
+              amm={effectiveAmm} 
+              isEditingMargin={isEditingMargin}
+              isEditingLiquidity={isEditingLiquidity}
+              onReset={handleReset} 
+              position={position} 
+            /> 
+          </AMMProvider>
         </Box>
       )}
     </Page>
