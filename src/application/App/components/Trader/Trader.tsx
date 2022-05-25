@@ -5,7 +5,7 @@ import isNull from 'lodash/isNull';
 import { Position } from '@voltz-protocol/v1-sdk';
 
 import { AugmentedAMM } from '@utilities';
-import { Agents } from '@components/contexts';
+import { Agents, AMMProvider } from '@components/contexts';
 import { PageTitleDesc } from '@components/composite';
 import { Panel } from '@components/atomic';
 import { useAgent } from '@hooks';
@@ -94,11 +94,13 @@ const Trader: React.FunctionComponent = () => {
 
       {renderMode === 'form' && (
         <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
-          <ConnectedSwapForm 
-            amm={effectiveAmm} 
-            isEditingMargin={isEditingMargin} 
-            onReset={handleReset} 
-          />
+          <AMMProvider amm={effectiveAmm}>
+            <ConnectedSwapForm 
+              amm={effectiveAmm} 
+              isEditingMargin={isEditingMargin} 
+              onReset={handleReset} 
+            />
+          </AMMProvider>
         </Box>
       )}
     </Page>
