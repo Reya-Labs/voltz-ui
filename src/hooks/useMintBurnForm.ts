@@ -1,5 +1,4 @@
 import { AugmentedAMM } from "@utilities";
-import { BigNumber } from "ethers";
 import { isUndefined } from "lodash";
 import { useEffect, useRef, useState } from "react";
 import { MintBurnFormModes } from "@components/interface";
@@ -33,13 +32,12 @@ export type MintBurnForm = {
   setMarginAction: (value: MintBurnFormState['marginAction']) => void;
   setNotional: (value: MintBurnFormState['notional']) => void;
   state: MintBurnFormState,
-  validate: (isEditingMargin: boolean, isEditingLiquidity: boolean) => boolean;
+  validate: () => void;
 };
 
 export const useMintBurnForm = (
   amm: AugmentedAMM, 
   mode: MintBurnFormModes,
-  balance: BigNumber | undefined,
   minimumRequiredMargin: number | undefined, 
   defaultValues: Partial<MintBurnFormState> = {}
 ): MintBurnForm => {
@@ -60,6 +58,8 @@ export const useMintBurnForm = (
   const [errors, setErrors] = useState<MintBurnForm['errors']>({});
   const [isValid, setIsValid] = useState<boolean>(false);
   const touched = useRef<string[]>([]);
+
+  const isAddingLiquidity = mode !== MintBurnFormModes.EDIT_LIQUIDITY || liquidityAction === MintBurnFormLiquidityAction.ADD;
 
   // validate the form after values change
   useEffect(() => {
@@ -112,15 +112,15 @@ export const useMintBurnForm = (
 
   const validate = () => {
     if(mode === MintBurnFormModes.NEW_POSITION) {
-      return validateNewPosition();
+      validateNewPosition();
     } else if(mode === MintBurnFormModes.EDIT_MARGIN) {
-      return validateEditMargin();
+      validateEditMargin();
     } else {
-      return validateEditLiquidity();
+      validateEditLiquidity();
     }
   }
 
-  const validateNewPosition = () => {
+  const validateNewPosition = async () => {
     const err: Record<string, string> = {};
     let valid = true;
 
@@ -157,16 +157,13 @@ export const useMintBurnForm = (
       if(touched.current.includes('margin')) {
         err['margin'] = 'Please enter an amount';
       }
-    }
+    }    
 
-    // check user has sufficient funds
-    if(!isUndefined(notional) && notional !== 0 && !isUndefined(margin) && !isUndefined(balance)) {
-      if(amm.descale(balance) < (margin + notional)) {
+    if(!isUndefined(margin) && margin !== 0) {
+      const hasEnoughFunds = await amm.hasEnoughUnderlyingTokens(margin);
+      if(!hasEnoughFunds) {
         valid = false;
-        err['notional'] = 'Insufficient funds';
-
-        // Only set the error on the margin field if the value !== 0
-        if (margin !== 0) {
+        if(touched.current.includes('margin')) {
           err['margin'] = 'Insufficient funds';
         }
       }
@@ -179,13 +176,13 @@ export const useMintBurnForm = (
         err['margin'] = 'Not enough margin';
       }
     }
-
+    
     setErrors(err);
     setIsValid(valid);
     return valid;
   };
 
-  const validateEditMargin = () => {
+  const validateEditMargin = async () => {
     const err: Record<string, string> = {};
     let valid = true;
 
@@ -196,11 +193,11 @@ export const useMintBurnForm = (
       }
     }
 
-    // If adding margin
     if(marginAction === MintBurnFormMarginAction.ADD) {
       // check user has sufficient funds
-      if(!isUndefined(balance) && !isUndefined(margin)) {
-        if(amm.descale(balance) < margin) {
+      if(!isUndefined(margin) && margin !== 0) {
+        const hasEnoughFunds = await amm.hasEnoughUnderlyingTokens(margin);
+        if(!hasEnoughFunds) {
           valid = false;
           if(touched.current.includes('margin')) {
             err['margin'] = 'Insufficient funds';
@@ -214,7 +211,7 @@ export const useMintBurnForm = (
     return valid;
   };
 
-  const validateEditLiquidity = () => {
+  const validateEditLiquidity = async () => {
     const err: Record<string, string> = {};
     let valid = true;
 
@@ -232,22 +229,19 @@ export const useMintBurnForm = (
       }
     }
 
-    // If adding liquidity
     if(liquidityAction === MintBurnFormLiquidityAction.ADD) {
       // check user has sufficient funds
-      if(!isUndefined(notional) && notional !== 0 && !isUndefined(margin) && !isUndefined(balance)) {
-        valid = false;
-        if(amm.descale(balance) < (margin + notional)) {
-          err['notional'] = 'Insufficient funds';
-
-          // Only set the error on the margin field if the value !== 0
-          if (margin !== 0) {
+      if(!isUndefined(margin) && margin !== 0) {
+        const hasEnoughFunds = await amm.hasEnoughUnderlyingTokens(margin);
+        if(!hasEnoughFunds) {
+          valid = false;
+          if(touched.current.includes('margin')) {
             err['margin'] = 'Insufficient funds';
           }
         }
       }
     }
-    
+
     setErrors(err);
     setIsValid(valid);
     return valid;

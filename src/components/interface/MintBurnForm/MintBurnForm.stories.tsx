@@ -48,7 +48,7 @@ const NewPositionMintBurnForm: React.FunctionComponent = (args) => {
   const mode = MintBurnFormModes.NEW_POSITION;
   const minRequiredMargin = 100;
 
-  const form = useMintBurnForm(mockAmm, mode, BigNumber.from(balance), minRequiredMargin);
+  const form = useMintBurnForm(mockAmm, mode, minRequiredMargin);
 
   return (
     <MintBurnForm 
@@ -67,7 +67,7 @@ const NewPositionMintBurnForm: React.FunctionComponent = (args) => {
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
-      onSubmit={() => form.validate(false, false)}
+      onSubmit={() => form.validate()}
       submitButtonHint="Submit hint text here"
       submitButtonText="Submit"
       tokenApprovals={mockTokenApprovals}
@@ -94,7 +94,7 @@ const EditingMarginMintBurnForm: React.FunctionComponent = (args) => {
   const mode = MintBurnFormModes.EDIT_MARGIN;
   const minRequiredMargin = 100;
 
-  const form = useMintBurnForm(mockAmm, mode, BigNumber.from(balance), minRequiredMargin, { fixedLow: 2, fixedHigh: 6 });
+  const form = useMintBurnForm(mockAmm, mode, minRequiredMargin, { fixedLow: 2, fixedHigh: 6 });
 
   return (
     <MintBurnForm 
@@ -113,7 +113,7 @@ const EditingMarginMintBurnForm: React.FunctionComponent = (args) => {
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
-      onSubmit={() => form.validate(true, false)}
+      onSubmit={() => form.validate()}
       submitButtonHint="Submit hint text here"
       submitButtonText="Submit"
       tokenApprovals={mockTokenApprovals}
@@ -140,7 +140,7 @@ const EditingLiquidityMintBurnForm: React.FunctionComponent = (args) => {
   const mode = MintBurnFormModes.EDIT_LIQUIDITY;
   const minRequiredMargin = 100;
 
-  const form = useMintBurnForm(mockAmm, mode, BigNumber.from(balance), minRequiredMargin, { fixedLow: 2, fixedHigh: 6 });
+  const form = useMintBurnForm(mockAmm, mode, minRequiredMargin, { fixedLow: 2, fixedHigh: 6 });
 
   return (
     <MintBurnForm 
@@ -159,7 +159,7 @@ const EditingLiquidityMintBurnForm: React.FunctionComponent = (args) => {
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
-      onSubmit={() => form.validate(false, true)}
+      onSubmit={() => form.validate()}
       submitButtonHint="Submit hint text here"
       submitButtonText="Submit"
       tokenApprovals={mockTokenApprovals}

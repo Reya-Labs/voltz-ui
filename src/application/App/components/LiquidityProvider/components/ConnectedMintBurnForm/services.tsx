@@ -4,8 +4,7 @@ import { useTokenApproval, MintBurnFormState, MintBurnFormLiquidityAction, MintB
 import { Box } from "@mui/system";
 import { actions } from "@store";
 import { AugmentedAMM } from "@utilities";
-import { MintBurnFormActions } from "./types";
-import { MintBurnFormModes } from '@components/interface';
+import { MintBurnFormActions, MintBurnFormModes } from '@components/interface';
 import { colors } from "@theme";
 
 type TextProps = {
