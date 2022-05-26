@@ -1,6 +1,6 @@
 export { default as AMMTable } from './AMMTable/AMMTable';
 export type { AMMTableFields } from './AMMTable/types';
-export { default as MintBurnForm } from './MintBurnForm/MintBurnForm';
+export * from './MintBurnForm';
 export type { MintBurnFormProps } from './MintBurnForm/MintBurnForm';
 export { default as Nav } from './Nav/Nav';
 export { default as Page } from './Page/Page';

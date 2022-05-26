@@ -6,7 +6,7 @@ import { AugmentedAMM } from '@utilities';
 import { routes } from '@routes';
 import { actions, selectors } from '@store';
 import { useAgent, useAMMContext, useDispatch, useMintBurnForm, useSelector, useTokenApproval, useWallet } from '@hooks';
-import { MintBurnForm, PendingTransaction } from '@components/interface';
+import { MintBurnForm, MintBurnFormModes, PendingTransaction } from '@components/interface';
 import { updateFixedRate } from './utilities';
 import { getFormAction, getSubmitAction, getSubmitButtonHint, getSubmitButtonText } from './services';
 import { isUndefined } from 'lodash';
@@ -14,8 +14,7 @@ import { BigNumber } from 'ethers';
 
 export type ConnectedMintBurnFormProps = {
   amm: AugmentedAMM;
-  isEditingMargin?: boolean;
-  isEditingLiquidity?: boolean;
+  mode?: MintBurnFormModes;
   onReset: () => void;
   position?: Position;
 };
@@ -23,8 +22,7 @@ export type ConnectedMintBurnFormProps = {
 const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps> = ({
   amm,
   onReset,
-  isEditingMargin = false,
-  isEditingLiquidity = false,
+  mode = MintBurnFormModes.NEW_POSITION,
   position
 }) => {
   const { agent } = useAgent();
@@ -40,14 +38,14 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     fixedLow: position ? parseFloat(position.fixedRateLower.toFixed() ) : undefined,
     fixedHigh: position ? parseFloat(position.fixedRateUpper.toFixed() ) : undefined
   }
-  const form = useMintBurnForm(amm, isEditingMargin, isEditingLiquidity, balance, minRequiredMargin || undefined, defaultValues);
+  const form = useMintBurnForm(amm, mode, balance, minRequiredMargin || undefined, defaultValues);
   const tokenApprovals = useTokenApproval(amm, true);
 
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
-  const formAction = getFormAction(isEditingMargin, isEditingLiquidity, form.state.liquidityAction);
+  const formAction = getFormAction(mode, form.state.liquidityAction);
   const submitButtonHint = getSubmitButtonHint(amm, form.errors, form.isValid, tokenApprovals);
-  const submitButtonText = getSubmitButtonText(isEditingMargin, isEditingLiquidity, tokenApprovals, amm, form.state);
+  const submitButtonText = getSubmitButtonText(mode, tokenApprovals, amm, form.state);
 
   const handleComplete = () => {
     onReset();
@@ -77,7 +75,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
       return;
     }
 
-    const action = getSubmitAction(amm, formAction, form.state, agent, isEditingLiquidity, isEditingMargin);
+    const action = getSubmitAction(amm, formAction, form.state, agent, mode);
     setTransactionId(action.payload.transaction.id);
     dispatch(action);
   };
@@ -119,7 +117,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     return (
       <PendingTransaction 
         amm={amm} 
-        isEditingMargin={isEditingMargin} 
+        isEditingMargin={mode === MintBurnFormModes.EDIT_MARGIN} 
         liquidityAction={form.state.liquidityAction} 
         transactionId={transactionId} 
         onComplete={handleComplete} 
@@ -134,8 +132,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
       endDate={amm.endDateTime}
       formState={form.state}
       errors={form.errors}
-      isEditingLiquidity={isEditingLiquidity}
-      isEditingMargin={isEditingMargin}
+      mode={mode}
       isFormValid={form.isValid}
       minRequiredMargin={minRequiredMargin || undefined}
       minRequiredMarginLoading={minRequiredMarginLoading}

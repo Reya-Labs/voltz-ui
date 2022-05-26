@@ -2,6 +2,7 @@ import { AugmentedAMM } from "@utilities";
 import { BigNumber } from "ethers";
 import { isUndefined } from "lodash";
 import { useEffect, useRef, useState } from "react";
+import { MintBurnFormModes } from "@components/interface";
 
 export enum MintBurnFormLiquidityAction {
   ADD='add',
@@ -37,8 +38,7 @@ export type MintBurnForm = {
 
 export const useMintBurnForm = (
   amm: AugmentedAMM, 
-  isEditingMargin: boolean, 
-  isEditingLiquidity: boolean, 
+  mode: MintBurnFormModes,
   balance: BigNumber | undefined,
   minimumRequiredMargin: number | undefined, 
   defaultValues: Partial<MintBurnFormState> = {}
@@ -111,9 +111,9 @@ export const useMintBurnForm = (
   }
 
   const validate = () => {
-    if(!isEditingMargin && !isEditingLiquidity) {
+    if(mode === MintBurnFormModes.NEW_POSITION) {
       return validateNewPosition();
-    } else if(isEditingMargin) {
+    } else if(mode === MintBurnFormModes.EDIT_MARGIN) {
       return validateEditMargin();
     } else {
       return validateEditLiquidity();

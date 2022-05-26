@@ -5,6 +5,7 @@ import { Box } from "@mui/system";
 import { actions } from "@store";
 import { AugmentedAMM } from "@utilities";
 import { MintBurnFormActions } from "./types";
+import { MintBurnFormModes } from '@components/interface';
 import { colors } from "@theme";
 
 type TextProps = {
@@ -25,15 +26,14 @@ const Text = ({ bold, children, green, red }: TextProps) => (
 
 /**
  * Returns what action the form is currently set to make (SWAP, FCM_SWAP etc)
- * @param isEditingMargin - boolean flag for edit margin mode
- * @param isEditingLiquidity - boolean flag for edit liquidity mode
+ * @param mode - the mode the form is in
  * @param liquidityAction - the liquidity action selected on the form 
  */
- export const getFormAction = (isEditingMargin: boolean, isEditingLiquidity: boolean, liquidityAction: MintBurnFormLiquidityAction) => {
-  if (isEditingMargin) {
+ export const getFormAction = (mode: MintBurnFormModes, liquidityAction: MintBurnFormLiquidityAction) => {
+  if (mode === MintBurnFormModes.EDIT_MARGIN) {
     return MintBurnFormActions.UPDATE;
   } 
-  else if (!isEditingLiquidity || liquidityAction === MintBurnFormLiquidityAction.ADD) {
+  else if (mode !== MintBurnFormModes.EDIT_LIQUIDITY || liquidityAction === MintBurnFormLiquidityAction.ADD) {
     return MintBurnFormActions.MINT;
   } 
   else {
@@ -87,21 +87,19 @@ export const getSubmitButtonHint = (amm: AugmentedAMM, formErrors: MintBurnForm[
 
 /**
  * Gets the text to show on the submit button
- * @param isEditingMargin - boolean flag for edit margin mode
- * @param isEditingLiquidity - boolean flag for edit liquidity mode
+ * @param mode - the mode the form is in
  * @param tokenApprovals - the token approvals state for this form
  * @param amm - the amm class instance for this form
  * @param formState - the form state
  */
  export const getSubmitButtonText = (
-  isEditingMargin: boolean, 
-  isEditingLiquidity: boolean, 
+  mode: MintBurnFormModes,
   tokenApprovals: ReturnType<typeof useTokenApproval>, 
   amm: AugmentedAMM, 
   formState: MintBurnFormState
 ) => {
-  const isAddingLiquidity = !isEditingLiquidity || formState.liquidityAction === MintBurnFormLiquidityAction.ADD;
-  const isAddingMargin = isEditingMargin && formState.marginAction === MintBurnFormMarginAction.ADD;
+  const isAddingLiquidity = mode !== MintBurnFormModes.EDIT_LIQUIDITY || formState.liquidityAction === MintBurnFormLiquidityAction.ADD;
+  const isAddingMargin = mode === MintBurnFormModes.EDIT_MARGIN && formState.marginAction === MintBurnFormMarginAction.ADD;
 
   if (tokenApprovals.checkingApprovals) {
     return 'Initialising...';
@@ -114,7 +112,7 @@ export const getSubmitButtonHint = (amm: AugmentedAMM, formErrors: MintBurnForm[
     return <Box>Approve <Text>{amm.underlyingToken.name || ''}</Text></Box>;
   }
 
-  if(isEditingMargin) {
+  if(mode === MintBurnFormModes.EDIT_MARGIN) {
     return isAddingMargin ? 'Deposit Margin' : 'Withdraw Margin';
   }
 
@@ -127,19 +125,17 @@ export const getSubmitButtonHint = (amm: AugmentedAMM, formErrors: MintBurnForm[
  * @param formAction - the action the form is currently set to make (MINT, BURN etc)
  * @param formState - the state of the form fields
  * @param agent - the agent mode the form is currently in (fixed, variable etc)
- * @param isEditingLiquidity - boolean flag for if the form is in 'edit liquidity' mode
- * @param isEditingMargin - boolean flag for if the form is in 'edit margin' mode
+ * @param mode - the mode the form is in
  */
 export const getSubmitAction = (
   amm: AugmentedAMM, 
   formAction: MintBurnFormActions, 
   formState: MintBurnFormState, 
   agent: Agents, 
-  isEditingLiquidity: boolean, 
-  isEditingMargin: boolean
+  mode: MintBurnFormModes
 ) => {
-  const isBurningLiquidity = (isEditingLiquidity && formState.liquidityAction === MintBurnFormLiquidityAction.BURN);
-  const isRemovingMargin = (isEditingMargin && formState.marginAction === MintBurnFormMarginAction.REMOVE);
+  const isBurningLiquidity = (mode === MintBurnFormModes.EDIT_LIQUIDITY && formState.liquidityAction === MintBurnFormLiquidityAction.BURN);
+  const isRemovingMargin = (mode === MintBurnFormModes.EDIT_MARGIN && formState.marginAction === MintBurnFormMarginAction.REMOVE);
   
   const transaction = { 
     ammId: amm.id, 
