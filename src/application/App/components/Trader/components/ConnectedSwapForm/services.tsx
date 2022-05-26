@@ -100,13 +100,23 @@ export const getNextTokenHint = (amm: AugmentedAMM, tokenApprovals: ReturnType<t
 
 /**
  * Gets the hint text to show below the submit button
- * @param formState - the state of the form fields
+ * @param amm - the amm class instance for this form
+ * @param formAction - the action the form is currently set to make (SWAP, FCM_SWAP etc)
+ * @param formErrors - the form errors object
  * @param isFormValid - boolean flag wether the form is valid or not
  * @param tokenApprovals - the token approvals state for this form
+ * @param isRemovingMargin - boolean flag for if the action is to remove margin
  */
-export const getSubmitButtonHint = (amm: AugmentedAMM, formAction: SwapFormActions, formErrors: SwapFormData['errors'], isFormValid: boolean, tokenApprovals: ReturnType<typeof useTokenApproval>) => {
+export const getSubmitButtonHint = (
+  amm: AugmentedAMM, 
+  formAction: SwapFormActions, 
+  formErrors: SwapFormData['errors'], 
+  isFormValid: boolean, 
+  tokenApprovals: ReturnType<typeof useTokenApproval>, 
+  isRemovingMargin: boolean
+) => {
   const isFCMAction = formAction === SwapFormActions.FCM_SWAP || formAction === SwapFormActions.FCM_UNWIND;
-  
+
   // Please note that the order these are in is important, you need the conditions that take precidence
   // to be nearer the top.
 
@@ -117,14 +127,17 @@ export const getSubmitButtonHint = (amm: AugmentedAMM, formAction: SwapFormActio
   if(tokenApprovals.approving) {
     return 'Waiting for confirmation...';
   }
-  if(tokenApprovals.lastError) {
-    return <Text red>{tokenApprovals.lastError.message}</Text>
-  }
-  
-  // Token approvals - user needs to approve a token
-  if(isFormValid) {
-    const nextTokenHint = getNextTokenHint(amm, tokenApprovals, isFCMAction);
-    if(nextTokenHint) return nextTokenHint;
+
+  if(!isRemovingMargin) {
+    if(tokenApprovals.lastError) {
+      return <Text red>{tokenApprovals.lastError.message}</Text>
+    }
+    
+    // Token approvals - user needs to approve a token
+    if(isFormValid) {
+      const nextTokenHint = getNextTokenHint(amm, tokenApprovals, isFCMAction);
+      if(nextTokenHint) return nextTokenHint;
+    }
   }
 
   // Form validation
@@ -150,8 +163,9 @@ export const getSubmitButtonHint = (amm: AugmentedAMM, formAction: SwapFormActio
  * @param amm - the amm class instance for this form
  * @param formAction - the action the form is currently set to make (SWAP, FCM_SWAP etc)
  * @param agent - the agent mode the form is currently in (fixed, variable etc)
+ * @param isRemovingMargin - boolean flag for if the action is to remove margin
  */
-export const getSubmitButtonText = (mode: SwapFormModes, tokenApprovals: ReturnType<typeof useTokenApproval>, amm: AugmentedAMM, formAction:SwapFormActions, agent: Agents) => {
+export const getSubmitButtonText = (mode: SwapFormModes, tokenApprovals: ReturnType<typeof useTokenApproval>, amm: AugmentedAMM, formAction:SwapFormActions, agent: Agents, isRemovingMargin: boolean) => {  
   if (tokenApprovals.checkingApprovals) {
     return 'Initialising...';
   }
@@ -159,20 +173,22 @@ export const getSubmitButtonText = (mode: SwapFormModes, tokenApprovals: ReturnT
     return 'Approving...';
   }
 
-  if (formAction === SwapFormActions.FCM_SWAP || formAction === SwapFormActions.FCM_UNWIND) {
-    if (!tokenApprovals.FCMApproved) {
-      return 'Approve FCM';
-    }
-    if (!tokenApprovals.yieldBearingTokenApprovedForFCM) {
-      return <Box>Approve <Text>{amm.protocol}</Text></Box>;
-    }
-    if (!tokenApprovals.underlyingTokenApprovedForFCM) {
-      return <Box>Approve <Text>{amm.underlyingToken.name || ''}</Text></Box>;
-    }
-  } 
-  else {
-    if (!tokenApprovals.underlyingTokenApprovedForPeriphery) {
-      return <Box>Approve <Text>{amm.underlyingToken.name || ''}</Text></Box>;
+  if(!isRemovingMargin) {
+    if (formAction === SwapFormActions.FCM_SWAP || formAction === SwapFormActions.FCM_UNWIND) {
+      if (!tokenApprovals.FCMApproved) {
+        return 'Approve FCM';
+      }
+      if (!tokenApprovals.yieldBearingTokenApprovedForFCM) {
+        return <Box>Approve <Text>{amm.protocol}</Text></Box>;
+      }
+      if (!tokenApprovals.underlyingTokenApprovedForFCM) {
+        return <Box>Approve <Text>{amm.underlyingToken.name || ''}</Text></Box>;
+      }
+    } 
+    else {
+      if (!tokenApprovals.underlyingTokenApprovedForPeriphery) {
+        return <Box>Approve <Text>{amm.underlyingToken.name || ''}</Text></Box>;
+      }
     }
   }
   

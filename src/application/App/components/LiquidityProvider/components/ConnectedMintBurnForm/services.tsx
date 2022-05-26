@@ -42,13 +42,17 @@ const Text = ({ bold, children, green, red }: TextProps) => (
 
 /**
  * Gets the hint text to show below the submit button
- * @param formState - the state of the form fields
- * @param isFormValid - boolean flag wether the form is valid or not
+ * @param amm - the amm class instance for this form
+ * @param mode - the mode the form is in
+ * @param form - the entire form state
  * @param tokenApprovals - the token approvals state for this form
  */
-export const getSubmitButtonHint = (amm: AugmentedAMM, formErrors: MintBurnForm['errors'], isFormValid: boolean, tokenApprovals: ReturnType<typeof useTokenApproval>) => {
+export const getSubmitButtonHint = (amm: AugmentedAMM, mode: MintBurnFormModes, form: MintBurnForm, tokenApprovals: ReturnType<typeof useTokenApproval>) => {
   // Please note that the order these are in is important, you need the conditions that take precidence
   // to be nearer the top.
+
+  const isBurningLiquidity = mode === MintBurnFormModes.EDIT_LIQUIDITY && form.state.liquidityAction === MintBurnFormLiquidityAction.BURN;
+  const isRemovingMargin = mode === MintBurnFormModes.EDIT_MARGIN && form.state.marginAction === MintBurnFormMarginAction.REMOVE;
 
   // Token approvals - Something happening
   if(tokenApprovals.checkingApprovals) {
@@ -57,29 +61,32 @@ export const getSubmitButtonHint = (amm: AugmentedAMM, formErrors: MintBurnForm[
   if(tokenApprovals.approving) {
     return 'Waiting for confirmation...';
   }
-  if(tokenApprovals.lastError) {
-    return <Text red>{tokenApprovals.lastError.message}</Text>
-  }
-  
-  // Token approvals - user needs to approve a token
-  if(isFormValid) {
-    if(!tokenApprovals.underlyingTokenApprovedForPeriphery) {
-      return `Please approve ${amm.underlyingToken.name || ''}`;
+
+  if(!isBurningLiquidity && !isRemovingMargin) {
+    if(tokenApprovals.lastError) {
+      return <Text red>{tokenApprovals.lastError.message}</Text>
+    }
+    
+    // Token approvals - user needs to approve a token
+    if(form.isValid) {
+      if(!tokenApprovals.underlyingTokenApprovedForPeriphery) {
+        return `Please approve ${amm.underlyingToken.name || ''}`;
+      }
     }
   }
 
   // Form validation
-  if (!isFormValid) {
-    if(formErrors.balance) {
+  if (!form.isValid) {
+    if(form.errors.balance) {
       return `You do not have enough ${amm.underlyingToken.name || ''}`;
     }
-    if(!Object.keys(formErrors).length) {
+    if(!Object.keys(form.errors).length) {
       return 'Input your parameters';
     }
     return 'Please fix form errors to continue';
   }
 
-  if (isFormValid) {
+  if (form.isValid) {
     return <>{tokenApprovals.lastApproval && <><Text green>Tokens approved</Text>. </>}Let's trade!</>;
   }
 }
@@ -99,6 +106,8 @@ export const getSubmitButtonHint = (amm: AugmentedAMM, formErrors: MintBurnForm[
 ) => {
   const isAddingLiquidity = mode !== MintBurnFormModes.EDIT_LIQUIDITY || formState.liquidityAction === MintBurnFormLiquidityAction.ADD;
   const isAddingMargin = mode === MintBurnFormModes.EDIT_MARGIN && formState.marginAction === MintBurnFormMarginAction.ADD;
+  const isBurningLiquidity = mode === MintBurnFormModes.EDIT_LIQUIDITY && formState.liquidityAction === MintBurnFormLiquidityAction.BURN;
+  const isRemovingMargin = mode === MintBurnFormModes.EDIT_MARGIN && formState.marginAction === MintBurnFormMarginAction.REMOVE;
 
   if (tokenApprovals.checkingApprovals) {
     return 'Initialising...';
@@ -107,8 +116,10 @@ export const getSubmitButtonHint = (amm: AugmentedAMM, formErrors: MintBurnForm[
     return 'Approving...';
   }
 
-  if (!tokenApprovals.underlyingTokenApprovedForPeriphery) {
-    return <Box>Approve <Text>{amm.underlyingToken.name || ''}</Text></Box>;
+  if(!isRemovingMargin && !isBurningLiquidity) {
+    if (!tokenApprovals.underlyingTokenApprovedForPeriphery) {
+      return <Box>Approve <Text>{amm.underlyingToken.name || ''}</Text></Box>;
+    }
   }
 
   if(mode === MintBurnFormModes.EDIT_MARGIN) {
