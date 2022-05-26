@@ -6,7 +6,6 @@ import { AgentProvider, Agents } from '@components/contexts';
 import MintBurnForm from './MintBurnForm';
 import { useMintBurnForm, useTokenApproval } from '@hooks';
 import { AugmentedAMM } from '@utilities';
-import { BigNumber } from 'ethers';
 import { MintBurnFormModes } from './types';
 
 export default {

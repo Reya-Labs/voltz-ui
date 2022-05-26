@@ -139,7 +139,7 @@ export const getSubmitButtonHint = (amm: AugmentedAMM, formAction: SwapFormActio
   }
 
   if (isFormValid) {
-    return <>{tokenApprovals.lastApproval && <><Text green>Tokens approved</Text>. </>}Let's trade</>;
+    return <>{tokenApprovals.lastApproval && <><Text green>Tokens approved</Text>. </>}Let's trade!</>;
   }
 }
 
