@@ -42,27 +42,29 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
 
   const formAction = getFormAction(mode, form.state.partialCollateralization, agent);
   const isRemovingMargin = mode === SwapFormModes.EDIT_MARGIN && form.state.marginAction === MintBurnFormMarginAction.REMOVE;
-  const submitButtonHint = getSubmitButtonHint(amm, formAction, form.errors, form.isValid, tokenApprovals);
-  const submitButtonText = getSubmitButtonText(mode, tokenApprovals, amm, formAction, agent);
+  const submitButtonHint = getSubmitButtonHint(amm, formAction, form.errors, form.isValid, tokenApprovals, isRemovingMargin);
+  const submitButtonText = getSubmitButtonText(mode, tokenApprovals, amm, formAction, agent, isRemovingMargin);
 
   const handleSubmit = () => {
     if(!form.isValid) return;
 
-    if (formAction === SwapFormActions.FCM_SWAP || formAction === SwapFormActions.FCM_UNWIND) {
-      if(!tokenApprovals.FCMApproved) {
-        tokenApprovals.approveFCM();
-        return;
-      } else if(!tokenApprovals.yieldBearingTokenApprovedForFCM) {
-        tokenApprovals.approveYieldBearingTokenForFCM();
-        return;
-      } else if(!tokenApprovals.underlyingTokenApprovedForFCM) {
-        tokenApprovals.approveUnderlyingTokenForFCM();
-        return;
-      }
-    } else {
-      if(!tokenApprovals.underlyingTokenApprovedForPeriphery) {
-        tokenApprovals.approveUnderlyingTokenForPeriphery();
-        return;
+    if(!isRemovingMargin) {
+      if (formAction === SwapFormActions.FCM_SWAP || formAction === SwapFormActions.FCM_UNWIND) {
+        if(!tokenApprovals.FCMApproved) {
+          tokenApprovals.approveFCM();
+          return;
+        } else if(!tokenApprovals.yieldBearingTokenApprovedForFCM) {
+          tokenApprovals.approveYieldBearingTokenForFCM();
+          return;
+        } else if(!tokenApprovals.underlyingTokenApprovedForFCM) {
+          tokenApprovals.approveUnderlyingTokenForFCM();
+          return;
+        }
+      } else {
+        if(!tokenApprovals.underlyingTokenApprovedForPeriphery) {
+          tokenApprovals.approveUnderlyingTokenForPeriphery();
+          return;
+        }
       }
     }
 

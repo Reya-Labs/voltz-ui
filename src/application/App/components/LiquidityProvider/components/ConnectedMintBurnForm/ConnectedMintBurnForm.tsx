@@ -5,7 +5,7 @@ import { Position, Token } from '@voltz-protocol/v1-sdk/dist/types/entities';
 import { AugmentedAMM } from '@utilities';
 import { routes } from '@routes';
 import { actions, selectors } from '@store';
-import { useAgent, useAMMContext, useDispatch, useMintBurnForm, useSelector, useTokenApproval, useWallet } from '@hooks';
+import { MintBurnFormLiquidityAction, MintBurnFormMarginAction, useAgent, useAMMContext, useDispatch, useMintBurnForm, useSelector, useTokenApproval, useWallet } from '@hooks';
 import { MintBurnForm, MintBurnFormModes, PendingTransaction } from '@components/interface';
 import { updateFixedRate } from './utilities';
 import { getFormAction, getSubmitAction, getSubmitButtonHint, getSubmitButtonText } from './services';
@@ -44,7 +44,9 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
   const formAction = getFormAction(mode, form.state.liquidityAction);
-  const submitButtonHint = getSubmitButtonHint(amm, form.errors, form.isValid, tokenApprovals);
+  const isBurningLiquidity = mode === MintBurnFormModes.EDIT_LIQUIDITY && form.state.liquidityAction === MintBurnFormLiquidityAction.BURN;
+  const isRemovingMargin = mode === MintBurnFormModes.EDIT_MARGIN && form.state.marginAction === MintBurnFormMarginAction.REMOVE;
+  const submitButtonHint = getSubmitButtonHint(amm, mode, form, tokenApprovals);
   const submitButtonText = getSubmitButtonText(mode, tokenApprovals, amm, form.state);
 
   const handleComplete = () => {
@@ -70,9 +72,11 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   const handleSubmit = () => {
     if(!form.isValid) return;
 
-    if(!tokenApprovals.underlyingTokenApprovedForPeriphery) {
-      tokenApprovals.approveUnderlyingTokenForPeriphery();
-      return;
+    if(!isBurningLiquidity && !isRemovingMargin) {
+      if(!tokenApprovals.underlyingTokenApprovedForPeriphery) {
+        tokenApprovals.approveUnderlyingTokenForPeriphery();
+        return;
+      }
     }
 
     const action = getSubmitAction(amm, formAction, form.state, agent, mode);
