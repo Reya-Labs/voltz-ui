@@ -3,6 +3,7 @@ import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '@mui/system';
 import { Agents } from '@components/contexts';
 import { Typography } from '@components/atomic';
+import { ProgressBar } from '@components/composite';
 import { lpLabels } from '../../constants';
 import { traderLabels } from '../../constants';
 import { FixedAPR, Notional, CurrentMargin, Maturity, AccruedRates } from './components';
@@ -79,7 +80,11 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     if (field === 'pool') {
       return (
         <Typography variant="h5" label={label}>
-          {position.source.includes("FCM") ? `FCM : ${position.amm.protocol}` : position.amm.protocol}
+          <ProgressBar 
+            leftContent={position.source.includes("FCM") ? `FCM : ${position.amm.protocol}` : position.amm.protocol} 
+            rightContent={<>??% CAP</>} 
+            percentageComplete={66} 
+          />
         </Typography>
       );
     }

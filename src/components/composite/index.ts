@@ -8,10 +8,11 @@ export { default as MaskedIntegerField } from './MaskedIntegerField/MaskedIntege
 export { default as MaturityInformation } from './MaturityInformation/MaturityInformation';
 export { default as Modal } from './Modal/Modal';
 export { default as NotionalAmount } from './NotionalAmount/NotionalAmount';
+export { default as PageTitleDesc } from './PageTitleDesc/PageTitleDesc';
 export { default as PanelAlert } from './PanelAlert/PanelAlert';
+export { default as ProgressBar } from './ProgressBar/ProgressBar';
 export { default as ProtocolInformation } from './ProtocolInformation/ProtocolInformation';
 export { default as RateOptions } from './RateOptions/RateOptions';
 export { default as TextField } from './TextField/TextField';
 export { default as ToggleButtonGroup } from './ToggleButtonGroup/ToggleButtonGroup';
 export { default as WalletAddressDisplay } from './WalletAddressDisplay/WalletAddressDisplay';
-export { default as PageTitleDesc } from './PageTitleDesc/PageTitleDesc';
