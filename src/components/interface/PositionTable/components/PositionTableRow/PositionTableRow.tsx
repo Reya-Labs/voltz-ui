@@ -71,7 +71,8 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
       return (
         <Notional 
           notional={agent === Agents.LIQUIDITY_PROVIDER ? position.notional.toFixed(2) : Math.abs(position.effectiveVariableTokenBalance).toFixed(2)} 
-          token={token} 
+          token={token}
+          onEdit={agent === Agents.LIQUIDITY_PROVIDER ? handleEditNotional : undefined}
         />
       )
     }
