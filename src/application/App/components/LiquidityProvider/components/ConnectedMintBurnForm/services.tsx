@@ -80,7 +80,7 @@ export const getSubmitButtonHint = (amm: AugmentedAMM, formErrors: MintBurnForm[
   }
 
   if (isFormValid) {
-    return <>{tokenApprovals.lastApproval && <><Text green>Tokens approved</Text>. </>}Let's trade</>;
+    return <>{tokenApprovals.lastApproval && <><Text green>Tokens approved</Text>. </>}Let's trade!</>;
   }
 }
 
