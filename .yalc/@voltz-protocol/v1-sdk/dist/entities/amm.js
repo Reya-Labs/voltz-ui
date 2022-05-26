@@ -1348,6 +1348,59 @@ var AMM = /** @class */ (function () {
         closestUsableTick -= count * this.tickSpacing;
         return (0, priceTickConversions_1.tickToFixedRate)(closestUsableTick).toNumber();
     };
+    // balance checks
+    AMM.prototype.hasEnoughUnderlyingTokens = function (amount) {
+        return __awaiter(this, void 0, void 0, function () {
+            var signerAddress, tokenAddress, token, currentBalance, scaledAmount;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!this.signer) {
+                            throw new Error('Wallet not connected');
+                        }
+                        if (!this.underlyingToken.id) {
+                            throw new Error("No underlying token");
+                        }
+                        return [4 /*yield*/, this.signer.getAddress()];
+                    case 1:
+                        signerAddress = _a.sent();
+                        tokenAddress = this.underlyingToken.id;
+                        token = typechain_1.ERC20Mock__factory.connect(tokenAddress, this.signer);
+                        return [4 /*yield*/, token.balanceOf(signerAddress)];
+                    case 2:
+                        currentBalance = _a.sent();
+                        scaledAmount = ethers_1.BigNumber.from(this.scale(amount));
+                        return [2 /*return*/, currentBalance.gte(scaledAmount)];
+                }
+            });
+        });
+    };
+    AMM.prototype.hasEnoughYieldBearingTokens = function (amount) {
+        return __awaiter(this, void 0, void 0, function () {
+            var signerAddress, fcmContract, tokenAddress, token, currentBalance, scaledAmount;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!this.signer) {
+                            throw new Error('Wallet not connected');
+                        }
+                        return [4 /*yield*/, this.signer.getAddress()];
+                    case 1:
+                        signerAddress = _a.sent();
+                        fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
+                        return [4 /*yield*/, fcmContract.underlyingYieldBearingToken()];
+                    case 2:
+                        tokenAddress = _a.sent();
+                        token = typechain_1.ERC20Mock__factory.connect(tokenAddress, this.signer);
+                        return [4 /*yield*/, token.balanceOf(signerAddress)];
+                    case 3:
+                        currentBalance = _a.sent();
+                        scaledAmount = ethers_1.BigNumber.from(this.scale(amount));
+                        return [2 /*return*/, currentBalance.gte(scaledAmount)];
+                }
+            });
+        });
+    };
     return AMM;
 }());
 exports.default = AMM;

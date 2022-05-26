@@ -162,6 +162,8 @@ declare class AMM {
     getPositionInformation(position: Position): Promise<PositionInfo>;
     closestTickAndFixedRate(fixedRate: number): ClosestTickAndFixedRate;
     getNextUsableFixedRate(fixedRate: number, count: number): number;
+    hasEnoughUnderlyingTokens(amount: number): Promise<boolean>;
+    hasEnoughYieldBearingTokens(amount: number): Promise<boolean>;
 }
 export default AMM;
 //# sourceMappingURL=amm.d.ts.map

@@ -1369,6 +1369,45 @@ class AMM {
     closestUsableTick -= count * this.tickSpacing;
     return tickToFixedRate(closestUsableTick).toNumber();
   }
+
+  // balance checks
+
+  public async hasEnoughUnderlyingTokens(amount: number): Promise<boolean> {
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
+    }
+
+    if (!this.underlyingToken.id) {
+      throw new Error("No underlying token");
+    }
+
+    const signerAddress = await this.signer.getAddress();
+    const tokenAddress = this.underlyingToken.id;
+    const token = tokenFactory.connect(tokenAddress, this.signer);
+
+    const currentBalance = await token.balanceOf(signerAddress);
+    const scaledAmount = BigNumber.from(this.scale(amount));
+
+    return currentBalance.gte(scaledAmount);
+  }
+
+  public async hasEnoughYieldBearingTokens(amount: number): Promise<boolean> {
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
+    }
+
+    const signerAddress = await this.signer.getAddress();
+
+    const fcmContract = fcmFactory.connect(this.fcmAddress, this.signer);
+    const tokenAddress = await fcmContract.underlyingYieldBearingToken();
+
+    const token = tokenFactory.connect(tokenAddress, this.signer);
+
+    const currentBalance = await token.balanceOf(signerAddress);
+    const scaledAmount = BigNumber.from(this.scale(amount));
+
+    return currentBalance.gte(scaledAmount);
+  }
 }
 
 export default AMM;
