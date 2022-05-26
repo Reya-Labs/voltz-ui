@@ -1,8 +1,8 @@
 import React, { ReactNode } from 'react';
-import { Agents } from '@components/contexts';
+import { Agents, } from '@components/contexts';
+import { SwapFormActions, SwapFormModes } from '@components/interface';
 import { SwapFormData, SwapFormState, useTokenApproval } from '@hooks';
 import { Box } from '@mui/material';
-import { SwapFormActions } from './types';
 import { AugmentedAMM } from '@utilities';
 import { actions } from '@store';
 import { colors }  from '@theme';
@@ -26,12 +26,12 @@ const Text = ({ bold, children, green, red }: TextProps) => (
 
 /**
  * Returns what action the form is currently set to make (SWAP, FCM_SWAP etc)
- * @param isEditingMargin - boolean flag for edit margin mode
+ * @param mode - the mode the form is in
  * @param partialCollateralization - boolean flag for if the form has partial collateralization selected
  * @param agent - the agent mode the form is currently in (fixed, variable etc)
  */
-export const getFormAction = (isEditingMargin: boolean, partialCollateralization: boolean, agent: Agents) => {
-  if (isEditingMargin) {
+export const getFormAction = (mode: SwapFormModes, partialCollateralization: boolean, agent: Agents) => {
+  if (mode === SwapFormModes.EDIT_MARGIN) {
     return SwapFormActions.UPDATE;
   } 
   else if (partialCollateralization) {
@@ -145,13 +145,13 @@ export const getSubmitButtonHint = (amm: AugmentedAMM, formAction: SwapFormActio
 
 /**
  * Gets the text to show on the submit button
- * @param isEditingMargin - boolean flag for edit margin mode
+ * @param mode - the mode the form is in
  * @param tokenApprovals - the token approvals state for this form
  * @param amm - the amm class instance for this form
  * @param formAction - the action the form is currently set to make (SWAP, FCM_SWAP etc)
  * @param agent - the agent mode the form is currently in (fixed, variable etc)
  */
-export const getSubmitButtonText = (isEditingMargin: boolean, tokenApprovals: ReturnType<typeof useTokenApproval>, amm: AugmentedAMM, formAction:SwapFormActions, agent: Agents) => {
+export const getSubmitButtonText = (mode: SwapFormModes, tokenApprovals: ReturnType<typeof useTokenApproval>, amm: AugmentedAMM, formAction:SwapFormActions, agent: Agents) => {
   if (tokenApprovals.checkingApprovals) {
     return 'Initialising...';
   }
@@ -176,7 +176,7 @@ export const getSubmitButtonText = (isEditingMargin: boolean, tokenApprovals: Re
     }
   }
   
-  if (isEditingMargin) {
+  if (mode === SwapFormModes.EDIT_MARGIN) {
     return "Update Margin";
   }
   if (agent === Agents.FIXED_TRADER) {

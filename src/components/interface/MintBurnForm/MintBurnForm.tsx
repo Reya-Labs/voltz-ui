@@ -15,6 +15,7 @@ import { MarginControls } from '../SwapForm/components';
 import { MintBurnFormLiquidityAction, MintBurnFormMarginAction, MintBurnFormState, useTokenApproval } from '@hooks';
 import { colors } from '@theme';
 import { isUndefined } from 'lodash';
+import { MintBurnFormModes } from './types';
 
 export type MintBurnFormProps = {
   balance?: number; 
@@ -23,13 +24,12 @@ export type MintBurnFormProps = {
   startDate?: DateTime;
   endDate?: DateTime;
   maxMargin?: number;
-  isEditingMargin?: boolean;
-  isEditingLiquidity?: boolean;
   isFormValid: boolean;
   formState: MintBurnFormState;
   errors: Record<string, string>;
   minRequiredMargin?: number;
   minRequiredMarginLoading: boolean;
+  mode: MintBurnFormModes;
   onChangeFixedLow: (value: number, increment: boolean | null) => void;
   onChangeFixedHigh: (value: number, increment: boolean | null) => void;
   onChangeNotional: (value: number) => void;
@@ -50,13 +50,12 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   startDate,
   endDate,
   maxMargin,
-  isEditingMargin = false,
-  isEditingLiquidity = false,
   isFormValid,
   formState,
   errors,
   minRequiredMargin,
   minRequiredMarginLoading,
+  mode = MintBurnFormModes.NEW_POSITION,
   onChangeFixedLow,
   onChangeFixedHigh,
   onChangeNotional,
@@ -70,7 +69,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   tokenApprovals,
   underlyingTokenName = ''
 }) => {
-  const isAddingLiquidity = !isEditingLiquidity || formState.liquidityAction === MintBurnFormLiquidityAction.ADD;
+  const isAddingLiquidity = mode !== MintBurnFormModes.EDIT_LIQUIDITY || formState.liquidityAction === MintBurnFormLiquidityAction.ADD;
 
   return (
     <Panel
@@ -101,7 +100,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         />
       </Box>
       
-      {isEditingLiquidity && (
+      {mode === MintBurnFormModes.EDIT_LIQUIDITY && (
         <Box
           sx={{
             marginBottom: (theme) => theme.spacing(6),
@@ -115,7 +114,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         </Box>
       )}
 
-      {isEditingMargin && (
+      {mode === MintBurnFormModes.EDIT_MARGIN && (
         <Box
           sx={{
             marginBottom: (theme) => theme.spacing(6),
@@ -145,7 +144,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         />
       </Box>
       
-      {!isEditingMargin && (
+      {mode !== MintBurnFormModes.EDIT_MARGIN && (
         <Box
           sx={{
             marginBottom: (theme) => theme.spacing(6),
@@ -162,7 +161,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         </Box>
       )}
 
-      {(!isEditingLiquidity || formState.liquidityAction === MintBurnFormLiquidityAction.ADD) && (
+      {isAddingLiquidity && (
         <Box
           sx={{
             marginBottom: (theme) => theme.spacing(6),
@@ -179,7 +178,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         </Box>
       )}
 
-      {(!isEditingMargin && isAddingLiquidity && (!isUndefined(minRequiredMargin) || minRequiredMarginLoading)) && (
+      {(mode !== MintBurnFormModes.EDIT_MARGIN && isAddingLiquidity && (!isUndefined(minRequiredMargin) || minRequiredMarginLoading)) && (
         <Box sx={{ marginBottom: (theme) => theme.spacing(6) }}>
           <MintInfo 
             balance={balance}

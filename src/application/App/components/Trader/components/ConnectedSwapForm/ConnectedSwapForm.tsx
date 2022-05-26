@@ -5,24 +5,23 @@ import { routes } from '@routes';
 import { AugmentedAMM } from '@utilities';
 import { actions, selectors } from '@store';
 import { MintBurnFormMarginAction, useAgent, useAMMContext, useDispatch, useSelector, useTokenApproval, useWallet } from '@hooks';
-import { SwapForm, PendingTransaction } from '@components/interface';
+import { SwapForm, PendingTransaction, SwapFormActions, SwapFormModes } from '@components/interface';
 import { Agents } from '@components/contexts';
 import useSwapForm from 'src/hooks/useSwapForm';
 import { getFormAction, getSubmitAction, getSubmitButtonHint, getSubmitButtonText } from './services';
-import { SwapFormActions } from './types';
 import { isUndefined } from 'lodash';
 import { BigNumber } from 'ethers';
 import { Token } from '@voltz-protocol/v1-sdk';
 
 export type ConnectedSwapFormProps = {
   amm: AugmentedAMM;
-  isEditingMargin?: boolean;
+  mode?: SwapFormModes;
   onReset: () => void;
 };
 
 const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ 
   amm,
-  isEditingMargin = false,
+  mode = SwapFormModes.NEW_POSITION,
   onReset,
 }) => {
   const { agent, onChangeAgent } = useAgent();
@@ -35,16 +34,16 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
   const token = useRef<Token>();
 
   const defaultValues = {};
-  const form = useSwapForm(amm, isEditingMargin, balance, swapInfoData?.marginRequirement, defaultValues);
+  const form = useSwapForm(amm, mode, swapInfoData?.marginRequirement, defaultValues);
   const tokenApprovals = useTokenApproval(amm);
 
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId); // contains a failureMessage attribute that will contain whatever came out from the sdk
 
-  const formAction = getFormAction(isEditingMargin, form.state.partialCollateralization, agent);
-  const isRemovingMargin = isEditingMargin && form.state.marginAction === MintBurnFormMarginAction.REMOVE;
+  const formAction = getFormAction(mode, form.state.partialCollateralization, agent);
+  const isRemovingMargin = mode === SwapFormModes.EDIT_MARGIN && form.state.marginAction === MintBurnFormMarginAction.REMOVE;
   const submitButtonHint = getSubmitButtonHint(amm, formAction, form.errors, form.isValid, tokenApprovals);
-  const submitButtonText = getSubmitButtonText(isEditingMargin, tokenApprovals, amm, formAction, agent);
+  const submitButtonText = getSubmitButtonText(mode, tokenApprovals, amm, formAction, agent);
 
   const handleSubmit = () => {
     if(!form.isValid) return;
@@ -118,7 +117,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
     return (
       <PendingTransaction 
         amm={amm} 
-        isEditingMargin={isEditingMargin} 
+        isEditingMargin={mode === SwapFormModes.EDIT_MARGIN} 
         transactionId={transactionId} 
         onComplete={handleComplete} 
         onBack={handleGoBack} 
@@ -131,8 +130,8 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
       endDate={amm.endDateTime}
       errors={form.errors}
       formState={form.state}
-      isEditingMargin={isEditingMargin}
       isFormValid={form.isValid}
+      mode={mode}
       onCancel={onReset}
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction}

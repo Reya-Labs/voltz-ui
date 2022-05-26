@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import { useLocation } from 'react-router-dom';
-import isNull from 'lodash/isNull';
 import { Position } from '@voltz-protocol/v1-sdk';
 
 import { AugmentedAMM } from '@utilities';
@@ -9,70 +8,53 @@ import { Agents, AMMProvider } from '@components/contexts';
 import { PageTitleDesc } from '@components/composite';
 import { Panel } from '@components/atomic';
 import { useAgent } from '@hooks';
-import { routes } from '@routes';
-import { Page } from '@components/interface';
+import { Page, SwapFormModes } from '@components/interface';
 import ConnectedAMMTable from '../ConnectedAMMTable/ConnectedAMMTable';
 import ConnectedPositionTable from '../ConnectedPositionTable/ConnectedPositionTable';
 import { ConnectedSwapForm } from './components';
+import { getRenderMode } from './services';
 
 const Trader: React.FunctionComponent = () => {
-  const [formActive, setFormActive] = useState(false);
-  const [amm, setAMM] = useState<AugmentedAMM | null>(null);
-  const [position, setPosition] = useState<Position | null>(null);
+  const [formMode, setFormMode] = useState<SwapFormModes>();
+  const [amm, setAMM] = useState<AugmentedAMM>();
+  const [position, setPosition] = useState<Position>();
+
   const { onChangeAgent } = useAgent();
   const { pathname, key } = useLocation();
+
   const pathnameWithoutPrefix = pathname.slice(1);
-
-  const effectiveAmm = useMemo(() => {
-    return (position?.amm as AugmentedAMM) || amm;
-  }, [amm, position]);
-
-  const getRenderMode = () => {
-    if (!formActive) {
-      if (pathnameWithoutPrefix === routes.SWAP) {
-        return 'pools';
-      } else {
-        return 'portfolio';
-      }
-    }
-
-    if (formActive && !isNull(effectiveAmm)) {
-      return 'form'
-    }
-  };
-
-  const renderMode = getRenderMode();
-  const isEditingMargin = formActive && !isNull(effectiveAmm) && !isNull(position);
+  const effectiveAmm = position?.amm as AugmentedAMM || amm;
+  const renderMode = getRenderMode(formMode, pathnameWithoutPrefix);
 
   useEffect(() => {
-    setFormActive(false);
-    setAMM(null);
-    setPosition(null);
+    setFormMode(undefined);
+    setAMM(undefined);
+    setPosition(undefined);
     onChangeAgent(Agents.FIXED_TRADER);
-  }, [setFormActive, setAMM, pathnameWithoutPrefix, onChangeAgent]);
+  }, [setFormMode, setAMM, pathnameWithoutPrefix, onChangeAgent]);
 
   useEffect(() => {
     handleReset();
   }, [key]);
 
   const handleSelectAmm = (selected: AugmentedAMM) => {
-    setFormActive(true);
+    setFormMode(SwapFormModes.NEW_POSITION);
     setAMM(selected);
-    setPosition(null);
+    setPosition(undefined);
   };
   const handleSelectPosition = (selected: Position) => {
-    setFormActive(true);
-    setAMM(null);
+    setFormMode(SwapFormModes.EDIT_MARGIN)
+    setAMM(undefined);
     setPosition(selected);
   };
   const handleReset = () => {
-    setFormActive(false);
-    setAMM(null);
-    setPosition(null);
+    setFormMode(undefined)
+    setAMM(undefined);
+    setPosition(undefined);
   };
 
   return (
-    <Page backgroundView={formActive ? 'form' : 'table'}>
+    <Page backgroundView={formMode ? 'form' : 'table'}>
 
       {renderMode === 'pools' && (
         <Box sx={{ width: '100%', maxWidth: '768px', margin: '0 auto' }}>
@@ -97,7 +79,7 @@ const Trader: React.FunctionComponent = () => {
           <AMMProvider amm={effectiveAmm}>
             <ConnectedSwapForm 
               amm={effectiveAmm} 
-              isEditingMargin={isEditingMargin} 
+              mode={formMode}
               onReset={handleReset} 
             />
           </AMMProvider>

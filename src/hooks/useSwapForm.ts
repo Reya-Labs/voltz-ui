@@ -1,5 +1,5 @@
+import { SwapFormModes } from "@components/interface";
 import { AugmentedAMM } from "@utilities";
-import { BigNumber } from "ethers";
 import { isUndefined } from "lodash";
 import { useEffect, useRef, useState } from "react";
 import { MintBurnFormMarginAction } from "./useMintBurnForm";
@@ -24,8 +24,7 @@ export type SwapFormData = {
 
 export const useSwapForm = (
   amm: AugmentedAMM, 
-  isEditingMargin: boolean, 
-  balance: BigNumber | undefined, 
+  mode: SwapFormModes, 
   minimumRequiredMargin: number | undefined, 
   defaultValues: Partial<SwapFormState> = {}
 ): SwapFormData => {
@@ -74,7 +73,7 @@ export const useSwapForm = (
   }
 
   const validate = () => {
-    if(!isEditingMargin) {
+    if(mode === SwapFormModes.NEW_POSITION) {
       return validateNewPosition();
     } else {
       return validateEditMargin();

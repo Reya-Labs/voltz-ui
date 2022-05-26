@@ -8,6 +8,7 @@ import { useSwapForm, useTokenApproval } from '@hooks';
 import { AugmentedAMM } from '@utilities';
 import { BigNumber } from 'ethers';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
+import { SwapFormModes } from './types';
 
 export default {
   title: 'Interface/SwapForm',
@@ -18,6 +19,7 @@ export default {
 } as ComponentMeta<typeof SwapForm>;
 
 const mockAmm = ({
+  hasEnoughUnderlyingTokens: () =>  true,
   underlyingToken: {
     id: '0x123456789',
     name: 'gil'
@@ -53,19 +55,18 @@ const NewPositionTemplate: ComponentStory<typeof SwapForm> = (args) => (
   </AgentProvider>
 );
 const NewPositionSwapForm: React.FunctionComponent = (args) => {
-  const balance = 100000;
-  const isEditingMargin = false;
   const minRequiredMargin = 100;
+  const mode = SwapFormModes.NEW_POSITION;
 
-  const form = useSwapForm(mockAmm, isEditingMargin, BigNumber.from(balance), minRequiredMargin);
+  const form = useSwapForm(mockAmm, mode, minRequiredMargin);
 
   return (
     <SwapForm 
       {...args} 
       errors={form.errors}
       formState={form.state} 
-      isEditingMargin={isEditingMargin}
       isFormValid={form.isValid}
+      mode={mode}
       onCancel={() => alert('cancel')}
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction} 
@@ -95,19 +96,18 @@ const EditingMarginTemplate: ComponentStory<typeof SwapForm> = (args) => (
   </AgentProvider>
 );
 const EditingMarginSwapForm: React.FunctionComponent = (args) => {
-  const balance = 100000;
-  const isEditingMargin = true;
   const minRequiredMargin = 100;
+  const mode = SwapFormModes.EDIT_MARGIN;
 
-  const form = useSwapForm(mockAmm, isEditingMargin, BigNumber.from(balance), minRequiredMargin);
+  const form = useSwapForm(mockAmm, mode, minRequiredMargin);
 
   return (
     <SwapForm 
       {...args} 
       errors={form.errors}
       formState={form.state}
-      isEditingMargin={isEditingMargin}
       isFormValid={form.isValid}
+      mode={mode}
       onCancel={() => alert('cancel')}
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction} 
