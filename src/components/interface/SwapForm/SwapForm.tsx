@@ -15,14 +15,15 @@ import {
 import { TraderControls, MarginControls, SwapInfo } from './components';
 import { colors } from '@theme';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
+import { SwapFormModes } from './types';
 
 export type SwapFormProps = {
   endDate?: DateTime;
   errors: Record<string, string>;
   formState: SwapFormState;
   maxMargin?: number;
-  isEditingMargin?: boolean;
   isFormValid: boolean;
+  mode: SwapFormModes;
   onCancel: () => void;
   onChangeMargin: (value: number) => void;
   onChangeMarginAction: (value: MintBurnFormMarginAction) => void;
@@ -44,8 +45,8 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   errors,
   formState,
   maxMargin,
-  isEditingMargin,
   isFormValid,
+  mode,
   onCancel,
   onChangeMargin,
   onChangeMarginAction,
@@ -94,7 +95,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         />
       </Box>
  
-      {isEditingMargin && (
+      {mode === SwapFormModes.EDIT_MARGIN && (
         <Box sx={{ ...bottomSpacing, display: 'flex' }}>
           <MarginControls 
             value={formState.marginAction}
@@ -103,7 +104,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         </Box>
       )}  
 
-      {!isEditingMargin && (
+      {mode !== SwapFormModes.EDIT_MARGIN && (
         <Box sx={{ ...bottomSpacing, display: 'flex' }}>
           <TraderControls
             agent={agent}
@@ -114,7 +115,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         </Box>
       )}
 
-      {!isEditingMargin && (
+      {mode !== SwapFormModes.EDIT_MARGIN && (
         <Box sx={bottomSpacing}>
           <NotionalAmount
             error={errors['notional']}

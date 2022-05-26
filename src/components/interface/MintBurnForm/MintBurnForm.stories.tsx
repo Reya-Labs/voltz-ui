@@ -18,6 +18,7 @@ export default {
 } as ComponentMeta<typeof MintBurnForm>;
 
 const mockAmm = ({
+  hasEnoughUnderlyingTokens: () =>  true,
   underlyingToken: {
     id: '0x123456789',
     name: 'gil'
