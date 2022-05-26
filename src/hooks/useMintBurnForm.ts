@@ -32,7 +32,7 @@ export type MintBurnForm = {
   setMarginAction: (value: MintBurnFormState['marginAction']) => void;
   setNotional: (value: MintBurnFormState['notional']) => void;
   state: MintBurnFormState,
-  validate: () => void;
+  validate: () => Promise<boolean>;
 };
 
 export const useMintBurnForm = (
@@ -110,13 +110,13 @@ export const useMintBurnForm = (
     setNotional(value);
   }
 
-  const validate = () => {
+  const validate = async () => {
     if(mode === MintBurnFormModes.NEW_POSITION) {
-      validateNewPosition();
+      return await validateNewPosition();
     } else if(mode === MintBurnFormModes.EDIT_MARGIN) {
-      validateEditMargin();
+      return await validateEditMargin();
     } else {
-      validateEditLiquidity();
+      return await validateEditLiquidity();
     }
   }
 

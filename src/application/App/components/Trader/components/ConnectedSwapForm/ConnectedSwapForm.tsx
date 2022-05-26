@@ -34,7 +34,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
   const token = useRef<Token>();
 
   const defaultValues = {};
-  const form = useSwapForm(amm, mode, swapInfoData?.marginRequirement, defaultValues);
+  const form = useSwapForm(amm, mode, swapInfoData?.marginRequirement, swapInfoData?.fee, agent, defaultValues);
   const tokenApprovals = useTokenApproval(amm);
 
   const [transactionId, setTransactionId] = useState<string | undefined>();

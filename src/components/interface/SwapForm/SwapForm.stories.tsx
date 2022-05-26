@@ -2,11 +2,10 @@ import React from 'react';
 import { DateTime, Duration } from 'luxon';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { AgentProvider } from '@components/contexts';
+import { AgentProvider, Agents } from '@components/contexts';
 import SwapForm from './SwapForm';
 import { useSwapForm, useTokenApproval } from '@hooks';
 import { AugmentedAMM } from '@utilities';
-import { BigNumber } from 'ethers';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormModes } from './types';
 
@@ -55,10 +54,11 @@ const NewPositionTemplate: ComponentStory<typeof SwapForm> = (args) => (
   </AgentProvider>
 );
 const NewPositionSwapForm: React.FunctionComponent = (args) => {
+  const fees = 4;
   const minRequiredMargin = 100;
   const mode = SwapFormModes.NEW_POSITION;
 
-  const form = useSwapForm(mockAmm, mode, minRequiredMargin);
+  const form = useSwapForm(mockAmm, mode, minRequiredMargin, fees, Agents.FIXED_TRADER);
 
   return (
     <SwapForm 
@@ -96,10 +96,11 @@ const EditingMarginTemplate: ComponentStory<typeof SwapForm> = (args) => (
   </AgentProvider>
 );
 const EditingMarginSwapForm: React.FunctionComponent = (args) => {
+  const fees = 4;
   const minRequiredMargin = 100;
   const mode = SwapFormModes.EDIT_MARGIN;
 
-  const form = useSwapForm(mockAmm, mode, minRequiredMargin);
+  const form = useSwapForm(mockAmm, mode, minRequiredMargin, fees, Agents.FIXED_TRADER);
 
   return (
     <SwapForm 
