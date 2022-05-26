@@ -160,12 +160,16 @@ export const useMintBurnForm = (
     }    
 
     if(!isUndefined(margin) && margin !== 0) {
-      const hasEnoughFunds = await amm.hasEnoughUnderlyingTokens(margin);
-      if(!hasEnoughFunds) {
-        valid = false;
-        if(touched.current.includes('margin')) {
-          err['margin'] = 'Insufficient funds';
+      try {
+        const hasEnoughFunds = await amm.hasEnoughUnderlyingTokens(margin);
+        if(!hasEnoughFunds) {
+          valid = false;
+          if(touched.current.includes('margin')) {
+            err['margin'] = 'Insufficient funds';
+          }
         }
+      } catch(e) {
+        // If error, just skip this check
       }
     }
 
@@ -196,12 +200,16 @@ export const useMintBurnForm = (
     if(marginAction === MintBurnFormMarginAction.ADD) {
       // check user has sufficient funds
       if(!isUndefined(margin) && margin !== 0) {
-        const hasEnoughFunds = await amm.hasEnoughUnderlyingTokens(margin);
-        if(!hasEnoughFunds) {
-          valid = false;
-          if(touched.current.includes('margin')) {
-            err['margin'] = 'Insufficient funds';
+        try {
+          const hasEnoughFunds = await amm.hasEnoughUnderlyingTokens(margin);
+          if(!hasEnoughFunds) {
+            valid = false;
+            if(touched.current.includes('margin')) {
+              err['margin'] = 'Insufficient funds';
+            }
           }
+        } catch(e) {
+          // If error, just skip this check
         }
       }
     }
@@ -232,12 +240,16 @@ export const useMintBurnForm = (
     if(liquidityAction === MintBurnFormLiquidityAction.ADD) {
       // check user has sufficient funds
       if(!isUndefined(margin) && margin !== 0) {
-        const hasEnoughFunds = await amm.hasEnoughUnderlyingTokens(margin);
-        if(!hasEnoughFunds) {
-          valid = false;
-          if(touched.current.includes('margin')) {
-            err['margin'] = 'Insufficient funds';
+        try {
+          const hasEnoughFunds = await amm.hasEnoughUnderlyingTokens(margin);
+          if(!hasEnoughFunds) {
+            valid = false;
+            if(touched.current.includes('margin')) {
+              err['margin'] = 'Insufficient funds';
+            }
           }
+        } catch(e) {
+          // If error, just skip this check
         }
       }
     }
