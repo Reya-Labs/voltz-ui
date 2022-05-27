@@ -21,7 +21,7 @@ const shortMonths = [
  * @param date - The date to process
  */
 export const formatDate = (date: Date) => {
-  return `${date.getDay().toString().padStart(2, '0')} ${
+  return `${date.getDate().toString().padStart(2, '0')} ${
     shortMonths[date.getMonth()]
   } ${date.getFullYear()}`;
 };
