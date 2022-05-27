@@ -24,6 +24,10 @@ export declare type AMMConstructorArgs = {
     totalNotionalTraded: JSBI;
     totalLiquidity: JSBI;
 };
+export declare type CapInfo = {
+    accumulated: number;
+    cap: number;
+};
 export declare type AMMGetInfoPostSwapArgs = {
     isFT: boolean;
     notional: number;
@@ -158,12 +162,15 @@ declare class AMM {
         timestamp: BigNumber;
     }[], atMaturity: boolean): Promise<number>;
     getVariableFactor(termStartTimestamp: BigNumber, termEndTimestamp: BigNumber): Promise<number>;
-    getApy(termStartTimestamp: BigNumber, termEndTimestamp: BigNumber): Promise<number>;
     getPositionInformation(position: Position): Promise<PositionInfo>;
     closestTickAndFixedRate(fixedRate: number): ClosestTickAndFixedRate;
     getNextUsableFixedRate(fixedRate: number, count: number): number;
     hasEnoughUnderlyingTokens(amount: number): Promise<boolean>;
     hasEnoughYieldBearingTokens(amount: number): Promise<boolean>;
+    setCap(amount: number): Promise<void>;
+    getCaps(): Promise<CapInfo>;
+    getPositionMarginRequirement(fixedLow: number, fixedHigh: number): Promise<number>;
+    getOneWeekApy(): Promise<number>;
 }
 export default AMM;
 //# sourceMappingURL=amm.d.ts.map

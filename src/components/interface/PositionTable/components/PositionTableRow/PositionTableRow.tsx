@@ -57,8 +57,9 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
         <CurrentMargin 
           accruedCashflow={positionInfo?.accruedCashflow} 
           margin={positionInfo?.margin} 
-          token={token} 
+          token={position.source.includes("FCM") ? position.amm.protocol : token} 
           onSelect={handleEditMargin} 
+          marginEdit={position.source.includes("FCM") ? false : true}
         />
       );
     }

@@ -10,9 +10,12 @@ class RateOracle {
 
   public readonly protocol: string;
 
+  public readonly protocolId: number;
+
   public constructor({ id, protocolId }: RateOracleConstructorArgs) {
     this.id = id;
     this.protocol = mapProtocolIdToProtocol(protocolId);
+    this.protocolId = protocolId;
   }
 }
 

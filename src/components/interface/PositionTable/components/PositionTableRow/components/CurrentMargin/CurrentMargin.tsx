@@ -8,13 +8,14 @@ import isNull from 'lodash/isNull';
 import { isUndefined } from 'lodash';
 
 export type CurrentMarginProps = {
+  marginEdit?: boolean;
   margin?: number;
   accruedCashflow?: number;
   token: string;
   onSelect: () => void;
 };
 
-const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({ margin, accruedCashflow, token, onSelect}) => {
+const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({ marginEdit, margin, accruedCashflow, token, onSelect}) => {
   const wallet = useWallet();
 
   const handleClick = () => {
@@ -31,7 +32,7 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({ margin, ac
         {!isUndefined(margin) ? `${margin.toFixed(2)} ${token}` : 'No Data'}
       </Typography>
 
-        <Button sx={{
+        {marginEdit && (<Button sx={{
           display: "flex",
           paddingTop: (theme) => theme.spacing(0),
           paddingBottom: (theme) => theme.spacing(0),
@@ -50,9 +51,7 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({ margin, ac
           },
         }} onClick={handleClick}>
             Edit 
-        </Button>
-
-
+        </Button>)}
     </TableCell>
   );
 };

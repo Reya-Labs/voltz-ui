@@ -29,7 +29,9 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
         return;
       }
 
-      return amm.getInfoPostMint({ ...args });
+      const result = await amm.getInfoPostMint({ ...args });
+
+      return result;
     },
     useMemo(() => undefined, [!!amm.signer]),
     100
