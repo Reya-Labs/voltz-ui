@@ -34,6 +34,7 @@ export const inputStyles = (disabled?: boolean, error?: boolean, inputSize?: str
   },
   boxSizing: 'border-box',
   width: '100%',
+  cursor: disabled ? 'not-allowed' : undefined,
   '::placeholder': {
     color: (theme) => {
       if (disabled) return colors.vzGreyDark;

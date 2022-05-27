@@ -136,8 +136,10 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
       >
         <RateOptions
           fixedLow={formState.fixedLow}
+          fixedLowDisabled={mode === MintBurnFormModes.EDIT_LIQUIDITY || mode === MintBurnFormModes.EDIT_MARGIN}
           fixedLowError={errors['fixedLow']}
           fixedHigh={formState.fixedHigh}
+          fixedHighDisabled={mode === MintBurnFormModes.EDIT_LIQUIDITY || mode === MintBurnFormModes.EDIT_MARGIN}
           fixedHighError={errors['fixedHigh']}
           onChangeFixedLow={onChangeFixedLow}
           onChangeFixedHigh={onChangeFixedHigh}
