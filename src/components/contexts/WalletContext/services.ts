@@ -4,6 +4,12 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import { BigNumber, ethers, Contract } from "ethers";
 import { OverrideTypes } from "@utilities";
 
+export type SignatureResponse = {
+  name?: string;
+  signature?: string;
+  walletAddress?: string;
+}
+
 /**
  * Will throw an error if the connected ethereum network does not match required network set in .env file
  * @param provider - The ethers-wrapped provider
@@ -33,9 +39,8 @@ export const checkForRiskyWallet = async (walletAddress: string) => {
  * @param signer - The ethers signer
  */
 export const checkForTOSSignature = async (signer: ethers.providers.JsonRpcSigner, walletAddress: string) => {
-  const existingSignatureKey = `TOS_SIGNATURE_${walletAddress}`;
-  const existingSignature = localStorage.getItem(existingSignatureKey);
   const signerAddress = await signer.getAddress();
+  const existingSignature = await getSignature(signerAddress);
   let termsAccepted = false;
 
   if(existingSignature) {
@@ -48,11 +53,25 @@ export const checkForTOSSignature = async (signer: ethers.providers.JsonRpcSigne
   if(!termsAccepted) {
     try {
       const signature = await signer.signMessage(getTOSText());
-      localStorage.setItem(existingSignatureKey, signature);
+      await saveSignature(signerAddress, signature);
     } catch(e) {
       throw new Error(' ');
     }
   }
+}
+
+/**
+ * Retrieves a signature via the signatures API for the given wallet address
+ * @param walletAddress - the wallet address to retrieve the signature for
+ */
+export const getSignature = async (walletAddress: string) => {
+  const resp = await fetch(`https://voltz-rest-api.herokuapp.com/get/${walletAddress}?token=${process.env.REACT_APP_SIGNATURES_API_KEY || ''}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  });
+  const data:SignatureResponse = resp.ok ? (await resp.json() as SignatureResponse) : {} as SignatureResponse;
+  return data.signature;
 }
 
 /**
@@ -197,4 +216,25 @@ export const isWalletRisky = (riskAssessment?: WalletRiskAssessment) => {
   const indicators = riskAssessment?.addressRiskIndicators;
   const redFlag = Array.isArray(indicators) && indicators.find(i => i.categoryRiskScoreLevel >= 10);
   return Boolean(redFlag);
+}
+
+/**
+ * Saves a signature via the signatures API for the given wallet address
+ * @param walletAddress - the wallet address to save the signature for
+ * @param signature - thwe signature to save
+ */
+export const saveSignature = async (walletAddress: string, signature: string) => {
+  return await fetch(`https://voltz-rest-api.herokuapp.com/post`, {
+    method: 'POST',
+    mode: 'cors',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      api_key: `${process.env.REACT_APP_SIGNATURES_API_KEY || ''}`,
+      signature,
+      walletAddress,
+    })
+  })
 }
