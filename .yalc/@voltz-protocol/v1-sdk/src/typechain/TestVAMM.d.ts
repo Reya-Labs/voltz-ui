@@ -23,7 +23,9 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 interface TestVAMMInterface extends ethers.utils.Interface {
   functions: {
     "MAX_FEE()": FunctionFragment;
+    "VOLTZ_PAUSER()": FunctionFragment;
     "burn(address,int24,int24,uint128)": FunctionFragment;
+    "changePauser(address,bool)": FunctionFragment;
     "checkMaturityDuration()": FunctionFragment;
     "computeGrowthInside(int24,int24)": FunctionFragment;
     "factory()": FunctionFragment;
@@ -47,6 +49,7 @@ interface TestVAMMInterface extends ethers.utils.Interface {
     "setFeeProtocol(uint8)": FunctionFragment;
     "setFixedTokenGrowthGlobal(int256)": FunctionFragment;
     "setIsAlpha(bool)": FunctionFragment;
+    "setPausability(bool)": FunctionFragment;
     "setTestProtocolFees(uint256)": FunctionFragment;
     "setTickTest(int24,(uint128,int128,int256,int256,uint256,bool))": FunctionFragment;
     "setVariableTokenGrowthGlobal(int256)": FunctionFragment;
@@ -65,8 +68,16 @@ interface TestVAMMInterface extends ethers.utils.Interface {
 
   encodeFunctionData(functionFragment: "MAX_FEE", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "VOLTZ_PAUSER",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "burn",
     values: [string, BigNumberish, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "changePauser",
+    values: [string, boolean]
   ): string;
   encodeFunctionData(
     functionFragment: "checkMaturityDuration",
@@ -140,6 +151,10 @@ interface TestVAMMInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "setIsAlpha", values: [boolean]): string;
   encodeFunctionData(
+    functionFragment: "setPausability",
+    values: [boolean]
+  ): string;
+  encodeFunctionData(
     functionFragment: "setTestProtocolFees",
     values: [BigNumberish]
   ): string;
@@ -206,7 +221,15 @@ interface TestVAMMInterface extends ethers.utils.Interface {
   ): string;
 
   decodeFunctionResult(functionFragment: "MAX_FEE", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "VOLTZ_PAUSER",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "changePauser",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "checkMaturityDuration",
     data: BytesLike
@@ -270,6 +293,10 @@ interface TestVAMMInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "setIsAlpha", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "setPausability",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "setTestProtocolFees",
     data: BytesLike
   ): Result;
@@ -320,9 +347,7 @@ interface TestVAMMInterface extends ethers.utils.Interface {
     "IsAlpha(bool)": EventFragment;
     "Mint(address,address,int24,int24,uint128)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
-    "Paused(address)": EventFragment;
     "Swap(address,address,int24,int24,int256,uint160,uint256,int256,int256,int256)": EventFragment;
-    "Unpaused(address)": EventFragment;
     "Upgraded(address)": EventFragment;
     "VAMMInitialization(uint160,int24)": EventFragment;
     "VAMMPriceChange(int24)": EventFragment;
@@ -336,9 +361,7 @@ interface TestVAMMInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "IsAlpha"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Mint"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Swap"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Upgraded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "VAMMInitialization"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "VAMMPriceChange"): EventFragment;
@@ -380,8 +403,6 @@ export type OwnershipTransferredEvent = TypedEvent<
   [string, string] & { previousOwner: string; newOwner: string }
 >;
 
-export type PausedEvent = TypedEvent<[string] & { account: string }>;
-
 export type SwapEvent = TypedEvent<
   [
     string,
@@ -407,8 +428,6 @@ export type SwapEvent = TypedEvent<
     fixedTokenDeltaUnbalanced: BigNumber;
   }
 >;
-
-export type UnpausedEvent = TypedEvent<[string] & { account: string }>;
 
 export type UpgradedEvent = TypedEvent<[string] & { implementation: string }>;
 
@@ -464,11 +483,19 @@ export class TestVAMM extends BaseContract {
   functions: {
     MAX_FEE(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    VOLTZ_PAUSER(overrides?: CallOverrides): Promise<[string]>;
+
     burn(
       recipient: string,
       tickLower: BigNumberish,
       tickUpper: BigNumberish,
       amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    changePauser(
+      account: string,
+      permission: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -561,6 +588,11 @@ export class TestVAMM extends BaseContract {
 
     setIsAlpha(
       __isAlpha: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setPausability(
+      state: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -663,11 +695,19 @@ export class TestVAMM extends BaseContract {
 
   MAX_FEE(overrides?: CallOverrides): Promise<BigNumber>;
 
+  VOLTZ_PAUSER(overrides?: CallOverrides): Promise<string>;
+
   burn(
     recipient: string,
     tickLower: BigNumberish,
     tickUpper: BigNumberish,
     amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  changePauser(
+    account: string,
+    permission: boolean,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -758,6 +798,11 @@ export class TestVAMM extends BaseContract {
 
   setIsAlpha(
     __isAlpha: boolean,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setPausability(
+    state: boolean,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -854,6 +899,8 @@ export class TestVAMM extends BaseContract {
   callStatic: {
     MAX_FEE(overrides?: CallOverrides): Promise<BigNumber>;
 
+    VOLTZ_PAUSER(overrides?: CallOverrides): Promise<string>;
+
     burn(
       recipient: string,
       tickLower: BigNumberish,
@@ -861,6 +908,12 @@ export class TestVAMM extends BaseContract {
       amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    changePauser(
+      account: string,
+      permission: boolean,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     checkMaturityDuration(
       overrides?: CallOverrides
@@ -943,6 +996,8 @@ export class TestVAMM extends BaseContract {
     ): Promise<void>;
 
     setIsAlpha(__isAlpha: boolean, overrides?: CallOverrides): Promise<void>;
+
+    setPausability(state: boolean, overrides?: CallOverrides): Promise<void>;
 
     setTestProtocolFees(
       newProtocolFees: BigNumberish,
@@ -1176,12 +1231,6 @@ export class TestVAMM extends BaseContract {
       { previousOwner: string; newOwner: string }
     >;
 
-    "Paused(address)"(
-      account?: null
-    ): TypedEventFilter<[string], { account: string }>;
-
-    Paused(account?: null): TypedEventFilter<[string], { account: string }>;
-
     "Swap(address,address,int24,int24,int256,uint160,uint256,int256,int256,int256)"(
       sender?: null,
       recipient?: string | null,
@@ -1258,12 +1307,6 @@ export class TestVAMM extends BaseContract {
       }
     >;
 
-    "Unpaused(address)"(
-      account?: null
-    ): TypedEventFilter<[string], { account: string }>;
-
-    Unpaused(account?: null): TypedEventFilter<[string], { account: string }>;
-
     "Upgraded(address)"(
       implementation?: string | null
     ): TypedEventFilter<[string], { implementation: string }>;
@@ -1298,11 +1341,19 @@ export class TestVAMM extends BaseContract {
   estimateGas: {
     MAX_FEE(overrides?: CallOverrides): Promise<BigNumber>;
 
+    VOLTZ_PAUSER(overrides?: CallOverrides): Promise<BigNumber>;
+
     burn(
       recipient: string,
       tickLower: BigNumberish,
       tickUpper: BigNumberish,
       amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    changePauser(
+      account: string,
+      permission: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1383,6 +1434,11 @@ export class TestVAMM extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setPausability(
+      state: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setTestProtocolFees(
       newProtocolFees: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1459,11 +1515,19 @@ export class TestVAMM extends BaseContract {
   populateTransaction: {
     MAX_FEE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    VOLTZ_PAUSER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     burn(
       recipient: string,
       tickLower: BigNumberish,
       tickUpper: BigNumberish,
       amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    changePauser(
+      account: string,
+      permission: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1549,6 +1613,11 @@ export class TestVAMM extends BaseContract {
 
     setIsAlpha(
       __isAlpha: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setPausability(
+      state: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

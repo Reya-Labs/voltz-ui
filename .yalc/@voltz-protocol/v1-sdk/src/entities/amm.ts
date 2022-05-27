@@ -680,12 +680,25 @@ class AMM {
       await this.approveUnderlyingTokenForPeriphery();
     }
 
-    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
-    const updatePositionMarginTransaction = await marginEngineContract.updatePositionMargin(
-      effectiveOwner,
+    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.signer);
+
+    await peripheryContract.callStatic.updatePositionMargin(
+      this.marginEngineAddress,
       tickLower,
       tickUpper,
       scaledMarginDelta,
+      false
+    ).catch(async (error: any) => {
+      const errorMessage = getReadableErrorMessage(error, this.environment);
+      throw new Error(errorMessage);
+    });
+
+    const updatePositionMarginTransaction = await peripheryContract.updatePositionMargin(
+      this.marginEngineAddress,
+      tickLower,
+      tickUpper,
+      scaledMarginDelta,
+      false,
       this.overrides
     );
 
@@ -713,6 +726,12 @@ class AMM {
     const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
 
     const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
+
+    await marginEngineContract.callStatic.liquidatePosition(owner, tickLower, tickUpper).catch((error) => {
+      const errorMessage = getReadableErrorMessage(error, this.environment);
+      throw new Error(errorMessage);
+    });;
+
     const liquidatePositionTransaction = await marginEngineContract.liquidatePosition(owner, tickLower, tickUpper, this.overrides);
 
     try {
@@ -739,9 +758,21 @@ class AMM {
 
     const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
     const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
-    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
 
-    const settlePositionTransaction = await marginEngineContract.settlePosition(
+    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.signer);
+
+    await peripheryContract.callStatic.settlePositionAndWithdrawMargin(
+      this.marginEngineAddress,
+      effectiveOwner,
+      tickLower,
+      tickUpper
+    ).catch((error) => {
+      const errorMessage = getReadableErrorMessage(error, this.environment);
+      throw new Error(errorMessage);
+    });
+
+    const settlePositionTransaction = await peripheryContract.settlePositionAndWithdrawMargin(
+      this.marginEngineAddress,
       effectiveOwner,
       tickLower,
       tickUpper,
@@ -797,6 +828,14 @@ class AMM {
       await this.approveUnderlyingTokenForFCM();
     }
 
+    await fcmContract.callStatic.initiateFullyCollateralisedFixedTakerSwap(
+      scaledNotional,
+      sqrtPriceLimitX96
+    ).catch((error) => {
+      const errorMessage = getReadableErrorMessage(error, this.environment);
+      throw new Error(errorMessage);
+    });
+
     const fcmSwapTransaction = await fcmContract.initiateFullyCollateralisedFixedTakerSwap(
       scaledNotional,
       sqrtPriceLimitX96,
@@ -847,6 +886,14 @@ class AMM {
       await this.approveUnderlyingTokenForFCM();
     }
 
+    await fcmContract.callStatic.unwindFullyCollateralisedFixedTakerSwap(
+      scaledNotional,
+      sqrtPriceLimitX96
+    ).catch((error) => {
+      const errorMessage = getReadableErrorMessage(error, this.environment);
+      throw new Error(errorMessage);
+    });
+
     const fcmUnwindTransaction = await fcmContract.unwindFullyCollateralisedFixedTakerSwap(
       scaledNotional,
       sqrtPriceLimitX96,
@@ -870,6 +917,12 @@ class AMM {
     }
 
     const fcmContract = fcmFactory.connect(this.fcmAddress, this.signer);
+
+    await fcmContract.callStatic.settleTrader().catch((error) => {
+      const errorMessage = getReadableErrorMessage(error, this.environment);
+      throw new Error(errorMessage);
+    });
+
     const fcmSettleTraderTransaction = await fcmContract.settleTrader(this.overrides);
 
     try {

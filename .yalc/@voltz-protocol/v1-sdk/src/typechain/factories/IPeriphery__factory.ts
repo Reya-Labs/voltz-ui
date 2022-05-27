@@ -13,6 +13,11 @@ const _abi = [
     type: "error",
   },
   {
+    inputs: [],
+    name: "CTokenExchangeRateReturnedZero",
+    type: "error",
+  },
+  {
     inputs: [
       {
         internalType: "bool",
@@ -232,53 +237,19 @@ const _abi = [
     inputs: [
       {
         indexed: false,
-        internalType: "contract IMarginEngine",
-        name: "_marginEngine",
+        internalType: "contract IVAMM",
+        name: "_vamm",
         type: "address",
       },
       {
         indexed: false,
-        internalType: "uint256",
-        name: "_lpNotionalCapNew",
-        type: "uint256",
-      },
-    ],
-    name: "NotionalCap",
-    type: "event",
-  },
-  {
-    inputs: [
-      {
-        internalType: "contract IMarginEngine",
-        name: "marginEngine",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "_owner",
-        type: "address",
-      },
-      {
-        internalType: "int24",
-        name: "_tickLower",
-        type: "int24",
-      },
-      {
-        internalType: "int24",
-        name: "_tickUpper",
-        type: "int24",
-      },
-    ],
-    name: "estimatedCashflowAtMaturity",
-    outputs: [
-      {
         internalType: "int256",
-        name: "estimatedSettlementCashflow",
+        name: "_lpMarginCapNew",
         type: "int256",
       },
     ],
-    stateMutability: "nonpayable",
-    type: "function",
+    name: "MarginCap",
+    type: "event",
   },
   {
     inputs: [
@@ -302,17 +273,17 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "contract IMarginEngine",
-        name: "_marginEngine",
+        internalType: "contract IVAMM",
+        name: "_vamm",
         type: "address",
       },
     ],
-    name: "lpNotionalCaps",
+    name: "lpMarginCaps",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "int256",
         name: "",
-        type: "uint256",
+        type: "int256",
       },
     ],
     stateMutability: "nonpayable",
@@ -321,17 +292,17 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "contract IMarginEngine",
-        name: "_marginEngine",
+        internalType: "contract IVAMM",
+        name: "_vamm",
         type: "address",
       },
     ],
-    name: "lpNotionalCumulatives",
+    name: "lpMarginCumulatives",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "int256",
         name: "",
-        type: "uint256",
+        type: "int256",
       },
     ],
     stateMutability: "nonpayable",
@@ -367,9 +338,9 @@ const _abi = [
             type: "bool",
           },
           {
-            internalType: "uint256",
+            internalType: "int256",
             name: "marginDelta",
-            type: "uint256",
+            type: "int256",
           },
         ],
         internalType: "struct IPeriphery.MintOrBurnParams",
@@ -385,6 +356,52 @@ const _abi = [
         type: "int256",
       },
     ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "contract IVAMM",
+        name: "_vamm",
+        type: "address",
+      },
+      {
+        internalType: "int256",
+        name: "_lpMarginCapNew",
+        type: "int256",
+      },
+    ],
+    name: "setLPMarginCap",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "contract IMarginEngine",
+        name: "_marginEngine",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_owner",
+        type: "address",
+      },
+      {
+        internalType: "int24",
+        name: "_tickLower",
+        type: "int24",
+      },
+      {
+        internalType: "int24",
+        name: "_tickUpper",
+        type: "int24",
+      },
+    ],
+    name: "settlePositionAndWithdrawMargin",
+    outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
@@ -466,6 +483,39 @@ const _abi = [
         type: "int24",
       },
     ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "contract IMarginEngine",
+        name: "_marginEngine",
+        type: "address",
+      },
+      {
+        internalType: "int24",
+        name: "_tickLower",
+        type: "int24",
+      },
+      {
+        internalType: "int24",
+        name: "_tickUpper",
+        type: "int24",
+      },
+      {
+        internalType: "int256",
+        name: "_marginDelta",
+        type: "int256",
+      },
+      {
+        internalType: "bool",
+        name: "_fullyWithdraw",
+        type: "bool",
+      },
+    ],
+    name: "updatePositionMargin",
+    outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },

@@ -32,6 +32,7 @@ interface AaveFCMInterface extends ethers.utils.Interface {
     "paused()": FunctionFragment;
     "rateOracle()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
+    "setPausability(bool)": FunctionFragment;
     "settleTrader()": FunctionFragment;
     "traders(address)": FunctionFragment;
     "transferMarginToMarginEngineTrader(address,uint256)": FunctionFragment;
@@ -77,6 +78,10 @@ interface AaveFCMInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setPausability",
+    values: [boolean]
   ): string;
   encodeFunctionData(
     functionFragment: "settleTrader",
@@ -139,6 +144,10 @@ interface AaveFCMInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "setPausability",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "settleTrader",
     data: BytesLike
   ): Result;
@@ -177,8 +186,6 @@ interface AaveFCMInterface extends ethers.utils.Interface {
     "FullyCollateralisedSwap(address,uint256,uint160,uint256,int256,int256,int256)": EventFragment;
     "FullyCollateralisedUnwind(address,uint256,uint160,uint256,int256,int256,int256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
-    "Paused(address)": EventFragment;
-    "Unpaused(address)": EventFragment;
     "Upgraded(address)": EventFragment;
     "fcmPositionSettlement(address,int256)": EventFragment;
   };
@@ -189,8 +196,6 @@ interface AaveFCMInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "FullyCollateralisedSwap"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "FullyCollateralisedUnwind"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Upgraded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "fcmPositionSettlement"): EventFragment;
 }
@@ -237,10 +242,6 @@ export type FullyCollateralisedUnwindEvent = TypedEvent<
 export type OwnershipTransferredEvent = TypedEvent<
   [string, string] & { previousOwner: string; newOwner: string }
 >;
-
-export type PausedEvent = TypedEvent<[string] & { account: string }>;
-
-export type UnpausedEvent = TypedEvent<[string] & { account: string }>;
 
 export type UpgradedEvent = TypedEvent<[string] & { implementation: string }>;
 
@@ -344,6 +345,11 @@ export class AaveFCM extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setPausability(
+      state: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     settleTrader(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -435,6 +441,11 @@ export class AaveFCM extends BaseContract {
   rateOracle(overrides?: CallOverrides): Promise<string>;
 
   renounceOwnership(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setPausability(
+    state: boolean,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -536,6 +547,8 @@ export class AaveFCM extends BaseContract {
     rateOracle(overrides?: CallOverrides): Promise<string>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    setPausability(state: boolean, overrides?: CallOverrides): Promise<void>;
 
     settleTrader(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -780,18 +793,6 @@ export class AaveFCM extends BaseContract {
       { previousOwner: string; newOwner: string }
     >;
 
-    "Paused(address)"(
-      account?: null
-    ): TypedEventFilter<[string], { account: string }>;
-
-    Paused(account?: null): TypedEventFilter<[string], { account: string }>;
-
-    "Unpaused(address)"(
-      account?: null
-    ): TypedEventFilter<[string], { account: string }>;
-
-    Unpaused(account?: null): TypedEventFilter<[string], { account: string }>;
-
     "Upgraded(address)"(
       implementation?: string | null
     ): TypedEventFilter<[string], { implementation: string }>;
@@ -851,6 +852,11 @@ export class AaveFCM extends BaseContract {
     rateOracle(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setPausability(
+      state: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -929,6 +935,11 @@ export class AaveFCM extends BaseContract {
     rateOracle(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setPausability(
+      state: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

@@ -489,7 +489,8 @@ var AMM = /** @class */ (function () {
     AMM.prototype.updatePositionMargin = function (_a) {
         var owner = _a.owner, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, marginDelta = _a.marginDelta;
         return __awaiter(this, void 0, void 0, function () {
-            var effectiveOwner, _b, tickUpper, tickLower, scaledMarginDelta, isUnderlyingTokenApprovedForPeriphery, marginEngineContract, updatePositionMarginTransaction, receipt, error_4;
+            var effectiveOwner, _b, tickUpper, tickLower, scaledMarginDelta, isUnderlyingTokenApprovedForPeriphery, peripheryContract, updatePositionMarginTransaction, receipt, error_4;
+            var _this = this;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
@@ -527,21 +528,30 @@ var AMM = /** @class */ (function () {
                         _c.sent();
                         _c.label = 6;
                     case 6:
-                        marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
-                        return [4 /*yield*/, marginEngineContract.updatePositionMargin(effectiveOwner, tickLower, tickUpper, scaledMarginDelta, this.overrides)];
+                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        return [4 /*yield*/, peripheryContract.callStatic.updatePositionMargin(this.marginEngineAddress, tickLower, tickUpper, scaledMarginDelta, false).catch(function (error) { return __awaiter(_this, void 0, void 0, function () {
+                                var errorMessage;
+                                return __generator(this, function (_a) {
+                                    errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, this.environment);
+                                    throw new Error(errorMessage);
+                                });
+                            }); })];
                     case 7:
-                        updatePositionMarginTransaction = _c.sent();
-                        _c.label = 8;
+                        _c.sent();
+                        return [4 /*yield*/, peripheryContract.updatePositionMargin(this.marginEngineAddress, tickLower, tickUpper, scaledMarginDelta, false, this.overrides)];
                     case 8:
-                        _c.trys.push([8, 10, , 11]);
-                        return [4 /*yield*/, updatePositionMarginTransaction.wait()];
+                        updatePositionMarginTransaction = _c.sent();
+                        _c.label = 9;
                     case 9:
+                        _c.trys.push([9, 11, , 12]);
+                        return [4 /*yield*/, updatePositionMarginTransaction.wait()];
+                    case 10:
                         receipt = _c.sent();
                         return [2 /*return*/, receipt];
-                    case 10:
+                    case 11:
                         error_4 = _c.sent();
                         throw new Error("Transaction Confirmation Error");
-                    case 11: return [2 /*return*/];
+                    case 12: return [2 /*return*/];
                 }
             });
         });
@@ -551,6 +561,7 @@ var AMM = /** @class */ (function () {
         var owner = _a.owner, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh;
         return __awaiter(this, void 0, void 0, function () {
             var tickUpper, tickLower, marginEngineContract, liquidatePositionTransaction, receipt, error_5;
+            var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -560,20 +571,27 @@ var AMM = /** @class */ (function () {
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
                         marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
-                        return [4 /*yield*/, marginEngineContract.liquidatePosition(owner, tickLower, tickUpper, this.overrides)];
+                        return [4 /*yield*/, marginEngineContract.callStatic.liquidatePosition(owner, tickLower, tickUpper).catch(function (error) {
+                                var errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, _this.environment);
+                                throw new Error(errorMessage);
+                            })];
                     case 1:
-                        liquidatePositionTransaction = _b.sent();
-                        _b.label = 2;
+                        _b.sent();
+                        ;
+                        return [4 /*yield*/, marginEngineContract.liquidatePosition(owner, tickLower, tickUpper, this.overrides)];
                     case 2:
-                        _b.trys.push([2, 4, , 5]);
-                        return [4 /*yield*/, liquidatePositionTransaction.wait()];
+                        liquidatePositionTransaction = _b.sent();
+                        _b.label = 3;
                     case 3:
+                        _b.trys.push([3, 5, , 6]);
+                        return [4 /*yield*/, liquidatePositionTransaction.wait()];
+                    case 4:
                         receipt = _b.sent();
                         return [2 /*return*/, receipt];
-                    case 4:
+                    case 5:
                         error_5 = _b.sent();
                         throw new Error("Transaction Confirmation Error");
-                    case 5: return [2 /*return*/];
+                    case 6: return [2 /*return*/];
                 }
             });
         });
@@ -582,7 +600,8 @@ var AMM = /** @class */ (function () {
     AMM.prototype.settlePosition = function (_a) {
         var owner = _a.owner, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh;
         return __awaiter(this, void 0, void 0, function () {
-            var effectiveOwner, _b, tickUpper, tickLower, marginEngineContract, settlePositionTransaction, receipt, error_6;
+            var effectiveOwner, _b, tickUpper, tickLower, peripheryContract, settlePositionTransaction, receipt, error_6;
+            var _this = this;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
@@ -601,21 +620,27 @@ var AMM = /** @class */ (function () {
                         effectiveOwner = _b;
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
-                        marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
-                        return [4 /*yield*/, marginEngineContract.settlePosition(effectiveOwner, tickLower, tickUpper, this.overrides)];
+                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        return [4 /*yield*/, peripheryContract.callStatic.settlePositionAndWithdrawMargin(this.marginEngineAddress, effectiveOwner, tickLower, tickUpper).catch(function (error) {
+                                var errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, _this.environment);
+                                throw new Error(errorMessage);
+                            })];
                     case 4:
-                        settlePositionTransaction = _c.sent();
-                        _c.label = 5;
+                        _c.sent();
+                        return [4 /*yield*/, peripheryContract.settlePositionAndWithdrawMargin(this.marginEngineAddress, effectiveOwner, tickLower, tickUpper, this.overrides)];
                     case 5:
-                        _c.trys.push([5, 7, , 8]);
-                        return [4 /*yield*/, settlePositionTransaction.wait()];
+                        settlePositionTransaction = _c.sent();
+                        _c.label = 6;
                     case 6:
+                        _c.trys.push([6, 8, , 9]);
+                        return [4 /*yield*/, settlePositionTransaction.wait()];
+                    case 7:
                         receipt = _c.sent();
                         return [2 /*return*/, receipt];
-                    case 7:
+                    case 8:
                         error_6 = _c.sent();
                         throw new Error("Transaction Confirmation Error");
-                    case 8: return [2 /*return*/];
+                    case 9: return [2 /*return*/];
                 }
             });
         });
@@ -625,6 +650,7 @@ var AMM = /** @class */ (function () {
         var notional = _a.notional, fixedRateLimit = _a.fixedRateLimit;
         return __awaiter(this, void 0, void 0, function () {
             var isFCMApproved, sqrtPriceLimitX96, tickLimit, fcmContract, scaledNotional, isUnderlyingTokenApprovedForFCM, isYieldBearingTokenApprovedForFCM, fcmSwapTransaction, receipt, error_7;
+            var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -668,20 +694,26 @@ var AMM = /** @class */ (function () {
                     case 8:
                         _b.sent();
                         _b.label = 9;
-                    case 9: return [4 /*yield*/, fcmContract.initiateFullyCollateralisedFixedTakerSwap(scaledNotional, sqrtPriceLimitX96, this.overrides)];
+                    case 9: return [4 /*yield*/, fcmContract.callStatic.initiateFullyCollateralisedFixedTakerSwap(scaledNotional, sqrtPriceLimitX96).catch(function (error) {
+                            var errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, _this.environment);
+                            throw new Error(errorMessage);
+                        })];
                     case 10:
-                        fcmSwapTransaction = _b.sent();
-                        _b.label = 11;
+                        _b.sent();
+                        return [4 /*yield*/, fcmContract.initiateFullyCollateralisedFixedTakerSwap(scaledNotional, sqrtPriceLimitX96, this.overrides)];
                     case 11:
-                        _b.trys.push([11, 13, , 14]);
-                        return [4 /*yield*/, fcmSwapTransaction.wait()];
+                        fcmSwapTransaction = _b.sent();
+                        _b.label = 12;
                     case 12:
+                        _b.trys.push([12, 14, , 15]);
+                        return [4 /*yield*/, fcmSwapTransaction.wait()];
+                    case 13:
                         receipt = _b.sent();
                         return [2 /*return*/, receipt];
-                    case 13:
+                    case 14:
                         error_7 = _b.sent();
                         throw new Error("Transaction Confirmation Error");
-                    case 14: return [2 /*return*/];
+                    case 15: return [2 /*return*/];
                 }
             });
         });
@@ -691,6 +723,7 @@ var AMM = /** @class */ (function () {
         var notionalToUnwind = _a.notionalToUnwind, fixedRateLimit = _a.fixedRateLimit;
         return __awaiter(this, void 0, void 0, function () {
             var sqrtPriceLimitX96, tickLimit, isFCMApproved, fcmContract, scaledNotional, isUnderlyingTokenApprovedForFCM, fcmUnwindTransaction, receipt, error_8;
+            var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -726,20 +759,26 @@ var AMM = /** @class */ (function () {
                     case 5:
                         _b.sent();
                         _b.label = 6;
-                    case 6: return [4 /*yield*/, fcmContract.unwindFullyCollateralisedFixedTakerSwap(scaledNotional, sqrtPriceLimitX96, this.overrides)];
+                    case 6: return [4 /*yield*/, fcmContract.callStatic.unwindFullyCollateralisedFixedTakerSwap(scaledNotional, sqrtPriceLimitX96).catch(function (error) {
+                            var errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, _this.environment);
+                            throw new Error(errorMessage);
+                        })];
                     case 7:
-                        fcmUnwindTransaction = _b.sent();
-                        _b.label = 8;
+                        _b.sent();
+                        return [4 /*yield*/, fcmContract.unwindFullyCollateralisedFixedTakerSwap(scaledNotional, sqrtPriceLimitX96, this.overrides)];
                     case 8:
-                        _b.trys.push([8, 10, , 11]);
-                        return [4 /*yield*/, fcmUnwindTransaction.wait()];
+                        fcmUnwindTransaction = _b.sent();
+                        _b.label = 9;
                     case 9:
+                        _b.trys.push([9, 11, , 12]);
+                        return [4 /*yield*/, fcmUnwindTransaction.wait()];
+                    case 10:
                         receipt = _b.sent();
                         return [2 /*return*/, receipt];
-                    case 10:
+                    case 11:
                         error_8 = _b.sent();
                         throw new Error("Transaction Confirmation Error");
-                    case 11: return [2 /*return*/];
+                    case 12: return [2 /*return*/];
                 }
             });
         });
@@ -748,6 +787,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.settleFCMTrader = function () {
         return __awaiter(this, void 0, void 0, function () {
             var fcmContract, fcmSettleTraderTransaction, receipt, error_9;
+            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -755,20 +795,26 @@ var AMM = /** @class */ (function () {
                             throw new Error('Wallet not connected');
                         }
                         fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
-                        return [4 /*yield*/, fcmContract.settleTrader(this.overrides)];
+                        return [4 /*yield*/, fcmContract.callStatic.settleTrader().catch(function (error) {
+                                var errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, _this.environment);
+                                throw new Error(errorMessage);
+                            })];
                     case 1:
-                        fcmSettleTraderTransaction = _a.sent();
-                        _a.label = 2;
+                        _a.sent();
+                        return [4 /*yield*/, fcmContract.settleTrader(this.overrides)];
                     case 2:
-                        _a.trys.push([2, 4, , 5]);
-                        return [4 /*yield*/, fcmSettleTraderTransaction.wait()];
+                        fcmSettleTraderTransaction = _a.sent();
+                        _a.label = 3;
                     case 3:
+                        _a.trys.push([3, 5, , 6]);
+                        return [4 /*yield*/, fcmSettleTraderTransaction.wait()];
+                    case 4:
                         receipt = _a.sent();
                         return [2 /*return*/, receipt];
-                    case 4:
+                    case 5:
                         error_9 = _a.sent();
                         throw new Error("Transaction Confirmation Error");
-                    case 5: return [2 /*return*/];
+                    case 6: return [2 /*return*/];
                 }
             });
         });

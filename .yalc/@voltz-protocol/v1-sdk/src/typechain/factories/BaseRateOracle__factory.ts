@@ -16,6 +16,11 @@ const _abi = [
     type: "error",
   },
   {
+    inputs: [],
+    name: "CTokenExchangeRateReturnedZero",
+    type: "error",
+  },
+  {
     inputs: [
       {
         internalType: "bool",
@@ -386,6 +391,19 @@ const _abi = [
   },
   {
     inputs: [],
+    name: "ONE_IN_WAD",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "UNDERLYING_YIELD_BEARING_PROTOCOL_ID",
     outputs: [
       {
@@ -456,6 +474,35 @@ const _abi = [
     name: "increaseObservationCardinalityNext",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "beforeOrAtRateValueRay",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "apyFromBeforeOrAtToAtOrAfterWad",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "timeDeltaBeforeOrAtToQueriedTimeWad",
+        type: "uint256",
+      },
+    ],
+    name: "interpolateRateValue",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "rateValueRay",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "pure",
     type: "function",
   },
   {

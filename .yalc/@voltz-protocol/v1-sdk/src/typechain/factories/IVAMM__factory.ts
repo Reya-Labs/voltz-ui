@@ -13,6 +13,11 @@ const _abi = [
     type: "error",
   },
   {
+    inputs: [],
+    name: "CTokenExchangeRateReturnedZero",
+    type: "error",
+  },
+  {
     inputs: [
       {
         internalType: "bool",
@@ -724,6 +729,19 @@ const _abi = [
       },
     ],
     name: "setIsAlpha",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bool",
+        name: "state",
+        type: "bool",
+      },
+    ],
+    name: "setPausability",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

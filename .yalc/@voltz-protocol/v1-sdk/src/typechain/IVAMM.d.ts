@@ -38,6 +38,7 @@ interface IVAMMInterface extends ethers.utils.Interface {
     "setFee(uint256)": FunctionFragment;
     "setFeeProtocol(uint8)": FunctionFragment;
     "setIsAlpha(bool)": FunctionFragment;
+    "setPausability(bool)": FunctionFragment;
     "swap((address,int256,uint160,int24,int24))": FunctionFragment;
     "tickBitmap(int16)": FunctionFragment;
     "tickSpacing()": FunctionFragment;
@@ -100,6 +101,10 @@ interface IVAMMInterface extends ethers.utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "setIsAlpha", values: [boolean]): string;
+  encodeFunctionData(
+    functionFragment: "setPausability",
+    values: [boolean]
+  ): string;
   encodeFunctionData(
     functionFragment: "swap",
     values: [
@@ -172,6 +177,10 @@ interface IVAMMInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "setIsAlpha", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setPausability",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "swap", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "tickBitmap", data: BytesLike): Result;
   decodeFunctionResult(
@@ -384,6 +393,11 @@ export class IVAMM extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setPausability(
+      state: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     swap(
       params: {
         recipient: string;
@@ -512,6 +526,11 @@ export class IVAMM extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setPausability(
+    state: boolean,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   swap(
     params: {
       recipient: string;
@@ -627,6 +646,8 @@ export class IVAMM extends BaseContract {
     ): Promise<void>;
 
     setIsAlpha(__isAlpha: boolean, overrides?: CallOverrides): Promise<void>;
+
+    setPausability(state: boolean, overrides?: CallOverrides): Promise<void>;
 
     swap(
       params: {
@@ -945,6 +966,11 @@ export class IVAMM extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setPausability(
+      state: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     swap(
       params: {
         recipient: string;
@@ -1047,6 +1073,11 @@ export class IVAMM extends BaseContract {
 
     setIsAlpha(
       __isAlpha: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setPausability(
+      state: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

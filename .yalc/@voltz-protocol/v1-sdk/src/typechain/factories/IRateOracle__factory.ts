@@ -13,6 +13,11 @@ const _abi = [
     type: "error",
   },
   {
+    inputs: [],
+    name: "CTokenExchangeRateReturnedZero",
+    type: "error",
+  },
+  {
     inputs: [
       {
         internalType: "bool",

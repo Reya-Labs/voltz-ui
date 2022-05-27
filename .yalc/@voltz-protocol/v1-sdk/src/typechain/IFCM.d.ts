@@ -26,6 +26,7 @@ interface IFCMInterface extends ethers.utils.Interface {
     "initiateFullyCollateralisedFixedTakerSwap(uint256,uint160)": FunctionFragment;
     "marginEngine()": FunctionFragment;
     "rateOracle()": FunctionFragment;
+    "setPausability(bool)": FunctionFragment;
     "settleTrader()": FunctionFragment;
     "transferMarginToMarginEngineTrader(address,uint256)": FunctionFragment;
     "unwindFullyCollateralisedFixedTakerSwap(uint256,uint160)": FunctionFragment;
@@ -51,6 +52,10 @@ interface IFCMInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "rateOracle",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setPausability",
+    values: [boolean]
   ): string;
   encodeFunctionData(
     functionFragment: "settleTrader",
@@ -80,6 +85,10 @@ interface IFCMInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "rateOracle", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setPausability",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "settleTrader",
     data: BytesLike
@@ -225,6 +234,11 @@ export class IFCM extends BaseContract {
 
     rateOracle(overrides?: CallOverrides): Promise<[string]>;
 
+    setPausability(
+      state: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     settleTrader(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -271,6 +285,11 @@ export class IFCM extends BaseContract {
   marginEngine(overrides?: CallOverrides): Promise<string>;
 
   rateOracle(overrides?: CallOverrides): Promise<string>;
+
+  setPausability(
+    state: boolean,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   settleTrader(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -325,6 +344,8 @@ export class IFCM extends BaseContract {
     marginEngine(overrides?: CallOverrides): Promise<string>;
 
     rateOracle(overrides?: CallOverrides): Promise<string>;
+
+    setPausability(state: boolean, overrides?: CallOverrides): Promise<void>;
 
     settleTrader(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -536,6 +557,11 @@ export class IFCM extends BaseContract {
 
     rateOracle(overrides?: CallOverrides): Promise<BigNumber>;
 
+    setPausability(
+      state: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     settleTrader(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -576,6 +602,11 @@ export class IFCM extends BaseContract {
     marginEngine(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     rateOracle(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    setPausability(
+      state: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     settleTrader(
       overrides?: Overrides & { from?: string | Promise<string> }

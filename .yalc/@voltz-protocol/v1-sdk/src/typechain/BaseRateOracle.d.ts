@@ -21,10 +21,12 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface BaseRateOracleInterface extends ethers.utils.Interface {
   functions: {
+    "ONE_IN_WAD()": FunctionFragment;
     "UNDERLYING_YIELD_BEARING_PROTOCOL_ID()": FunctionFragment;
     "getApyFromTo(uint256,uint256)": FunctionFragment;
     "getRateFromTo(uint256,uint256)": FunctionFragment;
     "increaseObservationCardinalityNext(uint16)": FunctionFragment;
+    "interpolateRateValue(uint256,uint256,uint256)": FunctionFragment;
     "minSecondsSinceLastUpdate()": FunctionFragment;
     "observations(uint256)": FunctionFragment;
     "oracleVars()": FunctionFragment;
@@ -40,6 +42,10 @@ interface BaseRateOracleInterface extends ethers.utils.Interface {
   };
 
   encodeFunctionData(
+    functionFragment: "ONE_IN_WAD",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "UNDERLYING_YIELD_BEARING_PROTOCOL_ID",
     values?: undefined
   ): string;
@@ -54,6 +60,10 @@ interface BaseRateOracleInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "increaseObservationCardinalityNext",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "interpolateRateValue",
+    values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "minSecondsSinceLastUpdate",
@@ -101,6 +111,7 @@ interface BaseRateOracleInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
 
+  decodeFunctionResult(functionFragment: "ONE_IN_WAD", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "UNDERLYING_YIELD_BEARING_PROTOCOL_ID",
     data: BytesLike
@@ -115,6 +126,10 @@ interface BaseRateOracleInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "increaseObservationCardinalityNext",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "interpolateRateValue",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -238,6 +253,8 @@ export class BaseRateOracle extends BaseContract {
   interface: BaseRateOracleInterface;
 
   functions: {
+    ONE_IN_WAD(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     UNDERLYING_YIELD_BEARING_PROTOCOL_ID(
       overrides?: CallOverrides
     ): Promise<[number] & { yieldBearingProtocolID: number }>;
@@ -258,6 +275,13 @@ export class BaseRateOracle extends BaseContract {
       rateCardinalityNext: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    interpolateRateValue(
+      beforeOrAtRateValueRay: BigNumberish,
+      apyFromBeforeOrAtToAtOrAfterWad: BigNumberish,
+      timeDeltaBeforeOrAtToQueriedTimeWad: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { rateValueRay: BigNumber }>;
 
     minSecondsSinceLastUpdate(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -323,6 +347,8 @@ export class BaseRateOracle extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
+  ONE_IN_WAD(overrides?: CallOverrides): Promise<BigNumber>;
+
   UNDERLYING_YIELD_BEARING_PROTOCOL_ID(
     overrides?: CallOverrides
   ): Promise<number>;
@@ -343,6 +369,13 @@ export class BaseRateOracle extends BaseContract {
     rateCardinalityNext: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  interpolateRateValue(
+    beforeOrAtRateValueRay: BigNumberish,
+    apyFromBeforeOrAtToAtOrAfterWad: BigNumberish,
+    timeDeltaBeforeOrAtToQueriedTimeWad: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   minSecondsSinceLastUpdate(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -408,6 +441,8 @@ export class BaseRateOracle extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    ONE_IN_WAD(overrides?: CallOverrides): Promise<BigNumber>;
+
     UNDERLYING_YIELD_BEARING_PROTOCOL_ID(
       overrides?: CallOverrides
     ): Promise<number>;
@@ -428,6 +463,13 @@ export class BaseRateOracle extends BaseContract {
       rateCardinalityNext: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    interpolateRateValue(
+      beforeOrAtRateValueRay: BigNumberish,
+      apyFromBeforeOrAtToAtOrAfterWad: BigNumberish,
+      timeDeltaBeforeOrAtToQueriedTimeWad: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     minSecondsSinceLastUpdate(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -566,6 +608,8 @@ export class BaseRateOracle extends BaseContract {
   };
 
   estimateGas: {
+    ONE_IN_WAD(overrides?: CallOverrides): Promise<BigNumber>;
+
     UNDERLYING_YIELD_BEARING_PROTOCOL_ID(
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -585,6 +629,13 @@ export class BaseRateOracle extends BaseContract {
     increaseObservationCardinalityNext(
       rateCardinalityNext: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    interpolateRateValue(
+      beforeOrAtRateValueRay: BigNumberish,
+      apyFromBeforeOrAtToAtOrAfterWad: BigNumberish,
+      timeDeltaBeforeOrAtToQueriedTimeWad: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     minSecondsSinceLastUpdate(overrides?: CallOverrides): Promise<BigNumber>;
@@ -638,6 +689,8 @@ export class BaseRateOracle extends BaseContract {
   };
 
   populateTransaction: {
+    ONE_IN_WAD(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     UNDERLYING_YIELD_BEARING_PROTOCOL_ID(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -657,6 +710,13 @@ export class BaseRateOracle extends BaseContract {
     increaseObservationCardinalityNext(
       rateCardinalityNext: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    interpolateRateValue(
+      beforeOrAtRateValueRay: BigNumberish,
+      apyFromBeforeOrAtToAtOrAfterWad: BigNumberish,
+      timeDeltaBeforeOrAtToQueriedTimeWad: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     minSecondsSinceLastUpdate(

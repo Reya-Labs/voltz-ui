@@ -16,10 +16,10 @@ export const TresholdApprovalBn = BigNumber.from(
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000';
 
 // Latest kovan deployment address of the factory
-export const FACTORY_ADDRESS = '0x71b5020bF90327F2241Cc7D66B60C72CEf9cC39b';
+export const FACTORY_ADDRESS = '0x9f9e5e2dFbE4c94eFFeb5aAa60D87BD3C72484cf';
 
 // Latest kovan deployment address of the periphery
-export const PERIPHERY_ADDRESS = '0x411b190015978F01e6d57e551455B317bf26233f';
+export const PERIPHERY_ADDRESS = '0xE63B5516f7Eda93da983c16Ec8775a5029Ed1eba';
 
 // constants used internally but not expected to be used externally
 export const NEGATIVE_ONE = JSBI.BigInt(-1);

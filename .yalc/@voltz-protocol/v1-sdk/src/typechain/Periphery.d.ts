@@ -21,29 +21,31 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface PeripheryInterface extends ethers.utils.Interface {
   functions: {
-    "estimatedCashflowAtMaturity(address,address,int24,int24)": FunctionFragment;
     "getCurrentTick(address)": FunctionFragment;
-    "lpNotionalCaps(address)": FunctionFragment;
-    "lpNotionalCumulatives(address)": FunctionFragment;
-    "mintOrBurn((address,int24,int24,uint256,bool,uint256))": FunctionFragment;
-    "setLPNotionalCap(address,uint256)": FunctionFragment;
+    "getLiquidityForNotional(uint160,uint160,uint256)": FunctionFragment;
+    "lpMarginCaps(address)": FunctionFragment;
+    "lpMarginCumulatives(address)": FunctionFragment;
+    "mintOrBurn((address,int24,int24,uint256,bool,int256))": FunctionFragment;
+    "setLPMarginCap(address,int256)": FunctionFragment;
+    "settlePositionAndWithdrawMargin(address,address,int24,int24)": FunctionFragment;
     "swap((address,bool,uint256,uint160,int24,int24,uint256))": FunctionFragment;
+    "updatePositionMargin(address,int24,int24,int256,bool)": FunctionFragment;
   };
 
-  encodeFunctionData(
-    functionFragment: "estimatedCashflowAtMaturity",
-    values: [string, string, BigNumberish, BigNumberish]
-  ): string;
   encodeFunctionData(
     functionFragment: "getCurrentTick",
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "lpNotionalCaps",
+    functionFragment: "getLiquidityForNotional",
+    values: [BigNumberish, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "lpMarginCaps",
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "lpNotionalCumulatives",
+    functionFragment: "lpMarginCumulatives",
     values: [string]
   ): string;
   encodeFunctionData(
@@ -60,8 +62,12 @@ interface PeripheryInterface extends ethers.utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "setLPNotionalCap",
+    functionFragment: "setLPMarginCap",
     values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "settlePositionAndWithdrawMargin",
+    values: [string, string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "swap",
@@ -77,39 +83,51 @@ interface PeripheryInterface extends ethers.utils.Interface {
       }
     ]
   ): string;
+  encodeFunctionData(
+    functionFragment: "updatePositionMargin",
+    values: [string, BigNumberish, BigNumberish, BigNumberish, boolean]
+  ): string;
 
-  decodeFunctionResult(
-    functionFragment: "estimatedCashflowAtMaturity",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "getCurrentTick",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "lpNotionalCaps",
+    functionFragment: "getLiquidityForNotional",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "lpNotionalCumulatives",
+    functionFragment: "lpMarginCaps",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "lpMarginCumulatives",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "mintOrBurn", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "setLPNotionalCap",
+    functionFragment: "setLPMarginCap",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "settlePositionAndWithdrawMargin",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "swap", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "updatePositionMargin",
+    data: BytesLike
+  ): Result;
 
   events: {
-    "NotionalCap(address,uint256)": EventFragment;
+    "MarginCap(address,int256)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "NotionalCap"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "MarginCap"): EventFragment;
 }
 
-export type NotionalCapEvent = TypedEvent<
-  [string, BigNumber] & { _marginEngine: string; _lpNotionalCapNew: BigNumber }
+export type MarginCapEvent = TypedEvent<
+  [string, BigNumber] & { _vamm: string; _lpMarginCapNew: BigNumber }
 >;
 
 export class Periphery extends BaseContract {
@@ -156,25 +174,21 @@ export class Periphery extends BaseContract {
   interface: PeripheryInterface;
 
   functions: {
-    estimatedCashflowAtMaturity(
-      marginEngine: string,
-      _owner: string,
-      _tickLower: BigNumberish,
-      _tickUpper: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     getCurrentTick(
       marginEngine: string,
       overrides?: CallOverrides
     ): Promise<[number] & { currentTick: number }>;
 
-    lpNotionalCaps(
-      arg0: string,
+    getLiquidityForNotional(
+      sqrtRatioAX96: BigNumberish,
+      sqrtRatioBX96: BigNumberish,
+      notionalAmount: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    ): Promise<[BigNumber] & { liquidity: BigNumber }>;
 
-    lpNotionalCumulatives(
+    lpMarginCaps(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    lpMarginCumulatives(
       arg0: string,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
@@ -191,9 +205,17 @@ export class Periphery extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    setLPNotionalCap(
+    setLPMarginCap(
+      _vamm: string,
+      _lpMarginCapNew: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    settlePositionAndWithdrawMargin(
       _marginEngine: string,
-      _lpNotionalCapNew: BigNumberish,
+      _owner: string,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -209,24 +231,32 @@ export class Periphery extends BaseContract {
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-  };
 
-  estimatedCashflowAtMaturity(
-    marginEngine: string,
-    _owner: string,
-    _tickLower: BigNumberish,
-    _tickUpper: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+    updatePositionMargin(
+      _marginEngine: string,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
+      _marginDelta: BigNumberish,
+      _fullyWithdraw: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+  };
 
   getCurrentTick(
     marginEngine: string,
     overrides?: CallOverrides
   ): Promise<number>;
 
-  lpNotionalCaps(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+  getLiquidityForNotional(
+    sqrtRatioAX96: BigNumberish,
+    sqrtRatioBX96: BigNumberish,
+    notionalAmount: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
-  lpNotionalCumulatives(
+  lpMarginCaps(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+  lpMarginCumulatives(
     arg0: string,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
@@ -243,9 +273,17 @@ export class Periphery extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  setLPNotionalCap(
+  setLPMarginCap(
+    _vamm: string,
+    _lpMarginCapNew: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  settlePositionAndWithdrawMargin(
     _marginEngine: string,
-    _lpNotionalCapNew: BigNumberish,
+    _owner: string,
+    _tickLower: BigNumberish,
+    _tickUpper: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -262,23 +300,31 @@ export class Periphery extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  callStatic: {
-    estimatedCashflowAtMaturity(
-      marginEngine: string,
-      _owner: string,
-      _tickLower: BigNumberish,
-      _tickUpper: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+  updatePositionMargin(
+    _marginEngine: string,
+    _tickLower: BigNumberish,
+    _tickUpper: BigNumberish,
+    _marginDelta: BigNumberish,
+    _fullyWithdraw: boolean,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
+  callStatic: {
     getCurrentTick(
       marginEngine: string,
       overrides?: CallOverrides
     ): Promise<number>;
 
-    lpNotionalCaps(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+    getLiquidityForNotional(
+      sqrtRatioAX96: BigNumberish,
+      sqrtRatioBX96: BigNumberish,
+      notionalAmount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-    lpNotionalCumulatives(
+    lpMarginCaps(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    lpMarginCumulatives(
       arg0: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -295,9 +341,17 @@ export class Periphery extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    setLPNotionalCap(
+    setLPMarginCap(
+      _vamm: string,
+      _lpMarginCapNew: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    settlePositionAndWithdrawMargin(
       _marginEngine: string,
-      _lpNotionalCapNew: BigNumberish,
+      _owner: string,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -322,43 +376,51 @@ export class Periphery extends BaseContract {
         _tickAfter: number;
       }
     >;
+
+    updatePositionMargin(
+      _marginEngine: string,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
+      _marginDelta: BigNumberish,
+      _fullyWithdraw: boolean,
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
   filters: {
-    "NotionalCap(address,uint256)"(
-      _marginEngine?: null,
-      _lpNotionalCapNew?: null
+    "MarginCap(address,int256)"(
+      _vamm?: null,
+      _lpMarginCapNew?: null
     ): TypedEventFilter<
       [string, BigNumber],
-      { _marginEngine: string; _lpNotionalCapNew: BigNumber }
+      { _vamm: string; _lpMarginCapNew: BigNumber }
     >;
 
-    NotionalCap(
-      _marginEngine?: null,
-      _lpNotionalCapNew?: null
+    MarginCap(
+      _vamm?: null,
+      _lpMarginCapNew?: null
     ): TypedEventFilter<
       [string, BigNumber],
-      { _marginEngine: string; _lpNotionalCapNew: BigNumber }
+      { _vamm: string; _lpMarginCapNew: BigNumber }
     >;
   };
 
   estimateGas: {
-    estimatedCashflowAtMaturity(
-      marginEngine: string,
-      _owner: string,
-      _tickLower: BigNumberish,
-      _tickUpper: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     getCurrentTick(
       marginEngine: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    lpNotionalCaps(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+    getLiquidityForNotional(
+      sqrtRatioAX96: BigNumberish,
+      sqrtRatioBX96: BigNumberish,
+      notionalAmount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-    lpNotionalCumulatives(
+    lpMarginCaps(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    lpMarginCumulatives(
       arg0: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -375,9 +437,17 @@ export class Periphery extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    setLPNotionalCap(
+    setLPMarginCap(
+      _vamm: string,
+      _lpMarginCapNew: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    settlePositionAndWithdrawMargin(
       _marginEngine: string,
-      _lpNotionalCapNew: BigNumberish,
+      _owner: string,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -391,30 +461,38 @@ export class Periphery extends BaseContract {
         tickUpper: BigNumberish;
         marginDelta: BigNumberish;
       },
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    updatePositionMargin(
+      _marginEngine: string,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
+      _marginDelta: BigNumberish,
+      _fullyWithdraw: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    estimatedCashflowAtMaturity(
-      marginEngine: string,
-      _owner: string,
-      _tickLower: BigNumberish,
-      _tickUpper: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     getCurrentTick(
       marginEngine: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    lpNotionalCaps(
+    getLiquidityForNotional(
+      sqrtRatioAX96: BigNumberish,
+      sqrtRatioBX96: BigNumberish,
+      notionalAmount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    lpMarginCaps(
       arg0: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    lpNotionalCumulatives(
+    lpMarginCumulatives(
       arg0: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -431,9 +509,17 @@ export class Periphery extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    setLPNotionalCap(
+    setLPMarginCap(
+      _vamm: string,
+      _lpMarginCapNew: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    settlePositionAndWithdrawMargin(
       _marginEngine: string,
-      _lpNotionalCapNew: BigNumberish,
+      _owner: string,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -447,6 +533,15 @@ export class Periphery extends BaseContract {
         tickUpper: BigNumberish;
         marginDelta: BigNumberish;
       },
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updatePositionMargin(
+      _marginEngine: string,
+      _tickLower: BigNumberish,
+      _tickUpper: BigNumberish,
+      _marginDelta: BigNumberish,
+      _fullyWithdraw: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

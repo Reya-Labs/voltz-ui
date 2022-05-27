@@ -21,8 +21,6 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface MockATokenInterface extends ethers.utils.Interface {
   functions: {
-    "POOL()": FunctionFragment;
-    "UNDERLYING_ASSET_ADDRESS()": FunctionFragment;
     "allowance(address,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "approveInternal(address,address,uint256)": FunctionFragment;
@@ -30,23 +28,15 @@ interface MockATokenInterface extends ethers.utils.Interface {
     "burn(address,address,uint256,uint256)": FunctionFragment;
     "decimals()": FunctionFragment;
     "decreaseAllowance(address,uint256)": FunctionFragment;
-    "getScaledUserBalanceAndSupply(address)": FunctionFragment;
     "increaseAllowance(address,uint256)": FunctionFragment;
     "mint(address,uint256,uint256)": FunctionFragment;
     "name()": FunctionFragment;
-    "scaledBalanceOf(address)": FunctionFragment;
-    "scaledTotalSupply()": FunctionFragment;
     "symbol()": FunctionFragment;
     "totalSupply()": FunctionFragment;
     "transfer(address,uint256)": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: "POOL", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "UNDERLYING_ASSET_ADDRESS",
-    values?: undefined
-  ): string;
   encodeFunctionData(
     functionFragment: "allowance",
     values: [string, string]
@@ -70,10 +60,6 @@ interface MockATokenInterface extends ethers.utils.Interface {
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "getScaledUserBalanceAndSupply",
-    values: [string]
-  ): string;
-  encodeFunctionData(
     functionFragment: "increaseAllowance",
     values: [string, BigNumberish]
   ): string;
@@ -82,14 +68,6 @@ interface MockATokenInterface extends ethers.utils.Interface {
     values: [string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "scaledBalanceOf",
-    values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "scaledTotalSupply",
-    values?: undefined
-  ): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "totalSupply",
@@ -104,11 +82,6 @@ interface MockATokenInterface extends ethers.utils.Interface {
     values: [string, string, BigNumberish]
   ): string;
 
-  decodeFunctionResult(functionFragment: "POOL", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "UNDERLYING_ASSET_ADDRESS",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(
@@ -123,23 +96,11 @@ interface MockATokenInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getScaledUserBalanceAndSupply",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "increaseAllowance",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "scaledBalanceOf",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "scaledTotalSupply",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalSupply",
@@ -216,10 +177,6 @@ export class MockAToken extends BaseContract {
   interface: MockATokenInterface;
 
   functions: {
-    POOL(overrides?: CallOverrides): Promise<[string]>;
-
-    UNDERLYING_ASSET_ADDRESS(overrides?: CallOverrides): Promise<[string]>;
-
     allowance(
       owner: string,
       spender: string,
@@ -257,11 +214,6 @@ export class MockAToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    getScaledUserBalanceAndSupply(
-      user: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber, BigNumber]>;
-
     increaseAllowance(
       spender: string,
       addedValue: BigNumberish,
@@ -276,13 +228,6 @@ export class MockAToken extends BaseContract {
     ): Promise<ContractTransaction>;
 
     name(overrides?: CallOverrides): Promise<[string]>;
-
-    scaledBalanceOf(
-      user: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
-    scaledTotalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     symbol(overrides?: CallOverrides): Promise<[string]>;
 
@@ -301,10 +246,6 @@ export class MockAToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
-
-  POOL(overrides?: CallOverrides): Promise<string>;
-
-  UNDERLYING_ASSET_ADDRESS(overrides?: CallOverrides): Promise<string>;
 
   allowance(
     owner: string,
@@ -343,11 +284,6 @@ export class MockAToken extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  getScaledUserBalanceAndSupply(
-    user: string,
-    overrides?: CallOverrides
-  ): Promise<[BigNumber, BigNumber]>;
-
   increaseAllowance(
     spender: string,
     addedValue: BigNumberish,
@@ -362,10 +298,6 @@ export class MockAToken extends BaseContract {
   ): Promise<ContractTransaction>;
 
   name(overrides?: CallOverrides): Promise<string>;
-
-  scaledBalanceOf(user: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-  scaledTotalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
   symbol(overrides?: CallOverrides): Promise<string>;
 
@@ -385,10 +317,6 @@ export class MockAToken extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    POOL(overrides?: CallOverrides): Promise<string>;
-
-    UNDERLYING_ASSET_ADDRESS(overrides?: CallOverrides): Promise<string>;
-
     allowance(
       owner: string,
       spender: string,
@@ -426,11 +354,6 @@ export class MockAToken extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    getScaledUserBalanceAndSupply(
-      user: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber, BigNumber]>;
-
     increaseAllowance(
       spender: string,
       addedValue: BigNumberish,
@@ -445,13 +368,6 @@ export class MockAToken extends BaseContract {
     ): Promise<boolean>;
 
     name(overrides?: CallOverrides): Promise<string>;
-
-    scaledBalanceOf(
-      user: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    scaledTotalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     symbol(overrides?: CallOverrides): Promise<string>;
 
@@ -510,10 +426,6 @@ export class MockAToken extends BaseContract {
   };
 
   estimateGas: {
-    POOL(overrides?: CallOverrides): Promise<BigNumber>;
-
-    UNDERLYING_ASSET_ADDRESS(overrides?: CallOverrides): Promise<BigNumber>;
-
     allowance(
       owner: string,
       spender: string,
@@ -551,11 +463,6 @@ export class MockAToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    getScaledUserBalanceAndSupply(
-      user: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     increaseAllowance(
       spender: string,
       addedValue: BigNumberish,
@@ -570,13 +477,6 @@ export class MockAToken extends BaseContract {
     ): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<BigNumber>;
-
-    scaledBalanceOf(
-      user: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    scaledTotalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     symbol(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -597,12 +497,6 @@ export class MockAToken extends BaseContract {
   };
 
   populateTransaction: {
-    POOL(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    UNDERLYING_ASSET_ADDRESS(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     allowance(
       owner: string,
       spender: string,
@@ -643,11 +537,6 @@ export class MockAToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    getScaledUserBalanceAndSupply(
-      user: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     increaseAllowance(
       spender: string,
       addedValue: BigNumberish,
@@ -662,13 +551,6 @@ export class MockAToken extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    scaledBalanceOf(
-      user: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    scaledTotalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
