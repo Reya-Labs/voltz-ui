@@ -11,9 +11,9 @@ exports.MaxUint256Bn = ethers_1.BigNumber.from('11579208923731619542357098500868
 exports.TresholdApprovalBn = ethers_1.BigNumber.from('6277101735386680763835789423207666416102355444464034512896');
 exports.ADDRESS_ZERO = '0x0000000000000000000000000000000000000000';
 // Latest kovan deployment address of the factory
-exports.FACTORY_ADDRESS = '0x9f9e5e2dFbE4c94eFFeb5aAa60D87BD3C72484cf';
+exports.FACTORY_ADDRESS = '0x005FFfeBBA1B7f6F4EB6A03d878B4e0cc9f9c1c2';
 // Latest kovan deployment address of the periphery
-exports.PERIPHERY_ADDRESS = '0xE63B5516f7Eda93da983c16Ec8775a5029Ed1eba';
+exports.PERIPHERY_ADDRESS = '0x45FFa35f3db83b811823dE7D3B66486c04bCeBff';
 // constants used internally but not expected to be used externally
 exports.NEGATIVE_ONE = jsbi_1.default.BigInt(-1);
 exports.ZERO = jsbi_1.default.BigInt(0);
