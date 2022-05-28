@@ -23,6 +23,8 @@ import {
   CompoundFCM__factory as fcmCompoundFactory,
   BaseRateOracle__factory,
   VAMM__factory,
+  CompoundFCM,
+  ICToken__factory,
 } from '../typechain';
 import RateOracle from './rateOracle';
 import { TickMath } from '../utils/tickMath';
@@ -799,6 +801,104 @@ class AMM {
 
   // FCM swap
 
+  public async getInfoPostFCMSwap({
+    notional,
+    fixedRateLimit,
+  }: fcmSwapArgs): Promise<InfoPostSwap> {
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
+    }
+
+    let sqrtPriceLimitX96;
+    if (fixedRateLimit) {
+      const { closestUsableTick: tickLimit } = this.closestTickAndFixedRate(fixedRateLimit);
+      sqrtPriceLimitX96 = TickMath.getSqrtRatioAtTick(tickLimit).toString();
+    } else {
+      sqrtPriceLimitX96 = TickMath.getSqrtRatioAtTick(TickMath.MAX_TICK - 1).toString();
+    }
+
+    let fcmContract;
+    switch (this.rateOracle.protocolId) {
+      case 1: {
+        fcmContract = fcmAaveFactory.connect(this.fcmAddress, this.signer);
+        break;
+      }
+
+      case 2: {
+        fcmContract = fcmCompoundFactory.connect(this.fcmAddress, this.signer);
+        break;
+      }
+
+      default:
+        throw new Error("Unrecognized FCM");
+    }
+    const scaledNotional = this.scale(notional);
+
+    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.signer);
+
+    let tickBefore = await peripheryContract.getCurrentTick(this.marginEngineAddress);
+    let tickAfter = 0;
+    let fee = BigNumber.from(0);
+    let availableNotional = BigNumber.from(0);
+    let fixedTokenDeltaUnbalanced = BigNumber.from(0);
+
+    await fcmContract.callStatic.initiateFullyCollateralisedFixedTakerSwap(
+      scaledNotional,
+      sqrtPriceLimitX96
+    ).then(async (result: any) => {
+      availableNotional = result[1];
+      fee = result[2];
+      fixedTokenDeltaUnbalanced = result[3];
+      tickAfter = await peripheryContract.getCurrentTick(this.marginEngineAddress);
+    },
+      (error: any) => {
+        const result = decodeInfoPostSwap(error, this.environment);
+        tickAfter = result.tick;
+        fee = result.fee;
+        availableNotional = result.availableNotional;
+        fixedTokenDeltaUnbalanced = result.fixedTokenDeltaUnbalanced;
+      });
+
+    const fixedRateBefore = tickToFixedRate(tickBefore);
+    const fixedRateAfter = tickToFixedRate(tickAfter);
+
+    const fixedRateDelta = fixedRateAfter.subtract(fixedRateBefore);
+    const fixedRateDeltaRaw = fixedRateDelta.toNumber();
+
+    const scaledAvailableNotional = this.descale(availableNotional);
+    const scaledFee = this.descale(fee);
+
+    const averageFixedRate = fixedTokenDeltaUnbalanced.mul(BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
+
+    let additionalMargin = 0;
+    switch (this.rateOracle.protocolId) {
+      case 1: {
+        additionalMargin = scaledAvailableNotional;
+        break;
+      }
+
+      case 2: {
+        const cTokenAddress = await (fcmContract as CompoundFCM).cToken();
+        const cTokenContract = ICToken__factory.connect(cTokenAddress, this.signer);
+        const rate = await cTokenContract.callStatic.exchangeRateCurrent();
+        const scaledRate = rate.div(BigNumber.from(1000000000000)).toNumber() / 1000000;
+        additionalMargin = scaledAvailableNotional / scaledRate;
+        break;
+      }
+
+      default:
+        throw new Error("Unrecognized FCM");
+    }
+
+    return {
+      marginRequirement: additionalMargin,
+      availableNotional: scaledAvailableNotional < 0 ? -scaledAvailableNotional : scaledAvailableNotional,
+      fee: scaledFee < 0 ? -scaledFee : scaledFee,
+      slippage: fixedRateDeltaRaw < 0 ? -fixedRateDeltaRaw : fixedRateDeltaRaw,
+      averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
+    };
+  }
+
   public async fcmSwap({
     notional,
     fixedRateLimit,
@@ -875,6 +975,83 @@ class AMM {
   }
 
   // FCM unwind
+
+  public async getInfoPostFCMUnwind({
+    notionalToUnwind,
+    fixedRateLimit,
+  }: fcmUnwindArgs): Promise<InfoPostSwap> {
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
+    }
+
+    let sqrtPriceLimitX96;
+    if (fixedRateLimit) {
+      const { closestUsableTick: tickLimit } = this.closestTickAndFixedRate(fixedRateLimit);
+      sqrtPriceLimitX96 = TickMath.getSqrtRatioAtTick(tickLimit).toString();
+    } else {
+      sqrtPriceLimitX96 = TickMath.getSqrtRatioAtTick(TickMath.MIN_TICK + 1).toString();
+    }
+
+    let fcmContract;
+    switch (this.rateOracle.protocolId) {
+      case 1:
+        fcmContract = fcmAaveFactory.connect(this.fcmAddress, this.signer);
+        break;
+
+      case 2:
+        fcmContract = fcmCompoundFactory.connect(this.fcmAddress, this.signer);
+        break;
+
+      default:
+        throw new Error("Unrecognized FCM");
+    }
+
+    const scaledNotional = this.scale(notionalToUnwind);
+
+    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.signer);
+
+    let tickBefore = await peripheryContract.getCurrentTick(this.marginEngineAddress);
+    let tickAfter = 0;
+    let fee = BigNumber.from(0);
+    let availableNotional = BigNumber.from(0);
+    let fixedTokenDeltaUnbalanced = BigNumber.from(0);
+
+    await fcmContract.callStatic.unwindFullyCollateralisedFixedTakerSwap(
+      scaledNotional,
+      sqrtPriceLimitX96
+    ).then(async (result: any) => {
+      availableNotional = result[1];
+      fee = result[2];
+      fixedTokenDeltaUnbalanced = result[3];
+      tickAfter = await peripheryContract.getCurrentTick(this.marginEngineAddress);
+    },
+      (error: any) => {
+        const result = decodeInfoPostSwap(error, this.environment);
+        tickAfter = result.tick;
+        fee = result.fee;
+        availableNotional = result.availableNotional;
+        fixedTokenDeltaUnbalanced = result.fixedTokenDeltaUnbalanced;
+      });
+
+    const fixedRateBefore = tickToFixedRate(tickBefore);
+    const fixedRateAfter = tickToFixedRate(tickAfter);
+
+    const fixedRateDelta = fixedRateAfter.subtract(fixedRateBefore);
+    const fixedRateDeltaRaw = fixedRateDelta.toNumber();
+
+    const scaledAvailableNotional = this.descale(availableNotional);
+    const scaledFee = this.descale(fee);
+
+    const averageFixedRate = fixedTokenDeltaUnbalanced.mul(BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
+
+    return {
+      marginRequirement: 0,
+      availableNotional: scaledAvailableNotional < 0 ? -scaledAvailableNotional : scaledAvailableNotional,
+      fee: scaledFee < 0 ? -scaledFee : scaledFee,
+      slippage: fixedRateDeltaRaw < 0 ? -fixedRateDeltaRaw : fixedRateDeltaRaw,
+      averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
+    };
+  }
 
   public async fcmUnwind({
     notionalToUnwind,

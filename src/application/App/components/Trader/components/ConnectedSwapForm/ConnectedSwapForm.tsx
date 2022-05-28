@@ -27,6 +27,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
   const { agent, onChangeAgent } = useAgent();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const { swapInfo: { call: loadSwapInfo, loading: swapInfoLoading, result: swapInfoData } } = useAMMContext();
 
   const [balance, setBalance] = useState<BigNumber>();

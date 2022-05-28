@@ -646,6 +646,109 @@ var AMM = /** @class */ (function () {
         });
     };
     // FCM swap
+    AMM.prototype.getInfoPostFCMSwap = function (_a) {
+        var notional = _a.notional, fixedRateLimit = _a.fixedRateLimit;
+        return __awaiter(this, void 0, void 0, function () {
+            var sqrtPriceLimitX96, tickLimit, fcmContract, scaledNotional, peripheryContract, tickBefore, tickAfter, fee, availableNotional, fixedTokenDeltaUnbalanced, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw, scaledAvailableNotional, scaledFee, averageFixedRate, additionalMargin, _b, cTokenAddress, cTokenContract, rate, scaledRate;
+            var _this = this;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        if (!this.signer) {
+                            throw new Error('Wallet not connected');
+                        }
+                        if (fixedRateLimit) {
+                            tickLimit = this.closestTickAndFixedRate(fixedRateLimit).closestUsableTick;
+                            sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickLimit).toString();
+                        }
+                        else {
+                            sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickMath_1.TickMath.MAX_TICK - 1).toString();
+                        }
+                        switch (this.rateOracle.protocolId) {
+                            case 1: {
+                                fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
+                                break;
+                            }
+                            case 2: {
+                                fcmContract = typechain_1.CompoundFCM__factory.connect(this.fcmAddress, this.signer);
+                                break;
+                            }
+                            default:
+                                throw new Error("Unrecognized FCM");
+                        }
+                        scaledNotional = this.scale(notional);
+                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        return [4 /*yield*/, peripheryContract.getCurrentTick(this.marginEngineAddress)];
+                    case 1:
+                        tickBefore = _c.sent();
+                        tickAfter = 0;
+                        fee = ethers_1.BigNumber.from(0);
+                        availableNotional = ethers_1.BigNumber.from(0);
+                        fixedTokenDeltaUnbalanced = ethers_1.BigNumber.from(0);
+                        return [4 /*yield*/, fcmContract.callStatic.initiateFullyCollateralisedFixedTakerSwap(scaledNotional, sqrtPriceLimitX96).then(function (result) { return __awaiter(_this, void 0, void 0, function () {
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0:
+                                            availableNotional = result[1];
+                                            fee = result[2];
+                                            fixedTokenDeltaUnbalanced = result[3];
+                                            return [4 /*yield*/, peripheryContract.getCurrentTick(this.marginEngineAddress)];
+                                        case 1:
+                                            tickAfter = _a.sent();
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            }); }, function (error) {
+                                var result = (0, errorHandling_1.decodeInfoPostSwap)(error, _this.environment);
+                                tickAfter = result.tick;
+                                fee = result.fee;
+                                availableNotional = result.availableNotional;
+                                fixedTokenDeltaUnbalanced = result.fixedTokenDeltaUnbalanced;
+                            })];
+                    case 2:
+                        _c.sent();
+                        fixedRateBefore = (0, priceTickConversions_1.tickToFixedRate)(tickBefore);
+                        fixedRateAfter = (0, priceTickConversions_1.tickToFixedRate)(tickAfter);
+                        fixedRateDelta = fixedRateAfter.subtract(fixedRateBefore);
+                        fixedRateDeltaRaw = fixedRateDelta.toNumber();
+                        scaledAvailableNotional = this.descale(availableNotional);
+                        scaledFee = this.descale(fee);
+                        averageFixedRate = fixedTokenDeltaUnbalanced.mul(ethers_1.BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
+                        additionalMargin = 0;
+                        _b = this.rateOracle.protocolId;
+                        switch (_b) {
+                            case 1: return [3 /*break*/, 3];
+                            case 2: return [3 /*break*/, 4];
+                        }
+                        return [3 /*break*/, 7];
+                    case 3:
+                        {
+                            additionalMargin = scaledAvailableNotional;
+                            return [3 /*break*/, 8];
+                        }
+                        _c.label = 4;
+                    case 4: return [4 /*yield*/, fcmContract.cToken()];
+                    case 5:
+                        cTokenAddress = _c.sent();
+                        cTokenContract = typechain_1.ICToken__factory.connect(cTokenAddress, this.signer);
+                        return [4 /*yield*/, cTokenContract.callStatic.exchangeRateCurrent()];
+                    case 6:
+                        rate = _c.sent();
+                        scaledRate = rate.div(ethers_1.BigNumber.from(1000000000000)).toNumber() / 1000000;
+                        additionalMargin = scaledAvailableNotional / scaledRate;
+                        return [3 /*break*/, 8];
+                    case 7: throw new Error("Unrecognized FCM");
+                    case 8: return [2 /*return*/, {
+                            marginRequirement: additionalMargin,
+                            availableNotional: scaledAvailableNotional < 0 ? -scaledAvailableNotional : scaledAvailableNotional,
+                            fee: scaledFee < 0 ? -scaledFee : scaledFee,
+                            slippage: fixedRateDeltaRaw < 0 ? -fixedRateDeltaRaw : fixedRateDeltaRaw,
+                            averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
+                        }];
+                }
+            });
+        });
+    };
     AMM.prototype.fcmSwap = function (_a) {
         var notional = _a.notional, fixedRateLimit = _a.fixedRateLimit;
         return __awaiter(this, void 0, void 0, function () {
@@ -730,6 +833,83 @@ var AMM = /** @class */ (function () {
         });
     };
     // FCM unwind
+    AMM.prototype.getInfoPostFCMUnwind = function (_a) {
+        var notionalToUnwind = _a.notionalToUnwind, fixedRateLimit = _a.fixedRateLimit;
+        return __awaiter(this, void 0, void 0, function () {
+            var sqrtPriceLimitX96, tickLimit, fcmContract, scaledNotional, peripheryContract, tickBefore, tickAfter, fee, availableNotional, fixedTokenDeltaUnbalanced, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw, scaledAvailableNotional, scaledFee, averageFixedRate;
+            var _this = this;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (!this.signer) {
+                            throw new Error('Wallet not connected');
+                        }
+                        if (fixedRateLimit) {
+                            tickLimit = this.closestTickAndFixedRate(fixedRateLimit).closestUsableTick;
+                            sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickLimit).toString();
+                        }
+                        else {
+                            sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickMath_1.TickMath.MIN_TICK + 1).toString();
+                        }
+                        switch (this.rateOracle.protocolId) {
+                            case 1:
+                                fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
+                                break;
+                            case 2:
+                                fcmContract = typechain_1.CompoundFCM__factory.connect(this.fcmAddress, this.signer);
+                                break;
+                            default:
+                                throw new Error("Unrecognized FCM");
+                        }
+                        scaledNotional = this.scale(notionalToUnwind);
+                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        return [4 /*yield*/, peripheryContract.getCurrentTick(this.marginEngineAddress)];
+                    case 1:
+                        tickBefore = _b.sent();
+                        tickAfter = 0;
+                        fee = ethers_1.BigNumber.from(0);
+                        availableNotional = ethers_1.BigNumber.from(0);
+                        fixedTokenDeltaUnbalanced = ethers_1.BigNumber.from(0);
+                        return [4 /*yield*/, fcmContract.callStatic.unwindFullyCollateralisedFixedTakerSwap(scaledNotional, sqrtPriceLimitX96).then(function (result) { return __awaiter(_this, void 0, void 0, function () {
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0:
+                                            availableNotional = result[1];
+                                            fee = result[2];
+                                            fixedTokenDeltaUnbalanced = result[3];
+                                            return [4 /*yield*/, peripheryContract.getCurrentTick(this.marginEngineAddress)];
+                                        case 1:
+                                            tickAfter = _a.sent();
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            }); }, function (error) {
+                                var result = (0, errorHandling_1.decodeInfoPostSwap)(error, _this.environment);
+                                tickAfter = result.tick;
+                                fee = result.fee;
+                                availableNotional = result.availableNotional;
+                                fixedTokenDeltaUnbalanced = result.fixedTokenDeltaUnbalanced;
+                            })];
+                    case 2:
+                        _b.sent();
+                        fixedRateBefore = (0, priceTickConversions_1.tickToFixedRate)(tickBefore);
+                        fixedRateAfter = (0, priceTickConversions_1.tickToFixedRate)(tickAfter);
+                        fixedRateDelta = fixedRateAfter.subtract(fixedRateBefore);
+                        fixedRateDeltaRaw = fixedRateDelta.toNumber();
+                        scaledAvailableNotional = this.descale(availableNotional);
+                        scaledFee = this.descale(fee);
+                        averageFixedRate = fixedTokenDeltaUnbalanced.mul(ethers_1.BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
+                        return [2 /*return*/, {
+                                marginRequirement: 0,
+                                availableNotional: scaledAvailableNotional < 0 ? -scaledAvailableNotional : scaledAvailableNotional,
+                                fee: scaledFee < 0 ? -scaledFee : scaledFee,
+                                slippage: fixedRateDeltaRaw < 0 ? -fixedRateDeltaRaw : fixedRateDeltaRaw,
+                                averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
+                            }];
+                }
+            });
+        });
+    };
     AMM.prototype.fcmUnwind = function (_a) {
         var notionalToUnwind = _a.notionalToUnwind, fixedRateLimit = _a.fixedRateLimit;
         return __awaiter(this, void 0, void 0, function () {

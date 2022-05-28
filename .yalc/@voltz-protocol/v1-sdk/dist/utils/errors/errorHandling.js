@@ -61,7 +61,7 @@ exports.errorMessageMapping = {
     UNITS: 'Internal error: Timestamps not initialized when getting variable factor',
     '>216': 'Internal error: Observation overflows in the rate oracle',
     'New size of oracle buffer should be positive': 'New size of oracle buffer should be positive',
-    OLD: 'Internal error: Oracle buffer overflows',
+    OLD: 'Internal error: Rate oracle not matured enough',
     'x must be > 0': 'Internal error: the value must be positive in BitMath',
     'SafeMath: addition overflow': 'Internal error: addition overflow',
     'SafeMath: subtraction overflow': 'ERC20: transfer amount exceeds balance',

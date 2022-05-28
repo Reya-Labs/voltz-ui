@@ -133,7 +133,9 @@ declare class AMM {
     updatePositionMargin({ owner, fixedLow, fixedHigh, marginDelta, }: AMMUpdatePositionMarginArgs): Promise<ContractReceipt | void>;
     liquidatePosition({ owner, fixedLow, fixedHigh, }: AMMLiquidatePositionArgs): Promise<ContractReceipt>;
     settlePosition({ owner, fixedLow, fixedHigh, }: AMMSettlePositionArgs): Promise<ContractReceipt>;
+    getInfoPostFCMSwap({ notional, fixedRateLimit, }: fcmSwapArgs): Promise<InfoPostSwap>;
     fcmSwap({ notional, fixedRateLimit, }: fcmSwapArgs): Promise<ContractReceipt>;
+    getInfoPostFCMUnwind({ notionalToUnwind, fixedRateLimit, }: fcmUnwindArgs): Promise<InfoPostSwap>;
     fcmUnwind({ notionalToUnwind, fixedRateLimit, }: fcmUnwindArgs): Promise<ContractReceipt>;
     settleFCMTrader(): Promise<ContractReceipt>;
     scale(value: number): string;
