@@ -891,7 +891,7 @@ class AMM {
     }
 
     return {
-      marginRequirement: additionalMargin,
+      marginRequirement: additionalMargin < 0 ? -additionalMargin : additionalMargin,
       availableNotional: scaledAvailableNotional < 0 ? -scaledAvailableNotional : scaledAvailableNotional,
       fee: scaledFee < 0 ? -scaledFee : scaledFee,
       slippage: fixedRateDeltaRaw < 0 ? -fixedRateDeltaRaw : fixedRateDeltaRaw,
@@ -1729,7 +1729,7 @@ class AMM {
     return currentBalance.gte(scaledAmount);
   }
 
-  // get cap
+  // caps
 
   async setCap(amount: number) {
     if (!this.signer) {
@@ -1790,6 +1790,8 @@ class AMM {
     }
   }
 
+  // current position margin requirement
+
   async getPositionMarginRequirement(fixedLow: number, fixedHigh: number): Promise<number> {
     if (!this.signer) {
       throw new Error('Wallet not connected');
@@ -1814,6 +1816,8 @@ class AMM {
 
     return this.descale(requirement);
   }
+
+  // one week look-back window apy
 
   async getOneWeekApy(): Promise<number> {
     if (!this.provider) {

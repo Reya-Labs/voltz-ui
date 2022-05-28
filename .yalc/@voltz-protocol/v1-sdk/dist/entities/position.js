@@ -71,17 +71,20 @@ var Position = /** @class */ (function () {
     });
     Object.defineProperty(Position.prototype, "notional", {
         get: function () {
-            var sqrtPriceLowerX96 = new price_1.Price(constants_1.Q96, tickMath_1.TickMath.getSqrtRatioAtTick(this.tickLower));
-            var sqrtPriceUpperX96 = new price_1.Price(constants_1.Q96, tickMath_1.TickMath.getSqrtRatioAtTick(this.tickUpper));
-            return sqrtPriceUpperX96
-                .subtract(sqrtPriceLowerX96)
-                .multiply(this.liquidity)
-                .divide(price_1.Price.fromNumber(Math.pow(10, this.amm.underlyingToken.decimals)))
-                .toNumber();
+            return this.getNotionalFromLiquidity(this.liquidity);
         },
         enumerable: false,
         configurable: true
     });
+    Position.prototype.getNotionalFromLiquidity = function (liquidity) {
+        var sqrtPriceLowerX96 = new price_1.Price(constants_1.Q96, tickMath_1.TickMath.getSqrtRatioAtTick(this.tickLower));
+        var sqrtPriceUpperX96 = new price_1.Price(constants_1.Q96, tickMath_1.TickMath.getSqrtRatioAtTick(this.tickUpper));
+        return sqrtPriceUpperX96
+            .subtract(sqrtPriceLowerX96)
+            .multiply(liquidity)
+            .divide(price_1.Price.fromNumber(Math.pow(10, this.amm.underlyingToken.decimals)))
+            .toNumber();
+    };
     Object.defineProperty(Position.prototype, "effectiveMargin", {
         get: function () {
             if (this.source.includes('FCM')) {

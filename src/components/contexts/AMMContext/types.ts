@@ -13,10 +13,17 @@ export type MintMinimumMarginRequirementPayload = Omit<
   'recipient' | 'margin'
 >;
 
-export type SwapInfoPayload = Omit<
-  AMMGetInfoPostSwapArgs,
-  'recipient' | 'isFT' | 'fixedLow' | 'fixedHigh'
->;
+export enum GetInfoType {
+  NORMAL_SWAP = 'NORMAL_SWAP',
+  FCM_SWAP = 'FCM_SWAP',
+  FCM_UNWIND = 'FCM_UNWIND'
+};
+
+export type SwapInfoPayload = {
+  notional: number;
+  type: GetInfoType;
+  fixedRateLimit?: number;
+}
 
 export type MinimumMarginAmountSwapPayload = {
   fixedLow: number;

@@ -3,14 +3,17 @@ import SummaryPanel from '../../../../atomic/SummaryPanel/SummaryPanel';
 import { IconLabel } from '@components/composite';
 import { formatCurrency, formatNumber } from '@utilities';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
+import { SwapFormActions } from '../../types';
 
 export type SwapInfoProps = {
   data: InfoPostSwap | void | null;
   loading: boolean;
   underlyingTokenName?: string; 
+  yieldBearingTokenName?: string;
+  formAction: SwapFormActions;
 };
 
-const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({ data, loading, underlyingTokenName = '' }) => {
+const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({ data, loading, underlyingTokenName = '', yieldBearingTokenName = '', formAction}) => {
 
   const label = <IconLabel
     label="trade information"
@@ -37,7 +40,7 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({ data, loading, under
     },
     {
       label: 'ADDITIONAL MARGIN REQUIRED:', 
-      value: `${formatCurrency(data.marginRequirement, true)} ${underlyingTokenName}`
+      value: (formAction === SwapFormActions.SWAP || formAction === SwapFormActions.UPDATE) ? `${formatCurrency(data.marginRequirement, true)} ${underlyingTokenName}` : `${formatCurrency(data.marginRequirement, true)} ${yieldBearingTokenName}`
     },
   ] : undefined;
 

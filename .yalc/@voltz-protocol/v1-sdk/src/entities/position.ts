@@ -190,12 +190,16 @@ class Position {
   }
 
   public get notional(): number {
+    return this.getNotionalFromLiquidity(this.liquidity);
+  }
+
+  public getNotionalFromLiquidity(liquidity: JSBI): number {
     const sqrtPriceLowerX96 = new Price(Q96, TickMath.getSqrtRatioAtTick(this.tickLower));
     const sqrtPriceUpperX96 = new Price(Q96, TickMath.getSqrtRatioAtTick(this.tickUpper));
 
     return sqrtPriceUpperX96
       .subtract(sqrtPriceLowerX96)
-      .multiply(this.liquidity)
+      .multiply(liquidity)
       .divide(Price.fromNumber(10 ** this.amm.underlyingToken.decimals))
       .toNumber();
   }

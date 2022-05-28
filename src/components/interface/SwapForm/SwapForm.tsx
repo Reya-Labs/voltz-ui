@@ -15,12 +15,13 @@ import {
 import { TraderControls, MarginControls, SwapInfo } from './components';
 import { colors } from '@theme';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
-import { SwapFormModes } from './types';
+import { SwapFormActions, SwapFormModes } from './types';
 
 export type SwapFormProps = {
   endDate?: DateTime;
   errors: Record<string, string>;
   formState: SwapFormState;
+  formAction: SwapFormActions;
   maxMargin?: number;
   isFormValid: boolean;
   mode: SwapFormModes;
@@ -48,6 +49,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   maxMargin,
   isFormValid,
   mode,
+  formAction,
   onCancel,
   onChangeMargin,
   onChangeMarginAction,
@@ -147,7 +149,9 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           <SwapInfo 
             data={swapInfo} 
             loading={swapInfoLoading} 
-            underlyingTokenName={underlyingTokenName} 
+            underlyingTokenName={underlyingTokenName}
+            yieldBearingTokenName={protocol}
+            formAction={formAction}
           />
         </Box>
       )}

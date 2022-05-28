@@ -12,6 +12,7 @@ import { getFormAction, getSubmitAction, getSubmitButtonHint, getSubmitButtonTex
 import { isUndefined } from 'lodash';
 import { BigNumber } from 'ethers';
 import { Token } from '@voltz-protocol/v1-sdk';
+import { GetInfoType } from 'src/components/contexts/AMMContext/types';
 
 export type ConnectedSwapFormProps = {
   amm: AugmentedAMM;
@@ -108,7 +109,30 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
   // Load the swap summary info
   useEffect(() => {
     if (!isUndefined(form.state.notional) && form.state.notional !== 0) {
-      loadSwapInfo({ notional: form.state.notional });
+      switch (formAction) {
+        case SwapFormActions.UPDATE: {
+          throw new Error("Should not get info post swap in update position margin");
+        }
+
+        case SwapFormActions.SWAP: {
+          loadSwapInfo({ notional: form.state.notional, type: GetInfoType.NORMAL_SWAP});
+          break;
+        }
+
+        case SwapFormActions.FCM_SWAP: {
+          loadSwapInfo({ notional: form.state.notional, type: GetInfoType.FCM_SWAP });
+          break;
+        }
+
+        case SwapFormActions.FCM_UNWIND: {
+          loadSwapInfo({ notional: form.state.notional, type: GetInfoType.FCM_UNWIND });
+          break;
+        }
+
+        default: {
+          throw new Error("Unrecognized form type");
+        }
+      } 
     }
   }, [loadSwapInfo, form.state.notional, agent]);
 
@@ -135,6 +159,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
       formState={form.state}
       isFormValid={form.isValid}
       mode={mode}
+      formAction={formAction}
       onCancel={onReset}
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction}

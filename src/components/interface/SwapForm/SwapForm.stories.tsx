@@ -7,7 +7,7 @@ import SwapForm from './SwapForm';
 import { useSwapForm, useTokenApproval } from '@hooks';
 import { AugmentedAMM } from '@utilities';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
-import { SwapFormModes } from './types';
+import { SwapFormActions, SwapFormModes } from './types';
 
 export default {
   title: 'Interface/SwapForm',
@@ -66,6 +66,7 @@ const NewPositionSwapForm: React.FunctionComponent = (args) => {
       errors={form.errors}
       formState={form.state} 
       isFormValid={form.isValid}
+      formAction={SwapFormActions.SWAP}
       mode={mode}
       onCancel={() => alert('cancel')}
       onChangeMargin={form.setMargin}
@@ -109,6 +110,7 @@ const EditingMarginSwapForm: React.FunctionComponent = (args) => {
       formState={form.state}
       isFormValid={form.isValid}
       mode={mode}
+      formAction={SwapFormActions.SWAP}
       onCancel={() => alert('cancel')}
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction} 

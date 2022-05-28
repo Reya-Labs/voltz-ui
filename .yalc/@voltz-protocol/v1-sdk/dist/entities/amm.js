@@ -739,7 +739,7 @@ var AMM = /** @class */ (function () {
                         return [3 /*break*/, 8];
                     case 7: throw new Error("Unrecognized FCM");
                     case 8: return [2 /*return*/, {
-                            marginRequirement: additionalMargin,
+                            marginRequirement: additionalMargin < 0 ? -additionalMargin : additionalMargin,
                             availableNotional: scaledAvailableNotional < 0 ? -scaledAvailableNotional : scaledAvailableNotional,
                             fee: scaledFee < 0 ? -scaledFee : scaledFee,
                             slippage: fixedRateDeltaRaw < 0 ? -fixedRateDeltaRaw : fixedRateDeltaRaw,
@@ -1695,7 +1695,7 @@ var AMM = /** @class */ (function () {
             });
         });
     };
-    // get cap
+    // caps
     AMM.prototype.setCap = function (amount) {
         return __awaiter(this, void 0, void 0, function () {
             var peripheryContract, marginEngineContract, vammAddress, vammContract, isAlphaTransaction, error_15, isAlphaTransactionME, error_16, setCapTransaction, error_17;
@@ -1783,6 +1783,7 @@ var AMM = /** @class */ (function () {
             });
         });
     };
+    // current position margin requirement
     AMM.prototype.getPositionMarginRequirement = function (fixedLow, fixedHigh) {
         return __awaiter(this, void 0, void 0, function () {
             var tickUpper, tickLower, marginEngineContract, signerAddress, requirement;
@@ -1806,6 +1807,7 @@ var AMM = /** @class */ (function () {
             });
         });
     };
+    // one week look-back window apy
     AMM.prototype.getOneWeekApy = function () {
         return __awaiter(this, void 0, void 0, function () {
             var lastBlock, lastBlockTimestamp, _a, _b, rateOracleContract, oneWeekApy;

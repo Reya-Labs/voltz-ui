@@ -74,6 +74,7 @@ declare class Position {
     get fixedRateLower(): Price;
     get fixedRateUpper(): Price;
     get notional(): number;
+    getNotionalFromLiquidity(liquidity: JSBI): number;
     get effectiveMargin(): number;
     get effectiveFixedTokenBalance(): number;
     get effectiveVariableTokenBalance(): number;
