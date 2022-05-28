@@ -5,8 +5,8 @@ import { BigNumber, ethers, Contract } from "ethers";
 import { OverrideTypes } from "@utilities";
 
 export type SignatureResponse = {
-  name?: string;
   signature?: string;
+  timestamp?: string;
   walletAddress?: string;
 }
 
@@ -65,11 +65,14 @@ export const checkForTOSSignature = async (signer: ethers.providers.JsonRpcSigne
  * @param walletAddress - the wallet address to retrieve the signature for
  */
 export const getSignature = async (walletAddress: string) => {
-  const resp = await fetch(`https://voltz-rest-api.herokuapp.com/get/${walletAddress}?token=${process.env.REACT_APP_SIGNATURES_API_KEY || ''}`, {
+  const resp = await fetch(`https://voltz-rest-api.herokuapp.com/get-signature/${walletAddress}`, {
     headers: {
       'Content-Type': 'application/json',
     }
   });
+
+  // https://voltz-rest-api.herokuapp.com/get-signature/0x45556408e543158f74403e882E3C8c23eCD9f732
+
   const data:SignatureResponse = resp.ok ? (await resp.json() as SignatureResponse) : {} as SignatureResponse;
   return data.signature;
 }
