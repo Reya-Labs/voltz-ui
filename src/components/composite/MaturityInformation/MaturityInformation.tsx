@@ -1,11 +1,10 @@
 import React, { useMemo } from 'react';
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js';
-import Box from '@mui/material/Box';
 
-import { Typography, Slider } from '@components/atomic';
 import { withLabel } from '../../utilities';
 import { formatDateTime } from '@utilities';
+import { ProgressBar } from '@components/composite';
 
 export type MaturityInformationProps = {
   startDate?: DateTime;
@@ -37,13 +36,11 @@ const MaturityInformation: React.FunctionComponent<MaturityInformationProps> = (
   const formattedEndDate = endDate ? formatDateTime(endDate) : '';
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography variant="h6">{(percentageComplete >= 100) ? "COMPLETED" : formattedEndDate}</Typography>
-        <Typography variant="h6">&nbsp;&nbsp;{Math.min(percentageComplete, 100)}%</Typography>
-      </Box>
-      <Slider controlled value={percentageComplete} />
-    </Box>
+    <ProgressBar 
+      leftContent={(percentageComplete >= 100) ? "COMPLETED" : formattedEndDate} 
+      rightContent={<>{Math.min(percentageComplete, 100)}%</>} 
+      percentageComplete={percentageComplete} 
+    />
   );
 };
 

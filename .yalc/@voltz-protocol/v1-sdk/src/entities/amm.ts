@@ -1845,7 +1845,7 @@ class AMM {
     }
   }
 
-  async getCaps(): Promise<CapInfo> {
+  async getCaps(): Promise<CapInfo | undefined> {
     if (!this.provider) {
       throw new Error('Blockchain not connected');
     }
@@ -1854,6 +1854,13 @@ class AMM {
     const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.provider);
 
     const vammAddress = await marginEngineContract.vamm();
+
+    const vammContract = VAMM__factory.connect(vammAddress, this.provider);
+    const isAlpha = await vammContract.isAlpha();
+
+    if (!isAlpha) {
+      return;
+    }
 
     const accumulated = await peripheryContract.lpMarginCumulatives(vammAddress);
     const cap = await peripheryContract.lpMarginCaps(vammAddress);

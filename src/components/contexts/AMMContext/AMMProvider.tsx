@@ -101,12 +101,33 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
     useMemo(() => undefined, [!!amm.signer, agent]),
   );
 
+  const ammCaps = useAsyncFunction(
+    async () => {
+      const result = await amm.getCaps();
+
+      if (!result) {
+        return;
+      }
+
+      if (result.cap > 0) {
+        if (result.accumulated >= result.cap) {
+          return 100;
+        }
+        return result.accumulated / result.cap * 100;
+      }
+      
+      return;
+    },
+    useMemo(() => undefined, [!!amm.provider])
+  );
+
   const value = {
     variableApy,
     fixedApr,
     mintMinimumMarginRequirement,
     swapInfo,
-    positionInfo
+    positionInfo,
+    ammCaps
   };
 
   return <AMMContext.Provider value={value}>{children}</AMMContext.Provider>;

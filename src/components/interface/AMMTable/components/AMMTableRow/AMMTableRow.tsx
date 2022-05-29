@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '@mui/system';
@@ -7,10 +7,13 @@ import isNull from 'lodash/isNull';
 import { Agents } from '@components/contexts';
 import { Button, Typography } from '@components/atomic';
 import { MaturityInformation } from '@components/composite';
-import { useAgent, useWallet } from '@hooks';
+import { useAgent, useAMMContext, useWallet } from '@hooks';
 import { AMMTableDatum } from '../../types';
 import { labels } from '../../constants';
 import { VariableAPY, FixedAPR } from './components';
+
+import { ProgressBar } from '@components/composite';
+import { Box } from '@mui/system';
 
 export type AMMTableRowProps = {
   datum: AMMTableDatum;
@@ -24,6 +27,12 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
   const wallet = useWallet();
   const { agent } = useAgent();
   const variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'main';
+
+  const { ammCaps: { call: loadCap, loading: capLoading, result: cap } } = useAMMContext();
+
+  useEffect(() => {
+    loadCap();
+  }, [loadCap]);
   
   // add object to sx prop
   // todo:
@@ -89,23 +98,50 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
             );
           }
 
-          const getContent = () => {
-            switch (field) {
-              case 'protocol':
-                return datum.protocol;
-
-              default:
-                return null;
+          if (agent === Agents.LIQUIDITY_PROVIDER) {
+            if (capLoading) {
+              return (
+                <Typography variant="h5" label={label}>
+                  <ProgressBar
+                    leftContent={datum.protocol}
+                    rightContent={"Loading..."}
+                    percentageComplete={0}
+                  />
+                </Typography>
+              );
             }
-          };
 
-          return (
-            <Typography variant="body2" label={label} sx={{
-              fontSize: 18
-            }}>
-              {getContent()}
-            </Typography>
-          );
+            if (!cap) {
+              return (
+                <Typography variant="h5" label={label}>
+                  <Box sx={{ width: '100%' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <Typography variant="h6">{datum.protocol}</Typography>
+                    </Box>
+                  </Box>
+                </Typography>);
+            }
+
+            return (
+              <Typography variant="h5" label={label}>
+                <ProgressBar
+                  leftContent={datum.protocol}
+                  rightContent={<>{cap.toFixed(2)}% CAP</>}
+                  percentageComplete={cap}
+                />
+              </Typography>
+            );
+          }
+          else {
+            return (
+              <Typography variant="h5" label={label}>
+                <Box sx={{ width: '100%' }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography variant="h6">{datum.protocol}</Typography>
+                  </Box>
+                </Box>
+              </Typography>);
+          }
         };
 
         return <TableCell key={field}>{renderDisplay()}</TableCell>;

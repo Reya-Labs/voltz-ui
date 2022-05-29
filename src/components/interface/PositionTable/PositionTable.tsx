@@ -5,11 +5,11 @@ import TableBody from '@mui/material/TableBody';
 import { SystemStyleObject, Theme } from '@mui/system';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 
-import { data } from '@utilities';
+import { AugmentedAMM, data } from '@utilities';
 import { Panel } from '@components/atomic';
 import { PositionTableFields } from './types';
 import { PositionTableHead, PositionTableRow } from './components';
-import { Agents } from '@components/contexts';
+import { Agents, AMMProvider } from '@components/contexts';
 import TransactionList from '../TransactionList/TransactionList';
 import { List, ListItem } from '@mui/material';
 import { useAgent } from '@hooks';
@@ -100,7 +100,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                   <TableContainer>
                     <Table size="medium" sx={{ ...commonOverrides }}>
                       <TableBody>
-                        {/* <AMMProvider amm={(pos.amm as AugmentedAMM)}> */}
+                        <AMMProvider amm={(pos.amm as AugmentedAMM)}>
                           <PositionTableRow
                             position={pos}
                             positionInfo={info}
@@ -109,7 +109,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                             onSelect={(mode: 'margin' | 'liquidity') => handleSelectRow(index, mode)}
                             handleSettle={() => handleSettle(pos)}
                           />
-                        {/* </AMMProvider> */}
+                        </AMMProvider>
                       </TableBody>
                     </Table>
                   </TableContainer>
