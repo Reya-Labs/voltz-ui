@@ -7,9 +7,10 @@ import { ProgressBar } from '@components/composite';
 import { lpLabels } from '../../constants';
 import { traderLabels } from '../../constants';
 import { FixedAPR, Notional, CurrentMargin, Maturity, AccruedRates } from './components';
-import React from 'react';
-import { useAgent } from '@hooks';
+import React, { useEffect } from 'react';
+import { useAgent, useAMMContext } from '@hooks';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
+import { Box } from '@mui/system';
 
 export type PositionTableRowProps = {
   position: Position;
@@ -28,6 +29,12 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
 }) => {
   const { agent } = useAgent();
   const labels = agent === Agents.LIQUIDITY_PROVIDER ? lpLabels : traderLabels;
+
+  const { ammCaps: { call: loadCap, loading: capLoading, result: cap } } = useAMMContext();
+
+  useEffect(() => {
+    loadCap();
+  }, [loadCap]);
 
   const typeStyleOverrides: SystemStyleObject<Theme> = {
     backgroundColor: `secondary.darken050`, // this affects the colour of the positions rows in the LP positions 
@@ -80,15 +87,52 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     }
     
     if (field === 'pool') {
-      return (
-        <Typography variant="h5" label={label}>
-          <ProgressBar 
-            leftContent={position.source.includes("FCM") ? `FCM : ${position.amm.protocol}` : position.amm.protocol} 
-            rightContent={<>??% CAP</>} 
-            percentageComplete={66} 
-          />
-        </Typography>
-      );
+
+      if (agent === Agents.LIQUIDITY_PROVIDER) {
+        if (capLoading) {
+          return (
+            <Typography variant="h5" label={label}>
+              <ProgressBar
+                leftContent={position.amm.protocol}
+                rightContent={"Loading..."}
+                percentageComplete={0}
+              />
+            </Typography>
+          );
+        }
+
+        if (!cap) {
+          return (
+            <Typography variant="h5" label={label}>
+              <Box sx={{ width: '100%' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography variant="h6">{position.amm.protocol}</Typography>
+                </Box>
+              </Box>
+            </Typography>);
+        }
+
+        return (
+          <Typography variant="h5" label={label}>
+            <ProgressBar
+              leftContent={position.amm.protocol}
+              rightContent={<>{cap.toFixed(2)}% CAP</>}
+              percentageComplete={cap}
+            />
+          </Typography>
+        );
+      }
+      else {
+        return (
+          <Typography variant="h5" label={label}>
+            <Box sx={{ width: '100%' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography variant="h6">{position.amm.protocol}</Typography>
+              </Box>
+            </Box>
+          </Typography>);
+      }
+      
     }
 
     if (field === 'rateRange') {

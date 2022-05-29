@@ -34,6 +34,12 @@ const AMMContext = createContext<AMMDispatch>({
     loading: false,
     call: (_args?: Position) => undefined,
   },
+  ammCaps: {
+    result: undefined,
+    error: false,
+    loading: false,
+    call: () => undefined,
+  },
 });
 
 export default AMMContext;

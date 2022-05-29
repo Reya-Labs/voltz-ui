@@ -1824,7 +1824,7 @@ var AMM = /** @class */ (function () {
     };
     AMM.prototype.getCaps = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var peripheryContract, marginEngineContract, vammAddress, accumulated, cap;
+            var peripheryContract, marginEngineContract, vammAddress, vammContract, isAlpha, accumulated, cap;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -1836,11 +1836,18 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, marginEngineContract.vamm()];
                     case 1:
                         vammAddress = _a.sent();
-                        return [4 /*yield*/, peripheryContract.lpMarginCumulatives(vammAddress)];
+                        vammContract = typechain_1.VAMM__factory.connect(vammAddress, this.provider);
+                        return [4 /*yield*/, vammContract.isAlpha()];
                     case 2:
+                        isAlpha = _a.sent();
+                        if (!isAlpha) {
+                            return [2 /*return*/];
+                        }
+                        return [4 /*yield*/, peripheryContract.lpMarginCumulatives(vammAddress)];
+                    case 3:
                         accumulated = _a.sent();
                         return [4 /*yield*/, peripheryContract.lpMarginCaps(vammAddress)];
-                    case 3:
+                    case 4:
                         cap = _a.sent();
                         return [2 /*return*/, {
                                 accumulated: this.descale(accumulated),
