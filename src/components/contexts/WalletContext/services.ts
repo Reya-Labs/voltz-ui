@@ -3,6 +3,13 @@ import detectEthereumProvider from '@metamask/detect-provider';
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { BigNumber, ethers, Contract } from "ethers";
 import { OverrideTypes } from "@utilities";
+import { DateTime } from "luxon";
+
+export type SignatureResponse = {
+  signature?: string;
+  timestamp?: string;
+  walletAddress?: string;
+}
 
 /**
  * Will throw an error if the connected ethereum network does not match required network set in .env file
@@ -33,9 +40,8 @@ export const checkForRiskyWallet = async (walletAddress: string) => {
  * @param signer - The ethers signer
  */
 export const checkForTOSSignature = async (signer: ethers.providers.JsonRpcSigner, walletAddress: string) => {
-  const existingSignatureKey = `TOS_SIGNATURE_${walletAddress}`;
-  const existingSignature = localStorage.getItem(existingSignatureKey);
   const signerAddress = await signer.getAddress();
+  const existingSignature = await getSignature(signerAddress);
   let termsAccepted = false;
 
   if(existingSignature) {
@@ -48,11 +54,28 @@ export const checkForTOSSignature = async (signer: ethers.providers.JsonRpcSigne
   if(!termsAccepted) {
     try {
       const signature = await signer.signMessage(getTOSText());
-      localStorage.setItem(existingSignatureKey, signature);
+      await saveSignature(signerAddress, signature);
     } catch(e) {
       throw new Error(' ');
     }
   }
+}
+
+/**
+ * Retrieves a signature via the signatures API for the given wallet address
+ * @param walletAddress - the wallet address to retrieve the signature for
+ */
+export const getSignature = async (walletAddress: string) => {
+  const resp = await fetch(`https://voltz-rest-api.herokuapp.com/get-signature/${walletAddress}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  });
+
+  // https://voltz-rest-api.herokuapp.com/get-signature/0x45556408e543158f74403e882E3C8c23eCD9f732
+
+  const data:SignatureResponse = resp.ok ? (await resp.json() as SignatureResponse) : {} as SignatureResponse;
+  return data.signature;
 }
 
 /**
@@ -197,4 +220,23 @@ export const isWalletRisky = (riskAssessment?: WalletRiskAssessment) => {
   const indicators = riskAssessment?.addressRiskIndicators;
   const redFlag = Array.isArray(indicators) && indicators.find(i => i.categoryRiskScoreLevel >= 10);
   return Boolean(redFlag);
+}
+
+/**
+ * Saves a signature via the signatures API for the given wallet address
+ * @param walletAddress - the wallet address to save the signature for
+ * @param signature - thwe signature to save
+ */
+export const saveSignature = async (walletAddress: string, signature: string) => {
+  // Build formData object.
+  const formData = new FormData();
+  formData.append('signature', signature);
+  formData.append('walletAddress', walletAddress);
+
+  return await fetch(`https://voltz-rest-api.herokuapp.com/add-signature`, {
+    method: 'POST',
+    mode: 'cors',
+    cache: 'no-cache',
+    body: formData
+  })
 }
