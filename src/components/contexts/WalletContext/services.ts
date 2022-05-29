@@ -3,6 +3,7 @@ import detectEthereumProvider from '@metamask/detect-provider';
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { BigNumber, ethers, Contract } from "ethers";
 import { OverrideTypes } from "@utilities";
+import { DateTime } from "luxon";
 
 export type SignatureResponse = {
   signature?: string;
@@ -227,17 +228,15 @@ export const isWalletRisky = (riskAssessment?: WalletRiskAssessment) => {
  * @param signature - thwe signature to save
  */
 export const saveSignature = async (walletAddress: string, signature: string) => {
-  return await fetch(`https://voltz-rest-api.herokuapp.com/post`, {
+  // Build formData object.
+  const formData = new FormData();
+  formData.append('signature', signature);
+  formData.append('walletAddress', walletAddress);
+
+  return await fetch(`https://voltz-rest-api.herokuapp.com/add-signature`, {
     method: 'POST',
     mode: 'cors',
     cache: 'no-cache',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      api_key: `${process.env.REACT_APP_SIGNATURES_API_KEY || ''}`,
-      signature,
-      walletAddress,
-    })
+    body: formData
   })
 }
