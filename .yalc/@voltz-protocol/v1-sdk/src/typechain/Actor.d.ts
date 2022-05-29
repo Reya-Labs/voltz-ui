@@ -24,7 +24,7 @@ interface ActorInterface extends ethers.utils.Interface {
     "burnViaAMM(address,address,int24,int24,uint128)": FunctionFragment;
     "initiateFullyCollateralisedFixedTakerSwap(address,uint256,uint160)": FunctionFragment;
     "liquidatePosition(address,int24,int24,address)": FunctionFragment;
-    "mintOrBurnViaPeriphery(address,(address,int24,int24,uint256,bool,uint256))": FunctionFragment;
+    "mintOrBurnViaPeriphery(address,(address,int24,int24,uint256,bool,int256))": FunctionFragment;
     "mintViaAMM(address,address,int24,int24,uint128)": FunctionFragment;
     "setIntegrationApproval(address,address,bool)": FunctionFragment;
     "settlePosition(address,address,int24,int24)": FunctionFragment;

@@ -39,11 +39,10 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     "indexAllYBATraders(address)": FunctionFragment;
     "initialCashflow()": FunctionFragment;
     "initiateFullyCollateralisedFixedTakerSwap(address,uint256,uint160)": FunctionFragment;
-    "invariantPostMaturity()": FunctionFragment;
     "keepInMindGas()": FunctionFragment;
     "liquidatePosition(address,int24,int24,address,int24,int24)": FunctionFragment;
     "liquidationRewards()": FunctionFragment;
-    "mintOrBurnViaPeriphery(address,(address,int24,int24,uint256,bool,uint256))": FunctionFragment;
+    "mintOrBurnViaPeriphery(address,(address,int24,int24,uint256,bool,int256))": FunctionFragment;
     "mintViaAMM(address,int24,int24,uint128)": FunctionFragment;
     "peripheryAddress()": FunctionFragment;
     "positionHistory(bytes32,uint256)": FunctionFragment;
@@ -57,7 +56,6 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     "setVAMMAddress(address)": FunctionFragment;
     "settlePositionViaAMM(address,int24,int24)": FunctionFragment;
     "settleYBATrader(address)": FunctionFragment;
-    "settlementCashflowBasedOnSwapSnapshots(address,int24,int24)": FunctionFragment;
     "sizeAllPositions()": FunctionFragment;
     "sizeAllYBATraders()": FunctionFragment;
     "sizeOfPositionHistory(bytes32)": FunctionFragment;
@@ -137,10 +135,6 @@ interface E2ESetupInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "initiateFullyCollateralisedFixedTakerSwap",
     values: [string, BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "invariantPostMaturity",
-    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "keepInMindGas",
@@ -226,10 +220,6 @@ interface E2ESetupInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "settleYBATrader",
     values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "settlementCashflowBasedOnSwapSnapshots",
-    values: [string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "sizeAllPositions",
@@ -341,10 +331,6 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "invariantPostMaturity",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "keepInMindGas",
     data: BytesLike
   ): Result;
@@ -407,10 +393,6 @@ interface E2ESetupInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "settleYBATrader",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "settlementCashflowBasedOnSwapSnapshots",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -626,10 +608,6 @@ export class E2ESetup extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    invariantPostMaturity(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     keepInMindGas(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     liquidatePosition(
@@ -762,13 +740,6 @@ export class E2ESetup extends BaseContract {
       trader: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    settlementCashflowBasedOnSwapSnapshots(
-      _owner: string,
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
 
     sizeAllPositions(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -956,10 +927,6 @@ export class E2ESetup extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  invariantPostMaturity(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   keepInMindGas(overrides?: CallOverrides): Promise<BigNumber>;
 
   liquidatePosition(
@@ -1092,13 +1059,6 @@ export class E2ESetup extends BaseContract {
     trader: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
-
-  settlementCashflowBasedOnSwapSnapshots(
-    _owner: string,
-    tickLower: BigNumberish,
-    tickUpper: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
 
   sizeAllPositions(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1284,8 +1244,6 @@ export class E2ESetup extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    invariantPostMaturity(overrides?: CallOverrides): Promise<void>;
-
     keepInMindGas(overrides?: CallOverrides): Promise<BigNumber>;
 
     liquidatePosition(
@@ -1412,13 +1370,6 @@ export class E2ESetup extends BaseContract {
     ): Promise<void>;
 
     settleYBATrader(trader: string, overrides?: CallOverrides): Promise<void>;
-
-    settlementCashflowBasedOnSwapSnapshots(
-      _owner: string,
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
 
     sizeAllPositions(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1581,10 +1532,6 @@ export class E2ESetup extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    invariantPostMaturity(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     keepInMindGas(overrides?: CallOverrides): Promise<BigNumber>;
 
     liquidatePosition(
@@ -1678,13 +1625,6 @@ export class E2ESetup extends BaseContract {
     settleYBATrader(
       trader: string,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    settlementCashflowBasedOnSwapSnapshots(
-      _owner: string,
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
-      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     sizeAllPositions(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1833,10 +1773,6 @@ export class E2ESetup extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    invariantPostMaturity(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     keepInMindGas(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     liquidatePosition(
@@ -1932,13 +1868,6 @@ export class E2ESetup extends BaseContract {
     settleYBATrader(
       trader: string,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    settlementCashflowBasedOnSwapSnapshots(
-      _owner: string,
-      tickLower: BigNumberish,
-      tickUpper: BigNumberish,
-      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     sizeAllPositions(overrides?: CallOverrides): Promise<PopulatedTransaction>;

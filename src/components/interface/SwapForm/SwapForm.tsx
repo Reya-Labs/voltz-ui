@@ -15,14 +15,16 @@ import {
 import { TraderControls, MarginControls, SwapInfo } from './components';
 import { colors } from '@theme';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
+import { SwapFormActions, SwapFormModes } from './types';
 
 export type SwapFormProps = {
   endDate?: DateTime;
   errors: Record<string, string>;
   formState: SwapFormState;
+  formAction: SwapFormActions;
   maxMargin?: number;
-  isEditingMargin?: boolean;
   isFormValid: boolean;
+  mode: SwapFormModes;
   onCancel: () => void;
   onChangeMargin: (value: number) => void;
   onChangeMarginAction: (value: MintBurnFormMarginAction) => void;
@@ -39,13 +41,15 @@ export type SwapFormProps = {
   underlyingTokenName?: string;
 };
 
+
 const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   endDate,
   errors,
   formState,
   maxMargin,
-  isEditingMargin,
   isFormValid,
+  mode,
+  formAction,
   onCancel,
   onChangeMargin,
   onChangeMarginAction,
@@ -94,7 +98,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         />
       </Box>
  
-      {isEditingMargin && (
+      {mode === SwapFormModes.EDIT_MARGIN && (
         <Box sx={{ ...bottomSpacing, display: 'flex' }}>
           <MarginControls 
             value={formState.marginAction}
@@ -103,7 +107,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         </Box>
       )}  
 
-      {!isEditingMargin && (
+      {mode !== SwapFormModes.EDIT_MARGIN && (
         <Box sx={{ ...bottomSpacing, display: 'flex' }}>
           <TraderControls
             agent={agent}
@@ -114,7 +118,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         </Box>
       )}
 
-      {!isEditingMargin && (
+      {mode !== SwapFormModes.EDIT_MARGIN && (
         <Box sx={bottomSpacing}>
           <NotionalAmount
             error={errors['notional']}
@@ -145,7 +149,9 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           <SwapInfo 
             data={swapInfo} 
             loading={swapInfoLoading} 
-            underlyingTokenName={underlyingTokenName} 
+            underlyingTokenName={underlyingTokenName}
+            yieldBearingTokenName={protocol}
+            formAction={formAction}
           />
         </Box>
       )}

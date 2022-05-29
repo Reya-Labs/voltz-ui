@@ -70,7 +70,7 @@ export const FCMPositionFactory = (positionData: FCMPositionQueryData, signer: W
       environment: 'KOVAN',
       rateOracle: new RateOracle({
         id: rateOracleAddress,
-        protocolId: parseInt(protocolId as string),
+        protocolId: parseInt(protocolId as string, 10),
       }),
       underlyingToken: new Token({
         id: tokenAddress,

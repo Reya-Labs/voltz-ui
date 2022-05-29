@@ -2,12 +2,12 @@ import React from 'react';
 import { DateTime, Duration } from 'luxon';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { AgentProvider } from '@components/contexts';
+import { AgentProvider, Agents } from '@components/contexts';
 import SwapForm from './SwapForm';
 import { useSwapForm, useTokenApproval } from '@hooks';
 import { AugmentedAMM } from '@utilities';
-import { BigNumber } from 'ethers';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
+import { SwapFormActions, SwapFormModes } from './types';
 
 export default {
   title: 'Interface/SwapForm',
@@ -18,6 +18,7 @@ export default {
 } as ComponentMeta<typeof SwapForm>;
 
 const mockAmm = ({
+  hasEnoughUnderlyingTokens: () =>  true,
   underlyingToken: {
     id: '0x123456789',
     name: 'gil'
@@ -53,19 +54,20 @@ const NewPositionTemplate: ComponentStory<typeof SwapForm> = (args) => (
   </AgentProvider>
 );
 const NewPositionSwapForm: React.FunctionComponent = (args) => {
-  const balance = 100000;
-  const isEditingMargin = false;
+  const fees = 4;
   const minRequiredMargin = 100;
+  const mode = SwapFormModes.NEW_POSITION;
 
-  const form = useSwapForm(mockAmm, isEditingMargin, BigNumber.from(balance), minRequiredMargin);
+  const form = useSwapForm(mockAmm, mode, minRequiredMargin, fees, Agents.FIXED_TRADER);
 
   return (
     <SwapForm 
       {...args} 
       errors={form.errors}
       formState={form.state} 
-      isEditingMargin={isEditingMargin}
       isFormValid={form.isValid}
+      formAction={SwapFormActions.SWAP}
+      mode={mode}
       onCancel={() => alert('cancel')}
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction} 
@@ -95,19 +97,20 @@ const EditingMarginTemplate: ComponentStory<typeof SwapForm> = (args) => (
   </AgentProvider>
 );
 const EditingMarginSwapForm: React.FunctionComponent = (args) => {
-  const balance = 100000;
-  const isEditingMargin = true;
+  const fees = 4;
   const minRequiredMargin = 100;
+  const mode = SwapFormModes.EDIT_MARGIN;
 
-  const form = useSwapForm(mockAmm, isEditingMargin, BigNumber.from(balance), minRequiredMargin);
+  const form = useSwapForm(mockAmm, mode, minRequiredMargin, fees, Agents.FIXED_TRADER);
 
   return (
     <SwapForm 
       {...args} 
       errors={form.errors}
       formState={form.state}
-      isEditingMargin={isEditingMargin}
       isFormValid={form.isValid}
+      mode={mode}
+      formAction={SwapFormActions.SWAP}
       onCancel={() => alert('cancel')}
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction} 

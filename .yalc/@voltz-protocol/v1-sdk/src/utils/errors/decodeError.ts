@@ -1,7 +1,7 @@
 import { getReadableErrorMessage } from './errorHandling';
 
 const error = {
-  data: "Reverted 0x6b4fff2400000000000000000000000000000000000000000000000000000000008fb84d",
+  data: "Reverted 0x798f045e0000000000000000000000000000000000000000000000000000000000000000",
 };
 
 console.log(getReadableErrorMessage(error, 'KOVAN'));

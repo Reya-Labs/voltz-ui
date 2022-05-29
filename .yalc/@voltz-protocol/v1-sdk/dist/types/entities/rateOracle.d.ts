@@ -5,6 +5,7 @@ export declare type RateOracleConstructorArgs = {
 declare class RateOracle {
     readonly id: string;
     readonly protocol: string;
+    readonly protocolId: number;
     constructor({ id, protocolId }: RateOracleConstructorArgs);
 }
 export default RateOracle;

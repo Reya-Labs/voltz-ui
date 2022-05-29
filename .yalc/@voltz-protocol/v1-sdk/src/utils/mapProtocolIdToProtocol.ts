@@ -7,7 +7,7 @@ const mapProtocolIdToProtocol = (protocolId: number): string => {
     return 'COMPOUND';
   }
 
-  return 'AAVE V2';
+  throw new Error('No protocol recognized');
 };
 
 export default mapProtocolIdToProtocol;

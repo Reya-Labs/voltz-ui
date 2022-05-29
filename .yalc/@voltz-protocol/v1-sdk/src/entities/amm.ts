@@ -12,6 +12,7 @@ import {
   ONE_YEAR_IN_SECONDS,
   MaxUint256Bn,
   TresholdApprovalBn,
+  getGasBuffer,
 } from '../constants';
 import {
   Periphery__factory as peripheryFactory,
@@ -19,8 +20,12 @@ import {
   Factory__factory as factoryFactory,
   // todo: not very elegant to use the mock as a factory
   ERC20Mock__factory as tokenFactory,
-  AaveFCM__factory as fcmFactory,
+  AaveFCM__factory as fcmAaveFactory,
+  CompoundFCM__factory as fcmCompoundFactory,
   BaseRateOracle__factory,
+  VAMM__factory,
+  CompoundFCM,
+  ICToken__factory,
 } from '../typechain';
 import RateOracle from './rateOracle';
 import { TickMath } from '../utils/tickMath';
@@ -52,6 +57,13 @@ export type AMMConstructorArgs = {
   totalNotionalTraded: JSBI;
   totalLiquidity: JSBI;
 };
+
+// caps
+
+export type CapInfo = {
+  accumulated: number;
+  cap: number;
+}
 
 // swap
 
@@ -177,9 +189,6 @@ class AMM {
   public readonly txCount: number;
   public readonly totalNotionalTraded: JSBI;
   public readonly totalLiquidity: JSBI;
-  public readonly overrides: {
-    gasLimit: number;
-  }
 
   public constructor({
     id,
@@ -215,10 +224,6 @@ class AMM {
     this.txCount = txCount;
     this.totalNotionalTraded = totalNotionalTraded;
     this.totalLiquidity = totalLiquidity;
-
-    this.overrides = {
-      gasLimit: 10000000,
-    }
   }
 
   // swap
@@ -417,7 +422,14 @@ class AMM {
       throw new Error(errorMessage);
     });
 
-    const swapTransaction = await peripheryContract.swap(swapPeripheryParams, this.overrides).catch((error) => {
+    const estimatedGas = await peripheryContract.estimateGas.swap(swapPeripheryParams).catch((error) => {
+      const errorMessage = getReadableErrorMessage(error, this.environment);
+      throw new Error(errorMessage);
+    });
+
+    const swapTransaction = await peripheryContract.swap(swapPeripheryParams, {
+      gasLimit: getGasBuffer(estimatedGas)
+    }).catch((error) => {
       const errorMessage = getReadableErrorMessage(error, this.environment);
       throw new Error(errorMessage);
     });
@@ -563,7 +575,14 @@ class AMM {
       throw new Error(errorMessage);
     });
 
-    const mintTransaction = await peripheryContract.mintOrBurn(mintOrBurnParams, this.overrides).catch((error) => {
+    const estimatedGas = await peripheryContract.estimateGas.mintOrBurn(mintOrBurnParams).catch((error) => {
+      const errorMessage = getReadableErrorMessage(error, this.environment);
+      throw new Error(errorMessage);
+    });
+
+    const mintTransaction = await peripheryContract.mintOrBurn(mintOrBurnParams, {
+      gasLimit: getGasBuffer(estimatedGas)
+    }).catch((error) => {
       const errorMessage = getReadableErrorMessage(error, this.environment);
       throw new Error(errorMessage);
     });
@@ -630,7 +649,11 @@ class AMM {
       throw new Error(errorMessage);
     });
 
-    const burnTransaction = await peripheryContract.mintOrBurn(mintOrBurnParams, this.overrides).catch((error) => {
+    const estimatedGas = await peripheryContract.estimateGas.mintOrBurn(mintOrBurnParams);
+
+    const burnTransaction = await peripheryContract.mintOrBurn(mintOrBurnParams, {
+      gasLimit: getGasBuffer(estimatedGas)
+    }).catch((error) => {
       const errorMessage = getReadableErrorMessage(error, this.environment);
       throw new Error(errorMessage);
     });
@@ -680,13 +703,36 @@ class AMM {
       await this.approveUnderlyingTokenForPeriphery();
     }
 
-    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
-    const updatePositionMarginTransaction = await marginEngineContract.updatePositionMargin(
-      effectiveOwner,
+    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.signer);
+
+    await peripheryContract.callStatic.updatePositionMargin(
+      this.marginEngineAddress,
       tickLower,
       tickUpper,
       scaledMarginDelta,
-      this.overrides
+      false
+    ).catch(async (error: any) => {
+      const errorMessage = getReadableErrorMessage(error, this.environment);
+      throw new Error(errorMessage);
+    });
+
+    const estimatedGas = await peripheryContract.estimateGas.updatePositionMargin(
+      this.marginEngineAddress,
+      tickLower,
+      tickUpper,
+      scaledMarginDelta,
+      false
+    );
+
+    const updatePositionMarginTransaction = await peripheryContract.updatePositionMargin(
+      this.marginEngineAddress,
+      tickLower,
+      tickUpper,
+      scaledMarginDelta,
+      false,
+      {
+        gasLimit: getGasBuffer(estimatedGas)
+      }
     );
 
     try {
@@ -713,7 +759,17 @@ class AMM {
     const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
 
     const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
-    const liquidatePositionTransaction = await marginEngineContract.liquidatePosition(owner, tickLower, tickUpper, this.overrides);
+
+    await marginEngineContract.callStatic.liquidatePosition(owner, tickLower, tickUpper).catch((error) => {
+      const errorMessage = getReadableErrorMessage(error, this.environment);
+      throw new Error(errorMessage);
+    });
+
+    const estimatedGas = await marginEngineContract.estimateGas.liquidatePosition(owner, tickLower, tickUpper);
+
+    const liquidatePositionTransaction = await marginEngineContract.liquidatePosition(owner, tickLower, tickUpper, {
+      gasLimit: getGasBuffer(estimatedGas)
+    });
 
     try {
       const receipt = await liquidatePositionTransaction.wait();
@@ -739,13 +795,34 @@ class AMM {
 
     const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
     const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
-    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
 
-    const settlePositionTransaction = await marginEngineContract.settlePosition(
+    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.signer);
+
+    await peripheryContract.callStatic.settlePositionAndWithdrawMargin(
+      this.marginEngineAddress,
+      effectiveOwner,
+      tickLower,
+      tickUpper
+    ).catch((error) => {
+      const errorMessage = getReadableErrorMessage(error, this.environment);
+      throw new Error(errorMessage);
+    });
+
+    const estimatedGas = await peripheryContract.estimateGas.settlePositionAndWithdrawMargin(
+      this.marginEngineAddress,
+      effectiveOwner,
+      tickLower,
+      tickUpper
+    );
+
+    const settlePositionTransaction = await peripheryContract.settlePositionAndWithdrawMargin(
+      this.marginEngineAddress,
       effectiveOwner,
       tickLower,
       tickUpper,
-      this.overrides
+      {
+        gasLimit: getGasBuffer(estimatedGas)
+      }
     );
 
     try {
@@ -758,6 +835,104 @@ class AMM {
   }
 
   // FCM swap
+
+  public async getInfoPostFCMSwap({
+    notional,
+    fixedRateLimit,
+  }: fcmSwapArgs): Promise<InfoPostSwap> {
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
+    }
+
+    let sqrtPriceLimitX96;
+    if (fixedRateLimit) {
+      const { closestUsableTick: tickLimit } = this.closestTickAndFixedRate(fixedRateLimit);
+      sqrtPriceLimitX96 = TickMath.getSqrtRatioAtTick(tickLimit).toString();
+    } else {
+      sqrtPriceLimitX96 = TickMath.getSqrtRatioAtTick(TickMath.MAX_TICK - 1).toString();
+    }
+
+    let fcmContract;
+    switch (this.rateOracle.protocolId) {
+      case 1: {
+        fcmContract = fcmAaveFactory.connect(this.fcmAddress, this.signer);
+        break;
+      }
+
+      case 2: {
+        fcmContract = fcmCompoundFactory.connect(this.fcmAddress, this.signer);
+        break;
+      }
+
+      default:
+        throw new Error("Unrecognized FCM");
+    }
+    const scaledNotional = this.scale(notional);
+
+    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.signer);
+
+    let tickBefore = await peripheryContract.getCurrentTick(this.marginEngineAddress);
+    let tickAfter = 0;
+    let fee = BigNumber.from(0);
+    let availableNotional = BigNumber.from(0);
+    let fixedTokenDeltaUnbalanced = BigNumber.from(0);
+
+    await fcmContract.callStatic.initiateFullyCollateralisedFixedTakerSwap(
+      scaledNotional,
+      sqrtPriceLimitX96
+    ).then(async (result: any) => {
+      availableNotional = result[1];
+      fee = result[2];
+      fixedTokenDeltaUnbalanced = result[3];
+      tickAfter = await peripheryContract.getCurrentTick(this.marginEngineAddress);
+    },
+      (error: any) => {
+        const result = decodeInfoPostSwap(error, this.environment);
+        tickAfter = result.tick;
+        fee = result.fee;
+        availableNotional = result.availableNotional;
+        fixedTokenDeltaUnbalanced = result.fixedTokenDeltaUnbalanced;
+      });
+
+    const fixedRateBefore = tickToFixedRate(tickBefore);
+    const fixedRateAfter = tickToFixedRate(tickAfter);
+
+    const fixedRateDelta = fixedRateAfter.subtract(fixedRateBefore);
+    const fixedRateDeltaRaw = fixedRateDelta.toNumber();
+
+    const scaledAvailableNotional = this.descale(availableNotional);
+    const scaledFee = this.descale(fee);
+
+    const averageFixedRate = fixedTokenDeltaUnbalanced.mul(BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
+
+    let additionalMargin = 0;
+    switch (this.rateOracle.protocolId) {
+      case 1: {
+        additionalMargin = scaledAvailableNotional;
+        break;
+      }
+
+      case 2: {
+        const cTokenAddress = await (fcmContract as CompoundFCM).cToken();
+        const cTokenContract = ICToken__factory.connect(cTokenAddress, this.signer);
+        const rate = await cTokenContract.callStatic.exchangeRateCurrent();
+        const scaledRate = rate.div(BigNumber.from(1000000000000)).toNumber() / 1000000;
+        additionalMargin = scaledAvailableNotional / scaledRate;
+        break;
+      }
+
+      default:
+        throw new Error("Unrecognized FCM");
+    }
+
+    return {
+      marginRequirement: additionalMargin < 0 ? -additionalMargin : additionalMargin,
+      availableNotional: scaledAvailableNotional < 0 ? -scaledAvailableNotional : scaledAvailableNotional,
+      fee: scaledFee < 0 ? -scaledFee : scaledFee,
+      slippage: fixedRateDeltaRaw < 0 ? -fixedRateDeltaRaw : fixedRateDeltaRaw,
+      averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
+    };
+  }
 
   public async fcmSwap({
     notional,
@@ -784,7 +959,21 @@ class AMM {
       sqrtPriceLimitX96 = TickMath.getSqrtRatioAtTick(TickMath.MAX_TICK - 1).toString();
     }
 
-    const fcmContract = fcmFactory.connect(this.fcmAddress, this.signer);
+    let fcmContract;
+    switch (this.rateOracle.protocolId) {
+      case 1: {
+        fcmContract = fcmAaveFactory.connect(this.fcmAddress, this.signer);
+        break;
+      }
+
+      case 2: {
+        fcmContract = fcmCompoundFactory.connect(this.fcmAddress, this.signer);
+        break;
+      }
+
+      default:
+        throw new Error("Unrecognized FCM");
+    }
     const scaledNotional = this.scale(notional);
 
     const isUnderlyingTokenApprovedForFCM = await this.isUnderlyingTokenApprovedForFCM();
@@ -797,10 +986,25 @@ class AMM {
       await this.approveUnderlyingTokenForFCM();
     }
 
+    await fcmContract.callStatic.initiateFullyCollateralisedFixedTakerSwap(
+      scaledNotional,
+      sqrtPriceLimitX96
+    ).catch((error) => {
+      const errorMessage = getReadableErrorMessage(error, this.environment);
+      throw new Error(errorMessage);
+    });
+
+    const estimatedGas = await fcmContract.estimateGas.initiateFullyCollateralisedFixedTakerSwap(
+      scaledNotional,
+      sqrtPriceLimitX96
+    );
+
     const fcmSwapTransaction = await fcmContract.initiateFullyCollateralisedFixedTakerSwap(
       scaledNotional,
       sqrtPriceLimitX96,
-      this.overrides
+      {
+        gasLimit: getGasBuffer(estimatedGas)
+      }
     );
 
     try {
@@ -813,6 +1017,83 @@ class AMM {
   }
 
   // FCM unwind
+
+  public async getInfoPostFCMUnwind({
+    notionalToUnwind,
+    fixedRateLimit,
+  }: fcmUnwindArgs): Promise<InfoPostSwap> {
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
+    }
+
+    let sqrtPriceLimitX96;
+    if (fixedRateLimit) {
+      const { closestUsableTick: tickLimit } = this.closestTickAndFixedRate(fixedRateLimit);
+      sqrtPriceLimitX96 = TickMath.getSqrtRatioAtTick(tickLimit).toString();
+    } else {
+      sqrtPriceLimitX96 = TickMath.getSqrtRatioAtTick(TickMath.MIN_TICK + 1).toString();
+    }
+
+    let fcmContract;
+    switch (this.rateOracle.protocolId) {
+      case 1:
+        fcmContract = fcmAaveFactory.connect(this.fcmAddress, this.signer);
+        break;
+
+      case 2:
+        fcmContract = fcmCompoundFactory.connect(this.fcmAddress, this.signer);
+        break;
+
+      default:
+        throw new Error("Unrecognized FCM");
+    }
+
+    const scaledNotional = this.scale(notionalToUnwind);
+
+    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.signer);
+
+    let tickBefore = await peripheryContract.getCurrentTick(this.marginEngineAddress);
+    let tickAfter = 0;
+    let fee = BigNumber.from(0);
+    let availableNotional = BigNumber.from(0);
+    let fixedTokenDeltaUnbalanced = BigNumber.from(0);
+
+    await fcmContract.callStatic.unwindFullyCollateralisedFixedTakerSwap(
+      scaledNotional,
+      sqrtPriceLimitX96
+    ).then(async (result: any) => {
+      availableNotional = result[1];
+      fee = result[2];
+      fixedTokenDeltaUnbalanced = result[3];
+      tickAfter = await peripheryContract.getCurrentTick(this.marginEngineAddress);
+    },
+      (error: any) => {
+        const result = decodeInfoPostSwap(error, this.environment);
+        tickAfter = result.tick;
+        fee = result.fee;
+        availableNotional = result.availableNotional;
+        fixedTokenDeltaUnbalanced = result.fixedTokenDeltaUnbalanced;
+      });
+
+    const fixedRateBefore = tickToFixedRate(tickBefore);
+    const fixedRateAfter = tickToFixedRate(tickAfter);
+
+    const fixedRateDelta = fixedRateAfter.subtract(fixedRateBefore);
+    const fixedRateDeltaRaw = fixedRateDelta.toNumber();
+
+    const scaledAvailableNotional = this.descale(availableNotional);
+    const scaledFee = this.descale(fee);
+
+    const averageFixedRate = fixedTokenDeltaUnbalanced.mul(BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
+
+    return {
+      marginRequirement: 0,
+      availableNotional: scaledAvailableNotional < 0 ? -scaledAvailableNotional : scaledAvailableNotional,
+      fee: scaledFee < 0 ? -scaledFee : scaledFee,
+      slippage: fixedRateDeltaRaw < 0 ? -fixedRateDeltaRaw : fixedRateDeltaRaw,
+      averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
+    };
+  }
 
   public async fcmUnwind({
     notionalToUnwind,
@@ -839,7 +1120,20 @@ class AMM {
       await this.approveFCM();
     }
 
-    const fcmContract = fcmFactory.connect(this.fcmAddress, this.signer);
+    let fcmContract;
+    switch (this.rateOracle.protocolId) {
+      case 1:
+        fcmContract = fcmAaveFactory.connect(this.fcmAddress, this.signer);
+        break;
+
+      case 2:
+        fcmContract = fcmCompoundFactory.connect(this.fcmAddress, this.signer);
+        break;
+
+      default:
+        throw new Error("Unrecognized FCM");
+    }
+
     const scaledNotional = this.scale(notionalToUnwind);
 
     const isUnderlyingTokenApprovedForFCM = await this.isUnderlyingTokenApprovedForFCM();
@@ -847,10 +1141,25 @@ class AMM {
       await this.approveUnderlyingTokenForFCM();
     }
 
+    await fcmContract.callStatic.unwindFullyCollateralisedFixedTakerSwap(
+      scaledNotional,
+      sqrtPriceLimitX96
+    ).catch((error) => {
+      const errorMessage = getReadableErrorMessage(error, this.environment);
+      throw new Error(errorMessage);
+    });
+
+    const estimatedGas = await fcmContract.estimateGas.unwindFullyCollateralisedFixedTakerSwap(
+      scaledNotional,
+      sqrtPriceLimitX96
+    );
+
     const fcmUnwindTransaction = await fcmContract.unwindFullyCollateralisedFixedTakerSwap(
       scaledNotional,
       sqrtPriceLimitX96,
-      this.overrides
+      {
+        gasLimit: getGasBuffer(estimatedGas)
+      }
     );
 
     try {
@@ -869,8 +1178,30 @@ class AMM {
       throw new Error('Wallet not connected');
     }
 
-    const fcmContract = fcmFactory.connect(this.fcmAddress, this.signer);
-    const fcmSettleTraderTransaction = await fcmContract.settleTrader(this.overrides);
+    let fcmContract;
+    switch (this.rateOracle.protocolId) {
+      case 1:
+        fcmContract = fcmAaveFactory.connect(this.fcmAddress, this.signer);
+        break;
+
+      case 2:
+        fcmContract = fcmCompoundFactory.connect(this.fcmAddress, this.signer);
+        break;
+
+      default:
+        throw new Error("Unrecognized FCM");
+    }
+
+    await fcmContract.callStatic.settleTrader().catch((error) => {
+      const errorMessage = getReadableErrorMessage(error, this.environment);
+      throw new Error(errorMessage);
+    });
+
+    const estimatedGas = await fcmContract.estimateGas.settleTrader();
+
+    const fcmSettleTraderTransaction = await fcmContract.settleTrader({
+      gasLimit: getGasBuffer(estimatedGas)
+    });
 
     try {
       const receipt = await fcmSettleTraderTransaction.wait();
@@ -930,7 +1261,12 @@ class AMM {
     }
 
     const factoryContract = factoryFactory.connect(FACTORY_ADDRESS, this.signer);
-    const approvalTransaction = await factoryContract.setApproval(this.fcmAddress, true, this.overrides);
+
+    const estimatedGas = await factoryContract.estimateGas.setApproval(this.fcmAddress, true);
+
+    const approvalTransaction = await factoryContract.setApproval(this.fcmAddress, true, {
+      gasLimit: getGasBuffer(estimatedGas)
+    });
 
     try {
       const receipt = await approvalTransaction.wait();
@@ -955,7 +1291,8 @@ class AMM {
     const signerAddress = await this.signer.getAddress();
     const tokenAddress = this.underlyingToken.id;
     const token = tokenFactory.connect(tokenAddress, this.signer);
-    const allowance = await token.allowance(signerAddress, PERIPHERY_ADDRESS, this.overrides);
+
+    const allowance = await token.allowance(signerAddress, PERIPHERY_ADDRESS);
 
     return allowance.gte(TresholdApprovalBn);
   }
@@ -976,7 +1313,12 @@ class AMM {
 
     const tokenAddress = this.underlyingToken.id;
     const token = tokenFactory.connect(tokenAddress, this.signer);
-    const approvalTransaction = await token.approve(PERIPHERY_ADDRESS, MaxUint256Bn, this.overrides);
+
+    const estimatedGas = await token.estimateGas.approve(PERIPHERY_ADDRESS, MaxUint256Bn);
+
+    const approvalTransaction = await token.approve(PERIPHERY_ADDRESS, MaxUint256Bn, {
+      gasLimit: getGasBuffer(estimatedGas)
+    });
 
     try {
       const receipt = await approvalTransaction.wait();
@@ -1001,7 +1343,7 @@ class AMM {
     const signerAddress = await this.signer.getAddress();
     const tokenAddress = this.underlyingToken.id;
     const token = tokenFactory.connect(tokenAddress, this.signer);
-    const allowance = await token.allowance(signerAddress, this.fcmAddress, this.overrides);
+    const allowance = await token.allowance(signerAddress, this.fcmAddress);
 
     return allowance.gte(TresholdApprovalBn);
   }
@@ -1022,7 +1364,12 @@ class AMM {
 
     const tokenAddress = this.underlyingToken.id;
     const token = tokenFactory.connect(tokenAddress, this.signer);
-    const approvalTransaction = await token.approve(this.fcmAddress, MaxUint256Bn, this.overrides);
+
+    const estimatedGas = await token.estimateGas.approve(this.fcmAddress, MaxUint256Bn);
+
+    const approvalTransaction = await token.approve(this.fcmAddress, MaxUint256Bn, {
+      gasLimit: getGasBuffer(estimatedGas)
+    });
 
     try {
       const receipt = await approvalTransaction.wait();
@@ -1036,21 +1383,32 @@ class AMM {
   // yield bearing token approval for fcm
 
   public async isYieldBearingTokenApprovedForFCM(): Promise<boolean | void> {
-    if (!this.underlyingToken.id) {
-      throw new Error("No underlying token");
-    }
-
     if (!this.signer) {
       throw new Error('Wallet not connected');
     }
 
+    let tokenAddress;
+    switch (this.rateOracle.protocolId) {
+      case 1: {
+        const fcmContract = fcmAaveFactory.connect(this.fcmAddress, this.signer);
+        tokenAddress = await fcmContract.underlyingYieldBearingToken();
+        break;
+      }
+
+      case 2: {
+        const fcmContract = fcmCompoundFactory.connect(this.fcmAddress, this.signer);
+        tokenAddress = await fcmContract.cToken();
+        break;
+      }
+
+      default:
+        throw new Error("Unrecognized FCM");
+    }
+
     const signerAddress = await this.signer.getAddress();
 
-    const fcmContract = fcmFactory.connect(this.fcmAddress, this.signer);
-    const tokenAddress = await fcmContract.underlyingYieldBearingToken();
-
     const token = tokenFactory.connect(tokenAddress, this.signer);
-    const allowance = await token.allowance(signerAddress, this.fcmAddress, this.overrides);
+    const allowance = await token.allowance(signerAddress, this.fcmAddress);
 
     return allowance.gte(TresholdApprovalBn);
   }
@@ -1070,19 +1428,35 @@ class AMM {
       return;
     }
 
-    if (!this.underlyingToken.id) {
-      throw new Error("No underlying token");
-    }
-
     if (!this.signer) {
       throw new Error('Wallet not connected');
     }
 
-    const fcmContract = fcmFactory.connect(this.fcmAddress, this.signer);
-    const tokenAddress = await fcmContract.underlyingYieldBearingToken();
+    let tokenAddress;
+    switch (this.rateOracle.protocolId) {
+      case 1: {
+        const fcmContract = fcmAaveFactory.connect(this.fcmAddress, this.signer);
+        tokenAddress = await fcmContract.underlyingYieldBearingToken();
+        break;
+      }
+
+      case 2: {
+        const fcmContract = fcmCompoundFactory.connect(this.fcmAddress, this.signer);
+        tokenAddress = await fcmContract.cToken();
+        break;
+      }
+
+      default:
+        throw new Error("Unrecognized FCM");
+    }
 
     const token = tokenFactory.connect(tokenAddress, this.signer);
-    const approvalTransaction = await token.approve(this.fcmAddress, MaxUint256Bn, this.overrides);
+
+    const estimatedGas = await token.estimateGas.approve(this.fcmAddress, MaxUint256Bn);
+
+    const approvalTransaction = await token.approve(this.fcmAddress, MaxUint256Bn, {
+      gasLimit: getGasBuffer(estimatedGas)
+    });
 
     try {
       const receipt = await approvalTransaction.wait();
@@ -1218,16 +1592,6 @@ class AMM {
     }
   }
 
-  public async getApy(termStartTimestamp: BigNumber, termEndTimestamp: BigNumber): Promise<number> {
-    if (!this.provider) {
-      throw new Error('Blockchain not connected');
-    }
-    const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
-    const result = await rateOracleContract.callStatic.getApyFromTo(termStartTimestamp, termEndTimestamp);
-    const resultScaled = result.div(BigNumber.from(10).pow(12)).toNumber() / 1000000;
-    return resultScaled;
-  }
-
   public async getPositionInformation(position: Position): Promise<PositionInfo> {
     if (!this.signer) {
       throw new Error('Wallet not connected');
@@ -1284,9 +1648,24 @@ class AMM {
     // margin and fees information
 
     if (position.source.includes("FCM")) {
-      const fcmContract = fcmFactory.connect(this.fcmAddress, this.signer);
-      const margin = (await fcmContract.getTraderMarginInATokens(signerAddress));
-      results.margin = this.descale(margin);
+      switch (this.rateOracle.protocolId) {
+        case 1: {
+          const fcmContract = fcmAaveFactory.connect(this.fcmAddress, this.signer);
+          const margin = (await fcmContract.getTraderMarginInATokens(signerAddress));
+          results.margin = this.descale(margin);
+          break;
+        }
+
+        case 2: {
+          const fcmContract = fcmCompoundFactory.connect(this.fcmAddress, this.signer);
+          const margin = (await fcmContract.getTraderMarginInCTokens(signerAddress));
+          results.margin = this.descale(margin);
+          break;
+        }
+
+        default:
+          throw new Error("Unrecognized FCM");
+      }
 
       if (beforeMaturity) {
         results.healthFactor = 3;
@@ -1368,6 +1747,164 @@ class AMM {
     let { closestUsableTick } = this.closestTickAndFixedRate(fixedRate);
     closestUsableTick -= count * this.tickSpacing;
     return tickToFixedRate(closestUsableTick).toNumber();
+  }
+
+  // balance checks
+
+  public async hasEnoughUnderlyingTokens(amount: number): Promise<boolean> {
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
+    }
+
+    if (!this.underlyingToken.id) {
+      throw new Error("No underlying token");
+    }
+
+    const signerAddress = await this.signer.getAddress();
+    const tokenAddress = this.underlyingToken.id;
+    const token = tokenFactory.connect(tokenAddress, this.signer);
+
+    const currentBalance = await token.balanceOf(signerAddress);
+    const scaledAmount = BigNumber.from(this.scale(amount));
+
+    return currentBalance.gte(scaledAmount);
+  }
+
+  public async hasEnoughYieldBearingTokens(amount: number): Promise<boolean> {
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
+    }
+
+    const signerAddress = await this.signer.getAddress();
+
+    let tokenAddress;
+    switch (this.rateOracle.protocolId) {
+      case 1: {
+        const fcmContract = fcmAaveFactory.connect(this.fcmAddress, this.signer);
+        tokenAddress = await fcmContract.underlyingYieldBearingToken();
+        break;
+      }
+
+      case 2: {
+        const fcmContract = fcmCompoundFactory.connect(this.fcmAddress, this.signer);
+        tokenAddress = await fcmContract.cToken();
+        break;
+      }
+
+      default:
+        throw new Error("Unrecognized FCM");
+    }
+
+    const token = tokenFactory.connect(tokenAddress, this.signer);
+
+    const currentBalance = await token.balanceOf(signerAddress);
+    const scaledAmount = BigNumber.from(this.scale(amount));
+
+    return currentBalance.gte(scaledAmount);
+  }
+
+  // caps
+
+  async setCap(amount: number) {
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
+    }
+
+    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.signer);
+    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
+
+    const vammAddress = await marginEngineContract.vamm();
+
+    const vammContract = VAMM__factory.connect(vammAddress, this.signer);
+
+    const isAlphaTransaction = await vammContract.setIsAlpha(true);
+
+    try {
+      await isAlphaTransaction.wait();
+    }
+    catch (error) {
+      throw new Error("Setting Alpha failed");
+    }
+
+    const isAlphaTransactionME = await marginEngineContract.setIsAlpha(true);
+
+    try {
+      await isAlphaTransactionME.wait();
+    }
+    catch (error) {
+      throw new Error("Setting Alpha failed");
+    }
+
+    const setCapTransaction = await peripheryContract.setLPMarginCap(vammAddress, this.scale(amount));
+
+    try {
+      await setCapTransaction.wait();
+    }
+    catch (error) {
+      throw new Error("Setting cap failed");
+    }
+  }
+
+  async getCaps(): Promise<CapInfo> {
+    if (!this.provider) {
+      throw new Error('Blockchain not connected');
+    }
+
+    const peripheryContract = peripheryFactory.connect(PERIPHERY_ADDRESS, this.provider);
+    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.provider);
+
+    const vammAddress = await marginEngineContract.vamm();
+
+    const accumulated = await peripheryContract.lpMarginCumulatives(vammAddress);
+    const cap = await peripheryContract.lpMarginCaps(vammAddress);
+
+    return {
+      accumulated: this.descale(accumulated),
+      cap: this.descale(cap)
+    }
+  }
+
+  // current position margin requirement
+
+  async getPositionMarginRequirement(fixedLow: number, fixedHigh: number): Promise<number> {
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
+    }
+
+    const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
+    const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
+
+    const marginEngineContract = marginEngineFactory.connect(
+      this.marginEngineAddress,
+      this.signer,
+    );
+
+    const signerAddress = await this.signer.getAddress();
+
+    const requirement = await marginEngineContract.callStatic.getPositionMarginRequirement(
+      signerAddress,
+      tickLower,
+      tickUpper,
+      false
+    );
+
+    return this.descale(requirement);
+  }
+
+  // one week look-back window apy
+
+  async getOneWeekApy(): Promise<number> {
+    if (!this.provider) {
+      throw new Error('Blockchain not connected');
+    }
+    const lastBlock = await this.provider.getBlockNumber();
+    const lastBlockTimestamp = BigNumber.from((await this.provider.getBlock(lastBlock - 4)).timestamp);
+
+    const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
+
+    const oneWeekApy = await rateOracleContract.callStatic.getApyFromTo(lastBlockTimestamp.sub(BigNumber.from(604800)), lastBlockTimestamp);
+
+    return oneWeekApy.div(BigNumber.from(1000000000000)).toNumber() / 10000;
   }
 }
 

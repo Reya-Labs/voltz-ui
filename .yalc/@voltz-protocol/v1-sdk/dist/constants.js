@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ONE_YEAR_IN_SECONDS = exports.MAX_FIXED_RATE = exports.MIN_FIXED_RATE = exports.MAX_TICK = exports.MIN_TICK = exports.Rounding = exports.Q192 = exports.Q96 = exports.ONE = exports.ZERO = exports.NEGATIVE_ONE = exports.PERIPHERY_ADDRESS = exports.FACTORY_ADDRESS = exports.ADDRESS_ZERO = exports.TresholdApprovalBn = exports.MaxUint256Bn = exports.MaxUint256 = void 0;
+exports.getGasBuffer = exports.ONE_YEAR_IN_SECONDS = exports.MAX_FIXED_RATE = exports.MIN_FIXED_RATE = exports.MAX_TICK = exports.MIN_TICK = exports.Rounding = exports.Q192 = exports.Q96 = exports.ONE = exports.ZERO = exports.NEGATIVE_ONE = exports.PERIPHERY_ADDRESS = exports.FACTORY_ADDRESS = exports.ADDRESS_ZERO = exports.TresholdApprovalBn = exports.MaxUint256Bn = exports.MaxUint256 = void 0;
 var ethers_1 = require("ethers");
 var jsbi_1 = __importDefault(require("jsbi"));
 exports.MaxUint256 = jsbi_1.default.BigInt('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff');
@@ -11,9 +11,9 @@ exports.MaxUint256Bn = ethers_1.BigNumber.from('11579208923731619542357098500868
 exports.TresholdApprovalBn = ethers_1.BigNumber.from('6277101735386680763835789423207666416102355444464034512896');
 exports.ADDRESS_ZERO = '0x0000000000000000000000000000000000000000';
 // Latest kovan deployment address of the factory
-exports.FACTORY_ADDRESS = '0x71b5020bF90327F2241Cc7D66B60C72CEf9cC39b';
+exports.FACTORY_ADDRESS = '0x005FFfeBBA1B7f6F4EB6A03d878B4e0cc9f9c1c2';
 // Latest kovan deployment address of the periphery
-exports.PERIPHERY_ADDRESS = '0x411b190015978F01e6d57e551455B317bf26233f';
+exports.PERIPHERY_ADDRESS = '0x45FFa35f3db83b811823dE7D3B66486c04bCeBff';
 // constants used internally but not expected to be used externally
 exports.NEGATIVE_ONE = jsbi_1.default.BigInt(-1);
 exports.ZERO = jsbi_1.default.BigInt(0);
@@ -44,3 +44,7 @@ exports.MIN_FIXED_RATE = 0.001;
  */
 exports.MAX_FIXED_RATE = 1001;
 exports.ONE_YEAR_IN_SECONDS = 31536000;
+function getGasBuffer(value) {
+    return value.mul(120).div(100);
+}
+exports.getGasBuffer = getGasBuffer;

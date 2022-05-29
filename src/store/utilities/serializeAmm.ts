@@ -13,7 +13,7 @@ const serializeAmm = (amm: AugmentedAMM): SerializedAMM => ({
   txCount: amm.txCount.toString(),
   rateOracle: {
     id: amm.rateOracle.id,
-    protocolId: amm.rateOracle.protocol,
+    protocolId: amm.rateOracle.protocolId.toString(),
     token: {
       id: amm.underlyingToken.id || 'id',
       name: amm.underlyingToken.name || 'token',

@@ -16,10 +16,10 @@ export const TresholdApprovalBn = BigNumber.from(
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000';
 
 // Latest kovan deployment address of the factory
-export const FACTORY_ADDRESS = '0x71b5020bF90327F2241Cc7D66B60C72CEf9cC39b';
+export const FACTORY_ADDRESS = '0x005FFfeBBA1B7f6F4EB6A03d878B4e0cc9f9c1c2';
 
 // Latest kovan deployment address of the periphery
-export const PERIPHERY_ADDRESS = '0x411b190015978F01e6d57e551455B317bf26233f';
+export const PERIPHERY_ADDRESS = '0x45FFa35f3db83b811823dE7D3B66486c04bCeBff';
 
 // constants used internally but not expected to be used externally
 export const NEGATIVE_ONE = JSBI.BigInt(-1);
@@ -58,3 +58,7 @@ export const MIN_FIXED_RATE = 0.001;
 export const MAX_FIXED_RATE = 1001;
 
 export const ONE_YEAR_IN_SECONDS = 31536000;
+
+export function getGasBuffer(value: BigNumber): BigNumber {
+  return value.mul(120).div(100);
+}

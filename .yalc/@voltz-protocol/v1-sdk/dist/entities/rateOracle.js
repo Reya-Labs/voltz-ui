@@ -9,6 +9,7 @@ var RateOracle = /** @class */ (function () {
         var id = _a.id, protocolId = _a.protocolId;
         this.id = id;
         this.protocol = (0, mapProtocolIdToProtocol_1.default)(protocolId);
+        this.protocolId = protocolId;
     }
     return RateOracle;
 }());

@@ -32,6 +32,7 @@ export const getHealthCounters = (positions: Position[], positionInfo: Record<Po
  */
 export const getNetPayingRate = (positions: Position[], positionInfo: Record<Position['id'], PositionInfo>, agent: Agents) => {
   let netPayingRate = 0;
+  let totalNotional = 0;
 
   positions.forEach(position => {
     const info = positionInfo[position.id];
@@ -42,16 +43,17 @@ export const getNetPayingRate = (positions: Position[], positionInfo: Record<Pos
 
       if(!isUndefined(fixedRate) && position.positionType !== 1) {
         netPayingRate += fixedRate * Math.abs(position.effectiveVariableTokenBalance);
+        totalNotional += Math.abs(position.effectiveVariableTokenBalance);
       }
 
       if(!isUndefined(variableRate) && position.positionType === 1) {
         netPayingRate += variableRate * Math.abs(position.effectiveVariableTokenBalance);
+        totalNotional += Math.abs(position.effectiveVariableTokenBalance);
       }
     }
   })
 
   if (agent !== Agents.LIQUIDITY_PROVIDER) {
-    const totalNotional = getTotalNotional(positions, agent);
     if (totalNotional > 0) {
       netPayingRate /= totalNotional;
     }
@@ -68,6 +70,7 @@ export const getNetPayingRate = (positions: Position[], positionInfo: Record<Pos
  */
 export const getNetReceivingRate = (positions: Position[], positionInfo: Record<Position['id'], PositionInfo>, agent: Agents) => {
   let netReceivingRate = 0;
+  let totalNotional = 0;
 
   positions.forEach(position => {
     const info = positionInfo[position.id];
@@ -78,16 +81,17 @@ export const getNetReceivingRate = (positions: Position[], positionInfo: Record<
 
       if(!isUndefined(fixedRate) && position.positionType === 1) {
         netReceivingRate += fixedRate * Math.abs(position.effectiveVariableTokenBalance);
+        totalNotional += Math.abs(position.effectiveVariableTokenBalance);
       }
 
       if(!isUndefined(variableRate) && position.positionType !== 1) {
         netReceivingRate += variableRate * Math.abs(position.effectiveVariableTokenBalance);
+        totalNotional += Math.abs(position.effectiveVariableTokenBalance);
       }
     }
   })
 
   if (agent !== Agents.LIQUIDITY_PROVIDER) {
-    const totalNotional = getTotalNotional(positions, agent);
     if (totalNotional > 0) {
       netReceivingRate /= totalNotional;
     }

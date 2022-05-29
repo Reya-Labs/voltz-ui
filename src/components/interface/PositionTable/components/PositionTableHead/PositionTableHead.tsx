@@ -97,8 +97,9 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
               <CircleIcon 
                 sx={{ 
                   width: 4, 
-                  height: 4, 
-                  borderRadius: 200, 
+                  height: 14, 
+                  borderRadius: '16px',
+                  marginRight: (theme) => theme.spacing(2), 
                   color: getHealthTextColor(),
                 }} 
               />

@@ -13,6 +13,11 @@ const _abi = [
     type: "error",
   },
   {
+    inputs: [],
+    name: "CTokenExchangeRateReturnedZero",
+    type: "error",
+  },
+  {
     inputs: [
       {
         internalType: "bool",
@@ -277,6 +282,19 @@ const _abi = [
       },
     ],
     name: "HistoricalApyWindowSetting",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "bool",
+        name: "__isAlpha",
+        type: "bool",
+      },
+    ],
+    name: "IsAlpha",
     type: "event",
   },
   {
@@ -592,6 +610,32 @@ const _abi = [
     anonymous: false,
     inputs: [
       {
+        indexed: false,
+        internalType: "uint256",
+        name: "cacheMaxAgeInSeconds",
+        type: "uint256",
+      },
+    ],
+    name: "RateOracle",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "contract IRateOracle",
+        name: "rateOracle",
+        type: "address",
+      },
+    ],
+    name: "RateOracleSetting",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
         indexed: true,
         internalType: "contract IVAMM",
         name: "vamm",
@@ -669,6 +713,19 @@ const _abi = [
       },
     ],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getHistoricalApyReadOnly",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -815,6 +872,19 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "isAlpha",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "address",
@@ -904,6 +974,19 @@ const _abi = [
       },
     ],
     name: "setFCM",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bool",
+        name: "__isAlpha",
+        type: "bool",
+      },
+    ],
+    name: "setIsAlpha",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -1035,6 +1118,32 @@ const _abi = [
       },
     ],
     name: "setMarginCalculatorParameters",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bool",
+        name: "state",
+        type: "bool",
+      },
+    ],
+    name: "setPausability",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "contract IRateOracle",
+        name: "__rateOracle",
+        type: "address",
+      },
+    ],
+    name: "setRateOracle",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

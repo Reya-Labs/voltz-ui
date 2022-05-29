@@ -3,9 +3,9 @@ import React, { useMemo } from 'react';
 import { AugmentedAMM } from '@utilities';
 import { useAsyncFunction, useAgent } from '@hooks';
 import { Agents } from '@components/contexts';
-import { MintMinimumMarginRequirementPayload, SwapInfoPayload } from './types';
+import { GetInfoType, MintMinimumMarginRequirementPayload, SwapInfoPayload } from './types';
 import AMMContext from './AMMContext';
-import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
+import { InfoPostSwap, Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
 
 export type AMMProviderProps = {
   amm: AugmentedAMM;
@@ -29,7 +29,9 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
         return;
       }
 
-      return amm.getInfoPostMint({ ...args });
+      const result = await amm.getInfoPostMint({ ...args });
+
+      return result;
     },
     useMemo(() => undefined, [!!amm.signer]),
     100
@@ -43,13 +45,33 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
       }
 
       // hard coded values here are the defaults we use for traders, they overlap with a reasonable range (which causes confusion)
-      const result = await amm.getInfoPostSwap({
-        ...args,
-        isFT: agent === Agents.FIXED_TRADER,
-        fixedLow: 1,
-        fixedHigh: 2,
-      });
+      let result: InfoPostSwap;
+      switch(args.type) {
+        case GetInfoType.NORMAL_SWAP: {
+          result = await amm.getInfoPostSwap({
+            ...args,
+            isFT: agent === Agents.FIXED_TRADER,
+            fixedLow: 1,
+            fixedHigh: 2,
+          }); 
+          break;
+        }
 
+        case GetInfoType.FCM_SWAP: {
+          result = await amm.getInfoPostFCMSwap({notional: args.notional});
+          break;
+        }
+
+        case GetInfoType.FCM_UNWIND: {
+          result = await amm.getInfoPostFCMUnwind({notionalToUnwind: args.notional});
+          break;
+        }
+
+        default: {
+          throw new Error("Unrecognized operation type");
+        }
+      }
+      
       if (!result) {
         return;
       }

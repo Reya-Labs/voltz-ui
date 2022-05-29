@@ -23,10 +23,6 @@ function* updatePositionMarginSaga(action: UpdatePositionMarginAction) {
 
   const { id, margin, fixedLow, fixedHigh } = action.payload.transaction;
 
-  if (isUndefined(fixedLow) || isUndefined(fixedHigh)) {
-    return;
-  }
-
   let result: ContractReceipt | void;
   try {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

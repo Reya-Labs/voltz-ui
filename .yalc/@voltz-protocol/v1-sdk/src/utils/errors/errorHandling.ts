@@ -63,7 +63,7 @@ export const errorMessageMapping: { [errSig: string]: string } = {
 
   'New size of oracle buffer should be positive': 'New size of oracle buffer should be positive',
 
-  OLD: 'Internal error: Oracle buffer overflows',
+  OLD: 'Internal error: Rate oracle not matured enough',
 
   'x must be > 0': 'Internal error: the value must be positive in BitMath',
 

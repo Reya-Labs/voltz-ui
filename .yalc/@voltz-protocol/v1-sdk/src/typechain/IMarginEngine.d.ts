@@ -26,18 +26,23 @@ interface IMarginEngineInterface extends ethers.utils.Interface {
     "factory()": FunctionFragment;
     "fcm()": FunctionFragment;
     "getHistoricalApy()": FunctionFragment;
+    "getHistoricalApyReadOnly()": FunctionFragment;
     "getPosition(address,int24,int24)": FunctionFragment;
     "getPositionMarginRequirement(address,int24,int24,bool)": FunctionFragment;
     "initialize(address,address,uint256,uint256)": FunctionFragment;
+    "isAlpha()": FunctionFragment;
     "liquidatePosition(address,int24,int24)": FunctionFragment;
     "liquidatorRewardWad()": FunctionFragment;
     "lookbackWindowInSeconds()": FunctionFragment;
     "rateOracle()": FunctionFragment;
     "setCacheMaxAgeInSeconds(uint256)": FunctionFragment;
     "setFCM(address)": FunctionFragment;
+    "setIsAlpha(bool)": FunctionFragment;
     "setLiquidatorReward(uint256)": FunctionFragment;
     "setLookbackWindowInSeconds(uint256)": FunctionFragment;
     "setMarginCalculatorParameters((uint256,uint256,int256,int256,int256,int256,int256,int256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256))": FunctionFragment;
+    "setPausability(bool)": FunctionFragment;
+    "setRateOracle(address)": FunctionFragment;
     "setVAMM(address)": FunctionFragment;
     "settlePosition(address,int24,int24)": FunctionFragment;
     "termEndTimestampWad()": FunctionFragment;
@@ -65,6 +70,10 @@ interface IMarginEngineInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "getHistoricalApyReadOnly",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "getPosition",
     values: [string, BigNumberish, BigNumberish]
   ): string;
@@ -76,6 +85,7 @@ interface IMarginEngineInterface extends ethers.utils.Interface {
     functionFragment: "initialize",
     values: [string, string, BigNumberish, BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "isAlpha", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "liquidatePosition",
     values: [string, BigNumberish, BigNumberish]
@@ -97,6 +107,7 @@ interface IMarginEngineInterface extends ethers.utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "setFCM", values: [string]): string;
+  encodeFunctionData(functionFragment: "setIsAlpha", values: [boolean]): string;
   encodeFunctionData(
     functionFragment: "setLiquidatorReward",
     values: [BigNumberish]
@@ -129,6 +140,14 @@ interface IMarginEngineInterface extends ethers.utils.Interface {
         minMarginToIncentiviseLiquidators: BigNumberish;
       }
     ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setPausability",
+    values: [boolean]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setRateOracle",
+    values: [string]
   ): string;
   encodeFunctionData(functionFragment: "setVAMM", values: [string]): string;
   encodeFunctionData(
@@ -195,6 +214,10 @@ interface IMarginEngineInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "getHistoricalApyReadOnly",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getPosition",
     data: BytesLike
   ): Result;
@@ -203,6 +226,7 @@ interface IMarginEngineInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "isAlpha", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "liquidatePosition",
     data: BytesLike
@@ -221,6 +245,7 @@ interface IMarginEngineInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "setFCM", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "setIsAlpha", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setLiquidatorReward",
     data: BytesLike
@@ -231,6 +256,14 @@ interface IMarginEngineInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "setMarginCalculatorParameters",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setPausability",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setRateOracle",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "setVAMM", data: BytesLike): Result;
@@ -273,6 +306,7 @@ interface IMarginEngineInterface extends ethers.utils.Interface {
     "FCMSetting(address)": EventFragment;
     "HistoricalApy(uint256)": EventFragment;
     "HistoricalApyWindowSetting(uint256)": EventFragment;
+    "IsAlpha(bool)": EventFragment;
     "LiquidatorRewardSetting(uint256)": EventFragment;
     "MarginCalculatorParametersSetting(tuple)": EventFragment;
     "PositionLiquidation(address,int24,int24,address,int256,uint256)": EventFragment;
@@ -280,6 +314,8 @@ interface IMarginEngineInterface extends ethers.utils.Interface {
     "PositionSettlement(address,int24,int24,int256)": EventFragment;
     "PositionUpdate(address,int24,int24,uint128,int256,int256,int256,uint256)": EventFragment;
     "ProtocolCollection(address,address,uint256)": EventFragment;
+    "RateOracle(uint256)": EventFragment;
+    "RateOracleSetting(address)": EventFragment;
     "VAMMSetting(address)": EventFragment;
   };
 
@@ -287,6 +323,7 @@ interface IMarginEngineInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "FCMSetting"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "HistoricalApy"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "HistoricalApyWindowSetting"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "IsAlpha"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LiquidatorRewardSetting"): EventFragment;
   getEvent(
     nameOrSignatureOrTopic: "MarginCalculatorParametersSetting"
@@ -296,6 +333,8 @@ interface IMarginEngineInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "PositionSettlement"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PositionUpdate"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ProtocolCollection"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "RateOracle"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "RateOracleSetting"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "VAMMSetting"): EventFragment;
 }
 
@@ -310,6 +349,8 @@ export type HistoricalApyEvent = TypedEvent<[BigNumber] & { value: BigNumber }>;
 export type HistoricalApyWindowSettingEvent = TypedEvent<
   [BigNumber] & { secondsAgo: BigNumber }
 >;
+
+export type IsAlphaEvent = TypedEvent<[boolean] & { __isAlpha: boolean }>;
 
 export type LiquidatorRewardSettingEvent = TypedEvent<
   [BigNumber] & { liquidatorRewardWad: BigNumber }
@@ -459,6 +500,14 @@ export type ProtocolCollectionEvent = TypedEvent<
   }
 >;
 
+export type RateOracleEvent = TypedEvent<
+  [BigNumber] & { cacheMaxAgeInSeconds: BigNumber }
+>;
+
+export type RateOracleSettingEvent = TypedEvent<
+  [string] & { rateOracle: string }
+>;
+
 export type VAMMSettingEvent = TypedEvent<[string] & { vamm: string }>;
 
 export class IMarginEngine extends BaseContract {
@@ -521,6 +570,8 @@ export class IMarginEngine extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    getHistoricalApyReadOnly(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     getPosition(
       _owner: string,
       _tickLower: BigNumberish,
@@ -544,6 +595,8 @@ export class IMarginEngine extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    isAlpha(overrides?: CallOverrides): Promise<[boolean]>;
+
     liquidatePosition(
       _owner: string,
       _tickLower: BigNumberish,
@@ -564,6 +617,11 @@ export class IMarginEngine extends BaseContract {
 
     setFCM(
       _newFCM: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setIsAlpha(
+      __isAlpha: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -598,6 +656,16 @@ export class IMarginEngine extends BaseContract {
         gammaWad: BigNumberish;
         minMarginToIncentiviseLiquidators: BigNumberish;
       },
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setPausability(
+      state: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setRateOracle(
+      __rateOracle: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -673,6 +741,8 @@ export class IMarginEngine extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  getHistoricalApyReadOnly(overrides?: CallOverrides): Promise<BigNumber>;
+
   getPosition(
     _owner: string,
     _tickLower: BigNumberish,
@@ -696,6 +766,8 @@ export class IMarginEngine extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  isAlpha(overrides?: CallOverrides): Promise<boolean>;
+
   liquidatePosition(
     _owner: string,
     _tickLower: BigNumberish,
@@ -716,6 +788,11 @@ export class IMarginEngine extends BaseContract {
 
   setFCM(
     _newFCM: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setIsAlpha(
+    __isAlpha: boolean,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -750,6 +827,16 @@ export class IMarginEngine extends BaseContract {
       gammaWad: BigNumberish;
       minMarginToIncentiviseLiquidators: BigNumberish;
     },
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setPausability(
+    state: boolean,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setRateOracle(
+    __rateOracle: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -823,6 +910,8 @@ export class IMarginEngine extends BaseContract {
 
     getHistoricalApy(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getHistoricalApyReadOnly(overrides?: CallOverrides): Promise<BigNumber>;
+
     getPosition(
       _owner: string,
       _tickLower: BigNumberish,
@@ -870,6 +959,8 @@ export class IMarginEngine extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    isAlpha(overrides?: CallOverrides): Promise<boolean>;
+
     liquidatePosition(
       _owner: string,
       _tickLower: BigNumberish,
@@ -889,6 +980,8 @@ export class IMarginEngine extends BaseContract {
     ): Promise<void>;
 
     setFCM(_newFCM: string, overrides?: CallOverrides): Promise<void>;
+
+    setIsAlpha(__isAlpha: boolean, overrides?: CallOverrides): Promise<void>;
 
     setLiquidatorReward(
       _liquidatorRewardWad: BigNumberish,
@@ -921,6 +1014,13 @@ export class IMarginEngine extends BaseContract {
         gammaWad: BigNumberish;
         minMarginToIncentiviseLiquidators: BigNumberish;
       },
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setPausability(state: boolean, overrides?: CallOverrides): Promise<void>;
+
+    setRateOracle(
+      __rateOracle: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1009,6 +1109,14 @@ export class IMarginEngine extends BaseContract {
     HistoricalApyWindowSetting(
       secondsAgo?: null
     ): TypedEventFilter<[BigNumber], { secondsAgo: BigNumber }>;
+
+    "IsAlpha(bool)"(
+      __isAlpha?: null
+    ): TypedEventFilter<[boolean], { __isAlpha: boolean }>;
+
+    IsAlpha(
+      __isAlpha?: null
+    ): TypedEventFilter<[boolean], { __isAlpha: boolean }>;
 
     "LiquidatorRewardSetting(uint256)"(
       liquidatorRewardWad?: null
@@ -1376,6 +1484,22 @@ export class IMarginEngine extends BaseContract {
       { sender: string; recipient: string; amount: BigNumber }
     >;
 
+    "RateOracle(uint256)"(
+      cacheMaxAgeInSeconds?: null
+    ): TypedEventFilter<[BigNumber], { cacheMaxAgeInSeconds: BigNumber }>;
+
+    RateOracle(
+      cacheMaxAgeInSeconds?: null
+    ): TypedEventFilter<[BigNumber], { cacheMaxAgeInSeconds: BigNumber }>;
+
+    "RateOracleSetting(address)"(
+      rateOracle?: string | null
+    ): TypedEventFilter<[string], { rateOracle: string }>;
+
+    RateOracleSetting(
+      rateOracle?: string | null
+    ): TypedEventFilter<[string], { rateOracle: string }>;
+
     "VAMMSetting(address)"(
       vamm?: string | null
     ): TypedEventFilter<[string], { vamm: string }>;
@@ -1402,6 +1526,8 @@ export class IMarginEngine extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    getHistoricalApyReadOnly(overrides?: CallOverrides): Promise<BigNumber>;
+
     getPosition(
       _owner: string,
       _tickLower: BigNumberish,
@@ -1425,6 +1551,8 @@ export class IMarginEngine extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    isAlpha(overrides?: CallOverrides): Promise<BigNumber>;
+
     liquidatePosition(
       _owner: string,
       _tickLower: BigNumberish,
@@ -1445,6 +1573,11 @@ export class IMarginEngine extends BaseContract {
 
     setFCM(
       _newFCM: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setIsAlpha(
+      __isAlpha: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1479,6 +1612,16 @@ export class IMarginEngine extends BaseContract {
         gammaWad: BigNumberish;
         minMarginToIncentiviseLiquidators: BigNumberish;
       },
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setPausability(
+      state: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setRateOracle(
+      __rateOracle: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1557,6 +1700,10 @@ export class IMarginEngine extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    getHistoricalApyReadOnly(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getPosition(
       _owner: string,
       _tickLower: BigNumberish,
@@ -1579,6 +1726,8 @@ export class IMarginEngine extends BaseContract {
       __termEndTimestampWad: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    isAlpha(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     liquidatePosition(
       _owner: string,
@@ -1604,6 +1753,11 @@ export class IMarginEngine extends BaseContract {
 
     setFCM(
       _newFCM: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setIsAlpha(
+      __isAlpha: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1638,6 +1792,16 @@ export class IMarginEngine extends BaseContract {
         gammaWad: BigNumberish;
         minMarginToIncentiviseLiquidators: BigNumberish;
       },
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setPausability(
+      state: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setRateOracle(
+      __rateOracle: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

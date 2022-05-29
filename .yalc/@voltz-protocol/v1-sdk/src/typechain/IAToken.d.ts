@@ -21,57 +21,15 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface IATokenInterface extends ethers.utils.Interface {
   functions: {
-    "UNDERLYING_ASSET_ADDRESS()": FunctionFragment;
     "burn(address,address,uint256,uint256)": FunctionFragment;
-    "getScaledUserBalanceAndSupply(address)": FunctionFragment;
-    "mint(address,uint256,uint256)": FunctionFragment;
-    "scaledBalanceOf(address)": FunctionFragment;
-    "scaledTotalSupply()": FunctionFragment;
   };
 
-  encodeFunctionData(
-    functionFragment: "UNDERLYING_ASSET_ADDRESS",
-    values?: undefined
-  ): string;
   encodeFunctionData(
     functionFragment: "burn",
     values: [string, string, BigNumberish, BigNumberish]
   ): string;
-  encodeFunctionData(
-    functionFragment: "getScaledUserBalanceAndSupply",
-    values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "mint",
-    values: [string, BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "scaledBalanceOf",
-    values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "scaledTotalSupply",
-    values?: undefined
-  ): string;
 
-  decodeFunctionResult(
-    functionFragment: "UNDERLYING_ASSET_ADDRESS",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "getScaledUserBalanceAndSupply",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "scaledBalanceOf",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "scaledTotalSupply",
-    data: BytesLike
-  ): Result;
 
   events: {};
 }
@@ -120,8 +78,6 @@ export class IAToken extends BaseContract {
   interface: IATokenInterface;
 
   functions: {
-    UNDERLYING_ASSET_ADDRESS(overrides?: CallOverrides): Promise<[string]>;
-
     burn(
       user: string,
       receiverOfUnderlying: string,
@@ -129,28 +85,7 @@ export class IAToken extends BaseContract {
       index: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    getScaledUserBalanceAndSupply(
-      user: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber, BigNumber]>;
-
-    mint(
-      user: string,
-      amount: BigNumberish,
-      index: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    scaledBalanceOf(
-      user: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
-    scaledTotalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
   };
-
-  UNDERLYING_ASSET_ADDRESS(overrides?: CallOverrides): Promise<string>;
 
   burn(
     user: string,
@@ -160,25 +95,7 @@ export class IAToken extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  getScaledUserBalanceAndSupply(
-    user: string,
-    overrides?: CallOverrides
-  ): Promise<[BigNumber, BigNumber]>;
-
-  mint(
-    user: string,
-    amount: BigNumberish,
-    index: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  scaledBalanceOf(user: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-  scaledTotalSupply(overrides?: CallOverrides): Promise<BigNumber>;
-
   callStatic: {
-    UNDERLYING_ASSET_ADDRESS(overrides?: CallOverrides): Promise<string>;
-
     burn(
       user: string,
       receiverOfUnderlying: string,
@@ -186,32 +103,11 @@ export class IAToken extends BaseContract {
       index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    getScaledUserBalanceAndSupply(
-      user: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber, BigNumber]>;
-
-    mint(
-      user: string,
-      amount: BigNumberish,
-      index: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    scaledBalanceOf(
-      user: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    scaledTotalSupply(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   filters: {};
 
   estimateGas: {
-    UNDERLYING_ASSET_ADDRESS(overrides?: CallOverrides): Promise<BigNumber>;
-
     burn(
       user: string,
       receiverOfUnderlying: string,
@@ -219,32 +115,9 @@ export class IAToken extends BaseContract {
       index: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
-
-    getScaledUserBalanceAndSupply(
-      user: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    mint(
-      user: string,
-      amount: BigNumberish,
-      index: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    scaledBalanceOf(
-      user: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    scaledTotalSupply(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    UNDERLYING_ASSET_ADDRESS(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     burn(
       user: string,
       receiverOfUnderlying: string,
@@ -252,24 +125,5 @@ export class IAToken extends BaseContract {
       index: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
-
-    getScaledUserBalanceAndSupply(
-      user: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    mint(
-      user: string,
-      amount: BigNumberish,
-      index: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    scaledBalanceOf(
-      user: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    scaledTotalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

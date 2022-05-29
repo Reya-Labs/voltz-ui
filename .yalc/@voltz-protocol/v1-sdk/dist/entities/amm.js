@@ -69,9 +69,6 @@ var AMM = /** @class */ (function () {
         this.txCount = txCount;
         this.totalNotionalTraded = totalNotionalTraded;
         this.totalLiquidity = totalLiquidity;
-        this.overrides = {
-            gasLimit: 10000000,
-        };
     }
     // swap
     AMM.prototype.getInfoPostSwap = function (_a) {
@@ -179,7 +176,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.swap = function (_a) {
         var isFT = _a.isFT, notional = _a.notional, margin = _a.margin, fixedRateLimit = _a.fixedRateLimit, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, validationOnly = _a.validationOnly;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, peripheryContract, scaledNotional, scaledMarginDelta, isUnderlyingTokenApprovedForPeriphery, swapPeripheryParams, swapTransaction, receipt, error_1;
+            var tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, peripheryContract, scaledNotional, scaledMarginDelta, isUnderlyingTokenApprovedForPeriphery, swapPeripheryParams, estimatedGas, swapTransaction, receipt, error_1;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
@@ -252,23 +249,31 @@ var AMM = /** @class */ (function () {
                             }); })];
                     case 4:
                         _b.sent();
-                        return [4 /*yield*/, peripheryContract.swap(swapPeripheryParams, this.overrides).catch(function (error) {
+                        return [4 /*yield*/, peripheryContract.estimateGas.swap(swapPeripheryParams).catch(function (error) {
                                 var errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, _this.environment);
                                 throw new Error(errorMessage);
                             })];
                     case 5:
-                        swapTransaction = _b.sent();
-                        _b.label = 6;
+                        estimatedGas = _b.sent();
+                        return [4 /*yield*/, peripheryContract.swap(swapPeripheryParams, {
+                                gasLimit: (0, constants_1.getGasBuffer)(estimatedGas)
+                            }).catch(function (error) {
+                                var errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, _this.environment);
+                                throw new Error(errorMessage);
+                            })];
                     case 6:
-                        _b.trys.push([6, 8, , 9]);
-                        return [4 /*yield*/, swapTransaction.wait()];
+                        swapTransaction = _b.sent();
+                        _b.label = 7;
                     case 7:
+                        _b.trys.push([7, 9, , 10]);
+                        return [4 /*yield*/, swapTransaction.wait()];
+                    case 8:
                         receipt = _b.sent();
                         return [2 /*return*/, receipt];
-                    case 8:
+                    case 9:
                         error_1 = _b.sent();
                         throw new Error("Transaction Confirmation Error");
-                    case 9: return [2 /*return*/];
+                    case 10: return [2 /*return*/];
                 }
             });
         });
@@ -341,7 +346,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.mint = function (_a) {
         var fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional, margin = _a.margin, validationOnly = _a.validationOnly;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, peripheryContract, _notional, _marginDelta, isUnderlyingTokenApprovedForPeriphery, mintOrBurnParams, mintTransaction, receipt, error_2;
+            var tickUpper, tickLower, peripheryContract, _notional, _marginDelta, isUnderlyingTokenApprovedForPeriphery, mintOrBurnParams, estimatedGas, mintTransaction, receipt, error_2;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
@@ -398,23 +403,31 @@ var AMM = /** @class */ (function () {
                             })];
                     case 4:
                         _b.sent();
-                        return [4 /*yield*/, peripheryContract.mintOrBurn(mintOrBurnParams, this.overrides).catch(function (error) {
+                        return [4 /*yield*/, peripheryContract.estimateGas.mintOrBurn(mintOrBurnParams).catch(function (error) {
                                 var errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, _this.environment);
                                 throw new Error(errorMessage);
                             })];
                     case 5:
-                        mintTransaction = _b.sent();
-                        _b.label = 6;
+                        estimatedGas = _b.sent();
+                        return [4 /*yield*/, peripheryContract.mintOrBurn(mintOrBurnParams, {
+                                gasLimit: (0, constants_1.getGasBuffer)(estimatedGas)
+                            }).catch(function (error) {
+                                var errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, _this.environment);
+                                throw new Error(errorMessage);
+                            })];
                     case 6:
-                        _b.trys.push([6, 8, , 9]);
-                        return [4 /*yield*/, mintTransaction.wait()];
+                        mintTransaction = _b.sent();
+                        _b.label = 7;
                     case 7:
+                        _b.trys.push([7, 9, , 10]);
+                        return [4 /*yield*/, mintTransaction.wait()];
+                    case 8:
                         receipt = _b.sent();
                         return [2 /*return*/, receipt];
-                    case 8:
+                    case 9:
                         error_2 = _b.sent();
                         throw new Error("Transaction Confirmation Error");
-                    case 9: return [2 /*return*/];
+                    case 10: return [2 /*return*/];
                 }
             });
         });
@@ -423,7 +436,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.burn = function (_a) {
         var fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional, validationOnly = _a.validationOnly;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, peripheryContract, _notional, mintOrBurnParams, burnTransaction, receipt, error_3;
+            var tickUpper, tickLower, peripheryContract, _notional, mintOrBurnParams, estimatedGas, burnTransaction, receipt, error_3;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
@@ -464,23 +477,28 @@ var AMM = /** @class */ (function () {
                             })];
                     case 1:
                         _b.sent();
-                        return [4 /*yield*/, peripheryContract.mintOrBurn(mintOrBurnParams, this.overrides).catch(function (error) {
+                        return [4 /*yield*/, peripheryContract.estimateGas.mintOrBurn(mintOrBurnParams)];
+                    case 2:
+                        estimatedGas = _b.sent();
+                        return [4 /*yield*/, peripheryContract.mintOrBurn(mintOrBurnParams, {
+                                gasLimit: (0, constants_1.getGasBuffer)(estimatedGas)
+                            }).catch(function (error) {
                                 var errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, _this.environment);
                                 throw new Error(errorMessage);
                             })];
-                    case 2:
-                        burnTransaction = _b.sent();
-                        _b.label = 3;
                     case 3:
-                        _b.trys.push([3, 5, , 6]);
-                        return [4 /*yield*/, burnTransaction.wait()];
+                        burnTransaction = _b.sent();
+                        _b.label = 4;
                     case 4:
+                        _b.trys.push([4, 6, , 7]);
+                        return [4 /*yield*/, burnTransaction.wait()];
+                    case 5:
                         receipt = _b.sent();
                         return [2 /*return*/, receipt];
-                    case 5:
+                    case 6:
                         error_3 = _b.sent();
                         throw new Error("Transaction Confirmation Error");
-                    case 6: return [2 /*return*/];
+                    case 7: return [2 /*return*/];
                 }
             });
         });
@@ -489,7 +507,8 @@ var AMM = /** @class */ (function () {
     AMM.prototype.updatePositionMargin = function (_a) {
         var owner = _a.owner, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, marginDelta = _a.marginDelta;
         return __awaiter(this, void 0, void 0, function () {
-            var effectiveOwner, _b, tickUpper, tickLower, scaledMarginDelta, isUnderlyingTokenApprovedForPeriphery, marginEngineContract, updatePositionMarginTransaction, receipt, error_4;
+            var effectiveOwner, _b, tickUpper, tickLower, scaledMarginDelta, isUnderlyingTokenApprovedForPeriphery, peripheryContract, estimatedGas, updatePositionMarginTransaction, receipt, error_4;
+            var _this = this;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
@@ -527,21 +546,35 @@ var AMM = /** @class */ (function () {
                         _c.sent();
                         _c.label = 6;
                     case 6:
-                        marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
-                        return [4 /*yield*/, marginEngineContract.updatePositionMargin(effectiveOwner, tickLower, tickUpper, scaledMarginDelta, this.overrides)];
+                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        return [4 /*yield*/, peripheryContract.callStatic.updatePositionMargin(this.marginEngineAddress, tickLower, tickUpper, scaledMarginDelta, false).catch(function (error) { return __awaiter(_this, void 0, void 0, function () {
+                                var errorMessage;
+                                return __generator(this, function (_a) {
+                                    errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, this.environment);
+                                    throw new Error(errorMessage);
+                                });
+                            }); })];
                     case 7:
-                        updatePositionMarginTransaction = _c.sent();
-                        _c.label = 8;
+                        _c.sent();
+                        return [4 /*yield*/, peripheryContract.estimateGas.updatePositionMargin(this.marginEngineAddress, tickLower, tickUpper, scaledMarginDelta, false)];
                     case 8:
-                        _c.trys.push([8, 10, , 11]);
-                        return [4 /*yield*/, updatePositionMarginTransaction.wait()];
+                        estimatedGas = _c.sent();
+                        return [4 /*yield*/, peripheryContract.updatePositionMargin(this.marginEngineAddress, tickLower, tickUpper, scaledMarginDelta, false, {
+                                gasLimit: (0, constants_1.getGasBuffer)(estimatedGas)
+                            })];
                     case 9:
+                        updatePositionMarginTransaction = _c.sent();
+                        _c.label = 10;
+                    case 10:
+                        _c.trys.push([10, 12, , 13]);
+                        return [4 /*yield*/, updatePositionMarginTransaction.wait()];
+                    case 11:
                         receipt = _c.sent();
                         return [2 /*return*/, receipt];
-                    case 10:
+                    case 12:
                         error_4 = _c.sent();
                         throw new Error("Transaction Confirmation Error");
-                    case 11: return [2 /*return*/];
+                    case 13: return [2 /*return*/];
                 }
             });
         });
@@ -550,7 +583,8 @@ var AMM = /** @class */ (function () {
     AMM.prototype.liquidatePosition = function (_a) {
         var owner = _a.owner, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, marginEngineContract, liquidatePositionTransaction, receipt, error_5;
+            var tickUpper, tickLower, marginEngineContract, estimatedGas, liquidatePositionTransaction, receipt, error_5;
+            var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -560,20 +594,31 @@ var AMM = /** @class */ (function () {
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
                         marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
-                        return [4 /*yield*/, marginEngineContract.liquidatePosition(owner, tickLower, tickUpper, this.overrides)];
+                        return [4 /*yield*/, marginEngineContract.callStatic.liquidatePosition(owner, tickLower, tickUpper).catch(function (error) {
+                                var errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, _this.environment);
+                                throw new Error(errorMessage);
+                            })];
                     case 1:
-                        liquidatePositionTransaction = _b.sent();
-                        _b.label = 2;
+                        _b.sent();
+                        return [4 /*yield*/, marginEngineContract.estimateGas.liquidatePosition(owner, tickLower, tickUpper)];
                     case 2:
-                        _b.trys.push([2, 4, , 5]);
-                        return [4 /*yield*/, liquidatePositionTransaction.wait()];
+                        estimatedGas = _b.sent();
+                        return [4 /*yield*/, marginEngineContract.liquidatePosition(owner, tickLower, tickUpper, {
+                                gasLimit: (0, constants_1.getGasBuffer)(estimatedGas)
+                            })];
                     case 3:
+                        liquidatePositionTransaction = _b.sent();
+                        _b.label = 4;
+                    case 4:
+                        _b.trys.push([4, 6, , 7]);
+                        return [4 /*yield*/, liquidatePositionTransaction.wait()];
+                    case 5:
                         receipt = _b.sent();
                         return [2 /*return*/, receipt];
-                    case 4:
+                    case 6:
                         error_5 = _b.sent();
                         throw new Error("Transaction Confirmation Error");
-                    case 5: return [2 /*return*/];
+                    case 7: return [2 /*return*/];
                 }
             });
         });
@@ -582,7 +627,8 @@ var AMM = /** @class */ (function () {
     AMM.prototype.settlePosition = function (_a) {
         var owner = _a.owner, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh;
         return __awaiter(this, void 0, void 0, function () {
-            var effectiveOwner, _b, tickUpper, tickLower, marginEngineContract, settlePositionTransaction, receipt, error_6;
+            var effectiveOwner, _b, tickUpper, tickLower, peripheryContract, estimatedGas, settlePositionTransaction, receipt, error_6;
+            var _this = this;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
@@ -601,30 +647,145 @@ var AMM = /** @class */ (function () {
                         effectiveOwner = _b;
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
-                        marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
-                        return [4 /*yield*/, marginEngineContract.settlePosition(effectiveOwner, tickLower, tickUpper, this.overrides)];
+                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        return [4 /*yield*/, peripheryContract.callStatic.settlePositionAndWithdrawMargin(this.marginEngineAddress, effectiveOwner, tickLower, tickUpper).catch(function (error) {
+                                var errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, _this.environment);
+                                throw new Error(errorMessage);
+                            })];
                     case 4:
-                        settlePositionTransaction = _c.sent();
-                        _c.label = 5;
+                        _c.sent();
+                        return [4 /*yield*/, peripheryContract.estimateGas.settlePositionAndWithdrawMargin(this.marginEngineAddress, effectiveOwner, tickLower, tickUpper)];
                     case 5:
-                        _c.trys.push([5, 7, , 8]);
-                        return [4 /*yield*/, settlePositionTransaction.wait()];
+                        estimatedGas = _c.sent();
+                        return [4 /*yield*/, peripheryContract.settlePositionAndWithdrawMargin(this.marginEngineAddress, effectiveOwner, tickLower, tickUpper, {
+                                gasLimit: (0, constants_1.getGasBuffer)(estimatedGas)
+                            })];
                     case 6:
+                        settlePositionTransaction = _c.sent();
+                        _c.label = 7;
+                    case 7:
+                        _c.trys.push([7, 9, , 10]);
+                        return [4 /*yield*/, settlePositionTransaction.wait()];
+                    case 8:
                         receipt = _c.sent();
                         return [2 /*return*/, receipt];
-                    case 7:
+                    case 9:
                         error_6 = _c.sent();
                         throw new Error("Transaction Confirmation Error");
-                    case 8: return [2 /*return*/];
+                    case 10: return [2 /*return*/];
                 }
             });
         });
     };
     // FCM swap
+    AMM.prototype.getInfoPostFCMSwap = function (_a) {
+        var notional = _a.notional, fixedRateLimit = _a.fixedRateLimit;
+        return __awaiter(this, void 0, void 0, function () {
+            var sqrtPriceLimitX96, tickLimit, fcmContract, scaledNotional, peripheryContract, tickBefore, tickAfter, fee, availableNotional, fixedTokenDeltaUnbalanced, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw, scaledAvailableNotional, scaledFee, averageFixedRate, additionalMargin, _b, cTokenAddress, cTokenContract, rate, scaledRate;
+            var _this = this;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        if (!this.signer) {
+                            throw new Error('Wallet not connected');
+                        }
+                        if (fixedRateLimit) {
+                            tickLimit = this.closestTickAndFixedRate(fixedRateLimit).closestUsableTick;
+                            sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickLimit).toString();
+                        }
+                        else {
+                            sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickMath_1.TickMath.MAX_TICK - 1).toString();
+                        }
+                        switch (this.rateOracle.protocolId) {
+                            case 1: {
+                                fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
+                                break;
+                            }
+                            case 2: {
+                                fcmContract = typechain_1.CompoundFCM__factory.connect(this.fcmAddress, this.signer);
+                                break;
+                            }
+                            default:
+                                throw new Error("Unrecognized FCM");
+                        }
+                        scaledNotional = this.scale(notional);
+                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        return [4 /*yield*/, peripheryContract.getCurrentTick(this.marginEngineAddress)];
+                    case 1:
+                        tickBefore = _c.sent();
+                        tickAfter = 0;
+                        fee = ethers_1.BigNumber.from(0);
+                        availableNotional = ethers_1.BigNumber.from(0);
+                        fixedTokenDeltaUnbalanced = ethers_1.BigNumber.from(0);
+                        return [4 /*yield*/, fcmContract.callStatic.initiateFullyCollateralisedFixedTakerSwap(scaledNotional, sqrtPriceLimitX96).then(function (result) { return __awaiter(_this, void 0, void 0, function () {
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0:
+                                            availableNotional = result[1];
+                                            fee = result[2];
+                                            fixedTokenDeltaUnbalanced = result[3];
+                                            return [4 /*yield*/, peripheryContract.getCurrentTick(this.marginEngineAddress)];
+                                        case 1:
+                                            tickAfter = _a.sent();
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            }); }, function (error) {
+                                var result = (0, errorHandling_1.decodeInfoPostSwap)(error, _this.environment);
+                                tickAfter = result.tick;
+                                fee = result.fee;
+                                availableNotional = result.availableNotional;
+                                fixedTokenDeltaUnbalanced = result.fixedTokenDeltaUnbalanced;
+                            })];
+                    case 2:
+                        _c.sent();
+                        fixedRateBefore = (0, priceTickConversions_1.tickToFixedRate)(tickBefore);
+                        fixedRateAfter = (0, priceTickConversions_1.tickToFixedRate)(tickAfter);
+                        fixedRateDelta = fixedRateAfter.subtract(fixedRateBefore);
+                        fixedRateDeltaRaw = fixedRateDelta.toNumber();
+                        scaledAvailableNotional = this.descale(availableNotional);
+                        scaledFee = this.descale(fee);
+                        averageFixedRate = fixedTokenDeltaUnbalanced.mul(ethers_1.BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
+                        additionalMargin = 0;
+                        _b = this.rateOracle.protocolId;
+                        switch (_b) {
+                            case 1: return [3 /*break*/, 3];
+                            case 2: return [3 /*break*/, 4];
+                        }
+                        return [3 /*break*/, 7];
+                    case 3:
+                        {
+                            additionalMargin = scaledAvailableNotional;
+                            return [3 /*break*/, 8];
+                        }
+                        _c.label = 4;
+                    case 4: return [4 /*yield*/, fcmContract.cToken()];
+                    case 5:
+                        cTokenAddress = _c.sent();
+                        cTokenContract = typechain_1.ICToken__factory.connect(cTokenAddress, this.signer);
+                        return [4 /*yield*/, cTokenContract.callStatic.exchangeRateCurrent()];
+                    case 6:
+                        rate = _c.sent();
+                        scaledRate = rate.div(ethers_1.BigNumber.from(1000000000000)).toNumber() / 1000000;
+                        additionalMargin = scaledAvailableNotional / scaledRate;
+                        return [3 /*break*/, 8];
+                    case 7: throw new Error("Unrecognized FCM");
+                    case 8: return [2 /*return*/, {
+                            marginRequirement: additionalMargin < 0 ? -additionalMargin : additionalMargin,
+                            availableNotional: scaledAvailableNotional < 0 ? -scaledAvailableNotional : scaledAvailableNotional,
+                            fee: scaledFee < 0 ? -scaledFee : scaledFee,
+                            slippage: fixedRateDeltaRaw < 0 ? -fixedRateDeltaRaw : fixedRateDeltaRaw,
+                            averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
+                        }];
+                }
+            });
+        });
+    };
     AMM.prototype.fcmSwap = function (_a) {
         var notional = _a.notional, fixedRateLimit = _a.fixedRateLimit;
         return __awaiter(this, void 0, void 0, function () {
-            var isFCMApproved, sqrtPriceLimitX96, tickLimit, fcmContract, scaledNotional, isUnderlyingTokenApprovedForFCM, isYieldBearingTokenApprovedForFCM, fcmSwapTransaction, receipt, error_7;
+            var isFCMApproved, sqrtPriceLimitX96, tickLimit, fcmContract, scaledNotional, isUnderlyingTokenApprovedForFCM, isYieldBearingTokenApprovedForFCM, estimatedGas, fcmSwapTransaction, receipt, error_7;
+            var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -650,7 +811,18 @@ var AMM = /** @class */ (function () {
                         else {
                             sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickMath_1.TickMath.MAX_TICK - 1).toString();
                         }
-                        fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
+                        switch (this.rateOracle.protocolId) {
+                            case 1: {
+                                fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
+                                break;
+                            }
+                            case 2: {
+                                fcmContract = typechain_1.CompoundFCM__factory.connect(this.fcmAddress, this.signer);
+                                break;
+                            }
+                            default:
+                                throw new Error("Unrecognized FCM");
+                        }
                         scaledNotional = this.scale(notional);
                         return [4 /*yield*/, this.isUnderlyingTokenApprovedForFCM()];
                     case 4:
@@ -668,29 +840,118 @@ var AMM = /** @class */ (function () {
                     case 8:
                         _b.sent();
                         _b.label = 9;
-                    case 9: return [4 /*yield*/, fcmContract.initiateFullyCollateralisedFixedTakerSwap(scaledNotional, sqrtPriceLimitX96, this.overrides)];
+                    case 9: return [4 /*yield*/, fcmContract.callStatic.initiateFullyCollateralisedFixedTakerSwap(scaledNotional, sqrtPriceLimitX96).catch(function (error) {
+                            var errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, _this.environment);
+                            throw new Error(errorMessage);
+                        })];
                     case 10:
-                        fcmSwapTransaction = _b.sent();
-                        _b.label = 11;
+                        _b.sent();
+                        return [4 /*yield*/, fcmContract.estimateGas.initiateFullyCollateralisedFixedTakerSwap(scaledNotional, sqrtPriceLimitX96)];
                     case 11:
-                        _b.trys.push([11, 13, , 14]);
-                        return [4 /*yield*/, fcmSwapTransaction.wait()];
+                        estimatedGas = _b.sent();
+                        return [4 /*yield*/, fcmContract.initiateFullyCollateralisedFixedTakerSwap(scaledNotional, sqrtPriceLimitX96, {
+                                gasLimit: (0, constants_1.getGasBuffer)(estimatedGas)
+                            })];
                     case 12:
+                        fcmSwapTransaction = _b.sent();
+                        _b.label = 13;
+                    case 13:
+                        _b.trys.push([13, 15, , 16]);
+                        return [4 /*yield*/, fcmSwapTransaction.wait()];
+                    case 14:
                         receipt = _b.sent();
                         return [2 /*return*/, receipt];
-                    case 13:
+                    case 15:
                         error_7 = _b.sent();
                         throw new Error("Transaction Confirmation Error");
-                    case 14: return [2 /*return*/];
+                    case 16: return [2 /*return*/];
                 }
             });
         });
     };
     // FCM unwind
+    AMM.prototype.getInfoPostFCMUnwind = function (_a) {
+        var notionalToUnwind = _a.notionalToUnwind, fixedRateLimit = _a.fixedRateLimit;
+        return __awaiter(this, void 0, void 0, function () {
+            var sqrtPriceLimitX96, tickLimit, fcmContract, scaledNotional, peripheryContract, tickBefore, tickAfter, fee, availableNotional, fixedTokenDeltaUnbalanced, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw, scaledAvailableNotional, scaledFee, averageFixedRate;
+            var _this = this;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (!this.signer) {
+                            throw new Error('Wallet not connected');
+                        }
+                        if (fixedRateLimit) {
+                            tickLimit = this.closestTickAndFixedRate(fixedRateLimit).closestUsableTick;
+                            sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickLimit).toString();
+                        }
+                        else {
+                            sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickMath_1.TickMath.MIN_TICK + 1).toString();
+                        }
+                        switch (this.rateOracle.protocolId) {
+                            case 1:
+                                fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
+                                break;
+                            case 2:
+                                fcmContract = typechain_1.CompoundFCM__factory.connect(this.fcmAddress, this.signer);
+                                break;
+                            default:
+                                throw new Error("Unrecognized FCM");
+                        }
+                        scaledNotional = this.scale(notionalToUnwind);
+                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        return [4 /*yield*/, peripheryContract.getCurrentTick(this.marginEngineAddress)];
+                    case 1:
+                        tickBefore = _b.sent();
+                        tickAfter = 0;
+                        fee = ethers_1.BigNumber.from(0);
+                        availableNotional = ethers_1.BigNumber.from(0);
+                        fixedTokenDeltaUnbalanced = ethers_1.BigNumber.from(0);
+                        return [4 /*yield*/, fcmContract.callStatic.unwindFullyCollateralisedFixedTakerSwap(scaledNotional, sqrtPriceLimitX96).then(function (result) { return __awaiter(_this, void 0, void 0, function () {
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0:
+                                            availableNotional = result[1];
+                                            fee = result[2];
+                                            fixedTokenDeltaUnbalanced = result[3];
+                                            return [4 /*yield*/, peripheryContract.getCurrentTick(this.marginEngineAddress)];
+                                        case 1:
+                                            tickAfter = _a.sent();
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            }); }, function (error) {
+                                var result = (0, errorHandling_1.decodeInfoPostSwap)(error, _this.environment);
+                                tickAfter = result.tick;
+                                fee = result.fee;
+                                availableNotional = result.availableNotional;
+                                fixedTokenDeltaUnbalanced = result.fixedTokenDeltaUnbalanced;
+                            })];
+                    case 2:
+                        _b.sent();
+                        fixedRateBefore = (0, priceTickConversions_1.tickToFixedRate)(tickBefore);
+                        fixedRateAfter = (0, priceTickConversions_1.tickToFixedRate)(tickAfter);
+                        fixedRateDelta = fixedRateAfter.subtract(fixedRateBefore);
+                        fixedRateDeltaRaw = fixedRateDelta.toNumber();
+                        scaledAvailableNotional = this.descale(availableNotional);
+                        scaledFee = this.descale(fee);
+                        averageFixedRate = fixedTokenDeltaUnbalanced.mul(ethers_1.BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
+                        return [2 /*return*/, {
+                                marginRequirement: 0,
+                                availableNotional: scaledAvailableNotional < 0 ? -scaledAvailableNotional : scaledAvailableNotional,
+                                fee: scaledFee < 0 ? -scaledFee : scaledFee,
+                                slippage: fixedRateDeltaRaw < 0 ? -fixedRateDeltaRaw : fixedRateDeltaRaw,
+                                averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
+                            }];
+                }
+            });
+        });
+    };
     AMM.prototype.fcmUnwind = function (_a) {
         var notionalToUnwind = _a.notionalToUnwind, fixedRateLimit = _a.fixedRateLimit;
         return __awaiter(this, void 0, void 0, function () {
-            var sqrtPriceLimitX96, tickLimit, isFCMApproved, fcmContract, scaledNotional, isUnderlyingTokenApprovedForFCM, fcmUnwindTransaction, receipt, error_8;
+            var sqrtPriceLimitX96, tickLimit, isFCMApproved, fcmContract, scaledNotional, isUnderlyingTokenApprovedForFCM, estimatedGas, fcmUnwindTransaction, receipt, error_8;
+            var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -716,7 +977,16 @@ var AMM = /** @class */ (function () {
                         _b.sent();
                         _b.label = 3;
                     case 3:
-                        fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
+                        switch (this.rateOracle.protocolId) {
+                            case 1:
+                                fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
+                                break;
+                            case 2:
+                                fcmContract = typechain_1.CompoundFCM__factory.connect(this.fcmAddress, this.signer);
+                                break;
+                            default:
+                                throw new Error("Unrecognized FCM");
+                        }
                         scaledNotional = this.scale(notionalToUnwind);
                         return [4 /*yield*/, this.isUnderlyingTokenApprovedForFCM()];
                     case 4:
@@ -726,20 +996,31 @@ var AMM = /** @class */ (function () {
                     case 5:
                         _b.sent();
                         _b.label = 6;
-                    case 6: return [4 /*yield*/, fcmContract.unwindFullyCollateralisedFixedTakerSwap(scaledNotional, sqrtPriceLimitX96, this.overrides)];
+                    case 6: return [4 /*yield*/, fcmContract.callStatic.unwindFullyCollateralisedFixedTakerSwap(scaledNotional, sqrtPriceLimitX96).catch(function (error) {
+                            var errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, _this.environment);
+                            throw new Error(errorMessage);
+                        })];
                     case 7:
-                        fcmUnwindTransaction = _b.sent();
-                        _b.label = 8;
+                        _b.sent();
+                        return [4 /*yield*/, fcmContract.estimateGas.unwindFullyCollateralisedFixedTakerSwap(scaledNotional, sqrtPriceLimitX96)];
                     case 8:
-                        _b.trys.push([8, 10, , 11]);
-                        return [4 /*yield*/, fcmUnwindTransaction.wait()];
+                        estimatedGas = _b.sent();
+                        return [4 /*yield*/, fcmContract.unwindFullyCollateralisedFixedTakerSwap(scaledNotional, sqrtPriceLimitX96, {
+                                gasLimit: (0, constants_1.getGasBuffer)(estimatedGas)
+                            })];
                     case 9:
+                        fcmUnwindTransaction = _b.sent();
+                        _b.label = 10;
+                    case 10:
+                        _b.trys.push([10, 12, , 13]);
+                        return [4 /*yield*/, fcmUnwindTransaction.wait()];
+                    case 11:
                         receipt = _b.sent();
                         return [2 /*return*/, receipt];
-                    case 10:
+                    case 12:
                         error_8 = _b.sent();
                         throw new Error("Transaction Confirmation Error");
-                    case 11: return [2 /*return*/];
+                    case 13: return [2 /*return*/];
                 }
             });
         });
@@ -747,28 +1028,49 @@ var AMM = /** @class */ (function () {
     // FCM settlement
     AMM.prototype.settleFCMTrader = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var fcmContract, fcmSettleTraderTransaction, receipt, error_9;
+            var fcmContract, estimatedGas, fcmSettleTraderTransaction, receipt, error_9;
+            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         if (!this.signer) {
                             throw new Error('Wallet not connected');
                         }
-                        fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
-                        return [4 /*yield*/, fcmContract.settleTrader(this.overrides)];
+                        switch (this.rateOracle.protocolId) {
+                            case 1:
+                                fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
+                                break;
+                            case 2:
+                                fcmContract = typechain_1.CompoundFCM__factory.connect(this.fcmAddress, this.signer);
+                                break;
+                            default:
+                                throw new Error("Unrecognized FCM");
+                        }
+                        return [4 /*yield*/, fcmContract.callStatic.settleTrader().catch(function (error) {
+                                var errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, _this.environment);
+                                throw new Error(errorMessage);
+                            })];
                     case 1:
-                        fcmSettleTraderTransaction = _a.sent();
-                        _a.label = 2;
+                        _a.sent();
+                        return [4 /*yield*/, fcmContract.estimateGas.settleTrader()];
                     case 2:
-                        _a.trys.push([2, 4, , 5]);
-                        return [4 /*yield*/, fcmSettleTraderTransaction.wait()];
+                        estimatedGas = _a.sent();
+                        return [4 /*yield*/, fcmContract.settleTrader({
+                                gasLimit: (0, constants_1.getGasBuffer)(estimatedGas)
+                            })];
                     case 3:
+                        fcmSettleTraderTransaction = _a.sent();
+                        _a.label = 4;
+                    case 4:
+                        _a.trys.push([4, 6, , 7]);
+                        return [4 /*yield*/, fcmSettleTraderTransaction.wait()];
+                    case 5:
                         receipt = _a.sent();
                         return [2 /*return*/, receipt];
-                    case 4:
+                    case 6:
                         error_9 = _a.sent();
                         throw new Error("Transaction Confirmation Error");
-                    case 5: return [2 /*return*/];
+                    case 7: return [2 /*return*/];
                 }
             });
         });
@@ -812,7 +1114,7 @@ var AMM = /** @class */ (function () {
     };
     AMM.prototype.approveFCM = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var isApproved, factoryContract, approvalTransaction, receipt, error_10;
+            var isApproved, factoryContract, estimatedGas, approvalTransaction, receipt, error_10;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.isFCMApproved()];
@@ -825,20 +1127,25 @@ var AMM = /** @class */ (function () {
                             throw new Error('Wallet not connected');
                         }
                         factoryContract = typechain_1.Factory__factory.connect(constants_1.FACTORY_ADDRESS, this.signer);
-                        return [4 /*yield*/, factoryContract.setApproval(this.fcmAddress, true, this.overrides)];
+                        return [4 /*yield*/, factoryContract.estimateGas.setApproval(this.fcmAddress, true)];
                     case 2:
-                        approvalTransaction = _a.sent();
-                        _a.label = 3;
+                        estimatedGas = _a.sent();
+                        return [4 /*yield*/, factoryContract.setApproval(this.fcmAddress, true, {
+                                gasLimit: (0, constants_1.getGasBuffer)(estimatedGas)
+                            })];
                     case 3:
-                        _a.trys.push([3, 5, , 6]);
-                        return [4 /*yield*/, approvalTransaction.wait()];
+                        approvalTransaction = _a.sent();
+                        _a.label = 4;
                     case 4:
+                        _a.trys.push([4, 6, , 7]);
+                        return [4 /*yield*/, approvalTransaction.wait()];
+                    case 5:
                         receipt = _a.sent();
                         return [2 /*return*/, receipt];
-                    case 5:
+                    case 6:
                         error_10 = _a.sent();
                         throw new Error("Transaction Confirmation Error");
-                    case 6: return [2 /*return*/];
+                    case 7: return [2 /*return*/];
                 }
             });
         });
@@ -861,7 +1168,7 @@ var AMM = /** @class */ (function () {
                         signerAddress = _a.sent();
                         tokenAddress = this.underlyingToken.id;
                         token = typechain_1.ERC20Mock__factory.connect(tokenAddress, this.signer);
-                        return [4 /*yield*/, token.allowance(signerAddress, constants_1.PERIPHERY_ADDRESS, this.overrides)];
+                        return [4 /*yield*/, token.allowance(signerAddress, constants_1.PERIPHERY_ADDRESS)];
                     case 2:
                         allowance = _a.sent();
                         return [2 /*return*/, allowance.gte(constants_1.TresholdApprovalBn)];
@@ -871,7 +1178,7 @@ var AMM = /** @class */ (function () {
     };
     AMM.prototype.approveUnderlyingTokenForPeriphery = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var isApproved, tokenAddress, token, approvalTransaction, receipt, error_11;
+            var isApproved, tokenAddress, token, estimatedGas, approvalTransaction, receipt, error_11;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.isUnderlyingTokenApprovedForPeriphery()];
@@ -888,20 +1195,25 @@ var AMM = /** @class */ (function () {
                         }
                         tokenAddress = this.underlyingToken.id;
                         token = typechain_1.ERC20Mock__factory.connect(tokenAddress, this.signer);
-                        return [4 /*yield*/, token.approve(constants_1.PERIPHERY_ADDRESS, constants_1.MaxUint256Bn, this.overrides)];
+                        return [4 /*yield*/, token.estimateGas.approve(constants_1.PERIPHERY_ADDRESS, constants_1.MaxUint256Bn)];
                     case 2:
-                        approvalTransaction = _a.sent();
-                        _a.label = 3;
+                        estimatedGas = _a.sent();
+                        return [4 /*yield*/, token.approve(constants_1.PERIPHERY_ADDRESS, constants_1.MaxUint256Bn, {
+                                gasLimit: (0, constants_1.getGasBuffer)(estimatedGas)
+                            })];
                     case 3:
-                        _a.trys.push([3, 5, , 6]);
-                        return [4 /*yield*/, approvalTransaction.wait()];
+                        approvalTransaction = _a.sent();
+                        _a.label = 4;
                     case 4:
+                        _a.trys.push([4, 6, , 7]);
+                        return [4 /*yield*/, approvalTransaction.wait()];
+                    case 5:
                         receipt = _a.sent();
                         return [2 /*return*/, receipt];
-                    case 5:
+                    case 6:
                         error_11 = _a.sent();
                         throw new Error("Token approval failed");
-                    case 6: return [2 /*return*/];
+                    case 7: return [2 /*return*/];
                 }
             });
         });
@@ -924,7 +1236,7 @@ var AMM = /** @class */ (function () {
                         signerAddress = _a.sent();
                         tokenAddress = this.underlyingToken.id;
                         token = typechain_1.ERC20Mock__factory.connect(tokenAddress, this.signer);
-                        return [4 /*yield*/, token.allowance(signerAddress, this.fcmAddress, this.overrides)];
+                        return [4 /*yield*/, token.allowance(signerAddress, this.fcmAddress)];
                     case 2:
                         allowance = _a.sent();
                         return [2 /*return*/, allowance.gte(constants_1.TresholdApprovalBn)];
@@ -934,7 +1246,7 @@ var AMM = /** @class */ (function () {
     };
     AMM.prototype.approveUnderlyingTokenForFCM = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var isApproved, tokenAddress, token, approvalTransaction, receipt, error_12;
+            var isApproved, tokenAddress, token, estimatedGas, approvalTransaction, receipt, error_12;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.isUnderlyingTokenApprovedForFCM()];
@@ -951,20 +1263,25 @@ var AMM = /** @class */ (function () {
                         }
                         tokenAddress = this.underlyingToken.id;
                         token = typechain_1.ERC20Mock__factory.connect(tokenAddress, this.signer);
-                        return [4 /*yield*/, token.approve(this.fcmAddress, constants_1.MaxUint256Bn, this.overrides)];
+                        return [4 /*yield*/, token.estimateGas.approve(this.fcmAddress, constants_1.MaxUint256Bn)];
                     case 2:
-                        approvalTransaction = _a.sent();
-                        _a.label = 3;
+                        estimatedGas = _a.sent();
+                        return [4 /*yield*/, token.approve(this.fcmAddress, constants_1.MaxUint256Bn, {
+                                gasLimit: (0, constants_1.getGasBuffer)(estimatedGas)
+                            })];
                     case 3:
-                        _a.trys.push([3, 5, , 6]);
-                        return [4 /*yield*/, approvalTransaction.wait()];
+                        approvalTransaction = _a.sent();
+                        _a.label = 4;
                     case 4:
+                        _a.trys.push([4, 6, , 7]);
+                        return [4 /*yield*/, approvalTransaction.wait()];
+                    case 5:
                         receipt = _a.sent();
                         return [2 /*return*/, receipt];
-                    case 5:
+                    case 6:
                         error_12 = _a.sent();
                         throw new Error("Token approval failed");
-                    case 6: return [2 /*return*/];
+                    case 7: return [2 /*return*/];
                 }
             });
         });
@@ -972,27 +1289,39 @@ var AMM = /** @class */ (function () {
     // yield bearing token approval for fcm
     AMM.prototype.isYieldBearingTokenApprovedForFCM = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var signerAddress, fcmContract, tokenAddress, token, allowance;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var tokenAddress, _a, fcmContract, fcmContract, signerAddress, token, allowance;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        if (!this.underlyingToken.id) {
-                            throw new Error("No underlying token");
-                        }
                         if (!this.signer) {
                             throw new Error('Wallet not connected');
                         }
-                        return [4 /*yield*/, this.signer.getAddress()];
+                        _a = this.rateOracle.protocolId;
+                        switch (_a) {
+                            case 1: return [3 /*break*/, 1];
+                            case 2: return [3 /*break*/, 3];
+                        }
+                        return [3 /*break*/, 5];
                     case 1:
-                        signerAddress = _a.sent();
                         fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
                         return [4 /*yield*/, fcmContract.underlyingYieldBearingToken()];
                     case 2:
-                        tokenAddress = _a.sent();
-                        token = typechain_1.ERC20Mock__factory.connect(tokenAddress, this.signer);
-                        return [4 /*yield*/, token.allowance(signerAddress, this.fcmAddress, this.overrides)];
+                        tokenAddress = _b.sent();
+                        return [3 /*break*/, 6];
                     case 3:
-                        allowance = _a.sent();
+                        fcmContract = typechain_1.CompoundFCM__factory.connect(this.fcmAddress, this.signer);
+                        return [4 /*yield*/, fcmContract.cToken()];
+                    case 4:
+                        tokenAddress = _b.sent();
+                        return [3 /*break*/, 6];
+                    case 5: throw new Error("Unrecognized FCM");
+                    case 6: return [4 /*yield*/, this.signer.getAddress()];
+                    case 7:
+                        signerAddress = _b.sent();
+                        token = typechain_1.ERC20Mock__factory.connect(tokenAddress, this.signer);
+                        return [4 /*yield*/, token.allowance(signerAddress, this.fcmAddress)];
+                    case 8:
+                        allowance = _b.sent();
                         return [2 /*return*/, allowance.gte(constants_1.TresholdApprovalBn)];
                 }
             });
@@ -1010,40 +1339,58 @@ var AMM = /** @class */ (function () {
     });
     AMM.prototype.approveYieldBearingTokenForFCM = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var isApproved, fcmContract, tokenAddress, token, approvalTransaction, receipt, error_13;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var isApproved, tokenAddress, _a, fcmContract, fcmContract, token, estimatedGas, approvalTransaction, receipt, error_13;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0: return [4 /*yield*/, this.isYieldBearingTokenApprovedForFCM()];
                     case 1:
-                        isApproved = _a.sent();
+                        isApproved = _b.sent();
                         if (isApproved) {
                             return [2 /*return*/];
-                        }
-                        if (!this.underlyingToken.id) {
-                            throw new Error("No underlying token");
                         }
                         if (!this.signer) {
                             throw new Error('Wallet not connected');
                         }
+                        _a = this.rateOracle.protocolId;
+                        switch (_a) {
+                            case 1: return [3 /*break*/, 2];
+                            case 2: return [3 /*break*/, 4];
+                        }
+                        return [3 /*break*/, 6];
+                    case 2:
                         fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
                         return [4 /*yield*/, fcmContract.underlyingYieldBearingToken()];
-                    case 2:
-                        tokenAddress = _a.sent();
-                        token = typechain_1.ERC20Mock__factory.connect(tokenAddress, this.signer);
-                        return [4 /*yield*/, token.approve(this.fcmAddress, constants_1.MaxUint256Bn, this.overrides)];
                     case 3:
-                        approvalTransaction = _a.sent();
-                        _a.label = 4;
+                        tokenAddress = _b.sent();
+                        return [3 /*break*/, 7];
                     case 4:
-                        _a.trys.push([4, 6, , 7]);
-                        return [4 /*yield*/, approvalTransaction.wait()];
+                        fcmContract = typechain_1.CompoundFCM__factory.connect(this.fcmAddress, this.signer);
+                        return [4 /*yield*/, fcmContract.cToken()];
                     case 5:
-                        receipt = _a.sent();
+                        tokenAddress = _b.sent();
+                        return [3 /*break*/, 7];
+                    case 6: throw new Error("Unrecognized FCM");
+                    case 7:
+                        token = typechain_1.ERC20Mock__factory.connect(tokenAddress, this.signer);
+                        return [4 /*yield*/, token.estimateGas.approve(this.fcmAddress, constants_1.MaxUint256Bn)];
+                    case 8:
+                        estimatedGas = _b.sent();
+                        return [4 /*yield*/, token.approve(this.fcmAddress, constants_1.MaxUint256Bn, {
+                                gasLimit: (0, constants_1.getGasBuffer)(estimatedGas)
+                            })];
+                    case 9:
+                        approvalTransaction = _b.sent();
+                        _b.label = 10;
+                    case 10:
+                        _b.trys.push([10, 12, , 13]);
+                        return [4 /*yield*/, approvalTransaction.wait()];
+                    case 11:
+                        receipt = _b.sent();
                         return [2 /*return*/, receipt];
-                    case 6:
-                        error_13 = _a.sent();
+                    case 12:
+                        error_13 = _b.sent();
                         throw new Error("Token approval failed");
-                    case 7: return [2 /*return*/];
+                    case 13: return [2 /*return*/];
                 }
             });
         });
@@ -1194,30 +1541,11 @@ var AMM = /** @class */ (function () {
             });
         });
     };
-    AMM.prototype.getApy = function (termStartTimestamp, termEndTimestamp) {
-        return __awaiter(this, void 0, void 0, function () {
-            var rateOracleContract, result, resultScaled;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (!this.provider) {
-                            throw new Error('Blockchain not connected');
-                        }
-                        rateOracleContract = typechain_1.BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
-                        return [4 /*yield*/, rateOracleContract.callStatic.getApyFromTo(termStartTimestamp, termEndTimestamp)];
-                    case 1:
-                        result = _a.sent();
-                        resultScaled = result.div(ethers_1.BigNumber.from(10).pow(12)).toNumber() / 1000000;
-                        return [2 /*return*/, resultScaled];
-                }
-            });
-        });
-    };
     AMM.prototype.getPositionInformation = function (position) {
         return __awaiter(this, void 0, void 0, function () {
-            var results, signerAddress, lastBlock, lastBlockTimestamp, _a, _b, beforeMaturity, _c, allSwaps, lenSwaps, rateOracleContract, lastSwapTimestamp, variableApySinceLastSwap, _d, _e, fcmContract, margin, tickLower, tickUpper, marginEngineContract, rawPositionInfo, liquidationThreshold, _1, safetyThreshold, _2;
-            return __generator(this, function (_f) {
-                switch (_f.label) {
+            var results, signerAddress, lastBlock, lastBlockTimestamp, _a, _b, beforeMaturity, _c, allSwaps, lenSwaps, rateOracleContract, lastSwapTimestamp, variableApySinceLastSwap, _d, _e, _f, fcmContract, margin, fcmContract, margin, tickLower, tickUpper, marginEngineContract, rawPositionInfo, liquidationThreshold, _1, safetyThreshold, _2;
+            return __generator(this, function (_g) {
+                switch (_g.label) {
                     case 0:
                         if (!this.signer) {
                             throw new Error('Wallet not connected');
@@ -1232,22 +1560,22 @@ var AMM = /** @class */ (function () {
                         };
                         return [4 /*yield*/, this.signer.getAddress()];
                     case 1:
-                        signerAddress = _f.sent();
+                        signerAddress = _g.sent();
                         return [4 /*yield*/, this.provider.getBlockNumber()];
                     case 2:
-                        lastBlock = _f.sent();
+                        lastBlock = _g.sent();
                         _b = (_a = ethers_1.BigNumber).from;
                         return [4 /*yield*/, this.provider.getBlock(lastBlock - 4)];
                     case 3:
-                        lastBlockTimestamp = _b.apply(_a, [(_f.sent()).timestamp]);
+                        lastBlockTimestamp = _b.apply(_a, [(_g.sent()).timestamp]);
                         beforeMaturity = (lastBlockTimestamp.mul(ethers_1.BigNumber.from(10).pow(18))).lt(ethers_1.BigNumber.from(this.termEndTimestamp.toString()));
                         results.beforeMaturity = beforeMaturity;
                         if (!beforeMaturity) return [3 /*break*/, 5];
                         _c = results;
                         return [4 /*yield*/, this.getFixedApr()];
                     case 4:
-                        _c.fixedApr = _f.sent();
-                        _f.label = 5;
+                        _c.fixedApr = _g.sent();
+                        _g.label = 5;
                     case 5:
                         allSwaps = this.getAllSwaps(position);
                         lenSwaps = allSwaps.length;
@@ -1258,70 +1586,87 @@ var AMM = /** @class */ (function () {
                         lastSwapTimestamp = allSwaps[lenSwaps - 1].timestamp;
                         return [4 /*yield*/, rateOracleContract.callStatic.getApyFromTo(lastSwapTimestamp, lastBlockTimestamp)];
                     case 6:
-                        variableApySinceLastSwap = _f.sent();
+                        variableApySinceLastSwap = _g.sent();
                         results.variableRateSinceLastSwap = variableApySinceLastSwap.div(ethers_1.BigNumber.from(10).pow(12)).toNumber() / 10000;
                         results.fixedRateSinceLastSwap = position.averageFixedRate;
                         _d = results;
                         return [4 /*yield*/, this.getAccruedCashflow(allSwaps, false)];
                     case 7:
-                        _d.accruedCashflow = _f.sent();
-                        _f.label = 8;
+                        _d.accruedCashflow = _g.sent();
+                        _g.label = 8;
                     case 8: return [3 /*break*/, 11];
                     case 9:
                         if (!!position.isSettled) return [3 /*break*/, 11];
                         _e = results;
                         return [4 /*yield*/, this.getAccruedCashflow(allSwaps, true)];
                     case 10:
-                        _e.accruedCashflow = _f.sent();
-                        _f.label = 11;
+                        _e.accruedCashflow = _g.sent();
+                        _g.label = 11;
                     case 11:
-                        if (!position.source.includes("FCM")) return [3 /*break*/, 13];
+                        if (!position.source.includes("FCM")) return [3 /*break*/, 18];
+                        _f = this.rateOracle.protocolId;
+                        switch (_f) {
+                            case 1: return [3 /*break*/, 12];
+                            case 2: return [3 /*break*/, 14];
+                        }
+                        return [3 /*break*/, 16];
+                    case 12:
                         fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
                         return [4 /*yield*/, fcmContract.getTraderMarginInATokens(signerAddress)];
-                    case 12:
-                        margin = (_f.sent());
+                    case 13:
+                        margin = (_g.sent());
                         results.margin = this.descale(margin);
+                        return [3 /*break*/, 17];
+                    case 14:
+                        fcmContract = typechain_1.CompoundFCM__factory.connect(this.fcmAddress, this.signer);
+                        return [4 /*yield*/, fcmContract.getTraderMarginInCTokens(signerAddress)];
+                    case 15:
+                        margin = (_g.sent());
+                        results.margin = this.descale(margin);
+                        return [3 /*break*/, 17];
+                    case 16: throw new Error("Unrecognized FCM");
+                    case 17:
                         if (beforeMaturity) {
                             results.healthFactor = 3;
                         }
-                        return [3 /*break*/, 22];
-                    case 13:
+                        return [3 /*break*/, 27];
+                    case 18:
                         tickLower = position.tickLower;
                         tickUpper = position.tickUpper;
                         marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
                         return [4 /*yield*/, marginEngineContract.callStatic.getPosition(signerAddress, tickLower, tickUpper)];
-                    case 14:
-                        rawPositionInfo = _f.sent();
+                    case 19:
+                        rawPositionInfo = _g.sent();
                         results.margin = this.descale(rawPositionInfo.margin);
                         results.fees = this.descale(rawPositionInfo.accumulatedFees);
-                        if (!beforeMaturity) return [3 /*break*/, 22];
-                        _f.label = 15;
-                    case 15:
-                        _f.trys.push([15, 17, , 18]);
-                        return [4 /*yield*/, marginEngineContract.callStatic.getPositionMarginRequirement(signerAddress, tickLower, tickUpper, true)];
-                    case 16:
-                        liquidationThreshold = _f.sent();
-                        results.liquidationThreshold = this.descale(liquidationThreshold);
-                        return [3 /*break*/, 18];
-                    case 17:
-                        _1 = _f.sent();
-                        return [3 /*break*/, 18];
-                    case 18:
-                        _f.trys.push([18, 20, , 21]);
-                        return [4 /*yield*/, marginEngineContract.callStatic.getPositionMarginRequirement(signerAddress, tickLower, tickUpper, false)];
-                    case 19:
-                        safetyThreshold = _f.sent();
-                        results.safetyThreshold = this.descale(safetyThreshold);
-                        return [3 /*break*/, 21];
+                        if (!beforeMaturity) return [3 /*break*/, 27];
+                        _g.label = 20;
                     case 20:
-                        _2 = _f.sent();
-                        return [3 /*break*/, 21];
+                        _g.trys.push([20, 22, , 23]);
+                        return [4 /*yield*/, marginEngineContract.callStatic.getPositionMarginRequirement(signerAddress, tickLower, tickUpper, true)];
                     case 21:
+                        liquidationThreshold = _g.sent();
+                        results.liquidationThreshold = this.descale(liquidationThreshold);
+                        return [3 /*break*/, 23];
+                    case 22:
+                        _1 = _g.sent();
+                        return [3 /*break*/, 23];
+                    case 23:
+                        _g.trys.push([23, 25, , 26]);
+                        return [4 /*yield*/, marginEngineContract.callStatic.getPositionMarginRequirement(signerAddress, tickLower, tickUpper, false)];
+                    case 24:
+                        safetyThreshold = _g.sent();
+                        results.safetyThreshold = this.descale(safetyThreshold);
+                        return [3 /*break*/, 26];
+                    case 25:
+                        _2 = _g.sent();
+                        return [3 /*break*/, 26];
+                    case 26:
                         if (!(0, lodash_1.isUndefined)(results.liquidationThreshold) && !(0, lodash_1.isUndefined)(results.safetyThreshold)) {
                             results.healthFactor = (results.margin < results.liquidationThreshold) ? 1 : (results.margin < results.safetyThreshold ? 2 : 3);
                         }
-                        _f.label = 22;
-                    case 22: return [2 /*return*/, results];
+                        _g.label = 27;
+                    case 27: return [2 /*return*/, results];
                 }
             });
         });
@@ -1347,6 +1692,213 @@ var AMM = /** @class */ (function () {
         var closestUsableTick = this.closestTickAndFixedRate(fixedRate).closestUsableTick;
         closestUsableTick -= count * this.tickSpacing;
         return (0, priceTickConversions_1.tickToFixedRate)(closestUsableTick).toNumber();
+    };
+    // balance checks
+    AMM.prototype.hasEnoughUnderlyingTokens = function (amount) {
+        return __awaiter(this, void 0, void 0, function () {
+            var signerAddress, tokenAddress, token, currentBalance, scaledAmount;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!this.signer) {
+                            throw new Error('Wallet not connected');
+                        }
+                        if (!this.underlyingToken.id) {
+                            throw new Error("No underlying token");
+                        }
+                        return [4 /*yield*/, this.signer.getAddress()];
+                    case 1:
+                        signerAddress = _a.sent();
+                        tokenAddress = this.underlyingToken.id;
+                        token = typechain_1.ERC20Mock__factory.connect(tokenAddress, this.signer);
+                        return [4 /*yield*/, token.balanceOf(signerAddress)];
+                    case 2:
+                        currentBalance = _a.sent();
+                        scaledAmount = ethers_1.BigNumber.from(this.scale(amount));
+                        return [2 /*return*/, currentBalance.gte(scaledAmount)];
+                }
+            });
+        });
+    };
+    AMM.prototype.hasEnoughYieldBearingTokens = function (amount) {
+        return __awaiter(this, void 0, void 0, function () {
+            var signerAddress, tokenAddress, _a, fcmContract, fcmContract, token, currentBalance, scaledAmount;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (!this.signer) {
+                            throw new Error('Wallet not connected');
+                        }
+                        return [4 /*yield*/, this.signer.getAddress()];
+                    case 1:
+                        signerAddress = _b.sent();
+                        _a = this.rateOracle.protocolId;
+                        switch (_a) {
+                            case 1: return [3 /*break*/, 2];
+                            case 2: return [3 /*break*/, 4];
+                        }
+                        return [3 /*break*/, 6];
+                    case 2:
+                        fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
+                        return [4 /*yield*/, fcmContract.underlyingYieldBearingToken()];
+                    case 3:
+                        tokenAddress = _b.sent();
+                        return [3 /*break*/, 7];
+                    case 4:
+                        fcmContract = typechain_1.CompoundFCM__factory.connect(this.fcmAddress, this.signer);
+                        return [4 /*yield*/, fcmContract.cToken()];
+                    case 5:
+                        tokenAddress = _b.sent();
+                        return [3 /*break*/, 7];
+                    case 6: throw new Error("Unrecognized FCM");
+                    case 7:
+                        token = typechain_1.ERC20Mock__factory.connect(tokenAddress, this.signer);
+                        return [4 /*yield*/, token.balanceOf(signerAddress)];
+                    case 8:
+                        currentBalance = _b.sent();
+                        scaledAmount = ethers_1.BigNumber.from(this.scale(amount));
+                        return [2 /*return*/, currentBalance.gte(scaledAmount)];
+                }
+            });
+        });
+    };
+    // caps
+    AMM.prototype.setCap = function (amount) {
+        return __awaiter(this, void 0, void 0, function () {
+            var peripheryContract, marginEngineContract, vammAddress, vammContract, isAlphaTransaction, error_15, isAlphaTransactionME, error_16, setCapTransaction, error_17;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!this.signer) {
+                            throw new Error('Wallet not connected');
+                        }
+                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
+                        return [4 /*yield*/, marginEngineContract.vamm()];
+                    case 1:
+                        vammAddress = _a.sent();
+                        vammContract = typechain_1.VAMM__factory.connect(vammAddress, this.signer);
+                        return [4 /*yield*/, vammContract.setIsAlpha(true)];
+                    case 2:
+                        isAlphaTransaction = _a.sent();
+                        _a.label = 3;
+                    case 3:
+                        _a.trys.push([3, 5, , 6]);
+                        return [4 /*yield*/, isAlphaTransaction.wait()];
+                    case 4:
+                        _a.sent();
+                        return [3 /*break*/, 6];
+                    case 5:
+                        error_15 = _a.sent();
+                        throw new Error("Setting Alpha failed");
+                    case 6: return [4 /*yield*/, marginEngineContract.setIsAlpha(true)];
+                    case 7:
+                        isAlphaTransactionME = _a.sent();
+                        _a.label = 8;
+                    case 8:
+                        _a.trys.push([8, 10, , 11]);
+                        return [4 /*yield*/, isAlphaTransactionME.wait()];
+                    case 9:
+                        _a.sent();
+                        return [3 /*break*/, 11];
+                    case 10:
+                        error_16 = _a.sent();
+                        throw new Error("Setting Alpha failed");
+                    case 11: return [4 /*yield*/, peripheryContract.setLPMarginCap(vammAddress, this.scale(amount))];
+                    case 12:
+                        setCapTransaction = _a.sent();
+                        _a.label = 13;
+                    case 13:
+                        _a.trys.push([13, 15, , 16]);
+                        return [4 /*yield*/, setCapTransaction.wait()];
+                    case 14:
+                        _a.sent();
+                        return [3 /*break*/, 16];
+                    case 15:
+                        error_17 = _a.sent();
+                        throw new Error("Setting cap failed");
+                    case 16: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    AMM.prototype.getCaps = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var peripheryContract, marginEngineContract, vammAddress, accumulated, cap;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!this.provider) {
+                            throw new Error('Blockchain not connected');
+                        }
+                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.provider);
+                        marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.provider);
+                        return [4 /*yield*/, marginEngineContract.vamm()];
+                    case 1:
+                        vammAddress = _a.sent();
+                        return [4 /*yield*/, peripheryContract.lpMarginCumulatives(vammAddress)];
+                    case 2:
+                        accumulated = _a.sent();
+                        return [4 /*yield*/, peripheryContract.lpMarginCaps(vammAddress)];
+                    case 3:
+                        cap = _a.sent();
+                        return [2 /*return*/, {
+                                accumulated: this.descale(accumulated),
+                                cap: this.descale(cap)
+                            }];
+                }
+            });
+        });
+    };
+    // current position margin requirement
+    AMM.prototype.getPositionMarginRequirement = function (fixedLow, fixedHigh) {
+        return __awaiter(this, void 0, void 0, function () {
+            var tickUpper, tickLower, marginEngineContract, signerAddress, requirement;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!this.signer) {
+                            throw new Error('Wallet not connected');
+                        }
+                        tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
+                        tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
+                        marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
+                        return [4 /*yield*/, this.signer.getAddress()];
+                    case 1:
+                        signerAddress = _a.sent();
+                        return [4 /*yield*/, marginEngineContract.callStatic.getPositionMarginRequirement(signerAddress, tickLower, tickUpper, false)];
+                    case 2:
+                        requirement = _a.sent();
+                        return [2 /*return*/, this.descale(requirement)];
+                }
+            });
+        });
+    };
+    // one week look-back window apy
+    AMM.prototype.getOneWeekApy = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var lastBlock, lastBlockTimestamp, _a, _b, rateOracleContract, oneWeekApy;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        if (!this.provider) {
+                            throw new Error('Blockchain not connected');
+                        }
+                        return [4 /*yield*/, this.provider.getBlockNumber()];
+                    case 1:
+                        lastBlock = _c.sent();
+                        _b = (_a = ethers_1.BigNumber).from;
+                        return [4 /*yield*/, this.provider.getBlock(lastBlock - 4)];
+                    case 2:
+                        lastBlockTimestamp = _b.apply(_a, [(_c.sent()).timestamp]);
+                        rateOracleContract = typechain_1.BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
+                        return [4 /*yield*/, rateOracleContract.callStatic.getApyFromTo(lastBlockTimestamp.sub(ethers_1.BigNumber.from(604800)), lastBlockTimestamp)];
+                    case 3:
+                        oneWeekApy = _c.sent();
+                        return [2 /*return*/, oneWeekApy.div(ethers_1.BigNumber.from(1000000000000)).toNumber() / 10000];
+                }
+            });
+        });
     };
     return AMM;
 }());

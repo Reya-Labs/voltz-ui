@@ -26,6 +26,9 @@ interface TestMarginEngineInterface extends ethers.utils.Interface {
     "MAX_LIQUIDATOR_REWARD_WAD()": FunctionFragment;
     "MAX_LOOKBACK_WINDOW_IN_SECONDS()": FunctionFragment;
     "MIN_LOOKBACK_WINDOW_IN_SECONDS()": FunctionFragment;
+    "ONE()": FunctionFragment;
+    "ONE_UINT()": FunctionFragment;
+    "SECONDS_IN_YEAR()": FunctionFragment;
     "cacheMaxAgeInSeconds()": FunctionFragment;
     "checkPositionMarginAboveRequirementTest(address,int24,int24,uint128,int256,int256,int256)": FunctionFragment;
     "checkPositionMarginCanBeUpdatedTest(address,int24,int24,uint128,int256,int256,int256)": FunctionFragment;
@@ -44,6 +47,7 @@ interface TestMarginEngineInterface extends ethers.utils.Interface {
     "getPositionMarginRequirementTest(address,int24,int24,bool)": FunctionFragment;
     "getUnderlyingToken()": FunctionFragment;
     "initialize(address,address,uint256,uint256)": FunctionFragment;
+    "isAlpha()": FunctionFragment;
     "isCounterfactualPositionLiquidatable(address,int24,int24,uint128,int256,int256,int256)": FunctionFragment;
     "isLiquidatablePositionTest(address,int24,int24)": FunctionFragment;
     "keepInMindMargin()": FunctionFragment;
@@ -56,10 +60,13 @@ interface TestMarginEngineInterface extends ethers.utils.Interface {
     "renounceOwnership()": FunctionFragment;
     "setCacheMaxAgeInSeconds(uint256)": FunctionFragment;
     "setFCM(address)": FunctionFragment;
+    "setIsAlpha(bool)": FunctionFragment;
     "setLiquidatorReward(uint256)": FunctionFragment;
     "setLookbackWindowInSeconds(uint256)": FunctionFragment;
     "setMarginCalculatorParameters((uint256,uint256,int256,int256,int256,int256,int256,int256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256))": FunctionFragment;
+    "setPausability(bool)": FunctionFragment;
     "setPosition(address,int24,int24,uint128,int256,int256,int256,int256,int256,uint256,bool)": FunctionFragment;
+    "setRateOracle(address)": FunctionFragment;
     "setVAMM(address)": FunctionFragment;
     "settlePosition(address,int24,int24)": FunctionFragment;
     "termEndTimestampWad()": FunctionFragment;
@@ -91,6 +98,12 @@ interface TestMarginEngineInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "MIN_LOOKBACK_WINDOW_IN_SECONDS",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "ONE", values?: undefined): string;
+  encodeFunctionData(functionFragment: "ONE_UINT", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "SECONDS_IN_YEAR",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -181,6 +194,7 @@ interface TestMarginEngineInterface extends ethers.utils.Interface {
     functionFragment: "initialize",
     values: [string, string, BigNumberish, BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "isAlpha", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "isCounterfactualPositionLiquidatable",
     values: [
@@ -228,6 +242,7 @@ interface TestMarginEngineInterface extends ethers.utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "setFCM", values: [string]): string;
+  encodeFunctionData(functionFragment: "setIsAlpha", values: [boolean]): string;
   encodeFunctionData(
     functionFragment: "setLiquidatorReward",
     values: [BigNumberish]
@@ -262,6 +277,10 @@ interface TestMarginEngineInterface extends ethers.utils.Interface {
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "setPausability",
+    values: [boolean]
+  ): string;
+  encodeFunctionData(
     functionFragment: "setPosition",
     values: [
       string,
@@ -276,6 +295,10 @@ interface TestMarginEngineInterface extends ethers.utils.Interface {
       BigNumberish,
       boolean
     ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setRateOracle",
+    values: [string]
   ): string;
   encodeFunctionData(functionFragment: "setVAMM", values: [string]): string;
   encodeFunctionData(
@@ -360,6 +383,12 @@ interface TestMarginEngineInterface extends ethers.utils.Interface {
     functionFragment: "MIN_LOOKBACK_WINDOW_IN_SECONDS",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "ONE", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "ONE_UINT", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "SECONDS_IN_YEAR",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "cacheMaxAgeInSeconds",
     data: BytesLike
@@ -420,6 +449,7 @@ interface TestMarginEngineInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "isAlpha", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isCounterfactualPositionLiquidatable",
     data: BytesLike
@@ -456,6 +486,7 @@ interface TestMarginEngineInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "setFCM", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "setIsAlpha", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setLiquidatorReward",
     data: BytesLike
@@ -469,7 +500,15 @@ interface TestMarginEngineInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "setPausability",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "setPosition",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setRateOracle",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "setVAMM", data: BytesLike): Result;
@@ -531,16 +570,17 @@ interface TestMarginEngineInterface extends ethers.utils.Interface {
     "FCMSetting(address)": EventFragment;
     "HistoricalApy(uint256)": EventFragment;
     "HistoricalApyWindowSetting(uint256)": EventFragment;
+    "IsAlpha(bool)": EventFragment;
     "LiquidatorRewardSetting(uint256)": EventFragment;
     "MarginCalculatorParametersSetting(tuple)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
-    "Paused(address)": EventFragment;
     "PositionLiquidation(address,int24,int24,address,int256,uint256)": EventFragment;
     "PositionMarginUpdate(address,address,int24,int24,int256)": EventFragment;
     "PositionSettlement(address,int24,int24,int256)": EventFragment;
     "PositionUpdate(address,int24,int24,uint128,int256,int256,int256,uint256)": EventFragment;
     "ProtocolCollection(address,address,uint256)": EventFragment;
-    "Unpaused(address)": EventFragment;
+    "RateOracle(uint256)": EventFragment;
+    "RateOracleSetting(address)": EventFragment;
     "Upgraded(address)": EventFragment;
     "VAMMSetting(address)": EventFragment;
   };
@@ -551,18 +591,19 @@ interface TestMarginEngineInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "FCMSetting"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "HistoricalApy"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "HistoricalApyWindowSetting"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "IsAlpha"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LiquidatorRewardSetting"): EventFragment;
   getEvent(
     nameOrSignatureOrTopic: "MarginCalculatorParametersSetting"
   ): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PositionLiquidation"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PositionMarginUpdate"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PositionSettlement"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PositionUpdate"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ProtocolCollection"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "RateOracle"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "RateOracleSetting"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Upgraded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "VAMMSetting"): EventFragment;
 }
@@ -584,6 +625,8 @@ export type HistoricalApyEvent = TypedEvent<[BigNumber] & { value: BigNumber }>;
 export type HistoricalApyWindowSettingEvent = TypedEvent<
   [BigNumber] & { secondsAgo: BigNumber }
 >;
+
+export type IsAlphaEvent = TypedEvent<[boolean] & { __isAlpha: boolean }>;
 
 export type LiquidatorRewardSettingEvent = TypedEvent<
   [BigNumber] & { liquidatorRewardWad: BigNumber }
@@ -677,8 +720,6 @@ export type OwnershipTransferredEvent = TypedEvent<
   [string, string] & { previousOwner: string; newOwner: string }
 >;
 
-export type PausedEvent = TypedEvent<[string] & { account: string }>;
-
 export type PositionLiquidationEvent = TypedEvent<
   [string, number, number, string, BigNumber, BigNumber] & {
     owner: string;
@@ -739,7 +780,13 @@ export type ProtocolCollectionEvent = TypedEvent<
   }
 >;
 
-export type UnpausedEvent = TypedEvent<[string] & { account: string }>;
+export type RateOracleEvent = TypedEvent<
+  [BigNumber] & { cacheMaxAgeInSeconds: BigNumber }
+>;
+
+export type RateOracleSettingEvent = TypedEvent<
+  [string] & { rateOracle: string }
+>;
 
 export type UpgradedEvent = TypedEvent<[string] & { implementation: string }>;
 
@@ -802,6 +849,12 @@ export class TestMarginEngine extends BaseContract {
     MIN_LOOKBACK_WINDOW_IN_SECONDS(
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
+
+    ONE(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    ONE_UINT(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    SECONDS_IN_YEAR(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     cacheMaxAgeInSeconds(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -904,6 +957,8 @@ export class TestMarginEngine extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    isAlpha(overrides?: CallOverrides): Promise<[boolean]>;
+
     isCounterfactualPositionLiquidatable(
       owner: string,
       tickLower: BigNumberish,
@@ -955,6 +1010,11 @@ export class TestMarginEngine extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setIsAlpha(
+      __isAlpha: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setLiquidatorReward(
       _newLiquidatorRewardWad: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -989,6 +1049,11 @@ export class TestMarginEngine extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setPausability(
+      state: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setPosition(
       owner: string,
       tickLower: BigNumberish,
@@ -1001,6 +1066,11 @@ export class TestMarginEngine extends BaseContract {
       variableTokenBalance: BigNumberish,
       feeGrowthInsideLastX128: BigNumberish,
       isSettled: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setRateOracle(
+      __rateOracle: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -1098,6 +1168,12 @@ export class TestMarginEngine extends BaseContract {
   MAX_LOOKBACK_WINDOW_IN_SECONDS(overrides?: CallOverrides): Promise<BigNumber>;
 
   MIN_LOOKBACK_WINDOW_IN_SECONDS(overrides?: CallOverrides): Promise<BigNumber>;
+
+  ONE(overrides?: CallOverrides): Promise<BigNumber>;
+
+  ONE_UINT(overrides?: CallOverrides): Promise<BigNumber>;
+
+  SECONDS_IN_YEAR(overrides?: CallOverrides): Promise<BigNumber>;
 
   cacheMaxAgeInSeconds(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1198,6 +1274,8 @@ export class TestMarginEngine extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  isAlpha(overrides?: CallOverrides): Promise<boolean>;
+
   isCounterfactualPositionLiquidatable(
     owner: string,
     tickLower: BigNumberish,
@@ -1249,6 +1327,11 @@ export class TestMarginEngine extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setIsAlpha(
+    __isAlpha: boolean,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   setLiquidatorReward(
     _newLiquidatorRewardWad: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -1283,6 +1366,11 @@ export class TestMarginEngine extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setPausability(
+    state: boolean,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   setPosition(
     owner: string,
     tickLower: BigNumberish,
@@ -1295,6 +1383,11 @@ export class TestMarginEngine extends BaseContract {
     variableTokenBalance: BigNumberish,
     feeGrowthInsideLastX128: BigNumberish,
     isSettled: boolean,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setRateOracle(
+    __rateOracle: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1396,6 +1489,12 @@ export class TestMarginEngine extends BaseContract {
     MIN_LOOKBACK_WINDOW_IN_SECONDS(
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    ONE(overrides?: CallOverrides): Promise<BigNumber>;
+
+    ONE_UINT(overrides?: CallOverrides): Promise<BigNumber>;
+
+    SECONDS_IN_YEAR(overrides?: CallOverrides): Promise<BigNumber>;
 
     cacheMaxAgeInSeconds(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1518,6 +1617,8 @@ export class TestMarginEngine extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    isAlpha(overrides?: CallOverrides): Promise<boolean>;
+
     isCounterfactualPositionLiquidatable(
       owner: string,
       tickLower: BigNumberish,
@@ -1564,6 +1665,8 @@ export class TestMarginEngine extends BaseContract {
 
     setFCM(_newFCM: string, overrides?: CallOverrides): Promise<void>;
 
+    setIsAlpha(__isAlpha: boolean, overrides?: CallOverrides): Promise<void>;
+
     setLiquidatorReward(
       _newLiquidatorRewardWad: BigNumberish,
       overrides?: CallOverrides
@@ -1598,6 +1701,8 @@ export class TestMarginEngine extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    setPausability(state: boolean, overrides?: CallOverrides): Promise<void>;
+
     setPosition(
       owner: string,
       tickLower: BigNumberish,
@@ -1610,6 +1715,11 @@ export class TestMarginEngine extends BaseContract {
       variableTokenBalance: BigNumberish,
       feeGrowthInsideLastX128: BigNumberish,
       isSettled: boolean,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setRateOracle(
+      __rateOracle: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1753,6 +1863,14 @@ export class TestMarginEngine extends BaseContract {
     HistoricalApyWindowSetting(
       secondsAgo?: null
     ): TypedEventFilter<[BigNumber], { secondsAgo: BigNumber }>;
+
+    "IsAlpha(bool)"(
+      __isAlpha?: null
+    ): TypedEventFilter<[boolean], { __isAlpha: boolean }>;
+
+    IsAlpha(
+      __isAlpha?: null
+    ): TypedEventFilter<[boolean], { __isAlpha: boolean }>;
 
     "LiquidatorRewardSetting(uint256)"(
       liquidatorRewardWad?: null
@@ -1952,12 +2070,6 @@ export class TestMarginEngine extends BaseContract {
       { previousOwner: string; newOwner: string }
     >;
 
-    "Paused(address)"(
-      account?: null
-    ): TypedEventFilter<[string], { account: string }>;
-
-    Paused(account?: null): TypedEventFilter<[string], { account: string }>;
-
     "PositionLiquidation(address,int24,int24,address,int256,uint256)"(
       owner?: string | null,
       tickLower?: BigNumberish | null,
@@ -2142,11 +2254,21 @@ export class TestMarginEngine extends BaseContract {
       { sender: string; recipient: string; amount: BigNumber }
     >;
 
-    "Unpaused(address)"(
-      account?: null
-    ): TypedEventFilter<[string], { account: string }>;
+    "RateOracle(uint256)"(
+      cacheMaxAgeInSeconds?: null
+    ): TypedEventFilter<[BigNumber], { cacheMaxAgeInSeconds: BigNumber }>;
 
-    Unpaused(account?: null): TypedEventFilter<[string], { account: string }>;
+    RateOracle(
+      cacheMaxAgeInSeconds?: null
+    ): TypedEventFilter<[BigNumber], { cacheMaxAgeInSeconds: BigNumber }>;
+
+    "RateOracleSetting(address)"(
+      rateOracle?: string | null
+    ): TypedEventFilter<[string], { rateOracle: string }>;
+
+    RateOracleSetting(
+      rateOracle?: string | null
+    ): TypedEventFilter<[string], { rateOracle: string }>;
 
     "Upgraded(address)"(
       implementation?: string | null
@@ -2177,6 +2299,12 @@ export class TestMarginEngine extends BaseContract {
     MIN_LOOKBACK_WINDOW_IN_SECONDS(
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    ONE(overrides?: CallOverrides): Promise<BigNumber>;
+
+    ONE_UINT(overrides?: CallOverrides): Promise<BigNumber>;
+
+    SECONDS_IN_YEAR(overrides?: CallOverrides): Promise<BigNumber>;
 
     cacheMaxAgeInSeconds(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -2277,6 +2405,8 @@ export class TestMarginEngine extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    isAlpha(overrides?: CallOverrides): Promise<BigNumber>;
+
     isCounterfactualPositionLiquidatable(
       owner: string,
       tickLower: BigNumberish,
@@ -2328,6 +2458,11 @@ export class TestMarginEngine extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setIsAlpha(
+      __isAlpha: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setLiquidatorReward(
       _newLiquidatorRewardWad: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -2362,6 +2497,11 @@ export class TestMarginEngine extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setPausability(
+      state: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setPosition(
       owner: string,
       tickLower: BigNumberish,
@@ -2374,6 +2514,11 @@ export class TestMarginEngine extends BaseContract {
       variableTokenBalance: BigNumberish,
       feeGrowthInsideLastX128: BigNumberish,
       isSettled: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setRateOracle(
+      __rateOracle: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -2480,6 +2625,12 @@ export class TestMarginEngine extends BaseContract {
     MIN_LOOKBACK_WINDOW_IN_SECONDS(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    ONE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    ONE_UINT(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    SECONDS_IN_YEAR(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     cacheMaxAgeInSeconds(
       overrides?: CallOverrides
@@ -2588,6 +2739,8 @@ export class TestMarginEngine extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    isAlpha(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     isCounterfactualPositionLiquidatable(
       owner: string,
       tickLower: BigNumberish,
@@ -2643,6 +2796,11 @@ export class TestMarginEngine extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    setIsAlpha(
+      __isAlpha: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     setLiquidatorReward(
       _newLiquidatorRewardWad: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -2677,6 +2835,11 @@ export class TestMarginEngine extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    setPausability(
+      state: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     setPosition(
       owner: string,
       tickLower: BigNumberish,
@@ -2689,6 +2852,11 @@ export class TestMarginEngine extends BaseContract {
       variableTokenBalance: BigNumberish,
       feeGrowthInsideLastX128: BigNumberish,
       isSettled: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setRateOracle(
+      __rateOracle: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

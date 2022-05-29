@@ -4,7 +4,7 @@ import { useTokenApproval, MintBurnFormState, MintBurnFormLiquidityAction, MintB
 import { Box } from "@mui/system";
 import { actions } from "@store";
 import { AugmentedAMM } from "@utilities";
-import { MintBurnFormActions } from "./types";
+import { MintBurnFormActions, MintBurnFormModes } from '@components/interface';
 import { colors } from "@theme";
 
 type TextProps = {
@@ -25,15 +25,14 @@ const Text = ({ bold, children, green, red }: TextProps) => (
 
 /**
  * Returns what action the form is currently set to make (SWAP, FCM_SWAP etc)
- * @param isEditingMargin - boolean flag for edit margin mode
- * @param isEditingLiquidity - boolean flag for edit liquidity mode
+ * @param mode - the mode the form is in
  * @param liquidityAction - the liquidity action selected on the form 
  */
- export const getFormAction = (isEditingMargin: boolean, isEditingLiquidity: boolean, liquidityAction: MintBurnFormLiquidityAction) => {
-  if (isEditingMargin) {
+ export const getFormAction = (mode: MintBurnFormModes, liquidityAction: MintBurnFormLiquidityAction) => {
+  if (mode === MintBurnFormModes.EDIT_MARGIN) {
     return MintBurnFormActions.UPDATE;
   } 
-  else if (!isEditingLiquidity || liquidityAction === MintBurnFormLiquidityAction.ADD) {
+  else if (mode !== MintBurnFormModes.EDIT_LIQUIDITY || liquidityAction === MintBurnFormLiquidityAction.ADD) {
     return MintBurnFormActions.MINT;
   } 
   else {
@@ -43,13 +42,17 @@ const Text = ({ bold, children, green, red }: TextProps) => (
 
 /**
  * Gets the hint text to show below the submit button
- * @param formState - the state of the form fields
- * @param isFormValid - boolean flag wether the form is valid or not
+ * @param amm - the amm class instance for this form
+ * @param mode - the mode the form is in
+ * @param form - the entire form state
  * @param tokenApprovals - the token approvals state for this form
  */
-export const getSubmitButtonHint = (amm: AugmentedAMM, formErrors: MintBurnForm['errors'], isFormValid: boolean, tokenApprovals: ReturnType<typeof useTokenApproval>) => {
+export const getSubmitButtonHint = (amm: AugmentedAMM, mode: MintBurnFormModes, form: MintBurnForm, tokenApprovals: ReturnType<typeof useTokenApproval>) => {
   // Please note that the order these are in is important, you need the conditions that take precidence
   // to be nearer the top.
+
+  const isBurningLiquidity = mode === MintBurnFormModes.EDIT_LIQUIDITY && form.state.liquidityAction === MintBurnFormLiquidityAction.BURN;
+  const isRemovingMargin = mode === MintBurnFormModes.EDIT_MARGIN && form.state.marginAction === MintBurnFormMarginAction.REMOVE;
 
   // Token approvals - Something happening
   if(tokenApprovals.checkingApprovals) {
@@ -58,50 +61,53 @@ export const getSubmitButtonHint = (amm: AugmentedAMM, formErrors: MintBurnForm[
   if(tokenApprovals.approving) {
     return 'Waiting for confirmation...';
   }
-  if(tokenApprovals.lastError) {
-    return <Text red>{tokenApprovals.lastError.message}</Text>
-  }
-  
-  // Token approvals - user needs to approve a token
-  if(isFormValid) {
-    if(!tokenApprovals.underlyingTokenApprovedForPeriphery) {
-      return `Please approve ${amm.underlyingToken.name || ''}`;
+
+  if(!isBurningLiquidity && !isRemovingMargin) {
+    if(tokenApprovals.lastError) {
+      return <Text red>{tokenApprovals.lastError.message}</Text>
+    }
+    
+    // Token approvals - user needs to approve a token
+    if(form.isValid) {
+      if(!tokenApprovals.underlyingTokenApprovedForPeriphery) {
+        return `Please approve ${amm.underlyingToken.name || ''}`;
+      }
     }
   }
 
   // Form validation
-  if (!isFormValid) {
-    if(formErrors.balance) {
+  if (!form.isValid) {
+    if(form.errors.balance) {
       return `You do not have enough ${amm.underlyingToken.name || ''}`;
     }
-    if(!Object.keys(formErrors).length) {
+    if(!Object.keys(form.errors).length) {
       return 'Input your parameters';
     }
     return 'Please fix form errors to continue';
   }
 
-  if (isFormValid) {
-    return <>{tokenApprovals.lastApproval && <><Text green>Tokens approved</Text>. </>}Let's trade</>;
+  if (form.isValid) {
+    return <>{tokenApprovals.lastApproval && <><Text green>Tokens approved</Text>. </>}Let's trade!</>;
   }
 }
 
 /**
  * Gets the text to show on the submit button
- * @param isEditingMargin - boolean flag for edit margin mode
- * @param isEditingLiquidity - boolean flag for edit liquidity mode
+ * @param mode - the mode the form is in
  * @param tokenApprovals - the token approvals state for this form
  * @param amm - the amm class instance for this form
  * @param formState - the form state
  */
  export const getSubmitButtonText = (
-  isEditingMargin: boolean, 
-  isEditingLiquidity: boolean, 
+  mode: MintBurnFormModes,
   tokenApprovals: ReturnType<typeof useTokenApproval>, 
   amm: AugmentedAMM, 
   formState: MintBurnFormState
 ) => {
-  const isAddingLiquidity = !isEditingLiquidity || formState.liquidityAction === MintBurnFormLiquidityAction.ADD;
-  const isAddingMargin = isEditingMargin && formState.marginAction === MintBurnFormMarginAction.ADD;
+  const isAddingLiquidity = mode !== MintBurnFormModes.EDIT_LIQUIDITY || formState.liquidityAction === MintBurnFormLiquidityAction.ADD;
+  const isAddingMargin = mode === MintBurnFormModes.EDIT_MARGIN && formState.marginAction === MintBurnFormMarginAction.ADD;
+  const isBurningLiquidity = mode === MintBurnFormModes.EDIT_LIQUIDITY && formState.liquidityAction === MintBurnFormLiquidityAction.BURN;
+  const isRemovingMargin = mode === MintBurnFormModes.EDIT_MARGIN && formState.marginAction === MintBurnFormMarginAction.REMOVE;
 
   if (tokenApprovals.checkingApprovals) {
     return 'Initialising...';
@@ -110,11 +116,13 @@ export const getSubmitButtonHint = (amm: AugmentedAMM, formErrors: MintBurnForm[
     return 'Approving...';
   }
 
-  if (!tokenApprovals.underlyingTokenApprovedForPeriphery) {
-    return <Box>Approve <Text>{amm.underlyingToken.name || ''}</Text></Box>;
+  if(!isRemovingMargin && !isBurningLiquidity) {
+    if (!tokenApprovals.underlyingTokenApprovedForPeriphery) {
+      return <Box>Approve <Text>{amm.underlyingToken.name || ''}</Text></Box>;
+    }
   }
 
-  if(isEditingMargin) {
+  if(mode === MintBurnFormModes.EDIT_MARGIN) {
     return isAddingMargin ? 'Deposit Margin' : 'Withdraw Margin';
   }
 
@@ -127,19 +135,17 @@ export const getSubmitButtonHint = (amm: AugmentedAMM, formErrors: MintBurnForm[
  * @param formAction - the action the form is currently set to make (MINT, BURN etc)
  * @param formState - the state of the form fields
  * @param agent - the agent mode the form is currently in (fixed, variable etc)
- * @param isEditingLiquidity - boolean flag for if the form is in 'edit liquidity' mode
- * @param isEditingMargin - boolean flag for if the form is in 'edit margin' mode
+ * @param mode - the mode the form is in
  */
 export const getSubmitAction = (
   amm: AugmentedAMM, 
   formAction: MintBurnFormActions, 
   formState: MintBurnFormState, 
   agent: Agents, 
-  isEditingLiquidity: boolean, 
-  isEditingMargin: boolean
+  mode: MintBurnFormModes
 ) => {
-  const isBurningLiquidity = (isEditingLiquidity && formState.liquidityAction === MintBurnFormLiquidityAction.BURN);
-  const isRemovingMargin = (isEditingMargin && formState.marginAction === MintBurnFormMarginAction.REMOVE);
+  const isBurningLiquidity = (mode === MintBurnFormModes.EDIT_LIQUIDITY && formState.liquidityAction === MintBurnFormLiquidityAction.BURN);
+  const isRemovingMargin = (mode === MintBurnFormModes.EDIT_MARGIN && formState.marginAction === MintBurnFormMarginAction.REMOVE);
   
   const transaction = { 
     ammId: amm.id, 

@@ -7,6 +7,6 @@ var mapProtocolIdToProtocol = function (protocolId) {
     if (protocolId === 2) {
         return 'COMPOUND';
     }
-    return 'AAVE V2';
+    throw new Error('No protocol recognized');
 };
 exports.default = mapProtocolIdToProtocol;

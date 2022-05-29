@@ -24,6 +24,10 @@ export declare type AMMConstructorArgs = {
     totalNotionalTraded: JSBI;
     totalLiquidity: JSBI;
 };
+export declare type CapInfo = {
+    accumulated: number;
+    cap: number;
+};
 export declare type AMMGetInfoPostSwapArgs = {
     isFT: boolean;
     notional: number;
@@ -117,9 +121,6 @@ declare class AMM {
     readonly txCount: number;
     readonly totalNotionalTraded: JSBI;
     readonly totalLiquidity: JSBI;
-    readonly overrides: {
-        gasLimit: number;
-    };
     constructor({ id, signer, provider, environment, marginEngineAddress, fcmAddress, rateOracle, updatedTimestamp, termStartTimestamp, termEndTimestamp, underlyingToken, tick, tickSpacing, txCount, totalNotionalTraded, totalLiquidity }: AMMConstructorArgs);
     getInfoPostSwap({ isFT, notional, fixedRateLimit, fixedLow, fixedHigh, }: AMMGetInfoPostSwapArgs): Promise<InfoPostSwap>;
     swap({ isFT, notional, margin, fixedRateLimit, fixedLow, fixedHigh, validationOnly, }: AMMSwapArgs): Promise<ContractReceipt | void>;
@@ -129,7 +130,9 @@ declare class AMM {
     updatePositionMargin({ owner, fixedLow, fixedHigh, marginDelta, }: AMMUpdatePositionMarginArgs): Promise<ContractReceipt | void>;
     liquidatePosition({ owner, fixedLow, fixedHigh, }: AMMLiquidatePositionArgs): Promise<ContractReceipt>;
     settlePosition({ owner, fixedLow, fixedHigh, }: AMMSettlePositionArgs): Promise<ContractReceipt>;
+    getInfoPostFCMSwap({ notional, fixedRateLimit, }: fcmSwapArgs): Promise<InfoPostSwap>;
     fcmSwap({ notional, fixedRateLimit, }: fcmSwapArgs): Promise<ContractReceipt>;
+    getInfoPostFCMUnwind({ notionalToUnwind, fixedRateLimit, }: fcmUnwindArgs): Promise<InfoPostSwap>;
     fcmUnwind({ notionalToUnwind, fixedRateLimit, }: fcmUnwindArgs): Promise<ContractReceipt>;
     settleFCMTrader(): Promise<ContractReceipt>;
     scale(value: number): string;
@@ -158,10 +161,15 @@ declare class AMM {
         timestamp: BigNumber;
     }[], atMaturity: boolean): Promise<number>;
     getVariableFactor(termStartTimestamp: BigNumber, termEndTimestamp: BigNumber): Promise<number>;
-    getApy(termStartTimestamp: BigNumber, termEndTimestamp: BigNumber): Promise<number>;
     getPositionInformation(position: Position): Promise<PositionInfo>;
     closestTickAndFixedRate(fixedRate: number): ClosestTickAndFixedRate;
     getNextUsableFixedRate(fixedRate: number, count: number): number;
+    hasEnoughUnderlyingTokens(amount: number): Promise<boolean>;
+    hasEnoughYieldBearingTokens(amount: number): Promise<boolean>;
+    setCap(amount: number): Promise<void>;
+    getCaps(): Promise<CapInfo>;
+    getPositionMarginRequirement(fixedLow: number, fixedHigh: number): Promise<number>;
+    getOneWeekApy(): Promise<number>;
 }
 export default AMM;
 //# sourceMappingURL=amm.d.ts.map

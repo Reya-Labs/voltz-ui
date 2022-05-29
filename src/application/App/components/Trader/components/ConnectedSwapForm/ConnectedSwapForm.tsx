@@ -5,29 +5,30 @@ import { routes } from '@routes';
 import { AugmentedAMM } from '@utilities';
 import { actions, selectors } from '@store';
 import { MintBurnFormMarginAction, useAgent, useAMMContext, useDispatch, useSelector, useTokenApproval, useWallet } from '@hooks';
-import { SwapForm, PendingTransaction } from '@components/interface';
+import { SwapForm, PendingTransaction, SwapFormActions, SwapFormModes } from '@components/interface';
 import { Agents } from '@components/contexts';
 import useSwapForm from 'src/hooks/useSwapForm';
 import { getFormAction, getSubmitAction, getSubmitButtonHint, getSubmitButtonText } from './services';
-import { SwapFormActions } from './types';
 import { isUndefined } from 'lodash';
 import { BigNumber } from 'ethers';
 import { Token } from '@voltz-protocol/v1-sdk';
+import { GetInfoType } from 'src/components/contexts/AMMContext/types';
 
 export type ConnectedSwapFormProps = {
   amm: AugmentedAMM;
-  isEditingMargin?: boolean;
+  mode?: SwapFormModes;
   onReset: () => void;
 };
 
 const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ 
   amm,
-  isEditingMargin = false,
+  mode = SwapFormModes.NEW_POSITION,
   onReset,
 }) => {
   const { agent, onChangeAgent } = useAgent();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const { swapInfo: { call: loadSwapInfo, loading: swapInfoLoading, result: swapInfoData } } = useAMMContext();
 
   const [balance, setBalance] = useState<BigNumber>();
@@ -35,35 +36,37 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
   const token = useRef<Token>();
 
   const defaultValues = {};
-  const form = useSwapForm(amm, isEditingMargin, balance, swapInfoData?.marginRequirement, defaultValues);
+  const form = useSwapForm(amm, mode, swapInfoData?.marginRequirement, swapInfoData?.fee, agent, defaultValues);
   const tokenApprovals = useTokenApproval(amm);
 
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId); // contains a failureMessage attribute that will contain whatever came out from the sdk
 
-  const formAction = getFormAction(isEditingMargin, form.state.partialCollateralization, agent);
-  const isRemovingMargin = isEditingMargin && form.state.marginAction === MintBurnFormMarginAction.REMOVE;
-  const submitButtonHint = getSubmitButtonHint(amm, formAction, form.errors, form.isValid, tokenApprovals);
-  const submitButtonText = getSubmitButtonText(isEditingMargin, tokenApprovals, amm, formAction, agent);
+  const formAction = getFormAction(mode, form.state.partialCollateralization, agent);
+  const isRemovingMargin = mode === SwapFormModes.EDIT_MARGIN && form.state.marginAction === MintBurnFormMarginAction.REMOVE;
+  const submitButtonHint = getSubmitButtonHint(amm, formAction, form.errors, form.isValid, tokenApprovals, isRemovingMargin);
+  const submitButtonText = getSubmitButtonText(mode, tokenApprovals, amm, formAction, agent, isRemovingMargin);
 
   const handleSubmit = () => {
     if(!form.isValid) return;
 
-    if (formAction === SwapFormActions.FCM_SWAP || formAction === SwapFormActions.FCM_UNWIND) {
-      if(!tokenApprovals.FCMApproved) {
-        tokenApprovals.approveFCM();
-        return;
-      } else if(!tokenApprovals.yieldBearingTokenApprovedForFCM) {
-        tokenApprovals.approveYieldBearingTokenForFCM();
-        return;
-      } else if(!tokenApprovals.underlyingTokenApprovedForFCM) {
-        tokenApprovals.approveUnderlyingTokenForFCM();
-        return;
-      }
-    } else {
-      if(!tokenApprovals.underlyingTokenApprovedForPeriphery) {
-        tokenApprovals.approveUnderlyingTokenForPeriphery();
-        return;
+    if(!isRemovingMargin) {
+      if (formAction === SwapFormActions.FCM_SWAP || formAction === SwapFormActions.FCM_UNWIND) {
+        if(!tokenApprovals.FCMApproved) {
+          tokenApprovals.approveFCM();
+          return;
+        } else if(!tokenApprovals.yieldBearingTokenApprovedForFCM) {
+          tokenApprovals.approveYieldBearingTokenForFCM();
+          return;
+        } else if(!tokenApprovals.underlyingTokenApprovedForFCM) {
+          tokenApprovals.approveUnderlyingTokenForFCM();
+          return;
+        }
+      } else {
+        if(!tokenApprovals.underlyingTokenApprovedForPeriphery) {
+          tokenApprovals.approveUnderlyingTokenForPeriphery();
+          return;
+        }
       }
     }
 
@@ -106,7 +109,30 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
   // Load the swap summary info
   useEffect(() => {
     if (!isUndefined(form.state.notional) && form.state.notional !== 0) {
-      loadSwapInfo({ notional: form.state.notional });
+      switch (formAction) {
+        case SwapFormActions.UPDATE: {
+          throw new Error("Should not get info post swap in update position margin");
+        }
+
+        case SwapFormActions.SWAP: {
+          loadSwapInfo({ notional: form.state.notional, type: GetInfoType.NORMAL_SWAP});
+          break;
+        }
+
+        case SwapFormActions.FCM_SWAP: {
+          loadSwapInfo({ notional: form.state.notional, type: GetInfoType.FCM_SWAP });
+          break;
+        }
+
+        case SwapFormActions.FCM_UNWIND: {
+          loadSwapInfo({ notional: form.state.notional, type: GetInfoType.FCM_UNWIND });
+          break;
+        }
+
+        default: {
+          throw new Error("Unrecognized form type");
+        }
+      } 
     }
   }, [loadSwapInfo, form.state.notional, agent]);
 
@@ -118,7 +144,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
     return (
       <PendingTransaction 
         amm={amm} 
-        isEditingMargin={isEditingMargin} 
+        isEditingMargin={mode === SwapFormModes.EDIT_MARGIN} 
         transactionId={transactionId} 
         onComplete={handleComplete} 
         onBack={handleGoBack} 
@@ -131,8 +157,9 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
       endDate={amm.endDateTime}
       errors={form.errors}
       formState={form.state}
-      isEditingMargin={isEditingMargin}
       isFormValid={form.isValid}
+      mode={mode}
+      formAction={formAction}
       onCancel={onReset}
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction}

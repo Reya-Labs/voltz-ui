@@ -20,16 +20,19 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface FCMStorageInterface extends ethers.utils.Interface {
   functions: {
+    "paused()": FunctionFragment;
     "traders(address)": FunctionFragment;
     "underlyingToken()": FunctionFragment;
   };
 
+  encodeFunctionData(functionFragment: "paused", values?: undefined): string;
   encodeFunctionData(functionFragment: "traders", values: [string]): string;
   encodeFunctionData(
     functionFragment: "underlyingToken",
     values?: undefined
   ): string;
 
+  decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "traders", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "underlyingToken",
@@ -83,6 +86,8 @@ export class FCMStorage extends BaseContract {
   interface: FCMStorageInterface;
 
   functions: {
+    paused(overrides?: CallOverrides): Promise<[boolean]>;
+
     traders(
       arg0: string,
       overrides?: CallOverrides
@@ -97,6 +102,8 @@ export class FCMStorage extends BaseContract {
 
     underlyingToken(overrides?: CallOverrides): Promise<[string]>;
   };
+
+  paused(overrides?: CallOverrides): Promise<boolean>;
 
   traders(
     arg0: string,
@@ -113,6 +120,8 @@ export class FCMStorage extends BaseContract {
   underlyingToken(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
+    paused(overrides?: CallOverrides): Promise<boolean>;
+
     traders(
       arg0: string,
       overrides?: CallOverrides
@@ -131,12 +140,16 @@ export class FCMStorage extends BaseContract {
   filters: {};
 
   estimateGas: {
+    paused(overrides?: CallOverrides): Promise<BigNumber>;
+
     traders(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     underlyingToken(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    paused(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     traders(
       arg0: string,
       overrides?: CallOverrides
