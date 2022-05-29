@@ -58,3 +58,7 @@ export const MIN_FIXED_RATE = 0.001;
 export const MAX_FIXED_RATE = 1001;
 
 export const ONE_YEAR_IN_SECONDS = 31536000;
+
+export function getGasBuffer(value: BigNumber): BigNumber {
+  return value.mul(120).div(100);
+}

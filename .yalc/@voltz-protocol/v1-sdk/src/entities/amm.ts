@@ -12,6 +12,7 @@ import {
   ONE_YEAR_IN_SECONDS,
   MaxUint256Bn,
   TresholdApprovalBn,
+  getGasBuffer,
 } from '../constants';
 import {
   Periphery__factory as peripheryFactory,
@@ -188,9 +189,6 @@ class AMM {
   public readonly txCount: number;
   public readonly totalNotionalTraded: JSBI;
   public readonly totalLiquidity: JSBI;
-  public readonly overrides: {
-    gasLimit: number;
-  }
 
   public constructor({
     id,
@@ -226,10 +224,6 @@ class AMM {
     this.txCount = txCount;
     this.totalNotionalTraded = totalNotionalTraded;
     this.totalLiquidity = totalLiquidity;
-
-    this.overrides = {
-      gasLimit: 10000000,
-    }
   }
 
   // swap
@@ -428,7 +422,14 @@ class AMM {
       throw new Error(errorMessage);
     });
 
-    const swapTransaction = await peripheryContract.swap(swapPeripheryParams, this.overrides).catch((error) => {
+    const estimatedGas = await peripheryContract.estimateGas.swap(swapPeripheryParams).catch((error) => {
+      const errorMessage = getReadableErrorMessage(error, this.environment);
+      throw new Error(errorMessage);
+    });
+
+    const swapTransaction = await peripheryContract.swap(swapPeripheryParams, {
+      gasLimit: getGasBuffer(estimatedGas)
+    }).catch((error) => {
       const errorMessage = getReadableErrorMessage(error, this.environment);
       throw new Error(errorMessage);
     });
@@ -574,7 +575,14 @@ class AMM {
       throw new Error(errorMessage);
     });
 
-    const mintTransaction = await peripheryContract.mintOrBurn(mintOrBurnParams, this.overrides).catch((error) => {
+    const estimatedGas = await peripheryContract.estimateGas.mintOrBurn(mintOrBurnParams).catch((error) => {
+      const errorMessage = getReadableErrorMessage(error, this.environment);
+      throw new Error(errorMessage);
+    });
+
+    const mintTransaction = await peripheryContract.mintOrBurn(mintOrBurnParams, {
+      gasLimit: getGasBuffer(estimatedGas)
+    }).catch((error) => {
       const errorMessage = getReadableErrorMessage(error, this.environment);
       throw new Error(errorMessage);
     });
@@ -641,7 +649,11 @@ class AMM {
       throw new Error(errorMessage);
     });
 
-    const burnTransaction = await peripheryContract.mintOrBurn(mintOrBurnParams, this.overrides).catch((error) => {
+    const estimatedGas = await peripheryContract.estimateGas.mintOrBurn(mintOrBurnParams);
+
+    const burnTransaction = await peripheryContract.mintOrBurn(mintOrBurnParams, {
+      gasLimit: getGasBuffer(estimatedGas)
+    }).catch((error) => {
       const errorMessage = getReadableErrorMessage(error, this.environment);
       throw new Error(errorMessage);
     });
@@ -704,13 +716,23 @@ class AMM {
       throw new Error(errorMessage);
     });
 
+    const estimatedGas = await peripheryContract.estimateGas.updatePositionMargin(
+      this.marginEngineAddress,
+      tickLower,
+      tickUpper,
+      scaledMarginDelta,
+      false
+    );
+
     const updatePositionMarginTransaction = await peripheryContract.updatePositionMargin(
       this.marginEngineAddress,
       tickLower,
       tickUpper,
       scaledMarginDelta,
       false,
-      this.overrides
+      {
+        gasLimit: getGasBuffer(estimatedGas)
+      }
     );
 
     try {
@@ -741,9 +763,13 @@ class AMM {
     await marginEngineContract.callStatic.liquidatePosition(owner, tickLower, tickUpper).catch((error) => {
       const errorMessage = getReadableErrorMessage(error, this.environment);
       throw new Error(errorMessage);
-    });;
+    });
 
-    const liquidatePositionTransaction = await marginEngineContract.liquidatePosition(owner, tickLower, tickUpper, this.overrides);
+    const estimatedGas = await marginEngineContract.estimateGas.liquidatePosition(owner, tickLower, tickUpper);
+
+    const liquidatePositionTransaction = await marginEngineContract.liquidatePosition(owner, tickLower, tickUpper, {
+      gasLimit: getGasBuffer(estimatedGas)
+    });
 
     try {
       const receipt = await liquidatePositionTransaction.wait();
@@ -782,12 +808,21 @@ class AMM {
       throw new Error(errorMessage);
     });
 
+    const estimatedGas = await peripheryContract.estimateGas.settlePositionAndWithdrawMargin(
+      this.marginEngineAddress,
+      effectiveOwner,
+      tickLower,
+      tickUpper
+    );
+
     const settlePositionTransaction = await peripheryContract.settlePositionAndWithdrawMargin(
       this.marginEngineAddress,
       effectiveOwner,
       tickLower,
       tickUpper,
-      this.overrides
+      {
+        gasLimit: getGasBuffer(estimatedGas)
+      }
     );
 
     try {
@@ -959,10 +994,17 @@ class AMM {
       throw new Error(errorMessage);
     });
 
+    const estimatedGas = await fcmContract.estimateGas.initiateFullyCollateralisedFixedTakerSwap(
+      scaledNotional,
+      sqrtPriceLimitX96
+    );
+
     const fcmSwapTransaction = await fcmContract.initiateFullyCollateralisedFixedTakerSwap(
       scaledNotional,
       sqrtPriceLimitX96,
-      this.overrides
+      {
+        gasLimit: getGasBuffer(estimatedGas)
+      }
     );
 
     try {
@@ -1107,10 +1149,17 @@ class AMM {
       throw new Error(errorMessage);
     });
 
+    const estimatedGas = await fcmContract.estimateGas.unwindFullyCollateralisedFixedTakerSwap(
+      scaledNotional,
+      sqrtPriceLimitX96
+    );
+
     const fcmUnwindTransaction = await fcmContract.unwindFullyCollateralisedFixedTakerSwap(
       scaledNotional,
       sqrtPriceLimitX96,
-      this.overrides
+      {
+        gasLimit: getGasBuffer(estimatedGas)
+      }
     );
 
     try {
@@ -1148,7 +1197,11 @@ class AMM {
       throw new Error(errorMessage);
     });
 
-    const fcmSettleTraderTransaction = await fcmContract.settleTrader(this.overrides);
+    const estimatedGas = await fcmContract.estimateGas.settleTrader();
+
+    const fcmSettleTraderTransaction = await fcmContract.settleTrader({
+      gasLimit: getGasBuffer(estimatedGas)
+    });
 
     try {
       const receipt = await fcmSettleTraderTransaction.wait();
@@ -1208,7 +1261,12 @@ class AMM {
     }
 
     const factoryContract = factoryFactory.connect(FACTORY_ADDRESS, this.signer);
-    const approvalTransaction = await factoryContract.setApproval(this.fcmAddress, true, this.overrides);
+
+    const estimatedGas = await factoryContract.estimateGas.setApproval(this.fcmAddress, true);
+
+    const approvalTransaction = await factoryContract.setApproval(this.fcmAddress, true, {
+      gasLimit: getGasBuffer(estimatedGas)
+    });
 
     try {
       const receipt = await approvalTransaction.wait();
@@ -1233,7 +1291,8 @@ class AMM {
     const signerAddress = await this.signer.getAddress();
     const tokenAddress = this.underlyingToken.id;
     const token = tokenFactory.connect(tokenAddress, this.signer);
-    const allowance = await token.allowance(signerAddress, PERIPHERY_ADDRESS, this.overrides);
+
+    const allowance = await token.allowance(signerAddress, PERIPHERY_ADDRESS);
 
     return allowance.gte(TresholdApprovalBn);
   }
@@ -1254,7 +1313,12 @@ class AMM {
 
     const tokenAddress = this.underlyingToken.id;
     const token = tokenFactory.connect(tokenAddress, this.signer);
-    const approvalTransaction = await token.approve(PERIPHERY_ADDRESS, MaxUint256Bn, this.overrides);
+
+    const estimatedGas = await token.estimateGas.approve(PERIPHERY_ADDRESS, MaxUint256Bn);
+
+    const approvalTransaction = await token.approve(PERIPHERY_ADDRESS, MaxUint256Bn, {
+      gasLimit: getGasBuffer(estimatedGas)
+    });
 
     try {
       const receipt = await approvalTransaction.wait();
@@ -1279,7 +1343,7 @@ class AMM {
     const signerAddress = await this.signer.getAddress();
     const tokenAddress = this.underlyingToken.id;
     const token = tokenFactory.connect(tokenAddress, this.signer);
-    const allowance = await token.allowance(signerAddress, this.fcmAddress, this.overrides);
+    const allowance = await token.allowance(signerAddress, this.fcmAddress);
 
     return allowance.gte(TresholdApprovalBn);
   }
@@ -1300,7 +1364,12 @@ class AMM {
 
     const tokenAddress = this.underlyingToken.id;
     const token = tokenFactory.connect(tokenAddress, this.signer);
-    const approvalTransaction = await token.approve(this.fcmAddress, MaxUint256Bn, this.overrides);
+
+    const estimatedGas = await token.estimateGas.approve(this.fcmAddress, MaxUint256Bn);
+
+    const approvalTransaction = await token.approve(this.fcmAddress, MaxUint256Bn, {
+      gasLimit: getGasBuffer(estimatedGas)
+    });
 
     try {
       const receipt = await approvalTransaction.wait();
@@ -1339,7 +1408,7 @@ class AMM {
     const signerAddress = await this.signer.getAddress();
 
     const token = tokenFactory.connect(tokenAddress, this.signer);
-    const allowance = await token.allowance(signerAddress, this.fcmAddress, this.overrides);
+    const allowance = await token.allowance(signerAddress, this.fcmAddress);
 
     return allowance.gte(TresholdApprovalBn);
   }
@@ -1382,7 +1451,12 @@ class AMM {
     }
 
     const token = tokenFactory.connect(tokenAddress, this.signer);
-    const approvalTransaction = await token.approve(this.fcmAddress, MaxUint256Bn, this.overrides);
+
+    const estimatedGas = await token.estimateGas.approve(this.fcmAddress, MaxUint256Bn);
+
+    const approvalTransaction = await token.approve(this.fcmAddress, MaxUint256Bn, {
+      gasLimit: getGasBuffer(estimatedGas)
+    });
 
     try {
       const receipt = await approvalTransaction.wait();

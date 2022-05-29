@@ -92,7 +92,7 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({
           <AMMTableHead order={order} orderBy={orderBy} onSort={handleSort} />
           <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
             {tableData.map((datum, index) => {
-              if (DateTime.now() < datum.endDate) {
+              if (DateTime.now() < datum.endDate && amms[index].id !== "0xb69c91fc9f52b8c09b038648bc9e224dca886150") {
                 return <AMMProvider amm={amms[index]}>
                   <AMMTableRow datum={datum} index={index} onSelect={handleSelectRow(index)} />
                 </AMMProvider>
