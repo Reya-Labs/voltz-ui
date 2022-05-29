@@ -1,4 +1,5 @@
 export { default as useAgent } from './useAgent';
+export { default as useBalance } from './useBalance';
 export { default as useAgentWithOverride } from './useAgentWithOverride';
 export { default as useAMMContext } from './useAMMContext';
 export { default as useAMMs } from './useAMMs';
@@ -13,4 +14,4 @@ export { default as useTokenApproval } from './useTokenApproval';
 export { default as useUniqueId } from './useUniqueId';
 export { default as useWallet } from './useWallet';
 export * from './useMintBurnForm';
-export * from './useSwapForm';
+export * from './useSwapForm/useSwapForm';

@@ -1,10 +1,9 @@
 import React, { ReactNode } from 'react';
 import { Agents, } from '@components/contexts';
 import { SwapFormActions, SwapFormModes } from '@components/interface';
-import { SwapFormData, SwapFormState, useTokenApproval } from '@hooks';
+import { SwapFormData, useTokenApproval } from '@hooks';
 import { Box } from '@mui/material';
 import { AugmentedAMM } from '@utilities';
-import { actions } from '@store';
 import { colors }  from '@theme';
 import { ApprovalType } from 'src/hooks/useTokenApproval';
 
@@ -200,32 +199,3 @@ export const getSubmitButtonText = (mode: SwapFormModes, tokenApprovals: ReturnT
   }
   return 'Trade Variable Rate';
 };
-
-/**
- * Returns the redux action required to submit the form, complete with transaction data
- * @param amm - the amm class instance for this form
- * @param formAction - the action the form is currently set to make (SWAP, FCM_SWAP etc)
- * @param formState - the state of the form fields
- * @param agent - the agent mode the form is currently in (fixed, variable etc)
- * @param isRemovingMargin - boolean flag for if the user is removing margin (margin edit mode only)
- */
-export const getSubmitAction = (amm: AugmentedAMM, formAction: SwapFormActions, formState: SwapFormState, agent: Agents, isRemovingMargin: boolean) => {
-  const transaction = { 
-    agent,
-    ammId: amm.id,
-    margin: Math.abs(formState.margin as number) * (isRemovingMargin ? -1 : 1),
-    notional: formState.notional as number,
-    partialCollateralization: formState.partialCollateralization
-  };
-
-  switch(formAction) {
-    case SwapFormActions.UPDATE:
-      return actions.updatePositionMarginAction(amm, transaction);
-    case SwapFormActions.SWAP:
-      return actions.swapAction(amm, transaction);
-    case SwapFormActions.FCM_SWAP:
-      return actions.fcmSwapAction(amm, transaction);
-    case SwapFormActions.FCM_UNWIND:
-      return actions.fcmUnwindAction(amm, transaction); 
-  }
-}
