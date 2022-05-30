@@ -35,7 +35,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
       ammId: amm.id,
       margin: Math.abs(form.state.margin as number) * (form.isRemovingMargin ? -1 : 1),
       notional: form.state.notional as number,
-      partialCollateralization: form.state.partialCollateralization
+      partialCollateralization: agent === Agents.FIXED_TRADER ? form.state.partialCollateralization : true
     };
   
     switch(form.action) {
@@ -45,15 +45,8 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
         return actions.swapAction(amm, transaction);
       case SwapFormActions.FCM_SWAP:
         return actions.fcmSwapAction(amm, transaction);
-      case SwapFormActions.FCM_UNWIND:
-        return actions.fcmUnwindAction(amm, transaction); 
-    }
-  }
-
-  const handleChangePartialCollateralization = (value: boolean) => {
-    form.setPartialCollateralization(value);
-    if(value === false) {
-      onChangeAgent(Agents.FIXED_TRADER);
+      // case SwapFormActions.FCM_UNWIND:
+      //   return actions.fcmUnwindAction(amm, transaction); 
     }
   }
 
@@ -91,8 +84,10 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
     }
 
     const action = getReduxAction();
-    setTransactionId(action.payload.transaction.id)
-    dispatch(action)
+    if(action) {
+      setTransactionId(action.payload.transaction.id);
+      dispatch(action);
+    }
   };
 
   if (!amm) {
@@ -123,7 +118,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction}
       onChangeNotional={form.setNotional}
-      onChangePartialCollateralization={handleChangePartialCollateralization}
+      onChangePartialCollateralization={form.setPartialCollateralization}
       onSubmit={handleSubmit}
       protocol={amm.protocol}
       startDate={amm.startDateTime}

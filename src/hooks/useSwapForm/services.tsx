@@ -32,15 +32,22 @@ const Text = ({ bold, children, green, red }: TextProps) => (
 export const getFormAction = (mode: SwapFormModes, partialCollateralization: boolean, agent: Agents) => {
   if (mode === SwapFormModes.EDIT_MARGIN) {
     return SwapFormActions.UPDATE;
-  } 
-  else if (partialCollateralization) {
-    return SwapFormActions.SWAP;
-  } 
-  else if (agent === Agents.FIXED_TRADER) {
-    return SwapFormActions.FCM_SWAP;
+  }
+
+  if (agent === Agents.FIXED_TRADER) {
+    if(partialCollateralization) {
+      return SwapFormActions.SWAP;
+    } else {
+      return SwapFormActions.FCM_SWAP;
+    }
   } 
   else {
-    return SwapFormActions.FCM_UNWIND;
+    // if (partialCollateralization) {
+      return SwapFormActions.SWAP;
+    // }
+    // else {
+    //   return SwapFormActions.FCM_UNWIND;
+    // }
   }
 };
 

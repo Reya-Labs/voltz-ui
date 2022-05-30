@@ -62,33 +62,31 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
         '& > *:not(:last-child)': { marginBottom: (theme) => theme.spacing(4) },
       }}
     >
-
       <ToggleButtonGroup
-        label={
-          <IconLabel label="TRADE WITH LEVERAGE" icon="information-circle" info="Trading with leverage means you need to deposit less margin to cover your position. However, it also means you may be at more risk of getting liquidated if the market moves against you. Learn more." />
-        }
-        options={Object.values(partialCollateralizationOptionTitles)}
-        option={
-          partialCollateralizationValue
-            ? partialCollateralizationOptionTitles.YES
-            : partialCollateralizationOptionTitles.NO
-        }
-        defaultOption={partialCollateralizationOptionTitles.YES}
-        onChangeOption={handleChangePartialCollateralization}
+        label={<IconLabel label="rates" icon="information-circle" info="Choose between taking a fixed or variable position." />}
+        options={Object.values(agentOptionTitles)}
+        option={agentOptionTitles[agent]}
+        defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
+        onChangeOption={handleChangeMode}
         agent={agent}
       />
 
-      {partialCollateralization && (
+      {agent === Agents.FIXED_TRADER && (
         <ToggleButtonGroup
-          label={<IconLabel label="rates" icon="information-circle" info="Choose between taking a fixed or variable position." />}
-          options={Object.values(agentOptionTitles)}
-          option={agentOptionTitles[agent]}
-          defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
-          onChangeOption={handleChangeMode}
+          label={
+            <IconLabel label="TRADE WITH LEVERAGE" icon="information-circle" info="Trading with leverage means you need to deposit less margin to cover your position. However, it also means you may be at more risk of getting liquidated if the market moves against you. Learn more." />
+          }
+          options={Object.values(partialCollateralizationOptionTitles)}
+          option={
+            partialCollateralizationValue
+              ? partialCollateralizationOptionTitles.YES
+              : partialCollateralizationOptionTitles.NO
+          }
+          defaultOption={partialCollateralizationOptionTitles.YES}
+          onChangeOption={handleChangePartialCollateralization}
           agent={agent}
         />
       )}
-
     </Box>
   );
 };
