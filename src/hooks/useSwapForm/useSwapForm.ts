@@ -7,7 +7,7 @@ import { MintBurnFormMarginAction } from "../useMintBurnForm";
 import { hasEnoughTokens, hasEnoughUnderlyingTokens, lessThan } from "@utilities";
 import { useAgent, useAMMContext, useTokenApproval } from "@hooks";
 import { InfoPostSwap } from "@voltz-protocol/v1-sdk";
-import { getFormAction, getSubmitButtonHint, getSubmitButtonText } from "./services";
+import * as s from "./services";
 
 export type SwapFormState = {
   margin?: number;
@@ -18,6 +18,7 @@ export type SwapFormState = {
 
 export type SwapFormData = {
   action: SwapFormActions;
+  approvalsNeeded: boolean;
   errors: Record<string, string>;
   isAddingMargin: boolean,
   isRemovingMargin: boolean;
@@ -61,15 +62,17 @@ export const useSwapForm = (
   const [isValid, setIsValid] = useState<boolean>(false);
   const touched = useRef<string[]>([]);
 
-  const action = getFormAction(mode, partialCollateralization, agent);
+  const action = s.getFormAction(mode, partialCollateralization, agent);
   const isAddingMargin = mode === SwapFormModes.EDIT_MARGIN && marginAction === MintBurnFormMarginAction.ADD;
   const isRemovingMargin = mode === SwapFormModes.EDIT_MARGIN && marginAction === MintBurnFormMarginAction.REMOVE;
-  const submitButtonHint = getSubmitButtonHint(amm, action, errors, isValid, tokenApprovals, isRemovingMargin);
-  const submitButtonText = getSubmitButtonText(mode, tokenApprovals, amm, action, agent, isRemovingMargin);
+
+  const approvalsNeeded = s.approvalsNeeded(action, tokenApprovals, isRemovingMargin)
+  const submitButtonHint = s.getSubmitButtonHint(amm, action, errors, isValid, tokenApprovals, isRemovingMargin);
+  const submitButtonText = s.getSubmitButtonText(mode, tokenApprovals, amm, action, agent, isRemovingMargin);
   
   // Load the swap summary info
   useEffect(() => {
-    if (!isUndefined(notional) && notional !== 0) {
+    if (!approvalsNeeded && !isUndefined(notional) && notional !== 0) {
       switch (action) {
         case SwapFormActions.SWAP: {
           swapInfo.call({ notional, type: GetInfoType.NORMAL_SWAP});
@@ -87,7 +90,7 @@ export const useSwapForm = (
         // }
       } 
     }
-  }, [swapInfo.call, notional, agent]);
+  }, [swapInfo.call, notional, agent, approvalsNeeded]);
 
   // Validate the form after values change
   useEffect(() => {
@@ -218,6 +221,7 @@ export const useSwapForm = (
 
   return {
     action,
+    approvalsNeeded,
     errors,
     isAddingMargin,
     isRemovingMargin,
