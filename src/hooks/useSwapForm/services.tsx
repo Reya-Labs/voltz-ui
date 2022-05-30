@@ -24,6 +24,23 @@ const Text = ({ bold, children, green, red }: TextProps) => (
 );
 
 /**
+ * Returns true or false if approvals are needed for this user to trade
+ * @param action - the action the form is currently set to make (SWAP, FCM_SWAP etc)
+ * @param tokenApprovals - the token approvals state for this form
+ * @param isRemovingMargin - boolean flag for if the action is to remove margin
+ */
+export const approvalsNeeded = (action: SwapFormActions, tokenApprovals: ReturnType<typeof useTokenApproval>, isRemovingMargin: boolean) => {
+  if(!isRemovingMargin) {
+    if (action === SwapFormActions.FCM_SWAP || action === SwapFormActions.FCM_UNWIND) {
+      return !tokenApprovals.FCMApproved || !tokenApprovals.yieldBearingTokenApprovedForFCM || !tokenApprovals.underlyingTokenApprovedForPeriphery;
+    } else {
+      return !tokenApprovals.underlyingTokenApprovedForPeriphery;
+    }
+  }
+  return false;
+}
+
+/**
  * Returns what action the form is currently set to make (SWAP, FCM_SWAP etc)
  * @param mode - the mode the form is in
  * @param partialCollateralization - boolean flag for if the form has partial collateralization selected
