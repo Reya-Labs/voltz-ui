@@ -1,3 +1,4 @@
+export { default as AlphaBanner } from './AlphaBanner/AlphaBanner';
 export { default as Autocomplete } from './Autocomplete/Autocomplete';
 export { default as DebouncedIntegerField } from './DebouncedIntegerField/DebouncedIntegerField';
 export type { DebouncedIntegerFieldDetails } from './DebouncedIntegerField/DebouncedIntegerField';
