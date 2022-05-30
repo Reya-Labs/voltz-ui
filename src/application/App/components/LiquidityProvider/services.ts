@@ -1,5 +1,5 @@
 import { routes } from '@routes';
-import { MintBurnFormModes } from 'src/components/interface';
+import { MintBurnFormModes } from '@components/interface';
 
 /**
  * Returns the current view mode to render

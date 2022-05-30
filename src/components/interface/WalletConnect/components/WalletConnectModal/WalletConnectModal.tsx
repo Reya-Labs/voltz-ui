@@ -4,7 +4,7 @@ import { useWallet } from '@hooks';
 import { Panel } from '@components/atomic';
 import { Modal } from '@components/composite';
 import { WalletConnectButton, WalletDisplay, WalletSelect } from './components';
-import { WalletName } from 'src/components/contexts';
+import { WalletName } from '@components/contexts';
 
 const WalletConnectModal: React.FunctionComponent = () => {
   const wallet = useWallet();
