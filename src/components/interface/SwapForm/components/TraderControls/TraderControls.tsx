@@ -74,7 +74,7 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
       {agent === Agents.FIXED_TRADER && (
         <ToggleButtonGroup
           label={
-            <IconLabel label="TRADE WITH LEVERAGE" icon="information-circle" info="Trading with leverage means you need to deposit less margin to cover your position. However, it also means you may be at more risk of getting liquidated if the market moves against you. Learn more." />
+            <IconLabel label="TRADE WITH LEVERAGE" icon="information-circle" info={<>Trading with leverage means you need to deposit less margin to cover your position. However, it also means you may be at more risk of getting liquidated if the market moves against you.<br/><br/> As a Fixed Taker you can also fully collateralise your position by depositing the underlying of the pool (e.g. aUSDC). This means you won’t be at risk of getting liquidated. Click No to enable this.</>} />
           }
           options={Object.values(partialCollateralizationOptionTitles)}
           option={
