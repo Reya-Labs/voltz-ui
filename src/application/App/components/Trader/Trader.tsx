@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { useLocation } from 'react-router-dom';
 import { Position } from '@voltz-protocol/v1-sdk';
 
-import { AugmentedAMM } from '@utilities';
+import { AugmentedAMM, setPageTitle } from '@utilities';
 import { Agents, AMMProvider } from '@components/contexts';
 import { PageTitleDesc } from '@components/composite';
 import { Panel } from '@components/atomic';
@@ -36,6 +36,23 @@ const Trader: React.FunctionComponent = () => {
   useEffect(() => {
     handleReset();
   }, [key]);
+
+  useEffect(() => {
+    switch(renderMode) {
+      case 'pools': {
+        setPageTitle('Trader Pools');
+        break;
+      }
+      case 'portfolio': {
+        setPageTitle('Trader Portfolio');
+        break;
+      }
+      case 'form': {
+        setPageTitle(`${position ? 'Edit' : 'New'} Trader Position`);
+        break;
+      }
+    }
+  }, [setPageTitle, renderMode, position])
 
   const handleSelectAmm = (selected: AugmentedAMM) => {
     setFormMode(SwapFormModes.NEW_POSITION);

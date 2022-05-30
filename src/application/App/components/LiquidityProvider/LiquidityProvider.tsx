@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { useLocation } from 'react-router-dom';
 import { Position } from '@voltz-protocol/v1-sdk';
 
-import { AugmentedAMM } from '@utilities';
+import { AugmentedAMM, setPageTitle } from '@utilities';
 import { Agents, AMMProvider } from '@components/contexts';
 import { useAgent } from '@hooks';
 
@@ -37,6 +37,23 @@ const LiquidityProvider: React.FunctionComponent = () => {
   useEffect(() => {
     handleReset();
   }, [key]);
+
+  useEffect(() => {
+    switch(renderMode) {
+      case 'pools': {
+        setPageTitle('Liquidity Provider Pools');
+        break;
+      }
+      case 'portfolio': {
+        setPageTitle('Liquidity Provider Portfolio');
+        break;
+      }
+      case 'form': {
+        setPageTitle(`${position ? 'Edit' : 'New'} Liquidity Provider Position`);
+        break;
+      }
+    }
+  }, [setPageTitle, renderMode, position])
 
   const handleSelectAmm = (selected: AugmentedAMM) => {
     setFormMode(MintBurnFormModes.NEW_POSITION);
