@@ -90,7 +90,7 @@ export const useSwapForm = (
         // }
       } 
     }
-  }, [swapInfo.call, notional, agent, approvalsNeeded]);
+  }, [swapInfo.call, notional, agent, approvalsNeeded, partialCollateralization]);
 
   // Validate the form after values change
   useEffect(() => {
