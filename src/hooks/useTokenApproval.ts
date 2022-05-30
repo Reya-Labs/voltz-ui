@@ -14,7 +14,7 @@ export type ApprovalErrorResponse = {
   message: string;
 };
 
-const useTokenApproval = (amm: AugmentedAMM, skipFCMChecks = false) => {
+export const useTokenApproval = (amm: AugmentedAMM, skipFCMChecks = false) => {
   const [checkingApprovals, setCheckingApprovals] = useState(false);
   const [approving, setApproving] = useState(false);
   const [lastApproval, setLastApproval] = useState<ApprovalType>();

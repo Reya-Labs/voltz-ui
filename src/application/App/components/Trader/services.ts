@@ -1,5 +1,5 @@
 import { routes } from '@routes';
-import { SwapFormModes } from 'src/components/interface';
+import { SwapFormModes } from '@components/interface';
 
 /**
  * Returns the current view mode to render

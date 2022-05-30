@@ -7,7 +7,7 @@ import { Button, Icon } from '@components/atomic';
 import CircleIcon from '@mui/icons-material/Circle';
 
 import './web3modal.scss';
-import { Icons } from 'src/components/atomic';
+import { Icons } from '@components/atomic';
 
 export type WalletConnectButtonProps = {
   onClick?: () => void;

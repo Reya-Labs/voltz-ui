@@ -1,11 +1,10 @@
 import React, { ReactNode } from 'react';
 import { Agents, } from '@components/contexts';
 import { SwapFormActions, SwapFormModes } from '@components/interface';
-import { SwapFormData, useTokenApproval } from '@hooks';
+import { ApprovalType, SwapFormData, useTokenApproval } from '@hooks';
 import { Box } from '@mui/material';
 import { AugmentedAMM } from '@utilities';
 import { colors }  from '@theme';
-import { ApprovalType } from 'src/hooks/useTokenApproval';
 
 type TextProps = {
   bold?: boolean;
