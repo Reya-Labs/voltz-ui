@@ -157,28 +157,27 @@ export const useSwapForm = (
       addError(err, 'notional', 'Please enter an amount');
     }
 
-    if((isUndefined(margin) || margin === 0) && partialCollateralization) {
-      valid = false;
-      addError(err, 'margin', 'Please enter an amount');
+    if((action === SwapFormActions.SWAP || action === SwapFormActions.UPDATE)) {
+      if(isUndefined(margin) || margin === 0) {
+        valid = false;
+        addError(err, 'margin', 'Please enter an amount');
+      }
     }
 
     // Check the user has enough balance
-    if(partialCollateralization) {
-      // Swap or update
+    if(action === SwapFormActions.SWAP || action === SwapFormActions.UPDATE) {
       if(margin !== 0 && await hasEnoughUnderlyingTokens(amm, margin) === false) {
         valid = false;
         addError(err, 'margin', 'Insufficient funds');
       }
     }
     else {
-      if(agent === Agents.FIXED_TRADER) {
-        // FCM Swap
+      if(action === SwapFormActions.FCM_SWAP) {
         if(notional !== 0 && await hasEnoughTokens(amm, swapInfo.result?.fee, notional) === false) {
           valid = false;
           addError(err, 'notional', 'Insufficient funds');
         }
       } else {
-        // FCM unwind
         if(await hasEnoughUnderlyingTokens(amm, swapInfo.result?.fee) === false) {
           valid = false;
           addError(err, 'notional', 'Insufficient funds');
@@ -187,9 +186,11 @@ export const useSwapForm = (
     }
 
     // Check that the input margin is >= minimum required margin
-    if(margin !== 0 && lessThan(margin, swapInfo.result?.marginRequirement) === true) {
-      valid = false;
-      addError(err, 'margin', 'Not enough margin');
+    if(action === SwapFormActions.SWAP || action === SwapFormActions.UPDATE) {
+      if(margin !== 0 && lessThan(margin, swapInfo.result?.marginRequirement) === true) {
+        valid = false;
+        addError(err, 'margin', 'Not enough margin');
+      }
     }
 
     setErrors(err);
