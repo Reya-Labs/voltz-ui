@@ -81,10 +81,10 @@ export const useSwapForm = (
           break;
         }
 
-        case SwapFormActions.FCM_UNWIND: {
-          swapInfo.call({ notional, type: GetInfoType.FCM_UNWIND });
-          break;
-        }
+        // case SwapFormActions.FCM_UNWIND: {
+        //   swapInfo.call({ notional, type: GetInfoType.FCM_UNWIND });
+        //   break;
+        // }
       } 
     }
   }, [swapInfo.call, notional, agent]);
