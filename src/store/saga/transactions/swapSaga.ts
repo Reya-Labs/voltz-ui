@@ -34,7 +34,7 @@ function* swapSaga(action: SwapAction) { // function * means it is async functio
       notional,
       margin,
       fixedLow: 1,
-      fixedHigh: 2.01,
+      fixedHigh: 999,
     });
 
   } catch (error) {

@@ -30,7 +30,7 @@ function* updatePositionMarginSaga(action: UpdatePositionMarginAction) {
       [amm, "updatePositionMargin"], {
       marginDelta: margin,
       fixedLow: fixedLow || 1,
-      fixedHigh: fixedHigh || 2.01,
+      fixedHigh: fixedHigh || 999,
     });
 
   } catch (error) {

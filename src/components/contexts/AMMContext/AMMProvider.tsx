@@ -52,7 +52,7 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
             ...args,
             isFT: agent === Agents.FIXED_TRADER,
             fixedLow: 1,
-            fixedHigh: 2,
+            fixedHigh: 999,
           }); 
           break;
         }
