@@ -153,7 +153,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
           }}
         >
           <NotionalAmount
-            label={ isAddingLiquidity ? "provided liquidity" : "removed liquidity"} 
+            label={ isAddingLiquidity ? "Notional liquidity Provided" : "Notional liquidity removed"} 
             info={`Choose the notional amount of liquidity you wish to ${isAddingLiquidity ? 'provide' : 'remove'}.`}
             protocol={protocol}
             notional={formState.notional}

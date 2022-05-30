@@ -123,7 +123,10 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           <NotionalAmount
             error={errors['notional']}
             label="notional amount"
-            info="Choose the notional you wish to trade. The notional amount is the total size of your trade."
+            info={(formAction === SwapFormActions.FCM_SWAP || formAction === SwapFormActions.FCM_UNWIND)
+              ? "Choose the notional you wish to trade. The notional amount is the total size of your trade and, since you're fully collateralising your position, is the amount of margin required too."
+              : "Choose the notional you wish to trade. The notional amount is the total size of your trade."
+            }
             protocol={protocol}
             notional={formState.notional}
             onChangeNotional={onChangeNotional}

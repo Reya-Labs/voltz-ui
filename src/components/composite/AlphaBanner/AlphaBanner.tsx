@@ -20,7 +20,11 @@ const AlphaBanner = () => {
     useRef<HTMLElement>(),
     useRef<HTMLElement>(),
     useRef<HTMLElement>(),
-    useRef<HTMLElement>()
+    useRef<HTMLElement>(),
+    useRef<HTMLElement>(),
+    useRef<HTMLElement>(),
+    useRef<HTMLElement>(),
+    useRef<HTMLElement>(),
   ];
 
   const start = useRef<number>();
@@ -69,7 +73,7 @@ const AlphaBanner = () => {
       <Box ref={inner} sx={{ whiteSpace: 'nowrap' }} aria-hidden>
         {(refs.map((ref, i) => (
           <Box ref={ref} sx={{ display: 'inline-block'}} key={i}>
-            <Typography variant='body2' sx={{ ...textStyles, color: colors.wildStrawberry.base }}>
+            {/* <Typography variant='body2' sx={{ ...textStyles, color: colors.wildStrawberry.base }}>
               Voltz alpha
             </Typography>
             <Typography variant='body2' sx={{ ...textStyles, color: colors.ultramarineBlue.base }}>
@@ -104,6 +108,42 @@ const AlphaBanner = () => {
             </Typography>
             <Typography variant='body2' sx={{ ...textStyles, color: colors.skyBlueCrayola.base }}>
               Voltz alpha
+            </Typography> */}
+            <Typography variant='body2' sx={{ ...textStyles, color: colors.wildStrawberry.base }}>
+              LFG
+            </Typography>
+            <Typography variant='body2' sx={{ ...textStyles, color: colors.ultramarineBlue.base }}>
+              LFG
+            </Typography>
+            <Typography variant='body2' sx={{ ...textStyles, color: colors.skyBlueCrayola.base }}>
+              LFG
+            </Typography>
+            <Typography variant='body2' sx={{ ...textStyles, color: colors.wildStrawberry.base }}>
+              LFG
+            </Typography>
+            <Typography variant='body2' sx={{ ...textStyles, color: colors.ultramarineBlue.base }}>
+              LFG
+            </Typography>
+            <Typography variant='body2' sx={{ ...textStyles, color: colors.skyBlueCrayola.base }}>
+              LFG
+            </Typography>
+            <Typography variant='body2' sx={{ ...textStyles, color: colors.wildStrawberry.base }}>
+              LFG
+            </Typography>
+            <Typography variant='body2' sx={{ ...textStyles, color: colors.ultramarineBlue.base }}>
+              LFG
+            </Typography>
+            <Typography variant='body2' sx={{ ...textStyles, color: colors.skyBlueCrayola.base }}>
+              LFG
+            </Typography>
+            <Typography variant='body2' sx={{ ...textStyles, color: colors.wildStrawberry.base }}>
+              LFG
+            </Typography>
+            <Typography variant='body2' sx={{ ...textStyles, color: colors.ultramarineBlue.base }}>
+              LFG
+            </Typography>
+            <Typography variant='body2' sx={{ ...textStyles, color: colors.skyBlueCrayola.base }}>
+              LFG
             </Typography>
           </Box>
         )))}

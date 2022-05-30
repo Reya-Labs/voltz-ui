@@ -42,7 +42,7 @@ const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
         disabled={fixedLowDisabled}
         error={fixedLowError}
         hint="The lower rate of the fixed rate range within which to deposit liquidity"
-        label="fixed low"
+        label="Fixed rate low"
         onChange={onChangeFixedLow}
         value={fixedLow}
       />
@@ -51,7 +51,7 @@ const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
         disabled={fixedHighDisabled}
         error={fixedHighError}
         hint="The upper rate of the fixed rate range within which to deposit liquidity"
-        label="fixed high"
+        label="Fixed rate high"
         onChange={onChangeFixedHigh}
         value={fixedHigh}
       />

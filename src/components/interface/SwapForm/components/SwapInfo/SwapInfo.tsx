@@ -18,7 +18,15 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({ data, loading, under
   const label = <IconLabel
     label="trade information"
     icon="information-circle"
-    info="Trade information"
+    info={
+      <>
+        Notional Available is the amount of Liqduity in the AMM that's avialble to trade<br/><br/>
+        Average Fixed Rate is the rate you'll receive or pay once accounting for slippage<br/><br/>
+        Fees are the fees you'll pay to the liquidity provider for the trade<br/><br/>
+        Estimated Slippage is accounted for in the Average Fixed Rate you'll recieve<br/><br/>
+        Additional Margin Required accounts for any margin you may already have in your account. If you don't have any this will be the same as your Minimum Required Margin
+      </>
+    }
   />;
 
   const rows = data ? [
@@ -39,7 +47,7 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({ data, loading, under
       value: `${formatNumber(Math.abs(data.slippage))} %`
     },
     {
-      label: 'ADDITIONAL MARGIN REQUIRED:', 
+      label: 'MINIMUM REQUIRED MARGIN:', 
       value: (formAction === SwapFormActions.SWAP || formAction === SwapFormActions.UPDATE) ? `${formatCurrency(data.marginRequirement, true)} ${underlyingTokenName}` : `${formatCurrency(data.marginRequirement, true)} ${yieldBearingTokenName}`
     },
   ] : undefined;
