@@ -54,11 +54,8 @@ const NewPositionTemplate: ComponentStory<typeof SwapForm> = (args) => (
   </AgentProvider>
 );
 const NewPositionSwapForm: React.FunctionComponent = (args) => {
-  const fees = 4;
-  const minRequiredMargin = 100;
   const mode = SwapFormModes.NEW_POSITION;
-
-  const form = useSwapForm(mockAmm, mode, minRequiredMargin, fees, Agents.FIXED_TRADER);
+  const form = useSwapForm(mockAmm, mode);
 
   return (
     <SwapForm 
@@ -97,11 +94,8 @@ const EditingMarginTemplate: ComponentStory<typeof SwapForm> = (args) => (
   </AgentProvider>
 );
 const EditingMarginSwapForm: React.FunctionComponent = (args) => {
-  const fees = 4;
-  const minRequiredMargin = 100;
   const mode = SwapFormModes.EDIT_MARGIN;
-
-  const form = useSwapForm(mockAmm, mode, minRequiredMargin, fees, Agents.FIXED_TRADER);
+  const form = useSwapForm(mockAmm, mode);
 
   return (
     <SwapForm 

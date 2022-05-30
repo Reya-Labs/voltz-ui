@@ -1,18 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { routes } from '@routes';
 import { AugmentedAMM } from '@utilities';
 import { actions, selectors } from '@store';
-import { MintBurnFormMarginAction, useAgent, useAMMContext, useDispatch, useSelector, useTokenApproval, useWallet } from '@hooks';
+import { useAgent, useDispatch, useSelector, useSwapForm } from '@hooks';
 import { SwapForm, PendingTransaction, SwapFormActions, SwapFormModes } from '@components/interface';
 import { Agents } from '@components/contexts';
-import useSwapForm from 'src/hooks/useSwapForm';
-import { getFormAction, getSubmitAction, getSubmitButtonHint, getSubmitButtonText } from './services';
-import { isUndefined } from 'lodash';
-import { BigNumber } from 'ethers';
-import { Token } from '@voltz-protocol/v1-sdk';
-import { GetInfoType } from 'src/components/contexts/AMMContext/types';
 
 export type ConnectedSwapFormProps = {
   amm: AugmentedAMM;
@@ -29,51 +23,32 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { swapInfo: { call: loadSwapInfo, loading: swapInfoLoading, result: swapInfoData } } = useAMMContext();
-
-  const [balance, setBalance] = useState<BigNumber>();
-  const { getTokenBalance } = useWallet();
-  const token = useRef<Token>();
-
   const defaultValues = {};
-  const form = useSwapForm(amm, mode, swapInfoData?.marginRequirement, swapInfoData?.fee, agent, defaultValues);
-  const tokenApprovals = useTokenApproval(amm);
-
+  const form = useSwapForm(amm, mode, defaultValues);
+  
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId); // contains a failureMessage attribute that will contain whatever came out from the sdk
 
-  const formAction = getFormAction(mode, form.state.partialCollateralization, agent);
-  const isRemovingMargin = mode === SwapFormModes.EDIT_MARGIN && form.state.marginAction === MintBurnFormMarginAction.REMOVE;
-  const submitButtonHint = getSubmitButtonHint(amm, formAction, form.errors, form.isValid, tokenApprovals, isRemovingMargin);
-  const submitButtonText = getSubmitButtonText(mode, tokenApprovals, amm, formAction, agent, isRemovingMargin);
-
-  const handleSubmit = () => {
-    if(!form.isValid) return;
-
-    if(!isRemovingMargin) {
-      if (formAction === SwapFormActions.FCM_SWAP || formAction === SwapFormActions.FCM_UNWIND) {
-        if(!tokenApprovals.FCMApproved) {
-          tokenApprovals.approveFCM();
-          return;
-        } else if(!tokenApprovals.yieldBearingTokenApprovedForFCM) {
-          tokenApprovals.approveYieldBearingTokenForFCM();
-          return;
-        } else if(!tokenApprovals.underlyingTokenApprovedForFCM) {
-          tokenApprovals.approveUnderlyingTokenForFCM();
-          return;
-        }
-      } else {
-        if(!tokenApprovals.underlyingTokenApprovedForPeriphery) {
-          tokenApprovals.approveUnderlyingTokenForPeriphery();
-          return;
-        }
-      }
+  const getReduxAction = () => {
+    const transaction = { 
+      agent,
+      ammId: amm.id,
+      margin: Math.abs(form.state.margin as number) * (form.isRemovingMargin ? -1 : 1),
+      notional: form.state.notional as number,
+      partialCollateralization: form.state.partialCollateralization
+    };
+  
+    switch(form.action) {
+      case SwapFormActions.UPDATE:
+        return actions.updatePositionMarginAction(amm, transaction);
+      case SwapFormActions.SWAP:
+        return actions.swapAction(amm, transaction);
+      case SwapFormActions.FCM_SWAP:
+        return actions.fcmSwapAction(amm, transaction);
+      case SwapFormActions.FCM_UNWIND:
+        return actions.fcmUnwindAction(amm, transaction); 
     }
-
-    const action = getSubmitAction(amm, formAction, form.state, agent, isRemovingMargin);
-    setTransactionId(action.payload.transaction.id)
-    dispatch(action)
-  };
+  }
 
   const handleChangePartialCollateralization = (value: boolean) => {
     form.setPartialCollateralization(value);
@@ -92,49 +67,33 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
     dispatch(action);
   }
 
-  // Load the users balance of the required token 
-  useEffect(() => {
-    if(token.current?.id !== amm.underlyingToken.id) {
-      token.current = amm.underlyingToken;
-      getTokenBalance(amm.underlyingToken)
-        .then((currentBalance) => {
-          setBalance(currentBalance);
-        })
-        .catch(() => {
-          setBalance(undefined);
-        })
+  const handleSubmit = () => {
+    if(!form.isValid) return;
+
+    if(!form.isRemovingMargin) {
+      if (form.action === SwapFormActions.FCM_SWAP || form.action === SwapFormActions.FCM_UNWIND) {
+        if(!form.tokenApprovals.FCMApproved) {
+          void form.tokenApprovals.approveFCM();
+          return;
+        } else if(!form.tokenApprovals.yieldBearingTokenApprovedForFCM) {
+          void form.tokenApprovals.approveYieldBearingTokenForFCM();
+          return;
+        } else if(!form.tokenApprovals.underlyingTokenApprovedForFCM) {
+          void form.tokenApprovals.approveUnderlyingTokenForFCM();
+          return;
+        }
+      } else {
+        if(!form.tokenApprovals.underlyingTokenApprovedForPeriphery) {
+          void form.tokenApprovals.approveUnderlyingTokenForPeriphery();
+          return;
+        }
+      }
     }
-  }, [amm.underlyingToken, amm.underlyingToken.id, getTokenBalance]);
 
-  // Load the swap summary info
-  useEffect(() => {
-    if (!isUndefined(form.state.notional) && form.state.notional !== 0) {
-      switch (formAction) {
-        case SwapFormActions.UPDATE: {
-          throw new Error("Should not get info post swap in update position margin");
-        }
-
-        case SwapFormActions.SWAP: {
-          loadSwapInfo({ notional: form.state.notional, type: GetInfoType.NORMAL_SWAP});
-          break;
-        }
-
-        case SwapFormActions.FCM_SWAP: {
-          loadSwapInfo({ notional: form.state.notional, type: GetInfoType.FCM_SWAP });
-          break;
-        }
-
-        case SwapFormActions.FCM_UNWIND: {
-          loadSwapInfo({ notional: form.state.notional, type: GetInfoType.FCM_UNWIND });
-          break;
-        }
-
-        default: {
-          throw new Error("Unrecognized form type");
-        }
-      } 
-    }
-  }, [loadSwapInfo, form.state.notional, agent]);
+    const action = getReduxAction();
+    setTransactionId(action.payload.transaction.id)
+    dispatch(action)
+  };
 
   if (!amm) {
     return null;
@@ -159,7 +118,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
       formState={form.state}
       isFormValid={form.isValid}
       mode={mode}
-      formAction={formAction}
+      formAction={form.action}
       onCancel={onReset}
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction}
@@ -168,11 +127,11 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
       onSubmit={handleSubmit}
       protocol={amm.protocol}
       startDate={amm.startDateTime}
-      swapInfo={swapInfoData}
-      swapInfoLoading={swapInfoLoading}
-      submitButtonHint={submitButtonHint}
-      submitButtonText={submitButtonText}
-      tokenApprovals={tokenApprovals}
+      swapInfo={form.swapInfo.data}
+      swapInfoLoading={form.swapInfo.loading}
+      submitButtonHint={form.submitButtonHint}
+      submitButtonText={form.submitButtonText}
+      tokenApprovals={form.tokenApprovals}
       underlyingTokenName={amm.underlyingToken.name}
     />
   );

@@ -6,3 +6,4 @@ export { default as getErrorMessage } from './getErrorMessage';
 export * from './overrideTypes';
 export * from './number';
 export * from './date';
+export * from './validation';

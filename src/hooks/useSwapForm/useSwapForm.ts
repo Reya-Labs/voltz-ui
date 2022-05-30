@@ -1,9 +1,13 @@
-import { Agents } from "@components/contexts";
-import { SwapFormModes } from "@components/interface";
+import { Agents, GetInfoType } from "@components/contexts";
+import { SwapFormActions, SwapFormModes } from "@components/interface";
 import { AugmentedAMM } from "@utilities";
 import { isUndefined } from "lodash";
-import { useEffect, useRef, useState } from "react";
-import { MintBurnFormMarginAction } from "./useMintBurnForm";
+import { ReactNode, useEffect, useRef, useState } from "react";
+import { MintBurnFormMarginAction } from "../useMintBurnForm";
+import { hasEnoughTokens, hasEnoughUnderlyingTokens, lessThan } from "@utilities";
+import { useAgent, useAMMContext, useTokenApproval } from "@hooks";
+import { InfoPostSwap } from "@voltz-protocol/v1-sdk";
+import { getFormAction, getSubmitButtonHint, getSubmitButtonText } from "./services";
 
 export type SwapFormState = {
   margin?: number;
@@ -13,22 +17,29 @@ export type SwapFormState = {
 };
 
 export type SwapFormData = {
-  errors: Record<string, string>,
+  action: SwapFormActions;
+  errors: Record<string, string>;
+  isAddingMargin: boolean,
+  isRemovingMargin: boolean;
   isValid: boolean;
   setMargin: (value: SwapFormState['margin']) => void;
   setMarginAction: (value: SwapFormState['marginAction']) => void;
   setNotional: (value: SwapFormState['notional']) => void;
   setPartialCollateralization: (value: SwapFormState['partialCollateralization']) => void;
   state: SwapFormState;
+  swapInfo: {
+    data?: InfoPostSwap;
+    loading: boolean;
+  }
+  submitButtonHint: ReactNode;
+  submitButtonText: ReactNode;
+  tokenApprovals: ReturnType<typeof useTokenApproval>;
   validate: () => Promise<boolean>;
 };
 
 export const useSwapForm = (
   amm: AugmentedAMM, 
-  mode: SwapFormModes, 
-  minimumRequiredMargin: number | undefined,
-  fees: number | undefined,
-  agent: Agents,
+  mode: SwapFormModes,
   defaultValues: Partial<SwapFormState> = {}
 ): SwapFormData => {
   const defaultMargin = !isUndefined(defaultValues.margin) ? defaultValues.margin : 0;
@@ -38,21 +49,65 @@ export const useSwapForm = (
     ? defaultValues.partialCollateralization 
     : true;
 
+  const { agent } = useAgent();
   const [margin, setMargin] = useState<SwapFormState['margin']>(defaultMargin);
   const [marginAction, setMarginAction] = useState<MintBurnFormMarginAction>(defaultMarginAction);
   const [notional, setNotional] = useState<SwapFormState['notional']>(defaultNotional);
   const [partialCollateralization, setPartialCollateralization] = useState<boolean>(defaultPartialCollateralization);
+  const { swapInfo } = useAMMContext();
+  const tokenApprovals = useTokenApproval(amm);
 
   const [errors, setErrors] = useState<SwapFormData['errors']>({});
   const [isValid, setIsValid] = useState<boolean>(false);
   const touched = useRef<string[]>([]);
 
-  // validate the form after values change
+  const action = getFormAction(mode, partialCollateralization, agent);
+  const isAddingMargin = mode === SwapFormModes.EDIT_MARGIN && marginAction === MintBurnFormMarginAction.ADD;
+  const isRemovingMargin = mode === SwapFormModes.EDIT_MARGIN && marginAction === MintBurnFormMarginAction.REMOVE;
+  const submitButtonHint = getSubmitButtonHint(amm, action, errors, isValid, tokenApprovals, isRemovingMargin);
+  const submitButtonText = getSubmitButtonText(mode, tokenApprovals, amm, action, agent, isRemovingMargin);
+  
+  // Load the swap summary info
+  useEffect(() => {
+    if (!isUndefined(notional) && notional !== 0) {
+      switch (action) {
+        case SwapFormActions.SWAP: {
+          swapInfo.call({ notional, type: GetInfoType.NORMAL_SWAP});
+          break;
+        }
+
+        case SwapFormActions.FCM_SWAP: {
+          swapInfo.call({ notional, type: GetInfoType.FCM_SWAP });
+          break;
+        }
+
+        case SwapFormActions.FCM_UNWIND: {
+          swapInfo.call({ notional, type: GetInfoType.FCM_UNWIND });
+          break;
+        }
+      } 
+    }
+  }, [swapInfo.call, notional, agent]);
+
+  // Validate the form after values change
   useEffect(() => {
     if(touched.current.length) {
-      validate();
+      void validate();
     }
-  }, [margin, marginAction, notional, partialCollateralization, minimumRequiredMargin, fees])
+  }, [
+    margin, 
+    marginAction, 
+    notional, 
+    partialCollateralization,
+    swapInfo.result?.marginRequirement, 
+    swapInfo.result?.fee
+  ])
+
+  const addError = (err: Record<string, string>, name: string, message: string) => {
+    if(touched.current.includes(name)) {
+      err[name] = message;
+    }
+  };
 
   const updateMargin = (value: SwapFormState['margin']) => {
     if(!touched.current.includes('margin')) {
@@ -96,78 +151,42 @@ export const useSwapForm = (
 
     if(isUndefined(notional) || notional === 0) {
       valid = false;
-      if(touched.current.includes('notional')) {
-        err['notional'] = 'Please enter an amount';
-      }
+      addError(err, 'notional', 'Please enter an amount');
     }
 
     if((isUndefined(margin) || margin === 0) && partialCollateralization) {
       valid = false;
-      if(touched.current.includes('margin')) {
-        err['margin'] = 'Please enter an amount';
-      }
+      addError(err, 'margin', 'Please enter an amount');
     }
 
+    // Check the user has enough balance
     if(partialCollateralization) {
-      if(!isUndefined(margin) && margin !== 0) {
-        try {
-          const hasEnoughFunds = await amm.hasEnoughUnderlyingTokens(margin);
-          if(!hasEnoughFunds) {
-            valid = false;
-            if(touched.current.includes('margin')) {
-              err['margin'] = 'Insufficient funds';
-            }
-          }
-        } catch(e) {
-          // If error, just skip this check
-        }
+      // Swap or update
+      if(margin !== 0 && await hasEnoughUnderlyingTokens(amm, margin) === false) {
+        valid = false;
+        addError(err, 'margin', 'Insufficient funds');
       }
     }
     else {
       if(agent === Agents.FIXED_TRADER) {
-        // FCM Swap - check the user has enough funds
-        if(!isUndefined(fees) && !isUndefined(notional) && notional !== 0) {
-          try {
-            const results = await Promise.allSettled([
-              amm.hasEnoughUnderlyingTokens(fees), 
-              amm.hasEnoughYieldBearingTokens(notional)
-            ]);
-            if(results[0].status === 'fulfilled' && results[1].status === 'fulfilled') {
-              if(results[0].value === false || results[1].value === false) {
-                valid = false;
-                if(touched.current.includes('notional')) {
-                  err['notional'] = 'Insufficient funds';
-                }
-              }
-            }
-          } catch(e) {
-            // If error, just skip this check
-          }
+        // FCM Swap
+        if(notional !== 0 && await hasEnoughTokens(amm, swapInfo.result?.fee, notional) === false) {
+          valid = false;
+          addError(err, 'notional', 'Insufficient funds');
         }
       } else {
-        // FCM Unwind
-        if(!isUndefined(fees) && !isUndefined(notional) && notional !== 0) {
-          try {
-            const hasEnoughFunds = await amm.hasEnoughUnderlyingTokens(fees);
-            if(!hasEnoughFunds) {
-              valid = false;
-              if(touched.current.includes('margin')) {
-                err['notional'] = 'Insufficient funds';
-              }
-            }
-          } catch(e) {
-            // If error, just skip this check
-          }
+        // FCM unwind
+        if(await hasEnoughUnderlyingTokens(amm, swapInfo.result?.fee) === false) {
+          valid = false;
+          addError(err, 'notional', 'Insufficient funds');
         }
       }
     }
 
     // Check that the input margin is >= minimum required margin
-    if(!isUndefined(minimumRequiredMargin) && !isUndefined(margin) && margin !== 0 && margin < minimumRequiredMargin) {
+    if(margin !== 0 && lessThan(margin, swapInfo.result?.marginRequirement) === true) {
       valid = false;
-      if(touched.current.includes('margin')) {
-        err['margin'] = 'Not enough margin';
-      }
+      addError(err, 'margin', 'Not enough margin');
     }
 
     setErrors(err);
@@ -181,25 +200,14 @@ export const useSwapForm = (
 
     if(isUndefined(margin) || margin === 0) {
       valid = false;
-      if(touched.current.includes('margin')) {
-        err['margin'] = 'Please enter an amount';
-      }
+      addError(err, 'margin', 'Please enter an amount');
     }
 
+    // check user has sufficient funds
     if(marginAction === MintBurnFormMarginAction.ADD) {
-      // check user has sufficient funds
-      if(!isUndefined(margin) && margin !== 0) {
-        try {
-          const hasEnoughFunds = await amm.hasEnoughUnderlyingTokens(margin);
-          if(!hasEnoughFunds) {
-            valid = false;
-            if(touched.current.includes('margin')) {
-              err['margin'] = 'Insufficient funds';
-            }
-          }
-        } catch(e) {
-          // If error, just skip this check
-        }
+      if(margin !== 0 && await hasEnoughUnderlyingTokens(amm, margin) === false) {
+        valid = false;
+        addError(err, 'margin', 'Insufficient funds');
       }
     }
     
@@ -209,18 +217,28 @@ export const useSwapForm = (
   };
 
   return {
+    action,
     errors,
+    isAddingMargin,
+    isRemovingMargin,
     isValid,
     setMargin: updateMargin,
     setMarginAction: updateMarginAction,
     setNotional: updateNotional,
     setPartialCollateralization: updatePartialCollateralization,
+    swapInfo: {
+      data: swapInfo.result || undefined,
+      loading: swapInfo.loading,
+    },
     state: {
       margin,
       marginAction,
       notional,
       partialCollateralization
     },
+    submitButtonHint,
+    submitButtonText,
+    tokenApprovals,
     validate
   }
 }
