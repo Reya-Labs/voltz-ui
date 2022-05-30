@@ -59,12 +59,12 @@ export const getFormAction = (mode: SwapFormModes, partialCollateralization: boo
     }
   } 
   else {
-    // if (partialCollateralization) {
+    if (partialCollateralization) {
       return SwapFormActions.SWAP;
-    // }
-    // else {
-    //   return SwapFormActions.FCM_UNWIND;
-    // }
+    }
+    else {
+      return SwapFormActions.FCM_UNWIND;
+    }
   }
 };
 
