@@ -124,7 +124,9 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
         isEditingMargin={mode === MintBurnFormModes.EDIT_MARGIN} 
         liquidityAction={form.state.liquidityAction} 
         transactionId={transactionId} 
-        onComplete={handleComplete} 
+        onComplete={handleComplete}
+        notional={form.state.notional}
+        margin={Math.abs(form.state.margin as number) * (isRemovingMargin ? -1 : 1) }
         onBack={handleGoBack} 
       />
     );

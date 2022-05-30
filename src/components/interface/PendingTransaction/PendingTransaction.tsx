@@ -16,6 +16,10 @@ export type PendingTransactionProps = {
   transactionId?: string;
   isEditingMargin?: boolean;
   liquidityAction?: MintBurnFormLiquidityAction;
+  isFCMSwap?: boolean;
+  isFCMUnwind?: boolean;
+  notional?: number;
+  margin?: number;
   onBack: () => void;
   onComplete: () => void;
 };
@@ -25,6 +29,10 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   transactionId,
   liquidityAction,
   isEditingMargin,
+  isFCMSwap,
+  isFCMUnwind,
+  notional,
+  margin,
   onBack,
   onComplete,
 }) => {
@@ -205,6 +213,34 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
     );
   };
 
+  const renderNotional = () => {
+    if (isUndefined(notional)) {
+      return "Internal error: Notional undefined";
+    }
+
+    if (isUndefined(amm.underlyingToken.name)) {
+      return "Internal error: Underlying token name undefined";
+    }
+
+    return `${formatCurrency(notional)} ${amm.underlyingToken.name}`;
+  }
+
+  const renderMargin = () => {
+    if (isUndefined(margin)) {
+      return "Internal error: Margin undefined";
+    }
+
+    if (isUndefined(amm.underlyingToken.name)) {
+      return "Internal error: Underlying token name undefined";
+    }
+
+    if (isFCMSwap) {
+      return `${formatCurrency(margin)} ${amm.protocol}`;
+    }
+
+    return `${formatCurrency(margin)} ${amm.underlyingToken.name}`;
+  }
+
   return (
     <Panel
       variant="dark"
@@ -225,20 +261,20 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
           }}
         >
           <Typography label="NOTIONAL AMOUNT" variant="body2">
-            {formatCurrency(activeTransaction.notional, true)} {amm.underlyingToken.name}
+            {renderNotional()}
           </Typography>
         </Box>)
         }
         
         {
-          (isUndefined(liquidityAction) || liquidityAction) && (
+          (isUndefined(liquidityAction) || liquidityAction) && (isUndefined(isFCMUnwind) || !isFCMUnwind) && (
         <Box
           sx={{
             marginBottom: (theme) => theme.spacing(4),
           }}
         >
           <Typography label="MARGIN" variant="body2">
-            {formatCurrency(activeTransaction.margin, true)} {amm.underlyingToken.name}
+            {renderMargin()}
           </Typography>
         </Box>
         )}

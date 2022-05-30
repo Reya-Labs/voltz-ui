@@ -915,8 +915,8 @@ class AMM {
       case 2: {
         const cTokenAddress = await (fcmContract as CompoundFCM).cToken();
         const cTokenContract = ICToken__factory.connect(cTokenAddress, this.signer);
-        const rate = await cTokenContract.callStatic.exchangeRateCurrent();
-        const scaledRate = rate.div(BigNumber.from(1000000000000)).toNumber() / 1000000;
+        const rate = await cTokenContract.exchangeRateStored();
+        const scaledRate = this.descaleCompoundValue(rate);
         additionalMargin = scaledAvailableNotional / scaledRate;
         break;
       }
@@ -1233,6 +1233,14 @@ class AMM {
     else {
       return value.div(BigNumber.from(10).pow(this.underlyingToken.decimals - 3)).toNumber() / 1000;
     }
+  }
+
+  // descale compound tokens
+
+  public descaleCompoundValue(value: BigNumber): number {
+    const scaledValue = (value.div(BigNumber.from(10).pow(this.underlyingToken.decimals)).div(BigNumber.from(10).pow(4))).toNumber() / 1000000;
+
+    return scaledValue;
   }
 
   // fcm approval
@@ -1659,7 +1667,7 @@ class AMM {
         case 2: {
           const fcmContract = fcmCompoundFactory.connect(this.fcmAddress, this.signer);
           const margin = (await fcmContract.getTraderMarginInCTokens(signerAddress));
-          results.margin = this.descale(margin);
+          results.margin = margin.toNumber() / (10 ** 8);
           break;
         }
 

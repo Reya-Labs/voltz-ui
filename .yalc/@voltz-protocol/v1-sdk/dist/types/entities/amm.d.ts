@@ -137,6 +137,7 @@ declare class AMM {
     settleFCMTrader(): Promise<ContractReceipt>;
     scale(value: number): string;
     descale(value: BigNumber): number;
+    descaleCompoundValue(value: BigNumber): number;
     isFCMApproved(): Promise<boolean | void>;
     approveFCM(): Promise<ContractReceipt | void>;
     isUnderlyingTokenApprovedForPeriphery(): Promise<boolean | void>;

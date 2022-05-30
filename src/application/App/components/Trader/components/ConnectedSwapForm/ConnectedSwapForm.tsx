@@ -95,15 +95,64 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
   }
   
   if (activeTransaction) {
-    return (
-      <PendingTransaction 
-        amm={amm} 
-        isEditingMargin={mode === SwapFormModes.EDIT_MARGIN} 
-        transactionId={transactionId} 
-        onComplete={handleComplete} 
-        onBack={handleGoBack} 
-      />
-    );
+
+    switch (form.action) {
+      case SwapFormActions.UPDATE: {
+        return (
+          <PendingTransaction
+            amm={amm}
+            isEditingMargin={true}
+            transactionId={transactionId}
+            onComplete={handleComplete}
+            margin={Math.abs(form.state.margin as number) * (form.isRemovingMargin ? -1 : 1)}
+            onBack={handleGoBack}
+          />
+        );
+      }
+
+      case SwapFormActions.SWAP: {
+        return (
+          <PendingTransaction
+            amm={amm}
+            isEditingMargin={false}
+            transactionId={transactionId}
+            onComplete={handleComplete}
+            notional={form.state.notional as number}
+            margin={Math.abs(form.state.margin as number) * (form.isRemovingMargin ? -1 : 1)}
+            onBack={handleGoBack}
+          />
+        );
+      }
+
+      case SwapFormActions.FCM_SWAP: {
+        return (
+          <PendingTransaction
+            amm={amm}
+            isEditingMargin={false}
+            transactionId={transactionId}
+            onComplete={handleComplete}
+            isFCMSwap={true}
+            notional={form.state.notional as number}
+            margin={form.swapInfo.data?.marginRequirement}
+            onBack={handleGoBack}
+          />
+        );
+      }
+
+      case SwapFormActions.FCM_UNWIND: {
+        return (
+          <PendingTransaction
+            amm={amm}
+            isEditingMargin={false}
+            transactionId={transactionId}
+            onComplete={handleComplete}
+            isFCMUnwind={true}
+            notional={form.state.notional as number}
+            onBack={handleGoBack}
+          />
+        );
+      }
+    }
   }
 
   return (

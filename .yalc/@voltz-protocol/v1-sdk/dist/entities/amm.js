@@ -763,10 +763,10 @@ var AMM = /** @class */ (function () {
                     case 5:
                         cTokenAddress = _c.sent();
                         cTokenContract = typechain_1.ICToken__factory.connect(cTokenAddress, this.signer);
-                        return [4 /*yield*/, cTokenContract.callStatic.exchangeRateCurrent()];
+                        return [4 /*yield*/, cTokenContract.exchangeRateStored()];
                     case 6:
                         rate = _c.sent();
-                        scaledRate = rate.div(ethers_1.BigNumber.from(1000000000000)).toNumber() / 1000000;
+                        scaledRate = this.descaleCompoundValue(rate);
                         additionalMargin = scaledAvailableNotional / scaledRate;
                         return [3 /*break*/, 8];
                     case 7: throw new Error("Unrecognized FCM");
@@ -1089,6 +1089,11 @@ var AMM = /** @class */ (function () {
         else {
             return value.div(ethers_1.BigNumber.from(10).pow(this.underlyingToken.decimals - 3)).toNumber() / 1000;
         }
+    };
+    // descale compound tokens
+    AMM.prototype.descaleCompoundValue = function (value) {
+        var scaledValue = (value.div(ethers_1.BigNumber.from(10).pow(this.underlyingToken.decimals)).div(ethers_1.BigNumber.from(10).pow(4))).toNumber() / 1000000;
+        return scaledValue;
     };
     // fcm approval
     AMM.prototype.isFCMApproved = function () {
@@ -1622,7 +1627,7 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, fcmContract.getTraderMarginInCTokens(signerAddress)];
                     case 15:
                         margin = (_g.sent());
-                        results.margin = this.descale(margin);
+                        results.margin = margin.toNumber() / (Math.pow(10, 8));
                         return [3 /*break*/, 17];
                     case 16: throw new Error("Unrecognized FCM");
                     case 17:
