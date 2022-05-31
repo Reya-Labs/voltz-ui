@@ -143,11 +143,12 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         <Box sx={bottomSpacing}>
           <MarginAmount
             error={errors['margin']}
-            protocol={protocol}
-            maxMargin={maxMargin}
-            margin={formState.margin}
             isAdditional={formState.marginAction === MintBurnFormMarginAction.ADD}
+            isEditing={mode === SwapFormModes.EDIT_MARGIN}
+            margin={formState.margin}
+            maxMargin={maxMargin}
             onChangeMargin={onChangeMargin}
+            protocol={protocol}
           />
         </Box>
       )}
