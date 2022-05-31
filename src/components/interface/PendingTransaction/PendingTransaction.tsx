@@ -215,11 +215,11 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
 
   const renderNotional = () => {
     if (isUndefined(notional)) {
-      return "Internal error: Notional undefined";
+      return "Notional undefined";
     }
 
     if (isUndefined(amm.underlyingToken.name)) {
-      return "Internal error: Underlying token name undefined";
+      return "Underlying token name undefined";
     }
 
     return `${formatCurrency(notional)} ${amm.underlyingToken.name}`;
@@ -227,11 +227,11 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
 
   const renderMargin = () => {
     if (isUndefined(margin)) {
-      return "Internal error: Margin undefined";
+      return "Margin undefined";
     }
 
     if (isUndefined(amm.underlyingToken.name)) {
-      return "Internal error: Underlying token name undefined";
+      return "Underlying token name undefined";
     }
 
     if (isFCMSwap) {
