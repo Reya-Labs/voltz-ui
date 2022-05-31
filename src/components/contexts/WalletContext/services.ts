@@ -3,7 +3,6 @@ import detectEthereumProvider from '@metamask/detect-provider';
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { BigNumber, ethers, Contract } from "ethers";
 import { OverrideTypes } from "@utilities";
-import { DateTime } from "luxon";
 
 export type SignatureResponse = {
   signature?: string;
@@ -29,7 +28,7 @@ export const checkForCorrectNetwork = async (provider: ethers.providers.JsonRpcP
 export const checkForRiskyWallet = async (walletAddress: string) => {
   const riskAssessment = await getWalletRiskAssessment(walletAddress);
   if(isWalletRisky(riskAssessment)) {
-    throw new Error('Risky Account Detected');
+    throw new Error('Your wallet has been flagged as high-risk and blocked from using the protocol. We use an industry-leading service provider to screen for wallets associated with high-risk activity.');
   }
 };
 
