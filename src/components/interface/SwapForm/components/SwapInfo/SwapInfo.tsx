@@ -20,7 +20,7 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({ data, loading, under
     icon="information-circle"
     info={
       <>
-        Notional Available is the amount of Liqduity in the AMM that's avialble to trade<br/><br/>
+        Notional Available is the amount of Liqduity in the AMM that's available to trade<br/><br/>
         Average Fixed Rate is the rate you'll receive or pay once accounting for slippage<br/><br/>
         Fees are the fees you'll pay to the liquidity provider for the trade<br/><br/>
         Estimated Slippage is accounted for in the Average Fixed Rate you'll recieve<br/><br/>
