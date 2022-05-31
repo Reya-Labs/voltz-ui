@@ -1829,9 +1829,9 @@ var AMM = /** @class */ (function () {
             });
         });
     };
-    AMM.prototype.getCaps = function () {
+    AMM.prototype.getCapPercentage = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var peripheryContract, marginEngineContract, vammAddress, vammContract, isAlpha, accumulated, cap;
+            var peripheryContract, marginEngineContract, vammAddress, vammContract, isAlpha, accumulated, cap, percentage;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -1856,10 +1856,8 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, peripheryContract.lpMarginCaps(vammAddress)];
                     case 4:
                         cap = _a.sent();
-                        return [2 /*return*/, {
-                                accumulated: this.descale(accumulated),
-                                cap: this.descale(cap)
-                            }];
+                        percentage = (accumulated.mul(1000).div(cap)).toNumber() / 1000;
+                        return [2 /*return*/, percentage];
                 }
             });
         });

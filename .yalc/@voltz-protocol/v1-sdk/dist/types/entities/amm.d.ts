@@ -172,7 +172,7 @@ declare class AMM {
     hasEnoughUnderlyingTokens(amount: number): Promise<boolean>;
     hasEnoughYieldBearingTokens(amount: number): Promise<boolean>;
     setCap(amount: number): Promise<void>;
-    getCaps(): Promise<CapInfo | undefined>;
+    getCapPercentage(): Promise<number | undefined>;
     getPositionMarginRequirement(fixedLow: number, fixedHigh: number): Promise<number>;
     getOneWeekApy(): Promise<number>;
 }

@@ -1861,7 +1861,7 @@ class AMM {
     }
   }
 
-  async getCaps(): Promise<CapInfo | undefined> {
+  async getCapPercentage(): Promise<number | undefined> {
     if (!this.provider) {
       throw new Error('Blockchain not connected');
     }
@@ -1881,10 +1881,9 @@ class AMM {
     const accumulated = await peripheryContract.lpMarginCumulatives(vammAddress);
     const cap = await peripheryContract.lpMarginCaps(vammAddress);
 
-    return {
-      accumulated: this.descale(accumulated),
-      cap: this.descale(cap)
-    }
+    const percentage = (accumulated.mul(1000).div(cap)).toNumber() / 1000;
+
+    return percentage;
   }
 
   // current position margin requirement

@@ -14,6 +14,7 @@ import { VariableAPY, FixedAPR } from './components';
 
 import { ProgressBar } from '@components/composite';
 import { Box } from '@mui/system';
+import { isNumber } from 'lodash';
 
 export type AMMTableRowProps = {
   datum: AMMTableDatum;
@@ -111,7 +112,7 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
               );
             }
 
-            if (!cap) {
+            if (!isNumber(cap)) {
               return (
                 <Typography variant="h5" label={label}>
                   <Box sx={{ width: '100%' }}>

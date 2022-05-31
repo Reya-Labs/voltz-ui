@@ -103,20 +103,8 @@ const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children 
 
   const ammCaps = useAsyncFunction(
     async () => {
-      const result = await amm.getCaps();
-
-      if (!result) {
-        return;
-      }
-
-      if (result.cap > 0) {
-        if (result.accumulated >= result.cap) {
-          return 100;
-        }
-        return result.accumulated / result.cap * 100;
-      }
-      
-      return;
+      const result = await amm.getCapPercentage();
+      return result;
     },
     useMemo(() => undefined, [!!amm.provider])
   );
