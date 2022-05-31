@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import { SystemStyleObject, Theme } from '@mui/system';
 import { MintBurnFormMarginAction, SwapFormState, useAgent, useTokenApproval } from '@hooks';
 import { Agents } from '@components/contexts';
-import { Button, Panel, Typography } from '@components/atomic';
+import { Button, Panel, Typography, Icon } from '@components/atomic';
 import {
   IconLabel,
   ProtocolInformation,
@@ -16,6 +16,7 @@ import { TraderControls, MarginControls, SwapInfo } from './components';
 import { colors } from '@theme';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from './types';
+import PositionBadge from 'src/components/interface/PositionTable/components/PositionBadge';
 
 export type SwapFormProps = {
   endDate?: DateTime;
@@ -81,7 +82,12 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           : '0px 0px 88px rgba(38, 103, 255, 0.20)',
       }}
     >
-      <ProtocolInformation protocol={protocol}/>
+      {!formState.partialCollateralization && (
+        <Box>
+          {/* positioning and styling needs to be fixed */}
+          <PositionBadge variant='FC' sx={{ marginLeft: 0, width: '45%' }} />
+          <IconLabel label="information-circle" icon="information-circle" info="lorem ipsum dolor" />
+        </Box>)}
 
       <Box sx={bottomSpacing}>
         <MaturityInformation
@@ -97,6 +103,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           endDate={endDate}
         />
       </Box>
+      <ProtocolInformation protocol={protocol}/>
  
       {mode === SwapFormModes.EDIT_MARGIN && (
         <Box sx={{ ...bottomSpacing, display: 'flex' }}>
