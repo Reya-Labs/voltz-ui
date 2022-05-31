@@ -5,9 +5,10 @@ import { isUndefined } from "lodash";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { MintBurnFormMarginAction } from "../useMintBurnForm";
 import { hasEnoughTokens, hasEnoughUnderlyingTokens, lessThan } from "@utilities";
-import { useAgent, useAMMContext, useTokenApproval } from "@hooks";
+import { useAgent, useAMMContext, useBalance, useMinRequiredMargin, useTokenApproval } from "@hooks";
 import { InfoPostSwap } from "@voltz-protocol/v1-sdk";
 import * as s from "./services";
+import { BigNumber } from "ethers";
 
 export type SwapFormState = {
   margin?: number;
@@ -19,10 +20,12 @@ export type SwapFormState = {
 export type SwapFormData = {
   action: SwapFormActions;
   approvalsNeeded: boolean;
+  balance?: BigNumber;
   errors: Record<string, string>;
   isAddingMargin: boolean,
   isRemovingMargin: boolean;
   isValid: boolean;
+  minRequiredMargin?: number;
   setMargin: (value: SwapFormState['margin']) => void;
   setMarginAction: (value: SwapFormState['marginAction']) => void;
   setNotional: (value: SwapFormState['notional']) => void;
@@ -51,8 +54,10 @@ export const useSwapForm = (
     : true;
 
   const { agent } = useAgent();
+  const balance = useBalance(amm);
   const [margin, setMargin] = useState<SwapFormState['margin']>(defaultMargin);
   const [marginAction, setMarginAction] = useState<MintBurnFormMarginAction>(defaultMarginAction);
+  const minRequiredMargin = useMinRequiredMargin(amm);
   const [notional, setNotional] = useState<SwapFormState['notional']>(defaultNotional);
   const [partialCollateralization, setPartialCollateralization] = useState<boolean>(defaultPartialCollateralization);
   const { swapInfo } = useAMMContext();
@@ -69,7 +74,7 @@ export const useSwapForm = (
   const approvalsNeeded = s.approvalsNeeded(action, tokenApprovals, isRemovingMargin)
   const submitButtonHint = s.getSubmitButtonHint(amm, action, errors, isValid, tokenApprovals, isRemovingMargin);
   const submitButtonText = s.getSubmitButtonText(mode, tokenApprovals, amm, action, agent, isRemovingMargin);
-  
+
   // Load the swap summary info
   useEffect(() => {
     if (!approvalsNeeded && !isUndefined(notional) && notional !== 0) {
@@ -220,13 +225,46 @@ export const useSwapForm = (
     return valid;
   };
 
-  return {
+  // eslint-disable-next-line
+  console.log({
     action,
     approvalsNeeded,
+    balance,
     errors,
     isAddingMargin,
     isRemovingMargin,
     isValid,
+    minRequiredMargin,
+    setMargin: updateMargin,
+    setMarginAction: updateMarginAction,
+    setNotional: updateNotional,
+    setPartialCollateralization: updatePartialCollateralization,
+    swapInfo: {
+      data: swapInfo.result || undefined,
+      loading: swapInfo.loading,
+    },
+    state: {
+      margin,
+      marginAction,
+      notional,
+      partialCollateralization
+    },
+    submitButtonHint,
+    submitButtonText,
+    tokenApprovals,
+    validate
+
+  })
+
+  return {
+    action,
+    approvalsNeeded,
+    balance,
+    errors,
+    isAddingMargin,
+    isRemovingMargin,
+    isValid,
+    minRequiredMargin,
     setMargin: updateMargin,
     setMarginAction: updateMarginAction,
     setNotional: updateNotional,

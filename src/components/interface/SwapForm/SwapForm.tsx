@@ -12,18 +12,21 @@ import {
   NotionalAmount,
   MarginAmount,
 } from '@components/composite';
-import { TraderControls, MarginControls, SwapInfo } from './components';
+import { TraderControls, MarginControls, SwapInfo, SwapInfoEditMargin } from './components';
 import { colors } from '@theme';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from './types';
+import { isUndefined } from 'lodash';
 
 export type SwapFormProps = {
+  balance?: number;
   endDate?: DateTime;
   errors: Record<string, string>;
   formState: SwapFormState;
   formAction: SwapFormActions;
-  maxMargin?: number;
   isFormValid: boolean;
+  maxMargin?: number;
+  minRequiredMargin?: number;
   mode: SwapFormModes;
   onCancel: () => void;
   onChangeMargin: (value: number) => void;
@@ -43,13 +46,15 @@ export type SwapFormProps = {
 
 
 const SwapForm: React.FunctionComponent<SwapFormProps> = ({
+  balance,
   endDate,
   errors,
-  formState,
-  maxMargin,
-  isFormValid,
-  mode,
   formAction,
+  formState,
+  isFormValid,
+  maxMargin,
+  minRequiredMargin,
+  mode,
   onCancel,
   onChangeMargin,
   onChangeMarginAction,
@@ -147,14 +152,24 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         </Box>
       )}
 
-      {(swapInfo || swapInfoLoading) && (
+      {mode === SwapFormModes.NEW_POSITION && (swapInfo || swapInfoLoading) && (
         <Box sx={bottomSpacing}>
-          <SwapInfo 
+          <SwapInfo
             data={swapInfo} 
             loading={swapInfoLoading} 
             underlyingTokenName={underlyingTokenName}
             yieldBearingTokenName={protocol}
             formAction={formAction}
+          />
+        </Box>
+      )}
+
+      {mode === SwapFormModes.EDIT_MARGIN && !isUndefined(minRequiredMargin) && (
+        <Box sx={bottomSpacing}>
+          <SwapInfoEditMargin 
+            balance={balance}
+            minRequiredMargin={minRequiredMargin}
+            underlyingTokenName={underlyingTokenName}
           />
         </Box>
       )}
