@@ -16,7 +16,7 @@ import { TraderControls, MarginControls, SwapInfo } from './components';
 import { colors } from '@theme';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from './types';
-import PositionBadge from 'src/components/interface/PositionTable/components/PositionBadge';
+import { PositionBadge } from '@components/interface';
 
 export type SwapFormProps = {
   endDate?: DateTime;
@@ -83,11 +83,16 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
       }}
     >
       {!formState.partialCollateralization && (
-        <Box>
-          {/* positioning and styling needs to be fixed */}
-          <PositionBadge variant='FC' sx={{ marginLeft: 0, width: '45%' }} />
-          <IconLabel label="information-circle" icon="information-circle" info="lorem ipsum dolor" />
-        </Box>)}
+        <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: (theme) => theme.spacing(6) }}>
+          <PositionBadge variant='FC' sx={{ display: 'inline-block', marginLeft: 0 }} />
+          <IconLabel 
+            icon="information-circle" 
+            label="" 
+            info="Please note that for the initial phase of the Voltz protocol mainnet launch, users who have supplied assets to the FCM will not accrue underling protocol rewards (ie COMP and AAVE). The Voltz Labs team will push an update in the coming weeks to allow for accruing and claiming of underling protocol rewards going forward." 
+            iconSx={{ color: colors.skyBlueCrayola.base, height: '14px', width: '14px', top: '0' }} 
+          />
+        </Box>
+      )}
 
       <Box sx={bottomSpacing}>
         <MaturityInformation

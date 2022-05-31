@@ -102,6 +102,9 @@ const dark = createTheme({
     },
     MuiToggleButtonGroup: {
       styleOverrides: {
+        root: ({ ownerState }) => ({
+          cursor: ownerState.disabled ? 'not-allowed' : undefined,
+        }),
         grouped: ({ theme }) => ({
           fontFamily: 'PixelOperatorMono',
           fontSize: 14,

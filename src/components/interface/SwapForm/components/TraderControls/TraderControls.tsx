@@ -62,7 +62,6 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
         '& > *:not(:last-child)': { marginBottom: (theme) => theme.spacing(4) },
       }}
     >
-      {partialCollateralizationValue && (
       <ToggleButtonGroup
         label={<IconLabel label="rates" icon="information-circle" info="Choose between taking a fixed or variable position." />}
         options={Object.values(agentOptionTitles)}
@@ -70,8 +69,8 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
         defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
         onChangeOption={handleChangeMode}
         agent={agent}
+        disabled={!partialCollateralizationValue}
       />
-  )}
       {agent === Agents.FIXED_TRADER && (
         <ToggleButtonGroup
           label={

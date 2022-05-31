@@ -13,6 +13,7 @@ export type ToggleButtonGroupProps = MuiToggleButtonGroupProps &
     options: string[];
     option?: string;
     defaultOption?: string;
+    disabled?: boolean;
     onChangeOption: (option: string) => void;
   };
 
@@ -21,6 +22,7 @@ const ToggleButtonGroup: React.FunctionComponent<ToggleButtonGroupProps> = ({
   options,
   option,
   defaultOption,
+  disabled = false,
   onChangeOption,
 }) => {
   useAgentWithOverride(agentOverride);
@@ -31,7 +33,7 @@ const ToggleButtonGroup: React.FunctionComponent<ToggleButtonGroupProps> = ({
   };
 
   return (
-    <MuiToggleButtonGroup value={option || activeOption} exclusive onChange={handleChange}>
+    <MuiToggleButtonGroup value={option || activeOption} exclusive onChange={handleChange} disabled={disabled}>
       {options.map((optionItem: string) => (
         <ToggleButton key={optionItem} value={optionItem}>
           {optionItem}
