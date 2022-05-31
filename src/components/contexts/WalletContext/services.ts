@@ -20,6 +20,8 @@ const unavailableText = 'Service unavailable, please try again shortly';
 export const checkForCorrectNetwork = async (provider: ethers.providers.JsonRpcProvider) => {
   const network = await provider.getNetwork();
   if(network.name !== process.env.REACT_APP_REQUIRED_ETHEREUM_NETWORK) {
+    // eslint-disable-next-line
+    console.warn(`User wallet is connected to '${network.name}' instead of '${process.env.REACT_APP_REQUIRED_ETHEREUM_NETWORK}'`);
     throw new Error('Wrong network');
   }
 };
