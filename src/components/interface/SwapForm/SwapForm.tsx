@@ -139,7 +139,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         </Box>
       )}
 
-      {formState.partialCollateralization && (
+      {(formAction === SwapFormActions.SWAP || formAction === SwapFormActions.UPDATE) && (
         <Box sx={bottomSpacing}>
           <MarginAmount
             error={errors['margin']}
