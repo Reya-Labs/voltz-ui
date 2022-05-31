@@ -99,6 +99,8 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         </Box>
       )}
 
+      <ProtocolInformation protocol={protocol}/>
+
       <Box sx={bottomSpacing}>
         <MaturityInformation
           label={
@@ -113,7 +115,6 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           endDate={endDate}
         />
       </Box>
-      <ProtocolInformation protocol={protocol}/>
  
       {mode === SwapFormModes.EDIT_MARGIN && (
         <Box sx={{ ...bottomSpacing, display: 'flex' }}>
