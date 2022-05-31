@@ -35,6 +35,7 @@ export type SwapFormProps = {
   onChangeNotional: (value: number) => void;
   onChangePartialCollateralization: (value: boolean) => void;
   onSubmit: () => void;
+  positionMargin?: number;
   protocol?: string;
   startDate?: DateTime;
   swapInfo: InfoPostSwap | void | null;
@@ -62,6 +63,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   onChangeNotional,
   onChangePartialCollateralization,
   onSubmit,
+  positionMargin,
   protocol,
   startDate,
   submitButtonHint,
@@ -178,11 +180,12 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         </Box>
       )}
 
-      {mode === SwapFormModes.EDIT_MARGIN && !isUndefined(minRequiredMargin) && (
+      {mode === SwapFormModes.EDIT_MARGIN && !isUndefined(minRequiredMargin) && !isUndefined(positionMargin) && (
         <Box sx={bottomSpacing}>
           <SwapInfoEditMargin 
             balance={balance}
             minRequiredMargin={minRequiredMargin}
+            positionMargin={positionMargin}
             underlyingTokenName={underlyingTokenName}
           />
         </Box>
