@@ -148,7 +148,7 @@ var getErrorSignature = function (error, environment) {
                 throw new Error('Unrecognized error type');
             }
         }
-        case 'KOVAN': {
+        case 'PROD': {
             try {
                 var reason = error.data.toString().replace('Reverted ', '');
                 if (reason.startsWith('0x08c379a0')) {
@@ -228,7 +228,7 @@ var decodeInfoPostMint = function (error, environment) {
                     throw new Error('Unrecognized error type');
                 }
             }
-            case 'KOVAN': {
+            case 'PROD': {
                 try {
                     var reason = error.data.toString().replace('Reverted ', '');
                     var decodingResult = exports.iface.decodeErrorResult(errSig, reason);
@@ -301,7 +301,7 @@ var decodeInfoPostSwap = function (error, environment) {
                     throw new Error('Unrecognized error type');
                 }
             }
-            case 'KOVAN': {
+            case 'PROD': {
                 try {
                     var reason = error.data.toString().replace('Reverted ', '');
                     var decodingResult = exports.iface.decodeErrorResult(errSig, reason);

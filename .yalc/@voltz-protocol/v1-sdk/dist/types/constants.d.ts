@@ -4,8 +4,6 @@ export declare const MaxUint256: JSBI;
 export declare const MaxUint256Bn: BigNumber;
 export declare const TresholdApprovalBn: BigNumber;
 export declare const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000";
-export declare const FACTORY_ADDRESS = "0x005FFfeBBA1B7f6F4EB6A03d878B4e0cc9f9c1c2";
-export declare const PERIPHERY_ADDRESS = "0x45FFa35f3db83b811823dE7D3B66486c04bCeBff";
 export declare const NEGATIVE_ONE: JSBI;
 export declare const ZERO: JSBI;
 export declare const ONE: JSBI;

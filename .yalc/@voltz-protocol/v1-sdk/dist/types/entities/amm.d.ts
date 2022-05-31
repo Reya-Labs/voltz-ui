@@ -11,6 +11,8 @@ export declare type AMMConstructorArgs = {
     signer: Signer | null;
     provider?: providers.Provider;
     environment: string;
+    factoryAddress: string;
+    peripheryAddress: string;
     marginEngineAddress: string;
     fcmAddress: string;
     rateOracle: RateOracle;
@@ -109,6 +111,8 @@ declare class AMM {
     readonly signer: Signer | null;
     readonly provider?: providers.Provider;
     readonly environment: string;
+    readonly factoryAddress: string;
+    readonly peripheryAddress: string;
     readonly marginEngineAddress: string;
     readonly fcmAddress: string;
     readonly rateOracle: RateOracle;
@@ -121,7 +125,7 @@ declare class AMM {
     readonly txCount: number;
     readonly totalNotionalTraded: JSBI;
     readonly totalLiquidity: JSBI;
-    constructor({ id, signer, provider, environment, marginEngineAddress, fcmAddress, rateOracle, updatedTimestamp, termStartTimestamp, termEndTimestamp, underlyingToken, tick, tickSpacing, txCount, totalNotionalTraded, totalLiquidity }: AMMConstructorArgs);
+    constructor({ id, signer, provider, environment, factoryAddress, peripheryAddress, marginEngineAddress, fcmAddress, rateOracle, updatedTimestamp, termStartTimestamp, termEndTimestamp, underlyingToken, tick, tickSpacing, txCount, totalNotionalTraded, totalLiquidity }: AMMConstructorArgs);
     getInfoPostSwap({ isFT, notional, fixedRateLimit, fixedLow, fixedHigh, }: AMMGetInfoPostSwapArgs): Promise<InfoPostSwap>;
     swap({ isFT, notional, margin, fixedRateLimit, fixedLow, fixedHigh, validationOnly, }: AMMSwapArgs): Promise<ContractReceipt | void>;
     getInfoPostMint({ fixedLow, fixedHigh, notional, }: AMMGetInfoPostMintArgs): Promise<number>;

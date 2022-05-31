@@ -58,7 +58,7 @@ const useAMMs = (): UseAMMsResult => {
             provider: providers.getDefaultProvider(
               process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK,
             ),
-            environment: 'KOVAN',
+            environment: process.env.REACT_APP_DECODING_TAG || 'PROD',
             rateOracle: new RateOracle({
               id: rateOracleAddress,
               protocolId: parseInt(protocolId as string, 10),
@@ -68,6 +68,8 @@ const useAMMs = (): UseAMMsResult => {
               name: tokenName,
               decimals: decimals as number,
             }),
+            factoryAddress: process.env.REACT_APP_FACTORY_ADDRESS || "0x",
+            peripheryAddress: process.env.REACT_APP_PERIPHERY_ADDRESS || "0x",
             marginEngineAddress,
             fcmAddress,
             updatedTimestamp: ammUpdatedTimestamp as JSBI,

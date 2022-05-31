@@ -52,11 +52,13 @@ var errorHandling_1 = require("../utils/errors/errorHandling");
 var lodash_1 = require("lodash");
 var AMM = /** @class */ (function () {
     function AMM(_a) {
-        var id = _a.id, signer = _a.signer, provider = _a.provider, environment = _a.environment, marginEngineAddress = _a.marginEngineAddress, fcmAddress = _a.fcmAddress, rateOracle = _a.rateOracle, updatedTimestamp = _a.updatedTimestamp, termStartTimestamp = _a.termStartTimestamp, termEndTimestamp = _a.termEndTimestamp, underlyingToken = _a.underlyingToken, tick = _a.tick, tickSpacing = _a.tickSpacing, txCount = _a.txCount, totalNotionalTraded = _a.totalNotionalTraded, totalLiquidity = _a.totalLiquidity;
+        var id = _a.id, signer = _a.signer, provider = _a.provider, environment = _a.environment, factoryAddress = _a.factoryAddress, peripheryAddress = _a.peripheryAddress, marginEngineAddress = _a.marginEngineAddress, fcmAddress = _a.fcmAddress, rateOracle = _a.rateOracle, updatedTimestamp = _a.updatedTimestamp, termStartTimestamp = _a.termStartTimestamp, termEndTimestamp = _a.termEndTimestamp, underlyingToken = _a.underlyingToken, tick = _a.tick, tickSpacing = _a.tickSpacing, txCount = _a.txCount, totalNotionalTraded = _a.totalNotionalTraded, totalLiquidity = _a.totalLiquidity;
         this.id = id;
         this.signer = signer;
         this.provider = provider || (signer === null || signer === void 0 ? void 0 : signer.provider);
         this.environment = environment;
+        this.factoryAddress = factoryAddress;
+        this.peripheryAddress = peripheryAddress;
         this.marginEngineAddress = marginEngineAddress;
         this.fcmAddress = fcmAddress;
         this.rateOracle = rateOracle;
@@ -112,7 +114,7 @@ var AMM = /** @class */ (function () {
                             }
                         }
                         scaledNotional = this.scale(notional);
-                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        peripheryContract = typechain_1.Periphery__factory.connect(this.peripheryAddress, this.signer);
                         swapPeripheryParams = {
                             marginEngine: this.marginEngineAddress,
                             isFT: isFT,
@@ -219,7 +221,7 @@ var AMM = /** @class */ (function () {
                                 sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickMath_1.TickMath.MIN_TICK + 1).toString();
                             }
                         }
-                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        peripheryContract = typechain_1.Periphery__factory.connect(this.peripheryAddress, this.signer);
                         scaledNotional = this.scale(notional);
                         scaledMarginDelta = this.scale(margin);
                         return [4 /*yield*/, this.isUnderlyingTokenApprovedForPeriphery()];
@@ -307,7 +309,7 @@ var AMM = /** @class */ (function () {
                         signerAddress = _b.sent();
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
-                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        peripheryContract = typechain_1.Periphery__factory.connect(this.peripheryAddress, this.signer);
                         scaledNotional = this.scale(notional);
                         mintOrBurnParams = {
                             marginEngine: this.marginEngineAddress,
@@ -377,7 +379,7 @@ var AMM = /** @class */ (function () {
                         }
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
-                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        peripheryContract = typechain_1.Periphery__factory.connect(this.peripheryAddress, this.signer);
                         _notional = this.scale(notional);
                         _marginDelta = this.scale(margin);
                         return [4 /*yield*/, this.isUnderlyingTokenApprovedForPeriphery()];
@@ -461,7 +463,7 @@ var AMM = /** @class */ (function () {
                         }
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
-                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        peripheryContract = typechain_1.Periphery__factory.connect(this.peripheryAddress, this.signer);
                         _notional = this.scale(notional);
                         mintOrBurnParams = {
                             marginEngine: this.marginEngineAddress,
@@ -546,7 +548,7 @@ var AMM = /** @class */ (function () {
                         _c.sent();
                         _c.label = 6;
                     case 6:
-                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        peripheryContract = typechain_1.Periphery__factory.connect(this.peripheryAddress, this.signer);
                         return [4 /*yield*/, peripheryContract.callStatic.updatePositionMargin(this.marginEngineAddress, tickLower, tickUpper, scaledMarginDelta, false).catch(function (error) { return __awaiter(_this, void 0, void 0, function () {
                                 var errorMessage;
                                 return __generator(this, function (_a) {
@@ -647,7 +649,7 @@ var AMM = /** @class */ (function () {
                         effectiveOwner = _b;
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
-                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        peripheryContract = typechain_1.Periphery__factory.connect(this.peripheryAddress, this.signer);
                         return [4 /*yield*/, peripheryContract.callStatic.settlePositionAndWithdrawMargin(this.marginEngineAddress, effectiveOwner, tickLower, tickUpper).catch(function (error) {
                                 var errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, _this.environment);
                                 throw new Error(errorMessage);
@@ -709,7 +711,7 @@ var AMM = /** @class */ (function () {
                                 throw new Error("Unrecognized FCM");
                         }
                         scaledNotional = this.scale(notional);
-                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        peripheryContract = typechain_1.Periphery__factory.connect(this.peripheryAddress, this.signer);
                         return [4 /*yield*/, peripheryContract.getCurrentTick(this.marginEngineAddress)];
                     case 1:
                         tickBefore = _c.sent();
@@ -899,7 +901,7 @@ var AMM = /** @class */ (function () {
                                 throw new Error("Unrecognized FCM");
                         }
                         scaledNotional = this.scale(notionalToUnwind);
-                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        peripheryContract = typechain_1.Periphery__factory.connect(this.peripheryAddress, this.signer);
                         return [4 /*yield*/, peripheryContract.getCurrentTick(this.marginEngineAddress)];
                     case 1:
                         tickBefore = _b.sent();
@@ -1105,7 +1107,7 @@ var AMM = /** @class */ (function () {
                         if (!this.signer) {
                             throw new Error('Wallet not connected');
                         }
-                        factoryContract = typechain_1.Factory__factory.connect(constants_1.FACTORY_ADDRESS, this.signer);
+                        factoryContract = typechain_1.Factory__factory.connect(this.factoryAddress, this.signer);
                         return [4 /*yield*/, this.signer.getAddress()];
                     case 1:
                         signerAddress = _a.sent();
@@ -1131,7 +1133,7 @@ var AMM = /** @class */ (function () {
                         if (!this.signer) {
                             throw new Error('Wallet not connected');
                         }
-                        factoryContract = typechain_1.Factory__factory.connect(constants_1.FACTORY_ADDRESS, this.signer);
+                        factoryContract = typechain_1.Factory__factory.connect(this.factoryAddress, this.signer);
                         return [4 /*yield*/, factoryContract.estimateGas.setApproval(this.fcmAddress, true)];
                     case 2:
                         estimatedGas = _a.sent();
@@ -1173,7 +1175,7 @@ var AMM = /** @class */ (function () {
                         signerAddress = _a.sent();
                         tokenAddress = this.underlyingToken.id;
                         token = typechain_1.ERC20Mock__factory.connect(tokenAddress, this.signer);
-                        return [4 /*yield*/, token.allowance(signerAddress, constants_1.PERIPHERY_ADDRESS)];
+                        return [4 /*yield*/, token.allowance(signerAddress, this.peripheryAddress)];
                     case 2:
                         allowance = _a.sent();
                         return [2 /*return*/, allowance.gte(constants_1.TresholdApprovalBn)];
@@ -1200,10 +1202,10 @@ var AMM = /** @class */ (function () {
                         }
                         tokenAddress = this.underlyingToken.id;
                         token = typechain_1.ERC20Mock__factory.connect(tokenAddress, this.signer);
-                        return [4 /*yield*/, token.estimateGas.approve(constants_1.PERIPHERY_ADDRESS, constants_1.MaxUint256Bn)];
+                        return [4 /*yield*/, token.estimateGas.approve(this.peripheryAddress, constants_1.MaxUint256Bn)];
                     case 2:
                         estimatedGas = _a.sent();
-                        return [4 /*yield*/, token.approve(constants_1.PERIPHERY_ADDRESS, constants_1.MaxUint256Bn, {
+                        return [4 /*yield*/, token.approve(this.peripheryAddress, constants_1.MaxUint256Bn, {
                                 gasLimit: (0, constants_1.getGasBuffer)(estimatedGas)
                             })];
                     case 3:
@@ -1425,7 +1427,7 @@ var AMM = /** @class */ (function () {
                         if (!this.provider) {
                             throw new Error('Blockchain not connected');
                         }
-                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.provider);
+                        peripheryContract = typechain_1.Periphery__factory.connect(this.peripheryAddress, this.provider);
                         return [4 /*yield*/, peripheryContract.callStatic.getCurrentTick(this.marginEngineAddress)];
                     case 1:
                         currentTick = _a.sent();
@@ -1777,7 +1779,7 @@ var AMM = /** @class */ (function () {
                         if (!this.signer) {
                             throw new Error('Wallet not connected');
                         }
-                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.signer);
+                        peripheryContract = typechain_1.Periphery__factory.connect(this.peripheryAddress, this.signer);
                         marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
                         return [4 /*yield*/, marginEngineContract.vamm()];
                     case 1:
@@ -1836,7 +1838,7 @@ var AMM = /** @class */ (function () {
                         if (!this.provider) {
                             throw new Error('Blockchain not connected');
                         }
-                        peripheryContract = typechain_1.Periphery__factory.connect(constants_1.PERIPHERY_ADDRESS, this.provider);
+                        peripheryContract = typechain_1.Periphery__factory.connect(this.peripheryAddress, this.provider);
                         marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.provider);
                         return [4 /*yield*/, marginEngineContract.vamm()];
                     case 1:

@@ -10,6 +10,7 @@ export type MarginAmountProps = {
   maxMargin?: number;
   margin?: number;
   isAdditional?: boolean;
+  isEditing?: boolean;
   onChangeMargin: (value: number) => void;
   error?: string;
 };
@@ -19,6 +20,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
   defaultMargin,
   margin,
   isAdditional,
+  isEditing,
   onChangeMargin,
   error
 }) => {
@@ -50,7 +52,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
       suffix={underlyingTokenName}
       label={
         <IconLabel
-          label={ isAdditional ? "Minimum Required Margin" : "Margin amount to withdraw" } 
+          label={ !isEditing ? 'Minimum required margin' : isAdditional ? "Margin amount to add" : "Margin amount to withdraw" } 
           icon="information-circle"
           info={ isAdditional ? 
             "Your minimum required margin is defined based on your leverage and notional amount traded. You are required to deposit margin in order to execute a trade." : 

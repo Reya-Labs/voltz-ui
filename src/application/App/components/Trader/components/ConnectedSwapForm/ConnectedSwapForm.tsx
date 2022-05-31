@@ -7,24 +7,27 @@ import { actions, selectors } from '@store';
 import { useAgent, useDispatch, useSelector, useSwapForm } from '@hooks';
 import { SwapForm, PendingTransaction, SwapFormActions, SwapFormModes } from '@components/interface';
 import { Agents } from '@components/contexts';
+import { Position } from '@voltz-protocol/v1-sdk';
 
 export type ConnectedSwapFormProps = {
   amm: AugmentedAMM;
   mode?: SwapFormModes;
   onReset: () => void;
+  position?: Position;
 };
 
 const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ 
   amm,
   mode = SwapFormModes.NEW_POSITION,
   onReset,
+  position,
 }) => {
   const { agent, onChangeAgent } = useAgent();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const defaultValues = {};
-  const form = useSwapForm(amm, mode, defaultValues);
+  const form = useSwapForm(position, amm, mode, defaultValues);
   
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId); // contains a failureMessage attribute that will contain whatever came out from the sdk
@@ -117,7 +120,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
             isEditingMargin={false}
             transactionId={transactionId}
             onComplete={handleComplete}
-            notional={form.state.notional as number}
+            notional={form.swapInfo.data?.availableNotional}
             margin={Math.abs(form.state.margin as number) * (form.isRemovingMargin ? -1 : 1)}
             onBack={handleGoBack}
           />
@@ -132,7 +135,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
             transactionId={transactionId}
             onComplete={handleComplete}
             isFCMSwap={true}
-            notional={form.state.notional as number}
+            notional={form.swapInfo.data?.availableNotional}
             margin={form.swapInfo.data?.marginRequirement}
             onBack={handleGoBack}
           />
@@ -147,7 +150,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
             transactionId={transactionId}
             onComplete={handleComplete}
             isFCMUnwind={true}
-            notional={form.state.notional as number}
+            notional={form.swapInfo.data?.availableNotional}
             onBack={handleGoBack}
           />
         );
@@ -157,12 +160,14 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
 
   return (
     <SwapForm
+      balance={form.balance ? amm.descale(form.balance) : undefined}
       endDate={amm.endDateTime}
       errors={form.errors}
+      formAction={form.action} 
       formState={form.state}
       isFormValid={form.isValid}
+      minRequiredMargin={form.minRequiredMargin}
       mode={mode}
-      formAction={form.action}
       onCancel={onReset}
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction}

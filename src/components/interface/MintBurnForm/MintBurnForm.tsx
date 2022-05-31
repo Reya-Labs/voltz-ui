@@ -174,6 +174,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
             maxMargin={maxMargin}
             margin={formState.margin}
             isAdditional={formState.marginAction === MintBurnFormMarginAction.ADD}
+            isEditing={mode === MintBurnFormModes.EDIT_MARGIN}
             onChangeMargin={onChangeMargin}
             error={errors['margin']}
           />
