@@ -68,9 +68,13 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
           const walletAddress = await newSigner.getAddress();
                              
           // Do checks that could stop us allowing the wallet to connect
-          await services.checkForTOSSignature(newSigner, walletAddress);
+          if(!process.env.REACT_APP_SKIP_TOS_CHECK) {
+            await services.checkForTOSSignature(newSigner, walletAddress);
+          }
           await services.checkForCorrectNetwork(newProvider);
-          await services.checkForRiskyWallet(walletAddress);
+          if(!process.env.REACT_APP_SKIP_WALLET_SCREENING) {
+            await services.checkForRiskyWallet(walletAddress);
+          }
             
           // IMPORTANT! - Set the provider and signer globally so that the redux store can use them
           (window as WindowWithWallet).wallet = {
