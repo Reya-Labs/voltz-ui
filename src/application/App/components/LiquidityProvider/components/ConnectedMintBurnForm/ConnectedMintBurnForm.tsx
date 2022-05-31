@@ -1,16 +1,15 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Position, Token } from '@voltz-protocol/v1-sdk/dist/types/entities';
+import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
 
 import { AugmentedAMM } from '@utilities';
 import { routes } from '@routes';
 import { actions, selectors } from '@store';
-import { MintBurnFormLiquidityAction, MintBurnFormMarginAction, useAgent, useAMMContext, useDispatch, useMintBurnForm, useSelector, useTokenApproval, useWallet } from '@hooks';
+import { MintBurnFormLiquidityAction, MintBurnFormMarginAction, useAgent, useAMMContext, useBalance, useDispatch, useMintBurnForm, useSelector, useTokenApproval } from '@hooks';
 import { MintBurnForm, MintBurnFormModes, PendingTransaction } from '@components/interface';
 import { updateFixedRate } from './utilities';
 import { getFormAction, getSubmitAction, getSubmitButtonHint, getSubmitButtonText } from './services';
 import { isUndefined } from 'lodash';
-import { BigNumber } from 'ethers';
 
 export type ConnectedMintBurnFormProps = {
   amm: AugmentedAMM;
@@ -29,11 +28,8 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { mintMinimumMarginRequirement: { call: loadMintInfo, loading: minRequiredMarginLoading, result: minRequiredMargin } } = useAMMContext();
-  
-  const [balance, setBalance] = useState<BigNumber>();
-  const { getTokenBalance } = useWallet();
-  const token = useRef<Token>();
 
+  const balance = useBalance(amm);
   const defaultValues = {
     fixedLow: position ? parseFloat(position.fixedRateLower.toFixed() ) : undefined,
     fixedHigh: position ? parseFloat(position.fixedRateUpper.toFixed() ) : undefined
@@ -83,20 +79,6 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     setTransactionId(action.payload.transaction.id);
     dispatch(action);
   };
-
-  // Load the users balance of the required token 
-  useEffect(() => {
-    if(token.current?.id !== amm.underlyingToken.id) {
-      token.current = amm.underlyingToken;
-      getTokenBalance(amm.underlyingToken)
-        .then((currentBalance) => {
-          setBalance(currentBalance);
-        })
-        .catch(() => {
-          setBalance(undefined);
-        })
-    }
-  }, [amm.underlyingToken, amm.underlyingToken.id, getTokenBalance]);
 
   // Load the mint summary info
   useEffect(() => {
