@@ -55,7 +55,7 @@ const NewPositionTemplate: ComponentStory<typeof SwapForm> = (args) => (
 );
 const NewPositionSwapForm: React.FunctionComponent = (args) => {
   const mode = SwapFormModes.NEW_POSITION;
-  const form = useSwapForm(mockAmm, mode);
+  const form = useSwapForm(undefined, mockAmm, mode);
 
   return (
     <SwapForm 
@@ -95,7 +95,7 @@ const EditingMarginTemplate: ComponentStory<typeof SwapForm> = (args) => (
 );
 const EditingMarginSwapForm: React.FunctionComponent = (args) => {
   const mode = SwapFormModes.EDIT_MARGIN;
-  const form = useSwapForm(mockAmm, mode);
+  const form = useSwapForm(undefined, mockAmm, mode);
 
   return (
     <SwapForm 
