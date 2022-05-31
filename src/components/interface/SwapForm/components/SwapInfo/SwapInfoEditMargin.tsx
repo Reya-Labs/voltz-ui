@@ -7,11 +7,11 @@ import { isUndefined } from 'lodash';
 export type SwapInfoEditMarginProps = {
   balance?: number;
   minRequiredMargin: number;
-  loading: boolean;
+  loading?: boolean;
   underlyingTokenName?: string; 
 };
 
-const SwapInfoEditMargin: React.FunctionComponent<SwapInfoEditMarginProps> = ({ balance, minRequiredMargin, loading, underlyingTokenName = '' }) => {
+const SwapInfoEditMargin: React.FunctionComponent<SwapInfoEditMarginProps> = ({ balance, minRequiredMargin, loading = false, underlyingTokenName = '' }) => {
 
   const label = <IconLabel
     label="trade information"
