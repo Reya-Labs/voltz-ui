@@ -1,11 +1,11 @@
-  /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument */
 
 import JSBI from 'jsbi';
 import { GetWalletQuery } from '@graphql'
 import { Position, Token, RateOracle, FCMSwap, FCMUnwind, FCMSettlement } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 import { AugmentedAMM } from '@utilities';
-import { Wallet }  from '@components/context';
+import { Wallet } from '@components/context';
 
 type FCMPositionQueryData = NonNullable<GetWalletQuery['wallet']>["fcmPositions"][number];
 
@@ -52,7 +52,7 @@ export const FCMPositionFactory = (positionData: FCMPositionQueryData, signer: W
     fcmUnwinds,
     fcmSettlements
   } = positionData;
-          
+
   return new Position({
     id: positionId,
     createdTimestamp: JSBI.BigInt(positionCreatedTimestamp),
@@ -67,7 +67,7 @@ export const FCMPositionFactory = (positionData: FCMPositionQueryData, signer: W
       provider: providers.getDefaultProvider(
         process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK,
       ),
-      environment: 'KOVAN',
+      environment: process.env.REACT_APP_DECODING_TAG || 'PROD',
       rateOracle: new RateOracle({
         id: rateOracleAddress,
         protocolId: parseInt(protocolId as string, 10),
@@ -77,6 +77,8 @@ export const FCMPositionFactory = (positionData: FCMPositionQueryData, signer: W
         name: tokenName,
         decimals: decimals as number,
       }),
+      factoryAddress: process.env.REACT_APP_FACTORY_ADDRESS || "0x",
+      peripheryAddress: process.env.REACT_APP_PERIPHERY_ADDRESS || "0x",
       marginEngineAddress,
       fcmAddress,
       updatedTimestamp: JSBI.BigInt(ammUpdatedTimestamp),

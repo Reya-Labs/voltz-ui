@@ -191,7 +191,7 @@ export const getErrorSignature = (error: any, environment: string): string => {
         throw new Error('Unrecognized error type');
       }
     }
-    case 'KOVAN': {
+    case 'PROD': {
       try {
         const reason = error.data.toString().replace('Reverted ', '') as string;
         if (reason.startsWith('0x08c379a0')) {
@@ -275,7 +275,7 @@ export const decodeInfoPostMint = (error: any, environment: string): RawInfoPost
           throw new Error('Unrecognized error type');
         }
       }
-      case 'KOVAN': {
+      case 'PROD': {
         try {
           const reason = error.data.toString().replace('Reverted ', '');
           const decodingResult = iface.decodeErrorResult(errSig, reason);
@@ -355,7 +355,7 @@ export const decodeInfoPostSwap = (error: any, environment: string): RawInfoPost
           throw new Error('Unrecognized error type');
         }
       }
-      case 'KOVAN': {
+      case 'PROD': {
         try {
           const reason = error.data.toString().replace('Reverted ', '');
           const decodingResult = iface.decodeErrorResult(errSig, reason);

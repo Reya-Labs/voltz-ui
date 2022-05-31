@@ -1,11 +1,11 @@
-  /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument */
 
 import JSBI from 'jsbi';
 import { GetWalletQuery } from '@graphql'
 import { providers } from 'ethers';
 import { Position, Token, RateOracle, Mint, Burn, Swap, MarginUpdate, Liquidation, Settlement } from '@voltz-protocol/v1-sdk';
 import { AugmentedAMM } from '@utilities';
-import { Wallet }  from '@components/context';
+import { Wallet } from '@components/context';
 
 type MEPositionQueryData = NonNullable<GetWalletQuery['wallet']>["positions"][number];
 
@@ -81,7 +81,7 @@ export const MEPositionFactory = (positionData: MEPositionQueryData, signer: Wal
       provider: providers.getDefaultProvider(
         process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK,
       ),
-      environment: 'KOVAN',
+      environment: process.env.REACT_APP_DECODING_TAG || 'PROD',
       rateOracle: new RateOracle({
         id: rateOracleAddress,
         protocolId: parseInt(protocolId as string, 10),
@@ -91,6 +91,8 @@ export const MEPositionFactory = (positionData: MEPositionQueryData, signer: Wal
         name: tokenName,
         decimals: decimals as number,
       }),
+      factoryAddress: process.env.REACT_APP_FACTORY_ADDRESS || "0x",
+      peripheryAddress: process.env.REACT_APP_PERIPHERY_ADDRESS || "0x",
       marginEngineAddress,
       fcmAddress,
       updatedTimestamp: JSBI.BigInt(ammUpdatedTimestamp),
@@ -140,7 +142,7 @@ export const MEPositionFactory = (positionData: MEPositionQueryData, signer: Wal
       transactionTimestamp: JSBI.BigInt(args.transaction.createdTimestamp),
       ammId,
       positionId: positionId,
-      depositer: args.depositer ,
+      depositer: args.depositer,
       marginDelta: JSBI.BigInt(args.marginDelta)
     })),
     liquidations: liquidations.map((args) => new Liquidation({
