@@ -6,9 +6,10 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 import { MintBurnFormMarginAction } from "../useMintBurnForm";
 import { hasEnoughTokens, hasEnoughUnderlyingTokens, lessThan } from "@utilities";
 import { useAgent, useAMMContext, useBalance, useMinRequiredMargin, useTokenApproval } from "@hooks";
-import { InfoPostSwap } from "@voltz-protocol/v1-sdk";
+import { InfoPostSwap, Position } from "@voltz-protocol/v1-sdk";
 import * as s from "./services";
 import { BigNumber } from "ethers";
+import JSBI from "jsbi";
 
 export type SwapFormState = {
   margin?: number;
@@ -42,7 +43,8 @@ export type SwapFormData = {
 };
 
 export const useSwapForm = (
-  amm: AugmentedAMM, 
+  position: Position | undefined,
+  amm: AugmentedAMM,
   mode: SwapFormModes,
   defaultValues: Partial<SwapFormState> = {}
 ): SwapFormData => {
@@ -217,6 +219,19 @@ export const useSwapForm = (
       if(margin !== 0 && await hasEnoughUnderlyingTokens(amm, margin) === false) {
         valid = false;
         addError(err, 'margin', 'Insufficient funds');
+      }
+    }
+
+    // Check that the input margin is >= minimum required margin if removing margin
+    if(position && !isUndefined(minRequiredMargin) && marginAction === MintBurnFormMarginAction.REMOVE) {
+      if(!isUndefined(margin) && margin !== 0) {
+        const originalMargin = amm.descale(BigNumber.from(position.margin.toString()));
+        const remainingMargin = originalMargin - margin;
+
+        if(remainingMargin < minRequiredMargin) {
+          valid = false;
+          addError(err, 'margin', 'Withdrawl amount too high');
+        }
       }
     }
     
