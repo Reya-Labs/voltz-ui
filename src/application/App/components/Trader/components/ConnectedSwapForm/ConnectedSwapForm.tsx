@@ -8,6 +8,7 @@ import { useAgent, useDispatch, useSelector, useSwapForm } from '@hooks';
 import { SwapForm, PendingTransaction, SwapFormActions, SwapFormModes } from '@components/interface';
 import { Agents } from '@components/contexts';
 import { Position } from '@voltz-protocol/v1-sdk';
+import { BigNumber } from 'ethers';
 
 export type ConnectedSwapFormProps = {
   amm: AugmentedAMM;
@@ -174,6 +175,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
       onChangeNotional={form.setNotional}
       onChangePartialCollateralization={form.setPartialCollateralization}
       onSubmit={handleSubmit}
+      positionMargin={position?.margin ? amm.descale(BigNumber.from(position.margin.toString())) : undefined}
       protocol={amm.protocol}
       startDate={amm.startDateTime}
       swapInfo={form.swapInfo.data}

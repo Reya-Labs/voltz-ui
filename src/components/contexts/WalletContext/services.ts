@@ -11,6 +11,8 @@ export type SignatureResponse = {
   walletAddress?: string;
 }
 
+const unavailableText = 'Service unavailable, please try again shortly';
+
 /**
  * Will throw an error if the connected ethereum network does not match required network set in .env file
  * @param provider - The ethers-wrapped provider
@@ -18,6 +20,8 @@ export type SignatureResponse = {
 export const checkForCorrectNetwork = async (provider: ethers.providers.JsonRpcProvider) => {
   const network = await provider.getNetwork();
   if(network.name !== process.env.REACT_APP_REQUIRED_ETHEREUM_NETWORK) {
+    // eslint-disable-next-line
+    console.warn(`User wallet is connected to '${network.name}' instead of '${process.env.REACT_APP_REQUIRED_ETHEREUM_NETWORK}'`);
     throw new Error('Wrong network');
   }
 };
@@ -41,11 +45,11 @@ export const checkForRiskyWallet = async (walletAddress: string) => {
  */
 export const checkForTOSSignature = async (signer: ethers.providers.JsonRpcSigner, walletAddress: string) => {
   const signerAddress = await signer.getAddress();
-  const existingSignature = await getSignature(signerAddress);
+  const signatureData = await getSignature(signerAddress);
   let termsAccepted = false;
 
-  if(existingSignature) {
-    const existingTOSSignerAddress = ethers.utils.verifyMessage(getTOSText(), existingSignature);
+  if(signatureData?.signature) {
+    const existingTOSSignerAddress = ethers.utils.verifyMessage(getTOSText(), signatureData.signature);
     if(existingTOSSignerAddress === signerAddress) {
       termsAccepted = true;
     }
@@ -62,20 +66,31 @@ export const checkForTOSSignature = async (signer: ethers.providers.JsonRpcSigne
 }
 
 /**
- * Retrieves a signature via the signatures API for the given wallet address
+ * Retrieves signature data via the signatures API for the given wallet address
  * @param walletAddress - the wallet address to retrieve the signature for
  */
 export const getSignature = async (walletAddress: string) => {
-  const resp = await fetch(`https://voltz-rest-api.herokuapp.com/get-signature/${walletAddress}`, {
-    headers: {
-      'Content-Type': 'application/json',
+  try {
+    const resp = await fetch(`https://voltz-rest-api.herokuapp.com/get-signature/${walletAddress}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    // https://voltz-rest-api.herokuapp.com/get-signature/0x45556408e543158f74403e882E3C8c23eCD9f732
+
+    if(resp.ok) {
+      return await resp.json() as SignatureResponse;
+    } else if(resp.status === 404) {
+      return undefined; // API is ok, but the signature wasn't found
+    } else {
+      throw await resp.text();
     }
-  });
-
-  // https://voltz-rest-api.herokuapp.com/get-signature/0x45556408e543158f74403e882E3C8c23eCD9f732
-
-  const data:SignatureResponse = resp.ok ? (await resp.json() as SignatureResponse) : {} as SignatureResponse;
-  return data.signature;
+  } catch(e) {
+    // eslint-disable-next-line
+    console.warn('TOS check failed', e);
+    throw new Error(unavailableText);
+  }
 }
 
 /**
@@ -188,27 +203,31 @@ export const getWalletProviderWalletConnect = async () => {
  * @param walletId - ID of the wallet to check
  */
 export async function getWalletRiskAssessment(walletId: string) {
-  const result = await fetch('https://api.trmlabs.com/public/v2/screening/addresses', {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-type': 'application/json',
-      Authorization: 'Basic ' + btoa(process.env.REACT_APP_TRM_API_KEY || '')
-    },
-    body: JSON.stringify([{
-      address: walletId,
-      chain: 'ethereum'
-    }])
-  });
+  try {
+    const result = await fetch('https://api.trmlabs.com/public/v2/screening/addresses', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-type': 'application/json',
+        Authorization: 'Basic ' + btoa(process.env.REACT_APP_TRM_API_KEY || '')
+      },
+      body: JSON.stringify([{
+        address: walletId,
+        chain: 'ethereum'
+      }])
+    });
 
-  if (result.ok) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const data:WalletRiskAssessment[] = await result.json();
-    return data[0];
-  } else {
-    const txt = await result.text();
+    if (result.ok) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const data:WalletRiskAssessment[] = await result.json();
+      return data[0];
+    } else {
+      throw await result.text();
+    }
+  } catch(e) {
     // eslint-disable-next-line
-    console.warn('Wallet screening failed', txt);
+    console.warn('Wallet screening failed', e);
+    throw new Error(unavailableText);
   }
 }
 

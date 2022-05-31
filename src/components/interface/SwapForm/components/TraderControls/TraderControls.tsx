@@ -69,8 +69,8 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
         defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
         onChangeOption={handleChangeMode}
         agent={agent}
+        disabled={!partialCollateralizationValue}
       />
-
       {agent === Agents.FIXED_TRADER && (
         <ToggleButtonGroup
           label={

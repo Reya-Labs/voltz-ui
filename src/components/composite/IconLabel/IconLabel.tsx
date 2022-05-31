@@ -5,15 +5,17 @@ import isNull from 'lodash/isNull';
 import upperCase from 'lodash/upperCase';
 
 import { Icon, Icons, Panel, Typography } from '@components/atomic';
+import { SystemStyleObject, Theme } from '@mui/system';
 
 export type IconLabelProps = {
   label: string;
   icon: Icons;
   info?: ReactNode;
   removeIcon?: boolean;
+  iconSx?: SystemStyleObject<Theme>
 };
 
-const IconLabel: React.FunctionComponent<IconLabelProps> = ({ label, icon, info, removeIcon }) => {
+const IconLabel: React.FunctionComponent<IconLabelProps> = ({ label, icon, info, removeIcon, iconSx = {} }) => {
   const [anchor, setAnchor] = useState<SVGElement | null>(null);
   const handlePopoverOpen = (event: React.MouseEvent<SVGElement>) => {
     setAnchor(event.currentTarget);
@@ -38,7 +40,7 @@ const IconLabel: React.FunctionComponent<IconLabelProps> = ({ label, icon, info,
         aria-haspopup="true"
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}
-        sx={{ height: 10, width: 10, position: 'relative', top: 1, left: 10, display: _display }}
+        sx={{ height: 10, width: 10, position: 'relative', top: 1, left: 10, display: _display, ...iconSx }}
       />
       {info && (
         <Popover

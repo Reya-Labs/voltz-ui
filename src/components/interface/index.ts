@@ -6,6 +6,7 @@ export { default as Nav } from './Nav/Nav';
 export { default as Page } from './Page/Page';
 export { default as PendingTransaction } from './PendingTransaction/PendingTransaction';
 export { default as PositionTable } from './PositionTable/PositionTable';
+export { PositionBadge } from './PositionTable/components';
 export type { PositionTableProps } from './PositionTable/PositionTable';
 export type { PositionTableFields } from './PositionTable/types';
 export * from './SwapForm';

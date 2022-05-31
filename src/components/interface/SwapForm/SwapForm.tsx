@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import { SystemStyleObject, Theme } from '@mui/system';
 import { MintBurnFormMarginAction, SwapFormState, useAgent, useTokenApproval } from '@hooks';
 import { Agents } from '@components/contexts';
-import { Button, Panel, Typography } from '@components/atomic';
+import { Button, Panel, Typography, Icon } from '@components/atomic';
 import {
   IconLabel,
   ProtocolInformation,
@@ -16,6 +16,7 @@ import { TraderControls, MarginControls, SwapInfo, SwapInfoEditMargin } from './
 import { colors } from '@theme';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from './types';
+import { PositionBadge } from '@components/interface';
 import { isUndefined } from 'lodash';
 
 export type SwapFormProps = {
@@ -34,6 +35,7 @@ export type SwapFormProps = {
   onChangeNotional: (value: number) => void;
   onChangePartialCollateralization: (value: boolean) => void;
   onSubmit: () => void;
+  positionMargin?: number;
   protocol?: string;
   startDate?: DateTime;
   swapInfo: InfoPostSwap | void | null;
@@ -61,6 +63,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   onChangeNotional,
   onChangePartialCollateralization,
   onSubmit,
+  positionMargin,
   protocol,
   startDate,
   submitButtonHint,
@@ -86,6 +89,18 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           : '0px 0px 88px rgba(38, 103, 255, 0.20)',
       }}
     >
+      {!formState.partialCollateralization && (
+        <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: (theme) => theme.spacing(6) }}>
+          <PositionBadge variant='FC' sx={{ display: 'inline-block', marginLeft: 0 }} />
+          <IconLabel 
+            icon="information-circle" 
+            label="" 
+            info="Please note that for the initial phase of the Voltz protocol mainnet launch, users who have supplied assets to the FCM will not accrue underling protocol rewards (ie COMP and AAVE). The Voltz Labs team will push an update in the coming weeks to allow for accruing and claiming of underling protocol rewards going forward." 
+            iconSx={{ color: colors.skyBlueCrayola.base, height: '14px', width: '14px', top: '0' }} 
+          />
+        </Box>
+      )}
+
       <ProtocolInformation protocol={protocol}/>
 
       <Box sx={bottomSpacing}>
@@ -165,11 +180,12 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         </Box>
       )}
 
-      {mode === SwapFormModes.EDIT_MARGIN && !isUndefined(minRequiredMargin) && (
+      {mode === SwapFormModes.EDIT_MARGIN && !isUndefined(minRequiredMargin) && !isUndefined(positionMargin) && (
         <Box sx={bottomSpacing}>
           <SwapInfoEditMargin 
             balance={balance}
             minRequiredMargin={minRequiredMargin}
+            positionMargin={positionMargin}
             underlyingTokenName={underlyingTokenName}
           />
         </Box>
