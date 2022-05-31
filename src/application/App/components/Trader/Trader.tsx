@@ -98,6 +98,7 @@ const Trader: React.FunctionComponent = () => {
               amm={effectiveAmm} 
               mode={formMode}
               onReset={handleReset} 
+              position={position}
             />
           </AMMProvider>
         </Box>

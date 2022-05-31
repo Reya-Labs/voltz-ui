@@ -12,18 +12,21 @@ import {
   NotionalAmount,
   MarginAmount,
 } from '@components/composite';
-import { TraderControls, MarginControls, SwapInfo } from './components';
+import { TraderControls, MarginControls, SwapInfo, SwapInfoEditMargin } from './components';
 import { colors } from '@theme';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from './types';
+import { isUndefined } from 'lodash';
 
 export type SwapFormProps = {
+  balance?: number;
   endDate?: DateTime;
   errors: Record<string, string>;
   formState: SwapFormState;
   formAction: SwapFormActions;
-  maxMargin?: number;
   isFormValid: boolean;
+  maxMargin?: number;
+  minRequiredMargin?: number;
   mode: SwapFormModes;
   onCancel: () => void;
   onChangeMargin: (value: number) => void;
@@ -43,13 +46,15 @@ export type SwapFormProps = {
 
 
 const SwapForm: React.FunctionComponent<SwapFormProps> = ({
+  balance,
   endDate,
   errors,
-  formState,
-  maxMargin,
-  isFormValid,
-  mode,
   formAction,
+  formState,
+  isFormValid,
+  maxMargin,
+  minRequiredMargin,
+  mode,
   onCancel,
   onChangeMargin,
   onChangeMarginAction,
@@ -134,27 +139,38 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         </Box>
       )}
 
-      {formState.partialCollateralization && (
+      {(formAction === SwapFormActions.SWAP || formAction === SwapFormActions.UPDATE) && (
         <Box sx={bottomSpacing}>
           <MarginAmount
             error={errors['margin']}
-            protocol={protocol}
-            maxMargin={maxMargin}
-            margin={formState.margin}
             isAdditional={formState.marginAction === MintBurnFormMarginAction.ADD}
+            isEditing={mode === SwapFormModes.EDIT_MARGIN}
+            margin={formState.margin}
+            maxMargin={maxMargin}
             onChangeMargin={onChangeMargin}
+            protocol={protocol}
           />
         </Box>
       )}
 
-      {(swapInfo || swapInfoLoading) && (
+      {mode === SwapFormModes.NEW_POSITION && (swapInfo || swapInfoLoading) && (
         <Box sx={bottomSpacing}>
-          <SwapInfo 
+          <SwapInfo
             data={swapInfo} 
             loading={swapInfoLoading} 
             underlyingTokenName={underlyingTokenName}
             yieldBearingTokenName={protocol}
             formAction={formAction}
+          />
+        </Box>
+      )}
+
+      {mode === SwapFormModes.EDIT_MARGIN && !isUndefined(minRequiredMargin) && (
+        <Box sx={bottomSpacing}>
+          <SwapInfoEditMargin 
+            balance={balance}
+            minRequiredMargin={minRequiredMargin}
+            underlyingTokenName={underlyingTokenName}
           />
         </Box>
       )}
