@@ -225,37 +225,6 @@ export const useSwapForm = (
     return valid;
   };
 
-  // eslint-disable-next-line
-  console.log({
-    action,
-    approvalsNeeded,
-    balance,
-    errors,
-    isAddingMargin,
-    isRemovingMargin,
-    isValid,
-    minRequiredMargin,
-    setMargin: updateMargin,
-    setMarginAction: updateMarginAction,
-    setNotional: updateNotional,
-    setPartialCollateralization: updatePartialCollateralization,
-    swapInfo: {
-      data: swapInfo.result || undefined,
-      loading: swapInfo.loading,
-    },
-    state: {
-      margin,
-      marginAction,
-      notional,
-      partialCollateralization
-    },
-    submitButtonHint,
-    submitButtonText,
-    tokenApprovals,
-    validate
-
-  })
-
   return {
     action,
     approvalsNeeded,
