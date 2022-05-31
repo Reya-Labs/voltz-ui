@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import Box from '@mui/material/Box';
 import Popover from '@mui/material/Popover';
 import isNull from 'lodash/isNull';
@@ -9,7 +9,7 @@ import { Icon, Icons, Panel, Typography } from '@components/atomic';
 export type IconLabelProps = {
   label: string;
   icon: Icons;
-  info?: string;
+  info?: ReactNode;
   removeIcon?: boolean;
 };
 
