@@ -6,12 +6,13 @@ import { isUndefined } from 'lodash';
 
 export type SwapInfoEditMarginProps = {
   balance?: number;
-  minRequiredMargin: number;
   loading?: boolean;
+  minRequiredMargin: number;
+  positionMargin: number;
   underlyingTokenName?: string; 
 };
 
-const SwapInfoEditMargin: React.FunctionComponent<SwapInfoEditMarginProps> = ({ balance, minRequiredMargin, loading = false, underlyingTokenName = '' }) => {
+const SwapInfoEditMargin: React.FunctionComponent<SwapInfoEditMarginProps> = ({ balance, loading = false, minRequiredMargin, positionMargin, underlyingTokenName = '' }) => {
 
   const label = <IconLabel
     label="trade information"
@@ -21,12 +22,16 @@ const SwapInfoEditMargin: React.FunctionComponent<SwapInfoEditMarginProps> = ({ 
 
   const rows = !isUndefined(minRequiredMargin) ? [
     {
-      label: 'MARGIN IN ACCOUNT:', 
-      value: !isUndefined(balance) ? `${formatCurrency(Math.abs(balance), true)} ${underlyingTokenName}` : 'NO DATA'
-    },
-    {
       label: 'MINIMUM REQUIRED MARGIN:', 
       value: `${formatCurrency(minRequiredMargin, true)} ${underlyingTokenName}`
+    },
+    {
+      label: 'POSITION MARGIN:', 
+      value: `${formatCurrency(positionMargin, true)} ${underlyingTokenName}`
+    },
+    {
+      label: 'WALLET BALANCE:', 
+      value: !isUndefined(balance) ? `${formatCurrency(Math.abs(balance), true)} ${underlyingTokenName}` : 'NO DATA'
     },
   ] : undefined;
 
