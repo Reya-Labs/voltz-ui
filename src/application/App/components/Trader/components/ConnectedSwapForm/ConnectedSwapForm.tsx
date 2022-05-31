@@ -117,7 +117,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
             isEditingMargin={false}
             transactionId={transactionId}
             onComplete={handleComplete}
-            notional={form.state.notional as number}
+            notional={form.swapInfo.data?.availableNotional}
             margin={Math.abs(form.state.margin as number) * (form.isRemovingMargin ? -1 : 1)}
             onBack={handleGoBack}
           />
@@ -132,7 +132,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
             transactionId={transactionId}
             onComplete={handleComplete}
             isFCMSwap={true}
-            notional={form.state.notional as number}
+            notional={form.swapInfo.data?.availableNotional}
             margin={form.swapInfo.data?.marginRequirement}
             onBack={handleGoBack}
           />
@@ -147,7 +147,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
             transactionId={transactionId}
             onComplete={handleComplete}
             isFCMUnwind={true}
-            notional={form.state.notional as number}
+            notional={form.swapInfo.data?.availableNotional}
             onBack={handleGoBack}
           />
         );
