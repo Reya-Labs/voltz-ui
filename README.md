@@ -18,7 +18,7 @@ REACT_APP_SKIP_TOS_CHECK=Y
 REACT_APP_SKIP_WALLET_SCREENING=Y
 ```
 
-`REACT_APP_REQUIRED_ETHEREUM_NETWORK` is used by the app to check that the connected Metamask wallet is using the correct network. Use `mainnet` for Ethereum Mainnet (live), or `kovan` for Kovan Testnet (dev).
+`REACT_APP_REQUIRED_ETHEREUM_NETWORK` is used by the app to check that the connected Metamask wallet is using the correct network. Use `homestead` for Ethereum Mainnet (live), or `kovan` for Kovan Testnet (dev).
 
 `REACT_APP_WALLETCONNECT_INFURA_ID` is used by the app when attempting to use the WalletConnect wallet option. Sign up for an account at https://infura.io/ and then create a new project. The 'infura id' is the same as the 'project id' in the keys section.
 
