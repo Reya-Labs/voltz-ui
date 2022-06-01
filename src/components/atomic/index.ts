@@ -1,7 +1,6 @@
 export { default as Background } from './Background/Background';
 export { default as Button } from './Button/Button';
 export { default as Card } from './Card/Card';
-export { default as FormHelperText } from './FormHelperText/FormHelperText';
 export { default as Icon } from './Icon/Icon';
 export type { IconProps } from './Icon/Icon';
 export type { Icons } from './Icon/types';
