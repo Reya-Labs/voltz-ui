@@ -1885,7 +1885,7 @@ class AMM {
       return 0;
     }
 
-    const percentage = (accumulated.mul(1000).div(cap)).toNumber() / 1000;
+    const percentage = (accumulated.mul(100000).div(cap)).toNumber() / 1000;
 
     return percentage;
   }

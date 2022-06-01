@@ -1859,7 +1859,7 @@ var AMM = /** @class */ (function () {
                         if (cap.eq(ethers_1.BigNumber.from(0))) {
                             return [2 /*return*/, 0];
                         }
-                        percentage = (accumulated.mul(1000).div(cap)).toNumber() / 1000;
+                        percentage = (accumulated.mul(100000).div(cap)).toNumber() / 1000;
                         return [2 /*return*/, percentage];
                 }
             });
