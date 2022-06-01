@@ -201,10 +201,10 @@ export const getSubmitButtonText = (mode: SwapFormModes, tokenApprovals: ReturnT
         return 'Approve FCM';
       }
       if (!tokenApprovals.yieldBearingTokenApprovedForFCM) {
-        return <Box>Approve <Text>{amm.protocol}</Text></Box>;
+        return <Box>Approve <Text>{amm.protocol}</Text> for trade</Box>;
       }
       if (!tokenApprovals.underlyingTokenApprovedForFCM) {
-        return <Box>Approve <Text>{amm.underlyingToken.name || ''}</Text></Box>;
+        return <Box>Approve <Text>{amm.underlyingToken.name || ''}</Text> for fees</Box>;
       }
     } 
     else {
