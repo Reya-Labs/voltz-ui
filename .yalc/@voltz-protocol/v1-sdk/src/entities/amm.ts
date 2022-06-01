@@ -338,7 +338,7 @@ class AMM {
         ? scaledMarginRequirement - scaledCurrentMargin
         : 0;
 
-    const averageFixedRate = fixedTokenDeltaUnbalanced.mul(BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
+    const averageFixedRate = (availableNotional.eq(BigNumber.from(0))) ? 0 : fixedTokenDeltaUnbalanced.mul(BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
 
     return {
       marginRequirement: additionalMargin,
@@ -911,7 +911,7 @@ class AMM {
     const scaledAvailableNotional = this.descale(availableNotional);
     const scaledFee = this.descale(fee);
 
-    const averageFixedRate = fixedTokenDeltaUnbalanced.mul(BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
+    const averageFixedRate = (availableNotional.eq(BigNumber.from(0))) ? 0 : fixedTokenDeltaUnbalanced.mul(BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
 
     let additionalMargin = 0;
     switch (this.rateOracle.protocolId) {
@@ -1092,7 +1092,7 @@ class AMM {
     const scaledAvailableNotional = this.descale(availableNotional);
     const scaledFee = this.descale(fee);
 
-    const averageFixedRate = fixedTokenDeltaUnbalanced.mul(BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
+    const averageFixedRate = (availableNotional.eq(BigNumber.from(0))) ? 0 : fixedTokenDeltaUnbalanced.mul(BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
 
     return {
       marginRequirement: 0,
@@ -1880,6 +1880,10 @@ class AMM {
 
     const accumulated = await peripheryContract.lpMarginCumulatives(vammAddress);
     const cap = await peripheryContract.lpMarginCaps(vammAddress);
+
+    if (cap.eq(BigNumber.from(0))) {
+      return 0;
+    }
 
     const percentage = (accumulated.mul(1000).div(cap)).toNumber() / 1000;
 

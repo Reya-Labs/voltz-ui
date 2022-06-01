@@ -163,7 +163,7 @@ var AMM = /** @class */ (function () {
                         additionalMargin = scaledMarginRequirement > scaledCurrentMargin
                             ? scaledMarginRequirement - scaledCurrentMargin
                             : 0;
-                        averageFixedRate = fixedTokenDeltaUnbalanced.mul(ethers_1.BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
+                        averageFixedRate = (availableNotional.eq(ethers_1.BigNumber.from(0))) ? 0 : fixedTokenDeltaUnbalanced.mul(ethers_1.BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
                         return [2 /*return*/, {
                                 marginRequirement: additionalMargin,
                                 availableNotional: scaledAvailableNotional < 0 ? -scaledAvailableNotional : scaledAvailableNotional,
@@ -747,7 +747,7 @@ var AMM = /** @class */ (function () {
                         fixedRateDeltaRaw = fixedRateDelta.toNumber();
                         scaledAvailableNotional = this.descale(availableNotional);
                         scaledFee = this.descale(fee);
-                        averageFixedRate = fixedTokenDeltaUnbalanced.mul(ethers_1.BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
+                        averageFixedRate = (availableNotional.eq(ethers_1.BigNumber.from(0))) ? 0 : fixedTokenDeltaUnbalanced.mul(ethers_1.BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
                         additionalMargin = 0;
                         _b = this.rateOracle.protocolId;
                         switch (_b) {
@@ -937,7 +937,7 @@ var AMM = /** @class */ (function () {
                         fixedRateDeltaRaw = fixedRateDelta.toNumber();
                         scaledAvailableNotional = this.descale(availableNotional);
                         scaledFee = this.descale(fee);
-                        averageFixedRate = fixedTokenDeltaUnbalanced.mul(ethers_1.BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
+                        averageFixedRate = (availableNotional.eq(ethers_1.BigNumber.from(0))) ? 0 : fixedTokenDeltaUnbalanced.mul(ethers_1.BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
                         return [2 /*return*/, {
                                 marginRequirement: 0,
                                 availableNotional: scaledAvailableNotional < 0 ? -scaledAvailableNotional : scaledAvailableNotional,
@@ -1856,6 +1856,9 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, peripheryContract.lpMarginCaps(vammAddress)];
                     case 4:
                         cap = _a.sent();
+                        if (cap.eq(ethers_1.BigNumber.from(0))) {
+                            return [2 /*return*/, 0];
+                        }
                         percentage = (accumulated.mul(1000).div(cap)).toNumber() / 1000;
                         return [2 /*return*/, percentage];
                 }

@@ -1,3 +1,7 @@
 "use strict";
-// import { getReadableErrorMessage } from './errorHandling';
-// console.log(getReadableErrorMessage(error, 'MAINNET'));
+Object.defineProperty(exports, "__esModule", { value: true });
+var errorHandling_1 = require("./errorHandling");
+var error = {
+    data: "Reverted 0x08c379a00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000353504c0000000000000000000000000000000000000000000000000000000000",
+};
+console.log((0, errorHandling_1.getReadableErrorMessage)(error, 'PROD'));

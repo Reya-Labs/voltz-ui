@@ -1,3 +1,7 @@
-// import { getReadableErrorMessage } from './errorHandling';
+import { getReadableErrorMessage } from './errorHandling';
 
-// console.log(getReadableErrorMessage(error, 'MAINNET'));
+const error = {
+  data: "Reverted 0x08c379a00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000353504c0000000000000000000000000000000000000000000000000000000000",
+};
+
+console.log(getReadableErrorMessage(error, 'PROD'));
