@@ -58,7 +58,7 @@ const useAMMs = (): UseAMMsResult => {
             provider: providers.getDefaultProvider(
               process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK,
             ),
-            environment: process.env.REACT_APP_DECODING_TAG || 'PROD',
+            environment: process.env.REACT_APP_DECODING_TAG || 'NO_ENV',
             rateOracle: new RateOracle({
               id: rateOracleAddress,
               protocolId: parseInt(protocolId as string, 10),

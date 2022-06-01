@@ -33,7 +33,7 @@ const deserializeAmm = (
     id,
     signer,
     provider: providers.getDefaultProvider(process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK),
-    environment: process.env.REACT_APP_DECODING_TAG || 'PROD',
+    environment: process.env.REACT_APP_DECODING_TAG || 'NO_ENV',
     updatedTimestamp: JSBI.BigInt(updatedTimestamp),
     fcmAddress,
     termStartTimestamp: JSBI.BigInt(termStartTimestamp),

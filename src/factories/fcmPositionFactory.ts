@@ -67,7 +67,7 @@ export const FCMPositionFactory = (positionData: FCMPositionQueryData, signer: W
       provider: providers.getDefaultProvider(
         process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK,
       ),
-      environment: process.env.REACT_APP_DECODING_TAG || 'PROD',
+      environment: process.env.REACT_APP_DECODING_TAG || 'KOVAN',
       rateOracle: new RateOracle({
         id: rateOracleAddress,
         protocolId: parseInt(protocolId as string, 10),

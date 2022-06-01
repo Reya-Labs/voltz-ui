@@ -191,9 +191,27 @@ export const getErrorSignature = (error: any, environment: string): string => {
         throw new Error('Unrecognized error type');
       }
     }
-    case 'PROD': {
+    case 'KOVAN': {
       try {
         const reason = error.data.toString().replace('Reverted ', '') as string;
+        if (reason.startsWith('0x08c379a0')) {
+          return 'Error';
+        }
+        const decodedError = iface.parseError(reason);
+        const errSig = decodedError.signature.split('(')[0];
+        return errSig;
+      } catch {
+        throw new Error('Unrecognized error type');
+      }
+    }
+    case 'MAINNET': {
+      try {
+        const stringifiedError = error.toString();
+        const afterOriginalError = stringifiedError.split("originalError")[1];
+        const afterData = afterOriginalError.split("data")[1];
+        const beforeMessage = afterData.split("message")[0];
+        const reason = beforeMessage.substring(3, beforeMessage.length - 3);
+
         if (reason.startsWith('0x08c379a0')) {
           return 'Error';
         }
@@ -275,9 +293,26 @@ export const decodeInfoPostMint = (error: any, environment: string): RawInfoPost
           throw new Error('Unrecognized error type');
         }
       }
-      case 'PROD': {
+      case 'KOVAN': {
         try {
           const reason = error.data.toString().replace('Reverted ', '');
+          const decodingResult = iface.decodeErrorResult(errSig, reason);
+          const result = {
+            marginRequirement: decodingResult.marginRequirement,
+          };
+          return result;
+        } catch {
+          throw new Error('Unrecognized error type');
+        }
+      }
+      case 'MAINNET': {
+        try {
+          const stringifiedError = error.toString();
+          const afterOriginalError = stringifiedError.split("originalError")[1];
+          const afterData = afterOriginalError.split("data")[1];
+          const beforeMessage = afterData.split("message")[0];
+          const reason = beforeMessage.substring(3, beforeMessage.length - 3);
+
           const decodingResult = iface.decodeErrorResult(errSig, reason);
           const result = {
             marginRequirement: decodingResult.marginRequirement,
@@ -355,9 +390,30 @@ export const decodeInfoPostSwap = (error: any, environment: string): RawInfoPost
           throw new Error('Unrecognized error type');
         }
       }
-      case 'PROD': {
+      case 'KOVAN': {
         try {
           const reason = error.data.toString().replace('Reverted ', '');
+          const decodingResult = iface.decodeErrorResult(errSig, reason);
+          const result = {
+            marginRequirement: decodingResult.marginRequirement,
+            tick: decodingResult.tick,
+            fee: decodingResult.cumulativeFeeIncurred,
+            availableNotional: decodingResult.variableTokenDelta,
+            fixedTokenDeltaUnbalanced: decodingResult.fixedTokenDeltaUnbalanced,
+          };
+          return result;
+        } catch {
+          throw new Error('Unrecognized error type');
+        }
+      }
+      case 'MAINNET': {
+        try {
+          const stringifiedError = error.toString();
+          const afterOriginalError = stringifiedError.split("originalError")[1];
+          const afterData = afterOriginalError.split("data")[1];
+          const beforeMessage = afterData.split("message")[0];
+          const reason = beforeMessage.substring(3, beforeMessage.length - 3);
+
           const decodingResult = iface.decodeErrorResult(errSig, reason);
           const result = {
             marginRequirement: decodingResult.marginRequirement,

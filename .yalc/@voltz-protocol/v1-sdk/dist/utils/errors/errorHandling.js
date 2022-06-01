@@ -148,7 +148,7 @@ var getErrorSignature = function (error, environment) {
                 throw new Error('Unrecognized error type');
             }
         }
-        case 'PROD': {
+        case 'KOVAN': {
             try {
                 var reason = error.data.toString().replace('Reverted ', '');
                 if (reason.startsWith('0x08c379a0')) {
@@ -159,6 +159,24 @@ var getErrorSignature = function (error, environment) {
                 return errSig;
             }
             catch (_c) {
+                throw new Error('Unrecognized error type');
+            }
+        }
+        case 'MAINNET': {
+            try {
+                var stringifiedError = error.toString();
+                var afterOriginalError = stringifiedError.split("originalError")[1];
+                var afterData = afterOriginalError.split("data")[1];
+                var beforeMessage = afterData.split("message")[0];
+                var reason = beforeMessage.substring(3, beforeMessage.length - 3);
+                if (reason.startsWith('0x08c379a0')) {
+                    return 'Error';
+                }
+                var decodedError = exports.iface.parseError(reason);
+                var errSig = decodedError.signature.split('(')[0];
+                return errSig;
+            }
+            catch (_d) {
                 throw new Error('Unrecognized error type');
             }
         }
@@ -228,7 +246,7 @@ var decodeInfoPostMint = function (error, environment) {
                     throw new Error('Unrecognized error type');
                 }
             }
-            case 'PROD': {
+            case 'KOVAN': {
                 try {
                     var reason = error.data.toString().replace('Reverted ', '');
                     var decodingResult = exports.iface.decodeErrorResult(errSig, reason);
@@ -238,6 +256,23 @@ var decodeInfoPostMint = function (error, environment) {
                     return result;
                 }
                 catch (_c) {
+                    throw new Error('Unrecognized error type');
+                }
+            }
+            case 'MAINNET': {
+                try {
+                    var stringifiedError = error.toString();
+                    var afterOriginalError = stringifiedError.split("originalError")[1];
+                    var afterData = afterOriginalError.split("data")[1];
+                    var beforeMessage = afterData.split("message")[0];
+                    var reason = beforeMessage.substring(3, beforeMessage.length - 3);
+                    var decodingResult = exports.iface.decodeErrorResult(errSig, reason);
+                    var result = {
+                        marginRequirement: decodingResult.marginRequirement,
+                    };
+                    return result;
+                }
+                catch (_d) {
                     throw new Error('Unrecognized error type');
                 }
             }
@@ -301,7 +336,7 @@ var decodeInfoPostSwap = function (error, environment) {
                     throw new Error('Unrecognized error type');
                 }
             }
-            case 'PROD': {
+            case 'KOVAN': {
                 try {
                     var reason = error.data.toString().replace('Reverted ', '');
                     var decodingResult = exports.iface.decodeErrorResult(errSig, reason);
@@ -315,6 +350,27 @@ var decodeInfoPostSwap = function (error, environment) {
                     return result;
                 }
                 catch (_c) {
+                    throw new Error('Unrecognized error type');
+                }
+            }
+            case 'MAINNET': {
+                try {
+                    var stringifiedError = error.toString();
+                    var afterOriginalError = stringifiedError.split("originalError")[1];
+                    var afterData = afterOriginalError.split("data")[1];
+                    var beforeMessage = afterData.split("message")[0];
+                    var reason = beforeMessage.substring(3, beforeMessage.length - 3);
+                    var decodingResult = exports.iface.decodeErrorResult(errSig, reason);
+                    var result = {
+                        marginRequirement: decodingResult.marginRequirement,
+                        tick: decodingResult.tick,
+                        fee: decodingResult.cumulativeFeeIncurred,
+                        availableNotional: decodingResult.variableTokenDelta,
+                        fixedTokenDeltaUnbalanced: decodingResult.fixedTokenDeltaUnbalanced,
+                    };
+                    return result;
+                }
+                catch (_d) {
                     throw new Error('Unrecognized error type');
                 }
             }
