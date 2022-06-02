@@ -281,10 +281,7 @@ var decodeInfoPostMint = function (error, environment) {
             }
         }
     }
-    if (errSig in exports.errorMessageMapping) {
-        throw new Error(exports.errorMessageMapping[errSig]);
-    }
-    throw new Error('Unrecognized error');
+    throw new Error((0, exports.getReadableErrorMessage)(error, environment));
 };
 exports.decodeInfoPostMint = decodeInfoPostMint;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -379,9 +376,6 @@ var decodeInfoPostSwap = function (error, environment) {
             }
         }
     }
-    if (errSig in exports.errorMessageMapping) {
-        throw new Error(exports.errorMessageMapping[errSig]);
-    }
-    throw new Error('Unrecognized error');
+    throw new Error((0, exports.getReadableErrorMessage)(error, environment));
 };
 exports.decodeInfoPostSwap = decodeInfoPostSwap;

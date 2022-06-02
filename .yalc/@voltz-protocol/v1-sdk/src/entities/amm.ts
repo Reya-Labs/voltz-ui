@@ -409,11 +409,6 @@ class AMM {
     const scaledNotional = this.scale(notional);
     const scaledMarginDelta = this.scale(margin);
 
-    const isUnderlyingTokenApprovedForPeriphery = await this.isUnderlyingTokenApprovedForPeriphery();
-    if (!isUnderlyingTokenApprovedForPeriphery) {
-      await this.approveUnderlyingTokenForPeriphery();
-    }
-
     const swapPeripheryParams: SwapPeripheryParams = {
       marginEngine: this.marginEngineAddress,
       isFT,
@@ -564,11 +559,6 @@ class AMM {
     const _notional = this.scale(notional);
     const _marginDelta = this.scale(margin);
 
-    const isUnderlyingTokenApprovedForPeriphery = await this.isUnderlyingTokenApprovedForPeriphery();
-    if (!isUnderlyingTokenApprovedForPeriphery) {
-      await this.approveUnderlyingTokenForPeriphery();
-    }
-
     const mintOrBurnParams: MintOrBurnParams = {
       marginEngine: this.marginEngineAddress,
       tickLower,
@@ -705,11 +695,6 @@ class AMM {
     const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
     const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
     const scaledMarginDelta = this.scale(marginDelta);
-
-    const isUnderlyingTokenApprovedForPeriphery = await this.isUnderlyingTokenApprovedForPeriphery();
-    if (!isUnderlyingTokenApprovedForPeriphery) {
-      await this.approveUnderlyingTokenForPeriphery();
-    }
 
     const peripheryContract = peripheryFactory.connect(this.peripheryAddress, this.signer);
 
@@ -954,11 +939,6 @@ class AMM {
       throw new Error('No underlying error');
     }
 
-    const isFCMApproved = await this.isFCMApproved();
-    if (!isFCMApproved) {
-      await this.approveFCM();
-    }
-
     let sqrtPriceLimitX96;
     if (fixedRateLimit) {
       const { closestUsableTick: tickLimit } = this.closestTickAndFixedRate(fixedRateLimit);
@@ -983,16 +963,6 @@ class AMM {
         throw new Error("Unrecognized FCM");
     }
     const scaledNotional = this.scale(notional);
-
-    const isUnderlyingTokenApprovedForFCM = await this.isUnderlyingTokenApprovedForFCM();
-    if (!isUnderlyingTokenApprovedForFCM) {
-      await this.approveUnderlyingTokenForFCM();
-    }
-
-    const isYieldBearingTokenApprovedForFCM = await this.isYieldBearingTokenApprovedForFCM();
-    if (!isYieldBearingTokenApprovedForFCM) {
-      await this.approveUnderlyingTokenForFCM();
-    }
 
     await fcmContract.callStatic.initiateFullyCollateralisedFixedTakerSwap(
       scaledNotional,
@@ -1123,11 +1093,6 @@ class AMM {
       sqrtPriceLimitX96 = TickMath.getSqrtRatioAtTick(TickMath.MIN_TICK + 1).toString();
     }
 
-    const isFCMApproved = await this.isFCMApproved();
-    if (!isFCMApproved) {
-      await this.approveFCM();
-    }
-
     let fcmContract;
     switch (this.rateOracle.protocolId) {
       case 1:
@@ -1143,11 +1108,6 @@ class AMM {
     }
 
     const scaledNotional = this.scale(notionalToUnwind);
-
-    const isUnderlyingTokenApprovedForFCM = await this.isUnderlyingTokenApprovedForFCM();
-    if (!isUnderlyingTokenApprovedForFCM) {
-      await this.approveUnderlyingTokenForFCM();
-    }
 
     await fcmContract.callStatic.unwindFullyCollateralisedFixedTakerSwap(
       scaledNotional,

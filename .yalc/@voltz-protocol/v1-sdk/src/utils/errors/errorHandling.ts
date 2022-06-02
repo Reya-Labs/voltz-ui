@@ -327,10 +327,7 @@ export const decodeInfoPostMint = (error: any, environment: string): RawInfoPost
       }
     }
   }
-  if (errSig in errorMessageMapping) {
-    throw new Error(errorMessageMapping[errSig]);
-  }
-  throw new Error('Unrecognized error');
+  throw new Error(getReadableErrorMessage(error, environment));
 };
 
 export type RawInfoPostSwap = {
@@ -432,8 +429,5 @@ export const decodeInfoPostSwap = (error: any, environment: string): RawInfoPost
       }
     }
   }
-  if (errSig in errorMessageMapping) {
-    throw new Error(errorMessageMapping[errSig]);
-  }
-  throw new Error('Unrecognized error');
+  throw new Error(getReadableErrorMessage(error, environment));
 };
