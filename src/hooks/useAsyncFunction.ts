@@ -4,7 +4,6 @@ import useDebounceFunc from './useDebounceFunc';
 export type UseAsyncFunctionResult<ArgsType, ResultType> = {
   result: ResultType | null;
   errorMessage: string | null;
-  // error: boolean;
   loading: boolean;
   call: (args?: ArgsType) => void;
 };
@@ -16,7 +15,6 @@ const useAsyncFunction = <ArgsType, ResultType>(
 ): UseAsyncFunctionResult<ArgsType, ResultType> => {
   const [args, setArgs] = useState<ArgsType>();
   const [result, setResult] = useState<ResultType | null>(null);
-  // const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [called, setCalled] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -24,7 +22,7 @@ const useAsyncFunction = <ArgsType, ResultType>(
     (callArgs?: ArgsType) => {
       setArgs(callArgs);
       setResult(null);
-      // setError(false);
+      setErrorMessage(null);
       setLoading(false);
       setCalled(true);
     },

@@ -31,7 +31,7 @@ const Text = ({ bold, children, green, red }: TextProps) => (
 export const approvalsNeeded = (action: SwapFormActions, tokenApprovals: ReturnType<typeof useTokenApproval>, isRemovingMargin: boolean) => {
   if(!isRemovingMargin) {
     if (action === SwapFormActions.FCM_SWAP || action === SwapFormActions.FCM_UNWIND) {
-      return !tokenApprovals.FCMApproved || !tokenApprovals.yieldBearingTokenApprovedForFCM || !tokenApprovals.underlyingTokenApprovedForPeriphery;
+      return !tokenApprovals.FCMApproved || !tokenApprovals.yieldBearingTokenApprovedForFCM || !tokenApprovals.underlyingTokenApprovedForFCM;
     } else {
       return !tokenApprovals.underlyingTokenApprovedForPeriphery;
     }
@@ -135,7 +135,8 @@ export const getSubmitButtonHint = (
   formErrors: SwapFormData['errors'], 
   isFormValid: boolean, 
   tokenApprovals: ReturnType<typeof useTokenApproval>, 
-  isRemovingMargin: boolean
+  isRemovingMargin: boolean,
+  tradeInfoErrorMessage: string | null,
 ) => {
   const isFCMAction = formAction === SwapFormActions.FCM_SWAP || formAction === SwapFormActions.FCM_UNWIND;
 
@@ -163,9 +164,12 @@ export const getSubmitButtonHint = (
   }
 
   // Form validation
-  if (!isFormValid) {
+  if (!isFormValid || tradeInfoErrorMessage) {
+    if (tradeInfoErrorMessage) {
+      return <Text red>{tradeInfoErrorMessage}</Text>;
+    }
     if(formErrors.balance) {
-      return `You do not have enough ${amm.underlyingToken.name || ''}`;
+      return <Text red>You do not have enough {amm.underlyingToken.name || ''}</Text>;
     }
     if(!Object.keys(formErrors).length) {
       return 'Input your margin'

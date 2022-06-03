@@ -114,6 +114,9 @@ exports.errorMessageMapping = {
     AavePoolGetReserveNormalizedIncomeReturnedZero: 'Internal error',
     /// @dev currentTime < queriedTime
     OOO: 'Internal error',
+    // @dev safeTransferLib error
+    'STL fail': 'Insufficient balance',
+    'Insufficient balance': 'Insufficient balance',
 };
 var extractErrorSignature = function (message) {
     // eslint-disable-next-line no-restricted-syntax
