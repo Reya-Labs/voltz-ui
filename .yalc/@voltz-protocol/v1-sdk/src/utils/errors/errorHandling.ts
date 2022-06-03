@@ -158,6 +158,11 @@ export const errorMessageMapping: { [errSig: string]: string } = {
 
   /// @dev currentTime < queriedTime
   OOO: 'Internal error',
+
+  // @dev safeTransferLib error
+  'STL fail': 'Insufficient balance',
+
+  'Insufficient balance': 'Insufficient balance',
 };
 
 export const extractErrorSignature = (message: string): string => {

@@ -3,7 +3,7 @@ import useDebounceFunc from './useDebounceFunc';
 
 export type UseAsyncFunctionResult<ArgsType, ResultType> = {
   result: ResultType | null;
-  error: boolean;
+  errorMessage: string | null;
   loading: boolean;
   call: (args?: ArgsType) => void;
 };
@@ -15,18 +15,18 @@ const useAsyncFunction = <ArgsType, ResultType>(
 ): UseAsyncFunctionResult<ArgsType, ResultType> => {
   const [args, setArgs] = useState<ArgsType>();
   const [result, setResult] = useState<ResultType | null>(null);
-  const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [called, setCalled] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const call = useCallback(
     (callArgs?: ArgsType) => {
       setArgs(callArgs);
       setResult(null);
-      setError(false);
+      setErrorMessage(null);
       setLoading(false);
       setCalled(true);
     },
-    [setArgs, setResult, setError, setLoading, setCalled],
+    [setArgs, setResult, setLoading, setCalled],
   );
   const request = useRef<Promise<ResultType>>();
 
@@ -49,8 +49,12 @@ const useAsyncFunction = <ArgsType, ResultType>(
         setResult(data);
       }
     } catch (_error) {
+      if (_error instanceof Error) {
+        setErrorMessage(_error.message)
+      } else {
+        setErrorMessage('Unrecognized Error')
+      }
       setResult(null);
-      setError(true);
     }
 
     setLoading(false);
@@ -67,11 +71,11 @@ const useAsyncFunction = <ArgsType, ResultType>(
   return useMemo(
     () => ({
       result,
-      error,
+      errorMessage,
       loading,
       call,
     }),
-    [result, error, loading, call],
+    [result, errorMessage, loading, call],
   );
 };
 

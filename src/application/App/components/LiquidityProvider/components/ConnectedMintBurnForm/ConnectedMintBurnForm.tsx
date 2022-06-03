@@ -27,7 +27,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   const { agent } = useAgent();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { mintMinimumMarginRequirement: { call: loadMintInfo, loading: minRequiredMarginLoading, result: minRequiredMargin } } = useAMMContext();
+  const { mintMinimumMarginRequirement: { call: loadMintInfo, loading: minRequiredMarginLoading, result: minRequiredMargin, errorMessage: mintInfoErrorMessage  } } = useAMMContext();
 
   const balance = useBalance(amm);
   const defaultValues = {
@@ -42,7 +42,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   const formAction = getFormAction(mode, form.state.liquidityAction);
   const isBurningLiquidity = mode === MintBurnFormModes.EDIT_LIQUIDITY && form.state.liquidityAction === MintBurnFormLiquidityAction.BURN;
   const isRemovingMargin = mode === MintBurnFormModes.EDIT_MARGIN && form.state.marginAction === MintBurnFormMarginAction.REMOVE;
-  const submitButtonHint = getSubmitButtonHint(amm, mode, form, tokenApprovals);
+  const submitButtonHint = getSubmitButtonHint(amm, mode, form, tokenApprovals, mintInfoErrorMessage);
   const submitButtonText = getSubmitButtonText(mode, tokenApprovals, amm, form.state);
 
   const handleComplete = () => {
@@ -66,7 +66,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   );
 
   const handleSubmit = () => {
-    if(!form.isValid) return;
+    if (!form.isValid) return;
 
     if(!isBurningLiquidity && !isRemovingMargin) {
       if(!tokenApprovals.underlyingTokenApprovedForPeriphery) {
@@ -121,7 +121,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
       formState={form.state}
       errors={form.errors}
       mode={mode}
-      isFormValid={form.isValid}
+      isFormValid={form.isValid && !mintInfoErrorMessage}
       minRequiredMargin={minRequiredMargin || undefined}
       minRequiredMarginLoading={minRequiredMarginLoading}
       onCancel={onReset}
