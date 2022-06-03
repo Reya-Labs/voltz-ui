@@ -106,7 +106,7 @@ export const getNetReceivingRate = (positions: Position[], positionInfo: Record<
  * @param positionInfo - The position info object
  */
 export const getTotalAccruedCashflow = (positions: Position[], positionInfo: Record<Position['id'], PositionInfo>) => {
-  return positions.reduce((runningTotal, position) => runningTotal + positionInfo[position.id]?.accruedCashflow || 0, 0);
+  return positions.reduce((runningTotal, position) => runningTotal + positionInfo[position.id].accruedCashflowInUSD || 0, 0);
 }
 
 /**
@@ -115,7 +115,7 @@ export const getTotalAccruedCashflow = (positions: Position[], positionInfo: Rec
  * @param positionInfo - The position info object
  */
 export const getTotalMargin = (positions: Position[], positionInfo: Record<Position['id'], PositionInfo>) => {
-  return positions.reduce((runningTotal, position) => runningTotal + positionInfo[position.id]?.margin || 0, 0);
+  return positions.reduce((runningTotal, position) => runningTotal + positionInfo[position.id].marginInUSD || 0, 0);
 }
 
 /**
@@ -123,10 +123,6 @@ export const getTotalMargin = (positions: Position[], positionInfo: Record<Posit
  * @param positions - The array of positions shown in the portfolio
  * @param agent - The current agent
  */
-export const getTotalNotional = (positions: Position[], agent: Agents) => {
-  if (agent === Agents.LIQUIDITY_PROVIDER) {
-    return positions.reduce((runningTotal, position) => runningTotal + position.notional, 0);
-  } else {
-    return positions.reduce((runningTotal, position) => runningTotal + Math.abs(position.effectiveVariableTokenBalance), 0);
-  }
+export const getTotalNotional = (positions: Position[], positionInfo: Record<Position['id'], PositionInfo>) => {
+  return positions.reduce((runningTotal, position) => runningTotal + positionInfo[position.id].notionalInUSD, 0);
 }

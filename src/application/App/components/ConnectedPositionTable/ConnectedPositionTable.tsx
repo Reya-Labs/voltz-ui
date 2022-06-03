@@ -137,7 +137,7 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
   }
 
   const healthCounters = getHealthCounters(positionsByAgentGroup, positionInformation);
-  const totalNotional = getTotalNotional(positionsByAgentGroup, agent);
+  const totalNotional = getTotalNotional(positionsByAgentGroup, positionInformation);
   const totalMargin = getTotalMargin(positionsByAgentGroup, positionInformation);
   const totalAccruedCashflow = getTotalAccruedCashflow(positionsByAgentGroup, positionInformation);
   const netReceivingRate = getNetReceivingRate(positionsByAgentGroup, positionInformation, agent);

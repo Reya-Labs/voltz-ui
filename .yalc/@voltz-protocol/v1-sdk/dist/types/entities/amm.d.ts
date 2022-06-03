@@ -91,10 +91,13 @@ export declare type fcmUnwindArgs = {
     fixedRateLimit?: number;
 };
 export declare type PositionInfo = {
+    notionalInUSD: number;
+    marginInUSD: number;
     margin: number;
     fees?: number;
     liquidationThreshold?: number;
     safetyThreshold?: number;
+    accruedCashflowInUSD: number;
     accruedCashflow: number;
     variableRateSinceLastSwap?: number;
     fixedRateSinceLastSwap?: number;

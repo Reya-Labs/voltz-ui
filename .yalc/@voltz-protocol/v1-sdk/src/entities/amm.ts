@@ -35,7 +35,7 @@ import { Price } from './fractions/price';
 import { TokenAmount } from './fractions/tokenAmount';
 import { decodeInfoPostMint, decodeInfoPostSwap, getReadableErrorMessage } from '../utils/errors/errorHandling';
 import Position from './position';
-import { isUndefined } from 'lodash';
+import { isUndefined, result } from 'lodash';
 
 export type AMMConstructorArgs = {
   id: string;
@@ -155,10 +155,13 @@ export type fcmUnwindArgs = {
 // dynamic information about position
 
 export type PositionInfo = {
+  notionalInUSD: number;
+  marginInUSD: number;
   margin: number;
   fees?: number;
   liquidationThreshold?: number;
   safetyThreshold?: number;
+  accruedCashflowInUSD: number;
   accruedCashflow: number;
   variableRateSinceLastSwap?: number;
   fixedRateSinceLastSwap?: number;
@@ -1578,7 +1581,10 @@ class AMM {
     }
 
     let results: PositionInfo = {
+      notionalInUSD: 0,
+      marginInUSD: 0,
       margin: 0,
+      accruedCashflowInUSD: 0,
       accruedCashflow: 0,
       beforeMaturity: false
     };
@@ -1611,12 +1617,20 @@ class AMM {
 
           results.fixedRateSinceLastSwap = position.averageFixedRate;
 
-          results.accruedCashflow = await this.getAccruedCashflow(allSwaps, false);
+          const accruedCashflowInUnderlyingToken = await this.getAccruedCashflow(allSwaps, false);
+          results.accruedCashflow = accruedCashflowInUnderlyingToken;
+
+          // need to change when introduce non-stable coins
+          results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken;
         }
       }
       else {
         if (!position.isSettled) {
-          results.accruedCashflow = await this.getAccruedCashflow(allSwaps, true);
+          const accruedCashflowInUnderlyingToken = await this.getAccruedCashflow(allSwaps, true);
+          results.accruedCashflow = accruedCashflowInUnderlyingToken;
+
+          // need to change when introduce non-stable coins
+          results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken;
         }
       }
     }
@@ -1629,6 +1643,11 @@ class AMM {
           const fcmContract = fcmAaveFactory.connect(this.fcmAddress, this.signer);
           const margin = (await fcmContract.getTraderMarginInATokens(signerAddress));
           results.margin = this.descale(margin);
+
+          const marginInUnderlyingToken = results.margin;
+
+          // need to change when introduce non-stable coins
+          results.marginInUSD = marginInUnderlyingToken;
           break;
         }
 
@@ -1636,6 +1655,16 @@ class AMM {
           const fcmContract = fcmCompoundFactory.connect(this.fcmAddress, this.signer);
           const margin = (await fcmContract.getTraderMarginInCTokens(signerAddress));
           results.margin = margin.toNumber() / (10 ** 8);
+
+          const cTokenAddress = await (fcmContract as CompoundFCM).cToken();
+          const cTokenContract = ICToken__factory.connect(cTokenAddress, this.signer);
+          const rate = await cTokenContract.exchangeRateStored();
+          const scaledRate = this.descaleCompoundValue(rate);
+
+          const marginInUnderlyingToken = results.margin * scaledRate;
+
+          // need to change when introduce non-stable coins
+          results.marginInUSD = marginInUnderlyingToken;
           break;
         }
 
@@ -1662,6 +1691,12 @@ class AMM {
         tickUpper,
       );
       results.margin = this.descale(rawPositionInfo.margin);
+
+      const marginInUnderlyingToken = results.margin;
+
+      // need to change when introduce non-stable coins
+      results.marginInUSD = marginInUnderlyingToken;
+
       results.fees = this.descale(rawPositionInfo.accumulatedFees);
 
       if (beforeMaturity) {
@@ -1691,6 +1726,14 @@ class AMM {
         }
       }
     }
+
+    const notionalInUnderlyingToken =
+      (position.positionType === 3)
+        ? Math.abs(position.notional) // LP
+        : Math.abs(position.effectiveVariableTokenBalance); // FT, VT
+
+    // need to change when introduce non-stable coins
+    results.notionalInUSD = notionalInUnderlyingToken;
 
     return results;
   }
