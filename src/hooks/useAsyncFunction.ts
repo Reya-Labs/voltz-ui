@@ -49,15 +49,12 @@ const useAsyncFunction = <ArgsType, ResultType>(
         setResult(data);
       }
     } catch (_error) {
-      // eslint-disable-next-line
-      console.log('_error: ', _error)
       if (_error instanceof Error) {
         setErrorMessage(_error.message)
       } else {
         setErrorMessage('Unrecognized Error')
       }
       setResult(null);
-      // setError(true);
     }
 
     setLoading(false);
@@ -75,7 +72,6 @@ const useAsyncFunction = <ArgsType, ResultType>(
     () => ({
       result,
       errorMessage,
-      // error,
       loading,
       call,
     }),
