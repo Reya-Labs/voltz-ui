@@ -19,7 +19,7 @@ export const getDescaledValue = (position: Position, num: JSBI) => {
  * @param variableTokenDelta 
  */
 export const getAvgFix = (fixedTokenDeltaUnbalanced: JSBI, variableTokenDelta: JSBI) => {
-  return Math.abs(JSBI.toNumber(JSBI.divide(JSBI.multiply(fixedTokenDeltaUnbalanced, JSBI.BigInt(100)), variableTokenDelta)) / 100);
+  return Math.abs(JSBI.toNumber(JSBI.divide(JSBI.multiply(fixedTokenDeltaUnbalanced, JSBI.BigInt(1000)), variableTokenDelta)) / 1000);
 }
 
 /**
