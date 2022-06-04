@@ -35,7 +35,7 @@ import { Price } from './fractions/price';
 import { TokenAmount } from './fractions/tokenAmount';
 import { decodeInfoPostMint, decodeInfoPostSwap, getReadableErrorMessage } from '../utils/errors/errorHandling';
 import Position from './position';
-import { isUndefined, result } from 'lodash';
+import { isUndefined } from 'lodash';
 
 export type AMMConstructorArgs = {
   id: string;
@@ -1591,7 +1591,7 @@ class AMM {
 
     const signerAddress = await this.signer.getAddress();
     const lastBlock = await this.provider.getBlockNumber();
-    const lastBlockTimestamp = BigNumber.from((await this.provider.getBlock(lastBlock - 4)).timestamp);
+    const lastBlockTimestamp = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
 
     const beforeMaturity = (lastBlockTimestamp.mul(BigNumber.from(10).pow(18))).lt(BigNumber.from(this.termEndTimestamp.toString()));
     results.beforeMaturity = beforeMaturity;
@@ -1612,10 +1612,12 @@ class AMM {
           const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.signer);
 
           const lastSwapTimestamp = allSwaps[lenSwaps - 1].timestamp;
-          const variableApySinceLastSwap = await rateOracleContract.callStatic.getApyFromTo(lastSwapTimestamp, lastBlockTimestamp);
-          results.variableRateSinceLastSwap = variableApySinceLastSwap.div(BigNumber.from(10).pow(12)).toNumber() / 10000;
 
-          results.fixedRateSinceLastSwap = position.averageFixedRate;
+          try {
+            const variableApySinceLastSwap = await rateOracleContract.callStatic.getApyFromTo(lastSwapTimestamp, lastBlockTimestamp);
+            results.variableRateSinceLastSwap = variableApySinceLastSwap.div(BigNumber.from(10).pow(12)).toNumber() / 10000;
+            results.fixedRateSinceLastSwap = position.averageFixedRate;
+          } catch (_) { }
 
           const accruedCashflowInUnderlyingToken = await this.getAccruedCashflow(allSwaps, false);
           results.accruedCashflow = accruedCashflowInUnderlyingToken;
@@ -1927,7 +1929,7 @@ class AMM {
       throw new Error('Blockchain not connected');
     }
     const lastBlock = await this.provider.getBlockNumber();
-    const lastBlockTimestamp = BigNumber.from((await this.provider.getBlock(lastBlock - 4)).timestamp);
+    const lastBlockTimestamp = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
 
     const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
 

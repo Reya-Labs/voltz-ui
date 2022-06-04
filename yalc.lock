@@ -2,7 +2,7 @@
   "version": "v1",
   "packages": {
     "@voltz-protocol/v1-sdk": {
-      "signature": "ba789aef5740c7d1f609c3d763c001d4",
+      "signature": "1cd2208f37dbc3604eec0c55d5b6e180",
       "file": true
     }
   }
