@@ -237,20 +237,53 @@ export const getErrorSignature = (error: any, environment: string): string => {
 export const getReadableErrorMessage = (error: any, environment: string): string => {
   const errSig = getErrorSignature(error, environment);
   if (errSig === 'Error') {
-    let reason = error.data.toString().replace('Reverted ', '') as string;
-    reason = `0x${reason.substring(10)}`;
-    try {
-      const rawErrorMessage = utils.defaultAbiCoder.decode(['string'], reason)[0];
-
-      if (rawErrorMessage in errorMessageMapping) {
-        return errorMessageMapping[rawErrorMessage];
+    switch (environment) {
+      case 'LOCALHOST_SDK': {
+        throw new Error("Cannot get errSig Error in LOCALHOST_SDK. Inspect raw error!");
       }
+      case 'LOCALHOST_UI': {
+        throw new Error("Cannot get errSign Error in LOCALHOST_UI. Inspect raw error!");
+      }
+      case 'KOVAN': {
+        let reason = error.data.toString().replace('Reverted ', '') as string;
+        reason = `0x${reason.substring(10)}`;
+        try {
+          const rawErrorMessage = utils.defaultAbiCoder.decode(['string'], reason)[0];
 
-      return `Unrecognized error (Raw error: ${rawErrorMessage})`;
-    } catch (_) {
-      return 'Unrecognized error';
+          if (rawErrorMessage in errorMessageMapping) {
+            return errorMessageMapping[rawErrorMessage];
+          }
+
+          return `Unrecognized error (Raw error: ${rawErrorMessage})`;
+        } catch (_) {
+          return 'Unrecognized error';
+        }
+      }
+      case 'MAINNET': {
+        const stringifiedError = error.toString();
+        const afterOriginalError = stringifiedError.split("originalError")[1];
+        const afterData = afterOriginalError.split("data")[1];
+        const beforeMessage = afterData.split("message")[0];
+        let reason = beforeMessage.substring(3, beforeMessage.length - 3);
+        reason = `0x${reason.substring(10)}`;
+
+        try {
+          const rawErrorMessage = utils.defaultAbiCoder.decode(['string'], reason)[0];
+
+          if (rawErrorMessage in errorMessageMapping) {
+            return errorMessageMapping[rawErrorMessage];
+          }
+
+          return `Unrecognized error (Raw error: ${rawErrorMessage})`;
+        } catch (_) {
+          return 'Unrecognized error';
+        }
+      }
+      default: {
+        throw new Error('Unrecognized network for decoding errors');
+      }
     }
-  }
+  };
   if (errSig in errorMessageMapping) {
     return errorMessageMapping[errSig];
   }

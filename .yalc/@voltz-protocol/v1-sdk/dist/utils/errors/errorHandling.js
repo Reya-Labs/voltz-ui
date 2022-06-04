@@ -193,19 +193,51 @@ exports.getErrorSignature = getErrorSignature;
 var getReadableErrorMessage = function (error, environment) {
     var errSig = (0, exports.getErrorSignature)(error, environment);
     if (errSig === 'Error') {
-        var reason = error.data.toString().replace('Reverted ', '');
-        reason = "0x".concat(reason.substring(10));
-        try {
-            var rawErrorMessage = ethers_1.utils.defaultAbiCoder.decode(['string'], reason)[0];
-            if (rawErrorMessage in exports.errorMessageMapping) {
-                return exports.errorMessageMapping[rawErrorMessage];
+        switch (environment) {
+            case 'LOCALHOST_SDK': {
+                throw new Error("Cannot get errSig Error in LOCALHOST_SDK. Inspect raw error!");
             }
-            return "Unrecognized error (Raw error: ".concat(rawErrorMessage, ")");
-        }
-        catch (_) {
-            return 'Unrecognized error';
+            case 'LOCALHOST_UI': {
+                throw new Error("Cannot get errSign Error in LOCALHOST_UI. Inspect raw error!");
+            }
+            case 'KOVAN': {
+                var reason = error.data.toString().replace('Reverted ', '');
+                reason = "0x".concat(reason.substring(10));
+                try {
+                    var rawErrorMessage = ethers_1.utils.defaultAbiCoder.decode(['string'], reason)[0];
+                    if (rawErrorMessage in exports.errorMessageMapping) {
+                        return exports.errorMessageMapping[rawErrorMessage];
+                    }
+                    return "Unrecognized error (Raw error: ".concat(rawErrorMessage, ")");
+                }
+                catch (_) {
+                    return 'Unrecognized error';
+                }
+            }
+            case 'MAINNET': {
+                var stringifiedError = error.toString();
+                var afterOriginalError = stringifiedError.split("originalError")[1];
+                var afterData = afterOriginalError.split("data")[1];
+                var beforeMessage = afterData.split("message")[0];
+                var reason = beforeMessage.substring(3, beforeMessage.length - 3);
+                reason = "0x".concat(reason.substring(10));
+                try {
+                    var rawErrorMessage = ethers_1.utils.defaultAbiCoder.decode(['string'], reason)[0];
+                    if (rawErrorMessage in exports.errorMessageMapping) {
+                        return exports.errorMessageMapping[rawErrorMessage];
+                    }
+                    return "Unrecognized error (Raw error: ".concat(rawErrorMessage, ")");
+                }
+                catch (_) {
+                    return 'Unrecognized error';
+                }
+            }
+            default: {
+                throw new Error('Unrecognized network for decoding errors');
+            }
         }
     }
+    ;
     if (errSig in exports.errorMessageMapping) {
         return exports.errorMessageMapping[errSig];
     }
