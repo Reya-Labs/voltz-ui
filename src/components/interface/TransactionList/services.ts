@@ -116,7 +116,7 @@ export const getTransactionData = (position: Position, tx: TraderPositionTransac
         items: [
           {
             label: 'notional', 
-            value: `${formatCurrency(getDescaledValue(position, tx.desiredNotional))} ${token}`
+            value: `${formatCurrency(Math.abs(getDescaledValue(position, tx.variableTokenDelta)))} ${token}`
           },
           {
             label: 'avg fix', 
