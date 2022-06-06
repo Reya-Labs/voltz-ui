@@ -152,14 +152,14 @@ export const useMintBurnForm = (
       }
     } 
 
-    if(isUndefined(margin) || margin === 0) {
+    if(isUndefined(margin)) {
       valid = false;
       if(touched.current.includes('margin')) {
         err['margin'] = 'Please enter an amount';
       }
     }    
 
-    if(!isUndefined(margin) && margin !== 0) {
+    if(!isUndefined(margin)) {
       try {
         const hasEnoughFunds = await amm.hasEnoughUnderlyingTokens(margin);
         if(!hasEnoughFunds) {
@@ -174,7 +174,7 @@ export const useMintBurnForm = (
     }
 
     // Check that the input margin is >= minimum required margin
-    if(!isUndefined(minimumRequiredMargin) && !isUndefined(margin) && margin !== 0 && margin < minimumRequiredMargin) {
+    if(!isUndefined(minimumRequiredMargin) && !isUndefined(margin) && margin < minimumRequiredMargin) {
       valid = false;
       if(touched.current.includes('margin')) {
         err['margin'] = 'Not enough margin';
@@ -239,7 +239,7 @@ export const useMintBurnForm = (
 
     if(liquidityAction === MintBurnFormLiquidityAction.ADD) {
       // check user has sufficient funds
-      if(!isUndefined(margin) && margin !== 0) {
+      if(!isUndefined(margin)) {
         try {
           const hasEnoughFunds = await amm.hasEnoughUnderlyingTokens(margin);
           if(!hasEnoughFunds) {
