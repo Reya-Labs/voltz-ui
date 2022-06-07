@@ -6,6 +6,7 @@ import { actions } from "@store";
 import { AugmentedAMM } from "@utilities";
 import { MintBurnFormActions, MintBurnFormModes } from '@components/interface';
 import { colors } from "@theme";
+import { Ellipsis } from "@components/atomic";
 
 type TextProps = {
   bold?: boolean;
@@ -56,10 +57,10 @@ export const getSubmitButtonHint = (amm: AugmentedAMM, mode: MintBurnFormModes, 
 
   // Token approvals - Something happening
   if(tokenApprovals.checkingApprovals) {
-    return 'Initialising, please wait...';
+    return 'Initialising, please wait';
   }
   if(tokenApprovals.approving) {
-    return 'Waiting for confirmation...';
+    return 'Waiting for confirmation';
   }
 
   if(!isBurningLiquidity && !isRemovingMargin) {
@@ -113,10 +114,10 @@ export const getSubmitButtonHint = (amm: AugmentedAMM, mode: MintBurnFormModes, 
   const isRemovingMargin = mode === MintBurnFormModes.EDIT_MARGIN && formState.marginAction === MintBurnFormMarginAction.REMOVE;
 
   if (tokenApprovals.checkingApprovals) {
-    return 'Initialising...';
+    return <>Initialising<Ellipsis /></>;
   }
   if (tokenApprovals.approving) {
-    return 'Approving...';
+    return <>Approving<Ellipsis /></>;
   }
 
   if(!isRemovingMargin && !isBurningLiquidity) {
