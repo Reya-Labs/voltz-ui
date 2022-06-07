@@ -177,7 +177,7 @@ declare class AMM {
     setCap(amount: number): Promise<void>;
     getCapPercentage(): Promise<number | undefined>;
     getPositionMarginRequirement(fixedLow: number, fixedHigh: number): Promise<number>;
-    getOneWeekApy(): Promise<number>;
+    getInstantApy(): Promise<number>;
 }
 export default AMM;
 //# sourceMappingURL=amm.d.ts.map

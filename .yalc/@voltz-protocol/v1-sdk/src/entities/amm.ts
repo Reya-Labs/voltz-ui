@@ -1525,21 +1525,23 @@ class AMM {
     vDelta: BigNumber,
     timestamp: BigNumber
   }[], atMaturity: boolean): Promise<number> {
-    if (!this.signer) {
+    if (!this.provider) {
       throw new Error('Wallet not connected');
     }
 
     let accruedCashflow = BigNumber.from(0);
     let lenSwaps = allSwaps.length;
 
+    const lastBlock = await this.provider.getBlockNumber();
+    const lastBlockTimestamp = BigNumber.from((await this.provider.getBlock(lastBlock - 2)).timestamp);
+
     let untilTimestamp = (atMaturity)
       ? BigNumber.from(this.termEndTimestamp.toString())
-      : allSwaps[lenSwaps - 1].timestamp.mul(BigNumber.from(10).pow(18));
+      : lastBlockTimestamp.mul(BigNumber.from(10).pow(18));
 
-    const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.signer);
+    const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
 
-    const excludeLast = (atMaturity) ? 0 : 1;
-    for (let i = 0; i + excludeLast < lenSwaps; i++) {
+    for (let i = 0; i < lenSwaps; i++) {
       const currentSwapTimestamp = allSwaps[i].timestamp.mul(BigNumber.from(10).pow(18));
 
       const normalizedTime = (untilTimestamp.sub(currentSwapTimestamp)).div(BigNumber.from(ONE_YEAR_IN_SECONDS))
@@ -1609,13 +1611,8 @@ class AMM {
     if (lenSwaps > 0) {
       if (beforeMaturity) {
         if (lenSwaps > 0) {
-          const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.signer);
-
-          const lastSwapTimestamp = allSwaps[lenSwaps - 1].timestamp;
-
           try {
-            const variableApySinceLastSwap = await rateOracleContract.callStatic.getApyFromTo(lastSwapTimestamp, lastBlockTimestamp);
-            results.variableRateSinceLastSwap = variableApySinceLastSwap.div(BigNumber.from(10).pow(12)).toNumber() / 10000;
+            results.variableRateSinceLastSwap = await this.getInstantApy() * 100;
             results.fixedRateSinceLastSwap = position.averageFixedRate;
           } catch (_) { }
 
@@ -1924,18 +1921,19 @@ class AMM {
 
   // one week look-back window apy
 
-  async getOneWeekApy(): Promise<number> {
+  async getInstantApy(): Promise<number> {
     if (!this.provider) {
       throw new Error('Blockchain not connected');
     }
     const lastBlock = await this.provider.getBlockNumber();
-    const lastBlockTimestamp = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
+    const oneBlockAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
+    const twoBlocksAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 2)).timestamp);
 
     const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
 
-    const oneWeekApy = await rateOracleContract.callStatic.getApyFromTo(lastBlockTimestamp.sub(BigNumber.from(604800)), lastBlockTimestamp);
+    const oneWeekApy = await rateOracleContract.callStatic.getApyFromTo(twoBlocksAgo, oneBlockAgo);
 
-    return oneWeekApy.div(BigNumber.from(1000000000000)).toNumber() / 10000;
+    return oneWeekApy.div(BigNumber.from(1000000000000)).toNumber() / 1000000;
   }
 }
 

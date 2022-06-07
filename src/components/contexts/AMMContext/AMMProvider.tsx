@@ -14,7 +14,7 @@ export type AMMProviderProps = {
 const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, children }) => {
   const { agent } = useAgent();
   const variableApy = useAsyncFunction(
-    amm.getVariableApy.bind(amm),
+    amm.getInstantApy.bind(amm),
     useMemo(() => undefined, [!!amm.provider]),
   );
   const fixedApr = useAsyncFunction(
