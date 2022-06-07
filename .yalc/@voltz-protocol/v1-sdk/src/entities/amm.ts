@@ -1614,22 +1614,24 @@ class AMM {
           try {
             results.variableRateSinceLastSwap = await this.getInstantApy() * 100;
             results.fixedRateSinceLastSwap = position.averageFixedRate;
+            
+            const accruedCashflowInUnderlyingToken = await this.getAccruedCashflow(allSwaps, false);
+            results.accruedCashflow = accruedCashflowInUnderlyingToken;
+
+            // need to change when introduce non-stable coins
+            results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken;
           } catch (_) { }
-
-          const accruedCashflowInUnderlyingToken = await this.getAccruedCashflow(allSwaps, false);
-          results.accruedCashflow = accruedCashflowInUnderlyingToken;
-
-          // need to change when introduce non-stable coins
-          results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken;
         }
       }
       else {
         if (!position.isSettled) {
-          const accruedCashflowInUnderlyingToken = await this.getAccruedCashflow(allSwaps, true);
-          results.accruedCashflow = accruedCashflowInUnderlyingToken;
+          try {
+            const accruedCashflowInUnderlyingToken = await this.getAccruedCashflow(allSwaps, true);
+            results.accruedCashflow = accruedCashflowInUnderlyingToken;
 
-          // need to change when introduce non-stable coins
-          results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken;
+            // need to change when introduce non-stable coins
+            results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken;
+          } catch (_) { }
         }
       }
     }
