@@ -5,6 +5,7 @@ import { ApprovalType, SwapFormData, useTokenApproval } from '@hooks';
 import { Box } from '@mui/material';
 import { AugmentedAMM } from '@utilities';
 import { colors }  from '@theme';
+import { Ellipsis } from "@components/atomic";
 
 type TextProps = {
   bold?: boolean;
@@ -145,10 +146,10 @@ export const getSubmitButtonHint = (
 
   // Token approvals - Something happening
   if(tokenApprovals.checkingApprovals) {
-    return 'Initialising, please wait...';
+    return 'Initialising, please wait';
   }
   if(tokenApprovals.approving) {
-    return 'Waiting for confirmation...';
+    return 'Waiting for confirmation';
   }
 
   if(!isRemovingMargin) {
@@ -193,10 +194,10 @@ export const getSubmitButtonHint = (
  */
 export const getSubmitButtonText = (mode: SwapFormModes, tokenApprovals: ReturnType<typeof useTokenApproval>, amm: AugmentedAMM, formAction:SwapFormActions, agent: Agents, isRemovingMargin: boolean) => {  
   if (tokenApprovals.checkingApprovals) {
-    return 'Initialising...';
+    return <>Initialising<Ellipsis /></>;
   }
   if (tokenApprovals.approving) {
-    return 'Approving...';
+    return <>Approving<Ellipsis /></>;
   }
 
   if(!isRemovingMargin) {
