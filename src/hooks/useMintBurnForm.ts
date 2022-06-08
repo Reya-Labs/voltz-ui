@@ -2,6 +2,7 @@ import { AugmentedAMM } from "@utilities";
 import { isUndefined } from "lodash";
 import { useEffect, useRef, useState } from "react";
 import { MintBurnFormModes } from "@components/interface";
+import { useAMMContext } from "@hooks";
 
 export enum MintBurnFormLiquidityAction {
   ADD='add',
@@ -25,6 +26,11 @@ export type MintBurnFormState = {
 export type MintBurnForm = {
   errors: Record<string, string>,
   isValid: boolean;
+  minRequiredMargin: {
+    errorMessage?: string;
+    loading: boolean;
+    result?: number;
+  }
   setFixedHigh: (value: MintBurnFormState['fixedHigh']) => void;
   setFixedLow: (value: MintBurnFormState['fixedLow']) => void;
   setLiquidityAction: (value: MintBurnFormState['liquidityAction']) => void;
@@ -38,7 +44,6 @@ export type MintBurnForm = {
 export const useMintBurnForm = (
   amm: AugmentedAMM, 
   mode: MintBurnFormModes,
-  minimumRequiredMargin: number | undefined, 
   defaultValues: Partial<MintBurnFormState> = {}
 ): MintBurnForm => {
   const defaultFixedHigh = !isUndefined(defaultValues.fixedHigh) ? defaultValues.fixedHigh : undefined;
@@ -53,13 +58,30 @@ export const useMintBurnForm = (
   const [liquidityAction, setLiquidityAction] = useState<MintBurnFormLiquidityAction>(defaultLiquidityAction);
   const [margin, setMargin] = useState<MintBurnFormState['margin']>(defaultMargin);
   const [marginAction, setMarginAction] = useState<MintBurnFormMarginAction>(defaultMarginAction);
+  const { mintMinimumMarginRequirement } = useAMMContext();
   const [notional, setNotional] = useState<MintBurnFormState['notional']>(defaultNotional);
-
+  
   const [errors, setErrors] = useState<MintBurnForm['errors']>({});
   const [isValid, setIsValid] = useState<boolean>(false);
+  const minimumRequiredMargin = mintMinimumMarginRequirement.result ?? undefined;
   const touched = useRef<string[]>([]);
 
   const isAddingLiquidity = mode !== MintBurnFormModes.EDIT_LIQUIDITY || liquidityAction === MintBurnFormLiquidityAction.ADD;
+
+  // Load the mint summary info
+  useEffect(() => {
+    if (
+      !isUndefined(notional) && notional !== 0 &&
+      !isUndefined(fixedLow) && fixedLow !== 0 &&
+      !isUndefined(fixedHigh) && fixedHigh !== 0
+    ) {
+      mintMinimumMarginRequirement.call({ 
+        fixedLow: fixedLow, 
+        fixedHigh: fixedHigh, 
+        notional: notional 
+      });
+    }
+  }, [mintMinimumMarginRequirement.call, notional, fixedLow, fixedHigh]);
 
   // validate the form after values change
   useEffect(() => {
@@ -262,6 +284,11 @@ export const useMintBurnForm = (
   return {
     errors,
     isValid,
+    minRequiredMargin: {
+      errorMessage: mintMinimumMarginRequirement.errorMessage || undefined,
+      loading: mintMinimumMarginRequirement.loading,
+      result: mintMinimumMarginRequirement.result ?? undefined
+    },
     setFixedHigh: updateFixedHigh,
     setFixedLow: updateFixedLow,
     setLiquidityAction: updateLiquidityAction,

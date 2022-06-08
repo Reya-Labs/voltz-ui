@@ -48,7 +48,7 @@ const Text = ({ bold, children, green, red }: TextProps) => (
  * @param form - the entire form state
  * @param tokenApprovals - the token approvals state for this form
  */
-export const getSubmitButtonHint = (amm: AugmentedAMM, mode: MintBurnFormModes, form: MintBurnForm, tokenApprovals: ReturnType<typeof useTokenApproval>, tradeInfoErrorMessage: string | null) => {
+export const getSubmitButtonHint = (amm: AugmentedAMM, mode: MintBurnFormModes, form: MintBurnForm, tokenApprovals: ReturnType<typeof useTokenApproval>, tradeInfoErrorMessage?: string) => {
   // Please note that the order these are in is important, you need the conditions that take precidence
   // to be nearer the top.
 

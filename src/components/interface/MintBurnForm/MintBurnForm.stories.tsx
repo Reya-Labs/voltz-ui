@@ -48,7 +48,7 @@ const NewPositionMintBurnForm: React.FunctionComponent = (args) => {
   const mode = MintBurnFormModes.NEW_POSITION;
   const minRequiredMargin = 100;
 
-  const form = useMintBurnForm(mockAmm, mode, minRequiredMargin);
+  const form = useMintBurnForm(mockAmm, mode);
 
   return (
     <MintBurnForm 
@@ -94,7 +94,7 @@ const EditingMarginMintBurnForm: React.FunctionComponent = (args) => {
   const mode = MintBurnFormModes.EDIT_MARGIN;
   const minRequiredMargin = 100;
 
-  const form = useMintBurnForm(mockAmm, mode, minRequiredMargin, { fixedLow: 2, fixedHigh: 6 });
+  const form = useMintBurnForm(mockAmm, mode, { fixedLow: 2, fixedHigh: 6 });
 
   return (
     <MintBurnForm 
@@ -140,7 +140,7 @@ const EditingLiquidityMintBurnForm: React.FunctionComponent = (args) => {
   const mode = MintBurnFormModes.EDIT_LIQUIDITY;
   const minRequiredMargin = 100;
 
-  const form = useMintBurnForm(mockAmm, mode, minRequiredMargin, { fixedLow: 2, fixedHigh: 6 });
+  const form = useMintBurnForm(mockAmm, mode, { fixedLow: 2, fixedHigh: 6 });
 
   return (
     <MintBurnForm 
