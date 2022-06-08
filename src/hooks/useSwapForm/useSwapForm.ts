@@ -2,13 +2,14 @@ import { GetInfoType } from "@components/contexts";
 import { SwapFormActions, SwapFormModes } from "@components/interface";
 import { AugmentedAMM } from "@utilities";
 import { isUndefined } from "lodash";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MintBurnFormMarginAction } from "../useMintBurnForm";
 import { hasEnoughTokens, hasEnoughUnderlyingTokens, lessThan } from "@utilities";
 import { useAgent, useAMMContext, useBalance, useMinRequiredMargin, useTokenApproval } from "@hooks";
 import { InfoPostSwap, Position } from "@voltz-protocol/v1-sdk";
 import * as s from "./services";
 import { BigNumber } from "ethers";
+import { SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates } from "./types";
 
 export type SwapFormState = {
   margin?: number;
@@ -22,7 +23,9 @@ export type SwapFormData = {
   approvalsNeeded: boolean;
   balance?: BigNumber;
   errors: Record<string, string>;
-  isAddingMargin: boolean,
+  hintState: SwapFormSubmitButtonHintStates;
+  isAddingMargin: boolean;
+  isFCMAction: boolean;
   isRemovingMargin: boolean;
   isValid: boolean;
   minRequiredMargin?: number;
@@ -33,10 +36,10 @@ export type SwapFormData = {
   state: SwapFormState;
   swapInfo: {
     data?: InfoPostSwap;
+    errorMessage?: string;
     loading: boolean;
   }
-  submitButtonHint: ReactNode;
-  submitButtonText: ReactNode;
+  submitButtonState: SwapFormSubmitButtonStates;
   tokenApprovals: ReturnType<typeof useTokenApproval>;
   validate: () => Promise<boolean>;
 };
@@ -70,11 +73,12 @@ export const useSwapForm = (
 
   const action = s.getFormAction(mode, partialCollateralization, agent);
   const isAddingMargin = mode === SwapFormModes.EDIT_MARGIN && marginAction === MintBurnFormMarginAction.ADD;
+  const isFCMAction = action === SwapFormActions.FCM_SWAP || action === SwapFormActions.FCM_UNWIND;
   const isRemovingMargin = mode === SwapFormModes.EDIT_MARGIN && marginAction === MintBurnFormMarginAction.REMOVE;
 
   const approvalsNeeded = s.approvalsNeeded(action, tokenApprovals, isRemovingMargin)
-  const submitButtonHint = s.getSubmitButtonHint(amm, action, errors, isValid, tokenApprovals, isRemovingMargin, swapInfo.errorMessage);
-  const submitButtonText = s.getSubmitButtonText(mode, tokenApprovals, amm, action, agent, isRemovingMargin);
+  const hintState = s.getHintState(action, errors, isValid, isRemovingMargin, tokenApprovals, swapInfo.errorMessage);
+  const submitButtonState = s.getSubmitButtonState(mode, tokenApprovals, action, agent, isRemovingMargin);
 
   // Load the swap summary info
   useEffect(() => {
@@ -96,7 +100,7 @@ export const useSwapForm = (
         // }
       } 
     }
-  }, [swapInfo.call, notional, agent, approvalsNeeded, partialCollateralization]);
+  }, [swapInfo.call, notional, agent, approvalsNeeded, partialCollateralization, marginAction]);
 
   // Validate the form after values change
   useEffect(() => {
@@ -109,7 +113,8 @@ export const useSwapForm = (
     notional, 
     partialCollateralization,
     swapInfo.result?.marginRequirement, 
-    swapInfo.result?.fee
+    swapInfo.result?.fee,
+    isValid
   ])
 
   const addError = (err: Record<string, string>, name: string, message: string) => {
@@ -244,9 +249,11 @@ export const useSwapForm = (
     approvalsNeeded,
     balance,
     errors,
+    hintState,
     isAddingMargin,
+    isFCMAction,
     isRemovingMargin,
-    isValid: isValid && !swapInfo.errorMessage,
+    isValid,
     minRequiredMargin,
     setMargin: updateMargin,
     setMarginAction: updateMarginAction,
@@ -254,6 +261,7 @@ export const useSwapForm = (
     setPartialCollateralization: updatePartialCollateralization,
     swapInfo: {
       data: swapInfo.result || undefined,
+      errorMessage: swapInfo.errorMessage || undefined,
       loading: swapInfo.loading
     },
     state: {
@@ -262,8 +270,7 @@ export const useSwapForm = (
       notional,
       partialCollateralization
     },
-    submitButtonHint,
-    submitButtonText,
+    submitButtonState,
     tokenApprovals,
     validate
   }

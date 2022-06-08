@@ -1,27 +1,8 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { Agents, } from '@components/contexts';
 import { SwapFormActions, SwapFormModes } from '@components/interface';
-import { ApprovalType, SwapFormData, useTokenApproval } from '@hooks';
-import { Box } from '@mui/material';
-import { AugmentedAMM } from '@utilities';
-import { colors }  from '@theme';
-import { Ellipsis } from "@components/atomic";
-
-type TextProps = {
-  bold?: boolean;
-  children?: ReactNode;
-  green?: boolean;
-  red?: boolean;
-};
-const Text = ({ bold, children, green, red }: TextProps) => (
-  <Box component='span' sx={{ 
-    color: green ? colors.vzCustomGreen1 : red ? colors.vzCustomRed1 : undefined,
-    fontWeight: bold ? 'bold' : undefined,
-    textTransform: 'none'
-  }}>
-    {children}
-  </Box>
-);
+import { SwapFormData, useTokenApproval } from '@hooks';
+import { SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates } from './types';
 
 /**
  * Returns true or false if approvals are needed for this user to trade
@@ -46,7 +27,7 @@ export const approvalsNeeded = (action: SwapFormActions, tokenApprovals: ReturnT
  * @param partialCollateralization - boolean flag for if the form has partial collateralization selected
  * @param agent - the agent mode the form is currently in (fixed, variable etc)
  */
-export const getFormAction = (mode: SwapFormModes, partialCollateralization: boolean, agent: Agents) => {
+export const getFormAction = (mode: SwapFormModes, partialCollateralization: boolean, agent: Agents): SwapFormActions => {
   if (mode === SwapFormModes.EDIT_MARGIN) {
     return SwapFormActions.UPDATE;
   }
@@ -69,74 +50,19 @@ export const getFormAction = (mode: SwapFormModes, partialCollateralization: boo
 };
 
 /**
- * Gets the submit button hint for when a token needs approval
- * @param amm - the amm class instance for this form
- * @param tokenApprovals - the token approvals state for this form
- * @param isFCMAction - boolean flag wether the form is set to perform an FCM action or not
- */
-export const getNextTokenHint = (amm: AugmentedAMM, tokenApprovals: ReturnType<typeof useTokenApproval>, isFCMAction: boolean) => {
-  let lastTokenApproved: string = '';
-  let nextToken: string = '';
-
-  if(isFCMAction) {
-    if(!tokenApprovals.FCMApproved) {
-      nextToken = 'FCM';
-    }
-    if(!tokenApprovals.yieldBearingTokenApprovedForFCM) {
-      nextToken = amm.protocol;
-    }
-    if(!tokenApprovals.underlyingTokenApprovedForFCM) {
-      nextToken = amm.underlyingToken.name || '';
-    }
-  } else {
-    if(!tokenApprovals.underlyingTokenApprovedForPeriphery) {
-      nextToken = amm.underlyingToken.name || '';
-    }
-  }
-
-  // If there is no next token, there is no next token hint. Exit here.
-  if(!nextToken) return;
-
-  switch(tokenApprovals.lastApproval) {
-    case ApprovalType.FCM:
-      lastTokenApproved = 'FCM';
-      break;
-    case ApprovalType.YBTOKEN_FCM:
-      lastTokenApproved = amm.protocol;
-      break;
-    case ApprovalType.UTOKEN_FCM:
-    case ApprovalType.UTOKEN_PERIPHERY:
-      lastTokenApproved = amm.underlyingToken.name || '';
-  }
-
-  if(lastTokenApproved) {
-    return (
-      <>
-        <Text green bold>{lastTokenApproved}</Text><Text green> approved!</Text> 
-        {' '}Let's now approve <Text bold>{nextToken}</Text>
-      </>
-    )
-  } else {
-    return `Please approve ${nextToken}`
-  }
-}
-
-/**
- * Gets the hint text to show below the submit button
- * @param amm - the amm class instance for this form
+ * Gets the hint state (used to show text below the submit button)
  * @param formAction - the action the form is currently set to make (SWAP, FCM_SWAP etc)
  * @param formErrors - the form errors object
  * @param isFormValid - boolean flag wether the form is valid or not
- * @param tokenApprovals - the token approvals state for this form
  * @param isRemovingMargin - boolean flag for if the action is to remove margin
+ * @param tokenApprovals - the token approvals state for this form
  */
-export const getSubmitButtonHint = (
-  amm: AugmentedAMM, 
+export const getHintState = (
   formAction: SwapFormActions, 
   formErrors: SwapFormData['errors'], 
   isFormValid: boolean, 
-  tokenApprovals: ReturnType<typeof useTokenApproval>, 
   isRemovingMargin: boolean,
+  tokenApprovals: ReturnType<typeof useTokenApproval>, 
   tradeInfoErrorMessage: string | null,
 ) => {
   const isFCMAction = formAction === SwapFormActions.FCM_SWAP || formAction === SwapFormActions.FCM_UNWIND;
@@ -144,86 +70,89 @@ export const getSubmitButtonHint = (
   // Please note that the order these are in is important, you need the conditions that take precidence
   // to be nearer the top.
 
-  // Token approvals - Something happening
+  // Token approvals - Checking current status
   if(tokenApprovals.checkingApprovals) {
-    return 'Initialising, please wait';
+    return SwapFormSubmitButtonHintStates.INITIALISING;
   }
   if(tokenApprovals.approving) {
-    return 'Waiting for confirmation';
+    return SwapFormSubmitButtonHintStates.APPROVING;
   }
 
   if(!isRemovingMargin) {
     if(tokenApprovals.lastError) {
-      return <Text red>{tokenApprovals.lastError.message}</Text>
+      return SwapFormSubmitButtonHintStates.ERROR_TOKEN_APPROVAL;
     }
     
-    // Token approvals - user needs to approve a token
-    if(isFormValid) {
-      const nextTokenHint = getNextTokenHint(amm, tokenApprovals, isFCMAction);
-      if(nextTokenHint) return nextTokenHint;
+    if(tokenApprovals.getNextApproval(isFCMAction)) {
+      if(tokenApprovals.lastApproval) {
+        return SwapFormSubmitButtonHintStates.APPROVE_NEXT_TOKEN;
+      } else {
+        return SwapFormSubmitButtonHintStates.APPROVE_TOKEN;
+      }
     }
   }
 
   // Form validation
   if (!isFormValid || tradeInfoErrorMessage) {
     if (tradeInfoErrorMessage) {
-      return <Text red>{tradeInfoErrorMessage}</Text>;
+      return SwapFormSubmitButtonHintStates.FORM_INVALID_TRADE;
     }
     if(formErrors.balance) {
-      return <Text red>You do not have enough {amm.underlyingToken.name || ''}</Text>;
+      return SwapFormSubmitButtonHintStates.FORM_INVALID_BALANCE;
     }
     if(!Object.keys(formErrors).length) {
-      return 'Input your margin'
+      return SwapFormSubmitButtonHintStates.FORM_INVALID_INCOMPLETE;
     }
-    return 'Please fix form errors to continue';
+    return SwapFormSubmitButtonHintStates.FORM_INVALID;
   }
 
-  if (isFormValid) {
-    return <>{tokenApprovals.lastApproval && <><Text green>Tokens approved</Text>. </>}Let's trade!</>;
+  if(tokenApprovals.lastApproval) {
+    return SwapFormSubmitButtonHintStates.READY_TO_TRADE_TOKENS_APPROVED;
+  } else {
+    return SwapFormSubmitButtonHintStates.READY_TO_TRADE;
   }
 }
 
 /**
- * Gets the text to show on the submit button
+ * Gets the submit button state (used to show text on the submit button)
  * @param mode - the mode the form is in
  * @param tokenApprovals - the token approvals state for this form
- * @param amm - the amm class instance for this form
  * @param formAction - the action the form is currently set to make (SWAP, FCM_SWAP etc)
  * @param agent - the agent mode the form is currently in (fixed, variable etc)
  * @param isRemovingMargin - boolean flag for if the action is to remove margin
  */
-export const getSubmitButtonText = (mode: SwapFormModes, tokenApprovals: ReturnType<typeof useTokenApproval>, amm: AugmentedAMM, formAction:SwapFormActions, agent: Agents, isRemovingMargin: boolean) => {  
+export const getSubmitButtonState = (mode: SwapFormModes, tokenApprovals: ReturnType<typeof useTokenApproval>, formAction:SwapFormActions, agent: Agents, isRemovingMargin: boolean) => {  
   if (tokenApprovals.checkingApprovals) {
-    return <>Initialising<Ellipsis /></>;
+    return SwapFormSubmitButtonStates.INITIALISING;
   }
   if (tokenApprovals.approving) {
-    return <>Approving<Ellipsis /></>;
+    return SwapFormSubmitButtonStates.APPROVING;
   }
 
   if(!isRemovingMargin) {
     if (formAction === SwapFormActions.FCM_SWAP || formAction === SwapFormActions.FCM_UNWIND) {
       if (!tokenApprovals.FCMApproved) {
-        return 'Approve FCM';
+        return SwapFormSubmitButtonStates.APPROVE_FCM;
       }
       if (!tokenApprovals.yieldBearingTokenApprovedForFCM) {
-        return <Box>Approve <Text>{amm.protocol}</Text> for trade</Box>;
+        return SwapFormSubmitButtonStates.APPROVE_YBT_FCM;
       }
       if (!tokenApprovals.underlyingTokenApprovedForFCM) {
-        return <Box>Approve <Text>{amm.underlyingToken.name || ''}</Text> for fees</Box>;
+        return SwapFormSubmitButtonStates.APPROVE_UT_FCM;
       }
     } 
     else {
       if (!tokenApprovals.underlyingTokenApprovedForPeriphery) {
-        return <Box>Approve <Text>{amm.underlyingToken.name || ''}</Text></Box>;
+        return SwapFormSubmitButtonStates.APPROVE_UT_PERIPHERY
       }
     }
   }
   
   if (mode === SwapFormModes.EDIT_MARGIN) {
-    return "Update Margin";
+    return SwapFormSubmitButtonStates.UPDATE;
   }
   if (agent === Agents.FIXED_TRADER) {
-    return 'Trade Fixed Rate';
+    return SwapFormSubmitButtonStates.TRADE_FIXED
   }
-  return 'Trade Variable Rate';
+  return SwapFormSubmitButtonStates.TRADE_VARIABLE;
 };

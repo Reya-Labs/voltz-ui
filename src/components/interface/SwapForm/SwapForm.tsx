@@ -1,10 +1,10 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
 import { SystemStyleObject, Theme } from '@mui/system';
-import { MintBurnFormMarginAction, SwapFormState, useAgent, useTokenApproval } from '@hooks';
+import { MintBurnFormMarginAction, SwapFormState, SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates, useAgent, useTokenApproval } from '@hooks';
 import { Agents } from '@components/contexts';
-import { Button, Panel, Typography, Icon } from '@components/atomic';
+import { Panel } from '@components/atomic';
 import {
   IconLabel,
   ProtocolInformation,
@@ -12,7 +12,7 @@ import {
   NotionalAmount,
   MarginAmount,
 } from '@components/composite';
-import { TraderControls, MarginControls, SwapInfo, SwapInfoEditMargin } from './components';
+import { TraderControls, MarginControls, SwapInfo, SwapInfoEditMargin, SubmitControls } from './components';
 import { colors } from '@theme';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from './types';
@@ -25,6 +25,8 @@ export type SwapFormProps = {
   errors: Record<string, string>;
   formState: SwapFormState;
   formAction: SwapFormActions;
+  hintState: SwapFormSubmitButtonHintStates;
+  isFCMAction: boolean;
   isFormValid: boolean;
   maxMargin?: number;
   minRequiredMargin?: number;
@@ -40,12 +42,11 @@ export type SwapFormProps = {
   startDate?: DateTime;
   swapInfo: InfoPostSwap | void | null;
   swapInfoLoading: boolean;
-  submitButtonHint: ReactNode;
-  submitButtonText: ReactNode;
+  submitButtonState: SwapFormSubmitButtonStates;
   tokenApprovals: ReturnType<typeof useTokenApproval>;
+  tradeInfoErrorMessage?: string;
   underlyingTokenName?: string;
 };
-
 
 const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   balance,
@@ -53,6 +54,8 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   errors,
   formAction,
   formState,
+  hintState,
+  isFCMAction,
   isFormValid,
   maxMargin,
   minRequiredMargin,
@@ -66,11 +69,11 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   positionMargin,
   protocol,
   startDate,
-  submitButtonHint,
-  submitButtonText,
+  submitButtonState,
   swapInfo,
   swapInfoLoading,
   tokenApprovals,
+  tradeInfoErrorMessage,
   underlyingTokenName,
 }) => {
   const { agent, onChangeAgent } = useAgent();
@@ -191,33 +194,18 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         </Box>
       )}
 
-      <Box sx={{ display: 'flex' }}>
-        <Button 
-          disabled={!isFormValid || tokenApprovals.checkingApprovals || tokenApprovals.approving} 
-          onClick={onSubmit} 
-          size="large" 
-          sx={{ flexGrow: 1 }}
-        >
-          {submitButtonText}
-        </Button>
-
-        <Button
-          sx={{ marginLeft: (theme) => theme.spacing(7), flexGrow: 0 }}
-          variant="dark"
-          onClick={onCancel}
-        >
-          Back
-        </Button>
-      </Box>
-
-      <Typography variant='body2' sx={{ 
-        marginTop: (theme) => theme.spacing(2), 
-        color: colors.lavenderWeb.darken015,
-        fontSize: '12px'
-      }}>
-        {submitButtonHint}
-      </Typography>
-  
+      <SubmitControls
+        hintState={hintState}
+        isFCMAction={isFCMAction}
+        isFormValid={isFormValid}
+        onCancel={onCancel}
+        onSubmit={onSubmit}
+        protocol={protocol}
+        submitButtonState={submitButtonState}
+        tokenApprovals={tokenApprovals}
+        tradeInfoErrorMessage={tradeInfoErrorMessage}
+        underlyingTokenName={underlyingTokenName}
+      />
     </Panel>
   );
 };

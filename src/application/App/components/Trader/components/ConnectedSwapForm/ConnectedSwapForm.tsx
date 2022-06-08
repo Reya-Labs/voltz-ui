@@ -166,6 +166,8 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
       errors={form.errors}
       formAction={form.action} 
       formState={form.state}
+      hintState={form.hintState}
+      isFCMAction={form.isFCMAction}
       isFormValid={form.isValid}
       minRequiredMargin={form.minRequiredMargin}
       mode={mode}
@@ -180,9 +182,9 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
       startDate={amm.startDateTime}
       swapInfo={form.swapInfo.data}
       swapInfoLoading={form.swapInfo.loading}
-      submitButtonHint={form.submitButtonHint}
-      submitButtonText={form.submitButtonText}
+      submitButtonState={form.submitButtonState}
       tokenApprovals={form.tokenApprovals}
+      tradeInfoErrorMessage={form.swapInfo.errorMessage}
       underlyingTokenName={amm.underlyingToken.name}
     />
   );
