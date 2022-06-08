@@ -1,11 +1,11 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
 
 import { AugmentedAMM } from '@utilities';
 import { routes } from '@routes';
 import { actions, selectors } from '@store';
-import { MintBurnFormLiquidityAction, MintBurnFormMarginAction, useAgent, useBalance, useDispatch, useMintBurnForm, useSelector, useTokenApproval } from '@hooks';
+import { MintBurnFormLiquidityAction, MintBurnFormMarginAction, useAgent, useDispatch, useMintBurnForm, useSelector, useTokenApproval } from '@hooks';
 import { MintBurnForm, MintBurnFormModes, PendingTransaction } from '@components/interface';
 import { updateFixedRate } from './utilities';
 import { getFormAction, getSubmitAction, getSubmitButtonHint, getSubmitButtonText } from './services';
@@ -27,7 +27,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const balance = useBalance(amm);
+  
   const defaultValues = {
     fixedLow: position ? parseFloat(position.fixedRateLower.toFixed() ) : undefined,
     fixedHigh: position ? parseFloat(position.fixedRateUpper.toFixed() ) : undefined
@@ -99,7 +99,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
 
   return (
     <MintBurnForm
-      balance={balance ? amm.descale(balance) : undefined}
+      balance={form.balance ? amm.descale(form.balance) : undefined}
       endDate={amm.endDateTime}
       formState={form.state}
       errors={form.errors}

@@ -2,7 +2,8 @@ import { AugmentedAMM } from "@utilities";
 import { isUndefined } from "lodash";
 import { useEffect, useRef, useState } from "react";
 import { MintBurnFormModes } from "@components/interface";
-import { useAMMContext } from "@hooks";
+import { useAMMContext, useBalance } from "@hooks";
+import { BigNumber } from "ethers";
 
 export enum MintBurnFormLiquidityAction {
   ADD='add',
@@ -24,6 +25,7 @@ export type MintBurnFormState = {
 };
 
 export type MintBurnForm = {
+  balance?: BigNumber;
   errors: Record<string, string>,
   isValid: boolean;
   minRequiredMargin: {
@@ -53,6 +55,7 @@ export const useMintBurnForm = (
   const defaultMarginAction = defaultValues.marginAction || MintBurnFormMarginAction.ADD;
   const defaultNotional = !isUndefined(defaultValues.notional) ? defaultValues.notional : 0;
 
+  const balance = useBalance(amm);
   const [fixedHigh, setFixedHigh] = useState<MintBurnFormState['fixedHigh']>(defaultFixedHigh);
   const [fixedLow, setFixedLow] = useState<MintBurnFormState['fixedLow']>(defaultFixedLow);
   const [liquidityAction, setLiquidityAction] = useState<MintBurnFormLiquidityAction>(defaultLiquidityAction);
@@ -282,6 +285,7 @@ export const useMintBurnForm = (
   };
 
   return {
+    balance,
     errors,
     isValid,
     minRequiredMargin: {
