@@ -161,6 +161,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
 
   return (
     <SwapForm
+      approvalsNeeded={form.approvalsNeeded}
       balance={form.balance ? amm.descale(form.balance) : undefined}
       endDate={amm.endDateTime}
       errors={form.errors}
@@ -169,6 +170,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
       hintState={form.hintState}
       isFCMAction={form.isFCMAction}
       isFormValid={form.isValid}
+      isTradeVerified={form.isTradeVerified}
       minRequiredMargin={form.minRequiredMargin}
       mode={mode}
       onCancel={onReset}

@@ -20,6 +20,7 @@ import { PositionBadge } from '@components/interface';
 import { isUndefined } from 'lodash';
 
 export type SwapFormProps = {
+  approvalsNeeded: boolean;
   balance?: number;
   endDate?: DateTime;
   errors: Record<string, string>;
@@ -28,6 +29,7 @@ export type SwapFormProps = {
   hintState: SwapFormSubmitButtonHintStates;
   isFCMAction: boolean;
   isFormValid: boolean;
+  isTradeVerified: boolean;
   maxMargin?: number;
   minRequiredMargin?: number;
   mode: SwapFormModes;
@@ -49,6 +51,7 @@ export type SwapFormProps = {
 };
 
 const SwapForm: React.FunctionComponent<SwapFormProps> = ({
+  approvalsNeeded,
   balance,
   endDate,
   errors,
@@ -57,6 +60,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   hintState,
   isFCMAction,
   isFormValid,
+  isTradeVerified,
   maxMargin,
   minRequiredMargin,
   mode,
@@ -195,13 +199,16 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
       )}
 
       <SubmitControls
+        approvalsNeeded={approvalsNeeded}
         hintState={hintState}
         isFCMAction={isFCMAction}
         isFormValid={isFormValid}
+        isTradeVerified={isTradeVerified}
         onCancel={onCancel}
         onSubmit={onSubmit}
         protocol={protocol}
         submitButtonState={submitButtonState}
+        swapInfoLoading={swapInfoLoading}
         tokenApprovals={tokenApprovals}
         tradeInfoErrorMessage={tradeInfoErrorMessage}
         underlyingTokenName={underlyingTokenName}

@@ -7,13 +7,16 @@ import { colors }  from '@theme';
 import { SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates } from 'src/hooks/useSwapForm/types';
 
 interface SubmitControlsProps {
+  approvalsNeeded: boolean;
   hintState: SwapFormSubmitButtonHintStates;
   isFCMAction: boolean;
   isFormValid: boolean;
+  isTradeVerified: boolean;
   onCancel: () => void;
   onSubmit: () => void;
   protocol?: string;
   submitButtonState: SwapFormSubmitButtonStates;
+  swapInfoLoading: boolean;
   tokenApprovals: ReturnType<typeof useTokenApproval>;
   tradeInfoErrorMessage?: string;
   underlyingTokenName?: string;
@@ -36,9 +39,11 @@ const Text = ({ bold, children, green, red }: TextProps) => (
 );
 
 const SubmitControls = ({
+  approvalsNeeded,
   hintState,
   isFCMAction,
   isFormValid, 
+  isTradeVerified,
   onCancel, 
   onSubmit, 
   protocol,
@@ -64,6 +69,9 @@ const SubmitControls = ({
       }
       case SwapFormSubmitButtonHintStates.APPROVING: {
         return 'Waiting for confirmation';
+      }
+      case SwapFormSubmitButtonHintStates.CHECKING: {
+        return 'Loading trade information';
       }
       case SwapFormSubmitButtonHintStates.ERROR_TOKEN_APPROVAL: {
         return <Text red>{tokenApprovals.lastError?.message}</Text>;
@@ -109,6 +117,9 @@ const SubmitControls = ({
       case SwapFormSubmitButtonStates.APPROVING: {
         return <>Approving<Ellipsis /></>;
       }
+      case SwapFormSubmitButtonStates.CHECKING: {
+        return <>Loading<Ellipsis /></>;
+      }
       case SwapFormSubmitButtonStates.INITIALISING: {
         return <>Initialising<Ellipsis /></>;
       }
@@ -128,7 +139,7 @@ const SubmitControls = ({
     <>
       <Box sx={{ display: 'flex' }}>
         <Button 
-          disabled={!isFormValid || tokenApprovals.checkingApprovals || tokenApprovals.approving || !!tradeInfoErrorMessage} 
+          disabled={!isFormValid || tokenApprovals.checkingApprovals || tokenApprovals.approving || (!approvalsNeeded && isFormValid && !isTradeVerified)} 
           onClick={onSubmit} 
           size="large" 
           sx={{ flexGrow: 1 }}

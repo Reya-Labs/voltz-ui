@@ -64,6 +64,7 @@ export const getHintState = (
   isRemovingMargin: boolean,
   tokenApprovals: ReturnType<typeof useTokenApproval>, 
   tradeInfoErrorMessage: string | null,
+  swapInfoLoading: boolean
 ) => {
   const isFCMAction = formAction === SwapFormActions.FCM_SWAP || formAction === SwapFormActions.FCM_UNWIND;
 
@@ -76,6 +77,20 @@ export const getHintState = (
   }
   if(tokenApprovals.approving) {
     return SwapFormSubmitButtonHintStates.APPROVING;
+  }
+  if (swapInfoLoading) {
+    return SwapFormSubmitButtonHintStates.CHECKING;
+  }
+
+  // Form validation
+  if (!isFormValid) {
+    if(formErrors.balance) {
+      return SwapFormSubmitButtonHintStates.FORM_INVALID_BALANCE;
+    }
+    if(!Object.keys(formErrors).length) {
+      return SwapFormSubmitButtonHintStates.FORM_INVALID_INCOMPLETE;
+    }
+    return SwapFormSubmitButtonHintStates.FORM_INVALID;
   }
 
   if(!isRemovingMargin) {
@@ -92,18 +107,9 @@ export const getHintState = (
     }
   }
 
-  // Form validation
-  if (!isFormValid || tradeInfoErrorMessage) {
-    if (tradeInfoErrorMessage) {
-      return SwapFormSubmitButtonHintStates.FORM_INVALID_TRADE;
-    }
-    if(formErrors.balance) {
-      return SwapFormSubmitButtonHintStates.FORM_INVALID_BALANCE;
-    }
-    if(!Object.keys(formErrors).length) {
-      return SwapFormSubmitButtonHintStates.FORM_INVALID_INCOMPLETE;
-    }
-    return SwapFormSubmitButtonHintStates.FORM_INVALID;
+  // trade info failed
+  if (tradeInfoErrorMessage) {
+    return SwapFormSubmitButtonHintStates.FORM_INVALID_TRADE;
   }
 
   if(tokenApprovals.lastApproval) {
@@ -120,13 +126,24 @@ export const getHintState = (
  * @param formAction - the action the form is currently set to make (SWAP, FCM_SWAP etc)
  * @param agent - the agent mode the form is currently in (fixed, variable etc)
  * @param isRemovingMargin - boolean flag for if the action is to remove margin
+ * @param swapInfoLoading - boolean flag for if the swap info is loading
  */
-export const getSubmitButtonState = (mode: SwapFormModes, tokenApprovals: ReturnType<typeof useTokenApproval>, formAction:SwapFormActions, agent: Agents, isRemovingMargin: boolean) => {  
+export const getSubmitButtonState = (
+  mode: SwapFormModes, 
+  tokenApprovals: ReturnType<typeof useTokenApproval>, 
+  formAction:SwapFormActions, 
+  agent: Agents, 
+  isRemovingMargin: boolean, 
+  swapInfoLoading: boolean
+) => {  
   if (tokenApprovals.checkingApprovals) {
     return SwapFormSubmitButtonStates.INITIALISING;
   }
   if (tokenApprovals.approving) {
     return SwapFormSubmitButtonStates.APPROVING;
+  }
+  if (swapInfoLoading) {
+    return SwapFormSubmitButtonStates.CHECKING;
   }
 
   if(!isRemovingMargin) {

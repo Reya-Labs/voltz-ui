@@ -60,11 +60,13 @@ const NewPositionSwapForm: React.FunctionComponent = (args) => {
   return (
     <SwapForm 
       {...args} 
+      approvalsNeeded={false}
       errors={form.errors}
       formState={form.state} 
       hintState={SwapFormSubmitButtonHintStates.READY_TO_TRADE}
       isFCMAction={false}
       isFormValid={form.isValid}
+      isTradeVerified={true}
       formAction={SwapFormActions.SWAP}
       mode={mode}
       onCancel={() => alert('cancel')}
@@ -101,11 +103,13 @@ const EditingMarginSwapForm: React.FunctionComponent = (args) => {
   return (
     <SwapForm 
       {...args} 
+      approvalsNeeded={false}
       errors={form.errors}
       formState={form.state}
       hintState={SwapFormSubmitButtonHintStates.READY_TO_TRADE}
       isFCMAction={false}
       isFormValid={form.isValid}
+      isTradeVerified={true}
       mode={mode}
       formAction={SwapFormActions.SWAP}
       onCancel={() => alert('cancel')}

@@ -27,6 +27,7 @@ export type SwapFormData = {
   isAddingMargin: boolean;
   isFCMAction: boolean;
   isRemovingMargin: boolean;
+  isTradeVerified: boolean;
   isValid: boolean;
   minRequiredMargin?: number;
   setMargin: (value: SwapFormState['margin']) => void;
@@ -75,10 +76,11 @@ export const useSwapForm = (
   const isAddingMargin = mode === SwapFormModes.EDIT_MARGIN && marginAction === MintBurnFormMarginAction.ADD;
   const isFCMAction = action === SwapFormActions.FCM_SWAP || action === SwapFormActions.FCM_UNWIND;
   const isRemovingMargin = mode === SwapFormModes.EDIT_MARGIN && marginAction === MintBurnFormMarginAction.REMOVE;
-
+  const isTradeVerified = !!swapInfo.result && !swapInfo.loading && !swapInfo.errorMessage;
+  
   const approvalsNeeded = s.approvalsNeeded(action, tokenApprovals, isRemovingMargin)
-  const hintState = s.getHintState(action, errors, isValid, isRemovingMargin, tokenApprovals, swapInfo.errorMessage);
-  const submitButtonState = s.getSubmitButtonState(mode, tokenApprovals, action, agent, isRemovingMargin);
+  const hintState = s.getHintState(action, errors, isValid, isRemovingMargin, tokenApprovals, swapInfo.errorMessage, swapInfo.loading);
+  const submitButtonState = s.getSubmitButtonState(mode, tokenApprovals, action, agent, isRemovingMargin, swapInfo.loading);
 
   // Load the swap summary info
   useEffect(() => {
@@ -169,7 +171,7 @@ export const useSwapForm = (
     }
 
     if((action === SwapFormActions.SWAP || action === SwapFormActions.UPDATE)) {
-      if(isUndefined(margin) || margin === 0) {
+      if(isUndefined(margin)) {
         valid = false;
         addError(err, 'margin', 'Please enter an amount');
       }
@@ -198,7 +200,7 @@ export const useSwapForm = (
 
     // Check that the input margin is >= minimum required margin
     if(action === SwapFormActions.SWAP || action === SwapFormActions.UPDATE) {
-      if(margin !== 0 && lessThan(margin, swapInfo.result?.marginRequirement) === true) {
+      if(lessThan(margin, swapInfo.result?.marginRequirement) === true) {
         valid = false;
         addError(err, 'margin', 'Not enough margin');
       }
@@ -252,6 +254,7 @@ export const useSwapForm = (
     hintState,
     isAddingMargin,
     isFCMAction,
+    isTradeVerified,
     isRemovingMargin,
     isValid,
     minRequiredMargin,
