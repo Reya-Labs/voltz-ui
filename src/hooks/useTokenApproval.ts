@@ -9,6 +9,11 @@ export enum ApprovalType {
   UTOKEN_PERIPHERY='UnderlyingTokenPeriphery'
 };
 
+export type ApprovalInfo = {
+  text?: string;
+  type: ApprovalType;
+};
+
 export type ApprovalErrorResponse = {
   code: number; 
   message: string;
@@ -17,7 +22,7 @@ export type ApprovalErrorResponse = {
 export const useTokenApproval = (amm: AugmentedAMM, skipFCMChecks = false) => {
   const [checkingApprovals, setCheckingApprovals] = useState(false);
   const [approving, setApproving] = useState(false);
-  const [lastApproval, setLastApproval] = useState<ApprovalType>();
+  const [lastApproval, setLastApproval] = useState<ApprovalInfo>();
   const [lastError, setLastError] = useState<ApprovalErrorResponse>();
 
   const [FCMApproved, setFCMApproved] = useState(false);
@@ -73,7 +78,7 @@ export const useTokenApproval = (amm: AugmentedAMM, skipFCMChecks = false) => {
     try {
       await amm.approveFCM();
       setFCMApproved(true);
-      setLastApproval(ApprovalType.FCM);
+      setLastApproval({ text: 'FCM', type: ApprovalType.FCM });
       setApproving(false);
     } catch(e) {
       handleApprovalError(e as ApprovalErrorResponse);
@@ -88,7 +93,7 @@ export const useTokenApproval = (amm: AugmentedAMM, skipFCMChecks = false) => {
     try {
       await amm.approveUnderlyingTokenForFCM();
       setUnderlyingTokenApprovedForFCM(true);
-      setLastApproval(ApprovalType.UTOKEN_FCM);
+      setLastApproval({ text: amm.underlyingToken.name, type: ApprovalType.UTOKEN_FCM });
       setApproving(false);
     } catch(e) {
       handleApprovalError(e as ApprovalErrorResponse);
@@ -103,7 +108,7 @@ export const useTokenApproval = (amm: AugmentedAMM, skipFCMChecks = false) => {
     try {
       await amm.approveUnderlyingTokenForPeriphery();
       setUnderlyingTokenApprovedForPeriphery(true);
-      setLastApproval(ApprovalType.UTOKEN_PERIPHERY);
+      setLastApproval({ text: amm.underlyingToken.name, type: ApprovalType.UTOKEN_PERIPHERY });
       setApproving(false);
     } catch(e) {
       handleApprovalError(e as ApprovalErrorResponse);
@@ -118,7 +123,7 @@ export const useTokenApproval = (amm: AugmentedAMM, skipFCMChecks = false) => {
     try {
       await amm.approveYieldBearingTokenForFCM();
       setYieldBearingTokenApprovedForFCM(true);
-      setLastApproval(ApprovalType.YBTOKEN_FCM);
+      setLastApproval({ text: amm.protocol, type: ApprovalType.YBTOKEN_FCM });
       setApproving(false);
     } catch(e) {
       handleApprovalError(e as ApprovalErrorResponse);
@@ -127,6 +132,30 @@ export const useTokenApproval = (amm: AugmentedAMM, skipFCMChecks = false) => {
     }
   }, [amm, setApproving, setYieldBearingTokenApprovedForFCM]);
 
+  const getNextApproval = useCallback((isFCMAction: boolean): ApprovalInfo | undefined => {
+    if(isFCMAction) {
+      if(!FCMApproved) {
+        return { text: 'FCM', type: ApprovalType.FCM };
+      }
+      if(!yieldBearingTokenApprovedForFCM) {
+        return { text: amm.protocol, type: ApprovalType.YBTOKEN_FCM };
+      }
+      if(!underlyingTokenApprovedForFCM) {
+        return { text: amm.underlyingToken.name, type: ApprovalType.UTOKEN_FCM };
+      }
+    } else {
+      if(!underlyingTokenApprovedForPeriphery) {
+        return { text: amm.underlyingToken.name, type: ApprovalType.UTOKEN_PERIPHERY };
+      }
+    }
+  }, [
+    amm,
+    FCMApproved, 
+    yieldBearingTokenApprovedForFCM, 
+    underlyingTokenApprovedForFCM, 
+    underlyingTokenApprovedForPeriphery
+  ]);
+
   return {
     approving,
     approveFCM,
@@ -134,9 +163,10 @@ export const useTokenApproval = (amm: AugmentedAMM, skipFCMChecks = false) => {
     approveUnderlyingTokenForPeriphery,
     approveYieldBearingTokenForFCM,
     checkingApprovals,
+    FCMApproved,
+    getNextApproval,
     lastApproval,
     lastError,
-    FCMApproved,
     underlyingTokenApprovedForFCM,
     underlyingTokenApprovedForPeriphery,
     yieldBearingTokenApprovedForFCM

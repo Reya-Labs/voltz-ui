@@ -16,3 +16,4 @@ export { default as useUniqueId } from './useUniqueId';
 export { default as useWallet } from './useWallet';
 export * from './useMintBurnForm';
 export * from './useSwapForm/useSwapForm';
+export * from './useSwapForm/types';

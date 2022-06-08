@@ -4,7 +4,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { AgentProvider, Agents } from '@components/contexts';
 import SwapForm from './SwapForm';
-import { useSwapForm, useTokenApproval } from '@hooks';
+import { SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates, useSwapForm, useTokenApproval } from '@hooks';
 import { AugmentedAMM } from '@utilities';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from './types';
@@ -60,9 +60,13 @@ const NewPositionSwapForm: React.FunctionComponent = (args) => {
   return (
     <SwapForm 
       {...args} 
+      approvalsNeeded={false}
       errors={form.errors}
       formState={form.state} 
+      hintState={SwapFormSubmitButtonHintStates.READY_TO_TRADE}
+      isFCMAction={false}
       isFormValid={form.isValid}
+      isTradeVerified={true}
       formAction={SwapFormActions.SWAP}
       mode={mode}
       onCancel={() => alert('cancel')}
@@ -71,8 +75,7 @@ const NewPositionSwapForm: React.FunctionComponent = (args) => {
       onChangeNotional={form.setNotional}
       onChangePartialCollateralization={form.setPartialCollateralization}
       onSubmit={() => form.validate()}
-      submitButtonHint="Submit hint text here"
-      submitButtonText="Submit"
+      submitButtonState={SwapFormSubmitButtonStates.TRADE_FIXED}
       swapInfo={mockSwapData}
       swapInfoLoading={false}
       tokenApprovals={mockTokenApprovals}
@@ -100,9 +103,13 @@ const EditingMarginSwapForm: React.FunctionComponent = (args) => {
   return (
     <SwapForm 
       {...args} 
+      approvalsNeeded={false}
       errors={form.errors}
       formState={form.state}
+      hintState={SwapFormSubmitButtonHintStates.READY_TO_TRADE}
+      isFCMAction={false}
       isFormValid={form.isValid}
+      isTradeVerified={true}
       mode={mode}
       formAction={SwapFormActions.SWAP}
       onCancel={() => alert('cancel')}
@@ -111,8 +118,7 @@ const EditingMarginSwapForm: React.FunctionComponent = (args) => {
       onChangeNotional={form.setNotional}
       onChangePartialCollateralization={form.setPartialCollateralization}
       onSubmit={() => form.validate()}
-      submitButtonHint="Submit hint text here"
-      submitButtonText="Submit"
+      submitButtonState={SwapFormSubmitButtonStates.TRADE_FIXED}
       swapInfo={mockSwapData}
       swapInfoLoading={false}
       tokenApprovals={mockTokenApprovals}
