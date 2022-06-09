@@ -124,5 +124,5 @@ export const getTotalMargin = (positions: Position[], positionInfo: Record<Posit
  * @param agent - The current agent
  */
 export const getTotalNotional = (positions: Position[], positionInfo: Record<Position['id'], PositionInfo>) => {
-  return positions.reduce((runningTotal, position) => runningTotal + positionInfo[position.id].notionalInUSD, 0);
+  return positions.reduce((runningTotal, position) => runningTotal + positionInfo[position.id].notionalInUSD || 0, 0);
 }

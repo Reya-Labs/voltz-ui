@@ -18,7 +18,6 @@ import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from './types';
 import { PositionBadge } from '@components/interface';
 import { isUndefined } from 'lodash';
-import { MintBurnFormMarginAction } from 'src/components/contexts';
 
 export type SwapFormProps = {
   approvalsNeeded: boolean;
@@ -206,6 +205,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         isFCMAction={isFCMAction}
         isFormValid={isFormValid}
         isTradeVerified={isTradeVerified}
+        mode={mode}
         onCancel={onCancel}
         onSubmit={onSubmit}
         protocol={protocol}
