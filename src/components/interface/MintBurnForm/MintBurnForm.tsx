@@ -1,7 +1,7 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
-import { Button, Panel, Typography } from '@components/atomic';
+import { Panel } from '@components/atomic';
 import {
   IconLabel,
   ProtocolInformation,
@@ -10,63 +10,68 @@ import {
   MarginAmount,
   NotionalAmount,
 } from '@components/composite';
-import { LiquidityControls, MintInfo } from './components';
+import { LiquidityControls, MintInfo, SubmitControls } from './components';
 import { MarginControls } from '../SwapForm/components';
 import { useTokenApproval } from '@hooks';
-import { MintBurnFormLiquidityAction, MintBurnFormMarginAction, MintBurnFormModes, MintBurnFormState } from '@components/contexts';
-import { colors } from '@theme';
+import { MintBurnFormHintStates, MintBurnFormLiquidityAction, MintBurnFormMarginAction, MintBurnFormModes, MintBurnFormState, MintBurnFormSubmitButtonStates } from '@components/contexts';
 import { isUndefined } from 'lodash';
 
 export type MintBurnFormProps = {
+  approvalsNeeded?: boolean;
   balance?: number; 
-  protocol?: string;
   fixedApr?: number;
-  startDate?: DateTime;
   endDate?: DateTime;
-  maxMargin?: number;
-  isFormValid: boolean;
-  formState: MintBurnFormState;
   errors: Record<string, string>;
+  formState: MintBurnFormState;
+  hintState: MintBurnFormHintStates;
+  isFormValid: boolean;
+  isTradeVierified: boolean;
+  maxMargin?: number;
   minRequiredMargin?: number;
   minRequiredMarginLoading: boolean;
   mode: MintBurnFormModes;
+  onCancel: () => void;
   onChangeFixedLow: (value: number, increment: boolean | null) => void;
   onChangeFixedHigh: (value: number, increment: boolean | null) => void;
-  onChangeNotional: (value: number) => void;
-  onChangeMargin: (value: number) => void;
-  onSubmit: () => void;
-  onCancel: () => void;
-  onChangeMarginAction: (value: MintBurnFormMarginAction) => void;
   onChangeLiquidityAction: (value: MintBurnFormLiquidityAction) => void;
-  submitButtonHint: ReactNode;
-  submitButtonText: ReactNode;
+  onChangeMargin: (value: number) => void;
+  onChangeMarginAction: (value: MintBurnFormMarginAction) => void;
+  onChangeNotional: (value: number) => void;
+  onSubmit: () => void;
+  protocol?: string;
+  startDate?: DateTime;
+  submitButtonState: MintBurnFormSubmitButtonStates;
   tokenApprovals: ReturnType<typeof useTokenApproval>;
+  tradeInfoErrorMessage?: string;
   underlyingTokenName?: string;
 };
 
 const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
+  approvalsNeeded = false,
   balance,
-  protocol,
-  startDate,
   endDate,
-  maxMargin,
-  isFormValid,
-  formState,
   errors,
+  formState,
+  hintState,
+  isFormValid,
+  isTradeVierified,
+  maxMargin,
   minRequiredMargin,
   minRequiredMarginLoading,
   mode = MintBurnFormModes.NEW_POSITION,
+  onCancel,
   onChangeFixedLow,
   onChangeFixedHigh,
-  onChangeNotional,
-  onChangeMargin,
-  onSubmit,
-  onCancel,
-  onChangeMarginAction,
   onChangeLiquidityAction,
-  submitButtonHint,
-  submitButtonText,
+  onChangeMargin,
+  onChangeMarginAction,
+  onChangeNotional,
+  onSubmit,
+  protocol,
+  startDate,
+  submitButtonState,
   tokenApprovals,
+  tradeInfoErrorMessage,
   underlyingTokenName = ''
 }) => {
   const isAddingLiquidity = mode !== MintBurnFormModes.EDIT_LIQUIDITY || formState.liquidityAction === MintBurnFormLiquidityAction.ADD;
@@ -193,32 +198,19 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         </Box>
       )}
 
-      <Box sx={{ display: 'flex' }}>
-        <Button 
-          disabled={!isFormValid || tokenApprovals.checkingApprovals || tokenApprovals.approving} 
-          size="large" 
-          onClick={onSubmit} 
-          sx={{ flexGrow: 1 }}
-        >
-          {submitButtonText}
-        </Button>
-        <Button
-          sx={{ marginLeft: (theme) => theme.spacing(6), flexGrow: 0 }}
-          variant="dark"
-          onClick={onCancel}
-        >
-          Back
-        </Button>
-      </Box>
-
-      <Typography variant='body2' sx={{ 
-        marginTop: (theme) => theme.spacing(2), 
-        color: colors.lavenderWeb.darken015,
-        fontSize: '12px'
-      }}>
-        {submitButtonHint}
-      </Typography>
-      
+      <SubmitControls 
+        approvalsNeeded={approvalsNeeded}
+        hintState={hintState}
+        isFormValid={isFormValid}
+        isTradeVerified={isTradeVierified}
+        mode={mode}
+        onCancel={onCancel} 
+        onSubmit={onSubmit}
+        submitButtonState={submitButtonState}
+        tokenApprovals={tokenApprovals}
+        tradeInfoErrorMessage={tradeInfoErrorMessage}
+        underlyingTokenName={underlyingTokenName}
+      />
     </Panel>
   );
 };

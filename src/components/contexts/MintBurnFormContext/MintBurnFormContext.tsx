@@ -1,7 +1,6 @@
 import { useAgent, useAMMContext, useBalance, useTokenApproval } from '@hooks';
 import { AugmentedAMM } from '@utilities';
 import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react';
-import { Ellipsis } from '@components/atomic';
 import { isUndefined } from 'lodash';
 import { BigNumber } from 'ethers';
 import { Position } from '@voltz-protocol/v1-sdk';
@@ -30,6 +29,32 @@ export enum MintBurnFormMarginAction {
   REMOVE='remove'
 };
 
+export enum MintBurnFormHintStates {
+  APPROVE_NEXT_TOKEN = 'APPROVE_NEXT_TOKEN',
+  APPROVE_TOKEN = 'APPROVE_TOKEN',
+  APPROVING = 'APPROVING',
+  CHECKING = 'CHECKING',
+  ERROR_TOKEN_APPROVAL = 'ERROR_TOKEN_APPROVAL',
+  FORM_INVALID = 'FORM_INVALID',
+  FORM_INVALID_BALANCE = 'FORM_INVALID_BALANCE',
+  FORM_INVALID_INCOMPLETE = 'FORM_INVALID_INCOMPLETE',
+  FORM_INVALID_TRADE = 'FORM_INVALID_TRADE',
+  INITIALISING = 'INITIALISING',
+  READY_TO_TRADE_TOKENS_APPROVED = 'READY_TO_TRADE_TOKENS_APPROVED',
+  READY_TO_TRADE = 'READY_TO_TRADE'
+}
+
+export enum MintBurnFormSubmitButtonStates {
+  ADD_LIQUIDITY = 'ADD_LIQUIDITY',
+  APPROVE_UT_PERIPHERY = 'APPROVE_UT_PERIPHERY',
+  APPROVING = 'APPROVING',
+  CHECKING = 'CHECKING',
+  DEPOSIT_MARGIN = 'DEPOSIT_MARGIN',
+  INITIALISING = 'INITIALISING',
+  REMOVE_LIQUIDITY = 'REMOVE_LIQUIDITY',
+  WITHDRAW_MARGIN = 'WITHDRAW_MARGIN',
+};
+
 export type MintBurnFormState = {
   fixedLow?: number;
   fixedHigh?: number;
@@ -38,7 +63,6 @@ export type MintBurnFormState = {
   marginAction: MintBurnFormMarginAction;
   notional?: number;
 };
-
 
 export type MintBurnFormProviderProps = {
   amm: AugmentedAMM;
@@ -50,12 +74,15 @@ export type MintBurnFormProviderProps = {
 export type MintBurnFormContext = {
   action: MintBurnFormActions;
   amm: AugmentedAMM;
+  approvalsNeeded: boolean;
   balance?: BigNumber;
   errors: Record<string, string>;
+  hintState: MintBurnFormHintStates;
   isAddingLiquidity: boolean;
   isAddingMargin: boolean;
   isRemovingLiquidity: boolean;
   isRemovingMargin: boolean;
+  isTradeVerified: boolean;
   isValid: boolean;
   minRequiredMargin: {
     errorMessage?: string;
@@ -70,8 +97,7 @@ export type MintBurnFormContext = {
   setMarginAction: (value: MintBurnFormState['marginAction']) => void;
   setNotional: (value: MintBurnFormState['notional']) => void;
   state: MintBurnFormState;
-  submitButtonHint: ReactNode;
-  submitButtonText: ReactNode;
+  submitButtonState: MintBurnFormSubmitButtonStates;
   tokenApprovals: ReturnType<typeof useTokenApproval>;
   validate: () => Promise<boolean>;
 };
@@ -119,8 +145,10 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   const [notional, setNotional] = useState<MintBurnFormState['notional']>(defaultNotional);
   const tokenApprovals = useTokenApproval(amm, true);
   
+  const approvalsNeeded = !tokenApprovals.underlyingTokenApprovedForPeriphery;
   const [errors, setErrors] = useState<MintBurnFormContext['errors']>({});
   const [isValid, setIsValid] = useState<boolean>(false);
+  const isTradeVerified = !!mintMinimumMarginRequirement.result && !mintMinimumMarginRequirement.loading && !mintMinimumMarginRequirement.errorMessage;
   const minimumRequiredMargin = mintMinimumMarginRequirement.result ?? undefined;
   const touched = useRef<string[]>([]);
 
@@ -140,69 +168,83 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
     action = MintBurnFormActions.BURN;
   }
 
-  const getSubmitButtonHint = () => {
+  const getHintState = () => {
     // Please note that the order these are in is important, you need the conditions that take precidence
     // to be nearer the top.
-  
-    // Token approvals - Something happening
+
     if(tokenApprovals.checkingApprovals) {
-      return 'Initialising, please wait';
+      return MintBurnFormHintStates.INITIALISING;
     }
     if(tokenApprovals.approving) {
-      return 'Waiting for confirmation';
+      return MintBurnFormHintStates.APPROVING;
+    }
+    if (mintMinimumMarginRequirement.loading) {
+      return MintBurnFormHintStates.CHECKING;
     }
   
-    if(!isRemovingLiquidity && !isRemovingMargin) {
+    // Form validation
+    if (!isValid) {
+      if(errors.balance) {
+        return MintBurnFormHintStates.FORM_INVALID_BALANCE;
+      }
+      if(!Object.keys(errors).length) {
+        return MintBurnFormHintStates.FORM_INVALID_INCOMPLETE;
+      }
+      return MintBurnFormHintStates.FORM_INVALID;
+    }
+  
+    if(!!isRemovingLiquidity && !isRemovingMargin) {
       if(tokenApprovals.lastError) {
-        return <Text red>{tokenApprovals.lastError.message}</Text>
+        return MintBurnFormHintStates.ERROR_TOKEN_APPROVAL;
       }
       
-      // Token approvals - user needs to approve a token
-      if(isValid) {
-        if(!tokenApprovals.underlyingTokenApprovedForPeriphery) {
-          return `Please approve ${amm.underlyingToken.name || ''}`;
+      if(tokenApprovals.getNextApproval(false)) {
+        if(tokenApprovals.lastApproval) {
+          return MintBurnFormHintStates.APPROVE_NEXT_TOKEN;
+        } else {
+          return MintBurnFormHintStates.APPROVE_TOKEN;
         }
       }
     }
   
-    // Form validation
-    if (!isValid || mintMinimumMarginRequirement.errorMessage) {
-      if (mintMinimumMarginRequirement.errorMessage) {
-        return <Text red>{mintMinimumMarginRequirement.errorMessage}</Text>;
-      }
-      if(errors.balance) {
-        return <Text red>You do not have enough {amm.underlyingToken.name || ''}</Text>;
-      }
-      if(!Object.keys(errors).length) {
-        return 'Input your parameters';
-      }
-      return <Text red>Please fix form errors to continue</Text>;
+    // trade info failed
+    if (mintMinimumMarginRequirement.errorMessage) {
+      return MintBurnFormHintStates.FORM_INVALID_TRADE;
     }
   
-    if (isValid) {
-      return <>{tokenApprovals.lastApproval && <><Text green>Tokens approved</Text>. </>}Let's trade!</>;
+    if(tokenApprovals.lastApproval) {
+      return MintBurnFormHintStates.READY_TO_TRADE_TOKENS_APPROVED;
+    } else {
+      return MintBurnFormHintStates.READY_TO_TRADE;
     }
   }
 
-  const getSubmitButtonText = () => {
+  const getSubmitButtonState = () => {
     if (tokenApprovals.checkingApprovals) {
-      return <>Initialising<Ellipsis /></>;
+      return MintBurnFormSubmitButtonStates.INITIALISING;
     }
     if (tokenApprovals.approving) {
-      return <>Approving<Ellipsis /></>;
+      return MintBurnFormSubmitButtonStates.APPROVING;
+    }
+    if (mintMinimumMarginRequirement.loading) {
+      return MintBurnFormSubmitButtonStates.CHECKING;
     }
   
     if(!isRemovingMargin && !isRemovingLiquidity) {
       if (!tokenApprovals.underlyingTokenApprovedForPeriphery) {
-        return <Box>Approve <Text>{amm.underlyingToken.name || ''}</Text></Box>;
+        return MintBurnFormSubmitButtonStates.APPROVE_UT_PERIPHERY;
       }
     }
   
     if(mode === MintBurnFormModes.EDIT_MARGIN) {
-      return isAddingMargin ? 'Deposit Margin' : 'Withdraw Margin';
+      return isAddingMargin 
+        ? MintBurnFormSubmitButtonStates.DEPOSIT_MARGIN 
+        : MintBurnFormSubmitButtonStates.WITHDRAW_MARGIN;
     }
   
-    return isAddingLiquidity ? 'Provide Liquidity' : 'Burn Liquidity';
+    return isAddingLiquidity 
+      ? MintBurnFormSubmitButtonStates.ADD_LIQUIDITY 
+      : MintBurnFormSubmitButtonStates.REMOVE_LIQUIDITY;
   };
 
   // Load the mint summary info
@@ -421,12 +463,15 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   const value = {
     action,
     amm,
+    approvalsNeeded,
     balance,
     errors,
+    hintState: getHintState(),
     isAddingLiquidity,
     isAddingMargin,
     isRemovingLiquidity,
     isRemovingMargin,
+    isTradeVerified,
     isValid,
     minRequiredMargin: {
       errorMessage: mintMinimumMarginRequirement.errorMessage || undefined,
@@ -448,8 +493,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
       marginAction,
       notional
     },
-    submitButtonHint: getSubmitButtonHint(),
-    submitButtonText: getSubmitButtonText(),
+    submitButtonState: getSubmitButtonState(),
     tokenApprovals,
     validate
   }
