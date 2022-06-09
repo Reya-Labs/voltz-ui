@@ -12,11 +12,10 @@ import {
 } from '@components/composite';
 import { LiquidityControls, MintInfo } from './components';
 import { MarginControls } from '../SwapForm/components';
-import { SwapFormMarginAction, useTokenApproval } from '@hooks';
-import { MintBurnFormLiquidityAction, MintBurnFormMarginAction, MintBurnFormState } from '@components/contexts';
+import { useTokenApproval } from '@hooks';
+import { MintBurnFormLiquidityAction, MintBurnFormMarginAction, MintBurnFormModes, MintBurnFormState } from '@components/contexts';
 import { colors } from '@theme';
 import { isUndefined } from 'lodash';
-import { MintBurnFormModes } from './types';
 
 export type MintBurnFormProps = {
   balance?: number; 

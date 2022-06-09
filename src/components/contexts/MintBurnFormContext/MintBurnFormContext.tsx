@@ -1,10 +1,24 @@
-import { useAMMContext, useBalance } from '@hooks';
+import { useAgent, useAMMContext, useBalance, useTokenApproval } from '@hooks';
 import { AugmentedAMM } from '@utilities';
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
-import { MintBurnFormModes } from '@components/interface';
+import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react';
+import { Ellipsis } from '@components/atomic';
 import { isUndefined } from 'lodash';
 import { BigNumber } from 'ethers';
 import { Position } from '@voltz-protocol/v1-sdk';
+import { Box } from '@mui/material';
+import { colors } from "@theme";
+
+export enum MintBurnFormModes {
+  NEW_POSITION='NEW_POSITION',
+  EDIT_MARGIN='EDIT_MARGIN',
+  EDIT_LIQUIDITY='EDIT_LIQUIDITY'
+}
+
+export enum MintBurnFormActions {
+  UPDATE='UPDATE',
+  MINT='MINT',
+  BURN='BURN'
+};
 
 export enum MintBurnFormLiquidityAction {
   ADD='add',
@@ -34,9 +48,10 @@ export type MintBurnFormProviderProps = {
 }
 
 export type MintBurnFormContext = {
+  action: MintBurnFormActions;
   amm: AugmentedAMM;
   balance?: BigNumber;
-  errors: Record<string, string>,
+  errors: Record<string, string>;
   isAddingLiquidity: boolean;
   isAddingMargin: boolean;
   isRemovingLiquidity: boolean;
@@ -54,11 +69,30 @@ export type MintBurnFormContext = {
   setMargin: (value: MintBurnFormState['margin']) => void;
   setMarginAction: (value: MintBurnFormState['marginAction']) => void;
   setNotional: (value: MintBurnFormState['notional']) => void;
-  state: MintBurnFormState,
+  state: MintBurnFormState;
+  submitButtonHint: ReactNode;
+  submitButtonText: ReactNode;
+  tokenApprovals: ReturnType<typeof useTokenApproval>;
   validate: () => Promise<boolean>;
 };
 
 const MintBurnFormCtx = createContext<MintBurnFormContext>({} as unknown as MintBurnFormContext);
+
+type TextProps = {
+  bold?: boolean;
+  children?: ReactNode;
+  green?: boolean;
+  red?: boolean;
+};
+const Text = ({ bold, children, green, red }: TextProps) => (
+  <Box component='span' sx={{ 
+    color: green ? colors.vzCustomGreen1 : red ? colors.vzCustomRed1 : undefined,
+    fontWeight: bold ? 'bold' : undefined,
+    textTransform: 'none'
+  }}>
+    {children}
+  </Box>
+);
 
 export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderProps> = ({ 
   amm, 
@@ -73,6 +107,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   const defaultMarginAction = defaultValues.marginAction ?? MintBurnFormMarginAction.ADD;
   const defaultNotional = defaultValues.notional ?? 0;
 
+  const { agent } = useAgent();
   const balance = useBalance(amm);
   const [fixedHigh, setFixedHigh] = useState<MintBurnFormState['fixedHigh']>(defaultFixedHigh);
   const [fixedLow, setFixedLow] = useState<MintBurnFormState['fixedLow']>(defaultFixedLow);
@@ -81,6 +116,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   const [marginAction, setMarginAction] = useState<MintBurnFormMarginAction>(defaultMarginAction);
   const { mintMinimumMarginRequirement } = useAMMContext();
   const [notional, setNotional] = useState<MintBurnFormState['notional']>(defaultNotional);
+  const tokenApprovals = useTokenApproval(amm, true);
   
   const [errors, setErrors] = useState<MintBurnFormContext['errors']>({});
   const [isValid, setIsValid] = useState<boolean>(false);
@@ -91,6 +127,82 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   const isAddingMargin = mode === MintBurnFormModes.EDIT_MARGIN && marginAction === MintBurnFormMarginAction.ADD;
   const isRemovingLiquidity = mode === MintBurnFormModes.EDIT_LIQUIDITY && liquidityAction === MintBurnFormLiquidityAction.BURN;
   const isRemovingMargin = mode === MintBurnFormModes.EDIT_MARGIN && marginAction === MintBurnFormMarginAction.REMOVE;
+
+  let action: MintBurnFormActions;
+  if (mode === MintBurnFormModes.EDIT_MARGIN) {
+    action = MintBurnFormActions.UPDATE;
+  } 
+  else if (mode !== MintBurnFormModes.EDIT_LIQUIDITY || liquidityAction === MintBurnFormLiquidityAction.ADD) {
+    action = MintBurnFormActions.MINT;
+  } 
+  else {
+    action = MintBurnFormActions.BURN;
+  }
+
+  const getSubmitButtonHint = () => {
+    // Please note that the order these are in is important, you need the conditions that take precidence
+    // to be nearer the top.
+  
+    // Token approvals - Something happening
+    if(tokenApprovals.checkingApprovals) {
+      return 'Initialising, please wait';
+    }
+    if(tokenApprovals.approving) {
+      return 'Waiting for confirmation';
+    }
+  
+    if(!isRemovingLiquidity && !isRemovingMargin) {
+      if(tokenApprovals.lastError) {
+        return <Text red>{tokenApprovals.lastError.message}</Text>
+      }
+      
+      // Token approvals - user needs to approve a token
+      if(isValid) {
+        if(!tokenApprovals.underlyingTokenApprovedForPeriphery) {
+          return `Please approve ${amm.underlyingToken.name || ''}`;
+        }
+      }
+    }
+  
+    // Form validation
+    if (!isValid || mintMinimumMarginRequirement.errorMessage) {
+      if (mintMinimumMarginRequirement.errorMessage) {
+        return <Text red>{mintMinimumMarginRequirement.errorMessage}</Text>;
+      }
+      if(errors.balance) {
+        return <Text red>You do not have enough {amm.underlyingToken.name || ''}</Text>;
+      }
+      if(!Object.keys(errors).length) {
+        return 'Input your parameters';
+      }
+      return <Text red>Please fix form errors to continue</Text>;
+    }
+  
+    if (isValid) {
+      return <>{tokenApprovals.lastApproval && <><Text green>Tokens approved</Text>. </>}Let's trade!</>;
+    }
+  }
+
+  const getSubmitButtonText = () => {
+    if (tokenApprovals.checkingApprovals) {
+      return <>Initialising<Ellipsis /></>;
+    }
+    if (tokenApprovals.approving) {
+      return <>Approving<Ellipsis /></>;
+    }
+  
+    if(!isRemovingMargin && !isRemovingLiquidity) {
+      if (!tokenApprovals.underlyingTokenApprovedForPeriphery) {
+        return <Box>Approve <Text>{amm.underlyingToken.name || ''}</Text></Box>;
+      }
+    }
+  
+    if(mode === MintBurnFormModes.EDIT_MARGIN) {
+      return isAddingMargin ? 'Deposit Margin' : 'Withdraw Margin';
+    }
+  
+    return isAddingLiquidity ? 'Provide Liquidity' : 'Burn Liquidity';
+  };
 
   // Load the mint summary info
   useEffect(() => {
@@ -306,6 +418,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   };
 
   const value = {
+    action,
     amm,
     balance,
     errors,
@@ -334,6 +447,9 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
       marginAction,
       notional
     },
+    submitButtonHint: getSubmitButtonHint(),
+    submitButtonText: getSubmitButtonText(),
+    tokenApprovals,
     validate
   }
 

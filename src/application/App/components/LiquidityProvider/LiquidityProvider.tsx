@@ -4,10 +4,10 @@ import { useLocation } from 'react-router-dom';
 import { Position } from '@voltz-protocol/v1-sdk';
 
 import { AugmentedAMM, setPageTitle } from '@utilities';
-import { Agents, AMMProvider, MintBurnFormProvider } from '@components/contexts';
+import { Agents, AMMProvider, MintBurnFormModes, MintBurnFormProvider } from '@components/contexts';
 import { useAgent } from '@hooks';
 
-import { Page, MintBurnFormModes } from '@components/interface';
+import { Page } from '@components/interface';
 import { Panel } from '@components/atomic';
 import { PageTitleDesc } from '@components/composite';
 import ConnectedAMMTable from '../ConnectedAMMTable/ConnectedAMMTable';

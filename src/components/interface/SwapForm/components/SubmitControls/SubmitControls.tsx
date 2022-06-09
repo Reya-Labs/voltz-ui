@@ -1,10 +1,9 @@
 import React, { ReactNode } from 'react';
-import { useAgent, useTokenApproval } from '@hooks';
+import { SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates, useAgent, useTokenApproval } from '@hooks';
 import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { Button, Ellipsis } from '@components/atomic';
 import { colors }  from '@theme';
-import { SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates } from 'src/hooks/useSwapForm/types';
 
 interface SubmitControlsProps {
   approvalsNeeded: boolean;

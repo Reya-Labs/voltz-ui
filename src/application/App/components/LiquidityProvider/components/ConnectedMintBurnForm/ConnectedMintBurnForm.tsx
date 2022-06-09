@@ -2,11 +2,10 @@ import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '@routes';
 import { actions, selectors } from '@store';
-import { useAgent, useDispatch, useSelector, useTokenApproval } from '@hooks';
-import { useMintBurnForm } from '@components/contexts';
-import { MintBurnForm, MintBurnFormModes, PendingTransaction } from '@components/interface';
+import { useAgent, useDispatch, useSelector } from '@hooks';
+import { MintBurnFormActions, MintBurnFormModes, useMintBurnForm } from '@components/contexts';
+import { MintBurnForm, PendingTransaction } from '@components/interface';
 import { updateFixedRate } from './utilities';
-import { getFormAction, getSubmitAction, getSubmitButtonHint, getSubmitButtonText } from './services';
 
 export type ConnectedMintBurnFormProps = {
   onReset: () => void;
@@ -15,17 +14,31 @@ export type ConnectedMintBurnFormProps = {
 const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps> = ({ onReset }) => {
   const { agent } = useAgent();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  
   const form = useMintBurnForm();
-  const tokenApprovals = useTokenApproval(form.amm, true);
+  const navigate = useNavigate();
 
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
 
-  const formAction = getFormAction(form.mode, form.state.liquidityAction);
-  const submitButtonHint = getSubmitButtonHint(form.amm, form.mode, form, tokenApprovals, form.minRequiredMargin.errorMessage);
-  const submitButtonText = getSubmitButtonText(form.mode, tokenApprovals, form.amm, form.state);
+  const getSubmitReduxAction = () => {
+    const transaction = { 
+      ammId: form.amm.id, 
+      agent,
+      fixedLow: form.state.fixedLow,
+      fixedHigh: form.state.fixedHigh,
+      margin: Math.abs(form.state.margin as number) * (form.isRemovingMargin ? -1 : 1),
+      notional: Math.abs(form.state.notional as number) * (form.isRemovingLiquidity ? -1 : 1),
+    };
+  
+    switch(form.action) {
+      case MintBurnFormActions.UPDATE:
+        return actions.updatePositionMarginAction(form.amm, transaction);
+      case MintBurnFormActions.MINT:
+        return actions.mintAction(form.amm, transaction);
+      case MintBurnFormActions.BURN:
+        return actions.burnAction(form.amm, transaction);
+    }
+  }
 
   const handleComplete = () => {
     onReset();
@@ -51,15 +64,17 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     if (!form.isValid) return;
 
     if(!form.isRemovingLiquidity && !form.isRemovingMargin) {
-      if(!tokenApprovals.underlyingTokenApprovedForPeriphery) {
-        tokenApprovals.approveUnderlyingTokenForPeriphery();
+      if(!form.tokenApprovals.underlyingTokenApprovedForPeriphery) {
+        form.tokenApprovals.approveUnderlyingTokenForPeriphery();
         return;
       }
     }
 
-    const action = getSubmitAction(form.amm, formAction, form.state, agent, form.mode);
-    setTransactionId(action.payload.transaction.id);
-    dispatch(action);
+    const reduxAction = getSubmitReduxAction();
+    if(reduxAction) {
+      setTransactionId(reduxAction.payload.transaction.id);
+      dispatch(reduxAction);
+    }
   };
 
   if (!form.amm) {
@@ -101,9 +116,9 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
       onSubmit={handleSubmit}
       protocol={form.amm.protocol}
       startDate={form.amm.startDateTime}
-      submitButtonHint={submitButtonHint}
-      submitButtonText={submitButtonText}
-      tokenApprovals={tokenApprovals}
+      submitButtonHint={form.submitButtonHint}
+      submitButtonText={form.submitButtonText}
+      tokenApprovals={form.tokenApprovals}
       underlyingTokenName={form.amm.underlyingToken.name}
     />
   );
