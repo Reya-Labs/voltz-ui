@@ -1,18 +1,18 @@
 import React, { useCallback } from 'react';
 import Box from '@mui/material/Box';
 import { IconLabel, ToggleButtonGroup } from '@components/composite';
-import { MintBurnFormMarginAction } from '@hooks';
 
-export type MarginControlsProps = {
-  onChange: (value: MintBurnFormMarginAction) => void;
-  value: MintBurnFormMarginAction;
+export type MarginControlsProps<T> = {
+  onChange: (value: T) => void;
+  values: Record<string | number, T>;
+  value: T;
 };
 
-const MarginControls = ({ onChange, value }: MarginControlsProps) => {
+const MarginControls = <T,>({ onChange, values, value }: MarginControlsProps<T>) => {
   const iconLabel = <IconLabel label="Add or Remove Margin" icon="information-circle" info="" removeIcon />
 
-  const handleChange = useCallback((newValue: string) => {
-    if(newValue) onChange(newValue as MintBurnFormMarginAction);
+  const handleChange = useCallback((newValue: T) => {
+    if(newValue) onChange(newValue);
   }, [onChange]);
 
   return (
@@ -26,7 +26,7 @@ const MarginControls = ({ onChange, value }: MarginControlsProps) => {
     >
       <ToggleButtonGroup
         label={iconLabel}
-        options={Object.values(MintBurnFormMarginAction)}
+        options={Object.values(values)}
         option={value}
         onChangeOption={handleChange}
       />

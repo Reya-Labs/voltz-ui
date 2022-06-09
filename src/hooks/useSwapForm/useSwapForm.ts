@@ -3,17 +3,16 @@ import { SwapFormActions, SwapFormModes } from "@components/interface";
 import { AugmentedAMM } from "@utilities";
 import { isUndefined } from "lodash";
 import { useEffect, useRef, useState } from "react";
-import { MintBurnFormMarginAction } from "../useMintBurnForm";
 import { hasEnoughTokens, hasEnoughUnderlyingTokens, lessThan } from "@utilities";
 import { useAgent, useAMMContext, useBalance, useMinRequiredMargin, useTokenApproval } from "@hooks";
 import { InfoPostSwap, Position } from "@voltz-protocol/v1-sdk";
 import * as s from "./services";
 import { BigNumber } from "ethers";
-import { SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates } from "./types";
+import { SwapFormMarginAction, SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates } from "./types";
 
 export type SwapFormState = {
   margin?: number;
-  marginAction: MintBurnFormMarginAction;
+  marginAction: SwapFormMarginAction;
   notional?: number;
   partialCollateralization: boolean;
 };
@@ -52,7 +51,7 @@ export const useSwapForm = (
   defaultValues: Partial<SwapFormState> = {}
 ): SwapFormData => {
   const defaultMargin = !isUndefined(defaultValues.margin) ? defaultValues.margin : 0;
-  const defaultMarginAction = defaultValues.marginAction || MintBurnFormMarginAction.ADD;
+  const defaultMarginAction = defaultValues.marginAction || SwapFormMarginAction.ADD;
   const defaultNotional = !isUndefined(defaultValues.notional) ? defaultValues.notional : 0;
   const defaultPartialCollateralization = !isUndefined(defaultValues.partialCollateralization) 
     ? defaultValues.partialCollateralization 
@@ -61,7 +60,7 @@ export const useSwapForm = (
   const { agent } = useAgent();
   const balance = useBalance(amm);
   const [margin, setMargin] = useState<SwapFormState['margin']>(defaultMargin);
-  const [marginAction, setMarginAction] = useState<MintBurnFormMarginAction>(defaultMarginAction);
+  const [marginAction, setMarginAction] = useState<SwapFormMarginAction>(defaultMarginAction);
   const minRequiredMargin = useMinRequiredMargin(amm);
   const [notional, setNotional] = useState<SwapFormState['notional']>(defaultNotional);
   const [partialCollateralization, setPartialCollateralization] = useState<boolean>(defaultPartialCollateralization);
@@ -73,9 +72,9 @@ export const useSwapForm = (
   const touched = useRef<string[]>([]);
 
   const action = s.getFormAction(mode, partialCollateralization, agent);
-  const isAddingMargin = mode === SwapFormModes.EDIT_MARGIN && marginAction === MintBurnFormMarginAction.ADD;
+  const isAddingMargin = mode === SwapFormModes.EDIT_MARGIN && marginAction === SwapFormMarginAction.ADD;
   const isFCMAction = action === SwapFormActions.FCM_SWAP || action === SwapFormActions.FCM_UNWIND;
-  const isRemovingMargin = mode === SwapFormModes.EDIT_MARGIN && marginAction === MintBurnFormMarginAction.REMOVE;
+  const isRemovingMargin = mode === SwapFormModes.EDIT_MARGIN && marginAction === SwapFormMarginAction.REMOVE;
   const isTradeVerified = !!swapInfo.result && !swapInfo.loading && !swapInfo.errorMessage;
   
   const approvalsNeeded = s.approvalsNeeded(action, tokenApprovals, isRemovingMargin)
@@ -221,7 +220,7 @@ export const useSwapForm = (
     }
 
     // check user has sufficient funds
-    if(marginAction === MintBurnFormMarginAction.ADD) {
+    if(marginAction === SwapFormMarginAction.ADD) {
       if(margin !== 0 && await hasEnoughUnderlyingTokens(amm, margin) === false) {
         valid = false;
         addError(err, 'margin', 'Insufficient funds');
@@ -229,7 +228,7 @@ export const useSwapForm = (
     }
 
     // Check that the input margin is >= minimum required margin if removing margin
-    if(position && !isUndefined(minRequiredMargin) && marginAction === MintBurnFormMarginAction.REMOVE) {
+    if(position && !isUndefined(minRequiredMargin) && marginAction === SwapFormMarginAction.REMOVE) {
       if(!isUndefined(margin) && margin !== 0) {
         const originalMargin = amm.descale(BigNumber.from(position.margin.toString()));
         const remainingMargin = originalMargin - margin;

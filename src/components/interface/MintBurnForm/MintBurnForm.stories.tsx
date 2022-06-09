@@ -2,11 +2,12 @@ import React from 'react';
 import { DateTime, Duration } from 'luxon';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { AgentProvider, Agents } from '@components/contexts';
+import { AgentProvider, Agents, useMintBurnForm } from '@components/contexts';
 import MintBurnForm from './MintBurnForm';
-import { useMintBurnForm, useTokenApproval } from '@hooks';
+import { useTokenApproval } from '@hooks';
 import { AugmentedAMM } from '@utilities';
 import { MintBurnFormModes } from './types';
+import { MintBurnFormProvider } from 'src/components/contexts';
 
 export default {
   title: 'Interface/MintBurnForm',
@@ -40,15 +41,15 @@ const mockTokenApprovals = {
 // Creating a new position
 const NewPositionTemplate: ComponentStory<typeof MintBurnForm> = (args) => (
   <AgentProvider defaultAgent={Agents.LIQUIDITY_PROVIDER}>
-    <NewPositionMintBurnForm {...args} />
+    <MintBurnFormProvider amm={mockAmm} mode={MintBurnFormModes.NEW_POSITION} defaultValues={{ fixedLow: 2, fixedHigh: 6 }}>
+      <NewPositionMintBurnForm {...args} />
+    </MintBurnFormProvider>
   </AgentProvider>
 );
 const NewPositionMintBurnForm: React.FunctionComponent = (args) => {
   const balance = 100000;
-  const mode = MintBurnFormModes.NEW_POSITION;
   const minRequiredMargin = 100;
-
-  const form = useMintBurnForm(mockAmm, mode, minRequiredMargin);
+  const form = useMintBurnForm();
 
   return (
     <MintBurnForm 
@@ -59,7 +60,7 @@ const NewPositionMintBurnForm: React.FunctionComponent = (args) => {
       isFormValid={form.isValid}
       minRequiredMargin={minRequiredMargin}
       minRequiredMarginLoading={false}
-      mode={mode}
+      mode={form.mode}
       onCancel={() => alert('cancel')}
       onChangeFixedLow={form.setFixedLow}
       onChangeFixedHigh={form.setFixedHigh}
@@ -86,15 +87,15 @@ NewPosition.args = {
 // Editing the margin of a position
 const EditingMarginTemplate: ComponentStory<typeof MintBurnForm> = (args) => (
   <AgentProvider defaultAgent={Agents.LIQUIDITY_PROVIDER}>
-    <EditingMarginMintBurnForm {...args} />
+    <MintBurnFormProvider amm={mockAmm} mode={MintBurnFormModes.EDIT_MARGIN} defaultValues={{ fixedLow: 2, fixedHigh: 6 }}>
+      <EditingMarginMintBurnForm {...args} />
+    </MintBurnFormProvider>
   </AgentProvider>
 );
 const EditingMarginMintBurnForm: React.FunctionComponent = (args) => {
   const balance = 100000;
-  const mode = MintBurnFormModes.EDIT_MARGIN;
   const minRequiredMargin = 100;
-
-  const form = useMintBurnForm(mockAmm, mode, minRequiredMargin, { fixedLow: 2, fixedHigh: 6 });
+  const form = useMintBurnForm();
 
   return (
     <MintBurnForm 
@@ -105,7 +106,7 @@ const EditingMarginMintBurnForm: React.FunctionComponent = (args) => {
       isFormValid={form.isValid}
       minRequiredMargin={minRequiredMargin}
       minRequiredMarginLoading={false}
-      mode={mode}
+      mode={form.mode}
       onCancel={() => alert('cancel')}
       onChangeFixedLow={form.setFixedLow}
       onChangeFixedHigh={form.setFixedHigh}
@@ -132,15 +133,15 @@ EditingMargin.args = {
 // Editing the liquidity of a position
 const EditingLiquidityTemplate: ComponentStory<typeof MintBurnForm> = (args) => (
   <AgentProvider defaultAgent={Agents.LIQUIDITY_PROVIDER}>
-    <EditingLiquidityMintBurnForm {...args} />
+    <MintBurnFormProvider amm={mockAmm} mode={MintBurnFormModes.EDIT_LIQUIDITY} defaultValues={{ fixedLow: 2, fixedHigh: 6 }}>
+      <EditingLiquidityMintBurnForm {...args} />
+    </MintBurnFormProvider>
   </AgentProvider>
 );
 const EditingLiquidityMintBurnForm: React.FunctionComponent = (args) => {
   const balance = 100000;
-  const mode = MintBurnFormModes.EDIT_LIQUIDITY;
   const minRequiredMargin = 100;
-
-  const form = useMintBurnForm(mockAmm, mode, minRequiredMargin, { fixedLow: 2, fixedHigh: 6 });
+  const form = useMintBurnForm();
 
   return (
     <MintBurnForm 
@@ -151,7 +152,7 @@ const EditingLiquidityMintBurnForm: React.FunctionComponent = (args) => {
       isFormValid={form.isValid}
       minRequiredMargin={minRequiredMargin}
       minRequiredMarginLoading={false}
-      mode={mode}
+      mode={form.mode}
       onCancel={() => alert('cancel')}
       onChangeFixedLow={form.setFixedLow}
       onChangeFixedHigh={form.setFixedHigh}

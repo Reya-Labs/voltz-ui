@@ -5,37 +5,37 @@ import MuiToggleButtonGroup, {
 
 import { AgentProps } from '@components/contexts';
 import { useAgentWithOverride } from '@hooks';
-import { withLabel } from '../../utilities';
+import { withLabel, WithLabelProps } from '../../utilities';
 import { ToggleButton } from '../../atomic';
 
-export type ToggleButtonGroupProps = MuiToggleButtonGroupProps &
+export type ToggleButtonGroupProps<T> = MuiToggleButtonGroupProps &
   AgentProps & {
-    options: string[];
-    option?: string;
-    defaultOption?: string;
+    options: Array<T>;
+    option?: T;
+    defaultOption?: T;
     disabled?: boolean;
-    onChangeOption: (option: string) => void;
+    onChangeOption: (option: T) => void;
   };
 
-const ToggleButtonGroup: React.FunctionComponent<ToggleButtonGroupProps> = ({
+const ToggleButtonGroup = <T,>({
   agent: agentOverride,
   options,
   option,
   defaultOption,
   disabled = false,
   onChangeOption,
-}) => {
+}:ToggleButtonGroupProps<T>) => {
   useAgentWithOverride(agentOverride);
   const [activeOption, setOption] = useState(option || defaultOption || options[0]);
-  const handleChange = (_event: React.MouseEvent<HTMLElement, MouseEvent>, value: string) => {
+  const handleChange = (_event: React.MouseEvent<HTMLElement, MouseEvent>, value: T) => {
     setOption(value);
     onChangeOption(value);
   };
 
   return (
     <MuiToggleButtonGroup value={option || activeOption} exclusive onChange={handleChange} disabled={disabled}>
-      {options.map((optionItem: string) => (
-        <ToggleButton key={optionItem} value={optionItem}>
+      {options.map((optionItem: T) => (
+        <ToggleButton key={optionItem as unknown as string} value={optionItem}>
           {optionItem}
         </ToggleButton>
       ))}
@@ -43,4 +43,4 @@ const ToggleButtonGroup: React.FunctionComponent<ToggleButtonGroupProps> = ({
   );
 };
 
-export default withLabel<ToggleButtonGroupProps>(ToggleButtonGroup);
+export default <T,>(props: ToggleButtonGroupProps<T> & WithLabelProps) => withLabel<ToggleButtonGroupProps<T>>(ToggleButtonGroup)(props);

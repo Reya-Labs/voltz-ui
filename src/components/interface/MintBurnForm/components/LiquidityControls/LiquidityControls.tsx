@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import Box from '@mui/material/Box';
 import { IconLabel, ToggleButtonGroup } from '@components/composite';
-import { MintBurnFormLiquidityAction } from '@hooks';
+import { MintBurnFormLiquidityAction } from '@components/contexts';
 
 export type LiquidityControlsProps = {
   onChange: (value: MintBurnFormLiquidityAction) => void;

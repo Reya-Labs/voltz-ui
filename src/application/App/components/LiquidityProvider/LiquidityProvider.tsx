@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { Position } from '@voltz-protocol/v1-sdk';
 
 import { AugmentedAMM, setPageTitle } from '@utilities';
-import { Agents, AMMProvider } from '@components/contexts';
+import { Agents, AMMProvider, MintBurnFormProvider } from '@components/contexts';
 import { useAgent } from '@hooks';
 
 import { Page, MintBurnFormModes } from '@components/interface';
@@ -100,12 +100,9 @@ const LiquidityProvider: React.FunctionComponent = () => {
       {renderMode === 'form' && (
         <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
           <AMMProvider amm={effectiveAmm}>
-            <ConnectedMintBurnForm 
-              amm={effectiveAmm} 
-              mode={formMode}
-              onReset={handleReset} 
-              position={position} 
-            /> 
+            <MintBurnFormProvider amm={effectiveAmm} mode={formMode as MintBurnFormModes} position={position}>
+              <ConnectedMintBurnForm onReset={handleReset} />
+            </MintBurnFormProvider>
           </AMMProvider>
         </Box>
       )}

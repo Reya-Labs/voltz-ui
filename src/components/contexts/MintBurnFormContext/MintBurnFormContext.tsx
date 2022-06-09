@@ -1,7 +1,10 @@
-import { AugmentedAMM } from "@utilities";
-import { isUndefined } from "lodash";
-import { useEffect, useRef, useState } from "react";
-import { MintBurnFormModes } from "@components/interface";
+import { useAMMContext, useBalance } from '@hooks';
+import { AugmentedAMM } from '@utilities';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { MintBurnFormModes } from '@components/interface';
+import { isUndefined } from 'lodash';
+import { BigNumber } from 'ethers';
+import { Position } from '@voltz-protocol/v1-sdk';
 
 export enum MintBurnFormLiquidityAction {
   ADD='add',
@@ -22,9 +25,29 @@ export type MintBurnFormState = {
   notional?: number;
 };
 
-export type MintBurnForm = {
+
+export type MintBurnFormProviderProps = {
+  amm: AugmentedAMM;
+  mode: MintBurnFormModes;
+  position?: Position;
+  defaultValues?: Partial<MintBurnFormState>;
+}
+
+export type MintBurnFormContext = {
+  amm: AugmentedAMM;
+  balance?: BigNumber;
   errors: Record<string, string>,
+  isAddingLiquidity: boolean;
+  isAddingMargin: boolean;
+  isRemovingLiquidity: boolean;
+  isRemovingMargin: boolean;
   isValid: boolean;
+  minRequiredMargin: {
+    errorMessage?: string;
+    loading: boolean;
+    result?: number;
+  };
+  mode: MintBurnFormModes;
   setFixedHigh: (value: MintBurnFormState['fixedHigh']) => void;
   setFixedLow: (value: MintBurnFormState['fixedLow']) => void;
   setLiquidityAction: (value: MintBurnFormState['liquidityAction']) => void;
@@ -35,31 +58,54 @@ export type MintBurnForm = {
   validate: () => Promise<boolean>;
 };
 
-export const useMintBurnForm = (
-  amm: AugmentedAMM, 
-  mode: MintBurnFormModes,
-  minimumRequiredMargin: number | undefined, 
-  defaultValues: Partial<MintBurnFormState> = {}
-): MintBurnForm => {
-  const defaultFixedHigh = !isUndefined(defaultValues.fixedHigh) ? defaultValues.fixedHigh : undefined;
-  const defaultFixedLow = !isUndefined(defaultValues.fixedLow) ? defaultValues.fixedLow : undefined;
-  const defaultLiquidityAction = defaultValues.liquidityAction || MintBurnFormLiquidityAction.ADD;
-  const defaultMargin = !isUndefined(defaultValues.margin) ? defaultValues.margin : 0;
-  const defaultMarginAction = defaultValues.marginAction || MintBurnFormMarginAction.ADD;
-  const defaultNotional = !isUndefined(defaultValues.notional) ? defaultValues.notional : 0;
+const MintBurnFormCtx = createContext<MintBurnFormContext>({} as unknown as MintBurnFormContext);
 
+export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderProps> = ({ 
+  amm, 
+  children, 
+  defaultValues = {}, 
+  mode = MintBurnFormModes.NEW_POSITION 
+}) => {
+  const defaultFixedHigh = defaultValues.fixedHigh ?? undefined;
+  const defaultFixedLow = defaultValues.fixedLow ?? undefined;
+  const defaultLiquidityAction = defaultValues.liquidityAction ?? MintBurnFormLiquidityAction.ADD;
+  const defaultMargin = defaultValues.margin ?? 0;
+  const defaultMarginAction = defaultValues.marginAction ?? MintBurnFormMarginAction.ADD;
+  const defaultNotional = defaultValues.notional ?? 0;
+
+  const balance = useBalance(amm);
   const [fixedHigh, setFixedHigh] = useState<MintBurnFormState['fixedHigh']>(defaultFixedHigh);
   const [fixedLow, setFixedLow] = useState<MintBurnFormState['fixedLow']>(defaultFixedLow);
   const [liquidityAction, setLiquidityAction] = useState<MintBurnFormLiquidityAction>(defaultLiquidityAction);
   const [margin, setMargin] = useState<MintBurnFormState['margin']>(defaultMargin);
   const [marginAction, setMarginAction] = useState<MintBurnFormMarginAction>(defaultMarginAction);
+  const { mintMinimumMarginRequirement } = useAMMContext();
   const [notional, setNotional] = useState<MintBurnFormState['notional']>(defaultNotional);
-
-  const [errors, setErrors] = useState<MintBurnForm['errors']>({});
+  
+  const [errors, setErrors] = useState<MintBurnFormContext['errors']>({});
   const [isValid, setIsValid] = useState<boolean>(false);
+  const minimumRequiredMargin = mintMinimumMarginRequirement.result ?? undefined;
   const touched = useRef<string[]>([]);
 
   const isAddingLiquidity = mode !== MintBurnFormModes.EDIT_LIQUIDITY || liquidityAction === MintBurnFormLiquidityAction.ADD;
+  const isAddingMargin = mode === MintBurnFormModes.EDIT_MARGIN && marginAction === MintBurnFormMarginAction.ADD;
+  const isRemovingLiquidity = mode === MintBurnFormModes.EDIT_LIQUIDITY && liquidityAction === MintBurnFormLiquidityAction.BURN;
+  const isRemovingMargin = mode === MintBurnFormModes.EDIT_MARGIN && marginAction === MintBurnFormMarginAction.REMOVE;
+
+  // Load the mint summary info
+  useEffect(() => {
+    if (
+      !isUndefined(notional) && notional !== 0 &&
+      !isUndefined(fixedLow) && fixedLow !== 0 &&
+      !isUndefined(fixedHigh) && fixedHigh !== 0
+    ) {
+      mintMinimumMarginRequirement.call({ 
+        fixedLow: fixedLow, 
+        fixedHigh: fixedHigh, 
+        notional: notional 
+      });
+    }
+  }, [mintMinimumMarginRequirement.call, notional, fixedLow, fixedHigh]);
 
   // validate the form after values change
   useEffect(() => {
@@ -157,7 +203,7 @@ export const useMintBurnForm = (
       if(touched.current.includes('margin')) {
         err['margin'] = 'Please enter an amount';
       }
-    }    
+    }
 
     if(!isUndefined(margin)) {
       try {
@@ -259,9 +305,21 @@ export const useMintBurnForm = (
     return valid;
   };
 
-  return {
+  const value = {
+    amm,
+    balance,
     errors,
+    isAddingLiquidity,
+    isAddingMargin,
+    isRemovingLiquidity,
+    isRemovingMargin,
     isValid,
+    minRequiredMargin: {
+      errorMessage: mintMinimumMarginRequirement.errorMessage || undefined,
+      loading: mintMinimumMarginRequirement.loading,
+      result: mintMinimumMarginRequirement.result ?? undefined
+    },
+    mode,
     setFixedHigh: updateFixedHigh,
     setFixedLow: updateFixedLow,
     setLiquidityAction: updateLiquidityAction,
@@ -278,6 +336,12 @@ export const useMintBurnForm = (
     },
     validate
   }
+
+  return (
+    <MintBurnFormCtx.Provider value={value}>
+      {children}
+    </MintBurnFormCtx.Provider>
+  )
 }
 
-export default useMintBurnForm;
+export const useMintBurnForm = () => useContext(MintBurnFormCtx);
