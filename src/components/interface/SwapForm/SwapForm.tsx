@@ -2,7 +2,7 @@ import React from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
 import { SystemStyleObject, Theme } from '@mui/system';
-import { MintBurnFormMarginAction, SwapFormState, SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates, useAgent, useTokenApproval } from '@hooks';
+import { SwapFormMarginAction, SwapFormState, SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates, useAgent, useTokenApproval } from '@hooks';
 import { Agents } from '@components/contexts';
 import { Panel } from '@components/atomic';
 import {
@@ -18,6 +18,7 @@ import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from './types';
 import { PositionBadge } from '@components/interface';
 import { isUndefined } from 'lodash';
+import { MintBurnFormMarginAction } from 'src/components/contexts';
 
 export type SwapFormProps = {
   approvalsNeeded: boolean;
@@ -35,7 +36,7 @@ export type SwapFormProps = {
   mode: SwapFormModes;
   onCancel: () => void;
   onChangeMargin: (value: number) => void;
-  onChangeMarginAction: (value: MintBurnFormMarginAction) => void;
+  onChangeMarginAction: (value: SwapFormMarginAction) => void;
   onChangeNotional: (value: number) => void;
   onChangePartialCollateralization: (value: boolean) => void;
   onSubmit: () => void;
@@ -128,6 +129,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
       {mode === SwapFormModes.EDIT_MARGIN && (
         <Box sx={{ ...bottomSpacing, display: 'flex' }}>
           <MarginControls 
+            values={SwapFormMarginAction}
             value={formState.marginAction}
             onChange={onChangeMarginAction}
           />
@@ -165,7 +167,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         <Box sx={bottomSpacing}>
           <MarginAmount
             error={errors['margin']}
-            isAdditional={formState.marginAction === MintBurnFormMarginAction.ADD}
+            isAdditional={formState.marginAction === SwapFormMarginAction.ADD}
             isEditing={mode === SwapFormModes.EDIT_MARGIN}
             margin={formState.margin}
             maxMargin={maxMargin}

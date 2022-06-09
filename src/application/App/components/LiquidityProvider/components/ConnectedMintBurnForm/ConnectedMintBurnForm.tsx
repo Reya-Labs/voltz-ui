@@ -1,47 +1,31 @@
 import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
-
-import { AugmentedAMM } from '@utilities';
 import { routes } from '@routes';
 import { actions, selectors } from '@store';
-import { MintBurnFormLiquidityAction, MintBurnFormMarginAction, useAgent, useDispatch, useMintBurnForm, useSelector, useTokenApproval } from '@hooks';
+import { useAgent, useDispatch, useSelector, useTokenApproval } from '@hooks';
+import { useMintBurnForm } from '@components/contexts';
 import { MintBurnForm, MintBurnFormModes, PendingTransaction } from '@components/interface';
 import { updateFixedRate } from './utilities';
 import { getFormAction, getSubmitAction, getSubmitButtonHint, getSubmitButtonText } from './services';
 
 export type ConnectedMintBurnFormProps = {
-  amm: AugmentedAMM;
-  mode?: MintBurnFormModes;
   onReset: () => void;
-  position?: Position;
 };
 
-const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps> = ({
-  amm,
-  onReset,
-  mode = MintBurnFormModes.NEW_POSITION,
-  position
-}) => {
+const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps> = ({ onReset }) => {
   const { agent } = useAgent();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   
-  const defaultValues = {
-    fixedLow: position ? parseFloat(position.fixedRateLower.toFixed() ) : undefined,
-    fixedHigh: position ? parseFloat(position.fixedRateUpper.toFixed() ) : undefined
-  }
-  const form = useMintBurnForm(amm, mode, defaultValues);
-  const tokenApprovals = useTokenApproval(amm, true);
+  const form = useMintBurnForm();
+  const tokenApprovals = useTokenApproval(form.amm, true);
 
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
-  const formAction = getFormAction(mode, form.state.liquidityAction);
-  const isBurningLiquidity = mode === MintBurnFormModes.EDIT_LIQUIDITY && form.state.liquidityAction === MintBurnFormLiquidityAction.BURN;
-  const isRemovingMargin = mode === MintBurnFormModes.EDIT_MARGIN && form.state.marginAction === MintBurnFormMarginAction.REMOVE;
-  const submitButtonHint = getSubmitButtonHint(amm, mode, form, tokenApprovals, form.minRequiredMargin.errorMessage);
-  const submitButtonText = getSubmitButtonText(mode, tokenApprovals, amm, form.state);
+
+  const formAction = getFormAction(form.mode, form.state.liquidityAction);
+  const submitButtonHint = getSubmitButtonHint(form.amm, form.mode, form, tokenApprovals, form.minRequiredMargin.errorMessage);
+  const submitButtonText = getSubmitButtonText(form.mode, tokenApprovals, form.amm, form.state);
 
   const handleComplete = () => {
     onReset();
@@ -54,44 +38,44 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   }
 
   const handleSetFixedHigh = useCallback(
-    updateFixedRate({ amm, fixedRate: form.state.fixedHigh, setFixedRate: form.setFixedHigh }),
-    [amm, form.state.fixedHigh, form.setFixedHigh],
+    updateFixedRate({ amm: form.amm, fixedRate: form.state.fixedHigh, setFixedRate: form.setFixedHigh }),
+    [form.amm, form.state.fixedHigh, form.setFixedHigh],
   );
 
   const handleSetFixedLow = useCallback(
-    updateFixedRate({ amm, fixedRate: form.state.fixedLow, setFixedRate: form.setFixedLow }),
-    [amm, form.state.fixedLow, form.setFixedLow],
+    updateFixedRate({ amm: form.amm, fixedRate: form.state.fixedLow, setFixedRate: form.setFixedLow }),
+    [form.amm, form.state.fixedLow, form.setFixedLow],
   );
 
   const handleSubmit = () => {
     if (!form.isValid) return;
 
-    if(!isBurningLiquidity && !isRemovingMargin) {
+    if(!form.isRemovingLiquidity && !form.isRemovingMargin) {
       if(!tokenApprovals.underlyingTokenApprovedForPeriphery) {
         tokenApprovals.approveUnderlyingTokenForPeriphery();
         return;
       }
     }
 
-    const action = getSubmitAction(amm, formAction, form.state, agent, mode);
+    const action = getSubmitAction(form.amm, formAction, form.state, agent, form.mode);
     setTransactionId(action.payload.transaction.id);
     dispatch(action);
   };
 
-  if (!amm) {
+  if (!form.amm) {
     return null;
   }
 
   if (activeTransaction) {
     return (
       <PendingTransaction 
-        amm={amm} 
-        isEditingMargin={mode === MintBurnFormModes.EDIT_MARGIN} 
+        amm={form.amm} 
+        isEditingMargin={form.mode === MintBurnFormModes.EDIT_MARGIN} 
         liquidityAction={form.state.liquidityAction} 
         transactionId={transactionId} 
         onComplete={handleComplete}
         notional={form.state.notional}
-        margin={Math.abs(form.state.margin as number) * (isRemovingMargin ? -1 : 1) }
+        margin={Math.abs(form.state.margin as number) * (form.isRemovingMargin ? -1 : 1) }
         onBack={handleGoBack} 
       />
     );
@@ -99,11 +83,11 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
 
   return (
     <MintBurnForm
-      balance={form.balance ? amm.descale(form.balance) : undefined}
-      endDate={amm.endDateTime}
+      balance={form.balance ? form.amm.descale(form.balance) : undefined}
+      endDate={form.amm.endDateTime}
       formState={form.state}
       errors={form.errors}
-      mode={mode}
+      mode={form.mode}
       isFormValid={form.isValid && !form.minRequiredMargin.errorMessage}
       minRequiredMargin={form.minRequiredMargin.result}
       minRequiredMarginLoading={form.minRequiredMargin.loading}
@@ -115,12 +99,12 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
       onSubmit={handleSubmit}
-      protocol={amm.protocol}
-      startDate={amm.startDateTime}
+      protocol={form.amm.protocol}
+      startDate={form.amm.startDateTime}
       submitButtonHint={submitButtonHint}
       submitButtonText={submitButtonText}
       tokenApprovals={tokenApprovals}
-      underlyingTokenName={amm.underlyingToken.name}
+      underlyingTokenName={form.amm.underlyingToken.name}
     />
   );
 };

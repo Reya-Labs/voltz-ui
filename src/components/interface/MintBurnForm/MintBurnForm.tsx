@@ -12,7 +12,8 @@ import {
 } from '@components/composite';
 import { LiquidityControls, MintInfo } from './components';
 import { MarginControls } from '../SwapForm/components';
-import { MintBurnFormLiquidityAction, MintBurnFormMarginAction, MintBurnFormState, useTokenApproval } from '@hooks';
+import { SwapFormMarginAction, useTokenApproval } from '@hooks';
+import { MintBurnFormLiquidityAction, MintBurnFormMarginAction, MintBurnFormState } from '@components/contexts';
 import { colors } from '@theme';
 import { isUndefined } from 'lodash';
 import { MintBurnFormModes } from './types';
@@ -122,6 +123,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
           }}
         >
           <MarginControls 
+            values={MintBurnFormMarginAction}
             value={formState.marginAction}
             onChange={onChangeMarginAction} 
           />

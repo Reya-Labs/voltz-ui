@@ -1,3 +1,8 @@
+export enum SwapFormMarginAction {
+  ADD='add',
+  REMOVE='remove'
+};
+
 export enum SwapFormSubmitButtonStates {
   APPROVE_FCM = 'APPROVE_FCM',
   APPROVE_UT_FCM = 'APPROVE_UT_FCM',
