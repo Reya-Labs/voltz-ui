@@ -98,10 +98,11 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   amm, 
   children, 
   defaultValues = {}, 
-  mode = MintBurnFormModes.NEW_POSITION 
+  mode = MintBurnFormModes.NEW_POSITION,
+  position
 }) => {
-  const defaultFixedHigh = defaultValues.fixedHigh ?? undefined;
-  const defaultFixedLow = defaultValues.fixedLow ?? undefined;
+  const defaultFixedHigh = position?.fixedRateUpper.toNumber() ?? defaultValues.fixedHigh ?? undefined;
+  const defaultFixedLow = position?.fixedRateLower.toNumber() ?? defaultValues.fixedLow ?? undefined;
   const defaultLiquidityAction = defaultValues.liquidityAction ?? MintBurnFormLiquidityAction.ADD;
   const defaultMargin = defaultValues.margin ?? 0;
   const defaultMarginAction = defaultValues.marginAction ?? MintBurnFormMarginAction.ADD;
