@@ -5,6 +5,7 @@ import { AgentProvider, Agents, MintBurnFormModes, MintBurnFormProvider, useMint
 import MintBurnForm from './MintBurnForm';
 import { useTokenApproval } from '@hooks';
 import { AugmentedAMM } from '@utilities';
+import { MintBurnFormHintStates, MintBurnFormSubmitButtonStates } from 'src/components/contexts';
 
 export default {
   title: 'Interface/MintBurnForm',
@@ -54,7 +55,9 @@ const NewPositionMintBurnForm: React.FunctionComponent = (args) => {
       balance={balance}
       errors={form.errors}
       formState={form.state}
+      hintState={MintBurnFormHintStates.READY_TO_TRADE}
       isFormValid={form.isValid}
+      isTradeVierified={true}
       minRequiredMargin={minRequiredMargin}
       minRequiredMarginLoading={false}
       mode={form.mode}
@@ -66,8 +69,7 @@ const NewPositionMintBurnForm: React.FunctionComponent = (args) => {
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
       onSubmit={() => form.validate()}
-      submitButtonHint="Submit hint text here"
-      submitButtonText="Submit"
+      submitButtonState={MintBurnFormSubmitButtonStates.ADD_LIQUIDITY}
       tokenApprovals={mockTokenApprovals}
     />
   );
@@ -100,7 +102,9 @@ const EditingMarginMintBurnForm: React.FunctionComponent = (args) => {
       balance={balance}
       errors={form.errors}
       formState={form.state} 
+      hintState={MintBurnFormHintStates.READY_TO_TRADE}
       isFormValid={form.isValid}
+      isTradeVierified={true}
       minRequiredMargin={minRequiredMargin}
       minRequiredMarginLoading={false}
       mode={form.mode}
@@ -112,8 +116,7 @@ const EditingMarginMintBurnForm: React.FunctionComponent = (args) => {
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
       onSubmit={() => form.validate()}
-      submitButtonHint="Submit hint text here"
-      submitButtonText="Submit"
+      submitButtonState={MintBurnFormSubmitButtonStates.DEPOSIT_MARGIN}
       tokenApprovals={mockTokenApprovals}
     />
   );
@@ -146,7 +149,9 @@ const EditingLiquidityMintBurnForm: React.FunctionComponent = (args) => {
       balance={balance}
       errors={form.errors}
       formState={form.state} 
+      hintState={MintBurnFormHintStates.READY_TO_TRADE}
       isFormValid={form.isValid}
+      isTradeVierified={true}
       minRequiredMargin={minRequiredMargin}
       minRequiredMarginLoading={false}
       mode={form.mode}
@@ -158,8 +163,7 @@ const EditingLiquidityMintBurnForm: React.FunctionComponent = (args) => {
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
       onSubmit={() => form.validate()}
-      submitButtonHint="Submit hint text here"
-      submitButtonText="Submit"
+      submitButtonState={MintBurnFormSubmitButtonStates.ADD_LIQUIDITY}
       tokenApprovals={mockTokenApprovals}
     />
   );

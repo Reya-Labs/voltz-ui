@@ -98,14 +98,17 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
 
   return (
     <MintBurnForm
+      approvalsNeeded={form.approvalsNeeded}
       balance={form.balance ? form.amm.descale(form.balance) : undefined}
       endDate={form.amm.endDateTime}
-      formState={form.state}
       errors={form.errors}
-      mode={form.mode}
+      formState={form.state}
+      hintState={form.hintState}
       isFormValid={form.isValid && !form.minRequiredMargin.errorMessage}
+      isTradeVierified={form.isTradeVerified}
       minRequiredMargin={form.minRequiredMargin.result}
       minRequiredMarginLoading={form.minRequiredMargin.loading}
+      mode={form.mode}
       onCancel={onReset}
       onChangeFixedLow={handleSetFixedLow}
       onChangeFixedHigh={handleSetFixedHigh}
@@ -116,8 +119,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
       onSubmit={handleSubmit}
       protocol={form.amm.protocol}
       startDate={form.amm.startDateTime}
-      submitButtonHint={form.submitButtonHint}
-      submitButtonText={form.submitButtonText}
+      submitButtonState={form.submitButtonState}
       tokenApprovals={form.tokenApprovals}
       underlyingTokenName={form.amm.underlyingToken.name}
     />
