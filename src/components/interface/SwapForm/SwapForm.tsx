@@ -205,6 +205,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         isFCMAction={isFCMAction}
         isFormValid={isFormValid}
         isTradeVerified={isTradeVerified}
+        mode={mode}
         onCancel={onCancel}
         onSubmit={onSubmit}
         protocol={protocol}

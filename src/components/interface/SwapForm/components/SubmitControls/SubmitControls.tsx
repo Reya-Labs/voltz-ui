@@ -4,6 +4,7 @@ import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { Button, Ellipsis } from '@components/atomic';
 import { colors }  from '@theme';
+import { SwapFormModes } from '../../types';
 
 interface SubmitControlsProps {
   approvalsNeeded: boolean;
@@ -11,6 +12,7 @@ interface SubmitControlsProps {
   isFCMAction: boolean;
   isFormValid: boolean;
   isTradeVerified: boolean;
+  mode: SwapFormModes
   onCancel: () => void;
   onSubmit: () => void;
   protocol?: string;
@@ -43,6 +45,7 @@ const SubmitControls = ({
   isFCMAction,
   isFormValid, 
   isTradeVerified,
+  mode,
   onCancel, 
   onSubmit, 
   protocol,
@@ -138,7 +141,12 @@ const SubmitControls = ({
     <>
       <Box sx={{ display: 'flex' }}>
         <Button 
-          disabled={!isFormValid || tokenApprovals.checkingApprovals || tokenApprovals.approving || (!approvalsNeeded && isFormValid && !isTradeVerified)} 
+          disabled={
+            !isFormValid || 
+            tokenApprovals.checkingApprovals || 
+            tokenApprovals.approving || 
+            (mode === SwapFormModes.NEW_POSITION && (!approvalsNeeded && isFormValid && !isTradeVerified))
+          } 
           onClick={onSubmit} 
           size="large" 
           sx={{ flexGrow: 1 }}
