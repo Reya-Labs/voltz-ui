@@ -106,7 +106,7 @@ export const getNetReceivingRate = (positions: Position[], positionInfo: Record<
  * @param positionInfo - The position info object
  */
 export const getTotalAccruedCashflow = (positions: Position[], positionInfo: Record<Position['id'], PositionInfo>) => {
-  return positions.reduce((runningTotal, position) => runningTotal + positionInfo[position.id].accruedCashflowInUSD || 0, 0);
+  return positions.reduce((runningTotal, position) => runningTotal + positionInfo[position.id]?.accruedCashflowInUSD || 0, 0);
 }
 
 /**
@@ -115,7 +115,7 @@ export const getTotalAccruedCashflow = (positions: Position[], positionInfo: Rec
  * @param positionInfo - The position info object
  */
 export const getTotalMargin = (positions: Position[], positionInfo: Record<Position['id'], PositionInfo>) => {
-  return positions.reduce((runningTotal, position) => runningTotal + positionInfo[position.id].marginInUSD || 0, 0);
+  return positions.reduce((runningTotal, position) => runningTotal + positionInfo[position.id]?.marginInUSD || 0, 0);
 }
 
 /**
@@ -124,5 +124,5 @@ export const getTotalMargin = (positions: Position[], positionInfo: Record<Posit
  * @param agent - The current agent
  */
 export const getTotalNotional = (positions: Position[], positionInfo: Record<Position['id'], PositionInfo>) => {
-  return positions.reduce((runningTotal, position) => runningTotal + positionInfo[position.id].notionalInUSD || 0, 0);
+  return positions.reduce((runningTotal, position) => runningTotal + positionInfo[position.id]?.notionalInUSD || 0, 0);
 }
