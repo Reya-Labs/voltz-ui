@@ -12,7 +12,7 @@ import {
   NotionalAmount,
   MarginAmount,
 } from '@components/composite';
-import { TraderControls, MarginControls, SwapInfo, SwapInfoEditMargin, SubmitControls } from './components';
+import { TraderControls, MarginControls, SwapInfo, SwapInfoEditMargin, SubmitControls, Leverage } from './components';
 import { colors } from '@theme';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from './types';
@@ -145,6 +145,10 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
           />
         </Box>
       )}
+
+      <Box sx={{ ...bottomSpacing, display: 'flex' }}>
+        <Leverage />
+      </Box>
 
       {mode !== SwapFormModes.EDIT_MARGIN && (
         <Box sx={bottomSpacing}>

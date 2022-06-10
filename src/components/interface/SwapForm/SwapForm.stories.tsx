@@ -19,6 +19,10 @@ export default {
 
 const mockAmm = ({
   hasEnoughUnderlyingTokens: () =>  true,
+  isFCMApproved: () => true,
+  isUnderlyingTokenApprovedForFCM: () => true,
+  isUnderlyingTokenApprovedForPeriphery: () => true,
+  isYieldBearingTokenApprovedForFCM: () =>  true,
   underlyingToken: {
     id: '0x123456789',
     name: 'gil'
