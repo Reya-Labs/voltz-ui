@@ -52,7 +52,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
       suffix={underlyingTokenName}
       label={
         <IconLabel
-          label={ !isEditing ? 'Minimum required margin' : isAdditional ? "Margin amount to add" : "Margin amount to withdraw" } 
+          label={ !isEditing ? 'Chosen margin' : isAdditional ? "Margin amount to add" : "Margin amount to withdraw" } 
           icon="information-circle"
           info={ isAdditional ? 
             "Your minimum required margin is defined based on your leverage and notional amount traded. You are required to deposit margin in order to execute a trade." : 
