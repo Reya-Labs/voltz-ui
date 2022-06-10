@@ -174,6 +174,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({
       minRequiredMargin={form.minRequiredMargin}
       mode={mode}
       onCancel={onReset}
+      onChangeLeverage={form.setLeverage}
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction}
       onChangeNotional={form.setNotional}

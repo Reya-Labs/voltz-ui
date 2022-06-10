@@ -34,6 +34,7 @@ export type SwapFormProps = {
   minRequiredMargin?: number;
   mode: SwapFormModes;
   onCancel: () => void;
+  onChangeLeverage: (value: number) => void;
   onChangeMargin: (value: number) => void;
   onChangeMarginAction: (value: SwapFormMarginAction) => void;
   onChangeNotional: (value: number) => void;
@@ -65,6 +66,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   minRequiredMargin,
   mode,
   onCancel,
+  onChangeLeverage,
   onChangeMargin,
   onChangeMarginAction,
   onChangeNotional,
@@ -147,7 +149,10 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
       )}
 
       <Box sx={{ ...bottomSpacing, display: 'flex' }}>
-        <Leverage />
+        <Leverage 
+          onChange={onChangeLeverage}
+          value={formState.leverage}
+        />
       </Box>
 
       {mode !== SwapFormModes.EDIT_MARGIN && (

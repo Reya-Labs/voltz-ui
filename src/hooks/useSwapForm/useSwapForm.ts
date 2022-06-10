@@ -11,6 +11,7 @@ import { BigNumber } from "ethers";
 import { SwapFormMarginAction, SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates } from "./types";
 
 export type SwapFormState = {
+  leverage: number;
   margin?: number;
   marginAction: SwapFormMarginAction;
   notional?: number;
@@ -29,6 +30,7 @@ export type SwapFormData = {
   isTradeVerified: boolean;
   isValid: boolean;
   minRequiredMargin?: number;
+  setLeverage: (value: SwapFormState['leverage']) => void;
   setMargin: (value: SwapFormState['margin']) => void;
   setMarginAction: (value: SwapFormState['marginAction']) => void;
   setNotional: (value: SwapFormState['notional']) => void;
@@ -50,6 +52,7 @@ export const useSwapForm = (
   mode: SwapFormModes,
   defaultValues: Partial<SwapFormState> = {}
 ): SwapFormData => {
+  const defaultLeverage = !isUndefined(defaultValues.leverage) ? defaultValues.leverage : 50;
   const defaultMargin = !isUndefined(defaultValues.margin) ? defaultValues.margin : 0;
   const defaultMarginAction = defaultValues.marginAction || SwapFormMarginAction.ADD;
   const defaultNotional = !isUndefined(defaultValues.notional) ? defaultValues.notional : 0;
@@ -59,6 +62,7 @@ export const useSwapForm = (
 
   const { agent } = useAgent();
   const balance = useBalance(amm);
+  const [leverage, setLeverage] = useState<SwapFormState['leverage']>(defaultLeverage);
   const [margin, setMargin] = useState<SwapFormState['margin']>(defaultMargin);
   const [marginAction, setMarginAction] = useState<SwapFormMarginAction>(defaultMarginAction);
   const minRequiredMargin = useMinRequiredMargin(amm);
@@ -124,11 +128,26 @@ export const useSwapForm = (
     }
   };
 
+  const updateLeverage = (value: SwapFormState['leverage']) => {
+    if(!touched.current.includes('leverage')) {
+      touched.current.push('leverage');
+    }
+    setLeverage(value);
+
+    if(!isUndefined(minRequiredMargin) && !isUndefined(notional)) {
+      setMargin(notional / value)
+    }
+  }
+
   const updateMargin = (value: SwapFormState['margin']) => {
     if(!touched.current.includes('margin')) {
       touched.current.push('margin');
     }
     setMargin(value);
+
+    if(!isUndefined(minRequiredMargin) && !isUndefined(notional)) {
+      setLeverage(notional / minRequiredMargin);
+    }
   }
 
   const updateMarginAction = (value: SwapFormState['marginAction']) => {
@@ -257,6 +276,7 @@ export const useSwapForm = (
     isRemovingMargin,
     isValid,
     minRequiredMargin,
+    setLeverage: updateLeverage,
     setMargin: updateMargin,
     setMarginAction: updateMarginAction,
     setNotional: updateNotional,
@@ -267,6 +287,7 @@ export const useSwapForm = (
       loading: swapInfo.loading
     },
     state: {
+      leverage,
       margin,
       marginAction,
       notional,

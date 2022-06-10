@@ -1,27 +1,35 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { Box, Slider } from '@mui/material';
 import { IntegerField, IconLabel } from '@components/composite';
 
 export type LeverageProps = {
   minRequiredMargin?: number; 
+  onChange: (value: number) => void;
+  value: number;
 }
 
-const Leverage = ({}: LeverageProps) => {
+const Leverage = ({onChange, value}: LeverageProps) => {
+  const delay = 200;
   const hint = 'todo';
-  const [value, setValue] = useState(50);
+  const [internalValue, setInternvalValue] = useState(value);
+  const timer = useRef<number>();
 
   const handleChangeSlider = useCallback((event: Event, newValue: number | number[]) => {
     if(typeof newValue === 'number') {
-      setValue(newValue);
+      setInternvalValue(newValue);
+      window.clearInterval(timer.current);
+      timer.current = window.setTimeout(() => onChange(newValue), delay);
     }
-  }, [setValue]);
+  }, [onChange, setInternvalValue]);
 
   const handleChangeInput = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = parseFloat(event.currentTarget.value);
     if(!isNaN(newValue)) {
-      setValue(newValue);
+      setInternvalValue(newValue);
+      window.clearInterval(timer.current);
+      timer.current = window.setTimeout(() => onChange(newValue), delay);
     }
-  }, [setValue])
+  }, [onChange, setInternvalValue])
   
   return (
     <Box sx={{ display: 'flex', width: '100%' }}>
@@ -29,7 +37,7 @@ const Leverage = ({}: LeverageProps) => {
         <IntegerField
           size="small"
           label={<IconLabel label={'Leverage'} icon="information-circle" info={hint} />}
-          value={value}
+          value={internalValue}
           onChange={handleChangeInput}
         />
       </Box>
@@ -37,8 +45,23 @@ const Leverage = ({}: LeverageProps) => {
         <Slider 
           min={0} 
           max={100} 
-          value={value} 
-          onChange={handleChangeSlider} 
+          step={0.01}
+          value={internalValue} 
+          onChange={handleChangeSlider}
+          marks={[
+            {
+              value: 0,
+              label: '0x'
+            },
+            {
+              value: 50,
+              label: '50x',
+            },
+            {
+              value: 100,
+              label: '100x',
+            }
+          ]} 
           sx={{marginTop: '26px' }} 
         />
       </Box>
