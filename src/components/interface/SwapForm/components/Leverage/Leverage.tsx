@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Box, Slider } from '@mui/material';
 import { IntegerField, IconLabel } from '@components/composite';
 
@@ -9,27 +9,31 @@ export type LeverageProps = {
 }
 
 const Leverage = ({onChange, value}: LeverageProps) => {
-  const delay = 200;
+  const delay = 50;
   const hint = 'todo';
-  const [internalValue, setInternvalValue] = useState(value);
+  const [internalValue, setInternalValue] = useState(value);
   const timer = useRef<number>();
+
+  useEffect(() => {
+    setInternalValue(value);
+  }, [value])
 
   const handleChangeSlider = useCallback((event: Event, newValue: number | number[]) => {
     if(typeof newValue === 'number') {
-      setInternvalValue(newValue);
+      setInternalValue(newValue);
       window.clearInterval(timer.current);
       timer.current = window.setTimeout(() => onChange(newValue), delay);
     }
-  }, [onChange, setInternvalValue]);
+  }, [onChange, setInternalValue]);
 
   const handleChangeInput = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = parseFloat(event.currentTarget.value);
     if(!isNaN(newValue)) {
-      setInternvalValue(newValue);
+      setInternalValue(newValue);
       window.clearInterval(timer.current);
       timer.current = window.setTimeout(() => onChange(newValue), delay);
     }
-  }, [onChange, setInternvalValue])
+  }, [onChange, setInternalValue])
   
   return (
     <Box sx={{ display: 'flex', width: '100%' }}>

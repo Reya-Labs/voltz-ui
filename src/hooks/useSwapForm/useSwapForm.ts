@@ -128,25 +128,29 @@ export const useSwapForm = (
     }
   };
 
-  const updateLeverage = (value: SwapFormState['leverage']) => {
+  const updateLeverage = (newLeverage: SwapFormState['leverage']) => {
     if(!touched.current.includes('leverage')) {
       touched.current.push('leverage');
     }
-    setLeverage(value);
+    setLeverage(newLeverage);
 
-    if(!isUndefined(minRequiredMargin) && !isUndefined(notional)) {
-      setMargin(notional / value)
+    if(!isUndefined(notional)) {
+      if(!touched.current.includes('margin')) {
+        touched.current.push('margin');
+      }
+      setMargin(parseFloat((notional / newLeverage).toFixed(2)));
     }
   }
 
-  const updateMargin = (value: SwapFormState['margin']) => {
+  const updateMargin = (newMargin: SwapFormState['margin']) => {
     if(!touched.current.includes('margin')) {
       touched.current.push('margin');
     }
-    setMargin(value);
 
-    if(!isUndefined(minRequiredMargin) && !isUndefined(notional)) {
-      setLeverage(notional / minRequiredMargin);
+    setMargin(newMargin);
+
+    if(!isUndefined(newMargin) && !isUndefined(notional)) {
+      setLeverage(notional / newMargin);
     }
   }
 

@@ -59,7 +59,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
             "Margin in underlying tokens to withdraw from the margin account." }
         />
       }
-      defaultValue={value}
+      value={value}
       onChange={handleChange}
       error={!!error}
       errorText={error}
