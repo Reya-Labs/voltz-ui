@@ -208,24 +208,27 @@ const dark = createTheme({
           border: 0,
           borderRadius: 0
         },
-        thumb: {
+        thumb: ({ ownerState }) => ({
           height: '16px',
           width: '4px',
           borderRadius: '0',
-          background: colors.lavenderWeb.base,
+          background: ownerState.disabled ? colors.lavenderWeb.darken015 : colors.lavenderWeb.base,
           '&:hover': {
             boxShadow: '0 0 0 8px rgba(229, 225, 249, 0.16)'
           },
           '&:active': {
-            boxShadow: '0 0 0 14px rgba(229, 225, 249, 0.16)'
-          }
-        },
-        mark: {
+            boxShadow: '0 0 0 12px rgba(229, 225, 249, 0.16)'
+          },
+        }),
+        mark: ({ ownerState }) => ({
           height: '4px',
           width: '1px',
           borderRadius: '0',
-          background: colors.lavenderWeb.base
-        }
+          background: ownerState.disabled ? colors.lavenderWeb.darken015 : colors.lavenderWeb.base,
+        }),
+        markLabel: ({ ownerState }) => ({
+          color: ownerState.disabled ? colors.vzGrey : undefined,
+        })
       }
     }
   },
