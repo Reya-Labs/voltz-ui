@@ -197,15 +197,35 @@ const dark = createTheme({
     MuiSlider: {
       styleOverrides: {
         rail: {
-          backgroundColor: colors.lavenderWeb.darken030,
-          opacity: 1
+          backgroundColor: colors.vzGreyDarkish,
+          opacity: 1,
+          border: 0,
+          borderRadius: 0
         },
         track: {
-          backgroundColor: colors.lavenderWeb.base,
+          backgroundColor: colors.vzGreyDarkish,
           opacity: 1,
-          borderTop: 0,
-          borderBottom: 0,
+          border: 0,
+          borderRadius: 0
         },
+        thumb: {
+          height: '16px',
+          width: '4px',
+          borderRadius: '0',
+          background: colors.lavenderWeb.base,
+          '&:hover': {
+            boxShadow: '0 0 0 8px rgba(229, 225, 249, 0.16)'
+          },
+          '&:active': {
+            boxShadow: '0 0 0 14px rgba(229, 225, 249, 0.16)'
+          }
+        },
+        mark: {
+          height: '4px',
+          width: '1px',
+          borderRadius: '0',
+          background: colors.lavenderWeb.base
+        }
       }
     }
   },
