@@ -40,7 +40,7 @@ const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
     <MaskedIntegerField
       allowDecimals
       allowNegativeValue={false}
-      suffix={underlyingTokenName}
+      suffix={` ${underlyingTokenName}`}
       label={<IconLabel label={label} icon="information-circle" info={info} />}
       defaultValue={value}
       onChange={handleChange}

@@ -49,7 +49,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
     <MaskedIntegerField
       allowDecimals
       allowNegativeValue={false}
-      suffix={underlyingTokenName}
+      suffix={` ${underlyingTokenName}`}
       label={
         <IconLabel
           label={ !isEditing ? 'Chosen margin' : isAdditional ? "Margin amount to add" : "Margin amount to withdraw" } 

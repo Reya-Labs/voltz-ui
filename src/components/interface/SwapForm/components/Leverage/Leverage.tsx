@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Box, Slider } from '@mui/material';
-import { IntegerField, IconLabel } from '@components/composite';
+import { MaskedIntegerField, IconLabel } from '@components/composite';
 
 export type LeverageProps = {
   minRequiredMargin?: number; 
@@ -26,8 +26,8 @@ const Leverage = ({onChange, value}: LeverageProps) => {
     }
   }, [onChange, setInternalValue]);
 
-  const handleChangeInput = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseFloat(event.currentTarget.value);
+  const handleChangeInput = useCallback((inputVal: string) => {
+    const newValue = parseFloat(inputVal);
     if(!isNaN(newValue)) {
       setInternalValue(newValue);
       window.clearInterval(timer.current);
@@ -38,24 +38,25 @@ const Leverage = ({onChange, value}: LeverageProps) => {
   return (
     <Box sx={{ display: 'flex', width: '100%' }}>
       <Box sx={{ flexGrow: '0', width: '80px' }}>
-        <IntegerField
-          size="small"
+        <MaskedIntegerField
+          inputSize="small"
           label={<IconLabel label={'Leverage'} icon="information-circle" info={hint} />}
           value={internalValue}
           onChange={handleChangeInput}
+          suffix='X'
         />
       </Box>
       <Box sx={{ flexGrow: '1', marginLeft: (theme) => theme.spacing(4), display: 'flex', alignItems: 'center' }}>
         <Slider 
-          min={0} 
+          min={1} 
           max={100} 
           step={0.01}
           value={internalValue} 
           onChange={handleChangeSlider}
           marks={[
             {
-              value: 0,
-              label: '0x'
+              value: 1,
+              label: '1x'
             },
             {
               value: 50,

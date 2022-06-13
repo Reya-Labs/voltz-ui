@@ -59,7 +59,7 @@ const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
           id={inputId}
           decimalsLimit={2}
           onValueChange={handleChange}
-          suffix={` ${suffix || ''}`}
+          suffix={suffix}
           {...props}
         />
       </Box>
