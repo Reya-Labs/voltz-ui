@@ -150,6 +150,8 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
 
       <Box sx={{ ...bottomSpacing, display: 'flex' }}>
         <Leverage 
+          margin={swapInfo?.marginRequirement ?? undefined}
+          notional={formState.notional}
           onChange={onChangeLeverage}
           value={formState.leverage}
         />

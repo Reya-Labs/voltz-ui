@@ -2,18 +2,42 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Box, Slider } from '@mui/material';
 import { MaskedIntegerField, IconLabel } from '@components/composite';
 import { colors } from '@theme';
+import { isUndefined } from 'lodash';
+
+/**
+ * margin: for a new position this is just the ratio between notional and minimum margin required
+ * for returning positions we need to base the calculation on the notional and margin amounts post swap
+ */
 
 export type LeverageProps = {
-  minRequiredMargin?: number; 
+  margin?: number;
+  notional?: number; 
   onChange: (value: number) => void;
   value: number;
 }
 
-const Leverage = ({onChange, value}: LeverageProps) => {
+const Leverage = ({margin, notional, onChange, value}: LeverageProps) => {
   const delay = 50;
   const hint = 'todo';
+  const isDisabled = isUndefined(margin) || isUndefined(notional);
   const [internalValue, setInternalValue] = useState(value);
   const timer = useRef<number>();
+
+  const high = !isDisabled ? (notional / margin) : 20;
+  const low = 1;
+  const range = high - low;
+
+  const rainbow1 = !isDisabled ? (high / 2) : 10;
+  const rainbow2 = !isDisabled ? (high / 1.5) : 14;
+  const rainbow3 = !isDisabled ? (high / 1.2) : 17;
+  const rainbow4 = !isDisabled ? (high / 1.05) : 19;
+
+  const rainbow2Percent  = (rainbow2 / high) * 100;
+  const rainbow3Percent  = (rainbow3 / high) * 100;
+  const rainbow4Percent  = (rainbow4 / high) * 100;
+
+  const rainbowStart = (1 - (rainbow1 / range)) * 100;
+  const rainbowWidth = 100 - rainbowStart;
 
   useEffect(() => {
     setInternalValue(value);
@@ -41,6 +65,7 @@ const Leverage = ({onChange, value}: LeverageProps) => {
       <Box sx={{ flexGrow: '0', width: '80px' }}>
         <MaskedIntegerField
           allowDecimals
+          disabled={isDisabled}
           inputSize="small"
           label={<IconLabel label={'Leverage'} icon="information-circle" info={hint} />}
           value={internalValue}
@@ -50,41 +75,46 @@ const Leverage = ({onChange, value}: LeverageProps) => {
       </Box>
       <Box sx={{ flexGrow: '1', marginLeft: (theme) => theme.spacing(4), display: 'flex', alignItems: 'center' }}>
         <Slider 
-          min={1} 
-          max={100} 
+          disabled={isDisabled}
+          min={low} 
+          max={high} 
           step={0.01}
           value={internalValue} 
           onChange={handleChangeSlider}
           marks={[
             {
-              value: 1,
-              label: '1x'
+              value: low,
+              label: `${low.toFixed(2)}x`,
             },
             {
-              value: 50,
-              label: '50x',
+              value: rainbow1,
+              label: `${rainbow1.toFixed(2)}x`,
             },
             {
-              value: 100,
-              label: '100x',
+              value: high,
+              label: `${high.toFixed(2)}x`,
             }
-          ]} 
+          ]}
           sx={{
             marginTop: '26px',
             '& .MuiSlider-track': {
-              background: 'linear-gradient(90deg, #00D395 69.9%, #F1D302 89.75%, #F61067 100.33%)',
-              width: '50% !important',
-              left: '50% !important'
+              background: `linear-gradient(90deg, #00D395 ${rainbow2Percent}%, #F1D302 ${rainbow3Percent}%, #F61067 ${rainbow4Percent}%)`,
+              width: `${rainbowWidth}% !important`,
+              left: `${rainbowStart}% !important`,
+              display: isDisabled ? 'none' : undefined
+            },
+            '& .MuiSlider-thumb': {
+              display: isDisabled ? 'none' : undefined
             },
             '& .MuiSlider-mark[data-index="1"]': {
               height: '6px',
               width: '3px',
-              background: colors.vzCustomGreen2,
+              background: isDisabled ? undefined : colors.vzCustomGreen2,
             },
             '& .MuiSlider-mark[data-index="2"]': {
               height: '6px',
               width: '3px',
-              background: colors.vzCustomRed2,
+              background: isDisabled ? undefined : colors.vzCustomRed2,
             }
           }} 
         />
