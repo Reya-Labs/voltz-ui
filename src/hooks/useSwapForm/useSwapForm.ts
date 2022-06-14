@@ -1,7 +1,7 @@
 import { GetInfoType } from "@components/contexts";
 import { SwapFormActions, SwapFormModes } from "@components/interface";
 import { AugmentedAMM } from "@utilities";
-import { isUndefined } from "lodash";
+import { isNumber, isUndefined } from "lodash";
 import { useEffect, useRef, useState } from "react";
 import { hasEnoughTokens, hasEnoughUnderlyingTokens, lessThan } from "@utilities";
 import { useAgent, useAMMContext, useBalance, useMinRequiredMargin, useTokenApproval } from "@hooks";
@@ -52,7 +52,7 @@ export const useSwapForm = (
   mode: SwapFormModes,
   defaultValues: Partial<SwapFormState> = {}
 ): SwapFormData => {
-  const defaultLeverage = !isUndefined(defaultValues.leverage) ? defaultValues.leverage : 50;
+  const defaultLeverage = !isUndefined(defaultValues.leverage) ? defaultValues.leverage : 10;
   const defaultMargin = !isUndefined(defaultValues.margin) ? defaultValues.margin : 0;
   const defaultMarginAction = defaultValues.marginAction || SwapFormMarginAction.ADD;
   const defaultNotional = !isUndefined(defaultValues.notional) ? defaultValues.notional : 0;
@@ -106,6 +106,16 @@ export const useSwapForm = (
       } 
     }
   }, [swapInfo.call, notional, agent, approvalsNeeded, partialCollateralization, marginAction]);
+
+  // set the leverage back to 50% if variables change
+  useEffect(() => {
+    const minMargin = swapInfo.result?.marginRequirement;
+    if(isNumber(notional) && isNumber(minMargin)) {
+      const cappedMinMargin = Math.max(minMargin, 0.1);
+      const newLeverage = parseFloat(((notional / cappedMinMargin) / 2).toFixed(2));
+      setLeverage(newLeverage);
+    }
+  }, [notional, swapInfo.result?.marginRequirement]);
 
   // Validate the form after values change
   useEffect(() => {

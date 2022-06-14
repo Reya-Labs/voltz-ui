@@ -2,23 +2,25 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Box, Slider } from '@mui/material';
 import { MaskedIntegerField, IconLabel } from '@components/composite';
 import { colors } from '@theme';
-import { isUndefined } from 'lodash';
+import { isNumber, isUndefined } from 'lodash';
 
 /**
  * margin: for a new position this is just the ratio between notional and minimum margin required
  * for returning positions we need to base the calculation on the notional and margin amounts post swap
  */
 
-export type LeverageProps = {
-  margin?: number;
+export type LeverageProps = { 
+  minMargin?: number;
   notional?: number; 
   onChange: (value: number) => void;
   value: number;
 }
 
-const Leverage = ({margin, notional, onChange, value}: LeverageProps) => {
+const Leverage = ({minMargin, notional, onChange, value}: LeverageProps) => {
   const delay = 50;
   const hint = 'todo';
+  const margin = isNumber(minMargin) ? Math.max(minMargin, 0.1) : undefined;
+
   const isDisabled = isUndefined(margin) || isUndefined(notional);
   const [internalValue, setInternalValue] = useState(value);
   const timer = useRef<number>();
