@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Box, Slider } from '@mui/material';
 import { MaskedIntegerField, IconLabel } from '@components/composite';
+import { colors } from '@theme';
 
 export type LeverageProps = {
   minRequiredMargin?: number; 
@@ -39,6 +40,7 @@ const Leverage = ({onChange, value}: LeverageProps) => {
     <Box sx={{ display: 'flex', width: '100%' }}>
       <Box sx={{ flexGrow: '0', width: '80px' }}>
         <MaskedIntegerField
+          allowDecimals
           inputSize="small"
           label={<IconLabel label={'Leverage'} icon="information-circle" info={hint} />}
           value={internalValue}
@@ -67,7 +69,24 @@ const Leverage = ({onChange, value}: LeverageProps) => {
               label: '100x',
             }
           ]} 
-          sx={{marginTop: '26px' }} 
+          sx={{
+            marginTop: '26px',
+            '& .MuiSlider-track': {
+              background: 'linear-gradient(90deg, #00D395 69.9%, #F1D302 89.75%, #F61067 100.33%)',
+              width: '50% !important',
+              left: '50% !important'
+            },
+            '& .MuiSlider-mark[data-index="1"]': {
+              height: '6px',
+              width: '3px',
+              background: colors.vzCustomGreen2,
+            },
+            '& .MuiSlider-mark[data-index="2"]': {
+              height: '6px',
+              width: '3px',
+              background: colors.vzCustomRed2,
+            }
+          }} 
         />
       </Box>
     </Box>
