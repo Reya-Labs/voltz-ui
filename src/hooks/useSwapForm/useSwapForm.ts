@@ -160,7 +160,7 @@ export const useSwapForm = (
     setMargin(newMargin);
 
     if(!isUndefined(newMargin) && !isUndefined(notional)) {
-      setLeverage(notional / newMargin);
+      setLeverage(parseFloat((notional / newMargin).toFixed(2)));
     }
   }
 

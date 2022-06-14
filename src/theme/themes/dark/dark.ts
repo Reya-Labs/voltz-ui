@@ -196,6 +196,9 @@ const dark = createTheme({
     },
     MuiSlider: {
       styleOverrides: {
+        root: {
+          marginBottom: '10px',
+        },
         rail: {
           backgroundColor: colors.vzGreyDarkish,
           opacity: 1,
@@ -228,6 +231,8 @@ const dark = createTheme({
         }),
         markLabel: ({ ownerState }) => ({
           color: ownerState.disabled ? colors.vzGrey : undefined,
+          fontSize: '10px',
+          top: '24px'
         })
       }
     }

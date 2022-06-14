@@ -49,13 +49,14 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
     <MaskedIntegerField
       allowDecimals
       allowNegativeValue={false}
+      decimalsLimit={2}
       suffix={` ${underlyingTokenName}`}
       label={
         <IconLabel
           label={ !isEditing ? 'Chosen margin' : isAdditional ? "Margin amount to add" : "Margin amount to withdraw" } 
           icon="information-circle"
           info={ isAdditional ? 
-            "Your minimum required margin is defined based on your leverage and notional amount traded. You are required to deposit margin in order to execute a trade." : 
+            "Your chosen margin is defined based on your leverage and notional amount traded. You are required to deposit margin in order to execute a trade." : 
             "Margin in underlying tokens to withdraw from the margin account." }
         />
       }

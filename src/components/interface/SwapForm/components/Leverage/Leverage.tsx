@@ -3,6 +3,7 @@ import { Box, Slider } from '@mui/material';
 import { MaskedIntegerField, IconLabel } from '@components/composite';
 import { colors } from '@theme';
 import { isNumber, isUndefined } from 'lodash';
+import { formatNumber } from '@utilities';
 
 /**
  * margin: for a new position this is just the ratio between notional and minimum margin required
@@ -86,19 +87,19 @@ const Leverage = ({minMargin, notional, onChange, value}: LeverageProps) => {
           marks={[
             {
               value: low,
-              label: `${low.toFixed(2)}x`,
+              label: `${formatNumber(low)}x`,
             },
             {
               value: rainbow1,
-              label: `${rainbow1.toFixed(2)}x`,
+              label: `${formatNumber(rainbow1)}x`,
             },
             {
               value: high,
-              label: `${high.toFixed(2)}x`,
+              label: `${formatNumber(high)}x`,
             }
           ]}
           sx={{
-            marginTop: '26px',
+            marginTop: '16px',
             '& .MuiSlider-track': {
               background: `linear-gradient(90deg, #00D395 ${rainbow2Percent}%, #F1D302 ${rainbow3Percent}%, #F61067 ${rainbow4Percent}%)`,
               width: `${rainbowWidth}% !important`,
