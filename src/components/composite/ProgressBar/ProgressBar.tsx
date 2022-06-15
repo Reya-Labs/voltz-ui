@@ -26,7 +26,7 @@ export const ProgressBar = ({leftContent, rightContent, percentageComplete = 0}:
       marginTop: (theme) => theme.spacing(1)
     }}>
       <Box sx={{
-        width: percentageComplete,
+        width: `${percentageComplete}%`,
         background: colors.lavenderWeb.base,
         height: '100%',
       }}/>
