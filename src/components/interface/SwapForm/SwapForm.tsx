@@ -12,7 +12,7 @@ import {
   NotionalAmount,
   MarginAmount,
 } from '@components/composite';
-import { TraderControls, MarginControls, SwapInfo, SwapInfoEditMargin, SubmitControls } from './components';
+import { TraderControls, MarginControls, SwapInfo, SwapInfoEditMargin, SubmitControls, Leverage } from './components';
 import { colors } from '@theme';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from './types';
@@ -34,6 +34,7 @@ export type SwapFormProps = {
   minRequiredMargin?: number;
   mode: SwapFormModes;
   onCancel: () => void;
+  onChangeLeverage: (value: number) => void;
   onChangeMargin: (value: number) => void;
   onChangeMarginAction: (value: SwapFormMarginAction) => void;
   onChangeNotional: (value: number) => void;
@@ -65,6 +66,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   minRequiredMargin,
   mode,
   onCancel,
+  onChangeLeverage,
   onChangeMargin,
   onChangeMarginAction,
   onChangeNotional,
@@ -158,6 +160,17 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
             protocol={protocol}
             notional={formState.notional}
             onChangeNotional={onChangeNotional}
+          />
+        </Box>
+      )}
+
+      {mode === SwapFormModes.NEW_POSITION && agent === Agents.FIXED_TRADER && formState.partialCollateralization && (
+        <Box sx={{ ...bottomSpacing, display: 'flex' }}>
+          <Leverage 
+            minMargin={swapInfo?.marginRequirement ?? undefined}
+            notional={formState.notional}
+            onChange={onChangeLeverage}
+            value={formState.leverage}
           />
         </Box>
       )}

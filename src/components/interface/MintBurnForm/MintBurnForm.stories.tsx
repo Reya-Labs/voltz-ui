@@ -1,11 +1,10 @@
 import React from 'react';
 import { DateTime, Duration } from 'luxon';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { AgentProvider, Agents, MintBurnFormModes, MintBurnFormProvider, useMintBurnForm } from '@components/contexts';
+import { AgentProvider, Agents, MintBurnFormModes, MintBurnFormProvider, MintBurnFormHintStates, MintBurnFormSubmitButtonStates, useMintBurnForm } from '@components/contexts';
 import MintBurnForm from './MintBurnForm';
 import { useTokenApproval } from '@hooks';
 import { AugmentedAMM } from '@utilities';
-import { MintBurnFormHintStates, MintBurnFormSubmitButtonStates } from 'src/components/contexts';
 
 export default {
   title: 'Interface/MintBurnForm',

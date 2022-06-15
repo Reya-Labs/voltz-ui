@@ -1,7 +1,7 @@
 import { GetInfoType } from "@components/contexts";
 import { SwapFormActions, SwapFormModes } from "@components/interface";
 import { AugmentedAMM } from "@utilities";
-import { isUndefined } from "lodash";
+import { isNumber, isUndefined } from "lodash";
 import { useEffect, useRef, useState } from "react";
 import { hasEnoughTokens, hasEnoughUnderlyingTokens, lessThan } from "@utilities";
 import { useAgent, useAMMContext, useBalance, useMinRequiredMargin, useTokenApproval } from "@hooks";
@@ -11,6 +11,7 @@ import { BigNumber } from "ethers";
 import { SwapFormMarginAction, SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates } from "./types";
 
 export type SwapFormState = {
+  leverage: number;
   margin?: number;
   marginAction: SwapFormMarginAction;
   notional?: number;
@@ -29,6 +30,7 @@ export type SwapFormData = {
   isTradeVerified: boolean;
   isValid: boolean;
   minRequiredMargin?: number;
+  setLeverage: (value: SwapFormState['leverage']) => void;
   setMargin: (value: SwapFormState['margin']) => void;
   setMarginAction: (value: SwapFormState['marginAction']) => void;
   setNotional: (value: SwapFormState['notional']) => void;
@@ -50,6 +52,7 @@ export const useSwapForm = (
   mode: SwapFormModes,
   defaultValues: Partial<SwapFormState> = {}
 ): SwapFormData => {
+  const defaultLeverage = !isUndefined(defaultValues.leverage) ? defaultValues.leverage : 10;
   const defaultMargin = !isUndefined(defaultValues.margin) ? defaultValues.margin : 0;
   const defaultMarginAction = defaultValues.marginAction || SwapFormMarginAction.ADD;
   const defaultNotional = !isUndefined(defaultValues.notional) ? defaultValues.notional : 0;
@@ -59,6 +62,7 @@ export const useSwapForm = (
 
   const { agent } = useAgent();
   const balance = useBalance(amm);
+  const [leverage, setLeverage] = useState<SwapFormState['leverage']>(defaultLeverage);
   const [margin, setMargin] = useState<SwapFormState['margin']>(defaultMargin);
   const [marginAction, setMarginAction] = useState<SwapFormMarginAction>(defaultMarginAction);
   const minRequiredMargin = useMinRequiredMargin(amm);
@@ -103,6 +107,16 @@ export const useSwapForm = (
     }
   }, [swapInfo.call, notional, agent, approvalsNeeded, partialCollateralization, marginAction]);
 
+  // set the leverage back to 50% if variables change
+  useEffect(() => {
+    const minMargin = swapInfo.result?.marginRequirement;
+    if(isNumber(notional) && isNumber(minMargin)) {
+      const cappedMinMargin = Math.max(minMargin, 0.1);
+      const newLeverage = parseFloat(((notional / cappedMinMargin) / 2).toFixed(2));
+      setLeverage(newLeverage);
+    }
+  }, [notional, swapInfo.result?.marginRequirement]);
+
   // Validate the form after values change
   useEffect(() => {
     if(touched.current.length) {
@@ -124,11 +138,30 @@ export const useSwapForm = (
     }
   };
 
-  const updateMargin = (value: SwapFormState['margin']) => {
+  const updateLeverage = (newLeverage: SwapFormState['leverage']) => {
+    if(!touched.current.includes('leverage')) {
+      touched.current.push('leverage');
+    }
+    setLeverage(newLeverage);
+
+    if(!isUndefined(notional)) {
+      if(!touched.current.includes('margin')) {
+        touched.current.push('margin');
+      }
+      setMargin(parseFloat((notional / newLeverage).toFixed(2)));
+    }
+  }
+
+  const updateMargin = (newMargin: SwapFormState['margin']) => {
     if(!touched.current.includes('margin')) {
       touched.current.push('margin');
     }
-    setMargin(value);
+
+    setMargin(newMargin);
+
+    if(!isUndefined(newMargin) && !isUndefined(notional)) {
+      setLeverage(parseFloat((notional / newMargin).toFixed(2)));
+    }
   }
 
   const updateMarginAction = (value: SwapFormState['marginAction']) => {
@@ -257,6 +290,7 @@ export const useSwapForm = (
     isRemovingMargin,
     isValid,
     minRequiredMargin,
+    setLeverage: updateLeverage,
     setMargin: updateMargin,
     setMarginAction: updateMarginAction,
     setNotional: updateNotional,
@@ -267,6 +301,7 @@ export const useSwapForm = (
       loading: swapInfo.loading
     },
     state: {
+      leverage,
       margin,
       marginAction,
       notional,

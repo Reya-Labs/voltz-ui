@@ -57,9 +57,7 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
     <Box
       sx={{
         display: 'flex',
-        flexDirection: 'column',
-        marginRight: (theme) => theme.spacing(4),
-        '& > *:not(:last-child)': { marginBottom: (theme) => theme.spacing(4) },
+        '& > *:not(:last-child)': { marginRight: (theme) => theme.spacing(8) },
       }}
     >
       <ToggleButtonGroup

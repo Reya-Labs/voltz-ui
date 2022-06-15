@@ -15,7 +15,7 @@ export type MaskedIntegerFieldProps = OverrideTypes<CurrencyInputProps, {
   errorText?: string;
   label?: ReactNode,
   onChange?: (value: string) => void;
-  inputSize?: InputBaseProps['size'];
+  inputSize?: 'small' | 'medium' | 'large';
 }>;
 
 const errorLabelStyles: SystemStyleObject<Theme> = {
@@ -31,7 +31,7 @@ const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
   errorText,
   label,
   onChange,
-  inputSize = 'medium',
+  inputSize = 'large',
   suffix,
   ...props
 }) => {
@@ -59,7 +59,7 @@ const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
           id={inputId}
           decimalsLimit={2}
           onValueChange={handleChange}
-          suffix={` ${suffix || ''}`}
+          suffix={suffix}
           {...props}
         />
       </Box>

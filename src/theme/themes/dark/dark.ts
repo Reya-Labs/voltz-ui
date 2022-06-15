@@ -196,16 +196,44 @@ const dark = createTheme({
     },
     MuiSlider: {
       styleOverrides: {
+        root: {
+          marginBottom: '10px',
+        },
         rail: {
-          backgroundColor: colors.lavenderWeb.darken030,
-          opacity: 1
+          backgroundColor: colors.vzGreyDarkish,
+          opacity: 1,
+          border: 0,
+          borderRadius: 0
         },
         track: {
-          backgroundColor: colors.lavenderWeb.base,
+          backgroundColor: colors.vzGreyDarkish,
           opacity: 1,
-          borderTop: 0,
-          borderBottom: 0,
+          border: 0,
+          borderRadius: 0
         },
+        thumb: ({ ownerState }) => ({
+          height: '16px',
+          width: '4px',
+          borderRadius: '0',
+          background: ownerState.disabled ? colors.lavenderWeb.darken015 : colors.lavenderWeb.base,
+          '&:hover': {
+            boxShadow: '0 0 0 8px rgba(229, 225, 249, 0.16)'
+          },
+          '&:active': {
+            boxShadow: '0 0 0 12px rgba(229, 225, 249, 0.16)'
+          },
+        }),
+        mark: ({ ownerState }) => ({
+          height: '4px',
+          width: '1px',
+          borderRadius: '0',
+          background: ownerState.disabled ? colors.lavenderWeb.darken015 : colors.lavenderWeb.base,
+        }),
+        markLabel: ({ ownerState }) => ({
+          color: ownerState.disabled ? colors.vzGrey : undefined,
+          fontSize: '10px',
+          top: '24px'
+        })
       }
     }
   },

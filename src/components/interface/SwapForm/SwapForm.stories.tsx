@@ -19,6 +19,10 @@ export default {
 
 const mockAmm = ({
   hasEnoughUnderlyingTokens: () =>  true,
+  isFCMApproved: () => true,
+  isUnderlyingTokenApprovedForFCM: () => true,
+  isUnderlyingTokenApprovedForPeriphery: () => true,
+  isYieldBearingTokenApprovedForFCM: () =>  true,
   underlyingToken: {
     id: '0x123456789',
     name: 'gil'
@@ -70,6 +74,7 @@ const NewPositionSwapForm: React.FunctionComponent = (args) => {
       formAction={SwapFormActions.SWAP}
       mode={mode}
       onCancel={() => alert('cancel')}
+      onChangeLeverage={form.setLeverage}
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
@@ -113,6 +118,7 @@ const EditingMarginSwapForm: React.FunctionComponent = (args) => {
       mode={mode}
       formAction={SwapFormActions.SWAP}
       onCancel={() => alert('cancel')}
+      onChangeLeverage={form.setLeverage}
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction} 
       onChangeNotional={form.setNotional}
