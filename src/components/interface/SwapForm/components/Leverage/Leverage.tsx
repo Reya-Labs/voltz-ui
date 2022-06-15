@@ -26,20 +26,20 @@ const Leverage = ({minMargin, notional, onChange, value}: LeverageProps) => {
   const [internalValue, setInternalValue] = useState(value);
   const timer = useRef<number>();
 
-  const high = !isDisabled ? (notional / margin) : 20;
+  const high = !isDisabled ? Math.max((notional / margin), 1) : 20;
   const low = 1;
   const range = high - low;
 
-  const rainbow1 = !isDisabled ? (high / 2) : 10;
-  const rainbow2 = !isDisabled ? (high / 1.5) : 14;
-  const rainbow3 = !isDisabled ? (high / 1.2) : 17;
-  const rainbow4 = !isDisabled ? (high / 1.05) : 19;
+  const rainbow1 = !isDisabled ? Math.max((high / 2), 1) : 10;
+  const rainbow2 = !isDisabled ? Math.max((high / 1.5), 1) : 14;
+  const rainbow3 = !isDisabled ? Math.max((high / 1.2), 1) : 17;
+  const rainbow4 = !isDisabled ? Math.max((high / 1.05), 1) : 19;
 
   const rainbow2Percent  = (rainbow2 / high) * 100;
   const rainbow3Percent  = (rainbow3 / high) * 100;
   const rainbow4Percent  = (rainbow4 / high) * 100;
 
-  const rainbowStart = (1 - (rainbow1 / range)) * 100;
+  const rainbowStart = Math.max((1 - (rainbow1 / range)) * 100, 0);
   const rainbowWidth = 100 - rainbowStart;
 
   useEffect(() => {
