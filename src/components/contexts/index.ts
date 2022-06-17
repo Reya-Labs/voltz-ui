@@ -7,6 +7,7 @@ export { default as AMMContext } from './AMMContext/AMMContext';
 export * from './AMMContext/types';
 export type { AMMDispatch } from './AMMContext/types';
 export * from './MintBurnFormContext/MintBurnFormContext';
+export * from './SwapFormContext/SwapFormContext';
 export { default as WalletProvider } from './WalletContext/WalletProvider';
 export { default as WalletContext } from './WalletContext/WalletContext';
 export type { WalletStatus, Wallet, WalletName } from './WalletContext/types';

@@ -2,9 +2,9 @@ import React from 'react';
 import { DateTime, Duration } from 'luxon';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { AgentProvider, Agents } from '@components/contexts';
+import { AgentProvider, SwapFormProvider, SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates, useSwapFormContext } from '@components/contexts';
 import SwapForm from './SwapForm';
-import { SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates, useSwapForm, useTokenApproval } from '@hooks';
+import { useTokenApproval } from '@hooks';
 import { AugmentedAMM } from '@utilities';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from './types';
@@ -54,12 +54,14 @@ const mockTokenApprovals = {
 // Creating a new position
 const NewPositionTemplate: ComponentStory<typeof SwapForm> = (args) => (
   <AgentProvider>
-    <NewPositionSwapForm {...args} />
+    <SwapFormProvider amm={mockAmm} mode={SwapFormModes.NEW_POSITION}>
+      <NewPositionSwapForm {...args} />
+    </SwapFormProvider>
   </AgentProvider>
 );
 const NewPositionSwapForm: React.FunctionComponent = (args) => {
   const mode = SwapFormModes.NEW_POSITION;
-  const form = useSwapForm(undefined, mockAmm, mode);
+  const form = useSwapFormContext();
 
   return (
     <SwapForm 
@@ -98,12 +100,14 @@ NewPosition.args = {
 // // Editing the margin of a position
 const EditingMarginTemplate: ComponentStory<typeof SwapForm> = (args) => (
   <AgentProvider>
-    <EditingMarginSwapForm {...args} />
+    <SwapFormProvider amm={mockAmm} mode={SwapFormModes.EDIT_MARGIN}>
+      <EditingMarginSwapForm {...args} />
+    </SwapFormProvider>
   </AgentProvider>
 );
 const EditingMarginSwapForm: React.FunctionComponent = (args) => {
   const mode = SwapFormModes.EDIT_MARGIN;
-  const form = useSwapForm(undefined, mockAmm, mode);
+  const form = useSwapFormContext();
 
   return (
     <SwapForm 

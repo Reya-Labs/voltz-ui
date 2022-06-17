@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
-import { SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates, useAgent, useTokenApproval } from '@hooks';
+import { SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates } from '@components/contexts';
+import { useAgent, useTokenApproval } from '@hooks';
 import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { Button, Ellipsis } from '@components/atomic';
