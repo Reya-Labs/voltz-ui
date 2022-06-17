@@ -2,34 +2,23 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { routes } from '@routes';
-import { AugmentedAMM } from '@utilities';
 import { actions, selectors } from '@store';
-import { useAgent, useDispatch, useSelector, useSwapForm } from '@hooks';
+import { useAgent, useDispatch, useSelector } from '@hooks';
 import { SwapForm, PendingTransaction, SwapFormActions, SwapFormModes } from '@components/interface';
-import { Agents } from '@components/contexts';
-import { Position } from '@voltz-protocol/v1-sdk';
+import { Agents, useSwapFormContext } from '@components/contexts';
 import { BigNumber } from 'ethers';
 
 export type ConnectedSwapFormProps = {
-  amm: AugmentedAMM;
-  mode?: SwapFormModes;
   onReset: () => void;
-  position?: Position;
 };
 
-const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ 
-  amm,
-  mode = SwapFormModes.NEW_POSITION,
-  onReset,
-  position,
-}) => {
-  const { agent, onChangeAgent } = useAgent();
+const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ onReset }) => {
+  const { agent } = useAgent();
   const dispatch = useDispatch();
+  const form = useSwapFormContext();
   const navigate = useNavigate();
 
-  const defaultValues = {};
-  const form = useSwapForm(position, amm, mode, defaultValues);
-  
+  const { amm, mode, position } = form;
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId); // contains a failureMessage attribute that will contain whatever came out from the sdk
 

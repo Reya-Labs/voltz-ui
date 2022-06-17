@@ -15,6 +15,7 @@ export default {
 } as ComponentMeta<typeof MintBurnForm>;
 
 const mockAmm = ({
+  isUnderlyingTokenApprovedForPeriphery: () =>  true,
   hasEnoughUnderlyingTokens: () =>  true,
   underlyingToken: {
     id: '0x123456789',
@@ -38,7 +39,7 @@ const mockTokenApprovals = {
 // Creating a new position
 const NewPositionTemplate: ComponentStory<typeof MintBurnForm> = (args) => (
   <AgentProvider defaultAgent={Agents.LIQUIDITY_PROVIDER}>
-    <MintBurnFormProvider amm={mockAmm} mode={MintBurnFormModes.NEW_POSITION} defaultValues={{ fixedLow: 2, fixedHigh: 6 }}>
+    <MintBurnFormProvider amm={mockAmm} mode={MintBurnFormModes.NEW_POSITION}>
       <NewPositionMintBurnForm {...args} />
     </MintBurnFormProvider>
   </AgentProvider>

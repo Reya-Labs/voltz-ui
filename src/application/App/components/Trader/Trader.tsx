@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { Position } from '@voltz-protocol/v1-sdk';
 
 import { AugmentedAMM, setPageTitle } from '@utilities';
-import { Agents, AMMProvider } from '@components/contexts';
+import { Agents, AMMProvider, SwapFormProvider } from '@components/contexts';
 import { PageTitleDesc } from '@components/composite';
 import { Panel } from '@components/atomic';
 import { useAgent } from '@hooks';
@@ -94,12 +94,9 @@ const Trader: React.FunctionComponent = () => {
       {renderMode === 'form' && (
         <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
           <AMMProvider amm={effectiveAmm}>
-            <ConnectedSwapForm 
-              amm={effectiveAmm} 
-              mode={formMode}
-              onReset={handleReset} 
-              position={position}
-            />
+            <SwapFormProvider amm={effectiveAmm} mode={formMode} position={position}>
+              <ConnectedSwapForm onReset={handleReset} />
+            </SwapFormProvider>
           </AMMProvider>
         </Box>
       )}

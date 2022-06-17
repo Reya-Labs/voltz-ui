@@ -1,14 +1,46 @@
-import { GetInfoType } from "@components/contexts";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import { Agents, GetInfoType } from "@components/contexts";
 import { SwapFormActions, SwapFormModes } from "@components/interface";
 import { AugmentedAMM } from "@utilities";
 import { isNumber, isUndefined } from "lodash";
-import { useEffect, useRef, useState } from "react";
 import { hasEnoughTokens, hasEnoughUnderlyingTokens, lessThan } from "@utilities";
 import { useAgent, useAMMContext, useBalance, useMinRequiredMargin, useTokenApproval } from "@hooks";
 import { InfoPostSwap, Position } from "@voltz-protocol/v1-sdk";
 import * as s from "./services";
 import { BigNumber } from "ethers";
-import { SwapFormMarginAction, SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates } from "./types";
+
+export enum SwapFormMarginAction {
+  ADD='add',
+  REMOVE='remove'
+};
+
+export enum SwapFormSubmitButtonStates {
+  APPROVE_FCM = 'APPROVE_FCM',
+  APPROVE_UT_FCM = 'APPROVE_UT_FCM',
+  APPROVE_UT_PERIPHERY = 'APPROVE_UT_PERIPHERY',
+  APPROVE_YBT_FCM = 'APPROVE_YBT_FCM',
+  APPROVING = 'APPROVING',
+  CHECKING = 'CHECKING',
+  INITIALISING = 'INITIALISING',
+  TRADE_FIXED = 'TRADE_FIXED',
+  TRADE_VARIABLE = 'TRADE_VARIABLE',
+  UPDATE = 'UPDATE',
+};
+
+export enum SwapFormSubmitButtonHintStates {
+  APPROVE_NEXT_TOKEN = 'APPROVE_NEXT_TOKEN',
+  APPROVE_TOKEN = 'APPROVE_TOKEN',
+  APPROVING = 'APPROVING',
+  CHECKING = 'CHECKING',
+  ERROR_TOKEN_APPROVAL = 'ERROR_TOKEN_APPROVAL',
+  FORM_INVALID = 'FORM_INVALID',
+  FORM_INVALID_BALANCE = 'FORM_INVALID_BALANCE',
+  FORM_INVALID_INCOMPLETE = 'FORM_INVALID_INCOMPLETE',
+  FORM_INVALID_TRADE = 'FORM_INVALID_TRADE',
+  INITIALISING = 'INITIALISING',
+  READY_TO_TRADE_TOKENS_APPROVED = 'READY_TO_TRADE_TOKENS_APPROVED',
+  READY_TO_TRADE = 'READY_TO_TRADE'
+};
 
 export type SwapFormState = {
   leverage: number;
@@ -18,8 +50,16 @@ export type SwapFormState = {
   partialCollateralization: boolean;
 };
 
-export type SwapFormData = {
+export type SwapFormProviderProps = {
+  amm: AugmentedAMM;
+  mode?: SwapFormModes;
+  position?: Position;
+  defaultValues?: Partial<SwapFormState>;
+}
+
+export type SwapFormContext = {
   action: SwapFormActions;
+  amm: AugmentedAMM;
   approvalsNeeded: boolean;
   balance?: BigNumber;
   errors: Record<string, string>;
@@ -30,6 +70,8 @@ export type SwapFormData = {
   isTradeVerified: boolean;
   isValid: boolean;
   minRequiredMargin?: number;
+  mode: SwapFormModes;
+  position?: Position;
   setLeverage: (value: SwapFormState['leverage']) => void;
   setMargin: (value: SwapFormState['margin']) => void;
   setMarginAction: (value: SwapFormState['marginAction']) => void;
@@ -46,12 +88,15 @@ export type SwapFormData = {
   validate: () => Promise<boolean>;
 };
 
-export const useSwapForm = (
-  position: Position | undefined,
-  amm: AugmentedAMM,
-  mode: SwapFormModes,
-  defaultValues: Partial<SwapFormState> = {}
-): SwapFormData => {
+const SwapFormCtx = createContext<SwapFormContext>({} as unknown as SwapFormContext);
+
+export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = ({ 
+  amm, 
+  children, 
+  defaultValues = {}, 
+  mode = SwapFormModes.NEW_POSITION,
+  position
+}) => {
   const defaultLeverage = !isUndefined(defaultValues.leverage) ? defaultValues.leverage : 10;
   const defaultMargin = !isUndefined(defaultValues.margin) ? defaultValues.margin : 0;
   const defaultMarginAction = defaultValues.marginAction || SwapFormMarginAction.ADD;
@@ -71,7 +116,7 @@ export const useSwapForm = (
   const { swapInfo } = useAMMContext();
   const tokenApprovals = useTokenApproval(amm);
 
-  const [errors, setErrors] = useState<SwapFormData['errors']>({});
+  const [errors, setErrors] = useState<SwapFormContext['errors']>({});
   const [isValid, setIsValid] = useState<boolean>(false);
   const touched = useRef<string[]>([]);
 
@@ -82,8 +127,6 @@ export const useSwapForm = (
   const isTradeVerified = !!swapInfo.result && !swapInfo.loading && !swapInfo.errorMessage;
   
   const approvalsNeeded = s.approvalsNeeded(action, tokenApprovals, isRemovingMargin)
-  const hintState = s.getHintState(action, errors, isValid, isRemovingMargin, tokenApprovals, swapInfo.errorMessage, swapInfo.loading);
-  const submitButtonState = s.getSubmitButtonState(mode, tokenApprovals, action, agent, isRemovingMargin, swapInfo.loading);
 
   // Load the swap summary info
   useEffect(() => {
@@ -136,6 +179,97 @@ export const useSwapForm = (
     if(touched.current.includes(name)) {
       err[name] = message;
     }
+  };
+
+  const getHintState = () => {
+    // Please note that the order these are in is important, you need the conditions that take precidence
+    // to be nearer the top.
+
+    // Token approvals - Checking current status
+    if(tokenApprovals.checkingApprovals) {
+      return SwapFormSubmitButtonHintStates.INITIALISING;
+    }
+    if(tokenApprovals.approving) {
+      return SwapFormSubmitButtonHintStates.APPROVING;
+    }
+    if (swapInfo.loading) {
+      return SwapFormSubmitButtonHintStates.CHECKING;
+    }
+
+    // Form validation
+    if (!isValid) {
+      if(errors.balance) {
+        return SwapFormSubmitButtonHintStates.FORM_INVALID_BALANCE;
+      }
+      if(!Object.keys(errors).length) {
+        return SwapFormSubmitButtonHintStates.FORM_INVALID_INCOMPLETE;
+      }
+      return SwapFormSubmitButtonHintStates.FORM_INVALID;
+    }
+
+    if(!isRemovingMargin) {
+      if(tokenApprovals.lastError) {
+        return SwapFormSubmitButtonHintStates.ERROR_TOKEN_APPROVAL;
+      }
+      
+      if(tokenApprovals.getNextApproval(isFCMAction)) {
+        if(tokenApprovals.lastApproval) {
+          return SwapFormSubmitButtonHintStates.APPROVE_NEXT_TOKEN;
+        } else {
+          return SwapFormSubmitButtonHintStates.APPROVE_TOKEN;
+        }
+      }
+    }
+
+    // trade info failed
+    if (swapInfo.errorMessage) {
+      return SwapFormSubmitButtonHintStates.FORM_INVALID_TRADE;
+    }
+
+    if(tokenApprovals.lastApproval) {
+      return SwapFormSubmitButtonHintStates.READY_TO_TRADE_TOKENS_APPROVED;
+    } else {
+      return SwapFormSubmitButtonHintStates.READY_TO_TRADE;
+    }
+  }
+
+  const getSubmitButtonState = () => {  
+    if (tokenApprovals.checkingApprovals) {
+      return SwapFormSubmitButtonStates.INITIALISING;
+    }
+    if (tokenApprovals.approving) {
+      return SwapFormSubmitButtonStates.APPROVING;
+    }
+    if (swapInfo.loading) {
+      return SwapFormSubmitButtonStates.CHECKING;
+    }
+
+    if(!isRemovingMargin) {
+      if (action === SwapFormActions.FCM_SWAP || action === SwapFormActions.FCM_UNWIND) {
+        if (!tokenApprovals.FCMApproved) {
+          return SwapFormSubmitButtonStates.APPROVE_FCM;
+        }
+        if (!tokenApprovals.yieldBearingTokenApprovedForFCM) {
+          return SwapFormSubmitButtonStates.APPROVE_YBT_FCM;
+        }
+        if (!tokenApprovals.underlyingTokenApprovedForFCM) {
+          return SwapFormSubmitButtonStates.APPROVE_UT_FCM;
+        }
+      } 
+      else {
+        if (!tokenApprovals.underlyingTokenApprovedForPeriphery) {
+          return SwapFormSubmitButtonStates.APPROVE_UT_PERIPHERY
+        }
+      }
+    }
+    
+    if (mode === SwapFormModes.EDIT_MARGIN) {
+      return SwapFormSubmitButtonStates.UPDATE;
+    }
+    if (agent === Agents.FIXED_TRADER) {
+      return SwapFormSubmitButtonStates.TRADE_FIXED
+    }
+    return SwapFormSubmitButtonStates.TRADE_VARIABLE;
   };
 
   const updateLeverage = (newLeverage: SwapFormState['leverage']) => {
@@ -278,18 +412,21 @@ export const useSwapForm = (
     return valid;
   };
 
-  return {
+  const value = {
     action,
+    amm,
     approvalsNeeded,
     balance,
     errors,
-    hintState,
+    hintState: getHintState(),
     isAddingMargin,
     isFCMAction,
     isTradeVerified,
     isRemovingMargin,
     isValid,
     minRequiredMargin,
+    mode,
+    position,
     setLeverage: updateLeverage,
     setMargin: updateMargin,
     setMarginAction: updateMarginAction,
@@ -307,10 +444,16 @@ export const useSwapForm = (
       notional,
       partialCollateralization
     },
-    submitButtonState,
+    submitButtonState: getSubmitButtonState(),
     tokenApprovals,
     validate
   }
+
+  return (
+    <SwapFormCtx.Provider value={value}>
+      {children}
+    </SwapFormCtx.Provider>
+  )
 }
 
-export default useSwapForm;
+export const useSwapFormContext = () => useContext(SwapFormCtx);

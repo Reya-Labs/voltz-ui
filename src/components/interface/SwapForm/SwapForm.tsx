@@ -2,8 +2,8 @@ import React from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
 import { SystemStyleObject, Theme } from '@mui/system';
-import { SwapFormMarginAction, SwapFormState, SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates, useAgent, useTokenApproval } from '@hooks';
-import { Agents } from '@components/contexts';
+import { useAgent, useTokenApproval } from '@hooks';
+import { Agents, SwapFormMarginAction, SwapFormState, SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates, } from '@components/contexts';
 import { Panel } from '@components/atomic';
 import {
   IconLabel,
