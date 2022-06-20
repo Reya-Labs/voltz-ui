@@ -1,9 +1,9 @@
 import React from 'react';
-import { TextFieldProps as MuiTextFieldProps } from '@mui/material/TextField';
-
 import { Input } from '../../atomic';
+import { TextFieldProps } from '../TextField/TextField';
+import { inputStyles } from '@theme';
 
-export type IntegerFieldProps = Omit<MuiTextFieldProps, 'variant'>;
+export type IntegerFieldProps = TextFieldProps;
 
 const IntegerField: React.FunctionComponent<IntegerFieldProps> = ({
   size,
@@ -15,13 +15,13 @@ const IntegerField: React.FunctionComponent<IntegerFieldProps> = ({
 }) => {
   return (
     <Input
-      size={size}
       label={label}
       disabled={disabled}
       error={error}
       value={value}
       onChange={onChange}
       type="number"
+      sx={{ input: inputStyles(disabled, error, size) }}
     />
   );
 };
