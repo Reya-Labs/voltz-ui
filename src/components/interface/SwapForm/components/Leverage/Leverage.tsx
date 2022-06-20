@@ -69,6 +69,7 @@ const Leverage = ({minMargin, notional, onChange, value}: LeverageProps) => {
         <MaskedIntegerField
           allowDecimals
           disabled={isDisabled}
+          dynamic
           inputSize="small"
           label={<IconLabel label={'Leverage'} icon="information-circle" info={hint} />}
           value={internalValue}
