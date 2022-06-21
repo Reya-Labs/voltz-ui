@@ -46,7 +46,7 @@ const TextField: React.FunctionComponent<TextFieldProps> = ({
         disabled={disabled} 
         error={error} 
         inputRef={inputRef} 
-        sx={inputStyles(disabled, error, size, dynamic)} 
+        sx={inputStyles({ disabled, error, inputSize: size, dynamic })} 
       />
       {error && errorText && (
         <Typography variant='body2' sx={errorLabelStyles}>

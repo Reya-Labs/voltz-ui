@@ -176,6 +176,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
           }}
         >
           <MarginAmount
+            balance={balance}
             protocol={protocol}
             maxMargin={maxMargin}
             margin={formState.margin}
