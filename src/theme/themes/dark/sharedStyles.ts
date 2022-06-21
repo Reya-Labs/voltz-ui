@@ -22,8 +22,6 @@ export const inputStyles = (disabled?: boolean, error?: boolean, inputSize?: str
       return colors.vzGreyDarkish2;
     },
     minHeight: 'auto !important',
-    height: 'auto !important',
-    lineHeight:() => '14px',
     boxSizing: 'border-box',
     width: '100%',
     cursor: disabled ? 'not-allowed' : undefined,
@@ -91,7 +89,9 @@ export const inputStyles = (disabled?: boolean, error?: boolean, inputSize?: str
     return {
       ...styles,
       fontSize: '14px',
-      padding: (theme) => `${theme.spacing(2)} ${theme.spacing(4)}`,
+      lineHeight: '14px',
+      height: '31px',
+      padding: (theme) => `calc(${theme.spacing(2)} - 1px) calc(${theme.spacing(4)} - 1px)`,
     }
   }
 
@@ -99,13 +99,17 @@ export const inputStyles = (disabled?: boolean, error?: boolean, inputSize?: str
     return {
       ...styles,
       fontSize: '16px',
-      padding: (theme) => `${theme.spacing(2)} ${theme.spacing(4)}`,
+      lineHeight: '14px',
+      height: '31px',
+      padding: (theme) => `calc(${theme.spacing(2)} - 1px) calc(${theme.spacing(4)} - 1px)`,
     }
   }
 
   return {
     ...styles,
     fontSize: '24px',
-    padding: (theme) => theme.spacing(4),
+    lineHeight: '1.2',
+    height: '61px',
+    padding: (theme) => `calc(${theme.spacing(4)} - 1px)`
   }
 };
