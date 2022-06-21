@@ -130,9 +130,9 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   const defaultFixedHigh = position?.fixedRateUpper.toNumber() ?? defaultValues.fixedHigh ?? undefined;
   const defaultFixedLow = position?.fixedRateLower.toNumber() ?? defaultValues.fixedLow ?? undefined;
   const defaultLiquidityAction = defaultValues.liquidityAction ?? MintBurnFormLiquidityAction.ADD;
-  const defaultMargin = defaultValues.margin ?? 0;
+  const defaultMargin = defaultValues.margin ?? undefined;
   const defaultMarginAction = defaultValues.marginAction ?? MintBurnFormMarginAction.ADD;
-  const defaultNotional = defaultValues.notional ?? 0;
+  const defaultNotional = defaultValues.notional ?? undefined;
 
   const { agent } = useAgent();
   const balance = useBalance(amm);

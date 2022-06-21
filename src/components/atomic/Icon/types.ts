@@ -13,6 +13,9 @@ import {
   Mint,
   Settle,
   Swap,
+  TokenDai,
+  TokenLido,
+  TokenUsdc,
   Voltz,
   WalletConnect,
 } from './icons';
@@ -23,6 +26,9 @@ export type Icons =
   | 'ethereum'
   | 'information-circle'
   | 'metamask'
+  | 'token-dai'
+  | 'token-lido'
+  | 'token-usdc'
   | 'tx-burn'
   | 'tx-liquidation'
   | 'tx-margin-update'
@@ -42,6 +48,9 @@ export const iconMap: Record<Icons, ElementType> = {
   voltz: Voltz as ElementType,
   'walletConnect': WalletConnect as ElementType,
   'warning-circle': InterfaceAlertWarningCircle as ElementType,
+  'token-dai': TokenDai as ElementType,
+  'token-lido': TokenLido as ElementType,
+  'token-usdc': TokenUsdc as ElementType,
   'tx-burn': Burn as ElementType,
   'tx-liquidation': Liquidation as ElementType,
   'tx-margin-update': MarginUpdate as ElementType,

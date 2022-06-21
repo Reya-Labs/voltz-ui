@@ -3,6 +3,7 @@ import isUndefined from 'lodash/isUndefined';
 
 import IconLabel from '../IconLabel/IconLabel';
 import MaskedIntegerField from '../MaskedIntegerField/MaskedIntegerField';
+import InputTokenLabel from '../InputTokenLabel/InputTokenLabel';
 
 export type MarginAmountProps = {
   protocol?: string;
@@ -50,7 +51,8 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
       allowDecimals
       allowNegativeValue={false}
       decimalsLimit={2}
-      suffix={` ${underlyingTokenName}`}
+      suffix={<InputTokenLabel tokenName={underlyingTokenName} />}
+      suffixPadding={90}
       label={
         <IconLabel
           label={ !isEditing ? 'Chosen margin' : isAdditional ? "Margin amount to add" : "Margin amount to withdraw" } 

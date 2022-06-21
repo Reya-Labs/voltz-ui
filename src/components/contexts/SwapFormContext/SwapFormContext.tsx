@@ -97,10 +97,10 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   mode = SwapFormModes.NEW_POSITION,
   position
 }) => {
-  const defaultLeverage = !isUndefined(defaultValues.leverage) ? defaultValues.leverage : 10;
-  const defaultMargin = !isUndefined(defaultValues.margin) ? defaultValues.margin : 0;
+  const defaultLeverage = defaultValues.leverage ?? 10;
+  const defaultMargin = defaultValues.margin ?? undefined;
   const defaultMarginAction = defaultValues.marginAction || SwapFormMarginAction.ADD;
-  const defaultNotional = !isUndefined(defaultValues.notional) ? defaultValues.notional : 0;
+  const defaultNotional = defaultValues.notional ?? undefined;
   const defaultPartialCollateralization = !isUndefined(defaultValues.partialCollateralization) 
     ? defaultValues.partialCollateralization 
     : true;

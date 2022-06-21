@@ -17,6 +17,8 @@ export type MaskedIntegerFieldProps = OverrideTypes<CurrencyInputProps, {
   label?: ReactNode,
   onChange?: (value: string) => void;
   inputSize?: 'small' | 'medium' | 'large';
+  suffix: ReactNode;
+  suffixPadding?: number;
 }>;
 
 const errorLabelStyles: SystemStyleObject<Theme> = {
@@ -35,6 +37,7 @@ const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
   onChange,
   inputSize = 'large',
   suffix,
+  suffixPadding = 0,
   ...props
 }) => {
   const inputId = useUniqueId();
@@ -54,16 +57,29 @@ const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
       )}
 
       <Box sx={{
+        ...inputStyles(props.disabled, error, inputSize, dynamic, suffixPadding),
         width: '100%',
-        input: inputStyles(props.disabled, error, inputSize, dynamic)
+        position: 'relative'
       }}>
         <CurrencyInput
           id={inputId}
           decimalsLimit={2}
           onValueChange={handleChange}
-          suffix={suffix}
+          suffix={undefined}
           {...props}
         />
+        {suffix && (
+          <Box 
+            className='suffix'
+            sx={{
+              position: 'absolute', 
+              right: (theme) => theme.spacing(4), 
+              top: '50%',
+              transform: 'translateY(-50%)'
+            }}>
+              {suffix}
+          </Box>
+        )}
       </Box>
       {error && errorText && (
         <Typography variant='body2' sx={errorLabelStyles}>
