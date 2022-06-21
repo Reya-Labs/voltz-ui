@@ -178,6 +178,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
       {(formAction === SwapFormActions.SWAP || formAction === SwapFormActions.UPDATE) && (
         <Box sx={bottomSpacing}>
           <MarginAmount
+            balance={balance}
             error={errors['margin']}
             isAdditional={formState.marginAction === SwapFormMarginAction.ADD}
             isEditing={mode === SwapFormModes.EDIT_MARGIN}

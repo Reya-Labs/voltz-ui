@@ -4,8 +4,10 @@ import isUndefined from 'lodash/isUndefined';
 import IconLabel from '../IconLabel/IconLabel';
 import MaskedIntegerField from '../MaskedIntegerField/MaskedIntegerField';
 import InputTokenLabel from '../InputTokenLabel/InputTokenLabel';
+import { formatCurrency } from '@utilities';
 
 export type MarginAmountProps = {
+  balance?: number;
   protocol?: string;
   defaultMargin?: number;
   maxMargin?: number;
@@ -17,6 +19,7 @@ export type MarginAmountProps = {
 };
 
 const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
+  balance,
   protocol,
   defaultMargin,
   margin,
@@ -25,6 +28,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
   onChangeMargin,
   error
 }) => {
+  const formattedBalance = !isUndefined(balance) ? formatCurrency(balance) : 'checking...';
   const value = isUndefined(margin) ? defaultMargin : margin;
   const handleChange = (newValue: string) => {
     onChangeMargin(parseFloat(newValue));
@@ -51,6 +55,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
       allowDecimals
       allowNegativeValue={false}
       decimalsLimit={2}
+      subtext={`BALANCE: ${formattedBalance}`}
       suffix={<InputTokenLabel tokenName={underlyingTokenName} />}
       suffixPadding={90}
       label={

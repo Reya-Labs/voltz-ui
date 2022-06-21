@@ -21,7 +21,7 @@ const IntegerField: React.FunctionComponent<IntegerFieldProps> = ({
       value={value}
       onChange={onChange}
       type="number"
-      sx={{ input: inputStyles(disabled, error, size) }}
+      sx={{ input: inputStyles({ disabled, error, inputSize: size }) }}
     />
   );
 };

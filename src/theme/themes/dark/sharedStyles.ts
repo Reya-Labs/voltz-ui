@@ -5,13 +5,16 @@
 import { SystemStyleObject, Theme } from '@mui/system';
 import colors from '../../colors';
 
-export const inputStyles = (
-  disabled?: boolean,
-  error?: boolean,
-  inputSize?: string,
-  dynamic?: boolean,
-  suffixPadding: number = 0,
-): SystemStyleObject<Theme> => {
+type inputStylesProps = {
+  disabled?: boolean;
+  dynamic?: boolean;
+  error?: boolean;
+  inputSize?: string;
+  suffixPadding?: number;
+  subtext?: boolean;
+}
+
+export const inputStyles = ({ disabled, dynamic, error, inputSize, suffixPadding = 0, subtext }: inputStylesProps): SystemStyleObject<Theme> => {
   const containerStyles:SystemStyleObject<Theme> = {
     '&:hover': {
       '*, input': {
@@ -155,11 +158,18 @@ export const inputStyles = (
       ...inputFieldStyles,
       height: '61px',
       padding: (theme) => `
-        calc(${theme.spacing(4)} - 1px)
+        calc(${subtext ? '11px' : theme.spacing(4)} - 1px)
         calc(${theme.spacing(4)} - 1px + ${suffixPadding}px)
-        calc(${theme.spacing(4)} - 1px)
+        calc(${subtext ? '29px' : theme.spacing(4)} - 1px)
         calc(${theme.spacing(4)} - 1px)
       `
+    },
+    '.subtext': {
+      fontSize: '14px',
+      color: (theme) => {
+        if (error) return theme.palette.error.base;
+        return colors.lavenderWeb.darken020;
+      }
     }
   }
 };
