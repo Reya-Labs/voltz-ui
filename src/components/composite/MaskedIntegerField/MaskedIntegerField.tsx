@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback } from 'react';
+import React, { ReactNode } from 'react';
 import CurrencyInput, { CurrencyInputProps } from 'react-currency-input-field';
 import { InputBaseProps } from '@mui/material/InputBase';
 import { Box, FormControl, InputLabel } from '@mui/material';
@@ -11,6 +11,7 @@ import { Typography } from '@components/atomic';
 import { inputStyles } from '@theme';
 
 export type MaskedIntegerFieldProps = OverrideTypes<CurrencyInputProps, {
+  dynamic?: boolean;
   error?: InputBaseProps['error'],
   errorText?: string;
   label?: ReactNode,
@@ -27,6 +28,7 @@ const errorLabelStyles: SystemStyleObject<Theme> = {
 }
 
 const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
+  dynamic,
   error,
   errorText,
   label,
@@ -53,7 +55,7 @@ const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
 
       <Box sx={{
         width: '100%',
-        input: inputStyles(props.disabled, error, inputSize)
+        input: inputStyles(props.disabled, error, inputSize, dynamic)
       }}>
         <CurrencyInput
           id={inputId}

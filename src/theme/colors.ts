@@ -32,6 +32,7 @@ const colors = {
   ...newColors,
   vzGrey: '#A6A2B4',
   vzGreyDarkish: '#6D6A77',
+  vzGreyDarkish2: '#6C697E',
   vzGreyDark: '#5A576D',
   vzGreyDarker: '#1F1D2D',
   vzGreyDarkest: '#1B1929',

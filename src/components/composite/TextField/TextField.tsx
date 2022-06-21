@@ -11,7 +11,9 @@ import { colors, inputStyles } from '@theme';
 import { SystemStyleObject, Theme } from '@mui/system';
 
 export type TextFieldProps = OverrideTypes<Omit<MuiTextFieldProps, 'variant'>, {
-  errorText?: string
+  dynamic?: boolean; // used for styling
+  errorText?: string;
+  size?: 'small' | 'medium' | 'large'
 }>;
 
 const errorLabelStyles: SystemStyleObject<Theme> = {
@@ -23,10 +25,12 @@ const errorLabelStyles: SystemStyleObject<Theme> = {
 
 const TextField: React.FunctionComponent<TextFieldProps> = ({
   disabled,
+  dynamic,
   error,
   errorText,
   label,
   inputRef,
+  size,
 }) => {
   const inputId = useUniqueId();
 
@@ -37,7 +41,13 @@ const TextField: React.FunctionComponent<TextFieldProps> = ({
           {label}
         </InputLabel>
       )}
-      <Input id={inputId} disabled={disabled} error={error} inputRef={inputRef} sx={{ input: inputStyles(disabled, error, 'medium') }} />
+      <Input 
+        id={inputId} 
+        disabled={disabled} 
+        error={error} 
+        inputRef={inputRef} 
+        sx={{ input: inputStyles(disabled, error, size, dynamic) }} 
+      />
       {error && errorText && (
         <Typography variant='body2' sx={errorLabelStyles}>
           {errorText}

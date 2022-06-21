@@ -5,38 +5,73 @@
 import { SystemStyleObject, Theme } from '@mui/system';
 import colors from '../../colors';
 
-export const inputStyles = (disabled?: boolean, error?: boolean, inputSize?: string): SystemStyleObject<Theme> => {
+export const inputStyles = (disabled?: boolean, error?: boolean, inputSize?: string, dynamic?: boolean): SystemStyleObject<Theme> => {
   const styles:SystemStyleObject<Theme> = {
     fontFamily: 'PixelOperatorMono',
     backgroundColor: (theme) => theme.palette.secondary.darken040,
     borderColor: (theme) => {
-      if (disabled) return 'transparent';
       if (error) return theme.palette.error.darken010;
-      return colors.vzGreyDark;
+      return theme.palette.secondary.darken040;
     },
     borderStyle: 'solid',
-    borderWidth: () => error ? '1px' : '0',
+    borderWidth: '1px',
     borderRadius: (theme) => theme.spacing(1),
     color: (theme) => {
-      if (disabled) return colors.vzGreyDark;
       if (error) return theme.palette.error.base;
-      return colors.vzGrey;
+      if (dynamic) return colors.lavenderWeb.darken010;
+      return colors.vzGreyDarkish2;
     },
     minHeight: 'auto !important',
-    height: 'auto !important',
-    lineHeight:() => '14px',
     boxSizing: 'border-box',
     width: '100%',
     cursor: disabled ? 'not-allowed' : undefined,
+    transition: 'border-color 0.1s linear, color 0.1s linear',
     '::placeholder': {
+      transition: 'color 0.1s linear',
       color: (theme) => {
-        if (disabled) return colors.vzGreyDark;
         if (error) return theme.palette.error.base;
-        return colors.vzGrey;
+        if (disabled) return colors.vzGreyDarkish2;
+        if (dynamic) return colors.lavenderWeb.darken010;
+        return colors.vzGreyDarkish2;
       },
+    },
+    '&:hover': {
+      borderColor: (theme) => {
+        if (error) return theme.palette.error.darken010;
+        if (disabled) return 'transparent';
+        return colors.vzGreyDarkish2;
+      },
+      color: (theme) => {
+        if (error) return theme.palette.error.base;
+        if (disabled) return colors.vzGreyDarkish2;
+        if (dynamic) return colors.lavenderWeb.darken010;
+        return colors.lavenderWeb.darken015
+      },
+      '::placeholder': {
+        color: (theme) => {
+          if (error) return theme.palette.error.base;
+          if (disabled) return colors.vzGreyDarkish2;
+          if (dynamic) return colors.lavenderWeb.darken010;
+          return colors.lavenderWeb.darken015
+        },
+      }
     },
     '&:focus-visible': {
       outline: 'none',
+      borderColor: (theme) => {
+        if (error) return theme.palette.error.darken010;
+        return colors.lavenderWeb.darken015;
+      },
+      color: (theme) => {
+        if (error) return theme.palette.error.base;
+        return colors.lavenderWeb.base
+      },
+      '::placeholder': {
+        color: (theme) => {
+          if (error) return theme.palette.error.base;
+          return colors.lavenderWeb.base
+        }
+      }
     },
     "::-webkit-outer-spin-button": { 
       "webkitAppearance": "none", 
@@ -54,12 +89,9 @@ export const inputStyles = (disabled?: boolean, error?: boolean, inputSize?: str
     return {
       ...styles,
       fontSize: '14px',
-      borderWidth: '1px',
-      padding: (theme) => `${theme.spacing(2)} ${theme.spacing(4)}`,
-      borderColor: (theme) => {
-        if (error) return theme.palette.error.darken010;
-        return colors.lavenderWeb.darken020;
-      },
+      lineHeight: '14px',
+      height: '31px',
+      padding: (theme) => `calc(${theme.spacing(2)} - 1px) calc(${theme.spacing(4)} - 1px)`,
     }
   }
 
@@ -67,13 +99,17 @@ export const inputStyles = (disabled?: boolean, error?: boolean, inputSize?: str
     return {
       ...styles,
       fontSize: '16px',
-      padding: (theme) => `${theme.spacing(2)} ${theme.spacing(4)}`,
+      lineHeight: '14px',
+      height: '31px',
+      padding: (theme) => `calc(${theme.spacing(2)} - 1px) calc(${theme.spacing(4)} - 1px)`,
     }
   }
 
   return {
     ...styles,
     fontSize: '24px',
-    padding: (theme) => theme.spacing(4),
+    lineHeight: '1.2',
+    height: '61px',
+    padding: (theme) => `calc(${theme.spacing(4)} - 1px)`
   }
 };
