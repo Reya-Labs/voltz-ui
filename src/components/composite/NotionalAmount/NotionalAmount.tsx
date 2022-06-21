@@ -3,6 +3,7 @@ import isUndefined from 'lodash/isUndefined';
 
 import IconLabel from '../IconLabel/IconLabel';
 import MaskedIntegerField from '../MaskedIntegerField/MaskedIntegerField';
+import InputTokenLabel from '../InputTokenLabel/InputTokenLabel';
 
 export type NotionalAmountProps = {
   label: string;
@@ -40,7 +41,8 @@ const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
     <MaskedIntegerField
       allowDecimals
       allowNegativeValue={false}
-      suffix={` ${underlyingTokenName}`}
+      suffix={<InputTokenLabel tokenName={underlyingTokenName} />}
+      suffixPadding={90}
       label={<IconLabel label={label} icon="information-circle" info={info} />}
       defaultValue={value}
       onChange={handleChange}

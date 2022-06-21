@@ -61,6 +61,7 @@ const RateOptionsInput: React.FunctionComponent<RateOptionsProps> = ({
       errorText={error}
       inputSize="small"
       suffix='%'
+      suffixPadding={20}
       label={<IconLabel label={label} icon="information-circle" info={hint} />}
       value={inputValue}
       onChange={handleChange}

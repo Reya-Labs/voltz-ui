@@ -75,6 +75,7 @@ const Leverage = ({minMargin, notional, onChange, value}: LeverageProps) => {
           value={internalValue}
           onChange={handleChangeInput}
           suffix='X'
+          suffixPadding={20}
         />
       </Box>
       <Box sx={{ flexGrow: '1', marginLeft: (theme) => theme.spacing(4), display: 'flex', alignItems: 'center' }}>

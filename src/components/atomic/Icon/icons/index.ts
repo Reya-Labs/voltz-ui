@@ -13,3 +13,7 @@ export { ReactComponent as MarginUpdate } from './transactions/margin-update.svg
 export { ReactComponent as Mint } from './transactions/mint.svg';
 export { ReactComponent as Settle } from './transactions/settle.svg';
 export { ReactComponent as Swap } from './transactions/swap.svg';
+
+export { ReactComponent as TokenDai } from './tokens/dai.svg';
+export { ReactComponent as TokenLido } from './tokens/lido.svg';
+export { ReactComponent as TokenUsdc } from './tokens/usdc.svg';

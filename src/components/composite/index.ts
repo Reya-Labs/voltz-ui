@@ -3,6 +3,7 @@ export { default as Autocomplete } from './Autocomplete/Autocomplete';
 export { default as DebouncedIntegerField } from './DebouncedIntegerField/DebouncedIntegerField';
 export type { DebouncedIntegerFieldDetails } from './DebouncedIntegerField/DebouncedIntegerField';
 export { default as IconLabel } from './IconLabel/IconLabel';
+export { default as InputTokenLabel } from './InputTokenLabel/InputTokenLabel';
 export { default as IntegerField } from './IntegerField/IntegerField';
 export { default as MarginAmount } from './MarginAmount/MarginAmount';
 export { default as MaskedIntegerField } from './MaskedIntegerField/MaskedIntegerField';
