@@ -429,13 +429,6 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
       if(touched.current.includes('notional')) {
         err['notional'] = 'Please enter an amount';
       }
-    } 
-
-    if(isUndefined(margin)) {
-      valid = false;
-      if(touched.current.includes('margin')) {
-        err['margin'] = 'Please enter an amount';
-      }
     }
 
     if(liquidityAction === MintBurnFormLiquidityAction.ADD) {
