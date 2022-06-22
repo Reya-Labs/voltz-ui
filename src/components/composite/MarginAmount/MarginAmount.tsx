@@ -14,7 +14,7 @@ export type MarginAmountProps = {
   margin?: number;
   isAdditional?: boolean;
   isEditing?: boolean;
-  onChangeMargin: (value: number) => void;
+  onChangeMargin: (value: number | undefined) => void;
   error?: string;
 };
 
@@ -30,8 +30,8 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
 }) => {
   const formattedBalance = !isUndefined(balance) ? formatCurrency(balance) : 'checking...';
   const value = isUndefined(margin) ? defaultMargin : margin;
-  const handleChange = (newValue: string) => {
-    onChangeMargin(parseFloat(newValue));
+  const handleChange = (newValue: string | undefined) => {
+    onChangeMargin(newValue ? parseFloat(newValue) : undefined);
   };
 
   // todo: below is a workaround when deriving the token name from the protocol name, needs to be fixed

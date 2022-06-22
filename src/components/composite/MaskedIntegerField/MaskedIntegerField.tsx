@@ -15,7 +15,7 @@ export type MaskedIntegerFieldProps = OverrideTypes<CurrencyInputProps, {
   error?: InputBaseProps['error'],
   errorText?: string;
   label?: ReactNode,
-  onChange?: (value: string) => void;
+  onChange?: (value: string | undefined) => void;
   inputSize?: 'small' | 'medium' | 'large';
   subtext?: string;
   suffix: ReactNode;
@@ -45,7 +45,7 @@ const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
   const inputId = useUniqueId();
 
   const handleChange = (val?: string) => {
-    if(onChange) onChange(val || '0');
+    if(onChange) onChange(val);
   };
 
   return (

@@ -54,12 +54,14 @@ const Leverage = ({minMargin, notional, onChange, value}: LeverageProps) => {
     }
   }, [onChange, setInternalValue]);
 
-  const handleChangeInput = useCallback((inputVal: string) => {
-    const newValue = parseFloat(inputVal);
-    if(!isNaN(newValue)) {
-      setInternalValue(newValue);
-      window.clearInterval(timer.current);
-      timer.current = window.setTimeout(() => onChange(newValue), delay);
+  const handleChangeInput = useCallback((inputVal: string | undefined) => {
+    if(inputVal) {
+      const newValue = parseFloat(inputVal);
+      if(!isNaN(newValue)) {
+        setInternalValue(newValue);
+        window.clearInterval(timer.current);
+        timer.current = window.setTimeout(() => onChange(newValue), delay);
+      }
     }
   }, [onChange, setInternalValue])
   
