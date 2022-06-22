@@ -431,6 +431,13 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
       }
     }
 
+    if(liquidityAction === MintBurnFormLiquidityAction.ADD && (isUndefined(margin) || margin === 0)) {
+      valid = false;
+      if(touched.current.includes('margin')) {
+        err['margin'] = 'Please enter an amount';
+      }
+    }
+
     if(liquidityAction === MintBurnFormLiquidityAction.ADD) {
       // check user has sufficient funds
       if(!isUndefined(margin)) {
