@@ -1,11 +1,9 @@
-import { useAgent, useAMMContext, useBalance, useTokenApproval } from '@hooks';
+import { useAMMContext, useBalance, useTokenApproval } from '@hooks';
 import { AugmentedAMM } from '@utilities';
-import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { isUndefined } from 'lodash';
 import { BigNumber } from 'ethers';
 import { Position } from '@voltz-protocol/v1-sdk';
-import { Box } from '@mui/material';
-import { colors } from "@theme";
 
 export enum MintBurnFormModes {
   NEW_POSITION='NEW_POSITION',
@@ -104,22 +102,6 @@ export type MintBurnFormContext = {
 
 const MintBurnFormCtx = createContext<MintBurnFormContext>({} as unknown as MintBurnFormContext);
 
-type TextProps = {
-  bold?: boolean;
-  children?: ReactNode;
-  green?: boolean;
-  red?: boolean;
-};
-const Text = ({ bold, children, green, red }: TextProps) => (
-  <Box component='span' sx={{ 
-    color: green ? colors.vzCustomGreen1 : red ? colors.vzCustomRed1 : undefined,
-    fontWeight: bold ? 'bold' : undefined,
-    textTransform: 'none'
-  }}>
-    {children}
-  </Box>
-);
-
 export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderProps> = ({ 
   amm, 
   children, 
@@ -134,7 +116,6 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   const defaultMarginAction = defaultValues.marginAction ?? MintBurnFormMarginAction.ADD;
   const defaultNotional = defaultValues.notional ?? undefined;
 
-  const { agent } = useAgent();
   const balance = useBalance(amm);
   const [fixedHigh, setFixedHigh] = useState<MintBurnFormState['fixedHigh']>(defaultFixedHigh);
   const [fixedLow, setFixedLow] = useState<MintBurnFormState['fixedLow']>(defaultFixedLow);
