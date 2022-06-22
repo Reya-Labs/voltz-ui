@@ -34,9 +34,9 @@ export type MintBurnFormProps = {
   onChangeFixedLow: (value: number, increment: boolean | null) => void;
   onChangeFixedHigh: (value: number, increment: boolean | null) => void;
   onChangeLiquidityAction: (value: MintBurnFormLiquidityAction) => void;
-  onChangeMargin: (value: number) => void;
+  onChangeMargin: (value: number | undefined) => void;
   onChangeMarginAction: (value: MintBurnFormMarginAction) => void;
-  onChangeNotional: (value: number) => void;
+  onChangeNotional: (value: number | undefined) => void;
   onSubmit: () => void;
   protocol?: string;
   startDate?: DateTime;

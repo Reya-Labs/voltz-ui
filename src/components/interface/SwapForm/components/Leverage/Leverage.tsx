@@ -26,7 +26,7 @@ const Leverage = ({minMargin, notional, onChange, value}: LeverageProps) => {
   const [internalValue, setInternalValue] = useState(value);
   const timer = useRef<number>();
 
-  const high = !isDisabled ? Math.min(Math.max((notional / margin), 1), 100) : 20;
+  const high = !isDisabled ? Math.max((notional / margin), 1) : 20;
   const low = 1;
   const range = high - low;
 
@@ -54,12 +54,14 @@ const Leverage = ({minMargin, notional, onChange, value}: LeverageProps) => {
     }
   }, [onChange, setInternalValue]);
 
-  const handleChangeInput = useCallback((inputVal: string) => {
-    const newValue = parseFloat(inputVal);
-    if(!isNaN(newValue)) {
-      setInternalValue(newValue);
-      window.clearInterval(timer.current);
-      timer.current = window.setTimeout(() => onChange(newValue), delay);
+  const handleChangeInput = useCallback((inputVal: string | undefined) => {
+    if(inputVal) {
+      const newValue = parseFloat(inputVal);
+      if(!isNaN(newValue)) {
+        setInternalValue(newValue);
+        window.clearInterval(timer.current);
+        timer.current = window.setTimeout(() => onChange(newValue), delay);
+      }
     }
   }, [onChange, setInternalValue])
   

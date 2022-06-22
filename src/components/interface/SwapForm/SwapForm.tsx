@@ -35,9 +35,9 @@ export type SwapFormProps = {
   mode: SwapFormModes;
   onCancel: () => void;
   onChangeLeverage: (value: number) => void;
-  onChangeMargin: (value: number) => void;
+  onChangeMargin: (value: number | undefined) => void;
   onChangeMarginAction: (value: SwapFormMarginAction) => void;
-  onChangeNotional: (value: number) => void;
+  onChangeNotional: (value: number | undefined) => void;
   onChangePartialCollateralization: (value: boolean) => void;
   onSubmit: () => void;
   positionMargin?: number;

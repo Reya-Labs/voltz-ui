@@ -11,7 +11,7 @@ export type NotionalAmountProps = {
   protocol?: string;
   defaultNotional?: number;
   notional?: number;
-  onChangeNotional: (value: number) => void;
+  onChangeNotional: (value: number | undefined) => void;
   error?: string;
 };
 
@@ -25,8 +25,8 @@ const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
   error,
 }) => {
   const value = isUndefined(notional) ? defaultNotional : notional;
-  const handleChange = (newValue: string) => {
-    onChangeNotional(parseFloat(newValue));
+  const handleChange = (newValue: string | undefined) => {
+    onChangeNotional(newValue ? parseFloat(newValue) : undefined);
   };
 
   // todo: below is a workaround when deriving the token name from the protocol name, needs to be fixed
