@@ -25,6 +25,7 @@ interface AaveRateOracleInterface extends ethers.utils.Interface {
     "UNDERLYING_YIELD_BEARING_PROTOCOL_ID()": FunctionFragment;
     "aaveLendingPool()": FunctionFragment;
     "getApyFromTo(uint256,uint256)": FunctionFragment;
+    "getCurrentRateInRay()": FunctionFragment;
     "getRateFromTo(uint256,uint256)": FunctionFragment;
     "increaseObservationCardinalityNext(uint16)": FunctionFragment;
     "interpolateRateValue(uint256,uint256,uint256)": FunctionFragment;
@@ -57,6 +58,10 @@ interface AaveRateOracleInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "getApyFromTo",
     values: [BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getCurrentRateInRay",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "getRateFromTo",
@@ -127,6 +132,10 @@ interface AaveRateOracleInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getApyFromTo",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getCurrentRateInRay",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -276,6 +285,10 @@ export class AaveRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { apyFromToWad: BigNumber }>;
 
+    getCurrentRateInRay(
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { resultRay: BigNumber }>;
+
     getRateFromTo(
       _from: BigNumberish,
       _to: BigNumberish,
@@ -372,6 +385,8 @@ export class AaveRateOracle extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  getCurrentRateInRay(overrides?: CallOverrides): Promise<BigNumber>;
+
   getRateFromTo(
     _from: BigNumberish,
     _to: BigNumberish,
@@ -467,6 +482,8 @@ export class AaveRateOracle extends BaseContract {
       to: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    getCurrentRateInRay(overrides?: CallOverrides): Promise<BigNumber>;
 
     getRateFromTo(
       _from: BigNumberish,
@@ -637,6 +654,8 @@ export class AaveRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getCurrentRateInRay(overrides?: CallOverrides): Promise<BigNumber>;
+
     getRateFromTo(
       _from: BigNumberish,
       _to: BigNumberish,
@@ -717,6 +736,10 @@ export class AaveRateOracle extends BaseContract {
     getApyFromTo(
       from: BigNumberish,
       to: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getCurrentRateInRay(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

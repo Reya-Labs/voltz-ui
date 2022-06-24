@@ -92,6 +92,11 @@ const _abi = [
     type: "error",
   },
   {
+    inputs: [],
+    name: "LidoGetPooledEthBySharesReturnedZero",
+    type: "error",
+  },
+  {
     inputs: [
       {
         internalType: "uint128",
@@ -220,6 +225,11 @@ const _abi = [
   {
     inputs: [],
     name: "PositionNotSettled",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "RocketPoolGetEthValueReturnedZero",
     type: "error",
   },
   {

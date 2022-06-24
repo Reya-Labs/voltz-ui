@@ -15,6 +15,17 @@ export declare class UUPSUpgradeable__factory {
         outputs?: undefined;
         stateMutability?: undefined;
     } | {
+        inputs: never[];
+        name: string;
+        outputs: {
+            internalType: string;
+            name: string;
+            type: string;
+        }[];
+        stateMutability: string;
+        type: string;
+        anonymous?: undefined;
+    } | {
         inputs: {
             internalType: string;
             name: string;

@@ -56,3 +56,5 @@ export const ONE_YEAR_IN_SECONDS = 31536000;
 export function getGasBuffer(value: BigNumber): BigNumber {
   return value.mul(120).div(100);
 }
+
+export const WETH9 = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2';

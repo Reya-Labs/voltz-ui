@@ -12,6 +12,7 @@ import {
   BaseContract,
   ContractTransaction,
   Overrides,
+  PayableOverrides,
   CallOverrides,
 } from "ethers";
 import { BytesLike } from "@ethersproject/bytes";
@@ -244,7 +245,7 @@ export class Actor extends BaseContract {
         isMint: boolean;
         marginDelta: BigNumberish;
       },
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     mintViaAMM(
@@ -307,7 +308,7 @@ export class Actor extends BaseContract {
         tickUpper: BigNumberish;
         marginDelta: BigNumberish;
       },
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     unwindFullyCollateralisedFixedTakerSwap(
@@ -361,7 +362,7 @@ export class Actor extends BaseContract {
       isMint: boolean;
       marginDelta: BigNumberish;
     },
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   mintViaAMM(
@@ -424,7 +425,7 @@ export class Actor extends BaseContract {
       tickUpper: BigNumberish;
       marginDelta: BigNumberish;
     },
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   unwindFullyCollateralisedFixedTakerSwap(
@@ -614,7 +615,7 @@ export class Actor extends BaseContract {
         isMint: boolean;
         marginDelta: BigNumberish;
       },
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     mintViaAMM(
@@ -677,7 +678,7 @@ export class Actor extends BaseContract {
         tickUpper: BigNumberish;
         marginDelta: BigNumberish;
       },
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     unwindFullyCollateralisedFixedTakerSwap(
@@ -732,7 +733,7 @@ export class Actor extends BaseContract {
         isMint: boolean;
         marginDelta: BigNumberish;
       },
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     mintViaAMM(
@@ -795,7 +796,7 @@ export class Actor extends BaseContract {
         tickUpper: BigNumberish;
         marginDelta: BigNumberish;
       },
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     unwindFullyCollateralisedFixedTakerSwap(

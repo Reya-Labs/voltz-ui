@@ -33,4 +33,5 @@ export declare const MIN_FIXED_RATE = 0.001;
 export declare const MAX_FIXED_RATE = 1001;
 export declare const ONE_YEAR_IN_SECONDS = 31536000;
 export declare function getGasBuffer(value: BigNumber): BigNumber;
+export declare const WETH9 = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
 //# sourceMappingURL=constants.d.ts.map

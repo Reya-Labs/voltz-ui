@@ -208,8 +208,8 @@ export class ICompoundRateOracle extends BaseContract {
     ): Promise<[BigNumber] & { apyFromTo: BigNumber }>;
 
     getRateFromTo(
-      from: BigNumberish,
-      to: BigNumberish,
+      _from: BigNumberish,
+      _to: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
@@ -259,8 +259,8 @@ export class ICompoundRateOracle extends BaseContract {
   ): Promise<BigNumber>;
 
   getRateFromTo(
-    from: BigNumberish,
-    to: BigNumberish,
+    _from: BigNumberish,
+    _to: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -310,8 +310,8 @@ export class ICompoundRateOracle extends BaseContract {
     ): Promise<BigNumber>;
 
     getRateFromTo(
-      from: BigNumberish,
-      to: BigNumberish,
+      _from: BigNumberish,
+      _to: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -420,8 +420,8 @@ export class ICompoundRateOracle extends BaseContract {
     ): Promise<BigNumber>;
 
     getRateFromTo(
-      from: BigNumberish,
-      to: BigNumberish,
+      _from: BigNumberish,
+      _to: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -472,8 +472,8 @@ export class ICompoundRateOracle extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getRateFromTo(
-      from: BigNumberish,
-      to: BigNumberish,
+      _from: BigNumberish,
+      _to: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

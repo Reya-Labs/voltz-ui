@@ -91,6 +91,11 @@ var _abi = [
         type: "error",
     },
     {
+        inputs: [],
+        name: "LidoGetPooledEthBySharesReturnedZero",
+        type: "error",
+    },
+    {
         inputs: [
             {
                 internalType: "uint128",
@@ -223,6 +228,11 @@ var _abi = [
     },
     {
         inputs: [],
+        name: "RocketPoolGetEthValueReturnedZero",
+        type: "error",
+    },
+    {
+        inputs: [],
         name: "WithdrawalExceedsCurrentMargin",
         type: "error",
     },
@@ -248,6 +258,19 @@ var _abi = [
             },
         ],
         name: "MarginCap",
+        type: "event",
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: false,
+                internalType: "contract IWETH",
+                name: "_weth",
+                type: "address",
+            },
+        ],
+        name: "WETHSetting",
         type: "event",
     },
     {
@@ -355,7 +378,7 @@ var _abi = [
                 type: "int256",
             },
         ],
-        stateMutability: "nonpayable",
+        stateMutability: "payable",
         type: "function",
     },
     {
@@ -482,7 +505,7 @@ var _abi = [
                 type: "int24",
             },
         ],
-        stateMutability: "nonpayable",
+        stateMutability: "payable",
         type: "function",
     },
     {
@@ -515,7 +538,7 @@ var _abi = [
         ],
         name: "updatePositionMargin",
         outputs: [],
-        stateMutability: "nonpayable",
+        stateMutability: "payable",
         type: "function",
     },
 ];

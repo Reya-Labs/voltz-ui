@@ -338,6 +338,7 @@ var decodeInfoPostSwap = function (error, environment) {
                         tick: parseInt(args[1], 10),
                         fee: ethers_1.BigNumber.from(args[4]),
                         availableNotional: ethers_1.BigNumber.from(args[3]),
+                        fixedTokenDelta: ethers_1.BigNumber.from(args[2]),
                         fixedTokenDeltaUnbalanced: ethers_1.BigNumber.from(args[5]),
                     };
                     return result;
@@ -360,6 +361,7 @@ var decodeInfoPostSwap = function (error, environment) {
                         tick: parseInt(args[1], 10),
                         fee: ethers_1.BigNumber.from(args[4]),
                         availableNotional: ethers_1.BigNumber.from(args[3]),
+                        fixedTokenDelta: ethers_1.BigNumber.from(args[2]),
                         fixedTokenDeltaUnbalanced: ethers_1.BigNumber.from(args[5]),
                     };
                     return result;
@@ -377,6 +379,7 @@ var decodeInfoPostSwap = function (error, environment) {
                         tick: decodingResult.tick,
                         fee: decodingResult.cumulativeFeeIncurred,
                         availableNotional: decodingResult.variableTokenDelta,
+                        fixedTokenDelta: decodingResult.fixedTokenDelta,
                         fixedTokenDeltaUnbalanced: decodingResult.fixedTokenDeltaUnbalanced,
                     };
                     return result;
@@ -398,6 +401,7 @@ var decodeInfoPostSwap = function (error, environment) {
                         tick: decodingResult.tick,
                         fee: decodingResult.cumulativeFeeIncurred,
                         availableNotional: decodingResult.variableTokenDelta,
+                        fixedTokenDelta: decodingResult.fixedTokenDelta,
                         fixedTokenDeltaUnbalanced: decodingResult.fixedTokenDeltaUnbalanced,
                     };
                     return result;

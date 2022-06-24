@@ -91,6 +91,11 @@ var _abi = [
         type: "error",
     },
     {
+        inputs: [],
+        name: "LidoGetPooledEthBySharesReturnedZero",
+        type: "error",
+    },
+    {
         inputs: [
             {
                 internalType: "uint128",
@@ -219,6 +224,11 @@ var _abi = [
     {
         inputs: [],
         name: "PositionNotSettled",
+        type: "error",
+    },
+    {
+        inputs: [],
+        name: "RocketPoolGetEthValueReturnedZero",
         type: "error",
     },
     {
@@ -373,12 +383,12 @@ var _abi = [
         inputs: [
             {
                 internalType: "uint256",
-                name: "from",
+                name: "_from",
                 type: "uint256",
             },
             {
                 internalType: "uint256",
-                name: "to",
+                name: "_to",
                 type: "uint256",
             },
         ],

@@ -36,6 +36,8 @@ export declare type AMMGetInfoPostSwapArgs = {
     fixedRateLimit?: number;
     fixedLow: number;
     fixedHigh: number;
+    margin?: number;
+    expectedApr?: number;
 };
 export declare type AMMSwapArgs = {
     isFT: boolean;
@@ -52,6 +54,7 @@ export declare type InfoPostSwap = {
     fee: number;
     slippage: number;
     averageFixedRate: number;
+    expectedApy?: number;
 };
 export declare type AMMMintArgs = {
     fixedLow: number;
@@ -128,13 +131,16 @@ declare class AMM {
     readonly txCount: number;
     readonly totalNotionalTraded: JSBI;
     readonly totalLiquidity: JSBI;
+    readonly isETH: boolean;
+    readonly isFCM: boolean;
     constructor({ id, signer, provider, environment, factoryAddress, peripheryAddress, marginEngineAddress, fcmAddress, rateOracle, updatedTimestamp, termStartTimestamp, termEndTimestamp, underlyingToken, tick, tickSpacing, txCount, totalNotionalTraded, totalLiquidity }: AMMConstructorArgs);
-    getInfoPostSwap({ isFT, notional, fixedRateLimit, fixedLow, fixedHigh, }: AMMGetInfoPostSwapArgs): Promise<InfoPostSwap>;
+    expectedApy: (ft: number, vt: number, margin: number, predictedApr: number) => number;
+    getInfoPostSwap({ isFT, notional, fixedRateLimit, fixedLow, fixedHigh, margin, expectedApr }: AMMGetInfoPostSwapArgs): Promise<InfoPostSwap>;
     swap({ isFT, notional, margin, fixedRateLimit, fixedLow, fixedHigh, validationOnly, }: AMMSwapArgs): Promise<ContractReceipt | void>;
     getInfoPostMint({ fixedLow, fixedHigh, notional, }: AMMGetInfoPostMintArgs): Promise<number>;
     mint({ fixedLow, fixedHigh, notional, margin, validationOnly, }: AMMMintArgs): Promise<ContractReceipt | void>;
     burn({ fixedLow, fixedHigh, notional, validationOnly, }: AMMBurnArgs): Promise<ContractReceipt | void>;
-    updatePositionMargin({ owner, fixedLow, fixedHigh, marginDelta, }: AMMUpdatePositionMarginArgs): Promise<ContractReceipt | void>;
+    updatePositionMargin({ fixedLow, fixedHigh, marginDelta, }: AMMUpdatePositionMarginArgs): Promise<ContractReceipt | void>;
     liquidatePosition({ owner, fixedLow, fixedHigh, }: AMMLiquidatePositionArgs): Promise<ContractReceipt>;
     settlePosition({ owner, fixedLow, fixedHigh, }: AMMSettlePositionArgs): Promise<ContractReceipt>;
     getInfoPostFCMSwap({ notional, fixedRateLimit, }: fcmSwapArgs): Promise<InfoPostSwap>;
@@ -174,6 +180,8 @@ declare class AMM {
     getNextUsableFixedRate(fixedRate: number, count: number): number;
     hasEnoughUnderlyingTokens(amount: number): Promise<boolean>;
     hasEnoughYieldBearingTokens(amount: number): Promise<boolean>;
+    underlyingTokens(): Promise<number>;
+    yieldBearingTokens(): Promise<number>;
     setCap(amount: number): Promise<void>;
     getCapPercentage(): Promise<number | undefined>;
     getPositionMarginRequirement(fixedLow: number, fixedHigh: number): Promise<number>;

@@ -12,6 +12,7 @@ import {
   BaseContract,
   ContractTransaction,
   Overrides,
+  PayableOverrides,
   CallOverrides,
 } from "ethers";
 import { BytesLike } from "@ethersproject/bytes";
@@ -112,14 +113,18 @@ interface IPeripheryInterface extends ethers.utils.Interface {
 
   events: {
     "MarginCap(address,int256)": EventFragment;
+    "WETHSetting(address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "MarginCap"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "WETHSetting"): EventFragment;
 }
 
 export type MarginCapEvent = TypedEvent<
   [string, BigNumber] & { _vamm: string; _lpMarginCapNew: BigNumber }
 >;
+
+export type WETHSettingEvent = TypedEvent<[string] & { _weth: string }>;
 
 export class IPeriphery extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -189,7 +194,7 @@ export class IPeriphery extends BaseContract {
         isMint: boolean;
         marginDelta: BigNumberish;
       },
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     setLPMarginCap(
@@ -216,7 +221,7 @@ export class IPeriphery extends BaseContract {
         tickUpper: BigNumberish;
         marginDelta: BigNumberish;
       },
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     updatePositionMargin(
@@ -225,7 +230,7 @@ export class IPeriphery extends BaseContract {
       _tickUpper: BigNumberish,
       _marginDelta: BigNumberish,
       _fullyWithdraw: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
 
@@ -253,7 +258,7 @@ export class IPeriphery extends BaseContract {
       isMint: boolean;
       marginDelta: BigNumberish;
     },
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   setLPMarginCap(
@@ -280,7 +285,7 @@ export class IPeriphery extends BaseContract {
       tickUpper: BigNumberish;
       marginDelta: BigNumberish;
     },
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   updatePositionMargin(
@@ -289,7 +294,7 @@ export class IPeriphery extends BaseContract {
     _tickUpper: BigNumberish,
     _marginDelta: BigNumberish,
     _fullyWithdraw: boolean,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
@@ -379,6 +384,12 @@ export class IPeriphery extends BaseContract {
       [string, BigNumber],
       { _vamm: string; _lpMarginCapNew: BigNumber }
     >;
+
+    "WETHSetting(address)"(
+      _weth?: null
+    ): TypedEventFilter<[string], { _weth: string }>;
+
+    WETHSetting(_weth?: null): TypedEventFilter<[string], { _weth: string }>;
   };
 
   estimateGas: {
@@ -406,7 +417,7 @@ export class IPeriphery extends BaseContract {
         isMint: boolean;
         marginDelta: BigNumberish;
       },
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     setLPMarginCap(
@@ -433,7 +444,7 @@ export class IPeriphery extends BaseContract {
         tickUpper: BigNumberish;
         marginDelta: BigNumberish;
       },
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     updatePositionMargin(
@@ -442,7 +453,7 @@ export class IPeriphery extends BaseContract {
       _tickUpper: BigNumberish,
       _marginDelta: BigNumberish,
       _fullyWithdraw: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
@@ -471,7 +482,7 @@ export class IPeriphery extends BaseContract {
         isMint: boolean;
         marginDelta: BigNumberish;
       },
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     setLPMarginCap(
@@ -498,7 +509,7 @@ export class IPeriphery extends BaseContract {
         tickUpper: BigNumberish;
         marginDelta: BigNumberish;
       },
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     updatePositionMargin(
@@ -507,7 +518,7 @@ export class IPeriphery extends BaseContract {
       _tickUpper: BigNumberish,
       _marginDelta: BigNumberish,
       _fullyWithdraw: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };
 }

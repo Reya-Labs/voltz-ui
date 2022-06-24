@@ -209,8 +209,8 @@ export class IAaveRateOracle extends BaseContract {
     ): Promise<[BigNumber] & { apyFromTo: BigNumber }>;
 
     getRateFromTo(
-      from: BigNumberish,
-      to: BigNumberish,
+      _from: BigNumberish,
+      _to: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
@@ -258,8 +258,8 @@ export class IAaveRateOracle extends BaseContract {
   ): Promise<BigNumber>;
 
   getRateFromTo(
-    from: BigNumberish,
-    to: BigNumberish,
+    _from: BigNumberish,
+    _to: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -307,8 +307,8 @@ export class IAaveRateOracle extends BaseContract {
     ): Promise<BigNumber>;
 
     getRateFromTo(
-      from: BigNumberish,
-      to: BigNumberish,
+      _from: BigNumberish,
+      _to: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -415,8 +415,8 @@ export class IAaveRateOracle extends BaseContract {
     ): Promise<BigNumber>;
 
     getRateFromTo(
-      from: BigNumberish,
-      to: BigNumberish,
+      _from: BigNumberish,
+      _to: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -465,8 +465,8 @@ export class IAaveRateOracle extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getRateFromTo(
-      from: BigNumberish,
-      to: BigNumberish,
+      _from: BigNumberish,
+      _to: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

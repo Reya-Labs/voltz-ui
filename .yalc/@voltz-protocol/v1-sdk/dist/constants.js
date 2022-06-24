@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getGasBuffer = exports.ONE_YEAR_IN_SECONDS = exports.MAX_FIXED_RATE = exports.MIN_FIXED_RATE = exports.MAX_TICK = exports.MIN_TICK = exports.Rounding = exports.Q192 = exports.Q96 = exports.ONE = exports.ZERO = exports.NEGATIVE_ONE = exports.ADDRESS_ZERO = exports.TresholdApprovalBn = exports.MaxUint256Bn = exports.MaxUint256 = void 0;
+exports.WETH9 = exports.getGasBuffer = exports.ONE_YEAR_IN_SECONDS = exports.MAX_FIXED_RATE = exports.MIN_FIXED_RATE = exports.MAX_TICK = exports.MIN_TICK = exports.Rounding = exports.Q192 = exports.Q96 = exports.ONE = exports.ZERO = exports.NEGATIVE_ONE = exports.ADDRESS_ZERO = exports.TresholdApprovalBn = exports.MaxUint256Bn = exports.MaxUint256 = void 0;
 var ethers_1 = require("ethers");
 var jsbi_1 = __importDefault(require("jsbi"));
 exports.MaxUint256 = jsbi_1.default.BigInt('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff');
@@ -44,3 +44,4 @@ function getGasBuffer(value) {
     return value.mul(120).div(100);
 }
 exports.getGasBuffer = getGasBuffer;
+exports.WETH9 = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2';

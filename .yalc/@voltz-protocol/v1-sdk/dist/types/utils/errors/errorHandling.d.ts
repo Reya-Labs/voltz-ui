@@ -16,6 +16,7 @@ export declare type RawInfoPostSwap = {
     fee: BigNumber;
     availableNotional: BigNumber;
     fixedTokenDeltaUnbalanced: BigNumber;
+    fixedTokenDelta: BigNumber;
 };
 export declare const decodeInfoPostSwap: (error: any, environment: string) => RawInfoPostSwap;
 //# sourceMappingURL=errorHandling.d.ts.map

@@ -92,6 +92,11 @@ const _abi = [
     type: "error",
   },
   {
+    inputs: [],
+    name: "LidoGetPooledEthBySharesReturnedZero",
+    type: "error",
+  },
+  {
     inputs: [
       {
         internalType: "uint128",
@@ -224,6 +229,11 @@ const _abi = [
   },
   {
     inputs: [],
+    name: "RocketPoolGetEthValueReturnedZero",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "WithdrawalExceedsCurrentMargin",
     type: "error",
   },
@@ -249,6 +259,19 @@ const _abi = [
       },
     ],
     name: "MarginCap",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "contract IWETH",
+        name: "_weth",
+        type: "address",
+      },
+    ],
+    name: "WETHSetting",
     type: "event",
   },
   {
@@ -356,7 +379,7 @@ const _abi = [
         type: "int256",
       },
     ],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
     type: "function",
   },
   {
@@ -483,7 +506,7 @@ const _abi = [
         type: "int24",
       },
     ],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
     type: "function",
   },
   {
@@ -516,7 +539,7 @@ const _abi = [
     ],
     name: "updatePositionMargin",
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
     type: "function",
   },
 ];

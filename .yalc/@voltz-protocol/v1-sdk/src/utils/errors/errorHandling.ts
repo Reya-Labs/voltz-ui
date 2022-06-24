@@ -374,6 +374,7 @@ export type RawInfoPostSwap = {
   fee: BigNumber;
   availableNotional: BigNumber;
   fixedTokenDeltaUnbalanced: BigNumber;
+  fixedTokenDelta: BigNumber;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -396,6 +397,7 @@ export const decodeInfoPostSwap = (error: any, environment: string): RawInfoPost
             tick: parseInt(args[1], 10),
             fee: BigNumber.from(args[4]),
             availableNotional: BigNumber.from(args[3]),
+            fixedTokenDelta: BigNumber.from(args[2]),
             fixedTokenDeltaUnbalanced: BigNumber.from(args[5]),
           };
           return result;
@@ -418,6 +420,7 @@ export const decodeInfoPostSwap = (error: any, environment: string): RawInfoPost
             tick: parseInt(args[1], 10),
             fee: BigNumber.from(args[4]),
             availableNotional: BigNumber.from(args[3]),
+            fixedTokenDelta: BigNumber.from(args[2]),
             fixedTokenDeltaUnbalanced: BigNumber.from(args[5]),
           };
           return result;
@@ -434,6 +437,7 @@ export const decodeInfoPostSwap = (error: any, environment: string): RawInfoPost
             tick: decodingResult.tick,
             fee: decodingResult.cumulativeFeeIncurred,
             availableNotional: decodingResult.variableTokenDelta,
+            fixedTokenDelta: decodingResult.fixedTokenDelta,
             fixedTokenDeltaUnbalanced: decodingResult.fixedTokenDeltaUnbalanced,
           };
           return result;
@@ -455,6 +459,7 @@ export const decodeInfoPostSwap = (error: any, environment: string): RawInfoPost
             tick: decodingResult.tick,
             fee: decodingResult.cumulativeFeeIncurred,
             availableNotional: decodingResult.variableTokenDelta,
+            fixedTokenDelta: decodingResult.fixedTokenDelta,
             fixedTokenDeltaUnbalanced: decodingResult.fixedTokenDeltaUnbalanced,
           };
           return result;

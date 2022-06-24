@@ -27,16 +27,12 @@ interface TestCompoundRateOracleInterface extends ethers.utils.Interface {
     "ctoken()": FunctionFragment;
     "decimals()": FunctionFragment;
     "getApyFromTo(uint256,uint256)": FunctionFragment;
-    "getOracleVars()": FunctionFragment;
+    "getCurrentRateInRay()": FunctionFragment;
+    "getLatestRateValue()": FunctionFragment;
     "getRate(uint16)": FunctionFragment;
     "getRateFromTo(uint256,uint256)": FunctionFragment;
     "increaseObservationCardinalityNext(uint16)": FunctionFragment;
     "interpolateRateValue(uint256,uint256,uint256)": FunctionFragment;
-    "latestAfterOrAtRateValue()": FunctionFragment;
-    "latestBeforeOrAtRateValue()": FunctionFragment;
-    "latestObservedRateValue()": FunctionFragment;
-    "latestRateFromTo()": FunctionFragment;
-    "liquidity()": FunctionFragment;
     "minSecondsSinceLastUpdate()": FunctionFragment;
     "observations(uint256)": FunctionFragment;
     "oracleVars()": FunctionFragment;
@@ -46,10 +42,7 @@ interface TestCompoundRateOracleInterface extends ethers.utils.Interface {
     "setMinSecondsSinceLastUpdate(uint256)": FunctionFragment;
     "settlementRateCache(uint32,uint32)": FunctionFragment;
     "testComputeApyFromRate(uint256,uint256)": FunctionFragment;
-    "testGetRateFromTo(uint256,uint256)": FunctionFragment;
-    "testGrow(uint16)": FunctionFragment;
-    "testObserveSingle(uint32)": FunctionFragment;
-    "tick()": FunctionFragment;
+    "testGetSurroundingRates(uint32)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "underlying()": FunctionFragment;
     "variableFactor(uint256,uint256)": FunctionFragment;
@@ -76,7 +69,11 @@ interface TestCompoundRateOracleInterface extends ethers.utils.Interface {
     values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "getOracleVars",
+    functionFragment: "getCurrentRateInRay",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getLatestRateValue",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -95,23 +92,6 @@ interface TestCompoundRateOracleInterface extends ethers.utils.Interface {
     functionFragment: "interpolateRateValue",
     values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
-  encodeFunctionData(
-    functionFragment: "latestAfterOrAtRateValue",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "latestBeforeOrAtRateValue",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "latestObservedRateValue",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "latestRateFromTo",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "liquidity", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "minSecondsSinceLastUpdate",
     values?: undefined
@@ -146,18 +126,9 @@ interface TestCompoundRateOracleInterface extends ethers.utils.Interface {
     values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "testGetRateFromTo",
-    values: [BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "testGrow",
+    functionFragment: "testGetSurroundingRates",
     values: [BigNumberish]
   ): string;
-  encodeFunctionData(
-    functionFragment: "testObserveSingle",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(functionFragment: "tick", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [string]
@@ -195,7 +166,11 @@ interface TestCompoundRateOracleInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getOracleVars",
+    functionFragment: "getCurrentRateInRay",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getLatestRateValue",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getRate", data: BytesLike): Result;
@@ -211,23 +186,6 @@ interface TestCompoundRateOracleInterface extends ethers.utils.Interface {
     functionFragment: "interpolateRateValue",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "latestAfterOrAtRateValue",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "latestBeforeOrAtRateValue",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "latestObservedRateValue",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "latestRateFromTo",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "liquidity", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "minSecondsSinceLastUpdate",
     data: BytesLike
@@ -259,15 +217,9 @@ interface TestCompoundRateOracleInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "testGetRateFromTo",
+    functionFragment: "testGetSurroundingRates",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "testGrow", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "testObserveSingle",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "tick", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
     data: BytesLike
@@ -412,7 +364,11 @@ export class TestCompoundRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { apyFromToWad: BigNumber }>;
 
-    getOracleVars(overrides?: CallOverrides): Promise<[number, number, number]>;
+    getCurrentRateInRay(
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { resultRay: BigNumber }>;
+
+    getLatestRateValue(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getRate(
       index: BigNumberish,
@@ -436,16 +392,6 @@ export class TestCompoundRateOracle extends BaseContract {
       timeDeltaBeforeOrAtToQueriedTimeWad: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { rateValueRay: BigNumber }>;
-
-    latestAfterOrAtRateValue(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    latestBeforeOrAtRateValue(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    latestObservedRateValue(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    latestRateFromTo(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    liquidity(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     minSecondsSinceLastUpdate(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -499,23 +445,15 @@ export class TestCompoundRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    testGetRateFromTo(
-      from: BigNumberish,
-      to: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    testGrow(
-      _rateCardinalityNext: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    testObserveSingle(
-      queriedTime: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    tick(overrides?: CallOverrides): Promise<[number]>;
+    testGetSurroundingRates(
+      target: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber] & {
+        latestBeforeOrAtRateValue: BigNumber;
+        latestAfterOrAtRateValue: BigNumber;
+      }
+    >;
 
     transferOwnership(
       newOwner: string,
@@ -586,7 +524,9 @@ export class TestCompoundRateOracle extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  getOracleVars(overrides?: CallOverrides): Promise<[number, number, number]>;
+  getCurrentRateInRay(overrides?: CallOverrides): Promise<BigNumber>;
+
+  getLatestRateValue(overrides?: CallOverrides): Promise<BigNumber>;
 
   getRate(
     index: BigNumberish,
@@ -610,16 +550,6 @@ export class TestCompoundRateOracle extends BaseContract {
     timeDeltaBeforeOrAtToQueriedTimeWad: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
-
-  latestAfterOrAtRateValue(overrides?: CallOverrides): Promise<BigNumber>;
-
-  latestBeforeOrAtRateValue(overrides?: CallOverrides): Promise<BigNumber>;
-
-  latestObservedRateValue(overrides?: CallOverrides): Promise<BigNumber>;
-
-  latestRateFromTo(overrides?: CallOverrides): Promise<BigNumber>;
-
-  liquidity(overrides?: CallOverrides): Promise<BigNumber>;
 
   minSecondsSinceLastUpdate(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -673,23 +603,15 @@ export class TestCompoundRateOracle extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  testGetRateFromTo(
-    from: BigNumberish,
-    to: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  testGrow(
-    _rateCardinalityNext: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  testObserveSingle(
-    queriedTime: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  tick(overrides?: CallOverrides): Promise<number>;
+  testGetSurroundingRates(
+    target: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<
+    [BigNumber, BigNumber] & {
+      latestBeforeOrAtRateValue: BigNumber;
+      latestAfterOrAtRateValue: BigNumber;
+    }
+  >;
 
   transferOwnership(
     newOwner: string,
@@ -760,7 +682,9 @@ export class TestCompoundRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getOracleVars(overrides?: CallOverrides): Promise<[number, number, number]>;
+    getCurrentRateInRay(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getLatestRateValue(overrides?: CallOverrides): Promise<BigNumber>;
 
     getRate(
       index: BigNumberish,
@@ -784,16 +708,6 @@ export class TestCompoundRateOracle extends BaseContract {
       timeDeltaBeforeOrAtToQueriedTimeWad: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
-
-    latestAfterOrAtRateValue(overrides?: CallOverrides): Promise<BigNumber>;
-
-    latestBeforeOrAtRateValue(overrides?: CallOverrides): Promise<BigNumber>;
-
-    latestObservedRateValue(overrides?: CallOverrides): Promise<BigNumber>;
-
-    latestRateFromTo(overrides?: CallOverrides): Promise<BigNumber>;
-
-    liquidity(overrides?: CallOverrides): Promise<BigNumber>;
 
     minSecondsSinceLastUpdate(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -845,23 +759,15 @@ export class TestCompoundRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    testGetRateFromTo(
-      from: BigNumberish,
-      to: BigNumberish,
+    testGetSurroundingRates(
+      target: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    testGrow(
-      _rateCardinalityNext: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    testObserveSingle(
-      queriedTime: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    tick(overrides?: CallOverrides): Promise<number>;
+    ): Promise<
+      [BigNumber, BigNumber] & {
+        latestBeforeOrAtRateValue: BigNumber;
+        latestAfterOrAtRateValue: BigNumber;
+      }
+    >;
 
     transferOwnership(
       newOwner: string,
@@ -983,7 +889,9 @@ export class TestCompoundRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getOracleVars(overrides?: CallOverrides): Promise<BigNumber>;
+    getCurrentRateInRay(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getLatestRateValue(overrides?: CallOverrides): Promise<BigNumber>;
 
     getRate(index: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1004,16 +912,6 @@ export class TestCompoundRateOracle extends BaseContract {
       timeDeltaBeforeOrAtToQueriedTimeWad: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
-
-    latestAfterOrAtRateValue(overrides?: CallOverrides): Promise<BigNumber>;
-
-    latestBeforeOrAtRateValue(overrides?: CallOverrides): Promise<BigNumber>;
-
-    latestObservedRateValue(overrides?: CallOverrides): Promise<BigNumber>;
-
-    latestRateFromTo(overrides?: CallOverrides): Promise<BigNumber>;
-
-    liquidity(overrides?: CallOverrides): Promise<BigNumber>;
 
     minSecondsSinceLastUpdate(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1053,23 +951,10 @@ export class TestCompoundRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    testGetRateFromTo(
-      from: BigNumberish,
-      to: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+    testGetSurroundingRates(
+      target: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
-
-    testGrow(
-      _rateCardinalityNext: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    testObserveSingle(
-      queriedTime: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    tick(overrides?: CallOverrides): Promise<BigNumber>;
 
     transferOwnership(
       newOwner: string,
@@ -1117,7 +1002,13 @@ export class TestCompoundRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getOracleVars(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getCurrentRateInRay(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getLatestRateValue(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getRate(
       index: BigNumberish,
@@ -1141,22 +1032,6 @@ export class TestCompoundRateOracle extends BaseContract {
       timeDeltaBeforeOrAtToQueriedTimeWad: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
-
-    latestAfterOrAtRateValue(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    latestBeforeOrAtRateValue(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    latestObservedRateValue(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    latestRateFromTo(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    liquidity(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     minSecondsSinceLastUpdate(
       overrides?: CallOverrides
@@ -1198,23 +1073,10 @@ export class TestCompoundRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    testGetRateFromTo(
-      from: BigNumberish,
-      to: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+    testGetSurroundingRates(
+      target: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
-
-    testGrow(
-      _rateCardinalityNext: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    testObserveSingle(
-      queriedTime: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    tick(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     transferOwnership(
       newOwner: string,

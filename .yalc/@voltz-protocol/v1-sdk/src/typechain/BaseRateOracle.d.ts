@@ -24,6 +24,7 @@ interface BaseRateOracleInterface extends ethers.utils.Interface {
     "ONE_IN_WAD()": FunctionFragment;
     "UNDERLYING_YIELD_BEARING_PROTOCOL_ID()": FunctionFragment;
     "getApyFromTo(uint256,uint256)": FunctionFragment;
+    "getCurrentRateInRay()": FunctionFragment;
     "getRateFromTo(uint256,uint256)": FunctionFragment;
     "increaseObservationCardinalityNext(uint16)": FunctionFragment;
     "interpolateRateValue(uint256,uint256,uint256)": FunctionFragment;
@@ -52,6 +53,10 @@ interface BaseRateOracleInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "getApyFromTo",
     values: [BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getCurrentRateInRay",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "getRateFromTo",
@@ -118,6 +123,10 @@ interface BaseRateOracleInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getApyFromTo",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getCurrentRateInRay",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -265,9 +274,11 @@ export class BaseRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { apyFromToWad: BigNumber }>;
 
+    getCurrentRateInRay(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     getRateFromTo(
-      from: BigNumberish,
-      to: BigNumberish,
+      _from: BigNumberish,
+      _to: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
@@ -359,9 +370,11 @@ export class BaseRateOracle extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  getCurrentRateInRay(overrides?: CallOverrides): Promise<BigNumber>;
+
   getRateFromTo(
-    from: BigNumberish,
-    to: BigNumberish,
+    _from: BigNumberish,
+    _to: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -453,9 +466,11 @@ export class BaseRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getCurrentRateInRay(overrides?: CallOverrides): Promise<BigNumber>;
+
     getRateFromTo(
-      from: BigNumberish,
-      to: BigNumberish,
+      _from: BigNumberish,
+      _to: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -620,9 +635,11 @@ export class BaseRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getCurrentRateInRay(overrides?: CallOverrides): Promise<BigNumber>;
+
     getRateFromTo(
-      from: BigNumberish,
-      to: BigNumberish,
+      _from: BigNumberish,
+      _to: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -701,9 +718,13 @@ export class BaseRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getCurrentRateInRay(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getRateFromTo(
-      from: BigNumberish,
-      to: BigNumberish,
+      _from: BigNumberish,
+      _to: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

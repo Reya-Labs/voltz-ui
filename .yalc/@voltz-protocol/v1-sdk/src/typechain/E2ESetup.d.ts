@@ -12,6 +12,7 @@ import {
   BaseContract,
   ContractTransaction,
   Overrides,
+  PayableOverrides,
   CallOverrides,
 } from "ethers";
 import { BytesLike } from "@ethersproject/bytes";
@@ -24,6 +25,7 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     "FCMAddress()": FunctionFragment;
     "MEAddress()": FunctionFragment;
     "VAMMAddress()": FunctionFragment;
+    "aaveLendingPool()": FunctionFragment;
     "abs(int256)": FunctionFragment;
     "addPosition(address,int24,int24)": FunctionFragment;
     "addSwapSnapshot(address,int24,int24,int256,int256,uint256)": FunctionFragment;
@@ -31,26 +33,25 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     "allPositions(uint256)": FunctionFragment;
     "allYBATraders(uint256)": FunctionFragment;
     "burnViaAMM(address,int24,int24,uint128)": FunctionFragment;
-    "continuousInvariants()": FunctionFragment;
-    "fcmFees()": FunctionFragment;
+    "cToken()": FunctionFragment;
     "getPositionHistory(address,int24,int24)": FunctionFragment;
     "getPositionSwapsHistory(address,int24,int24)": FunctionFragment;
     "indexAllPositions(bytes32)": FunctionFragment;
     "indexAllYBATraders(address)": FunctionFragment;
-    "initialCashflow()": FunctionFragment;
     "initiateFullyCollateralisedFixedTakerSwap(address,uint256,uint160)": FunctionFragment;
-    "keepInMindGas()": FunctionFragment;
     "liquidatePosition(address,int24,int24,address,int24,int24)": FunctionFragment;
-    "liquidationRewards()": FunctionFragment;
     "mintOrBurnViaPeriphery(address,(address,int24,int24,uint256,bool,int256))": FunctionFragment;
     "mintViaAMM(address,int24,int24,uint128)": FunctionFragment;
     "peripheryAddress()": FunctionFragment;
     "positionHistory(bytes32,uint256)": FunctionFragment;
     "positionSwapsHistory(bytes32,uint256)": FunctionFragment;
     "rateOracleAddress()": FunctionFragment;
+    "setAaveLendingPool(address)": FunctionFragment;
+    "setCToken(address)": FunctionFragment;
     "setFCMAddress(address)": FunctionFragment;
     "setIntegrationApproval(address,address,bool)": FunctionFragment;
     "setMEAddress(address)": FunctionFragment;
+    "setNewRate(uint256)": FunctionFragment;
     "setPeripheryAddress(address)": FunctionFragment;
     "setRateOracleAddress(address)": FunctionFragment;
     "setVAMMAddress(address)": FunctionFragment;
@@ -73,6 +74,10 @@ interface E2ESetupInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "MEAddress", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "VAMMAddress",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "aaveLendingPool",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "abs", values: [BigNumberish]): string;
@@ -107,11 +112,7 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     functionFragment: "burnViaAMM",
     values: [string, BigNumberish, BigNumberish, BigNumberish]
   ): string;
-  encodeFunctionData(
-    functionFragment: "continuousInvariants",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "fcmFees", values?: undefined): string;
+  encodeFunctionData(functionFragment: "cToken", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "getPositionHistory",
     values: [string, BigNumberish, BigNumberish]
@@ -129,16 +130,8 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "initialCashflow",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "initiateFullyCollateralisedFixedTakerSwap",
     values: [string, BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "keepInMindGas",
-    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "liquidatePosition",
@@ -150,10 +143,6 @@ interface E2ESetupInterface extends ethers.utils.Interface {
       BigNumberish,
       BigNumberish
     ]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "liquidationRewards",
-    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "mintOrBurnViaPeriphery",
@@ -190,6 +179,11 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "setAaveLendingPool",
+    values: [string]
+  ): string;
+  encodeFunctionData(functionFragment: "setCToken", values: [string]): string;
+  encodeFunctionData(
     functionFragment: "setFCMAddress",
     values: [string]
   ): string;
@@ -200,6 +194,10 @@ interface E2ESetupInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "setMEAddress",
     values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setNewRate",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "setPeripheryAddress",
@@ -279,6 +277,10 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     functionFragment: "VAMMAddress",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "aaveLendingPool",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "abs", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "addPosition",
@@ -301,11 +303,7 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "burnViaAMM", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "continuousInvariants",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "fcmFees", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "cToken", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getPositionHistory",
     data: BytesLike
@@ -323,23 +321,11 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "initialCashflow",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "initiateFullyCollateralisedFixedTakerSwap",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "keepInMindGas",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "liquidatePosition",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "liquidationRewards",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -364,6 +350,11 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "setAaveLendingPool",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "setCToken", data: BytesLike): Result;
+  decodeFunctionResult(
     functionFragment: "setFCMAddress",
     data: BytesLike
   ): Result;
@@ -375,6 +366,7 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     functionFragment: "setMEAddress",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setNewRate", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setPeripheryAddress",
     data: BytesLike
@@ -478,6 +470,8 @@ export class E2ESetup extends BaseContract {
 
     VAMMAddress(overrides?: CallOverrides): Promise<[string]>;
 
+    aaveLendingPool(overrides?: CallOverrides): Promise<[string]>;
+
     abs(value: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     addPosition(
@@ -526,11 +520,7 @@ export class E2ESetup extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    continuousInvariants(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    fcmFees(overrides?: CallOverrides): Promise<[BigNumber]>;
+    cToken(overrides?: CallOverrides): Promise<[string]>;
 
     getPositionHistory(
       owner: string,
@@ -599,16 +589,12 @@ export class E2ESetup extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    initialCashflow(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     initiateFullyCollateralisedFixedTakerSwap(
       trader: string,
       notional: BigNumberish,
       sqrtPriceLimitX96: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    keepInMindGas(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     liquidatePosition(
       liquidator: string,
@@ -620,8 +606,6 @@ export class E2ESetup extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    liquidationRewards(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     mintOrBurnViaPeriphery(
       trader: string,
       params: {
@@ -632,7 +616,7 @@ export class E2ESetup extends BaseContract {
         isMint: boolean;
         marginDelta: BigNumberish;
       },
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     mintViaAMM(
@@ -697,6 +681,16 @@ export class E2ESetup extends BaseContract {
 
     rateOracleAddress(overrides?: CallOverrides): Promise<[string]>;
 
+    setAaveLendingPool(
+      _aaveLendingPool: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setCToken(
+      _cToken: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setFCMAddress(
       _FCMAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -711,6 +705,11 @@ export class E2ESetup extends BaseContract {
 
     setMEAddress(
       _MEAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setNewRate(
+      rate: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -777,7 +776,7 @@ export class E2ESetup extends BaseContract {
         tickUpper: BigNumberish;
         marginDelta: BigNumberish;
       },
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     unwindFullyCollateralisedFixedTakerSwap(
@@ -801,6 +800,8 @@ export class E2ESetup extends BaseContract {
   MEAddress(overrides?: CallOverrides): Promise<string>;
 
   VAMMAddress(overrides?: CallOverrides): Promise<string>;
+
+  aaveLendingPool(overrides?: CallOverrides): Promise<string>;
 
   abs(value: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -847,11 +848,7 @@ export class E2ESetup extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  continuousInvariants(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  fcmFees(overrides?: CallOverrides): Promise<BigNumber>;
+  cToken(overrides?: CallOverrides): Promise<string>;
 
   getPositionHistory(
     owner: string,
@@ -918,16 +915,12 @@ export class E2ESetup extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  initialCashflow(overrides?: CallOverrides): Promise<BigNumber>;
-
   initiateFullyCollateralisedFixedTakerSwap(
     trader: string,
     notional: BigNumberish,
     sqrtPriceLimitX96: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
-
-  keepInMindGas(overrides?: CallOverrides): Promise<BigNumber>;
 
   liquidatePosition(
     liquidator: string,
@@ -939,8 +932,6 @@ export class E2ESetup extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  liquidationRewards(overrides?: CallOverrides): Promise<BigNumber>;
-
   mintOrBurnViaPeriphery(
     trader: string,
     params: {
@@ -951,7 +942,7 @@ export class E2ESetup extends BaseContract {
       isMint: boolean;
       marginDelta: BigNumberish;
     },
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   mintViaAMM(
@@ -1016,6 +1007,16 @@ export class E2ESetup extends BaseContract {
 
   rateOracleAddress(overrides?: CallOverrides): Promise<string>;
 
+  setAaveLendingPool(
+    _aaveLendingPool: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setCToken(
+    _cToken: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   setFCMAddress(
     _FCMAddress: string,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -1030,6 +1031,11 @@ export class E2ESetup extends BaseContract {
 
   setMEAddress(
     _MEAddress: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setNewRate(
+    rate: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1096,7 +1102,7 @@ export class E2ESetup extends BaseContract {
       tickUpper: BigNumberish;
       marginDelta: BigNumberish;
     },
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   unwindFullyCollateralisedFixedTakerSwap(
@@ -1120,6 +1126,8 @@ export class E2ESetup extends BaseContract {
     MEAddress(overrides?: CallOverrides): Promise<string>;
 
     VAMMAddress(overrides?: CallOverrides): Promise<string>;
+
+    aaveLendingPool(overrides?: CallOverrides): Promise<string>;
 
     abs(value: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1166,9 +1174,7 @@ export class E2ESetup extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    continuousInvariants(overrides?: CallOverrides): Promise<void>;
-
-    fcmFees(overrides?: CallOverrides): Promise<BigNumber>;
+    cToken(overrides?: CallOverrides): Promise<string>;
 
     getPositionHistory(
       owner: string,
@@ -1235,16 +1241,12 @@ export class E2ESetup extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    initialCashflow(overrides?: CallOverrides): Promise<BigNumber>;
-
     initiateFullyCollateralisedFixedTakerSwap(
       trader: string,
       notional: BigNumberish,
       sqrtPriceLimitX96: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    keepInMindGas(overrides?: CallOverrides): Promise<BigNumber>;
 
     liquidatePosition(
       liquidator: string,
@@ -1255,8 +1257,6 @@ export class E2ESetup extends BaseContract {
       tickUpper: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    liquidationRewards(overrides?: CallOverrides): Promise<BigNumber>;
 
     mintOrBurnViaPeriphery(
       trader: string,
@@ -1333,6 +1333,13 @@ export class E2ESetup extends BaseContract {
 
     rateOracleAddress(overrides?: CallOverrides): Promise<string>;
 
+    setAaveLendingPool(
+      _aaveLendingPool: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setCToken(_cToken: string, overrides?: CallOverrides): Promise<void>;
+
     setFCMAddress(
       _FCMAddress: string,
       overrides?: CallOverrides
@@ -1346,6 +1353,8 @@ export class E2ESetup extends BaseContract {
     ): Promise<void>;
 
     setMEAddress(_MEAddress: string, overrides?: CallOverrides): Promise<void>;
+
+    setNewRate(rate: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     setPeripheryAddress(
       _peripheryAddress: string,
@@ -1451,6 +1460,8 @@ export class E2ESetup extends BaseContract {
 
     VAMMAddress(overrides?: CallOverrides): Promise<BigNumber>;
 
+    aaveLendingPool(overrides?: CallOverrides): Promise<BigNumber>;
+
     abs(value: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     addPosition(
@@ -1493,11 +1504,7 @@ export class E2ESetup extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    continuousInvariants(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    fcmFees(overrides?: CallOverrides): Promise<BigNumber>;
+    cToken(overrides?: CallOverrides): Promise<BigNumber>;
 
     getPositionHistory(
       owner: string,
@@ -1523,16 +1530,12 @@ export class E2ESetup extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    initialCashflow(overrides?: CallOverrides): Promise<BigNumber>;
-
     initiateFullyCollateralisedFixedTakerSwap(
       trader: string,
       notional: BigNumberish,
       sqrtPriceLimitX96: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
-
-    keepInMindGas(overrides?: CallOverrides): Promise<BigNumber>;
 
     liquidatePosition(
       liquidator: string,
@@ -1544,8 +1547,6 @@ export class E2ESetup extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    liquidationRewards(overrides?: CallOverrides): Promise<BigNumber>;
-
     mintOrBurnViaPeriphery(
       trader: string,
       params: {
@@ -1556,7 +1557,7 @@ export class E2ESetup extends BaseContract {
         isMint: boolean;
         marginDelta: BigNumberish;
       },
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     mintViaAMM(
@@ -1583,6 +1584,16 @@ export class E2ESetup extends BaseContract {
 
     rateOracleAddress(overrides?: CallOverrides): Promise<BigNumber>;
 
+    setAaveLendingPool(
+      _aaveLendingPool: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setCToken(
+      _cToken: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setFCMAddress(
       _FCMAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1597,6 +1608,11 @@ export class E2ESetup extends BaseContract {
 
     setMEAddress(
       _MEAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setNewRate(
+      rate: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1663,7 +1679,7 @@ export class E2ESetup extends BaseContract {
         tickUpper: BigNumberish;
         marginDelta: BigNumberish;
       },
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     unwindFullyCollateralisedFixedTakerSwap(
@@ -1688,6 +1704,8 @@ export class E2ESetup extends BaseContract {
     MEAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     VAMMAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    aaveLendingPool(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     abs(
       value: BigNumberish,
@@ -1734,11 +1752,7 @@ export class E2ESetup extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    continuousInvariants(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    fcmFees(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    cToken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getPositionHistory(
       owner: string,
@@ -1764,16 +1778,12 @@ export class E2ESetup extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    initialCashflow(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     initiateFullyCollateralisedFixedTakerSwap(
       trader: string,
       notional: BigNumberish,
       sqrtPriceLimitX96: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
-
-    keepInMindGas(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     liquidatePosition(
       liquidator: string,
@@ -1783,10 +1793,6 @@ export class E2ESetup extends BaseContract {
       tickLower: BigNumberish,
       tickUpper: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    liquidationRewards(
-      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     mintOrBurnViaPeriphery(
@@ -1799,7 +1805,7 @@ export class E2ESetup extends BaseContract {
         isMint: boolean;
         marginDelta: BigNumberish;
       },
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     mintViaAMM(
@@ -1826,6 +1832,16 @@ export class E2ESetup extends BaseContract {
 
     rateOracleAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    setAaveLendingPool(
+      _aaveLendingPool: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setCToken(
+      _cToken: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     setFCMAddress(
       _FCMAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1840,6 +1856,11 @@ export class E2ESetup extends BaseContract {
 
     setMEAddress(
       _MEAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setNewRate(
+      rate: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1906,7 +1927,7 @@ export class E2ESetup extends BaseContract {
         tickUpper: BigNumberish;
         marginDelta: BigNumberish;
       },
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     unwindFullyCollateralisedFixedTakerSwap(
