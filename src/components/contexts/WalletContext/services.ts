@@ -94,25 +94,6 @@ export const getSignature = async (walletAddress: string) => {
 }
 
 /**
- * Gets the balance for a specific contract ID (you can pass in token IDs here)
- * @param provider - The ethers-wrapped provider
- * @param tokenId - the ID of the contract (token) you wish to check for
- * @param accountId - the ID of the account (wallet) to check
- */
-export const getTokenBalance = async (provider: ethers.providers.JsonRpcProvider, tokenId: string, accountId: string) => {
-  type TokenContract = OverrideTypes<Contract, { balanceOf: (id: string) => Promise<string> }>;
-  const abi = ["function balanceOf(address _owner) public view returns (uint256 balance)"];
-  const contract = new ethers.Contract(tokenId, abi, provider) as unknown as TokenContract;
-  
-  try {
-    const currentBalance = await contract.balanceOf(accountId);
-    return BigNumber.from(currentBalance);
-  } catch(e) {
-    return undefined;
-  }
-}
-
-/**
  * Returns the terms of service text that users have to agree to to connect their wallet.
  * Note - Any changes, including whitespace, will mean a new signature is required.
  */

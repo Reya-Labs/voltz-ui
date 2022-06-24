@@ -1727,9 +1727,9 @@ var AMM = /** @class */ (function () {
         return (0, priceTickConversions_1.tickToFixedRate)(closestUsableTick).toNumber();
     };
     // balance checks
-    AMM.prototype.hasEnoughUnderlyingTokens = function (amount) {
+    AMM.prototype.getUnderlyingTokenBalance = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var signerAddress, currentBalance, tokenAddress, token, scaledAmount;
+            var signerAddress, currentBalance, tokenAddress, token;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -1757,7 +1757,19 @@ var AMM = /** @class */ (function () {
                     case 4:
                         currentBalance = _a.sent();
                         _a.label = 5;
-                    case 5:
+                    case 5: return [2 /*return*/, currentBalance];
+                }
+            });
+        });
+    };
+    AMM.prototype.hasEnoughUnderlyingTokens = function (amount) {
+        return __awaiter(this, void 0, void 0, function () {
+            var currentBalance, scaledAmount;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.getUnderlyingTokenBalance()];
+                    case 1:
+                        currentBalance = _a.sent();
                         scaledAmount = ethers_1.BigNumber.from(this.scale(amount));
                         return [2 /*return*/, currentBalance.gte(scaledAmount)];
                 }
