@@ -14,7 +14,6 @@ const WalletContext = createContext<Wallet>({
   name: null,
   signer: null,
   balance: {},
-  getTokenBalance: defaultGetTokenBalance,
   wallet: null,
   loading: false,
   error: false,
