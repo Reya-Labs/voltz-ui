@@ -71,6 +71,7 @@ const NewPositionSwapForm: React.FunctionComponent = (args) => {
       formState={form.state} 
       hintState={SwapFormSubmitButtonHintStates.READY_TO_TRADE}
       isFCMAction={false}
+      isFCMAvailable={true}
       isFormValid={form.isValid}
       isTradeVerified={true}
       formAction={SwapFormActions.SWAP}
@@ -117,6 +118,7 @@ const EditingMarginSwapForm: React.FunctionComponent = (args) => {
       formState={form.state}
       hintState={SwapFormSubmitButtonHintStates.READY_TO_TRADE}
       isFCMAction={false}
+      isFCMAvailable={true}
       isFormValid={form.isValid}
       isTradeVerified={true}
       mode={mode}

@@ -28,6 +28,7 @@ export type SwapFormProps = {
   formAction: SwapFormActions;
   hintState: SwapFormSubmitButtonHintStates;
   isFCMAction: boolean;
+  isFCMAvailable: boolean;
   isFormValid: boolean;
   isTradeVerified: boolean;
   maxMargin?: number;
@@ -60,6 +61,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
   formState,
   hintState,
   isFCMAction,
+  isFCMAvailable,
   isFormValid,
   isTradeVerified,
   maxMargin,
@@ -141,6 +143,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
         <Box sx={{ ...bottomSpacing, display: 'flex' }}>
           <TraderControls
             agent={agent}
+            isFCMAvailable={isFCMAvailable}
             partialCollateralization={formState.partialCollateralization}
             onChangeAgent={onChangeAgent}
             onChangePartialCollateralization={onChangePartialCollateralization}

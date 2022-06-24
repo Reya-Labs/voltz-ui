@@ -158,6 +158,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
       formState={form.state}
       hintState={form.hintState}
       isFCMAction={form.isFCMAction}
+      isFCMAvailable={amm.isFCM}
       isFormValid={form.isValid}
       isTradeVerified={form.isTradeVerified}
       minRequiredMargin={form.minRequiredMargin}

@@ -7,6 +7,7 @@ import { IconLabel, ToggleButtonGroup } from '@components/composite';
 
 export type TraderControlsProps = {
   agent: Agents;
+  isFCMAvailable: boolean;
   isModifying?: boolean;
   defaultPartialCollateralization?: boolean;
   partialCollateralization?: boolean;
@@ -16,6 +17,7 @@ export type TraderControlsProps = {
 
 const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
   agent,
+  isFCMAvailable,
   isModifying,
   defaultPartialCollateralization,
   partialCollateralization,
@@ -83,6 +85,7 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
           defaultOption={partialCollateralizationOptionTitles.YES}
           onChangeOption={handleChangePartialCollateralization}
           agent={agent}
+          disabled={!isFCMAvailable}
         />
       )}
     </Box>
