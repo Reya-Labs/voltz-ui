@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import isUndefined from 'lodash/isUndefined';
 
 import IconLabel from '../IconLabel/IconLabel';
@@ -28,19 +28,24 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
   onChangeMargin,
   error
 }) => {
-  const formattedBalance = !isUndefined(balance) ? formatCurrency(balance) : 'checking...';
-  const value = isUndefined(margin) ? defaultMargin : margin;
-  const handleChange = (newValue: string | undefined) => {
-    onChangeMargin(newValue ? parseFloat(newValue) : undefined);
+  const defaultInputValue = () => {
+    const defaultVal = (margin ?? defaultMargin)
+    if (typeof defaultVal !== 'undefined') {
+      return defaultVal.toString();
+    }
   };
 
-  let isAdditionalMarginAmount: boolean;
+  const formattedBalance = !isUndefined(balance) ? formatCurrency(balance) : 'checking...';
+  const [inputValue, setInputValue] = useState<string | undefined>(defaultInputValue());
+  const value = isUndefined(margin) ? defaultMargin : margin;
 
-  if (isUndefined(isAdditional)) {
-    isAdditionalMarginAmount = false;
-  } else {
-    isAdditionalMarginAmount = isAdditional;
-  }
+  const handleChange = useCallback(
+    (newValue: string | undefined) => {
+      setInputValue(newValue);
+      onChangeMargin(newValue ? parseFloat(newValue) : undefined);
+    },
+    [onChangeMargin, setInputValue],
+  );
 
   return (
     <MaskedIntegerField
@@ -59,7 +64,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
             "Margin in underlying tokens to withdraw from the margin account." }
         />
       }
-      value={value}
+      value={inputValue}
       onChange={handleChange}
       error={!!error}
       errorText={error}
