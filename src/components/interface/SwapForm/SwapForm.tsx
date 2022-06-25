@@ -160,9 +160,9 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
               ? "Choose the notional you wish to trade. The notional amount is the total size of your trade and, since you're fully collateralising your position, is the amount of margin required too."
               : "Choose the notional you wish to trade. The notional amount is the total size of your trade."
             }
-            protocol={protocol}
             notional={formState.notional}
             onChangeNotional={onChangeNotional}
+            underlyingTokenName={underlyingTokenName}
           />
         </Box>
       )}
@@ -188,7 +188,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
             margin={formState.margin}
             maxMargin={maxMargin}
             onChangeMargin={onChangeMargin}
-            protocol={protocol}
+            underlyingTokenName={underlyingTokenName}
           />
         </Box>
       )}

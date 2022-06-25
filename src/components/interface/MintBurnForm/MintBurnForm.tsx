@@ -161,10 +161,10 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
           <NotionalAmount
             label={ isAddingLiquidity ? "Notional liquidity Provided" : "Notional liquidity removed"} 
             info={`Choose the notional amount of liquidity you wish to ${isAddingLiquidity ? 'provide' : 'remove'}.`}
-            protocol={protocol}
             notional={formState.notional}
             onChangeNotional={onChangeNotional}
             error={errors['notional']}
+            underlyingTokenName={underlyingTokenName}
           />
         </Box>
       )}
@@ -177,7 +177,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         >
           <MarginAmount
             balance={balance}
-            protocol={protocol}
+            underlyingTokenName={underlyingTokenName}
             maxMargin={maxMargin}
             margin={formState.margin}
             isAdditional={formState.marginAction === MintBurnFormMarginAction.ADD}

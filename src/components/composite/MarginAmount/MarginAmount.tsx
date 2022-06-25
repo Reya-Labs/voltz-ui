@@ -8,7 +8,7 @@ import { formatCurrency } from '@utilities';
 
 export type MarginAmountProps = {
   balance?: number;
-  protocol?: string;
+  underlyingTokenName?: string;
   defaultMargin?: number;
   maxMargin?: number;
   margin?: number;
@@ -20,7 +20,7 @@ export type MarginAmountProps = {
 
 const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
   balance,
-  protocol,
+  underlyingTokenName,
   defaultMargin,
   margin,
   isAdditional,
@@ -34,8 +34,6 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
     onChangeMargin(newValue ? parseFloat(newValue) : undefined);
   };
 
-  // todo: below is a workaround when deriving the token name from the protocol name, needs to be fixed
-
   let isAdditionalMarginAmount: boolean;
 
   if (isUndefined(isAdditional)) {
@@ -44,19 +42,13 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
     isAdditionalMarginAmount = isAdditional;
   }
 
-  let underlyingTokenName: string = '';
-
-  if (protocol) {
-    underlyingTokenName = protocol.substring(1);
-  }
-
   return (
     <MaskedIntegerField
       allowDecimals
       allowNegativeValue={false}
       decimalsLimit={2}
       subtext={`BALANCE: ${formattedBalance}`}
-      suffix={<InputTokenLabel tokenName={underlyingTokenName} />}
+      suffix={<InputTokenLabel tokenName={underlyingTokenName || ''} />}
       suffixPadding={90}
       label={
         <IconLabel

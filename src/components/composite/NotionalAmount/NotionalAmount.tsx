@@ -8,40 +8,33 @@ import InputTokenLabel from '../InputTokenLabel/InputTokenLabel';
 export type NotionalAmountProps = {
   label: string;
   info: string;
-  protocol?: string;
   defaultNotional?: number;
   notional?: number;
   onChangeNotional: (value: number | undefined) => void;
   error?: string;
+  underlyingTokenName?: string;
 };
 
 const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
   label,
   info,
-  protocol,
   defaultNotional,
   notional,
   onChangeNotional,
   error,
+  underlyingTokenName
 }) => {
   const value = isUndefined(notional) ? defaultNotional : notional;
+
   const handleChange = (newValue: string | undefined) => {
     onChangeNotional(newValue ? parseFloat(newValue) : undefined);
   };
-
-  // todo: below is a workaround when deriving the token name from the protocol name, needs to be fixed
-
-  let underlyingTokenName: string = '';
-
-  if (protocol) {
-    underlyingTokenName = protocol.substring(1);
-  }
 
   return (
     <MaskedIntegerField
       allowDecimals
       allowNegativeValue={false}
-      suffix={<InputTokenLabel tokenName={underlyingTokenName} />}
+      suffix={<InputTokenLabel tokenName={underlyingTokenName || ''} />}
       suffixPadding={90}
       label={<IconLabel label={label} icon="information-circle" info={info} />}
       defaultValue={value}
