@@ -2,17 +2,17 @@ import React, { useCallback, useState } from 'react';
 import IconLabel from '../IconLabel/IconLabel';
 import MaskedIntegerField from '../MaskedIntegerField/MaskedIntegerField';
 
-export type RateOptionsProps = {
+export type RateOptionsInputProps = {
   defaultValue?: number;
   disabled?: boolean;
   error?: string;
   hint: string;
   label: string;
-  onChange: (value: number, increment: boolean | null) => void;
+  onChange: (value: number | undefined, increment: boolean | null) => void;
   value?: number | undefined;
 };
 
-const RateOptionsInput: React.FunctionComponent<RateOptionsProps> = ({
+const RateOptionsInput: React.FunctionComponent<RateOptionsInputProps> = ({
   defaultValue,
   disabled,
   error,
@@ -33,12 +33,7 @@ const RateOptionsInput: React.FunctionComponent<RateOptionsProps> = ({
   const handleChange = useCallback(
     (newValue: string | undefined) => {
       setInputValue(newValue);
-      const oldParsedValue = parseFloat(inputValue || '');
-      const newParsedValue = parseFloat(newValue || '');
-
-      if(newParsedValue !== oldParsedValue) {
-        onChange(newParsedValue, null);
-      }
+      onChange(newValue ? parseFloat(newValue) : undefined, null);
     },
     [onChange, setInputValue],
   );

@@ -1,16 +1,15 @@
-import isNull from 'lodash/isNull';
-
 import { AugmentedAMM } from '@utilities';
+import { isNull, isUndefined } from 'lodash';
 
 export type UpdateFixedRateArgs = {
   amm?: AugmentedAMM;
   fixedRate?: number;
-  setFixedRate: (value: number) => void;
+  setFixedRate: (value: number | undefined) => void;
 };
 
 const updateFixedRate =
   ({ amm, setFixedRate }: UpdateFixedRateArgs) =>
-  (newFixedRate: number, increment: boolean | null) => {
+  (newFixedRate: number | undefined, increment: boolean | null) => {
     if (!amm) {
       return;
     }
@@ -23,7 +22,7 @@ const updateFixedRate =
       return increment ? 1 : -1;
     };
 
-    const nextFixedRate = amm.getNextUsableFixedRate(newFixedRate, getCount());
+    const nextFixedRate = isUndefined(newFixedRate) ? undefined : amm.getNextUsableFixedRate(newFixedRate, getCount());
     setFixedRate(nextFixedRate);
   };
 

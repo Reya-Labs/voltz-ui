@@ -1,6 +1,6 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
-import RateOptionsInput from './RateOptionInput';
+import RateOptionsInput, { RateOptionsInputProps } from './RateOptionInput';
 
 export type RateOptionsProps = {
   defaultFixedLow?: number;
@@ -11,8 +11,8 @@ export type RateOptionsProps = {
   fixedHigh?: number;
   fixedHighDisabled?: boolean;
   fixedHighError?: string;
-  onChangeFixedLow: (value: number, increment: boolean | null) => void;
-  onChangeFixedHigh: (value: number, increment: boolean | null) => void;
+  onChangeFixedLow: RateOptionsInputProps['onChange'];
+  onChangeFixedHigh: RateOptionsInputProps['onChange'];
 };
 
 const RateOptions: React.FunctionComponent<RateOptionsProps> = ({

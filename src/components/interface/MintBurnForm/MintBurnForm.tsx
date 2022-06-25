@@ -31,8 +31,8 @@ export type MintBurnFormProps = {
   minRequiredMarginLoading: boolean;
   mode: MintBurnFormModes;
   onCancel: () => void;
-  onChangeFixedLow: (value: number, increment: boolean | null) => void;
-  onChangeFixedHigh: (value: number, increment: boolean | null) => void;
+  onChangeFixedLow: (value: number | undefined, increment: boolean | null) => void;
+  onChangeFixedHigh: (value: number | undefined, increment: boolean | null) => void;
   onChangeLiquidityAction: (value: MintBurnFormLiquidityAction) => void;
   onChangeMargin: (value: number | undefined) => void;
   onChangeMarginAction: (value: MintBurnFormMarginAction) => void;
