@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import isUndefined from 'lodash/isUndefined';
 
 import IconLabel from '../IconLabel/IconLabel';
@@ -37,7 +37,6 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
 
   const formattedBalance = !isUndefined(balance) ? formatCurrency(balance) : 'checking...';
   const [inputValue, setInputValue] = useState<string | undefined>(defaultInputValue());
-  const value = isUndefined(margin) ? defaultMargin : margin;
 
   const handleChange = useCallback(
     (newValue: string | undefined) => {
@@ -46,6 +45,21 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
     },
     [onChangeMargin, setInputValue],
   );
+
+  // If the value prop changes, update the input field
+  useEffect(() => {
+    if(
+      isUndefined(margin) && !isUndefined(inputValue) || 
+      isUndefined(inputValue) && !isUndefined(margin) || 
+      !isUndefined(inputValue) && !isUndefined(margin) && margin !== parseFloat(inputValue)
+    ) {
+      let newValue = margin?.toString();
+      if(newValue !== undefined && newValue[newValue.length - 2] === '.') { 
+        newValue = `${newValue}0`; // Add trailing zero if we get something like 100.5
+      }
+      setInputValue(newValue);
+    }
+  }, [inputValue, margin, setInputValue])
 
   return (
     <MaskedIntegerField
