@@ -6,6 +6,7 @@ export type BackgroundProps = {
   sx?: SystemStyleObject<Theme>;
 };
 
+
 const Background: React.FunctionComponent<BackgroundProps> = ({ children, sx }) => (
   <Box
     sx={{
