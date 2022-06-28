@@ -51,6 +51,27 @@ var price_1 = require("./fractions/price");
 var tokenAmount_1 = require("./fractions/tokenAmount");
 var errorHandling_1 = require("../utils/errors/errorHandling");
 var lodash_1 = require("lodash");
+//1. Import coingecko-api
+var coingecko_api_1 = __importDefault(require("coingecko-api"));
+//2. Initiate the CoinGecko API Client
+var CoinGeckoClient = new coingecko_api_1.default();
+//3. Make call to get the price of 1 eth in USD, so divide the value of USD by data
+// queries the json response body with price of 1eth in usd
+// returns the value of 1 eth in USD 
+var geckoEthToUsd = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var data;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, CoinGeckoClient.simple.price({
+                    ids: ['ethereum'],
+                    vs_currencies: ['usd'],
+                })];
+            case 1:
+                data = _a.sent();
+                return [2 /*return*/, data.data.ethereum.usd];
+        }
+    });
+}); };
 var AMM = /** @class */ (function () {
     function AMM(_a) {
         var id = _a.id, signer = _a.signer, provider = _a.provider, environment = _a.environment, factoryAddress = _a.factoryAddress, peripheryAddress = _a.peripheryAddress, marginEngineAddress = _a.marginEngineAddress, fcmAddress = _a.fcmAddress, rateOracle = _a.rateOracle, updatedTimestamp = _a.updatedTimestamp, termStartTimestamp = _a.termStartTimestamp, termEndTimestamp = _a.termEndTimestamp, underlyingToken = _a.underlyingToken, tick = _a.tick, tickSpacing = _a.tickSpacing, txCount = _a.txCount, totalNotionalTraded = _a.totalNotionalTraded, totalLiquidity = _a.totalLiquidity;
@@ -1561,7 +1582,7 @@ var AMM = /** @class */ (function () {
     };
     AMM.prototype.getPositionInformation = function (position) {
         return __awaiter(this, void 0, void 0, function () {
-            var results, signerAddress, lastBlock, lastBlockTimestamp, _a, _b, beforeMaturity, _c, allSwaps, lenSwaps, _d, accruedCashflowInUnderlyingToken, _1, accruedCashflowInUnderlyingToken, _2, _e, fcmContract, margin, marginInUnderlyingToken, fcmContract, margin, cTokenAddress, cTokenContract, rate, scaledRate, marginInUnderlyingToken, tickLower, tickUpper, marginEngineContract, rawPositionInfo, marginInUnderlyingToken, liquidationThreshold, _3, safetyThreshold, _4, notionalInUnderlyingToken;
+            var results, signerAddress, lastBlock, lastBlockTimestamp, _a, _b, beforeMaturity, _c, allSwaps, lenSwaps, _d, accruedCashflowInUnderlyingToken, EthToUsdPrice_1, _1, accruedCashflowInUnderlyingToken, EthToUsdPrice_2, _2, _e, fcmContract, margin, marginInUnderlyingToken, EthToUsdPrice_3, fcmContract, margin, cTokenAddress, cTokenContract, rate, scaledRate, marginInUnderlyingToken, EthToUsdPrice_4, tickLower, tickUpper, marginEngineContract, rawPositionInfo, marginInUnderlyingToken, EthToUsdPrice_5, liquidationThreshold, _3, safetyThreshold, _4, notionalInUnderlyingToken, EthToUsdPrice;
             return __generator(this, function (_f) {
                 switch (_f.label) {
                     case 0:
@@ -1600,12 +1621,12 @@ var AMM = /** @class */ (function () {
                     case 5:
                         allSwaps = this.getAllSwaps(position);
                         lenSwaps = allSwaps.length;
-                        if (!(lenSwaps > 0)) return [3 /*break*/, 15];
-                        if (!beforeMaturity) return [3 /*break*/, 11];
-                        if (!(lenSwaps > 0)) return [3 /*break*/, 10];
+                        if (!(lenSwaps > 0)) return [3 /*break*/, 17];
+                        if (!beforeMaturity) return [3 /*break*/, 12];
+                        if (!(lenSwaps > 0)) return [3 /*break*/, 11];
                         _f.label = 6;
                     case 6:
-                        _f.trys.push([6, 9, , 10]);
+                        _f.trys.push([6, 10, , 11]);
                         _d = results;
                         return [4 /*yield*/, this.getInstantApy()];
                     case 7:
@@ -1615,115 +1636,133 @@ var AMM = /** @class */ (function () {
                     case 8:
                         accruedCashflowInUnderlyingToken = _f.sent();
                         results.accruedCashflow = accruedCashflowInUnderlyingToken;
-                        // need to change when introduce non-stable coins
-                        results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken;
-                        return [3 /*break*/, 10];
+                        return [4 /*yield*/, geckoEthToUsd()];
                     case 9:
+                        EthToUsdPrice_1 = _f.sent();
+                        // need to change when introduce non-stable coins
+                        results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken * EthToUsdPrice_1;
+                        return [3 /*break*/, 11];
+                    case 10:
                         _1 = _f.sent();
-                        return [3 /*break*/, 10];
-                    case 10: return [3 /*break*/, 15];
-                    case 11:
-                        if (!!position.isSettled) return [3 /*break*/, 15];
-                        _f.label = 12;
+                        return [3 /*break*/, 11];
+                    case 11: return [3 /*break*/, 17];
                     case 12:
-                        _f.trys.push([12, 14, , 15]);
-                        return [4 /*yield*/, this.getAccruedCashflow(allSwaps, true)];
+                        if (!!position.isSettled) return [3 /*break*/, 17];
+                        _f.label = 13;
                     case 13:
+                        _f.trys.push([13, 16, , 17]);
+                        return [4 /*yield*/, this.getAccruedCashflow(allSwaps, true)];
+                    case 14:
                         accruedCashflowInUnderlyingToken = _f.sent();
                         results.accruedCashflow = accruedCashflowInUnderlyingToken;
-                        // need to change when introduce non-stable coins
-                        results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken;
-                        return [3 /*break*/, 15];
-                    case 14:
-                        _2 = _f.sent();
-                        return [3 /*break*/, 15];
+                        return [4 /*yield*/, geckoEthToUsd()];
                     case 15:
-                        if (!position.source.includes("FCM")) return [3 /*break*/, 24];
+                        EthToUsdPrice_2 = _f.sent();
+                        // need to change when introduce non-stable coins
+                        results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken * EthToUsdPrice_2;
+                        return [3 /*break*/, 17];
+                    case 16:
+                        _2 = _f.sent();
+                        return [3 /*break*/, 17];
+                    case 17:
+                        if (!position.source.includes("FCM")) return [3 /*break*/, 28];
                         _e = this.rateOracle.protocolId;
                         switch (_e) {
-                            case 1: return [3 /*break*/, 16];
-                            case 2: return [3 /*break*/, 18];
+                            case 1: return [3 /*break*/, 18];
+                            case 2: return [3 /*break*/, 21];
                         }
-                        return [3 /*break*/, 22];
-                    case 16:
+                        return [3 /*break*/, 26];
+                    case 18:
                         fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
                         return [4 /*yield*/, fcmContract.getTraderMarginInATokens(signerAddress)];
-                    case 17:
+                    case 19:
                         margin = (_f.sent());
                         results.margin = this.descale(margin);
                         marginInUnderlyingToken = results.margin;
+                        return [4 /*yield*/, geckoEthToUsd()];
+                    case 20:
+                        EthToUsdPrice_3 = _f.sent();
                         // need to change when introduce non-stable coins
-                        results.marginInUSD = marginInUnderlyingToken;
-                        return [3 /*break*/, 23];
-                    case 18:
+                        results.marginInUSD = marginInUnderlyingToken * EthToUsdPrice_3;
+                        return [3 /*break*/, 27];
+                    case 21:
                         fcmContract = typechain_1.CompoundFCM__factory.connect(this.fcmAddress, this.signer);
                         return [4 /*yield*/, fcmContract.getTraderMarginInCTokens(signerAddress)];
-                    case 19:
+                    case 22:
                         margin = (_f.sent());
                         results.margin = margin.toNumber() / (Math.pow(10, 8));
                         return [4 /*yield*/, fcmContract.cToken()];
-                    case 20:
+                    case 23:
                         cTokenAddress = _f.sent();
                         cTokenContract = typechain_1.ICToken__factory.connect(cTokenAddress, this.signer);
                         return [4 /*yield*/, cTokenContract.exchangeRateStored()];
-                    case 21:
+                    case 24:
                         rate = _f.sent();
                         scaledRate = this.descaleCompoundValue(rate);
                         marginInUnderlyingToken = results.margin * scaledRate;
+                        return [4 /*yield*/, geckoEthToUsd()];
+                    case 25:
+                        EthToUsdPrice_4 = _f.sent();
                         // need to change when introduce non-stable coins
-                        results.marginInUSD = marginInUnderlyingToken;
-                        return [3 /*break*/, 23];
-                    case 22: throw new Error("Unrecognized FCM");
-                    case 23:
+                        results.marginInUSD = marginInUnderlyingToken * EthToUsdPrice_4;
+                        return [3 /*break*/, 27];
+                    case 26: throw new Error("Unrecognized FCM");
+                    case 27:
                         if (beforeMaturity) {
                             results.healthFactor = 3;
                         }
-                        return [3 /*break*/, 33];
-                    case 24:
+                        return [3 /*break*/, 38];
+                    case 28:
                         tickLower = position.tickLower;
                         tickUpper = position.tickUpper;
                         marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
                         return [4 /*yield*/, marginEngineContract.callStatic.getPosition(signerAddress, tickLower, tickUpper)];
-                    case 25:
+                    case 29:
                         rawPositionInfo = _f.sent();
                         results.margin = this.descale(rawPositionInfo.margin);
                         marginInUnderlyingToken = results.margin;
+                        return [4 /*yield*/, geckoEthToUsd()];
+                    case 30:
+                        EthToUsdPrice_5 = _f.sent();
                         // need to change when introduce non-stable coins
-                        results.marginInUSD = marginInUnderlyingToken;
+                        results.marginInUSD = marginInUnderlyingToken * EthToUsdPrice_5;
                         results.fees = this.descale(rawPositionInfo.accumulatedFees);
-                        if (!beforeMaturity) return [3 /*break*/, 33];
-                        _f.label = 26;
-                    case 26:
-                        _f.trys.push([26, 28, , 29]);
+                        if (!beforeMaturity) return [3 /*break*/, 38];
+                        _f.label = 31;
+                    case 31:
+                        _f.trys.push([31, 33, , 34]);
                         return [4 /*yield*/, marginEngineContract.callStatic.getPositionMarginRequirement(signerAddress, tickLower, tickUpper, true)];
-                    case 27:
+                    case 32:
                         liquidationThreshold = _f.sent();
                         results.liquidationThreshold = this.descale(liquidationThreshold);
-                        return [3 /*break*/, 29];
-                    case 28:
+                        return [3 /*break*/, 34];
+                    case 33:
                         _3 = _f.sent();
-                        return [3 /*break*/, 29];
-                    case 29:
-                        _f.trys.push([29, 31, , 32]);
+                        return [3 /*break*/, 34];
+                    case 34:
+                        _f.trys.push([34, 36, , 37]);
                         return [4 /*yield*/, marginEngineContract.callStatic.getPositionMarginRequirement(signerAddress, tickLower, tickUpper, false)];
-                    case 30:
+                    case 35:
                         safetyThreshold = _f.sent();
                         results.safetyThreshold = this.descale(safetyThreshold);
-                        return [3 /*break*/, 32];
-                    case 31:
+                        return [3 /*break*/, 37];
+                    case 36:
                         _4 = _f.sent();
-                        return [3 /*break*/, 32];
-                    case 32:
+                        return [3 /*break*/, 37];
+                    case 37:
                         if (!(0, lodash_1.isUndefined)(results.liquidationThreshold) && !(0, lodash_1.isUndefined)(results.safetyThreshold)) {
                             results.healthFactor = (results.margin < results.liquidationThreshold) ? 1 : (results.margin < results.safetyThreshold ? 2 : 3);
                         }
-                        _f.label = 33;
-                    case 33:
+                        _f.label = 38;
+                    case 38:
                         notionalInUnderlyingToken = (position.positionType === 3)
                             ? Math.abs(position.notional) // LP
                             : Math.abs(position.effectiveVariableTokenBalance);
+                        return [4 /*yield*/, geckoEthToUsd()];
+                    case 39:
+                        EthToUsdPrice = _f.sent();
                         // need to change when introduce non-stable coins
-                        results.notionalInUSD = notionalInUnderlyingToken;
+                        results.notionalInUSD = notionalInUnderlyingToken * EthToUsdPrice;
                         return [2 /*return*/, results];
                 }
             });

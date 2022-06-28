@@ -25,6 +25,7 @@
   "dependencies": {
     "@metamask/detect-provider": "^1.2.0",
     "big.js": "^6.1.1",
+    "coingecko-api": "^1.0.10",
     "decimal.js-light": "^2.5.1",
     "ethers": "^5.5.2",
     "evm-bn": "^1.1.1",
@@ -65,5 +66,5 @@
       ]
     ]
   },
-  "yalcSig": "3ec8c17d115ff5f592334a874e086293"
+  "yalcSig": "28b71a525686c14499db1f29b8597c45"
 }
