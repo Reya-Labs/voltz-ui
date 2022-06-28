@@ -35,6 +35,8 @@ interface MockCTokenInterface extends ethers.utils.Interface {
     "name()": FunctionFragment;
     "redeemUnderlying(uint256)": FunctionFragment;
     "setExchangeRate(uint256)": FunctionFragment;
+    "setSupplyRatePerBlock(uint256)": FunctionFragment;
+    "supplyRatePerBlock()": FunctionFragment;
     "symbol()": FunctionFragment;
     "totalSupply()": FunctionFragment;
     "transfer(address,uint256)": FunctionFragment;
@@ -88,6 +90,14 @@ interface MockCTokenInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "setExchangeRate",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setSupplyRatePerBlock",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "supplyRatePerBlock",
+    values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(
@@ -143,6 +153,14 @@ interface MockCTokenInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "setExchangeRate",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setSupplyRatePerBlock",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "supplyRatePerBlock",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
@@ -286,19 +304,26 @@ export class MockCToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setSupplyRatePerBlock(
+      supplyRatePerBlock: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    supplyRatePerBlock(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     symbol(overrides?: CallOverrides): Promise<[string]>;
 
     totalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     transfer(
-      to: string,
+      recipient: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     transferFrom(
-      from: string,
-      to: string,
+      sender: string,
+      recipient: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -370,19 +395,26 @@ export class MockCToken extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setSupplyRatePerBlock(
+    supplyRatePerBlock: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  supplyRatePerBlock(overrides?: CallOverrides): Promise<BigNumber>;
+
   symbol(overrides?: CallOverrides): Promise<string>;
 
   totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
   transfer(
-    to: string,
+    recipient: string,
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   transferFrom(
-    from: string,
-    to: string,
+    sender: string,
+    recipient: string,
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -452,19 +484,26 @@ export class MockCToken extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    setSupplyRatePerBlock(
+      supplyRatePerBlock: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    supplyRatePerBlock(overrides?: CallOverrides): Promise<BigNumber>;
+
     symbol(overrides?: CallOverrides): Promise<string>;
 
     totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     transfer(
-      to: string,
+      recipient: string,
       amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
     transferFrom(
-      from: string,
-      to: string,
+      sender: string,
+      recipient: string,
       amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<boolean>;
@@ -575,19 +614,26 @@ export class MockCToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setSupplyRatePerBlock(
+      supplyRatePerBlock: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    supplyRatePerBlock(overrides?: CallOverrides): Promise<BigNumber>;
+
     symbol(overrides?: CallOverrides): Promise<BigNumber>;
 
     totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     transfer(
-      to: string,
+      recipient: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     transferFrom(
-      from: string,
-      to: string,
+      sender: string,
+      recipient: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -665,19 +711,28 @@ export class MockCToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    setSupplyRatePerBlock(
+      supplyRatePerBlock: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    supplyRatePerBlock(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     transfer(
-      to: string,
+      recipient: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     transferFrom(
-      from: string,
-      to: string,
+      sender: string,
+      recipient: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;

@@ -41,7 +41,7 @@ exports.MIN_FIXED_RATE = 0.001;
 exports.MAX_FIXED_RATE = 1001;
 exports.ONE_YEAR_IN_SECONDS = 31536000;
 function getGasBuffer(value) {
-    return value.mul(120).div(100);
+    return value.mul(160).div(100);
 }
 exports.getGasBuffer = getGasBuffer;
 exports.WETH9 = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2';

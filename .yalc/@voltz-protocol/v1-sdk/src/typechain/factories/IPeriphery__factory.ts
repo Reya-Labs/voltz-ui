@@ -248,30 +248,17 @@ const _abi = [
       {
         indexed: false,
         internalType: "contract IVAMM",
-        name: "_vamm",
+        name: "vamm",
         type: "address",
       },
       {
         indexed: false,
         internalType: "int256",
-        name: "_lpMarginCapNew",
+        name: "lpMarginCapNew",
         type: "int256",
       },
     ],
     name: "MarginCap",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "contract IWETH",
-        name: "_weth",
-        type: "address",
-      },
-    ],
-    name: "WETHSetting",
     type: "event",
   },
   {
@@ -297,7 +284,7 @@ const _abi = [
     inputs: [
       {
         internalType: "contract IVAMM",
-        name: "_vamm",
+        name: "vamm",
         type: "address",
       },
     ],
@@ -309,14 +296,14 @@ const _abi = [
         type: "int256",
       },
     ],
-    stateMutability: "nonpayable",
+    stateMutability: "view",
     type: "function",
   },
   {
     inputs: [
       {
         internalType: "contract IVAMM",
-        name: "_vamm",
+        name: "vamm",
         type: "address",
       },
     ],
@@ -328,7 +315,7 @@ const _abi = [
         type: "int256",
       },
     ],
-    stateMutability: "nonpayable",
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -386,12 +373,12 @@ const _abi = [
     inputs: [
       {
         internalType: "contract IVAMM",
-        name: "_vamm",
+        name: "vamm",
         type: "address",
       },
       {
         internalType: "int256",
-        name: "_lpMarginCapNew",
+        name: "lpMarginCapNew",
         type: "int256",
       },
     ],
@@ -403,23 +390,41 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "contract IVAMM",
+        name: "vamm",
+        type: "address",
+      },
+      {
+        internalType: "int256",
+        name: "lpMarginCumulative",
+        type: "int256",
+      },
+    ],
+    name: "setLPMarginCumulative",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "contract IMarginEngine",
-        name: "_marginEngine",
+        name: "marginEngine",
         type: "address",
       },
       {
         internalType: "address",
-        name: "_owner",
+        name: "owner",
         type: "address",
       },
       {
         internalType: "int24",
-        name: "_tickLower",
+        name: "tickLower",
         type: "int24",
       },
       {
         internalType: "int24",
-        name: "_tickUpper",
+        name: "tickUpper",
         type: "int24",
       },
     ],
@@ -513,27 +518,27 @@ const _abi = [
     inputs: [
       {
         internalType: "contract IMarginEngine",
-        name: "_marginEngine",
+        name: "marginEngine",
         type: "address",
       },
       {
         internalType: "int24",
-        name: "_tickLower",
+        name: "tickLower",
         type: "int24",
       },
       {
         internalType: "int24",
-        name: "_tickUpper",
+        name: "tickUpper",
         type: "int24",
       },
       {
         internalType: "int256",
-        name: "_marginDelta",
+        name: "marginDelta",
         type: "int256",
       },
       {
         internalType: "bool",
-        name: "_fullyWithdraw",
+        name: "fullyWithdraw",
         type: "bool",
       },
     ],

@@ -61,7 +61,7 @@ export type SwapFormContext = {
   action: SwapFormActions;
   amm: AugmentedAMM;
   approvalsNeeded: boolean;
-  balance?: BigNumber;
+  balance?: number;
   errors: Record<string, string>;
   hintState: SwapFormSubmitButtonHintStates;
   isAddingMargin: boolean;

@@ -99,7 +99,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   return (
     <MintBurnForm
       approvalsNeeded={form.approvalsNeeded}
-      balance={form.balance ? form.amm.descale(form.balance) : undefined}
+      balance={form.balance}
       endDate={form.amm.endDateTime}
       errors={form.errors}
       formState={form.state}

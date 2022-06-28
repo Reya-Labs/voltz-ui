@@ -1,5 +1,5 @@
 import JSBI from 'jsbi';
-import { constants, providers } from 'ethers';
+import { constants, ethers, providers } from 'ethers';
 import { DateTime } from 'luxon';
 import { BigNumber, ContractReceipt, Signer, utils } from 'ethers';
 
@@ -240,14 +240,14 @@ class AMM {
     this.totalNotionalTraded = totalNotionalTraded;
     this.totalLiquidity = totalLiquidity;
 
-    if (this.underlyingToken.id?.toLowerCase() === WETH9) {
+    if (this.underlyingToken.name === "ETH") {
       this.isETH = true;
+      this.isFCM = false;
     }
     else {
       this.isETH = false;
+      this.isFCM = true;
     }
-
-    this.isFCM = this.fcmAddress.startsWith("0x");
   }
 
   // expected apy
@@ -470,7 +470,7 @@ class AMM {
         marginDelta: 0,
       };
 
-      tempOverrides.value = BigNumber.from(margin.toString());
+      tempOverrides.value = ethers.utils.parseEther(margin.toString());
     }
     else {
       const scaledMarginDelta = this.scale(margin);
@@ -638,7 +638,7 @@ class AMM {
         marginDelta: 0,
       };
 
-      tempOverrides.value = BigNumber.from(margin.toString());
+      tempOverrides.value = ethers.utils.parseEther(margin.toString());
     }
     else {
       const scaledMarginDelta = this.scale(margin);
@@ -781,7 +781,7 @@ class AMM {
     let scaledMarginDelta: string;
 
     if (this.isETH && marginDelta > 0) {
-      tempOverrides.value = BigNumber.from(marginDelta);
+      tempOverrides.value = ethers.utils.parseEther(marginDelta.toString());
       scaledMarginDelta = "0";
     }
     else {
@@ -1357,6 +1357,10 @@ class AMM {
       throw new Error('Wallet not connected');
     }
 
+    if (this.isETH) {
+      return true;
+    }
+
     const signerAddress = await this.signer.getAddress();
     const tokenAddress = this.underlyingToken.id;
     const token = tokenFactory.connect(tokenAddress, this.signer);
@@ -1861,7 +1865,7 @@ class AMM {
 
   // balance checks
 
-  public async getUnderlyingTokenBalance():Promise<BigNumber> {
+  public async hasEnoughUnderlyingTokens(amount: number): Promise<boolean> {
     if (!this.signer) {
       throw new Error('Wallet not connected');
     }
@@ -1870,11 +1874,11 @@ class AMM {
 
     let currentBalance: BigNumber;
     if (this.isETH) {
-      if (!this.provider) {
+      if (!this.signer.provider) {
         throw new Error('Provider not connected');
       }
 
-      currentBalance = await this.provider.getBalance(signerAddress);
+      currentBalance = await this.signer.provider.getBalance(signerAddress);
     }
     else {
       if (!this.underlyingToken.id) {
@@ -1887,12 +1891,8 @@ class AMM {
       currentBalance = await token.balanceOf(signerAddress);
     }
 
-    return currentBalance;
-  }
-
-  public async hasEnoughUnderlyingTokens(amount: number): Promise<boolean> {
-    const currentBalance = await this.getUnderlyingTokenBalance();
     const scaledAmount = BigNumber.from(this.scale(amount));
+
     return currentBalance.gte(scaledAmount);
   }
 
@@ -2100,15 +2100,37 @@ class AMM {
     if (!this.provider) {
       throw new Error('Blockchain not connected');
     }
-    const lastBlock = await this.provider.getBlockNumber();
-    const oneBlockAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
-    const twoBlocksAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 2)).timestamp);
 
-    const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
+    switch (this.rateOracle.protocolId) {
+      case 1: {
+        const lastBlock = await this.provider.getBlockNumber();
+        const oneBlockAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
+        const twoBlocksAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 2)).timestamp);
 
-    const oneWeekApy = await rateOracleContract.callStatic.getApyFromTo(twoBlocksAgo, oneBlockAgo);
+        const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
 
-    return oneWeekApy.div(BigNumber.from(1000000000000)).toNumber() / 1000000;
+        const oneWeekApy = await rateOracleContract.callStatic.getApyFromTo(twoBlocksAgo, oneBlockAgo);
+
+        return oneWeekApy.div(BigNumber.from(1000000000000)).toNumber() / 1000000;
+      }
+
+      case 2: {
+        const blocksPerDay = 6570; // 13.15 seconds per block
+        const daysPerYear = 365;
+
+        const fcmContract = fcmCompoundFactory.connect(this.fcmAddress, this.provider);
+
+        const cTokenAddress = await (fcmContract as CompoundFCM).cToken();
+        const cTokenContract = ICToken__factory.connect(cTokenAddress, this.provider);
+
+        const supplyRatePerBlock = await cTokenContract.supplyRatePerBlock();
+        const supplyApy = (((Math.pow((supplyRatePerBlock.toNumber() / 1e18 * blocksPerDay) + 1, daysPerYear))) - 1);
+        return supplyApy;
+      }
+
+      default:
+        throw new Error("Unrecognized FCM");
+    } 
   }
 }
 

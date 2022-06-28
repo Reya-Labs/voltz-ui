@@ -41,7 +41,6 @@ interface VAMMInterface extends ethers.utils.Interface {
     "owner()": FunctionFragment;
     "paused()": FunctionFragment;
     "protocolFees()": FunctionFragment;
-    "proxiableUUID()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "setFee(uint256)": FunctionFragment;
     "setFeeProtocol(uint8)": FunctionFragment;
@@ -112,10 +111,6 @@ interface VAMMInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "protocolFees",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "proxiableUUID",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -222,10 +217,6 @@ interface VAMMInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "proxiableUUID",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
@@ -271,7 +262,6 @@ interface VAMMInterface extends ethers.utils.Interface {
     "Burn(address,address,int24,int24,uint128)": EventFragment;
     "Fee(uint256)": EventFragment;
     "FeeProtocol(uint8)": EventFragment;
-    "Initialized(uint8)": EventFragment;
     "IsAlpha(bool)": EventFragment;
     "Mint(address,address,int24,int24,uint128)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
@@ -286,7 +276,6 @@ interface VAMMInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "Burn"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Fee"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "FeeProtocol"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "IsAlpha"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Mint"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
@@ -315,8 +304,6 @@ export type BurnEvent = TypedEvent<
 export type FeeEvent = TypedEvent<[BigNumber] & { feeWad: BigNumber }>;
 
 export type FeeProtocolEvent = TypedEvent<[number] & { feeProtocol: number }>;
-
-export type InitializedEvent = TypedEvent<[number] & { version: number }>;
 
 export type IsAlphaEvent = TypedEvent<[boolean] & { __isAlpha: boolean }>;
 
@@ -482,8 +469,6 @@ export class VAMM extends BaseContract {
     paused(overrides?: CallOverrides): Promise<[boolean]>;
 
     protocolFees(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    proxiableUUID(overrides?: CallOverrides): Promise<[string]>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -652,8 +637,6 @@ export class VAMM extends BaseContract {
 
   protocolFees(overrides?: CallOverrides): Promise<BigNumber>;
 
-  proxiableUUID(overrides?: CallOverrides): Promise<string>;
-
   renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -814,8 +797,6 @@ export class VAMM extends BaseContract {
     paused(overrides?: CallOverrides): Promise<boolean>;
 
     protocolFees(overrides?: CallOverrides): Promise<BigNumber>;
-
-    proxiableUUID(overrides?: CallOverrides): Promise<string>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
@@ -978,14 +959,6 @@ export class VAMM extends BaseContract {
     FeeProtocol(
       feeProtocol?: null
     ): TypedEventFilter<[number], { feeProtocol: number }>;
-
-    "Initialized(uint8)"(
-      version?: null
-    ): TypedEventFilter<[number], { version: number }>;
-
-    Initialized(
-      version?: null
-    ): TypedEventFilter<[number], { version: number }>;
 
     "IsAlpha(bool)"(
       __isAlpha?: null
@@ -1218,8 +1191,6 @@ export class VAMM extends BaseContract {
 
     protocolFees(overrides?: CallOverrides): Promise<BigNumber>;
 
-    proxiableUUID(overrides?: CallOverrides): Promise<BigNumber>;
-
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -1363,8 +1334,6 @@ export class VAMM extends BaseContract {
     paused(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     protocolFees(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    proxiableUUID(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }

@@ -54,6 +54,19 @@ const _abi = [
   },
   {
     inputs: [],
+    name: "supplyRatePerBlock",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "underlying",
     outputs: [
       {

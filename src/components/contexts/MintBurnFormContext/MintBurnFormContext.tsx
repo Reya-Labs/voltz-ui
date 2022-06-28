@@ -73,7 +73,7 @@ export type MintBurnFormContext = {
   action: MintBurnFormActions;
   amm: AugmentedAMM;
   approvalsNeeded: boolean;
-  balance?: BigNumber;
+  balance?: number;
   errors: Record<string, string>;
   hintState: MintBurnFormHintStates;
   isAddingLiquidity: boolean;

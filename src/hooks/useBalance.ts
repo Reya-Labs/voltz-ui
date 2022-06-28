@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import { AugmentedAMM } from "@utilities";
-import { BigNumber } from "ethers";
 
 export const useBalance = (amm: AugmentedAMM) => {
-  const [balance, setBalance] = useState<BigNumber>();
+  const [balance, setBalance] = useState<number>(0);
 
   useEffect(() => {
     const getBalance = async () => {
-      const newBalance = await amm.getUnderlyingTokenBalance();
+      const newBalance = await amm.underlyingTokens();
       setBalance(newBalance);
     }
     getBalance();

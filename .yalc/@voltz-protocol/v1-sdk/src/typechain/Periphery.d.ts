@@ -22,18 +22,30 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface PeripheryInterface extends ethers.utils.Interface {
   functions: {
+    "_lpMarginCaps(address)": FunctionFragment;
+    "_lpMarginCumulatives(address)": FunctionFragment;
+    "_weth()": FunctionFragment;
     "getCurrentTick(address)": FunctionFragment;
     "getLiquidityForNotional(uint160,uint160,uint256)": FunctionFragment;
     "lpMarginCaps(address)": FunctionFragment;
     "lpMarginCumulatives(address)": FunctionFragment;
     "mintOrBurn((address,int24,int24,uint256,bool,int256))": FunctionFragment;
     "setLPMarginCap(address,int256)": FunctionFragment;
+    "setLPMarginCumulative(address,int256)": FunctionFragment;
     "settlePositionAndWithdrawMargin(address,address,int24,int24)": FunctionFragment;
     "swap((address,bool,uint256,uint160,int24,int24,uint256))": FunctionFragment;
     "updatePositionMargin(address,int24,int24,int256,bool)": FunctionFragment;
-    "weth()": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "_lpMarginCaps",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "_lpMarginCumulatives",
+    values: [string]
+  ): string;
+  encodeFunctionData(functionFragment: "_weth", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "getCurrentTick",
     values: [string]
@@ -68,6 +80,10 @@ interface PeripheryInterface extends ethers.utils.Interface {
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "setLPMarginCumulative",
+    values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "settlePositionAndWithdrawMargin",
     values: [string, string, BigNumberish, BigNumberish]
   ): string;
@@ -89,8 +105,16 @@ interface PeripheryInterface extends ethers.utils.Interface {
     functionFragment: "updatePositionMargin",
     values: [string, BigNumberish, BigNumberish, BigNumberish, boolean]
   ): string;
-  encodeFunctionData(functionFragment: "weth", values?: undefined): string;
 
+  decodeFunctionResult(
+    functionFragment: "_lpMarginCaps",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "_lpMarginCumulatives",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "_weth", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getCurrentTick",
     data: BytesLike
@@ -113,6 +137,10 @@ interface PeripheryInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "setLPMarginCumulative",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "settlePositionAndWithdrawMargin",
     data: BytesLike
   ): Result;
@@ -121,22 +149,17 @@ interface PeripheryInterface extends ethers.utils.Interface {
     functionFragment: "updatePositionMargin",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "weth", data: BytesLike): Result;
 
   events: {
     "MarginCap(address,int256)": EventFragment;
-    "WETHSetting(address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "MarginCap"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "WETHSetting"): EventFragment;
 }
 
 export type MarginCapEvent = TypedEvent<
-  [string, BigNumber] & { _vamm: string; _lpMarginCapNew: BigNumber }
+  [string, BigNumber] & { vamm: string; lpMarginCapNew: BigNumber }
 >;
-
-export type WETHSettingEvent = TypedEvent<[string] & { _weth: string }>;
 
 export class Periphery extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -182,6 +205,18 @@ export class Periphery extends BaseContract {
   interface: PeripheryInterface;
 
   functions: {
+    _lpMarginCaps(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    _lpMarginCumulatives(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    _weth(overrides?: CallOverrides): Promise<[string]>;
+
     getCurrentTick(
       marginEngine: string,
       overrides?: CallOverrides
@@ -194,10 +229,10 @@ export class Periphery extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { liquidity: BigNumber }>;
 
-    lpMarginCaps(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
+    lpMarginCaps(vamm: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     lpMarginCumulatives(
-      arg0: string,
+      vamm: string,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
@@ -214,16 +249,22 @@ export class Periphery extends BaseContract {
     ): Promise<ContractTransaction>;
 
     setLPMarginCap(
-      _vamm: string,
-      _lpMarginCapNew: BigNumberish,
+      vamm: string,
+      lpMarginCapNew: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setLPMarginCumulative(
+      vamm: string,
+      lpMarginCumulative: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     settlePositionAndWithdrawMargin(
-      _marginEngine: string,
-      _owner: string,
-      _tickLower: BigNumberish,
-      _tickUpper: BigNumberish,
+      marginEngine: string,
+      owner: string,
+      tickLower: BigNumberish,
+      tickUpper: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -241,16 +282,23 @@ export class Periphery extends BaseContract {
     ): Promise<ContractTransaction>;
 
     updatePositionMargin(
-      _marginEngine: string,
-      _tickLower: BigNumberish,
-      _tickUpper: BigNumberish,
-      _marginDelta: BigNumberish,
-      _fullyWithdraw: boolean,
+      marginEngine: string,
+      tickLower: BigNumberish,
+      tickUpper: BigNumberish,
+      marginDelta: BigNumberish,
+      fullyWithdraw: boolean,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    weth(overrides?: CallOverrides): Promise<[string]>;
   };
+
+  _lpMarginCaps(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+  _lpMarginCumulatives(
+    arg0: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  _weth(overrides?: CallOverrides): Promise<string>;
 
   getCurrentTick(
     marginEngine: string,
@@ -264,10 +312,10 @@ export class Periphery extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  lpMarginCaps(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+  lpMarginCaps(vamm: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   lpMarginCumulatives(
-    arg0: string,
+    vamm: string,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -284,16 +332,22 @@ export class Periphery extends BaseContract {
   ): Promise<ContractTransaction>;
 
   setLPMarginCap(
-    _vamm: string,
-    _lpMarginCapNew: BigNumberish,
+    vamm: string,
+    lpMarginCapNew: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setLPMarginCumulative(
+    vamm: string,
+    lpMarginCumulative: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   settlePositionAndWithdrawMargin(
-    _marginEngine: string,
-    _owner: string,
-    _tickLower: BigNumberish,
-    _tickUpper: BigNumberish,
+    marginEngine: string,
+    owner: string,
+    tickLower: BigNumberish,
+    tickUpper: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -311,17 +365,24 @@ export class Periphery extends BaseContract {
   ): Promise<ContractTransaction>;
 
   updatePositionMargin(
-    _marginEngine: string,
-    _tickLower: BigNumberish,
-    _tickUpper: BigNumberish,
-    _marginDelta: BigNumberish,
-    _fullyWithdraw: boolean,
+    marginEngine: string,
+    tickLower: BigNumberish,
+    tickUpper: BigNumberish,
+    marginDelta: BigNumberish,
+    fullyWithdraw: boolean,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  weth(overrides?: CallOverrides): Promise<string>;
-
   callStatic: {
+    _lpMarginCaps(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    _lpMarginCumulatives(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    _weth(overrides?: CallOverrides): Promise<string>;
+
     getCurrentTick(
       marginEngine: string,
       overrides?: CallOverrides
@@ -334,10 +395,10 @@ export class Periphery extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    lpMarginCaps(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+    lpMarginCaps(vamm: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     lpMarginCumulatives(
-      arg0: string,
+      vamm: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -354,16 +415,22 @@ export class Periphery extends BaseContract {
     ): Promise<BigNumber>;
 
     setLPMarginCap(
-      _vamm: string,
-      _lpMarginCapNew: BigNumberish,
+      vamm: string,
+      lpMarginCapNew: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setLPMarginCumulative(
+      vamm: string,
+      lpMarginCumulative: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
     settlePositionAndWithdrawMargin(
-      _marginEngine: string,
-      _owner: string,
-      _tickLower: BigNumberish,
-      _tickUpper: BigNumberish,
+      marginEngine: string,
+      owner: string,
+      tickLower: BigNumberish,
+      tickUpper: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -390,42 +457,43 @@ export class Periphery extends BaseContract {
     >;
 
     updatePositionMargin(
-      _marginEngine: string,
-      _tickLower: BigNumberish,
-      _tickUpper: BigNumberish,
-      _marginDelta: BigNumberish,
-      _fullyWithdraw: boolean,
+      marginEngine: string,
+      tickLower: BigNumberish,
+      tickUpper: BigNumberish,
+      marginDelta: BigNumberish,
+      fullyWithdraw: boolean,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    weth(overrides?: CallOverrides): Promise<string>;
   };
 
   filters: {
     "MarginCap(address,int256)"(
-      _vamm?: null,
-      _lpMarginCapNew?: null
+      vamm?: null,
+      lpMarginCapNew?: null
     ): TypedEventFilter<
       [string, BigNumber],
-      { _vamm: string; _lpMarginCapNew: BigNumber }
+      { vamm: string; lpMarginCapNew: BigNumber }
     >;
 
     MarginCap(
-      _vamm?: null,
-      _lpMarginCapNew?: null
+      vamm?: null,
+      lpMarginCapNew?: null
     ): TypedEventFilter<
       [string, BigNumber],
-      { _vamm: string; _lpMarginCapNew: BigNumber }
+      { vamm: string; lpMarginCapNew: BigNumber }
     >;
-
-    "WETHSetting(address)"(
-      _weth?: null
-    ): TypedEventFilter<[string], { _weth: string }>;
-
-    WETHSetting(_weth?: null): TypedEventFilter<[string], { _weth: string }>;
   };
 
   estimateGas: {
+    _lpMarginCaps(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    _lpMarginCumulatives(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    _weth(overrides?: CallOverrides): Promise<BigNumber>;
+
     getCurrentTick(
       marginEngine: string,
       overrides?: CallOverrides
@@ -438,10 +506,10 @@ export class Periphery extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    lpMarginCaps(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+    lpMarginCaps(vamm: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     lpMarginCumulatives(
-      arg0: string,
+      vamm: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -458,16 +526,22 @@ export class Periphery extends BaseContract {
     ): Promise<BigNumber>;
 
     setLPMarginCap(
-      _vamm: string,
-      _lpMarginCapNew: BigNumberish,
+      vamm: string,
+      lpMarginCapNew: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setLPMarginCumulative(
+      vamm: string,
+      lpMarginCumulative: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     settlePositionAndWithdrawMargin(
-      _marginEngine: string,
-      _owner: string,
-      _tickLower: BigNumberish,
-      _tickUpper: BigNumberish,
+      marginEngine: string,
+      owner: string,
+      tickLower: BigNumberish,
+      tickUpper: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -485,18 +559,28 @@ export class Periphery extends BaseContract {
     ): Promise<BigNumber>;
 
     updatePositionMargin(
-      _marginEngine: string,
-      _tickLower: BigNumberish,
-      _tickUpper: BigNumberish,
-      _marginDelta: BigNumberish,
-      _fullyWithdraw: boolean,
+      marginEngine: string,
+      tickLower: BigNumberish,
+      tickUpper: BigNumberish,
+      marginDelta: BigNumberish,
+      fullyWithdraw: boolean,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
-
-    weth(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    _lpMarginCaps(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    _lpMarginCumulatives(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    _weth(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     getCurrentTick(
       marginEngine: string,
       overrides?: CallOverrides
@@ -510,12 +594,12 @@ export class Periphery extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     lpMarginCaps(
-      arg0: string,
+      vamm: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     lpMarginCumulatives(
-      arg0: string,
+      vamm: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -532,16 +616,22 @@ export class Periphery extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     setLPMarginCap(
-      _vamm: string,
-      _lpMarginCapNew: BigNumberish,
+      vamm: string,
+      lpMarginCapNew: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setLPMarginCumulative(
+      vamm: string,
+      lpMarginCumulative: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     settlePositionAndWithdrawMargin(
-      _marginEngine: string,
-      _owner: string,
-      _tickLower: BigNumberish,
-      _tickUpper: BigNumberish,
+      marginEngine: string,
+      owner: string,
+      tickLower: BigNumberish,
+      tickUpper: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -559,14 +649,12 @@ export class Periphery extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     updatePositionMargin(
-      _marginEngine: string,
-      _tickLower: BigNumberish,
-      _tickUpper: BigNumberish,
-      _marginDelta: BigNumberish,
-      _fullyWithdraw: boolean,
+      marginEngine: string,
+      tickLower: BigNumberish,
+      tickUpper: BigNumberish,
+      marginDelta: BigNumberish,
+      fullyWithdraw: boolean,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
-
-    weth(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

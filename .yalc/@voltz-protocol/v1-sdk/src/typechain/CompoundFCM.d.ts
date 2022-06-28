@@ -30,7 +30,6 @@ interface CompoundFCMInterface extends ethers.utils.Interface {
     "marginEngine()": FunctionFragment;
     "owner()": FunctionFragment;
     "paused()": FunctionFragment;
-    "proxiableUUID()": FunctionFragment;
     "rateOracle()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "setPausability(bool)": FunctionFragment;
@@ -68,10 +67,6 @@ interface CompoundFCMInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "proxiableUUID",
-    values?: undefined
-  ): string;
   encodeFunctionData(
     functionFragment: "rateOracle",
     values?: undefined
@@ -132,10 +127,6 @@ interface CompoundFCMInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "proxiableUUID",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "rateOracle", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
@@ -179,7 +170,6 @@ interface CompoundFCMInterface extends ethers.utils.Interface {
     "FCMTraderUpdate(address,uint256,int256,int256)": EventFragment;
     "FullyCollateralisedSwap(address,uint256,uint160,uint256,int256,int256,int256)": EventFragment;
     "FullyCollateralisedUnwind(address,uint256,uint160,uint256,int256,int256,int256)": EventFragment;
-    "Initialized(uint8)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Upgraded(address)": EventFragment;
     "fcmPositionSettlement(address,int256)": EventFragment;
@@ -190,7 +180,6 @@ interface CompoundFCMInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "FCMTraderUpdate"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "FullyCollateralisedSwap"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "FullyCollateralisedUnwind"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Upgraded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "fcmPositionSettlement"): EventFragment;
@@ -234,8 +223,6 @@ export type FullyCollateralisedUnwindEvent = TypedEvent<
     fixedTokenDeltaUnbalanced: BigNumber;
   }
 >;
-
-export type InitializedEvent = TypedEvent<[number] & { version: number }>;
 
 export type OwnershipTransferredEvent = TypedEvent<
   [string, string] & { previousOwner: string; newOwner: string }
@@ -337,8 +324,6 @@ export class CompoundFCM extends BaseContract {
 
     paused(overrides?: CallOverrides): Promise<[boolean]>;
 
-    proxiableUUID(overrides?: CallOverrides): Promise<[string]>;
-
     rateOracle(overrides?: CallOverrides): Promise<[string]>;
 
     renounceOwnership(
@@ -435,8 +420,6 @@ export class CompoundFCM extends BaseContract {
   owner(overrides?: CallOverrides): Promise<string>;
 
   paused(overrides?: CallOverrides): Promise<boolean>;
-
-  proxiableUUID(overrides?: CallOverrides): Promise<string>;
 
   rateOracle(overrides?: CallOverrides): Promise<string>;
 
@@ -541,8 +524,6 @@ export class CompoundFCM extends BaseContract {
     owner(overrides?: CallOverrides): Promise<string>;
 
     paused(overrides?: CallOverrides): Promise<boolean>;
-
-    proxiableUUID(overrides?: CallOverrides): Promise<string>;
 
     rateOracle(overrides?: CallOverrides): Promise<string>;
 
@@ -775,14 +756,6 @@ export class CompoundFCM extends BaseContract {
       }
     >;
 
-    "Initialized(uint8)"(
-      version?: null
-    ): TypedEventFilter<[number], { version: number }>;
-
-    Initialized(
-      version?: null
-    ): TypedEventFilter<[number], { version: number }>;
-
     "OwnershipTransferred(address,address)"(
       previousOwner?: string | null,
       newOwner?: string | null
@@ -854,8 +827,6 @@ export class CompoundFCM extends BaseContract {
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     paused(overrides?: CallOverrides): Promise<BigNumber>;
-
-    proxiableUUID(overrides?: CallOverrides): Promise<BigNumber>;
 
     rateOracle(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -937,8 +908,6 @@ export class CompoundFCM extends BaseContract {
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     paused(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    proxiableUUID(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     rateOracle(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

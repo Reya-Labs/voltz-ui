@@ -178,7 +178,6 @@ declare class AMM {
     getPositionInformation(position: Position): Promise<PositionInfo>;
     closestTickAndFixedRate(fixedRate: number): ClosestTickAndFixedRate;
     getNextUsableFixedRate(fixedRate: number, count: number): number;
-    getUnderlyingTokenBalance(): Promise<BigNumber>;
     hasEnoughUnderlyingTokens(amount: number): Promise<boolean>;
     hasEnoughYieldBearingTokens(amount: number): Promise<boolean>;
     underlyingTokens(): Promise<number>;
