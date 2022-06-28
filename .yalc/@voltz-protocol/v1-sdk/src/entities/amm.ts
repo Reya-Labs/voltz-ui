@@ -1489,10 +1489,32 @@ class AMM {
   // protocol name
 
   public get protocol(): string {
-    const firstProtocolCharacter = this.rateOracle.protocol[0];
     const tokenName = this.underlyingToken.name;
 
-    return `${firstProtocolCharacter.toLowerCase()}${tokenName}`;
+    let prefix: string;
+    switch(this.rateOracle.protocolId) {
+      case 1: {
+        prefix = "a";
+        break;
+      }
+      case 2: {
+        prefix = "c";
+        break;
+      }
+      case 3: {
+        prefix = "st";
+        break;
+      }
+      case 4: {
+        prefix = "r";
+        break;
+      }
+      default: {
+        throw new Error("Unrecognized protocol");
+      }
+    }
+
+    return `${prefix}${tokenName}`;
   }
 
   public async approveYieldBearingTokenForFCM(): Promise<ContractReceipt | void> {
@@ -2128,8 +2150,32 @@ class AMM {
         return supplyApy;
       }
 
+      case 3: {
+        const lastBlock = await this.provider.getBlockNumber();
+        const oneBlockAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
+        const twoBlocksAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 2)).timestamp);
+
+        const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
+
+        const oneWeekApy = await rateOracleContract.callStatic.getApyFromTo(twoBlocksAgo, oneBlockAgo);
+
+        return oneWeekApy.div(BigNumber.from(1000000000000)).toNumber() / 1000000;
+      }
+
+      case 4: {
+        const lastBlock = await this.provider.getBlockNumber();
+        const oneBlockAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
+        const twoBlocksAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 2)).timestamp);
+
+        const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
+
+        const oneWeekApy = await rateOracleContract.callStatic.getApyFromTo(twoBlocksAgo, oneBlockAgo);
+
+        return oneWeekApy.div(BigNumber.from(1000000000000)).toNumber() / 1000000;
+      }
+
       default:
-        throw new Error("Unrecognized FCM");
+        throw new Error("Unrecognized protocol");
     } 
   }
 }

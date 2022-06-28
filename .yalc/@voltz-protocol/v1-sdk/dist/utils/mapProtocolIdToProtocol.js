@@ -7,6 +7,12 @@ var mapProtocolIdToProtocol = function (protocolId) {
     if (protocolId === 2) {
         return 'COMPOUND';
     }
-    throw new Error('No protocol recognized');
+    if (protocolId === 3) {
+        return 'LIDO';
+    }
+    if (protocolId === 4) {
+        return 'ROCKET';
+    }
+    throw new Error('Unrecognized protocol');
 };
 exports.default = mapProtocolIdToProtocol;

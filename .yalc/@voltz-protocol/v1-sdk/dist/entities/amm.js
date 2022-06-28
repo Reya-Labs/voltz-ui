@@ -1321,9 +1321,30 @@ var AMM = /** @class */ (function () {
     Object.defineProperty(AMM.prototype, "protocol", {
         // protocol name
         get: function () {
-            var firstProtocolCharacter = this.rateOracle.protocol[0];
             var tokenName = this.underlyingToken.name;
-            return "".concat(firstProtocolCharacter.toLowerCase()).concat(tokenName);
+            var prefix;
+            switch (this.rateOracle.protocolId) {
+                case 1: {
+                    prefix = "a";
+                    break;
+                }
+                case 2: {
+                    prefix = "c";
+                    break;
+                }
+                case 3: {
+                    prefix = "st";
+                    break;
+                }
+                case 4: {
+                    prefix = "r";
+                    break;
+                }
+                default: {
+                    throw new Error("Unrecognized protocol");
+                }
+            }
+            return "".concat(prefix).concat(tokenName);
         },
         enumerable: false,
         configurable: true
@@ -2018,9 +2039,9 @@ var AMM = /** @class */ (function () {
     // one week look-back window apy
     AMM.prototype.getInstantApy = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, lastBlock, oneBlockAgo, _b, _c, twoBlocksAgo, _d, _e, rateOracleContract, oneWeekApy, blocksPerDay, daysPerYear, fcmContract, cTokenAddress, cTokenContract, supplyRatePerBlock, supplyApy;
-            return __generator(this, function (_f) {
-                switch (_f.label) {
+            var _a, lastBlock, oneBlockAgo, _b, _c, twoBlocksAgo, _d, _e, rateOracleContract, oneWeekApy, blocksPerDay, daysPerYear, fcmContract, cTokenAddress, cTokenContract, supplyRatePerBlock, supplyApy, lastBlock, oneBlockAgo, _f, _g, twoBlocksAgo, _h, _j, rateOracleContract, oneWeekApy, lastBlock, oneBlockAgo, _k, _l, twoBlocksAgo, _m, _o, rateOracleContract, oneWeekApy;
+            return __generator(this, function (_p) {
+                switch (_p.label) {
                     case 0:
                         if (!this.provider) {
                             throw new Error('Blockchain not connected');
@@ -2029,23 +2050,25 @@ var AMM = /** @class */ (function () {
                         switch (_a) {
                             case 1: return [3 /*break*/, 1];
                             case 2: return [3 /*break*/, 6];
+                            case 3: return [3 /*break*/, 9];
+                            case 4: return [3 /*break*/, 14];
                         }
-                        return [3 /*break*/, 9];
+                        return [3 /*break*/, 19];
                     case 1: return [4 /*yield*/, this.provider.getBlockNumber()];
                     case 2:
-                        lastBlock = _f.sent();
+                        lastBlock = _p.sent();
                         _c = (_b = ethers_2.BigNumber).from;
                         return [4 /*yield*/, this.provider.getBlock(lastBlock - 1)];
                     case 3:
-                        oneBlockAgo = _c.apply(_b, [(_f.sent()).timestamp]);
+                        oneBlockAgo = _c.apply(_b, [(_p.sent()).timestamp]);
                         _e = (_d = ethers_2.BigNumber).from;
                         return [4 /*yield*/, this.provider.getBlock(lastBlock - 2)];
                     case 4:
-                        twoBlocksAgo = _e.apply(_d, [(_f.sent()).timestamp]);
+                        twoBlocksAgo = _e.apply(_d, [(_p.sent()).timestamp]);
                         rateOracleContract = typechain_1.BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
                         return [4 /*yield*/, rateOracleContract.callStatic.getApyFromTo(twoBlocksAgo, oneBlockAgo)];
                     case 5:
-                        oneWeekApy = _f.sent();
+                        oneWeekApy = _p.sent();
                         return [2 /*return*/, oneWeekApy.div(ethers_2.BigNumber.from(1000000000000)).toNumber() / 1000000];
                     case 6:
                         blocksPerDay = 6570;
@@ -2053,14 +2076,46 @@ var AMM = /** @class */ (function () {
                         fcmContract = typechain_1.CompoundFCM__factory.connect(this.fcmAddress, this.provider);
                         return [4 /*yield*/, fcmContract.cToken()];
                     case 7:
-                        cTokenAddress = _f.sent();
+                        cTokenAddress = _p.sent();
                         cTokenContract = typechain_1.ICToken__factory.connect(cTokenAddress, this.provider);
                         return [4 /*yield*/, cTokenContract.supplyRatePerBlock()];
                     case 8:
-                        supplyRatePerBlock = _f.sent();
+                        supplyRatePerBlock = _p.sent();
                         supplyApy = (((Math.pow((supplyRatePerBlock.toNumber() / 1e18 * blocksPerDay) + 1, daysPerYear))) - 1);
                         return [2 /*return*/, supplyApy];
-                    case 9: throw new Error("Unrecognized FCM");
+                    case 9: return [4 /*yield*/, this.provider.getBlockNumber()];
+                    case 10:
+                        lastBlock = _p.sent();
+                        _g = (_f = ethers_2.BigNumber).from;
+                        return [4 /*yield*/, this.provider.getBlock(lastBlock - 1)];
+                    case 11:
+                        oneBlockAgo = _g.apply(_f, [(_p.sent()).timestamp]);
+                        _j = (_h = ethers_2.BigNumber).from;
+                        return [4 /*yield*/, this.provider.getBlock(lastBlock - 2)];
+                    case 12:
+                        twoBlocksAgo = _j.apply(_h, [(_p.sent()).timestamp]);
+                        rateOracleContract = typechain_1.BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
+                        return [4 /*yield*/, rateOracleContract.callStatic.getApyFromTo(twoBlocksAgo, oneBlockAgo)];
+                    case 13:
+                        oneWeekApy = _p.sent();
+                        return [2 /*return*/, oneWeekApy.div(ethers_2.BigNumber.from(1000000000000)).toNumber() / 1000000];
+                    case 14: return [4 /*yield*/, this.provider.getBlockNumber()];
+                    case 15:
+                        lastBlock = _p.sent();
+                        _l = (_k = ethers_2.BigNumber).from;
+                        return [4 /*yield*/, this.provider.getBlock(lastBlock - 1)];
+                    case 16:
+                        oneBlockAgo = _l.apply(_k, [(_p.sent()).timestamp]);
+                        _o = (_m = ethers_2.BigNumber).from;
+                        return [4 /*yield*/, this.provider.getBlock(lastBlock - 2)];
+                    case 17:
+                        twoBlocksAgo = _o.apply(_m, [(_p.sent()).timestamp]);
+                        rateOracleContract = typechain_1.BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
+                        return [4 /*yield*/, rateOracleContract.callStatic.getApyFromTo(twoBlocksAgo, oneBlockAgo)];
+                    case 18:
+                        oneWeekApy = _p.sent();
+                        return [2 /*return*/, oneWeekApy.div(ethers_2.BigNumber.from(1000000000000)).toNumber() / 1000000];
+                    case 19: throw new Error("Unrecognized protocol");
                 }
             });
         });
