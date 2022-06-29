@@ -50,7 +50,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
   }
 
   const renderTableCell = (field: string, label: string) => {
-    const token = position.amm.protocol.substring(1);
+    const token = position.amm.protocol;
     
     if (field === 'accruedRates') {
       return (<AccruedRates position={position} positionInfo={positionInfo} />);
