@@ -45,8 +45,8 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
 
   let transactionLink: string | undefined = undefined;
   if (activeTransaction.txid) {
-    if (process.env.REACT_APP_REQUIRED_ETHEREUM_NETWORK === 'kovan') {
-      transactionLink = `https://kovan.etherscan.io/tx/${activeTransaction.txid}`
+    if (process.env.REACT_APP_REQUIRED_ETHEREUM_NETWORK === 'goerli') {
+      transactionLink = `https://goerli.etherscan.io/tx/${activeTransaction.txid}`
     }
 
     if (process.env.REACT_APP_REQUIRED_ETHEREUM_NETWORK === 'homestead') {

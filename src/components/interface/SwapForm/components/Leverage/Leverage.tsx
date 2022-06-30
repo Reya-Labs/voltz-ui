@@ -19,7 +19,7 @@ export type LeverageProps = {
 
 const Leverage = ({minMargin, notional, onChange, value}: LeverageProps) => {
   const delay = 50;
-  const hint = 'todo';
+  const hint = 'Choose the amount of leverage you wish to trade with. The slider helps demonstrate safe amounts of leverage.';
   const margin = isNumber(minMargin) ? Math.max(minMargin, 0.1) : undefined;
 
   const isDisabled = isUndefined(margin) || isUndefined(notional);
@@ -76,8 +76,8 @@ const Leverage = ({minMargin, notional, onChange, value}: LeverageProps) => {
           label={<IconLabel label={'Leverage'} icon="information-circle" info={hint} />}
           value={internalValue}
           onChange={handleChangeInput}
-          suffix='X'
-          suffixPadding={20}
+          suffix='x'
+          suffixPadding={0}
         />
       </Box>
       <Box sx={{ flexGrow: '1', marginLeft: (theme) => theme.spacing(4), display: 'flex', alignItems: 'center' }}>
