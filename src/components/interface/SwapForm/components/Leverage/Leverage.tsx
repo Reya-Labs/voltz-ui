@@ -19,7 +19,7 @@ export type LeverageProps = {
 
 const Leverage = ({minMargin, notional, onChange, value}: LeverageProps) => {
   const delay = 50;
-  const hint = 'Choose the amount of leverage you wish to trade with. The slider helps demonstrate safe amounts of leverage.'; // add the tooltip copy here
+  const hint = 'Choose the amount of leverage you wish to trade with. The slider helps demonstrate safe amounts of leverage.';
   const margin = isNumber(minMargin) ? Math.max(minMargin, 0.1) : undefined;
 
   const isDisabled = isUndefined(margin) || isUndefined(notional);
