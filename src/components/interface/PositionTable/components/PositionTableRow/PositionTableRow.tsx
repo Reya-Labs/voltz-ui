@@ -50,7 +50,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
   }
 
   const renderTableCell = (field: string, label: string) => {
-    const token = position.amm.protocol;
+    const underlyingTokenName = position.amm.underlyingToken.name; // Introduced this so margin and notional show the correct underlying token unit e.g. Eth not stEth, USDC not aUSDC
     
     if (field === 'accruedRates') {
       return (<AccruedRates position={position} positionInfo={positionInfo} />);
@@ -65,7 +65,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
         <CurrentMargin 
           accruedCashflow={positionInfo?.accruedCashflow} 
           margin={positionInfo?.margin} 
-          token={position.source.includes("FCM") ? position.amm.protocol : token} 
+          token={position.source.includes("FCM") ? position.amm.protocol : underlyingTokenName || ''} 
           onSelect={handleEditMargin} 
           marginEdit={position.source.includes("FCM") ? false : true}
         />
@@ -80,7 +80,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
       return (
         <Notional 
           notional={agent === Agents.LIQUIDITY_PROVIDER ? position.notional.toFixed(2) : Math.abs(position.effectiveVariableTokenBalance).toFixed(2)} 
-          token={token}
+          token={underlyingTokenName || ''}
           onEdit={agent === Agents.LIQUIDITY_PROVIDER ? handleEditNotional : undefined}
         />
       )

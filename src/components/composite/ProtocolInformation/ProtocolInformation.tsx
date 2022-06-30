@@ -26,7 +26,7 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
       }}
     >
       <Typography
-        label={<IconLabel label="pool" icon="information-circle" info="The underlying yield bearing token." removeIcon />}
+        label={<IconLabel label="pool" icon="information-circle" info="The underlying yield bearing token." />} // add the wEth tooltip copy here as well
         variant="h3"
       >
         {protocol}
