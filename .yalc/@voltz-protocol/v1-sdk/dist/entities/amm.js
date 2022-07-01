@@ -1639,13 +1639,8 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, geckoEthToUsd()];
                     case 9:
                         EthToUsdPrice_1 = _f.sent();
-                        if (this.isETH) {
-                            // need to change when introduce non-stable coins
-                            results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken * EthToUsdPrice_1;
-                        }
-                        else {
-                            results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken;
-                        }
+                        // need to change when introduce non-stable coins
+                        results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken * EthToUsdPrice_1;
                         return [3 /*break*/, 11];
                     case 10:
                         _1 = _f.sent();
@@ -1663,13 +1658,8 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, geckoEthToUsd()];
                     case 15:
                         EthToUsdPrice_2 = _f.sent();
-                        if (this.isETH) {
-                            // need to change when introduce non-stable coins
-                            results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken * EthToUsdPrice_2;
-                        }
-                        else {
-                            results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken;
-                        }
+                        // need to change when introduce non-stable coins
+                        results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken * EthToUsdPrice_2;
                         return [3 /*break*/, 17];
                     case 16:
                         _2 = _f.sent();
@@ -1692,13 +1682,8 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, geckoEthToUsd()];
                     case 20:
                         EthToUsdPrice_3 = _f.sent();
-                        if (this.isETH) {
-                            // need to change when introduce non-stable coins
-                            results.marginInUSD = marginInUnderlyingToken * EthToUsdPrice_3;
-                        }
-                        else {
-                            results.marginInUSD = marginInUnderlyingToken;
-                        }
+                        // need to change when introduce non-stable coins
+                        results.marginInUSD = marginInUnderlyingToken * EthToUsdPrice_3;
                         return [3 /*break*/, 27];
                     case 21:
                         fcmContract = typechain_1.CompoundFCM__factory.connect(this.fcmAddress, this.signer);
@@ -1718,13 +1703,8 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, geckoEthToUsd()];
                     case 25:
                         EthToUsdPrice_4 = _f.sent();
-                        if (this.isETH) {
-                            // need to change when introduce non-stable coins
-                            results.marginInUSD = marginInUnderlyingToken * EthToUsdPrice_4;
-                        }
-                        else {
-                            results.marginInUSD = marginInUnderlyingToken;
-                        }
+                        // need to change when introduce non-stable coins
+                        results.marginInUSD = marginInUnderlyingToken * EthToUsdPrice_4;
                         return [3 /*break*/, 27];
                     case 26: throw new Error("Unrecognized FCM");
                     case 27:
@@ -1744,13 +1724,8 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, geckoEthToUsd()];
                     case 30:
                         EthToUsdPrice_5 = _f.sent();
-                        if (this.isETH) {
-                            // need to change when introduce non-stable coins
-                            results.marginInUSD = marginInUnderlyingToken * EthToUsdPrice_5;
-                        }
-                        else {
-                            results.marginInUSD = marginInUnderlyingToken;
-                        }
+                        // need to change when introduce non-stable coins
+                        results.marginInUSD = marginInUnderlyingToken * EthToUsdPrice_5;
                         results.fees = this.descale(rawPositionInfo.accumulatedFees);
                         if (!beforeMaturity) return [3 /*break*/, 38];
                         _f.label = 31;
@@ -1786,13 +1761,8 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, geckoEthToUsd()];
                     case 39:
                         EthToUsdPrice = _f.sent();
-                        if (this.isETH) {
-                            // need to change when introduce non-stable coins
-                            results.notionalInUSD = notionalInUnderlyingToken * EthToUsdPrice;
-                        }
-                        else {
-                            results.notionalInUSD = notionalInUnderlyingToken;
-                        }
+                        // need to change when introduce non-stable coins
+                        results.notionalInUSD = notionalInUnderlyingToken * EthToUsdPrice;
                         return [2 /*return*/, results];
                 }
             });
