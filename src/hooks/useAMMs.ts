@@ -26,7 +26,7 @@ const useAMMs = (): UseAMMsResult => {
     await refetch();
   }, [refetch]);
 
-  const hiddenPools = ["0x90eaa5c92ba8e73de962bcd6c146686761954259"];
+  const hiddenPools = ["0x90eaa5c92ba8e73de962bcd6c146686761954259", "0xc3ab353493ec83d4de43c547ac1b12cf1dd0232d"];
 
   let amms = useMemo(() => {
     if (data && !loading && !error) {
