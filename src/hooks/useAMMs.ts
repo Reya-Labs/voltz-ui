@@ -26,7 +26,9 @@ const useAMMs = (): UseAMMsResult => {
     await refetch();
   }, [refetch]);
 
-  const amms = useMemo(() => {
+  const hiddenPools = ["0x90eaa5c92ba8e73de962bcd6c146686761954259"];
+
+  let amms = useMemo(() => {
     if (data && !loading && !error) {
       return data.amms.map(
         ({
@@ -84,6 +86,8 @@ const useAMMs = (): UseAMMsResult => {
       );
     }
   }, [loading, error, isSignerAvailable, handleRefetch]);
+
+  amms = amms?.filter((amm) => !hiddenPools.includes(amm.id));
 
   return { amms, loading, error: !!error };
 };
