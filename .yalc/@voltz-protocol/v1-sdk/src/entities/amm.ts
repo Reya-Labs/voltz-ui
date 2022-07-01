@@ -514,7 +514,7 @@ class AMM {
       throw new Error(errorMessage);
     });
 
-    tempOverrides.gasLimit = estimatedGas;
+    tempOverrides.gasLimit = getGasBuffer(estimatedGas);
 
     const swapTransaction = await peripheryContract.swap(swapPeripheryParams, tempOverrides).catch((error) => {
       const errorMessage = getReadableErrorMessage(error, this.environment);
@@ -681,7 +681,7 @@ class AMM {
       throw new Error(errorMessage);
     });
 
-    tempOverrides.gasLimit = estimatedGas;
+    tempOverrides.gasLimit = getGasBuffer(estimatedGas);
 
     const mintTransaction = await peripheryContract.mintOrBurn(mintOrBurnParams, tempOverrides).catch((error) => {
       const errorMessage = getReadableErrorMessage(error, this.environment);
@@ -828,7 +828,7 @@ class AMM {
       tempOverrides
     );
 
-    tempOverrides.gasLimit = estimatedGas;
+    tempOverrides.gasLimit = getGasBuffer(estimatedGas);
 
     const updatePositionMarginTransaction = await peripheryContract.updatePositionMargin(
       this.marginEngineAddress,
@@ -2159,6 +2159,9 @@ class AMM {
       throw new Error('Blockchain not connected');
     }
 
+    const blocksPerDay = 6570; // 13.15 seconds per block
+    const blockPerHour = 274;
+
     switch (this.rateOracle.protocolId) {
       case 1: {
         const lastBlock = await this.provider.getBlockNumber();
@@ -2173,7 +2176,6 @@ class AMM {
       }
 
       case 2: {
-        const blocksPerDay = 6570; // 13.15 seconds per block
         const daysPerYear = 365;
 
         const fcmContract = fcmCompoundFactory.connect(this.fcmAddress, this.provider);
@@ -2188,24 +2190,24 @@ class AMM {
 
       case 3: {
         const lastBlock = await this.provider.getBlockNumber();
-        const oneBlockAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
-        const twoBlocksAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 2)).timestamp);
+        const to = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
+        const from = BigNumber.from((await this.provider.getBlock(lastBlock - 28 * blockPerHour)).timestamp);
 
         const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
 
-        const oneWeekApy = await rateOracleContract.callStatic.getApyFromTo(twoBlocksAgo, oneBlockAgo);
+        const oneWeekApy = await rateOracleContract.callStatic.getApyFromTo(from, to);
 
         return oneWeekApy.div(BigNumber.from(1000000000000)).toNumber() / 1000000;
       }
 
       case 4: {
         const lastBlock = await this.provider.getBlockNumber();
-        const oneBlockAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
-        const twoBlocksAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 2)).timestamp);
+        const to = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
+        const from = BigNumber.from((await this.provider.getBlock(lastBlock - 28 * blockPerHour)).timestamp);
 
         const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
 
-        const oneWeekApy = await rateOracleContract.callStatic.getApyFromTo(twoBlocksAgo, oneBlockAgo);
+        const oneWeekApy = await rateOracleContract.callStatic.getApyFromTo(from, to);
 
         return oneWeekApy.div(BigNumber.from(1000000000000)).toNumber() / 1000000;
       }
