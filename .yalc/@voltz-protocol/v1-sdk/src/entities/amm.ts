@@ -36,7 +36,7 @@ import { Price } from './fractions/price';
 import { TokenAmount } from './fractions/tokenAmount';
 import { decodeInfoPostMint, decodeInfoPostSwap, getReadableErrorMessage } from '../utils/errors/errorHandling';
 import Position from './position';
-import { isNumber, isUndefined } from 'lodash';
+import { isEqualWith, isNumber, isUndefined } from 'lodash';
 
 //1. Import coingecko-api
 import CoinGecko from 'coingecko-api';
@@ -1755,8 +1755,13 @@ class AMM {
             // Get current exchange rate for eth/usd
             const EthToUsdPrice = await geckoEthToUsd();
 
-            // need to change when introduce non-stable coins
-            results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken * EthToUsdPrice;
+            if (this.isETH) {
+              // need to change when introduce non-stable coins
+              results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken * EthToUsdPrice;
+            } else {
+              results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken
+            }
+
           } catch (_) { }
         }
       }
@@ -1769,8 +1774,13 @@ class AMM {
             // Get current exchange rate for eth/usd
             const EthToUsdPrice = await geckoEthToUsd();
 
-            // need to change when introduce non-stable coins
-            results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken * EthToUsdPrice;
+            if (this.isETH) {
+              // need to change when introduce non-stable coins
+              results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken * EthToUsdPrice;
+            } else {
+              results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken
+            }
+
           } catch (_) { }
         }
       }
@@ -1790,8 +1800,13 @@ class AMM {
           // Get current exchange rate for eth/usd
           const EthToUsdPrice = await geckoEthToUsd();
 
-          // need to change when introduce non-stable coins
-          results.marginInUSD = marginInUnderlyingToken * EthToUsdPrice;
+          if (this.isETH) {
+            // need to change when introduce non-stable coins
+            results.marginInUSD = marginInUnderlyingToken * EthToUsdPrice;
+          } else {
+            results.marginInUSD = marginInUnderlyingToken;
+          }
+
           break;
         }
 
@@ -1810,8 +1825,13 @@ class AMM {
           // Get current exchange rate for eth/usd
           const EthToUsdPrice = await geckoEthToUsd();
 
-          // need to change when introduce non-stable coins
-          results.marginInUSD = marginInUnderlyingToken * EthToUsdPrice;
+          if (this.isETH) {
+            // need to change when introduce non-stable coins
+            results.marginInUSD = marginInUnderlyingToken * EthToUsdPrice;
+          } else {
+            results.marginInUSD = marginInUnderlyingToken
+          }
+  
           break;
         }
 
@@ -1844,8 +1864,12 @@ class AMM {
       // Get current exchange rate for eth/usd
       const EthToUsdPrice = await geckoEthToUsd();
 
-      // need to change when introduce non-stable coins
-      results.marginInUSD = marginInUnderlyingToken * EthToUsdPrice;
+      if (this.isETH) {
+        // need to change when introduce non-stable coins
+        results.marginInUSD = marginInUnderlyingToken * EthToUsdPrice;
+      } else {
+        results.marginInUSD = marginInUnderlyingToken
+      }
 
       results.fees = this.descale(rawPositionInfo.accumulatedFees);
 
@@ -1885,8 +1909,12 @@ class AMM {
     // Get current exchange rate for eth/usd
     const EthToUsdPrice = await geckoEthToUsd();
 
-    // need to change when introduce non-stable coins
-    results.notionalInUSD = notionalInUnderlyingToken * EthToUsdPrice;
+    if (this.isETH) {
+      // need to change when introduce non-stable coins
+      results.notionalInUSD = notionalInUnderlyingToken * EthToUsdPrice;
+    } else {
+      results.notionalInUSD = notionalInUnderlyingToken
+    }
 
     return results;
   }
