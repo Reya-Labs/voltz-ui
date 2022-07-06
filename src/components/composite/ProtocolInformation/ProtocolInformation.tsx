@@ -26,7 +26,7 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
       }}
     >
       <Typography
-        label={<IconLabel label="pool" icon="information-circle" info="Trade rates in the stETH pool by depositing ETH as margin. stETH cannot be used as a form of margin until post-merge." />}
+        label={<IconLabel label="pool" icon="information-circle" removeIcon={(protocol === "stETH" || protocol === "rETH") ? false : true} info={(protocol === "stETH" || protocol === "rETH") ? `Trade rates in the ${protocol} pool by depositing ETH as margin. ${protocol} cannot be used as a form of margin until post-merge.` : ""} />}
         variant="h3"
       >
         {protocol}
