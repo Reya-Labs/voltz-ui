@@ -9,7 +9,7 @@ import { AugmentedAMM, data } from '@utilities';
 import { Panel } from '@components/atomic';
 import { PositionTableFields } from './types';
 import { PositionTableHead, PositionTableRow } from './components';
-import { Agents, AMMProvider } from '@components/contexts';
+import { Agents, AMMProvider } from '@contexts';
 import TransactionList from '../TransactionList/TransactionList';
 import { List, ListItem } from '@mui/material';
 import { useAgent } from '@hooks';

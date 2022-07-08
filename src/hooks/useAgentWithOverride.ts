@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { Agents, AgentSettings } from '@components/contexts';
+import { Agents, AgentSettings } from '@contexts';
 import useAgent from './useAgent';
 
 export type AgentSettingsOverride = {

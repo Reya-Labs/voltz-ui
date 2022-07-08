@@ -1,6 +1,6 @@
 import React from 'react';
 import InputBase, { InputBaseProps } from '@mui/material/InputBase';
-import { withLabel } from '../../utilities';
+import { withLabel } from '../../hoc';
 
 export type InputProps = InputBaseProps;
 

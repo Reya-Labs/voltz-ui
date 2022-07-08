@@ -1,6 +1,6 @@
 import { DateTime, Duration } from 'luxon';
 
-import { Agents } from '@components/contexts';
+import { Agents } from '@contexts';
 
 const data = [
   {

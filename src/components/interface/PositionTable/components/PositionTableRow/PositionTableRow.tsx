@@ -1,7 +1,7 @@
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '@mui/system';
-import { Agents } from '@components/contexts';
+import { Agents } from '@contexts';
 import { Typography } from '@components/atomic';
 import { ProgressBar } from '@components/composite';
 import { lpLabels } from '../../constants';

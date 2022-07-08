@@ -5,7 +5,7 @@ import Link from '@mui/material/Link';
 import { AugmentedAMM } from '@utilities';
 import { useWallet, useSelector } from '@hooks';
 import { selectors } from '@store';
-import { AMMProvider, MintBurnFormLiquidityAction } from '@components/contexts';
+import { AMMProvider, MintBurnFormLiquidityAction } from '@contexts';
 import { Button, Panel, Typography, Loading } from '@components/atomic';
 import { ProtocolInformation, WalletAddressDisplay } from '@components/composite';
 import { formatCurrency } from '@utilities';

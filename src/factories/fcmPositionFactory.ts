@@ -5,7 +5,7 @@ import { GetWalletQuery } from '@graphql'
 import { Position, Token, RateOracle, FCMSwap, FCMUnwind, FCMSettlement } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 import { AugmentedAMM } from '@utilities';
-import { Wallet } from '@components/context';
+import { Wallet } from '@contexts';
 
 type FCMPositionQueryData = NonNullable<GetWalletQuery['wallet']>["fcmPositions"][number];
 

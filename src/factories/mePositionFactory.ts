@@ -5,7 +5,7 @@ import { GetWalletQuery } from '@graphql'
 import { providers } from 'ethers';
 import { Position, Token, RateOracle, Mint, Burn, Swap, MarginUpdate, Liquidation, Settlement } from '@voltz-protocol/v1-sdk';
 import { AugmentedAMM } from '@utilities';
-import { Wallet } from '@components/context';
+import { Wallet } from '@contexts';
 
 type MEPositionQueryData = NonNullable<GetWalletQuery['wallet']>["positions"][number];
 

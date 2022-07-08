@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { AMMContext, AMMDispatch } from '@components/contexts';
+import { AMMContext, AMMDispatch } from '@contexts';
 
 const useAMMContext = (): AMMDispatch => {
   return useContext(AMMContext);

@@ -5,14 +5,14 @@ import TableBody from '@mui/material/TableBody';
 import { SystemStyleObject, Theme } from '@mui/system';
 
 import { data, AugmentedAMM } from '@utilities';
-import { AMMProvider } from '@components/contexts';
+import { AMMProvider } from '@contexts';
 import { Panel } from '@components/atomic';
 import { AMMTableFields } from './types';
 import { labels } from './constants';
 import { mapAmmToAmmTableDatum } from './utilities';
 import { AMMTableFooter, AMMTableHead, AMMTableRow } from './components';
 import { useAgent } from '@hooks';
-import { Agents } from '@components/contexts';
+import { Agents } from '@contexts';
 import { DateTime } from 'luxon';
 
 

@@ -4,7 +4,7 @@ import { SystemStyleObject } from '@mui/system';
 import { Theme } from '@mui/material';
 import MuiButton, { ButtonProps as MuiButtonProps } from '@mui/material/Button';
 
-import { AgentProps, Agents } from '@components/contexts';
+import { AgentProps, Agents } from '@contexts';
 import { useAgentWithOverride } from '@hooks';
 
 export type ButtonProps = MuiButtonProps &

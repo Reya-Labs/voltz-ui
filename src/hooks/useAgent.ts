@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { AgentContext, AgentSettings } from '@components/contexts';
+import { AgentContext, AgentSettings } from '@contexts';
 
 const useAgent = (): AgentSettings => {
   return useContext(AgentContext);

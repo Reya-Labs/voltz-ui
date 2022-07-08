@@ -11,9 +11,9 @@ import {
   NotionalAmount,
 } from '@components/composite';
 import { LiquidityControls, MintInfo, SubmitControls } from './components';
-import { MarginControls } from '../SwapForm/components';
+import { MarginControls } from '../Swap/components';
 import { useTokenApproval } from '@hooks';
-import { MintBurnFormHintStates, MintBurnFormLiquidityAction, MintBurnFormMarginAction, MintBurnFormModes, MintBurnFormState, MintBurnFormSubmitButtonStates } from '@components/contexts';
+import { MintBurnFormHintStates, MintBurnFormLiquidityAction, MintBurnFormMarginAction, MintBurnFormModes, MintBurnFormState, MintBurnFormSubmitButtonStates } from '@contexts';
 import { isUndefined } from 'lodash';
 
 export type MintBurnFormProps = {

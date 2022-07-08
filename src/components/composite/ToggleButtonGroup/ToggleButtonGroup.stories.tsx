@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { Agents, AgentProvider } from '@components/contexts';
+import { Agents, AgentProvider } from '@contexts';
 import ToggleButtonGroup from './ToggleButtonGroup';
 
 export default {

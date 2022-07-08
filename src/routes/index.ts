@@ -5,3 +5,6 @@ export const routes = {
   SWAP: 'trader-pools',
   TRM_POST: 'trm-post'
 };
+
+export { default as LiquidityProvider } from './LiquidityProvider/LiquidityProvider';
+export { default as Trader } from './Trader/Trader';

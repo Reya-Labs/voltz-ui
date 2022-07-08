@@ -1,6 +1,6 @@
 import { Position } from '@voltz-protocol/v1-sdk';
 
-import { Agents } from '@components/contexts';
+import { Agents } from '@contexts';
 import { isUndefined } from 'lodash';
 
 const mapPositionToPositionTableDatum =

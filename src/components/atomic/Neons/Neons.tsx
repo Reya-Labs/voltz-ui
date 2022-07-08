@@ -4,7 +4,7 @@ import { ReactComponent as TableNeonBox1 } from './table-neon-box-1.svg';
 import { ReactComponent as TableNeonBox2 } from './table-neon-box-2.svg';
 import { ReactComponent as FormNeonBox1 } from './form-neon-box-1.svg';
 import { ReactComponent as FormNeonBox2 } from './form-neon-box-2.svg';
-import { Agents } from '@components/contexts';
+import { Agents } from '@contexts';
 import { useAgent } from '@hooks';
 
 export type NeonsProps = {

@@ -2,7 +2,7 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import isNull from 'lodash/isNull';
 
-import { Wallet } from '@components/contexts';
+import { Wallet } from '@contexts';
 import { Button, Icon, Panel, Typography } from '@components/atomic';
 
 export type WalletDisplayProps = {

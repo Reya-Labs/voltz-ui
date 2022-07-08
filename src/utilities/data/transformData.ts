@@ -1,4 +1,4 @@
-import { Agents } from '@components/contexts';
+import { Agents } from '@contexts';
 import { Mode, TEMPORARY_Pool, TableData } from './types';
 
 export type TransformDataArgs = {

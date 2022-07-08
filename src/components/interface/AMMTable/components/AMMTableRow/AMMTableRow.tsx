@@ -4,7 +4,7 @@ import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '@mui/system';
 import isNull from 'lodash/isNull';
 
-import { Agents } from '@components/contexts';
+import { Agents } from '@contexts';
 import { Button, Typography } from '@components/atomic';
 import { MaturityInformation } from '@components/composite';
 import { useAgent, useAMMContext, useWallet } from '@hooks';

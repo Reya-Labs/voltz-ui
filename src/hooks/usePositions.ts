@@ -6,7 +6,7 @@ import { DateTime } from 'luxon';
 
 import { actions, selectors } from '@store';
 import { useAgent, useWallet, useSelector, useDispatch } from '@hooks';
-import { Agents } from '@components/contexts';
+import { Agents } from '@contexts';
 import { FCMPositionFactory, MEPositionFactory } from '@factories';
 
 export type usePositionsResult = {

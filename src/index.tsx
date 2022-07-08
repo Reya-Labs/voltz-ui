@@ -18,8 +18,8 @@ import './index.css';
 import store from './store';
 import { VoltzGraphProvider } from './graphql';
 import { ThemeProvider } from './theme';
-import { AgentProvider, WalletProvider } from './components';
-import { App } from './application';
+import { AgentProvider, WalletProvider } from './contexts';
+import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 // the root of the react app 

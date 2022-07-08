@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 
-import { Agents } from '@components/contexts';
+import { Agents } from '@contexts';
 
 export type TableOrder = 'asc' | 'desc';
 

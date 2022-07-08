@@ -1,4 +1,4 @@
-import { Agents } from '@components/contexts';
+import { Agents } from '@contexts';
 import { ethers } from 'ethers';
 
 export type WindowWithWallet = typeof window & {

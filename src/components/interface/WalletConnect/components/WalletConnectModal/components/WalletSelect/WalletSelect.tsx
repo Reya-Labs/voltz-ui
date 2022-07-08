@@ -2,10 +2,10 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 
-import { Wallet } from '@components/contexts';
+import { Wallet } from '@contexts';
 import { Icons, Typography } from '@components/atomic';
 import { WalletOptionButton } from './components';
-import { WalletName } from '@components/contexts';
+import { WalletName } from '@contexts';
 
 type WalletOption = {
   title: string;

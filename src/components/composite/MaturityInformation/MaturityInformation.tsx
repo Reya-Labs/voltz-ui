@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js';
 
-import { withLabel } from '../../utilities';
+import { withLabel } from '../../hoc';
 import { formatDateTime } from '@utilities';
 import { ProgressBar } from '@components/composite';
 

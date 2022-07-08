@@ -3,9 +3,9 @@ import MuiToggleButtonGroup, {
   ToggleButtonGroupProps as MuiToggleButtonGroupProps,
 } from '@mui/material/ToggleButtonGroup';
 
-import { AgentProps } from '@components/contexts';
+import { AgentProps } from '@contexts';
 import { useAgentWithOverride } from '@hooks';
-import { withLabel, WithLabelProps } from '../../utilities';
+import { withLabel, WithLabelProps } from '../../hoc';
 import { ToggleButton } from '../../atomic';
 
 export type ToggleButtonGroupProps<T> = MuiToggleButtonGroupProps &
