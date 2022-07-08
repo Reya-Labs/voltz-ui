@@ -11,22 +11,24 @@ import { formatNumber } from '@utilities';
  */
 
 export type LeverageProps = { 
+  availableNotional?: number; 
   minMargin?: number;
   notional?: number; 
   onChange: (value: number) => void;
   value: number;
 }
 
-const Leverage = ({minMargin, notional, onChange, value}: LeverageProps) => {
+const Leverage = ({availableNotional, minMargin, notional, onChange, value}: LeverageProps) => {
   const delay = 50;
   const hint = 'Choose the amount of leverage you wish to trade with. The slider helps demonstrate safe amounts of leverage.';
   const margin = isNumber(minMargin) ? Math.max(minMargin, 0.1) : undefined;
 
-  const isDisabled = isUndefined(margin) || isUndefined(notional);
+  const isDisabled = isUndefined(availableNotional) || isUndefined(margin) || isUndefined(notional);
   const [internalValue, setInternalValue] = useState(value);
   const timer = useRef<number>();
 
-  const high = !isDisabled ? Math.max((notional / margin), 1) : 20;
+  const maxNotional = !isDisabled ? Math.min(notional, availableNotional) : 10;
+  const high = !isDisabled ? Math.max((maxNotional / margin), 1) : 20;
   const low = 1;
   const range = high - low;
 
