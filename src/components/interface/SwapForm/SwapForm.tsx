@@ -170,6 +170,7 @@ const SwapForm: React.FunctionComponent<SwapFormProps> = ({
       {mode === SwapFormModes.NEW_POSITION && ((agent === Agents.FIXED_TRADER && formState.partialCollateralization) || agent === Agents.VARIABLE_TRADER) && (
         <Box sx={{ ...bottomSpacing, display: 'flex' }}>
           <Leverage 
+            availableNotional={swapInfo?.availableNotional ?? undefined}
             minMargin={swapInfo?.marginRequirement ?? undefined}
             notional={formState.notional}
             onChange={onChangeLeverage}
