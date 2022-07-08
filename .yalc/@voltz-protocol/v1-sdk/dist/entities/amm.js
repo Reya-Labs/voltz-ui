@@ -311,7 +311,7 @@ var AMM = /** @class */ (function () {
                             })];
                     case 2:
                         estimatedGas = _b.sent();
-                        tempOverrides.gasLimit = estimatedGas;
+                        tempOverrides.gasLimit = (0, constants_1.getGasBuffer)(estimatedGas);
                         return [4 /*yield*/, peripheryContract.swap(swapPeripheryParams, tempOverrides).catch(function (error) {
                                 var errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, _this.environment);
                                 throw new Error(errorMessage);
@@ -469,7 +469,7 @@ var AMM = /** @class */ (function () {
                             })];
                     case 2:
                         estimatedGas = _b.sent();
-                        tempOverrides.gasLimit = estimatedGas;
+                        tempOverrides.gasLimit = (0, constants_1.getGasBuffer)(estimatedGas);
                         return [4 /*yield*/, peripheryContract.mintOrBurn(mintOrBurnParams, tempOverrides).catch(function (error) {
                                 var errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, _this.environment);
                                 throw new Error(errorMessage);
@@ -606,7 +606,7 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, peripheryContract.estimateGas.updatePositionMargin(this.marginEngineAddress, tickLower, tickUpper, scaledMarginDelta, false, tempOverrides)];
                     case 2:
                         estimatedGas = _b.sent();
-                        tempOverrides.gasLimit = estimatedGas;
+                        tempOverrides.gasLimit = (0, constants_1.getGasBuffer)(estimatedGas);
                         return [4 /*yield*/, peripheryContract.updatePositionMargin(this.marginEngineAddress, tickLower, tickUpper, scaledMarginDelta, false, tempOverrides)];
                     case 3:
                         updatePositionMarginTransaction = _b.sent();
@@ -2108,13 +2108,15 @@ var AMM = /** @class */ (function () {
     // one week look-back window apy
     AMM.prototype.getInstantApy = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, lastBlock, oneBlockAgo, _b, _c, twoBlocksAgo, _d, _e, rateOracleContract, oneWeekApy, blocksPerDay, daysPerYear, fcmContract, cTokenAddress, cTokenContract, supplyRatePerBlock, supplyApy, lastBlock, oneBlockAgo, _f, _g, twoBlocksAgo, _h, _j, rateOracleContract, oneWeekApy, lastBlock, oneBlockAgo, _k, _l, twoBlocksAgo, _m, _o, rateOracleContract, oneWeekApy;
+            var blocksPerDay, blockPerHour, _a, lastBlock, oneBlockAgo, _b, _c, twoBlocksAgo, _d, _e, rateOracleContract, oneWeekApy, daysPerYear, fcmContract, cTokenAddress, cTokenContract, supplyRatePerBlock, supplyApy, lastBlock, to, _f, _g, from, _h, _j, rateOracleContract, oneWeekApy, lastBlock, to, _k, _l, from, _m, _o, rateOracleContract, oneWeekApy;
             return __generator(this, function (_p) {
                 switch (_p.label) {
                     case 0:
                         if (!this.provider) {
                             throw new Error('Blockchain not connected');
                         }
+                        blocksPerDay = 6570;
+                        blockPerHour = 274;
                         _a = this.rateOracle.protocolId;
                         switch (_a) {
                             case 1: return [3 /*break*/, 1];
@@ -2140,7 +2142,6 @@ var AMM = /** @class */ (function () {
                         oneWeekApy = _p.sent();
                         return [2 /*return*/, oneWeekApy.div(ethers_2.BigNumber.from(1000000000000)).toNumber() / 1000000];
                     case 6:
-                        blocksPerDay = 6570;
                         daysPerYear = 365;
                         fcmContract = typechain_1.CompoundFCM__factory.connect(this.fcmAddress, this.provider);
                         return [4 /*yield*/, fcmContract.cToken()];
@@ -2158,13 +2159,13 @@ var AMM = /** @class */ (function () {
                         _g = (_f = ethers_2.BigNumber).from;
                         return [4 /*yield*/, this.provider.getBlock(lastBlock - 1)];
                     case 11:
-                        oneBlockAgo = _g.apply(_f, [(_p.sent()).timestamp]);
+                        to = _g.apply(_f, [(_p.sent()).timestamp]);
                         _j = (_h = ethers_2.BigNumber).from;
-                        return [4 /*yield*/, this.provider.getBlock(lastBlock - 2)];
+                        return [4 /*yield*/, this.provider.getBlock(lastBlock - 28 * blockPerHour)];
                     case 12:
-                        twoBlocksAgo = _j.apply(_h, [(_p.sent()).timestamp]);
+                        from = _j.apply(_h, [(_p.sent()).timestamp]);
                         rateOracleContract = typechain_1.BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
-                        return [4 /*yield*/, rateOracleContract.callStatic.getApyFromTo(twoBlocksAgo, oneBlockAgo)];
+                        return [4 /*yield*/, rateOracleContract.callStatic.getApyFromTo(from, to)];
                     case 13:
                         oneWeekApy = _p.sent();
                         return [2 /*return*/, oneWeekApy.div(ethers_2.BigNumber.from(1000000000000)).toNumber() / 1000000];
@@ -2174,13 +2175,13 @@ var AMM = /** @class */ (function () {
                         _l = (_k = ethers_2.BigNumber).from;
                         return [4 /*yield*/, this.provider.getBlock(lastBlock - 1)];
                     case 16:
-                        oneBlockAgo = _l.apply(_k, [(_p.sent()).timestamp]);
+                        to = _l.apply(_k, [(_p.sent()).timestamp]);
                         _o = (_m = ethers_2.BigNumber).from;
-                        return [4 /*yield*/, this.provider.getBlock(lastBlock - 2)];
+                        return [4 /*yield*/, this.provider.getBlock(lastBlock - 28 * blockPerHour)];
                     case 17:
-                        twoBlocksAgo = _o.apply(_m, [(_p.sent()).timestamp]);
+                        from = _o.apply(_m, [(_p.sent()).timestamp]);
                         rateOracleContract = typechain_1.BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
-                        return [4 /*yield*/, rateOracleContract.callStatic.getApyFromTo(twoBlocksAgo, oneBlockAgo)];
+                        return [4 /*yield*/, rateOracleContract.callStatic.getApyFromTo(from, to)];
                     case 18:
                         oneWeekApy = _p.sent();
                         return [2 /*return*/, oneWeekApy.div(ethers_2.BigNumber.from(1000000000000)).toNumber() / 1000000];
