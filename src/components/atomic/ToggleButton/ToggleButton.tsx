@@ -1,10 +1,9 @@
 import React from 'react';
-import { SystemStyleObject, Theme } from '@mui/system';
 import MuiToggleButton, {
   ToggleButtonProps as MuiToggleButtonProps,
 } from '@mui/material/ToggleButton';
 
-import { colors } from '@theme';
+import { colors, SystemStyleObject, Theme } from '@theme';
 import { AgentProps, Agents } from '@contexts';
 import { useAgentWithOverride } from '@hooks';
 

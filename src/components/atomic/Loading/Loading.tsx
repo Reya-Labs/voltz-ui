@@ -1,6 +1,6 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import { SystemStyleObject, Theme } from '@mui/system';
+import { SystemStyleObject, Theme } from '@theme';
 
 type LoadingProps = {
   sx?: SystemStyleObject<Theme>;

@@ -1,7 +1,6 @@
 import React from 'react';
-import { SystemStyleObject, Theme } from '@mui/system';
+import { colors, SystemStyleObject, Theme } from '@theme';
 import Box from '@mui/material/Box';
-import { colors } from '@theme';
 
 export type PanelProps = {
   variant?: 'error' | 'warning' | 'info' | 'iconLabel' | 'main' | 'grey-dashed' | 'dark' | 'darker' ;

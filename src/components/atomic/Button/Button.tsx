@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SystemStyleObject } from '@mui/system';
-import { Theme } from '@mui/material';
+import { SystemStyleObject, Theme } from '@theme';
 import MuiButton, { ButtonProps as MuiButtonProps } from '@mui/material/Button';
 
 import { AgentProps, Agents } from '@contexts';

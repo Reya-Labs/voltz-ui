@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SxProps, Theme } from '@mui/system';
+import { SystemStyleObject, Theme } from '@theme';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import isArray from 'lodash/isArray';
 
@@ -42,7 +42,7 @@ const Icon: React.FunctionComponent<IconProps> = ({ name, sx, link, ...props }) 
     return null;
   }
 
-  const defaultSx: SxProps<Theme> = {
+  const defaultSx: SystemStyleObject<Theme> = {
     fill: 'none',
   };
   const getSx = () => {

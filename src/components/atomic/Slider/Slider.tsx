@@ -1,5 +1,5 @@
 import React from 'react';
-import { SystemStyleObject, Theme } from '@mui/system';
+import { SystemStyleObject, Theme } from '@theme';
 import MuiSlider, { SliderProps as MuiSliderProps } from '@mui/material/Slider';
 
 export type SliderProps = MuiSliderProps & {
