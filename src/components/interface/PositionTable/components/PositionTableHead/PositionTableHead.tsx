@@ -1,7 +1,6 @@
 import React from 'react';
-import { SystemStyleObject, Theme } from '@mui/system';
-import { Box } from '@mui/material';
-import { colors } from '@theme';
+import Box from '@mui/material/Box';
+import { colors, SystemStyleObject, Theme } from '@theme';
 import { formatCurrency, formatNumber } from '@utilities';
 import PositionBadge from '../PositionBadge';
 import { Typography } from '@components/atomic';

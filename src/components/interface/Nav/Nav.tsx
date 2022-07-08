@@ -1,5 +1,5 @@
 import React from 'react';
-import { SystemStyleObject, Theme } from '@mui/system';
+import { SystemStyleObject, Theme } from '@theme';
 import Box from '@mui/material/Box';
 import { routes } from '@routes';
 import { Button, Icon } from '../../atomic';

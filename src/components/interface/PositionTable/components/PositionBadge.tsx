@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/material';
-import { SystemStyleObject, Theme } from '@mui/system';
-import { colors } from '@theme';
+import { colors, SystemStyleObject, Theme } from '@theme';
 import { Typography } from '@components/atomic';
 
 type PositionBadgeVariant = 'FT' | 'VT' | 'LP' | 'FC';

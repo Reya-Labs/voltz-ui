@@ -2,7 +2,7 @@ import React from 'react';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import { SystemStyleObject, Theme } from '@mui/system';
+import { SystemStyleObject, Theme } from '@theme';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 
 import { AugmentedAMM, data } from '@utilities';
@@ -11,7 +11,8 @@ import { PositionTableFields } from './types';
 import { PositionTableHead, PositionTableRow } from './components';
 import { Agents, AMMProvider } from '@contexts';
 import TransactionList from '../TransactionList/TransactionList';
-import { List, ListItem } from '@mui/material';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 import { useAgent } from '@hooks';
 
 export type PositionTableProps = {

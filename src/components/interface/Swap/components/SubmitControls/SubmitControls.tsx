@@ -1,10 +1,10 @@
 import React, { ReactNode } from 'react';
 import { SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates } from '@contexts';
 import { useAgent, useTokenApproval } from '@hooks';
-import { Typography } from '@mui/material';
-import { Box } from '@mui/system';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 import { Button, Ellipsis } from '@components/atomic';
-import { colors }  from '@theme';
+import { colors } from '@theme';
 import { SwapFormModes } from '../../types';
 
 interface SubmitControlsProps {

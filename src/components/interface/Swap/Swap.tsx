@@ -1,7 +1,6 @@
 import React from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
-import { SystemStyleObject, Theme } from '@mui/system';
 import { useAgent, useTokenApproval } from '@hooks';
 import { Agents, SwapFormMarginAction, SwapFormState, SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates, } from '@contexts';
 import { Panel } from '@components/atomic';
@@ -13,7 +12,7 @@ import {
   MarginAmount,
 } from '@components/composite';
 import { TraderControls, MarginControls, SwapInfo, SwapInfoEditMargin, SubmitControls, Leverage } from './components';
-import { colors } from '@theme';
+import { colors, SystemStyleObject, Theme } from '@theme';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from './types';
 import { PositionBadge } from '@components/interface';

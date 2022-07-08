@@ -1,9 +1,8 @@
 import React from 'react';
-import { SystemStyleObject, Theme } from '@mui/system';
+import { colors, SystemStyleObject, Theme } from '@theme';
 import { Typography } from '@components/atomic';
 import { formatCurrency, formatNumber } from '@utilities';
-import { Box } from '@mui/material';
-import { colors } from '@theme';
+import Box from '@mui/material/Box';
 import { isUndefined } from 'lodash';
 import PortfolioHeaderValue from './PortfolioHeaderValue';
 import PortfolioHeaderBox from './PortfolioHeaderBox';

@@ -1,10 +1,9 @@
 import React from 'react';
-import { Box } from '@mui/material';
-import { colors } from '@theme';
+import Box from '@mui/material/Box';
+import { colors, SystemStyleObject, Theme } from '@theme';
 import PortfolioHeaderValue from './PortfolioHeaderValue';
 import PortfolioHeaderBox from './PortfolioHeaderBox';
 import { PortfolioHeaderProps } from './PortfolioHeader';
-import { SystemStyleObject, Theme } from '@mui/system';
 
 export type PortfolioHeaderHealthProps = {
   positionsDanger: PortfolioHeaderProps['positionsDanger'];

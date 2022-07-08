@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Box, Slider } from '@mui/material';
+import Box from '@mui/material/Box';
+import Slider from '@mui/material/Slider';
 import { MaskedIntegerField, IconLabel } from '@components/composite';
 import { colors } from '@theme';
 import { isNumber, isUndefined } from 'lodash';

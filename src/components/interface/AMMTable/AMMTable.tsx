@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import { SystemStyleObject, Theme } from '@mui/system';
+import { SystemStyleObject, Theme } from '@theme';
 
 import { data, AugmentedAMM } from '@utilities';
 import { AMMProvider } from '@contexts';

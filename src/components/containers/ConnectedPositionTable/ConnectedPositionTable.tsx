@@ -11,7 +11,7 @@ import { actions } from '@store';
 import { useDispatch } from '@hooks';
 import { AugmentedAMM } from '@utilities';
 import { routes } from '@routes';
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
 import { getHealthCounters, getNetPayingRate, getNetReceivingRate, getTotalAccruedCashflow, getTotalMargin, getTotalNotional } from './services';
 import { colors } from '@theme';
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import { FCMPositionTransaction, TraderPositionTransaction, TransactionType, LPPositionTransaction } from './types';
 import { Position } from '@voltz-protocol/v1-sdk';
-import { Box, ListItem } from '@mui/material';
-import { SystemStyleObject, Theme } from '@mui/system';
-import colors from '../../../theme/colors';
+import Box from '@mui/material/Box';
+import ListItem from '@mui/material/ListItem';
+import { colors, SystemStyleObject, Theme } from '@theme';
 import { Button, Icon, Typography } from '@components/atomic';
 import { getTransactionData } from './services';
 
