@@ -7,8 +7,7 @@ import isEmpty from 'lodash/isEmpty';
 import { useUniqueId } from '@hooks';
 import { Input, Typography } from '@components/atomic';
 import { OverrideTypes } from '@utilities';
-import { colors, inputStyles } from '@theme';
-import { SystemStyleObject, Theme } from '@mui/system';
+import { colors, inputStyles, SystemStyleObject, Theme } from '@theme';
 
 export type TextFieldProps = OverrideTypes<Omit<MuiTextFieldProps, 'variant'>, {
   dynamic?: boolean; // used for styling

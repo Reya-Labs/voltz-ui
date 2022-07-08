@@ -5,7 +5,7 @@ import isNull from 'lodash/isNull';
 import upperCase from 'lodash/upperCase';
 
 import { Icon, Icons, Panel, Typography } from '@components/atomic';
-import { SystemStyleObject, Theme } from '@mui/system';
+import { SystemStyleObject, Theme } from '@theme';
 
 export type IconLabelProps = {
   label: string;

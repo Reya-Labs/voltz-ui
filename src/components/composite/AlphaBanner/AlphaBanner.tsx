@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
 import { Typography } from '@components/atomic';
-import { colors } from '@theme';
-import { SystemStyleObject, Theme } from '@mui/system';
+import { colors, SystemStyleObject, Theme } from '@theme';
 
 const textStyles: SystemStyleObject<Theme> = {
   display:'inline-block', 

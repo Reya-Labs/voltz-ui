@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { Typography } from '@components/atomic';
-import { Box } from '@mui/system';
+import Box from '@mui/material/Box';
 import { colors } from '@theme';
 
 type ProgressBarProps = {

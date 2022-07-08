@@ -1,14 +1,15 @@
 import React, { ReactNode } from 'react';
 import CurrencyInput, { CurrencyInputProps } from 'react-currency-input-field';
 import { InputBaseProps } from '@mui/material/InputBase';
-import { Box, FormControl, InputLabel } from '@mui/material';
-import colors from '../../../theme/colors';
+import Box from '@mui/material/Box';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+
 import isEmpty from 'lodash/isEmpty';
 import { useUniqueId } from '@hooks';
 import { OverrideTypes } from '@utilities';
-import { SystemStyleObject, Theme } from '@mui/system';
 import { Typography } from '@components/atomic';
-import { inputStyles } from '@theme';
+import { colors, inputStyles, SystemStyleObject, Theme } from '@theme';
 
 export type MaskedIntegerFieldProps = OverrideTypes<CurrencyInputProps, {
   dynamic?: boolean;
