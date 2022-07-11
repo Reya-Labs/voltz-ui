@@ -36,18 +36,21 @@ const usePositions = (): usePositionsResult => {
     }
   }, [positionCount, loading, error, isSignerAvailable]);
 
-  const positions = (mePositions) ? ((fcmPositions) ? mePositions.concat(fcmPositions) : mePositions) : fcmPositions;
-  if (positions) {
-    positions.sort((a, b) => {
-      if (JSBI.GT(a.createdTimestamp, b.createdTimestamp)) {
-        return 1;
-      }
-      if (JSBI.GT(b.createdTimestamp, a.createdTimestamp)) {
-        return -1;
-      }
-      return 0;
-    })
-  }
+  const positions = useMemo(() => {
+    const _positions = (mePositions) ? ((fcmPositions) ? mePositions.concat(fcmPositions) : mePositions) : fcmPositions;
+    if (_positions) {
+      _positions.sort((a, b) => {
+        if (JSBI.GT(a.createdTimestamp, b.createdTimestamp)) {
+          return 1;
+        }
+        if (JSBI.GT(b.createdTimestamp, a.createdTimestamp)) {
+          return -1;
+        }
+        return 0;
+      })
+    }
+    return _positions;
+  }, [mePositions, fcmPositions]);
 
   const positionsByAgent = useMemo(() => {
     return positions?.filter(({ positionType }) => {
