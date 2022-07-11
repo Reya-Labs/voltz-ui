@@ -3,9 +3,9 @@ import SummaryPanel from '../../../../atomic/SummaryPanel/SummaryPanel';
 import { IconLabel } from '@components/composite';
 import { formatCurrency, formatNumber } from '@utilities';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
-import { SwapFormActions } from '../../types';
+import { SwapFormActions } from '../../../SwapForm/types';
 
-export type SwapInfoProps = {
+export type SwapSummaryProps = {
   data: InfoPostSwap | void | null;
   loading: boolean;
   underlyingTokenName?: string; 
@@ -13,7 +13,7 @@ export type SwapInfoProps = {
   formAction: SwapFormActions;
 };
 
-const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({ data, loading, underlyingTokenName = '', yieldBearingTokenName = '', formAction}) => {
+const SwapSummary: React.FunctionComponent<SwapSummaryProps> = ({ data, loading, underlyingTokenName = '', yieldBearingTokenName = '', formAction}) => {
 
   const label = <IconLabel
     label="trade information"
@@ -55,4 +55,4 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({ data, loading, under
   return <SummaryPanel label={label} loading={loading} rows={rows} />
 };
 
-export default SwapInfo;
+export default SwapSummary;

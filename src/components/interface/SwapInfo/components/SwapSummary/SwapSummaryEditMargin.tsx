@@ -4,7 +4,7 @@ import { IconLabel } from '@components/composite';
 import { formatCurrency } from '@utilities';
 import { isUndefined } from 'lodash';
 
-export type SwapInfoEditMarginProps = {
+export type SwapSummaryEditMarginProps = {
   balance?: number;
   loading?: boolean;
   minRequiredMargin: number;
@@ -12,7 +12,7 @@ export type SwapInfoEditMarginProps = {
   underlyingTokenName?: string; 
 };
 
-const SwapInfoEditMargin: React.FunctionComponent<SwapInfoEditMarginProps> = ({ balance, loading = false, minRequiredMargin, positionMargin, underlyingTokenName = '' }) => {
+const SwapSummaryEditMargin: React.FunctionComponent<SwapSummaryEditMarginProps> = ({ balance, loading = false, minRequiredMargin, positionMargin, underlyingTokenName = '' }) => {
 
   const label = <IconLabel
     label="trade information"
@@ -38,4 +38,4 @@ const SwapInfoEditMargin: React.FunctionComponent<SwapInfoEditMarginProps> = ({ 
   return <SummaryPanel label={label} loading={loading} rows={rows} />
 };
 
-export default SwapInfoEditMargin;
+export default SwapSummaryEditMargin;

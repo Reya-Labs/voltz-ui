@@ -9,6 +9,7 @@ export { default as PositionTable } from './PositionTable/PositionTable';
 export { PositionBadge } from './PositionTable/components';
 export type { PositionTableProps } from './PositionTable/PositionTable';
 export type { PositionTableFields } from './PositionTable/types';
-export * from './Swap';
+export * from './SwapForm';
+export * from './SwapInfo';
 export { default as WalletConnect } from './WalletConnect/WalletConnect';
 export { default as PortfolioHeader } from './PortfolioHeader/PortfolioHeader';

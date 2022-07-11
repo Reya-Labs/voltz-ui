@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { routes } from '@routes';
 import { actions, selectors } from '@store';
 import { useAgent, useDispatch, useSelector } from '@hooks';
-import { SwapForm, PendingTransaction, SwapFormActions, SwapFormModes } from '@components/interface';
+import { SwapForm, SwapInfo, PendingTransaction, SwapFormActions } from '@components/interface';
 import { Agents, useSwapFormContext } from '@contexts';
 import { BigNumber } from 'ethers';
 
@@ -149,37 +149,48 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
   }
 
   return (
-    <SwapForm
-      approvalsNeeded={form.approvalsNeeded}
-      balance={form.balance}
-      endDate={amm.endDateTime}
-      errors={form.errors}
-      formAction={form.action} 
-      formState={form.state}
-      hintState={form.hintState}
-      isFCMAction={form.isFCMAction}
-      isFCMAvailable={amm.isFCM}
-      isFormValid={form.isValid}
-      isTradeVerified={form.isTradeVerified}
-      minRequiredMargin={form.minRequiredMargin}
-      mode={mode}
-      onCancel={onReset}
-      onChangeLeverage={form.setLeverage}
-      onChangeMargin={form.setMargin}
-      onChangeMarginAction={form.setMarginAction}
-      onChangeNotional={form.setNotional}
-      onChangePartialCollateralization={form.setPartialCollateralization}
-      onSubmit={handleSubmit}
-      positionMargin={position?.margin ? amm.descale(BigNumber.from(position.margin.toString())) : undefined}
-      protocol={amm.protocol}
-      startDate={amm.startDateTime}
-      swapInfo={form.swapInfo.data}
-      swapInfoLoading={form.swapInfo.loading}
-      submitButtonState={form.submitButtonState}
-      tokenApprovals={form.tokenApprovals}
-      tradeInfoErrorMessage={form.swapInfo.errorMessage}
-      underlyingTokenName={amm.underlyingToken.name}
-    />
+    <>
+      <SwapForm
+        approvalsNeeded={form.approvalsNeeded}
+        balance={form.balance}
+        endDate={amm.endDateTime}
+        errors={form.errors}
+        formAction={form.action} 
+        formState={form.state}
+        hintState={form.hintState}
+        isFCMAction={form.isFCMAction}
+        isFCMAvailable={amm.isFCM}
+        isFormValid={form.isValid}
+        isTradeVerified={form.isTradeVerified}
+        mode={mode}
+        onCancel={onReset}
+        onChangeLeverage={form.setLeverage}
+        onChangeMargin={form.setMargin}
+        onChangeMarginAction={form.setMarginAction}
+        onChangeNotional={form.setNotional}
+        onChangePartialCollateralization={form.setPartialCollateralization}
+        onSubmit={handleSubmit}
+        protocol={amm.protocol}
+        startDate={amm.startDateTime}
+        swapInfo={form.swapInfo.data}
+        swapInfoLoading={form.swapInfo.loading}
+        submitButtonState={form.submitButtonState}
+        tokenApprovals={form.tokenApprovals}
+        tradeInfoErrorMessage={form.swapInfo.errorMessage}
+        underlyingTokenName={amm.underlyingToken.name}
+      />
+      <SwapInfo
+        balance={form.balance}
+        formAction={form.action} 
+        minRequiredMargin={form.minRequiredMargin}
+        mode={mode}
+        positionMargin={position?.margin ? amm.descale(BigNumber.from(position.margin.toString())) : undefined}
+        protocol={amm.protocol}
+        swapSummary={form.swapInfo.data}
+        swapSummaryLoading={form.swapInfo.loading}
+        underlyingTokenName={amm.underlyingToken.name}
+      />
+    </>
   );
 };
 

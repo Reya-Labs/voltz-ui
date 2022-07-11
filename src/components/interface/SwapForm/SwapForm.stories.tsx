@@ -3,7 +3,7 @@ import { DateTime, Duration } from 'luxon';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { AgentProvider, SwapFormProvider, SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates, useSwapFormContext } from '@contexts';
-import SwapForm from './Swap';
+import SwapForm from './SwapForm';
 import { useTokenApproval } from '@hooks';
 import { AugmentedAMM } from '@utilities';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
