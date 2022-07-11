@@ -48,7 +48,8 @@ const SwapSummary: React.FunctionComponent<SwapSummaryProps> = ({ data, loading,
     },
     {
       label: 'MINIMUM REQUIRED MARGIN:', 
-      value: (formAction === SwapFormActions.SWAP || formAction === SwapFormActions.UPDATE) ? `${formatCurrency(data.marginRequirement, true)} ${underlyingTokenName}` : `${formatCurrency(data.marginRequirement, true)} ${yieldBearingTokenName}`
+      value: (formAction === SwapFormActions.SWAP || formAction === SwapFormActions.UPDATE) ? `${formatCurrency(data.marginRequirement, true)} ${underlyingTokenName}` : `${formatCurrency(data.marginRequirement, true)} ${yieldBearingTokenName}`,
+      highlight: true
     },
   ] : undefined;
 

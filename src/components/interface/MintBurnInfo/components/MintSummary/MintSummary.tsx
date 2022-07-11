@@ -26,7 +26,8 @@ const MintSummary: React.FunctionComponent<MintSummaryProps> = ({ balance, minRe
     },
     {
       label: 'MINIMUM REQUIRED MARGIN:', 
-      value: `${formatCurrency(minRequiredMargin, true)} ${underlyingTokenName}`
+      value: `${formatCurrency(minRequiredMargin, true)} ${underlyingTokenName}`,
+      highlight: true
     },
   ] : undefined;
 

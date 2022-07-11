@@ -1,28 +1,32 @@
 import React, { ReactNode } from 'react';
-import { colors, SystemStyleObject, Theme } from '@theme';
+import { Box, SystemStyleObject, Theme } from '@mui/system';
 import { Typography } from '@components/atomic';
-import Box from '@mui/material/Box';
+import colors from '../../../theme/colors';
 
 interface SummaryPanelProps {
   label?: ReactNode;
   loading?: boolean;
-  rows?: {label: string; value: string}[];
+  rows?: {label: string; value: ReactNode, highlight?: boolean}[];
 }
 
 const SummaryPanel = ({ label, loading, rows }: SummaryPanelProps) => {
-  const containerStyles: SystemStyleObject<Theme> = {
-    border: `1px solid ${colors.lavenderWeb.darken040}`,
-    borderRadius: (theme) => theme.spacing(1),
-    padding: (theme) => theme.spacing(4),
-  };
   const rowStyles: SystemStyleObject<Theme> = {
     display: 'flex',
     alignItems: 'end',
     justifyContent: 'space-between',
     width: '100%',
+    'label': {
+      color: colors.lavenderWeb.base,
+      fontSize: '14px',
+      marginBottom: (theme) => theme.spacing(4)
+    },
+    'svg': {
+      color: colors.lavenderWeb.base,
+    }
   };
   const valueStyles: SystemStyleObject<Theme> = {
     whiteSpace: 'nowrap',
+    fontSize: '12px',
   };
 
   if (loading) {
@@ -31,13 +35,25 @@ const SummaryPanel = ({ label, loading, rows }: SummaryPanelProps) => {
 
   if (rows) {
     return (
-      <Box sx={containerStyles}>
+      <Box>
         {rows.map((row, index) => (
           <Box sx={rowStyles} key={row.label}>
-            <Typography variant="body2" label={index === 0 ? label : undefined}>
+            <Typography 
+              variant="body2" 
+              label={index === 0 ? label : undefined} 
+              sx={{ 
+                color: (row.highlight) ? colors.lavenderWeb.base : colors.lavenderWeb.darken015,
+                fontSize: '12px',
+                lineHeight: '1',
+                marginBottom: (theme) => theme.spacing(2)
+              }}
+            >
               {row.label}
             </Typography>
-            <Typography agentStyling variant="body2" sx={valueStyles}>
+            <Typography agentStyling={row.highlight} variant="body2" sx={{
+              ...valueStyles,
+              color: row.highlight ? undefined : colors.lavenderWeb.darken015,
+            }}>
               {row.value}
             </Typography>
           </Box>
