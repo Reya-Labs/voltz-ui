@@ -11,8 +11,8 @@ const InputTokenLabel = ({ tokenName }:InputTokenLabelProps) => {
     switch(tokenName.toUpperCase()) {
       case 'DAI':
         return <Icon name='token-dai' sx={{ display: 'block' }} />;
-      // case 'ETH':
-      //   return 'todo';
+      case 'ETH':
+        return <Icon name='token-eth' sx={{ display: 'block' }} />;
       case 'LIDO':
         return <Icon name='token-lido' sx={{ display: 'block' }} />;
       case 'USDC':
