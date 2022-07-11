@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box } from '@mui/material';
-import { colors, SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '@mui/system';
+import { colors } from '@theme';
 import { Typography } from '@components/atomic';
 
 type PositionBadgeVariant = 'FT' | 'VT' | 'LP' | 'FC';
@@ -19,6 +20,7 @@ const labels:Record<PositionBadgeVariant, string> = {
 
 const baseStyles:SystemStyleObject<Theme> = {
   border: '1px solid transparent',
+  display: 'inline-block',
   padding: (theme) => `${theme.spacing(1)} ${theme.spacing(2)}`,
   textTransform: 'uppercase',
   borderRadius: '4px',
@@ -51,7 +53,22 @@ const styles:Record<PositionBadgeVariant, SystemStyleObject<Theme>> = {
   }
 }
 
-const PositionBadge = ({ sx = {}, variant }:PositionBadgeProps) => {
+/**
+ * Returns the 2 letter variant for a position type
+ * @param positionType - positionType from your position (1, 2 or 3)
+ */
+export const getPositionBadgeVariant = (positionType: number) => {
+  switch(positionType) {
+    case 1:
+      return 'FT';
+    case 2:
+      return 'VT';
+    case 3:
+      return 'LP';
+  }
+};
+
+export const PositionBadge = ({ sx = {}, variant }:PositionBadgeProps) => {
   if (variant) return (
     <Box sx={{ ...sx, ...styles[variant] }}>
       <Typography variant='body2' sx={{ color: 'unset', fontSize: '14px', lineHeight: '1' }}>

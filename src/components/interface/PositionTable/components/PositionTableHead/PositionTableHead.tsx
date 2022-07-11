@@ -2,8 +2,7 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import { colors, SystemStyleObject, Theme } from '@theme';
 import { formatCurrency, formatNumber } from '@utilities';
-import PositionBadge from '../PositionBadge';
-import { Typography } from '@components/atomic';
+import { getPositionBadgeVariant, PositionBadge, Typography } from '@components/atomic';
 import { isUndefined } from 'lodash';
 import CircleIcon from '@mui/icons-material/Circle';
 
@@ -45,17 +44,6 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
   healthFactor,
   beforeMaturity
 }) => {
-  const getPositionBadgeVariant = () => {
-    switch(positionType) {
-      case 1:
-        return 'FT';
-      case 2:
-        return 'VT';
-      case 3:
-        return 'LP';
-    }
-  };
-
   const getHealthTextColor = () => {
     return (healthFactor === 1) ? '#F61067' : (healthFactor === 2 ? '#F1D302' : '#00d395');
   };
@@ -67,7 +55,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
   return (
     <Box sx={containerStyles}>
       <Box sx={{ display: 'flex' }}>
-        <PositionBadge variant={getPositionBadgeVariant()} />
+        <PositionBadge variant={getPositionBadgeVariant(positionType)} />
 
         {fcmBadge && (
           <PositionBadge variant='FC' sx={{ marginLeft: (theme) => theme.spacing(2) }} />

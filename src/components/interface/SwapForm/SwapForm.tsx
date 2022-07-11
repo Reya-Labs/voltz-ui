@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
 import { useAgent, useTokenApproval } from '@hooks';
 import { Agents, SwapFormMarginAction, SwapFormState, SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates, } from '@contexts';
-import { Panel } from '@components/atomic';
+import { Panel, PositionBadge } from '@components/atomic';
 import {
   IconLabel,
   ProtocolInformation,
@@ -15,7 +15,6 @@ import { TraderControls, MarginControls, SubmitControls, Leverage } from './comp
 import { colors, SystemStyleObject, Theme } from '@theme';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from './types';
-import { PositionBadge } from '@components/interface';
 
 export type SwapProps = {
   approvalsNeeded: boolean;
