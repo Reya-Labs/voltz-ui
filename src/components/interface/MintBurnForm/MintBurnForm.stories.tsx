@@ -58,8 +58,6 @@ const NewPositionMintBurnForm: React.FunctionComponent = (args) => {
       hintState={MintBurnFormHintStates.READY_TO_TRADE}
       isFormValid={form.isValid}
       isTradeVierified={true}
-      minRequiredMargin={minRequiredMargin}
-      minRequiredMarginLoading={false}
       mode={form.mode}
       onCancel={() => alert('cancel')}
       onChangeFixedLow={form.setFixedLow}
@@ -105,8 +103,6 @@ const EditingMarginMintBurnForm: React.FunctionComponent = (args) => {
       hintState={MintBurnFormHintStates.READY_TO_TRADE}
       isFormValid={form.isValid}
       isTradeVierified={true}
-      minRequiredMargin={minRequiredMargin}
-      minRequiredMarginLoading={false}
       mode={form.mode}
       onCancel={() => alert('cancel')}
       onChangeFixedLow={form.setFixedLow}
@@ -152,8 +148,6 @@ const EditingLiquidityMintBurnForm: React.FunctionComponent = (args) => {
       hintState={MintBurnFormHintStates.READY_TO_TRADE}
       isFormValid={form.isValid}
       isTradeVierified={true}
-      minRequiredMargin={minRequiredMargin}
-      minRequiredMarginLoading={false}
       mode={form.mode}
       onCancel={() => alert('cancel')}
       onChangeFixedLow={form.setFixedLow}

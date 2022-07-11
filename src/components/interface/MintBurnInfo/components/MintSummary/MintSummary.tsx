@@ -4,14 +4,14 @@ import { IconLabel } from '@components/composite';
 import { formatCurrency } from '@utilities';
 import { isUndefined } from 'lodash';
 
-export type MintInfoProps = {
+export type MintSummaryProps = {
   balance?: number;
   minRequiredMargin?: number;
   loading: boolean;
   underlyingTokenName?: string; 
 };
 
-const MintInfo: React.FunctionComponent<MintInfoProps> = ({ balance, minRequiredMargin, loading, underlyingTokenName = '' }) => {
+const MintSummary: React.FunctionComponent<MintSummaryProps> = ({ balance, minRequiredMargin, loading, underlyingTokenName = '' }) => {
 
   const label = <IconLabel
     label="trade information"
@@ -33,4 +33,4 @@ const MintInfo: React.FunctionComponent<MintInfoProps> = ({ balance, minRequired
   return <SummaryPanel label={label} loading={loading} rows={rows} />
 };
 
-export default MintInfo;
+export default MintSummary;

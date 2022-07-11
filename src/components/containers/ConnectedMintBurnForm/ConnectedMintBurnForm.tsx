@@ -4,7 +4,7 @@ import { routes } from '@routes';
 import { actions, selectors } from '@store';
 import { useAgent, useDispatch, useSelector } from '@hooks';
 import { MintBurnFormActions, MintBurnFormModes, useMintBurnForm } from '@contexts';
-import { MintBurnForm, PendingTransaction } from '@components/interface';
+import { MintBurnForm, MintBurnInfo, PendingTransaction } from '@components/interface';
 import { updateFixedRate } from './utilities';
 
 export type ConnectedMintBurnFormProps = {
@@ -97,32 +97,40 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   }
 
   return (
-    <MintBurnForm
-      approvalsNeeded={form.approvalsNeeded}
-      balance={form.balance}
-      endDate={form.amm.endDateTime}
-      errors={form.errors}
-      formState={form.state}
-      hintState={form.hintState}
-      isFormValid={form.isValid && !form.minRequiredMargin.errorMessage}
-      isTradeVierified={form.isTradeVerified}
-      minRequiredMargin={form.minRequiredMargin.result}
-      minRequiredMarginLoading={form.minRequiredMargin.loading}
-      mode={form.mode}
-      onCancel={onReset}
-      onChangeFixedLow={handleSetFixedLow}
-      onChangeFixedHigh={handleSetFixedHigh}
-      onChangeLiquidityAction={form.setLiquidityAction}
-      onChangeMargin={form.setMargin}
-      onChangeMarginAction={form.setMarginAction} 
-      onChangeNotional={form.setNotional}
-      onSubmit={handleSubmit}
-      protocol={form.amm.protocol}
-      startDate={form.amm.startDateTime}
-      submitButtonState={form.submitButtonState}
-      tokenApprovals={form.tokenApprovals}
-      underlyingTokenName={form.amm.underlyingToken.name}
-    />
+    <>
+      <MintBurnForm
+        approvalsNeeded={form.approvalsNeeded}
+        balance={form.balance}
+        endDate={form.amm.endDateTime}
+        errors={form.errors}
+        formState={form.state}
+        hintState={form.hintState}
+        isFormValid={form.isValid && !form.minRequiredMargin.errorMessage}
+        isTradeVierified={form.isTradeVerified}
+        mode={form.mode}
+        onCancel={onReset}
+        onChangeFixedLow={handleSetFixedLow}
+        onChangeFixedHigh={handleSetFixedHigh}
+        onChangeLiquidityAction={form.setLiquidityAction}
+        onChangeMargin={form.setMargin}
+        onChangeMarginAction={form.setMarginAction} 
+        onChangeNotional={form.setNotional}
+        onSubmit={handleSubmit}
+        protocol={form.amm.protocol}
+        startDate={form.amm.startDateTime}
+        submitButtonState={form.submitButtonState}
+        tokenApprovals={form.tokenApprovals}
+        underlyingTokenName={form.amm.underlyingToken.name}
+      />
+      <MintBurnInfo
+        balance={form.balance}
+        formState={form.state}
+        minRequiredMargin={form.minRequiredMargin.result}
+        minRequiredMarginLoading={form.minRequiredMargin.loading}
+        mode={form.mode}
+        underlyingTokenName={form.amm.underlyingToken.name}
+      />
+    </>
   );
 };
 

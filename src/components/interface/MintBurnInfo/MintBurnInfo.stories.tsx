@@ -1,0 +1,51 @@
+import React from 'react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { AgentProvider, Agents, MintBurnFormModes, MintBurnFormProvider, useMintBurnForm } from '@contexts';
+import MintBurnInfo from './MintBurnInfo';
+import { AugmentedAMM } from '@utilities';
+
+export default {
+  title: 'Interface/MintBurnInfo',
+  component: MintBurnInfo,
+  argTypes: { 
+    onSubmit: { action: 'clicked' } 
+  },
+} as ComponentMeta<typeof MintBurnInfo>;
+
+const mockAmm = ({
+  isUnderlyingTokenApprovedForPeriphery: () =>  true,
+  hasEnoughUnderlyingTokens: () =>  true,
+  underlyingToken: {
+    id: '0x123456789',
+    name: 'gil'
+  }
+} as unknown) as AugmentedAMM;
+
+// Creating a new position
+const NewPositionTemplate: ComponentStory<typeof MintBurnInfo> = (args) => (
+  <AgentProvider defaultAgent={Agents.LIQUIDITY_PROVIDER}>
+    <MintBurnFormProvider amm={mockAmm} mode={MintBurnFormModes.NEW_POSITION}>
+      <NewPositionMintBurnForm {...args} />
+    </MintBurnFormProvider>
+  </AgentProvider>
+);
+const NewPositionMintBurnForm: React.FunctionComponent = (args) => {
+  const balance = 100000;
+  const minRequiredMargin = 100;
+  const form = useMintBurnForm();
+
+  return (
+    <MintBurnInfo 
+      {...args} 
+      balance={balance}
+      formState={form.state}
+      minRequiredMarginLoading={false}
+      minRequiredMargin={minRequiredMargin}
+      mode={form.mode}
+      underlyingTokenName={'GIL'}
+    />
+  );
+};
+export const NewPosition = NewPositionTemplate.bind({});
+NewPosition.parameters = { controls: { exclude: /^on|is|formState*/ } };
+NewPosition.args = {};
