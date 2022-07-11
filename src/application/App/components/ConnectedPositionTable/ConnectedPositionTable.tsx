@@ -1,6 +1,5 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { data } from '@utilities';
 import { usePositions, useWallet } from '@hooks';
@@ -25,6 +24,7 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
   onSelectItem,
   agent
 }) => {
+  const extraInfoRequest = useRef<Promise<PromiseSettledResult<PositionInfo>[]>>();
   const [order, setOrder] = useState<data.TableOrder>('desc');
   const [orderBy, setOrderBy] = useState<PositionTableFields>('maturity');
   const [page, setPage] = useState(0);
@@ -42,8 +42,11 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
   const loadExtraPositionInformation = () => {
     if (!loading && !error && positionsByAgentGroup) {
       setPositionInformationLoading(true);
-      Promise.allSettled(positionsByAgentGroup.map(p => p.amm.getPositionInformation(p)))
-        .then((responses) => {
+      const thisRequest = Promise.allSettled(positionsByAgentGroup.map(p => p.amm.getPositionInformation(p)));
+      extraInfoRequest.current = thisRequest;
+
+      thisRequest.then((responses) => {
+        if(thisRequest === extraInfoRequest.current) {
           const piError = !!responses.find(resp => resp.status === 'rejected');
 
           if(piError) {
@@ -59,19 +62,22 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
             setPositionInformation(piData);
             setPositionInformationError(false);
           }
-        })
-        .catch((err) => {
-          // console.log("error in effect:", err);
-        })
-        .finally(() => {
+        }
+      })
+      .catch((err) => {
+        // console.log("error in effect:", err);
+      })
+      .finally(() => {
+        if(thisRequest === extraInfoRequest.current) {
           setPositionInformationLoading(false);
-        })
+        }
+      })
     }
   };
 
   useEffect(() => {
     loadExtraPositionInformation();
-  }, [agent, error, loading, !!positionsByAgentGroup]);
+  }, [agent, error, loading, positionsByAgentGroup]);
 
   const handleRetry = useCallback(() => {
     loadExtraPositionInformation();
