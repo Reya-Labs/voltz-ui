@@ -5,7 +5,7 @@ import { Position } from '@voltz-protocol/v1-sdk';
 
 import { AugmentedAMM, setPageTitle } from '@utilities';
 import { Agents, AMMProvider, MintBurnFormModes, MintBurnFormProvider } from '@contexts';
-import { useAgent } from '@hooks';
+import { useAgent, usePositions } from '@hooks';
 
 import { Page } from '@components/interface';
 import { Panel } from '@components/atomic';
@@ -22,6 +22,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
 
   const { onChangeAgent } = useAgent();
   const { pathname, key } = useLocation();
+  const { positions } = usePositions();
 
   const pathnameWithoutPrefix = pathname.slice(1);
   const effectiveAmm = position?.amm as AugmentedAMM || amm;
@@ -55,10 +56,13 @@ const LiquidityProvider: React.FunctionComponent = () => {
     }
   }, [setPageTitle, renderMode, position])
 
-  const handleSelectAmm = (selected: AugmentedAMM) => {
+  const handleSelectAmm = (selectedAMM: AugmentedAMM) => {
     setFormMode(MintBurnFormModes.NEW_POSITION);
-    setAMM(selected);
-    setPosition(undefined);
+    setAMM(selectedAMM);
+
+    let currentPosition:Position | undefined = undefined;
+    if(positions) currentPosition = positions.find(p => p.amm.id === selectedAMM.id);
+    setPosition(currentPosition);
   };
 
   const handleSelectPosition = (selected: Position, mode: 'margin' | 'liquidity') => {

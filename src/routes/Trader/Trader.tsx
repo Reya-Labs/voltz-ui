@@ -7,7 +7,7 @@ import { AugmentedAMM, setPageTitle } from '@utilities';
 import { Agents, AMMProvider, SwapFormProvider } from '@contexts';
 import { PageTitleDesc } from '@components/composite';
 import { Panel } from '@components/atomic';
-import { useAgent } from '@hooks';
+import { useAgent, usePositions } from '@hooks';
 import { Page, SwapFormModes } from '@components/interface';
 import ConnectedAMMTable from '../../components/containers/ConnectedAMMTable/ConnectedAMMTable';
 import ConnectedPositionTable from '../../components/containers/ConnectedPositionTable/ConnectedPositionTable';
@@ -21,6 +21,7 @@ const Trader: React.FunctionComponent = () => {
 
   const { onChangeAgent } = useAgent();
   const { pathname, key } = useLocation();
+  const { positions } = usePositions();
 
   const pathnameWithoutPrefix = pathname.slice(1);
   const effectiveAmm = position?.amm as AugmentedAMM || amm;
@@ -29,7 +30,6 @@ const Trader: React.FunctionComponent = () => {
   useEffect(() => {
     setFormMode(undefined);
     setAMM(undefined);
-    setPosition(undefined);
     onChangeAgent(Agents.FIXED_TRADER);
   }, [setFormMode, setAMM, pathnameWithoutPrefix, onChangeAgent]);
 
@@ -54,10 +54,13 @@ const Trader: React.FunctionComponent = () => {
     }
   }, [setPageTitle, renderMode, position])
 
-  const handleSelectAmm = (selected: AugmentedAMM) => {
+  const handleSelectAmm = (selectedAMM: AugmentedAMM) => {
     setFormMode(SwapFormModes.NEW_POSITION);
-    setAMM(selected);
-    setPosition(undefined);
+    setAMM(selectedAMM);
+
+    let currentPosition:Position | undefined = undefined;
+    if(positions) currentPosition = positions.find(p => p.amm.id === selectedAMM.id);
+    setPosition(currentPosition);
   };
   const handleSelectPosition = (selected: Position) => {
     setFormMode(SwapFormModes.EDIT_MARGIN)
