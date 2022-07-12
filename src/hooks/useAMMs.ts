@@ -83,10 +83,8 @@ const useAMMs = (): UseAMMsResult => {
           }),
       );
       if (process.env.REACT_APP_WHITELIST) {
-        const whitelist = process.env.REACT_APP_WHITELIST.split(', ');
+        const whitelist = process.env.REACT_APP_WHITELIST.split(',').map(s => s.trim());
         ammsData = ammsData?.filter((amm) => whitelist.includes(amm.id));
-        // eslint-disable-next-line
-        console.log('printing the whitelist: ', whitelist);
         return ammsData;
       } else {
         return ammsData;
