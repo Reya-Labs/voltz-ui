@@ -26,11 +26,9 @@ const useAMMs = (): UseAMMsResult => {
     await refetch();
   }, [refetch]);
 
-  const hiddenPools = ["0x90eaa5c92ba8e73de962bcd6c146686761954259", "0xc3ab353493ec83d4de43c547ac1b12cf1dd0232d"];
-
-  let amms = useMemo(() => {
+  const amms = useMemo(() => {
     if (data && !loading && !error) {
-      return data.amms.map(
+      let ammsData = data.amms.map(
         ({
           id: ammId,
           fcm: {
@@ -84,10 +82,15 @@ const useAMMs = (): UseAMMsResult => {
             totalLiquidity: totalLiquidity as JSBI,
           }),
       );
+      if (process.env.REACT_APP_WHITELIST) {
+        const whitelist = process.env.REACT_APP_WHITELIST.split(',').map(s => s.trim());
+        ammsData = ammsData?.filter((amm) => whitelist.includes(amm.id));
+        return ammsData;
+      } else {
+        return ammsData;
+      }
     }
   }, [loading, error, isSignerAvailable, handleRefetch]);
-
-  amms = amms?.filter((amm) => !hiddenPools.includes(amm.id));
 
   return { amms, loading, error: !!error };
 };

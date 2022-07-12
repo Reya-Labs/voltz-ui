@@ -30,6 +30,7 @@ REACT_APP_SKIP_WALLET_SCREENING=Y
 
 `REACT_APP_SKIP_WALLET_SCREENING` If this key exists, the app will not check if the wallet is deemed risky (via TRM). It is intended to be used on dev/test environments.
 
+`REACT_APP_WHITELIST` This key contains a subset of pools of all deployed pools. This subset should be visible in the production Voltz front-end. If you want to remove a pool from the production front-end remove it from this key, please. 
 # Run
 
 1. Run `yarn start`
