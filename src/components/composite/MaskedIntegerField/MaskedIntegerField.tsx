@@ -12,10 +12,12 @@ import { Typography } from '@components/atomic';
 import { colors, inputStyles, SystemStyleObject, Theme } from '@theme';
 
 export type MaskedIntegerFieldProps = OverrideTypes<CurrencyInputProps, {
+  bottomText?: string;
   dynamic?: boolean;
   error?: InputBaseProps['error'],
   errorText?: string;
   label?: ReactNode,
+  labelRight?: ReactNode,
   onChange?: (value: string | undefined) => void;
   inputSize?: 'small' | 'medium' | 'large';
   subtext?: string;
@@ -23,19 +25,24 @@ export type MaskedIntegerFieldProps = OverrideTypes<CurrencyInputProps, {
   suffixPadding?: number;
 }>;
 
-const errorLabelStyles: SystemStyleObject<Theme> = {
-  color: colors.wildStrawberry.base,
+const textStyles: SystemStyleObject<Theme> = {
   fontSize: '12px',
   lineHeight: '1.2',
-  marginTop: (theme) => theme.spacing(1),
   textTransform: 'uppercase'
+}
+const errorLabelStyles: SystemStyleObject<Theme> = {
+  ...textStyles,
+  color: colors.wildStrawberry.base,
+  marginTop: (theme) => theme.spacing(1),
 }
 
 const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
+  bottomText,
   dynamic,
   error,
   errorText,
   label,
+  labelRight,
   onChange,
   inputSize = 'large',
   subtext,
@@ -51,14 +58,32 @@ const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
 
   return (
     <FormControl variant="outlined" sx={{width: '100%'}}>
-      {!isEmpty(label) && (
-        <InputLabel shrink htmlFor={inputId} error={error} sx={{ 
-          color: (theme) => error ? `${theme.palette.error.base} !important` : undefined 
-        }}>
-          {label}
-        </InputLabel>
-      )}
-
+      <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%'}}>
+        <>
+          {!isEmpty(label) 
+            ? (
+              <InputLabel shrink htmlFor={inputId} error={error} sx={{ 
+                color: (theme) => error ? `${theme.palette.error.base} !important` : undefined 
+              }}>
+                {label}
+              </InputLabel>
+            ) 
+            : <div/>
+          }
+          {!isEmpty(labelRight) 
+            ? (
+              <Typography variant='body2' sx={{ 
+                ...textStyles, 
+                color: colors.lavenderWeb.darken010, 
+                marginBottom: (theme) => theme.spacing(2)
+              }}>
+                {labelRight}
+              </Typography>
+            ) 
+            : <div/>
+          }
+        </>
+      </Box>
       <Box sx={{
         ...inputStyles({ 
           disabled: props.disabled, 
@@ -104,6 +129,11 @@ const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
         </Box>
         )}
       </Box>
+      {bottomText && (
+        <Typography variant='body2' sx={textStyles}>
+          {bottomText}
+        </Typography>
+      )}
       {error && errorText && (
         <Typography variant='body2' sx={errorLabelStyles}>
           {errorText}

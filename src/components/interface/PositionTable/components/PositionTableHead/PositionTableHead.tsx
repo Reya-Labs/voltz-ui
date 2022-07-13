@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import { colors, SystemStyleObject, Theme } from '@theme';
 import { formatCurrency, formatNumber } from '@utilities';
 import { getPositionBadgeVariant, PositionBadge, Typography } from '@components/atomic';
+import { getHealthTextColor, HealthFactorText } from '@components/composite';
 import { isUndefined } from 'lodash';
 import CircleIcon from '@mui/icons-material/Circle';
 
@@ -44,10 +45,6 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
   healthFactor,
   beforeMaturity
 }) => {
-  const getHealthTextColor = () => {
-    return (healthFactor === 1) ? '#F61067' : (healthFactor === 2 ? '#F1D302' : '#00d395');
-  };
-
   const getTextColor = (positive: boolean) => {
     return positive ? colors.vzCustomGreen1 : colors.vzCustomRed1;
   }
@@ -107,7 +104,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
                   color: getHealthTextColor(),
                 }} 
               />
-              {(healthFactor === 1) ? 'DANGER' : (healthFactor === 2 ? 'WARNING' : 'HEALTHY')}
+              <HealthFactorText healthFactor={healthFactor} />
             </Typography>
           </Box>
         )}

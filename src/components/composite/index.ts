@@ -2,6 +2,7 @@ export { default as AlphaBanner } from './AlphaBanner/AlphaBanner';
 export { default as Autocomplete } from './Autocomplete/Autocomplete';
 export { default as DebouncedIntegerField } from './DebouncedIntegerField/DebouncedIntegerField';
 export type { DebouncedIntegerFieldDetails } from './DebouncedIntegerField/DebouncedIntegerField';
+export * from './HealthFactorText/HealthFactorText';
 export { default as IconLabel } from './IconLabel/IconLabel';
 export { default as InputTokenLabel } from './InputTokenLabel/InputTokenLabel';
 export { default as IntegerField } from './IntegerField/IntegerField';

@@ -23,6 +23,7 @@ export type MintBurnFormProps = {
   endDate?: DateTime;
   errors: Record<string, string>;
   formState: MintBurnFormState;
+  healthFactor?: number;
   hintState: MintBurnFormHintStates;
   isFormValid: boolean;
   isTradeVierified: boolean;
@@ -50,6 +51,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   endDate,
   errors,
   formState,
+  healthFactor,
   hintState,
   isFormValid,
   isTradeVierified,
@@ -152,6 +154,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
             underlyingTokenName={underlyingTokenName}
             maxMargin={maxMargin}
             margin={formState.margin}
+            healthFactor={healthFactor}
             isAdditional={formState.marginAction === MintBurnFormMarginAction.ADD}
             isEditing={mode === MintBurnFormModes.EDIT_MARGIN}
             onChangeMargin={onChangeMargin}

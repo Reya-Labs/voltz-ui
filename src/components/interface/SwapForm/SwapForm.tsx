@@ -23,6 +23,7 @@ export type SwapProps = {
   errors: Record<string, string>;
   formState: SwapFormState;
   formAction: SwapFormActions;
+  healthFactor?: number;
   hintState: SwapFormSubmitButtonHintStates;
   isFCMAction: boolean;
   isFCMAvailable: boolean;
@@ -54,6 +55,7 @@ const Swap: React.FunctionComponent<SwapProps> = ({
   errors,
   formAction,
   formState,
+  healthFactor,
   hintState,
   isFCMAction,
   isFCMAvailable,
@@ -177,6 +179,7 @@ const Swap: React.FunctionComponent<SwapProps> = ({
           <MarginAmount
             balance={balance}
             error={errors['margin']}
+            healthFactor={healthFactor}
             isAdditional={formState.marginAction === SwapFormMarginAction.ADD}
             isEditing={mode === SwapFormModes.EDIT_MARGIN}
             margin={formState.margin}
