@@ -82,12 +82,14 @@ const useAMMs = (): UseAMMsResult => {
             totalLiquidity: totalLiquidity as JSBI,
           }),
       );
-      if (process.env.REACT_APP_WHITELIST) {
-        const whitelist = process.env.REACT_APP_WHITELIST.split(',').map(s => s.trim());
-        ammsData = ammsData?.filter((amm) => whitelist.includes(amm.id));
-        return ammsData;
+      if (!process.env.REACT_APP_WHITELIST || process.env.REACT_APP_WHITELIST === `UNPROVIDED`) {
+          return ammsData;
       } else {
-        return ammsData;
+        if (process.env.REACT_APP_WHITELIST) {
+          const whitelist = process.env.REACT_APP_WHITELIST.split(',').map(s => s.trim());
+          ammsData = ammsData?.filter((amm) => whitelist.includes(amm.id));
+          return ammsData;
+        } 
       }
     }
   }, [loading, error, isSignerAvailable, handleRefetch]);
