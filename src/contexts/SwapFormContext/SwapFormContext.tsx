@@ -118,6 +118,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   const [partialCollateralization, setPartialCollateralization] = useState<boolean>(defaultPartialCollateralization);
   const [ratesMoveBy, setRatesMoveBy] = useState<number>(-1);
   const { swapInfo } = useAMMContext();
+  const [cachedSwapInfoMinRequiredMargin, setCachedSwapInfoMinRequiredMargin] = useState<number>();
   const tokenApprovals = useTokenApproval(amm);
 
   const [errors, setErrors] = useState<SwapFormContext['errors']>({});
@@ -136,6 +137,13 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   useEffect(() => {
     ammCtx.fixedApr.call();
   }, [])
+
+  // cache the minRequiredMargin from swapInfo
+  useEffect(() => {
+    if(isNumber(swapInfo.result?.marginRequirement)) {
+      setCachedSwapInfoMinRequiredMargin(swapInfo.result?.marginRequirement);
+    }
+  }, [swapInfo.result?.marginRequirement])
 
   // Load the swap summary info
   useEffect(() => {
@@ -183,13 +191,13 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
 
   // set the leverage back to 50% if variables change
   useEffect(() => {
-    const minMargin = swapInfo.result?.marginRequirement;
+    const minMargin = cachedSwapInfoMinRequiredMargin;
     if(isNumber(notional) && isNumber(minMargin)) {
       const cappedMinMargin = Math.max(minMargin, 0.1);
       const newLeverage = parseFloat(((notional / cappedMinMargin) / 2).toFixed(2));
       setLeverage(newLeverage);
     }
-  }, [notional, swapInfo.result?.marginRequirement]);
+  }, [notional, cachedSwapInfoMinRequiredMargin]);
 
   // Validate the form after values change
   useEffect(() => {
