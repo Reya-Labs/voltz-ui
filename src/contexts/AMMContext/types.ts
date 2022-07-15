@@ -20,6 +20,7 @@ export enum GetInfoType {
 };
 
 export type SwapInfoPayload = {
+  expectedApr?: number;
   notional: number;
   type: GetInfoType;
   fixedRateLimit?: number;

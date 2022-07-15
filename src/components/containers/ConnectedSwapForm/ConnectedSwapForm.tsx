@@ -153,7 +153,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
       {position && (
         <SwapCurrentPosition onPortfolio={onReset} position={position} />
       )}
-      <SwapForm
+      <SwapForm                                                                                                  
         approvalsNeeded={form.approvalsNeeded}
         balance={form.balance}
         endDate={amm.endDateTime}
@@ -187,8 +187,10 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         formAction={form.action} 
         minRequiredMargin={form.minRequiredMargin}
         mode={mode}
+        onChangeMovesRatesBy={form.setRatesMoveBy}
         positionMargin={position?.margin ? amm.descale(BigNumber.from(position.margin.toString())) : undefined}
         protocol={amm.protocol}
+        ratesMoveBy={form.ratesMoveBy}
         swapSummary={form.swapInfo.data}
         swapSummaryLoading={form.swapInfo.loading}
         underlyingTokenName={amm.underlyingToken.name}

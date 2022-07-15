@@ -72,11 +72,13 @@ export type SwapFormContext = {
   minRequiredMargin?: number;
   mode: SwapFormModes;
   position?: Position;
+  ratesMoveBy: number;
   setLeverage: (value: SwapFormState['leverage']) => void;
   setMargin: (value: SwapFormState['margin']) => void;
   setMarginAction: (value: SwapFormState['marginAction']) => void;
   setNotional: (value: SwapFormState['notional']) => void;
   setPartialCollateralization: (value: SwapFormState['partialCollateralization']) => void;
+  setRatesMoveBy: (value: number) => void;
   state: SwapFormState;
   swapInfo: {
     data?: InfoPostSwap;
@@ -105,6 +107,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     ? defaultValues.partialCollateralization 
     : true;
 
+  const ammCtx = useAMMContext();
   const { agent } = useAgent();
   const balance = useBalance(amm);
   const [leverage, setLeverage] = useState<SwapFormState['leverage']>(defaultLeverage);
@@ -113,6 +116,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   const minRequiredMargin = useMinRequiredMargin(amm);
   const [notional, setNotional] = useState<SwapFormState['notional']>(defaultNotional);
   const [partialCollateralization, setPartialCollateralization] = useState<boolean>(defaultPartialCollateralization);
+  const [ratesMoveBy, setRatesMoveBy] = useState<number>(-1);
   const { swapInfo } = useAMMContext();
   const tokenApprovals = useTokenApproval(amm);
 
@@ -128,17 +132,32 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   
   const approvalsNeeded = s.approvalsNeeded(action, tokenApprovals, isRemovingMargin)
 
+  // Load the fixed APR
+  useEffect(() => {
+    ammCtx.fixedApr.call();
+  }, [])
+
   // Load the swap summary info
   useEffect(() => {
     if (!approvalsNeeded && !isUndefined(notional) && notional !== 0) {
+      const expectedApr = isNumber(ammCtx.fixedApr.result) ? ammCtx.fixedApr.result + ratesMoveBy : undefined;
+
       switch (action) {
         case SwapFormActions.SWAP: {
-          swapInfo.call({ notional, type: GetInfoType.NORMAL_SWAP});
+          swapInfo.call({ 
+            expectedApr,
+            notional, 
+            type: GetInfoType.NORMAL_SWAP 
+          });
           break;
         }
 
         case SwapFormActions.FCM_SWAP: {
-          swapInfo.call({ notional, type: GetInfoType.FCM_SWAP });
+          swapInfo.call({ 
+            expectedApr,
+            notional, 
+            type: GetInfoType.FCM_SWAP 
+          });
           break;
         }
 
@@ -148,7 +167,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
         // }
       } 
     }
-  }, [swapInfo.call, notional, agent, approvalsNeeded, partialCollateralization, marginAction]);
+  }, [swapInfo.call, notional, agent, approvalsNeeded, partialCollateralization, marginAction, ammCtx.fixedApr.result, ratesMoveBy]);
 
   // set the leverage back to 50% if variables change
   useEffect(() => {
@@ -319,6 +338,13 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     setPartialCollateralization(value);
   }
 
+  const updateRatesMoveBy = (value: number) => {
+    if(!touched.current.includes('ratesMoveBy')) {
+      touched.current.push('ratesMoveBy');
+    }
+    setRatesMoveBy(value);
+  }
+
   const validate = async () => {
     if(mode === SwapFormModes.NEW_POSITION) {
       return await validateNewPosition();
@@ -427,11 +453,13 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     minRequiredMargin,
     mode,
     position,
+    ratesMoveBy,
     setLeverage: updateLeverage,
     setMargin: updateMargin,
     setMarginAction: updateMarginAction,
     setNotional: updateNotional,
     setPartialCollateralization: updatePartialCollateralization,
+    setRatesMoveBy: updateRatesMoveBy,
     swapInfo: {
       data: swapInfo.result || undefined,
       errorMessage: swapInfo.errorMessage || undefined,

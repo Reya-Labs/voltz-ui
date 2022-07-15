@@ -68,7 +68,6 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
     <MaskedIntegerField
       allowDecimals
       allowNegativeValue={false}
-      bottomText={'testing...'}
       decimalsLimit={2}
       subtext={`BALANCE: ${formattedBalance}`}
       suffix={<InputTokenLabel tokenName={underlyingTokenName || ''} />}
@@ -82,7 +81,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
             "Margin in underlying tokens to withdraw from the margin account." }
         />
       }
-      labelRight={!isUndefined(healthFactor) ? <HealthFactorText healthFactor={healthFactor} showNumber /> : undefined}
+      labelRight={!isUndefined(healthFactor) ? <HealthFactorText healthFactor={healthFactor} /> : undefined}
       value={inputValue}
       onChange={handleChange}
       error={!!error}

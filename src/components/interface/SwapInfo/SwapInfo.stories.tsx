@@ -51,7 +51,9 @@ const NewPositionSwapForm: React.FunctionComponent = (args) => {
     <SwapInfo 
       {...args} 
       mode={mode}
+      onChangeMovesRatesBy={() => {}}
       formAction={SwapFormActions.SWAP}
+      ratesMoveBy={-1}
       swapSummary={mockSwapData}
       swapSummaryLoading={false}
     />
@@ -87,7 +89,9 @@ const EditMarginSwapForm: React.FunctionComponent = (args) => {
       swapSummaryLoading={false}
       balance={100}
       minRequiredMargin={10}
+      onChangeMovesRatesBy={() => {}}
       positionMargin={20}
+      ratesMoveBy={-1}
       underlyingTokenName={'GIL'}
     />
   );

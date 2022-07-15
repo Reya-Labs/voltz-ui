@@ -1,6 +1,7 @@
 export { default as AlphaBanner } from './AlphaBanner/AlphaBanner';
 export { default as Autocomplete } from './Autocomplete/Autocomplete';
 export { default as DebouncedIntegerField } from './DebouncedIntegerField/DebouncedIntegerField';
+export * from './ExpectedAPY/ExpectedAPY';
 export type { DebouncedIntegerFieldDetails } from './DebouncedIntegerField/DebouncedIntegerField';
 export * from './HealthFactorText/HealthFactorText';
 export { default as IconLabel } from './IconLabel/IconLabel';
