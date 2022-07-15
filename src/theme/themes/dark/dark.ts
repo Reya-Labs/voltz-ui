@@ -1,4 +1,5 @@
 import { createTheme } from '@mui/material/styles';
+import { inherits } from 'util';
 
 import colors from '../../colors';
 
@@ -191,6 +192,10 @@ const dark = createTheme({
           textTransform: 'uppercase',
           transform: 'none',
           overflow: 'visible',
+
+          '&.Mui-focused': {
+            color: colors.lavenderWeb.darken010
+          }
         },
       },
     },
@@ -235,7 +240,57 @@ const dark = createTheme({
           top: '24px'
         })
       }
-    }
+    },
+    MuiSelect: {
+      styleOverrides: {
+        select: {
+          background: colors.lavenderWeb.darken045,
+          minHeight: 0,
+          height: '14px',
+        }
+      }
+    },
+    MuiMenu: {
+      styleOverrides: {
+        root: {
+          marginTop: '8px'
+        },
+        list: {
+          backgroundColor: colors.lavenderWeb.darken045,
+          border: `1px solid ${colors.lavenderWeb.darken030}`,
+          padding: '0',
+          borderRadius: '4px',
+        },
+      }
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: ({ownerState}) => ({
+          fontFamily: 'PixelOperatorMono',
+          fontSize: '16px',
+          lineHeight: '14px',
+          padding: '8px 14px',
+          borderBottom: `1px solid ${colors.lavenderWeb.darken040}`,
+
+          '&:last-child': {
+            borderBottom: 'none',
+          },
+
+          '&:hover': {
+            background: colors.lavenderWeb.darken040
+          },
+
+          '&.Mui-selected': {
+            background: colors.lavenderWeb.darken030,
+            '&:hover': {
+              background: colors.lavenderWeb.darken030
+            },
+          }
+
+        }),
+        
+      }
+    },
   },
   typography: {
     h1: {
