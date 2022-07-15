@@ -2,7 +2,7 @@ import React from 'react';
 
 import { SelectInput, Typography } from '@components/atomic';
 import { IconLabel } from '@components/composite';
-import { formatNumber } from '@utilities';
+import { formatCurrency, formatNumber } from '@utilities';
 import { isUndefined } from 'lodash';
 import Box from '@mui/material/Box';
 import { colors } from '@theme';
@@ -28,7 +28,7 @@ export const ExpectedAPY = ({ expectedAPY, onChangeMovesRatesBy, ratesMoveBy }:E
             label={<IconLabel label="Expected APY" icon="information-circle" info="Expected APY" />}
             agentStyling
           >
-            {!isUndefined(expectedAPY) ? formatNumber(expectedAPY) : '---'}
+            {!isUndefined(expectedAPY) ? `${formatCurrency(expectedAPY, true)}%` : '---'}
           </Typography>
         </Box>
         <Box sx={{

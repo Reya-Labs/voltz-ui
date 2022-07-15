@@ -146,8 +146,9 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
         case SwapFormActions.SWAP: {
           swapInfo.call({ 
             expectedApr,
+            margin,
             notional, 
-            type: GetInfoType.NORMAL_SWAP 
+            type: GetInfoType.NORMAL_SWAP
           });
           break;
         }
@@ -155,6 +156,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
         case SwapFormActions.FCM_SWAP: {
           swapInfo.call({ 
             expectedApr,
+            margin,
             notional, 
             type: GetInfoType.FCM_SWAP 
           });
@@ -167,7 +169,17 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
         // }
       } 
     }
-  }, [swapInfo.call, notional, agent, approvalsNeeded, partialCollateralization, marginAction, ammCtx.fixedApr.result, ratesMoveBy]);
+  }, [
+    swapInfo.call,
+    notional,
+    agent,
+    approvalsNeeded,
+    partialCollateralization,
+    marginAction,
+    ammCtx.fixedApr.result,
+    ratesMoveBy,
+    margin
+  ]);
 
   // set the leverage back to 50% if variables change
   useEffect(() => {
