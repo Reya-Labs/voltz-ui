@@ -1,5 +1,6 @@
 export { default as AMMTable } from './AMMTable/AMMTable';
 export type { AMMTableFields } from './AMMTable/types';
+export * from './FormPanel/FormPanel';
 export * from './MintBurnForm';
 export * from './MintBurnInfo';
 export type { MintBurnFormProps } from './MintBurnForm/MintBurnForm';

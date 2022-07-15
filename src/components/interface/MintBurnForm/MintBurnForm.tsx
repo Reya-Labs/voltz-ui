@@ -1,7 +1,7 @@
 import React from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
-import { Panel } from '@components/atomic';
+import { FormPanel } from '@components/interface';
 import {
   IconLabel,
   ProtocolInformation,
@@ -78,14 +78,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   const isAddingLiquidity = mode !== MintBurnFormModes.EDIT_LIQUIDITY || formState.liquidityAction === MintBurnFormLiquidityAction.ADD;
 
   return (
-    <Panel
-      variant="darker"
-      sx={{
-        marginTop: 12,
-        width: (theme) => theme.spacing(97),
-        boxShadow: '0px 0px 60px rgba(255, 89, 156, 0.2)',
-      }}
-    >
+    <FormPanel boxShadowType='LP'>
       <ProtocolInformation protocol={protocol} />
       <Box sx={bottomSpacing}>
         <MaturityInformation
@@ -176,7 +169,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         tradeInfoErrorMessage={tradeInfoErrorMessage}
         underlyingTokenName={underlyingTokenName}
       />
-    </Panel>
+    </FormPanel>
   );
 };
 

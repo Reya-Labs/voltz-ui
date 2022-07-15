@@ -4,7 +4,7 @@ import { routes } from '@routes';
 import { actions, selectors } from '@store';
 import { useAgent, useDispatch, useSelector } from '@hooks';
 import { MintBurnFormActions, MintBurnFormModes, useMintBurnForm } from '@contexts';
-import { MintBurnForm, MintBurnInfo, PendingTransaction } from '@components/interface';
+import { FormPanel, MintBurnForm, MintBurnInfo, PendingTransaction } from '@components/interface';
 import { updateFixedRate } from './utilities';
 
 export type ConnectedMintBurnFormProps = {
@@ -98,6 +98,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
 
   return (
     <>
+      <FormPanel noBackground />
       <MintBurnForm
         approvalsNeeded={form.approvalsNeeded}
         balance={form.balance}

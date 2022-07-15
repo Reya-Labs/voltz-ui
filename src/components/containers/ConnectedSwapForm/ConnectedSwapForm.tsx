@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { routes } from '@routes';
 import { actions, selectors } from '@store';
 import { useAgent, useDispatch, useSelector } from '@hooks';
-import { SwapCurrentPosition, SwapForm, SwapInfo, PendingTransaction, SwapFormActions } from '@components/interface';
+import { SwapCurrentPosition, SwapForm, SwapInfo, PendingTransaction, SwapFormActions, FormPanel } from '@components/interface';
 import { Agents, useSwapFormContext } from '@contexts';
 import { BigNumber } from 'ethers';
 
@@ -150,10 +150,11 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
 
   return (
     <>
-      {position && (
-        <SwapCurrentPosition onPortfolio={onReset} position={position} />
-      )}
-      <SwapForm                                                                                                  
+      {position 
+        ? <SwapCurrentPosition onPortfolio={onReset} position={position} />
+        : <FormPanel noBackground />
+      }
+      <SwapForm
         approvalsNeeded={form.approvalsNeeded}
         balance={form.balance}
         endDate={amm.endDateTime}

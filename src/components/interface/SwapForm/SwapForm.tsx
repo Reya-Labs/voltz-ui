@@ -3,7 +3,8 @@ import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
 import { useAgent, useTokenApproval } from '@hooks';
 import { Agents, SwapFormMarginAction, SwapFormState, SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates, } from '@contexts';
-import { Panel, PositionBadge } from '@components/atomic';
+import { PositionBadge } from '@components/atomic';
+import { FormPanel } from '@components/interface';
 import {
   IconLabel,
   ProtocolInformation,
@@ -85,16 +86,7 @@ const Swap: React.FunctionComponent<SwapProps> = ({
   }
 
   return (
-    <Panel
-      variant="dark"
-      sx={{
-        marginTop: 12,
-        width: (theme) => theme.spacing(97),
-        boxShadow: () => agent === Agents.FIXED_TRADER 
-          ? '0px 0px 88px rgba(0, 131, 155, 0.2)' 
-          : '0px 0px 88px rgba(38, 103, 255, 0.20)',
-      }}
-    >
+    <FormPanel boxShadowType={agent === Agents.FIXED_TRADER ? 'FT' : 'VT'}>
       {!formState.partialCollateralization && (
         <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: (theme) => theme.spacing(6) }}>
           <PositionBadge variant='FC' sx={{ display: 'inline-block', marginLeft: 0 }} />
@@ -206,7 +198,7 @@ const Swap: React.FunctionComponent<SwapProps> = ({
         tradeInfoErrorMessage={tradeInfoErrorMessage}
         underlyingTokenName={underlyingTokenName}
       />
-    </Panel>
+    </FormPanel>
   );
 };
 

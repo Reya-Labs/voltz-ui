@@ -7,6 +7,7 @@ import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from '../SwapForm/types';
 import { isUndefined } from 'lodash';
 import { ExpectedAPY } from '@components/composite';
+import { FormPanel } from '@components/interface';
 
 export type SwapInfoProps = {
   balance?: number;
@@ -40,51 +41,52 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
   }
 
   return (
-    <Box
-      sx={{
-        marginTop: 12,
-        marginLeft: 8,
-        marginRight: 8,
-        paddingTop: (theme) => theme.spacing(4),
-        width: (theme) => theme.spacing(81),
-
-      }}
-    >
+    <FormPanel noBackground>
       <ExpectedAPY 
         expectedAPY={swapSummary?.expectedApy}
         onChangeMovesRatesBy={onChangeMovesRatesBy} 
         ratesMoveBy={ratesMoveBy}
       />
 
-      <Box component={'hr'} sx={{ 
-        border: 'none',
-        borderBottom: `1px solid ${colors.lavenderWeb.darken045}`,
-        margin: (theme) => `${theme.spacing(4)} 0`,
-      }}/>
+
 
       {mode === SwapFormModes.NEW_POSITION && (swapSummary || swapSummaryLoading) && (
-        <Box sx={bottomSpacing}>
-          <SwapSummary
-            data={swapSummary} 
-            loading={swapSummaryLoading} 
-            underlyingTokenName={underlyingTokenName}
-            yieldBearingTokenName={protocol}
-            formAction={formAction}
-          />
-        </Box>
+        <>
+          <Box component={'hr'} sx={{ 
+            border: 'none',
+            borderBottom: `1px solid ${colors.lavenderWeb.darken045}`,
+            margin: (theme) => `${theme.spacing(4)} 0`,
+          }}/>
+          <Box sx={bottomSpacing}>
+            <SwapSummary
+              data={swapSummary} 
+              loading={swapSummaryLoading} 
+              underlyingTokenName={underlyingTokenName}
+              yieldBearingTokenName={protocol}
+              formAction={formAction}
+            />
+          </Box>
+        </>
       )}
 
       {mode === SwapFormModes.EDIT_MARGIN && !isUndefined(minRequiredMargin) && !isUndefined(positionMargin) && (
-        <Box sx={bottomSpacing}>
-          <SwapSummaryEditMargin 
-            balance={balance}
-            minRequiredMargin={minRequiredMargin}
-            positionMargin={positionMargin}
-            underlyingTokenName={underlyingTokenName}
-          />
-        </Box>
+        <>
+          <Box component={'hr'} sx={{ 
+            border: 'none',
+            borderBottom: `1px solid ${colors.lavenderWeb.darken045}`,
+            margin: (theme) => `${theme.spacing(4)} 0`,
+          }}/>
+          <Box sx={bottomSpacing}>
+            <SwapSummaryEditMargin 
+              balance={balance}
+              minRequiredMargin={minRequiredMargin}
+              positionMargin={positionMargin}
+              underlyingTokenName={underlyingTokenName}
+            />
+          </Box>
+        </>
       )}
-    </Box>
+    </FormPanel>
   );
 };
 
