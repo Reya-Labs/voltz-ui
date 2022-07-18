@@ -7,7 +7,8 @@ import { Typography } from '@components/atomic';
 type PositionBadgeVariant = 'FT' | 'VT' | 'LP' | 'FC';
 
 export type PositionBadgeProps = {
-  sx?: SystemStyleObject<Theme>,
+  sx?: SystemStyleObject<Theme>;
+  text?: string;
   variant?: PositionBadgeVariant;
 }
 
@@ -68,11 +69,11 @@ export const getPositionBadgeVariant = (positionType: number) => {
   }
 };
 
-export const PositionBadge = ({ sx = {}, variant }:PositionBadgeProps) => {
+export const PositionBadge = ({ sx = {}, text, variant }:PositionBadgeProps) => {
   if (variant) return (
     <Box sx={{ ...sx, ...styles[variant] }}>
       <Typography variant='body2' sx={{ color: 'unset', fontSize: '14px', lineHeight: '1' }}>
-        {labels[variant]}
+        {text || labels[variant]}
       </Typography>
     </Box>
   );

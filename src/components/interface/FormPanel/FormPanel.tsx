@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import Box from '@mui/material/Box';
-import { Panel } from 'src/components/atomic';
+import { Panel } from '@components/atomic';
 import { SystemStyleObject, Theme } from '@theme';
 
 export type FormPanelProps = {

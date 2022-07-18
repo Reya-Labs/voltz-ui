@@ -135,6 +135,16 @@ const Button: React.FunctionComponent<ButtonProps> = ({
       };
     }
 
+    if (props.variant === 'dark-link') {
+      return {
+        backgroundColor: selected ? 'secondary.darken030' : 'secondary.dark',
+        color: 'primary.base',
+        '&:hover': {
+          backgroundColor: 'secondary.darken030',
+        },
+      };
+    }
+
     if (props.variant === 'darker') {
       return {
         backgroundColor: selected ? 'secondary.dark' : 'secondary.darken045',
