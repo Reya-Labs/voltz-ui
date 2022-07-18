@@ -96,8 +96,25 @@ const dark = createTheme({
   components: {
     MuiButton: {
       styleOverrides: {
-        root: {
-          fontFamily: 'PixelOperatorMono',
+        root: ({ ownerState }) => {
+          const fontSize = () => {
+            if(ownerState.size === 'small') return '14px';
+            return '18px';
+          };
+          const padding = () => {
+            if(ownerState.size === 'large') return '16px 24px';
+            if(ownerState.size === 'small') return '4px 8px';
+            return '12px 18px';
+          };
+
+          return {
+            fontFamily: 'PixelOperatorMono',
+            fontSize: fontSize(),
+            lineHeight: '14px',
+            textTransform: 'uppercase',
+            padding: padding(),
+            minWidth: '0',
+          }
         },
       },
     },
