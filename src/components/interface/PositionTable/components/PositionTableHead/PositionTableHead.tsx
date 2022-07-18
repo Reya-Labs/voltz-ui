@@ -77,7 +77,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
         {beforeMaturity && !isUndefined(currentFixedRate) && !isUndefined(healthFactor) && (
           <Box sx={{ padding: (theme) => `${theme.spacing(1)} ${theme.spacing(2)}`, marginLeft: (theme) => theme.spacing(2) }}>
             <BulletLabel 
-              sx={{ color: getHealthTextColor() }} 
+              sx={{ color: getHealthTextColor(healthFactor) }} 
               text={<>Current fixed rate: {formatNumber(currentFixedRate)}%</>}
             />
           </Box>
@@ -86,7 +86,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
         {beforeMaturity && isUndefined(currentFixedRate) && !isUndefined(healthFactor) && (
           <Box sx={{ padding: (theme) => `${theme.spacing(1)} ${theme.spacing(2)}`, marginLeft: (theme) => theme.spacing(2) }}>
             <BulletLabel 
-              sx={{ color: getHealthTextColor() }} 
+              sx={{ color: getHealthTextColor(healthFactor) }} 
               text={<HealthFactorText healthFactor={healthFactor} />} 
             />
           </Box>
