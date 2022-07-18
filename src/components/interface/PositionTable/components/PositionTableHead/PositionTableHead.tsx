@@ -3,9 +3,8 @@ import Box from '@mui/material/Box';
 import { colors, SystemStyleObject, Theme } from '@theme';
 import { formatCurrency, formatNumber } from '@utilities';
 import { getPositionBadgeVariant, PositionBadge, Typography } from '@components/atomic';
-import { getHealthTextColor, HealthFactorText } from '@components/composite';
+import { BulletLabel, getHealthTextColor, HealthFactorText } from '@components/composite';
 import { isUndefined } from 'lodash';
-import CircleIcon from '@mui/icons-material/Circle';
 
 export type PositionTableHeadProps = {
   currencyCode?: string;
@@ -77,35 +76,19 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
       <Box sx={{ display: 'flex' }}>
         {beforeMaturity && !isUndefined(currentFixedRate) && !isUndefined(healthFactor) && (
           <Box sx={{ padding: (theme) => `${theme.spacing(1)} ${theme.spacing(2)}`, marginLeft: (theme) => theme.spacing(2) }}>
-            <Typography variant='body2' sx={{ ...labelStyles, color: getHealthTextColor() }}>
-              <CircleIcon 
-                sx={{ 
-                  width: 4, 
-                  height: 14, 
-                  borderRadius: '16px',
-                  marginRight: (theme) => theme.spacing(2), 
-                  color: getHealthTextColor(),
-                }} 
-              />
-              Current fixed rate: {formatNumber(currentFixedRate)}%
-            </Typography>
+            <BulletLabel 
+              sx={{ color: getHealthTextColor() }} 
+              text={<>Current fixed rate: {formatNumber(currentFixedRate)}%</>}
+            />
           </Box>
         )}
 
         {beforeMaturity && isUndefined(currentFixedRate) && !isUndefined(healthFactor) && (
           <Box sx={{ padding: (theme) => `${theme.spacing(1)} ${theme.spacing(2)}`, marginLeft: (theme) => theme.spacing(2) }}>
-            <Typography variant='body2' sx={{ ...labelStyles, color: getHealthTextColor() }}>
-              <CircleIcon 
-                sx={{ 
-                  width: 4, 
-                  height: 14, 
-                  borderRadius: '16px',
-                  marginRight: (theme) => theme.spacing(2), 
-                  color: getHealthTextColor(),
-                }} 
-              />
-              <HealthFactorText healthFactor={healthFactor} />
-            </Typography>
+            <BulletLabel 
+              sx={{ color: getHealthTextColor() }} 
+              text={<HealthFactorText healthFactor={healthFactor} />} 
+            />
           </Box>
         )}
       </Box>
