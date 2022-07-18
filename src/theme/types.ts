@@ -31,5 +31,8 @@ declare module '@mui/material/Button' {
     healthy: true;
     warning: true;
     danger: true;
+    rollover1: true;
+    rollover2: true;
+    rollover3: true;
   }
 }

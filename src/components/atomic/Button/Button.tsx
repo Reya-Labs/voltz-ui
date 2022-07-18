@@ -167,6 +167,30 @@ const Button: React.FunctionComponent<ButtonProps> = ({
       };
     }
 
+    if (props.variant === 'rollover1') {
+      return {
+        backgroundColor: 'primary.base',
+        color: 'tertiary.darken035',
+        fontWeight: 'bold',
+      };
+    }
+
+    if (props.variant === 'rollover2') {
+      return {
+        backgroundColor: 'tertiary.base',
+        color: 'secondary.base',
+        fontWeight: 'bold',
+      };
+    }
+
+    if (props.variant === 'rollover3') {
+      return {
+        backgroundColor: 'secondary.darken050',
+        color: 'primary.base',
+        fontWeight: 'bold',
+      };
+    }
+
     return {};
   };
   const handleClick = () => link && navigate(link);
