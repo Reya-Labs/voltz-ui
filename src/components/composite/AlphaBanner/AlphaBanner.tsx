@@ -59,9 +59,6 @@ const AlphaBanner = () => {
       background: 'linear-gradient(90deg, #201B35 0%, #372D65 50.52%, #2F2A54 100%)',
       width: '100%',
       height: '24px',
-      position: 'fixed',
-      bottom: 0,
-      left: 0,
       overflow: 'hidden',
       whiteSpace: 'nowrap',
     }}>

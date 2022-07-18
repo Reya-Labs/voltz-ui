@@ -2,7 +2,8 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 
 import { routes } from '@routes';
 import { LiquidityProvider, Trader } from './routes';
-import { AlphaBanner } from '@components/composite';
+import { AlphaBanner, GweiBar } from '@components/composite';
+import Box from '@mui/material/Box';
 
 const App = () => (
   <>
@@ -15,7 +16,10 @@ const App = () => (
         <Route path={routes.LP_FARM} element={<LiquidityProvider />} />
       </Route>
     </Routes>
-    <AlphaBanner />
+    <Box sx={{ position: 'fixed', bottom: '0', left: '0', width: '100%' }}>
+      <GweiBar />
+      <AlphaBanner />
+    </Box>
   </>
 );
 
