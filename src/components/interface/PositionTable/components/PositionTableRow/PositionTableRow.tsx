@@ -17,15 +17,13 @@ export type PositionTableRowProps = {
   positionInfo?: PositionInfo;
   index: number;
   onSelect: (mode: 'margin' | 'liquidity') => void;
-  handleSettle: () => void;
 };
 
 const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
   position,
   positionInfo,
   index,
-  onSelect,
-  handleSettle
+  onSelect
 }) => {
   const { agent } = useAgent();
   const labels = agent === Agents.LIQUIDITY_PROVIDER ? lpLabels : traderLabels;
@@ -73,7 +71,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     }
 
     if (field === 'maturity') {
-      return <Maturity onSettle={handleSettle} position={position} />
+      return <Maturity position={position} />
     }
 
     if (field === 'notional') {

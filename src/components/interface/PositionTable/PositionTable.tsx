@@ -29,14 +29,14 @@ export type PositionTableProps = {
   onSetSize: (size: number) => void;
   onSelectItem: (datum: Position, mode: 'margin' | 'liquidity') => void;
   agent: Agents
-  handleSettle: (position: Position) => void;
+  onSettle: (position: Position) => void;
 };
 
 const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   positions,
   positionInformation,
   onSelectItem,
-  handleSettle
+  onSettle
 }) => {
   const { agent } = useAgent();
   
@@ -85,7 +85,6 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
             return (
               <ListItem sx={listItemStyles} key={pos.id}>
                 <Panel variant='main' sx={{ width: '100%', padding: (theme) => `0 ${theme.spacing(4)}` }}>
-                  
                   <PositionTableHead
                     currencyCode='USD'
                     currencySymbol='$'
@@ -96,6 +95,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                     healthFactor={info?.healthFactor}
                     currentFixedRate={(agent === Agents.LIQUIDITY_PROVIDER) ? info?.fixedApr : undefined}
                     positionType={pos.positionType}
+                    onSettle={() => onSettle(pos)}
                   />
 
                   <TableContainer>
@@ -108,7 +108,6 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                             key={pos.id}
                             index={index}
                             onSelect={(mode: 'margin' | 'liquidity') => handleSelectRow(index, mode)}
-                            handleSettle={() => handleSettle(pos)}
                           />
                         </AMMProvider>
                       </TableBody>

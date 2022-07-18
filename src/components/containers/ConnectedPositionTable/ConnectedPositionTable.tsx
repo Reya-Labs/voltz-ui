@@ -178,7 +178,7 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
           size={size}
           onSetSize={setSize}
           onSelectItem={onSelectItem}
-          handleSettle={handleSettle}
+          onSettle={handleSettle}
           agent={agent}
         />
       </Box>
