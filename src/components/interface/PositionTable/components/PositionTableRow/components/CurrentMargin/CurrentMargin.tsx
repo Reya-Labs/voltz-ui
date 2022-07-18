@@ -32,26 +32,16 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({ marginEdit
         {!isUndefined(margin) ? `${margin.toFixed(2)} ${token}` : 'No Data'}
       </Typography>
 
-        {marginEdit && (<Button sx={{
-          display: "flex",
-          paddingTop: (theme) => theme.spacing(0),
-          paddingBottom: (theme) => theme.spacing(0),
-          paddingLeft: (theme) => theme.spacing(0),
-          paddingRight: (theme) => theme.spacing(0),
-          borderStyle: "solid",
-          borderColor: "#5C0026",
-          borderRadius: 1,
-          flex: "none",
-          width: "100%",
-          background: "transparent",
-          color: "#FF4AA9",
-          '&:hover': {
-            borderColor: '#FF4AA9',
-            background: "transparent",
-          },
-        }} onClick={handleClick}>
-            Edit 
-        </Button>)}
+      {marginEdit && (
+        <Button 
+          variant='red2' 
+          onClick={handleClick} 
+          size='small' 
+          sx={{ width: '100%', display: 'flex' }}
+        >
+          Edit 
+        </Button>
+      )}
     </TableCell>
   );
 };

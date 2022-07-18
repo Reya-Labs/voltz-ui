@@ -89,6 +89,19 @@ const Button: React.FunctionComponent<ButtonProps> = ({
       };
     }
 
+    if (props.variant === 'red2') {
+      return {
+        backgroundColor: 'transparent',
+        color: '#ff4aa9',
+        border: '1px solid #5C0026',
+        borderColor: '#5C0026',
+        '&:hover': {
+          borderColor: '#FF4AA9',
+          backgroundColor: 'transparent',
+        },
+      };
+    }
+
     if (props.variant === 'healthy') {
       return {
         backgroundColor: 'secondary.dark',
@@ -149,6 +162,16 @@ const Button: React.FunctionComponent<ButtonProps> = ({
       return {
         backgroundColor: selected ? 'secondary.dark' : 'secondary.darken045',
         color: 'secondary.light',
+        '&:hover': {
+          backgroundColor: 'secondary.darken035',
+        },
+      };
+    }
+
+    if (props.variant === 'darker-link') {
+      return {
+        backgroundColor: selected ? 'secondary.dark' : 'secondary.darken045',
+        color: 'primary.base',
         '&:hover': {
           backgroundColor: 'secondary.darken035',
         },

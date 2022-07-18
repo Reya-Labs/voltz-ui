@@ -98,12 +98,16 @@ const dark = createTheme({
       styleOverrides: {
         root: ({ ownerState }) => {
           const fontSize = () => {
+            if(ownerState.size === 'xs') return '14px';
+            if(ownerState.size === 'vs') return '12px';
             if(ownerState.size === 'small') return '14px';
             return '18px';
           };
           const padding = () => {
             if(ownerState.size === 'large') return '16px 24px';
-            if(ownerState.size === 'small') return '4px 8px';
+            if(ownerState.size === 'small') return '8px 10px';
+            if(ownerState.size === 'vs') return '8px 10px';
+            if(ownerState.size === 'xs') return '4px 8px';
             return '12px 18px';
           };
 

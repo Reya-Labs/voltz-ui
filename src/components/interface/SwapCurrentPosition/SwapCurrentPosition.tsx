@@ -98,6 +98,7 @@ const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionProps> = (
             flexGrow: 0 
           }}
           variant="dark-link"
+          size='vs'
           onClick={onPortfolio}
         >
           Portfolio
