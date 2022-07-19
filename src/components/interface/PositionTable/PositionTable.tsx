@@ -2,7 +2,7 @@ import React from 'react';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import { SystemStyleObject, Theme } from '@theme';
+import { colors, SystemStyleObject, Theme } from '@theme';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 
 import { AugmentedAMM, data } from '@utilities';
@@ -70,6 +70,26 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
       marginTop: '0'
     }
   }
+
+  const getMaturedTableBorderStyles = (positionType: number) => {
+    const base = { borderRadius: '8px' };
+    
+    switch(positionType) {
+      case 1: {
+        return { 
+          ...base, 
+          border: `1px solid ${colors.skyBlueCrayola.base}` 
+        };
+      }
+      case 2:
+      case 3: {
+        return { 
+          ...base, 
+          border: `1px solid ${colors.lavenderWeb.base}` 
+        };
+      }
+    }
+  }
   
   const handleSelectRow = (index: number, mode: 'margin' | 'liquidity') => {
     onSelectItem(positions[index], mode);
@@ -98,7 +118,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                     onSettle={() => onSettle(pos)}
                   />
 
-                  <TableContainer>
+                  <TableContainer sx={!info?.beforeMaturity ? getMaturedTableBorderStyles(pos.positionType) : undefined}>
                     <Table size="medium" sx={{ ...commonOverrides }}>
                       <TableBody>
                         <AMMProvider amm={(pos.amm as AugmentedAMM)}>
