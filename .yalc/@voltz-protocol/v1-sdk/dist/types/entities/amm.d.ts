@@ -12,7 +12,6 @@ export declare type AMMConstructorArgs = {
     provider?: providers.Provider;
     environment: string;
     factoryAddress: string;
-    peripheryAddress: string;
     marginEngineAddress: string;
     fcmAddress: string;
     rateOracle: RateOracle;
@@ -25,6 +24,7 @@ export declare type AMMConstructorArgs = {
     txCount: number;
     totalNotionalTraded: JSBI;
     totalLiquidity: JSBI;
+    wethAddress?: string;
 };
 export declare type CapInfo = {
     accumulated: number;
@@ -48,6 +48,16 @@ export declare type AMMSwapArgs = {
     fixedHigh: number;
     validationOnly?: boolean;
 };
+export declare type AMMSwapWithWethArgs = {
+    isFT: boolean;
+    notional: number;
+    margin: number;
+    marginEth?: number;
+    fixedRateLimit?: number;
+    fixedLow: number;
+    fixedHigh: number;
+    validationOnly?: boolean;
+};
 export declare type InfoPostSwap = {
     marginRequirement: number;
     availableNotional: number;
@@ -56,6 +66,33 @@ export declare type InfoPostSwap = {
     averageFixedRate: number;
     expectedApy?: number;
 };
+export declare type AMMRolloverWithSwapArgs = {
+    isFT: boolean;
+    notional: number;
+    margin: number;
+    marginEth?: number;
+    fixedRateLimit?: number;
+    fixedLow: number;
+    fixedHigh: number;
+    owner: string;
+    newMarginEngine: string;
+    oldFixedLow: number;
+    oldFixedHigh: number;
+    validationOnly?: boolean;
+};
+export declare type AMMGetInfoPostRolloverWithSwapArgs = {
+    isFT: boolean;
+    notional: number;
+    fixedRateLimit?: number;
+    fixedLow: number;
+    fixedHigh: number;
+    margin?: number;
+    owner: string;
+    newMarginEngine: string;
+    oldFixedLow: number;
+    oldFixedHigh: number;
+    expectedApr?: number;
+};
 export declare type AMMMintArgs = {
     fixedLow: number;
     fixedHigh: number;
@@ -63,10 +100,39 @@ export declare type AMMMintArgs = {
     margin: number;
     validationOnly?: boolean;
 };
+export declare type AMMMintWithWethArgs = {
+    fixedLow: number;
+    fixedHigh: number;
+    notional: number;
+    marginEth?: number;
+    margin: number;
+    validationOnly?: boolean;
+};
 export declare type AMMGetInfoPostMintArgs = {
     fixedLow: number;
     fixedHigh: number;
     notional: number;
+};
+export declare type AMMRolloverWithMintArgs = {
+    fixedLow: number;
+    fixedHigh: number;
+    notional: number;
+    margin: number;
+    marginEth?: number;
+    owner: string;
+    newMarginEngine: string;
+    oldFixedLow: number;
+    oldFixedHigh: number;
+    validationOnly?: boolean;
+};
+export declare type AMMGetInfoPostRolloverWithMintArgs = {
+    fixedLow: number;
+    fixedHigh: number;
+    notional: number;
+    owner: string;
+    newMarginEngine: string;
+    oldFixedLow: number;
+    oldFixedHigh: number;
 };
 export declare type AMMBurnArgs = Omit<AMMMintArgs, 'margin'>;
 export declare type AMMUpdatePositionMarginArgs = {
@@ -118,7 +184,6 @@ declare class AMM {
     readonly provider?: providers.Provider;
     readonly environment: string;
     readonly factoryAddress: string;
-    readonly peripheryAddress: string;
     readonly marginEngineAddress: string;
     readonly fcmAddress: string;
     readonly rateOracle: RateOracle;
@@ -132,13 +197,20 @@ declare class AMM {
     readonly totalNotionalTraded: JSBI;
     readonly totalLiquidity: JSBI;
     readonly isETH: boolean;
+    readonly wethAddress?: string;
     readonly isFCM: boolean;
-    constructor({ id, signer, provider, environment, factoryAddress, peripheryAddress, marginEngineAddress, fcmAddress, rateOracle, updatedTimestamp, termStartTimestamp, termEndTimestamp, underlyingToken, tick, tickSpacing, txCount, totalNotionalTraded, totalLiquidity }: AMMConstructorArgs);
+    constructor({ id, signer, provider, environment, factoryAddress, marginEngineAddress, fcmAddress, rateOracle, updatedTimestamp, termStartTimestamp, termEndTimestamp, underlyingToken, tick, tickSpacing, txCount, totalNotionalTraded, totalLiquidity, wethAddress }: AMMConstructorArgs);
     expectedApy: (ft: number, vt: number, margin: number, predictedApr: number) => number;
+    rolloverWithSwap({ isFT, notional, margin, marginEth, fixedRateLimit, fixedLow, fixedHigh, owner, newMarginEngine, oldFixedLow, oldFixedHigh, validationOnly, }: AMMRolloverWithSwapArgs): Promise<ContractReceipt | void>;
+    getInfoPostRolloverWithSwap({ isFT, notional, fixedRateLimit, fixedLow, fixedHigh, margin, owner, newMarginEngine, oldFixedLow, oldFixedHigh, expectedApr }: AMMGetInfoPostRolloverWithSwapArgs): Promise<InfoPostSwap>;
+    rolloverWithMint({ fixedLow, fixedHigh, notional, margin, marginEth, owner, newMarginEngine, oldFixedLow, oldFixedHigh, validationOnly, }: AMMRolloverWithMintArgs): Promise<ContractReceipt | void>;
+    getInfoPostRolloverWithMint({ fixedLow, fixedHigh, notional, owner, newMarginEngine, oldFixedLow, oldFixedHigh }: AMMGetInfoPostRolloverWithMintArgs): Promise<number>;
     getInfoPostSwap({ isFT, notional, fixedRateLimit, fixedLow, fixedHigh, margin, expectedApr }: AMMGetInfoPostSwapArgs): Promise<InfoPostSwap>;
     swap({ isFT, notional, margin, fixedRateLimit, fixedLow, fixedHigh, validationOnly, }: AMMSwapArgs): Promise<ContractReceipt | void>;
+    swapWithWeth({ isFT, notional, margin, marginEth, fixedRateLimit, fixedLow, fixedHigh, validationOnly, }: AMMSwapWithWethArgs): Promise<ContractReceipt | void>;
     getInfoPostMint({ fixedLow, fixedHigh, notional, }: AMMGetInfoPostMintArgs): Promise<number>;
     mint({ fixedLow, fixedHigh, notional, margin, validationOnly, }: AMMMintArgs): Promise<ContractReceipt | void>;
+    mintWithWeth({ fixedLow, fixedHigh, notional, margin, marginEth, validationOnly, }: AMMMintWithWethArgs): Promise<ContractReceipt | void>;
     burn({ fixedLow, fixedHigh, notional, validationOnly, }: AMMBurnArgs): Promise<ContractReceipt | void>;
     updatePositionMargin({ fixedLow, fixedHigh, marginDelta, }: AMMUpdatePositionMarginArgs): Promise<ContractReceipt | void>;
     liquidatePosition({ owner, fixedLow, fixedHigh, }: AMMLiquidatePositionArgs): Promise<ContractReceipt>;
@@ -154,6 +226,7 @@ declare class AMM {
     isFCMApproved(): Promise<boolean | void>;
     approveFCM(): Promise<ContractReceipt | void>;
     isUnderlyingTokenApprovedForPeriphery(): Promise<boolean | void>;
+    isWethTokenApprovedForPeriphery(): Promise<boolean | void>;
     approveUnderlyingTokenForPeriphery(): Promise<ContractReceipt | void>;
     isUnderlyingTokenApprovedForFCM(): Promise<boolean | void>;
     approveUnderlyingTokenForFCM(): Promise<ContractReceipt | void>;

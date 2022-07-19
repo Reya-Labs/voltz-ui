@@ -138,6 +138,7 @@ var getErrorSignature = function (error, environment) {
                 return errSig;
             }
             catch (_a) {
+                console.log(error);
                 throw new Error('Unrecognized error type');
             }
         }

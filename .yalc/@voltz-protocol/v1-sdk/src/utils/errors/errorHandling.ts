@@ -184,6 +184,7 @@ export const getErrorSignature = (error: any, environment: string): string => {
         const errSig = extractErrorSignature(message);
         return errSig;
       } catch {
+        console.log(error);
         throw new Error('Unrecognized error type');
       }
     }
