@@ -15,6 +15,12 @@ const SummaryPanel = ({ label, loading, rows }: SummaryPanelProps) => {
     alignItems: 'end',
     justifyContent: 'space-between',
     width: '100%',
+    lineHeight: '1',
+    marginBottom: (theme) => theme.spacing(2),
+
+    '&:last-child': {
+      marginBottom: '0'
+    },
     'label': {
       color: colors.lavenderWeb.base,
       fontSize: '14px',
@@ -25,8 +31,8 @@ const SummaryPanel = ({ label, loading, rows }: SummaryPanelProps) => {
     }
   };
   const valueStyles: SystemStyleObject<Theme> = {
-    whiteSpace: 'nowrap',
     fontSize: '12px',
+    lineHeight: '1',
   };
 
   if (loading) {
@@ -41,11 +47,9 @@ const SummaryPanel = ({ label, loading, rows }: SummaryPanelProps) => {
             <Typography 
               variant="body2" 
               label={index === 0 ? label : undefined} 
-              sx={{ 
+              sx={{
+                ...valueStyles, 
                 color: (row.highlight) ? colors.lavenderWeb.base : colors.lavenderWeb.darken015,
-                fontSize: '12px',
-                lineHeight: '1',
-                marginBottom: (theme) => theme.spacing(2)
               }}
             >
               {row.label}
@@ -53,6 +57,7 @@ const SummaryPanel = ({ label, loading, rows }: SummaryPanelProps) => {
             <Typography agentStyling={row.highlight} variant="body2" sx={{
               ...valueStyles,
               color: row.highlight ? undefined : colors.lavenderWeb.darken015,
+              whiteSpace: 'nowrap',
             }}>
               {row.value}
             </Typography>
