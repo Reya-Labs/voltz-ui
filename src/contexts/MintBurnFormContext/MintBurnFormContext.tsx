@@ -121,7 +121,9 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   const defaultLiquidityAction = defaultValues.liquidityAction ?? MintBurnFormLiquidityAction.ADD;
   const defaultMargin = defaultValues.margin ?? undefined;
   const defaultMarginAction = defaultValues.marginAction ?? MintBurnFormMarginAction.ADD;
-  const defaultNotional = defaultValues.notional ?? undefined;
+  const defaultNotional = (mode === MintBurnFormModes.ROLLOVER && position) 
+    ? position.notional
+    : defaultValues.notional ?? undefined;
 
   const balance = useBalance(amm);
   const [fixedHigh, setFixedHigh] = useState<MintBurnFormState['fixedHigh']>(defaultFixedHigh);
