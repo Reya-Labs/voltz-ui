@@ -5,7 +5,6 @@ const serializeAmm = (amm: AugmentedAMM): SerializedAMM => ({
   id: amm.id,
   updatedTimestamp: amm.updatedTimestamp.toString(),
   factoryAddress: amm.factoryAddress,
-  peripheryAddress: amm.peripheryAddress,
   fcmAddress: amm.fcmAddress,
   marginEngineAddress: amm.marginEngineAddress,
   termStartTimestamp: amm.termEndTimestamp.toString(),

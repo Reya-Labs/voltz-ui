@@ -43,7 +43,6 @@ export type SerializedAMM = {
   id: string;
   updatedTimestamp: string;
   factoryAddress: string;
-  peripheryAddress: string;
   fcmAddress: string;
   marginEngineAddress: string;
   termStartTimestamp: string;

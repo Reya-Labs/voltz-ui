@@ -13,7 +13,6 @@ const deserializeAmm = (
     id,
     updatedTimestamp,
     factoryAddress,
-    peripheryAddress,
     fcmAddress,
     marginEngineAddress,
     termStartTimestamp,
@@ -41,7 +40,6 @@ const deserializeAmm = (
     tick: parseInt(tick, 10),
     tickSpacing: parseInt(tickSpacing, 10),
     factoryAddress: factoryAddress || "0x",
-    peripheryAddress: peripheryAddress || "0x",
     marginEngineAddress,
     rateOracle: new RateOracle({ id: rateOracleAddress, protocolId: parseInt(protocolId, 10) }),
     underlyingToken: new Token({
