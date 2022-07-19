@@ -51,6 +51,7 @@ export enum MintBurnFormSubmitButtonStates {
   DEPOSIT_MARGIN = 'DEPOSIT_MARGIN',
   INITIALISING = 'INITIALISING',
   REMOVE_LIQUIDITY = 'REMOVE_LIQUIDITY',
+  SETTLE_AND_LP = 'SETTLE_AND_LP',
   WITHDRAW_MARGIN = 'WITHDRAW_MARGIN',
 };
 
@@ -226,13 +227,17 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
         return MintBurnFormSubmitButtonStates.APPROVE_UT_PERIPHERY;
       }
     }
+
+    if(mode === MintBurnFormModes.ROLLOVER) {
+      return MintBurnFormSubmitButtonStates.SETTLE_AND_LP; 
+    }
   
     if(mode === MintBurnFormModes.EDIT_MARGIN) {
       return isAddingMargin 
         ? MintBurnFormSubmitButtonStates.DEPOSIT_MARGIN 
         : MintBurnFormSubmitButtonStates.WITHDRAW_MARGIN;
     }
-  
+
     return isAddingLiquidity 
       ? MintBurnFormSubmitButtonStates.ADD_LIQUIDITY 
       : MintBurnFormSubmitButtonStates.REMOVE_LIQUIDITY;
