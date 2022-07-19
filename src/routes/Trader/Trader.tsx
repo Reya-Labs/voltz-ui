@@ -62,8 +62,12 @@ const Trader: React.FunctionComponent = () => {
     if(positions) currentPosition = positions.find(p => p.amm.id === selectedAMM.id);
     setPosition(currentPosition);
   };
-  const handleSelectPosition = (selected: Position) => {
-    setFormMode(SwapFormModes.EDIT_MARGIN)
+  const handleSelectPosition = (selected: Position, mode: 'margin' | 'liquidity' | 'rollover') => {
+    // Please note that you will never get 'liquidity' mode here as that is only for LP positions.
+    let newMode = SwapFormModes.EDIT_MARGIN;
+    if(mode === 'rollover') newMode = SwapFormModes.ROLLOVER;
+
+    setFormMode(newMode);
     setAMM(undefined);
     setPosition(selected);
   };

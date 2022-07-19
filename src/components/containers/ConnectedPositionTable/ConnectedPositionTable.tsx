@@ -15,7 +15,7 @@ import { getHealthCounters, getNetPayingRate, getNetReceivingRate, getTotalAccru
 import { colors } from '@theme';
 
 export type ConnectedAMMTableProps = {
-  onSelectItem: (item: Position, mode: 'margin' | 'liquidity') => void;
+  onSelectItem: (item: Position, mode: 'margin' | 'liquidity' | 'rollover') => void;
   agent: Agents
   amm?: AugmentedAMM;
 };

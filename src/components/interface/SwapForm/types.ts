@@ -8,4 +8,5 @@ export enum SwapFormActions {
 export enum SwapFormModes {
   NEW_POSITION='NEW_POSITION',
   EDIT_MARGIN='EDIT_MARGIN',
+  ROLLOVER='ROLLOVER',
 };

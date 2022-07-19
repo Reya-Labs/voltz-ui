@@ -16,6 +16,7 @@ export type PositionTableHeadProps = {
   positionType: number;
   healthFactor?: number;
   beforeMaturity: boolean;
+  onRollover: () => void;
   onSettle: () => void;
 };
 
@@ -44,6 +45,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
   positionType,
   healthFactor,
   beforeMaturity,
+  onRollover,
   onSettle
 }) => {
   const getTextColor = (positive: boolean) => {
@@ -107,6 +109,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
             <Button 
               variant={positionType === 1 ? 'rollover1' : positionType === 2 ? 'rollover2' : 'rollover3'}
               size='xs'
+              onClick={onRollover}
             >
               Roll over
             </Button>

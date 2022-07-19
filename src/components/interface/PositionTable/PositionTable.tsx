@@ -27,7 +27,7 @@ export type PositionTableProps = {
   onSetPage: (page: number) => void;
   size: number | null;
   onSetSize: (size: number) => void;
-  onSelectItem: (datum: Position, mode: 'margin' | 'liquidity') => void;
+  onSelectItem: (datum: Position, mode: 'margin' | 'liquidity' | 'rollover') => void;
   agent: Agents
   onSettle: (position: Position) => void;
 };
@@ -91,7 +91,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
     }
   }
   
-  const handleSelectRow = (index: number, mode: 'margin' | 'liquidity') => {
+  const handleSelectRow = (index: number, mode: 'margin' | 'liquidity' | 'rollover') => {
     onSelectItem(positions[index], mode);
   };
 
@@ -115,6 +115,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                     healthFactor={info?.healthFactor}
                     currentFixedRate={(agent === Agents.LIQUIDITY_PROVIDER) ? info?.fixedApr : undefined}
                     positionType={pos.positionType}
+                    onRollover={() => handleSelectRow(index, 'rollover')}
                     onSettle={() => onSettle(pos)}
                   />
 

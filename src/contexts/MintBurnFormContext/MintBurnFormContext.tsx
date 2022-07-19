@@ -8,7 +8,8 @@ import { Position } from '@voltz-protocol/v1-sdk';
 export enum MintBurnFormModes {
   NEW_POSITION='NEW_POSITION',
   EDIT_MARGIN='EDIT_MARGIN',
-  EDIT_LIQUIDITY='EDIT_LIQUIDITY'
+  EDIT_LIQUIDITY='EDIT_LIQUIDITY',
+  ROLLOVER='ROLLOVER',
 }
 
 export enum MintBurnFormActions {
