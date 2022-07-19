@@ -7,6 +7,7 @@ import { MintBurnFormActions, MintBurnFormModes, useMintBurnForm } from '@contex
 import { Loading } from '@components/atomic';
 import { FormPanel, MintBurnCurrentPosition, MintBurnForm, MintBurnInfo, PendingTransaction } from '@components/interface';
 import { updateFixedRate } from './utilities';
+import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
 
 export type ConnectedMintBurnFormProps = {
   onReset: () => void;
@@ -30,6 +31,17 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
       margin: Math.abs(form.state.margin as number) * (form.isRemovingMargin ? -1 : 1),
       notional: Math.abs(form.state.notional as number) * (form.isRemovingLiquidity ? -1 : 1),
     };
+
+    if(form.mode === MintBurnFormModes.ROLLOVER) {
+      return actions.rolloverAction(form.amm, { 
+        ...transaction,
+        margin: form.amm.isETH ? 0 : Math.abs(form.state.margin as number),
+        marginEth: form.amm.isETH ? Math.abs(form.state.margin as number) : undefined,
+        newMarginEngine: form.amm.marginEngineAddress,
+        oldFixedHigh: (form.position as Position).fixedRateUpper.toNumber(),
+        oldFixedLow: (form.position as Position).fixedRateLower.toNumber()
+      });
+    }
   
     switch(form.action) {
       case MintBurnFormActions.UPDATE:
@@ -117,7 +129,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
       }
       <MintBurnForm
         approvalsNeeded={form.approvalsNeeded}
-        balance={form.balance}
+        balance={form.totalBalance}
         endDate={form.amm.endDateTime}
         errors={form.errors}
         formState={form.state}

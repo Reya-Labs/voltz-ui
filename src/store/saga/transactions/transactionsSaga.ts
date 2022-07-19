@@ -7,6 +7,7 @@ import updatePositionMarginSaga from './updatePositionMarginSaga';
 import fcmSwapSaga from './fcmSwapSaga';
 import fcmUnwindSaga from './fcmUnwindSaga';
 import burnSaga from './burnSaga';
+import rolloverMintSaga from './rolloverMintSaga';
 
 function* transactionsSaga() {
   yield takeLatest('mint', mintSaga);
@@ -16,6 +17,7 @@ function* transactionsSaga() {
   yield takeLatest('fcmSwap', fcmSwapSaga);
   yield takeLatest('fcmUnwind', fcmUnwindSaga);
   yield takeLatest('burn', burnSaga); 
+  yield takeLatest('rolloverMint', rolloverMintSaga); 
 }
 
 export default transactionsSaga;

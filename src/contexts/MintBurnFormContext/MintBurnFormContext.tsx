@@ -105,6 +105,7 @@ export type MintBurnFormContext = {
   state: MintBurnFormState;
   submitButtonState: MintBurnFormSubmitButtonStates;
   tokenApprovals: ReturnType<typeof useTokenApproval>;
+  totalBalance: number;
   validate: () => Promise<boolean>;
 };
 
@@ -142,6 +143,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   const [isValid, setIsValid] = useState<boolean>(false);
   const isTradeVerified = !!mintMinimumMarginRequirement.result && !mintMinimumMarginRequirement.loading && !mintMinimumMarginRequirement.errorMessage;
   const minimumRequiredMargin = mintMinimumMarginRequirement.result ?? undefined;
+  const totalBalance = balance + (positionInfo.result?.accruedCashflow ?? 0)
   const touched = useRef<string[]>([]);
 
   const isAddingLiquidity = mode !== MintBurnFormModes.EDIT_LIQUIDITY || liquidityAction === MintBurnFormLiquidityAction.ADD;
@@ -502,6 +504,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
     },
     submitButtonState: getSubmitButtonState(),
     tokenApprovals,
+    totalBalance,
     validate
   }
 
