@@ -26,6 +26,8 @@ interface IPeripheryInterface extends ethers.utils.Interface {
     "lpMarginCaps(address)": FunctionFragment;
     "lpMarginCumulatives(address)": FunctionFragment;
     "mintOrBurn((address,int24,int24,uint256,bool,int256))": FunctionFragment;
+    "rolloverWithMint(address,address,int24,int24,(address,int24,int24,uint256,bool,int256))": FunctionFragment;
+    "rolloverWithSwap(address,address,int24,int24,(address,bool,uint256,uint160,int24,int24,uint256))": FunctionFragment;
     "setLPMarginCap(address,int256)": FunctionFragment;
     "setLPMarginCumulative(address,int256)": FunctionFragment;
     "settlePositionAndWithdrawMargin(address,address,int24,int24)": FunctionFragment;
@@ -54,6 +56,41 @@ interface IPeripheryInterface extends ethers.utils.Interface {
         tickUpper: BigNumberish;
         notional: BigNumberish;
         isMint: boolean;
+        marginDelta: BigNumberish;
+      }
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "rolloverWithMint",
+    values: [
+      string,
+      string,
+      BigNumberish,
+      BigNumberish,
+      {
+        marginEngine: string;
+        tickLower: BigNumberish;
+        tickUpper: BigNumberish;
+        notional: BigNumberish;
+        isMint: boolean;
+        marginDelta: BigNumberish;
+      }
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "rolloverWithSwap",
+    values: [
+      string,
+      string,
+      BigNumberish,
+      BigNumberish,
+      {
+        marginEngine: string;
+        isFT: boolean;
+        notional: BigNumberish;
+        sqrtPriceLimitX96: BigNumberish;
+        tickLower: BigNumberish;
+        tickUpper: BigNumberish;
         marginDelta: BigNumberish;
       }
     ]
@@ -102,6 +139,14 @@ interface IPeripheryInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "mintOrBurn", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "rolloverWithMint",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "rolloverWithSwap",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "setLPMarginCap",
     data: BytesLike
@@ -199,6 +244,39 @@ export class IPeriphery extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    rolloverWithMint(
+      marginEngine: string,
+      owner: string,
+      tickLower: BigNumberish,
+      tickUpper: BigNumberish,
+      paramsNewPosition: {
+        marginEngine: string;
+        tickLower: BigNumberish;
+        tickUpper: BigNumberish;
+        notional: BigNumberish;
+        isMint: boolean;
+        marginDelta: BigNumberish;
+      },
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    rolloverWithSwap(
+      marginEngine: string,
+      owner: string,
+      tickLower: BigNumberish,
+      tickUpper: BigNumberish,
+      paramsNewPosition: {
+        marginEngine: string;
+        isFT: boolean;
+        notional: BigNumberish;
+        sqrtPriceLimitX96: BigNumberish;
+        tickLower: BigNumberish;
+        tickUpper: BigNumberish;
+        marginDelta: BigNumberish;
+      },
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setLPMarginCap(
       vamm: string,
       lpMarginCapNew: BigNumberish,
@@ -261,6 +339,39 @@ export class IPeriphery extends BaseContract {
       tickUpper: BigNumberish;
       notional: BigNumberish;
       isMint: boolean;
+      marginDelta: BigNumberish;
+    },
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  rolloverWithMint(
+    marginEngine: string,
+    owner: string,
+    tickLower: BigNumberish,
+    tickUpper: BigNumberish,
+    paramsNewPosition: {
+      marginEngine: string;
+      tickLower: BigNumberish;
+      tickUpper: BigNumberish;
+      notional: BigNumberish;
+      isMint: boolean;
+      marginDelta: BigNumberish;
+    },
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  rolloverWithSwap(
+    marginEngine: string,
+    owner: string,
+    tickLower: BigNumberish,
+    tickUpper: BigNumberish,
+    paramsNewPosition: {
+      marginEngine: string;
+      isFT: boolean;
+      notional: BigNumberish;
+      sqrtPriceLimitX96: BigNumberish;
+      tickLower: BigNumberish;
+      tickUpper: BigNumberish;
       marginDelta: BigNumberish;
     },
     overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -332,6 +443,48 @@ export class IPeriphery extends BaseContract {
       },
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    rolloverWithMint(
+      marginEngine: string,
+      owner: string,
+      tickLower: BigNumberish,
+      tickUpper: BigNumberish,
+      paramsNewPosition: {
+        marginEngine: string;
+        tickLower: BigNumberish;
+        tickUpper: BigNumberish;
+        notional: BigNumberish;
+        isMint: boolean;
+        marginDelta: BigNumberish;
+      },
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    rolloverWithSwap(
+      marginEngine: string,
+      owner: string,
+      tickLower: BigNumberish,
+      tickUpper: BigNumberish,
+      paramsNewPosition: {
+        marginEngine: string;
+        isFT: boolean;
+        notional: BigNumberish;
+        sqrtPriceLimitX96: BigNumberish;
+        tickLower: BigNumberish;
+        tickUpper: BigNumberish;
+        marginDelta: BigNumberish;
+      },
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, number] & {
+        _fixedTokenDelta: BigNumber;
+        _variableTokenDelta: BigNumber;
+        _cumulativeFeeIncurred: BigNumber;
+        _fixedTokenDeltaUnbalanced: BigNumber;
+        _marginRequirement: BigNumber;
+        _tickAfter: number;
+      }
+    >;
 
     setLPMarginCap(
       vamm: string,
@@ -428,6 +581,39 @@ export class IPeriphery extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    rolloverWithMint(
+      marginEngine: string,
+      owner: string,
+      tickLower: BigNumberish,
+      tickUpper: BigNumberish,
+      paramsNewPosition: {
+        marginEngine: string;
+        tickLower: BigNumberish;
+        tickUpper: BigNumberish;
+        notional: BigNumberish;
+        isMint: boolean;
+        marginDelta: BigNumberish;
+      },
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    rolloverWithSwap(
+      marginEngine: string,
+      owner: string,
+      tickLower: BigNumberish,
+      tickUpper: BigNumberish,
+      paramsNewPosition: {
+        marginEngine: string;
+        isFT: boolean;
+        notional: BigNumberish;
+        sqrtPriceLimitX96: BigNumberish;
+        tickLower: BigNumberish;
+        tickUpper: BigNumberish;
+        marginDelta: BigNumberish;
+      },
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setLPMarginCap(
       vamm: string,
       lpMarginCapNew: BigNumberish,
@@ -494,6 +680,39 @@ export class IPeriphery extends BaseContract {
         tickUpper: BigNumberish;
         notional: BigNumberish;
         isMint: boolean;
+        marginDelta: BigNumberish;
+      },
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    rolloverWithMint(
+      marginEngine: string,
+      owner: string,
+      tickLower: BigNumberish,
+      tickUpper: BigNumberish,
+      paramsNewPosition: {
+        marginEngine: string;
+        tickLower: BigNumberish;
+        tickUpper: BigNumberish;
+        notional: BigNumberish;
+        isMint: boolean;
+        marginDelta: BigNumberish;
+      },
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    rolloverWithSwap(
+      marginEngine: string,
+      owner: string,
+      tickLower: BigNumberish,
+      tickUpper: BigNumberish,
+      paramsNewPosition: {
+        marginEngine: string;
+        isFT: boolean;
+        notional: BigNumberish;
+        sqrtPriceLimitX96: BigNumberish;
+        tickLower: BigNumberish;
+        tickUpper: BigNumberish;
         marginDelta: BigNumberish;
       },
       overrides?: PayableOverrides & { from?: string | Promise<string> }
