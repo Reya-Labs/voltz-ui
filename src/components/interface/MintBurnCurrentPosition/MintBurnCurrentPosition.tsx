@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Box from '@mui/material/Box';
 // import { SystemStyleObject, Theme } from '@theme';
 import { Position } from '@voltz-protocol/v1-sdk';
-import { Button, Ellipsis, PositionBadge, SummaryPanel } from '@components/atomic';
+import { Button, Ellipsis, Loading, PositionBadge, SummaryPanel } from '@components/atomic';
 import { FormPanel } from '@components/interface';
 import { formatCurrency, formatNumber } from '@utilities';
 import { BigNumber } from 'ethers';
@@ -26,7 +26,7 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
   // }
   const { positionInfo } = useAMMContext();
 
-  const currentPositionBadgeText = `Current position: LP`;
+  const currentPositionBadgeText = `${formMode !== MintBurnFormModes.ROLLOVER ? 'Previous' : 'Current'} position: LP`;
   const notional = Math.abs(position.effectiveVariableTokenBalance);
   const margin = position.amm.descale(BigNumber.from(position.margin.toString()));
   const leverage = notional / margin;
@@ -121,9 +121,16 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
     <FormPanel noBackground>
       <Box sx={{ width: (theme) => theme.spacing(53), marginLeft: 'auto' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: (theme) => theme.spacing(6) }}>
-          <PositionBadge variant='FC' text={currentPositionBadgeText} sx={{ display: 'inline-block', marginLeft: 0 }} />
+          <PositionBadge 
+            variant='FC' 
+            text={currentPositionBadgeText} 
+            sx={{ display: 'inline-block', marginLeft: 0 }} 
+          />
         </Box>
-        <SummaryPanel label="Position information" rows={rows} />
+        {(positionInfo.loading || !positionInfo.result)
+          ? <Loading />
+          : <SummaryPanel label="Position information" rows={rows} />
+        }
         <Button
           sx={{ 
             marginTop: (theme) => theme.spacing(6), 
@@ -131,6 +138,7 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
           }}
           variant="dark-link"
           onClick={onPortfolio}
+          size='small'
         >
           Portfolio
         </Button>
