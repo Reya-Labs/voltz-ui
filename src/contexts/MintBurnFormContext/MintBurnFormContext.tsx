@@ -89,6 +89,7 @@ export type MintBurnFormContext = {
     result?: number;
   };
   mode: MintBurnFormModes;
+  position?: Position;
   setFixedHigh: (value: MintBurnFormState['fixedHigh']) => void;
   setFixedLow: (value: MintBurnFormState['fixedLow']) => void;
   setLiquidityAction: (value: MintBurnFormState['liquidityAction']) => void;
@@ -461,6 +462,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
       result: mintMinimumMarginRequirement.result ?? undefined
     },
     mode,
+    position,
     setFixedHigh: updateFixedHigh,
     setFixedLow: updateFixedLow,
     setLiquidityAction: updateLiquidityAction,

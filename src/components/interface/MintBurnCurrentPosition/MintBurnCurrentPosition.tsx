@@ -4,17 +4,20 @@ import Box from '@mui/material/Box';
 import { Position } from '@voltz-protocol/v1-sdk';
 import { Button, Ellipsis, PositionBadge, SummaryPanel } from '@components/atomic';
 import { FormPanel } from '@components/interface';
-import { formatCurrency } from '@utilities';
+import { formatCurrency, formatNumber } from '@utilities';
 import { BigNumber } from 'ethers';
 import { useAMMContext } from '@hooks';
 import { colors }  from '@theme';
+import { MintBurnFormModes } from '@contexts';
 
-export type SwapCurrentPositionProps = {
+export type MintBurnCurrentPositionProps = {
+  formMode: MintBurnFormModes;
   onPortfolio: () => void;
   position: Position;
 };
 
-const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionProps> = ({
+export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPositionProps> = ({
+  formMode,
   onPortfolio,
   position
 }) => {
@@ -23,7 +26,7 @@ const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionProps> = (
   // }
   const { positionInfo } = useAMMContext();
 
-  const currentPositionBadgeText = `Current position: ${position.positionType === 1 ? 'Fix taker' : 'Variable taker'}`;
+  const currentPositionBadgeText = `Current position: LP`;
   const notional = Math.abs(position.effectiveVariableTokenBalance);
   const margin = position.amm.descale(BigNumber.from(position.margin.toString()));
   const leverage = notional / margin;
@@ -67,38 +70,66 @@ const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionProps> = (
     positionInfo.call(position);
   }, [position]);
 
+  const rows: React.ComponentProps<typeof SummaryPanel>['rows'] = [
+    {
+      label: 'NOTIONAL',
+      value: `${formatCurrency(notional)} ${underlyingTokenName}`
+    },
+    {
+      label: 'LEVERAGE',
+      value: `${formatCurrency(leverage)}x`
+    },
+    {
+      label: 'FIXED LOW',
+      value: `${formatNumber(position?.fixedRateLower.toNumber())}%`
+    },
+    {
+      label: 'FIXED HIGH',
+      value: `${formatNumber(position?.fixedRateUpper.toNumber())}%`
+    },
+    {
+      label: 'HEALTH FACTOR',
+      value: positionInfo.loading ? <Ellipsis /> : getHealthFactor(),
+    },
+    {
+      label: 'CURRENT MARGIN',
+      value: `${formatCurrency(margin)} ${underlyingTokenName}`,
+      highlight: true
+    }
+  ]
+
+  if(formMode === MintBurnFormModes.ROLLOVER) {
+    rows.push({
+      label: 'CASHFLOW',
+      value: positionInfo?.result
+        ? `${formatCurrency(positionInfo?.result?.accruedCashflow)} ${underlyingTokenName}`
+        : <Ellipsis />,
+      highlight: true
+    });
+
+    rows.push({
+      label: 'ROLLOVER BALANCE',
+      value: positionInfo?.result
+        ? `${formatCurrency(positionInfo?.result?.accruedCashflow + margin)} ${underlyingTokenName}`
+        : <Ellipsis />,
+      highlight: true,
+      bold: true
+    });
+  };
+
   return (
     <FormPanel noBackground>
       <Box sx={{ width: (theme) => theme.spacing(53), marginLeft: 'auto' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: (theme) => theme.spacing(6) }}>
           <PositionBadge variant='FC' text={currentPositionBadgeText} sx={{ display: 'inline-block', marginLeft: 0 }} />
         </Box>
-        <SummaryPanel label="Position information" rows={[
-          {
-            label: 'NOTIONAL',
-            value: `${formatCurrency(notional)} ${underlyingTokenName}`
-          },
-          {
-            label: 'LEVERAGE',
-            value: `${formatCurrency(leverage)}x`
-          },
-          {
-            label: 'HEALTH FACTOR',
-            value: positionInfo.loading ? <Ellipsis/> : getHealthFactor(),
-          },
-          {
-            label: 'CURRENT MARGIN',
-            value: `${formatCurrency(margin)} ${underlyingTokenName}`,
-            highlight: true
-          },
-        ]} />
+        <SummaryPanel label="Position information" rows={rows} />
         <Button
           sx={{ 
             marginTop: (theme) => theme.spacing(6), 
             flexGrow: 0 
           }}
           variant="dark-link"
-          size='vs'
           onClick={onPortfolio}
         >
           Portfolio
@@ -108,4 +139,4 @@ const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionProps> = (
   );
 };
 
-export default SwapCurrentPosition;
+export default MintBurnCurrentPosition;

@@ -6,7 +6,7 @@ import colors from '../../../theme/colors';
 interface SummaryPanelProps {
   label?: ReactNode;
   loading?: boolean;
-  rows?: {label: string; value: ReactNode, highlight?: boolean}[];
+  rows?: {label: string; value: ReactNode, highlight?: boolean, bold?: boolean}[];
 }
 
 const SummaryPanel = ({ label, loading, rows }: SummaryPanelProps) => {
@@ -36,7 +36,11 @@ const SummaryPanel = ({ label, loading, rows }: SummaryPanelProps) => {
   };
 
   if (loading) {
-    return <Typography agentStyling variant="body2">Loading...</Typography>
+    return (
+      <Typography variant="body2" sx={{ color: colors.skyBlueCrayola.base }}>
+        Loading...
+      </Typography>
+    );
   }
 
   if (rows) {
@@ -50,13 +54,15 @@ const SummaryPanel = ({ label, loading, rows }: SummaryPanelProps) => {
               sx={{
                 ...valueStyles, 
                 color: (row.highlight) ? colors.lavenderWeb.base : colors.lavenderWeb.darken015,
+                fontWeight: row.bold ? 'bold' : undefined,
               }}
             >
               {row.label}
             </Typography>
-            <Typography agentStyling={row.highlight} variant="body2" sx={{
+            <Typography variant="body2" sx={{
               ...valueStyles,
-              color: row.highlight ? undefined : colors.lavenderWeb.darken015,
+              color: row.highlight ? colors.skyBlueCrayola.base : colors.lavenderWeb.darken015,
+              fontWeight: row.bold ? 'bold' : undefined,
               whiteSpace: 'nowrap',
             }}>
               {row.value}
