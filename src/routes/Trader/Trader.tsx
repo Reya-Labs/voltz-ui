@@ -59,7 +59,7 @@ const Trader: React.FunctionComponent = () => {
     setAMM(selectedAMM);
 
     let currentPosition:Position | undefined = undefined;
-    if(positions) currentPosition = positions.find(p => p.amm.id === selectedAMM.id);
+    if(positions) currentPosition = positions.find(p => p.amm.id === selectedAMM.id && p.positionType < 3);
     setPosition(currentPosition);
   };
   const handleSelectPosition = (selected: Position, mode: 'margin' | 'liquidity' | 'rollover') => {
