@@ -3,7 +3,7 @@ import { AugmentedAMM } from '@utilities';
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { isUndefined } from 'lodash';
 import { BigNumber } from 'ethers';
-import { Position } from '@voltz-protocol/v1-sdk';
+import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 
 export enum MintBurnFormModes {
   NEW_POSITION='NEW_POSITION',
@@ -90,6 +90,11 @@ export type MintBurnFormContext = {
   };
   mode: MintBurnFormModes;
   position?: Position;
+  positionInfo?: {
+    errorMessage?: string;
+    loading: boolean;
+    result?: PositionInfo;
+  };
   setFixedHigh: (value: MintBurnFormState['fixedHigh']) => void;
   setFixedLow: (value: MintBurnFormState['fixedLow']) => void;
   setLiquidityAction: (value: MintBurnFormState['liquidityAction']) => void;
@@ -126,6 +131,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   const [marginAction, setMarginAction] = useState<MintBurnFormMarginAction>(defaultMarginAction);
   const { mintMinimumMarginRequirement } = useAMMContext();
   const [notional, setNotional] = useState<MintBurnFormState['notional']>(defaultNotional);
+  const { positionInfo } = useAMMContext();
   const tokenApprovals = useTokenApproval(amm, true);
   
   const approvalsNeeded = !tokenApprovals.underlyingTokenApprovedForPeriphery;
@@ -244,6 +250,11 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
       });
     }
   }, [mintMinimumMarginRequirement.call, notional, fixedLow, fixedHigh]);
+
+  // Load the position info (if we have a current position)
+  useEffect(() => {
+    if(position) positionInfo.call(position);
+  }, [position]);
 
   // validate the form after values change
   useEffect(() => {
@@ -463,6 +474,11 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
     },
     mode,
     position,
+    positionInfo: {
+      loading: positionInfo.loading,
+      errorMessage: positionInfo.errorMessage ?? undefined,
+      result: positionInfo.result ?? undefined
+    },
     setFixedHigh: updateFixedHigh,
     setFixedLow: updateFixedLow,
     setLiquidityAction: updateLiquidityAction,

@@ -4,6 +4,7 @@ import { routes } from '@routes';
 import { actions, selectors } from '@store';
 import { useAgent, useDispatch, useSelector } from '@hooks';
 import { MintBurnFormActions, MintBurnFormModes, useMintBurnForm } from '@contexts';
+import { Loading } from '@components/atomic';
 import { FormPanel, MintBurnCurrentPosition, MintBurnForm, MintBurnInfo, PendingTransaction } from '@components/interface';
 import { updateFixedRate } from './utilities';
 
@@ -94,6 +95,18 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
         onBack={handleGoBack} 
       />
     );
+  }
+
+  if(form.position && !form.positionInfo?.result) {
+    return (
+      <>
+        <FormPanel noBackground />
+        <FormPanel>
+          <Loading sx={{ margin: '0 auto' }} />
+        </FormPanel>
+        <FormPanel noBackground />
+      </>
+    )
   }
 
   return (

@@ -66,10 +66,6 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
     }
   }
 
-  useEffect(() => {
-    positionInfo.call(position);
-  }, [position]);
-
   const rows: React.ComponentProps<typeof SummaryPanel>['rows'] = [
     {
       label: 'NOTIONAL',
