@@ -25,7 +25,7 @@ export const ExpectedAPY = ({ expectedAPY, onChangeMovesRatesBy, ratesMoveBy }:E
         }}>
           <Typography
             variant="h3"
-            label={<IconLabel label="Expected APY" icon="information-circle" info="Expected APY" />}
+            label={<IconLabel label="Expected APY" icon="information-circle" info="This is the expected APY of your position if rates move by your selected amount." />}
             agentStyling
           >
             {!isUndefined(expectedAPY) ? `${formatCurrency(expectedAPY, true)}%` : '---'}
@@ -38,7 +38,7 @@ export const ExpectedAPY = ({ expectedAPY, onChangeMovesRatesBy, ratesMoveBy }:E
         }}>
           <SelectInput 
             name="ratesMoveBy"
-            label={<IconLabel label="Rates move by:" icon="information-circle" info="Rates move by" />} 
+            label={<IconLabel label="Rates move by:" icon="information-circle" info="Select the percentage of rate movement that you would like to simulate." />} 
             onChange={(event) => onChangeMovesRatesBy(event.target.value as number)}
             options={[
               { label: '-1%', value: -1 },
@@ -54,7 +54,7 @@ export const ExpectedAPY = ({ expectedAPY, onChangeMovesRatesBy, ratesMoveBy }:E
       </Box>
       <Box sx={{ marginTop: (theme) => theme.spacing(4) }}>
         <Typography variant='body1' sx={{ color: colors.lavenderWeb.darken020, fontSize: '14px' }}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec sit iaculis cras elit dictum massa. Sit metus amet, tincidunt odio. Tristique sagittis, nisl in eu eu vestibulum et. Ut sed mauris urna justo, dictumst molestie posuere.
+          Generate an expected APY for a given movement in rates. The expected APY factors in pool conditions and the details of your position.
         </Typography>
       </Box>
     </>
