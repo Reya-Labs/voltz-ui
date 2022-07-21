@@ -3,13 +3,13 @@ import Box from '@mui/material/Box';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '@theme';
-import { Agents } from '@contexts';
+import { Agents, useAMMContext } from '@contexts';
 import { Typography } from '@components/atomic';
 import { ProgressBar } from '@components/composite';
 import { lpLabels } from '../../constants';
 import { traderLabels } from '../../constants';
 import { FixedAPR, Notional, CurrentMargin, Maturity, AccruedRates } from './components';
-import { useAgent, useAMMContext } from '@hooks';
+import { useAgent } from '@hooks';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 
 export type PositionTableRowProps = {

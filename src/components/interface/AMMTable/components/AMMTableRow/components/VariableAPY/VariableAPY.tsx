@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import TableCell from '@mui/material/TableCell';
 
-import { useAMMContext } from '@hooks';
+import { useAMMContext } from '@contexts';
 import { Typography } from '@components/atomic';
 
 const VariableAPY: React.FunctionComponent = () => {

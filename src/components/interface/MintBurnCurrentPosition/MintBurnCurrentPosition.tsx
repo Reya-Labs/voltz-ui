@@ -6,7 +6,7 @@ import { Button, Ellipsis, Loading, PositionBadge, SummaryPanel } from '@compone
 import { FormPanel } from '@components/interface';
 import { formatCurrency, formatNumber } from '@utilities';
 import { BigNumber } from 'ethers';
-import { useAMMContext } from '@hooks';
+import { useAMMContext } from '@contexts';
 import { colors }  from '@theme';
 import { MintBurnFormModes } from '@contexts';
 

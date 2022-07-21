@@ -1,8 +1,8 @@
-import { useAMMContext, useBalance, useTokenApproval } from '@hooks';
+import { useBalance, useTokenApproval } from '@hooks';
+import { useAMMContext } from '@contexts';
 import { AugmentedAMM } from '@utilities';
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { isUndefined } from 'lodash';
-import { BigNumber } from 'ethers';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 
 export enum MintBurnFormModes {

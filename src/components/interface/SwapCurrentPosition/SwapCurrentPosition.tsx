@@ -6,7 +6,7 @@ import { Button, Ellipsis, PositionBadge, SummaryPanel } from '@components/atomi
 import { FormPanel } from '@components/interface';
 import { formatCurrency } from '@utilities';
 import { BigNumber } from 'ethers';
-import { useAMMContext } from '@hooks';
+import { useAMMContext } from '@contexts';
 import { colors }  from '@theme';
 
 export type SwapCurrentPositionProps = {

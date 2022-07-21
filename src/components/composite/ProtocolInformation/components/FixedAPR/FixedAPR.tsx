@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { useAMMContext } from '@hooks';
+import { useAMMContext } from '@contexts';
 import { Typography } from '@components/atomic';
 import { IconLabel } from '@components/composite';
 
