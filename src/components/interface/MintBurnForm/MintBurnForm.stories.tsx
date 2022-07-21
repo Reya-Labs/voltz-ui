@@ -1,7 +1,7 @@
 import React from 'react';
 import { DateTime, Duration } from 'luxon';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { AgentProvider, Agents, MintBurnFormModes, MintBurnFormProvider, MintBurnFormHintStates, MintBurnFormSubmitButtonStates, useMintBurnForm } from '@contexts';
+import { AgentProvider, Agents, MintBurnFormModes, MintBurnFormProvider, MintBurnFormHintStates, MintBurnFormSubmitButtonStates, useMintBurnForm, AMMProvider } from '@contexts';
 import MintBurnForm from './MintBurnForm';
 import { useTokenApproval } from '@hooks';
 import { AugmentedAMM } from '@utilities';
@@ -15,6 +15,9 @@ export default {
 } as ComponentMeta<typeof MintBurnForm>;
 
 const mockAmm = ({
+  getCapPercentage: () => Promise.resolve(),
+  getFixedApr: () => Promise.resolve(),
+  getInstantApy: () => Promise.resolve(),
   isUnderlyingTokenApprovedForPeriphery: () =>  true,
   hasEnoughUnderlyingTokens: () =>  true,
   underlyingToken: {
@@ -39,9 +42,11 @@ const mockTokenApprovals = {
 // Creating a new position
 const NewPositionTemplate: ComponentStory<typeof MintBurnForm> = (args) => (
   <AgentProvider defaultAgent={Agents.LIQUIDITY_PROVIDER}>
-    <MintBurnFormProvider amm={mockAmm} mode={MintBurnFormModes.NEW_POSITION}>
-      <NewPositionMintBurnForm {...args} />
-    </MintBurnFormProvider>
+    <AMMProvider amm={mockAmm}>
+      <MintBurnFormProvider mode={MintBurnFormModes.NEW_POSITION}>
+        <NewPositionMintBurnForm {...args} />
+      </MintBurnFormProvider>
+    </AMMProvider>
   </AgentProvider>
 );
 const NewPositionMintBurnForm: React.FunctionComponent = (args) => {
@@ -84,9 +89,11 @@ NewPosition.args = {
 // Editing the margin of a position
 const EditingMarginTemplate: ComponentStory<typeof MintBurnForm> = (args) => (
   <AgentProvider defaultAgent={Agents.LIQUIDITY_PROVIDER}>
-    <MintBurnFormProvider amm={mockAmm} mode={MintBurnFormModes.EDIT_MARGIN} defaultValues={{ fixedLow: 2, fixedHigh: 6 }}>
-      <EditingMarginMintBurnForm {...args} />
-    </MintBurnFormProvider>
+    <AMMProvider amm={mockAmm}>
+      <MintBurnFormProvider mode={MintBurnFormModes.EDIT_MARGIN} defaultValues={{ fixedLow: 2, fixedHigh: 6 }}>
+        <EditingMarginMintBurnForm {...args} />
+      </MintBurnFormProvider>
+    </AMMProvider>
   </AgentProvider>
 );
 const EditingMarginMintBurnForm: React.FunctionComponent = (args) => {
@@ -129,9 +136,11 @@ EditingMargin.args = {
 // Editing the liquidity of a position
 const EditingLiquidityTemplate: ComponentStory<typeof MintBurnForm> = (args) => (
   <AgentProvider defaultAgent={Agents.LIQUIDITY_PROVIDER}>
-    <MintBurnFormProvider amm={mockAmm} mode={MintBurnFormModes.EDIT_LIQUIDITY} defaultValues={{ fixedLow: 2, fixedHigh: 6 }}>
-      <EditingLiquidityMintBurnForm {...args} />
-    </MintBurnFormProvider>
+    <AMMProvider amm={mockAmm}>
+      <MintBurnFormProvider mode={MintBurnFormModes.EDIT_LIQUIDITY} defaultValues={{ fixedLow: 2, fixedHigh: 6 }}>
+        <EditingLiquidityMintBurnForm {...args} />
+      </MintBurnFormProvider>
+    </AMMProvider>
   </AgentProvider>
 );
 const EditingLiquidityMintBurnForm: React.FunctionComponent = (args) => {

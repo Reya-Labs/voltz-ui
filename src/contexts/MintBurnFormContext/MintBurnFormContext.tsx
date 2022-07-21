@@ -1,5 +1,5 @@
 import { useBalance, useTokenApproval } from '@hooks';
-import { useAMMContext } from '@contexts';
+import { useAMMContext, usePositionContext } from '@contexts';
 import { AugmentedAMM } from '@utilities';
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { isUndefined } from 'lodash';
@@ -65,9 +65,7 @@ export type MintBurnFormState = {
 };
 
 export type MintBurnFormProviderProps = {
-  amm: AugmentedAMM;
   mode: MintBurnFormModes;
-  position?: Position;
   defaultValues?: Partial<MintBurnFormState>;
 }
 
@@ -112,12 +110,13 @@ export type MintBurnFormContext = {
 const MintBurnFormCtx = createContext<MintBurnFormContext>({} as unknown as MintBurnFormContext);
 
 export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderProps> = ({ 
-  amm, 
   children, 
   defaultValues = {}, 
   mode = MintBurnFormModes.NEW_POSITION,
-  position
 }) => {
+  const { amm } = useAMMContext();
+  const { position } = usePositionContext();
+
   const defaultFixedHigh = position?.fixedRateUpper.toNumber() ?? defaultValues.fixedHigh ?? undefined;
   const defaultFixedLow = position?.fixedRateLower.toNumber() ?? defaultValues.fixedLow ?? undefined;
   const defaultLiquidityAction = defaultValues.liquidityAction ?? MintBurnFormLiquidityAction.ADD;

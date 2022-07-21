@@ -4,8 +4,8 @@ import { useLocation } from 'react-router-dom';
 import { Position } from '@voltz-protocol/v1-sdk';
 
 import { AugmentedAMM, setPageTitle } from '@utilities';
-import { Agents, AMMProvider, MintBurnFormModes, MintBurnFormProvider } from '@contexts';
-import { useAgent, usePositions } from '@hooks';
+import { Agents, AMMProvider, MintBurnFormModes, MintBurnFormProvider, PositionProvider } from '@contexts';
+import { useAgent, useAMMs, usePositions } from '@hooks';
 
 import { Page } from '@components/interface';
 import { Panel } from '@components/atomic';
@@ -20,12 +20,12 @@ const LiquidityProvider: React.FunctionComponent = () => {
   const [formMode, setFormMode] = useState<MintBurnFormModes>();
   const [position, setPosition] = useState<Position>();
 
+  const { amms } = useAMMs();
   const { onChangeAgent } = useAgent();
   const { pathname, key } = useLocation();
   const { positions } = usePositions();
 
   const pathnameWithoutPrefix = pathname.slice(1);
-  const effectiveAmm = position?.amm as AugmentedAMM || amm;
   const renderMode = getRenderMode(formMode, pathnameWithoutPrefix);
 
   useEffect(() => {
@@ -56,24 +56,34 @@ const LiquidityProvider: React.FunctionComponent = () => {
     }
   }, [setPageTitle, renderMode, position])
 
+  const findCurrentPosition = (selectedAmm: AugmentedAMM) => {
+    return (positions || []).find(p => {
+      return p.amm.rateOracle === selectedAmm.rateOracle && p.positionType === 3;
+    });
+  }
+
+  const findCurrentAmm = (selectedPosition: Position) => {
+    const currentAmm = (amms || []).find(_amm => {
+      return _amm.rateOracle === selectedPosition.amm.rateOracle;
+    });
+    return (currentAmm as AugmentedAMM) || undefined;
+  }
+
   const handleSelectAmm = (selectedAMM: AugmentedAMM) => {
     setFormMode(MintBurnFormModes.NEW_POSITION);
     setAMM(selectedAMM);
-
-    let currentPosition:Position | undefined = undefined;
-    if(positions) currentPosition = positions.find(p => p.amm.id === selectedAMM.id && p.positionType === 3);
-    setPosition(currentPosition);
+    setPosition(findCurrentPosition(selectedAMM));
   };
 
-  const handleSelectPosition = (selected: Position, mode: 'margin' | 'liquidity' | 'rollover') => {
+  const handleSelectPosition = (selectedPosition: Position, mode: 'margin' | 'liquidity' | 'rollover') => {
     let newMode:MintBurnFormModes | undefined = undefined;
     if(mode === 'margin') newMode = MintBurnFormModes.EDIT_MARGIN;
     if(mode === 'liquidity') newMode = MintBurnFormModes.EDIT_LIQUIDITY;
     if(mode === 'rollover') newMode = MintBurnFormModes.ROLLOVER;
 
     setFormMode(newMode);
-    setAMM(undefined);
-    setPosition(selected);
+    setAMM(findCurrentAmm(selectedPosition));
+    setPosition(selectedPosition);
   };
 
   const handleReset = () => {
@@ -99,7 +109,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
       {renderMode === 'portfolio' && (
         <Panel variant='dark' sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
           <ConnectedPositionTable 
-            amm={effectiveAmm}
+            amm={amm}
             onSelectItem={handleSelectPosition}
             agent={Agents.LIQUIDITY_PROVIDER}
           />
@@ -108,11 +118,15 @@ const LiquidityProvider: React.FunctionComponent = () => {
 
       {renderMode === 'form' && (
         <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
-          <AMMProvider amm={effectiveAmm}>
-            <MintBurnFormProvider amm={effectiveAmm} mode={formMode as MintBurnFormModes} position={position}>
-              <ConnectedMintBurnForm onReset={handleReset} />
-            </MintBurnFormProvider>
-          </AMMProvider>
+          {amm && (
+            <AMMProvider amm={amm}>
+              <PositionProvider position={position}>
+                <MintBurnFormProvider mode={formMode as MintBurnFormModes}>
+                  <ConnectedMintBurnForm onReset={handleReset} />
+                </MintBurnFormProvider>
+              </PositionProvider>
+            </AMMProvider>
+          )}
         </Box>
       )}
     </Page>
