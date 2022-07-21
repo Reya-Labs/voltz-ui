@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { AgentProvider, SwapFormProvider, useSwapFormContext } from '@contexts';
+import { AgentProvider, AMMProvider, SwapFormProvider, useSwapFormContext } from '@contexts';
 import SwapInfo from './SwapInfo';
 import { AugmentedAMM } from '@utilities';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
@@ -15,11 +15,14 @@ export default {
 } as ComponentMeta<typeof SwapInfo>;
 
 const mockAmm = ({
+  getCapPercentage: () => Promise.resolve(),
+  getFixedApr: () => Promise.resolve(),
+  getInstantApy: () => Promise.resolve(),
   hasEnoughUnderlyingTokens: () =>  true,
   isFCMApproved: () => true,
   isUnderlyingTokenApprovedForFCM: () => true,
   isUnderlyingTokenApprovedForPeriphery: () => true,
-  isYieldBearingTokenApprovedForFCM: () =>  true,
+  isYieldBearingTokenApprovedForFCM: () => true,
   underlyingToken: {
     id: '0x123456789',
     name: 'gil'
@@ -36,9 +39,11 @@ const mockSwapData = ({
 
 const NewPositionTemplate: ComponentStory<typeof SwapInfo> = (args) => (
   <AgentProvider>
-    <SwapFormProvider amm={mockAmm} mode={args.mode}>
-      <NewPositionSwapForm {...args} />
-    </SwapFormProvider>
+    <AMMProvider amm={mockAmm}>
+      <SwapFormProvider mode={args.mode}>
+        <NewPositionSwapForm {...args} />
+      </SwapFormProvider>
+    </AMMProvider>
   </AgentProvider>
 );
 
@@ -70,9 +75,11 @@ newPosition.args = {
 // Editing margin
 const EditMarginTemplate: ComponentStory<typeof SwapInfo> = (args) => (
   <AgentProvider>
-    <SwapFormProvider amm={mockAmm} mode={args.mode}>
-      <EditMarginSwapForm {...args} />
-    </SwapFormProvider>
+    <AMMProvider amm={mockAmm}>
+      <SwapFormProvider mode={args.mode}>
+        <EditMarginSwapForm {...args} />
+      </SwapFormProvider>
+    </AMMProvider>
   </AgentProvider>
 );
 

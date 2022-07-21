@@ -5,7 +5,7 @@ import { routes } from '@routes';
 import { actions, selectors } from '@store';
 import { useAgent, useDispatch, useSelector } from '@hooks';
 import { SwapCurrentPosition, SwapForm, SwapInfo, PendingTransaction, SwapFormActions, FormPanel } from '@components/interface';
-import { Agents, useSwapFormContext } from '@contexts';
+import { Agents, useAMMContext, usePositionContext, useSwapFormContext } from '@contexts';
 import { BigNumber } from 'ethers';
 
 export type ConnectedSwapFormProps = {
@@ -14,11 +14,13 @@ export type ConnectedSwapFormProps = {
 
 const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ onReset }) => {
   const { agent } = useAgent();
+  const { amm } = useAMMContext();
   const dispatch = useDispatch();
   const form = useSwapFormContext();
   const navigate = useNavigate();
+  const { position } = usePositionContext();
 
-  const { amm, mode, position } = form;
+  const { mode } = form;
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId); // contains a failureMessage attribute that will contain whatever came out from the sdk
 

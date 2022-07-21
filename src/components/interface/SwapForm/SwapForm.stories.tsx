@@ -2,7 +2,7 @@ import React from 'react';
 import { DateTime, Duration } from 'luxon';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { AgentProvider, SwapFormProvider, SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates, useSwapFormContext } from '@contexts';
+import { AgentProvider, AMMProvider, SwapFormProvider, SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates, useSwapFormContext } from '@contexts';
 import SwapForm from './SwapForm';
 import { useTokenApproval } from '@hooks';
 import { AugmentedAMM } from '@utilities';
@@ -18,6 +18,9 @@ export default {
 } as ComponentMeta<typeof SwapForm>;
 
 const mockAmm = ({
+  getCapPercentage: () => Promise.resolve(),
+  getFixedApr: () => Promise.resolve(),
+  getInstantApy: () => Promise.resolve(),
   hasEnoughUnderlyingTokens: () =>  true,
   isFCMApproved: () => true,
   isUnderlyingTokenApprovedForFCM: () => true,
@@ -54,9 +57,11 @@ const mockTokenApprovals = {
 // Creating a new position
 const NewPositionTemplate: ComponentStory<typeof SwapForm> = (args) => (
   <AgentProvider>
-    <SwapFormProvider amm={mockAmm} mode={SwapFormModes.NEW_POSITION}>
-      <NewPositionSwapForm {...args} />
-    </SwapFormProvider>
+    <AMMProvider amm={mockAmm}>
+      <SwapFormProvider mode={SwapFormModes.NEW_POSITION}>
+        <NewPositionSwapForm {...args} />
+      </SwapFormProvider>
+    </AMMProvider>
   </AgentProvider>
 );
 const NewPositionSwapForm: React.FunctionComponent = (args) => {
@@ -101,9 +106,11 @@ NewPosition.args = {
 // // Editing the margin of a position
 const EditingMarginTemplate: ComponentStory<typeof SwapForm> = (args) => (
   <AgentProvider>
-    <SwapFormProvider amm={mockAmm} mode={SwapFormModes.EDIT_MARGIN}>
-      <EditingMarginSwapForm {...args} />
-    </SwapFormProvider>
+    <AMMProvider amm={mockAmm}>
+      <SwapFormProvider mode={SwapFormModes.EDIT_MARGIN}>
+        <EditingMarginSwapForm {...args} />
+      </SwapFormProvider>
+    </AMMProvider>
   </AgentProvider>
 );
 const EditingMarginSwapForm: React.FunctionComponent = (args) => {

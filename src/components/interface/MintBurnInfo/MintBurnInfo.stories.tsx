@@ -1,6 +1,6 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { AgentProvider, Agents, MintBurnFormModes, MintBurnFormProvider, useMintBurnForm } from '@contexts';
+import { AgentProvider, Agents, AMMProvider, MintBurnFormModes, MintBurnFormProvider, useMintBurnForm } from '@contexts';
 import MintBurnInfo from './MintBurnInfo';
 import { AugmentedAMM } from '@utilities';
 
@@ -13,6 +13,9 @@ export default {
 } as ComponentMeta<typeof MintBurnInfo>;
 
 const mockAmm = ({
+  getCapPercentage: () => Promise.resolve(),
+  getFixedApr: () => Promise.resolve(),
+  getInstantApy: () => Promise.resolve(),
   isUnderlyingTokenApprovedForPeriphery: () =>  true,
   hasEnoughUnderlyingTokens: () =>  true,
   underlyingToken: {
@@ -24,9 +27,11 @@ const mockAmm = ({
 // Creating a new position
 const NewPositionTemplate: ComponentStory<typeof MintBurnInfo> = (args) => (
   <AgentProvider defaultAgent={Agents.LIQUIDITY_PROVIDER}>
-    <MintBurnFormProvider amm={mockAmm} mode={MintBurnFormModes.NEW_POSITION}>
-      <NewPositionMintBurnForm {...args} />
-    </MintBurnFormProvider>
+    <AMMProvider amm={mockAmm}>
+      <MintBurnFormProvider mode={MintBurnFormModes.NEW_POSITION}>
+        <NewPositionMintBurnForm {...args} />
+      </MintBurnFormProvider>
+    </AMMProvider>
   </AgentProvider>
 );
 const NewPositionMintBurnForm: React.FunctionComponent = (args) => {

@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { useLocation } from 'react-router-dom';
 import { Position } from '@voltz-protocol/v1-sdk';
 
-import { AugmentedAMM, setPageTitle } from '@utilities';
+import { AugmentedAMM, findCurrentAmm, findCurrentPosition, setPageTitle } from '@utilities';
 import { Agents, AMMProvider, MintBurnFormModes, MintBurnFormProvider, PositionProvider } from '@contexts';
 import { useAgent, useAMMs, usePositions } from '@hooks';
 
@@ -56,23 +56,10 @@ const LiquidityProvider: React.FunctionComponent = () => {
     }
   }, [setPageTitle, renderMode, position])
 
-  const findCurrentPosition = (selectedAmm: AugmentedAMM) => {
-    return (positions || []).find(p => {
-      return p.amm.rateOracle === selectedAmm.rateOracle && p.positionType === 3;
-    });
-  }
-
-  const findCurrentAmm = (selectedPosition: Position) => {
-    const currentAmm = (amms || []).find(_amm => {
-      return _amm.rateOracle === selectedPosition.amm.rateOracle;
-    });
-    return (currentAmm as AugmentedAMM) || undefined;
-  }
-
   const handleSelectAmm = (selectedAMM: AugmentedAMM) => {
     setFormMode(MintBurnFormModes.NEW_POSITION);
     setAMM(selectedAMM);
-    setPosition(findCurrentPosition(selectedAMM));
+    setPosition(findCurrentPosition(positions || [], selectedAMM));
   };
 
   const handleSelectPosition = (selectedPosition: Position, mode: 'margin' | 'liquidity' | 'rollover') => {
@@ -82,7 +69,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
     if(mode === 'rollover') newMode = MintBurnFormModes.ROLLOVER;
 
     setFormMode(newMode);
-    setAMM(findCurrentAmm(selectedPosition));
+    setAMM(findCurrentAmm(amms || [], selectedPosition));
     setPosition(selectedPosition);
   };
 

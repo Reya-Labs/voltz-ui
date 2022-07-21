@@ -19,47 +19,47 @@ export type useAMMReturnType = {
   variableApy: UseAsyncFunctionResult<unknown, number | void>;
 }
 
-export const useAMM = (amm: AugmentedAMM) => {
+export const useAMM = (amm?: AugmentedAMM) => {
   const { agent } = useAgent();
 
   const ammCaps = useAsyncFunction(
     async () => {
-      const result = await amm.getCapPercentage();
+      const result = await amm?.getCapPercentage();
       return result;
     },
-    useMemo(() => undefined, [!!amm.provider])
+    useMemo(() => undefined, [!!amm?.provider])
   );
 
   const fixedApr = useAsyncFunction(
-    amm.getFixedApr.bind(amm),
-    useMemo(() => undefined, [!!amm.provider]),
+    (amm?.getFixedApr || Promise.reject).bind(amm),
+    useMemo(() => undefined, [!!amm?.provider]),
   );
 
   const mintMinimumMarginRequirement = useAsyncFunction(
     async (args: MintMinimumMarginRequirementPayload) => {
-      const recipient = await amm.signer?.getAddress();
+      const recipient = await amm?.signer?.getAddress();
 
       if (!recipient) {
         return;
       }
 
-      const result = await amm.getInfoPostMint({ ...args });
+      const result = await amm?.getInfoPostMint({ ...args });
 
       return result;
     },
-    useMemo(() => undefined, [!!amm.signer]),
+    useMemo(() => undefined, [!!amm?.signer]),
     100
   );
   
   const positionInfo = useAsyncFunction(
     async (position: Position) => {
-      const recipient = await amm.signer?.getAddress();
+      const recipient = await amm?.signer?.getAddress();
 
       if (!recipient) {
         return;
       }
 
-      const result = await amm.getPositionInformation(position);
+      const result = await amm?.getPositionInformation(position);
 
       if (!result) {
         return;
@@ -67,22 +67,22 @@ export const useAMM = (amm: AugmentedAMM) => {
 
       return result;
     },
-    useMemo(() => undefined, [!!amm.signer, agent]),
+    useMemo(() => undefined, [!!amm?.signer, agent]),
   );
 
   const swapInfo = useAsyncFunction(
     async (args: SwapInfoPayload) => {
-      const recipient = await amm.signer?.getAddress();
+      const recipient = await amm?.signer?.getAddress();
 
       if (!recipient) {
         return;
       }
 
       // hard coded values here are the defaults we use for traders, they overlap with a reasonable range (which causes confusion)
-      let result: InfoPostSwap;
+      let result: InfoPostSwap | undefined;
       switch(args.type) {
         case GetInfoType.NORMAL_SWAP: {
-          result = await amm.getInfoPostSwap({
+          result = await amm?.getInfoPostSwap({
             ...args,
             isFT: agent === Agents.FIXED_TRADER,
             fixedLow: 1,
@@ -92,12 +92,12 @@ export const useAMM = (amm: AugmentedAMM) => {
         }
 
         case GetInfoType.FCM_SWAP: {
-          result = await amm.getInfoPostFCMSwap({notional: args.notional});
+          result = await amm?.getInfoPostFCMSwap({notional: args.notional});
           break;
         }
 
         case GetInfoType.FCM_UNWIND: {
-          result = await amm.getInfoPostFCMUnwind({notionalToUnwind: args.notional});
+          result = await amm?.getInfoPostFCMUnwind({notionalToUnwind: args.notional});
           break;
         }
 
@@ -112,13 +112,13 @@ export const useAMM = (amm: AugmentedAMM) => {
 
       return result;
     },
-    useMemo(() => undefined, [!!amm.signer, agent]),
+    useMemo(() => undefined, [!!amm?.signer, agent]),
     100
   );
 
   const variableApy = useAsyncFunction(
-    amm.getInstantApy.bind(amm),
-    useMemo(() => undefined, [!!amm.provider]),
+    (amm?.getInstantApy || Promise.reject).bind(amm),
+    useMemo(() => undefined, [!!amm?.provider]),
   );
 
   return useMemo(() => ({

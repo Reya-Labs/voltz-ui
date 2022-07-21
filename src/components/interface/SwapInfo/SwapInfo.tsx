@@ -48,8 +48,6 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
         ratesMoveBy={ratesMoveBy}
       />
 
-
-
       {mode === SwapFormModes.NEW_POSITION && (swapSummary || swapSummaryLoading) && (
         <>
           <Box component={'hr'} sx={{ 

@@ -6,7 +6,7 @@ import { Button, Ellipsis, PositionBadge, SummaryPanel } from '@components/atomi
 import { FormPanel } from '@components/interface';
 import { formatCurrency } from '@utilities';
 import { BigNumber } from 'ethers';
-import { useAMMContext } from '@contexts';
+import { usePositionContext } from '@contexts';
 import { colors }  from '@theme';
 
 export type SwapCurrentPositionProps = {
@@ -21,7 +21,7 @@ const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionProps> = (
   // const bottomSpacing: SystemStyleObject<Theme> = {
   //   marginBottom: (theme) => theme.spacing(6)
   // }
-  const { positionInfo } = useAMMContext();
+  const { positionInfo } = usePositionContext();
 
   const currentPositionBadgeText = `Current position: ${position.positionType === 1 ? 'Fix taker' : 'Variable taker'}`;
   const notional = Math.abs(position.effectiveVariableTokenBalance);
@@ -31,13 +31,13 @@ const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionProps> = (
 
   const getHealthFactor = () => {
     
-    if(positionInfo.loading) {
+    if(positionInfo?.loading) {
       return 'loading...';
     } else {
       let healthColour = '';
       let text = '';
 
-      switch(positionInfo.result?.healthFactor) {
+      switch(positionInfo?.result?.healthFactor) {
         case 1: {
           healthColour = colors.vzCustomRed1;
           text = 'DANGER';
@@ -64,7 +64,7 @@ const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionProps> = (
   }
 
   useEffect(() => {
-    positionInfo.call(position);
+    positionInfo?.call(position);
   }, [position]);
 
   return (
@@ -84,7 +84,7 @@ const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionProps> = (
           },
           {
             label: 'HEALTH FACTOR',
-            value: positionInfo.loading ? <Ellipsis/> : getHealthFactor(),
+            value: positionInfo?.loading ? <Ellipsis/> : getHealthFactor(),
           },
           {
             label: 'CURRENT MARGIN',

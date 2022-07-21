@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 // import { SystemStyleObject, Theme } from '@theme';
 import { Position } from '@voltz-protocol/v1-sdk';
@@ -6,7 +6,7 @@ import { Button, Ellipsis, Loading, PositionBadge, SummaryPanel } from '@compone
 import { FormPanel } from '@components/interface';
 import { formatCurrency, formatNumber } from '@utilities';
 import { BigNumber } from 'ethers';
-import { useAMMContext } from '@contexts';
+import { usePositionContext } from '@contexts';
 import { colors }  from '@theme';
 import { MintBurnFormModes } from '@contexts';
 
@@ -24,7 +24,7 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
   // const bottomSpacing: SystemStyleObject<Theme> = {
   //   marginBottom: (theme) => theme.spacing(6)
   // }
-  const { positionInfo } = useAMMContext();
+  const { positionInfo } = usePositionContext();
 
   const currentPositionBadgeText = `${formMode !== MintBurnFormModes.ROLLOVER ? 'Previous' : 'Current'} position: LP`;
   const notional = Math.abs(position.effectiveVariableTokenBalance);
@@ -34,13 +34,13 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
 
   const getHealthFactor = () => {
     
-    if(positionInfo.loading) {
+    if(positionInfo?.loading) {
       return 'loading...';
     } else {
       let healthColour = '';
       let text = '';
 
-      switch(positionInfo.result?.healthFactor) {
+      switch(positionInfo?.result?.healthFactor) {
         case 1: {
           healthColour = colors.vzCustomRed1;
           text = 'DANGER';
@@ -85,7 +85,7 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
     },
     {
       label: 'HEALTH FACTOR',
-      value: positionInfo.loading ? <Ellipsis /> : getHealthFactor(),
+      value: positionInfo?.loading ? <Ellipsis /> : getHealthFactor(),
     },
     {
       label: 'CURRENT MARGIN',
@@ -123,7 +123,7 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
             sx={{ display: 'inline-block', marginLeft: 0 }} 
           />
         </Box>
-        {(positionInfo.loading || !positionInfo.result)
+        {(positionInfo?.loading || !positionInfo?.result)
           ? <Loading />
           : <SummaryPanel label="Position information" rows={rows} />
         }

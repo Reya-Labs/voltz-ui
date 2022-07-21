@@ -3,11 +3,11 @@ import Box from '@mui/material/Box';
 import { useLocation } from 'react-router-dom';
 import { Position } from '@voltz-protocol/v1-sdk';
 
-import { AugmentedAMM, setPageTitle } from '@utilities';
-import { Agents, AMMProvider, SwapFormProvider } from '@contexts';
+import { AugmentedAMM, findCurrentAmm, findCurrentPosition, setPageTitle } from '@utilities';
+import { Agents, AMMProvider, PositionProvider, SwapFormProvider } from '@contexts';
 import { PageTitleDesc } from '@components/composite';
 import { Panel } from '@components/atomic';
-import { useAgent, usePositions } from '@hooks';
+import { useAgent, useAMMs, usePositions } from '@hooks';
 import { Page, SwapFormModes } from '@components/interface';
 import ConnectedAMMTable from '../../components/containers/ConnectedAMMTable/ConnectedAMMTable';
 import ConnectedPositionTable from '../../components/containers/ConnectedPositionTable/ConnectedPositionTable';
@@ -19,6 +19,7 @@ const Trader: React.FunctionComponent = () => {
   const [amm, setAMM] = useState<AugmentedAMM>();
   const [position, setPosition] = useState<Position>();
 
+  const { amms } = useAMMs();
   const { onChangeAgent } = useAgent();
   const { pathname, key } = useLocation();
   const { positions } = usePositions();
@@ -57,19 +58,16 @@ const Trader: React.FunctionComponent = () => {
   const handleSelectAmm = (selectedAMM: AugmentedAMM) => {
     setFormMode(SwapFormModes.NEW_POSITION);
     setAMM(selectedAMM);
-
-    let currentPosition:Position | undefined = undefined;
-    if(positions) currentPosition = positions.find(p => p.amm.id === selectedAMM.id && p.positionType < 3);
-    setPosition(currentPosition);
+    setPosition(findCurrentPosition(positions || [], selectedAMM));
   };
-  const handleSelectPosition = (selected: Position, mode: 'margin' | 'liquidity' | 'rollover') => {
+  const handleSelectPosition = (selectedPosition: Position, mode: 'margin' | 'liquidity' | 'rollover') => {
     // Please note that you will never get 'liquidity' mode here as that is only for LP positions.
     let newMode = SwapFormModes.EDIT_MARGIN;
     if(mode === 'rollover') newMode = SwapFormModes.ROLLOVER;
 
     setFormMode(newMode);
-    setAMM(undefined);
-    setPosition(selected);
+    setAMM(findCurrentAmm(amms || [], selectedPosition));
+    setPosition(selectedPosition);
   };
   const handleReset = () => {
     setFormMode(undefined)
@@ -100,11 +98,15 @@ const Trader: React.FunctionComponent = () => {
 
       {renderMode === 'form' && (
         <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
-          <AMMProvider amm={effectiveAmm}>
-            <SwapFormProvider amm={effectiveAmm} mode={formMode} position={position}>
-              <ConnectedSwapForm onReset={handleReset} />
-            </SwapFormProvider>
-          </AMMProvider>
+          {amm && (
+            <AMMProvider amm={amm}>
+              <PositionProvider position={position}>
+                <SwapFormProvider mode={formMode}>
+                  <ConnectedSwapForm onReset={handleReset} />
+                </SwapFormProvider>
+              </PositionProvider>
+            </AMMProvider>
+          )}
         </Box>
       )}
     </Page>
