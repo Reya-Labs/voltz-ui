@@ -195,6 +195,10 @@ const Button: React.FunctionComponent<ButtonProps> = ({
         backgroundColor: 'primary.base',
         color: 'tertiary.darken035',
         fontWeight: 'bold',
+        '&:hover': {
+          backgroundColor: 'primary.darken015',
+          boxShadow: 'none'
+        },
       };
     }
 
@@ -203,6 +207,10 @@ const Button: React.FunctionComponent<ButtonProps> = ({
         backgroundColor: 'tertiary.base',
         color: 'secondary.base',
         fontWeight: 'bold',
+        '&:hover': {
+          backgroundColor: 'tertiary.darken015',
+          boxShadow: 'none'
+        },
       };
     }
 
@@ -211,6 +219,10 @@ const Button: React.FunctionComponent<ButtonProps> = ({
         backgroundColor: 'secondary.darken050',
         color: 'primary.base',
         fontWeight: 'bold',
+        '&:hover': {
+          backgroundColor: 'secondary.darken045',
+          boxShadow: 'none'
+        },
       };
     }
 
