@@ -154,7 +154,7 @@ const Swap: React.FunctionComponent<SwapProps> = ({
         </Box>
       )}
 
-      {mode === SwapFormModes.NEW_POSITION && ((agent === Agents.FIXED_TRADER && formState.partialCollateralization) || agent === Agents.VARIABLE_TRADER) && (
+      {(mode === SwapFormModes.NEW_POSITION || mode === SwapFormModes.ROLLOVER) && ((agent === Agents.FIXED_TRADER && formState.partialCollateralization) || agent === Agents.VARIABLE_TRADER) && (
         <Box sx={{ ...bottomSpacing, display: 'flex' }}>
           <Leverage 
             availableNotional={swapInfo?.availableNotional ?? undefined}
@@ -166,7 +166,7 @@ const Swap: React.FunctionComponent<SwapProps> = ({
         </Box>
       )}
 
-      {(formAction === SwapFormActions.SWAP || formAction === SwapFormActions.UPDATE) && (
+      {(formAction === SwapFormActions.SWAP || formAction === SwapFormActions.UPDATE || formAction === SwapFormActions.ROLLOVER_SWAP) && (
         <Box sx={bottomSpacing}>
           <MarginAmount
             balance={balance}

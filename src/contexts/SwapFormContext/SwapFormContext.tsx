@@ -22,6 +22,7 @@ export enum SwapFormSubmitButtonStates {
   APPROVING = 'APPROVING',
   CHECKING = 'CHECKING',
   INITIALISING = 'INITIALISING',
+  ROLLOVER_TRADE = 'ROLLOVER_TRADE',
   TRADE_FIXED = 'TRADE_FIXED',
   TRADE_VARIABLE = 'TRADE_VARIABLE',
   UPDATE = 'UPDATE',
@@ -87,6 +88,7 @@ export type SwapFormContext = {
 };
 
 const SwapFormCtx = createContext<SwapFormContext>({} as unknown as SwapFormContext);
+SwapFormCtx.displayName = 'SwapFormContext';
 
 export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = ({ 
   children, 
@@ -99,7 +101,9 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   const defaultLeverage = defaultValues.leverage ?? 10;
   const defaultMargin = defaultValues.margin ?? undefined;
   const defaultMarginAction = defaultValues.marginAction || SwapFormMarginAction.ADD;
-  const defaultNotional = defaultValues.notional ?? undefined;
+  const defaultNotional = (mode === SwapFormModes.ROLLOVER && position) 
+    ? Math.abs(position.effectiveVariableTokenBalance)
+    : defaultValues.notional ?? undefined;
   const defaultPartialCollateralization = !isUndefined(defaultValues.partialCollateralization) 
     ? defaultValues.partialCollateralization 
     : true;
@@ -124,7 +128,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
 
   const action = s.getFormAction(mode, partialCollateralization, agent);
   const isAddingMargin = mode === SwapFormModes.EDIT_MARGIN && marginAction === SwapFormMarginAction.ADD;
-  const isFCMAction = action === SwapFormActions.FCM_SWAP || action === SwapFormActions.FCM_UNWIND;
+  const isFCMAction = action === SwapFormActions.FCM_SWAP || action === SwapFormActions.FCM_UNWIND || action === SwapFormActions.ROLLOVER_FCM_SWAP;
   const isRemovingMargin = mode === SwapFormModes.EDIT_MARGIN && marginAction === SwapFormMarginAction.REMOVE;
   const isTradeVerified = !!swapInfo.result && !swapInfo.loading && !swapInfo.errorMessage;
   
@@ -144,11 +148,13 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
 
   // Load the swap summary info
   useEffect(() => {
+    debugger;
     if (!approvalsNeeded && !isUndefined(notional) && notional !== 0) {
       const expectedApr = isNumber(ammCtx.fixedApr.result) ? ammCtx.fixedApr.result + ratesMoveBy : undefined;
 
       switch (action) {
-        case SwapFormActions.SWAP: {
+        case SwapFormActions.SWAP:
+        case SwapFormActions.ROLLOVER_SWAP: {
           swapInfo.call({ 
             expectedApr,
             margin,
@@ -158,7 +164,8 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
           break;
         }
 
-        case SwapFormActions.FCM_SWAP: {
+        case SwapFormActions.FCM_SWAP:
+        case SwapFormActions.ROLLOVER_FCM_SWAP: {
           swapInfo.call({ 
             expectedApr,
             margin,
@@ -297,6 +304,10 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
           return SwapFormSubmitButtonStates.APPROVE_UT_PERIPHERY
         }
       }
+    }
+
+    if (mode === SwapFormModes.ROLLOVER) {
+      return SwapFormSubmitButtonStates.ROLLOVER_TRADE;
     }
     
     if (mode === SwapFormModes.EDIT_MARGIN) {
