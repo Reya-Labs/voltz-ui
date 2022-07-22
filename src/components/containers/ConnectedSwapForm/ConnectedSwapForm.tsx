@@ -153,7 +153,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
   return (
     <>
       {position 
-        ? <SwapCurrentPosition onPortfolio={onReset} position={position} />
+        ? <SwapCurrentPosition formMode={form.mode} onPortfolio={onReset} position={position} />
         : <FormPanel noBackground />
       }
       <SwapForm

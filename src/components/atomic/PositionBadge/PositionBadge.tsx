@@ -8,6 +8,7 @@ type PositionBadgeVariant = 'FT' | 'VT' | 'LP' | 'FC';
 
 export type PositionBadgeProps = {
   sx?: SystemStyleObject<Theme>;
+  size?: 'small' | 'medium'
   text?: string;
   variant?: PositionBadgeVariant;
 }
@@ -69,10 +70,10 @@ export const getPositionBadgeVariant = (positionType: number) => {
   }
 };
 
-export const PositionBadge = ({ sx = {}, text, variant }:PositionBadgeProps) => {
+export const PositionBadge = ({ size='medium', sx = {}, text, variant }:PositionBadgeProps) => {
   if (variant) return (
     <Box sx={{ ...sx, ...styles[variant] }}>
-      <Typography variant='body2' sx={{ color: 'unset', fontSize: '14px', lineHeight: '1' }}>
+      <Typography variant='body2' sx={{ color: 'unset', fontSize: size === 'small' ? '12px' : '14px', lineHeight: '1' }}>
         {text || labels[variant]}
       </Typography>
     </Box>
