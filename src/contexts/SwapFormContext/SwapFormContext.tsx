@@ -148,7 +148,6 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
 
   // Load the swap summary info
   useEffect(() => {
-    debugger;
     if (!approvalsNeeded && !isUndefined(notional) && notional !== 0) {
       const expectedApr = isNumber(ammCtx.fixedApr.result) ? ammCtx.fixedApr.result + ratesMoveBy : undefined;
 
