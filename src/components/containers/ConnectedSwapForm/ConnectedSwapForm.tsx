@@ -4,9 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { routes } from '@routes';
 import { actions, selectors } from '@store';
 import { useAgent, useDispatch, useSelector } from '@hooks';
-import { SwapCurrentPosition, SwapForm, SwapInfo, PendingTransaction, SwapFormActions, FormPanel } from '@components/interface';
+import { SwapCurrentPosition, SwapForm, SwapInfo, PendingTransaction, SwapFormActions, FormPanel, SwapFormModes } from '@components/interface';
 import { Agents, useAMMContext, usePositionContext, useSwapFormContext } from '@contexts';
 import { BigNumber } from 'ethers';
+import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
 
 export type ConnectedSwapFormProps = {
   onReset: () => void;
@@ -32,6 +33,19 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
       notional: form.state.notional as number,
       partialCollateralization: agent === Agents.FIXED_TRADER ? form.state.partialCollateralization : true
     };
+
+    if(form.mode === SwapFormModes.ROLLOVER) {
+      return actions.rolloverSwapAction(amm, { 
+        ...transaction,
+        isFT: agent === Agents.FIXED_TRADER,
+        fixedRateLimit: undefined,
+        margin: amm.isETH ? 0 : Math.abs(form.state.margin as number),
+        marginEth: amm.isETH ? Math.abs(form.state.margin as number) : undefined,
+        newMarginEngine: amm.marginEngineAddress,
+        oldFixedHigh: (position as Position).fixedRateUpper.toNumber(),
+        oldFixedLow: (position as Position).fixedRateLower.toNumber()
+      });
+    }
   
     switch(form.action) {
       case SwapFormActions.UPDATE:

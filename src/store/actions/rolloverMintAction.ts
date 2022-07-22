@@ -2,7 +2,7 @@ import { AugmentedAMM } from '@utilities';
 import { RolloverMintAction, RolloverMintTransaction } from '../types';
 import { serializeAmm, createId } from '../utilities';
 
-const rolloverAction = (amm: AugmentedAMM, transaction: Omit<RolloverMintTransaction, 'id'>): RolloverMintAction => ({
+const rolloverMintAction = (amm: AugmentedAMM, transaction: Omit<RolloverMintTransaction, 'id'>): RolloverMintAction => ({
   type: 'rolloverMint',
   payload: {
     amm: serializeAmm(amm),
@@ -13,4 +13,4 @@ const rolloverAction = (amm: AugmentedAMM, transaction: Omit<RolloverMintTransac
   },
 });
 
-export default rolloverAction;
+export default rolloverMintAction;

@@ -23,7 +23,7 @@ export type TransactionUpdate = {
 };
 
 
-// defines a mint or a swap (including rollover)
+// defines a mint or a swap
 export type Transaction = TransactionUpdate & {
   agent: Agents;
   ammId: string;
@@ -37,9 +37,17 @@ export type Transaction = TransactionUpdate & {
   partialCollateralization?: boolean;
 };
 
-// defines a mint or a swap (including rollover)
 export type RolloverMintTransaction = Transaction & {
-  marginEth?: number
+  marginEth?: number;
+  newMarginEngine: string;
+  oldFixedLow: number;
+  oldFixedHigh: number;
+};
+
+export type RolloverSwapTransaction = Transaction & {
+  fixedRateLimit?: number;
+  isFT: boolean;
+  marginEth?: number;
   newMarginEngine: string;
   oldFixedLow: number;
   oldFixedHigh: number;
@@ -80,7 +88,8 @@ export type ActionType =
   | 'add-transaction'
   | 'close-transaction'
   | 'update-transaction'
-  | 'rolloverMint';
+  | 'rolloverMint'
+  | 'rolloverSwap'
 
 export type BaseAction = {
   type: ActionType;
@@ -97,6 +106,13 @@ export type TransactionAction = BaseAction & {
 export type RolloverMintTransactionAction = BaseAction & {
   payload: {
     transaction: RolloverMintTransaction;
+    amm: SerializedAMM;
+  };
+};
+
+export type RolloverSwapTransactionAction = BaseAction & {
+  payload: {
+    transaction: RolloverSwapTransaction;
     amm: SerializedAMM;
   };
 };
@@ -147,6 +163,10 @@ export type RolloverMintAction = RolloverMintTransactionAction & {
   type: 'rolloverMint';
 };
 
+export type RolloverSwapAction = RolloverSwapTransactionAction & {
+  type: 'rolloverSwap';
+};
+
 export type Action =
   | MintAction
   | BurnAction
@@ -157,4 +177,6 @@ export type Action =
   | SettlePositionAction
   | CloseTransactionAction
   | UpdateTransactionAction
-  | RolloverMintAction;
+  | RolloverMintAction
+  | RolloverSwapAction;
+

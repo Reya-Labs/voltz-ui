@@ -2,13 +2,13 @@ import { ContractReceipt, providers } from 'ethers';
 import { call, put } from 'redux-saga/effects';
 import { DateTime } from 'luxon';
 
-import { RolloverMintAction } from '../../types';
+import { RolloverSwapAction } from '../../types';
 import { deserializeAmm, getSigner } from '../../utilities';
 import * as actions from '../../actions';
 import { getErrorMessage } from '@utilities';
-import { AMMRolloverWithMintArgs } from '@voltz-protocol/v1-sdk/dist/types/entities/amm';
+import { AMMRolloverWithSwapArgs } from '@voltz-protocol/v1-sdk/dist/types/entities/amm';
 
-function* rolloverMintSaga(action: RolloverMintAction) {
+function* rolloverSwapSaga(action: RolloverSwapAction) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const signer: providers.JsonRpcSigner | null = yield getSigner();
 
@@ -22,16 +22,18 @@ function* rolloverMintSaga(action: RolloverMintAction) {
     return;
   }
 
-  const { id, fixedLow, fixedHigh, notional, margin, marginEth, newMarginEngine, oldFixedHigh, oldFixedLow } = action.payload.transaction;
+  const { id, fixedLow, fixedHigh, fixedRateLimit, isFT, notional, margin, marginEth, newMarginEngine, oldFixedHigh, oldFixedLow } = action.payload.transaction;
   if (!fixedLow || !fixedHigh) {
     return;
   }
 
   let result: ContractReceipt | void;
   try {
-    const args:AMMRolloverWithMintArgs = {
+    const args:AMMRolloverWithSwapArgs = {
       fixedLow,
       fixedHigh,
+      fixedRateLimit,
+      isFT,
       notional,
       margin,
       marginEth,
@@ -44,7 +46,7 @@ function* rolloverMintSaga(action: RolloverMintAction) {
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    result = yield call([amm, 'rolloverWithMint'], args);
+    result = yield call([amm, 'rolloverWithSwap'], args);
 
   } catch (error) {
     yield put(
@@ -69,4 +71,4 @@ function* rolloverMintSaga(action: RolloverMintAction) {
   }
 }
 
-export default rolloverMintSaga;
+export default rolloverSwapSaga;

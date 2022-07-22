@@ -35,7 +35,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     };
 
     if(form.mode === MintBurnFormModes.ROLLOVER) {
-      return actions.rolloverAction(amm, { 
+      return actions.rolloverMintAction(amm, { 
         ...transaction,
         margin: amm.isETH ? 0 : Math.abs(form.state.margin as number),
         marginEth: amm.isETH ? Math.abs(form.state.margin as number) : undefined,
