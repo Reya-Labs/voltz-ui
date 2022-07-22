@@ -111,18 +111,6 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     );
   }
 
-  if(position && !positionInfo?.result) {
-    return (
-      <>
-        <FormPanel noBackground />
-        <FormPanel>
-          <Loading sx={{ margin: '0 auto' }} />
-        </FormPanel>
-        <FormPanel noBackground />
-      </>
-    )
-  }
-
   return (
     <>
       {position 

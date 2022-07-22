@@ -26,7 +26,7 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
   // }
   const { positionInfo } = usePositionContext();
 
-  const currentPositionBadgeText = `${positionInfo?.result?.beforeMaturity ? 'Current' : 'Previous'} position: LP`;
+  const currentPositionBadgeText = `${positionInfo?.result?.beforeMaturity === false ? 'Previous' : 'Current'} position: LP`;
   const notional = Math.abs(position.effectiveVariableTokenBalance);
   const margin = position.amm.descale(BigNumber.from(position.margin.toString()));
   const leverage = notional / margin;
@@ -124,10 +124,10 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
             sx={{ display: 'inline-block', marginLeft: 0 }} 
           />
         </Box>
-        {(positionInfo?.loading || !positionInfo?.result)
-          ? <Loading />
-          : <SummaryPanel label="Position information" rows={rows} />
-        }
+        <SummaryPanel 
+          label="Position information" 
+          rows={rows} 
+        />
         <Button
           sx={{ 
             marginTop: (theme) => theme.spacing(6), 
