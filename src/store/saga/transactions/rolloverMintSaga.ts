@@ -40,7 +40,7 @@ function* mintSaga(action: RolloverMintAction) {
       newMarginEngine, 
       oldFixedLow: oldFixedLow,
       oldFixedHigh: oldFixedHigh,
-      validationOnly: true // REMOVE THIS WHEN READY!
+      validationOnly: !!process.env.REACT_APP_ROLLOVER_VALIDATE_ONLY
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
