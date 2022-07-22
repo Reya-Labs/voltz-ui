@@ -6,7 +6,7 @@ import { AugmentedAMM } from '@utilities';
 import { useWallet, useSelector } from '@hooks';
 import { selectors } from '@store';
 import { AMMProvider, MintBurnFormLiquidityAction } from '@contexts';
-import { Button, Panel, Typography, Loading } from '@components/atomic';
+import { Button, Panel, Typography, Loading, TokenAndText } from '@components/atomic';
 import { ProtocolInformation, WalletAddressDisplay } from '@components/composite';
 import { formatCurrency } from '@utilities';
 import { isUndefined } from 'lodash';
@@ -18,6 +18,7 @@ export type PendingTransactionProps = {
   liquidityAction?: MintBurnFormLiquidityAction;
   isFCMSwap?: boolean;
   isFCMUnwind?: boolean;
+  isRollover?: boolean;
   notional?: number;
   margin?: number;
   onBack: () => void;
@@ -31,6 +32,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   isEditingMargin,
   isFCMSwap,
   isFCMUnwind,
+  isRollover,
   notional,
   margin,
   onBack,
@@ -259,9 +261,22 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
     >
       {renderStatus()}
       <Panel variant="main">
-        <AMMProvider amm={amm}>
-          <ProtocolInformation protocol={amm.protocol} />
-        </AMMProvider>
+        {isRollover 
+          ? (
+            <TokenAndText 
+              token={amm.protocol} 
+              tokenLabel='pool' 
+              text='SETTLING' 
+              textLabel='STATUS' 
+            />
+          )
+          : (
+            <AMMProvider amm={amm}>
+              <ProtocolInformation protocol={amm.protocol} />
+            </AMMProvider>
+          )
+        }
+
         {(isUndefined(isEditingMargin) || !isEditingMargin) && (<Box
           sx={{
             marginBottom: (theme) => theme.spacing(4),

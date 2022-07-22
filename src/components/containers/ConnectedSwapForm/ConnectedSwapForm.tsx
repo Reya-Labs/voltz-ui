@@ -119,11 +119,13 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         );
       }
 
-      case SwapFormActions.SWAP: {
+      case SwapFormActions.SWAP:
+      case SwapFormActions.ROLLOVER_SWAP: {
         return (
           <PendingTransaction
             amm={amm}
             isEditingMargin={false}
+            isRollover={form.mode === SwapFormModes.ROLLOVER}
             transactionId={transactionId}
             onComplete={handleComplete}
             notional={form.swapInfo.data?.availableNotional}
@@ -133,11 +135,13 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         );
       }
 
-      case SwapFormActions.FCM_SWAP: {
+      case SwapFormActions.FCM_SWAP:
+      case SwapFormActions.ROLLOVER_FCM_SWAP: {
         return (
           <PendingTransaction
             amm={amm}
             isEditingMargin={false}
+            isRollover={form.mode === SwapFormModes.ROLLOVER}
             transactionId={transactionId}
             onComplete={handleComplete}
             isFCMSwap={true}

@@ -127,7 +127,7 @@ const SubmitControls = ({
         return <>Initialising<Ellipsis /></>;
       }
       case SwapFormSubmitButtonStates.ROLLOVER_TRADE: {
-        return 'Rollover and trade';
+        return 'Settle and trade';
       }
       case SwapFormSubmitButtonStates.TRADE_FIXED: {
         return 'Trade Fixed Rate';

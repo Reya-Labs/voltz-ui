@@ -102,6 +102,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
         amm={amm} 
         isEditingMargin={form.mode === MintBurnFormModes.EDIT_MARGIN} 
         liquidityAction={form.state.liquidityAction} 
+        isRollover={form.mode === MintBurnFormModes.ROLLOVER}
         transactionId={transactionId} 
         onComplete={handleComplete}
         notional={form.state.notional}
