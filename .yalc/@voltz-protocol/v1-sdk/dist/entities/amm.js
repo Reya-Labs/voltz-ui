@@ -78,14 +78,29 @@ var AMM = /** @class */ (function () {
         var _this = this;
         // expected apy
         this.expectedApy = function (ft, vt, margin, predictedApr) {
-            var timeInYears = ethers_2.BigNumber.from(_this.termEndTimestamp.toString())
-                .sub(ethers_2.BigNumber.from(_this.termStartTimestamp.toString()))
-                .div(ethers_2.BigNumber.from(10).pow(15))
-                .toNumber() / 1000 / constants_1.ONE_YEAR_IN_SECONDS;
-            var variableFactor = -Math.log(predictedApr) / Math.log(timeInYears) - 1;
-            var expectedCashflow = ft * timeInYears * 0.01 + vt * variableFactor;
-            var result = (1 + expectedCashflow / margin) ^ (1 / timeInYears) - 1;
-            return result;
+            var start = ethers_2.BigNumber.from(_this.termStartTimestamp.toString())
+                .div(ethers_2.BigNumber.from(10).pow(12))
+                .toNumber() / 1000000;
+            var now = Math.round((new Date()).getTime() / 1000);
+            var end = ethers_2.BigNumber.from(_this.termEndTimestamp.toString())
+                .div(ethers_2.BigNumber.from(10).pow(12))
+                .toNumber() / 1000000;
+            var scaledFt = 0;
+            var scaledVt = 0;
+            if (_this.underlyingToken.decimals <= 6) {
+                scaledFt = ft.toNumber() / (Math.pow(10, _this.underlyingToken.decimals));
+                scaledVt = vt.toNumber() / (Math.pow(10, _this.underlyingToken.decimals));
+            }
+            else {
+                scaledFt = ft.div(ethers_2.BigNumber.from(10).pow(_this.underlyingToken.decimals - 6)).toNumber() / 1000000;
+                scaledVt = vt.div(ethers_2.BigNumber.from(10).pow(_this.underlyingToken.decimals - 6)).toNumber() / 1000000;
+            }
+            var timeInYearsFromStartToEnd = (end - start) / constants_1.ONE_YEAR_IN_SECONDS;
+            var timeInYearsFromNowToEnd = (end - now) / constants_1.ONE_YEAR_IN_SECONDS;
+            var variableFactor = Math.pow(predictedApr / 100 + 1, timeInYearsFromStartToEnd) - 1;
+            var expectedCashflow = scaledFt * timeInYearsFromStartToEnd * 0.01 + scaledVt * variableFactor;
+            var result = Math.pow((1 + expectedCashflow / margin), (1 / timeInYearsFromNowToEnd)) - 1;
+            return result * 100;
         };
         this.id = id;
         this.signer = signer;
@@ -361,7 +376,7 @@ var AMM = /** @class */ (function () {
                             averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
                         };
                         if ((0, lodash_1.isNumber)(expectedApr) && (0, lodash_1.isNumber)(margin)) {
-                            result.expectedApy = this.expectedApy(this.descale(fixedTokenDelta), scaledAvailableNotional, margin, expectedApr);
+                            result.expectedApy = this.expectedApy(fixedTokenDelta, availableNotional, margin, expectedApr);
                         }
                         return [2 /*return*/, result];
                 }
@@ -654,7 +669,7 @@ var AMM = /** @class */ (function () {
                             averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
                         };
                         if ((0, lodash_1.isNumber)(expectedApr) && (0, lodash_1.isNumber)(margin)) {
-                            result.expectedApy = this.expectedApy(this.descale(fixedTokenDelta), scaledAvailableNotional, margin, expectedApr);
+                            result.expectedApy = this.expectedApy(fixedTokenDelta, availableNotional, margin, expectedApr);
                         }
                         return [2 /*return*/, result];
                 }
@@ -2542,9 +2557,9 @@ var AMM = /** @class */ (function () {
         return (0, priceTickConversions_1.tickToFixedRate)(closestUsableTick).toNumber();
     };
     // balance checks
-    AMM.prototype.hasEnoughUnderlyingTokens = function (amount) {
+    AMM.prototype.hasEnoughUnderlyingTokens = function (amount, rolloverPosition) {
         return __awaiter(this, void 0, void 0, function () {
-            var signerAddress, currentBalance, tokenAddress, token, scaledAmount;
+            var signerAddress, currentBalance, tokenAddress, token, scaledAmount, tickUpper, tickLower, marginEngineContract, position, start, end, timeInYearsFromStartToEnd, rateOracleContract, variableFactor, fixedCashflow, variableCashflow, cashflow, marginAfterSettlement;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -2574,7 +2589,35 @@ var AMM = /** @class */ (function () {
                         _a.label = 5;
                     case 5:
                         scaledAmount = ethers_2.BigNumber.from(this.scale(amount));
-                        return [2 /*return*/, currentBalance.gte(scaledAmount)];
+                        if (!rolloverPosition) return [3 /*break*/, 8];
+                        if (rolloverPosition.fixedLow >= rolloverPosition.fixedHigh) {
+                            throw new Error('Lower Rate must be smaller than Upper Rate');
+                        }
+                        if (rolloverPosition.fixedLow < constants_1.MIN_FIXED_RATE) {
+                            throw new Error('Lower Rate is too low');
+                        }
+                        if (rolloverPosition.fixedHigh > constants_1.MAX_FIXED_RATE) {
+                            throw new Error('Upper Rate is too high');
+                        }
+                        tickUpper = this.closestTickAndFixedRate(rolloverPosition.fixedLow).closestUsableTick;
+                        tickLower = this.closestTickAndFixedRate(rolloverPosition.fixedHigh).closestUsableTick;
+                        marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
+                        return [4 /*yield*/, marginEngineContract.callStatic.getPosition(signerAddress, tickLower, tickUpper)];
+                    case 6:
+                        position = _a.sent();
+                        start = ethers_2.BigNumber.from(this.termStartTimestamp.toString());
+                        end = ethers_2.BigNumber.from(this.termEndTimestamp.toString());
+                        timeInYearsFromStartToEnd = (end.sub(start)).div(constants_1.ONE_YEAR_IN_SECONDS);
+                        rateOracleContract = typechain_1.BaseRateOracle__factory.connect(this.rateOracle.id, this.signer);
+                        return [4 /*yield*/, rateOracleContract.callStatic.variableFactor(this.termStartTimestamp.toString(), this.termEndTimestamp.toString())];
+                    case 7:
+                        variableFactor = _a.sent();
+                        fixedCashflow = position.fixedTokenBalance.mul(timeInYearsFromStartToEnd).div(ethers_2.BigNumber.from(100)).div(ethers_2.BigNumber.from(10).pow(18));
+                        variableCashflow = position.variableTokenBalance.mul(variableFactor).div(ethers_2.BigNumber.from(10).pow(18));
+                        cashflow = fixedCashflow.add(variableCashflow);
+                        marginAfterSettlement = position.margin.add(cashflow);
+                        return [2 /*return*/, (currentBalance.add(marginAfterSettlement)).gte(scaledAmount)];
+                    case 8: return [2 /*return*/, currentBalance.gte(scaledAmount)];
                 }
             });
         });
@@ -2621,9 +2664,9 @@ var AMM = /** @class */ (function () {
             });
         });
     };
-    AMM.prototype.underlyingTokens = function () {
+    AMM.prototype.underlyingTokens = function (rolloverPosition) {
         return __awaiter(this, void 0, void 0, function () {
-            var signerAddress, currentBalance, tokenAddress, token;
+            var signerAddress, currentBalance, tokenAddress, token, tickUpper, tickLower, marginEngineContract, position, start, end, timeInYearsFromStartToEnd, rateOracleContract, variableFactor, fixedCashflow, variableCashflow, cashflow, marginAfterSettlement;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -2651,7 +2694,36 @@ var AMM = /** @class */ (function () {
                     case 4:
                         currentBalance = _a.sent();
                         _a.label = 5;
-                    case 5: return [2 /*return*/, this.descale(currentBalance)];
+                    case 5:
+                        if (!rolloverPosition) return [3 /*break*/, 8];
+                        if (rolloverPosition.fixedLow >= rolloverPosition.fixedHigh) {
+                            throw new Error('Lower Rate must be smaller than Upper Rate');
+                        }
+                        if (rolloverPosition.fixedLow < constants_1.MIN_FIXED_RATE) {
+                            throw new Error('Lower Rate is too low');
+                        }
+                        if (rolloverPosition.fixedHigh > constants_1.MAX_FIXED_RATE) {
+                            throw new Error('Upper Rate is too high');
+                        }
+                        tickUpper = this.closestTickAndFixedRate(rolloverPosition.fixedLow).closestUsableTick;
+                        tickLower = this.closestTickAndFixedRate(rolloverPosition.fixedHigh).closestUsableTick;
+                        marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
+                        return [4 /*yield*/, marginEngineContract.callStatic.getPosition(signerAddress, tickLower, tickUpper)];
+                    case 6:
+                        position = _a.sent();
+                        start = ethers_2.BigNumber.from(this.termStartTimestamp.toString());
+                        end = ethers_2.BigNumber.from(this.termEndTimestamp.toString());
+                        timeInYearsFromStartToEnd = (end.sub(start)).div(constants_1.ONE_YEAR_IN_SECONDS);
+                        rateOracleContract = typechain_1.BaseRateOracle__factory.connect(this.rateOracle.id, this.signer);
+                        return [4 /*yield*/, rateOracleContract.callStatic.variableFactor(this.termStartTimestamp.toString(), this.termEndTimestamp.toString())];
+                    case 7:
+                        variableFactor = _a.sent();
+                        fixedCashflow = position.fixedTokenBalance.mul(timeInYearsFromStartToEnd).div(ethers_2.BigNumber.from(100)).div(ethers_2.BigNumber.from(10).pow(18));
+                        variableCashflow = position.variableTokenBalance.mul(variableFactor).div(ethers_2.BigNumber.from(10).pow(18));
+                        cashflow = fixedCashflow.add(variableCashflow);
+                        marginAfterSettlement = position.margin.add(cashflow);
+                        return [2 /*return*/, this.descale(currentBalance.add(marginAfterSettlement))];
+                    case 8: return [2 /*return*/, this.descale(currentBalance)];
                 }
             });
         });

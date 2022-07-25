@@ -200,7 +200,7 @@ declare class AMM {
     readonly wethAddress?: string;
     readonly isFCM: boolean;
     constructor({ id, signer, provider, environment, factoryAddress, marginEngineAddress, fcmAddress, rateOracle, updatedTimestamp, termStartTimestamp, termEndTimestamp, underlyingToken, tick, tickSpacing, txCount, totalNotionalTraded, totalLiquidity, wethAddress }: AMMConstructorArgs);
-    expectedApy: (ft: number, vt: number, margin: number, predictedApr: number) => number;
+    expectedApy: (ft: BigNumber, vt: BigNumber, margin: number, predictedApr: number) => number;
     rolloverWithSwap({ isFT, notional, margin, marginEth, fixedRateLimit, fixedLow, fixedHigh, owner, newMarginEngine, oldFixedLow, oldFixedHigh, validationOnly, }: AMMRolloverWithSwapArgs): Promise<ContractReceipt | void>;
     getInfoPostRolloverWithSwap({ isFT, notional, fixedRateLimit, fixedLow, fixedHigh, margin, owner, newMarginEngine, oldFixedLow, oldFixedHigh, expectedApr }: AMMGetInfoPostRolloverWithSwapArgs): Promise<InfoPostSwap>;
     rolloverWithMint({ fixedLow, fixedHigh, notional, margin, marginEth, owner, newMarginEngine, oldFixedLow, oldFixedHigh, validationOnly, }: AMMRolloverWithMintArgs): Promise<ContractReceipt | void>;
@@ -251,9 +251,15 @@ declare class AMM {
     getPositionInformation(position: Position): Promise<PositionInfo>;
     closestTickAndFixedRate(fixedRate: number): ClosestTickAndFixedRate;
     getNextUsableFixedRate(fixedRate: number, count: number): number;
-    hasEnoughUnderlyingTokens(amount: number): Promise<boolean>;
+    hasEnoughUnderlyingTokens(amount: number, rolloverPosition: {
+        fixedLow: number;
+        fixedHigh: number;
+    } | undefined): Promise<boolean>;
     hasEnoughYieldBearingTokens(amount: number): Promise<boolean>;
-    underlyingTokens(): Promise<number>;
+    underlyingTokens(rolloverPosition: {
+        fixedLow: number;
+        fixedHigh: number;
+    } | undefined): Promise<number>;
     yieldBearingTokens(): Promise<number>;
     setCap(amount: number): Promise<void>;
     getCapPercentage(): Promise<number | undefined>;
