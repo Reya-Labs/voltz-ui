@@ -91,9 +91,10 @@ const Trader: React.FunctionComponent = () => {
       )}
 
       {renderMode === 'portfolio' && (
-        <Panel variant='dark' sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
-          <ConnectedPositionTable onSelectItem={handleSelectPosition} agent={Agents.FIXED_TRADER}/>
-        </Panel>
+        <ConnectedPositionTable 
+          onSelectItem={handleSelectPosition} 
+          agent={Agents.FIXED_TRADER}
+        />
       )}
 
       {renderMode === 'form' && (

@@ -94,13 +94,11 @@ const LiquidityProvider: React.FunctionComponent = () => {
       )}
 
       {renderMode === 'portfolio' && (
-        <Panel variant='dark' sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
-          <ConnectedPositionTable 
-            amm={amm}
-            onSelectItem={handleSelectPosition}
-            agent={Agents.LIQUIDITY_PROVIDER}
-          />
-        </Panel>
+        <ConnectedPositionTable 
+          amm={amm}
+          onSelectItem={handleSelectPosition}
+          agent={Agents.LIQUIDITY_PROVIDER}
+        />
       )}
 
       {renderMode === 'form' && (
