@@ -37,8 +37,8 @@ REACT_APP_SKIP_WALLET_SCREENING=Y
 
 ## If SDK code changes
 
-1. Run `yalc update @voltz/v1-sdk`
-2. Remove `node_modules`
+1. Remove `node_modules`
+2. Run `yalc update @voltz-protocol/v1-sdk`
 3. Run `yarn`
 4. Run `yarn start`
 
