@@ -104,12 +104,12 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   const defaultNotional = (mode === SwapFormModes.ROLLOVER && position) 
     ? Math.abs(position.effectiveVariableTokenBalance)
     : defaultValues.notional ?? undefined;
-  const defaultPartialCollateralization = !isUndefined(defaultValues.partialCollateralization) 
-    ? defaultValues.partialCollateralization 
-    : true;
+  const defaultPartialCollateralization = position
+    ? position.source !== 'FCM'
+    : defaultValues.partialCollateralization ?? true
 
   const ammCtx = useAMMContext();
-  const { agent } = useAgent();
+  const { agent, onChangeAgent } = useAgent();
   const balance = useBalance(positionAmm || poolAmm, mode === SwapFormModes.ROLLOVER ? position : undefined);
   const [leverage, setLeverage] = useState<SwapFormState['leverage']>(defaultLeverage);
   const [margin, setMargin] = useState<SwapFormState['margin']>(defaultMargin);
@@ -133,6 +133,13 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   const isTradeVerified = !!swapInfo.result && !swapInfo.loading && !swapInfo.errorMessage;
   
   const approvalsNeeded = s.approvalsNeeded(action, tokenApprovals, isRemovingMargin)
+
+  // Set the correct agent type for the given position
+  useEffect(() => {
+    if(position) {
+      onChangeAgent(position.positionType === 1 ? Agents.FIXED_TRADER : Agents.VARIABLE_TRADER);
+    }
+  }, [position])
 
   // Load the fixed APR
   useEffect(() => {
