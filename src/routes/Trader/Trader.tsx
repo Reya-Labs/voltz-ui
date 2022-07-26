@@ -66,7 +66,7 @@ const Trader: React.FunctionComponent = () => {
     if(mode === 'rollover') newMode = SwapFormModes.ROLLOVER;
 
     setFormMode(newMode);
-    setAMM(findCurrentAmm(amms || [], selectedPosition));
+    setAMM(mode === 'rollover' ? findCurrentAmm(amms || [], selectedPosition) : selectedPosition.amm as AugmentedAMM);
     setPosition(selectedPosition);
   };
   const handleReset = () => {

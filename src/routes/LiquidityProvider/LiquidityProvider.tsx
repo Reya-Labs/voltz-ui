@@ -69,7 +69,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
     if(mode === 'rollover') newMode = MintBurnFormModes.ROLLOVER;
 
     setFormMode(newMode);
-    setAMM(findCurrentAmm(amms || [], selectedPosition));
+    setAMM(mode === 'rollover' ? findCurrentAmm(amms || [], selectedPosition) : selectedPosition.amm as AugmentedAMM);
     setPosition(selectedPosition);
   };
 
