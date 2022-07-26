@@ -27,7 +27,7 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
   const { positionInfo } = usePositionContext();
 
   const currentPositionBadgeText = `${positionInfo?.result?.beforeMaturity === false ? 'Previous' : 'Current'} position: LP`;
-  const notional = Math.abs(position.effectiveVariableTokenBalance);
+  const notional = position.notional;
   const margin = position.amm.descale(BigNumber.from(position.margin.toString()));
   const leverage = notional / margin;
   const underlyingTokenName = position.amm.underlyingToken.name || '';
