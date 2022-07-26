@@ -56,7 +56,7 @@ const Trader: React.FunctionComponent = () => {
   const handleSelectAmm = (selectedAMM: AugmentedAMM) => {
     setFormMode(SwapFormModes.NEW_POSITION);
     setAMM(selectedAMM);
-    setPosition(findCurrentPosition(positions || [], selectedAMM));
+    setPosition(findCurrentPosition(positions || [], selectedAMM, [1,2]));
   };
   const handleSelectPosition = (selectedPosition: Position, mode: 'margin' | 'liquidity' | 'rollover') => {
     // Please note that you will never get 'liquidity' mode here as that is only for LP positions.

@@ -58,7 +58,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
   const handleSelectAmm = (selectedAMM: AugmentedAMM) => {
     setFormMode(MintBurnFormModes.NEW_POSITION);
     setAMM(selectedAMM);
-    setPosition(findCurrentPosition(positions || [], selectedAMM));
+    setPosition(findCurrentPosition(positions || [], selectedAMM, [3]));
   };
 
   const handleSelectPosition = (selectedPosition: Position, mode: 'margin' | 'liquidity' | 'rollover') => {
