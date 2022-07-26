@@ -18,14 +18,25 @@ export const findCurrentPosition = (positions: Position[], selectedAmm: Augmente
 }
 
 /**
- * Finds the amm that corresponds to the given position. 
- * Please note that the returned amm will be for the current pool, where as the position may correspond to an old (matured) pool.
+ * Finds the latest amm that corresponds to the given position.
+ * Please note that the returned amm will be for the latest pool, where as the position amm may correspond to an old (matured) pool.
  * @param amms - the array of available pools
  * @param selectedPosition - the selected position to find the current amm for
  */
 export const findCurrentAmm = (amms: AugmentedAMM[], selectedPosition: Position) => {
-  const currentAmm = (amms || []).find(amm => {
-    return amm.rateOracle.id === selectedPosition.amm.rateOracle.id;
-  });
-  return (currentAmm as AugmentedAMM) || undefined;
+  // First find pools that match rate oracle and underlying token
+  const matchingAmms = (amms || []).filter(amm => {
+    return (
+      amm.rateOracle.id === selectedPosition.amm.rateOracle.id && // check that these are from the same source - rocket, lido etc
+      amm.underlyingToken.id === selectedPosition.amm.underlyingToken.id // check that the tokens match - aDAI !== aUSDC
+    );
+  })
+
+  // There could be multiple pools that match. Find the one with the latest end time
+  if(matchingAmms.length) {
+    matchingAmms.sort((a,b) => +a.endDateTime - +b.endDateTime);
+    return matchingAmms.pop();
+  }
+  
+  return undefined;
 }
