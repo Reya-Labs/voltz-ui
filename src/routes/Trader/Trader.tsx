@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import { useLocation } from 'react-router-dom';
 import { Position } from '@voltz-protocol/v1-sdk';
@@ -6,7 +6,6 @@ import { Position } from '@voltz-protocol/v1-sdk';
 import { AugmentedAMM, findCurrentAmm, findCurrentPosition, setPageTitle } from '@utilities';
 import { Agents, AMMProvider, PositionProvider, SwapFormProvider } from '@contexts';
 import { PageTitleDesc } from '@components/composite';
-import { Panel } from '@components/atomic';
 import { useAgent, useAMMs, usePositions } from '@hooks';
 import { Page, SwapFormModes } from '@components/interface';
 import ConnectedAMMTable from '../../components/containers/ConnectedAMMTable/ConnectedAMMTable';
@@ -25,7 +24,6 @@ const Trader: React.FunctionComponent = () => {
   const { positions } = usePositions();
 
   const pathnameWithoutPrefix = pathname.slice(1);
-  const effectiveAmm = position?.amm as AugmentedAMM || amm;
   const renderMode = getRenderMode(formMode, pathnameWithoutPrefix);
 
   useEffect(() => {

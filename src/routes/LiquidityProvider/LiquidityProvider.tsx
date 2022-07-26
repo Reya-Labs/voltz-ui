@@ -8,7 +8,6 @@ import { Agents, AMMProvider, MintBurnFormModes, MintBurnFormProvider, PositionP
 import { useAgent, useAMMs, usePositions } from '@hooks';
 
 import { Page } from '@components/interface';
-import { Panel } from '@components/atomic';
 import { PageTitleDesc } from '@components/composite';
 import ConnectedAMMTable from '../../components/containers/ConnectedAMMTable/ConnectedAMMTable';
 import ConnectedMintBurnForm from '../../components/containers/ConnectedMintBurnForm/ConnectedMintBurnForm';

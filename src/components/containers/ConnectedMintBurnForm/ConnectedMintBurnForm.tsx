@@ -4,7 +4,6 @@ import { routes } from '@routes';
 import { actions, selectors } from '@store';
 import { useAgent, useDispatch, useSelector } from '@hooks';
 import { MintBurnFormActions, MintBurnFormModes, useAMMContext, useMintBurnForm, usePositionContext } from '@contexts';
-import { Loading } from '@components/atomic';
 import { FormPanel, MintBurnCurrentPosition, MintBurnForm, MintBurnInfo, PendingTransaction } from '@components/interface';
 import { updateFixedRate } from './utilities';
 import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
