@@ -10,8 +10,7 @@ import AugmentedAMM from "./augmentedAmm";
 export const findCurrentPosition = (positions: Position[], selectedAmm: AugmentedAMM, positionTypes: (1 | 2 | 3)[] = [1,2,3]) => {
   return (positions || []).find(p => {
     return (
-      p.amm.rateOracle.id === selectedAmm.rateOracle.id && // check that these are from the same source - rocket, lido etc
-      p.amm.underlyingToken.id === selectedAmm.underlyingToken.id && // check that the tokens match - aDAI !== aUSDC
+      p.amm.id === selectedAmm.id &&
       positionTypes.includes(p.positionType as (1 | 2 | 3)) // filter by position type
     );
   });
