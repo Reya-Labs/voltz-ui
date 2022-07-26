@@ -1,7 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import { colors, SystemStyleObject, Theme } from '@theme';
-import { formatCurrency, formatNumber } from '@utilities';
+import { AugmentedAMM, formatCurrency, formatNumber } from '@utilities';
 import { Button, getPositionBadgeVariant, PositionBadge, Typography } from '@components/atomic';
 import { BulletLabel, getHealthTextColor, HealthFactorText } from '@components/composite';
 import { isUndefined } from 'lodash';
@@ -19,6 +19,7 @@ export type PositionTableHeadProps = {
   beforeMaturity: boolean;
   onRollover: () => void;
   onSettle: () => void;
+  rolloverAmm?: AugmentedAMM;
 };
 
 const containerStyles: SystemStyleObject<Theme> = { 
@@ -48,7 +49,8 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
   healthFactor,
   beforeMaturity,
   onRollover,
-  onSettle
+  onSettle,
+  rolloverAmm
 }) => {
   const getTextColor = (positive: boolean) => {
     return positive ? colors.vzCustomGreen1 : colors.vzCustomRed1;
@@ -108,13 +110,15 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
             >
               Settle
             </Button>
-            <Button 
-              variant={positionType === 1 ? 'rollover1' : positionType === 2 ? 'rollover2' : 'rollover3'}
-              size='xs'
-              onClick={onRollover}
-            >
-              Roll over
-            </Button>
+            {rolloverAmm && (
+              <Button 
+                variant={positionType === 1 ? 'rollover1' : positionType === 2 ? 'rollover2' : 'rollover3'}
+                size='xs'
+                onClick={onRollover}
+              >
+                Roll over
+              </Button>
+            )}
           </>
         )}
 

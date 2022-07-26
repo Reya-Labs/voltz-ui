@@ -5,7 +5,7 @@ import TableBody from '@mui/material/TableBody';
 import { colors, SystemStyleObject, Theme } from '@theme';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 
-import { AugmentedAMM, data } from '@utilities';
+import { AugmentedAMM, data, findCurrentAmm, findCurrentPosition } from '@utilities';
 import { Panel } from '@components/atomic';
 import { PositionTableFields } from './types';
 import { PositionTableHead, PositionTableRow } from './components';
@@ -13,7 +13,7 @@ import { Agents, AMMProvider } from '@contexts';
 import TransactionList from '../TransactionList/TransactionList';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import { useAgent } from '@hooks';
+import { useAgent, useAMMs } from '@hooks';
 
 export type PositionTableProps = {
   positions: Position[];
@@ -38,6 +38,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   onSelectItem,
   onSettle
 }) => {
+  const { amms } = useAMMs();
   const { agent } = useAgent();
   
   const commonOverrides: SystemStyleObject<Theme> = {
@@ -101,6 +102,8 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
         <List sx={{ padding: '0', margin: '0' }}>
           {positions.map((pos, index) => {
             const info = positionInformation[pos.id];
+            const rolloverAmm = findCurrentAmm(amms || [], pos);
+            const rolloverAvailable = rolloverAmm && rolloverAmm.id !== pos.id;
 
             return (
               <ListItem sx={listItemStyles} key={pos.id}>
@@ -118,6 +121,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                     positionType={pos.positionType}
                     onRollover={() => handleSelectRow(index, 'rollover')}
                     onSettle={() => onSettle(pos)}
+                    rolloverAmm={rolloverAvailable ? rolloverAmm : undefined}
                   />
 
                   <TableContainer sx={!info?.beforeMaturity ? getMaturedTableBorderStyles(pos.positionType) : undefined}>
