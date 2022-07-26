@@ -13,6 +13,7 @@ export type PositionTableHeadProps = {
   fcmBadge?: boolean;
   fees?: number;
   feesPositive?: boolean;
+  isSettled: boolean;
   positionType: number;
   healthFactor?: number;
   beforeMaturity: boolean;
@@ -42,6 +43,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
   fcmBadge = false,
   fees, 
   feesPositive = true,
+  isSettled,
   positionType,
   healthFactor,
   beforeMaturity,
@@ -96,7 +98,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
           </Box>
         )}
 
-        {!beforeMaturity && (
+        {(!beforeMaturity && !isSettled) && (
           <>
             <Button 
               variant={positionType === 1 ? 'darker-link' : 'darker'}
@@ -114,6 +116,16 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
               Roll over
             </Button>
           </>
+        )}
+
+        {(!beforeMaturity && isSettled) && (
+          <Button 
+            variant={positionType === 1 ? 'darker-link' : 'darker'}
+            size='xs'
+            disabled
+          >
+            Settled
+          </Button>
         )}
       </Box>
     </Box>
