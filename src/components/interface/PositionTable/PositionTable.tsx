@@ -103,7 +103,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
           {positions.map((pos, index) => {
             const info = positionInformation[pos.id];
             const rolloverAmm = findCurrentAmm(amms || [], pos);
-            const rolloverAvailable = rolloverAmm && rolloverAmm.id !== pos.id;
+            const rolloverAvailable = rolloverAmm && rolloverAmm.id !== pos.amm.id;
 
             return (
               <ListItem sx={listItemStyles} key={pos.id}>
