@@ -38,7 +38,7 @@ function* rolloverSwapSaga(action: RolloverSwapAction) {
       margin,
       marginEth,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/unbound-method
-      owner: yield call(signer.getAddress),
+      owner: yield call([signer, 'getAddress']),
       newMarginEngine, 
       oldFixedLow: oldFixedLow,
       oldFixedHigh: oldFixedHigh,
