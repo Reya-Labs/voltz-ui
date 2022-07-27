@@ -182,7 +182,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
       return MintBurnFormHintStates.FORM_INVALID;
     }
   
-    if(!!isRemovingLiquidity && !isRemovingMargin) {
+    if(!isRemovingLiquidity && !isRemovingMargin) {
       if(tokenApprovals.lastError) {
         return MintBurnFormHintStates.ERROR_TOKEN_APPROVAL;
       }
