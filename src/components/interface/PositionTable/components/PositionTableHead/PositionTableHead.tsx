@@ -105,7 +105,6 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
             <Button 
               variant={positionType === 1 ? 'darker-link' : 'darker'}
               size='xs'
-              sx={{ marginRight: (theme) => theme.spacing(4) }}
               onClick={onSettle}
             >
               Settle
@@ -114,6 +113,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
               <Button 
                 variant={positionType === 1 ? 'rollover1' : positionType === 2 ? 'rollover2' : 'rollover3'}
                 size='xs'
+                sx={{ marginLeft: (theme) => theme.spacing(4) }}
                 onClick={onRollover}
               >
                 Roll over
