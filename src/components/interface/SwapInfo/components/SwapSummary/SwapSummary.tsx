@@ -1,7 +1,7 @@
 import React from 'react';
 import SummaryPanel from '../../../../atomic/SummaryPanel/SummaryPanel';
 import { IconLabel } from '@components/composite';
-import { formatCurrency, formatNumber } from '@utilities';
+import { formatCurrency, formatNumber, roundUpDecimal } from '@utilities';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions } from '../../../SwapForm/types';
 
@@ -48,7 +48,9 @@ const SwapSummary: React.FunctionComponent<SwapSummaryProps> = ({ data, loading,
     },
     {
       label: 'MINIMUM REQUIRED MARGIN:', 
-      value: (formAction === SwapFormActions.SWAP || formAction === SwapFormActions.UPDATE) ? `${formatCurrency(data.marginRequirement, true)} ${underlyingTokenName}` : `${formatCurrency(data.marginRequirement, true)} ${yieldBearingTokenName}`,
+      value: (formAction === SwapFormActions.SWAP || formAction === SwapFormActions.UPDATE) 
+        ? `${formatCurrency(roundUpDecimal(data.marginRequirement, 4), true)} ${underlyingTokenName}` 
+        : `${formatCurrency(roundUpDecimal(data.marginRequirement, 4), true)} ${yieldBearingTokenName}`,
       highlight: true
     },
   ] : undefined;

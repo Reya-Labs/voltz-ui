@@ -68,7 +68,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
     <MaskedIntegerField
       allowDecimals
       allowNegativeValue={false}
-      decimalsLimit={2}
+      decimalsLimit={4}
       subtext={`BALANCE: ${formattedBalance}`}
       suffix={<InputTokenLabel tokenName={underlyingTokenName || ''} />}
       suffixPadding={90}

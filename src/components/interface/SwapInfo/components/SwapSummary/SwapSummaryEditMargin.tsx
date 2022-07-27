@@ -1,7 +1,7 @@
 import React from 'react';
 import SummaryPanel from '../../../../atomic/SummaryPanel/SummaryPanel';
 import { IconLabel } from '@components/composite';
-import { formatCurrency } from '@utilities';
+import { formatCurrency, roundUpDecimal } from '@utilities';
 import { isUndefined } from 'lodash';
 
 export type SwapSummaryEditMarginProps = {
@@ -23,7 +23,7 @@ const SwapSummaryEditMargin: React.FunctionComponent<SwapSummaryEditMarginProps>
   const rows = !isUndefined(minRequiredMargin) ? [
     {
       label: 'MINIMUM REQUIRED MARGIN:', 
-      value: `${formatCurrency(minRequiredMargin, true)} ${underlyingTokenName}`,
+      value: `${formatCurrency(roundUpDecimal(minRequiredMargin, 4), true)} ${underlyingTokenName}`,
       highlight: true
     },
     {

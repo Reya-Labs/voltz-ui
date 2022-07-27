@@ -1,7 +1,7 @@
 import React from 'react';
 import SummaryPanel from '../../../../atomic/SummaryPanel/SummaryPanel';
 import { IconLabel } from '@components/composite';
-import { formatCurrency } from '@utilities';
+import { formatCurrency, roundUpDecimal } from '@utilities';
 import { isUndefined } from 'lodash';
 
 export type MintSummaryProps = {
@@ -12,7 +12,6 @@ export type MintSummaryProps = {
 };
 
 const MintSummary: React.FunctionComponent<MintSummaryProps> = ({ balance, minRequiredMargin, loading, underlyingTokenName = '' }) => {
-
   const label = <IconLabel
     label="trade information"
     icon="information-circle"
@@ -26,7 +25,7 @@ const MintSummary: React.FunctionComponent<MintSummaryProps> = ({ balance, minRe
     },
     {
       label: 'MINIMUM REQUIRED MARGIN:', 
-      value: `${formatCurrency(minRequiredMargin, true)} ${underlyingTokenName}`,
+      value: `${formatCurrency(roundUpDecimal(minRequiredMargin, 4), true, false, 0, 4)} ${underlyingTokenName}`,
       highlight: true
     },
   ] : undefined;

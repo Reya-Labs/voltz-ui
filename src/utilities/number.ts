@@ -10,10 +10,10 @@ export const hasDecimal = (num: number): boolean => !!(num % 1);
  * @param forceDecimals - force the showing of decimals (will show .00 on amounts)
  * @param showPlusSign - will add '+' at the start of positive values
  */
- export const formatCurrency = (num: number, forceDecimals = false, showPlusSign = false): string => {
+ export const formatCurrency = (num: number, forceDecimals = false, showPlusSign = false, minDecimals = 2, maxDecimals = 2): string => {
   const value = num.toLocaleString('en-US', { 
-    maximumFractionDigits:2,  
-    minimumFractionDigits: (hasDecimal(num) || forceDecimals) ? 2 : 0 
+    maximumFractionDigits: maxDecimals,
+    minimumFractionDigits: (hasDecimal(num) || forceDecimals) ? minDecimals : 0 
   });
   return `${(showPlusSign && num > 0) ? '+' : ''}${value}`;
 }
@@ -24,4 +24,13 @@ export const hasDecimal = (num: number): boolean => !!(num % 1);
  */
  export const formatNumber = (num: number): string => {
   return num.toLocaleString('en-US', { maximumFractionDigits: 2 });
+}
+
+/**
+ * Will round the given number up to the specifield decimal places. Please note it rounds UP.
+ * @param num - number to round
+ * @param dp - the number of decimal places to round to
+ */
+export const roundUpDecimal = (num: number, dp: number): number => {
+  return Math.ceil(num * Math.pow(10, dp)) / Math.pow(10, dp);
 }
