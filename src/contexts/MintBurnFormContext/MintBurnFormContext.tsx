@@ -136,7 +136,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   const approvalsNeeded = !tokenApprovals.underlyingTokenApprovedForPeriphery;
   const [errors, setErrors] = useState<MintBurnFormContext['errors']>({});
   const [isValid, setIsValid] = useState<boolean>(false);
-  const isTradeVerified = !!mintMinimumMarginRequirement.result && !mintMinimumMarginRequirement.loading && !mintMinimumMarginRequirement.errorMessage;
+  const isTradeVerified = !isUndefined(mintMinimumMarginRequirement.result ?? undefined) && !mintMinimumMarginRequirement.loading && !mintMinimumMarginRequirement.errorMessage;
   const minimumRequiredMargin = mintMinimumMarginRequirement.result ?? undefined;
   const totalBalance = balance + (positionInfo?.result?.accruedCashflow ?? 0)
   const touched = useRef<string[]>([]);
