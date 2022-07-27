@@ -632,6 +632,7 @@ class AMM {
         fixedTokenDeltaUnbalanced = result[3];
         marginRequirement = result[4];
         tickAfter = parseInt(result[5]);
+        fixedTokenDelta = result[0];
       },
       (error: any) => {
         const result = decodeInfoPostSwap(error, this.environment);
@@ -977,6 +978,7 @@ class AMM {
         fixedTokenDeltaUnbalanced = result[3];
         marginRequirement = result[4];
         tickAfter = parseInt(result[5]);
+        fixedTokenDelta = result[0];
       },
       (error: any) => {
         const result = decodeInfoPostSwap(error, this.environment);
@@ -3167,6 +3169,7 @@ class AMM {
     const blockPerHour = 274;
 
     switch (this.rateOracle.protocolId) {
+      // aave
       case 1: {
         const lastBlock = await this.provider.getBlockNumber();
         const oneBlockAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
@@ -3179,6 +3182,7 @@ class AMM {
         return oneWeekApy.div(BigNumber.from(1000000000000)).toNumber() / 1000000;
       }
 
+      // compound
       case 2: {
         const daysPerYear = 365;
 
@@ -3192,6 +3196,7 @@ class AMM {
         return supplyApy;
       }
 
+      // rocket
       case 3: {
         const lastBlock = await this.provider.getBlockNumber();
         const to = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
@@ -3204,6 +3209,7 @@ class AMM {
         return oneWeekApy.div(BigNumber.from(1000000000000)).toNumber() / 1000000;
       }
 
+      // lido
       case 4: {
         const lastBlock = await this.provider.getBlockNumber();
         const to = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
