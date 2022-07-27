@@ -149,7 +149,7 @@ const SubmitControls = ({
             !isFormValid || 
             tokenApprovals.checkingApprovals || 
             tokenApprovals.approving || 
-            (mode === SwapFormModes.NEW_POSITION && (!approvalsNeeded && isFormValid && !isTradeVerified))
+            ((mode === SwapFormModes.NEW_POSITION || mode === SwapFormModes.ROLLOVER) && (!approvalsNeeded && isFormValid && !isTradeVerified))
           } 
           onClick={onSubmit} 
           size="large" 

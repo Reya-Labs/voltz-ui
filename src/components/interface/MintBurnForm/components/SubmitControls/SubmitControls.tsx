@@ -134,7 +134,7 @@ const SubmitControls = ({
             !isFormValid || 
             tokenApprovals.checkingApprovals || 
             tokenApprovals.approving || 
-            (mode === MintBurnFormModes.NEW_POSITION && (!approvalsNeeded && isFormValid && !isTradeVerified))
+            ((mode === MintBurnFormModes.NEW_POSITION || mode === MintBurnFormModes.ROLLOVER) && (!approvalsNeeded && isFormValid && !isTradeVerified))
           }
           size="large" 
           onClick={onSubmit} 
