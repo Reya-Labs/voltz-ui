@@ -7,25 +7,27 @@ import { MintBurnFormActions, MintBurnFormModes, useAMMContext, useMintBurnForm,
 import { FormPanel, MintBurnCurrentPosition, MintBurnForm, MintBurnInfo, PendingTransaction } from '@components/interface';
 import { updateFixedRate } from './utilities';
 import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
+import { AugmentedAMM } from '@utilities';
 
 export type ConnectedMintBurnFormProps = {
   onReset: () => void;
 };
 
 const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps> = ({ onReset }) => {
-  const { amm } = useAMMContext();
+  const { amm: targetAmm } = useAMMContext();
+  const { amm: positionAmm } = usePositionContext();
   const { agent } = useAgent();
   const dispatch = useDispatch();
   const form = useMintBurnForm();
   const navigate = useNavigate();
-  const { position, positionInfo } = usePositionContext();
+  const { position } = usePositionContext();
 
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
 
   const getSubmitReduxAction = () => {
     const transaction = { 
-      ammId: amm.id, 
+      ammId: targetAmm.id, 
       agent,
       fixedLow: form.state.fixedLow,
       fixedHigh: form.state.fixedHigh,
@@ -34,11 +36,12 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     };
 
     if(form.mode === MintBurnFormModes.ROLLOVER) {
-      return actions.rolloverMintAction(amm, { 
+      return actions.rolloverMintAction((positionAmm as AugmentedAMM), { 
         ...transaction,
-        margin: amm.isETH ? 0 : Math.abs(form.state.margin as number),
-        marginEth: amm.isETH ? Math.abs(form.state.margin as number) : undefined,
-        newMarginEngine: amm.marginEngineAddress,
+        ammId: (positionAmm as AugmentedAMM).id,
+        margin: targetAmm.isETH ? 0 : Math.abs(form.state.margin as number),
+        marginEth: targetAmm.isETH ? Math.abs(form.state.margin as number) : undefined,
+        newMarginEngine: targetAmm.marginEngineAddress,
         oldFixedHigh: (position as Position).fixedRateUpper.toNumber(),
         oldFixedLow: (position as Position).fixedRateLower.toNumber()
       });
@@ -46,11 +49,11 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   
     switch(form.action) {
       case MintBurnFormActions.UPDATE:
-        return actions.updatePositionMarginAction(amm, transaction);
+        return actions.updatePositionMarginAction(targetAmm, transaction);
       case MintBurnFormActions.MINT:
-        return actions.mintAction(amm, transaction);
+        return actions.mintAction(targetAmm, transaction);
       case MintBurnFormActions.BURN:
-        return actions.burnAction(amm, transaction);
+        return actions.burnAction(targetAmm, transaction);
     }
   }
 
@@ -65,13 +68,13 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   }
 
   const handleSetFixedHigh = useCallback(
-    updateFixedRate({ amm: amm, fixedRate: form.state.fixedHigh, setFixedRate: form.setFixedHigh }),
-    [amm, form.state.fixedHigh, form.setFixedHigh],
+    updateFixedRate({ amm: targetAmm, fixedRate: form.state.fixedHigh, setFixedRate: form.setFixedHigh }),
+    [targetAmm, form.state.fixedHigh, form.setFixedHigh],
   );
 
   const handleSetFixedLow = useCallback(
-    updateFixedRate({ amm: amm, fixedRate: form.state.fixedLow, setFixedRate: form.setFixedLow }),
-    [amm, form.state.fixedLow, form.setFixedLow],
+    updateFixedRate({ amm: targetAmm, fixedRate: form.state.fixedLow, setFixedRate: form.setFixedLow }),
+    [targetAmm, form.state.fixedLow, form.setFixedLow],
   );
 
   const handleSubmit = () => {
@@ -91,14 +94,14 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     }
   };
 
-  if (!amm) {
+  if (!targetAmm) {
     return null;
   }
 
   if (activeTransaction) {
     return (
       <PendingTransaction 
-        amm={amm} 
+        amm={targetAmm} 
         isEditingMargin={form.mode === MintBurnFormModes.EDIT_MARGIN} 
         liquidityAction={form.state.liquidityAction} 
         isRollover={form.mode === MintBurnFormModes.ROLLOVER}
@@ -120,7 +123,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
       <MintBurnForm
         approvalsNeeded={form.approvalsNeeded}
         balance={form.totalBalance}
-        endDate={amm.endDateTime}
+        endDate={targetAmm.endDateTime}
         errors={form.errors}
         formState={form.state}
         hintState={form.hintState}
@@ -135,11 +138,11 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
         onChangeMarginAction={form.setMarginAction} 
         onChangeNotional={form.setNotional}
         onSubmit={handleSubmit}
-        protocol={amm.protocol}
-        startDate={amm.startDateTime}
+        protocol={targetAmm.protocol}
+        startDate={targetAmm.startDateTime}
         submitButtonState={form.submitButtonState}
         tokenApprovals={form.tokenApprovals}
-        underlyingTokenName={amm.underlyingToken.name}
+        underlyingTokenName={targetAmm.underlyingToken.name}
       />
       <MintBurnInfo
         balance={form.balance}
@@ -147,7 +150,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
         minRequiredMargin={form.minRequiredMargin.result}
         minRequiredMarginLoading={form.minRequiredMargin.loading}
         mode={form.mode}
-        underlyingTokenName={amm.underlyingToken.name}
+        underlyingTokenName={targetAmm.underlyingToken.name}
       />
     </>
   );

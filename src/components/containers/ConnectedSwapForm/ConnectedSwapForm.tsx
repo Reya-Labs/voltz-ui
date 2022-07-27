@@ -8,6 +8,7 @@ import { SwapCurrentPosition, SwapForm, SwapInfo, PendingTransaction, SwapFormAc
 import { Agents, useAMMContext, usePositionContext, useSwapFormContext } from '@contexts';
 import { BigNumber } from 'ethers';
 import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
+import { AugmentedAMM } from '@utilities';
 
 export type ConnectedSwapFormProps = {
   onReset: () => void;
@@ -15,7 +16,8 @@ export type ConnectedSwapFormProps = {
 
 const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ onReset }) => {
   const { agent } = useAgent();
-  const { amm } = useAMMContext();
+  const { amm: targetAmm } = useAMMContext();
+  const { amm: positionAmm } = usePositionContext();
   const dispatch = useDispatch();
   const form = useSwapFormContext();
   const navigate = useNavigate();
@@ -28,20 +30,21 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
   const getReduxAction = () => {
     const transaction = { 
       agent,
-      ammId: amm.id,
+      ammId: targetAmm.id,
       margin: Math.abs(form.state.margin as number) * (form.isRemovingMargin ? -1 : 1),
       notional: form.state.notional as number,
       partialCollateralization: agent === Agents.FIXED_TRADER ? form.state.partialCollateralization : true
     };
 
     if(form.mode === SwapFormModes.ROLLOVER) {
-      return actions.rolloverSwapAction(amm, { 
+      return actions.rolloverSwapAction(positionAmm as AugmentedAMM, { 
         ...transaction,
+        ammId: (positionAmm as AugmentedAMM).id,
         isFT: agent === Agents.FIXED_TRADER,
         fixedRateLimit: undefined,
-        margin: amm.isETH ? 0 : Math.abs(form.state.margin as number),
-        marginEth: amm.isETH ? Math.abs(form.state.margin as number) : undefined,
-        newMarginEngine: amm.marginEngineAddress,
+        margin: targetAmm.isETH ? 0 : Math.abs(form.state.margin as number),
+        marginEth: targetAmm.isETH ? Math.abs(form.state.margin as number) : undefined,
+        newMarginEngine: targetAmm.marginEngineAddress,
         oldFixedHigh: (position as Position).fixedRateUpper.toNumber(),
         oldFixedLow: (position as Position).fixedRateLower.toNumber()
       });
@@ -49,13 +52,13 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
   
     switch(form.action) {
       case SwapFormActions.UPDATE:
-        return actions.updatePositionMarginAction(amm, transaction);
+        return actions.updatePositionMarginAction(targetAmm, transaction);
       case SwapFormActions.SWAP:
-        return actions.swapAction(amm, transaction);
+        return actions.swapAction(targetAmm, transaction);
       case SwapFormActions.FCM_SWAP:
-        return actions.fcmSwapAction(amm, transaction);
+        return actions.fcmSwapAction(targetAmm, transaction);
       // case SwapFormActions.FCM_UNWIND:
-      //   return actions.fcmUnwindAction(amm, transaction); 
+      //   return actions.fcmUnwindAction(targetAmm, transaction); 
     }
   }
 
@@ -99,7 +102,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
     }
   };
 
-  if (!amm) {
+  if (!targetAmm) {
     return null;
   }
   
@@ -109,7 +112,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
       case SwapFormActions.UPDATE: {
         return (
           <PendingTransaction
-            amm={amm}
+            amm={targetAmm}
             isEditingMargin={true}
             transactionId={transactionId}
             onComplete={handleComplete}
@@ -123,7 +126,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
       case SwapFormActions.ROLLOVER_SWAP: {
         return (
           <PendingTransaction
-            amm={amm}
+            amm={targetAmm}
             isEditingMargin={false}
             isRollover={form.mode === SwapFormModes.ROLLOVER}
             transactionId={transactionId}
@@ -139,7 +142,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
       case SwapFormActions.ROLLOVER_FCM_SWAP: {
         return (
           <PendingTransaction
-            amm={amm}
+            amm={targetAmm}
             isEditingMargin={false}
             isRollover={form.mode === SwapFormModes.ROLLOVER}
             transactionId={transactionId}
@@ -155,7 +158,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
       case SwapFormActions.FCM_UNWIND: {
         return (
           <PendingTransaction
-            amm={amm}
+            amm={targetAmm}
             isEditingMargin={false}
             transactionId={transactionId}
             onComplete={handleComplete}
@@ -177,13 +180,13 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
       <SwapForm
         approvalsNeeded={form.approvalsNeeded}
         balance={form.balance}
-        endDate={amm.endDateTime}
+        endDate={targetAmm.endDateTime}
         errors={form.errors}
         formAction={form.action} 
         formState={form.state}
         hintState={form.hintState}
         isFCMAction={form.isFCMAction}
-        isFCMAvailable={amm.isFCM}
+        isFCMAvailable={targetAmm.isFCM}
         isFormValid={form.isValid}
         isTradeVerified={form.isTradeVerified}
         mode={mode}
@@ -194,14 +197,14 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         onChangeNotional={form.setNotional}
         onChangePartialCollateralization={form.setPartialCollateralization}
         onSubmit={handleSubmit}
-        protocol={amm.protocol}
-        startDate={amm.startDateTime}
+        protocol={targetAmm.protocol}
+        startDate={targetAmm.startDateTime}
         swapInfo={form.swapInfo.data}
         swapInfoLoading={form.swapInfo.loading}
         submitButtonState={form.submitButtonState}
         tokenApprovals={form.tokenApprovals}
         tradeInfoErrorMessage={form.swapInfo.errorMessage}
-        underlyingTokenName={amm.underlyingToken.name}
+        underlyingTokenName={targetAmm.underlyingToken.name}
       />
       <SwapInfo
         balance={form.balance}
@@ -209,12 +212,12 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         minRequiredMargin={form.minRequiredMargin}
         mode={mode}
         onChangeMovesRatesBy={form.setRatesMoveBy}
-        positionMargin={position?.margin ? amm.descale(BigNumber.from(position.margin.toString())) : undefined}
-        protocol={amm.protocol}
+        positionMargin={position?.margin ? targetAmm.descale(BigNumber.from(position.margin.toString())) : undefined}
+        protocol={targetAmm.protocol}
         ratesMoveBy={form.ratesMoveBy}
         swapSummary={form.swapInfo.data}
         swapSummaryLoading={form.swapInfo.loading}
-        underlyingTokenName={amm.underlyingToken.name}
+        underlyingTokenName={targetAmm.underlyingToken.name}
       />
     </>
   );
