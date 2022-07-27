@@ -341,6 +341,7 @@ var AMM = /** @class */ (function () {
                                 fixedTokenDeltaUnbalanced = result[3];
                                 marginRequirement = result[4];
                                 tickAfter = parseInt(result[5]);
+                                fixedTokenDelta = result[0];
                             }, function (error) {
                                 var result = (0, errorHandling_1.decodeInfoPostSwap)(error, _this.environment);
                                 marginRequirement = result.marginRequirement;
@@ -634,6 +635,7 @@ var AMM = /** @class */ (function () {
                                 fixedTokenDeltaUnbalanced = result[3];
                                 marginRequirement = result[4];
                                 tickAfter = parseInt(result[5]);
+                                fixedTokenDelta = result[0];
                             }, function (error) {
                                 var result = (0, errorHandling_1.decodeInfoPostSwap)(error, _this.environment);
                                 marginRequirement = result.marginRequirement;

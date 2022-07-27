@@ -143,7 +143,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
 
   // Load the fixed APR
   useEffect(() => {
-    ammCtx.fixedApr.call();
+    ammCtx.variableApy.call();
   }, [])
 
   // cache the minRequiredMargin from swapInfo
@@ -156,7 +156,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   // Load the swap summary info
   useEffect(() => {
     if (!approvalsNeeded && !isUndefined(notional) && notional !== 0) {
-      const expectedApr = isNumber(ammCtx.fixedApr.result) ? ammCtx.fixedApr.result + ratesMoveBy : undefined;
+      const expectedApr = isNumber(ammCtx.variableApy.result) ? ammCtx.variableApy.result * 100 + ratesMoveBy : undefined;
 
       switch (action) {
         case SwapFormActions.SWAP:
@@ -194,7 +194,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     approvalsNeeded,
     partialCollateralization,
     marginAction,
-    ammCtx.fixedApr.result,
+    ammCtx.variableApy.result,
     ratesMoveBy,
     margin
   ]);
