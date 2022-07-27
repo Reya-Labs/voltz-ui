@@ -142,6 +142,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
         startDate={targetAmm.startDateTime}
         submitButtonState={form.submitButtonState}
         tokenApprovals={form.tokenApprovals}
+        tradeInfoErrorMessage={form.minRequiredMargin.errorMessage}
         underlyingTokenName={targetAmm.underlyingToken.name}
       />
       <MintBurnInfo
