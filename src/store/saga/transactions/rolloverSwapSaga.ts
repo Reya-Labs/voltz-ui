@@ -22,16 +22,13 @@ function* rolloverSwapSaga(action: RolloverSwapAction) {
     return;
   }
 
-  const { id, fixedLow, fixedHigh, fixedRateLimit, isFT, notional, margin, marginEth, newMarginEngine, oldFixedHigh, oldFixedLow } = action.payload.transaction;
-  if (!fixedLow || !fixedHigh) {
-    return;
-  }
+  const { id, fixedRateLimit, isFT, notional, margin, marginEth, newMarginEngine } = action.payload.transaction;
 
   let result: ContractReceipt | void;
   try {
     const args:AMMRolloverWithSwapArgs = {
-      fixedLow,
-      fixedHigh,
+      fixedLow: 1,
+      fixedHigh: 999,
       fixedRateLimit,
       isFT,
       notional,
@@ -40,8 +37,8 @@ function* rolloverSwapSaga(action: RolloverSwapAction) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/unbound-method
       owner: yield call([signer, 'getAddress']),
       newMarginEngine, 
-      oldFixedLow: oldFixedLow,
-      oldFixedHigh: oldFixedHigh,
+      oldFixedLow: 1,
+      oldFixedHigh: 999,
       validationOnly: !!process.env.REACT_APP_ROLLOVER_VALIDATE_ONLY
     };
 

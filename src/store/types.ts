@@ -49,8 +49,6 @@ export type RolloverSwapTransaction = Transaction & {
   isFT: boolean;
   marginEth?: number;
   newMarginEngine: string;
-  oldFixedLow: number;
-  oldFixedHigh: number;
 };
 
 export type State = {

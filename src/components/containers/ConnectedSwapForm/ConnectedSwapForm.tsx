@@ -45,8 +45,6 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         margin: targetAmm.isETH ? 0 : Math.abs(form.state.margin as number),
         marginEth: targetAmm.isETH ? Math.abs(form.state.margin as number) : undefined,
         newMarginEngine: targetAmm.marginEngineAddress,
-        oldFixedHigh: (position as Position).fixedRateUpper.toNumber(),
-        oldFixedLow: (position as Position).fixedRateLower.toNumber()
       });
     }
   
