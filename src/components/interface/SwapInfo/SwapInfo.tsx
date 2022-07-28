@@ -42,19 +42,19 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
 
   return (
     <FormPanel noBackground>
-      <ExpectedAPY 
+      {/* <ExpectedAPY 
         expectedAPY={swapSummary?.expectedApy}
         onChangeMovesRatesBy={onChangeMovesRatesBy} 
         ratesMoveBy={ratesMoveBy}
-      />
+      /> */}
 
       {(mode === SwapFormModes.NEW_POSITION || mode === SwapFormModes.ROLLOVER) && (swapSummary || swapSummaryLoading) && (
         <>
-          <Box component={'hr'} sx={{ 
+          {/* <Box component={'hr'} sx={{ 
             border: 'none',
             borderBottom: `1px solid ${colors.lavenderWeb.darken045}`,
             margin: (theme) => `${theme.spacing(4)} 0`,
-          }}/>
+          }}/> */}
           <Box sx={bottomSpacing}>
             <SwapSummary
               data={swapSummary} 
