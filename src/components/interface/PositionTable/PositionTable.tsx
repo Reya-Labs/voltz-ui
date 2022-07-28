@@ -124,7 +124,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                     rolloverAmm={rolloverAvailable ? rolloverAmm : undefined}
                   />
 
-                  <TableContainer sx={!info?.beforeMaturity ? getMaturedTableBorderStyles(pos.positionType) : undefined}>
+                  <TableContainer sx={(!info?.beforeMaturity && !pos.isSettled) ? getMaturedTableBorderStyles(pos.positionType) : undefined}>
                     <Table size="medium" sx={{ ...commonOverrides }}>
                       <TableBody>
                         <AMMProvider amm={(pos.amm as AugmentedAMM)}>
