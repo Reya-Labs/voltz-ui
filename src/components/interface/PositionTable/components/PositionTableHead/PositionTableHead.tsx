@@ -116,7 +116,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
                 sx={{ marginLeft: (theme) => theme.spacing(4) }}
                 onClick={onRollover}
               >
-                Roll over
+                Rollover
               </Button>
             )}
           </>
