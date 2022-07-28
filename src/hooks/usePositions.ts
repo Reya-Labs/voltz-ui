@@ -74,6 +74,9 @@ const usePositions = (): usePositionsResult => {
       } else {
         return (positionType === 1 || positionType === 2);
       }
+    })
+    .sort((a,b) => {
+      return Number(a.isSettled) - Number(b.isSettled); // sort settled positions to the bottom
     });
   }, [positions, agent]);
 
