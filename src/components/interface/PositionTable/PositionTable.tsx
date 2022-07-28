@@ -111,7 +111,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                   <PositionTableHead
                     currencyCode='USD'
                     currencySymbol='$'
-                    fcmBadge={pos.source === 'FCM'}
+                    isFCM={pos.source === 'FCM'}
                     fees={agent === Agents.LIQUIDITY_PROVIDER ? info?.fees : undefined}
                     feesPositive={true}
                     beforeMaturity={info?.beforeMaturity}

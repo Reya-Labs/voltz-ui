@@ -10,7 +10,7 @@ export type PositionTableHeadProps = {
   currencyCode?: string;
   currencySymbol?: string;
   currentFixedRate?: number;
-  fcmBadge?: boolean;
+  isFCM?: boolean;
   fees?: number;
   feesPositive?: boolean;
   isSettled: boolean;
@@ -41,7 +41,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
   currencyCode = '',
   currencySymbol = '',
   currentFixedRate, 
-  fcmBadge = false,
+  isFCM = false,
   fees, 
   feesPositive = true,
   isSettled,
@@ -61,7 +61,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
       <Box sx={{ display: 'flex' }}>
         <PositionBadge variant={getPositionBadgeVariant(positionType)} />
 
-        {fcmBadge && (
+        {isFCM && (
           <PositionBadge variant='FC' sx={{ marginLeft: (theme) => theme.spacing(2) }} />
         )}
 
@@ -109,7 +109,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
             >
               Settle
             </Button>
-            {rolloverAmm && (
+            {(rolloverAmm && !isFCM) && (
               <Button 
                 variant={positionType === 1 ? 'rollover1' : positionType === 2 ? 'rollover2' : 'rollover3'}
                 size='xs'
