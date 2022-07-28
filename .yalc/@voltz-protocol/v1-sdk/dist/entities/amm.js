@@ -131,6 +131,12 @@ var AMM = /** @class */ (function () {
             this.isETH = false;
             this.isFCM = true;
         }
+        if (this.fcmAddress === constants_1.ADDRESS_ZERO) {
+            this.isFCM = false;
+        }
+        else {
+            this.isFCM = true;
+        }
     }
     // rollover with swap
     AMM.prototype.rolloverWithSwap = function (_a) {

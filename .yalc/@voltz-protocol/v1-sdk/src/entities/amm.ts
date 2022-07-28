@@ -12,6 +12,7 @@ import {
   TresholdApprovalBn,
   getGasBuffer,
   WETH9,
+  ADDRESS_ZERO,
 } from '../constants';
 import {
   Periphery__factory as peripheryFactory,
@@ -346,6 +347,13 @@ class AMM {
       this.isETH = false;
       this.isFCM = true;
     }
+
+    if (this.fcmAddress === ADDRESS_ZERO) {
+      this.isFCM = false;
+    } else {
+      this.isFCM = true;
+    }
+    
   }
 
   // expected apy
@@ -3169,7 +3177,6 @@ class AMM {
     const blockPerHour = 274;
 
     switch (this.rateOracle.protocolId) {
-      // aave
       case 1: {
         const lastBlock = await this.provider.getBlockNumber();
         const oneBlockAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
@@ -3182,7 +3189,6 @@ class AMM {
         return oneWeekApy.div(BigNumber.from(1000000000000)).toNumber() / 1000000;
       }
 
-      // compound
       case 2: {
         const daysPerYear = 365;
 
@@ -3196,7 +3202,6 @@ class AMM {
         return supplyApy;
       }
 
-      // rocket
       case 3: {
         const lastBlock = await this.provider.getBlockNumber();
         const to = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
@@ -3209,7 +3214,6 @@ class AMM {
         return oneWeekApy.div(BigNumber.from(1000000000000)).toNumber() / 1000000;
       }
 
-      // lido
       case 4: {
         const lastBlock = await this.provider.getBlockNumber();
         const to = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);

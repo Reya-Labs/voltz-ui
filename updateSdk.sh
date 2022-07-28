@@ -1,0 +1,1 @@
+sudo rm -r .yalc && sudo rm -r node_modules && yalc update @voltz-protocol/v1-sdk && yarn && yarn start
