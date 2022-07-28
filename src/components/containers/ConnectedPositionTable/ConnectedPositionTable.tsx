@@ -165,7 +165,7 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
         <PendingTransaction
           amm={positionToSettle.position.amm as AugmentedAMM}
           isEditingMargin={false}
-          isRollover={true}
+          isSettle={true}
           transactionId={positionToSettle.txId}
           onComplete={handleTransactionFinished}
           notional={Math.abs(positionToSettle.position.effectiveVariableTokenBalance)}

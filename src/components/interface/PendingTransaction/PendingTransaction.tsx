@@ -19,6 +19,7 @@ export type PendingTransactionProps = {
   isFCMSwap?: boolean;
   isFCMUnwind?: boolean;
   isRollover?: boolean;
+  isSettle?: boolean;
   notional?: number;
   margin?: number;
   onBack: () => void;
@@ -33,6 +34,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   isFCMSwap,
   isFCMUnwind,
   isRollover,
+  isSettle,
   notional,
   margin,
   onBack,
@@ -261,12 +263,12 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
     >
       {renderStatus()}
       <Panel variant="main">
-        {isRollover 
+        {(isRollover || isSettle) 
           ? (
             <TokenAndText 
               token={amm.protocol} 
               tokenLabel='pool' 
-              text='SETTLING' 
+              text={isRollover ? 'ROLLOVER' : 'SETTLING'} 
               textLabel='STATUS' 
             />
           )
