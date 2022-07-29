@@ -35,6 +35,10 @@ const mockSwapData = ({
   fee: 6.66,
   slippage: 4,
   averageFixedRate: 3,
+  expectedApy: [
+    [0, 0.5, 1, 1.5, 2.5],
+    [1.21, 16, 32, 88, 1955]
+  ]
 } as unknown) as InfoPostSwap;
 
 const NewPositionTemplate: ComponentStory<typeof SwapInfo> = (args) => (
@@ -56,9 +60,7 @@ const NewPositionSwapForm: React.FunctionComponent = (args) => {
     <SwapInfo 
       {...args} 
       mode={mode}
-      onChangeMovesRatesBy={() => {}}
       formAction={SwapFormActions.SWAP}
-      ratesMoveBy={-1}
       swapSummary={mockSwapData}
       swapSummaryLoading={false}
     />
@@ -96,9 +98,7 @@ const EditMarginSwapForm: React.FunctionComponent = (args) => {
       swapSummaryLoading={false}
       balance={100}
       minRequiredMargin={10}
-      onChangeMovesRatesBy={() => {}}
       positionMargin={20}
-      ratesMoveBy={-1}
       underlyingTokenName={'GIL'}
     />
   );

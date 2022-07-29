@@ -14,10 +14,8 @@ export type SwapInfoProps = {
   formAction: SwapFormActions;
   minRequiredMargin?: number;
   mode: SwapFormModes;
-  onChangeMovesRatesBy: (value: number) => void;
   positionMargin?: number;
   protocol?: string;
-  ratesMoveBy: number;
   swapSummary: InfoPostSwap | void | null;
   swapSummaryLoading: boolean;
   underlyingTokenName?: string;
@@ -28,10 +26,8 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
   formAction,
   minRequiredMargin,
   mode,
-  onChangeMovesRatesBy,
   positionMargin,
   protocol,
-  ratesMoveBy,
   swapSummary,
   swapSummaryLoading,
   underlyingTokenName,
@@ -45,18 +41,18 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
       {mode !== SwapFormModes.EDIT_MARGIN && (
         <ExpectedAPY 
           expectedAPY={swapSummary?.expectedApy}
-          onChangeMovesRatesBy={onChangeMovesRatesBy} 
-          ratesMoveBy={ratesMoveBy}
         />
       )}
 
       {(mode === SwapFormModes.NEW_POSITION || mode === SwapFormModes.ROLLOVER) && (swapSummary || swapSummaryLoading) && (
         <>
-          <Box component={'hr'} sx={{ 
-            border: 'none',
-            borderBottom: `1px solid ${colors.lavenderWeb.darken045}`,
-            margin: (theme) => `${theme.spacing(4)} 0`,
-          }}/>
+          {swapSummary?.expectedApy && (
+            <Box component={'hr'} sx={{ 
+              border: 'none',
+              borderBottom: `1px solid ${colors.lavenderWeb.darken045}`,
+              margin: (theme) => `${theme.spacing(4)} 0`,
+            }}/>
+          )}
           <Box sx={bottomSpacing}>
             <SwapSummary
               data={swapSummary} 
@@ -71,13 +67,13 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
 
       {mode === SwapFormModes.EDIT_MARGIN && !isUndefined(minRequiredMargin) && !isUndefined(positionMargin) && (
         <>
-          {mode !== SwapFormModes.EDIT_MARGIN && (
+          {/* {mode !== SwapFormModes.EDIT_MARGIN && (
             <Box component={'hr'} sx={{ 
               border: 'none',
               borderBottom: `1px solid ${colors.lavenderWeb.darken045}`,
               margin: (theme) => `${theme.spacing(4)} 0`,
             }}/>
-          )}
+          )} */}
           <Box sx={bottomSpacing}>
             <SwapSummaryEditMargin 
               balance={balance}

@@ -1,19 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { SelectInput, Typography } from '@components/atomic';
 import { IconLabel } from '@components/composite';
-import { formatCurrency, formatNumber } from '@utilities';
-import { isUndefined } from 'lodash';
 import Box from '@mui/material/Box';
 import { colors } from '@theme';
+import { formatNumber } from '@utilities';
 
 interface ExpectedAPYProps {
-  expectedAPY?: number;
-  onChangeMovesRatesBy: (value: number) => void;
-  ratesMoveBy: number;
+  expectedAPY?: number[][];
 }
 
-export const ExpectedAPY = ({ expectedAPY, onChangeMovesRatesBy, ratesMoveBy }:ExpectedAPYProps) => {
+export const ExpectedAPY = ({ expectedAPY }:ExpectedAPYProps) => {
+  type ExpectedAPYOption = {label: string;  value: string};
+  const [options, setOptions] = useState<ExpectedAPYOption[]>();
+  const [selectedOptionValue, setSelectedOptionValue] = useState<string>();
+
+  const handleChangeMoveBy = (value: string) => {
+    setSelectedOptionValue(value);
+  }
+
+  useEffect(() => {
+    if(expectedAPY) {
+      const newOptions = expectedAPY[0].map((labelNum, index) => ({
+        label: `${labelNum.toFixed(2)}%`, 
+        value: formatNumber(expectedAPY[1][index])
+      }));
+      setOptions(newOptions);
+      setSelectedOptionValue(newOptions[0].value)
+    }
+  }, expectedAPY);
+
+  if(!expectedAPY || !options) return null;
+
   return (
     <>
       <Box>
@@ -28,7 +46,7 @@ export const ExpectedAPY = ({ expectedAPY, onChangeMovesRatesBy, ratesMoveBy }:E
             label={<IconLabel label="Expected APY" icon="information-circle" info="This is the expected APY of your position if rates move by your selected amount." />}
             agentStyling
           >
-            {!isUndefined(expectedAPY) ? `${formatCurrency(expectedAPY, true)}%` : '---'}
+            {selectedOptionValue ? `${selectedOptionValue}%` : '---'}
           </Typography>
         </Box>
         <Box sx={{
@@ -37,18 +55,13 @@ export const ExpectedAPY = ({ expectedAPY, onChangeMovesRatesBy, ratesMoveBy }:E
           marginLeft: (theme) => theme.spacing(6)
         }}>
           <SelectInput 
+            defaultValue={options[0].value}
             name="ratesMoveBy"
             label={<IconLabel label="Rates move by:" icon="information-circle" info="Select the percentage of rate movement that you would like to simulate." />} 
-            onChange={(event) => onChangeMovesRatesBy(event.target.value as number)}
-            options={[
-              { label: '-1%', value: -1 },
-              { label: '1%',  value: 1  },
-              { label: '5%',  value: 5  },
-              { label: '10%', value: 10 },
-            ]}
-            value={ratesMoveBy}
+            onChange={(event) => handleChangeMoveBy(event.target.value as string)}
+            options={options}
             size="small"
-            sx={{ width: '80px' }}
+            sx={{ width: '90px' }}
           />
         </Box>
       </Box>
