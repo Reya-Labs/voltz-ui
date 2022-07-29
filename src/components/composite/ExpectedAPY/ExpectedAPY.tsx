@@ -43,7 +43,7 @@ export const ExpectedAPY = ({ expectedAPY }:ExpectedAPYProps) => {
         }}>
           <Typography
             variant="h3"
-            label={<IconLabel label="Expected APY" icon="information-circle" info="This is the expected APY of your position if rates move by your selected amount." />}
+            label={<IconLabel label="Expected APY" icon="information-circle" info="This is the expected APY of your position if the variable APY between now and the end of the is your selected amount." />}
             agentStyling
           >
             {selectedOptionValue ? `${selectedOptionValue}%` : '---'}
@@ -55,9 +55,9 @@ export const ExpectedAPY = ({ expectedAPY }:ExpectedAPYProps) => {
           marginLeft: (theme) => theme.spacing(6)
         }}>
           <SelectInput 
-            defaultValue={options[0].value}
-            name="ratesMoveBy"
-            label={<IconLabel label="Rates move by:" icon="information-circle" info="Select the percentage of rate movement that you would like to simulate." />} 
+            defaultValue={options[2].value}
+            name="ExpectedVariableAPY"
+            label={<IconLabel label="Expected Variable APY:" icon="information-circle" info="Select the percentage of the variable APY between now and the end of the pool that you would like to simulate." />} 
             onChange={(event) => handleChangeMoveBy(event.target.value as string)}
             options={options}
             size="small"
@@ -67,7 +67,7 @@ export const ExpectedAPY = ({ expectedAPY }:ExpectedAPYProps) => {
       </Box>
       <Box sx={{ marginTop: (theme) => theme.spacing(4) }}>
         <Typography variant='body1' sx={{ color: colors.lavenderWeb.darken020, fontSize: '14px' }}>
-          Generate an expected APY for a given movement in rates. The expected APY factors in pool conditions and the details of your position.
+          Generate an expected APY for a given variable APY between now and the end of the pool. The expected APY factors in pool conditions and the details of your position.
         </Typography>
       </Box>
     </>

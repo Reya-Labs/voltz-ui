@@ -353,7 +353,7 @@ class AMM {
       scaledVt = vt.div(BigNumber.from(10).pow(this.underlyingToken.decimals - 6)).toNumber() / 1000000;
     }
 
-    const varApy = await this.getVariableApy();
+    const varApy = await this.getInstantApy();
     const samples = [0, varApy / 2, varApy, 2 * varApy, 3 * varApy];
 
     const predictedAprs = [];

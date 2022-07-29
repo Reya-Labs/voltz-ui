@@ -97,7 +97,7 @@ var AMM = /** @class */ (function () {
                             scaledFt = ft.div(ethers_2.BigNumber.from(10).pow(this.underlyingToken.decimals - 6)).toNumber() / 1000000;
                             scaledVt = vt.div(ethers_2.BigNumber.from(10).pow(this.underlyingToken.decimals - 6)).toNumber() / 1000000;
                         }
-                        return [4 /*yield*/, this.getVariableApy()];
+                        return [4 /*yield*/, this.getInstantApy()];
                     case 1:
                         varApy = _a.sent();
                         samples = [0, varApy / 2, varApy, 2 * varApy, 3 * varApy];
