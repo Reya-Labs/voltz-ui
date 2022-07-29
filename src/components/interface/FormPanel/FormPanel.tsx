@@ -39,7 +39,7 @@ export const FormPanel: React.FunctionComponent<FormPanelProps> = ({
       marginLeft: 4,
       marginRight: 4,
       paddingTop: (theme) => theme.spacing(4),
-      width: (theme) => theme.spacing(77),
+      width: (theme) => theme.spacing(85),
       ...sx
     }}>
       {children}

@@ -31,13 +31,13 @@ export declare type CapInfo = {
     cap: number;
 };
 export declare type AMMGetInfoPostSwapArgs = {
+    position?: Position;
     isFT: boolean;
     notional: number;
     fixedRateLimit?: number;
     fixedLow: number;
     fixedHigh: number;
     margin?: number;
-    expectedApr?: number;
 };
 export declare type AMMSwapArgs = {
     isFT: boolean;
@@ -64,7 +64,7 @@ export declare type InfoPostSwap = {
     fee: number;
     slippage: number;
     averageFixedRate: number;
-    expectedApy?: number;
+    expectedApy?: number[][];
 };
 export declare type AMMRolloverWithSwapArgs = {
     isFT: boolean;
@@ -79,19 +79,6 @@ export declare type AMMRolloverWithSwapArgs = {
     oldFixedLow: number;
     oldFixedHigh: number;
     validationOnly?: boolean;
-};
-export declare type AMMGetInfoPostRolloverWithSwapArgs = {
-    isFT: boolean;
-    notional: number;
-    fixedRateLimit?: number;
-    fixedLow: number;
-    fixedHigh: number;
-    margin?: number;
-    owner: string;
-    newMarginEngine: string;
-    oldFixedLow: number;
-    oldFixedHigh: number;
-    expectedApr?: number;
 };
 export declare type AMMMintArgs = {
     fixedLow: number;
@@ -200,12 +187,10 @@ declare class AMM {
     readonly wethAddress?: string;
     readonly isFCM: boolean;
     constructor({ id, signer, provider, environment, factoryAddress, marginEngineAddress, fcmAddress, rateOracle, updatedTimestamp, termStartTimestamp, termEndTimestamp, underlyingToken, tick, tickSpacing, txCount, totalNotionalTraded, totalLiquidity, wethAddress }: AMMConstructorArgs);
-    expectedApy: (ft: BigNumber, vt: BigNumber, margin: number, predictedApr: number) => number;
+    expectedApy: (ft: BigNumber, vt: BigNumber, margin: number) => Promise<number[][]>;
     rolloverWithSwap({ isFT, notional, margin, marginEth, fixedRateLimit, fixedLow, fixedHigh, owner, newMarginEngine, oldFixedLow, oldFixedHigh, validationOnly, }: AMMRolloverWithSwapArgs): Promise<ContractReceipt | void>;
-    getInfoPostRolloverWithSwap({ isFT, notional, fixedRateLimit, fixedLow, fixedHigh, margin, owner, newMarginEngine, oldFixedLow, oldFixedHigh, expectedApr }: AMMGetInfoPostRolloverWithSwapArgs): Promise<InfoPostSwap>;
     rolloverWithMint({ fixedLow, fixedHigh, notional, margin, marginEth, owner, newMarginEngine, oldFixedLow, oldFixedHigh, validationOnly, }: AMMRolloverWithMintArgs): Promise<ContractReceipt | void>;
-    getInfoPostRolloverWithMint({ fixedLow, fixedHigh, notional, owner, newMarginEngine, oldFixedLow, oldFixedHigh }: AMMGetInfoPostRolloverWithMintArgs): Promise<number>;
-    getInfoPostSwap({ isFT, notional, fixedRateLimit, fixedLow, fixedHigh, margin, expectedApr }: AMMGetInfoPostSwapArgs): Promise<InfoPostSwap>;
+    getInfoPostSwap({ position, isFT, notional, fixedRateLimit, fixedLow, fixedHigh, margin, }: AMMGetInfoPostSwapArgs): Promise<InfoPostSwap>;
     swap({ isFT, notional, margin, fixedRateLimit, fixedLow, fixedHigh, validationOnly, }: AMMSwapArgs): Promise<ContractReceipt | void>;
     swapWithWeth({ isFT, notional, margin, marginEth, fixedRateLimit, fixedLow, fixedHigh, validationOnly, }: AMMSwapWithWethArgs): Promise<ContractReceipt | void>;
     getInfoPostMint({ fixedLow, fixedHigh, notional, }: AMMGetInfoPostMintArgs): Promise<number>;

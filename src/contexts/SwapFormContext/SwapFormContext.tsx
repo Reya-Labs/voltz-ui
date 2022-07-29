@@ -5,7 +5,7 @@ import { AugmentedAMM } from "@utilities";
 import { isNumber, isUndefined } from "lodash";
 import { hasEnoughTokens, hasEnoughUnderlyingTokens, lessThan } from "@utilities";
 import { GetInfoType, useAgent, useBalance, useMinRequiredMargin, useTokenApproval } from "@hooks";
-import { InfoPostSwap, Position } from "@voltz-protocol/v1-sdk";
+import { InfoPostSwap } from "@voltz-protocol/v1-sdk";
 import * as s from "./services";
 import { BigNumber } from "ethers";
 
@@ -69,13 +69,11 @@ export type SwapFormContext = {
   isValid: boolean;
   minRequiredMargin?: number;
   mode: SwapFormModes;
-  ratesMoveBy: number;
   setLeverage: (value: SwapFormState['leverage']) => void;
   setMargin: (value: SwapFormState['margin']) => void;
   setMarginAction: (value: SwapFormState['marginAction']) => void;
   setNotional: (value: SwapFormState['notional']) => void;
   setPartialCollateralization: (value: SwapFormState['partialCollateralization']) => void;
-  setRatesMoveBy: (value: number) => void;
   state: SwapFormState;
   swapInfo: {
     data?: InfoPostSwap;
@@ -117,7 +115,6 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   const minRequiredMargin = useMinRequiredMargin(poolAmm);
   const [notional, setNotional] = useState<SwapFormState['notional']>(defaultNotional);
   const [partialCollateralization, setPartialCollateralization] = useState<boolean>(defaultPartialCollateralization);
-  const [ratesMoveBy, setRatesMoveBy] = useState<number>(-1);
   const { swapInfo } = useAMMContext();
   const [cachedSwapInfoMinRequiredMargin, setCachedSwapInfoMinRequiredMargin] = useState<number>();
   const tokenApprovals = useTokenApproval(poolAmm);
@@ -156,13 +153,18 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   // Load the swap summary info
   useEffect(() => {
     if (!approvalsNeeded && !isUndefined(notional) && notional !== 0) {
-      const expectedApr = isNumber(ammCtx.variableApy.result) ? ammCtx.variableApy.result * 100 + ratesMoveBy : undefined;
-
       switch (action) {
-        case SwapFormActions.SWAP:
-        case SwapFormActions.ROLLOVER_SWAP: {
+        case SwapFormActions.SWAP: {
           swapInfo.call({ 
-            expectedApr,
+            position,
+            margin,
+            notional, 
+            type: GetInfoType.NORMAL_SWAP
+          });
+          break;
+        }
+        case SwapFormActions.ROLLOVER_SWAP: {
+          swapInfo.call({
             margin,
             notional, 
             type: GetInfoType.NORMAL_SWAP
@@ -170,10 +172,18 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
           break;
         }
 
-        case SwapFormActions.FCM_SWAP:
+        case SwapFormActions.FCM_SWAP: {
+          swapInfo.call({ 
+            position,
+            margin,
+            notional, 
+            type: GetInfoType.FCM_SWAP 
+          });
+          break;
+        }
+
         case SwapFormActions.ROLLOVER_FCM_SWAP: {
           swapInfo.call({ 
-            expectedApr,
             margin,
             notional, 
             type: GetInfoType.FCM_SWAP 
@@ -195,7 +205,6 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     partialCollateralization,
     marginAction,
     ammCtx.variableApy.result,
-    ratesMoveBy,
     margin
   ]);
 
@@ -372,13 +381,6 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     setPartialCollateralization(value);
   }
 
-  const updateRatesMoveBy = (value: number) => {
-    if(!touched.current.includes('ratesMoveBy')) {
-      touched.current.push('ratesMoveBy');
-    }
-    setRatesMoveBy(value);
-  }
-
   const validate = async () => {
     if(mode === SwapFormModes.NEW_POSITION) {
       return await validateNewPosition();
@@ -485,13 +487,11 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     isValid,
     minRequiredMargin,
     mode,
-    ratesMoveBy,
     setLeverage: updateLeverage,
     setMargin: updateMargin,
     setMarginAction: updateMarginAction,
     setNotional: updateNotional,
     setPartialCollateralization: updatePartialCollateralization,
-    setRatesMoveBy: updateRatesMoveBy,
     swapInfo: {
       data: swapInfo.result || undefined,
       errorMessage: swapInfo.errorMessage || undefined,

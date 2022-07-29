@@ -53,6 +53,7 @@ var errorHandling_1 = require("../utils/errors/errorHandling");
 var lodash_1 = require("lodash");
 //1. Import coingecko-api
 var coingecko_api_1 = __importDefault(require("coingecko-api"));
+var getExpectedApy_1 = require("../services/getExpectedApy");
 //2. Initiate the CoinGecko API Client
 var CoinGeckoClient = new coingecko_api_1.default();
 //3. Make call to get the price of 1 eth in USD, so divide the value of USD by data
@@ -77,31 +78,41 @@ var AMM = /** @class */ (function () {
         var id = _a.id, signer = _a.signer, provider = _a.provider, environment = _a.environment, factoryAddress = _a.factoryAddress, marginEngineAddress = _a.marginEngineAddress, fcmAddress = _a.fcmAddress, rateOracle = _a.rateOracle, updatedTimestamp = _a.updatedTimestamp, termStartTimestamp = _a.termStartTimestamp, termEndTimestamp = _a.termEndTimestamp, underlyingToken = _a.underlyingToken, tick = _a.tick, tickSpacing = _a.tickSpacing, txCount = _a.txCount, totalNotionalTraded = _a.totalNotionalTraded, totalLiquidity = _a.totalLiquidity, wethAddress = _a.wethAddress;
         var _this = this;
         // expected apy
-        this.expectedApy = function (ft, vt, margin, predictedApr) {
-            var start = ethers_2.BigNumber.from(_this.termStartTimestamp.toString())
-                .div(ethers_2.BigNumber.from(10).pow(12))
-                .toNumber() / 1000000;
-            var now = Math.round((new Date()).getTime() / 1000);
-            var end = ethers_2.BigNumber.from(_this.termEndTimestamp.toString())
-                .div(ethers_2.BigNumber.from(10).pow(12))
-                .toNumber() / 1000000;
-            var scaledFt = 0;
-            var scaledVt = 0;
-            if (_this.underlyingToken.decimals <= 6) {
-                scaledFt = ft.toNumber() / (Math.pow(10, _this.underlyingToken.decimals));
-                scaledVt = vt.toNumber() / (Math.pow(10, _this.underlyingToken.decimals));
-            }
-            else {
-                scaledFt = ft.div(ethers_2.BigNumber.from(10).pow(_this.underlyingToken.decimals - 6)).toNumber() / 1000000;
-                scaledVt = vt.div(ethers_2.BigNumber.from(10).pow(_this.underlyingToken.decimals - 6)).toNumber() / 1000000;
-            }
-            var timeInYearsFromStartToEnd = (end - start) / constants_1.ONE_YEAR_IN_SECONDS;
-            var timeInYearsFromNowToEnd = (end - now) / constants_1.ONE_YEAR_IN_SECONDS;
-            var variableFactor = Math.pow(predictedApr / 100 + 1, timeInYearsFromStartToEnd) - 1;
-            var expectedCashflow = scaledFt * timeInYearsFromStartToEnd * 0.01 + scaledVt * variableFactor;
-            var result = Math.pow((1 + expectedCashflow / margin), (1 / timeInYearsFromNowToEnd)) - 1;
-            return result * 100;
-        };
+        this.expectedApy = function (ft, vt, margin) { return __awaiter(_this, void 0, void 0, function () {
+            var now, end, scaledFt, scaledVt, varApy, samples, predictedAprs, predictedPnls, _i, samples_1, rate, pnl;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        now = Math.round((new Date()).getTime() / 1000);
+                        end = ethers_2.BigNumber.from(this.termEndTimestamp.toString())
+                            .div(ethers_2.BigNumber.from(10).pow(12))
+                            .toNumber() / 1000000;
+                        scaledFt = 0;
+                        scaledVt = 0;
+                        if (this.underlyingToken.decimals <= 6) {
+                            scaledFt = ft.toNumber() / (Math.pow(10, this.underlyingToken.decimals));
+                            scaledVt = vt.toNumber() / (Math.pow(10, this.underlyingToken.decimals));
+                        }
+                        else {
+                            scaledFt = ft.div(ethers_2.BigNumber.from(10).pow(this.underlyingToken.decimals - 6)).toNumber() / 1000000;
+                            scaledVt = vt.div(ethers_2.BigNumber.from(10).pow(this.underlyingToken.decimals - 6)).toNumber() / 1000000;
+                        }
+                        return [4 /*yield*/, this.getInstantApy()];
+                    case 1:
+                        varApy = _a.sent();
+                        samples = [0, varApy / 2, varApy, 5 * varApy, 10 * varApy];
+                        predictedAprs = [];
+                        predictedPnls = [];
+                        for (_i = 0, samples_1 = samples; _i < samples_1.length; _i++) {
+                            rate = samples_1[_i];
+                            pnl = (0, getExpectedApy_1.getExpectedApy)(now, end, scaledFt, scaledVt, margin, rate);
+                            predictedAprs.push(100 * rate);
+                            predictedPnls.push(100 * pnl);
+                        }
+                        return [2 /*return*/, [predictedAprs, predictedPnls]];
+                }
+            });
+        }); };
         this.id = id;
         this.signer = signer;
         this.provider = provider || (signer === null || signer === void 0 ? void 0 : signer.provider);
@@ -262,128 +273,6 @@ var AMM = /** @class */ (function () {
             });
         });
     };
-    AMM.prototype.getInfoPostRolloverWithSwap = function (_a) {
-        var isFT = _a.isFT, notional = _a.notional, fixedRateLimit = _a.fixedRateLimit, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, margin = _a.margin, owner = _a.owner, newMarginEngine = _a.newMarginEngine, oldFixedLow = _a.oldFixedLow, oldFixedHigh = _a.oldFixedHigh, expectedApr = _a.expectedApr;
-        return __awaiter(this, void 0, void 0, function () {
-            var effectiveOwner, _b, oldTickUpper, oldTickLower, tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, scaledNotional, factoryContract, peripheryAddress, peripheryContract, swapPeripheryParams, tickBefore, tickAfter, marginRequirement, fee, availableNotional, fixedTokenDeltaUnbalanced, fixedTokenDelta, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw, marginEngineContract, currentMargin, scaledCurrentMargin, scaledAvailableNotional, scaledFee, scaledMarginRequirement, additionalMargin, averageFixedRate, result;
-            var _this = this;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
-                    case 0:
-                        if (!this.signer) {
-                            throw new Error('Wallet not connected');
-                        }
-                        if (fixedLow >= fixedHigh && oldFixedLow >= oldFixedHigh) {
-                            throw new Error('Lower Rate must be smaller than Upper Rate');
-                        }
-                        if (fixedLow < constants_1.MIN_FIXED_RATE && oldFixedLow < constants_1.MIN_FIXED_RATE) {
-                            throw new Error('Lower Rate is too low');
-                        }
-                        if (fixedHigh > constants_1.MAX_FIXED_RATE && oldFixedHigh > constants_1.MAX_FIXED_RATE) {
-                            throw new Error('Upper Rate is too high');
-                        }
-                        if (notional <= 0) {
-                            throw new Error('Amount of notional must be greater than 0');
-                        }
-                        if (!(!owner)) return [3 /*break*/, 2];
-                        return [4 /*yield*/, this.signer.getAddress()];
-                    case 1:
-                        _b = _c.sent();
-                        return [3 /*break*/, 3];
-                    case 2:
-                        _b = owner;
-                        _c.label = 3;
-                    case 3:
-                        effectiveOwner = _b;
-                        oldTickUpper = this.closestTickAndFixedRate(oldFixedLow).closestUsableTick;
-                        oldTickLower = this.closestTickAndFixedRate(oldFixedHigh).closestUsableTick;
-                        tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
-                        tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
-                        if (fixedRateLimit) {
-                            tickLimit = this.closestTickAndFixedRate(fixedRateLimit).closestUsableTick;
-                            sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickLimit).toString();
-                        }
-                        else {
-                            if (isFT) {
-                                sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickMath_1.TickMath.MAX_TICK - 1).toString();
-                            }
-                            else {
-                                sqrtPriceLimitX96 = tickMath_1.TickMath.getSqrtRatioAtTick(tickMath_1.TickMath.MIN_TICK + 1).toString();
-                            }
-                        }
-                        scaledNotional = this.scale(notional);
-                        factoryContract = typechain_1.Factory__factory.connect(this.factoryAddress, this.signer);
-                        return [4 /*yield*/, factoryContract.periphery()];
-                    case 4:
-                        peripheryAddress = _c.sent();
-                        peripheryContract = typechain_1.Periphery__factory.connect(peripheryAddress, this.signer);
-                        swapPeripheryParams = {
-                            marginEngine: newMarginEngine,
-                            isFT: isFT,
-                            notional: scaledNotional,
-                            sqrtPriceLimitX96: sqrtPriceLimitX96,
-                            tickLower: tickLower,
-                            tickUpper: tickUpper,
-                            marginDelta: 0
-                        };
-                        return [4 /*yield*/, peripheryContract.getCurrentTick(this.marginEngineAddress)];
-                    case 5:
-                        tickBefore = _c.sent();
-                        tickAfter = 0;
-                        marginRequirement = ethers_2.BigNumber.from(0);
-                        fee = ethers_2.BigNumber.from(0);
-                        availableNotional = ethers_2.BigNumber.from(0);
-                        fixedTokenDeltaUnbalanced = ethers_2.BigNumber.from(0);
-                        fixedTokenDelta = ethers_2.BigNumber.from(0);
-                        return [4 /*yield*/, peripheryContract.callStatic.rolloverWithSwap(this.marginEngineAddress, effectiveOwner, oldTickLower, oldTickUpper, swapPeripheryParams).then(function (result) {
-                                availableNotional = result[1];
-                                fee = result[2];
-                                fixedTokenDeltaUnbalanced = result[3];
-                                marginRequirement = result[4];
-                                tickAfter = parseInt(result[5]);
-                                fixedTokenDelta = result[0];
-                            }, function (error) {
-                                var result = (0, errorHandling_1.decodeInfoPostSwap)(error, _this.environment);
-                                marginRequirement = result.marginRequirement;
-                                tickAfter = result.tick;
-                                fee = result.fee;
-                                availableNotional = result.availableNotional;
-                                fixedTokenDeltaUnbalanced = result.fixedTokenDeltaUnbalanced;
-                                fixedTokenDelta = result.fixedTokenDelta;
-                            })];
-                    case 6:
-                        _c.sent();
-                        fixedRateBefore = (0, priceTickConversions_1.tickToFixedRate)(tickBefore);
-                        fixedRateAfter = (0, priceTickConversions_1.tickToFixedRate)(tickAfter);
-                        fixedRateDelta = fixedRateAfter.subtract(fixedRateBefore);
-                        fixedRateDeltaRaw = fixedRateDelta.toNumber();
-                        marginEngineContract = typechain_1.MarginEngine__factory.connect(newMarginEngine, this.signer);
-                        return [4 /*yield*/, marginEngineContract.callStatic.getPosition(effectiveOwner, tickLower, tickUpper)];
-                    case 7:
-                        currentMargin = (_c.sent()).margin;
-                        scaledCurrentMargin = this.descale(currentMargin);
-                        scaledAvailableNotional = this.descale(availableNotional);
-                        scaledFee = this.descale(fee);
-                        scaledMarginRequirement = (this.descale(marginRequirement) + scaledFee) * 1.01;
-                        additionalMargin = scaledMarginRequirement > scaledCurrentMargin
-                            ? scaledMarginRequirement - scaledCurrentMargin
-                            : 0;
-                        averageFixedRate = (availableNotional.eq(ethers_2.BigNumber.from(0))) ? 0 : fixedTokenDeltaUnbalanced.mul(ethers_2.BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
-                        result = {
-                            marginRequirement: additionalMargin,
-                            availableNotional: scaledAvailableNotional < 0 ? -scaledAvailableNotional : scaledAvailableNotional,
-                            fee: scaledFee < 0 ? -scaledFee : scaledFee,
-                            slippage: fixedRateDeltaRaw < 0 ? -fixedRateDeltaRaw : fixedRateDeltaRaw,
-                            averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
-                        };
-                        if ((0, lodash_1.isNumber)(expectedApr) && (0, lodash_1.isNumber)(margin)) {
-                            result.expectedApy = this.expectedApy(fixedTokenDelta, availableNotional, margin, expectedApr);
-                        }
-                        return [2 /*return*/, result];
-                }
-            });
-        });
-    };
     // rollover with mint
     AMM.prototype.rolloverWithMint = function (_a) {
         var fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional, margin = _a.margin, marginEth = _a.marginEth, owner = _a.owner, newMarginEngine = _a.newMarginEngine, oldFixedLow = _a.oldFixedLow, oldFixedHigh = _a.oldFixedHigh, validationOnly = _a.validationOnly;
@@ -487,91 +376,14 @@ var AMM = /** @class */ (function () {
             });
         });
     };
-    AMM.prototype.getInfoPostRolloverWithMint = function (_a) {
-        var fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional, owner = _a.owner, newMarginEngine = _a.newMarginEngine, oldFixedLow = _a.oldFixedLow, oldFixedHigh = _a.oldFixedHigh;
-        return __awaiter(this, void 0, void 0, function () {
-            var effectiveOwner, _b, oldTickUpper, oldTickLower, tickUpper, tickLower, factoryContract, peripheryAddress, peripheryContract, scaledNotional, mintOrBurnParams, marginRequirement, marginEngineContract, currentMargin, scaledCurrentMargin, scaledMarginRequirement;
-            var _this = this;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
-                    case 0:
-                        if (!this.signer) {
-                            throw new Error('Wallet not connected');
-                        }
-                        if (fixedLow >= fixedHigh && oldFixedLow >= oldFixedHigh) {
-                            throw new Error('Lower Rate must be smaller than Upper Rate');
-                        }
-                        if (fixedLow < constants_1.MIN_FIXED_RATE && oldFixedLow < constants_1.MIN_FIXED_RATE) {
-                            throw new Error('Lower Rate is too low');
-                        }
-                        if (fixedHigh > constants_1.MAX_FIXED_RATE && oldFixedHigh > constants_1.MAX_FIXED_RATE) {
-                            throw new Error('Upper Rate is too high');
-                        }
-                        if (notional <= 0) {
-                            throw new Error('Amount of notional must be greater than 0');
-                        }
-                        if (!(!owner)) return [3 /*break*/, 2];
-                        return [4 /*yield*/, this.signer.getAddress()];
-                    case 1:
-                        _b = _c.sent();
-                        return [3 /*break*/, 3];
-                    case 2:
-                        _b = owner;
-                        _c.label = 3;
-                    case 3:
-                        effectiveOwner = _b;
-                        oldTickUpper = this.closestTickAndFixedRate(oldFixedLow).closestUsableTick;
-                        oldTickLower = this.closestTickAndFixedRate(oldFixedHigh).closestUsableTick;
-                        tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
-                        tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
-                        factoryContract = typechain_1.Factory__factory.connect(this.factoryAddress, this.signer);
-                        return [4 /*yield*/, factoryContract.periphery()];
-                    case 4:
-                        peripheryAddress = _c.sent();
-                        peripheryContract = typechain_1.Periphery__factory.connect(peripheryAddress, this.signer);
-                        scaledNotional = this.scale(notional);
-                        mintOrBurnParams = {
-                            marginEngine: newMarginEngine,
-                            tickLower: tickLower,
-                            tickUpper: tickUpper,
-                            notional: scaledNotional,
-                            isMint: true,
-                            marginDelta: '0',
-                        };
-                        marginRequirement = ethers_2.BigNumber.from('0');
-                        return [4 /*yield*/, peripheryContract.callStatic.rolloverWithMint(this.marginEngineAddress, effectiveOwner, oldTickLower, oldTickUpper, mintOrBurnParams).then(function (result) {
-                                marginRequirement = ethers_2.BigNumber.from(result);
-                            }, function (error) {
-                                var result = (0, errorHandling_1.decodeInfoPostMint)(error, _this.environment);
-                                marginRequirement = result.marginRequirement;
-                            })];
-                    case 5:
-                        _c.sent();
-                        marginEngineContract = typechain_1.MarginEngine__factory.connect(newMarginEngine, this.signer);
-                        return [4 /*yield*/, marginEngineContract.callStatic.getPosition(effectiveOwner, tickLower, tickUpper)];
-                    case 6:
-                        currentMargin = (_c.sent()).margin;
-                        scaledCurrentMargin = this.descale(currentMargin);
-                        scaledMarginRequirement = this.descale(marginRequirement) * 1.01;
-                        if (scaledMarginRequirement > scaledCurrentMargin) {
-                            return [2 /*return*/, scaledMarginRequirement - scaledCurrentMargin];
-                        }
-                        else {
-                            return [2 /*return*/, 0];
-                        }
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
     // swap
     AMM.prototype.getInfoPostSwap = function (_a) {
-        var isFT = _a.isFT, notional = _a.notional, fixedRateLimit = _a.fixedRateLimit, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, margin = _a.margin, expectedApr = _a.expectedApr;
+        var position = _a.position, isFT = _a.isFT, notional = _a.notional, fixedRateLimit = _a.fixedRateLimit, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, margin = _a.margin;
         return __awaiter(this, void 0, void 0, function () {
-            var signerAddress, tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, scaledNotional, factoryContract, peripheryAddress, peripheryContract, swapPeripheryParams, tickBefore, tickAfter, marginRequirement, fee, availableNotional, fixedTokenDeltaUnbalanced, fixedTokenDelta, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw, marginEngineContract, currentMargin, scaledCurrentMargin, scaledAvailableNotional, scaledFee, scaledMarginRequirement, additionalMargin, averageFixedRate, result;
+            var signerAddress, tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, scaledNotional, factoryContract, peripheryAddress, peripheryContract, swapPeripheryParams, tickBefore, tickAfter, marginRequirement, fee, availableNotional, fixedTokenDeltaUnbalanced, fixedTokenDelta, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw, marginEngineContract, currentMargin, scaledCurrentMargin, scaledAvailableNotional, scaledFee, scaledMarginRequirement, additionalMargin, averageFixedRate, result, positionMargin, accruedCashflow, positionUft, positionVt, allSwaps, lenSwaps, _i, allSwaps_1, swap, _b, _c;
             var _this = this;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            return __generator(this, function (_d) {
+                switch (_d.label) {
                     case 0:
                         if (!this.signer) {
                             throw new Error('Wallet not connected');
@@ -590,7 +402,7 @@ var AMM = /** @class */ (function () {
                         }
                         return [4 /*yield*/, this.signer.getAddress()];
                     case 1:
-                        signerAddress = _b.sent();
+                        signerAddress = _d.sent();
                         tickUpper = this.closestTickAndFixedRate(fixedLow).closestUsableTick;
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
                         if (fixedRateLimit) {
@@ -609,7 +421,7 @@ var AMM = /** @class */ (function () {
                         factoryContract = typechain_1.Factory__factory.connect(this.factoryAddress, this.signer);
                         return [4 /*yield*/, factoryContract.periphery()];
                     case 2:
-                        peripheryAddress = _b.sent();
+                        peripheryAddress = _d.sent();
                         peripheryContract = typechain_1.Periphery__factory.connect(peripheryAddress, this.signer);
                         swapPeripheryParams = {
                             marginEngine: this.marginEngineAddress,
@@ -622,7 +434,7 @@ var AMM = /** @class */ (function () {
                         };
                         return [4 /*yield*/, peripheryContract.getCurrentTick(this.marginEngineAddress)];
                     case 3:
-                        tickBefore = _b.sent();
+                        tickBefore = _d.sent();
                         tickAfter = 0;
                         marginRequirement = ethers_2.BigNumber.from(0);
                         fee = ethers_2.BigNumber.from(0);
@@ -635,7 +447,6 @@ var AMM = /** @class */ (function () {
                                 fixedTokenDeltaUnbalanced = result[3];
                                 marginRequirement = result[4];
                                 tickAfter = parseInt(result[5]);
-                                fixedTokenDelta = result[0];
                             }, function (error) {
                                 var result = (0, errorHandling_1.decodeInfoPostSwap)(error, _this.environment);
                                 marginRequirement = result.marginRequirement;
@@ -646,7 +457,7 @@ var AMM = /** @class */ (function () {
                                 fixedTokenDelta = result.fixedTokenDelta;
                             })];
                     case 4:
-                        _b.sent();
+                        _d.sent();
                         fixedRateBefore = (0, priceTickConversions_1.tickToFixedRate)(tickBefore);
                         fixedRateAfter = (0, priceTickConversions_1.tickToFixedRate)(tickAfter);
                         fixedRateDelta = fixedRateAfter.subtract(fixedRateBefore);
@@ -654,7 +465,7 @@ var AMM = /** @class */ (function () {
                         marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
                         return [4 /*yield*/, marginEngineContract.callStatic.getPosition(signerAddress, tickLower, tickUpper)];
                     case 5:
-                        currentMargin = (_b.sent()).margin;
+                        currentMargin = (_d.sent()).margin;
                         scaledCurrentMargin = this.descale(currentMargin);
                         scaledAvailableNotional = this.descale(availableNotional);
                         scaledFee = this.descale(fee);
@@ -670,10 +481,39 @@ var AMM = /** @class */ (function () {
                             slippage: fixedRateDeltaRaw < 0 ? -fixedRateDeltaRaw : fixedRateDeltaRaw,
                             averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
                         };
-                        if ((0, lodash_1.isNumber)(expectedApr) && (0, lodash_1.isNumber)(margin)) {
-                            result.expectedApy = this.expectedApy(fixedTokenDelta, availableNotional, margin, expectedApr);
+                        if (!(0, lodash_1.isNumber)(margin)) return [3 /*break*/, 12];
+                        positionMargin = 0;
+                        accruedCashflow = 0;
+                        positionUft = ethers_2.BigNumber.from(0);
+                        positionVt = ethers_2.BigNumber.from(0);
+                        if (!position) return [3 /*break*/, 10];
+                        allSwaps = this.getAllSwaps(position);
+                        lenSwaps = allSwaps.length;
+                        for (_i = 0, allSwaps_1 = allSwaps; _i < allSwaps_1.length; _i++) {
+                            swap = allSwaps_1[_i];
+                            positionUft = positionUft.add(swap.fDelta);
+                            positionVt = positionVt.add(swap.vDelta);
                         }
-                        return [2 /*return*/, result];
+                        positionMargin = scaledCurrentMargin;
+                        _d.label = 6;
+                    case 6:
+                        _d.trys.push([6, 9, , 10]);
+                        if (!(lenSwaps > 0)) return [3 /*break*/, 8];
+                        return [4 /*yield*/, this.getAccruedCashflow(allSwaps, false)];
+                    case 7:
+                        accruedCashflow = _d.sent();
+                        _d.label = 8;
+                    case 8: return [3 /*break*/, 10];
+                    case 9:
+                        _b = _d.sent();
+                        return [3 /*break*/, 10];
+                    case 10:
+                        _c = result;
+                        return [4 /*yield*/, this.expectedApy(positionUft.add(fixedTokenDeltaUnbalanced), positionVt.add(availableNotional), margin + positionMargin + accruedCashflow)];
+                    case 11:
+                        _c.expectedApy = _d.sent();
+                        _d.label = 12;
+                    case 12: return [2 /*return*/, result];
                 }
             });
         });

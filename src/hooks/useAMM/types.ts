@@ -1,4 +1,4 @@
-import { AMMGetInfoPostMintArgs } from "@voltz-protocol/v1-sdk/dist/types/entities";
+import { AMMGetInfoPostMintArgs, Position } from "@voltz-protocol/v1-sdk/dist/types/entities";
 
 export type MintMinimumMarginRequirementPayload = Omit<
   AMMGetInfoPostMintArgs,
@@ -12,7 +12,7 @@ export enum GetInfoType {
 };
 
 export type SwapInfoPayload = {
-  expectedApr?: number;
+  position?: Position;
   margin?: number;
   notional: number;
   type: GetInfoType;
