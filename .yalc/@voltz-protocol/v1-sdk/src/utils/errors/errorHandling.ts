@@ -190,8 +190,12 @@ export const getErrorSignature = (error: any, environment: string): string => {
     }
     case 'LOCALHOST_UI': {
       try {
-        const message = error.data.message as string;
-        const errSig = extractErrorSignature(message);
+        const reason = error.data.data.data.toString() as string;
+        if (reason.startsWith('0x08c379a0')) {
+          return 'Error';
+        }
+        const decodedError = iface.parseError(reason);
+        const errSig = decodedError.signature.split('(')[0];
         return errSig;
       } catch {
         throw new Error('Unrecognized error type');
@@ -243,7 +247,19 @@ export const getReadableErrorMessage = (error: any, environment: string): string
         throw new Error("Cannot get errSig Error in LOCALHOST_SDK. Inspect raw error!");
       }
       case 'LOCALHOST_UI': {
-        throw new Error("Cannot get errSign Error in LOCALHOST_UI. Inspect raw error!");
+        let reason = error.data.data.data.toString() as string;
+        reason = `0x${reason.substring(10)}`;
+        try {
+          const rawErrorMessage = utils.defaultAbiCoder.decode(['string'], reason)[0];
+
+          if (rawErrorMessage in errorMessageMapping) {
+            return errorMessageMapping[rawErrorMessage];
+          }
+
+          return `Unrecognized error (Raw error: ${rawErrorMessage})`;
+        } catch (_) {
+          return 'Unrecognized error';
+        }
       }
       case 'KOVAN': {
         let reason = error.data.toString().replace('Reverted ', '') as string;
@@ -318,15 +334,11 @@ export const decodeInfoPostMint = (error: any, environment: string): RawInfoPost
       }
       case 'LOCALHOST_UI': {
         try {
-          const message = error.data.message as string;
-          const args: string[] = message
-            .split(errSig)[1]
-            .split('(')[1]
-            .split(')')[0]
-            .replaceAll(' ', '')
-            .split(',');
-
-          const result = { marginRequirement: BigNumber.from(args[0]) };
+          const reason = error.data.data.data.toString();
+          const decodingResult = iface.decodeErrorResult(errSig, reason);
+          const result = {
+            marginRequirement: decodingResult.marginRequirement,
+          };
           return result;
         } catch {
           throw new Error('Unrecognized error type');
@@ -408,21 +420,15 @@ export const decodeInfoPostSwap = (error: any, environment: string): RawInfoPost
       }
       case 'LOCALHOST_UI': {
         try {
-          const message = error.data.message as string;
-          const args: string[] = message
-            .split(errSig)[1]
-            .split('(')[1]
-            .split(')')[0]
-            .replaceAll(' ', '')
-            .split(',');
-
+          const reason = error.data.data.data.toString();
+          const decodingResult = iface.decodeErrorResult(errSig, reason);
           const result = {
-            marginRequirement: BigNumber.from(args[0]),
-            tick: parseInt(args[1], 10),
-            fee: BigNumber.from(args[4]),
-            availableNotional: BigNumber.from(args[3]),
-            fixedTokenDelta: BigNumber.from(args[2]),
-            fixedTokenDeltaUnbalanced: BigNumber.from(args[5]),
+            marginRequirement: decodingResult.marginRequirement,
+            tick: decodingResult.tick,
+            fee: decodingResult.cumulativeFeeIncurred,
+            availableNotional: decodingResult.variableTokenDelta,
+            fixedTokenDelta: decodingResult.fixedTokenDelta,
+            fixedTokenDeltaUnbalanced: decodingResult.fixedTokenDeltaUnbalanced,
           };
           return result;
         } catch {

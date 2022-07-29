@@ -156,13 +156,11 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   // Load the swap summary info
   useEffect(() => {
     if (!approvalsNeeded && !isUndefined(notional) && notional !== 0) {
-      const expectedApr = isNumber(ammCtx.variableApy.result) ? ammCtx.variableApy.result * 100 + ratesMoveBy : undefined;
-
       switch (action) {
         case SwapFormActions.SWAP:
         case SwapFormActions.ROLLOVER_SWAP: {
           swapInfo.call({ 
-            expectedApr,
+            position,
             margin,
             notional, 
             type: GetInfoType.NORMAL_SWAP
@@ -173,7 +171,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
         case SwapFormActions.FCM_SWAP:
         case SwapFormActions.ROLLOVER_FCM_SWAP: {
           swapInfo.call({ 
-            expectedApr,
+            position,
             margin,
             notional, 
             type: GetInfoType.FCM_SWAP 
