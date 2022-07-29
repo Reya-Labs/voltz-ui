@@ -154,8 +154,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   useEffect(() => {
     if (!approvalsNeeded && !isUndefined(notional) && notional !== 0) {
       switch (action) {
-        case SwapFormActions.SWAP:
-        case SwapFormActions.ROLLOVER_SWAP: {
+        case SwapFormActions.SWAP: {
           swapInfo.call({ 
             position,
             margin,
@@ -164,11 +163,27 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
           });
           break;
         }
+        case SwapFormActions.ROLLOVER_SWAP: {
+          swapInfo.call({
+            margin,
+            notional, 
+            type: GetInfoType.NORMAL_SWAP
+          });
+          break;
+        }
 
-        case SwapFormActions.FCM_SWAP:
-        case SwapFormActions.ROLLOVER_FCM_SWAP: {
+        case SwapFormActions.FCM_SWAP: {
           swapInfo.call({ 
             position,
+            margin,
+            notional, 
+            type: GetInfoType.FCM_SWAP 
+          });
+          break;
+        }
+
+        case SwapFormActions.ROLLOVER_FCM_SWAP: {
+          swapInfo.call({ 
             margin,
             notional, 
             type: GetInfoType.FCM_SWAP 

@@ -26,7 +26,7 @@ export const ExpectedAPY = ({ expectedAPY }:ExpectedAPYProps) => {
         value: formatNumber(expectedAPY[1][index])
       }));
       setOptions(newOptions);
-      setSelectedOptionValue(newOptions[0].value)
+      setSelectedOptionValue(newOptions[2].value)
     }
   }, expectedAPY);
 

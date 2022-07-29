@@ -775,30 +775,35 @@ class AMM {
       averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
     };
 
-    if (position && isNumber(margin)) {
+    if (isNumber(margin)) {
+      let positionMargin = 0;
       let accruedCashflow = 0;
       let positionUft = BigNumber.from(0);
       let positionVt = BigNumber.from(0);
 
-      try {
-        const allSwaps = this.getAllSwaps(position);
-        const lenSwaps = allSwaps.length;
+      if (position) {
+        try {
+          const allSwaps = this.getAllSwaps(position);
+          const lenSwaps = allSwaps.length;
 
-        if (lenSwaps > 0){
-          accruedCashflow = await this.getAccruedCashflow(allSwaps, false);
+          if (lenSwaps > 0) {
+            accruedCashflow = await this.getAccruedCashflow(allSwaps, false);
 
-          for (let swap of allSwaps) {
-            positionUft = positionUft.add(swap.fDelta);
-            positionVt = positionVt.add(swap.vDelta);
+            for (let swap of allSwaps) {
+              positionUft = positionUft.add(swap.fDelta);
+              positionVt = positionVt.add(swap.vDelta);
+            }
           }
-        }
-        
-      } catch {}
+
+          positionMargin = scaledCurrentMargin;
+
+        } catch { }
+      }
 
       result.expectedApy = await this.expectedApy(
         positionUft.add(fixedTokenDeltaUnbalanced),
         positionVt.add(availableNotional),
-        scaledCurrentMargin + margin + accruedCashflow
+        margin + positionMargin + accruedCashflow
       );
     }
 
@@ -2650,11 +2655,11 @@ class AMM {
       if (rolloverPosition.fixedLow >= rolloverPosition.fixedHigh) {
         throw new Error('Lower Rate must be smaller than Upper Rate');
       }
-  
+
       if (rolloverPosition.fixedLow < MIN_FIXED_RATE) {
         throw new Error('Lower Rate is too low');
       }
-  
+
       if (rolloverPosition.fixedHigh > MAX_FIXED_RATE) {
         throw new Error('Upper Rate is too high');
       }
@@ -2750,11 +2755,11 @@ class AMM {
       if (rolloverPosition.fixedLow >= rolloverPosition.fixedHigh) {
         throw new Error('Lower Rate must be smaller than Upper Rate');
       }
-  
+
       if (rolloverPosition.fixedLow < MIN_FIXED_RATE) {
         throw new Error('Lower Rate is too low');
       }
-  
+
       if (rolloverPosition.fixedHigh > MAX_FIXED_RATE) {
         throw new Error('Upper Rate is too high');
       }

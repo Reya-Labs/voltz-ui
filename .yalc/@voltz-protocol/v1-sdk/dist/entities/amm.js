@@ -380,7 +380,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.getInfoPostSwap = function (_a) {
         var position = _a.position, isFT = _a.isFT, notional = _a.notional, fixedRateLimit = _a.fixedRateLimit, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, margin = _a.margin;
         return __awaiter(this, void 0, void 0, function () {
-            var signerAddress, tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, scaledNotional, factoryContract, peripheryAddress, peripheryContract, swapPeripheryParams, tickBefore, tickAfter, marginRequirement, fee, availableNotional, fixedTokenDeltaUnbalanced, fixedTokenDelta, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw, marginEngineContract, currentMargin, scaledCurrentMargin, scaledAvailableNotional, scaledFee, scaledMarginRequirement, additionalMargin, averageFixedRate, result, accruedCashflow, positionUft, positionVt, allSwaps, lenSwaps, _i, allSwaps_1, swap, _b, _c;
+            var signerAddress, tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, scaledNotional, factoryContract, peripheryAddress, peripheryContract, swapPeripheryParams, tickBefore, tickAfter, marginRequirement, fee, availableNotional, fixedTokenDeltaUnbalanced, fixedTokenDelta, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw, marginEngineContract, currentMargin, scaledCurrentMargin, scaledAvailableNotional, scaledFee, scaledMarginRequirement, additionalMargin, averageFixedRate, result, positionMargin, accruedCashflow, positionUft, positionVt, allSwaps, lenSwaps, _i, allSwaps_1, swap, _b, _c;
             var _this = this;
             return __generator(this, function (_d) {
                 switch (_d.label) {
@@ -481,10 +481,12 @@ var AMM = /** @class */ (function () {
                             slippage: fixedRateDeltaRaw < 0 ? -fixedRateDeltaRaw : fixedRateDeltaRaw,
                             averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
                         };
-                        if (!(position && (0, lodash_1.isNumber)(margin))) return [3 /*break*/, 12];
+                        if (!(0, lodash_1.isNumber)(margin)) return [3 /*break*/, 12];
+                        positionMargin = 0;
                         accruedCashflow = 0;
                         positionUft = ethers_2.BigNumber.from(0);
                         positionVt = ethers_2.BigNumber.from(0);
+                        if (!position) return [3 /*break*/, 10];
                         _d.label = 6;
                     case 6:
                         _d.trys.push([6, 9, , 10]);
@@ -500,13 +502,15 @@ var AMM = /** @class */ (function () {
                             positionVt = positionVt.add(swap.vDelta);
                         }
                         _d.label = 8;
-                    case 8: return [3 /*break*/, 10];
+                    case 8:
+                        positionMargin = scaledCurrentMargin;
+                        return [3 /*break*/, 10];
                     case 9:
                         _b = _d.sent();
                         return [3 /*break*/, 10];
                     case 10:
                         _c = result;
-                        return [4 /*yield*/, this.expectedApy(positionUft.add(fixedTokenDeltaUnbalanced), positionVt.add(availableNotional), scaledCurrentMargin + margin + accruedCashflow)];
+                        return [4 /*yield*/, this.expectedApy(positionUft.add(fixedTokenDeltaUnbalanced), positionVt.add(availableNotional), margin + positionMargin + accruedCashflow)];
                     case 11:
                         _c.expectedApy = _d.sent();
                         _d.label = 12;
