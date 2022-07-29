@@ -100,7 +100,7 @@ var AMM = /** @class */ (function () {
                         return [4 /*yield*/, this.getInstantApy()];
                     case 1:
                         varApy = _a.sent();
-                        samples = [0, varApy / 2, varApy, 2 * varApy, 3 * varApy];
+                        samples = [0, varApy / 2, varApy, 5 * varApy, 10 * varApy];
                         predictedAprs = [];
                         predictedPnls = [];
                         for (_i = 0, samples_1 = samples; _i < samples_1.length; _i++) {
@@ -487,24 +487,23 @@ var AMM = /** @class */ (function () {
                         positionUft = ethers_2.BigNumber.from(0);
                         positionVt = ethers_2.BigNumber.from(0);
                         if (!position) return [3 /*break*/, 10];
-                        _d.label = 6;
-                    case 6:
-                        _d.trys.push([6, 9, , 10]);
                         allSwaps = this.getAllSwaps(position);
                         lenSwaps = allSwaps.length;
-                        if (!(lenSwaps > 0)) return [3 /*break*/, 8];
-                        return [4 /*yield*/, this.getAccruedCashflow(allSwaps, false)];
-                    case 7:
-                        accruedCashflow = _d.sent();
                         for (_i = 0, allSwaps_1 = allSwaps; _i < allSwaps_1.length; _i++) {
                             swap = allSwaps_1[_i];
                             positionUft = positionUft.add(swap.fDelta);
                             positionVt = positionVt.add(swap.vDelta);
                         }
-                        _d.label = 8;
-                    case 8:
                         positionMargin = scaledCurrentMargin;
-                        return [3 /*break*/, 10];
+                        _d.label = 6;
+                    case 6:
+                        _d.trys.push([6, 9, , 10]);
+                        if (!(lenSwaps > 0)) return [3 /*break*/, 8];
+                        return [4 /*yield*/, this.getAccruedCashflow(allSwaps, false)];
+                    case 7:
+                        accruedCashflow = _d.sent();
+                        _d.label = 8;
+                    case 8: return [3 /*break*/, 10];
                     case 9:
                         _b = _d.sent();
                         return [3 /*break*/, 10];

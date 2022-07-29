@@ -354,7 +354,7 @@ class AMM {
     }
 
     const varApy = await this.getInstantApy();
-    const samples = [0, varApy / 2, varApy, 2 * varApy, 3 * varApy];
+    const samples = [0, varApy / 2, varApy, 5 * varApy, 10 * varApy];
 
     const predictedAprs = [];
     const predictedPnls = [];
@@ -782,21 +782,20 @@ class AMM {
       let positionVt = BigNumber.from(0);
 
       if (position) {
-        try {
-          const allSwaps = this.getAllSwaps(position);
-          const lenSwaps = allSwaps.length;
+        const allSwaps = this.getAllSwaps(position);
+        const lenSwaps = allSwaps.length;
 
+        for (let swap of allSwaps) {
+          positionUft = positionUft.add(swap.fDelta);
+          positionVt = positionVt.add(swap.vDelta);
+        }
+
+        positionMargin = scaledCurrentMargin;
+
+        try {
           if (lenSwaps > 0) {
             accruedCashflow = await this.getAccruedCashflow(allSwaps, false);
-
-            for (let swap of allSwaps) {
-              positionUft = positionUft.add(swap.fDelta);
-              positionVt = positionVt.add(swap.vDelta);
-            }
           }
-
-          positionMargin = scaledCurrentMargin;
-
         } catch { }
       }
 
