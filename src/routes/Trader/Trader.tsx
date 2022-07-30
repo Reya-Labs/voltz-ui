@@ -74,7 +74,7 @@ const Trader: React.FunctionComponent = () => {
   };
 
   return (
-    <Page backgroundView={formMode ? 'none' : 'table'}>
+    <Page>
 
       {renderMode === 'pools' && (
         <Box sx={{ width: '100%', maxWidth: '768px', margin: '0 auto' }}>
