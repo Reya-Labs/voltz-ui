@@ -23,6 +23,7 @@ export type Wallet = {
   disconnect: () => void;
   account: string | null;
   name: WalletName | null;
+  provider: ethers.providers.JsonRpcProvider | null;
   signer: ethers.providers.JsonRpcSigner | null;
   balance: Record<string, BigNumber>;
   wallet: GetWalletQuery['wallet'] | null;

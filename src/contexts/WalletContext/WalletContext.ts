@@ -11,6 +11,7 @@ const WalletContext = createContext<Wallet>({
   disconnect: defaultDisconnect,
   account: null,
   name: null,
+  provider: null,
   signer: null,
   balance: {},
   wallet: null,

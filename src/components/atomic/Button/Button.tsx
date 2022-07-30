@@ -89,6 +89,19 @@ const Button: React.FunctionComponent<ButtonProps> = ({
       };
     }
 
+    if (props.variant === 'red2') {
+      return {
+        backgroundColor: 'transparent',
+        color: '#ff4aa9',
+        border: '1px solid #5C0026',
+        borderColor: '#5C0026',
+        '&:hover': {
+          borderColor: '#FF4AA9',
+          backgroundColor: 'transparent',
+        },
+      };
+    }
+
     if (props.variant === 'healthy') {
       return {
         backgroundColor: 'secondary.dark',
@@ -135,10 +148,30 @@ const Button: React.FunctionComponent<ButtonProps> = ({
       };
     }
 
+    if (props.variant === 'dark-link') {
+      return {
+        backgroundColor: selected ? 'secondary.darken030' : 'secondary.dark',
+        color: 'primary.base',
+        '&:hover': {
+          backgroundColor: 'secondary.darken030',
+        },
+      };
+    }
+
     if (props.variant === 'darker') {
       return {
         backgroundColor: selected ? 'secondary.dark' : 'secondary.darken045',
         color: 'secondary.light',
+        '&:hover': {
+          backgroundColor: 'secondary.darken035',
+        },
+      };
+    }
+
+    if (props.variant === 'darker-link') {
+      return {
+        backgroundColor: selected ? 'secondary.dark' : 'secondary.darken045',
+        color: 'primary.base',
         '&:hover': {
           backgroundColor: 'secondary.darken035',
         },
@@ -153,6 +186,42 @@ const Button: React.FunctionComponent<ButtonProps> = ({
           backgroundColor: 'transparent',
           borderColor: 'transparent',
           textDecoration: 'underline',
+        },
+      };
+    }
+
+    if (props.variant === 'rollover1') {
+      return {
+        backgroundColor: 'primary.base',
+        color: 'tertiary.darken035',
+        fontWeight: 'bold',
+        '&:hover': {
+          backgroundColor: 'primary.darken015',
+          boxShadow: 'none'
+        },
+      };
+    }
+
+    if (props.variant === 'rollover2') {
+      return {
+        backgroundColor: 'tertiary.base',
+        color: 'secondary.base',
+        fontWeight: 'bold',
+        '&:hover': {
+          backgroundColor: 'tertiary.darken015',
+          boxShadow: 'none'
+        },
+      };
+    }
+
+    if (props.variant === 'rollover3') {
+      return {
+        backgroundColor: 'secondary.darken050',
+        color: 'primary.base',
+        fontWeight: 'bold',
+        '&:hover': {
+          backgroundColor: 'secondary.darken045',
+          boxShadow: 'none'
         },
       };
     }

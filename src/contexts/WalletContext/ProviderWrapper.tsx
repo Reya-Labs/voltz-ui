@@ -138,6 +138,7 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
     account,
     name,
     signer,
+    provider,
     balance,
     wallet: data && data.wallet ? data.wallet : null,
     loading,

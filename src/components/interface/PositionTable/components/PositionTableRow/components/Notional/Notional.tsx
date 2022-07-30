@@ -9,26 +9,6 @@ export type NotionalProps = {
   token: string;
 };
 
-const buttonStyles: SystemStyleObject<Theme> = { 
-  display: "flex",
-  paddingTop: (theme) => theme.spacing(0),
-  paddingBottom: (theme) => theme.spacing(0),
-  paddingLeft: (theme) => theme.spacing(0),
-  paddingRight: (theme) => theme.spacing(0),
-  borderStyle: "solid",
-  borderColor: "#5C0026",
-  borderRadius: 1,
-  flex: "none",
-  width: "100%",
-  background: "transparent",
-  color: "#FF4AA9",
-
-  '&:hover': {
-    borderColor: '#FF4AA9',
-    background: "transparent",
-  }
-};
-
 const Notional: React.FunctionComponent<NotionalProps> = ({ notional, onEdit, token }) => {
   return (
     <>
@@ -37,7 +17,7 @@ const Notional: React.FunctionComponent<NotionalProps> = ({ notional, onEdit, to
       </Typography>
 
       {onEdit && (
-        <Button sx={buttonStyles} onClick={onEdit}> 
+        <Button sx={{ width: '100%', display: 'flex'}} size='small' variant='red2' onClick={onEdit}> 
           Edit
         </Button>
       )}

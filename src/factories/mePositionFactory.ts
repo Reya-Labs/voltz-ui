@@ -92,7 +92,6 @@ export const MEPositionFactory = (positionData: MEPositionQueryData, signer: Wal
         decimals: decimals as number,
       }),
       factoryAddress: process.env.REACT_APP_FACTORY_ADDRESS || "0x",
-      peripheryAddress: process.env.REACT_APP_PERIPHERY_ADDRESS || "0x",
       marginEngineAddress,
       fcmAddress,
       updatedTimestamp: JSBI.BigInt(ammUpdatedTimestamp),

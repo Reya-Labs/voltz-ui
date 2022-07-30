@@ -33,14 +33,20 @@ export const getFormAction = (mode: SwapFormModes, partialCollateralization: boo
 
   if (agent === Agents.FIXED_TRADER) {
     if(partialCollateralization) {
-      return SwapFormActions.SWAP;
+      return mode === SwapFormModes.ROLLOVER 
+        ? SwapFormActions.ROLLOVER_SWAP 
+        : SwapFormActions.SWAP;
     } else {
-      return SwapFormActions.FCM_SWAP;
+      return mode === SwapFormModes.ROLLOVER 
+        ? SwapFormActions.ROLLOVER_FCM_SWAP 
+        : SwapFormActions.FCM_SWAP;
     }
   } 
   else {
     // if (partialCollateralization) {
-      return SwapFormActions.SWAP;
+      return mode === SwapFormModes.ROLLOVER
+        ? SwapFormActions.ROLLOVER_SWAP 
+        : SwapFormActions.SWAP;
     // }
     // else {
     //   return SwapFormActions.FCM_UNWIND;

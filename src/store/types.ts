@@ -29,10 +29,26 @@ export type Transaction = TransactionUpdate & {
   ammId: string;
   fixedLow?: number;
   fixedHigh?: number;
+  oldFixedLow?: number;
+  oldFixedHigh?: number;
   source?: string;
   notional: number;
   margin: number;
   partialCollateralization?: boolean;
+};
+
+export type RolloverMintTransaction = Transaction & {
+  marginEth?: number;
+  newMarginEngine: string;
+  oldFixedLow: number;
+  oldFixedHigh: number;
+};
+
+export type RolloverSwapTransaction = Transaction & {
+  fixedRateLimit?: number;
+  isFT: boolean;
+  marginEth?: number;
+  newMarginEngine: string;
 };
 
 export type State = {
@@ -43,7 +59,6 @@ export type SerializedAMM = {
   id: string;
   updatedTimestamp: string;
   factoryAddress: string;
-  peripheryAddress: string;
   fcmAddress: string;
   marginEngineAddress: string;
   termStartTimestamp: string;
@@ -70,7 +85,9 @@ export type ActionType =
   | 'settlePosition'  
   | 'add-transaction'
   | 'close-transaction'
-  | 'update-transaction';
+  | 'update-transaction'
+  | 'rolloverMint'
+  | 'rolloverSwap'
 
 export type BaseAction = {
   type: ActionType;
@@ -80,6 +97,20 @@ export type BaseAction = {
 export type TransactionAction = BaseAction & {
   payload: {
     transaction: Transaction;
+    amm: SerializedAMM;
+  };
+};
+
+export type RolloverMintTransactionAction = BaseAction & {
+  payload: {
+    transaction: RolloverMintTransaction;
+    amm: SerializedAMM;
+  };
+};
+
+export type RolloverSwapTransactionAction = BaseAction & {
+  payload: {
+    transaction: RolloverSwapTransaction;
     amm: SerializedAMM;
   };
 };
@@ -126,6 +157,14 @@ export type UpdateTransactionAction = BaseAction & {
   };
 };
 
+export type RolloverMintAction = RolloverMintTransactionAction & {
+  type: 'rolloverMint';
+};
+
+export type RolloverSwapAction = RolloverSwapTransactionAction & {
+  type: 'rolloverSwap';
+};
+
 export type Action =
   | MintAction
   | BurnAction
@@ -135,4 +174,7 @@ export type Action =
   | UpdatePositionMarginAction
   | SettlePositionAction
   | CloseTransactionAction
-  | UpdateTransactionAction;
+  | UpdateTransactionAction
+  | RolloverMintAction
+  | RolloverSwapAction;
+

@@ -1,3 +1,4 @@
+import { Position } from "@voltz-protocol/v1-sdk/dist/types/entities";
 import { isUndefined } from "lodash";
 import AugmentedAMM from "./augmentedAmm";
 
@@ -8,11 +9,14 @@ import AugmentedAMM from "./augmentedAmm";
  * @param underlyingTokenAmount - the amount of underlying tokens to check
  * @param yieldBearingTokenAmount - the amount of yield bearing tokens to check
  */
-export const hasEnoughTokens = async (amm: AugmentedAMM, underlyingTokenAmount: number | undefined, yieldBearingTokenAmount: number | undefined) => {
+export const hasEnoughTokens = async (amm: AugmentedAMM, underlyingTokenAmount: number | undefined, yieldBearingTokenAmount: number | undefined, rolloverPosition?: Position | undefined) => {
   if(!isUndefined(underlyingTokenAmount) && !isUndefined(yieldBearingTokenAmount)) {
     try {
       const results = await Promise.allSettled([
-        amm.hasEnoughUnderlyingTokens(underlyingTokenAmount), 
+        amm.hasEnoughUnderlyingTokens(underlyingTokenAmount, rolloverPosition ? {
+          fixedHigh: rolloverPosition.fixedRateUpper.toNumber(),
+          fixedLow: rolloverPosition.fixedRateLower.toNumber(),
+        } : undefined), 
         amm.hasEnoughYieldBearingTokens(yieldBearingTokenAmount)
       ]);
       if(results[0].status === 'fulfilled' && results[1].status === 'fulfilled') {
@@ -34,10 +38,13 @@ export const hasEnoughTokens = async (amm: AugmentedAMM, underlyingTokenAmount: 
  * @param amm - the amm for the position
  * @param mmount - the amount of underlying tokens to check
  */
-export const hasEnoughUnderlyingTokens = async (amm: AugmentedAMM, amount: number | undefined) => {
+export const hasEnoughUnderlyingTokens = async (amm: AugmentedAMM, amount: number | undefined, rolloverPosition?: Position | undefined) => {
   if(!isUndefined(amount)) {
     try {
-      return await amm.hasEnoughUnderlyingTokens(amount);
+      return await amm.hasEnoughUnderlyingTokens(amount, rolloverPosition ? {
+        fixedHigh: rolloverPosition.fixedRateUpper.toNumber(),
+        fixedLow: rolloverPosition.fixedRateLower.toNumber(),
+      } : undefined);
     } catch(e) {
       // If error, just skip this check
     }

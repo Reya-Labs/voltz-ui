@@ -2,10 +2,10 @@ import React from 'react';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import { SystemStyleObject, Theme } from '@theme';
+import { colors, SystemStyleObject, Theme } from '@theme';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 
-import { AugmentedAMM, data } from '@utilities';
+import { AugmentedAMM, data, findCurrentAmm, findCurrentPosition } from '@utilities';
 import { Panel } from '@components/atomic';
 import { PositionTableFields } from './types';
 import { PositionTableHead, PositionTableRow } from './components';
@@ -13,7 +13,7 @@ import { Agents, AMMProvider } from '@contexts';
 import TransactionList from '../TransactionList/TransactionList';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import { useAgent } from '@hooks';
+import { useAgent, useAMMs } from '@hooks';
 
 export type PositionTableProps = {
   positions: Position[];
@@ -27,17 +27,18 @@ export type PositionTableProps = {
   onSetPage: (page: number) => void;
   size: number | null;
   onSetSize: (size: number) => void;
-  onSelectItem: (datum: Position, mode: 'margin' | 'liquidity') => void;
+  onSelectItem: (datum: Position, mode: 'margin' | 'liquidity' | 'rollover') => void;
   agent: Agents
-  handleSettle: (position: Position) => void;
+  onSettle: (position: Position) => void;
 };
 
 const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   positions,
   positionInformation,
   onSelectItem,
-  handleSettle
+  onSettle
 }) => {
+  const { amms } = useAMMs();
   const { agent } = useAgent();
   
   const commonOverrides: SystemStyleObject<Theme> = {
@@ -70,8 +71,28 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
       marginTop: '0'
     }
   }
+
+  const getMaturedTableBorderStyles = (positionType: number) => {
+    const base = { borderRadius: '8px' };
+    
+    switch(positionType) {
+      case 1: {
+        return { 
+          ...base, 
+          border: `1px solid ${colors.skyBlueCrayola.base}` 
+        };
+      }
+      case 2:
+      case 3: {
+        return { 
+          ...base, 
+          border: `1px solid ${colors.lavenderWeb.base}` 
+        };
+      }
+    }
+  }
   
-  const handleSelectRow = (index: number, mode: 'margin' | 'liquidity') => {
+  const handleSelectRow = (index: number, mode: 'margin' | 'liquidity' | 'rollover') => {
     onSelectItem(positions[index], mode);
   };
 
@@ -81,24 +102,29 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
         <List sx={{ padding: '0', margin: '0' }}>
           {positions.map((pos, index) => {
             const info = positionInformation[pos.id];
+            const rolloverAmm = findCurrentAmm(amms || [], pos);
+            const rolloverAvailable = rolloverAmm && rolloverAmm.id !== pos.amm.id;
 
             return (
               <ListItem sx={listItemStyles} key={pos.id}>
                 <Panel variant='main' sx={{ width: '100%', padding: (theme) => `0 ${theme.spacing(4)}` }}>
-                  
                   <PositionTableHead
                     currencyCode='USD'
                     currencySymbol='$'
-                    fcmBadge={pos.source === 'FCM'}
+                    isFCM={pos.source === 'FCM'}
                     fees={agent === Agents.LIQUIDITY_PROVIDER ? info?.fees : undefined}
                     feesPositive={true}
                     beforeMaturity={info?.beforeMaturity}
                     healthFactor={info?.healthFactor}
+                    isSettled={pos.isSettled}
                     currentFixedRate={(agent === Agents.LIQUIDITY_PROVIDER) ? info?.fixedApr : undefined}
                     positionType={pos.positionType}
+                    onRollover={() => handleSelectRow(index, 'rollover')}
+                    onSettle={() => onSettle(pos)}
+                    rolloverAmm={rolloverAvailable ? rolloverAmm : undefined}
                   />
 
-                  <TableContainer>
+                  <TableContainer sx={(!info?.beforeMaturity && !pos.isSettled) ? getMaturedTableBorderStyles(pos.positionType) : undefined}>
                     <Table size="medium" sx={{ ...commonOverrides }}>
                       <TableBody>
                         <AMMProvider amm={(pos.amm as AugmentedAMM)}>
@@ -108,7 +134,6 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                             key={pos.id}
                             index={index}
                             onSelect={(mode: 'margin' | 'liquidity') => handleSelectRow(index, mode)}
-                            handleSettle={() => handleSettle(pos)}
                           />
                         </AMMProvider>
                       </TableBody>

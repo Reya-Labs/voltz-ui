@@ -4,16 +4,17 @@
 2. Ensure that you have a `.env` file in the `voltz-ui` directory with the following:
 
 ```
-REACT_APP_SUBGRAPH_URL=<<URL OF LOCAL SUBGRAPH>>
 REACT_APP_DEFAULT_PROVIDER_NETWORK=<<RPC ENDPOINT FOR BLOCKCHAIN>
 REACT_APP_REQUIRED_ETHEREUM_NETWORK=<<ETHEREUM_NETWORK_NAME>>
-REACT_APP_WALLETCONNECT_INFURA_ID=<<INFURA ID>>
+REACT_APP_SUBGRAPH_URL=<<URL OF LOCAL SUBGRAPH>>
 REACT_APP_TOS_URL=https://www.voltz.xyz/t-cs
 REACT_APP_TRM_API_KEY=<<TRM_API_KEY>>
+REACT_APP_WALLETCONNECT_INFURA_ID=<<INFURA ID>>
 ```
 
 Optional:
 ```
+REACT_APP_ROLLOVER_VALIDATE_ONLY=Y
 REACT_APP_SKIP_TOS_CHECK=Y
 REACT_APP_SKIP_WALLET_SCREENING=Y
 ```
@@ -30,7 +31,11 @@ REACT_APP_SKIP_WALLET_SCREENING=Y
 
 `REACT_APP_SKIP_WALLET_SCREENING` If this key exists, the app will not check if the wallet is deemed risky (via TRM). It is intended to be used on dev/test environments.
 
-`REACT_APP_WHITELIST` This key contains a subset of pools of all deployed pools. This subset should be visible in the production Voltz front-end. If you want to remove a pool from the production front-end remove it from this key, please. 
+`REACT_APP_WHITELIST` This key contains a subset of all deployed pools as a comma separated list of IDs. This subset should be visible in the production Voltz front-end. If you want to remove a pool from the production front-end remove it from this key, please.
+
+`REACT_APP_ROLLOVER_VALIDATE_ONLY` If this is set, rollover operations will have the `validateOnly` flag set to true. This can be useful for testing / debugging.
+
+
 # Run
 
 1. Run `yarn start`

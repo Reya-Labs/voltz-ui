@@ -5,11 +5,13 @@ import IconLabel from '../IconLabel/IconLabel';
 import MaskedIntegerField from '../MaskedIntegerField/MaskedIntegerField';
 import InputTokenLabel from '../InputTokenLabel/InputTokenLabel';
 import { formatCurrency } from '@utilities';
+import { HealthFactorText } from '@components/composite';
 
 export type MarginAmountProps = {
   balance?: number;
   underlyingTokenName?: string;
   defaultMargin?: number;
+  healthFactor?: number;
   maxMargin?: number;
   margin?: number;
   isAdditional?: boolean;
@@ -22,6 +24,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
   balance,
   underlyingTokenName,
   defaultMargin,
+  healthFactor,
   margin,
   isAdditional,
   isEditing,
@@ -65,7 +68,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
     <MaskedIntegerField
       allowDecimals
       allowNegativeValue={false}
-      decimalsLimit={2}
+      decimalsLimit={4}
       subtext={`BALANCE: ${formattedBalance}`}
       suffix={<InputTokenLabel tokenName={underlyingTokenName || ''} />}
       suffixPadding={90}
@@ -78,6 +81,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
             "Margin in underlying tokens to withdraw from the margin account." }
         />
       }
+      labelRight={!isUndefined(healthFactor) ? <HealthFactorText healthFactor={healthFactor} /> : undefined}
       value={inputValue}
       onChange={handleChange}
       error={!!error}

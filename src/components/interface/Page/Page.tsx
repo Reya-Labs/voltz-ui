@@ -25,7 +25,7 @@ const Page: React.FunctionComponent<PageProps> = ({ backgroundView, children }: 
     <Box sx={{ 
       flexGrow: 1, 
       overflowY: 'auto', 
-      padding: (theme) => `${theme.spacing(10)} ${theme.spacing(2)} ${theme.spacing(2)}`,
+      padding: (theme) => `${theme.spacing(10)} ${theme.spacing(2)} ${theme.spacing(16)}`,
       position: 'relative',
     }}>
       <Neons view={backgroundView} />

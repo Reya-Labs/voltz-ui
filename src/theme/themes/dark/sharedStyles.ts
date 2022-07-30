@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 
 import { SystemStyleObject, Theme } from '@mui/system';
 import colors from '../../colors';
 
 type inputStylesProps = {
+  background?: 'standard' | 'dark';
   disabled?: boolean;
   dynamic?: boolean;
   error?: boolean;
@@ -14,10 +16,10 @@ type inputStylesProps = {
   subtext?: boolean;
 }
 
-export const inputStyles = ({ disabled, dynamic, error, inputSize, suffixPadding = 0, subtext }: inputStylesProps): SystemStyleObject<Theme> => {
+export const inputStyles = ({ background = 'standard', disabled, dynamic, error, inputSize, suffixPadding = 0, subtext }: inputStylesProps): SystemStyleObject<Theme> => {
   const containerStyles:SystemStyleObject<Theme> = {
     '&:hover': {
-      '*, input': {
+      '*, input, .MuiSelect-select': {
         borderColor: (theme) => {
           if (error) return theme.palette.error.darken010;
           if (disabled) return 'transparent';
@@ -36,11 +38,11 @@ export const inputStyles = ({ disabled, dynamic, error, inputSize, suffixPadding
             if (dynamic) return colors.lavenderWeb.darken010;
             return colors.lavenderWeb.darken015
           },
-        }
+        },
       }
     },
     '&:focus-within': {
-      '*, input': {
+      '*, input, .MuiSelect-select': {
         outline: 'none',
         borderColor: (theme) => {
           if (error) return theme.palette.error.darken010;
@@ -48,16 +50,19 @@ export const inputStyles = ({ disabled, dynamic, error, inputSize, suffixPadding
         },
         color: (theme) => {
           if (error) return theme.palette.error.base;
-          return colors.lavenderWeb.base
+          return colors.lavenderWeb.base;
         },
         '::placeholder': {
           color: (theme) => {
             if (error) return theme.palette.error.base;
             return colors.lavenderWeb.base
           }
-        }
+        },
       }
     },
+    'fieldset': {
+      display: 'none'
+    }
   }
 
   const childElementStyles:SystemStyleObject<Theme> = {
@@ -71,7 +76,7 @@ export const inputStyles = ({ disabled, dynamic, error, inputSize, suffixPadding
   }
 
   const inputFieldStyles:SystemStyleObject<Theme> = {
-    backgroundColor: (theme) => theme.palette.secondary.darken040,
+    backgroundColor: (theme) => background === 'standard' ? theme.palette.secondary.darken040 : theme.palette.secondary.darken045,
     borderStyle: 'solid',
     borderWidth: '1px',
     borderRadius: (theme) => theme.spacing(1),
@@ -108,7 +113,7 @@ export const inputStyles = ({ disabled, dynamic, error, inputSize, suffixPadding
   if(inputSize === 'small') {
     return {
       ...containerStyles,
-      '*, input': {
+      '*, input, .MuiSelect-select': {
         ...childElementStyles,
         fontSize: '14px',
         lineHeight: '14px',
@@ -129,7 +134,7 @@ export const inputStyles = ({ disabled, dynamic, error, inputSize, suffixPadding
   if(inputSize === 'medium') {
     return {
       ...containerStyles,
-      '*, input': {
+      '*, input, .MuiSelect-select': {
         ...childElementStyles,
         fontSize: '16px',
         lineHeight: '14px',
@@ -149,7 +154,7 @@ export const inputStyles = ({ disabled, dynamic, error, inputSize, suffixPadding
 
   return {
     ...containerStyles,
-    '*, input': {
+    '*, input, .MuiSelect-select': {
       ...childElementStyles,
       fontSize: '24px',
       lineHeight: '1.2',

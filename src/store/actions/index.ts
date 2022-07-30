@@ -7,3 +7,5 @@ export { default as updatePositionMarginAction } from './updatePositionMarginAct
 export { default as settlePositionAction } from './settlePositionAction';
 export { default as fcmSwapAction } from './fcmSwapAction';
 export { default as fcmUnwindAction } from './fcmUnwindAction';
+export { default as rolloverMintAction } from './rolloverMintAction';
+export { default as rolloverSwapAction } from './rolloverSwapAction';

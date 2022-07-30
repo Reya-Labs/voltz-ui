@@ -117,6 +117,9 @@ const SubmitControls = ({
       case MintBurnFormSubmitButtonStates.REMOVE_LIQUIDITY: {
         return 'Burn Liquidity';
       }
+      case MintBurnFormSubmitButtonStates.SETTLE_AND_LP: {
+        return 'Settle and LP';
+      }
       case MintBurnFormSubmitButtonStates.WITHDRAW_MARGIN: {
         return 'Withdraw Margin';
       }
@@ -131,7 +134,7 @@ const SubmitControls = ({
             !isFormValid || 
             tokenApprovals.checkingApprovals || 
             tokenApprovals.approving || 
-            (mode === MintBurnFormModes.NEW_POSITION && (!approvalsNeeded && isFormValid && !isTradeVerified))
+            ((mode === MintBurnFormModes.NEW_POSITION || mode === MintBurnFormModes.ROLLOVER) && (!approvalsNeeded && isFormValid && !isTradeVerified))
           }
           size="large" 
           onClick={onSubmit} 

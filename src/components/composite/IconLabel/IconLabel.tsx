@@ -40,7 +40,7 @@ const IconLabel: React.FunctionComponent<IconLabelProps> = ({ label, icon, info,
         aria-haspopup="true"
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}
-        sx={{ height: 10, width: 10, position: 'relative', top: 1, left: 10, display: _display, ...iconSx }}
+        sx={{ height: 10, width: 10, position: 'relative', top: 1, marginLeft: '10px', display: _display, ...iconSx }}
       />
       {info && (
         <Popover

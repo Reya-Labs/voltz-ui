@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
-import { Agents, GetInfoType } from "@contexts";
+import { Agents, useAMMContext, usePositionContext } from "@contexts";
 import { SwapFormActions, SwapFormModes } from "@components/interface";
 import { AugmentedAMM } from "@utilities";
 import { isNumber, isUndefined } from "lodash";
 import { hasEnoughTokens, hasEnoughUnderlyingTokens, lessThan } from "@utilities";
-import { useAgent, useAMMContext, useBalance, useMinRequiredMargin, useTokenApproval } from "@hooks";
-import { InfoPostSwap, Position } from "@voltz-protocol/v1-sdk";
+import { GetInfoType, useAgent, useBalance, useMinRequiredMargin, useTokenApproval } from "@hooks";
+import { InfoPostSwap } from "@voltz-protocol/v1-sdk";
 import * as s from "./services";
 import { BigNumber } from "ethers";
 
@@ -22,6 +22,7 @@ export enum SwapFormSubmitButtonStates {
   APPROVING = 'APPROVING',
   CHECKING = 'CHECKING',
   INITIALISING = 'INITIALISING',
+  ROLLOVER_TRADE = 'ROLLOVER_TRADE',
   TRADE_FIXED = 'TRADE_FIXED',
   TRADE_VARIABLE = 'TRADE_VARIABLE',
   UPDATE = 'UPDATE',
@@ -51,15 +52,12 @@ export type SwapFormState = {
 };
 
 export type SwapFormProviderProps = {
-  amm: AugmentedAMM;
   mode?: SwapFormModes;
-  position?: Position;
   defaultValues?: Partial<SwapFormState>;
 }
 
 export type SwapFormContext = {
   action: SwapFormActions;
-  amm: AugmentedAMM;
   approvalsNeeded: boolean;
   balance?: number;
   errors: Record<string, string>;
@@ -71,7 +69,6 @@ export type SwapFormContext = {
   isValid: boolean;
   minRequiredMargin?: number;
   mode: SwapFormModes;
-  position?: Position;
   setLeverage: (value: SwapFormState['leverage']) => void;
   setMargin: (value: SwapFormState['margin']) => void;
   setMarginAction: (value: SwapFormState['marginAction']) => void;
@@ -89,32 +86,38 @@ export type SwapFormContext = {
 };
 
 const SwapFormCtx = createContext<SwapFormContext>({} as unknown as SwapFormContext);
+SwapFormCtx.displayName = 'SwapFormContext';
 
 export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = ({ 
-  amm, 
   children, 
   defaultValues = {}, 
   mode = SwapFormModes.NEW_POSITION,
-  position
 }) => {
+  const { amm: poolAmm } = useAMMContext();
+  const { amm: positionAmm, position } = usePositionContext();
+
   const defaultLeverage = defaultValues.leverage ?? 10;
   const defaultMargin = defaultValues.margin ?? undefined;
   const defaultMarginAction = defaultValues.marginAction || SwapFormMarginAction.ADD;
-  const defaultNotional = defaultValues.notional ?? undefined;
-  const defaultPartialCollateralization = !isUndefined(defaultValues.partialCollateralization) 
-    ? defaultValues.partialCollateralization 
-    : true;
+  const defaultNotional = (mode === SwapFormModes.ROLLOVER && position) 
+    ? Math.abs(position.effectiveVariableTokenBalance)
+    : defaultValues.notional ?? undefined;
+  const defaultPartialCollateralization = position
+    ? position.source !== 'FCM'
+    : defaultValues.partialCollateralization ?? true
 
-  const { agent } = useAgent();
-  const balance = useBalance(amm);
+  const ammCtx = useAMMContext();
+  const { agent, onChangeAgent } = useAgent();
+  const balance = useBalance(positionAmm || poolAmm, mode === SwapFormModes.ROLLOVER ? position : undefined);
   const [leverage, setLeverage] = useState<SwapFormState['leverage']>(defaultLeverage);
   const [margin, setMargin] = useState<SwapFormState['margin']>(defaultMargin);
   const [marginAction, setMarginAction] = useState<SwapFormMarginAction>(defaultMarginAction);
-  const minRequiredMargin = useMinRequiredMargin(amm);
+  const minRequiredMargin = useMinRequiredMargin(poolAmm);
   const [notional, setNotional] = useState<SwapFormState['notional']>(defaultNotional);
   const [partialCollateralization, setPartialCollateralization] = useState<boolean>(defaultPartialCollateralization);
   const { swapInfo } = useAMMContext();
-  const tokenApprovals = useTokenApproval(amm);
+  const [cachedSwapInfoMinRequiredMargin, setCachedSwapInfoMinRequiredMargin] = useState<number>();
+  const tokenApprovals = useTokenApproval(poolAmm);
 
   const [errors, setErrors] = useState<SwapFormContext['errors']>({});
   const [isValid, setIsValid] = useState<boolean>(false);
@@ -122,23 +125,69 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
 
   const action = s.getFormAction(mode, partialCollateralization, agent);
   const isAddingMargin = mode === SwapFormModes.EDIT_MARGIN && marginAction === SwapFormMarginAction.ADD;
-  const isFCMAction = action === SwapFormActions.FCM_SWAP || action === SwapFormActions.FCM_UNWIND;
+  const isFCMAction = action === SwapFormActions.FCM_SWAP || action === SwapFormActions.FCM_UNWIND || action === SwapFormActions.ROLLOVER_FCM_SWAP;
   const isRemovingMargin = mode === SwapFormModes.EDIT_MARGIN && marginAction === SwapFormMarginAction.REMOVE;
   const isTradeVerified = !!swapInfo.result && !swapInfo.loading && !swapInfo.errorMessage;
   
   const approvalsNeeded = s.approvalsNeeded(action, tokenApprovals, isRemovingMargin)
+
+  // Set the correct agent type for the given position
+  useEffect(() => {
+    if(position) {
+      onChangeAgent(position.positionType === 1 ? Agents.FIXED_TRADER : Agents.VARIABLE_TRADER);
+    }
+  }, [position])
+
+  // Load the fixed APR
+  useEffect(() => {
+    ammCtx.variableApy.call();
+  }, [])
+
+  // cache the minRequiredMargin from swapInfo
+  useEffect(() => {
+    if(isNumber(swapInfo.result?.marginRequirement)) {
+      setCachedSwapInfoMinRequiredMargin(swapInfo.result?.marginRequirement);
+    }
+  }, [swapInfo.result?.marginRequirement])
 
   // Load the swap summary info
   useEffect(() => {
     if (!approvalsNeeded && !isUndefined(notional) && notional !== 0) {
       switch (action) {
         case SwapFormActions.SWAP: {
-          swapInfo.call({ notional, type: GetInfoType.NORMAL_SWAP});
+          swapInfo.call({ 
+            position,
+            margin,
+            notional, 
+            type: GetInfoType.NORMAL_SWAP
+          });
+          break;
+        }
+        case SwapFormActions.ROLLOVER_SWAP: {
+          swapInfo.call({
+            margin,
+            notional, 
+            type: GetInfoType.NORMAL_SWAP
+          });
           break;
         }
 
         case SwapFormActions.FCM_SWAP: {
-          swapInfo.call({ notional, type: GetInfoType.FCM_SWAP });
+          swapInfo.call({ 
+            position,
+            margin,
+            notional, 
+            type: GetInfoType.FCM_SWAP 
+          });
+          break;
+        }
+
+        case SwapFormActions.ROLLOVER_FCM_SWAP: {
+          swapInfo.call({ 
+            margin,
+            notional, 
+            type: GetInfoType.FCM_SWAP 
+          });
           break;
         }
 
@@ -148,17 +197,26 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
         // }
       } 
     }
-  }, [swapInfo.call, notional, agent, approvalsNeeded, partialCollateralization, marginAction]);
+  }, [
+    swapInfo.call,
+    notional,
+    agent,
+    approvalsNeeded,
+    partialCollateralization,
+    marginAction,
+    ammCtx.variableApy.result,
+    margin
+  ]);
 
   // set the leverage back to 50% if variables change
   useEffect(() => {
-    const minMargin = swapInfo.result?.marginRequirement;
+    const minMargin = cachedSwapInfoMinRequiredMargin;
     if(isNumber(notional) && isNumber(minMargin)) {
       const cappedMinMargin = Math.max(minMargin, 0.1);
       const newLeverage = parseFloat(((notional / cappedMinMargin) / 2).toFixed(2));
       setLeverage(newLeverage);
     }
-  }, [notional, swapInfo.result?.marginRequirement]);
+  }, [notional, cachedSwapInfoMinRequiredMargin]);
 
   // Validate the form after values change
   useEffect(() => {
@@ -262,6 +320,10 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
         }
       }
     }
+
+    if (mode === SwapFormModes.ROLLOVER) {
+      return SwapFormSubmitButtonStates.ROLLOVER_TRADE;
+    }
     
     if (mode === SwapFormModes.EDIT_MARGIN) {
       return SwapFormSubmitButtonStates.UPDATE;
@@ -345,19 +407,19 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
 
     // Check the user has enough balance
     if(action === SwapFormActions.SWAP || action === SwapFormActions.UPDATE) {
-      if(margin !== 0 && await hasEnoughUnderlyingTokens(amm, margin) === false) {
+      if(margin !== 0 && await hasEnoughUnderlyingTokens(positionAmm || poolAmm, margin, mode === SwapFormModes.ROLLOVER ? position : undefined) === false) {
         valid = false;
         addError(err, 'margin', 'Insufficient funds');
       }
     }
     else {
       if(action === SwapFormActions.FCM_SWAP) {
-        if(notional !== 0 && await hasEnoughTokens(amm, swapInfo.result?.fee, notional) === false) {
+        if(notional !== 0 && await hasEnoughTokens(positionAmm || poolAmm, swapInfo.result?.fee, notional, mode === SwapFormModes.ROLLOVER ? position : undefined) === false) {
           valid = false;
           addError(err, 'notional', 'Insufficient funds');
         }
       } else {
-        if(await hasEnoughUnderlyingTokens(amm, swapInfo.result?.fee) === false) {
+        if(await hasEnoughUnderlyingTokens(positionAmm || poolAmm, swapInfo.result?.fee, mode === SwapFormModes.ROLLOVER ? position : undefined) === false) {
           valid = false;
           addError(err, 'notional', 'Insufficient funds');
         }
@@ -388,7 +450,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
 
     // check user has sufficient funds
     if(marginAction === SwapFormMarginAction.ADD) {
-      if(margin !== 0 && await hasEnoughUnderlyingTokens(amm, margin) === false) {
+      if(margin !== 0 && await hasEnoughUnderlyingTokens(positionAmm || poolAmm, margin) === false) {
         valid = false;
         addError(err, 'margin', 'Insufficient funds');
       }
@@ -397,7 +459,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     // Check that the input margin is >= minimum required margin if removing margin
     if(position && !isUndefined(minRequiredMargin) && marginAction === SwapFormMarginAction.REMOVE) {
       if(!isUndefined(margin) && margin !== 0) {
-        const originalMargin = amm.descale(BigNumber.from(position.margin.toString()));
+        const originalMargin = (positionAmm as AugmentedAMM).descale(BigNumber.from(position.margin.toString()));
         const remainingMargin = originalMargin - margin;
 
         if(remainingMargin < minRequiredMargin) {
@@ -414,7 +476,6 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
 
   const value = {
     action,
-    amm,
     approvalsNeeded,
     balance,
     errors,
@@ -426,7 +487,6 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     isValid,
     minRequiredMargin,
     mode,
-    position,
     setLeverage: updateLeverage,
     setMargin: updateMargin,
     setMarginAction: updateMarginAction,

@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import { useLocation } from 'react-router-dom';
 import { Position } from '@voltz-protocol/v1-sdk';
 
-import { AugmentedAMM, setPageTitle } from '@utilities';
-import { Agents, AMMProvider, SwapFormProvider } from '@contexts';
+import { AugmentedAMM, findCurrentAmm, findCurrentPosition, setPageTitle } from '@utilities';
+import { Agents, AMMProvider, PositionProvider, SwapFormProvider } from '@contexts';
 import { PageTitleDesc } from '@components/composite';
-import { Panel } from '@components/atomic';
-import { useAgent } from '@hooks';
+import { useAgent, useAMMs, usePositions } from '@hooks';
 import { Page, SwapFormModes } from '@components/interface';
 import ConnectedAMMTable from '../../components/containers/ConnectedAMMTable/ConnectedAMMTable';
 import ConnectedPositionTable from '../../components/containers/ConnectedPositionTable/ConnectedPositionTable';
@@ -19,17 +18,17 @@ const Trader: React.FunctionComponent = () => {
   const [amm, setAMM] = useState<AugmentedAMM>();
   const [position, setPosition] = useState<Position>();
 
+  const { amms } = useAMMs();
   const { onChangeAgent } = useAgent();
   const { pathname, key } = useLocation();
+  const { positions } = usePositions();
 
   const pathnameWithoutPrefix = pathname.slice(1);
-  const effectiveAmm = position?.amm as AugmentedAMM || amm;
   const renderMode = getRenderMode(formMode, pathnameWithoutPrefix);
 
   useEffect(() => {
     setFormMode(undefined);
     setAMM(undefined);
-    setPosition(undefined);
     onChangeAgent(Agents.FIXED_TRADER);
   }, [setFormMode, setAMM, pathnameWithoutPrefix, onChangeAgent]);
 
@@ -54,15 +53,19 @@ const Trader: React.FunctionComponent = () => {
     }
   }, [setPageTitle, renderMode, position])
 
-  const handleSelectAmm = (selected: AugmentedAMM) => {
+  const handleSelectAmm = (selectedAMM: AugmentedAMM) => {
     setFormMode(SwapFormModes.NEW_POSITION);
-    setAMM(selected);
-    setPosition(undefined);
+    setAMM(selectedAMM);
+    setPosition(findCurrentPosition(positions || [], selectedAMM, [1,2]));
   };
-  const handleSelectPosition = (selected: Position) => {
-    setFormMode(SwapFormModes.EDIT_MARGIN)
-    setAMM(undefined);
-    setPosition(selected);
+  const handleSelectPosition = (selectedPosition: Position, mode: 'margin' | 'liquidity' | 'rollover') => {
+    // Please note that you will never get 'liquidity' mode here as that is only for LP positions.
+    let newMode = SwapFormModes.EDIT_MARGIN;
+    if(mode === 'rollover') newMode = SwapFormModes.ROLLOVER;
+
+    setFormMode(newMode);
+    setAMM(mode === 'rollover' ? findCurrentAmm(amms || [], selectedPosition) : selectedPosition.amm as AugmentedAMM);
+    setPosition(selectedPosition);
   };
   const handleReset = () => {
     setFormMode(undefined)
@@ -71,7 +74,7 @@ const Trader: React.FunctionComponent = () => {
   };
 
   return (
-    <Page backgroundView={formMode ? 'form' : 'table'}>
+    <Page backgroundView={formMode ? 'none' : 'table'}>
 
       {renderMode === 'pools' && (
         <Box sx={{ width: '100%', maxWidth: '768px', margin: '0 auto' }}>
@@ -86,18 +89,23 @@ const Trader: React.FunctionComponent = () => {
       )}
 
       {renderMode === 'portfolio' && (
-        <Panel variant='dark' sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
-          <ConnectedPositionTable onSelectItem={handleSelectPosition} agent={Agents.FIXED_TRADER}/>
-        </Panel>
+        <ConnectedPositionTable 
+          onSelectItem={handleSelectPosition} 
+          agent={Agents.FIXED_TRADER}
+        />
       )}
 
       {renderMode === 'form' && (
         <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
-          <AMMProvider amm={effectiveAmm}>
-            <SwapFormProvider amm={effectiveAmm} mode={formMode} position={position}>
-              <ConnectedSwapForm onReset={handleReset} />
-            </SwapFormProvider>
-          </AMMProvider>
+          {amm && (
+            <AMMProvider amm={amm}>
+              <PositionProvider position={position}>
+                <SwapFormProvider mode={formMode}>
+                  <ConnectedSwapForm onReset={handleReset} />
+                </SwapFormProvider>
+              </PositionProvider>
+            </AMMProvider>
+          )}
         </Box>
       )}
     </Page>

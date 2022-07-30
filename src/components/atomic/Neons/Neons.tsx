@@ -8,11 +8,13 @@ import { Agents } from '@contexts';
 import { useAgent } from '@hooks';
 
 export type NeonsProps = {
-  view?: 'form' | 'table';
+  view?: 'form' | 'table' | 'none';
 };
 
 const Neons: React.FunctionComponent<NeonsProps> = ({ view = 'table' }) => {
   const { agent } = useAgent();
+
+  if (view === 'none') return null;
 
   if (view === 'table') return (
     <>

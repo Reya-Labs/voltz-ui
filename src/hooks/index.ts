@@ -1,7 +1,8 @@
 export { default as useAgent } from './useAgent';
 export { default as useBalance } from './useBalance';
 export { default as useAgentWithOverride } from './useAgentWithOverride';
-export { default as useAMMContext } from './useAMMContext';
+export * from './useAMM/useAMM';
+export * from './useAMM/types';
 export { default as useAMMs } from './useAMMs';
 export { default as useAsyncFunction } from './useAsyncFunction';
 export type { UseAsyncFunctionResult } from './useAsyncFunction';

@@ -1,22 +1,25 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import { colors, SystemStyleObject, Theme } from '@theme';
-import { formatCurrency, formatNumber } from '@utilities';
-import PositionBadge from '../PositionBadge';
-import { Typography } from '@components/atomic';
+import { AugmentedAMM, formatCurrency, formatNumber } from '@utilities';
+import { Button, getPositionBadgeVariant, PositionBadge, Typography } from '@components/atomic';
+import { BulletLabel, getHealthTextColor, HealthFactorText } from '@components/composite';
 import { isUndefined } from 'lodash';
-import CircleIcon from '@mui/icons-material/Circle';
 
 export type PositionTableHeadProps = {
   currencyCode?: string;
   currencySymbol?: string;
   currentFixedRate?: number;
-  fcmBadge?: boolean;
+  isFCM?: boolean;
   fees?: number;
   feesPositive?: boolean;
+  isSettled: boolean;
   positionType: number;
   healthFactor?: number;
   beforeMaturity: boolean;
+  onRollover: () => void;
+  onSettle: () => void;
+  rolloverAmm?: AugmentedAMM;
 };
 
 const containerStyles: SystemStyleObject<Theme> = { 
@@ -38,28 +41,17 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
   currencyCode = '',
   currencySymbol = '',
   currentFixedRate, 
-  fcmBadge = false,
+  isFCM = false,
   fees, 
   feesPositive = true,
+  isSettled,
   positionType,
   healthFactor,
-  beforeMaturity
+  beforeMaturity,
+  onRollover,
+  onSettle,
+  rolloverAmm
 }) => {
-  const getPositionBadgeVariant = () => {
-    switch(positionType) {
-      case 1:
-        return 'FT';
-      case 2:
-        return 'VT';
-      case 3:
-        return 'LP';
-    }
-  };
-
-  const getHealthTextColor = () => {
-    return (healthFactor === 1) ? '#F61067' : (healthFactor === 2 ? '#F1D302' : '#00d395');
-  };
-
   const getTextColor = (positive: boolean) => {
     return positive ? colors.vzCustomGreen1 : colors.vzCustomRed1;
   }
@@ -67,9 +59,9 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
   return (
     <Box sx={containerStyles}>
       <Box sx={{ display: 'flex' }}>
-        <PositionBadge variant={getPositionBadgeVariant()} />
+        <PositionBadge variant={getPositionBadgeVariant(positionType)} />
 
-        {fcmBadge && (
+        {isFCM && (
           <PositionBadge variant='FC' sx={{ marginLeft: (theme) => theme.spacing(2) }} />
         )}
 
@@ -92,36 +84,52 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
       <Box sx={{ display: 'flex' }}>
         {beforeMaturity && !isUndefined(currentFixedRate) && !isUndefined(healthFactor) && (
           <Box sx={{ padding: (theme) => `${theme.spacing(1)} ${theme.spacing(2)}`, marginLeft: (theme) => theme.spacing(2) }}>
-            <Typography variant='body2' sx={{ ...labelStyles, color: getHealthTextColor() }}>
-              <CircleIcon 
-                sx={{ 
-                  width: 4, 
-                  height: 14, 
-                  borderRadius: '16px',
-                  marginRight: (theme) => theme.spacing(2), 
-                  color: getHealthTextColor(),
-                }} 
-              />
-              Current fixed rate: {formatNumber(currentFixedRate)}%
-            </Typography>
+            <BulletLabel 
+              sx={{ color: getHealthTextColor(healthFactor) }} 
+              text={<>Current fixed rate: {formatNumber(currentFixedRate)}%</>}
+            />
           </Box>
         )}
 
         {beforeMaturity && isUndefined(currentFixedRate) && !isUndefined(healthFactor) && (
           <Box sx={{ padding: (theme) => `${theme.spacing(1)} ${theme.spacing(2)}`, marginLeft: (theme) => theme.spacing(2) }}>
-            <Typography variant='body2' sx={{ ...labelStyles, color: getHealthTextColor() }}>
-              <CircleIcon 
-                sx={{ 
-                  width: 4, 
-                  height: 14, 
-                  borderRadius: '16px',
-                  marginRight: (theme) => theme.spacing(2), 
-                  color: getHealthTextColor(),
-                }} 
-              />
-              {(healthFactor === 1) ? 'DANGER' : (healthFactor === 2 ? 'WARNING' : 'HEALTHY')}
-            </Typography>
+            <BulletLabel 
+              sx={{ color: getHealthTextColor(healthFactor) }} 
+              text={<HealthFactorText healthFactor={healthFactor} />} 
+            />
           </Box>
+        )}
+
+        {(!beforeMaturity && !isSettled) && (
+          <>
+            <Button 
+              variant={positionType === 1 ? 'darker-link' : 'darker'}
+              size='xs'
+              onClick={onSettle}
+            >
+              Settle
+            </Button>
+            {(rolloverAmm && !isFCM) && (
+              <Button 
+                variant={positionType === 1 ? 'rollover1' : positionType === 2 ? 'rollover2' : 'rollover3'}
+                size='xs'
+                sx={{ marginLeft: (theme) => theme.spacing(4) }}
+                onClick={onRollover}
+              >
+                Rollover
+              </Button>
+            )}
+          </>
+        )}
+
+        {(!beforeMaturity && isSettled) && (
+          <Button 
+            variant={positionType === 1 ? 'darker-link' : 'darker'}
+            size='xs'
+            disabled
+          >
+            Settled
+          </Button>
         )}
       </Box>
     </Box>

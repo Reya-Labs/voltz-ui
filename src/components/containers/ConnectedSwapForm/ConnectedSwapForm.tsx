@@ -4,9 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { routes } from '@routes';
 import { actions, selectors } from '@store';
 import { useAgent, useDispatch, useSelector } from '@hooks';
-import { SwapForm, PendingTransaction, SwapFormActions, SwapFormModes } from '@components/interface';
-import { Agents, useSwapFormContext } from '@contexts';
+import { SwapCurrentPosition, SwapForm, SwapInfo, PendingTransaction, SwapFormActions, FormPanel, SwapFormModes } from '@components/interface';
+import { Agents, useAMMContext, usePositionContext, useSwapFormContext } from '@contexts';
 import { BigNumber } from 'ethers';
+import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
+import { AugmentedAMM } from '@utilities';
 
 export type ConnectedSwapFormProps = {
   onReset: () => void;
@@ -14,32 +16,47 @@ export type ConnectedSwapFormProps = {
 
 const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ onReset }) => {
   const { agent } = useAgent();
+  const { amm: targetAmm } = useAMMContext();
+  const { amm: positionAmm } = usePositionContext();
   const dispatch = useDispatch();
   const form = useSwapFormContext();
   const navigate = useNavigate();
+  const { position } = usePositionContext();
 
-  const { amm, mode, position } = form;
+  const { mode } = form;
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId); // contains a failureMessage attribute that will contain whatever came out from the sdk
 
   const getReduxAction = () => {
     const transaction = { 
       agent,
-      ammId: amm.id,
+      ammId: targetAmm.id,
       margin: Math.abs(form.state.margin as number) * (form.isRemovingMargin ? -1 : 1),
       notional: form.state.notional as number,
       partialCollateralization: agent === Agents.FIXED_TRADER ? form.state.partialCollateralization : true
     };
+
+    if(form.mode === SwapFormModes.ROLLOVER) {
+      return actions.rolloverSwapAction(positionAmm as AugmentedAMM, { 
+        ...transaction,
+        ammId: (positionAmm as AugmentedAMM).id,
+        isFT: agent === Agents.FIXED_TRADER,
+        fixedRateLimit: undefined,
+        margin: targetAmm.isETH ? 0 : Math.abs(form.state.margin as number),
+        marginEth: targetAmm.isETH ? Math.abs(form.state.margin as number) : undefined,
+        newMarginEngine: targetAmm.marginEngineAddress,
+      });
+    }
   
     switch(form.action) {
       case SwapFormActions.UPDATE:
-        return actions.updatePositionMarginAction(amm, transaction);
+        return actions.updatePositionMarginAction(targetAmm, transaction);
       case SwapFormActions.SWAP:
-        return actions.swapAction(amm, transaction);
+        return actions.swapAction(targetAmm, transaction);
       case SwapFormActions.FCM_SWAP:
-        return actions.fcmSwapAction(amm, transaction);
+        return actions.fcmSwapAction(targetAmm, transaction);
       // case SwapFormActions.FCM_UNWIND:
-      //   return actions.fcmUnwindAction(amm, transaction); 
+      //   return actions.fcmUnwindAction(targetAmm, transaction); 
     }
   }
 
@@ -83,7 +100,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
     }
   };
 
-  if (!amm) {
+  if (!targetAmm) {
     return null;
   }
   
@@ -93,7 +110,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
       case SwapFormActions.UPDATE: {
         return (
           <PendingTransaction
-            amm={amm}
+            amm={targetAmm}
             isEditingMargin={true}
             transactionId={transactionId}
             onComplete={handleComplete}
@@ -103,11 +120,13 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         );
       }
 
-      case SwapFormActions.SWAP: {
+      case SwapFormActions.SWAP:
+      case SwapFormActions.ROLLOVER_SWAP: {
         return (
           <PendingTransaction
-            amm={amm}
+            amm={targetAmm}
             isEditingMargin={false}
+            isRollover={form.mode === SwapFormModes.ROLLOVER}
             transactionId={transactionId}
             onComplete={handleComplete}
             notional={form.swapInfo.data?.availableNotional}
@@ -117,11 +136,13 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         );
       }
 
-      case SwapFormActions.FCM_SWAP: {
+      case SwapFormActions.FCM_SWAP:
+      case SwapFormActions.ROLLOVER_FCM_SWAP: {
         return (
           <PendingTransaction
-            amm={amm}
+            amm={targetAmm}
             isEditingMargin={false}
+            isRollover={form.mode === SwapFormModes.ROLLOVER}
             transactionId={transactionId}
             onComplete={handleComplete}
             isFCMSwap={true}
@@ -135,7 +156,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
       case SwapFormActions.FCM_UNWIND: {
         return (
           <PendingTransaction
-            amm={amm}
+            amm={targetAmm}
             isEditingMargin={false}
             transactionId={transactionId}
             onComplete={handleComplete}
@@ -149,37 +170,53 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
   }
 
   return (
-    <SwapForm
-      approvalsNeeded={form.approvalsNeeded}
-      balance={form.balance}
-      endDate={amm.endDateTime}
-      errors={form.errors}
-      formAction={form.action} 
-      formState={form.state}
-      hintState={form.hintState}
-      isFCMAction={form.isFCMAction}
-      isFCMAvailable={amm.isFCM}
-      isFormValid={form.isValid}
-      isTradeVerified={form.isTradeVerified}
-      minRequiredMargin={form.minRequiredMargin}
-      mode={mode}
-      onCancel={onReset}
-      onChangeLeverage={form.setLeverage}
-      onChangeMargin={form.setMargin}
-      onChangeMarginAction={form.setMarginAction}
-      onChangeNotional={form.setNotional}
-      onChangePartialCollateralization={form.setPartialCollateralization}
-      onSubmit={handleSubmit}
-      positionMargin={position?.margin ? amm.descale(BigNumber.from(position.margin.toString())) : undefined}
-      protocol={amm.protocol}
-      startDate={amm.startDateTime}
-      swapInfo={form.swapInfo.data}
-      swapInfoLoading={form.swapInfo.loading}
-      submitButtonState={form.submitButtonState}
-      tokenApprovals={form.tokenApprovals}
-      tradeInfoErrorMessage={form.swapInfo.errorMessage}
-      underlyingTokenName={amm.underlyingToken.name}
-    />
+    <>
+      {position 
+        ? <SwapCurrentPosition formMode={form.mode} onPortfolio={onReset} position={position} />
+        : <FormPanel noBackground />
+      }
+      <SwapForm
+        approvalsNeeded={form.approvalsNeeded}
+        balance={form.balance}
+        endDate={targetAmm.endDateTime}
+        errors={form.errors}
+        formAction={form.action} 
+        formState={form.state}
+        hintState={form.hintState}
+        isFCMAction={form.isFCMAction}
+        // isFCMAvailable={targetAmm.isFCM}
+        isFCMAvailable={false}
+        isFormValid={form.isValid}
+        isTradeVerified={form.isTradeVerified}
+        mode={mode}
+        onCancel={onReset}
+        onChangeLeverage={form.setLeverage}
+        onChangeMargin={form.setMargin}
+        onChangeMarginAction={form.setMarginAction}
+        onChangeNotional={form.setNotional}
+        onChangePartialCollateralization={form.setPartialCollateralization}
+        onSubmit={handleSubmit}
+        protocol={targetAmm.protocol}
+        startDate={targetAmm.startDateTime}
+        swapInfo={form.swapInfo.data}
+        swapInfoLoading={form.swapInfo.loading}
+        submitButtonState={form.submitButtonState}
+        tokenApprovals={form.tokenApprovals}
+        tradeInfoErrorMessage={form.swapInfo.errorMessage}
+        underlyingTokenName={targetAmm.underlyingToken.name}
+      />
+      <SwapInfo
+        balance={form.balance}
+        formAction={form.action} 
+        minRequiredMargin={form.minRequiredMargin}
+        mode={mode}
+        positionMargin={position?.margin ? targetAmm.descale(BigNumber.from(position.margin.toString())) : undefined}
+        protocol={targetAmm.protocol}
+        swapSummary={form.swapInfo.data}
+        swapSummaryLoading={form.swapInfo.loading}
+        underlyingTokenName={targetAmm.underlyingToken.name}
+      />
+    </>
   );
 };
 

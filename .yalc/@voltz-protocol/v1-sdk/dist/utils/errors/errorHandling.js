@@ -138,13 +138,18 @@ var getErrorSignature = function (error, environment) {
                 return errSig;
             }
             catch (_a) {
+                console.log(error);
                 throw new Error('Unrecognized error type');
             }
         }
         case 'LOCALHOST_UI': {
             try {
-                var message = error.data.message;
-                var errSig = (0, exports.extractErrorSignature)(message);
+                var reason = error.data.data.data.toString();
+                if (reason.startsWith('0x08c379a0')) {
+                    return 'Error';
+                }
+                var decodedError = exports.iface.parseError(reason);
+                var errSig = decodedError.signature.split('(')[0];
                 return errSig;
             }
             catch (_b) {
@@ -198,7 +203,18 @@ var getReadableErrorMessage = function (error, environment) {
                 throw new Error("Cannot get errSig Error in LOCALHOST_SDK. Inspect raw error!");
             }
             case 'LOCALHOST_UI': {
-                throw new Error("Cannot get errSign Error in LOCALHOST_UI. Inspect raw error!");
+                var reason = error.data.data.data.toString();
+                reason = "0x".concat(reason.substring(10));
+                try {
+                    var rawErrorMessage = ethers_1.utils.defaultAbiCoder.decode(['string'], reason)[0];
+                    if (rawErrorMessage in exports.errorMessageMapping) {
+                        return exports.errorMessageMapping[rawErrorMessage];
+                    }
+                    return "Unrecognized error (Raw error: ".concat(rawErrorMessage, ")");
+                }
+                catch (_) {
+                    return 'Unrecognized error';
+                }
             }
             case 'KOVAN': {
                 var reason = error.data.toString().replace('Reverted ', '');
@@ -267,14 +283,11 @@ var decodeInfoPostMint = function (error, environment) {
             }
             case 'LOCALHOST_UI': {
                 try {
-                    var message = error.data.message;
-                    var args = message
-                        .split(errSig)[1]
-                        .split('(')[1]
-                        .split(')')[0]
-                        .replaceAll(' ', '')
-                        .split(',');
-                    var result = { marginRequirement: ethers_1.BigNumber.from(args[0]) };
+                    var reason = error.data.data.data.toString();
+                    var decodingResult = exports.iface.decodeErrorResult(errSig, reason);
+                    var result = {
+                        marginRequirement: decodingResult.marginRequirement,
+                    };
                     return result;
                 }
                 catch (_b) {
@@ -349,20 +362,15 @@ var decodeInfoPostSwap = function (error, environment) {
             }
             case 'LOCALHOST_UI': {
                 try {
-                    var message = error.data.message;
-                    var args = message
-                        .split(errSig)[1]
-                        .split('(')[1]
-                        .split(')')[0]
-                        .replaceAll(' ', '')
-                        .split(',');
+                    var reason = error.data.data.data.toString();
+                    var decodingResult = exports.iface.decodeErrorResult(errSig, reason);
                     var result = {
-                        marginRequirement: ethers_1.BigNumber.from(args[0]),
-                        tick: parseInt(args[1], 10),
-                        fee: ethers_1.BigNumber.from(args[4]),
-                        availableNotional: ethers_1.BigNumber.from(args[3]),
-                        fixedTokenDelta: ethers_1.BigNumber.from(args[2]),
-                        fixedTokenDeltaUnbalanced: ethers_1.BigNumber.from(args[5]),
+                        marginRequirement: decodingResult.marginRequirement,
+                        tick: decodingResult.tick,
+                        fee: decodingResult.cumulativeFeeIncurred,
+                        availableNotional: decodingResult.variableTokenDelta,
+                        fixedTokenDelta: decodingResult.fixedTokenDelta,
+                        fixedTokenDeltaUnbalanced: decodingResult.fixedTokenDeltaUnbalanced,
                     };
                     return result;
                 }

@@ -3,12 +3,11 @@ import Box from '@mui/material/Box';
 import { useLocation } from 'react-router-dom';
 import { Position } from '@voltz-protocol/v1-sdk';
 
-import { AugmentedAMM, setPageTitle } from '@utilities';
-import { Agents, AMMProvider, MintBurnFormModes, MintBurnFormProvider } from '@contexts';
-import { useAgent } from '@hooks';
+import { AugmentedAMM, findCurrentAmm, findCurrentPosition, setPageTitle } from '@utilities';
+import { Agents, AMMProvider, MintBurnFormModes, MintBurnFormProvider, PositionProvider } from '@contexts';
+import { useAgent, useAMMs, usePositions } from '@hooks';
 
 import { Page } from '@components/interface';
-import { Panel } from '@components/atomic';
 import { PageTitleDesc } from '@components/composite';
 import ConnectedAMMTable from '../../components/containers/ConnectedAMMTable/ConnectedAMMTable';
 import ConnectedMintBurnForm from '../../components/containers/ConnectedMintBurnForm/ConnectedMintBurnForm';
@@ -20,11 +19,12 @@ const LiquidityProvider: React.FunctionComponent = () => {
   const [formMode, setFormMode] = useState<MintBurnFormModes>();
   const [position, setPosition] = useState<Position>();
 
+  const { amms } = useAMMs();
   const { onChangeAgent } = useAgent();
   const { pathname, key } = useLocation();
+  const { positions } = usePositions();
 
   const pathnameWithoutPrefix = pathname.slice(1);
-  const effectiveAmm = position?.amm as AugmentedAMM || amm;
   const renderMode = getRenderMode(formMode, pathnameWithoutPrefix);
 
   useEffect(() => {
@@ -55,16 +55,21 @@ const LiquidityProvider: React.FunctionComponent = () => {
     }
   }, [setPageTitle, renderMode, position])
 
-  const handleSelectAmm = (selected: AugmentedAMM) => {
+  const handleSelectAmm = (selectedAMM: AugmentedAMM) => {
     setFormMode(MintBurnFormModes.NEW_POSITION);
-    setAMM(selected);
-    setPosition(undefined);
+    setAMM(selectedAMM);
+    setPosition(findCurrentPosition(positions || [], selectedAMM, [3]));
   };
 
-  const handleSelectPosition = (selected: Position, mode: 'margin' | 'liquidity') => {
-    setFormMode(mode === 'margin' ? MintBurnFormModes.EDIT_MARGIN : MintBurnFormModes.EDIT_LIQUIDITY);
-    setAMM(undefined);
-    setPosition(selected);
+  const handleSelectPosition = (selectedPosition: Position, mode: 'margin' | 'liquidity' | 'rollover') => {
+    let newMode:MintBurnFormModes | undefined = undefined;
+    if(mode === 'margin') newMode = MintBurnFormModes.EDIT_MARGIN;
+    if(mode === 'liquidity') newMode = MintBurnFormModes.EDIT_LIQUIDITY;
+    if(mode === 'rollover') newMode = MintBurnFormModes.ROLLOVER;
+
+    setFormMode(newMode);
+    setAMM(mode === 'rollover' ? findCurrentAmm(amms || [], selectedPosition) : selectedPosition.amm as AugmentedAMM);
+    setPosition(selectedPosition);
   };
 
   const handleReset = () => {
@@ -74,7 +79,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
   };
 
   return (
-    <Page backgroundView={formMode ? 'form' : 'table'}>
+    <Page backgroundView={formMode ? 'none' : 'table'}>
       {renderMode === 'pools' && (
         <Box sx={{ width: '100%', maxWidth: '870px', margin: '0 auto' }}>
           <Box sx={{ marginBottom: (theme) => theme.spacing(12) }}>
@@ -88,22 +93,24 @@ const LiquidityProvider: React.FunctionComponent = () => {
       )}
 
       {renderMode === 'portfolio' && (
-        <Panel variant='dark' sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
-          <ConnectedPositionTable 
-            amm={effectiveAmm}
-            onSelectItem={handleSelectPosition}
-            agent={Agents.LIQUIDITY_PROVIDER}
-          />
-        </Panel>
+        <ConnectedPositionTable 
+          amm={amm}
+          onSelectItem={handleSelectPosition}
+          agent={Agents.LIQUIDITY_PROVIDER}
+        />
       )}
 
       {renderMode === 'form' && (
         <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
-          <AMMProvider amm={effectiveAmm}>
-            <MintBurnFormProvider amm={effectiveAmm} mode={formMode as MintBurnFormModes} position={position}>
-              <ConnectedMintBurnForm onReset={handleReset} />
-            </MintBurnFormProvider>
-          </AMMProvider>
+          {amm && (
+            <AMMProvider amm={amm}>
+              <PositionProvider position={position}>
+                <MintBurnFormProvider mode={formMode as MintBurnFormModes}>
+                  <ConnectedMintBurnForm onReset={handleReset} />
+                </MintBurnFormProvider>
+              </PositionProvider>
+            </AMMProvider>
+          )}
         </Box>
       )}
     </Page>
