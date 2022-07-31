@@ -50,6 +50,7 @@ REACT_APP_SKIP_WALLET_SCREENING=Y
 
 (Or if you can find a way around the caching problem, stopping and starting `yarn start` should be sufficient)
 
+
 # Terms & Conditions
 The Voltz Protocol, and any products or services associated therewith, is offered only to persons (aged 18 years or older) or entities who are not residents of, citizens of, are incorporated in, owned or controlled by a person or entity in, located in, or have a registered office or principal place of business in any “Restricted Territory.”  
 
