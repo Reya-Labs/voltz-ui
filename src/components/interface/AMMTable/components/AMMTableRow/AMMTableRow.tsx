@@ -5,17 +5,13 @@ import { SystemStyleObject, Theme } from '@mui/system';
 import isNull from 'lodash/isNull';
 
 import { Agents } from '@contexts';
-import { Button, Typography } from '@components/atomic';
-import { MaturityInformation } from '@components/composite';
+import { Button } from '@components/atomic';
+import { PoolField, MaturityInformation } from '@components/composite';
 import { useAMMContext } from '@contexts';
 import { useAgent, useWallet } from '@hooks';
 import { AMMTableDatum } from '../../types';
 import { labels } from '../../constants';
 import { VariableAPY, FixedAPR } from './components';
-
-import { ProgressBar } from '@components/composite';
-import { Box } from '@mui/system';
-import { isNumber } from 'lodash';
 
 export type AMMTableRowProps = {
   datum: AMMTableDatum;
@@ -100,50 +96,7 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
             );
           }
 
-          if (agent === Agents.LIQUIDITY_PROVIDER) {
-            if (capLoading) {
-              return (
-                <Typography variant="h5" label={label}>
-                  <ProgressBar
-                    leftContent={datum.protocol}
-                    rightContent={"Loading..."}
-                    percentageComplete={0}
-                  />
-                </Typography>
-              );
-            }
-
-            if (!isNumber(cap)) {
-              return (
-                <Typography variant="h5" label={label}>
-                  <Box sx={{ width: '100%' }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <Typography variant="h6">{datum.protocol}</Typography>
-                    </Box>
-                  </Box>
-                </Typography>);
-            }
-
-            return (
-              <Typography variant="h5" label={label}>
-                <ProgressBar
-                  leftContent={datum.protocol}
-                  rightContent={<>{cap.toFixed(2)}% CAP</>}
-                  percentageComplete={cap}
-                />
-              </Typography>
-            );
-          }
-          else {
-            return (
-              <Typography variant="h5" label={label}>
-                <Box sx={{ width: '100%' }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography variant="h6">{datum.protocol}</Typography>
-                  </Box>
-                </Box>
-              </Typography>);
-          }
+          return (<PoolField agent={agent} protocol={datum.protocol} isBorrowing={datum.isBorrowing} capLoading={capLoading} cap={cap}/>);
         };
 
         return <TableCell key={field}>{renderDisplay()}</TableCell>;
