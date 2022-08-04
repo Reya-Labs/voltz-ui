@@ -4,72 +4,94 @@ import { useState } from 'react';
 import { actions, selectors } from '@store';
 
 import { useNavigate } from 'react-router-dom';
+import { BorrowForm } from 'src/components/interface/BorrowForm';
 
 
 export type ConnectedBorrowFormProps = {
-    onReset: () => void;
-  };
+  onReset: () => void;
+};
 
 const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = ({ onReset }) => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-    // TODO: this is static, need to use state
-    const form = {
+  const [transactionId, setTransactionId] = useState<string | undefined>();
+  const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
 
+  const { amms, loading, error } = useAMMs();
+
+  if (!amms || loading || error) {
+    return null;
+  }
+
+   // TODO: need to get rid of this and get the AMM from context
+  const targetAmm = amms[0];
+
+  // TODO: this is static, need to use state
+  const form = {
+    isValid: true,
+    notional: 100,
+    tokenApprovals: {
+      approved: true,
+      approve: async () => { }
+    }
+  }
+
+  const handleComplete = () => {
+    onReset();
+    navigate(`/${routes.PORTFOLIO}`);
+  };
+
+  const handleGoBack = () => {
+    const action = actions.closeTransaction(transactionId as string);
+    dispatch(action);
+  }
+
+
+  const getReduxAction = () => {
+    return actions.borrowAction(targetAmm, form.notional, {});
+  }
+
+  const handleSubmit = () => {
+    if (!form.isValid) return;
+
+    if (!form.tokenApprovals.approved) {
+      void form.tokenApprovals.approve();
+      return;
     }
 
-    // TODO: need to get rid of this and get the AMM from context
-    const { amms, loading, error } = useAMMs(); 
-
-    const handleComplete = () => {
-        onReset();
-        navigate(`/${routes.PORTFOLIO}`);
-    };
-
-    const handleGoBack = () => {
-        const action = actions.closeTransaction(transactionId as string);
-        dispatch(action);
+    const action = getReduxAction();
+    if (action) {
+      setTransactionId(action.payload.transaction.id);
+      dispatch(action);
     }
+  };
 
-    const [transactionId, setTransactionId] = useState<string | undefined>();
-    const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
+  if (activeTransaction) {
+    // need to create Pending Transaction screen
+    return null;
+  }
 
-    if (!amms || loading || error) {
-      return null;
-    }
-
-    const getReduxAction = () => {
-        return actions.borrowAction(amms[0], 10, {});
-      }
-
-      const handleSubmit = () => {
-        if(!form.isValid) return;
-    
-        if(!form.isRemovingMargin) {
-          if (form.action === SwapFormActions.FCM_SWAP || form.action === SwapFormActions.FCM_UNWIND) {
-            if(!form.tokenApprovals.FCMApproved) {
-              void form.tokenApprovals.approveFCM();
-              return;
-            } else if(!form.tokenApprovals.yieldBearingTokenApprovedForFCM) {
-              void form.tokenApprovals.approveYieldBearingTokenForFCM();
-              return;
-            } else if(!form.tokenApprovals.underlyingTokenApprovedForFCM) {
-              void form.tokenApprovals.approveUnderlyingTokenForFCM();
-              return;
-            }
-          } else {
-            if(!form.tokenApprovals.underlyingTokenApprovedForPeriphery) {
-              void form.tokenApprovals.approveUnderlyingTokenForPeriphery();
-              return;
-            }
-          }
-        }
-    
-        const action = getReduxAction();
-        if(action) {
-          setTransactionId(action.payload.transaction.id);
-          dispatch(action);
-        }
-      };
+  return (
+    <BorrowForm 
+      protocol={targetAmm.protocol}
+      startDate={targetAmm.startDateTime}
+      endDate={targetAmm.endDateTime}
+      errors={{}}
+      notional={form.notional}
+      onChangeNotional={() => {}}
+      underlyingTokenName={targetAmm.underlyingToken.name}
+      approvalsNeeded={false}
+      isFormValid={false}
+      isTradeVerified={true}
+      onCancel={handleGoBack}
+      onSubmit={handleSubmit}
+      tokenApprovals={{
+        checkingApprovals: false,
+        approving: false
+      }}
+    />
+  )
 }
+
+export default ConnectedBorrowForm;

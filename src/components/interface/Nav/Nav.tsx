@@ -92,6 +92,8 @@ const Nav: React.FunctionComponent = () => {
   const open2 = Boolean(anchorEl2);
   const id2 = open ? 'simple-popover' : undefined;
 
+  const id3 = open ? 'simple-popover' : undefined;
+
   return (
     <Box
       sx={{
@@ -168,6 +170,10 @@ const Nav: React.FunctionComponent = () => {
           </Button>
         </ButtonGroup>
       </Popover>
+
+      <Button aria-describedby={id3} sx={buttonSx} variant="text" link={`/${routes.BORROW}`}>
+        FIXED BORROW
+      </Button>
     </Box>
   );
 };

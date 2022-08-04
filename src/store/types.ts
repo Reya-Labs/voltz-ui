@@ -171,7 +171,7 @@ export type BorrowAction = {
   payload: {
     transaction: TransactionUpdate;
     amm: SerializedAMM;
-    borrowToFix: number;
+    notional: number;
   };
 }
 

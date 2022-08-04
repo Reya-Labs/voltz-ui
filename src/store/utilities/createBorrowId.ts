@@ -1,5 +1,5 @@
-const createBorrowId = (ammId: string, borrowToFix: number): string => {
-  return `Borrow:${ammId}${borrowToFix}`;
+const createBorrowId = (ammId: string, notional: number): string => {
+  return `Borrow:${ammId}${notional}`;
 };
 
 export default createBorrowId;
