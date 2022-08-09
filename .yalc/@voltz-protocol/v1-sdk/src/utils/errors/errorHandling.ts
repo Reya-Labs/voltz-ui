@@ -198,6 +198,7 @@ export const getErrorSignature = (error: any, environment: string): string => {
         const errSig = decodedError.signature.split('(')[0];
         return errSig;
       } catch {
+        console.log(error);
         throw new Error('Unrecognized error type');
       }
     }
@@ -211,16 +212,25 @@ export const getErrorSignature = (error: any, environment: string): string => {
         const errSig = decodedError.signature.split('(')[0];
         return errSig;
       } catch {
+        console.log(error);
         throw new Error('Unrecognized error type');
       }
     }
     case 'MAINNET': {
       try {
-        const stringifiedError = error.toString();
-        const afterOriginalError = stringifiedError.split("originalError")[1];
-        const afterData = afterOriginalError.split("data")[1];
-        const beforeMessage = afterData.split("message")[0];
-        const reason = beforeMessage.substring(3, beforeMessage.length - 3);
+        // const stringifiedError = error.toString();
+        // const afterOriginalError = stringifiedError.split("originalError")[1];
+        // const afterData = afterOriginalError.split("data")[1];
+        // const beforeMessage = afterData.split("message")[0];
+        // const reason = beforeMessage.substring(3, beforeMessage.length - 3);
+
+        let reason: string;
+
+        if (typeof error.error.data === 'string') {
+          reason = error.error.data;
+        } else {
+          reason = error.error.data.originalError.data;
+        }
 
         if (reason.startsWith('0x08c379a0')) {
           return 'Error';
@@ -229,6 +239,7 @@ export const getErrorSignature = (error: any, environment: string): string => {
         const errSig = decodedError.signature.split('(')[0];
         return errSig;
       } catch {
+        console.log(error);
         throw new Error('Unrecognized error type');
       }
     }
@@ -277,12 +288,20 @@ export const getReadableErrorMessage = (error: any, environment: string): string
         }
       }
       case 'MAINNET': {
-        const stringifiedError = error.toString();
-        const afterOriginalError = stringifiedError.split("originalError")[1];
-        const afterData = afterOriginalError.split("data")[1];
-        const beforeMessage = afterData.split("message")[0];
-        let reason = beforeMessage.substring(3, beforeMessage.length - 3);
-        reason = `0x${reason.substring(10)}`;
+        // const stringifiedError = error.toString();
+        // const afterOriginalError = stringifiedError.split("originalError")[1];
+        // const afterData = afterOriginalError.split("data")[1];
+        // const beforeMessage = afterData.split("message")[0];
+        // let reason = beforeMessage.substring(3, beforeMessage.length - 3);
+        // reason = `0x${reason.substring(10)}`;
+
+        let reason: string;
+
+        if (typeof error.error.data === 'string') {
+          reason = error.error.data;
+        } else {
+          reason = error.error.data.originalError.data;
+        }
 
         try {
           const rawErrorMessage = utils.defaultAbiCoder.decode(['string'], reason)[0];
@@ -329,6 +348,7 @@ export const decodeInfoPostMint = (error: any, environment: string): RawInfoPost
           const result = { marginRequirement: BigNumber.from(args[0]) };
           return result;
         } catch {
+          console.log(error);
           throw new Error('Unrecognized error type');
         }
       }
@@ -341,6 +361,7 @@ export const decodeInfoPostMint = (error: any, environment: string): RawInfoPost
           };
           return result;
         } catch {
+          console.log(error);
           throw new Error('Unrecognized error type');
         }
       }
@@ -353,16 +374,24 @@ export const decodeInfoPostMint = (error: any, environment: string): RawInfoPost
           };
           return result;
         } catch {
+          console.log(error);
           throw new Error('Unrecognized error type');
         }
       }
       case 'MAINNET': {
         try {
-          const stringifiedError = error.toString();
-          const afterOriginalError = stringifiedError.split("originalError")[1];
-          const afterData = afterOriginalError.split("data")[1];
-          const beforeMessage = afterData.split("message")[0];
-          const reason = beforeMessage.substring(3, beforeMessage.length - 3);
+          // const stringifiedError = error.toString();
+          // const afterOriginalError = stringifiedError.split("originalError")[1];
+          // const afterData = afterOriginalError.split("data")[1];
+          // const beforeMessage = afterData.split("message")[0];
+          // const reason = beforeMessage.substring(3, beforeMessage.length - 3);
+          let reason: string;
+
+          if (typeof error.error.data === 'string') {
+            reason = error.error.data;
+          } else {
+            reason = error.error.data.originalError.data;
+          }
 
           const decodingResult = iface.decodeErrorResult(errSig, reason);
           const result = {
@@ -370,6 +399,7 @@ export const decodeInfoPostMint = (error: any, environment: string): RawInfoPost
           };
           return result;
         } catch {
+          console.log(error);
           throw new Error('Unrecognized error type');
         }
       }
@@ -415,6 +445,7 @@ export const decodeInfoPostSwap = (error: any, environment: string): RawInfoPost
           };
           return result;
         } catch {
+          console.log(error);
           throw new Error('Unrecognized error type');
         }
       }
@@ -432,6 +463,7 @@ export const decodeInfoPostSwap = (error: any, environment: string): RawInfoPost
           };
           return result;
         } catch {
+          console.log(error);
           throw new Error('Unrecognized error type');
         }
       }
@@ -449,16 +481,26 @@ export const decodeInfoPostSwap = (error: any, environment: string): RawInfoPost
           };
           return result;
         } catch {
+          console.log(error);
           throw new Error('Unrecognized error type');
         }
       }
       case 'MAINNET': {
         try {
-          const stringifiedError = error.toString();
-          const afterOriginalError = stringifiedError.split("originalError")[1];
-          const afterData = afterOriginalError.split("data")[1];
-          const beforeMessage = afterData.split("message")[0];
-          const reason = beforeMessage.substring(3, beforeMessage.length - 3);
+          // const stringifiedError = error.toString();
+          // const afterOriginalError = stringifiedError.split("originalError")[1];
+          // const afterData = afterOriginalError.split("data")[1];
+          // const beforeMessage = afterData.split("message")[0];
+          // const reason = beforeMessage.substring(3, beforeMessage.length - 3);
+
+          let reason: string;
+
+          if (typeof error.error.data === 'string') {
+            reason = error.error.data;
+          } else {
+            reason = error.error.data.originalError.data;
+          }
+
 
           const decodingResult = iface.decodeErrorResult(errSig, reason);
           const result = {
@@ -471,6 +513,7 @@ export const decodeInfoPostSwap = (error: any, environment: string): RawInfoPost
           };
           return result;
         } catch {
+          console.log(error);
           throw new Error('Unrecognized error type');
         }
       }
