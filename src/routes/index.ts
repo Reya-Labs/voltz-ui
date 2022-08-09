@@ -3,7 +3,7 @@ export const routes = {
   POOLS: 'lp-pools',
   PORTFOLIO: 'portfolio',
   SWAP: 'trader-pools',
-  BORROW: 'fix-borrow',
+  BORROW_POS: 'borrow-positions',
   TRM_POST: 'trm-post'
 };
 

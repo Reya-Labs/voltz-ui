@@ -171,7 +171,7 @@ const Nav: React.FunctionComponent = () => {
         </ButtonGroup>
       </Popover>
 
-      <Button aria-describedby={id3} sx={buttonSx} variant="text" link={`/${routes.BORROW}`}>
+      <Button aria-describedby={id3} sx={buttonSx} variant="text" link={`/${routes.BORROW_POS}`}>
         FIXED BORROW
       </Button>
     </Box>

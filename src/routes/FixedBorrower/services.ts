@@ -1,4 +1,4 @@
 
-export const getRenderMode = () => {
-  return 'fix-borrow'
+export const getRenderMode = (isForm: boolean | undefined) => {
+  return isForm ? 'fix-borrow' : "borrow-positions";
 };
