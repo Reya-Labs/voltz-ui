@@ -153,6 +153,7 @@ var getErrorSignature = function (error, environment) {
                 return errSig;
             }
             catch (_b) {
+                console.log(error);
                 throw new Error('Unrecognized error type');
             }
         }
@@ -167,16 +168,24 @@ var getErrorSignature = function (error, environment) {
                 return errSig;
             }
             catch (_c) {
+                console.log(error);
                 throw new Error('Unrecognized error type');
             }
         }
         case 'MAINNET': {
             try {
-                var stringifiedError = error.toString();
-                var afterOriginalError = stringifiedError.split("originalError")[1];
-                var afterData = afterOriginalError.split("data")[1];
-                var beforeMessage = afterData.split("message")[0];
-                var reason = beforeMessage.substring(3, beforeMessage.length - 3);
+                // const stringifiedError = error.toString();
+                // const afterOriginalError = stringifiedError.split("originalError")[1];
+                // const afterData = afterOriginalError.split("data")[1];
+                // const beforeMessage = afterData.split("message")[0];
+                // const reason = beforeMessage.substring(3, beforeMessage.length - 3);
+                var reason = void 0;
+                if (typeof error.error.data === 'string') {
+                    reason = error.error.data;
+                }
+                else {
+                    reason = error.error.data.originalError.data;
+                }
                 if (reason.startsWith('0x08c379a0')) {
                     return 'Error';
                 }
@@ -185,6 +194,7 @@ var getErrorSignature = function (error, environment) {
                 return errSig;
             }
             catch (_d) {
+                console.log(error);
                 throw new Error('Unrecognized error type');
             }
         }
@@ -231,12 +241,19 @@ var getReadableErrorMessage = function (error, environment) {
                 }
             }
             case 'MAINNET': {
-                var stringifiedError = error.toString();
-                var afterOriginalError = stringifiedError.split("originalError")[1];
-                var afterData = afterOriginalError.split("data")[1];
-                var beforeMessage = afterData.split("message")[0];
-                var reason = beforeMessage.substring(3, beforeMessage.length - 3);
-                reason = "0x".concat(reason.substring(10));
+                // const stringifiedError = error.toString();
+                // const afterOriginalError = stringifiedError.split("originalError")[1];
+                // const afterData = afterOriginalError.split("data")[1];
+                // const beforeMessage = afterData.split("message")[0];
+                // let reason = beforeMessage.substring(3, beforeMessage.length - 3);
+                // reason = `0x${reason.substring(10)}`;
+                var reason = void 0;
+                if (typeof error.error.data === 'string') {
+                    reason = error.error.data;
+                }
+                else {
+                    reason = error.error.data.originalError.data;
+                }
                 try {
                     var rawErrorMessage = ethers_1.utils.defaultAbiCoder.decode(['string'], reason)[0];
                     if (rawErrorMessage in exports.errorMessageMapping) {
@@ -278,6 +295,7 @@ var decodeInfoPostMint = function (error, environment) {
                     return result;
                 }
                 catch (_a) {
+                    console.log(error);
                     throw new Error('Unrecognized error type');
                 }
             }
@@ -291,6 +309,7 @@ var decodeInfoPostMint = function (error, environment) {
                     return result;
                 }
                 catch (_b) {
+                    console.log(error);
                     throw new Error('Unrecognized error type');
                 }
             }
@@ -304,16 +323,24 @@ var decodeInfoPostMint = function (error, environment) {
                     return result;
                 }
                 catch (_c) {
+                    console.log(error);
                     throw new Error('Unrecognized error type');
                 }
             }
             case 'MAINNET': {
                 try {
-                    var stringifiedError = error.toString();
-                    var afterOriginalError = stringifiedError.split("originalError")[1];
-                    var afterData = afterOriginalError.split("data")[1];
-                    var beforeMessage = afterData.split("message")[0];
-                    var reason = beforeMessage.substring(3, beforeMessage.length - 3);
+                    // const stringifiedError = error.toString();
+                    // const afterOriginalError = stringifiedError.split("originalError")[1];
+                    // const afterData = afterOriginalError.split("data")[1];
+                    // const beforeMessage = afterData.split("message")[0];
+                    // const reason = beforeMessage.substring(3, beforeMessage.length - 3);
+                    var reason = void 0;
+                    if (typeof error.error.data === 'string') {
+                        reason = error.error.data;
+                    }
+                    else {
+                        reason = error.error.data.originalError.data;
+                    }
                     var decodingResult = exports.iface.decodeErrorResult(errSig, reason);
                     var result = {
                         marginRequirement: decodingResult.marginRequirement,
@@ -321,6 +348,7 @@ var decodeInfoPostMint = function (error, environment) {
                     return result;
                 }
                 catch (_d) {
+                    console.log(error);
                     throw new Error('Unrecognized error type');
                 }
             }
@@ -357,6 +385,7 @@ var decodeInfoPostSwap = function (error, environment) {
                     return result;
                 }
                 catch (_a) {
+                    console.log(error);
                     throw new Error('Unrecognized error type');
                 }
             }
@@ -375,6 +404,7 @@ var decodeInfoPostSwap = function (error, environment) {
                     return result;
                 }
                 catch (_b) {
+                    console.log(error);
                     throw new Error('Unrecognized error type');
                 }
             }
@@ -393,16 +423,24 @@ var decodeInfoPostSwap = function (error, environment) {
                     return result;
                 }
                 catch (_c) {
+                    console.log(error);
                     throw new Error('Unrecognized error type');
                 }
             }
             case 'MAINNET': {
                 try {
-                    var stringifiedError = error.toString();
-                    var afterOriginalError = stringifiedError.split("originalError")[1];
-                    var afterData = afterOriginalError.split("data")[1];
-                    var beforeMessage = afterData.split("message")[0];
-                    var reason = beforeMessage.substring(3, beforeMessage.length - 3);
+                    // const stringifiedError = error.toString();
+                    // const afterOriginalError = stringifiedError.split("originalError")[1];
+                    // const afterData = afterOriginalError.split("data")[1];
+                    // const beforeMessage = afterData.split("message")[0];
+                    // const reason = beforeMessage.substring(3, beforeMessage.length - 3);
+                    var reason = void 0;
+                    if (typeof error.error.data === 'string') {
+                        reason = error.error.data;
+                    }
+                    else {
+                        reason = error.error.data.originalError.data;
+                    }
                     var decodingResult = exports.iface.decodeErrorResult(errSig, reason);
                     var result = {
                         marginRequirement: decodingResult.marginRequirement,
@@ -415,6 +453,7 @@ var decodeInfoPostSwap = function (error, environment) {
                     return result;
                 }
                 catch (_d) {
+                    console.log(error);
                     throw new Error('Unrecognized error type');
                 }
             }

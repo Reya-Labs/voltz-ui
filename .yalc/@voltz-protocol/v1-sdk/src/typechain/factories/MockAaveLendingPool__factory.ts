@@ -11,228 +11,283 @@ import type {
 
 const _abi = [
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "uint256",
-        name: "x",
-        type: "uint256",
-      },
+        "internalType": "uint256",
+        "name": "x",
+        "type": "uint256"
+      }
     ],
-    name: "PRBMathUD60x18__Exp2InputTooBig",
-    type: "error",
+    "name": "PRBMathUD60x18__Exp2InputTooBig",
+    "type": "error"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "uint256",
-        name: "x",
-        type: "uint256",
-      },
+        "internalType": "uint256",
+        "name": "x",
+        "type": "uint256"
+      }
     ],
-    name: "PRBMathUD60x18__LogInputTooSmall",
-    type: "error",
+    "name": "PRBMathUD60x18__LogInputTooSmall",
+    "type": "error"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "uint256",
-        name: "prod1",
-        type: "uint256",
-      },
+        "internalType": "uint256",
+        "name": "prod1",
+        "type": "uint256"
+      }
     ],
-    name: "PRBMath__MulDivFixedPointOverflow",
-    type: "error",
+    "name": "PRBMath__MulDivFixedPointOverflow",
+    "type": "error"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "contract IERC20Minimal",
-        name: "asset",
-        type: "address",
-      },
+        "internalType": "contract IERC20Minimal",
+        "name": "asset",
+        "type": "address"
+      }
     ],
-    name: "getReserveData",
-    outputs: [
+    "name": "getReserveData",
+    "outputs": [
       {
-        components: [
+        "components": [
           {
-            components: [
+            "components": [
               {
-                internalType: "uint256",
-                name: "data",
-                type: "uint256",
-              },
+                "internalType": "uint256",
+                "name": "data",
+                "type": "uint256"
+              }
             ],
-            internalType: "struct IAaveV2LendingPool.ReserveConfigurationMap",
-            name: "configuration",
-            type: "tuple",
+            "internalType": "struct IAaveV2LendingPool.ReserveConfigurationMap",
+            "name": "configuration",
+            "type": "tuple"
           },
           {
-            internalType: "uint128",
-            name: "liquidityIndex",
-            type: "uint128",
+            "internalType": "uint128",
+            "name": "liquidityIndex",
+            "type": "uint128"
           },
           {
-            internalType: "uint128",
-            name: "variableBorrowIndex",
-            type: "uint128",
+            "internalType": "uint128",
+            "name": "variableBorrowIndex",
+            "type": "uint128"
           },
           {
-            internalType: "uint128",
-            name: "currentLiquidityRate",
-            type: "uint128",
+            "internalType": "uint128",
+            "name": "currentLiquidityRate",
+            "type": "uint128"
           },
           {
-            internalType: "uint128",
-            name: "currentVariableBorrowRate",
-            type: "uint128",
+            "internalType": "uint128",
+            "name": "currentVariableBorrowRate",
+            "type": "uint128"
           },
           {
-            internalType: "uint128",
-            name: "currentStableBorrowRate",
-            type: "uint128",
+            "internalType": "uint128",
+            "name": "currentStableBorrowRate",
+            "type": "uint128"
           },
           {
-            internalType: "uint40",
-            name: "lastUpdateTimestamp",
-            type: "uint40",
+            "internalType": "uint40",
+            "name": "lastUpdateTimestamp",
+            "type": "uint40"
           },
           {
-            internalType: "address",
-            name: "aTokenAddress",
-            type: "address",
+            "internalType": "address",
+            "name": "aTokenAddress",
+            "type": "address"
           },
           {
-            internalType: "address",
-            name: "stableDebtTokenAddress",
-            type: "address",
+            "internalType": "address",
+            "name": "stableDebtTokenAddress",
+            "type": "address"
           },
           {
-            internalType: "address",
-            name: "variableDebtTokenAddress",
-            type: "address",
+            "internalType": "address",
+            "name": "variableDebtTokenAddress",
+            "type": "address"
           },
           {
-            internalType: "address",
-            name: "interestRateStrategyAddress",
-            type: "address",
+            "internalType": "address",
+            "name": "interestRateStrategyAddress",
+            "type": "address"
           },
           {
-            internalType: "uint8",
-            name: "id",
-            type: "uint8",
-          },
+            "internalType": "uint8",
+            "name": "id",
+            "type": "uint8"
+          }
         ],
-        internalType: "struct IAaveV2LendingPool.ReserveData",
-        name: "",
-        type: "tuple",
-      },
+        "internalType": "struct IAaveV2LendingPool.ReserveData",
+        "name": "",
+        "type": "tuple"
+      }
     ],
-    stateMutability: "view",
-    type: "function",
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "contract IERC20Minimal",
-        name: "_underlyingAsset",
-        type: "address",
-      },
+        "internalType": "contract IERC20Minimal",
+        "name": "_underlyingAsset",
+        "type": "address"
+      }
     ],
-    name: "getReserveNormalizedIncome",
-    outputs: [
+    "name": "getReserveNormalizedIncome",
+    "outputs": [
       {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
     ],
-    stateMutability: "view",
-    type: "function",
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "contract IERC20Minimal",
-        name: "asset",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "aTokenAddress",
-        type: "address",
-      },
+        "internalType": "contract IERC20Minimal",
+        "name": "_underlyingAsset",
+        "type": "address"
+      }
     ],
-    name: "initReserve",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    "name": "getReserveNormalizedVariableDebt",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "contract IERC20Minimal",
-        name: "_underlyingAsset",
-        type: "address",
+        "internalType": "contract IERC20Minimal",
+        "name": "asset",
+        "type": "address"
       },
       {
-        internalType: "uint256",
-        name: "_factorPerSecondInRay",
-        type: "uint256",
-      },
+        "internalType": "address",
+        "name": "aTokenAddress",
+        "type": "address"
+      }
     ],
-    name: "setFactorPerSecondInRay",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    "name": "initReserve",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "contract IERC20Minimal",
-        name: "_underlyingAsset",
-        type: "address",
+        "internalType": "contract IERC20Minimal",
+        "name": "_underlyingAsset",
+        "type": "address"
       },
       {
-        internalType: "uint256",
-        name: "_reserveNormalizedIncome",
-        type: "uint256",
-      },
+        "internalType": "uint256",
+        "name": "_factorPerSecondInRay",
+        "type": "uint256"
+      }
     ],
-    name: "setReserveNormalizedIncome",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    "name": "setFactorPerSecondInRay",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "contract IERC20Minimal",
-        name: "asset",
-        type: "address",
+        "internalType": "contract IERC20Minimal",
+        "name": "reserveAsset",
+        "type": "address"
       },
       {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
+        "internalType": "address",
+        "name": "debtToken",
+        "type": "address"
+      }
     ],
-    name: "withdraw",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "function",
+    "name": "setReserveDebtToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IERC20Minimal",
+        "name": "_underlyingAsset",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_reserveNormalizedIncome",
+        "type": "uint256"
+      }
+    ],
+    "name": "setReserveNormalizedIncome",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IERC20Minimal",
+        "name": "_underlyingAsset",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_reserveNormalizedVariableDebt",
+        "type": "uint256"
+      }
+    ],
+    "name": "setReserveNormalizedVariableDebt",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IERC20Minimal",
+        "name": "asset",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      }
+    ],
+    "name": "withdraw",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
 ];
 
 const _bytecode =
