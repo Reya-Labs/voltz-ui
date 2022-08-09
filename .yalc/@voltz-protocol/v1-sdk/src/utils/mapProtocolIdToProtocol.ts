@@ -15,6 +15,14 @@ const mapProtocolIdToProtocol = (protocolId: number): string => {
     return 'ROCKET';
   }
 
+  if (protocolId === 5) {
+    return 'BORROW AAVE';
+  }
+
+  if (protocolId === 6) {
+    return 'BORROW COMPOUND';
+  }
+
   throw new Error('Unrecognized protocol');
 };
 

@@ -4,6 +4,7 @@ export { default as AugmentedAMM } from './augmentedAmm';
 export { default as calculateNotionalAmount } from './calculateNotionalAmount';
 export { default as elideAddress } from './elideAddress';
 export { default as getErrorMessage } from './getErrorMessage';
+export { default as isBorrowing } from './isBorrowing';
 export * from './overrideTypes';
 export * from './number';
 export * from './page';

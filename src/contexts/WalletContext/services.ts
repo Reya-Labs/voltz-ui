@@ -1,6 +1,6 @@
 import { WalletName, WalletRiskAssessment } from "./types";
 import detectEthereumProvider from '@metamask/detect-provider';
-import WalletConnectProvider from "@walletconnect/web3-provider";
+import WalletConnectProvider from "@walletconnect/ethereum-provider";
 import { BigNumber, ethers, Contract } from "ethers";
 import { OverrideTypes } from "@utilities";
 import { DateTime } from "luxon";

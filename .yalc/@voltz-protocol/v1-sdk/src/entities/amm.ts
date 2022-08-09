@@ -732,6 +732,7 @@ class AMM {
         fixedTokenDeltaUnbalanced = result[3];
         marginRequirement = result[4];
         tickAfter = parseInt(result[5]);
+        fixedTokenDelta = result[0];
       },
       (error: any) => {
         const result = decodeInfoPostSwap(error, this.environment);
@@ -2196,6 +2197,14 @@ class AMM {
         prefix = "r";
         break;
       }
+      case 5: {
+        prefix = "a";
+        break;
+      }
+      case 6: {
+        prefix = "c";
+        break;
+      }
       default: {
         throw new Error("Unrecognized protocol");
       }
@@ -2944,7 +2953,8 @@ class AMM {
     const blockPerHour = 274;
 
     switch (this.rateOracle.protocolId) {
-      case 1: {
+      case 1: 
+      case 5: {
         const lastBlock = await this.provider.getBlockNumber();
         const oneBlockAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
         const twoBlocksAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 2)).timestamp);
@@ -2956,7 +2966,8 @@ class AMM {
         return oneWeekApy.div(BigNumber.from(1000000000000)).toNumber() / 1000000;
       }
 
-      case 2: {
+      case 2: 
+      case 6: {
         const daysPerYear = 365;
 
         const fcmContract = fcmCompoundFactory.connect(this.fcmAddress, this.provider);
