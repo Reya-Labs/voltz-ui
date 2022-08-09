@@ -117,7 +117,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   return (
     <>
       {position 
-        ? <MintBurnCurrentPosition formMode={form.mode} onPortfolio={onReset} position={position} /> 
+        ? <MintBurnCurrentPosition formMode={form.mode} onPortfolio={handleComplete} position={position} /> 
         : <FormPanel noBackground />
       }
       <MintBurnForm
