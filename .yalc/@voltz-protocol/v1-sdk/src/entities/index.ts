@@ -1,4 +1,6 @@
 export { default as AMM } from './amm';
+export { default as BorrowAMM } from './borrowAMM';
+export { BorrowAMMConstructorArgs } from './borrowAMM';
 export type {
   AMMConstructorArgs,
   AMMGetInfoPostMintArgs,
