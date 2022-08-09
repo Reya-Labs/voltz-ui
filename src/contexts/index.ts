@@ -4,6 +4,8 @@ export { Agents } from './AgentContext/types';
 export type { AgentSettings, AgentProps } from './AgentContext/types';
 export { default as AMMContext } from './AMMContext/AMMContext';
 export * from './AMMContext/AMMContext';
+export { default as BorrowAMMContext } from './BorrowAMMContext/BorrowAMMContext';
+export * from './BorrowAMMContext/BorrowAMMContext';
 export * from './MintBurnFormContext/MintBurnFormContext';
 export * from './PositionContext/PositionContext';
 export * from './SwapFormContext/SwapFormContext';

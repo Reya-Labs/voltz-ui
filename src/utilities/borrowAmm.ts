@@ -8,10 +8,10 @@ import { Position } from "@voltz-protocol/v1-sdk/dist/types/entities";
  * @param selectedAmm - the selected amm
  * @param positionTypes - an array of position type ids to match. 1=Fixed, 2=Variable, 3=LP
  */
- export const findCurrentBorrowPosition = (positions: Position[], selectedAmm: AugmentedAMM) => {
+ export const findCurrentBorrowPosition = (positions: Position[], selectedAmm: AugmentedBorrowAMM) => {
   return (positions || []).find(p => {
     return (
-      p.amm.id === selectedAmm.id
+      p.amm.id === selectedAmm.id && p.positionType === 2
     );
   });
 }

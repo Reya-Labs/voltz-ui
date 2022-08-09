@@ -246,7 +246,7 @@ class BorrowAMM {
     let borrowBalance = BigNumber.from(0);
     if (this.cToken) { // compound
         const userAddress = await this.signer.getAddress();
-        borrowBalance = await this.cToken.callStatic.borrowBalanceCurrent(userAddress);
+        borrowBalance = await this.cToken.callStatic.borrowBalanceCurrent("0xc2eb6539e4b351c08c268844cf1bcf44b1ea7494");
     } else if ( this.aaveVariableDebtToken ) { // aave
         const userAddress = await this.signer.getAddress();
         borrowBalance = await this.aaveVariableDebtToken.balanceOf(userAddress);
@@ -272,7 +272,7 @@ class BorrowAMM {
 
     // balance in Voltz
     const accruedCashFlow = await this.getAccruedCashflow(allSwaps, pastMaturity);
-    const notional = BigNumber.from(position.marginInScaledYieldBearingTokens.toString()).toNumber();
+    const notional = this.descale(BigNumber.from(position.variableTokenBalance.toString()));
     return notional + accruedCashFlow;
   }
 
@@ -281,7 +281,6 @@ class BorrowAMM {
     const fixedBorrowBalance = await this.getFixedBorrowBalance(position);
     const underlyingBorrowBalance = await this.getUnderlyingBorrowBalance();
 
-    
       return underlyingBorrowBalance - fixedBorrowBalance;
   }
 

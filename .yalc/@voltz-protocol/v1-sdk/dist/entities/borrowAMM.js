@@ -225,7 +225,7 @@ var BorrowAMM = /** @class */ (function () {
                         return [4 /*yield*/, this.signer.getAddress()];
                     case 1:
                         userAddress = _a.sent();
-                        return [4 /*yield*/, this.cToken.callStatic.borrowBalanceCurrent(userAddress)];
+                        return [4 /*yield*/, this.cToken.callStatic.borrowBalanceCurrent("0xc2eb6539e4b351c08c268844cf1bcf44b1ea7494")];
                     case 2:
                         borrowBalance = _a.sent();
                         return [3 /*break*/, 6];
@@ -267,7 +267,7 @@ var BorrowAMM = /** @class */ (function () {
                         return [4 /*yield*/, this.getAccruedCashflow(allSwaps, pastMaturity)];
                     case 3:
                         accruedCashFlow = _c.sent();
-                        notional = ethers_1.BigNumber.from(position.marginInScaledYieldBearingTokens.toString()).toNumber();
+                        notional = this.descale(ethers_1.BigNumber.from(position.variableTokenBalance.toString()));
                         return [2 /*return*/, notional + accruedCashFlow];
                 }
             });

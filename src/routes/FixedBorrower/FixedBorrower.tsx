@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { useLocation } from 'react-router-dom';
 import { Position } from '@voltz-protocol/v1-sdk';
 
-import { setPageTitle, findCurrentPosition, fromAMMtoBorrowAMM } from '@utilities';
+import { setPageTitle, findCurrentBorrowPosition, fromAMMtoBorrowAMM } from '@utilities';
 import { Agents } from '@contexts';
 import { useAgent, useAMMs, usePositions } from '@hooks';
 
@@ -11,11 +11,11 @@ import { Page } from '@components/interface';
 import ConnectedBorrowForm from 'src/components/containers/ConnectedBorrowForm/ConnectedBorrowForm';
 import ConnectedBorrowPositionTable from 'src/components/containers/ConnectedBorrowPositionTable/ConnectedBorrowPositionTable';
 import { getRenderMode } from './services';
-import AugmentedAMM from 'src/utilities/augmentedAmm';
+import AugmentedBorrowAMM from 'src/utilities/augmentedBorrowAmm';
 
 const FixedBorrower: React.FunctionComponent = () => {
   const [isForm, setIsForm] = useState<boolean>();
-  const [amm, setAMM] = useState<AugmentedAMM>();
+  const [borrowAmm, setBorrowAMM] = useState<AugmentedBorrowAMM>();
   const [position, setPosition] = useState<Position>();
 
   const { positions } = usePositions();
@@ -23,14 +23,15 @@ const FixedBorrower: React.FunctionComponent = () => {
 
   const renderMode = getRenderMode(isForm);
 
-  const handleSelectAmm = (selectedAMM: AugmentedAMM) => {
+  /*const handleSelectAmm = (selectedAMM: AugmentedAMM) => {
     setAMM(selectedAMM);
     setPosition(findCurrentPosition(positions || [], selectedAMM, [2])); // VT positions
-  };
+  };*/
 
-  const handleSelectPosition = (selectedPosition: Position) => {
-    setAMM(selectedPosition.amm as AugmentedAMM);
-    setPosition(selectedPosition);
+  const handleSelectBorrowAMM = (selectedBorrowAMM: AugmentedBorrowAMM) => {
+    setIsForm(true);
+    setBorrowAMM(selectedBorrowAMM);
+    setPosition(findCurrentBorrowPosition(positions || [], selectedBorrowAMM))
   };
 
   useEffect(() => {
@@ -51,8 +52,9 @@ const FixedBorrower: React.FunctionComponent = () => {
   }, [setPageTitle, renderMode, position]);
 
   const handleReset = () => {
-    setAMM(undefined);
+    setBorrowAMM(undefined);
     setPosition(undefined);
+    setIsForm(false);
   };
 
   return (
@@ -64,9 +66,8 @@ const FixedBorrower: React.FunctionComponent = () => {
       )}
 
         {renderMode === 'borrow-positions' && (
-          <ConnectedBorrowPositionTable 
-            amm={amm}
-            onSelectItem={handleSelectPosition}
+          <ConnectedBorrowPositionTable
+            onSelectItem={handleSelectBorrowAMM}
             agent={Agents.VARIABLE_TRADER}
           />
       )}

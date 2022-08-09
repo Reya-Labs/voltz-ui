@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 
-export type FixedBorrowTableFields = 'protocol' | 'debt' | 'fixedApr' | 'maturity';
+export type FixedBorrowTableFields = 'protocol' | 'debt' | 'fixedApr';
 export type VariableBorrowTableFields = 'protocol' | 'debt' | 'variableApy';
 
 export type FixedBorrowTableDatum = {
@@ -12,17 +12,33 @@ export type FixedBorrowTableDatum = {
 };
 
 export const FixedBorrowTableLabels: Record<FixedBorrowTableFields, string> = {
-  protocol: 'Pool',
+  protocol: 'Variable Positions',
   debt: 'Debt',
-  fixedApr: 'Fixed APR',
-  maturity: 'Maturity',
+  fixedApr: 'Fixed Rate'
 };
 
 export const labels: [FixedBorrowTableFields, string][] = [
   ['protocol', FixedBorrowTableLabels.protocol],
   ['debt', FixedBorrowTableLabels.debt],
-  ['fixedApr', FixedBorrowTableLabels.fixedApr],
-  ['maturity', FixedBorrowTableLabels.maturity],
+  ['fixedApr', FixedBorrowTableLabels.fixedApr]
 ];
 
+export const VariableBorrowTableLabels: Record<VariableBorrowTableFields, string> = {
+  protocol: 'Variable Positions',
+  debt: 'Debt',
+  variableApy: 'Variable Rate'
+};
+
+export const labelsVariable: [VariableBorrowTableFields, string][] = [
+  ['protocol', VariableBorrowTableLabels.protocol],
+  ['debt', VariableBorrowTableLabels.debt],
+  ['variableApy', VariableBorrowTableLabels.variableApy]
+];
+
+export type BorrowAMMTableDatum = {
+  id: string;
+  protocol: string;
+  startDate: DateTime;
+  endDate: DateTime;
+};
   

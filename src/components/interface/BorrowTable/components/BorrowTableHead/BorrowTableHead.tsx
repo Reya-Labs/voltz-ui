@@ -2,22 +2,21 @@ import React from 'react';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
 import { SystemStyleObject, Theme } from '@mui/system';
 import { Typography } from '@components/atomic';
 
 import { data } from '@utilities';
-import { FixedBorrowTableFields, labels } from '../../types';
+import { VariableBorrowTableFields, labelsVariable } from '../../types';
 
 
 export type BorrowTableHeadProps = {
   order: data.TableOrder;
-  orderBy: FixedBorrowTableFields;
-  onSort: (field: FixedBorrowTableFields) => void;
+  orderBy: VariableBorrowTableFields;
+  onSort: (field: VariableBorrowTableFields) => void;
 };
 
 const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({ order, orderBy, onSort }) => {
-  const createSortHandler = (field: FixedBorrowTableFields) => (_event: React.MouseEvent<unknown>) =>
+  const createSortHandler = (field: VariableBorrowTableFields) => (_event: React.MouseEvent<unknown>) =>
     onSort(field);
 
   const cellSx: SystemStyleObject<Theme> = {
@@ -33,6 +32,37 @@ const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({ order,
 
   return (
     <TableHead>
+      <TableRow>
+        {labelsVariable.map(([field, label]) => (
+          <TableCell
+            key={field}
+            align="left"
+            padding="normal"
+            sortDirection={orderBy === field ? order : false}
+            sx={cellSx}
+          >
+            {/* <TableSortLabel
+              active={orderBy === field}
+              direction={orderBy === field ? order : 'asc'}
+              onClick={createSortHandler(field)}
+            > */}
+              {/* {label} */}
+              <Typography
+              variant="subtitle1"
+              sx={{
+                textTransform: "uppercase",
+                fontWeight: 400, 
+                fontSize: 12,
+                color: "#5A576D"
+              }}
+              >
+              {label}
+            </Typography>
+            {/* </TableSortLabel> */}
+          </TableCell>
+        ))}
+        <TableCell align="left" padding="normal" sx={cellSx}></TableCell>
+      </TableRow>
     </TableHead>
   );
 };

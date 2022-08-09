@@ -3,6 +3,8 @@ export { default as useBalance } from './useBalance';
 export { default as useAgentWithOverride } from './useAgentWithOverride';
 export * from './useAMM/useAMM';
 export * from './useAMM/types';
+export * from './useBorrowAMM/useBorrowAMM';
+export * from './useBorrowAMM/types';
 export { default as useAMMs } from './useAMMs';
 export { default as useBorrowAMMs } from './useBorrowAMMs';
 export { default as useAsyncFunction } from './useAsyncFunction';

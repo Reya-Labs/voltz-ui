@@ -2773,7 +2773,7 @@ var AMM = /** @class */ (function () {
                         switch (_a) {
                             case 1: return [3 /*break*/, 1];
                             case 5: return [3 /*break*/, 1];
-                            case 2: return [3 /*break*/, 6];
+                            case 2: return [3 /*break*/, 1];
                             case 6: return [3 /*break*/, 6];
                             case 3: return [3 /*break*/, 9];
                             case 4: return [3 /*break*/, 14];
