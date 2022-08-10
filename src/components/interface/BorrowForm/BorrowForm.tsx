@@ -12,6 +12,10 @@ import {
 import { SubmitControls } from './components';
 import { SystemStyleObject, Theme } from '@theme';
 
+import TableRow from '@mui/material/TableRow';
+import { VariableAPY, FixedAPR, MaturityEndDate, VariableDebt, FixBorrowSlider } from './components';
+import { Stack } from '@mui/material';
+
 export type BorrowProps = {
   protocol?: string;
   startDate?: DateTime;
@@ -55,32 +59,44 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
   return (
     <FormPanel>
       <ProtocolInformation protocol={protocol}/>
+      
+      <Box sx={bottomSpacing}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
+          <FixedAPR />
+          <VariableAPY />
+          <MaturityEndDate endDate={endDate} />
+        </Stack>
+      </Box>
 
       <Box sx={bottomSpacing}>
-        <MaturityInformation
-          label={
-            <IconLabel
-              label="maturity"
-              icon="information-circle"
-              info="The proportion between the time elapsed since the initiation of the pool and the entire duration."
-              removeIcon
-            />
-          }
-          startDate={startDate}
-          endDate={endDate}
+        <VariableDebt 
+          variableDebt={100}
+          currencySymbol={'$'}
+          currencyCode={'USD'}
+        />
+
+        <FixBorrowSlider 
+          variableDebt={100}
+          selectedFixedDebt={0}
+          selectedFixedDebtPercentage={0}
+          selectedVariableDebt={100}
+          selectedVariableDebtPercentage={100}
+          currencySymbol={'$'}
         />
       </Box>
 
-        <Box sx={bottomSpacing}>
-          <NotionalAmount
-            error={errors['notional']}
-            label="notional amount"
-            info={"To be added."}
-            notional={notional}
-            onChangeNotional={onChangeNotional}
-            underlyingTokenName={underlyingTokenName}
-          />
-        </Box>
+      <Box sx={bottomSpacing}>
+        <NotionalAmount
+          error={errors['notional']}
+          label="margin required to fix rate"
+          info={"To be added."}
+          notional={notional}
+          onChangeNotional={onChangeNotional}
+          underlyingTokenName={underlyingTokenName}
+          subtext={`BALANCE: 0`}
+          disabled={true}
+        />
+      </Box>
 
       <SubmitControls
         approvalsNeeded={approvalsNeeded}

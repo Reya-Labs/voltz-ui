@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { actions, selectors } from '@store';
 
 import { useNavigate } from 'react-router-dom';
-import { BorrowForm } from 'src/components/interface/BorrowForm';
+import { BorrowForm } from '@components/interface';
+import { useAMMContext } from '@contexts';
 
 
 export type ConnectedBorrowFormProps = {
@@ -12,6 +13,8 @@ export type ConnectedBorrowFormProps = {
 };
 
 const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = ({ onReset }) => {
+  const { amm: targetAmm } = useAMMContext();
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -23,9 +26,6 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
   if (!amms || loading || error) {
     return null;
   }
-
-   // TODO: need to get rid of this and get the AMM from context
-  const targetAmm = amms[0];
 
   // TODO: this is static, need to use state
   const form = {
