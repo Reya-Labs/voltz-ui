@@ -31,8 +31,8 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
       >
         {protocol}
       </Typography>
-      <FixedAPR />
-      <VariableAPY />
+      {/* <FixedAPR />
+      <VariableAPY /> */}
     </Box>
   );
 };

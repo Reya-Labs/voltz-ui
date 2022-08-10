@@ -447,6 +447,7 @@ var AMM = /** @class */ (function () {
                                 fixedTokenDeltaUnbalanced = result[3];
                                 marginRequirement = result[4];
                                 tickAfter = parseInt(result[5]);
+                                fixedTokenDelta = result[0];
                             }, function (error) {
                                 var result = (0, errorHandling_1.decodeInfoPostSwap)(error, _this.environment);
                                 marginRequirement = result.marginRequirement;
@@ -1935,6 +1936,14 @@ var AMM = /** @class */ (function () {
                     prefix = "r";
                     break;
                 }
+                case 5: {
+                    prefix = "a";
+                    break;
+                }
+                case 6: {
+                    prefix = "c";
+                    break;
+                }
                 default: {
                     throw new Error("Unrecognized protocol");
                 }
@@ -2763,7 +2772,9 @@ var AMM = /** @class */ (function () {
                         _a = this.rateOracle.protocolId;
                         switch (_a) {
                             case 1: return [3 /*break*/, 1];
-                            case 2: return [3 /*break*/, 6];
+                            case 5: return [3 /*break*/, 1];
+                            case 2: return [3 /*break*/, 1];
+                            case 6: return [3 /*break*/, 6];
                             case 3: return [3 /*break*/, 9];
                             case 4: return [3 /*break*/, 14];
                         }

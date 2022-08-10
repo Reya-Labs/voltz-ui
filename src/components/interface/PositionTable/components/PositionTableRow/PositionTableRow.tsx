@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
-import Box from '@mui/material/Box';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '@theme';
 import { Agents, useAMMContext } from '@contexts';
 import { Typography } from '@components/atomic';
-import { ProgressBar } from '@components/composite';
+import { PoolField } from '@components/composite';
 import { lpLabels } from '../../constants';
 import { traderLabels } from '../../constants';
 import { FixedAPR, Notional, CurrentMargin, Maturity, AccruedRates } from './components';
 import { useAgent } from '@hooks';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
+import { isBorrowing } from '@utilities';
 
 export type PositionTableRowProps = {
   position: Position;
@@ -86,51 +86,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     
     if (field === 'pool') {
 
-      if (agent === Agents.LIQUIDITY_PROVIDER) {
-        if (capLoading) {
-          return (
-            <Typography variant="h5" label={label}>
-              <ProgressBar
-                leftContent={position.amm.protocol}
-                rightContent={"Loading..."}
-                percentageComplete={0}
-              />
-            </Typography>
-          );
-        }
-
-        if (!cap) {
-          return (
-            <Typography variant="h5" label={label}>
-              <Box sx={{ width: '100%' }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography variant="h6">{position.amm.protocol}</Typography>
-                </Box>
-              </Box>
-            </Typography>);
-        }
-
-        return (
-          <Typography variant="h5" label={label}>
-            <ProgressBar
-              leftContent={position.amm.protocol}
-              rightContent={<>{cap.toFixed(2)}% CAP</>}
-              percentageComplete={cap}
-            />
-          </Typography>
-        );
-      }
-      else {
-        return (
-          <Typography variant="h5" label={label}>
-            <Box sx={{ width: '100%' }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Typography variant="h6">{position.amm.protocol}</Typography>
-              </Box>
-            </Box>
-          </Typography>);
-      }
-      
+      return (<PoolField agent={agent} protocol={position.amm.protocol} isBorrowing={isBorrowing(position.amm.rateOracle.protocolId)} capLoading={capLoading} cap={cap}/>)      
     }
 
     if (field === 'rateRange') {

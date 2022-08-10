@@ -7,4 +7,5 @@ export type AMMTableDatum = {
   protocol: string;
   startDate: DateTime;
   endDate: DateTime;
+  isBorrowing: boolean;
 };

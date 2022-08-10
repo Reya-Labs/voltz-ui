@@ -21,6 +21,10 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface ICTokenInterface extends ethers.utils.Interface {
   functions: {
+    "accrualBlockNumber()": FunctionFragment;
+    "borrowBalanceCurrent(address)": FunctionFragment;
+    "borrowIndex()": FunctionFragment;
+    "borrowRatePerBlock()": FunctionFragment;
     "exchangeRateCurrent()": FunctionFragment;
     "exchangeRateStored()": FunctionFragment;
     "redeemUnderlying(uint256)": FunctionFragment;
@@ -28,6 +32,22 @@ interface ICTokenInterface extends ethers.utils.Interface {
     "underlying()": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "accrualBlockNumber",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "borrowBalanceCurrent",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "borrowIndex",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "borrowRatePerBlock",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "exchangeRateCurrent",
     values?: undefined
@@ -49,6 +69,22 @@ interface ICTokenInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "accrualBlockNumber",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "borrowBalanceCurrent",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "borrowIndex",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "borrowRatePerBlock",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "exchangeRateCurrent",
     data: BytesLike
@@ -114,6 +150,17 @@ export class ICToken extends BaseContract {
   interface: ICTokenInterface;
 
   functions: {
+    accrualBlockNumber(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    borrowBalanceCurrent(
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    borrowIndex(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    borrowRatePerBlock(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     exchangeRateCurrent(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -129,6 +176,17 @@ export class ICToken extends BaseContract {
 
     underlying(overrides?: CallOverrides): Promise<[string]>;
   };
+
+  accrualBlockNumber(overrides?: CallOverrides): Promise<BigNumber>;
+
+  borrowBalanceCurrent(
+    account: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  borrowIndex(overrides?: CallOverrides): Promise<BigNumber>;
+
+  borrowRatePerBlock(overrides?: CallOverrides): Promise<BigNumber>;
 
   exchangeRateCurrent(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -146,6 +204,17 @@ export class ICToken extends BaseContract {
   underlying(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
+    accrualBlockNumber(overrides?: CallOverrides): Promise<BigNumber>;
+
+    borrowBalanceCurrent(
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    borrowIndex(overrides?: CallOverrides): Promise<BigNumber>;
+
+    borrowRatePerBlock(overrides?: CallOverrides): Promise<BigNumber>;
+
     exchangeRateCurrent(overrides?: CallOverrides): Promise<BigNumber>;
 
     exchangeRateStored(overrides?: CallOverrides): Promise<BigNumber>;
@@ -163,6 +232,17 @@ export class ICToken extends BaseContract {
   filters: {};
 
   estimateGas: {
+    accrualBlockNumber(overrides?: CallOverrides): Promise<BigNumber>;
+
+    borrowBalanceCurrent(
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    borrowIndex(overrides?: CallOverrides): Promise<BigNumber>;
+
+    borrowRatePerBlock(overrides?: CallOverrides): Promise<BigNumber>;
+
     exchangeRateCurrent(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -180,6 +260,21 @@ export class ICToken extends BaseContract {
   };
 
   populateTransaction: {
+    accrualBlockNumber(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    borrowBalanceCurrent(
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    borrowIndex(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    borrowRatePerBlock(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     exchangeRateCurrent(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
