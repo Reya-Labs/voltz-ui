@@ -1,22 +1,51 @@
 import React, { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
-import { setPageTitle } from '@utilities';
-import { Page } from '@components/interface';
-import { useAMMs } from '@hooks';
+import { useLocation } from 'react-router-dom';
+import { Position } from '@voltz-protocol/v1-sdk';
 
+import { setPageTitle, findCurrentBorrowPosition, fromAMMtoBorrowAMM } from '@utilities';
+import { Agents } from '@contexts';
+import { useAgent, useAMMs, usePositions } from '@hooks';
+
+import { Page } from '@components/interface';
+import ConnectedBorrowForm from 'src/components/containers/ConnectedBorrowForm/ConnectedBorrowForm';
+import ConnectedBorrowPositionTable from 'src/components/containers/ConnectedBorrowPositionTable/ConnectedBorrowPositionTable';
+import { getRenderMode } from './services';
+import AugmentedBorrowAMM from 'src/utilities/augmentedBorrowAmm';
+
+import { AMMProvider, PositionProvider } from '@contexts';
 
 // Form specific 
 import { AugmentedAMM } from '@utilities';
-import { Position } from '@voltz-protocol/v1-sdk';
 
-import ConnectedBorrowForm from '../../components/containers/ConnectedBorrowForm/ConnectedBorrowForm';
-import { AMMProvider, PositionProvider } from '@contexts';
 
 const FixedBorrower: React.FunctionComponent = () => {
-  // Form specific
-  const [amm, setAMM] = useState<AugmentedAMM>();
+  const [isForm, setIsForm] = useState<boolean>();
+  const [borrowAmm, setBorrowAMM] = useState<AugmentedBorrowAMM>();
   const [position, setPosition] = useState<Position>();
+
+  const { positions } = usePositions();
+  const { amms } = useAMMs();
+
+  const [amm, setAMM] = useState<AugmentedAMM>();
+
+  const renderMode = getRenderMode(isForm);
+
+  /*const handleSelectAmm = (selectedAMM: AugmentedAMM) => {
+    setAMM(selectedAMM);
+    setPosition(findCurrentPosition(positions || [], selectedAMM, [2])); // VT positions
+  };*/
+
+  const handleSelectBorrowAMM = (selectedBorrowAMM: AugmentedBorrowAMM) => {
+    setIsForm(true);
+    setBorrowAMM(selectedBorrowAMM);
+    setPosition(findCurrentBorrowPosition(positions || [], selectedBorrowAMM))
+  };
+
+  useEffect(() => {
+    handleReset();
+  }, []);
 
   useEffect(() => {
     setAMM(undefined);
@@ -25,33 +54,44 @@ const FixedBorrower: React.FunctionComponent = () => {
   }, [setAMM, setPosition]);
 
   useEffect(() => {
-    handleReset();
-  }, []);
+    switch(renderMode) {
+      case 'fix-borrow': {
+        setPageTitle('Fixed Borrow Form');
+        break;
+      }
+      case 'borrow-positions': {
+        setPageTitle('Borrwer Portfolio');
+        break;
+      }
+    }
+  }, [setPageTitle, renderMode, position]);
 
-  useEffect(() => {
-    setPageTitle('Fixed Borrow Form');
-  }, []);
-
-  // ==== TO DO: remove ====
-  const { amms, loading, error } = useAMMs();
-  useEffect(() => {
-    setAMM(!amms ? undefined : amms[13]);
-  }, []);
-  // =======================
-
-  const handleReset = () => {};
+  const handleReset = () => {
+    setBorrowAMM(undefined);
+    setPosition(undefined);
+    setIsForm(false);
+  };
 
   return (
     <Page backgroundView='none'>
-        <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
-          {amm && (
-            <AMMProvider amm={amm}>
-              <PositionProvider position={position}>
-                <ConnectedBorrowForm onReset={handleReset} />
-              </PositionProvider>
-            </AMMProvider>
-          )}
-        </Box>
+        {renderMode === 'fix-borrow' && (
+          <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
+            {amm && (
+              <AMMProvider amm={amm}>
+                <PositionProvider position={position}>
+                  <ConnectedBorrowForm onReset={handleReset} />
+                </PositionProvider>
+              </AMMProvider>
+            )}
+          </Box>
+      )}
+
+        {renderMode === 'borrow-positions' && (
+          <ConnectedBorrowPositionTable
+            onSelectItem={handleSelectBorrowAMM}
+            agent={Agents.VARIABLE_TRADER}
+          />
+      )}
     </Page>
   );
 };

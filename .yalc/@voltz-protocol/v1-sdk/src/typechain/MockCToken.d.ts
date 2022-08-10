@@ -21,11 +21,15 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface MockCTokenInterface extends ethers.utils.Interface {
   functions: {
+    "accrualBlockNumber()": FunctionFragment;
     "allowance(address,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "approveInternal(address,address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "balanceOfUnderlying(address)": FunctionFragment;
+    "borrowBalanceCurrent(address)": FunctionFragment;
+    "borrowIndex()": FunctionFragment;
+    "borrowRatePerBlock()": FunctionFragment;
     "decimals()": FunctionFragment;
     "decreaseAllowance(address,uint256)": FunctionFragment;
     "exchangeRateCurrent()": FunctionFragment;
@@ -34,6 +38,10 @@ interface MockCTokenInterface extends ethers.utils.Interface {
     "mint(address,uint256)": FunctionFragment;
     "name()": FunctionFragment;
     "redeemUnderlying(uint256)": FunctionFragment;
+    "setAccrualBlockNumber(uint256)": FunctionFragment;
+    "setBorrowBalanceCurrent(uint256,address)": FunctionFragment;
+    "setBorrowIndex(uint256)": FunctionFragment;
+    "setBorrowRatePerBlock(uint256)": FunctionFragment;
     "setExchangeRate(uint256)": FunctionFragment;
     "setSupplyRatePerBlock(uint256)": FunctionFragment;
     "supplyRatePerBlock()": FunctionFragment;
@@ -44,6 +52,10 @@ interface MockCTokenInterface extends ethers.utils.Interface {
     "underlying()": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "accrualBlockNumber",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "allowance",
     values: [string, string]
@@ -60,6 +72,18 @@ interface MockCTokenInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "balanceOfUnderlying",
     values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "borrowBalanceCurrent",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "borrowIndex",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "borrowRatePerBlock",
+    values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
   encodeFunctionData(
@@ -85,6 +109,22 @@ interface MockCTokenInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "redeemUnderlying",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setAccrualBlockNumber",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setBorrowBalanceCurrent",
+    values: [BigNumberish, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setBorrowIndex",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setBorrowRatePerBlock",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -117,6 +157,10 @@ interface MockCTokenInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "accrualBlockNumber",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(
@@ -126,6 +170,18 @@ interface MockCTokenInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "balanceOfUnderlying",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "borrowBalanceCurrent",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "borrowIndex",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "borrowRatePerBlock",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
@@ -149,6 +205,22 @@ interface MockCTokenInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "redeemUnderlying",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setAccrualBlockNumber",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setBorrowBalanceCurrent",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setBorrowIndex",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setBorrowRatePerBlock",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -240,6 +312,8 @@ export class MockCToken extends BaseContract {
   interface: MockCTokenInterface;
 
   functions: {
+    accrualBlockNumber(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     allowance(
       owner: string,
       spender: string,
@@ -265,6 +339,15 @@ export class MockCToken extends BaseContract {
       owner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    borrowBalanceCurrent(
+      user: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    borrowIndex(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    borrowRatePerBlock(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     decimals(overrides?: CallOverrides): Promise<[number]>;
 
@@ -299,6 +382,27 @@ export class MockCToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setAccrualBlockNumber(
+      accrualBlockNumber: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setBorrowBalanceCurrent(
+      value: BigNumberish,
+      user: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setBorrowIndex(
+      borrowIndex: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setBorrowRatePerBlock(
+      borrowRatePerBlock: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setExchangeRate(
       rate: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -316,20 +420,22 @@ export class MockCToken extends BaseContract {
     totalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     transfer(
-      recipient: string,
+      to: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     transferFrom(
-      sender: string,
-      recipient: string,
+      from: string,
+      to: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     underlying(overrides?: CallOverrides): Promise<[string]>;
   };
+
+  accrualBlockNumber(overrides?: CallOverrides): Promise<BigNumber>;
 
   allowance(
     owner: string,
@@ -356,6 +462,15 @@ export class MockCToken extends BaseContract {
     owner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  borrowBalanceCurrent(
+    user: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  borrowIndex(overrides?: CallOverrides): Promise<BigNumber>;
+
+  borrowRatePerBlock(overrides?: CallOverrides): Promise<BigNumber>;
 
   decimals(overrides?: CallOverrides): Promise<number>;
 
@@ -390,6 +505,27 @@ export class MockCToken extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setAccrualBlockNumber(
+    accrualBlockNumber: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setBorrowBalanceCurrent(
+    value: BigNumberish,
+    user: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setBorrowIndex(
+    borrowIndex: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setBorrowRatePerBlock(
+    borrowRatePerBlock: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   setExchangeRate(
     rate: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -407,14 +543,14 @@ export class MockCToken extends BaseContract {
   totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
   transfer(
-    recipient: string,
+    to: string,
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   transferFrom(
-    sender: string,
-    recipient: string,
+    from: string,
+    to: string,
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -422,6 +558,8 @@ export class MockCToken extends BaseContract {
   underlying(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
+    accrualBlockNumber(overrides?: CallOverrides): Promise<BigNumber>;
+
     allowance(
       owner: string,
       spender: string,
@@ -447,6 +585,15 @@ export class MockCToken extends BaseContract {
       owner: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    borrowBalanceCurrent(
+      user: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    borrowIndex(overrides?: CallOverrides): Promise<BigNumber>;
+
+    borrowRatePerBlock(overrides?: CallOverrides): Promise<BigNumber>;
 
     decimals(overrides?: CallOverrides): Promise<number>;
 
@@ -479,6 +626,27 @@ export class MockCToken extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    setAccrualBlockNumber(
+      accrualBlockNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setBorrowBalanceCurrent(
+      value: BigNumberish,
+      user: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setBorrowIndex(
+      borrowIndex: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setBorrowRatePerBlock(
+      borrowRatePerBlock: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     setExchangeRate(
       rate: BigNumberish,
       overrides?: CallOverrides
@@ -496,14 +664,14 @@ export class MockCToken extends BaseContract {
     totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     transfer(
-      recipient: string,
+      to: string,
       amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
     transferFrom(
-      sender: string,
-      recipient: string,
+      from: string,
+      to: string,
       amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<boolean>;
@@ -550,6 +718,8 @@ export class MockCToken extends BaseContract {
   };
 
   estimateGas: {
+    accrualBlockNumber(overrides?: CallOverrides): Promise<BigNumber>;
+
     allowance(
       owner: string,
       spender: string,
@@ -575,6 +745,15 @@ export class MockCToken extends BaseContract {
       owner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    borrowBalanceCurrent(
+      user: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    borrowIndex(overrides?: CallOverrides): Promise<BigNumber>;
+
+    borrowRatePerBlock(overrides?: CallOverrides): Promise<BigNumber>;
 
     decimals(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -609,6 +788,27 @@ export class MockCToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setAccrualBlockNumber(
+      accrualBlockNumber: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setBorrowBalanceCurrent(
+      value: BigNumberish,
+      user: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setBorrowIndex(
+      borrowIndex: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setBorrowRatePerBlock(
+      borrowRatePerBlock: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setExchangeRate(
       rate: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -626,14 +826,14 @@ export class MockCToken extends BaseContract {
     totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     transfer(
-      recipient: string,
+      to: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     transferFrom(
-      sender: string,
-      recipient: string,
+      from: string,
+      to: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -642,6 +842,10 @@ export class MockCToken extends BaseContract {
   };
 
   populateTransaction: {
+    accrualBlockNumber(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     allowance(
       owner: string,
       spender: string,
@@ -669,6 +873,17 @@ export class MockCToken extends BaseContract {
     balanceOfUnderlying(
       owner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    borrowBalanceCurrent(
+      user: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    borrowIndex(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    borrowRatePerBlock(
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     decimals(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -706,6 +921,27 @@ export class MockCToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    setAccrualBlockNumber(
+      accrualBlockNumber: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setBorrowBalanceCurrent(
+      value: BigNumberish,
+      user: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setBorrowIndex(
+      borrowIndex: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setBorrowRatePerBlock(
+      borrowRatePerBlock: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     setExchangeRate(
       rate: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -725,14 +961,14 @@ export class MockCToken extends BaseContract {
     totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     transfer(
-      recipient: string,
+      to: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     transferFrom(
-      sender: string,
-      recipient: string,
+      from: string,
+      to: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
