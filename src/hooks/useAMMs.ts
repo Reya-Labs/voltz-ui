@@ -85,8 +85,8 @@ const useAMMs = (): UseAMMsResult => {
           return ammsData;
       } else {
         if (process.env.REACT_APP_WHITELIST) {
-          const whitelist = process.env.REACT_APP_WHITELIST.split(',').map(s => s.trim());
-          ammsData = ammsData?.filter((amm) => whitelist.includes(amm.id));
+          const whitelist = process.env.REACT_APP_WHITELIST.split(',').map(s => s.trim().toLowerCase());
+          ammsData = ammsData?.filter((amm) => whitelist.includes(amm.id.toLowerCase()));
           return ammsData;
         } 
       }
