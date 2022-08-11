@@ -15,4 +15,5 @@ export * from './SwapCurrentPosition';
 export * from './SwapForm';
 export * from './SwapInfo';
 export { default as WalletConnect } from './WalletConnect/WalletConnect';
+export { default as BorrowPortfolioHeader } from './BorrowPortfolioHeader/BorrowPortfolioHeader';
 export { default as PortfolioHeader } from './PortfolioHeader/PortfolioHeader';

@@ -4,20 +4,23 @@ import { Position } from "@voltz-protocol/v1-sdk/dist/types/entities";
 
 import useAgent from "../useAgent";
 import useAsyncFunction, { UseAsyncFunctionResult } from "../useAsyncFunction";
-import { UnderlyingInfo } from "./types";
+import { DateTime } from "luxon";
 
 export type useBorrowAMMReturnType = {
-  aggregatedDebt: UseAsyncFunctionResult<unknown, number | void>;
+  underlyingDebt: UseAsyncFunctionResult<unknown, number | void>;
   variableDebt: UseAsyncFunctionResult<unknown, number | void>;
+  fixedDebt: UseAsyncFunctionResult<unknown, number | void>;
   variableApy: UseAsyncFunctionResult<unknown, number | void>;
+  fixedApr: UseAsyncFunctionResult<unknown, number | void>;
+  endDate: DateTime |  undefined;
 }
 
 export const useBorrowAMM = ( borrowAmm?: AugmentedBorrowAMM) => {
   const { agent } = useAgent();
 
-  const aggregatedDebt = useAsyncFunction(
-    async (position: Position) => {
-      const result = await borrowAmm?.getAggregatedBorrowBalance(position);
+  const underlyingDebt = useAsyncFunction(
+    async () => {
+      const result = await borrowAmm?.getUnderlyingBorrowBalance();
       return result;
     },
     useMemo(() => undefined, [!!borrowAmm?.provider])
@@ -25,11 +28,15 @@ export const useBorrowAMM = ( borrowAmm?: AugmentedBorrowAMM) => {
 
   const variableDebt = useAsyncFunction(
     async (position: Position) => {
-      const fixedDebt = await borrowAmm?.getFixedBorrowBalance(position);
-      const posAggregatedDebt = await borrowAmm?.getAggregatedBorrowBalance(position);
-      const result = borrowAmm?.getVariableBorrowBalance(
-        posAggregatedDebt ? posAggregatedDebt : 0,
-        fixedDebt ? fixedDebt : 0);
+      const result = await borrowAmm?.getAggregatedBorrowBalance(position);
+      return result;
+    },
+    useMemo(() => undefined, [!!borrowAmm?.provider])
+  );
+
+  const fixedDebt = useAsyncFunction(
+    async (position: Position) => {
+      const result = await borrowAmm?.getFixedBorrowBalance(position);
       return result;
     },
     useMemo(() => undefined, [!!borrowAmm?.provider])
@@ -47,15 +54,42 @@ export const useBorrowAMM = ( borrowAmm?: AugmentedBorrowAMM) => {
     useMemo(() => undefined, [!!borrowAmm?.provider]),
   );
 
+  const fixedApr = useAsyncFunction(
+    async (position: Position) => {
+      const amm = borrowAmm?.amm;
+      if (amm && position.amm.id == amm.id) {
+        const positionInfo = await amm.getPositionInformation(position);
+        return positionInfo.fixedRateSinceLastSwap;
+      }
+      return undefined;
+    },
+    useMemo(() => undefined, [!!borrowAmm?.provider]),
+  );
+
+  const endDate = useMemo(() => {
+      const amm = borrowAmm?.amm;
+      if (amm) {
+        return amm?.endDateTime;
+      }
+      return undefined;
+  }, [borrowAmm]);
+
+
   return useMemo(() => ({
-    aggregatedDebt,
+    underlyingDebt,
     variableDebt,
-    variableApy
+    fixedDebt,
+    variableApy,
+    fixedApr,
+    endDate
   } as useBorrowAMMReturnType), 
   [
-    aggregatedDebt,
+    underlyingDebt,
     variableDebt,
-    variableApy
+    fixedDebt,
+    variableApy,
+    fixedApr,
+    endDate
   ]);
 }
 

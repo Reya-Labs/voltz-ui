@@ -3,76 +3,55 @@ import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import { SystemStyleObject, Theme } from '@theme';
+import { Typography } from '@components/atomic';
 
-import { data, AugmentedBorrowAMM } from '@utilities';
+import { data, AugmentedBorrowAMM, findCurrentBorrowPosition } from '@utilities';
 import { mapAmmToAmmTableDatum } from './utilities';
-import { BorrowAMMProvider } from '@contexts';
+import { BorrowAMMProvider, PositionProvider } from '@contexts';
 import { Panel } from '@components/atomic';
 import { useAgent } from '@hooks';
-import { Agents } from '@contexts';
-import { VariableBorrowTableFields } from './types';
+import { FixedBorrowTableFields, labelsFixed, labelsVariable, VariableBorrowTableFields } from './types';
 import { BorrowTableHead } from './components';
-import BorrowPortfolioHeader, {BorrowPortfolioHeaderProps} from '../BorrowPortfolioHeader/BorrowPortfolioHeader';
 import { DateTime } from 'luxon';
 import BorrowTableRow from './components/BorrowTableRow/BorrowTableRow';
+import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
 
 
 export type BorrowTableProps = {
-  headerProps: BorrowPortfolioHeaderProps;
+  positions: Position[];
   borrowAmms: AugmentedBorrowAMM[];
   order: data.TableOrder;
   onSetOrder: (order: data.TableOrder) => void;
-  orderBy: VariableBorrowTableFields;
-  onSetOrderBy: (orderBy: VariableBorrowTableFields) => void;
+  variableOrderBy: VariableBorrowTableFields;
+  onSetVariableOrderBy: (orderBy: VariableBorrowTableFields) => void;
+  fixedOrderBy: FixedBorrowTableFields;
+  onSetFixedOrderBy: (orderBy: FixedBorrowTableFields) => void;
   page: number;
   pages: number;
   onSetPage: (page: number) => void;
   size: number | null;
   onSetSize: (size: number) => void;
   onSelectItem: (datum: AugmentedBorrowAMM) => void;
+  commonOverrides: SystemStyleObject<Theme>;
 };
 
 const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
-  headerProps,
+  positions,
   borrowAmms,
   order,
   onSetOrder,
-  orderBy,
-  onSetOrderBy,
+  variableOrderBy,
+  fixedOrderBy,
   page,
   pages,
   onSetPage,
   size,
   onSetSize,
   onSelectItem,
+  commonOverrides,
 }) => {
-  const commonOverrides: SystemStyleObject<Theme> = {
-    '& .MuiTableCell-root': {
-      borderColor: 'transparent',
-      paddingRight: (theme) => theme.spacing(4),
-      paddingLeft: (theme) => theme.spacing(4),
-      paddingTop: (theme) => theme.spacing(3),
-      paddingBottom: (theme) => theme.spacing(4),
-      '&:first-of-type': {
-        borderTopLeftRadius: 8,
-        borderBottomLeftRadius: 8,
-      },
-      '&:last-of-type': {
-        borderTopRightRadius: 8,
-        borderBottomRightRadius: 8,
-      },
-    },
-    '.MuiInputLabel-root': {
-      marginBottom: (theme) => theme.spacing(1)
-    },
-  };
-  const handleSort = (field: VariableBorrowTableFields) => {
-    onSetOrder(field === orderBy ? (order === 'asc' ? 'desc' : 'asc') : 'asc');
-    onSetOrderBy(field);
-  };
 
   const { agent } = useAgent();
-  const _variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'dark';
 
   const tableData = useMemo(() => {
     const unfilteredDatum = borrowAmms.map(mapAmmToAmmTableDatum);
@@ -84,12 +63,10 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
   };
 
     return (
-      <Panel variant={_variant} borderRadius='large' padding='container' sx={{ paddingTop: 0, paddingBottom: 0 }}>
-        <BorrowPortfolioHeader
-        currencyCode={headerProps.currencyCode}
-        currencySymbol={headerProps.currencySymbol}
-        aggregatedDebt={headerProps.aggregatedDebt}/>
+      <Panel variant={'dark'} borderRadius='large' padding='container' sx={{ paddingTop: 0, paddingBottom: 0 }}>
 
+        {/* VARIABLE POSITIONS TABLE */}
+        <Typography variant="body2" sx={{ fontSize: 20, fontWeight: 'bold' }}>VARIABLE POSITIONS</Typography>
         <TableContainer>
           <Table
             sx={{
@@ -100,12 +77,44 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
             aria-labelledby="tableTitle"
             size="medium"
           >
-            <BorrowTableHead order={order} orderBy={orderBy} onSort={handleSort} />
+            <BorrowTableHead order={order} orderBy={variableOrderBy} labels={labelsVariable}/>
             <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
             {tableData.map((datum, index) => {
               if (datum && DateTime.now() < datum.endDate) {
+                const position = findCurrentBorrowPosition(positions || [], borrowAmms[index]);
                 return (<BorrowAMMProvider amm={borrowAmms[index]}>
-                  <BorrowTableRow datum={datum} index={index} onSelect={handleSelectRow(index)} />
+                  <PositionProvider position={position}>
+                    <BorrowTableRow datum={datum} index={index} onSelect={handleSelectRow(index)} isFixedPositions={false} />
+                  </PositionProvider>
+                </BorrowAMMProvider>)
+              }
+          })}
+          </TableBody>
+          </Table>
+        </TableContainer>
+
+        {/* FIXED POSITIONS TABLE */}
+        <Typography variant="body2" sx={{ fontSize: 20, fontWeight: 'bold' }}>FIXED POSITIONS</Typography>
+        <TableContainer>
+          <Table
+            sx={{
+              borderCollapse: 'separate',
+              borderSpacing: '0px 16px',
+              ...commonOverrides,
+            }}
+            aria-labelledby="tableTitle"
+            size="medium"
+          >
+            <BorrowTableHead order={order} orderBy={fixedOrderBy} labels={labelsFixed}/>
+            <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
+            {tableData.map((datum, index) => {
+              if (datum && DateTime.now() < datum.endDate) {
+                const position = findCurrentBorrowPosition(positions || [], borrowAmms[index]);
+                if(!position) { return; }
+                return (<BorrowAMMProvider amm={borrowAmms[index]}>
+                  <PositionProvider position={position}>
+                    <BorrowTableRow datum={datum} index={index} onSelect={handleSelectRow(index)} isFixedPositions={true}/>
+                  </PositionProvider>
                 </BorrowAMMProvider>)
               }
           })}
