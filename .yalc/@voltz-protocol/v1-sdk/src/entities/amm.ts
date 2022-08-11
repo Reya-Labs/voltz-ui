@@ -1,5 +1,5 @@
 import JSBI from 'jsbi';
-import { ethers, providers } from 'ethers';
+import { BaseContract, ethers, providers } from 'ethers';
 import { DateTime } from 'luxon';
 import { BigNumber, ContractReceipt, Signer, utils } from 'ethers';
 
@@ -24,6 +24,8 @@ import {
   VAMM__factory,
   CompoundFCM,
   ICToken__factory,
+  CompoundRateOracle,
+  CompoundRateOracle__factory,
 } from '../typechain';
 import RateOracle from './rateOracle';
 import { TickMath } from '../utils/tickMath';
@@ -2952,10 +2954,9 @@ class AMM {
     const blocksPerDay = 6570; // 13.15 seconds per block
     const blockPerHour = 274;
 
-    // modify 
     switch (this.rateOracle.protocolId) {
-      case 1: 
-      case 5: {
+      case 5: 
+      case 1: {
         const lastBlock = await this.provider.getBlockNumber();
         const oneBlockAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
         const twoBlocksAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 2)).timestamp);
@@ -2966,14 +2967,12 @@ class AMM {
 
         return oneWeekApy.div(BigNumber.from(1000000000000)).toNumber() / 1000000;
       }
-
-      case 2: 
-      case 6: {
+      case 2: {
         const daysPerYear = 365;
 
-        const fcmContract = fcmCompoundFactory.connect(this.fcmAddress, this.provider);
+        const rateOracle = CompoundRateOracle__factory.connect(this.fcmAddress, this.provider);
 
-        const cTokenAddress = await (fcmContract as CompoundFCM).cToken();
+        const cTokenAddress = await (rateOracle as CompoundRateOracle).ctoken();
         const cTokenContract = ICToken__factory.connect(cTokenAddress, this.provider);
 
         const supplyRatePerBlock = await cTokenContract.supplyRatePerBlock();
@@ -3004,6 +3003,19 @@ class AMM {
 
         return oneWeekApy.div(BigNumber.from(1000000000000)).toNumber() / 1000000;
       }
+
+      case 6: {
+        const daysPerYear = 365;
+
+        const rateOracle = CompoundRateOracle__factory.connect(this.fcmAddress, this.provider);
+
+        const cTokenAddress = await (rateOracle as CompoundRateOracle).ctoken();
+        const cTokenContract = ICToken__factory.connect(cTokenAddress, this.provider);
+
+        const supplyRatePerBlock = await cTokenContract.supplyRatePerBlock();
+        const supplyApy = (((Math.pow((supplyRatePerBlock.toNumber() / 1e18 * blocksPerDay) + 1, daysPerYear))) - 1);
+        return supplyApy;
+      } 
 
       default:
         throw new Error("Unrecognized protocol");

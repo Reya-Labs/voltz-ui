@@ -60,11 +60,11 @@ var BorrowAMM = /** @class */ (function () {
         this.underlyingToken = amm.underlyingToken;
         this.amm = amm;
         var protocolId = this.rateOracle.protocolId;
-        if (protocolId !== 2 && protocolId !== 1) {
+        if (protocolId !== 6 && protocolId !== 5) {
             throw new Error("Not a borrow market");
         }
         if (this.signer) {
-            if (protocolId === 2) {
+            if (protocolId === 6) {
                 var compoundRateOracle = typechain_1.ICompoundRateOracle__factory.connect(this.rateOracle.id, this.signer);
                 compoundRateOracle.ctoken().then(function (cTokenAddress) {
                     if (_this.signer !== null) {
@@ -182,35 +182,6 @@ var BorrowAMM = /** @class */ (function () {
             });
         });
     };
-    // get user's borrow balance in underlying protocol
-    // public async getActualBorrowBalance(position: Position): Promise<number> {
-    //   if (!this.signer) {
-    //       throw new Error('Wallet not connected');
-    //   }
-    //   if (!this.provider) {
-    //       throw new Error('Blockchain not connected');
-    //   }
-    //   const protocolId = this.rateOracle.protocolId;
-    //   // last updated balance in underlying protocol
-    //   let borrowBalance = BigNumber.from(0);
-    //   if (this.cToken) { // compound
-    //       const userAddress = await this.signer.getAddress();
-    //       borrowBalance = await this.cToken.callStatic.borrowBalanceCurrent(userAddress);
-    //   } else if ( this.aaveVariableDebtToken ) { // aave
-    //       const userAddress = await this.signer.getAddress();
-    //       borrowBalance = await this.aaveVariableDebtToken.balanceOf(userAddress);
-    //   }
-    //   const allSwaps = this.getAllSwaps(position);
-    //   // is past maturity?
-    //   const lastBlock = await this.provider.getBlockNumber();
-    //   const lastBlockTimestamp = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
-    //   const pastMaturity = (BigNumber.from(this.termEndTimestamp.toString())).lt(lastBlockTimestamp.mul(BigNumber.from(10).pow(18)));
-    //   // balance in Voltz
-    //   const accruedCashFlow = await this.getAccruedCashflow(allSwaps, pastMaturity);
-    //   const notional = BigNumber.from(position.marginInScaledYieldBearingTokens.toString()).toNumber();
-    //   const actualBalance = this.descale(borrowBalance) - notional - accruedCashFlow;
-    //   return actualBalance;
-    // }
     BorrowAMM.prototype.getUnderlyingBorrowBalance = function () {
         return __awaiter(this, void 0, void 0, function () {
             var borrowBalance, userAddress, userAddress;
@@ -225,7 +196,7 @@ var BorrowAMM = /** @class */ (function () {
                         return [4 /*yield*/, this.signer.getAddress()];
                     case 1:
                         userAddress = _a.sent();
-                        return [4 /*yield*/, this.cToken.callStatic.borrowBalanceCurrent("0xc2eb6539e4b351c08c268844cf1bcf44b1ea7494")];
+                        return [4 /*yield*/, this.cToken.callStatic.borrowBalanceCurrent(userAddress)];
                     case 2:
                         borrowBalance = _a.sent();
                         return [3 /*break*/, 6];
@@ -285,7 +256,13 @@ var BorrowAMM = /** @class */ (function () {
                         return [4 /*yield*/, this.getUnderlyingBorrowBalance()];
                     case 2:
                         underlyingBorrowBalance = _a.sent();
-                        return [2 /*return*/, underlyingBorrowBalance - fixedBorrowBalance];
+                        if (underlyingBorrowBalance >= fixedBorrowBalance) {
+                            return [2 /*return*/, underlyingBorrowBalance - fixedBorrowBalance];
+                        }
+                        else {
+                            return [2 /*return*/, 0];
+                        }
+                        return [2 /*return*/];
                 }
             });
         });
