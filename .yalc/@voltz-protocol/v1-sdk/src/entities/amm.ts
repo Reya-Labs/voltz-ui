@@ -2970,7 +2970,7 @@ class AMM {
       case 2: {
         const daysPerYear = 365;
 
-        const rateOracle = CompoundRateOracle__factory.connect(this.fcmAddress, this.provider);
+        const rateOracle = CompoundRateOracle__factory.connect(this.rateOracle.id, this.provider);
 
         const cTokenAddress = await (rateOracle as CompoundRateOracle).ctoken();
         const cTokenContract = ICToken__factory.connect(cTokenAddress, this.provider);
@@ -3007,7 +3007,7 @@ class AMM {
       case 6: {
         const daysPerYear = 365;
 
-        const rateOracle = CompoundRateOracle__factory.connect(this.fcmAddress, this.provider);
+        const rateOracle = CompoundRateOracle__factory.connect(this.rateOracle.id, this.provider);
 
         const cTokenAddress = await (rateOracle as CompoundRateOracle).ctoken();
         const cTokenContract = ICToken__factory.connect(cTokenAddress, this.provider);

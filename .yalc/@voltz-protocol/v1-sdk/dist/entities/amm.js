@@ -2797,7 +2797,7 @@ var AMM = /** @class */ (function () {
                         return [2 /*return*/, oneWeekApy.div(ethers_2.BigNumber.from(1000000000000)).toNumber() / 1000000];
                     case 6:
                         daysPerYear = 365;
-                        rateOracle = typechain_1.CompoundRateOracle__factory.connect(this.fcmAddress, this.provider);
+                        rateOracle = typechain_1.CompoundRateOracle__factory.connect(this.rateOracle.id, this.provider);
                         return [4 /*yield*/, rateOracle.ctoken()];
                     case 7:
                         cTokenAddress = _p.sent();
@@ -2841,7 +2841,7 @@ var AMM = /** @class */ (function () {
                         return [2 /*return*/, oneWeekApy.div(ethers_2.BigNumber.from(1000000000000)).toNumber() / 1000000];
                     case 19:
                         daysPerYear = 365;
-                        rateOracle = typechain_1.CompoundRateOracle__factory.connect(this.fcmAddress, this.provider);
+                        rateOracle = typechain_1.CompoundRateOracle__factory.connect(this.rateOracle.id, this.provider);
                         return [4 /*yield*/, rateOracle.ctoken()];
                     case 20:
                         cTokenAddress = _p.sent();
