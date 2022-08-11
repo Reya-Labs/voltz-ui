@@ -2955,8 +2955,13 @@ class AMM {
     const blockPerHour = 274;
 
     switch (this.rateOracle.protocolId) {
+<<<<<<< HEAD
       case 5: 
       case 1: {
+=======
+      case 1: 
+      case 5: {
+>>>>>>> feat: variable table and draft 1 summary header
         const lastBlock = await this.provider.getBlockNumber();
         const oneBlockAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
         const twoBlocksAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 2)).timestamp);
