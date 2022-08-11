@@ -2955,8 +2955,7 @@ class AMM {
     // modify 
     switch (this.rateOracle.protocolId) {
       case 1: 
-      case 5:
-      case 2: {
+      case 5: {
         const lastBlock = await this.provider.getBlockNumber();
         const oneBlockAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
         const twoBlocksAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 2)).timestamp);
@@ -2968,6 +2967,7 @@ class AMM {
         return oneWeekApy.div(BigNumber.from(1000000000000)).toNumber() / 1000000;
       }
 
+      case 2: 
       case 6: {
         const daysPerYear = 365;
 

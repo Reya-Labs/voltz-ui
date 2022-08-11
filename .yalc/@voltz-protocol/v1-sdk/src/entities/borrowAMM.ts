@@ -284,9 +284,6 @@ class BorrowAMM {
       return underlyingBorrowBalance - fixedBorrowBalance;
   }
 
-  public getVariableBorrowBalance(aggregatedDebt: number, fixedDebt: number): number {
-    return aggregatedDebt - fixedDebt;
-  }
 }
 
 export default BorrowAMM;

@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-
+import Box from '@mui/material/Box';
+import { SystemStyleObject, Theme } from '@theme';
 
 import { AugmentedBorrowAMM, data } from '@utilities';
-import { useBorrowAMMs, usePositions } from '@hooks';
+import { useBorrowAMMs, useBorrowPositions, usePositions } from '@hooks';
 import { Agents } from '@contexts';
 import { Loading, Panel } from '@components/atomic';
 import BorrowTable from 'src/components/interface/BorrowTable/BorrowTable';
-import { VariableBorrowTableFields } from 'src/components/interface/BorrowTable/types';
-import {BorrowPortfolioHeaderProps} from 'src/components/interface/BorrowPortfolioHeader/BorrowPortfolioHeader';
-import { getTotalAggregatedDebt } from './services';
+import { FixedBorrowTableFields, VariableBorrowTableFields } from 'src/components/interface/BorrowTable/types';
+import { getTotalVariableDebt, getTotalFixedDebt } from './services';
+import BorrowPortfolioHeader, {BorrowPortfolioHeaderProps} from 'src/components/interface/BorrowPortfolioHeader/BorrowPortfolioHeader';
 
 
 export type ConnectedBorrowAMMTableProps = {
@@ -23,34 +24,78 @@ const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorrowAMMTa
   const [page, setPage] = useState(0);
   const [size, setSize] = useState<number | null>(null);
   const [order, setOrder] = useState<data.TableOrder>('desc');
-  const [orderBy, setOrderBy] = useState<VariableBorrowTableFields>('debt');
+  const [variableOrderBy, setVariableOrderBy] = useState<VariableBorrowTableFields>('debt');
+  const [fixedOrderBy, setFixedOrderBy] = useState<FixedBorrowTableFields>('debt');
 
   const { borrowAmms, loading, error } = useBorrowAMMs();
-  const { positions, loading: loadingPos, error: errorPos } = usePositions();
-  const [aggregatedDebt, setAggregatedDebt] = useState<number>();
-  const [headerProps, setHeaderProps] = useState<BorrowPortfolioHeaderProps>();
+  const { positions, loading: loadingPos, error: errorPos } = useBorrowPositions();
+  //const { positions, loading: loadingPos, error: errorPos } = usePositions();
 
-  const loadDebt = () => {
+  const [variableDebt, setVariableDebt] = useState<number>();
+  const [fixedDebt, setFixedDebt] = useState<number>();
+  const [variablePositionsCount, setVariablePositionsCount] = useState<number>();
+  const [fixedPositionsCount, setFixedPositionsCount] = useState<number>();
+
+  const commonOverrides: SystemStyleObject<Theme> = {
+    '& .MuiTableCell-root': {
+      borderColor: 'transparent',
+      paddingRight: (theme) => theme.spacing(4),
+      paddingLeft: (theme) => theme.spacing(4),
+      paddingTop: (theme) => theme.spacing(3),
+      paddingBottom: (theme) => theme.spacing(4),
+      '&:first-of-type': {
+        borderTopLeftRadius: 8,
+        borderBottomLeftRadius: 8,
+      },
+      '&:last-of-type': {
+        borderTopRightRadius: 8,
+        borderBottomRightRadius: 8,
+      },
+    },
+    '.MuiInputLabel-root': {
+      marginBottom: (theme) => theme.spacing(1)
+    },
+  };
+  const defaultHeaderProps = {
+    commonOverrides: commonOverrides,
+    currencyCode:'USD',
+    currencySymbol:'$'};
+  const [headerProps, setHeaderProps] = useState<BorrowPortfolioHeaderProps>(defaultHeaderProps);
+
+
+  
+
+  const loadBorrowPositionsSummary = () => {
     if(!loadingPos && !errorPos && !loading && !error && positions && borrowAmms) {
-      const request = getTotalAggregatedDebt(borrowAmms, positions);
-      request.then((response) => {
-        setAggregatedDebt(response);
+      const requestVariable = getTotalVariableDebt(borrowAmms, positions);
+      requestVariable.then(([varDebt, varPositionsCount]) => {
+        setVariableDebt(varDebt);
+        setVariablePositionsCount(varPositionsCount);
+      });
+
+      const requestFixed = getTotalFixedDebt(borrowAmms, positions);
+      requestFixed.then(([fixDebt, fixPositionsCount]) => {
+        setFixedDebt(fixDebt);
+        setFixedPositionsCount(fixPositionsCount);
       });
     }
   }
 
   useEffect(() => {
-    loadDebt();
+    loadBorrowPositionsSummary();
   }, [borrowAmms, error, loading, positions, loadingPos, errorPos]);
 
   useEffect(() => {
-    if(aggregatedDebt) {
-      setHeaderProps({
-        currencyCode:'USD',
+    setHeaderProps({
+      commonOverrides: commonOverrides,
+      currencyCode:'USD',
       currencySymbol:'$',
-      aggregatedDebt: aggregatedDebt});
-    }
-  }, [aggregatedDebt]);
+      fixedDebt: fixedDebt,
+      variableDebt: variableDebt,
+      fixedPositionsCount: fixedPositionsCount,
+      variablePositionsCount: variablePositionsCount
+    });
+  }, [fixedDebt, variableDebt, fixedPositionsCount, variablePositionsCount]);
 
   if (!borrowAmms || loading || error) {
     return null;
@@ -59,23 +104,38 @@ const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorrowAMMTa
   const pages = 0;
 
   const renderContent = () => {
-    if(aggregatedDebt && headerProps){
+    if(borrowAmms && positions && !loadingPos && !errorPos && !loading && !error){
       return (
         <>
-        <BorrowTable
-          borrowAmms={borrowAmms}
-          headerProps={headerProps}
-          order={order}
-          onSetOrder={setOrder}
-          orderBy={orderBy}
-          onSetOrderBy={setOrderBy}
-          page={page}
-          pages={pages}
-          onSetPage={setPage}
-          size={size}
-          onSetSize={setSize}
-          onSelectItem={onSelectItem}
-        />
+        <Panel variant='dark' sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
+        <BorrowPortfolioHeader
+            commonOverrides={headerProps.commonOverrides}
+            currencyCode={headerProps.currencyCode}
+            currencySymbol={headerProps.currencySymbol}
+            fixedDebt={headerProps.fixedDebt}
+            variableDebt={headerProps.variableDebt}
+            fixedPositionsCount={headerProps.fixedPositionsCount}
+            variablePositionsCount={headerProps.variablePositionsCount}/>
+          <Box sx={{ marginTop: (theme) => theme.spacing(14) }}>
+            <BorrowTable
+              positions={positions}
+              borrowAmms={borrowAmms}
+              order={order}
+              onSetOrder={setOrder}
+              variableOrderBy={variableOrderBy}
+              onSetVariableOrderBy={setVariableOrderBy}
+              fixedOrderBy={fixedOrderBy}
+              onSetFixedOrderBy={setFixedOrderBy}
+              page={page}
+              pages={pages}
+              onSetPage={setPage}
+              size={size}
+              onSetSize={setSize}
+              onSelectItem={onSelectItem}
+              commonOverrides={commonOverrides}
+            />
+          </Box>
+        </Panel>
         </>
       )
     } else{

@@ -290,9 +290,6 @@ var BorrowAMM = /** @class */ (function () {
             });
         });
     };
-    BorrowAMM.prototype.getVariableBorrowBalance = function (aggregatedDebt, fixedDebt) {
-        return aggregatedDebt - fixedDebt;
-    };
     return BorrowAMM;
 }());
 exports.default = BorrowAMM;

@@ -6,18 +6,16 @@ import { SystemStyleObject, Theme } from '@mui/system';
 import { Typography } from '@components/atomic';
 
 import { data } from '@utilities';
-import { VariableBorrowTableFields, labelsVariable } from '../../types';
+import { VariableBorrowTableFields, labelsVariable, labelsFixed, FixedBorrowTableFields } from '../../types';
 
 
 export type BorrowTableHeadProps = {
   order: data.TableOrder;
-  orderBy: VariableBorrowTableFields;
-  onSort: (field: VariableBorrowTableFields) => void;
+  orderBy: VariableBorrowTableFields | FixedBorrowTableFields;
+  labels: [VariableBorrowTableFields | FixedBorrowTableFields, string][];
 };
 
-const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({ order, orderBy, onSort }) => {
-  const createSortHandler = (field: VariableBorrowTableFields) => (_event: React.MouseEvent<unknown>) =>
-    onSort(field);
+const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({ order, orderBy, labels }) => {
 
   const cellSx: SystemStyleObject<Theme> = {
     '&.MuiTableCell-root': {
@@ -33,7 +31,8 @@ const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({ order,
   return (
     <TableHead>
       <TableRow>
-        {labelsVariable.map(([field, label]) => (
+        {
+        labels.map(([field, label]) => (
           <TableCell
             key={field}
             align="left"

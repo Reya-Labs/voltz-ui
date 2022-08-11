@@ -58,7 +58,7 @@ const FixedBorrower: React.FunctionComponent = () => {
   };
 
   return (
-    <Page backgroundView='none'>
+    <Page backgroundView='table'>
         {renderMode === 'fix-borrow' && (
           <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
             <ConnectedBorrowForm onReset={handleReset} />

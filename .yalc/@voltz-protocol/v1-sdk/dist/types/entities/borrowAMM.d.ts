@@ -42,7 +42,6 @@ declare class BorrowAMM {
     getUnderlyingBorrowBalance(): Promise<number>;
     getFixedBorrowBalance(position: Position): Promise<number>;
     getAggregatedBorrowBalance(position: Position): Promise<number>;
-    getVariableBorrowBalance(aggregatedDebt: number, fixedDebt: number): number;
 }
 export default BorrowAMM;
 //# sourceMappingURL=borrowAMM.d.ts.map
