@@ -174,18 +174,11 @@ var getErrorSignature = function (error, environment) {
         }
         case 'MAINNET': {
             try {
-                // const stringifiedError = error.toString();
-                // const afterOriginalError = stringifiedError.split("originalError")[1];
-                // const afterData = afterOriginalError.split("data")[1];
-                // const beforeMessage = afterData.split("message")[0];
-                // const reason = beforeMessage.substring(3, beforeMessage.length - 3);
-                var reason = void 0;
-                if (typeof error.error.data === 'string') {
-                    reason = error.error.data;
-                }
-                else {
-                    reason = error.error.data.originalError.data;
-                }
+                var stringifiedError = error.toString();
+                var afterOriginalError = stringifiedError.split("originalError")[1];
+                var afterData = afterOriginalError.split("data")[1];
+                var beforeMessage = afterData.split("message")[0];
+                var reason = beforeMessage.substring(3, beforeMessage.length - 3);
                 if (reason.startsWith('0x08c379a0')) {
                     return 'Error';
                 }
@@ -241,19 +234,12 @@ var getReadableErrorMessage = function (error, environment) {
                 }
             }
             case 'MAINNET': {
-                // const stringifiedError = error.toString();
-                // const afterOriginalError = stringifiedError.split("originalError")[1];
-                // const afterData = afterOriginalError.split("data")[1];
-                // const beforeMessage = afterData.split("message")[0];
-                // let reason = beforeMessage.substring(3, beforeMessage.length - 3);
-                // reason = `0x${reason.substring(10)}`;
-                var reason = void 0;
-                if (typeof error.error.data === 'string') {
-                    reason = error.error.data;
-                }
-                else {
-                    reason = error.error.data.originalError.data;
-                }
+                var stringifiedError = error.toString();
+                var afterOriginalError = stringifiedError.split("originalError")[1];
+                var afterData = afterOriginalError.split("data")[1];
+                var beforeMessage = afterData.split("message")[0];
+                var reason = beforeMessage.substring(3, beforeMessage.length - 3);
+                reason = "0x".concat(reason.substring(10));
                 try {
                     var rawErrorMessage = ethers_1.utils.defaultAbiCoder.decode(['string'], reason)[0];
                     if (rawErrorMessage in exports.errorMessageMapping) {
@@ -329,18 +315,11 @@ var decodeInfoPostMint = function (error, environment) {
             }
             case 'MAINNET': {
                 try {
-                    // const stringifiedError = error.toString();
-                    // const afterOriginalError = stringifiedError.split("originalError")[1];
-                    // const afterData = afterOriginalError.split("data")[1];
-                    // const beforeMessage = afterData.split("message")[0];
-                    // const reason = beforeMessage.substring(3, beforeMessage.length - 3);
-                    var reason = void 0;
-                    if (typeof error.error.data === 'string') {
-                        reason = error.error.data;
-                    }
-                    else {
-                        reason = error.error.data.originalError.data;
-                    }
+                    var stringifiedError = error.toString();
+                    var afterOriginalError = stringifiedError.split("originalError")[1];
+                    var afterData = afterOriginalError.split("data")[1];
+                    var beforeMessage = afterData.split("message")[0];
+                    var reason = beforeMessage.substring(3, beforeMessage.length - 3);
                     var decodingResult = exports.iface.decodeErrorResult(errSig, reason);
                     var result = {
                         marginRequirement: decodingResult.marginRequirement,
@@ -429,18 +408,11 @@ var decodeInfoPostSwap = function (error, environment) {
             }
             case 'MAINNET': {
                 try {
-                    // const stringifiedError = error.toString();
-                    // const afterOriginalError = stringifiedError.split("originalError")[1];
-                    // const afterData = afterOriginalError.split("data")[1];
-                    // const beforeMessage = afterData.split("message")[0];
-                    // const reason = beforeMessage.substring(3, beforeMessage.length - 3);
-                    var reason = void 0;
-                    if (typeof error.error.data === 'string') {
-                        reason = error.error.data;
-                    }
-                    else {
-                        reason = error.error.data.originalError.data;
-                    }
+                    var stringifiedError = error.toString();
+                    var afterOriginalError = stringifiedError.split("originalError")[1];
+                    var afterData = afterOriginalError.split("data")[1];
+                    var beforeMessage = afterData.split("message")[0];
+                    var reason = beforeMessage.substring(3, beforeMessage.length - 3);
                     var decodingResult = exports.iface.decodeErrorResult(errSig, reason);
                     var result = {
                         marginRequirement: decodingResult.marginRequirement,
