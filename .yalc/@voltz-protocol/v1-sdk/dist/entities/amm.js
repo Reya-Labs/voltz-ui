@@ -2760,7 +2760,7 @@ var AMM = /** @class */ (function () {
     // one week look-back window apy
     AMM.prototype.getInstantApy = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var blocksPerDay, blockPerHour, _a, lastBlock, oneBlockAgo, _b, _c, twoBlocksAgo, _d, _e, rateOracleContract, oneWeekApy, daysPerYear, fcmContract, cTokenAddress, cTokenContract, supplyRatePerBlock, supplyApy, lastBlock, to, _f, _g, from, _h, _j, rateOracleContract, oneWeekApy, lastBlock, to, _k, _l, from, _m, _o, rateOracleContract, oneWeekApy;
+            var blocksPerDay, blockPerHour, _a, lastBlock, oneBlockAgo, _b, _c, twoBlocksAgo, _d, _e, rateOracleContract, oneWeekApy, daysPerYear, rateOracleContract, cTokenAddress, cTokenContract, supplyRatePerBlock, supplyApy, lastBlock, to, _f, _g, from, _h, _j, rateOracleContract, oneWeekApy, lastBlock, to, _k, _l, from, _m, _o, rateOracleContract, oneWeekApy;
             return __generator(this, function (_p) {
                 switch (_p.label) {
                     case 0:
@@ -2797,8 +2797,8 @@ var AMM = /** @class */ (function () {
                         return [2 /*return*/, oneWeekApy.div(ethers_2.BigNumber.from(1000000000000)).toNumber() / 1000000];
                     case 6:
                         daysPerYear = 365;
-                        fcmContract = typechain_1.CompoundFCM__factory.connect(this.fcmAddress, this.provider);
-                        return [4 /*yield*/, fcmContract.cToken()];
+                        rateOracleContract = typechain_1.CompoundRateOracle__factory.connect(this.rateOracle.id, this.provider);
+                        return [4 /*yield*/, rateOracleContract.callStatic.ctoken()];
                     case 7:
                         cTokenAddress = _p.sent();
                         cTokenContract = typechain_1.ICToken__factory.connect(cTokenAddress, this.provider);

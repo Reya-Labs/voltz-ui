@@ -24,6 +24,7 @@ import {
   VAMM__factory,
   CompoundFCM,
   ICToken__factory,
+  CompoundRateOracle__factory,
 } from '../typechain';
 import RateOracle from './rateOracle';
 import { TickMath } from '../utils/tickMath';
@@ -2970,9 +2971,11 @@ class AMM {
       case 6: {
         const daysPerYear = 365;
 
-        const fcmContract = fcmCompoundFactory.connect(this.fcmAddress, this.provider);
+        // const fcmContract = fcmCompoundFactory.connect(this.fcmAddress, this.provider);
+        const rateOracleContract = CompoundRateOracle__factory.connect(this.rateOracle.id, this.provider);
 
-        const cTokenAddress = await (fcmContract as CompoundFCM).cToken();
+        const cTokenAddress = await rateOracleContract.callStatic.ctoken();
+        // const cTokenAddress = await (fcmContract as CompoundFCM).cToken();
         const cTokenContract = ICToken__factory.connect(cTokenAddress, this.provider);
 
         const supplyRatePerBlock = await cTokenContract.supplyRatePerBlock();
