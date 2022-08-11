@@ -28,7 +28,7 @@ export const findCurrentAmm = (amms: AugmentedAMM[], selectedPosition: Position)
     return (
       amm.rateOracle.id === selectedPosition.amm.rateOracle.id && // check that these are from the same source - rocket, lido etc
       amm.underlyingToken.id === selectedPosition.amm.underlyingToken.id && // check that the tokens match - aDAI !== aUSDC
-      (Math.abs(+amm.endDateTime - Date.now()) / (1000 * 60 * 60)) >= 24 // Has at least 24 hours until it matures
+      +amm.endDateTime - Date.now() >= 24 * (1000 * 60 * 60) // Has at least 24 hours until it matures
     );
   })
 
