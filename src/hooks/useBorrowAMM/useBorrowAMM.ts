@@ -10,6 +10,7 @@ export type useBorrowAMMReturnType = {
   aggregatedDebt: UseAsyncFunctionResult<unknown, number | void>;
   variableDebt: UseAsyncFunctionResult<unknown, number | void>;
   variableApy: UseAsyncFunctionResult<unknown, number | void>;
+  fullyCollateralisedMarginRequirement: UseAsyncFunctionResult<unknown, number | void>;
 }
 
 export const useBorrowAMM = ( borrowAmm?: AugmentedBorrowAMM) => {
@@ -47,15 +48,32 @@ export const useBorrowAMM = ( borrowAmm?: AugmentedBorrowAMM) => {
     useMemo(() => undefined, [!!borrowAmm?.provider]),
   );
 
+  const fullyCollateralisedMarginRequirement = useAsyncFunction(
+    async (args:{fixedTokenBalance: number, variableTokenBalance: number}) => {
+      if (borrowAmm) {
+        const fcMargin = 
+          await borrowAmm.getFullyCollateralisedMarginRequirement(
+            args.fixedTokenBalance,
+            args.variableTokenBalance
+          );
+        return fcMargin;
+      }
+      return 0;
+    },
+    useMemo(() => undefined, [!!borrowAmm?.provider])
+  );
+
   return useMemo(() => ({
     aggregatedDebt,
     variableDebt,
-    variableApy
+    variableApy,
+    fullyCollateralisedMarginRequirement
   } as useBorrowAMMReturnType), 
   [
     aggregatedDebt,
     variableDebt,
-    variableApy
+    variableApy,
+    fullyCollateralisedMarginRequirement
   ]);
 }
 

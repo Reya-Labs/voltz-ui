@@ -1,8 +1,9 @@
 import React from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
-import { useTokenApproval } from '@hooks';
+import { UseAsyncFunctionResult, useTokenApproval } from '@hooks';
 import { FormPanel } from '@components/interface';
+import { MaskedIntegerField, InputTokenLabel } from '@components/composite';
 import {
   IconLabel,
   ProtocolInformation,
@@ -13,27 +14,32 @@ import { SubmitControls } from './components';
 import { SystemStyleObject, Theme } from '@theme';
 
 import TableRow from '@mui/material/TableRow';
-import { VariableAPY, FixedAPR, MaturityEndDate, VariableDebt, FixBorrowSlider } from './components';
+import { VariableAPY, FixedAPR, MaturityEndDate, FixBorrow, FixBorrowSlider } from './components';
 import { Stack } from '@mui/material';
+import { BorrowFormSubmitButtonHintStates, SwapFormSubmitButtonHintStates } from '@contexts';
 
 export type BorrowProps = {
   protocol?: string;
   startDate?: DateTime;
   endDate?: DateTime;
-  errors: Record<string, string>;
-  notional: number;
-  onChangeNotional: (value: number | undefined) => void;
+  notional?: number;
+  onChangeNotional: (value: number) => void;
   underlyingTokenName?: string;
   approvalsNeeded: boolean;
   isFormValid: boolean;
   isTradeVerified: boolean;
   onCancel: () => void;
   onSubmit: () => void;
-  tokenApprovals: {
-    checkingApprovals: boolean;
-    approving: boolean;
-  };
+  tokenApprovals: ReturnType<typeof useTokenApproval>
   tradeInfoErrorMessage?: string;
+  aggregatedDebt: UseAsyncFunctionResult<unknown, number | void>;
+  selectedFixedDebt?: number;
+  selectedFixedDebtPercentage?: number;
+  selectedVariableDebt?: number;
+  selectedVariableDebtPercentage?: number;
+  errors: Record<string, string>;
+  hintState: BorrowFormSubmitButtonHintStates;
+  margin: number;
 };
 
 const BorrowForm: React.FunctionComponent<BorrowProps> = ({
@@ -50,7 +56,14 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
   onCancel,
   onSubmit,
   tokenApprovals,
-  tradeInfoErrorMessage
+  tradeInfoErrorMessage,
+  aggregatedDebt,
+  selectedFixedDebt,
+  selectedFixedDebtPercentage,
+  selectedVariableDebt,
+  selectedVariableDebtPercentage,
+  hintState,
+  margin
 }) => {
   const bottomSpacing: SystemStyleObject<Theme> = {
     marginBottom: (theme) => theme.spacing(6)
@@ -69,42 +82,54 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
       </Box>
 
       <Box sx={bottomSpacing}>
-        <VariableDebt 
-          variableDebt={100}
+        <FixBorrow
+          aggregatedDebt={aggregatedDebt}
           currencySymbol={'$'}
           currencyCode={'USD'}
-        />
-
-        <FixBorrowSlider 
-          variableDebt={100}
-          selectedFixedDebt={0}
-          selectedFixedDebtPercentage={0}
-          selectedVariableDebt={100}
-          selectedVariableDebtPercentage={100}
-          currencySymbol={'$'}
+          selectedFixedDebt={selectedFixedDebt}
+          selectedFixedDebtPercentage={selectedFixedDebtPercentage}
+          selectedVariableDebt={selectedVariableDebt}
+          selectedVariableDebtPercentage={selectedVariableDebtPercentage}
+          handleChange={onChangeNotional}
         />
       </Box>
 
       <Box sx={bottomSpacing}>
-        <NotionalAmount
-          error={errors['notional']}
-          label="margin required to fix rate"
-          info={"To be added."}
-          notional={notional}
-          onChangeNotional={onChangeNotional}
-          underlyingTokenName={underlyingTokenName}
+        <MaskedIntegerField
+          allowDecimals
+          allowNegativeValue={false}
+          suffix={<InputTokenLabel tokenName={underlyingTokenName || ''} />}
+          suffixPadding={90}
+          label={<IconLabel label={"margin required to fix rate"} icon="information-circle" info={"To be added."} />}
+          value={margin}
           subtext={`BALANCE: 0`}
           disabled={true}
+          error={!!errors['margin']}
+          errorText={errors['margin']}
         />
       </Box>
 
-      <SubmitControls
+      {/* <SubmitControls
         approvalsNeeded={approvalsNeeded}
         isFormValid={isFormValid}
         isTradeVerified={isTradeVerified}
         onCancel={onCancel}
         onSubmit={onSubmit}
         protocol={protocol}
+        tokenApprovals={tokenApprovals}
+        tradeInfoErrorMessage={tradeInfoErrorMessage}
+        underlyingTokenName={underlyingTokenName}
+      /> */}
+      <SubmitControls
+        approvalsNeeded={approvalsNeeded}
+        hintState={hintState}
+        isFormValid={isFormValid}
+        isTradeVerified={isTradeVerified}
+        onCancel={onCancel}
+        onSubmit={onSubmit}
+        protocol={protocol}
+        // submitButtonState={submitButtonState}
+        // swapInfoLoading={swapInfoLoading}
         tokenApprovals={tokenApprovals}
         tradeInfoErrorMessage={tradeInfoErrorMessage}
         underlyingTokenName={underlyingTokenName}
