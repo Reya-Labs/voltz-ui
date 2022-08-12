@@ -481,6 +481,9 @@ var AMM = /** @class */ (function () {
                             fee: scaledFee < 0 ? -scaledFee : scaledFee,
                             slippage: fixedRateDeltaRaw < 0 ? -fixedRateDeltaRaw : fixedRateDeltaRaw,
                             averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
+                            fixedTokenDeltaBalance: this.descale(fixedTokenDelta),
+                            variableTokenDeltaBalance: this.descale(availableNotional),
+                            fixedTokenDeltaUnbalanced: this.descale(fixedTokenDeltaUnbalanced)
                         };
                         if (!(0, lodash_1.isNumber)(margin)) return [3 /*break*/, 12];
                         positionMargin = 0;
@@ -1243,7 +1246,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.getInfoPostFCMSwap = function (_a) {
         var notional = _a.notional, fixedRateLimit = _a.fixedRateLimit;
         return __awaiter(this, void 0, void 0, function () {
-            var sqrtPriceLimitX96, tickLimit, fcmContract, scaledNotional, factoryContract, peripheryAddress, peripheryContract, tickBefore, tickAfter, fee, availableNotional, fixedTokenDeltaUnbalanced, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw, scaledAvailableNotional, scaledFee, averageFixedRate, additionalMargin, _b, cTokenAddress, cTokenContract, rate, scaledRate;
+            var sqrtPriceLimitX96, tickLimit, fcmContract, scaledNotional, factoryContract, peripheryAddress, peripheryContract, tickBefore, tickAfter, fee, availableNotional, fixedTokenDelta, fixedTokenDeltaUnbalanced, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw, scaledAvailableNotional, scaledFee, averageFixedRate, additionalMargin, _b, cTokenAddress, cTokenContract, rate, scaledRate;
             var _this = this;
             return __generator(this, function (_c) {
                 switch (_c.label) {
@@ -1282,11 +1285,13 @@ var AMM = /** @class */ (function () {
                         tickAfter = 0;
                         fee = ethers_2.BigNumber.from(0);
                         availableNotional = ethers_2.BigNumber.from(0);
+                        fixedTokenDelta = ethers_2.BigNumber.from(0);
                         fixedTokenDeltaUnbalanced = ethers_2.BigNumber.from(0);
                         return [4 /*yield*/, fcmContract.callStatic.initiateFullyCollateralisedFixedTakerSwap(scaledNotional, sqrtPriceLimitX96).then(function (result) { return __awaiter(_this, void 0, void 0, function () {
                                 return __generator(this, function (_a) {
                                     switch (_a.label) {
                                         case 0:
+                                            fixedTokenDelta = result[0];
                                             availableNotional = result[1];
                                             fee = result[2];
                                             fixedTokenDeltaUnbalanced = result[3];
@@ -1298,6 +1303,7 @@ var AMM = /** @class */ (function () {
                                 });
                             }); }, function (error) {
                                 var result = (0, errorHandling_1.decodeInfoPostSwap)(error, _this.environment);
+                                fixedTokenDelta = result.fixedTokenDelta;
                                 tickAfter = result.tick;
                                 fee = result.fee;
                                 availableNotional = result.availableNotional;
@@ -1342,6 +1348,9 @@ var AMM = /** @class */ (function () {
                             fee: scaledFee < 0 ? -scaledFee : scaledFee,
                             slippage: fixedRateDeltaRaw < 0 ? -fixedRateDeltaRaw : fixedRateDeltaRaw,
                             averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
+                            fixedTokenDeltaBalance: this.descale(fixedTokenDelta),
+                            variableTokenDeltaBalance: this.descale(availableNotional),
+                            fixedTokenDeltaUnbalanced: this.descale(fixedTokenDeltaUnbalanced)
                         }];
                 }
             });
@@ -1414,7 +1423,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.getInfoPostFCMUnwind = function (_a) {
         var notionalToUnwind = _a.notionalToUnwind, fixedRateLimit = _a.fixedRateLimit;
         return __awaiter(this, void 0, void 0, function () {
-            var sqrtPriceLimitX96, tickLimit, fcmContract, scaledNotional, factoryContract, peripheryAddress, peripheryContract, tickBefore, tickAfter, fee, availableNotional, fixedTokenDeltaUnbalanced, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw, scaledAvailableNotional, scaledFee, averageFixedRate;
+            var sqrtPriceLimitX96, tickLimit, fcmContract, scaledNotional, factoryContract, peripheryAddress, peripheryContract, tickBefore, tickAfter, fee, availableNotional, fixedTokenDelta, fixedTokenDeltaUnbalanced, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw, scaledAvailableNotional, scaledFee, averageFixedRate;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
@@ -1451,11 +1460,13 @@ var AMM = /** @class */ (function () {
                         tickAfter = 0;
                         fee = ethers_2.BigNumber.from(0);
                         availableNotional = ethers_2.BigNumber.from(0);
+                        fixedTokenDelta = ethers_2.BigNumber.from(0);
                         fixedTokenDeltaUnbalanced = ethers_2.BigNumber.from(0);
                         return [4 /*yield*/, fcmContract.callStatic.unwindFullyCollateralisedFixedTakerSwap(scaledNotional, sqrtPriceLimitX96).then(function (result) { return __awaiter(_this, void 0, void 0, function () {
                                 return __generator(this, function (_a) {
                                     switch (_a.label) {
                                         case 0:
+                                            fixedTokenDelta = result[0];
                                             availableNotional = result[1];
                                             fee = result[2];
                                             fixedTokenDeltaUnbalanced = result[3];
@@ -1467,6 +1478,7 @@ var AMM = /** @class */ (function () {
                                 });
                             }); }, function (error) {
                                 var result = (0, errorHandling_1.decodeInfoPostSwap)(error, _this.environment);
+                                fixedTokenDelta = result.fixedTokenDelta;
                                 tickAfter = result.tick;
                                 fee = result.fee;
                                 availableNotional = result.availableNotional;
@@ -1487,6 +1499,9 @@ var AMM = /** @class */ (function () {
                                 fee: scaledFee < 0 ? -scaledFee : scaledFee,
                                 slippage: fixedRateDeltaRaw < 0 ? -fixedRateDeltaRaw : fixedRateDeltaRaw,
                                 averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
+                                fixedTokenDeltaBalance: this.descale(fixedTokenDelta),
+                                variableTokenDeltaBalance: this.descale(availableNotional),
+                                fixedTokenDeltaUnbalanced: this.descale(fixedTokenDeltaUnbalanced)
                             }];
                 }
             });
@@ -2760,7 +2775,7 @@ var AMM = /** @class */ (function () {
     // one week look-back window apy
     AMM.prototype.getInstantApy = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var blocksPerDay, blockPerHour, _a, lastBlock, oneBlockAgo, _b, _c, twoBlocksAgo, _d, _e, rateOracleContract, oneWeekApy, daysPerYear, rateOracle, cTokenAddress, cTokenContract, supplyRatePerBlock, supplyApy, lastBlock, to, _f, _g, from, _h, _j, rateOracleContract, oneWeekApy, lastBlock, to, _k, _l, from, _m, _o, rateOracleContract, oneWeekApy, daysPerYear, rateOracle, cTokenAddress, cTokenContract, supplyRatePerBlock, supplyApy;
+            var blocksPerDay, blockPerHour, _a, lastBlock, oneBlockAgo, _b, _c, twoBlocksAgo, _d, _e, rateOracleContract, oneWeekApy, daysPerYear, rateOracle, cTokenAddress, cTokenContract, supplyRatePerBlock, supplyApy, lastBlock, to, _f, _g, from, _h, _j, rateOracleContract, oneWeekApy, lastBlock, to, _k, _l, from, _m, _o, rateOracleContract, oneWeekApy, rateOracleContract, lendingPoolAddress, lendingPool, reservesData, rateInRay, daysPerYear, rateOracle, cTokenAddress, cTokenContract, supplyRatePerBlock, supplyApy;
             return __generator(this, function (_p) {
                 switch (_p.label) {
                     case 0:
@@ -2771,14 +2786,14 @@ var AMM = /** @class */ (function () {
                         blockPerHour = 274;
                         _a = this.rateOracle.protocolId;
                         switch (_a) {
-                            case 5: return [3 /*break*/, 1];
                             case 1: return [3 /*break*/, 1];
                             case 2: return [3 /*break*/, 6];
                             case 3: return [3 /*break*/, 9];
                             case 4: return [3 /*break*/, 14];
-                            case 6: return [3 /*break*/, 19];
+                            case 5: return [3 /*break*/, 19];
+                            case 6: return [3 /*break*/, 22];
                         }
-                        return [3 /*break*/, 22];
+                        return [3 /*break*/, 25];
                     case 1: return [4 /*yield*/, this.provider.getBlockNumber()];
                     case 2:
                         lastBlock = _p.sent();
@@ -2840,18 +2855,32 @@ var AMM = /** @class */ (function () {
                         oneWeekApy = _p.sent();
                         return [2 /*return*/, oneWeekApy.div(ethers_2.BigNumber.from(1000000000000)).toNumber() / 1000000];
                     case 19:
+                        if (!this.underlyingToken.id) {
+                            throw new Error('No underlying error');
+                        }
+                        rateOracleContract = typechain_1.AaveBorrowRateOracle__factory.connect(this.rateOracle.id, this.provider);
+                        return [4 /*yield*/, rateOracleContract.aaveLendingPool()];
+                    case 20:
+                        lendingPoolAddress = _p.sent();
+                        lendingPool = typechain_1.IAaveV2LendingPool__factory.connect(lendingPoolAddress, this.provider);
+                        return [4 /*yield*/, lendingPool.getReserveData(this.underlyingToken.id)];
+                    case 21:
+                        reservesData = _p.sent();
+                        rateInRay = reservesData.currentVariableBorrowRate;
+                        return [2 /*return*/, rateInRay.div(ethers_2.BigNumber.from(10).pow(27)).toNumber()];
+                    case 22:
                         daysPerYear = 365;
                         rateOracle = typechain_1.CompoundRateOracle__factory.connect(this.rateOracle.id, this.provider);
                         return [4 /*yield*/, rateOracle.ctoken()];
-                    case 20:
+                    case 23:
                         cTokenAddress = _p.sent();
                         cTokenContract = typechain_1.ICToken__factory.connect(cTokenAddress, this.provider);
                         return [4 /*yield*/, cTokenContract.supplyRatePerBlock()];
-                    case 21:
+                    case 24:
                         supplyRatePerBlock = _p.sent();
                         supplyApy = (((Math.pow((supplyRatePerBlock.toNumber() / 1e18 * blocksPerDay) + 1, daysPerYear))) - 1);
                         return [2 /*return*/, supplyApy];
-                    case 22: throw new Error("Unrecognized protocol");
+                    case 25: throw new Error("Unrecognized protocol");
                 }
             });
         });

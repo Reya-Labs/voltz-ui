@@ -23,6 +23,7 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 interface IPeripheryInterface extends ethers.utils.Interface {
   functions: {
     "getCurrentTick(address)": FunctionFragment;
+    "initialize(address)": FunctionFragment;
     "lpMarginCaps(address)": FunctionFragment;
     "lpMarginCumulatives(address)": FunctionFragment;
     "mintOrBurn((address,int24,int24,uint256,bool,int256))": FunctionFragment;
@@ -33,12 +34,14 @@ interface IPeripheryInterface extends ethers.utils.Interface {
     "settlePositionAndWithdrawMargin(address,address,int24,int24)": FunctionFragment;
     "swap((address,bool,uint256,uint160,int24,int24,uint256))": FunctionFragment;
     "updatePositionMargin(address,int24,int24,int256,bool)": FunctionFragment;
+    "weth()": FunctionFragment;
   };
 
   encodeFunctionData(
     functionFragment: "getCurrentTick",
     values: [string]
   ): string;
+  encodeFunctionData(functionFragment: "initialize", values: [string]): string;
   encodeFunctionData(
     functionFragment: "lpMarginCaps",
     values: [string]
@@ -125,11 +128,13 @@ interface IPeripheryInterface extends ethers.utils.Interface {
     functionFragment: "updatePositionMargin",
     values: [string, BigNumberish, BigNumberish, BigNumberish, boolean]
   ): string;
+  encodeFunctionData(functionFragment: "weth", values?: undefined): string;
 
   decodeFunctionResult(
     functionFragment: "getCurrentTick",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "lpMarginCaps",
     data: BytesLike
@@ -164,6 +169,7 @@ interface IPeripheryInterface extends ethers.utils.Interface {
     functionFragment: "updatePositionMargin",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "weth", data: BytesLike): Result;
 
   events: {
     "MarginCap(address,int256)": EventFragment;
@@ -224,6 +230,11 @@ export class IPeriphery extends BaseContract {
       marginEngine: string,
       overrides?: CallOverrides
     ): Promise<[number] & { currentTick: number }>;
+
+    initialize(
+      weth_: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     lpMarginCaps(vamm: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -318,12 +329,19 @@ export class IPeriphery extends BaseContract {
       fullyWithdraw: boolean,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    weth(overrides?: CallOverrides): Promise<[string]>;
   };
 
   getCurrentTick(
     marginEngine: string,
     overrides?: CallOverrides
   ): Promise<number>;
+
+  initialize(
+    weth_: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   lpMarginCaps(vamm: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -419,11 +437,15 @@ export class IPeriphery extends BaseContract {
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  weth(overrides?: CallOverrides): Promise<string>;
+
   callStatic: {
     getCurrentTick(
       marginEngine: string,
       overrides?: CallOverrides
     ): Promise<number>;
+
+    initialize(weth_: string, overrides?: CallOverrides): Promise<void>;
 
     lpMarginCaps(vamm: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -536,6 +558,8 @@ export class IPeriphery extends BaseContract {
       fullyWithdraw: boolean,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    weth(overrides?: CallOverrides): Promise<string>;
   };
 
   filters: {
@@ -562,6 +586,11 @@ export class IPeriphery extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    initialize(
+      weth_: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     lpMarginCaps(vamm: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     lpMarginCumulatives(
@@ -655,12 +684,19 @@ export class IPeriphery extends BaseContract {
       fullyWithdraw: boolean,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    weth(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
     getCurrentTick(
       marginEngine: string,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    initialize(
+      weth_: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     lpMarginCaps(
@@ -759,5 +795,7 @@ export class IPeriphery extends BaseContract {
       fullyWithdraw: boolean,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    weth(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

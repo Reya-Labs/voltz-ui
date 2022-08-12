@@ -34,6 +34,7 @@ interface TestVAMMInterface extends ethers.utils.Interface {
     "fixedTokenGrowthGlobalX128()": FunctionFragment;
     "getCurrentTick()": FunctionFragment;
     "getProtocolFees()": FunctionFragment;
+    "getRateOracle()": FunctionFragment;
     "initialize(address,int24)": FunctionFragment;
     "initializeVAMM(uint160)": FunctionFragment;
     "isAlpha()": FunctionFragment;
@@ -44,6 +45,8 @@ interface TestVAMMInterface extends ethers.utils.Interface {
     "owner()": FunctionFragment;
     "paused()": FunctionFragment;
     "protocolFees()": FunctionFragment;
+    "proxiableUUID()": FunctionFragment;
+    "refreshRateOracle()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "setFee(uint256)": FunctionFragment;
     "setFeeProtocol(uint8)": FunctionFragment;
@@ -106,6 +109,10 @@ interface TestVAMMInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "getRateOracle",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "initialize",
     values: [string, BigNumberish]
   ): string;
@@ -131,6 +138,14 @@ interface TestVAMMInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "protocolFees",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "proxiableUUID",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "refreshRateOracle",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -256,6 +271,10 @@ interface TestVAMMInterface extends ethers.utils.Interface {
     functionFragment: "getProtocolFees",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "getRateOracle",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "initializeVAMM",
@@ -276,6 +295,14 @@ interface TestVAMMInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "protocolFees",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "proxiableUUID",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "refreshRateOracle",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -344,6 +371,7 @@ interface TestVAMMInterface extends ethers.utils.Interface {
     "Burn(address,address,int24,int24,uint128)": EventFragment;
     "Fee(uint256)": EventFragment;
     "FeeProtocol(uint8)": EventFragment;
+    "Initialized(uint8)": EventFragment;
     "IsAlpha(bool)": EventFragment;
     "Mint(address,address,int24,int24,uint128)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
@@ -358,6 +386,7 @@ interface TestVAMMInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "Burn"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Fee"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "FeeProtocol"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "IsAlpha"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Mint"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
@@ -386,6 +415,8 @@ export type BurnEvent = TypedEvent<
 export type FeeEvent = TypedEvent<[BigNumber] & { feeWad: BigNumber }>;
 
 export type FeeProtocolEvent = TypedEvent<[number] & { feeProtocol: number }>;
+
+export type InitializedEvent = TypedEvent<[number] & { version: number }>;
 
 export type IsAlphaEvent = TypedEvent<[boolean] & { __isAlpha: boolean }>;
 
@@ -534,6 +565,8 @@ export class TestVAMM extends BaseContract {
 
     getProtocolFees(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    getRateOracle(overrides?: CallOverrides): Promise<[string]>;
+
     initialize(
       __marginEngine: string,
       __tickSpacing: BigNumberish,
@@ -566,6 +599,12 @@ export class TestVAMM extends BaseContract {
     paused(overrides?: CallOverrides): Promise<[boolean]>;
 
     protocolFees(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    proxiableUUID(overrides?: CallOverrides): Promise<[string]>;
+
+    refreshRateOracle(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -744,6 +783,8 @@ export class TestVAMM extends BaseContract {
 
   getProtocolFees(overrides?: CallOverrides): Promise<BigNumber>;
 
+  getRateOracle(overrides?: CallOverrides): Promise<string>;
+
   initialize(
     __marginEngine: string,
     __tickSpacing: BigNumberish,
@@ -776,6 +817,12 @@ export class TestVAMM extends BaseContract {
   paused(overrides?: CallOverrides): Promise<boolean>;
 
   protocolFees(overrides?: CallOverrides): Promise<BigNumber>;
+
+  proxiableUUID(overrides?: CallOverrides): Promise<string>;
+
+  refreshRateOracle(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -948,6 +995,8 @@ export class TestVAMM extends BaseContract {
 
     getProtocolFees(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getRateOracle(overrides?: CallOverrides): Promise<string>;
+
     initialize(
       __marginEngine: string,
       __tickSpacing: BigNumberish,
@@ -980,6 +1029,10 @@ export class TestVAMM extends BaseContract {
     paused(overrides?: CallOverrides): Promise<boolean>;
 
     protocolFees(overrides?: CallOverrides): Promise<BigNumber>;
+
+    proxiableUUID(overrides?: CallOverrides): Promise<string>;
+
+    refreshRateOracle(overrides?: CallOverrides): Promise<void>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
@@ -1172,6 +1225,14 @@ export class TestVAMM extends BaseContract {
     FeeProtocol(
       feeProtocol?: null
     ): TypedEventFilter<[number], { feeProtocol: number }>;
+
+    "Initialized(uint8)"(
+      version?: null
+    ): TypedEventFilter<[number], { version: number }>;
+
+    Initialized(
+      version?: null
+    ): TypedEventFilter<[number], { version: number }>;
 
     "IsAlpha(bool)"(
       __isAlpha?: null
@@ -1377,6 +1438,8 @@ export class TestVAMM extends BaseContract {
 
     getProtocolFees(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getRateOracle(overrides?: CallOverrides): Promise<BigNumber>;
+
     initialize(
       __marginEngine: string,
       __tickSpacing: BigNumberish,
@@ -1409,6 +1472,12 @@ export class TestVAMM extends BaseContract {
     paused(overrides?: CallOverrides): Promise<BigNumber>;
 
     protocolFees(overrides?: CallOverrides): Promise<BigNumber>;
+
+    proxiableUUID(overrides?: CallOverrides): Promise<BigNumber>;
+
+    refreshRateOracle(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1557,6 +1626,8 @@ export class TestVAMM extends BaseContract {
 
     getProtocolFees(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    getRateOracle(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     initialize(
       __marginEngine: string,
       __tickSpacing: BigNumberish,
@@ -1591,6 +1662,12 @@ export class TestVAMM extends BaseContract {
     paused(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     protocolFees(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    proxiableUUID(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    refreshRateOracle(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }

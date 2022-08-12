@@ -20,14 +20,17 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface IStETHInterface extends ethers.utils.Interface {
   functions: {
+    "getFee()": FunctionFragment;
     "getPooledEthByShares(uint256)": FunctionFragment;
   };
 
+  encodeFunctionData(functionFragment: "getFee", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "getPooledEthByShares",
     values: [BigNumberish]
   ): string;
 
+  decodeFunctionResult(functionFragment: "getFee", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getPooledEthByShares",
     data: BytesLike
@@ -80,11 +83,17 @@ export class IStETH extends BaseContract {
   interface: IStETHInterface;
 
   functions: {
+    getFee(
+      overrides?: CallOverrides
+    ): Promise<[number] & { feeBasisPoints: number }>;
+
     getPooledEthByShares(
       _sharesAmount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
   };
+
+  getFee(overrides?: CallOverrides): Promise<number>;
 
   getPooledEthByShares(
     _sharesAmount: BigNumberish,
@@ -92,6 +101,8 @@ export class IStETH extends BaseContract {
   ): Promise<BigNumber>;
 
   callStatic: {
+    getFee(overrides?: CallOverrides): Promise<number>;
+
     getPooledEthByShares(
       _sharesAmount: BigNumberish,
       overrides?: CallOverrides
@@ -101,6 +112,8 @@ export class IStETH extends BaseContract {
   filters: {};
 
   estimateGas: {
+    getFee(overrides?: CallOverrides): Promise<BigNumber>;
+
     getPooledEthByShares(
       _sharesAmount: BigNumberish,
       overrides?: CallOverrides
@@ -108,6 +121,8 @@ export class IStETH extends BaseContract {
   };
 
   populateTransaction: {
+    getFee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     getPooledEthByShares(
       _sharesAmount: BigNumberish,
       overrides?: CallOverrides

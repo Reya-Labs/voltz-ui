@@ -39,7 +39,6 @@ interface MockCTokenInterface extends ethers.utils.Interface {
     "name()": FunctionFragment;
     "redeemUnderlying(uint256)": FunctionFragment;
     "setAccrualBlockNumber(uint256)": FunctionFragment;
-    "setBorrowBalanceCurrent(uint256,address)": FunctionFragment;
     "setBorrowIndex(uint256)": FunctionFragment;
     "setBorrowRatePerBlock(uint256)": FunctionFragment;
     "setExchangeRate(uint256)": FunctionFragment;
@@ -114,10 +113,6 @@ interface MockCTokenInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "setAccrualBlockNumber",
     values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setBorrowBalanceCurrent",
-    values: [BigNumberish, string]
   ): string;
   encodeFunctionData(
     functionFragment: "setBorrowIndex",
@@ -209,10 +204,6 @@ interface MockCTokenInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "setAccrualBlockNumber",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setBorrowBalanceCurrent",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -341,9 +332,9 @@ export class MockCToken extends BaseContract {
     ): Promise<ContractTransaction>;
 
     borrowBalanceCurrent(
-      user: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     borrowIndex(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -384,12 +375,6 @@ export class MockCToken extends BaseContract {
 
     setAccrualBlockNumber(
       accrualBlockNumber: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    setBorrowBalanceCurrent(
-      value: BigNumberish,
-      user: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -464,9 +449,9 @@ export class MockCToken extends BaseContract {
   ): Promise<ContractTransaction>;
 
   borrowBalanceCurrent(
-    user: string,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
+    account: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   borrowIndex(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -507,12 +492,6 @@ export class MockCToken extends BaseContract {
 
   setAccrualBlockNumber(
     accrualBlockNumber: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  setBorrowBalanceCurrent(
-    value: BigNumberish,
-    user: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -587,7 +566,7 @@ export class MockCToken extends BaseContract {
     ): Promise<BigNumber>;
 
     borrowBalanceCurrent(
-      user: string,
+      account: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -628,12 +607,6 @@ export class MockCToken extends BaseContract {
 
     setAccrualBlockNumber(
       accrualBlockNumber: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setBorrowBalanceCurrent(
-      value: BigNumberish,
-      user: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -747,8 +720,8 @@ export class MockCToken extends BaseContract {
     ): Promise<BigNumber>;
 
     borrowBalanceCurrent(
-      user: string,
-      overrides?: CallOverrides
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     borrowIndex(overrides?: CallOverrides): Promise<BigNumber>;
@@ -790,12 +763,6 @@ export class MockCToken extends BaseContract {
 
     setAccrualBlockNumber(
       accrualBlockNumber: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    setBorrowBalanceCurrent(
-      value: BigNumberish,
-      user: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -876,8 +843,8 @@ export class MockCToken extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     borrowBalanceCurrent(
-      user: string,
-      overrides?: CallOverrides
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     borrowIndex(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -923,12 +890,6 @@ export class MockCToken extends BaseContract {
 
     setAccrualBlockNumber(
       accrualBlockNumber: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setBorrowBalanceCurrent(
-      value: BigNumberish,
-      user: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

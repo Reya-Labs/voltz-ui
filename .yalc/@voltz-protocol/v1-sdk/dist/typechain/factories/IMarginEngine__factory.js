@@ -13,6 +13,11 @@ var _abi = [
     },
     {
         inputs: [],
+        name: "AavePoolGetReserveNormalizedVariableDebtReturnedZero",
+        type: "error",
+    },
+    {
+        inputs: [],
         name: "CTokenExchangeRateReturnedZero",
         type: "error",
     },

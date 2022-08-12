@@ -24,12 +24,19 @@ interface CompoundRateOracleInterface extends ethers.utils.Interface {
     "ONE_IN_WAD()": FunctionFragment;
     "UNDERLYING_YIELD_BEARING_PROTOCOL_ID()": FunctionFragment;
     "ctoken()": FunctionFragment;
+    "currentBlockSlope()": FunctionFragment;
     "decimals()": FunctionFragment;
+    "getApyFrom(uint256)": FunctionFragment;
     "getApyFromTo(uint256,uint256)": FunctionFragment;
+    "getBlockSlope()": FunctionFragment;
     "getCurrentRateInRay()": FunctionFragment;
+    "getLastRateSlope()": FunctionFragment;
+    "getLastUpdatedRate()": FunctionFragment;
+    "getRateFrom(uint256)": FunctionFragment;
     "getRateFromTo(uint256,uint256)": FunctionFragment;
     "increaseObservationCardinalityNext(uint16)": FunctionFragment;
     "interpolateRateValue(uint256,uint256,uint256)": FunctionFragment;
+    "lastUpdatedBlock()": FunctionFragment;
     "minSecondsSinceLastUpdate()": FunctionFragment;
     "observations(uint256)": FunctionFragment;
     "oracleVars()": FunctionFragment;
@@ -53,14 +60,38 @@ interface CompoundRateOracleInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "ctoken", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "currentBlockSlope",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "getApyFrom",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "getApyFromTo",
     values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "getBlockSlope",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "getCurrentRateInRay",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getLastRateSlope",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getLastUpdatedRate",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getRateFrom",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getRateFromTo",
@@ -73,6 +104,10 @@ interface CompoundRateOracleInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "interpolateRateValue",
     values: [BigNumberish, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "lastUpdatedBlock",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "minSecondsSinceLastUpdate",
@@ -126,13 +161,34 @@ interface CompoundRateOracleInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "ctoken", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "currentBlockSlope",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getApyFrom", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getApyFromTo",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "getBlockSlope",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getCurrentRateInRay",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getLastRateSlope",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getLastUpdatedRate",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getRateFrom",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -145,6 +201,10 @@ interface CompoundRateOracleInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "interpolateRateValue",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "lastUpdatedBlock",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -276,7 +336,18 @@ export class CompoundRateOracle extends BaseContract {
 
     ctoken(overrides?: CallOverrides): Promise<[string]>;
 
+    currentBlockSlope(
+      overrides?: CallOverrides
+    ): Promise<
+      [number, BigNumber] & { timeChange: number; blockChange: BigNumber }
+    >;
+
     decimals(overrides?: CallOverrides): Promise<[number]>;
+
+    getApyFrom(
+      from: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { apyFromToWad: BigNumber }>;
 
     getApyFromTo(
       from: BigNumberish,
@@ -284,9 +355,32 @@ export class CompoundRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { apyFromToWad: BigNumber }>;
 
+    getBlockSlope(
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, number] & { blockChange: BigNumber; timeChange: number }
+    >;
+
     getCurrentRateInRay(
       overrides?: CallOverrides
-    ): Promise<[BigNumber] & { resultRay: BigNumber }>;
+    ): Promise<[BigNumber] & { currentRate: BigNumber }>;
+
+    getLastRateSlope(
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, number] & { rateChange: BigNumber; timeChange: number }
+    >;
+
+    getLastUpdatedRate(
+      overrides?: CallOverrides
+    ): Promise<
+      [number, BigNumber] & { timestamp: number; resultRay: BigNumber }
+    >;
+
+    getRateFrom(
+      _from: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     getRateFromTo(
       _from: BigNumberish,
@@ -305,6 +399,10 @@ export class CompoundRateOracle extends BaseContract {
       timeDeltaBeforeOrAtToQueriedTimeWad: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { rateValueRay: BigNumber }>;
+
+    lastUpdatedBlock(
+      overrides?: CallOverrides
+    ): Promise<[number, BigNumber] & { timestamp: number; number: BigNumber }>;
 
     minSecondsSinceLastUpdate(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -378,7 +476,15 @@ export class CompoundRateOracle extends BaseContract {
 
   ctoken(overrides?: CallOverrides): Promise<string>;
 
+  currentBlockSlope(
+    overrides?: CallOverrides
+  ): Promise<
+    [number, BigNumber] & { timeChange: number; blockChange: BigNumber }
+  >;
+
   decimals(overrides?: CallOverrides): Promise<number>;
+
+  getApyFrom(from: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
   getApyFromTo(
     from: BigNumberish,
@@ -386,7 +492,28 @@ export class CompoundRateOracle extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  getBlockSlope(
+    overrides?: CallOverrides
+  ): Promise<
+    [BigNumber, number] & { blockChange: BigNumber; timeChange: number }
+  >;
+
   getCurrentRateInRay(overrides?: CallOverrides): Promise<BigNumber>;
+
+  getLastRateSlope(
+    overrides?: CallOverrides
+  ): Promise<
+    [BigNumber, number] & { rateChange: BigNumber; timeChange: number }
+  >;
+
+  getLastUpdatedRate(
+    overrides?: CallOverrides
+  ): Promise<[number, BigNumber] & { timestamp: number; resultRay: BigNumber }>;
+
+  getRateFrom(
+    _from: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   getRateFromTo(
     _from: BigNumberish,
@@ -405,6 +532,10 @@ export class CompoundRateOracle extends BaseContract {
     timeDeltaBeforeOrAtToQueriedTimeWad: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
+
+  lastUpdatedBlock(
+    overrides?: CallOverrides
+  ): Promise<[number, BigNumber] & { timestamp: number; number: BigNumber }>;
 
   minSecondsSinceLastUpdate(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -478,7 +609,18 @@ export class CompoundRateOracle extends BaseContract {
 
     ctoken(overrides?: CallOverrides): Promise<string>;
 
+    currentBlockSlope(
+      overrides?: CallOverrides
+    ): Promise<
+      [number, BigNumber] & { timeChange: number; blockChange: BigNumber }
+    >;
+
     decimals(overrides?: CallOverrides): Promise<number>;
+
+    getApyFrom(
+      from: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getApyFromTo(
       from: BigNumberish,
@@ -486,7 +628,30 @@ export class CompoundRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getBlockSlope(
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, number] & { blockChange: BigNumber; timeChange: number }
+    >;
+
     getCurrentRateInRay(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getLastRateSlope(
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, number] & { rateChange: BigNumber; timeChange: number }
+    >;
+
+    getLastUpdatedRate(
+      overrides?: CallOverrides
+    ): Promise<
+      [number, BigNumber] & { timestamp: number; resultRay: BigNumber }
+    >;
+
+    getRateFrom(
+      _from: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getRateFromTo(
       _from: BigNumberish,
@@ -505,6 +670,10 @@ export class CompoundRateOracle extends BaseContract {
       timeDeltaBeforeOrAtToQueriedTimeWad: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    lastUpdatedBlock(
+      overrides?: CallOverrides
+    ): Promise<[number, BigNumber] & { timestamp: number; number: BigNumber }>;
 
     minSecondsSinceLastUpdate(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -651,7 +820,14 @@ export class CompoundRateOracle extends BaseContract {
 
     ctoken(overrides?: CallOverrides): Promise<BigNumber>;
 
+    currentBlockSlope(overrides?: CallOverrides): Promise<BigNumber>;
+
     decimals(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getApyFrom(
+      from: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getApyFromTo(
       from: BigNumberish,
@@ -659,7 +835,18 @@ export class CompoundRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getBlockSlope(overrides?: CallOverrides): Promise<BigNumber>;
+
     getCurrentRateInRay(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getLastRateSlope(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getLastUpdatedRate(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getRateFrom(
+      _from: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getRateFromTo(
       _from: BigNumberish,
@@ -678,6 +865,8 @@ export class CompoundRateOracle extends BaseContract {
       timeDeltaBeforeOrAtToQueriedTimeWad: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    lastUpdatedBlock(overrides?: CallOverrides): Promise<BigNumber>;
 
     minSecondsSinceLastUpdate(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -738,7 +927,14 @@ export class CompoundRateOracle extends BaseContract {
 
     ctoken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    currentBlockSlope(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     decimals(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getApyFrom(
+      from: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getApyFromTo(
       from: BigNumberish,
@@ -746,7 +942,20 @@ export class CompoundRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getBlockSlope(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     getCurrentRateInRay(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getLastRateSlope(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getLastUpdatedRate(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getRateFrom(
+      _from: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -767,6 +976,8 @@ export class CompoundRateOracle extends BaseContract {
       timeDeltaBeforeOrAtToQueriedTimeWad: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    lastUpdatedBlock(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     minSecondsSinceLastUpdate(
       overrides?: CallOverrides

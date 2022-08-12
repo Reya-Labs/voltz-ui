@@ -22,16 +22,25 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface UUPSUpgradeableInterface extends ethers.utils.Interface {
   functions: {
+    "proxiableUUID()": FunctionFragment;
     "upgradeTo(address)": FunctionFragment;
     "upgradeToAndCall(address,bytes)": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "proxiableUUID",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "upgradeTo", values: [string]): string;
   encodeFunctionData(
     functionFragment: "upgradeToAndCall",
     values: [string, BytesLike]
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "proxiableUUID",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "upgradeTo", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "upgradeToAndCall",
@@ -41,11 +50,13 @@ interface UUPSUpgradeableInterface extends ethers.utils.Interface {
   events: {
     "AdminChanged(address,address)": EventFragment;
     "BeaconUpgraded(address)": EventFragment;
+    "Initialized(uint8)": EventFragment;
     "Upgraded(address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "AdminChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "BeaconUpgraded"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Upgraded"): EventFragment;
 }
 
@@ -54,6 +65,8 @@ export type AdminChangedEvent = TypedEvent<
 >;
 
 export type BeaconUpgradedEvent = TypedEvent<[string] & { beacon: string }>;
+
+export type InitializedEvent = TypedEvent<[number] & { version: number }>;
 
 export type UpgradedEvent = TypedEvent<[string] & { implementation: string }>;
 
@@ -101,6 +114,8 @@ export class UUPSUpgradeable extends BaseContract {
   interface: UUPSUpgradeableInterface;
 
   functions: {
+    proxiableUUID(overrides?: CallOverrides): Promise<[string]>;
+
     upgradeTo(
       newImplementation: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -112,6 +127,8 @@ export class UUPSUpgradeable extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
+
+  proxiableUUID(overrides?: CallOverrides): Promise<string>;
 
   upgradeTo(
     newImplementation: string,
@@ -125,6 +142,8 @@ export class UUPSUpgradeable extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    proxiableUUID(overrides?: CallOverrides): Promise<string>;
+
     upgradeTo(
       newImplementation: string,
       overrides?: CallOverrides
@@ -162,6 +181,14 @@ export class UUPSUpgradeable extends BaseContract {
       beacon?: string | null
     ): TypedEventFilter<[string], { beacon: string }>;
 
+    "Initialized(uint8)"(
+      version?: null
+    ): TypedEventFilter<[number], { version: number }>;
+
+    Initialized(
+      version?: null
+    ): TypedEventFilter<[number], { version: number }>;
+
     "Upgraded(address)"(
       implementation?: string | null
     ): TypedEventFilter<[string], { implementation: string }>;
@@ -172,6 +199,8 @@ export class UUPSUpgradeable extends BaseContract {
   };
 
   estimateGas: {
+    proxiableUUID(overrides?: CallOverrides): Promise<BigNumber>;
+
     upgradeTo(
       newImplementation: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -185,6 +214,8 @@ export class UUPSUpgradeable extends BaseContract {
   };
 
   populateTransaction: {
+    proxiableUUID(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     upgradeTo(
       newImplementation: string,
       overrides?: Overrides & { from?: string | Promise<string> }
