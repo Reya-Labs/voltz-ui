@@ -17,3 +17,4 @@ export * from './SwapInfo';
 export { default as WalletConnect } from './WalletConnect/WalletConnect';
 export { default as BorrowPortfolioHeader } from './BorrowPortfolioHeader/BorrowPortfolioHeader';
 export { default as PortfolioHeader } from './PortfolioHeader/PortfolioHeader';
+export { default as BorrowForm } from './BorrowForm/BorrowForm';

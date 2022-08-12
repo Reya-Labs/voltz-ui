@@ -1,15 +1,14 @@
 import { AugmentedAMM } from '@utilities';
-import { BorrowAction, TransactionUpdate } from '../types';
-import { serializeAmm, createBorrowId } from '../utilities';
+import { BorrowAction, Transaction } from '../types';
+import { serializeAmm, createId } from '../utilities';
 
-const borrowAction = (amm: AugmentedAMM, notional: number, transaction: Omit<TransactionUpdate, 'id'>): BorrowAction => ({
+const borrowAction = (amm: AugmentedAMM, transaction: Omit<Transaction, 'id'>): BorrowAction => ({
   type: 'borrow',
   payload: {
     amm: serializeAmm(amm),
-    notional: notional,
     transaction: {
       ...transaction,
-      id: createBorrowId(amm.id, notional),
+      id: createId(transaction),
     },
   },
 });
