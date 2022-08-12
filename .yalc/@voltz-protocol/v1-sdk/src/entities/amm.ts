@@ -30,6 +30,7 @@ import {
   CompoundBorrowRateOracle,
   AaveBorrowRateOracle__factory,
   IAaveV2LendingPool__factory,
+  CompoundBorrowRateOracle__factory,
   IAaveV2LendingPool,
 } from '../typechain';
 import RateOracle from './rateOracle';
@@ -3040,18 +3041,18 @@ class AMM {
 
         const rateInRay = reservesData.currentVariableBorrowRate;
 
-        return rateInRay.div(BigNumber.from(10).pow(27)).toNumber();
+        return rateInRay.toNumber() / 1e27;
       }
 
       case 6: {
         const daysPerYear = 365;
 
-        const rateOracle = CompoundRateOracle__factory.connect(this.rateOracle.id, this.provider);
+        const rateOracle = CompoundBorrowRateOracle__factory.connect(this.rateOracle.id, this.provider);
 
         const cTokenAddress = await (rateOracle as CompoundBorrowRateOracle).ctoken();
         const cTokenContract = ICToken__factory.connect(cTokenAddress, this.provider);
 
-        const supplyRatePerBlock = await cTokenContract.supplyRatePerBlock();
+        const supplyRatePerBlock = await cTokenContract.borrowRatePerBlock();
         const supplyApy = (((Math.pow((supplyRatePerBlock.toNumber() / 1e18 * blocksPerDay) + 1, daysPerYear))) - 1);
         return supplyApy;
       } 

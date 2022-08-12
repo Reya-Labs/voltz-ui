@@ -2867,15 +2867,15 @@ var AMM = /** @class */ (function () {
                     case 21:
                         reservesData = _p.sent();
                         rateInRay = reservesData.currentVariableBorrowRate;
-                        return [2 /*return*/, rateInRay.div(ethers_2.BigNumber.from(10).pow(27)).toNumber()];
+                        return [2 /*return*/, rateInRay.toNumber() / 1e27];
                     case 22:
                         daysPerYear = 365;
-                        rateOracle = typechain_1.CompoundRateOracle__factory.connect(this.rateOracle.id, this.provider);
+                        rateOracle = typechain_1.CompoundBorrowRateOracle__factory.connect(this.rateOracle.id, this.provider);
                         return [4 /*yield*/, rateOracle.ctoken()];
                     case 23:
                         cTokenAddress = _p.sent();
                         cTokenContract = typechain_1.ICToken__factory.connect(cTokenAddress, this.provider);
-                        return [4 /*yield*/, cTokenContract.supplyRatePerBlock()];
+                        return [4 /*yield*/, cTokenContract.borrowRatePerBlock()];
                     case 24:
                         supplyRatePerBlock = _p.sent();
                         supplyApy = (((Math.pow((supplyRatePerBlock.toNumber() / 1e18 * blocksPerDay) + 1, daysPerYear))) - 1);

@@ -32,9 +32,7 @@ const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({ datum, i
   const { result, loading, call } = variableDebt;
 
   useEffect(() => {
-    if (position) {
       call(position);
-    }
   }, [call, position]);
   
   // add object to sx prop

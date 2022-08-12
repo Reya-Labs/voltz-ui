@@ -33,8 +33,8 @@ function* swapSaga(action: SwapAction) { // function * means it is async functio
       isFT: agent === Agents.FIXED_TRADER,
       notional,
       margin,
-      fixedLow: 1,
-      fixedHigh: 999,
+      fixedLow: 0.001,
+      fixedHigh: 990,
     });
 
   } catch (error) {

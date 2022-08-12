@@ -28,9 +28,15 @@ export const useBorrowAMM = ( borrowAmm?: AugmentedBorrowAMM) => {
   );
 
   const variableDebt = useAsyncFunction(
-    async (position: Position) => {
-      const result = await borrowAmm?.getAggregatedBorrowBalance(position);
-      return result;
+    async (position: Position | undefined) => {
+      if (position){
+        const resultPos = await borrowAmm?.getAggregatedBorrowBalance(position);
+        return resultPos;
+      } else {
+        const resultPos = await borrowAmm?.getUnderlyingBorrowBalance();
+        return resultPos;
+      }
+      
     },
     useMemo(() => undefined, [!!borrowAmm?.provider])
   );

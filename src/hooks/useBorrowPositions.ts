@@ -15,6 +15,9 @@ const useBorrowPositions = (): useBorrowPositionsResult => {
 
   const borrowPositions = useMemo(() => {
     const vtPositions = positions?.filter((position) => position.positionType === 2);
+    if(!vtPositions){
+      return [];
+    }
     return vtPositions?.filter((position) => {
         return position.tickLower == -68940 && position.tickUpper == 69060 ;
     });
