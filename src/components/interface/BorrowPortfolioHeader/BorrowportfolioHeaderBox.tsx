@@ -6,9 +6,9 @@ import { BorrowPortfolioHeaderProps } from './BorrowPortfolioHeader';
 import { formatCurrency, formatNumber } from '@utilities';
 
 export type BorrowPortfolioHeaderBoxProps = {
-    aggregatedDebt?: BorrowPortfolioHeaderProps['aggregatedDebt'];
-    currencyCode?: BorrowPortfolioHeaderProps['currencyCode'];
-    currencySymbol?: BorrowPortfolioHeaderProps['currencySymbol'];
+    aggregatedDebt?: number;
+    currencyCode: string;
+    currencySymbol: string;
 };
 
 const valueBoxStyles: SystemStyleObject<Theme> = { 
@@ -20,9 +20,10 @@ const valueBoxStyles: SystemStyleObject<Theme> = {
 };
 
 const labelStyles: SystemStyleObject<Theme> = { 
-    fontSize: '12px', 
-    lineHeight: '1.2',
-    textTransform: 'uppercase'
+    textTransform: "uppercase",
+    fontWeight: 400, 
+    fontSize: 16,
+    color: "#5A576D"
   };
 const titleStyles: SystemStyleObject<Theme> = { 
 fontSize: '40px', 
@@ -34,15 +35,21 @@ const BorrowPortfolioHeaderBox = ({
     aggregatedDebt,
     currencyCode,
     currencySymbol
-}: BorrowPortfolioHeaderBoxProps) => (
-    <Box sx={{ textTransform: 'uppercase' }}>
-    <Typography variant='body2' sx={labelStyles}>
+}: BorrowPortfolioHeaderBoxProps) => {
+
+  const renderedValue = aggregatedDebt ?
+   (currencySymbol + formatCurrency(aggregatedDebt) +" "+ currencyCode) : "---";
+  return (
+  <Box sx={{ textTransform: 'uppercase' }}>
+    <Typography variant='subtitle1' sx={labelStyles}>
       Total Borrowing
     </Typography>
     <Typography variant='h1' sx={titleStyles}>
-      {currencySymbol}{formatCurrency(aggregatedDebt? aggregatedDebt : 0)} {currencyCode}
+      {renderedValue}
     </Typography>
   </Box>
-);
+  );
+}
+    ;
 
 export default BorrowPortfolioHeaderBox;

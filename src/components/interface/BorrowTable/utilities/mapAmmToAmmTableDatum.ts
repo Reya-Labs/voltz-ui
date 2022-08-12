@@ -1,11 +1,12 @@
 import { AugmentedBorrowAMM } from '@utilities';
+import { DateTime } from 'luxon';
 import { BorrowAMMTableDatum } from '../types';
 
 const mapAmmToAmmTableDatum = ({
   id,
   amm
 }: AugmentedBorrowAMM): BorrowAMMTableDatum | undefined => {
-  if (amm ) {
+  if (amm) {
     return {
       id,
       protocol: amm.protocol,

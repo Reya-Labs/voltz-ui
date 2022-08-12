@@ -2760,7 +2760,7 @@ var AMM = /** @class */ (function () {
     // one week look-back window apy
     AMM.prototype.getInstantApy = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var blocksPerDay, blockPerHour, _a, lastBlock, oneBlockAgo, _b, _c, twoBlocksAgo, _d, _e, rateOracleContract, oneWeekApy, daysPerYear, fcmContract, cTokenAddress, cTokenContract, supplyRatePerBlock, supplyApy, lastBlock, to, _f, _g, from, _h, _j, rateOracleContract, oneWeekApy, lastBlock, to, _k, _l, from, _m, _o, rateOracleContract, oneWeekApy;
+            var blocksPerDay, blockPerHour, _a, lastBlock, oneBlockAgo, _b, _c, twoBlocksAgo, _d, _e, rateOracleContract, oneWeekApy, daysPerYear, rateOracle, cTokenAddress, cTokenContract, supplyRatePerBlock, supplyApy, lastBlock, to, _f, _g, from, _h, _j, rateOracleContract, oneWeekApy, lastBlock, to, _k, _l, from, _m, _o, rateOracleContract, oneWeekApy, daysPerYear, rateOracle, cTokenAddress, cTokenContract, supplyRatePerBlock, supplyApy;
             return __generator(this, function (_p) {
                 switch (_p.label) {
                     case 0:
@@ -2771,14 +2771,14 @@ var AMM = /** @class */ (function () {
                         blockPerHour = 274;
                         _a = this.rateOracle.protocolId;
                         switch (_a) {
-                            case 1: return [3 /*break*/, 1];
                             case 5: return [3 /*break*/, 1];
-                            case 2: return [3 /*break*/, 1];
-                            case 6: return [3 /*break*/, 6];
+                            case 1: return [3 /*break*/, 1];
+                            case 2: return [3 /*break*/, 6];
                             case 3: return [3 /*break*/, 9];
                             case 4: return [3 /*break*/, 14];
+                            case 6: return [3 /*break*/, 19];
                         }
-                        return [3 /*break*/, 19];
+                        return [3 /*break*/, 22];
                     case 1: return [4 /*yield*/, this.provider.getBlockNumber()];
                     case 2:
                         lastBlock = _p.sent();
@@ -2797,8 +2797,8 @@ var AMM = /** @class */ (function () {
                         return [2 /*return*/, oneWeekApy.div(ethers_2.BigNumber.from(1000000000000)).toNumber() / 1000000];
                     case 6:
                         daysPerYear = 365;
-                        fcmContract = typechain_1.CompoundFCM__factory.connect(this.fcmAddress, this.provider);
-                        return [4 /*yield*/, fcmContract.cToken()];
+                        rateOracle = typechain_1.CompoundRateOracle__factory.connect(this.rateOracle.id, this.provider);
+                        return [4 /*yield*/, rateOracle.ctoken()];
                     case 7:
                         cTokenAddress = _p.sent();
                         cTokenContract = typechain_1.ICToken__factory.connect(cTokenAddress, this.provider);
@@ -2839,7 +2839,19 @@ var AMM = /** @class */ (function () {
                     case 18:
                         oneWeekApy = _p.sent();
                         return [2 /*return*/, oneWeekApy.div(ethers_2.BigNumber.from(1000000000000)).toNumber() / 1000000];
-                    case 19: throw new Error("Unrecognized protocol");
+                    case 19:
+                        daysPerYear = 365;
+                        rateOracle = typechain_1.CompoundRateOracle__factory.connect(this.rateOracle.id, this.provider);
+                        return [4 /*yield*/, rateOracle.ctoken()];
+                    case 20:
+                        cTokenAddress = _p.sent();
+                        cTokenContract = typechain_1.ICToken__factory.connect(cTokenAddress, this.provider);
+                        return [4 /*yield*/, cTokenContract.supplyRatePerBlock()];
+                    case 21:
+                        supplyRatePerBlock = _p.sent();
+                        supplyApy = (((Math.pow((supplyRatePerBlock.toNumber() / 1e18 * blocksPerDay) + 1, daysPerYear))) - 1);
+                        return [2 /*return*/, supplyApy];
+                    case 22: throw new Error("Unrecognized protocol");
                 }
             });
         });

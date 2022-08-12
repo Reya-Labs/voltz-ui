@@ -1,39 +1,50 @@
-import { SystemStyleObject, Theme } from '@theme';
+import { Panel } from '@components/atomic';
 import BorrowPortfolioHeaderBox from './BorrowportfolioHeaderBox';
+import BorrowPortfolioSummary from './BorrowPortfolioSummary';
+import { SystemStyleObject, Theme } from '@theme';
 
 export type BorrowPortfolioHeaderProps = {
-  currencyCode?: string;
-  currencySymbol?: string;
-  aggregatedDebt?: number;
+  commonOverrides: SystemStyleObject<Theme>;
+  currencyCode: string;
+  currencySymbol: string;
+  fixedDebt?: number;
+  variableDebt?: number;
+  fixedPositionsCount?: number;
+  variablePositionsCount?: number;
 };
 
-const labelStyles: SystemStyleObject<Theme> = { 
-  fontSize: '12px', 
-  lineHeight: '1.2',
-  textTransform: 'uppercase'
-};
-
-const titleStyles: SystemStyleObject<Theme> = { 
-  fontSize: '40px', 
-  lineHeight: '1.2', 
-  marginTop: (theme) => theme.spacing(2)
-};
-
-const PortfolioHeader = ({ 
-  currencyCode = '', 
-  currencySymbol = '',
-  aggregatedDebt = 0,
+const BorrowPortfolioHeader = ({ 
+  commonOverrides,
+  currencyCode, 
+  currencySymbol,
+  fixedDebt,
+  variableDebt,
+  fixedPositionsCount,
+  variablePositionsCount
 }: BorrowPortfolioHeaderProps) => {
   return (
     <>
+    <Panel variant={'dark'} borderRadius='large' padding='container' sx={{ paddingTop: 0, paddingBottom: 0 }}>
       <BorrowPortfolioHeaderBox
-       currencyCode={currencyCode}
-       currencySymbol={currencySymbol}
-       aggregatedDebt={aggregatedDebt}/>
+        currencyCode={currencyCode}
+        currencySymbol={currencySymbol}
+        aggregatedDebt={(variableDebt && fixedDebt) ? (variableDebt - fixedDebt) : undefined }/>
+
+        <BorrowPortfolioSummary
+          commonOverrides={commonOverrides}
+          currencyCode={currencyCode}
+          currencySymbol={currencySymbol}
+          fixedDebt={fixedDebt}
+          variableDebt={variableDebt}
+          fixedPositionsCount={fixedPositionsCount}
+          variablePositionsCount={variablePositionsCount}
+        />
+    </Panel>
+      
     </>
   )
 };
 
-export default PortfolioHeader;
+export default BorrowPortfolioHeader;
 
   
