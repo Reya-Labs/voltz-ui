@@ -176,7 +176,7 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
   }, [variableDebt.call]);
 
   useEffect(() => {
-    if (variableDebt.loading || (variableDebt.result === null) || (variableDebt.result === undefined)) {
+    if (variableDebt.loading || (variableDebt.result == null)) {
       return;
     }
 
@@ -192,7 +192,7 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
       touched.current.push('margin');
     }
 
-    if (variableDebt.loading || (variableDebt.result === null) || (variableDebt.result === undefined)) {
+    if (variableDebt.loading || (variableDebt.result == null)) {
       return;
     }
 
@@ -204,7 +204,7 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
   }
 
   useEffect(() => {
-    if (swapInfo.loading || (swapInfo.result === null) || (swapInfo.result === undefined)) {
+    if (swapInfo.loading || (swapInfo.result == null)) {
       return;
     }
 
@@ -217,7 +217,7 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
   }, [swapInfo.loading, swapInfo.result]);
 
   useEffect(() => {
-    if (fullyCollateralisedMarginRequirement.loading || (fullyCollateralisedMarginRequirement.result === null) || (fullyCollateralisedMarginRequirement.result === undefined)) {
+    if (fullyCollateralisedMarginRequirement.loading || (fullyCollateralisedMarginRequirement.result == null)) {
       return;
     }
 
