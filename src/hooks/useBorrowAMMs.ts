@@ -7,6 +7,7 @@ import { AugmentedAMM, AugmentedBorrowAMM } from '@utilities';
 import { Amm_OrderBy, useGetAmMsQuery } from '@graphql';
 import useWallet from './useWallet';
 import JSBI from 'jsbi';
+import { DateTime } from 'luxon';
 
 export type UseAMMsArgs = {};
 
@@ -82,14 +83,16 @@ const useBorrowAMMs = (): UseBorrowAMMsResult => {
           }),
       );
       if (!process.env.REACT_APP_WHITELIST || process.env.REACT_APP_WHITELIST === `UNPROVIDED`) {
-          const borrowMarkets = ammsData.filter(amm => [2,1].includes(amm.rateOracle.protocolId));
-          return borrowMarkets.map(amm => new AugmentedBorrowAMM({id: amm.id, amm: amm}) );
+          const borrowMarkets = ammsData.filter(amm => [5,6].includes(amm.rateOracle.protocolId));
+          const liveBorrowMarkets = borrowMarkets.filter(amm => DateTime.now() < amm.endDateTime);
+          return liveBorrowMarkets.map(amm => new AugmentedBorrowAMM({id: amm.id, amm: amm}) );
       } else {
         if (process.env.REACT_APP_WHITELIST) {
           const whitelist = process.env.REACT_APP_WHITELIST.split(',').map(s => s.trim());
           ammsData = ammsData?.filter((amm) => whitelist.includes(amm.id));
-          const borrowMarkets = ammsData.filter(amm => [2,1].includes(amm.rateOracle.protocolId));
-          return borrowMarkets.map(amm => new AugmentedBorrowAMM({id: amm.id, amm: amm}) );
+          const borrowMarkets = ammsData.filter(amm => [5,6].includes(amm.rateOracle.protocolId));
+          const liveBorrowMarkets = borrowMarkets.filter(amm => DateTime.now() < amm.endDateTime);
+          return liveBorrowMarkets.map(amm => new AugmentedBorrowAMM({id: amm.id, amm: amm}) );
         } 
       }
     }

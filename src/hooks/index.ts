@@ -13,6 +13,7 @@ export { default as useDebounce } from './useDebounce';
 export { default as useDispatch } from './useDispatch';
 export { default as useMinRequiredMargin } from './useMinRequiredMargin';
 export { default as usePositions } from './usePositions';
+export { default as useBorrowPositions } from './useBorrowPositions';
 export { default as useSelector } from './useSelector';
 export { default as useStateMemo } from './useStateMemo';
 export * from './useTokenApproval';
