@@ -19,7 +19,7 @@ declare class BorrowAMM {
     readonly termStartTimestamp: JSBI;
     readonly termEndTimestamp: JSBI;
     readonly underlyingToken: Token;
-    readonly amm?: AMM;
+    readonly amm: AMM;
     cToken?: ICToken;
     aaveVariableDebtToken?: IERC20Minimal;
     underlyingDebt: number;
@@ -42,6 +42,7 @@ declare class BorrowAMM {
     getUnderlyingBorrowBalance(): Promise<number>;
     getFixedBorrowBalance(position: Position): Promise<number>;
     getAggregatedBorrowBalance(position: Position): Promise<number>;
+    getFullyCollateralisedMarginRequirement(fixedTokenBalance: number, variableTokenBalance: number): Promise<number>;
 }
 export default BorrowAMM;
 //# sourceMappingURL=borrowAMM.d.ts.map

@@ -169,9 +169,8 @@ export type RolloverSwapAction = RolloverSwapTransactionAction & {
 export type BorrowAction = {
   type: 'borrow';
   payload: {
-    transaction: TransactionUpdate;
+    transaction: Transaction;
     amm: SerializedAMM;
-    notional: number;
   };
 }
 

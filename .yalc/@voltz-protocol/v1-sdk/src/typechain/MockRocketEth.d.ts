@@ -22,6 +22,10 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 interface MockRocketEthInterface extends ethers.utils.Interface {
   functions: {
     "getEthValue(uint256)": FunctionFragment;
+    "getLastUpdatedBlock()": FunctionFragment;
+    "setInstantUpdates(bool)": FunctionFragment;
+    "setLastUpdatedBlock(uint256)": FunctionFragment;
+    "setLastUpdatedBlockManipulation(bool)": FunctionFragment;
     "setRethMultiplierInRay(uint256)": FunctionFragment;
   };
 
@@ -30,12 +34,44 @@ interface MockRocketEthInterface extends ethers.utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "getLastUpdatedBlock",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setInstantUpdates",
+    values: [boolean]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setLastUpdatedBlock",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setLastUpdatedBlockManipulation",
+    values: [boolean]
+  ): string;
+  encodeFunctionData(
     functionFragment: "setRethMultiplierInRay",
     values: [BigNumberish]
   ): string;
 
   decodeFunctionResult(
     functionFragment: "getEthValue",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getLastUpdatedBlock",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setInstantUpdates",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setLastUpdatedBlock",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setLastUpdatedBlockManipulation",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -91,34 +127,85 @@ export class MockRocketEth extends BaseContract {
 
   functions: {
     getEthValue(
-      _rethAmount: BigNumberish,
+      rethAmount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    getLastUpdatedBlock(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    setInstantUpdates(
+      instantUpdates: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setLastUpdatedBlock(
+      lastUpdatedBlock: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setLastUpdatedBlockManipulation(
+      lastUpdatedBlockManipulation: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setRethMultiplierInRay(
-      _rethMultiplier: BigNumberish,
+      rethMultiplier: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
 
   getEthValue(
-    _rethAmount: BigNumberish,
+    rethAmount: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  getLastUpdatedBlock(overrides?: CallOverrides): Promise<BigNumber>;
+
+  setInstantUpdates(
+    instantUpdates: boolean,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setLastUpdatedBlock(
+    lastUpdatedBlock: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setLastUpdatedBlockManipulation(
+    lastUpdatedBlockManipulation: boolean,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   setRethMultiplierInRay(
-    _rethMultiplier: BigNumberish,
+    rethMultiplier: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
     getEthValue(
-      _rethAmount: BigNumberish,
+      rethAmount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getLastUpdatedBlock(overrides?: CallOverrides): Promise<BigNumber>;
+
+    setInstantUpdates(
+      instantUpdates: boolean,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setLastUpdatedBlock(
+      lastUpdatedBlock: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setLastUpdatedBlockManipulation(
+      lastUpdatedBlockManipulation: boolean,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     setRethMultiplierInRay(
-      _rethMultiplier: BigNumberish,
+      rethMultiplier: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
   };
@@ -127,24 +214,60 @@ export class MockRocketEth extends BaseContract {
 
   estimateGas: {
     getEthValue(
-      _rethAmount: BigNumberish,
+      rethAmount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getLastUpdatedBlock(overrides?: CallOverrides): Promise<BigNumber>;
+
+    setInstantUpdates(
+      instantUpdates: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setLastUpdatedBlock(
+      lastUpdatedBlock: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setLastUpdatedBlockManipulation(
+      lastUpdatedBlockManipulation: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setRethMultiplierInRay(
-      _rethMultiplier: BigNumberish,
+      rethMultiplier: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
     getEthValue(
-      _rethAmount: BigNumberish,
+      rethAmount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getLastUpdatedBlock(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    setInstantUpdates(
+      instantUpdates: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setLastUpdatedBlock(
+      lastUpdatedBlock: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setLastUpdatedBlockManipulation(
+      lastUpdatedBlockManipulation: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     setRethMultiplierInRay(
-      _rethMultiplier: BigNumberish,
+      rethMultiplier: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

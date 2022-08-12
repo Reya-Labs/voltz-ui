@@ -19,10 +19,12 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
-interface MockLidoRateOracleInterface extends ethers.utils.Interface {
+interface TestAaveBorrowRateOracleInterface extends ethers.utils.Interface {
   functions: {
     "ONE_IN_WAD()": FunctionFragment;
     "UNDERLYING_YIELD_BEARING_PROTOCOL_ID()": FunctionFragment;
+    "aaveLendingPool()": FunctionFragment;
+    "binarySearch(uint32)": FunctionFragment;
     "currentBlockSlope()": FunctionFragment;
     "getApyFrom(uint256)": FunctionFragment;
     "getApyFromTo(uint256,uint256)": FunctionFragment;
@@ -30,21 +32,23 @@ interface MockLidoRateOracleInterface extends ethers.utils.Interface {
     "getCurrentRateInRay()": FunctionFragment;
     "getLastRateSlope()": FunctionFragment;
     "getLastUpdatedRate()": FunctionFragment;
+    "getLatestRateValue()": FunctionFragment;
+    "getRate(uint16)": FunctionFragment;
     "getRateFrom(uint256)": FunctionFragment;
     "getRateFromTo(uint256,uint256)": FunctionFragment;
     "increaseObservationCardinalityNext(uint16)": FunctionFragment;
     "interpolateRateValue(uint256,uint256,uint256)": FunctionFragment;
     "lastUpdatedBlock()": FunctionFragment;
-    "lidoOracle()": FunctionFragment;
     "minSecondsSinceLastUpdate()": FunctionFragment;
     "observations(uint256)": FunctionFragment;
     "oracleVars()": FunctionFragment;
     "owner()": FunctionFragment;
-    "refreshBeaconSpec()": FunctionFragment;
+    "rayValueIsCloseTo(uint256,uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "setMinSecondsSinceLastUpdate(uint256)": FunctionFragment;
     "settlementRateCache(uint32,uint32)": FunctionFragment;
-    "stEth()": FunctionFragment;
+    "testComputeApyFromRate(uint256,uint256)": FunctionFragment;
+    "testGetSurroundingRates(uint32)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "underlying()": FunctionFragment;
     "variableFactor(uint256,uint256)": FunctionFragment;
@@ -59,6 +63,14 @@ interface MockLidoRateOracleInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "UNDERLYING_YIELD_BEARING_PROTOCOL_ID",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "aaveLendingPool",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "binarySearch",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "currentBlockSlope",
@@ -89,6 +101,14 @@ interface MockLidoRateOracleInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "getLatestRateValue",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getRate",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getRateFrom",
     values: [BigNumberish]
   ): string;
@@ -109,10 +129,6 @@ interface MockLidoRateOracleInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "lidoOracle",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "minSecondsSinceLastUpdate",
     values?: undefined
   ): string;
@@ -126,8 +142,8 @@ interface MockLidoRateOracleInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "refreshBeaconSpec",
-    values?: undefined
+    functionFragment: "rayValueIsCloseTo",
+    values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
@@ -141,7 +157,14 @@ interface MockLidoRateOracleInterface extends ethers.utils.Interface {
     functionFragment: "settlementRateCache",
     values: [BigNumberish, BigNumberish]
   ): string;
-  encodeFunctionData(functionFragment: "stEth", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "testComputeApyFromRate",
+    values: [BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "testGetSurroundingRates",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [string]
@@ -166,6 +189,14 @@ interface MockLidoRateOracleInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "ONE_IN_WAD", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "UNDERLYING_YIELD_BEARING_PROTOCOL_ID",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "aaveLendingPool",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "binarySearch",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -194,6 +225,11 @@ interface MockLidoRateOracleInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "getLatestRateValue",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "getRate", data: BytesLike): Result;
+  decodeFunctionResult(
     functionFragment: "getRateFrom",
     data: BytesLike
   ): Result;
@@ -213,7 +249,6 @@ interface MockLidoRateOracleInterface extends ethers.utils.Interface {
     functionFragment: "lastUpdatedBlock",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "lidoOracle", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "minSecondsSinceLastUpdate",
     data: BytesLike
@@ -225,7 +260,7 @@ interface MockLidoRateOracleInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "oracleVars", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "refreshBeaconSpec",
+    functionFragment: "rayValueIsCloseTo",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -240,7 +275,14 @@ interface MockLidoRateOracleInterface extends ethers.utils.Interface {
     functionFragment: "settlementRateCache",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "stEth", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "testComputeApyFromRate",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "testGetSurroundingRates",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
     data: BytesLike
@@ -296,7 +338,7 @@ export type RateCardinalityNextEvent = TypedEvent<
   [number] & { observationCardinalityNextNew: number }
 >;
 
-export class MockLidoRateOracle extends BaseContract {
+export class TestAaveBorrowRateOracle extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -337,7 +379,7 @@ export class MockLidoRateOracle extends BaseContract {
     toBlock?: string | number | undefined
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: MockLidoRateOracleInterface;
+  interface: TestAaveBorrowRateOracleInterface;
 
   functions: {
     ONE_IN_WAD(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -345,6 +387,37 @@ export class MockLidoRateOracle extends BaseContract {
     UNDERLYING_YIELD_BEARING_PROTOCOL_ID(
       overrides?: CallOverrides
     ): Promise<[number]>;
+
+    aaveLendingPool(overrides?: CallOverrides): Promise<[string]>;
+
+    binarySearch(
+      target: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        [number, BigNumber, boolean] & {
+          blockTimestamp: number;
+          observedValue: BigNumber;
+          initialized: boolean;
+        },
+        [number, BigNumber, boolean] & {
+          blockTimestamp: number;
+          observedValue: BigNumber;
+          initialized: boolean;
+        }
+      ] & {
+        beforeOrAt: [number, BigNumber, boolean] & {
+          blockTimestamp: number;
+          observedValue: BigNumber;
+          initialized: boolean;
+        };
+        atOrAfter: [number, BigNumber, boolean] & {
+          blockTimestamp: number;
+          observedValue: BigNumber;
+          initialized: boolean;
+        };
+      }
+    >;
 
     currentBlockSlope(
       overrides?: CallOverrides
@@ -385,6 +458,13 @@ export class MockLidoRateOracle extends BaseContract {
       [number, BigNumber] & { timestamp: number; resultRay: BigNumber }
     >;
 
+    getLatestRateValue(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    getRate(
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber, BigNumber]>;
+
     getRateFrom(
       _from: BigNumberish,
       overrides?: CallOverrides
@@ -412,8 +492,6 @@ export class MockLidoRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[number, BigNumber] & { timestamp: number; number: BigNumber }>;
 
-    lidoOracle(overrides?: CallOverrides): Promise<[string]>;
-
     minSecondsSinceLastUpdate(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     observations(
@@ -439,9 +517,11 @@ export class MockLidoRateOracle extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
-    refreshBeaconSpec(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+    rayValueIsCloseTo(
+      observedValueInRay: BigNumberish,
+      expectedValueInRay: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -458,7 +538,21 @@ export class MockLidoRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    stEth(overrides?: CallOverrides): Promise<[string]>;
+    testComputeApyFromRate(
+      rateFromTo: BigNumberish,
+      timeInYears: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    testGetSurroundingRates(
+      target: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber] & {
+        latestBeforeOrAtRateValue: BigNumber;
+        latestAfterOrAtRateValue: BigNumber;
+      }
+    >;
 
     transferOwnership(
       newOwner: string,
@@ -489,6 +583,37 @@ export class MockLidoRateOracle extends BaseContract {
   UNDERLYING_YIELD_BEARING_PROTOCOL_ID(
     overrides?: CallOverrides
   ): Promise<number>;
+
+  aaveLendingPool(overrides?: CallOverrides): Promise<string>;
+
+  binarySearch(
+    target: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<
+    [
+      [number, BigNumber, boolean] & {
+        blockTimestamp: number;
+        observedValue: BigNumber;
+        initialized: boolean;
+      },
+      [number, BigNumber, boolean] & {
+        blockTimestamp: number;
+        observedValue: BigNumber;
+        initialized: boolean;
+      }
+    ] & {
+      beforeOrAt: [number, BigNumber, boolean] & {
+        blockTimestamp: number;
+        observedValue: BigNumber;
+        initialized: boolean;
+      };
+      atOrAfter: [number, BigNumber, boolean] & {
+        blockTimestamp: number;
+        observedValue: BigNumber;
+        initialized: boolean;
+      };
+    }
+  >;
 
   currentBlockSlope(
     overrides?: CallOverrides
@@ -522,6 +647,13 @@ export class MockLidoRateOracle extends BaseContract {
     overrides?: CallOverrides
   ): Promise<[number, BigNumber] & { timestamp: number; resultRay: BigNumber }>;
 
+  getLatestRateValue(overrides?: CallOverrides): Promise<BigNumber>;
+
+  getRate(
+    index: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<[BigNumber, BigNumber]>;
+
   getRateFrom(
     _from: BigNumberish,
     overrides?: CallOverrides
@@ -549,8 +681,6 @@ export class MockLidoRateOracle extends BaseContract {
     overrides?: CallOverrides
   ): Promise<[number, BigNumber] & { timestamp: number; number: BigNumber }>;
 
-  lidoOracle(overrides?: CallOverrides): Promise<string>;
-
   minSecondsSinceLastUpdate(overrides?: CallOverrides): Promise<BigNumber>;
 
   observations(
@@ -576,9 +706,11 @@ export class MockLidoRateOracle extends BaseContract {
 
   owner(overrides?: CallOverrides): Promise<string>;
 
-  refreshBeaconSpec(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+  rayValueIsCloseTo(
+    observedValueInRay: BigNumberish,
+    expectedValueInRay: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
 
   renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -595,7 +727,21 @@ export class MockLidoRateOracle extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  stEth(overrides?: CallOverrides): Promise<string>;
+  testComputeApyFromRate(
+    rateFromTo: BigNumberish,
+    timeInYears: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  testGetSurroundingRates(
+    target: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<
+    [BigNumber, BigNumber] & {
+      latestBeforeOrAtRateValue: BigNumber;
+      latestAfterOrAtRateValue: BigNumber;
+    }
+  >;
 
   transferOwnership(
     newOwner: string,
@@ -626,6 +772,37 @@ export class MockLidoRateOracle extends BaseContract {
     UNDERLYING_YIELD_BEARING_PROTOCOL_ID(
       overrides?: CallOverrides
     ): Promise<number>;
+
+    aaveLendingPool(overrides?: CallOverrides): Promise<string>;
+
+    binarySearch(
+      target: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        [number, BigNumber, boolean] & {
+          blockTimestamp: number;
+          observedValue: BigNumber;
+          initialized: boolean;
+        },
+        [number, BigNumber, boolean] & {
+          blockTimestamp: number;
+          observedValue: BigNumber;
+          initialized: boolean;
+        }
+      ] & {
+        beforeOrAt: [number, BigNumber, boolean] & {
+          blockTimestamp: number;
+          observedValue: BigNumber;
+          initialized: boolean;
+        };
+        atOrAfter: [number, BigNumber, boolean] & {
+          blockTimestamp: number;
+          observedValue: BigNumber;
+          initialized: boolean;
+        };
+      }
+    >;
 
     currentBlockSlope(
       overrides?: CallOverrides
@@ -664,6 +841,13 @@ export class MockLidoRateOracle extends BaseContract {
       [number, BigNumber] & { timestamp: number; resultRay: BigNumber }
     >;
 
+    getLatestRateValue(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getRate(
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber, BigNumber]>;
+
     getRateFrom(
       _from: BigNumberish,
       overrides?: CallOverrides
@@ -691,8 +875,6 @@ export class MockLidoRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[number, BigNumber] & { timestamp: number; number: BigNumber }>;
 
-    lidoOracle(overrides?: CallOverrides): Promise<string>;
-
     minSecondsSinceLastUpdate(overrides?: CallOverrides): Promise<BigNumber>;
 
     observations(
@@ -718,7 +900,11 @@ export class MockLidoRateOracle extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<string>;
 
-    refreshBeaconSpec(overrides?: CallOverrides): Promise<void>;
+    rayValueIsCloseTo(
+      observedValueInRay: BigNumberish,
+      expectedValueInRay: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
@@ -733,7 +919,21 @@ export class MockLidoRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    stEth(overrides?: CallOverrides): Promise<string>;
+    testComputeApyFromRate(
+      rateFromTo: BigNumberish,
+      timeInYears: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    testGetSurroundingRates(
+      target: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber] & {
+        latestBeforeOrAtRateValue: BigNumber;
+        latestAfterOrAtRateValue: BigNumber;
+      }
+    >;
 
     transferOwnership(
       newOwner: string,
@@ -840,6 +1040,13 @@ export class MockLidoRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    aaveLendingPool(overrides?: CallOverrides): Promise<BigNumber>;
+
+    binarySearch(
+      target: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     currentBlockSlope(overrides?: CallOverrides): Promise<BigNumber>;
 
     getApyFrom(
@@ -860,6 +1067,10 @@ export class MockLidoRateOracle extends BaseContract {
     getLastRateSlope(overrides?: CallOverrides): Promise<BigNumber>;
 
     getLastUpdatedRate(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getLatestRateValue(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getRate(index: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     getRateFrom(
       _from: BigNumberish,
@@ -886,8 +1097,6 @@ export class MockLidoRateOracle extends BaseContract {
 
     lastUpdatedBlock(overrides?: CallOverrides): Promise<BigNumber>;
 
-    lidoOracle(overrides?: CallOverrides): Promise<BigNumber>;
-
     minSecondsSinceLastUpdate(overrides?: CallOverrides): Promise<BigNumber>;
 
     observations(
@@ -899,8 +1108,10 @@ export class MockLidoRateOracle extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
-    refreshBeaconSpec(
-      overrides?: Overrides & { from?: string | Promise<string> }
+    rayValueIsCloseTo(
+      observedValueInRay: BigNumberish,
+      expectedValueInRay: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     renounceOwnership(
@@ -918,7 +1129,16 @@ export class MockLidoRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    stEth(overrides?: CallOverrides): Promise<BigNumber>;
+    testComputeApyFromRate(
+      rateFromTo: BigNumberish,
+      timeInYears: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    testGetSurroundingRates(
+      target: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     transferOwnership(
       newOwner: string,
@@ -951,6 +1171,13 @@ export class MockLidoRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    aaveLendingPool(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    binarySearch(
+      target: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     currentBlockSlope(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getApyFrom(
@@ -973,6 +1200,15 @@ export class MockLidoRateOracle extends BaseContract {
     getLastRateSlope(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getLastUpdatedRate(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getLatestRateValue(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getRate(
+      index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1001,8 +1237,6 @@ export class MockLidoRateOracle extends BaseContract {
 
     lastUpdatedBlock(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    lidoOracle(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     minSecondsSinceLastUpdate(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -1016,8 +1250,10 @@ export class MockLidoRateOracle extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    refreshBeaconSpec(
-      overrides?: Overrides & { from?: string | Promise<string> }
+    rayValueIsCloseTo(
+      observedValueInRay: BigNumberish,
+      expectedValueInRay: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     renounceOwnership(
@@ -1035,7 +1271,16 @@ export class MockLidoRateOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    stEth(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    testComputeApyFromRate(
+      rateFromTo: BigNumberish,
+      timeInYears: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    testGetSurroundingRates(
+      target: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     transferOwnership(
       newOwner: string,

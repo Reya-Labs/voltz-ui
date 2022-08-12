@@ -13,6 +13,8 @@ import {
   IERC20Minimal__factory,
   ICToken,
   IERC20Minimal,
+  CompoundBorrowRateOracle__factory,
+  AaveBorrowRateOracle__factory,
 } from '../typechain';
 import RateOracle from './rateOracle';
 import Token from './token';
@@ -38,7 +40,7 @@ class BorrowAMM {
   public readonly termStartTimestamp: JSBI;
   public readonly termEndTimestamp: JSBI;
   public readonly underlyingToken: Token;
-  public readonly amm?: AMM;
+  public readonly amm: AMM;
 
   public cToken?: ICToken;
   public aaveVariableDebtToken?: IERC20Minimal;
@@ -69,14 +71,14 @@ class BorrowAMM {
 
     if (this.signer) {
       if ( protocolId === 6) {
-        const compoundRateOracle = ICompoundRateOracle__factory.connect(this.rateOracle.id, this.signer)
+        const compoundRateOracle = CompoundBorrowRateOracle__factory.connect(this.rateOracle.id, this.signer)
         compoundRateOracle.ctoken().then( (cTokenAddress) => {
           if (this.signer !== null) {
           this.cToken = cTokenFactory.connect(cTokenAddress, this.signer);
           }
         });
       } else {
-        const aaveRateOracle = IAaveRateOracle__factory.connect(this.rateOracle.id, this.signer)
+        const aaveRateOracle = AaveBorrowRateOracle__factory.connect(this.rateOracle.id, this.signer)
 
         aaveRateOracle.aaveLendingPool().then( (lendingPoolAddress) => {
           if (this.signer !== null) {
@@ -246,6 +248,23 @@ class BorrowAMM {
       return 0;
     }
   }
+
+  public async getFullyCollateralisedMarginRequirement(fixedTokenBalance: number, variableTokenBalance: number): Promise<number> {
+      if (!this.provider) {
+        throw new Error('Blockchain not connected');
+      }
+
+      const variableAPYToMaturity = await this.amm.getVariableFactor(
+        BigNumber.from(this.termStartTimestamp.toString()), 
+        BigNumber.from(this.termEndTimestamp.toString())
+      );
+
+      const termStartTimestamp = (BigNumber.from(this.termStartTimestamp.toString()).div(BigNumber.from(10).pow(18))).toNumber();
+      const termEndTimestamp = (BigNumber.from(this.termEndTimestamp.toString()).div(BigNumber.from(10).pow(18))).toNumber();
+      const fixedFactor = (termEndTimestamp - termStartTimestamp) / ONE_YEAR_IN_SECONDS * 0.01;
+      
+      return fixedTokenBalance * fixedFactor + variableTokenBalance * variableAPYToMaturity;
+    }
 }
 
 export default BorrowAMM;

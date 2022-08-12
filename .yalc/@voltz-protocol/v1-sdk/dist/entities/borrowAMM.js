@@ -65,7 +65,7 @@ var BorrowAMM = /** @class */ (function () {
         }
         if (this.signer) {
             if (protocolId === 6) {
-                var compoundRateOracle = typechain_1.ICompoundRateOracle__factory.connect(this.rateOracle.id, this.signer);
+                var compoundRateOracle = typechain_1.CompoundBorrowRateOracle__factory.connect(this.rateOracle.id, this.signer);
                 compoundRateOracle.ctoken().then(function (cTokenAddress) {
                     if (_this.signer !== null) {
                         _this.cToken = typechain_1.ICToken__factory.connect(cTokenAddress, _this.signer);
@@ -73,7 +73,7 @@ var BorrowAMM = /** @class */ (function () {
                 });
             }
             else {
-                var aaveRateOracle = typechain_1.IAaveRateOracle__factory.connect(this.rateOracle.id, this.signer);
+                var aaveRateOracle = typechain_1.AaveBorrowRateOracle__factory.connect(this.rateOracle.id, this.signer);
                 aaveRateOracle.aaveLendingPool().then(function (lendingPoolAddress) {
                     if (_this.signer !== null) {
                         var lendingPool = typechain_1.IAaveV2LendingPool__factory.connect(lendingPoolAddress, _this.signer);
@@ -263,6 +263,26 @@ var BorrowAMM = /** @class */ (function () {
                             return [2 /*return*/, 0];
                         }
                         return [2 /*return*/];
+                }
+            });
+        });
+    };
+    BorrowAMM.prototype.getFullyCollateralisedMarginRequirement = function (fixedTokenBalance, variableTokenBalance) {
+        return __awaiter(this, void 0, void 0, function () {
+            var variableAPYToMaturity, termStartTimestamp, termEndTimestamp, fixedFactor;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!this.provider) {
+                            throw new Error('Blockchain not connected');
+                        }
+                        return [4 /*yield*/, this.amm.getVariableFactor(ethers_1.BigNumber.from(this.termStartTimestamp.toString()), ethers_1.BigNumber.from(this.termEndTimestamp.toString()))];
+                    case 1:
+                        variableAPYToMaturity = _a.sent();
+                        termStartTimestamp = (ethers_1.BigNumber.from(this.termStartTimestamp.toString()).div(ethers_1.BigNumber.from(10).pow(18))).toNumber();
+                        termEndTimestamp = (ethers_1.BigNumber.from(this.termEndTimestamp.toString()).div(ethers_1.BigNumber.from(10).pow(18))).toNumber();
+                        fixedFactor = (termEndTimestamp - termStartTimestamp) / constants_1.ONE_YEAR_IN_SECONDS * 0.01;
+                        return [2 /*return*/, fixedTokenBalance * fixedFactor + variableTokenBalance * variableAPYToMaturity];
                 }
             });
         });

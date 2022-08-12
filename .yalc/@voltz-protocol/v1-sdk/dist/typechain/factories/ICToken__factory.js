@@ -7,134 +7,134 @@ exports.ICToken__factory = void 0;
 var ethers_1 = require("ethers");
 var _abi = [
     {
-        "inputs": [],
-        "name": "accrualBlockNumber",
-        "outputs": [
+        inputs: [],
+        name: "accrualBlockNumber",
+        outputs: [
             {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
         ],
-        "stateMutability": "view",
-        "type": "function"
+        stateMutability: "view",
+        type: "function",
     },
     {
-        "inputs": [
+        inputs: [
             {
-                "internalType": "address",
-                "name": "account",
-                "type": "address"
-            }
+                internalType: "address",
+                name: "account",
+                type: "address",
+            },
         ],
-        "name": "borrowBalanceCurrent",
-        "outputs": [
+        name: "borrowBalanceCurrent",
+        outputs: [
             {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
         ],
-        "stateMutability": "nonpayable",
-        "type": "function"
+        stateMutability: "nonpayable",
+        type: "function",
     },
     {
-        "inputs": [],
-        "name": "borrowIndex",
-        "outputs": [
+        inputs: [],
+        name: "borrowIndex",
+        outputs: [
             {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
         ],
-        "stateMutability": "view",
-        "type": "function"
+        stateMutability: "view",
+        type: "function",
     },
     {
-        "inputs": [],
-        "name": "borrowRatePerBlock",
-        "outputs": [
+        inputs: [],
+        name: "borrowRatePerBlock",
+        outputs: [
             {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
         ],
-        "stateMutability": "view",
-        "type": "function"
+        stateMutability: "view",
+        type: "function",
     },
     {
-        "inputs": [],
-        "name": "exchangeRateCurrent",
-        "outputs": [
+        inputs: [],
+        name: "exchangeRateCurrent",
+        outputs: [
             {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
         ],
-        "stateMutability": "nonpayable",
-        "type": "function"
+        stateMutability: "nonpayable",
+        type: "function",
     },
     {
-        "inputs": [],
-        "name": "exchangeRateStored",
-        "outputs": [
+        inputs: [],
+        name: "exchangeRateStored",
+        outputs: [
             {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
         ],
-        "stateMutability": "view",
-        "type": "function"
+        stateMutability: "view",
+        type: "function",
     },
     {
-        "inputs": [
+        inputs: [
             {
-                "internalType": "uint256",
-                "name": "redeemAmount",
-                "type": "uint256"
-            }
+                internalType: "uint256",
+                name: "redeemAmount",
+                type: "uint256",
+            },
         ],
-        "name": "redeemUnderlying",
-        "outputs": [
+        name: "redeemUnderlying",
+        outputs: [
             {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
         ],
-        "stateMutability": "nonpayable",
-        "type": "function"
+        stateMutability: "nonpayable",
+        type: "function",
     },
     {
-        "inputs": [],
-        "name": "supplyRatePerBlock",
-        "outputs": [
+        inputs: [],
+        name: "supplyRatePerBlock",
+        outputs: [
             {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
         ],
-        "stateMutability": "view",
-        "type": "function"
+        stateMutability: "view",
+        type: "function",
     },
     {
-        "inputs": [],
-        "name": "underlying",
-        "outputs": [
+        inputs: [],
+        name: "underlying",
+        outputs: [
             {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
+                internalType: "address",
+                name: "",
+                type: "address",
+            },
         ],
-        "stateMutability": "view",
-        "type": "function"
-    }
+        stateMutability: "view",
+        type: "function",
+    },
 ];
 var ICToken__factory = /** @class */ (function () {
     function ICToken__factory() {

@@ -14,6 +14,11 @@ const _abi = [
   },
   {
     inputs: [],
+    name: "AavePoolGetReserveNormalizedVariableDebtReturnedZero",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "CTokenExchangeRateReturnedZero",
     type: "error",
   },
@@ -575,6 +580,19 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "getRateOracle",
+    outputs: [
+      {
+        internalType: "contract IRateOracle",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "contract IMarginEngine",
@@ -702,6 +720,13 @@ const _abi = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "refreshRateOracle",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {

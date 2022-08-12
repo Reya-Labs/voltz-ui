@@ -8,6 +8,19 @@ import type { IStETH, IStETHInterface } from "../IStETH";
 
 const _abi = [
   {
+    inputs: [],
+    name: "getFee",
+    outputs: [
+      {
+        internalType: "uint16",
+        name: "feeBasisPoints",
+        type: "uint16",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "uint256",

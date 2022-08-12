@@ -17,6 +17,11 @@ const _abi = [
   },
   {
     inputs: [],
+    name: "AavePoolGetReserveNormalizedVariableDebtReturnedZero",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "CTokenExchangeRateReturnedZero",
     type: "error",
   },
@@ -426,6 +431,43 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "currentBlockSlope",
+    outputs: [
+      {
+        internalType: "uint32",
+        name: "timeChange",
+        type: "uint32",
+      },
+      {
+        internalType: "uint256",
+        name: "blockChange",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "from",
+        type: "uint256",
+      },
+    ],
+    name: "getApyFrom",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "apyFromToWad",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "uint256",
@@ -451,7 +493,80 @@ const _abi = [
   },
   {
     inputs: [],
+    name: "getBlockSlope",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "blockChange",
+        type: "uint256",
+      },
+      {
+        internalType: "uint32",
+        name: "timeChange",
+        type: "uint32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "getCurrentRateInRay",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "currentRate",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getLastRateSlope",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "rateChange",
+        type: "uint256",
+      },
+      {
+        internalType: "uint32",
+        name: "timeChange",
+        type: "uint32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getLastUpdatedRate",
+    outputs: [
+      {
+        internalType: "uint32",
+        name: "timestamp",
+        type: "uint32",
+      },
+      {
+        internalType: "uint256",
+        name: "rate",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_from",
+        type: "uint256",
+      },
+    ],
+    name: "getRateFrom",
     outputs: [
       {
         internalType: "uint256",
@@ -526,6 +641,24 @@ const _abi = [
       },
     ],
     stateMutability: "pure",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "lastUpdatedBlock",
+    outputs: [
+      {
+        internalType: "uint32",
+        name: "timestamp",
+        type: "uint32",
+      },
+      {
+        internalType: "uint256",
+        name: "number",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
