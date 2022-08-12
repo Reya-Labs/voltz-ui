@@ -12,7 +12,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { UseAsyncFunctionResult } from '@hooks';
 
 export type FixBorrowSliderProps = {
-  aggregatedDebt: UseAsyncFunctionResult<unknown, number | void>;
+  variableDebt: UseAsyncFunctionResult<unknown, number | void>;
   currencySymbol: string;
   selectedFixedDebt?: number;
   selectedFixedDebtPercentage?: number;
@@ -22,7 +22,7 @@ export type FixBorrowSliderProps = {
 }
 
 const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
-  aggregatedDebt,
+  variableDebt,
   currencySymbol,
   selectedFixedDebt,
   selectedFixedDebtPercentage,
@@ -68,7 +68,7 @@ const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
         min={0}
         max={100}
         onChangeCommitted={handleChangeCommitted}
-        disabled={aggregatedDebt.loading}
+        disabled={variableDebt.loading}
       />
     </Box>
   );

@@ -17,7 +17,7 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
   const { amm: borrowAmm } = useBorrowAMMContext();
   const { amm } = useAMMContext();
   const form = useBorrowFormContext();
-  const { aggregatedDebt } = useBorrowAMMContext();
+  const { variableDebt } = useBorrowAMMContext();
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -95,7 +95,7 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
       onCancel={handleGoBack}
       onSubmit={handleSubmit}
       tokenApprovals={form.tokenApprovals}
-      aggregatedDebt={form.aggregatedDebt}
+      variableDebt={form.variableDebt}
       selectedFixedDebt={form.selectedFixedDebt}
       selectedFixedDebtPercentage={form.selectedFixedDebtPercentage}
       selectedVariableDebt={form.selectedVariableDebt}

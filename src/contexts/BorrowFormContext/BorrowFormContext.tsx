@@ -27,7 +27,7 @@ export enum BorrowFormSubmitButtonHintStates {
 };
 
 export type BorrowFormContext = {
-  aggregatedDebt: UseAsyncFunctionResult<unknown, number | void>;
+  variableDebt: UseAsyncFunctionResult<unknown, number | void>;
   selectedFixedDebt?: number;
   selectedFixedDebtPercentage?: number;
   selectedVariableDebt?: number;
@@ -51,7 +51,7 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
   const { amm : borrowAmm } = useBorrowAMMContext();
   const { amm } = useAMMContext();
   const { position } = usePositionContext();
-  const { aggregatedDebt, fullyCollateralisedMarginRequirement } = useBorrowAMMContext();
+  const { variableDebt, fullyCollateralisedMarginRequirement } = useBorrowAMMContext();
 
   const [selectedFixedDebt, setSelectedFixedDebt] = useState<BorrowFormContext['selectedFixedDebt']>(undefined);
   const [selectedFixedDebtPercentage, setSelectedFixedDebtPercentage] = useState<BorrowFormContext['selectedFixedDebtPercentage']>(undefined);
@@ -172,19 +172,19 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
   }
 
   useEffect(() => {
-    aggregatedDebt.call(position);
-  }, [aggregatedDebt.call]);
+    variableDebt.call(position);
+  }, [variableDebt.call]);
 
   useEffect(() => {
-    if (aggregatedDebt.loading || (aggregatedDebt.result === null) || (aggregatedDebt.result === undefined)) {
+    if (variableDebt.loading || (variableDebt.result === null) || (variableDebt.result === undefined)) {
       return;
     }
 
     setSelectedFixedDebt(0);
     setSelectedFixedDebtPercentage(0);
-    setSelectedVariableDebt(aggregatedDebt.result);
+    setSelectedVariableDebt(variableDebt.result);
     setSelectedVariableDebtPercentage(100);
-  }, [aggregatedDebt.loading, aggregatedDebt.result]);
+  }, [variableDebt.loading, variableDebt.result]);
 
 
   const updateNotional = (value: number) => {
@@ -192,14 +192,14 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
       touched.current.push('margin');
     }
 
-    if (aggregatedDebt.loading || (aggregatedDebt.result === null) || (aggregatedDebt.result === undefined)) {
+    if (variableDebt.loading || (variableDebt.result === null) || (variableDebt.result === undefined)) {
       return;
     }
 
-    setSelectedFixedDebt(aggregatedDebt.result * value / 100)
+    setSelectedFixedDebt(variableDebt.result * value / 100)
     setSelectedFixedDebtPercentage(value);
 
-    setSelectedVariableDebt(aggregatedDebt.result * (100 - value) / 100);
+    setSelectedVariableDebt(variableDebt.result * (100 - value) / 100);
     setSelectedVariableDebtPercentage(100 - value);
   }
 
@@ -236,7 +236,7 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
   }, [selectedFixedDebt]);
 
   const value = {
-    aggregatedDebt,
+    variableDebt,
     selectedFixedDebt,
     selectedFixedDebtPercentage,
     selectedVariableDebt,

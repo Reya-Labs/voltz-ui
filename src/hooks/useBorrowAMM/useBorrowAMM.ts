@@ -93,7 +93,7 @@ export const useBorrowAMM = ( borrowAmm?: AugmentedBorrowAMM) => {
   return useMemo(() => ({
     underlyingDebt,
     variableDebt,
-    fullyCollateralisedMarginRequirement
+    fullyCollateralisedMarginRequirement,
     fixedDebt,
     variableApy,
     fixedApr,
@@ -102,7 +102,7 @@ export const useBorrowAMM = ( borrowAmm?: AugmentedBorrowAMM) => {
   [
     underlyingDebt,
     variableDebt,
-    fullyCollateralisedMarginRequirement
+    fullyCollateralisedMarginRequirement,
     fixedDebt,
     variableApy,
     fixedApr,

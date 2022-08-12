@@ -13,7 +13,7 @@ import FixBorrowSlider from '../FixBorrowSlider/FixBorrowSlider';
 import { UseAsyncFunctionResult } from '@hooks';
 
 export type FixBorrowProps = {
-  aggregatedDebt: UseAsyncFunctionResult<unknown, number | void>;
+  variableDebt: UseAsyncFunctionResult<unknown, number | void>;
   currencyCode?: string;
   currencySymbol?: string;
   selectedFixedDebt?: number;
@@ -24,7 +24,7 @@ export type FixBorrowProps = {
 }
 
 const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
-  aggregatedDebt,
+  variableDebt,
   currencyCode = '',
   currencySymbol = '',
   selectedFixedDebt,
@@ -34,15 +34,15 @@ const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
   handleChange
 }) => {
   const renderValue = () => {
-    if (aggregatedDebt.loading) {
+    if (variableDebt.loading) {
       return 'Loading...';
     }
 
-    if (!aggregatedDebt.result) {
+    if (!variableDebt.result) {
       return `${currencySymbol}0`;
     }
 
-    return `${currencySymbol}${(aggregatedDebt.result).toFixed(2)}`;
+    return `${currencySymbol}${(variableDebt.result).toFixed(2)}`;
   };
 
   return (
@@ -63,7 +63,7 @@ const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
       </Stack>
 
       <FixBorrowSlider 
-        aggregatedDebt={aggregatedDebt}
+        variableDebt={variableDebt}
         selectedFixedDebt={selectedFixedDebt}
         selectedFixedDebtPercentage={selectedFixedDebtPercentage}
         selectedVariableDebt={selectedVariableDebt}

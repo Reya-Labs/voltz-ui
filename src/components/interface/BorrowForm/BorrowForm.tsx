@@ -32,7 +32,7 @@ export type BorrowProps = {
   onSubmit: () => void;
   tokenApprovals: ReturnType<typeof useTokenApproval>
   tradeInfoErrorMessage?: string;
-  aggregatedDebt: UseAsyncFunctionResult<unknown, number | void>;
+  variableDebt: UseAsyncFunctionResult<unknown, number | void>;
   selectedFixedDebt?: number;
   selectedFixedDebtPercentage?: number;
   selectedVariableDebt?: number;
@@ -57,7 +57,7 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
   onSubmit,
   tokenApprovals,
   tradeInfoErrorMessage,
-  aggregatedDebt,
+  variableDebt,
   selectedFixedDebt,
   selectedFixedDebtPercentage,
   selectedVariableDebt,
@@ -83,7 +83,7 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
 
       <Box sx={bottomSpacing}>
         <FixBorrow
-          aggregatedDebt={aggregatedDebt}
+          variableDebt={variableDebt}
           currencySymbol={'$'}
           currencyCode={'USD'}
           selectedFixedDebt={selectedFixedDebt}
