@@ -8,7 +8,7 @@ import { Icon, Icons, Panel, Typography } from '@components/atomic';
 import { SystemStyleObject, Theme } from '@theme';
 
 export type IconLabelProps = {
-  label: string;
+  label: string | ReactNode;
   icon: Icons;
   info?: ReactNode;
   removeIcon?: boolean;
@@ -33,7 +33,7 @@ const IconLabel: React.FunctionComponent<IconLabelProps> = ({ label, icon, info,
   
   return (
     <>
-      {upperCase(label)}
+      {typeof label === "string" ? upperCase(label) : label}
       <Icon
         name={icon}
         aria-owns={open ? 'mouse-over-popover' : undefined}
