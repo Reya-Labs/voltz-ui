@@ -20,8 +20,8 @@ declare class BorrowAMM {
     readonly termEndTimestamp: JSBI;
     readonly underlyingToken: Token;
     readonly amm: AMM;
-    cToken?: ICToken;
-    aaveVariableDebtToken?: IERC20Minimal;
+    cToken: ICToken | undefined;
+    aaveVariableDebtToken: IERC20Minimal | undefined;
     underlyingDebt: number;
     variableDebt: number;
     fixedDebt: number;

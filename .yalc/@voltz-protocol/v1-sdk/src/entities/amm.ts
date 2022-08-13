@@ -31,7 +31,7 @@ import {
   AaveBorrowRateOracle__factory,
   IAaveV2LendingPool__factory,
   CompoundBorrowRateOracle__factory,
-  IAaveV2LendingPool,
+  IAaveV2LendingPool
 } from '../typechain';
 import RateOracle from './rateOracle';
 import { TickMath } from '../utils/tickMath';
@@ -2980,24 +2980,31 @@ class AMM {
 
     switch (this.rateOracle.protocolId) {
       case 1: {
-        const lastBlock = await this.provider.getBlockNumber();
-        const oneBlockAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
-        const twoBlocksAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 2)).timestamp);
+        // old implementation based on the rate oracle
+        // const lastBlock = await this.provider.getBlockNumber();
+        // const oneBlockAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
+        // const twoBlocksAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 2)).timestamp);
+        // const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
+        // const oneWeekApy = await rateOracleContract.callStatic.getApyFromTo(twoBlocksAgo, oneBlockAgo);
+        // return oneWeekApy.div(BigNumber.from(1000000000000)).toNumber() / 1000000;
 
-        const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
+        if (!this.underlyingToken.id) {
+          throw new Error('No underlying error');
+        }
 
-        const oneWeekApy = await rateOracleContract.callStatic.getApyFromTo(twoBlocksAgo, oneBlockAgo);
-
-        return oneWeekApy.div(BigNumber.from(1000000000000)).toNumber() / 1000000;
+        const rateOracleContract = AaveBorrowRateOracle__factory.connect(this.rateOracle.id, this.provider);
+        const lendingPoolAddress = await rateOracleContract.aaveLendingPool();
+        const lendingPool = IAaveV2LendingPool__factory.connect(lendingPoolAddress, this.provider);
+        const reservesData = await lendingPool.getReserveData(this.underlyingToken.id);
+        const rateInRay = reservesData.currentLiquidityRate;
+        const result = rateInRay.div(BigNumber.from(10).pow(21)).toNumber() / 1000000;
+        return result; 
       }
       case 2: {
         const daysPerYear = 365;
-
         const rateOracle = CompoundRateOracle__factory.connect(this.rateOracle.id, this.provider);
-
         const cTokenAddress = await (rateOracle as CompoundRateOracle).ctoken();
         const cTokenContract = ICToken__factory.connect(cTokenAddress, this.provider);
-
         const supplyRatePerBlock = await cTokenContract.supplyRatePerBlock();
         const supplyApy = (((Math.pow((supplyRatePerBlock.toNumber() / 1e18 * blocksPerDay) + 1, daysPerYear))) - 1);
         return supplyApy;
@@ -3033,15 +3040,12 @@ class AMM {
         }
 
         const rateOracleContract = AaveBorrowRateOracle__factory.connect(this.rateOracle.id, this.provider);
-
         const lendingPoolAddress = await rateOracleContract.aaveLendingPool();
         const lendingPool = IAaveV2LendingPool__factory.connect(lendingPoolAddress, this.provider);
-
         const reservesData = await lendingPool.getReserveData(this.underlyingToken.id);
-
         const rateInRay = reservesData.currentVariableBorrowRate;
-
-        return rateInRay.toNumber() / 1e27;
+        const result = rateInRay.div(BigNumber.from(10).pow(21)).toNumber() / 1000000;
+        return result;
       }
 
       case 6: {
@@ -3052,9 +3056,9 @@ class AMM {
         const cTokenAddress = await (rateOracle as CompoundBorrowRateOracle).ctoken();
         const cTokenContract = ICToken__factory.connect(cTokenAddress, this.provider);
 
-        const supplyRatePerBlock = await cTokenContract.borrowRatePerBlock();
-        const supplyApy = (((Math.pow((supplyRatePerBlock.toNumber() / 1e18 * blocksPerDay) + 1, daysPerYear))) - 1);
-        return supplyApy;
+        const borrowRatePerBlock = await cTokenContract.borrowRatePerBlock();
+        const borrowApy = (((Math.pow((borrowRatePerBlock.toNumber() / 1e18 * blocksPerDay) + 1, daysPerYear))) - 1);
+        return borrowApy;
       } 
 
       default:

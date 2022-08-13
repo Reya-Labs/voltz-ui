@@ -31,11 +31,6 @@ const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorrowAMMTa
   const { positions, loading: loadingPos, error: errorPos } = useBorrowPositions();
   //const { positions, loading: loadingPos, error: errorPos } = usePositions();
 
-  const [variableDebt, setVariableDebt] = useState<number>();
-  const [fixedDebt, setFixedDebt] = useState<number>();
-  const [variablePositionsCount, setVariablePositionsCount] = useState<number>();
-  const [fixedPositionsCount, setFixedPositionsCount] = useState<number>();
-
   const commonOverrides: SystemStyleObject<Theme> = {
     '& .MuiTableCell-root': {
       borderColor: 'transparent',
@@ -63,20 +58,22 @@ const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorrowAMMTa
   const [headerProps, setHeaderProps] = useState<BorrowPortfolioHeaderProps>(defaultHeaderProps);
 
 
-  
-
   const loadBorrowPositionsSummary = () => {
     if(!loadingPos && !errorPos && !loading && !error && positions && borrowAmms) {
       const requestVariable = getTotalVariableDebt(borrowAmms, positions);
       requestVariable.then(([varDebt, varPositionsCount]) => {
-        setVariableDebt(varDebt);
-        setVariablePositionsCount(varPositionsCount);
-      });
-
-      const requestFixed = getTotalFixedDebt(borrowAmms, positions);
-      requestFixed.then(([fixDebt, fixPositionsCount]) => {
-        setFixedDebt(fixDebt);
-        setFixedPositionsCount(fixPositionsCount);
+        const requestFixed = getTotalFixedDebt(borrowAmms, positions);
+        requestFixed.then(([fixDebt, fixPositionsCount]) => {
+          setHeaderProps({
+            commonOverrides: commonOverrides,
+            currencyCode:'USD',
+            currencySymbol:'$',
+            fixedDebt: fixDebt,
+            variableDebt: varDebt,
+            fixedPositionsCount: fixPositionsCount,
+            variablePositionsCount: varPositionsCount,
+          });
+        });
       });
     }
   }
@@ -85,17 +82,6 @@ const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorrowAMMTa
     loadBorrowPositionsSummary();
   }, [borrowAmms, error, loading, positions, loadingPos, errorPos]);
 
-  useEffect(() => {
-    setHeaderProps({
-      commonOverrides: commonOverrides,
-      currencyCode:'USD',
-      currencySymbol:'$',
-      fixedDebt: fixedDebt,
-      variableDebt: variableDebt,
-      fixedPositionsCount: fixedPositionsCount,
-      variablePositionsCount: variablePositionsCount
-    });
-  }, [fixedDebt, variableDebt, fixedPositionsCount, variablePositionsCount]);
 
   if (!borrowAmms || loading || error) {
     return null;

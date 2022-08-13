@@ -2775,9 +2775,9 @@ var AMM = /** @class */ (function () {
     // one week look-back window apy
     AMM.prototype.getInstantApy = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var blocksPerDay, blockPerHour, _a, lastBlock, oneBlockAgo, _b, _c, twoBlocksAgo, _d, _e, rateOracleContract, oneWeekApy, daysPerYear, rateOracle, cTokenAddress, cTokenContract, supplyRatePerBlock, supplyApy, lastBlock, to, _f, _g, from, _h, _j, rateOracleContract, oneWeekApy, lastBlock, to, _k, _l, from, _m, _o, rateOracleContract, oneWeekApy, rateOracleContract, lendingPoolAddress, lendingPool, reservesData, rateInRay, daysPerYear, rateOracle, cTokenAddress, cTokenContract, supplyRatePerBlock, supplyApy;
-            return __generator(this, function (_p) {
-                switch (_p.label) {
+            var blocksPerDay, blockPerHour, _a, rateOracleContract, lendingPoolAddress, lendingPool, reservesData, rateInRay, result, daysPerYear, rateOracle, cTokenAddress, cTokenContract, supplyRatePerBlock, supplyApy, lastBlock, to, _b, _c, from, _d, _e, rateOracleContract, oneWeekApy, lastBlock, to, _f, _g, from, _h, _j, rateOracleContract, oneWeekApy, rateOracleContract, lendingPoolAddress, lendingPool, reservesData, rateInRay, result, daysPerYear, rateOracle, cTokenAddress, cTokenContract, borrowRatePerBlock, borrowApy;
+            return __generator(this, function (_k) {
+                switch (_k.label) {
                     case 0:
                         if (!this.provider) {
                             throw new Error('Blockchain not connected');
@@ -2787,100 +2787,107 @@ var AMM = /** @class */ (function () {
                         _a = this.rateOracle.protocolId;
                         switch (_a) {
                             case 1: return [3 /*break*/, 1];
-                            case 2: return [3 /*break*/, 6];
-                            case 3: return [3 /*break*/, 9];
-                            case 4: return [3 /*break*/, 14];
-                            case 5: return [3 /*break*/, 19];
-                            case 6: return [3 /*break*/, 22];
+                            case 2: return [3 /*break*/, 4];
+                            case 3: return [3 /*break*/, 7];
+                            case 4: return [3 /*break*/, 12];
+                            case 5: return [3 /*break*/, 17];
+                            case 6: return [3 /*break*/, 20];
                         }
-                        return [3 /*break*/, 25];
-                    case 1: return [4 /*yield*/, this.provider.getBlockNumber()];
-                    case 2:
-                        lastBlock = _p.sent();
-                        _c = (_b = ethers_2.BigNumber).from;
-                        return [4 /*yield*/, this.provider.getBlock(lastBlock - 1)];
-                    case 3:
-                        oneBlockAgo = _c.apply(_b, [(_p.sent()).timestamp]);
-                        _e = (_d = ethers_2.BigNumber).from;
-                        return [4 /*yield*/, this.provider.getBlock(lastBlock - 2)];
-                    case 4:
-                        twoBlocksAgo = _e.apply(_d, [(_p.sent()).timestamp]);
-                        rateOracleContract = typechain_1.BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
-                        return [4 /*yield*/, rateOracleContract.callStatic.getApyFromTo(twoBlocksAgo, oneBlockAgo)];
-                    case 5:
-                        oneWeekApy = _p.sent();
-                        return [2 /*return*/, oneWeekApy.div(ethers_2.BigNumber.from(1000000000000)).toNumber() / 1000000];
-                    case 6:
-                        daysPerYear = 365;
-                        rateOracle = typechain_1.CompoundRateOracle__factory.connect(this.rateOracle.id, this.provider);
-                        return [4 /*yield*/, rateOracle.ctoken()];
-                    case 7:
-                        cTokenAddress = _p.sent();
-                        cTokenContract = typechain_1.ICToken__factory.connect(cTokenAddress, this.provider);
-                        return [4 /*yield*/, cTokenContract.supplyRatePerBlock()];
-                    case 8:
-                        supplyRatePerBlock = _p.sent();
-                        supplyApy = (((Math.pow((supplyRatePerBlock.toNumber() / 1e18 * blocksPerDay) + 1, daysPerYear))) - 1);
-                        return [2 /*return*/, supplyApy];
-                    case 9: return [4 /*yield*/, this.provider.getBlockNumber()];
-                    case 10:
-                        lastBlock = _p.sent();
-                        _g = (_f = ethers_2.BigNumber).from;
-                        return [4 /*yield*/, this.provider.getBlock(lastBlock - 1)];
-                    case 11:
-                        to = _g.apply(_f, [(_p.sent()).timestamp]);
-                        _j = (_h = ethers_2.BigNumber).from;
-                        return [4 /*yield*/, this.provider.getBlock(lastBlock - 28 * blockPerHour)];
-                    case 12:
-                        from = _j.apply(_h, [(_p.sent()).timestamp]);
-                        rateOracleContract = typechain_1.BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
-                        return [4 /*yield*/, rateOracleContract.callStatic.getApyFromTo(from, to)];
-                    case 13:
-                        oneWeekApy = _p.sent();
-                        return [2 /*return*/, oneWeekApy.div(ethers_2.BigNumber.from(1000000000000)).toNumber() / 1000000];
-                    case 14: return [4 /*yield*/, this.provider.getBlockNumber()];
-                    case 15:
-                        lastBlock = _p.sent();
-                        _l = (_k = ethers_2.BigNumber).from;
-                        return [4 /*yield*/, this.provider.getBlock(lastBlock - 1)];
-                    case 16:
-                        to = _l.apply(_k, [(_p.sent()).timestamp]);
-                        _o = (_m = ethers_2.BigNumber).from;
-                        return [4 /*yield*/, this.provider.getBlock(lastBlock - 28 * blockPerHour)];
-                    case 17:
-                        from = _o.apply(_m, [(_p.sent()).timestamp]);
-                        rateOracleContract = typechain_1.BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
-                        return [4 /*yield*/, rateOracleContract.callStatic.getApyFromTo(from, to)];
-                    case 18:
-                        oneWeekApy = _p.sent();
-                        return [2 /*return*/, oneWeekApy.div(ethers_2.BigNumber.from(1000000000000)).toNumber() / 1000000];
-                    case 19:
+                        return [3 /*break*/, 23];
+                    case 1:
+                        // old implementation based on the rate oracle
+                        // const lastBlock = await this.provider.getBlockNumber();
+                        // const oneBlockAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
+                        // const twoBlocksAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 2)).timestamp);
+                        // const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
+                        // const oneWeekApy = await rateOracleContract.callStatic.getApyFromTo(twoBlocksAgo, oneBlockAgo);
+                        // return oneWeekApy.div(BigNumber.from(1000000000000)).toNumber() / 1000000;
                         if (!this.underlyingToken.id) {
                             throw new Error('No underlying error');
                         }
                         rateOracleContract = typechain_1.AaveBorrowRateOracle__factory.connect(this.rateOracle.id, this.provider);
                         return [4 /*yield*/, rateOracleContract.aaveLendingPool()];
-                    case 20:
-                        lendingPoolAddress = _p.sent();
+                    case 2:
+                        lendingPoolAddress = _k.sent();
                         lendingPool = typechain_1.IAaveV2LendingPool__factory.connect(lendingPoolAddress, this.provider);
                         return [4 /*yield*/, lendingPool.getReserveData(this.underlyingToken.id)];
-                    case 21:
-                        reservesData = _p.sent();
+                    case 3:
+                        reservesData = _k.sent();
+                        rateInRay = reservesData.currentLiquidityRate;
+                        result = rateInRay.div(ethers_2.BigNumber.from(10).pow(21)).toNumber() / 1000000;
+                        return [2 /*return*/, result];
+                    case 4:
+                        daysPerYear = 365;
+                        rateOracle = typechain_1.CompoundRateOracle__factory.connect(this.rateOracle.id, this.provider);
+                        return [4 /*yield*/, rateOracle.ctoken()];
+                    case 5:
+                        cTokenAddress = _k.sent();
+                        cTokenContract = typechain_1.ICToken__factory.connect(cTokenAddress, this.provider);
+                        return [4 /*yield*/, cTokenContract.supplyRatePerBlock()];
+                    case 6:
+                        supplyRatePerBlock = _k.sent();
+                        supplyApy = (((Math.pow((supplyRatePerBlock.toNumber() / 1e18 * blocksPerDay) + 1, daysPerYear))) - 1);
+                        return [2 /*return*/, supplyApy];
+                    case 7: return [4 /*yield*/, this.provider.getBlockNumber()];
+                    case 8:
+                        lastBlock = _k.sent();
+                        _c = (_b = ethers_2.BigNumber).from;
+                        return [4 /*yield*/, this.provider.getBlock(lastBlock - 1)];
+                    case 9:
+                        to = _c.apply(_b, [(_k.sent()).timestamp]);
+                        _e = (_d = ethers_2.BigNumber).from;
+                        return [4 /*yield*/, this.provider.getBlock(lastBlock - 28 * blockPerHour)];
+                    case 10:
+                        from = _e.apply(_d, [(_k.sent()).timestamp]);
+                        rateOracleContract = typechain_1.BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
+                        return [4 /*yield*/, rateOracleContract.callStatic.getApyFromTo(from, to)];
+                    case 11:
+                        oneWeekApy = _k.sent();
+                        return [2 /*return*/, oneWeekApy.div(ethers_2.BigNumber.from(1000000000000)).toNumber() / 1000000];
+                    case 12: return [4 /*yield*/, this.provider.getBlockNumber()];
+                    case 13:
+                        lastBlock = _k.sent();
+                        _g = (_f = ethers_2.BigNumber).from;
+                        return [4 /*yield*/, this.provider.getBlock(lastBlock - 1)];
+                    case 14:
+                        to = _g.apply(_f, [(_k.sent()).timestamp]);
+                        _j = (_h = ethers_2.BigNumber).from;
+                        return [4 /*yield*/, this.provider.getBlock(lastBlock - 28 * blockPerHour)];
+                    case 15:
+                        from = _j.apply(_h, [(_k.sent()).timestamp]);
+                        rateOracleContract = typechain_1.BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
+                        return [4 /*yield*/, rateOracleContract.callStatic.getApyFromTo(from, to)];
+                    case 16:
+                        oneWeekApy = _k.sent();
+                        return [2 /*return*/, oneWeekApy.div(ethers_2.BigNumber.from(1000000000000)).toNumber() / 1000000];
+                    case 17:
+                        if (!this.underlyingToken.id) {
+                            throw new Error('No underlying error');
+                        }
+                        rateOracleContract = typechain_1.AaveBorrowRateOracle__factory.connect(this.rateOracle.id, this.provider);
+                        return [4 /*yield*/, rateOracleContract.aaveLendingPool()];
+                    case 18:
+                        lendingPoolAddress = _k.sent();
+                        lendingPool = typechain_1.IAaveV2LendingPool__factory.connect(lendingPoolAddress, this.provider);
+                        return [4 /*yield*/, lendingPool.getReserveData(this.underlyingToken.id)];
+                    case 19:
+                        reservesData = _k.sent();
                         rateInRay = reservesData.currentVariableBorrowRate;
-                        return [2 /*return*/, rateInRay.toNumber() / 1e27];
-                    case 22:
+                        result = rateInRay.div(ethers_2.BigNumber.from(10).pow(21)).toNumber() / 1000000;
+                        return [2 /*return*/, result];
+                    case 20:
                         daysPerYear = 365;
                         rateOracle = typechain_1.CompoundBorrowRateOracle__factory.connect(this.rateOracle.id, this.provider);
                         return [4 /*yield*/, rateOracle.ctoken()];
-                    case 23:
-                        cTokenAddress = _p.sent();
+                    case 21:
+                        cTokenAddress = _k.sent();
                         cTokenContract = typechain_1.ICToken__factory.connect(cTokenAddress, this.provider);
                         return [4 /*yield*/, cTokenContract.borrowRatePerBlock()];
-                    case 24:
-                        supplyRatePerBlock = _p.sent();
-                        supplyApy = (((Math.pow((supplyRatePerBlock.toNumber() / 1e18 * blocksPerDay) + 1, daysPerYear))) - 1);
-                        return [2 /*return*/, supplyApy];
-                    case 25: throw new Error("Unrecognized protocol");
+                    case 22:
+                        borrowRatePerBlock = _k.sent();
+                        borrowApy = (((Math.pow((borrowRatePerBlock.toNumber() / 1e18 * blocksPerDay) + 1, daysPerYear))) - 1);
+                        return [2 /*return*/, borrowApy];
+                    case 23: throw new Error("Unrecognized protocol");
                 }
             });
         });

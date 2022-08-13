@@ -1,4 +1,4 @@
-import React, { useEffect }  from 'react';
+import React, { useEffect, useState }  from 'react';
 import TableRow from '@mui/material/TableRow';
 import Box from '@mui/material/Box';
 import { Typography } from '@components/atomic';
@@ -32,8 +32,10 @@ const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({ datum, i
   const { result, loading, call } = variableDebt;
 
   useEffect(() => {
+    if (wallet.status === "connected") {
       call(position);
-  }, [call, position]);
+    }
+  }, [call, position, wallet.status]);
   
   // add object to sx prop
   // todo:

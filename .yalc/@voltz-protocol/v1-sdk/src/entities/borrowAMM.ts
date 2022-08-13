@@ -42,8 +42,8 @@ class BorrowAMM {
   public readonly underlyingToken: Token;
   public readonly amm: AMM;
 
-  public cToken?: ICToken;
-  public aaveVariableDebtToken?: IERC20Minimal;
+  public cToken: ICToken | undefined;
+  public aaveVariableDebtToken: IERC20Minimal | undefined;
 
   public underlyingDebt: number = 0;
   public variableDebt: number = 0;
@@ -69,33 +69,6 @@ class BorrowAMM {
         throw new Error("Not a borrow market");
     }
 
-    if (this.signer) {
-      if ( protocolId === 6) {
-        const compoundRateOracle = CompoundBorrowRateOracle__factory.connect(this.rateOracle.id, this.signer)
-        compoundRateOracle.ctoken().then( (cTokenAddress) => {
-          if (this.signer !== null) {
-          this.cToken = cTokenFactory.connect(cTokenAddress, this.signer);
-          }
-        });
-      } else {
-        const aaveRateOracle = AaveBorrowRateOracle__factory.connect(this.rateOracle.id, this.signer)
-
-        aaveRateOracle.aaveLendingPool().then( (lendingPoolAddress) => {
-          if (this.signer !== null) {
-            const lendingPool = IAaveV2LendingPool__factory.connect(lendingPoolAddress, this.signer);
-            if(!this.underlyingToken.id){
-              throw new Error('missing underlying token address');
-            }
-            lendingPool.getReserveData(this.underlyingToken.id).then( (reserve) => {
-              const variableDebtTokenAddress = reserve.variableDebtTokenAddress;
-              if (this.signer !== null) {
-                this.aaveVariableDebtToken = IERC20Minimal__factory.connect(variableDebtTokenAddress, this.signer);
-              }
-            });
-          }
-        });
-      }
-    }
   }
 
   // scale/descale according to underlying token
@@ -203,6 +176,26 @@ class BorrowAMM {
     if (!this.signer) {
       throw new Error('Wallet not connected');
     }
+
+    const protocolId = this.rateOracle.protocolId;
+    if ( protocolId === 6 && !this.cToken) {
+      const compoundRateOracle = CompoundBorrowRateOracle__factory.connect(this.rateOracle.id, this.signer)
+      const cTokenAddress = await compoundRateOracle.ctoken();
+      this.cToken = cTokenFactory.connect(cTokenAddress, this.signer);
+
+    } else if ( protocolId === 5 && !this.aaveVariableDebtToken) {
+      const aaveRateOracle = AaveBorrowRateOracle__factory.connect(this.rateOracle.id, this.signer)
+
+      const lendingPoolAddress = await aaveRateOracle.aaveLendingPool();
+      const lendingPool = IAaveV2LendingPool__factory.connect(lendingPoolAddress, this.signer);
+      if(!this.underlyingToken.id){
+        throw new Error('missing underlying token address');
+      }
+      const reserve =  await lendingPool.getReserveData(this.underlyingToken.id);
+      const variableDebtTokenAddress = reserve.variableDebtTokenAddress;
+      this.aaveVariableDebtToken = IERC20Minimal__factory.connect(variableDebtTokenAddress, this.signer);
+    }
+    
 
     let borrowBalance = BigNumber.from(0);
     if (this.cToken) { // compound

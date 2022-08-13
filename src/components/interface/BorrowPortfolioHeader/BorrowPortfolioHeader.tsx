@@ -28,7 +28,7 @@ const BorrowPortfolioHeader = ({
       <BorrowPortfolioHeaderBox
         currencyCode={currencyCode}
         currencySymbol={currencySymbol}
-        aggregatedDebt={(variableDebt && fixedDebt) ? (variableDebt - fixedDebt) : undefined }/>
+        aggregatedDebt={(variableDebt !== undefined && fixedDebt !== undefined) ? (variableDebt - fixedDebt) : undefined }/>
 
         <BorrowPortfolioSummary
           commonOverrides={commonOverrides}

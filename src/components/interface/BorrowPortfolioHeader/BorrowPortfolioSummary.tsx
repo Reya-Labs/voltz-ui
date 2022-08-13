@@ -38,7 +38,7 @@ const BorrowPortfolioSummary = ({
             Fixed Debt
           </Box>
           <Box sx={{display:'flex', alignContent: 'left'}}>
-          {fixedDebt ? (currencySymbol + formatCurrency(fixedDebt) +" "+ currencyCode) : "---"}
+          {(fixedDebt !== undefined)  ? (currencySymbol + formatCurrency(fixedDebt) +" "+ currencyCode) : "---"}
           </Box>
         </Typography>
       </TableCell>
@@ -49,7 +49,7 @@ const BorrowPortfolioSummary = ({
             Variable Debt
           </Box>
           <Box sx={{display:'flex', alignContent: 'right'}}>
-          {variableDebt ? (currencySymbol + formatCurrency(variableDebt) +" "+ currencyCode) : "---"}
+          { (variableDebt !== undefined) ? (currencySymbol + formatCurrency(variableDebt) +" "+ currencyCode) : "---"}
           </Box>
         </Typography>
       </TableCell>

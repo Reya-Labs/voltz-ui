@@ -44,7 +44,6 @@ var tokenAmount_1 = require("./fractions/tokenAmount");
 var BorrowAMM = /** @class */ (function () {
     function BorrowAMM(_a) {
         var id = _a.id, amm = _a.amm;
-        var _this = this;
         var _b;
         this.underlyingDebt = 0;
         this.variableDebt = 0;
@@ -62,33 +61,6 @@ var BorrowAMM = /** @class */ (function () {
         var protocolId = this.rateOracle.protocolId;
         if (protocolId !== 6 && protocolId !== 5) {
             throw new Error("Not a borrow market");
-        }
-        if (this.signer) {
-            if (protocolId === 6) {
-                var compoundRateOracle = typechain_1.CompoundBorrowRateOracle__factory.connect(this.rateOracle.id, this.signer);
-                compoundRateOracle.ctoken().then(function (cTokenAddress) {
-                    if (_this.signer !== null) {
-                        _this.cToken = typechain_1.ICToken__factory.connect(cTokenAddress, _this.signer);
-                    }
-                });
-            }
-            else {
-                var aaveRateOracle = typechain_1.AaveBorrowRateOracle__factory.connect(this.rateOracle.id, this.signer);
-                aaveRateOracle.aaveLendingPool().then(function (lendingPoolAddress) {
-                    if (_this.signer !== null) {
-                        var lendingPool = typechain_1.IAaveV2LendingPool__factory.connect(lendingPoolAddress, _this.signer);
-                        if (!_this.underlyingToken.id) {
-                            throw new Error('missing underlying token address');
-                        }
-                        lendingPool.getReserveData(_this.underlyingToken.id).then(function (reserve) {
-                            var variableDebtTokenAddress = reserve.variableDebtTokenAddress;
-                            if (_this.signer !== null) {
-                                _this.aaveVariableDebtToken = typechain_1.IERC20Minimal__factory.connect(variableDebtTokenAddress, _this.signer);
-                            }
-                        });
-                    }
-                });
-            }
         }
     }
     // scale/descale according to underlying token
@@ -184,32 +156,57 @@ var BorrowAMM = /** @class */ (function () {
     };
     BorrowAMM.prototype.getUnderlyingBorrowBalance = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var borrowBalance, userAddress, userAddress;
+            var protocolId, compoundRateOracle, cTokenAddress, aaveRateOracle, lendingPoolAddress, lendingPool, reserve, variableDebtTokenAddress, borrowBalance, userAddress, userAddress;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         if (!this.signer) {
                             throw new Error('Wallet not connected');
                         }
-                        borrowBalance = ethers_1.BigNumber.from(0);
-                        if (!this.cToken) return [3 /*break*/, 3];
-                        return [4 /*yield*/, this.signer.getAddress()];
+                        protocolId = this.rateOracle.protocolId;
+                        if (!(protocolId === 6 && !this.cToken)) return [3 /*break*/, 2];
+                        compoundRateOracle = typechain_1.CompoundBorrowRateOracle__factory.connect(this.rateOracle.id, this.signer);
+                        return [4 /*yield*/, compoundRateOracle.ctoken()];
                     case 1:
+                        cTokenAddress = _a.sent();
+                        this.cToken = typechain_1.ICToken__factory.connect(cTokenAddress, this.signer);
+                        return [3 /*break*/, 5];
+                    case 2:
+                        if (!(protocolId === 5 && !this.aaveVariableDebtToken)) return [3 /*break*/, 5];
+                        aaveRateOracle = typechain_1.AaveBorrowRateOracle__factory.connect(this.rateOracle.id, this.signer);
+                        return [4 /*yield*/, aaveRateOracle.aaveLendingPool()];
+                    case 3:
+                        lendingPoolAddress = _a.sent();
+                        lendingPool = typechain_1.IAaveV2LendingPool__factory.connect(lendingPoolAddress, this.signer);
+                        if (!this.underlyingToken.id) {
+                            throw new Error('missing underlying token address');
+                        }
+                        return [4 /*yield*/, lendingPool.getReserveData(this.underlyingToken.id)];
+                    case 4:
+                        reserve = _a.sent();
+                        variableDebtTokenAddress = reserve.variableDebtTokenAddress;
+                        this.aaveVariableDebtToken = typechain_1.IERC20Minimal__factory.connect(variableDebtTokenAddress, this.signer);
+                        _a.label = 5;
+                    case 5:
+                        borrowBalance = ethers_1.BigNumber.from(0);
+                        if (!this.cToken) return [3 /*break*/, 8];
+                        return [4 /*yield*/, this.signer.getAddress()];
+                    case 6:
                         userAddress = _a.sent();
                         return [4 /*yield*/, this.cToken.callStatic.borrowBalanceCurrent(userAddress)];
-                    case 2:
+                    case 7:
                         borrowBalance = _a.sent();
-                        return [3 /*break*/, 6];
-                    case 3:
-                        if (!this.aaveVariableDebtToken) return [3 /*break*/, 6];
+                        return [3 /*break*/, 11];
+                    case 8:
+                        if (!this.aaveVariableDebtToken) return [3 /*break*/, 11];
                         return [4 /*yield*/, this.signer.getAddress()];
-                    case 4:
+                    case 9:
                         userAddress = _a.sent();
                         return [4 /*yield*/, this.aaveVariableDebtToken.balanceOf(userAddress)];
-                    case 5:
+                    case 10:
                         borrowBalance = _a.sent();
-                        _a.label = 6;
-                    case 6: return [2 /*return*/, this.descale(borrowBalance)];
+                        _a.label = 11;
+                    case 11: return [2 /*return*/, this.descale(borrowBalance)];
                 }
             });
         });
