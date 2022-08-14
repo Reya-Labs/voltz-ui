@@ -52,11 +52,98 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
 }) => {
 
   const { agent } = useAgent();
+  let noFixedPositions: boolean = false;
+  let noVariablePositions: boolean = false;
+
+  const replacementRowStyle: SystemStyleObject<Theme> = {
+      fontSize: 18,
+      fontWeight: '400',
+      color: "#5A576D",
+      display: 'flex',
+      justifyContent: 'center',
+      backgroundColor: `secondary.darken040`,
+      borderRadius: 2,
+      padding: (theme) => theme.spacing(2),
+      marginBottom: (theme) => theme.spacing(8)
+  };
 
   const tableData = useMemo(() => {
     const unfilteredDatum = borrowAmms.map(mapAmmToAmmTableDatum);
-    return unfilteredDatum.filter((datum) => datum !== undefined )
+    return unfilteredDatum;
   }, [order, page, size]);
+
+  const renderVariableTable = () => {
+    const marketsWithPosition = tableData.map((datum, index) => {
+      if(datum && DateTime.now() < datum.endDate) {
+        const position = findCurrentBorrowPosition(positions || [], borrowAmms[index]);
+        return {datum: datum, borrowAmms: borrowAmms[index],position: position, index: index}
+      }
+    })
+
+    if (marketsWithPosition.filter((market) => market !== undefined).length == 0) {
+      noVariablePositions = true;
+    } else {
+      return (<>
+        {marketsWithPosition.map((info) => {
+            if (info) {
+              return (<BorrowAMMProvider amm={info.borrowAmms}>
+                <PositionProvider position={info.position}>
+                  <BorrowTableRow datum={info.datum} index={info.index} onSelect={handleSelectRow(info.index)} isFixedPositions={false} />
+                </PositionProvider>
+              </BorrowAMMProvider>)
+            }
+        })}
+      </>)
+    }
+    
+  }
+
+  const renderFixedTable = () => {
+    const marketsWithPosition = tableData.map((datum, index) => {
+      if(datum && DateTime.now() < datum.endDate) {
+        const position = findCurrentBorrowPosition(positions || [], borrowAmms[index]);
+        if (position) {
+          return {datum: datum, borrowAmms: borrowAmms[index], position: position, index: index}
+        }
+      }
+    })
+
+    if (marketsWithPosition.filter((market) => market !== undefined).length == 0) {
+      noFixedPositions = true;
+    } else {
+      return (<>
+        {marketsWithPosition.map((info) => {
+          if (info !== undefined) {
+            return (<BorrowAMMProvider amm={info.borrowAmms}>
+              <PositionProvider position={info.position}>
+                <BorrowTableRow datum={info.datum} index={info.index} onSelect={handleSelectRow(info.index)} isFixedPositions={true}/>
+              </PositionProvider>
+            </BorrowAMMProvider>)
+          }
+        })}
+      </>)
+    }
+    
+  }
+
+  const renderNoFixedPositions = () => {
+    if (noFixedPositions) {
+      return (
+        <Typography variant="body2" sx={{...replacementRowStyle}}>
+          YOU ARE PAYING VARIABLE ONLY
+      </Typography>
+      );
+      }
+  }
+  const renderNoVariablePositions = () => {
+    if (noVariablePositions) {
+      return (
+        <Typography variant="body2" sx={{...replacementRowStyle}}>
+          YOU DO NOT HAVE ANY DEBT
+      </Typography>
+      );
+      }
+  }
 
   const handleSelectRow = (index: number) => () => {
     onSelectItem(borrowAmms[index]);
@@ -79,19 +166,11 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
           >
             <BorrowTableHead order={order} orderBy={variableOrderBy} labels={labelsVariable}/>
             <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
-            {tableData.map((datum, index) => {
-              if (datum && DateTime.now() < datum.endDate) {
-                const position = findCurrentBorrowPosition(positions || [], borrowAmms[index]);
-                return (<BorrowAMMProvider amm={borrowAmms[index]}>
-                  <PositionProvider position={position}>
-                    <BorrowTableRow datum={datum} index={index} onSelect={handleSelectRow(index)} isFixedPositions={false} />
-                  </PositionProvider>
-                </BorrowAMMProvider>)
-              }
-          })}
-          </TableBody>
+            {renderVariableTable()}
+            </TableBody>
           </Table>
         </TableContainer>
+        {renderNoVariablePositions()}
 
         {/* FIXED POSITIONS TABLE */}
         <Typography variant="body2" sx={{ fontSize: 20, fontWeight: 'bold' }}>FIXED POSITIONS</Typography>
@@ -107,20 +186,11 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
           >
             <BorrowTableHead order={order} orderBy={fixedOrderBy} labels={labelsFixed}/>
             <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
-            {tableData.map((datum, index) => {
-              if (datum && DateTime.now() < datum.endDate) {
-                const position = findCurrentBorrowPosition(positions || [], borrowAmms[index]);
-                if(!position) { return; }
-                return (<BorrowAMMProvider amm={borrowAmms[index]}>
-                  <PositionProvider position={position}>
-                    <BorrowTableRow datum={datum} index={index} onSelect={handleSelectRow(index)} isFixedPositions={true}/>
-                  </PositionProvider>
-                </BorrowAMMProvider>)
-              }
-          })}
+            {renderFixedTable()}
           </TableBody>
           </Table>
         </TableContainer>
+        {renderNoFixedPositions()}
       </Panel>
     );
 

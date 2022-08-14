@@ -24,30 +24,32 @@ const BorrowPortfolioSummary = ({
   variablePositionsCount
 }: BorrowPortfolioSummaryProps) => {
 
-  let percentageVariable: string = "99%";
-  let percentageFixed: string = "0%";
+  let percentageVariable: number = 100;
+  let percentageFixed: number = 0;
   if( (variableDebt !== undefined) &&  (fixedDebt !== undefined) ) {
     if (variableDebt + fixedDebt !== 0) {
-      const variable = ((variableDebt) / (variableDebt + fixedDebt)) * 100;
-      const fixed = ((fixedDebt) / (variableDebt + fixedDebt)) * 100;
-      percentageVariable = variable.toString() + "%";
-      percentageFixed = fixed.toString() + "%";
+      percentageVariable = ((variableDebt) / (variableDebt + fixedDebt)) * 100;
+      percentageFixed = ((fixedDebt) / (variableDebt + fixedDebt)) * 100;
     }
   }
 
-  const sideWidth = (isVar: boolean, ): SystemStyleObject<Theme> => {
-    if (isVar) {
+  const sideWidth = (isVar: boolean, isLimit: boolean): SystemStyleObject<Theme> => {
+    const varColor = 'tertiary.darken010';
+    const fixColor = 'primary.light';
+    const height = '24px';
+    // show small line eve if percentage is zero
+    if(isLimit) {
       return {
-        width: percentageVariable,
-        backgroundColor: 'tertiary.darken010',
-        height: '24px'
+        width: '0.5%',
+        backgroundColor: isVar ? varColor : fixColor,
+        height: height
       }
-    } else {
-      return {
-        width: percentageFixed,
-        backgroundColor: 'primary.light',
-        height: '24px'
-      }
+    } 
+
+    return {
+      width: ((isVar ? percentageVariable : percentageFixed)*0.99).toString() + '%',
+      backgroundColor: isVar? varColor : fixColor,
+      height: height
     }
   }
 
@@ -62,25 +64,36 @@ const BorrowPortfolioSummary = ({
 
   const renderDebtSummary = () => {
     return (
-      <Grid container>
+      <Grid container sx={{marginBottom: (theme) => theme.spacing(3)}}>
       <Grid item xs={6}>
-        <Typography variant="body2" sx={{fontSize: 16, textTransform: "uppercase", verticalAlign: 'middle', fontWeight: "bold"}}>
+        <Typography variant="subtitle1" sx={{...labelStyles}}>
           <Box sx={{display:'flex', justifyContent:"flex-start", textAlign: "left"}}>
             Fixed Debt
           </Box>
-          <Box sx={{display:'flex', justifyContent:"flex-start", textAlign: "left"}}>
-          {(fixedDebt !== undefined)  ? (currencySymbol + formatCurrency(fixedDebt) +" "+ currencyCode) : "---"}
+        </Typography>
+      </Grid>
+      <Grid item xs={6}>
+        <Typography variant="subtitle1" sx={{...labelStyles}}>
+          <Box sx={{  display:'flex', justifyContent:"flex-end", textAlign: "right"}}>
+            Variable Debt
           </Box>
         </Typography>
       </Grid>
 
       <Grid item xs={6}>
         <Typography variant="body2" sx={{fontSize: 16, textTransform: "uppercase", verticalAlign: 'middle', fontWeight: "bold"}}>
-          <Box sx={{  display:'flex', justifyContent:"flex-end", textAlign: "right"}}>
-            Variable Debt
+          <Box sx={{display:'flex', justifyContent:"flex-start", textAlign: "left"}}>
+          {(fixedDebt !== undefined)  ? (currencySymbol + formatCurrency(fixedDebt) +" "+ currencyCode) : "---"}
+          <Box sx={{color: "#5A576D"}}> &nbsp; {"(" + percentageFixed.toString() + "%)"}</Box>
           </Box>
+        </Typography>
+      </Grid>
+
+      <Grid item xs={6}>
+        <Typography variant="body2" sx={{fontSize: 16, textTransform: "uppercase", verticalAlign: 'middle', fontWeight: "bold"}}>
           <Box sx={{display:'flex', justifyContent:"flex-end", textAlign: "right"}}>
           { (variableDebt !== undefined) ? (currencySymbol + formatCurrency(variableDebt) +" "+ currencyCode) : "---"}
+          <Box sx={{color: "#5A576D"}}>&nbsp; { "(" + (variableDebt == 0 ? 0 : percentageVariable).toString() + "%)"}</Box>
           </Box>
         </Typography>
       </Grid>
@@ -92,9 +105,14 @@ const BorrowPortfolioSummary = ({
     return (
       <Grid container>
         <Grid item xs={12} display="flex">
-        <Box sx={{ ...sideWidth(false)}}>
+        <Box sx={{ ...sideWidth(false, true)}}>
         </Box>
-        <Box sx={{ ...sideWidth(true)}}>
+        <Box sx={{ ...sideWidth(false, false)}}>
+        </Box>
+
+        <Box sx={{ ...sideWidth(true, false)}}>
+        </Box>
+        <Box sx={{ ...sideWidth(true, true)}}>
         </Box>
         </Grid>
       </Grid>
@@ -102,7 +120,7 @@ const BorrowPortfolioSummary = ({
   }
   const renderPositionsCount = () => {
     return (
-      <Grid container>
+      <Grid container >
       <Grid item xs={6}>
         <Typography variant="subtitle1" sx={{ ...labelStyles}}>
           <Box sx={{display:'flex', justifyContent:"flex-start", textAlign: "left"}}>
