@@ -19,7 +19,7 @@ const useBorrowPositions = (): useBorrowPositionsResult => {
       return [];
     }
     return vtPositions?.filter((position) => {
-        return position.tickLower == -68940 && position.tickUpper == 69060 ;
+        return position.tickLower === -69000 && position.tickUpper === 69060 ;
     });
   }, [positions, agent, loadingPos, errorPos]);
 

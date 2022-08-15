@@ -17,6 +17,8 @@ export type SwapInfoPayload = {
   notional: number;
   type: GetInfoType;
   fixedRateLimit?: number;
+  fixedLow?: number;
+  fixedHigh?: number;
 }
 
 export type MinimumMarginAmountSwapPayload = {
