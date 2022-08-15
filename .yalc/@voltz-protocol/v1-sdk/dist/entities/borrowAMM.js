@@ -266,7 +266,7 @@ var BorrowAMM = /** @class */ (function () {
     };
     BorrowAMM.prototype.getFullyCollateralisedMarginRequirement = function (fixedTokenBalance, variableTokenBalance) {
         return __awaiter(this, void 0, void 0, function () {
-            var variableAPYToMaturity, termStartTimestamp, termEndTimestamp, fixedFactor;
+            var variableAPYToMaturity, termStartTimestamp, termEndTimestamp, fixedFactor, fcMargin;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -279,7 +279,8 @@ var BorrowAMM = /** @class */ (function () {
                         termStartTimestamp = (ethers_1.BigNumber.from(this.termStartTimestamp.toString()).div(ethers_1.BigNumber.from(10).pow(18))).toNumber();
                         termEndTimestamp = (ethers_1.BigNumber.from(this.termEndTimestamp.toString()).div(ethers_1.BigNumber.from(10).pow(18))).toNumber();
                         fixedFactor = (termEndTimestamp - termStartTimestamp) / constants_1.ONE_YEAR_IN_SECONDS * 0.01;
-                        return [2 /*return*/, fixedTokenBalance * fixedFactor + variableTokenBalance * variableAPYToMaturity];
+                        fcMargin = -(fixedTokenBalance * fixedFactor + variableTokenBalance * variableAPYToMaturity);
+                        return [2 /*return*/, fcMargin > 0 ? fcMargin : 0];
                 }
             });
         });

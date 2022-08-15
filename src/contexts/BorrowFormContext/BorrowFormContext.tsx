@@ -1,6 +1,5 @@
-import { GetInfoType, useAMM, UseAsyncFunctionResult, useTokenApproval } from '@hooks';
-import { AugmentedAMM, hasEnoughUnderlyingTokens } from '@utilities';
-import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
+import { GetInfoType, useAgent, UseAsyncFunctionResult, useTokenApproval } from '@hooks';
+import { hasEnoughUnderlyingTokens } from '@utilities';
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { Agents, useAMMContext, useBorrowAMMContext, usePositionContext } from "@contexts";
 import { isUndefined } from 'lodash';
@@ -59,10 +58,19 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
   const [selectedVariableDebtPercentage, setSelectedVariableDebtPercentage] = useState<BorrowFormContext['selectedVariableDebtPercentage']>(undefined);
   const [margin, setMargin] = useState<number>(0);
 
-  const tokenApprovals = useTokenApproval(amm);
+  const tokenApprovals = useTokenApproval(amm, true);
   const { swapInfo } = useAMMContext();
   const approvalsNeeded = s.approvalsNeeded(SwapFormActions.SWAP, tokenApprovals, false);
   const isTradeVerified = !!swapInfo.result && !swapInfo.loading && !swapInfo.errorMessage;
+
+  const { agent, onChangeAgent } = useAgent();
+  useEffect(() => {
+    variableDebt.call(position);
+    onChangeAgent(Agents.VARIABLE_TRADER);
+  }, []);
+  useEffect(() => {
+    onChangeAgent(Agents.VARIABLE_TRADER);
+  }, [agent]);
 
   const [errors, setErrors] = useState<BorrowFormContext['errors']>({});
   const [isValid, setIsValid] = useState<boolean>(false);
@@ -172,10 +180,6 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
   }
 
   useEffect(() => {
-    variableDebt.call(position);
-  }, [variableDebt.call]);
-
-  useEffect(() => {
     if (variableDebt.loading || (variableDebt.result === null) || (variableDebt.result === undefined)) {
       return;
     }
@@ -230,7 +234,9 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
         position,
         margin,
         notional: selectedFixedDebt, 
-        type: GetInfoType.NORMAL_SWAP
+        type: GetInfoType.NORMAL_SWAP,
+        fixedLow: 0.001,
+        fixedHigh: 990
       });
     }
   }, [selectedFixedDebt]);

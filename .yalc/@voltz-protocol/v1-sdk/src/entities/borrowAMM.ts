@@ -256,7 +256,8 @@ class BorrowAMM {
       const termEndTimestamp = (BigNumber.from(this.termEndTimestamp.toString()).div(BigNumber.from(10).pow(18))).toNumber();
       const fixedFactor = (termEndTimestamp - termStartTimestamp) / ONE_YEAR_IN_SECONDS * 0.01;
       
-      return fixedTokenBalance * fixedFactor + variableTokenBalance * variableAPYToMaturity;
+      const fcMargin = -(fixedTokenBalance * fixedFactor + variableTokenBalance * variableAPYToMaturity);
+      return fcMargin > 0 ? fcMargin : 0;
     }
 }
 

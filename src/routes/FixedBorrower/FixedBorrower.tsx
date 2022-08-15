@@ -66,13 +66,6 @@ const FixedBorrower: React.FunctionComponent = () => {
     }
   }, [setPageTitle, renderMode, position]);
 
-  // ==== TO DO: remove ====
-  const { amms, loading, error } = useAMMs();
-  useEffect(() => {
-    setAMM(!amms ? undefined : amms[13]);
-  }, []);
-  // =======================
-
   const handleReset = () => {
     setBorrowAMM(undefined);
     setPosition(undefined);
