@@ -83,8 +83,8 @@ const BorrowPortfolioSummary = ({
       <Grid item xs={6}>
         <Typography variant="body2" sx={{fontSize: 16, textTransform: "uppercase", verticalAlign: 'middle', fontWeight: "bold"}}>
           <Box sx={{display:'flex', justifyContent:"flex-start", textAlign: "left"}}>
-          {(fixedDebt !== undefined)  ? (currencySymbol + formatCurrency(fixedDebt) +" "+ currencyCode) : "---"}
-          <Box sx={{color: "#5A576D"}}> &nbsp; {"(" + percentageFixed.toString() + "%)"}</Box>
+          {(fixedDebt !== undefined)  ? (currencySymbol + formatCurrency(fixedDebt, true,false, 2, 2) +" "+ currencyCode) : "---"}
+          <Box sx={{color: "#5A576D"}}> &nbsp; {"(" + percentageFixed.toFixed(2).toString() + "%)"}</Box>
           </Box>
         </Typography>
       </Grid>
@@ -92,8 +92,8 @@ const BorrowPortfolioSummary = ({
       <Grid item xs={6}>
         <Typography variant="body2" sx={{fontSize: 16, textTransform: "uppercase", verticalAlign: 'middle', fontWeight: "bold"}}>
           <Box sx={{display:'flex', justifyContent:"flex-end", textAlign: "right"}}>
-          { (variableDebt !== undefined) ? (currencySymbol + formatCurrency(variableDebt) +" "+ currencyCode) : "---"}
-          <Box sx={{color: "#5A576D"}}>&nbsp; { "(" + (variableDebt == 0 ? 0 : percentageVariable).toString() + "%)"}</Box>
+          { (variableDebt !== undefined) ? (currencySymbol + formatCurrency(variableDebt, true,false, 2, 2) +" "+ currencyCode) : "---"}
+          <Box sx={{color: "#5A576D"}}>&nbsp; { "(" + (variableDebt == 0 ? 0 : percentageVariable).toFixed(2).toString() + "%)"}</Box>
           </Box>
         </Typography>
       </Grid>

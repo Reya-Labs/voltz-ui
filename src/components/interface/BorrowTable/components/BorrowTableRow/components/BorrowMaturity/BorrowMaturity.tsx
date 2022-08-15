@@ -17,8 +17,8 @@ const BorrowMaturity: React.FunctionComponent = () => {
   };
 
   return (
-    <TableCell>
-      <Typography variant="body2" agentStyling sx={{fontSize: 18}}>
+    <TableCell width="20%">
+      <Typography variant="body2" sx={{fontSize: 18, color: 'primary.light'}}>
         {renderValue()}
       </Typography>
     </TableCell>

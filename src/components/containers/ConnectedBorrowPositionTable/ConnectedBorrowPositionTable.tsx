@@ -104,19 +104,17 @@ const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorrowAMMTa
             variablePositionsCount={headerProps.variablePositionsCount}/>
           <Box sx={{ marginTop: (theme) => theme.spacing(14) }}>
             <BorrowTable
+              showVariable = {(headerProps.variablePositionsCount !== undefined && headerProps.variablePositionsCount > 0)}
+              showFixed = {(headerProps.fixedPositionsCount !== undefined && headerProps.fixedPositionsCount > 0) }
               positions={positions}
               borrowAmms={borrowAmms}
               order={order}
-              onSetOrder={setOrder}
               variableOrderBy={variableOrderBy}
               onSetVariableOrderBy={setVariableOrderBy}
               fixedOrderBy={fixedOrderBy}
               onSetFixedOrderBy={setFixedOrderBy}
               page={page}
-              pages={pages}
-              onSetPage={setPage}
               size={size}
-              onSetSize={setSize}
               onSelectItem={onSelectItem}
               commonOverrides={commonOverrides}
             />

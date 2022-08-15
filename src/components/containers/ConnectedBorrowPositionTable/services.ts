@@ -9,21 +9,17 @@ export const getBorrowAmmsfromAmms = (amms: AugmentedAMM[]) => {
 export const getTotalVariableDebt = async (borrowAmms: AugmentedBorrowAMM[], positions: Position[] | undefined) => {
   let sum: number = 0;
   let countVariablePositions: number = 0;
-  if (positions && positions.length !== 0){
-    for (const p of positions) {
-      if (p.positionType == 2) {
-        for (const b of borrowAmms) {
-          if(b.amm && p.amm.id == b.amm.id && DateTime.now() < b.amm.endDateTime) {
-            const varDebt = await b.getAggregatedBorrowBalance(p);
-            countVariablePositions += ((varDebt == 0 ) ? 0 : 1);
-            sum += varDebt;
-          }
+
+  for (const b of borrowAmms) {
+    if (positions && positions.length !== 0) {
+      for (const p of positions) {
+        if(b.amm && p.amm.id == b.amm.id && DateTime.now() < b.amm.endDateTime) {
+          const varDebt = await b.getAggregatedBorrowBalance(p);
+          countVariablePositions += ((varDebt == 0 ) ? 0 : 1);
+          sum += varDebt;
         }
       }
-    }
-    
-  } else {
-    for (const b of borrowAmms) {
+    } else {
       if(b.amm && DateTime.now() < b.amm.endDateTime) {
         const varDebt = await b.getUnderlyingBorrowBalance();
         countVariablePositions += ((varDebt == 0 ) ? 0 : 1);

@@ -1,16 +1,12 @@
-import React, { useEffect, useState }  from 'react';
+import React, { useEffect }  from 'react';
 import TableRow from '@mui/material/TableRow';
-import Box from '@mui/material/Box';
-import { Typography } from '@components/atomic';
 import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '@mui/system';
 import isNull from 'lodash/isNull';
 
-import { Agents } from '@contexts';
 import { Button } from '@components/atomic';
-import { PoolField } from '@components/composite';
 import { useWallet } from '@hooks';
-import { BorrowAMMTableDatum, labelsVariable, VariableBorrowTableFields, FixedBorrowTableFields, labelsFixed } from '../../types';
+import { BorrowAMMTableDatum, labelsVariable, labelsFixed } from '../../types';
 import { BorrowVariableAPY, BorrowFixedAPR, Debt, BorrowMaturity } from './components';
 import Pool from './components/Pool/Pool';
 import { useBorrowAMMContext, usePositionContext } from '@contexts';
@@ -27,22 +23,22 @@ export type BorrowTableRowProps = {
 const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({ datum, index, onSelect, isFixedPositions }) => {
   const wallet = useWallet();
   const variant = 'main';
-  const { variableDebt } = useBorrowAMMContext();
+  const { variableDebt, fixedDebt } = useBorrowAMMContext();
   const { position } = usePositionContext();
-  const { result, loading, call } = variableDebt;
+  const { result: resultVar, loading: loadingVar, call: callVar } = variableDebt;
+  const { result: resultFixed, loading: loadingFixed, call: callFixed } = variableDebt;
 
   useEffect(() => {
-    if (wallet.status === "connected") {
-      call(position);
+    if (wallet.status === "connected" && !isFixedPositions) {
+      callVar(position);
     }
-  }, [call, position, wallet.status]);
-  
-  // add object to sx prop
-  // todo:
-  // 
-  // const anotherObject = {
-  //   margin: ... 
-  // }
+  }, [callVar, position, wallet.status]);
+
+  useEffect(() => {
+    if (wallet.status === "connected" && isFixedPositions) {
+      callFixed(position);
+    }
+  }, [callFixed, position, wallet.status]);
 
   const typeStyleOverrides = (): SystemStyleObject<Theme> => {
     if (!variant) {
@@ -73,7 +69,7 @@ const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({ datum, i
       return;
     }
     return (
-    <TableCell align="center">
+    <TableCell align="left" width="20%">
         <Button variant="contained" onClick={handleClick} sx={{
           paddingTop: (theme) => theme.spacing(3),
           paddingBottom: (theme) => theme.spacing(3),
@@ -93,36 +89,38 @@ const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({ datum, i
   }
 
   const renderTable = () => {
-    if (result === null || !result || loading) {
-      return <></>;
+    if (
+      (isFixedPositions && resultFixed && resultFixed > 0 && !loadingFixed) ||
+      (!isFixedPositions && resultVar && resultVar > 0 && !loadingVar)
+      ) {
+        const button = loadButton(); 
+        return (
+          // todo: <TableRow key={index} sx={{...anotherObject,  ...typeStyleOverrides() }}>
+          <TableRow key={index} sx={{...typeStyleOverrides() }}>
+          {(isFixedPositions ? labelsFixed : labelsVariable).map(([field, lable]) => {
+            if (field === 'variableApy') {
+              return <BorrowVariableAPY />;
+            }
+            if (field === 'fixedApr') {
+              return <BorrowFixedAPR />;
+            }
+            if (field === 'protocol') {
+              // modify to show svgs
+              return <Pool underlying={datum.protocol}/>;
+            }
+            if (field === 'maturity') {
+              return <BorrowMaturity/>;
+            }
+            return <Debt debt={isFixedPositions ? resultFixed : resultVar}/>;
+    
+          })}
+          {button}
+          </TableRow> );
     }
-    const button = loadButton(); 
-    return (
-      // todo: <TableRow key={index} sx={{...anotherObject,  ...typeStyleOverrides() }}>
-      <TableRow key={index} sx={{...typeStyleOverrides() }}>
-      {(isFixedPositions ? labelsFixed : labelsVariable).map(([field, lable]) => {
-        if (field === 'variableApy') {
-          return <BorrowVariableAPY />;
-        }
-        if (field === 'fixedApr') {
-          return <BorrowFixedAPR />;
-        }
-        if (field === 'protocol') {
-          // modify to show svgs
-          return <Pool underlying={datum.protocol}/>;
-        }
-        if (field === 'maturity') {
-          return <BorrowMaturity/>;
-        }
-        return <Debt isFixedPositions={isFixedPositions}/>;
-
-      })}
-      {button}
-      </TableRow> 
-  );
+    
   }
 
-  return renderTable();
+  return <>{renderTable()}</>;
 
   
 };

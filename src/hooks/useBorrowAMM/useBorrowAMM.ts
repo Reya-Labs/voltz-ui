@@ -30,7 +30,7 @@ export const useBorrowAMM = ( borrowAmm: AugmentedBorrowAMM) => {
   const variableDebt = useAsyncFunction(
     async (position: Position | undefined) => {
       if (position){
-        const resultPos = await borrowAmm?.getAggregatedBorrowBalance(position);
+        const resultPos = await borrowAmm.getAggregatedBorrowBalance(position);
         return resultPos;
       } else {
         const resultPos = await borrowAmm.getUnderlyingBorrowBalance();

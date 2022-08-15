@@ -6,7 +6,7 @@ import { SystemStyleObject, Theme } from '@mui/system';
 import { Typography } from '@components/atomic';
 
 import { data } from '@utilities';
-import { VariableBorrowTableFields, labelsVariable, labelsFixed, FixedBorrowTableFields } from '../../types';
+import { VariableBorrowTableFields, labelsVariable, labelsFixed, FixedBorrowTableFields, FixedBorrowTableLabels } from '../../types';
 
 
 export type BorrowTableHeadProps = {
@@ -28,6 +28,11 @@ const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({ order,
     },
   };
 
+  const maturityLabel: ["protocol" | "debt" | "variableApy" | "fixedApr" | "maturity", string] = ['maturity', FixedBorrowTableLabels.maturity];
+  const loadExtraCell = labels.includes(maturityLabel) ? (
+    <TableCell align="left" padding="normal" sx={cellSx}></TableCell>
+  ) : <></>;
+
   return (
     <TableHead>
       <TableRow>
@@ -35,7 +40,7 @@ const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({ order,
         labels.map(([field, label]) => (
           <TableCell
             key={field}
-            align="left"
+            align={(['fixedApr','variableApy'].includes(field)) ? "center": "left"}
             padding="normal"
             sortDirection={orderBy === field ? order : false}
             sx={cellSx}
@@ -60,10 +65,10 @@ const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({ order,
             {/* </TableSortLabel> */}
           </TableCell>
         ))}
-        <TableCell align="left" padding="normal" sx={cellSx}></TableCell>
+        {loadExtraCell}
       </TableRow>
     </TableHead>
   );
-};
+}
 
 export default BorrowTableHead;

@@ -26,8 +26,8 @@ const BorrowFixedAPR: React.FunctionComponent = () => {
   };
 
   return (
-    <TableCell>
-      <Typography variant="body2" agentStyling sx={{ fontSize: 18, fontWeight: 'bold' }}>
+    <TableCell align='center' width="20%">
+      <Typography variant="body2" sx={{ fontSize: 18, fontWeight: 'bold', color: 'primary.light'}}>
         {renderValue()}
       </Typography>
     </TableCell>
