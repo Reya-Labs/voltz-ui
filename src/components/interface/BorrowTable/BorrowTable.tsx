@@ -18,35 +18,31 @@ import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
 
 
 export type BorrowTableProps = {
+  showVariable: boolean;
+  showFixed: boolean;
   positions: Position[];
   borrowAmms: AugmentedBorrowAMM[];
   order: data.TableOrder;
-  onSetOrder: (order: data.TableOrder) => void;
   variableOrderBy: VariableBorrowTableFields;
   onSetVariableOrderBy: (orderBy: VariableBorrowTableFields) => void;
   fixedOrderBy: FixedBorrowTableFields;
   onSetFixedOrderBy: (orderBy: FixedBorrowTableFields) => void;
   page: number;
-  pages: number;
-  onSetPage: (page: number) => void;
   size: number | null;
-  onSetSize: (size: number) => void;
   onSelectItem: (datum: AugmentedBorrowAMM) => void;
   commonOverrides: SystemStyleObject<Theme>;
 };
 
 const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
+  showVariable,
+  showFixed,
   positions,
   borrowAmms,
   order,
-  onSetOrder,
   variableOrderBy,
   fixedOrderBy,
   page,
-  pages,
-  onSetPage,
   size,
-  onSetSize,
   onSelectItem,
   commonOverrides,
 }) => {
@@ -127,7 +123,7 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
   }
 
   const renderNoFixedPositions = () => {
-    if (noFixedPositions) {
+    if (noFixedPositions || !showFixed) {
       return (
         <Typography variant="body2" sx={{...replacementRowStyle}}>
           YOU ARE PAYING VARIABLE ONLY
@@ -136,7 +132,7 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
       }
   }
   const renderNoVariablePositions = () => {
-    if (noVariablePositions) {
+    if (noVariablePositions || !showVariable) {
       return (
         <Typography variant="body2" sx={{...replacementRowStyle}}>
           YOU DO NOT HAVE ANY DEBT
