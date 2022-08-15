@@ -1,9 +1,9 @@
 import { useTokenApproval } from '@hooks';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { Button } from '@components/atomic';
+import { Button, Ellipsis } from '@components/atomic';
 import { colors } from '@theme';
-import { BorrowFormSubmitButtonHintStates } from '@contexts';
+import { BorrowFormSubmitButtonHintStates, BorrowFormSubmitButtonStates } from '@contexts';
 import { ReactNode } from 'react';
 
 interface SubmitControlsProps {
@@ -17,6 +17,7 @@ interface SubmitControlsProps {
   tradeInfoErrorMessage?: string;
   underlyingTokenName?: string;
   hintState: BorrowFormSubmitButtonHintStates;
+  submitButtonState: BorrowFormSubmitButtonStates;
 }
 
 type TextProps = {
@@ -44,7 +45,8 @@ const SubmitControls = ({
   tokenApprovals,
   hintState,
   tradeInfoErrorMessage,
-  underlyingTokenName
+  underlyingTokenName,
+  submitButtonState
 }: SubmitControlsProps) => {
   const getHint = () => {
     switch(hintState) {
@@ -93,7 +95,23 @@ const SubmitControls = ({
   }
   
   const getSubmitText = () => {
-    return 'Fix rate!';
+    switch(submitButtonState) {
+      case BorrowFormSubmitButtonStates.APPROVE_UT_PERIPHERY: {
+        return <Box>Approve <Text>{underlyingTokenName}</Text></Box>;
+      }
+      case BorrowFormSubmitButtonStates.APPROVING: {
+        return <>Approving<Ellipsis /></>;
+      }
+      case BorrowFormSubmitButtonStates.CHECKING: {
+        return <>Loading<Ellipsis /></>;
+      }
+      case BorrowFormSubmitButtonStates.INITIALISING: {
+        return <>Initialising<Ellipsis /></>;
+      }
+      case BorrowFormSubmitButtonStates.FIX_RATE: {
+        return 'Fix Rate!';
+      }
+    }
   };
   
 
@@ -106,8 +124,7 @@ const SubmitControls = ({
             (!isFormValid || 
             tokenApprovals.checkingApprovals || 
             tokenApprovals.approving || 
-            approvalsNeeded ||
-            !isTradeVerified)
+            (!approvalsNeeded && isFormValid && !isTradeVerified))
           } 
           onClick={onSubmit} 
           size="large" 

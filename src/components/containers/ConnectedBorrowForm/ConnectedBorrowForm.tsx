@@ -4,9 +4,8 @@ import { useState } from 'react';
 import { actions, selectors } from '@store';
 
 import { useNavigate } from 'react-router-dom';
-import { BorrowForm, PendingTransaction } from '@components/interface';
+import { BorrowForm, PendingTransaction, SwapFormActions, SwapFormModes, SwapInfo } from '@components/interface';
 import { useAMMContext, useBorrowAMMContext, useBorrowFormContext, Agents } from '@contexts';
-import { AugmentedAMM } from '@utilities';
 
 
 export type ConnectedBorrowFormProps = {
@@ -17,7 +16,6 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
   const { amm: borrowAmm } = useBorrowAMMContext();
   const { amm } = useAMMContext();
   const form = useBorrowFormContext();
-  const { variableDebt } = useBorrowAMMContext();
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -83,29 +81,43 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
   }
 
   return (
-    <BorrowForm
-      protocol={amm.protocol}
-      startDate={amm.startDateTime}
-      endDate={amm.endDateTime}
-      errors={form.errors}
-      notional={0}
-      onChangeNotional={form.setNotional}
-      underlyingTokenName={amm.underlyingToken.name}
-      approvalsNeeded={form.approvalsNeeded}
-      isFormValid={form.isValid}
-      isTradeVerified={form.isTradeVerified}
-      onCancel={handleGoBack}
-      onSubmit={handleSubmit}
-      tokenApprovals={form.tokenApprovals}
-      variableDebt={form.variableDebt}
-      selectedFixedDebt={form.selectedFixedDebt}
-      selectedFixedDebtPercentage={form.selectedFixedDebtPercentage}
-      selectedVariableDebt={form.selectedVariableDebt}
-      selectedVariableDebtPercentage={form.selectedVariableDebtPercentage}
-      hintState={form.hintState}
-      margin={form.margin}
-      // tradeInfoErrorMessage={form.swapInfo.errorMessage}
-    />
+    <>
+      <BorrowForm
+        protocol={amm.protocol}
+        startDate={amm.startDateTime}
+        endDate={amm.endDateTime}
+        errors={form.errors}
+        notional={0}
+        onChangeNotional={form.setNotional}
+        underlyingTokenName={amm.underlyingToken.name}
+        approvalsNeeded={form.approvalsNeeded}
+        isFormValid={form.isValid}
+        isTradeVerified={form.isTradeVerified}
+        onCancel={handleGoBack}
+        onSubmit={handleSubmit}
+        tokenApprovals={form.tokenApprovals}
+        variableDebt={form.variableDebt}
+        selectedFixedDebt={form.selectedFixedDebt}
+        selectedFixedDebtPercentage={form.selectedFixedDebtPercentage}
+        selectedVariableDebt={form.selectedVariableDebt}
+        selectedVariableDebtPercentage={form.selectedVariableDebtPercentage}
+        hintState={form.hintState}
+        submitButtonState={form.submitButtonState}
+        margin={form.margin}
+        tradeInfoErrorMessage={form.borrowInfo.errorMessage}
+      />
+      {/* <SwapInfo
+        balance={form.selectedFixedDebt}
+        formAction={SwapFormActions.SWAP} 
+        minRequiredMargin={form.margin}
+        mode={SwapFormModes.NEW_POSITION}
+        positionMargin={form.margin}
+        protocol={amm.protocol}
+        swapSummary={form.borrowInfo.data}
+        swapSummaryLoading={form.borrowInfo.loading}
+        underlyingTokenName={amm.underlyingToken.name}
+      /> */}
+    </>
   )
 }
 

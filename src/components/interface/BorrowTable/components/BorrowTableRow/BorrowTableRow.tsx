@@ -93,7 +93,7 @@ const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({ datum, i
   }
 
   const renderTable = () => {
-    if (result == 0 || !result || loading) {
+    if (result === null || !result || loading) {
       return <></>;
     }
     const button = loadButton(); 

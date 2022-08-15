@@ -16,7 +16,7 @@ import { SystemStyleObject, Theme } from '@theme';
 import TableRow from '@mui/material/TableRow';
 import { VariableAPY, FixedAPR, MaturityEndDate, FixBorrow, FixBorrowSlider } from './components';
 import { Stack } from '@mui/material';
-import { BorrowFormSubmitButtonHintStates, SwapFormSubmitButtonHintStates } from '@contexts';
+import { BorrowFormSubmitButtonHintStates, BorrowFormSubmitButtonStates, SwapFormSubmitButtonHintStates } from '@contexts';
 
 export type BorrowProps = {
   protocol?: string;
@@ -39,6 +39,7 @@ export type BorrowProps = {
   selectedVariableDebtPercentage?: number;
   errors: Record<string, string>;
   hintState: BorrowFormSubmitButtonHintStates;
+  submitButtonState: BorrowFormSubmitButtonStates;
   margin: number;
 };
 
@@ -63,6 +64,7 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
   selectedVariableDebt,
   selectedVariableDebtPercentage,
   hintState,
+  submitButtonState,
   margin
 }) => {
   const bottomSpacing: SystemStyleObject<Theme> = {
@@ -71,7 +73,7 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
 
   return (
     <FormPanel>
-      <ProtocolInformation protocol={protocol}/>
+      <ProtocolInformation protocol={protocol} isBorrowForm={true}/>
       
       <Box sx={bottomSpacing}>
         <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
@@ -128,7 +130,7 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
         onCancel={onCancel}
         onSubmit={onSubmit}
         protocol={protocol}
-        // submitButtonState={submitButtonState}
+        submitButtonState={submitButtonState}
         // swapInfoLoading={swapInfoLoading}
         tokenApprovals={tokenApprovals}
         tradeInfoErrorMessage={tradeInfoErrorMessage}
