@@ -30,7 +30,7 @@ const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({ order,
 
   const maturityLabel: ["protocol" | "debt" | "variableApy" | "fixedApr" | "maturity", string] = ['maturity', FixedBorrowTableLabels.maturity];
   const loadExtraCell = labels.includes(maturityLabel) ? (
-    <TableCell align="left" padding="normal" sx={cellSx} width='10%'></TableCell>
+    <TableCell align="left" padding="normal" sx={cellSx}></TableCell>
   ) : <></>;
 
   return (
@@ -40,11 +40,10 @@ const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({ order,
         labels.map(([field, label]) => (
           <TableCell
             key={field}
-            align="left"
+            align={(['fixedApr','variableApy'].includes(field)) ? "center": "left"}
             padding="normal"
             sortDirection={orderBy === field ? order : false}
             sx={cellSx}
-            width={label == "maturity" ? '10%' : '30%'}
           >
             {/* <TableSortLabel
               active={orderBy === field}

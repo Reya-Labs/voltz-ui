@@ -25,7 +25,7 @@ const BorrowVariableAPY: React.FunctionComponent = () => {
   };
 
   return (
-    <TableCell>
+    <TableCell align='center' width="20%">
       <Typography variant="body2" sx={{fontSize: 18, fontWeight: 'bold', color: 'tertiary.light'}}>
         {renderValue()}
       </Typography>

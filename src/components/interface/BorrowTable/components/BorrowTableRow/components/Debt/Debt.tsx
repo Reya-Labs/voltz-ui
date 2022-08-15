@@ -1,40 +1,29 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import TableCell from '@mui/material/TableCell';
 
-import { useBorrowAMMContext, usePositionContext } from '@contexts';
 import { Typography } from '@components/atomic';
-import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
 
 export type DebtProps = {
-  isFixedPositions: boolean;
+  debt: number | null | void;
 };
 
 
-const Debt: React.FunctionComponent<DebtProps> = ({isFixedPositions}) => {
-  const { position } = usePositionContext();
-  const { variableDebt, fixedDebt } = useBorrowAMMContext();
-  const { result, loading, call } = (isFixedPositions ? fixedDebt : variableDebt);
-
-  useEffect(() => {
-    if (position) {
-      call(position);
-    }
-  }, [call, position]);
+const Debt: React.FunctionComponent<DebtProps> = ({debt}) => {
 
   const renderValue = () => {
-    if (loading) {
-      return '---';
-    }
+    // if (loading) {
+    //   return '---';
+    // }
 
-    if (!result) {
+    if (!debt) {
       return '$0';
     }
 
-    return `$${(result).toFixed(2)}`;
+    return `$${(debt).toFixed(2)}`;
   };
 
   return (
-    <TableCell>
+    <TableCell align="left" width="35%">
       <Typography variant="body2" sx={{fontSize: 18}}>
         {renderValue()}
       </Typography>

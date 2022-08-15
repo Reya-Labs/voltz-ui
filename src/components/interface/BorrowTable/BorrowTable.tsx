@@ -11,7 +11,7 @@ import { BorrowAMMProvider, PositionProvider } from '@contexts';
 import { Panel } from '@components/atomic';
 import { useAgent } from '@hooks';
 import { FixedBorrowTableFields, labelsFixed, labelsVariable, VariableBorrowTableFields } from './types';
-import { BorrowTableHead } from './components';
+import { BorrowTableHead} from './components';
 import { DateTime } from 'luxon';
 import BorrowTableRow from './components/BorrowTableRow/BorrowTableRow';
 import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
@@ -84,7 +84,7 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
             if (info) {
               return (<BorrowAMMProvider amm={info.borrowAmms}>
                 <PositionProvider position={info.position}>
-                  <BorrowTableRow datum={info.datum} index={info.index} onSelect={handleSelectRow(info.index)} isFixedPositions={false} />
+                  <BorrowTableRow datum={info.datum} index={info.index} onSelect={handleSelectRow(info.index)} isFixedPositions={false}/>
                 </PositionProvider>
               </BorrowAMMProvider>)
             }
@@ -145,50 +145,50 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
     onSelectItem(borrowAmms[index]);
   };
 
-    return (
-      <Panel variant={'dark'} borderRadius='large' padding='container' sx={{ paddingTop: 0, paddingBottom: 0 }}>
+  return (
+    <Panel variant={'dark'} borderRadius='large' padding='container' sx={{ paddingTop: 0, paddingBottom: 0 }}>
 
-        {/* VARIABLE POSITIONS TABLE */}
-        <Typography variant="body2" sx={{ fontSize: 20, fontWeight: 'bold' }}>VARIABLE POSITIONS</Typography>
-        <TableContainer>
-          <Table
-            sx={{
-              borderCollapse: 'separate',
-              borderSpacing: '0px 16px',
-              ...commonOverrides,
-            }}
-            aria-labelledby="tableTitle"
-            size="medium"
-          >
-            <BorrowTableHead order={order} orderBy={variableOrderBy} labels={labelsVariable}/>
-            <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
-            {renderVariableTable()}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        {renderNoVariablePositions()}
-
-        {/* FIXED POSITIONS TABLE */}
-        <Typography variant="body2" sx={{ fontSize: 20, fontWeight: 'bold' }}>FIXED POSITIONS</Typography>
-        <TableContainer>
-          <Table
-            sx={{
-              borderCollapse: 'separate',
-              borderSpacing: '0px 16px',
-              ...commonOverrides,
-            }}
-            aria-labelledby="tableTitle"
-            size="medium"
-          >
-            <BorrowTableHead order={order} orderBy={fixedOrderBy} labels={labelsFixed}/>
-            <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
-            {renderFixedTable()}
+      {/* VARIABLE POSITIONS TABLE */}
+      <Typography variant="body2" sx={{ fontSize: 20, fontWeight: 'bold' }}>VARIABLE POSITIONS</Typography>
+      <TableContainer>
+        <Table
+          sx={{
+            borderCollapse: 'separate',
+            borderSpacing: '0px 16px',
+            ...commonOverrides,
+          }}
+          aria-labelledby="tableTitle"
+          size="medium"
+        >
+          <BorrowTableHead order={order} orderBy={variableOrderBy} labels={labelsVariable}/>
+          <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
+          {renderVariableTable()}
           </TableBody>
-          </Table>
-        </TableContainer>
-        {renderNoFixedPositions()}
-      </Panel>
-    );
+        </Table>
+      </TableContainer>
+      {renderNoVariablePositions()}
+
+      {/* FIXED POSITIONS TABLE */}
+      <Typography variant="body2" sx={{ fontSize: 20, fontWeight: 'bold' }}>FIXED POSITIONS</Typography>
+      <TableContainer>
+        <Table
+          sx={{
+            borderCollapse: 'separate',
+            borderSpacing: '0px 16px',
+            ...commonOverrides,
+          }}
+          aria-labelledby="tableTitle"
+          size="medium"
+        >
+          <BorrowTableHead order={order} orderBy={fixedOrderBy} labels={labelsFixed}/>
+          <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
+          {renderFixedTable()}
+        </TableBody>
+        </Table>
+      </TableContainer>
+      {renderNoFixedPositions()}
+    </Panel>
+  );
 
   
 };
