@@ -19,6 +19,7 @@ export type FixBorrowSliderProps = {
   selectedVariableDebt?: number;
   selectedVariableDebtPercentage?: number;
   handleChange: (value: number) => void;
+  swapSummaryLoading: boolean;
 }
 
 const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
@@ -28,7 +29,8 @@ const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
   selectedFixedDebtPercentage,
   selectedVariableDebt,
   selectedVariableDebtPercentage,
-  handleChange
+  handleChange,
+  swapSummaryLoading
 }) => {
   const handleChangeCommitted = (event: React.SyntheticEvent | Event, newValue: number | number[]) => {
     if (typeof newValue === 'number') {
@@ -68,7 +70,7 @@ const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
         min={0}
         max={100}
         onChangeCommitted={handleChangeCommitted}
-        disabled={variableDebt.loading}
+        disabled={variableDebt.loading || swapSummaryLoading}
       />
     </Box>
   );

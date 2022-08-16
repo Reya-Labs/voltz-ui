@@ -41,6 +41,7 @@ export type BorrowProps = {
   hintState: BorrowFormSubmitButtonHintStates;
   submitButtonState: BorrowFormSubmitButtonStates;
   margin: number;
+  swapSummaryLoading: boolean;
 };
 
 const BorrowForm: React.FunctionComponent<BorrowProps> = ({
@@ -65,7 +66,8 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
   selectedVariableDebtPercentage,
   hintState,
   submitButtonState,
-  margin
+  margin,
+  swapSummaryLoading
 }) => {
   const bottomSpacing: SystemStyleObject<Theme> = {
     marginBottom: (theme) => theme.spacing(6)
@@ -93,6 +95,7 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
           selectedVariableDebt={selectedVariableDebt}
           selectedVariableDebtPercentage={selectedVariableDebtPercentage}
           handleChange={onChangeNotional}
+          swapSummaryLoading={swapSummaryLoading}
         />
       </Box>
 

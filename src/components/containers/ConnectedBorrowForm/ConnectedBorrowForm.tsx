@@ -105,9 +105,10 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
         submitButtonState={form.submitButtonState}
         margin={form.margin}
         tradeInfoErrorMessage={form.borrowInfo.errorMessage}
+        swapSummaryLoading={form.borrowInfo.loading}
       />
       {/* <SwapInfo
-        balance={form.selectedFixedDebt}
+      balance={form.selectedFixedDebt}
         formAction={SwapFormActions.SWAP} 
         minRequiredMargin={form.margin}
         mode={SwapFormModes.NEW_POSITION}

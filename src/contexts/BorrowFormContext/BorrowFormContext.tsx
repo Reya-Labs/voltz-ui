@@ -264,7 +264,11 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
       return;
     }
 
-    setMargin(fullyCollateralisedMarginRequirement.result);
+    if (swapInfo.result?.marginRequirement !== undefined && swapInfo.result?.marginRequirement > fullyCollateralisedMarginRequirement.result) {
+      setMargin(swapInfo.result?.marginRequirement);
+    } else {
+      setMargin(fullyCollateralisedMarginRequirement.result);
+    }
   }, [fullyCollateralisedMarginRequirement.loading, fullyCollateralisedMarginRequirement.result]);
 
   useEffect(() => {

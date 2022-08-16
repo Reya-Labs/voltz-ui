@@ -21,6 +21,7 @@ export type FixBorrowProps = {
   selectedVariableDebt?: number;
   selectedVariableDebtPercentage?: number;
   handleChange: (value: number) => void;
+  swapSummaryLoading: boolean;
 }
 
 const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
@@ -31,7 +32,8 @@ const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
   selectedFixedDebtPercentage,
   selectedVariableDebt,
   selectedVariableDebtPercentage,
-  handleChange
+  handleChange,
+  swapSummaryLoading
 }) => {
   const renderValue = () => {
     if (variableDebt.loading) {
@@ -70,6 +72,7 @@ const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
         selectedVariableDebtPercentage={selectedVariableDebtPercentage}
         currencySymbol={'$'}
         handleChange={handleChange}
+        swapSummaryLoading={swapSummaryLoading}
       />
     </Box>
   );
