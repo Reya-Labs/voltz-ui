@@ -91,7 +91,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
           </Box>
         )}
 
-        {beforeMaturity && isUndefined(currentFixedRate) && !isUndefined(healthFactor) && (
+        {beforeMaturity && !isUndefined(healthFactor) && (
           <Box sx={{ padding: (theme) => `${theme.spacing(1)} ${theme.spacing(2)}`, marginLeft: (theme) => theme.spacing(2) }}>
             <BulletLabel 
               sx={{ color: getHealthTextColor(healthFactor) }} 
