@@ -40,8 +40,8 @@ const Pool: React.FunctionComponent<PoolProps> = ({underlying}) => {
   const tokenInfo = tokenIcon();
 
   return (
-    <TableCell key={"protocol"} width="25%" >
-      <Typography variant="body2" sx={{fontSize: 16, textTransform: "uppercase", verticalAlign: 'middle', fontWeight: "bold"}}>
+    <TableCell key={"protocol"} width="35%" >
+      <Typography variant="body2" sx={{fontSize: 18, textTransform: "uppercase", verticalAlign: 'middle', fontWeight: 700, letterSpacing: '0.02em',lineHeight: '130%'}}>
         <Box sx={{display:'flex', alignContent: 'center'}}>
             {protocolInfo[1]}{tokenInfo[1]} &nbsp; {protocolInfo[0]} - {tokenInfo[0]}
         </Box> 

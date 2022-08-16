@@ -6,7 +6,7 @@ import { SystemStyleObject, Theme } from '@mui/system';
 import { Typography } from '@components/atomic';
 
 import { data } from '@utilities';
-import { VariableBorrowTableFields, labelsVariable, labelsFixed, FixedBorrowTableFields, FixedBorrowTableLabels } from '../../types';
+import { VariableBorrowTableFields, FixedBorrowTableFields, FixedBorrowTableLabels } from '../../types';
 
 
 export type BorrowTableHeadProps = {
@@ -57,7 +57,7 @@ const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({ order,
                 textTransform: "uppercase",
                 fontWeight: 400, 
                 fontSize: 12,
-                color: "#5A576D"
+                color: "#9B97AD"
               }}
               >
               {label}

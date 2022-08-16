@@ -4,6 +4,7 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import { SystemStyleObject, Theme } from '@theme';
 import { Typography } from '@components/atomic';
+import { Box } from '@mui/material';
 
 import { data, AugmentedBorrowAMM, findCurrentBorrowPosition } from '@utilities';
 import { mapAmmToAmmTableDatum } from './utilities';
@@ -84,7 +85,7 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
             if (info) {
               return (<BorrowAMMProvider amm={info.borrowAmms}>
                 <PositionProvider position={info.position}>
-                  <BorrowTableRow datum={info.datum} index={info.index} onSelect={handleSelectRow(info.index)} isFixedPositions={false}/>
+                  <BorrowTableRow datum={info.datum} index={info.index} onSelect={handleSelectRow(info.index)} isFixedPositions={false} />
                 </PositionProvider>
               </BorrowAMMProvider>)
             }
@@ -146,10 +147,13 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
   };
 
   return (
-    <Panel variant={'dark'} borderRadius='large' padding='container' sx={{ paddingTop: 0, paddingBottom: 0 }}>
-
+    <Panel variant={'dark'} borderRadius='large' padding='container' sx={{ paddingTop: 0, paddingBottom: 0, background:'transparent' }}>
+z
       {/* VARIABLE POSITIONS TABLE */}
-      <Typography variant="body2" sx={{ fontSize: 20, fontWeight: 'bold' }}>VARIABLE POSITIONS</Typography>
+      <Typography variant="body2" sx={{ fontSize: '18px', fontWeight: 700, display: 'flex', alignContent: 'center'}}>
+        <Box sx={{backgroundColor: "#2667FF", borderRadius: "5px", width: '4px', height: '4px', marginTop: '12px', marginRight: '8px'}}></Box>
+         VARIABLE POSITIONS
+      </Typography>
       <TableContainer>
         <Table
           sx={{
@@ -169,7 +173,10 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
       {renderNoVariablePositions()}
 
       {/* FIXED POSITIONS TABLE */}
-      <Typography variant="body2" sx={{ fontSize: 20, fontWeight: 'bold' }}>FIXED POSITIONS</Typography>
+      <Typography variant="body2" sx={{ fontSize: '18px', fontWeight: 700, display: 'flex', alignContent: 'center'}}>
+        <Box sx={{backgroundColor: "#4DE5FF", borderRadius: "5px", width: '4px', height: '4px', marginTop: '12px', marginRight: '8px'}}></Box>
+        FIXED POSITIONS
+      </Typography>
       <TableContainer>
         <Table
           sx={{

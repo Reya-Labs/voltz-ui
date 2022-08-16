@@ -48,8 +48,8 @@ const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({ datum, i
     }
     if (variant == 'main') {
       return {
-        backgroundColor: `secondary.darken040`, // this affects the colour of the Pool table rows
-        borderRadius: 2
+        backgroundColor: `#19152B`, // this affects the colour of the Pool table rows
+        borderRadius: '8px'
       };
     }
     return {};
@@ -71,15 +71,12 @@ const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({ datum, i
     return (
     <TableCell align="left" width="20%">
         <Button variant="contained" onClick={handleClick} sx={{
-          paddingTop: (theme) => theme.spacing(3),
-          paddingBottom: (theme) => theme.spacing(3),
-          paddingLeft: (theme) => theme.spacing(4),
-          paddingRight: (theme) => theme.spacing(4),
+          padding: '8px 16px',
           fontSize: 18,
           lineHeight: 1,
           boxShadow: 'none',
-          backgroundColor: `secondary.darken040`,
-          borderRadius: 2
+          backgroundColor: `#19152B`,
+          borderRadius: '4px'
         }}>
           FIX RATE
         </Button>

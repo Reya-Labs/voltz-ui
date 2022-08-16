@@ -23,8 +23,8 @@ const Debt: React.FunctionComponent<DebtProps> = ({debt}) => {
   };
 
   return (
-    <TableCell align="left" width="35%">
-      <Typography variant="body2" sx={{fontSize: 18}}>
+    <TableCell align="left" width="25%">
+      <Typography variant="body2" sx={{fontSize: 18, fontWeight: 700, letterSpacing: '0.02em',lineHeight: '130%'}}>
         {renderValue()}
       </Typography>
     </TableCell>

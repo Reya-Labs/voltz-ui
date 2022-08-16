@@ -22,8 +22,8 @@ const valueBoxStyles: SystemStyleObject<Theme> = {
 const labelStyles: SystemStyleObject<Theme> = { 
     textTransform: "uppercase",
     fontWeight: 400, 
-    fontSize: 16,
-    color: "#5A576D"
+    fontSize: 14,
+    color: "#B3AFC6"
   };
 const titleStyles: SystemStyleObject<Theme> = { 
 fontSize: '40px', 

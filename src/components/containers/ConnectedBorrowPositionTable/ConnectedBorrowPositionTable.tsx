@@ -93,7 +93,7 @@ const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorrowAMMTa
     if(borrowAmms && positions && !loadingPos && !errorPos && !loading && !error){
       return (
         <>
-        <Panel variant='dark' sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
+        <Panel variant='dark' padding='small' sx={{ width: '100%', maxWidth: '800px', margin: '0 auto', background: 'transparent' }}>
         <BorrowPortfolioHeader
             commonOverrides={headerProps.commonOverrides}
             currencyCode={headerProps.currencyCode}
@@ -102,7 +102,7 @@ const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorrowAMMTa
             variableDebt={headerProps.variableDebt}
             fixedPositionsCount={headerProps.fixedPositionsCount}
             variablePositionsCount={headerProps.variablePositionsCount}/>
-          <Box sx={{ marginTop: (theme) => theme.spacing(14) }}>
+          <Box sx={{ marginTop: (theme) => theme.spacing(8) }}>
             <BorrowTable
               showVariable = {(headerProps.variablePositionsCount !== undefined && headerProps.variablePositionsCount > 0)}
               showFixed = {(headerProps.fixedPositionsCount !== undefined && headerProps.fixedPositionsCount > 0) }

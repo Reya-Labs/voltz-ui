@@ -75,7 +75,7 @@ const FixedBorrower: React.FunctionComponent = () => {
   return (
     <Page backgroundView='table'>
         {renderMode === 'fix-borrow' && (
-          <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
+          <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center', backdropFilter: "blur(8px)" }}>
             {borrowAmm && borrowAmm.amm && (
               <BorrowAMMProvider amm={borrowAmm} >
                 <AMMProvider amm={new AugmentedAMM(borrowAmm.amm)}>
@@ -91,10 +91,13 @@ const FixedBorrower: React.FunctionComponent = () => {
       )}
 
         {renderMode === 'borrow-positions' && (
-          <ConnectedBorrowPositionTable
+          <Box sx={{backdropFilter: "blur(8px)", height: '100%', paddingBottom: "200px"}}>
+            <ConnectedBorrowPositionTable
             onSelectItem={handleSelectBorrowAMM}
             agent={Agents.VARIABLE_TRADER}
           />
+          </Box>
+          
       )}
     </Page>
   );

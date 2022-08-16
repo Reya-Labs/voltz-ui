@@ -24,7 +24,7 @@ const BorrowPortfolioHeader = ({
 }: BorrowPortfolioHeaderProps) => {
   return (
     <>
-    <Panel variant={'dark'} borderRadius='large' padding='container' sx={{ paddingTop: 0, paddingBottom: 0 }}>
+    <Panel borderRadius='large' padding='container' sx={{ paddingTop: 0, paddingBottom: 0, background: "transparent"}}>
       <BorrowPortfolioHeaderBox
         currencyCode={currencyCode}
         currencySymbol={currencySymbol}
