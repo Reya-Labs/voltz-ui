@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { SystemStyleObject, Theme } from '@theme';
 
 import { AugmentedBorrowAMM, data } from '@utilities';
-import { useBorrowAMMs, useBorrowPositions, usePositions } from '@hooks';
+import { useBorrowAMMs, useBorrowPositions } from '@hooks';
 import { Agents } from '@contexts';
 import { Loading, Panel } from '@components/atomic';
 import BorrowTable from 'src/components/interface/BorrowTable/BorrowTable';

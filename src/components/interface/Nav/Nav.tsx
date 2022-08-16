@@ -171,9 +171,12 @@ const Nav: React.FunctionComponent = () => {
         </ButtonGroup>
       </Popover>
 
-      <Button aria-describedby={id3} sx={buttonSx} variant="text" link={`/${routes.BORROW_POS}`}>
-        FIXED BORROW
-      </Button>
+      {
+        process.env.REACT_APP_FIXED_BORROW &&
+        <Button aria-describedby={id3} sx={buttonSx} variant="text" link={`/${routes.BORROW_POS}`}>
+          FIXED BORROW
+        </Button>
+      } 
     </Box>
   );
 };

@@ -1,13 +1,22 @@
 import { GetInfoType, useAgent, UseAsyncFunctionResult, useTokenApproval } from '@hooks';
-import { hasEnoughUnderlyingTokens } from '@utilities';
+import { hasEnoughUnderlyingTokens, lessThan, lessThanEpsilon } from '@utilities';
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { Agents, useAMMContext, useBorrowAMMContext, usePositionContext } from "@contexts";
 import { isUndefined } from 'lodash';
 import { SwapFormActions } from "@components/interface";
 import * as s from "../SwapFormContext/services";
+import { InfoPostSwap } from '@voltz-protocol/v1-sdk/dist/types/entities';
 
 export type BorrowFormProviderProps = {
   
+};
+
+export enum BorrowFormSubmitButtonStates {
+  APPROVE_UT_PERIPHERY = 'APPROVE_UT_PERIPHERY',
+  APPROVING = 'APPROVING',
+  CHECKING = 'CHECKING',
+  INITIALISING = 'INITIALISING',
+  FIX_RATE = 'FIX_RATE',
 };
 
 export enum BorrowFormSubmitButtonHintStates {
@@ -37,8 +46,14 @@ export type BorrowFormContext = {
   isValid: boolean;
   tokenApprovals: ReturnType<typeof useTokenApproval>;
   hintState: BorrowFormSubmitButtonHintStates;
+  submitButtonState: BorrowFormSubmitButtonStates;
   approvalsNeeded: boolean;
   isTradeVerified: boolean;
+  borrowInfo: {
+    data?: InfoPostSwap;
+    errorMessage?: string;
+    loading: boolean;
+  }
 };
 
 const borrowFormCtx = createContext<BorrowFormContext>({} as unknown as BorrowFormContext);
@@ -95,6 +110,11 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
       addError(err, 'margin', 'Please select fixed debt amount');
     }
 
+    if (!swapInfo.loading && lessThanEpsilon(swapInfo.result?.availableNotional, selectedFixedDebt, 0.001) === true) {
+      valid = false;
+      addError(err, 'margin', 'Not enough liquidity, please select lower fixed debt amount');
+    }
+
     // Check the user has enough balance
     
     if(margin !== 0 && await hasEnoughUnderlyingTokens(amm, margin, undefined) === false) {
@@ -138,9 +158,9 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
     if(tokenApprovals.approving) {
       return BorrowFormSubmitButtonHintStates.APPROVING;
     }
-    // if (swapInfo.loading) {
-    //   return BorrowFormSubmitButtonHintStates.CHECKING;
-    // }
+    if (swapInfo.loading || fullyCollateralisedMarginRequirement.loading) {
+      return BorrowFormSubmitButtonHintStates.CHECKING;
+    }
 
     // Form validation
     if (!isValid) {
@@ -168,9 +188,9 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
 
 
     // // trade info failed
-    // if (swapInfo.errorMessage) {
-    //   return SwapFormSubmitButtonHintStates.FORM_INVALID_TRADE;
-    // }
+    if (swapInfo.errorMessage || fullyCollateralisedMarginRequirement.errorMessage) {
+      return BorrowFormSubmitButtonHintStates.FORM_INVALID_TRADE;
+    }
 
     if(tokenApprovals.lastApproval) {
       return BorrowFormSubmitButtonHintStates.READY_TO_TRADE_TOKENS_APPROVED;
@@ -178,6 +198,25 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
       return BorrowFormSubmitButtonHintStates.READY_TO_TRADE;
     }
   }
+
+  const getSubmitButtonState = () => {  
+    if (tokenApprovals.checkingApprovals) {
+      return BorrowFormSubmitButtonStates.INITIALISING;
+    }
+    if (tokenApprovals.approving) {
+      return BorrowFormSubmitButtonStates.APPROVING;
+    }
+    if (swapInfo.loading || fullyCollateralisedMarginRequirement.loading) {
+      return BorrowFormSubmitButtonStates.CHECKING;
+    }
+
+   
+    if (!tokenApprovals.underlyingTokenApprovedForPeriphery) {
+      return BorrowFormSubmitButtonStates.APPROVE_UT_PERIPHERY;
+    }
+
+    return BorrowFormSubmitButtonStates.FIX_RATE;
+  };
 
   useEffect(() => {
     if (variableDebt.loading || (variableDebt.result === null) || (variableDebt.result === undefined)) {
@@ -253,8 +292,14 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
     isValid,
     tokenApprovals,
     hintState: getHintState(),
+    submitButtonState: getSubmitButtonState(),
     approvalsNeeded,
-    isTradeVerified
+    isTradeVerified,
+    borrowInfo: {
+      data: swapInfo.result || undefined,
+      errorMessage: swapInfo.errorMessage || (fullyCollateralisedMarginRequirement.errorMessage || undefined),
+      loading: swapInfo.loading || fullyCollateralisedMarginRequirement.loading
+    }
   }
   
   return <borrowFormCtx.Provider value={value}>{children}</borrowFormCtx.Provider>;

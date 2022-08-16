@@ -7,10 +7,12 @@ import { VariableAPY, FixedAPR } from './components';
 
 export type ProtocolInformationProps = {
   protocol?: string;
+  isBorrowForm?: boolean;
 };
 
 const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = ({
   protocol,
+  isBorrowForm
 }) => {
   return (
     <Box
@@ -31,8 +33,8 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
       >
         {protocol}
       </Typography>
-      {/* <FixedAPR />
-      <VariableAPY /> */}
+      {isBorrowForm !== true && <FixedAPR />}
+      {isBorrowForm !== true && <VariableAPY />}
     </Box>
   );
 };
