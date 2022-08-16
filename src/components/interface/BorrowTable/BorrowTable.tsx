@@ -164,7 +164,7 @@ z
           aria-labelledby="tableTitle"
           size="medium"
         >
-          <BorrowTableHead order={order} orderBy={variableOrderBy} labels={labelsVariable}/>
+          <BorrowTableHead order={order} orderBy={variableOrderBy} labels={labelsVariable} isFixedPositions={false}/>
           <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
           {renderVariableTable()}
           </TableBody>
@@ -187,7 +187,7 @@ z
           aria-labelledby="tableTitle"
           size="medium"
         >
-          <BorrowTableHead order={order} orderBy={fixedOrderBy} labels={labelsFixed}/>
+          <BorrowTableHead order={order} orderBy={fixedOrderBy} labels={labelsFixed} isFixedPositions={true}/>
           <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
           {renderFixedTable()}
         </TableBody>

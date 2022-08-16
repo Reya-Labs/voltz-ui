@@ -11,15 +11,19 @@ export const getTotalVariableDebt = async (borrowAmms: AugmentedBorrowAMM[], pos
   let countVariablePositions: number = 0;
 
   for (const b of borrowAmms) {
+    let hasPosition: boolean = false;
     if (positions && positions.length !== 0) {
       for (const p of positions) {
         if(b.amm && p.amm.id == b.amm.id && DateTime.now() < b.amm.endDateTime) {
           const varDebt = await b.getAggregatedBorrowBalance(p);
           countVariablePositions += ((varDebt == 0 ) ? 0 : 1);
           sum += varDebt;
+          hasPosition = true;
         }
       }
-    } else {
+    }
+    
+    if (!hasPosition) {
       if(b.amm && DateTime.now() < b.amm.endDateTime) {
         const varDebt = await b.getUnderlyingBorrowBalance();
         countVariablePositions += ((varDebt == 0 ) ? 0 : 1);

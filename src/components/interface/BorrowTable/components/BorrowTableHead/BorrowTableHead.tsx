@@ -13,9 +13,10 @@ export type BorrowTableHeadProps = {
   order: data.TableOrder;
   orderBy: VariableBorrowTableFields | FixedBorrowTableFields;
   labels: [VariableBorrowTableFields | FixedBorrowTableFields, string][];
+  isFixedPositions: boolean;
 };
 
-const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({ order, orderBy, labels }) => {
+const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({ order, orderBy, labels, isFixedPositions }) => {
 
   const cellSx: SystemStyleObject<Theme> = {
     '&.MuiTableCell-root': {
@@ -28,11 +29,18 @@ const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({ order,
     },
   };
 
-  const maturityLabel: ["protocol" | "debt" | "variableApy" | "fixedApr" | "maturity", string] = ['maturity', FixedBorrowTableLabels.maturity];
-  const loadExtraCell = labels.includes(maturityLabel) ? (
-    <TableCell align="left" padding="normal" sx={cellSx}></TableCell>
-  ) : <></>;
+  const cellWidth = new Map<string, string>();
+  cellWidth.set('pool', '35%');
+  cellWidth.set('debt', '25%');
+  cellWidth.set('variableApy', '20%');
+  cellWidth.set('fixedApr', '20%');
+  cellWidth.set('maturity', '20%');
 
+  const maturityLabel: ["protocol" | "debt" | "variableApy" | "fixedApr" | "maturity", string] = ['maturity', FixedBorrowTableLabels.maturity];
+  const loadExtraCell = isFixedPositions ? <></> : (
+    <TableCell width={cellWidth.get("maturity")} align="left" padding="normal" sx={cellSx}></TableCell>
+  ) ;
+  
   return (
     <TableHead>
       <TableRow>
@@ -44,6 +52,7 @@ const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({ order,
             padding="normal"
             sortDirection={orderBy === field ? order : false}
             sx={cellSx}
+            width={cellWidth.get(field)}
           >
             {/* <TableSortLabel
               active={orderBy === field}
