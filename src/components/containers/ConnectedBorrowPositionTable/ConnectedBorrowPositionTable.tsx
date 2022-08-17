@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { SystemStyleObject, Theme } from '@theme';
 
 import { AugmentedBorrowAMM, data } from '@utilities';
-import { useBorrowAMMs, useBorrowPositions } from '@hooks';
+import { useBorrowAMMs, useBorrowPositions, useWallet } from '@hooks';
 import { Agents } from '@contexts';
 import { Loading, Panel } from '@components/atomic';
 import BorrowTable from 'src/components/interface/BorrowTable/BorrowTable';
@@ -29,6 +29,7 @@ const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorrowAMMTa
 
   const { borrowAmms, loading, error } = useBorrowAMMs();
   const { positions, loading: loadingPos, error: errorPos } = useBorrowPositions();
+  const wallet = useWallet();
   //const { positions, loading: loadingPos, error: errorPos } = usePositions();
 
   const commonOverrides: SystemStyleObject<Theme> = {
@@ -90,7 +91,7 @@ const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorrowAMMTa
   const pages = 0;
 
   const renderContent = () => {
-    if(borrowAmms && positions && !loadingPos && !errorPos && !loading && !error){
+    if(wallet.status !== "connecting" && borrowAmms && positions && !loadingPos && !errorPos && !loading && !error){
       return (
         <>
         <Panel variant='dark' padding='small' sx={{ width: '100%', maxWidth: '800px', margin: '0 auto', background: 'transparent' }}>
@@ -125,7 +126,7 @@ const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorrowAMMTa
     } else{
       return (
         <>
-        <Panel variant='grey-dashed' sx={{ width: '100%' }}>
+        <Panel variant='grey-dashed' padding='small' sx={{ width: '100%', maxWidth: '800px', margin: '0 auto', background: 'transparent', marginBottom: '600px' }}>
           <Loading sx={{ margin: '0 auto' }} />
         </Panel>
         </>
