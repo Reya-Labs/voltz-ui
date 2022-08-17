@@ -298,7 +298,7 @@ var BorrowAMM = /** @class */ (function () {
     };
     BorrowAMM.prototype.getFullyCollateralisedMarginRequirement = function (fixedTokenBalance, variableTokenBalance) {
         return __awaiter(this, void 0, void 0, function () {
-            var variableAPYToMaturity, termStartTimestamp, termEndTimestamp, fixedFactor, fcMargin;
+            var variableAPYToMaturity, termStartTimestamp, termEndTimestamp, fixedFactor;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:

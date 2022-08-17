@@ -18,3 +18,4 @@ export { ReactComponent as TokenDai } from './tokens/dai.svg';
 export { ReactComponent as TokenEth } from './tokens/eth.svg';
 export { ReactComponent as TokenLido } from './tokens/lido.svg';
 export { ReactComponent as TokenUsdc } from './tokens/usdc.svg';
+export { ReactComponent as TokenUsdt } from './tokens/usdt.svg';

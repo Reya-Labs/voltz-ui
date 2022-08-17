@@ -30,6 +30,9 @@ const BorrowPortfolioSummary = ({
     if (variableDebt + fixedDebt !== 0) {
       percentageVariable = ((variableDebt) / (variableDebt + fixedDebt)) * 100;
       percentageFixed = ((fixedDebt) / (variableDebt + fixedDebt)) * 100;
+    } else {
+      percentageVariable = 0;
+      percentageFixed = 0;
     }
   }
 
@@ -62,6 +65,27 @@ const BorrowPortfolioSummary = ({
     marginTop: (theme) => theme.spacing(1)
   };
 
+  const renderDebt = (debt: number | undefined, percentage: number | undefined, isVar: boolean) => {
+    const justify = isVar ? "flex-end" : "flex-start";
+    const align = isVar ? "right" : "left";
+    if(debt !== undefined && percentage !== undefined){
+      return (
+        <Box sx={{display:'flex', justifyContent:justify, textAlign: align}}>
+          {currencySymbol + formatCurrency(debt, true,false, 2, 2) +" "+ currencyCode}
+          <Box sx={{color: "#A6A2B4", fontWeight: 400}}> &nbsp; 
+          {"(" + percentage.toFixed(2).toString()+ "%)"}
+          </Box>
+        </Box>
+      );
+    }
+
+    return (
+      <Box sx={{display:'flex', justifyContent:justify, textAlign: align}}>
+          {"---"}
+        </Box>
+    );
+  }
+
   const renderDebtSummary = () => {
     return (
       <Grid container sx={{marginBottom: (theme) => theme.spacing(4)}}>
@@ -82,19 +106,13 @@ const BorrowPortfolioSummary = ({
 
       <Grid item xs={6}>
         <Typography variant="body2" sx={{fontSize: 20, textTransform: "uppercase", verticalAlign: 'middle', fontWeight: 700}}>
-          <Box sx={{display:'flex', justifyContent:"flex-start", textAlign: "left"}}>
-          {(fixedDebt !== undefined)  ? (currencySymbol + formatCurrency(fixedDebt, true,false, 2, 2) +" "+ currencyCode) : "---"}
-          <Box sx={{color: "#A6A2B4", fontWeight: 400}}> &nbsp; {"(" + percentageFixed.toFixed(2).toString() + "%)"}</Box>
-          </Box>
+          {renderDebt(fixedDebt, percentageFixed, false)}
         </Typography>
       </Grid>
 
       <Grid item xs={6}>
         <Typography variant="body2" sx={{fontSize: 20, textTransform: "uppercase", verticalAlign: 'middle', fontWeight: 700}}>
-          <Box sx={{display:'flex', justifyContent:"flex-end", textAlign: "right"}}>
-          { (variableDebt !== undefined) ? (currencySymbol + formatCurrency(variableDebt, true,false, 2, 2) +" "+ currencyCode) : "---"}
-          <Box sx={{color: "#A6A2B4", fontWeight: 400}}>&nbsp; { "(" + (variableDebt == 0 ? 0 : percentageVariable).toFixed(2).toString() + "%)"}</Box>
-          </Box>
+          {renderDebt(variableDebt, percentageVariable, true)}
         </Typography>
       </Grid>
 
@@ -124,7 +142,7 @@ const BorrowPortfolioSummary = ({
       <Grid item xs={6}>
         <Typography variant="subtitle1" sx={{ ...labelStyles}}>
           <Box sx={{display:'flex', justifyContent:"flex-start", textAlign: "left"}}>
-          {fixedPositionsCount} {(fixedPositionsCount == 1) ? "POSITION" : "POSITIONS"}
+          {fixedPositionsCount !== undefined ? fixedPositionsCount : "---"} {(fixedPositionsCount == 1) ? "POSITION" : "POSITIONS"}
           </Box>
         </Typography>
       </Grid>
@@ -132,7 +150,7 @@ const BorrowPortfolioSummary = ({
       <Grid item xs={6}>
         <Typography variant="body2" sx={{ ...labelStyles}}>
           <Box sx={{display:'flex', justifyContent:"flex-end", textAlign: "right"}}>
-          {variablePositionsCount} {(variablePositionsCount == 1) ? "POSITION" : "POSITIONS"}
+          {variablePositionsCount !== undefined ? variablePositionsCount : "---"} {(variablePositionsCount == 1) ? "POSITION" : "POSITIONS"}
           </Box>
         </Typography>
       </Grid>

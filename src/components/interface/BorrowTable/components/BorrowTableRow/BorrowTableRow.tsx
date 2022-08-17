@@ -26,7 +26,7 @@ const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({ datum, i
   const { variableDebt, fixedDebt } = useBorrowAMMContext();
   const { position } = usePositionContext();
   const { result: resultVar, loading: loadingVar, call: callVar } = variableDebt;
-  const { result: resultFixed, loading: loadingFixed, call: callFixed } = variableDebt;
+  const { result: resultFixed, loading: loadingFixed, call: callFixed } = fixedDebt;
 
   useEffect(() => {
     if (wallet.status === "connected" && !isFixedPositions) {

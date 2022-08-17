@@ -70,18 +70,18 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
   }, [order, page, size]);
 
   const renderVariableTable = () => {
-    const marketsWithPosition = tableData.map((datum, index) => {
+    const liveMarkets = tableData.map((datum, index) => {
       if(datum && DateTime.now() < datum.endDate) {
         const position = findCurrentBorrowPosition(positions || [], borrowAmms[index]);
         return {datum: datum, borrowAmms: borrowAmms[index],position: position, index: index}
       }
     })
 
-    if (marketsWithPosition.filter((market) => market !== undefined).length == 0) {
+    if (liveMarkets.filter((market) => market !== undefined).length == 0) {
       noVariablePositions = true;
     } else {
       return (<>
-        {marketsWithPosition.map((info) => {
+        {liveMarkets.map((info) => {
             if (info) {
               return (<BorrowAMMProvider amm={info.borrowAmms}>
                 <PositionProvider position={info.position}>
@@ -127,7 +127,7 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
     if (noFixedPositions || !showFixed) {
       return (
         <Typography variant="body2" sx={{...replacementRowStyle}}>
-          YOU ARE PAYING VARIABLE ONLY
+          YOU DON'T HAVE ANY FIXED DEBT
       </Typography>
       );
       }
@@ -136,7 +136,7 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
     if (noVariablePositions || !showVariable) {
       return (
         <Typography variant="body2" sx={{...replacementRowStyle}}>
-          YOU DO NOT HAVE ANY DEBT
+          YOU DON'T HAVE ANY VARIABLE DEBT
       </Typography>
       );
       }
@@ -164,7 +164,7 @@ z
           aria-labelledby="tableTitle"
           size="medium"
         >
-          <BorrowTableHead order={order} orderBy={variableOrderBy} labels={labelsVariable}/>
+          <BorrowTableHead order={order} orderBy={variableOrderBy} labels={labelsVariable} isFixedPositions={false}/>
           <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
           {renderVariableTable()}
           </TableBody>
@@ -187,7 +187,7 @@ z
           aria-labelledby="tableTitle"
           size="medium"
         >
-          <BorrowTableHead order={order} orderBy={fixedOrderBy} labels={labelsFixed}/>
+          <BorrowTableHead order={order} orderBy={fixedOrderBy} labels={labelsFixed} isFixedPositions={true}/>
           <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
           {renderFixedTable()}
         </TableBody>
