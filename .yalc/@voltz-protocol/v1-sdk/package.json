@@ -20,7 +20,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "release": "semantic-release",
-    "irs-setup": "ts-node scripts/setup.ts"
+    "irs-setup": "ts-node scripts/setup.ts",
+    "decode-error": "ts-node src/utils/errors/decodeError.ts"
   },
   "dependencies": {
     "@metamask/detect-provider": "^1.2.0",
@@ -66,5 +67,5 @@
       ]
     ]
   },
-  "yalcSig": "c32452bd2e2335aa83f9e1b649e073f4"
+  "yalcSig": "f8232f625bf426a161c1eec684c95700"
 }

@@ -23,6 +23,20 @@ import { TokenAmount } from './fractions/tokenAmount';
 import Position from './position';
 import AMM from './amm';
 
+//1. Import coingecko-api
+import CoinGecko from 'coingecko-api';
+
+//2. Initiate the CoinGecko API Client
+const CoinGeckoClient = new CoinGecko();
+
+var geckoEthToUsd = async () => {
+  let data = await CoinGeckoClient.simple.price({
+    ids: ['ethereum'],
+    vs_currencies: ['usd'],
+  });
+  return data.data.ethereum.usd;
+};
+
 
 // dynamic information about position
 
@@ -205,7 +219,13 @@ class BorrowAMM {
         const userAddress = await this.signer.getAddress();
         borrowBalance = await this.aaveVariableDebtToken.balanceOf(userAddress);
     }
+
+    if (this.amm && this.amm.isETH) {
+      const EthToUsdPrice = await geckoEthToUsd();
+      return this.descale(borrowBalance)*EthToUsdPrice;
+    }
     return this.descale(borrowBalance);
+    
   }
 
   public async getFixedBorrowBalance(position: Position): Promise<number> {
@@ -227,6 +247,12 @@ class BorrowAMM {
     // balance in Voltz
     const accruedCashFlow = await this.getAccruedCashflow(allSwaps, pastMaturity);
     const notional = this.descale(BigNumber.from(position.variableTokenBalance.toString()));
+    
+    if (this.amm && this.amm.isETH) {
+      const EthToUsdPrice = await geckoEthToUsd();
+      return (notional + accruedCashFlow)*EthToUsdPrice;
+    }
+
     return notional + accruedCashFlow;
   }
 
@@ -256,7 +282,8 @@ class BorrowAMM {
       const termEndTimestamp = (BigNumber.from(this.termEndTimestamp.toString()).div(BigNumber.from(10).pow(18))).toNumber();
       const fixedFactor = (termEndTimestamp - termStartTimestamp) / ONE_YEAR_IN_SECONDS * 0.01;
       
-      const fcMargin = -(fixedTokenBalance * fixedFactor + variableTokenBalance * variableAPYToMaturity);
+      let fcMargin = -(fixedTokenBalance * fixedFactor + variableTokenBalance * variableAPYToMaturity);
+      fcMargin = Math.round((fcMargin + Number.EPSILON) * (10 ** 16)) / 10 ** 16;
       return fcMargin > 0 ? fcMargin : 0;
     }
 }

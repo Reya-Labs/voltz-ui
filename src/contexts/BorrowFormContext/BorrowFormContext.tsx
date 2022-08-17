@@ -73,10 +73,13 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
   const [selectedVariableDebtPercentage, setSelectedVariableDebtPercentage] = useState<BorrowFormContext['selectedVariableDebtPercentage']>(undefined);
   const [margin, setMargin] = useState<number>(0);
 
+  const [validationLock, setValidationLock] = useState<boolean>(false);
+
   const tokenApprovals = useTokenApproval(amm, true);
   const { swapInfo } = useAMMContext();
   const approvalsNeeded = s.approvalsNeeded(SwapFormActions.SWAP, tokenApprovals, false);
-  const isTradeVerified = !!swapInfo.result && !swapInfo.loading && !swapInfo.errorMessage;
+  const isTradeVerified = validationLock || (!!swapInfo.result && !swapInfo.loading && !swapInfo.errorMessage 
+    && !fullyCollateralisedMarginRequirement.loading && !!fullyCollateralisedMarginRequirement.result);
 
   const { agent, onChangeAgent } = useAgent();
   useEffect(() => {
@@ -110,7 +113,7 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
       addError(err, 'margin', 'Please select fixed debt amount');
     }
 
-    if (!swapInfo.loading && lessThanEpsilon(swapInfo.result?.availableNotional, selectedFixedDebt, 0.001) === true) {
+    if (!swapInfo.loading && !fullyCollateralisedMarginRequirement.loading && lessThanEpsilon(swapInfo.result?.availableNotional, selectedFixedDebt, 0.001) === true) {
       valid = false;
       addError(err, 'margin', 'Not enough liquidity, please select lower fixed debt amount');
     }
@@ -134,14 +137,15 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
     return valid;
   };
 
+  // 4
   // Validate the form after values change
   useEffect(() => {
     if(touched.current.length) {
       void validate();
+      setValidationLock(false);
     }
   }, [
     margin, 
-    selectedFixedDebt,
     // swapInfo.result?.marginRequirement, 
     // swapInfo.result?.fee,
     isValid
@@ -158,7 +162,7 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
     if(tokenApprovals.approving) {
       return BorrowFormSubmitButtonHintStates.APPROVING;
     }
-    if (swapInfo.loading || fullyCollateralisedMarginRequirement.loading) {
+    if (validationLock || swapInfo.loading || fullyCollateralisedMarginRequirement.loading) {
       return BorrowFormSubmitButtonHintStates.CHECKING;
     }
 
@@ -206,10 +210,10 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
     if (tokenApprovals.approving) {
       return BorrowFormSubmitButtonStates.APPROVING;
     }
-    if (swapInfo.loading || fullyCollateralisedMarginRequirement.loading) {
+    if (margin != 0 && (swapInfo.loading || fullyCollateralisedMarginRequirement.loading ||
+       !swapInfo.result || !fullyCollateralisedMarginRequirement.result || validationLock) ) {
       return BorrowFormSubmitButtonStates.CHECKING;
     }
-
    
     if (!tokenApprovals.underlyingTokenApprovedForPeriphery) {
       return BorrowFormSubmitButtonStates.APPROVE_UT_PERIPHERY;
@@ -246,6 +250,7 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
     setSelectedVariableDebtPercentage(100 - value);
   }
 
+  // 2
   useEffect(() => {
     if (swapInfo.loading || (swapInfo.result === null) || (swapInfo.result === undefined)) {
       return;
@@ -259,6 +264,7 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
     
   }, [swapInfo.loading, swapInfo.result]);
 
+  // 3
   useEffect(() => {
     if (fullyCollateralisedMarginRequirement.loading || (fullyCollateralisedMarginRequirement.result === null) || (fullyCollateralisedMarginRequirement.result === undefined)) {
       return;
@@ -271,16 +277,23 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
     }
   }, [fullyCollateralisedMarginRequirement.loading, fullyCollateralisedMarginRequirement.result]);
 
+  // 1
   useEffect(() => {
-    if (!approvalsNeeded && !isUndefined(selectedFixedDebt) && selectedFixedDebt !== 0) {
-      swapInfo.call({ 
-        position,
-        margin,
-        notional: selectedFixedDebt, 
-        type: GetInfoType.NORMAL_SWAP,
-        fixedLow: 0.001,
-        fixedHigh: 990
-      });
+    if (!approvalsNeeded && !isUndefined(selectedFixedDebt)) {
+      if ( selectedFixedDebt === 0) {
+        setMargin(0);
+      } else {
+        setValidationLock(true);
+        swapInfo.call({ 
+          position,
+          margin,
+          notional: selectedFixedDebt, 
+          type: GetInfoType.NORMAL_SWAP,
+          fixedLow: 0.001,
+          fixedHigh: 990
+        });
+      }
+      
     }
   }, [selectedFixedDebt]);
 

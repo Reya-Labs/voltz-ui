@@ -35,53 +35,52 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var ethers_1 = require("ethers");
 var constants_1 = require("../constants");
 var typechain_1 = require("../typechain");
 var price_1 = require("./fractions/price");
 var tokenAmount_1 = require("./fractions/tokenAmount");
-//1. Import coingecko-api
-var coingecko_api_1 = __importDefault(require("coingecko-api"));
-//2. Initiate the CoinGecko API Client
-var CoinGeckoClient = new coingecko_api_1.default();
-var geckoEthToUsd = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var data;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, CoinGeckoClient.simple.price({
-                    ids: ['ethereum'],
-                    vs_currencies: ['usd'],
-                })];
-            case 1:
-                data = _a.sent();
-                return [2 /*return*/, data.data.ethereum.usd];
-        }
-    });
-}); };
 var BorrowAMM = /** @class */ (function () {
     function BorrowAMM(_a) {
-        var id = _a.id, amm = _a.amm;
-        var _b;
-        this.underlyingDebt = 0;
-        this.variableDebt = 0;
-        this.fixedDebt = 0;
-        this.aggregatedDebt = 0;
+        var id = _a.id, signer = _a.signer, provider = _a.provider, environment = _a.environment, factoryAddress = _a.factoryAddress, marginEngineAddress = _a.marginEngineAddress, rateOracle = _a.rateOracle, termStartTimestamp = _a.termStartTimestamp, termEndTimestamp = _a.termEndTimestamp, underlyingToken = _a.underlyingToken, tick = _a.tick, tickSpacing = _a.tickSpacing;
+        var _this = this;
         this.id = id;
-        this.signer = amm.signer;
-        this.provider = amm.provider || ((_b = amm.signer) === null || _b === void 0 ? void 0 : _b.provider);
-        this.environment = amm.environment;
-        this.rateOracle = amm.rateOracle;
-        this.termStartTimestamp = amm.termStartTimestamp;
-        this.termEndTimestamp = amm.termEndTimestamp;
-        this.underlyingToken = amm.underlyingToken;
-        this.amm = amm;
+        this.signer = signer;
+        this.provider = provider || (signer === null || signer === void 0 ? void 0 : signer.provider);
+        this.environment = environment;
+        this.factoryAddress = factoryAddress;
+        this.marginEngineAddress = marginEngineAddress;
+        this.rateOracle = rateOracle;
+        this.termStartTimestamp = termStartTimestamp;
+        this.termEndTimestamp = termEndTimestamp;
+        this.underlyingToken = underlyingToken;
+        this.tickSpacing = tickSpacing;
+        this.tick = tick;
         var protocolId = this.rateOracle.protocolId;
         if (protocolId !== 6 && protocolId !== 5) {
             throw new Error("Not a borrow market");
+        }
+        if (signer) {
+            if (protocolId === 6) {
+                var compoundRateOracle = typechain_1.ICompoundRateOracle__factory.connect(this.rateOracle.id, signer);
+                var cTokenAddress = compoundRateOracle.ctoken().then(function (cTokenAddress) {
+                    _this.cToken = typechain_1.ICToken__factory.connect(cTokenAddress, signer);
+                });
+            }
+            else {
+                var aaveRateOracle = typechain_1.IAaveRateOracle__factory.connect(this.rateOracle.id, signer);
+                aaveRateOracle.aaveLendingPool().then(function (lendingPoolAddress) {
+                    var lendingPool = typechain_1.IAaveV2LendingPool__factory.connect(lendingPoolAddress, signer);
+                    if (!_this.underlyingToken.id) {
+                        throw new Error('missing underlying token address');
+                    }
+                    lendingPool.getReserveData(_this.underlyingToken.id).then(function (reserve) {
+                        var variableDebtTokenAddress = reserve.variableDebtTokenAddress;
+                        _this.aaveVariableDebtToken = typechain_1.IERC20Minimal__factory.connect(variableDebtTokenAddress, signer);
+                    });
+                });
+            }
         }
     }
     // scale/descale according to underlying token
@@ -101,9 +100,6 @@ var BorrowAMM = /** @class */ (function () {
     };
     BorrowAMM.prototype.getAllSwaps = function (position) {
         var allSwaps = [];
-        if (position === undefined) {
-            return allSwaps;
-        }
         for (var _i = 0, _a = position.swaps; _i < _a.length; _i++) {
             var s = _a[_i];
             allSwaps.push({
@@ -175,78 +171,73 @@ var BorrowAMM = /** @class */ (function () {
             });
         });
     };
+    // get user's borrow balance in underlying protocol
+    // public async getActualBorrowBalance(position: Position): Promise<number> {
+    //   if (!this.signer) {
+    //       throw new Error('Wallet not connected');
+    //   }
+    //   if (!this.provider) {
+    //       throw new Error('Blockchain not connected');
+    //   }
+    //   const protocolId = this.rateOracle.protocolId;
+    //   // last updated balance in underlying protocol
+    //   let borrowBalance = BigNumber.from(0);
+    //   if (this.cToken) { // compound
+    //       const userAddress = await this.signer.getAddress();
+    //       borrowBalance = await this.cToken.callStatic.borrowBalanceCurrent(userAddress);
+    //   } else if ( this.aaveVariableDebtToken ) { // aave
+    //       const userAddress = await this.signer.getAddress();
+    //       borrowBalance = await this.aaveVariableDebtToken.balanceOf(userAddress);
+    //   }
+    //   const allSwaps = this.getAllSwaps(position);
+    //   // is past maturity?
+    //   const lastBlock = await this.provider.getBlockNumber();
+    //   const lastBlockTimestamp = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
+    //   const pastMaturity = (BigNumber.from(this.termEndTimestamp.toString())).lt(lastBlockTimestamp.mul(BigNumber.from(10).pow(18)));
+    //   // balance in Voltz
+    //   const accruedCashFlow = await this.getAccruedCashflow(allSwaps, pastMaturity);
+    //   const notional = BigNumber.from(position.marginInScaledYieldBearingTokens.toString()).toNumber();
+    //   const actualBalance = this.descale(borrowBalance) - notional - accruedCashFlow;
+    //   return actualBalance;
+    // }
     BorrowAMM.prototype.getUnderlyingBorrowBalance = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var protocolId, compoundRateOracle, cTokenAddress, aaveRateOracle, lendingPoolAddress, lendingPool, reserve, variableDebtTokenAddress, borrowBalance, userAddress, userAddress, EthToUsdPrice;
+            var borrowBalance, userAddress, userAddress;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         if (!this.signer) {
                             throw new Error('Wallet not connected');
                         }
-                        protocolId = this.rateOracle.protocolId;
-                        if (!(protocolId === 6 && !this.cToken)) return [3 /*break*/, 2];
-                        compoundRateOracle = typechain_1.CompoundBorrowRateOracle__factory.connect(this.rateOracle.id, this.signer);
-                        return [4 /*yield*/, compoundRateOracle.ctoken()];
-                    case 1:
-                        cTokenAddress = _a.sent();
-                        this.cToken = typechain_1.ICToken__factory.connect(cTokenAddress, this.signer);
-                        return [3 /*break*/, 5];
-                    case 2:
-                        if (!(protocolId === 5 && !this.aaveVariableDebtToken)) return [3 /*break*/, 5];
-                        aaveRateOracle = typechain_1.AaveBorrowRateOracle__factory.connect(this.rateOracle.id, this.signer);
-                        return [4 /*yield*/, aaveRateOracle.aaveLendingPool()];
-                    case 3:
-                        lendingPoolAddress = _a.sent();
-                        lendingPool = typechain_1.IAaveV2LendingPool__factory.connect(lendingPoolAddress, this.signer);
-                        if (!this.underlyingToken.id) {
-                            throw new Error('missing underlying token address');
-                        }
-                        return [4 /*yield*/, lendingPool.getReserveData(this.underlyingToken.id)];
-                    case 4:
-                        reserve = _a.sent();
-                        variableDebtTokenAddress = reserve.variableDebtTokenAddress;
-                        this.aaveVariableDebtToken = typechain_1.IERC20Minimal__factory.connect(variableDebtTokenAddress, this.signer);
-                        _a.label = 5;
-                    case 5:
                         borrowBalance = ethers_1.BigNumber.from(0);
-                        if (!this.cToken) return [3 /*break*/, 8];
+                        if (!this.cToken) return [3 /*break*/, 3];
                         return [4 /*yield*/, this.signer.getAddress()];
-                    case 6:
+                    case 1:
                         userAddress = _a.sent();
                         return [4 /*yield*/, this.cToken.callStatic.borrowBalanceCurrent(userAddress)];
-                    case 7:
+                    case 2:
                         borrowBalance = _a.sent();
-                        return [3 /*break*/, 11];
-                    case 8:
-                        if (!this.aaveVariableDebtToken) return [3 /*break*/, 11];
+                        return [3 /*break*/, 6];
+                    case 3:
+                        if (!this.aaveVariableDebtToken) return [3 /*break*/, 6];
                         return [4 /*yield*/, this.signer.getAddress()];
-                    case 9:
+                    case 4:
                         userAddress = _a.sent();
                         return [4 /*yield*/, this.aaveVariableDebtToken.balanceOf(userAddress)];
-                    case 10:
+                    case 5:
                         borrowBalance = _a.sent();
-                        _a.label = 11;
-                    case 11:
-                        if (!(this.amm && this.amm.isETH)) return [3 /*break*/, 13];
-                        return [4 /*yield*/, geckoEthToUsd()];
-                    case 12:
-                        EthToUsdPrice = _a.sent();
-                        return [2 /*return*/, this.descale(borrowBalance) * EthToUsdPrice];
-                    case 13: return [2 /*return*/, this.descale(borrowBalance)];
+                        _a.label = 6;
+                    case 6: return [2 /*return*/, this.descale(borrowBalance)];
                 }
             });
         });
     };
     BorrowAMM.prototype.getFixedBorrowBalance = function (position) {
         return __awaiter(this, void 0, void 0, function () {
-            var allSwaps, lastBlock, lastBlockTimestamp, _a, _b, pastMaturity, accruedCashFlow, notional, EthToUsdPrice;
+            var allSwaps, lastBlock, lastBlockTimestamp, _a, _b, pastMaturity, accruedCashFlow, notional;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
-                        if (position === undefined) {
-                            return [2 /*return*/, 0];
-                        }
                         if (!this.provider) {
                             throw new Error('Blockchain not connected');
                         }
@@ -262,13 +253,8 @@ var BorrowAMM = /** @class */ (function () {
                         return [4 /*yield*/, this.getAccruedCashflow(allSwaps, pastMaturity)];
                     case 3:
                         accruedCashFlow = _c.sent();
-                        notional = this.descale(ethers_1.BigNumber.from(position.variableTokenBalance.toString()));
-                        if (!(this.amm && this.amm.isETH)) return [3 /*break*/, 5];
-                        return [4 /*yield*/, geckoEthToUsd()];
-                    case 4:
-                        EthToUsdPrice = _c.sent();
-                        return [2 /*return*/, (notional + accruedCashFlow) * EthToUsdPrice];
-                    case 5: return [2 /*return*/, notional + accruedCashFlow];
+                        notional = ethers_1.BigNumber.from(position.marginInScaledYieldBearingTokens.toString()).toNumber();
+                        return [2 /*return*/, notional + accruedCashFlow];
                 }
             });
         });
@@ -296,27 +282,8 @@ var BorrowAMM = /** @class */ (function () {
             });
         });
     };
-    BorrowAMM.prototype.getFullyCollateralisedMarginRequirement = function (fixedTokenBalance, variableTokenBalance) {
-        return __awaiter(this, void 0, void 0, function () {
-            var variableAPYToMaturity, termStartTimestamp, termEndTimestamp, fixedFactor, fcMargin;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (!this.provider) {
-                            throw new Error('Blockchain not connected');
-                        }
-                        return [4 /*yield*/, this.amm.getVariableFactor(ethers_1.BigNumber.from(this.termStartTimestamp.toString()), ethers_1.BigNumber.from(this.termEndTimestamp.toString()))];
-                    case 1:
-                        variableAPYToMaturity = _a.sent();
-                        termStartTimestamp = (ethers_1.BigNumber.from(this.termStartTimestamp.toString()).div(ethers_1.BigNumber.from(10).pow(18))).toNumber();
-                        termEndTimestamp = (ethers_1.BigNumber.from(this.termEndTimestamp.toString()).div(ethers_1.BigNumber.from(10).pow(18))).toNumber();
-                        fixedFactor = (termEndTimestamp - termStartTimestamp) / constants_1.ONE_YEAR_IN_SECONDS * 0.01;
-                        fcMargin = -(fixedTokenBalance * fixedFactor + variableTokenBalance * variableAPYToMaturity);
-                        fcMargin = Math.round((fcMargin + Number.EPSILON) * (Math.pow(10, 16))) / Math.pow(10, 16);
-                        return [2 /*return*/, fcMargin > 0 ? fcMargin : 0];
-                }
-            });
-        });
+    BorrowAMM.prototype.getVariableBorrowBalance = function (aggregatedDebt, fixedDebt) {
+        return aggregatedDebt - fixedDebt;
     };
     return BorrowAMM;
 }());
