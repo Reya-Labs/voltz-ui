@@ -6,6 +6,10 @@ import { Typography } from '@components/atomic';
 import { Button } from '@components/atomic';
 import isNull from 'lodash/isNull';
 import { isUndefined } from 'lodash';
+import { formatCurrency } from '@utilities';
+
+import Box from '@mui/material/Box';
+import { colors } from '@theme';
 
 export type CurrentMarginProps = {
   marginEdit?: boolean;
@@ -15,7 +19,13 @@ export type CurrentMarginProps = {
   onSelect: () => void;
 };
 
-const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({ marginEdit, margin, accruedCashflow, token, onSelect}) => {
+const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({ 
+  marginEdit, 
+  margin, 
+  accruedCashflow, 
+  token, 
+  onSelect
+}) => {
   const wallet = useWallet();
 
   const handleClick = () => {
@@ -26,9 +36,23 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({ marginEdit
     }
   };
 
+  const getNetMarginLabel = () => (
+    <>
+      Margin 
+      {!isUndefined(accruedCashflow) && (
+        <Box component='span' sx={{ color: accruedCashflow >= 0 ? colors.vzCustomGreen1 : colors.vzCustomRed1 }}>
+          {' '}
+          {accruedCashflow > 0 && '+'}
+          {accruedCashflow < 0 && '-'}
+          {formatCurrency(Math.abs(accruedCashflow))} {token}
+        </Box>
+      )}
+    </>
+  );
+
   return (
     <TableCell>
-      <Typography variant="body2" label={"Margin"} sx={{ fontSize: 18 }}>
+      <Typography variant="body2" label={getNetMarginLabel()} sx={{ fontSize: 18 }}>
         {!isUndefined(margin) ? `${margin.toFixed(2)} ${token}` : 'No Data'}
       </Typography>
 

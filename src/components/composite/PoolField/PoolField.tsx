@@ -18,11 +18,13 @@ const PoolField = ({agent, protocol, isBorrowing, capLoading, cap}: PoolFieldPro
         <>
           <Box component='span' sx={{ color: '#9B97AD' }}>
           POOL
-            </Box>
-            {(isBorrowing) && (<Box component='span' sx={{ color: '#FF4AA9' }}>
+          </Box>
+          {(isBorrowing) && (
+            <Box component='span' sx={{ color: '#FF4AA9' }}>
               {'  '}
               <strong>BORROWING</strong>
-            </Box>)}
+            </Box>
+          )}
         </>
       );
 
