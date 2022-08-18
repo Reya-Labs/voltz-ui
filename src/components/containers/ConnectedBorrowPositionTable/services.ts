@@ -15,7 +15,7 @@ export const getTotalVariableDebt = async (borrowAmms: AugmentedBorrowAMM[], pos
     if (positions && positions.length !== 0) {
       for (const p of positions) {
         if(b.amm && p.amm.id == b.amm.id && DateTime.now() < b.amm.endDateTime) {
-          const varDebt = await b.getAggregatedBorrowBalance(p);
+          const varDebt = await b.getAggregatedBorrowBalanceInUSD(p);
           countVariablePositions += ((varDebt == 0 ) ? 0 : 1);
           sum += varDebt;
           hasPosition = true;
@@ -25,7 +25,7 @@ export const getTotalVariableDebt = async (borrowAmms: AugmentedBorrowAMM[], pos
     
     if (!hasPosition) {
       if(b.amm && DateTime.now() < b.amm.endDateTime) {
-        const varDebt = await b.getUnderlyingBorrowBalance();
+        const varDebt = await b.getUnderlyingBorrowBalanceInUSD();
         countVariablePositions += ((varDebt == 0 ) ? 0 : 1);
         sum += varDebt;
       }
@@ -41,7 +41,7 @@ export const getTotalFixedDebt = async (borrowAmms: AugmentedBorrowAMM[], positi
     if (p.positionType == 2) {
       for (const b of borrowAmms) {
         if(b.amm && p.amm.id == b.amm.id && DateTime.now() < b.amm.endDateTime) {
-          const fixDebt = await b.getFixedBorrowBalance(p);
+          const fixDebt = await b.getFixedBorrowBalanceInUSD(p);
           countFixedPositions += ((fixDebt == 0 ) ? 0 : 1);
           sum += fixDebt;
         }

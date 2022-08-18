@@ -219,13 +219,8 @@ class BorrowAMM {
         const userAddress = await this.signer.getAddress();
         borrowBalance = await this.aaveVariableDebtToken.balanceOf(userAddress);
     }
-
-    if (this.amm && this.amm.isETH) {
-      const EthToUsdPrice = await geckoEthToUsd();
-      return this.descale(borrowBalance)*EthToUsdPrice;
-    }
     return this.descale(borrowBalance);
-    
+
   }
 
   public async getFixedBorrowBalance(position: Position): Promise<number> {
@@ -247,11 +242,6 @@ class BorrowAMM {
     // balance in Voltz
     const accruedCashFlow = await this.getAccruedCashflow(allSwaps, pastMaturity);
     const notional = this.descale(BigNumber.from(position.variableTokenBalance.toString()));
-    
-    if (this.amm && this.amm.isETH) {
-      const EthToUsdPrice = await geckoEthToUsd();
-      return (notional + accruedCashFlow)*EthToUsdPrice;
-    }
 
     return notional + accruedCashFlow;
   }
@@ -268,23 +258,52 @@ class BorrowAMM {
     }
   }
 
-  public async getFullyCollateralisedMarginRequirement(fixedTokenBalance: number, variableTokenBalance: number): Promise<number> {
-      if (!this.provider) {
-        throw new Error('Blockchain not connected');
-      }
-
-      const variableAPYToMaturity = await this.amm.getVariableFactor(
-        BigNumber.from(this.termStartTimestamp.toString()), 
-        BigNumber.from(this.termEndTimestamp.toString())
-      );
-
-      const termStartTimestamp = (BigNumber.from(this.termStartTimestamp.toString()).div(BigNumber.from(10).pow(18))).toNumber();
-      const termEndTimestamp = (BigNumber.from(this.termEndTimestamp.toString()).div(BigNumber.from(10).pow(18))).toNumber();
-      const fixedFactor = (termEndTimestamp - termStartTimestamp) / ONE_YEAR_IN_SECONDS * 0.01;
-      
-      const fcMargin = -(fixedTokenBalance * fixedFactor + variableTokenBalance * variableAPYToMaturity);
-      return fcMargin > 0 ? fcMargin : 0;
+  public async getFullyCollateralisedMarginRequirement(fixedTokenBalance: number, variableTokenBalance: number, fee: number): Promise<number> {
+    if (!this.provider) {
+      throw new Error('Blockchain not connected');
     }
+
+    const variableAPYToMaturity = await this.amm.getVariableFactor(
+      BigNumber.from(this.termStartTimestamp.toString()), 
+      BigNumber.from(this.termEndTimestamp.toString())
+    );
+
+    const termStartTimestamp = (BigNumber.from(this.termStartTimestamp.toString()).div(BigNumber.from(10).pow(18))).toNumber();
+    const termEndTimestamp = (BigNumber.from(this.termEndTimestamp.toString()).div(BigNumber.from(10).pow(18))).toNumber();
+    const fixedFactor = (termEndTimestamp - termStartTimestamp) / ONE_YEAR_IN_SECONDS * 0.01;
+    
+    let fcMargin = -(fixedTokenBalance * fixedFactor + variableTokenBalance * variableAPYToMaturity);
+    fcMargin = (fcMargin + fee) * 1.01;
+    return fcMargin > 0 ? fcMargin : 0;
+  }
+  
+  public async getFixedBorrowBalanceInUSD(position: Position): Promise<number> {
+    const balanceInTokens = await this.getFixedBorrowBalance(position);
+    if (this.amm && this.amm.isETH) {
+      const EthToUsdPrice = await geckoEthToUsd();
+      return balanceInTokens*EthToUsdPrice;
+    }
+    return balanceInTokens;
+  }
+
+  public async getUnderlyingBorrowBalanceInUSD(): Promise<number> {
+    const balanceInTokens = await this.getUnderlyingBorrowBalance();
+    if (this.amm && this.amm.isETH) {
+      const EthToUsdPrice = await geckoEthToUsd();
+      return balanceInTokens*EthToUsdPrice;
+    }
+    return balanceInTokens;
+  }
+
+  public async getAggregatedBorrowBalanceInUSD(position: Position): Promise<number> {
+    const balanceInTokens = await this.getAggregatedBorrowBalance(position);
+    if (this.amm && this.amm.isETH) {
+      const EthToUsdPrice = await geckoEthToUsd();
+      return balanceInTokens*EthToUsdPrice;
+    }
+    return balanceInTokens;
+  }
+
 }
 
 export default BorrowAMM;

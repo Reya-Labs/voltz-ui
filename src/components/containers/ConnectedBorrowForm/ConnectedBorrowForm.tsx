@@ -26,8 +26,8 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
     const transaction = { 
       agent: Agents.VARIABLE_TRADER,
       ammId: amm.id,
-      margin: Math.abs(form.margin),
-      notional: form.selectedFixedDebt as number,
+      margin: Number(Math.abs(form.margin).toFixed(5)),
+      notional: Number((form.selectedFixedDebt as number).toFixed(3)),
       partialCollateralization: true,
       fixedLow: 0.001,
       fixedHigh: 990
@@ -44,6 +44,7 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
   const handleGoBack = () => {
     const action = actions.closeTransaction(transactionId as string);
     dispatch(action);
+    form.setNotional(0);
   }
 
   const handleSubmit = () => {

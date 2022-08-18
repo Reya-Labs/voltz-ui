@@ -472,7 +472,7 @@ class AMM {
         marginDelta: '0',
       };
 
-      tempOverrides.value = ethers.utils.parseEther(margin.toString());
+      tempOverrides.value = ethers.utils.parseEther(margin.toFixed(18).toString());
     }
     else {
       const scaledMarginDelta = this.scale(margin);
@@ -602,7 +602,7 @@ class AMM {
     let tempOverrides: { value?: BigNumber, gasLimit?: BigNumber } = {};
 
     if (this.isETH && marginEth) {
-      tempOverrides.value = ethers.utils.parseEther(marginEth.toString());
+      tempOverrides.value = ethers.utils.parseEther(marginEth.toFixed(18).toString());
     }
 
     const scaledMarginDelta = this.scale(margin);
@@ -900,7 +900,7 @@ class AMM {
         marginDelta: 0, //
       };
 
-      tempOverrides.value = ethers.utils.parseEther(margin.toString());
+      tempOverrides.value = ethers.utils.parseEther(margin.toFixed(18).toString());
     }
     else {
       const scaledMarginDelta = this.scale(margin);
@@ -917,6 +917,12 @@ class AMM {
     }
 
     await peripheryContract.callStatic.swap(swapPeripheryParams, tempOverrides).catch(async (error: any) => {
+      let result = decodeInfoPostSwap(error, this.environment);
+      console.log('hi from SDK\n',
+                  'margin req: ', this.descale(result.marginRequirement), '\n',
+                  'fees: ', this.descale(result.fee), '\n',
+                  'sum: ', this.descale(result.marginRequirement) + this.descale(result.fee), '\n',
+                  'marginDelta: ', swapPeripheryParams.marginDelta, '\n');
       const errorMessage = getReadableErrorMessage(error, this.environment);
       throw new Error(errorMessage);
     });
@@ -1012,7 +1018,7 @@ class AMM {
     let tempOverrides: { value?: BigNumber, gasLimit?: BigNumber } = {};
 
     if (this.isETH && marginEth) {
-      tempOverrides.value = ethers.utils.parseEther(marginEth.toString());
+      tempOverrides.value = ethers.utils.parseEther(marginEth.toFixed(18).toString());
     }
 
     const scaledMarginDelta = this.scale(margin);
@@ -1185,7 +1191,7 @@ class AMM {
         marginDelta: 0,
       };
 
-      tempOverrides.value = ethers.utils.parseEther(margin.toString());
+      tempOverrides.value = ethers.utils.parseEther(margin.toFixed(18).toString());
     }
     else {
       const scaledMarginDelta = this.scale(margin);
@@ -1282,7 +1288,7 @@ class AMM {
     let tempOverrides: { value?: BigNumber, gasLimit?: BigNumber } = {};
 
     if (this.isETH && marginEth) {
-      tempOverrides.value = ethers.utils.parseEther(marginEth.toString());
+      tempOverrides.value = ethers.utils.parseEther(marginEth.toFixed(18).toString());
     }
 
     const scaledMarginDelta = this.scale(margin);
@@ -1428,7 +1434,7 @@ class AMM {
     let scaledMarginDelta: string;
 
     if (this.isETH && marginDelta > 0) {
-      tempOverrides.value = ethers.utils.parseEther(marginDelta.toString());
+      tempOverrides.value = ethers.utils.parseEther(marginDelta.toFixed(18).toString());
       scaledMarginDelta = "0";
     }
     else {
@@ -1960,20 +1966,13 @@ class AMM {
   }
 
   public descale(value: BigNumber): number {
-    if (this.underlyingToken.decimals <= 3) {
-      return value.toNumber() / (10 ** this.underlyingToken.decimals);
-    }
-    else {
-      return value.div(BigNumber.from(10).pow(this.underlyingToken.decimals - 3)).toNumber() / 1000;
-    }
+    return Number(ethers.utils.formatUnits(value, this.underlyingToken.decimals));
   }
 
   // descale compound tokens
 
   public descaleCompoundValue(value: BigNumber): number {
-    const scaledValue = (value.div(BigNumber.from(10).pow(this.underlyingToken.decimals)).div(BigNumber.from(10).pow(4))).toNumber() / 1000000;
-
-    return scaledValue;
+    return Number(ethers.utils.formatUnits(value, this.underlyingToken.decimals + 10));
   }
 
   // fcm approval

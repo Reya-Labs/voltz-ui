@@ -177,7 +177,7 @@ var BorrowAMM = /** @class */ (function () {
     };
     BorrowAMM.prototype.getUnderlyingBorrowBalance = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var protocolId, compoundRateOracle, cTokenAddress, aaveRateOracle, lendingPoolAddress, lendingPool, reserve, variableDebtTokenAddress, borrowBalance, userAddress, userAddress, EthToUsdPrice;
+            var protocolId, compoundRateOracle, cTokenAddress, aaveRateOracle, lendingPoolAddress, lendingPool, reserve, variableDebtTokenAddress, borrowBalance, userAddress, userAddress;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -227,20 +227,14 @@ var BorrowAMM = /** @class */ (function () {
                     case 10:
                         borrowBalance = _a.sent();
                         _a.label = 11;
-                    case 11:
-                        if (!(this.amm && this.amm.isETH)) return [3 /*break*/, 13];
-                        return [4 /*yield*/, geckoEthToUsd()];
-                    case 12:
-                        EthToUsdPrice = _a.sent();
-                        return [2 /*return*/, this.descale(borrowBalance) * EthToUsdPrice];
-                    case 13: return [2 /*return*/, this.descale(borrowBalance)];
+                    case 11: return [2 /*return*/, this.descale(borrowBalance)];
                 }
             });
         });
     };
     BorrowAMM.prototype.getFixedBorrowBalance = function (position) {
         return __awaiter(this, void 0, void 0, function () {
-            var allSwaps, lastBlock, lastBlockTimestamp, _a, _b, pastMaturity, accruedCashFlow, notional, EthToUsdPrice;
+            var allSwaps, lastBlock, lastBlockTimestamp, _a, _b, pastMaturity, accruedCashFlow, notional;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
@@ -263,12 +257,7 @@ var BorrowAMM = /** @class */ (function () {
                     case 3:
                         accruedCashFlow = _c.sent();
                         notional = this.descale(ethers_1.BigNumber.from(position.variableTokenBalance.toString()));
-                        if (!(this.amm && this.amm.isETH)) return [3 /*break*/, 5];
-                        return [4 /*yield*/, geckoEthToUsd()];
-                    case 4:
-                        EthToUsdPrice = _c.sent();
-                        return [2 /*return*/, (notional + accruedCashFlow) * EthToUsdPrice];
-                    case 5: return [2 /*return*/, notional + accruedCashFlow];
+                        return [2 /*return*/, notional + accruedCashFlow];
                 }
             });
         });
@@ -296,9 +285,9 @@ var BorrowAMM = /** @class */ (function () {
             });
         });
     };
-    BorrowAMM.prototype.getFullyCollateralisedMarginRequirement = function (fixedTokenBalance, variableTokenBalance) {
+    BorrowAMM.prototype.getFullyCollateralisedMarginRequirement = function (fixedTokenBalance, variableTokenBalance, fee) {
         return __awaiter(this, void 0, void 0, function () {
-            var variableAPYToMaturity, termStartTimestamp, termEndTimestamp, fixedFactor;
+            var variableAPYToMaturity, termStartTimestamp, termEndTimestamp, fixedFactor, fcMargin;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -312,8 +301,62 @@ var BorrowAMM = /** @class */ (function () {
                         termEndTimestamp = (ethers_1.BigNumber.from(this.termEndTimestamp.toString()).div(ethers_1.BigNumber.from(10).pow(18))).toNumber();
                         fixedFactor = (termEndTimestamp - termStartTimestamp) / constants_1.ONE_YEAR_IN_SECONDS * 0.01;
                         fcMargin = -(fixedTokenBalance * fixedFactor + variableTokenBalance * variableAPYToMaturity);
-                        fcMargin = Math.round((fcMargin + Number.EPSILON) * (Math.pow(10, 16))) / Math.pow(10, 16);
+                        fcMargin = (fcMargin + fee) * 1.01;
                         return [2 /*return*/, fcMargin > 0 ? fcMargin : 0];
+                }
+            });
+        });
+    };
+    BorrowAMM.prototype.getFixedBorrowBalanceInUSD = function (position) {
+        return __awaiter(this, void 0, void 0, function () {
+            var balanceInTokens, EthToUsdPrice;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.getFixedBorrowBalance(position)];
+                    case 1:
+                        balanceInTokens = _a.sent();
+                        if (!(this.amm && this.amm.isETH)) return [3 /*break*/, 3];
+                        return [4 /*yield*/, geckoEthToUsd()];
+                    case 2:
+                        EthToUsdPrice = _a.sent();
+                        return [2 /*return*/, balanceInTokens * EthToUsdPrice];
+                    case 3: return [2 /*return*/, balanceInTokens];
+                }
+            });
+        });
+    };
+    BorrowAMM.prototype.getUnderlyingBorrowBalanceInUSD = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var balanceInTokens, EthToUsdPrice;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.getUnderlyingBorrowBalance()];
+                    case 1:
+                        balanceInTokens = _a.sent();
+                        if (!(this.amm && this.amm.isETH)) return [3 /*break*/, 3];
+                        return [4 /*yield*/, geckoEthToUsd()];
+                    case 2:
+                        EthToUsdPrice = _a.sent();
+                        return [2 /*return*/, balanceInTokens * EthToUsdPrice];
+                    case 3: return [2 /*return*/, balanceInTokens];
+                }
+            });
+        });
+    };
+    BorrowAMM.prototype.getAggregatedBorrowBalanceInUSD = function (position) {
+        return __awaiter(this, void 0, void 0, function () {
+            var balanceInTokens, EthToUsdPrice;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.getAggregatedBorrowBalance(position)];
+                    case 1:
+                        balanceInTokens = _a.sent();
+                        if (!(this.amm && this.amm.isETH)) return [3 /*break*/, 3];
+                        return [4 /*yield*/, geckoEthToUsd()];
+                    case 2:
+                        EthToUsdPrice = _a.sent();
+                        return [2 /*return*/, balanceInTokens * EthToUsdPrice];
+                    case 3: return [2 /*return*/, balanceInTokens];
                 }
             });
         });

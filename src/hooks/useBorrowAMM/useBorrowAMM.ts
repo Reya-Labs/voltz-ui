@@ -61,12 +61,13 @@ export const useBorrowAMM = ( borrowAmm: AugmentedBorrowAMM) => {
   );
 
   const fullyCollateralisedMarginRequirement = useAsyncFunction(
-    async (args:{fixedTokenBalance: number, variableTokenBalance: number}) => {
+    async (args:{fixedTokenBalance: number, variableTokenBalance: number, fee: number}) => {
       if (borrowAmm) {
         const fcMargin = 
           await borrowAmm.getFullyCollateralisedMarginRequirement(
             args.fixedTokenBalance,
-            args.variableTokenBalance
+            args.variableTokenBalance,
+            args.fee
           );
         return fcMargin;
       }

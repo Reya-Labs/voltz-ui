@@ -222,7 +222,7 @@ var AMM = /** @class */ (function () {
                                 tickUpper: tickUpper,
                                 marginDelta: '0',
                             };
-                            tempOverrides.value = ethers_1.ethers.utils.parseEther(margin.toString());
+                            tempOverrides.value = ethers_1.ethers.utils.parseEther(margin.toFixed(18).toString());
                         }
                         else {
                             scaledMarginDelta = this.scale(margin);
@@ -331,7 +331,7 @@ var AMM = /** @class */ (function () {
                         _notional = this.scale(notional);
                         tempOverrides = {};
                         if (this.isETH && marginEth) {
-                            tempOverrides.value = ethers_1.ethers.utils.parseEther(marginEth.toString());
+                            tempOverrides.value = ethers_1.ethers.utils.parseEther(marginEth.toFixed(18).toString());
                         }
                         scaledMarginDelta = this.scale(margin);
                         mintOrBurnParams = {
@@ -585,7 +585,7 @@ var AMM = /** @class */ (function () {
                                 tickUpper: tickUpper,
                                 marginDelta: 0, //
                             };
-                            tempOverrides.value = ethers_1.ethers.utils.parseEther(margin.toString());
+                            tempOverrides.value = ethers_1.ethers.utils.parseEther(margin.toFixed(18).toString());
                         }
                         else {
                             scaledMarginDelta = this.scale(margin);
@@ -600,8 +600,10 @@ var AMM = /** @class */ (function () {
                             };
                         }
                         return [4 /*yield*/, peripheryContract.callStatic.swap(swapPeripheryParams, tempOverrides).catch(function (error) { return __awaiter(_this, void 0, void 0, function () {
-                                var errorMessage;
+                                var result, errorMessage;
                                 return __generator(this, function (_a) {
+                                    result = (0, errorHandling_1.decodeInfoPostSwap)(error, this.environment);
+                                    console.log('hi from SDK\n', 'margin req: ', this.descale(result.marginRequirement), '\n', 'fees: ', this.descale(result.fee), '\n', 'sum: ', this.descale(result.marginRequirement) + this.descale(result.fee), '\n', 'marginDelta: ', swapPeripheryParams.marginDelta, '\n');
                                     errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, this.environment);
                                     throw new Error(errorMessage);
                                 });
@@ -693,7 +695,7 @@ var AMM = /** @class */ (function () {
                         scaledNotional = this.scale(notional);
                         tempOverrides = {};
                         if (this.isETH && marginEth) {
-                            tempOverrides.value = ethers_1.ethers.utils.parseEther(marginEth.toString());
+                            tempOverrides.value = ethers_1.ethers.utils.parseEther(marginEth.toFixed(18).toString());
                         }
                         scaledMarginDelta = this.scale(margin);
                         swapPeripheryParams = {
@@ -861,7 +863,7 @@ var AMM = /** @class */ (function () {
                                 isMint: true,
                                 marginDelta: 0,
                             };
-                            tempOverrides.value = ethers_1.ethers.utils.parseEther(margin.toString());
+                            tempOverrides.value = ethers_1.ethers.utils.parseEther(margin.toFixed(18).toString());
                         }
                         else {
                             scaledMarginDelta = this.scale(margin);
@@ -953,7 +955,7 @@ var AMM = /** @class */ (function () {
                         _notional = this.scale(notional);
                         tempOverrides = {};
                         if (this.isETH && marginEth) {
-                            tempOverrides.value = ethers_1.ethers.utils.parseEther(marginEth.toString());
+                            tempOverrides.value = ethers_1.ethers.utils.parseEther(marginEth.toFixed(18).toString());
                         }
                         scaledMarginDelta = this.scale(margin);
                         mintOrBurnParams = {
@@ -1098,7 +1100,7 @@ var AMM = /** @class */ (function () {
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
                         tempOverrides = {};
                         if (this.isETH && marginDelta > 0) {
-                            tempOverrides.value = ethers_1.ethers.utils.parseEther(marginDelta.toString());
+                            tempOverrides.value = ethers_1.ethers.utils.parseEther(marginDelta.toFixed(18).toString());
                             scaledMarginDelta = "0";
                         }
                         else {
@@ -1626,17 +1628,11 @@ var AMM = /** @class */ (function () {
         return scaledValue;
     };
     AMM.prototype.descale = function (value) {
-        if (this.underlyingToken.decimals <= 3) {
-            return value.toNumber() / (Math.pow(10, this.underlyingToken.decimals));
-        }
-        else {
-            return value.div(ethers_2.BigNumber.from(10).pow(this.underlyingToken.decimals - 3)).toNumber() / 1000;
-        }
+        return Number(ethers_1.ethers.utils.formatUnits(value, this.underlyingToken.decimals));
     };
     // descale compound tokens
     AMM.prototype.descaleCompoundValue = function (value) {
-        var scaledValue = (value.div(ethers_2.BigNumber.from(10).pow(this.underlyingToken.decimals)).div(ethers_2.BigNumber.from(10).pow(4))).toNumber() / 1000000;
-        return scaledValue;
+        return Number(ethers_1.ethers.utils.formatUnits(value, this.underlyingToken.decimals + 10));
     };
     // fcm approval
     AMM.prototype.isFCMApproved = function () {
