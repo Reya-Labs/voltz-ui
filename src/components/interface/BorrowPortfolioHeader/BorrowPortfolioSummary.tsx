@@ -47,10 +47,14 @@ const BorrowPortfolioSummary = ({
         backgroundColor: isVar ? varColor : fixColor,
         height: height
       }
-    } 
+    }
+
+    const sum = percentageVariable + percentageFixed;
+    const width = (isVar ? 
+      (sum == 0 ? 100 : percentageVariable ) : percentageFixed);
 
     return {
-      width: ((isVar ? percentageVariable : percentageFixed)*0.99).toString() + '%',
+      width: (width*0.99).toString() + '%',
       backgroundColor: isVar? varColor : fixColor,
       height: height
     }

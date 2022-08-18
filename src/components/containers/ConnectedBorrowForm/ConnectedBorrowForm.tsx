@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { actions, selectors } from '@store';
 
 import { useNavigate } from 'react-router-dom';
-import { BorrowForm, PendingTransaction, SwapFormActions, SwapFormModes, SwapInfo } from '@components/interface';
+import { BorrowForm, PendingTransaction, SwapFormActions, SwapFormModes, SwapInfo, FormPanel } from '@components/interface';
 import { useAMMContext, useBorrowAMMContext, useBorrowFormContext, Agents } from '@contexts';
 
 
@@ -21,6 +21,13 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
   const navigate = useNavigate();
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
+
+  const protocol = () => {
+    if ([5,6].includes(amm.rateOracle.protocolId) ){
+      return "borrow_"+amm.protocol;
+    }
+    return amm.protocol;
+  }
 
   const getReduxAction = () => {
     const transaction = { 
@@ -42,9 +49,9 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
   };
 
   const handleGoBack = () => {
+    form.setNotional(0);
     const action = actions.closeTransaction(transactionId as string);
     dispatch(action);
-    form.setNotional(0);
   }
 
   const handleSubmit = () => {
@@ -83,6 +90,7 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
 
   return (
     <>
+      <FormPanel noBackground />
       <BorrowForm
         protocol={amm.protocol}
         startDate={amm.startDateTime}
@@ -94,7 +102,7 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
         approvalsNeeded={form.approvalsNeeded}
         isFormValid={form.isValid}
         isTradeVerified={form.isTradeVerified}
-        onCancel={handleGoBack}
+        onCancel={onReset}
         onSubmit={handleSubmit}
         tokenApprovals={form.tokenApprovals}
         variableDebt={form.variableDebt}
@@ -108,17 +116,17 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
         tradeInfoErrorMessage={form.borrowInfo.errorMessage}
         swapSummaryLoading={form.borrowInfo.loading}
       />
-      {/* <SwapInfo
-      balance={form.selectedFixedDebt}
+      <SwapInfo
+        balance={form.selectedFixedDebt}
         formAction={SwapFormActions.SWAP} 
         minRequiredMargin={form.margin}
-        mode={SwapFormModes.NEW_POSITION}
+        mode={SwapFormModes.FIX_BORROW}
         positionMargin={form.margin}
-        protocol={amm.protocol}
+        protocol={protocol()}
         swapSummary={form.borrowInfo.data}
         swapSummaryLoading={form.borrowInfo.loading}
         underlyingTokenName={amm.underlyingToken.name}
-      /> */}
+      />
     </>
   )
 }
