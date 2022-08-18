@@ -30,7 +30,6 @@ const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorrowAMMTa
   const { borrowAmms, loading, error } = useBorrowAMMs();
   const { positions, loading: loadingPos, error: errorPos } = useBorrowPositions();
   const wallet = useWallet();
-  //const { positions, loading: loadingPos, error: errorPos } = usePositions();
 
   const commonOverrides: SystemStyleObject<Theme> = {
     '& .MuiTableCell-root': {

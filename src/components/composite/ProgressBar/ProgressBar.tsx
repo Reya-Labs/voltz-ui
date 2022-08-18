@@ -7,14 +7,24 @@ type ProgressBarProps = {
   leftContent?: ReactNode;
   rightContent?: ReactNode;
   percentageComplete?: number;
+  isMaturity?:boolean;
 }
 
-export const ProgressBar = ({leftContent, rightContent, percentageComplete = 0}: ProgressBarProps) => (
+export const ProgressBar = ({leftContent, rightContent, percentageComplete = 0, isMaturity}: ProgressBarProps) => (
   <Box sx={{ width: '100%' }}>
     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+      { isMaturity && (
       <Typography variant="h6">
         {leftContent}
       </Typography>
+      )}
+      { !isMaturity && (
+      <Typography variant="body2" sx={{fontSize: 18, textTransform: "uppercase", verticalAlign: 'middle', fontWeight: 700, letterSpacing: '0.02em',lineHeight: '130%'}}>
+        <Box sx={{display:'flex', alignContent: 'center'}}>
+          {leftContent}
+        </Box> 
+      </Typography>
+      )}
       <Typography variant="h6" sx={{marginLeft: (theme) => theme.spacing(5)}}>
         {rightContent}
       </Typography>

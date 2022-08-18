@@ -8,8 +8,8 @@ import { Button } from '@components/atomic';
 import { useWallet } from '@hooks';
 import { BorrowAMMTableDatum, labelsVariable, labelsFixed } from '../../types';
 import { BorrowVariableAPY, BorrowFixedAPR, Debt, BorrowMaturity } from './components';
-import Pool from './components/Pool/Pool';
 import { useBorrowAMMContext, usePositionContext } from '@contexts';
+import { PoolField } from '@components/composite';
 
 export type BorrowTableRowProps = {
   datum: BorrowAMMTableDatum;
@@ -103,7 +103,10 @@ const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({ datum, i
             }
             if (field === 'protocol') {
               // modify to show svgs
-              return <Pool underlying={datum.protocol}/>;
+              return (
+              <TableCell key={"protocol"} width="35%" >
+                <PoolField protocol={datum.protocol} isBorrowing={false} capLoading={false} cap={null} isBorrowTable={true}/>
+              </TableCell>);
             }
             if (field === 'maturity') {
               return <BorrowMaturity/>;
