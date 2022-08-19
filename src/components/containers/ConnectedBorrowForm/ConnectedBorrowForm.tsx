@@ -26,8 +26,8 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
     const transaction = { 
       agent: Agents.VARIABLE_TRADER,
       ammId: amm.id,
-      margin: Number(Math.abs(form.margin).toFixed(5)),
-      notional: Number((form.selectedFixedDebt as number).toFixed(3)),
+      margin: Number(Math.abs(form.margin)),
+      notional: Number((form.selectedFixedDebt as number)),
       partialCollateralization: true,
       fixedLow: 0.001,
       fixedHigh: 990
@@ -107,6 +107,7 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
         margin={form.margin}
         tradeInfoErrorMessage={form.borrowInfo.errorMessage}
         swapSummaryLoading={form.borrowInfo.loading}
+        balance={form.balance}
       />
       {/* <SwapInfo
       balance={form.selectedFixedDebt}

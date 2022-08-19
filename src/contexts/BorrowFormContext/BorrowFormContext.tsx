@@ -1,4 +1,4 @@
-import { GetInfoType, useAgent, UseAsyncFunctionResult, useTokenApproval } from '@hooks';
+import { GetInfoType, useAgent, UseAsyncFunctionResult, useBalance, useTokenApproval } from '@hooks';
 import { hasEnoughUnderlyingTokens, lessThan, lessThanEpsilon } from '@utilities';
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { Agents, useAMMContext, useBorrowAMMContext, usePositionContext } from "@contexts";
@@ -54,6 +54,7 @@ export type BorrowFormContext = {
     errorMessage?: string;
     loading: boolean;
   }
+  balance: number;
 };
 
 const borrowFormCtx = createContext<BorrowFormContext>({} as unknown as BorrowFormContext);
@@ -62,10 +63,10 @@ borrowFormCtx.displayName = 'BorrowFormContext';
 export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps> = ({
   children
 }) => {
-  const { amm : borrowAmm } = useBorrowAMMContext();
   const { amm } = useAMMContext();
   const { position } = usePositionContext();
   const { variableDebt, fullyCollateralisedMarginRequirement } = useBorrowAMMContext();
+  const balance = useBalance(amm, undefined);
 
   const [selectedFixedDebt, setSelectedFixedDebt] = useState<BorrowFormContext['selectedFixedDebt']>(undefined);
   const [selectedFixedDebtPercentage, setSelectedFixedDebtPercentage] = useState<BorrowFormContext['selectedFixedDebtPercentage']>(undefined);
@@ -341,7 +342,8 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
       data: swapInfo.result || undefined,
       errorMessage: swapInfo.errorMessage || (fullyCollateralisedMarginRequirement.errorMessage || undefined),
       loading: isTradeInfoLoading
-    }
+    },
+    balance: balance
   }
   
   return <borrowFormCtx.Provider value={value}>{children}</borrowFormCtx.Provider>;
