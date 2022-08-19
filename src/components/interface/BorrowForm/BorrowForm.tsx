@@ -17,6 +17,8 @@ import TableRow from '@mui/material/TableRow';
 import { VariableAPY, FixedAPR, MaturityEndDate, FixBorrow, FixBorrowSlider } from './components';
 import { Stack } from '@mui/material';
 import { BorrowFormSubmitButtonHintStates, BorrowFormSubmitButtonStates, SwapFormSubmitButtonHintStates } from '@contexts';
+import { formatCurrency } from '@utilities';
+import { isUndefined } from 'lodash';
 
 export type BorrowProps = {
   protocol?: string;
@@ -42,6 +44,7 @@ export type BorrowProps = {
   submitButtonState: BorrowFormSubmitButtonStates;
   margin: number;
   swapSummaryLoading: boolean;
+  balance: number;
 };
 
 const BorrowForm: React.FunctionComponent<BorrowProps> = ({
@@ -67,10 +70,25 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
   hintState,
   submitButtonState,
   margin,
-  swapSummaryLoading
+  swapSummaryLoading,
+  balance
 }) => {
   const bottomSpacing: SystemStyleObject<Theme> = {
     marginBottom: (theme) => theme.spacing(6)
+  }
+
+  let formattedBalance;
+  if (protocol?.toUpperCase().includes('ETH')) {
+    formattedBalance = formatCurrency(balance, false, false, 6, 6);
+  } else {
+    formattedBalance = formatCurrency(balance);
+  }
+
+  let formattedMargin;
+  if (protocol?.toUpperCase().includes('ETH')) {
+    formattedMargin = formatCurrency(margin, false, false, 6, 6);
+  } else {
+    formattedMargin = formatCurrency(margin);
   }
 
   return (
@@ -106,8 +124,8 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
           suffix={<InputTokenLabel tokenName={underlyingTokenName || ''} />}
           suffixPadding={90}
           label={<IconLabel label={"margin required to fix rate"} icon="information-circle" info={"To be added."} />}
-          value={margin}
-          subtext={`BALANCE: 0`}
+          value={formattedMargin}
+          subtext={`WALLET BALANCE: ${formattedBalance}`}
           disabled={true}
           error={!!errors['margin']}
           errorText={errors['margin']}

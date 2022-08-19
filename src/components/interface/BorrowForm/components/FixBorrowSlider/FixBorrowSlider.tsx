@@ -1,5 +1,5 @@
 import { Typography } from '@components/atomic';
-import { Slider, Stack, TableRow } from '@mui/material';
+import { Stack, TableRow } from '@mui/material';
 import TableCell from '@mui/material/TableCell';
 
 import { formatCurrency, formatNumber } from '@utilities';
@@ -7,9 +7,15 @@ import { upperCase } from 'lodash';
 
 import { IconLabel } from '@components/composite';
 import { Box } from '@mui/system';
+import { SystemStyleObject, Theme } from '@theme';
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { UseAsyncFunctionResult } from '@hooks';
+
+import Slider, { SliderThumb } from '@mui/material/Slider';
+import { styled } from '@mui/material/styles';
+
+import { ReactComponent as ThumbComponent } from './thumb.svg';
 
 export type FixBorrowSliderProps = {
   variableDebt: UseAsyncFunctionResult<unknown, number | void>;
@@ -38,6 +44,41 @@ const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
     }
   };
 
+  const colorStyleOverrides = (): SystemStyleObject<Theme> => {
+    return {
+      // '& .MuiSlider-thumb': {
+      //   height: 27,
+      //   width: 27,
+      //   border: '1px solid currentColor',
+      //   '&:hover': {
+      //     boxShadow: '0 0 0 8px rgba(58, 133, 137, 0.16)',
+      //   }
+      // },
+      '& .MuiSlider-rail': {
+        background: '#002BB1',
+        height: 20,
+      },
+      '& .MuiSlider-track': {
+        background: "#009AB3",
+        height: 20
+      },
+      '& .MuiSlider-mark': {
+        opacity: 0
+      }
+    };
+  };
+
+  interface AirbnbThumbComponentProps extends React.HTMLAttributes<unknown> {}
+
+  function AirbnbThumbComponent(props: AirbnbThumbComponentProps) {
+    const { children, ...other } = props;
+    return (
+      <SliderThumb {...other}>
+        <ThumbComponent/>
+      </SliderThumb>
+    );
+  }
+  
   return (
     <Box>
       <Stack>
@@ -63,14 +104,16 @@ const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
       </Stack>
 
       <Slider
+        // components={{ Thumb: AirbnbThumbComponent }}
         defaultValue={0}
-        valueLabelDisplay="auto"
+        // valueLabelDisplay="auto"
         step={2.5}
         marks
         min={0}
         max={100}
         onChangeCommitted={handleChangeCommitted}
         disabled={variableDebt.loading || swapSummaryLoading}
+        sx={{ ...colorStyleOverrides() }}
       />
     </Box>
   );
