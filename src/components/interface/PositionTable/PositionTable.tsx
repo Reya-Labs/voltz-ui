@@ -5,7 +5,7 @@ import TableBody from '@mui/material/TableBody';
 import { colors, SystemStyleObject, Theme } from '@theme';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 
-import { AugmentedAMM, data, findCurrentAmm, findCurrentPosition } from '@utilities';
+import { AugmentedAMM, data, findCurrentAmm } from '@utilities';
 import { Panel } from '@components/atomic';
 import { PositionTableFields } from './types';
 import { PositionTableHead, PositionTableRow } from './components';
