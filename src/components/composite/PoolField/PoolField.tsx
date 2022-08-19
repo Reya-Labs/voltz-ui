@@ -5,12 +5,14 @@ import CustomPoolField from './CustomPoolField';
 import { isNumber } from 'lodash';
 import { Typography } from '@components/atomic';
 
-import { ReactComponent as Aave } from './aave-ico.svg';
-import { ReactComponent as Compound } from './compound-ico.svg';
-import { ReactComponent as DAI } from './dai-ico.svg';
-import { ReactComponent as USDC } from './usdc-ico.svg';
-import { ReactComponent as USDT } from './usdt-ico.svg';
-import { ReactComponent as ETH } from './eth-ico.svg';
+import { ReactComponent as Aave } from './aave-icon.svg';
+import { ReactComponent as Compound } from './compound-icon.svg';
+import { ReactComponent as Lido } from './lido-icon.svg';
+import { ReactComponent as Rocket } from './rocket-icon.svg';
+import { ReactComponent as DAI } from './dai-icon.svg';
+import { ReactComponent as USDC } from './usdc-icon.svg';
+import { ReactComponent as USDT } from './usdt-icon.svg';
+import { ReactComponent as ETH } from './eth-icon.svg';
 
 export type PoolFieldProps = {
     agent?: Agents;
@@ -26,8 +28,10 @@ const PoolField = ({agent, protocol, isBorrowing, capLoading, cap, isBorrowTable
   const protocolIcon = () => {
     const prefix = protocol[0];
     switch(prefix) {
-        case 'c': return [" Compound", <Compound/>];
-        case 'a': return [" Aave", <Aave/>];
+        case 'c': return ["Compound", <Compound/>];
+        case 'a': return ["Aave", <Aave/>];
+        case 's': return ["Lido", <Lido/>];
+        case 'r': return ["Lido", <Rocket/>];
         default: return ['',''];
     }
   };
@@ -37,7 +41,7 @@ const PoolField = ({agent, protocol, isBorrowing, capLoading, cap, isBorrowTable
     switch(token) {
         case 'DAI': return ['DAI',<DAI/>];
         case 'USDC': return ['USDC',<USDC/>];
-        case 'ETH': return ['ETH',<DAI/>];
+        case 'ETH': return ['ETH',<ETH/>];
         case 'USDT': return ['USDT',<USDT/>];
         default: return ['','']
     }
@@ -58,13 +62,18 @@ const PoolField = ({agent, protocol, isBorrowing, capLoading, cap, isBorrowTable
       </>
     );
 
+  const renderPool = () => (
+    <Typography variant="body2" sx={{fontSize: 18, textTransform: "uppercase", verticalAlign: 'middle', fontWeight: 700, letterSpacing: '0.02em',lineHeight: '100%', marginTop: (theme) => theme.spacing(1)}}>
+      <Box sx={{display:'flex', alignItems: "center"}}>
+          <Box sx={{marginRight:(theme) => theme.spacing(-1), marginBottom: (theme) => theme.spacing(-1)}}> {protocolInfo[1]}</Box>
+          <Box sx={{marginRight:(theme) => theme.spacing(2), marginBottom: (theme) => theme.spacing(-1)}}>{tokenInfo[1]}</Box>
+          {protocolInfo[0]} - {tokenInfo[0]}
+      </Box> 
+    </Typography>
+  );
+
     if (isBorrowTable) {
-      return (
-          <Typography variant="body2" sx={{fontSize: 18, textTransform: "uppercase", verticalAlign: 'middle', fontWeight: 700, letterSpacing: '0.02em',lineHeight: '130%'}}>
-            <Box sx={{display:'flex', alignContent: 'center'}}>
-                {protocolInfo[1]}{tokenInfo[1]} &thinsp; {protocolInfo[0]} - {tokenInfo[0]}
-            </Box> 
-          </Typography>);
+      return (renderPool());
     }
 
     if (agent === Agents.LIQUIDITY_PROVIDER) {
@@ -84,11 +93,7 @@ const PoolField = ({agent, protocol, isBorrowing, capLoading, cap, isBorrowTable
         return (
           <CustomPoolField label={getPoolLabel()}>
             <Box sx={{ width: '100%' }}>
-            <Typography variant="body2" sx={{fontSize: 18, textTransform: "uppercase", verticalAlign: 'middle', fontWeight: 700, letterSpacing: '0.02em',lineHeight: '130%'}}>
-              <Box sx={{display:'flex', alignContent: 'center'}}>
-                  {protocolInfo[0]} - {tokenInfo[0]}
-              </Box> 
-            </Typography>
+            {renderPool()}
             </Box>
           </CustomPoolField>);
       }
@@ -96,7 +101,11 @@ const PoolField = ({agent, protocol, isBorrowing, capLoading, cap, isBorrowTable
       return (
         <CustomPoolField label={getPoolLabel()}>
           <ProgressBar
-            leftContent={<> {protocolInfo[0]} - {tokenInfo[0]}</>}
+            leftContent={<> 
+            <Box sx={{marginRight:(theme) => theme.spacing(-1), marginBottom: (theme) => theme.spacing(-1)}}> {protocolInfo[1]}</Box>
+            <Box sx={{marginRight:(theme) => theme.spacing(2), marginBottom: (theme) => theme.spacing(-1)}}>{tokenInfo[1]}</Box>
+            {protocolInfo[0]} - {tokenInfo[0]}
+            </>} 
             rightContent={<>{cap.toFixed(2)}% CAP</>}
             percentageComplete={cap}
           />
@@ -106,11 +115,7 @@ const PoolField = ({agent, protocol, isBorrowing, capLoading, cap, isBorrowTable
     else {
       return (
         <CustomPoolField label={getPoolLabel()}>
-          <Typography variant="body2" sx={{fontSize: 18, textTransform: "uppercase", verticalAlign: 'middle', fontWeight: 700, letterSpacing: '0.02em',lineHeight: '130%'}}>
-            <Box sx={{display:'flex', alignContent: 'center'}}>
-                {protocolInfo[1]}{tokenInfo[1]} &thinsp; {protocolInfo[0]} - {tokenInfo[0]}
-            </Box> 
-          </Typography>
+          {renderPool()}
         </CustomPoolField>);
     }
 }
