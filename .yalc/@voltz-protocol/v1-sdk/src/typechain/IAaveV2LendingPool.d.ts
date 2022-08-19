@@ -23,6 +23,7 @@ interface IAaveV2LendingPoolInterface extends ethers.utils.Interface {
   functions: {
     "getReserveData(address)": FunctionFragment;
     "getReserveNormalizedIncome(address)": FunctionFragment;
+    "getReserveNormalizedVariableDebt(address)": FunctionFragment;
     "withdraw(address,uint256,address)": FunctionFragment;
   };
 
@@ -32,6 +33,10 @@ interface IAaveV2LendingPoolInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "getReserveNormalizedIncome",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getReserveNormalizedVariableDebt",
     values: [string]
   ): string;
   encodeFunctionData(
@@ -45,6 +50,10 @@ interface IAaveV2LendingPoolInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getReserveNormalizedIncome",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getReserveNormalizedVariableDebt",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
@@ -136,6 +145,11 @@ export class IAaveV2LendingPool extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    getReserveNormalizedVariableDebt(
+      underlyingAsset: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     withdraw(
       asset: string,
       amount: BigNumberish,
@@ -178,6 +192,11 @@ export class IAaveV2LendingPool extends BaseContract {
   >;
 
   getReserveNormalizedIncome(
+    underlyingAsset: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  getReserveNormalizedVariableDebt(
     underlyingAsset: string,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
@@ -228,6 +247,11 @@ export class IAaveV2LendingPool extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getReserveNormalizedVariableDebt(
+      underlyingAsset: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     withdraw(
       asset: string,
       amount: BigNumberish,
@@ -249,6 +273,11 @@ export class IAaveV2LendingPool extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getReserveNormalizedVariableDebt(
+      underlyingAsset: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     withdraw(
       asset: string,
       amount: BigNumberish,
@@ -264,6 +293,11 @@ export class IAaveV2LendingPool extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getReserveNormalizedIncome(
+      underlyingAsset: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getReserveNormalizedVariableDebt(
       underlyingAsset: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;

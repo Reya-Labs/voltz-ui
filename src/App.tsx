@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 import { routes } from '@routes';
-import { LiquidityProvider, Trader } from './routes';
+import { LiquidityProvider, Trader, FixedBorrower } from './routes';
 import { AlphaBanner, GweiBar } from '@components/composite';
 import Box from '@mui/material/Box';
 
@@ -14,6 +14,7 @@ const App = () => (
         <Route path={routes.PORTFOLIO} element={<Trader />} />
         <Route path={routes.POOLS} element={<LiquidityProvider />} />
         <Route path={routes.LP_FARM} element={<LiquidityProvider />} />
+        {process.env.REACT_APP_FIXED_BORROW && <Route path={routes.BORROW_POS} element={<FixedBorrower />} />}
       </Route>
     </Routes>
     <Box sx={{ position: 'fixed', bottom: '0', left: '0', width: '100%' }}>

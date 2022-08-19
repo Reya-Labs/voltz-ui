@@ -9,10 +9,12 @@ import { useAMMContext } from '@contexts';
 
 export type ProtocolInformationProps = {
   protocol?: string;
+  isBorrowForm?: boolean;
 };
 
 const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = ({
-  protocol
+  protocol,
+  isBorrowForm
 }) => {
   const { amm } = useAMMContext();
   const getPoolLabel = () => (
@@ -46,8 +48,8 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
       >
         {protocol}
       </Typography>
-      <FixedAPR />
-      <VariableAPY />
+      {isBorrowForm !== true && <FixedAPR />}
+      {isBorrowForm !== true && <VariableAPY />}
     </Box>
   );
 };

@@ -62,3 +62,10 @@ export const lessThan = (a: number | undefined, b: number | undefined) => {
     return a < b;
   }
 }
+
+export const lessThanEpsilon = (a: number | undefined, b: number | undefined, eps: number) => {
+  if(!isUndefined(a) && !isUndefined(b)) {
+    return a + eps < b;
+  }
+}
+

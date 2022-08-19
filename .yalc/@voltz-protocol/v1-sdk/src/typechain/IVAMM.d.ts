@@ -27,6 +27,7 @@ interface IVAMMInterface extends ethers.utils.Interface {
     "feeGrowthGlobalX128()": FunctionFragment;
     "feeWad()": FunctionFragment;
     "fixedTokenGrowthGlobalX128()": FunctionFragment;
+    "getRateOracle()": FunctionFragment;
     "initialize(address,int24)": FunctionFragment;
     "initializeVAMM(uint160)": FunctionFragment;
     "isAlpha()": FunctionFragment;
@@ -35,6 +36,7 @@ interface IVAMMInterface extends ethers.utils.Interface {
     "maxLiquidityPerTick()": FunctionFragment;
     "mint(address,int24,int24,uint128)": FunctionFragment;
     "protocolFees()": FunctionFragment;
+    "refreshRateOracle()": FunctionFragment;
     "setFee(uint256)": FunctionFragment;
     "setFeeProtocol(uint8)": FunctionFragment;
     "setIsAlpha(bool)": FunctionFragment;
@@ -67,6 +69,10 @@ interface IVAMMInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "getRateOracle",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "initialize",
     values: [string, BigNumberish]
   ): string;
@@ -90,6 +96,10 @@ interface IVAMMInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "protocolFees",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "refreshRateOracle",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -151,6 +161,10 @@ interface IVAMMInterface extends ethers.utils.Interface {
     functionFragment: "fixedTokenGrowthGlobalX128",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "getRateOracle",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "initializeVAMM",
@@ -169,6 +183,10 @@ interface IVAMMInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "protocolFees",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "refreshRateOracle",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "setFee", data: BytesLike): Result;
@@ -349,6 +367,8 @@ export class IVAMM extends BaseContract {
 
     fixedTokenGrowthGlobalX128(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    getRateOracle(overrides?: CallOverrides): Promise<[string]>;
+
     initialize(
       __marginEngine: string,
       __tickSpacing: BigNumberish,
@@ -377,6 +397,10 @@ export class IVAMM extends BaseContract {
     ): Promise<ContractTransaction>;
 
     protocolFees(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    refreshRateOracle(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     setFee(
       _fee: BigNumberish,
@@ -482,6 +506,8 @@ export class IVAMM extends BaseContract {
 
   fixedTokenGrowthGlobalX128(overrides?: CallOverrides): Promise<BigNumber>;
 
+  getRateOracle(overrides?: CallOverrides): Promise<string>;
+
   initialize(
     __marginEngine: string,
     __tickSpacing: BigNumberish,
@@ -510,6 +536,10 @@ export class IVAMM extends BaseContract {
   ): Promise<ContractTransaction>;
 
   protocolFees(overrides?: CallOverrides): Promise<BigNumber>;
+
+  refreshRateOracle(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   setFee(
     _fee: BigNumberish,
@@ -609,6 +639,8 @@ export class IVAMM extends BaseContract {
 
     fixedTokenGrowthGlobalX128(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getRateOracle(overrides?: CallOverrides): Promise<string>;
+
     initialize(
       __marginEngine: string,
       __tickSpacing: BigNumberish,
@@ -637,6 +669,8 @@ export class IVAMM extends BaseContract {
     ): Promise<BigNumber>;
 
     protocolFees(overrides?: CallOverrides): Promise<BigNumber>;
+
+    refreshRateOracle(overrides?: CallOverrides): Promise<void>;
 
     setFee(_fee: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
@@ -922,6 +956,8 @@ export class IVAMM extends BaseContract {
 
     fixedTokenGrowthGlobalX128(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getRateOracle(overrides?: CallOverrides): Promise<BigNumber>;
+
     initialize(
       __marginEngine: string,
       __tickSpacing: BigNumberish,
@@ -950,6 +986,10 @@ export class IVAMM extends BaseContract {
     ): Promise<BigNumber>;
 
     protocolFees(overrides?: CallOverrides): Promise<BigNumber>;
+
+    refreshRateOracle(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     setFee(
       _fee: BigNumberish,
@@ -1030,6 +1070,8 @@ export class IVAMM extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getRateOracle(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     initialize(
       __marginEngine: string,
       __tickSpacing: BigNumberish,
@@ -1060,6 +1102,10 @@ export class IVAMM extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     protocolFees(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    refreshRateOracle(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     setFee(
       _fee: BigNumberish,

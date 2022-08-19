@@ -38,6 +38,7 @@ interface MarginEngineEmergencyInterface extends ethers.utils.Interface {
     "lookbackWindowInSeconds()": FunctionFragment;
     "owner()": FunctionFragment;
     "paused()": FunctionFragment;
+    "proxiableUUID()": FunctionFragment;
     "rateOracle()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "termEndTimestampWad()": FunctionFragment;
@@ -92,6 +93,10 @@ interface MarginEngineEmergencyInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "proxiableUUID",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "rateOracle",
     values?: undefined
@@ -166,6 +171,10 @@ interface MarginEngineEmergencyInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "proxiableUUID",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "rateOracle", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
@@ -197,12 +206,14 @@ interface MarginEngineEmergencyInterface extends ethers.utils.Interface {
   events: {
     "AdminChanged(address,address)": EventFragment;
     "BeaconUpgraded(address)": EventFragment;
+    "Initialized(uint8)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Upgraded(address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "AdminChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "BeaconUpgraded"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Upgraded"): EventFragment;
 }
@@ -212,6 +223,8 @@ export type AdminChangedEvent = TypedEvent<
 >;
 
 export type BeaconUpgradedEvent = TypedEvent<[string] & { beacon: string }>;
+
+export type InitializedEvent = TypedEvent<[number] & { version: number }>;
 
 export type OwnershipTransferredEvent = TypedEvent<
   [string, string] & { previousOwner: string; newOwner: string }
@@ -306,6 +319,8 @@ export class MarginEngineEmergency extends BaseContract {
 
     paused(overrides?: CallOverrides): Promise<[boolean]>;
 
+    proxiableUUID(overrides?: CallOverrides): Promise<[string]>;
+
     rateOracle(overrides?: CallOverrides): Promise<[string]>;
 
     renounceOwnership(
@@ -373,6 +388,8 @@ export class MarginEngineEmergency extends BaseContract {
   owner(overrides?: CallOverrides): Promise<string>;
 
   paused(overrides?: CallOverrides): Promise<boolean>;
+
+  proxiableUUID(overrides?: CallOverrides): Promise<string>;
 
   rateOracle(overrides?: CallOverrides): Promise<string>;
 
@@ -446,6 +463,8 @@ export class MarginEngineEmergency extends BaseContract {
 
     paused(overrides?: CallOverrides): Promise<boolean>;
 
+    proxiableUUID(overrides?: CallOverrides): Promise<string>;
+
     rateOracle(overrides?: CallOverrides): Promise<string>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
@@ -499,6 +518,14 @@ export class MarginEngineEmergency extends BaseContract {
     BeaconUpgraded(
       beacon?: string | null
     ): TypedEventFilter<[string], { beacon: string }>;
+
+    "Initialized(uint8)"(
+      version?: null
+    ): TypedEventFilter<[number], { version: number }>;
+
+    Initialized(
+      version?: null
+    ): TypedEventFilter<[number], { version: number }>;
 
     "OwnershipTransferred(address,address)"(
       previousOwner?: string | null,
@@ -566,6 +593,8 @@ export class MarginEngineEmergency extends BaseContract {
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     paused(overrides?: CallOverrides): Promise<BigNumber>;
+
+    proxiableUUID(overrides?: CallOverrides): Promise<BigNumber>;
 
     rateOracle(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -649,6 +678,8 @@ export class MarginEngineEmergency extends BaseContract {
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     paused(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    proxiableUUID(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     rateOracle(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

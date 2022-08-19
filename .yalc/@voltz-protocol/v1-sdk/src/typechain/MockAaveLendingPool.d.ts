@@ -26,7 +26,6 @@ interface MockAaveLendingPoolInterface extends ethers.utils.Interface {
     "getReserveNormalizedVariableDebt(address)": FunctionFragment;
     "initReserve(address,address)": FunctionFragment;
     "setFactorPerSecondInRay(address,uint256)": FunctionFragment;
-    "setReserveDebtToken(address,address)": FunctionFragment;
     "setReserveNormalizedIncome(address,uint256)": FunctionFragment;
     "setReserveNormalizedVariableDebt(address,uint256)": FunctionFragment;
     "withdraw(address,uint256,address)": FunctionFragment;
@@ -51,10 +50,6 @@ interface MockAaveLendingPoolInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "setFactorPerSecondInRay",
     values: [string, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setReserveDebtToken",
-    values: [string, string]
   ): string;
   encodeFunctionData(
     functionFragment: "setReserveNormalizedIncome",
@@ -87,10 +82,6 @@ interface MockAaveLendingPoolInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "setFactorPerSecondInRay",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setReserveDebtToken",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -207,12 +198,6 @@ export class MockAaveLendingPool extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    setReserveDebtToken(
-      reserveAsset: string,
-      debtToken: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     setReserveNormalizedIncome(
       _underlyingAsset: string,
       _reserveNormalizedIncome: BigNumberish,
@@ -285,12 +270,6 @@ export class MockAaveLendingPool extends BaseContract {
   setFactorPerSecondInRay(
     _underlyingAsset: string,
     _factorPerSecondInRay: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  setReserveDebtToken(
-    reserveAsset: string,
-    debtToken: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -369,12 +348,6 @@ export class MockAaveLendingPool extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setReserveDebtToken(
-      reserveAsset: string,
-      debtToken: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     setReserveNormalizedIncome(
       _underlyingAsset: string,
       _reserveNormalizedIncome: BigNumberish,
@@ -425,12 +398,6 @@ export class MockAaveLendingPool extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    setReserveDebtToken(
-      reserveAsset: string,
-      debtToken: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     setReserveNormalizedIncome(
       _underlyingAsset: string,
       _reserveNormalizedIncome: BigNumberish,
@@ -476,12 +443,6 @@ export class MockAaveLendingPool extends BaseContract {
     setFactorPerSecondInRay(
       _underlyingAsset: string,
       _factorPerSecondInRay: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setReserveDebtToken(
-      reserveAsset: string,
-      debtToken: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

@@ -21,21 +21,69 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface MockStEthInterface extends ethers.utils.Interface {
   functions: {
+    "getFee()": FunctionFragment;
+    "getInstantUpdates()": FunctionFragment;
     "getPooledEthByShares(uint256)": FunctionFragment;
+    "getlastUpdatedTimestamp()": FunctionFragment;
+    "setInstantUpdates(bool)": FunctionFragment;
+    "setLastUpdatedTimestamp(uint256)": FunctionFragment;
+    "setLastUpdatedTimestampManipulation(bool)": FunctionFragment;
     "setSharesMultiplierInRay(uint256)": FunctionFragment;
   };
 
+  encodeFunctionData(functionFragment: "getFee", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "getInstantUpdates",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "getPooledEthByShares",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getlastUpdatedTimestamp",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setInstantUpdates",
+    values: [boolean]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setLastUpdatedTimestamp",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setLastUpdatedTimestampManipulation",
+    values: [boolean]
   ): string;
   encodeFunctionData(
     functionFragment: "setSharesMultiplierInRay",
     values: [BigNumberish]
   ): string;
 
+  decodeFunctionResult(functionFragment: "getFee", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getInstantUpdates",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "getPooledEthByShares",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getlastUpdatedTimestamp",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setInstantUpdates",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setLastUpdatedTimestamp",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setLastUpdatedTimestampManipulation",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -90,35 +138,100 @@ export class MockStEth extends BaseContract {
   interface: MockStEthInterface;
 
   functions: {
+    getFee(
+      overrides?: CallOverrides
+    ): Promise<[number] & { feeBasisPoints: number }>;
+
+    getInstantUpdates(overrides?: CallOverrides): Promise<[boolean]>;
+
     getPooledEthByShares(
-      _sharesAmount: BigNumberish,
+      sharesAmount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    getlastUpdatedTimestamp(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    setInstantUpdates(
+      instantUpdates: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setLastUpdatedTimestamp(
+      lastUpdatedTimestamp: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setLastUpdatedTimestampManipulation(
+      lastUpdatedTimestampManipulation: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setSharesMultiplierInRay(
-      _sharesMultiplier: BigNumberish,
+      sharesMultiplier: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
 
+  getFee(overrides?: CallOverrides): Promise<number>;
+
+  getInstantUpdates(overrides?: CallOverrides): Promise<boolean>;
+
   getPooledEthByShares(
-    _sharesAmount: BigNumberish,
+    sharesAmount: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  getlastUpdatedTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
+
+  setInstantUpdates(
+    instantUpdates: boolean,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setLastUpdatedTimestamp(
+    lastUpdatedTimestamp: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setLastUpdatedTimestampManipulation(
+    lastUpdatedTimestampManipulation: boolean,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   setSharesMultiplierInRay(
-    _sharesMultiplier: BigNumberish,
+    sharesMultiplier: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    getFee(overrides?: CallOverrides): Promise<number>;
+
+    getInstantUpdates(overrides?: CallOverrides): Promise<boolean>;
+
     getPooledEthByShares(
-      _sharesAmount: BigNumberish,
+      sharesAmount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getlastUpdatedTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
+
+    setInstantUpdates(
+      instantUpdates: boolean,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setLastUpdatedTimestamp(
+      lastUpdatedTimestamp: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setLastUpdatedTimestampManipulation(
+      lastUpdatedTimestampManipulation: boolean,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     setSharesMultiplierInRay(
-      _sharesMultiplier: BigNumberish,
+      sharesMultiplier: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
   };
@@ -126,25 +239,69 @@ export class MockStEth extends BaseContract {
   filters: {};
 
   estimateGas: {
+    getFee(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getInstantUpdates(overrides?: CallOverrides): Promise<BigNumber>;
+
     getPooledEthByShares(
-      _sharesAmount: BigNumberish,
+      sharesAmount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getlastUpdatedTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
+
+    setInstantUpdates(
+      instantUpdates: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setLastUpdatedTimestamp(
+      lastUpdatedTimestamp: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setLastUpdatedTimestampManipulation(
+      lastUpdatedTimestampManipulation: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setSharesMultiplierInRay(
-      _sharesMultiplier: BigNumberish,
+      sharesMultiplier: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    getFee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getInstantUpdates(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     getPooledEthByShares(
-      _sharesAmount: BigNumberish,
+      sharesAmount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getlastUpdatedTimestamp(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    setInstantUpdates(
+      instantUpdates: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setLastUpdatedTimestamp(
+      lastUpdatedTimestamp: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setLastUpdatedTimestampManipulation(
+      lastUpdatedTimestampManipulation: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     setSharesMultiplierInRay(
-      _sharesMultiplier: BigNumberish,
+      sharesMultiplier: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

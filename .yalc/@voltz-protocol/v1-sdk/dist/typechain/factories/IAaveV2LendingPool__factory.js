@@ -117,6 +117,25 @@ var _abi = [
         inputs: [
             {
                 internalType: "contract IERC20Minimal",
+                name: "underlyingAsset",
+                type: "address",
+            },
+        ],
+        name: "getReserveNormalizedVariableDebt",
+        outputs: [
+            {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "contract IERC20Minimal",
                 name: "asset",
                 type: "address",
             },

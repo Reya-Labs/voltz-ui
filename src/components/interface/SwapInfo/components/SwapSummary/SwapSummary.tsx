@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { VoidFunctionComponent } from 'react';
 import SummaryPanel from '../../../../atomic/SummaryPanel/SummaryPanel';
 import { IconLabel } from '@components/composite';
 import { formatCurrency, formatNumber, roundUpDecimal } from '@utilities';
@@ -29,33 +29,84 @@ const SwapSummary: React.FunctionComponent<SwapSummaryProps> = ({ data, loading,
     }
   />;
 
-  const rows = data ? [
-    {
-      label: 'NOTIONAL AVAILABLE:', 
-      value: `${formatCurrency(Math.abs(data.availableNotional), true)} ${underlyingTokenName}`
-    },
-    {
-      label: 'AVERAGE FIXED RATE:', 
-      value: `${formatNumber(Math.abs(data.averageFixedRate))} %`
-    },
-    {
-      label: 'FEES:', 
-      value: `${formatCurrency(Math.abs(data.fee), true)} ${underlyingTokenName}`
-    },
-    {
-      label: 'ESTIMATED SLIPPAGE:', 
-      value: `${formatNumber(Math.abs(data.slippage))} %`
-    },
-    {
-      label: 'MINIMUM REQUIRED MARGIN:', 
-      value: (formAction === SwapFormActions.SWAP || formAction === SwapFormActions.UPDATE) 
-        ? `${formatCurrency(roundUpDecimal(data.marginRequirement, 4), true)} ${underlyingTokenName}` 
-        : `${formatCurrency(roundUpDecimal(data.marginRequirement, 4), true)} ${yieldBearingTokenName}`,
-      highlight: true
-    },
-  ] : undefined;
+  const notionalRow = (availableNotional: number) => {
+    return (
+      {
+        label: 'NOTIONAL AVAILABLE:', 
+        value: `${formatCurrency(Math.abs(availableNotional), true)} ${underlyingTokenName}`
+      }
+    );
+  }
 
-  return <SummaryPanel label={label} loading={loading} rows={rows} />
+  const averageRateRow = (averageFixedRate: number) => {
+    return (
+      {
+        label: 'AVERAGE FIXED RATE:', 
+        value: `${formatNumber(Math.abs(averageFixedRate))} %`
+      }
+    );
+  }
+
+  const feesRow = (fee: number) => {
+    return (
+      {
+        label: 'FEES:', 
+        value: `${formatCurrency(Math.abs(fee), true)} ${underlyingTokenName}`
+      }
+    );
+  }
+
+  const slippageRow = (slippage: number) => {
+    return (
+      {
+        label: 'ESTIMATED SLIPPAGE:', 
+        value: `${formatNumber(Math.abs(slippage))} %`
+      }
+    );
+  }
+
+  const minMarginRow = (margin: number) => {
+    return (
+      {
+        label: 'MINIMUM REQUIRED MARGIN:', 
+        value: (formAction === SwapFormActions.SWAP || formAction === SwapFormActions.UPDATE) 
+          ? `${formatCurrency(roundUpDecimal(margin, 4), true)} ${underlyingTokenName}` 
+          : `${formatCurrency(roundUpDecimal(margin, 4), true)} ${yieldBearingTokenName}`,
+        highlight: true
+      }
+    );
+  }
+
+  const borrowMarginRow = (margin: number) => {
+    return (
+      {
+        label: 'REQUIRED MARGIN:', 
+        value: `${formatCurrency(roundUpDecimal(margin, 4), true)} ${underlyingTokenName}`,
+        highlight: true
+      }
+    );
+  }
+
+  const rows = () => {
+    if (yieldBearingTokenName.substring(0,6) === "borrow") {
+      return data ?  [
+        averageRateRow(data.averageFixedRate),
+        feesRow(data.fee),
+        slippageRow(data.slippage),
+        borrowMarginRow(data.marginRequirement)
+      ] : undefined;
+    }
+    return data ?  [
+      notionalRow(data.availableNotional),
+      averageRateRow(data.averageFixedRate),
+      feesRow(data.fee),
+      slippageRow(data.slippage),
+      minMarginRow(data.marginRequirement)
+    ] : undefined;
+    
+  }
+
+  return <SummaryPanel label={label} loading={loading} rows={rows()} />
 };
 
 export default SwapSummary;

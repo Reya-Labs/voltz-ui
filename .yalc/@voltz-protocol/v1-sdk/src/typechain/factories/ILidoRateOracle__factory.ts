@@ -17,6 +17,11 @@ const _abi = [
   },
   {
     inputs: [],
+    name: "AavePoolGetReserveNormalizedVariableDebtReturnedZero",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "CTokenExchangeRateReturnedZero",
     type: "error",
   },
@@ -340,6 +345,25 @@ const _abi = [
         name: "from",
         type: "uint256",
       },
+    ],
+    name: "getApyFrom",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "apyFromTo",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "from",
+        type: "uint256",
+      },
       {
         internalType: "uint256",
         name: "to",
@@ -351,6 +375,74 @@ const _abi = [
       {
         internalType: "uint256",
         name: "apyFromTo",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getBlockSlope",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "blockChange",
+        type: "uint256",
+      },
+      {
+        internalType: "uint32",
+        name: "timeChange",
+        type: "uint32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getCurrentRateInRay",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "currentRate",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getLastRateSlope",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "rateChange",
+        type: "uint256",
+      },
+      {
+        internalType: "uint32",
+        name: "timeChange",
+        type: "uint32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_from",
+        type: "uint256",
+      },
+    ],
+    name: "getRateFrom",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
         type: "uint256",
       },
     ],
@@ -392,6 +484,19 @@ const _abi = [
     name: "increaseObservationCardinalityNext",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "lidoOracle",
+    outputs: [
+      {
+        internalType: "contract ILidoOracle",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
