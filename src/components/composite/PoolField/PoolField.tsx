@@ -31,7 +31,7 @@ const PoolField = ({agent, protocol, isBorrowing, capLoading, cap, isBorrowTable
         case 'c': return ["Compound", <Compound/>];
         case 'a': return ["Aave", <Aave/>];
         case 's': return ["Lido", <Lido/>];
-        case 'r': return ["Lido", <Rocket/>];
+        case 'r': return ["Rocket", <Rocket/>];
         default: return ['',''];
     }
   };
