@@ -61,7 +61,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     if (field === 'margin') {
       return (
         <CurrentMargin 
-          accruedCashflow={positionInfo?.accruedCashflow} 
+          accruedCashflow={(agent === Agents.LIQUIDITY_PROVIDER) ? undefined : (positionInfo?.accruedCashflow || 0)} 
           margin={positionInfo?.margin} 
           token={position.source.includes("FCM") ? position.amm.protocol : underlyingTokenName || ''} 
           onSelect={handleEditMargin} 

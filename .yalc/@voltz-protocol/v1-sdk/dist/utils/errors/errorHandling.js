@@ -184,7 +184,12 @@ var getErrorSignature = function (error, environment) {
                     reason = error.error.data;
                 }
                 else {
-                    reason = error.error.data.originalError.data;
+                    if (typeof error.error.data.originalError.data === 'string') {
+                        reason = error.error.data.originalError.data;
+                    }
+                    else {
+                        throw new Error('Unrecognized error type');
+                    }
                 }
                 if (reason.startsWith('0x08c379a0')) {
                     return 'Error';
@@ -252,7 +257,12 @@ var getReadableErrorMessage = function (error, environment) {
                     reason = error.error.data;
                 }
                 else {
-                    reason = error.error.data.originalError.data;
+                    if (typeof error.error.data.originalError.data === 'string') {
+                        reason = error.error.data.originalError.data;
+                    }
+                    else {
+                        throw new Error('Unrecognized error type');
+                    }
                 }
                 try {
                     var rawErrorMessage = ethers_1.utils.defaultAbiCoder.decode(['string'], reason)[0];
@@ -339,7 +349,12 @@ var decodeInfoPostMint = function (error, environment) {
                         reason = error.error.data;
                     }
                     else {
-                        reason = error.error.data.originalError.data;
+                        if (typeof error.error.data.originalError.data === 'string') {
+                            reason = error.error.data.originalError.data;
+                        }
+                        else {
+                            throw new Error('Unrecognized error type');
+                        }
                     }
                     var decodingResult = exports.iface.decodeErrorResult(errSig, reason);
                     var result = {
@@ -439,7 +454,12 @@ var decodeInfoPostSwap = function (error, environment) {
                         reason = error.error.data;
                     }
                     else {
-                        reason = error.error.data.originalError.data;
+                        if (typeof error.error.data.originalError.data === 'string') {
+                            reason = error.error.data.originalError.data;
+                        }
+                        else {
+                            throw new Error('Unrecognized error type');
+                        }
                     }
                     var decodingResult = exports.iface.decodeErrorResult(errSig, reason);
                     var result = {

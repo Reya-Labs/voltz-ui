@@ -1,5 +1,5 @@
 import JSBI from 'jsbi';
-import { ethers, providers } from 'ethers';
+import { BaseContract, ethers, providers } from 'ethers';
 import { DateTime } from 'luxon';
 import { BigNumber, ContractReceipt, Signer, utils } from 'ethers';
 
@@ -24,6 +24,14 @@ import {
   VAMM__factory,
   CompoundFCM,
   ICToken__factory,
+  CompoundRateOracle,
+  CompoundRateOracle__factory,
+  AaveBorrowRateOracle,
+  CompoundBorrowRateOracle,
+  AaveBorrowRateOracle__factory,
+  IAaveV2LendingPool__factory,
+  CompoundBorrowRateOracle__factory,
+  IAaveV2LendingPool
 } from '../typechain';
 import RateOracle from './rateOracle';
 import { TickMath } from '../utils/tickMath';
@@ -124,6 +132,9 @@ export type InfoPostSwap = {
   slippage: number;
   averageFixedRate: number;
   expectedApy?: number[][];
+  fixedTokenDeltaBalance: number;
+  variableTokenDeltaBalance: number;
+  fixedTokenDeltaUnbalanced: number;
 };
 
 // rollover with swap
@@ -461,7 +472,7 @@ class AMM {
         marginDelta: '0',
       };
 
-      tempOverrides.value = ethers.utils.parseEther(margin.toString());
+      tempOverrides.value = ethers.utils.parseEther(margin.toFixed(18).toString());
     }
     else {
       const scaledMarginDelta = this.scale(margin);
@@ -591,7 +602,7 @@ class AMM {
     let tempOverrides: { value?: BigNumber, gasLimit?: BigNumber } = {};
 
     if (this.isETH && marginEth) {
-      tempOverrides.value = ethers.utils.parseEther(marginEth.toString());
+      tempOverrides.value = ethers.utils.parseEther(marginEth.toFixed(18).toString());
     }
 
     const scaledMarginDelta = this.scale(margin);
@@ -774,6 +785,9 @@ class AMM {
       fee: scaledFee < 0 ? -scaledFee : scaledFee,
       slippage: fixedRateDeltaRaw < 0 ? -fixedRateDeltaRaw : fixedRateDeltaRaw,
       averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
+      fixedTokenDeltaBalance: this.descale(fixedTokenDelta),
+      variableTokenDeltaBalance: this.descale(availableNotional),
+      fixedTokenDeltaUnbalanced: this.descale(fixedTokenDeltaUnbalanced)
     };
 
     if (isNumber(margin)) {
@@ -886,7 +900,7 @@ class AMM {
         marginDelta: 0, //
       };
 
-      tempOverrides.value = ethers.utils.parseEther(margin.toString());
+      tempOverrides.value = ethers.utils.parseEther(margin.toFixed(18).toString());
     }
     else {
       const scaledMarginDelta = this.scale(margin);
@@ -903,6 +917,12 @@ class AMM {
     }
 
     await peripheryContract.callStatic.swap(swapPeripheryParams, tempOverrides).catch(async (error: any) => {
+      let result = decodeInfoPostSwap(error, this.environment);
+      console.log('hi from SDK\n',
+                  'margin req: ', this.descale(result.marginRequirement), '\n',
+                  'fees: ', this.descale(result.fee), '\n',
+                  'sum: ', this.descale(result.marginRequirement) + this.descale(result.fee), '\n',
+                  'marginDelta: ', swapPeripheryParams.marginDelta, '\n');
       const errorMessage = getReadableErrorMessage(error, this.environment);
       throw new Error(errorMessage);
     });
@@ -998,7 +1018,7 @@ class AMM {
     let tempOverrides: { value?: BigNumber, gasLimit?: BigNumber } = {};
 
     if (this.isETH && marginEth) {
-      tempOverrides.value = ethers.utils.parseEther(marginEth.toString());
+      tempOverrides.value = ethers.utils.parseEther(marginEth.toFixed(18).toString());
     }
 
     const scaledMarginDelta = this.scale(margin);
@@ -1171,7 +1191,7 @@ class AMM {
         marginDelta: 0,
       };
 
-      tempOverrides.value = ethers.utils.parseEther(margin.toString());
+      tempOverrides.value = ethers.utils.parseEther(margin.toFixed(18).toString());
     }
     else {
       const scaledMarginDelta = this.scale(margin);
@@ -1268,7 +1288,7 @@ class AMM {
     let tempOverrides: { value?: BigNumber, gasLimit?: BigNumber } = {};
 
     if (this.isETH && marginEth) {
-      tempOverrides.value = ethers.utils.parseEther(marginEth.toString());
+      tempOverrides.value = ethers.utils.parseEther(marginEth.toFixed(18).toString());
     }
 
     const scaledMarginDelta = this.scale(margin);
@@ -1414,7 +1434,7 @@ class AMM {
     let scaledMarginDelta: string;
 
     if (this.isETH && marginDelta > 0) {
-      tempOverrides.value = ethers.utils.parseEther(marginDelta.toString());
+      tempOverrides.value = ethers.utils.parseEther(marginDelta.toFixed(18).toString());
       scaledMarginDelta = "0";
     }
     else {
@@ -1604,12 +1624,14 @@ class AMM {
     let tickAfter = 0;
     let fee = BigNumber.from(0);
     let availableNotional = BigNumber.from(0);
+    let fixedTokenDelta = BigNumber.from(0);
     let fixedTokenDeltaUnbalanced = BigNumber.from(0);
 
     await fcmContract.callStatic.initiateFullyCollateralisedFixedTakerSwap(
       scaledNotional,
       sqrtPriceLimitX96
     ).then(async (result: any) => {
+      fixedTokenDelta = result[0];
       availableNotional = result[1];
       fee = result[2];
       fixedTokenDeltaUnbalanced = result[3];
@@ -1617,6 +1639,7 @@ class AMM {
     },
       (error: any) => {
         const result = decodeInfoPostSwap(error, this.environment);
+        fixedTokenDelta = result.fixedTokenDelta;
         tickAfter = result.tick;
         fee = result.fee;
         availableNotional = result.availableNotional;
@@ -1660,6 +1683,9 @@ class AMM {
       fee: scaledFee < 0 ? -scaledFee : scaledFee,
       slippage: fixedRateDeltaRaw < 0 ? -fixedRateDeltaRaw : fixedRateDeltaRaw,
       averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
+      fixedTokenDeltaBalance: this.descale(fixedTokenDelta),
+      variableTokenDeltaBalance: this.descale(availableNotional),
+      fixedTokenDeltaUnbalanced: this.descale(fixedTokenDeltaUnbalanced)
     };
   }
 
@@ -1773,12 +1799,14 @@ class AMM {
     let tickAfter = 0;
     let fee = BigNumber.from(0);
     let availableNotional = BigNumber.from(0);
+    let fixedTokenDelta = BigNumber.from(0);
     let fixedTokenDeltaUnbalanced = BigNumber.from(0);
 
     await fcmContract.callStatic.unwindFullyCollateralisedFixedTakerSwap(
       scaledNotional,
       sqrtPriceLimitX96
     ).then(async (result: any) => {
+      fixedTokenDelta = result[0];
       availableNotional = result[1];
       fee = result[2];
       fixedTokenDeltaUnbalanced = result[3];
@@ -1786,6 +1814,7 @@ class AMM {
     },
       (error: any) => {
         const result = decodeInfoPostSwap(error, this.environment);
+        fixedTokenDelta = result.fixedTokenDelta;
         tickAfter = result.tick;
         fee = result.fee;
         availableNotional = result.availableNotional;
@@ -1809,6 +1838,9 @@ class AMM {
       fee: scaledFee < 0 ? -scaledFee : scaledFee,
       slippage: fixedRateDeltaRaw < 0 ? -fixedRateDeltaRaw : fixedRateDeltaRaw,
       averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
+      fixedTokenDeltaBalance: this.descale(fixedTokenDelta),
+      variableTokenDeltaBalance: this.descale(availableNotional),
+      fixedTokenDeltaUnbalanced: this.descale(fixedTokenDeltaUnbalanced)
     };
   }
 
@@ -1934,20 +1966,13 @@ class AMM {
   }
 
   public descale(value: BigNumber): number {
-    if (this.underlyingToken.decimals <= 3) {
-      return value.toNumber() / (10 ** this.underlyingToken.decimals);
-    }
-    else {
-      return value.div(BigNumber.from(10).pow(this.underlyingToken.decimals - 3)).toNumber() / 1000;
-    }
+    return Number(ethers.utils.formatUnits(value, this.underlyingToken.decimals));
   }
 
   // descale compound tokens
 
   public descaleCompoundValue(value: BigNumber): number {
-    const scaledValue = (value.div(BigNumber.from(10).pow(this.underlyingToken.decimals)).div(BigNumber.from(10).pow(4))).toNumber() / 1000000;
-
-    return scaledValue;
+    return Number(ethers.utils.formatUnits(value, this.underlyingToken.decimals + 10));
   }
 
   // fcm approval
@@ -2953,28 +2978,32 @@ class AMM {
     const blockPerHour = 274;
 
     switch (this.rateOracle.protocolId) {
-      case 1: 
-      case 5: {
-        const lastBlock = await this.provider.getBlockNumber();
-        const oneBlockAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
-        const twoBlocksAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 2)).timestamp);
+      case 1: {
+        // old implementation based on the rate oracle
+        // const lastBlock = await this.provider.getBlockNumber();
+        // const oneBlockAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
+        // const twoBlocksAgo = BigNumber.from((await this.provider.getBlock(lastBlock - 2)).timestamp);
+        // const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
+        // const oneWeekApy = await rateOracleContract.callStatic.getApyFromTo(twoBlocksAgo, oneBlockAgo);
+        // return oneWeekApy.div(BigNumber.from(1000000000000)).toNumber() / 1000000;
 
-        const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
+        if (!this.underlyingToken.id) {
+          throw new Error('No underlying error');
+        }
 
-        const oneWeekApy = await rateOracleContract.callStatic.getApyFromTo(twoBlocksAgo, oneBlockAgo);
-
-        return oneWeekApy.div(BigNumber.from(1000000000000)).toNumber() / 1000000;
+        const rateOracleContract = AaveBorrowRateOracle__factory.connect(this.rateOracle.id, this.provider);
+        const lendingPoolAddress = await rateOracleContract.aaveLendingPool();
+        const lendingPool = IAaveV2LendingPool__factory.connect(lendingPoolAddress, this.provider);
+        const reservesData = await lendingPool.getReserveData(this.underlyingToken.id);
+        const rateInRay = reservesData.currentLiquidityRate;
+        const result = rateInRay.div(BigNumber.from(10).pow(21)).toNumber() / 1000000;
+        return result; 
       }
-
-      case 2: 
-      case 6: {
+      case 2: {
         const daysPerYear = 365;
-
-        const fcmContract = fcmCompoundFactory.connect(this.fcmAddress, this.provider);
-
-        const cTokenAddress = await (fcmContract as CompoundFCM).cToken();
+        const rateOracle = CompoundRateOracle__factory.connect(this.rateOracle.id, this.provider);
+        const cTokenAddress = await (rateOracle as CompoundRateOracle).ctoken();
         const cTokenContract = ICToken__factory.connect(cTokenAddress, this.provider);
-
         const supplyRatePerBlock = await cTokenContract.supplyRatePerBlock();
         const supplyApy = (((Math.pow((supplyRatePerBlock.toNumber() / 1e18 * blocksPerDay) + 1, daysPerYear))) - 1);
         return supplyApy;
@@ -3003,6 +3032,33 @@ class AMM {
 
         return oneWeekApy.div(BigNumber.from(1000000000000)).toNumber() / 1000000;
       }
+
+      case 5: {
+        if (!this.underlyingToken.id) {
+          throw new Error('No underlying error');
+        }
+
+        const rateOracleContract = AaveBorrowRateOracle__factory.connect(this.rateOracle.id, this.provider);
+        const lendingPoolAddress = await rateOracleContract.aaveLendingPool();
+        const lendingPool = IAaveV2LendingPool__factory.connect(lendingPoolAddress, this.provider);
+        const reservesData = await lendingPool.getReserveData(this.underlyingToken.id);
+        const rateInRay = reservesData.currentVariableBorrowRate;
+        const result = rateInRay.div(BigNumber.from(10).pow(21)).toNumber() / 1000000;
+        return result;
+      }
+
+      case 6: {
+        const daysPerYear = 365;
+
+        const rateOracle = CompoundBorrowRateOracle__factory.connect(this.rateOracle.id, this.provider);
+
+        const cTokenAddress = await (rateOracle as CompoundBorrowRateOracle).ctoken();
+        const cTokenContract = ICToken__factory.connect(cTokenAddress, this.provider);
+
+        const borrowRatePerBlock = await cTokenContract.borrowRatePerBlock();
+        const borrowApy = (((Math.pow((borrowRatePerBlock.toNumber() / 1e18 * blocksPerDay) + 1, daysPerYear))) - 1);
+        return borrowApy;
+      } 
 
       default:
         throw new Error("Unrecognized protocol");

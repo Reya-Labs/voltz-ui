@@ -77,7 +77,7 @@ const Trader: React.FunctionComponent = () => {
     <Page backgroundView={formMode ? 'none' : 'table'}>
 
       {renderMode === 'pools' && (
-        <Box sx={{ width: '100%', maxWidth: '768px', margin: '0 auto' }}>
+        <Box sx={{ width: '100%', maxWidth: '800px', margin: '0 auto' }}>
           <Box sx={{ marginBottom: (theme) => theme.spacing(12) }}>
             <PageTitleDesc 
               title='Trade Fixed or Variable Rates' 

@@ -13,6 +13,8 @@ export type NotionalAmountProps = {
   onChangeNotional: (value: number | undefined) => void;
   error?: string;
   underlyingTokenName?: string;
+  subtext?: string;
+  disabled?: boolean;
 };
 
 const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
@@ -22,7 +24,9 @@ const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
   notional,
   onChangeNotional,
   error,
-  underlyingTokenName
+  underlyingTokenName,
+  subtext,
+  disabled
 }) => {
   const value = isUndefined(notional) ? defaultNotional : notional;
 
@@ -41,6 +45,8 @@ const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
       onChange={handleChange}
       error={!!error}
       errorText={error}
+      subtext={subtext}
+      disabled={disabled}
     />
   );
 };

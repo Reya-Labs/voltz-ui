@@ -13,6 +13,11 @@ var _abi = [
     },
     {
         inputs: [],
+        name: "AavePoolGetReserveNormalizedVariableDebtReturnedZero",
+        type: "error",
+    },
+    {
+        inputs: [],
         name: "CTokenExchangeRateReturnedZero",
         type: "error",
     },
@@ -282,6 +287,19 @@ var _abi = [
     {
         inputs: [
             {
+                internalType: "contract IWETH",
+                name: "weth_",
+                type: "address",
+            },
+        ],
+        name: "initialize",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
                 internalType: "contract IVAMM",
                 name: "vamm",
                 type: "address",
@@ -363,6 +381,178 @@ var _abi = [
                 internalType: "int256",
                 name: "positionMarginRequirement",
                 type: "int256",
+            },
+        ],
+        stateMutability: "payable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "contract IMarginEngine",
+                name: "marginEngine",
+                type: "address",
+            },
+            {
+                internalType: "address",
+                name: "owner",
+                type: "address",
+            },
+            {
+                internalType: "int24",
+                name: "tickLower",
+                type: "int24",
+            },
+            {
+                internalType: "int24",
+                name: "tickUpper",
+                type: "int24",
+            },
+            {
+                components: [
+                    {
+                        internalType: "contract IMarginEngine",
+                        name: "marginEngine",
+                        type: "address",
+                    },
+                    {
+                        internalType: "int24",
+                        name: "tickLower",
+                        type: "int24",
+                    },
+                    {
+                        internalType: "int24",
+                        name: "tickUpper",
+                        type: "int24",
+                    },
+                    {
+                        internalType: "uint256",
+                        name: "notional",
+                        type: "uint256",
+                    },
+                    {
+                        internalType: "bool",
+                        name: "isMint",
+                        type: "bool",
+                    },
+                    {
+                        internalType: "int256",
+                        name: "marginDelta",
+                        type: "int256",
+                    },
+                ],
+                internalType: "struct IPeriphery.MintOrBurnParams",
+                name: "paramsNewPosition",
+                type: "tuple",
+            },
+        ],
+        name: "rolloverWithMint",
+        outputs: [
+            {
+                internalType: "int256",
+                name: "newPositionMarginRequirement",
+                type: "int256",
+            },
+        ],
+        stateMutability: "payable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "contract IMarginEngine",
+                name: "marginEngine",
+                type: "address",
+            },
+            {
+                internalType: "address",
+                name: "owner",
+                type: "address",
+            },
+            {
+                internalType: "int24",
+                name: "tickLower",
+                type: "int24",
+            },
+            {
+                internalType: "int24",
+                name: "tickUpper",
+                type: "int24",
+            },
+            {
+                components: [
+                    {
+                        internalType: "contract IMarginEngine",
+                        name: "marginEngine",
+                        type: "address",
+                    },
+                    {
+                        internalType: "bool",
+                        name: "isFT",
+                        type: "bool",
+                    },
+                    {
+                        internalType: "uint256",
+                        name: "notional",
+                        type: "uint256",
+                    },
+                    {
+                        internalType: "uint160",
+                        name: "sqrtPriceLimitX96",
+                        type: "uint160",
+                    },
+                    {
+                        internalType: "int24",
+                        name: "tickLower",
+                        type: "int24",
+                    },
+                    {
+                        internalType: "int24",
+                        name: "tickUpper",
+                        type: "int24",
+                    },
+                    {
+                        internalType: "uint256",
+                        name: "marginDelta",
+                        type: "uint256",
+                    },
+                ],
+                internalType: "struct IPeriphery.SwapPeripheryParams",
+                name: "paramsNewPosition",
+                type: "tuple",
+            },
+        ],
+        name: "rolloverWithSwap",
+        outputs: [
+            {
+                internalType: "int256",
+                name: "_fixedTokenDelta",
+                type: "int256",
+            },
+            {
+                internalType: "int256",
+                name: "_variableTokenDelta",
+                type: "int256",
+            },
+            {
+                internalType: "uint256",
+                name: "_cumulativeFeeIncurred",
+                type: "uint256",
+            },
+            {
+                internalType: "int256",
+                name: "_fixedTokenDeltaUnbalanced",
+                type: "int256",
+            },
+            {
+                internalType: "int256",
+                name: "_marginRequirement",
+                type: "int256",
+            },
+            {
+                internalType: "int24",
+                name: "_tickAfter",
+                type: "int24",
             },
         ],
         stateMutability: "payable",
@@ -544,6 +734,19 @@ var _abi = [
         name: "updatePositionMargin",
         outputs: [],
         stateMutability: "payable",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "weth",
+        outputs: [
+            {
+                internalType: "contract IWETH",
+                name: "",
+                type: "address",
+            },
+        ],
+        stateMutability: "view",
         type: "function",
     },
 ];

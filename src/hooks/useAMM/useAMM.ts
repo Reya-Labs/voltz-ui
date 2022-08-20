@@ -83,10 +83,13 @@ export const useAMM = (amm?: AugmentedAMM) => {
       switch(args.type) {
         case GetInfoType.NORMAL_SWAP: {
           result = await amm?.getInfoPostSwap({
-            ...args,
+            position: args.position,
             isFT: agent === Agents.FIXED_TRADER,
-            fixedLow: 1,
-            fixedHigh: 999,
+            notional: args.notional,
+            fixedRateLimit: args.fixedRateLimit,
+            fixedLow: args.fixedLow ?? 1,
+            fixedHigh: args.fixedHigh ?? 999,
+            margin: args.margin
           }); 
           break;
         }

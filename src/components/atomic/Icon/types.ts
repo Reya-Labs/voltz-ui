@@ -17,6 +17,7 @@ import {
   TokenEth,
   TokenLido,
   TokenUsdc,
+  TokenUsdt,
   Voltz,
   WalletConnect,
 } from './icons';
@@ -31,6 +32,7 @@ export type Icons =
   | 'token-eth'
   | 'token-lido'
   | 'token-usdc'
+  | 'token-usdt'
   | 'tx-burn'
   | 'tx-liquidation'
   | 'tx-margin-update'
@@ -54,6 +56,7 @@ export const iconMap: Record<Icons, ElementType> = {
   'token-eth': TokenEth as ElementType,
   'token-lido': TokenLido as ElementType,
   'token-usdc': TokenUsdc as ElementType,
+  'token-usdt': TokenUsdt as ElementType,
   'tx-burn': Burn as ElementType,
   'tx-liquidation': Liquidation as ElementType,
   'tx-margin-update': MarginUpdate as ElementType,

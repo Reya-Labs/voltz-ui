@@ -8,6 +8,7 @@ export enum SwapFormActions {
 };
 
 export enum SwapFormModes {
+  FIX_BORROW='FIX_BORROW',
   NEW_POSITION='NEW_POSITION',
   EDIT_MARGIN='EDIT_MARGIN',
   ROLLOVER='ROLLOVER',

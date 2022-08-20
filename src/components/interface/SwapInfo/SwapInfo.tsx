@@ -38,14 +38,11 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
 
   return (
     <FormPanel noBackground>
-      {mode !== SwapFormModes.EDIT_MARGIN && (
+      {(mode !== SwapFormModes.EDIT_MARGIN && mode !== SwapFormModes.FIX_BORROW) && (
+        <>
         <ExpectedAPY 
           expectedAPY={swapSummary?.expectedApy}
         />
-      )}
-
-      {(mode === SwapFormModes.NEW_POSITION || mode === SwapFormModes.ROLLOVER) && (swapSummary || swapSummaryLoading) && (
-        <>
           {swapSummary?.expectedApy && (
             <Box component={'hr'} sx={{ 
               border: 'none',
@@ -53,6 +50,12 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
               margin: (theme) => `${theme.spacing(4)} 0`,
             }}/>
           )}
+        </>
+        
+      )}
+
+      {(mode === SwapFormModes.NEW_POSITION || mode === SwapFormModes.ROLLOVER || mode === SwapFormModes.FIX_BORROW) && (swapSummary || swapSummaryLoading) && (
+        <>
           <Box sx={bottomSpacing}>
             <SwapSummary
               data={swapSummary} 

@@ -68,11 +68,12 @@ const usePositions = (): usePositionsResult => {
   }, [positions, agent]);
 
   const positionsByAgentGroup = useMemo(() => {
-    return positions?.filter(({ positionType }) => {
+    return positions?.filter(({ positionType, tickLower, tickUpper }) => {
       if (agent === Agents.LIQUIDITY_PROVIDER) {
         return positionType === 3;
       } else {
-        return (positionType === 1 || positionType === 2);
+        return (positionType === 1 ||
+           (positionType === 2 && (tickLower !== -69000 || tickUpper !== 69060)) );
       }
     })
     .sort((a,b) => {

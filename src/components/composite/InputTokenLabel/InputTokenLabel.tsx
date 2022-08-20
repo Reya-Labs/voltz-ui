@@ -17,6 +17,8 @@ const InputTokenLabel = ({ tokenName }:InputTokenLabelProps) => {
         return <Icon name='token-lido' sx={{ display: 'block' }} />;
       case 'USDC':
         return <Icon name='token-usdc' sx={{ display: 'block' }} />;
+      case 'USDT':
+        return <Icon name='token-usdt' sx={{ display: 'block' }} />;
       default:
         return null;
     }

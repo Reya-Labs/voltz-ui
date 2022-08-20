@@ -1,22 +1,76 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 
+import { ReactComponent as Aave } from '../PoolField/aave-icon.svg';
+import { ReactComponent as Compound } from '../PoolField/compound-icon.svg';
+import { ReactComponent as Lido } from '../PoolField/lido-icon.svg';
+import { ReactComponent as Rocket } from '../PoolField/rocket-icon.svg';
+import { ReactComponent as DAI } from '../PoolField/dai-icon.svg';
+import { ReactComponent as USDC } from '../PoolField/usdc-icon.svg';
+import { ReactComponent as USDT } from '../PoolField/usdt-icon.svg';
+import { ReactComponent as ETH } from '../PoolField/eth-icon.svg';
+
 import { Typography } from '@components/atomic';
 import IconLabel from '../IconLabel/IconLabel';
 import { VariableAPY, FixedAPR } from './components';
+import { isBorrowing } from '@utilities';
+import { useAMMContext } from '@contexts';
 
 export type ProtocolInformationProps = {
   protocol?: string;
+  isBorrowForm?: boolean;
 };
 
 const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = ({
   protocol,
+  isBorrowForm
 }) => {
+  const { amm } = useAMMContext();
+  const getPoolLabel = () => (
+    <>
+      <Box component='span' sx={{ color: '#9B97AD' }}>
+      POOL
+        </Box>
+        {(amm && isBorrowing(amm.rateOracle.protocolId)) && (<Box component='span' sx={{ color: '#FF4AA9' }}>
+          {'  '}
+          <strong>BORROWING</strong>
+        </Box>)}
+    </>
+  );
+
+  const protocolIcon = () => {
+    if (protocol) {
+      const prefix = protocol[0];
+      switch(prefix) {
+          case 'c': return ["Compound", <Compound width="38" height="38"/>];
+          case 'a': return ["Aave",  <Aave width="38" height="38"/>];
+          case 's': return ["Lido", <Lido width="38" height="38"/>];
+          case 'r': return ["Rocket", <Rocket width="38" height="38"/>];
+          default: return ['',''];
+      }
+    }
+  };
+
+  const tokenIcon = () => {
+    if (protocol) {
+      const token = (protocol[0] === 's') ? protocol.substring(2) : protocol.substring(1);
+      switch(token) {
+          case 'DAI': return ['DAI',<DAI width="38" height="38"/>];
+          case 'USDC': return ['USDC', <USDC width="38" height="38"/>];
+          case 'ETH': return ['ETH',<ETH width="38" height="38"/>];
+          case 'USDT': return ['USDT',<USDT width="38" height="38"/>];
+          default: return ['','']
+      }
+    }
+  };
+
+  const protocolInfo = protocolIcon();
+  const tokenInfo = tokenIcon();
+
   return (
     <Box
       sx={{
-        display: 'flex',
-        marginBottom: (theme) => theme.spacing(6),
+        marginBottom: (theme) => theme.spacing(2),
         '.MuiFormControl-root': {
           paddingRight: 3,
           '&:last-child': {
@@ -26,13 +80,28 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
       }}
     >
       <Typography
-        label={<IconLabel label="pool" icon="information-circle" removeIcon={(protocol === "stETH" || protocol === "rETH") ? false : true} info={(protocol === "stETH" || protocol === "rETH") ? `Trade rates in the ${protocol} pool by depositing ETH as margin. ${protocol} cannot be used as a form of margin until post-merge.` : ""} />}
-        variant="h3"
-      >
-        {protocol}
-      </Typography>
-      <FixedAPR />
-      <VariableAPY />
+      label={<IconLabel label={getPoolLabel()}
+      icon="information-circle"
+      removeIcon={(protocol === "stETH" || protocol === "rETH") ? false : true}
+      info={(protocol === "stETH" || protocol === "rETH") ? `Trade rates in the ${protocol} pool by depositing ETH as margin. ${protocol} cannot be used as a form of margin until post-merge.` : ""} />}
+      variant="body2"
+      sx={{fontSize: 32, textTransform: "uppercase", verticalAlign: 'top', fontWeight: 700, letterSpacing: '0.02em',lineHeight: '110%', marginBottom: (theme) => theme.spacing(6)}}
+    >
+        {protocolInfo && tokenInfo && (
+          <Box sx={{display:'flex', alignContent: 'center'}}>
+            <Box sx={{marginRight:(theme) => theme.spacing(-2)}}> {protocolInfo[1]}</Box>
+            <Box >{tokenInfo[1]}</Box>
+            &thinsp;{protocolInfo[0]}&thinsp;-&thinsp;{tokenInfo[0]}
+          </Box>
+        ) 
+        }
+    </Typography>
+
+      <Box sx={{display:'flex', justifyContent: 'space-between', width: '50%'}}>
+      {isBorrowForm !== true && <FixedAPR />}
+      {isBorrowForm !== true && <VariableAPY />}
+      </Box>
+      
     </Box>
   );
 };

@@ -23,7 +23,12 @@ interface IAaveRateOracleInterface extends ethers.utils.Interface {
   functions: {
     "UNDERLYING_YIELD_BEARING_PROTOCOL_ID()": FunctionFragment;
     "aaveLendingPool()": FunctionFragment;
+    "getApyFrom(uint256)": FunctionFragment;
     "getApyFromTo(uint256,uint256)": FunctionFragment;
+    "getBlockSlope()": FunctionFragment;
+    "getCurrentRateInRay()": FunctionFragment;
+    "getLastRateSlope()": FunctionFragment;
+    "getRateFrom(uint256)": FunctionFragment;
     "getRateFromTo(uint256,uint256)": FunctionFragment;
     "increaseObservationCardinalityNext(uint16)": FunctionFragment;
     "minSecondsSinceLastUpdate()": FunctionFragment;
@@ -43,8 +48,28 @@ interface IAaveRateOracleInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "getApyFrom",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getApyFromTo",
     values: [BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getBlockSlope",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getCurrentRateInRay",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getLastRateSlope",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getRateFrom",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getRateFromTo",
@@ -87,8 +112,25 @@ interface IAaveRateOracleInterface extends ethers.utils.Interface {
     functionFragment: "aaveLendingPool",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "getApyFrom", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getApyFromTo",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getBlockSlope",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getCurrentRateInRay",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getLastRateSlope",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getRateFrom",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -202,11 +244,37 @@ export class IAaveRateOracle extends BaseContract {
 
     aaveLendingPool(overrides?: CallOverrides): Promise<[string]>;
 
+    getApyFrom(
+      from: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { apyFromTo: BigNumber }>;
+
     getApyFromTo(
       from: BigNumberish,
       to: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { apyFromTo: BigNumber }>;
+
+    getBlockSlope(
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, number] & { blockChange: BigNumber; timeChange: number }
+    >;
+
+    getCurrentRateInRay(
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { currentRate: BigNumber }>;
+
+    getLastRateSlope(
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, number] & { rateChange: BigNumber; timeChange: number }
+    >;
+
+    getRateFrom(
+      _from: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     getRateFromTo(
       _from: BigNumberish,
@@ -251,9 +319,30 @@ export class IAaveRateOracle extends BaseContract {
 
   aaveLendingPool(overrides?: CallOverrides): Promise<string>;
 
+  getApyFrom(from: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
   getApyFromTo(
     from: BigNumberish,
     to: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  getBlockSlope(
+    overrides?: CallOverrides
+  ): Promise<
+    [BigNumber, number] & { blockChange: BigNumber; timeChange: number }
+  >;
+
+  getCurrentRateInRay(overrides?: CallOverrides): Promise<BigNumber>;
+
+  getLastRateSlope(
+    overrides?: CallOverrides
+  ): Promise<
+    [BigNumber, number] & { rateChange: BigNumber; timeChange: number }
+  >;
+
+  getRateFrom(
+    _from: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -300,9 +389,33 @@ export class IAaveRateOracle extends BaseContract {
 
     aaveLendingPool(overrides?: CallOverrides): Promise<string>;
 
+    getApyFrom(
+      from: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getApyFromTo(
       from: BigNumberish,
       to: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getBlockSlope(
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, number] & { blockChange: BigNumber; timeChange: number }
+    >;
+
+    getCurrentRateInRay(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getLastRateSlope(
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, number] & { rateChange: BigNumber; timeChange: number }
+    >;
+
+    getRateFrom(
+      _from: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -408,9 +521,25 @@ export class IAaveRateOracle extends BaseContract {
 
     aaveLendingPool(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getApyFrom(
+      from: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getApyFromTo(
       from: BigNumberish,
       to: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getBlockSlope(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getCurrentRateInRay(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getLastRateSlope(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getRateFrom(
+      _from: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -458,9 +587,27 @@ export class IAaveRateOracle extends BaseContract {
 
     aaveLendingPool(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    getApyFrom(
+      from: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getApyFromTo(
       from: BigNumberish,
       to: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getBlockSlope(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getCurrentRateInRay(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getLastRateSlope(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getRateFrom(
+      _from: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

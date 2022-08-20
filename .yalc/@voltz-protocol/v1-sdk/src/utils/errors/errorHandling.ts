@@ -229,7 +229,12 @@ export const getErrorSignature = (error: any, environment: string): string => {
         if (typeof error.error.data === 'string') {
           reason = error.error.data;
         } else {
-          reason = error.error.data.originalError.data;
+
+          if (typeof error.error.data.originalError.data === 'string') {
+            reason = error.error.data.originalError.data;
+          } else {
+            throw new Error('Unrecognized error type');
+          }
         }
 
         if (reason.startsWith('0x08c379a0')) {
@@ -300,7 +305,12 @@ export const getReadableErrorMessage = (error: any, environment: string): string
         if (typeof error.error.data === 'string') {
           reason = error.error.data;
         } else {
-          reason = error.error.data.originalError.data;
+
+          if (typeof error.error.data.originalError.data === 'string') {
+            reason = error.error.data.originalError.data;
+          } else {
+            throw new Error('Unrecognized error type');
+          }
         }
 
         try {
@@ -390,7 +400,12 @@ export const decodeInfoPostMint = (error: any, environment: string): RawInfoPost
           if (typeof error.error.data === 'string') {
             reason = error.error.data;
           } else {
-            reason = error.error.data.originalError.data;
+  
+            if (typeof error.error.data.originalError.data === 'string') {
+              reason = error.error.data.originalError.data;
+            } else {
+              throw new Error('Unrecognized error type');
+            }
           }
 
           const decodingResult = iface.decodeErrorResult(errSig, reason);
@@ -498,7 +513,12 @@ export const decodeInfoPostSwap = (error: any, environment: string): RawInfoPost
           if (typeof error.error.data === 'string') {
             reason = error.error.data;
           } else {
-            reason = error.error.data.originalError.data;
+  
+            if (typeof error.error.data.originalError.data === 'string') {
+              reason = error.error.data.originalError.data;
+            } else {
+              throw new Error('Unrecognized error type');
+            }
           }
 
 

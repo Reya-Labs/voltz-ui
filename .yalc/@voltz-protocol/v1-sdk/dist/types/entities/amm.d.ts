@@ -65,6 +65,9 @@ export declare type InfoPostSwap = {
     slippage: number;
     averageFixedRate: number;
     expectedApy?: number[][];
+    fixedTokenDeltaBalance: number;
+    variableTokenDeltaBalance: number;
+    fixedTokenDeltaUnbalanced: number;
 };
 export declare type AMMRolloverWithSwapArgs = {
     isFT: boolean;

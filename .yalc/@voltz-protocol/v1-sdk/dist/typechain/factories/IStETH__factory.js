@@ -7,6 +7,19 @@ exports.IStETH__factory = void 0;
 var ethers_1 = require("ethers");
 var _abi = [
     {
+        inputs: [],
+        name: "getFee",
+        outputs: [
+            {
+                internalType: "uint16",
+                name: "feeBasisPoints",
+                type: "uint16",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
         inputs: [
             {
                 internalType: "uint256",

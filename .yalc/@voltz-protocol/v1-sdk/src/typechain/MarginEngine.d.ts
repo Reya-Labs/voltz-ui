@@ -44,6 +44,7 @@ interface MarginEngineInterface extends ethers.utils.Interface {
     "lookbackWindowInSeconds()": FunctionFragment;
     "owner()": FunctionFragment;
     "paused()": FunctionFragment;
+    "proxiableUUID()": FunctionFragment;
     "rateOracle()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "setCacheMaxAgeInSeconds(uint256)": FunctionFragment;
@@ -136,6 +137,10 @@ interface MarginEngineInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "proxiableUUID",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "rateOracle",
     values?: undefined
@@ -314,6 +319,10 @@ interface MarginEngineInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "proxiableUUID",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "rateOracle", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
@@ -396,6 +405,7 @@ interface MarginEngineInterface extends ethers.utils.Interface {
     "FCMSetting(address)": EventFragment;
     "HistoricalApy(uint256)": EventFragment;
     "HistoricalApyWindowSetting(uint256)": EventFragment;
+    "Initialized(uint8)": EventFragment;
     "IsAlpha(bool)": EventFragment;
     "LiquidatorRewardSetting(uint256)": EventFragment;
     "MarginCalculatorParametersSetting(tuple)": EventFragment;
@@ -417,6 +427,7 @@ interface MarginEngineInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "FCMSetting"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "HistoricalApy"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "HistoricalApyWindowSetting"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "IsAlpha"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LiquidatorRewardSetting"): EventFragment;
   getEvent(
@@ -451,6 +462,8 @@ export type HistoricalApyEvent = TypedEvent<[BigNumber] & { value: BigNumber }>;
 export type HistoricalApyWindowSettingEvent = TypedEvent<
   [BigNumber] & { secondsAgo: BigNumber }
 >;
+
+export type InitializedEvent = TypedEvent<[number] & { version: number }>;
 
 export type IsAlphaEvent = TypedEvent<[boolean] & { __isAlpha: boolean }>;
 
@@ -740,6 +753,8 @@ export class MarginEngine extends BaseContract {
 
     paused(overrides?: CallOverrides): Promise<[boolean]>;
 
+    proxiableUUID(overrides?: CallOverrides): Promise<[string]>;
+
     rateOracle(overrides?: CallOverrides): Promise<[string]>;
 
     renounceOwnership(
@@ -948,6 +963,8 @@ export class MarginEngine extends BaseContract {
   owner(overrides?: CallOverrides): Promise<string>;
 
   paused(overrides?: CallOverrides): Promise<boolean>;
+
+  proxiableUUID(overrides?: CallOverrides): Promise<string>;
 
   rateOracle(overrides?: CallOverrides): Promise<string>;
 
@@ -1184,6 +1201,8 @@ export class MarginEngine extends BaseContract {
 
     paused(overrides?: CallOverrides): Promise<boolean>;
 
+    proxiableUUID(overrides?: CallOverrides): Promise<string>;
+
     rateOracle(overrides?: CallOverrides): Promise<string>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
@@ -1363,6 +1382,14 @@ export class MarginEngine extends BaseContract {
     HistoricalApyWindowSetting(
       secondsAgo?: null
     ): TypedEventFilter<[BigNumber], { secondsAgo: BigNumber }>;
+
+    "Initialized(uint8)"(
+      version?: null
+    ): TypedEventFilter<[number], { version: number }>;
+
+    Initialized(
+      version?: null
+    ): TypedEventFilter<[number], { version: number }>;
 
     "IsAlpha(bool)"(
       __isAlpha?: null
@@ -1864,6 +1891,8 @@ export class MarginEngine extends BaseContract {
 
     paused(overrides?: CallOverrides): Promise<BigNumber>;
 
+    proxiableUUID(overrides?: CallOverrides): Promise<BigNumber>;
+
     rateOracle(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(
@@ -2089,6 +2118,8 @@ export class MarginEngine extends BaseContract {
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     paused(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    proxiableUUID(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     rateOracle(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
