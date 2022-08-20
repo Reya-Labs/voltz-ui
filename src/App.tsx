@@ -14,7 +14,7 @@ const App = () => (
         <Route path={routes.PORTFOLIO} element={<Trader />} />
         <Route path={routes.POOLS} element={<LiquidityProvider />} />
         <Route path={routes.LP_FARM} element={<LiquidityProvider />} />
-        {process.env.REACT_APP_FIXED_BORROW && <Route path={routes.BORROW_POS} element={<FixedBorrower />} />}
+        {process.env.REACT_APP_FIXED_BORROW && process.env.REACT_APP_FIXED_BORROW !== `UNPROVIDED` && <Route path={routes.BORROW_POS} element={<FixedBorrower />} />}
       </Route>
     </Routes>
     <Box sx={{ position: 'fixed', bottom: '0', left: '0', width: '100%' }}>
