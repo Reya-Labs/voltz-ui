@@ -42,6 +42,7 @@ const PoolField = ({agent, protocol, isBorrowing, capLoading, cap, isBorrowTable
         case 'DAI': return ['DAI',<DAI/>];
         case 'USDC': return ['USDC',<USDC/>];
         case 'ETH': return ['ETH',<ETH/>];
+        case 'tETH': return ['ETH',<ETH/>];
         case 'USDT': return ['USDT',<USDT/>];
         default: return ['','']
     }
