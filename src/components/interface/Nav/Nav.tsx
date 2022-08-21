@@ -172,7 +172,7 @@ const Nav: React.FunctionComponent = () => {
       </Popover>
 
       {
-        process.env.REACT_APP_FIXED_BORROW &&
+        process.env.REACT_APP_FIXED_BORROW && process.env.REACT_APP_FIXED_BORROW !== `UNPROVIDED` &&
         <Button aria-describedby={id3} sx={buttonSx} variant="text" link={`/${routes.BORROW_POS}`}>
           FIXED BORROW
         </Button>
