@@ -7,6 +7,7 @@ export type FormPanelProps = {
   boxShadowType?: 'LP' | 'FT' | 'VT';
   children?: ReactNode;
   noBackground?: boolean;
+  isBorrowForm?: boolean;
   sx?: SystemStyleObject<Theme>
 };
 
@@ -14,6 +15,7 @@ export const FormPanel: React.FunctionComponent<FormPanelProps> = ({
   boxShadowType,
   children, 
   noBackground = false,
+  isBorrowForm = false,
   sx = {},
 }) => {
   const getBoxShadow = () => {
@@ -33,6 +35,19 @@ export const FormPanel: React.FunctionComponent<FormPanelProps> = ({
       }
     }
   }
+
+  if(isBorrowForm) return (
+    <Panel variant="dark" sx={{
+      marginLeft: 4,
+      marginRight: 4,
+      padding: (theme) => theme.spacing(9),
+      width: (theme) => theme.spacing(102),
+      boxShadow: () => getBoxShadow(),
+      ...sx
+    }}>
+      {children}
+    </Panel>
+  );
 
   if(noBackground) return (
     <Box sx={{

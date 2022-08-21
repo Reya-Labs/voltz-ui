@@ -65,7 +65,7 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
 }) => {
   const { amm } = useAMMContext();
   const { position } = usePositionContext();
-  const { variableDebt, fullyCollateralisedMarginRequirement } = useBorrowAMMContext();
+  const { variableDebtInNativeTokens: variableDebt, fullyCollateralisedMarginRequirement } = useBorrowAMMContext();
   const balance = useBalance(amm, undefined);
 
   const [selectedFixedDebt, setSelectedFixedDebt] = useState<BorrowFormContext['selectedFixedDebt']>(undefined);

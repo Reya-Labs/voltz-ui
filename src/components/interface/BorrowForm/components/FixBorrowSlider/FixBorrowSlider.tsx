@@ -19,7 +19,7 @@ import { ReactComponent as ThumbComponent } from './thumb.svg';
 
 export type FixBorrowSliderProps = {
   variableDebt: UseAsyncFunctionResult<unknown, number | void>;
-  currencySymbol: string;
+  underlyingTokenName: string;
   selectedFixedDebt?: number;
   selectedFixedDebtPercentage?: number;
   selectedVariableDebt?: number;
@@ -30,7 +30,7 @@ export type FixBorrowSliderProps = {
 
 const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
   variableDebt,
-  currencySymbol,
+  underlyingTokenName,
   selectedFixedDebt,
   selectedFixedDebtPercentage,
   selectedVariableDebt,
@@ -44,16 +44,17 @@ const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
     }
   };
 
+  const labelStyles: SystemStyleObject<Theme> = { 
+    textTransform: "uppercase",
+    fontWeight: 400, 
+    fontSize: 12,
+    color: "#A6A2B4",
+    verticalAlign: 'middle',
+    marginTop: (theme) => theme.spacing(4)
+  };
+
   const colorStyleOverrides = (): SystemStyleObject<Theme> => {
     return {
-      // '& .MuiSlider-thumb': {
-      //   height: 27,
-      //   width: 27,
-      //   border: '1px solid currentColor',
-      //   '&:hover': {
-      //     boxShadow: '0 0 0 8px rgba(58, 133, 137, 0.16)',
-      //   }
-      // },
       '& .MuiSlider-rail': {
         background: '#002BB1',
         height: 20,
@@ -82,23 +83,27 @@ const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
   return (
     <Box>
       <Stack>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
-          <Typography variant='body2'>
-            {upperCase('Fixed Debt')}
+        <Stack direction="row" justifyContent="space-between" alignItems="baseline" spacing={1}>
+          <Typography variant='subtitle1' sx={{...labelStyles}}>
+            Fixed Debt
           </Typography>
-          <Typography variant='body2'>
-              {upperCase('Variable Debt')}
+          <Typography variant='subtitle1' sx={{...labelStyles}}>
+              Variable Debt
           </Typography>
         </Stack>
 
-        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
-          <Typography variant='body2'>
-            {(selectedFixedDebt != null && selectedFixedDebt !== undefined)  ? `${currencySymbol}${formatCurrency(selectedFixedDebt)}` : 'Loading...'} 
-            {(selectedFixedDebtPercentage !== null && selectedFixedDebtPercentage !== undefined) ? `(${formatNumber(selectedFixedDebtPercentage)}%)` : ''}
+        <Stack direction="row" justifyContent="space-between" alignItems="center">
+          <Typography variant='body2' display="flex" fontSize='14px' fontWeight='700'>
+            {(selectedFixedDebt != null && selectedFixedDebt !== undefined)  ? `${formatCurrency(selectedFixedDebt)} ${underlyingTokenName}` : 'Loading...'} 
+            <Box sx={{color: "#A6A2B4", fontWeight: 400}}>
+            &thinsp; {(selectedFixedDebtPercentage !== null && selectedFixedDebtPercentage !== undefined) ? ` (${formatNumber(selectedFixedDebtPercentage)}%)` : ''}
+            </Box>  
           </Typography>
-          <Typography variant='body2'>
-            {(selectedVariableDebt != null && selectedVariableDebt !== undefined) ? `${currencySymbol}${formatCurrency(selectedVariableDebt)}` : 'Loading...'} 
-            {(selectedVariableDebtPercentage !== null && selectedVariableDebtPercentage !== undefined) ? `(${formatNumber(selectedVariableDebtPercentage)}%)` : ''}
+          <Typography variant='body2' display="flex" fontSize='14px' fontWeight='700'>
+            {(selectedVariableDebt != null && selectedVariableDebt !== undefined) ? `${formatCurrency(selectedVariableDebt)} ${underlyingTokenName}` : 'Loading...'} 
+            <Box sx={{color: "#A6A2B4", fontWeight: 400}}>
+            &thinsp;{(selectedVariableDebtPercentage !== null && selectedVariableDebtPercentage !== undefined) ? ` (${formatNumber(selectedVariableDebtPercentage)}%)` : ''}
+            </Box>
           </Typography>
         </Stack>
       </Stack>

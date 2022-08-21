@@ -1,21 +1,15 @@
 import { Typography } from '@components/atomic';
 import { Stack, TableRow } from '@mui/material';
-import TableCell from '@mui/material/TableCell';
-
-import { formatCurrency, formatDateTime } from '@utilities';
-import { upperCase } from 'lodash';
+import { colors } from '@theme';
 
 import { IconLabel } from '@components/composite';
 import { Box } from '@mui/system';
-import { useBorrowAMMContext, usePositionContext } from '@contexts';
-import { useEffect } from 'react';
 import FixBorrowSlider from '../FixBorrowSlider/FixBorrowSlider';
 import { UseAsyncFunctionResult } from '@hooks';
 
 export type FixBorrowProps = {
   variableDebt: UseAsyncFunctionResult<unknown, number | void>;
-  currencyCode?: string;
-  currencySymbol?: string;
+  underlyingTokenName?: string;
   selectedFixedDebt?: number;
   selectedFixedDebtPercentage?: number;
   selectedVariableDebt?: number;
@@ -26,8 +20,7 @@ export type FixBorrowProps = {
 
 const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
   variableDebt,
-  currencyCode = '',
-  currencySymbol = '',
+  underlyingTokenName = '',
   selectedFixedDebt,
   selectedFixedDebtPercentage,
   selectedVariableDebt,
@@ -41,24 +34,24 @@ const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
     }
 
     if (!variableDebt.result) {
-      return `${currencySymbol}0`;
+      return `0 ${underlyingTokenName}`;
     }
 
-    return `${currencySymbol}${(variableDebt.result).toFixed(2)}`;
+    return `${(variableDebt.result).toFixed(2)} ${underlyingTokenName}`;
   };
 
   return (
     <Box>
       <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
         <Box>
-          <Typography variant='h4'>
+          <Typography variant='body2' sx={{fontSize: 20, fontWeight: 700}}>
             <IconLabel label="Variable Debt" icon="information-circle" info="TBA" />
           </Typography>
         </Box>
 
         <Box>
-          <Typography variant='h4'>
-            {renderValue()} {currencyCode}
+          <Typography variant='body2' sx={{fontSize: 20, fontWeight: 700, color: colors.skyBlueCrayola.base }}>
+            {renderValue()}
           </Typography>
         </Box>
         
@@ -70,7 +63,7 @@ const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
         selectedFixedDebtPercentage={selectedFixedDebtPercentage}
         selectedVariableDebt={selectedVariableDebt}
         selectedVariableDebtPercentage={selectedVariableDebtPercentage}
-        currencySymbol={'$'}
+        underlyingTokenName={underlyingTokenName}
         handleChange={handleChange}
         swapSummaryLoading={swapSummaryLoading}
       />
