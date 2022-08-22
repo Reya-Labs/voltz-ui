@@ -7,9 +7,12 @@ import useAsyncFunction, { UseAsyncFunctionResult } from "../useAsyncFunction";
 import { DateTime } from "luxon";
 
 export type useBorrowAMMReturnType = {
-  underlyingDebt: UseAsyncFunctionResult<unknown, number | void>;
-  variableDebt: UseAsyncFunctionResult<unknown, number | void>;
-  fixedDebt: UseAsyncFunctionResult<unknown, number | void>;
+  underlyingDebtInNativeTokens: UseAsyncFunctionResult<unknown, number | void>;
+  variableDebtInNativeTokens: UseAsyncFunctionResult<unknown, number | void>;
+  fixedDebtInNativeTokens: UseAsyncFunctionResult<unknown, number | void>;
+  underlyingDebtInUSD: UseAsyncFunctionResult<unknown, number | void>;
+  variableDebtInUSD: UseAsyncFunctionResult<unknown, number | void>;
+  fixedDebtInUSD: UseAsyncFunctionResult<unknown, number | void>;
   variableApy: UseAsyncFunctionResult<unknown, number | void>;
   fullyCollateralisedMarginRequirement: UseAsyncFunctionResult<unknown, number | void>;
   fixedApr: UseAsyncFunctionResult<unknown, number | void>;
@@ -19,7 +22,7 @@ export type useBorrowAMMReturnType = {
 export const useBorrowAMM = ( borrowAmm: AugmentedBorrowAMM) => {
   const { agent } = useAgent();
 
-  const underlyingDebt = useAsyncFunction(
+  const underlyingDebtInNativeTokens = useAsyncFunction(
     async () => {
       const result = await borrowAmm?.getUnderlyingBorrowBalance();
       return result;
@@ -27,7 +30,7 @@ export const useBorrowAMM = ( borrowAmm: AugmentedBorrowAMM) => {
     useMemo(() => undefined, [!!borrowAmm?.provider])
   );
 
-  const variableDebt = useAsyncFunction(
+  const variableDebtInNativeTokens = useAsyncFunction(
     async (position: Position | undefined) => {
       if (position){
         const resultPos = await borrowAmm.getAggregatedBorrowBalance(position);
@@ -40,9 +43,38 @@ export const useBorrowAMM = ( borrowAmm: AugmentedBorrowAMM) => {
     useMemo(() => undefined, [!!borrowAmm?.provider, borrowAmm.aaveVariableDebtToken])
   );
 
-  const fixedDebt = useAsyncFunction(
+  const fixedDebtInNativeTokens = useAsyncFunction(
     async (position: Position) => {
       const result = await borrowAmm?.getFixedBorrowBalance(position);
+      return result;
+    },
+    useMemo(() => undefined, [!!borrowAmm?.provider])
+  );
+
+  const underlyingDebtInUSD = useAsyncFunction(
+    async () => {
+      const result = await borrowAmm?.getUnderlyingBorrowBalanceInUSD();
+      return result;
+    },
+    useMemo(() => undefined, [!!borrowAmm?.provider])
+  );
+
+  const variableDebtInUSD = useAsyncFunction(
+    async (position: Position | undefined) => {
+      if (position){
+        const resultPos = await borrowAmm.getAggregatedBorrowBalanceInUSD(position);
+        return resultPos;
+      } else {
+        const resultPos = await borrowAmm.getUnderlyingBorrowBalanceInUSD();
+        return resultPos;
+      }
+    },
+    useMemo(() => undefined, [!!borrowAmm?.provider, borrowAmm.aaveVariableDebtToken])
+  );
+
+  const fixedDebtInUSD = useAsyncFunction(
+    async (position: Position) => {
+      const result = await borrowAmm?.getFixedBorrowBalanceInUSD(position);
       return result;
     },
     useMemo(() => undefined, [!!borrowAmm?.provider])
@@ -98,19 +130,25 @@ export const useBorrowAMM = ( borrowAmm: AugmentedBorrowAMM) => {
 
 
   return useMemo(() => ({
-    underlyingDebt,
-    variableDebt,
+    underlyingDebtInNativeTokens,
+    variableDebtInNativeTokens,
+    fixedDebtInNativeTokens,
+    underlyingDebtInUSD,
+    variableDebtInUSD,
+    fixedDebtInUSD,
     fullyCollateralisedMarginRequirement,
-    fixedDebt,
     variableApy,
     fixedApr,
     endDate
   } as useBorrowAMMReturnType), 
   [
-    underlyingDebt,
-    variableDebt,
+    underlyingDebtInNativeTokens,
+    variableDebtInNativeTokens,
+    fixedDebtInNativeTokens,
+    underlyingDebtInUSD,
+    variableDebtInUSD,
+    fixedDebtInUSD,
     fullyCollateralisedMarginRequirement,
-    fixedDebt,
     variableApy,
     fixedApr,
     endDate

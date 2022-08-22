@@ -12,18 +12,23 @@ import { ReactComponent as ETH } from '../PoolField/eth-icon.svg';
 
 import { Typography } from '@components/atomic';
 import IconLabel from '../IconLabel/IconLabel';
-import { VariableAPY, FixedAPR } from './components';
+import { VariableAPY, FixedAPR, MaturityEndDate } from './components';
 import { isBorrowing } from '@utilities';
-import { useAMMContext } from '@contexts';
+import { useAMMContext, Agents } from '@contexts';
+import { DateTime } from 'luxon';
+
+
 
 export type ProtocolInformationProps = {
   protocol?: string;
   isBorrowForm?: boolean;
+  endDate?: DateTime | undefined;
 };
 
 const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = ({
   protocol,
-  isBorrowForm
+  isBorrowForm,
+  endDate
 }) => {
   const { amm } = useAMMContext();
   const getPoolLabel = () => (
@@ -85,7 +90,7 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
       removeIcon={(protocol === "stETH" || protocol === "rETH") ? false : true}
       info={(protocol === "stETH" || protocol === "rETH") ? `Trade rates in the ${protocol} pool by depositing ETH as margin. ${protocol} cannot be used as a form of margin until post-merge.` : ""} />}
       variant="body2"
-      sx={{fontSize: 32, textTransform: "uppercase", verticalAlign: 'top', fontWeight: 700, letterSpacing: '0.02em',lineHeight: '110%', marginBottom: (theme) => theme.spacing(6)}}
+      sx={{fontSize: 32, textTransform: "uppercase", verticalAlign: 'top', fontWeight: 700, letterSpacing: '0.02em',lineHeight: '110%', marginBottom: (theme) => theme.spacing(4)}}
     >
         {protocolInfo && tokenInfo && (
           <Box sx={{display:'flex', alignContent: 'center'}}>
@@ -97,10 +102,22 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
         }
     </Typography>
 
-      <Box sx={{display:'flex', justifyContent: 'space-between', width: '50%'}}>
-      {isBorrowForm !== true && <FixedAPR />}
-      {isBorrowForm !== true && <VariableAPY />}
+      {isBorrowForm !== true && 
+      <Box sx={{display:'flex', justifyContent: 'space-between', width: '56%'}}>
+        <FixedAPR />
+        <VariableAPY />
       </Box>
+      }
+      {isBorrowForm === true && 
+        <Box display='flex'> 
+          <Box sx={{display:'flex', justifyContent: 'space-between', width: '56%', marginRight: (theme) => theme.spacing(8)}}>
+          <FixedAPR agent={Agents.FIXED_TRADER}/>
+          <VariableAPY agent={Agents.VARIABLE_TRADER}/>
+        </Box>
+        <MaturityEndDate endDate={endDate}/>
+        </Box>
+        
+        }
       
     </Box>
   );

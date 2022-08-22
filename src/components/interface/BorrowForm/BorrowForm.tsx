@@ -7,18 +7,15 @@ import { MaskedIntegerField, InputTokenLabel } from '@components/composite';
 import {
   IconLabel,
   ProtocolInformation,
-  MaturityInformation,
-  NotionalAmount,
 } from '@components/composite';
 import { SubmitControls } from './components';
 import { SystemStyleObject, Theme } from '@theme';
 
 import TableRow from '@mui/material/TableRow';
-import { VariableAPY, FixedAPR, MaturityEndDate, FixBorrow, FixBorrowSlider } from './components';
+import { FixBorrow } from './components';
 import { Stack } from '@mui/material';
-import { BorrowFormSubmitButtonHintStates, BorrowFormSubmitButtonStates, SwapFormSubmitButtonHintStates } from '@contexts';
+import { BorrowFormSubmitButtonHintStates, BorrowFormSubmitButtonStates } from '@contexts';
 import { formatCurrency } from '@utilities';
-import { isUndefined } from 'lodash';
 
 export type BorrowProps = {
   protocol?: string;
@@ -35,10 +32,10 @@ export type BorrowProps = {
   tokenApprovals: ReturnType<typeof useTokenApproval>
   tradeInfoErrorMessage?: string;
   variableDebt: UseAsyncFunctionResult<unknown, number | void>;
-  selectedFixedDebt?: number;
-  selectedFixedDebtPercentage?: number;
-  selectedVariableDebt?: number;
-  selectedVariableDebtPercentage?: number;
+  selectedFixedDebt: number;
+  selectedFixedDebtPercentage: number;
+  selectedVariableDebt: number;
+  selectedVariableDebtPercentage: number;
   errors: Record<string, string>;
   hintState: BorrowFormSubmitButtonHintStates;
   submitButtonState: BorrowFormSubmitButtonStates;
@@ -74,7 +71,7 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
   balance
 }) => {
   const bottomSpacing: SystemStyleObject<Theme> = {
-    marginBottom: (theme) => theme.spacing(6)
+    marginBottom: (theme) => theme.spacing(10)
   }
 
   let formattedBalance;
@@ -92,28 +89,23 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
   }
 
   return (
-    <FormPanel>
-      <ProtocolInformation protocol={protocol} isBorrowForm={true}/>
-      
-      <Box sx={bottomSpacing}>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
-          <FixedAPR />
-          <VariableAPY />
-          <MaturityEndDate endDate={endDate} />
-        </Stack>
+    <FormPanel isBorrowForm={true}>
+      <Box sx={{marginBottom: (theme) => theme.spacing(8)}}>
+        <ProtocolInformation protocol={protocol} isBorrowForm={true} endDate={endDate}/>
       </Box>
 
-      <Box sx={bottomSpacing}>
+      <Box sx={{marginBottom: (theme) => theme.spacing(2)}}>
         <FixBorrow
           variableDebt={variableDebt}
-          currencySymbol={'$'}
-          currencyCode={'USD'}
+          underlyingTokenName={underlyingTokenName}
           selectedFixedDebt={selectedFixedDebt}
           selectedFixedDebtPercentage={selectedFixedDebtPercentage}
           selectedVariableDebt={selectedVariableDebt}
           selectedVariableDebtPercentage={selectedVariableDebtPercentage}
           handleChange={onChangeNotional}
           swapSummaryLoading={swapSummaryLoading}
+          error={!!errors['slider']}
+          errorText={errors['slider']}
         />
       </Box>
 

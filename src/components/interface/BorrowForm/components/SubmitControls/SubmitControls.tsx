@@ -5,6 +5,7 @@ import { Button, Ellipsis } from '@components/atomic';
 import { colors } from '@theme';
 import { BorrowFormSubmitButtonHintStates, BorrowFormSubmitButtonStates } from '@contexts';
 import { ReactNode } from 'react';
+import { Agents } from '@contexts';
 
 interface SubmitControlsProps {
   approvalsNeeded: boolean;
@@ -109,7 +110,7 @@ const SubmitControls = ({
         return <>Initialising<Ellipsis /></>;
       }
       case BorrowFormSubmitButtonStates.FIX_RATE: {
-        return 'Fix Rate!';
+        return 'Fix Rate';
       }
     }
   };
@@ -129,14 +130,15 @@ const SubmitControls = ({
           onClick={onSubmit} 
           size="large" 
           sx={{ flexGrow: 1 }}
+          agent={Agents.FIXED_TRADER}
         >
           {getSubmitText()}
         </Button>
 
         <Button
-          sx={{ marginLeft: (theme) => theme.spacing(7), flexGrow: 0 }}
-          variant="dark"
+          sx={{ marginLeft: (theme) => theme.spacing(9.5), flexGrow: 0 }}
           onClick={onCancel}
+          agent={Agents.LIQUIDITY_PROVIDER}
         >
           Back
         </Button>
