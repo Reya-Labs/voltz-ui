@@ -35,10 +35,10 @@ export type BorrowProps = {
   tokenApprovals: ReturnType<typeof useTokenApproval>
   tradeInfoErrorMessage?: string;
   variableDebt: UseAsyncFunctionResult<unknown, number | void>;
-  selectedFixedDebt?: number;
-  selectedFixedDebtPercentage?: number;
-  selectedVariableDebt?: number;
-  selectedVariableDebtPercentage?: number;
+  selectedFixedDebt: number;
+  selectedFixedDebtPercentage: number;
+  selectedVariableDebt: number;
+  selectedVariableDebtPercentage: number;
   errors: Record<string, string>;
   hintState: BorrowFormSubmitButtonHintStates;
   submitButtonState: BorrowFormSubmitButtonStates;
@@ -114,6 +114,8 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
           selectedVariableDebtPercentage={selectedVariableDebtPercentage}
           handleChange={onChangeNotional}
           swapSummaryLoading={swapSummaryLoading}
+          error={!!errors['slider']}
+          errorText={errors['slider']}
         />
       </Box>
 
