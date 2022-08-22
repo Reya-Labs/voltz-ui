@@ -10,12 +10,14 @@ import { UseAsyncFunctionResult } from '@hooks';
 export type FixBorrowProps = {
   variableDebt: UseAsyncFunctionResult<unknown, number | void>;
   underlyingTokenName?: string;
-  selectedFixedDebt?: number;
-  selectedFixedDebtPercentage?: number;
-  selectedVariableDebt?: number;
-  selectedVariableDebtPercentage?: number;
+  selectedFixedDebt: number;
+  selectedFixedDebtPercentage: number;
+  selectedVariableDebt: number;
+  selectedVariableDebtPercentage: number;
   handleChange: (value: number) => void;
   swapSummaryLoading: boolean;
+  error?: boolean;
+  errorText?: string;
 }
 
 const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
@@ -26,7 +28,9 @@ const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
   selectedVariableDebt,
   selectedVariableDebtPercentage,
   handleChange,
-  swapSummaryLoading
+  swapSummaryLoading,
+  error,
+  errorText
 }) => {
   const renderValue = () => {
     if (variableDebt.loading) {
@@ -63,9 +67,11 @@ const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
         selectedFixedDebtPercentage={selectedFixedDebtPercentage}
         selectedVariableDebt={selectedVariableDebt}
         selectedVariableDebtPercentage={selectedVariableDebtPercentage}
+        handleSliderChange={handleChange}
         underlyingTokenName={underlyingTokenName}
-        handleChange={handleChange}
         swapSummaryLoading={swapSummaryLoading}
+        error={error}
+        errorText={errorText}
       />
     </Box>
   );
