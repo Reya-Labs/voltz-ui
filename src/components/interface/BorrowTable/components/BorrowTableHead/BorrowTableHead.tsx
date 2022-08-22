@@ -22,7 +22,7 @@ const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({ order,
     '&.MuiTableCell-root': {
       borderBottom: 0,
       padding: 0,
-      paddingLeft: (theme) => theme.spacing(4),
+      paddingLeft: (theme) => theme.spacing(5.1),
       paddingRight: (theme) => theme.spacing(4),
       paddingTop: (theme) => theme.spacing(1),
       paddingBottom: (theme) => theme.spacing(1),

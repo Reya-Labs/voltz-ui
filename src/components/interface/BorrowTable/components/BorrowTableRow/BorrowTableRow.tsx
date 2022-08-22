@@ -23,10 +23,12 @@ export type BorrowTableRowProps = {
 const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({ datum, index, onSelect, isFixedPositions }) => {
   const wallet = useWallet();
   const variant = 'main';
-  const { variableDebtInUSD: variableDebt, fixedDebtInUSD: fixedDebt } = useBorrowAMMContext();
+  const { variableDebtInNativeTokens: variableDebtInToken, fixedDebtInNativeTokens: fixedDebtInToken, variableDebtInUSD: variableDebt, fixedDebtInUSD: fixedDebt } = useBorrowAMMContext();
   const { position } = usePositionContext();
   const { result: resultVar, loading: loadingVar, call: callVar } = variableDebt;
   const { result: resultFixed, loading: loadingFixed, call: callFixed } = fixedDebt;
+  const { result: resultVarInToken, loading: loadingVarInToken, call: callVarInToken } = variableDebtInToken;
+  const { result: resultFixedInToken, loading: loadingFixedInToken, call: callFixedInToken } = fixedDebtInToken;
 
   useEffect(() => {
     if (wallet.status === "connected" && !isFixedPositions) {
@@ -39,6 +41,18 @@ const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({ datum, i
       callFixed(position);
     }
   }, [callFixed, position, wallet.status]);
+
+  useEffect(() => {
+    if (wallet.status === "connected" && !isFixedPositions) {
+      callVarInToken(position);
+    }
+  }, [callVarInToken, position, wallet.status]);
+
+  useEffect(() => {
+    if (wallet.status === "connected" && isFixedPositions) {
+      callFixedInToken(position);
+    }
+  }, [callFixedInToken, position, wallet.status]);
 
   const typeStyleOverrides = (): SystemStyleObject<Theme> => {
     if (!variant) {
@@ -111,7 +125,10 @@ const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({ datum, i
             if (field === 'maturity') {
               return <BorrowMaturity/>;
             }
-            return <Debt debt={isFixedPositions ? resultFixed : resultVar}/>;
+            return <Debt 
+              debtInUSD={isFixedPositions ? resultFixed : resultVar}
+              debtInToken={isFixedPositions ? resultFixedInToken : resultVarInToken}
+              tokenName={datum.underlyingTokenName} />;
     
           })}
           {button}

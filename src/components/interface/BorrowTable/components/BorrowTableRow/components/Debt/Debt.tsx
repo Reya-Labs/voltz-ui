@@ -2,30 +2,49 @@ import React from 'react';
 import TableCell from '@mui/material/TableCell';
 
 import { Typography } from '@components/atomic';
+import Box from '@mui/material/Box';
+import { themes } from '@theme';
 
 export type DebtProps = {
-  debt: number | null | void;
+  debtInUSD: number | null | void;
+  debtInToken: number | null | void;
+  tokenName: string | undefined;
 };
 
 
-const Debt: React.FunctionComponent<DebtProps> = ({debt}) => {
+const Debt: React.FunctionComponent<DebtProps> = ({debtInUSD, debtInToken, tokenName }) => {
 
-  const renderValue = () => {
+  const renderValueInUSD = () => {
     // if (loading) {
     //   return '---';
     // }
 
-    if (!debt) {
+    if (!debtInUSD) {
       return '$0';
     }
 
-    return `$${(debt).toFixed(2)}`;
+    return `$${(debtInUSD).toFixed(2)}`;
+  };
+
+  const renderValueInToken = () => {
+    // if (loading) {
+    //   return '---';
+    // }
+
+    if (!debtInToken) {
+      return '$0';
+    }
+
+    return `${(debtInToken).toFixed(2)} ${tokenName ? tokenName : ''}`;
   };
 
   return (
-    <TableCell align="left" width="25%">
-      <Typography variant="body2" sx={{fontSize: 18, fontWeight: 700, letterSpacing: '0.02em',lineHeight: '130%'}}>
-        {renderValue()}
+    <TableCell align="left" width="25%"> 
+      <Typography variant="body2" sx={{fontSize: 18, fontWeight: 400, letterSpacing: '0.02em',lineHeight: '100%'}}>
+        {renderValueInUSD()}
+        <Box sx={{color: "#A6A2B4", fontSize: 12, align:'left', marginLeft: (theme) => theme.spacing(-1.7)}}> &nbsp; 
+          {renderValueInToken()}
+        </Box>
       </Typography>
     </TableCell>
   );

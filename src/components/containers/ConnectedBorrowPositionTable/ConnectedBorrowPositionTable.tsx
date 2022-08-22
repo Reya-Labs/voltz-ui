@@ -36,8 +36,8 @@ const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorrowAMMTa
       borderColor: 'transparent',
       paddingRight: (theme) => theme.spacing(4),
       paddingLeft: (theme) => theme.spacing(4),
-      paddingTop: (theme) => theme.spacing(3),
-      paddingBottom: (theme) => theme.spacing(4),
+      paddingTop: (theme) => theme.spacing(2.5),
+      paddingBottom: (theme) => theme.spacing(2.5),
       '&:first-of-type': {
         borderTopLeftRadius: 8,
         borderBottomLeftRadius: 8,
