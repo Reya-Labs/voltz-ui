@@ -8,7 +8,7 @@ import { Button } from '@components/atomic';
 import { useWallet } from '@hooks';
 import { BorrowAMMTableDatum, labelsVariable, labelsFixed } from '../../types';
 import { BorrowVariableAPY, BorrowFixedAPR, Debt, BorrowMaturity } from './components';
-import { useBorrowAMMContext, usePositionContext } from '@contexts';
+import { useBorrowAMMContext, usePositionContext, Agents } from '@contexts';
 import { PoolField } from '@components/composite';
 
 export type BorrowTableRowProps = {
@@ -23,7 +23,7 @@ export type BorrowTableRowProps = {
 const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({ datum, index, onSelect, isFixedPositions }) => {
   const wallet = useWallet();
   const variant = 'main';
-  const { variableDebt, fixedDebt } = useBorrowAMMContext();
+  const { variableDebtInUSD: variableDebt, fixedDebtInUSD: fixedDebt } = useBorrowAMMContext();
   const { position } = usePositionContext();
   const { result: resultVar, loading: loadingVar, call: callVar } = variableDebt;
   const { result: resultFixed, loading: loadingFixed, call: callFixed } = fixedDebt;
@@ -70,7 +70,7 @@ const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({ datum, i
     }
     return (
     <TableCell align="left" width="20%">
-        <Button variant="contained" onClick={handleClick} sx={{
+        <Button variant="contained" agent={Agents.LIQUIDITY_PROVIDER} onClick={handleClick} sx={{
           padding: '8px 16px',
           fontSize: 18,
           lineHeight: 1,
