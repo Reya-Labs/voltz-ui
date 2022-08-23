@@ -73,7 +73,7 @@ const FixedBorrower: React.FunctionComponent = () => {
   };
 
   return (
-    <Page backgroundView='table'>
+    <Page>
         {renderMode === 'fix-borrow' && (
           <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center', backdropFilter: "blur(8px)" }}>
             {borrowAmm && borrowAmm.amm && (
