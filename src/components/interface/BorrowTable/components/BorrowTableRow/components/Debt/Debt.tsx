@@ -35,6 +35,10 @@ const Debt: React.FunctionComponent<DebtProps> = ({debtInUSD, debtInToken, token
       return '$0';
     }
 
+    if (tokenName === 'ETH') {
+      return `${(debtInToken).toFixed(4)} ${tokenName ? tokenName : ''}`;
+    }
+
     return `${(debtInToken).toFixed(2)} ${tokenName ? tokenName : ''}`;
   };
 

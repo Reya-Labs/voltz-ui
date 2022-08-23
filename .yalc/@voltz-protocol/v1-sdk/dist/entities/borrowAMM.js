@@ -44,21 +44,30 @@ var constants_1 = require("../constants");
 var typechain_1 = require("../typechain");
 var price_1 = require("./fractions/price");
 var tokenAmount_1 = require("./fractions/tokenAmount");
-//1. Import coingecko-api
-var coingecko_api_1 = __importDefault(require("coingecko-api"));
-//2. Initiate the CoinGecko API Client
-var CoinGeckoClient = new coingecko_api_1.default();
+var axios_1 = __importDefault(require("axios"));
 var geckoEthToUsd = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var data;
+    var attempt, data, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, CoinGeckoClient.simple.price({
-                    ids: ['ethereum'],
-                    vs_currencies: ['usd'],
-                })];
+            case 0:
+                attempt = 0;
+                _a.label = 1;
             case 1:
+                if (!(attempt < 5)) return [3 /*break*/, 6];
+                _a.label = 2;
+            case 2:
+                _a.trys.push([2, 4, , 5]);
+                return [4 /*yield*/, axios_1.default.get('https://pro-api.coingecko.com/api/v3/simple/price?x_cg_pro_api_key=' + process.env.REACT_APP_COINGECKO_API_KEY + '&ids=ethereum&vs_currencies=usd')];
+            case 3:
                 data = _a.sent();
                 return [2 /*return*/, data.data.ethereum.usd];
+            case 4:
+                error_1 = _a.sent();
+                return [3 /*break*/, 5];
+            case 5:
+                attempt++;
+                return [3 /*break*/, 1];
+            case 6: return [2 /*return*/, 0];
         }
     });
 }); };

@@ -15,7 +15,18 @@ export type SwapSummaryProps = {
 
 const SwapSummary: React.FunctionComponent<SwapSummaryProps> = ({ data, loading, underlyingTokenName = '', yieldBearingTokenName = '', formAction}) => {
 
-  const label = <IconLabel
+  const label = (yieldBearingTokenName.substring(0,6) === "borrow") ?
+  <IconLabel
+    label="trade information"
+    icon="information-circle"
+    info={
+      <>
+        Average Fixed Rate is the rate you'll pay once accounting for slippage<br/><br/>
+        Fees are the fees you'll pay to the liquidity provider for the trade; they are included in the margin<br/><br/>
+      </>
+    }
+  /> : 
+  <IconLabel
     label="trade information"
     icon="information-circle"
     info={
@@ -48,10 +59,11 @@ const SwapSummary: React.FunctionComponent<SwapSummaryProps> = ({ data, loading,
   }
 
   const feesRow = (fee: number) => {
+    const decimals = (underlyingTokenName === 'ETH') ? 4 : 2;
     return (
       {
         label: 'FEES:', 
-        value: `${formatCurrency(Math.abs(fee), true)} ${underlyingTokenName}`
+        value: `${formatCurrency(Math.abs(fee), true, false, 2, decimals)} ${underlyingTokenName}`
       }
     );
   }
@@ -91,9 +103,7 @@ const SwapSummary: React.FunctionComponent<SwapSummaryProps> = ({ data, loading,
     if (yieldBearingTokenName.substring(0,6) === "borrow") {
       return data ?  [
         averageRateRow(data.averageFixedRate),
-        feesRow(data.fee),
-        slippageRow(data.slippage),
-        borrowMarginRow(data.marginRequirement)
+        feesRow(data.fee)
       ] : undefined;
     }
     return data ?  [
