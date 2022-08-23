@@ -127,13 +127,15 @@ const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
 
         <Stack direction="row" justifyContent="space-between" alignItems="center">
           <Typography variant='body2' display="flex" fontSize='14px' fontWeight='700'>
-            {(!variableDebt.loading) ? `${formatCurrency(selectedFixedDebt)} ${underlyingTokenName}` : 'Loading...'} 
+            {(!variableDebt.loading) ? 
+            `${formatCurrency(selectedFixedDebt, true, false, (underlyingTokenName === 'ETH') ? 4 : 2, (underlyingTokenName === 'ETH') ? 4 : 2)} ${underlyingTokenName}` 
+            : 'Loading...'} 
             <Box sx={{color: "#A6A2B4", fontWeight: 400}}>
             &thinsp; {(!variableDebt.loading) ? ` (${formatNumber(selectedFixedDebtPercentage)}%)` : ''}
             </Box>  
           </Typography>
           <Typography variant='body2' display="flex" fontSize='14px' fontWeight='700'>
-            {(!variableDebt.loading) ? `${formatCurrency(selectedVariableDebt)} ${underlyingTokenName}` : 'Loading...'} 
+            {(!variableDebt.loading) ? `${formatCurrency(selectedVariableDebt, true, false, (underlyingTokenName === 'ETH') ? 4 : 2, (underlyingTokenName === 'ETH') ? 4 : 2)} ${underlyingTokenName}` : 'Loading...'} 
             <Box sx={{color: "#A6A2B4", fontWeight: 400}}>
             &thinsp;{(!variableDebt.loading) ? ` (${formatNumber(selectedVariableDebtPercentage)}%)` : ''}
             </Box>

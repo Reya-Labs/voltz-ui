@@ -115,7 +115,7 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
           allowNegativeValue={false}
           suffix={<InputTokenLabel tokenName={underlyingTokenName || ''} />}
           suffixPadding={90}
-          label={<IconLabel label={"margin required to fix rate"} icon="information-circle" info={"To be added."} />}
+          label={<IconLabel label={"margin required to fix rate"} icon="information-circle" info={"Margin required to enter position where you are paying the fixed rate on the selected amount (includes fees)"} />}
           value={formattedMargin}
           subtext={`WALLET BALANCE: ${formattedBalance}`}
           disabled={true}

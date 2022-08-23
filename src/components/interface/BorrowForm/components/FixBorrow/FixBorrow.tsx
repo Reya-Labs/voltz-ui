@@ -41,6 +41,10 @@ const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
       return `0 ${underlyingTokenName}`;
     }
 
+    if (underlyingTokenName === 'ETH') {
+      return `${(variableDebt.result).toFixed(4)} ${underlyingTokenName}`;
+    }
+
     return `${(variableDebt.result).toFixed(2)} ${underlyingTokenName}`;
   };
 
@@ -49,7 +53,7 @@ const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
       <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
         <Box>
           <Typography variant='body2' sx={{fontSize: 20, fontWeight: 700}}>
-            <IconLabel label="Variable Debt" icon="information-circle" info="TBA" />
+            <IconLabel label="Variable Debt" icon="information-circle" info="Your current variable debt on Aave or Compound that has not been set to a Voltz fixed rate yet" />
           </Typography>
         </Box>
 
