@@ -23,18 +23,17 @@ import { TokenAmount } from './fractions/tokenAmount';
 import Position from './position';
 import AMM from './amm';
 
-//1. Import coingecko-api
-import CoinGecko from 'coingecko-api';
-
-//2. Initiate the CoinGecko API Client
-const CoinGeckoClient = new CoinGecko();
+import axios from 'axios';
 
 var geckoEthToUsd = async () => {
-  let data = await CoinGeckoClient.simple.price({
-    ids: ['ethereum'],
-    vs_currencies: ['usd'],
-  });
-  return data.data.ethereum.usd;
+  for (let attempt = 0; attempt < 5; attempt++) {
+    try{
+      let data = await axios.get('https://pro-api.coingecko.com/api/v3/simple/price?x_cg_pro_api_key='+process.env.REACT_APP_COINGECKO_API_KEY+'&ids=ethereum&vs_currencies=usd');
+      return data.data.ethereum.usd;
+    } catch (error) {
+    }
+  }
+  return 0;
 };
 
 

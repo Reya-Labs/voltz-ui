@@ -51,25 +51,31 @@ var price_1 = require("./fractions/price");
 var tokenAmount_1 = require("./fractions/tokenAmount");
 var errorHandling_1 = require("../utils/errors/errorHandling");
 var lodash_1 = require("lodash");
-//1. Import coingecko-api
-var coingecko_api_1 = __importDefault(require("coingecko-api"));
 var getExpectedApy_1 = require("../services/getExpectedApy");
-//2. Initiate the CoinGecko API Client
-var CoinGeckoClient = new coingecko_api_1.default();
-//3. Make call to get the price of 1 eth in USD, so divide the value of USD by data
-// queries the json response body with price of 1eth in usd
-// returns the value of 1 eth in USD 
+var axios_1 = __importDefault(require("axios"));
 var geckoEthToUsd = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var data;
+    var attempt, data, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, CoinGeckoClient.simple.price({
-                    ids: ['ethereum'],
-                    vs_currencies: ['usd'],
-                })];
+            case 0:
+                attempt = 0;
+                _a.label = 1;
             case 1:
+                if (!(attempt < 5)) return [3 /*break*/, 6];
+                _a.label = 2;
+            case 2:
+                _a.trys.push([2, 4, , 5]);
+                return [4 /*yield*/, axios_1.default.get('https://pro-api.coingecko.com/api/v3/simple/price?x_cg_pro_api_key=' + process.env.REACT_APP_COINGECKO_API_KEY + '&ids=ethereum&vs_currencies=usd')];
+            case 3:
                 data = _a.sent();
                 return [2 /*return*/, data.data.ethereum.usd];
+            case 4:
+                error_1 = _a.sent();
+                return [3 /*break*/, 5];
+            case 5:
+                attempt++;
+                return [3 /*break*/, 1];
+            case 6: return [2 /*return*/, 0];
         }
     });
 }); };
@@ -147,7 +153,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.rolloverWithSwap = function (_a) {
         var isFT = _a.isFT, notional = _a.notional, margin = _a.margin, marginEth = _a.marginEth, fixedRateLimit = _a.fixedRateLimit, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, owner = _a.owner, newMarginEngine = _a.newMarginEngine, oldFixedLow = _a.oldFixedLow, oldFixedHigh = _a.oldFixedHigh, validationOnly = _a.validationOnly;
         return __awaiter(this, void 0, void 0, function () {
-            var effectiveOwner, _b, oldTickUpper, oldTickLower, tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, factoryContract, peripheryAddress, peripheryContract, scaledNotional, swapPeripheryParams, tempOverrides, scaledMarginDelta, estimatedGas, swapTransaction, receipt, error_1;
+            var effectiveOwner, _b, oldTickUpper, oldTickLower, tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, factoryContract, peripheryAddress, peripheryContract, scaledNotional, swapPeripheryParams, tempOverrides, scaledMarginDelta, estimatedGas, swapTransaction, receipt, error_2;
             var _this = this;
             return __generator(this, function (_c) {
                 switch (_c.label) {
@@ -266,7 +272,7 @@ var AMM = /** @class */ (function () {
                         receipt = _c.sent();
                         return [2 /*return*/, receipt];
                     case 10:
-                        error_1 = _c.sent();
+                        error_2 = _c.sent();
                         throw new Error("Transaction Confirmation Error");
                     case 11: return [2 /*return*/];
                 }
@@ -277,7 +283,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.rolloverWithMint = function (_a) {
         var fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional, margin = _a.margin, marginEth = _a.marginEth, owner = _a.owner, newMarginEngine = _a.newMarginEngine, oldFixedLow = _a.oldFixedLow, oldFixedHigh = _a.oldFixedHigh, validationOnly = _a.validationOnly;
         return __awaiter(this, void 0, void 0, function () {
-            var effectiveOwner, _b, oldTickUpper, oldTickLower, tickUpper, tickLower, factoryContract, peripheryAddress, peripheryContract, _notional, mintOrBurnParams, tempOverrides, scaledMarginDelta, estimatedGas, mintTransaction, receipt, error_2;
+            var effectiveOwner, _b, oldTickUpper, oldTickLower, tickUpper, tickLower, factoryContract, peripheryAddress, peripheryContract, _notional, mintOrBurnParams, tempOverrides, scaledMarginDelta, estimatedGas, mintTransaction, receipt, error_3;
             var _this = this;
             return __generator(this, function (_c) {
                 switch (_c.label) {
@@ -369,7 +375,7 @@ var AMM = /** @class */ (function () {
                         receipt = _c.sent();
                         return [2 /*return*/, receipt];
                     case 10:
-                        error_2 = _c.sent();
+                        error_3 = _c.sent();
                         throw new Error("Transaction Confirmation Error");
                     case 11: return [2 /*return*/];
                 }
@@ -525,7 +531,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.swap = function (_a) {
         var isFT = _a.isFT, notional = _a.notional, margin = _a.margin, fixedRateLimit = _a.fixedRateLimit, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, validationOnly = _a.validationOnly;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, factoryContract, peripheryAddress, peripheryContract, scaledNotional, swapPeripheryParams, tempOverrides, scaledMarginDelta, estimatedGas, swapTransaction, receipt, error_3;
+            var tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, factoryContract, peripheryAddress, peripheryContract, scaledNotional, swapPeripheryParams, tempOverrides, scaledMarginDelta, estimatedGas, swapTransaction, receipt, error_4;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
@@ -631,7 +637,7 @@ var AMM = /** @class */ (function () {
                         receipt = _b.sent();
                         return [2 /*return*/, receipt];
                     case 7:
-                        error_3 = _b.sent();
+                        error_4 = _b.sent();
                         throw new Error("Transaction Confirmation Error");
                     case 8: return [2 /*return*/];
                 }
@@ -641,7 +647,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.swapWithWeth = function (_a) {
         var isFT = _a.isFT, notional = _a.notional, margin = _a.margin, marginEth = _a.marginEth, fixedRateLimit = _a.fixedRateLimit, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, validationOnly = _a.validationOnly;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, factoryContract, peripheryAddress, peripheryContract, scaledNotional, swapPeripheryParams, tempOverrides, scaledMarginDelta, estimatedGas, swapTransaction, receipt, error_4;
+            var tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, factoryContract, peripheryAddress, peripheryContract, scaledNotional, swapPeripheryParams, tempOverrides, scaledMarginDelta, estimatedGas, swapTransaction, receipt, error_5;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
@@ -737,7 +743,7 @@ var AMM = /** @class */ (function () {
                         receipt = _b.sent();
                         return [2 /*return*/, receipt];
                     case 7:
-                        error_4 = _b.sent();
+                        error_5 = _b.sent();
                         throw new Error("Transaction Confirmation Error");
                     case 8: return [2 /*return*/];
                 }
@@ -816,7 +822,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.mint = function (_a) {
         var fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional, margin = _a.margin, validationOnly = _a.validationOnly;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, factoryContract, peripheryAddress, peripheryContract, _notional, mintOrBurnParams, tempOverrides, scaledMarginDelta, estimatedGas, mintTransaction, receipt, error_5;
+            var tickUpper, tickLower, factoryContract, peripheryAddress, peripheryContract, _notional, mintOrBurnParams, tempOverrides, scaledMarginDelta, estimatedGas, mintTransaction, receipt, error_6;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
@@ -903,7 +909,7 @@ var AMM = /** @class */ (function () {
                         receipt = _b.sent();
                         return [2 /*return*/, receipt];
                     case 7:
-                        error_5 = _b.sent();
+                        error_6 = _b.sent();
                         throw new Error("Transaction Confirmation Error");
                     case 8: return [2 /*return*/];
                 }
@@ -913,7 +919,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.mintWithWeth = function (_a) {
         var fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional, margin = _a.margin, marginEth = _a.marginEth, validationOnly = _a.validationOnly;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, factoryContract, peripheryAddress, peripheryContract, _notional, mintOrBurnParams, tempOverrides, scaledMarginDelta, estimatedGas, mintTransaction, receipt, error_6;
+            var tickUpper, tickLower, factoryContract, peripheryAddress, peripheryContract, _notional, mintOrBurnParams, tempOverrides, scaledMarginDelta, estimatedGas, mintTransaction, receipt, error_7;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
@@ -993,7 +999,7 @@ var AMM = /** @class */ (function () {
                         receipt = _b.sent();
                         return [2 /*return*/, receipt];
                     case 7:
-                        error_6 = _b.sent();
+                        error_7 = _b.sent();
                         throw new Error("Transaction Confirmation Error");
                     case 8: return [2 /*return*/];
                 }
@@ -1004,7 +1010,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.burn = function (_a) {
         var fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, notional = _a.notional, validationOnly = _a.validationOnly;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, factoryContract, peripheryAddress, peripheryContract, _notional, mintOrBurnParams, estimatedGas, burnTransaction, receipt, error_7;
+            var tickUpper, tickLower, factoryContract, peripheryAddress, peripheryContract, _notional, mintOrBurnParams, estimatedGas, burnTransaction, receipt, error_8;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
@@ -1068,7 +1074,7 @@ var AMM = /** @class */ (function () {
                         receipt = _b.sent();
                         return [2 /*return*/, receipt];
                     case 7:
-                        error_7 = _b.sent();
+                        error_8 = _b.sent();
                         throw new Error("Transaction Confirmation Error");
                     case 8: return [2 /*return*/];
                 }
@@ -1079,7 +1085,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.updatePositionMargin = function (_a) {
         var fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, marginDelta = _a.marginDelta;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, tempOverrides, scaledMarginDelta, factoryContract, peripheryAddress, peripheryContract, estimatedGas, updatePositionMarginTransaction, receipt, error_8;
+            var tickUpper, tickLower, tempOverrides, scaledMarginDelta, factoryContract, peripheryAddress, peripheryContract, estimatedGas, updatePositionMarginTransaction, receipt, error_9;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
@@ -1135,7 +1141,7 @@ var AMM = /** @class */ (function () {
                         receipt = _b.sent();
                         return [2 /*return*/, receipt];
                     case 7:
-                        error_8 = _b.sent();
+                        error_9 = _b.sent();
                         throw new Error("Transaction Confirmation Error");
                     case 8: return [2 /*return*/];
                 }
@@ -1146,7 +1152,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.liquidatePosition = function (_a) {
         var owner = _a.owner, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, marginEngineContract, estimatedGas, liquidatePositionTransaction, receipt, error_9;
+            var tickUpper, tickLower, marginEngineContract, estimatedGas, liquidatePositionTransaction, receipt, error_10;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
@@ -1179,7 +1185,7 @@ var AMM = /** @class */ (function () {
                         receipt = _b.sent();
                         return [2 /*return*/, receipt];
                     case 6:
-                        error_9 = _b.sent();
+                        error_10 = _b.sent();
                         throw new Error("Transaction Confirmation Error");
                     case 7: return [2 /*return*/];
                 }
@@ -1190,7 +1196,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.settlePosition = function (_a) {
         var owner = _a.owner, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh;
         return __awaiter(this, void 0, void 0, function () {
-            var effectiveOwner, _b, tickUpper, tickLower, factoryContract, peripheryAddress, peripheryContract, estimatedGas, settlePositionTransaction, receipt, error_10;
+            var effectiveOwner, _b, tickUpper, tickLower, factoryContract, peripheryAddress, peripheryContract, estimatedGas, settlePositionTransaction, receipt, error_11;
             var _this = this;
             return __generator(this, function (_c) {
                 switch (_c.label) {
@@ -1237,7 +1243,7 @@ var AMM = /** @class */ (function () {
                         receipt = _c.sent();
                         return [2 /*return*/, receipt];
                     case 10:
-                        error_10 = _c.sent();
+                        error_11 = _c.sent();
                         throw new Error("Transaction Confirmation Error");
                     case 11: return [2 /*return*/];
                 }
@@ -1361,7 +1367,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.fcmSwap = function (_a) {
         var notional = _a.notional, fixedRateLimit = _a.fixedRateLimit;
         return __awaiter(this, void 0, void 0, function () {
-            var sqrtPriceLimitX96, tickLimit, fcmContract, scaledNotional, estimatedGas, fcmSwapTransaction, receipt, error_11;
+            var sqrtPriceLimitX96, tickLimit, fcmContract, scaledNotional, estimatedGas, fcmSwapTransaction, receipt, error_12;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
@@ -1414,7 +1420,7 @@ var AMM = /** @class */ (function () {
                         receipt = _b.sent();
                         return [2 /*return*/, receipt];
                     case 6:
-                        error_11 = _b.sent();
+                        error_12 = _b.sent();
                         throw new Error("Transaction Confirmation Error");
                     case 7: return [2 /*return*/];
                 }
@@ -1512,7 +1518,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.fcmUnwind = function (_a) {
         var notionalToUnwind = _a.notionalToUnwind, fixedRateLimit = _a.fixedRateLimit;
         return __awaiter(this, void 0, void 0, function () {
-            var sqrtPriceLimitX96, tickLimit, fcmContract, scaledNotional, estimatedGas, fcmUnwindTransaction, receipt, error_12;
+            var sqrtPriceLimitX96, tickLimit, fcmContract, scaledNotional, estimatedGas, fcmUnwindTransaction, receipt, error_13;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
@@ -1563,7 +1569,7 @@ var AMM = /** @class */ (function () {
                         receipt = _b.sent();
                         return [2 /*return*/, receipt];
                     case 6:
-                        error_12 = _b.sent();
+                        error_13 = _b.sent();
                         throw new Error("Transaction Confirmation Error");
                     case 7: return [2 /*return*/];
                 }
@@ -1573,7 +1579,7 @@ var AMM = /** @class */ (function () {
     // FCM settlement
     AMM.prototype.settleFCMTrader = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var fcmContract, estimatedGas, fcmSettleTraderTransaction, receipt, error_13;
+            var fcmContract, estimatedGas, fcmSettleTraderTransaction, receipt, error_14;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -1613,7 +1619,7 @@ var AMM = /** @class */ (function () {
                         receipt = _a.sent();
                         return [2 /*return*/, receipt];
                     case 6:
-                        error_13 = _a.sent();
+                        error_14 = _a.sent();
                         throw new Error("Transaction Confirmation Error");
                     case 7: return [2 /*return*/];
                 }
@@ -1658,7 +1664,7 @@ var AMM = /** @class */ (function () {
     };
     AMM.prototype.approveFCM = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var isApproved, factoryContract, estimatedGas, approvalTransaction, receipt, error_14;
+            var isApproved, factoryContract, estimatedGas, approvalTransaction, receipt, error_15;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.isFCMApproved()];
@@ -1687,7 +1693,7 @@ var AMM = /** @class */ (function () {
                         receipt = _a.sent();
                         return [2 /*return*/, receipt];
                     case 6:
-                        error_14 = _a.sent();
+                        error_15 = _a.sent();
                         throw new Error("Transaction Confirmation Error");
                     case 7: return [2 /*return*/];
                 }
@@ -1763,7 +1769,7 @@ var AMM = /** @class */ (function () {
     };
     AMM.prototype.approveUnderlyingTokenForPeriphery = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var isApproved, tokenAddress, token, factoryContract, peripheryAddress, estimatedGas, approvalTransaction, receipt, error_15;
+            var isApproved, tokenAddress, token, factoryContract, peripheryAddress, estimatedGas, approvalTransaction, receipt, error_16;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -1809,7 +1815,7 @@ var AMM = /** @class */ (function () {
                         receipt = _a.sent();
                         return [2 /*return*/, receipt];
                     case 10:
-                        error_15 = _a.sent();
+                        error_16 = _a.sent();
                         throw new Error("Token approval failed");
                     case 11: return [2 /*return*/];
                 }
@@ -1844,7 +1850,7 @@ var AMM = /** @class */ (function () {
     };
     AMM.prototype.approveUnderlyingTokenForFCM = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var isApproved, tokenAddress, token, estimatedGas, approvalTransaction, receipt, error_16;
+            var isApproved, tokenAddress, token, estimatedGas, approvalTransaction, receipt, error_17;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.isUnderlyingTokenApprovedForFCM()];
@@ -1877,7 +1883,7 @@ var AMM = /** @class */ (function () {
                         receipt = _a.sent();
                         return [2 /*return*/, receipt];
                     case 6:
-                        error_16 = _a.sent();
+                        error_17 = _a.sent();
                         throw new Error("Token approval failed");
                     case 7: return [2 /*return*/];
                 }
@@ -1966,7 +1972,7 @@ var AMM = /** @class */ (function () {
     });
     AMM.prototype.approveYieldBearingTokenForFCM = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var isApproved, tokenAddress, _a, fcmContract, fcmContract, token, estimatedGas, approvalTransaction, receipt, error_17;
+            var isApproved, tokenAddress, _a, fcmContract, fcmContract, token, estimatedGas, approvalTransaction, receipt, error_18;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, this.isYieldBearingTokenApprovedForFCM()];
@@ -2015,7 +2021,7 @@ var AMM = /** @class */ (function () {
                         receipt = _b.sent();
                         return [2 /*return*/, receipt];
                     case 12:
-                        error_17 = _b.sent();
+                        error_18 = _b.sent();
                         throw new Error("Token approval failed");
                     case 13: return [2 /*return*/];
                 }
@@ -2154,7 +2160,7 @@ var AMM = /** @class */ (function () {
     };
     AMM.prototype.getVariableFactor = function (termStartTimestamp, termEndTimestamp) {
         return __awaiter(this, void 0, void 0, function () {
-            var rateOracleContract, result, resultScaled, error_18;
+            var rateOracleContract, result, resultScaled, error_19;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -2171,7 +2177,7 @@ var AMM = /** @class */ (function () {
                         resultScaled = result.div(ethers_2.BigNumber.from(10).pow(12)).toNumber() / 1000000;
                         return [2 /*return*/, resultScaled];
                     case 3:
-                        error_18 = _a.sent();
+                        error_19 = _a.sent();
                         throw new Error("Cannot get variable factor");
                     case 4: return [2 /*return*/];
                 }
@@ -2643,7 +2649,7 @@ var AMM = /** @class */ (function () {
     // caps
     AMM.prototype.setCap = function (amount) {
         return __awaiter(this, void 0, void 0, function () {
-            var factoryContract, peripheryAddress, peripheryContract, marginEngineContract, vammAddress, vammContract, isAlphaTransaction, error_19, isAlphaTransactionME, error_20, setCapTransaction, error_21;
+            var factoryContract, peripheryAddress, peripheryContract, marginEngineContract, vammAddress, vammContract, isAlphaTransaction, error_20, isAlphaTransactionME, error_21, setCapTransaction, error_22;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -2671,7 +2677,7 @@ var AMM = /** @class */ (function () {
                         _a.sent();
                         return [3 /*break*/, 7];
                     case 6:
-                        error_19 = _a.sent();
+                        error_20 = _a.sent();
                         throw new Error("Setting Alpha failed");
                     case 7: return [4 /*yield*/, marginEngineContract.setIsAlpha(true)];
                     case 8:
@@ -2684,7 +2690,7 @@ var AMM = /** @class */ (function () {
                         _a.sent();
                         return [3 /*break*/, 12];
                     case 11:
-                        error_20 = _a.sent();
+                        error_21 = _a.sent();
                         throw new Error("Setting Alpha failed");
                     case 12: return [4 /*yield*/, peripheryContract.setLPMarginCap(vammAddress, this.scale(amount))];
                     case 13:
@@ -2697,7 +2703,7 @@ var AMM = /** @class */ (function () {
                         _a.sent();
                         return [3 /*break*/, 17];
                     case 16:
-                        error_21 = _a.sent();
+                        error_22 = _a.sent();
                         throw new Error("Setting cap failed");
                     case 17: return [2 /*return*/];
                 }
