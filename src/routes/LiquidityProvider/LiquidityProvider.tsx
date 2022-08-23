@@ -79,7 +79,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
   };
 
   return (
-    <Page backgroundView={formMode ? 'none' : 'table'}>
+    <Page>
       {renderMode === 'pools' && (
         <Box sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
           <Box sx={{ marginBottom: (theme) => theme.spacing(12) }}>
