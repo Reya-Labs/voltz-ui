@@ -25,7 +25,7 @@ const Page: React.FunctionComponent<PageProps> = ({ children }: PageProps) => (
       overflowY: 'auto', 
       position: 'relative',
     }}>
-      <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0, backdropFilter: 'blur(4px)', }}>
+      <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0, backdropFilter: 'blur(8px)', }}>
         <Box sx={{ 
           width: 'calc(50% - 720px)', 
           height: '100%', 
@@ -39,7 +39,7 @@ const Page: React.FunctionComponent<PageProps> = ({ children }: PageProps) => (
           margin: '0 auto',
           maxWidth: '1440px',
           padding: (theme) => `${theme.spacing(10)} 0 ${theme.spacing(15)}`,
-          background: 'linear-gradient(270deg, rgba(12, 10, 23, 0.06) 0%, rgba(27, 23, 49, 0.95) 14.72%, #1A152F 50.21%, rgba(27, 23, 49, 0.95) 85.9%, rgba(13, 11, 24, 0.09) 100%)',
+          background: 'linear-gradient(270deg, rgba(25, 21, 42, 0) 0%, rgba(23, 19, 41, 0.83) 22.92%, #08070E 50.21%, rgba(23, 19, 41, 0.81) 76.81%, rgba(25, 21, 42, 0) 100%)',
         }}>
           {children}
         </Box>
