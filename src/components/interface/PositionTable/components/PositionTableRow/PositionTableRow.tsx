@@ -10,7 +10,7 @@ import { traderLabels } from '../../constants';
 import { FixedAPR, Notional, CurrentMargin, Maturity, AccruedRates } from './components';
 import { useAgent } from '@hooks';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
-import { isBorrowing } from '@utilities';
+import { formatNumber, isBorrowing } from '@utilities';
 
 export type PositionTableRowProps = {
   position: Position;
@@ -43,7 +43,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     onSelect('margin');
   }
 
-  const handleEditNotional = () => {
+  const handleEditLPNotional = () => {
     onSelect('liquidity');
   }
 
@@ -77,9 +77,9 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     if (field === 'notional') {
       return (
         <Notional 
-          notional={agent === Agents.LIQUIDITY_PROVIDER ? position.notional.toFixed(2) : Math.abs(position.effectiveVariableTokenBalance).toFixed(2)} 
+          notional={agent === Agents.LIQUIDITY_PROVIDER ? formatNumber(position.notional) : formatNumber(Math.abs(position.effectiveVariableTokenBalance))} 
           token={underlyingTokenName || ''}
-          onEdit={agent === Agents.LIQUIDITY_PROVIDER ? handleEditNotional : undefined}
+          onEdit={agent === Agents.LIQUIDITY_PROVIDER ? handleEditLPNotional : undefined}
         />
       )
     }
@@ -92,7 +92,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     if (field === 'rateRange') {
       return (
         <Typography variant="h5" label={label}>
-          {position.fixedRateLower.toNumber().toFixed(2)}% / {position.fixedRateUpper.toNumber().toFixed(2)}%
+          {formatNumber(position.fixedRateLower.toNumber())}% / {formatNumber(position.fixedRateUpper.toNumber())}%
         </Typography>
       );
     }

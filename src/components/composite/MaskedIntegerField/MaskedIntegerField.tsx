@@ -97,6 +97,7 @@ const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
         position: 'relative'
       }}>
         <CurrencyInput
+          intlConfig={{locale: navigator.language}}
           id={inputId}
           decimalsLimit={2}
           onValueChange={handleChange}

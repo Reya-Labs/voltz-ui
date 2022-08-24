@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { usePositionContext, useBorrowAMMContext } from '@contexts';
 import { Typography } from '@components/atomic';
 import TableCell from '@mui/material/TableCell';
+import { formatNumber } from '@utilities';
 
 const BorrowFixedAPR: React.FunctionComponent = () => {
   const { position } = usePositionContext();
@@ -22,7 +23,7 @@ const BorrowFixedAPR: React.FunctionComponent = () => {
       return '0%';
     }
 
-    return `${result.toFixed(2)}%`; 
+    return `${formatNumber(result)}%`; 
   };
 
   return (

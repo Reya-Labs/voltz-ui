@@ -13,6 +13,7 @@ import { ReactComponent as DAI } from './dai-icon.svg';
 import { ReactComponent as USDC } from './usdc-icon.svg';
 import { ReactComponent as USDT } from './usdt-icon.svg';
 import { ReactComponent as ETH } from './eth-icon.svg';
+import { formatNumber } from '@utilities';
 
 export type PoolFieldProps = {
     agent?: Agents;
@@ -107,7 +108,7 @@ const PoolField = ({agent, protocol, isBorrowing, capLoading, cap, isBorrowTable
             <Box sx={{marginRight:(theme) => theme.spacing(2), marginBottom: (theme) => theme.spacing(-1)}}>{tokenInfo[1]}</Box>
             {protocolInfo[0]} - {tokenInfo[0]}
             </>} 
-            rightContent={<>{cap.toFixed(2)}% CAP</>}
+            rightContent={<>{formatNumber(2)}% CAP</>}
             percentageComplete={cap}
           />
         </CustomPoolField>

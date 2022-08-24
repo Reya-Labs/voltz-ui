@@ -6,7 +6,7 @@ import { Typography } from '@components/atomic';
 import { Button } from '@components/atomic';
 import isNull from 'lodash/isNull';
 import { isUndefined } from 'lodash';
-import { formatCurrency } from '@utilities';
+import { formatCurrency, formatNumber } from '@utilities';
 
 import Box from '@mui/material/Box';
 import { colors } from '@theme';
@@ -53,7 +53,7 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({
   return (
     <TableCell>
       <Typography variant="body2" label={getNetMarginLabel()} sx={{ fontSize: 18 }}>
-        {!isUndefined(margin) ? `${margin.toFixed(2)} ${token}` : 'No Data'}
+        {!isUndefined(margin) ? `${formatNumber(margin)} ${token}` : 'No Data'}
       </Typography>
 
       {marginEdit && (

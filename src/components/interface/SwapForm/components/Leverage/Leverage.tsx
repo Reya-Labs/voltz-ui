@@ -4,7 +4,7 @@ import Slider from '@mui/material/Slider';
 import { MaskedIntegerField, IconLabel } from '@components/composite';
 import { colors } from '@theme';
 import { isNumber, isUndefined } from 'lodash';
-import { formatNumber } from '@utilities';
+import { formatNumber, toUSFormat } from '@utilities';
 
 /**
  * margin: for a new position this is just the ratio between notional and minimum margin required
@@ -26,6 +26,7 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value}: Lev
 
   const isDisabled = isUndefined(availableNotional) || isUndefined(margin) || isUndefined(notional);
   const [internalValue, setInternalValue] = useState(value);
+  const [inputValue, setInputValue] = useState(formatNumber(value));
   const timer = useRef<number>();
 
   const maxNotional = !isDisabled ? Math.min(notional, availableNotional) : 10;
@@ -47,11 +48,13 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value}: Lev
 
   useEffect(() => {
     setInternalValue(value);
+    setInputValue(formatNumber(value, 0, 2));
   }, [value])
 
   const handleChangeSlider = useCallback((event: Event, newValue: number | number[]) => {
     if(typeof newValue === 'number') {
       setInternalValue(newValue);
+      setInputValue(formatNumber(newValue, 0, 2));
       window.clearInterval(timer.current);
       timer.current = window.setTimeout(() => onChange(newValue), delay);
     }
@@ -59,9 +62,11 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value}: Lev
 
   const handleChangeInput = useCallback((inputVal: string | undefined) => {
     if(inputVal) {
-      const newValue = parseFloat(inputVal);
+      const usFormatted = toUSFormat(inputVal);
+      const newValue = usFormatted ? parseFloat(usFormatted) : NaN;
       if(!isNaN(newValue)) {
         setInternalValue(newValue);
+        setInputValue(inputVal);
         window.clearInterval(timer.current);
         timer.current = window.setTimeout(() => onChange(newValue), delay);
       }
@@ -77,7 +82,7 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value}: Lev
           dynamic
           inputSize="small"
           label={<IconLabel label={'Leverage'} icon="information-circle" info={hint} />}
-          value={internalValue}
+          value={inputValue}
           onChange={handleChangeInput}
           suffix='x'
           suffixPadding={0}

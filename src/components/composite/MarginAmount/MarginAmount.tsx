@@ -4,7 +4,7 @@ import isUndefined from 'lodash/isUndefined';
 import IconLabel from '../IconLabel/IconLabel';
 import MaskedIntegerField from '../MaskedIntegerField/MaskedIntegerField';
 import InputTokenLabel from '../InputTokenLabel/InputTokenLabel';
-import { formatCurrency } from '@utilities';
+import { formatCurrency, toUSFormat } from '@utilities';
 import { HealthFactorText } from '@components/composite';
 
 export type MarginAmountProps = {
@@ -43,24 +43,26 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
 
   const handleChange = useCallback(
     (newValue: string | undefined) => {
+      const usFormatted = toUSFormat(newValue);
       setInputValue(newValue);
-      onChangeMargin(newValue ? parseFloat(newValue) : undefined);
+      onChangeMargin(usFormatted ? parseFloat(usFormatted) : undefined);
     },
     [onChangeMargin, setInputValue],
   );
 
   // If the value prop changes, update the input field
   useEffect(() => {
+    const usFormatted = toUSFormat(inputValue);
     if(
       isUndefined(margin) && !isUndefined(inputValue) || 
       isUndefined(inputValue) && !isUndefined(margin) || 
-      !isUndefined(inputValue) && !isUndefined(margin) && margin !== parseFloat(inputValue)
+      !isUndefined(usFormatted) && !isUndefined(margin) && margin !== parseFloat(usFormatted)
     ) {
       let newValue = margin?.toString();
       if(newValue !== undefined && newValue[newValue.length - 2] === '.') { 
         newValue = `${newValue}0`; // Add trailing zero if we get something like 100.5
       }
-      setInputValue(newValue);
+      setInputValue(toUSFormat(newValue));
     }
   }, [inputValue, margin, setInputValue])
 
