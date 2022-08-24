@@ -3,6 +3,7 @@ import TableCell from '@mui/material/TableCell';
 
 import { useBorrowAMMContext } from '@contexts';
 import { Typography } from '@components/atomic';
+import { formatNumber } from '@utilities';
 
 const BorrowVariableAPY: React.FunctionComponent = () => {
   const { variableApy } = useBorrowAMMContext();
@@ -21,7 +22,7 @@ const BorrowVariableAPY: React.FunctionComponent = () => {
       return '0%';
     }
 
-    return `${(result * 100).toFixed(2)}%`;
+    return `${formatNumber(result * 100)}%`;
   };
 
   return (

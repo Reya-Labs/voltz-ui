@@ -2,7 +2,7 @@ import { Box, Grid } from '@mui/material';
 
 import { Typography } from '@components/atomic';
 import { SystemStyleObject, Theme } from '@theme'; 
-import { formatCurrency } from '@utilities';
+import { formatCurrency, formatNumber } from '@utilities';
 
 export type BorrowPortfolioSummaryProps = {
   commonOverrides: SystemStyleObject<Theme>;
@@ -77,7 +77,7 @@ const BorrowPortfolioSummary = ({
         <Box sx={{display:'flex', justifyContent:justify, textAlign: align}}>
           {currencySymbol + formatCurrency(debt, true,false, 2, 2) +" "+ currencyCode}
           <Box sx={{color: "#A6A2B4", fontWeight: 400}}> &nbsp; 
-          {"(" + percentage.toFixed(2).toString()+ "%)"}
+          {"(" + formatNumber(percentage)+ "%)"}
           </Box>
         </Box>
       );

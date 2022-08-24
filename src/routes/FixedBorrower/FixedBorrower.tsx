@@ -6,7 +6,7 @@ import { Position } from '@voltz-protocol/v1-sdk';
 
 import { setPageTitle, findCurrentBorrowPosition, fromAMMtoBorrowAMM } from '@utilities';
 import { Agents, BorrowAMMProvider, BorrowFormProvider, SwapFormProvider } from '@contexts';
-import { useAgent, useAMMs, usePositions } from '@hooks';
+import { useAgent, useAMMs, useBorrowPositions } from '@hooks';
 
 import { Page } from '@components/interface';
 import ConnectedBorrowForm from 'src/components/containers/ConnectedBorrowForm/ConnectedBorrowForm';
@@ -25,7 +25,7 @@ const FixedBorrower: React.FunctionComponent = () => {
   const [borrowAmm, setBorrowAMM] = useState<AugmentedBorrowAMM>();
   const [position, setPosition] = useState<Position>();
 
-  const { positions } = usePositions();
+  const { positions } = useBorrowPositions();
   // const { amms } = useAMMs();
 
   const [amm, setAMM] = useState<AugmentedAMM>();
@@ -73,7 +73,7 @@ const FixedBorrower: React.FunctionComponent = () => {
   };
 
   return (
-    <Page backgroundView='table'>
+    <Page>
         {renderMode === 'fix-borrow' && (
           <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center', backdropFilter: "blur(8px)" }}>
             {borrowAmm && borrowAmm.amm && (

@@ -36,10 +36,10 @@ export enum BorrowFormSubmitButtonHintStates {
 
 export type BorrowFormContext = {
   variableDebt: UseAsyncFunctionResult<unknown, number | void>;
-  selectedFixedDebt?: number;
-  selectedFixedDebtPercentage?: number;
-  selectedVariableDebt?: number;
-  selectedVariableDebtPercentage?: number;
+  selectedFixedDebt: number;
+  selectedFixedDebtPercentage: number;
+  selectedVariableDebt: number;
+  selectedVariableDebtPercentage: number;
   margin: number;
   setNotional: (value: number) => void;
   errors: Record<string, string>;
@@ -65,13 +65,13 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
 }) => {
   const { amm } = useAMMContext();
   const { position } = usePositionContext();
-  const { variableDebt, fullyCollateralisedMarginRequirement } = useBorrowAMMContext();
+  const { variableDebtInNativeTokens: variableDebt, fullyCollateralisedMarginRequirement } = useBorrowAMMContext();
   const balance = useBalance(amm, undefined);
 
-  const [selectedFixedDebt, setSelectedFixedDebt] = useState<BorrowFormContext['selectedFixedDebt']>(undefined);
-  const [selectedFixedDebtPercentage, setSelectedFixedDebtPercentage] = useState<BorrowFormContext['selectedFixedDebtPercentage']>(undefined);
-  const [selectedVariableDebt, setSelectedVariableDebt] = useState<BorrowFormContext['selectedVariableDebt']>(undefined);
-  const [selectedVariableDebtPercentage, setSelectedVariableDebtPercentage] = useState<BorrowFormContext['selectedVariableDebtPercentage']>(undefined);
+  const [selectedFixedDebt, setSelectedFixedDebt] = useState<BorrowFormContext['selectedFixedDebt']>(0);
+  const [selectedFixedDebtPercentage, setSelectedFixedDebtPercentage] = useState<BorrowFormContext['selectedFixedDebtPercentage']>(0);
+  const [selectedVariableDebt, setSelectedVariableDebt] = useState<BorrowFormContext['selectedVariableDebt']>(0);
+  const [selectedVariableDebtPercentage, setSelectedVariableDebtPercentage] = useState<BorrowFormContext['selectedVariableDebtPercentage']>(0);
   const [margin, setMargin] = useState<number>(0);
 
   const asyncCallsLoading = useRef<string[]>([]);
@@ -84,6 +84,8 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
     !isTradeInfoLoading &&
     !!swapInfo.result && !swapInfo.errorMessage && 
     !!fullyCollateralisedMarginRequirement.result && !fullyCollateralisedMarginRequirement.errorMessage;
+
+  const [ isAvailableNotionalInsufficient, setIsAvailableNotionalInsufficient] = useState<boolean>(false);
 
   const { agent, onChangeAgent } = useAgent();
   useEffect(() => {
@@ -109,17 +111,17 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
 
     if(isUndefined(selectedFixedDebt) || selectedFixedDebt === 0) {
       valid = false;
-      addError(err, 'margin', 'Please select fixed debt amount');
+      addError(err, 'slider', 'Please select fixed debt amount');
+    }
+
+    if (isAvailableNotionalInsufficient) {
+      // valid = false;
+      addError(err, 'slider', 'Warning: Slider was moved as this is the maximum amount of notional that can be fixed');
     }
     
     if(isUndefined(margin)) {
       valid = false;
-      addError(err, 'margin', 'Please select fixed debt amount');
-    }
-
-    if (!isTradeInfoLoading && lessThanEpsilon(swapInfo.result?.availableNotional, selectedFixedDebt, 0.001) === true) {
-      valid = false;
-      addError(err, 'margin', 'Not enough liquidity, please select lower fixed debt amount');
+      addError(err, 'slider', 'Please select fixed debt amount');
     }
 
     // Check the user has enough balance
@@ -242,9 +244,15 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
       touched.current.push('margin');
     }
 
+    if(!touched.current.includes('slider')) {
+      touched.current.push('slider');
+    }
+
     if (variableDebt.loading || (variableDebt.result === null) || (variableDebt.result === undefined)) {
       return;
     }
+
+    setIsAvailableNotionalInsufficient(false);
 
     if (value == selectedFixedDebtPercentage) {
       return;
@@ -273,6 +281,14 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
       }
       return;
     }
+
+    if (lessThanEpsilon(swapInfo.result?.availableNotional, selectedFixedDebt ?? 0, 0.0000001) === true) {
+      updateNotional(
+       Math.floor((swapInfo.result?.availableNotional / (variableDebt.result as number) * 1000 / 25)) * 2.5
+      );
+      setIsAvailableNotionalInsufficient(true);
+    }
+
 
     fullyCollateralisedMarginRequirement.call({
       fixedTokenBalance: swapInfo.result.fixedTokenDeltaBalance,

@@ -4,6 +4,7 @@ import isUndefined from 'lodash/isUndefined';
 import IconLabel from '../IconLabel/IconLabel';
 import MaskedIntegerField from '../MaskedIntegerField/MaskedIntegerField';
 import InputTokenLabel from '../InputTokenLabel/InputTokenLabel';
+import { toUSFormat } from '@utilities';
 
 export type NotionalAmountProps = {
   label: string;
@@ -31,7 +32,8 @@ const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
   const value = isUndefined(notional) ? defaultNotional : notional;
 
   const handleChange = (newValue: string | undefined) => {
-    onChangeNotional(newValue ? parseFloat(newValue) : undefined);
+    const usFormatted = toUSFormat(newValue);
+    onChangeNotional(usFormatted ? parseFloat(usFormatted) : undefined);
   };
 
   return (

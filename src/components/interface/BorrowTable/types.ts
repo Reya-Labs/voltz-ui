@@ -40,6 +40,7 @@ export const labelsVariable: [VariableBorrowTableFields, string][] = [
 export type BorrowAMMTableDatum = {
   id: string;
   protocol: string;
+  underlyingTokenName: string | undefined;
   startDate: DateTime;
   endDate: DateTime;
 };

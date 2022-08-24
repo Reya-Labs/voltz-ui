@@ -1,39 +1,37 @@
 import { Typography } from '@components/atomic';
 import { Stack, TableRow } from '@mui/material';
-import TableCell from '@mui/material/TableCell';
-
-import { formatCurrency, formatDateTime } from '@utilities';
-import { upperCase } from 'lodash';
+import { colors } from '@theme';
 
 import { IconLabel } from '@components/composite';
 import { Box } from '@mui/system';
-import { useBorrowAMMContext, usePositionContext } from '@contexts';
-import { useEffect } from 'react';
 import FixBorrowSlider from '../FixBorrowSlider/FixBorrowSlider';
 import { UseAsyncFunctionResult } from '@hooks';
+import { formatNumber } from '@utilities';
 
 export type FixBorrowProps = {
   variableDebt: UseAsyncFunctionResult<unknown, number | void>;
-  currencyCode?: string;
-  currencySymbol?: string;
-  selectedFixedDebt?: number;
-  selectedFixedDebtPercentage?: number;
-  selectedVariableDebt?: number;
-  selectedVariableDebtPercentage?: number;
+  underlyingTokenName?: string;
+  selectedFixedDebt: number;
+  selectedFixedDebtPercentage: number;
+  selectedVariableDebt: number;
+  selectedVariableDebtPercentage: number;
   handleChange: (value: number) => void;
   swapSummaryLoading: boolean;
+  error?: boolean;
+  errorText?: string;
 }
 
 const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
   variableDebt,
-  currencyCode = '',
-  currencySymbol = '',
+  underlyingTokenName = '',
   selectedFixedDebt,
   selectedFixedDebtPercentage,
   selectedVariableDebt,
   selectedVariableDebtPercentage,
   handleChange,
-  swapSummaryLoading
+  swapSummaryLoading,
+  error,
+  errorText
 }) => {
   const renderValue = () => {
     if (variableDebt.loading) {
@@ -41,24 +39,29 @@ const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
     }
 
     if (!variableDebt.result) {
-      return `${currencySymbol}0`;
+      return `0 ${underlyingTokenName}`;
     }
 
-    return `${currencySymbol}${(variableDebt.result).toFixed(2)}`;
+    let decimals = 2;
+    if (underlyingTokenName === 'ETH') {
+      decimals = 4;
+    }
+
+    return `${formatNumber(variableDebt.result, decimals, decimals)} ${underlyingTokenName}`;
   };
 
   return (
     <Box>
       <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
         <Box>
-          <Typography variant='h4'>
-            <IconLabel label="Variable Debt" icon="information-circle" info="TBA" />
+          <Typography variant='body2' sx={{fontSize: 20, fontWeight: 700}}>
+            <IconLabel label="Variable Debt" icon="information-circle" info="Your current variable debt on Aave or Compound that has not been set to a Voltz fixed rate yet" />
           </Typography>
         </Box>
 
         <Box>
-          <Typography variant='h4'>
-            {renderValue()} {currencyCode}
+          <Typography variant='body2' sx={{fontSize: 20, fontWeight: 700, color: colors.skyBlueCrayola.base }}>
+            {renderValue()}
           </Typography>
         </Box>
         
@@ -70,9 +73,11 @@ const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
         selectedFixedDebtPercentage={selectedFixedDebtPercentage}
         selectedVariableDebt={selectedVariableDebt}
         selectedVariableDebtPercentage={selectedVariableDebtPercentage}
-        currencySymbol={'$'}
-        handleChange={handleChange}
+        handleSliderChange={handleChange}
+        underlyingTokenName={underlyingTokenName}
         swapSummaryLoading={swapSummaryLoading}
+        error={error}
+        errorText={errorText}
       />
     </Box>
   );

@@ -8,7 +8,7 @@ import { Button } from '@components/atomic';
 import { useWallet } from '@hooks';
 import { BorrowAMMTableDatum, labelsVariable, labelsFixed } from '../../types';
 import { BorrowVariableAPY, BorrowFixedAPR, Debt, BorrowMaturity } from './components';
-import { useBorrowAMMContext, usePositionContext } from '@contexts';
+import { useBorrowAMMContext, usePositionContext, Agents } from '@contexts';
 import { PoolField } from '@components/composite';
 
 export type BorrowTableRowProps = {
@@ -23,10 +23,12 @@ export type BorrowTableRowProps = {
 const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({ datum, index, onSelect, isFixedPositions }) => {
   const wallet = useWallet();
   const variant = 'main';
-  const { variableDebt, fixedDebt } = useBorrowAMMContext();
+  const { variableDebtInNativeTokens: variableDebtInToken, fixedDebtInNativeTokens: fixedDebtInToken, variableDebtInUSD: variableDebt, fixedDebtInUSD: fixedDebt } = useBorrowAMMContext();
   const { position } = usePositionContext();
   const { result: resultVar, loading: loadingVar, call: callVar } = variableDebt;
   const { result: resultFixed, loading: loadingFixed, call: callFixed } = fixedDebt;
+  const { result: resultVarInToken, loading: loadingVarInToken, call: callVarInToken } = variableDebtInToken;
+  const { result: resultFixedInToken, loading: loadingFixedInToken, call: callFixedInToken } = fixedDebtInToken;
 
   useEffect(() => {
     if (wallet.status === "connected" && !isFixedPositions) {
@@ -39,6 +41,18 @@ const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({ datum, i
       callFixed(position);
     }
   }, [callFixed, position, wallet.status]);
+
+  useEffect(() => {
+    if (wallet.status === "connected" && !isFixedPositions) {
+      callVarInToken(position);
+    }
+  }, [callVarInToken, position, wallet.status]);
+
+  useEffect(() => {
+    if (wallet.status === "connected" && isFixedPositions) {
+      callFixedInToken(position);
+    }
+  }, [callFixedInToken, position, wallet.status]);
 
   const typeStyleOverrides = (): SystemStyleObject<Theme> => {
     if (!variant) {
@@ -70,7 +84,7 @@ const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({ datum, i
     }
     return (
     <TableCell align="left" width="20%">
-        <Button variant="contained" onClick={handleClick} sx={{
+        <Button variant="contained" agent={Agents.LIQUIDITY_PROVIDER} onClick={handleClick} sx={{
           padding: '8px 16px',
           fontSize: 18,
           lineHeight: 1,
@@ -111,7 +125,10 @@ const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({ datum, i
             if (field === 'maturity') {
               return <BorrowMaturity/>;
             }
-            return <Debt debt={isFixedPositions ? resultFixed : resultVar}/>;
+            return <Debt 
+              debtInUSD={isFixedPositions ? resultFixed : resultVar}
+              debtInToken={isFixedPositions ? resultFixedInToken : resultVarInToken}
+              tokenName={datum.underlyingTokenName} />;
     
           })}
           {button}

@@ -44,23 +44,19 @@ import { TokenAmount } from './fractions/tokenAmount';
 import { decodeInfoPostMint, decodeInfoPostSwap, getReadableErrorMessage } from '../utils/errors/errorHandling';
 import Position from './position';
 import { isNumber, isUndefined } from 'lodash';
-
-//1. Import coingecko-api
-import CoinGecko from 'coingecko-api';
 import { getExpectedApy } from '../services/getExpectedApy';
 
-//2. Initiate the CoinGecko API Client
-const CoinGeckoClient = new CoinGecko();
+import axios from 'axios';
 
-//3. Make call to get the price of 1 eth in USD, so divide the value of USD by data
-// queries the json response body with price of 1eth in usd
-// returns the value of 1 eth in USD 
 var geckoEthToUsd = async () => {
-  let data = await CoinGeckoClient.simple.price({
-    ids: ['ethereum'],
-    vs_currencies: ['usd'],
-  });
-  return data.data.ethereum.usd;
+  for (let attempt = 0; attempt < 5; attempt++) {
+    try{
+      let data = await axios.get('https://pro-api.coingecko.com/api/v3/simple/price?x_cg_pro_api_key='+process.env.REACT_APP_COINGECKO_API_KEY+'&ids=ethereum&vs_currencies=usd');
+      return data.data.ethereum.usd;
+    } catch (error) {
+    }
+  }
+  return 0;
 };
 
 

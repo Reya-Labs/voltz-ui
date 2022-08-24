@@ -1,66 +1,92 @@
 import { Typography } from '@components/atomic';
-import { Stack, TableRow } from '@mui/material';
-import TableCell from '@mui/material/TableCell';
+import { Stack } from '@mui/material';
 
 import { formatCurrency, formatNumber } from '@utilities';
 import { upperCase } from 'lodash';
 
-import { IconLabel } from '@components/composite';
 import { Box } from '@mui/system';
-import { SystemStyleObject, Theme } from '@theme';
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { UseAsyncFunctionResult } from '@hooks';
 
 import Slider, { SliderThumb } from '@mui/material/Slider';
-import { styled } from '@mui/material/styles';
 
-import { ReactComponent as ThumbComponent } from './thumb.svg';
+import { colors, inputStyles, SystemStyleObject, Theme } from '@theme';
 
 export type FixBorrowSliderProps = {
   variableDebt: UseAsyncFunctionResult<unknown, number | void>;
-  currencySymbol: string;
-  selectedFixedDebt?: number;
-  selectedFixedDebtPercentage?: number;
-  selectedVariableDebt?: number;
-  selectedVariableDebtPercentage?: number;
-  handleChange: (value: number) => void;
+  underlyingTokenName: string;
+  selectedFixedDebt: number;
+  selectedFixedDebtPercentage: number;
+  selectedVariableDebt: number;
+  selectedVariableDebtPercentage: number;
+  handleSliderChange: (value: number) => void;
   swapSummaryLoading: boolean;
+  error?: boolean;
+  errorText?: string;
+}
+
+const textStyles: SystemStyleObject<Theme> = {
+  fontSize: '11px',
+  lineHeight: '1.2',
+  textTransform: 'uppercase'
+}
+const errorLabelStyles: SystemStyleObject<Theme> = {
+  ...textStyles,
+  color: colors.wildStrawberry.base,
+  marginTop: (theme) => theme.spacing(-2),
 }
 
 const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
   variableDebt,
-  currencySymbol,
+  underlyingTokenName,
   selectedFixedDebt,
   selectedFixedDebtPercentage,
   selectedVariableDebt,
   selectedVariableDebtPercentage,
-  handleChange,
-  swapSummaryLoading
+  handleSliderChange,
+  swapSummaryLoading,
+  error,
+  errorText
 }) => {
-  const handleChangeCommitted = (event: React.SyntheticEvent | Event, newValue: number | number[]) => {
-    if (typeof newValue === 'number') {
-      handleChange(newValue);
+  const [ sliderValue, setSliderValue ] = useState<number | undefined>(undefined);
+
+  const handleChange = (event: Event, value: number | number[], activeThumb: number) => {
+    if (typeof value === 'number') {
+      setSliderValue(value);
     }
+  };
+
+  const handleChangeCommitted = (event: React.SyntheticEvent | Event, newValue: number | number[]) => {
+    setSliderValue(undefined);
+    if (typeof newValue === 'number') {
+      handleSliderChange(newValue);
+    }
+  };
+
+  const labelStyles: SystemStyleObject<Theme> = { 
+    textTransform: "uppercase",
+    fontWeight: 400, 
+    fontSize: 12,
+    color: "#A6A2B4",
+    verticalAlign: 'middle',
+    marginTop: (theme) => theme.spacing(4)
   };
 
   const colorStyleOverrides = (): SystemStyleObject<Theme> => {
     return {
-      // '& .MuiSlider-thumb': {
-      //   height: 27,
-      //   width: 27,
-      //   border: '1px solid currentColor',
-      //   '&:hover': {
-      //     boxShadow: '0 0 0 8px rgba(58, 133, 137, 0.16)',
-      //   }
-      // },
+      '& .MuiSlider-thumb': {
+        height: 0,
+        width: 0,
+        paddingTop: 1
+      },
       '& .MuiSlider-rail': {
         background: '#002BB1',
-        height: 20,
+        height: 13,
       },
       '& .MuiSlider-track': {
         background: "#009AB3",
-        height: 20
+        height: 13
       },
       '& .MuiSlider-mark': {
         opacity: 0
@@ -68,53 +94,75 @@ const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
     };
   };
 
-  interface AirbnbThumbComponentProps extends React.HTMLAttributes<unknown> {}
+  interface FixBorrowThumbComponentProps extends React.HTMLAttributes<unknown> {}
 
-  function AirbnbThumbComponent(props: AirbnbThumbComponentProps) {
+  function FixBorrowThumbComponent(props: FixBorrowThumbComponentProps) {
     const { children, ...other } = props;
     return (
       <SliderThumb {...other}>
-        <ThumbComponent/>
+        {children}
+        <div>
+          <svg width="17" height="18" viewBox="0 0 17 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="6.46875" width="4.04734" height="18" fill="#E5E1F9"/>
+            <path d="M16.5859 9L12.0327 11.5981L12.0327 6.40192L16.5859 9Z" fill="#E5E1F9"/>
+            <path d="M0.396484 9L4.94974 6.40192L4.94974 11.5981L0.396484 9Z" fill="#E5E1F9"/>
+          </svg>
+        </div>
       </SliderThumb>
     );
   }
   
+  
   return (
     <Box>
       <Stack>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
-          <Typography variant='body2'>
-            {upperCase('Fixed Debt')}
+        <Stack direction="row" justifyContent="space-between" alignItems="baseline" spacing={1}>
+          <Typography variant='subtitle1' sx={{...labelStyles}}>
+            Fixed Debt
           </Typography>
-          <Typography variant='body2'>
-              {upperCase('Variable Debt')}
+          <Typography variant='subtitle1' sx={{...labelStyles}}>
+              Variable Debt
           </Typography>
         </Stack>
 
-        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
-          <Typography variant='body2'>
-            {(selectedFixedDebt != null && selectedFixedDebt !== undefined)  ? `${currencySymbol}${formatCurrency(selectedFixedDebt)}` : 'Loading...'} 
-            {(selectedFixedDebtPercentage !== null && selectedFixedDebtPercentage !== undefined) ? `(${formatNumber(selectedFixedDebtPercentage)}%)` : ''}
+        <Stack direction="row" justifyContent="space-between" alignItems="center">
+          <Typography variant='body2' display="flex" fontSize='14px' fontWeight='700'>
+            {(!variableDebt.loading) ? 
+            `${formatCurrency(selectedFixedDebt, true, false, (underlyingTokenName === 'ETH') ? 4 : 2, (underlyingTokenName === 'ETH') ? 4 : 2)} ${underlyingTokenName}` 
+            : 'Loading...'} 
+            <Box sx={{color: "#A6A2B4", fontWeight: 400}}>
+            &thinsp; {(!variableDebt.loading) ? ` (${formatNumber(selectedFixedDebtPercentage)}%)` : ''}
+            </Box>  
           </Typography>
-          <Typography variant='body2'>
-            {(selectedVariableDebt != null && selectedVariableDebt !== undefined) ? `${currencySymbol}${formatCurrency(selectedVariableDebt)}` : 'Loading...'} 
-            {(selectedVariableDebtPercentage !== null && selectedVariableDebtPercentage !== undefined) ? `(${formatNumber(selectedVariableDebtPercentage)}%)` : ''}
+          <Typography variant='body2' display="flex" fontSize='14px' fontWeight='700'>
+            {(!variableDebt.loading) ? `${formatCurrency(selectedVariableDebt, true, false, (underlyingTokenName === 'ETH') ? 4 : 2, (underlyingTokenName === 'ETH') ? 4 : 2)} ${underlyingTokenName}` : 'Loading...'} 
+            <Box sx={{color: "#A6A2B4", fontWeight: 400}}>
+            &thinsp;{(!variableDebt.loading) ? ` (${formatNumber(selectedVariableDebtPercentage)}%)` : ''}
+            </Box>
           </Typography>
         </Stack>
       </Stack>
 
       <Slider
-        // components={{ Thumb: AirbnbThumbComponent }}
+        components={{ Thumb: FixBorrowThumbComponent }}
         defaultValue={0}
+        value={sliderValue ?? selectedFixedDebtPercentage}
         // valueLabelDisplay="auto"
         step={2.5}
         marks
         min={0}
         max={100}
+        onChange={handleChange}
         onChangeCommitted={handleChangeCommitted}
         disabled={variableDebt.loading || swapSummaryLoading}
         sx={{ ...colorStyleOverrides() }}
       />
+
+      {error && errorText && (
+        <Typography variant='body2' sx={errorLabelStyles}>
+          {errorText}
+        </Typography>
+      )}
     </Box>
   );
 };

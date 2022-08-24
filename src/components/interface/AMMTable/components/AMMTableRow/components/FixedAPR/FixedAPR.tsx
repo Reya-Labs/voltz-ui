@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { useAMMContext } from '@contexts';
 import { Typography } from '@components/atomic';
 import TableCell from '@mui/material/TableCell';
+import { formatNumber } from '@utilities';
 
 const FixedAPR: React.FunctionComponent = () => {
   const { fixedApr } = useAMMContext();
@@ -21,7 +22,7 @@ const FixedAPR: React.FunctionComponent = () => {
       return '0%';
     }
 
-    return `${result.toFixed(2)}%`;
+    return `${formatNumber(result)}%`;
   };
 
   return (
