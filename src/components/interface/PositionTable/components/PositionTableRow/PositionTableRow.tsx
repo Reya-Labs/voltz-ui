@@ -43,10 +43,6 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     onSelect('margin');
   }
 
-  const handleEditNotional = () => {
-    onSelect('notional');
-  }
-
   const handleEditLPNotional = () => {
     onSelect('liquidity');
   }
@@ -83,7 +79,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
         <Notional 
           notional={agent === Agents.LIQUIDITY_PROVIDER ? formatNumber(position.notional) : formatNumber(Math.abs(position.effectiveVariableTokenBalance))} 
           token={underlyingTokenName || ''}
-          onEdit={agent === Agents.LIQUIDITY_PROVIDER ? handleEditLPNotional : handleEditNotional}
+          onEdit={agent === Agents.LIQUIDITY_PROVIDER ? handleEditLPNotional : undefined}
         />
       )
     }
