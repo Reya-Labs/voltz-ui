@@ -4,6 +4,7 @@ import TableCell from '@mui/material/TableCell';
 import { Typography } from '@components/atomic';
 import Box from '@mui/material/Box';
 import { themes } from '@theme';
+import { formatNumber } from '@utilities';
 
 export type DebtProps = {
   debtInUSD: number | null | void;
@@ -23,7 +24,7 @@ const Debt: React.FunctionComponent<DebtProps> = ({debtInUSD, debtInToken, token
       return '$0';
     }
 
-    return `$${(debtInUSD).toFixed(2)}`;
+    return `$${formatNumber(debtInUSD)}`;
   };
 
   const renderValueInToken = () => {
@@ -35,11 +36,11 @@ const Debt: React.FunctionComponent<DebtProps> = ({debtInUSD, debtInToken, token
       return '$0';
     }
 
+    let decimals = 2;
     if (tokenName === 'ETH') {
-      return `${(debtInToken).toFixed(4)} ${tokenName ? tokenName : ''}`;
+      decimals = 4;
     }
-
-    return `${(debtInToken).toFixed(2)} ${tokenName ? tokenName : ''}`;
+    return `${formatNumber(debtInToken, decimals, decimals)} ${tokenName ? tokenName : ''}`;
   };
 
   return (

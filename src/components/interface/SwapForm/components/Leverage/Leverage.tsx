@@ -4,7 +4,7 @@ import Slider from '@mui/material/Slider';
 import { MaskedIntegerField, IconLabel } from '@components/composite';
 import { colors } from '@theme';
 import { isNumber, isUndefined } from 'lodash';
-import { formatNumber } from '@utilities';
+import { formatNumber, toUSFormat } from '@utilities';
 
 /**
  * margin: for a new position this is just the ratio between notional and minimum margin required
@@ -59,7 +59,8 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value}: Lev
 
   const handleChangeInput = useCallback((inputVal: string | undefined) => {
     if(inputVal) {
-      const newValue = parseFloat(inputVal);
+      const usFormatted = toUSFormat(inputVal);
+      const newValue = usFormatted ? parseFloat(usFormatted) : NaN;
       if(!isNaN(newValue)) {
         setInternalValue(newValue);
         window.clearInterval(timer.current);

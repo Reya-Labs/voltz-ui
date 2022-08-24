@@ -1,3 +1,4 @@
+import { toUSFormat } from '@utilities';
 import React, { useCallback, useState } from 'react';
 import IconLabel from '../IconLabel/IconLabel';
 import MaskedIntegerField from '../MaskedIntegerField/MaskedIntegerField';
@@ -32,8 +33,9 @@ const RateOptionsInput: React.FunctionComponent<RateOptionsInputProps> = ({
 
   const handleChange = useCallback(
     (newValue: string | undefined) => {
+      const usFormatted = toUSFormat(newValue);
       setInputValue(newValue);
-      onChange(newValue ? parseFloat(newValue) : undefined, null);
+      onChange(usFormatted ? parseFloat(usFormatted) : undefined, null);
     },
     [onChange, setInputValue],
   );

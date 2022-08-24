@@ -1,5 +1,6 @@
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 import { Typography } from '@components/atomic';
+import { formatNumber } from '@utilities';
 
 type AccruedRatesProps = {
   position: Position;
@@ -10,10 +11,10 @@ const AccruedRates = ({ position, positionInfo }: AccruedRatesProps) => {
   const renderValue = () => {  
     if (positionInfo?.variableRateSinceLastSwap && positionInfo?.fixedRateSinceLastSwap) {
       if (position.positionType === 1) {
-        return `${positionInfo?.fixedRateSinceLastSwap.toFixed(2)}% / ${positionInfo?.variableRateSinceLastSwap.toFixed(2)}%`;
+        return `${formatNumber(positionInfo?.fixedRateSinceLastSwap)}% / ${formatNumber(positionInfo?.variableRateSinceLastSwap)}%`;
       }
       else {
-        return `${positionInfo?.variableRateSinceLastSwap.toFixed(2)}% / ${positionInfo?.fixedRateSinceLastSwap.toFixed(2)}%`;
+        return `${formatNumber(positionInfo?.variableRateSinceLastSwap)}% / ${formatNumber(positionInfo?.fixedRateSinceLastSwap)}%`;
       }
     }
     else {

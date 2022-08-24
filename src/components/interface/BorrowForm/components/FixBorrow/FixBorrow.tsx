@@ -6,6 +6,7 @@ import { IconLabel } from '@components/composite';
 import { Box } from '@mui/system';
 import FixBorrowSlider from '../FixBorrowSlider/FixBorrowSlider';
 import { UseAsyncFunctionResult } from '@hooks';
+import { formatNumber } from '@utilities';
 
 export type FixBorrowProps = {
   variableDebt: UseAsyncFunctionResult<unknown, number | void>;
@@ -41,11 +42,12 @@ const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
       return `0 ${underlyingTokenName}`;
     }
 
+    let decimals = 2;
     if (underlyingTokenName === 'ETH') {
-      return `${(variableDebt.result).toFixed(4)} ${underlyingTokenName}`;
+      decimals = 4;
     }
 
-    return `${(variableDebt.result).toFixed(2)} ${underlyingTokenName}`;
+    return `${formatNumber(variableDebt.result, decimals, decimals)} ${underlyingTokenName}`;
   };
 
   return (

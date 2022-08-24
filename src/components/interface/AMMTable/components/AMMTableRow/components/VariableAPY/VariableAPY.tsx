@@ -3,6 +3,7 @@ import TableCell from '@mui/material/TableCell';
 
 import { useAMMContext } from '@contexts';
 import { Typography } from '@components/atomic';
+import { formatNumber } from '@utilities';
 
 const VariableAPY: React.FunctionComponent = () => {
   const { variableApy } = useAMMContext();
@@ -21,7 +22,7 @@ const VariableAPY: React.FunctionComponent = () => {
       return '0%';
     }
 
-    return `${(result * 100).toFixed(2)}%`;
+    return `${formatNumber(result * 100)}%`;
   };
 
   return (

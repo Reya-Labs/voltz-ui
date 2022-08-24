@@ -5,6 +5,7 @@ import { useAMMContext } from '@contexts';
 import { Typography } from '@components/atomic';
 import IconLabel from '../../../IconLabel/IconLabel';
 import { Agents } from '@contexts';
+import { formatNumber } from '@utilities';
 
 export type VariableAPYProps = {
   agent?: Agents;
@@ -27,7 +28,7 @@ const VariableAPY: React.FunctionComponent<VariableAPYProps> = ({agent}) => {
       return '0%';
     }
 
-    return `${(result * 100).toFixed(2)}%`;
+    return `${formatNumber(result * 100)}%`;
   };
 
   return (

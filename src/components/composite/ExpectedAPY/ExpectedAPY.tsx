@@ -22,7 +22,7 @@ export const ExpectedAPY = ({ expectedAPY }:ExpectedAPYProps) => {
   useEffect(() => {
     if(expectedAPY) {
       const newOptions = expectedAPY[0].map((labelNum, index) => ({
-        label: `${labelNum.toFixed(2)}%`, 
+        label: `${formatNumber(labelNum)}%`, 
         value: formatNumber(expectedAPY[1][index])
       }));
       setOptions(newOptions);
@@ -43,7 +43,7 @@ export const ExpectedAPY = ({ expectedAPY }:ExpectedAPYProps) => {
         }}>
           <Typography
             variant="h3"
-            label={<IconLabel label="Expected APY" icon="information-circle" info="This is the expected APY of your position if the variable APY between now and the end of the is your selected amount." />}
+            label={<IconLabel label="Expected APY" icon="information-circle" info="The APY you would get in a scenario in which the variable APY has the selected value until the pool's maturity" />}
             agentStyling
           >
             {selectedOptionValue ? `${selectedOptionValue}%` : '---'}

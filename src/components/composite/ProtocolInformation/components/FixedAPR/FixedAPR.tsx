@@ -5,6 +5,7 @@ import { useAMMContext } from '@contexts';
 import { Typography } from '@components/atomic';
 import { IconLabel } from '@components/composite';
 import { Agents } from '@contexts';
+import { formatNumber } from '@utilities';
 
 export type FixedAPRProps = {
   agent?: Agents;
@@ -27,7 +28,7 @@ const FixedAPR: React.FunctionComponent<FixedAPRProps> = ({agent}) => {
       return '0%';
     }
 
-    return `${result.toFixed(2)}%`;
+    return `${formatNumber(result)}%`;
   };
 
   return (
