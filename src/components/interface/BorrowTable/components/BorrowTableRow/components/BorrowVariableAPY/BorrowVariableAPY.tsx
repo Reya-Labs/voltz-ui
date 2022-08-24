@@ -21,7 +21,7 @@ const BorrowVariableAPY: React.FunctionComponent<BorrowVariableAPYProps> = ({loa
       return '0%';
     }
 
-    return `${(variableApy * 100).toFixed(2)}%`;
+    return `${formatNumber(result * 100)}%`;
   };
 
   return (

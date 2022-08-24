@@ -21,7 +21,7 @@ const BorrowFixedAPR: React.FunctionComponent<BorrowBorrowFixedAPR> = ({loading,
       return '0%';
     }
 
-    return `${fixedApr.toFixed(2)}%`; 
+    return `${formatNumber(result)}%`; 
   };
 
   return (
