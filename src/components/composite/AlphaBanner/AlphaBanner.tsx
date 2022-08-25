@@ -55,7 +55,7 @@ const AlphaBanner = () => {
   }, [step])
   
   return (
-    <Box aria-label="Voltz alpha - Currently in alpha launch. LP pools are capped." sx={{ 
+    <Box aria-label="Voltz alpha - Currently in alpha launch. LFG." sx={{ 
       background: 'linear-gradient(90deg, #201B35 0%, #372D65 50.52%, #2F2A54 100%)',
       width: '100%',
       height: '24px',
@@ -72,7 +72,7 @@ const AlphaBanner = () => {
               Voltz alpha
             </Typography>
             <Typography variant='body2' sx={{ ...textStyles, color: colors.skyBlueCrayola.base }}>
-              Currently in alpha launch. LP pools are capped
+              Currently in alpha launch. LFG
             </Typography>
             <Typography variant='body2' sx={{ ...textStyles, color: colors.wildStrawberry.base }}>
               Voltz alpha
@@ -84,7 +84,7 @@ const AlphaBanner = () => {
               Voltz alpha
             </Typography>
             <Typography variant='body2' sx={{ ...textStyles, color: colors.wildStrawberry.base }}>
-              Currently in alpha launch. LP pools are capped
+              Currently in alpha launch. LFG
             </Typography>
             <Typography variant='body2' sx={{ ...textStyles, color: colors.ultramarineBlue.base }}>
               Voltz alpha
@@ -96,7 +96,7 @@ const AlphaBanner = () => {
               Voltz alpha
             </Typography>
             <Typography variant='body2' sx={{ ...textStyles, color: colors.ultramarineBlue.base }}>
-              Currently in alpha launch. LP pools are capped
+              Currently in alpha launch. LFG
             </Typography>
             <Typography variant='body2' sx={{ ...textStyles, color: colors.skyBlueCrayola.base }}>
               Voltz alpha

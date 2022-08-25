@@ -26,6 +26,7 @@ const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorrowAMMTa
   const [order, setOrder] = useState<data.TableOrder>('desc');
   const [variableOrderBy, setVariableOrderBy] = useState<VariableBorrowTableFields>('debt');
   const [fixedOrderBy, setFixedOrderBy] = useState<FixedBorrowTableFields>('debt');
+  const [loadingItems, setLoadingItems] = useState<boolean>(true);
 
   const { borrowAmms, loading, error } = useBorrowAMMs();
   const { positions, loading: loadingPos, error: errorPos } = useBorrowPositions();
@@ -54,9 +55,9 @@ const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorrowAMMTa
   const defaultHeaderProps = {
     commonOverrides: commonOverrides,
     currencyCode:'USD',
-    currencySymbol:'$'};
+    currencySymbol:'$',
+    loading: true};
   const [headerProps, setHeaderProps] = useState<BorrowPortfolioHeaderProps>(defaultHeaderProps);
-
 
   const loadBorrowPositionsSummary = () => {
     if(!loadingPos && !errorPos && !loading && !error && positions && borrowAmms) {
@@ -101,11 +102,12 @@ const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorrowAMMTa
             fixedDebt={headerProps.fixedDebt}
             variableDebt={headerProps.variableDebt}
             fixedPositionsCount={headerProps.fixedPositionsCount}
-            variablePositionsCount={headerProps.variablePositionsCount}/>
+            variablePositionsCount={headerProps.variablePositionsCount}
+            loading={loadingItems}/>
           <Box sx={{ marginTop: (theme) => theme.spacing(8) }}>
             <BorrowTable
               showVariable = {(headerProps.variablePositionsCount !== undefined && headerProps.variablePositionsCount > 0)}
-              showFixed = {(headerProps.fixedPositionsCount !== undefined && headerProps.fixedPositionsCount > 0) }
+              showFixed = {(headerProps.fixedPositionsCount === undefined) }
               positions={positions}
               borrowAmms={borrowAmms}
               order={order}
@@ -117,6 +119,7 @@ const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorrowAMMTa
               size={size}
               onSelectItem={onSelectItem}
               commonOverrides={commonOverrides}
+              onLoaded={setLoadingItems}
             />
           </Box>
         </Panel>
