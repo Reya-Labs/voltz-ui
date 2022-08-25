@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { Agents, useAMMContext, usePositionContext } from "@contexts";
 import { SwapFormActions, SwapFormModes } from "@components/interface";
-import { AugmentedAMM, formatNumber } from "@utilities";
-import { isNumber, isUndefined } from "lodash";
+import { AugmentedAMM, lessThanEpsilon } from "@utilities";
+import { isNumber, isUndefined, max } from "lodash";
 import { hasEnoughTokens, hasEnoughUnderlyingTokens, lessThan } from "@utilities";
 import { GetInfoType, useAgent, useBalance, useMinRequiredMargin, useTokenApproval } from "@hooks";
 import { InfoPostSwap } from "@voltz-protocol/v1-sdk";
@@ -83,10 +83,12 @@ export type SwapFormContext = {
     data?: InfoPostSwap;
     errorMessage?: string;
     loading: boolean;
+    maxAvailableNotional?: number;
   }
   submitButtonState: SwapFormSubmitButtonStates;
   tokenApprovals: ReturnType<typeof useTokenApproval>;
   validate: () => Promise<boolean>;
+  warningText?: string;
 };
 
 const SwapFormCtx = createContext<SwapFormContext>({} as unknown as SwapFormContext);
@@ -137,6 +139,11 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
 
   const [resetDeltaState, setResetDeltaState] = useState<boolean>(false);
 
+  const [ isAvailableNotionalInsufficient, setIsAvailableNotionalInsufficient] = useState<boolean>(false);
+  const [warningText, setWarningText] = useState<string|undefined>(undefined);
+  const [maxAvailableNotional, setMaxAvailableNotional] = useState<number|undefined>(undefined);
+  const asyncCallsLoading = useRef<string[]>([]);
+
   // Set the correct agent type for the given position
   useEffect(() => {
     if(position) {
@@ -147,6 +154,12 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   // Load the fixed APR
   useEffect(() => {
     ammCtx.variableApy.call();
+    swapInfo.call({ 
+      position: undefined,
+      margin: 1000000000000000,
+      notional: 1000000000000000,  //10^15
+      type: GetInfoType.NORMAL_SWAP
+    });
   }, [])
 
   // cache the minRequiredMargin from swapInfo
@@ -385,6 +398,8 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     if(!touched.current.includes('notional')) {
       touched.current.push('notional');
     }
+    setIsAvailableNotionalInsufficient(false);
+    asyncCallsLoading.current = [];
     setNotional(value);
   }
 
@@ -406,6 +421,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   const validateNewPosition = async () => {
     const err: Record<string, string> = {};
     let valid = true;
+    let warnText = undefined;
 
     if(isUndefined(notional) || notional === 0) {
       valid = false;
@@ -448,8 +464,13 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       }
     }
 
+    if (lessThanEpsilon(swapInfo.result?.availableNotional, notional, 0.00001)) {
+      warnText = "msjnam jsani asjnas onsajia oasna jnasa";
+    }
+
     setErrors(err);
     setIsValid(valid);
+    setWarningText(warnText);
     return valid;
   };
 
@@ -488,6 +509,28 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     return valid;
   };
 
+  useEffect(() => {
+    if (swapInfo.loading) {
+      if (!asyncCallsLoading.current.includes('swapInfo')) {
+        asyncCallsLoading.current.push('swapInfo');
+      }
+      return;
+    }
+
+    if (isUndefined(swapInfo.result) || !asyncCallsLoading.current.includes('swapInfo')) {
+      return;
+    }
+
+    if (isUndefined(maxAvailableNotional) || lessThan(maxAvailableNotional, swapInfo.result?.availableNotional)) {
+      setMaxAvailableNotional(swapInfo.result?.availableNotional);
+    }
+
+    if (!isUndefined(notional) && lessThanEpsilon(swapInfo.result?.availableNotional, notional, 0.00001) === true) {
+      setIsAvailableNotionalInsufficient(true);
+      setMaxAvailableNotional(swapInfo.result?.availableNotional);
+    }
+  }, [swapInfo.loading, swapInfo.result]);
+
   const value = {
     action,
     approvalsNeeded,
@@ -509,7 +552,8 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     swapInfo: {
       data: swapInfo.result || undefined,
       errorMessage: swapInfo.errorMessage || undefined,
-      loading: swapInfo.loading
+      loading: swapInfo.loading,
+      maxAvailableNotional
     },
     state: {
       leverage,
@@ -521,7 +565,8 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     },
     submitButtonState: getSubmitButtonState(),
     tokenApprovals,
-    validate
+    validate,
+    warningText
   }
 
   return (
