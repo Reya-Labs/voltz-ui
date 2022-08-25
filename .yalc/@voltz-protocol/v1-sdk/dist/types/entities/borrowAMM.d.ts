@@ -38,7 +38,11 @@ declare class BorrowAMM {
         fDelta: BigNumber;
         vDelta: BigNumber;
         timestamp: BigNumber;
-    }[], atMaturity: boolean): Promise<number>;
+    }[], atMaturity: boolean): Promise<[BigNumber, BigNumber]>;
+    atMaturity(): Promise<boolean>;
+    getVariableCashFlow(position: Position): Promise<BigNumber>;
+    getFixedCashFlow(position: Position): Promise<number>;
+    getScaledUnderlyingBorrowBalance(): Promise<BigNumber>;
     getUnderlyingBorrowBalance(): Promise<number>;
     getFixedBorrowBalance(position: Position): Promise<number>;
     getAggregatedBorrowBalance(position: Position): Promise<number>;
