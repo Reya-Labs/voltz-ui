@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -31,6 +31,7 @@ export type BorrowTableProps = {
   page: number;
   size: number | null;
   onSelectItem: (datum: AugmentedBorrowAMM) => void;
+  onLoaded: (loaded: boolean) => void;
   commonOverrides: SystemStyleObject<Theme>;
 };
 
@@ -45,10 +46,14 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
   page,
   size,
   onSelectItem,
+  onLoaded,
   commonOverrides,
 }) => {
 
   const { agent } = useAgent();
+
+  const countLoaded = useRef(-2);
+  const counted = useRef({fixedRows: false, variableRows: false, noFixedRows: true, noVariableRows: true  });
 
   const replacementRowStyle: SystemStyleObject<Theme> = {
       fontSize: 18,
@@ -58,40 +63,63 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
       justifyContent: 'center',
       backgroundColor: `#151221`,
       borderRadius: 2,
-      padding: (theme) => theme.spacing(2),
+      padding: '10px',
       marginTop: (theme) => theme.spacing(-3),
       marginBottom: (theme) => theme.spacing(8)
   };
 
+  const handleLoadedRow = () => {
+    countLoaded.current++;
+    if(countLoaded.current == 0) {
+      onLoaded(false);
+    }
+  }
+
   const tableData = useMemo(() => {
     const unfilteredDatum = borrowAmms.map(mapAmmToAmmTableDatum);
+    counted.current.noFixedRows = false;
+    counted.current.noVariableRows = false;
     return unfilteredDatum;
   }, [order, page, size]);
 
   const renderNoFixedPositions = () => {
-      return (
-        <Typography variant="body2" sx={{...replacementRowStyle}}>
-          YOU DON'T HAVE ANY FIXED DEBT
-      </Typography>
-      );
+    if (!counted.current.noFixedRows) {
+      handleLoadedRow();
+      counted.current.noFixedRows = true;
+    }
+    return (
+      <Typography variant="body2" sx={{...replacementRowStyle}}>
+        YOU DON'T HAVE ANY FIXED DEBT
+    </Typography>
+    );
   }
   const renderNoVariablePositions = () => {
-      return (
-        <Typography variant="body2" sx={{...replacementRowStyle}}>
-          YOU DON'T HAVE ANY VARIABLE DEBT
-      </Typography>
-      );
+    if (!counted.current.noVariableRows && !showFixed) {
+      handleLoadedRow();
+      counted.current.noVariableRows = true;
+    }
+    return (
+      <Typography variant="body2" sx={{...replacementRowStyle}}>
+        YOU DON'T HAVE ANY VARIABLE DEBT
+    </Typography>
+    );
   }
 
   const renderVariableTable = () => {
     const liveMarkets = tableData.map((datum, index) => {
       if(datum && DateTime.now() < datum.endDate) {
         const position = findCurrentBorrowPosition(positions || [], borrowAmms[index]);
-        return {datum: datum, borrowAmms: borrowAmms[index],position: position, index: index}
+        return {datum: datum, borrowAmms: borrowAmms[index], position: position, index: index}
       }
     })
 
-    const showPositions = (liveMarkets.filter((market) => market !== undefined).length !== 0);
+    const filteredMarkets = liveMarkets.filter((market) => market !== undefined);
+    const showPositions = (filteredMarkets.length !== 0);
+
+    if(showPositions && showVariable && !counted.current.variableRows) {
+      countLoaded.current = countLoaded.current + (counted.current.noVariableRows ? 0 : 1) - filteredMarkets.length;
+      counted.current.variableRows = true;
+    }
   
     return ( <>
       <TableContainer>
@@ -106,7 +134,7 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
         >
           <BorrowTableHead order={order} orderBy={variableOrderBy} labels={labelsVariable} isFixedPositions={false}/>
           <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
-          {showPositions && showVariable && renderVariableRows(liveMarkets)}
+          {showPositions && showVariable && renderVariableRows(liveMarkets.filter((market) => market !== undefined))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -126,10 +154,9 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
       {marketsWithPosition.map((info) => {
       if (info !== undefined) {
         return (
-        
         <BorrowAMMProvider amm={info.borrowAmms}>
           <PositionProvider position={info.position}>
-            <BorrowTableRow datum={info.datum} index={info.index} onSelect={handleSelectRow(info.index)} isFixedPositions={true}/>
+            <BorrowTableRow datum={info.datum} index={info.index} onSelect={handleSelectRow(info.index)} isFixedPositions={true} handleLoadedRow={handleLoadedRow}/>
           </PositionProvider>
         </BorrowAMMProvider>)
       }
@@ -149,7 +176,7 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
             return (
             <BorrowAMMProvider amm={info.borrowAmms}>
               <PositionProvider position={info.position}>
-                <BorrowTableRow datum={info.datum} index={info.index} onSelect={handleSelectRow(info.index)} isFixedPositions={false} />
+                <BorrowTableRow datum={info.datum} index={info.index} onSelect={handleSelectRow(info.index)} isFixedPositions={false} handleLoadedRow={handleLoadedRow}/>
               </PositionProvider>
             </BorrowAMMProvider>)
           }
@@ -168,7 +195,13 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
       }
     })
 
-    const showPositions = (marketsWithPosition.filter((market) => market !== undefined).length !== 0);
+    const filteredMarkets = marketsWithPosition.filter((market) => market !== undefined);
+    const showPositions = (filteredMarkets.length !== 0);
+
+    if(showPositions && !counted.current.fixedRows) {
+      countLoaded.current = countLoaded.current + (counted.current.noFixedRows ? 0 : 1)  - filteredMarkets.length;
+      counted.current.fixedRows = true;
+    }
 
     return (<>
       <TableContainer>
@@ -183,11 +216,11 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
         >
           <BorrowTableHead order={order} orderBy={fixedOrderBy} labels={labelsFixed} isFixedPositions={true}/>
           <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
-          {showPositions && showFixed && renderFixedRows(marketsWithPosition)}
+          {showPositions && renderFixedRows(marketsWithPosition)}
         </TableBody>
         </Table>
       </TableContainer>
-      {(!showPositions || !showFixed ) && renderNoFixedPositions()}
+      {(!showPositions) && renderNoFixedPositions()}
     </>)
     
   }
