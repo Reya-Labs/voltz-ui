@@ -120,7 +120,7 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
 
     if (isAvailableNotionalInsufficient) {
       // valid = false;
-      warnText = "Slider was moved as this is the maximum amount of notional that can be fixed";
+      warnText = "There is not enough liquidity in the pool to fix all of your debt. The position the slider is in now is the maximum amount of variable debt you can fix.";
     }
     
     if(isUndefined(margin)) {

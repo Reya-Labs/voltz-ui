@@ -24,7 +24,7 @@ function* swapSaga(action: SwapAction) { // function * means it is async functio
     return;
   }
 
-  const { id, agent, notional, margin, fixedLow, fixedHigh } = action.payload.transaction;
+  const { id, agent, notional, margin, fixedLow, fixedHigh, fullyCollateralisedVTSwap } = action.payload.transaction;
 
   let result: ContractReceipt | void;
   try {
@@ -35,6 +35,7 @@ function* swapSaga(action: SwapAction) { // function * means it is async functio
       margin,
       fixedLow: fixedLow ?? 1,
       fixedHigh: fixedHigh ?? 999,
+      fullyCollateralisedVTSwap: fullyCollateralisedVTSwap
     });
 
   } catch (error) {
