@@ -7,7 +7,7 @@ const serializeAmm = (amm: AugmentedAMM): SerializedAMM => ({
   factoryAddress: amm.factoryAddress,
   fcmAddress: amm.fcmAddress,
   marginEngineAddress: amm.marginEngineAddress,
-  termStartTimestamp: amm.termEndTimestamp.toString(),
+  termStartTimestamp: amm.termStartTimestamp.toString(),
   termEndTimestamp: amm.termEndTimestamp.toString(),
   tickSpacing: amm.tickSpacing.toString(),
   tick: amm.tick.toString(),
