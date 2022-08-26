@@ -27,11 +27,6 @@ export declare class IPeriphery__factory {
         stateMutability?: undefined;
     } | {
         inputs: ({
-            internalType: string;
-            name: string;
-            type: string;
-            components?: undefined;
-        } | {
             components: {
                 internalType: string;
                 name: string;
@@ -40,6 +35,11 @@ export declare class IPeriphery__factory {
             internalType: string;
             name: string;
             type: string;
+        } | {
+            internalType: string;
+            name: string;
+            type: string;
+            components?: undefined;
         })[];
         name: string;
         outputs: {

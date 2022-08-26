@@ -23,6 +23,7 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 interface MarginEngineInterface extends ethers.utils.Interface {
   functions: {
     "MAX_CACHE_MAX_AGE_IN_SECONDS()": FunctionFragment;
+    "MAX_FIXED_RATE_WAD()": FunctionFragment;
     "MAX_LIQUIDATOR_REWARD_WAD()": FunctionFragment;
     "MAX_LOOKBACK_WINDOW_IN_SECONDS()": FunctionFragment;
     "MIN_LOOKBACK_WINDOW_IN_SECONDS()": FunctionFragment;
@@ -72,6 +73,10 @@ interface MarginEngineInterface extends ethers.utils.Interface {
 
   encodeFunctionData(
     functionFragment: "MAX_CACHE_MAX_AGE_IN_SECONDS",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "MAX_FIXED_RATE_WAD",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -257,6 +262,10 @@ interface MarginEngineInterface extends ethers.utils.Interface {
 
   decodeFunctionResult(
     functionFragment: "MAX_CACHE_MAX_AGE_IN_SECONDS",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "MAX_FIXED_RATE_WAD",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -679,6 +688,8 @@ export class MarginEngine extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    MAX_FIXED_RATE_WAD(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     MAX_LIQUIDATOR_REWARD_WAD(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     MAX_LOOKBACK_WINDOW_IN_SECONDS(
@@ -894,6 +905,8 @@ export class MarginEngine extends BaseContract {
 
   MAX_CACHE_MAX_AGE_IN_SECONDS(overrides?: CallOverrides): Promise<BigNumber>;
 
+  MAX_FIXED_RATE_WAD(overrides?: CallOverrides): Promise<BigNumber>;
+
   MAX_LIQUIDATOR_REWARD_WAD(overrides?: CallOverrides): Promise<BigNumber>;
 
   MAX_LOOKBACK_WINDOW_IN_SECONDS(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1104,6 +1117,8 @@ export class MarginEngine extends BaseContract {
 
   callStatic: {
     MAX_CACHE_MAX_AGE_IN_SECONDS(overrides?: CallOverrides): Promise<BigNumber>;
+
+    MAX_FIXED_RATE_WAD(overrides?: CallOverrides): Promise<BigNumber>;
 
     MAX_LIQUIDATOR_REWARD_WAD(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1817,6 +1832,8 @@ export class MarginEngine extends BaseContract {
   estimateGas: {
     MAX_CACHE_MAX_AGE_IN_SECONDS(overrides?: CallOverrides): Promise<BigNumber>;
 
+    MAX_FIXED_RATE_WAD(overrides?: CallOverrides): Promise<BigNumber>;
+
     MAX_LIQUIDATOR_REWARD_WAD(overrides?: CallOverrides): Promise<BigNumber>;
 
     MAX_LOOKBACK_WINDOW_IN_SECONDS(
@@ -2032,6 +2049,10 @@ export class MarginEngine extends BaseContract {
 
   populateTransaction: {
     MAX_CACHE_MAX_AGE_IN_SECONDS(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    MAX_FIXED_RATE_WAD(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
