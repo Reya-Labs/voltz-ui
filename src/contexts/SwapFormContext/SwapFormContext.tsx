@@ -139,8 +139,6 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
 
   const [resetDeltaState, setResetDeltaState] = useState<boolean>(false);
 
-  const [ isAvailableNotionalInsufficient, setIsAvailableNotionalInsufficient] = useState<boolean>(false);
-  const [warningText, setWarningText] = useState<string|undefined>(undefined);
   const [maxAvailableNotional, setMaxAvailableNotional] = useState<number|undefined>(undefined);
   const asyncCallsLoading = useRef<string[]>([]);
 
@@ -154,13 +152,18 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   // Load the fixed APR
   useEffect(() => {
     ammCtx.variableApy.call();
-    swapInfo.call({ 
-      position: undefined,
-      margin: 1000000000000000,
-      notional: 1000000000000000,  //10^15
-      type: GetInfoType.NORMAL_SWAP
-    });
   }, [])
+
+  useEffect(() => {
+    setMaxAvailableNotional(undefined);
+    asyncCallsLoading.current = [];
+    // swapInfo.call({ 
+    //   position: undefined,
+    //   margin: 1000000000000000,
+    //   notional: 1000000000000000,  //10^15
+    //   type: GetInfoType.NORMAL_SWAP
+    // });
+  }, [agent]);
 
   // cache the minRequiredMargin from swapInfo
   useEffect(() => {
@@ -174,6 +177,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     if (!approvalsNeeded && !isUndefined(notional) && notional !== 0) {
       switch (action) {
         case SwapFormActions.SWAP: {
+          asyncCallsLoading.current = [];
           swapInfo.call({ 
             position,
             margin,
@@ -183,6 +187,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
           break;
         }
         case SwapFormActions.ROLLOVER_SWAP: {
+          asyncCallsLoading.current = [];
           swapInfo.call({
             margin,
             notional, 
@@ -192,6 +197,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
         }
 
         case SwapFormActions.FCM_SWAP: {
+          asyncCallsLoading.current = [];
           swapInfo.call({ 
             position,
             margin,
@@ -202,6 +208,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
         }
 
         case SwapFormActions.ROLLOVER_FCM_SWAP: {
+          asyncCallsLoading.current = [];
           swapInfo.call({ 
             margin,
             notional, 
@@ -224,7 +231,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     partialCollateralization,
     marginAction,
     ammCtx.variableApy.result,
-    margin
+    margin                        // TO DO: ui-sprint1
   ]);
 
   // set the leverage back to 50% if variables change
@@ -398,8 +405,6 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     if(!touched.current.includes('notional')) {
       touched.current.push('notional');
     }
-    setIsAvailableNotionalInsufficient(false);
-    asyncCallsLoading.current = [];
     setNotional(value);
   }
 
@@ -421,7 +426,6 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   const validateNewPosition = async () => {
     const err: Record<string, string> = {};
     let valid = true;
-    let warnText = undefined;
 
     if(isUndefined(notional) || notional === 0) {
       valid = false;
@@ -464,15 +468,19 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       }
     }
 
-    if (lessThanEpsilon(swapInfo.result?.availableNotional, notional, 0.00001)) {
-      warnText = "msjnam jsani asjnas onsajia oasna jnasa";
-    }
-
     setErrors(err);
     setIsValid(valid);
-    setWarningText(warnText);
     return valid;
   };
+
+  const getWarningText = () => {
+    let warnText = undefined;
+    if (asyncCallsLoading.current.includes("swapInfo") && !swapInfo.loading && lessThanEpsilon(swapInfo.result?.availableNotional, notional, 0.00001) === true) {
+      warnText = "There is not enough liquidity in the pool to support your entire trade, meaning only a proportion of your trade will go through. You can see the details of this in the Trade Information box below.";
+    }
+
+    return warnText;
+  }
 
   const validateEditMargin = async () => {
     const err: Record<string, string> = {};
@@ -526,7 +534,6 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     }
 
     if (!isUndefined(notional) && lessThanEpsilon(swapInfo.result?.availableNotional, notional, 0.00001) === true) {
-      setIsAvailableNotionalInsufficient(true);
       setMaxAvailableNotional(swapInfo.result?.availableNotional);
     }
   }, [swapInfo.loading, swapInfo.result]);
@@ -553,7 +560,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       data: swapInfo.result || undefined,
       errorMessage: swapInfo.errorMessage || undefined,
       loading: swapInfo.loading,
-      maxAvailableNotional
+      maxAvailableNotional: swapInfo.result?.availableNotional    // TO DO: ui-sprint1
     },
     state: {
       leverage,
@@ -566,7 +573,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     submitButtonState: getSubmitButtonState(),
     tokenApprovals,
     validate,
-    warningText
+    warningText: getWarningText()
   }
 
   return (
