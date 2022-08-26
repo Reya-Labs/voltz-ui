@@ -268,6 +268,97 @@ var _abi = [
     {
         inputs: [
             {
+                components: [
+                    {
+                        internalType: "contract IMarginEngine",
+                        name: "marginEngine",
+                        type: "address",
+                    },
+                    {
+                        internalType: "bool",
+                        name: "isFT",
+                        type: "bool",
+                    },
+                    {
+                        internalType: "uint256",
+                        name: "notional",
+                        type: "uint256",
+                    },
+                    {
+                        internalType: "uint160",
+                        name: "sqrtPriceLimitX96",
+                        type: "uint160",
+                    },
+                    {
+                        internalType: "int24",
+                        name: "tickLower",
+                        type: "int24",
+                    },
+                    {
+                        internalType: "int24",
+                        name: "tickUpper",
+                        type: "int24",
+                    },
+                    {
+                        internalType: "uint256",
+                        name: "marginDelta",
+                        type: "uint256",
+                    },
+                ],
+                internalType: "struct IPeriphery.SwapPeripheryParams",
+                name: "params",
+                type: "tuple",
+            },
+            {
+                internalType: "uint256",
+                name: "variableFactorFromStartToNowWad",
+                type: "uint256",
+            },
+        ],
+        name: "fullyCollateralisedVTSwap",
+        outputs: [
+            {
+                internalType: "int256",
+                name: "_fixedTokenDelta",
+                type: "int256",
+            },
+            {
+                internalType: "int256",
+                name: "_variableTokenDelta",
+                type: "int256",
+            },
+            {
+                internalType: "uint256",
+                name: "_cumulativeFeeIncurred",
+                type: "uint256",
+            },
+            {
+                internalType: "int256",
+                name: "_fixedTokenDeltaUnbalanced",
+                type: "int256",
+            },
+            {
+                internalType: "int256",
+                name: "_marginRequirement",
+                type: "int256",
+            },
+            {
+                internalType: "int24",
+                name: "_tickAfter",
+                type: "int24",
+            },
+            {
+                internalType: "int256",
+                name: "marginDelta",
+                type: "int256",
+            },
+        ],
+        stateMutability: "payable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
                 internalType: "contract IMarginEngine",
                 name: "marginEngine",
                 type: "address",
@@ -699,6 +790,11 @@ var _abi = [
                 name: "_tickAfter",
                 type: "int24",
             },
+            {
+                internalType: "int256",
+                name: "marginDelta",
+                type: "int256",
+            },
         ],
         stateMutability: "payable",
         type: "function",
@@ -732,7 +828,13 @@ var _abi = [
             },
         ],
         name: "updatePositionMargin",
-        outputs: [],
+        outputs: [
+            {
+                internalType: "int256",
+                name: "",
+                type: "int256",
+            },
+        ],
         stateMutability: "payable",
         type: "function",
     },

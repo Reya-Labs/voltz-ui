@@ -47,6 +47,7 @@ export declare type AMMSwapArgs = {
     fixedLow: number;
     fixedHigh: number;
     validationOnly?: boolean;
+    fullyCollateralisedVTSwap?: boolean;
 };
 export declare type AMMSwapWithWethArgs = {
     isFT: boolean;
@@ -194,7 +195,7 @@ declare class AMM {
     rolloverWithSwap({ isFT, notional, margin, marginEth, fixedRateLimit, fixedLow, fixedHigh, owner, newMarginEngine, oldFixedLow, oldFixedHigh, validationOnly, }: AMMRolloverWithSwapArgs): Promise<ContractReceipt | void>;
     rolloverWithMint({ fixedLow, fixedHigh, notional, margin, marginEth, owner, newMarginEngine, oldFixedLow, oldFixedHigh, validationOnly, }: AMMRolloverWithMintArgs): Promise<ContractReceipt | void>;
     getInfoPostSwap({ position, isFT, notional, fixedRateLimit, fixedLow, fixedHigh, margin, }: AMMGetInfoPostSwapArgs): Promise<InfoPostSwap>;
-    swap({ isFT, notional, margin, fixedRateLimit, fixedLow, fixedHigh, validationOnly, }: AMMSwapArgs): Promise<ContractReceipt | void>;
+    swap({ isFT, notional, margin, fixedRateLimit, fixedLow, fixedHigh, validationOnly, fullyCollateralisedVTSwap }: AMMSwapArgs): Promise<ContractReceipt | void>;
     swapWithWeth({ isFT, notional, margin, marginEth, fixedRateLimit, fixedLow, fixedHigh, validationOnly, }: AMMSwapWithWethArgs): Promise<ContractReceipt | void>;
     getInfoPostMint({ fixedLow, fixedHigh, notional, }: AMMGetInfoPostMintArgs): Promise<number>;
     mint({ fixedLow, fixedHigh, notional, margin, validationOnly, }: AMMMintArgs): Promise<ContractReceipt | void>;

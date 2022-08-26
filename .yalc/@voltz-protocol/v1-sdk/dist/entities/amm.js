@@ -529,13 +529,16 @@ var AMM = /** @class */ (function () {
         });
     };
     AMM.prototype.swap = function (_a) {
-        var isFT = _a.isFT, notional = _a.notional, margin = _a.margin, fixedRateLimit = _a.fixedRateLimit, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, validationOnly = _a.validationOnly;
+        var isFT = _a.isFT, notional = _a.notional, margin = _a.margin, fixedRateLimit = _a.fixedRateLimit, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, validationOnly = _a.validationOnly, fullyCollateralisedVTSwap = _a.fullyCollateralisedVTSwap;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, factoryContract, peripheryAddress, peripheryContract, scaledNotional, swapPeripheryParams, tempOverrides, scaledMarginDelta, estimatedGas, swapTransaction, receipt, error_4;
+            var tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, factoryContract, peripheryAddress, peripheryContract, scaledNotional, swapPeripheryParams, tempOverrides, scaledMarginDelta, swapTransaction, estimatedGas, rateOracleContract, variableFactorFromStartToNowWad, estimatedGas, receipt, error_4;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
+                        if (!this.provider) {
+                            throw new Error('Blockchain not connected');
+                        }
                         if (!this.signer) {
                             throw new Error('Wallet not connected');
                         }
@@ -605,11 +608,11 @@ var AMM = /** @class */ (function () {
                                 marginDelta: scaledMarginDelta,
                             };
                         }
+                        if (!(fullyCollateralisedVTSwap === undefined || fullyCollateralisedVTSwap === false)) return [3 /*break*/, 5];
                         return [4 /*yield*/, peripheryContract.callStatic.swap(swapPeripheryParams, tempOverrides).catch(function (error) { return __awaiter(_this, void 0, void 0, function () {
                                 var result, errorMessage;
                                 return __generator(this, function (_a) {
                                     result = (0, errorHandling_1.decodeInfoPostSwap)(error, this.environment);
-                                    console.log('hi from SDK\n', 'margin req: ', this.descale(result.marginRequirement), '\n', 'fees: ', this.descale(result.fee), '\n', 'sum: ', this.descale(result.marginRequirement) + this.descale(result.fee), '\n', 'marginDelta: ', swapPeripheryParams.marginDelta, '\n');
                                     errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, this.environment);
                                     throw new Error(errorMessage);
                                 });
@@ -629,17 +632,46 @@ var AMM = /** @class */ (function () {
                             })];
                     case 4:
                         swapTransaction = _b.sent();
-                        _b.label = 5;
+                        return [3 /*break*/, 10];
                     case 5:
-                        _b.trys.push([5, 7, , 8]);
-                        return [4 /*yield*/, swapTransaction.wait()];
+                        rateOracleContract = typechain_1.BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
+                        return [4 /*yield*/, rateOracleContract.callStatic.variableFactor(ethers_2.BigNumber.from(this.termStartTimestamp.toString()), ethers_2.BigNumber.from(this.termEndTimestamp.toString()))];
                     case 6:
+                        variableFactorFromStartToNowWad = _b.sent();
+                        return [4 /*yield*/, peripheryContract.callStatic.fullyCollateralisedVTSwap(swapPeripheryParams, variableFactorFromStartToNowWad, tempOverrides).catch(function (error) { return __awaiter(_this, void 0, void 0, function () {
+                                var result, errorMessage;
+                                return __generator(this, function (_a) {
+                                    result = (0, errorHandling_1.decodeInfoPostSwap)(error, this.environment);
+                                    errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, this.environment);
+                                    throw new Error(errorMessage);
+                                });
+                            }); })];
+                    case 7:
+                        _b.sent();
+                        return [4 /*yield*/, peripheryContract.estimateGas.fullyCollateralisedVTSwap(swapPeripheryParams, variableFactorFromStartToNowWad, tempOverrides).catch(function (error) {
+                                var errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, _this.environment);
+                                throw new Error(errorMessage);
+                            })];
+                    case 8:
+                        estimatedGas = _b.sent();
+                        tempOverrides.gasLimit = (0, constants_1.getGasBuffer)(estimatedGas);
+                        return [4 /*yield*/, peripheryContract.fullyCollateralisedVTSwap(swapPeripheryParams, variableFactorFromStartToNowWad, tempOverrides).catch(function (error) {
+                                var errorMessage = (0, errorHandling_1.getReadableErrorMessage)(error, _this.environment);
+                                throw new Error(errorMessage);
+                            })];
+                    case 9:
+                        swapTransaction = _b.sent();
+                        _b.label = 10;
+                    case 10:
+                        _b.trys.push([10, 12, , 13]);
+                        return [4 /*yield*/, swapTransaction.wait()];
+                    case 11:
                         receipt = _b.sent();
                         return [2 /*return*/, receipt];
-                    case 7:
+                    case 12:
                         error_4 = _b.sent();
                         throw new Error("Transaction Confirmation Error");
-                    case 8: return [2 /*return*/];
+                    case 13: return [2 /*return*/];
                 }
             });
         });
