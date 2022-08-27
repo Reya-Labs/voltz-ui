@@ -235,12 +235,12 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   // set the leverage back to 50% if variables change
   useEffect(() => {
     const minMargin = cachedSwapInfoMinRequiredMargin;
-    if(isNumber(notional) && isNumber(minMargin)) {
+    if(isNumber(notional) && isNumber(minMargin) && swapInfo.result?.availableNotional !== undefined) {
       const cappedMinMargin = Math.max(minMargin, 0.1);
-      const newLeverage = parseFloat(((notional / cappedMinMargin) / 2).toFixed(2));
+      const newLeverage = parseFloat(((Math.min(notional, swapInfo.result?.availableNotional) / cappedMinMargin) / 2).toFixed(2));
       updateLeverage(newLeverage);
     }
-  }, [notional, cachedSwapInfoMinRequiredMargin, resetDeltaState]);
+  }, [notional, cachedSwapInfoMinRequiredMargin, resetDeltaState, swapInfo.result?.availableNotional]);
 
   // Validate the form after values change
   useEffect(() => {
@@ -371,11 +371,11 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     } else {
       setLeverage(newLeverage);
 
-      if(!isUndefined(notional)) {
+      if(!isUndefined(notional) && swapInfo.result?.availableNotional !== undefined) {
         if(!touched.current.includes('margin')) {
           touched.current.push('margin');
         }
-        setMargin(parseFloat((notional / newLeverage).toFixed(2)));
+        setMargin(parseFloat((Math.min(notional, swapInfo.result?.availableNotional) / newLeverage).toFixed(2)));
       }
     }
   }
