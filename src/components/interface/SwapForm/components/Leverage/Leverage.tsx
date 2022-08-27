@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import { MaskedIntegerField, IconLabel } from '@components/composite';
 import { colors } from '@theme';
 import { isNumber, isUndefined } from 'lodash';
-import { formatNumber, toUSFormat } from '@utilities';
+import { formatNumber } from '@utilities';
 
 /**
  * margin: for a new position this is just the ratio between notional and minimum margin required
@@ -25,7 +25,6 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
   const hint = 'Choose the amount of leverage you wish to trade with. The slider helps demonstrate safe amounts of leverage.';
   const margin = isNumber(minMargin) ? Math.max(minMargin, 0.1) : undefined;
 
-  const [inputValue, setInputValue] = useState(formatNumber(value));
   const [internalValue, setInternalValue] = useState<number | undefined>(value);
   const isDisabledLeverageBox = isUndefined(availableNotional) || isUndefined(margin) || isUndefined(notional);
   const isDisabled = isUndefined(availableNotional) || isUndefined(margin) || isUndefined(notional) || isUndefined(internalValue);
@@ -71,7 +70,6 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
       const newValue = parseFloat(inputVal);
       if(!isNaN(newValue)) {
         setInternalValue(newValue);
-        setInputValue(inputVal);
         window.clearInterval(timer.current);
         timer.current = window.setTimeout(() => onChange(newValue), delay);
       }
@@ -91,7 +89,7 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
           dynamic
           inputSize="small"
           label={<IconLabel label={'Leverage'} icon="information-circle" info={hint} />}
-          value={inputValue}
+          value={internalValue}
           onChange={handleChangeInput}
           suffix='x'
           suffixPadding={0}
