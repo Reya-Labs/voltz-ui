@@ -21,6 +21,7 @@ export type SwapInfoProps = {
   underlyingTokenName?: string;
   warningText?: string;
   maxAvailableNotional?: number;
+  expectedApy?: number[][];
 };
 
 const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
@@ -34,7 +35,8 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
   swapSummaryLoading,
   underlyingTokenName,
   warningText,
-  maxAvailableNotional
+  maxAvailableNotional,
+  expectedApy
 }) => {
   const bottomSpacing: SystemStyleObject<Theme> = {
     marginBottom: (theme) => theme.spacing(6)
@@ -45,9 +47,9 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
       {(mode !== SwapFormModes.EDIT_MARGIN && mode !== SwapFormModes.FIX_BORROW) && (
         <>
         <ExpectedAPY 
-          expectedAPY={swapSummary?.expectedApy}
+          expectedAPY={expectedApy}
         />
-          {swapSummary?.expectedApy && (
+          {expectedApy && (
             <Box component={'hr'} sx={{ 
               border: 'none',
               borderBottom: `1px solid ${colors.lavenderWeb.darken045}`,

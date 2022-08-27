@@ -84,6 +84,7 @@ export type SwapFormContext = {
     errorMessage?: string;
     loading: boolean;
     maxAvailableNotional?: number;
+    expectedApy?: number[][];
   }
   submitButtonState: SwapFormSubmitButtonStates;
   tokenApprovals: ReturnType<typeof useTokenApproval>;
@@ -121,7 +122,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   const minRequiredMargin = useMinRequiredMargin(poolAmm);
   const [notional, setNotional] = useState<SwapFormState['notional']>(defaultNotional);
   const [partialCollateralization, setPartialCollateralization] = useState<boolean>(defaultPartialCollateralization);
-  const { swapInfo } = useAMMContext();
+  const { swapInfo, expectedApyInfo } = useAMMContext();
   const [cachedSwapInfoMinRequiredMargin, setCachedSwapInfoMinRequiredMargin] = useState<number>();
   const tokenApprovals = useTokenApproval(poolAmm);
 
@@ -228,9 +229,19 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     approvalsNeeded,
     partialCollateralization,
     marginAction,
-    ammCtx.variableApy.result,
-    margin                        // TO DO: ui-sprint1
+    ammCtx.variableApy.result
   ]);
+
+  useEffect(() => {
+    if (!approvalsNeeded && !isUndefined(notional) && notional !== 0 && !isUndefined(margin) && swapInfo.result?.fixedTokenDeltaUnbalanced !== undefined && swapInfo.result?.availableNotional !== undefined) {
+      expectedApyInfo.call({
+        margin: margin,
+        position: position,
+        fixedTokenDeltaUnbalanced: swapInfo.result?.fixedTokenDeltaUnbalanced,
+        availableNotional: swapInfo.result?.availableNotional
+      });
+    }  
+  }, [margin, swapInfo.result?.fixedTokenDeltaUnbalanced]);
 
   // set the leverage back to 50% if variables change
   useEffect(() => {
@@ -551,7 +562,8 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       data: swapInfo.result || undefined,
       errorMessage: swapInfo.errorMessage || undefined,
       loading: swapInfo.loading,
-      maxAvailableNotional: swapInfo.result?.maxAvailableNotional ?? swapInfo.result?.availableNotional
+      maxAvailableNotional: swapInfo.result?.maxAvailableNotional ?? swapInfo.result?.availableNotional,
+      expectedApy: expectedApyInfo.result?.expectedApy
     },
     state: {
       leverage,
