@@ -9,6 +9,9 @@ import { InfoPostSwap } from "@voltz-protocol/v1-sdk";
 import * as s from "./services";
 import { BigNumber } from "ethers";
 
+// updateLeverage instead of setLeverage when notional updates
+// have reset flag in onChange in Leverage to be able to reset leverage when box is modified.
+
 export enum SwapFormMarginAction {
   ADD='add',
   REMOVE='remove'
@@ -49,6 +52,7 @@ export type SwapFormState = {
   marginAction: SwapFormMarginAction;
   notional?: number;
   partialCollateralization: boolean;
+  resetDeltaState: boolean;
 };
 
 export type SwapFormProviderProps = {
@@ -69,7 +73,7 @@ export type SwapFormContext = {
   isValid: boolean;
   minRequiredMargin?: number;
   mode: SwapFormModes;
-  setLeverage: (value: SwapFormState['leverage']) => void;
+  setLeverage: (value: SwapFormState['leverage'], resetToDefaultLeverage?: boolean) => void;
   setMargin: (value: SwapFormState['margin']) => void;
   setMarginAction: (value: SwapFormState['marginAction']) => void;
   setNotional: (value: SwapFormState['notional']) => void;
@@ -130,6 +134,8 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   const isTradeVerified = !!swapInfo.result && !swapInfo.loading && !swapInfo.errorMessage;
   
   const approvalsNeeded = s.approvalsNeeded(action, tokenApprovals, isRemovingMargin)
+
+  const [resetDeltaState, setResetDeltaState] = useState<boolean>(false);
 
   // Set the correct agent type for the given position
   useEffect(() => {
@@ -213,10 +219,10 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     const minMargin = cachedSwapInfoMinRequiredMargin;
     if(isNumber(notional) && isNumber(minMargin)) {
       const cappedMinMargin = Math.max(minMargin, 0.1);
-      const newLeverage = parseFloat(formatNumber((notional / cappedMinMargin) / 2));
-      setLeverage(newLeverage);
+      const newLeverage = parseFloat(((notional / cappedMinMargin) / 2).toFixed(2));
+      updateLeverage(newLeverage);
     }
-  }, [notional, cachedSwapInfoMinRequiredMargin]);
+  }, [notional, cachedSwapInfoMinRequiredMargin, resetDeltaState]);
 
   // Validate the form after values change
   useEffect(() => {
@@ -334,17 +340,25 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     return SwapFormSubmitButtonStates.TRADE_VARIABLE;
   };
 
-  const updateLeverage = (newLeverage: SwapFormState['leverage']) => {
+  const updateLeverage = (newLeverage: SwapFormState['leverage'], resetToDefaultLeverage: boolean = false) => {
     if(!touched.current.includes('leverage')) {
       touched.current.push('leverage');
     }
-    setLeverage(newLeverage);
 
-    if(!isUndefined(notional)) {
-      if(!touched.current.includes('margin')) {
-        touched.current.push('margin');
+    if (resetToDefaultLeverage) {
+      const currentNotional = notional;
+      if (!isUndefined(currentNotional)) {
+        setResetDeltaState(!resetDeltaState);
       }
-      setMargin(parseFloat(formatNumber(notional / newLeverage)));
+    } else {
+      setLeverage(newLeverage);
+
+      if(!isUndefined(notional)) {
+        if(!touched.current.includes('margin')) {
+          touched.current.push('margin');
+        }
+        setMargin(parseFloat((notional / newLeverage).toFixed(2)));
+      }
     }
   }
 
@@ -502,7 +516,8 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       margin,
       marginAction,
       notional,
-      partialCollateralization
+      partialCollateralization,
+      resetDeltaState
     },
     submitButtonState: getSubmitButtonState(),
     tokenApprovals,
