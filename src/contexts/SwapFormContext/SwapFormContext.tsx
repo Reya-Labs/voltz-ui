@@ -398,8 +398,8 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
 
     setMargin(newMargin);
 
-    if(!isUndefined(newMargin) && !isUndefined(notional)) {
-      setLeverage(parseFloat(formatNumber(notional / newMargin)));
+    if(!isUndefined(newMargin) && !isUndefined(notional)  && swapInfo.result?.availableNotional !== undefined) {
+      setLeverage(parseFloat((Math.min(notional, swapInfo.result?.availableNotional) / newMargin).toFixed(2)));
     }
   }
 
@@ -563,7 +563,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       errorMessage: swapInfo.errorMessage || undefined,
       loading: swapInfo.loading,
       maxAvailableNotional: swapInfo.result?.maxAvailableNotional ?? swapInfo.result?.availableNotional,
-      expectedApy: expectedApyInfo.result?.expectedApy
+      expectedApy: (!isUndefined(notional) && !isUndefined(margin)) ? expectedApyInfo.result?.expectedApy : undefined
     },
     state: {
       leverage,
