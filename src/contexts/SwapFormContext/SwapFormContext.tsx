@@ -139,7 +139,6 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
 
   const [resetDeltaState, setResetDeltaState] = useState<boolean>(false);
 
-  const [maxAvailableNotional, setMaxAvailableNotional] = useState<number|undefined>(undefined);
   const asyncCallsLoading = useRef<string[]>([]);
 
   // Set the correct agent type for the given position
@@ -155,7 +154,6 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   }, [])
 
   useEffect(() => {
-    setMaxAvailableNotional(undefined);
     asyncCallsLoading.current = [];
     // swapInfo.call({ 
     //   position: undefined,
@@ -529,13 +527,6 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       return;
     }
 
-    if (isUndefined(maxAvailableNotional) || lessThan(maxAvailableNotional, swapInfo.result?.availableNotional)) {
-      setMaxAvailableNotional(swapInfo.result?.availableNotional);
-    }
-
-    if (!isUndefined(notional) && lessThanEpsilon(swapInfo.result?.availableNotional, notional, 0.00001) === true) {
-      setMaxAvailableNotional(swapInfo.result?.availableNotional);
-    }
   }, [swapInfo.loading, swapInfo.result]);
 
   const value = {
@@ -560,7 +551,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       data: swapInfo.result || undefined,
       errorMessage: swapInfo.errorMessage || undefined,
       loading: swapInfo.loading,
-      maxAvailableNotional: swapInfo.result?.availableNotional    // TO DO: ui-sprint1
+      maxAvailableNotional: swapInfo.result?.maxAvailableNotional ?? swapInfo.result?.availableNotional
     },
     state: {
       leverage,

@@ -386,7 +386,7 @@ var AMM = /** @class */ (function () {
     AMM.prototype.getInfoPostSwap = function (_a) {
         var position = _a.position, isFT = _a.isFT, notional = _a.notional, fixedRateLimit = _a.fixedRateLimit, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, margin = _a.margin;
         return __awaiter(this, void 0, void 0, function () {
-            var signerAddress, tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, scaledNotional, factoryContract, peripheryAddress, peripheryContract, swapPeripheryParams, tickBefore, tickAfter, marginRequirement, fee, availableNotional, fixedTokenDeltaUnbalanced, fixedTokenDelta, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw, marginEngineContract, currentMargin, scaledCurrentMargin, scaledAvailableNotional, scaledFee, scaledMarginRequirement, additionalMargin, averageFixedRate, result, positionMargin, accruedCashflow, positionUft, positionVt, allSwaps, lenSwaps, _i, allSwaps_1, swap, _b, _c;
+            var signerAddress, tickUpper, tickLower, sqrtPriceLimitX96, tickLimit, scaledNotional, factoryContract, peripheryAddress, peripheryContract, swapPeripheryParams, tickBefore, tickAfter, marginRequirement, fee, availableNotional, fixedTokenDeltaUnbalanced, fixedTokenDelta, fixedRateBefore, fixedRateAfter, fixedRateDelta, fixedRateDeltaRaw, marginEngineContract, currentMargin, scaledCurrentMargin, scaledAvailableNotional, scaledFee, scaledMarginRequirement, additionalMargin, averageFixedRate, maxAvailableNotional, swapPeripheryParamsLargeSwap, scaledMaxAvailableNotional, result, positionMargin, accruedCashflow, positionUft, positionVt, allSwaps, lenSwaps, _i, allSwaps_1, swap, _b, _c;
             var _this = this;
             return __generator(this, function (_d) {
                 switch (_d.label) {
@@ -481,6 +481,25 @@ var AMM = /** @class */ (function () {
                             ? scaledMarginRequirement - scaledCurrentMargin
                             : 0;
                         averageFixedRate = (availableNotional.eq(ethers_2.BigNumber.from(0))) ? 0 : fixedTokenDeltaUnbalanced.mul(ethers_2.BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
+                        maxAvailableNotional = ethers_2.BigNumber.from(0);
+                        swapPeripheryParamsLargeSwap = {
+                            marginEngine: this.marginEngineAddress,
+                            isFT: isFT,
+                            notional: this.scale(1000000000000000),
+                            sqrtPriceLimitX96: sqrtPriceLimitX96,
+                            tickLower: tickLower,
+                            tickUpper: tickUpper,
+                            marginDelta: '0',
+                        };
+                        return [4 /*yield*/, peripheryContract.callStatic.swap(swapPeripheryParamsLargeSwap).then(function (result) {
+                                maxAvailableNotional = result[1];
+                            }, function (error) {
+                                var result = (0, errorHandling_1.decodeInfoPostSwap)(error, _this.environment);
+                                maxAvailableNotional = result.availableNotional;
+                            })];
+                    case 6:
+                        _d.sent();
+                        scaledMaxAvailableNotional = this.descale(maxAvailableNotional);
                         result = {
                             marginRequirement: additionalMargin,
                             availableNotional: scaledAvailableNotional < 0 ? -scaledAvailableNotional : scaledAvailableNotional,
@@ -489,14 +508,15 @@ var AMM = /** @class */ (function () {
                             averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
                             fixedTokenDeltaBalance: this.descale(fixedTokenDelta),
                             variableTokenDeltaBalance: this.descale(availableNotional),
-                            fixedTokenDeltaUnbalanced: this.descale(fixedTokenDeltaUnbalanced)
+                            fixedTokenDeltaUnbalanced: this.descale(fixedTokenDeltaUnbalanced),
+                            maxAvailableNotional: scaledMaxAvailableNotional < 0 ? -scaledMaxAvailableNotional : scaledMaxAvailableNotional,
                         };
-                        if (!(0, lodash_1.isNumber)(margin)) return [3 /*break*/, 12];
+                        if (!(0, lodash_1.isNumber)(margin)) return [3 /*break*/, 13];
                         positionMargin = 0;
                         accruedCashflow = 0;
                         positionUft = ethers_2.BigNumber.from(0);
                         positionVt = ethers_2.BigNumber.from(0);
-                        if (!position) return [3 /*break*/, 10];
+                        if (!position) return [3 /*break*/, 11];
                         allSwaps = this.getAllSwaps(position);
                         lenSwaps = allSwaps.length;
                         for (_i = 0, allSwaps_1 = allSwaps; _i < allSwaps_1.length; _i++) {
@@ -505,25 +525,25 @@ var AMM = /** @class */ (function () {
                             positionVt = positionVt.add(swap.vDelta);
                         }
                         positionMargin = scaledCurrentMargin;
-                        _d.label = 6;
-                    case 6:
-                        _d.trys.push([6, 9, , 10]);
-                        if (!(lenSwaps > 0)) return [3 /*break*/, 8];
-                        return [4 /*yield*/, this.getAccruedCashflow(allSwaps, false)];
+                        _d.label = 7;
                     case 7:
+                        _d.trys.push([7, 10, , 11]);
+                        if (!(lenSwaps > 0)) return [3 /*break*/, 9];
+                        return [4 /*yield*/, this.getAccruedCashflow(allSwaps, false)];
+                    case 8:
                         accruedCashflow = _d.sent();
-                        _d.label = 8;
-                    case 8: return [3 /*break*/, 10];
-                    case 9:
-                        _b = _d.sent();
-                        return [3 /*break*/, 10];
+                        _d.label = 9;
+                    case 9: return [3 /*break*/, 11];
                     case 10:
+                        _b = _d.sent();
+                        return [3 /*break*/, 11];
+                    case 11:
                         _c = result;
                         return [4 /*yield*/, this.expectedApy(positionUft.add(fixedTokenDeltaUnbalanced), positionVt.add(availableNotional), margin + positionMargin + accruedCashflow)];
-                    case 11:
+                    case 12:
                         _c.expectedApy = _d.sent();
-                        _d.label = 12;
-                    case 12: return [2 /*return*/, result];
+                        _d.label = 13;
+                    case 13: return [2 /*return*/, result];
                 }
             });
         });

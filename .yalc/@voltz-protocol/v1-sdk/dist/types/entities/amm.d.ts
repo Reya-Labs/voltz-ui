@@ -69,6 +69,7 @@ export declare type InfoPostSwap = {
     fixedTokenDeltaBalance: number;
     variableTokenDeltaBalance: number;
     fixedTokenDeltaUnbalanced: number;
+    maxAvailableNotional?: number;
 };
 export declare type AMMRolloverWithSwapArgs = {
     isFT: boolean;

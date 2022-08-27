@@ -132,6 +132,7 @@ export type InfoPostSwap = {
   fixedTokenDeltaBalance: number;
   variableTokenDeltaBalance: number;
   fixedTokenDeltaUnbalanced: number;
+  maxAvailableNotional?: number;
 };
 
 // rollover with swap
@@ -776,6 +777,27 @@ class AMM {
 
     const averageFixedRate = (availableNotional.eq(BigNumber.from(0))) ? 0 : fixedTokenDeltaUnbalanced.mul(BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
 
+    let maxAvailableNotional = BigNumber.from(0);
+    const swapPeripheryParamsLargeSwap = {
+      marginEngine: this.marginEngineAddress,
+      isFT,
+      notional: this.scale(1000000000000000),
+      sqrtPriceLimitX96,
+      tickLower,
+      tickUpper,
+      marginDelta: '0',
+    };
+    await peripheryContract.callStatic.swap(swapPeripheryParamsLargeSwap).then(
+      (result: any) => {
+        maxAvailableNotional = result[1];
+      },
+      (error: any) => {
+        const result = decodeInfoPostSwap(error, this.environment);
+        maxAvailableNotional = result.availableNotional;
+      },
+    );
+    const scaledMaxAvailableNotional = this.descale(maxAvailableNotional);
+ 
     const result: InfoPostSwap = {
       marginRequirement: additionalMargin,
       availableNotional: scaledAvailableNotional < 0 ? -scaledAvailableNotional : scaledAvailableNotional,
@@ -784,7 +806,8 @@ class AMM {
       averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
       fixedTokenDeltaBalance: this.descale(fixedTokenDelta),
       variableTokenDeltaBalance: this.descale(availableNotional),
-      fixedTokenDeltaUnbalanced: this.descale(fixedTokenDeltaUnbalanced)
+      fixedTokenDeltaUnbalanced: this.descale(fixedTokenDeltaUnbalanced),
+      maxAvailableNotional: scaledMaxAvailableNotional < 0 ? -scaledMaxAvailableNotional : scaledMaxAvailableNotional,
     };
 
     if (isNumber(margin)) {
