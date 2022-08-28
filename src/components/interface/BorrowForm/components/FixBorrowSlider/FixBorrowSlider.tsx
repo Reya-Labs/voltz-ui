@@ -152,9 +152,9 @@ const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
         marks
         min={0}
         max={100}
-        onChange={handleChange}
-        onChangeCommitted={handleChangeCommitted}
-        disabled={variableDebt.loading || swapSummaryLoading}
+        onChange={handleChangeCommitted}
+        // onChangeCommitted={handleChangeCommitted}
+        disabled={variableDebt.loading}
         sx={{ ...colorStyleOverrides() }}
       />
 
