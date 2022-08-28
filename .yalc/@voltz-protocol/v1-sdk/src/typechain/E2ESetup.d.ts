@@ -62,7 +62,7 @@ interface E2ESetupInterface extends ethers.utils.Interface {
     "sizeOfPositionHistory(bytes32)": FunctionFragment;
     "sizeOfPositionSwapsHistory(bytes32)": FunctionFragment;
     "swapViaAMM((address,int256,uint160,int24,int24))": FunctionFragment;
-    "swapViaPeriphery(address,(address,bool,uint256,uint160,int24,int24,uint256))": FunctionFragment;
+    "swapViaPeriphery(address,(address,bool,uint256,uint160,int24,int24,int256))": FunctionFragment;
     "unwindFullyCollateralisedFixedTakerSwap(address,uint256,uint160)": FunctionFragment;
     "updatePositionMarginViaAMM(address,int24,int24,int256)": FunctionFragment;
   };

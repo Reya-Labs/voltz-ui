@@ -188,7 +188,7 @@ class BorrowAMM {
     }
     const allSwaps = this.getAllSwaps(position);
     const pastMaturity = await this.atMaturity();
-    // balance in Voltz
+
     const [fixedCashFlow, variableCashFlow] = await this.getAccruedCashflow(allSwaps, pastMaturity);
 
     return variableCashFlow;
@@ -202,7 +202,6 @@ class BorrowAMM {
     const allSwaps = this.getAllSwaps(position);
     const pastMaturity = await this.atMaturity();
 
-    // balance in Voltz
     const [fixedCashFlow, variableCashFlow] = await this.getAccruedCashflow(allSwaps, pastMaturity);
 
     return this.descale(fixedCashFlow);

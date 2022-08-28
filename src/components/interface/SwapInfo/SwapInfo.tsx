@@ -63,7 +63,7 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
         </>
       )}
 
-      {(mode == SwapFormModes.NEW_POSITION || mode === SwapFormModes.FIX_BORROW) && !isUndefined(warningText) && (
+      {(mode === SwapFormModes.FIX_BORROW) && !isUndefined(warningText) && (
         <>
         <Box sx={bottomSpacing}>
           <WarningBox warningText={warningText} />
@@ -71,7 +71,7 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
       </>
       )}
 
-      {(mode === SwapFormModes.ROLLOVER || mode === SwapFormModes.FIX_BORROW) && (swapSummary || swapSummaryLoading) && (
+      {(mode === SwapFormModes.NEW_POSITION || mode === SwapFormModes.ROLLOVER || mode === SwapFormModes.FIX_BORROW) && (swapSummary || swapSummaryLoading) && (
         <>
           <Box sx={bottomSpacing}>
             <SwapSummary

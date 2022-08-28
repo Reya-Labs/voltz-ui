@@ -32,7 +32,7 @@ interface ActorInterface extends ethers.utils.Interface {
     "settlePositionViaAMM(address,address,int24,int24)": FunctionFragment;
     "settleYBATrader(address)": FunctionFragment;
     "swapViaAMM(address,(address,int256,uint160,int24,int24))": FunctionFragment;
-    "swapViaPeriphery(address,(address,bool,uint256,uint160,int24,int24,uint256))": FunctionFragment;
+    "swapViaPeriphery(address,(address,bool,uint256,uint160,int24,int24,int256))": FunctionFragment;
     "unwindFullyCollateralisedFixedTakerSwap(address,uint256,uint160)": FunctionFragment;
     "updatePositionMarginViaAMM(address,address,int24,int24,int256)": FunctionFragment;
   };
