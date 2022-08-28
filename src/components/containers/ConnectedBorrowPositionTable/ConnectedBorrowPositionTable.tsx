@@ -6,10 +6,10 @@ import { AugmentedBorrowAMM, data } from '@utilities';
 import { useBorrowAMMs, useBorrowPositions, useWallet } from '@hooks';
 import { Agents } from '@contexts';
 import { Loading, Panel } from '@components/atomic';
-import BorrowTable from 'src/components/interface/BorrowTable/BorrowTable';
-import { FixedBorrowTableFields, VariableBorrowTableFields } from 'src/components/interface/BorrowTable/types';
+import BorrowTable from '../../../components/interface/BorrowTable/BorrowTable';
+import { FixedBorrowTableFields, VariableBorrowTableFields } from '../../../components/interface/BorrowTable/types';
 import { getTotalVariableDebt, getTotalFixedDebt } from './services';
-import BorrowPortfolioHeader, {BorrowPortfolioHeaderProps} from 'src/components/interface/BorrowPortfolioHeader/BorrowPortfolioHeader';
+import BorrowPortfolioHeader, {BorrowPortfolioHeaderProps} from '../../../components/interface/BorrowPortfolioHeader/BorrowPortfolioHeader';
 
 
 export type ConnectedBorrowAMMTableProps = {

@@ -55,6 +55,7 @@ export type BorrowFormContext = {
     loading: boolean;
   }
   balance: number;
+  warningText?: string;
 };
 
 const borrowFormCtx = createContext<BorrowFormContext>({} as unknown as BorrowFormContext);
@@ -105,9 +106,12 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
     }
   };
 
+  const [warningText, setWarningText] = useState<string|undefined>(undefined);
+
   const validate = async () => {
     const err: Record<string, string> = {};
     let valid = true;
+    let warnText: (string | undefined) = undefined;
 
     if(isUndefined(selectedFixedDebt) || selectedFixedDebt === 0) {
       valid = false;
@@ -116,7 +120,7 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
 
     if (isAvailableNotionalInsufficient) {
       // valid = false;
-      addError(err, 'slider', 'Warning: Slider was moved as this is the maximum amount of notional that can be fixed');
+      warnText = "Slider was moved as this is the maximum amount of notional that can be fixed";
     }
     
     if(isUndefined(margin)) {
@@ -140,6 +144,7 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
 
     setErrors(err);
     setIsValid(valid);
+    setWarningText(warnText);
     return valid;
   };
 
@@ -271,7 +276,9 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
   // 2
   useEffect(() => {
     if (swapInfo.loading) {
-      asyncCallsLoading.current.push('swapInfo');
+      if (!asyncCallsLoading.current.includes('swapInfo')) {
+        asyncCallsLoading.current.push('swapInfo');
+      }
       return;
     } 
     
@@ -301,7 +308,9 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
   // 3
   useEffect(() => {
     if (fullyCollateralisedMarginRequirement.loading) {
-      asyncCallsLoading.current.push('fullyCollateralisedMarginRequirement');
+      if (!asyncCallsLoading.current.includes("fullyCollateralisedMarginRequirement")) {
+        asyncCallsLoading.current.push('fullyCollateralisedMarginRequirement');
+      }
       return;
     } 
 
@@ -359,7 +368,8 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
       errorMessage: swapInfo.errorMessage || (fullyCollateralisedMarginRequirement.errorMessage || undefined),
       loading: isTradeInfoLoading
     },
-    balance: balance
+    balance: balance,
+    warningText
   }
   
   return <borrowFormCtx.Provider value={value}>{children}</borrowFormCtx.Provider>;

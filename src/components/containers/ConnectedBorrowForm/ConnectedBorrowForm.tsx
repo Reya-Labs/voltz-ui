@@ -127,6 +127,7 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
         swapSummary={form.borrowInfo.data}
         swapSummaryLoading={form.borrowInfo.loading}
         underlyingTokenName={amm.underlyingToken.name}
+        warningText={form.warningText}
       />
     </>
   )
