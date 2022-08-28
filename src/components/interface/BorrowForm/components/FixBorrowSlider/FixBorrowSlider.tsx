@@ -2,7 +2,6 @@ import { Typography } from '@components/atomic';
 import { Stack } from '@mui/material';
 
 import { formatCurrency, formatNumber } from '@utilities';
-import { upperCase } from 'lodash';
 
 import { Box } from '@mui/system';
 
@@ -11,7 +10,7 @@ import { UseAsyncFunctionResult } from '@hooks';
 
 import Slider, { SliderThumb } from '@mui/material/Slider';
 
-import { colors, inputStyles, SystemStyleObject, Theme } from '@theme';
+import { colors, SystemStyleObject, Theme } from '@theme';
 
 export type FixBorrowSliderProps = {
   variableDebt: UseAsyncFunctionResult<unknown, number | void>;
@@ -45,7 +44,6 @@ const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
   selectedVariableDebt,
   selectedVariableDebtPercentage,
   handleSliderChange,
-  swapSummaryLoading,
   error,
   errorText
 }) => {
