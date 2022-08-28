@@ -5,24 +5,23 @@ import { useBorrowAMMContext } from '@contexts';
 import { Typography } from '@components/atomic';
 import { formatNumber } from '@utilities';
 
-const BorrowVariableAPY: React.FunctionComponent = () => {
-  const { variableApy } = useBorrowAMMContext();
-  const { result, loading, call } = variableApy;
+export type BorrowVariableAPYProps = {
+  loading: boolean;
+  variableApy: number | null | void;
+};
 
-  useEffect(() => {
-    call();
-  }, [call]);
+const BorrowVariableAPY: React.FunctionComponent<BorrowVariableAPYProps> = ({loading, variableApy}) => {
 
   const renderValue = () => {
     if (loading) {
       return 'Loading...';
     }
 
-    if (!result) {
+    if (!variableApy) {
       return '0%';
     }
 
-    return `${formatNumber(result * 100)}%`;
+    return `${(variableApy * 100).toFixed(2)}%`;
   };
 
   return (

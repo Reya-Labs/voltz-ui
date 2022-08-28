@@ -117,6 +117,8 @@ exports.errorMessageMapping = {
     // @dev safeTransferLib error
     'STL fail': 'Insufficient balance',
     'Insufficient balance': 'Insufficient balance',
+    'only fc VT swaps': 'Full Collateralization only supported for Variable Taker swaps',
+    'VT swap not fc': 'The pool experienced significant slippage. Please try again.'
 };
 var extractErrorSignature = function (message) {
     // eslint-disable-next-line no-restricted-syntax

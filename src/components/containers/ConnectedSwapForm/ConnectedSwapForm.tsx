@@ -9,6 +9,7 @@ import { Agents, useAMMContext, usePositionContext, useSwapFormContext } from '@
 import { BigNumber } from 'ethers';
 import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
 import { AugmentedAMM } from '@utilities';
+import { isUndefined } from 'lodash';
 
 export type ConnectedSwapFormProps = {
   onReset: () => void;
@@ -212,9 +213,12 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         mode={mode}
         positionMargin={position?.margin ? targetAmm.descale(BigNumber.from(position.margin.toString())) : undefined}
         protocol={targetAmm.protocol}
-        swapSummary={form.swapInfo.data}
+        swapSummary={(!isUndefined(form.state.notional)) ? form.swapInfo.data : undefined}
         swapSummaryLoading={form.swapInfo.loading}
         underlyingTokenName={targetAmm.underlyingToken.name}
+        warningText={form.warningText}
+        maxAvailableNotional={form.swapInfo.maxAvailableNotional}
+        expectedApy={form.swapInfo.expectedApy}
       />
     </>
   );

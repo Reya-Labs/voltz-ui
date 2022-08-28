@@ -33,7 +33,7 @@ export type SwapProps = {
   maxMargin?: number;
   mode: SwapFormModes;
   onCancel: () => void;
-  onChangeLeverage: (value: number) => void;
+  onChangeLeverage: (value: number, resetToDefaultLeverage?: boolean) => void;
   onChangeMargin: (value: number | undefined) => void;
   onChangeMarginAction: (value: SwapFormMarginAction) => void;
   onChangeNotional: (value: number | undefined) => void;
@@ -162,6 +162,7 @@ const Swap: React.FunctionComponent<SwapProps> = ({
             notional={formState.notional}
             onChange={onChangeLeverage}
             value={formState.leverage}
+            resetDeltaState={formState.resetDeltaState}
           />
         </Box>
       )}

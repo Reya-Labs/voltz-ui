@@ -108,6 +108,7 @@ export type AMMSwapArgs = {
   fixedLow: number;
   fixedHigh: number;
   validationOnly?: boolean;
+  fullyCollateralisedVTSwap?: boolean;
 };
 
 export type AMMSwapWithWethArgs = {
@@ -127,11 +128,24 @@ export type InfoPostSwap = {
   fee: number;
   slippage: number;
   averageFixedRate: number;
-  expectedApy?: number[][];
   fixedTokenDeltaBalance: number;
   variableTokenDeltaBalance: number;
   fixedTokenDeltaUnbalanced: number;
+  maxAvailableNotional?: number;
 };
+
+export type ExpectedApyArgs = {
+  margin: number;
+  position?: Position;
+  fixedLow: number;
+  fixedHigh: number;
+  fixedTokenDeltaUnbalanced: number;
+  availableNotional: number;
+}
+
+export type ExpectedApyInfo = {
+  expectedApy: number[][];
+}
 
 // rollover with swap
 
@@ -775,6 +789,27 @@ class AMM {
 
     const averageFixedRate = (availableNotional.eq(BigNumber.from(0))) ? 0 : fixedTokenDeltaUnbalanced.mul(BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
 
+    let maxAvailableNotional = BigNumber.from(0);
+    const swapPeripheryParamsLargeSwap = {
+      marginEngine: this.marginEngineAddress,
+      isFT,
+      notional: this.scale(1000000000000000),
+      sqrtPriceLimitX96,
+      tickLower,
+      tickUpper,
+      marginDelta: '0',
+    };
+    await peripheryContract.callStatic.swap(swapPeripheryParamsLargeSwap).then(
+      (result: any) => {
+        maxAvailableNotional = result[1];
+      },
+      (error: any) => {
+        const result = decodeInfoPostSwap(error, this.environment);
+        maxAvailableNotional = result.availableNotional;
+      },
+    );
+    const scaledMaxAvailableNotional = this.descale(maxAvailableNotional);
+ 
     const result: InfoPostSwap = {
       marginRequirement: additionalMargin,
       availableNotional: scaledAvailableNotional < 0 ? -scaledAvailableNotional : scaledAvailableNotional,
@@ -783,38 +818,80 @@ class AMM {
       averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
       fixedTokenDeltaBalance: this.descale(fixedTokenDelta),
       variableTokenDeltaBalance: this.descale(availableNotional),
-      fixedTokenDeltaUnbalanced: this.descale(fixedTokenDeltaUnbalanced)
+      fixedTokenDeltaUnbalanced: this.descale(fixedTokenDeltaUnbalanced),
+      maxAvailableNotional: scaledMaxAvailableNotional < 0 ? -scaledMaxAvailableNotional : scaledMaxAvailableNotional,
     };
 
-    if (isNumber(margin)) {
-      let positionMargin = 0;
-      let accruedCashflow = 0;
-      let positionUft = BigNumber.from(0);
-      let positionVt = BigNumber.from(0);
+    return result;
+  }
 
-      if (position) {
-        const allSwaps = this.getAllSwaps(position);
-        const lenSwaps = allSwaps.length;
+  public async getExpectedApyInfo({
+    margin,
+    position,
+    fixedLow,
+    fixedHigh,
+    fixedTokenDeltaUnbalanced,
+    availableNotional
+  }: ExpectedApyArgs): Promise<ExpectedApyInfo> {
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
+    }
 
-        for (let swap of allSwaps) {
-          positionUft = positionUft.add(swap.fDelta);
-          positionVt = positionVt.add(swap.vDelta);
-        }
+    if (fixedLow >= fixedHigh) {
+      throw new Error('Lower Rate must be smaller than Upper Rate');
+    }
 
-        positionMargin = scaledCurrentMargin;
+    if (fixedLow < MIN_FIXED_RATE) {
+      throw new Error('Lower Rate is too low');
+    }
 
-        try {
-          if (lenSwaps > 0) {
-            accruedCashflow = await this.getAccruedCashflow(allSwaps, false);
-          }
-        } catch { }
+    if (fixedHigh > MAX_FIXED_RATE) {
+      throw new Error('Upper Rate is too high');
+    }
+
+    const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
+    const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
+
+    const signerAddress = await this.signer.getAddress();
+
+    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
+    const currentMargin = (
+      await marginEngineContract.callStatic.getPosition(signerAddress, tickLower, tickUpper)
+    ).margin;
+
+    const scaledCurrentMargin = this.descale(currentMargin);
+
+    let positionMargin = 0;
+    let accruedCashflow = 0;
+    let positionUft = BigNumber.from(0);
+    let positionVt = BigNumber.from(0);
+
+    if (position) {
+      const allSwaps = this.getAllSwaps(position);
+      const lenSwaps = allSwaps.length;
+
+      for (let swap of allSwaps) {
+        positionUft = positionUft.add(swap.fDelta);
+        positionVt = positionVt.add(swap.vDelta);
       }
 
-      result.expectedApy = await this.expectedApy(
-        positionUft.add(fixedTokenDeltaUnbalanced),
-        positionVt.add(availableNotional),
-        margin + positionMargin + accruedCashflow
-      );
+      positionMargin = scaledCurrentMargin;
+
+      try {
+        if (lenSwaps > 0) {
+          accruedCashflow = await this.getAccruedCashflow(allSwaps, false);
+        }
+      } catch { }
+    }
+
+    const expectedApy = await this.expectedApy(
+      positionUft.add(this.scale(fixedTokenDeltaUnbalanced)),
+      positionVt.add(this.scale(availableNotional)),
+      margin + positionMargin + accruedCashflow
+    );
+
+    const result: ExpectedApyInfo = {
+      expectedApy: expectedApy
     }
 
     return result;
@@ -828,7 +905,12 @@ class AMM {
     fixedLow,
     fixedHigh,
     validationOnly,
+    fullyCollateralisedVTSwap
   }: AMMSwapArgs): Promise<ContractReceipt | void> {
+    if (!this.provider) {
+      throw new Error('Blockchain not connected');
+    }
+
     if (!this.signer) {
       throw new Error('Wallet not connected');
     }
@@ -912,28 +994,50 @@ class AMM {
       };
     }
 
-    await peripheryContract.callStatic.swap(swapPeripheryParams, tempOverrides).catch(async (error: any) => {
-      let result = decodeInfoPostSwap(error, this.environment);
-      console.log('hi from SDK\n',
-                  'margin req: ', this.descale(result.marginRequirement), '\n',
-                  'fees: ', this.descale(result.fee), '\n',
-                  'sum: ', this.descale(result.marginRequirement) + this.descale(result.fee), '\n',
-                  'marginDelta: ', swapPeripheryParams.marginDelta, '\n');
-      const errorMessage = getReadableErrorMessage(error, this.environment);
-      throw new Error(errorMessage);
-    });
+    let swapTransaction;
+    if (fullyCollateralisedVTSwap === undefined || fullyCollateralisedVTSwap === false) {
+      await peripheryContract.callStatic.swap(swapPeripheryParams, tempOverrides).catch(async (error: any) => {
+        let result = decodeInfoPostSwap(error, this.environment);
+        const errorMessage = getReadableErrorMessage(error, this.environment);
+        throw new Error(errorMessage);
+      });
+  
+      const estimatedGas = await peripheryContract.estimateGas.swap(swapPeripheryParams, tempOverrides).catch((error) => {
+        const errorMessage = getReadableErrorMessage(error, this.environment);
+        throw new Error(errorMessage);
+      });
+  
+      tempOverrides.gasLimit = getGasBuffer(estimatedGas);
+  
+      swapTransaction = await peripheryContract.swap(swapPeripheryParams, tempOverrides).catch((error) => {
+        const errorMessage = getReadableErrorMessage(error, this.environment);
+        throw new Error(errorMessage);
+      });
+    } else {
+      const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
+      const variableFactorFromStartToNowWad = await rateOracleContract.callStatic.variableFactor(
+        BigNumber.from(this.termStartTimestamp.toString()), 
+        BigNumber.from(this.termEndTimestamp.toString())
+      );
 
-    const estimatedGas = await peripheryContract.estimateGas.swap(swapPeripheryParams, tempOverrides).catch((error) => {
-      const errorMessage = getReadableErrorMessage(error, this.environment);
-      throw new Error(errorMessage);
-    });
-
-    tempOverrides.gasLimit = getGasBuffer(estimatedGas);
-
-    const swapTransaction = await peripheryContract.swap(swapPeripheryParams, tempOverrides).catch((error) => {
-      const errorMessage = getReadableErrorMessage(error, this.environment);
-      throw new Error(errorMessage);
-    });
+      await peripheryContract.callStatic.fullyCollateralisedVTSwap(swapPeripheryParams, variableFactorFromStartToNowWad, tempOverrides).catch(async (error: any) => {
+        let result = decodeInfoPostSwap(error, this.environment);
+        const errorMessage = getReadableErrorMessage(error, this.environment);
+        throw new Error(errorMessage);
+      });
+  
+      const estimatedGas = await peripheryContract.estimateGas.fullyCollateralisedVTSwap(swapPeripheryParams, variableFactorFromStartToNowWad, tempOverrides).catch((error) => {
+        const errorMessage = getReadableErrorMessage(error, this.environment);
+        throw new Error(errorMessage);
+      });
+  
+      tempOverrides.gasLimit = getGasBuffer(estimatedGas);
+  
+      swapTransaction = await peripheryContract.fullyCollateralisedVTSwap(swapPeripheryParams, variableFactorFromStartToNowWad, tempOverrides).catch((error) => {
+        const errorMessage = getReadableErrorMessage(error, this.environment);
+        throw new Error(errorMessage);
+      });
+    }
 
     try {
       const receipt = await swapTransaction.wait();

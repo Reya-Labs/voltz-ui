@@ -126,22 +126,6 @@ class BorrowAMM {
       })
     }
 
-    for (let s of position.fcmSwaps) {
-      allSwaps.push({
-        fDelta: BigNumber.from(s.fixedTokenDeltaUnbalanced.toString()),
-        vDelta: BigNumber.from(s.variableTokenDelta.toString()),
-        timestamp: BigNumber.from(s.transactionTimestamp.toString())
-      })
-    }
-
-    for (let s of position.fcmUnwinds) {
-      allSwaps.push({
-        fDelta: BigNumber.from(s.fixedTokenDeltaUnbalanced.toString()),
-        vDelta: BigNumber.from(s.variableTokenDelta.toString()),
-        timestamp: BigNumber.from(s.transactionTimestamp.toString())
-      })
-    }
-
     allSwaps.sort((a, b) => a.timestamp.sub(b.timestamp).toNumber());
 
     return allSwaps;
@@ -151,12 +135,13 @@ class BorrowAMM {
     fDelta: BigNumber,
     vDelta: BigNumber,
     timestamp: BigNumber
-  }[], atMaturity: boolean): Promise<number> {
+  }[], atMaturity: boolean): Promise<[BigNumber, BigNumber]> {
     if (!this.provider) {
       throw new Error('Wallet not connected');
     }
 
-    let accruedCashflow = BigNumber.from(0);
+    let totalVarableCashflow = BigNumber.from(0);
+    let totalFixedCashflow = BigNumber.from(0);
     let lenSwaps = allSwaps.length;
 
     const lastBlock = await this.provider.getBlockNumber();
@@ -178,14 +163,51 @@ class BorrowAMM {
       const fixedCashflow = allSwaps[i].fDelta.mul(normalizedTime).div(BigNumber.from(100)).div(BigNumber.from(10).pow(18));
       const variableCashflow = allSwaps[i].vDelta.mul(variableFactorBetweenSwaps).div(BigNumber.from(10).pow(18));
 
-      const cashflow = fixedCashflow.add(variableCashflow);
-      accruedCashflow = accruedCashflow.add(cashflow);
+      totalFixedCashflow = totalFixedCashflow.add(fixedCashflow);
+      totalVarableCashflow = totalVarableCashflow.add(variableCashflow);
     }
 
-    return this.descale(accruedCashflow);
+    return [totalFixedCashflow, totalVarableCashflow];
   }
 
-  public async getUnderlyingBorrowBalance(): Promise<number> {
+  public async atMaturity(): Promise<boolean> {
+    if (!this.provider) {
+      throw new Error('Blockchain not connected');
+    }
+    // is past maturity?
+    const lastBlock = await this.provider.getBlockNumber();
+    const lastBlockTimestamp = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
+    const pastMaturity = (BigNumber.from(this.termEndTimestamp.toString())).lt(lastBlockTimestamp.mul(BigNumber.from(10).pow(18)));
+
+    return pastMaturity;
+  }
+
+  public async getVariableCashFlow(position: Position): Promise<BigNumber> {
+    if(position === undefined){
+      return BigNumber.from(0);
+    }
+    const allSwaps = this.getAllSwaps(position);
+    const pastMaturity = await this.atMaturity();
+
+    const [fixedCashFlow, variableCashFlow] = await this.getAccruedCashflow(allSwaps, pastMaturity);
+
+    return variableCashFlow;
+  }
+
+  public async getFixedCashFlow(position: Position): Promise<number> {
+    if(position === undefined){
+      return 0;
+    }
+  
+    const allSwaps = this.getAllSwaps(position);
+    const pastMaturity = await this.atMaturity();
+
+    const [fixedCashFlow, variableCashFlow] = await this.getAccruedCashflow(allSwaps, pastMaturity);
+
+    return this.descale(fixedCashFlow);
+  }
+
+  public async getScaledUnderlyingBorrowBalance(): Promise<BigNumber> {
     if (!this.signer) {
       throw new Error('Wallet not connected');
     }
@@ -218,40 +240,35 @@ class BorrowAMM {
         const userAddress = await this.signer.getAddress();
         borrowBalance = await this.aaveVariableDebtToken.balanceOf(userAddress);
     }
-    return this.descale(borrowBalance);
 
+    return borrowBalance;
+  }
+
+  public async getUnderlyingBorrowBalance(): Promise<number> {
+    const borrowBalance = await this.getScaledUnderlyingBorrowBalance();
+    return this.descale(borrowBalance);
   }
 
   public async getFixedBorrowBalance(position: Position): Promise<number> {
-    if(position === undefined){
-      return 0;
-    }
-
-    if (!this.provider) {
-      throw new Error('Blockchain not connected');
-    }
-  
-    const allSwaps = this.getAllSwaps(position);
-    
-    // is past maturity?
-    const lastBlock = await this.provider.getBlockNumber();
-    const lastBlockTimestamp = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
-    const pastMaturity = (BigNumber.from(this.termEndTimestamp.toString())).lt(lastBlockTimestamp.mul(BigNumber.from(10).pow(18)));
-
-    // balance in Voltz
-    const accruedCashFlow = await this.getAccruedCashflow(allSwaps, pastMaturity);
+    const fixedCashFlow= await this.getFixedCashFlow(position);
     const notional = this.descale(BigNumber.from(position.variableTokenBalance.toString()));
 
-    return notional + accruedCashFlow;
+    return notional - fixedCashFlow;
   }
 
   // get variable debt: debt from underlying protocol - fixed debt on Voltz
   public async getAggregatedBorrowBalance(position: Position): Promise<number> {
-    const fixedBorrowBalance = await this.getFixedBorrowBalance(position);
-    const underlyingBorrowBalance = await this.getUnderlyingBorrowBalance();
+    const variableCashFlow = await this.getVariableCashFlow(position);
+    const notional = BigNumber.from(position.variableTokenBalance.toString());
+    const notionalWithVariableCashFlow = notional.add(variableCashFlow);
 
-    if (underlyingBorrowBalance >= fixedBorrowBalance) {
-      return underlyingBorrowBalance - fixedBorrowBalance;
+    const buffer = BigNumber.from("1001").div(BigNumber.from("1000"))
+    const notionalWithVariableCashFlowAndBuffer = notionalWithVariableCashFlow.mul(buffer);
+
+    const underlyingBorrowBalance = await this.getScaledUnderlyingBorrowBalance();
+
+    if (underlyingBorrowBalance.gte(notionalWithVariableCashFlowAndBuffer)) {
+      return this.descale(underlyingBorrowBalance.sub(notionalWithVariableCashFlow));
     } else {
       return 0;
     }

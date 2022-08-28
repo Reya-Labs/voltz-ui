@@ -8,17 +8,18 @@ import { formatNumber } from '@utilities';
 
 export type DebtProps = {
   debtInUSD: number | null | void;
+  loadingDebt: boolean;
   debtInToken: number | null | void;
   tokenName: string | undefined;
 };
 
 
-const Debt: React.FunctionComponent<DebtProps> = ({debtInUSD, debtInToken, tokenName }) => {
+const Debt: React.FunctionComponent<DebtProps> = ({debtInUSD, loadingDebt, debtInToken, tokenName }) => {
 
   const renderValueInUSD = () => {
-    // if (loading) {
-    //   return '---';
-    // }
+    if (loadingDebt) {
+      return '---';
+    }
 
     if (!debtInUSD) {
       return '$0';
@@ -28,9 +29,9 @@ const Debt: React.FunctionComponent<DebtProps> = ({debtInUSD, debtInToken, token
   };
 
   const renderValueInToken = () => {
-    // if (loading) {
-    //   return '---';
-    // }
+    if (loadingDebt) {
+      return '---';
+    }
 
     if (!debtInToken) {
       return '$0';

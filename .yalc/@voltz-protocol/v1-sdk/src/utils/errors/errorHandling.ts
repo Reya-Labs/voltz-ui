@@ -163,6 +163,10 @@ export const errorMessageMapping: { [errSig: string]: string } = {
   'STL fail': 'Insufficient balance',
 
   'Insufficient balance': 'Insufficient balance',
+
+  'only fc VT swaps': 'Full Collateralization only supported for Variable Taker swaps',
+
+  'VT swap not fc': 'The pool experienced significant slippage. Please try again.'
 };
 
 export const extractErrorSignature = (message: string): string => {

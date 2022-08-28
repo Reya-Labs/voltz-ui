@@ -12,6 +12,8 @@ import { Position } from "@voltz-protocol/v1-sdk/dist/types/entities";
   return (positions || []).find(p => {
     return (
       p.amm.id === selectedAmm.id && p.positionType === 2
+      && p.tickLower == -69000 && p.tickUpper == 69060
+      && p.variableTokenBalance.toString() !== '0'
     );
   });
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 
-import { SwapSummary, SwapSummaryEditMargin } from './components';
+import { SwapSummary, SwapSummaryEditMargin, DescriptionBox, WarningBox } from './components';
 import { colors, SystemStyleObject, Theme } from '@theme';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from '../SwapForm/types';
@@ -19,6 +19,9 @@ export type SwapInfoProps = {
   swapSummary: InfoPostSwap | void | null;
   swapSummaryLoading: boolean;
   underlyingTokenName?: string;
+  warningText?: string;
+  maxAvailableNotional?: number;
+  expectedApy?: number[][];
 };
 
 const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
@@ -31,6 +34,9 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
   swapSummary,
   swapSummaryLoading,
   underlyingTokenName,
+  warningText,
+  maxAvailableNotional,
+  expectedApy
 }) => {
   const bottomSpacing: SystemStyleObject<Theme> = {
     marginBottom: (theme) => theme.spacing(6)
@@ -41,9 +47,9 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
       {(mode !== SwapFormModes.EDIT_MARGIN && mode !== SwapFormModes.FIX_BORROW) && (
         <>
         <ExpectedAPY 
-          expectedAPY={swapSummary?.expectedApy}
+          expectedAPY={expectedApy}
         />
-          {swapSummary?.expectedApy && (
+          {expectedApy && (
             <Box component={'hr'} sx={{ 
               border: 'none',
               borderBottom: `1px solid ${colors.lavenderWeb.darken045}`,
@@ -51,7 +57,22 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
             }}/>
           )}
         </>
-        
+      )}
+
+      {(mode === SwapFormModes.FIX_BORROW) && (
+        <>
+          <Box sx={bottomSpacing}>
+            <DescriptionBox titleText="Borrowing on Voltz" descriptionText="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec sit iaculis cras elit dictum massa. Sit metus amet, tincidunt odio. Tristique sagittis, nisl in eu eu vestibulum et. Ut sed mauris urna justo, dictumst molestie posuere." />
+          </Box>
+        </>
+      )}
+
+      {(mode == SwapFormModes.NEW_POSITION || mode === SwapFormModes.FIX_BORROW) && !isUndefined(warningText) && (
+        <>
+        <Box sx={bottomSpacing}>
+          <WarningBox warningText={warningText} />
+        </Box>
+      </>
       )}
 
       {(mode === SwapFormModes.NEW_POSITION || mode === SwapFormModes.ROLLOVER || mode === SwapFormModes.FIX_BORROW) && (swapSummary || swapSummaryLoading) && (
@@ -63,6 +84,7 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
               underlyingTokenName={underlyingTokenName}
               yieldBearingTokenName={protocol}
               formAction={formAction}
+              maxAvailableNotional={maxAvailableNotional}
             />
           </Box>
         </>

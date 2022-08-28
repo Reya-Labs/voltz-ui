@@ -9,10 +9,10 @@ import { Agents, BorrowAMMProvider, BorrowFormProvider, SwapFormProvider } from 
 import { useAgent, useAMMs, useBorrowPositions } from '@hooks';
 
 import { Page } from '@components/interface';
-import ConnectedBorrowForm from 'src/components/containers/ConnectedBorrowForm/ConnectedBorrowForm';
-import ConnectedBorrowPositionTable from 'src/components/containers/ConnectedBorrowPositionTable/ConnectedBorrowPositionTable';
+import ConnectedBorrowForm from '../../components/containers/ConnectedBorrowForm/ConnectedBorrowForm';
+import ConnectedBorrowPositionTable from '../../components/containers/ConnectedBorrowPositionTable/ConnectedBorrowPositionTable';
 import { getRenderMode } from './services';
-import AugmentedBorrowAMM from 'src/utilities/augmentedBorrowAmm';
+import AugmentedBorrowAMM from '../../utilities/augmentedBorrowAmm';
 
 import { AMMProvider, PositionProvider } from '@contexts';
 
@@ -26,16 +26,8 @@ const FixedBorrower: React.FunctionComponent = () => {
   const [position, setPosition] = useState<Position>();
 
   const { positions } = useBorrowPositions();
-  // const { amms } = useAMMs();
-
-  const [amm, setAMM] = useState<AugmentedAMM>();
 
   const renderMode = getRenderMode(isForm);
-
-  /*const handleSelectAmm = (selectedAMM: AugmentedAMM) => {
-    setAMM(selectedAMM);
-    setPosition(findCurrentPosition(positions || [], selectedAMM, [2])); // VT positions
-  };*/
 
   const handleSelectBorrowAMM = (selectedBorrowAMM: AugmentedBorrowAMM) => {
     setIsForm(true);
@@ -48,10 +40,10 @@ const FixedBorrower: React.FunctionComponent = () => {
   }, []);
 
   useEffect(() => {
-    setAMM(undefined);
+    setBorrowAMM(undefined);
     setPosition(undefined);
     // onChangeAgent(Agents.BORROW_TRADER);
-  }, [setAMM, setPosition]);
+  }, [setBorrowAMM, setPosition]);
 
   useEffect(() => {
     switch(renderMode) {

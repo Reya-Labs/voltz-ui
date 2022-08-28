@@ -27,3 +27,10 @@ export type MinimumMarginAmountSwapPayload = {
   notional: number;
   isFT: boolean;
 };
+
+export type ExpectedInfoPayload = {
+  margin: number,
+  position?: Position,
+  fixedTokenDeltaUnbalanced: number,
+  availableNotional: number
+}

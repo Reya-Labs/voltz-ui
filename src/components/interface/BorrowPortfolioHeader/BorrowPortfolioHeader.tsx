@@ -11,6 +11,7 @@ export type BorrowPortfolioHeaderProps = {
   variableDebt?: number;
   fixedPositionsCount?: number;
   variablePositionsCount?: number;
+  loading?: boolean;
 };
 
 const BorrowPortfolioHeader = ({ 
@@ -20,12 +21,14 @@ const BorrowPortfolioHeader = ({
   fixedDebt,
   variableDebt,
   fixedPositionsCount,
-  variablePositionsCount
+  variablePositionsCount,
+  loading
 }: BorrowPortfolioHeaderProps) => {
   return (
     <>
     <Panel borderRadius='large' padding='container' sx={{ paddingTop: 0, paddingBottom: 0, background: "transparent"}}>
       <BorrowPortfolioHeaderBox
+        loading={loading}
         currencyCode={currencyCode}
         currencySymbol={currencySymbol}
         aggregatedDebt={(variableDebt !== undefined && fixedDebt !== undefined) ? (variableDebt + fixedDebt) : undefined }/>

@@ -55,6 +55,7 @@ export type BorrowFormContext = {
     loading: boolean;
   }
   balance: number;
+  warningText?: string;
 };
 
 const borrowFormCtx = createContext<BorrowFormContext>({} as unknown as BorrowFormContext);
@@ -105,18 +106,29 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
     }
   };
 
+  const [warningText, setWarningText] = useState<string|undefined>(undefined);
+
   const validate = async () => {
     const err: Record<string, string> = {};
     let valid = true;
+    let warnText: (string | undefined) = undefined;
 
     if(isUndefined(selectedFixedDebt) || selectedFixedDebt === 0) {
       valid = false;
       addError(err, 'slider', 'Please select fixed debt amount');
     }
 
+    if (asyncCallsLoading.current.includes('swapInfo') && !swapInfo.loading && swapInfo.result?.availableNotional !== undefined && lessThanEpsilon(swapInfo.result?.availableNotional, selectedFixedDebt ?? 0, 0.0000001) === true) {
+      updateNotional(
+       Math.floor((swapInfo.result?.availableNotional / (variableDebt.result as number) * 1000 / 25)) * 2.5
+      );
+      setIsAvailableNotionalInsufficient(true);
+      valid = false;
+    }
+
     if (isAvailableNotionalInsufficient) {
       // valid = false;
-      addError(err, 'slider', 'Warning: Slider was moved as this is the maximum amount of notional that can be fixed');
+      warnText = "There is not enough liquidity in the pool to fix all of your debt. The position the slider is in now is the maximum amount of variable debt you can fix.";
     }
     
     if(isUndefined(margin)) {
@@ -140,6 +152,7 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
 
     setErrors(err);
     setIsValid(valid);
+    setWarningText(warnText);
     return valid;
   };
 
@@ -254,7 +267,7 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
 
     setIsAvailableNotionalInsufficient(false);
 
-    if (value == selectedFixedDebtPercentage) {
+    if (value === selectedFixedDebtPercentage) {
       return;
     }
 
@@ -270,8 +283,15 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
 
   // 2
   useEffect(() => {
+    if (asyncCallsLoading.current.includes('zero_margin')) {
+      return;
+    }
+
     if (swapInfo.loading) {
-      asyncCallsLoading.current.push('swapInfo');
+      setIsTradeInfoLoading(true);
+      if (!asyncCallsLoading.current.includes('swapInfo')) {
+        asyncCallsLoading.current.push('swapInfo');
+      }
       return;
     } 
     
@@ -281,14 +301,6 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
       }
       return;
     }
-
-    if (lessThanEpsilon(swapInfo.result?.availableNotional, selectedFixedDebt ?? 0, 0.0000001) === true) {
-      updateNotional(
-       Math.floor((swapInfo.result?.availableNotional / (variableDebt.result as number) * 1000 / 25)) * 2.5
-      );
-      setIsAvailableNotionalInsufficient(true);
-    }
-
 
     fullyCollateralisedMarginRequirement.call({
       fixedTokenBalance: swapInfo.result.fixedTokenDeltaBalance,
@@ -301,7 +313,10 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
   // 3
   useEffect(() => {
     if (fullyCollateralisedMarginRequirement.loading) {
-      asyncCallsLoading.current.push('fullyCollateralisedMarginRequirement');
+      setIsTradeInfoLoading(true);
+      if (!asyncCallsLoading.current.includes("fullyCollateralisedMarginRequirement")) {
+        asyncCallsLoading.current.push('fullyCollateralisedMarginRequirement');
+      }
       return;
     } 
 
@@ -310,6 +325,10 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
     }
     
     if ((fullyCollateralisedMarginRequirement.result === null) || (fullyCollateralisedMarginRequirement.result === undefined)) {
+      return;
+    }
+
+    if (!asyncCallsLoading.current.includes("fullyCollateralisedMarginRequirement") || !asyncCallsLoading.current.includes("swapInfo")) {
       return;
     }
 
@@ -323,10 +342,13 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
   // 1
   useEffect(() => {
     if (!approvalsNeeded && !isUndefined(selectedFixedDebt)) {
+      asyncCallsLoading.current = [];
       if ( selectedFixedDebt === 0) {
+        asyncCallsLoading.current.push('zero_margin');
         setMargin(0);
         setIsTradeInfoLoading(false);
       } else {
+        setIsTradeInfoLoading(true);
         swapInfo.call({ 
           position,
           margin,
@@ -359,7 +381,8 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
       errorMessage: swapInfo.errorMessage || (fullyCollateralisedMarginRequirement.errorMessage || undefined),
       loading: isTradeInfoLoading
     },
-    balance: balance
+    balance: balance,
+    warningText
   }
   
   return <borrowFormCtx.Provider value={value}>{children}</borrowFormCtx.Provider>;

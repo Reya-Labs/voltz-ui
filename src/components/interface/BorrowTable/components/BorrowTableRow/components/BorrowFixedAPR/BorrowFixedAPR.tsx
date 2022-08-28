@@ -5,25 +5,23 @@ import { Typography } from '@components/atomic';
 import TableCell from '@mui/material/TableCell';
 import { formatNumber } from '@utilities';
 
-const BorrowFixedAPR: React.FunctionComponent = () => {
-  const { position } = usePositionContext();
-  const { fixedApr } = useBorrowAMMContext();
-  const { result, loading, call } = fixedApr;
+export type BorrowBorrowFixedAPR = {
+  loading: boolean;
+  fixedApr: number | null | void;
+};
 
-  useEffect(() => {
-    call(position);
-  }, [call]);
+const BorrowFixedAPR: React.FunctionComponent<BorrowBorrowFixedAPR> = ({loading, fixedApr}) => {
 
   const renderValue = () => {
     if (loading) {
       return '---';
     }
 
-    if (!result) {
+    if (!fixedApr) {
       return '0%';
     }
 
-    return `${formatNumber(result)}%`; 
+    return `${fixedApr.toFixed(2)}%`; 
   };
 
   return (
