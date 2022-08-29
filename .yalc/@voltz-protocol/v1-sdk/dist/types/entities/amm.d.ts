@@ -65,10 +65,21 @@ export declare type InfoPostSwap = {
     fee: number;
     slippage: number;
     averageFixedRate: number;
-    expectedApy?: number[][];
     fixedTokenDeltaBalance: number;
     variableTokenDeltaBalance: number;
     fixedTokenDeltaUnbalanced: number;
+    maxAvailableNotional?: number;
+};
+export declare type ExpectedApyArgs = {
+    margin: number;
+    position?: Position;
+    fixedLow: number;
+    fixedHigh: number;
+    fixedTokenDeltaUnbalanced: number;
+    availableNotional: number;
+};
+export declare type ExpectedApyInfo = {
+    expectedApy: number[][];
 };
 export declare type AMMRolloverWithSwapArgs = {
     isFT: boolean;
@@ -195,6 +206,7 @@ declare class AMM {
     rolloverWithSwap({ isFT, notional, margin, marginEth, fixedRateLimit, fixedLow, fixedHigh, owner, newMarginEngine, oldFixedLow, oldFixedHigh, validationOnly, }: AMMRolloverWithSwapArgs): Promise<ContractReceipt | void>;
     rolloverWithMint({ fixedLow, fixedHigh, notional, margin, marginEth, owner, newMarginEngine, oldFixedLow, oldFixedHigh, validationOnly, }: AMMRolloverWithMintArgs): Promise<ContractReceipt | void>;
     getInfoPostSwap({ position, isFT, notional, fixedRateLimit, fixedLow, fixedHigh, margin, }: AMMGetInfoPostSwapArgs): Promise<InfoPostSwap>;
+    getExpectedApyInfo({ margin, position, fixedLow, fixedHigh, fixedTokenDeltaUnbalanced, availableNotional }: ExpectedApyArgs): Promise<ExpectedApyInfo>;
     swap({ isFT, notional, margin, fixedRateLimit, fixedLow, fixedHigh, validationOnly, fullyCollateralisedVTSwap }: AMMSwapArgs): Promise<ContractReceipt | void>;
     swapWithWeth({ isFT, notional, margin, marginEth, fixedRateLimit, fixedLow, fixedHigh, validationOnly, }: AMMSwapWithWethArgs): Promise<ContractReceipt | void>;
     getInfoPostMint({ fixedLow, fixedHigh, notional, }: AMMGetInfoPostMintArgs): Promise<number>;
