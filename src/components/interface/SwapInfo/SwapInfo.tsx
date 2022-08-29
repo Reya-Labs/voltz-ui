@@ -58,7 +58,7 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
       {(mode === SwapFormModes.FIX_BORROW) && (
         <>
           <Box sx={bottomSpacing}>
-            <DescriptionBox titleText="Borrowing on Voltz" descriptionText="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec sit iaculis cras elit dictum massa. Sit metus amet, tincidunt odio. Tristique sagittis, nisl in eu eu vestibulum et. Ut sed mauris urna justo, dictumst molestie posuere." />
+            <DescriptionBox titleText="Fixing your Borrowing Costs" descriptionText="Voltz Protocol lets you convert your variable borrowing costs into fixed borrowing costs. These will be fixed until the end of the pools term, as seen under 'Fixed Until'. To fix your existing borrowing, use the slider to determine what proportion you wish to fix and click 'Fix Rate'. This will trigger a transaction that will cover the fixed cost of borrowing upfront, along with fees paid to Liquidity Providers, who collectively cover your variable liabilities." />
           </Box>
         </>
       )}
