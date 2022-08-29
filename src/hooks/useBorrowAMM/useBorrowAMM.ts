@@ -1,10 +1,12 @@
-import { useMemo, useEffect } from "react";
+import { useMemo } from "react";
 import { AugmentedBorrowAMM } from "@utilities";
 import { Position } from "@voltz-protocol/v1-sdk/dist/types/entities";
 
 import useAgent from "../useAgent";
 import useAsyncFunction, { UseAsyncFunctionResult } from "../useAsyncFunction";
 import { DateTime } from "luxon";
+import { BorrowSwapInfo } from "@voltz-protocol/v1-sdk/dist/types/entities/borrowAMM";
+import { SwapInfoPayload } from "../useAMM/types";
 
 export type useBorrowAMMReturnType = {
   underlyingDebtInNativeTokens: UseAsyncFunctionResult<unknown, number | void>;
@@ -14,12 +16,12 @@ export type useBorrowAMMReturnType = {
   variableDebtInUSD: UseAsyncFunctionResult<unknown, number | void>;
   fixedDebtInUSD: UseAsyncFunctionResult<unknown, number | void>;
   variableApy: UseAsyncFunctionResult<unknown, number | void>;
-  fullyCollateralisedMarginRequirement: UseAsyncFunctionResult<unknown, number | void>;
+  borrowSwapInfo: UseAsyncFunctionResult<unknown, BorrowSwapInfo | void>;
   fixedApr: UseAsyncFunctionResult<unknown, number | void>;
-  endDate: DateTime |  undefined;
+  endDate: DateTime | undefined;
 }
 
-export const useBorrowAMM = ( borrowAmm: AugmentedBorrowAMM) => {
+export const useBorrowAMM = (borrowAmm: AugmentedBorrowAMM) => {
   const { agent } = useAgent();
 
   const underlyingDebtInNativeTokens = useAsyncFunction(
@@ -32,7 +34,7 @@ export const useBorrowAMM = ( borrowAmm: AugmentedBorrowAMM) => {
 
   const variableDebtInNativeTokens = useAsyncFunction(
     async (position: Position | undefined) => {
-      if (position){
+      if (position) {
         const resultPos = await borrowAmm.getAggregatedBorrowBalance(position);
         return resultPos;
       } else {
@@ -61,7 +63,7 @@ export const useBorrowAMM = ( borrowAmm: AugmentedBorrowAMM) => {
 
   const variableDebtInUSD = useAsyncFunction(
     async (position: Position | undefined) => {
-      if (position){
+      if (position) {
         const resultPos = await borrowAmm.getAggregatedBorrowBalanceInUSD(position);
         return resultPos;
       } else {
@@ -92,18 +94,19 @@ export const useBorrowAMM = ( borrowAmm: AugmentedBorrowAMM) => {
     useMemo(() => undefined, [!!borrowAmm?.provider]),
   );
 
-  const fullyCollateralisedMarginRequirement = useAsyncFunction(
-    async (args:{fixedTokenBalance: number, variableTokenBalance: number, fee: number}) => {
+  const borrowSwapInfo = useAsyncFunction(
+    async (args: SwapInfoPayload) => {
       if (borrowAmm) {
-        const fcMargin = 
-          await borrowAmm.getFullyCollateralisedMarginRequirement(
-            args.fixedTokenBalance,
-            args.variableTokenBalance,
-            args.fee
-          );
-        return fcMargin;
+        const info =
+          await borrowAmm.getBorrowInfo({
+            isFT: false,
+            fixedLow: 0.001,
+            fixedHigh: 990,
+            ...args
+          });
+        return info;
       }
-      return 0;
+      return undefined;
     },
     useMemo(() => undefined, [!!borrowAmm?.provider])
   );
@@ -121,11 +124,11 @@ export const useBorrowAMM = ( borrowAmm: AugmentedBorrowAMM) => {
   );
 
   const endDate = useMemo(() => {
-      const amm = borrowAmm?.amm;
-      if (amm) {
-        return amm?.endDateTime;
-      }
-      return undefined;
+    const amm = borrowAmm?.amm;
+    if (amm) {
+      return amm?.endDateTime;
+    }
+    return undefined;
   }, [borrowAmm]);
 
 
@@ -136,23 +139,23 @@ export const useBorrowAMM = ( borrowAmm: AugmentedBorrowAMM) => {
     underlyingDebtInUSD,
     variableDebtInUSD,
     fixedDebtInUSD,
-    fullyCollateralisedMarginRequirement,
+    borrowSwapInfo,
     variableApy,
     fixedApr,
     endDate
-  } as useBorrowAMMReturnType), 
-  [
-    underlyingDebtInNativeTokens,
-    variableDebtInNativeTokens,
-    fixedDebtInNativeTokens,
-    underlyingDebtInUSD,
-    variableDebtInUSD,
-    fixedDebtInUSD,
-    fullyCollateralisedMarginRequirement,
-    variableApy,
-    fixedApr,
-    endDate
-  ]);
+  } as useBorrowAMMReturnType),
+    [
+      underlyingDebtInNativeTokens,
+      variableDebtInNativeTokens,
+      fixedDebtInNativeTokens,
+      underlyingDebtInUSD,
+      variableDebtInUSD,
+      fixedDebtInUSD,
+      borrowSwapInfo,
+      variableApy,
+      fixedApr,
+      endDate
+    ]);
 }
 
 export default useBorrowAMM;
