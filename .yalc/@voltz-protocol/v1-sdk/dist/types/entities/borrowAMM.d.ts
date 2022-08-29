@@ -5,10 +5,13 @@ import { ICToken, IERC20Minimal } from '../typechain';
 import RateOracle from './rateOracle';
 import Token from './token';
 import Position from './position';
-import AMM from './amm';
+import AMM, { AMMGetInfoPostSwapArgs, InfoPostSwap } from './amm';
 export declare type BorrowAMMConstructorArgs = {
     id: string;
     amm: AMM;
+};
+export declare type BorrowSwapInfo = InfoPostSwap & {
+    borrowMarginRequirement: number;
 };
 declare class BorrowAMM {
     readonly id: string;
@@ -46,7 +49,7 @@ declare class BorrowAMM {
     getUnderlyingBorrowBalance(): Promise<number>;
     getFixedBorrowBalance(position: Position): Promise<number>;
     getAggregatedBorrowBalance(position: Position): Promise<number>;
-    getFullyCollateralisedMarginRequirement(fixedTokenBalance: number, variableTokenBalance: number, fee: number): Promise<number>;
+    getBorrowInfo(infoPostSwapArgs: AMMGetInfoPostSwapArgs): Promise<BorrowSwapInfo>;
     getFixedBorrowBalanceInUSD(position: Position): Promise<number>;
     getUnderlyingBorrowBalanceInUSD(): Promise<number>;
     getAggregatedBorrowBalanceInUSD(position: Position): Promise<number>;
