@@ -128,24 +128,11 @@ export type InfoPostSwap = {
   fee: number;
   slippage: number;
   averageFixedRate: number;
+  expectedApy?: number[][];
   fixedTokenDeltaBalance: number;
   variableTokenDeltaBalance: number;
   fixedTokenDeltaUnbalanced: number;
-  maxAvailableNotional?: number;
 };
-
-export type ExpectedApyArgs = {
-  margin: number;
-  position?: Position;
-  fixedLow: number;
-  fixedHigh: number;
-  fixedTokenDeltaUnbalanced: number;
-  availableNotional: number;
-}
-
-export type ExpectedApyInfo = {
-  expectedApy: number[][];
-}
 
 // rollover with swap
 
@@ -789,27 +776,6 @@ class AMM {
 
     const averageFixedRate = (availableNotional.eq(BigNumber.from(0))) ? 0 : fixedTokenDeltaUnbalanced.mul(BigNumber.from(1000)).div(availableNotional).toNumber() / 1000;
 
-    let maxAvailableNotional = BigNumber.from(0);
-    const swapPeripheryParamsLargeSwap = {
-      marginEngine: this.marginEngineAddress,
-      isFT,
-      notional: this.scale(1000000000000000),
-      sqrtPriceLimitX96,
-      tickLower,
-      tickUpper,
-      marginDelta: '0',
-    };
-    await peripheryContract.callStatic.swap(swapPeripheryParamsLargeSwap).then(
-      (result: any) => {
-        maxAvailableNotional = result[1];
-      },
-      (error: any) => {
-        const result = decodeInfoPostSwap(error, this.environment);
-        maxAvailableNotional = result.availableNotional;
-      },
-    );
-    const scaledMaxAvailableNotional = this.descale(maxAvailableNotional);
- 
     const result: InfoPostSwap = {
       marginRequirement: additionalMargin,
       availableNotional: scaledAvailableNotional < 0 ? -scaledAvailableNotional : scaledAvailableNotional,
@@ -818,80 +784,38 @@ class AMM {
       averageFixedRate: averageFixedRate < 0 ? -averageFixedRate : averageFixedRate,
       fixedTokenDeltaBalance: this.descale(fixedTokenDelta),
       variableTokenDeltaBalance: this.descale(availableNotional),
-      fixedTokenDeltaUnbalanced: this.descale(fixedTokenDeltaUnbalanced),
-      maxAvailableNotional: scaledMaxAvailableNotional < 0 ? -scaledMaxAvailableNotional : scaledMaxAvailableNotional,
+      fixedTokenDeltaUnbalanced: this.descale(fixedTokenDeltaUnbalanced)
     };
 
-    return result;
-  }
+    if (isNumber(margin)) {
+      let positionMargin = 0;
+      let accruedCashflow = 0;
+      let positionUft = BigNumber.from(0);
+      let positionVt = BigNumber.from(0);
 
-  public async getExpectedApyInfo({
-    margin,
-    position,
-    fixedLow,
-    fixedHigh,
-    fixedTokenDeltaUnbalanced,
-    availableNotional
-  }: ExpectedApyArgs): Promise<ExpectedApyInfo> {
-    if (!this.signer) {
-      throw new Error('Wallet not connected');
-    }
+      if (position) {
+        const allSwaps = this.getAllSwaps(position);
+        const lenSwaps = allSwaps.length;
 
-    if (fixedLow >= fixedHigh) {
-      throw new Error('Lower Rate must be smaller than Upper Rate');
-    }
+        for (let swap of allSwaps) {
+          positionUft = positionUft.add(swap.fDelta);
+          positionVt = positionVt.add(swap.vDelta);
+        }
 
-    if (fixedLow < MIN_FIXED_RATE) {
-      throw new Error('Lower Rate is too low');
-    }
+        positionMargin = scaledCurrentMargin;
 
-    if (fixedHigh > MAX_FIXED_RATE) {
-      throw new Error('Upper Rate is too high');
-    }
-
-    const { closestUsableTick: tickUpper } = this.closestTickAndFixedRate(fixedLow);
-    const { closestUsableTick: tickLower } = this.closestTickAndFixedRate(fixedHigh);
-
-    const signerAddress = await this.signer.getAddress();
-
-    const marginEngineContract = marginEngineFactory.connect(this.marginEngineAddress, this.signer);
-    const currentMargin = (
-      await marginEngineContract.callStatic.getPosition(signerAddress, tickLower, tickUpper)
-    ).margin;
-
-    const scaledCurrentMargin = this.descale(currentMargin);
-
-    let positionMargin = 0;
-    let accruedCashflow = 0;
-    let positionUft = BigNumber.from(0);
-    let positionVt = BigNumber.from(0);
-
-    if (position) {
-      const allSwaps = this.getAllSwaps(position);
-      const lenSwaps = allSwaps.length;
-
-      for (let swap of allSwaps) {
-        positionUft = positionUft.add(swap.fDelta);
-        positionVt = positionVt.add(swap.vDelta);
+        try {
+          if (lenSwaps > 0) {
+            accruedCashflow = await this.getAccruedCashflow(allSwaps, false);
+          }
+        } catch { }
       }
 
-      positionMargin = scaledCurrentMargin;
-
-      try {
-        if (lenSwaps > 0) {
-          accruedCashflow = await this.getAccruedCashflow(allSwaps, false);
-        }
-      } catch { }
-    }
-
-    const expectedApy = await this.expectedApy(
-      positionUft.add(this.scale(fixedTokenDeltaUnbalanced)),
-      positionVt.add(this.scale(availableNotional)),
-      margin + positionMargin + accruedCashflow
-    );
-
-    const result: ExpectedApyInfo = {
-      expectedApy: expectedApy
+      result.expectedApy = await this.expectedApy(
+        positionUft.add(fixedTokenDeltaUnbalanced),
+        positionVt.add(availableNotional),
+        margin + positionMargin + accruedCashflow
+      );
     }
 
     return result;
