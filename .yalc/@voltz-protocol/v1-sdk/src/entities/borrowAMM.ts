@@ -21,7 +21,7 @@ import Token from './token';
 import { Price } from './fractions/price';
 import { TokenAmount } from './fractions/tokenAmount';
 import Position from './position';
-import AMM from './amm';
+import AMM, { AMMGetInfoPostSwapArgs, InfoPostSwap } from './amm';
 
 import axios from 'axios';
 
@@ -43,6 +43,10 @@ export type BorrowAMMConstructorArgs = {
   id: string;
   amm: AMM;
 };
+
+export type BorrowSwapInfo = InfoPostSwap & {
+  borrowMarginRequirement: number;
+}
 
 class BorrowAMM {
   public readonly id: string;
@@ -274,10 +278,12 @@ class BorrowAMM {
     }
   }
 
-  public async getFullyCollateralisedMarginRequirement(fixedTokenBalance: number, variableTokenBalance: number, fee: number): Promise<number> {
-    if (!this.provider) {
-      throw new Error('Blockchain not connected');
+  public async getBorrowInfo(infoPostSwapArgs: AMMGetInfoPostSwapArgs): Promise<BorrowSwapInfo> {
+    if (!this.signer) {
+      throw new Error('Wallet not connected');
     }
+
+    const infoPostSwap = await this.amm.getInfoPostSwap(infoPostSwapArgs);
 
     const variableAPYToMaturity = await this.amm.getVariableFactor(
       BigNumber.from(this.termStartTimestamp.toString()), 
@@ -288,9 +294,12 @@ class BorrowAMM {
     const termEndTimestamp = (BigNumber.from(this.termEndTimestamp.toString()).div(BigNumber.from(10).pow(18))).toNumber();
     const fixedFactor = (termEndTimestamp - termStartTimestamp) / ONE_YEAR_IN_SECONDS * 0.01;
     
-    let fcMargin = -(fixedTokenBalance * fixedFactor + variableTokenBalance * variableAPYToMaturity);
-    fcMargin = (fcMargin + fee) * 1.01;
-    return fcMargin > 0 ? fcMargin : 0;
+    let fcMargin = -(infoPostSwap.fixedTokenDeltaBalance * fixedFactor + infoPostSwap.variableTokenDeltaBalance * variableAPYToMaturity);
+    fcMargin = (fcMargin + infoPostSwap.fee) * 1.01;
+    return {
+      borrowMarginRequirement: fcMargin > 0 ? fcMargin : 0,
+      ...infoPostSwap
+    };
   }
   
   public async getFixedBorrowBalanceInUSD(position: Position): Promise<number> {
