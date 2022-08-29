@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -344,24 +355,27 @@ var BorrowAMM = /** @class */ (function () {
             });
         });
     };
-    BorrowAMM.prototype.getFullyCollateralisedMarginRequirement = function (fixedTokenBalance, variableTokenBalance, fee) {
+    BorrowAMM.prototype.getBorrowInfo = function (infoPostSwapArgs) {
         return __awaiter(this, void 0, void 0, function () {
-            var variableAPYToMaturity, termStartTimestamp, termEndTimestamp, fixedFactor, fcMargin;
+            var infoPostSwap, variableAPYToMaturity, termStartTimestamp, termEndTimestamp, fixedFactor, fcMargin;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!this.provider) {
-                            throw new Error('Blockchain not connected');
+                        if (!this.signer) {
+                            throw new Error('Wallet not connected');
                         }
-                        return [4 /*yield*/, this.amm.getVariableFactor(ethers_1.BigNumber.from(this.termStartTimestamp.toString()), ethers_1.BigNumber.from(this.termEndTimestamp.toString()))];
+                        return [4 /*yield*/, this.amm.getInfoPostSwap(infoPostSwapArgs)];
                     case 1:
+                        infoPostSwap = _a.sent();
+                        return [4 /*yield*/, this.amm.getVariableFactor(ethers_1.BigNumber.from(this.termStartTimestamp.toString()), ethers_1.BigNumber.from(this.termEndTimestamp.toString()))];
+                    case 2:
                         variableAPYToMaturity = _a.sent();
                         termStartTimestamp = (ethers_1.BigNumber.from(this.termStartTimestamp.toString()).div(ethers_1.BigNumber.from(10).pow(18))).toNumber();
                         termEndTimestamp = (ethers_1.BigNumber.from(this.termEndTimestamp.toString()).div(ethers_1.BigNumber.from(10).pow(18))).toNumber();
                         fixedFactor = (termEndTimestamp - termStartTimestamp) / constants_1.ONE_YEAR_IN_SECONDS * 0.01;
-                        fcMargin = -(fixedTokenBalance * fixedFactor + variableTokenBalance * variableAPYToMaturity);
-                        fcMargin = (fcMargin + fee) * 1.01;
-                        return [2 /*return*/, fcMargin > 0 ? fcMargin : 0];
+                        fcMargin = -(infoPostSwap.fixedTokenDeltaBalance * fixedFactor + infoPostSwap.variableTokenDeltaBalance * variableAPYToMaturity);
+                        fcMargin = (fcMargin + infoPostSwap.fee) * 1.01;
+                        return [2 /*return*/, __assign({ borrowMarginRequirement: fcMargin > 0 ? fcMargin : 0 }, infoPostSwap)];
                 }
             });
         });
