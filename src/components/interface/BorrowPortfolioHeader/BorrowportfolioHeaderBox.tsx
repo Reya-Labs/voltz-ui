@@ -7,6 +7,7 @@ import { formatCurrency, formatNumber } from '@utilities';
 
 export type BorrowPortfolioHeaderBoxProps = {
     aggregatedDebt?: number;
+    loading?: boolean;
     currencyCode: string;
     currencySymbol: string;
 };
@@ -33,12 +34,13 @@ marginTop: (theme) => theme.spacing(2)
 
 const BorrowPortfolioHeaderBox = ({ 
     aggregatedDebt,
+    loading,
     currencyCode,
     currencySymbol
 }: BorrowPortfolioHeaderBoxProps) => {
 
-  const renderedValue = (aggregatedDebt !== undefined) ?
-   (currencySymbol + formatCurrency(aggregatedDebt) +" "+ currencyCode) : "---";
+  const renderedValue = (aggregatedDebt !== undefined && !loading) ?
+   (currencySymbol + formatCurrency(aggregatedDebt) +" "+ currencyCode) : "Loading...";
   return (
   <Box sx={{ textTransform: 'uppercase' }}>
     <Typography variant='subtitle1' sx={labelStyles}>

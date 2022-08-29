@@ -23,6 +23,7 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 interface TestMarginEngineInterface extends ethers.utils.Interface {
   functions: {
     "MAX_CACHE_MAX_AGE_IN_SECONDS()": FunctionFragment;
+    "MAX_FIXED_RATE_WAD()": FunctionFragment;
     "MAX_LIQUIDATOR_REWARD_WAD()": FunctionFragment;
     "MAX_LOOKBACK_WINDOW_IN_SECONDS()": FunctionFragment;
     "MIN_LOOKBACK_WINDOW_IN_SECONDS()": FunctionFragment;
@@ -68,10 +69,14 @@ interface TestMarginEngineInterface extends ethers.utils.Interface {
     "setPausability(bool)": FunctionFragment;
     "setPosition(address,int24,int24,uint128,int256,int256,int256,int256,int256,uint256,bool)": FunctionFragment;
     "setRateOracle(address)": FunctionFragment;
+    "setTermTimestamps(uint256,uint256)": FunctionFragment;
     "setVAMM(address)": FunctionFragment;
     "settlePosition(address,int24,int24)": FunctionFragment;
     "termEndTimestampWad()": FunctionFragment;
     "termStartTimestampWad()": FunctionFragment;
+    "testComputeApyBound(uint256,bool)": FunctionFragment;
+    "testComputeTimeFactor()": FunctionFragment;
+    "testWorstCaseVariableFactorAtMaturity(bool,bool,uint256)": FunctionFragment;
     "transferMarginToFCMTrader(address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "underlyingToken()": FunctionFragment;
@@ -87,6 +92,10 @@ interface TestMarginEngineInterface extends ethers.utils.Interface {
 
   encodeFunctionData(
     functionFragment: "MAX_CACHE_MAX_AGE_IN_SECONDS",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "MAX_FIXED_RATE_WAD",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -305,6 +314,10 @@ interface TestMarginEngineInterface extends ethers.utils.Interface {
     functionFragment: "setRateOracle",
     values: [string]
   ): string;
+  encodeFunctionData(
+    functionFragment: "setTermTimestamps",
+    values: [BigNumberish, BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "setVAMM", values: [string]): string;
   encodeFunctionData(
     functionFragment: "settlePosition",
@@ -317,6 +330,18 @@ interface TestMarginEngineInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "termStartTimestampWad",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "testComputeApyBound",
+    values: [BigNumberish, boolean]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "testComputeTimeFactor",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "testWorstCaseVariableFactorAtMaturity",
+    values: [boolean, boolean, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "transferMarginToFCMTrader",
@@ -374,6 +399,10 @@ interface TestMarginEngineInterface extends ethers.utils.Interface {
 
   decodeFunctionResult(
     functionFragment: "MAX_CACHE_MAX_AGE_IN_SECONDS",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "MAX_FIXED_RATE_WAD",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -520,6 +549,10 @@ interface TestMarginEngineInterface extends ethers.utils.Interface {
     functionFragment: "setRateOracle",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "setTermTimestamps",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "setVAMM", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "settlePosition",
@@ -531,6 +564,18 @@ interface TestMarginEngineInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "termStartTimestampWad",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "testComputeApyBound",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "testComputeTimeFactor",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "testWorstCaseVariableFactorAtMaturity",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -853,6 +898,8 @@ export class TestMarginEngine extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    MAX_FIXED_RATE_WAD(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     MAX_LIQUIDATOR_REWARD_WAD(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     MAX_LOOKBACK_WINDOW_IN_SECONDS(
@@ -1089,6 +1136,12 @@ export class TestMarginEngine extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setTermTimestamps(
+      _startWad: BigNumberish,
+      _endWad: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setVAMM(
       _vAMM: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1104,6 +1157,23 @@ export class TestMarginEngine extends BaseContract {
     termEndTimestampWad(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     termStartTimestampWad(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    testComputeApyBound(
+      historicalApyWad: BigNumberish,
+      isUpper: boolean,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { apyBoundWad: BigNumber }>;
+
+    testComputeTimeFactor(
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { timeFactor: BigNumber }>;
+
+    testWorstCaseVariableFactorAtMaturity(
+      isFT: boolean,
+      isLM: boolean,
+      historicalApyWad: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { variableFactorWad: BigNumber }>;
 
     transferMarginToFCMTrader(
       _account: string,
@@ -1177,6 +1247,8 @@ export class TestMarginEngine extends BaseContract {
   };
 
   MAX_CACHE_MAX_AGE_IN_SECONDS(overrides?: CallOverrides): Promise<BigNumber>;
+
+  MAX_FIXED_RATE_WAD(overrides?: CallOverrides): Promise<BigNumber>;
 
   MAX_LIQUIDATOR_REWARD_WAD(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1408,6 +1480,12 @@ export class TestMarginEngine extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setTermTimestamps(
+    _startWad: BigNumberish,
+    _endWad: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   setVAMM(
     _vAMM: string,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -1423,6 +1501,21 @@ export class TestMarginEngine extends BaseContract {
   termEndTimestampWad(overrides?: CallOverrides): Promise<BigNumber>;
 
   termStartTimestampWad(overrides?: CallOverrides): Promise<BigNumber>;
+
+  testComputeApyBound(
+    historicalApyWad: BigNumberish,
+    isUpper: boolean,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  testComputeTimeFactor(overrides?: CallOverrides): Promise<BigNumber>;
+
+  testWorstCaseVariableFactorAtMaturity(
+    isFT: boolean,
+    isLM: boolean,
+    historicalApyWad: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   transferMarginToFCMTrader(
     _account: string,
@@ -1496,6 +1589,8 @@ export class TestMarginEngine extends BaseContract {
 
   callStatic: {
     MAX_CACHE_MAX_AGE_IN_SECONDS(overrides?: CallOverrides): Promise<BigNumber>;
+
+    MAX_FIXED_RATE_WAD(overrides?: CallOverrides): Promise<BigNumber>;
 
     MAX_LIQUIDATOR_REWARD_WAD(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1742,6 +1837,12 @@ export class TestMarginEngine extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    setTermTimestamps(
+      _startWad: BigNumberish,
+      _endWad: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     setVAMM(_vAMM: string, overrides?: CallOverrides): Promise<void>;
 
     settlePosition(
@@ -1754,6 +1855,21 @@ export class TestMarginEngine extends BaseContract {
     termEndTimestampWad(overrides?: CallOverrides): Promise<BigNumber>;
 
     termStartTimestampWad(overrides?: CallOverrides): Promise<BigNumber>;
+
+    testComputeApyBound(
+      historicalApyWad: BigNumberish,
+      isUpper: boolean,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    testComputeTimeFactor(overrides?: CallOverrides): Promise<BigNumber>;
+
+    testWorstCaseVariableFactorAtMaturity(
+      isFT: boolean,
+      isLM: boolean,
+      historicalApyWad: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     transferMarginToFCMTrader(
       _account: string,
@@ -2317,6 +2433,8 @@ export class TestMarginEngine extends BaseContract {
   estimateGas: {
     MAX_CACHE_MAX_AGE_IN_SECONDS(overrides?: CallOverrides): Promise<BigNumber>;
 
+    MAX_FIXED_RATE_WAD(overrides?: CallOverrides): Promise<BigNumber>;
+
     MAX_LIQUIDATOR_REWARD_WAD(overrides?: CallOverrides): Promise<BigNumber>;
 
     MAX_LOOKBACK_WINDOW_IN_SECONDS(
@@ -2551,6 +2669,12 @@ export class TestMarginEngine extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setTermTimestamps(
+      _startWad: BigNumberish,
+      _endWad: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setVAMM(
       _vAMM: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -2566,6 +2690,21 @@ export class TestMarginEngine extends BaseContract {
     termEndTimestampWad(overrides?: CallOverrides): Promise<BigNumber>;
 
     termStartTimestampWad(overrides?: CallOverrides): Promise<BigNumber>;
+
+    testComputeApyBound(
+      historicalApyWad: BigNumberish,
+      isUpper: boolean,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    testComputeTimeFactor(overrides?: CallOverrides): Promise<BigNumber>;
+
+    testWorstCaseVariableFactorAtMaturity(
+      isFT: boolean,
+      isLM: boolean,
+      historicalApyWad: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     transferMarginToFCMTrader(
       _account: string,
@@ -2640,6 +2779,10 @@ export class TestMarginEngine extends BaseContract {
 
   populateTransaction: {
     MAX_CACHE_MAX_AGE_IN_SECONDS(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    MAX_FIXED_RATE_WAD(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -2891,6 +3034,12 @@ export class TestMarginEngine extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    setTermTimestamps(
+      _startWad: BigNumberish,
+      _endWad: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     setVAMM(
       _vAMM: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -2908,6 +3057,23 @@ export class TestMarginEngine extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     termStartTimestampWad(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    testComputeApyBound(
+      historicalApyWad: BigNumberish,
+      isUpper: boolean,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    testComputeTimeFactor(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    testWorstCaseVariableFactorAtMaturity(
+      isFT: boolean,
+      isLM: boolean,
+      historicalApyWad: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

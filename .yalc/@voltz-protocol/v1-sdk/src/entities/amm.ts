@@ -108,6 +108,7 @@ export type AMMSwapArgs = {
   fixedLow: number;
   fixedHigh: number;
   validationOnly?: boolean;
+  fullyCollateralisedVTSwap?: boolean;
 };
 
 export type AMMSwapWithWethArgs = {
@@ -828,7 +829,12 @@ class AMM {
     fixedLow,
     fixedHigh,
     validationOnly,
+    fullyCollateralisedVTSwap
   }: AMMSwapArgs): Promise<ContractReceipt | void> {
+    if (!this.provider) {
+      throw new Error('Blockchain not connected');
+    }
+
     if (!this.signer) {
       throw new Error('Wallet not connected');
     }
@@ -912,28 +918,50 @@ class AMM {
       };
     }
 
-    await peripheryContract.callStatic.swap(swapPeripheryParams, tempOverrides).catch(async (error: any) => {
-      let result = decodeInfoPostSwap(error, this.environment);
-      console.log('hi from SDK\n',
-                  'margin req: ', this.descale(result.marginRequirement), '\n',
-                  'fees: ', this.descale(result.fee), '\n',
-                  'sum: ', this.descale(result.marginRequirement) + this.descale(result.fee), '\n',
-                  'marginDelta: ', swapPeripheryParams.marginDelta, '\n');
-      const errorMessage = getReadableErrorMessage(error, this.environment);
-      throw new Error(errorMessage);
-    });
+    let swapTransaction;
+    if (fullyCollateralisedVTSwap === undefined || fullyCollateralisedVTSwap === false) {
+      await peripheryContract.callStatic.swap(swapPeripheryParams, tempOverrides).catch(async (error: any) => {
+        let result = decodeInfoPostSwap(error, this.environment);
+        const errorMessage = getReadableErrorMessage(error, this.environment);
+        throw new Error(errorMessage);
+      });
+  
+      const estimatedGas = await peripheryContract.estimateGas.swap(swapPeripheryParams, tempOverrides).catch((error) => {
+        const errorMessage = getReadableErrorMessage(error, this.environment);
+        throw new Error(errorMessage);
+      });
+  
+      tempOverrides.gasLimit = getGasBuffer(estimatedGas);
+  
+      swapTransaction = await peripheryContract.swap(swapPeripheryParams, tempOverrides).catch((error) => {
+        const errorMessage = getReadableErrorMessage(error, this.environment);
+        throw new Error(errorMessage);
+      });
+    } else {
+      const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
+      const variableFactorFromStartToNowWad = await rateOracleContract.callStatic.variableFactor(
+        BigNumber.from(this.termStartTimestamp.toString()), 
+        BigNumber.from(this.termEndTimestamp.toString())
+      );
 
-    const estimatedGas = await peripheryContract.estimateGas.swap(swapPeripheryParams, tempOverrides).catch((error) => {
-      const errorMessage = getReadableErrorMessage(error, this.environment);
-      throw new Error(errorMessage);
-    });
-
-    tempOverrides.gasLimit = getGasBuffer(estimatedGas);
-
-    const swapTransaction = await peripheryContract.swap(swapPeripheryParams, tempOverrides).catch((error) => {
-      const errorMessage = getReadableErrorMessage(error, this.environment);
-      throw new Error(errorMessage);
-    });
+      await peripheryContract.callStatic.fullyCollateralisedVTSwap(swapPeripheryParams, variableFactorFromStartToNowWad, tempOverrides).catch(async (error: any) => {
+        let result = decodeInfoPostSwap(error, this.environment);
+        const errorMessage = getReadableErrorMessage(error, this.environment);
+        throw new Error(errorMessage);
+      });
+  
+      const estimatedGas = await peripheryContract.estimateGas.fullyCollateralisedVTSwap(swapPeripheryParams, variableFactorFromStartToNowWad, tempOverrides).catch((error) => {
+        const errorMessage = getReadableErrorMessage(error, this.environment);
+        throw new Error(errorMessage);
+      });
+  
+      tempOverrides.gasLimit = getGasBuffer(estimatedGas);
+  
+      swapTransaction = await peripheryContract.fullyCollateralisedVTSwap(swapPeripheryParams, variableFactorFromStartToNowWad, tempOverrides).catch((error) => {
+        const errorMessage = getReadableErrorMessage(error, this.environment);
+        throw new Error(errorMessage);
+      });
+    }
 
     try {
       const receipt = await swapTransaction.wait();

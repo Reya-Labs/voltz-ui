@@ -121,35 +121,20 @@ var BorrowAMM = /** @class */ (function () {
                 timestamp: ethers_1.BigNumber.from(s.transactionTimestamp.toString())
             });
         }
-        for (var _b = 0, _c = position.fcmSwaps; _b < _c.length; _b++) {
-            var s = _c[_b];
-            allSwaps.push({
-                fDelta: ethers_1.BigNumber.from(s.fixedTokenDeltaUnbalanced.toString()),
-                vDelta: ethers_1.BigNumber.from(s.variableTokenDelta.toString()),
-                timestamp: ethers_1.BigNumber.from(s.transactionTimestamp.toString())
-            });
-        }
-        for (var _d = 0, _e = position.fcmUnwinds; _d < _e.length; _d++) {
-            var s = _e[_d];
-            allSwaps.push({
-                fDelta: ethers_1.BigNumber.from(s.fixedTokenDeltaUnbalanced.toString()),
-                vDelta: ethers_1.BigNumber.from(s.variableTokenDelta.toString()),
-                timestamp: ethers_1.BigNumber.from(s.transactionTimestamp.toString())
-            });
-        }
         allSwaps.sort(function (a, b) { return a.timestamp.sub(b.timestamp).toNumber(); });
         return allSwaps;
     };
     BorrowAMM.prototype.getAccruedCashflow = function (allSwaps, atMaturity) {
         return __awaiter(this, void 0, void 0, function () {
-            var accruedCashflow, lenSwaps, lastBlock, lastBlockTimestamp, _a, _b, untilTimestamp, rateOracleContract, i, currentSwapTimestamp, normalizedTime, variableFactorBetweenSwaps, fixedCashflow, variableCashflow, cashflow;
+            var totalVarableCashflow, totalFixedCashflow, lenSwaps, lastBlock, lastBlockTimestamp, _a, _b, untilTimestamp, rateOracleContract, i, currentSwapTimestamp, normalizedTime, variableFactorBetweenSwaps, fixedCashflow, variableCashflow;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
                         if (!this.provider) {
                             throw new Error('Wallet not connected');
                         }
-                        accruedCashflow = ethers_1.BigNumber.from(0);
+                        totalVarableCashflow = ethers_1.BigNumber.from(0);
+                        totalFixedCashflow = ethers_1.BigNumber.from(0);
                         lenSwaps = allSwaps.length;
                         return [4 /*yield*/, this.provider.getBlockNumber()];
                     case 1:
@@ -173,18 +158,82 @@ var BorrowAMM = /** @class */ (function () {
                         variableFactorBetweenSwaps = _c.sent();
                         fixedCashflow = allSwaps[i].fDelta.mul(normalizedTime).div(ethers_1.BigNumber.from(100)).div(ethers_1.BigNumber.from(10).pow(18));
                         variableCashflow = allSwaps[i].vDelta.mul(variableFactorBetweenSwaps).div(ethers_1.BigNumber.from(10).pow(18));
-                        cashflow = fixedCashflow.add(variableCashflow);
-                        accruedCashflow = accruedCashflow.add(cashflow);
+                        totalFixedCashflow = totalFixedCashflow.add(fixedCashflow);
+                        totalVarableCashflow = totalVarableCashflow.add(variableCashflow);
                         _c.label = 5;
                     case 5:
                         i++;
                         return [3 /*break*/, 3];
-                    case 6: return [2 /*return*/, this.descale(accruedCashflow)];
+                    case 6: return [2 /*return*/, [totalFixedCashflow, totalVarableCashflow]];
                 }
             });
         });
     };
-    BorrowAMM.prototype.getUnderlyingBorrowBalance = function () {
+    BorrowAMM.prototype.atMaturity = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var lastBlock, lastBlockTimestamp, _a, _b, pastMaturity;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        if (!this.provider) {
+                            throw new Error('Blockchain not connected');
+                        }
+                        return [4 /*yield*/, this.provider.getBlockNumber()];
+                    case 1:
+                        lastBlock = _c.sent();
+                        _b = (_a = ethers_1.BigNumber).from;
+                        return [4 /*yield*/, this.provider.getBlock(lastBlock - 1)];
+                    case 2:
+                        lastBlockTimestamp = _b.apply(_a, [(_c.sent()).timestamp]);
+                        pastMaturity = (ethers_1.BigNumber.from(this.termEndTimestamp.toString())).lt(lastBlockTimestamp.mul(ethers_1.BigNumber.from(10).pow(18)));
+                        return [2 /*return*/, pastMaturity];
+                }
+            });
+        });
+    };
+    BorrowAMM.prototype.getVariableCashFlow = function (position) {
+        return __awaiter(this, void 0, void 0, function () {
+            var allSwaps, pastMaturity, _a, fixedCashFlow, variableCashFlow;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (position === undefined) {
+                            return [2 /*return*/, ethers_1.BigNumber.from(0)];
+                        }
+                        allSwaps = this.getAllSwaps(position);
+                        return [4 /*yield*/, this.atMaturity()];
+                    case 1:
+                        pastMaturity = _b.sent();
+                        return [4 /*yield*/, this.getAccruedCashflow(allSwaps, pastMaturity)];
+                    case 2:
+                        _a = _b.sent(), fixedCashFlow = _a[0], variableCashFlow = _a[1];
+                        return [2 /*return*/, variableCashFlow];
+                }
+            });
+        });
+    };
+    BorrowAMM.prototype.getFixedCashFlow = function (position) {
+        return __awaiter(this, void 0, void 0, function () {
+            var allSwaps, pastMaturity, _a, fixedCashFlow, variableCashFlow;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (position === undefined) {
+                            return [2 /*return*/, 0];
+                        }
+                        allSwaps = this.getAllSwaps(position);
+                        return [4 /*yield*/, this.atMaturity()];
+                    case 1:
+                        pastMaturity = _b.sent();
+                        return [4 /*yield*/, this.getAccruedCashflow(allSwaps, pastMaturity)];
+                    case 2:
+                        _a = _b.sent(), fixedCashFlow = _a[0], variableCashFlow = _a[1];
+                        return [2 /*return*/, this.descale(fixedCashFlow)];
+                }
+            });
+        });
+    };
+    BorrowAMM.prototype.getScaledUnderlyingBorrowBalance = function () {
         return __awaiter(this, void 0, void 0, function () {
             var protocolId, compoundRateOracle, cTokenAddress, aaveRateOracle, lendingPoolAddress, lendingPool, reserve, variableDebtTokenAddress, borrowBalance, userAddress, userAddress;
             return __generator(this, function (_a) {
@@ -236,37 +285,34 @@ var BorrowAMM = /** @class */ (function () {
                     case 10:
                         borrowBalance = _a.sent();
                         _a.label = 11;
-                    case 11: return [2 /*return*/, this.descale(borrowBalance)];
+                    case 11: return [2 /*return*/, borrowBalance];
+                }
+            });
+        });
+    };
+    BorrowAMM.prototype.getUnderlyingBorrowBalance = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var borrowBalance;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.getScaledUnderlyingBorrowBalance()];
+                    case 1:
+                        borrowBalance = _a.sent();
+                        return [2 /*return*/, this.descale(borrowBalance)];
                 }
             });
         });
     };
     BorrowAMM.prototype.getFixedBorrowBalance = function (position) {
         return __awaiter(this, void 0, void 0, function () {
-            var allSwaps, lastBlock, lastBlockTimestamp, _a, _b, pastMaturity, accruedCashFlow, notional;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
-                    case 0:
-                        if (position === undefined) {
-                            return [2 /*return*/, 0];
-                        }
-                        if (!this.provider) {
-                            throw new Error('Blockchain not connected');
-                        }
-                        allSwaps = this.getAllSwaps(position);
-                        return [4 /*yield*/, this.provider.getBlockNumber()];
+            var fixedCashFlow, notional;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.getFixedCashFlow(position)];
                     case 1:
-                        lastBlock = _c.sent();
-                        _b = (_a = ethers_1.BigNumber).from;
-                        return [4 /*yield*/, this.provider.getBlock(lastBlock - 1)];
-                    case 2:
-                        lastBlockTimestamp = _b.apply(_a, [(_c.sent()).timestamp]);
-                        pastMaturity = (ethers_1.BigNumber.from(this.termEndTimestamp.toString())).lt(lastBlockTimestamp.mul(ethers_1.BigNumber.from(10).pow(18)));
-                        return [4 /*yield*/, this.getAccruedCashflow(allSwaps, pastMaturity)];
-                    case 3:
-                        accruedCashFlow = _c.sent();
+                        fixedCashFlow = _a.sent();
                         notional = this.descale(ethers_1.BigNumber.from(position.variableTokenBalance.toString()));
-                        return [2 /*return*/, notional + accruedCashFlow];
+                        return [2 /*return*/, notional - fixedCashFlow];
                 }
             });
         });
@@ -274,17 +320,21 @@ var BorrowAMM = /** @class */ (function () {
     // get variable debt: debt from underlying protocol - fixed debt on Voltz
     BorrowAMM.prototype.getAggregatedBorrowBalance = function (position) {
         return __awaiter(this, void 0, void 0, function () {
-            var fixedBorrowBalance, underlyingBorrowBalance;
+            var variableCashFlow, notional, notionalWithVariableCashFlow, buffer, notionalWithVariableCashFlowAndBuffer, underlyingBorrowBalance;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.getFixedBorrowBalance(position)];
+                    case 0: return [4 /*yield*/, this.getVariableCashFlow(position)];
                     case 1:
-                        fixedBorrowBalance = _a.sent();
-                        return [4 /*yield*/, this.getUnderlyingBorrowBalance()];
+                        variableCashFlow = _a.sent();
+                        notional = ethers_1.BigNumber.from(position.variableTokenBalance.toString());
+                        notionalWithVariableCashFlow = notional.add(variableCashFlow);
+                        buffer = ethers_1.BigNumber.from("1001").div(ethers_1.BigNumber.from("1000"));
+                        notionalWithVariableCashFlowAndBuffer = notionalWithVariableCashFlow.mul(buffer);
+                        return [4 /*yield*/, this.getScaledUnderlyingBorrowBalance()];
                     case 2:
                         underlyingBorrowBalance = _a.sent();
-                        if (underlyingBorrowBalance >= fixedBorrowBalance) {
-                            return [2 /*return*/, underlyingBorrowBalance - fixedBorrowBalance];
+                        if (underlyingBorrowBalance.gte(notionalWithVariableCashFlowAndBuffer)) {
+                            return [2 /*return*/, this.descale(underlyingBorrowBalance.sub(notionalWithVariableCashFlow))];
                         }
                         else {
                             return [2 /*return*/, 0];
