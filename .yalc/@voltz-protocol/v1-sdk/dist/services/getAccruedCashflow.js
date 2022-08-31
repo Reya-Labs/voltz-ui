@@ -47,7 +47,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAccruedCashflow = void 0;
+exports.getAccruedCashflow = exports.transformSwaps = void 0;
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-lonely-if */
 var ethers_1 = require("ethers");
@@ -56,8 +56,7 @@ var getAnnualizedTime = function (start, end) {
     return (end - start) / constants_1.ONE_YEAR_IN_SECONDS;
 };
 // get all swaps of some position, descale the values to numbers and sort by time
-function getSwaps(_a, decimals) {
-    var swaps = _a.swaps;
+function transformSwaps(swaps, decimals) {
     return swaps
         .map(function (s) {
         return {
@@ -70,6 +69,7 @@ function getSwaps(_a, decimals) {
     })
         .sort(function (a, b) { return a.time - b.time; });
 }
+exports.transformSwaps = transformSwaps;
 // get accrued cashflow of some position between two timestamps
 function getAccruedCashflowBetween(notional, fixedRate, rateOracle, from, to) {
     return __awaiter(this, void 0, void 0, function () {
@@ -100,66 +100,54 @@ timeInYears, fixedRate0, fixedRate1) {
 }
 // get the accrued cashflow and average fixed rate of particular position
 var getAccruedCashflow = function (_a) {
-    var position = _a.position, rateOracle = _a.rateOracle, currentTime = _a.currentTime, endTime = _a.endTime, decimals = _a.decimals;
+    var swaps = _a.swaps, rateOracle = _a.rateOracle, currentTime = _a.currentTime, endTime = _a.endTime;
     return __awaiter(void 0, void 0, void 0, function () {
-        var swaps, info, i, timeUntilMaturity, lockedInProfit, accruedCashflowBetween, accruedCashflowBetween, accruedCashflowBetween, lockedInProfit, accruedCashflowBetween, accruedCashflowBetween;
+        var info, i, timeUntilMaturity, lockedInProfit, accruedCashflowBetween, lockedInProfit, accruedCashflowBetween, accruedCashflowBetween, accruedCashflowBetween, lockedInProfit, accruedCashflowBetween, lockedInProfit, accruedCashflowBetween, accruedCashflowBetween;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    if (position.swaps.length === 0) {
+                    if (swaps.length === 0) {
                         return [2 /*return*/, {
                                 avgFixedRate: 0,
                                 accruedCashflow: 0,
                             }];
                     }
-                    swaps = getSwaps(position, decimals);
                     info = __assign({ accruedCashflow: 0 }, swaps[0]);
                     i = 1;
                     _b.label = 1;
                 case 1:
-                    if (!(i < swaps.length)) return [3 /*break*/, 11];
+                    if (!(i < swaps.length)) return [3 /*break*/, 16];
                     timeUntilMaturity = getAnnualizedTime(swaps[i].time, endTime);
-                    if (!(info.notional >= 0)) return [3 /*break*/, 6];
-                    if (!(swaps[i].notional < 0)) return [3 /*break*/, 3];
+                    if (!(info.notional >= 0)) return [3 /*break*/, 9];
+                    if (!(swaps[i].notional < 0)) return [3 /*break*/, 6];
+                    if (!(info.notional + swaps[i].notional > 0)) return [3 /*break*/, 3];
                     lockedInProfit = getLockedInProfit(swaps[i].notional, timeUntilMaturity, info.avgFixedRate, swaps[i].avgFixedRate);
                     return [4 /*yield*/, getAccruedCashflowBetween(-swaps[i].notional, // notional > 0
                         info.avgFixedRate, rateOracle, info.time, swaps[i].time)];
                 case 2:
                     accruedCashflowBetween = _b.sent();
-                    if (info.notional + swaps[i].notional > 0) {
-                        // partial unwind
-                        info = {
-                            accruedCashflow: info.accruedCashflow + lockedInProfit + accruedCashflowBetween,
-                            notional: info.notional + swaps[i].notional,
-                            time: info.time,
-                            avgFixedRate: info.avgFixedRate,
-                        };
-                    }
-                    else {
-                        // full unwind + FT
-                        info = {
-                            accruedCashflow: info.accruedCashflow + lockedInProfit + accruedCashflowBetween,
-                            notional: info.notional + swaps[i].notional,
-                            time: swaps[i].time,
-                            avgFixedRate: swaps[i].avgFixedRate,
-                        };
-                    }
+                    info = {
+                        accruedCashflow: info.accruedCashflow + lockedInProfit + accruedCashflowBetween,
+                        notional: info.notional + swaps[i].notional,
+                        time: info.time,
+                        avgFixedRate: info.avgFixedRate,
+                    };
                     return [3 /*break*/, 5];
-                case 3: return [4 /*yield*/, getAccruedCashflowBetween(info.notional, info.avgFixedRate, rateOracle, info.time, swaps[i].time)];
+                case 3:
+                    lockedInProfit = getLockedInProfit(-info.notional, timeUntilMaturity, info.avgFixedRate, swaps[i].avgFixedRate);
+                    return [4 /*yield*/, getAccruedCashflowBetween(info.notional, // notional > 0
+                        info.avgFixedRate, rateOracle, info.time, swaps[i].time)];
                 case 4:
                     accruedCashflowBetween = _b.sent();
                     info = {
-                        accruedCashflow: info.accruedCashflow + accruedCashflowBetween,
+                        accruedCashflow: info.accruedCashflow + lockedInProfit + accruedCashflowBetween,
                         notional: info.notional + swaps[i].notional,
                         time: swaps[i].time,
-                        avgFixedRate: (info.avgFixedRate * info.notional + swaps[i].avgFixedRate * swaps[i].notional) /
-                            (info.notional + swaps[i].notional),
+                        avgFixedRate: swaps[i].avgFixedRate,
                     };
                     _b.label = 5;
-                case 5: return [3 /*break*/, 10];
-                case 6:
-                    if (!(swaps[i].notional < 0)) return [3 /*break*/, 8];
-                    return [4 /*yield*/, getAccruedCashflowBetween(info.notional, info.avgFixedRate, rateOracle, info.time, swaps[i].time)];
+                case 5: return [3 /*break*/, 8];
+                case 6: return [4 /*yield*/, getAccruedCashflowBetween(info.notional, info.avgFixedRate, rateOracle, info.time, swaps[i].time)];
                 case 7:
                     accruedCashflowBetween = _b.sent();
                     info = {
@@ -169,37 +157,53 @@ var getAccruedCashflow = function (_a) {
                         avgFixedRate: (info.avgFixedRate * info.notional + swaps[i].avgFixedRate * swaps[i].notional) /
                             (info.notional + swaps[i].notional),
                     };
-                    return [3 /*break*/, 10];
-                case 8:
+                    _b.label = 8;
+                case 8: return [3 /*break*/, 15];
+                case 9:
+                    if (!(swaps[i].notional < 0)) return [3 /*break*/, 11];
+                    return [4 /*yield*/, getAccruedCashflowBetween(info.notional, info.avgFixedRate, rateOracle, info.time, swaps[i].time)];
+                case 10:
+                    accruedCashflowBetween = _b.sent();
+                    info = {
+                        accruedCashflow: info.accruedCashflow + accruedCashflowBetween,
+                        notional: info.notional + swaps[i].notional,
+                        time: swaps[i].time,
+                        avgFixedRate: (info.avgFixedRate * info.notional + swaps[i].avgFixedRate * swaps[i].notional) /
+                            (info.notional + swaps[i].notional),
+                    };
+                    return [3 /*break*/, 15];
+                case 11:
+                    if (!(info.notional + swaps[i].notional < 0)) return [3 /*break*/, 13];
                     lockedInProfit = getLockedInProfit(swaps[i].notional, timeUntilMaturity, info.avgFixedRate, swaps[i].avgFixedRate);
                     return [4 /*yield*/, getAccruedCashflowBetween(-swaps[i].notional, // notional < 0
                         info.avgFixedRate, rateOracle, info.time, swaps[i].time)];
-                case 9:
+                case 12:
                     accruedCashflowBetween = _b.sent();
-                    if (info.notional + swaps[i].notional < 0) {
-                        // partial unwind
-                        info = {
-                            accruedCashflow: info.accruedCashflow + lockedInProfit + accruedCashflowBetween,
-                            notional: info.notional + swaps[i].notional,
-                            time: info.time,
-                            avgFixedRate: info.avgFixedRate,
-                        };
-                    }
-                    else {
-                        // full unwind + VT
-                        info = {
-                            accruedCashflow: info.accruedCashflow + lockedInProfit + accruedCashflowBetween,
-                            notional: info.notional + swaps[i].notional,
-                            time: swaps[i].time,
-                            avgFixedRate: swaps[i].avgFixedRate,
-                        };
-                    }
-                    _b.label = 10;
-                case 10:
+                    info = {
+                        accruedCashflow: info.accruedCashflow + lockedInProfit + accruedCashflowBetween,
+                        notional: info.notional + swaps[i].notional,
+                        time: info.time,
+                        avgFixedRate: info.avgFixedRate,
+                    };
+                    return [3 /*break*/, 15];
+                case 13:
+                    lockedInProfit = getLockedInProfit(-info.notional, timeUntilMaturity, info.avgFixedRate, swaps[i].avgFixedRate);
+                    return [4 /*yield*/, getAccruedCashflowBetween(info.notional, // notional < 0
+                        info.avgFixedRate, rateOracle, info.time, swaps[i].time)];
+                case 14:
+                    accruedCashflowBetween = _b.sent();
+                    info = {
+                        accruedCashflow: info.accruedCashflow + lockedInProfit + accruedCashflowBetween,
+                        notional: info.notional + swaps[i].notional,
+                        time: swaps[i].time,
+                        avgFixedRate: swaps[i].avgFixedRate,
+                    };
+                    _b.label = 15;
+                case 15:
                     i += 1;
                     return [3 /*break*/, 1];
-                case 11: return [4 /*yield*/, getAccruedCashflowBetween(info.notional, info.avgFixedRate, rateOracle, info.time, currentTime)];
-                case 12:
+                case 16: return [4 /*yield*/, getAccruedCashflowBetween(info.notional, info.avgFixedRate, rateOracle, info.time, currentTime)];
+                case 17:
                     accruedCashflowBetween = _b.sent();
                     info = {
                         accruedCashflow: info.accruedCashflow + accruedCashflowBetween,

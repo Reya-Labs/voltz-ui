@@ -573,11 +573,10 @@ var AMM = /** @class */ (function () {
                         _f.trys.push([5, 8, , 9]);
                         if (!(position.swaps.length > 0)) return [3 /*break*/, 7];
                         return [4 /*yield*/, (0, getAccruedCashflow_1.getAccruedCashflow)({
-                                position: position,
+                                swaps: (0, getAccruedCashflow_1.transformSwaps)(position.swaps, this.underlyingToken.decimals),
                                 rateOracle: rateOracleContract,
                                 currentTime: Number(lastBlockTimestamp.toString()),
                                 endTime: Number(ethers_2.utils.formatUnits(this.termEndTimestamp.toString(), 18)),
-                                decimals: this.underlyingToken.decimals
                             })];
                     case 6:
                         accruedCashflowInfo = _f.sent();
@@ -2264,11 +2263,10 @@ var AMM = /** @class */ (function () {
                         _d.variableRateSinceLastSwap = (_f.sent()) * 100;
                         console.log("Getting accrued cashflow info...");
                         return [4 /*yield*/, (0, getAccruedCashflow_1.getAccruedCashflow)({
-                                position: position,
+                                swaps: (0, getAccruedCashflow_1.transformSwaps)(position.swaps, this.underlyingToken.decimals),
                                 rateOracle: rateOracleContract,
                                 currentTime: Number(lastBlockTimestamp.toString()),
                                 endTime: Number(ethers_2.utils.formatUnits(this.termEndTimestamp.toString(), 18)),
-                                decimals: this.underlyingToken.decimals
                             })];
                     case 8:
                         accruedCashflowInfo = _f.sent();
@@ -2297,11 +2295,10 @@ var AMM = /** @class */ (function () {
                         _f.trys.push([13, 16, , 17]);
                         console.log("Getting accrued cashflow info...");
                         return [4 /*yield*/, (0, getAccruedCashflow_1.getAccruedCashflow)({
-                                position: position,
+                                swaps: (0, getAccruedCashflow_1.transformSwaps)(position.swaps, this.underlyingToken.decimals),
                                 rateOracle: rateOracleContract,
                                 currentTime: Number(ethers_2.utils.formatUnits(this.termEndTimestamp.toString(), 18)),
                                 endTime: Number(ethers_2.utils.formatUnits(this.termEndTimestamp.toString(), 18)),
-                                decimals: this.underlyingToken.decimals
                             })];
                     case 14:
                         accruedCashflowInfo = _f.sent();

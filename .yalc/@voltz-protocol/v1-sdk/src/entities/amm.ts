@@ -45,7 +45,7 @@ import { decodeInfoPostMint, decodeInfoPostSwap, getReadableErrorMessage } from 
 import Position from './position';
 import { isNumber, isUndefined } from 'lodash';
 import { getExpectedApy } from '../services/getExpectedApy';
-import { getAccruedCashflow } from '../services/getAccruedCashflow';
+import { getAccruedCashflow, transformSwaps } from '../services/getAccruedCashflow';
 
 import axios from 'axios';
 
@@ -887,11 +887,10 @@ class AMM {
       try {
         if (position.swaps.length > 0) {
            const accruedCashflowInfo = await getAccruedCashflow({
-            position,
+            swaps: transformSwaps(position.swaps, this.underlyingToken.decimals),
             rateOracle: rateOracleContract,
             currentTime: Number(lastBlockTimestamp.toString()),
             endTime: Number(utils.formatUnits(this.termEndTimestamp.toString(), 18)),
-            decimals: this.underlyingToken.decimals
           });
           accruedCashflow = accruedCashflowInfo.accruedCashflow;
         }
@@ -2493,11 +2492,10 @@ class AMM {
 
             console.log("Getting accrued cashflow info...");
             const accruedCashflowInfo = await getAccruedCashflow({
-              position,
+              swaps: transformSwaps(position.swaps, this.underlyingToken.decimals),
               rateOracle: rateOracleContract,
               currentTime: Number(lastBlockTimestamp.toString()),
               endTime: Number(utils.formatUnits(this.termEndTimestamp.toString(), 18)),
-              decimals: this.underlyingToken.decimals
             });
             console.log("Result:", accruedCashflowInfo);
 
@@ -2522,11 +2520,10 @@ class AMM {
           try {
             console.log("Getting accrued cashflow info...");
             const accruedCashflowInfo = await getAccruedCashflow({
-              position,
+              swaps: transformSwaps(position.swaps, this.underlyingToken.decimals),
               rateOracle: rateOracleContract,
               currentTime: Number(utils.formatUnits(this.termEndTimestamp.toString(), 18)),
               endTime: Number(utils.formatUnits(this.termEndTimestamp.toString(), 18)),
-              decimals: this.underlyingToken.decimals
             });
             console.log("Result:", accruedCashflowInfo);
 
