@@ -45,6 +45,7 @@ import { decodeInfoPostMint, decodeInfoPostSwap, getReadableErrorMessage } from 
 import Position from './position';
 import { isNumber, isUndefined } from 'lodash';
 import { getExpectedApy } from '../services/getExpectedApy';
+import { getAccruedCashflow } from '../services/getAccruedCashflow';
 
 import axios from 'axios';
 
@@ -837,6 +838,10 @@ class AMM {
       throw new Error('Wallet not connected');
     }
 
+    if (!this.provider) {
+      throw new Error('Blockchain not connected');
+    }
+
     if (fixedLow >= fixedHigh) {
       throw new Error('Lower Rate must be smaller than Upper Rate');
     }
@@ -859,6 +864,11 @@ class AMM {
       await marginEngineContract.callStatic.getPosition(signerAddress, tickLower, tickUpper)
     ).margin;
 
+    const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
+
+    const lastBlock = await this.provider.getBlockNumber();
+    const lastBlockTimestamp = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
+
     const scaledCurrentMargin = this.descale(currentMargin);
 
     let positionMargin = 0;
@@ -867,19 +877,23 @@ class AMM {
     let positionVt = BigNumber.from(0);
 
     if (position) {
-      const allSwaps = this.getAllSwaps(position);
-      const lenSwaps = allSwaps.length;
-
-      for (let swap of allSwaps) {
-        positionUft = positionUft.add(swap.fDelta);
-        positionVt = positionVt.add(swap.vDelta);
+      for (let swap of position.swaps) {
+        positionUft = positionUft.add(swap.fixedTokenDeltaUnbalanced.toString());
+        positionVt = positionVt.add(swap.variableTokenDelta.toString());
       }
 
       positionMargin = scaledCurrentMargin;
 
       try {
-        if (lenSwaps > 0) {
-          accruedCashflow = await this.getAccruedCashflow(allSwaps, false);
+        if (position.swaps.length > 0) {
+           const accruedCashflowInfo = await getAccruedCashflow({
+            position,
+            rateOracle: rateOracleContract,
+            currentTime: Number(lastBlockTimestamp.toString()),
+            endTime: Number(utils.formatUnits(this.termEndTimestamp.toString(), 18)),
+            decimals: this.underlyingToken.decimals
+          });
+          accruedCashflow = accruedCashflowInfo.accruedCashflow;
         }
       } catch { }
     }
@@ -2423,80 +2437,6 @@ class AMM {
     return parseFloat(utils.formatEther(historicalApy));
   }
 
-  public getAllSwaps(position: Position) {
-    const allSwaps: {
-      fDelta: BigNumber,
-      vDelta: BigNumber,
-      timestamp: BigNumber
-    }[] = [];
-
-    for (let s of position.swaps) {
-      allSwaps.push({
-        fDelta: BigNumber.from(s.fixedTokenDeltaUnbalanced.toString()),
-        vDelta: BigNumber.from(s.variableTokenDelta.toString()),
-        timestamp: BigNumber.from(s.transactionTimestamp.toString())
-      })
-    }
-
-    for (let s of position.fcmSwaps) {
-      allSwaps.push({
-        fDelta: BigNumber.from(s.fixedTokenDeltaUnbalanced.toString()),
-        vDelta: BigNumber.from(s.variableTokenDelta.toString()),
-        timestamp: BigNumber.from(s.transactionTimestamp.toString())
-      })
-    }
-
-    for (let s of position.fcmUnwinds) {
-      allSwaps.push({
-        fDelta: BigNumber.from(s.fixedTokenDeltaUnbalanced.toString()),
-        vDelta: BigNumber.from(s.variableTokenDelta.toString()),
-        timestamp: BigNumber.from(s.transactionTimestamp.toString())
-      })
-    }
-
-    allSwaps.sort((a, b) => a.timestamp.sub(b.timestamp).toNumber());
-
-    return allSwaps;
-  }
-
-  public async getAccruedCashflow(allSwaps: {
-    fDelta: BigNumber,
-    vDelta: BigNumber,
-    timestamp: BigNumber
-  }[], atMaturity: boolean): Promise<number> {
-    if (!this.provider) {
-      throw new Error('Wallet not connected');
-    }
-
-    let accruedCashflow = BigNumber.from(0);
-    let lenSwaps = allSwaps.length;
-
-    const lastBlock = await this.provider.getBlockNumber();
-    const lastBlockTimestamp = BigNumber.from((await this.provider.getBlock(lastBlock - 2)).timestamp);
-
-    let untilTimestamp = (atMaturity)
-      ? BigNumber.from(this.termEndTimestamp.toString())
-      : lastBlockTimestamp.mul(BigNumber.from(10).pow(18));
-
-    const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
-
-    for (let i = 0; i < lenSwaps; i++) {
-      const currentSwapTimestamp = allSwaps[i].timestamp.mul(BigNumber.from(10).pow(18));
-
-      const normalizedTime = (untilTimestamp.sub(currentSwapTimestamp)).div(BigNumber.from(ONE_YEAR_IN_SECONDS))
-
-      const variableFactorBetweenSwaps = await rateOracleContract.callStatic.variableFactor(currentSwapTimestamp, untilTimestamp);
-
-      const fixedCashflow = allSwaps[i].fDelta.mul(normalizedTime).div(BigNumber.from(100)).div(BigNumber.from(10).pow(18));
-      const variableCashflow = allSwaps[i].vDelta.mul(variableFactorBetweenSwaps).div(BigNumber.from(10).pow(18));
-
-      const cashflow = fixedCashflow.add(variableCashflow);
-      accruedCashflow = accruedCashflow.add(cashflow);
-    }
-
-    return this.descale(accruedCashflow);
-  }
-
   public async getVariableFactor(termStartTimestamp: BigNumber, termEndTimestamp: BigNumber): Promise<number> {
     if (!this.provider) {
       throw new Error('Blockchain not connected');
@@ -2530,6 +2470,8 @@ class AMM {
       beforeMaturity: false
     };
 
+    const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
+
     const signerAddress = await this.signer.getAddress();
     const lastBlock = await this.provider.getBlockNumber();
     const lastBlockTimestamp = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
@@ -2542,48 +2484,62 @@ class AMM {
       results.fixedApr = await this.getFixedApr();
     }
 
-    const allSwaps = this.getAllSwaps(position);
-    const lenSwaps = allSwaps.length;
-
     // variable apy and accrued cashflow
 
-    if (lenSwaps > 0) {
+    if (position.swaps.length > 0) {
       if (beforeMaturity) {
-        if (lenSwaps > 0) {
           try {
             results.variableRateSinceLastSwap = await this.getInstantApy() * 100;
-            results.fixedRateSinceLastSwap = position.averageFixedRate;
 
-            const accruedCashflowInUnderlyingToken = await this.getAccruedCashflow(allSwaps, false);
-            results.accruedCashflow = accruedCashflowInUnderlyingToken;
+            console.log("Getting accrued cashflow info...");
+            const accruedCashflowInfo = await getAccruedCashflow({
+              position,
+              rateOracle: rateOracleContract,
+              currentTime: Number(lastBlockTimestamp.toString()),
+              endTime: Number(utils.formatUnits(this.termEndTimestamp.toString(), 18)),
+              decimals: this.underlyingToken.decimals
+            });
+            console.log("Result:", accruedCashflowInfo);
+
+            results.accruedCashflow = accruedCashflowInfo.accruedCashflow;
+
+            results.fixedRateSinceLastSwap = accruedCashflowInfo.avgFixedRate;
 
             // Get current exchange rate for eth/usd
             const EthToUsdPrice = await geckoEthToUsd();
 
             if (this.isETH) {
               // need to change when introduce non-stable coins
-              results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken * EthToUsdPrice;
+              results.accruedCashflowInUSD = results.accruedCashflow * EthToUsdPrice;
             } else {
-              results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken
+              results.accruedCashflowInUSD = results.accruedCashflow;
             }
 
           } catch (_) { }
-        }
       }
       else {
         if (!position.isSettled) {
           try {
-            const accruedCashflowInUnderlyingToken = await this.getAccruedCashflow(allSwaps, true);
-            results.accruedCashflow = accruedCashflowInUnderlyingToken;
+            console.log("Getting accrued cashflow info...");
+            const accruedCashflowInfo = await getAccruedCashflow({
+              position,
+              rateOracle: rateOracleContract,
+              currentTime: Number(utils.formatUnits(this.termEndTimestamp.toString(), 18)),
+              endTime: Number(utils.formatUnits(this.termEndTimestamp.toString(), 18)),
+              decimals: this.underlyingToken.decimals
+            });
+            console.log("Result:", accruedCashflowInfo);
+
+            results.accruedCashflow = accruedCashflowInfo.accruedCashflow;
 
             // Get current exchange rate for eth/usd
             const EthToUsdPrice = await geckoEthToUsd();
 
             if (this.isETH) {
               // need to change when introduce non-stable coins
-              results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken * EthToUsdPrice;
+              results.accruedCashflowInUSD = accruedCashflowInfo.accruedCashflow * EthToUsdPrice;
             } else {
-              results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken
+              results.accruedCashflowInUSD = accruedCashflowInfo.accruedCashflow
             }
 
           } catch (_) { }
