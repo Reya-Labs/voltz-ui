@@ -175,6 +175,7 @@ export declare type PositionInfo = {
     beforeMaturity: boolean;
     fixedApr?: number;
     healthFactor?: number;
+    fixedRateHealthFactor?: number;
 };
 export declare type ClosestTickAndFixedRate = {
     closestUsableTick: number;

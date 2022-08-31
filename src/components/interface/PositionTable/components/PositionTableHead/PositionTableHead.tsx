@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { colors, SystemStyleObject, Theme } from '@theme';
 import { AugmentedAMM, formatCurrency, formatNumber } from '@utilities';
 import { Button, getPositionBadgeVariant, PositionBadge, Typography } from '@components/atomic';
-import { BulletLabel, getHealthTextColor, HealthFactorText } from '@components/composite';
+import { BulletLabel, getHealthTextColor, getFixedRateHealthTextColor, HealthFactorText } from '@components/composite';
 import { isUndefined } from 'lodash';
 
 export type PositionTableHeadProps = {
@@ -16,6 +16,7 @@ export type PositionTableHeadProps = {
   isSettled: boolean;
   positionType: number;
   healthFactor?: number;
+  fixedRateHealthFactor?: number;
   beforeMaturity: boolean;
   onRollover: () => void;
   onSettle: () => void;
@@ -47,6 +48,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
   isSettled,
   positionType,
   healthFactor,
+  fixedRateHealthFactor,
   beforeMaturity,
   onRollover,
   onSettle,
@@ -85,7 +87,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
         {beforeMaturity && !isUndefined(currentFixedRate) && !isUndefined(healthFactor) && (
           <Box sx={{ padding: (theme) => `${theme.spacing(1)} ${theme.spacing(2)}`, marginLeft: (theme) => theme.spacing(2) }}>
             <BulletLabel 
-              sx={{ color: getHealthTextColor(healthFactor) }} 
+              sx={{ color: getFixedRateHealthTextColor(fixedRateHealthFactor) }} 
               text={<>Current fixed rate: {formatNumber(currentFixedRate)}%</>}
             />
           </Box>
