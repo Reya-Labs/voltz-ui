@@ -2472,7 +2472,7 @@ class AMM {
     let lenSwaps = allSwaps.length;
 
     const lastBlock = await this.provider.getBlockNumber();
-    const lastBlockTimestamp = BigNumber.from((await this.provider.getBlock(lastBlock - 2)).timestamp);
+    const lastBlockTimestamp = BigNumber.from((await this.provider.getBlock(lastBlock)).timestamp);
 
     let untilTimestamp = (atMaturity)
       ? BigNumber.from(this.termEndTimestamp.toString())

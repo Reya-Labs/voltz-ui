@@ -4,7 +4,7 @@ import Slider from '@mui/material/Slider';
 import { MaskedIntegerField, IconLabel } from '@components/composite';
 import { colors } from '@theme';
 import { isNumber, isUndefined } from 'lodash';
-import { formatNumber } from '@utilities';
+import { formatNumber, toUSFormat } from '@utilities';
 
 /**
  * margin: for a new position this is just the ratio between notional and minimum margin required
@@ -26,6 +26,7 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
   const margin = isNumber(minMargin) ? Math.max(minMargin, 0.1) : undefined;
 
   const [internalValue, setInternalValue] = useState<number | undefined>(value);
+  const [inputValue, setInputValue] = useState(formatNumber(value));
   const isDisabledLeverageBox = isUndefined(availableNotional) || isUndefined(margin) || isUndefined(notional);
   const isDisabled = isUndefined(availableNotional) || isUndefined(margin) || isUndefined(notional) || isUndefined(internalValue);
   const timer = useRef<number>();
@@ -49,11 +50,13 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
 
   useEffect(() => {
     setInternalValue(value);
+    setInputValue(formatNumber(value, 0, 2));
   }, [value, resetDeltaState])
 
   const handleChangeSlider = (event: Event, newValue: number | number[], activeThumb: number) => {
     if (typeof newValue === 'number') {
       setInternalValue(newValue);
+      setInputValue(formatNumber(newValue, 0, 2));
     }
   }
 
@@ -67,14 +70,17 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
 
   const handleChangeInput = (inputVal: string | undefined) => {
     if (inputVal) {
-      const newValue = parseFloat(inputVal);
+      const usFormatted = toUSFormat(inputVal);
+      const newValue = usFormatted ? parseFloat(usFormatted) : NaN;
       if(!isNaN(newValue)) {
         setInternalValue(newValue);
+        setInputValue(inputVal);
         window.clearInterval(timer.current);
         timer.current = window.setTimeout(() => onChange(newValue), delay);
       }
     } else {
       setInternalValue(undefined);
+      setInputValue("");
       window.clearInterval(timer.current);
       timer.current = window.setTimeout(() => onChange(0, true), delay * 2);
     }
@@ -89,7 +95,7 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
           dynamic
           inputSize="small"
           label={<IconLabel label={'Leverage'} icon="information-circle" info={hint} />}
-          value={internalValue}
+          value={inputValue}
           onChange={handleChangeInput}
           suffix='x'
           suffixPadding={0}
