@@ -16,7 +16,7 @@ export type PositionTableRowProps = {
   position: Position;
   positionInfo?: PositionInfo;
   index: number;
-  onSelect: (mode: 'margin' | 'liquidity') => void;
+  onSelect: (mode: 'margin' | 'liquidity' | 'notional') => void;
 };
 
 const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({

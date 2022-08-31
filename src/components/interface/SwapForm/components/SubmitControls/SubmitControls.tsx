@@ -138,6 +138,9 @@ const SubmitControls = ({
       case SwapFormSubmitButtonStates.UPDATE: {
         return 'Update Margin';
       }
+      case SwapFormSubmitButtonStates.UPDATE_POSITION: {
+        return 'Update Position';
+      }
     }
   };
 

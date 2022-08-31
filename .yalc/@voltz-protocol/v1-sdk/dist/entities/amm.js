@@ -607,9 +607,6 @@ var AMM = /** @class */ (function () {
                         if (notional <= 0) {
                             throw new Error('Amount of notional must be greater than 0');
                         }
-                        if (margin < 0) {
-                            throw new Error('Amount of margin cannot be negative');
-                        }
                         if (!this.underlyingToken.id) {
                             throw new Error('No underlying error');
                         }
@@ -2214,7 +2211,7 @@ var AMM = /** @class */ (function () {
                     case 1:
                         lastBlock = _c.sent();
                         _b = (_a = ethers_2.BigNumber).from;
-                        return [4 /*yield*/, this.provider.getBlock(lastBlock - 2)];
+                        return [4 /*yield*/, this.provider.getBlock(lastBlock)];
                     case 2:
                         lastBlockTimestamp = _b.apply(_a, [(_c.sent()).timestamp]);
                         untilTimestamp = (atMaturity)

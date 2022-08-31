@@ -63,9 +63,9 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
       // window.clearInterval(timer.current);
       onChange(newValue);
     }
-  }, [onChange, setInternalValue]);
+  };
 
-  const handleChangeInput = useCallback((inputVal: string | undefined) => {
+  const handleChangeInput = (inputVal: string | undefined) => {
     if(inputVal) {
       const usFormatted = toUSFormat(inputVal);
       const newValue = usFormatted ? parseFloat(usFormatted) : NaN;

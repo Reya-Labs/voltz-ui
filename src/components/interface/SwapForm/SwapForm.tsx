@@ -124,13 +124,14 @@ const Swap: React.FunctionComponent<SwapProps> = ({
             onChange={onChangeMarginAction}
           />
         </Box>
-      )}  
+      )} 
 
       {mode !== SwapFormModes.EDIT_MARGIN && (
         <Box sx={{ ...bottomSpacing, display: 'flex' }}>
           <TraderControls
             agent={agent}
             isFCMAvailable={isFCMAvailable}
+            isEdit={mode === SwapFormModes.EDIT_NOTIONAL}
             partialCollateralization={formState.partialCollateralization}
             onChangeAgent={onChangeAgent}
             onChangePartialCollateralization={onChangePartialCollateralization}
@@ -167,6 +168,16 @@ const Swap: React.FunctionComponent<SwapProps> = ({
         </Box>
       )}
 
+      {mode === SwapFormModes.EDIT_NOTIONAL && (
+        <Box sx={{ ...bottomSpacing, display: 'flex' }}>
+          <MarginControls 
+            values={SwapFormMarginAction}
+            value={formState.marginAction}
+            onChange={onChangeMarginAction}
+          />
+        </Box>
+      )} 
+
       {(formAction === SwapFormActions.SWAP || formAction === SwapFormActions.UPDATE || formAction === SwapFormActions.ROLLOVER_SWAP) && (
         <Box sx={bottomSpacing}>
           <MarginAmount
@@ -174,7 +185,7 @@ const Swap: React.FunctionComponent<SwapProps> = ({
             error={errors['margin']}
             healthFactor={healthFactor}
             isAdditional={formState.marginAction === SwapFormMarginAction.ADD}
-            isEditing={mode === SwapFormModes.EDIT_MARGIN}
+            isEditing={mode === SwapFormModes.EDIT_MARGIN || mode === SwapFormModes.EDIT_NOTIONAL}
             margin={formState.margin}
             maxMargin={maxMargin}
             onChangeMargin={onChangeMargin}
