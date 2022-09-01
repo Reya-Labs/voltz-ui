@@ -225,12 +225,12 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   };
 
   const renderNotional = () => {
-    if (isUndefined(notional)) {
-      return "Notional undefined";
-    }
-
     if (isUndefined(amm.underlyingToken.name)) {
       return "Underlying token name undefined";
+    }
+
+    if (isUndefined(notional)) {
+      return `${formatCurrency(0)} ${amm.underlyingToken.name}`;
     }
 
     return `${formatCurrency(notional)} ${amm.underlyingToken.name}`;

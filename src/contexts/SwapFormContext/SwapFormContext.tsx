@@ -109,7 +109,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   const defaultMarginAction = defaultValues.marginAction || SwapFormMarginAction.ADD;
   const defaultNotional = (mode === SwapFormModes.ROLLOVER && position) 
     ? Math.abs(position.effectiveVariableTokenBalance)
-    : defaultValues.notional ?? undefined;
+    : defaultValues.notional;
   const defaultPartialCollateralization = position
     ? position.source !== 'FCM'
     : defaultValues.partialCollateralization ?? true

@@ -144,6 +144,8 @@ const Swap: React.FunctionComponent<SwapProps> = ({
           <NotionalAmount
             error={errors['notional']}
             label="notional amount"
+            defaultNotional={mode === SwapFormModes.EDIT_NOTIONAL ? 0 : undefined}
+            isEditing={mode === SwapFormModes.EDIT_NOTIONAL}
             info={(formAction === SwapFormActions.FCM_SWAP || formAction === SwapFormActions.FCM_UNWIND)
               ? "Choose the notional you wish to trade. The notional amount is the total size of your trade and, since you're fully collateralising your position, is the amount of margin required too."
               : "Choose the notional you wish to trade. The notional amount is the total size of your trade."
@@ -186,6 +188,7 @@ const Swap: React.FunctionComponent<SwapProps> = ({
             healthFactor={healthFactor}
             isAdditional={formState.marginAction === SwapFormMarginAction.ADD}
             isEditing={mode === SwapFormModes.EDIT_MARGIN || mode === SwapFormModes.EDIT_NOTIONAL}
+            defaultMargin={0}
             margin={formState.margin}
             maxMargin={maxMargin}
             onChangeMargin={onChangeMargin}

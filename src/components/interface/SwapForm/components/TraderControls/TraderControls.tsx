@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import Box from '@mui/material/Box';
 import isUndefined from 'lodash/isUndefined';
 
-import { Agents } from '@contexts';
+import { Agents, usePositionContext } from '@contexts';
 import { IconLabel, ToggleButtonGroup } from '@components/composite';
 
 export type TraderControlsProps = {
@@ -26,6 +26,11 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
 }) => {
 
   const initAgent = useRef<Agents>(agent);
+
+  const { position } = usePositionContext();
+  if ( position ) {
+    initAgent.current = position.effectiveVariableTokenBalance > 0 ? Agents.VARIABLE_TRADER : Agents.FIXED_TRADER;
+  }
 
   if (!agent || agent === Agents.LIQUIDITY_PROVIDER) {
     return null;

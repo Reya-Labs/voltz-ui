@@ -101,7 +101,7 @@ const Trader: React.FunctionComponent = () => {
           {amm && (
             <AMMProvider amm={amm}>
               <PositionProvider position={position}>
-                <SwapFormProvider mode={formMode}>
+                <SwapFormProvider mode={formMode} defaultValues={{notional: (formMode == SwapFormModes.EDIT_NOTIONAL) ? 0 : undefined}}>
                   <ConnectedSwapForm onReset={handleReset} />
                 </SwapFormProvider>
               </PositionProvider>

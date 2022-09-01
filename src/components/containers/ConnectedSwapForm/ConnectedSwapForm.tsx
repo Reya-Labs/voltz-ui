@@ -48,6 +48,10 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         newMarginEngine: targetAmm.marginEngineAddress,
       });
     }
+
+    if(form.state.notional == 0 && form.mode === SwapFormModes.EDIT_NOTIONAL) {
+      return actions.updatePositionMarginAction(targetAmm, transaction);
+    }
   
     switch(form.action) {
       case SwapFormActions.UPDATE:
