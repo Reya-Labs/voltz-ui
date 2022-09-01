@@ -44,7 +44,11 @@ export enum SwapFormSubmitButtonHintStates {
   FORM_INVALID_TRADE = 'FORM_INVALID_TRADE',
   INITIALISING = 'INITIALISING',
   READY_TO_TRADE_TOKENS_APPROVED = 'READY_TO_TRADE_TOKENS_APPROVED',
-  READY_TO_TRADE = 'READY_TO_TRADE'
+  READY_TO_TRADE = 'READY_TO_TRADE',
+  ADD_AND_REMOVE = 'ADD_AND_REMOVE',
+  ADD_AND_ADD = 'ADD_AND_ADD',
+  REMOVE_AND_REMOVE = 'REMOVE_AND_REMOVE',
+  REMOVE_AND_ADD = 'REMOVE_AND_ADD'
 };
 
 export type SwapFormState = {
@@ -323,6 +327,22 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     if(tokenApprovals.lastApproval) {
       return SwapFormSubmitButtonHintStates.READY_TO_TRADE_TOKENS_APPROVED;
     } else {
+      if (mode === SwapFormModes.EDIT_NOTIONAL) {
+        const isRemovingNotional = (agent === Agents.VARIABLE_TRADER && (position?.effectiveVariableTokenBalance ?? 0) < 0) ||
+          (agent === Agents.FIXED_TRADER && (position?.effectiveVariableTokenBalance ?? 0) > 0) ;
+        if (isRemovingNotional && isRemovingMargin) {
+          return SwapFormSubmitButtonHintStates.REMOVE_AND_REMOVE
+        }
+        if (isRemovingNotional && !isRemovingMargin) {
+          return SwapFormSubmitButtonHintStates.REMOVE_AND_ADD
+        }
+        if (!isRemovingNotional && isRemovingMargin) {
+          return SwapFormSubmitButtonHintStates.ADD_AND_REMOVE
+        }
+        if (!isRemovingNotional && !isRemovingMargin ) {
+          return SwapFormSubmitButtonHintStates.ADD_AND_ADD
+        }
+      }
       return SwapFormSubmitButtonHintStates.READY_TO_TRADE;
     }
   }
