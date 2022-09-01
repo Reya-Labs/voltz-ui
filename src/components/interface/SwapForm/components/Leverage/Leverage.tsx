@@ -63,7 +63,8 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
   const handleChangeCommittedSlider = (event: React.SyntheticEvent | Event, newValue: number | number[]) => {
     if (typeof newValue === 'number') {
       setInternalValue(newValue);
-      // window.clearInterval(timer.current);
+      setInputValue(formatNumber(value, 0, 2));
+      window.clearInterval(timer.current);
       onChange(newValue);
     }
   };
