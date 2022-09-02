@@ -47,10 +47,28 @@ const withCommaDecimalSeparator = (): boolean => {
   return formatted.includes(',');
 }
 
+export const notFormatted = (val: string | undefined): string | undefined => {
+  let formattedValue = val;
+    if (withCommaDecimalSeparator()) {
+      formattedValue = val?.split(".").join("");
+    } else {
+      formattedValue = val?.split(",").join("");
+    }
+  return formattedValue;
+}
+
 export const toUSFormat = (val: string | undefined): string | undefined => {
   let formattedValue = val;
     if (withCommaDecimalSeparator()) {
       formattedValue = val?.split('.').join('-').split(',').join('.').split('-').join(',');
     }
   return formattedValue;
+}
+
+export const stringToBigFloat = (val: string) : number => {
+  let formattedValue = val;
+  if (val.includes(',')) {
+    formattedValue = val.split(",").join("");
+  }
+  return parseFloat(formattedValue);
 }

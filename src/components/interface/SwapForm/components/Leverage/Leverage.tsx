@@ -4,7 +4,7 @@ import Slider from '@mui/material/Slider';
 import { MaskedIntegerField, IconLabel } from '@components/composite';
 import { colors } from '@theme';
 import { isNumber, isUndefined } from 'lodash';
-import { formatNumber, toUSFormat } from '@utilities';
+import { formatNumber, notFormatted, stringToBigFloat, toUSFormat } from '@utilities';
 
 /**
  * margin: for a new position this is just the ratio between notional and minimum margin required
@@ -26,7 +26,7 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
   const margin = isNumber(minMargin) ? Math.max(minMargin, 0.1) : undefined;
 
   const [internalValue, setInternalValue] = useState<number | undefined>(value);
-  const [inputValue, setInputValue] = useState(formatNumber(value));
+  const [inputValue, setInputValue] = useState(formatNumber(value, 0,2));
   const isDisabledLeverageBox = isUndefined(availableNotional) || isUndefined(margin) || isUndefined(notional);
   const isDisabled = isUndefined(availableNotional) || isUndefined(margin) || isUndefined(notional) || isUndefined(internalValue);
   const timer = useRef<number>();
@@ -50,13 +50,15 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
 
   useEffect(() => {
     setInternalValue(value);
-    setInputValue(formatNumber(value, 0, 2));
+    const formatted = formatNumber(value, 0, 2);
+    setInputValue(formatted);
   }, [value, resetDeltaState])
 
   const handleChangeSlider = (event: Event, newValue: number | number[], activeThumb: number) => {
     if (typeof newValue === 'number') {
       setInternalValue(newValue);
-      setInputValue(formatNumber(newValue, 0, 2));
+      const formatted = formatNumber(newValue, 0, 2);
+      setInputValue(formatted);
     }
   }
 
@@ -72,7 +74,7 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
   const handleChangeInput = (inputVal: string | undefined) => {
     if (inputVal) {
       const usFormatted = toUSFormat(inputVal);
-      const newValue = usFormatted ? parseFloat(usFormatted) : NaN;
+      const newValue = usFormatted ? stringToBigFloat(usFormatted) : NaN;
       if(!isNaN(newValue)) {
         setInternalValue(newValue);
         setInputValue(inputVal);
@@ -96,10 +98,10 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
           dynamic
           inputSize="small"
           label={<IconLabel label={'Leverage'} icon="information-circle" info={hint} />}
-          value={inputValue}
           onChange={handleChangeInput}
           suffix='x'
           suffixPadding={0}
+          value={notFormatted(inputValue)}
         />
       </Box>
       <Box sx={{ flexGrow: '1', marginLeft: (theme) => theme.spacing(4), display: 'flex', alignItems: 'center' }}>

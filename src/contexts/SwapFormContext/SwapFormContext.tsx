@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { Agents, useAMMContext, usePositionContext } from "@contexts";
 import { SwapFormActions, SwapFormModes } from "@components/interface";
-import { AugmentedAMM, lessThanEpsilon, formatNumber } from "@utilities";
+import { AugmentedAMM, lessThanEpsilon, formatNumber, stringToBigFloat } from "@utilities";
 import { isNumber, isUndefined, max } from "lodash";
 import { hasEnoughTokens, hasEnoughUnderlyingTokens, lessThan } from "@utilities";
 import { GetInfoType, useAgent, useBalance, useMinRequiredMargin, useTokenApproval } from "@hooks";
@@ -386,7 +386,10 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
         if(!touched.current.includes('margin')) {
           touched.current.push('margin');
         }
-        setMargin(parseFloat(formatNumber(Math.min(notional, swapInfo.result?.availableNotional) / newLeverage)));
+        const minNotional = Math.min(notional, swapInfo.result?.availableNotional);
+        const formatted = formatNumber(minNotional / newLeverage);
+        const newMargin  = stringToBigFloat(formatted);
+        setMargin(newMargin);
       }
     }
   }
@@ -399,7 +402,10 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     setMargin(newMargin);
 
     if(!isUndefined(newMargin) && !isUndefined(notional)  && swapInfo.result?.availableNotional !== undefined) {
-      setLeverage(parseFloat(formatNumber(Math.min(notional, swapInfo.result?.availableNotional) / newMargin)));
+      const minNotional = Math.min(notional, swapInfo.result?.availableNotional);
+        const formatted = formatNumber(minNotional / newMargin);
+        const newLeverage  = stringToBigFloat(formatted);
+      setLeverage(newLeverage);
     }
   }
 
