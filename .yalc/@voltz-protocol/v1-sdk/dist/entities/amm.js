@@ -2214,7 +2214,8 @@ var AMM = /** @class */ (function () {
     };
     AMM.prototype.getPositionInformation = function (position) {
         return __awaiter(this, void 0, void 0, function () {
-            var results, rateOracleContract, signerAddress, lastBlock, lastBlockTimestamp, _a, _b, beforeMaturity, _c, _d, accruedCashflowInfo, EthToUsdPrice_1, _1, accruedCashflowInfo, EthToUsdPrice_2, _2, _e, fcmContract, margin, marginInUnderlyingToken, EthToUsdPrice_3, fcmContract, margin, cTokenAddress, cTokenContract, rate, scaledRate, marginInUnderlyingToken, EthToUsdPrice_4, tickLower, tickUpper, marginEngineContract, rawPositionInfo, marginInUnderlyingToken, EthToUsdPrice_5, liquidationThreshold, _3, safetyThreshold, _4, notionalInUnderlyingToken, EthToUsdPrice;
+
+            var results, rateOracleContract, signerAddress, lastBlock, lastBlockTimestamp, _a, _b, beforeMaturity, _c, _d, accruedCashflowInfo, EthToUsdPrice_1, _1, accruedCashflowInfo, EthToUsdPrice_2, _2, _e, fcmContract, margin, marginInUnderlyingToken, EthToUsdPrice_3, fcmContract, margin, cTokenAddress, cTokenContract, rate, scaledRate, marginInUnderlyingToken, EthToUsdPrice_4, tickLower, tickUpper, marginEngineContract, rawPositionInfo, marginInUnderlyingToken, EthToUsdPrice_5, liquidationThreshold, _3, safetyThreshold, _4, notionalInUnderlyingToken, EthToUsdPrice, fixedApr;
             return __generator(this, function (_f) {
                 switch (_f.label) {
                     case 0:
@@ -2436,6 +2437,22 @@ var AMM = /** @class */ (function () {
                         }
                         else {
                             results.notionalInUSD = notionalInUnderlyingToken;
+                        }
+                        return [4 /*yield*/, this.getFixedApr()];
+                    case 40:
+                        fixedApr = _f.sent();
+                        if (position.fixedRateLower.toNumber() < fixedApr
+                            && fixedApr < position.fixedRateUpper.toNumber()) {
+                            if ((0.15 * position.fixedRateUpper.toNumber() + 0.85 * position.fixedRateLower.toNumber()) > fixedApr
+                                || fixedApr > (0.85 * position.fixedRateUpper.toNumber() + 0.15 * position.fixedRateLower.toNumber())) {
+                                results.fixedRateHealthFactor = 2; // yellow
+                            }
+                            else {
+                                results.fixedRateHealthFactor = 3; // green
+                            }
+                        }
+                        else {
+                            results.fixedRateHealthFactor = 1; // red
                         }
                         return [2 /*return*/, results];
                 }
