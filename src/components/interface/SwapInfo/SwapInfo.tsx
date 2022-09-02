@@ -49,13 +49,11 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
         <ExpectedAPY 
           expectedAPY={expectedApy}
         />
-          {expectedApy && (
             <Box component={'hr'} sx={{ 
               border: 'none',
               borderBottom: `1px solid ${colors.lavenderWeb.darken045}`,
               margin: (theme) => `${theme.spacing(4)} 0`,
             }}/>
-          )}
         </>
       )}
 
