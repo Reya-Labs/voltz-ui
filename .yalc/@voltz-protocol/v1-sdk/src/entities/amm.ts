@@ -45,6 +45,7 @@ import { decodeInfoPostMint, decodeInfoPostSwap, getReadableErrorMessage } from 
 import Position from './position';
 import { isNumber, isUndefined } from 'lodash';
 import { getExpectedApy } from '../services/getExpectedApy';
+import { getAccruedCashflow, transformSwaps } from '../services/getAccruedCashflow';
 
 import axios from 'axios';
 
@@ -273,6 +274,7 @@ export type PositionInfo = {
   beforeMaturity: boolean;
   fixedApr?: number;
   healthFactor?: number;
+  fixedRateHealthFactor?: number;
 }
 
 export type ClosestTickAndFixedRate = {
@@ -837,6 +839,10 @@ class AMM {
       throw new Error('Wallet not connected');
     }
 
+    if (!this.provider) {
+      throw new Error('Blockchain not connected');
+    }
+
     if (fixedLow >= fixedHigh) {
       throw new Error('Lower Rate must be smaller than Upper Rate');
     }
@@ -859,6 +865,11 @@ class AMM {
       await marginEngineContract.callStatic.getPosition(signerAddress, tickLower, tickUpper)
     ).margin;
 
+    const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
+
+    const lastBlock = await this.provider.getBlockNumber();
+    const lastBlockTimestamp = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
+
     const scaledCurrentMargin = this.descale(currentMargin);
 
     let positionMargin = 0;
@@ -867,19 +878,22 @@ class AMM {
     let positionVt = BigNumber.from(0);
 
     if (position) {
-      const allSwaps = this.getAllSwaps(position);
-      const lenSwaps = allSwaps.length;
-
-      for (let swap of allSwaps) {
-        positionUft = positionUft.add(swap.fDelta);
-        positionVt = positionVt.add(swap.vDelta);
+      for (let swap of position.swaps) {
+        positionUft = positionUft.add(swap.fixedTokenDeltaUnbalanced.toString());
+        positionVt = positionVt.add(swap.variableTokenDelta.toString());
       }
 
       positionMargin = scaledCurrentMargin;
 
       try {
-        if (lenSwaps > 0) {
-          accruedCashflow = await this.getAccruedCashflow(allSwaps, false);
+        if (position.swaps.length > 0) {
+           const accruedCashflowInfo = await getAccruedCashflow({
+            swaps: transformSwaps(position.swaps, this.underlyingToken.decimals),
+            rateOracle: rateOracleContract,
+            currentTime: Number(lastBlockTimestamp.toString()),
+            endTime: Number(utils.formatUnits(this.termEndTimestamp.toString(), 18)),
+          });
+          accruedCashflow = accruedCashflowInfo.accruedCashflow;
         }
       } catch { }
     }
@@ -2526,6 +2540,8 @@ class AMM {
       beforeMaturity: false
     };
 
+    const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
+
     const signerAddress = await this.signer.getAddress();
     const lastBlock = await this.provider.getBlockNumber();
     const lastBlockTimestamp = BigNumber.from((await this.provider.getBlock(lastBlock - 1)).timestamp);
@@ -2538,48 +2554,60 @@ class AMM {
       results.fixedApr = await this.getFixedApr();
     }
 
-    const allSwaps = this.getAllSwaps(position);
-    const lenSwaps = allSwaps.length;
-
     // variable apy and accrued cashflow
 
-    if (lenSwaps > 0) {
+    if (position.swaps.length > 0) {
       if (beforeMaturity) {
-        if (lenSwaps > 0) {
           try {
             results.variableRateSinceLastSwap = await this.getInstantApy() * 100;
-            results.fixedRateSinceLastSwap = position.averageFixedRate;
 
-            const accruedCashflowInUnderlyingToken = await this.getAccruedCashflow(allSwaps, false);
-            results.accruedCashflow = accruedCashflowInUnderlyingToken;
+            console.log("Getting accrued cashflow info...");
+            const accruedCashflowInfo = await getAccruedCashflow({
+              swaps: transformSwaps(position.swaps, this.underlyingToken.decimals),
+              rateOracle: rateOracleContract,
+              currentTime: Number(lastBlockTimestamp.toString()),
+              endTime: Number(utils.formatUnits(this.termEndTimestamp.toString(), 18)),
+            });
+            console.log("Result:", accruedCashflowInfo);
+
+            results.accruedCashflow = accruedCashflowInfo.accruedCashflow;
+
+            results.fixedRateSinceLastSwap = accruedCashflowInfo.avgFixedRate;
 
             // Get current exchange rate for eth/usd
             const EthToUsdPrice = await geckoEthToUsd();
 
             if (this.isETH) {
               // need to change when introduce non-stable coins
-              results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken * EthToUsdPrice;
+              results.accruedCashflowInUSD = results.accruedCashflow * EthToUsdPrice;
             } else {
-              results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken
+              results.accruedCashflowInUSD = results.accruedCashflow;
             }
 
           } catch (_) { }
-        }
       }
       else {
         if (!position.isSettled) {
           try {
-            const accruedCashflowInUnderlyingToken = await this.getAccruedCashflow(allSwaps, true);
-            results.accruedCashflow = accruedCashflowInUnderlyingToken;
+            console.log("Getting accrued cashflow info...");
+            const accruedCashflowInfo = await getAccruedCashflow({
+              swaps: transformSwaps(position.swaps, this.underlyingToken.decimals),
+              rateOracle: rateOracleContract,
+              currentTime: Number(utils.formatUnits(this.termEndTimestamp.toString(), 18)),
+              endTime: Number(utils.formatUnits(this.termEndTimestamp.toString(), 18)),
+            });
+            console.log("Result:", accruedCashflowInfo);
+
+            results.accruedCashflow = accruedCashflowInfo.accruedCashflow;
 
             // Get current exchange rate for eth/usd
             const EthToUsdPrice = await geckoEthToUsd();
 
             if (this.isETH) {
               // need to change when introduce non-stable coins
-              results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken * EthToUsdPrice;
+              results.accruedCashflowInUSD = accruedCashflowInfo.accruedCashflow * EthToUsdPrice;
             } else {
-              results.accruedCashflowInUSD = accruedCashflowInUnderlyingToken
+              results.accruedCashflowInUSD = accruedCashflowInfo.accruedCashflow
             }
 
           } catch (_) { }
@@ -2715,6 +2743,22 @@ class AMM {
       results.notionalInUSD = notionalInUnderlyingToken * EthToUsdPrice;
     } else {
       results.notionalInUSD = notionalInUnderlyingToken
+    }
+
+    const fixedApr = await this.getFixedApr();
+    if (position.fixedRateLower.toNumber() < fixedApr
+     && fixedApr < position.fixedRateUpper.toNumber() ) {
+      
+      if (
+        (0.15 * position.fixedRateUpper.toNumber() + 0.85 * position.fixedRateLower.toNumber()) > fixedApr
+        || fixedApr > (0.85 * position.fixedRateUpper.toNumber() + 0.15 * position.fixedRateLower.toNumber())
+      ) {
+        results.fixedRateHealthFactor = 2 // yellow
+      } else {
+        results.fixedRateHealthFactor = 3 // green
+      }
+    } else {
+      results.fixedRateHealthFactor = 1 // red
     }
 
     return results;

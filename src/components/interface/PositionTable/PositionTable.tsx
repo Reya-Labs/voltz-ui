@@ -116,6 +116,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                     feesPositive={true}
                     beforeMaturity={info?.beforeMaturity}
                     healthFactor={info?.healthFactor}
+                    fixedRateHealthFactor={info?.fixedRateHealthFactor}
                     isSettled={pos.isSettled}
                     currentFixedRate={(agent === Agents.LIQUIDITY_PROVIDER) ? info?.fixedApr : undefined}
                     positionType={pos.positionType}

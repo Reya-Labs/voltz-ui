@@ -175,6 +175,7 @@ export declare type PositionInfo = {
     beforeMaturity: boolean;
     fixedApr?: number;
     healthFactor?: number;
+    fixedRateHealthFactor?: number;
 };
 export declare type ClosestTickAndFixedRate = {
     closestUsableTick: number;
@@ -238,16 +239,6 @@ declare class AMM {
     get endDateTime(): DateTime;
     getFixedApr(): Promise<number>;
     getVariableApy(): Promise<number>;
-    getAllSwaps(position: Position): {
-        fDelta: BigNumber;
-        vDelta: BigNumber;
-        timestamp: BigNumber;
-    }[];
-    getAccruedCashflow(allSwaps: {
-        fDelta: BigNumber;
-        vDelta: BigNumber;
-        timestamp: BigNumber;
-    }[], atMaturity: boolean): Promise<number>;
     getVariableFactor(termStartTimestamp: BigNumber, termEndTimestamp: BigNumber): Promise<number>;
     getPositionInformation(position: Position): Promise<PositionInfo>;
     closestTickAndFixedRate(fixedRate: number): ClosestTickAndFixedRate;
