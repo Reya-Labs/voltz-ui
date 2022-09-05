@@ -12,29 +12,28 @@ import Box from '@mui/material/Box';
 import { colors } from '@theme';
 
 export type CurrentMarginProps = {
-  marginEdit?: boolean;
+  //marginEdit?: boolean;
   margin?: number;
   accruedCashflow?: number;
   token: string;
-  onSelect: () => void;
+  //onSelect: () => void;
 };
 
 const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({ 
-  marginEdit, 
+  //marginEdit, 
   margin, 
   accruedCashflow, 
-  token, 
-  onSelect
+  token 
 }) => {
   const wallet = useWallet();
 
-  const handleClick = () => {
-    if (isNull(wallet.account)) {
-      wallet.setRequired(true);
-    } else {
-      onSelect();
-    }
-  };
+  // const handleClick = () => {
+  //   if (isNull(wallet.account)) {
+  //     wallet.setRequired(true);
+  //   } else {
+  //     onSelect();
+  //   }
+  // };
 
   const getNetMarginLabel = () => (
     <>
@@ -56,7 +55,7 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({
         {!isUndefined(margin) ? `${formatNumber(margin)} ${token}` : 'No Data'}
       </Typography>
 
-      {marginEdit && (
+      {/* {marginEdit && (
         <Button 
           variant='red2' 
           onClick={handleClick} 
@@ -65,7 +64,7 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({
         >
           Edit 
         </Button>
-      )}
+      )} */}
     </TableCell>
   );
 };

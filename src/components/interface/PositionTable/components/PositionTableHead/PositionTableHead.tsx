@@ -5,6 +5,7 @@ import { AugmentedAMM, formatCurrency, formatNumber } from '@utilities';
 import { Button, getPositionBadgeVariant, PositionBadge, Typography } from '@components/atomic';
 import { BulletLabel, getHealthTextColor, getFixedRateHealthTextColor, HealthFactorText } from '@components/composite';
 import { isUndefined } from 'lodash';
+import { ReactComponent as EditIcon } from './editPosition.svg';
 
 export type PositionTableHeadProps = {
   currencyCode?: string;
@@ -21,6 +22,7 @@ export type PositionTableHeadProps = {
   onRollover: () => void;
   onSettle: () => void;
   rolloverAmm?: AugmentedAMM;
+  onSelect: (mode: 'margin' | 'liquidity' | 'notional') => void;
 };
 
 const containerStyles: SystemStyleObject<Theme> = { 
@@ -52,10 +54,15 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
   beforeMaturity,
   onRollover,
   onSettle,
-  rolloverAmm
+  rolloverAmm,
+  onSelect
 }) => {
   const getTextColor = (positive: boolean) => {
     return positive ? colors.vzCustomGreen1 : colors.vzCustomRed1;
+  }
+
+  const handleEditNotional = () => {
+    onSelect('notional');
   }
 
   return (
@@ -94,11 +101,19 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
         )}
 
         {beforeMaturity && !isUndefined(healthFactor) && (
-          <Box sx={{ padding: (theme) => `${theme.spacing(1)} ${theme.spacing(2)}`, marginLeft: (theme) => theme.spacing(2) }}>
+          <Box sx={{ padding: (theme) => `${theme.spacing(1)} ${theme.spacing(2)}`, marginLeft: (theme) => theme.spacing(2), display: 'flex' }}>
             <BulletLabel 
-              sx={{ color: getHealthTextColor(healthFactor) }} 
+              sx={{ color: getHealthTextColor(healthFactor), alignItems: "center", marginRight: "8px", fontSize: "14px" }} 
               text={<HealthFactorText healthFactor={healthFactor} />} 
             />
+            <Button 
+              variant='darker' 
+              onClick={handleEditNotional} 
+              size='vs' 
+              sx={{display: 'flex', padding: "4px 8px", fontSize: "14px" }}
+            >
+              <Box sx={{marginRight: "4px"}}>Edit </Box><EditIcon/>
+            </Button>
           </Box>
         )}
 
