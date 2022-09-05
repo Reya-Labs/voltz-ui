@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import isUndefined from 'lodash/isUndefined';
 
 import IconLabel from '../IconLabel/IconLabel';
@@ -16,6 +16,7 @@ export type NotionalAmountProps = {
   underlyingTokenName?: string;
   subtext?: string;
   disabled?: boolean;
+  isEditing?: boolean
 };
 
 const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
@@ -27,13 +28,21 @@ const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
   error,
   underlyingTokenName,
   subtext,
-  disabled
+  disabled,
+  isEditing
 }) => {
+  
   const value = isUndefined(notional) ? defaultNotional : notional;
+
+  useState(() => {
+    if (isEditing) {
+      onChangeNotional(0);
+    }
+  });
 
   const handleChange = (newValue: string | undefined) => {
     const usFormatted = toUSFormat(newValue);
-    onChangeNotional(usFormatted ? parseFloat(usFormatted) : undefined);
+    onChangeNotional(!isUndefined(usFormatted) ? parseFloat(usFormatted) : undefined);
   };
 
   return (

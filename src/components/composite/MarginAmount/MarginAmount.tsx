@@ -6,6 +6,7 @@ import MaskedIntegerField from '../MaskedIntegerField/MaskedIntegerField';
 import InputTokenLabel from '../InputTokenLabel/InputTokenLabel';
 import { formatCurrency, toUSFormat } from '@utilities';
 import { HealthFactorText } from '@components/composite';
+import { editMargin } from 'src/components/interface/SwapInfo/SwapInfo.stories';
 
 export type MarginAmountProps = {
   balance?: number;
@@ -32,7 +33,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
   error
 }) => {
   const defaultInputValue = () => {
-    const defaultVal = (margin ?? defaultMargin)
+    const defaultVal = isEditing ? defaultMargin : (margin ?? defaultMargin);
     if (typeof defaultVal !== 'undefined') {
       return defaultVal.toString();
     }
@@ -40,6 +41,12 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
 
   const formattedBalance = !isUndefined(balance) ? formatCurrency(balance) : 'checking...';
   const [inputValue, setInputValue] = useState<string | undefined>(defaultInputValue());
+
+  useState(() => {
+    if (isEditing) {
+      onChangeMargin(0);
+    }
+  });
 
   const handleChange = useCallback(
     (newValue: string | undefined) => {
@@ -50,13 +57,27 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
     [onChangeMargin, setInputValue],
   );
 
+  useEffect(() => {
+    const usFormatted = toUSFormat(inputValue);
+    if(
+      !isUndefined(usFormatted) &&
+      !isUndefined(margin) && 
+      margin !== parseFloat(usFormatted) &&
+      isEditing
+    ) {
+      onChangeMargin(parseFloat(usFormatted))
+    }
+  }, [margin]);
+
   // If the value prop changes, update the input field
   useEffect(() => {
     const usFormatted = toUSFormat(inputValue);
     if(
-      isUndefined(margin) && !isUndefined(inputValue) || 
-      isUndefined(inputValue) && !isUndefined(margin) || 
-      !isUndefined(usFormatted) && !isUndefined(margin) && margin !== parseFloat(usFormatted)
+      !isEditing && (
+        isUndefined(margin) && !isUndefined(inputValue) || 
+        isUndefined(inputValue) && !isUndefined(margin) || 
+        !isUndefined(usFormatted) && !isUndefined(margin) && margin !== parseFloat(usFormatted)
+      )
     ) {
       let newValue = margin?.toString();
       if(newValue !== undefined && newValue[newValue.length - 2] === '.') { 
@@ -64,7 +85,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
       }
       setInputValue(toUSFormat(newValue));
     }
-  }, [inputValue, margin, setInputValue])
+  }, [inputValue, margin, setInputValue]);
 
   return (
     <MaskedIntegerField

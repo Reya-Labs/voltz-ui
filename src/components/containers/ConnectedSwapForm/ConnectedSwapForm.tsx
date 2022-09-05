@@ -48,6 +48,10 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         newMarginEngine: targetAmm.marginEngineAddress,
       });
     }
+
+    if(form.state.notional == 0 && form.mode === SwapFormModes.EDIT_NOTIONAL) {
+      return actions.updatePositionMarginAction(targetAmm, transaction);
+    }
   
     switch(form.action) {
       case SwapFormActions.UPDATE:
@@ -123,10 +127,13 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
 
       case SwapFormActions.SWAP:
       case SwapFormActions.ROLLOVER_SWAP: {
+        const isRemovingNotional = (agent === Agents.VARIABLE_TRADER && (position?.effectiveVariableTokenBalance ?? 0) < 0) ||
+          (agent === Agents.FIXED_TRADER && (position?.effectiveVariableTokenBalance ?? 0) > 0) 
         return (
           <PendingTransaction
             amm={targetAmm}
             isEditingMargin={false}
+            showNegativeNotional={form.mode === SwapFormModes.EDIT_NOTIONAL && isRemovingNotional }
             isRollover={form.mode === SwapFormModes.ROLLOVER}
             transactionId={transactionId}
             onComplete={handleComplete}

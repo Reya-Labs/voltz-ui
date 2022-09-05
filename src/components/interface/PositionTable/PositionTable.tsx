@@ -27,7 +27,7 @@ export type PositionTableProps = {
   onSetPage: (page: number) => void;
   size: number | null;
   onSetSize: (size: number) => void;
-  onSelectItem: (datum: Position, mode: 'margin' | 'liquidity' | 'rollover') => void;
+  onSelectItem: (datum: Position, mode: 'margin' | 'liquidity' | 'rollover' | 'notional') => void;
   agent: Agents
   onSettle: (position: Position) => void;
 };
@@ -92,7 +92,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
     }
   }
   
-  const handleSelectRow = (index: number, mode: 'margin' | 'liquidity' | 'rollover') => {
+  const handleSelectRow = (index: number, mode: 'margin' | 'liquidity' | 'rollover'| 'notional') => {
     onSelectItem(positions[index], mode);
   };
 
@@ -134,7 +134,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                             positionInfo={info}
                             key={pos.id}
                             index={index}
-                            onSelect={(mode: 'margin' | 'liquidity') => handleSelectRow(index, mode)}
+                            onSelect={(mode: 'margin' | 'liquidity' | 'notional') => handleSelectRow(index, mode)}
                           />
                         </AMMProvider>
                       </TableBody>
