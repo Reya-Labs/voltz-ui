@@ -2256,6 +2256,7 @@ var AMM = /** @class */ (function () {
             });
         });
     };
+
     AMM.prototype.getVariableFactor = function (termStartTimestamp, termEndTimestamp) {
         return __awaiter(this, void 0, void 0, function () {
             var rateOracleContract, result, resultScaled, error_19;

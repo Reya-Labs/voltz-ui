@@ -100,6 +100,7 @@ const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
           intlConfig={{locale: navigator.language}}
           id={inputId}
           decimalsLimit={2}
+          maxLength={9}
           onValueChange={handleChange}
           suffix={undefined}
           {...props}
