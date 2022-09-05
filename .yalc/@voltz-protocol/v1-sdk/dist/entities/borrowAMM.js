@@ -151,7 +151,7 @@ var BorrowAMM = /** @class */ (function () {
                     case 1:
                         lastBlock = _c.sent();
                         _b = (_a = ethers_1.BigNumber).from;
-                        return [4 /*yield*/, this.provider.getBlock(lastBlock - 2)];
+                        return [4 /*yield*/, this.provider.getBlock(lastBlock)];
                     case 2:
                         lastBlockTimestamp = _b.apply(_a, [(_c.sent()).timestamp]);
                         untilTimestamp = (atMaturity)

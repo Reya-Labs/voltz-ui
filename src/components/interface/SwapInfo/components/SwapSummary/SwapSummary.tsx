@@ -11,9 +11,10 @@ export type SwapSummaryProps = {
   underlyingTokenName?: string; 
   yieldBearingTokenName?: string;
   formAction: SwapFormActions;
+  maxAvailableNotional?: number;
 };
 
-const SwapSummary: React.FunctionComponent<SwapSummaryProps> = ({ data, loading, underlyingTokenName = '', yieldBearingTokenName = '', formAction}) => {
+const SwapSummary: React.FunctionComponent<SwapSummaryProps> = ({ data, loading, underlyingTokenName = '', yieldBearingTokenName = '', formAction, maxAvailableNotional}) => {
 
   const label = (yieldBearingTokenName.substring(0,6) === "borrow") ?
   <IconLabel
@@ -106,8 +107,8 @@ const SwapSummary: React.FunctionComponent<SwapSummaryProps> = ({ data, loading,
         feesRow(data.fee)
       ] : undefined;
     }
-    return data ?  [
-      notionalRow(data.availableNotional),
+    return data && maxAvailableNotional ?  [
+      notionalRow(maxAvailableNotional),
       averageRateRow(data.averageFixedRate),
       feesRow(data.fee),
       slippageRow(data.slippage),

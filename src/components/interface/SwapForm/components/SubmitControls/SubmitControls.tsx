@@ -100,6 +100,18 @@ const SubmitControls = ({
       case SwapFormSubmitButtonHintStates.READY_TO_TRADE_TOKENS_APPROVED: {
         return <><Text green>Tokens approved</Text>. Let's trade!</>;
       }
+      case SwapFormSubmitButtonHintStates.ADD_AND_ADD: {
+        return 'You\'re ADDING NOTIONAL and MARGIN';
+      }
+      case SwapFormSubmitButtonHintStates.REMOVE_AND_ADD: {
+        return 'You\'re REMOVING NOTIONAL and ADDING MARGIN';
+      }
+      case SwapFormSubmitButtonHintStates.ADD_AND_REMOVE: {
+        return 'You\'re ADDING NOTIONAL and REMOVING MARGIN';
+      }
+      case SwapFormSubmitButtonHintStates.REMOVE_AND_REMOVE: {
+        return 'You\'re REMOVING NOTIONAL and MARGIN';
+      }
     }
   }
   
@@ -137,6 +149,9 @@ const SubmitControls = ({
       }
       case SwapFormSubmitButtonStates.UPDATE: {
         return 'Update Margin';
+      }
+      case SwapFormSubmitButtonStates.UPDATE_POSITION: {
+        return 'Update Position';
       }
     }
   };

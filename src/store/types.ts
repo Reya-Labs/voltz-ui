@@ -35,6 +35,7 @@ export type Transaction = TransactionUpdate & {
   notional: number;
   margin: number;
   partialCollateralization?: boolean;
+  fullyCollateralisedVTSwap?: boolean;
 };
 
 export type RolloverMintTransaction = Transaction & {

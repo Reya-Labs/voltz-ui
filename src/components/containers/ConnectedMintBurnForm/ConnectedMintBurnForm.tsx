@@ -8,6 +8,7 @@ import { FormPanel, MintBurnCurrentPosition, MintBurnForm, MintBurnInfo, Pending
 import { updateFixedRate } from './utilities';
 import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
 import { AugmentedAMM } from '@utilities';
+import { isUndefined } from 'lodash';
 
 export type ConnectedMintBurnFormProps = {
   onReset: () => void;
@@ -108,8 +109,9 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
         transactionId={transactionId} 
         onComplete={handleComplete}
         notional={form.state.notional}
-        margin={Math.abs(form.state.margin as number) * (form.isRemovingMargin ? -1 : 1) }
-        onBack={handleGoBack} 
+        margin={isUndefined(form.state.margin && form.isRemovingMargin) ? 0 : 
+          (Math.abs(form.state.margin as number) * (form.isRemovingMargin ? -1 : 1) )}
+        onBack={handleGoBack}
       />
     );
   }

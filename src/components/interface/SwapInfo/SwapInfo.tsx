@@ -20,6 +20,8 @@ export type SwapInfoProps = {
   swapSummaryLoading: boolean;
   underlyingTokenName?: string;
   warningText?: string;
+  maxAvailableNotional?: number;
+  expectedApy?: number[][];
 };
 
 const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
@@ -32,7 +34,9 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
   swapSummary,
   swapSummaryLoading,
   underlyingTokenName,
-  warningText
+  warningText,
+  maxAvailableNotional,
+  expectedApy
 }) => {
   const bottomSpacing: SystemStyleObject<Theme> = {
     marginBottom: (theme) => theme.spacing(6)
@@ -40,18 +44,16 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
 
   return (
     <FormPanel noBackground>
-      {(mode !== SwapFormModes.EDIT_MARGIN && mode !== SwapFormModes.FIX_BORROW) && (
+      {(mode !== SwapFormModes.EDIT_NOTIONAL && mode !== SwapFormModes.EDIT_MARGIN && mode !== SwapFormModes.FIX_BORROW) && (
         <>
         <ExpectedAPY 
-          expectedAPY={swapSummary?.expectedApy}
+          expectedAPY={expectedApy}
         />
-          {swapSummary?.expectedApy && (
             <Box component={'hr'} sx={{ 
               border: 'none',
               borderBottom: `1px solid ${colors.lavenderWeb.darken045}`,
               margin: (theme) => `${theme.spacing(4)} 0`,
             }}/>
-          )}
         </>
       )}
 
@@ -63,7 +65,7 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
         </>
       )}
 
-      {(mode === SwapFormModes.FIX_BORROW) && !isUndefined(warningText) && (
+      {(mode == SwapFormModes.NEW_POSITION || mode === SwapFormModes.FIX_BORROW) && !isUndefined(warningText) && (
         <>
         <Box sx={bottomSpacing}>
           <WarningBox warningText={warningText} />
@@ -71,7 +73,7 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
       </>
       )}
 
-      {(mode === SwapFormModes.NEW_POSITION || mode === SwapFormModes.ROLLOVER || mode === SwapFormModes.FIX_BORROW) && (swapSummary || swapSummaryLoading) && (
+      {(mode === SwapFormModes.EDIT_NOTIONAL ||  mode === SwapFormModes.NEW_POSITION || mode === SwapFormModes.ROLLOVER || mode === SwapFormModes.FIX_BORROW) && (swapSummary || swapSummaryLoading) && (
         <>
           <Box sx={bottomSpacing}>
             <SwapSummary
@@ -80,6 +82,7 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
               underlyingTokenName={underlyingTokenName}
               yieldBearingTokenName={protocol}
               formAction={formAction}
+              maxAvailableNotional={maxAvailableNotional}
             />
           </Box>
         </>

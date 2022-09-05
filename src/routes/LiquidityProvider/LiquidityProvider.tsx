@@ -61,7 +61,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
     setPosition(findCurrentPosition(positions || [], selectedAMM, [3]));
   };
 
-  const handleSelectPosition = (selectedPosition: Position, mode: 'margin' | 'liquidity' | 'rollover') => {
+  const handleSelectPosition = (selectedPosition: Position, mode: 'margin' | 'liquidity' | 'rollover'|'notional') => {
     let newMode:MintBurnFormModes | undefined = undefined;
     if(mode === 'margin') newMode = MintBurnFormModes.EDIT_MARGIN;
     if(mode === 'liquidity') newMode = MintBurnFormModes.EDIT_LIQUIDITY;

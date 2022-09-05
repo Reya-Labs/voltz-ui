@@ -37,7 +37,8 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
       notional: Number(form.selectedFixedDebt),
       partialCollateralization: true,
       fixedLow: 0.001,
-      fixedHigh: 990
+      fixedHigh: 990,
+      fullyCollateralisedVTSwap: true
     };
 
     return actions.swapAction(amm, transaction);

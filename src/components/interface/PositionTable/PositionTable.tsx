@@ -27,7 +27,7 @@ export type PositionTableProps = {
   onSetPage: (page: number) => void;
   size: number | null;
   onSetSize: (size: number) => void;
-  onSelectItem: (datum: Position, mode: 'margin' | 'liquidity' | 'rollover') => void;
+  onSelectItem: (datum: Position, mode: 'margin' | 'liquidity' | 'rollover' | 'notional') => void;
   agent: Agents
   onSettle: (position: Position) => void;
 };
@@ -92,7 +92,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
     }
   }
   
-  const handleSelectRow = (index: number, mode: 'margin' | 'liquidity' | 'rollover') => {
+  const handleSelectRow = (index: number, mode: 'margin' | 'liquidity' | 'rollover'| 'notional') => {
     onSelectItem(positions[index], mode);
   };
 
@@ -116,12 +116,14 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                     feesPositive={true}
                     beforeMaturity={info?.beforeMaturity}
                     healthFactor={info?.healthFactor}
+                    fixedRateHealthFactor={info?.fixedRateHealthFactor}
                     isSettled={pos.isSettled}
                     currentFixedRate={(agent === Agents.LIQUIDITY_PROVIDER) ? info?.fixedApr : undefined}
                     positionType={pos.positionType}
                     onRollover={() => handleSelectRow(index, 'rollover')}
                     onSettle={() => onSettle(pos)}
                     rolloverAmm={rolloverAvailable ? rolloverAmm : undefined}
+                    onSelect={(mode: 'margin' | 'liquidity' | 'notional') => handleSelectRow(index, mode)}
                   />
 
                   <TableContainer sx={(!info?.beforeMaturity && !pos.isSettled) ? getMaturedTableBorderStyles(pos.positionType) : undefined}>
@@ -133,7 +135,6 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                             positionInfo={info}
                             key={pos.id}
                             index={index}
-                            onSelect={(mode: 'margin' | 'liquidity') => handleSelectRow(index, mode)}
                           />
                         </AMMProvider>
                       </TableBody>

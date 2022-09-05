@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { Agents } from "@contexts";
-import { MintMinimumMarginRequirementPayload, SwapInfoPayload, GetInfoType } from './types';
+import { MintMinimumMarginRequirementPayload, SwapInfoPayload, GetInfoType, ExpectedInfoPayload } from './types';
 import { AugmentedAMM } from "@utilities";
-import { InfoPostSwap, Position, PositionInfo } from "@voltz-protocol/v1-sdk/dist/types/entities";
+import { InfoPostSwap, Position, PositionInfo, ExpectedApyInfo } from "@voltz-protocol/v1-sdk/dist/types/entities";
 
 import useAgent from "../useAgent";
 import useAsyncFunction, { UseAsyncFunctionResult } from "../useAsyncFunction";
@@ -17,6 +17,7 @@ export type useAMMReturnType = {
   positionInfo: UseAsyncFunctionResult<Position, PositionInfo | void>;
   swapInfo: UseAsyncFunctionResult<SwapInfoPayload, InfoPostSwap | void>;
   variableApy: UseAsyncFunctionResult<unknown, number | void>;
+  expectedApyInfo: UseAsyncFunctionResult<ExpectedInfoPayload, ExpectedApyInfo | void>;
 }
 
 export const useAMM = (amm?: AugmentedAMM) => {
@@ -119,6 +120,33 @@ export const useAMM = (amm?: AugmentedAMM) => {
     100
   );
 
+  const expectedApyInfo = useAsyncFunction(
+    async (args: ExpectedInfoPayload) => {
+      const recipient = await amm?.signer?.getAddress();
+
+      if (!recipient) {
+        return;
+      }
+
+      let result: ExpectedApyInfo | undefined = undefined;
+      result = await amm?.getExpectedApyInfo({
+        margin: args.margin,
+        position: args.position,
+        fixedLow: 1,
+        fixedHigh: 999,
+        fixedTokenDeltaUnbalanced: args.fixedTokenDeltaUnbalanced,
+        availableNotional: args.availableNotional
+      });
+
+      if (!result) {
+        return;
+      }
+
+      return result;
+    },
+    useMemo(() => undefined, [!!amm?.signer])
+  )
+
   const variableApy = useAsyncFunction(
     (amm?.getInstantApy || Promise.reject).bind(amm),
     useMemo(() => undefined, [!!amm?.provider]),
@@ -131,6 +159,7 @@ export const useAMM = (amm?: AugmentedAMM) => {
     positionInfo,
     swapInfo,
     variableApy,
+    expectedApyInfo,
   } as useAMMReturnType), 
   [
     ammCaps, 
@@ -139,6 +168,7 @@ export const useAMM = (amm?: AugmentedAMM) => {
     positionInfo,
     swapInfo,
     variableApy,
+    expectedApyInfo,
   ]);
 }
 

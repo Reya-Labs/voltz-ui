@@ -30,7 +30,21 @@ export const ExpectedAPY = ({ expectedAPY }:ExpectedAPYProps) => {
     }
   }, expectedAPY);
 
-  if(!expectedAPY || !options) return null;
+  const getSelectedOptionValue = (value: string | undefined) => {
+    if (value) {
+      return value.length >= 7 ? '>1,000%' : value+"%";
+    }
+    return '---'
+  }
+
+  const findLabel = (value: unknown) => {
+    if (options){
+      for (const entry of options){
+        if (entry.value === value) return entry.label;
+      }
+    }
+    return '0%'
+  }
 
   return (
     <>
@@ -39,14 +53,16 @@ export const ExpectedAPY = ({ expectedAPY }:ExpectedAPYProps) => {
           display: 'inline-block',
           padding: (theme) => theme.spacing(4), 
           borderRadius: '8px', 
-          background: colors.lavenderWeb.darken045 
+          background: colors.lavenderWeb.darken045,
+          maxWidth: '100px',
+          width: '100px'
         }}>
           <Typography
             variant="h3"
             label={<IconLabel label="Expected APY" icon="information-circle" info="The APY you would get in a scenario in which the variable APY has the selected value until the pool's maturity" />}
             agentStyling
           >
-            {selectedOptionValue ? `${selectedOptionValue}%` : '---'}
+            {getSelectedOptionValue(selectedOptionValue)}
           </Typography>
         </Box>
         <Box sx={{
@@ -55,11 +71,16 @@ export const ExpectedAPY = ({ expectedAPY }:ExpectedAPYProps) => {
           marginLeft: (theme) => theme.spacing(6)
         }}>
           <SelectInput 
-            defaultValue={options[2].value}
+            displayEmpty={true}
+            renderValue={(value) => { 
+              if (value) return <>{findLabel(value)}</>;
+              if (options) return <>{options[2].label}</> 
+              return <>0%</>;
+            }}
             name="ExpectedVariableAPY"
             label={<IconLabel label="Expected Variable APY:" icon="information-circle" info="Select the percentage of the variable APY between now and the end of the pool that you would like to simulate." />} 
             onChange={(event) => handleChangeMoveBy(event.target.value as string)}
-            options={options}
+            options={options ?? []}
             size="small"
             sx={{ width: '90px' }}
           />

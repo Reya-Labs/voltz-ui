@@ -33,7 +33,7 @@ export type SwapProps = {
   maxMargin?: number;
   mode: SwapFormModes;
   onCancel: () => void;
-  onChangeLeverage: (value: number) => void;
+  onChangeLeverage: (value: number, resetToDefaultLeverage?: boolean) => void;
   onChangeMargin: (value: number | undefined) => void;
   onChangeMarginAction: (value: SwapFormMarginAction) => void;
   onChangeNotional: (value: number | undefined) => void;
@@ -124,13 +124,14 @@ const Swap: React.FunctionComponent<SwapProps> = ({
             onChange={onChangeMarginAction}
           />
         </Box>
-      )}  
+      )} 
 
       {mode !== SwapFormModes.EDIT_MARGIN && (
         <Box sx={{ ...bottomSpacing, display: 'flex' }}>
           <TraderControls
             agent={agent}
             isFCMAvailable={isFCMAvailable}
+            isEdit={mode === SwapFormModes.EDIT_NOTIONAL}
             partialCollateralization={formState.partialCollateralization}
             onChangeAgent={onChangeAgent}
             onChangePartialCollateralization={onChangePartialCollateralization}
@@ -143,6 +144,8 @@ const Swap: React.FunctionComponent<SwapProps> = ({
           <NotionalAmount
             error={errors['notional']}
             label="notional amount"
+            defaultNotional={mode === SwapFormModes.EDIT_NOTIONAL ? 0 : undefined}
+            isEditing={mode === SwapFormModes.EDIT_NOTIONAL}
             info={(formAction === SwapFormActions.FCM_SWAP || formAction === SwapFormActions.FCM_UNWIND)
               ? "Choose the notional you wish to trade. The notional amount is the total size of your trade and, since you're fully collateralising your position, is the amount of margin required too."
               : "Choose the notional you wish to trade. The notional amount is the total size of your trade."
@@ -162,9 +165,20 @@ const Swap: React.FunctionComponent<SwapProps> = ({
             notional={formState.notional}
             onChange={onChangeLeverage}
             value={formState.leverage}
+            resetDeltaState={formState.resetDeltaState}
           />
         </Box>
       )}
+
+      {mode === SwapFormModes.EDIT_NOTIONAL && (
+        <Box sx={{ ...bottomSpacing, display: 'flex' }}>
+          <MarginControls 
+            values={SwapFormMarginAction}
+            value={formState.marginAction}
+            onChange={onChangeMarginAction}
+          />
+        </Box>
+      )} 
 
       {(formAction === SwapFormActions.SWAP || formAction === SwapFormActions.UPDATE || formAction === SwapFormActions.ROLLOVER_SWAP) && (
         <Box sx={bottomSpacing}>
@@ -173,7 +187,8 @@ const Swap: React.FunctionComponent<SwapProps> = ({
             error={errors['margin']}
             healthFactor={healthFactor}
             isAdditional={formState.marginAction === SwapFormMarginAction.ADD}
-            isEditing={mode === SwapFormModes.EDIT_MARGIN}
+            isEditing={mode === SwapFormModes.EDIT_MARGIN || mode === SwapFormModes.EDIT_NOTIONAL}
+            defaultMargin={0}
             margin={formState.margin}
             maxMargin={maxMargin}
             onChangeMargin={onChangeMargin}
