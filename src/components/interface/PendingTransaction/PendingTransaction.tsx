@@ -15,6 +15,7 @@ export type PendingTransactionProps = {
   amm: AugmentedAMM;
   transactionId?: string;
   isEditingMargin?: boolean;
+  showNegativeNotional?: boolean;
   liquidityAction?: MintBurnFormLiquidityAction;
   isFCMSwap?: boolean;
   isFCMUnwind?: boolean;
@@ -31,6 +32,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   transactionId,
   liquidityAction,
   isEditingMargin,
+  showNegativeNotional,
   isFCMSwap,
   isFCMUnwind,
   isRollover,
@@ -225,12 +227,16 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   };
 
   const renderNotional = () => {
-    if (isUndefined(notional)) {
-      return "Notional undefined";
-    }
-
     if (isUndefined(amm.underlyingToken.name)) {
       return "Underlying token name undefined";
+    }
+
+    if (isUndefined(notional)) {
+      return `${formatCurrency(0)} ${amm.underlyingToken.name}`;
+    }
+
+    if (showNegativeNotional) {
+      return `${formatCurrency(0-notional)} ${amm.underlyingToken.name}`;
     }
 
     return `${formatCurrency(notional)} ${amm.underlyingToken.name}`;

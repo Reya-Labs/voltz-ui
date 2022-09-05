@@ -58,10 +58,11 @@ const Trader: React.FunctionComponent = () => {
     setAMM(selectedAMM);
     setPosition(findCurrentPosition(positions || [], selectedAMM, [1,2]));
   };
-  const handleSelectPosition = (selectedPosition: Position, mode: 'margin' | 'liquidity' | 'rollover') => {
+  const handleSelectPosition = (selectedPosition: Position, mode: 'margin' | 'liquidity' | 'rollover' | 'notional') => {
     // Please note that you will never get 'liquidity' mode here as that is only for LP positions.
     let newMode = SwapFormModes.EDIT_MARGIN;
     if(mode === 'rollover') newMode = SwapFormModes.ROLLOVER;
+    if(mode === 'notional') newMode = SwapFormModes.EDIT_NOTIONAL;
 
     setFormMode(newMode);
     setAMM(mode === 'rollover' ? findCurrentAmm(amms || [], selectedPosition) : selectedPosition.amm as AugmentedAMM);
@@ -100,7 +101,7 @@ const Trader: React.FunctionComponent = () => {
           {amm && (
             <AMMProvider amm={amm}>
               <PositionProvider position={position}>
-                <SwapFormProvider mode={formMode}>
+                <SwapFormProvider mode={formMode} defaultValues={{notional: (formMode == SwapFormModes.EDIT_NOTIONAL) ? 0 : undefined}}>
                   <ConnectedSwapForm onReset={handleReset} />
                 </SwapFormProvider>
               </PositionProvider>

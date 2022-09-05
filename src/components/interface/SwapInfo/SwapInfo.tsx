@@ -44,18 +44,16 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
 
   return (
     <FormPanel noBackground>
-      {(mode !== SwapFormModes.EDIT_MARGIN && mode !== SwapFormModes.FIX_BORROW) && (
+      {(mode !== SwapFormModes.EDIT_NOTIONAL && mode !== SwapFormModes.EDIT_MARGIN && mode !== SwapFormModes.FIX_BORROW) && (
         <>
         <ExpectedAPY 
           expectedAPY={expectedApy}
         />
-          {expectedApy && (
             <Box component={'hr'} sx={{ 
               border: 'none',
               borderBottom: `1px solid ${colors.lavenderWeb.darken045}`,
               margin: (theme) => `${theme.spacing(4)} 0`,
             }}/>
-          )}
         </>
       )}
 

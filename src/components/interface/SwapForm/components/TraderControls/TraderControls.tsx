@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Box from '@mui/material/Box';
 import isUndefined from 'lodash/isUndefined';
 
-import { Agents } from '@contexts';
+import { Agents, usePositionContext } from '@contexts';
 import { IconLabel, ToggleButtonGroup } from '@components/composite';
 
 export type TraderControlsProps = {
   agent: Agents;
   isFCMAvailable: boolean;
-  isModifying?: boolean;
+  isEdit?: boolean;
   defaultPartialCollateralization?: boolean;
   partialCollateralization?: boolean;
   onChangeAgent: (agent: Agents) => void;
@@ -18,22 +18,35 @@ export type TraderControlsProps = {
 const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
   agent,
   isFCMAvailable,
-  isModifying,
+  isEdit,
   defaultPartialCollateralization,
   partialCollateralization,
   onChangeAgent,
   onChangePartialCollateralization,
 }) => {
 
+  const initAgent = useRef<Agents>(agent);
+
+  const { position } = usePositionContext();
+  if ( position ) {
+    initAgent.current = position.effectiveVariableTokenBalance > 0 ? Agents.VARIABLE_TRADER : Agents.FIXED_TRADER;
+  }
+
   if (!agent || agent === Agents.LIQUIDITY_PROVIDER) {
     return null;
   }
 
-  const agentOptionTitles = {
+  const newTradeOptionTitles = {
     [Agents.FIXED_TRADER]: 'FIXED',
     [Agents.VARIABLE_TRADER]: 'VARIABLE',
   };
 
+  const editOptionTitles = {
+    [initAgent.current === Agents.FIXED_TRADER ? Agents.FIXED_TRADER : Agents.VARIABLE_TRADER ]: "ADD",
+    [initAgent.current === Agents.FIXED_TRADER ? Agents.VARIABLE_TRADER : Agents.FIXED_TRADER ] : "REMOVE",
+  };
+
+  const agentOptionTitles = isEdit ? editOptionTitles : newTradeOptionTitles;
 
   const handleChangeMode = (option: string) => {
     for (const [key, value] of Object.entries(agentOptionTitles)) {

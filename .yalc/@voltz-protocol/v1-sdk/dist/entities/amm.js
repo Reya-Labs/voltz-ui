@@ -404,7 +404,7 @@ var AMM = /** @class */ (function () {
                         if (fixedHigh > constants_1.MAX_FIXED_RATE) {
                             throw new Error('Upper Rate is too high');
                         }
-                        if (notional <= 0) {
+                        if (notional < 0) {
                             throw new Error('Amount of notional must be greater than 0');
                         }
                         return [4 /*yield*/, this.signer.getAddress()];
@@ -620,11 +620,8 @@ var AMM = /** @class */ (function () {
                         if (fixedHigh > constants_1.MAX_FIXED_RATE) {
                             throw new Error('Upper Rate is too high');
                         }
-                        if (notional <= 0) {
+                        if (notional < 0) {
                             throw new Error('Amount of notional must be greater than 0');
-                        }
-                        if (margin < 0) {
-                            throw new Error('Amount of margin cannot be negative');
                         }
                         if (!this.underlyingToken.id) {
                             throw new Error('No underlying error');

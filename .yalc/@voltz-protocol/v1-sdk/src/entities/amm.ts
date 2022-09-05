@@ -703,7 +703,7 @@ class AMM {
       throw new Error('Upper Rate is too high');
     }
 
-    if (notional <= 0) {
+    if (notional < 0) {
       throw new Error('Amount of notional must be greater than 0');
     }
 
@@ -941,12 +941,8 @@ class AMM {
       throw new Error('Upper Rate is too high');
     }
 
-    if (notional <= 0) {
+    if (notional < 0) {
       throw new Error('Amount of notional must be greater than 0');
-    }
-
-    if (margin < 0) {
-      throw new Error('Amount of margin cannot be negative');
     }
 
     if (!this.underlyingToken.id) {

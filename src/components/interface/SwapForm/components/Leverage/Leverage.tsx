@@ -6,6 +6,7 @@ import { colors } from '@theme';
 import { isNumber, isUndefined } from 'lodash';
 import { formatNumber, notFormatted, stringToBigFloat, toUSFormat } from '@utilities';
 
+
 /**
  * margin: for a new position this is just the ratio between notional and minimum margin required
  * for returning positions we need to base the calculation on the notional and margin amounts post swap
