@@ -16,14 +16,12 @@ export type PositionTableRowProps = {
   position: Position;
   positionInfo?: PositionInfo;
   index: number;
-  onSelect: (mode: 'margin' | 'liquidity' | 'notional') => void;
 };
 
 const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
   position,
   positionInfo,
-  index,
-  onSelect
+  index
 }) => {
   const { agent } = useAgent();
   const labels = agent === Agents.LIQUIDITY_PROVIDER ? lpLabels : traderLabels;
@@ -38,18 +36,6 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     backgroundColor: `secondary.darken050`, // this affects the colour of the positions rows in the LP positions 
     borderRadius: 2
   };
-
-  const handleEditMargin = () => {
-    onSelect('margin');
-  }
-
-  const handleEditNotional = () => {
-    onSelect('notional');
-  }
-
-  const handleEditLPNotional = () => {
-    onSelect('liquidity');
-  }
 
   const renderTableCell = (field: string, label: string) => {
     const underlyingTokenName = position.amm.underlyingToken.name; // Introduced this so margin and notional show the correct underlying token unit e.g. Eth not stEth, USDC not aUSDC
@@ -68,8 +54,6 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
           accruedCashflow={(agent === Agents.LIQUIDITY_PROVIDER) ? undefined : (positionInfo?.accruedCashflow || 0)} 
           margin={positionInfo?.margin} 
           token={position.source.includes("FCM") ? position.amm.protocol : underlyingTokenName || ''} 
-          onSelect={handleEditMargin} 
-          marginEdit={position.source.includes("FCM") ? false : true}
         />
       );
     }
@@ -83,7 +67,6 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
         <Notional 
           notional={agent === Agents.LIQUIDITY_PROVIDER ? formatNumber(position.notional) : formatNumber(Math.abs(position.effectiveVariableTokenBalance))} 
           token={underlyingTokenName || ''}
-          onEdit={agent === Agents.LIQUIDITY_PROVIDER ? handleEditLPNotional : handleEditNotional}
         />
       )
     }
