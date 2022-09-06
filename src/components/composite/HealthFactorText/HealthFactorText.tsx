@@ -24,7 +24,7 @@ export const HealthFactorText = ({ healthFactor, label = 'Health factor: ', show
     <>
       {label}
       <span style={{color: getHealthTextColor(healthFactor)}}>
-        {" "}{showNumber ? healthFactor : healthFactorText}
+        {showNumber ? healthFactor : healthFactorText}
       </span>
     </>
   )

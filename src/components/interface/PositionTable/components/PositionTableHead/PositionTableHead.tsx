@@ -22,7 +22,7 @@ export type PositionTableHeadProps = {
   onRollover: () => void;
   onSettle: () => void;
   rolloverAmm?: AugmentedAMM;
-  onSelect: (mode: 'margin' | 'liquidity' | 'notional') => void;
+  onSelect?: (mode: 'margin' | 'liquidity' | 'notional') => void;
 };
 
 const containerStyles: SystemStyleObject<Theme> = { 
@@ -62,7 +62,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
   }
 
   const handleEditNotional = () => {
-    onSelect('notional');
+    if (onSelect) onSelect('notional');
   }
 
   return (
@@ -106,14 +106,16 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
               sx={{ color: getHealthTextColor(healthFactor), alignItems: "center", marginRight: "8px", fontSize: "14px" }} 
               text={<HealthFactorText healthFactor={healthFactor} />} 
             />
-            <Button 
+            { onSelect && 
+              <Button 
               variant='darker' 
               onClick={handleEditNotional} 
               size='vs' 
               sx={{display: 'flex', padding: "4px 8px", fontSize: "14px" }}
-            >
-              <Box sx={{marginRight: "4px"}}>Edit </Box><EditIcon/>
-            </Button>
+              >
+                <Box sx={{marginRight: "4px"}}>Edit </Box><EditIcon/>
+              </Button>
+            }
           </Box>
         )}
 
