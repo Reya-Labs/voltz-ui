@@ -43,10 +43,6 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     onSelect('margin');
   }
 
-  const handleEditNotional = () => {
-    onSelect('notional');
-  }
-
   const handleEditLPNotional = () => {
     onSelect('liquidity');
   }
@@ -68,7 +64,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
           accruedCashflow={(agent === Agents.LIQUIDITY_PROVIDER) ? undefined : (positionInfo?.accruedCashflow || 0)} 
           margin={positionInfo?.margin} 
           token={position.source.includes("FCM") ? position.amm.protocol : underlyingTokenName || ''} 
-          onSelect={handleEditMargin} 
+          onSelect={agent === Agents.LIQUIDITY_PROVIDER ? handleEditMargin : undefined} 
           marginEdit={position.source.includes("FCM") ? false : true}
         />
       );
@@ -83,7 +79,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
         <Notional 
           notional={agent === Agents.LIQUIDITY_PROVIDER ? formatNumber(position.notional) : formatNumber(Math.abs(position.effectiveVariableTokenBalance))} 
           token={underlyingTokenName || ''}
-          onEdit={agent === Agents.LIQUIDITY_PROVIDER ? handleEditLPNotional : handleEditNotional}
+          onEdit={agent === Agents.LIQUIDITY_PROVIDER ? handleEditLPNotional : undefined}
         />
       )
     }

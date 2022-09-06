@@ -123,6 +123,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                     onRollover={() => handleSelectRow(index, 'rollover')}
                     onSettle={() => onSettle(pos)}
                     rolloverAmm={rolloverAvailable ? rolloverAmm : undefined}
+                    onSelect={agent === Agents.LIQUIDITY_PROVIDER ? undefined : (mode: 'margin' | 'liquidity' | 'notional') => handleSelectRow(index, mode)}
                   />
 
                   <TableContainer sx={(!info?.beforeMaturity && !pos.isSettled) ? getMaturedTableBorderStyles(pos.positionType) : undefined}>
