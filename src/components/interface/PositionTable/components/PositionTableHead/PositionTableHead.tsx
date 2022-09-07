@@ -17,7 +17,7 @@ export type PositionTableHeadProps = {
   positionType: number;
   healthFactor?: number;
   fixedRateHealthFactor?: number;
-  beforeMaturity: boolean;
+  beforeMaturity?: boolean;
   onRollover: () => void;
   onSettle: () => void;
   rolloverAmm?: AugmentedAMM;
@@ -102,7 +102,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
           </Box>
         )}
 
-        {(!beforeMaturity && !isSettled) && (
+        {(beforeMaturity === false && !isSettled) && (
           <>
             <Button 
               variant={positionType === 1 ? 'darker-link' : 'darker'}
@@ -124,7 +124,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
           </>
         )}
 
-        {(!beforeMaturity && isSettled) && (
+        {(beforeMaturity === false && isSettled) && (
           <Button 
             variant={positionType === 1 ? 'darker-link' : 'darker'}
             size='xs'

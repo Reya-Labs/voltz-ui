@@ -6,9 +6,9 @@ import PortfolioHeaderBox from './PortfolioHeaderBox';
 import { PortfolioHeaderProps } from './PortfolioHeader';
 
 export type PortfolioHeaderHealthProps = {
-  positionsDanger: PortfolioHeaderProps['positionsDanger'];
-  positionsHealthy: PortfolioHeaderProps['positionsHealthy'];
-  positionsWarning: PortfolioHeaderProps['positionsWarning'];
+  positionsDanger: number;
+  positionsHealthy: number;
+  positionsWarning: number;
 };
 
 const itemStyles: SystemStyleObject<Theme> = { 

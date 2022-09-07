@@ -11,13 +11,13 @@ import PortfolioHeaderValue from './PortfolioHeaderValue';
 import PortfolioHeaderBox from './PortfolioHeaderBox';
 
 export type PortfolioHeaderInfoProps = {
-  currencyCode?: PortfolioHeaderProps['currencyCode'];
-  currencySymbol?: PortfolioHeaderProps['currencySymbol'];
-  feesApy?: PortfolioHeaderProps['feesApy'];
-  netMargin?: PortfolioHeaderProps['netMargin'];
-  netMarginDiff?: PortfolioHeaderProps['netMarginDiff'];
-  netRatePaying?: PortfolioHeaderProps['netRatePaying'];
-  netRateReceiving?: PortfolioHeaderProps['netRateReceiving'];
+  currencyCode?: string;
+  currencySymbol?: string;
+  feesApy?: number;
+  netMargin?: number;
+  netMarginDiff?: number;
+  netRatePaying?: number;
+  netRateReceiving?: number;
 };
 
 const listItemStyles: SystemStyleObject<Theme> = { 

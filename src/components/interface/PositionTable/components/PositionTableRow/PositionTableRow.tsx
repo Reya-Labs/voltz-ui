@@ -14,7 +14,7 @@ import { formatNumber, isBorrowing } from '@utilities';
 
 export type PositionTableRowProps = {
   position: Position;
-  positionInfo?: PositionInfo;
+  positionInfo: PositionInfo | undefined;
   index: number;
   onSelect: (mode: 'margin' | 'liquidity' | 'notional') => void;
 };
@@ -36,7 +36,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
 
   const typeStyleOverrides: SystemStyleObject<Theme> = {
     backgroundColor: `secondary.darken050`, // this affects the colour of the positions rows in the LP positions 
-    borderRadius: 2
+    borderRadius: 2 
   };
 
   const handleEditMargin = () => {

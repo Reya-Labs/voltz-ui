@@ -5,13 +5,12 @@ import { data } from '@utilities';
 import { usePositions, useSelector, useWallet } from '@hooks';
 import { PendingTransaction, PortfolioHeader, PositionTable, PositionTableFields } from '@components/interface';
 import { Button, Loading, Panel, RouteLink, Typography } from '@components/atomic';
-import { Agents } from '@contexts';
+import { Agents, usePortfolioContext } from '@contexts';
 import { actions, selectors } from '@store';
 import { useDispatch } from '@hooks';
 import { AugmentedAMM } from '@utilities';
 import { routes } from '@routes';
 import Box from '@mui/material/Box';
-import { getHealthCounters, getNetPayingRate, getNetReceivingRate, getTotalAccruedCashflow, getTotalMargin, getTotalNotional } from './services';
 import { colors } from '@theme';
 
 export type ConnectedAMMTableProps = {
@@ -40,6 +39,8 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
   const [positionInformation, setPositionInformation] = useState<Record<Position['id'], PositionInfo>>({});
   const [positionInformationLoading, setPositionInformationLoading] = useState<boolean>(true);
   const [positionInformationError, setPositionInformationError] = useState<boolean>(false);
+
+  const portfolioData = usePortfolioContext();
 
   const loadExtraPositionInformation = () => {
     if (!loading && !error && positionsByAgentGroup) {
@@ -77,12 +78,8 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
     }
   };
 
-  useEffect(() => {
-    loadExtraPositionInformation();
-  }, [agent, error, loading, positionsByAgentGroup]);
 
   const handleRetry = useCallback(() => {
-    loadExtraPositionInformation();
   }, [loadExtraPositionInformation]);
   
   const handleSettle = useCallback(
@@ -178,33 +175,18 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
 
   const renderPositionTable = () => {
     if(!positionsByAgentGroup) return null;
-
-    const healthCounters = getHealthCounters(positionsByAgentGroup, positionInformation);
-    const totalNotional = getTotalNotional(positionsByAgentGroup, positionInformation);
-    const totalMargin = getTotalMargin(positionsByAgentGroup, positionInformation);
-    const totalAccruedCashflow = getTotalAccruedCashflow(positionsByAgentGroup, positionInformation);
-    const netReceivingRate = getNetReceivingRate(positionsByAgentGroup, positionInformation, agent);
-    const netPayingRate = getNetPayingRate(positionsByAgentGroup, positionInformation, agent);
   
     return (
       <>
         <PortfolioHeader
           currencyCode='USD'
           currencySymbol='$'
-          netMargin={totalMargin}
-          netMarginDiff={agent === Agents.LIQUIDITY_PROVIDER ? totalAccruedCashflow : totalAccruedCashflow}
-          netNotional={totalNotional}
-          netRateReceiving={agent !== Agents.LIQUIDITY_PROVIDER ? netReceivingRate : undefined}
-          netRatePaying={agent !== Agents.LIQUIDITY_PROVIDER ? netPayingRate : undefined}
           feesApy={agent === Agents.LIQUIDITY_PROVIDER ? 3.55 : undefined}
-          positionsDanger={healthCounters.danger}
-          positionsHealthy={healthCounters.healthy}
-          positionsWarning={healthCounters.warning}
+          portfolioData={portfolioData}
         />
         <Box sx={{ marginTop: (theme) => theme.spacing(14) }}>
           <PositionTable
             positions={positionsByAgentGroup}
-            positionInformation={positionInformation}
             order={order}
             onSetOrder={setOrder}
             orderBy={orderBy}
@@ -217,6 +199,7 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
             onSelectItem={onSelectItem}
             onSettle={handleSettle}
             agent={agent}
+            portfolioData={portfolioData}
           />
         </Box>
       </>
@@ -230,7 +213,7 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
       return renderPendingTransaction(); // We return this one immediately as we dont want it wrapped in a Panel
     }
 
-    else if(loading || status === 'connecting' || (positionsByAgentGroup?.length && positionInformationLoading)) {
+    else if(loading || status === 'connecting') {
       content = renderLoading();
     }
 

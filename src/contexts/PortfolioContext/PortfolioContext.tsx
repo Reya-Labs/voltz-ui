@@ -1,17 +1,18 @@
 import { useAgent, useAMM } from '@hooks';
 import { AugmentedAMM } from '@utilities';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk/dist/types/entities';
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState, useRef } from 'react'
 import { getHealthCounters, getNetPayingRate, getNetReceivingRate, getTotalAccruedCashflow, getTotalMargin, getTotalNotional } from './services';
 
 export type PortfolioProviderProps = {
   positions?: Position[];
 };
 
-export type PortfolioContextPopulated = ReturnType<typeof useAMM> & {
+export type PortfolioContext = {
+  loadPosition: (position : Position) => void,
   info: Record<Position['id'], PositionInfo>,
   positions: Position[],
-  healthCounters: {} | undefined,
+  healthCounters: {danger: number, warning: number, healthy: number} | undefined,
   totalNotional: number | undefined,
   totalMargin: number | undefined,
   totalAccruedCashflow: number | undefined,
@@ -19,16 +20,33 @@ export type PortfolioContextPopulated = ReturnType<typeof useAMM> & {
   netPayingRate: number | undefined,
 };
 
-export type PortfolioContext = Partial<PortfolioContextPopulated>;
+const PortfolioCtx = createContext<PortfolioContext>({} as unknown as PortfolioContext);
+PortfolioCtx.displayName = 'PortfolioContext';
 
-const portfolioContext = createContext<PortfolioContext>({} as unknown as PortfolioContext);
-portfolioContext.displayName = 'PortfolioContext';
+export const PortfolioProvider: React.FunctionComponent<PortfolioProviderProps> = ({ children, positions }) => {
 
-export const PositionProvider: React.FunctionComponent<PortfolioProviderProps> = ({ children, positions }) => {
+  const defaultInfo = () => {
+    const piData:Record<Position['id'], PositionInfo> = {};
+    if (positions) {
+      for (const pos of positions) {
+        const positionInfo: PositionInfo = {
+          notionalInUSD: 0,
+          marginInUSD: 0,
+          margin: 0,
+          beforeMaturity: false,
+          accruedCashflowInUSD: 0,
+          accruedCashflow: 0,
+          fixedApr: 0
+        }
+        piData[pos.id] = positionInfo;
+      }
+    }
+    return piData;
+  }
 
-  const [info, setInfo] = useState<Record<Position['id'], PositionInfo> | undefined>();
-  const [storedPositions, setStoredPositions] = useState<Position[]>(positions ?? []);
-  const [healthCounters, setHealthCounters] = useState<{}>();
+  const info = useRef<Record<Position['id'], PositionInfo>>({});
+  const [loaded, setLoaded] = useState<string>("")
+  const [healthCounters, setHealthCounters] = useState<{danger: number, warning: number, healthy: number}>();
   const [totalNotional, setTotalNotional] = useState<number | undefined>();
   const [totalMargin, setTotalMargin] = useState<number | undefined>();
   const [totalAccruedCashflow, setTotalAccruedCashflow] = useState<number | undefined>();
@@ -38,48 +56,46 @@ export const PositionProvider: React.FunctionComponent<PortfolioProviderProps> =
   const { agent } = useAgent();
 
   useEffect(() => {
-    if (positions && JSON.stringify(positions) !== JSON.stringify(storedPositions)) {
+    if (positions) {
         for ( let  i = 0; i < positions.length; i++ ) {
             void loadPositionInfo(positions[i]);
         }
-        setStoredPositions(positions);
     }
-  }, [JSON.stringify(positions)]);
-
+  }, [positions]);
+  
   useEffect(() => {
-    if (positions && positions.length > 0 && info && Object.keys(info).length === positions.length ) {
-        setHealthCounters(getHealthCounters(positions, info));
-        setTotalNotional(getTotalNotional(positions, info));
-        setTotalMargin(getTotalMargin(positions, info));
-        setTotalAccruedCashflow(getTotalAccruedCashflow(positions, info));
-        setNetReceivingRate(getNetReceivingRate(positions, info, agent));
-        setNetPayingRate(getNetPayingRate(positions, info, agent));
+    if (positions && positions.length > 0 && info.current && Object.keys(info.current).length === positions.length ) {
+        setHealthCounters(getHealthCounters(positions, info.current));
+        setTotalNotional(getTotalNotional(positions, info.current));
+        setTotalMargin(getTotalMargin(positions, info.current));
+        setTotalAccruedCashflow(getTotalAccruedCashflow(positions, info.current));
+        setNetReceivingRate(getNetReceivingRate(positions, info.current, agent));
+        setNetPayingRate(getNetPayingRate(positions, info.current, agent));
     }
   }, [info]);
 
-  const loadPositionInfo = async (position : Position) => {
-    const piData:Record<Position['id'], PositionInfo> = info ?? {};
-    const positionInfo = await position.amm.getPositionInformation(position);
-    piData[position.id] = positionInfo;
-    setInfo(piData);
+  const loadPositionInfo = (position : Position) => {
+    position.amm.getPositionInformation(position).then( positionInfo => {
+      info.current[position.id] = positionInfo;
+      setLoaded(JSON.stringify(info.current));
+    })
   }
 
-  const value = positions ? {
-    info: info,
-    positions: storedPositions,
+  const value = {
+    loadPosition: loadPositionInfo,
+    info: info.current,
+    positions: positions,
     healthCounters,
     totalNotional,
     totalMargin,
     totalAccruedCashflow,
     netReceivingRate,
     netPayingRate,
-  } : {} as unknown as PortfolioContext;
+  } as PortfolioContext;
 
-  return <portfolioContext.Provider value={value}>{children}</portfolioContext.Provider>;
+  return <PortfolioCtx.Provider value={value}>{children}</PortfolioCtx.Provider>;
 };
 
-export const usePortfolioContext = (): PortfolioContext => {
-  return useContext(portfolioContext);
-};
+export const usePortfolioContext = () => useContext(PortfolioCtx);
 
-export default PositionProvider;
+export default PortfolioProvider;
