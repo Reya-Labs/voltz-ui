@@ -11,7 +11,7 @@ export type WalletDisplayProps = {
 };
 
 const WalletDisplay: React.FunctionComponent<WalletDisplayProps> = ({ wallet, onChangeWallet }) => {
-  if (isNull(wallet.name)) {
+  if (isNull(wallet.name) || wallet.name === 'disconnect') {
     return null;
   }
 

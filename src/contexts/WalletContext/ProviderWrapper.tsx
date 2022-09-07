@@ -60,8 +60,8 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
   const connect = useCallback(
     async (walletName: WalletName) => {
       try {
-        setStatus('connecting');
         const newProvider = await services.getWalletProvider(walletName);
+        setStatus('connecting');
 
         if(newProvider) {
           const newSigner = newProvider.getSigner();

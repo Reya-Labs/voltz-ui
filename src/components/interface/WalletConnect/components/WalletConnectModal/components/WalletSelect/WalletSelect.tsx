@@ -19,7 +19,8 @@ export type WalletSelectProps = {
 
 export const walletOptions:WalletOption[] = [
   { title: 'Metamask', name: 'metamask' },
-  { title: 'WalletConnect', name: 'walletConnect' }
+  { title: 'WalletConnect', name: 'walletConnect' },
+  { title: 'Disconnect', name: 'disconnect' }
 ];
 
 const WalletSelect: React.FunctionComponent<WalletSelectProps> = ({ wallet, onSelectWallet }) => {
