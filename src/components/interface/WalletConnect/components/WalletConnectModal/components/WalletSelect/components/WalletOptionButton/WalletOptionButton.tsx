@@ -5,7 +5,7 @@ import { Button, Icon, IconProps, Typography } from '@components/atomic';
 export type WalletOptionButtonProps = {
   onClick: () => void;
   title: string;
-  icon: IconProps['name'];
+  icon?: IconProps['name'];
   selected: boolean;
 };
 
@@ -35,7 +35,7 @@ const WalletOptionButton: React.FunctionComponent<WalletOptionButtonProps> = ({
       {selected && '• '}
       {title}
     </Typography>
-    <Icon name={icon} sx={{width: 22}} />
+    {icon && <Icon name={icon} sx={{width: 22}} />}
   </Button>
 );
 

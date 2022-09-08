@@ -10,7 +10,8 @@ export type WalletStatus =
 
 export type WalletName = 
   | 'metamask'
-  | 'walletConnect';
+  | 'walletConnect'
+  | 'disconnect';
 
 export type EthereumRequestArguments = {
   method: string;
