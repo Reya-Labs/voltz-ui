@@ -16,7 +16,7 @@ export type CurrentMarginProps = {
   margin?: number;
   accruedCashflow?: number;
   token: string;
-  onSelect: () => void;
+  onSelect?: () => void;
 };
 
 const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({ 
@@ -29,10 +29,12 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({
   const wallet = useWallet();
 
   const handleClick = () => {
-    if (isNull(wallet.account)) {
-      wallet.setRequired(true);
-    } else {
-      onSelect();
+    if (onSelect) {
+      if (isNull(wallet.account)) {
+        wallet.setRequired(true);
+      } else {
+       onSelect();
+      }
     }
   };
 
@@ -56,7 +58,7 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({
         {!isUndefined(margin) ? `${formatNumber(margin)} ${token}` : 'Loading...'}
       </Typography>
 
-      {marginEdit && (
+      {marginEdit && onSelect && (
         <Button 
           variant='red2' 
           onClick={handleClick} 
