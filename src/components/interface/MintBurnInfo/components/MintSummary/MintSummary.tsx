@@ -21,7 +21,7 @@ const MintSummary: React.FunctionComponent<MintSummaryProps> = ({ balance, minRe
   const rows = !isUndefined(minRequiredMargin) ? [
     {
       label: 'MARGIN IN ACCOUNT:', 
-      value: !isUndefined(balance) ? `${formatCurrency(Math.abs(balance), true)} ${underlyingTokenName}` : 'NO DATA'
+      value: !isUndefined(balance) ? `${formatCurrency(Math.abs(balance), true)} ${underlyingTokenName}` : 'Loading...'
     },
     {
       label: 'MINIMUM REQUIRED MARGIN:', 

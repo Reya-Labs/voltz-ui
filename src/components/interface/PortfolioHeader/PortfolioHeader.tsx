@@ -1,14 +1,10 @@
-import React from 'react';
-import { colors, SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '@theme';
 import { Typography } from '@components/atomic';
-import { formatCurrency, formatNumber } from '@utilities';
+import { formatCurrency} from '@utilities';
 import Box from '@mui/material/Box';
-import { isUndefined } from 'lodash';
-import PortfolioHeaderValue from './PortfolioHeaderValue';
-import PortfolioHeaderBox from './PortfolioHeaderBox';
 import PortfolioHeaderInfo from './PorfolioHeaderInfo';
 import PortfolioHeaderHealth from './PortfolioHeaderHealth';
-import { PortfolioContext, usePortfolioContext } from '@contexts';
+import { PortfolioContext} from '@contexts';
 
 export type PortfolioHeaderProps = {
   currencyCode?: string;
@@ -42,7 +38,9 @@ const PortfolioHeader = ({
           Net notional
         </Typography>
         <Typography variant='h1' sx={titleStyles}>
-          {currencySymbol}{formatCurrency(0)} {currencyCode}
+          {!portfolioData.totalNotional && <>Loading...</>}
+          {portfolioData.totalNotional &&  <>{currencySymbol}{formatCurrency(portfolioData.totalNotional)} {currencyCode}</>}
+          
         </Typography>
       </Box>
 
@@ -52,17 +50,17 @@ const PortfolioHeader = ({
             currencyCode={currencyCode} 
             currencySymbol={currencySymbol}
             feesApy={feesApy} 
-            netMargin={portfolioData.totalMargin ?? 0} 
-            netMarginDiff={portfolioData.totalAccruedCashflow ?? 0} 
-            netRatePaying={portfolioData.netPayingRate ?? 0} 
-            netRateReceiving={portfolioData.netReceivingRate ?? 0}
+            netMargin={portfolioData.totalMargin} 
+            netMarginDiff={portfolioData.totalAccruedCashflow} 
+            netRatePaying={portfolioData.netPayingRate} 
+            netRateReceiving={portfolioData.netReceivingRate}
           />
         </Box>
         <Box>
           <PortfolioHeaderHealth
-            positionsDanger={portfolioData.healthCounters ? portfolioData.healthCounters.danger : 0} 
-            positionsHealthy={portfolioData.healthCounters ? portfolioData.healthCounters.healthy : 0} 
-            positionsWarning={portfolioData.healthCounters ? portfolioData.healthCounters.warning : 0}
+            positionsDanger={portfolioData.healthCounters?.danger} 
+            positionsHealthy={portfolioData.healthCounters?.healthy} 
+            positionsWarning={portfolioData.healthCounters?.warning}
           />
         </Box>
       </Box>

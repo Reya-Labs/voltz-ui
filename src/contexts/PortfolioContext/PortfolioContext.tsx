@@ -25,25 +25,6 @@ PortfolioCtx.displayName = 'PortfolioContext';
 
 export const PortfolioProvider: React.FunctionComponent<PortfolioProviderProps> = ({ children, positions }) => {
 
-  const defaultInfo = () => {
-    const piData:Record<Position['id'], PositionInfo> = {};
-    if (positions) {
-      for (const pos of positions) {
-        const positionInfo: PositionInfo = {
-          notionalInUSD: 0,
-          marginInUSD: 0,
-          margin: 0,
-          beforeMaturity: false,
-          accruedCashflowInUSD: 0,
-          accruedCashflow: 0,
-          fixedApr: 0
-        }
-        piData[pos.id] = positionInfo;
-      }
-    }
-    return piData;
-  }
-
   const info = useRef<Record<Position['id'], PositionInfo>>({});
   const [loaded, setLoaded] = useState<string>("")
   const [healthCounters, setHealthCounters] = useState<{danger: number, warning: number, healthy: number}>();
@@ -72,13 +53,17 @@ export const PortfolioProvider: React.FunctionComponent<PortfolioProviderProps> 
         setNetReceivingRate(getNetReceivingRate(positions, info.current, agent));
         setNetPayingRate(getNetPayingRate(positions, info.current, agent));
     }
-  }, [info]);
+  }, [loaded]);
 
+  // 0x3044fa8f672424a31acf0069b9691e19a91a2711#0xf8f6b70a36f4398f0853a311dc6699aba8333cc1
   const loadPositionInfo = (position : Position) => {
     position.amm.getPositionInformation(position).then( positionInfo => {
       info.current[position.id] = positionInfo;
       setLoaded(JSON.stringify(info.current));
-    })
+    }).catch( (e) => {
+      loadPositionInfo(position)
+    }
+    );
   }
 
   const value = {

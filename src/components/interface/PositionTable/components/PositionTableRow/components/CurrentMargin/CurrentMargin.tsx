@@ -53,7 +53,7 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({
   return (
     <TableCell>
       <Typography variant="body2" label={getNetMarginLabel()} sx={{ fontSize: 18 }}>
-        {!isUndefined(margin) ? `${formatNumber(margin)} ${token}` : 'No Data'}
+        {!isUndefined(margin) ? `${formatNumber(margin)} ${token}` : 'Loading...'}
       </Typography>
 
       {marginEdit && (
