@@ -703,7 +703,7 @@ class AMM {
       throw new Error('Upper Rate is too high');
     }
 
-    if (notional < 0) {
+    if (notional <= 0) {
       throw new Error('Amount of notional must be greater than 0');
     }
 
@@ -941,7 +941,7 @@ class AMM {
       throw new Error('Upper Rate is too high');
     }
 
-    if (notional < 0) {
+    if (notional <= 0) {
       throw new Error('Amount of notional must be greater than 0');
     }
 
@@ -2082,7 +2082,7 @@ class AMM {
   // descale compound tokens
 
   public descaleCompoundValue(value: BigNumber): number {
-    return Number(ethers.utils.formatUnits(value, this.underlyingToken.decimals + 10));
+    return Number(ethers.utils.formatUnits(value, parseInt(this.underlyingToken.decimals.toString()) + 10));
   }
 
   // fcm approval
@@ -2433,80 +2433,6 @@ class AMM {
     return parseFloat(utils.formatEther(historicalApy));
   }
 
-  public getAllSwaps(position: Position) {
-    const allSwaps: {
-      fDelta: BigNumber,
-      vDelta: BigNumber,
-      timestamp: BigNumber
-    }[] = [];
-
-    for (let s of position.swaps) {
-      allSwaps.push({
-        fDelta: BigNumber.from(s.fixedTokenDeltaUnbalanced.toString()),
-        vDelta: BigNumber.from(s.variableTokenDelta.toString()),
-        timestamp: BigNumber.from(s.transactionTimestamp.toString())
-      })
-    }
-
-    for (let s of position.fcmSwaps) {
-      allSwaps.push({
-        fDelta: BigNumber.from(s.fixedTokenDeltaUnbalanced.toString()),
-        vDelta: BigNumber.from(s.variableTokenDelta.toString()),
-        timestamp: BigNumber.from(s.transactionTimestamp.toString())
-      })
-    }
-
-    for (let s of position.fcmUnwinds) {
-      allSwaps.push({
-        fDelta: BigNumber.from(s.fixedTokenDeltaUnbalanced.toString()),
-        vDelta: BigNumber.from(s.variableTokenDelta.toString()),
-        timestamp: BigNumber.from(s.transactionTimestamp.toString())
-      })
-    }
-
-    allSwaps.sort((a, b) => a.timestamp.sub(b.timestamp).toNumber());
-
-    return allSwaps;
-  }
-
-  public async getAccruedCashflow(allSwaps: {
-    fDelta: BigNumber,
-    vDelta: BigNumber,
-    timestamp: BigNumber
-  }[], atMaturity: boolean): Promise<number> {
-    if (!this.provider) {
-      throw new Error('Wallet not connected');
-    }
-
-    let accruedCashflow = BigNumber.from(0);
-    let lenSwaps = allSwaps.length;
-
-    const lastBlock = await this.provider.getBlockNumber();
-    const lastBlockTimestamp = BigNumber.from((await this.provider.getBlock(lastBlock)).timestamp);
-
-    let untilTimestamp = (atMaturity)
-      ? BigNumber.from(this.termEndTimestamp.toString())
-      : lastBlockTimestamp.mul(BigNumber.from(10).pow(18));
-
-    const rateOracleContract = BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
-
-    for (let i = 0; i < lenSwaps; i++) {
-      const currentSwapTimestamp = allSwaps[i].timestamp.mul(BigNumber.from(10).pow(18));
-
-      const normalizedTime = (untilTimestamp.sub(currentSwapTimestamp)).div(BigNumber.from(ONE_YEAR_IN_SECONDS))
-
-      const variableFactorBetweenSwaps = await rateOracleContract.callStatic.variableFactor(currentSwapTimestamp, untilTimestamp);
-
-      const fixedCashflow = allSwaps[i].fDelta.mul(normalizedTime).div(BigNumber.from(100)).div(BigNumber.from(10).pow(18));
-      const variableCashflow = allSwaps[i].vDelta.mul(variableFactorBetweenSwaps).div(BigNumber.from(10).pow(18));
-
-      const cashflow = fixedCashflow.add(variableCashflow);
-      accruedCashflow = accruedCashflow.add(cashflow);
-    }
-
-    return this.descale(accruedCashflow);
-  }
-
   public async getVariableFactor(termStartTimestamp: BigNumber, termEndTimestamp: BigNumber): Promise<number> {
     if (!this.provider) {
       throw new Error('Blockchain not connected');
@@ -2529,6 +2455,11 @@ class AMM {
 
     if (!this.provider) {
       throw new Error('Blockchain not connected');
+    }
+
+    let EthToUsdPrice = 1;
+    if (this.isETH) {
+      EthToUsdPrice = await geckoEthToUsd();
     }
 
     let results: PositionInfo = {
@@ -2574,9 +2505,6 @@ class AMM {
 
             results.fixedRateSinceLastSwap = accruedCashflowInfo.avgFixedRate;
 
-            // Get current exchange rate for eth/usd
-            const EthToUsdPrice = await geckoEthToUsd();
-
             if (this.isETH) {
               // need to change when introduce non-stable coins
               results.accruedCashflowInUSD = results.accruedCashflow * EthToUsdPrice;
@@ -2599,9 +2527,6 @@ class AMM {
             console.log("Result:", accruedCashflowInfo);
 
             results.accruedCashflow = accruedCashflowInfo.accruedCashflow;
-
-            // Get current exchange rate for eth/usd
-            const EthToUsdPrice = await geckoEthToUsd();
 
             if (this.isETH) {
               // need to change when introduce non-stable coins
@@ -2626,9 +2551,6 @@ class AMM {
 
           const marginInUnderlyingToken = results.margin;
 
-          // Get current exchange rate for eth/usd
-          const EthToUsdPrice = await geckoEthToUsd();
-
           if (this.isETH) {
             // need to change when introduce non-stable coins
             results.marginInUSD = marginInUnderlyingToken * EthToUsdPrice;
@@ -2650,9 +2572,6 @@ class AMM {
           const scaledRate = this.descaleCompoundValue(rate);
 
           const marginInUnderlyingToken = results.margin * scaledRate;
-
-          // Get current exchange rate for eth/usd
-          const EthToUsdPrice = await geckoEthToUsd();
 
           if (this.isETH) {
             // need to change when introduce non-stable coins
@@ -2689,9 +2608,6 @@ class AMM {
       results.margin = this.descale(rawPositionInfo.margin);
 
       const marginInUnderlyingToken = results.margin;
-
-      // Get current exchange rate for eth/usd
-      const EthToUsdPrice = await geckoEthToUsd();
 
       if (this.isETH) {
         // need to change when introduce non-stable coins
@@ -2734,9 +2650,6 @@ class AMM {
       (position.positionType === 3)
         ? Math.abs(position.notional) // LP
         : Math.abs(position.effectiveVariableTokenBalance); // FT, VT
-
-    // Get current exchange rate for eth/usd
-    const EthToUsdPrice = await geckoEthToUsd();
 
     if (this.isETH) {
       // need to change when introduce non-stable coins
