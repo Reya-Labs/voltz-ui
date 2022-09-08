@@ -4,3 +4,4 @@ export { default as ConnectedPositionTable } from './ConnectedPositionTable/Conn
 export { default as ConnectedSwapForm } from './ConnectedSwapForm/ConnectedSwapForm';
 export { default as ConnectedBorrowPositionTable } from './ConnectedBorrowPositionTable/ConnectedBorrowPositionTable';
 export { default as ConnectedBorrowForm } from './ConnectedBorrowForm/ConnectedBorrowForm';
+export { default as ConnectedMellowLPTable } from './ConnectedMellowLPTable/ConnectedMellowLPTable';

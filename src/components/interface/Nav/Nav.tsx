@@ -177,6 +177,12 @@ const Nav: React.FunctionComponent = () => {
           FIXED BORROW
         </Button>
       } 
+
+      {
+        <Button aria-describedby={id3} sx={buttonSx} variant="text" link={`/${routes.ECOSYSTEM}`}>
+          Ecosystem
+        </Button>
+      }
     </Box>
   );
 };

@@ -19,3 +19,4 @@ export { default as useStateMemo } from './useStateMemo';
 export * from './useTokenApproval';
 export { default as useUniqueId } from './useUniqueId';
 export { default as useWallet } from './useWallet';
+export { default as useMellowLPVaults } from './useMellowLPVaults';
