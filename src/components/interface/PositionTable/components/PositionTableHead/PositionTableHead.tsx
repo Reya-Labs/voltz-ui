@@ -5,19 +5,18 @@ import { AugmentedAMM, formatCurrency, formatNumber } from '@utilities';
 import { Button, getPositionBadgeVariant, PositionBadge, Typography } from '@components/atomic';
 import { BulletLabel, getHealthTextColor, getFixedRateHealthTextColor, HealthFactorText } from '@components/composite';
 import { isUndefined } from 'lodash';
+import { PositionInfo } from '@voltz-protocol/v1-sdk/dist/types/entities';
+import { useAgent } from '@hooks';
+import { Agents } from '@contexts';
 
 export type PositionTableHeadProps = {
   currencyCode?: string;
   currencySymbol?: string;
-  currentFixedRate?: number;
   isFCM?: boolean;
-  fees?: number;
   feesPositive?: boolean;
   isSettled: boolean;
   positionType: number;
-  healthFactor?: number;
-  fixedRateHealthFactor?: number;
-  beforeMaturity?: boolean;
+  info: PositionInfo | undefined;
   onRollover: () => void;
   onSettle: () => void;
   rolloverAmm?: AugmentedAMM;
@@ -41,19 +40,22 @@ const labelStyles: SystemStyleObject<Theme> = {
 const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
   currencyCode = '',
   currencySymbol = '',
-  currentFixedRate, 
   isFCM = false,
-  fees, 
   feesPositive = true,
   isSettled,
   positionType,
-  healthFactor,
-  fixedRateHealthFactor,
-  beforeMaturity,
+  info,
   onRollover,
   onSettle,
   rolloverAmm
 }) => {
+  const {agent} = useAgent()
+  const beforeMaturity = info?.beforeMaturity;
+  const healthFactor = info?.healthFactor;
+  const fixedRateHealthFactor = info?.fixedRateHealthFactor;
+  const currentFixedRate = (agent === Agents.LIQUIDITY_PROVIDER) ? info?.fixedApr : undefined;
+  const fees = (agent === Agents.LIQUIDITY_PROVIDER) ? info?.fees : undefined;
+
   const getTextColor = (positive: boolean) => {
     return positive ? colors.vzCustomGreen1 : colors.vzCustomRed1;
   }

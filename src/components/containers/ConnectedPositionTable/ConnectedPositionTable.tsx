@@ -23,7 +23,6 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
   onSelectItem,
   agent
 }) => {
-  const extraInfoRequest = useRef<Promise<PromiseSettledResult<PositionInfo>[]>>();
   const [order, setOrder] = useState<data.TableOrder>('desc');
   const [orderBy, setOrderBy] = useState<PositionTableFields>('maturity');
   const [page, setPage] = useState(0);
@@ -37,50 +36,12 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
   const dispatch = useDispatch();
 
   const [positionInformation, setPositionInformation] = useState<Record<Position['id'], PositionInfo>>({});
-  const [positionInformationLoading, setPositionInformationLoading] = useState<boolean>(true);
-  const [positionInformationError, setPositionInformationError] = useState<boolean>(false);
 
   const portfolioData = usePortfolioContext();
 
-  const loadExtraPositionInformation = () => {
-    if (!loading && !error && positionsByAgentGroup) {
-      setPositionInformationLoading(true);
-      const thisRequest = Promise.allSettled(positionsByAgentGroup.map(p => p.amm.getPositionInformation(p)));
-      extraInfoRequest.current = thisRequest;
-
-      thisRequest.then((responses) => {
-        if(thisRequest === extraInfoRequest.current) {
-          const piError = !!responses.find(resp => resp.status === 'rejected');
-
-          if(piError) {
-            setPositionInformationError(true);
-          } else {
-            const piData:Record<Position['id'], PositionInfo> = {};
-            responses.forEach((resp, i) => {
-              if (resp.status === 'fulfilled') {
-                piData[positionsByAgentGroup[i].id] = resp.value;
-              }
-            });
-  
-            setPositionInformation(piData);
-            setPositionInformationError(false);
-          }
-        }
-      })
-      .catch((err) => {
-        // console.log("error in effect:", err);
-      })
-      .finally(() => {
-        if(thisRequest === extraInfoRequest.current) {
-          setPositionInformationLoading(false);
-        }
-      })
-    }
-  };
-
 
   const handleRetry = useCallback(() => {
-  }, [loadExtraPositionInformation]);
+  }, []);
   
   const handleSettle = useCallback(
     (position: Position) => {
@@ -155,7 +116,7 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
   const renderPendingTransaction = () => {
     if(!positionToSettle) return null;
 
-    const spData = positionInformation[positionToSettle.position.id];
+    const spData = portfolioData.info[positionToSettle.position.id];
 
     return (
       <Box sx={{display: 'flex', justifyContent: 'center'}}>
@@ -215,10 +176,6 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
 
     else if(loading || status === 'connecting') {
       content = renderLoading();
-    }
-
-    else if(positionInformationError) {
-      content = renderFailure();
     }
 
     else if(error || status !== 'connected') {

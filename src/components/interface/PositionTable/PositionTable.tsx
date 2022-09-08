@@ -111,12 +111,9 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                     currencyCode='USD'
                     currencySymbol='$'
                     isFCM={pos.source === 'FCM'}
-                    fees={agent === Agents.LIQUIDITY_PROVIDER ? undefined : undefined}
+                    info={portfolioData?.info ? portfolioData.info[pos.id] : undefined}
                     feesPositive={true}
-                    healthFactor={undefined}
-                    fixedRateHealthFactor={undefined}
                     isSettled={pos.isSettled}
-                    currentFixedRate={(agent === Agents.LIQUIDITY_PROVIDER) ? undefined : undefined}
                     positionType={pos.positionType}
                     onRollover={() => handleSelectRow(index, 'rollover')}
                     onSettle={() => onSettle(pos)}
