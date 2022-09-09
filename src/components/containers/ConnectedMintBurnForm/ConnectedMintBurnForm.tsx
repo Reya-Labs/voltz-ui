@@ -7,7 +7,7 @@ import { MintBurnFormActions, MintBurnFormModes, useAMMContext, useMintBurnForm,
 import { FormPanel, MintBurnCurrentPosition, MintBurnForm, MintBurnInfo, PendingTransaction } from '@components/interface';
 import { updateFixedRate } from './utilities';
 import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
-import { AugmentedAMM } from '@utilities';
+import { AugmentedAMM, getPoolButtonId, isBorrowing } from '@utilities';
 import { isUndefined } from 'lodash';
 
 export type ConnectedMintBurnFormProps = {
@@ -140,7 +140,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
         onChangeMarginAction={form.setMarginAction} 
         onChangeNotional={form.setNotional}
         onSubmit={handleSubmit}
-        protocol={targetAmm.protocol}
+        gaButtonId={getPoolButtonId(form.state.marginAction.toString(), form.state.liquidityAction.toString(), "", agent, targetAmm)}
         startDate={targetAmm.startDateTime}
         submitButtonState={form.submitButtonState}
         tokenApprovals={form.tokenApprovals}

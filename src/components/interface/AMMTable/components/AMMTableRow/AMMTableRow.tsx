@@ -12,6 +12,7 @@ import { useAgent, useWallet } from '@hooks';
 import { AMMTableDatum } from '../../types';
 import { labels } from '../../constants';
 import { VariableAPY, FixedAPR } from './components';
+import { getPoolButtonId, getRowButtonId } from '@utilities';
 
 export type AMMTableRowProps = {
   datum: AMMTableDatum;
@@ -102,7 +103,7 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
         return <TableCell key={field}>{renderDisplay()}</TableCell>;
       })}
       <TableCell align="center">
-        <Button variant="contained" onClick={handleClick} sx={{
+        <Button variant="contained" onClick={handleClick} id={getRowButtonId(agent === Agents.LIQUIDITY_PROVIDER, datum.protocol, datum.isBorrowing)} sx={{
           paddingTop: (theme) => theme.spacing(3),
           paddingBottom: (theme) => theme.spacing(3),
           paddingLeft: (theme) => theme.spacing(4),

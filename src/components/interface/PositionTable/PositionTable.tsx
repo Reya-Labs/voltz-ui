@@ -5,7 +5,7 @@ import TableBody from '@mui/material/TableBody';
 import { colors, SystemStyleObject, Theme } from '@theme';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 
-import { AugmentedAMM, data, findCurrentAmm } from '@utilities';
+import { AugmentedAMM, data, findCurrentAmm, getRowButtonId, isBorrowing } from '@utilities';
 import { Panel } from '@components/atomic';
 import { PositionTableFields } from './types';
 import { PositionTableHead, PositionTableRow } from './components';
@@ -122,6 +122,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                     positionType={pos.positionType}
                     onRollover={() => handleSelectRow(index, 'rollover')}
                     onSettle={() => onSettle(pos)}
+                    gaButtonId={getRowButtonId(agent === Agents.LIQUIDITY_PROVIDER, pos.amm.protocol, isBorrowing(pos.amm.rateOracle.protocolId))}
                     rolloverAmm={rolloverAvailable ? rolloverAmm : undefined}
                     onSelect={agent === Agents.LIQUIDITY_PROVIDER ? undefined : (mode: 'margin' | 'liquidity' | 'notional') => handleSelectRow(index, mode)}
                   />

@@ -29,6 +29,7 @@ export type MintBurnFormProps = {
   isTradeVierified: boolean;
   maxMargin?: number;
   mode: MintBurnFormModes;
+  gaButtonId?:string;
   onCancel: () => void;
   onChangeFixedLow: (value: number | undefined, increment: boolean | null) => void;
   onChangeFixedHigh: (value: number | undefined, increment: boolean | null) => void;
@@ -57,6 +58,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   isTradeVierified,
   maxMargin,
   mode = MintBurnFormModes.NEW_POSITION,
+  gaButtonId,
   onCancel,
   onChangeFixedLow,
   onChangeFixedHigh,
@@ -164,6 +166,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         mode={mode}
         onCancel={onCancel} 
         onSubmit={onSubmit}
+        gaButtonId={gaButtonId}
         submitButtonState={submitButtonState}
         tokenApprovals={tokenApprovals}
         tradeInfoErrorMessage={tradeInfoErrorMessage}

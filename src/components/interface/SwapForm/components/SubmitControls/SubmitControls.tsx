@@ -17,6 +17,7 @@ interface SubmitControlsProps {
   onCancel: () => void;
   onSubmit: () => void;
   protocol?: string;
+  gaButtonId?: string;
   submitButtonState: SwapFormSubmitButtonStates;
   swapInfoLoading: boolean;
   tokenApprovals: ReturnType<typeof useTokenApproval>;
@@ -50,6 +51,7 @@ const SubmitControls = ({
   onCancel, 
   onSubmit, 
   protocol,
+  gaButtonId,
   submitButtonState,
   tokenApprovals,
   tradeInfoErrorMessage,
@@ -169,6 +171,7 @@ const SubmitControls = ({
           onClick={onSubmit} 
           size="large" 
           sx={{ flexGrow: 1 }}
+          id={gaButtonId}
         >
           {getSubmitText()}
         </Button>
