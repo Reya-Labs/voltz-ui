@@ -9,12 +9,15 @@ import { Box, TableCell, TableHead, TableRow } from '@mui/material';
 import { Panel } from '@components/atomic';
 import RankingTableRow from './components/RankingTableRow/RankingTableRow';
 import { RankingTableHeader } from './components';
+import { getSortedRanking, RankType } from 'src/utilities/data';
 
 
 export type RankingTableProps = {
+  ranking: Map<string, number>;
 };
 
 const RankingTable: React.FunctionComponent<RankingTableProps> = ({
+  ranking
 }) => {
 
   const replacementRowStyle: SystemStyleObject<Theme> = {
@@ -86,8 +89,16 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
   }
 
   const renderVariableRows = () => {
+    const result: RankType[] = [];
+    const keys = Array.from(ranking.keys());
+    keys.forEach((address) => {
+      const value = ranking.get(address);
+      result.push({address: address, points: value ?? 0})
+    });
+    //ranking.forEach((points, address) => result.push({address: address, points: points}));
+    const sorted = result.sort((a, b) => b.points - a.points);
     return <>
-      <RankingTableRow/>
+      <RankingTableRow ranking={sorted}/>
     </>
   }
 
