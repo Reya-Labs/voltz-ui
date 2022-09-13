@@ -60,8 +60,11 @@ type Activity = {
 
 // [MOCK]
 // eslint-disable-next-line @typescript-eslint/require-await
-const getReferrals: () => Promise < [string, string][] > = async () => {
-  return [["0xf8f6b70a36f4398f0853a311dc6699aba8333cc1", "0xf8f6b70a36f4398f0853a311dc6699aba8333cc1"]];
+const getReferrals: () => Promise < Map<string, string[]> > = async () => {
+  const mockReferrals = new Map<string, string[]>();
+  mockReferrals.set("0xf8f6b70a36f4398f0853a311dc6699aba8333cc1", ["0xf8f6b70a36f4398f0853a311dc6699aba8333cc1"]);
+
+  return mockReferrals;
 }
 
 export async function getActivity(
@@ -134,19 +137,21 @@ export async function getActivity(
     const referrals = await getReferrals();
     const total = new Map(scores);
 
-    for (const [a, b] of referrals) {
-      const ta = total.get(a);
-      const tb = scores.get(b);
-
-      if (tb) {
-        if (ta) {
-          total.set(a, ta + 0.3 * tb);
-        }
-        else {
-          total.set(a, 0.3 * tb);
-        }
+    referrals.forEach((referees, referral) => {
+      let referralScore = 0;
+      for (const referee of referees) {
+        const tb = scores.get(referee.toLowerCase());
+        referralScore += tb || 0;
       }
-    }
+
+      const ta = total.get(referral.toLowerCase());
+      if (ta) {
+        total.set(referral.toLowerCase(), ta + 0.3 * referralScore);
+      }
+      else {
+        total.set(referral.toLowerCase(), 0.3 * referralScore);
+      }
+    });
 
     return {
       total
