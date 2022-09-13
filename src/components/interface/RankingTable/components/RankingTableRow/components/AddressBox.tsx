@@ -13,8 +13,8 @@ const AddressBox: React.FunctionComponent<AddressBoxProps> = ({address}) => {
   };
 
   return (
-    <TableCell align='center' width="20%">
-      <Typography variant="body2" sx={{fontSize: 18, color: '#2667FF', fontWeight: 700, letterSpacing: '0.02em',lineHeight: '130%'}}>
+    <TableCell align="left">
+      <Typography variant="body2" sx={{fontSize: 18, fontWeight: 400, letterSpacing: '0.02em',lineHeight: '130%'}}>
         {renderValue()}
       </Typography>
     </TableCell>

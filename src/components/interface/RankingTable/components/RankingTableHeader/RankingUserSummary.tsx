@@ -1,10 +1,12 @@
-import { Box, Grid, Tab, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 import { Typography } from '@components/atomic';
 import { SystemStyleObject, Theme } from '@theme'; 
-import { formatCurrency, formatNumber } from '@utilities';
+import { formatCurrency, formatDateTime, formatNumber } from '@utilities';
 import { DateTime } from 'luxon';
 import { isUndefined } from 'lodash';
+import { ProgressBar } from '@components/composite';
+import { Button } from '@components/atomic';
 
 export type RankingUserSummaryProps = {
   seasonNumber?: number;
@@ -44,8 +46,7 @@ const RankingUserSummary = ({
       marginBottom: (theme) => theme.spacing(1)
     },
   };
-  const labelStyles: SystemStyleObject<Theme> = { 
-    textTransform: "uppercase",
+  const labelStyles: SystemStyleObject<Theme> = {
     fontWeight: 400, 
     fontSize: 14,
     color: "#A6A2B4",
@@ -53,37 +54,94 @@ const RankingUserSummary = ({
     marginTop: (theme) => theme.spacing(1)
   };
   const titleStyles: SystemStyleObject<Theme> = { 
-  fontSize: '24px', 
-  lineHeight: '1.2', 
-  marginTop: (theme) => theme.spacing(2)
+    textTransform: "uppercase",
+    fontSize: '16px', 
+    lineHeight: '19.2px', 
+    marginTop: (theme) => theme.spacing(2)
+  };
+  const cellSx: SystemStyleObject<Theme> = {
+    '&.MuiTableCell-root': {
+      borderBottom: 0,
+      padding: 0,
+      paddingLeft: (theme) => theme.spacing(5.1),
+      paddingRight: (theme) => theme.spacing(4),
+      paddingTop: (theme) => theme.spacing(1),
+      paddingBottom: (theme) => theme.spacing(1),
+    },
   };
 
   const renderSeason = () => {
     return (
-      <Box>
-        {seasonNumber && (seasonNumber < 10 ? 'Season ' + '0' + seasonNumber.toString() : 'Season ' + seasonNumber.toString()) }
-        {!seasonNumber && 'Loading...'}
-       </Box>
+      <Box sx={{display: 'flex', width:'80%', marginBottom:"24px"}}>
+        <Box sx={{borderStyle: 'solid', borderColor: "#FF4AA9", borderRadius: '4px', padding: '4px 8px', textTransform: "uppercase", marginRight: '16px', width: "79px", display: "flex", justifyContent: "center"}}>
+        {seasonNumber && (
+          <Typography variant='subtitle1' sx={{color: "#FF4AA9", fontSize: "14px"}}>
+           Season
+           <span style={{color:"#E5E1F9", fontSize: "14px"}}> 
+            {seasonNumber < 10 ? ' 0' + seasonNumber.toString() : seasonNumber.toString() }
+           </span>
+          </Typography>
+        )}
+        {!seasonNumber && (
+          <Typography variant='subtitle1' sx={{color: "#FF4AA9"}}>
+          {!seasonNumber && 'Loading...'}
+        </Typography>
+        )}
+      </Box>
+
+      <Box sx={{width: '80%'}}>
+        <ProgressBar
+           isMaturity={true} 
+          leftContent={seasonEndDate ? <>{formatDateTime(seasonEndDate)}</> : undefined}
+          rightContent={<>20%</>} 
+          percentageComplete={20} 
+        />
+      </Box>
+      </Box>
+      
     );
   }
 
   const renderPointsSystem = () => {
     return (
-      <Box>
+      <Box sx={{marginBottom:"24px"}}>
         <Typography variant='h1' sx={titleStyles}>
           Points System
         </Typography>
-        <Typography variant='subtitle1' sx={labelStyles}>
+        <Typography sx={labelStyles}>
         Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.
         </Typography>
       </Box>
     );
   }
 
+  const renderTableHead = () => {
+    const labels = ["rank", "trader", "points"];
+    return (
+    <TableHead>
+      <TableRow>
+        {
+        labels.map((label) => (
+          <TableCell
+            align={"left"}
+            padding="normal"
+            sx={cellSx}
+          >
+            <Typography variant="subtitle1" sx={{textTransform: "uppercase", fontWeight: 400, fontSize: 12, color: "#9B97AD"}} >
+              {label}
+            </Typography>
+            {/* </TableSortLabel> */}
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+    );
+  }
+
   const renderCurrentPosition = () => {
     return (
       <Box>
-        <Typography variant='h1' sx={titleStyles}>
+        <Typography variant='h1' sx={{...titleStyles, marginBottom:"-10px"}}>
           Current Position
         </Typography>
         <TableContainer>
@@ -96,6 +154,7 @@ const RankingUserSummary = ({
           aria-labelledby="tableTitle"
           size="medium"
         >
+          {renderTableHead()}
           <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
           <TableRow sx={{backgroundColor: `#251F3F`, borderRadius: '8px' }}>
             <TableCell key={"protocol"} width="35%" >
@@ -118,21 +177,23 @@ const RankingUserSummary = ({
   const renderBooster = () => {
     return (
       <Box>
-        <Typography variant='h1' sx={titleStyles}>
+        <Typography variant='h1' sx={{...titleStyles, marginBottom: "8px"}}>
           Points Booster
         </Typography>
-        <Box>
-          <Typography variant='subtitle1' sx={labelStyles}>
-            Invite a Trader - Button
-          </Typography>
-          {!isUndefined(invitedTraders) && (
-            <Typography variant='subtitle1' sx={labelStyles}> Active Invited Traders {(invitedTraders < 10 ? '0' + invitedTraders.toString() : invitedTraders.toString())}</Typography>
-          )}
-          {isUndefined(invitedTraders) && (
-            <Typography variant='subtitle1' sx={labelStyles}> Loading...</Typography>
-          )}
+        <Box sx={{display: 'flex'}}>
+          <Button sx={{ color: "#E5E1F9", marginRight: "24px", background:"transparent", padding:"0px", textTransform:"none"}} variant={"text"}>
+            Invite a trader
+          </Button>
+
+          <Box sx={{ marginRight: "24px", borderStyle: 'solid', borderColor: "#FF4AA9", borderRadius: "4px", padding: "2px 4px", textTransform: "uppercase"}} >
+            {!isUndefined(invitedTraders) && (
+              <Typography variant='subtitle1' sx={{color: "#FF4AA9"}}> Active Invited Traders <span style={{color:"#E5E1F9"}}>{(invitedTraders < 10 ? '0' + invitedTraders.toString() : invitedTraders.toString())}</span></Typography>
+            )}
+            {isUndefined(invitedTraders) && (
+              <Typography variant='subtitle1' sx={{color: "#FF4AA9"}}> Loading...</Typography>
+            )}
+          </Box>
         </Box>
-        
       </Box>
     );
   }
