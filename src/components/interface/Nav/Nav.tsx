@@ -177,6 +177,9 @@ const Nav: React.FunctionComponent = () => {
           FIXED BORROW
         </Button>
       } 
+      <Button aria-describedby={id3} sx={buttonSx} variant="text" link={`/${routes.LEADER_BOARD}`}>
+          LEADER BOARD
+        </Button>
     </Box>
   );
 };
