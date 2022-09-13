@@ -5,6 +5,8 @@ import { SystemStyleObject, Theme } from '@mui/system';
 
 import { Button } from '@components/atomic';
 import { useWallet } from '@hooks';
+import { AddressBox, PointsBox, Rank } from './components';
+import { formatNumber } from '@utilities';
 
 export type RankingTableRowProps = {
 };
@@ -16,18 +18,10 @@ const RankingTableRow: React.FunctionComponent<RankingTableRowProps> = ({}) => {
   const variant = 'main';
 
   const typeStyleOverrides = (): SystemStyleObject<Theme> => {
-    if (!variant) {
       return {
-        backgroundColor: `primary.dark`,
+        backgroundColor: `#262040`, // this affects the colour of the Pool table rows
+        borderRadius: '10px'
       };
-    }
-    if (variant == 'main') {
-      return {
-        backgroundColor: `#19152B`, // this affects the colour of the Pool table rows
-        borderRadius: '8px'
-      };
-    }
-    return {};
   };
 
   const handleClick = () => {
@@ -60,16 +54,34 @@ const RankingTableRow: React.FunctionComponent<RankingTableRowProps> = ({}) => {
 
   const renderTable = () => {
     const button = loadButton(); 
+    const labels = ["rank", "trader", "points"];
+    const agag = Array.from({length: 40}, () => Math.floor(Math.random() * 40));
     return (
-      // todo: <TableRow key={index} sx={{...anotherObject,  ...typeStyleOverrides() }}>
-      <TableRow sx={{...typeStyleOverrides() }}>
-      {button}
-      </TableRow> );
+      <>
+        { agag.map(() => {
+          return (
+          <TableRow sx={{...typeStyleOverrides() }}>
+            {labels.map((label) => {
+                  if (label === 'rank') {
+                    return <Rank points={parseInt((Math.random() * 10 + 1).toFixed(0))}/>;
+                  }
+                  if (label === 'points') {
+                    return <PointsBox points={parseInt((Math.random() * 100 + 1).toFixed(0))}/>;
+                  }
+                  if (label === 'trader') {
+                    return <AddressBox address={"0x27h276399n990hg9i9920984ff90"}></AddressBox>;
+                  }
+          
+              })}
+          </TableRow> );
+        })
+        }
+      </>
+    );
     
   }
 
   return <>{renderTable()}</>;
-
   
 };
 

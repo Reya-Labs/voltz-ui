@@ -4,7 +4,7 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import { SystemStyleObject, Theme } from '@theme';
 import { Typography } from '@components/atomic';
-import { Box } from '@mui/material';
+import { Box, TableCell, TableHead, TableRow } from '@mui/material';
 
 import { Panel } from '@components/atomic';
 import RankingTableRow from './components/RankingTableRow/RankingTableRow';
@@ -30,18 +30,51 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
       marginBottom: (theme) => theme.spacing(8)
   };
 
-  const renderVariableTable = () => {
-  
+  const commonOverrides: SystemStyleObject<Theme> = {
+    '& .MuiTableCell-root': {
+      borderColor: 'transparent',
+      paddingRight: (theme) => theme.spacing(4),
+      paddingLeft: (theme) => theme.spacing(4),
+      paddingTop: (theme) => theme.spacing(2.5),
+      paddingBottom: (theme) => theme.spacing(2.5),
+      '&:first-of-type': {
+        borderTopLeftRadius: 8,
+        borderBottomLeftRadius: 8,
+      },
+      '&:last-of-type': {
+        borderTopRightRadius: 8,
+        borderBottomRightRadius: 8,
+      },
+    },
+    '.MuiInputLabel-root': {
+      marginBottom: (theme) => theme.spacing(1)
+    },
+  };
+
+  const cellSx: SystemStyleObject<Theme> = {
+    '&.MuiTableCell-root': {
+      borderBottom: 0,
+      padding: 0,
+      paddingLeft: (theme) => theme.spacing(5.1),
+      paddingRight: (theme) => theme.spacing(4),
+      paddingTop: (theme) => theme.spacing(1),
+      paddingBottom: (theme) => theme.spacing(1),
+    },
+  };
+
+  const renderTable = () => {
     return ( <>
       <TableContainer>
         <Table
           sx={{
             borderCollapse: 'separate',
-            borderSpacing: '0px 16px'
+            borderSpacing: '0px 16px',
+            ...commonOverrides
           }}
           aria-labelledby="tableTitle"
           size="medium"
         >
+          {renderTableHead()}
           <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
           {renderVariableRows()}
           </TableBody>
@@ -58,17 +91,38 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
     </>
   }
 
+  const renderTableHead = () => {
+    const labels = ["rank", "trader", "points"];
+    return (
+    <TableHead>
+      <TableRow>
+        {
+        labels.map((label) => (
+          <TableCell
+            align={"left"}
+            padding="normal"
+            sx={cellSx}
+          >
+            <Typography variant="subtitle1" sx={{textTransform: "uppercase", fontWeight: 400, fontSize: 12, color: "#9B97AD"}} >
+              {label}
+            </Typography>
+            {/* </TableSortLabel> */}
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+    );
+  }
+
 
   return (
     <>
     <RankingTableHeader loading={false} />
-    <Panel variant={'dark'} borderRadius='large' padding='container' sx={{ paddingTop: 0, paddingBottom: 0, background:'transparent' }}>
-      {/* VARIABLE POSITIONS TABLE */}
-      <Typography variant="body2" sx={{ fontSize: '18px', fontWeight: 700, display: 'flex', alignContent: 'center'}}>
-        <Box sx={{backgroundColor: "#2667FF", borderRadius: "5px", width: '4px', height: '4px', marginTop: '12px', marginRight: '8px'}}></Box>
-         VARIABLE POSITIONS
+    <Panel variant={'dark'} borderRadius='large' padding='container' sx={{ paddingTop: 0, paddingBottom: 0, background:'transparent', marginTop: "40px"}}>
+      <Typography variant="body2" sx={{ fontSize: '24px', fontWeight: 700, display: 'flex', alignContent: 'center'}}>
+         SEASON 1 LEADERBOARD
       </Typography>
-      {renderVariableTable()}
+      {renderTable()}
     </Panel>
     </>
     
