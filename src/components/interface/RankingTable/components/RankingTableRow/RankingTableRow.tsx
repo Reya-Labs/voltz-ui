@@ -4,18 +4,16 @@ import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '@mui/system';
 
 import { Button } from '@components/atomic';
-import { useWallet } from '@hooks';
 import { AddressBox, PointsBox, Rank } from './components';
-import { formatNumber } from '@utilities';
+import { RankType} from 'src/utilities/data/rankingData';
 
 export type RankingTableRowProps = {
+  ranking: RankType[];
 };
 
 
 // todo: panel component, adjust the styling
-const RankingTableRow: React.FunctionComponent<RankingTableRowProps> = ({}) => {
-  const wallet = useWallet();
-  const variant = 'main';
+const RankingTableRow: React.FunctionComponent<RankingTableRowProps> = ({ranking}) => {
 
   const typeStyleOverrides = (): SystemStyleObject<Theme> => {
       return {
@@ -58,18 +56,18 @@ const RankingTableRow: React.FunctionComponent<RankingTableRowProps> = ({}) => {
     const agag = Array.from({length: 40}, () => Math.floor(Math.random() * 40));
     return (
       <>
-        { agag.map(() => {
+        { ranking.map((rank, index) => {
           return (
           <TableRow sx={{...typeStyleOverrides() }}>
             {labels.map((label) => {
                   if (label === 'rank') {
-                    return <Rank points={parseInt((Math.random() * 10 + 1).toFixed(0))}/>;
+                    return <Rank points={index}/>;
                   }
                   if (label === 'points') {
-                    return <PointsBox points={parseInt((Math.random() * 100 + 1).toFixed(0))}/>;
+                    return <PointsBox points={rank.points}/>;
                   }
                   if (label === 'trader') {
-                    return <AddressBox address={"0x27h276399n990hg9i9920984ff90"}></AddressBox>;
+                    return <AddressBox address={rank.address}></AddressBox>;
                   }
           
               })}

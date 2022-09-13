@@ -1,8 +1,11 @@
-import React, {useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import { SystemStyleObject, Theme } from '@theme';
 
 import { Loading, Panel } from '@components/atomic';
 import RankingTable from 'src/components/interface/RankingTable/RankingTable';
+import useRanking from 'src/hooks/useRanking';
+import { isUndefined } from 'lodash';
+import { useWallet } from '@hooks';
 
 
 export type ConnectedRankingTableProps = {
@@ -10,7 +13,20 @@ export type ConnectedRankingTableProps = {
 
 const ConnectedRankingTable: React.FunctionComponent<ConnectedRankingTableProps> = ({
 }) => {
-  const [loadingItems, setLoadingItems] = useState<boolean>(false);
+  const wallet = useWallet();
+  const { rankings } = useRanking(wallet);
+  const { result, loading, call } = rankings;
+
+  useEffect(() => {
+    call();
+  }, [call]);
+
+  // useEffect(() => {
+  //   if (result) {
+  //     const sorted = getSortedRanking(result);
+  //     setSortedRanking(sorted);
+  //   }
+  // }, [result]);
 
   const commonOverrides: SystemStyleObject<Theme> = {
     '& .MuiTableCell-root': {
@@ -36,11 +52,11 @@ const ConnectedRankingTable: React.FunctionComponent<ConnectedRankingTableProps>
   const pages = 0;
 
   const renderContent = () => {
-    if(!loadingItems){
+    if(!loading && result){
       return (
         <>
         <Panel variant='dark' padding='small' sx={{ width: '100%', maxWidth: '800px', margin: '0 auto', background: 'transparent' }}>
-          <RankingTable/>
+          <RankingTable ranking={result}/>
         </Panel>
         </>
       )

@@ -1,6 +1,7 @@
 import React from 'react';
 import TableCell from '@mui/material/TableCell';
 import { Typography } from '@components/atomic';
+import { formatNumber } from '@utilities';
 
 export type PointsBoxProps = {
   points: number;
@@ -9,7 +10,7 @@ export type PointsBoxProps = {
 const PointsBox: React.FunctionComponent<PointsBoxProps> = ({points}) => {
 
   const renderValue = () => {
-      return `${points}`;
+      return `${formatNumber(points)}`;
   };
 
   return (
