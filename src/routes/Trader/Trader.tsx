@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Box from '@mui/material/Box';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { Position } from '@voltz-protocol/v1-sdk';
 
 import { AugmentedAMM, findCurrentAmm, findCurrentPosition, setPageTitle } from '@utilities';
@@ -32,12 +32,20 @@ const Trader: React.FunctionComponent = () => {
     onChangeAgent(Agents.FIXED_TRADER);
   }, [setFormMode, setAMM, pathnameWithoutPrefix, onChangeAgent]);
 
+  const referrerKey = 'invitedBy';
+  const [searchParams] = useSearchParams();
+  if (!!searchParams.get(referrerKey) && !localStorage.getItem(referrerKey)) {
+    // Referrer is set in URL and has not already been saved in storage; save to storage now
+    // We do deliberately do not overwrite any existing value because we want to credit the first referral link that was followed
+    localStorage.setItem('invitedBy', searchParams.get('invitedBy') || '');
+  }
+
   useEffect(() => {
     handleReset();
   }, [key]);
 
   useEffect(() => {
-    switch(renderMode) {
+    switch (renderMode) {
       case 'pools': {
         setPageTitle('Trader Pools');
         break;
@@ -51,38 +59,44 @@ const Trader: React.FunctionComponent = () => {
         break;
       }
     }
-  }, [setPageTitle, renderMode, position])
+  }, [setPageTitle, renderMode, position]);
 
   const handleSelectAmm = (selectedAMM: AugmentedAMM) => {
     setFormMode(SwapFormModes.NEW_POSITION);
     setAMM(selectedAMM);
-    setPosition(findCurrentPosition(positions || [], selectedAMM, [1,2]));
+    setPosition(findCurrentPosition(positions || [], selectedAMM, [1, 2]));
   };
-  const handleSelectPosition = (selectedPosition: Position, mode: 'margin' | 'liquidity' | 'rollover' | 'notional') => {
+  const handleSelectPosition = (
+    selectedPosition: Position,
+    mode: 'margin' | 'liquidity' | 'rollover' | 'notional',
+  ) => {
     // Please note that you will never get 'liquidity' mode here as that is only for LP positions.
     let newMode = SwapFormModes.EDIT_MARGIN;
-    if(mode === 'rollover') newMode = SwapFormModes.ROLLOVER;
-    if(mode === 'notional') newMode = SwapFormModes.EDIT_NOTIONAL;
+    if (mode === 'rollover') newMode = SwapFormModes.ROLLOVER;
+    if (mode === 'notional') newMode = SwapFormModes.EDIT_NOTIONAL;
 
     setFormMode(newMode);
-    setAMM(mode === 'rollover' ? findCurrentAmm(amms || [], selectedPosition) : selectedPosition.amm as AugmentedAMM);
+    setAMM(
+      mode === 'rollover'
+        ? findCurrentAmm(amms || [], selectedPosition)
+        : (selectedPosition.amm as AugmentedAMM),
+    );
     setPosition(selectedPosition);
   };
   const handleReset = () => {
-    setFormMode(undefined)
+    setFormMode(undefined);
     setAMM(undefined);
     setPosition(undefined);
   };
 
   return (
     <Page>
-
       {renderMode === 'pools' && (
         <Box sx={{ width: '100%', maxWidth: '800px', margin: '0 auto' }}>
           <Box sx={{ marginBottom: (theme) => theme.spacing(12) }}>
-            <PageTitleDesc 
-              title='Trade Fixed or Variable Rates' 
-              desc='Choose a pool and decide whether to trade fixed or variable rates.' 
+            <PageTitleDesc
+              title="Trade Fixed or Variable Rates"
+              desc="Choose a pool and decide whether to trade fixed or variable rates."
             />
           </Box>
           <ConnectedAMMTable onSelectItem={handleSelectAmm} />
@@ -90,10 +104,7 @@ const Trader: React.FunctionComponent = () => {
       )}
 
       {renderMode === 'portfolio' && (
-        <ConnectedPositionTable 
-          onSelectItem={handleSelectPosition} 
-          agent={Agents.FIXED_TRADER}
-        />
+        <ConnectedPositionTable onSelectItem={handleSelectPosition} agent={Agents.FIXED_TRADER} />
       )}
 
       {renderMode === 'form' && (
@@ -101,7 +112,12 @@ const Trader: React.FunctionComponent = () => {
           {amm && (
             <AMMProvider amm={amm}>
               <PositionProvider position={position}>
-                <SwapFormProvider mode={formMode} defaultValues={{notional: (formMode == SwapFormModes.EDIT_NOTIONAL) ? 0 : undefined}}>
+                <SwapFormProvider
+                  mode={formMode}
+                  defaultValues={{
+                    notional: formMode == SwapFormModes.EDIT_NOTIONAL ? 0 : undefined,
+                  }}
+                >
                   <ConnectedSwapForm onReset={handleReset} />
                 </SwapFormProvider>
               </PositionProvider>

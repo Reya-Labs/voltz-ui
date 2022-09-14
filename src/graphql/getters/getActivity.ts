@@ -157,6 +157,3 @@ export async function getActivity({ from, end }: ActivityArgs): Promise<Activity
     total,
   };
 }
-
-// console.log('getActivity');
-// getActivity({ from: 100 }).then((result) => console.log(result));

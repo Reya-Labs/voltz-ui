@@ -56,7 +56,7 @@ export const checkForTOSSignature = async (
 
   if (signatureData?.signature) {
     const existingTOSSignerAddress = ethers.utils.verifyMessage(
-      getTOSText(signatureData?.referrer),
+      getTOSText(signatureData?.referrer || null),
       signatureData.signature,
     );
     if (existingTOSSignerAddress === signerAddress) {
@@ -64,8 +64,7 @@ export const checkForTOSSignature = async (
     }
   }
 
-  // TODO: get from storage
-  const referrer = undefined;
+  const referrer = localStorage.getItem('invitedBy') || '';
 
   if (!termsAccepted) {
     try {
@@ -140,7 +139,7 @@ export const getAllReferrals = async (): Promise<{ [s: string]: string[] }> => {
  * Returns the terms of service text that users have to agree to to connect their wallet.
  * Note - Any changes, including whitespace, will mean a new signature is required.
  */
-export const getTOSText = (referrer: string | undefined) => {
+export const getTOSText = (referrer: string | null) => {
   const text = `
 Please sign this message to log in. This won't cost you any ETH!
 
@@ -149,11 +148,10 @@ ${process.env.REACT_APP_TOS_URL || ''}
 ${
   referrer
     ? `
-You also agree that you were invited to Voltz by ${referrer}. (You and ${referrer} will both receive additional Voltz Pointz for this.)
+You also agree that you were invited to Voltz by ${referrer}. You will both receive additional Voltz Pointz for this referral.
 `
     : ``
 }
-
 If you're connecting a hardware wallet, you'll need to sign the message on your device too.`;
 
   return text.trim();
