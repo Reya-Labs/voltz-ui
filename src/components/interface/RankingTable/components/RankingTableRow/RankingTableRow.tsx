@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '@mui/system';
+import { Typography } from '@components/atomic';
 
 import { Button } from '@components/atomic';
 import { AddressBox, PointsBox, Rank } from './components';
@@ -9,11 +10,12 @@ import { RankType} from 'src/utilities/data/rankingData';
 
 export type RankingTableRowProps = {
   ranking: RankType[];
+  page: number;
 };
 
 
 // todo: panel component, adjust the styling
-const RankingTableRow: React.FunctionComponent<RankingTableRowProps> = ({ranking}) => {
+const RankingTableRow: React.FunctionComponent<RankingTableRowProps> = ({ranking, page}) => {
 
   const typeStyleOverrides = (): SystemStyleObject<Theme> => {
       return {
@@ -57,11 +59,12 @@ const RankingTableRow: React.FunctionComponent<RankingTableRowProps> = ({ranking
     return (
       <>
         { ranking.map((rank, index) => {
+          if (index < page*10 || index >= page*10+10 ) {return <></>}
           return (
           <TableRow sx={{...typeStyleOverrides() }}>
             {labels.map((label) => {
                   if (label === 'rank') {
-                    return <Rank points={index}/>;
+                    return <Rank points={index+1}/>;
                   }
                   if (label === 'points') {
                     return <PointsBox points={rank.points}/>;
