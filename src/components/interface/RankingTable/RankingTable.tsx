@@ -1,98 +1,36 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import { SystemStyleObject, Theme } from '@theme';
 import { Typography } from '@components/atomic';
-import { Box, Button, TableCell, TableHead, TableRow } from '@mui/material';
+import { Box, TableCell, TableHead, TableRow } from '@mui/material';
 
 import { Panel } from '@components/atomic';
 import RankingTableRow from './components/RankingTableRow/RankingTableRow';
 import { RankingTableHeader } from './components';
 import { getSortedRanking, RankType } from 'src/utilities/data';
-import { isUndefined } from 'lodash';
-import useRanking from 'src/hooks/useRanking';
-import { DateTime } from 'luxon';
-import { useWallet } from '@hooks';
-
 
 export type RankingTableProps = {
   ranking: Map<string, number>;
-  handleInvite: () => void;
-  seasonNumber: number;
-  seasonEndDate: DateTime;
 };
 
 const RankingTable: React.FunctionComponent<RankingTableProps> = ({
-  ranking,
-  handleInvite,
-  seasonNumber,
-  seasonEndDate
+  ranking
 }) => {
 
-  const [page, setPage] = useState<number>(0);
-  const wallet = useWallet();
-
-  const [userRank, setUserRank] = useState<number>();
-  const [userPoints, setUserPoints] = useState<number>();
-  const [userAddress, setUserAddress] = useState<string>();
-  const allPages = useRef<number>(-2)
-
-  const [sorted, setSorted] = useState<RankType[]>();
-
-  useEffect(() => {
-    const result: RankType[] = [];
-    const keys = Array.from(ranking.keys());
-    keys.forEach((address) => {
-      const value = ranking.get(address);
-      result.push({address: address, points: value ?? 0})
-    });
-    allPages.current = Math.round(result.length/10) + 1;
-    //ranking.forEach((points, address) => result.push({address: address, points: points}));
-    const s = result.sort((a, b) => b.points - a.points);
-    setSorted(s);
-
-    if(s) {
-      for (let i = 0; i < s.length; i ++) {
-        const e = s[i];
-        if (e.address === wallet.account){
-          setUserAddress(e.address);
-          setUserPoints(e.points);
-          setUserRank(i+1);
-        }
-      }
-    }
-  }, []);
-
-  const renderPageControl = () => {
-    if (allPages.current != -1) {
-      return (
-      <Box sx={{display: "flex", justifyContent: "center"}}>
-        <Button onClick={handleClickLeft} variant={"text"} sx={{color: '#FF4AA9'}}>
-          &larr; Previous Page
-        </Button>
-        <Typography variant="body2" sx={{fontSize: 18, fontWeight: 400,  margin: "5px"}}>
-            {page+1}/{allPages.current}
-        </Typography>
-        <Button onClick={handleClickRight} variant={"text"} sx={{color: '#FF4AA9'}}>
-          Next Page &rarr;
-        </Button>
-      </Box>
-      );
-    }
-  }
-
-  const handleClickRight = () => {
-    if(page < allPages.current) {
-      setPage(page + 1)
-    }
-  }
-
-  const handleClickLeft = () => {
-    if(page >= 1) {
-      setPage(page - 1);
-    }
-  }
+  const replacementRowStyle: SystemStyleObject<Theme> = {
+      fontSize: 18,
+      fontWeight: '400',
+      color: "#48435E",
+      display: 'flex',
+      justifyContent: 'center',
+      backgroundColor: `#151221`,
+      borderRadius: 2,
+      padding: '10px',
+      marginTop: (theme) => theme.spacing(-3),
+      marginBottom: (theme) => theme.spacing(8)
+  };
 
   const commonOverrides: SystemStyleObject<Theme> = {
     '& .MuiTableCell-root': {
@@ -144,18 +82,46 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
           </TableBody>
         </Table>
       </TableContainer>
-      {renderPageControl()}
     </>
     )
     
   }
 
-  const renderVariableRows = () => {
-    if (sorted) {
-      return <>
-      <RankingTableRow page={page} ranking={sorted}/>
-      </>
+  const exportDataset = (sortedRanking: RankType[]) => {
+    const seasonResults: {address: string, score: number, position: number}[] = [];
+    const TRADER_THRESHOLD = 100;
+
+    for (let it = 0; it < sortedRanking.length; it++) {
+      if (sortedRanking[it].points < TRADER_THRESHOLD) {
+        break;
+      }
+      seasonResults.push({
+        address: sortedRanking[it].address,
+        score: sortedRanking[it].points,
+        position: it + 1
+      });
     }
+
+    const output = {"S1": seasonResults};
+
+    // console.log("output:", output);
+  }
+
+  const renderVariableRows = () => {
+    const result: RankType[] = [];
+    const keys = Array.from(ranking.keys());
+    keys.forEach((address) => {
+      const value = ranking.get(address);
+      result.push({address: address, points: value ?? 0})
+    });
+    //ranking.forEach((points, address) => result.push({address: address, points: points}));
+    const sorted = result.sort((a, b) => b.points - a.points);
+
+    exportDataset(sorted);
+
+    return <>
+      <RankingTableRow ranking={sorted}/>
+    </>
   }
 
   const renderTableHead = () => {
@@ -184,12 +150,10 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
 
   return (
     <>
-      <RankingTableHeader loading={false} handleInvite={handleInvite} seasonNumber={seasonNumber} seasonEndDate={seasonEndDate}
-      userRank={userRank} userAddress={userAddress} userPoints={userPoints}/>
-    
+    <RankingTableHeader loading={false} />
     <Panel variant={'dark'} borderRadius='large' padding='container' sx={{ paddingTop: 0, paddingBottom: 0, background:'transparent', marginTop: "40px"}}>
       <Typography variant="body2" sx={{ fontSize: '24px', fontWeight: 700, display: 'flex', alignContent: 'center'}}>
-         SEASON {seasonNumber} LEADERBOARD
+         SEASON 1 LEADERBOARD
       </Typography>
       {renderTable()}
     </Panel>
