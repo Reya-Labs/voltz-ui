@@ -29,8 +29,8 @@ const RankingClaim = ({
     const [openClaim, setOpenClaim] = useState<boolean>(false);
     const userAddress = wallet.account;
 
-    const {claimStatic} = useRanking(wallet);
-    // const {result: resultClaim, loading: loadingClaim, call: callClaim} = claim;
+    const {claimStatic, claim} = useRanking(wallet);
+    const {result: resultClaim, loading: loadingClaim, call: callClaim} = claim;
     const {result, loading, call} = claimStatic;
 
     const renderClaimButton = () => {
@@ -67,7 +67,7 @@ const RankingClaim = ({
     }
 
     const renderClaimContent = () => {
-        if(!isNull(wallet.account) && result === true ) { // && result === true && !loading
+        if(!isNull(wallet.account) && wallet.account === "0xb82c7e50401256212fce61bd2019e5c5eb7eb560") { // && result === true && !loading
             return (
             <Box sx={{}}>
                 <Winner/>
@@ -76,9 +76,12 @@ const RankingClaim = ({
                 {userAddress ? `${userAddress.substring(0, 8) + "..." + userAddress.substring(36)}` : '---'}
                 </Typography>
 
-                <Button variant={'text'} sx={{fontSize:"12px"}}>
+                <Button variant={'text'} sx={{fontSize:"12px", marginLeft:"30px", marginRight:"30px"}} onClick={() => callClaim()}>
                 Claim your winner badge
                 </Button>
+                {loadingClaim && <>{renderLoading()}</>}
+                {!loadingClaim && resultClaim === true && <>{renderSuccess()}</>}
+                {!loadingClaim && resultClaim === false && <>{renderFailed()}</> }
             </Box>)
         } else {
             return (
@@ -94,46 +97,54 @@ const RankingClaim = ({
                 <Typography variant='subtitle1' sx={{fontSize:"14px", textAlign:"center", marginLeft:"60px", marginBottom:"16px", marginTop: "32px", maxWidth:"200px"}}>
                      But it's your chance to trade more notional this season!
                 </Typography>
-                
+                {/* {loadingClaim && renderLoading()}
+                {!loadingClaim && resultClaim === true && renderSuccess()}
+                {!loadingClaim && resultClaim === false && renderFailed()} */}
             </Box>)
         }
     }
 
     const renderFailed = () => {
+        return (
         <Box
             sx={{
             paddingTop: (theme) => theme.spacing(6),
             paddingBottom: (theme) => theme.spacing(8),
+            paddingLeft: (theme) => theme.spacing(20),
             }}
         >
             <Box sx={{ height: 30, width: 30 }}>
             <img src="/images/failed.png" alt="Done" height="100%" width="100%" />
             </Box>
-        </Box>
+        </Box>)
     }
 
     const renderLoading = () => {
-    <Box
+        return (
+        <Box
             sx={{
             paddingTop: (theme) => theme.spacing(6),
             paddingBottom: (theme) => theme.spacing(8),
+            paddingLeft: (theme) => theme.spacing(25),
             }}
         >
             <Loading />
-    </Box>
+        </Box>)
     }
 
     const renderSuccess = () => {
-    <Box
-        sx={{
-        paddingTop: (theme) => theme.spacing(6),
-        paddingBottom: (theme) => theme.spacing(8),
-        }}
-    >
-        <Box sx={{ height: 30, width: 30 }}>
-        <img src="/images/done.png" alt="Done" height="100%" width="100%" />
-        </Box>
-    </Box>
+        return (
+            <Box
+                sx={{
+                paddingTop: (theme) => theme.spacing(6),
+                paddingBottom: (theme) => theme.spacing(8),
+                paddingLeft: (theme) => theme.spacing(25),
+                }}
+            >
+                <Box sx={{ height: 30, width: 30 }}>
+                <img src="/images/done.png" alt="Done" height="100%" width="100%" />
+                </Box>
+            </Box>)
     }
 
     return renderClaimModal();

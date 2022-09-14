@@ -1,6 +1,6 @@
 import { ContractReceipt, Signer } from 'ethers';
 export declare type BadgeResponse = {
-    status: 'SUCCESS' | 'FAIL';
+    status: string;
     error?: string;
     receipt?: ContractReceipt;
 };
