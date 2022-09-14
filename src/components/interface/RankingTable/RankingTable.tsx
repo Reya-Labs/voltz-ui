@@ -178,7 +178,7 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
   }
 
   const renderTableHead = () => {
-    const labels = ["rank", "trader", "points"];
+    const labels = ["rank", "trader", "voltz pointz"];
     return (
     <TableHead>
       <TableRow>

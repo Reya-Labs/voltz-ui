@@ -133,7 +133,7 @@ const RankingUserSummary = ({
     return (
       <Box sx={{marginBottom:"24px"}}>
         <Typography variant='h1' sx={titleStyles}>
-          Points System
+          Pointz System
         </Typography>
         <Typography sx={labelStyles}>
         Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.
@@ -143,7 +143,7 @@ const RankingUserSummary = ({
   }
 
   const renderTableHead = () => {
-    const labels = ["rank", "trader", "points"];
+    const labels = ["rank", "trader", "voltz pointz"];
     return (
     <TableHead>
       <TableRow>
@@ -258,7 +258,7 @@ const RankingUserSummary = ({
     return (
       <Box>
         <Typography variant='h1' sx={{...titleStyles, marginBottom: "8px"}}>
-          Points Booster
+          Voltz Pointz Booster
         </Typography>
         <Box sx={{display: 'flex', justifyContent:"space-between"}}>
           <Box sx={{display: 'flex'}}>
