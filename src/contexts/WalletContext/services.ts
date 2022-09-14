@@ -148,7 +148,7 @@ ${process.env.REACT_APP_TOS_URL || ''}
 ${
   referrer
     ? `
-You also agree that you were invited to Voltz by ${referrer}. You will both receive additional Voltz Pointz for this referral.
+Your account and the account that invited you (${referrer}) may both receive additional Voltz Pointz, based on your use of the protocol. 
 `
     : ``
 }
