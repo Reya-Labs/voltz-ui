@@ -86,6 +86,14 @@ const RankingUserSummary = ({
     },
   };
 
+  const getPercentage = () => {
+    if(seasonEndDate){
+      const diff = seasonEndDate.diffNow("days").days;
+      return Math.round( (1 - diff/30) * 100)
+    }
+    
+  }
+
   const renderSeason = () => {
     return (
       <Box sx={{display: 'flex', width:'80%', marginBottom:"24px"}}>
@@ -109,8 +117,8 @@ const RankingUserSummary = ({
         <ProgressBar
            isMaturity={true} 
           leftContent={seasonEndDate ? <>{formatDateTime(seasonEndDate)}</> : undefined}
-          rightContent={<>20%</>} 
-          percentageComplete={20} 
+          rightContent={<>{getPercentage()}%</>} 
+          percentageComplete={getPercentage()} 
         />
       </Box>
       </Box>
@@ -174,13 +182,13 @@ const RankingUserSummary = ({
           <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
           <TableRow sx={{backgroundColor: `#251F3F`, borderRadius: '8px' }}>
             <TableCell key={"protocol"} width="35%" >
-                {userRank}
+                {userRank ?? '---'}
               </TableCell>
               <TableCell key={"protocol"} width="35%" >
-                {userAddress}
+                {userAddress ? `${userAddress.substring(0, 8) + "..." + userAddress.substring(36)}` : '---'}
               </TableCell>
               <TableCell key={"protocol"} width="35%" >
-                {userPoints}
+                {userPoints ? formatNumber(userPoints) : '---'}
               </TableCell>
           </TableRow>
           </TableBody>
