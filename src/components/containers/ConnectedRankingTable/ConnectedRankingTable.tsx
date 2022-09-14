@@ -21,13 +21,6 @@ const ConnectedRankingTable: React.FunctionComponent<ConnectedRankingTableProps>
     call();
   }, [call]);
 
-  // useEffect(() => {
-  //   if (result) {
-  //     const sorted = getSortedRanking(result);
-  //     setSortedRanking(sorted);
-  //   }
-  // }, [result]);
-
   const commonOverrides: SystemStyleObject<Theme> = {
     '& .MuiTableCell-root': {
       borderColor: 'transparent',

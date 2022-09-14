@@ -11,7 +11,6 @@ import RankingTableRow from './components/RankingTableRow/RankingTableRow';
 import { RankingTableHeader } from './components';
 import { getSortedRanking, RankType } from 'src/utilities/data';
 
-
 export type RankingTableProps = {
   ranking: Map<string, number>;
 };
@@ -88,6 +87,26 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
     
   }
 
+  const exportDataset = (sortedRanking: RankType[]) => {
+    const seasonResults: {address: string, score: number, position: number}[] = [];
+    const TRADER_THRESHOLD = 100;
+
+    for (let it = 0; it < sortedRanking.length; it++) {
+      if (sortedRanking[it].points < TRADER_THRESHOLD) {
+        break;
+      }
+      seasonResults.push({
+        address: sortedRanking[it].address,
+        score: sortedRanking[it].points,
+        position: it + 1
+      });
+    }
+
+    const output = {"S1": seasonResults};
+
+    // console.log("output:", output);
+  }
+
   const renderVariableRows = () => {
     const result: RankType[] = [];
     const keys = Array.from(ranking.keys());
@@ -97,6 +116,9 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
     });
     //ranking.forEach((points, address) => result.push({address: address, points: points}));
     const sorted = result.sort((a, b) => b.points - a.points);
+
+    exportDataset(sorted);
+
     return <>
       <RankingTableRow ranking={sorted}/>
     </>
