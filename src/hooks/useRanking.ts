@@ -4,9 +4,12 @@ import { DateTime } from "luxon";
 import { getActivity } from "@graphql";
 import { Wallet } from "@contexts";
 import { isUndefined } from "lodash";
+import { redeemBadge } from '@voltz-protocol/v1-sdk/src/entities/badges';
 
 export type useRankingReturnType = {
   rankings: UseAsyncFunctionResult<unknown, Map<string, number> | void>;
+  claimStatic: UseAsyncFunctionResult<unknown, boolean | void>;
+  //claim: UseAsyncFunctionResult<unknown, Map<string, number> | void>;
   seasonEndDate: DateTime | undefined;
   findCurrentSeason: (now: DateTime) => {seasonNumber: number, seasonEndDate: DateTime};
 }
@@ -14,10 +17,10 @@ export type useRankingReturnType = {
 export const useRanking = (wallet: Wallet) => {
 
   const startOfSeasons = DateTime.fromISO("2022-08-01T16:03:44+00:00"); 
-  const duration = 45; // months 
+  const duration = 1; // months 
   const seasonsDate = new Map<number, DateTime>();
   for (let i = 0; i <= 10; i ++) {
-    seasonsDate.set(i, startOfSeasons.plus({days: duration*i}));
+    seasonsDate.set(i, startOfSeasons.plus({months: duration*i}));
   }
 
   const findCurrentSeason = () => {
@@ -25,11 +28,24 @@ export const useRanking = (wallet: Wallet) => {
         const seasonDate = seasonsDate.get(i);
         if (seasonDate &&  
           seasonDate.diffNow("days").days <= 0 &&
-          seasonDate.diffNow("days").days > -45) {
+          seasonDate.diffNow("days").days > -30) {
                 return {seasonNumber: i, seasonEndDate: seasonsDate.get(i+1)};
             }
     }
   }
+
+  const claimStatic = useAsyncFunction(
+    async () => {
+      const season =  findCurrentSeason();
+      if(season && wallet.signer){
+        const result = await redeemBadge("", wallet.signer, "S"+season.toString(), true);
+        return result.status === "SUCCESS";
+      }
+      return false;
+    },
+    useMemo(() => undefined, [])
+  );
+
 
   const curretSeason = findCurrentSeason();
   const seasonEndDate = curretSeason ? seasonsDate.get(curretSeason.seasonNumber) : undefined;
@@ -49,11 +65,13 @@ export const useRanking = (wallet: Wallet) => {
 
   return useMemo(() => ({
     rankings,
+    claimStatic,
     seasonEndDate,
     findCurrentSeason
   } as useRankingReturnType),
     [
       rankings,
+      claimStatic,
       seasonEndDate,
       findCurrentSeason
     ]);
