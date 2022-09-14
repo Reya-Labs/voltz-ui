@@ -2,7 +2,7 @@ import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow }
 
 import { Typography } from '@components/atomic';
 import { SystemStyleObject, Theme } from '@theme'; 
-import { Panel } from '@components/atomic';
+import { Panel, Loading } from '@components/atomic';
 import { Modal } from '@components/composite';
 import { formatCurrency, formatDateTime, formatNumber } from '@utilities';
 import { DateTime } from 'luxon';
@@ -13,10 +13,13 @@ import { Button } from '@components/atomic';
 import { ReactComponent as Flash } from './icons/flash.svg';
 import { ReactComponent as Ghost } from './icons/ghost.svg';
 import { ReactComponent as Copy } from './icons/copy-white.svg';
+import { ReactComponent as Winner } from './icons/winner-badge.svg';
 import { useWallet } from '@hooks';
 import { Wallet } from '@contexts';
 import { useState } from 'react';
 import { copyFile } from 'fs';
+import useRanking from 'src/hooks/useRanking';
+import RankingClaim from './RankingClaim';
 
 export type RankingUserSummaryProps = {
   seasonNumber?: number;
@@ -273,20 +276,13 @@ const RankingUserSummary = ({
               )}
             </Box>
           </Box>
-          {renderClaim()}
+          <RankingClaim wallet={wallet}/>
         </Box>
       </Box>
     );
   }
 
-  const renderClaim = () => {
-    return (
-      <Box sx={{ alignContent: 'left'}}>
-        <Button variant={'text'} sx={{fontSize:"16px", color: "#4DE5FF"}} onClick={copy}>
-          claim your badge
-        </Button>
-      </Box>)
-  }
+  
 
 
   return (
