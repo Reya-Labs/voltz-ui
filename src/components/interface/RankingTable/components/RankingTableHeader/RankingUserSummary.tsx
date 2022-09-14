@@ -201,11 +201,12 @@ const RankingUserSummary = ({
       await navigator.clipboard.writeText(link);
     }
   }
+
   const renderInviteContent = () => {
     if(!isNull(wallet.account)) {
       return (
         <Box sx={{ alignContent: 'center'}}>
-          <Typography variant='h1' sx={{fontSize:"24px", color: "#FF4AA9", display:"flex", justifyContent:"center", marginBottom:"16px"}}> Copy this link to send it to a friend </Typography>
+          <Typography variant='subtitle1' sx={{fontSize:"24px", color: "#FF4AA9", display:"flex", justifyContent:"center", marginBottom:"16px"}}> Copy this link to send it to a friend </Typography>
           <Button variant={'dark'} sx={{textTransform:"none"}} onClick={copy}>
           {generateLink(wallet)}
           <Copy style={{height: "38px", width: "38px"}}/>
@@ -248,24 +249,38 @@ const RankingUserSummary = ({
         <Typography variant='h1' sx={{...titleStyles, marginBottom: "8px"}}>
           Points Booster
         </Typography>
-        <Box sx={{display: 'flex'}}>
-          {renderInviteModal()}
-          <Box sx={{ marginRight: "24px", borderStyle: 'solid', borderColor: "#FF4AA9", borderRadius: "4px", padding: "2px 4px", textTransform: "uppercase"}} >
-            {!isUndefined(invitedTraders) && (
-              <Typography variant='subtitle1' sx={{color: "#FF4AA9"}}> 
-                <span><Ghost style={{marginRight: "10px", marginBottom: '-2.5px'}}/></span>
-                Active Invited Traders
-                 <span style={{color:"#E5E1F9", paddingLeft: "10px"}}>{(invitedTraders < 10 ? '0' + invitedTraders.toString() : invitedTraders.toString())}</span>
-              </Typography>
-            )}
-            {isUndefined(invitedTraders) && (
-              <Typography variant='subtitle1' sx={{color: "#FF4AA9"}}> Loading...</Typography>
-            )}
+        <Box sx={{display: 'flex', justifyContent:"space-between"}}>
+          <Box sx={{display: 'flex'}}>
+            {renderInviteModal()}
+            <Box sx={{ marginRight: "24px", marginTop:"8px", marginBottom:"8px", borderStyle: 'solid', borderColor: "#FF4AA9", borderRadius: "4px", padding: "2px 4px", textTransform: "uppercase"}} >
+              {!isUndefined(invitedTraders) && (
+                <Typography variant='subtitle1' sx={{color: "#FF4AA9"}}> 
+                  <span><Ghost style={{marginRight: "10px", marginBottom: '-2.5px'}}/></span>
+                  Active Invited Traders
+                  <span style={{color:"#E5E1F9", paddingLeft: "10px"}}>{(invitedTraders < 10 ? '0' + invitedTraders.toString() : invitedTraders.toString())}</span>
+                </Typography>
+              )}
+              {isUndefined(invitedTraders) && (
+                <Typography variant='subtitle1' sx={{color: "#FF4AA9"}}> Loading...</Typography>
+              )}
+            </Box>
           </Box>
+          {renderClaim()}
         </Box>
       </Box>
     );
   }
+
+  const renderClaim = () => {
+    return (
+      <Box sx={{ alignContent: 'left'}}>
+        <Button variant={'text'} sx={{fontSize:"16px", color: "#4DE5FF"}} onClick={copy}>
+          claim your badge
+        </Button>
+      </Box>)
+  }
+
+
   return (
     <>
       <Box sx={{backgroundColor: `#19152A`, borderRadius: '4px', border:"1px solid #2D2B3D", padding: (theme) => theme.spacing(4), marginTop: (theme) => theme.spacing(8)}}>
