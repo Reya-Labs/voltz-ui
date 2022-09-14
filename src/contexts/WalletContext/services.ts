@@ -7,6 +7,7 @@ export type SignatureResponse = {
   signature?: string;
   timestamp?: string;
   walletAddress?: string;
+  referrer?: string;
 };
 
 const unavailableText = 'Service unavailable, please try again shortly';
@@ -41,7 +42,7 @@ export const checkForRiskyWallet = async (walletAddress: string) => {
 
 /**
  * Will make the wallet open a prompt, asking the user to agree to the T&Cs. It will throw an
- * error if the user disagrees / closes the window. The signature is stored in localStorage to
+ * error if the user disagrees / closes the window. The signature is stored in a database to
  * avoid having to sign the terms every time you connect your wallet.
  * @param signer - The ethers signer
  */
@@ -55,7 +56,7 @@ export const checkForTOSSignature = async (
 
   if (signatureData?.signature) {
     const existingTOSSignerAddress = ethers.utils.verifyMessage(
-      getTOSText(),
+      getTOSText(signatureData?.referrer),
       signatureData.signature,
     );
     if (existingTOSSignerAddress === signerAddress) {
@@ -63,10 +64,15 @@ export const checkForTOSSignature = async (
     }
   }
 
+  // TODO: get from storage
+  const referrer = undefined;
+
   if (!termsAccepted) {
     try {
-      const signature = await signer.signMessage(getTOSText());
-      await saveSignature(signerAddress, signature);
+      const signature = await signer.signMessage(getTOSText(referrer));
+      // TODO: include the referrer details within the signed text, and send
+      // the signed text along with the signature for verification on the backend
+      await saveSignatureWithReferrer(signerAddress, signature, referrer);
     } catch (e) {
       throw new Error('Error processing signature');
     }
@@ -134,12 +140,19 @@ export const getAllReferrals = async (): Promise<{ [s: string]: string[] }> => {
  * Returns the terms of service text that users have to agree to to connect their wallet.
  * Note - Any changes, including whitespace, will mean a new signature is required.
  */
-export const getTOSText = () => {
+export const getTOSText = (referrer: string | undefined) => {
   const text = `
 Please sign this message to log in. This won't cost you any ETH!
 
 By signing, you accept Voltz's Terms of Service, which you can find here:
 ${process.env.REACT_APP_TOS_URL || ''}
+${
+  referrer
+    ? `
+You also agree that you were invited to Voltz by ${referrer}. (You and ${referrer} will both receive additional Voltz Pointz for this.)
+`
+    : ``
+}
 
 If you're connecting a hardware wallet, you'll need to sign the message on your device too.`;
 
@@ -269,11 +282,16 @@ export const isWalletRisky = (riskAssessment?: WalletRiskAssessment) => {
  * @param walletAddress - the wallet address to save the signature for
  * @param signature - thwe signature to save
  */
-export const saveSignature = async (walletAddress: string, signature: string) => {
+export const saveSignatureWithReferrer = async (
+  walletAddress: string,
+  signature: string,
+  referrer?: string,
+) => {
   // Build formData object.
   const formData = new FormData();
   formData.append('signature', signature);
   formData.append('walletAddress', walletAddress);
+  formData.append('referrer', referrer || '');
 
   return await fetch(`https://hackathon-rest-api.herokuapp.com/add-signature`, {
     method: 'POST',
