@@ -4,12 +4,12 @@ import { DateTime } from "luxon";
 import { getActivity } from "@graphql";
 import { Wallet } from "@contexts";
 import { isUndefined } from "lodash";
-import { redeemBadge } from '@voltz-protocol/v1-sdk/src/entities/badges';
+//import { redeemBadge } from "@voltz-protocol/v1-sdk/dist/entities/badges.js";
 
 export type useRankingReturnType = {
   rankings: UseAsyncFunctionResult<unknown, Map<string, number> | void>;
   claimStatic: UseAsyncFunctionResult<unknown, boolean | void>;
-  //claim: UseAsyncFunctionResult<unknown, Map<string, number> | void>;
+  claim: UseAsyncFunctionResult<unknown, boolean | void>;
   seasonEndDate: DateTime | undefined;
   findCurrentSeason: (now: DateTime) => {seasonNumber: number, seasonEndDate: DateTime};
 }
@@ -38,7 +38,23 @@ export const useRanking = (wallet: Wallet) => {
     async () => {
       const season =  findCurrentSeason();
       if(season && wallet.signer){
-        const result = await redeemBadge("", wallet.signer, "S"+season.toString(), true);
+        const result = {status:"SUCCESS"}
+        await new Promise(r => setTimeout(r, 2000));
+        //await redeemBadge("", wallet.signer, "S"+season.seasonNumber.toString(), true);
+        return result.status === "SUCCESS";
+      }
+      return false;
+    },
+    useMemo(() => undefined, [])
+  );
+
+  const claim = useAsyncFunction(
+    async () => {
+      const season =  findCurrentSeason();
+      if(season && wallet.signer){
+        const result = {status:"SUCCESS"}
+        await new Promise(r => setTimeout(r, 2000));
+        //await redeemBadge("", wallet.signer, "S"+season.seasonNumber.toString(), false);
         return result.status === "SUCCESS";
       }
       return false;
@@ -66,12 +82,14 @@ export const useRanking = (wallet: Wallet) => {
   return useMemo(() => ({
     rankings,
     claimStatic,
+    claim,
     seasonEndDate,
     findCurrentSeason
   } as useRankingReturnType),
     [
       rankings,
       claimStatic,
+      claim,
       seasonEndDate,
       findCurrentSeason
     ]);

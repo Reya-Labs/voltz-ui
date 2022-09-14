@@ -5,7 +5,7 @@ import { ERC721LeaderboardNFT__factory as badgesFactory } from '../typechain';
 import * as resultsJson from './results.json'; // Input provided by the SDK
 
 export type BadgeResponse = {
-  status: 'SUCCESS' | 'FAIL';
+  status: string;
   error?: string;
   receipt?: ContractReceipt;
 };
