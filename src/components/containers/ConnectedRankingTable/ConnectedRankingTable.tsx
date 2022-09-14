@@ -9,9 +9,11 @@ import { useWallet } from '@hooks';
 
 
 export type ConnectedRankingTableProps = {
+  handleInvite: () => void;
 };
 
 const ConnectedRankingTable: React.FunctionComponent<ConnectedRankingTableProps> = ({
+  handleInvite
 }) => {
   const wallet = useWallet();
   const { rankings } = useRanking(wallet);
@@ -49,7 +51,7 @@ const ConnectedRankingTable: React.FunctionComponent<ConnectedRankingTableProps>
       return (
         <>
         <Panel variant='dark' padding='small' sx={{ width: '100%', maxWidth: '800px', margin: '0 auto', background: 'transparent' }}>
-          <RankingTable ranking={result}/>
+          <RankingTable ranking={result} handleInvite={handleInvite}/>
         </Panel>
         </>
       )

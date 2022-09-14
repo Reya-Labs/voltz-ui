@@ -4,18 +4,29 @@ import Box from '@mui/material/Box';
 
 import { setPageTitle } from '@utilities';
 
-import { Page } from '@components/interface';
+import { Modal, Page, Panel } from '@components/interface';
 import ConnectedRankingTable from '../../components/containers/ConnectedRankingTable/ConnectedRankingTable';
 import { getRenderMode } from './services';
+import { useWallet } from '@hooks';
+import { Wallet } from '@contexts';
+import { isNull } from 'lodash';
+import { Button } from '@mui/material';
 
 
 const LeaderBoard: React.FunctionComponent = () => {
   const [isClaiming, setIsClaiming] = useState<boolean>();
+  const [isInvite, setIsInvite] = useState<boolean>();
 
-  const renderMode = getRenderMode(isClaiming);
+  const renderMode = getRenderMode(isClaiming, isInvite);
 
   const handleClaim = () => {
     setIsClaiming(true);
+    setIsInvite(false);
+  };
+
+  const handleInvite = () => {
+    setIsClaiming(false);
+    setIsInvite(true);
   };
 
   useEffect(() => {
@@ -37,6 +48,7 @@ const LeaderBoard: React.FunctionComponent = () => {
 
   const handleReset = () => {
     setIsClaiming(false);
+    setIsInvite(false);
   };
 
   return (
@@ -49,12 +61,15 @@ const LeaderBoard: React.FunctionComponent = () => {
 
         {renderMode === 'ranking' && (
           <Box sx={{backdropFilter: "blur(8px)", height: '100%', paddingBottom: "200px"}}>
-            <ConnectedRankingTable/>
+            <ConnectedRankingTable handleInvite={handleInvite}/>
           </Box>
-          
       )}
+
+
     </Page>
   );
+
+
 };
 
 export default LeaderBoard;

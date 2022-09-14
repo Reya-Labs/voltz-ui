@@ -4,33 +4,56 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import { SystemStyleObject, Theme } from '@theme';
 import { Typography } from '@components/atomic';
-import { Box, TableCell, TableHead, TableRow } from '@mui/material';
+import { Box, Button, TableCell, TableHead, TableRow } from '@mui/material';
 
 import { Panel } from '@components/atomic';
 import RankingTableRow from './components/RankingTableRow/RankingTableRow';
 import { RankingTableHeader } from './components';
 import { getSortedRanking, RankType } from 'src/utilities/data';
+import { isUndefined } from 'lodash';
 
 export type RankingTableProps = {
   ranking: Map<string, number>;
+  handleInvite: () => void;
 };
 
 const RankingTable: React.FunctionComponent<RankingTableProps> = ({
-  ranking
+  ranking,
+  handleInvite
 }) => {
 
-  const replacementRowStyle: SystemStyleObject<Theme> = {
-      fontSize: 18,
-      fontWeight: '400',
-      color: "#48435E",
-      display: 'flex',
-      justifyContent: 'center',
-      backgroundColor: `#151221`,
-      borderRadius: 2,
-      padding: '10px',
-      marginTop: (theme) => theme.spacing(-3),
-      marginBottom: (theme) => theme.spacing(8)
-  };
+  const [page, setPage] = useState<number>(0);
+  let allPages: number = -1;
+
+  const renderPageControl = () => {
+    if (allPages != -1) {
+      return (
+      <Box sx={{display: "flex", justifyContent: "center"}}>
+        <Button onClick={handleClickLeft} variant={"text"} sx={{color: '#FF4AA9'}}>
+          &larr; Previous Page
+        </Button>
+        <Typography variant="body2" sx={{fontSize: 18, fontWeight: 400,  margin: "5px"}}>
+            {page+1}/{allPages}
+        </Typography>
+        <Button onClick={handleClickRight} variant={"text"} sx={{color: '#FF4AA9'}}>
+          Next Page &rarr;
+        </Button>
+      </Box>
+      );
+    }
+  }
+
+  const handleClickRight = () => {
+    if(page < allPages) {
+      setPage(page + 1)
+    }
+  }
+
+  const handleClickLeft = () => {
+    if(page >= 1) {
+      setPage(page - 1);
+    }
+  }
 
   const commonOverrides: SystemStyleObject<Theme> = {
     '& .MuiTableCell-root': {
@@ -82,6 +105,7 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
           </TableBody>
         </Table>
       </TableContainer>
+      {renderPageControl()}
     </>
     )
     
@@ -114,13 +138,14 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
       const value = ranking.get(address);
       result.push({address: address, points: value ?? 0})
     });
+    allPages = Math.round(result.length/10) + 1;
     //ranking.forEach((points, address) => result.push({address: address, points: points}));
     const sorted = result.sort((a, b) => b.points - a.points);
 
     exportDataset(sorted);
 
     return <>
-      <RankingTableRow ranking={sorted}/>
+      <RankingTableRow page={page} ranking={sorted}/>
     </>
   }
 
@@ -150,7 +175,7 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
 
   return (
     <>
-    <RankingTableHeader loading={false} />
+    <RankingTableHeader loading={false} handleInvite={handleInvite}/>
     <Panel variant={'dark'} borderRadius='large' padding='container' sx={{ paddingTop: 0, paddingBottom: 0, background:'transparent', marginTop: "40px"}}>
       <Typography variant="body2" sx={{ fontSize: '24px', fontWeight: 700, display: 'flex', alignContent: 'center'}}>
          SEASON 1 LEADERBOARD

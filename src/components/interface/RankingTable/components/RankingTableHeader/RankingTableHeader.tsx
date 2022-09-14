@@ -6,10 +6,12 @@ import { DateTime } from 'luxon';
 
 export type RankingTableHeaderProps = {
   loading?: boolean;
+  handleInvite: () => void;
 };
 
 const RankingTableHeader = ({ 
-  loading
+  loading,
+  handleInvite
 }: RankingTableHeaderProps) => {
   return (
     <>
@@ -18,7 +20,7 @@ const RankingTableHeader = ({
         loading={loading}
         season={1}/>
 
-        <RankingUserSummary seasonNumber={1} seasonEndDate={DateTime.local()} userRank={21} userAddress={"0xgerard.eth"} userPoints={1276} invitedTraders={1}/>
+        <RankingUserSummary handleInvite={handleInvite} seasonNumber={1} seasonEndDate={DateTime.local()} userRank={21} userAddress={"0xgerard.eth"} userPoints={1276} invitedTraders={1}/>
     </Panel>
       
     </>
