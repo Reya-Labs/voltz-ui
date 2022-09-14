@@ -6,6 +6,7 @@ import RankingTable from 'src/components/interface/RankingTable/RankingTable';
 import useRanking from 'src/hooks/useRanking';
 import { isUndefined } from 'lodash';
 import { useWallet } from '@hooks';
+import { DateTime } from 'luxon';
 
 
 export type ConnectedRankingTableProps = {
@@ -16,8 +17,10 @@ const ConnectedRankingTable: React.FunctionComponent<ConnectedRankingTableProps>
   handleInvite
 }) => {
   const wallet = useWallet();
-  const { rankings } = useRanking(wallet);
+  const { rankings, findCurrentSeason } = useRanking(wallet);
   const { result, loading, call } = rankings;
+
+  const season = findCurrentSeason(DateTime.local())
 
   useEffect(() => {
     call();
@@ -54,11 +57,11 @@ const ConnectedRankingTable: React.FunctionComponent<ConnectedRankingTableProps>
   const pages = 0;
 
   const renderContent = () => {
-    if(!loading && result){
+    if(!loading && result && !isUndefined(season.seasonNumber)){
       return (
         <>
         <Panel variant='dark' padding='small' sx={{ width: '100%', maxWidth: '800px', margin: '0 auto', background: 'transparent' }}>
-          <RankingTable ranking={result} handleInvite={handleInvite}/>
+          <RankingTable ranking={result} handleInvite={handleInvite} seasonNumber={season.seasonNumber+1} seasonEndDate={season.seasonEndDate}/>
         </Panel>
         </>
       )

@@ -7,20 +7,30 @@ import { DateTime } from 'luxon';
 export type RankingTableHeaderProps = {
   loading?: boolean;
   handleInvite: () => void;
+  seasonNumber: number;
+  seasonEndDate: DateTime;
+  userRank?: number;
+  userAddress? : string;
+  userPoints? : number;
 };
 
 const RankingTableHeader = ({ 
   loading,
-  handleInvite
+  handleInvite,
+  seasonNumber,
+  seasonEndDate,
+  userAddress,
+  userRank,
+  userPoints
 }: RankingTableHeaderProps) => {
   return (
     <>
     <Panel borderRadius='large' padding='container' sx={{ paddingTop: 0, paddingBottom: 0, background: "transparent"}}>
       <RankingHeaderBox
         loading={loading}
-        season={1}/>
+        season={seasonNumber}/>
 
-        <RankingUserSummary handleInvite={handleInvite} seasonNumber={1} seasonEndDate={DateTime.local()} userRank={21} userAddress={"0xgerard.eth"} userPoints={1276} invitedTraders={1}/>
+        <RankingUserSummary handleInvite={handleInvite} seasonNumber={seasonNumber} seasonEndDate={seasonEndDate} userRank={userRank} userAddress={userAddress} userPoints={userPoints} invitedTraders={1} />
     </Panel>
       
     </>
