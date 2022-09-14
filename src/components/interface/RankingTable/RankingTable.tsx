@@ -15,7 +15,6 @@ import useRanking from 'src/hooks/useRanking';
 import { DateTime } from 'luxon';
 import { useWallet } from '@hooks';
 
-
 export type RankingTableProps = {
   ranking: Map<string, number>;
   handleInvite: () => void;
@@ -148,6 +147,26 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
     </>
     )
     
+  }
+
+  const exportDataset = (sortedRanking: RankType[]) => {
+    const seasonResults: {address: string, score: number, position: number}[] = [];
+    const TRADER_THRESHOLD = 100;
+
+    for (let it = 0; it < sortedRanking.length; it++) {
+      if (sortedRanking[it].points < TRADER_THRESHOLD) {
+        break;
+      }
+      seasonResults.push({
+        address: sortedRanking[it].address,
+        score: sortedRanking[it].points,
+        position: it + 1
+      });
+    }
+
+    const output = {"S1": seasonResults};
+
+    // console.log("output:", output);
   }
 
   const renderVariableRows = () => {
