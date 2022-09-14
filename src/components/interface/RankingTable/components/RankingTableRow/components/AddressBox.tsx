@@ -9,7 +9,7 @@ export type AddressBoxProps = {
 const AddressBox: React.FunctionComponent<AddressBoxProps> = ({address}) => {
 
   const renderValue = () => {
-      return `${address}`;
+      return `${address.substring(0, 8) + "..." + address.substring(36)}`;
   };
 
   return (

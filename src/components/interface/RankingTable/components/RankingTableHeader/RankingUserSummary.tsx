@@ -2,11 +2,21 @@ import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow }
 
 import { Typography } from '@components/atomic';
 import { SystemStyleObject, Theme } from '@theme'; 
+import { Panel } from '@components/atomic';
+import { Modal } from '@components/composite';
 import { formatCurrency, formatDateTime, formatNumber } from '@utilities';
 import { DateTime } from 'luxon';
-import { isUndefined } from 'lodash';
+import { isNull, isUndefined } from 'lodash';
 import { ProgressBar } from '@components/composite';
 import { Button } from '@components/atomic';
+
+import { ReactComponent as Flash } from './icons/flash.svg';
+import { ReactComponent as Ghost } from './icons/ghost.svg';
+import { ReactComponent as Copy } from './icons/copy-white.svg';
+import { useWallet } from '@hooks';
+import { Wallet } from '@contexts';
+import { useState } from 'react';
+import { copyFile } from 'fs';
 
 export type RankingUserSummaryProps = {
   seasonNumber?: number;
@@ -15,6 +25,7 @@ export type RankingUserSummaryProps = {
   userAddress?: string;
   userPoints?: number;
   invitedTraders?: number;
+  handleInvite: () => void;
 };
 
 const RankingUserSummary = ({ 
@@ -23,8 +34,13 @@ const RankingUserSummary = ({
   userRank,
   userAddress,
   userPoints,
-  invitedTraders
+  invitedTraders,
+  handleInvite
 }: RankingUserSummaryProps) => {
+
+  const wallet = useWallet();
+
+  const [openLink, setOpenLink] = useState<boolean>(false);
 
   const commonOverrides: SystemStyleObject<Theme> = {
     '& .MuiTableCell-root': {
@@ -174,6 +190,58 @@ const RankingUserSummary = ({
     );
   }
 
+  const generateLink = (w: Wallet) => {
+    const address = w.account;
+    return !isNull(address) ? "http://localhost:3000/#/trader-pools?invitedBy="+address : null;
+  }
+
+  const copy = async () => {
+    const link = generateLink(wallet);
+    if(!isNull(link)){
+      await navigator.clipboard.writeText(link);
+    }
+  }
+  const renderInviteContent = () => {
+    if(!isNull(wallet.account)) {
+      return (
+        <Box sx={{ alignContent: 'center'}}>
+          <Typography variant='h1' sx={{fontSize:"24px", color: "#FF4AA9", display:"flex", justifyContent:"center", marginBottom:"16px"}}> Copy this link to send it to a friend </Typography>
+          <Button variant={'dark'} sx={{textTransform:"none"}} onClick={copy}>
+          {generateLink(wallet)}
+          <Copy style={{height: "38px", width: "38px"}}/>
+          </Button>
+        </Box>)
+    }
+  }
+
+  const renderInviteModal = () => {
+    return (
+      <Modal
+        open={openLink}
+        onOpen={() => setOpenLink(true)}
+        onClose={() => setOpenLink(false)}
+        trigger={
+        <Button sx={{ color: "#E5E1F9", marginRight: "24px", background:"transparent", padding:"0px", textTransform:"none"}} variant={"text"} onClick={() => setOpenLink(true)}>
+        <Flash style={{marginRight: "10px"}} />Invite a trader
+      </Button>}
+      >
+        <Panel
+          variant="darker"
+          sx={{
+            minWidth: 800,
+            maxWidth: 800,
+            minHeight: 200,
+            display: "flex",
+            justifyContent: 'center'
+          }}
+        >
+          {renderInviteContent()}
+        </Panel>
+      </Modal>
+
+    );
+  }
+
   const renderBooster = () => {
     return (
       <Box>
@@ -181,13 +249,14 @@ const RankingUserSummary = ({
           Points Booster
         </Typography>
         <Box sx={{display: 'flex'}}>
-          <Button sx={{ color: "#E5E1F9", marginRight: "24px", background:"transparent", padding:"0px", textTransform:"none"}} variant={"text"}>
-            Invite a trader
-          </Button>
-
+          {renderInviteModal()}
           <Box sx={{ marginRight: "24px", borderStyle: 'solid', borderColor: "#FF4AA9", borderRadius: "4px", padding: "2px 4px", textTransform: "uppercase"}} >
             {!isUndefined(invitedTraders) && (
-              <Typography variant='subtitle1' sx={{color: "#FF4AA9"}}> Active Invited Traders <span style={{color:"#E5E1F9"}}>{(invitedTraders < 10 ? '0' + invitedTraders.toString() : invitedTraders.toString())}</span></Typography>
+              <Typography variant='subtitle1' sx={{color: "#FF4AA9"}}> 
+                <span><Ghost style={{marginRight: "10px", marginBottom: '-2.5px'}}/></span>
+                Active Invited Traders
+                 <span style={{color:"#E5E1F9", paddingLeft: "10px"}}>{(invitedTraders < 10 ? '0' + invitedTraders.toString() : invitedTraders.toString())}</span>
+              </Typography>
             )}
             {isUndefined(invitedTraders) && (
               <Typography variant='subtitle1' sx={{color: "#FF4AA9"}}> Loading...</Typography>
