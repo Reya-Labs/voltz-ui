@@ -4,12 +4,13 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import { SystemStyleObject, Theme } from '@theme';
 import { Typography } from '@components/atomic';
-import { Box, TableCell, TableHead, TableRow } from '@mui/material';
+import { Box, Button, TableCell, TableHead, TableRow } from '@mui/material';
 
 import { Panel } from '@components/atomic';
 import RankingTableRow from './components/RankingTableRow/RankingTableRow';
 import { RankingTableHeader } from './components';
 import { getSortedRanking, RankType } from 'src/utilities/data';
+import { isUndefined } from 'lodash';
 
 
 export type RankingTableProps = {
@@ -19,6 +20,39 @@ export type RankingTableProps = {
 const RankingTable: React.FunctionComponent<RankingTableProps> = ({
   ranking
 }) => {
+
+  const [page, setPage] = useState<number>(0);
+  let allPages: number = -1;
+
+  const renderPageControl = () => {
+    if (allPages != -1) {
+      return (
+      <Box sx={{display: "flex", justifyContent: "center"}}>
+        <Button onClick={handleClickLeft} variant={"text"} sx={{color: '#FF4AA9'}}>
+          &larr; Previous Page
+        </Button>
+        <Typography variant="body2" sx={{fontSize: 18, fontWeight: 400,  margin: "5px"}}>
+            {page+1}/{allPages}
+        </Typography>
+        <Button onClick={handleClickRight} variant={"text"} sx={{color: '#FF4AA9'}}>
+          Next Page &rarr;
+        </Button>
+      </Box>
+      );
+    }
+  }
+
+  const handleClickRight = () => {
+    if(page < allPages) {
+      setPage(page + 1)
+    }
+  }
+
+  const handleClickLeft = () => {
+    if(page >= 1) {
+      setPage(page - 1);
+    }
+  }
 
   const replacementRowStyle: SystemStyleObject<Theme> = {
       fontSize: 18,
@@ -83,6 +117,7 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
           </TableBody>
         </Table>
       </TableContainer>
+      {renderPageControl()}
     </>
     )
     
@@ -95,10 +130,11 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
       const value = ranking.get(address);
       result.push({address: address, points: value ?? 0})
     });
+    allPages = Math.round(result.length/10) + 1;
     //ranking.forEach((points, address) => result.push({address: address, points: points}));
     const sorted = result.sort((a, b) => b.points - a.points);
     return <>
-      <RankingTableRow ranking={sorted}/>
+      <RankingTableRow page={page} ranking={sorted}/>
     </>
   }
 
