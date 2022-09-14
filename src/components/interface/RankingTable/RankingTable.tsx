@@ -15,10 +15,12 @@ import { isUndefined } from 'lodash';
 
 export type RankingTableProps = {
   ranking: Map<string, number>;
+  handleInvite: () => void;
 };
 
 const RankingTable: React.FunctionComponent<RankingTableProps> = ({
-  ranking
+  ranking,
+  handleInvite
 }) => {
 
   const [page, setPage] = useState<number>(0);
@@ -53,19 +55,6 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
       setPage(page - 1);
     }
   }
-
-  const replacementRowStyle: SystemStyleObject<Theme> = {
-      fontSize: 18,
-      fontWeight: '400',
-      color: "#48435E",
-      display: 'flex',
-      justifyContent: 'center',
-      backgroundColor: `#151221`,
-      borderRadius: 2,
-      padding: '10px',
-      marginTop: (theme) => theme.spacing(-3),
-      marginBottom: (theme) => theme.spacing(8)
-  };
 
   const commonOverrides: SystemStyleObject<Theme> = {
     '& .MuiTableCell-root': {
@@ -164,7 +153,7 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
 
   return (
     <>
-    <RankingTableHeader loading={false} />
+    <RankingTableHeader loading={false} handleInvite={handleInvite}/>
     <Panel variant={'dark'} borderRadius='large' padding='container' sx={{ paddingTop: 0, paddingBottom: 0, background:'transparent', marginTop: "40px"}}>
       <Typography variant="body2" sx={{ fontSize: '24px', fontWeight: 700, display: 'flex', alignContent: 'center'}}>
          SEASON 1 LEADERBOARD
