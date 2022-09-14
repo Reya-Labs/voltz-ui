@@ -4,9 +4,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { ethers } from "ethers";
-import { GraphQLClient, gql } from "graphql-request";
-import axios from "axios";
+import { ethers } from 'ethers';
+import { GraphQLClient, gql } from 'graphql-request';
+import { getAllReferrals } from '../../contexts/WalletContext/services';
+import axios from 'axios';
 
 const ONE_YEAR = 31536000;
 
@@ -41,7 +42,7 @@ const geckoEthToUsd = async () => {
   for (let attempt = 0; attempt < 5; attempt++) {
     try {
       const data = await axios.get(
-        `https://pro-api.coingecko.com/api/v3/simple/price?x_cg_pro_api_key=${process.env.REACT_APP_COINGECKO_API_KEY}&ids=ethereum&vs_currencies=usd`
+        `https://pro-api.coingecko.com/api/v3/simple/price?x_cg_pro_api_key=${process.env.REACT_APP_COINGECKO_API_KEY}&ids=ethereum&vs_currencies=usd`,
       );
       return data.data.ethereum.usd;
     } catch (error) {}
@@ -52,108 +53,110 @@ const geckoEthToUsd = async () => {
 type ActivityArgs = {
   from: number;
   end?: number;
-}
+};
 
 type Activity = {
   total: Map<string, number>;
-}
+};
 
-// [MOCK]
-// eslint-disable-next-line @typescript-eslint/require-await
-const getReferrals: () => Promise < Map<string, string[]> > = async () => {
-  const mockReferrals = new Map<string, string[]>();
-  mockReferrals.set("0xf8f6b70a36f4398f0853a311dc6699aba8333cc1", ["0xf8f6b70a36f4398f0853a311dc6699aba8333cc1"]);
+// // [MOCK]
+// // eslint-disable-next-line @typescript-eslint/require-await
+// const getReferrals: () => Promise < Map<string, string[]> > = async () => {
+//   const mockReferrals = new Map<string, string[]>();
+//   mockReferrals.set("0xf8f6b70a36f4398f0853a311dc6699aba8333cc1", ["0xf8f6b70a36f4398f0853a311dc6699aba8333cc1"]);
 
-  return mockReferrals;
-}
+//   return mockReferrals;
+// }
 
-export async function getActivity(
-  {
-    from,
-    end
-  }: ActivityArgs): Promise< Activity > {
-    const endpoint =
-      "https://api.thegraph.com/subgraphs/name/voltzprotocol/mainnet-v1";
-    const graphQLClient = new GraphQLClient(endpoint);
-    
-    const ethPrice = await geckoEthToUsd();
+export async function getActivity({ from, end }: ActivityArgs): Promise<Activity> {
+  // export async function getActivity({ from, end }: ActivityArgs): Promise<Activity> {
+  const endpoint = 'https://api.thegraph.com/subgraphs/name/voltzprotocol/mainnet-v1';
+  const graphQLClient = new GraphQLClient(endpoint);
 
-    let to = Math.floor(Date.now() / 1000);
-    if (end) {
-      to = end;
-    }
+  const ethPrice = await geckoEthToUsd();
 
-    const scores: Map<string, number> = new Map<string, number>();
+  let to = Math.floor(Date.now() / 1000);
+  if (end) {
+    to = end;
+  }
 
-    let skip = 0;
-    while (true) {
-      const data = await graphQLClient.request(
-        gql`
-          ${getActivityQuery(skip)}
-        `
-      );
-      skip += 1000;
+  const scores: Map<string, number> = new Map<string, number>();
 
-      const activity = JSON.parse(JSON.stringify(data, undefined, 2));
+  let skip = 0;
+  while (true) {
+    const data = await graphQLClient.request(
+      gql`
+        ${getActivityQuery(skip)}
+      `,
+    );
+    skip += 1000;
 
-      for (const wallet of activity.wallets) {
-        let score = 0;
-  
-        for (const position of wallet.positions) {
-          const token = position.amm.rateOracle.token.name;
-          const decimals: number = position.amm.rateOracle.token.decimals;
-    
-          const termEnd = Number(ethers.utils.formatUnits(position.amm.termEndTimestamp.toString(), 18));
-    
-          for (const swap of position.swaps) {
-            const swapTime: number = swap.transaction.createdTimestamp;
-            const swapNotional = Number(ethers.utils.formatUnits(swap.variableTokenDelta.toString(), decimals));
-    
-            if (from < swapTime && swapTime <= to) {
-              const timeWeightedNotional = Math.abs(swapNotional) *  (termEnd - swapTime) / ONE_YEAR;
-              switch (token) {
-                case "ETH": {
-                  score += timeWeightedNotional * ethPrice;
-                  break;
-                }
-                default: {
-                  score += timeWeightedNotional;
-                }
+    const activity = JSON.parse(JSON.stringify(data, undefined, 2));
+
+    for (const wallet of activity.wallets) {
+      let score = 0;
+
+      for (const position of wallet.positions) {
+        const token = position.amm.rateOracle.token.name;
+        const decimals: number = position.amm.rateOracle.token.decimals;
+
+        const termEnd = Number(
+          ethers.utils.formatUnits(position.amm.termEndTimestamp.toString(), 18),
+        );
+
+        for (const swap of position.swaps) {
+          const swapTime: number = swap.transaction.createdTimestamp;
+          const swapNotional = Number(
+            ethers.utils.formatUnits(swap.variableTokenDelta.toString(), decimals),
+          );
+
+          if (from < swapTime && swapTime <= to) {
+            const timeWeightedNotional = (Math.abs(swapNotional) * (termEnd - swapTime)) / ONE_YEAR;
+            switch (token) {
+              case 'ETH': {
+                score += timeWeightedNotional * ethPrice;
+                break;
+              }
+              default: {
+                score += timeWeightedNotional;
               }
             }
           }
         }
-  
-        if (score > 0) {
-          scores.set((wallet.id as string), score);
-        }
       }
 
-      if (activity.wallets.length < 1000) {
-        break;
+      if (score > 0) {
+        scores.set(wallet.id as string, score);
       }
     }
 
-    const referrals = await getReferrals();
-    const total = new Map(scores);
+    if (activity.wallets.length < 1000) {
+      break;
+    }
+  }
 
-    referrals.forEach((referees, referral) => {
-      let referralScore = 0;
-      for (const referee of referees) {
-        const tb = scores.get(referee.toLowerCase());
-        referralScore += tb || 0;
-      }
+  const referrals = await getAllReferrals();
+  const total = new Map(scores);
 
-      const ta = total.get(referral.toLowerCase());
-      if (ta) {
-        total.set(referral.toLowerCase(), ta + 0.3 * referralScore);
-      }
-      else {
-        total.set(referral.toLowerCase(), 0.3 * referralScore);
-      }
-    });
+  for (const [referral, referees] of Object.entries(referrals)) {
+    let referralScore = 0;
+    for (const referee of referees) {
+      const tb = scores.get(referee.toLowerCase());
+      referralScore += tb || 0;
+    }
 
-    return {
-      total
-    };
+    const ta = total.get(referral.toLowerCase());
+    if (ta) {
+      total.set(referral.toLowerCase(), ta + 0.3 * referralScore);
+    } else {
+      total.set(referral.toLowerCase(), 0.3 * referralScore);
+    }
+  }
+
+  return {
+    total,
+  };
 }
+
+// console.log('getActivity');
+// getActivity({ from: 100 }).then((result) => console.log(result));
