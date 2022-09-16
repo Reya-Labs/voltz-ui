@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { Position } from '@voltz-protocol/v1-sdk';
 
 import { AugmentedAMM, findCurrentAmm, findCurrentPosition, setPageTitle } from '@utilities';
-import { Agents, AMMProvider, PositionProvider, SwapFormProvider } from '@contexts';
+import { Agents, AMMProvider, PositionProvider, SwapFormProvider, PortfolioProvider } from '@contexts';
 import { PageTitleDesc } from '@components/composite';
 import { useAgent, useAMMs, usePositions } from '@hooks';
 import { Page, SwapFormModes } from '@components/interface';
@@ -21,7 +21,7 @@ const Trader: React.FunctionComponent = () => {
   const { amms } = useAMMs();
   const { onChangeAgent } = useAgent();
   const { pathname, key } = useLocation();
-  const { positions } = usePositions();
+  const { positions, positionsByAgentGroup } = usePositions();
 
   const pathnameWithoutPrefix = pathname.slice(1);
   const renderMode = getRenderMode(formMode, pathnameWithoutPrefix);
@@ -90,10 +90,13 @@ const Trader: React.FunctionComponent = () => {
       )}
 
       {renderMode === 'portfolio' && (
-        <ConnectedPositionTable 
-          onSelectItem={handleSelectPosition} 
-          agent={Agents.FIXED_TRADER}
-        />
+        <PortfolioProvider positions={positionsByAgentGroup}>
+          <ConnectedPositionTable 
+            onSelectItem={handleSelectPosition} 
+            agent={Agents.FIXED_TRADER}
+          />
+        </PortfolioProvider>
+        
       )}
 
       {renderMode === 'form' && (

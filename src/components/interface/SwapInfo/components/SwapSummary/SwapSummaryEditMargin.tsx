@@ -32,7 +32,7 @@ const SwapSummaryEditMargin: React.FunctionComponent<SwapSummaryEditMarginProps>
     },
     {
       label: 'WALLET BALANCE:', 
-      value: !isUndefined(balance) ? `${formatCurrency(Math.abs(balance), true)} ${underlyingTokenName}` : 'NO DATA'
+      value: !isUndefined(balance) ? `${formatCurrency(Math.abs(balance), true)} ${underlyingTokenName}` : 'Loading...'
     },
   ] : undefined;
 

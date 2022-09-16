@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { Position } from '@voltz-protocol/v1-sdk';
 
 import { AugmentedAMM, findCurrentAmm, findCurrentPosition, setPageTitle } from '@utilities';
-import { Agents, AMMProvider, MintBurnFormModes, MintBurnFormProvider, PositionProvider } from '@contexts';
+import { Agents, AMMProvider, MintBurnFormModes, MintBurnFormProvider, PositionProvider, PortfolioProvider } from '@contexts';
 import { useAgent, useAMMs, usePositions } from '@hooks';
 
 import { Page } from '@components/interface';
@@ -93,11 +93,14 @@ const LiquidityProvider: React.FunctionComponent = () => {
       )}
 
       {renderMode === 'portfolio' && (
-        <ConnectedPositionTable 
+        <PortfolioProvider positions={positions}>
+          <ConnectedPositionTable 
           amm={amm}
           onSelectItem={handleSelectPosition}
           agent={Agents.LIQUIDITY_PROVIDER}
         />
+        </PortfolioProvider>
+        
       )}
 
       {renderMode === 'form' && (
