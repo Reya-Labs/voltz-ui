@@ -27,6 +27,9 @@ export const ExpectedAPY = ({ expectedAPY }:ExpectedAPYProps) => {
       }));
       setOptions(newOptions);
       setSelectedOptionValue(newOptions[2].value)
+    } else {
+      setOptions(undefined);
+      setSelectedOptionValue(undefined)
     }
   }, expectedAPY);
 

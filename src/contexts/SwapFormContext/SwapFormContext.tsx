@@ -246,7 +246,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
         availableNotional: swapInfo.result?.availableNotional
       });
     }  
-  }, [margin, swapInfo.result?.fixedTokenDeltaUnbalanced]);
+  }, [agent, margin, swapInfo.result?.fixedTokenDeltaUnbalanced]);
 
   // set the leverage back to 50% if variables change
   useEffect(() => {
@@ -651,7 +651,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       errorMessage: swapInfo.errorMessage || undefined,
       loading: swapInfo.loading,
       maxAvailableNotional: swapInfo.result?.maxAvailableNotional ?? swapInfo.result?.availableNotional,
-      expectedApy: (!isUndefined(notional) && !isUndefined(margin)) ? expectedApyInfo.result?.expectedApy : undefined
+      expectedApy: (!isUndefined(notional) && !isUndefined(margin) && !expectedApyInfo.loading) ? expectedApyInfo.result?.expectedApy : undefined
     },
     state: {
       leverage,
