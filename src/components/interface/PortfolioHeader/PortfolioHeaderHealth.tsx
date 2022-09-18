@@ -6,9 +6,9 @@ import PortfolioHeaderBox from './PortfolioHeaderBox';
 import { PortfolioHeaderProps } from './PortfolioHeader';
 
 export type PortfolioHeaderHealthProps = {
-  positionsDanger: PortfolioHeaderProps['positionsDanger'];
-  positionsHealthy: PortfolioHeaderProps['positionsHealthy'];
-  positionsWarning: PortfolioHeaderProps['positionsWarning'];
+  positionsDanger: number | undefined;
+  positionsHealthy: number | undefined;
+  positionsWarning: number | undefined;
 };
 
 const itemStyles: SystemStyleObject<Theme> = { 
@@ -24,24 +24,24 @@ const itemTextStyles: SystemStyleObject<Theme> = {
   fontSize: '14px'
 };
  
-const PortfolioHeaderHealth = ({ positionsDanger = 0, positionsHealthy = 0, positionsWarning = 0 }: PortfolioHeaderHealthProps) => {
+const PortfolioHeaderHealth = ({ positionsDanger, positionsHealthy, positionsWarning  }: PortfolioHeaderHealthProps) => {
   return (
     <PortfolioHeaderValue label='Positions health'>
       <Box sx={{ display: 'flex' }}>
         <PortfolioHeaderBox 
           sx={itemStyles} 
           textSx={{ ...itemTextStyles, color: colors.vzCustomGreen1 }}>
-          {positionsHealthy} healthy
+          {positionsHealthy ?? "..." } healthy
         </PortfolioHeaderBox>
         <PortfolioHeaderBox 
           sx={itemStyles} 
           textSx={{ ...itemTextStyles, color: colors.vzCustomYellow1 }}>
-          {positionsWarning} warning
+          {positionsWarning ?? "..."} warning
         </PortfolioHeaderBox>
         <PortfolioHeaderBox 
           sx={itemStyles} 
           textSx={{ ...itemTextStyles, color: colors.vzCustomRed1 }}>
-          {positionsDanger} danger
+          {positionsDanger ?? "..."} danger
         </PortfolioHeaderBox>
       </Box>
     </PortfolioHeaderValue>

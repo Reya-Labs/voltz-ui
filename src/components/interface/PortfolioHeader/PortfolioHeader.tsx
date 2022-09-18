@@ -1,26 +1,16 @@
-import React from 'react';
-import { colors, SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '@theme';
 import { Typography } from '@components/atomic';
-import { formatCurrency, formatNumber } from '@utilities';
+import { formatCurrency} from '@utilities';
 import Box from '@mui/material/Box';
-import { isUndefined } from 'lodash';
-import PortfolioHeaderValue from './PortfolioHeaderValue';
-import PortfolioHeaderBox from './PortfolioHeaderBox';
 import PortfolioHeaderInfo from './PorfolioHeaderInfo';
 import PortfolioHeaderHealth from './PortfolioHeaderHealth';
+import { PortfolioContext} from '@contexts';
 
 export type PortfolioHeaderProps = {
   currencyCode?: string;
   currencySymbol?: string;
   feesApy?: number;
-  netMargin?: number;
-  netMarginDiff?: number;
-  netNotional: number;
-  netRatePaying?: number;
-  netRateReceiving?: number;
-  positionsDanger?: number;
-  positionsHealthy?: number;
-  positionsWarning?: number;
+  portfolioData: PortfolioContext;
 };
 
 const labelStyles: SystemStyleObject<Theme> = { 
@@ -38,15 +28,8 @@ const titleStyles: SystemStyleObject<Theme> = {
 const PortfolioHeader = ({ 
   currencyCode = '', 
   currencySymbol = '', 
-  feesApy, 
-  netMargin, 
-  netMarginDiff, 
-  netNotional, 
-  netRatePaying, 
-  netRateReceiving,
-  positionsDanger,
-  positionsHealthy,
-  positionsWarning
+  feesApy,
+  portfolioData
 }: PortfolioHeaderProps) => {
   return (
     <>
@@ -55,7 +38,9 @@ const PortfolioHeader = ({
           Net notional
         </Typography>
         <Typography variant='h1' sx={titleStyles}>
-          {currencySymbol}{formatCurrency(netNotional)} {currencyCode}
+          {!portfolioData.totalNotional && <>Loading...</>}
+          {portfolioData.totalNotional &&  <>{currencySymbol}{formatCurrency(portfolioData.totalNotional)} {currencyCode}</>}
+          
         </Typography>
       </Box>
 
@@ -65,17 +50,17 @@ const PortfolioHeader = ({
             currencyCode={currencyCode} 
             currencySymbol={currencySymbol}
             feesApy={feesApy} 
-            netMargin={netMargin} 
-            netMarginDiff={netMarginDiff} 
-            netRatePaying={netRatePaying} 
-            netRateReceiving={netRateReceiving}
+            netMargin={portfolioData.totalMargin} 
+            netMarginDiff={portfolioData.totalAccruedCashflow} 
+            netRatePaying={portfolioData.netPayingRate} 
+            netRateReceiving={portfolioData.netReceivingRate}
           />
         </Box>
         <Box>
           <PortfolioHeaderHealth
-            positionsDanger={positionsDanger} 
-            positionsHealthy={positionsHealthy} 
-            positionsWarning={positionsWarning}
+            positionsDanger={portfolioData.healthCounters?.danger} 
+            positionsHealthy={portfolioData.healthCounters?.healthy} 
+            positionsWarning={portfolioData.healthCounters?.warning}
           />
         </Box>
       </Box>

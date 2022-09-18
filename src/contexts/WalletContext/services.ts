@@ -154,6 +154,7 @@ export const getWalletProvider = async (name: WalletName) => {
  * Returns an ethers Web3Provider, which wraps the WalletConnect instance
  */
 export const getWalletProviderWalletConnect = async () => {
+  window.localStorage.removeItem('walletconnect')
   let provider;
 
   // Try to init WalletConnect - could fail if INFURA_ID is incorrect
@@ -167,7 +168,7 @@ export const getWalletProviderWalletConnect = async () => {
 
   // Now try and get the user to log into their wallet
   try {
-    await provider.enable(); //  Enable session (triggers QR Code modal)
+    await provider.connect(); //  Enable session (triggers QR Code modal)
   } catch(e) {
     return undefined; // assume user cancelled login
   }
