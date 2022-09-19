@@ -141,6 +141,7 @@ const SubmitControls = ({
           sx={{ marginLeft: (theme) => theme.spacing(9.5), flexGrow: 0 }}
           onClick={onCancel}
           agent={Agents.LIQUIDITY_PROVIDER}
+          id={gaButtonId}
         >
           Back
         </Button>

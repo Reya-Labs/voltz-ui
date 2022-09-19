@@ -179,7 +179,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
   return (
     <>
       {position 
-        ? <SwapCurrentPosition formMode={form.mode} onPortfolio={handleComplete} position={position} />
+        ? <SwapCurrentPosition formMode={form.mode} onPortfolio={handleComplete} position={position} gaButtonId={getPoolButtonId(form.state.marginAction.toString(), "",getNotionalActionFromHintState(form.hintState), agent, targetAmm)}/>
         : <FormPanel noBackground />
       }
       <SwapForm

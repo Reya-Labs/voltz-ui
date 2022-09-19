@@ -149,6 +149,7 @@ const SubmitControls = ({
           sx={{ marginLeft: (theme) => theme.spacing(6), flexGrow: 0 }}
           variant="dark"
           onClick={onCancel}
+          id={gaButtonId}
         >
           Back
         </Button>

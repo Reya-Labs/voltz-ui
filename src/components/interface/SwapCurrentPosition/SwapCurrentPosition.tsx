@@ -13,12 +13,14 @@ export type SwapCurrentPositionProps = {
   formMode: SwapFormModes;
   onPortfolio: () => void;
   position: Position;
+  gaButtonId?: string;
 };
 
 const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionProps> = ({
   formMode,
   onPortfolio,
-  position
+  position,
+  gaButtonId
 }) => {
   // const bottomSpacing: SystemStyleObject<Theme> = {
   //   marginBottom: (theme) => theme.spacing(6)
@@ -126,6 +128,7 @@ const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionProps> = (
           variant="dark-link"
           size='vs'
           onClick={onPortfolio}
+          id={gaButtonId}
         >
           Portfolio
         </Button>

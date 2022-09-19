@@ -34,5 +34,7 @@ export const getNotionalActionFromHintState = (hint: SwapFormSubmitButtonHintSta
         case SwapFormSubmitButtonHintStates.ADD_AND_ADD:
         case SwapFormSubmitButtonHintStates.ADD_AND_REMOVE:
             return "ADD";
+        default:
+            return "";
     }
 }
