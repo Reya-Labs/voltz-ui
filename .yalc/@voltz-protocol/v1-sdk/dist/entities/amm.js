@@ -2211,7 +2211,7 @@ var AMM = /** @class */ (function () {
     };
     AMM.prototype.getPositionInformation = function (position) {
         return __awaiter(this, void 0, void 0, function () {
-            var EthToUsdPrice, results, rateOracleContract, signerAddress, lastBlock, lastBlockTimestamp, _a, _b, beforeMaturity, _c, _d, accruedCashflowInfo, _1, accruedCashflowInfo, _2, _e, fcmContract, margin, marginInUnderlyingToken, fcmContract, margin, cTokenAddress, cTokenContract, rate, scaledRate, marginInUnderlyingToken, tickLower, tickUpper, marginEngineContract, rawPositionInfo, marginInUnderlyingToken, liquidationThreshold, _3, safetyThreshold, _4, notionalInUnderlyingToken, fixedApr;
+            var usdExchangeRate, results, rateOracleContract, signerAddress, lastBlock, lastBlockTimestamp, _a, _b, beforeMaturity, _c, _d, accruedCashflowInfo, _1, accruedCashflowInfo, _2, _e, fcmContract, margin, marginInUnderlyingToken, fcmContract, margin, cTokenAddress, cTokenContract, rate, scaledRate, marginInUnderlyingToken, tickLower, tickUpper, marginEngineContract, rawPositionInfo, marginInUnderlyingToken, liquidationThreshold, _3, safetyThreshold, _4, notionalInUnderlyingToken, fixedApr;
             return __generator(this, function (_f) {
                 switch (_f.label) {
                     case 0:
@@ -2221,11 +2221,11 @@ var AMM = /** @class */ (function () {
                         if (!this.provider) {
                             throw new Error('Blockchain not connected');
                         }
-                        EthToUsdPrice = 1;
+                        usdExchangeRate = 1;
                         if (!this.isETH) return [3 /*break*/, 2];
                         return [4 /*yield*/, geckoEthToUsd()];
                     case 1:
-                        EthToUsdPrice = _f.sent();
+                        usdExchangeRate = _f.sent();
                         _f.label = 2;
                     case 2:
                         results = {
@@ -2277,13 +2277,7 @@ var AMM = /** @class */ (function () {
                         console.log("Result:", accruedCashflowInfo);
                         results.accruedCashflow = accruedCashflowInfo.accruedCashflow;
                         results.fixedRateSinceLastSwap = accruedCashflowInfo.avgFixedRate;
-                        if (this.isETH) {
-                            // need to change when introduce non-stable coins
-                            results.accruedCashflowInUSD = results.accruedCashflow * EthToUsdPrice;
-                        }
-                        else {
-                            results.accruedCashflowInUSD = results.accruedCashflow;
-                        }
+                        results.accruedCashflowInUSD = results.accruedCashflow * usdExchangeRate;
                         return [3 /*break*/, 12];
                     case 11:
                         _1 = _f.sent();
@@ -2305,13 +2299,7 @@ var AMM = /** @class */ (function () {
                         accruedCashflowInfo = _f.sent();
                         console.log("Result:", accruedCashflowInfo);
                         results.accruedCashflow = accruedCashflowInfo.accruedCashflow;
-                        if (this.isETH) {
-                            // need to change when introduce non-stable coins
-                            results.accruedCashflowInUSD = accruedCashflowInfo.accruedCashflow * EthToUsdPrice;
-                        }
-                        else {
-                            results.accruedCashflowInUSD = accruedCashflowInfo.accruedCashflow;
-                        }
+                        results.accruedCashflowInUSD = accruedCashflowInfo.accruedCashflow * usdExchangeRate;
                         return [3 /*break*/, 17];
                     case 16:
                         _2 = _f.sent();
@@ -2331,13 +2319,7 @@ var AMM = /** @class */ (function () {
                         margin = (_f.sent());
                         results.margin = this.descale(margin);
                         marginInUnderlyingToken = results.margin;
-                        if (this.isETH) {
-                            // need to change when introduce non-stable coins
-                            results.marginInUSD = marginInUnderlyingToken * EthToUsdPrice;
-                        }
-                        else {
-                            results.marginInUSD = marginInUnderlyingToken;
-                        }
+                        results.marginInUSD = marginInUnderlyingToken * usdExchangeRate;
                         return [3 /*break*/, 25];
                     case 20:
                         fcmContract = typechain_1.CompoundFCM__factory.connect(this.fcmAddress, this.signer);
@@ -2354,13 +2336,7 @@ var AMM = /** @class */ (function () {
                         rate = _f.sent();
                         scaledRate = this.descaleCompoundValue(rate);
                         marginInUnderlyingToken = results.margin * scaledRate;
-                        if (this.isETH) {
-                            // need to change when introduce non-stable coins
-                            results.marginInUSD = marginInUnderlyingToken * EthToUsdPrice;
-                        }
-                        else {
-                            results.marginInUSD = marginInUnderlyingToken;
-                        }
+                        results.marginInUSD = marginInUnderlyingToken * usdExchangeRate;
                         return [3 /*break*/, 25];
                     case 24: throw new Error("Unrecognized FCM");
                     case 25:
@@ -2377,13 +2353,7 @@ var AMM = /** @class */ (function () {
                         rawPositionInfo = _f.sent();
                         results.margin = this.descale(rawPositionInfo.margin);
                         marginInUnderlyingToken = results.margin;
-                        if (this.isETH) {
-                            // need to change when introduce non-stable coins
-                            results.marginInUSD = marginInUnderlyingToken * EthToUsdPrice;
-                        }
-                        else {
-                            results.marginInUSD = marginInUnderlyingToken;
-                        }
+                        results.marginInUSD = marginInUnderlyingToken * usdExchangeRate;
                         results.fees = this.descale(rawPositionInfo.accumulatedFees);
                         if (!beforeMaturity) return [3 /*break*/, 35];
                         _f.label = 28;
@@ -2416,13 +2386,7 @@ var AMM = /** @class */ (function () {
                         notionalInUnderlyingToken = (position.positionType === 3)
                             ? Math.abs(position.notional) // LP
                             : Math.abs(position.effectiveVariableTokenBalance);
-                        if (this.isETH) {
-                            // need to change when introduce non-stable coins
-                            results.notionalInUSD = notionalInUnderlyingToken * EthToUsdPrice;
-                        }
-                        else {
-                            results.notionalInUSD = notionalInUnderlyingToken;
-                        }
+                        results.notionalInUSD = notionalInUnderlyingToken * usdExchangeRate;
                         return [4 /*yield*/, this.getFixedApr()];
                     case 36:
                         fixedApr = _f.sent();
