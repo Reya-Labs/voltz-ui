@@ -19,11 +19,12 @@ export type BorrowTableRowProps = {
   isFixedPositions: boolean;
   onSelect: () => void;
   handleLoadedRow: () => void;
+  gaButtonId?: string; 
 };
 
 
 // todo: panel component, adjust the styling
-const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({ datum, index, onSelect, isFixedPositions, handleLoadedRow }) => {
+const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({ datum, index, onSelect, isFixedPositions, handleLoadedRow, gaButtonId }) => {
   const wallet = useWallet();
   const variant = 'main';
   const { variableDebtInNativeTokens: variableDebtInToken, fixedDebtInNativeTokens: fixedDebtInToken, variableDebtInUSD: variableDebt, fixedDebtInUSD: fixedDebt } = useBorrowAMMContext();
@@ -111,7 +112,9 @@ const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({ datum, i
     }
     return (
     <TableCell align="left" width="20%">
-        <Button onClick={handleClick} sx={{
+        <Button onClick={handleClick} 
+        id={gaButtonId}
+        sx={{
           backgroundColor: '#19152B',
           color: 'primary.light',
           '&:hover': {

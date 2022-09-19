@@ -40,6 +40,7 @@ export type SwapProps = {
   onChangePartialCollateralization: (value: boolean) => void;
   onSubmit: () => void;
   protocol?: string;
+  gaButtonId?: string;
   startDate?: DateTime;
   swapInfo: InfoPostSwap | void | null;
   swapInfoLoading: boolean;
@@ -72,6 +73,7 @@ const Swap: React.FunctionComponent<SwapProps> = ({
   onChangePartialCollateralization,
   onSubmit,
   protocol,
+  gaButtonId,
   startDate,
   submitButtonState,
   swapInfo,
@@ -206,7 +208,7 @@ const Swap: React.FunctionComponent<SwapProps> = ({
         mode={mode}
         onCancel={onCancel}
         onSubmit={onSubmit}
-        protocol={protocol}
+        gaButtonId={gaButtonId}
         submitButtonState={submitButtonState}
         swapInfoLoading={swapInfoLoading}
         tokenApprovals={tokenApprovals}
