@@ -7,7 +7,7 @@ import { useAgent, useDispatch, useSelector } from '@hooks';
 import { SwapCurrentPosition, SwapForm, SwapInfo, PendingTransaction, SwapFormActions, FormPanel, SwapFormModes } from '@components/interface';
 import { Agents, useAMMContext, usePositionContext, useSwapFormContext } from '@contexts';
 import { BigNumber } from 'ethers';
-import { AugmentedAMM, getPoolButtonId } from '@utilities';
+import { AugmentedAMM, getNotionalActionFromHintState, getPoolButtonId } from '@utilities';
 import { isUndefined } from 'lodash';
 
 export type ConnectedSwapFormProps = {
@@ -204,7 +204,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         onChangePartialCollateralization={form.setPartialCollateralization}
         onSubmit={handleSubmit}
         protocol={targetAmm.protocol}
-        gaButtonId={getPoolButtonId(form.state.marginAction.toString(), "", "", agent, targetAmm)}
+        gaButtonId={getPoolButtonId(form.state.marginAction.toString(), "",getNotionalActionFromHintState(form.hintState), agent, targetAmm)}
         startDate={targetAmm.startDateTime}
         swapInfo={form.swapInfo.data}
         swapInfoLoading={form.swapInfo.loading}
