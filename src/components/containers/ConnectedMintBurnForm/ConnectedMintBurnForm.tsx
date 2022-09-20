@@ -140,6 +140,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
         onChangeMarginAction={form.setMarginAction} 
         onChangeNotional={form.setNotional}
         onSubmit={handleSubmit}
+        protocol={targetAmm.protocol}
         gaButtonId={getPoolButtonId(form.state.marginAction.toString(), form.state.liquidityAction.toString(), "", agent, targetAmm)}
         startDate={targetAmm.startDateTime}
         submitButtonState={form.submitButtonState}
