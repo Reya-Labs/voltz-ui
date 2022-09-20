@@ -1,6 +1,6 @@
 import { useAMMs, useDispatch, useSelector } from '@hooks';
 import { routes } from '@routes';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { actions, selectors } from '@store';
 
 import { useNavigate } from 'react-router-dom';
@@ -21,6 +21,18 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
   const navigate = useNavigate();
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
+
+  const { fixedApr, variableApy } = useAMMContext();
+  const { result: resultFixedApr, loading: loadingFixedApr, call: callFixedApr } = fixedApr;
+  const { result: resultVariableApy, loading: loadingVariableApy, call: callVariableApy } = variableApy;
+
+  useEffect(() => {
+    callFixedApr();
+  }, [callFixedApr]);
+
+  useEffect(() => {
+    callVariableApy();
+  }, [ callVariableApy]);
 
   const protocol = () => {
     if ([5,6].includes(amm.rateOracle.protocolId) ){
@@ -85,6 +97,8 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
         notional={form.selectedFixedDebt}
         margin={form.margin}
         onBack={handleGoBack}
+        variableApy={typeof resultVariableApy === 'number' ?  resultVariableApy : undefined}
+        fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr :  undefined}
       />
     );
   }
@@ -117,6 +131,8 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
         tradeInfoErrorMessage={form.borrowInfo.errorMessage}
         swapSummaryLoading={form.borrowInfo.loading}
         balance={form.balance}
+        variableApy={typeof resultVariableApy === 'number' ?  resultVariableApy : undefined}
+        fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr :  undefined}
       />
       <SwapInfo
         balance={form.selectedFixedDebt}

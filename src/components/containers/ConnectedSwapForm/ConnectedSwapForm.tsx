@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { routes } from '@routes';
@@ -26,6 +26,18 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
   const { mode } = form;
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId); // contains a failureMessage attribute that will contain whatever came out from the sdk
+
+  const { fixedApr, variableApy } = useAMMContext();
+  const { result: resultFixedApr, loading: loadingFixedApr, call: callFixedApr } = fixedApr;
+  const { result: resultVariableApy, loading: loadingVariableApy, call: callVariableApy } = variableApy;
+
+  useEffect(() => {
+    callFixedApr();
+  }, [callFixedApr]);
+
+  useEffect(() => {
+    callVariableApy();
+  }, [ callVariableApy]);
 
   const getReduxAction = () => {
     const transaction = { 
@@ -170,6 +182,8 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
             isFCMUnwind={true}
             notional={form.swapInfo.data?.availableNotional}
             onBack={handleGoBack}
+            variableApy={typeof resultVariableApy === 'number' ?  resultVariableApy : undefined}
+            fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr :  undefined}
           />
         );
       }
@@ -212,6 +226,8 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         tokenApprovals={form.tokenApprovals}
         tradeInfoErrorMessage={form.swapInfo.errorMessage}
         underlyingTokenName={targetAmm.underlyingToken.name}
+        variableApy={typeof resultVariableApy === 'number' ?  resultVariableApy : undefined}
+        fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr :  undefined}
       />
       <SwapInfo
         balance={form.balance}

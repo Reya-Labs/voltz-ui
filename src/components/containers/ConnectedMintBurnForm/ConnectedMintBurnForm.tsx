@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '@routes';
 import { actions, selectors } from '@store';
@@ -25,6 +25,18 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
 
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
+
+  const { fixedApr, variableApy } = useAMMContext();
+  const { result: resultFixedApr, loading: loadingFixedApr, call: callFixedApr } = fixedApr;
+  const { result: resultVariableApy, loading: loadingVariableApy, call: callVariableApy } = variableApy;
+
+  useEffect(() => {
+    callFixedApr();
+  }, [callFixedApr]);
+
+  useEffect(() => {
+    callVariableApy();
+  }, [ callVariableApy]);
 
   const getSubmitReduxAction = () => {
     const transaction = { 
@@ -112,6 +124,8 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
         margin={isUndefined(form.state.margin && form.isRemovingMargin) ? 0 : 
           (Math.abs(form.state.margin as number) * (form.isRemovingMargin ? -1 : 1) )}
         onBack={handleGoBack}
+        variableApy={typeof resultVariableApy === 'number' ?  resultVariableApy : undefined}
+        fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr :  undefined}
       />
     );
   }
@@ -140,12 +154,15 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
         onChangeMarginAction={form.setMarginAction} 
         onChangeNotional={form.setNotional}
         onSubmit={handleSubmit}
+        protocol={targetAmm.protocol}
         gaButtonId={getPoolButtonId(form.state.marginAction.toString(), form.state.liquidityAction.toString(), "", agent, targetAmm)}
         startDate={targetAmm.startDateTime}
         submitButtonState={form.submitButtonState}
         tokenApprovals={form.tokenApprovals}
         tradeInfoErrorMessage={form.minRequiredMargin.errorMessage}
         underlyingTokenName={targetAmm.underlyingToken.name}
+        variableApy={typeof resultVariableApy === 'number' ?  resultVariableApy : undefined}
+        fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr :  undefined}
       />
       <MintBurnInfo
         balance={form.balance}

@@ -25,6 +25,8 @@ export type PendingTransactionProps = {
   margin?: number;
   onBack: () => void;
   onComplete: () => void;
+  variableApy?: number;
+  fixedApr?: number;
 };
 
 const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
@@ -41,6 +43,8 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   margin,
   onBack,
   onComplete,
+  variableApy,
+  fixedApr,
 }) => {
   const { account } = useWallet();
   const {agent} = useAgent();
@@ -311,7 +315,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
           )
           : (
             <AMMProvider amm={amm}>
-              <ProtocolInformation protocol={amm.protocol} />
+              <ProtocolInformation protocol={amm.protocol} variableApy={variableApy} fixedApr={fixedApr}/>
             </AMMProvider>
           )
         }
