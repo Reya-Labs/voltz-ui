@@ -11,6 +11,7 @@ import { FixedAPR, Notional, CurrentMargin, Maturity, AccruedRates } from './com
 import { useAgent } from '@hooks';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 import { formatNumber, isBorrowing } from '@utilities';
+import { isNumber } from 'lodash';
 
 export type PositionTableRowProps = {
   position: Position;
@@ -27,6 +28,13 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
 }) => {
   const { agent } = useAgent();
   const labels = agent === Agents.LIQUIDITY_PROVIDER ? lpLabels : traderLabels;
+
+  const { fixedApr } = useAMMContext();
+  const { result: resultFixedApr, loading : loadingFixedApr, call: callFixedApr } = fixedApr;
+
+  useEffect(() => {
+      callFixedApr();
+  }, [callFixedApr]);
 
   const typeStyleOverrides: SystemStyleObject<Theme> = {
     backgroundColor: `secondary.darken050`, // this affects the colour of the positions rows in the LP positions 
@@ -49,7 +57,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     }
 
     if (field === 'fixedApr') {
-      return <FixedAPR />;
+      return <FixedAPR fixedApr={isNumber(resultFixedApr) ? resultFixedApr : undefined}/>;
     }
 
     if (field === 'margin') {

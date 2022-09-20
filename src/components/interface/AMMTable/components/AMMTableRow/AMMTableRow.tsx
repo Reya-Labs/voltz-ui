@@ -12,7 +12,8 @@ import { useAgent, useWallet } from '@hooks';
 import { AMMTableDatum } from '../../types';
 import { labels } from '../../constants';
 import { VariableAPY, FixedAPR } from './components';
-import { getPoolButtonId, getRowButtonId } from '@utilities';
+import { getRowButtonId } from '@utilities';
+import { isNumber } from 'lodash';
 
 export type AMMTableRowProps = {
   datum: AMMTableDatum;
@@ -26,7 +27,19 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
   const wallet = useWallet();
   const { agent } = useAgent();
   const variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'main';
+
+  const { variableApy, fixedApr } = useAMMContext();
+  const { result: resultFixedApr, loading : loadingFixedApr, call: callFixedApr } = fixedApr;
+  const { result: resultVarApy, loading: loadingVarApy, call: callVarApy } = variableApy;
   
+  useEffect(() => {
+      callVarApy();
+  }, [callVarApy]);
+
+  useEffect(() => {
+      callFixedApr();
+  }, [callFixedApr]);
+
   // add object to sx prop
   // todo:
   // 
@@ -73,11 +86,11 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
       <TableRow key={index} sx={{...typeStyleOverrides() }}>
       {labels.map(([field, label]) => {
         if (field === 'variableApy') {
-          return <VariableAPY />;
+          return <VariableAPY variableApy={isNumber(resultVarApy) ? resultVarApy : undefined}/>;
         }
 
         if (field === 'fixedApr') {
-          return <FixedAPR />;
+          return <FixedAPR fixedApr={isNumber(resultFixedApr) ? resultFixedApr : undefined}/>;
         }
 
         const renderDisplay = () => {
