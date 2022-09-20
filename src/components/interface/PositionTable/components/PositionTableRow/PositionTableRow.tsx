@@ -28,12 +28,6 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
   const { agent } = useAgent();
   const labels = agent === Agents.LIQUIDITY_PROVIDER ? lpLabels : traderLabels;
 
-  const { ammCaps: { call: loadCap, loading: capLoading, result: cap } } = useAMMContext();
-
-  useEffect(() => {
-    loadCap();
-  }, [loadCap]);
-
   const typeStyleOverrides: SystemStyleObject<Theme> = {
     backgroundColor: `secondary.darken050`, // this affects the colour of the positions rows in the LP positions 
     borderRadius: 2 
@@ -86,7 +80,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     
     if (field === 'pool') {
 
-      return (<PoolField agent={agent} protocol={position.amm.protocol} isBorrowing={isBorrowing(position.amm.rateOracle.protocolId)} capLoading={capLoading} cap={cap}/>)      
+      return (<PoolField agent={agent} protocol={position.amm.protocol} isBorrowing={isBorrowing(position.amm.rateOracle.protocolId)}/>)      
     }
 
     if (field === 'rateRange') {

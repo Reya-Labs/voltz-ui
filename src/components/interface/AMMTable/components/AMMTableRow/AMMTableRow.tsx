@@ -26,12 +26,6 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
   const wallet = useWallet();
   const { agent } = useAgent();
   const variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'main';
-
-  const { ammCaps: { call: loadCap, loading: capLoading, result: cap } } = useAMMContext();
-
-  useEffect(() => {
-    loadCap();
-  }, [loadCap]);
   
   // add object to sx prop
   // todo:
@@ -97,7 +91,7 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
             );
           }
 
-          return (<PoolField agent={agent} protocol={datum.protocol} isBorrowing={datum.isBorrowing} capLoading={capLoading} cap={cap}/>);
+          return (<PoolField agent={agent} protocol={datum.protocol} isBorrowing={datum.isBorrowing}/>);
         };
 
         return <TableCell key={field}>{renderDisplay()}</TableCell>;

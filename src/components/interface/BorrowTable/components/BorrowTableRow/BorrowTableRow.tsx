@@ -157,7 +157,7 @@ const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({ datum, i
               // modify to show svgs
               return (
               <TableCell key={"protocol"} width="35%" >
-                <PoolField protocol={datum.protocol} isBorrowing={false} capLoading={false} cap={null} isBorrowTable={true}/>
+                <PoolField protocol={datum.protocol} isBorrowing={false} isBorrowTable={true}/>
               </TableCell>);
             }
             if (field === 'maturity') {
