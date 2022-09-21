@@ -2,8 +2,8 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 
-import { AugmentedAMM } from '@utilities';
-import { useWallet, useSelector } from '@hooks';
+import { AugmentedAMM, getPoolButtonId } from '@utilities';
+import { useWallet, useSelector, useAgent } from '@hooks';
 import { selectors } from '@store';
 import { AMMProvider, MintBurnFormLiquidityAction } from '@contexts';
 import { Button, Panel, Typography, Loading, TokenAndText } from '@components/atomic';
@@ -43,6 +43,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   onComplete,
 }) => {
   const { account } = useWallet();
+  const {agent} = useAgent();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
 
   if (!activeTransaction) {
@@ -86,7 +87,13 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               paddingBottom: (theme) => theme.spacing(8),
             }}
           >
-            <Link href={transactionLink} variant="caption" color="primary.light">
+            <Link href={transactionLink} variant="caption" color="primary.light"
+              id={getPoolButtonId(
+                (margin && margin < 0) ? "REMOVE" : "ADD",
+                (liquidityAction ?? "").toString(),
+                showNegativeNotional ? "REMOVE": "ADD",
+                agent,
+                amm)}>
               View on etherscan
             </Link>
           </Box>
@@ -95,7 +102,13 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               paddingBottom: (theme) => theme.spacing(10),
             }}
           >
-            <Button variant="contained" onClick={onComplete}>
+            <Button variant="contained" onClick={onComplete}
+              id={getPoolButtonId(
+                (margin && margin < 0) ? "REMOVE" : "ADD",
+                (liquidityAction ?? "").toString(),
+                showNegativeNotional ? "REMOVE": "ADD",
+                agent,
+                amm)}>
               Go to your portfolio
             </Button>
           </Box>
@@ -137,7 +150,12 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               paddingBottom: (theme) => theme.spacing(10),
             }}
           >
-            <Button variant="contained" onClick={onBack}>
+            <Button variant="contained" onClick={onBack} id={getPoolButtonId(
+                (margin && margin < 0) ? "REMOVE" : "ADD",
+                (liquidityAction ?? "").toString(),
+                showNegativeNotional ? "REMOVE": "ADD",
+                agent,
+                amm)+"_FAILED"}>
               Back
             </Button>
           </Box>
@@ -168,7 +186,13 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               paddingBottom: (theme) => theme.spacing(8),
             }}
           >
-            <Link href={transactionLink} target="_blank" variant="caption" color="primary.light">
+            <Link href={transactionLink} target="_blank" variant="caption" color="primary.light"
+              id={getPoolButtonId(
+                (margin && margin < 0) ? "REMOVE" : "ADD",
+                (liquidityAction ?? "").toString(),
+                showNegativeNotional ? "REMOVE": "ADD",
+                agent,
+                amm)}>
               View on etherscan
             </Link>
           </Box>
@@ -181,7 +205,14 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
             {/* <Typography variant="caption" color="secondary">
               Wait a few moments for the blockchain data to synchronize
             </Typography> */}
-            <Button variant="contained" onClick={onComplete}>
+            <Button variant="contained"
+              onClick={onComplete}
+              id={getPoolButtonId(
+                (margin && margin < 0) ? "REMOVE" : "ADD",
+                (liquidityAction ?? "").toString(),
+                showNegativeNotional ? "REMOVE": "ADD",
+                agent,
+                amm)}>
               Go to your portfolio
             </Button>
           </Box>

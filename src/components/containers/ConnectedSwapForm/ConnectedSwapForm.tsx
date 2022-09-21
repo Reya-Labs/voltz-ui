@@ -7,8 +7,7 @@ import { useAgent, useDispatch, useSelector } from '@hooks';
 import { SwapCurrentPosition, SwapForm, SwapInfo, PendingTransaction, SwapFormActions, FormPanel, SwapFormModes } from '@components/interface';
 import { Agents, useAMMContext, usePositionContext, useSwapFormContext } from '@contexts';
 import { BigNumber } from 'ethers';
-import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
-import { AugmentedAMM } from '@utilities';
+import { AugmentedAMM, getNotionalActionFromHintState, getPoolButtonId } from '@utilities';
 import { isUndefined } from 'lodash';
 
 export type ConnectedSwapFormProps = {
@@ -180,7 +179,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
   return (
     <>
       {position 
-        ? <SwapCurrentPosition formMode={form.mode} onPortfolio={handleComplete} position={position} />
+        ? <SwapCurrentPosition formMode={form.mode} onPortfolio={handleComplete} position={position} gaButtonId={getPoolButtonId(form.state.marginAction.toString(), "",getNotionalActionFromHintState(form.hintState), agent, targetAmm)}/>
         : <FormPanel noBackground />
       }
       <SwapForm
@@ -205,6 +204,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         onChangePartialCollateralization={form.setPartialCollateralization}
         onSubmit={handleSubmit}
         protocol={targetAmm.protocol}
+        gaButtonId={getPoolButtonId(form.state.marginAction.toString(), "",getNotionalActionFromHintState(form.hintState), agent, targetAmm)}
         startDate={targetAmm.startDateTime}
         swapInfo={form.swapInfo.data}
         swapInfoLoading={form.swapInfo.loading}

@@ -6,7 +6,7 @@ import { SystemStyleObject, Theme } from '@theme';
 import { Typography } from '@components/atomic';
 import { Box } from '@mui/material';
 
-import { data, AugmentedBorrowAMM, findCurrentBorrowPosition } from '@utilities';
+import { data, AugmentedBorrowAMM, findCurrentBorrowPosition, getRowButtonId } from '@utilities';
 import { mapAmmToAmmTableDatum } from './utilities';
 import { BorrowAMMProvider, PositionProvider } from '@contexts';
 import { Panel } from '@components/atomic';
@@ -176,7 +176,13 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
             return (
             <BorrowAMMProvider amm={info.borrowAmms}>
               <PositionProvider position={info.position}>
-                <BorrowTableRow datum={info.datum} index={info.index} onSelect={handleSelectRow(info.index)} isFixedPositions={false} handleLoadedRow={handleLoadedRow}/>
+                <BorrowTableRow 
+                  datum={info.datum}
+                  index={info.index}
+                  onSelect={handleSelectRow(info.index)}
+                  isFixedPositions={false}
+                  handleLoadedRow={handleLoadedRow}
+                  gaButtonId={getRowButtonId(false, info.datum.protocol, true)}/>
               </PositionProvider>
             </BorrowAMMProvider>)
           }

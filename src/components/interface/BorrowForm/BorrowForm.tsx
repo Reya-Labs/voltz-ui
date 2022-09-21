@@ -14,8 +14,8 @@ import { SystemStyleObject, Theme } from '@theme';
 import TableRow from '@mui/material/TableRow';
 import { FixBorrow } from './components';
 import { Stack } from '@mui/material';
-import { BorrowFormSubmitButtonHintStates, BorrowFormSubmitButtonStates } from '@contexts';
-import { formatCurrency } from '@utilities';
+import { Agents, BorrowFormSubmitButtonHintStates, BorrowFormSubmitButtonStates } from '@contexts';
+import { formatCurrency, getPoolButtonId } from '@utilities';
 
 export type BorrowProps = {
   protocol?: string;
@@ -142,7 +142,7 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
         isTradeVerified={isTradeVerified}
         onCancel={onCancel}
         onSubmit={onSubmit}
-        protocol={protocol}
+        gaButtonId={getPoolButtonId("", "", "", Agents.VARIABLE_TRADER, undefined, true)}
         submitButtonState={submitButtonState}
         // swapInfoLoading={swapInfoLoading}
         tokenApprovals={tokenApprovals}

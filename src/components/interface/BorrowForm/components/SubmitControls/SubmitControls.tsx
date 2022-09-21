@@ -13,7 +13,7 @@ interface SubmitControlsProps {
   isTradeVerified: boolean;
   onCancel: () => void;
   onSubmit: () => void;
-  protocol?: string;
+  gaButtonId?: string;
   tokenApprovals: ReturnType<typeof useTokenApproval>
   tradeInfoErrorMessage?: string;
   underlyingTokenName?: string;
@@ -43,6 +43,7 @@ const SubmitControls = ({
   isTradeVerified,
   onCancel, 
   onSubmit, 
+  gaButtonId,
   tokenApprovals,
   hintState,
   tradeInfoErrorMessage,
@@ -131,6 +132,7 @@ const SubmitControls = ({
           size="large" 
           sx={{ flexGrow: 1 }}
           agent={Agents.FIXED_TRADER}
+          id={gaButtonId}
         >
           {getSubmitText()}
         </Button>
@@ -139,6 +141,7 @@ const SubmitControls = ({
           sx={{ marginLeft: (theme) => theme.spacing(9.5), flexGrow: 0 }}
           onClick={onCancel}
           agent={Agents.LIQUIDITY_PROVIDER}
+          id={gaButtonId}
         >
           Back
         </Button>

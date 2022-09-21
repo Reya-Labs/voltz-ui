@@ -22,6 +22,7 @@ export type PositionTableHeadProps = {
   onRollover: () => void;
   onSettle: () => void;
   rolloverAmm?: AugmentedAMM;
+  gaButtonId?: string; 
   onSelect?: (mode: 'margin' | 'liquidity' | 'notional') => void;
 };
 
@@ -51,6 +52,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
   onRollover,
   onSettle,
   rolloverAmm,
+  gaButtonId,
   onSelect
 }) => {
   const {agent} = useAgent()
@@ -115,6 +117,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
               onClick={handleEditNotional} 
               size='vs' 
               sx={{display: 'flex', padding: "4px 8px", fontSize: "14px" }}
+              id={gaButtonId}
               >
                 <Box sx={{marginRight: "4px"}}>Edit </Box><EditIcon/>
               </Button>
@@ -128,6 +131,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
               variant={positionType === 1 ? 'darker-link' : 'darker'}
               size='xs'
               onClick={onSettle}
+              id={gaButtonId}
             >
               Settle
             </Button>
@@ -137,6 +141,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
                 size='xs'
                 sx={{ marginLeft: (theme) => theme.spacing(4) }}
                 onClick={onRollover}
+                id={gaButtonId}
               >
                 Rollover
               </Button>
