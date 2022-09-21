@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { routes } from '@routes';
 import { actions, selectors } from '@store';
 import { useAgent, useDispatch, useSelector } from '@hooks';
-import { MintBurnFormActions, MintBurnFormModes, useAMMContext, useMintBurnForm, usePositionContext } from '@contexts';
+import { MintBurnFormActions, MintBurnFormModes, useAMMContext, useAMMsContext, useMintBurnForm, usePositionContext } from '@contexts';
 import { FormPanel, MintBurnCurrentPosition, MintBurnForm, MintBurnInfo, PendingTransaction } from '@components/interface';
 import { updateFixedRate } from './utilities';
 import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
@@ -26,9 +26,9 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
 
-  const { fixedApr, variableApy } = useAMMContext();
-  const { result: resultFixedApr, loading: loadingFixedApr, call: callFixedApr } = fixedApr;
-  const { result: resultVariableApy, loading: loadingVariableApy, call: callVariableApy } = variableApy;
+  const { fixedApr, variableApy } = useAMMsContext();
+  const { result: resultFixedApr, loading: loadingFixedApr, call: callFixedApr } = fixedApr(targetAmm);
+  const { result: resultVariableApy, loading: loadingVariableApy, call: callVariableApy } = variableApy(targetAmm);
 
   useEffect(() => {
     callFixedApr();

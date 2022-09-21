@@ -4,7 +4,7 @@ import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '@mui/system';
 import isNull from 'lodash/isNull';
 
-import { Agents } from '@contexts';
+import { Agents, useAMMsContext } from '@contexts';
 import { Button } from '@components/atomic';
 import { PoolField, MaturityInformation } from '@components/composite';
 import { useAMMContext } from '@contexts';
@@ -27,10 +27,11 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
   const wallet = useWallet();
   const { agent } = useAgent();
   const variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'main';
+  const {amm} = useAMMContext()
 
-  const { variableApy, fixedApr } = useAMMContext();
-  const { result: resultFixedApr, loading : loadingFixedApr, call: callFixedApr } = fixedApr;
-  const { result: resultVarApy, loading: loadingVarApy, call: callVarApy } = variableApy;
+  const { variableApy, fixedApr } = useAMMsContext();
+  const { result: resultFixedApr, loading : loadingFixedApr, call: callFixedApr } = fixedApr(amm);
+  const { result: resultVarApy, loading: loadingVarApy, call: callVarApy } = variableApy(amm);
   
   useEffect(() => {
       callVarApy();

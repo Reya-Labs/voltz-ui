@@ -21,6 +21,7 @@ import { ThemeProvider } from './theme';
 import { AgentProvider, WalletProvider } from './contexts';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import AMMsProvider from './contexts/AMMsContext/AMMsContext';
 
 // the root of the react app 
 
@@ -41,7 +42,9 @@ ReactDOM.render(
           <WalletProvider>
             <AgentProvider>
               <HashRouter>
-                <App />
+                <AMMsProvider>
+                  <App />
+                </AMMsProvider>
               </HashRouter>
             </AgentProvider>
           </WalletProvider>
