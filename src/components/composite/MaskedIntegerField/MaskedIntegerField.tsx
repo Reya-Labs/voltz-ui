@@ -10,6 +10,7 @@ import { useUniqueId } from '@hooks';
 import { OverrideTypes } from '@utilities';
 import { Typography } from '@components/atomic';
 import { colors, inputStyles, SystemStyleObject, Theme } from '@theme';
+import { isUndefined } from 'lodash';
 
 export type MaskedIntegerFieldProps = OverrideTypes<CurrencyInputProps, {
   bottomText?: string;
@@ -21,6 +22,7 @@ export type MaskedIntegerFieldProps = OverrideTypes<CurrencyInputProps, {
   onChange?: (value: string | undefined) => void;
   inputSize?: 'small' | 'medium' | 'large';
   subtext?: string;
+  subtextSize?: number;
   suffix: ReactNode;
   suffixPadding?: number;
 }>;
@@ -46,6 +48,7 @@ const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
   onChange,
   inputSize = 'large',
   subtext,
+  subtextSize,
   suffix,
   suffixPadding = 0,
   ...props
@@ -89,8 +92,8 @@ const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
           disabled: props.disabled, 
           error, 
           inputSize, 
-          dynamic, 
-          subtext: !!subtext,
+          dynamic,
+          subtextSize: isUndefined(subtext) ? undefined: (subtextSize || 14),
           suffixPadding 
         }),
         width: '100%',

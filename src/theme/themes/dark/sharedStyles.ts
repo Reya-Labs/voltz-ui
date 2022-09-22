@@ -13,10 +13,10 @@ type inputStylesProps = {
   error?: boolean;
   inputSize?: string;
   suffixPadding?: number;
-  subtext?: boolean;
+  subtextSize?: number;
 }
 
-export const inputStyles = ({ background = 'standard', disabled, dynamic, error, inputSize, suffixPadding = 0, subtext }: inputStylesProps): SystemStyleObject<Theme> => {
+export const inputStyles = ({ background = 'standard', disabled, dynamic, error, inputSize, suffixPadding = 0, subtextSize }: inputStylesProps): SystemStyleObject<Theme> => {
   const containerStyles:SystemStyleObject<Theme> = {
     '&:hover': {
       '*, input, .MuiSelect-select': {
@@ -163,14 +163,14 @@ export const inputStyles = ({ background = 'standard', disabled, dynamic, error,
       ...inputFieldStyles,
       height: '61px',
       padding: (theme) => `
-        calc(${subtext ? '11px' : theme.spacing(4)} - 1px)
+        calc(${subtextSize ? '11px' : theme.spacing(4)} - 1px)
         calc(${theme.spacing(4)} - 1px + ${suffixPadding}px)
-        calc(${subtext ? '29px' : theme.spacing(4)} - 1px)
+        calc(${subtextSize ? '29px' : theme.spacing(4)} - 1px)
         calc(${theme.spacing(4)} - 1px)
       `
     },
     '.subtext': {
-      fontSize: '14px',
+      fontSize: `${subtextSize || 14}px`,
       color: (theme) => {
         if (error) return theme.palette.error.base;
         return colors.lavenderWeb.darken020;
