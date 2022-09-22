@@ -2,6 +2,7 @@ import React, { useMemo, useRef } from 'react';
 import { useAMM, useAsyncFunction, UseAsyncFunctionResult } from '@hooks';
 import { AugmentedAMM } from '@utilities';
 import { createContext, useContext } from 'react'
+import { Position, PositionInfo } from '@voltz-protocol/v1-sdk/dist/types/entities';
 
 export type AMMsProviderProps = {
 };
@@ -9,6 +10,8 @@ export type AMMsProviderProps = {
 export type AMMsContext = {
     variableApy: (amm:AugmentedAMM) => UseAsyncFunctionResult<AugmentedAMM, number | void>;
     fixedApr: (amm:AugmentedAMM) => UseAsyncFunctionResult<AugmentedAMM, number | void>;
+    positionsInfo: Record<string,PositionInfo>;
+    cachePositionInfo: (info: PositionInfo, position: Position) => void;
 }
 
 const AMMsCtx = createContext<AMMsContext>({} as unknown as AMMsContext);
@@ -18,6 +21,12 @@ export const AMMsProvider: React.FunctionComponent<AMMsProviderProps> = ({ child
 
   const variableApys = useRef<Record<string,number>>({});
   const fixedAprs = useRef<Record<string,number>>({});
+
+  const positionsInfo = useRef<Record<string,PositionInfo>>({});
+
+  const cachePositionInfo = (info: PositionInfo, position: Position) => {
+    positionsInfo.current[position.id] = info;
+  }
 
   const useVariableApy = (amm: AugmentedAMM) => (useAsyncFunction(
     async () => {
@@ -51,7 +60,9 @@ export const AMMsProvider: React.FunctionComponent<AMMsProviderProps> = ({ child
 
   const value = {
     variableApy: useVariableApy,
-    fixedApr: useFixedApr
+    fixedApr: useFixedApr,
+    positionsInfo: positionsInfo.current,
+    cachePositionInfo
   };
 
   return <AMMsCtx.Provider value={value}>{children}</AMMsCtx.Provider>;
