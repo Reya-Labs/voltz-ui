@@ -15,7 +15,6 @@ const Input: React.FunctionComponent<InputProps> = ({ background = 'standard', .
     error: props.error,
     inputSize: props.size,
     suffixPadding: 0,
-    subtext: false
   });
 
   return <InputBase {...props} sx={{ ...styles, ...(props.sx || {}) }} />;

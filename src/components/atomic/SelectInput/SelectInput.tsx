@@ -17,8 +17,7 @@ export const SelectInputBase = ({ background = 'standard', options, ...props }: 
     dynamic: false,
     error: props.error,
     inputSize: props.size,
-    suffixPadding: 0,
-    subtext: false
+    suffixPadding: 0
   });
 
   return (

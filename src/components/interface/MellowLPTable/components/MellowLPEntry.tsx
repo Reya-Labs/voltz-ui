@@ -9,10 +9,11 @@ import MellowLPPosition from "./MellowLPPosition";
 
 
 export type MellowLPEntryProps = {
+    onSelectItem: () => void;
     lpVault: AugmentedMellowLpVault;
 }
 
-const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({ lpVault }: MellowLPEntryProps) => {
+const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({ lpVault, onSelectItem }: MellowLPEntryProps) => {
     const boxStyles: SystemStyleObject<Theme> = {
         display: "flex",
         borderRadius: "4px",
@@ -78,7 +79,7 @@ const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({ lpVault }:
                 </Box>
 
                 <Box sx={{marginLeft: "8px", marginTop: "16px"}}>
-                    <MellowLPPosition handleClick={() => {}}/>
+                    <MellowLPPosition handleClick={onSelectItem}/>
                 </Box>
             </Box>
         )
