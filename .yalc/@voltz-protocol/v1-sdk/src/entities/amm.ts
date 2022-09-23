@@ -48,6 +48,7 @@ import { getExpectedApy } from '../services/getExpectedApy';
 import { getAccruedCashflow, transformSwaps } from '../services/getAccruedCashflow';
 
 import axios from 'axios';
+import { getProtocolPrefix } from '../services/getTokenInfo';
 
 var geckoEthToUsd = async () => {
   for (let attempt = 0; attempt < 5; attempt++) {
@@ -2314,36 +2315,7 @@ class AMM {
   public get protocol(): string {
     const tokenName = this.underlyingToken.name;
 
-    let prefix: string;
-    switch (this.rateOracle.protocolId) {
-      case 1: {
-        prefix = "a";
-        break;
-      }
-      case 2: {
-        prefix = "c";
-        break;
-      }
-      case 3: {
-        prefix = "st";
-        break;
-      }
-      case 4: {
-        prefix = "r";
-        break;
-      }
-      case 5: {
-        prefix = "a";
-        break;
-      }
-      case 6: {
-        prefix = "c";
-        break;
-      }
-      default: {
-        throw new Error("Unrecognized protocol");
-      }
-    }
+    let prefix = getProtocolPrefix(this.rateOracle.protocolId);
 
     return `${prefix}${tokenName}`;
   }

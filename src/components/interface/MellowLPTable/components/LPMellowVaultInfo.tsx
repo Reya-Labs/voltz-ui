@@ -1,40 +1,36 @@
 import { Box, Typography } from "@mui/material";
-import { SystemStyleObject, Theme } from "@mui/system";
-import { formatCurrency } from "@utilities";
+import { AugmentedMellowLpVault, formatCurrency } from "@utilities";
+import { isUndefined } from "lodash";
 import { ProgressBar } from "src/components/composite";
 
 
 export type LPMellowVaultInfoProps = {
-    token: string,
-    accumulative: number,
-    cap: number,
+    lpVault: AugmentedMellowLpVault
 }
-const LPMellowVaultInfo: React.FunctionComponent<LPMellowVaultInfoProps> = ({token, accumulative, cap} : LPMellowVaultInfoProps) => {
+const LPMellowVaultInfo: React.FunctionComponent<LPMellowVaultInfoProps> = ({lpVault} : LPMellowVaultInfoProps) => {
     
-    const percentage = Math.floor(accumulative * 100 / cap + 0.5);
 
-    const copyStyles: SystemStyleObject<Theme> = {
-        fontSize: '12px',
-        color: '#9B97AD',
-        marginLeft: '0px',
-    }
+    const getCapBar = () => {
+        if (isUndefined(lpVault.vaultCap) || isUndefined(lpVault.vaultAccumulative)) {
+            return null;
+        }
 
-    const renderContent = () => {
+        const percentage = (lpVault.vaultCap > 0) ? Math.floor(lpVault.vaultAccumulative * 100 / lpVault.vaultCap + 0.5) : 100;
 
         return (<Box>
-            <Typography variant='h6' sx={copyStyles}>
+            <Typography variant='h6' sx={{ fontSize: '12px', color: '#9B97AD', marginLeft: '0px' }}>
                 DEPOSITS
             </Typography>
             <ProgressBar
                 isMaturity={true}
                 leftContent={
                     (<Typography variant="h6" color="#E5E1F9" marginLeft="0px">
-                        {token}
+                        {lpVault.tokenName}
                     </Typography>)
                 }
                 middleContent={
                     (<Typography variant="h6" color="#E5E1F9" marginLeft="0px">
-                        {'$'}{formatCurrency(accumulative, true)}
+                        {formatCurrency(lpVault.vaultAccumulative, true)}
                     </Typography>)
                 }
                 rightContent={
@@ -47,7 +43,7 @@ const LPMellowVaultInfo: React.FunctionComponent<LPMellowVaultInfoProps> = ({tok
         </Box>);
     }
 
-    return renderContent();
+    return getCapBar();
 }
 
 export default LPMellowVaultInfo;

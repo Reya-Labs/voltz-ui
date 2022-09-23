@@ -1,32 +1,44 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { SystemStyleObject, Theme } from "@mui/system";
-import { formatCurrency } from "@utilities";
-import { Button } from "src/components/atomic";
-import { Agents } from '@contexts';
+import { AugmentedMellowLpVault, formatCurrency } from "@utilities";
+import { isUndefined } from "lodash";
 
 export type MellowLPPositionProps = {
-    position?: number;
+    lpVault: AugmentedMellowLpVault;
     handleClick: () => void;
 }
 
-const MellowLPPosition: React.FunctionComponent<MellowLPPositionProps> = ({position, handleClick}: MellowLPPositionProps) => {
+const MellowLPPosition: React.FunctionComponent<MellowLPPositionProps> = ({ lpVault, handleClick }: MellowLPPositionProps) => {
 
-    const copyStyles: SystemStyleObject<Theme> = {
-        fontSize: '14px',
-        color: '#9B97AD', 
-        textTransform: 'uppercase',
+    const getPositionInfo = () => {
+        if (isUndefined(lpVault.userDeposit)) {
+            return (
+                <Typography variant='h6' sx={{fontSize: '14px', color: '#9B97AD', textTransform: 'uppercase'}}>
+                    Your position ---
+                </Typography>
+            )
+        }
+
+        return (
+            <Box sx={{display:"flex"}}>
+                <Typography variant='h6' sx={{fontSize: '14px', color: '#9B97AD', textTransform: 'uppercase'}}>
+                    Your position:
+                </Typography>
+                <Typography variant='h6' sx={{fontSize: '14px', color: 'primary.light', textTransform: 'uppercase', marginLeft: '4px'}}>
+                    {formatCurrency(lpVault.userDeposit)} {lpVault.tokenName}
+                </Typography>
+            </Box>
+        );
     }
 
     const renderContent = () => {
         return (
-            <Box sx={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-                <Typography variant='h6' sx={copyStyles}>
-                    Your position {(position) ? ': $' + formatCurrency(position, true) : '---'}
-                </Typography>
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                {getPositionInfo()}
 
                 <Button onClick={handleClick} sx={{
                     background: 'transparent',
-                    // color: 'primary.light',
+                    color: 'primary.light',
                     '&:hover': {
                         background: 'transparent',
                         borderStyle: 'none none solid none',
@@ -39,9 +51,9 @@ const MellowLPPosition: React.FunctionComponent<MellowLPPositionProps> = ({posit
                     boxShadow: 'none',
                     borderStyle: 'none none none none',
                     borderRadius: '0px'
-                    }}>
-          DEPOSIT
-        </Button>
+                }}>
+                    DEPOSIT
+                </Button>
             </Box>
         )
     }
