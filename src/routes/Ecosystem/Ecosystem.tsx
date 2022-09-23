@@ -7,6 +7,8 @@ import ConnectedMellowLPTable from '../../components/containers/ConnectedMellowL
 import { AugmentedMellowLpVault } from '@utilities';
 import { useEffect, useState } from 'react';
 import { setPageTitle } from '@utilities';
+import { isNull } from 'lodash';
+import { useWallet } from '@hooks';
 
 export enum EcosystemRenderMode {
   MELLOW_DEPOSIT_FORM,
@@ -14,13 +16,18 @@ export enum EcosystemRenderMode {
 };
 
 const Ecosystem: React.FunctionComponent = () => {
+  const wallet = useWallet();
 
   const [renderMode, setRenderMode] = useState<EcosystemRenderMode>(EcosystemRenderMode.PAGE);
   const [currentVault, setCurrentVault] = useState<AugmentedMellowLpVault>();
 
   const handleSelectMellowLpVault = (selectedVault: AugmentedMellowLpVault) => {
-    setRenderMode(EcosystemRenderMode.MELLOW_DEPOSIT_FORM);
-    setCurrentVault(selectedVault);
+    if (isNull(wallet.account)) {
+      wallet.setRequired(true);
+    } else {
+      setRenderMode(EcosystemRenderMode.MELLOW_DEPOSIT_FORM);
+      setCurrentVault(selectedVault);
+    }
   }
 
   const handleReset = () => {

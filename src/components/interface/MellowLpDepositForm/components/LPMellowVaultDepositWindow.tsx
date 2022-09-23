@@ -2,12 +2,19 @@ import { FormPanel } from '@components/interface';
 import { IconLabel, InputTokenLabel, MaskedIntegerField } from '@components/composite';
 import { Box } from '@mui/system';
 import { Panel, Typography } from "src/components/atomic";
-import { formatCurrency } from '@utilities';
+import { AugmentedMellowLpVault, formatCurrency, toUSFormat } from '@utilities';
 import { Button } from '@components/atomic';
 import { colors } from '@theme';
 import { ReactNode } from 'react';
+import { isUndefined } from 'lodash';
 
-export type LPMellowVaultDepositWindowProps = {};
+export type LPMellowVaultDepositWindowProps = {
+    lpVault: AugmentedMellowLpVault;
+    onChangeDeposit: (value: number | undefined) => void;
+    onSubmit: () => void;
+    onCancel: () => void;
+    disabled: boolean;
+};
 
 type TextProps = {
     bold?: boolean;
@@ -26,17 +33,14 @@ const Text = ({ bold, children, green, red }: TextProps) => (
     </Box>
   );
 
-const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWindowProps> = ({ }: LPMellowVaultDepositWindowProps) => {
+const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWindowProps> = ({ lpVault, onChangeDeposit, onSubmit, disabled, onCancel }: LPMellowVaultDepositWindowProps) => {
 
-    const token = "USDC";
-    const balance = 100;
-    const handleChange = () => {};
-    const subtext = `WALLET BALANCE: ${formatCurrency(balance, true)} ${token}`;
-    
-    const handleSubmit = () => {};
-    const onCancel = () => {};
-    const disabled = false;
-    const hint = "PRESS";
+    const subtext = `WALLET BALANCE: ${isUndefined(lpVault.userWalletBalance) ? "---" : `${formatCurrency(lpVault.userWalletBalance, true)} ${lpVault.tokenName}`}`;
+
+    const handleChange = (newValue: string | undefined) => {
+        const usFormatted = toUSFormat(newValue);
+        onChangeDeposit(!isUndefined(usFormatted) ? parseFloat(usFormatted) : undefined);
+    };
     
     const renderContent = () => {
         return (
@@ -63,7 +67,7 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
                     <MaskedIntegerField
                         allowDecimals
                         allowNegativeValue={false}
-                        suffix={<InputTokenLabel tokenName={token} />}
+                        suffix={<InputTokenLabel tokenName={lpVault.tokenName} />}
                         suffixPadding={90}
                         label={<IconLabel label={"AMOUNT"} icon="information-circle" info={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Volutpat ut proin porttitor sit lorem."} />}
                         defaultValue={0}
@@ -77,7 +81,7 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
                 <Box sx={{ display: 'flex', marginTop: "16px" }}>
                     <Button 
                         disabled={disabled} 
-                        onClick={handleSubmit} 
+                        onClick={onSubmit} 
                         size="large" 
                         sx={{ flexGrow: 1, backgroundColor: '#00556D',
                         color: '#4DE5FF',
