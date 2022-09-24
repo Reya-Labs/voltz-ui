@@ -127,6 +127,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         return (
           <PendingTransaction
             amm={targetAmm}
+            position={position}
             isEditingMargin={true}
             transactionId={transactionId}
             onComplete={handleComplete}
@@ -143,6 +144,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         return (
           <PendingTransaction
             amm={targetAmm}
+            position={position}
             isEditingMargin={false}
             showNegativeNotional={form.mode === SwapFormModes.EDIT_NOTIONAL && isRemovingNotional }
             isRollover={form.mode === SwapFormModes.ROLLOVER}
@@ -160,6 +162,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         return (
           <PendingTransaction
             amm={targetAmm}
+            position={position}
             isEditingMargin={false}
             isRollover={form.mode === SwapFormModes.ROLLOVER}
             transactionId={transactionId}
@@ -176,6 +179,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         return (
           <PendingTransaction
             amm={targetAmm}
+            position={position}
             isEditingMargin={false}
             transactionId={transactionId}
             onComplete={handleComplete}

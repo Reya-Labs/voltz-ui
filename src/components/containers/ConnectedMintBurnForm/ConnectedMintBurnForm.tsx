@@ -115,6 +115,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     return (
       <PendingTransaction 
         amm={targetAmm} 
+        position={position}
         isEditingMargin={form.mode === MintBurnFormModes.EDIT_MARGIN} 
         liquidityAction={form.state.liquidityAction} 
         isRollover={form.mode === MintBurnFormModes.ROLLOVER}

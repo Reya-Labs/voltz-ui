@@ -1,6 +1,7 @@
 import { useAgent, useAMM } from '@hooks';
 import { AugmentedAMM } from '@utilities';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk/dist/types/entities';
+import { isUndefined } from 'lodash';
 import { createContext, useContext, useEffect, useState, useRef } from 'react'
 import { useAMMsContext } from '../AMMsContext/AMMsContext';
 import { getHealthCounters, getNetPayingRate, getNetReceivingRate, getTotalAccruedCashflow, getTotalMargin, getTotalNotional } from './services';
@@ -60,8 +61,9 @@ export const PortfolioProvider: React.FunctionComponent<PortfolioProviderProps> 
 
   // 0x3044fa8f672424a31acf0069b9691e19a91a2711#0xf8f6b70a36f4398f0853a311dc6699aba8333cc1
   const loadPositionInfo = (position : Position) => {
-    if (positionsInfo[position.id]) {
-      info.current[position.id] = positionsInfo[position.id];
+    const posInfo = positionsInfo[position.id];
+    if (posInfo) {
+      info.current[position.id] = posInfo;
     } else {
       position.amm.getPositionInformation(position).then( pInfo => {
         info.current[position.id] = pInfo;

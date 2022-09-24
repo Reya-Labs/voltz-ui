@@ -122,6 +122,7 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
       <Box sx={{display: 'flex', justifyContent: 'center'}}>
         <PendingTransaction
           amm={positionToSettle.position.amm as AugmentedAMM}
+          position={positionToSettle.position}
           isEditingMargin={false}
           isSettle={true}
           transactionId={positionToSettle.txId}
