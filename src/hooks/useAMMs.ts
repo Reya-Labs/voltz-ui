@@ -86,7 +86,7 @@ const useAMMs = (): UseAMMsResult => {
       if (!process.env.REACT_APP_WHITELIST || process.env.REACT_APP_WHITELIST === `UNPROVIDED`) {
           return ammsData;
       } else {
-        if (pathname !== "/trader-pools" && process.env.REACT_APP_LP_ONLY_WHITELIST) {
+        if (pathname !== "/trader-pools" && pathname !== "/portfolio" && process.env.REACT_APP_LP_ONLY_WHITELIST) {
           const whitelist = process.env.REACT_APP_LP_ONLY_WHITELIST.split(',').map(s => s.trim().toLowerCase());
           ammsData = ammsData?.filter((amm) => whitelist.includes(amm.id.toLowerCase()));
           return ammsData;
