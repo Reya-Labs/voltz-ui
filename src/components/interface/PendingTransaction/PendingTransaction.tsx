@@ -52,23 +52,11 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
 }) => {
   const previousWallet = useRef<Wallet>();
   const [fetch, setFetch] = useState<number>(0);
-  const { account, refetch, wallet } = useWallet();
+  const { account, refetch, wallet, loading } = useWallet();
   const {agent} = useAgent();
   const { isPositionFeched } = useAMMsContext();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
-  // const {fetchSubgraphPosition} = useAMMsContext();
-  // const {result, loading, call} = fetchSubgraphPosition;
-
-  // const { data, loading, error, stopPolling } = useGetWalletQuery({
-  //   variables: { id: account || '' },
-  //   pollInterval,
-  // });
-
-  // useEffect(() => {
-  //   if (activeTransaction && (activeTransaction.resolvedAt || activeTransaction.succeededAt) && !loading && !result) {
-  //     call(position);
-  //   }
-  // }, [activeTransaction?.resolvedAt, activeTransaction?.succeededAt]);
+  const isFetched = previousWallet.current ? isPositionFeched(wallet as Wallet, previousWallet.current, position) : undefined;
 
   useEffect(() => {
     if (!previousWallet.current && wallet) {
@@ -78,12 +66,9 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
 
   useEffect(() => {
     if (activeTransaction && (activeTransaction.resolvedAt || activeTransaction.succeededAt)) {
-      const current = wallet?.positions[0].burns.length;
-      const previous = previousWallet.current?.positions[0].burns.length;
-      const pos = position?.burns.length;
       if( wallet && previousWallet.current && !isPositionFeched(wallet as Wallet, previousWallet.current, position) ) {
-        refetch();
-        if(fetch < 10) setFetch(fetch+1);
+        setTimeout(() => {refetch()}, 500);
+        if(fetch < 20) setFetch(fetch+1);
       } 
     }
   }, [activeTransaction?.resolvedAt, activeTransaction?.succeededAt, fetch]);
@@ -104,7 +89,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   }
 
   const renderStatus = () => {
-    if (activeTransaction.resolvedAt) {
+    if (activeTransaction.resolvedAt && isFetched) {
       return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Box
@@ -205,7 +190,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
       );
     }
 
-    if (activeTransaction.succeededAt) {
+    if (activeTransaction.succeededAt && isFetched) {
       return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Box

@@ -128,7 +128,7 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
           transactionId={positionToSettle.txId}
           onComplete={handleTransactionFinished}
           notional={Math.abs(positionToSettle.position.effectiveVariableTokenBalance)}
-          margin={spData.margin}
+          margin={spData?.margin}
           onBack={handleTransactionFinished}
         />
       </Box>

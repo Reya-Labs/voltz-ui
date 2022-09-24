@@ -22,7 +22,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
   const { amms } = useAMMs();
   const { onChangeAgent } = useAgent();
   const { pathname, key } = useLocation();
-  const { positions } = usePositions();
+  const { positions, positionsByAgent } = usePositions();
 
   const pathnameWithoutPrefix = pathname.slice(1);
   const renderMode = getRenderMode(formMode, pathnameWithoutPrefix);
@@ -93,7 +93,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
       )}
 
       {renderMode === 'portfolio' && (
-        <PortfolioProvider positions={positions}>
+        <PortfolioProvider positions={positionsByAgent}>
           <ConnectedPositionTable 
           amm={amm}
           onSelectItem={handleSelectPosition}

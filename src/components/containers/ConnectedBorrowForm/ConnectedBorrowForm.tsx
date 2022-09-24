@@ -1,11 +1,11 @@
-import { useAMMs, useDispatch, useSelector } from '@hooks';
+import { useAMMs, useDispatch, usePositions, useSelector } from '@hooks';
 import { routes } from '@routes';
 import { useEffect, useState } from 'react';
 import { actions, selectors } from '@store';
 
 import { useNavigate } from 'react-router-dom';
 import { BorrowForm, PendingTransaction, SwapFormActions, SwapFormModes, SwapInfo, FormPanel } from '@components/interface';
-import { useAMMContext, useBorrowAMMContext, useBorrowFormContext, Agents } from '@contexts';
+import { useAMMContext, useBorrowAMMContext, useBorrowFormContext, Agents, usePositionContext } from '@contexts';
 
 
 export type ConnectedBorrowFormProps = {
@@ -16,6 +16,7 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
   const { amm: borrowAmm } = useBorrowAMMContext();
   const { amm } = useAMMContext();
   const form = useBorrowFormContext();
+  const { position } = usePositionContext();
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -90,6 +91,7 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
     return (
       <PendingTransaction
         amm={amm}
+        position={position}
         isEditingMargin={false}
         isRollover={false}
         transactionId={transactionId}

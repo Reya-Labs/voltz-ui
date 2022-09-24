@@ -34,6 +34,7 @@ export const AMMsProvider: React.FunctionComponent<AMMsProviderProps> = ({ child
     if (position) {
       positionsInfo.current[position.id] = undefined;
     }
+
     if (!position) {
       if ( wallet.positions && wallet.positions.length > previousWallet.positions.length) {
         return true; 
@@ -44,7 +45,7 @@ export const AMMsProvider: React.FunctionComponent<AMMsProviderProps> = ({ child
         const poss = wallet.positions.filter((pos) => pos.id === position.id) as unknown as  Position[];
         newPosition = poss[0];
       }
-      if (position && wallet && newPosition){
+      if (position && newPosition){
         if (newPosition.swaps.length > position.swaps.length ||
           newPosition.burns.length > position.burns.length || 
           newPosition.mints.length > position.mints.length ||
@@ -57,43 +58,6 @@ export const AMMsProvider: React.FunctionComponent<AMMsProviderProps> = ({ child
     return false;
 
   }
-
-  // const fetchSubgraphPosition = useAsyncFunction(
-  //   async (position?: Position) => {
-  //     if (position) {
-  //       positionsInfo.current[position.id] = undefined;
-  //     }
-  //     const { data, loading, error, stopPolling } = useGetWalletQuery({
-  //       variables: { id: wallet?.id || '' }
-  //     });
-  //     while (loading) {
-  //       const delay = new Promise(() => setTimeout(() => {}, 100));
-  //       await delay;
-  //     }
-  //     if (!position) {
-  //       if (data && data.wallet && wallet && data.wallet.positions.length > wallet.positions.length) {
-  //         return true; 
-  //       }
-  //     }else {
-  //       let newPosition: Position | undefined = undefined;
-  //       if (position && data && data.wallet && data.wallet.positions) {
-  //         const poss = data.wallet.positions.filter((pos) => pos.id === position.id) as unknown as  Position[];
-  //         newPosition = poss[0];
-  //       }
-  //       if (position && data && data.wallet && newPosition){
-  //         if (newPosition.swaps.length > position.swaps.length ||
-  //           newPosition.burns.length > position.burns.length || 
-  //           newPosition.mints.length > position.mints.length ||
-  //           newPosition.marginUpdates.length > position.marginUpdates.length || 
-  //           newPosition.settlements.length > position.settlements.length) {
-  //             return true;
-  //         }
-  //       }
-  //     }
-  //     return false;
-  //   },
-  //   useMemo(() => undefined, []),
-  // );
 
   const useVariableApy = (amm: AugmentedAMM) => (useAsyncFunction(
     async () => {

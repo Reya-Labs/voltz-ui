@@ -41,6 +41,7 @@ export const PortfolioProvider: React.FunctionComponent<PortfolioProviderProps> 
   const {positionsInfo, cachePositionInfo} = useAMMsContext();
 
   useEffect(() => {
+    info.current={};
     if (positions) {
         for ( let  i = 0; i < positions.length; i++ ) {
             void loadPositionInfo(positions[i]);
@@ -49,7 +50,7 @@ export const PortfolioProvider: React.FunctionComponent<PortfolioProviderProps> 
   }, [positions]);
   
   useEffect(() => {
-    if (positions && positions.length > 0 && info.current && Object.keys(info.current).length === positions.length ) {
+    if (loaded.length > 0 && positions && positions.length > 0 && info.current && Object.keys(info.current).length === positions.length ) {
         setHealthCounters(getHealthCounters(positions, info.current));
         setTotalNotional(getTotalNotional(positions, info.current));
         setTotalMargin(getTotalMargin(positions, info.current));
@@ -64,6 +65,7 @@ export const PortfolioProvider: React.FunctionComponent<PortfolioProviderProps> 
     const posInfo = positionsInfo[position.id];
     if (posInfo) {
       info.current[position.id] = posInfo;
+      setLoaded(JSON.stringify(info.current));
     } else {
       position.amm.getPositionInformation(position).then( pInfo => {
         info.current[position.id] = pInfo;
