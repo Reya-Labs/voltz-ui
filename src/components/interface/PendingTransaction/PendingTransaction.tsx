@@ -52,11 +52,12 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
 }) => {
   const previousWallet = useRef<Wallet>();
   const [fetch, setFetch] = useState<number>(0);
+  const fetchLimit = 20;
   const { account, refetch, wallet, loading } = useWallet();
   const {agent} = useAgent();
   const { isPositionFeched } = useAMMsContext();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
-  const isFetched = previousWallet.current ? isPositionFeched(wallet as Wallet, previousWallet.current, position) : undefined;
+  const isFetched = previousWallet.current ? isPositionFeched(wallet as Wallet, previousWallet.current, position) : fetch >= fetchLimit ;
 
   useEffect(() => {
     if (!previousWallet.current && wallet) {
@@ -68,7 +69,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
     if (activeTransaction && (activeTransaction.resolvedAt || activeTransaction.succeededAt)) {
       if( wallet && previousWallet.current && !isPositionFeched(wallet as Wallet, previousWallet.current, position) ) {
         setTimeout(() => {refetch()}, 500);
-        if(fetch < 20) setFetch(fetch+1);
+        if(fetch < fetchLimit) setFetch(fetch+1);
       } 
     }
   }, [activeTransaction?.resolvedAt, activeTransaction?.succeededAt, fetch]);

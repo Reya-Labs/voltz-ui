@@ -133,6 +133,8 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
             onComplete={handleComplete}
             margin={Math.abs(form.state.margin as number) * (form.isRemovingMargin ? -1 : 1)}
             onBack={handleGoBack}
+            variableApy={typeof resultVariableApy === 'number' ?  resultVariableApy : undefined}
+            fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr :  undefined}
           />
         );
       }
@@ -153,6 +155,8 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
             notional={form.swapInfo.data?.availableNotional}
             margin={Math.abs(form.state.margin as number) * (form.isRemovingMargin ? -1 : 1)}
             onBack={handleGoBack}
+            variableApy={typeof resultVariableApy === 'number' ?  resultVariableApy : undefined}
+            fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr :  undefined}
           />
         );
       }
@@ -171,6 +175,8 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
             notional={form.swapInfo.data?.availableNotional}
             margin={form.swapInfo.data?.marginRequirement}
             onBack={handleGoBack}
+            variableApy={typeof resultVariableApy === 'number' ?  resultVariableApy : undefined}
+            fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr :  undefined}
           />
         );
       }

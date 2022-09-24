@@ -5,7 +5,7 @@ import { data } from '@utilities';
 import { usePositions, useSelector, useWallet } from '@hooks';
 import { PendingTransaction, PortfolioHeader, PositionTable, PositionTableFields } from '@components/interface';
 import { Button, Loading, Panel, RouteLink, Typography } from '@components/atomic';
-import { Agents, usePortfolioContext } from '@contexts';
+import { Agents, useAMMContext, useAMMsContext, usePortfolioContext } from '@contexts';
 import { actions, selectors } from '@store';
 import { useDispatch } from '@hooks';
 import { AugmentedAMM } from '@utilities';
@@ -35,7 +35,6 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
   const activeTransaction = useSelector(selectors.transactionSelector)(positionToSettle?.txId); // contains a failureMessage attribute that will contain whatever came out from the sdk
   const dispatch = useDispatch();
 
-  const [positionInformation, setPositionInformation] = useState<Record<Position['id'], PositionInfo>>({});
 
   const portfolioData = usePortfolioContext();
 
