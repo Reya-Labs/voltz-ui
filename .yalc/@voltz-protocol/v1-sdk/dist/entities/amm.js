@@ -219,30 +219,19 @@ var AMM = /** @class */ (function () {
                         peripheryContract = typechain_1.Periphery__factory.connect(peripheryAddress, this.signer);
                         scaledNotional = this.scale(notional);
                         tempOverrides = {};
-                        if (this.isETH) {
-                            swapPeripheryParams = {
-                                marginEngine: newMarginEngine,
-                                isFT: isFT,
-                                notional: scaledNotional,
-                                sqrtPriceLimitX96: sqrtPriceLimitX96,
-                                tickLower: tickLower,
-                                tickUpper: tickUpper,
-                                marginDelta: '0',
-                            };
-                            tempOverrides.value = ethers_1.ethers.utils.parseEther(margin.toFixed(18).toString());
+                        if (this.isETH && marginEth) {
+                            tempOverrides.value = ethers_1.ethers.utils.parseEther(marginEth.toFixed(18).toString());
                         }
-                        else {
-                            scaledMarginDelta = this.scale(margin);
-                            swapPeripheryParams = {
-                                marginEngine: newMarginEngine,
-                                isFT: isFT,
-                                notional: scaledNotional,
-                                sqrtPriceLimitX96: sqrtPriceLimitX96,
-                                tickLower: tickLower,
-                                tickUpper: tickUpper,
-                                marginDelta: scaledMarginDelta,
-                            };
-                        }
+                        scaledMarginDelta = this.scale(margin);
+                        swapPeripheryParams = {
+                            marginEngine: newMarginEngine,
+                            isFT: isFT,
+                            notional: scaledNotional,
+                            sqrtPriceLimitX96: sqrtPriceLimitX96,
+                            tickLower: tickLower,
+                            tickUpper: tickUpper,
+                            marginDelta: scaledMarginDelta,
+                        };
                         return [4 /*yield*/, peripheryContract.callStatic.rolloverWithSwap(this.marginEngineAddress, effectiveOwner, oldTickLower, oldTickUpper, swapPeripheryParams, tempOverrides).catch(function (error) { return __awaiter(_this, void 0, void 0, function () {
                                 var errorMessage;
                                 return __generator(this, function (_a) {
@@ -2463,7 +2452,7 @@ var AMM = /** @class */ (function () {
                         _a.label = 5;
                     case 5:
                         scaledAmount = ethers_2.BigNumber.from(this.scale(amount));
-                        if (!rolloverPosition) return [3 /*break*/, 8];
+                        if (!(rolloverPosition && !this.isETH)) return [3 /*break*/, 8];
                         if (rolloverPosition.fixedLow >= rolloverPosition.fixedHigh) {
                             throw new Error('Lower Rate must be smaller than Upper Rate');
                         }
@@ -2569,7 +2558,7 @@ var AMM = /** @class */ (function () {
                         currentBalance = _a.sent();
                         _a.label = 5;
                     case 5:
-                        if (!rolloverPosition) return [3 /*break*/, 8];
+                        if (!(rolloverPosition && !this.isETH)) return [3 /*break*/, 8];
                         if (rolloverPosition.fixedLow >= rolloverPosition.fixedHigh) {
                             throw new Error('Lower Rate must be smaller than Upper Rate');
                         }

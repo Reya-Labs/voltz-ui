@@ -34,7 +34,7 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
   isBorrowForm,
   endDate,
   variableApy,
-  fixedApr,,
+  fixedApr,
   isRollover,
   isSettle
 }) => {

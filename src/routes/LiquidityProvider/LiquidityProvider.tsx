@@ -22,7 +22,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
   const { amms } = useAMMs();
   const { onChangeAgent, agent } = useAgent();
   const { pathname, key } = useLocation();
-  const { positions, positionsByAgent } = usePositions();
+  const { positions, positionsByAgentGroup } = usePositions();
 
   const pathnameWithoutPrefix = pathname.slice(1);
   const renderMode = getRenderMode(formMode, pathnameWithoutPrefix);

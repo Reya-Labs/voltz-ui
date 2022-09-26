@@ -472,33 +472,21 @@ class AMM {
     let swapPeripheryParams: SwapPeripheryParams;
     let tempOverrides: { value?: BigNumber, gasLimit?: BigNumber } = {};
 
-
-    if (this.isETH) {
-      swapPeripheryParams = {
-        marginEngine: newMarginEngine,
-        isFT,
-        notional: scaledNotional,
-        sqrtPriceLimitX96,
-        tickLower,
-        tickUpper,
-        marginDelta: '0',
-      };
-
-      tempOverrides.value = ethers.utils.parseEther(margin.toFixed(18).toString());
+    if (this.isETH && marginEth) {
+      tempOverrides.value = ethers.utils.parseEther(marginEth.toFixed(18).toString());
     }
-    else {
-      const scaledMarginDelta = this.scale(margin);
 
-      swapPeripheryParams = {
-        marginEngine: newMarginEngine,
-        isFT,
-        notional: scaledNotional,
-        sqrtPriceLimitX96,
-        tickLower,
-        tickUpper,
-        marginDelta: scaledMarginDelta,
-      };
-    }
+    const scaledMarginDelta = this.scale(margin);
+
+    swapPeripheryParams = {
+      marginEngine: newMarginEngine,
+      isFT,
+      notional: scaledNotional,
+      sqrtPriceLimitX96,
+      tickLower,
+      tickUpper,
+      marginDelta: scaledMarginDelta,
+    };
 
     await peripheryContract.callStatic.rolloverWithSwap(
       this.marginEngineAddress,
@@ -2706,7 +2694,7 @@ class AMM {
 
     const scaledAmount = BigNumber.from(this.scale(amount));
 
-    if (rolloverPosition) {
+    if (rolloverPosition && !this.isETH) {
       if (rolloverPosition.fixedLow >= rolloverPosition.fixedHigh) {
         throw new Error('Lower Rate must be smaller than Upper Rate');
       }
@@ -2806,7 +2794,7 @@ class AMM {
       currentBalance = await token.balanceOf(signerAddress);
     }
 
-    if (rolloverPosition) {
+    if (rolloverPosition && !this.isETH) {
       if (rolloverPosition.fixedLow >= rolloverPosition.fixedHigh) {
         throw new Error('Lower Rate must be smaller than Upper Rate');
       }
