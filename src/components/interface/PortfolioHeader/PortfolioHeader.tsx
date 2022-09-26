@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import PortfolioHeaderInfo from './PorfolioHeaderInfo';
 import PortfolioHeaderHealth from './PortfolioHeaderHealth';
 import { PortfolioContext} from '@contexts';
+import { isUndefined } from 'lodash';
 
 export type PortfolioHeaderProps = {
   currencyCode?: string;
