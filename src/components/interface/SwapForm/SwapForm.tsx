@@ -48,6 +48,8 @@ export type SwapProps = {
   tokenApprovals: ReturnType<typeof useTokenApproval>;
   tradeInfoErrorMessage?: string;
   underlyingTokenName?: string;
+  variableApy?: number;
+  fixedApr?: number;
 };
 
 const Swap: React.FunctionComponent<SwapProps> = ({
@@ -81,6 +83,8 @@ const Swap: React.FunctionComponent<SwapProps> = ({
   tokenApprovals,
   tradeInfoErrorMessage,
   underlyingTokenName,
+  variableApy,
+  fixedApr,
 }) => {
   const { agent, onChangeAgent } = useAgent();
   const bottomSpacing: SystemStyleObject<Theme> = {
@@ -101,7 +105,7 @@ const Swap: React.FunctionComponent<SwapProps> = ({
         </Box>
       )}
 
-      <ProtocolInformation protocol={protocol}/>
+      <ProtocolInformation protocol={protocol} variableApy={variableApy} fixedApr={fixedApr}/>
 
       <Box sx={bottomSpacing}>
         <MaturityInformation

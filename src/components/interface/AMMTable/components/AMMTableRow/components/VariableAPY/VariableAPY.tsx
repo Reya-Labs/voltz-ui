@@ -4,25 +4,21 @@ import TableCell from '@mui/material/TableCell';
 import { useAMMContext } from '@contexts';
 import { Typography } from '@components/atomic';
 import { formatNumber } from '@utilities';
+import { isUndefined } from 'lodash';
 
-const VariableAPY: React.FunctionComponent = () => {
-  const { variableApy } = useAMMContext();
-  const { result, loading, call } = variableApy;
+export type VariableAPYProps = {
+  variableApy?: number;
+};
 
-  useEffect(() => {
-    call();
-  }, [call]);
+
+const VariableAPY: React.FunctionComponent<VariableAPYProps> = ({variableApy}) => {
 
   const renderValue = () => {
-    if (loading) {
+    if (isUndefined(variableApy)) {
       return 'Loading...';
     }
 
-    if (!result) {
-      return '0%';
-    }
-
-    return `${formatNumber(result * 100)}%`;
+    return `${formatNumber(variableApy * 100)}%`;
   };
 
   return (

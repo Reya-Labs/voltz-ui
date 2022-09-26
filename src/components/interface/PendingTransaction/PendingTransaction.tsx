@@ -1,18 +1,21 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 
 import { AugmentedAMM, getPoolButtonId } from '@utilities';
 import { useWallet, useSelector, useAgent } from '@hooks';
 import { selectors } from '@store';
-import { AMMProvider, MintBurnFormLiquidityAction } from '@contexts';
+import { AMMProvider, MintBurnFormLiquidityAction, useAMMsContext } from '@contexts';
 import { Button, Panel, Typography, Loading, TokenAndText } from '@components/atomic';
 import { ProtocolInformation, WalletAddressDisplay } from '@components/composite';
 import { formatCurrency } from '@utilities';
 import { isUndefined } from 'lodash';
+import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
+import { Wallet } from '@graphql';
 
 export type PendingTransactionProps = {
   amm: AugmentedAMM;
+  position?: Position;
   transactionId?: string;
   isEditingMargin?: boolean;
   showNegativeNotional?: boolean;
@@ -25,10 +28,13 @@ export type PendingTransactionProps = {
   margin?: number;
   onBack: () => void;
   onComplete: () => void;
+  variableApy?: number;
+  fixedApr?: number;
 };
 
 const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   amm,
+  position,
   transactionId,
   liquidityAction,
   isEditingMargin,
@@ -41,10 +47,32 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   margin,
   onBack,
   onComplete,
+  variableApy,
+  fixedApr,
 }) => {
-  const { account } = useWallet();
+  const previousWallet = useRef<Wallet>();
+  const [fetch, setFetch] = useState<number>(0);
+  const fetchLimit = 20;
+  const { account, refetch, wallet, loading } = useWallet();
   const {agent} = useAgent();
+  const { isPositionFeched } = useAMMsContext();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
+  const isFetched = previousWallet.current ? isPositionFeched(wallet as Wallet, previousWallet.current, position) : fetch >= fetchLimit ;
+
+  useEffect(() => {
+    if (!previousWallet.current && wallet) {
+      previousWallet.current = wallet as Wallet;
+    }
+  }, [wallet]);
+
+  useEffect(() => {
+    if (activeTransaction && (activeTransaction.resolvedAt || activeTransaction.succeededAt)) {
+      if( wallet && previousWallet.current && !isPositionFeched(wallet as Wallet, previousWallet.current, position) ) {
+        setTimeout(() => {refetch()}, 500);
+        if(fetch < fetchLimit) setFetch(fetch+1);
+      } 
+    }
+  }, [activeTransaction?.resolvedAt, activeTransaction?.succeededAt, fetch]);
 
   if (!activeTransaction) {
     return null;
@@ -62,7 +90,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   }
 
   const renderStatus = () => {
-    if (activeTransaction.resolvedAt) {
+    if (activeTransaction.resolvedAt && isFetched) {
       return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Box
@@ -163,7 +191,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
       );
     }
 
-    if (activeTransaction.succeededAt) {
+    if (activeTransaction.succeededAt && isFetched) {
       return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Box
@@ -311,7 +339,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
           )
           : (
             <AMMProvider amm={amm}>
-              <ProtocolInformation protocol={amm.protocol} />
+              <ProtocolInformation protocol={amm.protocol} variableApy={variableApy} fixedApr={fixedApr}/>
             </AMMProvider>
           )
         }

@@ -115,10 +115,14 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
   }, []);
 
   const pollInterval = polling ? 500 : undefined;
-  const { data, loading, error, stopPolling } = useGetWalletQuery({
+  const { data, loading, error, stopPolling, refetch } = useGetWalletQuery({
     variables: { id: account || '' },
     pollInterval,
+    fetchPolicy: 'no-cache',
+    nextFetchPolicy: 'no-cache'
   });
+
+  const doRefetch = useCallback(() => {refetch()}, [refetch]);
 
   const unresolvedTransactions = useSelector(selectors.unresolvedTransactionsSelector);
   const shouldPoll = unresolvedTransactions.length > 0;
@@ -146,6 +150,7 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
     required,
     setRequired,
     walletError,
+    refetch: doRefetch
   };
 
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;

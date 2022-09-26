@@ -4,25 +4,20 @@ import { useAMMContext } from '@contexts';
 import { Typography } from '@components/atomic';
 import TableCell from '@mui/material/TableCell';
 import { formatNumber } from '@utilities';
+import { isUndefined } from 'lodash';
 
-const FixedAPR: React.FunctionComponent = () => {
-  const { fixedApr } = useAMMContext();
-  const { result, loading, call } = fixedApr;
+export type FixedAPRProps = {
+  fixedApr?: number;
+};
 
-  useEffect(() => {
-    call();
-  }, [call]);
+const FixedAPR: React.FunctionComponent<FixedAPRProps> = ({fixedApr}) => {
 
   const renderValue = () => {
-    if (loading) {
+    if (isUndefined(fixedApr)) {
       return 'Loading...';
     }
 
-    if (!result) {
-      return '0%';
-    }
-
-    return `${formatNumber(result)}%`;
+    return `${formatNumber(fixedApr)}%`;
   };
 
   return (
