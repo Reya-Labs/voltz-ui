@@ -15,23 +15,27 @@ export type ConnectedMellowLPTableProps = {
 
 const ConnectedMellowLPTable: React.FunctionComponent<ConnectedMellowLPTableProps> = ({onSelectItem}) => {
 
-    // TODO: need to get this via hook when implementation is done
     const { lpVaults } = useMellowLPVaults();
 
     const { signer } = useWallet();
     const isSignerAvailable = !isNull(signer);
 
+    const [dataLoading, setDataLoading] = useState<boolean>(false);
     const [vaultsLoaded, setVaultsLoaded] = useState<boolean>(false);
     const [userDataLoaded, setUserDataLoaded] = useState<boolean>(false);
 
     const initVaults = () => {
         if (lpVaults) {
             setVaultsLoaded(false);
+            setDataLoading(true);
             const request = Promise.allSettled(lpVaults.map(item => item.vaultInit()));
 
-            request.then((_) => {
+            void request.then((_) => {
                 console.log("Vault info loaded.");
                 setVaultsLoaded(true);
+                setDataLoading(false);
+            }, (_) => {
+                setDataLoading(false);
             });
         }
     }
@@ -39,12 +43,17 @@ const ConnectedMellowLPTable: React.FunctionComponent<ConnectedMellowLPTableProp
     const initUserData = () => {
         if (lpVaults && vaultsLoaded && !isNull(signer)) {
             setUserDataLoaded(false);
+            setDataLoading(true);
+
             const request = Promise.allSettled(lpVaults.map(item => item.userInit(signer)));
 
-            request.then((_) => {
+            void request.then((_) => {
                 console.log("User data loaded.");
                 setUserDataLoaded(true);
-            })
+                setDataLoading(false);
+            }, (_) => {
+                setDataLoading(false);
+            });
         }
     }
 
@@ -68,7 +77,7 @@ const ConnectedMellowLPTable: React.FunctionComponent<ConnectedMellowLPTableProp
                 />
                 {lpVaults && (
                 <Box sx={{ marginTop: "32px"}}>
-                    <MellowLPTable lpVaults={lpVaults} onSelectItem={onSelectItem}/>
+                    <MellowLPTable lpVaults={lpVaults} onSelectItem={onSelectItem} disabled={dataLoading}/>
                 </Box>)}
             </Panel>
             </>
