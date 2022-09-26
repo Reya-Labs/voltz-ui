@@ -6,9 +6,10 @@ import { isUndefined } from "lodash";
 export type MellowLPPositionProps = {
     lpVault: AugmentedMellowLpVault;
     handleClick: () => void;
+    disabled: boolean;
 }
 
-const MellowLPPosition: React.FunctionComponent<MellowLPPositionProps> = ({ lpVault, handleClick }: MellowLPPositionProps) => {
+const MellowLPPosition: React.FunctionComponent<MellowLPPositionProps> = ({ lpVault, handleClick, disabled }: MellowLPPositionProps) => {
 
     const getPositionInfo = () => {
         if (isUndefined(lpVault.userDeposit)) {
@@ -36,7 +37,7 @@ const MellowLPPosition: React.FunctionComponent<MellowLPPositionProps> = ({ lpVa
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 {getPositionInfo()}
 
-                <Button onClick={handleClick} sx={{
+                <Button onClick={handleClick} disabled={disabled} sx={{
                     background: 'transparent',
                     color: 'primary.light',
                     '&:hover': {

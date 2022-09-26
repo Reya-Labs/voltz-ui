@@ -11,29 +11,14 @@ import { isUndefined } from 'lodash';
 export type LPMellowVaultDepositWindowProps = {
     lpVault: AugmentedMellowLpVault;
     onChangeDeposit: (value: number | undefined) => void;
+    submitText: string;
+    hintText: ReactNode;
     onSubmit: () => void;
-    onCancel: () => void;
     disabled: boolean;
+    onCancel: () => void;
 };
 
-type TextProps = {
-    bold?: boolean;
-    children?: ReactNode;
-    green?: boolean;
-    red?: boolean;
-  };
-
-const Text = ({ bold, children, green, red }: TextProps) => (
-    <Box component='span' sx={{ 
-      color: green ? colors.vzCustomGreen1 : red ? colors.vzCustomRed1 : undefined,
-      fontWeight: bold ? 'bold' : undefined,
-      textTransform: 'none'
-    }}>
-      {children}
-    </Box>
-  );
-
-const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWindowProps> = ({ lpVault, onChangeDeposit, onSubmit, disabled, onCancel }: LPMellowVaultDepositWindowProps) => {
+const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWindowProps> = ({ lpVault, onChangeDeposit, submitText, hintText, disabled, onSubmit, onCancel }: LPMellowVaultDepositWindowProps) => {
 
     const subtext = `WALLET BALANCE: ${isUndefined(lpVault.userWalletBalance) ? "---" : `${formatCurrency(lpVault.userWalletBalance, true)} ${lpVault.tokenName}`}`;
 
@@ -91,7 +76,7 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
                           boxShadow: '0px 4px 20px 0px #4de5ff33',
                         } }}
                     >
-                        DEPOSIT
+                        {submitText}
                     </Button>
 
                     <Button
@@ -108,7 +93,7 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
                     color: colors.lavenderWeb.darken015,
                     fontSize: '12px'
                 }}>
-                    {<><Text green>Tokens approved</Text>. Let's deposit!</>}
+                    {hintText}
                 </Typography>
 
                 <Panel sx={{ width: '100%', maxWidth: '296px', background: "#28233B", padding: "16px 16px", marginTop: "16px" }}>
