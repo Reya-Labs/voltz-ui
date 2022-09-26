@@ -39,8 +39,8 @@ const PortfolioHeader = ({
           Net notional
         </Typography>
         <Typography variant='h1' sx={titleStyles}>
-          {!portfolioData.totalNotional && <>Loading...</>}
-          {portfolioData.totalNotional &&  <>{currencySymbol}{formatCurrency(portfolioData.totalNotional)} {currencyCode}</>}
+          {isUndefined(portfolioData.totalNotional) && <>Loading...</>}
+          {!isUndefined(portfolioData.totalNotional) &&  <>{currencySymbol}{formatCurrency(portfolioData.totalNotional)} {currencyCode}</>}
           
         </Typography>
       </Box>
