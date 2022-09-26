@@ -328,22 +328,10 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
     >
       {renderStatus()}
       <Panel variant="main">
-        {(isRollover || isSettle) 
-          ? (
-            <TokenAndText 
-              token={amm.protocol} 
-              tokenLabel='pool' 
-              text={isRollover ? 'ROLLOVER' : 'SETTLING'} 
-              textLabel='STATUS' 
-            />
-          )
-          : (
-            <AMMProvider amm={amm}>
-              <ProtocolInformation protocol={amm.protocol} variableApy={variableApy} fixedApr={fixedApr}/>
-            </AMMProvider>
-          )
-        }
-
+        <AMMProvider amm={amm}>
+          <ProtocolInformation protocol={amm.protocol} isRollover={isRollover} isSettle={isSettle} variableApy={variableApy} fixedApr={fixedApr}/>
+        </AMMProvider>
+      
         {(isUndefined(isEditingMargin) || !isEditingMargin) && (<Box
           sx={{
             marginBottom: (theme) => theme.spacing(4),
