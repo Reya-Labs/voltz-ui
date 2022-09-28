@@ -1,5 +1,5 @@
 import JSBI from 'jsbi';
-import { BaseContract, ethers, providers } from 'ethers';
+import { ethers, providers } from 'ethers';
 import { DateTime } from 'luxon';
 import { BigNumber, ContractReceipt, Signer, utils } from 'ethers';
 

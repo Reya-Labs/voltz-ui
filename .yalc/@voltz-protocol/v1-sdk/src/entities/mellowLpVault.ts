@@ -1,6 +1,14 @@
 /* eslint-disable camelcase */
 /* eslint-disable lines-between-class-members */
-import { Signer, providers, ethers, BigNumberish, BigNumber, ContractReceipt } from 'ethers';
+import {
+  Signer,
+  providers,
+  ethers,
+  BigNumberish,
+  BigNumber,
+  ContractReceipt,
+  Contract,
+} from 'ethers';
 import { isNull, isUndefined } from 'lodash';
 import { getProtocolPrefix, getTokenInfo } from '../services/getTokenInfo';
 import timestampWadToDateTime from '../utils/timestampWadToDateTime';
@@ -12,29 +20,34 @@ import {
   MarginEngine,
   MarginEngine__factory,
 } from '../typechain';
-import { getGasBuffer } from '../constants';
+import { getGasBuffer, MaxUint256Bn, TresholdApprovalBn } from '../constants';
+
+import { abi as VoltzVaultABI } from '../ABIs/VoltzVault.json';
+import { abi as Erc20RootVaultABI } from '../ABIs/Erc20RootVault.json';
 
 export type MellowLpVaultArgs = {
-  id: string;
+  voltzVaultAddress: string;
+  erc20RootVaultAddress: string;
   provider?: providers.Provider;
 };
 
 class MellowLpVault {
-  public readonly id: string;
+  public readonly voltzVaultAddress: string;
+  public readonly erc20RootVaultAddress: string;
   public readonly provider?: providers.Provider;
 
   public readOnlyContracts?: {
     marginEngine: MarginEngine;
     token: IERC20Minimal;
     rateOracle: BaseRateOracle;
-    // TODO: change type
-    erc20Vault: any;
+    voltzVault: Contract;
+    erc20RootVault: Contract;
   };
 
   public writeContracts?: {
     token: IERC20Minimal;
-    // TODO: change type
-    erc20Vault: any;
+    voltzVault: Contract;
+    erc20RootVault: Contract;
   };
 
   public signer?: Signer;
@@ -54,8 +67,9 @@ class MellowLpVault {
   public vaultInitialized = false;
   public userInitialized = false;
 
-  public constructor({ id, provider }: MellowLpVaultArgs) {
-    this.id = id;
+  public constructor({ erc20RootVaultAddress, voltzVaultAddress, provider }: MellowLpVaultArgs) {
+    this.erc20RootVaultAddress = erc20RootVaultAddress;
+    this.voltzVaultAddress = voltzVaultAddress;
     this.provider = provider;
   }
 
@@ -79,9 +93,23 @@ class MellowLpVault {
       return;
     }
 
-    // TODO: retrieve margin engine address from voltzVault
-    const marginEngineAddress = '0x0BC09825Ce9433B2cDF60891e1B50a300b069Dd2';
+    const voltzVaultContract = new ethers.Contract(
+      this.voltzVaultAddress,
+      VoltzVaultABI,
+      this.provider,
+    );
+    console.log('voltz vault address:', this.voltzVaultAddress);
+
+    const erc20RootVaultContract = new ethers.Contract(
+      this.erc20RootVaultAddress,
+      Erc20RootVaultABI,
+      this.provider,
+    );
+
+    const marginEngineAddress = await voltzVaultContract.marginEngine();
     const marginEngineContract = MarginEngine__factory.connect(marginEngineAddress, this.provider);
+
+    console.log('margin engine address:', marginEngineAddress);
 
     const tokenAddress = await marginEngineContract.underlyingToken();
     const tokenContract = IERC20Minimal__factory.connect(tokenAddress, this.provider);
@@ -97,8 +125,8 @@ class MellowLpVault {
       marginEngine: marginEngineContract,
       token: tokenContract,
       rateOracle: rateOracleContract,
-      // TODO: build erc20Vault
-      erc20Vault: null,
+      voltzVault: voltzVaultContract,
+      erc20RootVault: erc20RootVaultContract,
     };
 
     console.log('read-only contracts ready');
@@ -148,8 +176,12 @@ class MellowLpVault {
 
     this.writeContracts = {
       token: IERC20Minimal__factory.connect(this.readOnlyContracts.token.address, this.signer),
-      // TODO: build erc20Vault
-      erc20Vault: null,
+      voltzVault: new ethers.Contract(this.voltzVaultAddress, VoltzVaultABI, this.signer),
+      erc20RootVault: new ethers.Contract(
+        this.erc20RootVaultAddress,
+        Erc20RootVaultABI,
+        this.signer,
+      ),
     };
 
     console.log('write contracts ready');
@@ -203,7 +235,30 @@ class MellowLpVault {
   };
 
   refreshUserDeposit = async (): Promise<void> => {
-    this.userDeposit = 1999;
+    if (
+      isUndefined(this.userAddress) ||
+      isUndefined(this.readOnlyContracts) ||
+      isUndefined(this.tokenDecimals)
+    ) {
+      this.userDeposit = 0;
+      return;
+    }
+
+    const lpTokens = await this.readOnlyContracts.erc20RootVault.balanceOf(this.userAddress);
+    const totalLpTokens = await this.readOnlyContracts.erc20RootVault.totalSupply();
+
+    console.log('lp tokens', lpTokens.toString());
+    console.log('total lp tokens:', totalLpTokens);
+    const tvl = await this.readOnlyContracts.voltzVault.tvl();
+    console.log('tvl', tvl.toString());
+
+    const updatedTvl = await this.readOnlyContracts.voltzVault.callStatic.updateTvl();
+    console.log('updated tvl', updatedTvl.toString());
+
+    const userFunds = lpTokens.mul(tvl[0][0]).div(totalLpTokens);
+    console.log('user funds:', userFunds.toString());
+
+    this.userDeposit = this.descale(userFunds, this.tokenDecimals);
   };
 
   refreshUserExpectedCashflow = async (): Promise<void> => {
@@ -224,98 +279,99 @@ class MellowLpVault {
     this.userWalletBalance = this.descale(walletBalance, this.tokenDecimals);
   };
 
-  getTokenApproval = async (): Promise<number> => {
+  isTokenApproved = async (): Promise<boolean> => {
     if (
       isUndefined(this.userAddress) ||
       isUndefined(this.readOnlyContracts) ||
       isUndefined(this.tokenDecimals)
     ) {
-      return 0;
+      return false;
     }
 
-    console.log(`Querying allowance...`);
-    return 123456;
+    const tokenApproval = await this.readOnlyContracts.token.allowance(
+      this.userAddress,
+      this.readOnlyContracts.erc20RootVault.address,
+    );
 
-    // const tokenApproval = await this.readOnlyContracts.token.allowance(
-    //   this.userAddress,
-    //   this.readOnlyContracts.erc20Vault.address,
-    // );
-
-    // return this.descale(tokenApproval, this.tokenDecimals);
+    return tokenApproval.gte(TresholdApprovalBn);
   };
 
-  approveToken = async (amount: number): Promise<ContractReceipt> => {
+  approveToken = async (): Promise<ContractReceipt> => {
     if (isUndefined(this.readOnlyContracts) || isUndefined(this.writeContracts)) {
       throw new Error('Uninitialized contracts.');
     }
 
-    const scaledAmount = this.scale(amount);
+    try {
+      await this.writeContracts.token.callStatic.approve(
+        this.readOnlyContracts.erc20RootVault.address,
+        MaxUint256Bn,
+      );
+    } catch (_) {
+      throw new Error('Unsuccessful approval simulation.');
+    }
 
-    console.log(`Calling approve(${scaledAmount})...`);
-    throw new Error(`Calling approve(${scaledAmount})...`);
+    const gasLimit = await this.writeContracts.token.estimateGas.approve(
+      this.readOnlyContracts.erc20RootVault.address,
+      MaxUint256Bn,
+    );
 
-    // try {
-    //   await this.writeContracts.token.callStatic.approve(
-    //     this.readOnlyContracts.erc20Vault.address,
-    //     scaledAmount,
-    //   );
-    // } catch (_) {
-    //   throw new Error('Unsuccessful approval.');
-    // }
+    const tx = await this.writeContracts.token.approve(
+      this.readOnlyContracts.erc20RootVault.address,
+      MaxUint256Bn,
+      {
+        gasLimit: getGasBuffer(gasLimit),
+      },
+    );
 
-    // const gasLimit = await this.writeContracts.token.estimateGas.approve(
-    //   this.readOnlyContracts.erc20Vault.address,
-    //   scaledAmount,
-    // );
-
-    // const tx = await this.writeContracts.token.approve(
-    //   this.readOnlyContracts.erc20Vault.address,
-    //   scaledAmount,
-    //   {
-    //     gasLimit: getGasBuffer(gasLimit),
-    //   },
-    // );
-
-    // try {
-    //   const receipt = await tx.wait();
-    //   return receipt;
-    // } catch (_) {
-    //   throw new Error('Unsucessful confirmation.');
-    // }
+    try {
+      const receipt = await tx.wait();
+      return receipt;
+    } catch (_) {
+      throw new Error('Unsucessful approval confirmation.');
+    }
   };
 
   deposit = async (amount: number): Promise<ContractReceipt> => {
-    if (isUndefined(this.readOnlyContracts) || isUndefined(this.writeContracts)) {
+    if (
+      isUndefined(this.readOnlyContracts) ||
+      isUndefined(this.writeContracts) ||
+      isUndefined(this.userAddress)
+    ) {
       throw new Error('Uninitialized contracts.');
     }
 
     const scaledAmount = this.scale(amount);
 
     console.log(`Calling deposit(${scaledAmount})...`);
-    throw new Error(`Calling deposit(${scaledAmount})...`);
 
-    // try {
-    //   await this.writeContracts.erc20Vault.callStatic.deposit([scaledAmount], 0, '');
-    // } catch (_) {
-    //   throw new Error('Unsuccessful approval.');
-    // }
+    const minLPTokens = BigNumber.from(0);
 
-    // const gasLimit = await this.writeContracts.erc20Vault.estimatedGas.deposit(
-    //   [scaledAmount],
-    //   0,
-    //   '',
-    // );
+    console.log(`args of deposit: (${[scaledAmount]}, ${minLPTokens.toString()}, ${[]}`);
 
-    // const tx = await this.writeContracts.erc20Vault.deposit([scaledAmount], 0, '', {
-    //   gasLimit: getGasBuffer(gasLimit),
-    // });
+    try {
+      await this.writeContracts.erc20RootVault.callStatic.deposit([scaledAmount], minLPTokens, []);
+    } catch (err) {
+      console.log('ERROR', err);
+      throw new Error('Unsuccessful deposit simulation.');
+    }
 
-    // try {
-    //   const receipt = await tx.wait();
-    //   return receipt;
-    // } catch (_) {
-    //   throw new Error('Unsucessful confirmation.');
-    // }
+    const gasLimit = await this.writeContracts.erc20RootVault.estimateGas.deposit(
+      [scaledAmount],
+      minLPTokens,
+      [],
+    );
+
+    const tx = await this.writeContracts.erc20RootVault.deposit([scaledAmount], minLPTokens, [], {
+      gasLimit: getGasBuffer(gasLimit),
+    });
+
+    try {
+      const receipt = await tx.wait();
+      return receipt;
+    } catch (err) {
+      console.log('ERROR', err);
+      throw new Error('Unsucessful deposit confirmation.');
+    }
   };
 }
 

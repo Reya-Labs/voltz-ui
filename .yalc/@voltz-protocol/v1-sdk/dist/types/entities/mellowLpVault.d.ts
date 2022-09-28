@@ -1,21 +1,25 @@
-import { Signer, providers, BigNumberish, BigNumber, ContractReceipt } from 'ethers';
+import { Signer, providers, BigNumberish, BigNumber, ContractReceipt, Contract } from 'ethers';
 import { BaseRateOracle, IERC20Minimal, MarginEngine } from '../typechain';
 export declare type MellowLpVaultArgs = {
-    id: string;
+    voltzVaultAddress: string;
+    erc20RootVaultAddress: string;
     provider?: providers.Provider;
 };
 declare class MellowLpVault {
-    readonly id: string;
+    readonly voltzVaultAddress: string;
+    readonly erc20RootVaultAddress: string;
     readonly provider?: providers.Provider;
     readOnlyContracts?: {
         marginEngine: MarginEngine;
         token: IERC20Minimal;
         rateOracle: BaseRateOracle;
-        erc20Vault: any;
+        voltzVault: Contract;
+        erc20RootVault: Contract;
     };
     writeContracts?: {
         token: IERC20Minimal;
-        erc20Vault: any;
+        voltzVault: Contract;
+        erc20RootVault: Contract;
     };
     signer?: Signer;
     maturity?: string;
@@ -29,7 +33,7 @@ declare class MellowLpVault {
     userAddress?: string;
     vaultInitialized: boolean;
     userInitialized: boolean;
-    constructor({ id, provider }: MellowLpVaultArgs);
+    constructor({ erc20RootVaultAddress, voltzVaultAddress, provider }: MellowLpVaultArgs);
     descale: (amount: BigNumberish, decimals: number) => number;
     scale: (amount: number) => BigNumber;
     vaultInit: () => Promise<void>;
@@ -43,8 +47,8 @@ declare class MellowLpVault {
     refreshUserDeposit: () => Promise<void>;
     refreshUserExpectedCashflow: () => Promise<void>;
     refreshWalletBalance: () => Promise<void>;
-    getTokenApproval: () => Promise<number>;
-    approveToken: (amount: number) => Promise<ContractReceipt>;
+    isTokenApproved: () => Promise<boolean>;
+    approveToken: () => Promise<ContractReceipt>;
     deposit: (amount: number) => Promise<ContractReceipt>;
 }
 export default MellowLpVault;
