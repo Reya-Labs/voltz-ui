@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 
@@ -12,6 +12,7 @@ import { formatCurrency } from '@utilities';
 import { isUndefined } from 'lodash';
 import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
 import { Wallet } from '@graphql';
+import { ChangeCircleSharp } from '@mui/icons-material';
 
 export type PendingTransactionProps = {
   amm: AugmentedAMM;
@@ -52,12 +53,37 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
 }) => {
   const previousWallet = useRef<Wallet>();
   const [fetch, setFetch] = useState<number>(0);
+  const fetchRef = useRef<number>(0);
   const fetchLimit = 20;
-  const { account, refetch, wallet, loading } = useWallet();
+  const { account, refetch, wallet } = useWallet();
+  const [loadingRefetch, setLoadingRefetch] = useState<boolean>(false);
   const {agent} = useAgent();
   const { isPositionFeched } = useAMMsContext();
+  const cachedMargin = useRef<number | undefined>(margin);
+
+  useEffect(() => {
+    if (!isUndefined(margin) && margin !== 0){
+      cachedMargin.current =  margin;
+    }
+  }, [margin]);
+  
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
-  const isFetched = previousWallet.current ? isPositionFeched(wallet as Wallet, previousWallet.current, position) : fetch >= fetchLimit ;
+  const trasactionState = useMemo(() => {
+    return [activeTransaction?.resolvedAt,activeTransaction?.succeededAt]; 
+  }, []);
+
+  const isFetched = useMemo(() => {
+    if (previousWallet.current && !loadingRefetch && isPositionFeched(wallet as Wallet, previousWallet.current, position)) {
+        fetchRef.current = 0;
+        return true;
+    } else {
+        if (fetch >= fetchLimit) {
+          fetchRef.current = 0;
+          return true;
+        }
+      }
+    return false;
+  }, [fetch, loadingRefetch] );
 
   useEffect(() => {
     if (!previousWallet.current && wallet) {
@@ -66,13 +92,19 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   }, [wallet]);
 
   useEffect(() => {
+    if ( activeTransaction && trasactionState[0] === activeTransaction.resolvedAt && trasactionState[1] === activeTransaction.succeededAt ) return;
     if (activeTransaction && (activeTransaction.resolvedAt || activeTransaction.succeededAt)) {
-      if( wallet && previousWallet.current && !isPositionFeched(wallet as Wallet, previousWallet.current, position) ) {
-        setTimeout(() => {refetch()}, 500);
-        if(fetch < fetchLimit) setFetch(fetch+1);
+      if( fetch < fetchLimit && !loadingRefetch && wallet && previousWallet.current && !isPositionFeched(wallet as Wallet, previousWallet.current, position) ) {
+        setLoadingRefetch(true);
+        /* eslint-disable @typescript-eslint/no-unsafe-call */
+        refetch().then(() => {
+          setTimeout(() => {setLoadingRefetch(false)}, 500);
+          fetchRef.current = fetch+1;
+          setFetch(fetchRef.current);
+        });
       } 
     }
-  }, [activeTransaction?.resolvedAt, activeTransaction?.succeededAt, fetch]);
+  }, [activeTransaction?.resolvedAt, activeTransaction?.succeededAt, fetch, loadingRefetch]);
 
   if (!activeTransaction) {
     return null;
@@ -273,12 +305,18 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
           <WalletAddressDisplay address={account} />
         </Box>
         <Box
+        >
+          <Typography variant="caption" color="secondary" sx={{}}>
+            Confirm this transaction in your wallet
+          </Typography>
+        </Box>
+        <Box
           sx={{
             paddingBottom: (theme) => theme.spacing(10),
           }}
         >
-          <Typography variant="caption" color="secondary">
-            Confirm this transaction in your wallet
+          <Typography variant="caption" color="secondary" sx={{}}>
+            if you haven't already
           </Typography>
         </Box>
       </Box>
@@ -302,12 +340,16 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   }
 
   const renderMargin = () => {
-    if (isUndefined(margin)) {
-      return "Margin undefined";
-    }
 
     if (isUndefined(amm.underlyingToken.name)) {
       return "Underlying token name undefined";
+    }
+
+    if (isSettle) {
+      return `${formatCurrency(cachedMargin.current ?? 0)} ${amm.underlyingToken.name}`;
+    }
+    if (isUndefined(margin)) {
+      return "Margin undefined";
     }
 
     if (isFCMSwap) {

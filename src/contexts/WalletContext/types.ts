@@ -34,7 +34,7 @@ export type Wallet = {
   setRequired: (required: boolean) => void;
   walletError: string | null;
   networkId?: string;
-  refetch: () => void;
+  refetch: () => Promise<void>;
 };
 
 export interface WalletRiskAssessment {

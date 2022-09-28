@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { BigNumber, ethers } from 'ethers';
 
 import { useGetWalletQuery } from '@graphql';
@@ -122,7 +122,9 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
     nextFetchPolicy: 'no-cache'
   });
 
-  const doRefetch = useCallback(() => {refetch()}, [refetch]);
+  const doRefetch = useCallback(async () => {
+    await refetch()
+  }, [refetch]);
 
   const unresolvedTransactions = useSelector(selectors.unresolvedTransactionsSelector);
   const shouldPoll = unresolvedTransactions.length > 0;
