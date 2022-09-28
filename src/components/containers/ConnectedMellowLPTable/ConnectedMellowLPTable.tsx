@@ -31,7 +31,6 @@ const ConnectedMellowLPTable: React.FunctionComponent<ConnectedMellowLPTableProp
             const request = Promise.allSettled(lpVaults.map(item => item.vaultInit()));
 
             void request.then((_) => {
-                console.log("Vault info loaded.");
                 setVaultsLoaded(true);
                 setDataLoading(false);
             }, (_) => {
@@ -48,7 +47,6 @@ const ConnectedMellowLPTable: React.FunctionComponent<ConnectedMellowLPTableProp
             const request = Promise.allSettled(lpVaults.map(item => item.userInit(signer)));
 
             void request.then((_) => {
-                console.log("User data loaded.");
                 setUserDataLoaded(true);
                 setDataLoading(false);
             }, (_) => {
