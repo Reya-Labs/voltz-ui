@@ -164,7 +164,7 @@ const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMellowLpDep
                 submitText: "Deposit",
                 action: deposit,
                 hintText: (selectedDeposit > 0) ? (<><Text green>Tokens approved</Text>. Let's deposit!</>) : "Please input amount",
-                disabled: false,
+                disabled: !(selectedDeposit > 0),
             }
             break;
         }

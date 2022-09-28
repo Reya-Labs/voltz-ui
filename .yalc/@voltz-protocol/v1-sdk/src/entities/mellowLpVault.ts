@@ -249,16 +249,19 @@ class MellowLpVault {
 
     console.log('lp tokens', lpTokens.toString());
     console.log('total lp tokens:', totalLpTokens);
-    const tvl = await this.readOnlyContracts.voltzVault.tvl();
+    const tvl = await this.readOnlyContracts.erc20RootVault.tvl();
     console.log('tvl', tvl.toString());
 
     const updatedTvl = await this.readOnlyContracts.voltzVault.callStatic.updateTvl();
-    console.log('updated tvl', updatedTvl.toString());
+    console.log('voltz updated tvl', updatedTvl.toString());
 
-    const userFunds = lpTokens.mul(tvl[0][0]).div(totalLpTokens);
-    console.log('user funds:', userFunds.toString());
-
-    this.userDeposit = this.descale(userFunds, this.tokenDecimals);
+    if (totalLpTokens.gt(0)) {
+      const userFunds = lpTokens.mul(tvl[0][0]).div(totalLpTokens);
+      console.log('user funds:', userFunds.toString());
+      this.userDeposit = this.descale(userFunds, this.tokenDecimals);
+    } else {
+      this.userDeposit = 0;
+    }
   };
 
   refreshUserExpectedCashflow = async (): Promise<void> => {
@@ -367,6 +370,25 @@ class MellowLpVault {
 
     try {
       const receipt = await tx.wait();
+
+      try {
+        await this.refreshWalletBalance();
+      } catch (_) {
+        console.error('Wallet user balance failed to refresh after deposit');
+      }
+
+      try {
+        await this.refreshUserDeposit();
+      } catch (_) {
+        console.error('User deposit failed to refresh after deposit');
+      }
+
+      try {
+        await this.refreshVaultAccumulative();
+      } catch (_) {
+        console.error('Vault accumulative failed to refresh after deposit');
+      }
+
       return receipt;
     } catch (err) {
       console.log('ERROR', err);

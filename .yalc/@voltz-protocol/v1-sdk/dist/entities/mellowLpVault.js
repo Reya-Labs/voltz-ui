@@ -211,17 +211,22 @@ var MellowLpVault = /** @class */ (function () {
                         totalLpTokens = _a.sent();
                         console.log('lp tokens', lpTokens.toString());
                         console.log('total lp tokens:', totalLpTokens);
-                        return [4 /*yield*/, this.readOnlyContracts.voltzVault.tvl()];
+                        return [4 /*yield*/, this.readOnlyContracts.erc20RootVault.tvl()];
                     case 3:
                         tvl = _a.sent();
                         console.log('tvl', tvl.toString());
                         return [4 /*yield*/, this.readOnlyContracts.voltzVault.callStatic.updateTvl()];
                     case 4:
                         updatedTvl = _a.sent();
-                        console.log('updated tvl', updatedTvl.toString());
-                        userFunds = lpTokens.mul(tvl[0][0]).div(totalLpTokens);
-                        console.log('user funds:', userFunds.toString());
-                        this.userDeposit = this.descale(userFunds, this.tokenDecimals);
+                        console.log('voltz updated tvl', updatedTvl.toString());
+                        if (totalLpTokens.gt(0)) {
+                            userFunds = lpTokens.mul(tvl[0][0]).div(totalLpTokens);
+                            console.log('user funds:', userFunds.toString());
+                            this.userDeposit = this.descale(userFunds, this.tokenDecimals);
+                        }
+                        else {
+                            this.userDeposit = 0;
+                        }
                         return [2 /*return*/];
                 }
             });
@@ -309,7 +314,7 @@ var MellowLpVault = /** @class */ (function () {
             });
         }); };
         this.deposit = function (amount) { return __awaiter(_this, void 0, void 0, function () {
-            var scaledAmount, minLPTokens, err_1, gasLimit, tx, receipt, err_2;
+            var scaledAmount, minLPTokens, err_1, gasLimit, tx, receipt, _3, _4, _5, err_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -343,16 +348,47 @@ var MellowLpVault = /** @class */ (function () {
                         tx = _a.sent();
                         _a.label = 7;
                     case 7:
-                        _a.trys.push([7, 9, , 10]);
+                        _a.trys.push([7, 19, , 20]);
                         return [4 /*yield*/, tx.wait()];
                     case 8:
                         receipt = _a.sent();
-                        return [2 /*return*/, receipt];
+                        _a.label = 9;
                     case 9:
+                        _a.trys.push([9, 11, , 12]);
+                        return [4 /*yield*/, this.refreshWalletBalance()];
+                    case 10:
+                        _a.sent();
+                        return [3 /*break*/, 12];
+                    case 11:
+                        _3 = _a.sent();
+                        console.error('Wallet user balance failed to refresh after deposit');
+                        return [3 /*break*/, 12];
+                    case 12:
+                        _a.trys.push([12, 14, , 15]);
+                        return [4 /*yield*/, this.refreshUserDeposit()];
+                    case 13:
+                        _a.sent();
+                        return [3 /*break*/, 15];
+                    case 14:
+                        _4 = _a.sent();
+                        console.error('User deposit failed to refresh after deposit');
+                        return [3 /*break*/, 15];
+                    case 15:
+                        _a.trys.push([15, 17, , 18]);
+                        return [4 /*yield*/, this.refreshVaultAccumulative()];
+                    case 16:
+                        _a.sent();
+                        return [3 /*break*/, 18];
+                    case 17:
+                        _5 = _a.sent();
+                        console.error('Vault accumulative failed to refresh after deposit');
+                        return [3 /*break*/, 18];
+                    case 18: return [2 /*return*/, receipt];
+                    case 19:
                         err_2 = _a.sent();
                         console.log('ERROR', err_2);
                         throw new Error('Unsucessful deposit confirmation.');
-                    case 10: return [2 /*return*/];
+                    case 20: return [2 /*return*/];
                 }
             });
         }); };
