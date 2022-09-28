@@ -16,7 +16,6 @@ export type ConnectedMellowLpDepositFormProps = {
 
 export enum DepositStates {
     INITIALISING = "INITIALISING",
-    INSUFFICIENT_FUNDS = "INSUFFICIENT_FUNDS",
     PROVIDER_ERROR = "PROVIDER_ERROR",
     APPROVE_REQUIRED = "APPROVE_REQUIRED",
     APPROVING = "APPROVING",
@@ -55,27 +54,18 @@ const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMellowLpDep
     const sufficientFunds = (vault.userWalletBalance ?? 0) >= selectedDeposit;
 
     useEffect(() => {
-        setError(undefined);
-        setDepositState(DepositStates.INITIALISING);
-
-        console.log("Effect triggered", sufficientFunds);
-        if (sufficientFunds) {
-            vault.getTokenApproval().then((allowance: number) => {
-                if (allowance >= selectedDeposit) {
-                    setDepositState(DepositStates.APPROVED);
-                }
-                else {
-                    setDepositState(DepositStates.APPROVE_REQUIRED);
-                }
-            }, (err: Error) => {
-                setError(err.message);
-                setDepositState(DepositStates.PROVIDER_ERROR);
-            });
-        }
-        else {
-            setDepositState(DepositStates.INSUFFICIENT_FUNDS);
-        }
-    }, [vault, sufficientFunds, selectedDeposit]);
+        vault.isTokenApproved().then((resp) => {
+            if (resp) {
+                setDepositState(DepositStates.APPROVED);
+            }
+            else {
+                setDepositState(DepositStates.APPROVE_REQUIRED);
+            }
+        }, (err: Error) => {
+            setError(err.message);
+            setDepositState(DepositStates.PROVIDER_ERROR);
+        });
+    }, [vault]);
 
     let submissionState: {
         submitText: string,
@@ -108,15 +98,6 @@ const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMellowLpDep
             }
             break;
         }
-        case DepositStates.INSUFFICIENT_FUNDS: {
-            submissionState = {
-                submitText: "Insufficient Funds",
-                action: () => { },
-                hintText: "Please fix form errors to continue",
-                disabled: true,
-            }
-            break;
-        }
         case DepositStates.APPROVE_FAILED: {
             submissionState = {
                 submitText: "Approve failed",
@@ -140,7 +121,7 @@ const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMellowLpDep
                 submitText: "Approve",
                 action: () => {
                     setDepositState(DepositStates.APPROVING);
-                    vault.approveToken(selectedDeposit).then(() => {
+                    vault.approveToken().then(() => {
                         setDepositState(DepositStates.APPROVED);
                     }, (err: Error) => {
                         setError(err.message);
