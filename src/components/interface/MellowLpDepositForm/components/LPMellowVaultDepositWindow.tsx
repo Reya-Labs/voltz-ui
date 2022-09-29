@@ -15,10 +15,9 @@ export type LPMellowVaultDepositWindowProps = {
     hintText: ReactNode;
     onSubmit: () => void;
     disabled: boolean;
-    onCancel: () => void;
 };
 
-const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWindowProps> = ({ lpVault, onChangeDeposit, submitText, hintText, disabled, onSubmit, onCancel }: LPMellowVaultDepositWindowProps) => {
+const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWindowProps> = ({ lpVault, onChangeDeposit, submitText, hintText, disabled, onSubmit }: LPMellowVaultDepositWindowProps) => {
 
     const subtext = `WALLET BALANCE: ${isUndefined(lpVault.userWalletBalance) ? "---" : `${formatCurrency(lpVault.userWalletBalance, true)} ${lpVault.tokenName}`}`;
 
@@ -77,14 +76,6 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
                         } }}
                     >
                         {submitText}
-                    </Button>
-
-                    <Button
-                    sx={{ marginLeft: (theme) => theme.spacing(7), flexGrow: 0 }}
-                    variant="dark"
-                    onClick={onCancel}
-                    >
-                    Back
                     </Button>
                 </Box>
 

@@ -39,19 +39,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/* eslint-disable no-console */
 /* eslint-disable camelcase */
 /* eslint-disable lines-between-class-members */
 var ethers_1 = require("ethers");
 var lodash_1 = require("lodash");
+var evm_bn_1 = require("evm-bn");
 var getTokenInfo_1 = require("../services/getTokenInfo");
 var timestampWadToDateTime_1 = __importDefault(require("../utils/timestampWadToDateTime"));
 var typechain_1 = require("../typechain");
 var constants_1 = require("../constants");
 var VoltzVault_json_1 = require("../ABIs/VoltzVault.json");
 var Erc20RootVault_json_1 = require("../ABIs/Erc20RootVault.json");
+var Erc20RootVaultGovernance_json_1 = require("../ABIs/Erc20RootVaultGovernance.json");
 var MellowLpVault = /** @class */ (function () {
     function MellowLpVault(_a) {
-        var erc20RootVaultAddress = _a.erc20RootVaultAddress, voltzVaultAddress = _a.voltzVaultAddress, provider = _a.provider;
+        var erc20RootVaultAddress = _a.erc20RootVaultAddress, erc20RootVaultGovernanceAddress = _a.erc20RootVaultGovernanceAddress, voltzVaultAddress = _a.voltzVaultAddress, provider = _a.provider;
         var _this = this;
         this.vaultInitialized = false;
         this.userInitialized = false;
@@ -63,7 +66,7 @@ var MellowLpVault = /** @class */ (function () {
         };
         // NEXT: to offload this to subgraph
         this.vaultInit = function () { return __awaiter(_this, void 0, void 0, function () {
-            var voltzVaultContract, erc20RootVaultContract, marginEngineAddress, marginEngineContract, tokenAddress, tokenContract, rateOracleAddress, rateOracleContract, _a, maturityWad, date;
+            var voltzVaultContract, marginEngineAddress, marginEngineContract, tokenAddress, tokenContract, rateOracleAddress, rateOracleContract, _a, maturityWad, date;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -77,7 +80,6 @@ var MellowLpVault = /** @class */ (function () {
                         }
                         voltzVaultContract = new ethers_1.ethers.Contract(this.voltzVaultAddress, VoltzVault_json_1.abi, this.provider);
                         console.log('voltz vault address:', this.voltzVaultAddress);
-                        erc20RootVaultContract = new ethers_1.ethers.Contract(this.erc20RootVaultAddress, Erc20RootVault_json_1.abi, this.provider);
                         return [4 /*yield*/, voltzVaultContract.marginEngine()];
                     case 1:
                         marginEngineAddress = _b.sent();
@@ -98,7 +100,8 @@ var MellowLpVault = /** @class */ (function () {
                             token: tokenContract,
                             rateOracle: rateOracleContract,
                             voltzVault: voltzVaultContract,
-                            erc20RootVault: erc20RootVaultContract,
+                            erc20RootVault: new ethers_1.ethers.Contract(this.erc20RootVaultAddress, Erc20RootVault_json_1.abi, this.provider),
+                            erc20RootVaultGovernance: new ethers_1.ethers.Contract(this.erc20RootVaultGovernanceAddress, Erc20RootVaultGovernance_json_1.abi, this.provider),
                         };
                         console.log('read-only contracts ready');
                         _a = this;
@@ -112,16 +115,13 @@ var MellowLpVault = /** @class */ (function () {
                         date = (0, timestampWadToDateTime_1.default)(maturityWad);
                         this.maturity = "".concat(date.day, " ").concat(date.monthShort, " ").concat(date.year % 100);
                         console.log('maturity:', this.maturity);
-                        return [4 /*yield*/, this.refreshVaultCap()];
+                        return [4 /*yield*/, this.refreshVaultAccumulative()];
                     case 6:
                         _b.sent();
-                        console.log('vault cap refreshed', this.vaultCap);
-                        return [4 /*yield*/, this.refreshVaultAccumulative()];
-                    case 7:
-                        _b.sent();
                         console.log('vault accumulative refreshed', this.vaultAccumulative);
+                        console.log('vault cap refreshed', this.vaultCap);
                         return [4 /*yield*/, this.refreshVaultExpectedApy()];
-                    case 8:
+                    case 7:
                         _b.sent();
                         console.log('vault expected apy refreshed', this.vaultExpectedApy);
                         this.vaultInitialized = true;
@@ -174,16 +174,40 @@ var MellowLpVault = /** @class */ (function () {
                 }
             });
         }); };
-        this.refreshVaultCap = function () { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                this.vaultCap = 20000;
-                return [2 /*return*/];
-            });
-        }); };
         this.refreshVaultAccumulative = function () { return __awaiter(_this, void 0, void 0, function () {
+            var totalLpTokens, tvl, nft, strategyParams;
             return __generator(this, function (_a) {
-                this.vaultAccumulative = 10000;
-                return [2 /*return*/];
+                switch (_a.label) {
+                    case 0:
+                        if ((0, lodash_1.isUndefined)(this.readOnlyContracts)) {
+                            this.vaultAccumulative = 0;
+                            this.vaultCap = 0;
+                            return [2 /*return*/];
+                        }
+                        return [4 /*yield*/, this.readOnlyContracts.erc20RootVault.totalSupply()];
+                    case 1:
+                        totalLpTokens = _a.sent();
+                        if (totalLpTokens.eq(0)) {
+                            this.vaultAccumulative = 0;
+                            this.vaultCap = 0;
+                            return [2 /*return*/];
+                        }
+                        return [4 /*yield*/, this.readOnlyContracts.erc20RootVault.tvl()];
+                    case 2:
+                        tvl = _a.sent();
+                        console.log('accumulated (tvl):', tvl.minTokenAmounts[0].toString());
+                        return [4 /*yield*/, this.readOnlyContracts.erc20RootVault.nft()];
+                    case 3:
+                        nft = _a.sent();
+                        return [4 /*yield*/, this.readOnlyContracts.erc20RootVaultGovernance.strategyParams(nft)];
+                    case 4:
+                        strategyParams = _a.sent();
+                        console.log('strategy params:', strategyParams);
+                        console.log('token limit', strategyParams.tokenLimit.toString());
+                        this.vaultAccumulative = this.descale(tvl.minTokenAmounts[0], this.tokenDecimals);
+                        this.vaultCap = this.descale(totalLpTokens.mul((0, evm_bn_1.toBn)('1', 18)).div(strategyParams.tokenLimit), 16);
+                        return [2 /*return*/];
+                }
             });
         }); };
         this.refreshVaultExpectedApy = function () { return __awaiter(_this, void 0, void 0, function () {
@@ -193,7 +217,7 @@ var MellowLpVault = /** @class */ (function () {
             });
         }); };
         this.refreshUserDeposit = function () { return __awaiter(_this, void 0, void 0, function () {
-            var lpTokens, totalLpTokens, tvl, updatedTvl, userFunds;
+            var lpTokens, totalLpTokens, tvl, userFunds;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -215,10 +239,6 @@ var MellowLpVault = /** @class */ (function () {
                     case 3:
                         tvl = _a.sent();
                         console.log('tvl', tvl.toString());
-                        return [4 /*yield*/, this.readOnlyContracts.voltzVault.callStatic.updateTvl()];
-                    case 4:
-                        updatedTvl = _a.sent();
-                        console.log('voltz updated tvl', updatedTvl.toString());
                         if (totalLpTokens.gt(0)) {
                             userFunds = lpTokens.mul(tvl[0][0]).div(totalLpTokens);
                             console.log('user funds:', userFunds.toString());
@@ -393,6 +413,7 @@ var MellowLpVault = /** @class */ (function () {
             });
         }); };
         this.erc20RootVaultAddress = erc20RootVaultAddress;
+        this.erc20RootVaultGovernanceAddress = erc20RootVaultGovernanceAddress;
         this.voltzVaultAddress = voltzVaultAddress;
         this.provider = provider;
     }

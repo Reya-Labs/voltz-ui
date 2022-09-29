@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable camelcase */
 /* eslint-disable lines-between-class-members */
 import {
@@ -9,7 +10,8 @@ import {
   ContractReceipt,
   Contract,
 } from 'ethers';
-import { isNull, isUndefined } from 'lodash';
+import { isUndefined } from 'lodash';
+import { toBn } from 'evm-bn';
 import { getProtocolPrefix, getTokenInfo } from '../services/getTokenInfo';
 import timestampWadToDateTime from '../utils/timestampWadToDateTime';
 import {
@@ -24,16 +26,19 @@ import { getGasBuffer, MaxUint256Bn, TresholdApprovalBn } from '../constants';
 
 import { abi as VoltzVaultABI } from '../ABIs/VoltzVault.json';
 import { abi as Erc20RootVaultABI } from '../ABIs/Erc20RootVault.json';
+import { abi as Erc20RootVaultGovernanceABI } from '../ABIs/Erc20RootVaultGovernance.json';
 
 export type MellowLpVaultArgs = {
   voltzVaultAddress: string;
   erc20RootVaultAddress: string;
+  erc20RootVaultGovernanceAddress: string;
   provider?: providers.Provider;
 };
 
 class MellowLpVault {
   public readonly voltzVaultAddress: string;
   public readonly erc20RootVaultAddress: string;
+  public readonly erc20RootVaultGovernanceAddress: string;
   public readonly provider?: providers.Provider;
 
   public readOnlyContracts?: {
@@ -42,6 +47,7 @@ class MellowLpVault {
     rateOracle: BaseRateOracle;
     voltzVault: Contract;
     erc20RootVault: Contract;
+    erc20RootVaultGovernance: Contract;
   };
 
   public writeContracts?: {
@@ -67,8 +73,14 @@ class MellowLpVault {
   public vaultInitialized = false;
   public userInitialized = false;
 
-  public constructor({ erc20RootVaultAddress, voltzVaultAddress, provider }: MellowLpVaultArgs) {
+  public constructor({
+    erc20RootVaultAddress,
+    erc20RootVaultGovernanceAddress,
+    voltzVaultAddress,
+    provider,
+  }: MellowLpVaultArgs) {
     this.erc20RootVaultAddress = erc20RootVaultAddress;
+    this.erc20RootVaultGovernanceAddress = erc20RootVaultGovernanceAddress;
     this.voltzVaultAddress = voltzVaultAddress;
     this.provider = provider;
   }
@@ -100,12 +112,6 @@ class MellowLpVault {
     );
     console.log('voltz vault address:', this.voltzVaultAddress);
 
-    const erc20RootVaultContract = new ethers.Contract(
-      this.erc20RootVaultAddress,
-      Erc20RootVaultABI,
-      this.provider,
-    );
-
     const marginEngineAddress = await voltzVaultContract.marginEngine();
     const marginEngineContract = MarginEngine__factory.connect(marginEngineAddress, this.provider);
 
@@ -126,7 +132,16 @@ class MellowLpVault {
       token: tokenContract,
       rateOracle: rateOracleContract,
       voltzVault: voltzVaultContract,
-      erc20RootVault: erc20RootVaultContract,
+      erc20RootVault: new ethers.Contract(
+        this.erc20RootVaultAddress,
+        Erc20RootVaultABI,
+        this.provider,
+      ),
+      erc20RootVaultGovernance: new ethers.Contract(
+        this.erc20RootVaultGovernanceAddress,
+        Erc20RootVaultGovernanceABI,
+        this.provider,
+      ),
     };
 
     console.log('read-only contracts ready');
@@ -142,11 +157,9 @@ class MellowLpVault {
 
     console.log('maturity:', this.maturity);
 
-    await this.refreshVaultCap();
-    console.log('vault cap refreshed', this.vaultCap);
-
     await this.refreshVaultAccumulative();
     console.log('vault accumulative refreshed', this.vaultAccumulative);
+    console.log('vault cap refreshed', this.vaultCap);
 
     await this.refreshVaultExpectedApy();
     console.log('vault expected apy refreshed', this.vaultExpectedApy);
@@ -222,12 +235,36 @@ class MellowLpVault {
     return `${prefix}${this.tokenName}`;
   }
 
-  refreshVaultCap = async (): Promise<void> => {
-    this.vaultCap = 20000;
-  };
-
   refreshVaultAccumulative = async (): Promise<void> => {
-    this.vaultAccumulative = 10000;
+    if (isUndefined(this.readOnlyContracts)) {
+      this.vaultAccumulative = 0;
+      this.vaultCap = 0;
+      return;
+    }
+
+    const totalLpTokens = await this.readOnlyContracts.erc20RootVault.totalSupply();
+
+    if (totalLpTokens.eq(0)) {
+      this.vaultAccumulative = 0;
+      this.vaultCap = 0;
+      return;
+    }
+
+    const tvl = await this.readOnlyContracts.erc20RootVault.tvl();
+    console.log('accumulated (tvl):', tvl.minTokenAmounts[0].toString());
+
+    const nft = await this.readOnlyContracts.erc20RootVault.nft();
+    const strategyParams = await this.readOnlyContracts.erc20RootVaultGovernance.strategyParams(
+      nft,
+    );
+    console.log('strategy params:', strategyParams);
+    console.log('token limit', strategyParams.tokenLimit.toString());
+
+    this.vaultAccumulative = this.descale(tvl.minTokenAmounts[0], this.tokenDecimals);
+    this.vaultCap = this.descale(
+      totalLpTokens.mul(toBn('1', 18)).div(strategyParams.tokenLimit),
+      16,
+    );
   };
 
   refreshVaultExpectedApy = async (): Promise<void> => {
@@ -251,9 +288,6 @@ class MellowLpVault {
     console.log('total lp tokens:', totalLpTokens);
     const tvl = await this.readOnlyContracts.erc20RootVault.tvl();
     console.log('tvl', tvl.toString());
-
-    const updatedTvl = await this.readOnlyContracts.voltzVault.callStatic.updateTvl();
-    console.log('voltz updated tvl', updatedTvl.toString());
 
     if (totalLpTokens.gt(0)) {
       const userFunds = lpTokens.mul(tvl[0][0]).div(totalLpTokens);

@@ -15,7 +15,7 @@ const LPMellowVaultInfo: React.FunctionComponent<LPMellowVaultInfoProps> = ({lpV
             return null;
         }
 
-        const percentage = (lpVault.vaultCap > 0) ? Math.floor(lpVault.vaultAccumulative * 100 / lpVault.vaultCap + 0.5) : 100;
+        const percentage = Math.floor(lpVault.vaultCap * 100 + 0.5) / 100;
 
         return (<Box>
             <Typography variant='h6' sx={{ fontSize: '12px', color: '#9B97AD', marginLeft: '0px' }}>

@@ -3,11 +3,13 @@ import { BaseRateOracle, IERC20Minimal, MarginEngine } from '../typechain';
 export declare type MellowLpVaultArgs = {
     voltzVaultAddress: string;
     erc20RootVaultAddress: string;
+    erc20RootVaultGovernanceAddress: string;
     provider?: providers.Provider;
 };
 declare class MellowLpVault {
     readonly voltzVaultAddress: string;
     readonly erc20RootVaultAddress: string;
+    readonly erc20RootVaultGovernanceAddress: string;
     readonly provider?: providers.Provider;
     readOnlyContracts?: {
         marginEngine: MarginEngine;
@@ -15,6 +17,7 @@ declare class MellowLpVault {
         rateOracle: BaseRateOracle;
         voltzVault: Contract;
         erc20RootVault: Contract;
+        erc20RootVaultGovernance: Contract;
     };
     writeContracts?: {
         token: IERC20Minimal;
@@ -33,7 +36,7 @@ declare class MellowLpVault {
     userAddress?: string;
     vaultInitialized: boolean;
     userInitialized: boolean;
-    constructor({ erc20RootVaultAddress, voltzVaultAddress, provider }: MellowLpVaultArgs);
+    constructor({ erc20RootVaultAddress, erc20RootVaultGovernanceAddress, voltzVaultAddress, provider, }: MellowLpVaultArgs);
     descale: (amount: BigNumberish, decimals: number) => number;
     scale: (amount: number) => BigNumber;
     vaultInit: () => Promise<void>;
@@ -41,7 +44,6 @@ declare class MellowLpVault {
     get tokenName(): string;
     get tokenDecimals(): number;
     get protocol(): string;
-    refreshVaultCap: () => Promise<void>;
     refreshVaultAccumulative: () => Promise<void>;
     refreshVaultExpectedApy: () => Promise<void>;
     refreshUserDeposit: () => Promise<void>;
