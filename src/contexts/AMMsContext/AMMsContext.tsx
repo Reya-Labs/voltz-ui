@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { useAMM, useAsyncFunction, UseAsyncFunctionResult, useWallet } from '@hooks';
 import { AugmentedAMM } from '@utilities';
 import { createContext, useContext } from 'react'
@@ -11,6 +11,7 @@ export type AMMsProviderProps = {
 export type AMMsContext = {
     variableApy: (amm:AugmentedAMM) => UseAsyncFunctionResult<AugmentedAMM, number | void>;
     fixedApr: (amm:AugmentedAMM) => UseAsyncFunctionResult<AugmentedAMM, number | void>;
+    removeFixedApr: (amm:AugmentedAMM) => void;
     positionsInfo: Record<string,PositionInfo|undefined>;
     cachePositionInfo: (info: PositionInfo, position: Position) => void;
     isPositionFeched: (wallet: Wallet, previousWallet: Wallet, position?: Position) => boolean;
@@ -22,7 +23,11 @@ AMMsCtx.displayName = 'AMMContext';
 export const AMMsProvider: React.FunctionComponent<AMMsProviderProps> = ({ children }) => {
 
   const variableApys = useRef<Record<string,number>>({});
-  const fixedAprs = useRef<Record<string,number>>({});
+  const fixedAprs = useRef<Record<string,number | undefined>>({});
+
+  const removeFixedApr = useCallback((amm: AugmentedAMM) => {
+    fixedAprs.current[amm.id] = undefined;
+  }, []);
 
   const positionsInfo = useRef<Record<string,PositionInfo | undefined>>({});
 
@@ -92,6 +97,7 @@ export const AMMsProvider: React.FunctionComponent<AMMsProviderProps> = ({ child
   const value = {
     variableApy: useVariableApy,
     fixedApr: useFixedApr,
+    removeFixedApr: removeFixedApr,
     positionsInfo: positionsInfo.current,
     cachePositionInfo,
     isPositionFeched
