@@ -19,12 +19,10 @@ export type PoolFieldProps = {
     agent?: Agents;
     protocol: string;
     isBorrowing: boolean;
-    capLoading: boolean;
-    cap: number | void | null;
     isBorrowTable?: boolean;
 }
 
-const PoolField = ({agent, protocol, isBorrowing, capLoading, cap, isBorrowTable}: PoolFieldProps) => {
+const PoolField = ({agent, protocol, isBorrowing, isBorrowTable}: PoolFieldProps) => {
 
   const protocolIcon = () => {
     const prefix = protocol[0];
@@ -79,40 +77,14 @@ const PoolField = ({agent, protocol, isBorrowing, capLoading, cap, isBorrowTable
     }
 
     if (agent === Agents.LIQUIDITY_PROVIDER) {
-      if (capLoading) {
-        return (
-          <CustomPoolField label={getPoolLabel()}>
-            <ProgressBar
-                leftContent={<>{protocolInfo[0]} - {tokenInfo[0]}</>}
-                rightContent={"Loading..."}
-                percentageComplete={0}
-              />
-          </CustomPoolField>
-        );
-      }
-
-      if (!isNumber(cap)) {
-        return (
-          <CustomPoolField label={getPoolLabel()}>
-            <Box sx={{ width: '100%' }}>
-            {renderPool()}
-            </Box>
-          </CustomPoolField>);
-      }
 
       return (
         <CustomPoolField label={getPoolLabel()}>
-          <ProgressBar
-            leftContent={<> 
-            <Box sx={{marginRight:(theme) => theme.spacing(-1), marginBottom: (theme) => theme.spacing(-1)}}> {protocolInfo[1]}</Box>
-            <Box sx={{marginRight:(theme) => theme.spacing(2), marginBottom: (theme) => theme.spacing(-1)}}>{tokenInfo[1]}</Box>
-            {protocolInfo[0]} - {tokenInfo[0]}
-            </>} 
-            rightContent={<>{formatNumber(2)}% CAP</>}
-            percentageComplete={cap}
-          />
-        </CustomPoolField>
-      );
+          <Box sx={{ width: '100%' }}>
+          {renderPool()}
+          </Box>
+        </CustomPoolField>);
+
     }
     else {
       return (

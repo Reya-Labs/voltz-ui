@@ -1,7 +1,9 @@
 import { useAgent, useAMM } from '@hooks';
 import { AugmentedAMM } from '@utilities';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk/dist/types/entities';
+import { isUndefined } from 'lodash';
 import { createContext, useContext, useEffect, useState, useRef } from 'react'
+import { useAMMsContext } from '../AMMsContext/AMMsContext';
 import { getHealthCounters, getNetPayingRate, getNetReceivingRate, getTotalAccruedCashflow, getTotalMargin, getTotalNotional } from './services';
 
 export type PortfolioProviderProps = {
@@ -36,7 +38,10 @@ export const PortfolioProvider: React.FunctionComponent<PortfolioProviderProps> 
 
   const { agent } = useAgent();
 
+  const {positionsInfo, cachePositionInfo} = useAMMsContext();
+
   useEffect(() => {
+    info.current={};
     if (positions) {
         for ( let  i = 0; i < positions.length; i++ ) {
             void loadPositionInfo(positions[i]);
@@ -45,7 +50,7 @@ export const PortfolioProvider: React.FunctionComponent<PortfolioProviderProps> 
   }, [positions]);
   
   useEffect(() => {
-    if (positions && positions.length > 0 && info.current && Object.keys(info.current).length === positions.length ) {
+    if (loaded.length > 0 && positions && positions.length > 0 && info.current && Object.keys(info.current).length === positions.length ) {
         setHealthCounters(getHealthCounters(positions, info.current));
         setTotalNotional(getTotalNotional(positions, info.current));
         setTotalMargin(getTotalMargin(positions, info.current));
@@ -57,13 +62,21 @@ export const PortfolioProvider: React.FunctionComponent<PortfolioProviderProps> 
 
   // 0x3044fa8f672424a31acf0069b9691e19a91a2711#0xf8f6b70a36f4398f0853a311dc6699aba8333cc1
   const loadPositionInfo = (position : Position) => {
-    position.amm.getPositionInformation(position).then( positionInfo => {
-      info.current[position.id] = positionInfo;
+    const posInfo = positionsInfo[position.id];
+    if (posInfo) {
+      info.current[position.id] = posInfo;
       setLoaded(JSON.stringify(info.current));
-    }).catch( (e) => {
-      loadPositionInfo(position)
+    } else {
+      position.amm.getPositionInformation(position).then( pInfo => {
+        info.current[position.id] = pInfo;
+        cachePositionInfo(pInfo, position);
+        setLoaded(JSON.stringify(info.current));
+      }).catch( (e) => {
+        loadPositionInfo(position)
+      }
+      );
     }
-    );
+    
   }
 
   const value = {

@@ -42,6 +42,8 @@ export type BorrowProps = {
   margin: number;
   swapSummaryLoading: boolean;
   balance: number;
+  variableApy?:number;
+  fixedApr?:number;
 };
 
 const BorrowForm: React.FunctionComponent<BorrowProps> = ({
@@ -68,7 +70,9 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
   submitButtonState,
   margin,
   swapSummaryLoading,
-  balance
+  balance,
+  variableApy,
+  fixedApr,
 }) => {
   const bottomSpacing: SystemStyleObject<Theme> = {
     marginBottom: (theme) => theme.spacing(10)
@@ -91,7 +95,7 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
   return (
     <FormPanel isBorrowForm={true}>
       <Box sx={{marginBottom: (theme) => theme.spacing(8)}}>
-        <ProtocolInformation protocol={protocol} isBorrowForm={true} endDate={endDate}/>
+        <ProtocolInformation protocol={protocol} isBorrowForm={true} endDate={endDate} variableApy={variableApy} fixedApr={fixedApr}/>
       </Box>
 
       <Box sx={{marginBottom: (theme) => theme.spacing(2)}}>

@@ -11,6 +11,7 @@ import { FixedAPR, Notional, CurrentMargin, Maturity, AccruedRates } from './com
 import { useAgent } from '@hooks';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 import { formatNumber, isBorrowing } from '@utilities';
+import { isNumber } from 'lodash';
 
 export type PositionTableRowProps = {
   position: Position;
@@ -28,11 +29,12 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
   const { agent } = useAgent();
   const labels = agent === Agents.LIQUIDITY_PROVIDER ? lpLabels : traderLabels;
 
-  const { ammCaps: { call: loadCap, loading: capLoading, result: cap } } = useAMMContext();
+  const { fixedApr } = useAMMContext();
+  const { result: resultFixedApr, loading : loadingFixedApr, call: callFixedApr } = fixedApr;
 
   useEffect(() => {
-    loadCap();
-  }, [loadCap]);
+      callFixedApr();
+  }, [callFixedApr]);
 
   const typeStyleOverrides: SystemStyleObject<Theme> = {
     backgroundColor: `secondary.darken050`, // this affects the colour of the positions rows in the LP positions 
@@ -55,7 +57,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     }
 
     if (field === 'fixedApr') {
-      return <FixedAPR />;
+      return <FixedAPR fixedApr={isNumber(resultFixedApr) ? resultFixedApr : undefined}/>;
     }
 
     if (field === 'margin') {
@@ -86,7 +88,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     
     if (field === 'pool') {
 
-      return (<PoolField agent={agent} protocol={position.amm.protocol} isBorrowing={isBorrowing(position.amm.rateOracle.protocolId)} capLoading={capLoading} cap={cap}/>)      
+      return (<PoolField agent={agent} protocol={position.amm.protocol} isBorrowing={isBorrowing(position.amm.rateOracle.protocolId)}/>)      
     }
 
     if (field === 'rateRange') {

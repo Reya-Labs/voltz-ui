@@ -4,7 +4,7 @@ import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '@mui/system';
 import isNull from 'lodash/isNull';
 
-import { Agents } from '@contexts';
+import { Agents, useAMMsContext } from '@contexts';
 import { Button } from '@components/atomic';
 import { PoolField, MaturityInformation } from '@components/composite';
 import { useAMMContext } from '@contexts';
@@ -12,7 +12,8 @@ import { useAgent, useWallet } from '@hooks';
 import { AMMTableDatum } from '../../types';
 import { labels } from '../../constants';
 import { VariableAPY, FixedAPR } from './components';
-import { getPoolButtonId, getRowButtonId } from '@utilities';
+import { getRowButtonId } from '@utilities';
+import { isNumber } from 'lodash';
 
 export type AMMTableRowProps = {
   datum: AMMTableDatum;
@@ -26,13 +27,20 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
   const wallet = useWallet();
   const { agent } = useAgent();
   const variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'main';
+  const {amm} = useAMMContext()
 
-  const { ammCaps: { call: loadCap, loading: capLoading, result: cap } } = useAMMContext();
+  const { variableApy, fixedApr } = useAMMsContext();
+  const { result: resultFixedApr, loading : loadingFixedApr, call: callFixedApr } = fixedApr(amm);
+  const { result: resultVarApy, loading: loadingVarApy, call: callVarApy } = variableApy(amm);
+  
+  useEffect(() => {
+      callVarApy();
+  }, [callVarApy]);
 
   useEffect(() => {
-    loadCap();
-  }, [loadCap]);
-  
+      callFixedApr();
+  }, [callFixedApr]);
+
   // add object to sx prop
   // todo:
   // 
@@ -79,11 +87,11 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
       <TableRow key={index} sx={{...typeStyleOverrides() }}>
       {labels.map(([field, label]) => {
         if (field === 'variableApy') {
-          return <VariableAPY />;
+          return <VariableAPY variableApy={isNumber(resultVarApy) ? resultVarApy : undefined}/>;
         }
 
         if (field === 'fixedApr') {
-          return <FixedAPR />;
+          return <FixedAPR fixedApr={isNumber(resultFixedApr) ? resultFixedApr : undefined}/>;
         }
 
         const renderDisplay = () => {
@@ -97,7 +105,7 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
             );
           }
 
-          return (<PoolField agent={agent} protocol={datum.protocol} isBorrowing={datum.isBorrowing} capLoading={capLoading} cap={cap}/>);
+          return (<PoolField agent={agent} protocol={datum.protocol} isBorrowing={datum.isBorrowing}/>);
         };
 
         return <TableCell key={field}>{renderDisplay()}</TableCell>;

@@ -6,29 +6,27 @@ import { Typography } from '@components/atomic';
 import { IconLabel } from '@components/composite';
 import { Agents } from '@contexts';
 import { formatNumber } from '@utilities';
+import { isUndefined } from 'lodash';
 
 export type FixedAPRProps = {
   agent?: Agents;
+  fixedApr?: number;
 };
 
-const FixedAPR: React.FunctionComponent<FixedAPRProps> = ({agent}) => {
-  const { fixedApr } = useAMMContext();
-  const { result, loading, call } = fixedApr;
+const FixedAPR: React.FunctionComponent<FixedAPRProps> = ({agent, fixedApr}) => {
+  // const { fixedApr } = useAMMContext();
+  // const { result, loading, call } = fixedApr;
 
-  useEffect(() => {
-    call();
-  }, [call]);
+  // useEffect(() => {
+  //   call();
+  // }, [call]);
 
   const renderValue = () => {
-    if (loading) {
+    if (isUndefined(fixedApr)) {
       return <Box sx={{ fontSize: 18 }}>Loading...</Box>;
     }
 
-    if (!result) {
-      return '0%';
-    }
-
-    return `${formatNumber(result)}%`;
+    return `${formatNumber(fixedApr)}%`;
   };
 
   return (

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { routes } from '@routes';
 import { actions, selectors } from '@store';
 import { useAgent, useDispatch, useSelector } from '@hooks';
 import { SwapCurrentPosition, SwapForm, SwapInfo, PendingTransaction, SwapFormActions, FormPanel, SwapFormModes } from '@components/interface';
-import { Agents, useAMMContext, usePositionContext, useSwapFormContext } from '@contexts';
+import { Agents, useAMMContext, useAMMsContext, usePositionContext, useSwapFormContext } from '@contexts';
 import { BigNumber } from 'ethers';
 import { AugmentedAMM, getNotionalActionFromHintState, getPoolButtonId } from '@utilities';
 import { isUndefined } from 'lodash';
@@ -26,6 +26,18 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
   const { mode } = form;
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId); // contains a failureMessage attribute that will contain whatever came out from the sdk
+
+  const { variableApy, fixedApr } = useAMMsContext()
+  const { result: resultFixedApr, loading: loadingFixedApr, call: callFixedApr } = fixedApr(targetAmm);
+  const { result: resultVariableApy, loading: loadingVariableApy, call: callVariableApy } = variableApy(targetAmm);
+
+  useEffect(() => {
+    callFixedApr();
+  }, [callFixedApr]);
+
+  useEffect(() => {
+    callVariableApy();
+  }, [ callVariableApy]);
 
   const getReduxAction = () => {
     const transaction = { 
@@ -115,11 +127,14 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         return (
           <PendingTransaction
             amm={targetAmm}
+            position={position}
             isEditingMargin={true}
             transactionId={transactionId}
             onComplete={handleComplete}
             margin={Math.abs(form.state.margin as number) * (form.isRemovingMargin ? -1 : 1)}
             onBack={handleGoBack}
+            variableApy={typeof resultVariableApy === 'number' ?  resultVariableApy : undefined}
+            fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr :  undefined}
           />
         );
       }
@@ -131,6 +146,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         return (
           <PendingTransaction
             amm={targetAmm}
+            position={position}
             isEditingMargin={false}
             showNegativeNotional={form.mode === SwapFormModes.EDIT_NOTIONAL && isRemovingNotional }
             isRollover={form.mode === SwapFormModes.ROLLOVER}
@@ -139,6 +155,8 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
             notional={form.swapInfo.data?.availableNotional}
             margin={Math.abs(form.state.margin as number) * (form.isRemovingMargin ? -1 : 1)}
             onBack={handleGoBack}
+            variableApy={typeof resultVariableApy === 'number' ?  resultVariableApy : undefined}
+            fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr :  undefined}
           />
         );
       }
@@ -148,6 +166,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         return (
           <PendingTransaction
             amm={targetAmm}
+            position={position}
             isEditingMargin={false}
             isRollover={form.mode === SwapFormModes.ROLLOVER}
             transactionId={transactionId}
@@ -156,6 +175,8 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
             notional={form.swapInfo.data?.availableNotional}
             margin={form.swapInfo.data?.marginRequirement}
             onBack={handleGoBack}
+            variableApy={typeof resultVariableApy === 'number' ?  resultVariableApy : undefined}
+            fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr :  undefined}
           />
         );
       }
@@ -164,12 +185,15 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         return (
           <PendingTransaction
             amm={targetAmm}
+            position={position}
             isEditingMargin={false}
             transactionId={transactionId}
             onComplete={handleComplete}
             isFCMUnwind={true}
             notional={form.swapInfo.data?.availableNotional}
             onBack={handleGoBack}
+            variableApy={typeof resultVariableApy === 'number' ?  resultVariableApy : undefined}
+            fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr :  undefined}
           />
         );
       }
@@ -212,6 +236,8 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         tokenApprovals={form.tokenApprovals}
         tradeInfoErrorMessage={form.swapInfo.errorMessage}
         underlyingTokenName={targetAmm.underlyingToken.name}
+        variableApy={typeof resultVariableApy === 'number' ?  resultVariableApy : undefined}
+        fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr :  undefined}
       />
       <SwapInfo
         balance={form.balance}

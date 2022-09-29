@@ -9,6 +9,7 @@ export * from './BorrowAMMContext/BorrowAMMContext';
 export * from './MintBurnFormContext/MintBurnFormContext';
 export * from './PositionContext/PositionContext';
 export * from './PortfolioContext/PortfolioContext';
+export * from './AMMsContext/AMMsContext';
 export * from './SwapFormContext/SwapFormContext';
 export { default as WalletProvider } from './WalletContext/WalletProvider';
 export { default as WalletContext } from './WalletContext/WalletContext';

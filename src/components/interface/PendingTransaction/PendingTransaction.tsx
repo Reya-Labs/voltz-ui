@@ -1,18 +1,22 @@
-import React from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 
 import { AugmentedAMM, getPoolButtonId } from '@utilities';
 import { useWallet, useSelector, useAgent } from '@hooks';
 import { selectors } from '@store';
-import { AMMProvider, MintBurnFormLiquidityAction } from '@contexts';
+import { AMMProvider, MintBurnFormLiquidityAction, useAMMsContext } from '@contexts';
 import { Button, Panel, Typography, Loading, TokenAndText } from '@components/atomic';
 import { ProtocolInformation, WalletAddressDisplay } from '@components/composite';
 import { formatCurrency } from '@utilities';
 import { isUndefined } from 'lodash';
+import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
+import { Wallet } from '@graphql';
+import { ChangeCircleSharp } from '@mui/icons-material';
 
 export type PendingTransactionProps = {
   amm: AugmentedAMM;
+  position?: Position;
   transactionId?: string;
   isEditingMargin?: boolean;
   showNegativeNotional?: boolean;
@@ -25,10 +29,13 @@ export type PendingTransactionProps = {
   margin?: number;
   onBack: () => void;
   onComplete: () => void;
+  variableApy?: number;
+  fixedApr?: number;
 };
 
 const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   amm,
+  position,
   transactionId,
   liquidityAction,
   isEditingMargin,
@@ -41,10 +48,63 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   margin,
   onBack,
   onComplete,
+  variableApy,
+  fixedApr,
 }) => {
-  const { account } = useWallet();
+  const previousWallet = useRef<Wallet>();
+  const [fetch, setFetch] = useState<number>(0);
+  const fetchRef = useRef<number>(0);
+  const fetchLimit = 20;
+  const { account, refetch, wallet } = useWallet();
+  const [loadingRefetch, setLoadingRefetch] = useState<boolean>(false);
   const {agent} = useAgent();
+  const { isPositionFeched } = useAMMsContext();
+  const cachedMargin = useRef<number | undefined>(margin);
+
+  useEffect(() => {
+    if (!isUndefined(margin) && margin !== 0){
+      cachedMargin.current =  margin;
+    }
+  }, [margin]);
+  
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
+  const trasactionState = useMemo(() => {
+    return [activeTransaction?.resolvedAt,activeTransaction?.succeededAt]; 
+  }, []);
+
+  const isFetched = useMemo(() => {
+    if (previousWallet.current && !loadingRefetch && isPositionFeched(wallet as Wallet, previousWallet.current, position)) {
+        fetchRef.current = 0;
+        return true;
+    } else {
+        if (fetch >= fetchLimit) {
+          fetchRef.current = 0;
+          return true;
+        }
+      }
+    return false;
+  }, [fetch, loadingRefetch] );
+
+  useEffect(() => {
+    if (!previousWallet.current && wallet) {
+      previousWallet.current = wallet as Wallet;
+    }
+  }, [wallet]);
+
+  useEffect(() => {
+    if ( activeTransaction && trasactionState[0] === activeTransaction.resolvedAt && trasactionState[1] === activeTransaction.succeededAt ) return;
+    if (activeTransaction && (activeTransaction.resolvedAt || activeTransaction.succeededAt)) {
+      if( fetch < fetchLimit && !loadingRefetch && wallet && previousWallet.current && !isPositionFeched(wallet as Wallet, previousWallet.current, position) ) {
+        setLoadingRefetch(true);
+        /* eslint-disable @typescript-eslint/no-unsafe-call */
+        refetch().then(() => {
+          setTimeout(() => {setLoadingRefetch(false)}, 500);
+          fetchRef.current = fetch+1;
+          setFetch(fetchRef.current);
+        });
+      } 
+    }
+  }, [activeTransaction?.resolvedAt, activeTransaction?.succeededAt, fetch, loadingRefetch]);
 
   if (!activeTransaction) {
     return null;
@@ -62,7 +122,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   }
 
   const renderStatus = () => {
-    if (activeTransaction.resolvedAt) {
+    if (activeTransaction.resolvedAt && isFetched) {
       return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Box
@@ -163,7 +223,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
       );
     }
 
-    if (activeTransaction.succeededAt) {
+    if (activeTransaction.succeededAt && isFetched) {
       return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Box
@@ -245,12 +305,18 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
           <WalletAddressDisplay address={account} />
         </Box>
         <Box
+        >
+          <Typography variant="caption" color="secondary" sx={{}}>
+            Confirm this transaction in your wallet
+          </Typography>
+        </Box>
+        <Box
           sx={{
             paddingBottom: (theme) => theme.spacing(10),
           }}
         >
-          <Typography variant="caption" color="secondary">
-            Confirm this transaction in your wallet
+          <Typography variant="caption" color="secondary" sx={{}}>
+            if you haven't already
           </Typography>
         </Box>
       </Box>
@@ -274,12 +340,16 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   }
 
   const renderMargin = () => {
-    if (isUndefined(margin)) {
-      return "Margin undefined";
-    }
 
     if (isUndefined(amm.underlyingToken.name)) {
       return "Underlying token name undefined";
+    }
+
+    if (isSettle) {
+      return `${formatCurrency(cachedMargin.current ?? 0)} ${amm.underlyingToken.name}`;
+    }
+    if (isUndefined(margin)) {
+      return "Margin undefined";
     }
 
     if (isFCMSwap) {
@@ -300,22 +370,10 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
     >
       {renderStatus()}
       <Panel variant="main">
-        {(isRollover || isSettle) 
-          ? (
-            <TokenAndText 
-              token={amm.protocol} 
-              tokenLabel='pool' 
-              text={isRollover ? 'ROLLOVER' : 'SETTLING'} 
-              textLabel='STATUS' 
-            />
-          )
-          : (
-            <AMMProvider amm={amm}>
-              <ProtocolInformation protocol={amm.protocol} />
-            </AMMProvider>
-          )
-        }
-
+        <AMMProvider amm={amm}>
+          <ProtocolInformation protocol={amm.protocol} isRollover={isRollover} isSettle={isSettle} variableApy={variableApy} fixedApr={fixedApr}/>
+        </AMMProvider>
+      
         {(isUndefined(isEditingMargin) || !isEditingMargin) && (<Box
           sx={{
             marginBottom: (theme) => theme.spacing(4),
