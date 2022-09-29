@@ -70,7 +70,7 @@ const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMellowLpDep
 
     const approve = () => {
         setDepositState(DepositStates.APPROVING);
-        vault.approveToken().then(() => {
+        void vault.approveToken().then(() => {
             setDepositState(DepositStates.APPROVED);
         }, (err: Error) => {
             setError((<Text red>{`Approval failed. ${err.message ?? ""}`}</Text>));
@@ -79,7 +79,7 @@ const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMellowLpDep
     };
 
     useEffect(() => {
-        vault.isTokenApproved().then((resp) => {
+        void vault.isTokenApproved().then((resp) => {
             if (resp) {
                 setDepositState(DepositStates.APPROVED);
             }
@@ -152,7 +152,7 @@ const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMellowLpDep
         }
         case DepositStates.APPROVING: {
             submissionState = {
-                submitText: "Approving",
+                submitText: "Approving...",
                 action: () => { },
                 hintText: "Waiting for confirmation",
                 disabled: true,
@@ -170,7 +170,7 @@ const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMellowLpDep
         }
         case DepositStates.DEPOSITING: {
             submissionState = {
-                submitText: "Depositing",
+                submitText: "Depositing...",
                 action: () => { },
                 hintText: "Waiting for confirmation",
                 disabled: true,

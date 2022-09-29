@@ -19,10 +19,10 @@ const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = (
 
     return (
         <>
-            <MellowLpDepositFormHeader />
+            <MellowLpDepositFormHeader onCancel={onCancel}/>
             <Box sx={{display: "flex"}}>
                 <LPMellowVaultDepositInfo lpVault={lpVault}/>
-                <LPMellowVaultDepositWindow lpVault={lpVault} onChangeDeposit={onChangeDeposit} submitText={submitText} hintText={hintText} disabled={disabled} onSubmit={onSubmit} onCancel={onCancel}/>
+                <LPMellowVaultDepositWindow lpVault={lpVault} onChangeDeposit={onChangeDeposit} submitText={submitText} hintText={hintText} disabled={disabled} onSubmit={onSubmit}/>
             </Box>
         </>
         
