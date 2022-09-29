@@ -82,7 +82,7 @@ const SwapSummary: React.FunctionComponent<SwapSummaryProps> = ({ data, loading,
     return (
       {
         label: 'MINIMUM REQUIRED MARGIN:', 
-        value: (formAction === SwapFormActions.SWAP || formAction === SwapFormActions.UPDATE) 
+        value: (formAction === SwapFormActions.SWAP || formAction === SwapFormActions.UPDATE || formAction === SwapFormActions.ROLLOVER_SWAP) 
           ? `${formatCurrency(roundUpDecimal(margin, 4), true)} ${underlyingTokenName}` 
           : `${formatCurrency(roundUpDecimal(margin, 4), true)} ${yieldBearingTokenName}`,
         highlight: true

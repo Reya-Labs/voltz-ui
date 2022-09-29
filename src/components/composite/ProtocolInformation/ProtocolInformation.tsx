@@ -25,6 +25,8 @@ export type ProtocolInformationProps = {
   endDate?: DateTime | undefined;
   variableApy?:number;
   fixedApr?:number;
+  isRollover?: boolean;
+  isSettle?: boolean;
 };
 
 const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = ({
@@ -33,6 +35,8 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
   endDate,
   variableApy,
   fixedApr,
+  isRollover,
+  isSettle
 }) => {
   const { amm } = useAMMContext();
   const getPoolLabel = () => (
@@ -108,13 +112,21 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
         }
     </Typography>
 
-      {isBorrowForm !== true && 
+      {(isRollover || isSettle) &&
+      <Box sx={{display:'flex', justifyContent: 'space-between', width: '56%'}}>
+          <Typography label={"STATUS"} variant="h3" agentStyling>
+            {isRollover ? "ROLLOVER" : "SETTLING"}
+          </Typography>
+      </Box>
+      }
+
+      {(!isRollover && !isSettle) && isBorrowForm !== true && 
       <Box sx={{display:'flex', justifyContent: 'space-between', width: '56%'}}>
         <FixedAPR fixedApr={fixedApr}/>
         <VariableAPY variableApy={variableApy}/>
       </Box>
       }
-      {isBorrowForm === true && 
+      {(!isRollover && !isSettle) && isBorrowForm === true && 
         <Box display='flex'> 
           <Box sx={{display:'flex', justifyContent: 'space-between', width: '56%', marginRight: (theme) => theme.spacing(8)}}>
           <FixedAPR agent={Agents.FIXED_TRADER} fixedApr={fixedApr}/>

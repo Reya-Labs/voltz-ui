@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import PortfolioHeaderInfo from './PorfolioHeaderInfo';
 import PortfolioHeaderHealth from './PortfolioHeaderHealth';
 import { PortfolioContext} from '@contexts';
+import { isUndefined } from 'lodash';
 
 export type PortfolioHeaderProps = {
   currencyCode?: string;
@@ -38,8 +39,8 @@ const PortfolioHeader = ({
           Net notional
         </Typography>
         <Typography variant='h1' sx={titleStyles}>
-          {!portfolioData.totalNotional && <>Loading...</>}
-          {portfolioData.totalNotional &&  <>{currencySymbol}{formatCurrency(portfolioData.totalNotional)} {currencyCode}</>}
+          {isUndefined(portfolioData.totalNotional) && <>Loading...</>}
+          {!isUndefined(portfolioData.totalNotional) &&  <>{currencySymbol}{formatCurrency(portfolioData.totalNotional)} {currencyCode}</>}
           
         </Typography>
       </Box>

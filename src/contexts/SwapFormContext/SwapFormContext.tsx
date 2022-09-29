@@ -455,7 +455,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   }
 
   const validate = async () => {
-    if(mode === SwapFormModes.NEW_POSITION ) {
+    if(mode === SwapFormModes.NEW_POSITION || mode === SwapFormModes.ROLLOVER) {
       return await validateNewPosition();
     } 
     if(mode === SwapFormModes.EDIT_NOTIONAL ) {
@@ -473,15 +473,8 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       addError(err, 'notional', 'Please enter an amount');
     }
 
-    if((action === SwapFormActions.SWAP || action === SwapFormActions.UPDATE)) {
-      if(isUndefined(margin)) {
-        valid = false;
-        addError(err, 'margin', 'Please enter an amount');
-      }
-    }
-
     // Check the user has enough balance
-    if(action === SwapFormActions.SWAP || action === SwapFormActions.UPDATE) {
+    if(action === SwapFormActions.SWAP || action === SwapFormActions.UPDATE || action === SwapFormActions.ROLLOVER_SWAP) {
       if(margin !== 0 && await hasEnoughUnderlyingTokens(positionAmm || poolAmm, margin, mode === SwapFormModes.ROLLOVER ? position : undefined) === false) {
         valid = false;
         addError(err, 'margin', 'Insufficient funds');
@@ -502,7 +495,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     }
 
     // Check that the input margin is >= minimum required margin
-    if(action === SwapFormActions.SWAP || action === SwapFormActions.UPDATE) {
+    if(action === SwapFormActions.SWAP || action === SwapFormActions.UPDATE || action === SwapFormActions.ROLLOVER_SWAP) {
       if(lessThan(margin, swapInfo.result?.marginRequirement) === true) {
         valid = false;
         addError(err, 'margin', 'Not enough margin');
