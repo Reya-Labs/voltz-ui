@@ -58,7 +58,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   const { account, refetch, wallet } = useWallet();
   const [loadingRefetch, setLoadingRefetch] = useState<boolean>(false);
   const {agent} = useAgent();
-  const { isPositionFeched } = useAMMsContext();
+  const { isPositionFeched, removeFixedApr } = useAMMsContext();
   const cachedMargin = useRef<number | undefined>(margin);
 
   useEffect(() => {
@@ -75,10 +75,12 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   const isFetched = useMemo(() => {
     if (previousWallet.current && !loadingRefetch && isPositionFeched(wallet as Wallet, previousWallet.current, position)) {
         fetchRef.current = 0;
+        removeFixedApr(amm);
         return true;
     } else {
         if (fetch >= fetchLimit) {
           fetchRef.current = 0;
+          removeFixedApr(amm);
           return true;
         }
       }
