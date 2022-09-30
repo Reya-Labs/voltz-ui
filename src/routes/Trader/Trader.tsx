@@ -17,6 +17,7 @@ const Trader: React.FunctionComponent = () => {
   const [formMode, setFormMode] = useState<SwapFormModes>();
   const [amm, setAMM] = useState<AugmentedAMM>();
   const [position, setPosition] = useState<Position>();
+  const [settling, setSettling] = useState<boolean>(false);
 
   const { amms } = useAMMs();
   const { onChangeAgent } = useAgent();
@@ -36,6 +37,10 @@ const Trader: React.FunctionComponent = () => {
   useEffect(() => {
     handleReset();
   }, [key]);
+
+  const handleCompletedSettling = () => {
+    setSettling(!settling)
+  }
 
   useEffect(() => {
     switch(renderMode) {
@@ -90,15 +95,27 @@ const Trader: React.FunctionComponent = () => {
         </Box>
       )}
 
-      {renderMode === 'portfolio' && (
+      {settling && renderMode === 'portfolio' && (
         <PortfolioProvider positions={agent !== Agents.LIQUIDITY_PROVIDER  ? positionsByAgentGroup : undefined}>
           <ConnectedPositionTable 
             onSelectItem={handleSelectPosition} 
             agent={Agents.FIXED_TRADER}
+            handleCompletedSettling={handleCompletedSettling}
           />
         </PortfolioProvider>
-        
+  
       )}
+
+      {!settling && renderMode === 'portfolio' && (
+            <PortfolioProvider positions={agent !== Agents.LIQUIDITY_PROVIDER  ? positionsByAgentGroup : undefined}>
+              <ConnectedPositionTable 
+                onSelectItem={handleSelectPosition} 
+                agent={Agents.FIXED_TRADER}
+                handleCompletedSettling={handleCompletedSettling}
+              />
+            </PortfolioProvider>
+
+          )}
 
       {renderMode === 'form' && (
         <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>

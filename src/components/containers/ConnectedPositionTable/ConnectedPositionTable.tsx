@@ -1,8 +1,9 @@
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 import React, { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { data } from '@utilities';
-import { usePositions, useSelector, useWallet } from '@hooks';
+import { useAgent, usePositions, useSelector, useWallet } from '@hooks';
 import { PendingTransaction, PortfolioHeader, PositionTable, PositionTableFields } from '@components/interface';
 import { Button, Loading, Panel, RouteLink, Typography } from '@components/atomic';
 import { Agents, useAMMContext, useAMMsContext, usePortfolioContext } from '@contexts';
@@ -17,11 +18,13 @@ export type ConnectedAMMTableProps = {
   onSelectItem: (item: Position, mode: 'margin' | 'liquidity' | 'rollover' | 'notional') => void;
   agent: Agents
   amm?: AugmentedAMM;
+  handleCompletedSettling: () => void;
 };
 
 const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = ({
   onSelectItem,
-  agent
+  agent,
+  handleCompletedSettling,
 }) => {
   const [order, setOrder] = useState<data.TableOrder>('desc');
   const [orderBy, setOrderBy] = useState<PositionTableFields>('maturity');
@@ -65,6 +68,7 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
   );
 
   const handleTransactionFinished = () => {
+    handleCompletedSettling();
     if(positionToSettle) {
       const action = actions.closeTransaction(positionToSettle.txId);
       dispatch(action);

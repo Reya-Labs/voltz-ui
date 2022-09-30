@@ -18,6 +18,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
   const [amm, setAMM] = useState<AugmentedAMM>();
   const [formMode, setFormMode] = useState<MintBurnFormModes>();
   const [position, setPosition] = useState<Position>();
+  const [settling, setSettling] = useState<boolean>(false);
 
   const { amms } = useAMMs();
   const { onChangeAgent, agent } = useAgent();
@@ -72,6 +73,10 @@ const LiquidityProvider: React.FunctionComponent = () => {
     setPosition(selectedPosition);
   };
 
+  const handleCompletedSettling = () => {
+    setSettling(!settling)
+  }
+
   const handleReset = () => {
     setFormMode(undefined);
     setAMM(undefined);
@@ -92,15 +97,26 @@ const LiquidityProvider: React.FunctionComponent = () => {
         </Box>
       )}
 
-      {renderMode === 'portfolio' && (
+      {settling && renderMode === 'portfolio' && (
         <PortfolioProvider positions={agent === Agents.LIQUIDITY_PROVIDER ? positionsByAgentGroup : undefined}>
           <ConnectedPositionTable 
           amm={amm}
           onSelectItem={handleSelectPosition}
           agent={Agents.LIQUIDITY_PROVIDER}
+          handleCompletedSettling={handleCompletedSettling}
         />
         </PortfolioProvider>
-        
+      )}
+
+      {!settling && renderMode === 'portfolio' && (
+        <PortfolioProvider positions={agent === Agents.LIQUIDITY_PROVIDER ? positionsByAgentGroup : undefined}>
+          <ConnectedPositionTable 
+          amm={amm}
+          onSelectItem={handleSelectPosition}
+          agent={Agents.LIQUIDITY_PROVIDER}
+          handleCompletedSettling={handleCompletedSettling}
+        />
+        </PortfolioProvider>
       )}
 
       {renderMode === 'form' && (
