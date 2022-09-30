@@ -14,19 +14,14 @@ import { isUndefined } from 'lodash';
 import { toBn } from 'evm-bn';
 import { getProtocolPrefix, getTokenInfo } from '../services/getTokenInfo';
 import timestampWadToDateTime from '../utils/timestampWadToDateTime';
-import {
-  BaseRateOracle,
-  BaseRateOracle__factory,
-  IERC20Minimal,
-  IERC20Minimal__factory,
-  MarginEngine,
-  MarginEngine__factory,
-} from '../typechain';
 import { getGasBuffer, MaxUint256Bn, TresholdApprovalBn } from '../constants';
 
 import { abi as VoltzVaultABI } from '../ABIs/VoltzVault.json';
 import { abi as Erc20RootVaultABI } from '../ABIs/Erc20RootVault.json';
 import { abi as Erc20RootVaultGovernanceABI } from '../ABIs/Erc20RootVaultGovernance.json';
+import { abi as MarginEngineABI } from '../ABIs/MarginEngine.json';
+import { abi as BaseRateOracleABI } from '../ABIs/BaseRateOracle.json';
+import { abi as IERC20MinimalABI } from '../ABIs/IERC20Minimal.json';
 
 export type MellowLpVaultArgs = {
   voltzVaultAddress: string;
@@ -42,16 +37,16 @@ class MellowLpVault {
   public readonly provider?: providers.Provider;
 
   public readOnlyContracts?: {
-    marginEngine: MarginEngine;
-    token: IERC20Minimal;
-    rateOracle: BaseRateOracle;
+    marginEngine: Contract;
+    token: Contract;
+    rateOracle: Contract;
     voltzVault: Contract;
     erc20RootVault: Contract;
     erc20RootVaultGovernance: Contract;
   };
 
   public writeContracts?: {
-    token: IERC20Minimal;
+    token: Contract;
     voltzVault: Contract;
     erc20RootVault: Contract;
   };
@@ -113,17 +108,21 @@ class MellowLpVault {
     console.log('voltz vault address:', this.voltzVaultAddress);
 
     const marginEngineAddress = await voltzVaultContract.marginEngine();
-    const marginEngineContract = MarginEngine__factory.connect(marginEngineAddress, this.provider);
+    const marginEngineContract = new ethers.Contract(
+      marginEngineAddress,
+      MarginEngineABI,
+      this.provider,
+    );
 
     console.log('margin engine address:', marginEngineAddress);
 
     const tokenAddress = await marginEngineContract.underlyingToken();
-    const tokenContract = IERC20Minimal__factory.connect(tokenAddress, this.provider);
+    const tokenContract = new Contract(tokenAddress, IERC20MinimalABI, this.provider);
 
     console.log('token address:', tokenAddress);
 
     const rateOracleAddress = await marginEngineContract.rateOracle();
-    const rateOracleContract = BaseRateOracle__factory.connect(rateOracleAddress, this.provider);
+    const rateOracleContract = new Contract(rateOracleAddress, BaseRateOracleABI, this.provider);
 
     console.log('rate oracle:', rateOracleAddress);
 
@@ -188,7 +187,11 @@ class MellowLpVault {
     console.log('user address', this.userAddress);
 
     this.writeContracts = {
-      token: IERC20Minimal__factory.connect(this.readOnlyContracts.token.address, this.signer),
+      token: new ethers.Contract(
+        this.readOnlyContracts.token.address,
+        IERC20MinimalABI,
+        this.signer,
+      ),
       voltzVault: new ethers.Contract(this.voltzVaultAddress, VoltzVaultABI, this.signer),
       erc20RootVault: new ethers.Contract(
         this.erc20RootVaultAddress,

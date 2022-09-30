@@ -47,11 +47,13 @@ var lodash_1 = require("lodash");
 var evm_bn_1 = require("evm-bn");
 var getTokenInfo_1 = require("../services/getTokenInfo");
 var timestampWadToDateTime_1 = __importDefault(require("../utils/timestampWadToDateTime"));
-var typechain_1 = require("../typechain");
 var constants_1 = require("../constants");
 var VoltzVault_json_1 = require("../ABIs/VoltzVault.json");
 var Erc20RootVault_json_1 = require("../ABIs/Erc20RootVault.json");
 var Erc20RootVaultGovernance_json_1 = require("../ABIs/Erc20RootVaultGovernance.json");
+var MarginEngine_json_1 = require("../ABIs/MarginEngine.json");
+var BaseRateOracle_json_1 = require("../ABIs/BaseRateOracle.json");
+var IERC20Minimal_json_1 = require("../ABIs/IERC20Minimal.json");
 var MellowLpVault = /** @class */ (function () {
     function MellowLpVault(_a) {
         var erc20RootVaultAddress = _a.erc20RootVaultAddress, erc20RootVaultGovernanceAddress = _a.erc20RootVaultGovernanceAddress, voltzVaultAddress = _a.voltzVaultAddress, provider = _a.provider;
@@ -83,17 +85,17 @@ var MellowLpVault = /** @class */ (function () {
                         return [4 /*yield*/, voltzVaultContract.marginEngine()];
                     case 1:
                         marginEngineAddress = _b.sent();
-                        marginEngineContract = typechain_1.MarginEngine__factory.connect(marginEngineAddress, this.provider);
+                        marginEngineContract = new ethers_1.ethers.Contract(marginEngineAddress, MarginEngine_json_1.abi, this.provider);
                         console.log('margin engine address:', marginEngineAddress);
                         return [4 /*yield*/, marginEngineContract.underlyingToken()];
                     case 2:
                         tokenAddress = _b.sent();
-                        tokenContract = typechain_1.IERC20Minimal__factory.connect(tokenAddress, this.provider);
+                        tokenContract = new ethers_1.Contract(tokenAddress, IERC20Minimal_json_1.abi, this.provider);
                         console.log('token address:', tokenAddress);
                         return [4 /*yield*/, marginEngineContract.rateOracle()];
                     case 3:
                         rateOracleAddress = _b.sent();
-                        rateOracleContract = typechain_1.BaseRateOracle__factory.connect(rateOracleAddress, this.provider);
+                        rateOracleContract = new ethers_1.Contract(rateOracleAddress, BaseRateOracle_json_1.abi, this.provider);
                         console.log('rate oracle:', rateOracleAddress);
                         this.readOnlyContracts = {
                             marginEngine: marginEngineContract,
@@ -152,7 +154,7 @@ var MellowLpVault = /** @class */ (function () {
                         _a.userAddress = _b.sent();
                         console.log('user address', this.userAddress);
                         this.writeContracts = {
-                            token: typechain_1.IERC20Minimal__factory.connect(this.readOnlyContracts.token.address, this.signer),
+                            token: new ethers_1.ethers.Contract(this.readOnlyContracts.token.address, IERC20Minimal_json_1.abi, this.signer),
                             voltzVault: new ethers_1.ethers.Contract(this.voltzVaultAddress, VoltzVault_json_1.abi, this.signer),
                             erc20RootVault: new ethers_1.ethers.Contract(this.erc20RootVaultAddress, Erc20RootVault_json_1.abi, this.signer),
                         };

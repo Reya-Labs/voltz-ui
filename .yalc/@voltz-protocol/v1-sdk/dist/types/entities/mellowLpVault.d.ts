@@ -1,5 +1,4 @@
 import { Signer, providers, BigNumberish, BigNumber, ContractReceipt, Contract } from 'ethers';
-import { BaseRateOracle, IERC20Minimal, MarginEngine } from '../typechain';
 export declare type MellowLpVaultArgs = {
     voltzVaultAddress: string;
     erc20RootVaultAddress: string;
@@ -12,15 +11,15 @@ declare class MellowLpVault {
     readonly erc20RootVaultGovernanceAddress: string;
     readonly provider?: providers.Provider;
     readOnlyContracts?: {
-        marginEngine: MarginEngine;
-        token: IERC20Minimal;
-        rateOracle: BaseRateOracle;
+        marginEngine: Contract;
+        token: Contract;
+        rateOracle: Contract;
         voltzVault: Contract;
         erc20RootVault: Contract;
         erc20RootVaultGovernance: Contract;
     };
     writeContracts?: {
-        token: IERC20Minimal;
+        token: Contract;
         voltzVault: Contract;
         erc20RootVault: Contract;
     };
