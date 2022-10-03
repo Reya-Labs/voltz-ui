@@ -12,10 +12,11 @@ import MarginUpdate from './marginUpdate';
 import Mint from './mint';
 import Settlement from './settlement';
 import Swap from './swap';
-import { Q96 } from '../constants';
+import { ONE_YEAR_IN_SECONDS, Q96 } from '../constants';
 import { tickToPrice, tickToFixedRate } from '../utils/priceTickConversions';
 import { TickMath } from '../utils/tickMath';
 import { Price } from './fractions/price';
+import { BaseRateOracle__factory } from '../typechain';
 
 export type PositionConstructorArgs = {
   source: string;
@@ -250,6 +251,38 @@ class Position {
       1000;
     return Math.abs(averageFixedRate);
   }
+
+  // get settlement rate of particular position
+  public async getSettlementCashflow(): Promise<number | undefined> {
+
+    const start = BigNumber.from(this.amm.termStartTimestamp.toString());
+    const end = BigNumber.from(this.amm.termEndTimestamp.toString());
+
+    if (this.amm.provider) {
+      const rateOracleContract = BaseRateOracle__factory.connect(this.amm.rateOracle.id, this.amm.provider);
+      const variableFactorToMaturityWad = await rateOracleContract.callStatic.variableFactor(
+        start, 
+        end
+      );
+
+      const fixedFactor = end.sub(start).div(ONE_YEAR_IN_SECONDS);
+
+      try {
+        const fixedCashflowWad = BigNumber.from(this.fixedTokenBalance.toString()).mul(fixedFactor).div(BigNumber.from(100)).div(BigNumber.from(10).pow(18));
+        const variableCashflowWad = BigNumber.from(this.variableTokenBalance.toString()).mul(variableFactorToMaturityWad);
+  
+        const cashFlow = fixedCashflowWad.add(variableCashflowWad);
+  
+        return this.amm.descale(cashFlow);
+
+      } catch (e) {
+        return undefined;
+      }
+    }
+
+    return undefined;
+    
+  };
 }
 
 export default Position;

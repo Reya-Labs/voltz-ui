@@ -43,7 +43,7 @@ import { Price } from './fractions/price';
 import { TokenAmount } from './fractions/tokenAmount';
 import { decodeInfoPostMint, decodeInfoPostSwap, getReadableErrorMessage } from '../utils/errors/errorHandling';
 import Position from './position';
-import { isNumber, isUndefined } from 'lodash';
+import { isNumber, isUndefined, result } from 'lodash';
 import { getExpectedApy } from '../services/getExpectedApy';
 import { getAccruedCashflow, transformSwaps } from '../services/getAccruedCashflow';
 
@@ -267,6 +267,7 @@ export type PositionInfo = {
   marginInUSD: number;
   margin: number;
   fees?: number;
+  settlementCashflow?: number;
   liquidationThreshold?: number;
   safetyThreshold?: number;
   accruedCashflowInUSD: number;
@@ -2465,6 +2466,11 @@ class AMM {
     // fixed apr
     if (beforeMaturity) {
       results.fixedApr = await this.getFixedApr();
+    }
+
+    // fixed apr
+    if (!beforeMaturity && !position.isSettled) {
+      results.settlementCashflow = await position.getSettlementCashflow();
     }
 
     // variable apy and accrued cashflow
