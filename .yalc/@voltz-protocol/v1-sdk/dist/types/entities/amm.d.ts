@@ -168,6 +168,7 @@ export declare type PositionInfo = {
     marginInUSD: number;
     margin: number;
     fees?: number;
+    settlementCashflow?: number;
     liquidationThreshold?: number;
     safetyThreshold?: number;
     accruedCashflowInUSD: number;
