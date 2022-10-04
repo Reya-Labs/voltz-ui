@@ -135,7 +135,8 @@ export const useAMM = (amm?: AugmentedAMM) => {
         fixedLow: 1,
         fixedHigh: 999,
         fixedTokenDeltaUnbalanced: args.fixedTokenDeltaUnbalanced,
-        availableNotional: args.availableNotional
+        availableNotional: args.availableNotional,
+        predictedVariableApy: args.predictedVariableApy
       });
 
       if (!result) {

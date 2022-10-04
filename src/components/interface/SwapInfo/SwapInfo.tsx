@@ -21,7 +21,10 @@ export type SwapInfoProps = {
   underlyingTokenName?: string;
   warningText?: string;
   maxAvailableNotional?: number;
-  expectedApy?: number[][];
+  expectedApy?: number;
+  variableApy?: number;
+  userSimulatedVariableApy?: number;
+  onChangeUserSimulatedVariableApy?: (value: number, resetToDefault?: boolean) => void;
 };
 
 const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
@@ -36,7 +39,9 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
   underlyingTokenName,
   warningText,
   maxAvailableNotional,
-  expectedApy
+  expectedApy,
+  userSimulatedVariableApy,
+  onChangeUserSimulatedVariableApy
 }) => {
   const bottomSpacing: SystemStyleObject<Theme> = {
     marginBottom: (theme) => theme.spacing(6)
@@ -44,10 +49,13 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
 
   return (
     <FormPanel noBackground>
-      {(mode !== SwapFormModes.EDIT_NOTIONAL && mode !== SwapFormModes.EDIT_MARGIN && mode !== SwapFormModes.FIX_BORROW) && (
+      {(mode !== SwapFormModes.EDIT_NOTIONAL && mode !== SwapFormModes.EDIT_MARGIN && mode !== SwapFormModes.FIX_BORROW && 
+        !isUndefined(onChangeUserSimulatedVariableApy)) && (
         <>
         <ExpectedAPY 
-          expectedAPY={expectedApy}
+          expectedApy={expectedApy}
+          userSimulatedVariableApy={userSimulatedVariableApy}
+          onChangeUserSimulatedVariableApy={onChangeUserSimulatedVariableApy}
         />
             <Box component={'hr'} sx={{ 
               border: 'none',

@@ -1,52 +1,57 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { SelectInput, Typography } from '@components/atomic';
+import { MaskedIntegerField } from '@components/composite';
 import { IconLabel } from '@components/composite';
 import Box from '@mui/material/Box';
 import { colors } from '@theme';
-import { formatNumber } from '@utilities';
+import { formatNumber, notFormatted, stringToBigFloat, toUSFormat } from '@utilities';
+import { isUndefined } from 'lodash';
 
 interface ExpectedAPYProps {
-  expectedAPY?: number[][];
+  expectedApy?: number;
+  userSimulatedVariableApy?: number;
+  onChangeUserSimulatedVariableApy: (value: number, resetToDefault?: boolean) => void;
 }
 
-export const ExpectedAPY = ({ expectedAPY }:ExpectedAPYProps) => {
-  type ExpectedAPYOption = {label: string;  value: string};
-  const [options, setOptions] = useState<ExpectedAPYOption[]>();
-  const [selectedOptionValue, setSelectedOptionValue] = useState<string>();
+export const ExpectedAPY = ({ expectedApy, userSimulatedVariableApy, onChangeUserSimulatedVariableApy }:ExpectedAPYProps) => {
+  const delay = 1000;
 
-  const handleChangeMoveBy = (value: string) => {
-    setSelectedOptionValue(value);
-  }
+  const [userInput, setUserInput] = useState(!isUndefined(userSimulatedVariableApy) ? formatNumber(userSimulatedVariableApy, 0,2) : undefined);
+  const timer = useRef<number>();
 
   useEffect(() => {
-    if(expectedAPY) {
-      const newOptions = expectedAPY[0].map((labelNum, index) => ({
-        label: `${formatNumber(labelNum)}%`, 
-        value: formatNumber(expectedAPY[1][index])
-      }));
-      setOptions(newOptions);
-      setSelectedOptionValue(newOptions[2].value)
-    } else {
-      setOptions(undefined);
-      setSelectedOptionValue(undefined)
-    }
-  }, expectedAPY);
+    const formatted = !isUndefined(userSimulatedVariableApy) ? formatNumber(userSimulatedVariableApy, 0,2) : undefined
+    setUserInput(formatted);
+  }, [userSimulatedVariableApy])
 
-  const getSelectedOptionValue = (value: string | undefined) => {
-    if (value) {
-      return value.length >= 7 ? '>1,000%' : value+"%";
-    }
-    return '---'
-  }
-
-  const findLabel = (value: unknown) => {
-    if (options){
-      for (const entry of options){
-        if (entry.value === value) return entry.label;
+  const handleChangeInput = (inputVal: string | undefined) => {
+    if (inputVal) {
+      const usFormatted = toUSFormat(inputVal);
+      const newValue = usFormatted ? stringToBigFloat(usFormatted) : NaN;
+      if(!isNaN(newValue)) {
+        setUserInput(inputVal);
+        window.clearInterval(timer.current);
+        timer.current = window.setTimeout(() => onChangeUserSimulatedVariableApy(newValue), delay);
       }
+    } else {
+      setUserInput("");
+      window.clearInterval(timer.current);
+      timer.current = window.setTimeout(() => onChangeUserSimulatedVariableApy(0, true), delay * 2);
     }
-    return '0%'
+  };
+
+  const formatExpectedApy = (value: number | undefined) => {
+    if (value) {
+      if (value > 1000) {
+        return '>1,000%'
+      }
+      if (value < -1000) {
+        return '<-1,000%'
+      }
+      return formatNumber(value, 0, 2)+'%';
+    }
+    return '---';
   }
 
   return (
@@ -65,27 +70,24 @@ export const ExpectedAPY = ({ expectedAPY }:ExpectedAPYProps) => {
             label={<IconLabel label="Expected APY" icon="information-circle" info="The APY you would get in a scenario in which the variable APY has the selected value until the pool's maturity" />}
             agentStyling
           >
-            {getSelectedOptionValue(selectedOptionValue)}
+            {formatExpectedApy(expectedApy)}
           </Typography>
         </Box>
         <Box sx={{
           display: 'inline-block',
           padding: (theme) => theme.spacing(4), 
-          marginLeft: (theme) => theme.spacing(6)
+          marginLeft: (theme) => theme.spacing(6),
+          flexGrow: '0', width: '80px'
         }}>
-          <SelectInput 
-            displayEmpty={true}
-            renderValue={(value) => { 
-              if (value) return <>{findLabel(value)}</>;
-              if (options) return <>{options[2].label}</> 
-              return <>0%</>;
-            }}
-            name="ExpectedVariableAPY"
-            label={<IconLabel label="Expected Variable APY:" icon="information-circle" info="Select the percentage of the variable APY between now and the end of the pool that you would like to simulate." />} 
-            onChange={(event) => handleChangeMoveBy(event.target.value as string)}
-            options={options ?? []}
-            size="small"
-            sx={{ width: '90px' }}
+          <MaskedIntegerField
+            allowDecimals
+            dynamic
+            inputSize="small"
+            label={<IconLabel label={'Expected Variable APY'} icon="information-circle" info="Select the percentage of the variable APY between now and the end of the pool that you would like to simulate." />}
+            onChange={handleChangeInput}
+            suffix='%'
+            suffixPadding={0}
+            value={notFormatted(userInput)}
           />
         </Box>
       </Box>
