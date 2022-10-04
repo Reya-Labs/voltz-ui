@@ -68,6 +68,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
           token={position.source.includes("FCM") ? position.amm.protocol : underlyingTokenName || ''} 
           onSelect={agent === Agents.LIQUIDITY_PROVIDER ? handleEditMargin : undefined} 
           marginEdit={position.source.includes("FCM") ? false : true}
+          isSettled={position.isSettled}
         />
       );
     }
