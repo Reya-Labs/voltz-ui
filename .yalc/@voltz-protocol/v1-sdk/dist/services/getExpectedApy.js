@@ -18,7 +18,7 @@ predictedApr) {
     // cashflow = uft * (end - current) / YEAR * 0.01 + vt * (rate[end]/rate[current] - 1)
     var ecs = uft * getAnnualizedTime(current, end) * 0.01 + vt * vf;
     // PNL = (1 + estimated cashflow / margin so far) ^ (YEAR / (end - current)) - 1
-    var pnl = Math.pow((1 + ecs / margin), (1 / getAnnualizedTime(current, end))) - 1;
+    var pnl = (ecs / margin) * (1 / getAnnualizedTime(current, end));
     return pnl;
 };
 exports.getExpectedApy = getExpectedApy;
