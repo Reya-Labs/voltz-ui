@@ -24,7 +24,7 @@ export type LeverageProps = {
 const Leverage = ({availableNotional, minMargin, notional, onChange, value, resetDeltaState}: LeverageProps) => {
   const delay = 1000;
   const hint = 'Choose the amount of leverage you wish to trade with. The slider helps demonstrate safe amounts of leverage.';
-  const margin = isNumber(minMargin) ? Math.max(minMargin, 0.1) : undefined;
+  const margin = isNumber(minMargin) ? Math.max(minMargin, 0.0001) : undefined;
 
   const [internalValue, setInternalValue] = useState<number | undefined>(value);
   const [inputValue, setInputValue] = useState(formatNumber(value, 0,2));
