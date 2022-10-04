@@ -18,6 +18,7 @@ import { AugmentedAMM } from '@utilities';
 import { routes } from '@routes';
 import Box from '@mui/material/Box';
 import { colors } from '@theme';
+import { isUndefined } from 'lodash';
 
 export type ConnectedAMMTableProps = {
   onSelectItem: (item: Position, mode: 'margin' | 'liquidity' | 'rollover' | 'notional') => void;
@@ -131,6 +132,14 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
 
     const spData = portfolioData.info[positionToSettle.position.id];
 
+    let netWithdraw = undefined;
+    if (agent === Agents.LIQUIDITY_PROVIDER) {
+      netWithdraw = !isUndefined(spData?.fees) && !isUndefined(spData?.settlementCashflow) ? spData?.margin + spData?.fees + spData?.settlementCashflow : undefined;
+    } else {
+      netWithdraw = !isUndefined(spData?.settlementCashflow) ? spData?.margin + spData?.settlementCashflow : undefined;
+    }
+     
+
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
         <PendingTransaction
@@ -140,12 +149,8 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
           isSettle={true}
           transactionId={positionToSettle.txId}
           onComplete={handleTransactionFinished}
-          notional={
-            agent === Agents.LIQUIDITY_PROVIDER
-              ? Math.abs(positionToSettle.position.notional)
-              : Math.abs(positionToSettle.position.effectiveVariableTokenBalance)
-          }
-          margin={spData?.margin}
+          notional={agent === Agents.LIQUIDITY_PROVIDER ? Math.abs(positionToSettle.position.notional) : Math.abs(positionToSettle.position.effectiveVariableTokenBalance)}
+          margin={netWithdraw}
           onBack={handleTransactionFinished}
         />
       </Box>

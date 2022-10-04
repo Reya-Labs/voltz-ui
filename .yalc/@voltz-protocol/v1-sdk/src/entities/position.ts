@@ -16,7 +16,7 @@ import { ONE_YEAR_IN_SECONDS, Q96 } from '../constants';
 import { tickToPrice, tickToFixedRate } from '../utils/priceTickConversions';
 import { TickMath } from '../utils/tickMath';
 import { Price } from './fractions/price';
-import { BaseRateOracle__factory } from '../typechain';
+import { BaseRateOracle__factory, MarginEngine__factory } from '../typechain';
 
 export type PositionConstructorArgs = {
   source: string;
@@ -258,20 +258,27 @@ class Position {
     const start = BigNumber.from(this.amm.termStartTimestamp.toString());
     const end = BigNumber.from(this.amm.termEndTimestamp.toString());
 
-    if (this.amm.provider) {
-      const rateOracleContract = BaseRateOracle__factory.connect(this.amm.rateOracle.id, this.amm.provider);
-      const variableFactorToMaturityWad = await rateOracleContract.callStatic.variableFactor(
-        start, 
-        end
-      );
-
-      const fixedFactor = end.sub(start).div(ONE_YEAR_IN_SECONDS);
-
+    if (this.amm.provider && this.amm.signer) {
       try {
-        const fixedCashflowWad = BigNumber.from(this.fixedTokenBalance.toString()).mul(fixedFactor).div(BigNumber.from(100)).div(BigNumber.from(10).pow(18));
-        const variableCashflowWad = BigNumber.from(this.variableTokenBalance.toString()).mul(variableFactorToMaturityWad);
+
+        const marginEngineContract = MarginEngine__factory.connect(this.amm.marginEngineAddress, this.amm.signer);
+
+        const signerAddress = await this.amm.signer.getAddress()
+
+        const position = await marginEngineContract.callStatic.getPosition(signerAddress, this.tickLower, this.tickUpper);
+
+        const rateOracleContract = BaseRateOracle__factory.connect(this.amm.rateOracle.id, this.amm.signer);
+        const variableFactorToMaturityWad = await rateOracleContract.callStatic.variableFactor(
+          start, 
+          end
+        );
+
+        const fixedFactor = end.sub(start).div(ONE_YEAR_IN_SECONDS);
+
+        const fixedCashflow = position.fixedTokenBalance.mul(fixedFactor).div(BigNumber.from(100)).div(BigNumber.from(10).pow(18));
+        const variableCashflow = position.variableTokenBalance.mul(variableFactorToMaturityWad).div(BigNumber.from(10).pow(18));
   
-        const cashFlow = fixedCashflowWad.add(variableCashflowWad);
+        const cashFlow = fixedCashflow.add(variableCashflow);
   
         return this.amm.descale(cashFlow);
 

@@ -189,29 +189,36 @@ var Position = /** @class */ (function () {
     // get settlement rate of particular position
     Position.prototype.getSettlementCashflow = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var start, end, rateOracleContract, variableFactorToMaturityWad, fixedFactor, fixedCashflowWad, variableCashflowWad, cashFlow;
+            var start, end, marginEngineContract, signerAddress, position, rateOracleContract, variableFactorToMaturityWad, fixedFactor, fixedCashflow, variableCashflow, cashFlow, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         start = ethers_1.BigNumber.from(this.amm.termStartTimestamp.toString());
                         end = ethers_1.BigNumber.from(this.amm.termEndTimestamp.toString());
-                        if (!this.amm.provider) return [3 /*break*/, 2];
-                        rateOracleContract = typechain_1.BaseRateOracle__factory.connect(this.amm.rateOracle.id, this.amm.provider);
-                        return [4 /*yield*/, rateOracleContract.callStatic.variableFactor(start, end)];
+                        if (!(this.amm.provider && this.amm.signer)) return [3 /*break*/, 6];
+                        _a.label = 1;
                     case 1:
+                        _a.trys.push([1, 5, , 6]);
+                        marginEngineContract = typechain_1.MarginEngine__factory.connect(this.amm.marginEngineAddress, this.amm.signer);
+                        return [4 /*yield*/, this.amm.signer.getAddress()];
+                    case 2:
+                        signerAddress = _a.sent();
+                        return [4 /*yield*/, marginEngineContract.callStatic.getPosition(signerAddress, this.tickLower, this.tickUpper)];
+                    case 3:
+                        position = _a.sent();
+                        rateOracleContract = typechain_1.BaseRateOracle__factory.connect(this.amm.rateOracle.id, this.amm.signer);
+                        return [4 /*yield*/, rateOracleContract.callStatic.variableFactor(start, end)];
+                    case 4:
                         variableFactorToMaturityWad = _a.sent();
                         fixedFactor = end.sub(start).div(constants_1.ONE_YEAR_IN_SECONDS);
-                        try {
-                            fixedCashflowWad = ethers_1.BigNumber.from(this.fixedTokenBalance.toString()).mul(fixedFactor).div(ethers_1.BigNumber.from(100)).div(ethers_1.BigNumber.from(10).pow(18));
-                            variableCashflowWad = ethers_1.BigNumber.from(this.variableTokenBalance.toString()).mul(variableFactorToMaturityWad);
-                            cashFlow = fixedCashflowWad.add(variableCashflowWad);
-                            return [2 /*return*/, this.amm.descale(cashFlow)];
-                        }
-                        catch (e) {
-                            return [2 /*return*/, undefined];
-                        }
-                        _a.label = 2;
-                    case 2: return [2 /*return*/, undefined];
+                        fixedCashflow = position.fixedTokenBalance.mul(fixedFactor).div(ethers_1.BigNumber.from(100)).div(ethers_1.BigNumber.from(10).pow(18));
+                        variableCashflow = position.variableTokenBalance.mul(variableFactorToMaturityWad).div(ethers_1.BigNumber.from(10).pow(18));
+                        cashFlow = fixedCashflow.add(variableCashflow);
+                        return [2 /*return*/, this.amm.descale(cashFlow)];
+                    case 5:
+                        e_1 = _a.sent();
+                        return [2 /*return*/, undefined];
+                    case 6: return [2 /*return*/, undefined];
                 }
             });
         });
