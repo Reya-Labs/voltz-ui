@@ -112,7 +112,7 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
     });
 
     rows.push({
-      label: 'NET ROLLOVER BALANCE',
+      label: 'NET BALANCE',
       value: !isUndefined(cashflow) && !isUndefined(fees)
         ? `${formatCurrency(cashflow + margin + fees)} ${underlyingTokenName}`
         : <Ellipsis />,

@@ -83,7 +83,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   }, []);
 
   useEffect(() => {
-    if (!isUndefined(margin) && margin !== 0){
+    if (!isUndefined(margin) && margin !== 0 && fetch == 0){
       cachedMargin.current =  margin;
     }
   }, [margin]);
