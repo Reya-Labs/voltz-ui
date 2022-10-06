@@ -20,6 +20,7 @@ const useMellowLPVaults = (): useMellowLPVaultsResult => {
       .replace("]", "")
       .split(",")
     : [];
+    
 
     const entries = [];
     for (let i = 0; i < addresses.length; i += 3)
