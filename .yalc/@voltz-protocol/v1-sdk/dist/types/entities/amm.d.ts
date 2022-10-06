@@ -77,9 +77,11 @@ export declare type ExpectedApyArgs = {
     fixedHigh: number;
     fixedTokenDeltaUnbalanced: number;
     availableNotional: number;
+    predictedVariableApy: number;
 };
 export declare type ExpectedApyInfo = {
-    expectedApy: number[][];
+    expectedApy: number;
+    expectedCashflow: number;
 };
 export declare type AMMRolloverWithSwapArgs = {
     isFT: boolean;
@@ -203,11 +205,11 @@ declare class AMM {
     readonly wethAddress?: string;
     readonly isFCM: boolean;
     constructor({ id, signer, provider, environment, factoryAddress, marginEngineAddress, fcmAddress, rateOracle, updatedTimestamp, termStartTimestamp, termEndTimestamp, underlyingToken, tick, tickSpacing, txCount, totalNotionalTraded, totalLiquidity, wethAddress }: AMMConstructorArgs);
-    expectedApy: (ft: BigNumber, vt: BigNumber, margin: number) => Promise<number[][]>;
+    expectedApy: (ft: BigNumber, vt: BigNumber, margin: number, rate: number) => Promise<number[]>;
     rolloverWithSwap({ isFT, notional, margin, marginEth, fixedRateLimit, fixedLow, fixedHigh, owner, newMarginEngine, oldFixedLow, oldFixedHigh, validationOnly, }: AMMRolloverWithSwapArgs): Promise<ContractReceipt | void>;
     rolloverWithMint({ fixedLow, fixedHigh, notional, margin, marginEth, owner, newMarginEngine, oldFixedLow, oldFixedHigh, validationOnly, }: AMMRolloverWithMintArgs): Promise<ContractReceipt | void>;
     getInfoPostSwap({ position, isFT, notional, fixedRateLimit, fixedLow, fixedHigh, margin, }: AMMGetInfoPostSwapArgs): Promise<InfoPostSwap>;
-    getExpectedApyInfo({ margin, position, fixedLow, fixedHigh, fixedTokenDeltaUnbalanced, availableNotional }: ExpectedApyArgs): Promise<ExpectedApyInfo>;
+    getExpectedApyInfo({ margin, position, fixedLow, fixedHigh, fixedTokenDeltaUnbalanced, availableNotional, predictedVariableApy }: ExpectedApyArgs): Promise<ExpectedApyInfo>;
     swap({ isFT, notional, margin, fixedRateLimit, fixedLow, fixedHigh, validationOnly, fullyCollateralisedVTSwap }: AMMSwapArgs): Promise<ContractReceipt | void>;
     swapWithWeth({ isFT, notional, margin, marginEth, fixedRateLimit, fixedLow, fixedHigh, validationOnly, }: AMMSwapWithWethArgs): Promise<ContractReceipt | void>;
     getInfoPostMint({ fixedLow, fixedHigh, notional, }: AMMGetInfoPostMintArgs): Promise<number>;
