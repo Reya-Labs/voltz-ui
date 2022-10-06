@@ -6,7 +6,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { ethers } from 'ethers';
 import { GraphQLClient, gql } from 'graphql-request';
-import { getAllReferrals } from '../../contexts/WalletContext/services';
+// import { getAllReferrals } from '../../contexts/WalletContext/services';
 import axios from 'axios';
 
 const ONE_YEAR = 31536000;
@@ -135,23 +135,23 @@ export async function getActivity({ from, end }: ActivityArgs): Promise<Activity
     }
   }
 
-  const referrals = await getAllReferrals();
+  // const referrals = await getAllReferrals();
   const total = new Map(scores);
 
-  for (const [referral, referees] of Object.entries(referrals)) {
-    let referralScore = 0;
-    for (const referee of referees) {
-      const tb = scores.get(referee.toLowerCase());
-      referralScore += tb || 0;
-    }
+  // for (const [referral, referees] of Object.entries(referrals)) {
+  //   let referralScore = 0;
+  //   for (const referee of referees) {
+  //     const tb = scores.get(referee.toLowerCase());
+  //     referralScore += tb || 0;
+  //   }
 
-    const ta = total.get(referral.toLowerCase());
-    if (ta) {
-      total.set(referral.toLowerCase(), ta + 0.3 * referralScore);
-    } else {
-      total.set(referral.toLowerCase(), 0.3 * referralScore);
-    }
-  }
+  //   const ta = total.get(referral.toLowerCase());
+  //   if (ta) {
+  //     total.set(referral.toLowerCase(), ta + 0.3 * referralScore);
+  //   } else {
+  //     total.set(referral.toLowerCase(), 0.3 * referralScore);
+  //   }
+  // }
 
   return {
     total,
