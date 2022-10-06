@@ -56,7 +56,8 @@ export const checkForTOSSignature = async (
 
   if (signatureData?.signature) {
     const existingTOSSignerAddress = ethers.utils.verifyMessage(
-      getTOSText(signatureData?.referrer || null),
+      // getTOSText(signatureData?.referrer || null),
+      getTOSText(null),
       signatureData.signature,
     );
     if (existingTOSSignerAddress === signerAddress) {
@@ -64,14 +65,16 @@ export const checkForTOSSignature = async (
     }
   }
 
-  const referrer = localStorage.getItem('invitedBy') || '';
+  // const referrer = localStorage.getItem('invitedBy') || '';
 
   if (!termsAccepted) {
     try {
-      const signature = await signer.signMessage(getTOSText(referrer));
+      // const termsOfService = getTOSText(referrer);
+      const termsOfService = getTOSText(null);
+      const signature = await signer.signMessage(termsOfService);
       // TODO: include the referrer details within the signed text, and send
       // the signed text along with the signature for verification on the backend
-      await saveSignatureWithReferrer(signerAddress, signature, referrer);
+      await saveSignatureWithTOS(signerAddress, signature, termsOfService);
     } catch (e) {
       throw new Error('Error processing signature');
     }
@@ -112,28 +115,28 @@ export const getSignature = async (walletAddress: string) => {
 /**
  * Retrieves referral data via the referral API for all wallet addresses
  */
-export const getAllReferrals = async (): Promise<{ [s: string]: string[] }> => {
-  try {
-    const resp = await fetch(`https://hackathon-rest-api.herokuapp.com/referrals`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+// export const getAllReferrals = async (): Promise<{ [s: string]: string[] }> => {
+//   try {
+//     const resp = await fetch(`https://hackathon-rest-api.herokuapp.com/referrals`, {
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//     });
 
-    if (resp.ok) {
-      const json = (await resp.json()) as { [s: string]: string[] };
-      return json;
-    } else if (resp.status === 404) {
-      return {}; // No referrals found
-    } else {
-      throw await resp.text();
-    }
-  } catch (e) {
-    // eslint-disable-next-line
-    console.warn('Error getting referrals', e);
-    throw e;
-  }
-};
+//     if (resp.ok) {
+//       const json = (await resp.json()) as { [s: string]: string[] };
+//       return json;
+//     } else if (resp.status === 404) {
+//       return {}; // No referrals found
+//     } else {
+//       throw await resp.text();
+//     }
+//   } catch (e) {
+//     // eslint-disable-next-line
+//     console.warn('Error getting referrals', e);
+//     throw e;
+//   }
+// };
 
 /**
  * Returns the terms of service text that users have to agree to to connect their wallet.
@@ -280,16 +283,18 @@ export const isWalletRisky = (riskAssessment?: WalletRiskAssessment) => {
  * @param walletAddress - the wallet address to save the signature for
  * @param signature - thwe signature to save
  */
-export const saveSignatureWithReferrer = async (
+const saveSignatureWithTOS = async (
   walletAddress: string,
   signature: string,
-  referrer?: string,
+  termsOfService: string,
+  // referrer?: string,
 ) => {
   // Build formData object.
   const formData = new FormData();
   formData.append('signature', signature);
   formData.append('walletAddress', walletAddress);
-  formData.append('referrer', referrer || '');
+  formData.append('message', termsOfService);
+  // formData.append('referrer', referrer || '');
 
   return await fetch(`https://hackathon-rest-api.herokuapp.com/add-signature`, {
     method: 'POST',
