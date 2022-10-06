@@ -2161,7 +2161,7 @@ var AMM = /** @class */ (function () {
     };
     AMM.prototype.getVariableFactor = function (termStartTimestamp, termEndTimestamp) {
         return __awaiter(this, void 0, void 0, function () {
-            var rateOracleContract, result_1, resultScaled, error_19;
+            var rateOracleContract, result, resultScaled, error_19;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -2174,8 +2174,8 @@ var AMM = /** @class */ (function () {
                         _a.trys.push([1, 3, , 4]);
                         return [4 /*yield*/, rateOracleContract.callStatic.variableFactor(termStartTimestamp, termEndTimestamp)];
                     case 2:
-                        result_1 = _a.sent();
-                        resultScaled = result_1.div(ethers_2.BigNumber.from(10).pow(12)).toNumber() / 1000000;
+                        result = _a.sent();
+                        resultScaled = result.div(ethers_2.BigNumber.from(10).pow(12)).toNumber() / 1000000;
                         return [2 /*return*/, resultScaled];
                     case 3:
                         error_19 = _a.sent();
@@ -2766,7 +2766,7 @@ var AMM = /** @class */ (function () {
     // one week look-back window apy
     AMM.prototype.getInstantApy = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var blocksPerDay, blockPerHour, _a, rateOracleContract, lendingPoolAddress, lendingPool, reservesData, rateInRay, result_2, daysPerYear, rateOracle, cTokenAddress, cTokenContract, supplyRatePerBlock, supplyApy, lastBlock, to, _b, _c, from, _d, _e, rateOracleContract, oneWeekApy, lastBlock, to, _f, _g, from, _h, _j, rateOracleContract, oneWeekApy, rateOracleContract, lendingPoolAddress, lendingPool, reservesData, rateInRay, result_3, daysPerYear, rateOracle, cTokenAddress, cTokenContract, borrowRatePerBlock, borrowApy;
+            var blocksPerDay, blockPerHour, _a, rateOracleContract, lendingPoolAddress, lendingPool, reservesData, rateInRay, result, daysPerYear, rateOracle, cTokenAddress, cTokenContract, supplyRatePerBlock, supplyApy, lastBlock, to, _b, _c, from, _d, _e, rateOracleContract, oneWeekApy, lastBlock, to, _f, _g, from, _h, _j, rateOracleContract, oneWeekApy, rateOracleContract, lendingPoolAddress, lendingPool, reservesData, rateInRay, result, daysPerYear, rateOracle, cTokenAddress, cTokenContract, borrowRatePerBlock, borrowApy;
             return __generator(this, function (_k) {
                 switch (_k.label) {
                     case 0:
@@ -2805,8 +2805,8 @@ var AMM = /** @class */ (function () {
                     case 3:
                         reservesData = _k.sent();
                         rateInRay = reservesData.currentLiquidityRate;
-                        result_2 = rateInRay.div(ethers_2.BigNumber.from(10).pow(21)).toNumber() / 1000000;
-                        return [2 /*return*/, result_2];
+                        result = rateInRay.div(ethers_2.BigNumber.from(10).pow(21)).toNumber() / 1000000;
+                        return [2 /*return*/, result];
                     case 4:
                         daysPerYear = 365;
                         rateOracle = typechain_1.CompoundRateOracle__factory.connect(this.rateOracle.id, this.provider);
@@ -2864,8 +2864,8 @@ var AMM = /** @class */ (function () {
                     case 19:
                         reservesData = _k.sent();
                         rateInRay = reservesData.currentVariableBorrowRate;
-                        result_3 = rateInRay.div(ethers_2.BigNumber.from(10).pow(21)).toNumber() / 1000000;
-                        return [2 /*return*/, result_3];
+                        result = rateInRay.div(ethers_2.BigNumber.from(10).pow(21)).toNumber() / 1000000;
+                        return [2 /*return*/, result];
                     case 20:
                         daysPerYear = 365;
                         rateOracle = typechain_1.CompoundBorrowRateOracle__factory.connect(this.rateOracle.id, this.provider);
