@@ -104,6 +104,7 @@ const Nav: React.FunctionComponent = () => (
       } 
 
       {
+        process.env.REACT_APP_ECOSYSTEM && process.env.REACT_APP_ECOSYSTEM !== `UNPROVIDED` && 
         <Button aria-describedby={id3} sx={buttonSx} variant="text" link={`/${routes.ECOSYSTEM}`}>
           Ecosystem
         </Button>
