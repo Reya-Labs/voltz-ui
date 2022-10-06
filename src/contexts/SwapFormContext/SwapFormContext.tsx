@@ -95,8 +95,10 @@ export type SwapFormContext = {
   validate: () => Promise<boolean>;
   warningText?: string;
   expectedApy?: number;
+  expectedCashflow?: number;
   userSimulatedVariableApy?: number;
   setUserSimulatedVariableApy: (value: number, resetToDefault?: boolean) => void;
+  userSimulatedVariableApyUpdated: boolean;
 };
 
 const SwapFormCtx = createContext<SwapFormContext>({} as unknown as SwapFormContext);
@@ -148,6 +150,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   const approvalsNeeded = s.approvalsNeeded(action, tokenApprovals, isRemovingMargin)
 
   const [resetDeltaState, setResetDeltaState] = useState<boolean>(false);
+  const [userSimulatedVariableApyUpdated, setUserSimulatedVariableApyUpdated] = useState<boolean>(false);
 
   const asyncCallsLoading = useRef<string[]>([]);
 
@@ -164,8 +167,19 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   }, [])
 
   useEffect(() => {
+    if (userSimulatedVariableApyUpdated) {
+      setUserSimulatedVariableApyUpdated(false);
+    }
+  }, [userSimulatedVariableApyUpdated])
+
+  useEffect(() => {
     if (isUndefined(userSimulatedVariableApy)) {
-      setUserSimulatedVariableApy(ammCtx.variableApy.result ?? undefined);
+      if (ammCtx.variableApy.result) {
+        updateUserSimulatedVariableApy(ammCtx.variableApy.result * 100)
+      } else {
+        setUserSimulatedVariableApy(undefined)
+        setUserSimulatedVariableApyUpdated(true);
+      }
     }
   }, [ammCtx.variableApy.result, userSimulatedVariableApy])
 
@@ -451,8 +465,15 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     if (resetToDefault) {
       setUserSimulatedVariableApy(undefined);
     } else {
+      if (newUserSimulatedVariableApy < 0) {
+        newUserSimulatedVariableApy = 0;
+      } else if (newUserSimulatedVariableApy > 1000) {
+        newUserSimulatedVariableApy = 1000;
+      }
+
       setUserSimulatedVariableApy(newUserSimulatedVariableApy / 100);
     }
+    setUserSimulatedVariableApyUpdated(true);
   }
 
   const updateMargin = (newMargin: SwapFormState['margin']) => {
@@ -695,8 +716,10 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     validate,
     warningText: getWarningText(),
     expectedApy: (!isUndefined(notional) && !isUndefined(margin) && !expectedApyInfo.loading) ? expectedApyInfo.result?.expectedApy : undefined,
+    expectedCashflow: (!isUndefined(notional) && !isUndefined(margin) && !expectedApyInfo.loading) ? expectedApyInfo.result?.expectedCashflow : undefined,
     userSimulatedVariableApy: !isUndefined(userSimulatedVariableApy) ? userSimulatedVariableApy * 100 : undefined,
-    setUserSimulatedVariableApy: updateUserSimulatedVariableApy
+    setUserSimulatedVariableApy: updateUserSimulatedVariableApy,
+    userSimulatedVariableApyUpdated: userSimulatedVariableApyUpdated
   }
 
   return (

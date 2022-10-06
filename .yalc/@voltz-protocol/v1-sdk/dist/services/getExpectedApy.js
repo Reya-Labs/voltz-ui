@@ -19,6 +19,6 @@ predictedApr) {
     var ecs = uft * getAnnualizedTime(current, end) * 0.01 + vt * vf;
     // PNL = (1 + estimated cashflow / margin so far) ^ (YEAR / (end - current)) - 1
     var pnl = (ecs / margin) * (1 / getAnnualizedTime(current, end));
-    return pnl;
+    return [pnl, ecs + margin];
 };
 exports.getExpectedApy = getExpectedApy;
