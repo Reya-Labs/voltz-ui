@@ -252,8 +252,10 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         warningText={form.warningText}
         maxAvailableNotional={form.swapInfo.maxAvailableNotional}
         expectedApy={form.expectedApy}
+        expectedCashflow={form.expectedCashflow}
         userSimulatedVariableApy={form.userSimulatedVariableApy}
         onChangeUserSimulatedVariableApy={form.setUserSimulatedVariableApy}
+        userSimulatedVariableApyUpdated={form.userSimulatedVariableApyUpdated}
       />
     </>
   );

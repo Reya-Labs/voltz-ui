@@ -86,8 +86,8 @@ var AMM = /** @class */ (function () {
         var _this = this;
         // expected apy
         this.expectedApy = function (ft, vt, margin, rate) { return __awaiter(_this, void 0, void 0, function () {
-            var now, end, scaledFt, scaledVt, pnl, predictedPnl;
-            return __generator(this, function (_a) {
+            var now, end, scaledFt, scaledVt, _a, pnl, ecs;
+            return __generator(this, function (_b) {
                 now = Math.round((new Date()).getTime() / 1000);
                 end = ethers_2.BigNumber.from(this.termEndTimestamp.toString())
                     .div(ethers_2.BigNumber.from(10).pow(12))
@@ -102,9 +102,8 @@ var AMM = /** @class */ (function () {
                     scaledFt = ft.div(ethers_2.BigNumber.from(10).pow(this.underlyingToken.decimals - 6)).toNumber() / 1000000;
                     scaledVt = vt.div(ethers_2.BigNumber.from(10).pow(this.underlyingToken.decimals - 6)).toNumber() / 1000000;
                 }
-                pnl = (0, getExpectedApy_1.getExpectedApy)(now, end, scaledFt, scaledVt, margin, rate);
-                predictedPnl = 100 * pnl;
-                return [2 /*return*/, predictedPnl];
+                _a = (0, getExpectedApy_1.getExpectedApy)(now, end, scaledFt, scaledVt, margin, rate), pnl = _a[0], ecs = _a[1];
+                return [2 /*return*/, [100 * pnl, ecs]];
             });
         }); };
         this.id = id;
@@ -507,9 +506,9 @@ var AMM = /** @class */ (function () {
     AMM.prototype.getExpectedApyInfo = function (_a) {
         var margin = _a.margin, position = _a.position, fixedLow = _a.fixedLow, fixedHigh = _a.fixedHigh, fixedTokenDeltaUnbalanced = _a.fixedTokenDeltaUnbalanced, availableNotional = _a.availableNotional, predictedVariableApy = _a.predictedVariableApy;
         return __awaiter(this, void 0, void 0, function () {
-            var tickUpper, tickLower, signerAddress, marginEngineContract, currentMargin, rateOracleContract, lastBlock, lastBlockTimestamp, _b, _c, scaledCurrentMargin, positionMargin, accruedCashflow, positionUft, positionVt, _i, _d, swap, accruedCashflowInfo, _e, expectedApy, result;
-            return __generator(this, function (_f) {
-                switch (_f.label) {
+            var tickUpper, tickLower, signerAddress, marginEngineContract, currentMargin, rateOracleContract, lastBlock, lastBlockTimestamp, _b, _c, scaledCurrentMargin, positionMargin, accruedCashflow, positionUft, positionVt, _i, _d, swap, accruedCashflowInfo, _e, _f, expectedApy, expectedCashflow, result;
+            return __generator(this, function (_g) {
+                switch (_g.label) {
                     case 0:
                         if (!this.signer) {
                             throw new Error('Wallet not connected');
@@ -530,19 +529,19 @@ var AMM = /** @class */ (function () {
                         tickLower = this.closestTickAndFixedRate(fixedHigh).closestUsableTick;
                         return [4 /*yield*/, this.signer.getAddress()];
                     case 1:
-                        signerAddress = _f.sent();
+                        signerAddress = _g.sent();
                         marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
                         return [4 /*yield*/, marginEngineContract.callStatic.getPosition(signerAddress, tickLower, tickUpper)];
                     case 2:
-                        currentMargin = (_f.sent()).margin;
+                        currentMargin = (_g.sent()).margin;
                         rateOracleContract = typechain_1.BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
                         return [4 /*yield*/, this.provider.getBlockNumber()];
                     case 3:
-                        lastBlock = _f.sent();
+                        lastBlock = _g.sent();
                         _c = (_b = ethers_2.BigNumber).from;
                         return [4 /*yield*/, this.provider.getBlock(lastBlock - 1)];
                     case 4:
-                        lastBlockTimestamp = _c.apply(_b, [(_f.sent()).timestamp]);
+                        lastBlockTimestamp = _c.apply(_b, [(_g.sent()).timestamp]);
                         scaledCurrentMargin = this.descale(currentMargin);
                         positionMargin = 0;
                         accruedCashflow = 0;
@@ -555,9 +554,9 @@ var AMM = /** @class */ (function () {
                             positionVt = positionVt.add(swap.variableTokenDelta.toString());
                         }
                         positionMargin = scaledCurrentMargin;
-                        _f.label = 5;
+                        _g.label = 5;
                     case 5:
-                        _f.trys.push([5, 8, , 9]);
+                        _g.trys.push([5, 8, , 9]);
                         if (!(position.swaps.length > 0)) return [3 /*break*/, 7];
                         return [4 /*yield*/, (0, getAccruedCashflow_1.getAccruedCashflow)({
                                 swaps: (0, getAccruedCashflow_1.transformSwaps)(position.swaps, this.underlyingToken.decimals),
@@ -566,18 +565,19 @@ var AMM = /** @class */ (function () {
                                 endTime: Number(ethers_2.utils.formatUnits(this.termEndTimestamp.toString(), 18)),
                             })];
                     case 6:
-                        accruedCashflowInfo = _f.sent();
+                        accruedCashflowInfo = _g.sent();
                         accruedCashflow = accruedCashflowInfo.accruedCashflow;
-                        _f.label = 7;
+                        _g.label = 7;
                     case 7: return [3 /*break*/, 9];
                     case 8:
-                        _e = _f.sent();
+                        _e = _g.sent();
                         return [3 /*break*/, 9];
                     case 9: return [4 /*yield*/, this.expectedApy(positionUft.add(this.scale(fixedTokenDeltaUnbalanced)), positionVt.add(this.scale(availableNotional)), margin + positionMargin + accruedCashflow, predictedVariableApy)];
                     case 10:
-                        expectedApy = _f.sent();
+                        _f = _g.sent(), expectedApy = _f[0], expectedCashflow = _f[1];
                         result = {
-                            expectedApy: expectedApy
+                            expectedApy: expectedApy,
+                            expectedCashflow: expectedCashflow
                         };
                         return [2 /*return*/, result];
                 }

@@ -10,11 +10,13 @@ import { isUndefined } from 'lodash';
 
 interface ExpectedAPYProps {
   expectedApy?: number;
+  expectedCashflow?: number;
   userSimulatedVariableApy?: number;
   onChangeUserSimulatedVariableApy: (value: number, resetToDefault?: boolean) => void;
+  userSimulatedVariableApyUpdated: boolean;
 }
 
-export const ExpectedAPY = ({ expectedApy, userSimulatedVariableApy, onChangeUserSimulatedVariableApy }:ExpectedAPYProps) => {
+export const ExpectedAPY = ({ expectedApy, expectedCashflow, userSimulatedVariableApy, onChangeUserSimulatedVariableApy, userSimulatedVariableApyUpdated }:ExpectedAPYProps) => {
   const delay = 1000;
 
   const [userInput, setUserInput] = useState(!isUndefined(userSimulatedVariableApy) ? formatNumber(userSimulatedVariableApy, 0,2) : undefined);
@@ -22,8 +24,8 @@ export const ExpectedAPY = ({ expectedApy, userSimulatedVariableApy, onChangeUse
 
   useEffect(() => {
     const formatted = !isUndefined(userSimulatedVariableApy) ? formatNumber(userSimulatedVariableApy, 0,2) : undefined
-    setUserInput(formatted);
-  }, [userSimulatedVariableApy])
+    setUserInput(formatted);    
+  }, [userSimulatedVariableApy, userSimulatedVariableApyUpdated])
 
   const handleChangeInput = (inputVal: string | undefined) => {
     if (inputVal) {
@@ -54,30 +56,58 @@ export const ExpectedAPY = ({ expectedApy, userSimulatedVariableApy, onChangeUse
     return '---';
   }
 
+  const formatCashflow = (value: number | undefined) => {
+    if (value) {
+      if (Math.abs(value) >= 1000000000 - 0.5) {
+        return formatNumber(value / 1000000000, 0, 3)+'bn';
+      }
+      if (Math.abs(value) >= 1000000 - 0.5) {
+        return formatNumber(value, 0, 0);
+      }
+      if (Math.abs(value) >= 100000 - 0.5) {
+        return formatNumber(value, 0, 2);
+      }
+      return formatNumber(value, 0, 4);
+    }
+
+    return '---';
+  }
+
   return (
     <>
-      <Box>
-        <Box sx={{ 
-          display: 'inline-block',
-          padding: (theme) => theme.spacing(4), 
+      <Box sx={{ marginBottom: (theme) => theme.spacing(4) }}>
+        <Typography 
+          label={
+            <Typography variant="h4">
+              <IconLabel 
+                label="APY Calculator" 
+                icon="information-circle" 
+                info="TBD" 
+              />
+            </Typography>
+          }
+          variant='body1' 
+          sx={{ color: colors.lavenderWeb.darken020, fontSize: '14px' }}
+        >
+          Generate an expected APY for a given variable APY between now and the end of the pool. The expected APY factors in pool conditions and the details of your position.
+        </Typography>
+      </Box>
+      <Box sx = {{
+          display: 'flex',
+          flexDirection: 'row',
           borderRadius: '8px', 
           background: colors.lavenderWeb.darken045,
-          maxWidth: '100px',
-          width: '100px'
-        }}>
-          <Typography
-            variant="h3"
-            label={<IconLabel label="Expected APY" icon="information-circle" info="The APY you would get in a scenario in which the variable APY has the selected value until the pool's maturity" />}
-            agentStyling
-          >
-            {formatExpectedApy(expectedApy)}
-          </Typography>
-        </Box>
+          maxWidth: '340px',
+          width: '340px',
+        }}
+      >
         <Box sx={{
-          display: 'inline-block',
+          // display: 'inline-block',
           padding: (theme) => theme.spacing(4), 
-          marginLeft: (theme) => theme.spacing(6),
-          flexGrow: '0', width: '80px'
+          marginRight: (theme) => theme.spacing(16),
+          maxWidth: '80px',
+          width: '80px',
+          marginTop: '4px'
         }}>
           <MaskedIntegerField
             allowDecimals
@@ -90,11 +120,32 @@ export const ExpectedAPY = ({ expectedApy, userSimulatedVariableApy, onChangeUse
             value={notFormatted(userInput)}
           />
         </Box>
-      </Box>
-      <Box sx={{ marginTop: (theme) => theme.spacing(4) }}>
-        <Typography variant='body1' sx={{ color: colors.lavenderWeb.darken020, fontSize: '14px' }}>
-          Generate an expected APY for a given variable APY between now and the end of the pool. The expected APY factors in pool conditions and the details of your position.
-        </Typography>
+        <Box sx={{ 
+          // display: 'inline-block',
+          padding: (theme) => theme.spacing(4),
+          maxWidth: '100px',
+          width: '100px'
+        }}>
+          <Typography
+            variant="body2"
+            fontSize={24}
+            label={<IconLabel label="Expected Casfhlow" icon="information-circle" info="The cashflow you would get in a scenario in which the variable APY has the selected value until the pool's maturity" />}
+            sx={{
+              marginTop: '-4px'
+            }}
+          >
+            {formatCashflow(expectedCashflow)}
+          </Typography>
+          <Typography
+              variant="body2"
+              fontSize={12}
+              sx={{
+                color: colors.lavenderWeb.darken010
+              }}
+            >
+              {"APY: " + formatExpectedApy(expectedApy)}
+            </Typography>
+        </Box>
       </Box>
     </>
   );

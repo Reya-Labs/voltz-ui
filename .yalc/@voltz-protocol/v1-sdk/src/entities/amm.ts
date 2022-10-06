@@ -147,6 +147,7 @@ export type ExpectedApyArgs = {
 
 export type ExpectedApyInfo = {
   expectedApy: number;
+  expectedCashflow: number;
 }
 
 // rollover with swap
@@ -377,10 +378,9 @@ class AMM {
       scaledVt = vt.div(BigNumber.from(10).pow(this.underlyingToken.decimals - 6)).toNumber() / 1000000;
     }
 
-    const pnl = getExpectedApy(now, end, scaledFt, scaledVt, margin, rate);
-    const predictedPnl = 100 * pnl;
+    const [pnl, ecs] = getExpectedApy(now, end, scaledFt, scaledVt, margin, rate);
   
-    return predictedPnl;
+    return [100 * pnl, ecs];
   };
 
   // rollover with swap
@@ -890,7 +890,7 @@ class AMM {
       } catch { }
     }
 
-    const expectedApy = await this.expectedApy(
+    const [expectedApy, expectedCashflow] = await this.expectedApy(
       positionUft.add(this.scale(fixedTokenDeltaUnbalanced)),
       positionVt.add(this.scale(availableNotional)),
       margin + positionMargin + accruedCashflow,
@@ -898,7 +898,8 @@ class AMM {
     );
 
     const result: ExpectedApyInfo = {
-      expectedApy: expectedApy
+      expectedApy: expectedApy,
+      expectedCashflow: expectedCashflow
     }
 
     return result;
