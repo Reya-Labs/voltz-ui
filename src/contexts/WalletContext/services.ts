@@ -7,7 +7,8 @@ export type SignatureResponse = {
   signature?: string;
   timestamp?: string;
   walletAddress?: string;
-  referrer?: string;
+  // referrer?: string;
+  message?: string;
 };
 
 const unavailableText = 'Service unavailable, please try again shortly';
@@ -52,18 +53,27 @@ export const checkForTOSSignature = async (
 ) => {
   const signerAddress = await signer.getAddress();
   const signatureData = await getSignature(signerAddress);
+  const latestTOS = getTOSText(null);
   let termsAccepted = false;
 
-  if (signatureData?.signature) {
-    const existingTOSSignerAddress = ethers.utils.verifyMessage(
-      // getTOSText(signatureData?.referrer || null),
-      getTOSText(null),
-      signatureData.signature,
-    );
-    if (existingTOSSignerAddress === signerAddress) {
+  if (!!signatureData?.walletAddress && signatureData.walletAddress === signerAddress) {
+    // Wallet matches
+    if (signatureData.message && signatureData.message == latestTOS) {
+      // Signed data also matches (signature was checked before being written to database)
       termsAccepted = true;
     }
   }
+
+  // if (signatureData?.signature) {
+  //   const existingTOSSignerAddress = ethers.utils.verifyMessage(
+  //     // getTOSText(signatureData?.referrer || null),
+  //     getTOSText(null),
+  //     signatureData.signature,
+  //   );
+  //   if (existingTOSSignerAddress === signerAddress) {
+  //     termsAccepted = true;
+  //   }
+  // }
 
   // const referrer = localStorage.getItem('invitedBy') || '';
 
