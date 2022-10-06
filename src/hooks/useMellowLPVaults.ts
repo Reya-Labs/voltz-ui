@@ -14,9 +14,9 @@ const useMellowLPVaults = (): useMellowLPVaultsResult => {
   const lpVaults = useMemo(() => {
     return [new AugmentedMellowLpVault({
       refetch: handleRefetch,
-      voltzVaultAddress: "0x7b9ea740314356b48971381e190d43bba8c02762",
-      erc20RootVaultAddress: "0xb4eF1755a547585c804F0129F65b4A3f325c9D51",
-      erc20RootVaultGovernanceAddress: "0xf6F0E48B32441878C0955d2fb3a9A4c6fbd54680",
+      voltzVaultAddress: "0x810fB16dBC38fE2a7e5B47539a8D893d0d885131",
+      erc20RootVaultAddress: "0xbfC0eCC64A06f703F1dD20e28BaBcc6cf735e6F2",
+      erc20RootVaultGovernanceAddress: "0xF980BE39d79Eb07de32856e8356Eac0Dcd4CF96c",
       provider: providers.getDefaultProvider(
         process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK,
       )
