@@ -65,33 +65,28 @@ const Nav: React.FunctionComponent = () => {
     },
   };
 
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const [anchorTradersElement, setAnchorTradersElement] = React.useState<HTMLButtonElement | null>(
+    null,
+  );
+  const [anchorLPElement, setAnchorLPElement] = React.useState<HTMLButtonElement | null>(null);
+  const isTradersPopoverOpen = Boolean(anchorTradersElement);
+  const isLPPopoverOpen = Boolean(anchorLPElement);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
+  const handleTradersClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorTradersElement(event.currentTarget);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleTradersPopoverClose = () => {
+    setAnchorTradersElement(null);
   };
 
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
-
-  const [anchorEl2, setAnchorEl2] = React.useState<HTMLButtonElement | null>(null);
-
-  const handleClick2 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget);
+  const handleLPClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorLPElement(event.currentTarget);
   };
 
-  const handleClose2 = () => {
-    setAnchorEl2(null);
+  const handleLPPopoverClose = () => {
+    setAnchorLPElement(null);
   };
-
-  const open2 = Boolean(anchorEl2);
-  const id2 = open ? 'simple-popover' : undefined;
-
-  const id3 = open ? 'simple-popover' : undefined;
 
   return (
     <Box
@@ -124,19 +119,17 @@ const Nav: React.FunctionComponent = () => {
 
       {/* todo: below logic can be simplified by wrapping duplicate code below into a reusable component */}
       <Button
-        aria-describedby={id}
         sx={buttonSx}
         variant="text"
-        onClick={handleClick}
-        className={open ? 'open' : undefined}
+        onClick={handleTradersClick}
+        className={isTradersPopoverOpen ? 'open' : undefined}
       >
         TRADERS
       </Button>
       <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
+        open={isTradersPopoverOpen}
+        anchorEl={anchorTradersElement}
+        onClose={handleTradersPopoverClose}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'left',
@@ -160,19 +153,17 @@ const Nav: React.FunctionComponent = () => {
       </Popover>
 
       <Button
-        aria-describedby={id2}
         sx={buttonSx}
         variant="text"
-        onClick={handleClick2}
-        className={open2 ? 'open' : undefined}
+        onClick={handleLPClick}
+        className={isLPPopoverOpen ? 'open' : undefined}
       >
         LIQUIDITY PROVIDERS
       </Button>
       <Popover
-        id={id2}
-        open={open2}
-        anchorEl={anchorEl2}
-        onClose={handleClose2}
+        open={isLPPopoverOpen}
+        anchorEl={anchorLPElement}
+        onClose={handleLPPopoverClose}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'left',
@@ -195,7 +186,8 @@ const Nav: React.FunctionComponent = () => {
         </ButtonGroup>
       </Popover>
 
-      {process.env.REACT_APP_FIXED_BORROW && process.env.REACT_APP_FIXED_BORROW !== `UNPROVIDED` && (
+      {
+        process.env.REACT_APP_FIXED_BORROW && process.env.REACT_APP_FIXED_BORROW !== `UNPROVIDED` &&
         <Button aria-describedby={id3} sx={buttonSx} variant="text" link={`/${routes.BORROW_POS}`}>
           FIXED BORROW
         </Button>
@@ -203,6 +195,12 @@ const Nav: React.FunctionComponent = () => {
       {process.env.REACT_APP_COMMUNITY && process.env.REACT_APP_COMMUNITY !== `UNPROVIDED` && (
         <Button aria-describedby={id3} sx={buttonSx} variant="text" link={`/${routes.LEADERBOARD}`}>
           LEADERBOARD
+        </Button>
+      )}
+
+      {process.env.REACT_APP_PROFILE && process.env.REACT_APP_PROFILE !== `UNPROVIDED` && (
+        <Button sx={buttonSx} variant="text" link={`/${routes.PROFILE}`}>
+          PROFILE
         </Button>
       )}
     </Box>
