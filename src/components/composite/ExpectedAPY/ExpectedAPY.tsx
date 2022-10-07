@@ -79,7 +79,7 @@ export const ExpectedAPY = ({ expectedApy, expectedCashflow, userSimulatedVariab
         <Typography 
           label={
             <Typography variant="h4">
-              {'P&L Calculator'}
+              P&L Calculator
             </Typography>
           }
           variant='body1' 
