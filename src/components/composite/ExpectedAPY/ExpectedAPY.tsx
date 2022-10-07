@@ -79,17 +79,13 @@ export const ExpectedAPY = ({ expectedApy, expectedCashflow, userSimulatedVariab
         <Typography 
           label={
             <Typography variant="h4">
-              <IconLabel 
-                label="APY Calculator" 
-                icon="information-circle" 
-                info="TBD" 
-              />
+              {'P&L Calculator'}
             </Typography>
           }
           variant='body1' 
           sx={{ color: colors.lavenderWeb.darken020, fontSize: '14px' }}
         >
-          Generate an expected APY for a given variable APY between now and the end of the pool. The expected APY factors in pool conditions and the details of your position.
+          Use the P&L Calculator to compute your expected cash flow, and implied APY, for a range of simulated market conditions. To begin, adjust the variable rate to see how your expected returns vary.
         </Typography>
       </Box>
       <Box sx = {{
@@ -113,7 +109,7 @@ export const ExpectedAPY = ({ expectedApy, expectedCashflow, userSimulatedVariab
             allowDecimals
             dynamic
             inputSize="small"
-            label={<IconLabel label={'Expected Variable APY'} icon="information-circle" info="Select the percentage of the variable APY between now and the end of the pool that you would like to simulate." />}
+            label={<IconLabel label={'Expected Variable APY'} icon="information-circle" info="Select the variable APY you wish to simulate. This calculation will assume the variable rate [immediately] moves to your selected rate and then stays there until maturity." />}
             onChange={handleChangeInput}
             suffix='%'
             suffixPadding={0}
@@ -129,7 +125,7 @@ export const ExpectedAPY = ({ expectedApy, expectedCashflow, userSimulatedVariab
           <Typography
             variant="body2"
             fontSize={24}
-            label={<IconLabel label="Expected Casfhlow" icon="information-circle" info="The cashflow you would get in a scenario in which the variable APY has the selected value until the pool's maturity" />}
+            label={<IconLabel label="Expected Casfhlow" icon="information-circle" info=" The cashflow you would generate based on your position and simulated Variable APY. " />}
             sx={{
               marginTop: '-4px'
             }}
