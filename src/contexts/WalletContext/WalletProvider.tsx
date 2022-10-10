@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { WalletName, WalletStatus } from './types';
 import ProviderWrapper from './ProviderWrapper';
@@ -17,6 +17,12 @@ const WalletProvider: React.FunctionComponent<WalletProviderProps> = ({
   const [name, setName] = useState<WalletName | null>(null);
   const [balance, setBalance] = useState<Record<string, BigNumber>>({});
   const [required, setRequired] = useState<boolean>(false);
+  const [sessionId, setSessionId] = useState<string>("");
+
+  useEffect(() => {
+    setSessionId((Math.random()).toString(20).substring(2, 10));
+  }, [account]);
+
 
   return (
     <ProviderWrapper
@@ -30,6 +36,7 @@ const WalletProvider: React.FunctionComponent<WalletProviderProps> = ({
       setBalance={setBalance}
       required={required}
       setRequired={setRequired}
+      sessionId={sessionId}
     >
       {children}
     </ProviderWrapper>

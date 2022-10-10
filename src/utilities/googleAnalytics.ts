@@ -1,7 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { Agents, SwapFormSubmitButtonHintStates } from "@contexts";
 import { isUndefined } from "lodash";
 import AugmentedAMM from "./augmentedAmm";
 import isBorrowing from "./isBorrowing";
+
+declare global {
+    interface Window {
+      dataLayer?: any;
+    }
+}
 
 export const getPoolButtonId = ( marginAction: string, liquidityAction: string, notionalAction: string, agent: Agents, amm?: AugmentedAMM, borrow?: boolean ): string => {
     const protocol = amm ? amm.protocol : "";
@@ -37,4 +46,8 @@ export const getNotionalActionFromHintState = (hint: SwapFormSubmitButtonHintSta
         default:
             return "";
     }
+}
+
+export const pushEvent = (eventName: string, eventValue: string | number, sessionId?: string) => {
+    window.dataLayer.push({'event': eventName, 'value': eventValue, 'sessionId': sessionId});
 }

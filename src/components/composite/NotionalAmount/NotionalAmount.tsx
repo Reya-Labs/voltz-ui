@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import isUndefined from 'lodash/isUndefined';
 
 import IconLabel from '../IconLabel/IconLabel';
 import MaskedIntegerField from '../MaskedIntegerField/MaskedIntegerField';
 import InputTokenLabel from '../InputTokenLabel/InputTokenLabel';
-import { toUSFormat } from '@utilities';
+import { pushEvent, toUSFormat } from '@utilities';
+import { useWallet } from '@hooks';
 
 export type NotionalAmountProps = {
   label: string;
@@ -31,8 +32,13 @@ const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
   disabled,
   isEditing
 }) => {
+  const { sessionId }= useWallet(); 
   
   const value = isUndefined(notional) ? defaultNotional : notional;
+
+  useEffect(() => {
+    if (!isUndefined(notional)) { pushEvent("notional_change", notional, sessionId) }
+  }, [notional]);
 
   useState(() => {
     if (isEditing) {

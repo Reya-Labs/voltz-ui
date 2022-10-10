@@ -4,7 +4,8 @@ import Slider from '@mui/material/Slider';
 import { MaskedIntegerField, IconLabel } from '@components/composite';
 import { colors } from '@theme';
 import { isNumber, isUndefined } from 'lodash';
-import { formatNumber, notFormatted, stringToBigFloat, toUSFormat } from '@utilities';
+import { formatNumber, notFormatted, pushEvent, stringToBigFloat, toUSFormat } from '@utilities';
+import { useWallet } from '@hooks';
 
 
 /**
@@ -22,6 +23,7 @@ export type LeverageProps = {
 }
 
 const Leverage = ({availableNotional, minMargin, notional, onChange, value, resetDeltaState}: LeverageProps) => {
+  const { sessionId } = useWallet();  
   const delay = 1000;
   const hint = 'Choose the amount of leverage you wish to trade with. The slider helps demonstrate safe amounts of leverage.';
   const margin = isNumber(minMargin) ? Math.max(minMargin, 0.0001) : undefined;
@@ -50,6 +52,9 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
   const rainbowWidth = 100 - rainbowStart;
 
   useEffect(() => {
+    if (value !== internalValue) {
+      window.setTimeout(() => pushEvent("leverage_change", value, sessionId), delay);
+    }
     setInternalValue(value);
     const formatted = formatNumber(value, 0, 2);
     setInputValue(formatted);
@@ -65,6 +70,7 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
 
   const handleChangeCommittedSlider = (event: React.SyntheticEvent | Event, newValue: number | number[]) => {
     if (typeof newValue === 'number') {
+      pushEvent("leverage_change", newValue, sessionId);
       setInternalValue(newValue);
       setInputValue(formatNumber(value, 0, 2));
       window.clearInterval(timer.current);
@@ -77,6 +83,7 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
       const usFormatted = toUSFormat(inputVal);
       const newValue = usFormatted ? stringToBigFloat(usFormatted) : NaN;
       if(!isNaN(newValue)) {
+        if (newValue !== internalValue) {pushEvent("leverage_change", newValue, sessionId);}
         setInternalValue(newValue);
         setInputValue(inputVal);
         window.clearInterval(timer.current);
@@ -113,6 +120,7 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
           step={0.01}
           value={internalValue} 
           onChange={handleChangeSlider}
+          id={"Slider"}
           onChangeCommitted={handleChangeCommittedSlider}
           marks={[
             {

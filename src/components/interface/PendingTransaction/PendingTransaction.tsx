@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 
-import { AugmentedAMM, getPoolButtonId } from '@utilities';
+import { AugmentedAMM, getPoolButtonId, setPageTitle } from '@utilities';
 import { useWallet, useSelector, useAgent } from '@hooks';
 import { selectors } from '@store';
 import { AMMProvider, MintBurnFormLiquidityAction, useAMMsContext } from '@contexts';
@@ -12,7 +12,6 @@ import { formatCurrency } from '@utilities';
 import { isUndefined } from 'lodash';
 import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
 import { Wallet } from '@graphql';
-import { ChangeCircleSharp } from '@mui/icons-material';
 
 export type PendingTransactionProps = {
   amm: AugmentedAMM;
@@ -62,6 +61,10 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   const cachedMargin = useRef<number | undefined>(margin);
 
   useEffect(() => {
+    setPageTitle('Pending Transaction');
+  }, []);
+
+  useEffect(() => {
     if (!isUndefined(margin) && margin !== 0){
       cachedMargin.current =  margin;
     }
@@ -76,6 +79,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
     if (previousWallet.current && !loadingRefetch && isPositionFeched(wallet as Wallet, previousWallet.current, position)) {
         fetchRef.current = 0;
         removeFixedApr(amm);
+        setPageTitle('Successful Transaction');
         return true;
     } else {
         if (fetch >= fetchLimit) {
@@ -179,6 +183,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
     }
 
     if (activeTransaction.failedAt) {
+      setPageTitle('Failed Transaction');
       return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Box

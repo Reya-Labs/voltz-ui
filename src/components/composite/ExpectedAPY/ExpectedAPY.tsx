@@ -5,8 +5,9 @@ import { MaskedIntegerField } from '@components/composite';
 import { IconLabel } from '@components/composite';
 import Box from '@mui/material/Box';
 import { colors } from '@theme';
-import { formatNumber, notFormatted, stringToBigFloat, toUSFormat } from '@utilities';
+import { formatNumber, notFormatted, pushEvent, stringToBigFloat, toUSFormat } from '@utilities';
 import { isUndefined } from 'lodash';
+import { useWallet } from '@hooks';
 
 interface ExpectedAPYProps {
   expectedApy?: number;
@@ -18,12 +19,13 @@ interface ExpectedAPYProps {
 
 export const ExpectedAPY = ({ expectedApy, expectedCashflow, userSimulatedVariableApy, onChangeUserSimulatedVariableApy, userSimulatedVariableApyUpdated }:ExpectedAPYProps) => {
   const delay = 1000;
+  const { sessionId } = useWallet(); 
 
   const [userInput, setUserInput] = useState(!isUndefined(userSimulatedVariableApy) ? formatNumber(userSimulatedVariableApy, 0,2) : undefined);
   const timer = useRef<number>();
 
   useEffect(() => {
-    const formatted = !isUndefined(userSimulatedVariableApy) ? formatNumber(userSimulatedVariableApy, 0,2) : undefined
+    const formatted = !isUndefined(userSimulatedVariableApy) ? formatNumber(userSimulatedVariableApy, 0,2) : undefined;
     setUserInput(formatted);    
   }, [userSimulatedVariableApy, userSimulatedVariableApyUpdated])
 
@@ -34,7 +36,12 @@ export const ExpectedAPY = ({ expectedApy, expectedCashflow, userSimulatedVariab
       if(!isNaN(newValue)) {
         setUserInput(inputVal);
         window.clearInterval(timer.current);
-        timer.current = window.setTimeout(() => onChangeUserSimulatedVariableApy(newValue), delay);
+        timer.current = window.setTimeout(() => {
+          if (expectedCashflow) {
+            pushEvent("expectedApy_change", newValue, sessionId);
+          }
+          onChangeUserSimulatedVariableApy(newValue);
+        }, delay);
       }
     } else {
       setUserInput("");
