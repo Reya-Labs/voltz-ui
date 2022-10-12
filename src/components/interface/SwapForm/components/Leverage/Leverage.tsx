@@ -5,7 +5,8 @@ import { MaskedIntegerField, IconLabel } from '@components/composite';
 import { colors } from '@theme';
 import { isNumber, isUndefined } from 'lodash';
 import { formatNumber, notFormatted, pushEvent, stringToBigFloat, toUSFormat } from '@utilities';
-import { useWallet } from '@hooks';
+import { useAgent, useWallet } from '@hooks';
+import { useAMMContext } from '@contexts';
 
 
 /**
@@ -24,6 +25,9 @@ export type LeverageProps = {
 
 const Leverage = ({availableNotional, minMargin, notional, onChange, value, resetDeltaState}: LeverageProps) => {
   const { sessionId } = useWallet();  
+  const { agent } = useAgent();
+  const { amm } = useAMMContext();
+
   const delay = 1000;
   const hint = 'Choose the amount of leverage you wish to trade with. The slider helps demonstrate safe amounts of leverage.';
   const margin = isNumber(minMargin) ? Math.max(minMargin, 0.0001) : undefined;
@@ -53,7 +57,7 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
 
   useEffect(() => {
     if (value !== internalValue) {
-      window.setTimeout(() => pushEvent("leverage_change", value, sessionId), delay);
+      window.setTimeout(() => pushEvent("leverage_change", value, sessionId, amm, agent.toString()), delay);
     }
     setInternalValue(value);
     const formatted = formatNumber(value, 0, 2);
@@ -70,7 +74,7 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
 
   const handleChangeCommittedSlider = (event: React.SyntheticEvent | Event, newValue: number | number[]) => {
     if (typeof newValue === 'number') {
-      pushEvent("leverage_change", newValue, sessionId);
+      pushEvent("leverage_change", newValue, sessionId, amm, agent.toString());
       setInternalValue(newValue);
       setInputValue(formatNumber(value, 0, 2));
       window.clearInterval(timer.current);
@@ -83,7 +87,9 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
       const usFormatted = toUSFormat(inputVal);
       const newValue = usFormatted ? stringToBigFloat(usFormatted) : NaN;
       if(!isNaN(newValue)) {
-        if (newValue !== internalValue) {pushEvent("leverage_change", newValue, sessionId);}
+        if (newValue !== internalValue) {
+          pushEvent("leverage_change", newValue, sessionId, amm, agent.toString());
+        }
         setInternalValue(newValue);
         setInputValue(inputVal);
         window.clearInterval(timer.current);

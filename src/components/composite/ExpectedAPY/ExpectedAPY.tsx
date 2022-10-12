@@ -7,7 +7,8 @@ import Box from '@mui/material/Box';
 import { colors } from '@theme';
 import { formatNumber, notFormatted, pushEvent, stringToBigFloat, toUSFormat } from '@utilities';
 import { isUndefined } from 'lodash';
-import { useWallet } from '@hooks';
+import { useAgent, useWallet } from '@hooks';
+import { useAMMContext } from '@contexts';
 
 interface ExpectedAPYProps {
   expectedApy?: number;
@@ -20,6 +21,8 @@ interface ExpectedAPYProps {
 export const ExpectedAPY = ({ expectedApy, expectedCashflow, userSimulatedVariableApy, onChangeUserSimulatedVariableApy, userSimulatedVariableApyUpdated }:ExpectedAPYProps) => {
   const delay = 1000;
   const { sessionId } = useWallet(); 
+  const { agent } = useAgent();
+  const { amm } = useAMMContext();
 
   const [userInput, setUserInput] = useState(!isUndefined(userSimulatedVariableApy) ? formatNumber(userSimulatedVariableApy, 0,2) : undefined);
   const timer = useRef<number>();
@@ -29,6 +32,14 @@ export const ExpectedAPY = ({ expectedApy, expectedCashflow, userSimulatedVariab
     setUserInput(formatted);    
   }, [userSimulatedVariableApy, userSimulatedVariableApyUpdated])
 
+  useEffect(() => {
+    const usFormatted = toUSFormat(userInput);
+    const newValue = usFormatted ? stringToBigFloat(usFormatted) : NaN;
+    if(!isNaN(newValue)) {
+      pushEvent("expectedApy_change", newValue, sessionId, amm, agent.toString());
+    } 
+  }, [stringToBigFloat(toUSFormat(userInput) ?? "0")])
+
   const handleChangeInput = (inputVal: string | undefined) => {
     if (inputVal) {
       const usFormatted = toUSFormat(inputVal);
@@ -37,9 +48,6 @@ export const ExpectedAPY = ({ expectedApy, expectedCashflow, userSimulatedVariab
         setUserInput(inputVal);
         window.clearInterval(timer.current);
         timer.current = window.setTimeout(() => {
-          if (expectedCashflow) {
-            pushEvent("expectedApy_change", newValue, sessionId);
-          }
           onChangeUserSimulatedVariableApy(newValue);
         }, delay);
       }

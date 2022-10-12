@@ -5,7 +5,8 @@ import IconLabel from '../IconLabel/IconLabel';
 import MaskedIntegerField from '../MaskedIntegerField/MaskedIntegerField';
 import InputTokenLabel from '../InputTokenLabel/InputTokenLabel';
 import { pushEvent, toUSFormat } from '@utilities';
-import { useWallet } from '@hooks';
+import { useAgent, useWallet } from '@hooks';
+import { useAMMContext } from '@contexts';
 
 export type NotionalAmountProps = {
   label: string;
@@ -17,7 +18,7 @@ export type NotionalAmountProps = {
   underlyingTokenName?: string;
   subtext?: string;
   disabled?: boolean;
-  isEditing?: boolean
+  isEditing?: boolean;
 };
 
 const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
@@ -32,12 +33,16 @@ const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
   disabled,
   isEditing
 }) => {
-  const { sessionId }= useWallet(); 
+  const { sessionId } = useWallet();
+  const { agent } = useAgent();
+  const { amm } = useAMMContext();
   
   const value = isUndefined(notional) ? defaultNotional : notional;
 
   useEffect(() => {
-    if (!isUndefined(notional)) { pushEvent("notional_change", notional, sessionId) }
+    if (!isUndefined(notional)) { 
+      pushEvent("notional_change", notional, sessionId, amm, agent.toString()) 
+    }
   }, [notional]);
 
   useState(() => {

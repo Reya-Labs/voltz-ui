@@ -48,6 +48,12 @@ export const getNotionalActionFromHintState = (hint: SwapFormSubmitButtonHintSta
     }
 }
 
-export const pushEvent = (eventName: string, eventValue: string | number, sessionId?: string) => {
-    window.dataLayer.push({'event': eventName, 'value': eventValue, 'sessionId': sessionId});
+export const pushEvent = (eventName: string, eventValue: string | number, sessionId?: string, amm?: AugmentedAMM, agent?: string) => {
+    // with context
+    if (amm) {
+        const pool = amm.protocol + (amm.rateOracle.protocolId === 5 || amm.rateOracle.protocolId === 6 ? "_borrow" : "" );
+        window.dataLayer.push({'event': eventName, 'value': eventValue, 'sessionId': sessionId, 'pool': pool, 'agent': agent});
+    } else { // without context
+        window.dataLayer.push({'event': eventName, 'value': eventValue, 'sessionId': sessionId});
+    }
 }
