@@ -1,15 +1,34 @@
-export type ColorSet = {
-  base: string;
-  darken010: string;
-  darken015: string;
-  darken020: string;
-  darken025: string;
-  darken030: string;
-  darken035: string;
-  darken040: string;
-  darken045: string;
-  darken050: string;
-};
+export type BaseColors =
+  | 'lavenderWeb'
+  | 'wildStrawberry'
+  | 'orangeYellow'
+  | 'skyBlueCrayola'
+  | 'ultramarineBlue'
+  // todo: Align with Brokoli to make it part of base colors
+  | 'vzGrey'
+  | 'vzGreyDarkish'
+  | 'vzGreyDarkish2'
+  | 'vzGreyDark'
+  | 'vzGreyDarker'
+  | 'vzCustomRed1'
+  | 'vzCustomRed2'
+  | 'vzCustomYellow1'
+  | 'vzCustomGreen1'
+  | 'vzCustomGreen2';
+
+export type ColorVariations =
+  | 'base'
+  | 'darken010'
+  | 'darken015'
+  | 'darken020'
+  | 'darken025'
+  | 'darken030'
+  | 'darken035'
+  | 'darken040'
+  | 'darken045'
+  | 'darken050';
+
+export type ColorSet = Record<ColorVariations, string>;
 
 declare module '@mui/material/styles' {
   interface Palette {
