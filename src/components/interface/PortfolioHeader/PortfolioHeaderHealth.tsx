@@ -11,41 +11,48 @@ export type PortfolioHeaderHealthProps = {
   positionsWarning: number | undefined;
 };
 
-const itemStyles: SystemStyleObject<Theme> = { 
+const itemStyles: SystemStyleObject<Theme> = {
   padding: (theme) => theme.spacing(2),
   marginLeft: (theme) => theme.spacing(1),
 
   '&:first-of-type': {
-    marginLeft: 0
-  }
+    marginLeft: 0,
+  },
 };
 
-const itemTextStyles: SystemStyleObject<Theme> = { 
-  fontSize: '14px'
+const itemTextStyles: SystemStyleObject<Theme> = {
+  fontSize: '14px',
 };
- 
-const PortfolioHeaderHealth = ({ positionsDanger, positionsHealthy, positionsWarning  }: PortfolioHeaderHealthProps) => {
+
+const PortfolioHeaderHealth = ({
+  positionsDanger,
+  positionsHealthy,
+  positionsWarning,
+}: PortfolioHeaderHealthProps) => {
   return (
-    <PortfolioHeaderValue label='Positions health'>
+    <PortfolioHeaderValue label="Positions health">
       <Box sx={{ display: 'flex' }}>
-        <PortfolioHeaderBox 
-          sx={itemStyles} 
-          textSx={{ ...itemTextStyles, color: colors.vzCustomGreen1 }}>
-          {positionsHealthy ?? "..." } healthy
+        <PortfolioHeaderBox
+          sx={itemStyles}
+          textSx={{ ...itemTextStyles, color: colors.vzCustomGreen1.base }}
+        >
+          {positionsHealthy ?? '...'} healthy
         </PortfolioHeaderBox>
-        <PortfolioHeaderBox 
-          sx={itemStyles} 
-          textSx={{ ...itemTextStyles, color: colors.vzCustomYellow1 }}>
-          {positionsWarning ?? "..."} warning
+        <PortfolioHeaderBox
+          sx={itemStyles}
+          textSx={{ ...itemTextStyles, color: colors.vzCustomYellow1.base }}
+        >
+          {positionsWarning ?? '...'} warning
         </PortfolioHeaderBox>
-        <PortfolioHeaderBox 
-          sx={itemStyles} 
-          textSx={{ ...itemTextStyles, color: colors.vzCustomRed1 }}>
-          {positionsDanger ?? "..."} danger
+        <PortfolioHeaderBox
+          sx={itemStyles}
+          textSx={{ ...itemTextStyles, color: colors.vzCustomRed1.base }}
+        >
+          {positionsDanger ?? '...'} danger
         </PortfolioHeaderBox>
       </Box>
     </PortfolioHeaderValue>
   );
-}
+};
 
-export default PortfolioHeaderHealth
+export default PortfolioHeaderHealth;

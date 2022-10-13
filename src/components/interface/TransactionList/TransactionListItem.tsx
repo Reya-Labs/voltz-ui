@@ -1,5 +1,10 @@
 import React from 'react';
-import { FCMPositionTransaction, TraderPositionTransaction, TransactionType, LPPositionTransaction } from './types';
+import {
+  FCMPositionTransaction,
+  TraderPositionTransaction,
+  TransactionType,
+  LPPositionTransaction,
+} from './types';
 import { Position } from '@voltz-protocol/v1-sdk';
 import Box from '@mui/material/Box';
 import ListItem from '@mui/material/ListItem';
@@ -22,9 +27,9 @@ const rowStyles: SystemStyleObject<Theme> = {
   textTransform: 'uppercase',
 
   '&:first-of-type': {
-    borderTop: 'none'
-  }
-}
+    borderTop: 'none',
+  },
+};
 
 const cellStyles: SystemStyleObject<Theme> = {
   color: '#fff',
@@ -33,41 +38,50 @@ const cellStyles: SystemStyleObject<Theme> = {
   alignItems: 'center',
 
   '&:first-of-type': {
-    paddingLeft: '2px'
+    paddingLeft: '2px',
   },
 
   '&:last-of-type': {
-    paddingRight: '2px'
-  }
-}
+    paddingRight: '2px',
+  },
+};
 
 const labelStyles: SystemStyleObject<Theme> = {
   fontSize: '12px',
   lineHeight: '14px',
   color: colors.lavenderWeb.darken020,
-  marginRight: (theme) => theme.spacing(2)
+  marginRight: (theme) => theme.spacing(2),
 };
 
 const iconStyles: SystemStyleObject<Theme> = {
   width: '16px',
-  height: '16px'
+  height: '16px',
 };
 
-const TransactionListItem = ({ listId, onOpenClose, open = false, position, transaction }: TransactionListItemProps) => {
+const TransactionListItem = ({
+  listId,
+  onOpenClose,
+  open = false,
+  position,
+  transaction,
+}: TransactionListItemProps) => {
   const data = getTransactionData(position, transaction);
   const isLiquidation = transaction.type === TransactionType.LIQUIDATION;
 
   const openCloseStyles: SystemStyleObject<Theme> = {
-    color: colors.lavenderWeb.base, 
+    color: colors.lavenderWeb.base,
     marginLeft: 'auto',
     minWidth: 'auto',
-    paddingRight: open ? undefined : '0'
+    paddingRight: open ? undefined : '0',
   };
 
   return (
     <ListItem sx={rowStyles}>
       <Box sx={cellStyles}>
-        <Typography variant='body2' sx={{color: colors.lavenderWeb.darken020, textTransform: 'uppercase'}}>
+        <Typography
+          variant="body2"
+          sx={{ color: colors.lavenderWeb.darken020, textTransform: 'uppercase' }}
+        >
           {data.date}
         </Typography>
       </Box>
@@ -75,25 +89,39 @@ const TransactionListItem = ({ listId, onOpenClose, open = false, position, tran
         <Icon name={data.icon} sx={iconStyles} />
       </Box>
       <Box sx={cellStyles}>
-        <Typography variant='body2' sx={isLiquidation ? {color: colors.vzCustomRed1} : undefined}>
+        <Typography
+          variant="body2"
+          sx={isLiquidation ? { color: colors.vzCustomRed1.base } : undefined}
+        >
           {data.label}
         </Typography>
       </Box>
-      {data.items.map(item => (
+      {data.items.map((item) => (
         <Box sx={cellStyles} key={item.label}>
-          <Typography variant='body2' sx={labelStyles}>{item.label}</Typography>
-          <Typography variant='body2' sx={isLiquidation ? {color: colors.vzCustomRed1} : undefined}>
+          <Typography variant="body2" sx={labelStyles}>
+            {item.label}
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={isLiquidation ? { color: colors.vzCustomRed1.base } : undefined}
+          >
             {item.value}
           </Typography>
         </Box>
       ))}
       {onOpenClose && (
-        <Button onClick={onOpenClose} variant='text' sx={openCloseStyles} aria-expanded={open} aria-controls={listId?.toString()}>
+        <Button
+          onClick={onOpenClose}
+          variant="text"
+          sx={openCloseStyles}
+          aria-expanded={open}
+          aria-controls={listId?.toString()}
+        >
           {open ? 'X' : 'TX History'}
         </Button>
       )}
     </ListItem>
   );
-}
+};
 
 export default TransactionListItem;

@@ -21,59 +21,67 @@ export type PortfolioHeaderInfoProps = {
   netRateReceiving?: number;
 };
 
-const listItemStyles: SystemStyleObject<Theme> = { 
+const listItemStyles: SystemStyleObject<Theme> = {
   marginLeft: (theme) => theme.spacing(6),
   padding: '0',
 
   '&:first-of-type': {
-    marginLeft: '0'
-  }
+    marginLeft: '0',
+  },
 };
 
-const PortfolioHeaderInfo = ({ 
-  currencyCode = '', 
-  currencySymbol = '', 
-  feesApy, 
-  netMargin, 
-  netMarginDiff, 
-  netRatePaying, 
+const PortfolioHeaderInfo = ({
+  currencyCode = '',
+  currencySymbol = '',
+  feesApy,
+  netMargin,
+  netMarginDiff,
+  netRatePaying,
   netRateReceiving,
 }: PortfolioHeaderInfoProps) => {
-  const {agent} = useAgent()
+  const { agent } = useAgent();
   const getNetMarginLabel = () => (
     <>
-      Net margin 
+      Net margin
       {!isUndefined(netMarginDiff) && (
-        <Box component='span' sx={{ color: netMarginDiff >= 0 ? colors.vzCustomGreen1 : colors.vzCustomRed1 }}>
+        <Box
+          component="span"
+          sx={{ color: netMarginDiff >= 0 ? colors.vzCustomGreen1.base : colors.vzCustomRed1.base }}
+        >
           {' '}
           {netMarginDiff > 0 && '+'}
           {netMarginDiff < 0 && '-'}
-          {currencySymbol}{formatCurrency(Math.abs(netMarginDiff))} {currencyCode}
+          {currencySymbol}
+          {formatCurrency(Math.abs(netMarginDiff))} {currencyCode}
         </Box>
       )}
     </>
   );
 
-  const dataExists = (
-    !isUndefined(netMargin) || 
-    !isUndefined(netRateReceiving) || 
-    !isUndefined(netRatePaying) || 
-    !isUndefined(feesApy)
-  );
+  const dataExists =
+    !isUndefined(netMargin) ||
+    !isUndefined(netRateReceiving) ||
+    !isUndefined(netRatePaying) ||
+    !isUndefined(feesApy);
 
   return (
     <List sx={{ padding: '0', display: 'flex' }}>
-        <ListItem sx={listItemStyles}>
-          <PortfolioHeaderValue label={getNetMarginLabel()}>
-            <PortfolioHeaderBox>
-              {isUndefined(netMargin) && <>Loading...</>}
-              {!isUndefined(netMargin) && <>{currencySymbol}{formatCurrency(netMargin)} {currencyCode}</>}
-            </PortfolioHeaderBox>
-          </PortfolioHeaderValue>
-        </ListItem>
+      <ListItem sx={listItemStyles}>
+        <PortfolioHeaderValue label={getNetMarginLabel()}>
+          <PortfolioHeaderBox>
+            {isUndefined(netMargin) && <>Loading...</>}
+            {!isUndefined(netMargin) && (
+              <>
+                {currencySymbol}
+                {formatCurrency(netMargin)} {currencyCode}
+              </>
+            )}
+          </PortfolioHeaderBox>
+        </PortfolioHeaderValue>
+      </ListItem>
       {!(agent === Agents.LIQUIDITY_PROVIDER) && (
         <ListItem sx={listItemStyles}>
-          <PortfolioHeaderValue label='Net rate receiving'>
+          <PortfolioHeaderValue label="Net rate receiving">
             <PortfolioHeaderBox>
               {isUndefined(netRateReceiving) && <>Loading...</>}
               {!isUndefined(netRateReceiving) && <>{formatNumber(netRateReceiving)} %</>}
@@ -81,9 +89,9 @@ const PortfolioHeaderInfo = ({
           </PortfolioHeaderValue>
         </ListItem>
       )}
-      {!(agent === Agents.LIQUIDITY_PROVIDER)  && (
+      {!(agent === Agents.LIQUIDITY_PROVIDER) && (
         <ListItem sx={listItemStyles}>
-          <PortfolioHeaderValue label='Net rate paying'>
+          <PortfolioHeaderValue label="Net rate paying">
             <PortfolioHeaderBox>
               {isUndefined(netRatePaying) && <>Loading...</>}
               {!isUndefined(netRatePaying) && <>{formatNumber(netRatePaying)} %</>}
@@ -91,9 +99,9 @@ const PortfolioHeaderInfo = ({
           </PortfolioHeaderValue>
         </ListItem>
       )}
-      {(agent === Agents.LIQUIDITY_PROVIDER)  && (
+      {agent === Agents.LIQUIDITY_PROVIDER && (
         <ListItem sx={listItemStyles}>
-          <PortfolioHeaderValue label='Fees APY'>
+          <PortfolioHeaderValue label="Fees APY">
             <PortfolioHeaderBox>s00n</PortfolioHeaderBox>
             {/* <PortfolioHeaderBox>{formatNumber(feesApy)} %</PortfolioHeaderBox> */}
           </PortfolioHeaderValue>
@@ -104,5 +112,3 @@ const PortfolioHeaderInfo = ({
 };
 
 export default PortfolioHeaderInfo;
-
-  
