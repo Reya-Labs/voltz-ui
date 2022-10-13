@@ -4,10 +4,8 @@ import isUndefined from 'lodash/isUndefined';
 import IconLabel from '../IconLabel/IconLabel';
 import MaskedIntegerField from '../MaskedIntegerField/MaskedIntegerField';
 import InputTokenLabel from '../InputTokenLabel/InputTokenLabel';
-import { formatCurrency, pushEvent, toUSFormat } from '@utilities';
+import { formatCurrency, toUSFormat } from '@utilities';
 import { HealthFactorText } from '@components/composite';
-import { useAgent, useWallet } from '@hooks';
-import { useAMMContext } from '@contexts';
 
 export type MarginAmountProps = {
   balance?: number;
@@ -33,9 +31,6 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
   onChangeMargin,
   error
 }) => {
-  const { sessionId }= useWallet();  
-  const { agent } = useAgent();
-  const { amm } = useAMMContext();
 
   const defaultInputValue = () => {
     const defaultVal = isEditing ? defaultMargin : (margin ?? defaultMargin);
@@ -52,12 +47,6 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
       onChangeMargin(0);
     }
   });
-
-  useEffect(() => {
-    if (!isUndefined(inputValue)) { 
-      pushEvent("margin_change", parseFloat(inputValue), sessionId, amm, agent.toString()) 
-    }
-  }, [inputValue]);
 
   const handleChange = useCallback(
     (newValue: string | undefined) => {

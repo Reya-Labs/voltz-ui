@@ -57,3 +57,43 @@ export const pushEvent = (eventName: string, eventValue: string | number, sessio
         window.dataLayer.push({'event': eventName, 'value': eventValue, 'sessionId': sessionId});
     }
 }
+
+export const pushTxSubmition = (
+    eventName: string, 
+    notional: number | undefined,
+    margin: number | undefined,
+    action: string,
+    sessionId: string,
+    amm: AugmentedAMM,
+    agent?: string | number,
+    failMessage?: string
+) => {
+    let agentType = "";
+    if ( typeof agent === "string") {
+        agentType = agent;
+    } else {
+        switch (agent) {
+            case 1: 
+                agentType = "Fixed Trader"; 
+                break;
+            case 2: 
+                agentType = "Variable Trader"; 
+                break;
+            case 3: 
+                agentType = "Liquidity Provider"; 
+                break;
+            default: agentType = "";
+        }
+    }
+    const pool = amm.protocol + (amm.rateOracle.protocolId === 5 || amm.rateOracle.protocolId === 6 ? "_borrow" : "" );
+    window.dataLayer.push({
+        'event': eventName,
+        'notional': notional,
+        'margin': margin,
+        'action':  action,
+        'sessionId': sessionId,
+        'pool': pool,
+        'agent': agentType,
+        'failMessage': failMessage
+    });
+}

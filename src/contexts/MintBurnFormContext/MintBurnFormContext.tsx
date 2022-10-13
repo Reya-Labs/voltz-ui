@@ -1,8 +1,8 @@
-import { useBalance, useTokenApproval } from '@hooks';
+import { useBalance, useTokenApproval, useWallet } from '@hooks';
 import { useAMMContext, usePositionContext } from '@contexts';
-import { AugmentedAMM, hasEnoughUnderlyingTokens } from '@utilities';
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
-import { isUndefined } from 'lodash';
+import { AugmentedAMM, hasEnoughUnderlyingTokens, pushEvent } from '@utilities';
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { debounce, isUndefined } from 'lodash';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 
 export enum MintBurnFormModes {
@@ -112,6 +112,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   defaultValues = {}, 
   mode = MintBurnFormModes.NEW_POSITION,
 }) => {
+  const { sessionId }= useWallet();  
   const { amm: poolAmm, mintMinimumMarginRequirement } = useAMMContext();
   const { position, amm: positionAmm, positionInfo } = usePositionContext();
 
@@ -266,6 +267,26 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
       validate();
     }
   }, [fixedHigh, fixedLow, liquidityAction, margin, marginAction, notional, minimumRequiredMargin]);
+
+  const notionalChange = useCallback(debounce((value: number | undefined) => {
+    pushEvent("notional_change", value ?? 0, sessionId, poolAmm, "Liquidity Provider");
+  }, 1000), []);
+
+  const marginChange = useCallback(debounce((value: number | undefined) => {
+    pushEvent("margin_change", value ?? 0, sessionId, poolAmm, "Liquidity Provider");
+  }, 1000),[]);
+
+  useEffect(() => {
+    if ( !isUndefined(mintMinimumMarginRequirement.result)) {
+      notionalChange(notional);
+    }
+  }, [mintMinimumMarginRequirement.result])
+
+  useEffect(() => {
+    if ( !isUndefined(margin)) {
+      marginChange(margin);
+    }
+  }, [margin])
 
   const updateFixedHigh = (value: MintBurnFormState['fixedHigh']) => {
     if(!touched.current.includes('fixedHigh')) {

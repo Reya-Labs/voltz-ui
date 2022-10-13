@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 
-import { AugmentedAMM, getPoolButtonId, setPageTitle } from '@utilities';
+import { AugmentedAMM, getPoolButtonId, pushTxSubmition, setPageTitle } from '@utilities';
 import { useWallet, useSelector, useAgent } from '@hooks';
 import { selectors } from '@store';
 import { AMMProvider, MintBurnFormLiquidityAction, useAMMsContext } from '@contexts';
@@ -54,14 +54,30 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   const [fetch, setFetch] = useState<number>(0);
   const fetchRef = useRef<number>(0);
   const fetchLimit = 20;
-  const { account, refetch, wallet } = useWallet();
+  const { account, refetch, wallet, sessionId } = useWallet();
   const [loadingRefetch, setLoadingRefetch] = useState<boolean>(false);
-  const {agent} = useAgent();
+  const { agent } = useAgent();
   const { isPositionFeched, removeFixedApr } = useAMMsContext();
   const cachedMargin = useRef<number | undefined>(margin);
 
+  const action = useMemo(() => {
+    if ( isRollover ) return "rollover";
+    if ( isSettle ) return "settle";
+    if ( isEditingMargin || position ) return "edit";
+    return "new";
+  },[isRollover, isSettle, isEditingMargin]);
+
   useEffect(() => {
     setPageTitle('Pending Transaction');
+    pushTxSubmition(
+      "tx_submitted",
+      (notional ?? 0) * (showNegativeNotional || liquidityAction === MintBurnFormLiquidityAction.BURN ? -1 : 1),
+      isSettle ? cachedMargin.current : margin,
+      action,
+      sessionId,
+      amm,
+      isSettle ? position?.positionType : agent.toString()
+    );
   }, []);
 
   useEffect(() => {
@@ -75,11 +91,26 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
     return [activeTransaction?.resolvedAt,activeTransaction?.succeededAt]; 
   }, []);
 
+  useEffect(() => {
+    if ( activeTransaction?.failedAt ) {
+      setPageTitle('Failed Transaction');
+      pushTxSubmition(
+        "failed_tx",
+        (notional ?? 0) * (showNegativeNotional || liquidityAction === MintBurnFormLiquidityAction.BURN ? -1 : 1),
+        isSettle ? cachedMargin.current : margin,
+        action,
+        sessionId,
+        amm,
+        isSettle ? position?.positionType : agent.toString(),
+        activeTransaction.failureMessage || "Unrecognized error"
+      );
+    }
+  }, [activeTransaction?.failedAt]);
+
   const isFetched = useMemo(() => {
     if (previousWallet.current && !loadingRefetch && isPositionFeched(wallet as Wallet, previousWallet.current, position)) {
         fetchRef.current = 0;
         removeFixedApr(amm);
-        setPageTitle('Successful Transaction');
         return true;
     } else {
         if (fetch >= fetchLimit) {
@@ -90,6 +121,21 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
       }
     return false;
   }, [fetch, loadingRefetch] );
+
+  useEffect(() => {
+    if ( (activeTransaction?.succeededAt || activeTransaction?.resolvedAt) && isFetched ) {
+      setPageTitle('Successful Transaction');
+        pushTxSubmition(
+          "successful_tx",
+          (notional ?? 0) * (showNegativeNotional || liquidityAction === MintBurnFormLiquidityAction.BURN ? -1 : 1),
+          isSettle ? cachedMargin.current : margin,
+          action,
+          sessionId,
+          amm,
+          isSettle ? position?.positionType : agent.toString()
+        );
+    }
+  }, [ (activeTransaction?.succeededAt || activeTransaction?.resolvedAt) && isFetched]);
 
   useEffect(() => {
     if (!previousWallet.current && wallet) {
@@ -183,7 +229,6 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
     }
 
     if (activeTransaction.failedAt) {
-      setPageTitle('Failed Transaction');
       return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Box

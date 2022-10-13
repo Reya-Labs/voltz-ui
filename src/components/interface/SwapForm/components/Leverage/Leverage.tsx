@@ -56,9 +56,6 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
   const rainbowWidth = 100 - rainbowStart;
 
   useEffect(() => {
-    if (value !== internalValue) {
-      window.setTimeout(() => pushEvent("leverage_change", value, sessionId, amm, agent.toString()), delay);
-    }
     setInternalValue(value);
     const formatted = formatNumber(value, 0, 2);
     setInputValue(formatted);
@@ -74,7 +71,6 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
 
   const handleChangeCommittedSlider = (event: React.SyntheticEvent | Event, newValue: number | number[]) => {
     if (typeof newValue === 'number') {
-      pushEvent("leverage_change", newValue, sessionId, amm, agent.toString());
       setInternalValue(newValue);
       setInputValue(formatNumber(value, 0, 2));
       window.clearInterval(timer.current);
@@ -87,9 +83,6 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
       const usFormatted = toUSFormat(inputVal);
       const newValue = usFormatted ? stringToBigFloat(usFormatted) : NaN;
       if(!isNaN(newValue)) {
-        if (newValue !== internalValue) {
-          pushEvent("leverage_change", newValue, sessionId, amm, agent.toString());
-        }
         setInternalValue(newValue);
         setInputValue(inputVal);
         window.clearInterval(timer.current);

@@ -6,7 +6,7 @@ import { Position } from '@voltz-protocol/v1-sdk';
 import { AugmentedAMM, findCurrentAmm, findCurrentPosition, setPageTitle } from '@utilities';
 import { Agents, AMMProvider, PositionProvider, SwapFormProvider, PortfolioProvider } from '@contexts';
 import { PageTitleDesc } from '@components/composite';
-import { useAgent, useAMMs, usePositions, useWallet } from '@hooks';
+import { useAgent, useAMMs, usePositions } from '@hooks';
 import { Page, SwapFormModes } from '@components/interface';
 import ConnectedAMMTable from '../../components/containers/ConnectedAMMTable/ConnectedAMMTable';
 import ConnectedPositionTable from '../../components/containers/ConnectedPositionTable/ConnectedPositionTable';
@@ -23,7 +23,7 @@ const Trader: React.FunctionComponent = () => {
   const { onChangeAgent } = useAgent();
   const { pathname, key } = useLocation();
   const { positions, positionsByAgentGroup } = usePositions();
-  const { agent } = useAgent();
+  const { agent } = useAgent()
 
   const pathnameWithoutPrefix = pathname.slice(1);
   const renderMode = getRenderMode(formMode, pathnameWithoutPrefix);

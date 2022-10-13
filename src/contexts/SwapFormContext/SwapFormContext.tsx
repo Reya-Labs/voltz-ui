@@ -1,10 +1,10 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Agents, useAMMContext, usePositionContext } from "@contexts";
 import { SwapFormActions, SwapFormModes } from "@components/interface";
-import { AugmentedAMM, lessThanEpsilon, formatNumber, stringToBigFloat } from "@utilities";
-import { isNumber, isUndefined, max } from "lodash";
+import { AugmentedAMM, lessThanEpsilon, formatNumber, stringToBigFloat, pushEvent } from "@utilities";
+import { debounce, isNumber, isUndefined } from "lodash";
 import { hasEnoughTokens, hasEnoughUnderlyingTokens, lessThan } from "@utilities";
-import { GetInfoType, useAgent, useBalance, useMinRequiredMargin, useTokenApproval } from "@hooks";
+import { GetInfoType, useAgent, useBalance, useMinRequiredMargin, useTokenApproval, useWallet } from "@hooks";
 import { InfoPostSwap } from "@voltz-protocol/v1-sdk";
 import * as s from "./services";
 import { BigNumber } from "ethers";
@@ -123,6 +123,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     : defaultValues.partialCollateralization ?? true
 
   const ammCtx = useAMMContext();
+  const { sessionId }= useWallet();  
   const { agent, onChangeAgent } = useAgent();
   const balance = useBalance(positionAmm || poolAmm, mode === SwapFormModes.ROLLOVER ? position : undefined);
   const [leverage, setLeverage] = useState<SwapFormState['leverage']>(defaultLeverage);
@@ -677,7 +678,24 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       return;
     }
 
+    pushEvent("notional_change", notional ?? 0, sessionId, poolAmm, agent.toString());
+
   }, [swapInfo.loading, swapInfo.result]);
+
+  const leverageChange = useCallback(debounce((value: number | undefined) => {
+    pushEvent("leverage_change", value ?? 0, sessionId, poolAmm, agent.toString());
+  }, 1000), []);
+
+  const marginChange = useCallback(debounce((value: number | undefined) => {
+    pushEvent("margin_change", value ?? 0, sessionId, poolAmm, "Liquidity Provider");
+  }, 1000),[]);
+
+  useEffect(() => {
+    if ( !isUndefined(margin)) {
+      marginChange(margin);
+      leverageChange((notional ?? 0)/margin);
+    }
+  }, [margin])
 
   const value = {
     action,
