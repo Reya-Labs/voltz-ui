@@ -6,54 +6,65 @@ import { colors } from '@theme';
 import { isNumber, isUndefined } from 'lodash';
 import { formatNumber, notFormatted, stringToBigFloat, toUSFormat } from '@utilities';
 
-
 /**
  * margin: for a new position this is just the ratio between notional and minimum margin required
  * for returning positions we need to base the calculation on the notional and margin amounts post swap
  */
 
-export type LeverageProps = { 
-  availableNotional?: number; 
+export type LeverageProps = {
+  availableNotional?: number;
   minMargin?: number;
-  notional?: number; 
+  notional?: number;
   onChange: (value: number, resetToDefaultLeverage?: boolean) => void;
   value: number;
   resetDeltaState: boolean;
-}
+};
 
-const Leverage = ({availableNotional, minMargin, notional, onChange, value, resetDeltaState}: LeverageProps) => {
+const Leverage = ({
+  availableNotional,
+  minMargin,
+  notional,
+  onChange,
+  value,
+  resetDeltaState,
+}: LeverageProps) => {
   const delay = 1000;
   const hint = 'Choose the amount of leverage you wish to trade with. The slider helps demonstrate safe amounts of leverage.';
   const margin = isNumber(minMargin) ? Math.max(minMargin, 0.0001) : undefined;
 
   const [internalValue, setInternalValue] = useState<number | undefined>(value);
-  const [inputValue, setInputValue] = useState(formatNumber(value, 0,2));
-  const isDisabledLeverageBox = isUndefined(availableNotional) || isUndefined(margin) || isUndefined(notional);
-  const isDisabled = isUndefined(availableNotional) || isUndefined(margin) || isUndefined(notional) || isUndefined(internalValue);
+  const [inputValue, setInputValue] = useState(formatNumber(value, 0, 2));
+  const isDisabledLeverageBox =
+    isUndefined(availableNotional) || isUndefined(margin) || isUndefined(notional);
+  const isDisabled =
+    isUndefined(availableNotional) ||
+    isUndefined(margin) ||
+    isUndefined(notional) ||
+    isUndefined(internalValue);
   const timer = useRef<number>();
 
   const maxNotional = !isDisabled ? Math.min(notional, availableNotional) : 10;
-  const high = !isDisabled ? Math.max((maxNotional / margin), 1) : 20;
+  const high = !isDisabled ? Math.max(maxNotional / margin, 1) : 20;
   const low = 1;
   const range = high - low;
 
-  const rainbow1 = !isDisabled ? Math.max((high / 2), 1) : 10;
-  const rainbow2 = !isDisabled ? Math.max((high / 1.5), 1) : 14;
-  const rainbow3 = !isDisabled ? Math.max((high / 1.2), 1) : 17;
-  const rainbow4 = !isDisabled ? Math.max((high / 1.05), 1) : 19;
+  const rainbow1 = !isDisabled ? Math.max(high / 2, 1) : 10;
+  const rainbow2 = !isDisabled ? Math.max(high / 1.5, 1) : 14;
+  const rainbow3 = !isDisabled ? Math.max(high / 1.2, 1) : 17;
+  const rainbow4 = !isDisabled ? Math.max(high / 1.05, 1) : 19;
 
-  const rainbow2Percent  = (rainbow2 / high) * 100;
-  const rainbow3Percent  = (rainbow3 / high) * 100;
-  const rainbow4Percent  = (rainbow4 / high) * 10
+  const rainbow2Percent = (rainbow2 / high) * 100;
+  const rainbow3Percent = (rainbow3 / high) * 100;
+  const rainbow4Percent = (rainbow4 / high) * 10;
 
-  const rainbowStart = Math.max((1 - (rainbow1 / range)) * 100, 0);
+  const rainbowStart = Math.max((1 - rainbow1 / range) * 100, 0);
   const rainbowWidth = 100 - rainbowStart;
 
   useEffect(() => {
     setInternalValue(value);
     const formatted = formatNumber(value, 0, 2);
     setInputValue(formatted);
-  }, [value, resetDeltaState])
+  }, [value, resetDeltaState]);
 
   const handleChangeSlider = (event: Event, newValue: number | number[], activeThumb: number) => {
     if (typeof newValue === 'number') {
@@ -61,9 +72,12 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
       const formatted = formatNumber(newValue, 0, 2);
       setInputValue(formatted);
     }
-  }
+  };
 
-  const handleChangeCommittedSlider = (event: React.SyntheticEvent | Event, newValue: number | number[]) => {
+  const handleChangeCommittedSlider = (
+    event: React.SyntheticEvent | Event,
+    newValue: number | number[],
+  ) => {
     if (typeof newValue === 'number') {
       setInternalValue(newValue);
       setInputValue(formatNumber(value, 0, 2));
@@ -76,7 +90,7 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
     if (inputVal) {
       const usFormatted = toUSFormat(inputVal);
       const newValue = usFormatted ? stringToBigFloat(usFormatted) : NaN;
-      if(!isNaN(newValue)) {
+      if (!isNaN(newValue)) {
         setInternalValue(newValue);
         setInputValue(inputVal);
         window.clearInterval(timer.current);
@@ -84,12 +98,12 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
       }
     } else {
       setInternalValue(undefined);
-      setInputValue("");
+      setInputValue('');
       window.clearInterval(timer.current);
       timer.current = window.setTimeout(() => onChange(0, true), delay * 2);
     }
   };
-  
+
   return (
     <Box sx={{ display: 'flex', width: '100%' }}>
       <Box sx={{ flexGrow: '0', width: '80px' }}>
@@ -100,18 +114,25 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
           inputSize="small"
           label={<IconLabel label={'Leverage'} icon="information-circle" info={hint} />}
           onChange={handleChangeInput}
-          suffix='x'
+          suffix="x"
           suffixPadding={0}
           value={notFormatted(inputValue)}
         />
       </Box>
-      <Box sx={{ flexGrow: '1', marginLeft: (theme) => theme.spacing(4), display: 'flex', alignItems: 'center' }}>
-        <Slider 
+      <Box
+        sx={{
+          flexGrow: '1',
+          marginLeft: (theme) => theme.spacing(4),
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <Slider
           disabled={isDisabled}
-          min={low} 
-          max={high} 
+          min={low}
+          max={high}
           step={0.01}
-          value={internalValue} 
+          value={internalValue}
           onChange={handleChangeSlider}
           onChangeCommitted={handleChangeCommittedSlider}
           marks={[
@@ -126,7 +147,7 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
             {
               value: high,
               label: `${formatNumber(high)}x`,
-            }
+            },
           ]}
           sx={{
             marginTop: '16px',
@@ -134,26 +155,26 @@ const Leverage = ({availableNotional, minMargin, notional, onChange, value, rese
               background: `linear-gradient(90deg, #00D395 ${rainbow2Percent}%, #F1D302 ${rainbow3Percent}%, #F61067 ${rainbow4Percent}%)`,
               width: `${rainbowWidth}% !important`,
               left: `${rainbowStart}% !important`,
-              display: isDisabled ? 'none' : undefined
+              display: isDisabled ? 'none' : undefined,
             },
             '& .MuiSlider-thumb': {
-              display: isDisabled ? 'none' : undefined
+              display: isDisabled ? 'none' : undefined,
             },
             '& .MuiSlider-mark[data-index="1"]': {
               height: '6px',
               width: '3px',
-              background: isDisabled ? undefined : colors.vzCustomGreen2,
+              background: isDisabled ? undefined : colors.vzCustomGreen2.base,
             },
             '& .MuiSlider-mark[data-index="2"]': {
               height: '6px',
               width: '3px',
-              background: isDisabled ? undefined : colors.vzCustomRed2,
-            }
-          }} 
+              background: isDisabled ? undefined : colors.vzCustomRed2.base,
+            },
+          }}
         />
       </Box>
     </Box>
-  )
-}
+  );
+};
 
 export default Leverage;

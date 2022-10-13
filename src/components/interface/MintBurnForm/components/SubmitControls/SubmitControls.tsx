@@ -1,7 +1,11 @@
-import React, { ReactNode } from 'react'; 
+import React, { ReactNode } from 'react';
 import { useTokenApproval } from '@hooks';
 import { Button, Ellipsis, Typography } from '@components/atomic';
-import { MintBurnFormHintStates, MintBurnFormModes, MintBurnFormSubmitButtonStates } from '@contexts';
+import {
+  MintBurnFormHintStates,
+  MintBurnFormModes,
+  MintBurnFormSubmitButtonStates,
+} from '@contexts';
 import { colors } from '@theme';
 import { Box } from '@mui/system';
 
@@ -12,11 +16,14 @@ type TextProps = {
   red?: boolean;
 };
 const Text = ({ bold, children, green, red }: TextProps) => (
-  <Box component='span' sx={{ 
-    color: green ? colors.vzCustomGreen1 : red ? colors.vzCustomRed1 : undefined,
-    fontWeight: bold ? 'bold' : undefined,
-    textTransform: 'none'
-  }}>
+  <Box
+    component="span"
+    sx={{
+      color: green ? colors.vzCustomGreen1.base : red ? colors.vzCustomRed1.base : undefined,
+      fontWeight: bold ? 'bold' : undefined,
+      textTransform: 'none',
+    }}
+  >
     {children}
   </Box>
 );
@@ -34,7 +41,7 @@ export type SubmitControlsProps = {
   tokenApprovals: ReturnType<typeof useTokenApproval>;
   tradeInfoErrorMessage?: string;
   underlyingTokenName?: string;
-}
+};
 
 const SubmitControls = ({
   approvalsNeeded,
@@ -42,21 +49,24 @@ const SubmitControls = ({
   isFormValid,
   isTradeVerified,
   mode,
-  onCancel, 
+  onCancel,
   onSubmit,
   gaButtonId,
   submitButtonState,
   tokenApprovals,
   tradeInfoErrorMessage,
-  underlyingTokenName
+  underlyingTokenName,
 }: SubmitControlsProps) => {
   const getHint = () => {
-    switch(hintState) {
+    switch (hintState) {
       case MintBurnFormHintStates.APPROVE_NEXT_TOKEN: {
         return (
           <>
-            <Text green bold>{tokenApprovals.lastApproval?.text}</Text><Text green> approved!</Text> 
-            {' '}Let's now approve <Text bold>{tokenApprovals.getNextApproval(false)?.text}</Text>
+            <Text green bold>
+              {tokenApprovals.lastApproval?.text}
+            </Text>
+            <Text green> approved!</Text> Let's now approve{' '}
+            <Text bold>{tokenApprovals.getNextApproval(false)?.text}</Text>
           </>
         );
       }
@@ -88,33 +98,56 @@ const SubmitControls = ({
         return 'Initialising, please wait';
       }
       case MintBurnFormHintStates.READY_TO_TRADE: {
-        return 'Let\'s trade!';
+        return "Let's trade!";
       }
       case MintBurnFormHintStates.READY_TO_TRADE_TOKENS_APPROVED: {
-        return <><Text green>Tokens approved</Text>. Let's trade!</>;
+        return (
+          <>
+            <Text green>Tokens approved</Text>. Let's trade!
+          </>
+        );
       }
     }
-  }
+  };
 
   const getSubmitButtonText = () => {
-    switch(submitButtonState) {
+    switch (submitButtonState) {
       case MintBurnFormSubmitButtonStates.ADD_LIQUIDITY: {
         return 'Provide Liquidity';
       }
       case MintBurnFormSubmitButtonStates.APPROVE_UT_PERIPHERY: {
-        return <Box>Approve <Text>{underlyingTokenName}</Text></Box>;
+        return (
+          <Box>
+            Approve <Text>{underlyingTokenName}</Text>
+          </Box>
+        );
       }
       case MintBurnFormSubmitButtonStates.APPROVING: {
-        return <>Approving<Ellipsis /></>;
+        return (
+          <>
+            Approving
+            <Ellipsis />
+          </>
+        );
       }
       case MintBurnFormSubmitButtonStates.CHECKING: {
-        return <>Loading<Ellipsis /></>;
+        return (
+          <>
+            Loading
+            <Ellipsis />
+          </>
+        );
       }
       case MintBurnFormSubmitButtonStates.DEPOSIT_MARGIN: {
         return 'Deposit Margin';
       }
       case MintBurnFormSubmitButtonStates.INITIALISING: {
-        return <>Initialising<Ellipsis /></>;
+        return (
+          <>
+            Initialising
+            <Ellipsis />
+          </>
+        );
       }
       case MintBurnFormSubmitButtonStates.REMOVE_LIQUIDITY: {
         return 'Burn Liquidity';
@@ -126,21 +159,24 @@ const SubmitControls = ({
         return 'Withdraw Margin';
       }
     }
-  }
+  };
 
   return (
     <>
       <Box sx={{ display: 'flex' }}>
-        <Button 
+        <Button
           disabled={
-            !isFormValid || 
-            tokenApprovals.checkingApprovals || 
-            tokenApprovals.approving || 
-            ((mode === MintBurnFormModes.NEW_POSITION || mode === MintBurnFormModes.ROLLOVER) && (!approvalsNeeded && isFormValid && !isTradeVerified))
+            !isFormValid ||
+            tokenApprovals.checkingApprovals ||
+            tokenApprovals.approving ||
+            ((mode === MintBurnFormModes.NEW_POSITION || mode === MintBurnFormModes.ROLLOVER) &&
+              !approvalsNeeded &&
+              isFormValid &&
+              !isTradeVerified)
           }
           id={gaButtonId}
-          size="large" 
-          onClick={onSubmit} 
+          size="large"
+          onClick={onSubmit}
           sx={{ flexGrow: 1 }}
         >
           {getSubmitButtonText()}
@@ -155,15 +191,18 @@ const SubmitControls = ({
         </Button>
       </Box>
 
-      <Typography variant='body2' sx={{ 
-        marginTop: (theme) => theme.spacing(2), 
-        color: colors.lavenderWeb.darken015,
-        fontSize: '12px'
-      }}>
+      <Typography
+        variant="body2"
+        sx={{
+          marginTop: (theme) => theme.spacing(2),
+          color: colors.lavenderWeb.darken015,
+          fontSize: '12px',
+        }}
+      >
         {getHint()}
       </Typography>
     </>
-  )
-}
+  );
+};
 
 export default SubmitControls;
