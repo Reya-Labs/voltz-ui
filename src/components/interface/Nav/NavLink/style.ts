@@ -1,19 +1,9 @@
 import { colors, SystemStyleObject, Theme } from '@theme';
 import { keyframes } from '@mui/system';
 
-const glow = keyframes`
-  10%, 30%, 50%, 70%, 90% {
-    filter: drop-shadow(0px 4px 0px ${colors.orangeYellow.base}) drop-shadow(0px 0px 40px ${colors.orangeYellow.base});
-  }
-  
-  20%, 40%, 60%, 80% {
-    filter: drop-shadow(0px 4px 10px ${colors.orangeYellow.base}) drop-shadow(0px 0px 15px ${colors.orangeYellow.base});
-  }
-`;
-
 const shake = keyframes`
   10%, 30%, 50%, 70%, 90% {
-    transform: translate3d(-1px, 0, 0);
+    transform: translate3d(-2px, 0, 0);
   }
 
   20%, 40%, 60%, 80% {
@@ -25,19 +15,19 @@ export const iconSx: SystemStyleObject<Theme> = {
   width: '100%',
   height: '100%',
   cursor: 'pointer',
-  filter: (theme) =>
-    `drop-shadow(0px 4px 20px ${theme.palette.error.base}) drop-shadow(0px 0px 40px ${theme.palette.error.base})`,
+  transition: 'filter 150ms ease-in',
   '&:hover': {
-    animation: `${glow} 2000ms infinite ease`,
+    filter: `drop-shadow(0px 4px 20px ${colors.wildStrawberry.base}) drop-shadow(0px 0px 40px ${colors.wildStrawberry.base})`,
   },
-  '&:hover > g': {
-    animation: `${shake} 100ms infinite ease`,
-    fill: `${colors.orangeYellow.base}`,
+  '&:hover > path': {
+    fill: colors.lavenderWeb.base,
+  },
+  '& > path': {
+    fill: colors.lavenderWeb.darken010,
   },
 };
 
 export const buttonSx: SystemStyleObject<Theme> = {
-  // color: 'secondary.light',
   fontSize: '16px',
   lineHeight: '14px',
   fontWeight: 400,
