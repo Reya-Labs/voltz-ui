@@ -19,3 +19,5 @@ export * from './SelectInput/SelectInput';
 export { default as SummaryPanel } from './SummaryPanel/SummaryPanel';
 export * from './PositionBadge/PositionBadge';
 export type { NeonsProps } from './Neons/Neons';
+export { Pill } from './Pill';
+export type { PillProps } from './Pill';
