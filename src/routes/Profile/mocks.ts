@@ -9,39 +9,39 @@ type Badge = {
 
 export const claimedBadges: Badge[] = [
   {
-    title: 'Open a FT position',
-    variant: 'badge1',
+    title: 'NO RISK HERE SER',
+    variant: 'noRiskHereSer',
     tier: 'tier1',
     description: 'Taking no risks, opening your first Fixed Taker position.',
   },
   {
-    title: 'Open a VT position',
-    variant: 'badge2',
-    tier: 'tier1',
-    description: 'Looking to collectat that juicy delta. Opening your first VT position',
-  },
-  {
-    title: '100x LEVERAGE',
-    variant: 'badge3',
+    title: 'LEVERAGE CROWBAR',
+    variant: 'leverageCrowbar',
     tier: 'tier2',
-    description: 'Looking to collectat that juicy delta. Opening your first VT position',
+    description: 'Taking no risks, opening your first Fixed Taker position.',
   },
   {
-    title: 'Open a FT position',
-    variant: 'badge1',
+    title: 'DELTA DEGEN',
+    variant: 'deltaDegen',
     tier: 'tier1',
     description: 'Taking no risks, opening your first Fixed Taker position.',
   },
   {
-    title: 'Open a VT position',
-    variant: 'badge2',
+    title: 'IRS CONNOISSEUR',
+    variant: 'irsConnoisseur',
+    tier: 'tier2',
+    description: 'Taking no risks, opening your first Fixed Taker position.',
+  },
+  {
+    title: 'SUSHI ROLL',
+    variant: 'sushiRoll',
+    tier: 'tier2',
+    description: 'Taking no risks, opening your first Fixed Taker position.',
+  },
+  {
+    title: 'DEGEN STUFF',
+    variant: 'degenStuff',
     tier: 'tier3',
-    description: 'Looking to collectat that juicy delta. Opening your first VT position',
-  },
-  {
-    title: '100x LEVERAGE',
-    variant: 'badge3',
-    tier: 'tier2',
-    description: 'Looking to collectat that juicy delta',
+    description: 'Taking no risks, opening your first Fixed Taker position.',
   },
 ];

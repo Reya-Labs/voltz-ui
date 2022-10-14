@@ -3,7 +3,7 @@ import { keyframes } from '@mui/system';
 
 const glow = keyframes`
   10%, 30%, 50%, 70%, 90% {
-    filter: drop-shadow(0px 4px 20px ${colors.orangeYellow.base}) drop-shadow(0px 0px 40px ${colors.orangeYellow.base});
+    filter: drop-shadow(0px 4px 0px ${colors.orangeYellow.base}) drop-shadow(0px 0px 40px ${colors.orangeYellow.base});
   }
   
   20%, 40%, 60%, 80% {

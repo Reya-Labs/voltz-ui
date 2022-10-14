@@ -13,9 +13,9 @@ const Template: ComponentStory<typeof BadgeCard> = (args) => <BadgeCard {...args
 
 export const Default = Template.bind({});
 const args: React.ComponentProps<typeof BadgeCard> = {
-  title: 'Open a VT position',
-  variant: 'badge1',
+  title: 'LEVERAGE CROWBAR',
+  variant: 'leverageCrowbar',
   tier: 'tier2',
-  description: 'Looking to collectat that juicy delta. Opening your first VT position',
+  description: 'Taking no risks, opening your first Fixed Taker position.',
 };
 Default.args = args;
