@@ -1,12 +1,10 @@
 import React from 'react';
-import { colors, SystemStyleObject, Theme } from '@theme';
 import Box from '@mui/material/Box';
 import { routes } from '@routes';
-import { Button, Icon } from '../../atomic';
-import Popover from '@mui/material/Popover';
-import ButtonGroup from '@mui/material/ButtonGroup';
+import { Icon } from '../../atomic';
 import { NavLink } from './NavLink/NavLink';
 import { iconSx } from './NavLink/style';
+import { colors } from '@theme';
 
 const Nav: React.FunctionComponent = () => (
   <Box
@@ -21,9 +19,8 @@ const Nav: React.FunctionComponent = () => (
       }}
       sx={{
         cursor: 'pointer',
-        height: 30,
-        width: 22.5,
-        marginRight: (theme) => theme.spacing(2),
+        marginRight: (theme) => theme.spacing(4),
+        filter: `drop-shadow(0px 4px 20px ${colors.wildStrawberry.base}) drop-shadow(0px 0px 40px ${colors.wildStrawberry.base})`,
       }}
     >
       <Icon name="voltz" viewBox={'0 0 20 30'} sx={iconSx} />
