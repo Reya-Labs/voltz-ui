@@ -53,7 +53,16 @@ export type Icons =
   | 'irsConnoisseur'
   | 'leverageCrowbar'
   | 'noRiskHereSer'
-  | 'sushiRoll';
+  | 'sushiRoll'
+  | 'seasonedTrader'
+  | 'beWaterMyFriend'
+  | 'rainMaker'
+  | 'waterHose'
+  | 'moneyMoneyMoney'
+  | 'lpoor'
+  | 'sugarDaddy'
+  | 'maxBidding'
+  | 'okBoomer';
 
 export const iconMap: Record<Icons, ElementType> = {
   'arrow-left': ArrowLeft as ElementType,
@@ -81,4 +90,13 @@ export const iconMap: Record<Icons, ElementType> = {
   leverageCrowbar: LeverageCrowbar as ElementType,
   noRiskHereSer: NoRiskHereSer as ElementType,
   sushiRoll: SushiRoll as ElementType,
+  seasonedTrader: DegenStuff as ElementType,
+  beWaterMyFriend: DegenStuff as ElementType,
+  rainMaker: DegenStuff as ElementType,
+  waterHose: DegenStuff as ElementType,
+  moneyMoneyMoney: DegenStuff as ElementType,
+  lpoor: DegenStuff as ElementType,
+  sugarDaddy: DegenStuff as ElementType,
+  maxBidding: DegenStuff as ElementType,
+  okBoomer: DegenStuff as ElementType,
 };

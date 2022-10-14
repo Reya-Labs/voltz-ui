@@ -14,7 +14,9 @@ export type BaseColors =
   | 'vzCustomRed2'
   | 'vzCustomYellow1'
   | 'vzCustomGreen1'
-  | 'vzCustomGreen2';
+  | 'vzCustomGreen2'
+  | 'vzCustomMarine'
+  | 'vzCustomPink';
 
 export type ColorVariations =
   | 'base'

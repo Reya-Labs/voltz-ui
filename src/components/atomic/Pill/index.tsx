@@ -5,7 +5,10 @@ import { Typography } from '@components/atomic';
 export type PillProps = {
   sx?: SystemStyleObject<Theme>;
   text: string;
-  variant: Extract<BaseColors, 'wildStrawberry' | 'orangeYellow' | 'skyBlueCrayola'>;
+  variant: Extract<
+    BaseColors,
+    'wildStrawberry' | 'orangeYellow' | 'skyBlueCrayola' | 'vzCustomPink' | 'vzCustomMarine'
+  >;
 };
 
 export const Pill = ({ text, variant, sx }: PillProps) => (

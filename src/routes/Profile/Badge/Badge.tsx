@@ -1,14 +1,9 @@
 import React from 'react';
 import { Icon } from '@components/atomic';
+import { BadgeVariant } from '../types';
 
 export type BadgeProps = {
-  variant:
-    | 'degenStuff'
-    | 'deltaDegen'
-    | 'irsConnoisseur'
-    | 'leverageCrowbar'
-    | 'noRiskHereSer'
-    | 'sushiRoll';
+  variant: BadgeVariant;
 };
 
 export const Badge: React.FunctionComponent<BadgeProps> = ({ variant }) => {

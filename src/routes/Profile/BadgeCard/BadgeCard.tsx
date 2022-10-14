@@ -2,24 +2,15 @@ import colors from '../../../theme/colors';
 import React from 'react';
 import Box from '@mui/material/Box';
 import { PillProps, Pill, Typography } from '@components/atomic';
-import { Badge, BadgeProps } from '../Badge/Badge';
-
-const TIER_PILL_VARIANT_MAP: Record<BadgeCardProps['tier'], PillProps['variant']> = {
-  tier1: 'wildStrawberry',
-  tier2: 'orangeYellow',
-  tier3: 'skyBlueCrayola',
-};
-const TIER_COPY_MAP: Record<BadgeCardProps['tier'], string> = {
-  tier1: 'TIER 1',
-  tier2: 'TIER 2',
-  tier3: 'TIER 3',
-};
+import { Badge } from '../Badge/Badge';
+import { BadgeTier, BadgeVariant } from '../types';
+import { BadgePill } from '../BadgePill/BadgePill';
 
 export type BadgeCardProps = {
-  variant: BadgeProps['variant'];
+  variant: BadgeVariant;
   title: string;
   description: string;
-  tier: 'tier1' | 'tier2' | 'tier3';
+  tier: BadgeTier;
 };
 export const BadgeCard: React.FunctionComponent<BadgeCardProps> = ({
   variant,
@@ -43,7 +34,7 @@ export const BadgeCard: React.FunctionComponent<BadgeCardProps> = ({
           marginBottom: (theme) => theme.spacing(6),
         }}
       >
-        <Pill text={TIER_COPY_MAP[tier]} variant={TIER_PILL_VARIANT_MAP[tier]} />
+        <BadgePill tier={tier} />
       </Box>
       <Box
         sx={{
@@ -69,7 +60,7 @@ export const BadgeCard: React.FunctionComponent<BadgeCardProps> = ({
       <Typography
         variant="body2"
         sx={{
-          color: colors.lavenderWeb,
+          color: colors.lavenderWeb.base,
           fontSize: '12px',
           lineHeight: '18px',
           fontWeight: 400,
