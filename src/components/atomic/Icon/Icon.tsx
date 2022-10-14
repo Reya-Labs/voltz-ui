@@ -23,6 +23,15 @@ const Icon: React.FunctionComponent<IconProps> = ({ name, sx, link, ...props }) 
       case 'leverageCrowbar':
       case 'noRiskHereSer':
       case 'sushiRoll':
+      case 'seasonedTrader':
+      case 'beWaterMyFriend':
+      case 'rainMaker':
+      case 'waterHose':
+      case 'moneyMoneyMoney':
+      case 'lpoor':
+      case 'sugarDaddy':
+      case 'maxBidding':
+      case 'okBoomer':
         return {
           viewBox: '0 0 459 459',
         };

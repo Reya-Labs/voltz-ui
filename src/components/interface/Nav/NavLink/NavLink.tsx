@@ -59,7 +59,13 @@ export const NavLink: React.FunctionComponent<NavLinkProps> = ({
             aria-label="vertical outlined button group"
           >
             {subLinks?.map((subLink) => (
-              <Button role="link" variant="text" sx={subMenuButtonSx} link={subLink.link}>
+              <Button
+                key={subLink.text}
+                role="link"
+                variant="text"
+                sx={subMenuButtonSx}
+                link={subLink.link}
+              >
                 {subLink.text}
               </Button>
             ))}

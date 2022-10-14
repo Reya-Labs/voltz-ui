@@ -19,6 +19,8 @@ const baseColors: Record<BaseColors, string> = {
   vzCustomYellow1: '#F1D302',
   vzCustomGreen1: '#40F99B',
   vzCustomGreen2: '#00D395',
+  vzCustomMarine: '#B6A5FF',
+  vzCustomPink: '#F982EB',
 };
 
 const generateColorMap = (color: string): ColorSet => ({
