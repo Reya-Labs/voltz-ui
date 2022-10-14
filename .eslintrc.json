@@ -34,7 +34,9 @@
       {
         "devDependencies": [
           "**/*.test.ts",
+          "**/*.test.tsx",
           "**/*.spec.ts",
+          "**/*.spec.tsx",
           "src/setupTests.ts",
           "**/*.stories.tsx"
         ]
