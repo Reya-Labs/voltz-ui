@@ -1,9 +1,11 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import { Grid, Pill, Typography, Page } from '../../../components';
-import colors from '../../../theme/colors';
-import { elideAddress } from '../../../utilities';
+import { Pill, Typography } from '@components/atomic';
+import { Grid } from '@components/layout';
+import { elideAddress } from '@utilities';
 import { BadgeCard, BadgeCardProps } from '../BadgeCard/BadgeCard';
+import { colors } from '@theme';
+import { Page } from '@components/interface';
 
 type ProfilePageProps = {
   account: string;

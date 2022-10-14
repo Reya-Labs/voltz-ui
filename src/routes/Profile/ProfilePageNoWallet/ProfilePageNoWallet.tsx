@@ -1,7 +1,8 @@
 import React from 'react';
-import { Pill, Page, Typography } from '../../../components';
+import { Pill, Typography } from '@components/atomic';
 import Box from '@mui/material/Box';
-import colors from '../../../theme/colors';
+import { colors } from '@theme';
+import { Page } from '@components/interface';
 
 export const ProfilePageNoWallet: React.FunctionComponent = React.memo(() => (
   <Page>
