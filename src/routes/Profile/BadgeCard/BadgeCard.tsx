@@ -4,7 +4,7 @@ import Badge3 from '../assets/badge3.svg';
 import colors from '../../../theme/colors';
 import React from 'react';
 import Box from '@mui/material/Box';
-import { PillProps, Pill, Typography } from '@components/*';
+import { PillProps, Pill, Typography } from '@components/atomic';
 
 type BadgeProps = {
   variant: 'badge1' | 'badge2' | 'badge3';
@@ -54,7 +54,7 @@ export const BadgeCard: React.FunctionComponent<BadgeCardProps> = ({
 }) => {
   return (
     <Box
-      data-testId="BadgeCard"
+      data-testid="BadgeCard"
       sx={{
         backgroundColor: '#19152A',
         borderRadius: '4px',
