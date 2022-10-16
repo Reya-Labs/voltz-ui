@@ -1,23 +1,16 @@
-import colors from '../../../theme/colors';
+import { colors } from '@theme';
 import React from 'react';
 import Box from '@mui/material/Box';
-import { PillProps, Pill, Typography } from '@components/atomic';
+import { Typography } from '@components/atomic';
 import { Badge } from '../Badge/Badge';
-import { BadgeTier, BadgeVariant } from '../types';
+import { BadgeVariant } from '../types';
 import { BadgePill } from '../BadgePill/BadgePill';
+import { BADGE_VARIANT_DESCRIPTION_COPY_MAP, BADGE_VARIANT_TITLE_COPY_MAP } from '../helpers';
 
 export type BadgeCardProps = {
   variant: BadgeVariant;
-  title: string;
-  description: string;
-  tier: BadgeTier;
 };
-export const BadgeCard: React.FunctionComponent<BadgeCardProps> = ({
-  variant,
-  title,
-  description,
-  tier,
-}) => {
+export const BadgeCard: React.FunctionComponent<BadgeCardProps> = ({ variant }) => {
   return (
     <Box
       data-testid="BadgeCard"
@@ -34,7 +27,7 @@ export const BadgeCard: React.FunctionComponent<BadgeCardProps> = ({
           marginBottom: (theme) => theme.spacing(6),
         }}
       >
-        <BadgePill tier={tier} />
+        <BadgePill variant={variant} />
       </Box>
       <Box
         sx={{
@@ -55,7 +48,7 @@ export const BadgeCard: React.FunctionComponent<BadgeCardProps> = ({
           marginBottom: (theme) => theme.spacing(2),
         }}
       >
-        {title.toUpperCase()}
+        {BADGE_VARIANT_TITLE_COPY_MAP[variant].toUpperCase()}
       </Typography>
       <Typography
         variant="body2"
@@ -66,7 +59,7 @@ export const BadgeCard: React.FunctionComponent<BadgeCardProps> = ({
           fontWeight: 400,
         }}
       >
-        {description}
+        {BADGE_VARIANT_DESCRIPTION_COPY_MAP[variant]}
       </Typography>
     </Box>
   );

@@ -1,6 +1,7 @@
 import React from 'react';
 import { PillProps, Pill } from '@components/atomic';
-import { BadgeTier } from '../types';
+import { BadgeTier, BadgeVariant } from '../types';
+import { BADGE_VARIANT_TIER_MAP, TIER_COPY_MAP } from '../helpers';
 
 const TIER_PILL_VARIANT_MAP: Record<BadgeTier, PillProps['variant']> = {
   tier1: 'wildStrawberry',
@@ -10,16 +11,9 @@ const TIER_PILL_VARIANT_MAP: Record<BadgeTier, PillProps['variant']> = {
   legendary: 'vzCustomMarine',
 };
 
-const TIER_COPY_MAP: Record<BadgeTier, string> = {
-  tier1: 'TIER 1',
-  tier2: 'TIER 2',
-  tier3: 'TIER 3',
-  legendary: 'LEGENDARY',
-  '???': '???',
-};
-
 export const BadgePill: React.FunctionComponent<{
-  tier: BadgeTier;
-}> = ({ tier }) => {
+  variant: BadgeVariant;
+}> = ({ variant }) => {
+  const tier = BADGE_VARIANT_TIER_MAP[variant];
   return <Pill text={TIER_COPY_MAP[tier]} variant={TIER_PILL_VARIANT_MAP[tier]} />;
 };

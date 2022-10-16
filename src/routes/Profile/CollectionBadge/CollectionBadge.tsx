@@ -1,19 +1,16 @@
-import colors from '../../../theme/colors';
+import { colors } from '@theme';
 import React from 'react';
 import Box from '@mui/material/Box';
 import { Typography } from '@components/atomic';
-import { BadgeTier, BadgeVariant } from '../types';
+import { BadgeVariant } from '../types';
 import { BadgePill } from '../BadgePill/BadgePill';
+import { BADGE_VARIANT_TITLE_COPY_MAP } from '../helpers';
 
 export type CollectionBadgeProps = {
-  title: string;
-  tier: BadgeTier;
   achievedAt?: string;
   variant: BadgeVariant;
 };
 export const CollectionBadge: React.FunctionComponent<CollectionBadgeProps> = ({
-  title,
-  tier,
   achievedAt,
   variant,
 }) => (
@@ -35,7 +32,7 @@ export const CollectionBadge: React.FunctionComponent<CollectionBadgeProps> = ({
       }}
     >
       <Box>
-        <BadgePill tier={tier} />
+        <BadgePill variant={variant} />
       </Box>
     </Box>
     <Typography
@@ -48,7 +45,7 @@ export const CollectionBadge: React.FunctionComponent<CollectionBadgeProps> = ({
         flex: '1',
       }}
     >
-      {title.toUpperCase()}
+      {BADGE_VARIANT_TITLE_COPY_MAP[variant].toUpperCase()}
     </Typography>
     <Typography
       variant="body2"
