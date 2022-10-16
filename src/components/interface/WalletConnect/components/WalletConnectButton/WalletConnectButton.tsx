@@ -8,7 +8,7 @@ import CircleIcon from '@mui/icons-material/Circle';
 
 import './web3modal.scss';
 import { Icons } from '@components/atomic';
-import colors from '../../../../../theme/colors';
+import { colors } from '@theme';
 
 export type WalletConnectButtonProps = {
   onClick?: () => void;

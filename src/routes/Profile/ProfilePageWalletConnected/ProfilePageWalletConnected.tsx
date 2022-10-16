@@ -7,8 +7,7 @@ import { BadgeCard, BadgeCardProps } from '../BadgeCard/BadgeCard';
 import { colors } from '@theme';
 import { Page } from '@components/interface';
 import { CollectionBadge, CollectionBadgeProps } from '../CollectionBadge/CollectionBadge';
-import { collectionBadges } from '../mocks';
-import { BadgeVariant } from '../types';
+import { BADGE_VARIANT_TIER_MAP } from '../helpers';
 
 type ProfilePageProps = {
   account: string;
@@ -45,7 +44,9 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
     return collectionBadgesSort
       .map((variant) => collection.find((c) => c.variant === variant))
       .filter((b) => b)
-      .filter((b) => (b!.tier === '???' ? b!.achievedAt : true)) as CollectionBadgeProps[];
+      .filter((b) =>
+        BADGE_VARIANT_TIER_MAP[b!.variant] === '???' ? b!.achievedAt : true,
+      ) as CollectionBadgeProps[];
   }, [collection]);
 
   return (
@@ -109,74 +110,80 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
             AT THE END OF THE SEASON YOU WILL BE ABLE TO CLAIM YOUR EARNED BADGES
           </Typography>
         </Box>
-        <Box
-          sx={{
-            backgroundColor: '#1E1932',
-            borderRadius: '8px',
-            padding: (theme) => theme.spacing(4),
-            marginTop: (theme) => theme.spacing(3),
-          }}
-        >
-          <Typography variant="h2">YOUR BADGE ACHIEVEMENTS COLLECTION</Typography>
-          <Grid
-            itemsPerRow={3}
+        {(claimedBadges || []).length !== 0 ? (
+          <Box
             sx={{
-              marginTop: (theme) => theme.spacing(6),
-              rowGap: (theme) => theme.spacing(6),
-              columnGap: (theme) => theme.spacing(4),
+              backgroundColor: '#1E1932',
+              borderRadius: '8px',
+              padding: (theme) => theme.spacing(4),
+              marginTop: (theme) => theme.spacing(3),
             }}
           >
-            {claimedBadges.map((badge, index) => (
-              <BadgeCard key={`${badge.title} ${index}`} {...badge} />
-            ))}
-          </Grid>
-        </Box>
-        <Box
-          sx={{
-            padding: (theme) => theme.spacing(0, 4),
-            marginTop: (theme) => theme.spacing(6),
-          }}
-        >
-          <Typography
-            variant="h2"
-            sx={{
-              fontWeight: 400,
-            }}
-          >
-            THE COLLECTION -&nbsp;
-            <span
-              style={{
-                fontWeight: 700,
+            <Typography variant="h2">YOUR BADGE ACHIEVEMENTS COLLECTION</Typography>
+            <Grid
+              itemsPerRow={3}
+              sx={{
+                marginTop: (theme) => theme.spacing(6),
+                rowGap: (theme) => theme.spacing(6),
+                columnGap: (theme) => theme.spacing(4),
               }}
             >
-              SEASON {season}
-            </span>
-          </Typography>
-          <Typography
-            variant="body2"
+              {claimedBadges.map((badge, index) => (
+                <BadgeCard key={`${badge.variant}${index}`} {...badge} />
+              ))}
+            </Grid>
+          </Box>
+        ) : null}
+
+        {(badgeCollections || []).length !== 0 ? (
+          <Box
             sx={{
-              marginTop: (theme) => theme.spacing(2),
-              lineHeight: '160%',
-              fontSize: '14px',
-              fontFamily: 'DM Sans',
-              fontWeight: 400,
-              color: colors.lavenderWeb.darken015,
-            }}
-          >
-            Compete against other traders for rewards by trading or bringing people to the platform.
-          </Typography>
-          <Grid
-            itemsPerRow={1}
-            sx={{
+              padding: (theme) => theme.spacing(0, 4),
               marginTop: (theme) => theme.spacing(6),
-              rowGap: (theme) => theme.spacing(2),
             }}
           >
-            {badgeCollections.map((badge, index) => (
-              <CollectionBadge key={`${badge.title} ${index}`} {...badge} />
-            ))}
-          </Grid>
-        </Box>
+            <Typography
+              variant="h2"
+              sx={{
+                fontWeight: 400,
+              }}
+            >
+              THE COLLECTION -&nbsp;
+              <span
+                style={{
+                  fontWeight: 700,
+                }}
+              >
+                SEASON {season}
+              </span>
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{
+                marginTop: (theme) => theme.spacing(2),
+                lineHeight: '160%',
+                fontSize: '14px',
+                fontFamily: 'DM Sans',
+                fontWeight: 400,
+                color: colors.lavenderWeb.darken015,
+              }}
+            >
+              Compete against other traders for rewards by trading or bringing people to the
+              platform.
+            </Typography>
+            <Grid
+              itemsPerRow={1}
+              sx={{
+                marginTop: (theme) => theme.spacing(6),
+                rowGap: (theme) => theme.spacing(2),
+              }}
+            >
+              {badgeCollections.map((badge, index) => (
+                <CollectionBadge key={`${badge.variant}${index}`} {...badge} />
+              ))}
+            </Grid>
+          </Box>
+        ) : null}
       </Box>
     </Page>
   );
