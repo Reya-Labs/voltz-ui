@@ -7,7 +7,7 @@ const TIER_PILL_VARIANT_MAP: Record<BadgeTier, PillProps['variant']> = {
   tier1: 'wildStrawberry',
   tier2: 'orangeYellow',
   tier3: 'skyBlueCrayola',
-  '???': 'vzCustomPink',
+  easterEgg: 'vzCustomPink',
   legendary: 'vzCustomMarine',
 };
 

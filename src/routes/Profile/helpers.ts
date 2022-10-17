@@ -5,7 +5,7 @@ export const TIER_COPY_MAP: Record<BadgeTier, string> = {
   tier2: 'TIER 2',
   tier3: 'TIER 3',
   legendary: 'LEGENDARY',
-  '???': '???',
+  easterEgg: 'EASTER EGG',
 };
 
 export const BADGE_VARIANT_TITLE_COPY_MAP: Record<BadgeVariant, string> = {
@@ -57,7 +57,7 @@ export const BADGE_VARIANT_TIER_MAP: Record<BadgeVariant, BadgeTier> = {
   waterHose: 'tier2',
   moneyMoneyMoney: 'tier2',
   lpoor: 'tier1',
-  sugarDaddy: '???',
-  maxBidding: '???',
-  okBoomer: '???',
+  sugarDaddy: 'easterEgg',
+  maxBidding: 'easterEgg',
+  okBoomer: 'easterEgg',
 };

@@ -14,4 +14,4 @@ export type BadgeVariant =
   | 'sugarDaddy'
   | 'maxBidding'
   | 'okBoomer';
-export type BadgeTier = 'tier1' | 'tier2' | 'tier3' | 'legendary' | '???';
+export type BadgeTier = 'tier1' | 'tier2' | 'tier3' | 'legendary' | 'easterEgg';
