@@ -7,11 +7,10 @@ export type BackgroundProps = {
   sx?: SystemStyleObject<Theme>;
 };
 
-
 const Background: React.FunctionComponent<BackgroundProps> = ({ children, sx }) => (
   <Box
     sx={{
-      background: 'radial-gradient(86.39% 190.57% at 49.31% 50%, #000000 0%, #312859 100%)',
+      background: 'linear-gradient(152.9deg, #231D40 0%, #151126 52.6%, #201A3A 100%)',
       width: '100vw',
       height: '100vh',
       position: 'fixed',
@@ -19,7 +18,16 @@ const Background: React.FunctionComponent<BackgroundProps> = ({ children, sx }) 
       ...sx,
     }}
   >
-    <Box sx={{ height: '100%', width: '100%', overflow: 'hidden', position: 'absolute', 'top': 0, left: 0 }}>
+    <Box
+      sx={{
+        height: '100%',
+        width: '100%',
+        overflow: 'hidden',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+      }}
+    >
       <Neons />
     </Box>
     {children}
