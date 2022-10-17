@@ -33,7 +33,7 @@ type CollectionBadge = {
 export const collectionBadges: CollectionBadge[] = [
   {
     variant: 'noRiskHereSer',
-    achievedAt: '10/12/2022',
+    achievedAt: '10/12/22',
   },
   {
     variant: 'deltaDegen',
@@ -52,19 +52,19 @@ export const collectionBadges: CollectionBadge[] = [
   },
   {
     variant: 'seasonedTrader',
-    achievedAt: '10/12/2022',
+    achievedAt: '10/12/22',
   },
   {
     variant: 'okBoomer',
-    achievedAt: '10/12/2022',
+    achievedAt: '10/12/22',
   },
   {
     variant: 'maxBidding',
-    achievedAt: '10/12/2022',
+    achievedAt: '10/12/22',
   },
   {
     variant: 'sugarDaddy',
-    achievedAt: '10/12/2022',
+    achievedAt: '10/12/22',
   },
   {
     variant: 'lpoor',
