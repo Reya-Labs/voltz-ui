@@ -45,7 +45,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
       .map((variant) => collection.find((c) => c.variant === variant))
       .filter((b) => b)
       .filter((b) =>
-        BADGE_VARIANT_TIER_MAP[b!.variant] === '???' ? b!.achievedAt : true,
+        BADGE_VARIANT_TIER_MAP[b!.variant] === 'easterEgg' ? b!.achievedAt : true,
       ) as CollectionBadgeProps[];
   }, [collection]);
 
