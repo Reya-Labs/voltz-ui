@@ -70,7 +70,7 @@ export const NavLink: React.FunctionComponent<NavLinkProps> = ({
             ? OPEN_CLASS
             : isActiveLink(
                 link,
-                subLinks?.map((l) => l.text),
+                subLinks?.map((l) => l.link),
               )
             ? ACTIVE_CLASS
             : undefined
@@ -106,6 +106,7 @@ export const NavLink: React.FunctionComponent<NavLinkProps> = ({
                 sx={subMenuButtonSx}
                 onClick={handlePopoverClose}
                 startIcon={subLink.isNew ? newLinkIndicator : null}
+                className={isActiveLink(subLink.link) ? ACTIVE_CLASS : undefined}
               >
                 {subLink.text}
               </Button>

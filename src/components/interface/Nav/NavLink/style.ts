@@ -79,6 +79,10 @@ export const subMenuButtonSx: SystemStyleObject<Theme> = {
     borderBottomColor: 'transparent',
     background: '#0E0C16',
   },
+
+  [`&.${ACTIVE_CLASS}`]: {
+    background: '#0E0C16',
+  },
 };
 
 export const buttonGroupSx: SystemStyleObject<Theme> = {
