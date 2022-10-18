@@ -31,6 +31,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
   onChangeMargin,
   error,
 }) => {
+
   const defaultInputValue = () => {
     const defaultVal = isEditing ? defaultMargin : margin ?? defaultMargin;
     if (typeof defaultVal !== 'undefined') {

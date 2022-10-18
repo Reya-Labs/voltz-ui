@@ -1,10 +1,10 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Agents, useAMMContext, usePositionContext } from "@contexts";
 import { SwapFormActions, SwapFormModes } from "@components/interface";
-import { AugmentedAMM, lessThanEpsilon, formatNumber, stringToBigFloat } from "@utilities";
-import { isNumber, isUndefined, max } from "lodash";
+import { AugmentedAMM, lessThanEpsilon, formatNumber, stringToBigFloat, pushEvent, DataLayerEventPayload, isBorrowing, getAmmProtocol } from "@utilities";
+import { debounce, isNumber, isUndefined } from "lodash";
 import { hasEnoughTokens, hasEnoughUnderlyingTokens, lessThan } from "@utilities";
-import { GetInfoType, useAgent, useBalance, useMinRequiredMargin, useTokenApproval } from "@hooks";
+import { GetInfoType, useAgent, useBalance, useMinRequiredMargin, useTokenApproval, useWallet } from "@hooks";
 import { InfoPostSwap } from "@voltz-protocol/v1-sdk";
 import * as s from "./services";
 import { BigNumber } from "ethers";
@@ -677,7 +677,42 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       return;
     }
 
+    const payload : DataLayerEventPayload = {
+      event: "notional_change",
+      eventValue: notional ?? 0,
+      pool: getAmmProtocol(poolAmm),
+      agent: agent
+    };
+    pushEvent(payload);
+
   }, [swapInfo.loading, swapInfo.result]);
+
+  const leverageChange = useCallback(debounce((value: number | undefined, _agent: Agents) => {
+    const payload : DataLayerEventPayload = {
+      event: "leverage_change",
+      eventValue: value ?? 0,
+      pool: getAmmProtocol(poolAmm),
+      agent: _agent
+    };
+    pushEvent(payload);
+  }, 1000), []);
+
+  const marginChange = useCallback(debounce((value: number | undefined, _agent: Agents) => {
+    const payload : DataLayerEventPayload = {
+      event: "margin_change",
+      eventValue: value ?? 0,
+      pool: getAmmProtocol(poolAmm),
+      agent: _agent
+    };
+    pushEvent(payload);
+  }, 1000),[]);
+
+  useEffect(() => {
+    if ( !isUndefined(margin)) {
+      marginChange(margin, agent);
+      leverageChange((notional ?? 0)/margin, agent);
+    }
+  }, [margin])
 
   const value = {
     action,

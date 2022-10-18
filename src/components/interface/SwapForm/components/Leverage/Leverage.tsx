@@ -20,6 +20,7 @@ export type LeverageProps = {
   resetDeltaState: boolean;
 };
 
+
 const Leverage = ({
   availableNotional,
   minMargin,
@@ -134,6 +135,7 @@ const Leverage = ({
           step={0.01}
           value={internalValue}
           onChange={handleChangeSlider}
+          id={"Slider"}
           onChangeCommitted={handleChangeCommittedSlider}
           marks={[
             {

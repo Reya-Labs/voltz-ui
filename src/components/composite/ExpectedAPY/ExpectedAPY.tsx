@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { SelectInput, Typography } from '@components/atomic';
+import { Typography } from '@components/atomic';
 import { MaskedIntegerField } from '@components/composite';
 import { IconLabel } from '@components/composite';
 import Box from '@mui/material/Box';
 import { colors } from '@theme';
-import { formatNumber, notFormatted, stringToBigFloat, toUSFormat } from '@utilities';
+import { DataLayerEventPayload, formatNumber, getAmmProtocol, isBorrowing, notFormatted, pushEvent, stringToBigFloat, toUSFormat } from '@utilities';
 import { isUndefined } from 'lodash';
+import { useAgent } from '@hooks';
+import { useAMMContext } from '@contexts';
 
 interface ExpectedAPYProps {
   expectedApy?: number;
@@ -18,14 +20,30 @@ interface ExpectedAPYProps {
 
 export const ExpectedAPY = ({ expectedApy, expectedCashflow, userSimulatedVariableApy, onChangeUserSimulatedVariableApy, userSimulatedVariableApyUpdated }:ExpectedAPYProps) => {
   const delay = 1000;
+  const { agent } = useAgent();
+  const { amm } = useAMMContext();
 
   const [userInput, setUserInput] = useState(!isUndefined(userSimulatedVariableApy) ? formatNumber(userSimulatedVariableApy, 0,2) : undefined);
   const timer = useRef<number>();
 
   useEffect(() => {
-    const formatted = !isUndefined(userSimulatedVariableApy) ? formatNumber(userSimulatedVariableApy, 0,2) : undefined
+    const formatted = !isUndefined(userSimulatedVariableApy) ? formatNumber(userSimulatedVariableApy, 0,2) : undefined;
     setUserInput(formatted);    
   }, [userSimulatedVariableApy, userSimulatedVariableApyUpdated])
+
+  useEffect(() => {
+    const usFormatted = toUSFormat(userInput);
+    const newValue = usFormatted ? stringToBigFloat(usFormatted) : NaN;
+    if(!isNaN(newValue)) {
+      const payload : DataLayerEventPayload  = {
+        event: "expectedApy_change",
+        eventValue: newValue,
+        pool: getAmmProtocol(amm),
+        agent: agent
+      };
+      pushEvent(payload);
+    } 
+  }, [stringToBigFloat(toUSFormat(userInput) ?? "0")])
 
   const handleChangeInput = (inputVal: string | undefined) => {
     if (inputVal) {
@@ -34,7 +52,9 @@ export const ExpectedAPY = ({ expectedApy, expectedCashflow, userSimulatedVariab
       if(!isNaN(newValue)) {
         setUserInput(inputVal);
         window.clearInterval(timer.current);
-        timer.current = window.setTimeout(() => onChangeUserSimulatedVariableApy(newValue), delay);
+        timer.current = window.setTimeout(() => {
+          onChangeUserSimulatedVariableApy(newValue);
+        }, delay);
       }
     } else {
       setUserInput("");

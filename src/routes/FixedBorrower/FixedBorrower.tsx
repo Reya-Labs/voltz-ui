@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
-import { useLocation } from 'react-router-dom';
 import { Position } from '@voltz-protocol/v1-sdk';
 
-import { setPageTitle, findCurrentBorrowPosition, fromAMMtoBorrowAMM } from '@utilities';
-import { Agents, BorrowAMMProvider, BorrowFormProvider, SwapFormProvider } from '@contexts';
-import { useAgent, useAMMs, useBorrowPositions } from '@hooks';
+import { setPageTitle, findCurrentBorrowPosition } from '@utilities';
+import { Agents, BorrowAMMProvider, BorrowFormProvider } from '@contexts';
+import { useBorrowPositions } from '@hooks';
 
 import { Page } from '@components/interface';
 import ConnectedBorrowForm from '../../components/containers/ConnectedBorrowForm/ConnectedBorrowForm';

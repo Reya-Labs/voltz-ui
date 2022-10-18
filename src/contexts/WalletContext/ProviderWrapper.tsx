@@ -38,7 +38,7 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
   setBalance,
   required,
   setRequired,
-  children,
+  children
 }) => {
   const [polling, setPolling] = useState(false);
   const [provider, setProvider] = useState<ethers.providers.JsonRpcProvider | null>(null);
