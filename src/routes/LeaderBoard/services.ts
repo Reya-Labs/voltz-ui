@@ -1,5 +1,3 @@
-import { isNative } from "lodash";
-
 export const getRenderMode = (isClaiming: boolean | undefined, isInvite: boolean | undefined) => {
-  return isClaiming ? "claim": (isInvite ? "invite" : 'ranking');
+  return isClaiming ? 'claim' : isInvite ? 'invite' : 'ranking';
 };

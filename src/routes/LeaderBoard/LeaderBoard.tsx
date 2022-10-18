@@ -4,25 +4,15 @@ import Box from '@mui/material/Box';
 
 import { setPageTitle } from '@utilities';
 
-import { Modal, Page, Panel } from '@components/interface';
+import { Page } from '@components/interface';
 import ConnectedRankingTable from '../../components/containers/ConnectedRankingTable/ConnectedRankingTable';
 import { getRenderMode } from './services';
-import { useWallet } from '@hooks';
-import { Wallet } from '@contexts';
-import { isNull } from 'lodash';
-import { Button } from '@mui/material';
-
 
 const LeaderBoard: React.FunctionComponent = () => {
   const [isClaiming, setIsClaiming] = useState<boolean>();
   const [isInvite, setIsInvite] = useState<boolean>();
 
   const renderMode = getRenderMode(isClaiming, isInvite);
-
-  const handleClaim = () => {
-    setIsClaiming(true);
-    setIsInvite(false);
-  };
 
   const handleInvite = () => {
     setIsClaiming(false);
@@ -34,7 +24,7 @@ const LeaderBoard: React.FunctionComponent = () => {
   }, []);
 
   useEffect(() => {
-    switch(renderMode) {
+    switch (renderMode) {
       case 'claim': {
         setPageTitle('Claim Reward');
         break;
@@ -53,23 +43,23 @@ const LeaderBoard: React.FunctionComponent = () => {
 
   return (
     <Page>
-        {renderMode === 'claim' && (
-          <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center', backdropFilter: "blur(8px)" }}>
-            
-          </Box>
+      {renderMode === 'claim' && (
+        <Box
+          sx={{
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            backdropFilter: 'blur(8px)',
+          }}
+        />
       )}
-
-        {renderMode === 'ranking' && (
-          <Box sx={{backdropFilter: "blur(8px)", height: '100%', paddingBottom: "200px"}}>
-            <ConnectedRankingTable handleInvite={handleInvite}/>
-          </Box>
+      {renderMode === 'ranking' && (
+        <Box sx={{ backdropFilter: 'blur(8px)', height: '100%', paddingBottom: '200px' }}>
+          <ConnectedRankingTable handleInvite={handleInvite} />
+        </Box>
       )}
-
-
     </Page>
   );
-
-
 };
 
 export default LeaderBoard;
