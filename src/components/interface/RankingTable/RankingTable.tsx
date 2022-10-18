@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,11 +7,8 @@ import { Typography } from '@components/atomic';
 import { Box, Button, TableCell, TableHead, TableRow } from '@mui/material';
 
 import { Panel } from '@components/atomic';
-import RankingTableRow from './components/RankingTableRow/RankingTableRow';
-import { RankingTableHeader } from './components';
-import { getSortedRanking, RankType } from 'src/utilities/data';
-import { isUndefined } from 'lodash';
-import useRanking from 'src/hooks/useRanking';
+import { RankingTableHeader, RankingTableRow } from './components';
+import { RankType } from 'src/utilities/data';
 import { DateTime } from 'luxon';
 import { useWallet } from '@hooks';
 
@@ -26,16 +23,15 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
   ranking,
   handleInvite,
   seasonNumber,
-  seasonEndDate
+  seasonEndDate,
 }) => {
-
   const [page, setPage] = useState<number>(0);
   const wallet = useWallet();
 
   const [userRank, setUserRank] = useState<number>();
   const [userPoints, setUserPoints] = useState<number>();
   const [userAddress, setUserAddress] = useState<string>();
-  const allPages = useRef<number>(-2)
+  const allPages = useRef<number>(-2);
 
   const [sorted, setSorted] = useState<RankType[]>();
 
@@ -44,54 +40,54 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
     const keys = Array.from(ranking.keys());
     keys.forEach((address) => {
       const value = ranking.get(address);
-      result.push({address: address, points: value ?? 0})
+      result.push({ address: address, points: value ?? 0 });
     });
-    allPages.current = Math.round(result.length/10) + 1;
-    //ranking.forEach((points, address) => result.push({address: address, points: points}));
+    allPages.current = Math.round(result.length / 10) + 1;
+
     const s = result.sort((a, b) => b.points - a.points);
     setSorted(s);
 
-    if(s) {
-      for (let i = 0; i < s.length; i ++) {
+    if (s) {
+      for (let i = 0; i < s.length; i++) {
         const e = s[i];
-        if (e.address === wallet.account){
+        if (e.address === wallet.account) {
           setUserAddress(e.address);
           setUserPoints(e.points);
-          setUserRank(i+1);
+          setUserRank(i + 1);
         }
       }
     }
   }, []);
 
   const renderPageControl = () => {
-    if (allPages.current != -1) {
+    if (allPages.current !== -1) {
       return (
-      <Box sx={{display: "flex", justifyContent: "center"}}>
-        <Button onClick={handleClickLeft} variant={"text"} sx={{color: '#FF4AA9'}}>
-          &larr; Previous Page
-        </Button>
-        <Typography variant="body2" sx={{fontSize: 18, fontWeight: 400,  margin: "5px"}}>
-            {page+1}/{allPages.current}
-        </Typography>
-        <Button onClick={handleClickRight} variant={"text"} sx={{color: '#FF4AA9'}}>
-          Next Page &rarr;
-        </Button>
-      </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Button onClick={handleClickLeft} variant={'text'} sx={{ color: '#FF4AA9' }}>
+            &larr; Previous Page
+          </Button>
+          <Typography variant="body2" sx={{ fontSize: 18, fontWeight: 400, margin: '5px' }}>
+            {page + 1}/{allPages.current}
+          </Typography>
+          <Button onClick={handleClickRight} variant={'text'} sx={{ color: '#FF4AA9' }}>
+            Next Page &rarr;
+          </Button>
+        </Box>
       );
     }
-  }
+  };
 
   const handleClickRight = () => {
-    if(page < allPages.current) {
-      setPage(page + 1)
+    if (page < allPages.current) {
+      setPage(page + 1);
     }
-  }
+  };
 
   const handleClickLeft = () => {
-    if(page >= 1) {
+    if (page >= 1) {
       setPage(page - 1);
     }
-  }
+  };
 
   const commonOverrides: SystemStyleObject<Theme> = {
     '& .MuiTableCell-root': {
@@ -110,7 +106,7 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
       },
     },
     '.MuiInputLabel-root': {
-      marginBottom: (theme) => theme.spacing(1)
+      marginBottom: (theme) => theme.spacing(1),
     },
   };
 
@@ -126,97 +122,86 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
   };
 
   const renderTable = () => {
-    return ( <>
-      <TableContainer>
-        <Table
-          sx={{
-            borderCollapse: 'separate',
-            borderSpacing: '0px 16px',
-            ...commonOverrides
-          }}
-          aria-labelledby="tableTitle"
-          size="medium"
-        >
-          {renderTableHead()}
-          <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
-          {renderVariableRows()}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      {renderPageControl()}
-    </>
-    )
-    
-  }
-
-  const exportDataset = (sortedRanking: RankType[]) => {
-    const seasonResults: {address: string, score: number, position: number}[] = [];
-    const TRADER_THRESHOLD = 100;
-
-    for (let it = 0; it < sortedRanking.length; it++) {
-      if (sortedRanking[it].points < TRADER_THRESHOLD) {
-        break;
-      }
-      seasonResults.push({
-        address: sortedRanking[it].address,
-        score: sortedRanking[it].points,
-        position: it + 1
-      });
-    }
-
-    const output = {"S1": seasonResults};
-
-    // console.log("output:", output);
-  }
+    return (
+      <>
+        <TableContainer>
+          <Table
+            sx={{
+              borderCollapse: 'separate',
+              borderSpacing: '0px 16px',
+              ...commonOverrides,
+            }}
+            aria-labelledby="tableTitle"
+            size="medium"
+          >
+            {renderTableHead()}
+            <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
+              {renderVariableRows()}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        {renderPageControl()}
+      </>
+    );
+  };
 
   const renderVariableRows = () => {
     if (sorted) {
-      return <>
-      <RankingTableRow page={page} ranking={sorted}/>
-      </>
+      return (
+        <>
+          <RankingTableRow page={page} ranking={sorted} />
+        </>
+      );
     }
-  }
+  };
 
   const renderTableHead = () => {
-    const labels = ["rank", "trader", "voltz pointz"];
+    const labels = ['rank', 'trader', 'voltz pointz'];
     return (
-    <TableHead>
-      <TableRow>
-        {
-        labels.map((label) => (
-          <TableCell
-            align={"left"}
-            padding="normal"
-            sx={cellSx}
-          >
-            <Typography variant="subtitle1" sx={{textTransform: "uppercase", fontWeight: 400, fontSize: 12, color: "#9B97AD"}} >
-              {label}
-            </Typography>
-            {/* </TableSortLabel> */}
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
+      <TableHead>
+        <TableRow>
+          {labels.map((label) => (
+            <TableCell align={'left'} padding="normal" sx={cellSx}>
+              <Typography
+                variant="subtitle1"
+                sx={{ textTransform: 'uppercase', fontWeight: 400, fontSize: 12, color: '#9B97AD' }}
+              >
+                {label}
+              </Typography>
+            </TableCell>
+          ))}
+        </TableRow>
+      </TableHead>
     );
-  }
-
+  };
 
   return (
     <>
-      <RankingTableHeader loading={false} handleInvite={handleInvite} seasonNumber={seasonNumber} seasonEndDate={seasonEndDate}
-      userRank={userRank} userAddress={userAddress} userPoints={userPoints}/>
-    
-    <Panel variant={'dark'} borderRadius='large' padding='container' sx={{ paddingTop: 0, paddingBottom: 0, background:'transparent', marginTop: "40px"}}>
-      <Typography variant="body2" sx={{ fontSize: '24px', fontWeight: 700, display: 'flex', alignContent: 'center'}}>
-         SEASON {seasonNumber} LEADERBOARD
-      </Typography>
-      {renderTable()}
-    </Panel>
+      <RankingTableHeader
+        loading={false}
+        handleInvite={handleInvite}
+        seasonNumber={seasonNumber}
+        seasonEndDate={seasonEndDate}
+        userRank={userRank}
+        userAddress={userAddress}
+        userPoints={userPoints}
+      />
+      <Panel
+        variant={'dark'}
+        borderRadius="large"
+        padding="container"
+        sx={{ paddingTop: 0, paddingBottom: 0, background: 'transparent', marginTop: '40px' }}
+      >
+        <Typography
+          variant="body2"
+          sx={{ fontSize: '24px', fontWeight: 700, display: 'flex', alignContent: 'center' }}
+        >
+          SEASON {seasonNumber} LEADERBOARD
+        </Typography>
+        {renderTable()}
+      </Panel>
     </>
-    
   );
-
-  
 };
 
 export default RankingTable;

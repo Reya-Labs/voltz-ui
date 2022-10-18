@@ -5,7 +5,7 @@ export const routes = {
   SWAP: 'trader-pools',
   BORROW_POS: 'borrow-positions',
   TRM_POST: 'trm-post',
-  LEADER_BOARD: 'leader-board'
+  LEADERBOARD: 'leaderboard',
 };
 
 export { default as LiquidityProvider } from './LiquidityProvider/LiquidityProvider';
