@@ -38,7 +38,7 @@ const Nav: React.FunctionComponent = () => (
         },
       ]}
     >
-      TRADERS
+      Traders
     </NavLink>
 
     <NavLink
@@ -53,15 +53,16 @@ const Nav: React.FunctionComponent = () => (
         },
       ]}
     >
-      LIQUIDITY PROVIDERS
+      Liquidity Providers
     </NavLink>
 
     {process.env.REACT_APP_FIXED_BORROW && process.env.REACT_APP_FIXED_BORROW !== `UNPROVIDED` && (
-      <NavLink link={`/${routes.BORROW_POS}`}>FIXED BORROW</NavLink>
+      <NavLink link={`/${routes.BORROW_POS}`}>Fixed Borrow</NavLink>
     )}
 
     {process.env.REACT_APP_COMMUNITY && process.env.REACT_APP_COMMUNITY !== `UNPROVIDED` && (
       <NavLink
+        isNew={true}
         subLinks={[
           {
             text: 'LEADERBOARD',
