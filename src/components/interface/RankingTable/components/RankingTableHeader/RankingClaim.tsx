@@ -10,7 +10,7 @@ import { ReactComponent as Looser } from './icons/sad3.svg';
 import { ReactComponent as Winner } from './icons/winner-badge.svg';
 import { Wallet } from '@contexts';
 import { useState } from 'react';
-import useRanking from 'src/hooks/useRanking';
+import { useRanking } from '@hooks';
 
 export type RankingClaimProps = {
   wallet: Wallet;
@@ -22,7 +22,7 @@ const RankingClaim = ({ wallet }: RankingClaimProps) => {
 
   const { claimStatic, claim } = useRanking(wallet);
   const { result: resultClaim, loading: loadingClaim, call: callClaim } = claim;
-  const { result, loading, call } = claimStatic;
+  const { call } = claimStatic;
 
   const renderClaimButton = () => {
     return (
