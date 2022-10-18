@@ -7,13 +7,12 @@ import Popover from '@mui/material/Popover';
 import ButtonGroup from '@mui/material/ButtonGroup';
 
 const Nav: React.FunctionComponent = () => {
-  
-  const buttonGroupSx: SystemStyleObject<Theme> = {    
+  const buttonGroupSx: SystemStyleObject<Theme> = {
     '& .MuiButtonGroup-grouped:not(:last-of-type):hover': {
-      borderBottomColor: 'transparent'
+      borderBottomColor: 'transparent',
     },
   };
-  
+
   const buttonSx: SystemStyleObject<Theme> = {
     // color: 'secondary.light',
     fontSize: '16px',
@@ -29,22 +28,22 @@ const Nav: React.FunctionComponent = () => {
       textDecoration: 'none',
       backgroundColor: 'transparent',
       color: 'secondary.light',
-      textShadow: '0px 0px 11px rgba(229, 225, 249, 0.7)'
+      textShadow: '0px 0px 11px rgba(229, 225, 249, 0.7)',
     },
 
     '&:active': {
       textDecoration: 'none',
       backgroundColor: 'transparent',
       color: 'secondary.light',
-      textShadow: '0px 0px 11px rgba(229, 225, 249, 0.7)'
+      textShadow: '0px 0px 11px rgba(229, 225, 249, 0.7)',
     },
 
     '&.open': {
       textDecoration: 'none',
       backgroundColor: 'transparent',
       color: 'secondary.light',
-      textShadow: '0px 0px 11px rgba(229, 225, 249, 0.7)'
-    }
+      textShadow: '0px 0px 11px rgba(229, 225, 249, 0.7)',
+    },
   };
 
   const subMenuButtonSx: SystemStyleObject<Theme> = {
@@ -52,7 +51,7 @@ const Nav: React.FunctionComponent = () => {
     marginTop: (theme) => `${theme.spacing(2)} !important`,
     marginLeft: 0,
     textAlign: 'left',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
   };
 
   const popoverOverride: SystemStyleObject<Theme> = {
@@ -111,15 +110,26 @@ const Nav: React.FunctionComponent = () => {
       {/* todo: add the correct logo in place of png */}
 
       <Box sx={{ height: 30, width: 22.5, marginRight: (theme) => theme.spacing(2) }}>
-        <Icon name={'voltz'} viewBox={'0 0 20 30'} sx={{
-          width: '100%', 
-          height: '100%',
-          filter: (theme) => `drop-shadow(0px 4px 20px ${theme.palette.error.base}) drop-shadow(0px 0px 40px ${theme.palette.error.base})`
-        }} />
+        <Icon
+          name={'voltz'}
+          viewBox={'0 0 20 30'}
+          sx={{
+            width: '100%',
+            height: '100%',
+            filter: (theme) =>
+              `drop-shadow(0px 4px 20px ${theme.palette.error.base}) drop-shadow(0px 0px 40px ${theme.palette.error.base})`,
+          }}
+        />
       </Box>
 
       {/* todo: below logic can be simplified by wrapping duplicate code below into a reusable component */}
-      <Button aria-describedby={id} sx={buttonSx} variant="text" onClick={handleClick} className={open ? 'open' : undefined}>
+      <Button
+        aria-describedby={id}
+        sx={buttonSx}
+        variant="text"
+        onClick={handleClick}
+        className={open ? 'open' : undefined}
+      >
         TRADERS
       </Button>
       <Popover
@@ -134,7 +144,11 @@ const Nav: React.FunctionComponent = () => {
         sx={{ ...popoverOverride }}
         elevation={0}
       >
-        <ButtonGroup orientation="vertical" sx={buttonGroupSx}  aria-label="vertical outlined button group">
+        <ButtonGroup
+          orientation="vertical"
+          sx={buttonGroupSx}
+          aria-label="vertical outlined button group"
+        >
           <Button variant="text" sx={subMenuButtonSx} link={`/${routes.SWAP}`}>
             TRADER POOLS
           </Button>
@@ -145,7 +159,13 @@ const Nav: React.FunctionComponent = () => {
         </ButtonGroup>
       </Popover>
 
-      <Button aria-describedby={id2} sx={buttonSx} variant="text" onClick={handleClick2} className={open2 ? 'open' : undefined}>
+      <Button
+        aria-describedby={id2}
+        sx={buttonSx}
+        variant="text"
+        onClick={handleClick2}
+        className={open2 ? 'open' : undefined}
+      >
         LIQUIDITY PROVIDERS
       </Button>
       <Popover
@@ -160,7 +180,11 @@ const Nav: React.FunctionComponent = () => {
         sx={{ ...popoverOverride }}
         elevation={0}
       >
-        <ButtonGroup orientation="vertical" sx={buttonGroupSx} aria-label="vertical outlined button group">
+        <ButtonGroup
+          orientation="vertical"
+          sx={buttonGroupSx}
+          aria-label="vertical outlined button group"
+        >
           <Button variant="text" sx={subMenuButtonSx} link={`/${routes.POOLS}`}>
             LP POOLS
           </Button>
@@ -171,12 +195,16 @@ const Nav: React.FunctionComponent = () => {
         </ButtonGroup>
       </Popover>
 
-      {
-        process.env.REACT_APP_FIXED_BORROW && process.env.REACT_APP_FIXED_BORROW !== `UNPROVIDED` &&
+      {process.env.REACT_APP_FIXED_BORROW && process.env.REACT_APP_FIXED_BORROW !== `UNPROVIDED` && (
         <Button aria-describedby={id3} sx={buttonSx} variant="text" link={`/${routes.BORROW_POS}`}>
           FIXED BORROW
         </Button>
-      } 
+      )}
+      {process.env.REACT_APP_COMMUNITY && process.env.REACT_APP_COMMUNITY !== `UNPROVIDED` && (
+        <Button aria-describedby={id3} sx={buttonSx} variant="text" link={`/${routes.LEADERBOARD}`}>
+          LEADERBOARD
+        </Button>
+      )}
     </Box>
   );
 };

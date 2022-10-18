@@ -463,33 +463,21 @@ class AMM {
     let swapPeripheryParams: SwapPeripheryParams;
     let tempOverrides: { value?: BigNumber, gasLimit?: BigNumber } = {};
 
-
-    if (this.isETH) {
-      swapPeripheryParams = {
-        marginEngine: newMarginEngine,
-        isFT,
-        notional: scaledNotional,
-        sqrtPriceLimitX96,
-        tickLower,
-        tickUpper,
-        marginDelta: '0',
-      };
-
-      tempOverrides.value = ethers.utils.parseEther(margin.toFixed(18).toString());
+    if (this.isETH && marginEth) {
+      tempOverrides.value = ethers.utils.parseEther(marginEth.toFixed(18).toString());
     }
-    else {
-      const scaledMarginDelta = this.scale(margin);
 
-      swapPeripheryParams = {
-        marginEngine: newMarginEngine,
-        isFT,
-        notional: scaledNotional,
-        sqrtPriceLimitX96,
-        tickLower,
-        tickUpper,
-        marginDelta: scaledMarginDelta,
-      };
-    }
+    const scaledMarginDelta = this.scale(margin);
+
+    swapPeripheryParams = {
+      marginEngine: newMarginEngine,
+      isFT,
+      notional: scaledNotional,
+      sqrtPriceLimitX96,
+      tickLower,
+      tickUpper,
+      marginDelta: scaledMarginDelta,
+    };
 
     await peripheryContract.callStatic.rolloverWithSwap(
       this.marginEngineAddress,
@@ -2076,7 +2064,7 @@ class AMM {
   // descale compound tokens
 
   public descaleCompoundValue(value: BigNumber): number {
-    return Number(ethers.utils.formatUnits(value, this.underlyingToken.decimals + 10));
+    return Number(ethers.utils.formatUnits(value, parseInt(this.underlyingToken.decimals.toString()) + 10));
   }
 
   // fcm approval
@@ -2451,6 +2439,11 @@ class AMM {
       throw new Error('Blockchain not connected');
     }
 
+    let usdExchangeRate = 1;
+    if (this.isETH) {
+      usdExchangeRate = await geckoEthToUsd();
+    }
+
     let results: PositionInfo = {
       notionalInUSD: 0,
       marginInUSD: 0,
@@ -2494,15 +2487,7 @@ class AMM {
 
             results.fixedRateSinceLastSwap = accruedCashflowInfo.avgFixedRate;
 
-            // Get current exchange rate for eth/usd
-            const EthToUsdPrice = await geckoEthToUsd();
-
-            if (this.isETH) {
-              // need to change when introduce non-stable coins
-              results.accruedCashflowInUSD = results.accruedCashflow * EthToUsdPrice;
-            } else {
-              results.accruedCashflowInUSD = results.accruedCashflow;
-            }
+            results.accruedCashflowInUSD = results.accruedCashflow * usdExchangeRate;
 
           } catch (_) { }
       }
@@ -2520,15 +2505,7 @@ class AMM {
 
             results.accruedCashflow = accruedCashflowInfo.accruedCashflow;
 
-            // Get current exchange rate for eth/usd
-            const EthToUsdPrice = await geckoEthToUsd();
-
-            if (this.isETH) {
-              // need to change when introduce non-stable coins
-              results.accruedCashflowInUSD = accruedCashflowInfo.accruedCashflow * EthToUsdPrice;
-            } else {
-              results.accruedCashflowInUSD = accruedCashflowInfo.accruedCashflow
-            }
+            results.accruedCashflowInUSD = accruedCashflowInfo.accruedCashflow * usdExchangeRate;
 
           } catch (_) { }
         }
@@ -2546,15 +2523,7 @@ class AMM {
 
           const marginInUnderlyingToken = results.margin;
 
-          // Get current exchange rate for eth/usd
-          const EthToUsdPrice = await geckoEthToUsd();
-
-          if (this.isETH) {
-            // need to change when introduce non-stable coins
-            results.marginInUSD = marginInUnderlyingToken * EthToUsdPrice;
-          } else {
-            results.marginInUSD = marginInUnderlyingToken;
-          }
+          results.marginInUSD = marginInUnderlyingToken * usdExchangeRate;
 
           break;
         }
@@ -2571,15 +2540,7 @@ class AMM {
 
           const marginInUnderlyingToken = results.margin * scaledRate;
 
-          // Get current exchange rate for eth/usd
-          const EthToUsdPrice = await geckoEthToUsd();
-
-          if (this.isETH) {
-            // need to change when introduce non-stable coins
-            results.marginInUSD = marginInUnderlyingToken * EthToUsdPrice;
-          } else {
-            results.marginInUSD = marginInUnderlyingToken
-          }
+          results.marginInUSD = marginInUnderlyingToken * usdExchangeRate;
 
           break;
         }
@@ -2610,16 +2571,7 @@ class AMM {
 
       const marginInUnderlyingToken = results.margin;
 
-      // Get current exchange rate for eth/usd
-      const EthToUsdPrice = await geckoEthToUsd();
-
-      if (this.isETH) {
-        // need to change when introduce non-stable coins
-        results.marginInUSD = marginInUnderlyingToken * EthToUsdPrice;
-      } else {
-        results.marginInUSD = marginInUnderlyingToken
-      }
-
+      results.marginInUSD = marginInUnderlyingToken * usdExchangeRate;
       results.fees = this.descale(rawPositionInfo.accumulatedFees);
 
       if (beforeMaturity) {
@@ -2655,15 +2607,7 @@ class AMM {
         ? Math.abs(position.notional) // LP
         : Math.abs(position.effectiveVariableTokenBalance); // FT, VT
 
-    // Get current exchange rate for eth/usd
-    const EthToUsdPrice = await geckoEthToUsd();
-
-    if (this.isETH) {
-      // need to change when introduce non-stable coins
-      results.notionalInUSD = notionalInUnderlyingToken * EthToUsdPrice;
-    } else {
-      results.notionalInUSD = notionalInUnderlyingToken
-    }
+    results.notionalInUSD = notionalInUnderlyingToken * usdExchangeRate;
 
     const fixedApr = await this.getFixedApr();
     if (position.fixedRateLower.toNumber() < fixedApr
@@ -2744,7 +2688,7 @@ class AMM {
 
     const scaledAmount = BigNumber.from(this.scale(amount));
 
-    if (rolloverPosition) {
+    if (rolloverPosition && !this.isETH) {
       if (rolloverPosition.fixedLow >= rolloverPosition.fixedHigh) {
         throw new Error('Lower Rate must be smaller than Upper Rate');
       }
@@ -2844,7 +2788,7 @@ class AMM {
       currentBalance = await token.balanceOf(signerAddress);
     }
 
-    if (rolloverPosition) {
+    if (rolloverPosition && !this.isETH) {
       if (rolloverPosition.fixedLow >= rolloverPosition.fixedHigh) {
         throw new Error('Lower Rate must be smaller than Upper Rate');
       }
