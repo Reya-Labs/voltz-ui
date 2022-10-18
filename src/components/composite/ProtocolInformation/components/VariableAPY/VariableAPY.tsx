@@ -6,29 +6,21 @@ import { Typography } from '@components/atomic';
 import IconLabel from '../../../IconLabel/IconLabel';
 import { Agents } from '@contexts';
 import { formatNumber } from '@utilities';
+import { isUndefined } from 'lodash';
 
 export type VariableAPYProps = {
   agent?: Agents;
+  variableApy?: number;
 };
 
-const VariableAPY: React.FunctionComponent<VariableAPYProps> = ({agent}) => {
-  const { variableApy } = useAMMContext();
-  const { result, loading, call } = variableApy;
-
-  useEffect(() => {
-    call();
-  }, [call]);
+const VariableAPY: React.FunctionComponent<VariableAPYProps> = ({agent, variableApy}) => {
 
   const renderValue = () => {
-    if (loading) {
+    if (isUndefined(variableApy)) {
       return <Box sx={{ fontSize: 18 }}>Loading...</Box>;
     }
 
-    if (!result) {
-      return '0%';
-    }
-
-    return `${formatNumber(result * 100)}%`;
+    return `${formatNumber(variableApy * 100)}%`;
   };
 
   return (

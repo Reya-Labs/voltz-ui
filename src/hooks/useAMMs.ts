@@ -7,6 +7,7 @@ import { AugmentedAMM } from '@utilities';
 import { Amm_OrderBy, useGetAmMsQuery } from '@graphql';
 import useWallet from './useWallet';
 import JSBI from 'jsbi';
+import { useLocation } from 'react-router-dom';
 
 export type UseAMMsArgs = {};
 
@@ -18,6 +19,7 @@ export type UseAMMsResult = {
 
 const useAMMs = (): UseAMMsResult => {
   const { signer } = useWallet();
+  const { pathname } = useLocation();
   const isSignerAvailable = !isNull(signer);
   const { data, loading, error, refetch } = useGetAmMsQuery({
     variables: { orderBy: Amm_OrderBy.Id },
@@ -84,6 +86,11 @@ const useAMMs = (): UseAMMsResult => {
       if (!process.env.REACT_APP_WHITELIST || process.env.REACT_APP_WHITELIST === `UNPROVIDED`) {
           return ammsData;
       } else {
+        if (pathname !== "/trader-pools" && pathname !== "/portfolio" && process.env.REACT_APP_LP_ONLY_WHITELIST) {
+          const whitelist = process.env.REACT_APP_LP_ONLY_WHITELIST.split(',').map(s => s.trim().toLowerCase());
+          ammsData = ammsData?.filter((amm) => whitelist.includes(amm.id.toLowerCase()));
+          return ammsData;
+        } 
         if (process.env.REACT_APP_WHITELIST) {
           const whitelist = process.env.REACT_APP_WHITELIST.split(',').map(s => s.trim().toLowerCase());
           ammsData = ammsData?.filter((amm) => whitelist.includes(amm.id.toLowerCase()));

@@ -32,5 +32,6 @@ export type ExpectedInfoPayload = {
   margin: number,
   position?: Position,
   fixedTokenDeltaUnbalanced: number,
-  availableNotional: number
+  availableNotional: number,
+  predictedVariableApy: number
 }

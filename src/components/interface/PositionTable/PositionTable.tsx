@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import { colors, SystemStyleObject, Theme } from '@theme';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 
-import { AugmentedAMM, data, findCurrentAmm } from '@utilities';
+import { AugmentedAMM, data, findCurrentAmm, getRowButtonId, isBorrowing } from '@utilities';
 import { Panel } from '@components/atomic';
 import { PositionTableFields } from './types';
 import { PositionTableHead, PositionTableRow } from './components';
-import { Agents, AMMProvider } from '@contexts';
+import { Agents, AMMProvider, PortfolioContext, usePortfolioContext } from '@contexts';
 import TransactionList from '../TransactionList/TransactionList';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -17,7 +17,6 @@ import { useAgent, useAMMs } from '@hooks';
 
 export type PositionTableProps = {
   positions: Position[];
-  positionInformation: Record<Position['id'], PositionInfo>;
   order: data.TableOrder;
   onSetOrder: (order: data.TableOrder) => void;
   orderBy: PositionTableFields;
@@ -30,13 +29,14 @@ export type PositionTableProps = {
   onSelectItem: (datum: Position, mode: 'margin' | 'liquidity' | 'rollover' | 'notional') => void;
   agent: Agents
   onSettle: (position: Position) => void;
+  portfolioData: PortfolioContext;
 };
 
 const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   positions,
-  positionInformation,
   onSelectItem,
-  onSettle
+  onSettle,
+  portfolioData
 }) => {
   const { amms } = useAMMs();
   const { agent } = useAgent();
@@ -101,7 +101,6 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
       {positions.length > 0 && (
         <List sx={{ padding: '0', margin: '0' }}>
           {positions.map((pos, index) => {
-            const info = positionInformation[pos.id];
             const rolloverAmm = findCurrentAmm(amms || [], pos);
             const rolloverAvailable = rolloverAmm && rolloverAmm.id !== pos.amm.id;
 
@@ -112,27 +111,24 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                     currencyCode='USD'
                     currencySymbol='$'
                     isFCM={pos.source === 'FCM'}
-                    fees={agent === Agents.LIQUIDITY_PROVIDER ? info?.fees : undefined}
+                    info={portfolioData?.info ? portfolioData.info[pos.id] : undefined}
                     feesPositive={true}
-                    beforeMaturity={info?.beforeMaturity}
-                    healthFactor={info?.healthFactor}
-                    fixedRateHealthFactor={info?.fixedRateHealthFactor}
                     isSettled={pos.isSettled}
-                    currentFixedRate={(agent === Agents.LIQUIDITY_PROVIDER) ? info?.fixedApr : undefined}
                     positionType={pos.positionType}
                     onRollover={() => handleSelectRow(index, 'rollover')}
                     onSettle={() => onSettle(pos)}
+                    gaButtonId={getRowButtonId(agent === Agents.LIQUIDITY_PROVIDER, pos.amm.protocol, isBorrowing(pos.amm.rateOracle.protocolId))}
                     rolloverAmm={rolloverAvailable ? rolloverAmm : undefined}
                     onSelect={agent === Agents.LIQUIDITY_PROVIDER ? undefined : (mode: 'margin' | 'liquidity' | 'notional') => handleSelectRow(index, mode)}
                   />
 
-                  <TableContainer sx={(!info?.beforeMaturity && !pos.isSettled) ? getMaturedTableBorderStyles(pos.positionType) : undefined}>
+                  <TableContainer sx={(portfolioData?.info && portfolioData?.info[pos.id]?.beforeMaturity === false && !pos.isSettled) ? getMaturedTableBorderStyles(pos.positionType) : undefined}>
                     <Table size="medium" sx={{ ...commonOverrides }}>
                       <TableBody>
                         <AMMProvider amm={(pos.amm as AugmentedAMM)}>
                           <PositionTableRow
                             position={pos}
-                            positionInfo={info}
+                            positionInfo={portfolioData?.info ? portfolioData.info[pos.id] : undefined}
                             key={pos.id}
                             index={index}
                             onSelect={(mode: 'margin' | 'liquidity' | 'notional') => handleSelectRow(index, mode)}

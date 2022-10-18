@@ -13,7 +13,7 @@ const Notional: React.FunctionComponent<NotionalProps> = ({ notional, onEdit, to
   return (
     <>
       <Typography variant="body2" label="Notional" sx={{ fontSize: 18 }}>
-        {isUndefined(notional) ? 'No data' : `${notional} ${token}`}
+        {isUndefined(notional) ? 'Loading...' : `${notional} ${token}`}
       </Typography>
 
       {onEdit && (

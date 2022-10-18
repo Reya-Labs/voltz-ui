@@ -29,6 +29,7 @@ export type SubmitControlsProps = {
   mode: MintBurnFormModes;
   onCancel: () => void;
   onSubmit: () => void;
+  gaButtonId: string | undefined;
   submitButtonState: MintBurnFormSubmitButtonStates;
   tokenApprovals: ReturnType<typeof useTokenApproval>;
   tradeInfoErrorMessage?: string;
@@ -43,6 +44,7 @@ const SubmitControls = ({
   mode,
   onCancel, 
   onSubmit,
+  gaButtonId,
   submitButtonState,
   tokenApprovals,
   tradeInfoErrorMessage,
@@ -136,6 +138,7 @@ const SubmitControls = ({
             tokenApprovals.approving || 
             ((mode === MintBurnFormModes.NEW_POSITION || mode === MintBurnFormModes.ROLLOVER) && (!approvalsNeeded && isFormValid && !isTradeVerified))
           }
+          id={gaButtonId}
           size="large" 
           onClick={onSubmit} 
           sx={{ flexGrow: 1 }}
@@ -146,6 +149,7 @@ const SubmitControls = ({
           sx={{ marginLeft: (theme) => theme.spacing(6), flexGrow: 0 }}
           variant="dark"
           onClick={onCancel}
+          id={gaButtonId}
         >
           Back
         </Button>

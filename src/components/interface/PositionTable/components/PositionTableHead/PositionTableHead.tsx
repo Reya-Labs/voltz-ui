@@ -5,23 +5,24 @@ import { AugmentedAMM, formatCurrency, formatNumber } from '@utilities';
 import { Button, getPositionBadgeVariant, PositionBadge, Typography } from '@components/atomic';
 import { BulletLabel, getHealthTextColor, getFixedRateHealthTextColor, HealthFactorText } from '@components/composite';
 import { isUndefined } from 'lodash';
+import { PositionInfo } from '@voltz-protocol/v1-sdk/dist/types/entities';
+import { useAgent } from '@hooks';
+import { Agents } from '@contexts';
 import { ReactComponent as EditIcon } from './editPosition.svg';
+
 
 export type PositionTableHeadProps = {
   currencyCode?: string;
   currencySymbol?: string;
-  currentFixedRate?: number;
   isFCM?: boolean;
-  fees?: number;
   feesPositive?: boolean;
   isSettled: boolean;
   positionType: number;
-  healthFactor?: number;
-  fixedRateHealthFactor?: number;
-  beforeMaturity: boolean;
+  info: PositionInfo | undefined;
   onRollover: () => void;
   onSettle: () => void;
   rolloverAmm?: AugmentedAMM;
+  gaButtonId?: string; 
   onSelect?: (mode: 'margin' | 'liquidity' | 'notional') => void;
 };
 
@@ -43,20 +44,24 @@ const labelStyles: SystemStyleObject<Theme> = {
 const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
   currencyCode = '',
   currencySymbol = '',
-  currentFixedRate, 
   isFCM = false,
-  fees, 
   feesPositive = true,
   isSettled,
   positionType,
-  healthFactor,
-  fixedRateHealthFactor,
-  beforeMaturity,
+  info,
   onRollover,
   onSettle,
   rolloverAmm,
+  gaButtonId,
   onSelect
 }) => {
+  const {agent} = useAgent()
+  const beforeMaturity = info?.beforeMaturity;
+  const healthFactor = info?.healthFactor;
+  const fixedRateHealthFactor = info?.fixedRateHealthFactor;
+  const currentFixedRate = (agent === Agents.LIQUIDITY_PROVIDER) ? info?.fixedApr : undefined;
+  const fees = (agent === Agents.LIQUIDITY_PROVIDER) ? info?.fees : undefined;
+
   const getTextColor = (positive: boolean) => {
     return positive ? colors.vzCustomGreen1 : colors.vzCustomRed1;
   }
@@ -112,6 +117,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
               onClick={handleEditNotional} 
               size='vs' 
               sx={{display: 'flex', padding: "4px 8px", fontSize: "14px" }}
+              id={gaButtonId}
               >
                 <Box sx={{marginRight: "4px"}}>Edit </Box><EditIcon/>
               </Button>
@@ -119,12 +125,13 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
           </Box>
         )}
 
-        {(!beforeMaturity && !isSettled) && (
+        {(beforeMaturity === false && !isSettled) && (
           <>
             <Button 
               variant={positionType === 1 ? 'darker-link' : 'darker'}
               size='xs'
               onClick={onSettle}
+              id={gaButtonId}
             >
               Settle
             </Button>
@@ -134,6 +141,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
                 size='xs'
                 sx={{ marginLeft: (theme) => theme.spacing(4) }}
                 onClick={onRollover}
+                id={gaButtonId}
               >
                 Rollover
               </Button>
@@ -141,7 +149,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
           </>
         )}
 
-        {(!beforeMaturity && isSettled) && (
+        {(beforeMaturity === false && isSettled) && (
           <Button 
             variant={positionType === 1 ? 'darker-link' : 'darker'}
             size='xs'

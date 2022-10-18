@@ -1,12 +1,20 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+import TagManager from 'react-gtm-module';
 
 import { LeaderBoard, routes } from '@routes';
 import { LiquidityProvider, Trader, FixedBorrower } from './routes';
 import { AlphaBanner, GweiBar } from '@components/composite';
 import Box from '@mui/material/Box';
+import { useEffect} from 'react';
 
-const App = () => (
-  <>
+const App = () => {
+  useEffect(() => {
+    if (process.env.REACT_APP_GTM_CODE) {
+      TagManager.initialize({ gtmId: process.env.REACT_APP_GTM_CODE});
+    }
+  }, []);
+
+  return (<>
     <Routes>
       <Route path="/">
         <Route index element={<Navigate to={routes.SWAP} />} />
@@ -22,7 +30,7 @@ const App = () => (
       <GweiBar />
       <AlphaBanner />
     </Box>
-  </>
-);
+  </>)
+};
 
 export default App;

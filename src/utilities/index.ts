@@ -12,3 +12,4 @@ export * from './number';
 export * from './page';
 export * from './date';
 export * from './validation';
+export * from './googleAnalytics';

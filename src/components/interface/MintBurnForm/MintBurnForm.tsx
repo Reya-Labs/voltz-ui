@@ -15,11 +15,11 @@ import { MarginControls } from '../SwapForm/components';
 import { useTokenApproval } from '@hooks';
 import { MintBurnFormHintStates, MintBurnFormLiquidityAction, MintBurnFormMarginAction, MintBurnFormModes, MintBurnFormState, MintBurnFormSubmitButtonStates } from '@contexts';
 import { SystemStyleObject, Theme } from '@theme';
+import { FixedAPR } from 'src/components/composite/ProtocolInformation/components';
 
 export type MintBurnFormProps = {
   approvalsNeeded?: boolean;
-  balance?: number; 
-  fixedApr?: number;
+  balance?: number;
   endDate?: DateTime;
   errors: Record<string, string>;
   formState: MintBurnFormState;
@@ -29,6 +29,7 @@ export type MintBurnFormProps = {
   isTradeVierified: boolean;
   maxMargin?: number;
   mode: MintBurnFormModes;
+  gaButtonId?:string;
   onCancel: () => void;
   onChangeFixedLow: (value: number | undefined, increment: boolean | null) => void;
   onChangeFixedHigh: (value: number | undefined, increment: boolean | null) => void;
@@ -43,6 +44,8 @@ export type MintBurnFormProps = {
   tokenApprovals: ReturnType<typeof useTokenApproval>;
   tradeInfoErrorMessage?: string;
   underlyingTokenName?: string;
+  variableApy?:number;
+  fixedApr?:number;
 };
 
 const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
@@ -57,6 +60,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   isTradeVierified,
   maxMargin,
   mode = MintBurnFormModes.NEW_POSITION,
+  gaButtonId,
   onCancel,
   onChangeFixedLow,
   onChangeFixedHigh,
@@ -70,7 +74,9 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   submitButtonState,
   tokenApprovals,
   tradeInfoErrorMessage,
-  underlyingTokenName = ''
+  underlyingTokenName = '',
+  variableApy,
+  fixedApr,
 }) => {
   const bottomSpacing: SystemStyleObject<Theme> = {
     marginBottom: (theme) => theme.spacing(6)
@@ -79,7 +85,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
 
   return (
     <FormPanel boxShadowType='LP'>
-      <ProtocolInformation protocol={protocol} />
+      <ProtocolInformation protocol={protocol} fixedApr={fixedApr} variableApy={variableApy}/>
       <Box sx={bottomSpacing}>
         <MaturityInformation
           label={
@@ -164,6 +170,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         mode={mode}
         onCancel={onCancel} 
         onSubmit={onSubmit}
+        gaButtonId={gaButtonId}
         submitButtonState={submitButtonState}
         tokenApprovals={tokenApprovals}
         tradeInfoErrorMessage={tradeInfoErrorMessage}

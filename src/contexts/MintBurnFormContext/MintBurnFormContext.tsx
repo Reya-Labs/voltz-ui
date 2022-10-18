@@ -310,7 +310,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   }
 
   const validate = async () => {
-    if(mode === MintBurnFormModes.NEW_POSITION) {
+    if(mode === MintBurnFormModes.NEW_POSITION || mode === MintBurnFormModes.ROLLOVER) {
       return await validateNewPosition();
     } else if(mode === MintBurnFormModes.EDIT_MARGIN) {
       return await validateEditMargin();

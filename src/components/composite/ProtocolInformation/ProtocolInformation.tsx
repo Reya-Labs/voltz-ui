@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Box from '@mui/material/Box';
 
 import { ReactComponent as Aave } from '../PoolField/aave-icon.svg';
@@ -23,12 +23,20 @@ export type ProtocolInformationProps = {
   protocol?: string;
   isBorrowForm?: boolean;
   endDate?: DateTime | undefined;
+  variableApy?:number;
+  fixedApr?:number;
+  isRollover?: boolean;
+  isSettle?: boolean;
 };
 
 const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = ({
   protocol,
   isBorrowForm,
-  endDate
+  endDate,
+  variableApy,
+  fixedApr,
+  isRollover,
+  isSettle
 }) => {
   const { amm } = useAMMContext();
   const getPoolLabel = () => (
@@ -43,7 +51,7 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
     </>
   );
 
-  const protocolIcon = () => {
+  const protocolIconMemo = useMemo(() => {
     if (protocol) {
       const prefix = protocol[0];
       switch(prefix) {
@@ -54,9 +62,10 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
           default: return ['',''];
       }
     }
-  };
+    return ['',''];
+  }, [protocol]);
 
-  const tokenIcon = () => {
+  const tokenIconMemo = useMemo(() => {
     if (protocol) {
       const token = (protocol[0] === 's') ? protocol.substring(2) : protocol.substring(1);
       switch(token) {
@@ -67,10 +76,11 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
           default: return ['','']
       }
     }
-  };
+    return ['',''];
+  }, [protocol]);
 
-  const protocolInfo = protocolIcon();
-  const tokenInfo = tokenIcon();
+  const protocolInfo = protocolIconMemo;
+  const tokenInfo = tokenIconMemo;
 
   return (
     <Box
@@ -102,17 +112,25 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
         }
     </Typography>
 
-      {isBorrowForm !== true && 
+      {(isRollover || isSettle) &&
       <Box sx={{display:'flex', justifyContent: 'space-between', width: '56%'}}>
-        <FixedAPR />
-        <VariableAPY />
+          <Typography label={"STATUS"} variant="h3" agentStyling>
+            {isRollover ? "ROLLOVER" : "SETTLING"}
+          </Typography>
       </Box>
       }
-      {isBorrowForm === true && 
+
+      {(!isRollover && !isSettle) && isBorrowForm !== true && 
+      <Box sx={{display:'flex', justifyContent: 'space-between', width: '56%'}}>
+        <FixedAPR fixedApr={fixedApr}/>
+        <VariableAPY variableApy={variableApy}/>
+      </Box>
+      }
+      {(!isRollover && !isSettle) && isBorrowForm === true && 
         <Box display='flex'> 
           <Box sx={{display:'flex', justifyContent: 'space-between', width: '56%', marginRight: (theme) => theme.spacing(8)}}>
-          <FixedAPR agent={Agents.FIXED_TRADER}/>
-          <VariableAPY agent={Agents.VARIABLE_TRADER}/>
+          <FixedAPR agent={Agents.FIXED_TRADER} fixedApr={fixedApr}/>
+          <VariableAPY agent={Agents.VARIABLE_TRADER} variableApy={variableApy}/>
         </Box>
         <MaturityEndDate endDate={endDate}/>
         </Box>
