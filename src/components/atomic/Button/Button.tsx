@@ -1,26 +1,24 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { SystemStyleObject, Theme } from '@theme';
 import MuiButton, { ButtonProps as MuiButtonProps } from '@mui/material/Button';
 
 import { AgentProps, Agents } from '@contexts';
 import { useAgentWithOverride } from '@hooks';
+import { SxProps } from '@mui/system';
 
-export type ButtonProps = MuiButtonProps &
-  AgentProps & {
-    selected?: boolean;
-    link?: string;
-  };
-
-const Button: React.FunctionComponent<ButtonProps> = ({
+function Button<C extends React.ElementType>({
   agent: agentOverride,
   selected,
   link,
-  onClick,
   ...props
-}) => {
+}: Omit<MuiButtonProps<C, { component?: C }>, 'onClick' | 'sx'> &
+  AgentProps & {
+    sx?: SxProps<Theme>;
+    selected?: boolean;
+    link?: string;
+    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  }) {
   const { agent } = useAgentWithOverride(agentOverride);
-  const navigate = useNavigate();
   const styleOverrides: SystemStyleObject<Theme> = {
     border: 1,
     borderColor: 'transparent',
@@ -39,7 +37,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
         '&:hover': {
           backgroundColor: 'primary.darken030',
           borderColor: 'primary.light',
-          boxShadow: '0px 4px 20px 0px #4de5ff33',
+          boxShadow: '0px 4px 20px 0px #4de5ff33',
         },
       };
     }
@@ -229,19 +227,13 @@ const Button: React.FunctionComponent<ButtonProps> = ({
     return {};
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    link && navigate(link);
-    onClick && onClick(event);
-  };
-
   return (
     <MuiButton
       disableRipple
-      onClick={handleClick}
       {...props}
       sx={{ ...styleOverrides, ...agentStyleOverrides(), ...stateStyleOverrides(), ...props.sx }}
     />
   );
-};
+}
 
 export default Button;
