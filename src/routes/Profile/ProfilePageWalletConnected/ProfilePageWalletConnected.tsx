@@ -14,6 +14,7 @@ type ProfilePageProps = {
   claimedBadges: BadgeCardProps[];
   collection: CollectionBadgeProps[];
   season: string;
+  loading?: boolean;
 };
 
 const collectionBadgesSort = [
@@ -39,6 +40,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
   claimedBadges,
   season,
   collection,
+  loading,
 }) => {
   const badgeCollections: CollectionBadgeProps[] = React.useMemo(() => {
     return collectionBadgesSort
@@ -129,7 +131,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
               }}
             >
               {claimedBadges.map((badge, index) => (
-                <BadgeCard key={`${badge.variant}${index}`} {...badge} />
+                <BadgeCard key={`${badge.variant}${index}`} {...badge} loading={loading} />
               ))}
             </Grid>
           </Box>
@@ -179,7 +181,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
               }}
             >
               {badgeCollections.map((badge, index) => (
-                <CollectionBadge key={`${badge.variant}${index}`} {...badge} />
+                <CollectionBadge key={`${badge.variant}${index}`} {...badge} loading={loading} />
               ))}
             </Grid>
           </Box>
