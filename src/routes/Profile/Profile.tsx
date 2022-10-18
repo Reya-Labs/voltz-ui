@@ -15,6 +15,7 @@ const Profile: React.FunctionComponent = () => {
       account={wallet.account}
       claimedBadges={claimedBadges}
       collection={collectionBadges}
+      loading={false}
     />
   );
 };
