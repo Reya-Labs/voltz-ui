@@ -224,4 +224,3 @@ export { Printer__factory } from "./factories/Printer__factory";
 export { WadRayMath__factory } from "./factories/WadRayMath__factory";
 export { VAMM__factory } from "./factories/VAMM__factory";
 export { VoltzPausable__factory } from "./factories/VoltzPausable__factory";
-export { ERC721LeaderboardNFT__factory } from "./factories/ERC721LeaderboardNFT__factory";

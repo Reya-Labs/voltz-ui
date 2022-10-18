@@ -142,10 +142,12 @@ export type ExpectedApyArgs = {
   fixedHigh: number;
   fixedTokenDeltaUnbalanced: number;
   availableNotional: number;
+  predictedVariableApy: number;
 }
 
 export type ExpectedApyInfo = {
-  expectedApy: number[][];
+  expectedApy: number;
+  expectedCashflow: number;
 }
 
 // rollover with swap
@@ -357,7 +359,7 @@ class AMM {
   }
 
   // expected apy
-  expectedApy = async (ft: BigNumber, vt: BigNumber, margin: number) => {
+  expectedApy = async (ft: BigNumber, vt: BigNumber, margin: number, rate: number) => {
     const now = Math.round((new Date()).getTime() / 1000);
 
     const end = BigNumber.from(this.termEndTimestamp.toString())
@@ -376,20 +378,9 @@ class AMM {
       scaledVt = vt.div(BigNumber.from(10).pow(this.underlyingToken.decimals - 6)).toNumber() / 1000000;
     }
 
-    const varApy = await this.getInstantApy();
-    const samples = [0, varApy / 2, varApy, 5 * varApy, 10 * varApy];
-
-    const predictedAprs = [];
-    const predictedPnls = [];
-
-    for (let rate of samples) {
-      const pnl = getExpectedApy(now, end, scaledFt, scaledVt, margin, rate);
-
-      predictedAprs.push(100 * rate);
-      predictedPnls.push(100 * pnl);
-    }
-
-    return [predictedAprs, predictedPnls];
+    const [pnl, ecs] = getExpectedApy(now, end, scaledFt, scaledVt, margin, rate);
+  
+    return [100 * pnl, ecs];
   };
 
   // rollover with swap
@@ -821,7 +812,8 @@ class AMM {
     fixedLow,
     fixedHigh,
     fixedTokenDeltaUnbalanced,
-    availableNotional
+    availableNotional,
+    predictedVariableApy
   }: ExpectedApyArgs): Promise<ExpectedApyInfo> {
     if (!this.signer) {
       throw new Error('Wallet not connected');
@@ -886,14 +878,16 @@ class AMM {
       } catch { }
     }
 
-    const expectedApy = await this.expectedApy(
+    const [expectedApy, expectedCashflow] = await this.expectedApy(
       positionUft.add(this.scale(fixedTokenDeltaUnbalanced)),
       positionVt.add(this.scale(availableNotional)),
-      margin + positionMargin + accruedCashflow
+      margin + positionMargin + accruedCashflow,
+      predictedVariableApy
     );
 
     const result: ExpectedApyInfo = {
-      expectedApy: expectedApy
+      expectedApy: expectedApy,
+      expectedCashflow: expectedCashflow
     }
 
     return result;
