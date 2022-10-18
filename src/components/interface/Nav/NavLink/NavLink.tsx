@@ -10,9 +10,9 @@ import {
 } from './style';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Popover from '@mui/material/Popover';
-import { NewLinkIndicator } from './NewLinkIndicator';
 import CircleIcon from '@mui/icons-material/Circle';
 import { colors } from '@theme';
+import { Link } from 'react-router-dom';
 
 type NavLinkProps = {
   link?: string;
@@ -59,10 +59,11 @@ export const NavLink: React.FunctionComponent<NavLinkProps> = ({
   return (
     <React.Fragment>
       <Button
+        component={link ? Link : 'button'}
+        to={link || ''}
         role="link"
         sx={buttonSx}
         variant="text"
-        link={link}
         onClick={hasSubLinks ? handlePopoverOpen : undefined}
         className={
           isPopoverOpen
@@ -97,11 +98,12 @@ export const NavLink: React.FunctionComponent<NavLinkProps> = ({
           >
             {subLinks?.map((subLink) => (
               <Button
+                component={Link}
+                to={subLink.link}
                 key={subLink.text}
                 role="link"
                 variant="text"
                 sx={subMenuButtonSx}
-                link={subLink.link}
                 onClick={handlePopoverClose}
                 startIcon={subLink.isNew ? newLinkIndicator : null}
               >
