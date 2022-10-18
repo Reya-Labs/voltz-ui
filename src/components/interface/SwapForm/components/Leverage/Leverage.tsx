@@ -4,9 +4,7 @@ import Slider from '@mui/material/Slider';
 import { MaskedIntegerField, IconLabel } from '@components/composite';
 import { colors } from '@theme';
 import { isNumber, isUndefined } from 'lodash';
-import { formatNumber, notFormatted, pushEvent, stringToBigFloat, toUSFormat } from '@utilities';
-import { useAgent, useWallet } from '@hooks';
-import { useAMMContext } from '@contexts';
+import { formatNumber, notFormatted, stringToBigFloat, toUSFormat } from '@utilities';
 
 
 /**
@@ -24,9 +22,6 @@ export type LeverageProps = {
 }
 
 const Leverage = ({availableNotional, minMargin, notional, onChange, value, resetDeltaState}: LeverageProps) => {
-  const { sessionId } = useWallet();  
-  const { agent } = useAgent();
-  const { amm } = useAMMContext();
 
   const delay = 1000;
   const hint = 'Choose the amount of leverage you wish to trade with. The slider helps demonstrate safe amounts of leverage.';

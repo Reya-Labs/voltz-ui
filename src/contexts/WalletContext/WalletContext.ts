@@ -20,8 +20,7 @@ const WalletContext = createContext<Wallet>({
   required: false,
   setRequired: (_required: boolean) => undefined,
   walletError: null,
-  refetch: () => Promise.resolve(),
-  sessionId: ""
+  refetch: () => Promise.resolve()
 });
 
 export default WalletContext;

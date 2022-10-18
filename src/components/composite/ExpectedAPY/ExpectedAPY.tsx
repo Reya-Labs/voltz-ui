@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { SelectInput, Typography } from '@components/atomic';
+import { Typography } from '@components/atomic';
 import { MaskedIntegerField } from '@components/composite';
 import { IconLabel } from '@components/composite';
 import Box from '@mui/material/Box';
 import { colors } from '@theme';
-import { formatNumber, notFormatted, pushEvent, stringToBigFloat, toUSFormat } from '@utilities';
+import { DataLayerEventPayload, formatNumber, getAmmProtocol, isBorrowing, notFormatted, pushEvent, stringToBigFloat, toUSFormat } from '@utilities';
 import { isUndefined } from 'lodash';
-import { useAgent, useWallet } from '@hooks';
+import { useAgent } from '@hooks';
 import { useAMMContext } from '@contexts';
 
 interface ExpectedAPYProps {
@@ -20,7 +20,6 @@ interface ExpectedAPYProps {
 
 export const ExpectedAPY = ({ expectedApy, expectedCashflow, userSimulatedVariableApy, onChangeUserSimulatedVariableApy, userSimulatedVariableApyUpdated }:ExpectedAPYProps) => {
   const delay = 1000;
-  const { sessionId } = useWallet(); 
   const { agent } = useAgent();
   const { amm } = useAMMContext();
 
@@ -36,7 +35,13 @@ export const ExpectedAPY = ({ expectedApy, expectedCashflow, userSimulatedVariab
     const usFormatted = toUSFormat(userInput);
     const newValue = usFormatted ? stringToBigFloat(usFormatted) : NaN;
     if(!isNaN(newValue)) {
-      pushEvent("expectedApy_change", newValue, sessionId, amm, agent.toString());
+      const payload : DataLayerEventPayload  = {
+        event: "expectedApy_change",
+        eventValue: newValue,
+        pool: getAmmProtocol(amm),
+        agent: agent
+      };
+      pushEvent(payload);
     } 
   }, [stringToBigFloat(toUSFormat(userInput) ?? "0")])
 

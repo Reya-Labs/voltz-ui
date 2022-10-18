@@ -1,6 +1,6 @@
-import { useBalance, useTokenApproval, useWallet } from '@hooks';
-import { useAMMContext, usePositionContext } from '@contexts';
-import { AugmentedAMM, hasEnoughUnderlyingTokens, pushEvent } from '@utilities';
+import { useBalance, useTokenApproval } from '@hooks';
+import { useAMMContext, usePositionContext, Agents } from '@contexts';
+import { AugmentedAMM, DataLayerEventPayload, getAmmProtocol, hasEnoughUnderlyingTokens, isBorrowing, pushEvent } from '@utilities';
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { debounce, isUndefined } from 'lodash';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
@@ -112,7 +112,6 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   defaultValues = {}, 
   mode = MintBurnFormModes.NEW_POSITION,
 }) => {
-  const { sessionId }= useWallet();  
   const { amm: poolAmm, mintMinimumMarginRequirement } = useAMMContext();
   const { position, amm: positionAmm, positionInfo } = usePositionContext();
 
@@ -269,11 +268,23 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   }, [fixedHigh, fixedLow, liquidityAction, margin, marginAction, notional, minimumRequiredMargin]);
 
   const notionalChange = useCallback(debounce((value: number | undefined) => {
-    pushEvent("notional_change", value ?? 0, sessionId, poolAmm, "Liquidity Provider");
+    const payload : DataLayerEventPayload  = {
+      event: "notional_change",
+      eventValue: value ?? 0,
+      pool: getAmmProtocol(poolAmm),
+      agent: Agents.LIQUIDITY_PROVIDER
+    };
+    pushEvent(payload);
   }, 1000), []);
 
   const marginChange = useCallback(debounce((value: number | undefined) => {
-    pushEvent("margin_change", value ?? 0, sessionId, poolAmm, "Liquidity Provider");
+    const payload : DataLayerEventPayload  = {
+      event: "margin_change",
+      eventValue: value ?? 0,
+      pool: getAmmProtocol(poolAmm),
+      agent: Agents.LIQUIDITY_PROVIDER
+    };
+    pushEvent(payload);
   }, 1000),[]);
 
   useEffect(() => {

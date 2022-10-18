@@ -1,4 +1,4 @@
-import { pushEvent } from "./googleAnalytics";
+import { DataLayerEventPayload, pushEvent } from "./googleAnalytics";
 
 /**
  * Allows you to set the suffix of the page title
@@ -6,5 +6,9 @@ import { pushEvent } from "./googleAnalytics";
  */
 export const setPageTitle = (text: string) => {
   document.title = `Voltz ⚡ ${text ? `${text}` : ''}`;
-  pushEvent("path_change", text);
+  const payload : DataLayerEventPayload  = {
+    event: "title_change",
+    eventValue: text
+  }
+  pushEvent(payload);
 };

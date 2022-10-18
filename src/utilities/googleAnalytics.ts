@@ -1,16 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import { Agents, SwapFormSubmitButtonHintStates } from "@contexts";
 import { isUndefined } from "lodash";
 import AugmentedAMM from "./augmentedAmm";
 import isBorrowing from "./isBorrowing";
+import { v4 as uuidv4 } from 'uuid';
 
-declare global {
-    interface Window {
-      dataLayer?: any;
-    }
-}
+const SESSION_ID = uuidv4()
 
 export const getPoolButtonId = ( marginAction: string, liquidityAction: string, notionalAction: string, agent: Agents, amm?: AugmentedAMM, borrow?: boolean ): string => {
     const protocol = amm ? amm.protocol : "";
@@ -48,52 +47,35 @@ export const getNotionalActionFromHintState = (hint: SwapFormSubmitButtonHintSta
     }
 }
 
-export const pushEvent = (eventName: string, eventValue: string | number, sessionId?: string, amm?: AugmentedAMM, agent?: string) => {
-    // with context
-    if (amm) {
-        const pool = amm.protocol + (amm.rateOracle.protocolId === 5 || amm.rateOracle.protocolId === 6 ? "_borrow" : "" );
-        window.dataLayer.push({'event': eventName, 'value': eventValue, 'sessionId': sessionId, 'pool': pool, 'agent': agent});
-    } else { // without context
-        window.dataLayer.push({'event': eventName, 'value': eventValue, 'sessionId': sessionId});
-    }
-}
-
-export const pushTxSubmition = (
-    eventName: string, 
+export type TxEventPayload = {
     notional: number | undefined,
     margin: number | undefined,
     action: string,
-    sessionId: string,
-    amm: AugmentedAMM,
-    agent?: string | number,
     failMessage?: string
+}
+
+export type DataLayerEventPayload = {
+    event: DataLayerEventName;
+    eventValue: string | number | TxEventPayload; 
+    pool?: string;
+    agent?: Agents;
+}
+
+type DataLayerEventName = 
+    'expectedApy_change' |
+    'notional_change' |
+    'margin_change' |
+    'leverage_change' |
+    'title_change' |
+    'tx_submitted' |
+    'failed_tx' |
+    'successful_tx';
+
+export const pushEvent = (
+    payload: DataLayerEventPayload
 ) => {
-    let agentType = "";
-    if ( typeof agent === "string") {
-        agentType = agent;
-    } else {
-        switch (agent) {
-            case 1: 
-                agentType = "Fixed Trader"; 
-                break;
-            case 2: 
-                agentType = "Variable Trader"; 
-                break;
-            case 3: 
-                agentType = "Liquidity Provider"; 
-                break;
-            default: agentType = "";
-        }
+    if(!window.dataLayer) {
+        return;
     }
-    const pool = amm.protocol + (amm.rateOracle.protocolId === 5 || amm.rateOracle.protocolId === 6 ? "_borrow" : "" );
-    window.dataLayer.push({
-        'event': eventName,
-        'notional': notional,
-        'margin': margin,
-        'action':  action,
-        'sessionId': sessionId,
-        'pool': pool,
-        'agent': agentType,
-        'failMessage': failMessage
-    });
+    window.dataLayer.push({sessionId: SESSION_ID, ...payload});
 }

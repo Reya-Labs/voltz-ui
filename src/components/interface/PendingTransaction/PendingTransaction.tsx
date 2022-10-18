@@ -2,11 +2,11 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 
-import { AugmentedAMM, getPoolButtonId, pushTxSubmition, setPageTitle } from '@utilities';
+import { AugmentedAMM, DataLayerEventPayload, getAgentFromPosition, getAmmProtocol, getPoolButtonId, pushEvent, setPageTitle } from '@utilities';
 import { useWallet, useSelector, useAgent } from '@hooks';
 import { selectors } from '@store';
 import { AMMProvider, MintBurnFormLiquidityAction, useAMMsContext } from '@contexts';
-import { Button, Panel, Typography, Loading, TokenAndText } from '@components/atomic';
+import { Button, Panel, Typography, Loading } from '@components/atomic';
 import { ProtocolInformation, WalletAddressDisplay } from '@components/composite';
 import { formatCurrency } from '@utilities';
 import { isUndefined } from 'lodash';
@@ -54,7 +54,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   const [fetch, setFetch] = useState<number>(0);
   const fetchRef = useRef<number>(0);
   const fetchLimit = 20;
-  const { account, refetch, wallet, sessionId } = useWallet();
+  const { account, refetch, wallet } = useWallet();
   const [loadingRefetch, setLoadingRefetch] = useState<boolean>(false);
   const { agent } = useAgent();
   const { isPositionFeched, removeFixedApr } = useAMMsContext();
@@ -69,15 +69,17 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
 
   useEffect(() => {
     setPageTitle('Pending Transaction');
-    pushTxSubmition(
-      "tx_submitted",
-      (notional ?? 0) * (showNegativeNotional || liquidityAction === MintBurnFormLiquidityAction.BURN ? -1 : 1),
-      isSettle ? cachedMargin.current : margin,
-      action,
-      sessionId,
-      amm,
-      isSettle ? position?.positionType : agent.toString()
-    );
+    const payload : DataLayerEventPayload  = {
+      event: "tx_submitted",
+      eventValue: {
+        notional: (notional ?? 0) * (showNegativeNotional || liquidityAction === MintBurnFormLiquidityAction.BURN ? -1 : 1),
+        margin: isSettle ? cachedMargin.current : margin,
+        action: action,
+      },
+      pool: getAmmProtocol(amm),
+      agent: isSettle ? getAgentFromPosition(position) : agent
+    };
+    pushEvent(payload);
   }, []);
 
   useEffect(() => {
@@ -94,16 +96,18 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   useEffect(() => {
     if ( activeTransaction?.failedAt ) {
       setPageTitle('Failed Transaction');
-      pushTxSubmition(
-        "failed_tx",
-        (notional ?? 0) * (showNegativeNotional || liquidityAction === MintBurnFormLiquidityAction.BURN ? -1 : 1),
-        isSettle ? cachedMargin.current : margin,
-        action,
-        sessionId,
-        amm,
-        isSettle ? position?.positionType : agent.toString(),
-        activeTransaction.failureMessage || "Unrecognized error"
-      );
+      const payload : DataLayerEventPayload  = {
+        event: "failed_tx",
+        eventValue: {
+          notional: (notional ?? 0) * (showNegativeNotional || liquidityAction === MintBurnFormLiquidityAction.BURN ? -1 : 1),
+          margin: isSettle ? cachedMargin.current : margin,
+          action: action,
+          failMessage: activeTransaction.failureMessage || "Unrecognized error"
+        },
+        pool: getAmmProtocol(amm),
+        agent: isSettle ? getAgentFromPosition(position) : agent
+      };
+      pushEvent(payload);
     }
   }, [activeTransaction?.failedAt]);
 
@@ -125,15 +129,17 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   useEffect(() => {
     if ( (activeTransaction?.succeededAt || activeTransaction?.resolvedAt) && isFetched ) {
       setPageTitle('Successful Transaction');
-        pushTxSubmition(
-          "successful_tx",
-          (notional ?? 0) * (showNegativeNotional || liquidityAction === MintBurnFormLiquidityAction.BURN ? -1 : 1),
-          isSettle ? cachedMargin.current : margin,
-          action,
-          sessionId,
-          amm,
-          isSettle ? position?.positionType : agent.toString()
-        );
+      const payload : DataLayerEventPayload  = {
+        event: "successful_tx",
+        eventValue: {
+          notional: (notional ?? 0) * (showNegativeNotional || liquidityAction === MintBurnFormLiquidityAction.BURN ? -1 : 1),
+          margin: isSettle ? cachedMargin.current : margin,
+          action: action
+        },
+        pool: getAmmProtocol(amm),
+        agent: isSettle ? getAgentFromPosition(position) : agent
+      };
+      pushEvent(payload);
     }
   }, [ (activeTransaction?.succeededAt || activeTransaction?.resolvedAt) && isFetched]);
 

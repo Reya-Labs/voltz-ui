@@ -35,7 +35,6 @@ export type Wallet = {
   walletError: string | null;
   networkId?: string;
   refetch: () => Promise<void>;
-  sessionId: string;
 };
 
 export interface WalletRiskAssessment {

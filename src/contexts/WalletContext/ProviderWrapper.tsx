@@ -25,7 +25,6 @@ export type ProviderWrapperProps = {
   setBalance: React.Dispatch<React.SetStateAction<Record<string, BigNumber>>>;
   required: boolean;
   setRequired: React.Dispatch<React.SetStateAction<boolean>>;
-  sessionId: string;
 };
 
 const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
@@ -39,8 +38,7 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
   setBalance,
   required,
   setRequired,
-  children,
-  sessionId
+  children
 }) => {
   const [polling, setPolling] = useState(false);
   const [provider, setProvider] = useState<ethers.providers.JsonRpcProvider | null>(null);
@@ -154,8 +152,7 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
     required,
     setRequired,
     walletError,
-    refetch: doRefetch,
-    sessionId: sessionId
+    refetch: doRefetch
   };
 
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;
