@@ -13,7 +13,7 @@ interface SubmitControlsProps {
   isFCMAction: boolean;
   isFormValid: boolean;
   isTradeVerified: boolean;
-  mode: SwapFormModes
+  mode: SwapFormModes;
   onCancel: () => void;
   onSubmit: () => void;
   protocol?: string;
@@ -32,11 +32,14 @@ type TextProps = {
   red?: boolean;
 };
 const Text = ({ bold, children, green, red }: TextProps) => (
-  <Box component='span' sx={{ 
-    color: green ? colors.vzCustomGreen1 : red ? colors.vzCustomRed1 : undefined,
-    fontWeight: bold ? 'bold' : undefined,
-    textTransform: 'none'
-  }}>
+  <Box
+    component="span"
+    sx={{
+      color: green ? colors.vzCustomGreen1.base : red ? colors.vzCustomRed1.base : undefined,
+      fontWeight: bold ? 'bold' : undefined,
+      textTransform: 'none',
+    }}
+  >
     {children}
   </Box>
 );
@@ -45,27 +48,30 @@ const SubmitControls = ({
   approvalsNeeded,
   hintState,
   isFCMAction,
-  isFormValid, 
+  isFormValid,
   isTradeVerified,
   mode,
-  onCancel, 
-  onSubmit, 
+  onCancel,
+  onSubmit,
   protocol,
   gaButtonId,
   submitButtonState,
   tokenApprovals,
   tradeInfoErrorMessage,
-  underlyingTokenName
+  underlyingTokenName,
 }: SubmitControlsProps) => {
   const { agent } = useAgent();
 
   const getHint = () => {
-    switch(hintState) {
+    switch (hintState) {
       case SwapFormSubmitButtonHintStates.APPROVE_NEXT_TOKEN: {
         return (
           <>
-            <Text green bold>{tokenApprovals.lastApproval?.text}</Text><Text green> approved!</Text> 
-            {' '}Let's now approve <Text bold>{tokenApprovals.getNextApproval(isFCMAction)?.text}</Text>
+            <Text green bold>
+              {tokenApprovals.lastApproval?.text}
+            </Text>
+            <Text green> approved!</Text> Let's now approve{' '}
+            <Text bold>{tokenApprovals.getNextApproval(isFCMAction)?.text}</Text>
           </>
         );
       }
@@ -97,48 +103,79 @@ const SubmitControls = ({
         return 'Initialising, please wait';
       }
       case SwapFormSubmitButtonHintStates.READY_TO_TRADE: {
-        return 'Let\'s trade!';
+        return "Let's trade!";
       }
       case SwapFormSubmitButtonHintStates.READY_TO_TRADE_TOKENS_APPROVED: {
-        return <><Text green>Tokens approved</Text>. Let's trade!</>;
+        return (
+          <>
+            <Text green>Tokens approved</Text>. Let's trade!
+          </>
+        );
       }
       case SwapFormSubmitButtonHintStates.ADD_AND_ADD: {
-        return 'You\'re ADDING NOTIONAL and MARGIN';
+        return "You're ADDING NOTIONAL and MARGIN";
       }
       case SwapFormSubmitButtonHintStates.REMOVE_AND_ADD: {
-        return 'You\'re REMOVING NOTIONAL and ADDING MARGIN';
+        return "You're REMOVING NOTIONAL and ADDING MARGIN";
       }
       case SwapFormSubmitButtonHintStates.ADD_AND_REMOVE: {
-        return 'You\'re ADDING NOTIONAL and REMOVING MARGIN';
+        return "You're ADDING NOTIONAL and REMOVING MARGIN";
       }
       case SwapFormSubmitButtonHintStates.REMOVE_AND_REMOVE: {
-        return 'You\'re REMOVING NOTIONAL and MARGIN';
+        return "You're REMOVING NOTIONAL and MARGIN";
       }
     }
-  }
-  
+  };
+
   const getSubmitText = () => {
-    switch(submitButtonState) {
+    switch (submitButtonState) {
       case SwapFormSubmitButtonStates.APPROVE_FCM: {
         return 'Approve FCM';
       }
       case SwapFormSubmitButtonStates.APPROVE_UT_FCM: {
-        return <Box>Approve <Text>{underlyingTokenName}</Text> for fees</Box>;
+        return (
+          <Box>
+            Approve <Text>{underlyingTokenName}</Text> for fees
+          </Box>
+        );
       }
       case SwapFormSubmitButtonStates.APPROVE_UT_PERIPHERY: {
-        return <Box>Approve <Text>{underlyingTokenName}</Text></Box>;
+        return (
+          <Box>
+            Approve <Text>{underlyingTokenName}</Text>
+          </Box>
+        );
       }
       case SwapFormSubmitButtonStates.APPROVE_YBT_FCM: {
-        return <Box>Approve <Text>{protocol}</Text> for trade</Box>;
+        return (
+          <Box>
+            Approve <Text>{protocol}</Text> for trade
+          </Box>
+        );
       }
       case SwapFormSubmitButtonStates.APPROVING: {
-        return <>Approving<Ellipsis /></>;
+        return (
+          <>
+            Approving
+            <Ellipsis />
+          </>
+        );
       }
       case SwapFormSubmitButtonStates.CHECKING: {
-        return <>Loading<Ellipsis /></>;
+        return (
+          <>
+            Loading
+            <Ellipsis />
+          </>
+        );
       }
       case SwapFormSubmitButtonStates.INITIALISING: {
-        return <>Initialising<Ellipsis /></>;
+        return (
+          <>
+            Initialising
+            <Ellipsis />
+          </>
+        );
       }
       case SwapFormSubmitButtonStates.ROLLOVER_TRADE: {
         return 'Settle and trade';
@@ -161,15 +198,18 @@ const SubmitControls = ({
   return (
     <>
       <Box sx={{ display: 'flex' }}>
-        <Button 
+        <Button
           disabled={
-            !isFormValid || 
-            tokenApprovals.checkingApprovals || 
-            tokenApprovals.approving || 
-            ((mode === SwapFormModes.NEW_POSITION || mode === SwapFormModes.ROLLOVER) && (!approvalsNeeded && isFormValid && !isTradeVerified))
-          } 
-          onClick={onSubmit} 
-          size="large" 
+            !isFormValid ||
+            tokenApprovals.checkingApprovals ||
+            tokenApprovals.approving ||
+            ((mode === SwapFormModes.NEW_POSITION || mode === SwapFormModes.ROLLOVER) &&
+              !approvalsNeeded &&
+              isFormValid &&
+              !isTradeVerified)
+          }
+          onClick={onSubmit}
+          size="large"
           sx={{ flexGrow: 1 }}
           id={gaButtonId}
         >
@@ -186,28 +226,18 @@ const SubmitControls = ({
         </Button>
       </Box>
 
-      <Typography variant='body2' sx={{ 
-        marginTop: (theme) => theme.spacing(2), 
-        color: colors.lavenderWeb.darken015,
-        fontSize: '12px'
-      }}>
+      <Typography
+        variant="body2"
+        sx={{
+          marginTop: (theme) => theme.spacing(2),
+          color: colors.lavenderWeb.darken015,
+          fontSize: '12px',
+        }}
+      >
         {getHint()}
       </Typography>
     </>
-  )
-}
+  );
+};
 
 export default SubmitControls;
-
-
-
-
-
-
-
-
-
-
-
-
-

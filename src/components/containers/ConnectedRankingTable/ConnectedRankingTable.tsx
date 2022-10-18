@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
 
 import { Loading, Panel } from '@components/atomic';
-import RankingTable from 'src/components/interface/RankingTable/RankingTable';
-import useRanking from 'src/hooks/useRanking';
+import { RankingTable } from '@components/interface';
 import { isUndefined } from 'lodash';
-import { useWallet } from '@hooks';
+import { useWallet, useRanking } from '@hooks';
 import { DateTime } from 'luxon';
 
 export type ConnectedRankingTableProps = {

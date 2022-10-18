@@ -1,0 +1,42 @@
+<svg width="459" height="459" viewBox="0 0 459 459" fill="none" xmlns="http://www.w3.org/2000/svg">
+<ellipse cx="229.565" cy="229.435" rx="213.435" ry="213.435" transform="rotate(90 229.565 229.435)" fill="url(#paint0_radial_38_6413)"/>
+<mask id="mask0_38_6413" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="16" y="16" width="427" height="427">
+<ellipse cx="229.565" cy="229.435" rx="213.435" ry="213.435" transform="rotate(90 229.565 229.435)" fill="url(#paint1_radial_38_6413)"/>
+</mask>
+<g mask="url(#mask0_38_6413)">
+<line x1="464" y1="298" x2="234" y2="298" stroke="#E5E1F9" stroke-width="2"/>
+<line x1="464" y1="322" x2="234" y2="322" stroke="#FF4AA9" stroke-width="2"/>
+<line x1="464" y1="346" x2="234" y2="346" stroke="#E5E1F9" stroke-width="2"/>
+<line x1="464" y1="370" x2="234" y2="370" stroke="#E5E1F9" stroke-width="2"/>
+<line x1="464" y1="394" x2="234" y2="394" stroke="#E5E1F9" stroke-width="2"/>
+<line x1="464" y1="418" x2="234" y2="418" stroke="#4DE5FF" stroke-width="2"/>
+<line x1="226" y1="58" x2="85" y2="58" stroke="#4DE5FF" stroke-width="2"/>
+<line x1="226" y1="82" x2="-4" y2="82" stroke="#E5E1F9" stroke-width="2"/>
+<line x1="226" y1="106" x2="-4" y2="106" stroke="#E5E1F9" stroke-width="2"/>
+<line x1="226" y1="130" x2="-4" y2="130" stroke="#E5E1F9" stroke-width="2"/>
+<line x1="226" y1="154" x2="-4" y2="154" stroke="#E5E1F9" stroke-width="2"/>
+<line x1="226" y1="178" x2="-4" y2="178" stroke="#E5E1F9" stroke-width="2"/>
+<line x1="226" y1="202" x2="-4" y2="202" stroke="#FF4AA9" stroke-width="2"/>
+<line x1="226" y1="226" x2="-4" y2="226" stroke="#E5E1F9" stroke-width="2"/>
+<line x1="226" y1="250" x2="-4" y2="250" stroke="#E5E1F9" stroke-width="2"/>
+<line x1="226" y1="274" x2="-4" y2="274" stroke="#E5E1F9" stroke-width="2"/>
+<line x1="226" y1="298" x2="-4" y2="298" stroke="#E5E1F9" stroke-width="2"/>
+<line x1="226" y1="322" x2="-4" y2="322" stroke="#E5E1F9" stroke-width="2"/>
+<line x1="226" y1="346" x2="-4" y2="346" stroke="#FF4AA9" stroke-width="2"/>
+<line x1="226" y1="370" x2="-4" y2="370" stroke="#E5E1F9" stroke-width="2"/>
+<line x1="226" y1="394" x2="-4" y2="394" stroke="#E5E1F9" stroke-width="2"/>
+<line x1="226" y1="418" x2="-4" y2="418" stroke="#E5E1F9" stroke-width="2"/>
+<line x1="226" y1="34" x2="85" y2="34" stroke="#E5E1F9" stroke-width="2"/>
+</g>
+<path d="M287 81H291V117H287V105H283V101H287V81ZM279 97H283V101H279V97ZM271 81H275V93H279V97H275V117H271V81ZM319 85H323V113H319V85ZM307 113H319V117H307V113ZM303 85H307V113H303V85ZM307 81H319V85H307V81ZM271 148H287V152H275V164H287V168H283V172H279V168H275V184H271V148ZM287 152H291V164H287V152ZM283 172H287V176H283V172ZM287 176H291V184H287V176ZM303 148H323V152H315V180H323V184H303V180H311V152H303V148ZM335 152H339V164H335V152ZM351 168H355V180H351V168ZM339 180H351V184H339V180ZM335 176H339V180H335V176ZM339 164H351V168H339V164ZM351 152H355V156H351V152ZM339 148H351V152H339V148ZM383 176H387V184H383V176ZM379 172H383V176H379V172ZM375 168H379V172H375V168ZM367 148H371V164H375V168H371V184H367V148ZM375 160H379V164H375V160ZM379 156H383V160H379V156ZM383 148H387V156H383V148ZM271 215H275V231H287V215H291V251H287V235H275V251H271V215ZM303 215H323V219H307V231H315V235H307V247H323V251H303V215ZM335 215H351V219H339V231H351V235H347V239H343V235H339V251H335V215ZM351 219H355V231H351V219ZM347 239H351V243H347V239ZM351 243H355V251H351V243ZM367 215H387V219H371V231H379V235H371V247H387V251H367V215Z" fill="#E5E1F9"/>
+<defs>
+<radialGradient id="paint0_radial_38_6413" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(226.601 229.435) rotate(-36.9988) scale(562.358 1260.17)">
+<stop offset="0.104167"/>
+<stop offset="1" stop-color="#312859"/>
+</radialGradient>
+<radialGradient id="paint1_radial_38_6413" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(226.601 229.435) rotate(-36.9988) scale(562.358 1260.17)">
+<stop offset="0.104167"/>
+<stop offset="1" stop-color="#312859"/>
+</radialGradient>
+</defs>
+</svg>

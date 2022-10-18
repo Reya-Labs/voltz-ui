@@ -19,3 +19,10 @@ export { ReactComponent as TokenEth } from './tokens/eth.svg';
 export { ReactComponent as TokenLido } from './tokens/lido.svg';
 export { ReactComponent as TokenUsdc } from './tokens/usdc.svg';
 export { ReactComponent as TokenUsdt } from './tokens/usdt.svg';
+
+export { ReactComponent as DegenStuff } from './badges/degenStuff.svg';
+export { ReactComponent as DeltaDegen } from './badges/deltaDegen.svg';
+export { ReactComponent as IrsConnoisseur } from './badges/irsConnoisseur.svg';
+export { ReactComponent as LeverageCrowbar } from './badges/leverageCrowbar.svg';
+export { ReactComponent as NoRiskHereSer } from './badges/noRiskHereSer.svg';
+export { ReactComponent as SushiRoll } from './badges/sushiRoll.svg';

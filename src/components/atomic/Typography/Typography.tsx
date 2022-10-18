@@ -6,19 +6,18 @@ import { useAgentWithOverride } from '@hooks';
 import { withLabel } from '../../hoc';
 import { SystemStyleObject, Theme } from '@theme';
 
-export type TypographyProps = MuiTypographyProps &
-  AgentProps & {
-    agentStyling?: boolean;
-  };
+export type TypographyProps = React.ComponentProps<typeof Typography>;
 
-const Typography: React.FunctionComponent<TypographyProps> = ({
-  agent: agentOverride,
-  agentStyling = false,
-  sx,
-  ...props
-}) => {
+function Typography<C extends React.ElementType>(
+  props: MuiTypographyProps<C, { component?: C }> &
+    AgentProps & {
+      agentStyling?: boolean;
+    },
+) {
+  const { agent: agentOverride, agentStyling = false, sx, ...restProps } = props;
+
   const { agent } = useAgentWithOverride(agentOverride);
-    
+
   const agentStyleOverrides = (): SystemStyleObject<Theme> => {
     if (!agent || !agentStyling) {
       return {};
@@ -47,10 +46,10 @@ const Typography: React.FunctionComponent<TypographyProps> = ({
 
   return (
     <MuiTypography
-      {...props}
+      {...restProps}
       sx={{ ...(sx as SystemStyleObject<Theme>), ...agentStyleOverrides() }}
     />
   );
-};
+}
 
 export default withLabel<TypographyProps>(Typography);

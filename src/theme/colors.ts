@@ -1,14 +1,26 @@
 import chroma from 'chroma-js';
-import mapValues from 'lodash/mapValues';
 
-import { ColorSet } from './types';
+import { BaseColors, ColorSet } from './types';
 
-const baseColors = {
+const baseColors: Record<BaseColors, string> = {
   lavenderWeb: '#E5E1F9',
   wildStrawberry: '#FF4AA9',
   orangeYellow: '#FBC13A',
   skyBlueCrayola: '#4DE5FF',
   ultramarineBlue: '#2667FF',
+  // todo: Align with Brokoli to make it part of base colors
+  vzGrey: '#A6A2B4',
+  vzGreyDarkish: '#6D6A77',
+  vzGreyDarkish2: '#6C697E',
+  vzGreyDark: '#5A576D',
+  vzGreyDarker: '#1F1D2D',
+  vzCustomRed1: '#F61067',
+  vzCustomRed2: '#FF0000',
+  vzCustomYellow1: '#F1D302',
+  vzCustomGreen1: '#40F99B',
+  vzCustomGreen2: '#00D395',
+  vzCustomMarine: '#B6A5FF',
+  vzCustomPink: '#F982EB',
 };
 
 const generateColorMap = (color: string): ColorSet => ({
@@ -24,34 +36,12 @@ const generateColorMap = (color: string): ColorSet => ({
   darken050: chroma(color).darken(5).hex(),
 });
 
-const newColors = mapValues(baseColors, (value: string) => generateColorMap(value));
-
-
-// all the colours in the UI are one of these
-const colors = {
-  ...newColors,
-  vzGrey: '#A6A2B4',
-  vzGreyDarkish: '#6D6A77',
-  vzGreyDarkish2: '#6C697E',
-  vzGreyDark: '#5A576D',
-  vzGreyDarker: '#1F1D2D',
-  vzGreyDarkest: '#1B1929',
-  vzGoldLight: '#FBC13A',
-  vzGoldDark: '#473711',
-  vzBlueDark: '#272531',
-  vzBlueGreenDark: '#2C555C',
-  vzBlueGreenLight: '#4DE5FF',
-  vzPurpleLight: '#E5E1F9',
-  vzPurpleDark: '#1F1D2D',
-  vzPurpleDarker: '#1B1929',
-  vzRedDark: '#100008',
-  vzPink: '#FF4AA9',
-  vzYellowDark: '#191406',
-  vzCustomRed1: '#F61067',
-  vzCustomRed2: '#FF0000',
-  vzCustomYellow1: '#F1D302',
-  vzCustomGreen1: '#40F99B',
-  vzCustomGreen2: '#00D395',
-};
+const colors: Record<BaseColors, ColorSet> = Object.keys(baseColors).reduce(
+  (colorSets, baseColor) => ({
+    [baseColor]: generateColorMap(baseColors[baseColor as BaseColors]),
+    ...colorSets,
+  }),
+  {} as Record<BaseColors, ColorSet>,
+);
 
 export default colors;

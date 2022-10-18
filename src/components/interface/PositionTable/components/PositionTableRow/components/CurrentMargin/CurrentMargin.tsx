@@ -35,7 +35,7 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({
       if (isNull(wallet.account)) {
         wallet.setRequired(true);
       } else {
-       onSelect();
+        onSelect();
       }
     }
   };
@@ -59,15 +59,15 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({
       <Typography variant="body2" label={getNetMarginLabel()} sx={{ fontSize: 18 }}>
         {!isUndefined(margin) ? `${formatNumber(margin)} ${token}` : 'Loading...'}
       </Typography>
-      
+
       {marginEdit && onSelect && (
-        <Button 
-          variant='red2' 
-          onClick={handleClick} 
-          size='small' 
+        <Button
+          variant="red2"
+          onClick={handleClick}
+          size="small"
           sx={{ width: '100%', display: 'flex' }}
         >
-          Edit 
+          Edit
         </Button>
       )}
     </TableCell>

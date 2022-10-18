@@ -1,12 +1,12 @@
 import React, { ReactNode } from 'react';
 import { Box, SystemStyleObject, Theme } from '@mui/system';
 import { Typography } from '@components/atomic';
-import colors from '../../../theme/colors';
+import { colors } from '@theme';
 
 interface SummaryPanelProps {
   label?: ReactNode;
   loading?: boolean;
-  rows?: {label: string; value: ReactNode, highlight?: boolean, bold?: boolean}[];
+  rows?: { label: string; value: ReactNode; highlight?: boolean; bold?: boolean }[];
 }
 
 const SummaryPanel = ({ label, loading, rows }: SummaryPanelProps) => {
@@ -19,16 +19,16 @@ const SummaryPanel = ({ label, loading, rows }: SummaryPanelProps) => {
     marginBottom: (theme) => theme.spacing(2),
 
     '&:last-child': {
-      marginBottom: '0'
+      marginBottom: '0',
     },
-    'label': {
+    label: {
       color: colors.lavenderWeb.base,
       fontSize: '14px',
-      marginBottom: (theme) => theme.spacing(4)
+      marginBottom: (theme) => theme.spacing(4),
     },
-    'svg': {
+    svg: {
       color: colors.lavenderWeb.base,
-    }
+    },
   };
   const valueStyles: SystemStyleObject<Theme> = {
     fontSize: '12px',
@@ -48,32 +48,35 @@ const SummaryPanel = ({ label, loading, rows }: SummaryPanelProps) => {
       <Box>
         {rows.map((row, index) => (
           <Box sx={rowStyles} key={row.label}>
-            <Typography 
-              variant="body2" 
-              label={index === 0 ? label : undefined} 
+            <Typography
+              variant="body2"
+              label={index === 0 ? label : undefined}
               sx={{
-                ...valueStyles, 
-                color: (row.highlight) ? colors.lavenderWeb.base : colors.lavenderWeb.darken015,
+                ...valueStyles,
+                color: row.highlight ? colors.lavenderWeb.base : colors.lavenderWeb.darken015,
                 fontWeight: row.bold ? 'bold' : undefined,
               }}
             >
               {row.label}
             </Typography>
-            <Typography variant="body2" sx={{
-              ...valueStyles,
-              color: row.highlight ? colors.skyBlueCrayola.base : colors.lavenderWeb.darken015,
-              fontWeight: row.bold ? 'bold' : undefined,
-              whiteSpace: 'nowrap',
-            }}>
+            <Typography
+              variant="body2"
+              sx={{
+                ...valueStyles,
+                color: row.highlight ? colors.skyBlueCrayola.base : colors.lavenderWeb.darken015,
+                fontWeight: row.bold ? 'bold' : undefined,
+                whiteSpace: 'nowrap',
+              }}
+            >
               {row.value}
             </Typography>
           </Box>
         ))}
       </Box>
-    )
+    );
   }
 
   return null;
-}
+};
 
 export default SummaryPanel;

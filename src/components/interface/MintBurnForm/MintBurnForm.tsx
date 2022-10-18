@@ -13,9 +13,15 @@ import {
 import { LiquidityControls, SubmitControls } from './components';
 import { MarginControls } from '../SwapForm/components';
 import { useTokenApproval } from '@hooks';
-import { MintBurnFormHintStates, MintBurnFormLiquidityAction, MintBurnFormMarginAction, MintBurnFormModes, MintBurnFormState, MintBurnFormSubmitButtonStates } from '@contexts';
+import {
+  MintBurnFormHintStates,
+  MintBurnFormLiquidityAction,
+  MintBurnFormMarginAction,
+  MintBurnFormModes,
+  MintBurnFormState,
+  MintBurnFormSubmitButtonStates,
+} from '@contexts';
 import { SystemStyleObject, Theme } from '@theme';
-import { FixedAPR } from 'src/components/composite/ProtocolInformation/components';
 
 export type MintBurnFormProps = {
   approvalsNeeded?: boolean;
@@ -29,7 +35,7 @@ export type MintBurnFormProps = {
   isTradeVierified: boolean;
   maxMargin?: number;
   mode: MintBurnFormModes;
-  gaButtonId?:string;
+  gaButtonId?: string;
   onCancel: () => void;
   onChangeFixedLow: (value: number | undefined, increment: boolean | null) => void;
   onChangeFixedHigh: (value: number | undefined, increment: boolean | null) => void;
@@ -44,8 +50,8 @@ export type MintBurnFormProps = {
   tokenApprovals: ReturnType<typeof useTokenApproval>;
   tradeInfoErrorMessage?: string;
   underlyingTokenName?: string;
-  variableApy?:number;
-  fixedApr?:number;
+  variableApy?: number;
+  fixedApr?: number;
 };
 
 const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
@@ -79,13 +85,15 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   fixedApr,
 }) => {
   const bottomSpacing: SystemStyleObject<Theme> = {
-    marginBottom: (theme) => theme.spacing(6)
+    marginBottom: (theme) => theme.spacing(6),
   };
-  const isAddingLiquidity = mode !== MintBurnFormModes.EDIT_LIQUIDITY || formState.liquidityAction === MintBurnFormLiquidityAction.ADD;
+  const isAddingLiquidity =
+    mode !== MintBurnFormModes.EDIT_LIQUIDITY ||
+    formState.liquidityAction === MintBurnFormLiquidityAction.ADD;
 
   return (
-    <FormPanel boxShadowType='LP'>
-      <ProtocolInformation protocol={protocol} fixedApr={fixedApr} variableApy={variableApy}/>
+    <FormPanel boxShadowType="LP">
+      <ProtocolInformation protocol={protocol} fixedApr={fixedApr} variableApy={variableApy} />
       <Box sx={bottomSpacing}>
         <MaturityInformation
           label={
@@ -100,44 +108,47 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
           endDate={endDate}
         />
       </Box>
-      
+
       {mode === MintBurnFormModes.EDIT_LIQUIDITY && (
         <Box sx={{ ...bottomSpacing, display: 'flex' }}>
-          <LiquidityControls 
-            value={formState.liquidityAction}
-            onChange={onChangeLiquidityAction}
-          />          
+          <LiquidityControls value={formState.liquidityAction} onChange={onChangeLiquidityAction} />
         </Box>
       )}
 
       {mode === MintBurnFormModes.EDIT_MARGIN && (
         <Box sx={{ ...bottomSpacing, display: 'flex' }}>
-          <MarginControls 
+          <MarginControls
             values={MintBurnFormMarginAction}
             value={formState.marginAction}
-            onChange={onChangeMarginAction} 
+            onChange={onChangeMarginAction}
           />
         </Box>
-      )}  
+      )}
 
       <Box sx={{ ...bottomSpacing, display: 'flex' }}>
         <RateOptions
           fixedLow={formState.fixedLow}
-          fixedLowDisabled={mode === MintBurnFormModes.EDIT_LIQUIDITY || mode === MintBurnFormModes.EDIT_MARGIN}
+          fixedLowDisabled={
+            mode === MintBurnFormModes.EDIT_LIQUIDITY || mode === MintBurnFormModes.EDIT_MARGIN
+          }
           fixedLowError={errors['fixedLow']}
           fixedHigh={formState.fixedHigh}
-          fixedHighDisabled={mode === MintBurnFormModes.EDIT_LIQUIDITY || mode === MintBurnFormModes.EDIT_MARGIN}
+          fixedHighDisabled={
+            mode === MintBurnFormModes.EDIT_LIQUIDITY || mode === MintBurnFormModes.EDIT_MARGIN
+          }
           fixedHighError={errors['fixedHigh']}
           onChangeFixedLow={onChangeFixedLow}
           onChangeFixedHigh={onChangeFixedHigh}
         />
       </Box>
-      
+
       {mode !== MintBurnFormModes.EDIT_MARGIN && (
         <Box sx={bottomSpacing}>
           <NotionalAmount
-            label={ isAddingLiquidity ? "Notional liquidity Provided" : "Notional liquidity removed"} 
-            info={`Choose the notional amount of liquidity you wish to ${isAddingLiquidity ? 'provide' : 'remove'}.`}
+            label={isAddingLiquidity ? 'Notional liquidity Provided' : 'Notional liquidity removed'}
+            info={`Choose the notional amount of liquidity you wish to ${
+              isAddingLiquidity ? 'provide' : 'remove'
+            }.`}
             notional={formState.notional}
             onChangeNotional={onChangeNotional}
             error={errors['notional']}
@@ -162,13 +173,13 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         </Box>
       )}
 
-      <SubmitControls 
+      <SubmitControls
         approvalsNeeded={approvalsNeeded}
         hintState={hintState}
         isFormValid={isFormValid}
         isTradeVerified={isTradeVierified}
         mode={mode}
-        onCancel={onCancel} 
+        onCancel={onCancel}
         onSubmit={onSubmit}
         gaButtonId={gaButtonId}
         submitButtonState={submitButtonState}

@@ -16,6 +16,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
   agent: agentOverride,
   selected,
   link,
+  onClick,
   ...props
 }) => {
   const { agent } = useAgentWithOverride(agentOverride);
@@ -29,7 +30,6 @@ const Button: React.FunctionComponent<ButtonProps> = ({
     if (!agent) {
       return {};
     }
-
 
     // selecting different colours from the pallet to style the component
     if (agent === Agents.FIXED_TRADER) {
@@ -85,7 +85,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
           backgroundColor: 'secondary.darken030',
         },
         borderWidth: 1,
-        borderColor: '#ff4aa9'
+        borderColor: '#ff4aa9',
       };
     }
 
@@ -110,7 +110,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
         },
         color: '#40F99B',
         borderWidth: 1,
-        borderColor: '#40F99B'
+        borderColor: '#40F99B',
       };
     }
 
@@ -122,7 +122,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
         },
         color: '#F1D302',
         borderWidth: 1,
-        borderColor: '#F1D302'
+        borderColor: '#F1D302',
       };
     }
 
@@ -134,7 +134,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
         },
         color: '#F61067',
         borderWidth: 1,
-        borderColor: '#F61067'
+        borderColor: '#F61067',
       };
     }
 
@@ -197,7 +197,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
         fontWeight: 'bold',
         '&:hover': {
           backgroundColor: 'primary.darken015',
-          boxShadow: 'none'
+          boxShadow: 'none',
         },
       };
     }
@@ -209,7 +209,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
         fontWeight: 'bold',
         '&:hover': {
           backgroundColor: 'tertiary.darken015',
-          boxShadow: 'none'
+          boxShadow: 'none',
         },
       };
     }
@@ -221,14 +221,18 @@ const Button: React.FunctionComponent<ButtonProps> = ({
         fontWeight: 'bold',
         '&:hover': {
           backgroundColor: 'secondary.darken045',
-          boxShadow: 'none'
+          boxShadow: 'none',
         },
       };
     }
 
     return {};
   };
-  const handleClick = () => link && navigate(link);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    link && navigate(link);
+    onClick && onClick(event);
+  };
 
   return (
     <MuiButton
