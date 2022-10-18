@@ -23,7 +23,7 @@ const Trader: React.FunctionComponent = () => {
   const { onChangeAgent } = useAgent();
   const { pathname, key } = useLocation();
   const { positions, positionsByAgentGroup } = usePositions();
-  const { agent } = useAgent()
+  const { agent } = useAgent();
 
   const pathnameWithoutPrefix = pathname.slice(1);
   const renderMode = getRenderMode(formMode, pathnameWithoutPrefix);

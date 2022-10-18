@@ -2187,7 +2187,7 @@ var AMM = /** @class */ (function () {
     };
     AMM.prototype.getPositionInformation = function (position) {
         return __awaiter(this, void 0, void 0, function () {
-            var results, rateOracleContract, signerAddress, lastBlock, lastBlockTimestamp, _a, _b, beforeMaturity, _c, _d, accruedCashflowInfo, EthToUsdPrice_1, _1, accruedCashflowInfo, EthToUsdPrice_2, _2, _e, fcmContract, margin, marginInUnderlyingToken, EthToUsdPrice_3, fcmContract, margin, cTokenAddress, cTokenContract, rate, scaledRate, marginInUnderlyingToken, EthToUsdPrice_4, tickLower, tickUpper, marginEngineContract, rawPositionInfo, marginInUnderlyingToken, EthToUsdPrice_5, liquidationThreshold, _3, safetyThreshold, _4, notionalInUnderlyingToken, EthToUsdPrice, fixedApr;
+            var usdExchangeRate, results, rateOracleContract, signerAddress, lastBlock, lastBlockTimestamp, _a, _b, beforeMaturity, _c, _d, accruedCashflowInfo, _1, accruedCashflowInfo, _2, _e, fcmContract, margin, marginInUnderlyingToken, fcmContract, margin, cTokenAddress, cTokenContract, rate, scaledRate, marginInUnderlyingToken, tickLower, tickUpper, marginEngineContract, rawPositionInfo, marginInUnderlyingToken, liquidationThreshold, _3, safetyThreshold, _4, notionalInUnderlyingToken, fixedApr;
             return __generator(this, function (_f) {
                 switch (_f.label) {
                     case 0:

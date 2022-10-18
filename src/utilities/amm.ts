@@ -1,5 +1,6 @@
 import { Position } from "@voltz-protocol/v1-sdk/dist/types/entities";
 import AugmentedAMM from "./augmentedAmm";
+import isBorrowing from "./isBorrowing";
 
 /**
  * Returns the current position that the user has for the given amm 
@@ -40,4 +41,16 @@ export const findCurrentAmm = (amms: AugmentedAMM[], selectedPosition: Position)
   }
   
   return undefined;
+}
+
+/**
+ * Returns AMM pool name and includes borrowing tag
+ * @param amm - the amm
+ */
+ export const getAmmProtocol = (amm: AugmentedAMM) => {
+
+  if ( !amm.rateOracle.protocolId ) return "";
+
+  return amm.protocol + (isBorrowing(amm.rateOracle.protocolId) ? "_borrow" : "");
+
 }

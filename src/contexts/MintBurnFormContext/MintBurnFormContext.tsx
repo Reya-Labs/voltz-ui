@@ -1,8 +1,8 @@
 import { useBalance, useTokenApproval } from '@hooks';
-import { useAMMContext, usePositionContext } from '@contexts';
-import { AugmentedAMM, hasEnoughUnderlyingTokens } from '@utilities';
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
-import { isUndefined } from 'lodash';
+import { useAMMContext, usePositionContext, Agents } from '@contexts';
+import { AugmentedAMM, DataLayerEventPayload, getAmmProtocol, hasEnoughUnderlyingTokens, isBorrowing, pushEvent } from '@utilities';
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { debounce, isUndefined } from 'lodash';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 
 export enum MintBurnFormModes {
@@ -266,6 +266,38 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
       validate();
     }
   }, [fixedHigh, fixedLow, liquidityAction, margin, marginAction, notional, minimumRequiredMargin]);
+
+  const notionalChange = useCallback(debounce((value: number | undefined) => {
+    const payload : DataLayerEventPayload  = {
+      event: "notional_change",
+      eventValue: value ?? 0,
+      pool: getAmmProtocol(poolAmm),
+      agent: Agents.LIQUIDITY_PROVIDER
+    };
+    pushEvent(payload);
+  }, 1000), []);
+
+  const marginChange = useCallback(debounce((value: number | undefined) => {
+    const payload : DataLayerEventPayload  = {
+      event: "margin_change",
+      eventValue: value ?? 0,
+      pool: getAmmProtocol(poolAmm),
+      agent: Agents.LIQUIDITY_PROVIDER
+    };
+    pushEvent(payload);
+  }, 1000),[]);
+
+  useEffect(() => {
+    if ( !isUndefined(mintMinimumMarginRequirement.result)) {
+      notionalChange(notional);
+    }
+  }, [mintMinimumMarginRequirement.result])
+
+  useEffect(() => {
+    if ( !isUndefined(margin)) {
+      marginChange(margin);
+    }
+  }, [margin])
 
   const updateFixedHigh = (value: MintBurnFormState['fixedHigh']) => {
     if(!touched.current.includes('fixedHigh')) {

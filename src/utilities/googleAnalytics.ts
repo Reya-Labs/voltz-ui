@@ -1,7 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import { Agents, SwapFormSubmitButtonHintStates } from "@contexts";
 import { isUndefined } from "lodash";
 import AugmentedAMM from "./augmentedAmm";
 import isBorrowing from "./isBorrowing";
+import { v4 as uuidv4 } from 'uuid';
+
+const SESSION_ID = uuidv4()
 
 export const getPoolButtonId = ( marginAction: string, liquidityAction: string, notionalAction: string, agent: Agents, amm?: AugmentedAMM, borrow?: boolean ): string => {
     const protocol = amm ? amm.protocol : "";
@@ -37,4 +45,37 @@ export const getNotionalActionFromHintState = (hint: SwapFormSubmitButtonHintSta
         default:
             return "";
     }
+}
+
+export type TxEventPayload = {
+    notional: number | undefined,
+    margin: number | undefined,
+    action: string,
+    failMessage?: string
+}
+
+export type DataLayerEventPayload = {
+    event: DataLayerEventName;
+    eventValue: string | number | TxEventPayload; 
+    pool?: string;
+    agent?: Agents;
+}
+
+type DataLayerEventName = 
+    'expectedApy_change' |
+    'notional_change' |
+    'margin_change' |
+    'leverage_change' |
+    'title_change' |
+    'tx_submitted' |
+    'failed_tx' |
+    'successful_tx';
+
+export const pushEvent = (
+    payload: DataLayerEventPayload
+) => {
+    if(!window.dataLayer) {
+        return;
+    }
+    window.dataLayer.push({sessionId: SESSION_ID, ...payload});
 }
