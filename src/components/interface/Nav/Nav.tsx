@@ -60,8 +60,21 @@ const Nav: React.FunctionComponent = () => (
       <NavLink link={`/${routes.BORROW_POS}`}>FIXED BORROW</NavLink>
     )}
 
-    {process.env.REACT_APP_PROFILE && process.env.REACT_APP_PROFILE !== `UNPROVIDED` && (
-      <NavLink link={`/${routes.PROFILE}`}>PROFILE</NavLink>
+    {process.env.REACT_APP_COMMUNITY && process.env.REACT_APP_COMMUNITY !== `UNPROVIDED` && (
+      <NavLink
+        subLinks={[
+          {
+            text: 'LEADERBOARD',
+            link: `/${routes.LEADERBOARD}`,
+          },
+          {
+            text: 'PROFILE',
+            link: `/${routes.PROFILE}`,
+          },
+        ]}
+      >
+        Community
+      </NavLink>
     )}
   </Box>
 );
