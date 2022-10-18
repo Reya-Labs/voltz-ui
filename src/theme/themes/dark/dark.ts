@@ -90,7 +90,7 @@ const dark = createTheme({
       darken050: colors.orangeYellow.darken050,
     },
     background: {
-      default: colors.vzGreyDarker,
+      default: colors.vzGreyDarker.base,
     },
   },
   components: {
@@ -98,16 +98,16 @@ const dark = createTheme({
       styleOverrides: {
         root: ({ ownerState }) => {
           const fontSize = () => {
-            if(ownerState.size === 'xs') return '14px';
-            if(ownerState.size === 'vs') return '12px';
-            if(ownerState.size === 'small') return '14px';
+            if (ownerState.size === 'xs') return '14px';
+            if (ownerState.size === 'vs') return '12px';
+            if (ownerState.size === 'small') return '14px';
             return '18px';
           };
           const padding = () => {
-            if(ownerState.size === 'large') return '16px 24px';
-            if(ownerState.size === 'small') return '8px 10px';
-            if(ownerState.size === 'vs') return '8px 10px';
-            if(ownerState.size === 'xs') return '4px 8px';
+            if (ownerState.size === 'large') return '16px 24px';
+            if (ownerState.size === 'small') return '8px 10px';
+            if (ownerState.size === 'vs') return '8px 10px';
+            if (ownerState.size === 'xs') return '4px 8px';
             return '12px 18px';
           };
 
@@ -118,7 +118,7 @@ const dark = createTheme({
             textTransform: 'uppercase',
             padding: padding(),
             minWidth: '0',
-          }
+          };
         },
       },
     },
@@ -143,14 +143,14 @@ const dark = createTheme({
         input: ({ ownerState, theme }) => {
           const color = () => {
             if (ownerState.disabled) {
-              return colors.vzGreyDark;
+              return colors.vzGreyDark.base;
             }
 
             if (ownerState.error) {
               return theme.palette.error.base;
             }
 
-            return colors.vzGrey;
+            return colors.vzGrey.base;
           };
           const borderColor = () => {
             if (ownerState.disabled) {
@@ -161,7 +161,7 @@ const dark = createTheme({
               return theme.palette.error.darken010;
             }
 
-            return colors.vzGreyDark;
+            return colors.vzGreyDark.base;
           };
           const padding = () => {
             if (ownerState.size === 'small') {
@@ -170,7 +170,7 @@ const dark = createTheme({
                 paddingLeft: theme.spacing(2),
               };
             }
-        
+
             return {
               padding: theme.spacing(4),
             };
@@ -187,16 +187,16 @@ const dark = createTheme({
             fontSize: ownerState.size === 'small' ? 14 : 24,
             cursor: ownerState.disabled ? 'not-allowed' : undefined,
             ...padding(),
-            "::-webkit-outer-spin-button": { 
-              "-webkit-appearance": "none", 
-              "-moz-appearance": "none",
-              "appearance": "none"
+            '::-webkit-outer-spin-button': {
+              '-webkit-appearance': 'none',
+              '-moz-appearance': 'none',
+              appearance: 'none',
             },
-            "::-webkit-inner-spin-button": {
-              "-webkit-appearance": "none",
-              "-moz-appearance": "none",
-              "appearance": "none"
-            }
+            '::-webkit-inner-spin-button': {
+              '-webkit-appearance': 'none',
+              '-moz-appearance': 'none',
+              appearance: 'none',
+            },
           };
         },
       },
@@ -215,8 +215,8 @@ const dark = createTheme({
           overflow: 'visible',
 
           '&.Mui-focused': {
-            color: colors.lavenderWeb.darken010
-          }
+            color: colors.lavenderWeb.darken010,
+          },
         },
       },
     },
@@ -226,16 +226,16 @@ const dark = createTheme({
           marginBottom: '10px',
         },
         rail: {
-          backgroundColor: colors.vzGreyDarkish,
+          backgroundColor: colors.vzGreyDarkish.base,
           opacity: 1,
           border: 0,
-          borderRadius: 0
+          borderRadius: 0,
         },
         track: {
-          backgroundColor: colors.vzGreyDarkish,
+          backgroundColor: colors.vzGreyDarkish.base,
           opacity: 1,
           border: 0,
-          borderRadius: 0
+          borderRadius: 0,
         },
         thumb: ({ ownerState }) => ({
           height: '16px',
@@ -243,10 +243,10 @@ const dark = createTheme({
           borderRadius: '0',
           background: ownerState.disabled ? colors.lavenderWeb.darken015 : colors.lavenderWeb.base,
           '&:hover': {
-            boxShadow: '0 0 0 8px rgba(229, 225, 249, 0.16)'
+            boxShadow: '0 0 0 8px rgba(229, 225, 249, 0.16)',
           },
           '&:active': {
-            boxShadow: '0 0 0 12px rgba(229, 225, 249, 0.16)'
+            boxShadow: '0 0 0 12px rgba(229, 225, 249, 0.16)',
           },
         }),
         mark: ({ ownerState }) => ({
@@ -256,11 +256,11 @@ const dark = createTheme({
           background: ownerState.disabled ? colors.lavenderWeb.darken015 : colors.lavenderWeb.base,
         }),
         markLabel: ({ ownerState }) => ({
-          color: ownerState.disabled ? colors.vzGrey : undefined,
+          color: ownerState.disabled ? colors.vzGrey.base : undefined,
           fontSize: '10px',
-          top: '24px'
-        })
-      }
+          top: '24px',
+        }),
+      },
     },
     MuiSelect: {
       styleOverrides: {
@@ -268,13 +268,13 @@ const dark = createTheme({
           background: colors.lavenderWeb.darken045,
           minHeight: 0,
           height: '14px',
-        }
-      }
+        },
+      },
     },
     MuiMenu: {
       styleOverrides: {
         root: {
-          marginTop: '8px'
+          marginTop: '8px',
         },
         list: {
           backgroundColor: colors.lavenderWeb.darken045,
@@ -282,11 +282,11 @@ const dark = createTheme({
           padding: '0',
           borderRadius: '4px',
         },
-      }
+      },
     },
     MuiMenuItem: {
       styleOverrides: {
-        root: ({ownerState}) => ({
+        root: ({ ownerState }) => ({
           fontFamily: 'PixelOperatorMono',
           fontSize: '16px',
           lineHeight: '14px',
@@ -298,19 +298,17 @@ const dark = createTheme({
           },
 
           '&:hover': {
-            background: colors.lavenderWeb.darken040
+            background: colors.lavenderWeb.darken040,
           },
 
           '&.Mui-selected': {
             background: colors.lavenderWeb.darken030,
             '&:hover': {
-              background: colors.lavenderWeb.darken030
+              background: colors.lavenderWeb.darken030,
             },
-          }
-
+          },
         }),
-        
-      }
+      },
     },
   },
   typography: {

@@ -14,7 +14,7 @@ interface SubmitControlsProps {
   onCancel: () => void;
   onSubmit: () => void;
   gaButtonId?: string;
-  tokenApprovals: ReturnType<typeof useTokenApproval>
+  tokenApprovals: ReturnType<typeof useTokenApproval>;
   tradeInfoErrorMessage?: string;
   underlyingTokenName?: string;
   hintState: BorrowFormSubmitButtonHintStates;
@@ -28,35 +28,41 @@ type TextProps = {
   red?: boolean;
 };
 const Text = ({ bold, children, green, red }: TextProps) => (
-  <Box component='span' sx={{ 
-    color: green ? colors.vzCustomGreen1 : red ? colors.vzCustomRed1 : undefined,
-    fontWeight: bold ? 'bold' : undefined,
-    textTransform: 'none'
-  }}>
+  <Box
+    component="span"
+    sx={{
+      color: green ? colors.vzCustomGreen1.base : red ? colors.vzCustomRed1.base : undefined,
+      fontWeight: bold ? 'bold' : undefined,
+      textTransform: 'none',
+    }}
+  >
     {children}
   </Box>
 );
 
 const SubmitControls = ({
   approvalsNeeded,
-  isFormValid, 
+  isFormValid,
   isTradeVerified,
-  onCancel, 
-  onSubmit, 
+  onCancel,
+  onSubmit,
   gaButtonId,
   tokenApprovals,
   hintState,
   tradeInfoErrorMessage,
   underlyingTokenName,
-  submitButtonState
+  submitButtonState,
 }: SubmitControlsProps) => {
   const getHint = () => {
-    switch(hintState) {
+    switch (hintState) {
       case BorrowFormSubmitButtonHintStates.APPROVE_NEXT_TOKEN: {
         return (
           <>
-            <Text green bold>{tokenApprovals.lastApproval?.text}</Text><Text green> approved!</Text> 
-            {' '}Let's now approve <Text bold>{tokenApprovals.getNextApproval(false)?.text}</Text>
+            <Text green bold>
+              {tokenApprovals.lastApproval?.text}
+            </Text>
+            <Text green> approved!</Text> Let's now approve{' '}
+            <Text bold>{tokenApprovals.getNextApproval(false)?.text}</Text>
           </>
         );
       }
@@ -88,48 +94,69 @@ const SubmitControls = ({
         return 'Initialising, please wait';
       }
       case BorrowFormSubmitButtonHintStates.READY_TO_TRADE: {
-        return 'Let\'s trade!';
+        return "Let's trade!";
       }
       case BorrowFormSubmitButtonHintStates.READY_TO_TRADE_TOKENS_APPROVED: {
-        return <><Text green>Tokens approved</Text>. Let's trade!</>;
+        return (
+          <>
+            <Text green>Tokens approved</Text>. Let's trade!
+          </>
+        );
       }
     }
-  }
-  
+  };
+
   const getSubmitText = () => {
-    switch(submitButtonState) {
+    switch (submitButtonState) {
       case BorrowFormSubmitButtonStates.APPROVE_UT_PERIPHERY: {
-        return <Box>Approve <Text>{underlyingTokenName}</Text></Box>;
+        return (
+          <Box>
+            Approve <Text>{underlyingTokenName}</Text>
+          </Box>
+        );
       }
       case BorrowFormSubmitButtonStates.APPROVING: {
-        return <>Approving<Ellipsis /></>;
+        return (
+          <>
+            Approving
+            <Ellipsis />
+          </>
+        );
       }
       case BorrowFormSubmitButtonStates.CHECKING: {
-        return <>Loading<Ellipsis /></>;
+        return (
+          <>
+            Loading
+            <Ellipsis />
+          </>
+        );
       }
       case BorrowFormSubmitButtonStates.INITIALISING: {
-        return <>Initialising<Ellipsis /></>;
+        return (
+          <>
+            Initialising
+            <Ellipsis />
+          </>
+        );
       }
       case BorrowFormSubmitButtonStates.FIX_RATE: {
         return 'Fix Rate';
       }
     }
   };
-  
-
 
   return (
     <>
       <Box sx={{ display: 'flex' }}>
-        <Button 
+        <Button
           disabled={
-            (!isFormValid || 
-            tokenApprovals.checkingApprovals || 
-            tokenApprovals.approving || 
-            (!approvalsNeeded && isFormValid && !isTradeVerified))
-          } 
-          onClick={onSubmit} 
-          size="large" 
+            !isFormValid ||
+            tokenApprovals.checkingApprovals ||
+            tokenApprovals.approving ||
+            (!approvalsNeeded && isFormValid && !isTradeVerified)
+          }
+          onClick={onSubmit}
+          size="large"
           sx={{ flexGrow: 1 }}
           agent={Agents.FIXED_TRADER}
           id={gaButtonId}
@@ -147,28 +174,18 @@ const SubmitControls = ({
         </Button>
       </Box>
 
-      <Typography variant='body2' sx={{ 
-        marginTop: (theme) => theme.spacing(2), 
-        color: colors.lavenderWeb.darken015,
-        fontSize: '12px'
-      }}>
+      <Typography
+        variant="body2"
+        sx={{
+          marginTop: (theme) => theme.spacing(2),
+          color: colors.lavenderWeb.darken015,
+          fontSize: '12px',
+        }}
+      >
         {getHint()}
       </Typography>
     </>
-  )
-}
+  );
+};
 
 export default SubmitControls;
-
-
-
-
-
-
-
-
-
-
-
-
-
