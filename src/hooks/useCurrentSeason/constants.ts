@@ -14,26 +14,26 @@ export const SEASONS: Season[] = [
   {
     id: 1,
     startDate: SEASON_START_DATE,
-    endDate: DateTime.fromSQL('2022-12-31'),
+    endDate: DateTime.fromSQL('2022-12-31 23:59:59'),
   },
   {
     id: 2,
-    startDate: DateTime.fromSQL('2023-01-01'),
-    endDate: DateTime.fromSQL('2023-03-31'),
+    startDate: DateTime.fromSQL('2023-01-01 00:00:00'),
+    endDate: DateTime.fromSQL('2023-03-31 23:59:59'),
   },
   {
     id: 3,
-    startDate: DateTime.fromSQL('2023-04-01'),
-    endDate: DateTime.fromSQL('2023-06-30'),
+    startDate: DateTime.fromSQL('2023-04-01 00:00:00'),
+    endDate: DateTime.fromSQL('2023-06-30 23:59:59'),
   },
   {
     id: 4,
-    startDate: DateTime.fromSQL('2023-07-01'),
-    endDate: DateTime.fromSQL('2023-09-30'),
+    startDate: DateTime.fromSQL('2023-07-01 00:00:00'),
+    endDate: DateTime.fromSQL('2023-09-30 23:59:59'),
   },
   {
     id: 5,
-    startDate: DateTime.fromSQL('2023-10-01'),
-    endDate: DateTime.fromSQL('2023-12-31'),
+    startDate: DateTime.fromSQL('2023-10-01 00:00:00'),
+    endDate: DateTime.fromSQL('2023-12-31 23:59:59'),
   },
 ];
