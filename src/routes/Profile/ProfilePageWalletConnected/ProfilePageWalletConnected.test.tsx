@@ -26,7 +26,7 @@ test('renders proper UI when claimed badges present', () => {
   ).not.toBeNull();
   expect(screen.getByText('YOUR BADGE ACHIEVEMENTS COLLECTION')).not.toBeNull();
 
-  expect(screen.getAllByTestId('BadgeCard')).toHaveLength(6);
+  expect(screen.getAllByTestId('BadgeCard')).toHaveLength(16);
 });
 
 test('renders proper UI when NO claimed badges present', () => {

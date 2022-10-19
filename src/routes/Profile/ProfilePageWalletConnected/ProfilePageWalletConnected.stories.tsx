@@ -34,7 +34,7 @@ export const Loading = Template.bind({});
 Loading.args = {
   account: '0xb01F14d1C9000D453241221EB54648F1C378c970',
   claimedBadges: [],
-  collection: [],
+  collection: collectionBadges,
   season: '1',
   loading: true,
 };

@@ -7,7 +7,12 @@ import { BadgeCard, BadgeCardProps } from '../BadgeCard/BadgeCard';
 import { colors } from '@theme';
 import { Page } from '@components/interface';
 import { CollectionBadge, CollectionBadgeProps } from '../CollectionBadge/CollectionBadge';
-import { BADGE_VARIANT_TIER_MAP } from '../helpers';
+import {
+  BADGE_VARIANT_DESCRIPTION_COPY_MAP,
+  BADGE_VARIANT_TIER_MAP,
+  BADGE_VARIANT_TITLE_COPY_MAP,
+} from '../helpers';
+import { Badge } from '../Badge/Badge';
 
 type ProfilePageProps = {
   account: string;
@@ -26,6 +31,7 @@ const collectionBadgesSort = [
   'degenStuff',
   'seasonedTrader',
   'okBoomer',
+  'dryIce',
   'maxBidding',
   'sugarDaddy',
   'lpoor',
@@ -120,9 +126,28 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
             marginTop: (theme) => theme.spacing(3),
           }}
         >
-          <Typography variant="h2">YOUR BADGE ACHIEVEMENTS COLLECTION</Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Typography variant="h2">YOUR BADGE ACHIEVEMENTS COLLECTION</Typography>
+            <Typography
+              variant="h1"
+              sx={{
+                fontWeight: 400,
+                fontSize: '14px',
+                lineHeight: '14px',
+                fontFamily: 'PixelOperatorMono',
+                padding: (theme) => theme.spacing(1, 2),
+              }}
+            >
+              Season {season}
+            </Typography>
+          </Box>
           <Grid
-            itemsPerRow={3}
+            itemsPerRow={!loading && claimedBadges.length === 0 ? 1 : 3}
             sx={{
               marginTop: (theme) => theme.spacing(6),
               rowGap: (theme) => theme.spacing(6),
@@ -138,7 +163,29 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
               claimedBadges.map((badge, index) => (
                 <BadgeCard key={`${badge.variant}${index}`} {...badge} loading={loading} />
               ))}
-            {!loading && claimedBadges.length === 0 && <div>Empty state. No claimed badges</div>}
+            {!loading && claimedBadges.length === 0 && (
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
+              >
+                <Badge variant="noClaimedBadges" />
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: colors.lavenderWeb.base,
+                    fontSize: '12px',
+                    lineHeight: '18px',
+                    fontWeight: 400,
+                    marginTop: (theme) => theme.spacing(4),
+                  }}
+                >
+                  No claimed badges yet!
+                </Typography>
+              </Box>
+            )}
           </Grid>
         </Box>
 
