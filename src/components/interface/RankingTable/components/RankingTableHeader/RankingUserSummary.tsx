@@ -12,13 +12,7 @@ import { Typography } from '@components/atomic';
 import { SystemStyleObject, Theme } from '@theme';
 import { formatDateTime, formatNumber } from '@utilities';
 import { DateTime } from 'luxon';
-import { isUndefined } from 'lodash';
 import { ProgressBar } from '@components/composite';
-
-import { ReactComponent as Ghost } from './icons/ghost.svg';
-import { useWallet } from '@hooks';
-import { useState } from 'react';
-import RankingClaim from './RankingClaim';
 
 export type RankingUserSummaryProps = {
   seasonNumber?: number;
@@ -36,12 +30,7 @@ const RankingUserSummary = ({
   userRank,
   userAddress,
   userPoints,
-  invitedTraders,
 }: RankingUserSummaryProps) => {
-  const wallet = useWallet();
-
-  const [openLink, setOpenLink] = useState<boolean>(false);
-
   const commonOverrides: SystemStyleObject<Theme> = {
     '& .MuiTableCell-root': {
       borderColor: 'transparent',
@@ -208,53 +197,6 @@ const RankingUserSummary = ({
     );
   };
 
-  const renderBooster = () => {
-    return (
-      <Box>
-        <Typography variant="h1" sx={{ ...titleStyles, marginBottom: '8px' }}>
-          Voltz Pointz Booster
-        </Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Box sx={{ display: 'flex' }}>
-            <Box
-              sx={{
-                marginRight: '24px',
-                marginTop: '8px',
-                marginBottom: '8px',
-                borderStyle: 'solid',
-                borderColor: '#FF4AA9',
-                borderRadius: '4px',
-                padding: '2px 4px',
-                textTransform: 'uppercase',
-              }}
-            >
-              {!isUndefined(invitedTraders) && (
-                <Typography variant="subtitle1" sx={{ color: '#FF4AA9' }}>
-                  <span>
-                    <Ghost style={{ marginRight: '10px', marginBottom: '-2.5px' }} />
-                  </span>
-                  Active Invited Traders
-                  <span style={{ color: '#E5E1F9', paddingLeft: '10px' }}>
-                    {invitedTraders < 10
-                      ? '0' + invitedTraders.toString()
-                      : invitedTraders.toString()}
-                  </span>
-                </Typography>
-              )}
-              {isUndefined(invitedTraders) && (
-                <Typography variant="subtitle1" sx={{ color: '#FF4AA9' }}>
-                  {' '}
-                  Loading...
-                </Typography>
-              )}
-            </Box>
-          </Box>
-          <RankingClaim wallet={wallet} />
-        </Box>
-      </Box>
-    );
-  };
-
   return (
     <>
       <Box
@@ -269,7 +211,6 @@ const RankingUserSummary = ({
         {renderSeason()}
         {renderPointsSystem()}
         {renderCurrentPosition()}
-        {renderBooster()}
       </Box>
     </>
   );
