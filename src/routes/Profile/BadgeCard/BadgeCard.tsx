@@ -3,10 +3,10 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import { Typography } from '@components/atomic';
 import { Badge } from '../Badge/Badge';
-import { BadgeVariant } from '../types';
 import { BadgePill } from '../BadgePill/BadgePill';
 import { BADGE_VARIANT_DESCRIPTION_COPY_MAP, BADGE_VARIANT_TITLE_COPY_MAP } from '../helpers';
 import Skeleton from '@mui/material/Skeleton';
+import { BadgeVariant } from '@graphql';
 
 export type BadgeCardProps = {
   variant: BadgeVariant;

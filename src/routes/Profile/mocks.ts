@@ -1,4 +1,4 @@
-import { BadgeVariant } from './types';
+import { BadgeVariant } from '@graphql';
 
 type ClaimedBadge = {
   variant: BadgeVariant;

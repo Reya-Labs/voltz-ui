@@ -1,4 +1,5 @@
-import { BadgeTier, BadgeVariant } from './types';
+import { BadgeTier } from './types';
+import { BadgeVariant } from '@graphql';
 
 export const TIER_COPY_MAP: Record<BadgeTier, string> = {
   tier1: 'TIER 1',
