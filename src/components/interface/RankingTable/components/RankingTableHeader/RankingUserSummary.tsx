@@ -12,17 +12,13 @@ import { Typography } from '@components/atomic';
 import { SystemStyleObject, Theme } from '@theme';
 import { formatDateTime, formatNumber } from '@utilities';
 import { DateTime } from 'luxon';
-import { isUndefined } from 'lodash';
 import { ProgressBar } from '@components/composite';
-
-import { ReactComponent as Ghost } from './icons/ghost.svg';
-import { useWallet } from '@hooks';
-import { useState } from 'react';
-import RankingClaim from './RankingClaim';
+import React from 'react';
 
 export type RankingUserSummaryProps = {
   seasonNumber?: number;
-  seasonEndDate?: DateTime;
+  seasonStartDate: DateTime;
+  seasonEndDate: DateTime;
   userRank?: number;
   userAddress?: string;
   userPoints?: number;
@@ -32,15 +28,20 @@ export type RankingUserSummaryProps = {
 
 const RankingUserSummary = ({
   seasonNumber,
+  seasonStartDate,
   seasonEndDate,
   userRank,
   userAddress,
   userPoints,
-  invitedTraders,
 }: RankingUserSummaryProps) => {
-  const wallet = useWallet();
-
-  const [openLink, setOpenLink] = useState<boolean>(false);
+  const percentage = React.useMemo(() => {
+    const now = Date.now().valueOf();
+    return Math.round(
+      100 *
+        ((now - seasonStartDate.toMillis()) /
+          (seasonEndDate.toMillis() - seasonStartDate.toMillis())),
+    );
+  }, [seasonStartDate, seasonEndDate]);
 
   const commonOverrides: SystemStyleObject<Theme> = {
     '& .MuiTableCell-root': {
@@ -86,13 +87,6 @@ const RankingUserSummary = ({
     },
   };
 
-  const getPercentage = () => {
-    if (seasonEndDate) {
-      const diff = seasonEndDate.diffNow('days').days;
-      return Math.round((1 - diff / 30) * 100);
-    }
-  };
-
   const renderSeason = () => {
     return (
       <Box sx={{ display: 'flex', width: '80%', marginBottom: '24px' }}>
@@ -128,8 +122,8 @@ const RankingUserSummary = ({
           <ProgressBar
             isMaturity={true}
             leftContent={seasonEndDate ? <>{formatDateTime(seasonEndDate)}</> : undefined}
-            rightContent={<>{getPercentage()}%</>}
-            percentageComplete={getPercentage()}
+            rightContent={<>{percentage}%</>}
+            percentageComplete={percentage}
           />
         </Box>
       </Box>
@@ -208,53 +202,6 @@ const RankingUserSummary = ({
     );
   };
 
-  const renderBooster = () => {
-    return (
-      <Box>
-        <Typography variant="h1" sx={{ ...titleStyles, marginBottom: '8px' }}>
-          Voltz Pointz Booster
-        </Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Box sx={{ display: 'flex' }}>
-            <Box
-              sx={{
-                marginRight: '24px',
-                marginTop: '8px',
-                marginBottom: '8px',
-                borderStyle: 'solid',
-                borderColor: '#FF4AA9',
-                borderRadius: '4px',
-                padding: '2px 4px',
-                textTransform: 'uppercase',
-              }}
-            >
-              {!isUndefined(invitedTraders) && (
-                <Typography variant="subtitle1" sx={{ color: '#FF4AA9' }}>
-                  <span>
-                    <Ghost style={{ marginRight: '10px', marginBottom: '-2.5px' }} />
-                  </span>
-                  Active Invited Traders
-                  <span style={{ color: '#E5E1F9', paddingLeft: '10px' }}>
-                    {invitedTraders < 10
-                      ? '0' + invitedTraders.toString()
-                      : invitedTraders.toString()}
-                  </span>
-                </Typography>
-              )}
-              {isUndefined(invitedTraders) && (
-                <Typography variant="subtitle1" sx={{ color: '#FF4AA9' }}>
-                  {' '}
-                  Loading...
-                </Typography>
-              )}
-            </Box>
-          </Box>
-          <RankingClaim wallet={wallet} />
-        </Box>
-      </Box>
-    );
-  };
-
   return (
     <>
       <Box
@@ -269,7 +216,6 @@ const RankingUserSummary = ({
         {renderSeason()}
         {renderPointsSystem()}
         {renderCurrentPosition()}
-        {renderBooster()}
       </Box>
     </>
   );

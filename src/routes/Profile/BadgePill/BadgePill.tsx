@@ -1,8 +1,9 @@
 import React from 'react';
 import { PillProps, Pill } from '@components/atomic';
-import { BadgeTier, BadgeVariant } from '../types';
+import { BadgeTier, ComingSoonBadges } from '../types';
 import { BADGE_VARIANT_TIER_MAP, TIER_COPY_MAP } from '../helpers';
 import Skeleton from '@mui/material/Skeleton';
+import { BadgeVariant } from '@graphql';
 
 const TIER_PILL_VARIANT_MAP: Record<BadgeTier, PillProps['variant']> = {
   tier1: 'wildStrawberry',
@@ -13,7 +14,7 @@ const TIER_PILL_VARIANT_MAP: Record<BadgeTier, PillProps['variant']> = {
 };
 
 export const BadgePill: React.FunctionComponent<{
-  variant: BadgeVariant;
+  variant: BadgeVariant | ComingSoonBadges;
   loading?: boolean;
 }> = ({ loading, variant }) => {
   if (loading) {

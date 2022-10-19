@@ -3,20 +3,30 @@ import { ElementType } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
+  BeWaterMyFriend,
   Burn,
   DegenStuff,
   DeltaDegen,
+  DryIce,
   Ethereum,
   InterfaceAlertInformationCircle,
   InterfaceAlertWarningCircle,
   IrsConnoisseur,
   LeverageCrowbar,
   Liquidation,
+  Lpoor,
   MarginUpdate,
+  MaxBidding,
   Metamask,
   Mint,
+  MoneyMoneyMoney,
+  NoClaimedBadges,
   NoRiskHereSer,
+  OkBoomer,
+  Rainmaker,
+  SeasonedTrader,
   Settle,
+  Yikes,
   SushiRoll,
   Swap,
   TokenDai,
@@ -26,6 +36,7 @@ import {
   TokenUsdt,
   Voltz,
   WalletConnect,
+  WaterHose,
 } from './icons';
 
 export type Icons =
@@ -60,8 +71,10 @@ export type Icons =
   | 'waterHose'
   | 'moneyMoneyMoney'
   | 'lpoor'
-  | 'sugarDaddy'
+  | 'yikes'
   | 'maxBidding'
+  | 'dryIce'
+  | 'noClaimedBadges'
   | 'okBoomer';
 
 export const iconMap: Record<Icons, ElementType> = {
@@ -90,13 +103,15 @@ export const iconMap: Record<Icons, ElementType> = {
   leverageCrowbar: LeverageCrowbar as ElementType,
   noRiskHereSer: NoRiskHereSer as ElementType,
   sushiRoll: SushiRoll as ElementType,
-  seasonedTrader: DegenStuff as ElementType,
-  beWaterMyFriend: DegenStuff as ElementType,
-  rainMaker: DegenStuff as ElementType,
-  waterHose: DegenStuff as ElementType,
-  moneyMoneyMoney: DegenStuff as ElementType,
-  lpoor: DegenStuff as ElementType,
-  sugarDaddy: DegenStuff as ElementType,
-  maxBidding: DegenStuff as ElementType,
-  okBoomer: DegenStuff as ElementType,
+  seasonedTrader: SeasonedTrader as ElementType,
+  beWaterMyFriend: BeWaterMyFriend as ElementType,
+  rainMaker: Rainmaker as ElementType,
+  waterHose: WaterHose as ElementType,
+  moneyMoneyMoney: MoneyMoneyMoney as ElementType,
+  lpoor: Lpoor as ElementType,
+  yikes: Yikes as ElementType,
+  maxBidding: MaxBidding as ElementType,
+  okBoomer: OkBoomer as ElementType,
+  dryIce: DryIce as ElementType,
+  noClaimedBadges: NoClaimedBadges as ElementType,
 };

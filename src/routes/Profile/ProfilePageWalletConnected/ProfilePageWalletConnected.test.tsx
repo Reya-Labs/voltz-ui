@@ -14,33 +14,27 @@ const { Default, NoClaimedBadges } = composeStories(stories);
 test('renders proper UI when claimed badges present', () => {
   render(<Default />);
 
-  expect(screen.getByText('WELCOME')).not.toBeNull();
+  expect(screen.getByText('WELCOME TO YOUR PROFILE')).not.toBeNull();
   expect(screen.getByText('0XB01F1...378C970')).not.toBeNull();
   expect(
-    screen.getAllByText(
-      'Compete against other traders for rewards by trading or bringing people to the platform.',
+    screen.getByText(
+      'Earn badges through your contribution to the community and activity on the protocol. Badges are earnt throughout each Season, with minting available at the end of each Season. The more you collect the greater your contribution. Season 1 will run until the 31st December 2022.',
     ),
-  ).toHaveLength(2);
-  expect(
-    screen.getByText('AT THE END OF THE SEASON YOU WILL BE ABLE TO CLAIM YOUR EARNED BADGES'),
   ).not.toBeNull();
-  expect(screen.getByText('YOUR BADGE ACHIEVEMENTS COLLECTION')).not.toBeNull();
+  expect(screen.getByText('YOUR BADGE COLLECTION')).not.toBeNull();
 
-  expect(screen.getAllByTestId('BadgeCard')).toHaveLength(6);
+  expect(screen.getAllByTestId('BadgeCard')).toHaveLength(16);
 });
 
 test('renders proper UI when NO claimed badges present', () => {
   render(<NoClaimedBadges />);
 
-  expect(screen.getByText('WELCOME')).not.toBeNull();
+  expect(screen.getByText('WELCOME TO YOUR PROFILE')).not.toBeNull();
   expect(screen.getByText('0XB01F1...378C970')).not.toBeNull();
   expect(
-    screen.getAllByText(
-      'Compete against other traders for rewards by trading or bringing people to the platform.',
+    screen.getByText(
+      'Earn badges through your contribution to the community and activity on the protocol. Badges are earnt throughout each Season, with minting available at the end of each Season. The more you collect the greater your contribution. Season 1 will run until the 31st December 2022.',
     ),
-  ).toHaveLength(2);
-  expect(
-    screen.getByText('AT THE END OF THE SEASON YOU WILL BE ABLE TO CLAIM YOUR EARNED BADGES'),
   ).not.toBeNull();
 
   const badgeCards = screen.queryAllByTestId('BadgeCard');

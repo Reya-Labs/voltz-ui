@@ -2,9 +2,7 @@ import React, { useEffect } from 'react';
 
 import { Loading, Panel } from '@components/atomic';
 import { RankingTable } from '@components/interface';
-import { isUndefined } from 'lodash';
-import { useWallet, useRanking } from '@hooks';
-import { DateTime } from 'luxon';
+import { useWallet, useRanking, useCurrentSeason } from '@hooks';
 
 export type ConnectedRankingTableProps = {
   handleInvite: () => void;
@@ -13,17 +11,15 @@ export type ConnectedRankingTableProps = {
 const ConnectedRankingTable: React.FunctionComponent<ConnectedRankingTableProps> = ({
   handleInvite,
 }) => {
-  const wallet = useWallet();
-  const { rankings, findCurrentSeason } = useRanking(wallet);
+  const { rankings } = useRanking();
   const { result, loading, call } = rankings;
-
-  const season = findCurrentSeason(DateTime.local());
+  const season = useCurrentSeason();
 
   useEffect(() => {
     call();
   }, [call]);
 
-  if (!loading && result && !isUndefined(season.seasonNumber)) {
+  if (!loading && result && season) {
     return (
       <Panel
         variant="dark"
@@ -33,8 +29,9 @@ const ConnectedRankingTable: React.FunctionComponent<ConnectedRankingTableProps>
         <RankingTable
           ranking={result}
           handleInvite={handleInvite}
-          seasonNumber={season.seasonNumber + 1}
-          seasonEndDate={season.seasonEndDate}
+          seasonNumber={season.id}
+          seasonStartDate={season.startDate}
+          seasonEndDate={season.endDate}
         />
       </Panel>
     );

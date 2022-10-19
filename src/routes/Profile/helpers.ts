@@ -1,4 +1,6 @@
-import { BadgeTier, BadgeVariant } from './types';
+import { BadgeTier, ComingSoonBadges } from './types';
+import { BadgeVariant } from '@graphql';
+import { Yikes } from '../../components/atomic/Icon/icons';
 
 export const TIER_COPY_MAP: Record<BadgeTier, string> = {
   tier1: 'TIER 1',
@@ -8,7 +10,7 @@ export const TIER_COPY_MAP: Record<BadgeTier, string> = {
   easterEgg: 'EASTER EGG',
 };
 
-export const BADGE_VARIANT_TITLE_COPY_MAP: Record<BadgeVariant, string> = {
+export const BADGE_VARIANT_TITLE_COPY_MAP: Record<BadgeVariant | ComingSoonBadges, string> = {
   degenStuff: 'DEGEN STUFF',
   deltaDegen: 'DELTA DEGEN',
   irsConnoisseur: 'IRS CONNOISSEUR',
@@ -21,30 +23,36 @@ export const BADGE_VARIANT_TITLE_COPY_MAP: Record<BadgeVariant, string> = {
   waterHose: 'WATER HOSE',
   moneyMoneyMoney: 'MONEY MONEY MONEY',
   lpoor: 'LPOOR',
-  sugarDaddy: 'SUGAR DADDY',
+  yikes: 'YIKES',
   maxBidding: 'MAX BIDDING',
   okBoomer: 'OK BOOMER',
+  dryIce: 'DRY ICE',
+  governorz: 'GOVERNORZ',
+  diplomatz: 'DIPLOMATZ',
+  senatorz: 'SENATORZ',
+  theOgActivity: 'THE OG ACTIVITY',
 };
 
 export const BADGE_VARIANT_DESCRIPTION_COPY_MAP: Record<BadgeVariant, string> = {
-  degenStuff: 'Taking no risks, opening your first Fixed Taker position.',
-  deltaDegen: 'Taking no risks, opening your first Fixed Taker position.',
-  irsConnoisseur: 'Taking no risks, opening your first Fixed Taker position.',
-  leverageCrowbar: 'Taking no risks, opening your first Fixed Taker position.',
-  noRiskHereSer: 'Taking no risks, opening your first Fixed Taker position.',
-  sushiRoll: 'Taking no risks, opening your first Fixed Taker position.',
-  seasonedTrader: 'Taking no risks, opening your first Fixed Taker position.',
-  beWaterMyFriend: 'Taking no risks, opening your first Fixed Taker position.',
-  rainMaker: 'Taking no risks, opening your first Fixed Taker position.',
-  waterHose: 'Taking no risks, opening your first Fixed Taker position.',
-  moneyMoneyMoney: 'Taking no risks, opening your first Fixed Taker position.',
-  lpoor: 'Taking no risks, opening your first Fixed Taker position.',
-  sugarDaddy: 'Taking no risks, opening your first Fixed Taker position.',
-  maxBidding: 'Taking no risks, opening your first Fixed Taker position.',
-  okBoomer: 'Taking no risks, opening your first Fixed Taker position.',
+  degenStuff: "You went big and it's been noticed.",
+  deltaDegen: 'You went variable, degen status incoming.',
+  irsConnoisseur: 'You have entered many positions now ser.',
+  leverageCrowbar: 'Woah you like the leverage.',
+  noRiskHereSer: 'Nice and stable with a fixed taker position.',
+  sushiRoll: 'Keep rolling rolling rolling.',
+  seasonedTrader: 'A top 5 leaderboard finish this season.',
+  beWaterMyFriend: 'A top 5 Liquidity Provider finish this season.',
+  rainMaker: 'You went big on liquidity and it got noticed.',
+  waterHose: 'You have provided much liquidity now ser.',
+  moneyMoneyMoney: 'You sure know how to provide liquidity.',
+  lpoor: 'Protocol just got a little more liquid.',
+  yikes: 'Oof you’re the largest liquidation this season.',
+  maxBidding: 'You went all out on leverage.',
+  okBoomer: 'We all start somewhere, you just started small.',
+  dryIce: 'LPs can start small too.',
 };
 
-export const BADGE_VARIANT_TIER_MAP: Record<BadgeVariant, BadgeTier> = {
+export const BADGE_VARIANT_TIER_MAP: Record<BadgeVariant | ComingSoonBadges, BadgeTier> = {
   degenStuff: 'tier3',
   deltaDegen: 'tier1',
   irsConnoisseur: 'tier2',
@@ -57,7 +65,19 @@ export const BADGE_VARIANT_TIER_MAP: Record<BadgeVariant, BadgeTier> = {
   waterHose: 'tier2',
   moneyMoneyMoney: 'tier2',
   lpoor: 'tier1',
-  sugarDaddy: 'easterEgg',
+  yikes: 'easterEgg',
   maxBidding: 'easterEgg',
   okBoomer: 'easterEgg',
+  dryIce: 'easterEgg',
+  governorz: 'tier1',
+  diplomatz: 'tier2',
+  senatorz: 'tier3',
+  theOgActivity: 'legendary',
 };
+
+export const COMING_SOON_BADGES: ComingSoonBadges[] = [
+  'governorz',
+  'diplomatz',
+  'senatorz',
+  'theOgActivity',
+];
