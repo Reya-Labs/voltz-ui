@@ -1,6 +1,7 @@
 export type BadgeVariant =
   | 'degenStuff'
   | 'deltaDegen'
+  | 'dryIce'
   | 'irsConnoisseur'
   | 'leverageCrowbar'
   | 'noRiskHereSer'

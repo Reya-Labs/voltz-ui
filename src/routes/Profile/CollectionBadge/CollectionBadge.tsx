@@ -6,9 +6,10 @@ import { BadgeVariant } from '../types';
 import { BadgePill } from '../BadgePill/BadgePill';
 import { BADGE_VARIANT_TITLE_COPY_MAP } from '../helpers';
 import Skeleton from '@mui/material/Skeleton';
+import { formatPOSIXTimestamp } from '@utilities';
 
 export type CollectionBadgeProps = {
-  achievedAt?: string;
+  achievedAt?: number;
   variant: BadgeVariant;
   loading?: boolean;
 };
@@ -73,7 +74,7 @@ export const CollectionBadge: React.FunctionComponent<CollectionBadgeProps> = ({
           textAlign: 'right',
         }}
       >
-        {achievedAt ? `Achieved: ${achievedAt}` : 'Keep trading...'}
+        {achievedAt ? `Achieved: ${formatPOSIXTimestamp(achievedAt)}` : 'Keep trading...'}
       </Typography>
     </Box>
   );

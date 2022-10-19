@@ -6,34 +6,64 @@ type ClaimedBadge = {
 
 export const claimedBadges: ClaimedBadge[] = [
   {
-    variant: 'noRiskHereSer',
-  },
-  {
-    variant: 'leverageCrowbar',
+    variant: 'degenStuff',
   },
   {
     variant: 'deltaDegen',
   },
   {
+    variant: 'dryIce',
+  },
+  {
     variant: 'irsConnoisseur',
+  },
+  {
+    variant: 'leverageCrowbar',
+  },
+  {
+    variant: 'noRiskHereSer',
   },
   {
     variant: 'sushiRoll',
   },
   {
-    variant: 'degenStuff',
+    variant: 'seasonedTrader',
+  },
+  {
+    variant: 'beWaterMyFriend',
+  },
+  {
+    variant: 'rainMaker',
+  },
+  {
+    variant: 'waterHose',
+  },
+  {
+    variant: 'moneyMoneyMoney',
+  },
+  {
+    variant: 'lpoor',
+  },
+  {
+    variant: 'sugarDaddy',
+  },
+  {
+    variant: 'maxBidding',
+  },
+  {
+    variant: 'okBoomer',
   },
 ];
 
 type CollectionBadge = {
   variant: BadgeVariant;
-  achievedAt?: string;
+  achievedAt?: number;
 };
 
 export const collectionBadges: CollectionBadge[] = [
   {
     variant: 'noRiskHereSer',
-    achievedAt: '10/12/22',
+    achievedAt: 1665525600000,
   },
   {
     variant: 'deltaDegen',
@@ -52,19 +82,19 @@ export const collectionBadges: CollectionBadge[] = [
   },
   {
     variant: 'seasonedTrader',
-    achievedAt: '10/12/22',
+    achievedAt: 1665525600000,
   },
   {
     variant: 'okBoomer',
-    achievedAt: '10/12/22',
+    achievedAt: 1665525600000,
   },
   {
     variant: 'maxBidding',
-    achievedAt: '10/12/22',
+    achievedAt: 1665525600000,
   },
   {
     variant: 'sugarDaddy',
-    achievedAt: '10/12/22',
+    achievedAt: 1665525600000,
   },
   {
     variant: 'lpoor',
@@ -80,5 +110,8 @@ export const collectionBadges: CollectionBadge[] = [
   },
   {
     variant: 'beWaterMyFriend',
+  },
+  {
+    variant: 'dryIce',
   },
 ];

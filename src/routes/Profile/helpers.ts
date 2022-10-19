@@ -24,6 +24,7 @@ export const BADGE_VARIANT_TITLE_COPY_MAP: Record<BadgeVariant, string> = {
   sugarDaddy: 'SUGAR DADDY',
   maxBidding: 'MAX BIDDING',
   okBoomer: 'OK BOOMER',
+  dryIce: 'DRY ICE',
 };
 
 export const BADGE_VARIANT_DESCRIPTION_COPY_MAP: Record<BadgeVariant, string> = {
@@ -42,6 +43,7 @@ export const BADGE_VARIANT_DESCRIPTION_COPY_MAP: Record<BadgeVariant, string> = 
   sugarDaddy: 'Taking no risks, opening your first Fixed Taker position.',
   maxBidding: 'Taking no risks, opening your first Fixed Taker position.',
   okBoomer: 'Taking no risks, opening your first Fixed Taker position.',
+  dryIce: 'Taking no risks, opening your first Fixed Taker position.',
 };
 
 export const BADGE_VARIANT_TIER_MAP: Record<BadgeVariant, BadgeTier> = {
@@ -60,4 +62,5 @@ export const BADGE_VARIANT_TIER_MAP: Record<BadgeVariant, BadgeTier> = {
   sugarDaddy: 'easterEgg',
   maxBidding: 'easterEgg',
   okBoomer: 'easterEgg',
+  dryIce: 'easterEgg',
 };

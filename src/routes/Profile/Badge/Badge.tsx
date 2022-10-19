@@ -4,7 +4,7 @@ import { BadgeVariant } from '../types';
 import Skeleton from '@mui/material/Skeleton';
 
 export type BadgeProps = {
-  variant: BadgeVariant;
+  variant: BadgeVariant | 'noClaimedBadges';
   loading?: boolean;
 };
 
