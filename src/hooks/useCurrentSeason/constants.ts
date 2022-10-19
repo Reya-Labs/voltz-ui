@@ -19,17 +19,17 @@ export const SEASONS: Season[] = [
   {
     id: 2,
     startDate: DateTime.fromSQL('2023-01-01'),
-    endDate: DateTime.fromSQL('2022-03-31'),
+    endDate: DateTime.fromSQL('2023-03-31'),
   },
   {
     id: 3,
     startDate: DateTime.fromSQL('2023-04-01'),
-    endDate: DateTime.fromSQL('2022-06-30'),
+    endDate: DateTime.fromSQL('2023-06-30'),
   },
   {
     id: 4,
     startDate: DateTime.fromSQL('2023-07-01'),
-    endDate: DateTime.fromSQL('2022-09-30'),
+    endDate: DateTime.fromSQL('2023-09-30'),
   },
   {
     id: 5,
