@@ -16,7 +16,7 @@ test('renders proper UI when achieved', () => {
 
   expect(screen.getByTestId('CollectionBadge-leverageCrowbar')).not.toBeNull();
   expect(screen.getByText('LEVERAGE CROWBAR')).not.toBeNull();
-  expect(screen.getByText('Achieved: 10/12/2022')).not.toBeNull();
+  expect(screen.getByText('Achieved: 02/02/22')).not.toBeNull();
   expect(screen.getByText('TIER 2')).not.toBeNull();
 });
 

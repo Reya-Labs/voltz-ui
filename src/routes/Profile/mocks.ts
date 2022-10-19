@@ -63,7 +63,7 @@ type CollectionBadge = {
 export const collectionBadges: CollectionBadge[] = [
   {
     variant: 'noRiskHereSer',
-    achievedAt: 1665525600000,
+    achievedAt: new Date('02/02/2022').valueOf(),
   },
   {
     variant: 'deltaDegen',
@@ -82,19 +82,19 @@ export const collectionBadges: CollectionBadge[] = [
   },
   {
     variant: 'seasonedTrader',
-    achievedAt: 1665525600000,
+    achievedAt: new Date('02/02/2022').valueOf(),
   },
   {
     variant: 'okBoomer',
-    achievedAt: 1665525600000,
+    achievedAt: new Date('02/02/2022').valueOf(),
   },
   {
     variant: 'maxBidding',
-    achievedAt: 1665525600000,
+    achievedAt: new Date('02/02/2022').valueOf(),
   },
   {
     variant: 'sugarDaddy',
-    achievedAt: 1665525600000,
+    achievedAt: new Date('02/02/2022').valueOf(),
   },
   {
     variant: 'lpoor',
