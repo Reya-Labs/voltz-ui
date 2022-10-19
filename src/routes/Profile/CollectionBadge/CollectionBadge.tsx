@@ -77,7 +77,7 @@ export const CollectionBadge: React.FunctionComponent<CollectionBadgeProps> = ({
       >
         {achievedAt
           ? `Achieved: ${formatPOSIXTimestamp(achievedAt)}`
-          : COMING_SOON_BADGES.indexOf(variant) !== -1
+          : COMING_SOON_BADGES.indexOf(variant as ComingSoonBadges) !== -1
           ? 'Contribute...'
           : 'Keep trading...'}
       </Typography>
