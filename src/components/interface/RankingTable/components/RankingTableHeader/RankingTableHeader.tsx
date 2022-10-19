@@ -7,6 +7,7 @@ export type RankingTableHeaderProps = {
   loading?: boolean;
   handleInvite: () => void;
   seasonNumber: number;
+  seasonStartDate: DateTime;
   seasonEndDate: DateTime;
   userRank?: number;
   userAddress?: string;
@@ -17,6 +18,7 @@ const RankingTableHeader = ({
   loading,
   handleInvite,
   seasonNumber,
+  seasonStartDate,
   seasonEndDate,
   userAddress,
   userRank,
@@ -34,6 +36,7 @@ const RankingTableHeader = ({
         <RankingUserSummary
           handleInvite={handleInvite}
           seasonNumber={seasonNumber}
+          seasonStartDate={seasonStartDate}
           seasonEndDate={seasonEndDate}
           userRank={userRank}
           userAddress={userAddress}

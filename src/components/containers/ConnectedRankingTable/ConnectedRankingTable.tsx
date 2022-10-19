@@ -11,8 +11,7 @@ export type ConnectedRankingTableProps = {
 const ConnectedRankingTable: React.FunctionComponent<ConnectedRankingTableProps> = ({
   handleInvite,
 }) => {
-  const wallet = useWallet();
-  const { rankings } = useRanking(wallet);
+  const { rankings } = useRanking();
   const { result, loading, call } = rankings;
   const season = useCurrentSeason();
 
@@ -30,8 +29,9 @@ const ConnectedRankingTable: React.FunctionComponent<ConnectedRankingTableProps>
         <RankingTable
           ranking={result}
           handleInvite={handleInvite}
-          seasonNumber={season.seasonNumber + 1}
-          seasonEndDate={season.seasonEndDate}
+          seasonNumber={season.id}
+          seasonStartDate={season.startDate}
+          seasonEndDate={season.endDate}
         />
       </Panel>
     );

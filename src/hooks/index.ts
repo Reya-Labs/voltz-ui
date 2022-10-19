@@ -20,4 +20,4 @@ export * from './useTokenApproval';
 export { default as useUniqueId } from './useUniqueId';
 export { default as useWallet } from './useWallet';
 export { default as useRanking } from './useRanking';
-export { default as useCurrentSeason } from './useCurrentSeason';
+export { default as useCurrentSeason } from './useCurrentSeason/useCurrentSeason';

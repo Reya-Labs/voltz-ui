@@ -16,6 +16,7 @@ export type RankingTableProps = {
   ranking: Map<string, number>;
   handleInvite: () => void;
   seasonNumber: number;
+  seasonStartDate: DateTime;
   seasonEndDate: DateTime;
 };
 
@@ -23,6 +24,7 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
   ranking,
   handleInvite,
   seasonNumber,
+  seasonStartDate,
   seasonEndDate,
 }) => {
   const [page, setPage] = useState<number>(0);
@@ -181,6 +183,7 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
         loading={false}
         handleInvite={handleInvite}
         seasonNumber={seasonNumber}
+        seasonStartDate={seasonStartDate}
         seasonEndDate={seasonEndDate}
         userRank={userRank}
         userAddress={userAddress}

@@ -19,7 +19,7 @@ type ProfilePageProps = {
   account: string;
   claimedBadges: BadgeCardProps[];
   collection: CollectionBadgeProps[];
-  season?: string;
+  season: string;
   loading?: boolean;
 };
 
@@ -148,7 +148,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
                   padding: (theme) => theme.spacing(1, 2),
                 }}
               >
-                Season {season.padStart(2, '0')}
+                Season {season}
               </Typography>
             )}
           </Box>
@@ -214,7 +214,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
                   fontWeight: 700,
                 }}
               >
-                SEASON {season.padStart(2, '0')}
+                SEASON {season}
               </span>
             )}
           </Typography>
