@@ -13,7 +13,7 @@ const Template: ComponentStory<typeof CollectionBadge> = (args) => <CollectionBa
 
 export const Default = Template.bind({});
 const argsDefault: React.ComponentProps<typeof CollectionBadge> = {
-  achievedAt: 1665525600000,
+  achievedAt: new Date('02/02/2022').valueOf(),
   variant: 'leverageCrowbar',
 };
 Default.args = argsDefault;
