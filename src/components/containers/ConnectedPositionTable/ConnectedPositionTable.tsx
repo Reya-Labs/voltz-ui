@@ -133,7 +133,7 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
     let netWithdraw = undefined;
     if (agent === Agents.LIQUIDITY_PROVIDER) {
       netWithdraw = (typeof spData?.fees === "number" && typeof spData?.settlementCashflow === "number")
-         ? spData?.margin + spData?.fees + spData?.settlementCashflow 
+         ? spData?.margin + spData?.settlementCashflow 
          : undefined;
     } else {
       netWithdraw = (typeof spData?.settlementCashflow === "number") ? spData?.margin + spData?.settlementCashflow : undefined;
