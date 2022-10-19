@@ -3,14 +3,15 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import { Typography } from '@components/atomic';
 import { BadgePill } from '../BadgePill/BadgePill';
-import { BADGE_VARIANT_TITLE_COPY_MAP } from '../helpers';
+import { BADGE_VARIANT_TITLE_COPY_MAP, COMING_SOON_BADGES } from '../helpers';
 import Skeleton from '@mui/material/Skeleton';
 import { formatPOSIXTimestamp } from '@utilities';
 import { BadgeVariant } from '@graphql';
+import { ComingSoonBadges } from '../types';
 
 export type CollectionBadgeProps = {
   achievedAt?: number;
-  variant: BadgeVariant;
+  variant: BadgeVariant | ComingSoonBadges;
   loading?: boolean;
 };
 export const CollectionBadge: React.FunctionComponent<CollectionBadgeProps> = ({
@@ -74,7 +75,11 @@ export const CollectionBadge: React.FunctionComponent<CollectionBadgeProps> = ({
           textAlign: 'right',
         }}
       >
-        {achievedAt ? `Achieved: ${formatPOSIXTimestamp(achievedAt)}` : 'Keep trading...'}
+        {achievedAt
+          ? `Achieved: ${formatPOSIXTimestamp(achievedAt)}`
+          : COMING_SOON_BADGES.indexOf(variant) !== -1
+          ? 'Contribute...'
+          : 'Keep trading...'}
       </Typography>
     </Box>
   );
