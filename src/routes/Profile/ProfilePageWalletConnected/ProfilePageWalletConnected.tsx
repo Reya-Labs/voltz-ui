@@ -18,7 +18,7 @@ type ProfilePageProps = {
   account: string;
   claimedBadges: BadgeCardProps[];
   collection: CollectionBadgeProps[];
-  season: string;
+  season?: string;
   loading?: boolean;
 };
 
@@ -133,18 +133,20 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
             }}
           >
             <Typography variant="h2">YOUR BADGE ACHIEVEMENTS COLLECTION</Typography>
-            <Typography
-              variant="h1"
-              sx={{
-                fontWeight: 400,
-                fontSize: '14px',
-                lineHeight: '14px',
-                fontFamily: 'PixelOperatorMono',
-                padding: (theme) => theme.spacing(1, 2),
-              }}
-            >
-              Season {season}
-            </Typography>
+            {season && (
+              <Typography
+                variant="h1"
+                sx={{
+                  fontWeight: 400,
+                  fontSize: '14px',
+                  lineHeight: '14px',
+                  fontFamily: 'PixelOperatorMono',
+                  padding: (theme) => theme.spacing(1, 2),
+                }}
+              >
+                Season {season}
+              </Typography>
+            )}
           </Box>
           <Grid
             itemsPerRow={!loading && claimedBadges.length === 0 ? 1 : 3}
@@ -202,13 +204,15 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
             }}
           >
             THE COLLECTION -&nbsp;
-            <span
-              style={{
-                fontWeight: 700,
-              }}
-            >
-              SEASON {season}
-            </span>
+            {season && (
+              <span
+                style={{
+                  fontWeight: 700,
+                }}
+              >
+                SEASON {season}
+              </span>
+            )}
           </Typography>
           <Typography
             variant="body2"

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Icon } from '@components/atomic';
-import { BadgeVariant } from '../types';
 import Skeleton from '@mui/material/Skeleton';
+import { BadgeVariant } from '@graphql';
 
 export type BadgeProps = {
   variant: BadgeVariant | 'noClaimedBadges';
