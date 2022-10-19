@@ -11,6 +11,7 @@ import {
   BADGE_VARIANT_DESCRIPTION_COPY_MAP,
   BADGE_VARIANT_TIER_MAP,
   BADGE_VARIANT_TITLE_COPY_MAP,
+  COMING_SOON_BADGES,
 } from '../helpers';
 import { Badge } from '../Badge/Badge';
 
@@ -72,7 +73,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
             fontWeight: 400,
           }}
         >
-          WELCOME&nbsp;
+          WELCOME TO YOUR PROFILE&nbsp;
           <span
             style={{
               fontWeight: 700,
@@ -92,7 +93,10 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
             color: colors.lavenderWeb.darken015,
           }}
         >
-          Compete against other traders for rewards by trading or bringing people to the platform.
+          Earn badges through your contribution to the community and activity on the protocol.
+          Badges are earnt throughout each Season, with minting available at the end of each Season.
+          The more you collect the greater your contribution. Season 1 will run until the 31st
+          December 2022.
         </Typography>
         <Box
           sx={{
@@ -109,13 +113,13 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
             }}
           >
             <Pill
-              text="WEN CLAIMING"
+              text="CLAIM"
               variant="wildStrawberry"
               sx={{
                 marginRight: (theme) => theme.spacing(2),
               }}
             />
-            AT THE END OF THE SEASON YOU WILL BE ABLE TO CLAIM YOUR EARNED BADGES
+            UNAVAILABLE UNTIL THE END OF THE SEASON.
           </Typography>
         </Box>
         <Box
@@ -132,7 +136,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
               justifyContent: 'space-between',
             }}
           >
-            <Typography variant="h2">YOUR BADGE ACHIEVEMENTS COLLECTION</Typography>
+            <Typography variant="h2">YOUR BADGE COLLECTION</Typography>
             {season && (
               <Typography
                 variant="h1"
@@ -184,7 +188,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
                     marginTop: (theme) => theme.spacing(4),
                   }}
                 >
-                  No claimed badges yet!
+                  Make contributions to the community or trade on the protocol to earn badges
                 </Typography>
               </Box>
             )}
@@ -225,7 +229,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
               color: colors.lavenderWeb.darken015,
             }}
           >
-            Compete against other traders for rewards by trading or bringing people to the platform.
+            Make contributions to the community or trade on the protocol to earn badges{' '}
           </Typography>
           <Grid
             itemsPerRow={1}
@@ -236,6 +240,33 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
           >
             {collections.map((badge, index) => (
               <CollectionBadge key={`${badge.variant}${index}`} {...badge} loading={loading} />
+            ))}
+          </Grid>
+        </Box>
+
+        <Box
+          sx={{
+            padding: (theme) => theme.spacing(0, 4),
+            marginTop: (theme) => theme.spacing(6),
+          }}
+        >
+          <Typography
+            variant="h2"
+            sx={{
+              fontWeight: 400,
+            }}
+          >
+            COMING SOON
+          </Typography>
+          <Grid
+            itemsPerRow={1}
+            sx={{
+              marginTop: (theme) => theme.spacing(6),
+              rowGap: (theme) => theme.spacing(2),
+            }}
+          >
+            {COMING_SOON_BADGES.map((badge, index) => (
+              <CollectionBadge key={`${badge}${index}`} variant={badge} loading={loading} />
             ))}
           </Grid>
         </Box>
