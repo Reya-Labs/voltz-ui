@@ -27,59 +27,88 @@ export const iconSx: SystemStyleObject<Theme> = {
   },
 };
 
+export const OPEN_CLASS = 'open';
+export const ACTIVE_CLASS = 'active';
+
 export const buttonSx: SystemStyleObject<Theme> = {
   fontSize: '16px',
-  lineHeight: '14px',
+  lineHeight: '16px',
   fontWeight: 400,
-  letterSpacing: '1px',
-  textTransform: 'uppercase',
-  color: 'secondary.darken020',
-  padding: (theme) => theme.spacing(2),
-  marginLeft: (theme) => theme.spacing(2),
+  fontFamily: 'DM Sans',
+  letterSpacing: '0.02rem',
+  color: colors.lavenderWeb.base,
+  padding: (theme) => theme.spacing(2, 4),
+  opacity: 0.7,
+  textTransform: 'none',
+  textDecoration: 'none',
+  marginLeft: (theme) => theme.spacing(4),
+  borderRadius: '8px',
 
   '&:hover': {
-    textDecoration: 'none',
-    backgroundColor: 'transparent',
-    color: 'secondary.light',
-    textShadow: '0px 0px 11px rgba(229, 225, 249, 0.7)',
+    background: '#352E56',
+    opacity: 1,
   },
 
-  '&:active': {
-    textDecoration: 'none',
-    backgroundColor: 'transparent',
-    color: 'secondary.light',
-    textShadow: '0px 0px 11px rgba(229, 225, 249, 0.7)',
+  [`&.${OPEN_CLASS}`]: {
+    background: '#352E56',
+    opacity: 1,
+    borderRadius: '8px 8px 0px 0px',
   },
 
-  '&.open': {
-    textDecoration: 'none',
-    backgroundColor: 'transparent',
-    color: 'secondary.light',
-    textShadow: '0px 0px 11px rgba(229, 225, 249, 0.7)',
+  [`&.${ACTIVE_CLASS}`]: {
+    background: '#352E56',
+    opacity: 1,
   },
 };
 
 export const subMenuButtonSx: SystemStyleObject<Theme> = {
-  ...buttonSx,
-  marginTop: (theme) => `${theme.spacing(2)} !important`,
-  marginLeft: 0,
-  textAlign: 'left',
-  justifyContent: 'flex-start',
+  fontFamily: 'PixelOperatorMono',
+  fontWeight: 400,
+  fontSize: '16px',
+  lineHeight: '14px',
+  letterSpacing: '0.02em',
+  color: colors.lavenderWeb.base,
+  textDecoration: 'none',
+  background: '#251F3F',
+  padding: (theme) => theme.spacing(2, 4),
+  borderRadius: '8px',
+
+  '&:hover': {
+    textDecoration: 'none',
+    borderRadius: '8px',
+    borderBottomColor: 'transparent',
+    background: '#0E0C16',
+  },
+
+  [`&.${ACTIVE_CLASS}`]: {
+    background: '#0E0C16',
+  },
 };
 
 export const buttonGroupSx: SystemStyleObject<Theme> = {
   '& .MuiButtonGroup-grouped:not(:last-of-type):hover': {
     borderBottomColor: 'transparent',
   },
+  '& .MuiButtonGroup-grouped:not(:last-of-type)': {
+    textDecoration: 'none',
+    borderRadius: '8px',
+    borderBottomColor: 'transparent',
+  },
+  '& .MuiButtonGroup-grouped:not(:first-of-type)': {
+    textDecoration: 'none',
+    borderRadius: '8px',
+    borderBottomColor: 'transparent',
+  },
 };
 
 export const popoverOverrideSx: SystemStyleObject<Theme> = {
   '& .MuiPaper-root': {
-    backgroundColor: 'transparent',
-    backgroundImage: 'none',
-    background: 'none',
-    backdropFilter: 'blur(8px)',
-    borderRadius: '4px',
-    border: '1px solid rgba(15,12,29,.24)',
+    background: '#352E56',
+    borderRadius: '0px 8px 8px 8px',
+  },
+  '& .MuiButtonGroup-root': {
+    padding: (theme) => theme.spacing(4),
+    rowGap: (theme) => theme.spacing(4),
+    minWidth: '176px',
   },
 };
