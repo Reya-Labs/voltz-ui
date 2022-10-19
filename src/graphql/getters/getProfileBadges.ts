@@ -13,7 +13,7 @@ export type BadgeVariant =
   | 'waterHose'
   | 'moneyMoneyMoney'
   | 'lpoor'
-  | 'sugarDaddy'
+  | 'yikes'
   | 'maxBidding'
   | 'okBoomer'
   | 'dryIce';
@@ -107,7 +107,7 @@ const DEFAULT_RESPONSE: GetProfileBadgesResponse = {
       variant: 'maxBidding',
     },
     {
-      variant: 'sugarDaddy',
+      variant: 'yikes',
     },
     {
       variant: 'lpoor',
@@ -186,7 +186,7 @@ export async function getProfileBadges(owner: string): Promise<GetProfileBadgesR
             variant: 'maxBidding',
           },
           {
-            variant: 'sugarDaddy',
+            variant: 'yikes',
           },
           {
             variant: 'lpoor',

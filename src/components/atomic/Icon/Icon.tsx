@@ -29,7 +29,7 @@ const Icon: React.FunctionComponent<IconProps> = ({ name, sx, link, ...props }) 
       case 'waterHose':
       case 'moneyMoneyMoney':
       case 'lpoor':
-      case 'sugarDaddy':
+      case 'yikes':
       case 'maxBidding':
       case 'okBoomer':
       case 'dryIce':

@@ -45,7 +45,7 @@ export const claimedBadges: ClaimedBadge[] = [
     variant: 'lpoor',
   },
   {
-    variant: 'sugarDaddy',
+    variant: 'yikes',
   },
   {
     variant: 'maxBidding',
@@ -93,7 +93,7 @@ export const collectionBadges: CollectionBadge[] = [
     achievedAt: new Date('02/02/2022').valueOf(),
   },
   {
-    variant: 'sugarDaddy',
+    variant: 'yikes',
     achievedAt: new Date('02/02/2022').valueOf(),
   },
   {

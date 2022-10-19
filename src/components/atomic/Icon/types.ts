@@ -26,7 +26,7 @@ import {
   Rainmaker,
   SeasonedTrader,
   Settle,
-  SugarDaddy,
+  Yikes,
   SushiRoll,
   Swap,
   TokenDai,
@@ -71,7 +71,7 @@ export type Icons =
   | 'waterHose'
   | 'moneyMoneyMoney'
   | 'lpoor'
-  | 'sugarDaddy'
+  | 'yikes'
   | 'maxBidding'
   | 'dryIce'
   | 'noClaimedBadges'
@@ -109,7 +109,7 @@ export const iconMap: Record<Icons, ElementType> = {
   waterHose: WaterHose as ElementType,
   moneyMoneyMoney: MoneyMoneyMoney as ElementType,
   lpoor: Lpoor as ElementType,
-  sugarDaddy: SugarDaddy as ElementType,
+  yikes: Yikes as ElementType,
   maxBidding: MaxBidding as ElementType,
   okBoomer: OkBoomer as ElementType,
   dryIce: DryIce as ElementType,
