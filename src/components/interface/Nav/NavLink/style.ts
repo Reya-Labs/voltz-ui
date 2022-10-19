@@ -62,7 +62,7 @@ export const buttonSx: SystemStyleObject<Theme> = {
 };
 
 export const subMenuButtonSx: SystemStyleObject<Theme> = {
-  fontFamily: 'Pixel Operator Mono',
+  fontFamily: 'PixelOperatorMono',
   fontWeight: 400,
   fontSize: '16px',
   lineHeight: '14px',
