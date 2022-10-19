@@ -148,7 +148,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
                   padding: (theme) => theme.spacing(1, 2),
                 }}
               >
-                Season {season}
+                Season {season.padStart(2, '0')}
               </Typography>
             )}
           </Box>
@@ -214,7 +214,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
                   fontWeight: 700,
                 }}
               >
-                SEASON {season}
+                SEASON {season.padStart(2, '0')}
               </span>
             )}
           </Typography>
