@@ -34,7 +34,7 @@ const collectionBadgesSort = [
   'okBoomer',
   'dryIce',
   'maxBidding',
-  'sugarDaddy',
+  'yikes',
   'lpoor',
   'moneyMoneyMoney',
   'waterHose',

@@ -1,5 +1,6 @@
 import { BadgeTier, ComingSoonBadges } from './types';
 import { BadgeVariant } from '@graphql';
+import { Yikes } from '../../components/atomic/Icon/icons';
 
 export const TIER_COPY_MAP: Record<BadgeTier, string> = {
   tier1: 'TIER 1',
@@ -22,7 +23,7 @@ export const BADGE_VARIANT_TITLE_COPY_MAP: Record<BadgeVariant | ComingSoonBadge
   waterHose: 'WATER HOSE',
   moneyMoneyMoney: 'MONEY MONEY MONEY',
   lpoor: 'LPOOR',
-  sugarDaddy: 'YIKES',
+  yikes: 'YIKES',
   maxBidding: 'MAX BIDDING',
   okBoomer: 'OK BOOMER',
   dryIce: 'DRY ICE',
@@ -45,8 +46,7 @@ export const BADGE_VARIANT_DESCRIPTION_COPY_MAP: Record<BadgeVariant, string> = 
   waterHose: 'You have provided much liquidity now ser.',
   moneyMoneyMoney: 'You sure know how to provide liquidity.',
   lpoor: 'Protocol just got a little more liquid.',
-  // todo: replace with yikes
-  sugarDaddy: 'Oof you’re the largest liquidation this season.',
+  yikes: 'Oof you’re the largest liquidation this season.',
   maxBidding: 'You went all out on leverage.',
   okBoomer: 'We all start somewhere, you just started small.',
   dryIce: 'LPs can start small too.',
@@ -65,7 +65,7 @@ export const BADGE_VARIANT_TIER_MAP: Record<BadgeVariant | ComingSoonBadges, Bad
   waterHose: 'tier2',
   moneyMoneyMoney: 'tier2',
   lpoor: 'tier1',
-  sugarDaddy: 'easterEgg',
+  yikes: 'easterEgg',
   maxBidding: 'easterEgg',
   okBoomer: 'easterEgg',
   dryIce: 'easterEgg',

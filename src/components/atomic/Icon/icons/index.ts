@@ -34,6 +34,6 @@ export { ReactComponent as NoRiskHereSer } from './badges/noRiskHereSer.svg';
 export { ReactComponent as OkBoomer } from './badges/okBoomer.svg';
 export { ReactComponent as Rainmaker } from './badges/rainmaker.svg';
 export { ReactComponent as SeasonedTrader } from './badges/seasonedTrader.svg';
-export { ReactComponent as SugarDaddy } from './badges/sugarDaddy.svg';
+export { ReactComponent as Yikes } from './badges/yikes.svg';
 export { ReactComponent as SushiRoll } from './badges/sushiRoll.svg';
 export { ReactComponent as WaterHose } from './badges/waterHose.svg';
