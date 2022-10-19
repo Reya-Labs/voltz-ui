@@ -13,10 +13,12 @@ import { SystemStyleObject, Theme } from '@theme';
 import { formatDateTime, formatNumber } from '@utilities';
 import { DateTime } from 'luxon';
 import { ProgressBar } from '@components/composite';
+import React from 'react';
 
 export type RankingUserSummaryProps = {
   seasonNumber?: number;
-  seasonEndDate?: DateTime;
+  seasonStartDate: DateTime;
+  seasonEndDate: DateTime;
   userRank?: number;
   userAddress?: string;
   userPoints?: number;
@@ -26,11 +28,21 @@ export type RankingUserSummaryProps = {
 
 const RankingUserSummary = ({
   seasonNumber,
+  seasonStartDate,
   seasonEndDate,
   userRank,
   userAddress,
   userPoints,
 }: RankingUserSummaryProps) => {
+  const percentage = React.useMemo(() => {
+    const now = Date.now().valueOf();
+    return Math.round(
+      100 *
+        ((now - seasonStartDate.toMillis()) /
+          (seasonEndDate.toMillis() - seasonStartDate.toMillis())),
+    );
+  }, [seasonStartDate, seasonEndDate]);
+
   const commonOverrides: SystemStyleObject<Theme> = {
     '& .MuiTableCell-root': {
       borderColor: 'transparent',
@@ -75,13 +87,6 @@ const RankingUserSummary = ({
     },
   };
 
-  const getPercentage = () => {
-    if (seasonEndDate) {
-      const diff = seasonEndDate.diffNow('days').days;
-      return Math.round((1 - diff / 30) * 100);
-    }
-  };
-
   const renderSeason = () => {
     return (
       <Box sx={{ display: 'flex', width: '80%', marginBottom: '24px' }}>
@@ -117,8 +122,8 @@ const RankingUserSummary = ({
           <ProgressBar
             isMaturity={true}
             leftContent={seasonEndDate ? <>{formatDateTime(seasonEndDate)}</> : undefined}
-            rightContent={<>{getPercentage()}%</>}
-            percentageComplete={getPercentage()}
+            rightContent={<>{percentage}%</>}
+            percentageComplete={percentage}
           />
         </Box>
       </Box>

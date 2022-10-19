@@ -36,7 +36,7 @@ const Profile: React.FunctionComponent = () => {
   }
   return (
     <ProfilePageWalletConnected
-      season={season?.seasonNumber.toString()}
+      season={season.id.toString().padStart(2, '0')}
       account={wallet.account}
       claimedBadges={claimedBadges}
       collection={collectionBadges}
