@@ -2,15 +2,9 @@ import React, { useEffect } from 'react';
 
 import { Loading, Panel } from '@components/atomic';
 import { RankingTable } from '@components/interface';
-import { useWallet, useRanking, useCurrentSeason } from '@hooks';
+import { useRanking, useCurrentSeason } from '@hooks';
 
-export type ConnectedRankingTableProps = {
-  handleInvite: () => void;
-};
-
-const ConnectedRankingTable: React.FunctionComponent<ConnectedRankingTableProps> = ({
-  handleInvite,
-}) => {
+const ConnectedRankingTable: React.FunctionComponent = () => {
   const { rankings } = useRanking();
   const { result, loading, call } = rankings;
   const season = useCurrentSeason();
@@ -28,8 +22,7 @@ const ConnectedRankingTable: React.FunctionComponent<ConnectedRankingTableProps>
       >
         <RankingTable
           ranking={result}
-          handleInvite={handleInvite}
-          seasonNumber={season.id}
+          seasonNumber={season.id.toString().padStart(2, '0')}
           seasonStartDate={season.startDate}
           seasonEndDate={season.endDate}
         />

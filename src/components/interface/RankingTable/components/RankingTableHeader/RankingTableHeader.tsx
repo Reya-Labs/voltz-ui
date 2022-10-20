@@ -5,7 +5,6 @@ import { DateTime } from 'luxon';
 
 export type RankingTableHeaderProps = {
   loading?: boolean;
-  handleInvite: () => void;
   seasonNumber: number;
   seasonStartDate: DateTime;
   seasonEndDate: DateTime;
@@ -16,7 +15,6 @@ export type RankingTableHeaderProps = {
 
 const RankingTableHeader = ({
   loading,
-  handleInvite,
   seasonNumber,
   seasonStartDate,
   seasonEndDate,
@@ -34,7 +32,6 @@ const RankingTableHeader = ({
         <RankingHeaderBox loading={loading} season={seasonNumber} />
 
         <RankingUserSummary
-          handleInvite={handleInvite}
           seasonNumber={seasonNumber}
           seasonStartDate={seasonStartDate}
           seasonEndDate={seasonEndDate}

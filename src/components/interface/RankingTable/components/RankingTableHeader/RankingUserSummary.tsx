@@ -23,7 +23,6 @@ export type RankingUserSummaryProps = {
   userAddress?: string;
   userPoints?: number;
   invitedTraders?: number;
-  handleInvite: () => void;
 };
 
 const RankingUserSummary = ({
