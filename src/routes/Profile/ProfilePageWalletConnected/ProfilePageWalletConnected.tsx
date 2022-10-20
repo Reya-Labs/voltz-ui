@@ -83,6 +83,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
           </span>
         </Typography>
         <Typography
+          data-testId="Profile-BadgesExplained"
           variant="body2"
           sx={{
             marginTop: (theme) => theme.spacing(2),
