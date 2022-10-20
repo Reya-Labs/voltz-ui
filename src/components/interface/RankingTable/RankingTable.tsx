@@ -14,15 +14,13 @@ import { useWallet } from '@hooks';
 
 export type RankingTableProps = {
   ranking: Map<string, number>;
-  handleInvite: () => void;
-  seasonNumber: number;
+  seasonNumber: string;
   seasonStartDate: DateTime;
   seasonEndDate: DateTime;
 };
 
 const RankingTable: React.FunctionComponent<RankingTableProps> = ({
   ranking,
-  handleInvite,
   seasonNumber,
   seasonStartDate,
   seasonEndDate,
@@ -163,7 +161,7 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
       <TableHead>
         <TableRow>
           {labels.map((label) => (
-            <TableCell align={'left'} padding="normal" sx={cellSx}>
+            <TableCell key={label} align={'left'} padding="normal" sx={cellSx}>
               <Typography
                 variant="subtitle1"
                 sx={{ textTransform: 'uppercase', fontWeight: 400, fontSize: 12, color: '#9B97AD' }}
@@ -181,7 +179,6 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
     <>
       <RankingTableHeader
         loading={false}
-        handleInvite={handleInvite}
         seasonNumber={seasonNumber}
         seasonStartDate={seasonStartDate}
         seasonEndDate={seasonEndDate}
