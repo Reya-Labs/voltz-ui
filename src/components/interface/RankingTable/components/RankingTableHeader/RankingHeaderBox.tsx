@@ -1,32 +1,32 @@
 import React from 'react';
-import { SystemStyleObject, Theme } from '@theme';
+import { colors } from '@theme';
 import { Typography } from '@components/atomic';
 import Box from '@mui/material/Box';
 
-export type RankingHeaderBoxProps = {
-  season: string;
-  loading?: boolean;
-};
-
-const labelStyles: SystemStyleObject<Theme> = {
-  textTransform: 'uppercase',
-  fontWeight: 400,
-  fontSize: 14,
-  color: '#B3AFC6',
-};
-const titleStyles: SystemStyleObject<Theme> = {
-  fontSize: '40px',
-  lineHeight: '1.2',
-  marginTop: (theme) => theme.spacing(2),
-};
-
-const RankingHeaderBox = ({ season, loading }: RankingHeaderBoxProps) => (
+const RankingHeaderBox = () => (
   <Box>
-    <Typography variant="h1" sx={titleStyles}>
-      {loading ? 'LOADING...' : 'VOLTZ TRADING LEAGUE'}
+    <Typography
+      variant="h1"
+      sx={{
+        fontSize: '40px',
+        lineHeight: '120%',
+        fontWeight: 700,
+      }}
+    >
+      VOLTZ TRADING LEAGUE
     </Typography>
-    <Typography variant="subtitle1" sx={labelStyles}>
-      COMPETE AGAINST OTHER TRADERS FOR REWARDS BY TRADING.
+    <Typography
+      variant="subtitle1"
+      sx={{
+        fontWeight: 400,
+        lineHeight: '160%',
+        marginTop: (theme) => theme.spacing(2),
+        color: colors.lavenderWeb.darken015,
+        fontSize: '14px',
+        fontFamily: 'DM Sans',
+      }}
+    >
+      Compete against other traders for rewards by trading.
     </Typography>
   </Box>
 );
