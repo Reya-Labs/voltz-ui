@@ -1,49 +1,79 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { Loading, Panel } from '@components/atomic';
 import { RankingTable } from '@components/interface';
-import { useRanking, useCurrentSeason } from '@hooks';
+import { useRanking, useCurrentSeason, useWallet } from '@hooks';
+import { RankType } from '../../../utilities/data';
+const PER_PAGE = 10;
 
 const ConnectedRankingTable: React.FunctionComponent = () => {
   const { rankings } = useRanking();
-  const { result, loading, call } = rankings;
+  const { result: ranking, loading, call } = rankings;
   const season = useCurrentSeason();
+  const [rankingResults, setRankingResults] = useState<RankType[]>([]);
+  const wallet = useWallet();
+  const [userRank, setUserRank] = useState<number>(-1);
+  const [userPoints, setUserPoints] = useState<number>(-1);
+  const [page, setPage] = useState<number>(0);
+  const maxPages = Math.floor(rankingResults.length / PER_PAGE) + 1;
 
+  const handleOnNextPage = () => {
+    if (page + 1 < maxPages) {
+      setPage(page + 1);
+    }
+  };
+
+  const handleOnPrevPage = () => {
+    if (page - 1 > -1) {
+      setPage(page - 1);
+    }
+  };
   useEffect(() => {
     call();
   }, [call]);
 
-  if (!loading && result && season) {
-    return (
-      <Panel
-        variant="dark"
-        padding="small"
-        sx={{ width: '100%', maxWidth: '800px', margin: '0 auto', background: 'transparent' }}
-      >
-        <RankingTable
-          ranking={result}
-          seasonNumber={season.id.toString().padStart(2, '0')}
-          seasonStartDate={season.startDate}
-          seasonEndDate={season.endDate}
-        />
-      </Panel>
-    );
-  }
+  useEffect(() => {
+    if (!ranking) {
+      return;
+    }
+
+    const rankResult: RankType[] = [];
+    const keys = Array.from(ranking.keys());
+    keys.forEach((address) => {
+      const value = ranking.get(address);
+      rankResult.push({ address: address, points: value ?? 0 });
+    });
+
+    const s = rankResult.sort((a, b) => b.points - a.points);
+
+    if (s) {
+      for (let i = 0; i < s.length; i++) {
+        const e = s[i];
+        if (e.address === wallet.account) {
+          setUserPoints(e.points);
+          setUserRank(i);
+        }
+      }
+    }
+
+    setRankingResults(s);
+  }, [wallet.account, ranking]);
 
   return (
-    <Panel
-      variant="grey-dashed"
-      padding="small"
-      sx={{
-        width: '100%',
-        maxWidth: '800px',
-        margin: '0 auto',
-        background: 'transparent',
-        marginBottom: '600px',
-      }}
-    >
-      <Loading sx={{ margin: '0 auto' }} />
-    </Panel>
+    <RankingTable
+      loading={loading}
+      rankings={rankingResults.slice(page * 10, page * 10 + PER_PAGE)}
+      maxPages={maxPages}
+      userAddress={wallet.account || ''}
+      userRank={userRank}
+      userPoints={userPoints}
+      seasonNumber={season.id.toString().padStart(2, '0')}
+      seasonStartDate={season.startDate}
+      seasonEndDate={season.endDate}
+      page={page}
+      onNextPage={handleOnNextPage}
+      onPrevPage={handleOnPrevPage}
+      perPage={PER_PAGE}
+    />
   );
 };
 
