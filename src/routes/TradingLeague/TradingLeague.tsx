@@ -7,9 +7,9 @@ import { setPageTitle } from '@utilities';
 import { Page } from '@components/interface';
 import ConnectedRankingTable from '../../components/containers/ConnectedRankingTable/ConnectedRankingTable';
 
-const LeaderBoard: React.FunctionComponent = () => {
+const TradingLeague: React.FunctionComponent = () => {
   useEffect(() => {
-    setPageTitle('Leaderboard');
+    setPageTitle('Trading League');
   }, []);
 
   return (
@@ -21,4 +21,4 @@ const LeaderBoard: React.FunctionComponent = () => {
   );
 };
 
-export default LeaderBoard;
+export default TradingLeague;
