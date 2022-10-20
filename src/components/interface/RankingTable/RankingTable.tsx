@@ -14,7 +14,6 @@ import { useWallet } from '@hooks';
 
 export type RankingTableProps = {
   ranking: Map<string, number>;
-  handleInvite: () => void;
   seasonNumber: number;
   seasonStartDate: DateTime;
   seasonEndDate: DateTime;
@@ -22,7 +21,6 @@ export type RankingTableProps = {
 
 const RankingTable: React.FunctionComponent<RankingTableProps> = ({
   ranking,
-  handleInvite,
   seasonNumber,
   seasonStartDate,
   seasonEndDate,
@@ -181,7 +179,6 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
     <>
       <RankingTableHeader
         loading={false}
-        handleInvite={handleInvite}
         seasonNumber={seasonNumber}
         seasonStartDate={seasonStartDate}
         seasonEndDate={seasonEndDate}
