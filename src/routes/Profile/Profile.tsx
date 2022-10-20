@@ -3,6 +3,7 @@ import { useCurrentSeason, useWallet } from '@hooks';
 import { ProfilePageNoWallet } from './ProfilePageNoWallet/ProfilePageNoWallet';
 import { ProfilePageWalletConnected } from './ProfilePageWalletConnected/ProfilePageWalletConnected';
 import { getProfileBadges, GetProfileBadgesResponse } from '@graphql';
+import { setPageTitle } from '@utilities';
 
 const Profile: React.FunctionComponent = () => {
   const wallet = useWallet();
@@ -26,6 +27,10 @@ const Profile: React.FunctionComponent = () => {
     }
     void getBadges(wallet.account);
   }, [wallet.account]);
+
+  useEffect(() => {
+    setPageTitle('Profile');
+  }, []);
 
   if (!wallet.account) {
     return <ProfilePageNoWallet />;
