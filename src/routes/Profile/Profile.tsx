@@ -33,6 +33,8 @@ const Profile: React.FunctionComponent = () => {
   return (
     <ProfilePageWalletConnected
       season={season.id.toString().padStart(2, '0')}
+      seasonStartDateFormatted={season.startDate.toFormat('DDD')}
+      seasonEndDateFormatted={season.endDate.toFormat('DDD')}
       account={wallet.account}
       achievedBadges={achievedBadges}
       loading={loading}
