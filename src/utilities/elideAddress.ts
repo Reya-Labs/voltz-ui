@@ -1,6 +1,6 @@
 const elideAddress = (address: string) => {
-  const start = address.slice(0, 7);
-  const end = address.slice(35);
+  const start = address.slice(0, 6);
+  const end = address.slice(38);
 
   return `${start}...${end}`;
 };
