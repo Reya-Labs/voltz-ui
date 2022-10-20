@@ -19,6 +19,8 @@ Default.args = {
   account: '0xb01F14d1C9000D453241221EB54648F1C378c970',
   achievedBadges: collectionBadges,
   season: '1',
+  seasonStartDateFormatted: '1st October 2022',
+  seasonEndDateFormatted: '31st December 2022',
 };
 
 export const Loading = Template.bind({});
@@ -27,4 +29,6 @@ Loading.args = {
   achievedBadges: collectionBadges,
   season: '1',
   loading: true,
+  seasonStartDateFormatted: '1st October 2022',
+  seasonEndDateFormatted: '31st December 2022',
 };

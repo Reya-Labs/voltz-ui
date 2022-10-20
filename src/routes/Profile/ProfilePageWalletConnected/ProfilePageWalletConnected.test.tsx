@@ -22,6 +22,8 @@ test('renders proper UI when claimed badges present', () => {
     ),
   ).not.toBeNull();
   expect(screen.getByText('YOUR BADGE COLLECTION')).not.toBeNull();
+  expect(screen.getByText('1st October 2022')).not.toBeNull();
+  expect(screen.getByText('31st December 2022')).not.toBeNull();
 
   expect(screen.getAllByTestId('BadgeCard')).toHaveLength(5);
 });

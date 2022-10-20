@@ -15,6 +15,8 @@ type ProfilePageProps = {
   account: string;
   achievedBadges: AchievedBadgeProps[];
   season: string;
+  seasonStartDateFormatted: string;
+  seasonEndDateFormatted: string;
   loading?: boolean;
 };
 
@@ -40,6 +42,8 @@ const collectionBadgesSort = [
 export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProps> = ({
   account,
   season,
+  seasonStartDateFormatted,
+  seasonEndDateFormatted,
   achievedBadges,
   loading,
 }) => {
@@ -90,9 +94,9 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
           }}
         >
           Earn badges through your contribution to the community and activity on the protocol.
-          Badges are earnt throughout each Season, with minting available at the end of each Season.
-          The more you collect the greater your contribution. Season 1 will run until the 31st
-          December 2022.
+          Badges are earned throughout each Season, with minting available at the end of each
+          Season. The more you collect the greater your contribution. <b>Season {season}</b> runs
+          between <b>{seasonStartDateFormatted}</b> and <b>{seasonEndDateFormatted}</b>.
         </Typography>
         <Box
           sx={{
