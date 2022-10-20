@@ -1,5 +1,5 @@
 import JSBI from 'jsbi';
-import { BaseContract, ethers, providers } from 'ethers';
+import { ethers, providers } from 'ethers';
 import { DateTime } from 'luxon';
 import { BigNumber, ContractReceipt, Signer, utils } from 'ethers';
 
@@ -26,12 +26,10 @@ import {
   ICToken__factory,
   CompoundRateOracle,
   CompoundRateOracle__factory,
-  AaveBorrowRateOracle,
   CompoundBorrowRateOracle,
   AaveBorrowRateOracle__factory,
   IAaveV2LendingPool__factory,
   CompoundBorrowRateOracle__factory,
-  IAaveV2LendingPool
 } from '../typechain';
 import RateOracle from './rateOracle';
 import { TickMath } from '../utils/tickMath';
@@ -43,7 +41,7 @@ import { Price } from './fractions/price';
 import { TokenAmount } from './fractions/tokenAmount';
 import { decodeInfoPostMint, decodeInfoPostSwap, getReadableErrorMessage } from '../utils/errors/errorHandling';
 import Position from './position';
-import { isNumber, isUndefined } from 'lodash';
+import { isUndefined } from 'lodash';
 import { getExpectedApy } from '../services/getExpectedApy';
 import { getAccruedCashflow, transformSwaps } from '../services/getAccruedCashflow';
 
@@ -267,6 +265,7 @@ export type PositionInfo = {
   marginInUSD: number;
   margin: number;
   fees?: number;
+  settlementCashflow?: number;
   liquidationThreshold?: number;
   safetyThreshold?: number;
   accruedCashflowInUSD: number;
@@ -2465,6 +2464,11 @@ class AMM {
     // fixed apr
     if (beforeMaturity) {
       results.fixedApr = await this.getFixedApr();
+    }
+
+    // fixed apr
+    if (!beforeMaturity && !position.isSettled) {
+      results.settlementCashflow = await position.getSettlementCashflow();
     }
 
     // variable apy and accrued cashflow

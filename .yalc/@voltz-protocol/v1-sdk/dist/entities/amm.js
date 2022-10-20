@@ -2187,9 +2187,9 @@ var AMM = /** @class */ (function () {
     };
     AMM.prototype.getPositionInformation = function (position) {
         return __awaiter(this, void 0, void 0, function () {
-            var usdExchangeRate, results, rateOracleContract, signerAddress, lastBlock, lastBlockTimestamp, _a, _b, beforeMaturity, _c, _d, accruedCashflowInfo, _1, accruedCashflowInfo, _2, _e, fcmContract, margin, marginInUnderlyingToken, fcmContract, margin, cTokenAddress, cTokenContract, rate, scaledRate, marginInUnderlyingToken, tickLower, tickUpper, marginEngineContract, rawPositionInfo, marginInUnderlyingToken, liquidationThreshold, _3, safetyThreshold, _4, notionalInUnderlyingToken, fixedApr;
-            return __generator(this, function (_f) {
-                switch (_f.label) {
+            var usdExchangeRate, results, rateOracleContract, signerAddress, lastBlock, lastBlockTimestamp, _a, _b, beforeMaturity, _c, _d, _e, accruedCashflowInfo, _1, accruedCashflowInfo, _2, _f, fcmContract, margin, marginInUnderlyingToken, fcmContract, margin, cTokenAddress, cTokenContract, rate, scaledRate, marginInUnderlyingToken, tickLower, tickUpper, marginEngineContract, rawPositionInfo, marginInUnderlyingToken, liquidationThreshold, _3, safetyThreshold, _4, notionalInUnderlyingToken, fixedApr;
+            return __generator(this, function (_g) {
+                switch (_g.label) {
                     case 0:
                         if (!this.signer) {
                             throw new Error('Wallet not connected');
@@ -2201,8 +2201,8 @@ var AMM = /** @class */ (function () {
                         if (!this.isETH) return [3 /*break*/, 2];
                         return [4 /*yield*/, geckoEthToUsd()];
                     case 1:
-                        usdExchangeRate = _f.sent();
-                        _f.label = 2;
+                        usdExchangeRate = _g.sent();
+                        _g.label = 2;
                     case 2:
                         results = {
                             notionalInUSD: 0,
@@ -2215,32 +2215,39 @@ var AMM = /** @class */ (function () {
                         rateOracleContract = typechain_1.BaseRateOracle__factory.connect(this.rateOracle.id, this.provider);
                         return [4 /*yield*/, this.signer.getAddress()];
                     case 3:
-                        signerAddress = _f.sent();
+                        signerAddress = _g.sent();
                         return [4 /*yield*/, this.provider.getBlockNumber()];
                     case 4:
-                        lastBlock = _f.sent();
+                        lastBlock = _g.sent();
                         _b = (_a = ethers_2.BigNumber).from;
                         return [4 /*yield*/, this.provider.getBlock(lastBlock - 1)];
                     case 5:
-                        lastBlockTimestamp = _b.apply(_a, [(_f.sent()).timestamp]);
+                        lastBlockTimestamp = _b.apply(_a, [(_g.sent()).timestamp]);
                         beforeMaturity = (lastBlockTimestamp.mul(ethers_2.BigNumber.from(10).pow(18))).lt(ethers_2.BigNumber.from(this.termEndTimestamp.toString()));
                         results.beforeMaturity = beforeMaturity;
                         if (!beforeMaturity) return [3 /*break*/, 7];
                         _c = results;
                         return [4 /*yield*/, this.getFixedApr()];
                     case 6:
-                        _c.fixedApr = _f.sent();
-                        _f.label = 7;
+                        _c.fixedApr = _g.sent();
+                        _g.label = 7;
                     case 7:
-                        if (!(position.swaps.length > 0)) return [3 /*break*/, 17];
-                        if (!beforeMaturity) return [3 /*break*/, 13];
-                        _f.label = 8;
-                    case 8:
-                        _f.trys.push([8, 11, , 12]);
+                        if (!(!beforeMaturity && !position.isSettled)) return [3 /*break*/, 9];
                         _d = results;
-                        return [4 /*yield*/, this.getInstantApy()];
+                        return [4 /*yield*/, position.getSettlementCashflow()];
+                    case 8:
+                        _d.settlementCashflow = _g.sent();
+                        _g.label = 9;
                     case 9:
-                        _d.variableRateSinceLastSwap = (_f.sent()) * 100;
+                        if (!(position.swaps.length > 0)) return [3 /*break*/, 19];
+                        if (!beforeMaturity) return [3 /*break*/, 15];
+                        _g.label = 10;
+                    case 10:
+                        _g.trys.push([10, 13, , 14]);
+                        _e = results;
+                        return [4 /*yield*/, this.getInstantApy()];
+                    case 11:
+                        _e.variableRateSinceLastSwap = (_g.sent()) * 100;
                         console.log("Getting accrued cashflow info...");
                         return [4 /*yield*/, (0, getAccruedCashflow_1.getAccruedCashflow)({
                                 swaps: (0, getAccruedCashflow_1.transformSwaps)(position.swaps, this.underlyingToken.decimals),
@@ -2248,22 +2255,22 @@ var AMM = /** @class */ (function () {
                                 currentTime: Number(lastBlockTimestamp.toString()),
                                 endTime: Number(ethers_2.utils.formatUnits(this.termEndTimestamp.toString(), 18)),
                             })];
-                    case 10:
-                        accruedCashflowInfo = _f.sent();
+                    case 12:
+                        accruedCashflowInfo = _g.sent();
                         console.log("Result:", accruedCashflowInfo);
                         results.accruedCashflow = accruedCashflowInfo.accruedCashflow;
                         results.fixedRateSinceLastSwap = accruedCashflowInfo.avgFixedRate;
                         results.accruedCashflowInUSD = results.accruedCashflow * usdExchangeRate;
-                        return [3 /*break*/, 12];
-                    case 11:
-                        _1 = _f.sent();
-                        return [3 /*break*/, 12];
-                    case 12: return [3 /*break*/, 17];
+                        return [3 /*break*/, 14];
                     case 13:
-                        if (!!position.isSettled) return [3 /*break*/, 17];
-                        _f.label = 14;
-                    case 14:
-                        _f.trys.push([14, 16, , 17]);
+                        _1 = _g.sent();
+                        return [3 /*break*/, 14];
+                    case 14: return [3 /*break*/, 19];
+                    case 15:
+                        if (!!position.isSettled) return [3 /*break*/, 19];
+                        _g.label = 16;
+                    case 16:
+                        _g.trys.push([16, 18, , 19]);
                         console.log("Getting accrued cashflow info...");
                         return [4 /*yield*/, (0, getAccruedCashflow_1.getAccruedCashflow)({
                                 swaps: (0, getAccruedCashflow_1.transformSwaps)(position.swaps, this.underlyingToken.decimals),
@@ -2271,101 +2278,101 @@ var AMM = /** @class */ (function () {
                                 currentTime: Number(ethers_2.utils.formatUnits(this.termEndTimestamp.toString(), 18)),
                                 endTime: Number(ethers_2.utils.formatUnits(this.termEndTimestamp.toString(), 18)),
                             })];
-                    case 15:
-                        accruedCashflowInfo = _f.sent();
+                    case 17:
+                        accruedCashflowInfo = _g.sent();
                         console.log("Result:", accruedCashflowInfo);
                         results.accruedCashflow = accruedCashflowInfo.accruedCashflow;
                         results.accruedCashflowInUSD = accruedCashflowInfo.accruedCashflow * usdExchangeRate;
-                        return [3 /*break*/, 17];
-                    case 16:
-                        _2 = _f.sent();
-                        return [3 /*break*/, 17];
-                    case 17:
-                        if (!position.source.includes("FCM")) return [3 /*break*/, 26];
-                        _e = this.rateOracle.protocolId;
-                        switch (_e) {
-                            case 1: return [3 /*break*/, 18];
-                            case 2: return [3 /*break*/, 20];
-                        }
-                        return [3 /*break*/, 24];
+                        return [3 /*break*/, 19];
                     case 18:
+                        _2 = _g.sent();
+                        return [3 /*break*/, 19];
+                    case 19:
+                        if (!position.source.includes("FCM")) return [3 /*break*/, 28];
+                        _f = this.rateOracle.protocolId;
+                        switch (_f) {
+                            case 1: return [3 /*break*/, 20];
+                            case 2: return [3 /*break*/, 22];
+                        }
+                        return [3 /*break*/, 26];
+                    case 20:
                         fcmContract = typechain_1.AaveFCM__factory.connect(this.fcmAddress, this.signer);
                         return [4 /*yield*/, fcmContract.getTraderMarginInATokens(signerAddress)];
-                    case 19:
-                        margin = (_f.sent());
+                    case 21:
+                        margin = (_g.sent());
                         results.margin = this.descale(margin);
                         marginInUnderlyingToken = results.margin;
                         results.marginInUSD = marginInUnderlyingToken * usdExchangeRate;
-                        return [3 /*break*/, 25];
-                    case 20:
+                        return [3 /*break*/, 27];
+                    case 22:
                         fcmContract = typechain_1.CompoundFCM__factory.connect(this.fcmAddress, this.signer);
                         return [4 /*yield*/, fcmContract.getTraderMarginInCTokens(signerAddress)];
-                    case 21:
-                        margin = (_f.sent());
+                    case 23:
+                        margin = (_g.sent());
                         results.margin = margin.toNumber() / (Math.pow(10, 8));
                         return [4 /*yield*/, fcmContract.cToken()];
-                    case 22:
-                        cTokenAddress = _f.sent();
+                    case 24:
+                        cTokenAddress = _g.sent();
                         cTokenContract = typechain_1.ICToken__factory.connect(cTokenAddress, this.signer);
                         return [4 /*yield*/, cTokenContract.exchangeRateStored()];
-                    case 23:
-                        rate = _f.sent();
+                    case 25:
+                        rate = _g.sent();
                         scaledRate = this.descaleCompoundValue(rate);
                         marginInUnderlyingToken = results.margin * scaledRate;
                         results.marginInUSD = marginInUnderlyingToken * usdExchangeRate;
-                        return [3 /*break*/, 25];
-                    case 24: throw new Error("Unrecognized FCM");
-                    case 25:
+                        return [3 /*break*/, 27];
+                    case 26: throw new Error("Unrecognized FCM");
+                    case 27:
                         if (beforeMaturity) {
                             results.healthFactor = 3;
                         }
-                        return [3 /*break*/, 35];
-                    case 26:
+                        return [3 /*break*/, 37];
+                    case 28:
                         tickLower = position.tickLower;
                         tickUpper = position.tickUpper;
                         marginEngineContract = typechain_1.MarginEngine__factory.connect(this.marginEngineAddress, this.signer);
                         return [4 /*yield*/, marginEngineContract.callStatic.getPosition(signerAddress, tickLower, tickUpper)];
-                    case 27:
-                        rawPositionInfo = _f.sent();
+                    case 29:
+                        rawPositionInfo = _g.sent();
                         results.margin = this.descale(rawPositionInfo.margin);
                         marginInUnderlyingToken = results.margin;
                         results.marginInUSD = marginInUnderlyingToken * usdExchangeRate;
                         results.fees = this.descale(rawPositionInfo.accumulatedFees);
-                        if (!beforeMaturity) return [3 /*break*/, 35];
-                        _f.label = 28;
-                    case 28:
-                        _f.trys.push([28, 30, , 31]);
-                        return [4 /*yield*/, marginEngineContract.callStatic.getPositionMarginRequirement(signerAddress, tickLower, tickUpper, true)];
-                    case 29:
-                        liquidationThreshold = _f.sent();
-                        results.liquidationThreshold = this.descale(liquidationThreshold);
-                        return [3 /*break*/, 31];
+                        if (!beforeMaturity) return [3 /*break*/, 37];
+                        _g.label = 30;
                     case 30:
-                        _3 = _f.sent();
-                        return [3 /*break*/, 31];
+                        _g.trys.push([30, 32, , 33]);
+                        return [4 /*yield*/, marginEngineContract.callStatic.getPositionMarginRequirement(signerAddress, tickLower, tickUpper, true)];
                     case 31:
-                        _f.trys.push([31, 33, , 34]);
-                        return [4 /*yield*/, marginEngineContract.callStatic.getPositionMarginRequirement(signerAddress, tickLower, tickUpper, false)];
+                        liquidationThreshold = _g.sent();
+                        results.liquidationThreshold = this.descale(liquidationThreshold);
+                        return [3 /*break*/, 33];
                     case 32:
-                        safetyThreshold = _f.sent();
-                        results.safetyThreshold = this.descale(safetyThreshold);
-                        return [3 /*break*/, 34];
+                        _3 = _g.sent();
+                        return [3 /*break*/, 33];
                     case 33:
-                        _4 = _f.sent();
-                        return [3 /*break*/, 34];
+                        _g.trys.push([33, 35, , 36]);
+                        return [4 /*yield*/, marginEngineContract.callStatic.getPositionMarginRequirement(signerAddress, tickLower, tickUpper, false)];
                     case 34:
+                        safetyThreshold = _g.sent();
+                        results.safetyThreshold = this.descale(safetyThreshold);
+                        return [3 /*break*/, 36];
+                    case 35:
+                        _4 = _g.sent();
+                        return [3 /*break*/, 36];
+                    case 36:
                         if (!(0, lodash_1.isUndefined)(results.liquidationThreshold) && !(0, lodash_1.isUndefined)(results.safetyThreshold)) {
                             results.healthFactor = (results.margin < results.liquidationThreshold) ? 1 : (results.margin < results.safetyThreshold ? 2 : 3);
                         }
-                        _f.label = 35;
-                    case 35:
+                        _g.label = 37;
+                    case 37:
                         notionalInUnderlyingToken = (position.positionType === 3)
                             ? Math.abs(position.notional) // LP
                             : Math.abs(position.effectiveVariableTokenBalance);
                         results.notionalInUSD = notionalInUnderlyingToken * usdExchangeRate;
                         return [4 /*yield*/, this.getFixedApr()];
-                    case 36:
-                        fixedApr = _f.sent();
+                    case 38:
+                        fixedApr = _g.sent();
                         if (position.fixedRateLower.toNumber() < fixedApr
                             && fixedApr < position.fixedRateUpper.toNumber()) {
                             if ((0.15 * position.fixedRateUpper.toNumber() + 0.85 * position.fixedRateLower.toNumber()) > fixedApr

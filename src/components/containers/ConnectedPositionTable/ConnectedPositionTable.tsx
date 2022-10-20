@@ -1,6 +1,5 @@
-import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
-import React, { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Position } from '@voltz-protocol/v1-sdk';
+import React, { ReactNode, useCallback, useState } from 'react';
 
 import { data } from '@utilities';
 import { useAgent, usePositions, useSelector, useWallet } from '@hooks';
@@ -11,7 +10,7 @@ import {
   PositionTableFields,
 } from '@components/interface';
 import { Button, Loading, Panel, RouteLink, Typography } from '@components/atomic';
-import { Agents, useAMMContext, useAMMsContext, usePortfolioContext } from '@contexts';
+import { Agents, usePortfolioContext } from '@contexts';
 import { actions, selectors } from '@store';
 import { useDispatch } from '@hooks';
 import { AugmentedAMM } from '@utilities';
@@ -131,6 +130,16 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
 
     const spData = portfolioData.info[positionToSettle.position.id];
 
+    let netWithdraw = undefined;
+    if (agent === Agents.LIQUIDITY_PROVIDER) {
+      netWithdraw = (typeof spData?.fees === "number" && typeof spData?.settlementCashflow === "number")
+         ? spData?.margin + spData?.settlementCashflow 
+         : undefined;
+    } else {
+      netWithdraw = (typeof spData?.settlementCashflow === "number") ? spData?.margin + spData?.settlementCashflow : undefined;
+    }
+     
+
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
         <PendingTransaction
@@ -140,12 +149,8 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
           isSettle={true}
           transactionId={positionToSettle.txId}
           onComplete={handleTransactionFinished}
-          notional={
-            agent === Agents.LIQUIDITY_PROVIDER
-              ? Math.abs(positionToSettle.position.notional)
-              : Math.abs(positionToSettle.position.effectiveVariableTokenBalance)
-          }
-          margin={spData?.margin}
+          notional={agent === Agents.LIQUIDITY_PROVIDER ? Math.abs(positionToSettle.position.notional) : Math.abs(positionToSettle.position.effectiveVariableTokenBalance)}
+          margin={netWithdraw}
           onBack={handleTransactionFinished}
         />
       </Box>

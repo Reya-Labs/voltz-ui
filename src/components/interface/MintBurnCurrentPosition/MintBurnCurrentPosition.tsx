@@ -9,6 +9,7 @@ import { BigNumber } from 'ethers';
 import { usePositionContext } from '@contexts';
 import { colors } from '@theme';
 import { MintBurnFormModes } from '@contexts';
+import { isUndefined } from 'lodash';
 
 export type MintBurnCurrentPositionProps = {
   formMode: MintBurnFormModes;
@@ -32,6 +33,8 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
   const notional = position.notional;
   const margin = position.amm.descale(BigNumber.from(position.margin.toString()));
   const leverage = notional / margin;
+  const fees = positionInfo?.result?.fees;
+  const cashflow = positionInfo?.result?.settlementCashflow;
   const underlyingTokenName = position.amm.underlyingToken.name || '';
 
   const getHealthFactor = () => {
@@ -94,21 +97,25 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
   if (formMode === MintBurnFormModes.ROLLOVER) {
     rows.push({
       label: 'CASHFLOW',
-      value: positionInfo?.result ? (
-        `${formatCurrency(positionInfo?.result?.accruedCashflow)} ${underlyingTokenName}`
-      ) : (
-        <Ellipsis />
-      ),
-      highlight: true,
+      value: !isUndefined(cashflow)
+        ? `${formatCurrency(cashflow)} ${underlyingTokenName}`
+        : <Ellipsis />,
+      highlight: true
     });
 
     rows.push({
-      label: 'ROLLOVER BALANCE',
-      value: positionInfo?.result ? (
-        `${formatCurrency(positionInfo?.result?.accruedCashflow + margin)} ${underlyingTokenName}`
-      ) : (
-        <Ellipsis />
-      ),
+      label: 'FEES',
+      value: !isUndefined(fees)
+        ? `${formatCurrency(fees)} ${underlyingTokenName}`
+        : <Ellipsis />,
+      highlight: true
+    });
+
+    rows.push({
+      label: 'NET BALANCE',
+      value: !isUndefined(cashflow) && !isUndefined(fees)
+        ? `${formatCurrency(cashflow + margin + fees)} ${underlyingTokenName}`
+        : <Ellipsis />,
       highlight: true,
       bold: true,
     });

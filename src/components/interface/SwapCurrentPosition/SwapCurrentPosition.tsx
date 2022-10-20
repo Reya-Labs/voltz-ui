@@ -7,7 +7,8 @@ import { FormPanel, SwapFormModes } from '@components/interface';
 import { formatCurrency } from '@utilities';
 import { BigNumber } from 'ethers';
 import { usePositionContext } from '@contexts';
-import { colors } from '@theme';
+import { colors }  from '@theme';
+import { isUndefined } from 'lodash';
 
 export type SwapCurrentPositionProps = {
   formMode: SwapFormModes;
@@ -34,6 +35,7 @@ const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionProps> = (
   const margin = position.amm.descale(BigNumber.from(position.margin.toString()));
   const leverage = notional / margin;
   const underlyingTokenName = position.amm.underlyingToken.name || '';
+  const settlementCashflow = positionInfo?.result?.settlementCashflow;
 
   const getHealthFactor = () => {
     if (positionInfo?.loading) {
@@ -87,21 +89,17 @@ const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionProps> = (
   if (formMode === SwapFormModes.ROLLOVER) {
     rows.push({
       label: 'CASHFLOW',
-      value: positionInfo?.result ? (
-        `${formatCurrency(positionInfo?.result?.accruedCashflow)} ${underlyingTokenName}`
-      ) : (
-        <Ellipsis />
-      ),
-      highlight: true,
+      value: !isUndefined(settlementCashflow)
+        ? `${formatCurrency(settlementCashflow)} ${underlyingTokenName}`
+        : <Ellipsis />,
+      highlight: true
     });
 
     rows.push({
-      label: 'ROLLOVER BALANCE',
-      value: positionInfo?.result ? (
-        `${formatCurrency(positionInfo?.result?.accruedCashflow + margin)} ${underlyingTokenName}`
-      ) : (
-        <Ellipsis />
-      ),
+      label: 'NET BALANCE',
+      value: positionInfo?.result && !isUndefined(settlementCashflow)
+        ? `${formatCurrency(settlementCashflow + margin)} ${underlyingTokenName}`
+        : <Ellipsis />,
       highlight: true,
       bold: true,
     });
