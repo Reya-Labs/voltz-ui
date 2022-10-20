@@ -65,12 +65,12 @@ const Nav: React.FunctionComponent = () => (
         isNew={true}
         subLinks={[
           {
-            text: 'LEADERBOARD',
-            link: `/${routes.LEADERBOARD}`,
-          },
-          {
             text: 'PROFILE',
             link: `/${routes.PROFILE}`,
+          },
+          {
+            text: 'TRADING LEAGUE',
+            link: `/${routes.TRADING_LEAGUE}`,
           },
         ]}
       >

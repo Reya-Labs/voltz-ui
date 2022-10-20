@@ -23,7 +23,7 @@ const titleStyles: SystemStyleObject<Theme> = {
 const RankingHeaderBox = ({ season, loading }: RankingHeaderBoxProps) => (
   <Box>
     <Typography variant="h1" sx={titleStyles}>
-      {loading ? 'LOADING...' : `VOLTZ TRADING SEASON ${season}`}
+      {loading ? 'LOADING...' : 'VOLTZ TRADING LEAGUE'}
     </Typography>
     <Typography variant="subtitle1" sx={labelStyles}>
       COMPETE AGAINST OTHER TRADERS FOR REWARDS BY TRADING.

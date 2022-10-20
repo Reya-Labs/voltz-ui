@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import TagManager from 'react-gtm-module';
 
-import { routes, LeaderBoard, Profile, LiquidityProvider, Trader, FixedBorrower } from '@routes';
+import { routes, TradingLeague, Profile, LiquidityProvider, Trader, FixedBorrower } from '@routes';
 import { AlphaBanner, GweiBar } from '@components/composite';
 import Box from '@mui/material/Box';
 import { useEffect } from 'react';
@@ -30,7 +30,7 @@ const App = () => {
             <Route path={routes.PROFILE} element={<Profile />} />
           )}
           {process.env.REACT_APP_COMMUNITY && process.env.REACT_APP_COMMUNITY !== `UNPROVIDED` && (
-            <Route path={routes.LEADERBOARD} element={<LeaderBoard />} />
+            <Route path={routes.TRADING_LEAGUE} element={<TradingLeague />} />
           )}
         </Route>
       </Routes>
