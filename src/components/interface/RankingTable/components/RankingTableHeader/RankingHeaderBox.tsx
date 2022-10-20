@@ -4,7 +4,7 @@ import { Typography } from '@components/atomic';
 import Box from '@mui/material/Box';
 
 export type RankingHeaderBoxProps = {
-  season: number;
+  season: string;
   loading?: boolean;
 };
 
@@ -21,12 +21,12 @@ const titleStyles: SystemStyleObject<Theme> = {
 };
 
 const RankingHeaderBox = ({ season, loading }: RankingHeaderBoxProps) => (
-  <Box sx={{ textTransform: 'uppercase' }}>
+  <Box>
     <Typography variant="h1" sx={titleStyles}>
-      {loading ? 'Loading...' : 'Voltz Trading Season - ' + season.toString().padStart(2, '0')}
+      {loading ? 'LOADING...' : `VOLTZ TRADING SEASON ${season}`}
     </Typography>
     <Typography variant="subtitle1" sx={labelStyles}>
-      Compete against other traders for rewards by trading or bringging people to the platform.
+      COMPETE AGAINST OTHER TRADERS FOR REWARDS BY TRADING.
     </Typography>
   </Box>
 );

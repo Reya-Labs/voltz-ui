@@ -16,16 +16,18 @@ import { ProgressBar } from '@components/composite';
 import React from 'react';
 
 export type RankingUserSummaryProps = {
-  seasonNumber?: number;
+  seasonNumber: string;
   seasonStartDate: DateTime;
   seasonEndDate: DateTime;
   userRank?: number;
   userAddress?: string;
   userPoints?: number;
   invitedTraders?: number;
+  loading?: boolean;
 };
 
 const RankingUserSummary = ({
+  loading,
   seasonNumber,
   seasonStartDate,
   seasonEndDate,
@@ -102,17 +104,15 @@ const RankingUserSummary = ({
             justifyContent: 'center',
           }}
         >
-          {seasonNumber && (
+          {!loading && (
             <Typography variant="subtitle1" sx={{ color: '#FF4AA9', fontSize: '14px' }}>
-              Season
-              <span style={{ color: '#E5E1F9', fontSize: '14px' }}>
-                {seasonNumber < 10 ? ' 0' + seasonNumber.toString() : seasonNumber.toString()}
-              </span>
+              Season&nbsp;
+              <span style={{ color: '#E5E1F9', fontSize: '14px' }}>{seasonNumber}</span>
             </Typography>
           )}
-          {!seasonNumber && (
+          {loading && (
             <Typography variant="subtitle1" sx={{ color: '#FF4AA9' }}>
-              {!seasonNumber && 'Loading...'}
+              Loading...
             </Typography>
           )}
         </Box>
@@ -202,21 +202,19 @@ const RankingUserSummary = ({
   };
 
   return (
-    <>
-      <Box
-        sx={{
-          backgroundColor: `#19152A`,
-          borderRadius: '4px',
-          border: '1px solid #2D2B3D',
-          padding: (theme) => theme.spacing(4),
-          marginTop: (theme) => theme.spacing(8),
-        }}
-      >
-        {renderSeason()}
-        {renderPointsSystem()}
-        {renderCurrentPosition()}
-      </Box>
-    </>
+    <Box
+      sx={{
+        backgroundColor: `#19152A`,
+        borderRadius: '4px',
+        border: '1px solid #2D2B3D',
+        padding: (theme) => theme.spacing(4),
+        marginTop: (theme) => theme.spacing(8),
+      }}
+    >
+      {renderSeason()}
+      {renderPointsSystem()}
+      {renderCurrentPosition()}
+    </Box>
   );
 };
 
