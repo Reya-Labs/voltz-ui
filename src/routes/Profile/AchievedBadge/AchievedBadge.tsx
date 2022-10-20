@@ -9,12 +9,12 @@ import { formatPOSIXTimestamp } from '@utilities';
 import { BadgeVariant } from '@graphql';
 import { ComingSoonBadges } from '../types';
 
-export type CollectionBadgeProps = {
+export type AchievedBadgeProps = {
   achievedAt?: number;
   variant: BadgeVariant | ComingSoonBadges;
   loading?: boolean;
 };
-export const CollectionBadge: React.FunctionComponent<CollectionBadgeProps> = ({
+export const AchievedBadge: React.FunctionComponent<AchievedBadgeProps> = ({
   achievedAt,
   variant,
   loading,
@@ -32,7 +32,7 @@ export const CollectionBadge: React.FunctionComponent<CollectionBadgeProps> = ({
     />
   ) : (
     <Box
-      data-testid={`CollectionBadge-${variant}`}
+      data-testid={`AchievedBadge-${variant}`}
       sx={{
         backgroundColor: '#2B2548',
         borderRadius: '8px',
