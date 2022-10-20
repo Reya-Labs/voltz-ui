@@ -86,14 +86,14 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
                 rank={rank}
                 address={ranking.address}
                 variant={
-                  rank === userRank + 1
-                    ? 'me'
-                    : rank === 1
+                  rank === 1
                     ? 'rank1'
                     : rank === 2
                     ? 'rank2'
                     : rank === 3
                     ? 'rank3'
+                    : rank === userRank + 1
+                    ? 'me'
                     : 'other'
                 }
               />
