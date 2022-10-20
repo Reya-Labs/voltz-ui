@@ -6,10 +6,7 @@ import { getProfileBadges, GetProfileBadgesResponse } from '@graphql';
 
 const Profile: React.FunctionComponent = () => {
   const wallet = useWallet();
-  const [claimedBadges, setClaimedBadges] = React.useState<
-    GetProfileBadgesResponse['claimedBadges']
-  >([]);
-  const [collectionBadges, setCollectionBadges] = React.useState<
+  const [achievedBadges, setAchievedBadges] = React.useState<
     GetProfileBadgesResponse['achievedBadges']
   >([]);
   const [loading, setLoading] = React.useState(true);
@@ -18,8 +15,7 @@ const Profile: React.FunctionComponent = () => {
   const getBadges = async (account: string) => {
     setLoading(true);
     const result = await getProfileBadges(account);
-    setClaimedBadges(result.claimedBadges);
-    setCollectionBadges(result.achievedBadges);
+    setAchievedBadges(result.achievedBadges);
     setLoading(false);
   };
 
@@ -37,9 +33,10 @@ const Profile: React.FunctionComponent = () => {
   return (
     <ProfilePageWalletConnected
       season={season.id.toString().padStart(2, '0')}
+      seasonStartDateFormatted={season.startDate.toFormat('DDD')}
+      seasonEndDateFormatted={season.endDate.toFormat('DDD')}
       account={wallet.account}
-      claimedBadges={claimedBadges}
-      collection={collectionBadges}
+      achievedBadges={achievedBadges}
       loading={loading}
     />
   );

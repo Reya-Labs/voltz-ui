@@ -206,7 +206,6 @@ export async function getProfileBadges(owner: string): Promise<GetProfileBadgesR
           },
           {
             variant: 'beWaterMyFriend',
-            achievedAt: formatTimestamp(parseInt(badges.BADGE_NO_RISK_HERE_SER)),
           },
           {
             variant: 'dryIce',

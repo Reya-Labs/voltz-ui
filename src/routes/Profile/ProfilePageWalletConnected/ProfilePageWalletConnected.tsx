@@ -3,23 +3,20 @@ import Box from '@mui/material/Box';
 import { Pill, Typography } from '@components/atomic';
 import { Grid } from '@components/layout';
 import { elideAddress } from '@utilities';
-import { BadgeCard, BadgeCardProps } from '../BadgeCard/BadgeCard';
+import { BadgeCard } from '../BadgeCard/BadgeCard';
 import { colors } from '@theme';
 import { Page } from '@components/interface';
-import { CollectionBadge, CollectionBadgeProps } from '../CollectionBadge/CollectionBadge';
-import {
-  BADGE_VARIANT_DESCRIPTION_COPY_MAP,
-  BADGE_VARIANT_TIER_MAP,
-  BADGE_VARIANT_TITLE_COPY_MAP,
-  COMING_SOON_BADGES,
-} from '../helpers';
+import { AchievedBadge, AchievedBadgeProps } from '../AchievedBadge/AchievedBadge';
+import { BADGE_VARIANT_TIER_MAP, COMING_SOON_BADGES } from '../helpers';
 import { Badge } from '../Badge/Badge';
+import { BadgeVariant } from '@graphql';
 
 type ProfilePageProps = {
   account: string;
-  claimedBadges: BadgeCardProps[];
-  collection: CollectionBadgeProps[];
+  achievedBadges: AchievedBadgeProps[];
   season: string;
+  seasonStartDateFormatted: string;
+  seasonEndDateFormatted: string;
   loading?: boolean;
 };
 
@@ -44,19 +41,22 @@ const collectionBadgesSort = [
 
 export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProps> = ({
   account,
-  claimedBadges,
   season,
-  collection,
+  seasonStartDateFormatted,
+  seasonEndDateFormatted,
+  achievedBadges,
   loading,
 }) => {
-  const collections: CollectionBadgeProps[] = React.useMemo(() => {
+  const achievedBadgesMemo: AchievedBadgeProps[] = React.useMemo(() => {
     return collectionBadgesSort
-      .map((variant) => collection.find((c) => c.variant === variant))
+      .map((variant) => achievedBadges.find((c) => c.variant === variant))
       .filter((b) => b)
       .filter((b) =>
         BADGE_VARIANT_TIER_MAP[b!.variant] === 'easterEgg' ? b!.achievedAt : true,
-      ) as CollectionBadgeProps[];
-  }, [collection]);
+      ) as AchievedBadgeProps[];
+  }, [achievedBadges]);
+
+  const collection = achievedBadgesMemo.filter((aB) => aB.achievedAt);
 
   return (
     <Page>
@@ -83,6 +83,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
           </span>
         </Typography>
         <Typography
+          data-testId="Profile-BadgesExplained"
           variant="body2"
           sx={{
             marginTop: (theme) => theme.spacing(2),
@@ -94,9 +95,9 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
           }}
         >
           Earn badges through your contribution to the community and activity on the protocol.
-          Badges are earnt throughout each Season, with minting available at the end of each Season.
-          The more you collect the greater your contribution. Season 1 will run until the 31st
-          December 2022.
+          Badges are earned throughout each Season, with minting available at the end of each
+          Season. The more you collect the greater your contribution. <b>Season {season}</b> runs
+          between <b>{seasonStartDateFormatted}</b> and <b>{seasonEndDateFormatted}</b>.
         </Typography>
         <Box
           sx={{
@@ -153,7 +154,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
             )}
           </Box>
           <Grid
-            itemsPerRow={!loading && claimedBadges.length === 0 ? 1 : 3}
+            itemsPerRow={!loading && collection.length === 0 ? 1 : 3}
             sx={{
               marginTop: (theme) => theme.spacing(6),
               rowGap: (theme) => theme.spacing(6),
@@ -165,11 +166,15 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
                 <BadgeCard key={index} loading={loading} variant="degenStuff" />
               ))}
             {!loading &&
-              claimedBadges.length !== 0 &&
-              claimedBadges.map((badge, index) => (
-                <BadgeCard key={`${badge.variant}${index}`} {...badge} loading={loading} />
+              collection.length !== 0 &&
+              collection.map((badge, index) => (
+                <BadgeCard
+                  key={`${badge.variant}${index}`}
+                  variant={badge.variant as BadgeVariant}
+                  loading={loading}
+                />
               ))}
-            {!loading && claimedBadges.length === 0 && (
+            {!loading && collection.length === 0 && (
               <Box
                 sx={{
                   display: 'flex',
@@ -238,8 +243,8 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
               rowGap: (theme) => theme.spacing(2),
             }}
           >
-            {collections.map((badge, index) => (
-              <CollectionBadge key={`${badge.variant}${index}`} {...badge} loading={loading} />
+            {achievedBadgesMemo.map((badge, index) => (
+              <AchievedBadge key={`${badge.variant}${index}`} {...badge} loading={loading} />
             ))}
           </Grid>
         </Box>
@@ -266,7 +271,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
             }}
           >
             {COMING_SOON_BADGES.map((badge, index) => (
-              <CollectionBadge key={`${badge}${index}`} variant={badge} loading={loading} />
+              <AchievedBadge key={`${badge}${index}`} variant={badge} loading={loading} />
             ))}
           </Grid>
         </Box>
