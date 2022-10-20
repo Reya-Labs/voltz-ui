@@ -67,7 +67,7 @@ export const RankingEntry: React.FunctionComponent<RankingEntryProps> = ({
             fontWeight: 400,
           }}
         >
-          {rank || '---'}
+          {rank <= 0 ? '---' : rank}
           {rank === 1 && <Gold style={{ marginLeft: '8px' }} />}
           {rank === 2 && <Silver style={{ marginLeft: '8px' }} />}
           {rank === 3 && <Bronze style={{ marginLeft: '8px' }} />}
@@ -96,7 +96,7 @@ export const RankingEntry: React.FunctionComponent<RankingEntryProps> = ({
           textAlign: 'right',
         }}
       >
-        {points ? formatNumber(points) : '---'}
+        {points <= 0 ? '---' : formatNumber(points)}
       </Typography>
     </Box>
   );

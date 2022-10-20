@@ -11,9 +11,8 @@ const ConnectedRankingTable: React.FunctionComponent = () => {
   const season = useCurrentSeason();
   const [rankingResults, setRankingResults] = useState<RankType[]>([]);
   const wallet = useWallet();
-  const [userRank, setUserRank] = useState<number>(0);
-  const [userPoints, setUserPoints] = useState<number>(0);
-  const [userAddress, setUserAddress] = useState<string>('');
+  const [userRank, setUserRank] = useState<number>(-1);
+  const [userPoints, setUserPoints] = useState<number>(-1);
   const [page, setPage] = useState<number>(0);
   const maxPages = Math.floor(rankingResults.length / PER_PAGE) + 1;
 
@@ -50,9 +49,8 @@ const ConnectedRankingTable: React.FunctionComponent = () => {
       for (let i = 0; i < s.length; i++) {
         const e = s[i];
         if (e.address === wallet.account) {
-          setUserAddress(e.address);
           setUserPoints(e.points);
-          setUserRank(i + 1);
+          setUserRank(i);
         }
       }
     }
@@ -65,7 +63,7 @@ const ConnectedRankingTable: React.FunctionComponent = () => {
       loading={loading}
       rankings={rankingResults.slice(page * 10, page * 10 + PER_PAGE)}
       maxPages={maxPages}
-      userAddress={userAddress}
+      userAddress={wallet.account || ''}
       userRank={userRank}
       userPoints={userPoints}
       seasonNumber={season.id.toString().padStart(2, '0')}

@@ -27,6 +27,8 @@ export type RankingTableProps = {
   perPage: number;
 };
 
+const inRange = (start: number, end: number, num: number) => start <= num && num <= end;
+
 const RankingTable: React.FunctionComponent<RankingTableProps> = ({
   rankings,
   seasonNumber,
@@ -84,7 +86,15 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
                 rank={rank}
                 address={ranking.address}
                 variant={
-                  rank === 1 ? 'rank1' : rank === 2 ? 'rank2' : rank === 3 ? 'rank3' : 'other'
+                  rank === userRank + 1
+                    ? 'me'
+                    : rank === 1
+                    ? 'rank1'
+                    : rank === 2
+                    ? 'rank2'
+                    : rank === 3
+                    ? 'rank3'
+                    : 'other'
                 }
               />
             );
@@ -102,6 +112,14 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
               />
             );
           })}
+        {!loading && !inRange(page * perPage, page * perPage + perPage, userRank) && (
+          <RankingEntry
+            points={userPoints}
+            rank={userRank + 1}
+            address={userAddress}
+            variant="me"
+          />
+        )}
       </Grid>
       {!loading && (
         <Box
