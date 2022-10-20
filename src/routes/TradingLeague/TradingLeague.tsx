@@ -6,6 +6,7 @@ import { setPageTitle } from '@utilities';
 
 import { Page } from '@components/interface';
 import ConnectedRankingTable from '../../components/containers/ConnectedRankingTable/ConnectedRankingTable';
+import { useCurrentSeason, useRanking } from '@hooks';
 
 const TradingLeague: React.FunctionComponent = () => {
   useEffect(() => {
@@ -14,7 +15,13 @@ const TradingLeague: React.FunctionComponent = () => {
 
   return (
     <Page>
-      <Box sx={{ backdropFilter: 'blur(8px)', height: '100%', paddingBottom: '200px' }}>
+      <Box
+        sx={{
+          width: '724px',
+          margin: '0 auto',
+          background: 'transparent',
+        }}
+      >
         <ConnectedRankingTable />
       </Box>
     </Page>

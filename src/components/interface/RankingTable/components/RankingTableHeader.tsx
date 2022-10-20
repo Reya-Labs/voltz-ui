@@ -1,10 +1,10 @@
-import { Panel } from '@components/atomic';
 import RankingHeaderBox from './RankingHeaderBox';
 import RankingUserSummary from './RankingUserSummary';
 import { DateTime } from 'luxon';
+import Box from '@mui/material/Box';
 
 export type RankingTableHeaderProps = {
-  loading?: boolean;
+  loading: boolean;
   seasonNumber: string;
   seasonStartDate: DateTime;
   seasonEndDate: DateTime;
@@ -22,13 +22,8 @@ const RankingTableHeader = ({
   userRank,
   userPoints,
 }: RankingTableHeaderProps) => (
-  <Panel
-    borderRadius="large"
-    padding="container"
-    sx={{ paddingTop: 0, paddingBottom: 0, background: 'transparent' }}
-  >
-    <RankingHeaderBox loading={loading} season={seasonNumber} />
-
+  <Box>
+    <RankingHeaderBox />
     <RankingUserSummary
       loading={loading}
       seasonNumber={seasonNumber}
@@ -39,7 +34,7 @@ const RankingTableHeader = ({
       userPoints={userPoints}
       invitedTraders={1}
     />
-  </Panel>
+  </Box>
 );
 
 export default RankingTableHeader;
