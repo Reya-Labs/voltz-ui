@@ -6,6 +6,7 @@ import MaskedIntegerField from '../MaskedIntegerField/MaskedIntegerField';
 import InputTokenLabel from '../InputTokenLabel/InputTokenLabel';
 import { formatCurrency, toUSFormat } from '@utilities';
 import { HealthFactorText } from '@components/composite';
+import { useSwapFormContext, usePortfolioContext, usePositionContext } from '@contexts';
 
 export type MarginAmountProps = {
   balance?: number;
@@ -38,7 +39,18 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
       return defaultVal.toString();
     }
   };
+  
+  const swapForm = useSwapFormContext();
+  const positionForm = usePositionContext();
 
+  const divisor = underlyingTokenName?.includes('USD') ? 1e6 : 1e18;
+  const portfolioMarginInfo = positionForm.position?.margin.toString();
+  const marginAmount = !isUndefined(portfolioMarginInfo) ? parseInt(portfolioMarginInfo) / divisor : defaultMargin;
+  const initialMarginRequirement = swapForm?.minRequiredMargin || defaultMargin;
+
+  const maxAmountToWithdraw = !isUndefined(marginAmount) && !isUndefined(initialMarginRequirement) ? (marginAmount - initialMarginRequirement) : undefined;
+  const formattedMaxAmountToWithdraw = !isUndefined(maxAmountToWithdraw) ? formatCurrency(maxAmountToWithdraw) : 'checking...';
+  
   const formattedBalance = !isUndefined(balance) ? formatCurrency(balance) : 'checking...';
   const [inputValue, setInputValue] = useState<string | undefined>(defaultInputValue());
 
@@ -91,7 +103,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
       allowDecimals
       allowNegativeValue={false}
       decimalsLimit={4}
-      subtext={`BALANCE: ${formattedBalance}`}
+      subtext={isAdditional ? `BALANCE: ${formattedBalance}` : `MAX WITHDRAWAL: ${formattedMaxAmountToWithdraw}` }
       suffix={<InputTokenLabel tokenName={underlyingTokenName || ''} />}
       suffixPadding={90}
       label={
