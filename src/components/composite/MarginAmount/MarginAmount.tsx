@@ -43,14 +43,9 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
   const swapForm = useSwapFormContext();
   const positionForm = usePositionContext();
 
-  let marginAmount;
-  if (underlyingTokenName?.includes('USD')) {
-    const portfolioMarginInfo = positionForm.position?.margin.toString();
-    marginAmount = !isUndefined(portfolioMarginInfo) ? parseInt(portfolioMarginInfo)/1e6 : defaultMargin;
-  } else {
-    const portfolioMarginInfo = positionForm.position?.margin.toString();
-    marginAmount = !isUndefined(portfolioMarginInfo) ? parseInt(portfolioMarginInfo) / 1e18 : defaultMargin;
-  }
+  const divisor = underlyingTokenName?.includes('USD') ? 1e6 : 1e18;
+  const portfolioMarginInfo = positionForm.position?.margin.toString();
+  const marginAmount = !isUndefined(portfolioMarginInfo) ? parseInt(portfolioMarginInfo) / divisor : defaultMargin;
   const initialMarginRequirement = swapForm?.minRequiredMargin || defaultMargin;
 
   const maxAmountToWithdraw = !isUndefined(marginAmount) && !isUndefined(initialMarginRequirement) ? (marginAmount - initialMarginRequirement) : undefined;
