@@ -43,19 +43,19 @@ const ConnectedRankingTable: React.FunctionComponent = () => {
       rankResult.push({ address: address, points: value ?? 0 });
     });
 
-    const s = rankResult.sort((a, b) => b.points - a.points);
+    const sorted = rankResult.sort((a, b) => b.points - a.points);
 
-    if (s) {
-      for (let i = 0; i < s.length; i++) {
-        const e = s[i];
-        if (e.address === wallet.account) {
-          setUserPoints(e.points);
-          setUserRank(i);
+    if (sorted) {
+      for (let rank = 0; rank < sorted.length; rank++) {
+        const entry = sorted[rank];
+        if (entry.address === wallet.account) {
+          setUserPoints(entry.points);
+          setUserRank(rank);
         }
       }
     }
 
-    setRankingResults(s);
+    setRankingResults(sorted);
   }, [wallet.account, ranking]);
 
   return (
