@@ -8,9 +8,9 @@ export type RankingTableHeaderProps = {
   seasonNumber: string;
   seasonStartDate: DateTime;
   seasonEndDate: DateTime;
-  userRank?: number;
-  userAddress?: string;
-  userPoints?: number;
+  userRank: number;
+  userAddress: string;
+  userPoints: number;
 };
 
 const RankingTableHeader = ({
@@ -29,7 +29,7 @@ const RankingTableHeader = ({
       seasonNumber={seasonNumber}
       seasonStartDate={seasonStartDate}
       seasonEndDate={seasonEndDate}
-      userRank={userRank}
+      userRank={userRank + 1}
       userAddress={userAddress}
       userPoints={userPoints}
       invitedTraders={1}
