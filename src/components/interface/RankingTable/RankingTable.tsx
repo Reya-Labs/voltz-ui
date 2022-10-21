@@ -112,14 +112,16 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
               />
             );
           })}
-        {!loading && !inRange(page * perPage, page * perPage + perPage, userRank) && (
-          <RankingEntry
-            points={userPoints}
-            rank={userRank + 1}
-            address={userAddress}
-            variant="me"
-          />
-        )}
+        {!loading &&
+          userAddress &&
+          !inRange(page * perPage, page * perPage + perPage, userRank) && (
+            <RankingEntry
+              points={userPoints}
+              rank={userRank + 1}
+              address={userAddress}
+              variant="me"
+            />
+          )}
       </Grid>
       {!loading && (
         <Box
