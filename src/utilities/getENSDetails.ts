@@ -7,6 +7,11 @@ type ENSDetails = {
 
 const CACHED_ENS: Record<string, ENSDetails | null> = {};
 
+/**
+ * It takes an Ethereum address and returns an object with the ENS name and avatar URL
+ * @param {string | null} [address] - The address to look up.
+ * @returns An object with the name and avatarUrl of the ENS address.
+ */
 export const getENSDetails = async (address?: string | null): Promise<ENSDetails | null> => {
   if (!address || !window.ethereum) {
     return null;
