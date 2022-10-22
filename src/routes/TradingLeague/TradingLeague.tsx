@@ -6,7 +6,6 @@ import { setPageTitle } from '@utilities';
 
 import { Page } from '@components/interface';
 import ConnectedRankingTable from '../../components/containers/ConnectedRankingTable/ConnectedRankingTable';
-import { useCurrentSeason, useRanking } from '@hooks';
 
 const TradingLeague: React.FunctionComponent = () => {
   useEffect(() => {
