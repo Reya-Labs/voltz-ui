@@ -81,7 +81,7 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
             const rank = index + 1 + page * perPage;
             return (
               <RankingEntry
-                key={index}
+                key={ranking.address}
                 points={ranking.points}
                 rank={rank}
                 address={ranking.address}
