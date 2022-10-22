@@ -3,10 +3,10 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import { Typography } from '@components/atomic';
 import Skeleton from '@mui/material/Skeleton';
-import { elideAddress } from '@utilities';
 import { ReactComponent as Gold } from './icons/gold.svg';
 import { ReactComponent as Silver } from './icons/silver.svg';
 import { ReactComponent as Bronze } from './icons/bronze.svg';
+import { AvatarAddress } from '../../AvatarAddress/AvatarAddress';
 import { Points } from './Points';
 
 export type RankingEntryProps = {
@@ -74,18 +74,27 @@ export const RankingEntry: React.FunctionComponent<RankingEntryProps> = ({
           {rank === 3 && <Bronze style={{ marginLeft: '8px' }} />}
         </Typography>
       </Box>
-      <Typography
-        variant="body2"
+      <Box
         sx={{
-          color: colors.lavenderWeb.base,
-          fontSize: '18px',
-          lineHeight: '24px',
-          fontWeight: 400,
           flex: '1',
         }}
       >
-        {address ? elideAddress(address).toUpperCase() : '---'}
-      </Typography>
+        {address ? (
+          <AvatarAddress address={address} size={24} />
+        ) : (
+          <Typography
+            variant="body2"
+            sx={{
+              color: colors.lavenderWeb.base,
+              fontSize: '18px',
+              lineHeight: '24px',
+              fontWeight: 400,
+            }}
+          >
+            ---
+          </Typography>
+        )}
+      </Box>
       <Points points={points} />
     </Box>
   );

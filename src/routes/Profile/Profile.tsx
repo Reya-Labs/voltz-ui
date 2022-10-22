@@ -4,6 +4,7 @@ import { ProfilePageNoWallet } from './ProfilePageNoWallet/ProfilePageNoWallet';
 import { ProfilePageWalletConnected } from './ProfilePageWalletConnected/ProfilePageWalletConnected';
 import { getProfileBadges, GetProfileBadgesResponse } from '@graphql';
 import { setPageTitle } from '@utilities';
+import { getENSDetails } from '../../utilities/getENSDetails';
 
 const Profile: React.FunctionComponent = () => {
   const wallet = useWallet();
@@ -19,7 +20,9 @@ const Profile: React.FunctionComponent = () => {
     setAchievedBadges(result.achievedBadges);
     setLoading(false);
   };
-
+  useEffect(() => {
+    getENSDetails();
+  }, []);
   useEffect(() => {
     if (!wallet.account) {
       setLoading(false);

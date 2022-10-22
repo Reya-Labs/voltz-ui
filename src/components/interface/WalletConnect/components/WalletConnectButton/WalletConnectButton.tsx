@@ -9,6 +9,7 @@ import CircleIcon from '@mui/icons-material/Circle';
 import './web3modal.scss';
 import { Icons } from '@components/atomic';
 import { colors } from '@theme';
+import { AvatarAddress } from '../../../AvatarAddress/AvatarAddress';
 
 export type WalletConnectButtonProps = {
   onClick?: () => void;
@@ -58,15 +59,17 @@ const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = (
         <Button
           variant="dark"
           sx={{ zIndex: 1, left: (theme) => theme.spacing(-2), fontSize: 16 }}
-          startIcon={
-            <CircleIcon
-              sx={{ width: 4, height: 4, borderRadius: 200, color: colors.vzCustomGreen2.base }}
-            />
-          }
           endIcon={name && <Icon name={name as Icons} sx={{ width: 16 }} />}
           onClick={onClick}
         >
-          {account && elideAddress(account)}
+          <AvatarAddress
+            address={account}
+            size={16}
+            nameSx={{
+              fontSize: '16px',
+              lineHeight: '14px',
+            }}
+          />
         </Button>
       </Box>
     );
