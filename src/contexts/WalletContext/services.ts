@@ -70,7 +70,11 @@ export const checkForTOSSignature = async (
     try {
       // The latest terms of service have not been accepted. Get a signature now.
       const signature = await signer.signMessage(latestTOS);
-      await saveSignatureWithTOS(signerAddress, signature, latestTOS);
+      const response = await saveSignatureWithTOS(signerAddress, signature, latestTOS);
+
+      if (!response.ok) {
+        throw new Error('Error saving signature');
+      }
     } catch (e) {
       throw new Error('Error processing signature');
     }
