@@ -5,6 +5,8 @@ import { routes, TradingLeague, Profile, LiquidityProvider, Trader, FixedBorrowe
 import { AlphaBanner, GweiBar } from '@components/composite';
 import Box from '@mui/material/Box';
 import { useEffect } from 'react';
+import useWallet from './hooks/useWallet';
+import { ethers } from 'ethers';
 
 const App = () => {
   useEffect(() => {
@@ -12,6 +14,22 @@ const App = () => {
       TagManager.initialize({ gtmId: process.env.REACT_APP_GTM_CODE });
     }
   }, []);
+
+  const wallet = useWallet();
+
+  /* eslint-disable @typescript-eslint/no-unsafe-call */
+  /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+  window.ethereum?.on('accountsChanged', function () {
+    if (!wallet.loading) {
+      void wallet.connect('metamask');
+    }
+  })
+
+  window.ethereum?.on('chainChanged', function () {
+    if (!wallet.loading) {
+      void wallet.connect('metamask');
+    }
+  })
 
   return (
     <>
