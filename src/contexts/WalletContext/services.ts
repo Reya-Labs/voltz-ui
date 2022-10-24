@@ -118,7 +118,7 @@ export const getSignature = async (walletAddress: string) => {
  */
 export const getTOSText = () => {
   const text = `
-Please sign this message to log in. This won't cost you any ETH!
+Please sign this message to log in. This won't cost you any ETH.
 
 By signing, you accept Voltz's Terms of Service (which may have been updated since you last signed). You can find these here:
 ${process.env.REACT_APP_TOS_URL || ''}
