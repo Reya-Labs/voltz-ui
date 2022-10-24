@@ -20,7 +20,7 @@ const WalletConnectModal: React.FunctionComponent = () => {
   };
   const handleSelectWallet = (name: WalletName) => {
     handleClose();
-    if (walletOptions[2].name === name) {
+    if (name === 'disconnect') {
       wallet.disconnect();
     } else {
       wallet.connect(name);
