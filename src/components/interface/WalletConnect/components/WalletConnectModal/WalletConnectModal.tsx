@@ -5,6 +5,7 @@ import { Panel } from '@components/atomic';
 import { Modal } from '@components/composite';
 import { WalletConnectButton, WalletDisplay, WalletSelect } from './components';
 import { WalletName } from '@contexts';
+import { walletOptions } from './components/WalletSelect/WalletSelect';
 
 const WalletConnectModal: React.FunctionComponent = () => {
   const wallet = useWallet();
@@ -19,7 +20,11 @@ const WalletConnectModal: React.FunctionComponent = () => {
   };
   const handleSelectWallet = (name: WalletName) => {
     handleClose();
-    wallet.connect(name);
+    if (name === 'disconnect') {
+      wallet.disconnect();
+    } else {
+      wallet.connect(name);
+    }
   };
 
   const renderContent = () => {
