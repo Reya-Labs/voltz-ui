@@ -79,14 +79,14 @@ const LPMellowVaulDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoP
                     </Typography>
                 </Box>
 
-                <Box sx={{ display: "flex", borderRadius: "4px", padding: "8px 16px", border: "1px solid #1E1933", background: "#1E1933", marginTop: "16px" }}>
+                {/* <Box sx={{ display: "flex", borderRadius: "4px", padding: "8px 16px", border: "1px solid #1E1933", background: "#1E1933", marginTop: "16px" }}>
                     <Typography variant='h6' sx={{ fontSize: "14px", color: "#8B879D" }}>
                         EXPECTED CASHFLOW:
                     </Typography>
                     <Typography variant='h6' sx={{ fontSize: "14px", color: "#4DE5FF", paddingLeft: "8px" }}>
                         {isUndefined(lpVault.userExpectedCashflow) ? "---" : `${formatCurrency(lpVault.userExpectedCashflow, true)} ${lpVault.tokenName}`}
                     </Typography>
-                </Box>
+                </Box> */}
 
                 <Typography variant='body1' sx={{ fontSize: "14px", color: "#9B97AD", marginTop: "8px" }}>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec sit iaculis cras elit dictum massa. Sit metus amet, tincidunt odio. Tristique sagittis, nisl in eu eu vestibulum et. Ut sed mauris urna justo, dictumst molestie posuere.
