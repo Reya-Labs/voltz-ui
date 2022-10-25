@@ -16,6 +16,7 @@ const App = () => {
 
   const wallet = useWallet();
 
+  // TODO upgrade to metamask v2.0.0 and remove ethereum.d.ts
   /* eslint-disable @typescript-eslint/no-unsafe-call */
   /* eslint-disable @typescript-eslint/no-unsafe-member-access */
   window.ethereum?.on('accountsChanged', function () {
