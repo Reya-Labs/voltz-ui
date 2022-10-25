@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
-import { useLocation } from 'react-router-dom';
 import { Position } from '@voltz-protocol/v1-sdk';
 
-import { setPageTitle, findCurrentBorrowPosition, fromAMMtoBorrowAMM } from '@utilities';
-import { Agents, BorrowAMMProvider, BorrowFormProvider, SwapFormProvider } from '@contexts';
-import { useAgent, useAMMs, useBorrowPositions } from '@hooks';
+import { setPageTitle, findCurrentBorrowPosition } from '@utilities';
+import { Agents, BorrowAMMProvider, BorrowFormProvider } from '@contexts';
+import { useBorrowPositions } from '@hooks';
 
 import { Page } from '@components/interface';
 import ConnectedBorrowForm from '../../components/containers/ConnectedBorrowForm/ConnectedBorrowForm';
@@ -16,9 +15,7 @@ import AugmentedBorrowAMM from '../../utilities/augmentedBorrowAmm';
 
 import { AMMProvider, PositionProvider } from '@contexts';
 
-// Form specific 
 import { AugmentedAMM } from '@utilities';
-
 
 const FixedBorrower: React.FunctionComponent = () => {
   const [isForm, setIsForm] = useState<boolean>();
@@ -32,7 +29,7 @@ const FixedBorrower: React.FunctionComponent = () => {
   const handleSelectBorrowAMM = (selectedBorrowAMM: AugmentedBorrowAMM) => {
     setIsForm(true);
     setBorrowAMM(selectedBorrowAMM);
-    setPosition(findCurrentBorrowPosition(positions || [], selectedBorrowAMM))
+    setPosition(findCurrentBorrowPosition(positions || [], selectedBorrowAMM));
   };
 
   useEffect(() => {
@@ -46,13 +43,13 @@ const FixedBorrower: React.FunctionComponent = () => {
   }, [setBorrowAMM, setPosition]);
 
   useEffect(() => {
-    switch(renderMode) {
+    switch (renderMode) {
       case 'fix-borrow': {
         setPageTitle('Fixed Borrow Form');
         break;
       }
       case 'borrow-positions': {
-        setPageTitle('Borrwer Portfolio');
+        setPageTitle('Borrower Portfolio');
         break;
       }
     }
@@ -66,30 +63,36 @@ const FixedBorrower: React.FunctionComponent = () => {
 
   return (
     <Page>
-        {renderMode === 'fix-borrow' && (
-          <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center', backdropFilter: "blur(8px)" }}>
-            {borrowAmm && borrowAmm.amm && (
-              <BorrowAMMProvider amm={borrowAmm} >
-                <AMMProvider amm={new AugmentedAMM(borrowAmm.amm)}>
-                  <PositionProvider position={position}>
-                    <BorrowFormProvider>
-                      <ConnectedBorrowForm onReset={handleReset} />
-                    </BorrowFormProvider>
-                  </PositionProvider>
-                </AMMProvider>
-              </BorrowAMMProvider>
-            )}
-          </Box>
+      {renderMode === 'fix-borrow' && (
+        <Box
+          sx={{
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            backdropFilter: 'blur(8px)',
+          }}
+        >
+          {borrowAmm && borrowAmm.amm && (
+            <BorrowAMMProvider amm={borrowAmm}>
+              <AMMProvider amm={new AugmentedAMM(borrowAmm.amm)}>
+                <PositionProvider position={position}>
+                  <BorrowFormProvider>
+                    <ConnectedBorrowForm onReset={handleReset} />
+                  </BorrowFormProvider>
+                </PositionProvider>
+              </AMMProvider>
+            </BorrowAMMProvider>
+          )}
+        </Box>
       )}
 
-        {renderMode === 'borrow-positions' && (
-          <Box sx={{backdropFilter: "blur(8px)", height: '100%', paddingBottom: "200px"}}>
-            <ConnectedBorrowPositionTable
+      {renderMode === 'borrow-positions' && (
+        <Box sx={{ backdropFilter: 'blur(8px)', height: '100%', paddingBottom: '200px' }}>
+          <ConnectedBorrowPositionTable
             onSelectItem={handleSelectBorrowAMM}
             agent={Agents.VARIABLE_TRADER}
           />
-          </Box>
-          
+        </Box>
       )}
     </Page>
   );

@@ -1,10 +1,10 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Agents, useAMMContext, usePositionContext } from "@contexts";
 import { SwapFormActions, SwapFormModes } from "@components/interface";
-import { AugmentedAMM, lessThanEpsilon, formatNumber, stringToBigFloat } from "@utilities";
-import { isNumber, isUndefined, max } from "lodash";
+import { AugmentedAMM, lessThanEpsilon, formatNumber, stringToBigFloat, pushEvent, DataLayerEventPayload, isBorrowing, getAmmProtocol } from "@utilities";
+import { debounce, isNumber, isUndefined } from "lodash";
 import { hasEnoughTokens, hasEnoughUnderlyingTokens, lessThan } from "@utilities";
-import { GetInfoType, useAgent, useBalance, useMinRequiredMargin, useTokenApproval } from "@hooks";
+import { GetInfoType, useAgent, useBalance, useMinRequiredMargin, useTokenApproval, useWallet } from "@hooks";
 import { InfoPostSwap } from "@voltz-protocol/v1-sdk";
 import * as s from "./services";
 import { BigNumber } from "ethers";
@@ -89,12 +89,16 @@ export type SwapFormContext = {
     errorMessage?: string;
     loading: boolean;
     maxAvailableNotional?: number;
-    expectedApy?: number[][];
   }
   submitButtonState: SwapFormSubmitButtonStates;
   tokenApprovals: ReturnType<typeof useTokenApproval>;
   validate: () => Promise<boolean>;
   warningText?: string;
+  expectedApy?: number;
+  expectedCashflow?: number;
+  userSimulatedVariableApy?: number;
+  setUserSimulatedVariableApy: (value: number, resetToDefault?: boolean) => void;
+  userSimulatedVariableApyUpdated: boolean;
 };
 
 const SwapFormCtx = createContext<SwapFormContext>({} as unknown as SwapFormContext);
@@ -128,8 +132,10 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   const [notional, setNotional] = useState<SwapFormState['notional']>(defaultNotional);
   const [partialCollateralization, setPartialCollateralization] = useState<boolean>(defaultPartialCollateralization);
   const { swapInfo, expectedApyInfo } = useAMMContext();
-  const [cachedSwapInfoMinRequiredMargin, setCachedSwapInfoMinRequiredMargin] = useState<number>();
+  const cachedSwapInfoMinRequiredMargin = useRef<number>();
+  const [cachedSwapInfoAvailableNotional, setCachedSwapInfoAvailableNotional] = useState<number>();
   const tokenApprovals = useTokenApproval(poolAmm);
+  const [userSimulatedVariableApy, setUserSimulatedVariableApy] = useState<number | undefined>(undefined);
 
   const [errors, setErrors] = useState<SwapFormContext['errors']>({});
   const [isValid, setIsValid] = useState<boolean>(false);
@@ -144,6 +150,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   const approvalsNeeded = s.approvalsNeeded(action, tokenApprovals, isRemovingMargin)
 
   const [resetDeltaState, setResetDeltaState] = useState<boolean>(false);
+  const [userSimulatedVariableApyUpdated, setUserSimulatedVariableApyUpdated] = useState<boolean>(false);
 
   const asyncCallsLoading = useRef<string[]>([]);
 
@@ -160,6 +167,23 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   }, [])
 
   useEffect(() => {
+    if (userSimulatedVariableApyUpdated) {
+      setUserSimulatedVariableApyUpdated(false);
+    }
+  }, [userSimulatedVariableApyUpdated])
+
+  useEffect(() => {
+    if (isUndefined(userSimulatedVariableApy)) {
+      if (ammCtx.variableApy.result) {
+        updateUserSimulatedVariableApy(ammCtx.variableApy.result * 100)
+      } else {
+        setUserSimulatedVariableApy(undefined)
+        setUserSimulatedVariableApyUpdated(true);
+      }
+    }
+  }, [ammCtx.variableApy.result, userSimulatedVariableApy])
+
+  useEffect(() => {
     asyncCallsLoading.current = [];
     // swapInfo.call({ 
     //   position: undefined,
@@ -170,11 +194,13 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   }, [agent]);
 
   // cache the minRequiredMargin from swapInfo
+  // cache the available notional from swapInfo
   useEffect(() => {
-    if(isNumber(swapInfo.result?.marginRequirement)) {
-      setCachedSwapInfoMinRequiredMargin(swapInfo.result?.marginRequirement);
+    if (swapInfo.result) {
+      cachedSwapInfoMinRequiredMargin.current = swapInfo.result.marginRequirement;
+      setCachedSwapInfoAvailableNotional(swapInfo.result.availableNotional);
     }
-  }, [swapInfo.result?.marginRequirement])
+  }, [swapInfo.result])
 
   // Load the swap summary info
   useEffect(() => {
@@ -238,25 +264,38 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   ]);
 
   useEffect(() => {
-    if (!approvalsNeeded && !isUndefined(notional) && notional !== 0 && !isUndefined(margin) && swapInfo.result?.fixedTokenDeltaUnbalanced !== undefined && swapInfo.result?.availableNotional !== undefined) {
+    if (!approvalsNeeded && !isUndefined(notional) && notional !== 0 && !isUndefined(margin) 
+          && swapInfo.result?.fixedTokenDeltaUnbalanced !== undefined && swapInfo.result?.availableNotional !== undefined
+            && userSimulatedVariableApy !== undefined) {
       expectedApyInfo.call({
         margin: margin,
         position: position,
         fixedTokenDeltaUnbalanced: swapInfo.result?.fixedTokenDeltaUnbalanced,
-        availableNotional: swapInfo.result?.availableNotional
+        availableNotional: swapInfo.result?.variableTokenDeltaBalance,
+        predictedVariableApy: userSimulatedVariableApy
       });
     }  
-  }, [agent, margin, swapInfo.result?.fixedTokenDeltaUnbalanced]);
+  }, [agent, margin, swapInfo.result?.fixedTokenDeltaUnbalanced, 
+    swapInfo.result?.availableNotional, userSimulatedVariableApy]);
 
   // set the leverage back to 50% if variables change
   useEffect(() => {
-    const minMargin = cachedSwapInfoMinRequiredMargin;
-    if(isNumber(notional) && isNumber(minMargin) && swapInfo.result?.availableNotional !== undefined) {
-      const cappedMinMargin = Math.max(minMargin, 0.1);
-      const newLeverage = parseFloat(formatNumber(((Math.min(notional, swapInfo.result?.availableNotional) / cappedMinMargin) / 2)));
+    const minMargin = cachedSwapInfoMinRequiredMargin.current;
+    if(isNumber(notional) && isNumber(minMargin) && cachedSwapInfoAvailableNotional !== undefined) {
+      const cappedMinMargin = Math.max(minMargin, 0.0001);
+      const newLeverage = stringToBigFloat(formatNumber(((Math.min(notional, cachedSwapInfoAvailableNotional) / cappedMinMargin) / 2), 0, 2));
       updateLeverage(newLeverage);
     }
-  }, [notional, cachedSwapInfoMinRequiredMargin, resetDeltaState, swapInfo.result?.availableNotional]);
+  }, [resetDeltaState]);
+
+  useEffect(() => {
+    const minMargin = cachedSwapInfoMinRequiredMargin.current;
+    if(isNumber(notional) && isNumber(minMargin) && cachedSwapInfoAvailableNotional !== undefined) {
+      const cappedMinMargin = Math.max(minMargin, 0.0001);
+      const newLeverage = stringToBigFloat(formatNumber(((Math.min(notional, cachedSwapInfoAvailableNotional) / cappedMinMargin) / 2), 0, 2));
+      updateLeverage(newLeverage, false, false);
+    }
+  }, [notional, cachedSwapInfoAvailableNotional]);
 
   // Validate the form after values change
   useEffect(() => {
@@ -393,7 +432,11 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     return SwapFormSubmitButtonStates.TRADE_VARIABLE;
   };
 
-  const updateLeverage = (newLeverage: SwapFormState['leverage'], resetToDefaultLeverage: boolean = false) => {
+  const updateLeverage = (
+    newLeverage: SwapFormState['leverage'], 
+    resetToDefaultLeverage: boolean = false,
+    updateMargin: boolean = true
+  ) => {
     if(!touched.current.includes('leverage')) {
       touched.current.push('leverage');
     }
@@ -406,16 +449,31 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     } else {
       setLeverage(newLeverage);
 
-      if(!isUndefined(notional) && swapInfo.result?.availableNotional !== undefined) {
+      if(updateMargin && !isUndefined(notional) && swapInfo.result?.availableNotional !== undefined) {
         if(!touched.current.includes('margin')) {
           touched.current.push('margin');
         }
         const minNotional = Math.min(notional, swapInfo.result?.availableNotional);
-        const formatted = formatNumber(minNotional / newLeverage);
+        const formatted = formatNumber(minNotional / newLeverage, 0, 4);
         const newMargin  = stringToBigFloat(formatted);
         setMargin(newMargin);
       }
     }
+  }
+
+  const updateUserSimulatedVariableApy = (newUserSimulatedVariableApy: number, resetToDefault: boolean = false) => {
+    if (resetToDefault) {
+      setUserSimulatedVariableApy(undefined);
+    } else {
+      if (newUserSimulatedVariableApy < 0) {
+        newUserSimulatedVariableApy = 0;
+      } else if (newUserSimulatedVariableApy > 1000) {
+        newUserSimulatedVariableApy = 1000;
+      }
+
+      setUserSimulatedVariableApy(newUserSimulatedVariableApy / 100);
+    }
+    setUserSimulatedVariableApyUpdated(true);
   }
 
   const updateMargin = (newMargin: SwapFormState['margin']) => {
@@ -427,7 +485,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
 
     if(!isUndefined(newMargin) && !isUndefined(notional)  && swapInfo.result?.availableNotional !== undefined) {
       const minNotional = Math.min(notional, swapInfo.result?.availableNotional);
-      const formatted = formatNumber(minNotional / newMargin);
+      const formatted = formatNumber(minNotional / newMargin, 0, 4);
       const newLeverage  = stringToBigFloat(formatted);
       setLeverage(newLeverage);
     }
@@ -496,7 +554,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
 
     // Check that the input margin is >= minimum required margin
     if(action === SwapFormActions.SWAP || action === SwapFormActions.UPDATE || action === SwapFormActions.ROLLOVER_SWAP) {
-      if(lessThan(margin, swapInfo.result?.marginRequirement) === true) {
+      if(isUndefined(margin) || lessThan(margin, swapInfo.result?.marginRequirement) === true) {
         valid = false;
         addError(err, 'margin', 'Not enough margin');
       }
@@ -619,7 +677,42 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       return;
     }
 
+    const payload : DataLayerEventPayload = {
+      event: "notional_change",
+      eventValue: notional ?? 0,
+      pool: getAmmProtocol(poolAmm),
+      agent: agent
+    };
+    pushEvent(payload);
+
   }, [swapInfo.loading, swapInfo.result]);
+
+  const leverageChange = useCallback(debounce((value: number | undefined, _agent: Agents) => {
+    const payload : DataLayerEventPayload = {
+      event: "leverage_change",
+      eventValue: value ?? 0,
+      pool: getAmmProtocol(poolAmm),
+      agent: _agent
+    };
+    pushEvent(payload);
+  }, 1000), []);
+
+  const marginChange = useCallback(debounce((value: number | undefined, _agent: Agents) => {
+    const payload : DataLayerEventPayload = {
+      event: "margin_change",
+      eventValue: value ?? 0,
+      pool: getAmmProtocol(poolAmm),
+      agent: _agent
+    };
+    pushEvent(payload);
+  }, 1000),[]);
+
+  useEffect(() => {
+    if ( !isUndefined(margin)) {
+      marginChange(margin, agent);
+      leverageChange((notional ?? 0)/margin, agent);
+    }
+  }, [margin])
 
   const value = {
     action,
@@ -644,7 +737,6 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       errorMessage: swapInfo.errorMessage || undefined,
       loading: swapInfo.loading,
       maxAvailableNotional: swapInfo.result?.maxAvailableNotional ?? swapInfo.result?.availableNotional,
-      expectedApy: (!isUndefined(notional) && !isUndefined(margin) && !expectedApyInfo.loading) ? expectedApyInfo.result?.expectedApy : undefined
     },
     state: {
       leverage,
@@ -657,7 +749,12 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     submitButtonState: getSubmitButtonState(),
     tokenApprovals,
     validate,
-    warningText: getWarningText()
+    warningText: getWarningText(),
+    expectedApy: (!isUndefined(notional) && !isUndefined(margin) && !expectedApyInfo.loading) ? expectedApyInfo.result?.expectedApy : undefined,
+    expectedCashflow: (!isUndefined(notional) && !isUndefined(margin) && !expectedApyInfo.loading) ? expectedApyInfo.result?.expectedCashflow : undefined,
+    userSimulatedVariableApy: !isUndefined(userSimulatedVariableApy) ? userSimulatedVariableApy * 100 : undefined,
+    setUserSimulatedVariableApy: updateUserSimulatedVariableApy,
+    userSimulatedVariableApyUpdated: userSimulatedVariableApyUpdated
   }
 
   return (

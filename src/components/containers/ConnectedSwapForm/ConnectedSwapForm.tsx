@@ -7,7 +7,7 @@ import { useAgent, useDispatch, useSelector } from '@hooks';
 import { SwapCurrentPosition, SwapForm, SwapInfo, PendingTransaction, SwapFormActions, FormPanel, SwapFormModes } from '@components/interface';
 import { Agents, useAMMContext, useAMMsContext, usePositionContext, useSwapFormContext } from '@contexts';
 import { BigNumber } from 'ethers';
-import { AugmentedAMM, getNotionalActionFromHintState, getPoolButtonId } from '@utilities';
+import { AugmentedAMM, getNotionalActionFromHintState, getPoolButtonId, setPageTitle } from '@utilities';
 import { isUndefined } from 'lodash';
 
 export type ConnectedSwapFormProps = {
@@ -82,6 +82,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
   };
 
   const handleGoBack = () => {
+    setPageTitle(`${position ? 'Edit' : 'New'} Trader Position`);
     const action = actions.closeTransaction(transactionId as string);
     dispatch(action);
   }
@@ -251,7 +252,11 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         underlyingTokenName={targetAmm.underlyingToken.name}
         warningText={form.warningText}
         maxAvailableNotional={form.swapInfo.maxAvailableNotional}
-        expectedApy={form.swapInfo.expectedApy}
+        expectedApy={form.expectedApy}
+        expectedCashflow={form.expectedCashflow}
+        userSimulatedVariableApy={form.userSimulatedVariableApy}
+        onChangeUserSimulatedVariableApy={form.setUserSimulatedVariableApy}
+        userSimulatedVariableApyUpdated={form.userSimulatedVariableApyUpdated}
       />
     </>
   );

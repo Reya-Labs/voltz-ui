@@ -2,17 +2,16 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 
-import { AugmentedAMM, getPoolButtonId } from '@utilities';
+import { AugmentedAMM, DataLayerEventPayload, getAgentFromPosition, getAmmProtocol, getPoolButtonId, pushEvent, setPageTitle } from '@utilities';
 import { useWallet, useSelector, useAgent } from '@hooks';
 import { selectors } from '@store';
 import { AMMProvider, MintBurnFormLiquidityAction, useAMMsContext } from '@contexts';
-import { Button, Panel, Typography, Loading, TokenAndText } from '@components/atomic';
+import { Button, Panel, Typography, Loading } from '@components/atomic';
 import { ProtocolInformation, WalletAddressDisplay } from '@components/composite';
 import { formatCurrency } from '@utilities';
 import { isUndefined } from 'lodash';
 import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
 import { Wallet } from '@graphql';
-import { ChangeCircleSharp } from '@mui/icons-material';
 
 export type PendingTransactionProps = {
   amm: AugmentedAMM;
@@ -57,12 +56,34 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   const fetchLimit = 20;
   const { account, refetch, wallet } = useWallet();
   const [loadingRefetch, setLoadingRefetch] = useState<boolean>(false);
-  const {agent} = useAgent();
+  const { agent } = useAgent();
   const { isPositionFeched, removeFixedApr } = useAMMsContext();
   const cachedMargin = useRef<number | undefined>(margin);
 
+  const action = useMemo(() => {
+    if ( isRollover ) return "rollover";
+    if ( isSettle ) return "settle";
+    if ( isEditingMargin || position ) return "edit";
+    return "new";
+  },[isRollover, isSettle, isEditingMargin]);
+
   useEffect(() => {
-    if (!isUndefined(margin) && margin !== 0){
+    setPageTitle('Pending Transaction');
+    const payload : DataLayerEventPayload  = {
+      event: "tx_submitted",
+      eventValue: {
+        notional: (notional ?? 0) * (showNegativeNotional || liquidityAction === MintBurnFormLiquidityAction.BURN ? -1 : 1),
+        margin: isSettle ? cachedMargin.current : margin,
+        action: action,
+      },
+      pool: getAmmProtocol(amm),
+      agent: isSettle ? getAgentFromPosition(position) : agent
+    };
+    pushEvent(payload);
+  }, []);
+
+  useEffect(() => {
+    if (!isUndefined(margin) && margin !== 0 && fetch === 0){
       cachedMargin.current =  margin;
     }
   }, [margin]);
@@ -71,6 +92,24 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   const trasactionState = useMemo(() => {
     return [activeTransaction?.resolvedAt,activeTransaction?.succeededAt]; 
   }, []);
+
+  useEffect(() => {
+    if ( activeTransaction?.failedAt ) {
+      setPageTitle('Failed Transaction');
+      const payload : DataLayerEventPayload  = {
+        event: "failed_tx",
+        eventValue: {
+          notional: (notional ?? 0) * (showNegativeNotional || liquidityAction === MintBurnFormLiquidityAction.BURN ? -1 : 1),
+          margin: isSettle ? cachedMargin.current : margin,
+          action: action,
+          failMessage: activeTransaction.failureMessage || "Unrecognized error"
+        },
+        pool: getAmmProtocol(amm),
+        agent: isSettle ? getAgentFromPosition(position) : agent
+      };
+      pushEvent(payload);
+    }
+  }, [activeTransaction?.failedAt]);
 
   const isFetched = useMemo(() => {
     if (previousWallet.current && !loadingRefetch && isPositionFeched(wallet as Wallet, previousWallet.current, position)) {
@@ -86,6 +125,23 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
       }
     return false;
   }, [fetch, loadingRefetch] );
+
+  useEffect(() => {
+    if ( (activeTransaction?.succeededAt || activeTransaction?.resolvedAt) && isFetched ) {
+      setPageTitle('Successful Transaction');
+      const payload : DataLayerEventPayload  = {
+        event: "successful_tx",
+        eventValue: {
+          notional: (notional ?? 0) * (showNegativeNotional || liquidityAction === MintBurnFormLiquidityAction.BURN ? -1 : 1),
+          margin: isSettle ? cachedMargin.current : margin,
+          action: action
+        },
+        pool: getAmmProtocol(amm),
+        agent: isSettle ? getAgentFromPosition(position) : agent
+      };
+      pushEvent(payload);
+    }
+  }, [ (activeTransaction?.succeededAt || activeTransaction?.resolvedAt) && isFetched]);
 
   useEffect(() => {
     if (!previousWallet.current && wallet) {

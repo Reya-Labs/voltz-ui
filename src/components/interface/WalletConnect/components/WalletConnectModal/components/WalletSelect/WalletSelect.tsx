@@ -10,17 +10,17 @@ import { WalletName } from '@contexts';
 type WalletOption = {
   title: string;
   name: WalletName;
-}
+};
 
 export type WalletSelectProps = {
   wallet: Wallet;
   onSelectWallet: (name: WalletName) => void;
 };
 
-export const walletOptions:WalletOption[] = [
+export const walletOptions: WalletOption[] = [
   { title: 'Metamask', name: 'metamask' },
   { title: 'WalletConnect', name: 'walletConnect' },
-  { title: 'Disconnect', name: 'disconnect' }
+  { title: 'Disconnect', name: 'disconnect' },
 ];
 
 const WalletSelect: React.FunctionComponent<WalletSelectProps> = ({ wallet, onSelectWallet }) => {
@@ -44,6 +44,7 @@ const WalletSelect: React.FunctionComponent<WalletSelectProps> = ({ wallet, onSe
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
         {walletOptions.map(({ title, name }) => (
           <WalletOptionButton
+            key={title}
             title={title}
             icon={name as Icons}
             onClick={() => onSelectWallet(name)}

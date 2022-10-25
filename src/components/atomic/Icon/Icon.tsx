@@ -16,15 +16,35 @@ const Icon: React.FunctionComponent<IconProps> = ({ name, sx, link, ...props }) 
   const NamedIcon = iconMap[name];
 
   const extraProps = (iconName: Icons) => {
-    switch(iconName) {
+    switch (iconName) {
+      case 'degenStuff':
+      case 'deltaDegen':
+      case 'irsConnoisseur':
+      case 'leverageCrowbar':
+      case 'fixedTrader':
+      case 'sushiRoll':
+      case 'topTrader':
+      case 'beWaterMyFriend':
+      case 'rainMaker':
+      case 'waterHose':
+      case 'moneyMoneyMoney':
+      case 'lpoor':
+      case 'yikes':
+      case 'maxBidding':
+      case 'okBoomer':
+      case 'dryIce':
+      case 'noClaimedBadges':
+        return {
+          viewBox: '0 0 459 459',
+        };
       case 'metamask':
         return {
-          viewBox: "0 0 23 22"
-        }
+          viewBox: '0 0 23 22',
+        };
       case 'walletConnect':
         return {
-          viewBox: "0 0 22 20"
-        }
+          viewBox: '0 0 22 20',
+        };
       case 'tx-burn':
       case 'tx-liquidation':
       case 'tx-margin-update':
@@ -32,8 +52,8 @@ const Icon: React.FunctionComponent<IconProps> = ({ name, sx, link, ...props }) 
       case 'tx-settle':
       case 'tx-swap':
         return {
-          viewBox: "0 0 16 16"
-        }
+          viewBox: '0 0 16 16',
+        };
     }
     return {};
   };
@@ -59,10 +79,10 @@ const Icon: React.FunctionComponent<IconProps> = ({ name, sx, link, ...props }) 
   const handleClick = () => link && navigate(link);
 
   return (
-    <SvgIcon 
-      component={NamedIcon} 
-      sx={[defaultSx, ...getSx()]} 
-      onClick={handleClick} 
+    <SvgIcon
+      component={NamedIcon}
+      sx={[defaultSx, ...getSx()]}
+      onClick={handleClick}
       {...extraProps(name)}
       {...props}
     />

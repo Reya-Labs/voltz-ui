@@ -82,6 +82,7 @@ declare class Position {
     get createdDateTime(): DateTime;
     get updatedDateTime(): DateTime;
     get averageFixedRate(): number | undefined;
+    getSettlementCashflow(): Promise<number | undefined>;
 }
 export default Position;
 //# sourceMappingURL=position.d.ts.map

@@ -1,25 +1,24 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { SystemStyleObject, Theme } from '@theme';
 import MuiButton, { ButtonProps as MuiButtonProps } from '@mui/material/Button';
 
 import { AgentProps, Agents } from '@contexts';
 import { useAgentWithOverride } from '@hooks';
+import { SxProps } from '@mui/system';
 
-export type ButtonProps = MuiButtonProps &
-  AgentProps & {
-    selected?: boolean;
-    link?: string;
-  };
-
-const Button: React.FunctionComponent<ButtonProps> = ({
+function Button<C extends React.ElementType>({
   agent: agentOverride,
   selected,
   link,
   ...props
-}) => {
+}: Omit<MuiButtonProps<C, { component?: C }>, 'onClick' | 'sx'> &
+  AgentProps & {
+    sx?: SxProps<Theme>;
+    selected?: boolean;
+    link?: string;
+    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  }) {
   const { agent } = useAgentWithOverride(agentOverride);
-  const navigate = useNavigate();
   const styleOverrides: SystemStyleObject<Theme> = {
     border: 1,
     borderColor: 'transparent',
@@ -30,7 +29,6 @@ const Button: React.FunctionComponent<ButtonProps> = ({
       return {};
     }
 
-
     // selecting different colours from the pallet to style the component
     if (agent === Agents.FIXED_TRADER) {
       return {
@@ -39,7 +37,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
         '&:hover': {
           backgroundColor: 'primary.darken030',
           borderColor: 'primary.light',
-          boxShadow: '0px 4px 20px 0px #4de5ff33',
+          boxShadow: '0px 4px 20px 0px #4de5ff33',
         },
       };
     }
@@ -85,7 +83,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
           backgroundColor: 'secondary.darken030',
         },
         borderWidth: 1,
-        borderColor: '#ff4aa9'
+        borderColor: '#ff4aa9',
       };
     }
 
@@ -110,7 +108,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
         },
         color: '#40F99B',
         borderWidth: 1,
-        borderColor: '#40F99B'
+        borderColor: '#40F99B',
       };
     }
 
@@ -122,7 +120,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
         },
         color: '#F1D302',
         borderWidth: 1,
-        borderColor: '#F1D302'
+        borderColor: '#F1D302',
       };
     }
 
@@ -134,7 +132,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
         },
         color: '#F61067',
         borderWidth: 1,
-        borderColor: '#F61067'
+        borderColor: '#F61067',
       };
     }
 
@@ -197,7 +195,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
         fontWeight: 'bold',
         '&:hover': {
           backgroundColor: 'primary.darken015',
-          boxShadow: 'none'
+          boxShadow: 'none',
         },
       };
     }
@@ -209,7 +207,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
         fontWeight: 'bold',
         '&:hover': {
           backgroundColor: 'tertiary.darken015',
-          boxShadow: 'none'
+          boxShadow: 'none',
         },
       };
     }
@@ -221,23 +219,21 @@ const Button: React.FunctionComponent<ButtonProps> = ({
         fontWeight: 'bold',
         '&:hover': {
           backgroundColor: 'secondary.darken045',
-          boxShadow: 'none'
+          boxShadow: 'none',
         },
       };
     }
 
     return {};
   };
-  const handleClick = () => link && navigate(link);
 
   return (
     <MuiButton
       disableRipple
-      onClick={handleClick}
       {...props}
       sx={{ ...styleOverrides, ...agentStyleOverrides(), ...stateStyleOverrides(), ...props.sx }}
     />
   );
-};
+}
 
 export default Button;

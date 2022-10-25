@@ -3,13 +3,19 @@ import { colors, SystemStyleObject, Theme } from '@theme';
 import Box from '@mui/material/Box';
 
 export type PanelProps = {
-  variant?: 'error' | 'warning' | 'info' | 'iconLabel' | 'main' | 'grey-dashed' | 'dark' | 'darker' ;
+  variant?: 'error' | 'warning' | 'info' | 'iconLabel' | 'main' | 'grey-dashed' | 'dark' | 'darker';
   borderRadius?: 'small' | 'large';
-  padding?: 'small' | 'large' | 'container'; 
+  padding?: 'small' | 'large' | 'container';
   sx?: SystemStyleObject<Theme>;
 };
 
-const Panel: React.FunctionComponent<PanelProps> = ({ variant, borderRadius = 'small', padding = 'large', sx, children }) => {
+const Panel: React.FunctionComponent<PanelProps> = ({
+  variant,
+  borderRadius = 'small',
+  padding = 'large',
+  sx,
+  children,
+}) => {
   const commonOverrides: SystemStyleObject<Theme> = {
     border: 1,
     borderColor: 'transparent',
@@ -43,31 +49,31 @@ const Panel: React.FunctionComponent<PanelProps> = ({ variant, borderRadius = 's
         return {
           backgroundColor: `secondary.darken050`,
         };
-      
+
       case 'iconLabel':
         return {
-          borderRadius: 1, 
+          borderRadius: 1,
           padding: (theme) => `${theme.spacing(3)} ${theme.spacing(4)}`,
-          maxWidth: 200, 
-          backgroundColor: "#0F0C1D",
-          borderColor: "#383545", 
-          borderStyle: "solid", 
+          maxWidth: 200,
+          backgroundColor: '#0F0C1D',
+          borderColor: '#383545',
+          borderStyle: 'solid',
           boxShadow: '0px 4px 15px rgba(229, 225, 249, 0.1)',
           '& > *': {
             color: `${variant}.light`,
           },
         };
 
-      case 'error': 
+      case 'error':
         return {
           background: 'transparent',
-          border: `2px dashed ${colors.vzCustomRed1}`,
-          borderColor: colors.vzCustomRed1,
-          color: colors.vzCustomRed1,
+          border: `2px dashed ${colors.vzCustomRed1.base}`,
+          borderColor: colors.vzCustomRed1.base,
+          color: colors.vzCustomRed1.base,
           textAlign: 'center',
         };
-      
-      case 'grey-dashed': 
+
+      case 'grey-dashed':
         return {
           background: 'transparent',
           border: `2px dashed ${colors.lavenderWeb.darken035}`,

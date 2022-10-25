@@ -7,7 +7,7 @@ import { MintBurnFormActions, MintBurnFormModes, useAMMContext, useAMMsContext, 
 import { FormPanel, MintBurnCurrentPosition, MintBurnForm, MintBurnInfo, PendingTransaction } from '@components/interface';
 import { updateFixedRate } from './utilities';
 import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
-import { AugmentedAMM, getPoolButtonId, isBorrowing } from '@utilities';
+import { AugmentedAMM, getPoolButtonId, setPageTitle } from '@utilities';
 import { isUndefined } from 'lodash';
 
 export type ConnectedMintBurnFormProps = {
@@ -76,6 +76,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   };
 
   const handleGoBack = () => {
+    setPageTitle(`${position ? 'Edit' : 'New'} Liquidity Provider Position`);
     const action = actions.closeTransaction(transactionId as string);
     dispatch(action);
   }

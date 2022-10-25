@@ -17,6 +17,7 @@ export type CurrentMarginProps = {
   accruedCashflow?: number;
   token: string;
   onSelect?: () => void;
+  isSettled: boolean;
 };
 
 const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({ 
@@ -24,7 +25,8 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({
   margin, 
   accruedCashflow, 
   token, 
-  onSelect
+  onSelect,
+  isSettled
 }) => {
   const wallet = useWallet();
 
@@ -33,7 +35,7 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({
       if (isNull(wallet.account)) {
         wallet.setRequired(true);
       } else {
-       onSelect();
+        onSelect();
       }
     }
   };
@@ -41,7 +43,7 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({
   const getNetMarginLabel = () => (
     <>
       Margin 
-      {!isUndefined(accruedCashflow) && (
+      {!isUndefined(accruedCashflow) && !isSettled && (
         <Box component='span' sx={{ color: accruedCashflow >= 0 ? colors.vzCustomGreen1 : colors.vzCustomRed1 }}>
           {' '}
           {accruedCashflow > 0 && '+'}
@@ -59,13 +61,13 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({
       </Typography>
 
       {marginEdit && onSelect && (
-        <Button 
-          variant='red2' 
-          onClick={handleClick} 
-          size='small' 
+        <Button
+          variant="red2"
+          onClick={handleClick}
+          size="small"
           sx={{ width: '100%', display: 'flex' }}
         >
-          Edit 
+          Edit
         </Button>
       )}
     </TableCell>

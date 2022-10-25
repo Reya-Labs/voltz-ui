@@ -2,17 +2,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { BigNumber, ethers } from 'ethers';
 
 import { useGetWalletQuery } from '@graphql';
-import { selectors, WindowWithWallet } from '@store';
+import { selectors } from '@store';
 import { useSelector } from '@hooks';
 import { WalletName, WalletStatus } from './types';
 import WalletContext from './WalletContext';
 import { getErrorMessage } from '@utilities';
 import * as services from './services';
-import { Token } from '@voltz-protocol/v1-sdk';
 
 export type ProviderWrapperProps = {
   status: WalletStatus;
@@ -45,17 +44,20 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
   const [signer, setSigner] = useState<ethers.providers.JsonRpcSigner | null>(null);
   const [walletError, setWalletError] = useState<string | null>(null);
 
-  const disconnect = useCallback((errorMessage: string | null = null) => {
-    (window as WindowWithWallet).wallet = undefined;
-    setProvider(null);
-    setSigner(null);
-    setName(null);
-    localStorage.removeItem('connectedWalletName');
-    setAccount(null);
-    setBalance({});
-    setStatus('notConnected');
-    setWalletError(errorMessage);
-  }, [setAccount, setBalance, setStatus]);
+  const disconnect = useCallback(
+    (errorMessage: string | null = null) => {
+      window.wallet = undefined;
+      setProvider(null);
+      setSigner(null);
+      setName(null);
+      localStorage.removeItem('connectedWalletName');
+      setAccount(null);
+      setBalance({});
+      setStatus('notConnected');
+      setWalletError(errorMessage);
+    },
+    [setAccount, setBalance, setStatus],
+  );
 
   const connect = useCallback(
     async (walletName: WalletName) => {
@@ -63,23 +65,22 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
         const newProvider = await services.getWalletProvider(walletName);
         setStatus('connecting');
 
-        if(newProvider) {
+        if (newProvider) {
           const newSigner = newProvider.getSigner();
           const walletAddress = await newSigner.getAddress();
-                             
+
           // Do checks that could stop us allowing the wallet to connect
-          if(!process.env.REACT_APP_SKIP_TOS_CHECK) {
+          if (!process.env.REACT_APP_SKIP_TOS_CHECK) {
             await services.checkForTOSSignature(newSigner, walletAddress);
           }
           await services.checkForCorrectNetwork(newProvider);
-          if(!process.env.REACT_APP_SKIP_WALLET_SCREENING) {
+          if (!process.env.REACT_APP_SKIP_WALLET_SCREENING) {
             await services.checkForRiskyWallet(walletAddress);
           }
-            
-          // IMPORTANT! - Set the provider and signer globally so that the redux store can use them
-          (window as WindowWithWallet).wallet = {
+
+          window.wallet = {
             provider: newProvider,
-            signer: newSigner
+            signer: newSigner,
           };
 
           setProvider(newProvider);
@@ -90,27 +91,28 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
           setBalance({});
           setStatus('connected');
           setWalletError(null);
-        }
-        else {
+        } else {
           setStatus('notConnected');
         }
-      } 
-      catch (error) {
+      } catch (error) {
         let errorMessage = getErrorMessage(error).trim();
-        if (errorMessage.endsWith(".")) {
-          errorMessage = errorMessage.slice(0, -1);
+        if (errorMessage.includes("Wrong network")) {
+          errorMessage = "Wrong network";
+        } else {
+          errorMessage = "Failed connection";
         }
 
         disconnect(errorMessage || null);
       }
-    }, 
-  [disconnect, setAccount, setBalance, setStatus]);
+    },
+    [disconnect, setAccount, setBalance, setStatus],
+  );
 
   // Reconnect wallet on page load
   useEffect(() => {
     const walletName = localStorage.getItem('connectedWalletName') as WalletName;
     if (walletName) {
-      connect(walletName)
+      connect(walletName);
     }
   }, []);
 
@@ -119,11 +121,11 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
     variables: { id: account || '' },
     pollInterval,
     fetchPolicy: 'no-cache',
-    nextFetchPolicy: 'no-cache'
+    nextFetchPolicy: 'no-cache',
   });
 
   const doRefetch = useCallback(async () => {
-    await refetch()
+    await refetch();
   }, [refetch]);
 
   const unresolvedTransactions = useSelector(selectors.unresolvedTransactionsSelector);
@@ -152,7 +154,7 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
     required,
     setRequired,
     walletError,
-    refetch: doRefetch
+    refetch: doRefetch,
   };
 
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;

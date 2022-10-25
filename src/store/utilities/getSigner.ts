@@ -1,7 +1,8 @@
-import { WindowWithWallet } from '../types';
+import { ethers } from 'ethers';
 
-function* getSigner() {
-  return (window as WindowWithWallet).wallet?.signer || null;
+// TODO: why is this generator function... Doesn't really make sense
+function* getSigner(): Generator<ethers.providers.JsonRpcSigner | null> {
+  return window.wallet?.signer || null;
 }
 
 export default getSigner;

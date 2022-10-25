@@ -3,15 +3,31 @@ import { ElementType } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
+  BeWaterMyFriend,
   Burn,
+  DegenStuff,
+  DeltaDegen,
+  DryIce,
   Ethereum,
   InterfaceAlertInformationCircle,
   InterfaceAlertWarningCircle,
+  IrsConnoisseur,
+  LeverageCrowbar,
   Liquidation,
+  Lpoor,
   MarginUpdate,
+  MaxBidding,
   Metamask,
   Mint,
+  MoneyMoneyMoney,
+  NoClaimedBadges,
+  FixedTrader,
+  OkBoomer,
+  Rainmaker,
+  TopTrader,
   Settle,
+  Yikes,
+  SushiRoll,
   Swap,
   TokenDai,
   TokenEth,
@@ -20,6 +36,7 @@ import {
   TokenUsdt,
   Voltz,
   WalletConnect,
+  WaterHose,
 } from './icons';
 
 export type Icons =
@@ -41,7 +58,24 @@ export type Icons =
   | 'tx-swap'
   | 'voltz'
   | 'walletConnect'
-  | 'warning-circle';
+  | 'warning-circle'
+  | 'degenStuff'
+  | 'deltaDegen'
+  | 'irsConnoisseur'
+  | 'leverageCrowbar'
+  | 'fixedTrader'
+  | 'sushiRoll'
+  | 'topTrader'
+  | 'beWaterMyFriend'
+  | 'rainMaker'
+  | 'waterHose'
+  | 'moneyMoneyMoney'
+  | 'lpoor'
+  | 'yikes'
+  | 'maxBidding'
+  | 'dryIce'
+  | 'noClaimedBadges'
+  | 'okBoomer';
 
 export const iconMap: Record<Icons, ElementType> = {
   'arrow-left': ArrowLeft as ElementType,
@@ -50,7 +84,7 @@ export const iconMap: Record<Icons, ElementType> = {
   'information-circle': InterfaceAlertInformationCircle as ElementType,
   metamask: Metamask as ElementType,
   voltz: Voltz as ElementType,
-  'walletConnect': WalletConnect as ElementType,
+  walletConnect: WalletConnect as ElementType,
   'warning-circle': InterfaceAlertWarningCircle as ElementType,
   'token-dai': TokenDai as ElementType,
   'token-eth': TokenEth as ElementType,
@@ -63,4 +97,21 @@ export const iconMap: Record<Icons, ElementType> = {
   'tx-mint': Mint as ElementType,
   'tx-settle': Settle as ElementType,
   'tx-swap': Swap as ElementType,
+  degenStuff: DegenStuff as ElementType,
+  deltaDegen: DeltaDegen as ElementType,
+  irsConnoisseur: IrsConnoisseur as ElementType,
+  leverageCrowbar: LeverageCrowbar as ElementType,
+  fixedTrader: FixedTrader as ElementType,
+  sushiRoll: SushiRoll as ElementType,
+  topTrader: TopTrader as ElementType,
+  beWaterMyFriend: BeWaterMyFriend as ElementType,
+  rainMaker: Rainmaker as ElementType,
+  waterHose: WaterHose as ElementType,
+  moneyMoneyMoney: MoneyMoneyMoney as ElementType,
+  lpoor: Lpoor as ElementType,
+  yikes: Yikes as ElementType,
+  maxBidding: MaxBidding as ElementType,
+  okBoomer: OkBoomer as ElementType,
+  dryIce: DryIce as ElementType,
+  noClaimedBadges: NoClaimedBadges as ElementType,
 };

@@ -1,14 +1,4 @@
 import { Agents } from '@contexts';
-import { ethers } from 'ethers';
-
-export type WindowWithWallet = typeof window & {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  wallet?: {
-    provider: ethers.providers.Web3Provider,
-    signer: ethers.providers.JsonRpcSigner
-  }
-};
-
 
 // things that can occur after the transaction has been mined or fails
 export type TransactionUpdate = {
@@ -21,7 +11,6 @@ export type TransactionUpdate = {
   // if value != reject
   resolvedAt?: string;
 };
-
 
 // defines a mint or a swap
 export type Transaction = TransactionUpdate & {
@@ -83,7 +72,7 @@ export type ActionType =
   | 'fcmSwap'
   | 'fcmUnwind'
   | 'updatePositionMargin'
-  | 'settlePosition'  
+  | 'settlePosition'
   | 'add-transaction'
   | 'close-transaction'
   | 'update-transaction'
@@ -173,7 +162,7 @@ export type BorrowAction = {
     transaction: Transaction;
     amm: SerializedAMM;
   };
-}
+};
 
 export type Action =
   | MintAction
@@ -188,4 +177,3 @@ export type Action =
   | RolloverMintAction
   | RolloverSwapAction
   | BorrowAction;
-

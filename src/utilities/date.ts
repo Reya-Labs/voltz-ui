@@ -43,3 +43,16 @@ export const formatDateTime = (dateTime: DateTime) => {
 export const formatTimestamp = (timestamp: string | number | JSBI) => {
   return formatDate(new Date(parseInt(timestamp.toString(), 10) * 1000));
 };
+
+/**
+ * Takes a POSIX timestamp and returns a string representation: 10/12/22 (DD/MM/YY)
+ * or 12/10/22 (MM/DD/YY) depending on locale
+ * @param timestamp - The POSIX timestamp to process
+ */
+export const formatPOSIXTimestamp = (timestamp: number): string => {
+  return DateTime.fromMillis(timestamp).toLocaleString({
+    day: '2-digit',
+    month: '2-digit',
+    year: '2-digit',
+  });
+};

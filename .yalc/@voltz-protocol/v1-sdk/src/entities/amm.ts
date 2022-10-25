@@ -1,5 +1,5 @@
 import JSBI from 'jsbi';
-import { BaseContract, ethers, providers } from 'ethers';
+import { ethers, providers } from 'ethers';
 import { DateTime } from 'luxon';
 import { BigNumber, ContractReceipt, Signer, utils } from 'ethers';
 
@@ -26,12 +26,10 @@ import {
   ICToken__factory,
   CompoundRateOracle,
   CompoundRateOracle__factory,
-  AaveBorrowRateOracle,
   CompoundBorrowRateOracle,
   AaveBorrowRateOracle__factory,
   IAaveV2LendingPool__factory,
   CompoundBorrowRateOracle__factory,
-  IAaveV2LendingPool
 } from '../typechain';
 import RateOracle from './rateOracle';
 import { TickMath } from '../utils/tickMath';
@@ -43,7 +41,7 @@ import { Price } from './fractions/price';
 import { TokenAmount } from './fractions/tokenAmount';
 import { decodeInfoPostMint, decodeInfoPostSwap, getReadableErrorMessage } from '../utils/errors/errorHandling';
 import Position from './position';
-import { isNumber, isUndefined } from 'lodash';
+import { isUndefined } from 'lodash';
 import { getExpectedApy } from '../services/getExpectedApy';
 import { getAccruedCashflow, transformSwaps } from '../services/getAccruedCashflow';
 
@@ -142,10 +140,12 @@ export type ExpectedApyArgs = {
   fixedHigh: number;
   fixedTokenDeltaUnbalanced: number;
   availableNotional: number;
+  predictedVariableApy: number;
 }
 
 export type ExpectedApyInfo = {
-  expectedApy: number[][];
+  expectedApy: number;
+  expectedCashflow: number;
 }
 
 // rollover with swap
@@ -265,6 +265,7 @@ export type PositionInfo = {
   marginInUSD: number;
   margin: number;
   fees?: number;
+  settlementCashflow?: number;
   liquidationThreshold?: number;
   safetyThreshold?: number;
   accruedCashflowInUSD: number;
@@ -357,7 +358,7 @@ class AMM {
   }
 
   // expected apy
-  expectedApy = async (ft: BigNumber, vt: BigNumber, margin: number) => {
+  expectedApy = async (ft: BigNumber, vt: BigNumber, margin: number, rate: number) => {
     const now = Math.round((new Date()).getTime() / 1000);
 
     const end = BigNumber.from(this.termEndTimestamp.toString())
@@ -376,20 +377,9 @@ class AMM {
       scaledVt = vt.div(BigNumber.from(10).pow(this.underlyingToken.decimals - 6)).toNumber() / 1000000;
     }
 
-    const varApy = await this.getInstantApy();
-    const samples = [0, varApy / 2, varApy, 5 * varApy, 10 * varApy];
-
-    const predictedAprs = [];
-    const predictedPnls = [];
-
-    for (let rate of samples) {
-      const pnl = getExpectedApy(now, end, scaledFt, scaledVt, margin, rate);
-
-      predictedAprs.push(100 * rate);
-      predictedPnls.push(100 * pnl);
-    }
-
-    return [predictedAprs, predictedPnls];
+    const [pnl, ecs] = getExpectedApy(now, end, scaledFt, scaledVt, margin, rate);
+  
+    return [100 * pnl, ecs];
   };
 
   // rollover with swap
@@ -821,7 +811,8 @@ class AMM {
     fixedLow,
     fixedHigh,
     fixedTokenDeltaUnbalanced,
-    availableNotional
+    availableNotional,
+    predictedVariableApy
   }: ExpectedApyArgs): Promise<ExpectedApyInfo> {
     if (!this.signer) {
       throw new Error('Wallet not connected');
@@ -886,14 +877,16 @@ class AMM {
       } catch { }
     }
 
-    const expectedApy = await this.expectedApy(
+    const [expectedApy, expectedCashflow] = await this.expectedApy(
       positionUft.add(this.scale(fixedTokenDeltaUnbalanced)),
       positionVt.add(this.scale(availableNotional)),
-      margin + positionMargin + accruedCashflow
+      margin + positionMargin + accruedCashflow,
+      predictedVariableApy
     );
 
     const result: ExpectedApyInfo = {
-      expectedApy: expectedApy
+      expectedApy: expectedApy,
+      expectedCashflow: expectedCashflow
     }
 
     return result;
@@ -2471,6 +2464,11 @@ class AMM {
     // fixed apr
     if (beforeMaturity) {
       results.fixedApr = await this.getFixedApr();
+    }
+
+    // fixed apr
+    if (!beforeMaturity && !position.isSettled) {
+      results.settlementCashflow = await position.getSettlementCashflow();
     }
 
     // variable apy and accrued cashflow
