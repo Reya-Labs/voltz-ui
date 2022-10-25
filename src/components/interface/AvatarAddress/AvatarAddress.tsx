@@ -1,4 +1,4 @@
-import React, { FunctionComponent, ReactNode, useEffect, useState } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import { elideAddress, getENSDetails } from '@utilities';
 import Box from '@mui/system/Box';
 import { colors, Theme } from '@theme';
