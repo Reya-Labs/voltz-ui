@@ -21,10 +21,10 @@ import {
   Mint,
   MoneyMoneyMoney,
   NoClaimedBadges,
-  NoRiskHereSer,
+  FixedTrader,
   OkBoomer,
   Rainmaker,
-  SeasonedTrader,
+  TopTrader,
   Settle,
   Yikes,
   SushiRoll,
@@ -63,9 +63,9 @@ export type Icons =
   | 'deltaDegen'
   | 'irsConnoisseur'
   | 'leverageCrowbar'
-  | 'noRiskHereSer'
+  | 'fixedTrader'
   | 'sushiRoll'
-  | 'seasonedTrader'
+  | 'topTrader'
   | 'beWaterMyFriend'
   | 'rainMaker'
   | 'waterHose'
@@ -101,9 +101,9 @@ export const iconMap: Record<Icons, ElementType> = {
   deltaDegen: DeltaDegen as ElementType,
   irsConnoisseur: IrsConnoisseur as ElementType,
   leverageCrowbar: LeverageCrowbar as ElementType,
-  noRiskHereSer: NoRiskHereSer as ElementType,
+  fixedTrader: FixedTrader as ElementType,
   sushiRoll: SushiRoll as ElementType,
-  seasonedTrader: SeasonedTrader as ElementType,
+  topTrader: TopTrader as ElementType,
   beWaterMyFriend: BeWaterMyFriend as ElementType,
   rainMaker: Rainmaker as ElementType,
   waterHose: WaterHose as ElementType,

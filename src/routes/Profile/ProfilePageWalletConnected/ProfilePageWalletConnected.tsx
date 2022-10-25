@@ -21,13 +21,13 @@ type ProfilePageProps = {
 };
 
 const collectionBadgesSort = [
-  'noRiskHereSer',
+  'fixedTrader',
   'deltaDegen',
   'leverageCrowbar',
   'irsConnoisseur',
   'sushiRoll',
   'degenStuff',
-  'seasonedTrader',
+  'topTrader',
   'okBoomer',
   'dryIce',
   'maxBidding',

@@ -5,9 +5,9 @@ export type BadgeVariant =
   | 'deltaDegen'
   | 'irsConnoisseur'
   | 'leverageCrowbar'
-  | 'noRiskHereSer'
+  | 'fixedTrader'
   | 'sushiRoll'
-  | 'seasonedTrader'
+  | 'topTrader'
   | 'beWaterMyFriend'
   | 'rainMaker'
   | 'waterHose'
@@ -80,7 +80,7 @@ export type GetProfileBadgesResponse = {
 const DEFAULT_RESPONSE: GetProfileBadgesResponse = {
   achievedBadges: [
     {
-      variant: 'noRiskHereSer',
+      variant: 'fixedTrader',
     },
     {
       variant: 'deltaDegen',
@@ -98,7 +98,7 @@ const DEFAULT_RESPONSE: GetProfileBadgesResponse = {
       variant: 'degenStuff',
     },
     {
-      variant: 'seasonedTrader',
+      variant: 'topTrader',
     },
     {
       variant: 'okBoomer',
@@ -152,7 +152,7 @@ export async function getProfileBadges(owner: string): Promise<GetProfileBadgesR
       return {
         achievedBadges: [
           {
-            variant: 'noRiskHereSer',
+            variant: 'fixedTrader',
             achievedAt: formatTimestamp(parseInt(badges.BADGE_NO_RISK_HERE_SER)),
           },
           {
@@ -176,7 +176,7 @@ export async function getProfileBadges(owner: string): Promise<GetProfileBadgesR
             achievedAt: formatTimestamp(parseInt(badges.BADGE_DEGEN_STUFF)),
           },
           {
-            variant: 'seasonedTrader',
+            variant: 'topTrader',
           },
           {
             variant: 'okBoomer',
