@@ -21,13 +21,9 @@ export const checkForCorrectNetwork = async (provider: ethers.providers.JsonRpcP
   try {
     const network = await provider.getNetwork();
     if (network.name !== process.env.REACT_APP_REQUIRED_ETHEREUM_NETWORK) {
-      // eslint-disable-next-line
-      console.warn(
-        `User wallet is connected to '${network.name}' instead of '${
-          process.env.REACT_APP_REQUIRED_ETHEREUM_NETWORK || '<unknown>'
-        }'`,
-      );
-      throw new Error();
+      throw new Error(`Connected to '${network.name}' instead of '${
+        process.env.REACT_APP_REQUIRED_ETHEREUM_NETWORK || '<unknown>'
+      }`);
     }
   } catch (e) {
     throw new Error('Wrong network');

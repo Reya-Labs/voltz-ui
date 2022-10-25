@@ -5,8 +5,7 @@ import { routes, TradingLeague, Profile, LiquidityProvider, Trader, FixedBorrowe
 import { AlphaBanner, GweiBar } from '@components/composite';
 import Box from '@mui/material/Box';
 import { useEffect } from 'react';
-import useWallet from './hooks/useWallet';
-import { ethers } from 'ethers';
+import { useWallet } from '@hooks';
 
 const App = () => {
   useEffect(() => {
