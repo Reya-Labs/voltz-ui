@@ -1,6 +1,31 @@
 import { BadgeTier, ComingSoonBadges } from './types';
 import { BadgeVariant } from '@graphql';
-import { Yikes } from '../../components/atomic/Icon/icons';
+
+export const BADGE_VARIANT_TRADER_LP_MAP: Record<
+  BadgeVariant | ComingSoonBadges,
+  'trader' | 'lp' | ''
+> = {
+  degenStuff: 'trader',
+  deltaDegen: 'trader',
+  irsConnoisseur: 'trader',
+  leverageCrowbar: 'trader',
+  noRiskHereSer: 'trader',
+  sushiRoll: 'trader',
+  seasonedTrader: 'trader',
+  beWaterMyFriend: 'lp',
+  rainMaker: 'lp',
+  waterHose: 'lp',
+  moneyMoneyMoney: 'lp',
+  lpoor: 'lp',
+  yikes: 'trader',
+  maxBidding: 'trader',
+  okBoomer: 'trader',
+  dryIce: 'lp',
+  governorz: '',
+  diplomatz: '',
+  senatorz: '',
+  theOgActivity: '',
+};
 
 export const TIER_COPY_MAP: Record<BadgeTier, string> = {
   tier1: 'TIER 1',
