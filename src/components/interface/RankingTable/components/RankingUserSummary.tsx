@@ -145,8 +145,9 @@ const RankingUserSummary = ({
             marginTop: (theme) => theme.spacing(2),
           }}
         >
-          Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia
-          consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.
+          Earn pointz based on your trading activity on Voltz Protocol. Pointz are calculated based
+          on notional traded, which is then time-weighted based on how far away your trade is from
+          maturity.
         </Typography>
       </Box>
 
