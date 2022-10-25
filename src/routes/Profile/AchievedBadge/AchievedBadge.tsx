@@ -45,7 +45,8 @@ export const AchievedBadge: React.FunctionComponent<AchievedBadgeProps> = ({
     >
       <Box
         sx={{
-          width: '100px',
+          width: '150px',
+          marginRight: (theme) => theme.spacing(2),
         }}
       >
         <Box>

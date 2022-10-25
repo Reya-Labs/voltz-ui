@@ -21,13 +21,13 @@ type ProfilePageProps = {
 };
 
 const collectionBadgesSort = [
-  'noRiskHereSer',
+  'fixedTrader',
   'deltaDegen',
   'leverageCrowbar',
   'irsConnoisseur',
   'sushiRoll',
   'degenStuff',
-  'seasonedTrader',
+  'topTrader',
   'okBoomer',
   'dryIce',
   'maxBidding',
@@ -38,6 +38,10 @@ const collectionBadgesSort = [
   'rainMaker',
   'beWaterMyFriend',
 ];
+
+const BoldText: React.FunctionComponent = ({ children }) => (
+  <b style={{ color: colors.lavenderWeb.base }}>{children}</b>
+);
 
 export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProps> = ({
   account,
@@ -79,7 +83,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
               fontWeight: 700,
             }}
           >
-            {elideAddress(account.toUpperCase())}
+            {account.length === 42 ? elideAddress(account.toUpperCase()) : account.toUpperCase()}
           </span>
         </Typography>
         <Typography
@@ -96,8 +100,10 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
         >
           Earn badges through your contribution to the community and activity on the protocol.
           Badges are earned throughout each Season, with minting available at the end of each
-          Season. The more you collect the greater your contribution. <b>Season {season}</b> runs
-          between <b>{seasonStartDateFormatted}</b> and <b>{seasonEndDateFormatted}</b>.
+          Season. The more you collect the greater your contribution.{' '}
+          <BoldText>Season {season}</BoldText> runs between{' '}
+          <BoldText>{seasonStartDateFormatted}</BoldText> and{' '}
+          <BoldText>{seasonEndDateFormatted}</BoldText>.
         </Typography>
         <Box
           sx={{

@@ -26,7 +26,9 @@ const RankingHeaderBox = () => (
         fontFamily: 'DM Sans',
       }}
     >
-      Compete against other traders for rewards by trading.
+      Compete against other traderz in the Voltz Trading League. The more active you are, the more
+      pointz you earn. Pointz reset at the end of each season, with the Top Traderz earning
+      legendary status forever...
     </Typography>
   </Box>
 );

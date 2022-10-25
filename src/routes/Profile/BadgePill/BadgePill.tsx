@@ -1,7 +1,7 @@
 import React from 'react';
 import { PillProps, Pill } from '@components/atomic';
 import { BadgeTier, ComingSoonBadges } from '../types';
-import { BADGE_VARIANT_TIER_MAP, TIER_COPY_MAP } from '../helpers';
+import { BADGE_VARIANT_TIER_MAP, BADGE_VARIANT_TRADER_LP_MAP, TIER_COPY_MAP } from '../helpers';
 import Skeleton from '@mui/material/Skeleton';
 import { BadgeVariant } from '@graphql';
 
@@ -21,5 +21,9 @@ export const BadgePill: React.FunctionComponent<{
     return <Skeleton variant="text" sx={{ fontSize: '14px', width: 60 }} />;
   }
   const tier = BADGE_VARIANT_TIER_MAP[variant];
-  return <Pill text={TIER_COPY_MAP[tier]} variant={TIER_PILL_VARIANT_MAP[tier]} />;
+  const categoryText = BADGE_VARIANT_TRADER_LP_MAP[variant]
+    ? `${BADGE_VARIANT_TRADER_LP_MAP[variant]}: `.toUpperCase()
+    : '';
+  const tierText = TIER_COPY_MAP[tier];
+  return <Pill text={categoryText + tierText} variant={TIER_PILL_VARIANT_MAP[tier]} />;
 };
