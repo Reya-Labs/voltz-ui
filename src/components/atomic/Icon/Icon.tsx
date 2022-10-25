@@ -21,9 +21,9 @@ const Icon: React.FunctionComponent<IconProps> = ({ name, sx, link, ...props }) 
       case 'deltaDegen':
       case 'irsConnoisseur':
       case 'leverageCrowbar':
-      case 'noRiskHereSer':
+      case 'fixedTrader':
       case 'sushiRoll':
-      case 'seasonedTrader':
+      case 'topTrader':
       case 'beWaterMyFriend':
       case 'rainMaker':
       case 'waterHose':

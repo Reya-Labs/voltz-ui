@@ -7,7 +7,7 @@ type CollectionBadge = {
 
 export const collectionBadges: CollectionBadge[] = [
   {
-    variant: 'noRiskHereSer',
+    variant: 'fixedTrader',
     achievedAt: new Date('02/02/2022').valueOf(),
   },
   {
@@ -26,7 +26,7 @@ export const collectionBadges: CollectionBadge[] = [
     variant: 'degenStuff',
   },
   {
-    variant: 'seasonedTrader',
+    variant: 'topTrader',
     achievedAt: new Date('02/02/2022').valueOf(),
   },
   {
