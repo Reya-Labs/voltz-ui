@@ -7,7 +7,6 @@ export type SignatureResponse = {
   signature?: string;
   timestamp?: string;
   walletAddress?: string;
-  // referrer?: string;
   message?: string;
 };
 
@@ -21,9 +20,11 @@ export const checkForCorrectNetwork = async (provider: ethers.providers.JsonRpcP
   try {
     const network = await provider.getNetwork();
     if (network.name !== process.env.REACT_APP_REQUIRED_ETHEREUM_NETWORK) {
-      throw new Error(`Connected to '${network.name}' instead of '${
-        process.env.REACT_APP_REQUIRED_ETHEREUM_NETWORK || '<unknown>'
-      }`);
+      throw new Error(
+        `Connected to '${network.name}' instead of '${
+          process.env.REACT_APP_REQUIRED_ETHEREUM_NETWORK || '<unknown>'
+        }`,
+      );
     }
   } catch (e) {
     throw new Error('Wrong network');
@@ -53,38 +54,29 @@ export const checkForTOSSignature = async (
 ) => {
   const signerAddress = await signer.getAddress();
   const signatureData = await getSignature(signerAddress);
-  const latestTOS = getTOSText(null);
+  const latestTOS = getTOSText();
   let termsAccepted = false;
 
-  if (!!signatureData?.walletAddress && signatureData.walletAddress === signerAddress) {
-    // Wallet matches
-    if (signatureData.message && signatureData.message == latestTOS) {
-      // Signed data also matches (signature was checked before being written to database)
-      termsAccepted = true;
-    }
+  if (
+    !!signatureData?.walletAddress &&
+    signatureData.walletAddress === signerAddress &&
+    signatureData.message &&
+    signatureData.message === latestTOS
+  ) {
+    // Wallet matches, and signed data also matches
+    // (signature was checked before being written to database)
+    termsAccepted = true;
   }
-
-  // if (signatureData?.signature) {
-  //   const existingTOSSignerAddress = ethers.utils.verifyMessage(
-  //     // getTOSText(signatureData?.referrer || null),
-  //     getTOSText(null),
-  //     signatureData.signature,
-  //   );
-  //   if (existingTOSSignerAddress === signerAddress) {
-  //     termsAccepted = true;
-  //   }
-  // }
-
-  // const referrer = localStorage.getItem('invitedBy') || '';
 
   if (!termsAccepted) {
     try {
-      // const termsOfService = getTOSText(referrer);
-      const termsOfService = getTOSText(null);
-      const signature = await signer.signMessage(termsOfService);
-      // TODO: include the referrer details within the signed text, and send
-      // the signed text along with the signature for verification on the backend
-      await saveSignatureWithTOS(signerAddress, signature, termsOfService);
+      // The latest terms of service have not been accepted. Get a signature now.
+      const signature = await signer.signMessage(latestTOS);
+      const response = await saveSignatureWithTOS(signerAddress, signature, latestTOS);
+
+      if (!response.ok) {
+        throw new Error('Error saving signature');
+      }
     } catch (e) {
       throw new Error('Error processing signature');
     }
@@ -98,7 +90,7 @@ export const checkForTOSSignature = async (
 export const getSignature = async (walletAddress: string) => {
   try {
     const resp = await fetch(
-      `https://hackathon-rest-api.herokuapp.com/get-signature/${walletAddress}`,
+      `https://voltz-rest-api.herokuapp.com/get-signature/${walletAddress}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -106,7 +98,7 @@ export const getSignature = async (walletAddress: string) => {
       },
     );
 
-    // https://hackathon-rest-api.herokuapp.com/get-signature/0x45556408e543158f74403e882E3C8c23eCD9f732
+    // https://voltz-rest-api.herokuapp.com//get-signature/0x45556408e543158f74403e882E3C8c23eCD9f732
 
     if (resp.ok) {
       return (await resp.json()) as SignatureResponse;
@@ -123,48 +115,16 @@ export const getSignature = async (walletAddress: string) => {
 };
 
 /**
- * Retrieves referral data via the referral API for all wallet addresses
- */
-// export const getAllReferrals = async (): Promise<{ [s: string]: string[] }> => {
-//   try {
-//     const resp = await fetch(`https://hackathon-rest-api.herokuapp.com/referrals`, {
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//     });
-
-//     if (resp.ok) {
-//       const json = (await resp.json()) as { [s: string]: string[] };
-//       return json;
-//     } else if (resp.status === 404) {
-//       return {}; // No referrals found
-//     } else {
-//       throw await resp.text();
-//     }
-//   } catch (e) {
-//     // eslint-disable-next-line
-//     console.warn('Error getting referrals', e);
-//     throw e;
-//   }
-// };
-
-/**
  * Returns the terms of service text that users have to agree to to connect their wallet.
  * Note - Any changes, including whitespace, will mean a new signature is required.
  */
-export const getTOSText = (referrer: string | null) => {
+export const getTOSText = () => {
   const text = `
-Please sign this message to log in. This won't cost you any ETH!
+Please sign this message to log in. This won't cost you any ETH.
 
-By signing, you accept Voltz's Terms of Service, which you can find here:
+By signing, you accept Voltz's Terms of Service (which may have been updated since you last signed). You can find these here:
 ${process.env.REACT_APP_TOS_URL || ''}
-${
-  referrer
-    ? `
-Your account and the account that invited you (${referrer}) may both receive additional Voltz Pointz, based on your use of the protocol. 
-`
-    : ``
-}
+
 If you're connecting a hardware wallet, you'll need to sign the message on your device too.`;
 
   return text.trim();
@@ -297,16 +257,14 @@ const saveSignatureWithTOS = async (
   walletAddress: string,
   signature: string,
   termsOfService: string,
-  // referrer?: string,
 ) => {
   // Build formData object.
   const formData = new FormData();
   formData.append('signature', signature);
   formData.append('walletAddress', walletAddress);
   formData.append('message', termsOfService);
-  // formData.append('referrer', referrer || '');
 
-  return await fetch(`https://hackathon-rest-api.herokuapp.com/add-signature`, {
+  return await fetch(`https://voltz-rest-api.herokuapp.com/add-signature`, {
     method: 'POST',
     mode: 'cors',
     cache: 'no-cache',
