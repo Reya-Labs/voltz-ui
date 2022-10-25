@@ -96,8 +96,10 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
         }
       } catch (error) {
         let errorMessage = getErrorMessage(error).trim();
-        if (errorMessage.endsWith('.')) {
-          errorMessage = errorMessage.slice(0, -1);
+        if (errorMessage.includes("Wrong network")) {
+          errorMessage = "Wrong network";
+        } else {
+          errorMessage = "Failed connection";
         }
 
         disconnect(errorMessage || null);
