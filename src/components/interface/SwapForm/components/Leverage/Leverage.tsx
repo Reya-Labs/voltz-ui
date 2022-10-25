@@ -20,6 +20,8 @@ export type LeverageProps = {
   resetDeltaState: boolean;
 };
 
+// Set the leverage options in this array
+const LEVERAGE_OPTIONS = [100, 500, 1000];
 
 const Leverage = ({
   availableNotional,
@@ -44,8 +46,7 @@ const Leverage = ({
     isUndefined(internalValue);
   const timer = useRef<number>();
 
-  const options = [{ id: 100, text: "100x" }, { id: 500, text: "500x" }, { id: 1000, text: "1000x" }];
-  const [activeOption, setActiveOption] = useState(options[0]);
+  const [activeOption, setActiveOption] = useState(LEVERAGE_OPTIONS[0]);
 
   useEffect(() => {
     setInternalValue(value);
@@ -89,7 +90,7 @@ const Leverage = ({
       <Box
         sx={{
           flexGrow: '1',
-          marginLeft: (theme) => theme.spacing(4),
+          marginLeft: (theme) => theme.spacing(8),
           marginTop: (theme) => theme.spacing(5.5),
           display: 'flex',
           alignItems: 'center',
@@ -97,16 +98,17 @@ const Leverage = ({
           width: "232px"
         }}
       >
-        {options.map(opt => {
+        {LEVERAGE_OPTIONS.map(opt => {
           return (
             <Button
+              key={opt}
               variant={"contained"}
               size ="small"
               color="secondary"
-              sx={opt.id === activeOption.id ? activeButtonStyle : buttonStyle}
-              onClick={() => { onChange(opt.id); setActiveOption(opt) }}
+              sx={opt === activeOption ? activeButtonStyle : buttonStyle}
+              onClick={() => { onChange(opt); setActiveOption(opt) }}
             >
-              {opt.text}
+              { `${opt}x` }
             </Button>
           )
         }) 
