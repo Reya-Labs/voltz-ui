@@ -66,6 +66,7 @@ export const AvatarAddress: FunctionComponent<{
               style={{
                 width: size,
                 height: size,
+                borderRadius: '50%',
               }}
               src={avatarUrl}
               alt="avatar"
