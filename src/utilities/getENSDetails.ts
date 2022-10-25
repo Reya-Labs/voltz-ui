@@ -1,4 +1,5 @@
 import { ethers } from 'ethers';
+import { ExternalProvider } from '@ethersproject/providers/src.ts/web3-provider';
 
 type ENSDetails = {
   name: string;
@@ -19,7 +20,7 @@ export const getENSDetails = async (address?: string | null): Promise<ENSDetails
   if (CACHED_ENS[address] !== undefined) {
     return CACHED_ENS[address];
   }
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const provider = new ethers.providers.Web3Provider(window.ethereum as ExternalProvider);
   const name = await provider.lookupAddress(address);
   if (!name) {
     CACHED_ENS[address] = null;
