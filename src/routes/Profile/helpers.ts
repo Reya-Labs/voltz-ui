@@ -67,7 +67,7 @@ export const BADGE_VARIANT_DESCRIPTION_COPY_MAP: Record<BadgeVariant, string> = 
   sushiRoll: 'Stopping for nothing, rolling over the next pool.',
   topTrader: 'Top 5 finisher during this season. View from the top looks nice.',
   beWaterMyFriend: 'A top 5 Liquidity Provider finish this season.',
-  rainMaker: 'No RNG for the degen gods. Going big 500k+ notional provided.',
+  rainMaker: 'No luck needed for the degen gods. Going big 500k+ notional provided.',
   waterHose: 'You left no pool unturned, provided liquidity to 3+ pools.',
   moneyMoneyMoney: '100k leverage. You provided real liquidity here, market maker status.',
   lpoor: 'You provided liquidity and the protocol just got a little more robust.',
