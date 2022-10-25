@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
-import Slider from '@mui/material/Slider';
 import { MaskedIntegerField, IconLabel } from '@components/composite';
 import { colors } from '@theme';
 import { isNumber, isUndefined } from 'lodash';
 import { formatNumber, notFormatted, stringToBigFloat, toUSFormat } from '@utilities';
+import { Button } from '@mui/material';
+import { activeButtonStyle, buttonStyle } from './style';
 
 /**
  * margin: for a new position this is just the ratio between notional and minimum margin required
@@ -30,7 +31,7 @@ const Leverage = ({
   resetDeltaState,
 }: LeverageProps) => {
   const delay = 1000;
-  const hint = 'Choose the amount of leverage you wish to trade with. The slider helps demonstrate safe amounts of leverage.';
+  const hint = 'Choose the amount of leverage you wish to trade with from the options on the right or set your own leverage by typing it in the box below.';
   const margin = isNumber(minMargin) ? Math.max(minMargin, 0.0001) : undefined;
 
   const [internalValue, setInternalValue] = useState<number | undefined>(value);
@@ -44,48 +45,14 @@ const Leverage = ({
     isUndefined(internalValue);
   const timer = useRef<number>();
 
-  const maxNotional = !isDisabled ? Math.min(notional, availableNotional) : 10;
-  const high = !isDisabled ? Math.max(maxNotional / margin, 1) : 20;
-  const low = 1;
-  const range = high - low;
-
-  const rainbow1 = !isDisabled ? Math.max(high / 2, 1) : 10;
-  const rainbow2 = !isDisabled ? Math.max(high / 1.5, 1) : 14;
-  const rainbow3 = !isDisabled ? Math.max(high / 1.2, 1) : 17;
-  const rainbow4 = !isDisabled ? Math.max(high / 1.05, 1) : 19;
-
-  const rainbow2Percent = (rainbow2 / high) * 100;
-  const rainbow3Percent = (rainbow3 / high) * 100;
-  const rainbow4Percent = (rainbow4 / high) * 10;
-
-  const rainbowStart = Math.max((1 - rainbow1 / range) * 100, 0);
-  const rainbowWidth = 100 - rainbowStart;
+  const options = [{ id: 100, text: "100x" }, { id: 500, text: "500x" }, { id: 1000, text: "1000x" }];
+  const [activeOption, setActiveOption] = useState(options[0]);
 
   useEffect(() => {
     setInternalValue(value);
     const formatted = formatNumber(value, 0, 2);
     setInputValue(formatted);
   }, [value, resetDeltaState]);
-
-  const handleChangeSlider = (event: Event, newValue: number | number[], activeThumb: number) => {
-    if (typeof newValue === 'number') {
-      setInternalValue(newValue);
-      const formatted = formatNumber(newValue, 0, 2);
-      setInputValue(formatted);
-    }
-  };
-
-  const handleChangeCommittedSlider = (
-    event: React.SyntheticEvent | Event,
-    newValue: number | number[],
-  ) => {
-    if (typeof newValue === 'number') {
-      setInternalValue(newValue);
-      setInputValue(formatNumber(value, 0, 2));
-      window.clearInterval(timer.current);
-      onChange(newValue);
-    }
-  };
 
   const handleChangeInput = (inputVal: string | undefined) => {
     if (inputVal) {
@@ -124,56 +91,67 @@ const Leverage = ({
         sx={{
           flexGrow: '1',
           marginLeft: (theme) => theme.spacing(4),
+          marginTop: (theme) => theme.spacing(5.5),
           display: 'flex',
           alignItems: 'center',
+          columnGap: (theme) => theme.spacing(2),
+          width: "232px"
         }}
       >
-        <Slider
-          disabled={isDisabled}
-          min={low}
-          max={high}
-          step={0.01}
-          value={internalValue}
-          onChange={handleChangeSlider}
-          id={"Slider"}
-          onChangeCommitted={handleChangeCommittedSlider}
-          marks={[
-            {
-              value: low,
-              label: `${formatNumber(low)}x`,
-            },
-            {
-              value: rainbow1,
-              label: `${formatNumber(rainbow1)}x`,
-            },
-            {
-              value: high,
-              label: `${formatNumber(high)}x`,
-            },
-          ]}
-          sx={{
-            marginTop: '16px',
-            '& .MuiSlider-track': {
-              background: `linear-gradient(90deg, #00D395 ${rainbow2Percent}%, #F1D302 ${rainbow3Percent}%, #F61067 ${rainbow4Percent}%)`,
-              width: `${rainbowWidth}% !important`,
-              left: `${rainbowStart}% !important`,
-              display: isDisabled ? 'none' : undefined,
-            },
-            '& .MuiSlider-thumb': {
-              display: isDisabled ? 'none' : undefined,
-            },
-            '& .MuiSlider-mark[data-index="1"]': {
-              height: '6px',
-              width: '3px',
-              background: isDisabled ? undefined : colors.vzCustomGreen2.base,
-            },
-            '& .MuiSlider-mark[data-index="2"]': {
-              height: '6px',
-              width: '3px',
-              background: isDisabled ? undefined : colors.vzCustomRed2.base,
-            },
+        {options.map(opt => {
+          return (
+            <Button
+              variant={"contained"} //
+              size ="small"
+              color="secondary"
+              sx={opt.id === activeOption.id ? activeButtonStyle : buttonStyle}
+              onClick={() => { onChange(opt.id); setActiveOption(opt) }}
+            >
+              {opt.text}
+            </Button>
+          )
+        }) 
+          } 
+      
+      <Box/>
+          {/* <Button
+            variant="contained"
+            color="secondary"
+            size="small"
+            sx={{ flex: 1 }}
+
+            onClick={ () => {
+              onChange(100);
+            }}
+          >
+            100x
+            </Button>
+
+        <Button
+          variant="contained"
+          color="secondary" // component library should have these colours 
+          size="small"
+          sx={{ flex: 1 }}
+
+          onClick={() => {
+            onChange(500);
           }}
-        />
+        >
+          500x
+        </Button>
+
+        <Button
+          variant="contained"
+          color="secondary"
+          size="small"
+          sx={{ flex: 1 }}
+
+          onClick={() => {
+            onChange(1000);
+          }}
+        >
+          1000x
+        </Button> */}
       </Box>
     </Box>
   );
