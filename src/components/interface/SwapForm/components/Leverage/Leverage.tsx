@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import { MaskedIntegerField, IconLabel } from '@components/composite';
-import { colors } from '@theme';
 import { isNumber, isUndefined } from 'lodash';
 import { formatNumber, notFormatted, stringToBigFloat, toUSFormat } from '@utilities';
 import { Button } from '@mui/material';
@@ -101,7 +100,7 @@ const Leverage = ({
         {options.map(opt => {
           return (
             <Button
-              variant={"contained"} //
+              variant={"contained"}
               size ="small"
               color="secondary"
               sx={opt.id === activeOption.id ? activeButtonStyle : buttonStyle}
@@ -113,45 +112,7 @@ const Leverage = ({
         }) 
           } 
       
-      <Box/>
-          {/* <Button
-            variant="contained"
-            color="secondary"
-            size="small"
-            sx={{ flex: 1 }}
-
-            onClick={ () => {
-              onChange(100);
-            }}
-          >
-            100x
-            </Button>
-
-        <Button
-          variant="contained"
-          color="secondary" // component library should have these colours 
-          size="small"
-          sx={{ flex: 1 }}
-
-          onClick={() => {
-            onChange(500);
-          }}
-        >
-          500x
-        </Button>
-
-        <Button
-          variant="contained"
-          color="secondary"
-          size="small"
-          sx={{ flex: 1 }}
-
-          onClick={() => {
-            onChange(1000);
-          }}
-        >
-          1000x
-        </Button> */}
+        <Box/>
       </Box>
     </Box>
   );
