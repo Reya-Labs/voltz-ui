@@ -16,20 +16,22 @@ const App = () => {
 
   const wallet = useWallet();
 
-  // TODO upgrade to metamask v2.0.0 and remove ethereum.d.ts
+  // TODO upgrade to metamask v2.0.0 and extend global.d.ts
   /* eslint-disable @typescript-eslint/no-unsafe-call */
   /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+  // @ts-ignore
   window.ethereum?.on('accountsChanged', function () {
     if (!wallet.loading) {
       void wallet.connect('metamask');
     }
-  })
+  });
 
+  // @ts-ignore
   window.ethereum?.on('chainChanged', function () {
     if (!wallet.loading) {
       void wallet.connect('metamask');
     }
-  })
+  });
 
   return (
     <>
