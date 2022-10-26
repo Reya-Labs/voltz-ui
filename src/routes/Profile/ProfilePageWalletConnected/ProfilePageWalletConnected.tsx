@@ -83,7 +83,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
               fontWeight: 700,
             }}
           >
-            {account.length === 42 ? elideAddress(account.toUpperCase()) : account.toUpperCase()}
+            {elideAddress(account.toUpperCase())}
           </span>
         </Typography>
         <Typography
