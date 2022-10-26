@@ -32,7 +32,10 @@ const App = () => {
           {process.env.REACT_APP_COMMUNITY && process.env.REACT_APP_COMMUNITY !== `UNPROVIDED` && (
             <Route path={routes.TRADING_LEAGUE} element={<TradingLeague />} />
           )}
-          <Route path={routes.ECOSYSTEM} element={<Ecosystem />} />
+          {process.env.REACT_APP_ECOSYSTEM &&
+            process.env.REACT_APP_ECOSYSTEM !== `UNPROVIDED` && (
+              <Route path={routes.ECOSYSTEM} element={<Ecosystem />} />
+            )}
         </Route>
       </Routes>
       <Box sx={{ position: 'fixed', bottom: '0', left: '0', width: '100%' }}>

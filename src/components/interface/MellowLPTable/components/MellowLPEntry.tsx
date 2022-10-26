@@ -72,7 +72,7 @@ const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({ lpVault, o
                 </Box>
 
                 {(lpVault.protocol !== "-") && (<Box sx={{marginLeft: "8px", marginTop: "16px"}}>
-                    <PoolField agent={Agents.LIQUIDITY_PROVIDER} protocol={lpVault.protocol} isBorrowing={false} capLoading={false} cap={null} isBorrowTable={true}/>
+                    <PoolField agent={Agents.LIQUIDITY_PROVIDER} protocol={lpVault.protocol} isBorrowing={false} isBorrowTable={true}/>
                 </Box>)}
 
                 <Box sx={{marginLeft: "8px", marginTop: "16px"}}>
