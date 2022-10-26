@@ -112,7 +112,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   const { amm: poolAmm } = useAMMContext();
   const { amm: positionAmm, position } = usePositionContext();
 
-  const defaultLeverage = defaultValues.leverage ?? 10;
+  const defaultLeverage = defaultValues.leverage ?? 100;
   const defaultMargin = defaultValues.margin ?? undefined;
   const defaultMarginAction = defaultValues.marginAction || SwapFormMarginAction.ADD;
   const defaultNotional = (mode === SwapFormModes.ROLLOVER && position) 
