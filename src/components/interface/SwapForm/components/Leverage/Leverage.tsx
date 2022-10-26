@@ -4,7 +4,7 @@ import { MaskedIntegerField, IconLabel } from '@components/composite';
 import { isNumber, isUndefined } from 'lodash';
 import { formatNumber, notFormatted, stringToBigFloat, toUSFormat } from '@utilities';
 import { Button } from '@mui/material';
-import { activeButtonStyle, buttonStyle } from './style';
+import { activeButtonStyle, buttonStyle, leverageBoxStyle } from './style';
 
 /**
  * margin: for a new position this is just the ratio between notional and minimum margin required
@@ -39,11 +39,7 @@ const Leverage = ({
   const [inputValue, setInputValue] = useState(formatNumber(value, 0, 2));
   const isDisabledLeverageBox =
     isUndefined(availableNotional) || isUndefined(margin) || isUndefined(notional);
-  const isDisabled =
-    isUndefined(availableNotional) ||
-    isUndefined(margin) ||
-    isUndefined(notional) ||
-    isUndefined(internalValue);
+
   const timer = useRef<number>();
 
   const [activeOption, setActiveOption] = useState(LEVERAGE_OPTIONS[0]);
@@ -88,15 +84,7 @@ const Leverage = ({
         />
       </Box>
       <Box
-        sx={{
-          flexGrow: '1',
-          marginLeft: (theme) => theme.spacing(8),
-          marginTop: (theme) => theme.spacing(5.5),
-          display: 'flex',
-          alignItems: 'center',
-          columnGap: (theme) => theme.spacing(2),
-          width: "232px"
-        }}
+        sx={leverageBoxStyle}
       >
         {LEVERAGE_OPTIONS.map(opt => {
           return (

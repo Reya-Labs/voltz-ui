@@ -11,3 +11,13 @@ export const buttonStyle: SystemStyleObject<Theme> = {
     backgroundColor: '#2D2B3D',
     color: colors.lavenderWeb.base,
 };
+
+export const leverageBoxStyle: SystemStyleObject<Theme> = {
+    flexGrow: '1',
+    marginLeft: (theme) => theme.spacing(8),
+    marginTop: (theme) => theme.spacing(5.5),
+    display: 'flex',
+    alignItems: 'center',
+    columnGap: (theme) => theme.spacing(2),
+    width: "232px",
+};
