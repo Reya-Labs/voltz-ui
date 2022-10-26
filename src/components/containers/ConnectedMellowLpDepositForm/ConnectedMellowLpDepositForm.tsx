@@ -1,6 +1,5 @@
 import { AugmentedMellowLpVault } from "@utilities";
 import { routes } from '@routes';
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import MellowLpDepositForm from "src/components/interface/MellowLpDepositForm/MellowLpDepositForm";
 import { Panel } from "src/components/atomic";
