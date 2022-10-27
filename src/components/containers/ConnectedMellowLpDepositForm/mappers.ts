@@ -13,33 +13,33 @@ export enum DepositStates {
 };
 
 export const getSubmissionState = (
-    { 
-        depositState, 
-        deposit, 
-        approve, 
-        selectedDeposit, 
-        sufficientFunds,
-        error, 
-        tokenName 
-    }: 
     {
-        depositState: DepositStates; 
-        deposit: () => void; 
-        approve: () => void; 
-        selectedDeposit: number; 
-        sufficientFunds: boolean;
-        error: string;
-        tokenName: string;
-    }): {
-    submitText: string,
-    hintText: {
-        text: string,
-        suffixText?: string,
-        textColor?: string,
-    },
-    action: () => void,
-    disabled: boolean,
-} => {
+        depositState,
+        deposit,
+        approve,
+        selectedDeposit,
+        sufficientFunds,
+        error,
+        tokenName
+    }:
+        {
+            depositState: DepositStates;
+            deposit: () => void;
+            approve: () => void;
+            selectedDeposit: number;
+            sufficientFunds: boolean;
+            error: string;
+            tokenName: string;
+        }): {
+            submitText: string,
+            hintText: {
+                text: string,
+                suffixText?: string,
+                textColor?: string,
+            },
+            action: () => void,
+            disabled: boolean,
+        } => {
     if (!sufficientFunds) {
         return {
             submitText: "Deposit",
@@ -125,7 +125,7 @@ export const getSubmissionState = (
                     suffixText: "Let's deposit."
                 } : {
                     text: "Please input amount",
-                }, 
+                },
                 disabled: !(selectedDeposit > 0),
             }
         }

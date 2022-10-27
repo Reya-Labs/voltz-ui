@@ -10,20 +10,20 @@ export type useMellowLPVaultsResult = {
 };
 
 const useMellowLPVaults = (): useMellowLPVaultsResult => {
-  const handleRefetch = useCallback(async () => {}, []);
-  
+  const handleRefetch = useCallback(async () => { }, []);
+
   const lpVaults = useMemo(() => {
     const addresses = getMellowLPAddresses();
 
     return addresses.map((item) => new AugmentedMellowLpVault({
-        refetch: handleRefetch,
-        voltzVaultAddress: item.voltzVaultAddress,
-        erc20RootVaultAddress: item.erc20RootVaultAddress,
-        erc20RootVaultGovernanceAddress: item.erc20RootVaultGovernanceAddress,
-        provider: providers.getDefaultProvider(
-          process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK,
-        )
-      }));
+      refetch: handleRefetch,
+      voltzVaultAddress: item.voltzVaultAddress,
+      erc20RootVaultAddress: item.erc20RootVaultAddress,
+      erc20RootVaultGovernanceAddress: item.erc20RootVaultGovernanceAddress,
+      provider: providers.getDefaultProvider(
+        process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK,
+      )
+    }));
   }, []);
 
   return { lpVaults, loading: false, error: false };

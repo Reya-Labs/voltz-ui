@@ -13,7 +13,7 @@ export type ConnectedMellowLPTableProps = {
     agent: Agents;
 };
 
-const ConnectedMellowLPTable: React.FunctionComponent<ConnectedMellowLPTableProps> = ({onSelectItem}) => {
+const ConnectedMellowLPTable: React.FunctionComponent<ConnectedMellowLPTableProps> = ({ onSelectItem }) => {
 
     const { lpVaults } = useMellowLPVaults();
 
@@ -56,15 +56,15 @@ const ConnectedMellowLPTable: React.FunctionComponent<ConnectedMellowLPTableProp
         return (
             <Panel variant='dark' sx={{ padding: 0, width: '100%', maxWidth: '988px', margin: '0 auto', background: 'transparent' }}>
                 <EcosystemHeader
-                    lpOptimizerTag = {`LP OPTIMISER`}
-                    lpOptimizerCount = {lpVaults ? lpVaults.length : 0}
-                    alphaVaultTag = {`ALPHA VAULT`}
-                    alphaVaultCount = {0}
+                    lpOptimizerTag={`LP OPTIMISER`}
+                    lpOptimizerCount={lpVaults ? lpVaults.length : 0}
+                    alphaVaultTag={`ALPHA VAULT`}
+                    alphaVaultCount={0}
                 />
                 {lpVaults && (
-                <Box sx={{ marginTop: "32px"}}>
-                    <MellowLPTable lpVaults={lpVaults} onSelectItem={onSelectItem} disabled={dataLoading}/>
-                </Box>)}
+                    <Box sx={{ marginTop: "32px" }}>
+                        <MellowLPTable lpVaults={lpVaults} onSelectItem={onSelectItem} disabled={dataLoading} />
+                    </Box>)}
             </Panel>
         )
     }

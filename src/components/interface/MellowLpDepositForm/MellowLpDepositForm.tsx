@@ -18,17 +18,17 @@ export type MellowLpDepositFormProps = {
     onCancel: () => void;
 };
 
-const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = ({lpVault, onChangeDeposit, submitText, hintText, disabled, onSubmit, onCancel}: MellowLpDepositFormProps) => {
+const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = ({ lpVault, onChangeDeposit, submitText, hintText, disabled, onSubmit, onCancel }: MellowLpDepositFormProps) => {
 
     return (
         <>
-            <MellowLpDepositFormHeader onCancel={onCancel}/>
-            <Box sx={{display: "flex"}}>
-                <LPMellowVaultDepositInfo lpVault={lpVault}/>
-                <LPMellowVaultDepositWindow lpVault={lpVault} onChangeDeposit={onChangeDeposit} submitText={submitText} hintText={hintText} disabled={disabled} onSubmit={onSubmit}/>
+            <MellowLpDepositFormHeader onCancel={onCancel} />
+            <Box sx={{ display: "flex" }}>
+                <LPMellowVaultDepositInfo lpVault={lpVault} />
+                <LPMellowVaultDepositWindow lpVault={lpVault} onChangeDeposit={onChangeDeposit} submitText={submitText} hintText={hintText} disabled={disabled} onSubmit={onSubmit} />
             </Box>
         </>
-        
+
     )
 }
 

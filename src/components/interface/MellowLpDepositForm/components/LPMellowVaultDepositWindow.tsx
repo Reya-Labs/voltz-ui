@@ -27,7 +27,7 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
         const usFormatted = toUSFormat(newValue);
         onChangeDeposit(!isUndefined(usFormatted) ? parseFloat(usFormatted) : undefined);
     };
-    
+
     return (
         <FormPanel sx={{ width: '100%', maxWidth: '328px', background: "#19152A", padding: "16px 16px" }}>
             <Box sx={{ display: 'flex' }}>
@@ -48,7 +48,7 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Volutpat ut proin porttitor sit lorem.
             </Typography>
 
-            <Box sx={{marginTop: "16px"}}>
+            <Box sx={{ marginTop: "16px" }}>
                 <MaskedIntegerField
                     allowDecimals
                     allowNegativeValue={false}
@@ -64,23 +64,25 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
 
 
             <Box sx={{ display: 'flex', marginTop: "16px" }}>
-                <Button 
-                    disabled={disabled} 
-                    onClick={onSubmit} 
-                    size="large" 
-                    sx={{ flexGrow: 1, backgroundColor: '#00556D',
-                    color: '#4DE5FF',
-                    '&:hover': {
-                      backgroundColor: '#00556D',
-                      borderColor: '#4DE5FF',
-                      boxShadow: '0px 4px 20px 0px #4de5ff33',
-                    } }}
+                <Button
+                    disabled={disabled}
+                    onClick={onSubmit}
+                    size="large"
+                    sx={{
+                        flexGrow: 1, backgroundColor: '#00556D',
+                        color: '#4DE5FF',
+                        '&:hover': {
+                            backgroundColor: '#00556D',
+                            borderColor: '#4DE5FF',
+                            boxShadow: '0px 4px 20px 0px #4de5ff33',
+                        }
+                    }}
                 >
                     {submitText}
                 </Button>
             </Box>
 
-            <HintText {...hintText}/>
+            <HintText {...hintText} />
 
             <Panel sx={{ width: '100%', maxWidth: '296px', background: "#28233B", padding: "16px 16px", marginTop: "16px" }}>
                 <Typography variant='h1' sx={{ fontSize: '14px', lineHeight: '1.4', color: '#C6C2DA', fontWeight: '700', marginLeft: "0px" }}>
@@ -99,13 +101,13 @@ const HintText: React.FunctionComponent<{
     text: string,
     suffixText?: string,
     textColor?: string,
-}> = ({text, suffixText, textColor}) => {
-    return (<Typography variant='body2' sx={{ 
-        marginTop: (theme) => theme.spacing(2), 
+}> = ({ text, suffixText, textColor }) => {
+    return (<Typography variant='body2' sx={{
+        marginTop: (theme) => theme.spacing(2),
         color: colors.lavenderWeb.darken015,
         fontSize: '12px'
     }}>
-        <span style={{ color: textColor }}> {text}</span> 
+        <span style={{ color: textColor }}> {text}</span>
         {suffixText}
     </Typography>);
 };

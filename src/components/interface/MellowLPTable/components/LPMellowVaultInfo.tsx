@@ -7,8 +7,8 @@ import { ProgressBar } from "@components/composite";
 export type LPMellowVaultInfoProps = {
     lpVault: AugmentedMellowLpVault
 }
-const LPMellowVaultInfo: React.FunctionComponent<LPMellowVaultInfoProps> = ({lpVault} : LPMellowVaultInfoProps) => {
-    
+const LPMellowVaultInfo: React.FunctionComponent<LPMellowVaultInfoProps> = ({ lpVault }: LPMellowVaultInfoProps) => {
+
 
     const getCapBar = () => {
         if (isUndefined(lpVault.vaultCap) || isUndefined(lpVault.vaultAccumulative)) {

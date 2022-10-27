@@ -21,8 +21,8 @@ export const getMellowLPAddresses = (): MellowLpVaultAddresses[] => {
     for (let i = 0; i < addresses.length; i += 3) {
         result.push({
             voltzVaultAddress: addresses[i],
-            erc20RootVaultAddress: addresses[i+1],
-            erc20RootVaultGovernanceAddress: addresses[i+2],
+            erc20RootVaultAddress: addresses[i + 1],
+            erc20RootVaultGovernanceAddress: addresses[i + 2],
         });
     }
 

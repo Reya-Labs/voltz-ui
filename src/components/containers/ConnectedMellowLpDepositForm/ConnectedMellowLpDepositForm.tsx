@@ -61,7 +61,7 @@ const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMellowLpDep
         });
     }, [vault, selectedDeposit]);
 
-    const submissionState = getSubmissionState({depositState, deposit, approve, selectedDeposit, sufficientFunds, error, tokenName: vault.tokenName});
+    const submissionState = getSubmissionState({ depositState, deposit, approve, selectedDeposit, sufficientFunds, error, tokenName: vault.tokenName });
 
     const handleGoBack = () => {
         onReset();
@@ -73,17 +73,17 @@ const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMellowLpDep
     }
 
     return (
-            <Panel variant='dark' sx={{ padding: 0, width: '100%', maxWidth: '748px', margin: '0 auto', background: 'transparent' }}>
-                <MellowLpDepositForm
-                    lpVault={vault}
-                    onChangeDeposit={onChangeDeposit}
-                    submitText={submissionState.submitText}
-                    hintText={submissionState.hintText}
-                    disabled={!sufficientFunds || submissionState.disabled}
-                    onSubmit={submissionState.action}
-                    onCancel={handleGoBack}
-                />
-            </Panel>
+        <Panel variant='dark' sx={{ padding: 0, width: '100%', maxWidth: '748px', margin: '0 auto', background: 'transparent' }}>
+            <MellowLpDepositForm
+                lpVault={vault}
+                onChangeDeposit={onChangeDeposit}
+                submitText={submissionState.submitText}
+                hintText={submissionState.hintText}
+                disabled={!sufficientFunds || submissionState.disabled}
+                onSubmit={submissionState.action}
+                onCancel={handleGoBack}
+            />
+        </Panel>
     )
 }
 

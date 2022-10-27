@@ -14,18 +14,18 @@ const MellowLPPosition: React.FunctionComponent<MellowLPPositionProps> = ({ lpVa
     const getPositionInfo = () => {
         if (isUndefined(lpVault.userDeposit)) {
             return (
-                <Typography variant='h6' sx={{fontSize: '14px', color: '#9B97AD', textTransform: 'uppercase'}}>
+                <Typography variant='h6' sx={{ fontSize: '14px', color: '#9B97AD', textTransform: 'uppercase' }}>
                     Your position ---
                 </Typography>
             )
         }
 
         return (
-            <Box sx={{display:"flex"}}>
-                <Typography variant='h6' sx={{fontSize: '14px', color: '#9B97AD', textTransform: 'uppercase'}}>
+            <Box sx={{ display: "flex" }}>
+                <Typography variant='h6' sx={{ fontSize: '14px', color: '#9B97AD', textTransform: 'uppercase' }}>
                     Your position:
                 </Typography>
-                <Typography variant='h6' sx={{fontSize: '14px', color: 'primary.light', textTransform: 'uppercase', marginLeft: '4px'}}>
+                <Typography variant='h6' sx={{ fontSize: '14px', color: 'primary.light', textTransform: 'uppercase', marginLeft: '4px' }}>
                     {formatCurrency(lpVault.userDeposit)} {lpVault.tokenName}
                 </Typography>
             </Box>
