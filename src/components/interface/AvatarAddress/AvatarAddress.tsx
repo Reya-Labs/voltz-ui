@@ -83,7 +83,7 @@ export const AvatarAddress: FunctionComponent<{
               ...nameSx,
             }}
           >
-            {name.length === 42 ? elideAddress(name).toUpperCase() : name.toUpperCase()}
+            {elideAddress(name).toUpperCase()}
           </Typography>
         </>
       )}
