@@ -84,9 +84,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
       <ContainerBox>
         <Heading variant="h1">
           WELCOME TO YOUR PROFILE&nbsp;
-          <Account>
-            {account.length === 42 ? elideAddress(account.toUpperCase()) : account.toUpperCase()}
-          </Account>
+          <Account>{elideAddress(account.toUpperCase())}</Account>
         </Heading>
         <Subheading data-testid="Profile-BadgesExplained" variant="body2">
           Earn badges through your contribution to the community and activity on the protocol.
