@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { providers } from 'ethers';
 import { AugmentedMellowLpVault } from '@utilities';
+import { getMellowLPAddresses } from './utils';
 
 export type useMellowLPVaultsResult = {
   lpVaults?: AugmentedMellowLpVault[];
@@ -12,30 +13,17 @@ const useMellowLPVaults = (): useMellowLPVaultsResult => {
   const handleRefetch = useCallback(async () => {}, []);
   
   const lpVaults = useMemo(() => {
-    const addresses = (process.env.REACT_APP_MELLOW_VAULTS) ? 
-    process.env.REACT_APP_MELLOW_VAULTS
-      .replace("(", "")
-      .replace("[", "")
-      .replace(")", "")
-      .replace("]", "")
-      .split(",")
-    : [];
-    
+    const addresses = getMellowLPAddresses();
 
-    const entries = [];
-    for (let i = 0; i < addresses.length; i += 3)
-    {
-      entries.push(new AugmentedMellowLpVault({
+    return addresses.map((item) => new AugmentedMellowLpVault({
         refetch: handleRefetch,
-        voltzVaultAddress: addresses[i],
-        erc20RootVaultAddress: addresses[i+1],
-        erc20RootVaultGovernanceAddress: addresses[i+2],
+        voltzVaultAddress: item.voltzVaultAddress,
+        erc20RootVaultAddress: item.erc20RootVaultAddress,
+        erc20RootVaultGovernanceAddress: item.erc20RootVaultGovernanceAddress,
         provider: providers.getDefaultProvider(
           process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK,
         )
       }));
-    }
-    return entries;
   }, []);
 
   return { lpVaults, loading: false, error: false };

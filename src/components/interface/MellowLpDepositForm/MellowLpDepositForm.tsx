@@ -1,6 +1,5 @@
 import { Box } from "@mui/system";
 import { AugmentedMellowLpVault } from "@utilities";
-import { ReactNode } from "react";
 import LPMellowVaultDepositInfo from "./components/LPMellowVaultDepositInfo";
 import LPMellowVaultDepositWindow from "./components/LPMellowVaultDepositWindow";
 import MellowLpDepositFormHeader from "./components/MellowLpDepositFormHeader";
@@ -9,7 +8,11 @@ export type MellowLpDepositFormProps = {
     lpVault: AugmentedMellowLpVault;
     onChangeDeposit: (value: number | undefined) => void;
     submitText: string;
-    hintText: ReactNode;
+    hintText: {
+        text: string,
+        suffixText?: string,
+        textColor?: string,
+    };
     onSubmit: () => void;
     disabled: boolean;
     onCancel: () => void;

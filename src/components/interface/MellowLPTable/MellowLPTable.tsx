@@ -14,13 +14,9 @@ const MellowLPTable: React.FunctionComponent<MellowLPTableProps> = ({
     onSelectItem,
     disabled,
 }: MellowLPTableProps) => {
-    const renderContent = () => {
-        return (<Box sx={{display: "flex", justifyContent: "space-between"}}>
-            <MellowLPEntry lpVault={lpVaults[0]} onSelectItem={() => onSelectItem(lpVaults[0])} disabled={disabled}/>
-        </Box>)
-    }
-
-    return renderContent();
+    return (<Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <MellowLPEntry lpVault={lpVaults[0]} onSelectItem={() => onSelectItem(lpVaults[0])} disabled={disabled} />
+    </Box>);
 }
 
 export default MellowLPTable;

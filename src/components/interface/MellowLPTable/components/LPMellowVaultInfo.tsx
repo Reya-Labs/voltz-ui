@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { AugmentedMellowLpVault, formatCurrency } from "@utilities";
 import { isUndefined } from "lodash";
-import { ProgressBar } from "src/components/composite";
+import { ProgressBar } from "@components/composite";
 
 
 export type LPMellowVaultInfoProps = {

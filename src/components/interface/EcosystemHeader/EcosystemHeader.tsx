@@ -1,5 +1,6 @@
-import { SystemStyleObject, Theme, Box } from "@mui/system";
-import { Panel, Typography } from "src/components/atomic";
+import { Box } from "@mui/system";
+import { Panel, Typography } from "../../atomic";
+import { titleStyles, copyStyles, boxStyles, tagStyles } from "./styles";
 
 export type EcosystemHeaderProps = {
     lpOptimizerTag: string;
@@ -8,31 +9,7 @@ export type EcosystemHeaderProps = {
     alphaVaultCount: number;
 };
 
-const EcosystemHeader = ({lpOptimizerTag, lpOptimizerCount, alphaVaultTag, alphaVaultCount}: EcosystemHeaderProps) => {
-  
-    const titleStyles: SystemStyleObject<Theme> = { 
-        fontSize: '40px', 
-        lineHeight: '1.2', 
-        color: '#E5E1F9',
-        fontWeight: '700',
-    };
-
-    const copyStyles: SystemStyleObject<Theme> = {
-        fontSize: '14px',
-        color: '#9B97AD', 
-        marginTop: "8px",
-    }
-    
-    const tagStyles: SystemStyleObject<Theme> = {
-        fontSize: '14px',
-    };
-
-    const boxStyles: SystemStyleObject<Theme> = {
-        display: "flex",
-        borderRadius: "4px",
-        padding: "0px 8px",
-    }
-      
+const EcosystemHeader = ({lpOptimizerTag, lpOptimizerCount, alphaVaultTag, alphaVaultCount}: EcosystemHeaderProps) => {      
     const renderContent = () => {
         return (
             <Panel sx={{padding: 0, background: 'transparent'}}>

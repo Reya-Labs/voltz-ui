@@ -4,8 +4,8 @@ import { Box } from "@mui/system";
 import { AugmentedMellowLpVault } from "@utilities";
 import { isNull } from "lodash";
 import { useEffect, useState } from "react";
-import { Panel } from "src/components/atomic";
-import MellowLPTable from "src/components/interface/MellowLPTable/MellowLPTable";
+import { Panel } from "../../atomic";
+import MellowLPTable from "../../interface/MellowLPTable/MellowLPTable";
 import EcosystemHeader from "../../../components/interface/EcosystemHeader/EcosystemHeader";
 
 export type ConnectedMellowLPTableProps = {
@@ -22,9 +22,8 @@ const ConnectedMellowLPTable: React.FunctionComponent<ConnectedMellowLPTableProp
 
     const [dataLoading, setDataLoading] = useState<boolean>(false);
     const [vaultsLoaded, setVaultsLoaded] = useState<boolean>(false);
-    const [userDataLoaded, setUserDataLoaded] = useState<boolean>(false);
 
-    const initVaults = () => {
+    useEffect(() => {
         if (lpVaults) {
             setVaultsLoaded(false);
             setDataLoading(true);
@@ -37,35 +36,24 @@ const ConnectedMellowLPTable: React.FunctionComponent<ConnectedMellowLPTableProp
                 setDataLoading(false);
             });
         }
-    }
+    }, [lpVaults]);
 
-    const initUserData = () => {
-        if (lpVaults && vaultsLoaded && !isNull(signer)) {
-            setUserDataLoaded(false);
+    useEffect(() => {
+        if (lpVaults && isSignerAvailable && vaultsLoaded) {
             setDataLoading(true);
 
             const request = Promise.allSettled(lpVaults.map(item => item.userInit(signer)));
 
             void request.then((_) => {
-                setUserDataLoaded(true);
                 setDataLoading(false);
             }, (_) => {
                 setDataLoading(false);
             });
         }
-    }
-
-    useEffect(() => {
-        initVaults();
-    }, []);
-
-    useEffect(() => {
-        initUserData();
-    }, [isSignerAvailable, vaultsLoaded]);
+    }, [lpVaults, isSignerAvailable, vaultsLoaded]);
 
     const renderContent = () => {
         return (
-            <>
             <Panel variant='dark' sx={{ padding: 0, width: '100%', maxWidth: '988px', margin: '0 auto', background: 'transparent' }}>
                 <EcosystemHeader
                     lpOptimizerTag = {`LP OPTIMISER`}
@@ -78,7 +66,6 @@ const ConnectedMellowLPTable: React.FunctionComponent<ConnectedMellowLPTableProp
                     <MellowLPTable lpVaults={lpVaults} onSelectItem={onSelectItem} disabled={dataLoading}/>
                 </Box>)}
             </Panel>
-            </>
         )
     }
 
