@@ -13,7 +13,7 @@ const useMellowLPVaults = (): useMellowLPVaultsResult => {
   const handleRefetch = useCallback(async () => { }, []);
 
   const lpVaults = useMemo(() => {
-    const addresses = getMellowLPAddresses();
+    const addresses = getMellowLPAddresses(process.env.REACT_APP_MELLOW_VAULTS);
 
     return addresses.map((item) => new AugmentedMellowLpVault({
       refetch: handleRefetch,

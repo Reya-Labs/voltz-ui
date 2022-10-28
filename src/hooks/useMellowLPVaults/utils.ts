@@ -6,10 +6,10 @@ type MellowLpVaultAddresses = {
     erc20RootVaultGovernanceAddress: string;
 };
 
-export const getMellowLPAddresses = (): MellowLpVaultAddresses[] => {
+export const getMellowLPAddresses = (mellowVaultAddresses?: string): MellowLpVaultAddresses[] => {
     const addresses =
-        (process.env.REACT_APP_MELLOW_VAULTS)
-            ? process.env.REACT_APP_MELLOW_VAULTS
+        (mellowVaultAddresses)
+            ? mellowVaultAddresses
                 .replace("(", "")
                 .replace("[", "")
                 .replace(")", "")
@@ -18,7 +18,7 @@ export const getMellowLPAddresses = (): MellowLpVaultAddresses[] => {
             : [];
 
     const result: MellowLpVaultAddresses[] = [];
-    for (let i = 0; i < addresses.length; i += 3) {
+    for (let i = 0; i+2 < addresses.length; i += 3) {
         result.push({
             voltzVaultAddress: addresses[i],
             erc20RootVaultAddress: addresses[i + 1],
