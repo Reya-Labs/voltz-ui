@@ -48,7 +48,7 @@ const LPMellowVaulDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoP
 
         return (
             <Panel variant='dark' sx={{ width: '100%', maxWidth: '366px', background: 'transparent' }}>
-                <PoolField agent={Agents.LIQUIDITY_PROVIDER} protocol={"aUSDC"} isBorrowing={false} isBorrowTable={true} />
+                <PoolField agent={Agents.LIQUIDITY_PROVIDER} protocol={lpVault.protocol} isBorrowing={false} isBorrowTable={true} />
 
                 <Box sx={{ marginTop: "16px", display: "flex" }}>
                     <Typography
