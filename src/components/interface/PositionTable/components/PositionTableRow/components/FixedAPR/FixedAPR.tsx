@@ -10,8 +10,7 @@ export type FixedAPRProps = {
   fixedApr?: number;
 };
 
-const FixedAPR: React.FunctionComponent<FixedAPRProps> = ({fixedApr}) => {
-
+const FixedAPR: React.FunctionComponent<FixedAPRProps> = ({ fixedApr }) => {
   const renderValue = () => {
     if (isUndefined(fixedApr)) {
       return 'Loading...';

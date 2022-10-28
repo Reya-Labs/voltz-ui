@@ -20,7 +20,7 @@ const Ellipsis = () => {
       }
     }
 
-    if(frame.current === 2) {
+    if (frame.current === 2) {
       frame.current = 0;
     } else {
       frame.current += 1;
@@ -32,12 +32,10 @@ const Ellipsis = () => {
 
     return () => {
       window.clearInterval(loop.current);
-    }
+    };
   }, [updateText]);
 
-  return (
-    <span style={{whiteSpace: 'pre'}}>{text}</span>
-  )
-}
+  return <span style={{ whiteSpace: 'pre' }}>{text}</span>;
+};
 
 export default Ellipsis;

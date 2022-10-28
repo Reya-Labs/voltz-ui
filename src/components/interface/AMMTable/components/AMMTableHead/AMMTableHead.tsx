@@ -47,16 +47,16 @@ const AMMTableHead: React.FunctionComponent<AMMTableHeadProps> = ({ order, order
               direction={orderBy === field ? order : 'asc'}
               onClick={createSortHandler(field)}
             > */}
-              {/* {label} */}
-              <Typography
+            {/* {label} */}
+            <Typography
               variant="subtitle1"
               sx={{
-                textTransform: "uppercase",
-                fontWeight: 400, 
+                textTransform: 'uppercase',
+                fontWeight: 400,
                 fontSize: 12,
-                color: "#5A576D"
+                color: '#5A576D',
               }}
-              >
+            >
               {label}
             </Typography>
             {/* </TableSortLabel> */}

@@ -23,12 +23,12 @@ const RateOptionsInput: React.FunctionComponent<RateOptionsInputProps> = ({
   value,
 }) => {
   const defaultInputValue = () => {
-    const defaultVal = (value ?? defaultValue)
+    const defaultVal = value ?? defaultValue;
     if (typeof defaultVal !== 'undefined') {
       return defaultVal.toString();
     }
   };
-  
+
   const [inputValue, setInputValue] = useState<string | undefined>(defaultInputValue());
 
   const handleChange = useCallback(
@@ -40,13 +40,10 @@ const RateOptionsInput: React.FunctionComponent<RateOptionsInputProps> = ({
     [onChange, setInputValue],
   );
 
-  const handleBlur = useCallback(
-    () => {
-      // eslint-disable-next-line
-      setInputValue(value?.toString());
-    }, 
-    [setInputValue, value]
-  );
+  const handleBlur = useCallback(() => {
+    // eslint-disable-next-line
+    setInputValue(value?.toString());
+  }, [setInputValue, value]);
 
   return (
     <MaskedIntegerField
@@ -57,7 +54,7 @@ const RateOptionsInput: React.FunctionComponent<RateOptionsInputProps> = ({
       error={!!error}
       errorText={error}
       inputSize="small"
-      suffix='%'
+      suffix="%"
       suffixPadding={20}
       label={<IconLabel label={label} icon="information-circle" info={hint} />}
       value={inputValue}
@@ -65,6 +62,6 @@ const RateOptionsInput: React.FunctionComponent<RateOptionsInputProps> = ({
       onBlur={handleBlur}
     />
   );
-}
+};
 
 export default RateOptionsInput;

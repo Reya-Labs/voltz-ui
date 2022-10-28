@@ -12,9 +12,7 @@ export default {
   args: {},
 } as ComponentMeta<typeof TransactionList>;
 
-const Template: ComponentStory<typeof TransactionList> = (args) => (
-  <TransactionList {...args} />
-);
+const Template: ComponentStory<typeof TransactionList> = (args) => <TransactionList {...args} />;
 
 const descale = (num: BigNumber) => {
   const output = num.div(BigNumber.from('10').pow(16));
@@ -29,8 +27,8 @@ FixedPosition.args = {
     amm: {
       descale,
       underlyingToken: {
-        name: 'GIL'
-      }
+        name: 'GIL',
+      },
     },
     swaps: [
       {
@@ -40,21 +38,21 @@ FixedPosition.args = {
         fixedTokenDeltaUnbalanced: JSBI.BigInt(3550000000000000000),
         cumulativeFeeIncurred: JSBI.BigInt(15340000000000000000),
         variableTokenDelta: JSBI.BigInt(-15340000000000000000),
-      }
+      },
     ],
     marginUpdates: [
       {
         id: 2,
         transactionTimestamp: JSBI.BigInt(1621574608),
         marginDelta: JSBI.BigInt(1293380000000000000000),
-      }
+      },
     ],
     settlements: [
       {
         id: 3,
         transactionTimestamp: JSBI.BigInt(1631574608),
         settlementCashflow: JSBI.BigInt(1053848420000000000000000),
-      }
+      },
     ],
     liquidations: [
       {
@@ -62,8 +60,8 @@ FixedPosition.args = {
         transactionTimestamp: JSBI.BigInt(1611574608),
         notionalUnwound: JSBI.BigInt(1293380000000000000000),
         reward: JSBI.BigInt(-1293380000000000000000),
-      }
-    ]
+      },
+    ],
   } as unknown as Position,
 };
 
@@ -75,8 +73,8 @@ VariablePosition.args = {
     amm: {
       descale,
       underlyingToken: {
-        name: 'GIL'
-      }
+        name: 'GIL',
+      },
     },
     swaps: [
       {
@@ -86,21 +84,21 @@ VariablePosition.args = {
         fixedTokenDeltaUnbalanced: JSBI.BigInt(3550000000000000000),
         cumulativeFeeIncurred: JSBI.BigInt(15340000000000000000),
         variableTokenDelta: JSBI.BigInt(15340000000000000000),
-      }
+      },
     ],
     marginUpdates: [
       {
         id: 2,
         transactionTimestamp: JSBI.BigInt(1621574608),
         marginDelta: JSBI.BigInt(1293380000000000000000),
-      }
+      },
     ],
     settlements: [
       {
         id: 3,
         transactionTimestamp: JSBI.BigInt(1631574608),
         settlementCashflow: JSBI.BigInt(1053848420000000000000000),
-      }
+      },
     ],
     liquidations: [
       {
@@ -108,8 +106,8 @@ VariablePosition.args = {
         transactionTimestamp: JSBI.BigInt(1611574608),
         notionalUnwound: JSBI.BigInt(1293380000000000000000),
         reward: JSBI.BigInt(-1293380000000000000000),
-      }
-    ]
+      },
+    ],
   } as unknown as Position,
 };
 
@@ -120,8 +118,8 @@ FCMPosition.args = {
     amm: {
       descale,
       underlyingToken: {
-        name: 'GIL'
-      }
+        name: 'GIL',
+      },
     },
     fcmSwaps: [
       {
@@ -131,7 +129,7 @@ FCMPosition.args = {
         fixedTokenDeltaUnbalanced: JSBI.BigInt(3550000000000000000),
         cumulativeFeeIncurred: JSBI.BigInt(15340000000000000000),
         variableTokenDelta: JSBI.BigInt(15340000000000000000),
-      }
+      },
     ],
     fcmUnwinds: [
       {
@@ -141,15 +139,15 @@ FCMPosition.args = {
         fixedTokenDeltaUnbalanced: JSBI.BigInt(3550000000000000000),
         cumulativeFeeIncurred: JSBI.BigInt(15340000000000000000),
         variableTokenDelta: JSBI.BigInt(15340000000000000000),
-      }
+      },
     ],
     fcmSettlements: [
       {
         id: 3,
         transactionTimestamp: JSBI.BigInt(1631574608),
         settlementCashflow: JSBI.BigInt(1053848420000000000000000),
-      }
-    ]
+      },
+    ],
   } as unknown as Position,
 };
 
@@ -161,36 +159,36 @@ LPPosition.args = {
     amm: {
       descale,
       underlyingToken: {
-        name: 'GIL'
-      }
+        name: 'GIL',
+      },
     },
     mints: [
       {
         id: 1,
         transactionTimestamp: JSBI.BigInt(1651574608),
         amount: JSBI.BigInt(1053848420000000000000000),
-      }
+      },
     ],
     burns: [
       {
         id: 2,
         transactionTimestamp: JSBI.BigInt(1641574608),
         amount: JSBI.BigInt(1053848420000000000000000),
-      }
+      },
     ],
     marginUpdates: [
       {
         id: 3,
         transactionTimestamp: JSBI.BigInt(1621574608),
         marginDelta: JSBI.BigInt(1293380000000000000000),
-      }
+      },
     ],
     settlements: [
       {
         id: 4,
         transactionTimestamp: JSBI.BigInt(1631574608),
         settlementCashflow: JSBI.BigInt(1053848420000000000000000),
-      }
+      },
     ],
     liquidations: [
       {
@@ -198,7 +196,7 @@ LPPosition.args = {
         transactionTimestamp: JSBI.BigInt(1611574608),
         notionalUnwound: JSBI.BigInt(1293380000000000000000),
         reward: JSBI.BigInt(-1293380000000000000000),
-      }
-    ]
+      },
+    ],
   } as unknown as Position,
 };

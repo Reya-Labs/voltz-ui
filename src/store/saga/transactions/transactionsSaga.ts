@@ -18,10 +18,10 @@ function* transactionsSaga() {
   yield takeLatest('settlePosition', settlePositionSaga);
   yield takeLatest('fcmSwap', fcmSwapSaga);
   yield takeLatest('fcmUnwind', fcmUnwindSaga);
-  yield takeLatest('burn', burnSaga); 
-  yield takeLatest('rolloverMint', rolloverMintSaga); 
-  yield takeLatest('rolloverSwap', rolloverSwapSaga); 
-  yield takeLatest('borrow', borrowSaga); 
+  yield takeLatest('burn', burnSaga);
+  yield takeLatest('rolloverMint', rolloverMintSaga);
+  yield takeLatest('rolloverSwap', rolloverSwapSaga);
+  yield takeLatest('borrow', borrowSaga);
 }
 
 export default transactionsSaga;

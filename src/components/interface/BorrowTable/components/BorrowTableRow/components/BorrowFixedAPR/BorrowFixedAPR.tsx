@@ -10,8 +10,7 @@ export type BorrowBorrowFixedAPR = {
   fixedApr: number | null | void;
 };
 
-const BorrowFixedAPR: React.FunctionComponent<BorrowBorrowFixedAPR> = ({loading, fixedApr}) => {
-
+const BorrowFixedAPR: React.FunctionComponent<BorrowBorrowFixedAPR> = ({ loading, fixedApr }) => {
   const renderValue = () => {
     if (loading) {
       return '---';
@@ -21,12 +20,21 @@ const BorrowFixedAPR: React.FunctionComponent<BorrowBorrowFixedAPR> = ({loading,
       return '0%';
     }
 
-    return `${formatNumber(fixedApr)}%`; 
+    return `${formatNumber(fixedApr)}%`;
   };
 
   return (
-    <TableCell align='center' width="20%">
-      <Typography variant="body2" sx={{ fontSize: 18, color: 'primary.light', fontWeight: 700, letterSpacing: '0.02em',lineHeight: '130%'}}>
+    <TableCell align="center" width="20%">
+      <Typography
+        variant="body2"
+        sx={{
+          fontSize: 18,
+          color: 'primary.light',
+          fontWeight: 700,
+          letterSpacing: '0.02em',
+          lineHeight: '130%',
+        }}
+      >
         {renderValue()}
       </Typography>
     </TableCell>

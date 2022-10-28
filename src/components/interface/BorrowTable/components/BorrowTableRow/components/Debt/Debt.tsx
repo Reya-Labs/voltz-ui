@@ -13,9 +13,12 @@ export type DebtProps = {
   tokenName: string | undefined;
 };
 
-
-const Debt: React.FunctionComponent<DebtProps> = ({debtInUSD, loadingDebt, debtInToken, tokenName }) => {
-
+const Debt: React.FunctionComponent<DebtProps> = ({
+  debtInUSD,
+  loadingDebt,
+  debtInToken,
+  tokenName,
+}) => {
   const renderValueInUSD = () => {
     if (loadingDebt) {
       return '---';
@@ -45,10 +48,22 @@ const Debt: React.FunctionComponent<DebtProps> = ({debtInUSD, loadingDebt, debtI
   };
 
   return (
-    <TableCell align="left" width="25%"> 
-      <Typography variant="body2" sx={{fontSize: 18, fontWeight: 400, letterSpacing: '0.02em',lineHeight: '100%'}}>
+    <TableCell align="left" width="25%">
+      <Typography
+        variant="body2"
+        sx={{ fontSize: 18, fontWeight: 400, letterSpacing: '0.02em', lineHeight: '100%' }}
+      >
         {renderValueInUSD()}
-        <Box sx={{color: "#A6A2B4", fontSize: 12, align:'left', marginLeft: (theme) => theme.spacing(-1.7)}}> &nbsp; 
+        <Box
+          sx={{
+            color: '#A6A2B4',
+            fontSize: 12,
+            align: 'left',
+            marginLeft: (theme) => theme.spacing(-1.7),
+          }}
+        >
+          {' '}
+          &nbsp;
           {renderValueInToken()}
         </Box>
       </Typography>

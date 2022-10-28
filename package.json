@@ -9,6 +9,8 @@
     "generate": "graphql-codegen --config graphql-codegen.yaml",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "lint:fix": "eslint --fix 'src/**/*.{ts,tsx}'",
+    "prettier:fix": "prettier --write './src/**/*.{ts,tsx}'",
+    "prettier:check": "prettier --check './src/**/*.{ts,tsx}'",
     "prepare": "husky install",
     "release": "semantic-release",
     "start": "node scripts/start.js",

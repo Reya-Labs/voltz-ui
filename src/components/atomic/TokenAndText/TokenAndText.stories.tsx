@@ -21,5 +21,5 @@ Basic.args = {
   token: 'GIL',
   tokenLabel: 'pool',
   text: 'RECEIVED!',
-  textLabel: 'status'
+  textLabel: 'status',
 };

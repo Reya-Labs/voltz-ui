@@ -14,5 +14,5 @@ export const Basic = Template.bind({});
 Basic.args = {
   leftContent: 'Power',
   rightContent: '1.21 GWatt',
-  percentageComplete: 88
+  percentageComplete: 88,
 };

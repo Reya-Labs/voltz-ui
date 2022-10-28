@@ -4,7 +4,13 @@ import { useLocation, useSearchParams } from 'react-router-dom';
 import { Position } from '@voltz-protocol/v1-sdk';
 
 import { AugmentedAMM, findCurrentAmm, findCurrentPosition, setPageTitle } from '@utilities';
-import { Agents, AMMProvider, PositionProvider, SwapFormProvider, PortfolioProvider } from '@contexts';
+import {
+  Agents,
+  AMMProvider,
+  PositionProvider,
+  SwapFormProvider,
+  PortfolioProvider,
+} from '@contexts';
 import { PageTitleDesc } from '@components/composite';
 import { useAgent, useAMMs, usePositions } from '@hooks';
 import { Page, SwapFormModes } from '@components/interface';
@@ -47,8 +53,8 @@ const Trader: React.FunctionComponent = () => {
   }, [key]);
 
   const handleCompletedSettling = () => {
-    setSettling(!settling)
-  }
+    setSettling(!settling);
+  };
 
   useEffect(() => {
     switch (renderMode) {
@@ -110,26 +116,28 @@ const Trader: React.FunctionComponent = () => {
       )}
 
       {settling && renderMode === 'portfolio' && (
-        <PortfolioProvider positions={agent !== Agents.LIQUIDITY_PROVIDER  ? positionsByAgentGroup : undefined}>
-          <ConnectedPositionTable 
-            onSelectItem={handleSelectPosition} 
+        <PortfolioProvider
+          positions={agent !== Agents.LIQUIDITY_PROVIDER ? positionsByAgentGroup : undefined}
+        >
+          <ConnectedPositionTable
+            onSelectItem={handleSelectPosition}
             agent={Agents.FIXED_TRADER}
             handleCompletedSettling={handleCompletedSettling}
           />
         </PortfolioProvider>
-  
       )}
 
       {!settling && renderMode === 'portfolio' && (
-            <PortfolioProvider positions={agent !== Agents.LIQUIDITY_PROVIDER  ? positionsByAgentGroup : undefined}>
-              <ConnectedPositionTable 
-                onSelectItem={handleSelectPosition} 
-                agent={Agents.FIXED_TRADER}
-                handleCompletedSettling={handleCompletedSettling}
-              />
-            </PortfolioProvider>
-
-          )}
+        <PortfolioProvider
+          positions={agent !== Agents.LIQUIDITY_PROVIDER ? positionsByAgentGroup : undefined}
+        >
+          <ConnectedPositionTable
+            onSelectItem={handleSelectPosition}
+            agent={Agents.FIXED_TRADER}
+            handleCompletedSettling={handleCompletedSettling}
+          />
+        </PortfolioProvider>
+      )}
 
       {renderMode === 'form' && (
         <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>

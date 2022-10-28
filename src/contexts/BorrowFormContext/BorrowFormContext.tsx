@@ -1,15 +1,19 @@
-import { GetInfoType, useAgent, UseAsyncFunctionResult, useBalance, useTokenApproval } from '@hooks';
+import {
+  GetInfoType,
+  useAgent,
+  UseAsyncFunctionResult,
+  useBalance,
+  useTokenApproval,
+} from '@hooks';
 import { hasEnoughUnderlyingTokens, lessThan, lessThanEpsilon } from '@utilities';
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
-import { Agents, useAMMContext, useBorrowAMMContext, usePositionContext } from "@contexts";
+import { Agents, useAMMContext, useBorrowAMMContext, usePositionContext } from '@contexts';
 import { isUndefined, update } from 'lodash';
-import { SwapFormActions } from "@components/interface";
-import * as s from "../SwapFormContext/services";
+import { SwapFormActions } from '@components/interface';
+import * as s from '../SwapFormContext/services';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk/dist/types/entities';
 
-export type BorrowFormProviderProps = {
-  
-};
+export type BorrowFormProviderProps = {};
 
 export enum BorrowFormSubmitButtonStates {
   APPROVE_UT_PERIPHERY = 'APPROVE_UT_PERIPHERY',
@@ -17,7 +21,7 @@ export enum BorrowFormSubmitButtonStates {
   CHECKING = 'CHECKING',
   INITIALISING = 'INITIALISING',
   FIX_RATE = 'FIX_RATE',
-};
+}
 
 export enum BorrowFormSubmitButtonHintStates {
   APPROVE_NEXT_TOKEN = 'APPROVE_NEXT_TOKEN',
@@ -31,8 +35,8 @@ export enum BorrowFormSubmitButtonHintStates {
   FORM_INVALID_TRADE = 'FORM_INVALID_TRADE',
   INITIALISING = 'INITIALISING',
   READY_TO_TRADE_TOKENS_APPROVED = 'READY_TO_TRADE_TOKENS_APPROVED',
-  READY_TO_TRADE = 'READY_TO_TRADE'
-};
+  READY_TO_TRADE = 'READY_TO_TRADE',
+}
 
 export type BorrowFormContext = {
   variableDebt: UseAsyncFunctionResult<unknown, number | void>;
@@ -53,7 +57,7 @@ export type BorrowFormContext = {
     data?: InfoPostSwap;
     errorMessage?: string;
     loading: boolean;
-  }
+  };
   balance: number;
   warningText?: string;
 };
@@ -62,30 +66,33 @@ const borrowFormCtx = createContext<BorrowFormContext>({} as unknown as BorrowFo
 borrowFormCtx.displayName = 'BorrowFormContext';
 
 export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps> = ({
-  children
+  children,
 }) => {
   const { amm } = useAMMContext();
   const { position } = usePositionContext();
   const { variableDebtInNativeTokens: variableDebt, borrowSwapInfo } = useBorrowAMMContext();
   const balance = useBalance(amm, undefined);
 
-  const [selectedFixedDebt, setSelectedFixedDebt] = useState<BorrowFormContext['selectedFixedDebt']>(0);
-  const [selectedFixedDebtPercentage, setSelectedFixedDebtPercentage] = useState<BorrowFormContext['selectedFixedDebtPercentage']>(0);
-  const [selectedVariableDebt, setSelectedVariableDebt] = useState<BorrowFormContext['selectedVariableDebt']>(0);
-  const [selectedVariableDebtPercentage, setSelectedVariableDebtPercentage] = useState<BorrowFormContext['selectedVariableDebtPercentage']>(0);
+  const [selectedFixedDebt, setSelectedFixedDebt] =
+    useState<BorrowFormContext['selectedFixedDebt']>(0);
+  const [selectedFixedDebtPercentage, setSelectedFixedDebtPercentage] =
+    useState<BorrowFormContext['selectedFixedDebtPercentage']>(0);
+  const [selectedVariableDebt, setSelectedVariableDebt] =
+    useState<BorrowFormContext['selectedVariableDebt']>(0);
+  const [selectedVariableDebtPercentage, setSelectedVariableDebtPercentage] =
+    useState<BorrowFormContext['selectedVariableDebtPercentage']>(0);
   const [margin, setMargin] = useState<number>(0);
 
   const isAvailableNotionalInsufficient = useRef<boolean>(false);
   const borrowSwapInfoAsyncState = useRef<number>(5);
   const validateId = useRef<number>(0);
 
-  const isTradeInfoLoading = borrowSwapInfoAsyncState.current < 4; 
+  const isTradeInfoLoading = borrowSwapInfoAsyncState.current < 4;
 
   const tokenApprovals = useTokenApproval(amm, true);
   const approvalsNeeded = s.approvalsNeeded(SwapFormActions.SWAP, tokenApprovals, false);
-  const isTradeVerified = 
-    !isTradeInfoLoading &&
-    !!borrowSwapInfo.result && !borrowSwapInfo.errorMessage;
+  const isTradeVerified =
+    !isTradeInfoLoading && !!borrowSwapInfo.result && !borrowSwapInfo.errorMessage;
 
   const { agent, onChangeAgent } = useAgent();
   useEffect(() => {
@@ -100,12 +107,12 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
   const [isValid, setIsValid] = useState<boolean>(false);
   const touched = useRef<string[]>([]);
   const addError = (err: Record<string, string>, name: string, message: string) => {
-    if(touched.current.includes(name)) {
+    if (touched.current.includes(name)) {
       err[name] = message;
     }
   };
 
-  const [warningText, setWarningText] = useState<string|undefined>(undefined);
+  const [warningText, setWarningText] = useState<string | undefined>(undefined);
 
   const validate = async () => {
     validateId.current = (validateId.current + 1) % 666013;
@@ -113,16 +120,27 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
 
     const err: Record<string, string> = {};
     let valid = true;
-    let warnText: (string | undefined) = undefined;
+    let warnText: string | undefined = undefined;
 
-    if(borrowSwapInfoAsyncState.current === 5) {
+    if (borrowSwapInfoAsyncState.current === 5) {
       valid = false;
       addError(err, 'slider', 'Please select fixed debt amount');
     }
 
-    if (borrowSwapInfoAsyncState.current === 4 && borrowSwapInfo.result?.availableNotional !== undefined && lessThanEpsilon(borrowSwapInfo.result?.availableNotional, selectedFixedDebt ?? 0, 0.0000001) === true) {
+    if (
+      borrowSwapInfoAsyncState.current === 4 &&
+      borrowSwapInfo.result?.availableNotional !== undefined &&
+      lessThanEpsilon(
+        borrowSwapInfo.result?.availableNotional,
+        selectedFixedDebt ?? 0,
+        0.0000001,
+      ) === true
+    ) {
       updateNotional(
-       Math.floor((borrowSwapInfo.result?.availableNotional / (variableDebt.result as number) * 1000 / 25)) * 2.5
+        Math.floor(
+          ((borrowSwapInfo.result?.availableNotional / (variableDebt.result as number)) * 1000) /
+            25,
+        ) * 2.5,
       );
       isAvailableNotionalInsufficient.current = true;
       valid = false;
@@ -130,11 +148,12 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
 
     if (isAvailableNotionalInsufficient.current) {
       // valid = false;
-      warnText = "There is not enough liquidity in the pool to fix all of your debt. The position the slider is in now is the maximum amount of variable debt you can fix.";
+      warnText =
+        'There is not enough liquidity in the pool to fix all of your debt. The position the slider is in now is the maximum amount of variable debt you can fix.';
     }
 
     // Check the user has enough balance
-    if(margin !== 0 && await hasEnoughUnderlyingTokens(amm, margin, undefined) === false) {
+    if (margin !== 0 && (await hasEnoughUnderlyingTokens(amm, margin, undefined)) === false) {
       valid = false;
       addError(err, 'margin', 'Insufficient funds');
     }
@@ -144,7 +163,7 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
       setIsValid(valid);
       setWarningText(warnText);
     }
-  
+
     return valid;
   };
 
@@ -153,50 +172,74 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
       return;
     }
 
-    if (borrowSwapInfo.loading === false && borrowSwapInfo.result === null && borrowSwapInfo.errorMessage === null) {
+    if (
+      borrowSwapInfo.loading === false &&
+      borrowSwapInfo.result === null &&
+      borrowSwapInfo.errorMessage === null
+    ) {
       borrowSwapInfoAsyncState.current = 1;
     }
 
-    if (borrowSwapInfo.loading === true && borrowSwapInfo.result === null && borrowSwapInfo.errorMessage === null) {
+    if (
+      borrowSwapInfo.loading === true &&
+      borrowSwapInfo.result === null &&
+      borrowSwapInfo.errorMessage === null
+    ) {
       borrowSwapInfoAsyncState.current = 2;
     }
 
-    if (borrowSwapInfo.loading === true && borrowSwapInfo.result !== null && borrowSwapInfo.errorMessage === null) {
+    if (
+      borrowSwapInfo.loading === true &&
+      borrowSwapInfo.result !== null &&
+      borrowSwapInfo.errorMessage === null
+    ) {
       borrowSwapInfoAsyncState.current = 3;
     }
 
-    if (borrowSwapInfo.loading === true && borrowSwapInfo.result === null && borrowSwapInfo.errorMessage !== null) {
+    if (
+      borrowSwapInfo.loading === true &&
+      borrowSwapInfo.result === null &&
+      borrowSwapInfo.errorMessage !== null
+    ) {
       borrowSwapInfoAsyncState.current = 3;
     }
 
-    if (borrowSwapInfo.loading === false && borrowSwapInfo.result !== null && borrowSwapInfo.errorMessage === null) {
+    if (
+      borrowSwapInfo.loading === false &&
+      borrowSwapInfo.result !== null &&
+      borrowSwapInfo.errorMessage === null
+    ) {
       borrowSwapInfoAsyncState.current = 4;
     }
 
-    if (borrowSwapInfo.loading === false && borrowSwapInfo.result === null && borrowSwapInfo.errorMessage !== null) {
+    if (
+      borrowSwapInfo.loading === false &&
+      borrowSwapInfo.result === null &&
+      borrowSwapInfo.errorMessage !== null
+    ) {
       borrowSwapInfoAsyncState.current = 4;
     }
-  }
+  };
 
   // 4
   // Validate the form after values change
   useEffect(() => {
-    updateBorrowSwapInfoAsyncState();   
+    updateBorrowSwapInfoAsyncState();
 
-    if(touched.current.length) {
+    if (touched.current.length) {
       void validate();
     }
-  }, [borrowSwapInfo.loading, borrowSwapInfo.result, borrowSwapInfo.errorMessage, margin])
+  }, [borrowSwapInfo.loading, borrowSwapInfo.result, borrowSwapInfo.errorMessage, margin]);
 
   const getHintState = () => {
     // Please note that the order these are in is important, you need the conditions that take precidence
     // to be nearer the top.
 
     // Token approvals - Checking current status
-    if(tokenApprovals.checkingApprovals) {
+    if (tokenApprovals.checkingApprovals) {
       return BorrowFormSubmitButtonHintStates.INITIALISING;
     }
-    if(tokenApprovals.approving) {
+    if (tokenApprovals.approving) {
       return BorrowFormSubmitButtonHintStates.APPROVING;
     }
     if (isTradeInfoLoading) {
@@ -205,22 +248,21 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
 
     // Form validation
     if (!isValid) {
-      if(errors.balance) {
+      if (errors.balance) {
         return BorrowFormSubmitButtonHintStates.FORM_INVALID_BALANCE;
       }
-      if(!Object.keys(errors).length) {
+      if (!Object.keys(errors).length) {
         return BorrowFormSubmitButtonHintStates.FORM_INVALID_INCOMPLETE;
       }
       return BorrowFormSubmitButtonHintStates.FORM_INVALID;
     }
 
-
-    if(tokenApprovals.lastError) {
+    if (tokenApprovals.lastError) {
       return BorrowFormSubmitButtonHintStates.ERROR_TOKEN_APPROVAL;
     }
-    
-    if(tokenApprovals.getNextApproval(false)) {
-      if(tokenApprovals.lastApproval) {
+
+    if (tokenApprovals.getNextApproval(false)) {
+      if (tokenApprovals.lastApproval) {
         return BorrowFormSubmitButtonHintStates.APPROVE_NEXT_TOKEN;
       } else {
         return BorrowFormSubmitButtonHintStates.APPROVE_TOKEN;
@@ -232,14 +274,14 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
       return BorrowFormSubmitButtonHintStates.FORM_INVALID_TRADE;
     }
 
-    if(tokenApprovals.lastApproval) {
+    if (tokenApprovals.lastApproval) {
       return BorrowFormSubmitButtonHintStates.READY_TO_TRADE_TOKENS_APPROVED;
     } else {
       return BorrowFormSubmitButtonHintStates.READY_TO_TRADE;
     }
-  }
+  };
 
-  const getSubmitButtonState = () => {  
+  const getSubmitButtonState = () => {
     if (tokenApprovals.checkingApprovals) {
       return BorrowFormSubmitButtonStates.INITIALISING;
     }
@@ -249,7 +291,7 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
     if (isTradeInfoLoading) {
       return BorrowFormSubmitButtonStates.CHECKING;
     }
-   
+
     if (!tokenApprovals.underlyingTokenApprovedForPeriphery) {
       return BorrowFormSubmitButtonStates.APPROVE_UT_PERIPHERY;
     }
@@ -258,7 +300,7 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
   };
 
   useEffect(() => {
-    if (variableDebt.loading || (variableDebt.result === null) || (variableDebt.result === undefined)) {
+    if (variableDebt.loading || variableDebt.result === null || variableDebt.result === undefined) {
       return;
     }
 
@@ -268,17 +310,16 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
     setSelectedVariableDebtPercentage(100);
   }, [variableDebt.loading, variableDebt.result]);
 
-
   const updateNotional = (value: number) => {
-    if(!touched.current.includes('margin')) {
+    if (!touched.current.includes('margin')) {
       touched.current.push('margin');
     }
 
-    if(!touched.current.includes('slider')) {
+    if (!touched.current.includes('slider')) {
       touched.current.push('slider');
     }
 
-    if (variableDebt.loading || (variableDebt.result === null) || (variableDebt.result === undefined)) {
+    if (variableDebt.loading || variableDebt.result === null || variableDebt.result === undefined) {
       return;
     }
 
@@ -288,12 +329,12 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
       return;
     }
 
-    setSelectedFixedDebt(variableDebt.result * value / 100)
+    setSelectedFixedDebt((variableDebt.result * value) / 100);
     setSelectedFixedDebtPercentage(value);
 
-    setSelectedVariableDebt(variableDebt.result * (100 - value) / 100);
+    setSelectedVariableDebt((variableDebt.result * (100 - value)) / 100);
     setSelectedVariableDebtPercentage(100 - value);
-  }
+  };
 
   // 1
   useEffect(() => {
@@ -302,28 +343,33 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
     }
 
     if (!approvalsNeeded && !isUndefined(selectedFixedDebt)) {
-      if ( selectedFixedDebt === 0) {
+      if (selectedFixedDebt === 0) {
         setMargin(0);
         borrowSwapInfoAsyncState.current = 5;
       } else {
         borrowSwapInfoAsyncState.current = 0;
-        borrowSwapInfo.call({ 
+        borrowSwapInfo.call({
           position,
           margin,
-          notional: selectedFixedDebt, 
-          type: GetInfoType.NORMAL_SWAP
+          notional: selectedFixedDebt,
+          type: GetInfoType.NORMAL_SWAP,
         });
       }
     }
   }, [selectedFixedDebt]);
 
   useEffect(() => {
-    updateBorrowSwapInfoAsyncState();   
+    updateBorrowSwapInfoAsyncState();
 
     if (borrowSwapInfoAsyncState.current === 4 && borrowSwapInfo.result) {
-      setMargin(Math.max(borrowSwapInfo.result.marginRequirement, borrowSwapInfo.result.borrowMarginRequirement));
+      setMargin(
+        Math.max(
+          borrowSwapInfo.result.marginRequirement,
+          borrowSwapInfo.result.borrowMarginRequirement,
+        ),
+      );
     }
-  }, [borrowSwapInfo.loading, borrowSwapInfo.result, borrowSwapInfo.errorMessage])
+  }, [borrowSwapInfo.loading, borrowSwapInfo.result, borrowSwapInfo.errorMessage]);
 
   const value = {
     variableDebt,
@@ -341,14 +387,17 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
     approvalsNeeded,
     isTradeVerified,
     borrowInfo: {
-      data: (borrowSwapInfoAsyncState.current === 4) ? borrowSwapInfo.result || undefined : undefined,
-      errorMessage: (borrowSwapInfoAsyncState.current === 4) ? borrowSwapInfo.errorMessage || undefined : undefined,
-      loading: isTradeInfoLoading
+      data: borrowSwapInfoAsyncState.current === 4 ? borrowSwapInfo.result || undefined : undefined,
+      errorMessage:
+        borrowSwapInfoAsyncState.current === 4
+          ? borrowSwapInfo.errorMessage || undefined
+          : undefined,
+      loading: isTradeInfoLoading,
     },
     balance: balance,
-    warningText
-  }
-  
+    warningText,
+  };
+
   return <borrowFormCtx.Provider value={value}>{children}</borrowFormCtx.Provider>;
 };
 

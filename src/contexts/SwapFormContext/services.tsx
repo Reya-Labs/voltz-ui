@@ -9,16 +9,24 @@ import { useTokenApproval } from '@hooks';
  * @param tokenApprovals - the token approvals state for this form
  * @param isRemovingMargin - boolean flag for if the action is to remove margin
  */
-export const approvalsNeeded = (action: SwapFormActions, tokenApprovals: ReturnType<typeof useTokenApproval>, isRemovingMargin: boolean) => {
-  if(!isRemovingMargin) {
+export const approvalsNeeded = (
+  action: SwapFormActions,
+  tokenApprovals: ReturnType<typeof useTokenApproval>,
+  isRemovingMargin: boolean,
+) => {
+  if (!isRemovingMargin) {
     if (action === SwapFormActions.FCM_SWAP || action === SwapFormActions.FCM_UNWIND) {
-      return !tokenApprovals.FCMApproved || !tokenApprovals.yieldBearingTokenApprovedForFCM || !tokenApprovals.underlyingTokenApprovedForFCM;
+      return (
+        !tokenApprovals.FCMApproved ||
+        !tokenApprovals.yieldBearingTokenApprovedForFCM ||
+        !tokenApprovals.underlyingTokenApprovedForFCM
+      );
     } else {
       return !tokenApprovals.underlyingTokenApprovedForPeriphery;
     }
   }
   return false;
-}
+};
 
 /**
  * Returns what action the form is currently set to make (SWAP, FCM_SWAP etc)
@@ -26,27 +34,26 @@ export const approvalsNeeded = (action: SwapFormActions, tokenApprovals: ReturnT
  * @param partialCollateralization - boolean flag for if the form has partial collateralization selected
  * @param agent - the agent mode the form is currently in (fixed, variable etc)
  */
-export const getFormAction = (mode: SwapFormModes, partialCollateralization: boolean, agent: Agents): SwapFormActions => {
+export const getFormAction = (
+  mode: SwapFormModes,
+  partialCollateralization: boolean,
+  agent: Agents,
+): SwapFormActions => {
   if (mode === SwapFormModes.EDIT_MARGIN) {
     return SwapFormActions.UPDATE;
   }
 
   if (agent === Agents.FIXED_TRADER) {
-    if(partialCollateralization) {
-      return mode === SwapFormModes.ROLLOVER 
-        ? SwapFormActions.ROLLOVER_SWAP 
-        : SwapFormActions.SWAP;
+    if (partialCollateralization) {
+      return mode === SwapFormModes.ROLLOVER ? SwapFormActions.ROLLOVER_SWAP : SwapFormActions.SWAP;
     } else {
-      return mode === SwapFormModes.ROLLOVER 
-        ? SwapFormActions.ROLLOVER_FCM_SWAP 
+      return mode === SwapFormModes.ROLLOVER
+        ? SwapFormActions.ROLLOVER_FCM_SWAP
         : SwapFormActions.FCM_SWAP;
     }
-  } 
-  else {
+  } else {
     // if (partialCollateralization) {
-      return mode === SwapFormModes.ROLLOVER
-        ? SwapFormActions.ROLLOVER_SWAP 
-        : SwapFormActions.SWAP;
+    return mode === SwapFormModes.ROLLOVER ? SwapFormActions.ROLLOVER_SWAP : SwapFormActions.SWAP;
     // }
     // else {
     //   return SwapFormActions.FCM_UNWIND;

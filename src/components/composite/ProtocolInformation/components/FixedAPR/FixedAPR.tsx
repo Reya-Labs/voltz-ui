@@ -13,7 +13,7 @@ export type FixedAPRProps = {
   fixedApr?: number;
 };
 
-const FixedAPR: React.FunctionComponent<FixedAPRProps> = ({agent, fixedApr}) => {
+const FixedAPR: React.FunctionComponent<FixedAPRProps> = ({ agent, fixedApr }) => {
   // const { fixedApr } = useAMMContext();
   // const { result, loading, call } = fixedApr;
 

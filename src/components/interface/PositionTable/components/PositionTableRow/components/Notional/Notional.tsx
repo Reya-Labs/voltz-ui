@@ -17,12 +17,17 @@ const Notional: React.FunctionComponent<NotionalProps> = ({ notional, onEdit, to
       </Typography>
 
       {onEdit && (
-        <Button sx={{ width: '100%', display: 'flex'}} size='small' variant='red2' onClick={onEdit}> 
+        <Button
+          sx={{ width: '100%', display: 'flex' }}
+          size="small"
+          variant="red2"
+          onClick={onEdit}
+        >
           Edit
         </Button>
       )}
     </>
   );
 };
-    
+
 export default Notional;

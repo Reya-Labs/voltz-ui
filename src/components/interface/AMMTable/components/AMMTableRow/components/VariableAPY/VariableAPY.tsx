@@ -10,9 +10,7 @@ export type VariableAPYProps = {
   variableApy?: number;
 };
 
-
-const VariableAPY: React.FunctionComponent<VariableAPYProps> = ({variableApy}) => {
-
+const VariableAPY: React.FunctionComponent<VariableAPYProps> = ({ variableApy }) => {
   const renderValue = () => {
     if (isUndefined(variableApy)) {
       return 'Loading...';
@@ -23,7 +21,7 @@ const VariableAPY: React.FunctionComponent<VariableAPYProps> = ({variableApy}) =
 
   return (
     <TableCell>
-      <Typography variant="body2" label="Variable APY" agentStyling sx={{fontSize: 18}}>
+      <Typography variant="body2" label="Variable APY" agentStyling sx={{ fontSize: 18 }}>
         {renderValue()}
       </Typography>
     </TableCell>

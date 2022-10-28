@@ -16,7 +16,7 @@ export type NotionalAmountProps = {
   underlyingTokenName?: string;
   subtext?: string;
   disabled?: boolean;
-  isEditing?: boolean
+  isEditing?: boolean;
 };
 
 const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
@@ -29,9 +29,8 @@ const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
   underlyingTokenName,
   subtext,
   disabled,
-  isEditing
+  isEditing,
 }) => {
-  
   const value = isUndefined(notional) ? defaultNotional : notional;
 
   useState(() => {

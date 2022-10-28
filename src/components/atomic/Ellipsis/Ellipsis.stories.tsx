@@ -11,4 +11,4 @@ export default {
 const Template: ComponentStory<typeof Ellipsis> = (args) => <Ellipsis />;
 
 export const Primary = Template.bind({});
-Primary.args = { };
+Primary.args = {};

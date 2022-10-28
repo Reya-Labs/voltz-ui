@@ -9,11 +9,16 @@ export type MarginControlsProps<T> = {
 };
 
 const MarginControls = <T,>({ onChange, values, value }: MarginControlsProps<T>) => {
-  const iconLabel = <IconLabel label="Add or Remove Margin" icon="information-circle" info="" removeIcon />
+  const iconLabel = (
+    <IconLabel label="Add or Remove Margin" icon="information-circle" info="" removeIcon />
+  );
 
-  const handleChange = useCallback((newValue: T) => {
-    if(newValue) onChange(newValue);
-  }, [onChange]);
+  const handleChange = useCallback(
+    (newValue: T) => {
+      if (newValue) onChange(newValue);
+    },
+    [onChange],
+  );
 
   return (
     <Box

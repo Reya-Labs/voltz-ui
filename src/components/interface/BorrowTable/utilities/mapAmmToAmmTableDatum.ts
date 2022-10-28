@@ -4,7 +4,7 @@ import { BorrowAMMTableDatum } from '../types';
 
 const mapAmmToAmmTableDatum = ({
   id,
-  amm
+  amm,
 }: AugmentedBorrowAMM): BorrowAMMTableDatum | undefined => {
   if (amm) {
     return {
@@ -16,8 +16,6 @@ const mapAmmToAmmTableDatum = ({
     };
   }
   return undefined;
-    
 };
 
 export default mapAmmToAmmTableDatum;
-

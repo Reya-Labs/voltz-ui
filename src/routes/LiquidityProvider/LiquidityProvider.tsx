@@ -4,7 +4,14 @@ import { useLocation } from 'react-router-dom';
 import { Position } from '@voltz-protocol/v1-sdk';
 
 import { AugmentedAMM, findCurrentAmm, findCurrentPosition, setPageTitle } from '@utilities';
-import { Agents, AMMProvider, MintBurnFormModes, MintBurnFormProvider, PositionProvider, PortfolioProvider } from '@contexts';
+import {
+  Agents,
+  AMMProvider,
+  MintBurnFormModes,
+  MintBurnFormProvider,
+  PositionProvider,
+  PortfolioProvider,
+} from '@contexts';
 import { useAgent, useAMMs, usePositions } from '@hooks';
 
 import { Page } from '@components/interface';
@@ -40,7 +47,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
   }, [key]);
 
   useEffect(() => {
-    switch(renderMode) {
+    switch (renderMode) {
       case 'pools': {
         setPageTitle('Liquidity Provider Pools');
         break;
@@ -54,7 +61,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
         break;
       }
     }
-  }, [setPageTitle, renderMode, position])
+  }, [setPageTitle, renderMode, position]);
 
   const handleSelectAmm = (selectedAMM: AugmentedAMM) => {
     setFormMode(MintBurnFormModes.NEW_POSITION);
@@ -62,20 +69,27 @@ const LiquidityProvider: React.FunctionComponent = () => {
     setPosition(findCurrentPosition(positions || [], selectedAMM, [3]));
   };
 
-  const handleSelectPosition = (selectedPosition: Position, mode: 'margin' | 'liquidity' | 'rollover'|'notional') => {
-    let newMode:MintBurnFormModes | undefined = undefined;
-    if(mode === 'margin') newMode = MintBurnFormModes.EDIT_MARGIN;
-    if(mode === 'liquidity') newMode = MintBurnFormModes.EDIT_LIQUIDITY;
-    if(mode === 'rollover') newMode = MintBurnFormModes.ROLLOVER;
+  const handleSelectPosition = (
+    selectedPosition: Position,
+    mode: 'margin' | 'liquidity' | 'rollover' | 'notional',
+  ) => {
+    let newMode: MintBurnFormModes | undefined = undefined;
+    if (mode === 'margin') newMode = MintBurnFormModes.EDIT_MARGIN;
+    if (mode === 'liquidity') newMode = MintBurnFormModes.EDIT_LIQUIDITY;
+    if (mode === 'rollover') newMode = MintBurnFormModes.ROLLOVER;
 
     setFormMode(newMode);
-    setAMM(mode === 'rollover' ? findCurrentAmm(amms || [], selectedPosition) : selectedPosition.amm as AugmentedAMM);
+    setAMM(
+      mode === 'rollover'
+        ? findCurrentAmm(amms || [], selectedPosition)
+        : (selectedPosition.amm as AugmentedAMM),
+    );
     setPosition(selectedPosition);
   };
 
   const handleCompletedSettling = () => {
-    setSettling(!settling)
-  }
+    setSettling(!settling);
+  };
 
   const handleReset = () => {
     setFormMode(undefined);
@@ -88,9 +102,9 @@ const LiquidityProvider: React.FunctionComponent = () => {
       {renderMode === 'pools' && (
         <Box sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
           <Box sx={{ marginBottom: (theme) => theme.spacing(12) }}>
-            <PageTitleDesc 
-              title='Provide Liquidity' 
-              desc='Choose a pool and provide liquidity within your chosen ranges.' 
+            <PageTitleDesc
+              title="Provide Liquidity"
+              desc="Choose a pool and provide liquidity within your chosen ranges."
             />
           </Box>
           <ConnectedAMMTable onSelectItem={handleSelectAmm} />
@@ -98,24 +112,28 @@ const LiquidityProvider: React.FunctionComponent = () => {
       )}
 
       {settling && renderMode === 'portfolio' && (
-        <PortfolioProvider positions={agent === Agents.LIQUIDITY_PROVIDER ? positionsByAgentGroup : undefined}>
-          <ConnectedPositionTable 
-          amm={amm}
-          onSelectItem={handleSelectPosition}
-          agent={Agents.LIQUIDITY_PROVIDER}
-          handleCompletedSettling={handleCompletedSettling}
-        />
+        <PortfolioProvider
+          positions={agent === Agents.LIQUIDITY_PROVIDER ? positionsByAgentGroup : undefined}
+        >
+          <ConnectedPositionTable
+            amm={amm}
+            onSelectItem={handleSelectPosition}
+            agent={Agents.LIQUIDITY_PROVIDER}
+            handleCompletedSettling={handleCompletedSettling}
+          />
         </PortfolioProvider>
       )}
 
       {!settling && renderMode === 'portfolio' && (
-        <PortfolioProvider positions={agent === Agents.LIQUIDITY_PROVIDER ? positionsByAgentGroup : undefined}>
-          <ConnectedPositionTable 
-          amm={amm}
-          onSelectItem={handleSelectPosition}
-          agent={Agents.LIQUIDITY_PROVIDER}
-          handleCompletedSettling={handleCompletedSettling}
-        />
+        <PortfolioProvider
+          positions={agent === Agents.LIQUIDITY_PROVIDER ? positionsByAgentGroup : undefined}
+        >
+          <ConnectedPositionTable
+            amm={amm}
+            onSelectItem={handleSelectPosition}
+            agent={Agents.LIQUIDITY_PROVIDER}
+            handleCompletedSettling={handleCompletedSettling}
+          />
         </PortfolioProvider>
       )}
 

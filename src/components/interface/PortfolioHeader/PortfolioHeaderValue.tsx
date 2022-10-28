@@ -9,17 +9,17 @@ export type PortfolioHeaderValueProps = {
   label: ReactNode;
 };
 
-const valueBoxLabelStyles: SystemStyleObject<Theme> = { 
-  fontSize: '12px', 
+const valueBoxLabelStyles: SystemStyleObject<Theme> = {
+  fontSize: '12px',
   lineHeight: '1.2',
   textTransform: 'uppercase',
   marginLeft: '2px',
-  whiteSpace: 'nowrap'
+  whiteSpace: 'nowrap',
 };
 
 const PortfolioHeaderValue = ({ children, hint, label }: PortfolioHeaderValueProps) => (
   <Box>
-    <Typography variant='body2' sx={valueBoxLabelStyles}>
+    <Typography variant="body2" sx={valueBoxLabelStyles}>
       {label}
     </Typography>
     {children}
@@ -27,5 +27,3 @@ const PortfolioHeaderValue = ({ children, hint, label }: PortfolioHeaderValuePro
 );
 
 export default PortfolioHeaderValue;
-
-  

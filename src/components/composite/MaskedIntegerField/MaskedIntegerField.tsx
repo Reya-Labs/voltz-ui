@@ -11,30 +11,33 @@ import { OverrideTypes } from '@utilities';
 import { Typography } from '@components/atomic';
 import { colors, inputStyles, SystemStyleObject, Theme } from '@theme';
 
-export type MaskedIntegerFieldProps = OverrideTypes<CurrencyInputProps, {
-  bottomText?: string;
-  dynamic?: boolean;
-  error?: InputBaseProps['error'],
-  errorText?: string;
-  label?: ReactNode,
-  labelRight?: ReactNode,
-  onChange?: (value: string | undefined) => void;
-  inputSize?: 'small' | 'medium' | 'large';
-  subtext?: string;
-  suffix: ReactNode;
-  suffixPadding?: number;
-}>;
+export type MaskedIntegerFieldProps = OverrideTypes<
+  CurrencyInputProps,
+  {
+    bottomText?: string;
+    dynamic?: boolean;
+    error?: InputBaseProps['error'];
+    errorText?: string;
+    label?: ReactNode;
+    labelRight?: ReactNode;
+    onChange?: (value: string | undefined) => void;
+    inputSize?: 'small' | 'medium' | 'large';
+    subtext?: string;
+    suffix: ReactNode;
+    suffixPadding?: number;
+  }
+>;
 
 const textStyles: SystemStyleObject<Theme> = {
   fontSize: '12px',
   lineHeight: '1.2',
-  textTransform: 'uppercase'
-}
+  textTransform: 'uppercase',
+};
 const errorLabelStyles: SystemStyleObject<Theme> = {
   ...textStyles,
   color: colors.wildStrawberry.base,
   marginTop: (theme) => theme.spacing(1),
-}
+};
 
 const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
   bottomText,
@@ -53,51 +56,66 @@ const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
   const inputId = useUniqueId();
 
   const handleChange = (val?: string) => {
-    if(onChange) onChange(val);
+    if (onChange) onChange(val);
   };
 
   return (
-    <FormControl variant="outlined" sx={{width: '100%'}}>
-      <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%'}}>
+    <FormControl variant="outlined" sx={{ width: '100%' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          width: '100%',
+        }}
+      >
         <>
-          {!isEmpty(label) 
-            ? (
-              <InputLabel shrink htmlFor={inputId} error={error} sx={{ 
-                color: (theme) => error ? `${theme.palette.error.base} !important` : undefined 
-              }}>
-                {label}
-              </InputLabel>
-            ) 
-            : <div/>
-          }
-          {!isEmpty(labelRight) 
-            ? (
-              <Typography variant='body2' sx={{ 
-                ...textStyles, 
-                color: colors.lavenderWeb.darken010, 
-                marginBottom: (theme) => theme.spacing(2)
-              }}>
-                {labelRight}
-              </Typography>
-            ) 
-            : <div/>
-          }
+          {!isEmpty(label) ? (
+            <InputLabel
+              shrink
+              htmlFor={inputId}
+              error={error}
+              sx={{
+                color: (theme) => (error ? `${theme.palette.error.base} !important` : undefined),
+              }}
+            >
+              {label}
+            </InputLabel>
+          ) : (
+            <div />
+          )}
+          {!isEmpty(labelRight) ? (
+            <Typography
+              variant="body2"
+              sx={{
+                ...textStyles,
+                color: colors.lavenderWeb.darken010,
+                marginBottom: (theme) => theme.spacing(2),
+              }}
+            >
+              {labelRight}
+            </Typography>
+          ) : (
+            <div />
+          )}
         </>
       </Box>
-      <Box sx={{
-        ...inputStyles({ 
-          disabled: props.disabled, 
-          error, 
-          inputSize, 
-          dynamic, 
-          subtext: !!subtext,
-          suffixPadding 
-        }),
-        width: '100%',
-        position: 'relative'
-      }}>
+      <Box
+        sx={{
+          ...inputStyles({
+            disabled: props.disabled,
+            error,
+            inputSize,
+            dynamic,
+            subtext: !!subtext,
+            suffixPadding,
+          }),
+          width: '100%',
+          position: 'relative',
+        }}
+      >
         <CurrencyInput
-          intlConfig={{locale: navigator.language}}
+          intlConfig={{ locale: navigator.language }}
           id={inputId}
           decimalsLimit={2}
           maxLength={9}
@@ -106,38 +124,40 @@ const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
           {...props}
         />
         {suffix && (
-          <Box 
-            className='suffix'
+          <Box
+            className="suffix"
             sx={{
-              position: 'absolute', 
-              right: (theme) => theme.spacing(4), 
+              position: 'absolute',
+              right: (theme) => theme.spacing(4),
               top: '50%',
               transform: 'translateY(-50%)',
               pointerEvents: 'none',
-            }}>
-              {suffix}
+            }}
+          >
+            {suffix}
           </Box>
         )}
         {subtext && (
-          <Box 
-          className='subtext'
-          sx={{
-            position: 'absolute', 
-            left: (theme) => theme.spacing(4),
-            top: '37px',
-            pointerEvents: 'none',
-          }}>
+          <Box
+            className="subtext"
+            sx={{
+              position: 'absolute',
+              left: (theme) => theme.spacing(4),
+              top: '37px',
+              pointerEvents: 'none',
+            }}
+          >
             {subtext}
-        </Box>
+          </Box>
         )}
       </Box>
       {bottomText && (
-        <Typography variant='body2' sx={textStyles}>
+        <Typography variant="body2" sx={textStyles}>
           {bottomText}
         </Typography>
       )}
       {error && errorText && (
-        <Typography variant='body2' sx={errorLabelStyles}>
+        <Typography variant="body2" sx={errorLabelStyles}>
           {errorText}
         </Typography>
       )}

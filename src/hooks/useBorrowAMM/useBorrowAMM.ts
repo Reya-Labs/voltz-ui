@@ -1,12 +1,12 @@
-import { useMemo } from "react";
-import { AugmentedBorrowAMM } from "@utilities";
-import { Position } from "@voltz-protocol/v1-sdk/dist/types/entities";
+import { useMemo } from 'react';
+import { AugmentedBorrowAMM } from '@utilities';
+import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
 
-import useAgent from "../useAgent";
-import useAsyncFunction, { UseAsyncFunctionResult } from "../useAsyncFunction";
-import { DateTime } from "luxon";
-import { BorrowSwapInfo } from "@voltz-protocol/v1-sdk/dist/types/entities/borrowAMM";
-import { SwapInfoPayload } from "../useAMM/types";
+import useAgent from '../useAgent';
+import useAsyncFunction, { UseAsyncFunctionResult } from '../useAsyncFunction';
+import { DateTime } from 'luxon';
+import { BorrowSwapInfo } from '@voltz-protocol/v1-sdk/dist/types/entities/borrowAMM';
+import { SwapInfoPayload } from '../useAMM/types';
 
 export type useBorrowAMMReturnType = {
   underlyingDebtInNativeTokens: UseAsyncFunctionResult<unknown, number | void>;
@@ -19,7 +19,7 @@ export type useBorrowAMMReturnType = {
   borrowSwapInfo: UseAsyncFunctionResult<unknown, BorrowSwapInfo | void>;
   fixedApr: UseAsyncFunctionResult<unknown, number | void>;
   endDate: DateTime | undefined;
-}
+};
 
 export const useBorrowAMM = (borrowAmm: AugmentedBorrowAMM) => {
   const { agent } = useAgent();
@@ -29,7 +29,7 @@ export const useBorrowAMM = (borrowAmm: AugmentedBorrowAMM) => {
       const result = await borrowAmm?.getUnderlyingBorrowBalance();
       return result;
     },
-    useMemo(() => undefined, [!!borrowAmm?.provider])
+    useMemo(() => undefined, [!!borrowAmm?.provider]),
   );
 
   const variableDebtInNativeTokens = useAsyncFunction(
@@ -42,7 +42,7 @@ export const useBorrowAMM = (borrowAmm: AugmentedBorrowAMM) => {
         return resultPos;
       }
     },
-    useMemo(() => undefined, [!!borrowAmm?.provider, borrowAmm.aaveVariableDebtToken])
+    useMemo(() => undefined, [!!borrowAmm?.provider, borrowAmm.aaveVariableDebtToken]),
   );
 
   const fixedDebtInNativeTokens = useAsyncFunction(
@@ -50,7 +50,7 @@ export const useBorrowAMM = (borrowAmm: AugmentedBorrowAMM) => {
       const result = await borrowAmm?.getFixedBorrowBalance(position);
       return result;
     },
-    useMemo(() => undefined, [!!borrowAmm?.provider])
+    useMemo(() => undefined, [!!borrowAmm?.provider]),
   );
 
   const underlyingDebtInUSD = useAsyncFunction(
@@ -58,7 +58,7 @@ export const useBorrowAMM = (borrowAmm: AugmentedBorrowAMM) => {
       const result = await borrowAmm?.getUnderlyingBorrowBalanceInUSD();
       return result;
     },
-    useMemo(() => undefined, [!!borrowAmm?.provider])
+    useMemo(() => undefined, [!!borrowAmm?.provider]),
   );
 
   const variableDebtInUSD = useAsyncFunction(
@@ -71,7 +71,7 @@ export const useBorrowAMM = (borrowAmm: AugmentedBorrowAMM) => {
         return resultPos;
       }
     },
-    useMemo(() => undefined, [!!borrowAmm?.provider, borrowAmm.aaveVariableDebtToken])
+    useMemo(() => undefined, [!!borrowAmm?.provider, borrowAmm.aaveVariableDebtToken]),
   );
 
   const fixedDebtInUSD = useAsyncFunction(
@@ -79,7 +79,7 @@ export const useBorrowAMM = (borrowAmm: AugmentedBorrowAMM) => {
       const result = await borrowAmm?.getFixedBorrowBalanceInUSD(position);
       return result;
     },
-    useMemo(() => undefined, [!!borrowAmm?.provider])
+    useMemo(() => undefined, [!!borrowAmm?.provider]),
   );
 
   const variableApy = useAsyncFunction(
@@ -97,18 +97,17 @@ export const useBorrowAMM = (borrowAmm: AugmentedBorrowAMM) => {
   const borrowSwapInfo = useAsyncFunction(
     async (args: SwapInfoPayload) => {
       if (borrowAmm) {
-        const info =
-          await borrowAmm.getBorrowInfo({
-            isFT: false,
-            fixedLow: 0.001,
-            fixedHigh: 990,
-            ...args
-          });
+        const info = await borrowAmm.getBorrowInfo({
+          isFT: false,
+          fixedLow: 0.001,
+          fixedHigh: 990,
+          ...args,
+        });
         return info;
       }
       return undefined;
     },
-    useMemo(() => undefined, [!!borrowAmm?.provider])
+    useMemo(() => undefined, [!!borrowAmm?.provider]),
   );
 
   const fixedApr = useAsyncFunction(
@@ -131,19 +130,20 @@ export const useBorrowAMM = (borrowAmm: AugmentedBorrowAMM) => {
     return undefined;
   }, [borrowAmm]);
 
-
-  return useMemo(() => ({
-    underlyingDebtInNativeTokens,
-    variableDebtInNativeTokens,
-    fixedDebtInNativeTokens,
-    underlyingDebtInUSD,
-    variableDebtInUSD,
-    fixedDebtInUSD,
-    borrowSwapInfo,
-    variableApy,
-    fixedApr,
-    endDate
-  } as useBorrowAMMReturnType),
+  return useMemo(
+    () =>
+      ({
+        underlyingDebtInNativeTokens,
+        variableDebtInNativeTokens,
+        fixedDebtInNativeTokens,
+        underlyingDebtInUSD,
+        variableDebtInUSD,
+        fixedDebtInUSD,
+        borrowSwapInfo,
+        variableApy,
+        fixedApr,
+        endDate,
+      } as useBorrowAMMReturnType),
     [
       underlyingDebtInNativeTokens,
       variableDebtInNativeTokens,
@@ -154,8 +154,9 @@ export const useBorrowAMM = (borrowAmm: AugmentedBorrowAMM) => {
       borrowSwapInfo,
       variableApy,
       fixedApr,
-      endDate
-    ]);
-}
+      endDate,
+    ],
+  );
+};
 
 export default useBorrowAMM;

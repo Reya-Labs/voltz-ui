@@ -21,31 +21,30 @@ export type AMMTableRowProps = {
   onSelect: () => void;
 };
 
-
 // todo: panel component, adjust the styling
 const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, onSelect }) => {
   const wallet = useWallet();
   const { agent } = useAgent();
   const variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'main';
-  const {amm} = useAMMContext()
+  const { amm } = useAMMContext();
 
   const { variableApy, fixedApr } = useAMMsContext();
-  const { result: resultFixedApr, loading : loadingFixedApr, call: callFixedApr } = fixedApr(amm);
+  const { result: resultFixedApr, loading: loadingFixedApr, call: callFixedApr } = fixedApr(amm);
   const { result: resultVarApy, loading: loadingVarApy, call: callVarApy } = variableApy(amm);
-  
+
   useEffect(() => {
-      callVarApy();
+    callVarApy();
   }, [callVarApy]);
 
   useEffect(() => {
-      callFixedApr();
+    callFixedApr();
   }, [callFixedApr]);
 
   // add object to sx prop
   // todo:
-  // 
+  //
   // const anotherObject = {
-  //   margin: ... 
+  //   margin: ...
   // }
 
   const typeStyleOverrides = (): SystemStyleObject<Theme> => {
@@ -59,20 +58,19 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
       case 'main':
         return {
           backgroundColor: `secondary.darken040`, // this affects the colour of the Pool table rows
-          borderRadius: 2
+          borderRadius: 2,
         };
 
       case 'darker':
         return {
           backgroundColor: `secondary.darken045`,
-          borderRadius: 2
+          borderRadius: 2,
         };
 
       default:
         return {};
     }
   };
-
 
   const handleClick = () => {
     if (isNull(wallet.account)) {
@@ -83,15 +81,15 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
   };
 
   return (
-      // todo: <TableRow key={index} sx={{...anotherObject,  ...typeStyleOverrides() }}>
-      <TableRow key={index} sx={{...typeStyleOverrides() }}>
+    // todo: <TableRow key={index} sx={{...anotherObject,  ...typeStyleOverrides() }}>
+    <TableRow key={index} sx={{ ...typeStyleOverrides() }}>
       {labels.map(([field, label]) => {
         if (field === 'variableApy') {
-          return <VariableAPY variableApy={isNumber(resultVarApy) ? resultVarApy : undefined}/>;
+          return <VariableAPY variableApy={isNumber(resultVarApy) ? resultVarApy : undefined} />;
         }
 
         if (field === 'fixedApr') {
-          return <FixedAPR fixedApr={isNumber(resultFixedApr) ? resultFixedApr : undefined}/>;
+          return <FixedAPR fixedApr={isNumber(resultFixedApr) ? resultFixedApr : undefined} />;
         }
 
         const renderDisplay = () => {
@@ -105,21 +103,32 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
             );
           }
 
-          return (<PoolField agent={agent} protocol={datum.protocol} isBorrowing={datum.isBorrowing}/>);
+          return (
+            <PoolField agent={agent} protocol={datum.protocol} isBorrowing={datum.isBorrowing} />
+          );
         };
 
         return <TableCell key={field}>{renderDisplay()}</TableCell>;
       })}
       <TableCell align="center">
-        <Button variant="contained" onClick={handleClick} id={getRowButtonId(agent === Agents.LIQUIDITY_PROVIDER, datum.protocol, datum.isBorrowing)} sx={{
-          paddingTop: (theme) => theme.spacing(3),
-          paddingBottom: (theme) => theme.spacing(3),
-          paddingLeft: (theme) => theme.spacing(4),
-          paddingRight: (theme) => theme.spacing(4),
-          fontSize: 18,
-          lineHeight: 1,
-          boxShadow: 'none',
-        }}>
+        <Button
+          variant="contained"
+          onClick={handleClick}
+          id={getRowButtonId(
+            agent === Agents.LIQUIDITY_PROVIDER,
+            datum.protocol,
+            datum.isBorrowing,
+          )}
+          sx={{
+            paddingTop: (theme) => theme.spacing(3),
+            paddingBottom: (theme) => theme.spacing(3),
+            paddingLeft: (theme) => theme.spacing(4),
+            paddingRight: (theme) => theme.spacing(4),
+            fontSize: 18,
+            lineHeight: 1,
+            boxShadow: 'none',
+          }}
+        >
           {agent === Agents.LIQUIDITY_PROVIDER ? 'PROVIDE LIQUIDITY' : 'TRADE'}
         </Button>
       </TableCell>

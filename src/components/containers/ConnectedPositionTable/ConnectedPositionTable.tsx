@@ -132,13 +132,16 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
 
     let netWithdraw = undefined;
     if (agent === Agents.LIQUIDITY_PROVIDER) {
-      netWithdraw = (typeof spData?.fees === "number" && typeof spData?.settlementCashflow === "number")
-         ? spData?.margin + spData?.settlementCashflow 
-         : undefined;
+      netWithdraw =
+        typeof spData?.fees === 'number' && typeof spData?.settlementCashflow === 'number'
+          ? spData?.margin + spData?.settlementCashflow
+          : undefined;
     } else {
-      netWithdraw = (typeof spData?.settlementCashflow === "number") ? spData?.margin + spData?.settlementCashflow : undefined;
+      netWithdraw =
+        typeof spData?.settlementCashflow === 'number'
+          ? spData?.margin + spData?.settlementCashflow
+          : undefined;
     }
-     
 
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -149,7 +152,11 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
           isSettle={true}
           transactionId={positionToSettle.txId}
           onComplete={handleTransactionFinished}
-          notional={agent === Agents.LIQUIDITY_PROVIDER ? Math.abs(positionToSettle.position.notional) : Math.abs(positionToSettle.position.effectiveVariableTokenBalance)}
+          notional={
+            agent === Agents.LIQUIDITY_PROVIDER
+              ? Math.abs(positionToSettle.position.notional)
+              : Math.abs(positionToSettle.position.effectiveVariableTokenBalance)
+          }
           margin={netWithdraw}
           onBack={handleTransactionFinished}
         />

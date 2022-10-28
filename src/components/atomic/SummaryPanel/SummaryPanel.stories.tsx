@@ -22,15 +22,15 @@ Basic.args = {
   rows: [
     {
       label: 'NOTIONAL AVAILABLE:',
-      value: '50030.77 USDC'
+      value: '50030.77 USDC',
     },
     {
       label: 'AVERAGE FIXED RATE:',
-      value: '44.53 %'
+      value: '44.53 %',
     },
     {
       label: 'FEES:',
-      value: '20 USDC'
+      value: '20 USDC',
     },
-  ]
+  ],
 };

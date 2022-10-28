@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 
-const useDebounceFunc = (func: Function, duration: number = 300): () =>  void => {
+const useDebounceFunc = (func: Function, duration: number = 300): (() => void) => {
   const timeoutRef = useRef<number>();
 
   const trigger = useCallback(() => {

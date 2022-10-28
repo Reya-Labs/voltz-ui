@@ -13,7 +13,9 @@ export default {
   },
 } as ComponentMeta<typeof DebouncedIntegerField>;
 
-const Template: ComponentStory<typeof DebouncedIntegerField> = (args) => <DebouncedIntegerField {...args} />;
+const Template: ComponentStory<typeof DebouncedIntegerField> = (args) => (
+  <DebouncedIntegerField {...args} />
+);
 
 export const Basic = Template.bind({});
 Basic.args = {};

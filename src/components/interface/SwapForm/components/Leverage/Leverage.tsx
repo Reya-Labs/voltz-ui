@@ -32,7 +32,8 @@ const Leverage = ({
   resetDeltaState,
 }: LeverageProps) => {
   const delay = 1000;
-  const hint = 'Choose the amount of leverage you wish to trade with from the options on the right or set your own leverage by typing it in the box below.';
+  const hint =
+    'Choose the amount of leverage you wish to trade with from the options on the right or set your own leverage by typing it in the box below.';
   const margin = isNumber(minMargin) ? Math.max(minMargin, 0.0001) : undefined;
 
   const [internalValue, setInternalValue] = useState<number | undefined>(value);
@@ -83,26 +84,26 @@ const Leverage = ({
           value={notFormatted(inputValue)}
         />
       </Box>
-      <Box
-        sx={leverageBoxStyle}
-      >
-        {LEVERAGE_OPTIONS.map(opt => {
+      <Box sx={leverageBoxStyle}>
+        {LEVERAGE_OPTIONS.map((opt) => {
           return (
             <Button
               key={opt}
-              variant={"contained"}
-              size ="small"
+              variant={'contained'}
+              size="small"
               color="secondary"
               sx={opt === activeOption ? activeButtonStyle : buttonStyle}
-              onClick={() => { onChange(opt); setActiveOption(opt) }}
+              onClick={() => {
+                onChange(opt);
+                setActiveOption(opt);
+              }}
             >
-              { `${opt}x` }
+              {`${opt}x`}
             </Button>
-          )
-        }) 
-          } 
-      
-        <Box/>
+          );
+        })}
+
+        <Box />
       </Box>
     </Box>
   );

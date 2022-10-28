@@ -29,26 +29,22 @@ function* settlePositionSaga(action: SettlePositionAction) {
 
   let result: ContractReceipt | void;
   try {
-    if (source.includes("FCM")) {
+    if (source.includes('FCM')) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      result = yield call([amm, "settleFCMTrader"]);
-    }
-    else {
+      result = yield call([amm, 'settleFCMTrader']);
+    } else {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      result = yield call(
-        [amm, "settlePosition"], {
+      result = yield call([amm, 'settlePosition'], {
         fixedLow: fixedLow,
         fixedHigh: fixedHigh,
-      }
-      );
+      });
     }
-
   } catch (error) {
     yield put(
       actions.updateTransaction({
         id,
         failedAt: DateTime.now().toISO(),
-        failureMessage: getErrorMessage(error)
+        failureMessage: getErrorMessage(error),
       }),
     );
 
@@ -61,7 +57,11 @@ function* settlePositionSaga(action: SettlePositionAction) {
     );
   } else {
     yield put(
-      actions.updateTransaction({ id, succeededAt: DateTime.now().toISO(), txid: result.transactionHash }),
+      actions.updateTransaction({
+        id,
+        succeededAt: DateTime.now().toISO(),
+        txid: result.transactionHash,
+      }),
     );
   }
 }

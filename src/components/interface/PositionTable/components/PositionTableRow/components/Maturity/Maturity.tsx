@@ -7,16 +7,16 @@ import { Box } from '@mui/material';
 
 type MaturityProps = {
   position: Position;
-}
+};
 
 const Maturity = ({ position }: MaturityProps) => {
   return (
     <MaturityInformation
-      label='Maturity'
+      label="Maturity"
       startDate={position.amm.startDateTime}
       endDate={position.amm.endDateTime}
     />
-  ); 
-}
+  );
+};
 
 export default Maturity;

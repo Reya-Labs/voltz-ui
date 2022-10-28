@@ -24,12 +24,12 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
   onChangeAgent,
   onChangePartialCollateralization,
 }) => {
-
   const initAgent = useRef<Agents>(agent);
 
   const { position } = usePositionContext();
-  if ( position ) {
-    initAgent.current = position.effectiveVariableTokenBalance > 0 ? Agents.VARIABLE_TRADER : Agents.FIXED_TRADER;
+  if (position) {
+    initAgent.current =
+      position.effectiveVariableTokenBalance > 0 ? Agents.VARIABLE_TRADER : Agents.FIXED_TRADER;
   }
 
   if (!agent || agent === Agents.LIQUIDITY_PROVIDER) {
@@ -42,8 +42,10 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
   };
 
   const editOptionTitles = {
-    [initAgent.current === Agents.FIXED_TRADER ? Agents.FIXED_TRADER : Agents.VARIABLE_TRADER ]: "ADD",
-    [initAgent.current === Agents.FIXED_TRADER ? Agents.VARIABLE_TRADER : Agents.FIXED_TRADER ] : "REMOVE",
+    [initAgent.current === Agents.FIXED_TRADER ? Agents.FIXED_TRADER : Agents.VARIABLE_TRADER]:
+      'ADD',
+    [initAgent.current === Agents.FIXED_TRADER ? Agents.VARIABLE_TRADER : Agents.FIXED_TRADER]:
+      'REMOVE',
   };
 
   const agentOptionTitles = isEdit ? editOptionTitles : newTradeOptionTitles;
@@ -76,7 +78,13 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
       }}
     >
       <ToggleButtonGroup
-        label={<IconLabel label="rates" icon="information-circle" info="Choose between taking a fixed or variable position." />}
+        label={
+          <IconLabel
+            label="rates"
+            icon="information-circle"
+            info="Choose between taking a fixed or variable position."
+          />
+        }
         options={Object.values(agentOptionTitles)}
         option={agentOptionTitles[agent]}
         defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
@@ -84,10 +92,24 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
         agent={agent}
         disabled={!partialCollateralizationValue}
       />
-      {(agent === Agents.FIXED_TRADER && isFCMAvailable) && (
+      {agent === Agents.FIXED_TRADER && isFCMAvailable && (
         <ToggleButtonGroup
           label={
-            <IconLabel label="TRADE WITH LEVERAGE" icon="information-circle" info={<>Trading with leverage means you need to deposit less margin to cover your position. However, it also means you may be at more risk of getting liquidated if the market moves against you.<br/><br/> As a Fixed Taker you can also fully collateralise your position by depositing the underlying of the pool (e.g. aUSDC). This means you won’t be at risk of getting liquidated. Click No to enable this.</>} />
+            <IconLabel
+              label="TRADE WITH LEVERAGE"
+              icon="information-circle"
+              info={
+                <>
+                  Trading with leverage means you need to deposit less margin to cover your
+                  position. However, it also means you may be at more risk of getting liquidated if
+                  the market moves against you.
+                  <br />
+                  <br /> As a Fixed Taker you can also fully collateralise your position by
+                  depositing the underlying of the pool (e.g. aUSDC). This means you won’t be at
+                  risk of getting liquidated. Click No to enable this.
+                </>
+              }
+            />
           }
           options={Object.values(partialCollateralizationOptionTitles)}
           option={
