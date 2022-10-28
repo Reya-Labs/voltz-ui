@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { routes } from '@routes';
 import { actions, selectors } from '@store';
-import { useAgent, useDispatch, useSelector } from '@hooks';
+import { useAgent, useDispatch, useSelector, useWallet } from '@hooks';
 import {
   SwapCurrentPosition,
   SwapForm,
@@ -37,6 +37,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
   const { agent } = useAgent();
   const { amm: targetAmm } = useAMMContext();
   const { amm: positionAmm } = usePositionContext();
+  const { account } = useWallet();
   const dispatch = useDispatch();
   const form = useSwapFormContext();
   const navigate = useNavigate();
@@ -102,7 +103,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
   };
 
   const handleGoBack = () => {
-    setPageTitle(`${position ? 'Edit' : 'New'} Trader Position`);
+    setPageTitle(`${position ? 'Edit' : 'New'} Trader Position`, account);
     const action = actions.closeTransaction(transactionId as string);
     dispatch(action);
   };

@@ -12,7 +12,7 @@ import {
   PositionProvider,
   PortfolioProvider,
 } from '@contexts';
-import { useAgent, useAMMs, usePositions } from '@hooks';
+import { useAgent, useAMMs, usePositions, useWallet } from '@hooks';
 
 import { Page } from '@components/interface';
 import { PageTitleDesc } from '@components/composite';
@@ -31,6 +31,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
   const { onChangeAgent, agent } = useAgent();
   const { pathname, key } = useLocation();
   const { positions, positionsByAgentGroup } = usePositions();
+  const { account } = useWallet();
 
   const pathnameWithoutPrefix = pathname.slice(1);
   const renderMode = getRenderMode(formMode, pathnameWithoutPrefix);
@@ -49,15 +50,15 @@ const LiquidityProvider: React.FunctionComponent = () => {
   useEffect(() => {
     switch (renderMode) {
       case 'pools': {
-        setPageTitle('Liquidity Provider Pools');
+        setPageTitle('Liquidity Provider Pools', account);
         break;
       }
       case 'portfolio': {
-        setPageTitle('Liquidity Provider Portfolio');
+        setPageTitle('Liquidity Provider Portfolio', account);
         break;
       }
       case 'form': {
-        setPageTitle(`${position ? 'Edit' : 'New'} Liquidity Provider Position`);
+        setPageTitle(`${position ? 'Edit' : 'New'} Liquidity Provider Position`, account);
         break;
       }
     }

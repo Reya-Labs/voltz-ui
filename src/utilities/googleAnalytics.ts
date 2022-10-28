@@ -10,11 +10,6 @@ import isBorrowing from './isBorrowing';
 import { v4 as uuidv4 } from 'uuid';
 
 const SESSION_ID = uuidv4();
-let USER_ADDRESS = '';
-
-export const saveUserAddress = (address: string) => {
-  USER_ADDRESS = address;
-};
 
 export const getPoolButtonId = (
   marginAction: string,
@@ -91,9 +86,9 @@ type DataLayerEventName =
   | 'failed_tx'
   | 'successful_tx';
 
-export const pushEvent = (payload: DataLayerEventPayload) => {
+export const pushEvent = (userAddress: string, payload: DataLayerEventPayload) => {
   if (!window.dataLayer) {
     return;
   }
-  window.dataLayer.push({ sessionId: SESSION_ID, userAddress: USER_ADDRESS, ...payload });
+  window.dataLayer.push({ sessionId: SESSION_ID, userAddress: userAddress, ...payload });
 };
