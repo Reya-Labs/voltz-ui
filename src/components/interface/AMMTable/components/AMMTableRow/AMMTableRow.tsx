@@ -23,7 +23,7 @@ export type AMMTableRowProps = {
 
 // todo: panel component, adjust the styling
 const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, onSelect }) => {
-  // here we pass AMM object that this row represents
+  // here we can pass AMM object that this row represents
 
   const wallet = useWallet();
   const { agent } = useAgent();
@@ -43,13 +43,6 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
     callFixedApr();
   }, [callFixedApr]);
   // remove above
-
-  // add object to sx prop
-  // todo:
-  //
-  // const anotherObject = {
-  //   margin: ...
-  // }
 
   const typeStyleOverrides = (): SystemStyleObject<Theme> => {
     if (!variant) {
