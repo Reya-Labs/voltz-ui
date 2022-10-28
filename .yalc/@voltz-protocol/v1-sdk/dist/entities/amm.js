@@ -54,6 +54,7 @@ var lodash_1 = require("lodash");
 var getExpectedApy_1 = require("../services/getExpectedApy");
 var getAccruedCashflow_1 = require("../services/getAccruedCashflow");
 var axios_1 = __importDefault(require("axios"));
+var getTokenInfo_1 = require("../services/getTokenInfo");
 var geckoEthToUsd = function () { return __awaiter(void 0, void 0, void 0, function () {
     var attempt, data, error_1;
     return __generator(this, function (_a) {
@@ -2009,36 +2010,7 @@ var AMM = /** @class */ (function () {
         // protocol name
         get: function () {
             var tokenName = this.underlyingToken.name;
-            var prefix;
-            switch (this.rateOracle.protocolId) {
-                case 1: {
-                    prefix = "a";
-                    break;
-                }
-                case 2: {
-                    prefix = "c";
-                    break;
-                }
-                case 3: {
-                    prefix = "st";
-                    break;
-                }
-                case 4: {
-                    prefix = "r";
-                    break;
-                }
-                case 5: {
-                    prefix = "a";
-                    break;
-                }
-                case 6: {
-                    prefix = "c";
-                    break;
-                }
-                default: {
-                    throw new Error("Unrecognized protocol");
-                }
-            }
+            var prefix = (0, getTokenInfo_1.getProtocolPrefix)(this.rateOracle.protocolId);
             return "".concat(prefix).concat(tokenName);
         },
         enumerable: false,

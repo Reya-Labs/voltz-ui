@@ -1,7 +1,15 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import TagManager from 'react-gtm-module';
 
-import { routes, TradingLeague, Profile, LiquidityProvider, Trader, FixedBorrower } from '@routes';
+import {
+  routes,
+  TradingLeague,
+  Profile,
+  LiquidityProvider,
+  Trader,
+  FixedBorrower,
+  Ecosystem,
+} from '@routes';
 import { AlphaBanner, GweiBar } from '@components/composite';
 import Box from '@mui/material/Box';
 import { useEffect } from 'react';
@@ -31,6 +39,9 @@ const App = () => {
           )}
           {process.env.REACT_APP_COMMUNITY && process.env.REACT_APP_COMMUNITY !== `UNPROVIDED` && (
             <Route path={routes.TRADING_LEAGUE} element={<TradingLeague />} />
+          )}
+          {process.env.REACT_APP_ECOSYSTEM && process.env.REACT_APP_ECOSYSTEM !== `UNPROVIDED` && (
+            <Route path={routes.ECOSYSTEM} element={<Ecosystem />} />
           )}
         </Route>
       </Routes>

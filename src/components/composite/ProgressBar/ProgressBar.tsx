@@ -5,6 +5,7 @@ import { colors } from '@theme';
 
 type ProgressBarProps = {
   leftContent?: ReactNode;
+  middleContent?: ReactNode;
   rightContent?: ReactNode;
   percentageComplete?: number;
   isMaturity?: boolean;
@@ -12,6 +13,7 @@ type ProgressBarProps = {
 
 export const ProgressBar = ({
   leftContent,
+  middleContent,
   rightContent,
   percentageComplete = 0,
   isMaturity,
@@ -34,6 +36,9 @@ export const ProgressBar = ({
           <Box sx={{ display: 'flex', alignContent: 'center' }}>{leftContent}</Box>
         </Typography>
       )}
+      <Typography variant="h6" sx={{ marginLeft: (theme) => theme.spacing(5) }}>
+        {middleContent}
+      </Typography>
       <Typography variant="h6" sx={{ marginLeft: (theme) => theme.spacing(5) }}>
         {rightContent}
       </Typography>

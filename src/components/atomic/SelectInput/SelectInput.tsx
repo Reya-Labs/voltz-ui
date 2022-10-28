@@ -25,7 +25,6 @@ export const SelectInputBase = ({
     error: props.error,
     inputSize: props.size,
     suffixPadding: 0,
-    subtext: false,
   });
 
   return (
