@@ -76,7 +76,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   }, [isRollover, isSettle, isEditingMargin]);
 
   useEffect(() => {
-    setPageTitle('Pending Transaction');
+    setPageTitle('Pending Transaction', account);
     const payload: DataLayerEventPayload = {
       event: 'tx_submitted',
       eventValue: {
@@ -89,7 +89,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
       pool: getAmmProtocol(amm),
       agent: isSettle ? getAgentFromPosition(position) : agent,
     };
-    pushEvent(payload);
+    pushEvent(account ?? '', payload);
   }, []);
 
   useEffect(() => {
@@ -105,7 +105,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
 
   useEffect(() => {
     if (activeTransaction?.failedAt) {
-      setPageTitle('Failed Transaction');
+      setPageTitle('Failed Transaction', account);
       const payload: DataLayerEventPayload = {
         event: 'failed_tx',
         eventValue: {
@@ -119,7 +119,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
         pool: getAmmProtocol(amm),
         agent: isSettle ? getAgentFromPosition(position) : agent,
       };
-      pushEvent(payload);
+      pushEvent(account ?? '', payload);
     }
   }, [activeTransaction?.failedAt]);
 
@@ -144,7 +144,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
 
   useEffect(() => {
     if ((activeTransaction?.succeededAt || activeTransaction?.resolvedAt) && isFetched) {
-      setPageTitle('Successful Transaction');
+      setPageTitle('Successful Transaction', account);
       const payload: DataLayerEventPayload = {
         event: 'successful_tx',
         eventValue: {
@@ -157,7 +157,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
         pool: getAmmProtocol(amm),
         agent: isSettle ? getAgentFromPosition(position) : agent,
       };
-      pushEvent(payload);
+      pushEvent(account ?? '', payload);
     }
   }, [(activeTransaction?.succeededAt || activeTransaction?.resolvedAt) && isFetched]);
 

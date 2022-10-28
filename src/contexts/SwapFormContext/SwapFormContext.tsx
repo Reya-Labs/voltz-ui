@@ -12,7 +12,14 @@ import {
 } from '@utilities';
 import { debounce, isNumber, isUndefined } from 'lodash';
 import { hasEnoughTokens, hasEnoughUnderlyingTokens, lessThan } from '@utilities';
-import { GetInfoType, useAgent, useBalance, useMinRequiredMargin, useTokenApproval } from '@hooks';
+import {
+  GetInfoType,
+  useAgent,
+  useBalance,
+  useMinRequiredMargin,
+  useTokenApproval,
+  useWallet,
+} from '@hooks';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import * as s from './services';
 import { BigNumber } from 'ethers';
@@ -119,6 +126,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
 }) => {
   const { amm: poolAmm } = useAMMContext();
   const { amm: positionAmm, position } = usePositionContext();
+  const { account } = useWallet();
 
   const defaultLeverage = defaultValues.leverage ?? 100;
   const defaultMargin = defaultValues.margin ?? undefined;
@@ -795,7 +803,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       pool: getAmmProtocol(poolAmm),
       agent: agent,
     };
-    pushEvent(payload);
+    pushEvent(account ?? '', payload);
   }, [swapInfo.loading, swapInfo.result]);
 
   const leverageChange = useCallback(
@@ -806,7 +814,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
         pool: getAmmProtocol(poolAmm),
         agent: _agent,
       };
-      pushEvent(payload);
+      pushEvent(account ?? '', payload);
     }, 1000),
     [],
   );
@@ -819,7 +827,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
         pool: getAmmProtocol(poolAmm),
         agent: _agent,
       };
-      pushEvent(payload);
+      pushEvent(account ?? '', payload);
     }, 1000),
     [],
   );

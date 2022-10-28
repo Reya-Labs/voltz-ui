@@ -6,10 +6,12 @@ import { setPageTitle } from '@utilities';
 
 import { Page } from '@components/interface';
 import ConnectedRankingTable from '../../components/containers/ConnectedRankingTable/ConnectedRankingTable';
+import { useWallet } from '@hooks';
 
 const TradingLeague: React.FunctionComponent = () => {
+  const { account } = useWallet();
   useEffect(() => {
-    setPageTitle('Trading League');
+    setPageTitle('Trading League', account);
   }, []);
 
   return (
