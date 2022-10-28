@@ -11,6 +11,9 @@ install-ci:
 test:
 	yarn test
 
+eslint-check:
+	yarn lint:check
+
 prettier-check: 
 	yarn prettier:check
 
