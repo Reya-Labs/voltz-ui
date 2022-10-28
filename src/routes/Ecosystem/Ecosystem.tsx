@@ -13,7 +13,7 @@ import { useWallet } from '@hooks';
 export enum EcosystemRenderMode {
   MELLOW_DEPOSIT_FORM,
   PAGE,
-};
+}
 
 const Ecosystem: React.FunctionComponent = () => {
   const wallet = useWallet();
@@ -28,7 +28,7 @@ const Ecosystem: React.FunctionComponent = () => {
       setRenderMode(EcosystemRenderMode.MELLOW_DEPOSIT_FORM);
       setCurrentVault(selectedVault);
     }
-  }
+  };
 
   const handleReset = () => {
     setRenderMode(EcosystemRenderMode.PAGE);
@@ -44,7 +44,7 @@ const Ecosystem: React.FunctionComponent = () => {
   }, [setCurrentVault]);
 
   useEffect(() => {
-    switch(renderMode) {
+    switch (renderMode) {
       case EcosystemRenderMode.MELLOW_DEPOSIT_FORM: {
         setPageTitle('Deposit Form');
         break;
@@ -56,23 +56,40 @@ const Ecosystem: React.FunctionComponent = () => {
     }
   }, [setPageTitle, renderMode]);
 
-    return (
-        <Page>
-          {renderMode === EcosystemRenderMode.PAGE && 
-          (<Box sx={{ height: '100%', display: 'flex', justifyContent: 'center', backdropFilter: "blur(8px)" }}>
-            <ConnectedMellowLPTable agent={Agents.LIQUIDITY_PROVIDER} onSelectItem={handleSelectMellowLpVault}/>
-          </Box>)
-          }
+  return (
+    <Page>
+      {renderMode === EcosystemRenderMode.PAGE && (
+        <Box
+          sx={{
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            backdropFilter: 'blur(8px)',
+          }}
+        >
+          <ConnectedMellowLPTable
+            agent={Agents.LIQUIDITY_PROVIDER}
+            onSelectItem={handleSelectMellowLpVault}
+          />
+        </Box>
+      )}
 
-{renderMode === EcosystemRenderMode.MELLOW_DEPOSIT_FORM && 
-          (<Box sx={{ height: '100%', display: 'flex', justifyContent: 'center', backdropFilter: "blur(8px)" }}>
-            {currentVault && (
-              <ConnectedMellowLpDepositForm onReset = {handleReset} vault={currentVault} />)
-            }
-          </Box>)
-          }
-        </Page>
-    )
-}
+      {renderMode === EcosystemRenderMode.MELLOW_DEPOSIT_FORM && (
+        <Box
+          sx={{
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            backdropFilter: 'blur(8px)',
+          }}
+        >
+          {currentVault && (
+            <ConnectedMellowLpDepositForm onReset={handleReset} vault={currentVault} />
+          )}
+        </Box>
+      )}
+    </Page>
+  );
+};
 
 export default Ecosystem;

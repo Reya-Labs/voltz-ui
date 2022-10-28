@@ -80,7 +80,7 @@ const Nav: React.FunctionComponent = () => (
 
     {process.env.REACT_APP_ECOSYSTEM && process.env.REACT_APP_ECOSYSTEM !== `UNPROVIDED` && (
       <NavLink link={`/${routes.ECOSYSTEM}`}>Ecosystem</NavLink>
-    )}  
+    )}
   </Box>
 );
 
