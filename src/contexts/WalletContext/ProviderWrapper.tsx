@@ -10,7 +10,7 @@ import { selectors } from '@store';
 import { useSelector } from '@hooks';
 import { WalletName, WalletStatus } from './types';
 import WalletContext from './WalletContext';
-import { getErrorMessage } from '@utilities';
+import { getErrorMessage, saveUserAddress } from '@utilities';
 import * as services from './services';
 
 export type ProviderWrapperProps = {
@@ -91,6 +91,7 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
           setBalance({});
           setStatus('connected');
           setWalletError(null);
+          saveUserAddress(walletAddress);
         } else {
           setStatus('notConnected');
         }
