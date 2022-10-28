@@ -47,14 +47,8 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId); // contains a failureMessage attribute that will contain whatever came out from the sdk
 
   const { variableApy, fixedApr } = useAMMsContext();
-  const {
-    result: resultFixedApr,
-    call: callFixedApr,
-  } = fixedApr(targetAmm);
-  const {
-    result: resultVariableApy,
-    call: callVariableApy,
-  } = variableApy(targetAmm);
+  const { result: resultFixedApr, call: callFixedApr } = fixedApr(targetAmm);
+  const { result: resultVariableApy, call: callVariableApy } = variableApy(targetAmm);
 
   useEffect(() => {
     callFixedApr();

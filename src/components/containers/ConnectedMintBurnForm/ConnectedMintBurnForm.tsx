@@ -42,14 +42,8 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
 
   const { fixedApr, variableApy } = useAMMsContext();
-  const {
-    result: resultFixedApr,
-    call: callFixedApr,
-  } = fixedApr(targetAmm);
-  const {
-    result: resultVariableApy,
-    call: callVariableApy,
-  } = variableApy(targetAmm);
+  const { result: resultFixedApr, call: callFixedApr } = fixedApr(targetAmm);
+  const { result: resultVariableApy, call: callVariableApy } = variableApy(targetAmm);
 
   useEffect(() => {
     callFixedApr();

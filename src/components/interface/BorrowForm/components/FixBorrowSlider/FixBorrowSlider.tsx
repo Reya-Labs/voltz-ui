@@ -48,7 +48,7 @@ const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
   errorText,
 }) => {
   const [sliderValue, setSliderValue] = useState<number | undefined>(undefined);
-  
+
   const handleChangeCommitted = (
     event: React.SyntheticEvent | Event,
     newValue: number | number[],

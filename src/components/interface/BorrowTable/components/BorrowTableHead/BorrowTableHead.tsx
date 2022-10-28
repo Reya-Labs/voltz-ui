@@ -6,10 +6,7 @@ import { SystemStyleObject, Theme } from '@mui/system';
 import { Typography } from '@components/atomic';
 
 import { data } from '@utilities';
-import {
-  VariableBorrowTableFields,
-  FixedBorrowTableFields,
-} from '../../types';
+import { VariableBorrowTableFields, FixedBorrowTableFields } from '../../types';
 
 export type BorrowTableHeadProps = {
   order: data.TableOrder;

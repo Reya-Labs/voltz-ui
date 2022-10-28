@@ -37,10 +37,7 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
 
   const { fixedApr, variableApy } = useAMMContext();
   const { result: resultFixedApr, call: callFixedApr } = fixedApr;
-  const {
-    result: resultVariableApy,
-    call: callVariableApy,
-  } = variableApy;
+  const { result: resultVariableApy, call: callVariableApy } = variableApy;
 
   useEffect(() => {
     callFixedApr();
