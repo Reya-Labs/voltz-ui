@@ -1,7 +1,6 @@
 import React from 'react';
-import { Icon } from '@components/atomic';
-import Skeleton from '@mui/material/Skeleton';
 import { BadgeVariant } from '@graphql';
+import { Skeleton, Icon } from './Badge.styled';
 
 export type BadgeProps = {
   variant: BadgeVariant | 'noClaimedBadges';
@@ -10,24 +9,7 @@ export type BadgeProps = {
 
 export const Badge: React.FunctionComponent<BadgeProps> = ({ loading, variant }) => {
   if (loading) {
-    return (
-      <Skeleton
-        variant="circular"
-        sx={{
-          width: '168px',
-          height: '168px',
-        }}
-      />
-    );
+    return <Skeleton data-testid="Badge-Skeleton" variant="circular" />;
   }
-  return (
-    <Icon
-      sx={{
-        width: '168px',
-        height: '168px',
-      }}
-      data-testid={`Badge-${variant}`}
-      name={variant}
-    />
-  );
+  return <Icon data-testid={`Badge-${variant}`} name={variant} />;
 };

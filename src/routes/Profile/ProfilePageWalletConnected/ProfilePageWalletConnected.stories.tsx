@@ -2,7 +2,7 @@ import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { ProfilePageWalletConnected } from './ProfilePageWalletConnected';
-import { collectionBadges } from '../mocks';
+import { collectionBadges } from './ProfilePageWalletConnected.mocks';
 
 export default {
   title: 'Interface/ProfilePageWalletConnected',

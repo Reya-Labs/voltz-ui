@@ -1,12 +1,17 @@
-import { colors } from '@theme';
 import React from 'react';
-import Box from '@mui/material/Box';
-import { Typography } from '@components/atomic';
 import { Badge } from '../Badge/Badge';
 import { BadgePill } from '../BadgePill/BadgePill';
 import { BADGE_VARIANT_DESCRIPTION_COPY_MAP, BADGE_VARIANT_TITLE_COPY_MAP } from '../helpers';
-import Skeleton from '@mui/material/Skeleton';
 import { BadgeVariant } from '@graphql';
+import {
+  BadgeBox,
+  BadgePillBox,
+  Container,
+  DescriptionSkeleton,
+  DescriptionTypography,
+  TitleSkeleton,
+  TitleTypography,
+} from './BadgeCard.styled';
 
 export type BadgeCardProps = {
   variant: BadgeVariant;
@@ -15,63 +20,27 @@ export type BadgeCardProps = {
 
 export const BadgeCard: React.FunctionComponent<BadgeCardProps> = ({ loading, variant }) => {
   return (
-    <Box
-      data-testid="BadgeCard"
-      sx={{
-        backgroundColor: '#19152A',
-        borderRadius: '4px',
-        padding: (theme) => theme.spacing(4),
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      <Box
-        sx={{
-          marginBottom: (theme) => theme.spacing(6),
-        }}
-      >
+    <Container data-testid="BadgeCard">
+      <BadgePillBox>
         <BadgePill loading={loading} variant={variant} />
-      </Box>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          marginBottom: (theme) => theme.spacing(6),
-        }}
-      >
+      </BadgePillBox>
+      <BadgeBox>
         <Badge loading={loading} variant={variant} />
-      </Box>
+      </BadgeBox>
       {loading ? (
-        <Skeleton variant="text" sx={{ fontSize: '18px', lineHeight: '24px' }} />
+        <TitleSkeleton variant="text" />
       ) : (
-        <Typography
-          variant="body2"
-          sx={{
-            color: colors.lavenderWeb.base,
-            fontSize: '18px',
-            lineHeight: '24px',
-            fontWeight: 700,
-            marginBottom: (theme) => theme.spacing(2),
-          }}
-        >
+        <TitleTypography variant="body2">
           {BADGE_VARIANT_TITLE_COPY_MAP[variant].toUpperCase()}
-        </Typography>
+        </TitleTypography>
       )}
       {loading ? (
-        <Skeleton variant="text" sx={{ fontSize: '12px', lineHeight: '18px' }} />
+        <DescriptionSkeleton variant="text" />
       ) : (
-        <Typography
-          variant="body2"
-          sx={{
-            color: colors.lavenderWeb.base,
-            fontSize: '12px',
-            lineHeight: '18px',
-            fontWeight: 400,
-          }}
-        >
+        <DescriptionTypography variant="body2">
           {BADGE_VARIANT_DESCRIPTION_COPY_MAP[variant]}
-        </Typography>
+        </DescriptionTypography>
       )}
-    </Box>
+    </Container>
   );
 };
