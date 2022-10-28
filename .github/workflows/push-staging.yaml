@@ -19,6 +19,8 @@ jobs:
           node-version: 'lts/*'
       - name: Install dependencies
         run: make install-ci
+      - name: Run prettier check
+        run: make prettier-check
       - name: Run tests
         run: make test
       - name: Configure amplify

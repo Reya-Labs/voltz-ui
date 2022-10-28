@@ -11,6 +11,9 @@ install-ci:
 test:
 	yarn test
 
+prettier-check: 
+	yarn prettier:check
+
 build:
 	yarn build
 

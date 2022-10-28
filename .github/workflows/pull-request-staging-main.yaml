@@ -1,12 +1,12 @@
-name: Open pull request to staging or main branches
+name: Open pull request to main or develop branches
 on:
   pull_request:
     branches:
       - main
-      - staging
+      - develop
 jobs:
-  staging-main-pr:
-    name: Staging or main pull request
+  pr-check:
+    name: Develop or main pull request
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -20,5 +20,7 @@ jobs:
           node-version: 'lts/*'
       - name: Install dependencies
         run: make install-ci
+      - name: Run prettier check
+        run: make prettier-check
       - name: Run tests
-        run: make test
+        run: make test 
