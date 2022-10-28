@@ -15,7 +15,6 @@ import { useAgent } from '@hooks';
 import { Agents } from '@contexts';
 import { DateTime } from 'luxon';
 
-
 export type AMMTableProps = {
   amms: AugmentedAMM[];
   order: data.TableOrder;
@@ -60,7 +59,7 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({
       },
     },
     '.MuiInputLabel-root': {
-      marginBottom: (theme) => theme.spacing(1)
+      marginBottom: (theme) => theme.spacing(1),
     },
   };
   const handleSort = (field: AMMTableFields) => {
@@ -78,7 +77,12 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({
   const _variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'dark';
 
   return (
-    <Panel variant={_variant} borderRadius='large' padding='container' sx={{ paddingTop: 0, paddingBottom: 0 }}>
+    <Panel
+      variant={_variant}
+      borderRadius="large"
+      padding="container"
+      sx={{ paddingTop: 0, paddingBottom: 0 }}
+    >
       <TableContainer>
         <Table
           sx={{
@@ -93,11 +97,13 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({
           <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
             {tableData.map((datum, index) => {
               if (DateTime.now() < datum.endDate) {
-                return <AMMProvider amm={amms[index]}>
-                  <AMMTableRow datum={datum} index={index} onSelect={handleSelectRow(index)} />
-                </AMMProvider>
+                return (
+                  <AMMProvider amm={amms[index]}>
+                    <AMMTableRow datum={datum} index={index} onSelect={handleSelectRow(index)} />
+                  </AMMProvider>
+                );
               }
-          })}
+            })}
           </TableBody>
           <AMMTableFooter
             columns={labels.length + 1}

@@ -35,7 +35,6 @@ function* mintSaga(action: MintAction) {
       notional,
       margin,
     });
-
   } catch (error) {
     yield put(
       actions.updateTransaction({
@@ -54,7 +53,11 @@ function* mintSaga(action: MintAction) {
     );
   } else {
     yield put(
-      actions.updateTransaction({ id, succeededAt: DateTime.now().toISO(), txid: result.transactionHash }),
+      actions.updateTransaction({
+        id,
+        succeededAt: DateTime.now().toISO(),
+        txid: result.transactionHash,
+      }),
     );
   }
 }

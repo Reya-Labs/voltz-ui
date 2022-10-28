@@ -1,31 +1,37 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument */
 
 import JSBI from 'jsbi';
-import { GetWalletQuery } from '@graphql'
-import { Position, Token, RateOracle, FCMSwap, FCMUnwind, FCMSettlement } from '@voltz-protocol/v1-sdk';
+import { GetWalletQuery } from '@graphql';
+import {
+  Position,
+  Token,
+  RateOracle,
+  FCMSwap,
+  FCMUnwind,
+  FCMSettlement,
+} from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 import { AugmentedAMM } from '@utilities';
 import { Wallet } from '@contexts';
 
-type FCMPositionQueryData = NonNullable<GetWalletQuery['wallet']>["fcmPositions"][number];
+type FCMPositionQueryData = NonNullable<GetWalletQuery['wallet']>['fcmPositions'][number];
 
 /**
  * Takes the data received for an FCM position from GetWalletQuery and returns a Position class instance
  * @param positionData - The data for an FCM position received from the GetWalletQuery graphql query
  * @param signer - The wallet signer
  */
-export const FCMPositionFactory = (positionData: FCMPositionQueryData, signer: Wallet['signer']): Position => {
+export const FCMPositionFactory = (
+  positionData: FCMPositionQueryData,
+  signer: Wallet['signer'],
+): Position => {
   const {
     id: positionId,
     createdTimestamp: positionCreatedTimestamp,
     amm: {
       id: ammId,
-      fcm: {
-        id: fcmAddress
-      },
-      marginEngine: {
-        id: marginEngineAddress
-      },
+      fcm: { id: fcmAddress },
+      marginEngine: { id: marginEngineAddress },
       rateOracle: {
         id: rateOracleAddress,
         protocolId,
@@ -50,7 +56,7 @@ export const FCMPositionFactory = (positionData: FCMPositionQueryData, signer: W
     marginInScaledYieldBearingTokens,
     fcmSwaps,
     fcmUnwinds,
-    fcmSettlements
+    fcmSettlements,
   } = positionData;
 
   return new Position({
@@ -64,9 +70,7 @@ export const FCMPositionFactory = (positionData: FCMPositionQueryData, signer: W
     amm: new AugmentedAMM({
       id: ammId,
       signer,
-      provider: providers.getDefaultProvider(
-        process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK,
-      ),
+      provider: providers.getDefaultProvider(process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK),
       environment: process.env.REACT_APP_DECODING_TAG || 'KOVAN',
       rateOracle: new RateOracle({
         id: rateOracleAddress,
@@ -77,7 +81,7 @@ export const FCMPositionFactory = (positionData: FCMPositionQueryData, signer: W
         name: tokenName,
         decimals: decimals as number,
       }),
-      factoryAddress: process.env.REACT_APP_FACTORY_ADDRESS || "0x",
+      factoryAddress: process.env.REACT_APP_FACTORY_ADDRESS || '0x',
       marginEngineAddress,
       fcmAddress,
       updatedTimestamp: JSBI.BigInt(ammUpdatedTimestamp),
@@ -90,40 +94,49 @@ export const FCMPositionFactory = (positionData: FCMPositionQueryData, signer: W
       totalLiquidity: totalLiquidity as JSBI,
     }),
     marginInScaledYieldBearingTokens: JSBI.BigInt(marginInScaledYieldBearingTokens),
-    fcmSwaps: fcmSwaps.map((args) => new FCMSwap({
-      id: args.id,
-      transactionId: args.transaction.id,
-      transactionTimestamp: JSBI.BigInt(args.transaction.createdTimestamp),
-      ammId,
-      fcmPositionId: positionId,
-      desiredNotional: JSBI.BigInt(args.desiredNotional),
-      sqrtPriceLimitX96: JSBI.BigInt(args.sqrtPriceLimitX96),
-      cumulativeFeeIncurred: JSBI.BigInt(args.cumulativeFeeIncurred),
-      fixedTokenDelta: JSBI.BigInt(args.fixedTokenDelta),
-      variableTokenDelta: JSBI.BigInt(args.variableTokenDelta),
-      fixedTokenDeltaUnbalanced: JSBI.BigInt(args.fixedTokenDeltaUnbalanced)
-    })),
-    fcmUnwinds: fcmUnwinds.map((args) => new FCMUnwind({
-      id: args.id,
-      transactionId: args.transaction.id,
-      transactionTimestamp: JSBI.BigInt(args.transaction.createdTimestamp),
-      ammId,
-      fcmPositionId: positionId,
-      desiredNotional: JSBI.BigInt(args.desiredNotional),
-      sqrtPriceLimitX96: JSBI.BigInt(args.sqrtPriceLimitX96),
-      cumulativeFeeIncurred: JSBI.BigInt(args.cumulativeFeeIncurred),
-      fixedTokenDelta: JSBI.BigInt(args.fixedTokenDelta),
-      variableTokenDelta: JSBI.BigInt(args.variableTokenDelta),
-      fixedTokenDeltaUnbalanced: JSBI.BigInt(args.fixedTokenDeltaUnbalanced)
-    })),
-    fcmSettlements: fcmSettlements.map((args) => new FCMSettlement({
-      id: args.id,
-      transactionId: args.transaction.id,
-      transactionTimestamp: JSBI.BigInt(args.transaction.createdTimestamp),
-      ammId,
-      fcmPositionId: positionId,
-      settlementCashflow: JSBI.BigInt(args.settlementCashflow)
-    })),
+    fcmSwaps: fcmSwaps.map(
+      (args) =>
+        new FCMSwap({
+          id: args.id,
+          transactionId: args.transaction.id,
+          transactionTimestamp: JSBI.BigInt(args.transaction.createdTimestamp),
+          ammId,
+          fcmPositionId: positionId,
+          desiredNotional: JSBI.BigInt(args.desiredNotional),
+          sqrtPriceLimitX96: JSBI.BigInt(args.sqrtPriceLimitX96),
+          cumulativeFeeIncurred: JSBI.BigInt(args.cumulativeFeeIncurred),
+          fixedTokenDelta: JSBI.BigInt(args.fixedTokenDelta),
+          variableTokenDelta: JSBI.BigInt(args.variableTokenDelta),
+          fixedTokenDeltaUnbalanced: JSBI.BigInt(args.fixedTokenDeltaUnbalanced),
+        }),
+    ),
+    fcmUnwinds: fcmUnwinds.map(
+      (args) =>
+        new FCMUnwind({
+          id: args.id,
+          transactionId: args.transaction.id,
+          transactionTimestamp: JSBI.BigInt(args.transaction.createdTimestamp),
+          ammId,
+          fcmPositionId: positionId,
+          desiredNotional: JSBI.BigInt(args.desiredNotional),
+          sqrtPriceLimitX96: JSBI.BigInt(args.sqrtPriceLimitX96),
+          cumulativeFeeIncurred: JSBI.BigInt(args.cumulativeFeeIncurred),
+          fixedTokenDelta: JSBI.BigInt(args.fixedTokenDelta),
+          variableTokenDelta: JSBI.BigInt(args.variableTokenDelta),
+          fixedTokenDeltaUnbalanced: JSBI.BigInt(args.fixedTokenDeltaUnbalanced),
+        }),
+    ),
+    fcmSettlements: fcmSettlements.map(
+      (args) =>
+        new FCMSettlement({
+          id: args.id,
+          transactionId: args.transaction.id,
+          transactionTimestamp: JSBI.BigInt(args.transaction.createdTimestamp),
+          ammId,
+          fcmPositionId: positionId,
+          settlementCashflow: JSBI.BigInt(args.settlementCashflow),
+        }),
+    ),
     swaps: [],
     mints: [],
     burns: [],
@@ -136,7 +149,7 @@ export const FCMPositionFactory = (positionData: FCMPositionQueryData, signer: W
     tickLower: 0,
     tickUpper: 0,
     margin: JSBI.BigInt(0),
-    source: "FCM",
+    source: 'FCM',
     totalNotionalTraded: positionTotalNotionalTraded as JSBI,
     sumOfWeightedFixedRate: sumOfWeightedFixedRate as JSBI,
   });

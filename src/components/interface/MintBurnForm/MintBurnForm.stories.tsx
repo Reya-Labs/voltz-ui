@@ -1,7 +1,16 @@
 import React from 'react';
 import { DateTime, Duration } from 'luxon';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { AgentProvider, Agents, MintBurnFormModes, MintBurnFormProvider, MintBurnFormHintStates, MintBurnFormSubmitButtonStates, useMintBurnForm, AMMProvider } from '@contexts';
+import {
+  AgentProvider,
+  Agents,
+  MintBurnFormModes,
+  MintBurnFormProvider,
+  MintBurnFormHintStates,
+  MintBurnFormSubmitButtonStates,
+  useMintBurnForm,
+  AMMProvider,
+} from '@contexts';
 import MintBurnForm from './MintBurnForm';
 import { useTokenApproval } from '@hooks';
 import { AugmentedAMM } from '@utilities';
@@ -9,22 +18,22 @@ import { AugmentedAMM } from '@utilities';
 export default {
   title: 'Interface/MintBurnForm',
   component: MintBurnForm,
-  argTypes: { 
-    onSubmit: { action: 'clicked' } 
+  argTypes: {
+    onSubmit: { action: 'clicked' },
   },
 } as ComponentMeta<typeof MintBurnForm>;
 
-const mockAmm = ({
+const mockAmm = {
   getCapPercentage: () => Promise.resolve(),
   getFixedApr: () => Promise.resolve(),
   getInstantApy: () => Promise.resolve(),
-  isUnderlyingTokenApprovedForPeriphery: () =>  true,
-  hasEnoughUnderlyingTokens: () =>  true,
+  isUnderlyingTokenApprovedForPeriphery: () => true,
+  hasEnoughUnderlyingTokens: () => true,
   underlyingToken: {
     id: '0x123456789',
-    name: 'gil'
-  }
-} as unknown) as AugmentedAMM;
+    name: 'gil',
+  },
+} as unknown as AugmentedAMM;
 
 const mockTokenApprovals = {
   approving: false,
@@ -36,8 +45,8 @@ const mockTokenApprovals = {
   FCMApproved: true,
   underlyingTokenApprovedForFCM: true,
   underlyingTokenApprovedForPeriphery: true,
-  yieldBearingTokenApprovedForFCM: true
-} as ReturnType<typeof useTokenApproval>
+  yieldBearingTokenApprovedForFCM: true,
+} as ReturnType<typeof useTokenApproval>;
 
 // Creating a new position
 const NewPositionTemplate: ComponentStory<typeof MintBurnForm> = (args) => (
@@ -51,12 +60,11 @@ const NewPositionTemplate: ComponentStory<typeof MintBurnForm> = (args) => (
 );
 const NewPositionMintBurnForm: React.FunctionComponent = (args) => {
   const balance = 100000;
-  const minRequiredMargin = 100;
   const form = useMintBurnForm();
 
   return (
-    <MintBurnForm 
-      {...args} 
+    <MintBurnForm
+      {...args}
       balance={balance}
       errors={form.errors}
       formState={form.state}
@@ -69,7 +77,7 @@ const NewPositionMintBurnForm: React.FunctionComponent = (args) => {
       onChangeFixedHigh={form.setFixedHigh}
       onChangeLiquidityAction={form.setLiquidityAction}
       onChangeMargin={form.setMargin}
-      onChangeMarginAction={form.setMarginAction} 
+      onChangeMarginAction={form.setMarginAction}
       onChangeNotional={form.setNotional}
       onSubmit={() => form.validate()}
       submitButtonState={MintBurnFormSubmitButtonStates.ADD_LIQUIDITY}
@@ -90,7 +98,10 @@ NewPosition.args = {
 const EditingMarginTemplate: ComponentStory<typeof MintBurnForm> = (args) => (
   <AgentProvider defaultAgent={Agents.LIQUIDITY_PROVIDER}>
     <AMMProvider amm={mockAmm}>
-      <MintBurnFormProvider mode={MintBurnFormModes.EDIT_MARGIN} defaultValues={{ fixedLow: 2, fixedHigh: 6 }}>
+      <MintBurnFormProvider
+        mode={MintBurnFormModes.EDIT_MARGIN}
+        defaultValues={{ fixedLow: 2, fixedHigh: 6 }}
+      >
         <EditingMarginMintBurnForm {...args} />
       </MintBurnFormProvider>
     </AMMProvider>
@@ -98,15 +109,14 @@ const EditingMarginTemplate: ComponentStory<typeof MintBurnForm> = (args) => (
 );
 const EditingMarginMintBurnForm: React.FunctionComponent = (args) => {
   const balance = 100000;
-  const minRequiredMargin = 100;
   const form = useMintBurnForm();
 
   return (
-    <MintBurnForm 
-      {...args} 
+    <MintBurnForm
+      {...args}
       balance={balance}
       errors={form.errors}
-      formState={form.state} 
+      formState={form.state}
       hintState={MintBurnFormHintStates.READY_TO_TRADE}
       isFormValid={form.isValid}
       isTradeVierified={true}
@@ -116,7 +126,7 @@ const EditingMarginMintBurnForm: React.FunctionComponent = (args) => {
       onChangeFixedHigh={form.setFixedHigh}
       onChangeLiquidityAction={form.setLiquidityAction}
       onChangeMargin={form.setMargin}
-      onChangeMarginAction={form.setMarginAction} 
+      onChangeMarginAction={form.setMarginAction}
       onChangeNotional={form.setNotional}
       onSubmit={() => form.validate()}
       submitButtonState={MintBurnFormSubmitButtonStates.DEPOSIT_MARGIN}
@@ -137,7 +147,10 @@ EditingMargin.args = {
 const EditingLiquidityTemplate: ComponentStory<typeof MintBurnForm> = (args) => (
   <AgentProvider defaultAgent={Agents.LIQUIDITY_PROVIDER}>
     <AMMProvider amm={mockAmm}>
-      <MintBurnFormProvider mode={MintBurnFormModes.EDIT_LIQUIDITY} defaultValues={{ fixedLow: 2, fixedHigh: 6 }}>
+      <MintBurnFormProvider
+        mode={MintBurnFormModes.EDIT_LIQUIDITY}
+        defaultValues={{ fixedLow: 2, fixedHigh: 6 }}
+      >
         <EditingLiquidityMintBurnForm {...args} />
       </MintBurnFormProvider>
     </AMMProvider>
@@ -145,15 +158,14 @@ const EditingLiquidityTemplate: ComponentStory<typeof MintBurnForm> = (args) => 
 );
 const EditingLiquidityMintBurnForm: React.FunctionComponent = (args) => {
   const balance = 100000;
-  const minRequiredMargin = 100;
   const form = useMintBurnForm();
 
   return (
-    <MintBurnForm 
-      {...args} 
+    <MintBurnForm
+      {...args}
       balance={balance}
       errors={form.errors}
-      formState={form.state} 
+      formState={form.state}
       hintState={MintBurnFormHintStates.READY_TO_TRADE}
       isFormValid={form.isValid}
       isTradeVierified={true}
@@ -163,7 +175,7 @@ const EditingLiquidityMintBurnForm: React.FunctionComponent = (args) => {
       onChangeFixedHigh={form.setFixedHigh}
       onChangeLiquidityAction={form.setLiquidityAction}
       onChangeMargin={form.setMargin}
-      onChangeMarginAction={form.setMarginAction} 
+      onChangeMarginAction={form.setMarginAction}
       onChangeNotional={form.setNotional}
       onSubmit={() => form.validate()}
       submitButtonState={MintBurnFormSubmitButtonStates.ADD_LIQUIDITY}

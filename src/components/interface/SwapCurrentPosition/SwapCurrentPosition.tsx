@@ -7,7 +7,7 @@ import { FormPanel, SwapFormModes } from '@components/interface';
 import { formatCurrency } from '@utilities';
 import { BigNumber } from 'ethers';
 import { usePositionContext } from '@contexts';
-import { colors }  from '@theme';
+import { colors } from '@theme';
 import { isUndefined } from 'lodash';
 
 export type SwapCurrentPositionProps = {
@@ -89,17 +89,22 @@ const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionProps> = (
   if (formMode === SwapFormModes.ROLLOVER) {
     rows.push({
       label: 'CASHFLOW',
-      value: !isUndefined(settlementCashflow)
-        ? `${formatCurrency(settlementCashflow)} ${underlyingTokenName}`
-        : <Ellipsis />,
-      highlight: true
+      value: !isUndefined(settlementCashflow) ? (
+        `${formatCurrency(settlementCashflow)} ${underlyingTokenName}`
+      ) : (
+        <Ellipsis />
+      ),
+      highlight: true,
     });
 
     rows.push({
       label: 'NET BALANCE',
-      value: positionInfo?.result && !isUndefined(settlementCashflow)
-        ? `${formatCurrency(settlementCashflow + margin)} ${underlyingTokenName}`
-        : <Ellipsis />,
+      value:
+        positionInfo?.result && !isUndefined(settlementCashflow) ? (
+          `${formatCurrency(settlementCashflow + margin)} ${underlyingTokenName}`
+        ) : (
+          <Ellipsis />
+        ),
       highlight: true,
       bold: true,
     });

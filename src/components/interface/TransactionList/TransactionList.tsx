@@ -11,12 +11,12 @@ interface TransactionListProps {
 }
 
 const listStyles: SystemStyleObject<Theme> = {
-  width: '100%', 
+  width: '100%',
   padding: (theme) => `0 ${theme.spacing(4)}`,
   background: colors.lavenderWeb.darken040,
   boxSizing: 'border-box',
   borderRadius: `8px`,
-}
+};
 
 const TransactionList = ({ position }: TransactionListProps) => {
   const transactions = sortTransactions(getTransactions(position));
@@ -25,22 +25,22 @@ const TransactionList = ({ position }: TransactionListProps) => {
 
   const handleOpenClose = useCallback(() => {
     setOpen(!open);
-  }, [open, setOpen])
+  }, [open, setOpen]);
 
   return (
     <List sx={listStyles} id={id}>
       {(open ? transactions : [transactions[0]]).map((tx, i) => (
-        <TransactionListItem 
-          key={tx.id} 
+        <TransactionListItem
+          key={tx.id}
           listId={id}
-          position={position} 
-          transaction={tx} 
-          onOpenClose={i === 0 ? handleOpenClose : undefined} 
+          position={position}
+          transaction={tx}
+          onOpenClose={i === 0 ? handleOpenClose : undefined}
           open={open}
         />
       ))}
     </List>
-  )
-}
+  );
+};
 
 export default TransactionList;

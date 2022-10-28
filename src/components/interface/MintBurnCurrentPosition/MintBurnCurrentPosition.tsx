@@ -2,7 +2,7 @@ import React from 'react';
 import Box from '@mui/material/Box';
 // import { SystemStyleObject, Theme } from '@theme';
 import { Position } from '@voltz-protocol/v1-sdk';
-import { Button, Ellipsis, Loading, PositionBadge, SummaryPanel } from '@components/atomic';
+import { Button, Ellipsis, PositionBadge, SummaryPanel } from '@components/atomic';
 import { FormPanel } from '@components/interface';
 import { formatCurrency, formatNumber } from '@utilities';
 import { BigNumber } from 'ethers';
@@ -97,25 +97,28 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
   if (formMode === MintBurnFormModes.ROLLOVER) {
     rows.push({
       label: 'CASHFLOW',
-      value: !isUndefined(cashflow)
-        ? `${formatCurrency(cashflow)} ${underlyingTokenName}`
-        : <Ellipsis />,
-      highlight: true
+      value: !isUndefined(cashflow) ? (
+        `${formatCurrency(cashflow)} ${underlyingTokenName}`
+      ) : (
+        <Ellipsis />
+      ),
+      highlight: true,
     });
 
     rows.push({
       label: 'FEES',
-      value: !isUndefined(fees)
-        ? `${formatCurrency(fees)} ${underlyingTokenName}`
-        : <Ellipsis />,
-      highlight: true
+      value: !isUndefined(fees) ? `${formatCurrency(fees)} ${underlyingTokenName}` : <Ellipsis />,
+      highlight: true,
     });
 
     rows.push({
       label: 'NET BALANCE',
-      value: !isUndefined(cashflow) && !isUndefined(fees)
-        ? `${formatCurrency(cashflow + margin + fees)} ${underlyingTokenName}`
-        : <Ellipsis />,
+      value:
+        !isUndefined(cashflow) && !isUndefined(fees) ? (
+          `${formatCurrency(cashflow + margin + fees)} ${underlyingTokenName}`
+        ) : (
+          <Ellipsis />
+        ),
       highlight: true,
       bold: true,
     });

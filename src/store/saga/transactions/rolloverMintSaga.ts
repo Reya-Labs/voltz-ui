@@ -22,14 +22,24 @@ function* rolloverMintSaga(action: RolloverMintAction) {
     return;
   }
 
-  const { id, fixedLow, fixedHigh, notional, margin, marginEth, newMarginEngine, oldFixedHigh, oldFixedLow } = action.payload.transaction;
+  const {
+    id,
+    fixedLow,
+    fixedHigh,
+    notional,
+    margin,
+    marginEth,
+    newMarginEngine,
+    oldFixedHigh,
+    oldFixedLow,
+  } = action.payload.transaction;
   if (!fixedLow || !fixedHigh) {
     return;
   }
 
   let result: ContractReceipt | void;
   try {
-    const args:AMMRolloverWithMintArgs = {
+    const args: AMMRolloverWithMintArgs = {
       fixedLow,
       fixedHigh,
       notional,
@@ -37,15 +47,14 @@ function* rolloverMintSaga(action: RolloverMintAction) {
       marginEth,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/unbound-method
       owner: yield call([signer, 'getAddress']),
-      newMarginEngine, 
+      newMarginEngine,
       oldFixedLow: oldFixedLow,
       oldFixedHigh: oldFixedHigh,
-      validationOnly: !!process.env.REACT_APP_ROLLOVER_VALIDATE_ONLY
+      validationOnly: !!process.env.REACT_APP_ROLLOVER_VALIDATE_ONLY,
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     result = yield call([amm, 'rolloverWithMint'], args);
-
   } catch (error) {
     yield put(
       actions.updateTransaction({
@@ -64,7 +73,11 @@ function* rolloverMintSaga(action: RolloverMintAction) {
     );
   } else {
     yield put(
-      actions.updateTransaction({ id, succeededAt: DateTime.now().toISO(), txid: result.transactionHash }),
+      actions.updateTransaction({
+        id,
+        succeededAt: DateTime.now().toISO(),
+        txid: result.transactionHash,
+      }),
     );
   }
 }

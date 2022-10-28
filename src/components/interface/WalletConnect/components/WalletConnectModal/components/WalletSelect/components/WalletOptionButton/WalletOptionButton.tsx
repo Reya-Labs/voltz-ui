@@ -26,8 +26,8 @@ const WalletOptionButton: React.FunctionComponent<WalletOptionButtonProps> = ({
       marginTop: (theme) => theme.spacing(4),
 
       '&:first-of-type': {
-        marginTop: '0'
-      }
+        marginTop: '0',
+      },
     }}
     selected={selected}
   >
@@ -35,7 +35,7 @@ const WalletOptionButton: React.FunctionComponent<WalletOptionButtonProps> = ({
       {selected && '• '}
       {title}
     </Typography>
-    {icon && <Icon name={icon} sx={{width: 22}} />}
+    {icon && <Icon name={icon} sx={{ width: 22 }} />}
   </Button>
 );
 

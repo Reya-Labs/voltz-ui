@@ -16,18 +16,20 @@ const TokenAndText: React.FunctionComponent<TokenAndTextProps> = ({
   textLabel,
 }) => {
   return (
-    <Box sx={{
-      display: 'flex',
-      justifyContent: 'flex-start',
-      marginBottom: (theme) => theme.spacing(6),
-      ' > div': {
-        width: 'auto',
-        marginRight: (theme) => theme.spacing(8),
-        '&:last-child': {
-          marginRight: '0',
-        }
-      }
-    }}>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'flex-start',
+        marginBottom: (theme) => theme.spacing(6),
+        ' > div': {
+          width: 'auto',
+          marginRight: (theme) => theme.spacing(8),
+          '&:last-child': {
+            marginRight: '0',
+          },
+        },
+      }}
+    >
       <Typography label={tokenLabel} variant="h3">
         {token}
       </Typography>

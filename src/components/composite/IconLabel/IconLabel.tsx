@@ -12,10 +12,16 @@ export type IconLabelProps = {
   icon: Icons;
   info?: ReactNode;
   removeIcon?: boolean;
-  iconSx?: SystemStyleObject<Theme>
+  iconSx?: SystemStyleObject<Theme>;
 };
 
-const IconLabel: React.FunctionComponent<IconLabelProps> = ({ label, icon, info, removeIcon, iconSx = {} }) => {
+const IconLabel: React.FunctionComponent<IconLabelProps> = ({
+  label,
+  icon,
+  info,
+  removeIcon,
+  iconSx = {},
+}) => {
   const [anchor, setAnchor] = useState<SVGElement | null>(null);
   const handlePopoverOpen = (event: React.MouseEvent<SVGElement>) => {
     setAnchor(event.currentTarget);
@@ -25,22 +31,30 @@ const IconLabel: React.FunctionComponent<IconLabelProps> = ({ label, icon, info,
   };
   const open = !isNull(anchor);
 
-  let _display = "inline";
-  
+  let _display = 'inline';
+
   if (removeIcon) {
-    _display = "none";
+    _display = 'none';
   }
-  
+
   return (
     <>
-      {typeof label === "string" ? upperCase(label) : label}
+      {typeof label === 'string' ? upperCase(label) : label}
       <Icon
         name={icon}
         aria-owns={open ? 'mouse-over-popover' : undefined}
         aria-haspopup="true"
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}
-        sx={{ height: 10, width: 10, position: 'relative', top: 1, marginLeft: '10px', display: _display, ...iconSx }}
+        sx={{
+          height: 10,
+          width: 10,
+          position: 'relative',
+          top: 1,
+          marginLeft: '10px',
+          display: _display,
+          ...iconSx,
+        }}
       />
       {info && (
         <Popover
@@ -70,12 +84,17 @@ const IconLabel: React.FunctionComponent<IconLabelProps> = ({ label, icon, info,
           disableRestoreFocus
         >
           <Panel variant="iconLabel">
-            <Typography variant="caption" sx={{
-              fontFamily: "DM Sans",
-              fontStyle: "normal",
-              fontSize: 12,
-              lineHeight: "150%",
-            }}>{info}</Typography>
+            <Typography
+              variant="caption"
+              sx={{
+                fontFamily: 'DM Sans',
+                fontStyle: 'normal',
+                fontSize: 12,
+                lineHeight: '150%',
+              }}
+            >
+              {info}
+            </Typography>
           </Panel>
           <Box
             sx={{

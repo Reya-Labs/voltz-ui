@@ -33,12 +33,8 @@ const useAMMs = (): UseAMMsResult => {
       let ammsData = data.amms.map(
         ({
           id: ammId,
-          fcm: {
-            id: fcmAddress
-          },
-          marginEngine: {
-            id: marginEngineAddress
-          },
+          fcm: { id: fcmAddress },
+          marginEngine: { id: marginEngineAddress },
           rateOracle: {
             id: rateOracleAddress,
             protocolId,
@@ -57,9 +53,7 @@ const useAMMs = (): UseAMMsResult => {
             refetch: handleRefetch,
             id: ammId,
             signer,
-            provider: providers.getDefaultProvider(
-              process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK,
-            ),
+            provider: providers.getDefaultProvider(process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK),
             environment: process.env.REACT_APP_DECODING_TAG || 'NO_ENV',
             rateOracle: new RateOracle({
               id: rateOracleAddress,
@@ -70,7 +64,7 @@ const useAMMs = (): UseAMMsResult => {
               name: tokenName,
               decimals: decimals as number,
             }),
-            factoryAddress: process.env.REACT_APP_FACTORY_ADDRESS || "0x",
+            factoryAddress: process.env.REACT_APP_FACTORY_ADDRESS || '0x',
             marginEngineAddress,
             fcmAddress,
             updatedTimestamp: ammUpdatedTimestamp as JSBI,
@@ -84,18 +78,26 @@ const useAMMs = (): UseAMMsResult => {
           }),
       );
       if (!process.env.REACT_APP_WHITELIST || process.env.REACT_APP_WHITELIST === `UNPROVIDED`) {
-          return ammsData;
+        return ammsData;
       } else {
-        if (pathname !== "/trader-pools" && pathname !== "/portfolio" && process.env.REACT_APP_LP_ONLY_WHITELIST) {
-          const whitelist = process.env.REACT_APP_LP_ONLY_WHITELIST.split(',').map(s => s.trim().toLowerCase());
+        if (
+          pathname !== '/trader-pools' &&
+          pathname !== '/portfolio' &&
+          process.env.REACT_APP_LP_ONLY_WHITELIST
+        ) {
+          const whitelist = process.env.REACT_APP_LP_ONLY_WHITELIST.split(',').map((s) =>
+            s.trim().toLowerCase(),
+          );
           ammsData = ammsData?.filter((amm) => whitelist.includes(amm.id.toLowerCase()));
           return ammsData;
-        } 
+        }
         if (process.env.REACT_APP_WHITELIST) {
-          const whitelist = process.env.REACT_APP_WHITELIST.split(',').map(s => s.trim().toLowerCase());
+          const whitelist = process.env.REACT_APP_WHITELIST.split(',').map((s) =>
+            s.trim().toLowerCase(),
+          );
           ammsData = ammsData?.filter((amm) => whitelist.includes(amm.id.toLowerCase()));
           return ammsData;
-        } 
+        }
       }
     }
   }, [loading, error, isSignerAvailable, handleRefetch]);

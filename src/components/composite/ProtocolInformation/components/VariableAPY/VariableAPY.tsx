@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 
-import { useAMMContext } from '@contexts';
 import { Typography } from '@components/atomic';
 import IconLabel from '../../../IconLabel/IconLabel';
 import { Agents } from '@contexts';
@@ -13,8 +12,7 @@ export type VariableAPYProps = {
   variableApy?: number;
 };
 
-const VariableAPY: React.FunctionComponent<VariableAPYProps> = ({agent, variableApy}) => {
-
+const VariableAPY: React.FunctionComponent<VariableAPYProps> = ({ agent, variableApy }) => {
   const renderValue = () => {
     if (isUndefined(variableApy)) {
       return <Box sx={{ fontSize: 18 }}>Loading...</Box>;
@@ -26,7 +24,14 @@ const VariableAPY: React.FunctionComponent<VariableAPYProps> = ({agent, variable
   return (
     <Typography
       variant="h3"
-      label={<IconLabel label="variable apy" icon="information-circle" info="The historical Annual Percentage Yield of the pool. The value is computed by aggregating the historical rates of the underlying rate oracle over a fixed look-back window." removeIcon />}
+      label={
+        <IconLabel
+          label="variable apy"
+          icon="information-circle"
+          info="The historical Annual Percentage Yield of the pool. The value is computed by aggregating the historical rates of the underlying rate oracle over a fixed look-back window."
+          removeIcon
+        />
+      }
       agentStyling
       agent={agent}
     >

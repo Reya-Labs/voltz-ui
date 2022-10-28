@@ -1,6 +1,6 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates } from '@contexts';
-import { useAgent, useTokenApproval } from '@hooks';
+import { useTokenApproval } from '@hooks';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Button, Ellipsis } from '@components/atomic';
@@ -60,8 +60,6 @@ const SubmitControls = ({
   tradeInfoErrorMessage,
   underlyingTokenName,
 }: SubmitControlsProps) => {
-  const { agent } = useAgent();
-
   const getHint = () => {
     switch (hintState) {
       case SwapFormSubmitButtonHintStates.APPROVE_NEXT_TOKEN: {

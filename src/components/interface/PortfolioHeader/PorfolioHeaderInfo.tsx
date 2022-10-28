@@ -1,4 +1,3 @@
-import React from 'react';
 import { colors, SystemStyleObject, Theme } from '@theme';
 
 import { formatCurrency, formatNumber } from '@utilities';
@@ -57,12 +56,6 @@ const PortfolioHeaderInfo = ({
       )}
     </>
   );
-
-  const dataExists =
-    !isUndefined(netMargin) ||
-    !isUndefined(netRateReceiving) ||
-    !isUndefined(netRatePaying) ||
-    !isUndefined(feesApy);
 
   return (
     <List sx={{ padding: '0', display: 'flex' }}>

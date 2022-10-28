@@ -14,9 +14,9 @@ export const Primary = Template.bind({});
 Primary.args = {
   options: [
     { label: '-1%', value: -1 },
-    { label: '1%',  value: 1  },
-    { label: '5%',  value: 5  },
+    { label: '1%', value: 1 },
+    { label: '5%', value: 5 },
     { label: '10%', value: 10 },
   ],
-  size: 'small'
+  size: 'small',
 };

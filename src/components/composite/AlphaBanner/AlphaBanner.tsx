@@ -4,13 +4,13 @@ import { Typography } from '@components/atomic';
 import { colors, SystemStyleObject, Theme } from '@theme';
 
 const textStyles: SystemStyleObject<Theme> = {
-  display:'inline-block', 
-  marginRight: (theme) => theme.spacing(4), 
+  display: 'inline-block',
+  marginRight: (theme) => theme.spacing(4),
   textTransform: 'uppercase',
-  fontWeight: 'bold', 
+  fontWeight: 'bold',
   fontSize: '14px',
   lineHeight: '24px',
-}
+};
 
 const AlphaBanner = () => {
   const inner = useRef<HTMLElement>();
@@ -31,7 +31,7 @@ const AlphaBanner = () => {
 
     const elapsed = time - start.current;
 
-    if(refs[0].current && inner.current) {
+    if (refs[0].current && inner.current) {
       const count = Math.min(0.06 * elapsed, refs[0].current?.clientWidth);
       inner.current.style.transform = `translateX(-${count}px)`;
 
@@ -41,7 +41,7 @@ const AlphaBanner = () => {
       }
     }
 
-    if(mounted.current === true) {
+    if (mounted.current === true) {
       requestAnimationFrame(step);
     }
   }, []);
@@ -51,58 +51,61 @@ const AlphaBanner = () => {
     requestAnimationFrame(step);
     return () => {
       mounted.current = false;
-    }
-  }, [step])
-  
+    };
+  }, [step]);
+
   return (
-    <Box aria-label="Voltz alpha - Currently in alpha launch. LFG." sx={{ 
-      background: 'linear-gradient(90deg, #201B35 0%, #372D65 50.52%, #2F2A54 100%)',
-      width: '100%',
-      height: '24px',
-      overflow: 'hidden',
-      whiteSpace: 'nowrap',
-    }}>
+    <Box
+      aria-label="Voltz alpha - Currently in alpha launch. LFG."
+      sx={{
+        background: 'linear-gradient(90deg, #201B35 0%, #372D65 50.52%, #2F2A54 100%)',
+        width: '100%',
+        height: '24px',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+      }}
+    >
       <Box ref={inner} sx={{ whiteSpace: 'nowrap' }} aria-hidden>
-        {(refs.map((ref, i) => (
-          <Box ref={ref} sx={{ display: 'inline-block'}} key={i}>
-            <Typography variant='body2' sx={{ ...textStyles, color: colors.wildStrawberry.base }}>
+        {refs.map((ref, i) => (
+          <Box ref={ref} sx={{ display: 'inline-block' }} key={i}>
+            <Typography variant="body2" sx={{ ...textStyles, color: colors.wildStrawberry.base }}>
               Voltz alpha
             </Typography>
-            <Typography variant='body2' sx={{ ...textStyles, color: colors.ultramarineBlue.base }}>
+            <Typography variant="body2" sx={{ ...textStyles, color: colors.ultramarineBlue.base }}>
               Voltz alpha
             </Typography>
-            <Typography variant='body2' sx={{ ...textStyles, color: colors.skyBlueCrayola.base }}>
+            <Typography variant="body2" sx={{ ...textStyles, color: colors.skyBlueCrayola.base }}>
               Currently in alpha launch. LFG
             </Typography>
-            <Typography variant='body2' sx={{ ...textStyles, color: colors.wildStrawberry.base }}>
+            <Typography variant="body2" sx={{ ...textStyles, color: colors.wildStrawberry.base }}>
               Voltz alpha
             </Typography>
-            <Typography variant='body2' sx={{ ...textStyles, color: colors.ultramarineBlue.base }}>
+            <Typography variant="body2" sx={{ ...textStyles, color: colors.ultramarineBlue.base }}>
               Voltz alpha
             </Typography>
-            <Typography variant='body2' sx={{ ...textStyles, color: colors.skyBlueCrayola.base }}>
+            <Typography variant="body2" sx={{ ...textStyles, color: colors.skyBlueCrayola.base }}>
               Voltz alpha
             </Typography>
-            <Typography variant='body2' sx={{ ...textStyles, color: colors.wildStrawberry.base }}>
+            <Typography variant="body2" sx={{ ...textStyles, color: colors.wildStrawberry.base }}>
               Currently in alpha launch. LFG
             </Typography>
-            <Typography variant='body2' sx={{ ...textStyles, color: colors.ultramarineBlue.base }}>
+            <Typography variant="body2" sx={{ ...textStyles, color: colors.ultramarineBlue.base }}>
               Voltz alpha
             </Typography>
-            <Typography variant='body2' sx={{ ...textStyles, color: colors.skyBlueCrayola.base }}>
+            <Typography variant="body2" sx={{ ...textStyles, color: colors.skyBlueCrayola.base }}>
               Voltz alpha
             </Typography>
-            <Typography variant='body2' sx={{ ...textStyles, color: colors.wildStrawberry.base }}>
+            <Typography variant="body2" sx={{ ...textStyles, color: colors.wildStrawberry.base }}>
               Voltz alpha
             </Typography>
-            <Typography variant='body2' sx={{ ...textStyles, color: colors.ultramarineBlue.base }}>
+            <Typography variant="body2" sx={{ ...textStyles, color: colors.ultramarineBlue.base }}>
               Currently in alpha launch. LFG
             </Typography>
-            <Typography variant='body2' sx={{ ...textStyles, color: colors.skyBlueCrayola.base }}>
+            <Typography variant="body2" sx={{ ...textStyles, color: colors.skyBlueCrayola.base }}>
               Voltz alpha
             </Typography>
           </Box>
-        )))}
+        ))}
       </Box>
     </Box>
   );

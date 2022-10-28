@@ -1,7 +1,7 @@
 export enum BorrowFormActions {
-  BORROW='BORROW',
-};
+  BORROW = 'BORROW',
+}
 
 export enum BorrowFormModes {
-  NEW_POSITION='NEW_POSITION',
-};
+  NEW_POSITION = 'NEW_POSITION',
+}

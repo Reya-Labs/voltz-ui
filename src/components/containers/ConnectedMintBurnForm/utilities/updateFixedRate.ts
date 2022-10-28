@@ -22,7 +22,9 @@ const updateFixedRate =
       return increment ? 1 : -1;
     };
 
-    const nextFixedRate = isUndefined(newFixedRate) ? undefined : amm.getNextUsableFixedRate(newFixedRate, getCount());
+    const nextFixedRate = isUndefined(newFixedRate)
+      ? undefined
+      : amm.getNextUsableFixedRate(newFixedRate, getCount());
     setFixedRate(nextFixedRate);
   };
 

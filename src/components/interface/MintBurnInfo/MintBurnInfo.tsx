@@ -6,7 +6,7 @@ import { isUndefined } from 'lodash';
 import { FormPanel } from '@components/interface';
 
 export type MintBurnInfoProps = {
-  balance?: number; 
+  balance?: number;
   formState: MintBurnFormState;
   minRequiredMargin?: number;
   minRequiredMarginLoading: boolean;
@@ -20,22 +20,26 @@ const MintBurnInfo: React.FunctionComponent<MintBurnInfoProps> = ({
   minRequiredMargin,
   minRequiredMarginLoading,
   mode = MintBurnFormModes.NEW_POSITION,
-  underlyingTokenName = ''
+  underlyingTokenName = '',
 }) => {
-  const isAddingLiquidity = mode !== MintBurnFormModes.EDIT_LIQUIDITY || formState.liquidityAction === MintBurnFormLiquidityAction.ADD;
+  const isAddingLiquidity =
+    mode !== MintBurnFormModes.EDIT_LIQUIDITY ||
+    formState.liquidityAction === MintBurnFormLiquidityAction.ADD;
 
   return (
     <FormPanel noBackground>
-      {(mode !== MintBurnFormModes.EDIT_MARGIN && isAddingLiquidity && (!isUndefined(minRequiredMargin) || minRequiredMarginLoading)) && (
-        <Box sx={{ marginBottom: (theme) => theme.spacing(6) }}>
-          <MintSummary 
-            balance={balance}
-            minRequiredMargin={minRequiredMargin}
-            loading={minRequiredMarginLoading} 
-            underlyingTokenName={underlyingTokenName} 
-          />
-        </Box>
-      )}
+      {mode !== MintBurnFormModes.EDIT_MARGIN &&
+        isAddingLiquidity &&
+        (!isUndefined(minRequiredMargin) || minRequiredMarginLoading) && (
+          <Box sx={{ marginBottom: (theme) => theme.spacing(6) }}>
+            <MintSummary
+              balance={balance}
+              minRequiredMargin={minRequiredMargin}
+              loading={minRequiredMarginLoading}
+              underlyingTokenName={underlyingTokenName}
+            />
+          </Box>
+        )}
     </FormPanel>
   );
 };

@@ -8,10 +8,7 @@ export type WalletStatus =
   | 'connecting'
   | 'connected';
 
-export type WalletName = 
-  | 'metamask'
-  | 'walletConnect'
-  | 'disconnect';
+export type WalletName = 'metamask' | 'walletConnect' | 'disconnect';
 
 export type EthereumRequestArguments = {
   method: string;
@@ -40,10 +37,10 @@ export type Wallet = {
 export interface WalletRiskAssessment {
   accountExternalId: string;
   address: string;
-  addressRiskIndicators: (AddressRiskIndicatorsEntity)[];
+  addressRiskIndicators: AddressRiskIndicatorsEntity[];
   addressSubmitted: string;
   chain: string;
-  entities: (EntitiesEntity)[];
+  entities: EntitiesEntity[];
   trmAppUrl: string;
 }
 export interface AddressRiskIndicatorsEntity {
@@ -65,4 +62,3 @@ export interface EntitiesEntity {
   trmAppUrl: string;
   trmUrn: string;
 }
-

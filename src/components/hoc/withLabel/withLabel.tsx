@@ -34,7 +34,7 @@ const withLabel = <T,>(WrappedComponent: React.FunctionComponent<T>) => {
     if (isEmpty(label)) {
       return <WrappedComponent {...(props as T)} />;
     }
-    
+
     return (
       <FormControl sx={{ width: '100%' }}>
         <InputLabel
