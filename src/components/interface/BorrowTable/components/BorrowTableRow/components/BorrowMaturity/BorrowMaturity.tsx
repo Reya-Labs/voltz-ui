@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import TableCell from '@mui/material/TableCell';
 
 import { useBorrowAMMContext } from '@contexts';

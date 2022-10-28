@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import { MaskedIntegerField, IconLabel } from '@components/composite';
 import { isNumber, isUndefined } from 'lodash';
@@ -36,7 +36,6 @@ const Leverage = ({
     'Choose the amount of leverage you wish to trade with from the options on the right or set your own leverage by typing it in the box below.';
   const margin = isNumber(minMargin) ? Math.max(minMargin, 0.0001) : undefined;
 
-  const [internalValue, setInternalValue] = useState<number | undefined>(value);
   const [inputValue, setInputValue] = useState(formatNumber(value, 0, 2));
   const isDisabledLeverageBox =
     isUndefined(availableNotional) || isUndefined(margin) || isUndefined(notional);
@@ -46,7 +45,6 @@ const Leverage = ({
   const [activeOption, setActiveOption] = useState(LEVERAGE_OPTIONS[0]);
 
   useEffect(() => {
-    setInternalValue(value);
     const formatted = formatNumber(value, 0, 2);
     setInputValue(formatted);
   }, [value, resetDeltaState]);
@@ -56,13 +54,11 @@ const Leverage = ({
       const usFormatted = toUSFormat(inputVal);
       const newValue = usFormatted ? stringToBigFloat(usFormatted) : NaN;
       if (!isNaN(newValue)) {
-        setInternalValue(newValue);
         setInputValue(inputVal);
         window.clearInterval(timer.current);
         timer.current = window.setTimeout(() => onChange(newValue), delay);
       }
     } else {
-      setInternalValue(undefined);
       setInputValue('');
       window.clearInterval(timer.current);
       timer.current = window.setTimeout(() => onChange(0, true), delay * 2);

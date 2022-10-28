@@ -1,7 +1,5 @@
-import { useAgent, useAMM } from '@hooks';
-import { AugmentedAMM } from '@utilities';
+import { useAgent } from '@hooks';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk/dist/types/entities';
-import { isUndefined } from 'lodash';
 import { createContext, useContext, useEffect, useState, useRef } from 'react';
 import { useAMMsContext } from '../AMMsContext/AMMsContext';
 import {

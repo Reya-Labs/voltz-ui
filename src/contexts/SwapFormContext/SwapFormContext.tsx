@@ -8,7 +8,6 @@ import {
   stringToBigFloat,
   pushEvent,
   DataLayerEventPayload,
-  isBorrowing,
   getAmmProtocol,
 } from '@utilities';
 import { debounce, isNumber, isUndefined } from 'lodash';
@@ -19,7 +18,6 @@ import {
   useBalance,
   useMinRequiredMargin,
   useTokenApproval,
-  useWallet,
 } from '@hooks';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import * as s from './services';

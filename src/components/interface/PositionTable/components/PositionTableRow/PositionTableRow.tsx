@@ -30,7 +30,7 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
   const labels = agent === Agents.LIQUIDITY_PROVIDER ? lpLabels : traderLabels;
 
   const { fixedApr } = useAMMContext();
-  const { result: resultFixedApr, loading: loadingFixedApr, call: callFixedApr } = fixedApr;
+  const { result: resultFixedApr, call: callFixedApr } = fixedApr;
 
   useEffect(() => {
     callFixedApr();

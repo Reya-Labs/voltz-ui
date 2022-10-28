@@ -1,4 +1,3 @@
-import React from 'react';
 import { Agents } from '@contexts';
 import { SwapFormActions, SwapFormModes } from '@components/interface';
 import { useTokenApproval } from '@hooks';

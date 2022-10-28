@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import { Position } from '@voltz-protocol/v1-sdk';

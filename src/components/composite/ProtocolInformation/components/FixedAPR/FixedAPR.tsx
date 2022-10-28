@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 
-import { useAMMContext } from '@contexts';
 import { Typography } from '@components/atomic';
 import { IconLabel } from '@components/composite';
 import { Agents } from '@contexts';

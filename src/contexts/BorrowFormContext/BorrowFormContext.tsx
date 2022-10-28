@@ -5,10 +5,10 @@ import {
   useBalance,
   useTokenApproval,
 } from '@hooks';
-import { hasEnoughUnderlyingTokens, lessThan, lessThanEpsilon } from '@utilities';
+import { hasEnoughUnderlyingTokens, lessThanEpsilon } from '@utilities';
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { Agents, useAMMContext, useBorrowAMMContext, usePositionContext } from '@contexts';
-import { isUndefined, update } from 'lodash';
+import { isUndefined } from 'lodash';
 import { SwapFormActions } from '@components/interface';
 import * as s from '../SwapFormContext/services';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk/dist/types/entities';

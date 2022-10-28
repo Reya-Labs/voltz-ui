@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, Typography } from '@components/atomic';
 import { isUndefined } from 'lodash';
-import { SystemStyleObject, Theme } from '@mui/system';
 
 export type NotionalProps = {
   notional?: string;

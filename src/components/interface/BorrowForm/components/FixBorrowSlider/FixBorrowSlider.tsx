@@ -48,13 +48,7 @@ const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
   errorText,
 }) => {
   const [sliderValue, setSliderValue] = useState<number | undefined>(undefined);
-
-  const handleChange = (event: Event, value: number | number[], activeThumb: number) => {
-    if (typeof value === 'number') {
-      setSliderValue(value);
-    }
-  };
-
+  
   const handleChangeCommitted = (
     event: React.SyntheticEvent | Event,
     newValue: number | number[],

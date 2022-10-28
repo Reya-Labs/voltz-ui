@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef } from 'react';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -10,7 +10,6 @@ import { data, AugmentedBorrowAMM, findCurrentBorrowPosition, getRowButtonId } f
 import { mapAmmToAmmTableDatum } from './utilities';
 import { BorrowAMMProvider, PositionProvider } from '@contexts';
 import { Panel } from '@components/atomic';
-import { useAgent } from '@hooks';
 import {
   FixedBorrowTableFields,
   labelsFixed,
@@ -54,8 +53,6 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
   onLoaded,
   commonOverrides,
 }) => {
-  const { agent } = useAgent();
-
   const countLoaded = useRef(-2);
   const counted = useRef({
     fixedRows: false,

@@ -3,7 +3,6 @@ import TableCell from '@mui/material/TableCell';
 
 import { Typography } from '@components/atomic';
 import Box from '@mui/material/Box';
-import { themes } from '@theme';
 import { formatNumber } from '@utilities';
 
 export type DebtProps = {

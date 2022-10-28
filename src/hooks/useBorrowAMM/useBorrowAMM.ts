@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import { AugmentedBorrowAMM } from '@utilities';
 import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
 
-import useAgent from '../useAgent';
 import useAsyncFunction, { UseAsyncFunctionResult } from '../useAsyncFunction';
 import { DateTime } from 'luxon';
 import { BorrowSwapInfo } from '@voltz-protocol/v1-sdk/dist/types/entities/borrowAMM';
@@ -22,8 +21,6 @@ export type useBorrowAMMReturnType = {
 };
 
 export const useBorrowAMM = (borrowAmm: AugmentedBorrowAMM) => {
-  const { agent } = useAgent();
-
   const underlyingDebtInNativeTokens = useAsyncFunction(
     async () => {
       const result = await borrowAmm?.getUnderlyingBorrowBalance();

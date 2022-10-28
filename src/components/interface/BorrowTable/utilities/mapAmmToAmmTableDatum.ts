@@ -1,5 +1,4 @@
 import { AugmentedBorrowAMM } from '@utilities';
-import { DateTime } from 'luxon';
 import { BorrowAMMTableDatum } from '../types';
 
 const mapAmmToAmmTableDatum = ({

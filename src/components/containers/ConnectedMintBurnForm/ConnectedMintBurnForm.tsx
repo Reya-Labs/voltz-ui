@@ -44,12 +44,10 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
   const { fixedApr, variableApy } = useAMMsContext();
   const {
     result: resultFixedApr,
-    loading: loadingFixedApr,
     call: callFixedApr,
   } = fixedApr(targetAmm);
   const {
     result: resultVariableApy,
-    loading: loadingVariableApy,
     call: callVariableApy,
   } = variableApy(targetAmm);
 

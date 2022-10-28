@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import { colors, SystemStyleObject, Theme } from '@theme';
-import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
+import { Position } from '@voltz-protocol/v1-sdk';
 
 import { AugmentedAMM, data, findCurrentAmm, getRowButtonId, isBorrowing } from '@utilities';
 import { Panel } from '@components/atomic';
 import { PositionTableFields } from './types';
 import { PositionTableHead, PositionTableRow } from './components';
-import { Agents, AMMProvider, PortfolioContext, usePortfolioContext } from '@contexts';
+import { Agents, AMMProvider, PortfolioContext } from '@contexts';
 import TransactionList from '../TransactionList/TransactionList';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';

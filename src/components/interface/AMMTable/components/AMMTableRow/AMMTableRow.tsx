@@ -29,8 +29,8 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
   const { amm } = useAMMContext();
 
   const { variableApy, fixedApr } = useAMMsContext();
-  const { result: resultFixedApr, loading: loadingFixedApr, call: callFixedApr } = fixedApr(amm);
-  const { result: resultVarApy, loading: loadingVarApy, call: callVarApy } = variableApy(amm);
+  const { result: resultFixedApr, call: callFixedApr } = fixedApr(amm);
+  const { result: resultVarApy, call: callVarApy } = variableApy(amm);
 
   useEffect(() => {
     callVarApy();

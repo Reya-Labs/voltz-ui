@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
-import { useAMMContext } from '@contexts';
 import { Typography } from '@components/atomic';
 import { IconLabel } from '@components/composite';
 import { formatNumber } from '@utilities';

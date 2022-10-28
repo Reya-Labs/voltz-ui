@@ -1,9 +1,5 @@
-import React from 'react';
 import { Position } from '@voltz-protocol/v1-sdk';
-import { DateTime } from 'luxon';
-import { Button, Typography } from '@components/atomic';
 import { MaturityInformation } from '@components/composite';
-import { Box } from '@mui/material';
 
 type MaturityProps = {
   position: Position;

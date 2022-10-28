@@ -1,7 +1,7 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Typography } from '@components/atomic';
 import Box from '@mui/material/Box';
-import { colors, SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '@theme';
 
 export type PortfolioHeaderValueProps = {
   children?: ReactNode;

@@ -5,12 +5,11 @@ import {
   DataLayerEventPayload,
   getAmmProtocol,
   hasEnoughUnderlyingTokens,
-  isBorrowing,
   pushEvent,
 } from '@utilities';
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { debounce, isUndefined } from 'lodash';
-import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
+import { PositionInfo } from '@voltz-protocol/v1-sdk';
 
 export enum MintBurnFormModes {
   NEW_POSITION = 'NEW_POSITION',

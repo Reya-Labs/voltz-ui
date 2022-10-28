@@ -21,7 +21,7 @@ function* fcmUnwindSaga(action: FCMUnwindAction) {
     return;
   }
 
-  const { id, notional, margin } = action.payload.transaction;
+  const { id, notional } = action.payload.transaction;
   if (isUndefined(notional)) return;
 
   let result: ContractReceipt | void;

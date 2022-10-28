@@ -1,4 +1,4 @@
-import { useAMMs, useDispatch, usePositions, useSelector } from '@hooks';
+import { useDispatch, useSelector } from '@hooks';
 import { routes } from '@routes';
 import { useEffect, useState } from 'react';
 import { actions, selectors } from '@store';
@@ -36,10 +36,9 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
 
   const { fixedApr, variableApy } = useAMMContext();
-  const { result: resultFixedApr, loading: loadingFixedApr, call: callFixedApr } = fixedApr;
+  const { result: resultFixedApr, call: callFixedApr } = fixedApr;
   const {
     result: resultVariableApy,
-    loading: loadingVariableApy,
     call: callVariableApy,
   } = variableApy;
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { AgentProvider, AMMProvider, SwapFormProvider, useSwapFormContext } from '@contexts';
+import { AgentProvider, AMMProvider, SwapFormProvider } from '@contexts';
 import SwapInfo from './SwapInfo';
 import { AugmentedAMM } from '@utilities';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
@@ -53,7 +53,6 @@ const NewPositionTemplate: ComponentStory<typeof SwapInfo> = (args) => (
 // New position
 const NewPositionSwapForm: React.FunctionComponent = (args) => {
   const mode = SwapFormModes.NEW_POSITION;
-  const form = useSwapFormContext();
 
   return (
     <SwapInfo
@@ -85,7 +84,6 @@ const EditMarginTemplate: ComponentStory<typeof SwapInfo> = (args) => (
 
 const EditMarginSwapForm: React.FunctionComponent = (args) => {
   const mode = SwapFormModes.EDIT_MARGIN;
-  const form = useSwapFormContext();
 
   return (
     <SwapInfo

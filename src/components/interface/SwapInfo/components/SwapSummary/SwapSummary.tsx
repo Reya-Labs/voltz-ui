@@ -1,4 +1,4 @@
-import React, { VoidFunctionComponent } from 'react';
+import React from 'react';
 import SummaryPanel from '../../../../atomic/SummaryPanel/SummaryPanel';
 import { IconLabel } from '@components/composite';
 import { formatCurrency, formatNumber, roundUpDecimal } from '@utilities';
@@ -102,14 +102,6 @@ const SwapSummary: React.FunctionComponent<SwapSummaryProps> = ({
         formAction === SwapFormActions.ROLLOVER_SWAP
           ? `${formatCurrency(roundUpDecimal(margin, 4), true)} ${underlyingTokenName}`
           : `${formatCurrency(roundUpDecimal(margin, 4), true)} ${yieldBearingTokenName}`,
-      highlight: true,
-    };
-  };
-
-  const borrowMarginRow = (margin: number) => {
-    return {
-      label: 'REQUIRED MARGIN:',
-      value: `${formatCurrency(roundUpDecimal(margin, 4), true)} ${underlyingTokenName}`,
       highlight: true,
     };
   };

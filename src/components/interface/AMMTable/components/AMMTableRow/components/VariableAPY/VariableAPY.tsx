@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import TableCell from '@mui/material/TableCell';
 
-import { useAMMContext } from '@contexts';
 import { Typography } from '@components/atomic';
 import { formatNumber } from '@utilities';
 import { isUndefined } from 'lodash';

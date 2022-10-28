@@ -1,8 +1,6 @@
 import { Agents } from '@contexts';
 import Box from '@mui/material/Box';
-import { ProgressBar } from '@components/composite';
 import CustomPoolField from './CustomPoolField';
-import { isNumber } from 'lodash';
 import { Typography } from '@components/atomic';
 
 import { ReactComponent as Aave } from './aave-icon.svg';
@@ -13,7 +11,6 @@ import { ReactComponent as DAI } from './dai-icon.svg';
 import { ReactComponent as USDC } from './usdc-icon.svg';
 import { ReactComponent as USDT } from './usdt-icon.svg';
 import { ReactComponent as ETH } from './eth-icon.svg';
-import { formatNumber } from '@utilities';
 
 export type PoolFieldProps = {
   agent?: Agents;

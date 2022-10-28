@@ -21,7 +21,7 @@ function* settlePositionSaga(action: SettlePositionAction) {
     return;
   }
 
-  const { id, fixedLow, fixedHigh, source, margin } = action.payload.transaction;
+  const { id, fixedLow, fixedHigh, source } = action.payload.transaction;
 
   if (isUndefined(fixedLow) || isUndefined(fixedHigh) || isUndefined(source)) {
     return;

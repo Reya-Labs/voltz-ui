@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo, useRef } from 'react';
-import { useAMM, useAsyncFunction, UseAsyncFunctionResult, useWallet } from '@hooks';
+import { useAsyncFunction, UseAsyncFunctionResult } from '@hooks';
 import { AugmentedAMM } from '@utilities';
 import { createContext, useContext } from 'react';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk/dist/types/entities';
-import { useGetWalletQuery, Wallet } from '@graphql';
+import { Wallet } from '@graphql';
 
 export type AMMsProviderProps = {};
 

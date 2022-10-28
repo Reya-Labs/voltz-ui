@@ -8,9 +8,7 @@ import { IconLabel, ProtocolInformation } from '@components/composite';
 import { SubmitControls } from './components';
 import { SystemStyleObject, Theme } from '@theme';
 
-import TableRow from '@mui/material/TableRow';
 import { FixBorrow } from './components';
-import { Stack } from '@mui/material';
 import { Agents, BorrowFormSubmitButtonHintStates, BorrowFormSubmitButtonStates } from '@contexts';
 import { formatCurrency, getPoolButtonId } from '@utilities';
 

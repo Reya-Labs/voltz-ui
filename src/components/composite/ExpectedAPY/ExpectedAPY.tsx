@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Typography } from '@components/atomic';
 import { MaskedIntegerField } from '@components/composite';
@@ -9,7 +9,6 @@ import {
   DataLayerEventPayload,
   formatNumber,
   getAmmProtocol,
-  isBorrowing,
   notFormatted,
   pushEvent,
   stringToBigFloat,

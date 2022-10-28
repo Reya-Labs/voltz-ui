@@ -9,7 +9,6 @@ import { data } from '@utilities';
 import {
   VariableBorrowTableFields,
   FixedBorrowTableFields,
-  FixedBorrowTableLabels,
 } from '../../types';
 
 export type BorrowTableHeadProps = {
@@ -43,10 +42,6 @@ const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({
   cellWidth.set('fixedApr', '20%');
   cellWidth.set('maturity', '20%');
 
-  const maturityLabel: ['protocol' | 'debt' | 'variableApy' | 'fixedApr' | 'maturity', string] = [
-    'maturity',
-    FixedBorrowTableLabels.maturity,
-  ];
   const loadExtraCell = isFixedPositions ? (
     <></>
   ) : (

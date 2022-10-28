@@ -2,7 +2,7 @@ import React from 'react';
 import Box from '@mui/material/Box';
 // import { SystemStyleObject, Theme } from '@theme';
 import { Position } from '@voltz-protocol/v1-sdk';
-import { Button, Ellipsis, Loading, PositionBadge, SummaryPanel } from '@components/atomic';
+import { Button, Ellipsis, PositionBadge, SummaryPanel } from '@components/atomic';
 import { FormPanel } from '@components/interface';
 import { formatCurrency, formatNumber } from '@utilities';
 import { BigNumber } from 'ethers';

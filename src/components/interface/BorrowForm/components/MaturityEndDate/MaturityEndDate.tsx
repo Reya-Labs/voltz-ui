@@ -1,5 +1,4 @@
 import { Typography } from '@components/atomic';
-import TableCell from '@mui/material/TableCell';
 
 import { DateTime } from 'luxon';
 import { formatDateTime } from '@utilities';

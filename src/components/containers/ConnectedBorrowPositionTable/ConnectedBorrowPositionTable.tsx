@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import { SystemStyleObject, Theme } from '@theme';
 
-import { AugmentedBorrowAMM, data } from '@utilities';
+import { AugmentedBorrowAMM } from '@utilities';
 import { useBorrowAMMs, useBorrowPositions, useWallet } from '@hooks';
 import { Agents } from '@contexts';
 import { Loading, Panel } from '@components/atomic';
@@ -23,11 +23,7 @@ export type ConnectedBorrowAMMTableProps = {
 
 const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorrowAMMTableProps> = ({
   onSelectItem,
-  agent,
 }) => {
-  const [page, setPage] = useState(0);
-  const [size, setSize] = useState<number | null>(null);
-  const [order, setOrder] = useState<data.TableOrder>('desc');
   const [variableOrderBy, setVariableOrderBy] = useState<VariableBorrowTableFields>('debt');
   const [fixedOrderBy, setFixedOrderBy] = useState<FixedBorrowTableFields>('debt');
   const [loadingItems, setLoadingItems] = useState<boolean>(true);
@@ -92,8 +88,6 @@ const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorrowAMMTa
     return null;
   }
 
-  const pages = 0;
-
   const renderContent = () => {
     if (
       wallet.status !== 'connecting' &&
@@ -130,13 +124,13 @@ const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorrowAMMTa
                 showFixed={headerProps.fixedPositionsCount === undefined}
                 positions={positions}
                 borrowAmms={borrowAmms}
-                order={order}
+                order={'desc'}
                 variableOrderBy={variableOrderBy}
                 onSetVariableOrderBy={setVariableOrderBy}
                 fixedOrderBy={fixedOrderBy}
                 onSetFixedOrderBy={setFixedOrderBy}
-                page={page}
-                size={size}
+                page={0}
+                size={null}
                 onSelectItem={onSelectItem}
                 commonOverrides={commonOverrides}
                 onLoaded={setLoadingItems}

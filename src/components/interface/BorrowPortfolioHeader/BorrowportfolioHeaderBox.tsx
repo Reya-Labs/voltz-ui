@@ -1,23 +1,13 @@
-import React, { ReactNode } from 'react';
-import { colors, SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '@theme';
 import { Typography } from '@components/atomic';
 import Box from '@mui/material/Box';
-import { BorrowPortfolioHeaderProps } from './BorrowPortfolioHeader';
-import { formatCurrency, formatNumber } from '@utilities';
+import { formatCurrency } from '@utilities';
 
 export type BorrowPortfolioHeaderBoxProps = {
   aggregatedDebt?: number;
   loading?: boolean;
   currencyCode: string;
   currencySymbol: string;
-};
-
-const valueBoxStyles: SystemStyleObject<Theme> = {
-  background: colors.lavenderWeb.darken040,
-  padding: (theme) => `${theme.spacing(2)} ${theme.spacing(4)}`,
-  borderRadius: '4px',
-  marginTop: (theme) => theme.spacing(2),
-  display: 'inline-block',
 };
 
 const labelStyles: SystemStyleObject<Theme> = {

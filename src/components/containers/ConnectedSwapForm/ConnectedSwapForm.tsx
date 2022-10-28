@@ -49,12 +49,10 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
   const { variableApy, fixedApr } = useAMMsContext();
   const {
     result: resultFixedApr,
-    loading: loadingFixedApr,
     call: callFixedApr,
   } = fixedApr(targetAmm);
   const {
     result: resultVariableApy,
-    loading: loadingVariableApy,
     call: callVariableApy,
   } = variableApy(targetAmm);
 

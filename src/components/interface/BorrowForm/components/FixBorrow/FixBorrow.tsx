@@ -1,5 +1,5 @@
 import { Typography } from '@components/atomic';
-import { Stack, TableRow } from '@mui/material';
+import { Stack } from '@mui/material';
 import { colors } from '@theme';
 
 import { IconLabel } from '@components/composite';

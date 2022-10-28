@@ -60,7 +60,6 @@ const NewPositionTemplate: ComponentStory<typeof MintBurnForm> = (args) => (
 );
 const NewPositionMintBurnForm: React.FunctionComponent = (args) => {
   const balance = 100000;
-  const minRequiredMargin = 100;
   const form = useMintBurnForm();
 
   return (
@@ -110,7 +109,6 @@ const EditingMarginTemplate: ComponentStory<typeof MintBurnForm> = (args) => (
 );
 const EditingMarginMintBurnForm: React.FunctionComponent = (args) => {
   const balance = 100000;
-  const minRequiredMargin = 100;
   const form = useMintBurnForm();
 
   return (
@@ -160,7 +158,6 @@ const EditingLiquidityTemplate: ComponentStory<typeof MintBurnForm> = (args) => 
 );
 const EditingLiquidityMintBurnForm: React.FunctionComponent = (args) => {
   const balance = 100000;
-  const minRequiredMargin = 100;
   const form = useMintBurnForm();
 
   return (

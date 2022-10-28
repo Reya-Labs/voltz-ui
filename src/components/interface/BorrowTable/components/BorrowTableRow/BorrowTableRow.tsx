@@ -3,15 +3,13 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '@mui/system';
 import isNull from 'lodash/isNull';
-import { DateTime } from 'luxon';
 
 import { Button } from '@components/atomic';
 import { useWallet } from '@hooks';
 import { BorrowAMMTableDatum, labelsVariable, labelsFixed } from '../../types';
 import { BorrowVariableAPY, BorrowFixedAPR, Debt, BorrowMaturity } from './components';
-import { useBorrowAMMContext, usePositionContext, Agents } from '@contexts';
+import { useBorrowAMMContext, usePositionContext } from '@contexts';
 import { PoolField } from '@components/composite';
-import { isNumber } from 'lodash';
 
 export type BorrowTableRowProps = {
   datum: BorrowAMMTableDatum;
