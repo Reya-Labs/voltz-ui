@@ -9,18 +9,21 @@ import { Input, Typography } from '@components/atomic';
 import { OverrideTypes } from '@utilities';
 import { colors, inputStyles, SystemStyleObject, Theme } from '@theme';
 
-export type TextFieldProps = OverrideTypes<Omit<MuiTextFieldProps, 'variant'>, {
-  dynamic?: boolean; // used for styling
-  errorText?: string;
-  size?: 'small' | 'medium' | 'large'
-}>;
+export type TextFieldProps = OverrideTypes<
+  Omit<MuiTextFieldProps, 'variant'>,
+  {
+    dynamic?: boolean; // used for styling
+    errorText?: string;
+    size?: 'small' | 'medium' | 'large';
+  }
+>;
 
 const errorLabelStyles: SystemStyleObject<Theme> = {
   color: colors.wildStrawberry.base,
   fontSize: '12px',
   lineHeight: '1.2',
-  marginTop: (theme) => theme.spacing(1)
-}
+  marginTop: (theme) => theme.spacing(1),
+};
 
 const TextField: React.FunctionComponent<TextFieldProps> = ({
   disabled,
@@ -40,15 +43,15 @@ const TextField: React.FunctionComponent<TextFieldProps> = ({
           {label}
         </InputLabel>
       )}
-      <Input 
-        id={inputId} 
-        disabled={disabled} 
-        error={error} 
-        inputRef={inputRef} 
-        sx={inputStyles({ disabled, error, inputSize: size, dynamic })} 
+      <Input
+        id={inputId}
+        disabled={disabled}
+        error={error}
+        inputRef={inputRef}
+        sx={inputStyles({ disabled, error, inputSize: size, dynamic })}
       />
       {error && errorText && (
-        <Typography variant='body2' sx={errorLabelStyles}>
+        <Typography variant="body2" sx={errorLabelStyles}>
           {errorText}
         </Typography>
       )}

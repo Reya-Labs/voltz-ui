@@ -4,16 +4,11 @@ import Box from '@mui/material/Box';
 import { UseAsyncFunctionResult, useTokenApproval } from '@hooks';
 import { FormPanel } from '@components/interface';
 import { MaskedIntegerField, InputTokenLabel } from '@components/composite';
-import {
-  IconLabel,
-  ProtocolInformation,
-} from '@components/composite';
+import { IconLabel, ProtocolInformation } from '@components/composite';
 import { SubmitControls } from './components';
 import { SystemStyleObject, Theme } from '@theme';
 
-import TableRow from '@mui/material/TableRow';
 import { FixBorrow } from './components';
-import { Stack } from '@mui/material';
 import { Agents, BorrowFormSubmitButtonHintStates, BorrowFormSubmitButtonStates } from '@contexts';
 import { formatCurrency, getPoolButtonId } from '@utilities';
 
@@ -29,7 +24,7 @@ export type BorrowProps = {
   isTradeVerified: boolean;
   onCancel: () => void;
   onSubmit: () => void;
-  tokenApprovals: ReturnType<typeof useTokenApproval>
+  tokenApprovals: ReturnType<typeof useTokenApproval>;
   tradeInfoErrorMessage?: string;
   variableDebt: UseAsyncFunctionResult<unknown, number | void>;
   selectedFixedDebt: number;
@@ -42,8 +37,8 @@ export type BorrowProps = {
   margin: number;
   swapSummaryLoading: boolean;
   balance: number;
-  variableApy?:number;
-  fixedApr?:number;
+  variableApy?: number;
+  fixedApr?: number;
 };
 
 const BorrowForm: React.FunctionComponent<BorrowProps> = ({
@@ -75,8 +70,8 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
   fixedApr,
 }) => {
   const bottomSpacing: SystemStyleObject<Theme> = {
-    marginBottom: (theme) => theme.spacing(10)
-  }
+    marginBottom: (theme) => theme.spacing(10),
+  };
 
   let formattedBalance;
   if (protocol?.toUpperCase().includes('ETH')) {
@@ -94,11 +89,17 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
 
   return (
     <FormPanel isBorrowForm={true}>
-      <Box sx={{marginBottom: (theme) => theme.spacing(8)}}>
-        <ProtocolInformation protocol={protocol} isBorrowForm={true} endDate={endDate} variableApy={variableApy} fixedApr={fixedApr}/>
+      <Box sx={{ marginBottom: (theme) => theme.spacing(8) }}>
+        <ProtocolInformation
+          protocol={protocol}
+          isBorrowForm={true}
+          endDate={endDate}
+          variableApy={variableApy}
+          fixedApr={fixedApr}
+        />
       </Box>
 
-      <Box sx={{marginBottom: (theme) => theme.spacing(2)}}>
+      <Box sx={{ marginBottom: (theme) => theme.spacing(2) }}>
         <FixBorrow
           variableDebt={variableDebt}
           underlyingTokenName={underlyingTokenName}
@@ -119,7 +120,15 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
           allowNegativeValue={false}
           suffix={<InputTokenLabel tokenName={underlyingTokenName || ''} />}
           suffixPadding={90}
-          label={<IconLabel label={"margin required to fix rate"} icon="information-circle" info={"Margin required to enter position where you are paying the fixed rate on the selected amount (includes fees)"} />}
+          label={
+            <IconLabel
+              label={'margin required to fix rate'}
+              icon="information-circle"
+              info={
+                'Margin required to enter position where you are paying the fixed rate on the selected amount (includes fees)'
+              }
+            />
+          }
           value={formattedMargin}
           subtext={`WALLET BALANCE: ${formattedBalance}`}
           disabled={true}
@@ -146,7 +155,7 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
         isTradeVerified={isTradeVerified}
         onCancel={onCancel}
         onSubmit={onSubmit}
-        gaButtonId={getPoolButtonId("", "", "", Agents.VARIABLE_TRADER, undefined, true)}
+        gaButtonId={getPoolButtonId('', '', '', Agents.VARIABLE_TRADER, undefined, true)}
         submitButtonState={submitButtonState}
         // swapInfoLoading={swapInfoLoading}
         tokenApprovals={tokenApprovals}

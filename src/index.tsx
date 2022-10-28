@@ -23,7 +23,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import AMMsProvider from './contexts/AMMsContext/AMMsContext';
 
-// the root of the react app 
+// the root of the react app
 
 try {
   if (process.env.NODE_ENV !== 'development') {

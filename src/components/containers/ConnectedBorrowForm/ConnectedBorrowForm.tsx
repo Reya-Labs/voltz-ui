@@ -1,12 +1,24 @@
-import { useAMMs, useDispatch, usePositions, useSelector } from '@hooks';
+import { useDispatch, useSelector } from '@hooks';
 import { routes } from '@routes';
 import { useEffect, useState } from 'react';
 import { actions, selectors } from '@store';
 
 import { useNavigate } from 'react-router-dom';
-import { BorrowForm, PendingTransaction, SwapFormActions, SwapFormModes, SwapInfo, FormPanel } from '@components/interface';
-import { useAMMContext, useBorrowAMMContext, useBorrowFormContext, Agents, usePositionContext } from '@contexts';
-
+import {
+  BorrowForm,
+  PendingTransaction,
+  SwapFormActions,
+  SwapFormModes,
+  SwapInfo,
+  FormPanel,
+} from '@components/interface';
+import {
+  useAMMContext,
+  useBorrowAMMContext,
+  useBorrowFormContext,
+  Agents,
+  usePositionContext,
+} from '@contexts';
 
 export type ConnectedBorrowFormProps = {
   onReset: () => void;
@@ -17,15 +29,15 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
   const { amm } = useAMMContext();
   const form = useBorrowFormContext();
   const { position } = usePositionContext();
-  
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
 
   const { fixedApr, variableApy } = useAMMContext();
-  const { result: resultFixedApr, loading: loadingFixedApr, call: callFixedApr } = fixedApr;
-  const { result: resultVariableApy, loading: loadingVariableApy, call: callVariableApy } = variableApy;
+  const { result: resultFixedApr, call: callFixedApr } = fixedApr;
+  const { result: resultVariableApy, call: callVariableApy } = variableApy;
 
   useEffect(() => {
     callFixedApr();
@@ -33,17 +45,17 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
 
   useEffect(() => {
     callVariableApy();
-  }, [ callVariableApy]);
+  }, [callVariableApy]);
 
   const protocol = () => {
-    if ([5,6].includes(amm.rateOracle.protocolId) ){
-      return "borrow_"+amm.protocol;
+    if ([5, 6].includes(amm.rateOracle.protocolId)) {
+      return 'borrow_' + amm.protocol;
     }
     return amm.protocol;
-  }
+  };
 
   const getReduxAction = () => {
-    const transaction = { 
+    const transaction = {
       agent: Agents.VARIABLE_TRADER,
       ammId: amm.id,
       margin: Number(Math.abs(form.margin)),
@@ -51,11 +63,11 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
       partialCollateralization: true,
       fixedLow: 0.001,
       fixedHigh: 990,
-      fullyCollateralisedVTSwap: true
+      fullyCollateralisedVTSwap: true,
     };
 
     return actions.swapAction(amm, transaction);
-  }
+  };
 
   const handleComplete = () => {
     onReset();
@@ -66,12 +78,12 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
     form.setNotional(0);
     const action = actions.closeTransaction(transactionId as string);
     dispatch(action);
-  }
+  };
 
   const handleSubmit = () => {
     if (!form.isValid) return;
 
-    if(!form.tokenApprovals.underlyingTokenApprovedForPeriphery) {
+    if (!form.tokenApprovals.underlyingTokenApprovedForPeriphery) {
       void form.tokenApprovals.approveUnderlyingTokenForPeriphery();
       return;
     }
@@ -99,8 +111,8 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
         notional={form.selectedFixedDebt}
         margin={form.margin}
         onBack={handleGoBack}
-        variableApy={typeof resultVariableApy === 'number' ?  resultVariableApy : undefined}
-        fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr :  undefined}
+        variableApy={typeof resultVariableApy === 'number' ? resultVariableApy : undefined}
+        fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr : undefined}
       />
     );
   }
@@ -133,12 +145,12 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
         tradeInfoErrorMessage={form.borrowInfo.errorMessage}
         swapSummaryLoading={form.borrowInfo.loading}
         balance={form.balance}
-        variableApy={typeof resultVariableApy === 'number' ?  resultVariableApy : undefined}
-        fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr :  undefined}
+        variableApy={typeof resultVariableApy === 'number' ? resultVariableApy : undefined}
+        fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr : undefined}
       />
       <SwapInfo
         balance={form.selectedFixedDebt}
-        formAction={SwapFormActions.SWAP} 
+        formAction={SwapFormActions.SWAP}
         minRequiredMargin={form.margin}
         mode={SwapFormModes.FIX_BORROW}
         positionMargin={form.margin}
@@ -149,7 +161,7 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
         warningText={form.warningText}
       />
     </>
-  )
-}
+  );
+};
 
 export default ConnectedBorrowForm;

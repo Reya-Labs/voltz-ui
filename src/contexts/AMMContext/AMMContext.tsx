@@ -1,15 +1,15 @@
 import React from 'react';
 import { useAMM } from '@hooks';
 import { AugmentedAMM } from '@utilities';
-import { createContext, useContext } from 'react'
+import { createContext, useContext } from 'react';
 
 export type AMMProviderProps = {
   amm: AugmentedAMM;
 };
 
 export type AMMContext = ReturnType<typeof useAMM> & {
-  amm: AugmentedAMM,
-}
+  amm: AugmentedAMM;
+};
 
 const AMMCtx = createContext<AMMContext>({} as unknown as AMMContext);
 AMMCtx.displayName = 'AMMContext';
@@ -19,7 +19,7 @@ export const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, ch
 
   const value = {
     amm,
-    ...ammFuncs
+    ...ammFuncs,
   };
 
   return <AMMCtx.Provider value={value}>{children}</AMMCtx.Provider>;

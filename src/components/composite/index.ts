@@ -22,4 +22,4 @@ export { default as RateOptions } from './RateOptions/RateOptions';
 export { default as TextField } from './TextField/TextField';
 export { default as ToggleButtonGroup } from './ToggleButtonGroup/ToggleButtonGroup';
 export { default as WalletAddressDisplay } from './WalletAddressDisplay/WalletAddressDisplay';
-export { default as PoolField} from './PoolField/PoolField';
+export { default as PoolField } from './PoolField/PoolField';

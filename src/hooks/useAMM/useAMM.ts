@@ -1,11 +1,21 @@
-import { useMemo } from "react";
-import { Agents } from "@contexts";
-import { MintMinimumMarginRequirementPayload, SwapInfoPayload, GetInfoType, ExpectedInfoPayload } from './types';
-import { AugmentedAMM } from "@utilities";
-import { InfoPostSwap, Position, PositionInfo, ExpectedApyInfo } from "@voltz-protocol/v1-sdk/dist/types/entities";
+import { useMemo } from 'react';
+import { Agents } from '@contexts';
+import {
+  MintMinimumMarginRequirementPayload,
+  SwapInfoPayload,
+  GetInfoType,
+  ExpectedInfoPayload,
+} from './types';
+import { AugmentedAMM } from '@utilities';
+import {
+  InfoPostSwap,
+  Position,
+  PositionInfo,
+  ExpectedApyInfo,
+} from '@voltz-protocol/v1-sdk/dist/types/entities';
 
-import useAgent from "../useAgent";
-import useAsyncFunction, { UseAsyncFunctionResult } from "../useAsyncFunction";
+import useAgent from '../useAgent';
+import useAsyncFunction, { UseAsyncFunctionResult } from '../useAsyncFunction';
 
 export type useAMMReturnType = {
   ammCaps: UseAsyncFunctionResult<unknown, number | void>;
@@ -18,7 +28,7 @@ export type useAMMReturnType = {
   swapInfo: UseAsyncFunctionResult<SwapInfoPayload, InfoPostSwap | void>;
   variableApy: UseAsyncFunctionResult<unknown, number | void>;
   expectedApyInfo: UseAsyncFunctionResult<ExpectedInfoPayload, ExpectedApyInfo | void>;
-}
+};
 
 export const useAMM = (amm?: AugmentedAMM) => {
   const { agent } = useAgent();
@@ -28,7 +38,7 @@ export const useAMM = (amm?: AugmentedAMM) => {
       const result = await amm?.getCapPercentage();
       return result;
     },
-    useMemo(() => undefined, [!!amm?.provider])
+    useMemo(() => undefined, [!!amm?.provider]),
   );
 
   const fixedApr = useAsyncFunction(
@@ -49,9 +59,9 @@ export const useAMM = (amm?: AugmentedAMM) => {
       return result;
     },
     useMemo(() => undefined, [!!amm?.signer]),
-    100
+    100,
   );
-  
+
   const positionInfo = useAsyncFunction(
     async (position: Position) => {
       const recipient = await amm?.signer?.getAddress();
@@ -81,7 +91,7 @@ export const useAMM = (amm?: AugmentedAMM) => {
 
       // hard coded values here are the defaults we use for traders, they overlap with a reasonable range (which causes confusion)
       let result: InfoPostSwap | undefined;
-      switch(args.type) {
+      switch (args.type) {
         case GetInfoType.NORMAL_SWAP: {
           result = await amm?.getInfoPostSwap({
             position: args.position,
@@ -90,26 +100,26 @@ export const useAMM = (amm?: AugmentedAMM) => {
             fixedRateLimit: args.fixedRateLimit,
             fixedLow: args.fixedLow ?? 1,
             fixedHigh: args.fixedHigh ?? 999,
-            margin: args.margin
-          }); 
+            margin: args.margin,
+          });
           break;
         }
 
         case GetInfoType.FCM_SWAP: {
-          result = await amm?.getInfoPostFCMSwap({notional: args.notional});
+          result = await amm?.getInfoPostFCMSwap({ notional: args.notional });
           break;
         }
 
         case GetInfoType.FCM_UNWIND: {
-          result = await amm?.getInfoPostFCMUnwind({notionalToUnwind: args.notional});
+          result = await amm?.getInfoPostFCMUnwind({ notionalToUnwind: args.notional });
           break;
         }
 
         default: {
-          throw new Error("Unrecognized operation type");
+          throw new Error('Unrecognized operation type');
         }
       }
-      
+
       if (!result) {
         return;
       }
@@ -117,7 +127,7 @@ export const useAMM = (amm?: AugmentedAMM) => {
       return result;
     },
     useMemo(() => undefined, [!!amm?.signer, agent]),
-    100
+    100,
   );
 
   const expectedApyInfo = useAsyncFunction(
@@ -136,7 +146,7 @@ export const useAMM = (amm?: AugmentedAMM) => {
         fixedHigh: 999,
         fixedTokenDeltaUnbalanced: args.fixedTokenDeltaUnbalanced,
         availableNotional: args.availableNotional,
-        predictedVariableApy: args.predictedVariableApy
+        predictedVariableApy: args.predictedVariableApy,
       });
 
       if (!result) {
@@ -145,32 +155,35 @@ export const useAMM = (amm?: AugmentedAMM) => {
 
       return result;
     },
-    useMemo(() => undefined, [!!amm?.signer])
-  )
+    useMemo(() => undefined, [!!amm?.signer]),
+  );
 
   const variableApy = useAsyncFunction(
     (amm?.getInstantApy || Promise.reject).bind(amm),
     useMemo(() => undefined, [!!amm?.provider]),
   );
 
-  return useMemo(() => ({
-    ammCaps,
-    fixedApr,
-    mintMinimumMarginRequirement,
-    positionInfo,
-    swapInfo,
-    variableApy,
-    expectedApyInfo,
-  } as useAMMReturnType), 
-  [
-    ammCaps, 
-    fixedApr, 
-    mintMinimumMarginRequirement, 
-    positionInfo,
-    swapInfo,
-    variableApy,
-    expectedApyInfo,
-  ]);
-}
+  return useMemo(
+    () =>
+      ({
+        ammCaps,
+        fixedApr,
+        mintMinimumMarginRequirement,
+        positionInfo,
+        swapInfo,
+        variableApy,
+        expectedApyInfo,
+      } as useAMMReturnType),
+    [
+      ammCaps,
+      fixedApr,
+      mintMinimumMarginRequirement,
+      positionInfo,
+      swapInfo,
+      variableApy,
+      expectedApyInfo,
+    ],
+  );
+};
 
 export default useAMM;

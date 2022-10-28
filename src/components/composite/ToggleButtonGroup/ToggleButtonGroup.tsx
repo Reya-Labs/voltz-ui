@@ -24,7 +24,7 @@ const ToggleButtonGroup = <T,>({
   defaultOption,
   disabled = false,
   onChangeOption,
-}:ToggleButtonGroupProps<T>) => {
+}: ToggleButtonGroupProps<T>) => {
   useAgentWithOverride(agentOverride);
   const [activeOption, setOption] = useState(option || defaultOption || options[0]);
   const handleChange = (_event: React.MouseEvent<HTMLElement, MouseEvent>, value: T) => {
@@ -33,7 +33,12 @@ const ToggleButtonGroup = <T,>({
   };
 
   return (
-    <MuiToggleButtonGroup value={option || activeOption} exclusive onChange={handleChange} disabled={disabled}>
+    <MuiToggleButtonGroup
+      value={option || activeOption}
+      exclusive
+      onChange={handleChange}
+      disabled={disabled}
+    >
       {options.map((optionItem: T) => (
         <ToggleButton key={optionItem as unknown as string} value={optionItem}>
           {optionItem}
@@ -43,4 +48,5 @@ const ToggleButtonGroup = <T,>({
   );
 };
 
-export default <T,>(props: ToggleButtonGroupProps<T> & WithLabelProps) => withLabel<ToggleButtonGroupProps<T>>(ToggleButtonGroup)(props);
+export default <T,>(props: ToggleButtonGroupProps<T> & WithLabelProps) =>
+  withLabel<ToggleButtonGroupProps<T>>(ToggleButtonGroup)(props);

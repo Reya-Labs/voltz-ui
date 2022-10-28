@@ -1,5 +1,5 @@
 import { Typography } from '@components/atomic';
-import { Stack, TableRow } from '@mui/material';
+import { Stack } from '@mui/material';
 import { colors } from '@theme';
 
 import { IconLabel } from '@components/composite';
@@ -19,7 +19,7 @@ export type FixBorrowProps = {
   swapSummaryLoading: boolean;
   error?: boolean;
   errorText?: string;
-}
+};
 
 const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
   variableDebt,
@@ -31,7 +31,7 @@ const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
   handleChange,
   swapSummaryLoading,
   error,
-  errorText
+  errorText,
 }) => {
   const renderValue = () => {
     if (variableDebt.loading) {
@@ -54,20 +54,26 @@ const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
     <Box>
       <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
         <Box>
-          <Typography variant='body2' sx={{fontSize: 20, fontWeight: 700}}>
-            <IconLabel label="Variable Debt" icon="information-circle" info="Your current variable debt on Aave or Compound that has not been set to a Voltz fixed rate yet" />
+          <Typography variant="body2" sx={{ fontSize: 20, fontWeight: 700 }}>
+            <IconLabel
+              label="Variable Debt"
+              icon="information-circle"
+              info="Your current variable debt on Aave or Compound that has not been set to a Voltz fixed rate yet"
+            />
           </Typography>
         </Box>
 
         <Box>
-          <Typography variant='body2' sx={{fontSize: 20, fontWeight: 700, color: colors.skyBlueCrayola.base }}>
+          <Typography
+            variant="body2"
+            sx={{ fontSize: 20, fontWeight: 700, color: colors.skyBlueCrayola.base }}
+          >
             {renderValue()}
           </Typography>
         </Box>
-        
       </Stack>
 
-      <FixBorrowSlider 
+      <FixBorrowSlider
         variableDebt={variableDebt}
         selectedFixedDebt={selectedFixedDebt}
         selectedFixedDebtPercentage={selectedFixedDebtPercentage}

@@ -8,15 +8,17 @@ export type HealthFactorProps = {
   status: string;
 };
 
-const HealthFactor: React.FunctionComponent<HealthFactorProps> = ({status}) => {
+const HealthFactor: React.FunctionComponent<HealthFactorProps> = ({ status }) => {
   if (status === 'HEALTHY') {
     return (
       <TableCell>
         <Box sx={{ marginLeft: (theme) => theme.spacing(4), display: 'flex' }}>
           <Button
-            variant='healthy'
+            variant="healthy"
             sx={{ zIndex: 1, left: (theme) => theme.spacing(-2), fontSize: 16, borderWidth: 0 }}
-            startIcon={<CircleIcon sx={{ width: 4, height: 4, borderRadius: 200, color: "#00d395" }} />}
+            startIcon={
+              <CircleIcon sx={{ width: 4, height: 4, borderRadius: 200, color: '#00d395' }} />
+            }
           >
             {status}
           </Button>
@@ -30,9 +32,11 @@ const HealthFactor: React.FunctionComponent<HealthFactorProps> = ({status}) => {
       <TableCell>
         <Box sx={{ marginLeft: (theme) => theme.spacing(4), display: 'flex' }}>
           <Button
-            variant='warning'
+            variant="warning"
             sx={{ zIndex: 1, left: (theme) => theme.spacing(-2), fontSize: 16, borderWidth: 0 }}
-            startIcon={<CircleIcon sx={{ width: 4, height: 4, borderRadius: 200, color: "#F1D302" }} />}
+            startIcon={
+              <CircleIcon sx={{ width: 4, height: 4, borderRadius: 200, color: '#F1D302' }} />
+            }
           >
             {status}
           </Button>
@@ -46,9 +50,11 @@ const HealthFactor: React.FunctionComponent<HealthFactorProps> = ({status}) => {
       <TableCell>
         <Box sx={{ marginLeft: (theme) => theme.spacing(4), display: 'flex' }}>
           <Button
-            variant='danger'
+            variant="danger"
             sx={{ zIndex: 1, left: (theme) => theme.spacing(-2), fontSize: 16, borderWidth: 0 }}
-            startIcon={<CircleIcon sx={{ width: 4, height: 4, borderRadius: 200, color: "#F61067" }} />}
+            startIcon={
+              <CircleIcon sx={{ width: 4, height: 4, borderRadius: 200, color: '#F61067' }} />
+            }
           >
             {status}
           </Button>
@@ -61,9 +67,11 @@ const HealthFactor: React.FunctionComponent<HealthFactorProps> = ({status}) => {
     <TableCell>
       <Box sx={{ marginLeft: (theme) => theme.spacing(4), display: 'flex' }}>
         <Button
-          variant='dark'
+          variant="dark"
           sx={{ zIndex: 1, left: (theme) => theme.spacing(-2), fontSize: 16, borderWidth: 0 }}
-          startIcon={<CircleIcon sx={{ width: 4, height: 4, borderRadius: 200, color: "#ff4aa9" }} />}
+          startIcon={
+            <CircleIcon sx={{ width: 4, height: 4, borderRadius: 200, color: '#ff4aa9' }} />
+          }
         >
           {status}
         </Button>

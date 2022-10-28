@@ -2,7 +2,14 @@ import React from 'react';
 import { DateTime, Duration } from 'luxon';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { AgentProvider, AMMProvider, SwapFormProvider, SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates, useSwapFormContext } from '@contexts';
+import {
+  AgentProvider,
+  AMMProvider,
+  SwapFormProvider,
+  SwapFormSubmitButtonHintStates,
+  SwapFormSubmitButtonStates,
+  useSwapFormContext,
+} from '@contexts';
 import SwapForm from './SwapForm';
 import { useTokenApproval } from '@hooks';
 import { AugmentedAMM } from '@utilities';
@@ -12,33 +19,33 @@ import { SwapFormActions, SwapFormModes } from './types';
 export default {
   title: 'Interface/SwapForm',
   component: SwapForm,
-  argTypes: { 
-    onSubmit: { action: 'clicked' } 
+  argTypes: {
+    onSubmit: { action: 'clicked' },
   },
 } as ComponentMeta<typeof SwapForm>;
 
-const mockAmm = ({
+const mockAmm = {
   getCapPercentage: () => Promise.resolve(),
   getFixedApr: () => Promise.resolve(),
   getInstantApy: () => Promise.resolve(),
-  hasEnoughUnderlyingTokens: () =>  true,
+  hasEnoughUnderlyingTokens: () => true,
   isFCMApproved: () => true,
   isUnderlyingTokenApprovedForFCM: () => true,
   isUnderlyingTokenApprovedForPeriphery: () => true,
-  isYieldBearingTokenApprovedForFCM: () =>  true,
+  isYieldBearingTokenApprovedForFCM: () => true,
   underlyingToken: {
     id: '0x123456789',
-    name: 'gil'
-  }
-} as unknown) as AugmentedAMM;
+    name: 'gil',
+  },
+} as unknown as AugmentedAMM;
 
-const mockSwapData = ({
+const mockSwapData = {
   marginRequirement: 55,
   availableNotional: 4000,
   fee: 6.66,
   slippage: 4,
   averageFixedRate: 3,
-} as unknown) as InfoPostSwap;
+} as unknown as InfoPostSwap;
 
 const mockTokenApprovals = {
   approving: false,
@@ -50,9 +57,8 @@ const mockTokenApprovals = {
   FCMApproved: true,
   underlyingTokenApprovedForFCM: true,
   underlyingTokenApprovedForPeriphery: true,
-  yieldBearingTokenApprovedForFCM: true
-} as ReturnType<typeof useTokenApproval>
-
+  yieldBearingTokenApprovedForFCM: true,
+} as ReturnType<typeof useTokenApproval>;
 
 // Creating a new position
 const NewPositionTemplate: ComponentStory<typeof SwapForm> = (args) => (
@@ -69,11 +75,11 @@ const NewPositionSwapForm: React.FunctionComponent = (args) => {
   const form = useSwapFormContext();
 
   return (
-    <SwapForm 
-      {...args} 
+    <SwapForm
+      {...args}
       approvalsNeeded={false}
       errors={form.errors}
-      formState={form.state} 
+      formState={form.state}
       hintState={SwapFormSubmitButtonHintStates.READY_TO_TRADE}
       isFCMAction={false}
       isFCMAvailable={true}
@@ -84,7 +90,7 @@ const NewPositionSwapForm: React.FunctionComponent = (args) => {
       onCancel={() => alert('cancel')}
       onChangeLeverage={form.setLeverage}
       onChangeMargin={form.setMargin}
-      onChangeMarginAction={form.setMarginAction} 
+      onChangeMarginAction={form.setMarginAction}
       onChangeNotional={form.setNotional}
       onChangePartialCollateralization={form.setPartialCollateralization}
       onSubmit={() => form.validate()}
@@ -118,8 +124,8 @@ const EditingMarginSwapForm: React.FunctionComponent = (args) => {
   const form = useSwapFormContext();
 
   return (
-    <SwapForm 
-      {...args} 
+    <SwapForm
+      {...args}
       approvalsNeeded={false}
       errors={form.errors}
       formState={form.state}
@@ -133,7 +139,7 @@ const EditingMarginSwapForm: React.FunctionComponent = (args) => {
       onCancel={() => alert('cancel')}
       onChangeLeverage={form.setLeverage}
       onChangeMargin={form.setMargin}
-      onChangeMarginAction={form.setMarginAction} 
+      onChangeMarginAction={form.setMarginAction}
       onChangeNotional={form.setNotional}
       onChangePartialCollateralization={form.setPartialCollateralization}
       onSubmit={() => form.validate()}

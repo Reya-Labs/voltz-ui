@@ -1,1 +1,8 @@
-export type PositionTableFields = 'pool' | 'notional' | 'margin' | 'maturity' | 'fixedApr' | 'rateRange' | 'accruedRates';
+export type PositionTableFields =
+  | 'pool'
+  | 'notional'
+  | 'margin'
+  | 'maturity'
+  | 'fixedApr'
+  | 'rateRange'
+  | 'accruedRates';

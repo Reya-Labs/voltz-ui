@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { AgentProvider, AMMProvider, SwapFormProvider, useSwapFormContext } from '@contexts';
+import { AgentProvider, AMMProvider, SwapFormProvider } from '@contexts';
 import SwapInfo from './SwapInfo';
 import { AugmentedAMM } from '@utilities';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
@@ -10,26 +10,25 @@ import { SwapFormActions, SwapFormModes } from '../SwapForm/types';
 export default {
   title: 'Interface/SwapInfo',
   component: SwapInfo,
-  argTypes: { 
-  },
+  argTypes: {},
 } as ComponentMeta<typeof SwapInfo>;
 
-const mockAmm = ({
+const mockAmm = {
   getCapPercentage: () => Promise.resolve(),
   getFixedApr: () => Promise.resolve(),
   getInstantApy: () => Promise.resolve(),
-  hasEnoughUnderlyingTokens: () =>  true,
+  hasEnoughUnderlyingTokens: () => true,
   isFCMApproved: () => true,
   isUnderlyingTokenApprovedForFCM: () => true,
   isUnderlyingTokenApprovedForPeriphery: () => true,
   isYieldBearingTokenApprovedForFCM: () => true,
   underlyingToken: {
     id: '0x123456789',
-    name: 'gil'
-  }
-} as unknown) as AugmentedAMM;
+    name: 'gil',
+  },
+} as unknown as AugmentedAMM;
 
-const mockSwapData = ({
+const mockSwapData = {
   marginRequirement: 55,
   availableNotional: 4000,
   fee: 6.66,
@@ -37,9 +36,9 @@ const mockSwapData = ({
   averageFixedRate: 3,
   expectedApy: [
     [0, 0.5, 1, 1.5, 2.5],
-    [1.21, 16, 32, 88, 1955]
-  ]
-} as unknown) as InfoPostSwap;
+    [1.21, 16, 32, 88, 1955],
+  ],
+} as unknown as InfoPostSwap;
 
 const NewPositionTemplate: ComponentStory<typeof SwapInfo> = (args) => (
   <AgentProvider>
@@ -54,11 +53,10 @@ const NewPositionTemplate: ComponentStory<typeof SwapInfo> = (args) => (
 // New position
 const NewPositionSwapForm: React.FunctionComponent = (args) => {
   const mode = SwapFormModes.NEW_POSITION;
-  const form = useSwapFormContext();
 
   return (
-    <SwapInfo 
-      {...args} 
+    <SwapInfo
+      {...args}
       mode={mode}
       formAction={SwapFormActions.SWAP}
       swapSummary={mockSwapData}
@@ -73,7 +71,6 @@ newPosition.args = {
   protocol: 'aGIL',
 };
 
-
 // Editing margin
 const EditMarginTemplate: ComponentStory<typeof SwapInfo> = (args) => (
   <AgentProvider>
@@ -87,11 +84,10 @@ const EditMarginTemplate: ComponentStory<typeof SwapInfo> = (args) => (
 
 const EditMarginSwapForm: React.FunctionComponent = (args) => {
   const mode = SwapFormModes.EDIT_MARGIN;
-  const form = useSwapFormContext();
 
   return (
-    <SwapInfo 
-      {...args} 
+    <SwapInfo
+      {...args}
       mode={mode}
       formAction={SwapFormActions.SWAP}
       swapSummary={mockSwapData}

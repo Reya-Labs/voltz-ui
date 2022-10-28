@@ -18,4 +18,3 @@ const mapAmmToAmmTableDatum = ({
 };
 
 export default mapAmmToAmmTableDatum;
-

@@ -26,7 +26,7 @@ const deserializeAmm = (
     },
     txCount,
     totalLiquidity,
-    totalNotionalTraded
+    totalNotionalTraded,
   } = serializedAmm;
   const amm = new AugmentedAMM({
     id,
@@ -39,7 +39,7 @@ const deserializeAmm = (
     termEndTimestamp: JSBI.BigInt(termEndTimestamp),
     tick: parseInt(tick, 10),
     tickSpacing: parseInt(tickSpacing, 10),
-    factoryAddress: factoryAddress || "0x",
+    factoryAddress: factoryAddress || '0x',
     marginEngineAddress,
     rateOracle: new RateOracle({ id: rateOracleAddress, protocolId: parseInt(protocolId, 10) }),
     underlyingToken: new Token({

@@ -1,15 +1,4 @@
 import { colors, SystemStyleObject, Theme } from '@theme';
-import { keyframes } from '@mui/system';
-
-const shake = keyframes`
-  10%, 30%, 50%, 70%, 90% {
-    transform: translate3d(-2px, 0, 0);
-  }
-
-  20%, 40%, 60%, 80% {
-    transform: translate3d(1px, 0, 0);
-  }
-`;
 
 export const iconSx: SystemStyleObject<Theme> = {
   width: '100%',

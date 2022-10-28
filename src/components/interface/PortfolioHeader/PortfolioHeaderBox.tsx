@@ -9,30 +9,28 @@ export type PortfolioHeaderBoxProps = {
   textSx?: SystemStyleObject<Theme>;
 };
 
-const valueBoxStyles: SystemStyleObject<Theme> = { 
+const valueBoxStyles: SystemStyleObject<Theme> = {
   background: colors.lavenderWeb.darken040,
   padding: (theme) => `${theme.spacing(2)} ${theme.spacing(4)}`,
   borderRadius: '4px',
   marginTop: (theme) => theme.spacing(2),
-  display: 'inline-block'
+  display: 'inline-block',
 };
 
-const valueBoxTextStyles: SystemStyleObject<Theme> = { 
+const valueBoxTextStyles: SystemStyleObject<Theme> = {
   color: colors.skyBlueCrayola.base,
-  fontSize: '16px', 
+  fontSize: '16px',
   lineHeight: '0.9',
   textTransform: 'uppercase',
-  whiteSpace: 'nowrap'
+  whiteSpace: 'nowrap',
 };
 
 const PortfolioHeaderBox = ({ children, sx, textSx }: PortfolioHeaderBoxProps) => (
   <Box sx={{ ...valueBoxStyles, ...sx }}>
-    <Typography variant='body2' sx={{ ...valueBoxTextStyles, ...textSx }}>
+    <Typography variant="body2" sx={{ ...valueBoxTextStyles, ...textSx }}>
       {children}
     </Typography>
   </Box>
 );
 
 export default PortfolioHeaderBox;
-
-  

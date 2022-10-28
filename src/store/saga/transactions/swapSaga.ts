@@ -10,7 +10,8 @@ import { SwapAction } from '../../types';
 import { deserializeAmm, getSigner } from '../../utilities';
 import * as actions from '../../actions';
 
-function* swapSaga(action: SwapAction) { // function * means it is async function
+function* swapSaga(action: SwapAction) {
+  // function * means it is async function
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const signer: providers.JsonRpcSigner | null = yield getSigner();
 
@@ -24,7 +25,8 @@ function* swapSaga(action: SwapAction) { // function * means it is async functio
     return;
   }
 
-  const { id, agent, notional, margin, fixedLow, fixedHigh, fullyCollateralisedVTSwap } = action.payload.transaction;
+  const { id, agent, notional, margin, fixedLow, fixedHigh, fullyCollateralisedVTSwap } =
+    action.payload.transaction;
 
   let result: ContractReceipt | void;
   try {
@@ -35,15 +37,14 @@ function* swapSaga(action: SwapAction) { // function * means it is async functio
       margin,
       fixedLow: fixedLow ?? 1,
       fixedHigh: fixedHigh ?? 999,
-      fullyCollateralisedVTSwap: fullyCollateralisedVTSwap
+      fullyCollateralisedVTSwap: fullyCollateralisedVTSwap,
     });
-
   } catch (error) {
     yield put(
       actions.updateTransaction({
         id,
         failedAt: DateTime.now().toISO(),
-        failureMessage: getErrorMessage(error)
+        failureMessage: getErrorMessage(error),
       }),
     );
 
@@ -56,7 +57,11 @@ function* swapSaga(action: SwapAction) { // function * means it is async functio
     );
   } else {
     yield put(
-      actions.updateTransaction({ id, succeededAt: DateTime.now().toISO(), txid: result.transactionHash }),
+      actions.updateTransaction({
+        id,
+        succeededAt: DateTime.now().toISO(),
+        txid: result.transactionHash,
+      }),
     );
   }
 }
