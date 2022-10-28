@@ -77,6 +77,10 @@ const Nav: React.FunctionComponent = () => (
         Community
       </NavLink>
     )}
+
+    {process.env.REACT_APP_ECOSYSTEM && process.env.REACT_APP_ECOSYSTEM !== `UNPROVIDED` && (
+      <NavLink link={`/${routes.ECOSYSTEM}`}>Ecosystem</NavLink>
+    )}
   </Box>
 );
 

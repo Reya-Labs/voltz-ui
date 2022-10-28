@@ -5,3 +5,5 @@ export { default as ConnectedSwapForm } from './ConnectedSwapForm/ConnectedSwapF
 export { default as ConnectedBorrowPositionTable } from './ConnectedBorrowPositionTable/ConnectedBorrowPositionTable';
 export { default as ConnectedBorrowForm } from './ConnectedBorrowForm/ConnectedBorrowForm';
 export { default as ConnectedRankingTable } from './ConnectedRankingTable/ConnectedRankingTable';
+export { default as ConnectedMellowLPTable } from './ConnectedMellowLPTable/ConnectedMellowLPTable';
+export { default as ConnectedMellowLpDepositForm } from './ConnectedMellowLpDepositForm/ConnectedMellowLpDepositForm';
