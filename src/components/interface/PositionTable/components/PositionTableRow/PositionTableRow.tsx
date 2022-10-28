@@ -29,12 +29,14 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
   const { agent } = useAgent();
   const labels = agent === Agents.LIQUIDITY_PROVIDER ? lpLabels : traderLabels;
 
+  // remove this and get fixedApr from position.amm.fixedApr (field)
   const { fixedApr } = useAMMContext();
   const { result: resultFixedApr, call: callFixedApr } = fixedApr;
 
   useEffect(() => {
     callFixedApr();
   }, [callFixedApr]);
+  // remove above
 
   const typeStyleOverrides: SystemStyleObject<Theme> = {
     backgroundColor: `secondary.darken050`, // this affects the colour of the positions rows in the LP positions
@@ -63,15 +65,19 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     if (field === 'margin') {
       return (
         <CurrentMargin
-          accruedCashflow={
+            // replace positionInfo?.accruedCashflow with position.accruedCashflow
+            accruedCashflow={
             agent === Agents.LIQUIDITY_PROVIDER ? undefined : positionInfo?.accruedCashflow || 0
           }
-          margin={positionInfo?.margin}
-          token={
+            // replace positionInfo?.margin with position.margin
+            margin={positionInfo?.margin}
+            // replace this with token={position.amm.tokenName}
+            token={
             position.source.includes('FCM') ? position.amm.protocol : underlyingTokenName || ''
           }
           onSelect={agent === Agents.LIQUIDITY_PROVIDER ? handleEditMargin : undefined}
-          marginEdit={position.source.includes('FCM') ? false : true}
+            // replace this with marginEdit={true}
+            marginEdit={position.source.includes('FCM') ? false : true}
           isSettled={position.isSettled}
         />
       );
@@ -84,7 +90,8 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     if (field === 'notional') {
       return (
         <Notional
-          notional={
+            // replace position.effectiveVariableTokenBalance with position.variableTokenBalance
+            notional={
             agent === Agents.LIQUIDITY_PROVIDER
               ? formatNumber(position.notional)
               : formatNumber(Math.abs(position.effectiveVariableTokenBalance))

@@ -25,10 +25,16 @@ const Trader: React.FunctionComponent = () => {
   const [position, setPosition] = useState<Position>();
   const [settling, setSettling] = useState<boolean>(false);
 
+  // 1. build protocol object with the env. variable and trigger onLand() initializer (and remove useAmms())
+  // at this moment, all AMMs are loaded
+  // 2. add an useEffect when signer is connected and trigger onConnect(signer) (and remove usePositions())
+  // protocol.positions (:Position[]) will be filled onConnect()
+
   const { amms } = useAMMs();
   const { onChangeAgent } = useAgent();
   const { pathname, key } = useLocation();
-  const { positions, positionsByAgentGroup } = usePositions();
+    // remove both for v2 (if agent is FIXED_TAKER or VARIABLE_TAKER, then get protocol.getTraderPositions(), otherwise protocol.getLPPositions())
+    const { positions, positionsByAgentGroup } = usePositions();
   const { agent } = useAgent();
   const { account } = useWallet();
 

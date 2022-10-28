@@ -30,11 +30,14 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
   agent,
   handleCompletedSettling,
 }) => {
+  // 1. here we have all positions from protocol
+  // 2. there will be some fields re-named in position
+
   const [order, setOrder] = useState<data.TableOrder>('desc');
   const [orderBy, setOrderBy] = useState<PositionTableFields>('maturity');
   const [page, setPage] = useState(0);
   const [size, setSize] = useState<number | null>(null);
-  const { positionsByAgentGroup, loading, error } = usePositions();
+  const { positionsByAgentGroup, loading, error } = usePositions(); // remove this in v2
   const pages = 0;
   const { status } = useWallet();
 

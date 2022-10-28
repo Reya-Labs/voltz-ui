@@ -23,11 +23,14 @@ export type AMMTableRowProps = {
 
 // todo: panel component, adjust the styling
 const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, onSelect }) => {
+  // here we pass AMM object that this row represents
+
   const wallet = useWallet();
   const { agent } = useAgent();
   const variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'main';
   const { amm } = useAMMContext();
 
+  // we need to remove these context functions and get variableApy from amm.variableApy (field) and get fixedApr from amm.fixedApr
   const { variableApy, fixedApr } = useAMMsContext();
   const { result: resultFixedApr, call: callFixedApr } = fixedApr(amm);
   const { result: resultVarApy, call: callVarApy } = variableApy(amm);
@@ -39,6 +42,7 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
   useEffect(() => {
     callFixedApr();
   }, [callFixedApr]);
+  // remove above
 
   // add object to sx prop
   // todo:

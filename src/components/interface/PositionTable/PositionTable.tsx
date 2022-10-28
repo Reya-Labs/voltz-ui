@@ -38,7 +38,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   onSettle,
   portfolioData,
 }) => {
-  const { amms } = useAMMs();
+  const { amms } = useAMMs(); // remove this (we have amms into protocol.amms)
   const { agent } = useAgent();
 
   const commonOverrides: SystemStyleObject<Theme> = {

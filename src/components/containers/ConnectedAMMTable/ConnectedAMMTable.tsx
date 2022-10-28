@@ -9,11 +9,13 @@ export type ConnectedAMMTableProps = {
 };
 
 const ConnectedAMMTable: React.FunctionComponent<ConnectedAMMTableProps> = ({ onSelectItem }) => {
+  // protocol (that contains AMMs) is going to be passed as prop in v2
+
   const [order, setOrder] = useState<data.TableOrder>('desc');
   const [orderBy, setOrderBy] = useState<AMMTableFields>('maturity');
   const [page, setPage] = useState(0);
   const [size, setSize] = useState<number | null>(null);
-  const { amms, loading, error } = useAMMs();
+  const { amms, loading, error } = useAMMs(); // remove in v2
   const pages = 0;
 
   if (!amms || loading || error) {
