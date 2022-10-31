@@ -43,7 +43,7 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
       sx={{
         width: '100%',
         maxWidth: '328px',
-        maxHeight: '444px',
+        maxHeight: '464px',
         background: '#19152A',
         padding: (theme) => theme.spacing(4),
       }}
@@ -92,7 +92,7 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
           fontWeight: '400',
         }}
       >
-        The Mellow LP optimiser is available for the Voltz Protocol stETH pool.
+        The Mellow LP Optimiser is available for the Voltz Protocol stETH pool.
       </Typography>
 
       <Box sx={{ marginTop: '16px' }}>
@@ -170,8 +170,8 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
             lineHeight: '1.5',
           }}
         >
-          Funds deposited will be locked into the pool until the pool reaches maturity. At this
-          point the withdrawal mechanism will be enabled.
+          Funds deposited will be locked into the pool until the pool reaches maturity. Upon maturity,
+          the withdrawal mechanism will be enabled.
         </Typography>
       </Panel>
     </FormPanel>

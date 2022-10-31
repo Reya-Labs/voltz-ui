@@ -23,8 +23,8 @@ const EcosystemHeader = ({
             VOLTZ ECOSYSTEM
           </Typography>
           <Typography variant="body1" sx={copyStyles}>
-            Access a world of new products, integrations, protocols and applications built ontop of
-            Voltz Protocol below.
+            Access a world of new products, integrations, protocols and applications built on top of
+            Voltz Protocol.
           </Typography>
         </Box>
         <Box sx={{ marginTop: '16px', display: 'flex' }}>
