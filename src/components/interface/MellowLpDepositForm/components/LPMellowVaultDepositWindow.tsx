@@ -58,7 +58,8 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
           </Typography>
         </Box>
 
-        <Box sx={{ borderBottom: '1px solid #2A2444', marginLeft: '16px' }}>
+        {/* TODO enable WITHDRAW once feature is supported (maturity) */}
+        {/* <Box sx={{ borderBottom: '1px solid #2A2444', marginLeft: '16px' }}>
           <Typography
             variant="h1"
             sx={{
@@ -71,7 +72,7 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
           >
             WITHDRAW
           </Typography>
-        </Box>
+        </Box> */}
       </Box>
 
       <Typography
