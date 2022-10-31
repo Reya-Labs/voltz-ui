@@ -29,9 +29,9 @@ const MellowLpDepositHeaderForm: React.FunctionComponent<MellowLpDepositFormHead
         </Box>
 
         <Box sx={{ display: 'flex' }}>
-          <Button sx={{ ...boxStyles, border: '1px solid #FF4AA9' }} onClick={onCancel}>
+          <Button sx={{ ...boxStyles }} onClick={onCancel}>
             <Typography variant="h6" sx={{ ...tagStyles }}>
-              ECOSYSTEM
+              BACK
             </Typography>
           </Button>
 

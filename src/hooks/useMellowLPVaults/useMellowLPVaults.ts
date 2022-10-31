@@ -19,7 +19,7 @@ const useMellowLPVaults = (): useMellowLPVaultsResult => {
       (item) =>
         new AugmentedMellowLpVault({
           refetch: handleRefetch,
-          ethWrapperAddress: process.env.REACT_APP_MELLOW_ETH_WRAPPER || "",
+          ethWrapperAddress: process.env.REACT_APP_MELLOW_ETH_WRAPPER || '',
           voltzVaultAddress: item.voltzVaultAddress,
           erc20RootVaultAddress: item.erc20RootVaultAddress,
           erc20RootVaultGovernanceAddress: item.erc20RootVaultGovernanceAddress,
