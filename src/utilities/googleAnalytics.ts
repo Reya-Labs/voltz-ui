@@ -86,9 +86,9 @@ type DataLayerEventName =
   | 'failed_tx'
   | 'successful_tx';
 
-export const pushEvent = (payload: DataLayerEventPayload) => {
+export const pushEvent = (userAddress: string, payload: DataLayerEventPayload) => {
   if (!window.dataLayer) {
     return;
   }
-  window.dataLayer.push({ sessionId: SESSION_ID, ...payload });
+  window.dataLayer.push({ sessionId: SESSION_ID, userAddress: userAddress, ...payload });
 };
