@@ -34,6 +34,22 @@ const Icon: React.FunctionComponent<IconProps> = ({ name, sx, link, ...props }) 
       case 'okBoomer':
       case 'dryIce':
       case 'noClaimedBadges':
+      case 'ogDegenStuff':
+      case 'ogDeltaDegen':
+      case 'ogIrsConnoisseur':
+      case 'ogLeverageCrowbar':
+      case 'ogFixedTrader':
+      case 'ogSushiRoll':
+      case 'ogTopTrader':
+      case 'ogBeWaterMyFriend':
+      case 'ogRainMaker':
+      case 'ogWaterHose':
+      case 'ogMoneyMoneyMoney':
+      case 'ogLpoor':
+      case 'ogYikes':
+      case 'ogMaxBidding':
+      case 'ogOkBoomer':
+      case 'ogDryIce':
         return {
           viewBox: '0 0 459 459',
         };

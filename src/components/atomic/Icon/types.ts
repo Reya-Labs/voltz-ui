@@ -37,7 +37,6 @@ import {
   Voltz,
   WalletConnect,
   WaterHose,
-  OGNoClaimedBadges,
   OGLpoor,
   OGDryIce,
   OGYikes,
@@ -110,7 +109,6 @@ export type Icons =
   | 'ogYikes'
   | 'ogMaxBidding'
   | 'ogDryIce'
-  | 'ogNoClaimedBadges'
   | 'ogOkBoomer';
 
 export const iconMap: Record<Icons, ElementType> = {
@@ -168,5 +166,4 @@ export const iconMap: Record<Icons, ElementType> = {
   ogMaxBidding: OGMaxBidding as ElementType,
   ogOkBoomer: OGOkBoomer as ElementType,
   ogDryIce: OGDryIce as ElementType,
-  ogNoClaimedBadges: OGNoClaimedBadges as ElementType,
 };

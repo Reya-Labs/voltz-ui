@@ -35,41 +35,26 @@ import {
 type ProfilePageProps = {
   account: string;
   achievedBadges: AchievedBadgeProps[];
-  season: string;
+  seasonLabel: string;
   seasonStartDateFormatted: string;
   seasonEndDateFormatted: string;
   loading?: boolean;
+  isOnGoingSeason: boolean;
+  seasonBadgeVariants: string[];
 };
-
-const collectionBadgesSort = [
-  'fixedTrader',
-  'deltaDegen',
-  'leverageCrowbar',
-  'irsConnoisseur',
-  'sushiRoll',
-  'degenStuff',
-  'topTrader',
-  'okBoomer',
-  'dryIce',
-  'maxBidding',
-  'yikes',
-  'lpoor',
-  'moneyMoneyMoney',
-  'waterHose',
-  'rainMaker',
-  'beWaterMyFriend',
-];
 
 export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProps> = ({
   account,
-  season,
+  seasonLabel,
   seasonStartDateFormatted,
   seasonEndDateFormatted,
   achievedBadges,
   loading,
+  isOnGoingSeason,
+  seasonBadgeVariants = [],
 }) => {
   const achievedBadgesMemo: AchievedBadgeProps[] = React.useMemo(() => {
-    return collectionBadgesSort
+    return seasonBadgeVariants
       .map((variant) => achievedBadges.find((c) => c.variant === variant))
       .filter((b) => b)
       .filter((b) =>
@@ -90,7 +75,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
           Earn badges through your contribution to the community and activity on the protocol.
           Badges are earned throughout each Season, with minting available at the end of each
           Season. The more you collect the greater your contribution.{' '}
-          <BoldText>Season {season}</BoldText> runs between{' '}
+          <BoldText>{seasonLabel}</BoldText> {isOnGoingSeason ? 'runs' : 'ran'} between{' '}
           <BoldText>{seasonStartDateFormatted}</BoldText> and{' '}
           <BoldText>{seasonEndDateFormatted}</BoldText>.
         </Subheading>
@@ -106,7 +91,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
             <Typography variant="h2">YOUR BADGE COLLECTION</Typography>
             {
               <BadgeCollectionSeasonTypography variant="h1">
-                Season {season}
+                {seasonLabel}
               </BadgeCollectionSeasonTypography>
             }
           </BadgeCollectionTypographyBox>
@@ -138,7 +123,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
         <AchievedBadgesListBox>
           <AchievedBadgesListHeading variant="h2">
             THE COLLECTION -&nbsp;
-            {<AchievedBadgesListSeason>SEASON {season}</AchievedBadgesListSeason>}
+            <AchievedBadgesListSeason>{seasonLabel.toUpperCase()}</AchievedBadgesListSeason>
           </AchievedBadgesListHeading>
           <AchievedBadgesListSubheading variant="body2">
             Make contributions to the community or trade on the protocol to earn badges{' '}

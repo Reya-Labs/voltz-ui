@@ -5,7 +5,7 @@ type CollectionBadge = {
   achievedAt?: number;
 };
 
-export const collectionBadges: CollectionBadge[] = [
+export const season1Badges: CollectionBadge[] = [
   {
     variant: 'fixedTrader',
     achievedAt: new Date('02/02/2022').valueOf(),
@@ -58,5 +58,71 @@ export const collectionBadges: CollectionBadge[] = [
   },
   {
     variant: 'dryIce',
+  },
+];
+export const seasonOGBadges: CollectionBadge[] = [
+  {
+    variant: 'ogFixedTrader',
+    achievedAt: new Date().valueOf(),
+  },
+  {
+    variant: 'ogDeltaDegen',
+    achievedAt: new Date().valueOf(),
+  },
+  {
+    variant: 'ogLeverageCrowbar',
+    achievedAt: new Date().valueOf(),
+  },
+  {
+    variant: 'ogIrsConnoisseur',
+    achievedAt: new Date().valueOf(),
+  },
+  {
+    variant: 'ogSushiRoll',
+    achievedAt: new Date().valueOf(),
+  },
+  {
+    variant: 'ogDegenStuff',
+    achievedAt: new Date().valueOf(),
+  },
+  {
+    variant: 'ogTopTrader',
+    achievedAt: new Date().valueOf(),
+  },
+  {
+    variant: 'ogOkBoomer',
+    achievedAt: new Date().valueOf(),
+  },
+  {
+    variant: 'ogMaxBidding',
+    achievedAt: new Date().valueOf(),
+  },
+  {
+    variant: 'ogYikes',
+    achievedAt: new Date().valueOf(),
+  },
+  {
+    variant: 'ogLpoor',
+    achievedAt: new Date().valueOf(),
+  },
+  {
+    variant: 'ogMoneyMoneyMoney',
+    achievedAt: new Date().valueOf(),
+  },
+  {
+    variant: 'ogWaterHose',
+    achievedAt: new Date().valueOf(),
+  },
+  {
+    variant: 'ogRainMaker',
+    achievedAt: new Date().valueOf(),
+  },
+  {
+    variant: 'ogBeWaterMyFriend',
+    achievedAt: new Date().valueOf(),
+  },
+  {
+    variant: 'ogDryIce',
+    achievedAt: new Date().valueOf(),
   },
 ];

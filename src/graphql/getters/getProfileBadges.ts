@@ -1,6 +1,7 @@
 import { GraphQLClient, gql } from 'graphql-request';
 
 export type BadgeVariant =
+  // season 1
   | 'degenStuff'
   | 'deltaDegen'
   | 'irsConnoisseur'
@@ -16,7 +17,24 @@ export type BadgeVariant =
   | 'yikes'
   | 'maxBidding'
   | 'okBoomer'
-  | 'dryIce';
+  | 'dryIce'
+  // season OG
+  | 'ogDegenStuff'
+  | 'ogDeltaDegen'
+  | 'ogIrsConnoisseur'
+  | 'ogLeverageCrowbar'
+  | 'ogFixedTrader'
+  | 'ogSushiRoll'
+  | 'ogTopTrader'
+  | 'ogBeWaterMyFriend'
+  | 'ogRainMaker'
+  | 'ogWaterHose'
+  | 'ogMoneyMoneyMoney'
+  | 'ogLpoor'
+  | 'ogYikes'
+  | 'ogMaxBidding'
+  | 'ogOkBoomer'
+  | 'ogDryIce';
 
 export type CollectionBadge = {
   variant: BadgeVariant;
