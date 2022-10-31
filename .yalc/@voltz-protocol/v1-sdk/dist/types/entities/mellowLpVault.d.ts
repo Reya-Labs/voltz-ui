@@ -1,5 +1,6 @@
 import { Signer, providers, BigNumberish, BigNumber, ContractReceipt, Contract } from 'ethers';
 export declare type MellowLpVaultArgs = {
+    ethWrapperAddress: string;
     voltzVaultAddress: string;
     erc20RootVaultAddress: string;
     erc20RootVaultGovernanceAddress: string;
@@ -10,6 +11,7 @@ declare class MellowLpVault {
     readonly erc20RootVaultAddress: string;
     readonly erc20RootVaultGovernanceAddress: string;
     readonly provider?: providers.Provider;
+    readonly ethWrapperAddress: string;
     readOnlyContracts?: {
         marginEngine: Contract;
         token: Contract;
@@ -20,8 +22,8 @@ declare class MellowLpVault {
     };
     writeContracts?: {
         token: Contract;
-        voltzVault: Contract;
         erc20RootVault: Contract;
+        ethWrapper: Contract;
     };
     signer?: Signer;
     maturity?: string;
@@ -30,23 +32,22 @@ declare class MellowLpVault {
     vaultCap?: number;
     vaultExpectedApy?: number;
     userDeposit?: number;
-    userExpectedCashflow?: number;
     userWalletBalance?: number;
     userAddress?: string;
     vaultInitialized: boolean;
     userInitialized: boolean;
-    constructor({ erc20RootVaultAddress, erc20RootVaultGovernanceAddress, voltzVaultAddress, provider, }: MellowLpVaultArgs);
+    constructor({ ethWrapperAddress, erc20RootVaultAddress, erc20RootVaultGovernanceAddress, voltzVaultAddress, provider, }: MellowLpVaultArgs);
     descale: (amount: BigNumberish, decimals: number) => number;
     scale: (amount: number) => BigNumber;
     vaultInit: () => Promise<void>;
     userInit: (signer: Signer) => Promise<void>;
     get tokenName(): string;
+    get isETH(): boolean;
     get tokenDecimals(): number;
     get protocol(): string;
     refreshVaultAccumulative: () => Promise<void>;
     refreshVaultExpectedApy: () => Promise<void>;
     refreshUserDeposit: () => Promise<void>;
-    refreshUserExpectedCashflow: () => Promise<void>;
     refreshWalletBalance: () => Promise<void>;
     isTokenApproved: () => Promise<boolean>;
     approveToken: () => Promise<ContractReceipt>;

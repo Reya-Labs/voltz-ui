@@ -21,8 +21,10 @@ import { abi as Erc20RootVaultGovernanceABI } from '../ABIs/Erc20RootVaultGovern
 import { abi as MarginEngineABI } from '../ABIs/MarginEngine.json';
 import { abi as BaseRateOracleABI } from '../ABIs/BaseRateOracle.json';
 import { abi as IERC20MinimalABI } from '../ABIs/IERC20Minimal.json';
+import { abi as MellowDepositWrapperABI } from '../ABIs/MellowDepositWrapper.json';
 
 export type MellowLpVaultArgs = {
+  ethWrapperAddress: string;
   voltzVaultAddress: string;
   erc20RootVaultAddress: string;
   erc20RootVaultGovernanceAddress: string;
@@ -34,6 +36,7 @@ class MellowLpVault {
   public readonly erc20RootVaultAddress: string;
   public readonly erc20RootVaultGovernanceAddress: string;
   public readonly provider?: providers.Provider;
+  public readonly ethWrapperAddress: string;
 
   public readOnlyContracts?: {
     marginEngine: Contract;
@@ -46,8 +49,8 @@ class MellowLpVault {
 
   public writeContracts?: {
     token: Contract;
-    voltzVault: Contract;
     erc20RootVault: Contract;
+    ethWrapper: Contract;
   };
 
   public signer?: Signer;
@@ -59,7 +62,6 @@ class MellowLpVault {
   public vaultExpectedApy?: number;
 
   public userDeposit?: number;
-  public userExpectedCashflow?: number;
   public userWalletBalance?: number;
 
   public userAddress?: string;
@@ -68,11 +70,13 @@ class MellowLpVault {
   public userInitialized = false;
 
   public constructor({
+    ethWrapperAddress,
     erc20RootVaultAddress,
     erc20RootVaultGovernanceAddress,
     voltzVaultAddress,
     provider,
   }: MellowLpVaultArgs) {
+    this.ethWrapperAddress = ethWrapperAddress;
     this.erc20RootVaultAddress = erc20RootVaultAddress;
     this.erc20RootVaultGovernanceAddress = erc20RootVaultGovernanceAddress;
     this.voltzVaultAddress = voltzVaultAddress;
@@ -191,20 +195,18 @@ class MellowLpVault {
         IERC20MinimalABI,
         this.signer,
       ),
-      voltzVault: new ethers.Contract(this.voltzVaultAddress, VoltzVaultABI, this.signer),
       erc20RootVault: new ethers.Contract(
         this.erc20RootVaultAddress,
         Erc20RootVaultABI,
         this.signer,
       ),
+      ethWrapper: new ethers.Contract(this.ethWrapperAddress, MellowDepositWrapperABI, this.signer),
     };
 
     console.log('write contracts ready');
 
     await this.refreshUserDeposit();
     console.log('user deposit refreshed', this.userDeposit);
-    await this.refreshUserExpectedCashflow();
-    console.log('user expected cashflow refreshed', this.userExpectedCashflow);
     await this.refreshWalletBalance();
     console.log('user wallet balance refreshed', this.userWalletBalance);
 
@@ -217,6 +219,10 @@ class MellowLpVault {
     }
 
     return getTokenInfo(this.readOnlyContracts.token.address).name;
+  }
+
+  public get isETH(): boolean {
+    return this.tokenName === 'ETH';
   }
 
   public get tokenDecimals(): number {
@@ -270,7 +276,7 @@ class MellowLpVault {
   };
 
   refreshVaultExpectedApy = async (): Promise<void> => {
-    this.vaultExpectedApy = 7;
+    this.vaultExpectedApy = 31.03;
   };
 
   refreshUserDeposit = async (): Promise<void> => {
@@ -300,25 +306,29 @@ class MellowLpVault {
     }
   };
 
-  refreshUserExpectedCashflow = async (): Promise<void> => {
-    this.userExpectedCashflow = 299;
-  };
-
   refreshWalletBalance = async (): Promise<void> => {
     if (
       isUndefined(this.userAddress) ||
       isUndefined(this.readOnlyContracts) ||
+      isUndefined(this.provider) ||
       isUndefined(this.tokenDecimals)
     ) {
       this.userWalletBalance = 0;
       return;
     }
 
-    const walletBalance = await this.readOnlyContracts.token.balanceOf(this.userAddress);
+    const walletBalance = this.isETH
+      ? await this.provider.getBalance(this.userAddress)
+      : await this.readOnlyContracts.token.balanceOf(this.userAddress);
+
     this.userWalletBalance = this.descale(walletBalance, this.tokenDecimals);
   };
 
   isTokenApproved = async (): Promise<boolean> => {
+    if (this.isETH) {
+      return true;
+    }
+
     if (
       isUndefined(this.userAddress) ||
       isUndefined(this.readOnlyContracts) ||
@@ -387,22 +397,64 @@ class MellowLpVault {
 
     console.log(`args of deposit: (${[scaledAmount]}, ${minLPTokens.toString()}, ${[]}`);
 
+    const tempOverrides: { value?: BigNumber; gasLimit?: BigNumber } = {};
+
+    if (this.isETH) {
+      tempOverrides.value = scaledAmount;
+    }
+
     try {
-      await this.writeContracts.erc20RootVault.callStatic.deposit([scaledAmount], minLPTokens, []);
+      if (this.isETH) {
+        this.writeContracts.ethWrapper.callStatic.deposit(
+          this.readOnlyContracts.erc20RootVault.address,
+          minLPTokens,
+          [],
+          tempOverrides,
+        );
+      } else {
+        await this.writeContracts.erc20RootVault.callStatic.deposit(
+          [scaledAmount],
+          minLPTokens,
+          [],
+        );
+      }
     } catch (err) {
       console.log('ERROR', err);
       throw new Error('Unsuccessful deposit simulation.');
     }
 
-    const gasLimit = await this.writeContracts.erc20RootVault.estimateGas.deposit(
-      [scaledAmount],
-      minLPTokens,
-      [],
-    );
+    if (this.isETH) {
+      const gasLimit = await this.writeContracts.ethWrapper.estimateGas.deposit(
+        this.readOnlyContracts.erc20RootVault.address,
+        minLPTokens,
+        [],
+        tempOverrides,
+      );
+      tempOverrides.gasLimit =
+        gasLimit.mul(2) > BigNumber.from('2000000') ? gasLimit.mul(2) : BigNumber.from('2000000');
+    } else {
+      const gasLimit = await this.writeContracts.erc20RootVault.estimateGas.deposit(
+        [scaledAmount],
+        minLPTokens,
+        [],
+      );
+      tempOverrides.gasLimit =
+        gasLimit.mul(2) > BigNumber.from('2000000') ? gasLimit.mul(2) : BigNumber.from('2000000');
+    }
 
-    const tx = await this.writeContracts.erc20RootVault.deposit([scaledAmount], minLPTokens, [], {
-      gasLimit: getGasBuffer(gasLimit),
-    });
+    const tx = this.isETH
+      ? await this.writeContracts.ethWrapper.deposit(
+          this.readOnlyContracts.erc20RootVault.address,
+          minLPTokens,
+          [],
+          tempOverrides,
+        )
+      : await this.writeContracts.erc20RootVault.deposit(
+          [scaledAmount],
+          minLPTokens,
+          [],
+          tempOverrides,
+        );
 
     try {
       const receipt = await tx.wait();

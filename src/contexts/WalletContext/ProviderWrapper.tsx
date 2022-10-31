@@ -98,6 +98,8 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
         let errorMessage = getErrorMessage(error).trim();
         if (errorMessage.includes('Wrong network')) {
           errorMessage = 'Wrong network';
+        } else if (errorMessage.includes('Risky Account Detected')) {
+          errorMessage = 'Risky Account Detected';
         } else {
           errorMessage = 'Failed connection';
         }

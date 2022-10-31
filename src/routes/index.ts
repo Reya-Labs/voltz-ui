@@ -7,7 +7,7 @@ export const routes = {
   TRM_POST: 'trm-post',
   TRADING_LEAGUE: 'trading-league',
   PROFILE: 'profile',
-  ECOSYSTEM: 'ecosystem',
+  PRODUCTS: 'products',
 };
 
 export { default as LiquidityProvider } from './LiquidityProvider/LiquidityProvider';

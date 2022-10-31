@@ -52,9 +52,10 @@ var Erc20RootVaultGovernance_json_1 = require("../ABIs/Erc20RootVaultGovernance.
 var MarginEngine_json_1 = require("../ABIs/MarginEngine.json");
 var BaseRateOracle_json_1 = require("../ABIs/BaseRateOracle.json");
 var IERC20Minimal_json_1 = require("../ABIs/IERC20Minimal.json");
+var MellowDepositWrapper_json_1 = require("../ABIs/MellowDepositWrapper.json");
 var MellowLpVault = /** @class */ (function () {
     function MellowLpVault(_a) {
-        var erc20RootVaultAddress = _a.erc20RootVaultAddress, erc20RootVaultGovernanceAddress = _a.erc20RootVaultGovernanceAddress, voltzVaultAddress = _a.voltzVaultAddress, provider = _a.provider;
+        var ethWrapperAddress = _a.ethWrapperAddress, erc20RootVaultAddress = _a.erc20RootVaultAddress, erc20RootVaultGovernanceAddress = _a.erc20RootVaultGovernanceAddress, voltzVaultAddress = _a.voltzVaultAddress, provider = _a.provider;
         var _this = this;
         this.vaultInitialized = false;
         this.userInitialized = false;
@@ -153,20 +154,16 @@ var MellowLpVault = /** @class */ (function () {
                         console.log('user address', this.userAddress);
                         this.writeContracts = {
                             token: new ethers_1.ethers.Contract(this.readOnlyContracts.token.address, IERC20Minimal_json_1.abi, this.signer),
-                            voltzVault: new ethers_1.ethers.Contract(this.voltzVaultAddress, VoltzVault_json_1.abi, this.signer),
                             erc20RootVault: new ethers_1.ethers.Contract(this.erc20RootVaultAddress, Erc20RootVault_json_1.abi, this.signer),
+                            ethWrapper: new ethers_1.ethers.Contract(this.ethWrapperAddress, MellowDepositWrapper_json_1.abi, this.signer),
                         };
                         console.log('write contracts ready');
                         return [4 /*yield*/, this.refreshUserDeposit()];
                     case 2:
                         _b.sent();
                         console.log('user deposit refreshed', this.userDeposit);
-                        return [4 /*yield*/, this.refreshUserExpectedCashflow()];
-                    case 3:
-                        _b.sent();
-                        console.log('user expected cashflow refreshed', this.userExpectedCashflow);
                         return [4 /*yield*/, this.refreshWalletBalance()];
-                    case 4:
+                    case 3:
                         _b.sent();
                         console.log('user wallet balance refreshed', this.userWalletBalance);
                         this.userInitialized = true;
@@ -212,7 +209,7 @@ var MellowLpVault = /** @class */ (function () {
         }); };
         this.refreshVaultExpectedApy = function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                this.vaultExpectedApy = 7;
+                this.vaultExpectedApy = 31.03;
                 return [2 /*return*/];
             });
         }); };
@@ -251,26 +248,29 @@ var MellowLpVault = /** @class */ (function () {
                 }
             });
         }); };
-        this.refreshUserExpectedCashflow = function () { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                this.userExpectedCashflow = 299;
-                return [2 /*return*/];
-            });
-        }); };
         this.refreshWalletBalance = function () { return __awaiter(_this, void 0, void 0, function () {
-            var walletBalance;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var walletBalance, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
                         if ((0, lodash_1.isUndefined)(this.userAddress) ||
                             (0, lodash_1.isUndefined)(this.readOnlyContracts) ||
+                            (0, lodash_1.isUndefined)(this.provider) ||
                             (0, lodash_1.isUndefined)(this.tokenDecimals)) {
                             this.userWalletBalance = 0;
                             return [2 /*return*/];
                         }
-                        return [4 /*yield*/, this.readOnlyContracts.token.balanceOf(this.userAddress)];
+                        if (!this.isETH) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.provider.getBalance(this.userAddress)];
                     case 1:
-                        walletBalance = _a.sent();
+                        _a = _b.sent();
+                        return [3 /*break*/, 4];
+                    case 2: return [4 /*yield*/, this.readOnlyContracts.token.balanceOf(this.userAddress)];
+                    case 3:
+                        _a = _b.sent();
+                        _b.label = 4;
+                    case 4:
+                        walletBalance = _a;
                         this.userWalletBalance = this.descale(walletBalance, this.tokenDecimals);
                         return [2 /*return*/];
                 }
@@ -281,6 +281,9 @@ var MellowLpVault = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        if (this.isETH) {
+                            return [2 /*return*/, true];
+                        }
                         if ((0, lodash_1.isUndefined)(this.userAddress) ||
                             (0, lodash_1.isUndefined)(this.readOnlyContracts) ||
                             (0, lodash_1.isUndefined)(this.tokenDecimals)) {
@@ -334,9 +337,9 @@ var MellowLpVault = /** @class */ (function () {
             });
         }); };
         this.deposit = function (amount) { return __awaiter(_this, void 0, void 0, function () {
-            var scaledAmount, minLPTokens, err_1, gasLimit, tx, receipt, _3, _4, _5, err_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var scaledAmount, minLPTokens, tempOverrides, err_1, gasLimit, gasLimit, tx, _a, receipt, _3, _4, _5, err_2;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
                         if ((0, lodash_1.isUndefined)(this.readOnlyContracts) ||
                             (0, lodash_1.isUndefined)(this.writeContracts) ||
@@ -347,71 +350,98 @@ var MellowLpVault = /** @class */ (function () {
                         console.log("Calling deposit(".concat(scaledAmount, ")..."));
                         minLPTokens = ethers_1.BigNumber.from(0);
                         console.log("args of deposit: (".concat([scaledAmount], ", ").concat(minLPTokens.toString(), ", ").concat([]));
-                        _a.label = 1;
+                        tempOverrides = {};
+                        if (this.isETH) {
+                            tempOverrides.value = scaledAmount;
+                        }
+                        _b.label = 1;
                     case 1:
-                        _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, this.writeContracts.erc20RootVault.callStatic.deposit([scaledAmount], minLPTokens, [])];
-                    case 2:
-                        _a.sent();
+                        _b.trys.push([1, 5, , 6]);
+                        if (!this.isETH) return [3 /*break*/, 2];
+                        this.writeContracts.ethWrapper.callStatic.deposit(this.readOnlyContracts.erc20RootVault.address, minLPTokens, [], tempOverrides);
                         return [3 /*break*/, 4];
+                    case 2: return [4 /*yield*/, this.writeContracts.erc20RootVault.callStatic.deposit([scaledAmount], minLPTokens, [])];
                     case 3:
-                        err_1 = _a.sent();
+                        _b.sent();
+                        _b.label = 4;
+                    case 4: return [3 /*break*/, 6];
+                    case 5:
+                        err_1 = _b.sent();
                         console.log('ERROR', err_1);
                         throw new Error('Unsuccessful deposit simulation.');
-                    case 4: return [4 /*yield*/, this.writeContracts.erc20RootVault.estimateGas.deposit([scaledAmount], minLPTokens, [])];
-                    case 5:
-                        gasLimit = _a.sent();
-                        return [4 /*yield*/, this.writeContracts.erc20RootVault.deposit([scaledAmount], minLPTokens, [], {
-                                gasLimit: (0, constants_1.getGasBuffer)(gasLimit),
-                            })];
                     case 6:
-                        tx = _a.sent();
-                        _a.label = 7;
+                        if (!this.isETH) return [3 /*break*/, 8];
+                        return [4 /*yield*/, this.writeContracts.ethWrapper.estimateGas.deposit(this.readOnlyContracts.erc20RootVault.address, minLPTokens, [], tempOverrides)];
                     case 7:
-                        _a.trys.push([7, 19, , 20]);
-                        return [4 /*yield*/, tx.wait()];
-                    case 8:
-                        receipt = _a.sent();
-                        _a.label = 9;
+                        gasLimit = _b.sent();
+                        tempOverrides.gasLimit =
+                            gasLimit.mul(2) > ethers_1.BigNumber.from('2000000') ? gasLimit.mul(2) : ethers_1.BigNumber.from('2000000');
+                        return [3 /*break*/, 10];
+                    case 8: return [4 /*yield*/, this.writeContracts.erc20RootVault.estimateGas.deposit([scaledAmount], minLPTokens, [])];
                     case 9:
-                        _a.trys.push([9, 11, , 12]);
-                        return [4 /*yield*/, this.refreshWalletBalance()];
+                        gasLimit = _b.sent();
+                        tempOverrides.gasLimit =
+                            gasLimit.mul(2) > ethers_1.BigNumber.from('2000000') ? gasLimit.mul(2) : ethers_1.BigNumber.from('2000000');
+                        _b.label = 10;
                     case 10:
-                        _a.sent();
-                        return [3 /*break*/, 12];
+                        if (!this.isETH) return [3 /*break*/, 12];
+                        return [4 /*yield*/, this.writeContracts.ethWrapper.deposit(this.readOnlyContracts.erc20RootVault.address, minLPTokens, [], tempOverrides)];
                     case 11:
-                        _3 = _a.sent();
-                        console.error('Wallet user balance failed to refresh after deposit');
-                        return [3 /*break*/, 12];
-                    case 12:
-                        _a.trys.push([12, 14, , 15]);
-                        return [4 /*yield*/, this.refreshUserDeposit()];
+                        _a = _b.sent();
+                        return [3 /*break*/, 14];
+                    case 12: return [4 /*yield*/, this.writeContracts.erc20RootVault.deposit([scaledAmount], minLPTokens, [], tempOverrides)];
                     case 13:
-                        _a.sent();
-                        return [3 /*break*/, 15];
+                        _a = _b.sent();
+                        _b.label = 14;
                     case 14:
-                        _4 = _a.sent();
-                        console.error('User deposit failed to refresh after deposit');
-                        return [3 /*break*/, 15];
+                        tx = _a;
+                        _b.label = 15;
                     case 15:
-                        _a.trys.push([15, 17, , 18]);
-                        return [4 /*yield*/, this.refreshVaultAccumulative()];
+                        _b.trys.push([15, 27, , 28]);
+                        return [4 /*yield*/, tx.wait()];
                     case 16:
-                        _a.sent();
-                        return [3 /*break*/, 18];
+                        receipt = _b.sent();
+                        _b.label = 17;
                     case 17:
-                        _5 = _a.sent();
-                        console.error('Vault accumulative failed to refresh after deposit');
-                        return [3 /*break*/, 18];
-                    case 18: return [2 /*return*/, receipt];
+                        _b.trys.push([17, 19, , 20]);
+                        return [4 /*yield*/, this.refreshWalletBalance()];
+                    case 18:
+                        _b.sent();
+                        return [3 /*break*/, 20];
                     case 19:
-                        err_2 = _a.sent();
+                        _3 = _b.sent();
+                        console.error('Wallet user balance failed to refresh after deposit');
+                        return [3 /*break*/, 20];
+                    case 20:
+                        _b.trys.push([20, 22, , 23]);
+                        return [4 /*yield*/, this.refreshUserDeposit()];
+                    case 21:
+                        _b.sent();
+                        return [3 /*break*/, 23];
+                    case 22:
+                        _4 = _b.sent();
+                        console.error('User deposit failed to refresh after deposit');
+                        return [3 /*break*/, 23];
+                    case 23:
+                        _b.trys.push([23, 25, , 26]);
+                        return [4 /*yield*/, this.refreshVaultAccumulative()];
+                    case 24:
+                        _b.sent();
+                        return [3 /*break*/, 26];
+                    case 25:
+                        _5 = _b.sent();
+                        console.error('Vault accumulative failed to refresh after deposit');
+                        return [3 /*break*/, 26];
+                    case 26: return [2 /*return*/, receipt];
+                    case 27:
+                        err_2 = _b.sent();
                         console.log('ERROR', err_2);
                         throw new Error('Unsucessful deposit confirmation.');
-                    case 20: return [2 /*return*/];
+                    case 28: return [2 /*return*/];
                 }
             });
         }); };
+        this.ethWrapperAddress = ethWrapperAddress;
         this.erc20RootVaultAddress = erc20RootVaultAddress;
         this.erc20RootVaultGovernanceAddress = erc20RootVaultGovernanceAddress;
         this.voltzVaultAddress = voltzVaultAddress;
@@ -423,6 +453,13 @@ var MellowLpVault = /** @class */ (function () {
                 return '-';
             }
             return (0, getTokenInfo_1.getTokenInfo)(this.readOnlyContracts.token.address).name;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MellowLpVault.prototype, "isETH", {
+        get: function () {
+            return this.tokenName === 'ETH';
         },
         enumerable: false,
         configurable: true

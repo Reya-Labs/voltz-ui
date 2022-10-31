@@ -120,7 +120,7 @@ export const getSubmissionState = ({
         hintText:
           selectedDeposit > 0
             ? {
-                text: 'Tokens approved.',
+                text: tokenName === 'ETH' ? '' : 'Tokens approved.',
                 textColor: colors.vzCustomGreen1.base,
                 suffixText: "Let's deposit.",
               }
