@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography } from '@components/atomic';
-import { doNothing, elideAddress } from '@utilities';
+import { doNothing, elideAddress, formatDateTimeWithOrdinal } from '@utilities';
 import { BadgeCard } from '../BadgeCard/BadgeCard';
 import { Page } from '@components/interface';
 import { AchievedBadge, AchievedBadgeProps } from '../AchievedBadge/AchievedBadge';
@@ -58,8 +58,8 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
   seasonOptions,
 }) => {
   const seasonLabel = season.label;
-  const seasonStartDateFormatted = season.startDate.toFormat('DDD');
-  const seasonEndDateFormatted = season.endDate.toFormat('DDD');
+  const seasonStartDateFormatted = formatDateTimeWithOrdinal(season.startDate);
+  const seasonEndDateFormatted = formatDateTimeWithOrdinal(season.endDate);
   const achievedBadgesMemo: AchievedBadgeProps[] = React.useMemo(() => {
     return seasonBadgeVariants
       .map((variant) => achievedBadges.find((c) => c.variant === variant))
