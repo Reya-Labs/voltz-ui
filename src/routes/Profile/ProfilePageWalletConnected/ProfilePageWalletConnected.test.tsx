@@ -9,11 +9,11 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => jest.fn(),
 }));
 
-const { Season01 } = composeStories(stories);
+const { Default } = composeStories(stories);
 
 describe('<ProfilePageWalletConnected />', () => {
   it('should render proper UI when claimed badges present', () => {
-    render(<Season01 />);
+    render(<Default />);
 
     expect(screen.getByText('WELCOME TO YOUR PROFILE')).not.toBeNull();
     expect(screen.getByText('0XB01F...C970')).not.toBeNull();

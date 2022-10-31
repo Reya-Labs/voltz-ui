@@ -1,6 +1,6 @@
 import { BadgeTier, ComingSoonBadges } from './types';
 import { BadgeVariant } from '@graphql';
-import { Season } from '../../hooks/useCurrentSeason/constants';
+import { Season } from '../../hooks/season/types';
 
 export const BADGE_VARIANT_TRADER_LP_MAP: Record<
   BadgeVariant | ComingSoonBadges,
