@@ -20,6 +20,9 @@ export { ReactComponent as TokenLido } from './tokens/lido.svg';
 export { ReactComponent as TokenUsdc } from './tokens/usdc.svg';
 export { ReactComponent as TokenUsdt } from './tokens/usdt.svg';
 
+// badges
+export { ReactComponent as NoClaimedBadges } from './badges/noClaimedBadges.svg';
+
 // season1 badges
 export { ReactComponent as BeWaterMyFriend } from './badges/season1/beWaterMyFriend.svg';
 export { ReactComponent as DegenStuff } from './badges/season1/degenStuff.svg';
@@ -30,7 +33,6 @@ export { ReactComponent as LeverageCrowbar } from './badges/season1/leverageCrow
 export { ReactComponent as Lpoor } from './badges/season1/lpoor.svg';
 export { ReactComponent as MaxBidding } from './badges/season1/maxBidding.svg';
 export { ReactComponent as MoneyMoneyMoney } from './badges/season1/moneyMoneyMoney.svg';
-export { ReactComponent as NoClaimedBadges } from './badges/season1/noClaimedBadges.svg';
 export { ReactComponent as FixedTrader } from './badges/season1/fixedTrader.svg';
 export { ReactComponent as OkBoomer } from './badges/season1/okBoomer.svg';
 export { ReactComponent as Rainmaker } from './badges/season1/rainmaker.svg';
@@ -49,7 +51,6 @@ export { ReactComponent as OGLeverageCrowbar } from './badges/og/ogLeverageCrowb
 export { ReactComponent as OGLpoor } from './badges/og/ogLpoor.svg';
 export { ReactComponent as OGMaxBidding } from './badges/og/ogMaxBidding.svg';
 export { ReactComponent as OGMoneyMoneyMoney } from './badges/og/ogMoneyMoneyMoney.svg';
-export { ReactComponent as OGNoClaimedBadges } from './badges/og/ogNoClaimedBadges.svg';
 export { ReactComponent as OGFixedTrader } from './badges/og/ogFixedTrader.svg';
 export { ReactComponent as OGOkBoomer } from './badges/og/ogOkBoomer.svg';
 export { ReactComponent as OGRainmaker } from './badges/og/ogRainmaker.svg';
