@@ -11,17 +11,19 @@ jest.mock('react-router-dom', () => ({
 
 const { Default } = composeStories(stories);
 
-test('renders proper UI when claimed badges present', () => {
-  render(<Default />);
+describe('<ProfilePageWalletConnected />', () => {
+  it('should render proper UI when claimed badges present', () => {
+    render(<Default />);
 
-  expect(screen.getByText('WELCOME TO YOUR PROFILE')).not.toBeNull();
-  expect(screen.getByText('0XB01F...C970')).not.toBeNull();
-  expect(screen.getByTestId('Profile-BadgesExplained').textContent).toBe(
-    'Earn badges through your contribution to the community and activity on the protocol. Badges are earned throughout each Season, with minting available at the end of each Season. The more you collect the greater your contribution. Season 01 runs between 1st October 2022 and 31st December 2022.',
-  );
-  expect(screen.getByText('YOUR BADGE COLLECTION')).not.toBeNull();
-  expect(screen.getByText('1st October 2022')).not.toBeNull();
-  expect(screen.getByText('31st December 2022')).not.toBeNull();
+    expect(screen.getByText('WELCOME TO YOUR PROFILE')).not.toBeNull();
+    expect(screen.getByText('0XB01F...C970')).not.toBeNull();
+    expect(screen.getByTestId('Profile-BadgesExplained').textContent).toBe(
+      'Earn badges through your contribution to the community and activity on the protocol. Badges are earned throughout each Season, with minting available at the end of each Season. The more you collect the greater your contribution. Season 01 runs between October 1st 2022 and December 31st 2022.',
+    );
+    expect(screen.getByText('YOUR BADGE COLLECTION')).not.toBeNull();
+    expect(screen.getByText('October 1st 2022')).not.toBeNull();
+    expect(screen.getByText('December 31st 2022')).not.toBeNull();
 
-  expect(screen.getAllByTestId('BadgeCard')).toHaveLength(5);
+    expect(screen.getAllByTestId('BadgeCard')).toHaveLength(5);
+  });
 });

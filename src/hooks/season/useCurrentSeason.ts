@@ -1,4 +1,5 @@
-import { Season, SEASONS } from './constants';
+import { SEASONS } from './constants';
+import { Season } from './types';
 
 const useCurrentSeason = (): Season => {
   const now = Date.now().valueOf();
