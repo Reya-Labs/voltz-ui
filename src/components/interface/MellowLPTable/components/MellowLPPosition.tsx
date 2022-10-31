@@ -48,38 +48,40 @@ const MellowLPPosition: React.FunctionComponent<MellowLPPositionProps> = ({
     );
   };
 
-  const renderContent = () => {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        {getPositionInfo()}
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
+    >
+      {getPositionInfo()}
 
-        <Button
-          onClick={handleClick}
-          disabled={disabled}
-          sx={{
+      <Button
+        onClick={handleClick}
+        disabled={disabled}
+        sx={{
+          background: 'transparent',
+          color: 'primary.light',
+          '&:hover': {
             background: 'transparent',
-            color: 'primary.light',
-            '&:hover': {
-              background: 'transparent',
-              borderStyle: 'none none solid none',
-              borderColor: 'primary.light',
-              borderRadius: '0px',
-            },
-            padding: '4px 1px',
-            fontSize: '14px',
-            lineHeight: '20px',
-            boxShadow: 'none',
-            borderStyle: 'none none none none',
+            borderStyle: 'none none solid none',
+            borderColor: 'primary.light',
             borderRadius: '0px',
-          }}
-        >
-          DEPOSIT
-        </Button>
-      </Box>
-    );
-  };
-
-  return renderContent();
+          },
+          padding: '4px 1px',
+          fontSize: '14px',
+          lineHeight: '20px',
+          boxShadow: 'none',
+          borderStyle: 'none none none none',
+          borderRadius: '0px',
+        }}
+      >
+        DEPOSIT
+      </Button>
+    </Box>
+  );
 };
 
 export default MellowLPPosition;
