@@ -105,14 +105,6 @@ export const BadgeCollectionTypographyBox = styled(Box)`
   justify-content: space-between;
 `;
 
-export const BadgeCollectionSeasonTypography = styled(Typography)`
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 14px;
-  font-family: 'PixelOperatorMono', monospace;
-  padding: ${({ theme }) => theme.spacing(1, 2)};
-`;
-
 export const BadgeCollectionBox = styled(Box)`
   background-color: #1e1932;
   border-radius: 8px;

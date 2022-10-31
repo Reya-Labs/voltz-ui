@@ -37,6 +37,22 @@ import {
   Voltz,
   WalletConnect,
   WaterHose,
+  OGLpoor,
+  OGDryIce,
+  OGYikes,
+  OGMaxBidding,
+  OGOkBoomer,
+  OGLeverageCrowbar,
+  OGWaterHose,
+  OGDeltaDegen,
+  OGIrsConnoisseur,
+  OGDegenStuff,
+  OGFixedTrader,
+  OGSushiRoll,
+  OGTopTrader,
+  OGBeWaterMyFriend,
+  OGRainmaker,
+  OGMoneyMoneyMoney,
 } from './icons';
 
 export type Icons =
@@ -59,6 +75,7 @@ export type Icons =
   | 'voltz'
   | 'walletConnect'
   | 'warning-circle'
+  // season 1 badges
   | 'degenStuff'
   | 'deltaDegen'
   | 'irsConnoisseur'
@@ -75,7 +92,24 @@ export type Icons =
   | 'maxBidding'
   | 'dryIce'
   | 'noClaimedBadges'
-  | 'okBoomer';
+  | 'okBoomer'
+  // season OG badges
+  | 'ogDegenStuff'
+  | 'ogDeltaDegen'
+  | 'ogIrsConnoisseur'
+  | 'ogLeverageCrowbar'
+  | 'ogFixedTrader'
+  | 'ogSushiRoll'
+  | 'ogTopTrader'
+  | 'ogBeWaterMyFriend'
+  | 'ogRainMaker'
+  | 'ogWaterHose'
+  | 'ogMoneyMoneyMoney'
+  | 'ogLpoor'
+  | 'ogYikes'
+  | 'ogMaxBidding'
+  | 'ogDryIce'
+  | 'ogOkBoomer';
 
 export const iconMap: Record<Icons, ElementType> = {
   'arrow-left': ArrowLeft as ElementType,
@@ -97,6 +131,7 @@ export const iconMap: Record<Icons, ElementType> = {
   'tx-mint': Mint as ElementType,
   'tx-settle': Settle as ElementType,
   'tx-swap': Swap as ElementType,
+  // badges season 1
   degenStuff: DegenStuff as ElementType,
   deltaDegen: DeltaDegen as ElementType,
   irsConnoisseur: IrsConnoisseur as ElementType,
@@ -114,4 +149,21 @@ export const iconMap: Record<Icons, ElementType> = {
   okBoomer: OkBoomer as ElementType,
   dryIce: DryIce as ElementType,
   noClaimedBadges: NoClaimedBadges as ElementType,
+  // badges season OG
+  ogDegenStuff: OGDegenStuff as ElementType,
+  ogDeltaDegen: OGDeltaDegen as ElementType,
+  ogIrsConnoisseur: OGIrsConnoisseur as ElementType,
+  ogLeverageCrowbar: OGLeverageCrowbar as ElementType,
+  ogFixedTrader: OGFixedTrader as ElementType,
+  ogSushiRoll: OGSushiRoll as ElementType,
+  ogTopTrader: OGTopTrader as ElementType,
+  ogBeWaterMyFriend: OGBeWaterMyFriend as ElementType,
+  ogRainMaker: OGRainmaker as ElementType,
+  ogWaterHose: OGWaterHose as ElementType,
+  ogMoneyMoneyMoney: OGMoneyMoneyMoney as ElementType,
+  ogLpoor: OGLpoor as ElementType,
+  ogYikes: OGYikes as ElementType,
+  ogMaxBidding: OGMaxBidding as ElementType,
+  ogOkBoomer: OGOkBoomer as ElementType,
+  ogDryIce: OGDryIce as ElementType,
 };
