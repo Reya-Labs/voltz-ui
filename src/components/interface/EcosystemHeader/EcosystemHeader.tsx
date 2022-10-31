@@ -23,9 +23,8 @@ const EcosystemHeader = ({
             VOLTZ ECOSYSTEM
           </Typography>
           <Typography variant="body1" sx={copyStyles}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec sit iaculis cras elit
-            dictum massa. Sit metus amet, tincidunt odio. Tristique sagittis, nisl in eu eu
-            vestibulum et. Ut sed mauris urna justo, dictumst molestie posuere.
+            Access a world of new products, integrations, protocols and applications built on top of
+            Voltz Protocol.
           </Typography>
         </Box>
         <Box sx={{ marginTop: '16px', display: 'flex' }}>
@@ -40,7 +39,7 @@ const EcosystemHeader = ({
             </Typography>
           </Box> */}
 
-          <Box sx={{ ...boxStyles, border: '1px solid #2667FF', marginLeft: '8px' }}>
+          <Box sx={{ ...boxStyles, border: '1px solid #2667FF' }}>
             <Typography variant="h6" sx={{ ...tagStyles, color: '#2667FF' }}>
               {alphaVaultTag}
               {alphaVaultCount > 0 ? ':' : ''}

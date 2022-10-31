@@ -63,15 +63,15 @@ const LPMellowVaulDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoP
             sx={{ fontSize: '24px', color: '#FF4AA9', fontFamily: 'DM Sans', fontWeight: '700' }}
             label={
               <IconLabel
-                label="Expected APY"
+                label="Estimated Historic APY"
                 icon="information-circle"
-                info="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec sit iaculis cras elit dictum massa. Sit metus amet, tincidunt odio. Tristique sagittis, nisl in eu eu vestibulum et. Ut sed mauris urna justo, dictumst molestie posuere."
+                info="This shows the estimated returns that would have been generated had the strategy been running from Jul 22 to Oct 22."
               />
             }
           >
             {isUndefined(lpVault.vaultExpectedApy)
               ? '---'
-              : `${lpVault.vaultExpectedApy.toFixed(2)}%`}
+              : `${lpVault.vaultExpectedApy > 30 ? '>30' : lpVault.vaultExpectedApy.toFixed(2)}%`}
           </Typography>
 
           <Typography
@@ -87,7 +87,7 @@ const LPMellowVaulDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoP
               <IconLabel
                 label="Running until"
                 icon="information-circle"
-                info="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec sit iaculis cras elit dictum massa. Sit metus amet, tincidunt odio. Tristique sagittis, nisl in eu eu vestibulum et. Ut sed mauris urna justo, dictumst molestie posuere."
+                info="This strategy will run until 31 Dec 22. At this point depositors can collect any returns that may have been generated and withdraw their funds."
               />
             }
           >
@@ -118,9 +118,22 @@ const LPMellowVaulDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoP
         </Box>
 
         <Typography variant="body1" sx={{ fontSize: '14px', color: '#9B97AD', marginTop: '8px' }}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec sit iaculis cras elit
-          dictum massa. Sit metus amet, tincidunt odio. Tristique sagittis, nisl in eu eu vestibulum
-          et. Ut sed mauris urna justo, dictumst molestie posuere.
+          The Mellow LP Optimiser runs a permissionless strategy that takes deposits and provides
+          liquidity into Voltz Protocol pools. The liquidity provided is optimised to try and
+          maximise yield for depositors.
+        </Typography>
+        <Typography variant="body1" sx={{ fontSize: '14px', color: '#9B97AD', marginTop: '8px' }}>
+          In a typical Voltz Protocol pool, LPs need to specify margin, leverage and chosen
+          fixed-rate tick ranges. The Mellow LP Optimiser abstracts away these complexities and
+          automatically chooses an optimal amount of leverage and tick ranges for liquidity
+          supplied.
+        </Typography>
+        <Typography variant="body1" sx={{ fontSize: '14px', color: '#9B97AD', marginTop: '8px' }}>
+          For this pool, users simply deposit ETH in order to get access to optimised LP yields on
+          the Voltz Protocol stETH pool.
+        </Typography>
+        <Typography variant="body1" sx={{ fontSize: '14px', color: '#9B97AD', marginTop: '8px' }}>
+          Remember, returns are not guaranteed and you may get back less than you put in.
         </Typography>
       </Panel>
     );
