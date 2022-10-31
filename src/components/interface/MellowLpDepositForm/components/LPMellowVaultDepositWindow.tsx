@@ -45,7 +45,7 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
         maxWidth: '328px',
         maxHeight: '444px',
         background: '#19152A',
-        padding: '16px',
+        padding: (theme) => theme.spacing(4),
       }}
     >
       <Box sx={{ display: 'flex' }}>
@@ -88,7 +88,7 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
           fontSize: '14px',
           lineHeight: '1.6',
           color: '#e5e1f9d9',
-          marginTop: '16px',
+          marginTop: (theme) => theme.spacing(4),
           fontWeight: '400',
         }}
       >
@@ -117,7 +117,7 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
         />
       </Box>
 
-      <Box sx={{ display: 'flex', marginTop: '16px' }}>
+      <Box sx={{ display: 'flex', marginTop: (theme) => theme.spacing(4) }}>
         <Button
           disabled={disabled}
           onClick={onSubmit}
@@ -144,8 +144,8 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
           width: '100%',
           maxWidth: '296px',
           background: '#28233B',
-          padding: '16px 16px',
-          marginTop: '16px',
+          padding: (theme) => theme.spacing(4),
+          marginTop: (theme) => theme.spacing(4),
         }}
       >
         <Typography
@@ -165,7 +165,7 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
           sx={{
             fontSize: '12px',
             color: '#9B97AD',
-            marginTop: '10px',
+            marginTop: (theme) => theme.spacing(2.5),
             fontWeight: '400',
             lineHeight: '1.5',
           }}
