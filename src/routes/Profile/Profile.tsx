@@ -13,11 +13,15 @@ const Profile: React.FunctionComponent = () => {
   const [achievedBadges, setAchievedBadges] = React.useState<
     GetProfileBadgesResponse['achievedBadges']
   >([]);
+  const pastSeasons = usePastSeasons();
   const [loading, setLoading] = React.useState(true);
   const [name, setName] = React.useState('');
   const currentActiveSeason = useCurrentSeason();
   const [season, setSeason] = React.useState<Season>(currentActiveSeason);
-  const seasonOptions = [...usePastSeasons(), currentActiveSeason];
+  const seasonOptions =
+    process.env.REACT_APP_COMMUNITY_P2 && process.env.REACT_APP_COMMUNITY_P2 !== `UNPROVIDED`
+      ? [...pastSeasons, currentActiveSeason]
+      : [currentActiveSeason];
 
   const getBadges = async (account: string) => {
     setLoading(true);
