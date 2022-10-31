@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { setPageTitle } from '@utilities';
 import { isNull } from 'lodash';
 import { useWallet } from '@hooks';
+import { useLocation } from 'react-router-dom';
 
 export enum EcosystemRenderMode {
   MELLOW_DEPOSIT_FORM,
@@ -20,6 +21,7 @@ const Ecosystem: React.FunctionComponent = () => {
 
   const [renderMode, setRenderMode] = useState<EcosystemRenderMode>(EcosystemRenderMode.PAGE);
   const [currentVault, setCurrentVault] = useState<AugmentedMellowLpVault>();
+  const location = useLocation();
 
   const handleSelectMellowLpVault = (selectedVault: AugmentedMellowLpVault) => {
     if (isNull(wallet.account)) {
@@ -55,6 +57,13 @@ const Ecosystem: React.FunctionComponent = () => {
       }
     }
   }, [setPageTitle, renderMode]);
+
+  useEffect(() => {
+    if (renderMode === EcosystemRenderMode.PAGE) {
+      return;
+    }
+    handleReset();
+  }, [location.key]);
 
   return (
     <Page>
