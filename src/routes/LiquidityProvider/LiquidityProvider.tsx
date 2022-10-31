@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Position } from '@voltz-protocol/v1-sdk';
 
 import { AugmentedAMM, findCurrentAmm, findCurrentPosition, setPageTitle } from '@utilities';
@@ -20,6 +20,8 @@ import ConnectedAMMTable from '../../components/containers/ConnectedAMMTable/Con
 import ConnectedMintBurnForm from '../../components/containers/ConnectedMintBurnForm/ConnectedMintBurnForm';
 import ConnectedPositionTable from '../../components/containers/ConnectedPositionTable/ConnectedPositionTable';
 import { getRenderMode } from './services';
+import { Button } from '@mui/material';
+import { routes } from '@routes';
 
 const LiquidityProvider: React.FunctionComponent = () => {
   const [amm, setAMM] = useState<AugmentedAMM>();
@@ -107,6 +109,22 @@ const LiquidityProvider: React.FunctionComponent = () => {
               title="Provide Liquidity"
               desc="Choose a pool and provide liquidity within your chosen ranges."
             />
+            <Button
+              component={Link}
+              to={`/${routes.PRODUCTS}`}
+              sx={{
+                color: 'primary.base',
+                marginTop: (theme) => theme.spacing(2),
+                padding: (theme) => theme.spacing(0.5, 1),
+                fontSize: '18px',
+                lineHeight: '14px',
+                '&:hover': {
+                  background: 'transparent',
+                },
+              }}
+            >
+              LP OPTIMISER VAULT
+            </Button>
           </Box>
           <ConnectedAMMTable onSelectItem={handleSelectAmm} />
         </Box>

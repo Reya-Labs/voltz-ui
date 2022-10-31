@@ -54,9 +54,8 @@ const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
 
         <Box>
           <Typography variant="h6" sx={copyStyles}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec sit iaculis cras elit
-            dictum massa. Sit metus amet, tincidunt odio. Tristique sagittis, nisl in eu eu
-            vestibulum et. Ut sed mauris urna justo, dictumst molestie posuere.
+            The Mellow LP Optimiser runs a permissionless strategy that takes deposits and generates
+            optimised LP fees by providing liquidity on Voltz Protocol.
           </Typography>
         </Box>
 
