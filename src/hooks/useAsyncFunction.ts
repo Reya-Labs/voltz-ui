@@ -17,7 +17,7 @@ const useAsyncFunction = <ArgsType, ResultType>(
   const [result, setResult] = useState<ResultType | null>(null);
   const [loading, setLoading] = useState(false);
   const [called, setCalled] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const call = useCallback(
     (callArgs?: ArgsType) => {
       setArgs(callArgs);
@@ -45,14 +45,14 @@ const useAsyncFunction = <ArgsType, ResultType>(
 
       // We need to stop older (cancelled) requests from overwriting the current data
       // req.current will always point to the latest request, where as req will get stale.
-      if(req === request.current) {
+      if (req === request.current) {
         setResult(data);
       }
     } catch (_error) {
       if (_error instanceof Error) {
-        setErrorMessage(_error.message)
+        setErrorMessage(_error.message);
       } else {
-        setErrorMessage('Unrecognized Error')
+        setErrorMessage('Unrecognized Error');
       }
       setResult(null);
     }

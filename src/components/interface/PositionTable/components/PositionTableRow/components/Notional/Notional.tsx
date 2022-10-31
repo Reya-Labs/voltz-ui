@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, Typography } from '@components/atomic';
 import { isUndefined } from 'lodash';
-import { SystemStyleObject, Theme } from '@mui/system';
 
 export type NotionalProps = {
   notional?: string;
@@ -17,12 +16,17 @@ const Notional: React.FunctionComponent<NotionalProps> = ({ notional, onEdit, to
       </Typography>
 
       {onEdit && (
-        <Button sx={{ width: '100%', display: 'flex'}} size='small' variant='red2' onClick={onEdit}> 
+        <Button
+          sx={{ width: '100%', display: 'flex' }}
+          size="small"
+          variant="red2"
+          onClick={onEdit}
+        >
           Edit
         </Button>
       )}
     </>
   );
 };
-    
+
 export default Notional;

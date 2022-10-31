@@ -56,3 +56,51 @@ export const formatPOSIXTimestamp = (timestamp: number): string => {
     year: '2-digit',
   });
 };
+
+/**
+ * Takes a DateTime and returns a string representatio
+ * @param dateTime - The DateTime to process
+ */
+export const formatDateTimeWithOrdinal = (dateTime: DateTime): string => {
+  const formatted = dateTime.toFormat('DDD');
+  const formatParts = formatted.split(' ');
+  if (formatParts.length === 3) {
+    return formatParts
+      .map((p) =>
+        !isNaN(parseInt(p, 10)) && parseInt(p, 10) <= 31
+          ? parseInt(p, 10).toString() + getNumberSuffix(parseInt(p, 10))
+          : p,
+      )
+      .join(' ');
+  }
+  return formatted;
+};
+
+/**
+ * "If the number is 11, 12, or 13, return 'th', otherwise return the appropriate suffix based on the last digit of the
+ * number."
+ *
+ * @param {number} num - The number to get the suffix for.
+ * @returns the suffix of a number.
+ */
+export function getNumberSuffix(num: number): string {
+  const th = 'th';
+  const rd = 'rd';
+  const nd = 'nd';
+  const st = 'st';
+
+  if (num === 11 || num === 12 || num === 13) return th;
+
+  const lastDigit = num.toString().slice(-1);
+
+  switch (lastDigit) {
+    case '1':
+      return st;
+    case '2':
+      return nd;
+    case '3':
+      return rd;
+    default:
+      return th;
+  }
+}

@@ -4,15 +4,24 @@ import { ProfilePageNoWallet } from './ProfilePageNoWallet/ProfilePageNoWallet';
 import { ProfilePageWalletConnected } from './ProfilePageWalletConnected/ProfilePageWalletConnected';
 import { getProfileBadges, GetProfileBadgesResponse } from '@graphql';
 import { getENSDetails, setPageTitle } from '@utilities';
+import { SEASON_BADGE_VARIANTS } from './helpers';
+import usePastSeasons from '../../hooks/season/usePastSeasons';
+import { Season } from '../../hooks/season/types';
 
 const Profile: React.FunctionComponent = () => {
   const wallet = useWallet();
   const [achievedBadges, setAchievedBadges] = React.useState<
     GetProfileBadgesResponse['achievedBadges']
   >([]);
+  const pastSeasons = usePastSeasons();
   const [loading, setLoading] = React.useState(true);
   const [name, setName] = React.useState('');
-  const season = useCurrentSeason();
+  const currentActiveSeason = useCurrentSeason();
+  const [season, setSeason] = React.useState<Season>(currentActiveSeason);
+  const seasonOptions =
+    process.env.REACT_APP_COMMUNITY_P2 && process.env.REACT_APP_COMMUNITY_P2 !== `UNPROVIDED`
+      ? [...pastSeasons, currentActiveSeason]
+      : [currentActiveSeason];
 
   const getBadges = async (account: string) => {
     setLoading(true);
@@ -36,20 +45,23 @@ const Profile: React.FunctionComponent = () => {
   }, [wallet.account]);
 
   useEffect(() => {
-    setPageTitle('Profile');
+    setPageTitle('Profile', wallet.account);
   }, []);
 
   if (!wallet.account) {
     return <ProfilePageNoWallet />;
   }
+
   return (
     <ProfilePageWalletConnected
-      season={season.id.toString().padStart(2, '0')}
-      seasonStartDateFormatted={season.startDate.toFormat('DDD')}
-      seasonEndDateFormatted={season.endDate.toFormat('DDD')}
+      isOnGoingSeason={season.id === currentActiveSeason.id}
+      season={season}
       account={name}
       achievedBadges={achievedBadges}
       loading={loading}
+      onSeasonChange={setSeason}
+      seasonBadgeVariants={SEASON_BADGE_VARIANTS[season.id]}
+      seasonOptions={seasonOptions}
     />
   );
 };

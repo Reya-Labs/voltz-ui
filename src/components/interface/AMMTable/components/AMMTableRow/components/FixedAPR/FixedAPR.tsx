@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
-import { useAMMContext } from '@contexts';
 import { Typography } from '@components/atomic';
 import TableCell from '@mui/material/TableCell';
 import { formatNumber } from '@utilities';
@@ -10,8 +9,7 @@ export type FixedAPRProps = {
   fixedApr?: number;
 };
 
-const FixedAPR: React.FunctionComponent<FixedAPRProps> = ({fixedApr}) => {
-
+const FixedAPR: React.FunctionComponent<FixedAPRProps> = ({ fixedApr }) => {
   const renderValue = () => {
     if (isUndefined(fixedApr)) {
       return 'Loading...';

@@ -2,14 +2,14 @@ import { Position } from '@voltz-protocol/v1-sdk';
 import React, { ReactNode, useCallback, useState } from 'react';
 
 import { data } from '@utilities';
-import { useAgent, usePositions, useSelector, useWallet } from '@hooks';
+import { usePositions, useSelector, useWallet } from '@hooks';
 import {
   PendingTransaction,
   PortfolioHeader,
   PositionTable,
   PositionTableFields,
 } from '@components/interface';
-import { Button, Loading, Panel, RouteLink, Typography } from '@components/atomic';
+import { Loading, Panel, RouteLink, Typography } from '@components/atomic';
 import { Agents, usePortfolioContext } from '@contexts';
 import { actions, selectors } from '@store';
 import { useDispatch } from '@hooks';
@@ -45,8 +45,6 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
   const dispatch = useDispatch();
 
   const portfolioData = usePortfolioContext();
-
-  const handleRetry = useCallback(() => {}, []);
 
   const handleSettle = useCallback(
     (position: Position) => {
@@ -89,22 +87,6 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
     );
   };
 
-  const renderFailure = () => {
-    return (
-      <Panel variant="error" sx={{ width: '100%', textAlign: 'center' }}>
-        <Typography variant="h6" sx={{ color: colors.vzCustomRed1.base, lineHeight: '14px' }}>
-          <Button
-            variant="text"
-            onClick={handleRetry}
-            sx={{ fontSize: 'inherit', color: 'inherit', padding: '0', lineHeight: 'inherit' }}
-          >
-            FAILED TO LOAD: RETRY?
-          </Button>
-        </Typography>
-      </Panel>
-    );
-  };
-
   const renderLoading = () => {
     return (
       <Panel variant="grey-dashed" sx={{ width: '100%' }}>
@@ -132,13 +114,16 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
 
     let netWithdraw = undefined;
     if (agent === Agents.LIQUIDITY_PROVIDER) {
-      netWithdraw = (typeof spData?.fees === "number" && typeof spData?.settlementCashflow === "number")
-         ? spData?.margin + spData?.settlementCashflow 
-         : undefined;
+      netWithdraw =
+        typeof spData?.fees === 'number' && typeof spData?.settlementCashflow === 'number'
+          ? spData?.margin + spData?.settlementCashflow
+          : undefined;
     } else {
-      netWithdraw = (typeof spData?.settlementCashflow === "number") ? spData?.margin + spData?.settlementCashflow : undefined;
+      netWithdraw =
+        typeof spData?.settlementCashflow === 'number'
+          ? spData?.margin + spData?.settlementCashflow
+          : undefined;
     }
-     
 
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -149,7 +134,11 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
           isSettle={true}
           transactionId={positionToSettle.txId}
           onComplete={handleTransactionFinished}
-          notional={agent === Agents.LIQUIDITY_PROVIDER ? Math.abs(positionToSettle.position.notional) : Math.abs(positionToSettle.position.effectiveVariableTokenBalance)}
+          notional={
+            agent === Agents.LIQUIDITY_PROVIDER
+              ? Math.abs(positionToSettle.position.notional)
+              : Math.abs(positionToSettle.position.effectiveVariableTokenBalance)
+          }
           margin={netWithdraw}
           onBack={handleTransactionFinished}
         />

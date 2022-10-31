@@ -36,11 +36,11 @@ const MaturityInformation: React.FunctionComponent<MaturityInformationProps> = (
   const formattedEndDate = endDate ? formatDateTime(endDate) : '';
 
   return (
-    <ProgressBar 
-      isMaturity={true} 
-      leftContent={(percentageComplete >= 100) ? "COMPLETED" : formattedEndDate} 
-      rightContent={<>{Math.min(percentageComplete, 100)}%</>} 
-      percentageComplete={percentageComplete} 
+    <ProgressBar
+      isMaturity={true}
+      leftContent={percentageComplete >= 100 ? 'COMPLETED' : formattedEndDate}
+      rightContent={<>{Math.min(percentageComplete, 100)}%</>}
+      percentageComplete={percentageComplete}
     />
   );
 };

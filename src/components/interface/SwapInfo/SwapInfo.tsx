@@ -48,79 +48,95 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
   userSimulatedVariableApyUpdated,
 }) => {
   const bottomSpacing: SystemStyleObject<Theme> = {
-    marginBottom: (theme) => theme.spacing(6)
-  }
+    marginBottom: (theme) => theme.spacing(6),
+  };
 
   return (
     <FormPanel noBackground>
-      {(mode !== SwapFormModes.EDIT_NOTIONAL && mode !== SwapFormModes.EDIT_MARGIN && mode !== SwapFormModes.FIX_BORROW && 
-        !isUndefined(onChangeUserSimulatedVariableApy) && !isUndefined(userSimulatedVariableApyUpdated)) && (
-        <>
-        <ExpectedAPY 
-          expectedApy={expectedApy}
-          expectedCashflow={expectedCashflow}
-          userSimulatedVariableApy={userSimulatedVariableApy}
-          onChangeUserSimulatedVariableApy={onChangeUserSimulatedVariableApy}
-          userSimulatedVariableApyUpdated={userSimulatedVariableApyUpdated}
-        />
-            <Box component={'hr'} sx={{ 
-              border: 'none',
-              borderBottom: `1px solid ${colors.lavenderWeb.darken045}`,
-              margin: (theme) => `${theme.spacing(4)} 0`,
-            }}/>
-        </>
-      )}
+      {mode !== SwapFormModes.EDIT_NOTIONAL &&
+        mode !== SwapFormModes.EDIT_MARGIN &&
+        mode !== SwapFormModes.FIX_BORROW &&
+        !isUndefined(onChangeUserSimulatedVariableApy) &&
+        !isUndefined(userSimulatedVariableApyUpdated) && (
+          <>
+            <ExpectedAPY
+              expectedApy={expectedApy}
+              expectedCashflow={expectedCashflow}
+              userSimulatedVariableApy={userSimulatedVariableApy}
+              onChangeUserSimulatedVariableApy={onChangeUserSimulatedVariableApy}
+              userSimulatedVariableApyUpdated={userSimulatedVariableApyUpdated}
+            />
+            <Box
+              component={'hr'}
+              sx={{
+                border: 'none',
+                borderBottom: `1px solid ${colors.lavenderWeb.darken045}`,
+                margin: (theme) => `${theme.spacing(4)} 0`,
+              }}
+            />
+          </>
+        )}
 
-      {(mode === SwapFormModes.FIX_BORROW) && (
+      {mode === SwapFormModes.FIX_BORROW && (
         <>
           <Box sx={bottomSpacing}>
-            <DescriptionBox titleText="Fixing your Borrowing Costs" descriptionText="Voltz Protocol lets you convert your variable borrowing costs into fixed borrowing costs. These will be fixed until the end of the pools term, as seen under 'Fixed Until'. To fix your existing borrowing, use the slider to determine what proportion you wish to fix and click 'Fix Rate'. This will trigger a transaction that will cover the fixed cost of borrowing upfront, along with fees paid to Liquidity Providers, who collectively cover your variable liabilities." />
-          </Box>
-        </>
-      )}
-
-      {(mode == SwapFormModes.NEW_POSITION || mode === SwapFormModes.FIX_BORROW) && !isUndefined(warningText) && (
-        <>
-        <Box sx={bottomSpacing}>
-          <WarningBox warningText={warningText} />
-        </Box>
-      </>
-      )}
-
-      {(mode === SwapFormModes.EDIT_NOTIONAL || mode === SwapFormModes.NEW_POSITION || mode === SwapFormModes.ROLLOVER || mode === SwapFormModes.FIX_BORROW) && (swapSummary || swapSummaryLoading) && (
-        <>
-          <Box sx={bottomSpacing}>
-            <SwapSummary
-              data={swapSummary} 
-              loading={swapSummaryLoading} 
-              underlyingTokenName={underlyingTokenName}
-              yieldBearingTokenName={protocol}
-              formAction={formAction}
-              maxAvailableNotional={maxAvailableNotional}
+            <DescriptionBox
+              titleText="Fixing your Borrowing Costs"
+              descriptionText="Voltz Protocol lets you convert your variable borrowing costs into fixed borrowing costs. These will be fixed until the end of the pools term, as seen under 'Fixed Until'. To fix your existing borrowing, use the slider to determine what proportion you wish to fix and click 'Fix Rate'. This will trigger a transaction that will cover the fixed cost of borrowing upfront, along with fees paid to Liquidity Providers, who collectively cover your variable liabilities."
             />
           </Box>
         </>
       )}
 
-      {mode === SwapFormModes.EDIT_MARGIN && !isUndefined(minRequiredMargin) && !isUndefined(positionMargin) && (
-        <>
-          {/* {mode !== SwapFormModes.EDIT_MARGIN && (
+      {(mode == SwapFormModes.NEW_POSITION || mode === SwapFormModes.FIX_BORROW) &&
+        !isUndefined(warningText) && (
+          <>
+            <Box sx={bottomSpacing}>
+              <WarningBox warningText={warningText} />
+            </Box>
+          </>
+        )}
+
+      {(mode === SwapFormModes.EDIT_NOTIONAL ||
+        mode === SwapFormModes.NEW_POSITION ||
+        mode === SwapFormModes.ROLLOVER ||
+        mode === SwapFormModes.FIX_BORROW) &&
+        (swapSummary || swapSummaryLoading) && (
+          <>
+            <Box sx={bottomSpacing}>
+              <SwapSummary
+                data={swapSummary}
+                loading={swapSummaryLoading}
+                underlyingTokenName={underlyingTokenName}
+                yieldBearingTokenName={protocol}
+                formAction={formAction}
+                maxAvailableNotional={maxAvailableNotional}
+              />
+            </Box>
+          </>
+        )}
+
+      {mode === SwapFormModes.EDIT_MARGIN &&
+        !isUndefined(minRequiredMargin) &&
+        !isUndefined(positionMargin) && (
+          <>
+            {/* {mode !== SwapFormModes.EDIT_MARGIN && (
             <Box component={'hr'} sx={{ 
               border: 'none',
               borderBottom: `1px solid ${colors.lavenderWeb.darken045}`,
               margin: (theme) => `${theme.spacing(4)} 0`,
             }}/>
           )} */}
-          <Box sx={bottomSpacing}>
-            <SwapSummaryEditMargin 
-              balance={balance}
-              minRequiredMargin={minRequiredMargin}
-              positionMargin={positionMargin}
-              underlyingTokenName={underlyingTokenName}
-            />
-          </Box>
-        </>
-      )}
+            <Box sx={bottomSpacing}>
+              <SwapSummaryEditMargin
+                balance={balance}
+                minRequiredMargin={minRequiredMargin}
+                positionMargin={positionMargin}
+                underlyingTokenName={underlyingTokenName}
+              />
+            </Box>
+          </>
+        )}
     </FormPanel>
   );
 };

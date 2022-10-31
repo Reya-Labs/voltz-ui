@@ -1,7 +1,15 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import TagManager from 'react-gtm-module';
 
-import { routes, TradingLeague, Profile, LiquidityProvider, Trader, FixedBorrower } from '@routes';
+import {
+  routes,
+  TradingLeague,
+  Profile,
+  LiquidityProvider,
+  Trader,
+  FixedBorrower,
+  Ecosystem,
+} from '@routes';
 import { AlphaBanner, GweiBar } from '@components/composite';
 import Box from '@mui/material/Box';
 import { useEffect } from 'react';
@@ -22,10 +30,12 @@ const App = () => {
           <Route path={routes.PORTFOLIO} element={<Trader />} />
           <Route path={routes.POOLS} element={<LiquidityProvider />} />
           <Route path={routes.LP_FARM} element={<LiquidityProvider />} />
-          {process.env.REACT_APP_FIXED_BORROW &&
-            process.env.REACT_APP_FIXED_BORROW !== `UNPROVIDED` && (
-              <Route path={routes.BORROW_POS} element={<FixedBorrower />} />
-            )}
+          {process.env.REACT_APP_ECOSYSTEM && process.env.REACT_APP_ECOSYSTEM !== `UNPROVIDED` && (
+            <Route path={routes.PRODUCTS} element={<Ecosystem />} />
+          )}
+          {process.env.REACT_APP_ECOSYSTEM && process.env.REACT_APP_ECOSYSTEM !== `UNPROVIDED` && (
+            <Route path={routes.BORROW_POS} element={<FixedBorrower />} />
+          )}
           {process.env.REACT_APP_COMMUNITY && process.env.REACT_APP_COMMUNITY !== `UNPROVIDED` && (
             <Route path={routes.PROFILE} element={<Profile />} />
           )}

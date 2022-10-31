@@ -9,7 +9,8 @@ import { BorrowAction } from '../../types';
 import { deserializeAmm, getSigner } from '../../utilities';
 import * as actions from '../../actions';
 
-function* borrowSaga(action: BorrowAction) { // function * means it is async function
+function* borrowSaga(action: BorrowAction) {
+  // function * means it is async function
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const signer: providers.JsonRpcSigner | null = yield getSigner();
 
@@ -35,13 +36,12 @@ function* borrowSaga(action: BorrowAction) { // function * means it is async fun
       fixedLow: 0.001,
       fixedHigh: 990,
     });
-
   } catch (error) {
     yield put(
       actions.updateTransaction({
         id,
         failedAt: DateTime.now().toISO(),
-        failureMessage: getErrorMessage(error)
+        failureMessage: getErrorMessage(error),
       }),
     );
 
@@ -54,7 +54,11 @@ function* borrowSaga(action: BorrowAction) { // function * means it is async fun
     );
   } else {
     yield put(
-      actions.updateTransaction({ id, succeededAt: DateTime.now().toISO(), txid: result.transactionHash }),
+      actions.updateTransaction({
+        id,
+        succeededAt: DateTime.now().toISO(),
+        txid: result.transactionHash,
+      }),
     );
   }
 }

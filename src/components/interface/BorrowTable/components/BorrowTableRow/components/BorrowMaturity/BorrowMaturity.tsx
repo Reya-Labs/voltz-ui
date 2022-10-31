@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import TableCell from '@mui/material/TableCell';
 
 import { useBorrowAMMContext } from '@contexts';
@@ -18,7 +18,7 @@ const BorrowMaturity: React.FunctionComponent = () => {
 
   return (
     <TableCell width="20%">
-      <Typography variant="body2" sx={{fontSize: 18, color: 'primary.light'}}>
+      <Typography variant="body2" sx={{ fontSize: 18, color: 'primary.light' }}>
         {renderValue()}
       </Typography>
     </TableCell>

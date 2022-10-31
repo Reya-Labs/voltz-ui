@@ -26,18 +26,22 @@ const usePositions = (): usePositionsResult => {
 
   const fcmPositions = useMemo(() => {
     if (wallet && wallet.fcmPositions && !loading && !error) {
-      return wallet.fcmPositions.map(positionData => FCMPositionFactory(positionData, signer));
+      return wallet.fcmPositions.map((positionData) => FCMPositionFactory(positionData, signer));
     }
   }, [fcmPositionCount, loading, error, isSignerAvailable]);
 
   const mePositions = useMemo(() => {
     if (wallet && wallet.positions && !loading && !error) {
-      return wallet.positions.map(positionData => MEPositionFactory(positionData, signer));
+      return wallet.positions.map((positionData) => MEPositionFactory(positionData, signer));
     }
   }, [positionCount, loading, error, isSignerAvailable]);
 
   const positions = useMemo(() => {
-    const _positions = (mePositions) ? ((fcmPositions) ? mePositions.concat(fcmPositions) : mePositions) : fcmPositions;
+    const _positions = mePositions
+      ? fcmPositions
+        ? mePositions.concat(fcmPositions)
+        : mePositions
+      : fcmPositions;
     if (_positions) {
       _positions.sort((a, b) => {
         if (JSBI.GT(a.createdTimestamp, b.createdTimestamp)) {
@@ -47,7 +51,7 @@ const usePositions = (): usePositionsResult => {
           return -1;
         }
         return 0;
-      })
+      });
     }
     return _positions;
   }, [mePositions, fcmPositions]);
@@ -68,17 +72,20 @@ const usePositions = (): usePositionsResult => {
   }, [positions, agent]);
 
   const positionsByAgentGroup = useMemo(() => {
-    return positions?.filter(({ positionType, tickLower, tickUpper }) => {
-      if (agent === Agents.LIQUIDITY_PROVIDER) {
-        return positionType === 3;
-      } else {
-        return (positionType === 1 ||
-           (positionType === 2 && (tickLower !== -69000 || tickUpper !== 69060)) );
-      }
-    })
-    .sort((a,b) => {
-      return Number(a.isSettled) - Number(b.isSettled); // sort settled positions to the bottom
-    });
+    return positions
+      ?.filter(({ positionType, tickLower, tickUpper }) => {
+        if (agent === Agents.LIQUIDITY_PROVIDER) {
+          return positionType === 3;
+        } else {
+          return (
+            positionType === 1 ||
+            (positionType === 2 && (tickLower !== -69000 || tickUpper !== 69060))
+          );
+        }
+      })
+      .sort((a, b) => {
+        return Number(a.isSettled) - Number(b.isSettled); // sort settled positions to the bottom
+      });
   }, [positions, agent]);
 
   const unresolvedTransactions = useSelector(selectors.unresolvedTransactionsSelector);

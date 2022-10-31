@@ -1,31 +1,40 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument */
 
 import JSBI from 'jsbi';
-import { GetWalletQuery } from '@graphql'
+import { GetWalletQuery } from '@graphql';
 import { providers } from 'ethers';
-import { Position, Token, RateOracle, Mint, Burn, Swap, MarginUpdate, Liquidation, Settlement } from '@voltz-protocol/v1-sdk';
+import {
+  Position,
+  Token,
+  RateOracle,
+  Mint,
+  Burn,
+  Swap,
+  MarginUpdate,
+  Liquidation,
+  Settlement,
+} from '@voltz-protocol/v1-sdk';
 import { AugmentedAMM } from '@utilities';
 import { Wallet } from '@contexts';
 
-type MEPositionQueryData = NonNullable<GetWalletQuery['wallet']>["positions"][number];
+type MEPositionQueryData = NonNullable<GetWalletQuery['wallet']>['positions'][number];
 
 /**
  * Takes the data received for an ME position from GetWalletQuery and returns a Position class instance
  * @param positionData - The data for a ME position received from the GetWalletQuery graphql query
  * @param signer - The wallet signer
  */
-export const MEPositionFactory = (positionData: MEPositionQueryData, signer: Wallet['signer']): Position => {
+export const MEPositionFactory = (
+  positionData: MEPositionQueryData,
+  signer: Wallet['signer'],
+): Position => {
   const {
     id: positionId,
     createdTimestamp: positionCreatedTimestamp,
     amm: {
       id: ammId,
-      fcm: {
-        id: fcmAddress
-      },
-      marginEngine: {
-        id: marginEngineAddress
-      },
+      fcm: { id: fcmAddress },
+      marginEngine: { id: marginEngineAddress },
       rateOracle: {
         id: rateOracleAddress,
         protocolId,
@@ -58,7 +67,7 @@ export const MEPositionFactory = (positionData: MEPositionQueryData, signer: Wal
     swaps,
     marginUpdates,
     liquidations,
-    settlements
+    settlements,
   } = positionData;
 
   return new Position({
@@ -78,9 +87,7 @@ export const MEPositionFactory = (positionData: MEPositionQueryData, signer: Wal
     amm: new AugmentedAMM({
       id: ammId,
       signer,
-      provider: providers.getDefaultProvider(
-        process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK,
-      ),
+      provider: providers.getDefaultProvider(process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK),
       environment: process.env.REACT_APP_DECODING_TAG || 'PROD',
       rateOracle: new RateOracle({
         id: rateOracleAddress,
@@ -91,7 +98,7 @@ export const MEPositionFactory = (positionData: MEPositionQueryData, signer: Wal
         name: tokenName,
         decimals: decimals as number,
       }),
-      factoryAddress: process.env.REACT_APP_FACTORY_ADDRESS || "0x",
+      factoryAddress: process.env.REACT_APP_FACTORY_ADDRESS || '0x',
       marginEngineAddress,
       fcmAddress,
       updatedTimestamp: JSBI.BigInt(ammUpdatedTimestamp),
@@ -103,71 +110,89 @@ export const MEPositionFactory = (positionData: MEPositionQueryData, signer: Wal
       totalNotionalTraded: ammTotalNotionalTraded as JSBI,
       totalLiquidity: totalLiquidity as JSBI,
     }),
-    mints: mints.map((args) => new Mint({
-      id: args.id,
-      transactionId: args.transaction.id,
-      transactionTimestamp: JSBI.BigInt(args.transaction.createdTimestamp),
-      ammId,
-      positionId: positionId,
-      sender: args.sender,
-      amount: JSBI.BigInt(args.amount),
-    })),
-    burns: burns.map((args) => new Burn({
-      id: args.id,
-      transactionId: args.transaction.id,
-      transactionTimestamp: JSBI.BigInt(args.transaction.createdTimestamp),
-      ammId,
-      positionId: positionId,
-      sender: args.sender,
-      amount: JSBI.BigInt(args.amount),
-    })),
-    swaps: swaps.map((args) => new Swap({
-      id: args.id,
-      transactionId: args.transaction.id,
-      transactionTimestamp: JSBI.BigInt(args.transaction.createdTimestamp),
-      ammId,
-      positionId: positionId,
-      sender: args.sender,
-      desiredNotional: JSBI.BigInt(args.desiredNotional),
-      sqrtPriceLimitX96: JSBI.BigInt(args.sqrtPriceLimitX96),
-      cumulativeFeeIncurred: JSBI.BigInt(args.cumulativeFeeIncurred),
-      fixedTokenDelta: JSBI.BigInt(args.fixedTokenDelta),
-      variableTokenDelta: JSBI.BigInt(args.variableTokenDelta),
-      fixedTokenDeltaUnbalanced: JSBI.BigInt(args.fixedTokenDeltaUnbalanced)
-    })),
-    marginUpdates: marginUpdates.map((args) => new MarginUpdate({
-      id: args.id,
-      transactionId: args.transaction.id,
-      transactionTimestamp: JSBI.BigInt(args.transaction.createdTimestamp),
-      ammId,
-      positionId: positionId,
-      depositer: args.depositer,
-      marginDelta: JSBI.BigInt(args.marginDelta)
-    })),
-    liquidations: liquidations.map((args) => new Liquidation({
-      id: args.id,
-      transactionId: args.transaction.id,
-      transactionTimestamp: JSBI.BigInt(args.transaction.createdTimestamp),
-      ammId,
-      positionId: positionId,
-      liquidator: args.liquidator,
-      reward: JSBI.BigInt(args.reward),
-      notionalUnwound: JSBI.BigInt(args.notionalUnwound),
-    })),
-    settlements: settlements.map((args) => new Settlement({
-      id: args.id,
-      transactionId: args.transaction.id,
-      transactionTimestamp: JSBI.BigInt(args.transaction.createdTimestamp),
-      ammId,
-      positionId: positionId,
-      settlementCashflow: JSBI.BigInt(args.settlementCashflow)
-    })),
+    mints: mints.map(
+      (args) =>
+        new Mint({
+          id: args.id,
+          transactionId: args.transaction.id,
+          transactionTimestamp: JSBI.BigInt(args.transaction.createdTimestamp),
+          ammId,
+          positionId: positionId,
+          sender: args.sender,
+          amount: JSBI.BigInt(args.amount),
+        }),
+    ),
+    burns: burns.map(
+      (args) =>
+        new Burn({
+          id: args.id,
+          transactionId: args.transaction.id,
+          transactionTimestamp: JSBI.BigInt(args.transaction.createdTimestamp),
+          ammId,
+          positionId: positionId,
+          sender: args.sender,
+          amount: JSBI.BigInt(args.amount),
+        }),
+    ),
+    swaps: swaps.map(
+      (args) =>
+        new Swap({
+          id: args.id,
+          transactionId: args.transaction.id,
+          transactionTimestamp: JSBI.BigInt(args.transaction.createdTimestamp),
+          ammId,
+          positionId: positionId,
+          sender: args.sender,
+          desiredNotional: JSBI.BigInt(args.desiredNotional),
+          sqrtPriceLimitX96: JSBI.BigInt(args.sqrtPriceLimitX96),
+          cumulativeFeeIncurred: JSBI.BigInt(args.cumulativeFeeIncurred),
+          fixedTokenDelta: JSBI.BigInt(args.fixedTokenDelta),
+          variableTokenDelta: JSBI.BigInt(args.variableTokenDelta),
+          fixedTokenDeltaUnbalanced: JSBI.BigInt(args.fixedTokenDeltaUnbalanced),
+        }),
+    ),
+    marginUpdates: marginUpdates.map(
+      (args) =>
+        new MarginUpdate({
+          id: args.id,
+          transactionId: args.transaction.id,
+          transactionTimestamp: JSBI.BigInt(args.transaction.createdTimestamp),
+          ammId,
+          positionId: positionId,
+          depositer: args.depositer,
+          marginDelta: JSBI.BigInt(args.marginDelta),
+        }),
+    ),
+    liquidations: liquidations.map(
+      (args) =>
+        new Liquidation({
+          id: args.id,
+          transactionId: args.transaction.id,
+          transactionTimestamp: JSBI.BigInt(args.transaction.createdTimestamp),
+          ammId,
+          positionId: positionId,
+          liquidator: args.liquidator,
+          reward: JSBI.BigInt(args.reward),
+          notionalUnwound: JSBI.BigInt(args.notionalUnwound),
+        }),
+    ),
+    settlements: settlements.map(
+      (args) =>
+        new Settlement({
+          id: args.id,
+          transactionId: args.transaction.id,
+          transactionTimestamp: JSBI.BigInt(args.transaction.createdTimestamp),
+          ammId,
+          positionId: positionId,
+          settlementCashflow: JSBI.BigInt(args.settlementCashflow),
+        }),
+    ),
     fcmSwaps: [],
     fcmUnwinds: [],
     fcmSettlements: [],
     marginInScaledYieldBearingTokens: JSBI.BigInt(0),
-    source: "ME",
+    source: 'ME',
     totalNotionalTraded: positionTotalNotionalTraded as JSBI,
     sumOfWeightedFixedRate: sumOfWeightedFixedRate as JSBI,
   });
-}
+};

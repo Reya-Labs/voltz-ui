@@ -6,7 +6,10 @@ import { SwapFormModes } from '@components/interface';
  * @param formMode - The form mode (this is only set if a pool / position has been selected)
  * @param pathnameWithoutPrefix - The route pathname without prefix
  */
-export const getRenderMode = (formMode: SwapFormModes | undefined, pathnameWithoutPrefix: string) => {
+export const getRenderMode = (
+  formMode: SwapFormModes | undefined,
+  pathnameWithoutPrefix: string,
+) => {
   if (!formMode) {
     if (pathnameWithoutPrefix === routes.SWAP) {
       return 'pools';
@@ -15,5 +18,5 @@ export const getRenderMode = (formMode: SwapFormModes | undefined, pathnameWitho
     }
   }
 
-  return 'form'
+  return 'form';
 };

@@ -2,7 +2,15 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 
-import { AugmentedAMM, DataLayerEventPayload, getAgentFromPosition, getAmmProtocol, getPoolButtonId, pushEvent, setPageTitle } from '@utilities';
+import {
+  AugmentedAMM,
+  DataLayerEventPayload,
+  getAgentFromPosition,
+  getAmmProtocol,
+  getPoolButtonId,
+  pushEvent,
+  setPageTitle,
+} from '@utilities';
 import { useWallet, useSelector, useAgent } from '@hooks';
 import { selectors } from '@store';
 import { AMMProvider, MintBurnFormLiquidityAction, useAMMsContext } from '@contexts';
@@ -61,87 +69,97 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   const cachedMargin = useRef<number | undefined>(margin);
 
   const action = useMemo(() => {
-    if ( isRollover ) return "rollover";
-    if ( isSettle ) return "settle";
-    if ( isEditingMargin || position ) return "edit";
-    return "new";
-  },[isRollover, isSettle, isEditingMargin]);
+    if (isRollover) return 'rollover';
+    if (isSettle) return 'settle';
+    if (isEditingMargin || position) return 'edit';
+    return 'new';
+  }, [isRollover, isSettle, isEditingMargin]);
 
   useEffect(() => {
-    setPageTitle('Pending Transaction');
-    const payload : DataLayerEventPayload  = {
-      event: "tx_submitted",
+    setPageTitle('Pending Transaction', account);
+    const payload: DataLayerEventPayload = {
+      event: 'tx_submitted',
       eventValue: {
-        notional: (notional ?? 0) * (showNegativeNotional || liquidityAction === MintBurnFormLiquidityAction.BURN ? -1 : 1),
+        notional:
+          (notional ?? 0) *
+          (showNegativeNotional || liquidityAction === MintBurnFormLiquidityAction.BURN ? -1 : 1),
         margin: isSettle ? cachedMargin.current : margin,
         action: action,
       },
       pool: getAmmProtocol(amm),
-      agent: isSettle ? getAgentFromPosition(position) : agent
+      agent: isSettle ? getAgentFromPosition(position) : agent,
     };
-    pushEvent(payload);
+    pushEvent(account ?? '', payload);
   }, []);
 
   useEffect(() => {
-    if (!isUndefined(margin) && margin !== 0 && fetch === 0){
-      cachedMargin.current =  margin;
+    if (!isUndefined(margin) && margin !== 0 && fetch === 0) {
+      cachedMargin.current = margin;
     }
   }, [margin]);
-  
+
   const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
   const trasactionState = useMemo(() => {
-    return [activeTransaction?.resolvedAt,activeTransaction?.succeededAt]; 
+    return [activeTransaction?.resolvedAt, activeTransaction?.succeededAt];
   }, []);
 
   useEffect(() => {
-    if ( activeTransaction?.failedAt ) {
-      setPageTitle('Failed Transaction');
-      const payload : DataLayerEventPayload  = {
-        event: "failed_tx",
+    if (activeTransaction?.failedAt) {
+      setPageTitle('Failed Transaction', account);
+      const payload: DataLayerEventPayload = {
+        event: 'failed_tx',
         eventValue: {
-          notional: (notional ?? 0) * (showNegativeNotional || liquidityAction === MintBurnFormLiquidityAction.BURN ? -1 : 1),
+          notional:
+            (notional ?? 0) *
+            (showNegativeNotional || liquidityAction === MintBurnFormLiquidityAction.BURN ? -1 : 1),
           margin: isSettle ? cachedMargin.current : margin,
           action: action,
-          failMessage: activeTransaction.failureMessage || "Unrecognized error"
+          failMessage: activeTransaction.failureMessage || 'Unrecognized error',
         },
         pool: getAmmProtocol(amm),
-        agent: isSettle ? getAgentFromPosition(position) : agent
+        agent: isSettle ? getAgentFromPosition(position) : agent,
       };
-      pushEvent(payload);
+      pushEvent(account ?? '', payload);
     }
   }, [activeTransaction?.failedAt]);
 
   const isFetched = useMemo(() => {
-    if (previousWallet.current && !loadingRefetch && isPositionFeched(wallet as Wallet, previousWallet.current, position)) {
+    if (
+      previousWallet.current &&
+      !loadingRefetch &&
+      isPositionFeched(wallet as Wallet, previousWallet.current, position)
+    ) {
+      fetchRef.current = 0;
+      removeFixedApr(amm);
+      return true;
+    } else {
+      if (fetch >= fetchLimit) {
         fetchRef.current = 0;
         removeFixedApr(amm);
         return true;
-    } else {
-        if (fetch >= fetchLimit) {
-          fetchRef.current = 0;
-          removeFixedApr(amm);
-          return true;
-        }
       }
+    }
     return false;
-  }, [fetch, loadingRefetch] );
+  }, [fetch, loadingRefetch]);
 
   useEffect(() => {
-    if ( (activeTransaction?.succeededAt || activeTransaction?.resolvedAt) && isFetched ) {
-      setPageTitle('Successful Transaction');
-      const payload : DataLayerEventPayload  = {
-        event: "successful_tx",
+    if ((activeTransaction?.succeededAt || activeTransaction?.resolvedAt) && isFetched) {
+      setPageTitle('Successful Transaction', account);
+      const payload: DataLayerEventPayload = {
+        event: 'successful_tx',
         eventValue: {
-          notional: (notional ?? 0) * (showNegativeNotional || liquidityAction === MintBurnFormLiquidityAction.BURN ? -1 : 1),
+          notional:
+            (notional ?? 0) *
+            (showNegativeNotional || liquidityAction === MintBurnFormLiquidityAction.BURN ? -1 : 1),
           margin: isSettle ? cachedMargin.current : margin,
-          action: action
+          action: action,
         },
         pool: getAmmProtocol(amm),
-        agent: isSettle ? getAgentFromPosition(position) : agent
+        agent: isSettle ? getAgentFromPosition(position) : agent,
       };
-      pushEvent(payload);
+      pushEvent(account ?? '', payload);
     }
-  }, [ (activeTransaction?.succeededAt || activeTransaction?.resolvedAt) && isFetched]);
+  }, [(activeTransaction?.succeededAt || activeTransaction?.resolvedAt) && isFetched]);
 
   useEffect(() => {
     if (!previousWallet.current && wallet) {
@@ -150,17 +168,30 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   }, [wallet]);
 
   useEffect(() => {
-    if ( activeTransaction && trasactionState[0] === activeTransaction.resolvedAt && trasactionState[1] === activeTransaction.succeededAt ) return;
+    if (
+      activeTransaction &&
+      trasactionState[0] === activeTransaction.resolvedAt &&
+      trasactionState[1] === activeTransaction.succeededAt
+    )
+      return;
     if (activeTransaction && (activeTransaction.resolvedAt || activeTransaction.succeededAt)) {
-      if( fetch < fetchLimit && !loadingRefetch && wallet && previousWallet.current && !isPositionFeched(wallet as Wallet, previousWallet.current, position) ) {
+      if (
+        fetch < fetchLimit &&
+        !loadingRefetch &&
+        wallet &&
+        previousWallet.current &&
+        !isPositionFeched(wallet as Wallet, previousWallet.current, position)
+      ) {
         setLoadingRefetch(true);
         /* eslint-disable @typescript-eslint/no-unsafe-call */
         refetch().then(() => {
-          setTimeout(() => {setLoadingRefetch(false)}, 500);
-          fetchRef.current = fetch+1;
+          setTimeout(() => {
+            setLoadingRefetch(false);
+          }, 500);
+          fetchRef.current = fetch + 1;
           setFetch(fetchRef.current);
         });
-      } 
+      }
     }
   }, [activeTransaction?.resolvedAt, activeTransaction?.succeededAt, fetch, loadingRefetch]);
 
@@ -171,11 +202,11 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   let transactionLink: string | undefined = undefined;
   if (activeTransaction.txid) {
     if (process.env.REACT_APP_REQUIRED_ETHEREUM_NETWORK === 'goerli') {
-      transactionLink = `https://goerli.etherscan.io/tx/${activeTransaction.txid}`
+      transactionLink = `https://goerli.etherscan.io/tx/${activeTransaction.txid}`;
     }
 
     if (process.env.REACT_APP_REQUIRED_ETHEREUM_NETWORK === 'homestead') {
-      transactionLink = `https://etherscan.io/tx/${activeTransaction.txid}`
+      transactionLink = `https://etherscan.io/tx/${activeTransaction.txid}`;
     }
   }
 
@@ -205,13 +236,18 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               paddingBottom: (theme) => theme.spacing(8),
             }}
           >
-            <Link href={transactionLink} variant="caption" color="primary.light"
+            <Link
+              href={transactionLink}
+              variant="caption"
+              color="primary.light"
               id={getPoolButtonId(
-                (margin && margin < 0) ? "REMOVE" : "ADD",
-                (liquidityAction ?? "").toString(),
-                showNegativeNotional ? "REMOVE": "ADD",
+                margin && margin < 0 ? 'REMOVE' : 'ADD',
+                (liquidityAction ?? '').toString(),
+                showNegativeNotional ? 'REMOVE' : 'ADD',
                 agent,
-                amm)}>
+                amm,
+              )}
+            >
               View on etherscan
             </Link>
           </Box>
@@ -220,13 +256,17 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               paddingBottom: (theme) => theme.spacing(10),
             }}
           >
-            <Button variant="contained" onClick={onComplete}
+            <Button
+              variant="contained"
+              onClick={onComplete}
               id={getPoolButtonId(
-                (margin && margin < 0) ? "REMOVE" : "ADD",
-                (liquidityAction ?? "").toString(),
-                showNegativeNotional ? "REMOVE": "ADD",
+                margin && margin < 0 ? 'REMOVE' : 'ADD',
+                (liquidityAction ?? '').toString(),
+                showNegativeNotional ? 'REMOVE' : 'ADD',
                 agent,
-                amm)}>
+                amm,
+              )}
+            >
               Go to your portfolio
             </Button>
           </Box>
@@ -260,7 +300,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
             }}
           >
             <Typography variant="body2" align="center" color="error">
-              {activeTransaction.failureMessage || "Unrecognized error"}
+              {activeTransaction.failureMessage || 'Unrecognized error'}
             </Typography>
           </Box>
           <Box
@@ -268,12 +308,19 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               paddingBottom: (theme) => theme.spacing(10),
             }}
           >
-            <Button variant="contained" onClick={onBack} id={getPoolButtonId(
-                (margin && margin < 0) ? "REMOVE" : "ADD",
-                (liquidityAction ?? "").toString(),
-                showNegativeNotional ? "REMOVE": "ADD",
-                agent,
-                amm)+"_FAILED"}>
+            <Button
+              variant="contained"
+              onClick={onBack}
+              id={
+                getPoolButtonId(
+                  margin && margin < 0 ? 'REMOVE' : 'ADD',
+                  (liquidityAction ?? '').toString(),
+                  showNegativeNotional ? 'REMOVE' : 'ADD',
+                  agent,
+                  amm,
+                ) + '_FAILED'
+              }
+            >
               Back
             </Button>
           </Box>
@@ -304,13 +351,19 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               paddingBottom: (theme) => theme.spacing(8),
             }}
           >
-            <Link href={transactionLink} target="_blank" variant="caption" color="primary.light"
+            <Link
+              href={transactionLink}
+              target="_blank"
+              variant="caption"
+              color="primary.light"
               id={getPoolButtonId(
-                (margin && margin < 0) ? "REMOVE" : "ADD",
-                (liquidityAction ?? "").toString(),
-                showNegativeNotional ? "REMOVE": "ADD",
+                margin && margin < 0 ? 'REMOVE' : 'ADD',
+                (liquidityAction ?? '').toString(),
+                showNegativeNotional ? 'REMOVE' : 'ADD',
                 agent,
-                amm)}>
+                amm,
+              )}
+            >
               View on etherscan
             </Link>
           </Box>
@@ -323,14 +376,17 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
             {/* <Typography variant="caption" color="secondary">
               Wait a few moments for the blockchain data to synchronize
             </Typography> */}
-            <Button variant="contained"
+            <Button
+              variant="contained"
               onClick={onComplete}
               id={getPoolButtonId(
-                (margin && margin < 0) ? "REMOVE" : "ADD",
-                (liquidityAction ?? "").toString(),
-                showNegativeNotional ? "REMOVE": "ADD",
+                margin && margin < 0 ? 'REMOVE' : 'ADD',
+                (liquidityAction ?? '').toString(),
+                showNegativeNotional ? 'REMOVE' : 'ADD',
                 agent,
-                amm)}>
+                amm,
+              )}
+            >
               Go to your portfolio
             </Button>
           </Box>
@@ -362,8 +418,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
         >
           <WalletAddressDisplay address={account} />
         </Box>
-        <Box
-        >
+        <Box>
           <Typography variant="caption" color="secondary" sx={{}}>
             Confirm this transaction in your wallet
           </Typography>
@@ -383,7 +438,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
 
   const renderNotional = () => {
     if (isUndefined(amm.underlyingToken.name)) {
-      return "Underlying token name undefined";
+      return 'Underlying token name undefined';
     }
 
     if (isUndefined(notional)) {
@@ -391,23 +446,22 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
     }
 
     if (showNegativeNotional) {
-      return `${formatCurrency(0-notional)} ${amm.underlyingToken.name}`;
+      return `${formatCurrency(0 - notional)} ${amm.underlyingToken.name}`;
     }
 
     return `${formatCurrency(notional)} ${amm.underlyingToken.name}`;
-  }
+  };
 
   const renderMargin = () => {
-
     if (isUndefined(amm.underlyingToken.name)) {
-      return "Underlying token name undefined";
+      return 'Underlying token name undefined';
     }
 
     if (isSettle) {
       return `${formatCurrency(cachedMargin.current ?? 0)} ${amm.underlyingToken.name}`;
     }
     if (isUndefined(margin)) {
-      return "Margin undefined";
+      return 'Margin undefined';
     }
 
     if (isFCMSwap) {
@@ -415,7 +469,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
     }
 
     return `${formatCurrency(margin)} ${amm.underlyingToken.name}`;
-  }
+  };
 
   return (
     <Panel
@@ -429,32 +483,39 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
       {renderStatus()}
       <Panel variant="main">
         <AMMProvider amm={amm}>
-          <ProtocolInformation protocol={amm.protocol} isRollover={isRollover} isSettle={isSettle} variableApy={variableApy} fixedApr={fixedApr}/>
+          <ProtocolInformation
+            protocol={amm.protocol}
+            isRollover={isRollover}
+            isSettle={isSettle}
+            variableApy={variableApy}
+            fixedApr={fixedApr}
+          />
         </AMMProvider>
-      
-        {(isUndefined(isEditingMargin) || !isEditingMargin) && (<Box
-          sx={{
-            marginBottom: (theme) => theme.spacing(4),
-          }}
-        >
-          <Typography label="NOTIONAL AMOUNT" variant="body2">
-            {renderNotional()}
-          </Typography>
-        </Box>)
-        }
-        
-        {
-          (isUndefined(liquidityAction) || liquidityAction) && (isUndefined(isFCMUnwind) || !isFCMUnwind) && (
-        <Box
-          sx={{
-            marginBottom: (theme) => theme.spacing(4),
-          }}
-        >
-          <Typography label="MARGIN" variant="body2">
-            {renderMargin()}
-          </Typography>
-        </Box>
+
+        {(isUndefined(isEditingMargin) || !isEditingMargin) && (
+          <Box
+            sx={{
+              marginBottom: (theme) => theme.spacing(4),
+            }}
+          >
+            <Typography label="NOTIONAL AMOUNT" variant="body2">
+              {renderNotional()}
+            </Typography>
+          </Box>
         )}
+
+        {(isUndefined(liquidityAction) || liquidityAction) &&
+          (isUndefined(isFCMUnwind) || !isFCMUnwind) && (
+            <Box
+              sx={{
+                marginBottom: (theme) => theme.spacing(4),
+              }}
+            >
+              <Typography label="MARGIN" variant="body2">
+                {renderMargin()}
+              </Typography>
+            </Box>
+          )}
       </Panel>
     </Panel>
   );

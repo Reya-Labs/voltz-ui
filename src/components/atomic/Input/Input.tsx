@@ -4,7 +4,7 @@ import { withLabel } from '../../hoc';
 import { inputStyles } from '@theme';
 
 export type InputProps = InputBaseProps & {
-  background?: 'standard' | 'dark'
+  background?: 'standard' | 'dark';
 };
 
 const Input: React.FunctionComponent<InputProps> = ({ background = 'standard', ...props }) => {
@@ -15,7 +15,6 @@ const Input: React.FunctionComponent<InputProps> = ({ background = 'standard', .
     error: props.error,
     inputSize: props.size,
     suffixPadding: 0,
-    subtext: false
   });
 
   return <InputBase {...props} sx={{ ...styles, ...(props.sx || {}) }} />;

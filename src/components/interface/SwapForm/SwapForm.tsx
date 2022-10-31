@@ -2,7 +2,13 @@ import React from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
 import { useAgent, useTokenApproval } from '@hooks';
-import { Agents, SwapFormMarginAction, SwapFormState, SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates, } from '@contexts';
+import {
+  Agents,
+  SwapFormMarginAction,
+  SwapFormState,
+  SwapFormSubmitButtonHintStates,
+  SwapFormSubmitButtonStates,
+} from '@contexts';
 import { PositionBadge } from '@components/atomic';
 import { FormPanel } from '@components/interface';
 import {
@@ -88,24 +94,26 @@ const Swap: React.FunctionComponent<SwapProps> = ({
 }) => {
   const { agent, onChangeAgent } = useAgent();
   const bottomSpacing: SystemStyleObject<Theme> = {
-    marginBottom: (theme) => theme.spacing(6)
-  }
+    marginBottom: (theme) => theme.spacing(6),
+  };
 
   return (
     <FormPanel boxShadowType={agent === Agents.FIXED_TRADER ? 'FT' : 'VT'}>
       {!formState.partialCollateralization && (
-        <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: (theme) => theme.spacing(6) }}>
-          <PositionBadge variant='FC' sx={{ display: 'inline-block', marginLeft: 0 }} />
-          <IconLabel 
-            icon="information-circle" 
-            label="" 
-            info="Please note that for the initial phase of the Voltz protocol mainnet launch, users who have supplied assets to the FCM will not accrue underling protocol rewards (ie COMP and AAVE). The Voltz Labs team will push an update in the coming weeks to allow for accruing and claiming of underling protocol rewards going forward." 
-            iconSx={{ color: colors.skyBlueCrayola.base, height: '14px', width: '14px', top: '0' }} 
+        <Box
+          sx={{ display: 'flex', alignItems: 'center', marginBottom: (theme) => theme.spacing(6) }}
+        >
+          <PositionBadge variant="FC" sx={{ display: 'inline-block', marginLeft: 0 }} />
+          <IconLabel
+            icon="information-circle"
+            label=""
+            info="Please note that for the initial phase of the Voltz protocol mainnet launch, users who have supplied assets to the FCM will not accrue underling protocol rewards (ie COMP and AAVE). The Voltz Labs team will push an update in the coming weeks to allow for accruing and claiming of underling protocol rewards going forward."
+            iconSx={{ color: colors.skyBlueCrayola.base, height: '14px', width: '14px', top: '0' }}
           />
         </Box>
       )}
 
-      <ProtocolInformation protocol={protocol} variableApy={variableApy} fixedApr={fixedApr}/>
+      <ProtocolInformation protocol={protocol} variableApy={variableApy} fixedApr={fixedApr} />
 
       <Box sx={bottomSpacing}>
         <MaturityInformation
@@ -124,13 +132,13 @@ const Swap: React.FunctionComponent<SwapProps> = ({
 
       {mode === SwapFormModes.EDIT_MARGIN && (
         <Box sx={{ ...bottomSpacing, display: 'flex' }}>
-          <MarginControls 
+          <MarginControls
             values={SwapFormMarginAction}
             value={formState.marginAction}
             onChange={onChangeMarginAction}
           />
         </Box>
-      )} 
+      )}
 
       {mode !== SwapFormModes.EDIT_MARGIN && (
         <Box sx={{ ...bottomSpacing, display: 'flex' }}>
@@ -152,9 +160,10 @@ const Swap: React.FunctionComponent<SwapProps> = ({
             label="notional amount"
             defaultNotional={mode === SwapFormModes.EDIT_NOTIONAL ? 0 : undefined}
             isEditing={mode === SwapFormModes.EDIT_NOTIONAL}
-            info={(formAction === SwapFormActions.FCM_SWAP || formAction === SwapFormActions.FCM_UNWIND)
-              ? "Choose the notional you wish to trade. The notional amount is the total size of your trade and, since you're fully collateralising your position, is the amount of margin required too."
-              : "Choose the notional you wish to trade. The notional amount is the total size of your trade."
+            info={
+              formAction === SwapFormActions.FCM_SWAP || formAction === SwapFormActions.FCM_UNWIND
+                ? "Choose the notional you wish to trade. The notional amount is the total size of your trade and, since you're fully collateralising your position, is the amount of margin required too."
+                : 'Choose the notional you wish to trade. The notional amount is the total size of your trade.'
             }
             notional={formState.notional}
             onChangeNotional={onChangeNotional}
@@ -163,30 +172,34 @@ const Swap: React.FunctionComponent<SwapProps> = ({
         </Box>
       )}
 
-      {(mode === SwapFormModes.NEW_POSITION || mode === SwapFormModes.ROLLOVER) && ((agent === Agents.FIXED_TRADER && formState.partialCollateralization) || agent === Agents.VARIABLE_TRADER) && (
-        <Box sx={{ ...bottomSpacing, display: 'flex' }}>
-          <Leverage 
-            availableNotional={swapInfo?.availableNotional ?? undefined}
-            minMargin={swapInfo?.marginRequirement ?? undefined}
-            notional={formState.notional}
-            onChange={onChangeLeverage}
-            value={formState.leverage}
-            resetDeltaState={formState.resetDeltaState}
-          />
-        </Box>
-      )}
+      {(mode === SwapFormModes.NEW_POSITION || mode === SwapFormModes.ROLLOVER) &&
+        ((agent === Agents.FIXED_TRADER && formState.partialCollateralization) ||
+          agent === Agents.VARIABLE_TRADER) && (
+          <Box sx={{ ...bottomSpacing, display: 'flex' }}>
+            <Leverage
+              availableNotional={swapInfo?.availableNotional ?? undefined}
+              minMargin={swapInfo?.marginRequirement ?? undefined}
+              notional={formState.notional}
+              onChange={onChangeLeverage}
+              value={formState.leverage}
+              resetDeltaState={formState.resetDeltaState}
+            />
+          </Box>
+        )}
 
       {mode === SwapFormModes.EDIT_NOTIONAL && (
         <Box sx={{ ...bottomSpacing, display: 'flex' }}>
-          <MarginControls 
+          <MarginControls
             values={SwapFormMarginAction}
             value={formState.marginAction}
             onChange={onChangeMarginAction}
           />
         </Box>
-      )} 
+      )}
 
-      {(formAction === SwapFormActions.SWAP || formAction === SwapFormActions.UPDATE || formAction === SwapFormActions.ROLLOVER_SWAP) && (
+      {(formAction === SwapFormActions.SWAP ||
+        formAction === SwapFormActions.UPDATE ||
+        formAction === SwapFormActions.ROLLOVER_SWAP) && (
         <Box sx={bottomSpacing}>
           <MarginAmount
             balance={balance}

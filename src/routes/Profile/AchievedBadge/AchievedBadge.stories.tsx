@@ -23,3 +23,10 @@ const argsNotAchieved: React.ComponentProps<typeof AchievedBadge> = {
   variant: 'beWaterMyFriend',
 };
 NotAchieved.args = argsNotAchieved;
+
+export const Loading = Template.bind({});
+const argsLoading: React.ComponentProps<typeof AchievedBadge> = {
+  variant: 'beWaterMyFriend',
+  loading: true,
+};
+Loading.args = argsLoading;

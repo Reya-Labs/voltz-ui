@@ -4,36 +4,32 @@ import { Icon } from '@components/atomic';
 
 type InputTokenLabelProps = {
   tokenName: string;
-}
+};
 
-const InputTokenLabel = ({ tokenName }:InputTokenLabelProps) => {
+const InputTokenLabel = ({ tokenName }: InputTokenLabelProps) => {
   const getTokenIcon = () => {
-    switch(tokenName.toUpperCase()) {
+    switch (tokenName.toUpperCase()) {
       case 'DAI':
-        return <Icon name='token-dai' sx={{ display: 'block' }} />;
+        return <Icon name="token-dai" sx={{ display: 'block' }} />;
       case 'ETH':
-        return <Icon name='token-eth' sx={{ display: 'block' }} />;
+        return <Icon name="token-eth" sx={{ display: 'block' }} />;
       case 'LIDO':
-        return <Icon name='token-lido' sx={{ display: 'block' }} />;
+        return <Icon name="token-lido" sx={{ display: 'block' }} />;
       case 'USDC':
-        return <Icon name='token-usdc' sx={{ display: 'block' }} />;
+        return <Icon name="token-usdc" sx={{ display: 'block' }} />;
       case 'USDT':
-        return <Icon name='token-usdt' sx={{ display: 'block' }} />;
+        return <Icon name="token-usdt" sx={{ display: 'block' }} />;
       default:
         return null;
     }
-  }
+  };
 
   return (
-    <Box sx={{display: 'flex', alignItems: 'center'}}>
-      <Box sx={{marginRight: (theme) =>  theme.spacing(2)}}>
-        {getTokenIcon()}
-      </Box>
-      <Box>
-        {tokenName}
-      </Box>
+    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box sx={{ marginRight: (theme) => theme.spacing(2) }}>{getTokenIcon()}</Box>
+      <Box>{tokenName}</Box>
     </Box>
   );
-}
+};
 
 export default InputTokenLabel;

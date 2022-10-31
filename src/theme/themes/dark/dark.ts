@@ -1,5 +1,4 @@
 import { createTheme } from '@mui/material/styles';
-import { inherits } from 'util';
 
 import colors from '../../colors';
 

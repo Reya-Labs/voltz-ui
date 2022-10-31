@@ -5,7 +5,6 @@ import { getErrorMessage } from '@utilities';
 import { UpdatePositionMarginAction } from '../../types';
 import { deserializeAmm, getSigner } from '../../utilities';
 import * as actions from '../../actions';
-import { isUndefined } from 'lodash';
 
 function* updatePositionMarginSaga(action: UpdatePositionMarginAction) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -26,19 +25,17 @@ function* updatePositionMarginSaga(action: UpdatePositionMarginAction) {
   let result: ContractReceipt | void;
   try {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    result = yield call(
-      [amm, "updatePositionMargin"], {
+    result = yield call([amm, 'updatePositionMargin'], {
       marginDelta: margin,
       fixedLow: fixedLow || 1,
       fixedHigh: fixedHigh || 999,
     });
-
   } catch (error) {
     yield put(
       actions.updateTransaction({
         id,
         failedAt: DateTime.now().toISO(),
-        failureMessage: getErrorMessage(error)
+        failureMessage: getErrorMessage(error),
       }),
     );
 
@@ -51,7 +48,11 @@ function* updatePositionMarginSaga(action: UpdatePositionMarginAction) {
     );
   } else {
     yield put(
-      actions.updateTransaction({ id, succeededAt: DateTime.now().toISO(), txid: result.transactionHash }),
+      actions.updateTransaction({
+        id,
+        succeededAt: DateTime.now().toISO(),
+        txid: result.transactionHash,
+      }),
     );
   }
 }

@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 
-import { useAMMContext } from '@contexts';
 import { Typography } from '@components/atomic';
 import { IconLabel } from '@components/composite';
 import { Agents } from '@contexts';
@@ -13,7 +12,7 @@ export type FixedAPRProps = {
   fixedApr?: number;
 };
 
-const FixedAPR: React.FunctionComponent<FixedAPRProps> = ({agent, fixedApr}) => {
+const FixedAPR: React.FunctionComponent<FixedAPRProps> = ({ agent, fixedApr }) => {
   // const { fixedApr } = useAMMContext();
   // const { result, loading, call } = fixedApr;
 

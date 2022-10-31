@@ -14,24 +14,33 @@ export type BorrowPortfolioHeaderProps = {
   loading?: boolean;
 };
 
-const BorrowPortfolioHeader = ({ 
+const BorrowPortfolioHeader = ({
   commonOverrides,
-  currencyCode, 
+  currencyCode,
   currencySymbol,
   fixedDebt,
   variableDebt,
   fixedPositionsCount,
   variablePositionsCount,
-  loading
+  loading,
 }: BorrowPortfolioHeaderProps) => {
   return (
     <>
-    <Panel borderRadius='large' padding='container' sx={{ paddingTop: 0, paddingBottom: 0, background: "transparent"}}>
-      <BorrowPortfolioHeaderBox
-        loading={loading}
-        currencyCode={currencyCode}
-        currencySymbol={currencySymbol}
-        aggregatedDebt={(variableDebt !== undefined && fixedDebt !== undefined) ? (variableDebt + fixedDebt) : undefined }/>
+      <Panel
+        borderRadius="large"
+        padding="container"
+        sx={{ paddingTop: 0, paddingBottom: 0, background: 'transparent' }}
+      >
+        <BorrowPortfolioHeaderBox
+          loading={loading}
+          currencyCode={currencyCode}
+          currencySymbol={currencySymbol}
+          aggregatedDebt={
+            variableDebt !== undefined && fixedDebt !== undefined
+              ? variableDebt + fixedDebt
+              : undefined
+          }
+        />
 
         <BorrowPortfolioSummary
           commonOverrides={commonOverrides}
@@ -42,12 +51,9 @@ const BorrowPortfolioHeader = ({
           fixedPositionsCount={fixedPositionsCount}
           variablePositionsCount={variablePositionsCount}
         />
-    </Panel>
-      
+      </Panel>
     </>
-  )
+  );
 };
 
 export default BorrowPortfolioHeader;
-
-  

@@ -6,7 +6,7 @@ export type FeesProps = {
   value: string;
 };
 
-const Fees: React.FunctionComponent<FeesProps> = ({value}) => {
+const Fees: React.FunctionComponent<FeesProps> = ({ value }) => {
   return (
     <TableCell>
       <Typography variant="body2" label="Fees" sx={{ fontSize: 18 }}>

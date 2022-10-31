@@ -2,7 +2,6 @@ import React from 'react';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
 import { SystemStyleObject, Theme } from '@mui/system';
 import { Typography } from '@components/atomic';
 
@@ -17,9 +16,6 @@ export type AMMTableHeadProps = {
 };
 
 const AMMTableHead: React.FunctionComponent<AMMTableHeadProps> = ({ order, orderBy, onSort }) => {
-  const createSortHandler = (field: AMMTableFields) => (_event: React.MouseEvent<unknown>) =>
-    onSort(field);
-
   const cellSx: SystemStyleObject<Theme> = {
     '&.MuiTableCell-root': {
       borderBottom: 0,
@@ -47,16 +43,16 @@ const AMMTableHead: React.FunctionComponent<AMMTableHeadProps> = ({ order, order
               direction={orderBy === field ? order : 'asc'}
               onClick={createSortHandler(field)}
             > */}
-              {/* {label} */}
-              <Typography
+            {/* {label} */}
+            <Typography
               variant="subtitle1"
               sx={{
-                textTransform: "uppercase",
-                fontWeight: 400, 
+                textTransform: 'uppercase',
+                fontWeight: 400,
                 fontSize: 12,
-                color: "#5A576D"
+                color: '#5A576D',
               }}
-              >
+            >
               {label}
             </Typography>
             {/* </TableSortLabel> */}

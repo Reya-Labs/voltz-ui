@@ -15,11 +15,11 @@ const useBorrowPositions = (): useBorrowPositionsResult => {
 
   const borrowPositions = useMemo(() => {
     const vtPositions = positions?.filter((position) => position.positionType === 2);
-    if(!vtPositions){
+    if (!vtPositions) {
       return [];
     }
     return vtPositions?.filter((position) => {
-        return position.tickLower === -69000 && position.tickUpper === 69060 ;
+      return position.tickLower === -69000 && position.tickUpper === 69060;
     });
   }, [positions, agent, loadingPos, errorPos]);
 

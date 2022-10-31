@@ -6,7 +6,10 @@ import { MintBurnFormModes } from '@contexts';
  * @param formMode - The form mode (this is only set if a pool / position has been selected)
  * @param pathnameWithoutPrefix - The route pathname without prefix
  */
-export const getRenderMode = (formMode: MintBurnFormModes | undefined, pathnameWithoutPrefix: string) => {
+export const getRenderMode = (
+  formMode: MintBurnFormModes | undefined,
+  pathnameWithoutPrefix: string,
+) => {
   if (!formMode) {
     if (pathnameWithoutPrefix === routes.POOLS) {
       return 'pools';
@@ -15,5 +18,5 @@ export const getRenderMode = (formMode: MintBurnFormModes | undefined, pathnameW
     }
   }
 
-  return 'form'
+  return 'form';
 };

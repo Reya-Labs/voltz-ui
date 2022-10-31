@@ -2,7 +2,10 @@ import { AugmentedAMM } from '@utilities';
 import { SettlePositionAction, Transaction } from '../types';
 import { serializeAmm, createId } from '../utilities';
 
-const settlePositionAction = (amm: AugmentedAMM, transaction: Omit<Transaction, 'id'>): SettlePositionAction => ({
+const settlePositionAction = (
+  amm: AugmentedAMM,
+  transaction: Omit<Transaction, 'id'>,
+): SettlePositionAction => ({
   type: 'settlePosition',
   payload: {
     amm: serializeAmm(amm),

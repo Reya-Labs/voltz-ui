@@ -1,12 +1,18 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import { Position } from '@voltz-protocol/v1-sdk';
 
 import { AugmentedAMM, findCurrentAmm, findCurrentPosition, setPageTitle } from '@utilities';
-import { Agents, AMMProvider, PositionProvider, SwapFormProvider, PortfolioProvider } from '@contexts';
+import {
+  Agents,
+  AMMProvider,
+  PositionProvider,
+  SwapFormProvider,
+  PortfolioProvider,
+} from '@contexts';
 import { PageTitleDesc } from '@components/composite';
-import { useAgent, useAMMs, usePositions } from '@hooks';
+import { useAgent, useAMMs, usePositions, useWallet } from '@hooks';
 import { Page, SwapFormModes } from '@components/interface';
 import ConnectedAMMTable from '../../components/containers/ConnectedAMMTable/ConnectedAMMTable';
 import ConnectedPositionTable from '../../components/containers/ConnectedPositionTable/ConnectedPositionTable';
@@ -24,6 +30,7 @@ const Trader: React.FunctionComponent = () => {
   const { pathname, key } = useLocation();
   const { positions, positionsByAgentGroup } = usePositions();
   const { agent } = useAgent();
+  const { account } = useWallet();
 
   const pathnameWithoutPrefix = pathname.slice(1);
   const renderMode = getRenderMode(formMode, pathnameWithoutPrefix);
@@ -47,21 +54,21 @@ const Trader: React.FunctionComponent = () => {
   }, [key]);
 
   const handleCompletedSettling = () => {
-    setSettling(!settling)
-  }
+    setSettling(!settling);
+  };
 
   useEffect(() => {
     switch (renderMode) {
       case 'pools': {
-        setPageTitle('Trader Pools');
+        setPageTitle('Trader Pools', account);
         break;
       }
       case 'portfolio': {
-        setPageTitle('Trader Portfolio');
+        setPageTitle('Trader Portfolio', account);
         break;
       }
       case 'form': {
-        setPageTitle(`${position ? 'Edit' : 'New'} Trader Position`);
+        setPageTitle(`${position ? 'Edit' : 'New'} Trader Position`, account);
         break;
       }
     }
@@ -110,26 +117,28 @@ const Trader: React.FunctionComponent = () => {
       )}
 
       {settling && renderMode === 'portfolio' && (
-        <PortfolioProvider positions={agent !== Agents.LIQUIDITY_PROVIDER  ? positionsByAgentGroup : undefined}>
-          <ConnectedPositionTable 
-            onSelectItem={handleSelectPosition} 
+        <PortfolioProvider
+          positions={agent !== Agents.LIQUIDITY_PROVIDER ? positionsByAgentGroup : undefined}
+        >
+          <ConnectedPositionTable
+            onSelectItem={handleSelectPosition}
             agent={Agents.FIXED_TRADER}
             handleCompletedSettling={handleCompletedSettling}
           />
         </PortfolioProvider>
-  
       )}
 
       {!settling && renderMode === 'portfolio' && (
-            <PortfolioProvider positions={agent !== Agents.LIQUIDITY_PROVIDER  ? positionsByAgentGroup : undefined}>
-              <ConnectedPositionTable 
-                onSelectItem={handleSelectPosition} 
-                agent={Agents.FIXED_TRADER}
-                handleCompletedSettling={handleCompletedSettling}
-              />
-            </PortfolioProvider>
-
-          )}
+        <PortfolioProvider
+          positions={agent !== Agents.LIQUIDITY_PROVIDER ? positionsByAgentGroup : undefined}
+        >
+          <ConnectedPositionTable
+            onSelectItem={handleSelectPosition}
+            agent={Agents.FIXED_TRADER}
+            handleCompletedSettling={handleCompletedSettling}
+          />
+        </PortfolioProvider>
+      )}
 
       {renderMode === 'form' && (
         <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>

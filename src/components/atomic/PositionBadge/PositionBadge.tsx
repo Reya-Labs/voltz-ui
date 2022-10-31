@@ -8,59 +8,59 @@ type PositionBadgeVariant = 'FT' | 'VT' | 'LP' | 'FC';
 
 export type PositionBadgeProps = {
   sx?: SystemStyleObject<Theme>;
-  size?: 'small' | 'medium'
+  size?: 'small' | 'medium';
   text?: string;
   variant?: PositionBadgeVariant;
-}
+};
 
-const labels:Record<PositionBadgeVariant, string> = {
+const labels: Record<PositionBadgeVariant, string> = {
   FT: 'Fixed taker',
   VT: 'Variable taker',
   LP: 'Liquidity provider',
-  FC: 'Fully collateralised'
-}
+  FC: 'Fully collateralised',
+};
 
-const baseStyles:SystemStyleObject<Theme> = {
+const baseStyles: SystemStyleObject<Theme> = {
   border: '1px solid transparent',
   display: 'inline-block',
   padding: (theme) => `${theme.spacing(1)} ${theme.spacing(2)}`,
   textTransform: 'uppercase',
   borderRadius: '4px',
-}
+};
 
-const styles:Record<PositionBadgeVariant, SystemStyleObject<Theme>> = {
+const styles: Record<PositionBadgeVariant, SystemStyleObject<Theme>> = {
   FT: {
     ...baseStyles,
     borderColor: 'primary.base',
     color: 'primary.base',
-    background: colors.skyBlueCrayola.darken030
+    background: colors.skyBlueCrayola.darken030,
   },
   VT: {
     ...baseStyles,
     borderColor: 'secondary.base',
     color: 'secondary.base',
-    background: 'tertiary.base'
+    background: 'tertiary.base',
   },
   LP: {
     ...baseStyles,
     borderColor: colors.lavenderWeb.darken045,
     color: 'primary.base',
-    background: colors.lavenderWeb.darken045
+    background: colors.lavenderWeb.darken045,
   },
   FC: {
     ...baseStyles,
     borderColor: 'primary.base',
     color: 'primary.base',
-    background: 'transparent'
-  }
-}
+    background: 'transparent',
+  },
+};
 
 /**
  * Returns the 2 letter variant for a position type
  * @param positionType - positionType from your position (1, 2 or 3)
  */
 export const getPositionBadgeVariant = (positionType: number) => {
-  switch(positionType) {
+  switch (positionType) {
     case 1:
       return 'FT';
     case 2:
@@ -70,16 +70,20 @@ export const getPositionBadgeVariant = (positionType: number) => {
   }
 };
 
-export const PositionBadge = ({ size='medium', sx = {}, text, variant }:PositionBadgeProps) => {
-  if (variant) return (
-    <Box sx={{ ...sx, ...styles[variant] }}>
-      <Typography variant='body2' sx={{ color: 'unset', fontSize: size === 'small' ? '12px' : '14px', lineHeight: '1' }}>
-        {text || labels[variant]}
-      </Typography>
-    </Box>
-  );
+export const PositionBadge = ({ size = 'medium', sx = {}, text, variant }: PositionBadgeProps) => {
+  if (variant)
+    return (
+      <Box sx={{ ...sx, ...styles[variant] }}>
+        <Typography
+          variant="body2"
+          sx={{ color: 'unset', fontSize: size === 'small' ? '12px' : '14px', lineHeight: '1' }}
+        >
+          {text || labels[variant]}
+        </Typography>
+      </Box>
+    );
 
   return null;
-}
+};
 
 export default PositionBadge;

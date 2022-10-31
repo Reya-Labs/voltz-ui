@@ -56,10 +56,6 @@ const Nav: React.FunctionComponent = () => (
       Liquidity Providers
     </NavLink>
 
-    {process.env.REACT_APP_FIXED_BORROW && process.env.REACT_APP_FIXED_BORROW !== `UNPROVIDED` && (
-      <NavLink link={`/${routes.BORROW_POS}`}>Fixed Borrow</NavLink>
-    )}
-
     {process.env.REACT_APP_COMMUNITY && process.env.REACT_APP_COMMUNITY !== `UNPROVIDED` && (
       <NavLink
         isNew={true}
@@ -75,6 +71,24 @@ const Nav: React.FunctionComponent = () => (
         ]}
       >
         Community
+      </NavLink>
+    )}
+
+    {process.env.REACT_APP_ECOSYSTEM && process.env.REACT_APP_ECOSYSTEM !== `UNPROVIDED` && (
+      <NavLink
+        isNew={true}
+        subLinks={[
+          {
+            text: 'PRODUCTS',
+            link: `/${routes.PRODUCTS}`,
+          },
+          {
+            text: 'FIXED BORROW',
+            link: `/${routes.BORROW_POS}`,
+          },
+        ]}
+      >
+        Ecosystem
       </NavLink>
     )}
   </Box>

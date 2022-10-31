@@ -20,10 +20,7 @@ const WalletDisplay: React.FunctionComponent<WalletDisplayProps> = ({ wallet, on
       <Typography variant="h6" sx={{ marginBottom: (theme) => theme.spacing(6) }}>
         ACCOUNT
       </Typography>
-      <Panel
-        variant="dark"
-        sx={{ display: 'flex', flexDirection: 'column' }}
-      >
+      <Panel variant="dark" sx={{ display: 'flex', flexDirection: 'column' }}>
         <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
           <Typography variant="h2">CONNECTED WITH {wallet.name.toUpperCase()}</Typography>
           <Icon
@@ -39,11 +36,7 @@ const WalletDisplay: React.FunctionComponent<WalletDisplayProps> = ({ wallet, on
             alignItems: 'center',
           }}
         >
-          <Icon
-            name="information-circle"
-            color="info"
-            sx={{ position: 'relative', top: '-2px' }}
-          />
+          <Icon name="information-circle" color="info" sx={{ position: 'relative', top: '-2px' }} />
           <Box sx={{ display: 'flex', alignItems: 'baseline' }}>
             <Button
               variant="text"
