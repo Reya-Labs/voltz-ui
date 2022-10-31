@@ -71,7 +71,7 @@ const LPMellowVaulDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoP
           >
             {isUndefined(lpVault.vaultExpectedApy)
               ? '---'
-              : `${lpVault.vaultExpectedApy > 30 ? ">30" : lpVault.vaultExpectedApy.toFixed(2)}%`}
+              : `${lpVault.vaultExpectedApy > 30 ? '>30' : lpVault.vaultExpectedApy.toFixed(2)}%`}
           </Typography>
 
           <Typography
@@ -123,10 +123,10 @@ const LPMellowVaulDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoP
           maximise yield for depositors.
         </Typography>
         <Typography variant="body1" sx={{ fontSize: '14px', color: '#9B97AD', marginTop: '8px' }}>
-          In a typical Voltz Protocol pool, LPs need to specify margin,
-          leverage and chosen fixed-rate tick ranges. The Mellow LP Optimiser abstracts away these
-          complexities and automatically chooses an optimal amount of leverage and tick ranges for
-          liquidity supplied.
+          In a typical Voltz Protocol pool, LPs need to specify margin, leverage and chosen
+          fixed-rate tick ranges. The Mellow LP Optimiser abstracts away these complexities and
+          automatically chooses an optimal amount of leverage and tick ranges for liquidity
+          supplied.
         </Typography>
         <Typography variant="body1" sx={{ fontSize: '14px', color: '#9B97AD', marginTop: '8px' }}>
           For this pool, users simply deposit ETH in order to get access to optimised LP yields on

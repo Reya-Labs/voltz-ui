@@ -170,8 +170,8 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
             lineHeight: '1.5',
           }}
         >
-          Funds deposited will be locked into the pool until the pool reaches maturity. Upon maturity,
-          the withdrawal mechanism will be enabled.
+          Funds deposited will be locked into the pool until the pool reaches maturity. Upon
+          maturity, the withdrawal mechanism will be enabled.
         </Typography>
       </Panel>
     </FormPanel>
