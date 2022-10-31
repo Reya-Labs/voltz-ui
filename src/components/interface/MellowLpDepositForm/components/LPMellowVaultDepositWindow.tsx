@@ -40,7 +40,13 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
 
   return (
     <FormPanel
-      sx={{ width: '100%', maxWidth: '328px', background: '#19152A', padding: '16px 16px' }}
+      sx={{
+        width: '100%',
+        maxWidth: '328px',
+        maxHeight: '444px',
+        background: '#19152A',
+        padding: '16px',
+      }}
     >
       <Box sx={{ display: 'flex' }}>
         <Box sx={{ borderBottom: '1px solid #E5E1F9' }}>
@@ -78,15 +84,15 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
       <Typography
         variant="body1"
         sx={{
-          fontSize: '16px',
+          fontFamily: 'DM Sans',
+          fontSize: '14px',
           lineHeight: '1.6',
-          color: '#E5E1F9',
-          marginTop: '8px',
+          color: '#e5e1f9d9',
+          marginTop: '16px',
           fontWeight: '400',
         }}
       >
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Volutpat ut proin porttitor sit
-        lorem.
+        The Mellow LP optimiser is available for the Voltz Protocol stETH pool.
       </Typography>
 
       <Box sx={{ marginTop: '16px' }}>
@@ -100,7 +106,7 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
               label={'AMOUNT'}
               icon="information-circle"
               info={
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Volutpat ut proin porttitor sit lorem.'
+                'Choose the amount you wish to deposit into the strategy. Remember you won’t be able to withdraw until the pool matures. '
               }
             />
           }
@@ -146,21 +152,26 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
           variant="h1"
           sx={{
             fontSize: '14px',
-            lineHeight: '1.4',
             color: '#C6C2DA',
             fontWeight: '700',
             marginLeft: '0px',
+            lineHeight: '120%',
           }}
         >
           ABOUT YOUR FUNDS
         </Typography>
         <Typography
           variant="body1"
-          sx={{ fontSize: '12px', color: '#9B97AD', marginTop: '10px', fontWeight: '400' }}
+          sx={{
+            fontSize: '12px',
+            color: '#9B97AD',
+            marginTop: '10px',
+            fontWeight: '400',
+            lineHeight: '1.5',
+          }}
         >
-          There is one small nuance though, being 10x levered when there is one year until maturity
-          of the AMM is very different from 10x leverage when there are a few days left until the
-          maturity of the AMM. Need to properly signal this in the UX
+          Funds deposited will be locked into the pool until the pool reaches maturity. At this
+          point the withdrawal mechanism will be enabled.
         </Typography>
       </Panel>
     </FormPanel>
