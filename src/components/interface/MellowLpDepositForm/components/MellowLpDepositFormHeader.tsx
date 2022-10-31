@@ -22,9 +22,8 @@ const MellowLpDepositHeaderForm: React.FunctionComponent<MellowLpDepositFormHead
             </Typography>
           </Box>
           <Typography variant="body1" sx={copyStyles}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec sit iaculis cras elit
-            dictum massa. Sit metus amet, tincidunt odio. Tristique sagittis, nisl in eu eu
-            vestibulum et. Ut sed mauris urna justo, dictumst molestie posuere.
+            The Mellow LP optimiser runs a permissionless strategy that takes deposits and generates
+            optimised LP fees by providing liquidity on Voltz Protocol.
           </Typography>
         </Box>
 
