@@ -4,8 +4,9 @@ import { ProfilePageNoWallet } from './ProfilePageNoWallet/ProfilePageNoWallet';
 import { ProfilePageWalletConnected } from './ProfilePageWalletConnected/ProfilePageWalletConnected';
 import { getProfileBadges, GetProfileBadgesResponse } from '@graphql';
 import { getENSDetails, setPageTitle } from '@utilities';
-import { Season } from '../../hooks/useCurrentSeason/constants';
 import { SEASON_BADGE_VARIANTS } from './helpers';
+import usePastSeasons from '../../hooks/season/usePastSeasons';
+import { Season } from '../../hooks/season/types';
 
 const Profile: React.FunctionComponent = () => {
   const wallet = useWallet();
@@ -15,7 +16,8 @@ const Profile: React.FunctionComponent = () => {
   const [loading, setLoading] = React.useState(true);
   const [name, setName] = React.useState('');
   const currentActiveSeason = useCurrentSeason();
-  const [season] = React.useState<Season>(currentActiveSeason);
+  const [season, setSeason] = React.useState<Season>(currentActiveSeason);
+  const seasonOptions = [...usePastSeasons(), currentActiveSeason];
 
   const getBadges = async (account: string) => {
     setLoading(true);
@@ -49,13 +51,13 @@ const Profile: React.FunctionComponent = () => {
   return (
     <ProfilePageWalletConnected
       isOnGoingSeason={season.id === currentActiveSeason.id}
-      seasonLabel={season.label}
-      seasonStartDateFormatted={season.startDate.toFormat('DDD')}
-      seasonEndDateFormatted={season.endDate.toFormat('DDD')}
+      season={season}
       account={name}
       achievedBadges={achievedBadges}
       loading={loading}
+      onSeasonChange={setSeason}
       seasonBadgeVariants={SEASON_BADGE_VARIANTS[season.id]}
+      seasonOptions={seasonOptions}
     />
   );
 };

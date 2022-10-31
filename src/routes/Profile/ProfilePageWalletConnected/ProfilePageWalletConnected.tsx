@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography } from '@components/atomic';
-import { elideAddress } from '@utilities';
+import { doNothing, elideAddress } from '@utilities';
 import { BadgeCard } from '../BadgeCard/BadgeCard';
 import { Page } from '@components/interface';
 import { AchievedBadge, AchievedBadgeProps } from '../AchievedBadge/AchievedBadge';
@@ -16,7 +16,6 @@ import {
   AchievedBadgesListSeason,
   AchievedBadgesListSubheading,
   BadgeCollectionBox,
-  BadgeCollectionSeasonTypography,
   BadgeCollectionTypographyBox,
   BoldText,
   ClaimBox,
@@ -31,28 +30,36 @@ import {
   PillBox,
   Subheading,
 } from './ProfilePageWalletConnected.styled';
+import { Season } from '../../../hooks/season/types';
+import { SeasonToggle } from '../SeasonToggle/SeasonToggle';
 
 type ProfilePageProps = {
   account: string;
   achievedBadges: AchievedBadgeProps[];
-  seasonLabel: string;
-  seasonStartDateFormatted: string;
-  seasonEndDateFormatted: string;
+  // seasonLabel: string;
+  // seasonStartDateFormatted: string;
+  // seasonEndDateFormatted: string;
+  season: Season;
   loading?: boolean;
   isOnGoingSeason: boolean;
   seasonBadgeVariants: string[];
+  onSeasonChange: (season: Season) => void;
+  seasonOptions: Season[];
 };
 
 export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProps> = ({
   account,
-  seasonLabel,
-  seasonStartDateFormatted,
-  seasonEndDateFormatted,
+  season,
   achievedBadges,
   loading,
   isOnGoingSeason,
   seasonBadgeVariants = [],
+  onSeasonChange = doNothing,
+  seasonOptions,
 }) => {
+  const seasonLabel = season.label;
+  const seasonStartDateFormatted = season.startDate.toFormat('DDD');
+  const seasonEndDateFormatted = season.endDate.toFormat('DDD');
   const achievedBadgesMemo: AchievedBadgeProps[] = React.useMemo(() => {
     return seasonBadgeVariants
       .map((variant) => achievedBadges.find((c) => c.variant === variant))
@@ -60,7 +67,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
       .filter((b) =>
         BADGE_VARIANT_TIER_MAP[b!.variant] === 'easterEgg' ? b!.achievedAt : true,
       ) as AchievedBadgeProps[];
-  }, [achievedBadges]);
+  }, [seasonBadgeVariants, achievedBadges]);
 
   const collection = achievedBadgesMemo.filter((aB) => aB.achievedAt);
 
@@ -89,11 +96,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
         <BadgeCollectionBox>
           <BadgeCollectionTypographyBox>
             <Typography variant="h2">YOUR BADGE COLLECTION</Typography>
-            {
-              <BadgeCollectionSeasonTypography variant="h1">
-                {seasonLabel}
-              </BadgeCollectionSeasonTypography>
-            }
+            <SeasonToggle seasons={seasonOptions} onChange={onSeasonChange} season={season} />
           </BadgeCollectionTypographyBox>
           <AchievedBadgesGrid itemsPerRow={!loading && collection.length === 0 ? 1 : 3}>
             {loading &&
