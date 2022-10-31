@@ -5,7 +5,7 @@ import { Position } from '@voltz-protocol/v1-sdk';
 
 import { setPageTitle, findCurrentBorrowPosition } from '@utilities';
 import { Agents, BorrowAMMProvider, BorrowFormProvider } from '@contexts';
-import { useBorrowPositions } from '@hooks';
+import { useBorrowPositions, useWallet } from '@hooks';
 
 import { Page } from '@components/interface';
 import ConnectedBorrowForm from '../../components/containers/ConnectedBorrowForm/ConnectedBorrowForm';
@@ -23,6 +23,7 @@ const FixedBorrower: React.FunctionComponent = () => {
   const [position, setPosition] = useState<Position>();
 
   const { positions } = useBorrowPositions();
+  const { account } = useWallet();
 
   const renderMode = getRenderMode(isForm);
 
@@ -45,11 +46,11 @@ const FixedBorrower: React.FunctionComponent = () => {
   useEffect(() => {
     switch (renderMode) {
       case 'fix-borrow': {
-        setPageTitle('Fixed Borrow Form');
+        setPageTitle('Fixed Borrow Form', account);
         break;
       }
       case 'borrow-positions': {
-        setPageTitle('Borrower Portfolio');
+        setPageTitle('Borrower Portfolio', account);
         break;
       }
     }

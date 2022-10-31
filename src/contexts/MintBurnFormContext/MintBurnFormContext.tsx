@@ -1,4 +1,4 @@
-import { useBalance, useTokenApproval } from '@hooks';
+import { useBalance, useTokenApproval, useWallet } from '@hooks';
 import { useAMMContext, usePositionContext, Agents } from '@contexts';
 import {
   AugmentedAMM,
@@ -118,6 +118,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   defaultValues = {},
   mode = MintBurnFormModes.NEW_POSITION,
 }) => {
+  const { account } = useWallet();
   const { amm: poolAmm, mintMinimumMarginRequirement } = useAMMContext();
   const { position, amm: positionAmm, positionInfo } = usePositionContext();
 
@@ -301,7 +302,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
         pool: getAmmProtocol(poolAmm),
         agent: Agents.LIQUIDITY_PROVIDER,
       };
-      pushEvent(payload);
+      pushEvent(account ?? '', payload);
     }, 1000),
     [],
   );
@@ -314,7 +315,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
         pool: getAmmProtocol(poolAmm),
         agent: Agents.LIQUIDITY_PROVIDER,
       };
-      pushEvent(payload);
+      pushEvent(account ?? '', payload);
     }, 1000),
     [],
   );

@@ -12,7 +12,7 @@ import {
   PortfolioProvider,
 } from '@contexts';
 import { PageTitleDesc } from '@components/composite';
-import { useAgent, useAMMs, usePositions } from '@hooks';
+import { useAgent, useAMMs, usePositions, useWallet } from '@hooks';
 import { Page, SwapFormModes } from '@components/interface';
 import ConnectedAMMTable from '../../components/containers/ConnectedAMMTable/ConnectedAMMTable';
 import ConnectedPositionTable from '../../components/containers/ConnectedPositionTable/ConnectedPositionTable';
@@ -30,6 +30,7 @@ const Trader: React.FunctionComponent = () => {
   const { pathname, key } = useLocation();
   const { positions, positionsByAgentGroup } = usePositions();
   const { agent } = useAgent();
+  const { account } = useWallet();
 
   const pathnameWithoutPrefix = pathname.slice(1);
   const renderMode = getRenderMode(formMode, pathnameWithoutPrefix);
@@ -59,15 +60,15 @@ const Trader: React.FunctionComponent = () => {
   useEffect(() => {
     switch (renderMode) {
       case 'pools': {
-        setPageTitle('Trader Pools');
+        setPageTitle('Trader Pools', account);
         break;
       }
       case 'portfolio': {
-        setPageTitle('Trader Portfolio');
+        setPageTitle('Trader Portfolio', account);
         break;
       }
       case 'form': {
-        setPageTitle(`${position ? 'Edit' : 'New'} Trader Position`);
+        setPageTitle(`${position ? 'Edit' : 'New'} Trader Position`, account);
         break;
       }
     }

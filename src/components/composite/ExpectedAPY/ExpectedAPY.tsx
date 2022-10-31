@@ -15,7 +15,7 @@ import {
   toUSFormat,
 } from '@utilities';
 import { isUndefined } from 'lodash';
-import { useAgent } from '@hooks';
+import { useAgent, useWallet } from '@hooks';
 import { useAMMContext } from '@contexts';
 
 interface ExpectedAPYProps {
@@ -36,6 +36,7 @@ export const ExpectedAPY = ({
   const delay = 1000;
   const { agent } = useAgent();
   const { amm } = useAMMContext();
+  const { account } = useWallet();
 
   const [userInput, setUserInput] = useState(
     !isUndefined(userSimulatedVariableApy)
@@ -61,7 +62,7 @@ export const ExpectedAPY = ({
         pool: getAmmProtocol(amm),
         agent: agent,
       };
-      pushEvent(payload);
+      pushEvent(account ?? '', payload);
     }
   }, [stringToBigFloat(toUSFormat(userInput) ?? '0')]);
 

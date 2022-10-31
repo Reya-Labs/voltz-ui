@@ -36,7 +36,7 @@ const Profile: React.FunctionComponent = () => {
   }, [wallet.account]);
 
   useEffect(() => {
-    setPageTitle('Profile');
+    setPageTitle('Profile', wallet.account);
   }, []);
 
   if (!wallet.account) {
