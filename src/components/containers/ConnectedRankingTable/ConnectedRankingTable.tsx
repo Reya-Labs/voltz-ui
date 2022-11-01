@@ -66,7 +66,7 @@ const ConnectedRankingTable: React.FunctionComponent = () => {
       userAddress={wallet.account || ''}
       userRank={userRank}
       userPoints={userPoints}
-      seasonNumber={season.id.toString().padStart(2, '0')}
+      seasonNumber={season.shortName}
       seasonStartDate={season.startDate}
       seasonEndDate={season.endDate}
       page={page}

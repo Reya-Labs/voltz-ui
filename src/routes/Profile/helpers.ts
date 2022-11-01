@@ -184,7 +184,7 @@ export const COMING_SOON_BADGES: ComingSoonBadges[] = [
 ];
 
 export const SEASON_BADGE_VARIANTS: Record<`${Season['id']}`, string[]> = {
-  og: [
+  0: [
     'ogFixedTrader',
     'ogDeltaDegen',
     'ogLeverageCrowbar',
@@ -202,7 +202,7 @@ export const SEASON_BADGE_VARIANTS: Record<`${Season['id']}`, string[]> = {
     'ogRainMaker',
     'ogBeWaterMyFriend',
   ],
-  s1: [
+  1: [
     'fixedTrader',
     'deltaDegen',
     'leverageCrowbar',
@@ -220,8 +220,8 @@ export const SEASON_BADGE_VARIANTS: Record<`${Season['id']}`, string[]> = {
     'rainMaker',
     'beWaterMyFriend',
   ],
-  s2: [],
-  s3: [],
-  s4: [],
-  s5: [],
+  2: [],
+  3: [],
+  4: [],
+  5: [],
 };
