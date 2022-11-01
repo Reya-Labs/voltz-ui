@@ -30,12 +30,8 @@ const App = () => {
           <Route path={routes.PORTFOLIO} element={<Trader />} />
           <Route path={routes.POOLS} element={<LiquidityProvider />} />
           <Route path={routes.LP_FARM} element={<LiquidityProvider />} />
-          {process.env.REACT_APP_ECOSYSTEM && process.env.REACT_APP_ECOSYSTEM !== `UNPROVIDED` && (
-            <Route path={routes.PRODUCTS} element={<Ecosystem />} />
-          )}
-          {process.env.REACT_APP_ECOSYSTEM && process.env.REACT_APP_ECOSYSTEM !== `UNPROVIDED` && (
-            <Route path={routes.BORROW_POS} element={<FixedBorrower />} />
-          )}
+          <Route path={routes.PRODUCTS} element={<Ecosystem />} />
+          <Route path={routes.BORROW_POS} element={<FixedBorrower />} />
           {process.env.REACT_APP_COMMUNITY && process.env.REACT_APP_COMMUNITY !== `UNPROVIDED` && (
             <Route path={routes.PROFILE} element={<Profile />} />
           )}

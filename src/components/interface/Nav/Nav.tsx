@@ -74,10 +74,11 @@ const Nav: React.FunctionComponent = () => (
       </NavLink>
     )}
 
-    {process.env.REACT_APP_ECOSYSTEM && process.env.REACT_APP_ECOSYSTEM !== `UNPROVIDED` && (
       <NavLink
         isNew={true}
-        subLinks={[
+        subLinks={
+          process.env.REACT_APP_ECOSYSTEM && process.env.REACT_APP_ECOSYSTEM !== `UNPROVIDED` ?
+          [
           {
             text: 'PRODUCTS',
             link: `/${routes.PRODUCTS}`,
@@ -86,11 +87,17 @@ const Nav: React.FunctionComponent = () => (
             text: 'FIXED BORROW',
             link: `/${routes.BORROW_POS}`,
           },
-        ]}
+        ] : 
+        [
+          {
+            text: 'FIXED BORROW',
+            link: `/${routes.BORROW_POS}`,
+          },
+        ]
+      }
       >
         Ecosystem
       </NavLink>
-    )}
   </Box>
 );
 
