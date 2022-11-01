@@ -10,9 +10,7 @@ import { Season } from '../../hooks/season/types';
 
 const Profile: React.FunctionComponent = () => {
   const wallet = useWallet();
-  const [achievedBadges, setAchievedBadges] = React.useState<
-    GetProfileBadgesResponse['achievedBadges']
-  >([]);
+  const [collectionBadges, setCollectionBadges] = React.useState<GetProfileBadgesResponse>([]);
   const pastSeasons = usePastSeasons();
   const [loading, setLoading] = React.useState(true);
   const [name, setName] = React.useState('');
@@ -23,10 +21,10 @@ const Profile: React.FunctionComponent = () => {
       ? [...pastSeasons, currentActiveSeason]
       : [currentActiveSeason];
 
-  const getBadges = async (seasonNumber: number, account: string) => {
+  const getBadges = async (seasonId: Season['id'], account: string) => {
     setLoading(true);
-    const result = await getSeasonBadges(account, seasonNumber);
-    setAchievedBadges(result.achievedBadges);
+    const result = await getSeasonBadges(account, seasonId);
+    setCollectionBadges(result);
     setLoading(false);
   };
 
@@ -37,11 +35,17 @@ const Profile: React.FunctionComponent = () => {
 
   useEffect(() => {
     if (!wallet.account) {
+      return;
+    }
+    void fetchEnsDetails(wallet.account);
+  }, [wallet.account]);
+
+  useEffect(() => {
+    if (!wallet.account) {
       setLoading(false);
       return;
     }
     void getBadges(season.id, wallet.account);
-    void fetchEnsDetails(wallet.account);
   }, [season.id, wallet.account]);
 
   useEffect(() => {
@@ -57,7 +61,7 @@ const Profile: React.FunctionComponent = () => {
       isOnGoingSeason={season.id === currentActiveSeason.id}
       season={season}
       account={name}
-      achievedBadges={achievedBadges}
+      achievedBadges={collectionBadges}
       loading={loading}
       onSeasonChange={setSeason}
       seasonBadgeVariants={SEASON_BADGE_VARIANTS[season.id]}
