@@ -39,31 +39,69 @@ export type BadgeVariant =
 export type CollectionBadge = {
   variant: BadgeVariant;
   achievedAt?: number;
+  claimedAt?: number;
 };
 
 export type ClaimedBadge = {
   variant: BadgeVariant;
 };
 
-const getBadgesQueryString = (owner: string) => `
-{
-  users(where: {id: "${owner.toLowerCase()}"}) {
-    id
-    BADGE_NO_RISK_HERE_SER
-    BADGE_DELTA_DEGEN
-    BADGE_LEVERAGE_CROWBAR
-    BADGE_IRS_CONNOISSEUR
-    BADGE_SUSHI_ROLL
-    BADGE_DEGEN_STUFF
-    BADGE_OK_BOOMER
-    BADGE_LPOOR
-    BADGE_MONEY_MONEY_MONEY
-    BADGE_WATER_HOSE
-    BADGE_RAIN_MAKER
-    BADGE_DRY_ICE
-  }
-}
-`;
+const getBadgesQueryString = (owner: string, seasonNumber: number) => {
+  const id = `${owner.toLowerCase()}#${seasonNumber}`;
+  return `{
+    seasonUser(id: "${id}") {
+      id
+      BADGE_NO_RISK_HERE_SER {
+        awardedTimestamp
+        mintedTimestamp
+      }
+      BADGE_DELTA_DEGEN {
+        awardedTimestamp
+        mintedTimestamp
+      }
+      BADGE_LEVERAGE_CROWBAR {
+        awardedTimestamp
+        mintedTimestamp
+      }
+      BADGE_IRS_CONNOISSEUR {
+        awardedTimestamp
+        mintedTimestamp
+      }
+      BADGE_SUSHI_ROLL {
+        awardedTimestamp
+        mintedTimestamp
+      }
+      BADGE_DEGEN_STUFF {
+        awardedTimestamp
+        mintedTimestamp
+      }
+      BADGE_OK_BOOMER {
+        awardedTimestamp
+        mintedTimestamp
+      }
+      BADGE_LPOOR {
+        awardedTimestamp
+        mintedTimestamp
+      }
+      BADGE_MONEY_MONEY_MONEY {
+        awardedTimestamp
+        mintedTimestamp
+      }
+      BADGE_WATER_HOSE {
+        awardedTimestamp
+        mintedTimestamp
+      }
+      BADGE_RAIN_MAKER {
+        awardedTimestamp
+        mintedTimestamp
+      }
+      BADGE_DRY_ICE {
+        awardedTimestamp
+        mintedTimestamp
+      }
+    }
+  }`;
+};
 
 const formatTimestamp = (timestamp: number): number | undefined => {
   if (timestamp === 0) {
@@ -73,21 +111,26 @@ const formatTimestamp = (timestamp: number): number | undefined => {
   return timestamp * 1000;
 };
 
+type BadgeResponse = {
+  awardedTimestamp: string;
+  mintedTimestamp: string;
+};
+
 type BadgesQueryResponse = {
-  users: {
-    BADGE_NO_RISK_HERE_SER: string;
-    BADGE_DELTA_DEGEN: string;
-    BADGE_LEVERAGE_CROWBAR: string;
-    BADGE_IRS_CONNOISSEUR: string;
-    BADGE_SUSHI_ROLL: string;
-    BADGE_DEGEN_STUFF: string;
-    BADGE_OK_BOOMER: string;
-    BADGE_LPOOR: string;
-    BADGE_MONEY_MONEY_MONEY: string;
-    BADGE_WATER_HOSE: string;
-    BADGE_RAIN_MAKER: string;
-    BADGE_DRY_ICE: string;
-  }[];
+  seasonUser: {
+    BADGE_NO_RISK_HERE_SER: BadgeResponse;
+    BADGE_DELTA_DEGEN: BadgeResponse;
+    BADGE_LEVERAGE_CROWBAR: BadgeResponse;
+    BADGE_IRS_CONNOISSEUR: BadgeResponse;
+    BADGE_SUSHI_ROLL: BadgeResponse;
+    BADGE_DEGEN_STUFF: BadgeResponse;
+    BADGE_OK_BOOMER: BadgeResponse;
+    BADGE_LPOOR: BadgeResponse;
+    BADGE_MONEY_MONEY_MONEY: BadgeResponse;
+    BADGE_WATER_HOSE: BadgeResponse;
+    BADGE_RAIN_MAKER: BadgeResponse;
+    BADGE_DRY_ICE: BadgeResponse;
+  };
 };
 
 export type GetProfileBadgesResponse = {
@@ -95,148 +138,171 @@ export type GetProfileBadgesResponse = {
   claimedBadges: ClaimedBadge[];
 };
 
-const DEFAULT_RESPONSE: GetProfileBadgesResponse = {
-  achievedBadges: [
-    {
-      variant: 'fixedTrader',
-    },
-    {
-      variant: 'deltaDegen',
-    },
-    {
-      variant: 'leverageCrowbar',
-    },
-    {
-      variant: 'irsConnoisseur',
-    },
-    {
-      variant: 'sushiRoll',
-    },
-    {
-      variant: 'degenStuff',
-    },
-    {
-      variant: 'topTrader',
-    },
-    {
-      variant: 'okBoomer',
-    },
-    {
-      variant: 'maxBidding',
-    },
-    {
-      variant: 'yikes',
-    },
-    {
-      variant: 'lpoor',
-    },
-    {
-      variant: 'moneyMoneyMoney',
-    },
-    {
-      variant: 'waterHose',
-    },
-    {
-      variant: 'rainMaker',
-    },
-    {
-      variant: 'beWaterMyFriend',
-    },
-    {
-      variant: 'dryIce',
-    },
-  ],
-  claimedBadges: [],
-};
+function DEFAULT_RESPONSE(seasonNumber: number): GetProfileBadgesResponse {
+  return {
+    achievedBadges: [
+      {
+        variant: mapForSeason(seasonNumber, 'fixedTrader'),
+      },
+      {
+        variant: mapForSeason(seasonNumber, 'deltaDegen'),
+      },
+      {
+        variant: mapForSeason(seasonNumber, 'leverageCrowbar'),
+      },
+      {
+        variant: mapForSeason(seasonNumber, 'irsConnoisseur'),
+      },
+      {
+        variant: mapForSeason(seasonNumber, 'sushiRoll'),
+      },
+      {
+        variant: mapForSeason(seasonNumber, 'degenStuff'),
+      },
+      {
+        variant: mapForSeason(seasonNumber, 'topTrader'),
+      },
+      {
+        variant: mapForSeason(seasonNumber, 'okBoomer'),
+      },
+      {
+        variant: mapForSeason(seasonNumber, 'maxBidding'),
+      },
+      {
+        variant: mapForSeason(seasonNumber, 'yikes'),
+      },
+      {
+        variant: mapForSeason(seasonNumber, 'lpoor'),
+      },
+      {
+        variant: mapForSeason(seasonNumber, 'moneyMoneyMoney'),
+      },
+      {
+        variant: mapForSeason(seasonNumber, 'waterHose'),
+      },
+      {
+        variant: mapForSeason(seasonNumber, 'rainMaker'),
+      },
+      {
+        variant: mapForSeason(seasonNumber, 'beWaterMyFriend'),
+      },
+      {
+        variant: mapForSeason(seasonNumber, 'dryIce'),
+      },
+    ],
+    claimedBadges: [],
+  };
+}
 
-export async function getProfileBadges(owner: string): Promise<GetProfileBadgesResponse> {
+const mapForSeason = (seasonNumber: number, badgeVariant: string): BadgeVariant => {
+  if (seasonNumber === 0) {
+    return `og${badgeVariant[0].toUpperCase()}${badgeVariant.substring(1)}` as BadgeVariant;
+  }
+  return badgeVariant as BadgeVariant;
+};
+export async function getSeasonBadges(
+  owner: string,
+  seasonNumber: number,
+): Promise<GetProfileBadgesResponse> {
   if (!process.env.REACT_APP_SUBGRAPH_BADGES_URL) {
-    return DEFAULT_RESPONSE;
+    return DEFAULT_RESPONSE(seasonNumber);
   }
   try {
     const graphQLClient = new GraphQLClient(process.env.REACT_APP_SUBGRAPH_BADGES_URL);
 
     const data: BadgesQueryResponse = await graphQLClient.request(
       gql`
-        ${getBadgesQueryString(owner)}
+        ${getBadgesQueryString(owner, seasonNumber)}
       `,
     );
 
     const badgesBatch = data;
 
-    if (badgesBatch.users.length > 0) {
-      const badges = badgesBatch.users[0];
+    if (badgesBatch.seasonUser) {
+      const badges = badgesBatch.seasonUser;
 
       return {
         achievedBadges: [
           {
-            variant: 'fixedTrader',
-            achievedAt: formatTimestamp(parseInt(badges.BADGE_NO_RISK_HERE_SER)),
+            variant: mapForSeason(seasonNumber, 'fixedTrader'),
+            achievedAt: formatTimestamp(parseInt(badges.BADGE_NO_RISK_HERE_SER.awardedTimestamp)),
+            claimedAt: formatTimestamp(parseInt(badges.BADGE_NO_RISK_HERE_SER.mintedTimestamp)),
           },
           {
-            variant: 'deltaDegen',
-            achievedAt: formatTimestamp(parseInt(badges.BADGE_DELTA_DEGEN)),
+            variant: mapForSeason(seasonNumber, 'deltaDegen'),
+            achievedAt: formatTimestamp(parseInt(badges.BADGE_DELTA_DEGEN.awardedTimestamp)),
+            claimedAt: formatTimestamp(parseInt(badges.BADGE_DELTA_DEGEN.mintedTimestamp)),
           },
           {
-            variant: 'leverageCrowbar',
-            achievedAt: formatTimestamp(parseInt(badges.BADGE_LEVERAGE_CROWBAR)),
+            variant: mapForSeason(seasonNumber, 'leverageCrowbar'),
+            achievedAt: formatTimestamp(parseInt(badges.BADGE_LEVERAGE_CROWBAR.awardedTimestamp)),
+            claimedAt: formatTimestamp(parseInt(badges.BADGE_LEVERAGE_CROWBAR.mintedTimestamp)),
           },
           {
-            variant: 'irsConnoisseur',
-            achievedAt: formatTimestamp(parseInt(badges.BADGE_IRS_CONNOISSEUR)),
+            variant: mapForSeason(seasonNumber, 'irsConnoisseur'),
+            achievedAt: formatTimestamp(parseInt(badges.BADGE_IRS_CONNOISSEUR.awardedTimestamp)),
+            claimedAt: formatTimestamp(parseInt(badges.BADGE_IRS_CONNOISSEUR.mintedTimestamp)),
           },
           {
-            variant: 'sushiRoll',
-            achievedAt: formatTimestamp(parseInt(badges.BADGE_SUSHI_ROLL)),
+            variant: mapForSeason(seasonNumber, 'sushiRoll'),
+            achievedAt: formatTimestamp(parseInt(badges.BADGE_SUSHI_ROLL.awardedTimestamp)),
+            claimedAt: formatTimestamp(parseInt(badges.BADGE_SUSHI_ROLL.mintedTimestamp)),
           },
           {
-            variant: 'degenStuff',
-            achievedAt: formatTimestamp(parseInt(badges.BADGE_DEGEN_STUFF)),
+            variant: mapForSeason(seasonNumber, 'degenStuff'),
+            achievedAt: formatTimestamp(parseInt(badges.BADGE_DEGEN_STUFF.awardedTimestamp)),
+            claimedAt: formatTimestamp(parseInt(badges.BADGE_DEGEN_STUFF.mintedTimestamp)),
           },
           {
-            variant: 'topTrader',
+            variant: mapForSeason(seasonNumber, 'topTrader'),
           },
           {
-            variant: 'okBoomer',
-            achievedAt: formatTimestamp(parseInt(badges.BADGE_OK_BOOMER)),
+            variant: mapForSeason(seasonNumber, 'okBoomer'),
+            achievedAt: formatTimestamp(parseInt(badges.BADGE_OK_BOOMER.awardedTimestamp)),
+            claimedAt: formatTimestamp(parseInt(badges.BADGE_OK_BOOMER.mintedTimestamp)),
           },
           {
-            variant: 'maxBidding',
+            variant: mapForSeason(seasonNumber, 'maxBidding'),
           },
           {
-            variant: 'yikes',
+            variant: mapForSeason(seasonNumber, 'yikes'),
           },
           {
-            variant: 'lpoor',
-            achievedAt: formatTimestamp(parseInt(badges.BADGE_LPOOR)),
+            variant: mapForSeason(seasonNumber, 'lpoor'),
+            achievedAt: formatTimestamp(parseInt(badges.BADGE_LPOOR.awardedTimestamp)),
+            claimedAt: formatTimestamp(parseInt(badges.BADGE_LPOOR.mintedTimestamp)),
           },
           {
-            variant: 'moneyMoneyMoney',
-            achievedAt: formatTimestamp(parseInt(badges.BADGE_MONEY_MONEY_MONEY)),
+            variant: mapForSeason(seasonNumber, 'moneyMoneyMoney'),
+            achievedAt: formatTimestamp(parseInt(badges.BADGE_MONEY_MONEY_MONEY.awardedTimestamp)),
+            claimedAt: formatTimestamp(parseInt(badges.BADGE_MONEY_MONEY_MONEY.mintedTimestamp)),
           },
           {
-            variant: 'waterHose',
-            achievedAt: formatTimestamp(parseInt(badges.BADGE_WATER_HOSE)),
+            variant: mapForSeason(seasonNumber, 'waterHose'),
+            achievedAt: formatTimestamp(parseInt(badges.BADGE_WATER_HOSE.awardedTimestamp)),
+            claimedAt: formatTimestamp(parseInt(badges.BADGE_WATER_HOSE.mintedTimestamp)),
           },
           {
-            variant: 'rainMaker',
-            achievedAt: formatTimestamp(parseInt(badges.BADGE_RAIN_MAKER)),
+            variant: mapForSeason(seasonNumber, 'rainMaker'),
+            achievedAt: formatTimestamp(parseInt(badges.BADGE_RAIN_MAKER.awardedTimestamp)),
+            claimedAt: formatTimestamp(parseInt(badges.BADGE_RAIN_MAKER.mintedTimestamp)),
           },
           {
-            variant: 'beWaterMyFriend',
+            variant: mapForSeason(seasonNumber, 'beWaterMyFriend'),
           },
           {
-            variant: 'dryIce',
-            achievedAt: formatTimestamp(parseInt(badges.BADGE_DRY_ICE)),
+            variant: mapForSeason(seasonNumber, 'dryIce'),
+            achievedAt: formatTimestamp(parseInt(badges.BADGE_DRY_ICE.awardedTimestamp)),
+            claimedAt: formatTimestamp(parseInt(badges.BADGE_DRY_ICE.mintedTimestamp)),
           },
         ],
         claimedBadges: [],
       };
     } else {
-      return DEFAULT_RESPONSE;
+      return DEFAULT_RESPONSE(seasonNumber);
     }
   } catch (error) {
     console.error('Error in fetching the bagde information of this address');
-    return DEFAULT_RESPONSE;
+    return DEFAULT_RESPONSE(seasonNumber);
   }
 }

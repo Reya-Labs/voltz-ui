@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useCurrentSeason, useWallet } from '@hooks';
 import { ProfilePageNoWallet } from './ProfilePageNoWallet/ProfilePageNoWallet';
 import { ProfilePageWalletConnected } from './ProfilePageWalletConnected/ProfilePageWalletConnected';
-import { getProfileBadges, GetProfileBadgesResponse } from '@graphql';
+import { getSeasonBadges, GetProfileBadgesResponse } from '@graphql';
 import { getENSDetails, setPageTitle } from '@utilities';
 import { SEASON_BADGE_VARIANTS } from './helpers';
 import usePastSeasons from '../../hooks/season/usePastSeasons';
@@ -23,9 +23,9 @@ const Profile: React.FunctionComponent = () => {
       ? [...pastSeasons, currentActiveSeason]
       : [currentActiveSeason];
 
-  const getBadges = async (account: string) => {
+  const getBadges = async (seasonNumber: number, account: string) => {
     setLoading(true);
-    const result = await getProfileBadges(account);
+    const result = await getSeasonBadges(account, seasonNumber);
     setAchievedBadges(result.achievedBadges);
     setLoading(false);
   };
@@ -40,9 +40,9 @@ const Profile: React.FunctionComponent = () => {
       setLoading(false);
       return;
     }
-    void getBadges(wallet.account);
+    void getBadges(season.id, wallet.account);
     void fetchEnsDetails(wallet.account);
-  }, [wallet.account]);
+  }, [season.id, wallet.account]);
 
   useEffect(() => {
     setPageTitle('Profile', wallet.account);

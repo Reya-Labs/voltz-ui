@@ -21,8 +21,8 @@ const Template: ComponentStory<typeof ProfilePageWalletConnected> = (args) => {
       season={season}
       seasonBadgeVariants={SEASON_BADGE_VARIANTS[season.id]}
       onSeasonChange={setSeason}
-      isOnGoingSeason={season.id !== 'og'}
-      achievedBadges={season.id === 'og' ? seasonOGBadges : season1Badges}
+      isOnGoingSeason={season.id !== 0}
+      achievedBadges={season.id === 0 ? seasonOGBadges : season1Badges}
     />
   );
 };
@@ -42,6 +42,6 @@ Loading.args = {
   season: SEASONS[1],
   loading: true,
   isOnGoingSeason: true,
-  seasonBadgeVariants: SEASON_BADGE_VARIANTS['s1'],
+  seasonBadgeVariants: SEASON_BADGE_VARIANTS[1],
   seasonOptions: [SEASONS[0], SEASONS[1]],
 };
