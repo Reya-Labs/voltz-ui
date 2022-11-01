@@ -6,6 +6,7 @@ export const Confetti: FunctionComponent = ({ children }) => {
     () => Array.from({ length: 20 }, (_, index) => <i key={index} />),
     [],
   );
+
   return (
     <Container>
       {children}
