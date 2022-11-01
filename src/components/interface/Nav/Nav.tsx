@@ -6,7 +6,7 @@ import { NavLink } from './NavLink/NavLink';
 import { iconSx } from './NavLink/style';
 import { colors } from '@theme';
 
-const Nav: React.FunctionComponent = () => (
+const Nav: React.FunctionComponent = React.memo(() => (
   <Box
     sx={{
       display: 'flex',
@@ -74,32 +74,31 @@ const Nav: React.FunctionComponent = () => (
       </NavLink>
     )}
 
-    
-      <NavLink
-        isNew={true}
-        subLinks={
-          process.env.REACT_APP_ECOSYSTEM && process.env.REACT_APP_ECOSYSTEM !== `UNPROVIDED` ?
-          [
-            {
-              text: 'PRODUCTS',
-              link: `/${routes.PRODUCTS}`,
-            },
-            {
-              text: 'FIXED BORROW',
-              link: `/${routes.BORROW_POS}`,
-            },
-          ] : [
-            {
-              text: 'FIXED BORROW',
-              link: `/${routes.BORROW_POS}`,
-            },
-          ]
-        }
-        
-      >
-        Ecosystem
-      </NavLink>
+    <NavLink
+      isNew={true}
+      subLinks={
+        process.env.REACT_APP_ECOSYSTEM && process.env.REACT_APP_ECOSYSTEM !== `UNPROVIDED`
+          ? [
+              {
+                text: 'PRODUCTS',
+                link: `/${routes.PRODUCTS}`,
+              },
+              {
+                text: 'FIXED BORROW',
+                link: `/${routes.BORROW_POS}`,
+              },
+            ]
+          : [
+              {
+                text: 'FIXED BORROW',
+                link: `/${routes.BORROW_POS}`,
+              },
+            ]
+      }
+    >
+      Ecosystem
+    </NavLink>
   </Box>
-);
+));
 
 export default Nav;
