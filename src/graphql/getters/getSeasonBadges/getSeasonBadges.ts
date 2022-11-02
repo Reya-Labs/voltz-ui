@@ -128,7 +128,6 @@ export async function getSeasonBadges(
       return getDefaultResponse(seasonId);
     }
   } catch (error) {
-    console.error('Error in fetching the bagde information of this address');
     return getDefaultResponse(seasonId);
   }
 }
