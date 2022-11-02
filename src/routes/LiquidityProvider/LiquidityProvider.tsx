@@ -109,22 +109,24 @@ const LiquidityProvider: React.FunctionComponent = () => {
               title="Provide Liquidity"
               desc="Choose a pool and provide liquidity within your chosen ranges."
             />
-            <Button
-              component={Link}
-              to={`/${routes.PRODUCTS}`}
-              sx={{
-                color: 'primary.base',
-                marginTop: (theme) => theme.spacing(2),
-                padding: (theme) => theme.spacing(0.5, 1),
-                fontSize: '18px',
-                lineHeight: '14px',
-                '&:hover': {
-                  background: 'transparent',
-                },
-              }}
-            >
-              LP OPTIMISER VAULT
-            </Button>
+            {process.env.REACT_APP_ECOSYSTEM && process.env.REACT_APP_ECOSYSTEM !== `UNPROVIDED` ? (
+              <Button
+                component={Link}
+                to={`/${routes.PRODUCTS}`}
+                sx={{
+                  color: 'primary.base',
+                  marginTop: (theme) => theme.spacing(2),
+                  padding: (theme) => theme.spacing(0.5, 1),
+                  fontSize: '18px',
+                  lineHeight: '14px',
+                  '&:hover': {
+                    background: 'transparent',
+                  },
+                }}
+              >
+                LP OPTIMISER VAULT
+              </Button>
+            ) : null}
           </Box>
           <ConnectedAMMTable onSelectItem={handleSelectAmm} />
         </Box>
