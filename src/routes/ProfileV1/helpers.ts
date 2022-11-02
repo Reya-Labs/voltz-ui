@@ -1,6 +1,5 @@
 import { BadgeTier, ComingSoonBadges } from './types';
 import { BadgeVariant } from '@graphql';
-import { Season } from '../../hooks/season/types';
 
 export const BADGE_VARIANT_TRADER_LP_MAP: Record<
   BadgeVariant | ComingSoonBadges,
@@ -182,46 +181,3 @@ export const COMING_SOON_BADGES: ComingSoonBadges[] = [
   'senatorz',
   'theOgActivity',
 ];
-
-export const SEASON_BADGE_VARIANTS: Record<`${Season['id']}`, string[]> = {
-  0: [
-    'ogFixedTrader',
-    'ogDeltaDegen',
-    'ogLeverageCrowbar',
-    'ogIrsConnoisseur',
-    'ogSushiRoll',
-    'ogDegenStuff',
-    'ogTopTrader',
-    'ogOkBoomer',
-    'ogDryIce',
-    'ogMaxBidding',
-    'ogYikes',
-    'ogLpoor',
-    'ogMoneyMoneyMoney',
-    'ogWaterHose',
-    'ogRainMaker',
-    'ogBeWaterMyFriend',
-  ],
-  1: [
-    'fixedTrader',
-    'deltaDegen',
-    'leverageCrowbar',
-    'irsConnoisseur',
-    'sushiRoll',
-    'degenStuff',
-    'topTrader',
-    'okBoomer',
-    'dryIce',
-    'maxBidding',
-    'yikes',
-    'lpoor',
-    'moneyMoneyMoney',
-    'waterHose',
-    'rainMaker',
-    'beWaterMyFriend',
-  ],
-  2: [],
-  3: [],
-  4: [],
-  5: [],
-};

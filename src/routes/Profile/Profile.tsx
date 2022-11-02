@@ -2,9 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useCurrentSeason, useWallet } from '@hooks';
 import { ProfilePageNoWallet } from './ProfilePageNoWallet/ProfilePageNoWallet';
 import { ProfilePageWalletConnected } from './ProfilePageWalletConnected/ProfilePageWalletConnected';
-import { getSeasonBadges, GetProfileBadgesResponse, BadgeVariant } from '@graphql';
+import {
+  getSeasonBadges,
+  GetProfileBadgesResponse,
+  BadgeVariant,
+  SEASON_BADGE_VARIANTS,
+} from '@graphql';
 import { getENSDetails, setPageTitle } from '@utilities';
-import { SEASON_BADGE_VARIANTS } from './helpers';
 import usePastSeasons from '../../hooks/season/usePastSeasons';
 import { Season } from '../../hooks/season/types';
 import { ClaimButtonProps } from './ClaimButton/ClaimButton';

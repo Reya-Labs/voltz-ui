@@ -6,10 +6,9 @@ import {
   ProfilePageWalletConnectedProps,
 } from './ProfilePageWalletConnected';
 import { season1Badges, seasonOGBadges } from './ProfilePageWalletConnected.mocks';
-import { SEASON_BADGE_VARIANTS } from '../helpers';
 import { SEASONS } from '../../../hooks/season/constants';
 import { Season } from '../../../hooks/season/types';
-import { BadgeVariant } from '@graphql';
+import { BadgeVariant, SEASON_BADGE_VARIANTS } from '@graphql';
 import { ClaimButtonProps } from '../ClaimButton/ClaimButton';
 
 export default {
