@@ -6,6 +6,8 @@ import { season1Badges, seasonOGBadges } from './ProfilePageWalletConnected.mock
 import { SEASON_BADGE_VARIANTS } from '../helpers';
 import { SEASONS } from '../../../hooks/season/constants';
 import { Season } from '../../../hooks/season/types';
+import { BadgeVariant } from '@graphql';
+import { ClaimButtonProps } from '../ClaimButton/ClaimButton';
 
 export default {
   title: 'Interface/ProfilePageWalletConnected',
@@ -15,6 +17,32 @@ export default {
 
 const Template: ComponentStory<typeof ProfilePageWalletConnected> = (args) => {
   const [season, setSeason] = useState<Season>(args.season);
+  const [claimButtonModes, setClaimButtonModes] = useState<
+    Record<BadgeVariant, ClaimButtonProps['mode']>
+  >(
+    SEASON_BADGE_VARIANTS[season.id].reduce(
+      (pV, cI) => ({
+        ...pV,
+        [cI as BadgeVariant]: 'claim',
+      }),
+      {} as Record<BadgeVariant, ClaimButtonProps['mode']>,
+    ),
+  );
+
+  function handleOnClaimButtonClick(variant: BadgeVariant) {
+    setClaimButtonModes((prev) => ({
+      ...prev,
+      [variant]: 'claiming',
+    }));
+    // fake minting
+    setTimeout(() => {
+      setClaimButtonModes((prev) => ({
+        ...prev,
+        [variant]: 'claimed',
+      }));
+    }, 1500);
+  }
+
   return (
     <ProfilePageWalletConnected
       {...args}
@@ -22,6 +50,8 @@ const Template: ComponentStory<typeof ProfilePageWalletConnected> = (args) => {
       seasonBadgeVariants={SEASON_BADGE_VARIANTS[season.id]}
       onSeasonChange={setSeason}
       isOnGoingSeason={season.id !== 0}
+      claimButtonModes={claimButtonModes}
+      onClaimButtonClick={handleOnClaimButtonClick}
       achievedBadges={season.id === 0 ? seasonOGBadges : season1Badges}
     />
   );
