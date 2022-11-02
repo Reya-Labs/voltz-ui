@@ -6,7 +6,7 @@ import { NavLink } from './NavLink/NavLink';
 import { iconSx } from './NavLink/style';
 import { colors } from '@theme';
 
-const Nav: React.FunctionComponent = () => (
+const Nav: React.FunctionComponent = React.memo(() => (
   <Box
     sx={{
       display: 'flex',
@@ -99,6 +99,6 @@ const Nav: React.FunctionComponent = () => (
       Ecosystem
     </NavLink>
   </Box>
-);
+));
 
 export default Nav;
