@@ -39,7 +39,7 @@ const Template: ComponentStory<typeof ProfilePageWalletConnected> = (args) => {
   useEffect(() => {
     setAchievedBadges(season.id === 0 ? seasonOGBadges : season1Badges);
     setClaimButtonBulkMode('claim');
-  }, [season.id]);
+  }, []);
 
   function handleOnClaimButtonClick(variant: BadgeVariant) {
     setClaimButtonModes((prev) => ({
@@ -75,7 +75,11 @@ const Template: ComponentStory<typeof ProfilePageWalletConnected> = (args) => {
       claimButtonBulkMode={claimButtonBulkMode}
       season={season}
       seasonBadgeVariants={SEASON_BADGE_VARIANTS[season.id]}
-      onSeasonChange={setSeason}
+      onSeasonChange={(newSeason) => {
+        setSeason(newSeason);
+        setAchievedBadges(newSeason.id === 0 ? seasonOGBadges : season1Badges);
+        setClaimButtonBulkMode('claim');
+      }}
       isOnGoingSeason={season.id === 1}
       claimButtonModes={claimButtonModes}
       onClaimButtonClick={handleOnClaimButtonClick}
