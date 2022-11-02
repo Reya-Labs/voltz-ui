@@ -95,38 +95,48 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
             <BoldText>{seasonStartDateFormatted}</BoldText> and{' '}
             <BoldText>{seasonEndDateFormatted}</BoldText>.
           </Subheading>
-          <ClaimNotificationContainer>
-            <ClaimNotificationBox>
+          {isOnGoingSeason ? (
+            <ClaimNotificationContainer>
+              <ClaimNotificationBox>
+                <ClaimNotification
+                  pillText="CLAIM"
+                  text="UNAVAILABLE UNTIL THE END OF THE SEASON"
+                />
+              </ClaimNotificationBox>
+            </ClaimNotificationContainer>
+          ) : (
+            <ClaimNotificationContainer>
+              <ClaimNotificationBox>
+                {notClaimedBadges.length !== 0 ? (
+                  <>
+                    <ClaimNotification
+                      pillText="BULK CLAIM"
+                      text={
+                        <>
+                          YOU HAVE GOT <BoldText>{notClaimedBadges.length} BADGES</BoldText> READY
+                          TO CLAIM
+                        </>
+                      }
+                    />
+                  </>
+                ) : (
+                  <ClaimNotification pillText="KEEP TRADING" text="NO NEW BADGES TO CLAIM YET" />
+                )}
+              </ClaimNotificationBox>
               {notClaimedBadges.length !== 0 ? (
-                <>
-                  <ClaimNotification
-                    pillText="BULK CLAIM"
-                    text={
-                      <>
-                        YOU HAVE GOT <BoldText>{notClaimedBadges.length} BADGES</BoldText> READY TO
-                        CLAIM
-                      </>
+                <ClaimButtonBox>
+                  <ClaimButton
+                    mode={claimButtonBulkMode}
+                    onClick={() =>
+                      onClaimBulkClick(notClaimedBadges.map((b) => b.variant as BadgeVariant))
                     }
-                  />
-                </>
-              ) : (
-                <ClaimNotification pillText="KEEP TRADING" text="NO NEW BADGES TO CLAIM YET" />
-              )}
-            </ClaimNotificationBox>
-            {notClaimedBadges.length !== 0 ? (
-              <ClaimButtonBox>
-                <ClaimButton
-                  mode={claimButtonBulkMode}
-                  onClick={() =>
-                    onClaimBulkClick(notClaimedBadges.map((b) => b.variant as BadgeVariant))
-                  }
-                >
-                  CLAIM
-                </ClaimButton>
-              </ClaimButtonBox>
-            ) : null}
-          </ClaimNotificationContainer>
-
+                  >
+                    CLAIM
+                  </ClaimButton>
+                </ClaimButtonBox>
+              ) : null}
+            </ClaimNotificationContainer>
+          )}
           <BadgeCollectionBox>
             <BadgeCollectionTypographyBox>
               <Typography variant="h2">YOUR BADGE COLLECTION</Typography>
@@ -140,6 +150,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
                     key={index}
                     loading={loading}
                     variant="degenStuff"
+                    disableClaiming={true}
                   />
                 ))}
               {!loading &&
@@ -152,6 +163,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
                     onClaimButtonClick={() => onClaimButtonClick(badge.variant as BadgeVariant)}
                     claimButtonMode={claimButtonModes[badge.variant as BadgeVariant] || 'claim'}
                     claimedAt={badge.claimedAt}
+                    disableClaiming={isOnGoingSeason}
                   />
                 ))}
               {!loading && collection.length === 0 && (

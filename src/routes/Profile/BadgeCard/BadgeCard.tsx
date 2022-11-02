@@ -24,6 +24,7 @@ export type BadgeCardProps = {
   onClaimButtonClick?: ClaimButtonProps['onClick'];
   claimButtonMode: ClaimButtonProps['mode'];
   claimedAt?: ClaimButtonProps['claimedAt'];
+  disableClaiming: boolean;
 };
 
 export const BadgeCard: React.FunctionComponent<BadgeCardProps> = ({
@@ -32,6 +33,7 @@ export const BadgeCard: React.FunctionComponent<BadgeCardProps> = ({
   loading,
   variant,
   claimedAt,
+  disableClaiming,
 }) => {
   return (
     <Container data-testid="BadgeCard">
@@ -59,13 +61,19 @@ export const BadgeCard: React.FunctionComponent<BadgeCardProps> = ({
           </DescriptionTypography>
         )}
       </DescriptionBox>
-      <ClaimButtonBox>
-        {loading ? (
-          <ClaimButtonSkeleton variant="rectangular" />
-        ) : (
-          <ClaimButton claimedAt={claimedAt} onClick={onClaimButtonClick} mode={claimButtonMode} />
-        )}
-      </ClaimButtonBox>
+      {disableClaiming ? null : (
+        <ClaimButtonBox>
+          {loading ? (
+            <ClaimButtonSkeleton variant="rectangular" />
+          ) : (
+            <ClaimButton
+              claimedAt={claimedAt}
+              onClick={onClaimButtonClick}
+              mode={claimButtonMode}
+            />
+          )}
+        </ClaimButtonBox>
+      )}
     </Container>
   );
 };
