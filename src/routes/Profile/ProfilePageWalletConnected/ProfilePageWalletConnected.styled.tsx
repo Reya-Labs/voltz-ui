@@ -2,7 +2,6 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import { colors } from '@theme';
 import { Grid } from '../../../components/layout/Grid';
-import { Pill } from '../../../components/atomic/Pill';
 import Typography from '../../../components/atomic/Typography/Typography';
 
 export const ContainerBox = styled(Box)`
@@ -24,19 +23,11 @@ export const Subheading = styled(Typography)`
   color: ${colors.lavenderWeb.darken015};
 `;
 
-export const ClaimBox = styled(Box)`
+export const ClaimNotificationBox = styled(Box)`
   margin-top: ${({ theme }) => theme.spacing(6)};
   background-color: #19152a;
   border-radius: 8px;
   padding: ${({ theme }) => theme.spacing(2, 4)};
-`;
-
-export const ClaimTypography = styled(Typography)`
-  color: ${colors.lavenderWeb.darken015};
-`;
-
-export const PillBox = styled(Pill)`
-  margin-right: ${({ theme }) => theme.spacing(2)};
 `;
 
 export const ComingSoonBox = styled(Box)`

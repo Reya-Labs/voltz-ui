@@ -18,8 +18,7 @@ import {
   BadgeCollectionBox,
   BadgeCollectionTypographyBox,
   BoldText,
-  ClaimBox,
-  ClaimTypography,
+  ClaimNotificationBox,
   ComingSoonBox,
   ComingSoonGrid,
   ComingSoonTypography,
@@ -27,12 +26,12 @@ import {
   Heading,
   NoAchievedBadgesBox,
   NoAchievedBadgesTypography,
-  PillBox,
   Subheading,
 } from './ProfilePageWalletConnected.styled';
 import { Season } from '../../../hooks/season/types';
 import { SeasonToggle } from '../SeasonToggle/SeasonToggle';
 import { ClaimButtonProps } from '../ClaimButton/ClaimButton';
+import { ClaimNotification } from '../ClaimNotification/ClaimNotification';
 
 export type ProfilePageWalletConnectedProps = {
   account: string;
@@ -73,6 +72,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
     }, [seasonBadgeVariants, achievedBadges]);
 
     const collection = achievedBadgesMemo.filter((aB) => aB.achievedAt);
+    const notClaimedBadgesCount = collection.filter((b) => !b.claimedAt).length;
 
     return (
       <Page>
@@ -89,12 +89,20 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
             <BoldText>{seasonStartDateFormatted}</BoldText> and{' '}
             <BoldText>{seasonEndDateFormatted}</BoldText>.
           </Subheading>
-          <ClaimBox>
-            <ClaimTypography variant="body2">
-              <PillBox text="CLAIM" variant="wildStrawberry" />
-              UNAVAILABLE UNTIL THE END OF THE SEASON.
-            </ClaimTypography>
-          </ClaimBox>
+          <ClaimNotificationBox>
+            {notClaimedBadgesCount !== 0 ? (
+              <ClaimNotification
+                ctaText="CLAIM"
+                text={
+                  <>
+                    YOU HAVE GOT <BoldText>{notClaimedBadgesCount} BADGES</BoldText> READY TO CLAIM
+                  </>
+                }
+              />
+            ) : (
+              <ClaimNotification ctaText="KEEP TRADING" text="NO NEW BADGES TO CLAIM YET" />
+            )}
+          </ClaimNotificationBox>
 
           <BadgeCollectionBox>
             <BadgeCollectionTypographyBox>
