@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { ProfilePageWalletConnected } from './ProfilePageWalletConnected';
+import {
+  ProfilePageWalletConnected,
+  ProfilePageWalletConnectedProps,
+} from './ProfilePageWalletConnected';
 import { season1Badges, seasonOGBadges } from './ProfilePageWalletConnected.mocks';
 import { SEASON_BADGE_VARIANTS } from '../helpers';
 import { SEASONS } from '../../../hooks/season/constants';
@@ -17,6 +20,10 @@ export default {
 
 const Template: ComponentStory<typeof ProfilePageWalletConnected> = (args) => {
   const [season, setSeason] = useState<Season>(args.season);
+  const [claimButtonBulkMode, setClaimButtonBulkMode] = useState<ClaimButtonProps['mode']>('claim');
+  const [achievedBadges, setAchievedBadges] = useState<
+    ProfilePageWalletConnectedProps['achievedBadges']
+  >([]);
   const [claimButtonModes, setClaimButtonModes] = useState<
     Record<BadgeVariant, ClaimButtonProps['mode']>
   >(
@@ -29,6 +36,11 @@ const Template: ComponentStory<typeof ProfilePageWalletConnected> = (args) => {
     ),
   );
 
+  useEffect(() => {
+    setAchievedBadges(season.id === 0 ? seasonOGBadges : season1Badges);
+    setClaimButtonBulkMode('claim');
+  }, [season.id]);
+
   function handleOnClaimButtonClick(variant: BadgeVariant) {
     setClaimButtonModes((prev) => ({
       ...prev,
@@ -40,19 +52,35 @@ const Template: ComponentStory<typeof ProfilePageWalletConnected> = (args) => {
         ...prev,
         [variant]: 'claimed',
       }));
+      setAchievedBadges((prev) => {
+        const copy = [...prev];
+        copy.forEach((b) => {
+          if (b.variant === variant) {
+            b.claimedAt = Date.now().valueOf();
+          }
+        });
+        return copy;
+      });
     }, 1500);
+  }
+
+  function handleOnClaimBulkClick(variants: BadgeVariant[]) {
+    setClaimButtonBulkMode('claiming');
+    variants.forEach((v) => handleOnClaimButtonClick(v));
   }
 
   return (
     <ProfilePageWalletConnected
       {...args}
+      claimButtonBulkMode={claimButtonBulkMode}
       season={season}
       seasonBadgeVariants={SEASON_BADGE_VARIANTS[season.id]}
       onSeasonChange={setSeason}
-      isOnGoingSeason={season.id !== 0}
+      isOnGoingSeason={season.id === 1}
       claimButtonModes={claimButtonModes}
       onClaimButtonClick={handleOnClaimButtonClick}
-      achievedBadges={season.id === 0 ? seasonOGBadges : season1Badges}
+      onClaimBulkClick={handleOnClaimBulkClick}
+      achievedBadges={achievedBadges}
     />
   );
 };
