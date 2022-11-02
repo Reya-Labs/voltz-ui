@@ -24,7 +24,7 @@ describe('<ProfilePageWalletConnected />', () => {
     expect(screen.getByText('October 1st 2022')).not.toBeNull();
     expect(screen.getByText('December 31st 2022')).not.toBeNull();
     expect(screen.getByTestId('ClaimNotification').textContent).toBe(
-      'CLAIMYOU HAVE GOT 5 BADGES READY TO CLAIM',
+      'BULK CLAIMYOU HAVE GOT 5 BADGES READY TO CLAIM',
     );
 
     expect(screen.getAllByTestId('BadgeCard')).toHaveLength(5);
