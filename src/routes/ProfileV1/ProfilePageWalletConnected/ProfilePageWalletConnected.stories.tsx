@@ -3,8 +3,8 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { ProfilePageWalletConnected } from './ProfilePageWalletConnected';
 import { season1Badges } from './ProfilePageWalletConnected.mocks';
-import { SEASON_BADGE_VARIANTS } from '../helpers';
 import { SEASONS } from '../../../hooks/season/constants';
+import { SEASON_BADGE_VARIANTS } from '@graphql';
 
 export default {
   title: 'Interface/ProfilePageWalletConnectedV1',

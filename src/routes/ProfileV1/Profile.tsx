@@ -2,9 +2,8 @@ import React, { useEffect } from 'react';
 import { useCurrentSeason, useWallet } from '@hooks';
 import { ProfilePageNoWallet } from './ProfilePageNoWallet/ProfilePageNoWallet';
 import { ProfilePageWalletConnected } from './ProfilePageWalletConnected/ProfilePageWalletConnected';
-import { getSeasonBadges, GetProfileBadgesResponse } from '@graphql';
+import { getSeasonBadges, GetProfileBadgesResponse, SEASON_BADGE_VARIANTS } from '@graphql';
 import { getENSDetails, setPageTitle } from '@utilities';
-import { SEASON_BADGE_VARIANTS } from './helpers';
 import { Season } from '../../hooks/season/types';
 
 const Profile: React.FunctionComponent = () => {
