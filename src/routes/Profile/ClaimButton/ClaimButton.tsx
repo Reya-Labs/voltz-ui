@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   ClaimedAtTypography,
   ClaimButton as ClaimButtonUI,
@@ -31,10 +31,11 @@ export const ClaimButton: React.FunctionComponent<ClaimButtonProps> = ({
   claimedAt,
 }) => {
   const [showConfetti, setShowConfetti] = useState(false);
+  const initialModeRef = useRef<ClaimButtonMode>(mode);
   const ButtonUI = mode === 'claimedDate' ? StretchClaimButton : ClaimButtonUI;
   const Wrapper = showConfetti ? Confetti : React.Fragment;
   const handleTickAnimationEnd = useCallback(() => {
-    setShowConfetti(true);
+    setShowConfetti(initialModeRef.current !== 'claimed');
   }, []);
 
   return (
