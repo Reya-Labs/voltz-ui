@@ -39,7 +39,7 @@ export const ClaimButton: React.FunctionComponent<ClaimButtonProps> = ({
   }, []);
 
   return (
-    <ButtonUI onClick={onClick} disabled={mode !== 'claim'}>
+    <ButtonUI data-testid="ClaimButton" onClick={onClick} disabled={mode !== 'claim'}>
       <Wrapper>{MODE_COPY_MAP[mode]}</Wrapper>
       {mode === 'claimed' && (
         <TickWrapper>
