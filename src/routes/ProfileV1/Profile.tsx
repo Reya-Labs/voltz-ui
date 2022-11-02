@@ -5,22 +5,19 @@ import { ProfilePageWalletConnected } from './ProfilePageWalletConnected/Profile
 import { getSeasonBadges, GetProfileBadgesResponse } from '@graphql';
 import { getENSDetails, setPageTitle } from '@utilities';
 import { SEASON_BADGE_VARIANTS } from './helpers';
-import usePastSeasons from '../../hooks/season/usePastSeasons';
 import { Season } from '../../hooks/season/types';
 
 const Profile: React.FunctionComponent = () => {
   const wallet = useWallet();
-  const [collectionBadges, setCollectionBadges] = React.useState<GetProfileBadgesResponse>([]);
-  const pastSeasons = usePastSeasons();
+  const [achievedBadges, setAchievedBadges] = React.useState<GetProfileBadgesResponse>([]);
   const [loading, setLoading] = React.useState(true);
   const [name, setName] = React.useState('');
   const currentActiveSeason = useCurrentSeason();
-  const [season, setSeason] = React.useState<Season>(currentActiveSeason);
 
-  const getBadges = async (seasonId: Season['id'], account: string) => {
+  const getBadges = async (account: string, seasonId: Season['id']) => {
     setLoading(true);
     const result = await getSeasonBadges(account, seasonId);
-    setCollectionBadges(result);
+    setAchievedBadges(result);
     setLoading(false);
   };
 
@@ -31,18 +28,12 @@ const Profile: React.FunctionComponent = () => {
 
   useEffect(() => {
     if (!wallet.account) {
-      return;
-    }
-    void fetchEnsDetails(wallet.account);
-  }, [wallet.account]);
-
-  useEffect(() => {
-    if (!wallet.account) {
       setLoading(false);
       return;
     }
-    void getBadges(season.id, wallet.account);
-  }, [season.id, wallet.account]);
+    void getBadges(wallet.account, currentActiveSeason.id);
+    void fetchEnsDetails(wallet.account);
+  }, [wallet.account]);
 
   useEffect(() => {
     setPageTitle('Profile', wallet.account);
@@ -54,15 +45,11 @@ const Profile: React.FunctionComponent = () => {
 
   return (
     <ProfilePageWalletConnected
-      isOnGoingSeason={season.id === currentActiveSeason.id}
-      season={season}
+      season={currentActiveSeason}
       account={name}
-      achievedBadges={collectionBadges}
+      achievedBadges={achievedBadges}
       loading={loading}
-      onSeasonChange={setSeason}
-      seasonBadgeVariants={SEASON_BADGE_VARIANTS[season.id]}
-      seasonOptions={[...pastSeasons, currentActiveSeason]}
-      claimButtonBulkMode="claim"
+      seasonBadgeVariants={SEASON_BADGE_VARIANTS[currentActiveSeason.id]}
     />
   );
 };

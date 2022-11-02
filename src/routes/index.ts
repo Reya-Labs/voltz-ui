@@ -15,4 +15,5 @@ export { default as Trader } from './Trader/Trader';
 export { default as FixedBorrower } from './FixedBorrower/FixedBorrower';
 export { default as TradingLeague } from './TradingLeague/TradingLeague';
 export { default as Profile } from './Profile/Profile';
+export { default as ProfileV1 } from './ProfileV1/Profile';
 export { default as Ecosystem } from './Ecosystem/Ecosystem';
