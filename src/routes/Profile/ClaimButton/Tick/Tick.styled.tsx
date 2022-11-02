@@ -1,5 +1,36 @@
 import { styled } from '@mui/material/styles';
 import { colors } from '@theme';
+import { keyframes } from '@mui/system';
+
+const swipe1 = keyframes`
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.5;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+`;
+
+const swipe2 = keyframes`
+  40% {
+    opacity: 0;
+  }
+  47% {
+    transform: scaleY(0.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+`;
 
 export const IconAnimated = styled('div')`
   width: 16px;
@@ -28,45 +59,15 @@ const Leg = styled('svg')`
 `;
 
 export const TickPart1 = styled(Leg)`
-  animation-name: tick-swipe1;
+  animation-name: ${swipe1};
   transform: scaleX(0);
   transform-origin: left bottom;
-
-  @keyframes tick-swipe1 {
-    0% {
-      opacity: 0;
-    }
-    10% {
-      opacity: 0.5;
-    }
-    20% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 1;
-      transform: scaleX(1);
-    }
-  }
 `;
 
 export const TickPart2 = styled(Leg)`
-  animation-name: tick-swipe2;
+  animation-name: ${swipe2};
   transform: scaleY(0);
   transform-origin: right bottom;
-
-  @keyframes tick-swipe2 {
-    40% {
-      opacity: 0;
-    }
-    47% {
-      transform: scaleY(0.15);
-      opacity: 1;
-    }
-    100% {
-      transform: scaleY(1);
-      opacity: 1;
-    }
-  }
 `;
 
 export const TickContainer = styled('div')`
