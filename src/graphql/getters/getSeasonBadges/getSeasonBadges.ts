@@ -60,12 +60,12 @@ const getBadgesQueryString = (owner: string, seasonNumber: number) => {
   }`;
 };
 
-const formatTimestamp = (timestamp: number): number | undefined => {
-  if (timestamp === 0) {
+const toMillis = (secondsTimestamp: number): number | undefined => {
+  if (secondsTimestamp === 0) {
     return undefined;
   }
 
-  return timestamp * 1000;
+  return secondsTimestamp * 1000;
 };
 
 type BadgeResponse = {
@@ -120,8 +120,8 @@ export async function getSeasonBadges(
         }
         return {
           variant: BADGE_TYPE_BADGE_VARIANT_MAP[badge.badgeType],
-          achievedAt: formatTimestamp(parseInt(badge.awardedTimestamp)),
-          claimedAt: formatTimestamp(parseInt(badge.mintedTimestamp)),
+          achievedAt: toMillis(parseInt(badge.awardedTimestamp)),
+          claimedAt: toMillis(parseInt(badge.mintedTimestamp)),
         };
       });
     } else {
