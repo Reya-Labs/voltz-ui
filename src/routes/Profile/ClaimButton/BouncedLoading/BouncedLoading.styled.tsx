@@ -1,5 +1,21 @@
 import { styled } from '@mui/material/styles';
 import { colors } from '@theme';
+import { keyframes } from '@mui/system';
+
+const bounce = keyframes`
+  0%,
+  20% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(0, -5px);
+    background: ${colors.skyBlueCrayola.darken015};
+  }
+  80%,
+  100% {
+    transform: translate(0, 0);
+  }
+`;
 
 export const Container = styled('div')`
   position: relative;
@@ -16,29 +32,14 @@ export const Container = styled('div')`
   }
   i:nth-of-type(1) {
     z-index: 1;
-    animation: bounce 700ms infinite ease-in-out;
+    animation: ${bounce} 700ms infinite ease-in-out;
   }
   i:nth-of-type(2) {
-    animation: bounce 700ms infinite ease-in-out;
+    animation: ${bounce} 700ms infinite ease-in-out;
     animation-delay: 125ms;
   }
   i:nth-of-type(3) {
-    animation: bounce 700ms infinite ease-in-out;
+    animation: ${bounce} 700ms infinite ease-in-out;
     animation-delay: 250ms;
-  }
-
-  @-webkit-keyframes bounce {
-    0%,
-    20% {
-      transform: translate(0, 0);
-    }
-    50% {
-      transform: translate(0, -5px);
-      background: ${colors.skyBlueCrayola.darken015};
-    }
-    80%,
-    100% {
-      transform: translate(0, 0);
-    }
   }
 `;
