@@ -3,14 +3,14 @@ import React from 'react';
 
 type ClaimNotificationProps = {
   text: React.ReactNode;
-  ctaText: string;
+  pillText: string;
 };
 export const ClaimNotification: React.FunctionComponent<ClaimNotificationProps> = ({
-  ctaText,
+  pillText,
   text,
 }) => (
   <ClaimTypography data-testid="ClaimNotification" variant="body2">
-    <PillBox text={ctaText} variant="wildStrawberry" />
+    <PillBox text={pillText} variant="wildStrawberry" />
     {text}
   </ClaimTypography>
 );

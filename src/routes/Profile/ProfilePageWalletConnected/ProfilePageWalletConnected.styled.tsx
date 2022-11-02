@@ -24,10 +24,20 @@ export const Subheading = styled(Typography)`
 `;
 
 export const ClaimNotificationBox = styled(Box)`
-  margin-top: ${({ theme }) => theme.spacing(6)};
-  background-color: #19152a;
-  border-radius: 8px;
   padding: ${({ theme }) => theme.spacing(2, 4)};
+`;
+
+export const ClaimNotificationContainer = styled(Box)`
+  background-color: #19152a;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: ${({ theme }) => theme.spacing(6)};
+  border-radius: 8px;
+`;
+
+export const ClaimButtonBox = styled(Box)`
+  width: 150px;
 `;
 
 export const ComingSoonBox = styled(Box)`

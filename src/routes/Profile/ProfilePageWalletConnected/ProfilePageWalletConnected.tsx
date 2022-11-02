@@ -18,7 +18,9 @@ import {
   BadgeCollectionBox,
   BadgeCollectionTypographyBox,
   BoldText,
+  ClaimButtonBox,
   ClaimNotificationBox,
+  ClaimNotificationContainer,
   ComingSoonBox,
   ComingSoonGrid,
   ComingSoonTypography,
@@ -30,7 +32,7 @@ import {
 } from './ProfilePageWalletConnected.styled';
 import { Season } from '../../../hooks/season/types';
 import { SeasonToggle } from '../SeasonToggle/SeasonToggle';
-import { ClaimButtonProps } from '../ClaimButton/ClaimButton';
+import { ClaimButton, ClaimButtonProps } from '../ClaimButton/ClaimButton';
 import { ClaimNotification } from '../ClaimNotification/ClaimNotification';
 
 export type ProfilePageWalletConnectedProps = {
@@ -41,6 +43,8 @@ export type ProfilePageWalletConnectedProps = {
   isOnGoingSeason: boolean;
   seasonBadgeVariants: string[];
   onSeasonChange: (season: Season) => void;
+  onClaimBulkClick?: (badgeVariants: BadgeVariant[]) => void;
+  claimButtonBulkMode: ClaimButtonProps['mode'];
   seasonOptions: Season[];
   onClaimButtonClick?: (badgeVariant: BadgeVariant) => void;
   claimButtonModes?: Record<BadgeVariant, ClaimButtonProps['mode']>;
@@ -57,7 +61,9 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
     onSeasonChange = doNothing,
     seasonOptions,
     onClaimButtonClick = doNothing,
+    onClaimBulkClick = doNothing,
     claimButtonModes = {},
+    claimButtonBulkMode,
   }) => {
     const seasonLabel = season.label;
     const seasonStartDateFormatted = formatDateTimeWithOrdinal(season.startDate);
@@ -72,7 +78,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
     }, [seasonBadgeVariants, achievedBadges]);
 
     const collection = achievedBadgesMemo.filter((aB) => aB.achievedAt);
-    const notClaimedBadgesCount = collection.filter((b) => !b.claimedAt).length;
+    const notClaimedBadges = collection.filter((b) => !b.claimedAt);
 
     return (
       <Page>
@@ -89,20 +95,37 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
             <BoldText>{seasonStartDateFormatted}</BoldText> and{' '}
             <BoldText>{seasonEndDateFormatted}</BoldText>.
           </Subheading>
-          <ClaimNotificationBox>
-            {notClaimedBadgesCount !== 0 ? (
-              <ClaimNotification
-                ctaText="CLAIM"
-                text={
-                  <>
-                    YOU HAVE GOT <BoldText>{notClaimedBadgesCount} BADGES</BoldText> READY TO CLAIM
-                  </>
-                }
-              />
-            ) : (
-              <ClaimNotification ctaText="KEEP TRADING" text="NO NEW BADGES TO CLAIM YET" />
-            )}
-          </ClaimNotificationBox>
+          <ClaimNotificationContainer>
+            <ClaimNotificationBox>
+              {notClaimedBadges.length !== 0 ? (
+                <>
+                  <ClaimNotification
+                    pillText="BULK CLAIM"
+                    text={
+                      <>
+                        YOU HAVE GOT <BoldText>{notClaimedBadges.length} BADGES</BoldText> READY TO
+                        CLAIM
+                      </>
+                    }
+                  />
+                </>
+              ) : (
+                <ClaimNotification pillText="KEEP TRADING" text="NO NEW BADGES TO CLAIM YET" />
+              )}
+            </ClaimNotificationBox>
+            {notClaimedBadges.length !== 0 ? (
+              <ClaimButtonBox>
+                <ClaimButton
+                  mode={claimButtonBulkMode}
+                  onClick={() =>
+                    onClaimBulkClick(notClaimedBadges.map((b) => b.variant as BadgeVariant))
+                  }
+                >
+                  CLAIM
+                </ClaimButton>
+              </ClaimButtonBox>
+            ) : null}
+          </ClaimNotificationContainer>
 
           <BadgeCollectionBox>
             <BadgeCollectionTypographyBox>

@@ -66,6 +66,7 @@ const Profile: React.FunctionComponent = () => {
       onSeasonChange={setSeason}
       seasonBadgeVariants={SEASON_BADGE_VARIANTS[season.id]}
       seasonOptions={seasonOptions}
+      claimButtonBulkMode="claim"
     />
   );
 };
