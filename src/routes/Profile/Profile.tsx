@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useCurrentSeason, useWallet } from '@hooks';
+import { useCurrentSeason, usePastSeasons, useWallet } from '@hooks';
 import { ProfilePageNoWallet } from './ProfilePageNoWallet/ProfilePageNoWallet';
 import { ProfilePageWalletConnected } from './ProfilePageWalletConnected/ProfilePageWalletConnected';
 import {
@@ -10,7 +10,6 @@ import {
   SEASON_BADGE_VARIANTS,
 } from '@graphql';
 import { getENSDetails, setPageTitle } from '@utilities';
-import usePastSeasons from '../../hooks/season/usePastSeasons';
 import { Season } from '../../hooks/season/types';
 import { ClaimButtonProps } from './ClaimButton/ClaimButton';
 import { getCacheValue, invalidateCache, setCacheValue } from './cache';
