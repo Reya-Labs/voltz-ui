@@ -25,7 +25,7 @@ const RANK_COLORS: Record<RankingEntryProps['variant'], string> = {
   me: '#251F3F',
 };
 
-export const RankingEntry: React.FunctionComponent<RankingEntryProps> = ({
+export const Entry: React.FunctionComponent<RankingEntryProps> = ({
   points,
   rank,
   address,

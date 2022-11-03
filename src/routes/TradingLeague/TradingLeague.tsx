@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import { setPageTitle } from '@utilities';
-import { Page, RankingTable } from '@components/interface';
+import { Page } from '@components/interface';
 import { useCurrentSeason, useWallet } from '@hooks';
 import { RankType } from '../../utilities/data';
 import { getActivity } from '@graphql';
+import Leaderboard from './Leaderboard/Leaderboard';
 const PER_PAGE = 10;
 
 const TradingLeague: React.FunctionComponent = () => {
@@ -84,7 +85,7 @@ const TradingLeague: React.FunctionComponent = () => {
           background: 'transparent',
         }}
       >
-        <RankingTable
+        <Leaderboard
           loading={loading}
           rankings={rankingResults.slice(page * 10, page * 10 + PER_PAGE)}
           maxPages={maxPages}

@@ -3,7 +3,7 @@ import { colors } from '@theme';
 import { Box } from '@mui/material';
 import React from 'react';
 
-export const RankingHeader: React.FunctionComponent = () => (
+export const Header: React.FunctionComponent = () => (
   <Box
     sx={{
       display: 'flex',

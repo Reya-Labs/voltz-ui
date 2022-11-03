@@ -3,7 +3,7 @@ import { colors } from '@theme';
 import { Typography } from '@components/atomic';
 import Box from '@mui/material/Box';
 
-const RankingHeaderBox = () => (
+const HeaderBox = () => (
   <Box>
     <Typography
       variant="h1"
@@ -33,4 +33,4 @@ const RankingHeaderBox = () => (
   </Box>
 );
 
-export default RankingHeaderBox;
+export default HeaderBox;
