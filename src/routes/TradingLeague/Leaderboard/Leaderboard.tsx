@@ -7,9 +7,9 @@ import { DateTime } from 'luxon';
 import { colors } from '@theme';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import ChevronLeft from '@mui/icons-material/ChevronLeft';
-import { RankingEntry } from '../RankingEntry/RankingEntry';
-import { RankingHeader } from '../RankingHeader/RankingHeader';
-import RankingTableHeader from '../RankingTableHeader/RankingTableHeader';
+import { Header } from '../Header/Header';
+import { Entry } from '../Entry/Entry';
+import { LeaderboardHeader } from '../LeaderboardHeader/LeaderboardHeader';
 
 export type RankingTableProps = {
   rankings: RankType[];
@@ -29,7 +29,7 @@ export type RankingTableProps = {
 
 const inRange = (start: number, end: number, num: number) => start <= num && num <= end;
 
-const RankingTable: React.FunctionComponent<RankingTableProps> = ({
+const Leaderboard: React.FunctionComponent<RankingTableProps> = ({
   rankings,
   seasonNumber,
   seasonStartDate,
@@ -46,7 +46,7 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
 }) => {
   return (
     <Box>
-      <RankingTableHeader
+      <LeaderboardHeader
         loading={loading}
         seasonNumber={seasonNumber}
         seasonStartDate={seasonStartDate}
@@ -75,13 +75,13 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
           padding: (theme) => theme.spacing(0, 4),
         }}
       >
-        <RankingHeader />
+        <Header />
         {!loading &&
           rankings.length !== 0 &&
           rankings.map((ranking, index) => {
             const rank = index + 1 + page * perPage;
             return (
-              <RankingEntry
+              <Entry
                 key={ranking.address}
                 points={ranking.points}
                 rank={rank}
@@ -103,7 +103,7 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
         {loading &&
           Array.from({ length: 10 }, () => ({})).map((ranking, index) => {
             return (
-              <RankingEntry
+              <Entry
                 points={index}
                 rank={index}
                 variant={'rank1'}
@@ -116,12 +116,7 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
         {!loading &&
           userAddress &&
           !inRange(page * perPage, page * perPage + perPage, userRank) && (
-            <RankingEntry
-              points={userPoints}
-              rank={userRank + 1}
-              address={userAddress}
-              variant="me"
-            />
+            <Entry points={userPoints} rank={userRank + 1} address={userAddress} variant="me" />
           )}
       </Grid>
       {!loading && (
@@ -180,4 +175,4 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
   );
 };
 
-export default RankingTable;
+export default Leaderboard;

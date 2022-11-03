@@ -4,8 +4,8 @@ import { formatDateTime } from '@utilities';
 import { DateTime } from 'luxon';
 import React from 'react';
 import { colors } from '@theme';
-import { RankingEntry } from '../RankingEntry/RankingEntry';
-import { RankingHeader } from '../RankingHeader/RankingHeader';
+import { Header } from '../Header/Header';
+import { Entry } from '../Entry/Entry';
 
 export type RankingUserSummaryProps = {
   seasonNumber: string;
@@ -18,7 +18,7 @@ export type RankingUserSummaryProps = {
   loading: boolean;
 };
 
-const RankingUserSummary = ({
+const UserSummary = ({
   loading,
   seasonNumber,
   seasonStartDate,
@@ -170,8 +170,8 @@ const RankingUserSummary = ({
             flexDirection: 'column',
           }}
         >
-          <RankingHeader />
-          <RankingEntry
+          <Header />
+          <Entry
             variant="me"
             points={userPoints || 0}
             rank={userRank || 0}
@@ -184,4 +184,4 @@ const RankingUserSummary = ({
   );
 };
 
-export default RankingUserSummary;
+export default UserSummary;
