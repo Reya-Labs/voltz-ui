@@ -7,9 +7,9 @@ import { DateTime } from 'luxon';
 import { colors } from '@theme';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import ChevronLeft from '@mui/icons-material/ChevronLeft';
-import { RankingEntry } from './components/RankingEntry';
-import { RankingHeader } from './components/RankingHeader';
-import RankingTableHeader from './components/RankingTableHeader';
+import { RankingEntry } from '../RankingEntry/RankingEntry';
+import { RankingHeader } from '../RankingHeader/RankingHeader';
+import RankingTableHeader from '../RankingTableHeader/RankingTableHeader';
 
 export type RankingTableProps = {
   rankings: RankType[];
