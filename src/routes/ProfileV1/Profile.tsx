@@ -15,7 +15,10 @@ const Profile: React.FunctionComponent = () => {
 
   const getBadges = async (account: string, seasonId: Season['id']) => {
     setLoading(true);
-    const result = await getSeasonBadges(account, seasonId);
+    const result = await getSeasonBadges({
+      seasonId,
+      userId: account,
+    });
     setAchievedBadges(result);
     setLoading(false);
   };

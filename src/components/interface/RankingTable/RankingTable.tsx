@@ -72,6 +72,7 @@ const RankingTable: React.FunctionComponent<RankingTableProps> = ({
         sx={{
           marginTop: (theme) => theme.spacing(6),
           rowGap: (theme) => theme.spacing(2),
+          padding: (theme) => theme.spacing(0, 4),
         }}
       >
         <RankingHeader />

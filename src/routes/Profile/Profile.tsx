@@ -3,15 +3,17 @@ import { useCurrentSeason, useWallet } from '@hooks';
 import { ProfilePageNoWallet } from './ProfilePageNoWallet/ProfilePageNoWallet';
 import { ProfilePageWalletConnected } from './ProfilePageWalletConnected/ProfilePageWalletConnected';
 import {
-  getSeasonBadges,
-  GetProfileBadgesResponse,
   BadgeVariant,
+  GetProfileBadgesResponse,
+  getSeasonBadges,
+  getSeasonUserId,
   SEASON_BADGE_VARIANTS,
 } from '@graphql';
 import { getENSDetails, setPageTitle } from '@utilities';
 import usePastSeasons from '../../hooks/season/usePastSeasons';
 import { Season } from '../../hooks/season/types';
 import { ClaimButtonProps } from './ClaimButton/ClaimButton';
+import { getCacheValue, invalidateCache, setCacheValue } from './cache';
 
 const Profile: React.FunctionComponent = () => {
   const wallet = useWallet();
@@ -35,11 +37,24 @@ const Profile: React.FunctionComponent = () => {
     ),
   );
 
+  const fetchBadges = async (seasonId: Season['id'], account: string) => {
+    return await getSeasonBadges({
+      userId: account,
+      seasonId,
+    });
+  };
+
   const getBadges = async (seasonId: Season['id'], account: string) => {
-    setLoading(true);
-    const result = await getSeasonBadges(account, seasonId);
+    const seasonUserId = getSeasonUserId(account, seasonId);
+    let result = getCacheValue(seasonUserId);
+
+    if (!result) {
+      setLoading(true);
+      result = await fetchBadges(seasonId, account);
+      setCacheValue(seasonUserId, result);
+      setLoading(false);
+    }
     setCollectionBadges(result);
-    setLoading(false);
     setClaimButtonBulkMode('claim');
     setClaimButtonModes(
       SEASON_BADGE_VARIANTS[season.id].reduce(
@@ -56,6 +71,7 @@ const Profile: React.FunctionComponent = () => {
     const details = await getENSDetails(account);
     setName(details?.name || account);
   };
+
   // mocking utils
   function handleOnClaimButtonClick(variant: BadgeVariant) {
     setClaimButtonModes((prev) => ({
@@ -69,13 +85,10 @@ const Profile: React.FunctionComponent = () => {
         [variant]: 'claimed',
       }));
       setCollectionBadges((prev) => {
-        const copy = [...prev];
-        copy.forEach((b) => {
-          if (b.variant === variant) {
-            b.claimedAt = Date.now().valueOf();
-          }
-        });
-        return copy;
+        return prev.map((b) => ({
+          ...b,
+          claimedAt: b.variant === variant ? Date.now().valueOf() : b.claimedAt,
+        }));
       });
     }, 1500);
   }
@@ -84,12 +97,14 @@ const Profile: React.FunctionComponent = () => {
     setClaimButtonBulkMode('claiming');
     variants.forEach((v) => handleOnClaimButtonClick(v));
   }
-  // mocking utils
+  // end of mocking utils
+
   useEffect(() => {
     if (!wallet.account) {
       return;
     }
     void fetchEnsDetails(wallet.account);
+    invalidateCache();
   }, [wallet.account]);
 
   useEffect(() => {
@@ -102,6 +117,7 @@ const Profile: React.FunctionComponent = () => {
 
   useEffect(() => {
     setPageTitle('Profile', wallet.account);
+    invalidateCache();
   }, []);
 
   if (!wallet.account) {
