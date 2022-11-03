@@ -4,8 +4,8 @@ import { formatDateTime } from '@utilities';
 import { DateTime } from 'luxon';
 import React from 'react';
 import { colors } from '@theme';
-import { RankingEntry } from './RankingEntry';
-import { RankingHeader } from './RankingHeader';
+import { RankingEntry } from '../RankingEntry/RankingEntry';
+import { RankingHeader } from '../RankingHeader/RankingHeader';
 
 export type RankingUserSummaryProps = {
   seasonNumber: string;

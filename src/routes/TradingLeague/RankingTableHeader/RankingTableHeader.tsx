@@ -1,5 +1,5 @@
-import RankingHeaderBox from './RankingHeaderBox';
-import RankingUserSummary from './RankingUserSummary';
+import RankingHeaderBox from '../RankingHeaderBox/RankingHeaderBox';
+import RankingUserSummary from '../RankingUserSummary/RankingUserSummary';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
 

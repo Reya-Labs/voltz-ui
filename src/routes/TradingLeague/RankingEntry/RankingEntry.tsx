@@ -6,8 +6,8 @@ import Skeleton from '@mui/material/Skeleton';
 import { ReactComponent as Gold } from './icons/gold.svg';
 import { ReactComponent as Silver } from './icons/silver.svg';
 import { ReactComponent as Bronze } from './icons/bronze.svg';
-import { AvatarAddress } from '../../AvatarAddress/AvatarAddress';
-import { Points } from './Points';
+import { AvatarAddress } from '../../../components/interface/AvatarAddress/AvatarAddress';
+import { Points } from '../Points/Points';
 
 export type RankingEntryProps = {
   points: number;
