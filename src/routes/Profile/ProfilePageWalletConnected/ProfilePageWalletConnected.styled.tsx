@@ -97,7 +97,7 @@ export const NoAchievedBadgesTypography = styled(Typography)`
 
 export const AchievedBadgesGrid = styled(Grid)`
   margin-top: ${({ theme }) => theme.spacing(6)};
-  row-gap: ${({ theme }) => theme.spacing(6)};
+  row-gap: ${({ theme }) => theme.spacing(4)};
   column-gap: ${({ theme }) => theme.spacing(4)};
 `;
 
