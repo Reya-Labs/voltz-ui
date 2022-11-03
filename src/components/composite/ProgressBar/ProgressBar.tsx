@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import { Typography } from '@components/atomic';
 import Box from '@mui/material/Box';
 import { colors } from '@theme';
+import { ProgressBarBox } from './ProgressBar.styled';
 
 type ProgressBarProps = {
   leftContent?: ReactNode;
@@ -51,13 +52,7 @@ export const ProgressBar = ({
         marginTop: (theme) => theme.spacing(1),
       }}
     >
-      <Box
-        sx={{
-          width: `${Math.min(percentageComplete, 100)}%`,
-          background: colors.lavenderWeb.base,
-          height: '100%',
-        }}
-      />
+      <ProgressBarBox percentage={Math.min(percentageComplete, 100)} />
     </Box>
   </Box>
 );
