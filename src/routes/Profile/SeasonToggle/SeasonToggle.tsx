@@ -26,7 +26,7 @@ export const SeasonToggle: React.FunctionComponent<SeasonToggleProps> = ({
       aria-label="text alignment"
     >
       {seasons.map((option) => (
-        <ToggleButton value={option.id}>
+        <ToggleButton key={option.id} value={option.id}>
           <SeasonTypography>{option.label}</SeasonTypography>
         </ToggleButton>
       ))}

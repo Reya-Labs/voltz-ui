@@ -2,6 +2,7 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import { colors } from '@theme';
 import { Grid } from '../../../components/layout/Grid';
+import { Pill } from '../../../components/atomic/Pill';
 import Typography from '../../../components/atomic/Typography/Typography';
 
 export const ContainerBox = styled(Box)`
@@ -23,21 +24,19 @@ export const Subheading = styled(Typography)`
   color: ${colors.lavenderWeb.darken015};
 `;
 
-export const ClaimNotificationBox = styled(Box)`
+export const ClaimBox = styled(Box)`
+  margin-top: ${({ theme }) => theme.spacing(6)};
+  background-color: #19152a;
+  border-radius: 8px;
   padding: ${({ theme }) => theme.spacing(2, 4)};
 `;
 
-export const ClaimNotificationContainer = styled(Box)`
-  background-color: #19152a;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: ${({ theme }) => theme.spacing(6)};
-  border-radius: 8px;
+export const ClaimTypography = styled(Typography)`
+  color: ${colors.lavenderWeb.darken015};
 `;
 
-export const ClaimButtonBox = styled(Box)`
-  width: 150px;
+export const PillBox = styled(Pill)`
+  margin-right: ${({ theme }) => theme.spacing(2)};
 `;
 
 export const ComingSoonBox = styled(Box)`
@@ -119,4 +118,12 @@ export const BoldText = styled('b')`
 
 export const Account = styled('span')`
   font-weight: 700;
+`;
+
+export const BadgeCollectionSeasonTypography = styled(Typography)`
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 14px;
+  font-family: 'PixelOperatorMono', monospace;
+  padding: ${({ theme }) => theme.spacing(1, 2)};
 `;

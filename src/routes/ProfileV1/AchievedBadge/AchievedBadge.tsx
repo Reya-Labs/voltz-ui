@@ -15,7 +15,6 @@ import { ComingSoonBadges } from '../types';
 
 export type AchievedBadgeProps = {
   achievedAt?: number;
-  claimedAt?: number;
   variant: BadgeVariant | ComingSoonBadges;
   loading?: boolean;
 };
