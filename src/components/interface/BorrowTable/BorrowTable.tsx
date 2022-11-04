@@ -76,7 +76,7 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
 
   const handleLoadedRow = () => {
     countLoaded.current++;
-    if (countLoaded.current == 0) {
+    if (countLoaded.current === 0) {
       onLoaded(false);
     }
   };

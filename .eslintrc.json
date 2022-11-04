@@ -13,6 +13,7 @@
   },
   "ignorePatterns": ["src/graphql/generated.ts"],
   "rules": {
+    "eqeqeq": "error",
     "no-unused-vars": "off",
     "no-use-before-define": "off",
     "no-console": ["error", { "allow": ["debug", "warn", "error"] }],
