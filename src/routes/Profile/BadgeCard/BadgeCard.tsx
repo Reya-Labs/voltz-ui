@@ -70,6 +70,7 @@ export const BadgeCard: React.FunctionComponent<BadgeCardProps> = ({
               claimedAt={claimedAt}
               onClick={onClaimButtonClick}
               mode={claimButtonMode}
+              displayError={true}
             />
           )}
         </ClaimButtonBox>
