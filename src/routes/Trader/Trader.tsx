@@ -148,7 +148,7 @@ const Trader: React.FunctionComponent = () => {
                 <SwapFormProvider
                   mode={formMode}
                   defaultValues={{
-                    notional: formMode == SwapFormModes.EDIT_NOTIONAL ? 0 : undefined,
+                    notional: formMode === SwapFormModes.EDIT_NOTIONAL ? 0 : undefined,
                   }}
                 >
                   <ConnectedSwapForm onReset={handleReset} />
