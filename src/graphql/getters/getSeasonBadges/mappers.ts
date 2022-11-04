@@ -19,6 +19,8 @@ export const BADGE_TYPE_BADGE_VARIANT_MAP: Record<string, BadgeVariant> = {
   '25': 'yikes',
   '26': 'maxBidding',
   '27': 'topTrader',
+  // todo: change with correct BE enum value
+  '100000': 'mellowLpVault',
   // season OG
   '0': 'ogFixedTrader',
   '1': 'ogDeltaDegen',
@@ -70,6 +72,7 @@ export const SEASON_BADGE_VARIANTS: Record<`${Season['id']}`, string[]> = {
     'maxBidding',
     'yikes',
     'lpoor',
+    'mellowLpVault',
     'moneyMoneyMoney',
     'waterHose',
     'rainMaker',
