@@ -23,23 +23,6 @@ export const Subheading = styled(Typography)`
   color: ${colors.lavenderWeb.darken015};
 `;
 
-export const ClaimNotificationBox = styled(Box)`
-  padding: ${({ theme }) => theme.spacing(2, 4)};
-`;
-
-export const ClaimNotificationContainer = styled(Box)`
-  background-color: #19152a;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: ${({ theme }) => theme.spacing(6)};
-  border-radius: 8px;
-`;
-
-export const ClaimButtonBox = styled(Box)`
-  width: 150px;
-`;
-
 export const ComingSoonBox = styled(Box)`
   margin-top: ${({ theme }) => theme.spacing(6)};
   padding: ${({ theme }) => theme.spacing(0, 4)};
@@ -111,10 +94,6 @@ export const BadgeCollectionBox = styled(Box)`
   border-radius: 8px;
   padding: ${({ theme }) => theme.spacing(4)};
   margin-top: ${({ theme }) => theme.spacing(3)};
-`;
-
-export const BoldText = styled('b')`
-  color: ${colors.lavenderWeb.base};
 `;
 
 export const Account = styled('span')`
