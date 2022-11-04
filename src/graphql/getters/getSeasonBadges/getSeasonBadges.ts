@@ -1,4 +1,4 @@
-import { GraphQLClient, gql } from 'graphql-request';
+import { gql, GraphQLClient } from 'graphql-request';
 import { Season } from '../../../hooks/season/types';
 import { BADGE_TYPE_BADGE_VARIANT_MAP, SEASON_BADGE_VARIANTS } from './mappers';
 import { BadgesQueryResponse, BadgeVariant, GetProfileBadgesResponse } from './types';
@@ -43,7 +43,7 @@ export async function getSeasonBadges({
     }
 
     const badges = data.seasonUser.badges;
-    const response = SEASON_BADGE_VARIANTS[seasonId].map((badgeVariant) => {
+    return SEASON_BADGE_VARIANTS[seasonId].map((badgeVariant) => {
       const badge = badges.find((b) => BADGE_TYPE_BADGE_VARIANT_MAP[b.badgeType] === badgeVariant);
       if (!badge) {
         return {
@@ -51,12 +51,12 @@ export async function getSeasonBadges({
         };
       }
       return {
+        badgeResponseRaw: badge,
         variant: BADGE_TYPE_BADGE_VARIANT_MAP[badge.badgeType],
         achievedAt: toMillis(parseInt(badge.awardedTimestamp, 10)),
         claimedAt: toMillis(parseInt(badge.mintedTimestamp, 10)),
       };
     });
-    return response;
   } catch (error) {
     return getDefaultResponse(seasonId);
   }

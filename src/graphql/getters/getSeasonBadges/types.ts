@@ -1,4 +1,5 @@
 export type GetProfileBadgesResponse = {
+  badgeResponseRaw?: BadgeResponse;
   variant: BadgeVariant;
   achievedAt?: number;
   claimedAt?: number;
