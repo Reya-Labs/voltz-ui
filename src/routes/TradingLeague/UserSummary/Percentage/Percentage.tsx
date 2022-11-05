@@ -23,18 +23,16 @@ const PercentageTypography: React.FunctionComponent = ({ children }) => (
 
 export const Percentage: React.FunctionComponent<PercentageProps> = React.memo(({ percentage }) => {
   return (
-    <CountUp
-      start={0}
-      end={percentage}
-      delay={0}
-      duration={0.7}
-      formattingFn={(value) => `${value}%`}
-    >
-      {({ countUpRef }) => (
-        <PercentageTypography>
-          <span ref={countUpRef} />
-        </PercentageTypography>
-      )}
-    </CountUp>
+    <PercentageTypography>
+      <CountUp
+        start={0}
+        end={percentage}
+        delay={0}
+        duration={0.7}
+        formattingFn={(value) => `${value}%`}
+      >
+        {({ countUpRef }) => <span ref={countUpRef} />}
+      </CountUp>
+    </PercentageTypography>
   );
 });
