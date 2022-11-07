@@ -430,16 +430,14 @@ class MellowLpVault {
         [],
         tempOverrides,
       );
-      tempOverrides.gasLimit =
-        gasLimit.mul(2) > BigNumber.from('2000000') ? gasLimit.mul(2) : BigNumber.from('2000000');
+      tempOverrides.gasLimit = getGasBuffer(gasLimit);
     } else {
       const gasLimit = await this.writeContracts.erc20RootVault.estimateGas.deposit(
         [scaledAmount],
         minLPTokens,
         [],
       );
-      tempOverrides.gasLimit =
-        gasLimit.mul(2) > BigNumber.from('2000000') ? gasLimit.mul(2) : BigNumber.from('2000000');
+      tempOverrides.gasLimit = getGasBuffer(gasLimit);
     }
 
     const tx = this.isETH

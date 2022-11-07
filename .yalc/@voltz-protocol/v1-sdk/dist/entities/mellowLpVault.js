@@ -374,14 +374,12 @@ var MellowLpVault = /** @class */ (function () {
                         return [4 /*yield*/, this.writeContracts.ethWrapper.estimateGas.deposit(this.readOnlyContracts.erc20RootVault.address, minLPTokens, [], tempOverrides)];
                     case 7:
                         gasLimit = _b.sent();
-                        tempOverrides.gasLimit =
-                            gasLimit.mul(2) > ethers_1.BigNumber.from('2000000') ? gasLimit.mul(2) : ethers_1.BigNumber.from('2000000');
+                        tempOverrides.gasLimit = (0, constants_1.getGasBuffer)(gasLimit);
                         return [3 /*break*/, 10];
                     case 8: return [4 /*yield*/, this.writeContracts.erc20RootVault.estimateGas.deposit([scaledAmount], minLPTokens, [])];
                     case 9:
                         gasLimit = _b.sent();
-                        tempOverrides.gasLimit =
-                            gasLimit.mul(2) > ethers_1.BigNumber.from('2000000') ? gasLimit.mul(2) : ethers_1.BigNumber.from('2000000');
+                        tempOverrides.gasLimit = (0, constants_1.getGasBuffer)(gasLimit);
                         _b.label = 10;
                     case 10:
                         if (!this.isETH) return [3 /*break*/, 12];

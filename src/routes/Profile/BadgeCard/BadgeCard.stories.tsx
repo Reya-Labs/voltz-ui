@@ -14,5 +14,7 @@ const Template: ComponentStory<typeof BadgeCard> = (args) => <BadgeCard {...args
 export const Default = Template.bind({});
 const args: React.ComponentProps<typeof BadgeCard> = {
   variant: 'leverageCrowbar',
+  disableClaiming: true,
+  claimButtonMode: 'claim',
 };
 Default.args = args;
