@@ -59,8 +59,11 @@
       ]
     ]
   },
+  "resolutions": {
+    "@apollo/client": "3.5.1"
+  },
   "dependencies": {
-    "@apollo/client": "^3.5.10",
+    "@apollo/client": "3.5.1",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@metamask/detect-provider": "^1.2.0",
