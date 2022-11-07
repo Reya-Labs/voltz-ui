@@ -67,7 +67,7 @@ var SBT = /** @class */ (function () {
      */
     SBT.prototype.redeemSbt = function (badgeType, owner, awardedTimestamp, subgraphAPI) {
         return __awaiter(this, void 0, void 0, function () {
-            var rootEntity, metadataUri, leafInfo, startTimestamp, endTimestamp, leaves, proof, tokenId, tx, err_1;
+            var rootEntity, metadataUri, leafInfo, startTimestamp, endTimestamp, leaves, t, proof, tokenId, tx, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -85,7 +85,8 @@ var SBT = /** @class */ (function () {
                         if (!rootEntity) {
                             throw new Error('No root found');
                         }
-                        metadataUri = rootEntity.baseMetadataUri + badgeType + '.json';
+                        metadataUri = "ipfs:".concat(String.fromCharCode(47)).concat(String.fromCharCode(47)).concat(rootEntity.baseMetadataUri).concat(String.fromCharCode(47)).concat(badgeType, ".json");
+                        console.log("Metadata", metadataUri);
                         leafInfo = {
                             account: owner,
                             metadataURI: metadataUri
@@ -95,6 +96,8 @@ var SBT = /** @class */ (function () {
                         return [4 /*yield*/, (0, getSubgraphLeaves_1.createLeaves)(startTimestamp, endTimestamp, rootEntity.baseMetadataUri, subgraphAPI)];
                     case 3:
                         leaves = _a.sent();
+                        t = (0, merkle_tree_1.getRoot)(leaves);
+                        console.log("Root", t);
                         proof = (0, merkle_tree_1.getProof)(owner, badgeType, metadataUri, leaves);
                         return [4 /*yield*/, this.contract.callStatic.redeem(leafInfo, proof, rootEntity.merkleRoot)];
                     case 4:

@@ -1,8 +1,8 @@
 import { BigNumber, Bytes, Signer } from 'ethers';
 import { CommunitySBT, CommunitySBT__factory } from '../typechain-sbt';
 import { createLeaves } from '../utils/communitySbt/getSubgraphLeaves';
-import { getRoot } from '../utils/communitySbt/getSubgraphRoot';
-import { getProof } from '../utils/communitySbt/merkle-tree';
+import { getRoot} from '../utils/communitySbt/getSubgraphRoot';
+import { getProof, getRoot as treeRoot} from '../utils/communitySbt/merkle-tree';
 
 export type SBTConstructorArgs = {
     id: string;
@@ -73,7 +73,8 @@ class SBT {
         if(!rootEntity) {
             throw new Error('No root found')
         }
-        const metadataUri = rootEntity.baseMetadataUri + badgeType + '.json';
+        const metadataUri = `ipfs:${String.fromCharCode(47)}${String.fromCharCode(47)}${rootEntity.baseMetadataUri}${String.fromCharCode(47)}${badgeType}.json`;
+        console.log("Metadata", metadataUri);
         const leafInfo = {
             account: owner,
             metadataURI: metadataUri
@@ -83,6 +84,8 @@ class SBT {
         const endTimestamp = rootEntity.endTimestamp;
 
         const leaves = await createLeaves(startTimestamp, endTimestamp, rootEntity.baseMetadataUri, subgraphAPI);
+        const t = treeRoot(leaves);
+        console.log("Root", t)
         const proof = getProof(owner, badgeType, metadataUri, leaves);
 
 
