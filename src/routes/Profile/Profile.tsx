@@ -14,6 +14,8 @@ import { Season } from '../../hooks/season/types';
 import { ClaimButtonProps } from './ClaimButton/ClaimButton';
 import { getCacheValue, invalidateCache, setCacheValue } from './cache';
 import { CommunitySBT } from '@voltz-protocol/v1-sdk';
+import { getClaimButtonModesForVariants } from './helpers';
+import { DateTime } from 'luxon';
 
 const Profile: React.FunctionComponent = () => {
   const wallet = useWallet();
@@ -27,15 +29,7 @@ const Profile: React.FunctionComponent = () => {
   const [claimButtonBulkMode, setClaimButtonBulkMode] = useState<ClaimButtonProps['mode']>('claim');
   const [claimButtonModes, setClaimButtonModes] = useState<
     Record<BadgeVariant, ClaimButtonProps['mode']>
-  >(
-    SEASON_BADGE_VARIANTS[season.id].reduce(
-      (pV, cI) => ({
-        ...pV,
-        [cI as BadgeVariant]: 'claim',
-      }),
-      {} as Record<BadgeVariant, ClaimButtonProps['mode']>,
-    ),
-  );
+  >(getClaimButtonModesForVariants(SEASON_BADGE_VARIANTS[season.id] as BadgeVariant[], 'claim'));
 
   const fetchBadges = async (seasonId: Season['id'], account: string) => {
     return await getSeasonBadges({
@@ -56,15 +50,32 @@ const Profile: React.FunctionComponent = () => {
     }
     setCollectionBadges(result);
     setClaimButtonBulkMode('claim');
-    setClaimButtonModes(
-      SEASON_BADGE_VARIANTS[season.id].reduce(
-        (pV, cI) => ({
-          ...pV,
-          [cI as BadgeVariant]: 'claim',
-        }),
-        {} as Record<BadgeVariant, ClaimButtonProps['mode']>,
+    const claimedTodayVariants = SEASON_BADGE_VARIANTS[season.id].filter((badgeVariant) =>
+      result!.find(
+        ({ claimedAt, variant }) =>
+          variant === badgeVariant &&
+          claimedAt &&
+          DateTime.now().startOf('day').valueOf() <= claimedAt &&
+          claimedAt <= DateTime.now().endOf('day').valueOf(),
       ),
     );
+    const claimedInThePastVariants = SEASON_BADGE_VARIANTS[season.id].filter((badgeVariant) =>
+      result!.find(
+        ({ claimedAt, variant }) =>
+          variant === badgeVariant &&
+          claimedAt &&
+          claimedAt < DateTime.now().startOf('day').valueOf(),
+      ),
+    );
+    const notClaimedVariants = SEASON_BADGE_VARIANTS[season.id].filter((badgeVariant) =>
+      result!.find(({ claimedAt, variant }) => variant === badgeVariant && !claimedAt),
+    );
+    setClaimButtonModes((p) => ({
+      ...p,
+      ...getClaimButtonModesForVariants(notClaimedVariants as BadgeVariant[], 'claim'),
+      ...getClaimButtonModesForVariants(claimedTodayVariants as BadgeVariant[], 'claimed'),
+      ...getClaimButtonModesForVariants(claimedInThePastVariants as BadgeVariant[], 'claimedDate'),
+    }));
   };
 
   const fetchEnsDetails = async (account: string) => {
@@ -90,7 +101,7 @@ const Profile: React.FunctionComponent = () => {
     const badge = collectionBadges.find((b) => b.variant === variant);
     const subgraphAPI = process.env.REACT_APP_SUBGRAPH_BADGES_URL;
     const owner = wallet.account;
-    if (!badge?.badgeResponseRaw || !owner || !subgraphAPI) {
+    if (!badge?.badgeResponseRaw || badge.claimedAt || !owner || !subgraphAPI) {
       return;
     }
     const communitySBT = new CommunitySBT(params);
@@ -124,19 +135,6 @@ const Profile: React.FunctionComponent = () => {
     }
   }
 
-  const setBulkButtonModes = (variants: BadgeVariant[], mode: ClaimButtonProps['mode']) => {
-    setClaimButtonModes((prev) => ({
-      ...prev,
-      ...variants.reduce(
-        (pV, cI) => ({
-          ...pV,
-          [cI]: mode,
-        }),
-        {},
-      ),
-    }));
-  };
-
   async function handleOnClaimBulkClick(variants: BadgeVariant[]) {
     const params = getSDKInitParams();
     if (!params) {
@@ -152,7 +150,10 @@ const Profile: React.FunctionComponent = () => {
     }
     const communitySBT = new CommunitySBT(params);
     setClaimButtonBulkMode('claiming');
-    setBulkButtonModes(variants, 'claiming');
+    setClaimButtonModes((p) => ({
+      ...p,
+      ...getClaimButtonModesForVariants(variants, 'claiming'),
+    }));
     try {
       const response = await communitySBT.redeemMultipleSbts(
         badges.map((badge) => ({
@@ -171,7 +172,10 @@ const Profile: React.FunctionComponent = () => {
         })
         .filter((v) => v);
 
-      setBulkButtonModes(claimedVariants, 'claimed');
+      setClaimButtonModes((p) => ({
+        ...p,
+        ...getClaimButtonModesForVariants(claimedVariants, 'claimed'),
+      }));
     } catch (err) {
       setClaimButtonBulkMode('claimError');
     }
