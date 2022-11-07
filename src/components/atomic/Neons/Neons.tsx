@@ -1,28 +1,13 @@
 import React from 'react';
-import { ReactComponent as NeonBox1 } from './neon1.svg';
-import { ReactComponent as NeonBox2 } from './neon2.svg';
+import { NeonBox1, NeonBox2 } from './Neons.styled';
 
-export type NeonsProps = {};
-
-const Neons: React.FunctionComponent<NeonsProps> = () => {
+const Neons: React.FunctionComponent = React.memo(() => {
   return (
     <>
-      <NeonBox1
-        style={{
-          position: 'absolute',
-          left: '42.92%',
-          top: '-66px',
-        }}
-      />
-      <NeonBox2
-        style={{
-          position: 'absolute',
-          left: '46.46%',
-          top: '-80px',
-        }}
-      />
+      <NeonBox1 />
+      <NeonBox2 />
     </>
   );
-};
+});
 
 export default Neons;
