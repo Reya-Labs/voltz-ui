@@ -40,6 +40,7 @@ export const BADGE_VARIANT_TRADER_LP_MAP: Record<
   ogMaxBidding: 'trader',
   ogOkBoomer: 'trader',
   ogDryIce: 'lp',
+  mellowLpVault: 'lp',
   // coming soon...
   governorz: '',
   diplomatz: '',
@@ -73,6 +74,7 @@ export const BADGE_VARIANT_TITLE_COPY_MAP: Record<BadgeVariant | ComingSoonBadge
   maxBidding: 'MAX BIDDING',
   okBoomer: 'OK BOOMER',
   dryIce: 'DRY ICE',
+  mellowLpVault: 'MELLOW VAULT OPTIMIZOOOOOR',
   // season OG
   ogDegenStuff: 'DEGEN STUFF',
   ogDeltaDegen: 'DELTA DEGEN',
@@ -115,6 +117,7 @@ export const BADGE_VARIANT_DESCRIPTION_COPY_MAP: Record<BadgeVariant, string> = 
   maxBidding: 'There is only one button on your keyboard: max bidding, max leverage',
   okBoomer: '2x leverage is OK. We all start somewhere, you just started small.',
   dryIce: 'Providing liquidity but below 2x notional.',
+  mellowLpVault: 'Providing liquidity for the highest performance.',
   // season OG
   ogDegenStuff: '500k+ is serious levels of notional. Hats off to the degen king.',
   ogDeltaDegen: 'Only degens can see the delta on that variable position.',
@@ -152,6 +155,7 @@ export const BADGE_VARIANT_TIER_MAP: Record<BadgeVariant | ComingSoonBadges, Bad
   maxBidding: 'easterEgg',
   okBoomer: 'easterEgg',
   dryIce: 'easterEgg',
+  mellowLpVault: 'tier1',
   // season og
   ogDegenStuff: 'tier3',
   ogDeltaDegen: 'tier1',

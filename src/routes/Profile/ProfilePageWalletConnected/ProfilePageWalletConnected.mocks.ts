@@ -59,6 +59,10 @@ export const season1Badges: CollectionBadge[] = [
   {
     variant: 'dryIce',
   },
+  {
+    variant: 'mellowLpVault',
+    achievedAt: new Date('02/02/2022').valueOf(),
+  },
 ];
 export const seasonOGBadges: CollectionBadge[] = [
   {
