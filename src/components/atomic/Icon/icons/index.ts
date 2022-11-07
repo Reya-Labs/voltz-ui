@@ -40,6 +40,7 @@ export { ReactComponent as TopTrader } from './badges/season1/topTrader.svg';
 export { ReactComponent as Yikes } from './badges/season1/yikes.svg';
 export { ReactComponent as SushiRoll } from './badges/season1/sushiRoll.svg';
 export { ReactComponent as WaterHose } from './badges/season1/waterHose.svg';
+export { ReactComponent as MellowLpVault } from './badges/season1/mellowLpVault.svg';
 
 // OG badges
 export { ReactComponent as OGBeWaterMyFriend } from './badges/og/ogBeWaterMyFriend.svg';
