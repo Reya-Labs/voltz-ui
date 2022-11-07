@@ -31,3 +31,4 @@ export { default as FCMSwap } from './fcmSwap';
 export { default as FCMUnwind } from './fcmUnwind';
 export { default as FCMSettlement } from './fcmSettlement';
 export { default as MellowLpVault } from './mellowLpVault';
+export { default as CommunitySBT } from './communitySbt';
