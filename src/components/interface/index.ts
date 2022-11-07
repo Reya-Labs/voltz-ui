@@ -18,6 +18,5 @@ export { default as WalletConnect } from './WalletConnect/WalletConnect';
 export { default as BorrowPortfolioHeader } from './BorrowPortfolioHeader/BorrowPortfolioHeader';
 export { default as PortfolioHeader } from './PortfolioHeader/PortfolioHeader';
 export { default as BorrowForm } from './BorrowForm/BorrowForm';
-export { default as RankingTable } from './RankingTable/RankingTable';
 export { default as EcosystemHeader } from './EcosystemHeader/EcosystemHeader';
 export { default as MellowLPTable } from './MellowLPTable/MellowLPTable';

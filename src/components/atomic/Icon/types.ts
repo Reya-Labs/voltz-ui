@@ -53,6 +53,7 @@ import {
   OGBeWaterMyFriend,
   OGRainmaker,
   OGMoneyMoneyMoney,
+  MellowLpVault,
 } from './icons';
 
 export type Icons =
@@ -93,6 +94,7 @@ export type Icons =
   | 'dryIce'
   | 'noClaimedBadges'
   | 'okBoomer'
+  | 'mellowLpVault'
   // season OG badges
   | 'ogDegenStuff'
   | 'ogDeltaDegen'
@@ -131,6 +133,8 @@ export const iconMap: Record<Icons, ElementType> = {
   'tx-mint': Mint as ElementType,
   'tx-settle': Settle as ElementType,
   'tx-swap': Swap as ElementType,
+  // badges
+  noClaimedBadges: NoClaimedBadges as ElementType,
   // badges season 1
   degenStuff: DegenStuff as ElementType,
   deltaDegen: DeltaDegen as ElementType,
@@ -148,7 +152,7 @@ export const iconMap: Record<Icons, ElementType> = {
   maxBidding: MaxBidding as ElementType,
   okBoomer: OkBoomer as ElementType,
   dryIce: DryIce as ElementType,
-  noClaimedBadges: NoClaimedBadges as ElementType,
+  mellowLpVault: MellowLpVault as ElementType,
   // badges season OG
   ogDegenStuff: OGDegenStuff as ElementType,
   ogDeltaDegen: OGDeltaDegen as ElementType,

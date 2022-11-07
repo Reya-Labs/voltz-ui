@@ -2,7 +2,6 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import { colors } from '@theme';
 import { Grid } from '../../../components/layout/Grid';
-import { Pill } from '../../../components/atomic/Pill';
 import Typography from '../../../components/atomic/Typography/Typography';
 
 export const ContainerBox = styled(Box)`
@@ -24,19 +23,21 @@ export const Subheading = styled(Typography)`
   color: ${colors.lavenderWeb.darken015};
 `;
 
-export const ClaimBox = styled(Box)`
-  margin-top: ${({ theme }) => theme.spacing(6)};
-  background-color: #19152a;
-  border-radius: 8px;
+export const ClaimNotificationBox = styled(Box)`
   padding: ${({ theme }) => theme.spacing(2, 4)};
 `;
 
-export const ClaimTypography = styled(Typography)`
-  color: ${colors.lavenderWeb.darken015};
+export const ClaimNotificationContainer = styled(Box)`
+  background-color: #19152a;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: ${({ theme }) => theme.spacing(6)};
+  border-radius: 8px;
 `;
 
-export const PillBox = styled(Pill)`
-  margin-right: ${({ theme }) => theme.spacing(2)};
+export const ClaimButtonBox = styled(Box)`
+  width: 150px;
 `;
 
 export const ComingSoonBox = styled(Box)`
@@ -96,7 +97,7 @@ export const NoAchievedBadgesTypography = styled(Typography)`
 
 export const AchievedBadgesGrid = styled(Grid)`
   margin-top: ${({ theme }) => theme.spacing(6)};
-  row-gap: ${({ theme }) => theme.spacing(6)};
+  row-gap: ${({ theme }) => theme.spacing(4)};
   column-gap: ${({ theme }) => theme.spacing(4)};
 `;
 

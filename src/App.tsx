@@ -9,6 +9,7 @@ import {
   Trader,
   FixedBorrower,
   Ecosystem,
+  ProfileV1,
 } from '@routes';
 import { AlphaBanner, GweiBar } from '@components/composite';
 import Box from '@mui/material/Box';
@@ -33,7 +34,17 @@ const App = () => {
           <Route path={routes.PRODUCTS} element={<Ecosystem />} />
           <Route path={routes.BORROW_POS} element={<FixedBorrower />} />
           {process.env.REACT_APP_COMMUNITY && process.env.REACT_APP_COMMUNITY !== `UNPROVIDED` && (
-            <Route path={routes.PROFILE} element={<Profile />} />
+            <Route
+              path={routes.PROFILE}
+              element={
+                process.env.REACT_APP_COMMUNITY_P2 &&
+                process.env.REACT_APP_COMMUNITY_P2 !== `UNPROVIDED` ? (
+                  <Profile />
+                ) : (
+                  <ProfileV1 />
+                )
+              }
+            />
           )}
           {process.env.REACT_APP_COMMUNITY && process.env.REACT_APP_COMMUNITY !== `UNPROVIDED` && (
             <Route path={routes.TRADING_LEAGUE} element={<TradingLeague />} />

@@ -6,10 +6,16 @@ import { colors } from '@theme';
 
 export const Container = styled(Box)`
   background-color: #19152a;
-  border-radius: 4px;
+  border-radius: 8px;
   padding: ${({ theme }) => theme.spacing(4)};
   display: flex;
   flex-direction: column;
+  transition: box-shadow 0.25s ease-out 0s, border 0.25s ease-out 0s;
+  box-sizing: border-box;
+
+  &:hover {
+    box-shadow: rgb(62 115 196 / 40%) 0px 0px 35px;
+  }
 `;
 
 export const BadgePillBox = styled(Box)`
@@ -27,12 +33,15 @@ export const TitleSkeleton = styled(SkeletonComponent)`
   line-height: 24px;
 `;
 
+export const TitleBox = styled(Box)`
+  margin-bottom: ${({ theme }) => theme.spacing(2)};
+`;
+
 export const TitleTypography = styled(Typography)`
   color: ${colors.lavenderWeb.base};
   font-size: 18px;
   line-height: 24px;
   font-weight: 700;
-  margin-bottom: ${({ theme }) => theme.spacing(2)};
 `;
 
 export const DescriptionSkeleton = styled(SkeletonComponent)`
@@ -40,9 +49,22 @@ export const DescriptionSkeleton = styled(SkeletonComponent)`
   line-height: 18px;
 `;
 
+export const DescriptionBox = styled(Box)`
+  margin-bottom: ${({ theme }) => theme.spacing(4)};
+`;
+
 export const DescriptionTypography = styled(Typography)`
   color: ${colors.lavenderWeb.base};
   font-size: 12px;
   line-height: 18px;
   font-weight: 400;
+`;
+
+export const ClaimButtonSkeleton = styled(SkeletonComponent)`
+  height: 36px;
+  border-radius: 8px;
+`;
+
+export const ClaimButtonBox = styled(Box)`
+  margin-top: auto;
 `;

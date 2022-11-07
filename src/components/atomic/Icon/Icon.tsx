@@ -34,6 +34,7 @@ const Icon: React.FunctionComponent<IconProps> = ({ name, sx, link, ...props }) 
       case 'okBoomer':
       case 'dryIce':
       case 'noClaimedBadges':
+      case 'mellowLpVault':
       case 'ogDegenStuff':
       case 'ogDeltaDegen':
       case 'ogIrsConnoisseur':

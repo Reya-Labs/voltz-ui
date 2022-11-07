@@ -23,7 +23,13 @@ describe('<ProfilePageWalletConnected />', () => {
     expect(screen.getByText('YOUR BADGE COLLECTION')).not.toBeNull();
     expect(screen.getByText('October 1st 2022')).not.toBeNull();
     expect(screen.getByText('December 31st 2022')).not.toBeNull();
+    expect(screen.getByTestId('ClaimNotification').textContent).toBe(
+      'CLAIMUNAVAILABLE UNTIL THE END OF THE SEASON',
+    );
 
-    expect(screen.getAllByTestId('BadgeCard')).toHaveLength(5);
+    expect(screen.getAllByTestId('BadgeCard')).toHaveLength(6);
+    expect(screen.queryAllByTestId('ClaimButton')).toHaveLength(0);
+
+    // todo: add test for season filter
   });
 });
