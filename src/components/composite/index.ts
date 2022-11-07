@@ -1,7 +1,6 @@
 export { default as AlphaBanner } from './AlphaBanner/AlphaBanner';
 export * from './BulletLabel/BulletLabel';
 export { default as DebouncedIntegerField } from './DebouncedIntegerField/DebouncedIntegerField';
-export * from './ExpectedAPY/ExpectedAPY';
 export type { DebouncedIntegerFieldDetails } from './DebouncedIntegerField/DebouncedIntegerField';
 export * from './GweiBar/GweiBar';
 export * from './HealthFactorText/HealthFactorText';
