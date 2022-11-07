@@ -13,7 +13,6 @@ export { default as MaturityInformation } from './MaturityInformation/MaturityIn
 export { default as Modal } from './Modal/Modal';
 export { default as NotionalAmount } from './NotionalAmount/NotionalAmount';
 export { default as PageTitleDesc } from './PageTitleDesc/PageTitleDesc';
-export { default as PanelAlert } from './PanelAlert/PanelAlert';
 export { default as ProgressBar } from './ProgressBar/ProgressBar';
 export { default as ProtocolInformation } from './ProtocolInformation/ProtocolInformation';
 export { default as RateOptions } from './RateOptions/RateOptions';
