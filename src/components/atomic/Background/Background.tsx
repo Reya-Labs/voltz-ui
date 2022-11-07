@@ -5,8 +5,8 @@ import { Neons } from './Neons/Neons';
 const Background: React.FunctionComponent = ({ children }) => (
   <Box
     sx={{
-    display: 'flex',
-    flexDirection: 'column',
+      display: 'flex',
+      flexDirection: 'column',
       background: 'linear-gradient(152.9deg, #231D40 0%, #151126 52.6%, #201A3A 100%)',
       width: '100vw',
       height: '100vh',
