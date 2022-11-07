@@ -37,6 +37,7 @@ export type BadgeVariant =
   | 'maxBidding'
   | 'okBoomer'
   | 'dryIce'
+  | 'mellowLpVault'
   // season OG
   | 'ogDegenStuff'
   | 'ogDeltaDegen'
