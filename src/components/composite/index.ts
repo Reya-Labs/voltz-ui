@@ -1,5 +1,4 @@
 export { default as AlphaBanner } from './AlphaBanner/AlphaBanner';
-export { default as Autocomplete } from './Autocomplete/Autocomplete';
 export * from './BulletLabel/BulletLabel';
 export { default as DebouncedIntegerField } from './DebouncedIntegerField/DebouncedIntegerField';
 export * from './ExpectedAPY/ExpectedAPY';
