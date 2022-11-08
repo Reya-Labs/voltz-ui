@@ -1,5 +1,6 @@
 import React from 'react';
 import { isUndefined } from 'lodash';
+import { colors } from '@theme';
 
 interface HealthFactorTextProps {
   healthFactor?: number;
@@ -8,15 +9,7 @@ interface HealthFactorTextProps {
 }
 
 export const getHealthTextColor = (healthFactor = 1) => {
-  return healthFactor === 1 ? '#F61067' : healthFactor === 2 ? '#F1D302' : '#00d395';
-};
-
-export const getFixedRateHealthTextColor = (fixedRateHealthFactor = 1) => {
-  return fixedRateHealthFactor === 1
-    ? '#F61067'
-    : fixedRateHealthFactor === 2
-    ? '#F1D302'
-    : '#00d395';
+  return healthFactor === 1 ? colors.vzCustomRed1.base : healthFactor === 2 ? colors.vzCustomYellow1.base : colors.vzCustomGreen2.base;
 };
 
 export const HealthFactorText = ({
