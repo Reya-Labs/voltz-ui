@@ -3,11 +3,7 @@ import Box from '@mui/material/Box';
 import { colors, SystemStyleObject, Theme } from '@theme';
 import { AugmentedAMM, formatCurrency, formatNumber } from '@utilities';
 import { Button, getPositionBadgeVariant, PositionBadge, Typography } from '@components/atomic';
-import {
-  BulletLabel,
-  getHealthTextColor,
-  HealthFactorText,
-} from '@components/composite';
+import { BulletLabel, getHealthTextColor, HealthFactorText } from '@components/composite';
 import { isUndefined } from 'lodash';
 import { PositionInfo } from '@voltz-protocol/v1-sdk/dist/types/entities';
 import { useAgent } from '@hooks';
