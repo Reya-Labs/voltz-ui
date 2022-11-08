@@ -49,7 +49,7 @@ const BorrowPortfolioSummary = ({
     }
 
     const sum = percentageVariable + percentageFixed;
-    const width = isVar ? (sum == 0 ? 100 : percentageVariable) : percentageFixed;
+    const width = isVar ? (sum === 0 ? 100 : percentageVariable) : percentageFixed;
 
     return {
       width: (width * 0.99).toString() + '%',
@@ -154,7 +154,7 @@ const BorrowPortfolioSummary = ({
           <Typography variant="subtitle1" sx={{ ...labelStyles }}>
             <Box sx={{ display: 'flex', justifyContent: 'flex-start', textAlign: 'left' }}>
               {fixedPositionsCount !== undefined ? fixedPositionsCount : '---'}{' '}
-              {fixedPositionsCount == 1 ? 'POSITION' : 'POSITIONS'}
+              {fixedPositionsCount === 1 ? 'POSITION' : 'POSITIONS'}
             </Box>
           </Typography>
         </Grid>
@@ -163,7 +163,7 @@ const BorrowPortfolioSummary = ({
           <Typography variant="body2" sx={{ ...labelStyles }}>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', textAlign: 'right' }}>
               {variablePositionsCount !== undefined ? variablePositionsCount : '---'}{' '}
-              {variablePositionsCount == 1 ? 'POSITION' : 'POSITIONS'}
+              {variablePositionsCount === 1 ? 'POSITION' : 'POSITIONS'}
             </Box>
           </Typography>
         </Grid>
