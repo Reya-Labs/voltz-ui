@@ -20,7 +20,6 @@ import {
 import { ClaimButtonProps, ClaimButton } from '../ClaimButton/ClaimButton';
 
 export type BadgeCardProps = {
-  containerId?: string;
   variant: BadgeVariant;
   loading?: boolean;
   onClaimButtonClick?: ClaimButtonProps['onClick'];
