@@ -174,8 +174,6 @@
     "husky": "^7.0.2",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.4.3",
-    "jest-resolve": "^27.4.2",
-    "jest-watch-typeahead": "^1.0.0",
     "lint-staged": "11.1.2",
     "mini-css-extract-plugin": "^2.4.5",
     "os-browserify": "0.3.0",
