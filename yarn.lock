@@ -9985,11 +9985,6 @@ char-regex@^1.0.2:
   resolved "https://registry.npmjs.org/char-regex/-/char-regex-1.0.2.tgz"
   integrity sha512-kWWXztvZ5SBQV+eRgKFeh8q5sLuZY2+8WUIzlxWVTg+oGwY14qylx1KbKzHd8P6ZYkAg0xyIDU9JMHhyJMZ1jw==
 
-char-regex@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/char-regex/-/char-regex-2.0.0.tgz"
-  integrity sha512-oGu2QekBMXgyQNWPDRQ001bjvDnZe4/zBTz37TMbiKz1NbNiyiH5hRkobe7npRN6GfbGbxMYFck/vQ1r9c1VMA==
-
 character-entities-legacy@^1.0.0:
   version "1.1.4"
   resolved "https://registry.npmjs.org/character-entities-legacy/-/character-entities-legacy-1.1.4.tgz"
@@ -15887,7 +15882,7 @@ jest-regex-util@^26.0.0:
   resolved "https://registry.npmjs.org/jest-regex-util/-/jest-regex-util-26.0.0.tgz"
   integrity sha512-Gv3ZIs/nA48/Zvjrl34bf+oD76JHiGDUxNOVgUjh3j890sblXryjY4rss71fPtD/njchl6PSE2hIhvyWa1eT0A==
 
-jest-regex-util@^27.0.0, jest-regex-util@^27.4.0:
+jest-regex-util@^27.4.0:
   version "27.4.0"
   resolved "https://registry.npmjs.org/jest-regex-util/-/jest-regex-util-27.4.0.tgz"
   integrity sha512-WeCpMpNnqJYMQoOjm1nTtsgbR4XHAk1u00qDoNBQoykM280+/TmgA5Qh5giC1ecy6a5d4hbSsHzpBtu5yvlbEg==
@@ -15901,7 +15896,7 @@ jest-resolve-dependencies@^27.4.6:
     jest-regex-util "^27.4.0"
     jest-snapshot "^27.4.6"
 
-jest-resolve@^27.4.2, jest-resolve@^27.4.6:
+jest-resolve@^27.4.6:
   version "27.4.6"
   resolved "https://registry.npmjs.org/jest-resolve/-/jest-resolve-27.4.6.tgz"
   integrity sha512-SFfITVApqtirbITKFAO7jOVN45UgFzcRdQanOFzjnbd+CACDoyeX7206JyU92l4cRr73+Qy/TlW51+4vHGt+zw==
@@ -16053,20 +16048,7 @@ jest-validate@^27.4.6:
     leven "^3.1.0"
     pretty-format "^27.4.6"
 
-jest-watch-typeahead@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/jest-watch-typeahead/-/jest-watch-typeahead-1.0.0.tgz"
-  integrity sha512-jxoszalAb394WElmiJTFBMzie/RDCF+W7Q29n5LzOPtcoQoHWfdUtHFkbhgf5NwWe8uMOxvKb/g7ea7CshfkTw==
-  dependencies:
-    ansi-escapes "^4.3.1"
-    chalk "^4.0.0"
-    jest-regex-util "^27.0.0"
-    jest-watcher "^27.0.0"
-    slash "^4.0.0"
-    string-length "^5.0.1"
-    strip-ansi "^7.0.1"
-
-jest-watcher@^27.0.0, jest-watcher@^27.4.6:
+jest-watcher@^27.4.6:
   version "27.4.6"
   resolved "https://registry.npmjs.org/jest-watcher/-/jest-watcher-27.4.6.tgz"
   integrity sha512-yKQ20OMBiCDigbD0quhQKLkBO+ObGN79MO4nT7YaCuQ5SM+dkBNWE8cZX0FjU6czwMvWw6StWbe+Wv4jJPJ+fw==
@@ -22625,14 +22607,6 @@ string-length@^4.0.1:
     char-regex "^1.0.2"
     strip-ansi "^6.0.0"
 
-string-length@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.npmjs.org/string-length/-/string-length-5.0.1.tgz"
-  integrity sha512-9Ep08KAMUn0OadnVaBuRdE2l615CQ508kr0XMadjClfYpdCyvrbFp6Taebo8yyxokQ4viUd/xPPUA4FGgUa0ow==
-  dependencies:
-    char-regex "^2.0.0"
-    strip-ansi "^7.0.1"
-
 string-natural-compare@^3.0.1:
   version "3.0.1"
   resolved "https://registry.npmjs.org/string-natural-compare/-/string-natural-compare-3.0.1.tgz"
@@ -22805,7 +22779,7 @@ strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   dependencies:
     ansi-regex "^5.0.1"
 
-strip-ansi@^7.0.0, strip-ansi@^7.0.1:
+strip-ansi@^7.0.0:
   version "7.0.1"
   resolved "https://registry.npmjs.org/strip-ansi/-/strip-ansi-7.0.1.tgz"
   integrity sha512-cXNxvT8dFNRVfhVME3JAe98mkXDYN2O1l7jmcwMnOslDeESg1rF/OZMtK0nRAhiari1unG5cD4jG3rapUAkLbw==
