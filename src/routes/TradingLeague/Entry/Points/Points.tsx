@@ -30,12 +30,10 @@ export const Points: React.FunctionComponent<PointsProps> = ({ points }) => {
   }
 
   return (
-    <CountUp start={0} end={points} delay={0} formattingFn={formatNumber}>
-      {({ countUpRef }) => (
-        <PointsTypography>
-          <span ref={countUpRef} />
-        </PointsTypography>
-      )}
-    </CountUp>
+    <PointsTypography>
+      <CountUp start={0} end={points} delay={0} formattingFn={formatNumber}>
+        {({ countUpRef }) => <span ref={countUpRef} />}
+      </CountUp>
+    </PointsTypography>
   );
 };
