@@ -88,7 +88,7 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
         </>
       )}
 
-      {(mode == SwapFormModes.NEW_POSITION || mode === SwapFormModes.FIX_BORROW) &&
+      {(mode === SwapFormModes.NEW_POSITION || mode === SwapFormModes.FIX_BORROW) &&
         !isUndefined(warningText) && (
           <>
             <Box sx={bottomSpacing}>

@@ -97,9 +97,9 @@ const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({
       : !loadingVarApy &&
         !loadingVar &&
         !loadingVarInToken &&
-        (resultVar || resultVar == 0) &&
+        (resultVar || resultVar === 0) &&
         resultVarApy &&
-        (resultVarInToken || resultVarInToken == 0);
+        (resultVarInToken || resultVarInToken === 0);
     const loadedFixed = !isFixedPositions
       ? true
       : !loadingFixedApr &&
@@ -126,7 +126,7 @@ const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({
         backgroundColor: `primary.dark`,
       };
     }
-    if (variant == 'main') {
+    if (variant === 'main') {
       return {
         backgroundColor: `#19152B`, // this affects the colour of the Pool table rows
         borderRadius: '8px',

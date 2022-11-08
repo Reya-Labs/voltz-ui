@@ -16,8 +16,8 @@ export const findCurrentBorrowPosition = (
     return (
       p.amm.id === selectedAmm.id &&
       p.positionType === 2 &&
-      p.tickLower == -69000 &&
-      p.tickUpper == 69060 &&
+      p.tickLower === -69000 &&
+      p.tickUpper === 69060 &&
       p.variableTokenBalance.toString() !== '0'
     );
   });
