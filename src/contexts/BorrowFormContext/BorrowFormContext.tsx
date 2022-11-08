@@ -118,9 +118,18 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
     validateId.current = (validateId.current + 1) % 666013;
     const currentValidateId = validateId.current;
 
+    updateBorrowSwapInfoAsyncState();
+
     const err: Record<string, string> = {};
     let valid = true;
     let warnText: string | undefined = undefined;
+
+    if (approvalsNeeded) {
+      setErrors(err);
+      setIsValid(valid);
+      setWarningText(warnText);
+      return;
+    }
 
     if (borrowSwapInfoAsyncState.current === 5) {
       valid = false;
@@ -224,8 +233,6 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
   // 4
   // Validate the form after values change
   useEffect(() => {
-    updateBorrowSwapInfoAsyncState();
-
     if (touched.current.length) {
       void validate();
     }
@@ -337,9 +344,13 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
   };
 
   // 1
-  useEffect(() => {
+  const selectedFixedDebtChanged = () => {
     if (isAvailableNotionalInsufficient.current === true) {
       return;
+    }
+
+    if (approvalsNeeded && touched.current.length) {
+      void validate();
     }
 
     if (!approvalsNeeded && !isUndefined(selectedFixedDebt)) {
@@ -356,7 +367,20 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
         });
       }
     }
+  };
+
+  useEffect(() => {
+    void selectedFixedDebtChanged();
   }, [selectedFixedDebt]);
+
+  useEffect(() => {
+    if (!approvalsNeeded && touched.current.length) {
+      void selectedFixedDebtChanged();
+      if (selectedFixedDebt === 0) {
+        void validate();
+      }
+    }
+  }, [approvalsNeeded]);
 
   useEffect(() => {
     updateBorrowSwapInfoAsyncState();
