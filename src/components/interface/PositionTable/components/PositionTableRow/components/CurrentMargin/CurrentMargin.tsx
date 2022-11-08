@@ -8,7 +8,6 @@ import isNull from 'lodash/isNull';
 import { isUndefined } from 'lodash';
 import { formatCurrency, formatNumber } from '@utilities';
 
-import Box from '@mui/material/Box';
 import { colors } from '@theme';
 
 export type CurrentMarginProps = {
@@ -40,22 +39,34 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({
     }
   };
 
-  const getNetMarginLabel = () => (
-    <>
-      Margin
-      {!isUndefined(accruedCashflow) && !isSettled && (
-        <Box
-          component="span"
-          sx={{ color: accruedCashflow >= 0 ? colors.vzCustomGreen1 : colors.vzCustomRed1 }}
+  const getNetMarginLabel = () => {
+    if (isUndefined(accruedCashflow) || isSettled) {
+      return 'Margin';
+    }
+
+    const formattedAccFlow = formatCurrency(Math.abs(accruedCashflow));
+    const accFlowValue = parseFloat(formattedAccFlow);
+
+    return (
+      <>
+        Margin
+        <span
+          style={{
+            color:
+              accFlowValue > 0
+                ? colors.vzCustomGreen1.base
+                : accFlowValue < 0
+                ? colors.vzCustomRed1.base
+                : undefined,
+          }}
         >
           {' '}
-          {accruedCashflow > 0 && '+'}
-          {accruedCashflow < 0 && '-'}
-          {formatCurrency(Math.abs(accruedCashflow))} {token}
-        </Box>
-      )}
-    </>
-  );
+          {accFlowValue > 0 ? '+' : accFlowValue < 0 ? '-' : ''}
+          {formattedAccFlow} {token}
+        </span>
+      </>
+    );
+  };
 
   return (
     <TableCell>
