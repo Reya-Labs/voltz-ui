@@ -9,6 +9,8 @@ export const hasDecimal = (num: number): boolean => !!(num % 1);
  * @param num - the number to process
  * @param forceDecimals - force the showing of decimals (will show .00 on amounts)
  * @param showPlusSign - will add '+' at the start of positive values
+ * @param minDecimals - min decimals when format is applied
+ * @param maxDecimals - max decimals when format is applied
  */
 export const formatCurrency = (
   num: number,
