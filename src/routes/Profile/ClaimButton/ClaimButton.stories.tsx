@@ -27,5 +27,6 @@ const Template: ComponentStory<typeof ClaimButton> = (args) => (
 export const Default = Template.bind({});
 const args: React.ComponentProps<typeof ClaimButton> = {
   mode: 'claim',
+  displayError: true,
 };
 Default.args = args;

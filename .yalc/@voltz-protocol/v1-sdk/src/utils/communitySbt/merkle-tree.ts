@@ -1,6 +1,5 @@
 import { MerkleTree } from "merkletreejs";
 import keccak256 from "keccak256";
-import fs from "fs";
 import { BigNumber, ethers } from "ethers";
 import { LeafEntry } from "./getSubgraphLeaves";
 
@@ -10,7 +9,7 @@ const getLeaf = (address: string, badgeUrl: string): Buffer => {
     ethers.utils
       .solidityKeccak256(
         ["address", "string"],
-        [address, badgeUrl ]
+        [address, badgeUrl.toString()]
       )
       .slice(2),
     "hex"
