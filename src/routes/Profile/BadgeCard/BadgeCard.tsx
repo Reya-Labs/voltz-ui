@@ -87,6 +87,7 @@ export const BadgeCard = forwardRef<BadgeCardHandle, BadgeCardProps>(
                 claimedAt={claimedAt}
                 onClick={onClaimButtonClick}
                 mode={claimButtonMode}
+                displayError={true}
               />
             )}
           </ClaimButtonBox>
