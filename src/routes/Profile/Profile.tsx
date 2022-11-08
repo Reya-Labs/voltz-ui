@@ -177,6 +177,7 @@ const Profile: React.FunctionComponent = () => {
         ...p,
         ...getClaimButtonModesForVariants(claimedVariants, 'claimed'),
       }));
+      setClaimButtonBulkMode(claimedVariants.length === variants.length ? 'claimed' : 'claim');
     } catch (err) {
       setClaimButtonBulkMode('claimError');
       setClaimButtonModes((p) => ({
