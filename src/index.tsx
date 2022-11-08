@@ -18,12 +18,8 @@ import './index.css';
 import store from './store';
 import { VoltzGraphProvider } from './graphql';
 import { ThemeProvider } from './theme';
-import { AgentProvider, WalletProvider } from './contexts';
+import { AgentProvider, AMMsProvider, WalletProvider } from './contexts';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
-import AMMsProvider from './contexts/AMMsContext/AMMsContext';
-
-// the root of the react app
 
 try {
   if (process.env.NODE_ENV !== 'development') {
@@ -54,5 +50,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root'),
 );
-
-reportWebVitals();
