@@ -125,7 +125,6 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
                 collection.map((badge, index) => (
                   <BadgeCard
                     ref={(ref: BadgeCardHandle) => (badgeCardRefs.current[badge.variant] = ref)}
-                    containerId={`BadgeCard-${badge.variant}`}
                     key={`${badge.variant}${index}`}
                     variant={badge.variant as BadgeVariant}
                     loading={loading}
