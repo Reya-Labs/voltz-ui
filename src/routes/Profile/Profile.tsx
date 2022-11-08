@@ -178,6 +178,10 @@ const Profile: React.FunctionComponent = () => {
       }));
     } catch (err) {
       setClaimButtonBulkMode('claimError');
+      setClaimButtonModes((p) => ({
+        ...p,
+        ...getClaimButtonModesForVariants(variants, 'claimError'),
+      }));
     }
   }
 
