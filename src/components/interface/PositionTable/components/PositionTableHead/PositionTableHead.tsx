@@ -6,7 +6,6 @@ import { Button, getPositionBadgeVariant, PositionBadge, Typography } from '@com
 import {
   BulletLabel,
   getHealthTextColor,
-  getFixedRateHealthTextColor,
   HealthFactorText,
 } from '@components/composite';
 import { isUndefined } from 'lodash';
@@ -110,7 +109,7 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
             }}
           >
             <BulletLabel
-              sx={{ color: getFixedRateHealthTextColor(fixedRateHealthFactor) }}
+              sx={{ color: getHealthTextColor(fixedRateHealthFactor) }}
               text={<>Current fixed rate: {formatNumber(currentFixedRate)}%</>}
             />
           </Box>
