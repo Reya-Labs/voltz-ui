@@ -6,6 +6,8 @@ import React from 'react';
 import { colors } from '@theme';
 import { Header } from '../Header/Header';
 import { Entry } from '../Entry/Entry';
+import { Percentage } from './Percentage/Percentage';
+import { ProgressBarBox } from '../../../components/composite/ProgressBar/ProgressBar.styled';
 
 export type RankingUserSummaryProps = {
   seasonNumber: string;
@@ -93,17 +95,7 @@ const UserSummary = ({
             >
               Ends: {formatDateTime(seasonEndDate)}
             </Typography>
-            <Typography
-              sx={{
-                color: colors.lavenderWeb.base,
-                fontSize: '14px',
-                lineHeight: '14px',
-                fontWeight: 400,
-              }}
-              variant="body2"
-            >
-              {percentage}%
-            </Typography>
+            <Percentage percentage={percentage} />
           </Box>
           <Box
             sx={{
@@ -113,13 +105,7 @@ const UserSummary = ({
               marginTop: (theme) => theme.spacing(1),
             }}
           >
-            <Box
-              sx={{
-                width: `${Math.min(percentage, 100)}%`,
-                background: colors.lavenderWeb.base,
-                height: '100%',
-              }}
-            />
+            <ProgressBarBox percentage={Math.min(percentage, 100)} />
           </Box>
         </Box>
       </Box>

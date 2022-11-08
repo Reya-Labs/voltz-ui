@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Typography } from '@components/atomic';
 import { doNothing, elideAddress, formatDateTimeWithOrdinal } from '@utilities';
-import { BadgeCard } from '../BadgeCard/BadgeCard';
+import { BadgeCard, BadgeCardHandle } from '../BadgeCard/BadgeCard';
 import { Page } from '@components/interface';
 import { AchievedBadge, AchievedBadgeProps } from '../AchievedBadge/AchievedBadge';
 import { BADGE_VARIANT_TIER_MAP, COMING_SOON_BADGES } from '../helpers';
@@ -62,6 +62,8 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
     claimButtonModes = {},
     claimButtonBulkMode,
   }) => {
+    const badgeCardRefs = useRef<Record<string, BadgeCardHandle>>({});
+
     const seasonLabel = season.label;
     const seasonStartDateFormatted = formatDateTimeWithOrdinal(season.startDate);
     const seasonEndDateFormatted = formatDateTimeWithOrdinal(season.endDate);
@@ -76,7 +78,9 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
 
     const collection = achievedBadgesMemo.filter((aB) => aB.achievedAt);
     const notClaimedBadges = collection.filter((b) => !b.claimedAt);
-
+    const handleSmoothScroll = React.useCallback((variant: BadgeVariant) => {
+      badgeCardRefs.current[variant]?.scrollIntoView();
+    }, []);
     return (
       <Page>
         <ContainerBox>
@@ -120,6 +124,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
                 collection.length !== 0 &&
                 collection.map((badge, index) => (
                   <BadgeCard
+                    ref={(ref: BadgeCardHandle) => (badgeCardRefs.current[badge.variant] = ref)}
                     key={`${badge.variant}${index}`}
                     variant={badge.variant as BadgeVariant}
                     loading={loading}
@@ -150,7 +155,12 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
             </AchievedBadgesListSubheading>
             <AchievedBadgesListGrid itemsPerRow={1}>
               {achievedBadgesMemo.map((badge, index) => (
-                <AchievedBadge key={`${badge.variant}${index}`} {...badge} loading={loading} />
+                <AchievedBadge
+                  key={`${badge.variant}${index}`}
+                  {...badge}
+                  loading={loading}
+                  onClick={() => handleSmoothScroll(badge.variant as BadgeVariant)}
+                />
               ))}
             </AchievedBadgesListGrid>
           </AchievedBadgesListBox>
