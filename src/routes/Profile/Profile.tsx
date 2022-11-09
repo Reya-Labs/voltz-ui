@@ -172,12 +172,18 @@ const Profile: React.FunctionComponent = () => {
         })
         .filter((v) => v);
 
+      setClaimButtonBulkMode(claimedVariants.length === variants.length ? 'claimed' : 'claim');
       setClaimButtonModes((p) => ({
         ...p,
         ...getClaimButtonModesForVariants(claimedVariants, 'claimed'),
       }));
+      setClaimButtonBulkMode(claimedVariants.length === variants.length ? 'claimed' : 'claim');
     } catch (err) {
       setClaimButtonBulkMode('claimError');
+      setClaimButtonModes((p) => ({
+        ...p,
+        ...getClaimButtonModesForVariants(variants, 'claimError'),
+      }));
     }
   }
 

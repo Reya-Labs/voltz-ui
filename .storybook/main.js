@@ -19,7 +19,7 @@ module.exports = {
     });
     config.module.rules.push({
       test: /\.(sa|sc|c)ss$/,
-      use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
+      use: ['style-loader', 'css-loader'],
       include: path.resolve(__dirname, '../src'),
     });
     config.plugins = [

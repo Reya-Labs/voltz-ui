@@ -2,7 +2,7 @@ import React from 'react';
 import { Typography } from '@components/atomic';
 import { Grid } from '@components/layout';
 import { Box, Button } from '@mui/material';
-import { RankType } from 'src/utilities/data';
+import { RankType } from '../types';
 import { DateTime } from 'luxon';
 import { colors } from '@theme';
 import ChevronRight from '@mui/icons-material/ChevronRight';

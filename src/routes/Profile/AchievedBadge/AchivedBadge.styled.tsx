@@ -12,14 +12,25 @@ export const Skeleton = styled(SkeletonComponent)`
   width: 100%;
 `;
 
-export const ContainerBox = styled(Box)<{ isAchieved: boolean }>`
+export const ContainerBox = styled(Box)`
   background-color: #2b2548;
   border-radius: 8px;
   padding: ${({ theme }) => theme.spacing(2, 2, 2, 4)};
   display: flex;
+  opacity: 0.7;
   flex-direction: row;
-  opacity: ${({ isAchieved }) => (isAchieved ? 1 : 0.7)};
   align-items: center;
+  pointer-events: none;
+`;
+
+export const AchievedContainerBox = styled(ContainerBox)`
+  cursor: pointer;
+  pointer-events: auto;
+  opacity: 1;
+
+  &:hover {
+    box-shadow: rgb(62 115 196 / 40%) 0px 0px 10px;
+  }
 `;
 
 export const BadgePillBox = styled(Box)`

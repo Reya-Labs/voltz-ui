@@ -61,7 +61,7 @@ export const ClaimButton: React.FunctionComponent<ClaimButtonProps> = ({
         )}
         {mode === 'claiming' && <BouncedLoading />}
         {mode === 'claimedDate' && claimedAt && (
-          <ClaimedAtTypography>${formatPOSIXTimestamp(claimedAt)}</ClaimedAtTypography>
+          <ClaimedAtTypography>{formatPOSIXTimestamp(claimedAt)}</ClaimedAtTypography>
         )}
       </ButtonUI>
       {mode === 'claimError' && displayError && (

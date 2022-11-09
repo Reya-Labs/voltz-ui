@@ -38,11 +38,11 @@ export const ClaimSection: React.FunctionComponent<ClaimSectionProps> = ({
               pillText={claimButtonBulkMode === 'claimError' ? 'ERROR' : 'BULK CLAIM'}
               text={
                 claimButtonBulkMode === 'claimError' ? (
+                  'ERROR WHEN CLAIMING, TRY AGAIN'
+                ) : (
                   <>
                     YOU HAVE GOT <BoldText>{notClaimedBadgesCount} BADGES</BoldText> READY TO CLAIM
                   </>
-                ) : (
-                  'ERROR WHEN CLAIMING, TRY AGAIN'
                 )
               }
             />
