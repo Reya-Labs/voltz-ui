@@ -775,7 +775,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
 
         if (remainingMargin < minRequiredMargin) {
           valid = false;
-          addError(err, 'margin', 'Withdrawl amount too high');
+          addError(err, 'margin', 'Withdrawal amount too high');
         }
       }
     }
