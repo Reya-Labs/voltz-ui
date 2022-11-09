@@ -1,4 +1,4 @@
-import { useBalance, useTokenApproval, useWallet } from '@hooks';
+import { useBalance, useCurrentPositionMarginRequirement, useTokenApproval, useWallet } from '@hooks';
 import { useAMMContext, usePositionContext, Agents } from '@contexts';
 import {
   AugmentedAMM,
@@ -10,6 +10,7 @@ import {
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { debounce, isUndefined } from 'lodash';
 import { PositionInfo } from '@voltz-protocol/v1-sdk';
+import { BigNumber } from 'ethers';
 
 export enum MintBurnFormModes {
   NEW_POSITION = 'NEW_POSITION',
@@ -79,6 +80,7 @@ export type MintBurnFormContext = {
   action: MintBurnFormActions;
   approvalsNeeded: boolean;
   balance?: number;
+  currentPositionMarginRequirement?: number;
   errors: Record<string, string>;
   hintState: MintBurnFormHintStates;
   isAddingLiquidity: boolean;
@@ -87,7 +89,7 @@ export type MintBurnFormContext = {
   isRemovingMargin: boolean;
   isTradeVerified: boolean;
   isValid: boolean;
-  minRequiredMargin: {
+  mintMinimumMarginRequirement: {
     errorMessage?: string;
     loading: boolean;
     result?: number;
@@ -121,6 +123,8 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   const { account } = useWallet();
   const { amm: poolAmm, mintMinimumMarginRequirement } = useAMMContext();
   const { position, amm: positionAmm, positionInfo } = usePositionContext();
+
+  const currentPositionMarginRequirement = useCurrentPositionMarginRequirement(poolAmm);
 
   const defaultFixedHigh =
     position?.fixedRateUpper.toNumber() ?? defaultValues.fixedHigh ?? undefined;
@@ -490,6 +494,27 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
       }
     }
 
+    // Check that the input margin is >= minimum required margin if removing margin
+    if (
+      position &&
+      !isUndefined(currentPositionMarginRequirement) &&
+      marginAction === MintBurnFormMarginAction.REMOVE
+    ) {
+      if (!isUndefined(margin) && margin !== 0) {
+        const originalMargin = (positionAmm as AugmentedAMM).descale(
+          BigNumber.from(position.margin.toString()),
+        );
+        const remainingMargin = originalMargin - margin;
+
+        if (remainingMargin < currentPositionMarginRequirement) {
+          valid = false;
+          if (touched.current.includes('margin')) {
+            err['margin'] = 'Withdrawal amount too high';
+          }
+        }
+      }
+    }
+
     setErrors(err);
     setIsValid(valid);
     return valid;
@@ -546,6 +571,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
     action,
     approvalsNeeded,
     balance,
+    currentPositionMarginRequirement,
     errors,
     hintState: getHintState(),
     isAddingLiquidity,
@@ -554,7 +580,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
     isRemovingMargin,
     isTradeVerified,
     isValid,
-    minRequiredMargin: {
+    mintMinimumMarginRequirement: {
       errorMessage: mintMinimumMarginRequirement.errorMessage || undefined,
       loading: mintMinimumMarginRequirement.loading,
       result: mintMinimumMarginRequirement.result ?? undefined,

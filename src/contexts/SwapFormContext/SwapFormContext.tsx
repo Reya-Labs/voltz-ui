@@ -16,7 +16,7 @@ import {
   GetInfoType,
   useAgent,
   useBalance,
-  useMinRequiredMargin,
+  useCurrentPositionMarginRequirement,
   useTokenApproval,
   useWallet,
 } from '@hooks';
@@ -84,6 +84,7 @@ export type SwapFormContext = {
   action: SwapFormActions;
   approvalsNeeded: boolean;
   balance?: number;
+  currentPositionMarginRequirement?: number;
   errors: Record<string, string>;
   hintState: SwapFormSubmitButtonHintStates;
   isAddingMargin: boolean;
@@ -91,7 +92,6 @@ export type SwapFormContext = {
   isRemovingMargin: boolean;
   isTradeVerified: boolean;
   isValid: boolean;
-  minRequiredMargin?: number;
   mode: SwapFormModes;
   setLeverage: (value: SwapFormState['leverage'], resetToDefaultLeverage?: boolean) => void;
   setMargin: (value: SwapFormState['margin']) => void;
@@ -148,7 +148,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   const [leverage, setLeverage] = useState<SwapFormState['leverage']>(defaultLeverage);
   const [margin, setMargin] = useState<SwapFormState['margin']>(defaultMargin);
   const [marginAction, setMarginAction] = useState<SwapFormMarginAction>(defaultMarginAction);
-  const minRequiredMargin = useMinRequiredMargin(poolAmm);
+  const currentPositionMarginRequirement = useCurrentPositionMarginRequirement(poolAmm);
   const [notional, setNotional] = useState<SwapFormState['notional']>(defaultNotional);
   const [partialCollateralization, setPartialCollateralization] = useState<boolean>(
     defaultPartialCollateralization,
@@ -224,7 +224,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     // });
   }, [agent]);
 
-  // cache the minRequiredMargin from swapInfo
+  // cache the margin requirement from swapInfo
   // cache the available notional from swapInfo
   useEffect(() => {
     if (swapInfo.result) {
@@ -764,7 +764,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     // Check that the input margin is >= minimum required margin if removing margin
     if (
       position &&
-      !isUndefined(minRequiredMargin) &&
+      !isUndefined(currentPositionMarginRequirement) &&
       marginAction === SwapFormMarginAction.REMOVE
     ) {
       if (!isUndefined(margin) && margin !== 0) {
@@ -773,7 +773,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
         );
         const remainingMargin = originalMargin - margin;
 
-        if (remainingMargin < minRequiredMargin) {
+        if (remainingMargin < currentPositionMarginRequirement) {
           valid = false;
           addError(err, 'margin', 'Withdrawal amount too high');
         }
@@ -850,7 +850,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     isTradeVerified,
     isRemovingMargin,
     isValid,
-    minRequiredMargin,
+    currentPositionMarginRequirement,
     mode,
     setLeverage: updateLeverage,
     setMargin: updateMargin,

@@ -43,7 +43,7 @@ const NewPositionTemplate: ComponentStory<typeof MintBurnInfo> = (args) => (
 );
 const NewPositionMintBurnForm: React.FunctionComponent = (args) => {
   const balance = 100000;
-  const minRequiredMargin = 100;
+  const mintMinimumMarginRequirement = 100;
   const form = useMintBurnForm();
 
   return (
@@ -51,8 +51,8 @@ const NewPositionMintBurnForm: React.FunctionComponent = (args) => {
       {...args}
       balance={balance}
       formState={form.state}
-      minRequiredMarginLoading={false}
-      minRequiredMargin={minRequiredMargin}
+      mintMinimumMarginRequirementLoading={false}
+      mintMinimumMarginRequirement={mintMinimumMarginRequirement}
       mode={form.mode}
       underlyingTokenName={'GIL'}
     />

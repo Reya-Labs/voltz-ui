@@ -11,7 +11,7 @@ export { default as useAsyncFunction } from './useAsyncFunction';
 export type { UseAsyncFunctionResult } from './useAsyncFunction';
 export { default as useDebounce } from './useDebounce';
 export { default as useDispatch } from './useDispatch';
-export { default as useMinRequiredMargin } from './useMinRequiredMargin';
+export { default as useCurrentPositionMarginRequirement } from './useCurrentPositionMarginRequirement';
 export { default as usePositions } from './usePositions';
 export { default as useBorrowPositions } from './useBorrowPositions';
 export { default as useSelector } from './useSelector';

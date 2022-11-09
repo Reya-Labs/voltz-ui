@@ -150,8 +150,8 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
       />
       <SwapInfo
         balance={form.selectedFixedDebt}
+        currentPositionMarginRequirement={form.margin}
         formAction={SwapFormActions.SWAP}
-        minRequiredMargin={form.margin}
         mode={SwapFormModes.FIX_BORROW}
         positionMargin={form.margin}
         protocol={protocol()}
