@@ -94,6 +94,9 @@ const Profile: React.FunctionComponent = () => {
   };
 
   async function handleOnClaimButtonClick(variant: BadgeVariant) {
+    if(claimButtonBulkMode === 'claiming') {
+        return;
+    }
     const params = getSDKInitParams();
     if (!params) {
       return;
