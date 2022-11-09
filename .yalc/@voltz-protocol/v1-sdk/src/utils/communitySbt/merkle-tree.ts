@@ -9,7 +9,7 @@ const getLeaf = (address: string, badgeUrl: string): Buffer => {
     ethers.utils
       .solidityKeccak256(
         ["address", "string"],
-        [address, badgeUrl.toString()]
+        [address, badgeUrl]
       )
       .slice(2),
     "hex"
