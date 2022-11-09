@@ -12,7 +12,7 @@ import { FormPanel } from '@components/interface';
 export type SwapInfoProps = {
   balance?: number;
   formAction: SwapFormActions;
-  minRequiredMargin?: number;
+  currentPositionMarginRequirement?: number;
   mode: SwapFormModes;
   positionMargin?: number;
   protocol?: string;
@@ -32,7 +32,7 @@ export type SwapInfoProps = {
 const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
   balance,
   formAction,
-  minRequiredMargin,
+  currentPositionMarginRequirement,
   mode,
   positionMargin,
   protocol,
@@ -117,7 +117,7 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
         )}
 
       {mode === SwapFormModes.EDIT_MARGIN &&
-        !isUndefined(minRequiredMargin) &&
+        !isUndefined(currentPositionMarginRequirement) &&
         !isUndefined(positionMargin) && (
           <>
             {/* {mode !== SwapFormModes.EDIT_MARGIN && (
@@ -130,7 +130,7 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
             <Box sx={bottomSpacing}>
               <SwapSummaryEditMargin
                 balance={balance}
-                minRequiredMargin={minRequiredMargin}
+                currentPositionMarginRequirement={currentPositionMarginRequirement}
                 positionMargin={positionMargin}
                 underlyingTokenName={underlyingTokenName}
               />

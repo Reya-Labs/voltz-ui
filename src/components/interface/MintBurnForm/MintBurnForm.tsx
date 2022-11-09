@@ -26,6 +26,7 @@ import { SystemStyleObject, Theme } from '@theme';
 export type MintBurnFormProps = {
   approvalsNeeded?: boolean;
   balance?: number;
+  currentPositionMarginRequirement?: number;
   endDate?: DateTime;
   errors: Record<string, string>;
   formState: MintBurnFormState;
@@ -57,6 +58,7 @@ export type MintBurnFormProps = {
 const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   approvalsNeeded = false,
   balance,
+  currentPositionMarginRequirement,
   endDate,
   errors,
   formState,
@@ -161,6 +163,7 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
         <Box sx={bottomSpacing}>
           <MarginAmount
             balance={balance}
+            currentPositionMarginRequirement={currentPositionMarginRequirement}
             underlyingTokenName={underlyingTokenName}
             maxMargin={maxMargin}
             margin={formState.margin}

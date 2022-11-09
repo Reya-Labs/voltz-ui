@@ -6,10 +6,11 @@ import MaskedIntegerField from '../MaskedIntegerField/MaskedIntegerField';
 import InputTokenLabel from '../InputTokenLabel/InputTokenLabel';
 import { formatCurrency, toUSFormat } from '@utilities';
 import { HealthFactorText } from '@components/composite';
-import { useSwapFormContext, usePositionContext } from '@contexts';
+import { usePositionContext } from '@contexts';
 
 export type MarginAmountProps = {
   balance?: number;
+  currentPositionMarginRequirement?: number;
   underlyingTokenName?: string;
   defaultMargin?: number;
   healthFactor?: number;
@@ -27,6 +28,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
   defaultMargin,
   healthFactor,
   margin,
+  currentPositionMarginRequirement,
   isAdditional,
   isEditing,
   onChangeMargin,
@@ -39,7 +41,6 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
     }
   };
 
-  const swapForm = useSwapFormContext();
   const positionForm = usePositionContext();
 
   const divisor = underlyingTokenName?.includes('USD') ? 1e6 : 1e18;
@@ -47,7 +48,7 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
   const marginAmount = !isUndefined(portfolioMarginInfo)
     ? parseInt(portfolioMarginInfo) / divisor
     : defaultMargin;
-  const initialMarginRequirement = swapForm?.minRequiredMargin || defaultMargin;
+  const initialMarginRequirement = currentPositionMarginRequirement || defaultMargin;
 
   const maxAmountToWithdraw =
     !isUndefined(marginAmount) && !isUndefined(initialMarginRequirement)
@@ -59,12 +60,6 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
 
   const formattedBalance = !isUndefined(balance) ? formatCurrency(balance) : 'checking...';
   const [inputValue, setInputValue] = useState<string | undefined>(defaultInputValue());
-
-  useState(() => {
-    if (isEditing) {
-      onChangeMargin(0);
-    }
-  });
 
   const handleChange = useCallback(
     (newValue: string | undefined) => {
