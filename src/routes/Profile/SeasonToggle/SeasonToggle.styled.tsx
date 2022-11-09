@@ -17,6 +17,10 @@ export const ToggleButton = styled(ToggleButtonComponent)`
     background: transparent;
   }
 
+  &.MuiToggleButtonGroup-grouped:hover {
+    background: #251F3F;
+  }
+
   &.Mui-selected {
     background: #2b2548;
   }
