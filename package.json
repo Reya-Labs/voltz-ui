@@ -7,6 +7,7 @@
     "build": "node scripts/build.js",
     "build-storybook": "build-storybook",
     "generate": "graphql-codegen --config graphql-codegen.yaml",
+    "ts:check": "tsc --noEmit",
     "lint:check": "eslint 'src/**/*.{ts,tsx}'",
     "lint:fix": "eslint --fix 'src/**/*.{ts,tsx}'",
     "prettier:check": "prettier --check './src/**/*.{ts,tsx}' './scripts/**/*.js' './.storybook/**/*.js'",
