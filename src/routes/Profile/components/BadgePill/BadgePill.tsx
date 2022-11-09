@@ -10,8 +10,8 @@ const TIER_PILL_VARIANT_MAP: Record<BadgeTier, PillProps['variant']> = {
   tier1: 'wildStrawberry',
   tier2: 'orangeYellow',
   tier3: 'skyBlueCrayola',
-  easterEgg: 'vzCustomPink',
-  legendary: 'vzCustomMarine',
+  easterEgg: 'libertyDark',
+  legendary: 'liberty',
 };
 
 export const BadgePill: React.FunctionComponent<{

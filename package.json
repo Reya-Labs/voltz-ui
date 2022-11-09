@@ -149,7 +149,6 @@
     "@walletconnect/web3-provider": "1.8.0",
     "aws-amplify": "4.3.44",
     "axios": "0.27.2",
-    "chroma-js": "2.1.2",
     "copy-to-clipboard": "3.3.3",
     "ethereumjs-abi": "0.6.8",
     "ethers": "5.5.4",

@@ -75,14 +75,14 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
       case 1: {
         return {
           ...base,
-          border: `1px solid ${colors.skyBlueCrayola.base}`,
+          border: `1px solid ${colors.skyBlueCrayola}`,
         };
       }
       case 2:
       case 3: {
         return {
           ...base,
-          border: `1px solid ${colors.lavenderWeb.base}`,
+          border: `1px solid ${colors.lavenderWeb}`,
         };
       }
     }

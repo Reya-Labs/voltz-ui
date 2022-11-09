@@ -73,7 +73,7 @@ export const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
               component={'hr'}
               sx={{
                 border: 'none',
-                borderBottom: `1px solid ${colors.lavenderWeb.darken045}`,
+                borderBottom: `1px solid ${colors.lavenderWeb8}`,
                 margin: (theme) => `${theme.spacing(4)} 0`,
               }}
             />

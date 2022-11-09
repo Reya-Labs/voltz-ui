@@ -1,8 +1,7 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
-
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 import colors from './colors';
-import { BaseColors, ColorSet, ColorVariations } from './types';
+import { BaseColors } from './types';
 
 const ColorTile: React.FunctionComponent<{ name: string; value: string }> = ({ name, value }) => (
   <div
@@ -27,20 +26,6 @@ export default {
   argTypes: {},
 } as ComponentMeta<typeof ColorTile>;
 
-const ColorSetTile: React.FunctionComponent<{
-  color: BaseColors;
-  colorSet: ColorSet;
-}> = ({ color, colorSet }) => (
-  <React.Fragment>
-    {Object.keys(colorSet).map((colorSetKey) => (
-      <ColorTile
-        key={`colors.${color}.${colorSetKey}`}
-        name={`colors.${color}.${colorSetKey}`}
-        value={colors[color][colorSetKey as ColorVariations]}
-      />
-    ))}
-  </React.Fragment>
-);
 const AllColorsTemplate: ComponentStory<typeof React.Fragment> = () => (
   <div
     style={{
@@ -60,7 +45,7 @@ const AllColorsTemplate: ComponentStory<typeof React.Fragment> = () => (
     {Object.keys(colors)
       .sort()
       .map((c) => (
-        <ColorSetTile key={c} color={c as BaseColors} colorSet={colors[c as BaseColors]} />
+        <ColorTile key={`colors.${c}`} name={`colors.${c}`} value={colors[c as BaseColors]} />
       ))}
   </div>
 );

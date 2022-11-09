@@ -32,20 +32,20 @@ export const inputStyles = ({
         borderColor: (theme) => {
           if (error) return theme.palette.error.darken010;
           if (disabled) return 'transparent';
-          return colors.vzGreyDarkish2.base;
+          return colors.lavenderWeb5;
         },
         color: (theme) => {
           if (error) return theme.palette.error.base;
-          if (disabled) return colors.vzGreyDarkish2.base;
-          if (dynamic) return colors.lavenderWeb.darken010;
-          return colors.lavenderWeb.darken015;
+          if (disabled) return colors.lavenderWeb5;
+          if (dynamic) return colors.lavenderWeb1;
+          return colors.lavenderWeb2;
         },
         '::placeholder': {
           color: (theme) => {
             if (error) return theme.palette.error.base;
-            if (disabled) return colors.vzGreyDarkish2.base;
-            if (dynamic) return colors.lavenderWeb.darken010;
-            return colors.lavenderWeb.darken015;
+            if (disabled) return colors.lavenderWeb5;
+            if (dynamic) return colors.lavenderWeb1;
+            return colors.lavenderWeb2;
           },
         },
       },
@@ -55,16 +55,16 @@ export const inputStyles = ({
         outline: 'none',
         borderColor: (theme) => {
           if (error) return theme.palette.error.darken010;
-          return colors.lavenderWeb.darken015;
+          return colors.lavenderWeb2;
         },
         color: (theme) => {
           if (error) return theme.palette.error.base;
-          return colors.lavenderWeb.base;
+          return colors.lavenderWeb;
         },
         '::placeholder': {
           color: (theme) => {
             if (error) return theme.palette.error.base;
-            return colors.lavenderWeb.base;
+            return colors.lavenderWeb;
           },
         },
       },
@@ -77,8 +77,8 @@ export const inputStyles = ({
   const childElementStyles: SystemStyleObject<Theme> = {
     color: (theme) => {
       if (error) return theme.palette.error.base;
-      if (dynamic) return colors.lavenderWeb.darken010;
-      return colors.vzGreyDarkish2.base;
+      if (dynamic) return colors.lavenderWeb1;
+      return colors.lavenderWeb5;
     },
     fontFamily: 'PixelOperatorMono',
     transition: 'border-color 0.1s linear, color 0.1s linear',
@@ -105,9 +105,9 @@ export const inputStyles = ({
       transition: 'color 0.1s linear',
       color: (theme) => {
         if (error) return theme.palette.error.base;
-        if (disabled) return colors.vzGreyDarkish2.base;
-        if (dynamic) return colors.lavenderWeb.darken010;
-        return colors.vzGreyDarkish2.base;
+        if (disabled) return colors.lavenderWeb5;
+        if (dynamic) return colors.lavenderWeb1;
+        return colors.lavenderWeb5;
       },
     },
     '::-webkit-outer-spin-button': {
@@ -185,7 +185,7 @@ export const inputStyles = ({
       fontSize: `${subtextSize || 14}px`,
       color: (theme) => {
         if (error) return theme.palette.error.base;
-        return colors.lavenderWeb.darken020;
+        return colors.lavenderWeb3;
       },
     },
   };

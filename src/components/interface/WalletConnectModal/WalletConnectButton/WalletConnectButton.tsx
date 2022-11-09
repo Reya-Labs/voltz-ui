@@ -38,7 +38,7 @@ export const WalletConnectButton: React.FunctionComponent<WalletConnectButtonPro
         <Button
           startIcon={
             <CircleIcon
-              sx={{ width: 4, height: 4, borderRadius: 200, color: colors.wildStrawberry.base }}
+              sx={{ width: 4, height: 4, borderRadius: 200, color: colors.wildStrawberry }}
             />
           }
           sx={{ zIndex: 1, left: (theme) => theme.spacing(-2), fontSize: 16 }}
@@ -77,7 +77,7 @@ export const WalletConnectButton: React.FunctionComponent<WalletConnectButtonPro
     <Button
       startIcon={
         <CircleIcon
-          sx={{ width: 4, height: 4, borderRadius: 200, color: colors.wildStrawberry.base }}
+          sx={{ width: 4, height: 4, borderRadius: 200, color: colors.wildStrawberry }}
         />
       }
       sx={{ marginLeft: (theme) => theme.spacing(4), fontSize: 16 }}

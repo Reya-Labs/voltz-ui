@@ -51,9 +51,9 @@ export const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({
           style={{
             color:
               accruedCashflow > 0
-                ? colors.vzCustomGreen1.base
+                ? colors.skyBlueCrayola
                 : accruedCashflow < 0
-                ? colors.vzCustomRed1.base
+                ? colors.wildStrawberry
                 : undefined,
           }}
         >

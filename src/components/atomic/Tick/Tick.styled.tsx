@@ -43,7 +43,7 @@ export const IconAnimated = styled('div')`
 `;
 
 const Leg = styled('svg')`
-  fill: ${colors.skyBlueCrayola.darken015};
+  fill: ${colors.skyBlueCrayola2};
   animation-fill-mode: forwards;
   animation-duration: 750ms;
   animation-iteration-count: 1;

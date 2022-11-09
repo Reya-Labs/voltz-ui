@@ -11,7 +11,7 @@ export type PortfolioHeaderBoxProps = {
 };
 
 const valueBoxStyles: SystemStyleObject<Theme> = {
-  background: colors.lavenderWeb.darken040,
+  background: colors.lavenderWeb7,
   padding: (theme) => `${theme.spacing(2)} ${theme.spacing(4)}`,
   borderRadius: '4px',
   marginTop: (theme) => theme.spacing(2),
@@ -19,7 +19,7 @@ const valueBoxStyles: SystemStyleObject<Theme> = {
 };
 
 const valueBoxTextStyles: SystemStyleObject<Theme> = {
-  color: colors.skyBlueCrayola.base,
+  color: colors.skyBlueCrayola,
   fontSize: '16px',
   lineHeight: '0.9',
   textTransform: 'uppercase',

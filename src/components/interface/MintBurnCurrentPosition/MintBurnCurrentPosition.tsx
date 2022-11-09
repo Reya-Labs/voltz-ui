@@ -48,17 +48,17 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
 
       switch (position?.healthFactor) {
         case 1: {
-          healthColour = colors.vzCustomRed1.base;
+          healthColour = colors.wildStrawberry;
           text = 'DANGER';
           break;
         }
         case 2: {
-          healthColour = colors.vzCustomYellow1.base;
+          healthColour = colors.orangeYellow;
           text = 'WARNING';
           break;
         }
         case 3: {
-          healthColour = colors.vzCustomGreen2.base;
+          healthColour = colors.skyBlueCrayola;
           text = 'HEALTHY';
           break;
         }

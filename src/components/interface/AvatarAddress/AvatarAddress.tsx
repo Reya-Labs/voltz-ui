@@ -76,7 +76,7 @@ export const AvatarAddress: FunctionComponent<{
           )}
           <Typography
             sx={{
-              color: colors.lavenderWeb.base,
+              color: colors.lavenderWeb,
               fontSize: '18px',
               lineHeight: '24px',
               fontWeight: 400,

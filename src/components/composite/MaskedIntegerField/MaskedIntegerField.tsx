@@ -37,7 +37,7 @@ const textStyles: SystemStyleObject<Theme> = {
 };
 const errorLabelStyles: SystemStyleObject<Theme> = {
   ...textStyles,
-  color: colors.wildStrawberry.base,
+  color: colors.wildStrawberry,
   marginTop: (theme) => theme.spacing(1),
 };
 
@@ -91,7 +91,7 @@ export const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps
             <Typography
               sx={{
                 ...textStyles,
-                color: colors.lavenderWeb.darken010,
+                color: colors.lavenderWeb1,
                 marginBottom: (theme) => theme.spacing(2),
               }}
               variant="body2"

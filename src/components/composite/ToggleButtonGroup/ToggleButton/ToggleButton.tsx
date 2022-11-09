@@ -88,9 +88,9 @@ export const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
   const stateStyleOverrides = (): SystemStyleObject<Theme> => {
     if (!selected) {
       return {
-        backgroundColor: colors.vzGreyDarker.base,
-        color: colors.vzGreyDark.base,
-        borderColor: colors.vzGreyDark.base,
+        backgroundColor: colors.lavenderWeb8,
+        color: colors.lavenderWeb6,
+        borderColor: colors.lavenderWeb6,
       };
     }
 

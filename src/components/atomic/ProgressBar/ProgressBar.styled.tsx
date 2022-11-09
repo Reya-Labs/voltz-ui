@@ -15,7 +15,7 @@ const grow = (percentage: number) => keyframes`
 
 export const ProgressBarPercentageBox = styled(Box)<{ percentage: number }>`
   width: 0;
-  background: ${colors.lavenderWeb.base};
+  background: ${colors.lavenderWeb};
   height: 100%;
   animation: ${({ percentage }) => grow(percentage)} 700ms ease-out forwards;
 `;

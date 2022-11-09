@@ -9,7 +9,7 @@ const bounce = keyframes`
   }
   50% {
     transform: translate(0, -5px);
-    background: ${colors.skyBlueCrayola.darken015};
+    background: ${colors.skyBlueCrayola2};
   }
   80%,
   100% {
@@ -28,7 +28,7 @@ export const Container = styled('div')`
     width: 2px;
     float: left;
     margin: 0 2px;
-    background: ${colors.lavenderWeb.darken015};
+    background: ${colors.lavenderWeb2};
   }
   i:nth-of-type(1) {
     z-index: 1;

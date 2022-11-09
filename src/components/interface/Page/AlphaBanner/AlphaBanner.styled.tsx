@@ -42,13 +42,13 @@ const BannerTypography = styled(Typography)`
 `;
 
 export const BannerTypographyWildStrawberry = styled(BannerTypography)`
-  color: ${colors.wildStrawberry.base};
+  color: ${colors.wildStrawberry};
 `;
 
 export const BannerTypographyUltramarineBlue = styled(BannerTypography)`
-  color: ${colors.ultramarineBlue.base};
+  color: ${colors.ultramarineBlue};
 `;
 
 export const BannerTypographySkyBlueCrayola = styled(BannerTypography)`
-  color: ${colors.skyBlueCrayola.base};
+  color: ${colors.skyBlueCrayola};
 `;

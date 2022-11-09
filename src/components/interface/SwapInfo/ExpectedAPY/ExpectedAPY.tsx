@@ -119,8 +119,8 @@ export const ExpectedAPY = ({
       <Box sx={{ marginBottom: (theme) => theme.spacing(4) }}>
         <Typography
           label={<Typography variant="h4">P&L Calculator</Typography>}
-          sx={{ color: colors.lavenderWeb.darken020, fontSize: '14px' }}
           variant="body1"
+          sx={{ color: colors.lavenderWeb3, fontSize: '14px' }}
         >
           Use the P&L Calculator to compute your expected cash flow, and implied APY, for a range of
           simulated market conditions. To begin, adjust the variable rate to see how your expected
@@ -132,7 +132,7 @@ export const ExpectedAPY = ({
           display: 'flex',
           flexDirection: 'row',
           borderRadius: '8px',
-          background: colors.lavenderWeb.darken045,
+          background: colors.lavenderWeb8,
           maxWidth: '340px',
           width: '340px',
         }}
@@ -189,7 +189,7 @@ export const ExpectedAPY = ({
           <Typography
             fontSize={12}
             sx={{
-              color: colors.lavenderWeb.darken010,
+              color: colors.lavenderWeb1,
             }}
             variant="body2"
           >

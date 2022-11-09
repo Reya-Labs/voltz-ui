@@ -21,7 +21,7 @@ export const Subheading = styled(Typography)`
   font-size: 14px;
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
-  color: ${colors.lavenderWeb.darken015};
+  color: ${colors.lavenderWeb2};
 `;
 
 export const CommunityEngagementBox = styled(Box)`
@@ -57,7 +57,7 @@ export const AchievedBadgesListSubheading = styled(Typography)`
   font-size: 14px;
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
-  color: ${colors.lavenderWeb.darken015};
+  color: ${colors.lavenderWeb2};
 `;
 
 export const AchievedBadgesListGrid = styled(Grid)`
@@ -72,7 +72,7 @@ export const NoAchievedBadgesBox = styled(Box)`
 `;
 
 export const NoAchievedBadgesTypography = styled(Typography)`
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
   font-size: 12px;
   line-height: 18px;
   font-weight: 400;

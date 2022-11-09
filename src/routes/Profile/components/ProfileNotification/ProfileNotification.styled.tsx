@@ -5,7 +5,7 @@ import { Typography } from '../../../../components/atomic/Typography/Typography'
 import { colors } from '../../../../theme';
 
 export const NotificationTypography = styled(Typography)`
-  color: ${colors.lavenderWeb.darken015};
+  color: ${colors.lavenderWeb2};
 `;
 
 export const PillBox = styled(Pill)`

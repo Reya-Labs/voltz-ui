@@ -60,22 +60,22 @@ export const Panel: React.FunctionComponent<PanelProps> = React.forwardRef(
             },
           };
 
-        case 'error':
-          return {
-            background: 'transparent',
-            border: `2px dashed ${colors.vzCustomRed1.base}`,
-            borderColor: colors.vzCustomRed1.base,
-            color: colors.vzCustomRed1.base,
-            textAlign: 'center',
-          };
+      case 'error':
+        return {
+          background: 'transparent',
+          border: `2px dashed ${colors.wildStrawberry}`,
+          borderColor: colors.wildStrawberry,
+          color: colors.wildStrawberry,
+          textAlign: 'center',
+        };
 
-        case 'grey-dashed':
-          return {
-            background: 'transparent',
-            border: `2px dashed ${colors.lavenderWeb.darken035}`,
-            borderColor: colors.lavenderWeb.darken035,
-            textAlign: 'center',
-          };
+      case 'grey-dashed':
+        return {
+          background: 'transparent',
+          border: `2px dashed ${colors.lavenderWeb6}`,
+          borderColor: colors.lavenderWeb6,
+          textAlign: 'center',
+        };
 
         default:
           return {

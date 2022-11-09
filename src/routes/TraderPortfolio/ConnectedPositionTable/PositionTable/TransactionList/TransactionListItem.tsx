@@ -19,7 +19,7 @@ interface TransactionListItemProps {
 const rowStyles: SystemStyleObject<Theme> = {
   width: '100%',
   padding: '0',
-  borderTop: `1px solid ${colors.lavenderWeb.darken045}`,
+  borderTop: `1px solid ${colors.lavenderWeb8}`,
   textTransform: 'uppercase',
 
   '&:first-of-type': {
@@ -45,7 +45,7 @@ const cellStyles: SystemStyleObject<Theme> = {
 const labelStyles: SystemStyleObject<Theme> = {
   fontSize: '12px',
   lineHeight: '14px',
-  color: colors.lavenderWeb.darken020,
+  color: colors.lavenderWeb3,
   marginRight: (theme) => theme.spacing(2),
 };
 
@@ -64,7 +64,7 @@ export const TransactionListItem = ({
   const data = transactionData;
 
   const openCloseStyles: SystemStyleObject<Theme> = {
-    color: colors.lavenderWeb.base,
+    color: colors.lavenderWeb,
     marginLeft: 'auto',
     minWidth: 'auto',
     paddingRight: open ? undefined : '0',
@@ -74,8 +74,8 @@ export const TransactionListItem = ({
     <ListItem sx={rowStyles}>
       <Box sx={cellStyles}>
         <Typography
-          sx={{ color: colors.lavenderWeb.darken020, textTransform: 'uppercase' }}
           variant="body2"
+          sx={{ color: colors.lavenderWeb3, textTransform: 'uppercase' }}
         >
           {data.date}
         </Typography>
@@ -85,8 +85,8 @@ export const TransactionListItem = ({
       </Box>
       <Box sx={cellStyles}>
         <Typography
-          sx={isLiquidation ? { color: colors.vzCustomRed1.base } : undefined}
           variant="body2"
+          sx={isLiquidation ? { color: colors.wildStrawberry } : undefined}
         >
           {data.label}
         </Typography>
@@ -97,8 +97,8 @@ export const TransactionListItem = ({
             {item.label}
           </Typography>
           <Typography
-            sx={isLiquidation ? { color: colors.vzCustomRed1.base } : undefined}
             variant="body2"
+            sx={isLiquidation ? { color: colors.wildStrawberry } : undefined}
           >
             {item.value}
           </Typography>

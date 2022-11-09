@@ -13,8 +13,7 @@ export const ClaimButton = styled(Button)<{ disabled: boolean }>`
   background: #1e1a33;
   width: 100%;
   padding: ${({ theme }) => theme.spacing(2, 4)};
-  color: ${({ disabled }) =>
-    disabled ? colors.lavenderWeb.darken015 : colors.skyBlueCrayola.base};
+  color: ${({ disabled }) => (disabled ? colors.lavenderWeb2 : colors.skyBlueCrayola)};
 `;
 
 export const StretchClaimButton = styled(ClaimButton)`
@@ -27,7 +26,7 @@ export const TickWrapper = styled('div')`
 `;
 
 export const ClaimedAtTypography = styled('span')`
-  color: ${colors.skyBlueCrayola.base};
+  color: ${colors.skyBlueCrayola};
   margin-left: ${({ theme }) => theme.spacing(1)};
 `;
 
@@ -38,6 +37,6 @@ export const ClaimErrorTypography = styled('span')`
   font-size: 12px;
   line-height: 14px;
   letter-spacing: 0.02em;
-  color: ${colors.vzCustomRed1.base};
+  color: ${colors.wildStrawberry};
   margin-top: ${({ theme }) => theme.spacing(1)};
 `;

@@ -40,7 +40,7 @@ export const BadgePillBox = styled(Box)`
 `;
 
 export const TitleTypography = styled(Typography)`
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
   font-size: 18px;
   line-height: 24px;
   font-weight: 400;
@@ -48,7 +48,7 @@ export const TitleTypography = styled(Typography)`
 `;
 
 export const AchievedAtTypography = styled(Typography)`
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
   font-size: 18px;
   line-height: 24px;
   font-weight: 400;

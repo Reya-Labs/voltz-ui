@@ -10,10 +10,10 @@ interface HealthFactorTextProps {
 
 export const getHealthTextColor = (healthFactor = 1) => {
   return healthFactor === 1
-    ? colors.vzCustomRed1.base
+    ? colors.wildStrawberry
     : healthFactor === 2
-    ? colors.vzCustomYellow1.base
-    : colors.vzCustomGreen2.base;
+    ? colors.orangeYellow
+    : colors.skyBlueCrayola;
 };
 
 export const HealthFactorText = ({

@@ -58,7 +58,7 @@ export const TitleBox = styled(Box)`
 `;
 
 export const TitleTypography = styled(Typography)`
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
   font-size: 18px;
   line-height: 24px;
   font-weight: 700;
@@ -74,7 +74,7 @@ export const DescriptionBox = styled(Box)`
 `;
 
 export const DescriptionTypography = styled(Typography)`
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
   font-size: 12px;
   line-height: 18px;
   font-weight: 400;

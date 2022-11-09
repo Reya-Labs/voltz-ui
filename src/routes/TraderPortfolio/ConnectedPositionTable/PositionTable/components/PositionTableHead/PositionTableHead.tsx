@@ -76,7 +76,7 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
   const fees = agent === Agents.LIQUIDITY_PROVIDER ? feesProp : undefined;
 
   const getTextColor = (positive: boolean) => {
-    return positive ? colors.vzCustomGreen1.base : colors.vzCustomRed1.base;
+    return positive ? colors.skyBlueCrayola : colors.wildStrawberry;
   };
 
   const handleEditNotional = () => {

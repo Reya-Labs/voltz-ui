@@ -47,11 +47,11 @@ export const GweiBar: React.FunctionComponent<GweiBarProps> = () => {
         sx={{
           height: '100%',
           width: '1px',
-          background: colors.lavenderWeb.base,
+          background: colors.lavenderWeb,
           margin: (theme) => `0 ${theme.spacing(4)}`,
         }}
       />
-      <BulletLabel sx={{ color: colors.vzCustomGreen2.base }} text={blockNumber} />
+      <BulletLabel sx={{ color: colors.skyBlueCrayola }} text={blockNumber} />
     </Box>
   );
 };

@@ -15,7 +15,7 @@ interface TransactionListProps {
 const listStyles: SystemStyleObject<Theme> = {
   width: '100%',
   padding: (theme) => `0 ${theme.spacing(4)}`,
-  background: colors.lavenderWeb.darken040,
+  background: colors.lavenderWeb7,
   boxSizing: 'border-box',
   borderRadius: `8px`,
 };

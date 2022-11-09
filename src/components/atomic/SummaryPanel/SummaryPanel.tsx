@@ -24,12 +24,12 @@ export const SummaryPanel = ({ label, loading, rows }: SummaryPanelProps) => {
       marginBottom: '0',
     },
     label: {
-      color: colors.lavenderWeb.base,
+      color: colors.lavenderWeb,
       fontSize: '14px',
       marginBottom: (theme) => theme.spacing(4),
     },
     svg: {
-      color: colors.lavenderWeb.base,
+      color: colors.lavenderWeb,
     },
   };
   const valueStyles: SystemStyleObject<Theme> = {
@@ -39,7 +39,7 @@ export const SummaryPanel = ({ label, loading, rows }: SummaryPanelProps) => {
 
   if (loading) {
     return (
-      <Typography sx={{ color: colors.skyBlueCrayola.base }} variant="body2">
+      <Typography variant="body2" sx={{ color: colors.skyBlueCrayola }}>
         Loading...
       </Typography>
     );
@@ -54,7 +54,7 @@ export const SummaryPanel = ({ label, loading, rows }: SummaryPanelProps) => {
               label={index === 0 ? label : undefined}
               sx={{
                 ...valueStyles,
-                color: row.highlight ? colors.lavenderWeb.base : colors.lavenderWeb.darken015,
+                color: row.highlight ? colors.lavenderWeb : colors.lavenderWeb2,
                 fontWeight: row.bold ? 'bold' : undefined,
               }}
               variant="body2"
@@ -64,7 +64,7 @@ export const SummaryPanel = ({ label, loading, rows }: SummaryPanelProps) => {
             <Typography
               sx={{
                 ...valueStyles,
-                color: row.highlight ? colors.skyBlueCrayola.base : colors.lavenderWeb.darken015,
+                color: row.highlight ? colors.skyBlueCrayola : colors.lavenderWeb2,
                 fontWeight: row.bold ? 'bold' : undefined,
                 whiteSpace: 'nowrap',
               }}

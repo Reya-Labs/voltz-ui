@@ -2,94 +2,87 @@ import { createTheme } from '@mui/material/styles';
 
 import colors from '../../colors';
 
-// AB notes:
-// this defines all the cokour overrides for different parts of the UI
-// changes the colours for all the UI
-// the colours for agents: FT, VT and LP
-// colours organised into themes, themes used in compoents and currently 1 theme
-// also have a global context
-
 const dark = createTheme({
   spacing: 4,
   palette: {
     mode: 'dark',
     primary: {
-      base: colors.skyBlueCrayola.base,
-      light: colors.skyBlueCrayola.base,
-      darken010: colors.skyBlueCrayola.darken010,
-      darken015: colors.skyBlueCrayola.darken015,
-      darken020: colors.skyBlueCrayola.darken020,
-      main: colors.skyBlueCrayola.darken020,
-      darken025: colors.skyBlueCrayola.darken025,
-      darken030: colors.skyBlueCrayola.darken030,
-      darken035: colors.skyBlueCrayola.darken035,
-      darken040: colors.skyBlueCrayola.darken040,
-      dark: colors.skyBlueCrayola.darken040,
-      darken045: colors.skyBlueCrayola.darken045,
-      darken050: colors.skyBlueCrayola.darken050,
+      base: colors.skyBlueCrayola,
+      light: colors.skyBlueCrayola,
+      darken010: colors.skyBlueCrayola1,
+      darken015: colors.skyBlueCrayola2,
+      darken020: colors.skyBlueCrayola3,
+      main: colors.skyBlueCrayola3,
+      darken025: colors.skyBlueCrayola4,
+      darken030: colors.skyBlueCrayola5,
+      darken035: colors.skyBlueCrayola6,
+      darken040: colors.skyBlueCrayola7,
+      dark: colors.skyBlueCrayola7,
+      darken045: colors.skyBlueCrayola8,
+      darken050: colors.skyBlueCrayola8,
     },
     secondary: {
-      base: colors.lavenderWeb.base,
-      light: colors.lavenderWeb.base,
-      darken010: colors.lavenderWeb.darken010,
-      darken015: colors.lavenderWeb.darken015,
-      darken020: colors.lavenderWeb.darken020,
-      main: colors.lavenderWeb.darken020,
-      darken025: colors.lavenderWeb.darken025,
-      darken030: colors.lavenderWeb.darken030,
-      darken035: colors.lavenderWeb.darken035,
-      darken040: colors.lavenderWeb.darken040,
-      dark: colors.lavenderWeb.darken040,
-      darken045: colors.lavenderWeb.darken045,
-      darken050: colors.lavenderWeb.darken050,
+      base: colors.lavenderWeb,
+      light: colors.lavenderWeb,
+      darken010: colors.lavenderWeb1,
+      darken015: colors.lavenderWeb2,
+      darken020: colors.lavenderWeb3,
+      main: colors.lavenderWeb3,
+      darken025: colors.lavenderWeb4,
+      darken030: colors.lavenderWeb5,
+      darken035: colors.lavenderWeb6,
+      darken040: colors.lavenderWeb7,
+      dark: colors.lavenderWeb7,
+      darken045: colors.lavenderWeb8,
+      darken050: colors.lavenderWeb8,
     },
     tertiary: {
-      base: colors.ultramarineBlue.base,
-      light: colors.ultramarineBlue.base,
-      darken010: colors.ultramarineBlue.darken010,
-      darken015: colors.ultramarineBlue.darken015,
-      darken020: colors.ultramarineBlue.darken020,
-      main: colors.ultramarineBlue.darken020,
-      darken025: colors.ultramarineBlue.darken025,
-      darken030: colors.ultramarineBlue.darken030,
-      darken035: colors.ultramarineBlue.darken035,
-      darken040: colors.ultramarineBlue.darken040,
-      dark: colors.ultramarineBlue.darken040,
-      darken045: colors.ultramarineBlue.darken045,
-      darken050: colors.ultramarineBlue.darken050,
+      base: colors.ultramarineBlue,
+      light: colors.ultramarineBlue,
+      darken010: colors.ultramarineBlue1,
+      darken015: colors.ultramarineBlue2,
+      darken020: colors.ultramarineBlue3,
+      main: colors.ultramarineBlue3,
+      darken025: colors.ultramarineBlue4,
+      darken030: colors.ultramarineBlue5,
+      darken035: colors.ultramarineBlue6,
+      darken040: colors.ultramarineBlue7,
+      dark: colors.ultramarineBlue7,
+      darken045: colors.ultramarineBlue8,
+      darken050: colors.ultramarineBlue8,
     },
     error: {
-      base: colors.wildStrawberry.base,
-      light: colors.wildStrawberry.base,
-      darken010: colors.wildStrawberry.darken010,
-      darken015: colors.wildStrawberry.darken015,
-      darken020: colors.wildStrawberry.darken020,
-      main: colors.wildStrawberry.base,
-      darken025: colors.wildStrawberry.darken025,
-      darken030: colors.wildStrawberry.darken030,
-      darken035: colors.wildStrawberry.darken035,
-      darken040: colors.wildStrawberry.darken040,
-      dark: colors.wildStrawberry.darken020,
-      darken045: colors.wildStrawberry.darken045,
-      darken050: colors.wildStrawberry.darken050,
+      base: colors.wildStrawberry,
+      light: colors.wildStrawberry,
+      darken010: colors.wildStrawberry1,
+      darken015: colors.wildStrawberry2,
+      darken020: colors.wildStrawberry3,
+      main: colors.wildStrawberry,
+      darken025: colors.wildStrawberry4,
+      darken030: colors.wildStrawberry5,
+      darken035: colors.wildStrawberry6,
+      darken040: colors.wildStrawberry7,
+      dark: colors.wildStrawberry3,
+      darken045: colors.wildStrawberry8,
+      darken050: colors.wildStrawberry8,
     },
     warning: {
-      base: colors.orangeYellow.base,
-      light: colors.orangeYellow.base,
-      darken010: colors.orangeYellow.darken010,
-      darken015: colors.orangeYellow.darken015,
-      darken020: colors.orangeYellow.darken020,
-      main: colors.orangeYellow.darken020,
-      darken025: colors.orangeYellow.darken025,
-      darken030: colors.orangeYellow.darken030,
-      darken035: colors.orangeYellow.darken035,
-      darken040: colors.orangeYellow.darken040,
-      dark: colors.orangeYellow.darken040,
-      darken045: colors.orangeYellow.darken045,
-      darken050: colors.orangeYellow.darken050,
+      base: colors.orangeYellow,
+      light: colors.orangeYellow,
+      darken010: colors.orangeYellow1,
+      darken015: colors.orangeYellow2,
+      darken020: colors.orangeYellow3,
+      main: colors.orangeYellow3,
+      darken025: colors.orangeYellow4,
+      darken030: colors.orangeYellow5,
+      darken035: colors.orangeYellow6,
+      darken040: colors.orangeYellow7,
+      dark: colors.orangeYellow7,
+      darken045: colors.orangeYellow8,
+      darken050: colors.orangeYellow8,
     },
     background: {
-      default: colors.vzGreyDarker.base,
+      default: colors.lavenderWeb8,
     },
   },
   components: {
@@ -142,14 +135,14 @@ const dark = createTheme({
         input: ({ ownerState, theme }) => {
           const color = () => {
             if (ownerState.disabled) {
-              return colors.vzGreyDark.base;
+              return colors.lavenderWeb6;
             }
 
             if (ownerState.error) {
               return theme.palette.error.base;
             }
 
-            return colors.vzGrey.base;
+            return colors.lavenderWeb1;
           };
           const borderColor = () => {
             if (ownerState.disabled) {
@@ -160,7 +153,7 @@ const dark = createTheme({
               return theme.palette.error.darken010;
             }
 
-            return colors.vzGreyDark.base;
+            return colors.lavenderWeb6;
           };
           const padding = () => {
             if (ownerState.size === 'small') {
@@ -207,14 +200,14 @@ const dark = createTheme({
           fontSize: '12px',
           lineHeight: 1.2,
           marginBottom: '8px',
-          color: colors.lavenderWeb.darken010,
+          color: colors.lavenderWeb1,
           position: 'static',
           textTransform: 'uppercase',
           transform: 'none',
           overflow: 'visible',
 
           '&.Mui-focused': {
-            color: colors.lavenderWeb.darken010,
+            color: colors.lavenderWeb1,
           },
         },
       },
@@ -225,13 +218,13 @@ const dark = createTheme({
           marginBottom: '10px',
         },
         rail: {
-          backgroundColor: colors.vzGreyDarkish.base,
+          backgroundColor: colors.lavenderWeb4,
           opacity: 1,
           border: 0,
           borderRadius: 0,
         },
         track: {
-          backgroundColor: colors.vzGreyDarkish.base,
+          backgroundColor: colors.lavenderWeb4,
           opacity: 1,
           border: 0,
           borderRadius: 0,
@@ -240,7 +233,7 @@ const dark = createTheme({
           height: '16px',
           width: '4px',
           borderRadius: '0',
-          background: ownerState.disabled ? colors.lavenderWeb.darken015 : colors.lavenderWeb.base,
+          background: ownerState.disabled ? colors.lavenderWeb2 : colors.lavenderWeb,
           '&:hover': {
             boxShadow: '0 0 0 8px rgba(229, 225, 249, 0.16)',
           },
@@ -252,10 +245,10 @@ const dark = createTheme({
           height: '4px',
           width: '1px',
           borderRadius: '0',
-          background: ownerState.disabled ? colors.lavenderWeb.darken015 : colors.lavenderWeb.base,
+          background: ownerState.disabled ? colors.lavenderWeb2 : colors.lavenderWeb,
         }),
         markLabel: ({ ownerState }) => ({
-          color: ownerState.disabled ? colors.vzGrey.base : undefined,
+          color: ownerState.disabled ? colors.lavenderWeb1 : undefined,
           fontSize: '10px',
           top: '24px',
         }),
@@ -264,7 +257,7 @@ const dark = createTheme({
     MuiSelect: {
       styleOverrides: {
         select: {
-          background: colors.lavenderWeb.darken045,
+          background: colors.lavenderWeb8,
           minHeight: 0,
           height: '14px',
         },
@@ -276,8 +269,8 @@ const dark = createTheme({
           marginTop: '8px',
         },
         list: {
-          backgroundColor: colors.lavenderWeb.darken045,
-          border: `1px solid ${colors.lavenderWeb.darken030}`,
+          backgroundColor: colors.lavenderWeb8,
+          border: `1px solid ${colors.lavenderWeb5}`,
           padding: '0',
           borderRadius: '4px',
         },
@@ -290,20 +283,20 @@ const dark = createTheme({
           fontSize: '16px',
           lineHeight: '14px',
           padding: '8px 14px',
-          borderBottom: `1px solid ${colors.lavenderWeb.darken040}`,
+          borderBottom: `1px solid ${colors.lavenderWeb7}`,
 
           '&:last-child': {
             borderBottom: 'none',
           },
 
           '&:hover': {
-            background: colors.lavenderWeb.darken040,
+            background: colors.lavenderWeb7,
           },
 
           '&.Mui-selected': {
-            background: colors.lavenderWeb.darken030,
+            background: colors.lavenderWeb5,
             '&:hover': {
-              background: colors.lavenderWeb.darken030,
+              background: colors.lavenderWeb5,
             },
           },
         }),
@@ -316,77 +309,77 @@ const dark = createTheme({
       fontWeight: 'bold',
       fontSize: 32,
       lineHeight: '160%',
-      color: colors.lavenderWeb.base,
+      color: colors.lavenderWeb,
     },
     h2: {
       fontFamily: 'PixelOperatorMono',
       fontWeight: 'bold',
       fontSize: 24,
       lineHeight: '120%',
-      color: colors.lavenderWeb.base,
+      color: colors.lavenderWeb,
     },
     h3: {
       fontFamily: 'DM Sans',
       fontWeight: 'bold',
       fontSize: 24,
       lineHeight: '120%',
-      color: colors.lavenderWeb.base,
+      color: colors.lavenderWeb,
     },
     h4: {
       fontFamily: 'PixelOperatorMono',
       fontWeight: 'bold',
       fontSize: 20,
       lineHeight: '130%',
-      color: colors.lavenderWeb.base,
+      color: colors.lavenderWeb,
     },
     h5: {
       fontFamily: 'DM Sans',
       fontWeight: 'bold',
       fontSize: 16,
       lineHeight: '130%',
-      color: colors.lavenderWeb.base,
+      color: colors.lavenderWeb,
     },
     h6: {
       fontFamily: 'PixelOperatorMono',
       fontWeight: 'normal',
       fontSize: 18,
       lineHeight: '130%',
-      color: colors.lavenderWeb.base,
+      color: colors.lavenderWeb,
     },
     subtitle1: {
       fontFamily: 'PixelOperatorMono',
       fontWeight: 'normal',
       fontSize: 16,
       lineHeight: '140%',
-      color: colors.lavenderWeb.base,
+      color: colors.lavenderWeb,
     },
     subtitle2: {
       fontFamily: 'DM Sans',
       fontWeight: 'normal',
       fontSize: 16,
       lineHeight: '160%',
-      color: colors.lavenderWeb.base,
+      color: colors.lavenderWeb,
     },
     body1: {
       fontFamily: 'DM Sans',
       fontWeight: 'normal',
       fontSize: 16,
       lineHeight: '160%',
-      color: colors.lavenderWeb.base,
+      color: colors.lavenderWeb,
     },
     body2: {
       fontFamily: 'PixelOperatorMono',
       fontWeight: 'normal',
       fontSize: 16,
       lineHeight: '160%',
-      color: colors.lavenderWeb.base,
+      color: colors.lavenderWeb,
     },
     caption: {
       fontFamily: 'PixelOperatorMono',
       fontWeight: 'normal',
       fontSize: 12,
       lineHeight: '100%',
-      color: colors.lavenderWeb.base,
+      color: colors.lavenderWeb,
     },
   },
 });

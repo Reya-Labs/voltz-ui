@@ -36,7 +36,7 @@ const Text = ({ bold, children, green, red }: TextProps) => (
   <Box
     component="span"
     sx={{
-      color: green ? colors.vzCustomGreen1.base : red ? colors.vzCustomRed1.base : undefined,
+      color: green ? colors.skyBlueCrayola : red ? colors.wildStrawberry : undefined,
       fontWeight: bold ? 'bold' : undefined,
       textTransform: 'none',
     }}
@@ -182,7 +182,7 @@ export const SubmitControls = ({
       <Typography
         sx={{
           marginTop: (theme) => theme.spacing(2),
-          color: colors.lavenderWeb.darken015,
+          color: colors.lavenderWeb2,
           fontSize: '12px',
         }}
         variant="body2"

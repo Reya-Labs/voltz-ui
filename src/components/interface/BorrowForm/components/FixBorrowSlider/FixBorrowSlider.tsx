@@ -28,7 +28,7 @@ const textStyles: SystemStyleObject<Theme> = {
 };
 const errorLabelStyles: SystemStyleObject<Theme> = {
   ...textStyles,
-  color: colors.wildStrawberry.base,
+  color: colors.wildStrawberry,
   marginTop: (theme) => theme.spacing(-2),
 };
 

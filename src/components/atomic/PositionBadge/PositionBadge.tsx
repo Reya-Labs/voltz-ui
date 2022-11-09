@@ -39,7 +39,7 @@ const styles: Record<PositionBadgeVariant, SystemStyleObject<Theme>> = {
     ...baseStyles,
     borderColor: 'primary.base',
     color: 'primary.base',
-    background: colors.skyBlueCrayola.darken030,
+    background: colors.skyBlueCrayola5,
   },
   VT: {
     ...baseStyles,
@@ -49,8 +49,8 @@ const styles: Record<PositionBadgeVariant, SystemStyleObject<Theme>> = {
   },
   LP: {
     ...baseStyles,
-    borderColor: colors.lavenderWeb.darken045,
-    color: colors.skyBlueCrayola.base,
+    borderColor: colors.lavenderWeb8,
+    color: colors.skyBlueCrayola,
     /* Liberty 6 */
     background: '#19152A',
   },

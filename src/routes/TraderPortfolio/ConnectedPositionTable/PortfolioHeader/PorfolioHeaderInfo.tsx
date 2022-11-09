@@ -43,7 +43,7 @@ export const PortfolioHeaderInfo = ({
       {!isUndefined(netMarginDiff) && (
         <Box
           component="span"
-          sx={{ color: netMarginDiff >= 0 ? colors.vzCustomGreen1.base : colors.vzCustomRed1.base }}
+          sx={{ color: netMarginDiff >= 0 ? colors.skyBlueCrayola : colors.wildStrawberry }}
         >
           {' '}
           {netMarginDiff > 0 && '+'}

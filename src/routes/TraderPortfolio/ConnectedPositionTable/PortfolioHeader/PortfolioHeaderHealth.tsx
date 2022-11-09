@@ -33,19 +33,19 @@ export const PortfolioHeaderHealth = ({
       <Box sx={{ display: 'flex' }}>
         <PortfolioHeaderBox
           sx={itemStyles}
-          textSx={{ ...itemTextStyles, color: colors.vzCustomGreen1.base }}
+          textSx={{ ...itemTextStyles, color: colors.skyBlueCrayola }}
         >
           {positionsHealthy ?? '...'} healthy
         </PortfolioHeaderBox>
         <PortfolioHeaderBox
           sx={itemStyles}
-          textSx={{ ...itemTextStyles, color: colors.vzCustomYellow1.base }}
+          textSx={{ ...itemTextStyles, color: colors.orangeYellow }}
         >
           {positionsWarning ?? '...'} warning
         </PortfolioHeaderBox>
         <PortfolioHeaderBox
           sx={itemStyles}
-          textSx={{ ...itemTextStyles, color: colors.vzCustomRed1.base }}
+          textSx={{ ...itemTextStyles, color: colors.wildStrawberry }}
         >
           {positionsDanger ?? '...'} danger
         </PortfolioHeaderBox>

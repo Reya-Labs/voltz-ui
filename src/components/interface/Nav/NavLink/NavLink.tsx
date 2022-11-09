@@ -53,7 +53,7 @@ export const NavLink: React.FunctionComponent<NavLinkProps> = ({
         width: (theme) => theme.spacing(1),
         height: (theme) => theme.spacing(1),
         borderRadius: '50%',
-        color: colors.wildStrawberry.base,
+        color: colors.wildStrawberry,
       }}
     />
   );

@@ -10,10 +10,10 @@ export type WarningBoxProps = {
 
 export const WarningBox: React.FunctionComponent<WarningBoxProps> = ({ warningText }) => {
   return (
-    <Box sx={{ bgcolor: colors.orangeYellow.darken030, borderRadius: 2 }}>
+    <Box sx={{ bgcolor: colors.orangeYellow5, borderRadius: 2 }}>
       <Typography
         sx={{
-          color: colors.orangeYellow.base,
+          color: colors.orangeYellow,
           fontSize: '16px',
           paddingTop: (theme) => theme.spacing(3),
           paddingLeft: (theme) => theme.spacing(4),
@@ -24,7 +24,7 @@ export const WarningBox: React.FunctionComponent<WarningBoxProps> = ({ warningTe
       </Typography>
       <Typography
         sx={{
-          color: colors.orangeYellow.darken015,
+          color: colors.orangeYellow2,
           fontSize: '14px',
           paddingLeft: (theme) => theme.spacing(3),
           paddingTop: (theme) => theme.spacing(1),
