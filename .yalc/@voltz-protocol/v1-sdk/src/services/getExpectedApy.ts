@@ -23,5 +23,5 @@ export const getExpectedApy = (
   // PNL = (1 + estimated cashflow / margin so far) ^ (YEAR / (end - current)) - 1
   const pnl = (ecs / margin) * (1 / getAnnualizedTime(current, end));
 
-  return [pnl, ecs + margin];
+  return [pnl, ecs];
 };

@@ -6,7 +6,7 @@ import { colors, SystemStyleObject, Theme } from '@theme';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from '../SwapForm/types';
 import { isUndefined } from 'lodash';
-import { ExpectedAPY } from '@components/composite';
+import { ExpectedAPY } from './components';
 import { FormPanel } from '@components/interface';
 
 export type SwapInfoProps = {
@@ -88,7 +88,7 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
         </>
       )}
 
-      {(mode == SwapFormModes.NEW_POSITION || mode === SwapFormModes.FIX_BORROW) &&
+      {(mode === SwapFormModes.NEW_POSITION || mode === SwapFormModes.FIX_BORROW) &&
         !isUndefined(warningText) && (
           <>
             <Box sx={bottomSpacing}>

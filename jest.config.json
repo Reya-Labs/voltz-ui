@@ -16,8 +16,7 @@
     "node"
   ],
   "moduleNameMapper": {
-    "^react-native$": "react-native-web",
-    "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy",
+    "^.+\\.module\\.(css)$": "identity-obj-proxy",
     "@contexts": "<rootDir>/src/contexts",
     "@hooks": "<rootDir>/src/hooks",
     "@utilities": "<rootDir>/src/utilities",
@@ -47,13 +46,8 @@
     "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
     "^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
   },
-
   "transformIgnorePatterns": [
     "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$",
-    "^.+\\.module\\.(css|sass|scss)$"
-  ],
-  "watchPlugins": [
-    "jest-watch-typeahead/filename",
-    "jest-watch-typeahead/testname"
+    "^.+\\.module\\.(css)$"
   ]
 }

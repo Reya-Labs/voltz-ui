@@ -4,6 +4,7 @@ import { BadgePill } from '../BadgePill/BadgePill';
 import { BADGE_VARIANT_TITLE_COPY_MAP, COMING_SOON_BADGES } from '../helpers';
 import {
   AchievedAtTypography,
+  AchievedContainerBox,
   BadgePillBox,
   ContainerBox,
   Skeleton,
@@ -18,16 +19,20 @@ export type AchievedBadgeProps = {
   claimedAt?: number;
   variant: BadgeVariant | ComingSoonBadges;
   loading?: boolean;
+  onClick?: () => void;
 };
 export const AchievedBadge: React.FunctionComponent<AchievedBadgeProps> = ({
   achievedAt,
   variant,
   loading,
-}) =>
-  loading ? (
-    <Skeleton data-testid="AchievedBadge-Skeleton" variant="rectangular" />
-  ) : (
-    <ContainerBox isAchieved={Boolean(achievedAt)} data-testid={`AchievedBadge-${variant}`}>
+  onClick,
+}) => {
+  if (loading) {
+    return <Skeleton data-testid="AchievedBadge-Skeleton" variant="rectangular" />;
+  }
+  const Container = Boolean(achievedAt) ? AchievedContainerBox : ContainerBox;
+  return (
+    <Container onClick={onClick} data-testid={`AchievedBadge-${variant}`}>
       <BadgePillBox>
         <Box>
           <BadgePill variant={variant} />
@@ -43,5 +48,6 @@ export const AchievedBadge: React.FunctionComponent<AchievedBadgeProps> = ({
           ? 'Contribute...'
           : 'Keep trading...'}
       </AchievedAtTypography>
-    </ContainerBox>
+    </Container>
   );
+};

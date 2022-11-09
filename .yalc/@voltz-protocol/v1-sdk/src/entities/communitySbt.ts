@@ -73,7 +73,7 @@ class SBT {
         if(!rootEntity) {
             throw new Error('No root found')
         }
-        const metadataUri = rootEntity.baseMetadataUri + badgeType + '.json';
+        const metadataUri = `ipfs:${String.fromCharCode(47)}${String.fromCharCode(47)}${rootEntity.baseMetadataUri}${String.fromCharCode(47)}${badgeType}.json`;
         const leafInfo = {
             account: owner,
             metadataURI: metadataUri
@@ -130,7 +130,7 @@ class SBT {
             if(!rootEntity) {
                 continue;
             }
-            const metadataUri = rootEntity.baseMetadataUri + badge.badgeType + '.json';
+            const metadataUri = `ipfs:${String.fromCharCode(47)}${String.fromCharCode(47)}${rootEntity.baseMetadataUri}${String.fromCharCode(47)}${badge.badgeType}.json`;
             const leafInfo: LeafInfo = {
                 account: owner,
                 metadataURI: metadataUri

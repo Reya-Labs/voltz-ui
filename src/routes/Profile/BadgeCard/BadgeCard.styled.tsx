@@ -3,6 +3,22 @@ import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import Typography from '../../../components/atomic/Typography/Typography';
 import { colors } from '@theme';
+import { keyframes } from '@mui/system';
+
+const highlightAnimation = keyframes`
+  0% { 
+    transform: scale(1);
+    box-shadow: rgb(62 115 196 / 40%) 0px 0px 35px;
+  }
+  50% { 
+    transform: scale(1.1);
+    box-shadow: rgb(62 115 196 / 40%) 0px 0px 55px;
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: rgb(62 115 196 / 40%) 0px 0px 35px;
+  }
+`;
 
 export const Container = styled(Box)`
   background-color: #19152a;
@@ -16,6 +32,10 @@ export const Container = styled(Box)`
   &:hover {
     box-shadow: rgb(62 115 196 / 40%) 0px 0px 35px;
   }
+`;
+
+export const HighlightedContainer = styled(Container)`
+  animation: ${highlightAnimation} 350ms linear forwards;
 `;
 
 export const BadgePillBox = styled(Box)`

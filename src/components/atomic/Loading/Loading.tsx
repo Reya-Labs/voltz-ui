@@ -9,7 +9,7 @@ type LoadingProps = {
 const Loading: React.FunctionComponent<LoadingProps> = ({ sx = {} }) => {
   return (
     <Box sx={{ height: 40, width: 40, ...sx }}>
-      <img src="/images/loading.gif" alt="image" height="100%" width="100%" />
+      <img src="/images/loading.gif" alt="loading" height="100%" width="100%" />
     </Box>
   );
 };

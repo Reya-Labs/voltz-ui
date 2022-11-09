@@ -11,7 +11,7 @@ interface PageProps {
 }
 
 const Page: React.FunctionComponent<PageProps> = ({ children }: PageProps) => (
-  <Background sx={{ display: 'flex', flexDirection: 'column' }}>
+  <Background>
     <Box
       sx={{
         display: 'flex',

@@ -1,8 +1,6 @@
 export { default as AlphaBanner } from './AlphaBanner/AlphaBanner';
-export { default as Autocomplete } from './Autocomplete/Autocomplete';
 export * from './BulletLabel/BulletLabel';
 export { default as DebouncedIntegerField } from './DebouncedIntegerField/DebouncedIntegerField';
-export * from './ExpectedAPY/ExpectedAPY';
 export type { DebouncedIntegerFieldDetails } from './DebouncedIntegerField/DebouncedIntegerField';
 export * from './GweiBar/GweiBar';
 export * from './HealthFactorText/HealthFactorText';
@@ -15,7 +13,6 @@ export { default as MaturityInformation } from './MaturityInformation/MaturityIn
 export { default as Modal } from './Modal/Modal';
 export { default as NotionalAmount } from './NotionalAmount/NotionalAmount';
 export { default as PageTitleDesc } from './PageTitleDesc/PageTitleDesc';
-export { default as PanelAlert } from './PanelAlert/PanelAlert';
 export { default as ProgressBar } from './ProgressBar/ProgressBar';
 export { default as ProtocolInformation } from './ProtocolInformation/ProtocolInformation';
 export { default as RateOptions } from './RateOptions/RateOptions';

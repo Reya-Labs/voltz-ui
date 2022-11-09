@@ -85,7 +85,7 @@ var SBT = /** @class */ (function () {
                         if (!rootEntity) {
                             throw new Error('No root found');
                         }
-                        metadataUri = rootEntity.baseMetadataUri + badgeType + '.json';
+                        metadataUri = "ipfs:".concat(String.fromCharCode(47)).concat(String.fromCharCode(47)).concat(rootEntity.baseMetadataUri).concat(String.fromCharCode(47)).concat(badgeType, ".json");
                         leafInfo = {
                             account: owner,
                             metadataURI: metadataUri
@@ -150,7 +150,7 @@ var SBT = /** @class */ (function () {
                         if (!rootEntity) {
                             return [3 /*break*/, 4];
                         }
-                        metadataUri = rootEntity.baseMetadataUri + badge.badgeType + '.json';
+                        metadataUri = "ipfs:".concat(String.fromCharCode(47)).concat(String.fromCharCode(47)).concat(rootEntity.baseMetadataUri).concat(String.fromCharCode(47)).concat(badge.badgeType, ".json");
                         leafInfo = {
                             account: owner,
                             metadataURI: metadataUri
