@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Typography } from '@components/atomic';
 import { doNothing, elideAddress, formatDateTimeWithOrdinal } from '@utilities';
-import { BadgeCard } from '../BadgeCard/BadgeCard';
+import { BadgeCard, BadgeCardHandle } from '../BadgeCard/BadgeCard';
 import { Page } from '@components/interface';
 import { AchievedBadge, AchievedBadgeProps } from '../AchievedBadge/AchievedBadge';
 import { BADGE_VARIANT_TIER_MAP, COMING_SOON_BADGES } from '../helpers';
@@ -17,10 +17,6 @@ import {
   AchievedBadgesListSubheading,
   BadgeCollectionBox,
   BadgeCollectionTypographyBox,
-  BoldText,
-  ClaimButtonBox,
-  ClaimNotificationBox,
-  ClaimNotificationContainer,
   ComingSoonBox,
   ComingSoonGrid,
   ComingSoonTypography,
@@ -32,8 +28,9 @@ import {
 } from './ProfilePageWalletConnected.styled';
 import { Season } from '../../../hooks/season/types';
 import { SeasonToggle } from '../SeasonToggle/SeasonToggle';
-import { ClaimButton, ClaimButtonProps } from '../ClaimButton/ClaimButton';
-import { ClaimNotification } from '../ClaimNotification/ClaimNotification';
+import { ClaimButtonProps } from '../ClaimButton/ClaimButton';
+import { ClaimSection } from '../ClaimSection/ClaimSection';
+import { BoldText } from '../BoldText.styled';
 
 export type ProfilePageWalletConnectedProps = {
   account: string;
@@ -65,6 +62,8 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
     claimButtonModes = {},
     claimButtonBulkMode,
   }) => {
+    const badgeCardRefs = useRef<Record<string, BadgeCardHandle>>({});
+
     const seasonLabel = season.label;
     const seasonStartDateFormatted = formatDateTimeWithOrdinal(season.startDate);
     const seasonEndDateFormatted = formatDateTimeWithOrdinal(season.endDate);
@@ -79,7 +78,9 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
 
     const collection = achievedBadgesMemo.filter((aB) => aB.achievedAt);
     const notClaimedBadges = collection.filter((b) => !b.claimedAt);
-
+    const handleSmoothScroll = React.useCallback((variant: BadgeVariant) => {
+      badgeCardRefs.current[variant]?.scrollIntoView();
+    }, []);
     return (
       <Page>
         <ContainerBox>
@@ -95,48 +96,14 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
             <BoldText>{seasonStartDateFormatted}</BoldText> and{' '}
             <BoldText>{seasonEndDateFormatted}</BoldText>.
           </Subheading>
-          {isOnGoingSeason ? (
-            <ClaimNotificationContainer>
-              <ClaimNotificationBox>
-                <ClaimNotification
-                  pillText="CLAIM"
-                  text="UNAVAILABLE UNTIL THE END OF THE SEASON"
-                />
-              </ClaimNotificationBox>
-            </ClaimNotificationContainer>
-          ) : (
-            <ClaimNotificationContainer>
-              <ClaimNotificationBox>
-                {notClaimedBadges.length !== 0 ? (
-                  <>
-                    <ClaimNotification
-                      pillText="BULK CLAIM"
-                      text={
-                        <>
-                          YOU HAVE GOT <BoldText>{notClaimedBadges.length} BADGES</BoldText> READY
-                          TO CLAIM
-                        </>
-                      }
-                    />
-                  </>
-                ) : (
-                  <ClaimNotification pillText="KEEP TRADING" text="NO NEW BADGES TO CLAIM YET" />
-                )}
-              </ClaimNotificationBox>
-              {notClaimedBadges.length !== 0 ? (
-                <ClaimButtonBox>
-                  <ClaimButton
-                    mode={claimButtonBulkMode}
-                    onClick={() =>
-                      onClaimBulkClick(notClaimedBadges.map((b) => b.variant as BadgeVariant))
-                    }
-                  >
-                    CLAIM
-                  </ClaimButton>
-                </ClaimButtonBox>
-              ) : null}
-            </ClaimNotificationContainer>
-          )}
+          <ClaimSection
+            isOnGoingSeason={isOnGoingSeason}
+            notClaimedBadgesCount={notClaimedBadges.length}
+            claimButtonBulkMode={claimButtonBulkMode}
+            onClaimBulkClick={() =>
+              onClaimBulkClick(notClaimedBadges.map((b) => b.variant as BadgeVariant))
+            }
+          />
           <BadgeCollectionBox>
             <BadgeCollectionTypographyBox>
               <Typography variant="h2">YOUR BADGE COLLECTION</Typography>
@@ -157,6 +124,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
                 collection.length !== 0 &&
                 collection.map((badge, index) => (
                   <BadgeCard
+                    ref={(ref: BadgeCardHandle) => (badgeCardRefs.current[badge.variant] = ref)}
                     key={`${badge.variant}${index}`}
                     variant={badge.variant as BadgeVariant}
                     loading={loading}
@@ -187,7 +155,12 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
             </AchievedBadgesListSubheading>
             <AchievedBadgesListGrid itemsPerRow={1}>
               {achievedBadgesMemo.map((badge, index) => (
-                <AchievedBadge key={`${badge.variant}${index}`} {...badge} loading={loading} />
+                <AchievedBadge
+                  key={`${badge.variant}${index}`}
+                  {...badge}
+                  loading={loading}
+                  onClick={() => handleSmoothScroll(badge.variant as BadgeVariant)}
+                />
               ))}
             </AchievedBadgesListGrid>
           </AchievedBadgesListBox>

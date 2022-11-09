@@ -1,29 +1,14 @@
-import { SystemStyleObject, Theme } from '@theme';
-import { Typography } from '@components/atomic';
-import { formatCurrency } from '@utilities';
 import Box from '@mui/material/Box';
 import PortfolioHeaderInfo from './PorfolioHeaderInfo';
 import PortfolioHeaderHealth from './PortfolioHeaderHealth';
 import { PortfolioContext } from '@contexts';
-import { isUndefined } from 'lodash';
+import { NetNotional } from './NetNotional/NetNotional';
 
 export type PortfolioHeaderProps = {
   currencyCode?: string;
   currencySymbol?: string;
   feesApy?: number;
   portfolioData: PortfolioContext;
-};
-
-const labelStyles: SystemStyleObject<Theme> = {
-  fontSize: '12px',
-  lineHeight: '1.2',
-  textTransform: 'uppercase',
-};
-
-const titleStyles: SystemStyleObject<Theme> = {
-  fontSize: '40px',
-  lineHeight: '1.2',
-  marginTop: (theme) => theme.spacing(2),
 };
 
 const PortfolioHeader = ({
@@ -34,21 +19,11 @@ const PortfolioHeader = ({
 }: PortfolioHeaderProps) => {
   return (
     <>
-      <Box sx={{ textTransform: 'uppercase' }}>
-        <Typography variant="body2" sx={labelStyles}>
-          Net notional
-        </Typography>
-        <Typography variant="h1" sx={titleStyles}>
-          {isUndefined(portfolioData.totalNotional) && <>Loading...</>}
-          {!isUndefined(portfolioData.totalNotional) && (
-            <>
-              {currencySymbol}
-              {formatCurrency(portfolioData.totalNotional)} {currencyCode}
-            </>
-          )}
-        </Typography>
-      </Box>
-
+      <NetNotional
+        totalNotional={portfolioData.totalNotional}
+        currencySymbol={currencySymbol}
+        currencyCode={currencyCode}
+      />
       <Box
         sx={{
           display: 'flex',

@@ -11,6 +11,9 @@ install-ci:
 test:
 	yarn test
 
+ts-check:
+	yarn ts:check
+
 eslint-check:
 	yarn lint:check
 

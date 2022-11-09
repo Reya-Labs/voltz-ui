@@ -1,5 +1,6 @@
 import { BadgeTier, ComingSoonBadges } from './types';
 import { BadgeVariant } from '@graphql';
+import { ClaimButtonProps } from './ClaimButton/ClaimButton';
 
 export const BADGE_VARIANT_TRADER_LP_MAP: Record<
   BadgeVariant | ComingSoonBadges,
@@ -185,3 +186,15 @@ export const COMING_SOON_BADGES: ComingSoonBadges[] = [
   'senatorz',
   'theOgActivity',
 ];
+
+export const getClaimButtonModesForVariants = (
+  variants: BadgeVariant[],
+  mode: ClaimButtonProps['mode'],
+): Record<BadgeVariant, ClaimButtonProps['mode']> =>
+  variants.reduce(
+    (pV, cI) => ({
+      ...pV,
+      [cI]: mode,
+    }),
+    {} as Record<BadgeVariant, ClaimButtonProps['mode']>,
+  );

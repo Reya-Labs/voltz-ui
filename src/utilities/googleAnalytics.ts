@@ -27,7 +27,7 @@ export const getPoolButtonId = (
     showBorrow = borrow ? '_borrow' : '';
   }
   const showAgent =
-    agent == Agents.LIQUIDITY_PROVIDER ? 'lp' : agent === Agents.FIXED_TRADER ? 'ft' : 'vt';
+    agent === Agents.LIQUIDITY_PROVIDER ? 'lp' : agent === Agents.FIXED_TRADER ? 'ft' : 'vt';
   return (
     'Protocol:' +
     protocol +

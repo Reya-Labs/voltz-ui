@@ -1,6 +1,5 @@
 export { default as Background } from './Background/Background';
 export { default as Button } from './Button/Button';
-export { default as Card } from './Card/Card';
 export { default as Ellipsis } from './Ellipsis/Ellipsis';
 export { default as Icon } from './Icon/Icon';
 export type { IconProps } from './Icon/Icon';
@@ -14,10 +13,8 @@ export { default as ToggleButton } from './ToggleButton/ToggleButton';
 export { default as TokenAndText } from './TokenAndText/TokenAndText';
 export { default as Typography } from './Typography/Typography';
 export { default as RouteLink } from './RouteLink/RouteLink';
-export { default as Neons } from './Neons/Neons';
 export * from './SelectInput/SelectInput';
 export { default as SummaryPanel } from './SummaryPanel/SummaryPanel';
 export * from './PositionBadge/PositionBadge';
-export type { NeonsProps } from './Neons/Neons';
 export { Pill } from './Pill';
 export type { PillProps } from './Pill';

@@ -24,4 +24,4 @@ const ThemeProvider: FunctionComponent<ThemeProviderProps> = ({
   );
 };
 
-export default ThemeProvider; //
+export default ThemeProvider;

@@ -76,7 +76,7 @@ function createLeaves(seasonStart, seasonEnd, baseMetadataUri, subgraphUrl) {
                         badgeType = parseInt(entry.badgeType);
                         props = entry.id.split("#");
                         address = props[0];
-                        metadataURI = baseMetadataUri + badgeType.toString() + ".json";
+                        metadataURI = "ipfs:".concat(String.fromCharCode(47)).concat(String.fromCharCode(47)).concat(baseMetadataUri).concat(String.fromCharCode(47)).concat(badgeType, ".json");
                         snpashotEntry = {
                             owner: address,
                             metadataURI: metadataURI
