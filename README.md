@@ -58,6 +58,41 @@ The term Restricted Territory includes the United States of America (including i
 
 # Contributing
 
+## Branching model
+
+UI needs to be available on both [https://test.voltz.xyz](test.voltz.xyz) and [https://app.voltz.xyz](app.voltz.xyz) at same time with different version of code. 
+Hence, we need to have 2 branches each representing the env. we deploy to. `main` branch relates to `app.voltz.xyz` aka `production` and 
+`develop` branch relates to `test.voltz.xyz` aka `test`.
+
+In the UI world you should branch off develop when building a feature. 
+So just go on `develop`, pull latest and then branch out of it. 
+Create your PR against `develop`.
+
+The `main` branch is just a snapshot of `develop` at given point in time, 
+so no need to do any developing against `main`, 
+and we just simple merge `develop` to `main` whenever we want to do a release.
+
+Branch naming is quite standard, we tried to duplicate what we have done for 
+the committing messages, following standard commit message format: [https://www.conventionalcommits.org/en/v1.0.0/].
+
+Branch names can start with the prefixes found in the regex under '.husky/pre-commit'.
+
+### Short summary:
+
+**DEVELOPING**
+  * do branch from `develop`
+  * wait for approvals comments stuff
+  * merge to `develop` using **Rebase strategy**
+
+**RELEASING**
+ * do branch from `main`, name it `chore/release-YYYYMMDD`
+ * git merge `develop` to that branch, accepting all changes from `develop`
+ * create a PR against `main`
+ * wait for approvals comments stuff
+ * merge to `main` using **Squash and merge**
+
+## Tools
+
 Helpful tools to install to improve your development life!
 * [React Developer Tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en)
 * [Redux DevTools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd/related?hl=en)
