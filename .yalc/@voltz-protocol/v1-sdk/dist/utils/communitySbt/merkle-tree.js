@@ -9,7 +9,7 @@ var keccak256_1 = __importDefault(require("keccak256"));
 var ethers_1 = require("ethers");
 var getLeaf = function (address, badgeUrl) {
     return Buffer.from(ethers_1.ethers.utils
-        .solidityKeccak256(["address", "string"], [address, badgeUrl.toString()])
+        .solidityKeccak256(["address", "string"], [address, badgeUrl])
         .slice(2), "hex");
 };
 var getMerkleTree = function (leaves) {
