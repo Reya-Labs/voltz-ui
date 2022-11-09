@@ -234,7 +234,7 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
   // Validate the form after values change
   useEffect(() => {
     if (touched.current.length) {
-      void validate();
+      validate();
     }
   }, [borrowSwapInfo.loading, borrowSwapInfo.result, borrowSwapInfo.errorMessage, margin]);
 
@@ -350,7 +350,7 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
     }
 
     if (approvalsNeeded && touched.current.length) {
-      void validate();
+      validate();
     }
 
     if (!approvalsNeeded && !isUndefined(selectedFixedDebt)) {
@@ -370,14 +370,14 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
   };
 
   useEffect(() => {
-    void selectedFixedDebtChanged();
+    selectedFixedDebtChanged();
   }, [selectedFixedDebt]);
 
   useEffect(() => {
     if (!approvalsNeeded && touched.current.length) {
-      void selectedFixedDebtChanged();
+      selectedFixedDebtChanged();
       if (selectedFixedDebt === 0) {
-        void validate();
+        validate();
       }
     }
   }, [approvalsNeeded]);
