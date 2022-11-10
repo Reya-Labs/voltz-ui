@@ -15,7 +15,7 @@ import {
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { debounce, isUndefined } from 'lodash';
 import { PositionInfo } from '@voltz-protocol/v1-sdk';
-import isMarginWithdrawable from 'src/utilities/isMarginWithdrawable';
+import { isMarginWithdrawable } from '@utilities';
 
 export enum MintBurnFormModes {
   NEW_POSITION = 'NEW_POSITION',
