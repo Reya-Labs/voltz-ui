@@ -1,4 +1,9 @@
-import { useBalance, useCurrentPositionMarginRequirement, useTokenApproval, useWallet } from '@hooks';
+import {
+  useBalance,
+  useCurrentPositionMarginRequirement,
+  useTokenApproval,
+  useWallet,
+} from '@hooks';
 import { useAMMContext, usePositionContext, Agents } from '@contexts';
 import {
   AugmentedAMM,
@@ -10,7 +15,7 @@ import {
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { debounce, isUndefined } from 'lodash';
 import { PositionInfo } from '@voltz-protocol/v1-sdk';
-import { BigNumber } from 'ethers';
+import isMarginWithdrawable from 'src/utilities/isMarginWithdrawable';
 
 export enum MintBurnFormModes {
   NEW_POSITION = 'NEW_POSITION',
@@ -494,23 +499,19 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
       }
     }
 
-    // Check that the input margin is >= minimum required margin if removing margin
-    if (
-      position &&
-      !isUndefined(currentPositionMarginRequirement) &&
-      marginAction === MintBurnFormMarginAction.REMOVE
-    ) {
-      if (!isUndefined(margin) && margin !== 0) {
-        const originalMargin = (positionAmm as AugmentedAMM).descale(
-          BigNumber.from(position.margin.toString()),
-        );
-        const remainingMargin = originalMargin - margin;
-
-        if (remainingMargin < currentPositionMarginRequirement) {
-          valid = false;
-          if (touched.current.includes('margin')) {
-            err['margin'] = 'Withdrawal amount too high';
-          }
+    // Action: Remove Margin
+    // Check enough margin is left in the position
+    if (marginAction === MintBurnFormMarginAction.REMOVE) {
+      const isWithdrawable = isMarginWithdrawable(
+        margin,
+        position,
+        positionAmm,
+        currentPositionMarginRequirement,
+      );
+      if (!isUndefined(isWithdrawable) && !isWithdrawable) {
+        valid = false;
+        if (touched.current.includes('margin')) {
+          err['margin'] = 'Withdrawal amount too high';
         }
       }
     }

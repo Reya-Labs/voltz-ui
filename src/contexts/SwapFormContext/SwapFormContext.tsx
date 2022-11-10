@@ -2,7 +2,6 @@ import React, { createContext, useCallback, useContext, useEffect, useRef, useSt
 import { Agents, useAMMContext, usePositionContext } from '@contexts';
 import { SwapFormActions, SwapFormModes } from '@components/interface';
 import {
-  AugmentedAMM,
   lessThanEpsilon,
   formatNumber,
   stringToBigFloat,
@@ -22,7 +21,7 @@ import {
 } from '@hooks';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import * as s from './services';
-import { BigNumber } from 'ethers';
+import isMarginWithdrawable from 'src/utilities/isMarginWithdrawable';
 
 // updateLeverage instead of setLeverage when notional updates
 // have reset flag in onChange in Leverage to be able to reset leverage when box is modified.
@@ -167,7 +166,8 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
 
   const action = s.getFormAction(mode, partialCollateralization, agent);
   const isAddingMargin =
-    mode === SwapFormModes.EDIT_MARGIN && marginAction === SwapFormMarginAction.ADD;
+    (mode === SwapFormModes.EDIT_MARGIN || mode === SwapFormModes.EDIT_NOTIONAL) &&
+    marginAction === SwapFormMarginAction.ADD;
   const isFCMAction =
     action === SwapFormActions.FCM_SWAP ||
     action === SwapFormActions.FCM_UNWIND ||
@@ -428,7 +428,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     if (tokenApprovals.lastApproval) {
       return SwapFormSubmitButtonHintStates.READY_TO_TRADE_TOKENS_APPROVED;
     } else {
-      if (mode === SwapFormModes.EDIT_NOTIONAL) {
+      if (mode === SwapFormModes.EDIT_NOTIONAL || mode === SwapFormModes.EDIT_MARGIN) {
         const isRemovingNotional =
           (agent === Agents.VARIABLE_TRADER &&
             (position?.effectiveVariableTokenBalance ?? 0) < 0) ||
@@ -483,10 +483,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       return SwapFormSubmitButtonStates.ROLLOVER_TRADE;
     }
 
-    if (mode === SwapFormModes.EDIT_MARGIN) {
-      return SwapFormSubmitButtonStates.UPDATE;
-    }
-    if (mode === SwapFormModes.EDIT_NOTIONAL) {
+    if (mode === SwapFormModes.EDIT_NOTIONAL || mode === SwapFormModes.EDIT_MARGIN) {
       return SwapFormSubmitButtonStates.UPDATE_POSITION;
     }
     if (agent === Agents.FIXED_TRADER) {
@@ -590,10 +587,8 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     if (mode === SwapFormModes.NEW_POSITION || mode === SwapFormModes.ROLLOVER) {
       return await validateNewPosition();
     }
-    if (mode === SwapFormModes.EDIT_NOTIONAL) {
-      return await validateEditNotional();
-    }
-    return await validateEditMargin();
+
+    return await validateEditNotionalOrMargin();
   };
 
   const validateNewPosition = async () => {
@@ -681,38 +676,46 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     return warnText;
   };
 
-  const validateEditNotional = async () => {
+  const validateEditNotionalOrMargin = async () => {
     const err: Record<string, string> = {};
     let valid = true;
 
-    if (isUndefined(margin) || margin < 0) {
+    // MARGIN
+    if (isUndefined(margin) || margin === 0) {
       valid = false;
       addError(err, 'margin', 'Please enter an amount');
     }
 
-    if (isUndefined(notional) || notional < 0) {
-      valid = false;
-      addError(err, 'notional', 'Please enter an amount');
-    }
-
     // check user has sufficient funds
     if (marginAction === SwapFormMarginAction.ADD) {
-      if ((await hasEnoughUnderlyingTokens(positionAmm || poolAmm, margin)) === false) {
+      if (
+        margin !== 0 &&
+        (await hasEnoughUnderlyingTokens(positionAmm || poolAmm, margin)) === false
+      ) {
         valid = false;
         addError(err, 'margin', 'Insufficient funds');
       }
     }
 
-    // Check that the input margin is >= minimum required margin
-    if (position && marginAction === SwapFormMarginAction.REMOVE) {
-      const originalMargin = (positionAmm as AugmentedAMM).descale(
-        BigNumber.from(position.margin.toString()),
+    // Action: Remove Margin
+    // Check enough margin is left in the position
+    if (marginAction === SwapFormMarginAction.REMOVE) {
+      const isWithdrawable = isMarginWithdrawable(
+        margin,
+        position,
+        positionAmm,
+        currentPositionMarginRequirement,
       );
-      const remainingMargin = originalMargin - (margin ? margin : 0);
-      if (lessThan(remainingMargin, swapInfo.result?.marginRequirement) === true) {
+      if (!isUndefined(isWithdrawable) && !isWithdrawable) {
         valid = false;
-        addError(err, 'margin', 'Withdrawl amount too high');
+        addError(err, 'margin', 'Withdrawal amount too high');
       }
+    }
+
+    // NOTIONAL
+    if (isUndefined(notional) || notional < 0) {
+      valid = false;
+      addError(err, 'notional', 'Please enter an amount');
     }
 
     // Check if notional/margin exceeds position balance
@@ -732,50 +735,6 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
         if (newVariableTokenBalance < 0) {
           valid = false;
           addError(err, 'notional', 'Removed too much notional');
-        }
-      }
-    }
-
-    setErrors(err);
-    setIsValid(valid);
-    return valid;
-  };
-
-  const validateEditMargin = async () => {
-    const err: Record<string, string> = {};
-    let valid = true;
-
-    if (isUndefined(margin) || margin === 0) {
-      valid = false;
-      addError(err, 'margin', 'Please enter an amount');
-    }
-
-    // check user has sufficient funds
-    if (marginAction === SwapFormMarginAction.ADD) {
-      if (
-        margin !== 0 &&
-        (await hasEnoughUnderlyingTokens(positionAmm || poolAmm, margin)) === false
-      ) {
-        valid = false;
-        addError(err, 'margin', 'Insufficient funds');
-      }
-    }
-
-    // Check that the input margin is >= minimum required margin if removing margin
-    if (
-      position &&
-      !isUndefined(currentPositionMarginRequirement) &&
-      marginAction === SwapFormMarginAction.REMOVE
-    ) {
-      if (!isUndefined(margin) && margin !== 0) {
-        const originalMargin = (positionAmm as AugmentedAMM).descale(
-          BigNumber.from(position.margin.toString()),
-        );
-        const remainingMargin = originalMargin - margin;
-
-        if (remainingMargin < currentPositionMarginRequirement) {
-          valid = false;
-          addError(err, 'margin', 'Withdrawal amount too high');
         }
       }
     }
