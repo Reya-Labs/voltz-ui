@@ -244,6 +244,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
       <SwapForm
         approvalsNeeded={form.approvalsNeeded}
         balance={form.balance}
+        currentPositionMarginRequirement={form.currentPositionMarginRequirement}
         endDate={targetAmm.endDateTime}
         errors={form.errors}
         formAction={form.action}
@@ -282,8 +283,8 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
       />
       <SwapInfo
         balance={form.balance}
+        currentPositionMarginRequirement={form.currentPositionMarginRequirement}
         formAction={form.action}
-        minRequiredMargin={form.minRequiredMargin}
         mode={mode}
         positionMargin={
           position?.margin

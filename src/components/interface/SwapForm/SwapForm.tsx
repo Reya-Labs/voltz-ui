@@ -26,6 +26,7 @@ import { SwapFormActions, SwapFormModes } from './types';
 export type SwapProps = {
   approvalsNeeded: boolean;
   balance?: number;
+  currentPositionMarginRequirement?: number;
   endDate?: DateTime;
   errors: Record<string, string>;
   formState: SwapFormState;
@@ -61,6 +62,7 @@ export type SwapProps = {
 const Swap: React.FunctionComponent<SwapProps> = ({
   approvalsNeeded,
   balance,
+  currentPositionMarginRequirement,
   endDate,
   errors,
   formAction,
@@ -203,6 +205,7 @@ const Swap: React.FunctionComponent<SwapProps> = ({
         <Box sx={bottomSpacing}>
           <MarginAmount
             balance={balance}
+            currentPositionMarginRequirement={currentPositionMarginRequirement}
             error={errors['margin']}
             healthFactor={healthFactor}
             isAdditional={formState.marginAction === SwapFormMarginAction.ADD}

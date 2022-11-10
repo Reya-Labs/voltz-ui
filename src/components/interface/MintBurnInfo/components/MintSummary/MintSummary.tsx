@@ -6,15 +6,15 @@ import { isUndefined } from 'lodash';
 
 export type MintSummaryProps = {
   balance?: number;
-  minRequiredMargin?: number;
   loading: boolean;
+  mintMinimumMarginRequirement?: number;
   underlyingTokenName?: string;
 };
 
 const MintSummary: React.FunctionComponent<MintSummaryProps> = ({
   balance,
-  minRequiredMargin,
   loading,
+  mintMinimumMarginRequirement,
   underlyingTokenName = '',
 }) => {
   const label = (
@@ -25,7 +25,7 @@ const MintSummary: React.FunctionComponent<MintSummaryProps> = ({
     />
   );
 
-  const rows = !isUndefined(minRequiredMargin)
+  const rows = !isUndefined(mintMinimumMarginRequirement)
     ? [
         {
           label: 'MARGIN IN ACCOUNT:',
@@ -36,7 +36,7 @@ const MintSummary: React.FunctionComponent<MintSummaryProps> = ({
         {
           label: 'MINIMUM REQUIRED MARGIN:',
           value: `${formatCurrency(
-            roundUpDecimal(minRequiredMargin, 4),
+            roundUpDecimal(mintMinimumMarginRequirement, 4),
             true,
             false,
             0,
