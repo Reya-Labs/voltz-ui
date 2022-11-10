@@ -77,7 +77,8 @@ const Profile: React.FunctionComponent = () => {
       ...getClaimButtonModesForVariants(claimedInThePastVariants as BadgeVariant[], 'claimedDate'),
     }));
   };
-
+  const isClaimingInProgress = () =>
+    Object.values(claimButtonModes).some((bM) => bM === 'claiming');
   const fetchEnsDetails = async (account: string) => {
     const details = await getENSDetails(account);
     setName(details?.name || account);
@@ -94,6 +95,9 @@ const Profile: React.FunctionComponent = () => {
   };
 
   async function handleOnClaimButtonClick(variant: BadgeVariant) {
+    if (claimButtonBulkMode === 'claiming') {
+      return;
+    }
     const params = getSDKInitParams();
     if (!params) {
       return;
@@ -138,6 +142,9 @@ const Profile: React.FunctionComponent = () => {
   async function handleOnClaimBulkClick(variants: BadgeVariant[]) {
     const params = getSDKInitParams();
     if (!params) {
+      return;
+    }
+    if (isClaimingInProgress()) {
       return;
     }
     const badges = collectionBadges.filter(
@@ -220,6 +227,9 @@ const Profile: React.FunctionComponent = () => {
       achievedBadges={collectionBadges}
       loading={loading}
       onSeasonChange={(newSeason) => {
+        if (claimButtonBulkMode === 'claiming' || isClaimingInProgress()) {
+          return;
+        }
         setSeason(newSeason);
         setClaimButtonBulkMode('claim');
       }}
