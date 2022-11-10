@@ -30,7 +30,7 @@ const AllColorsTemplate: ComponentStory<typeof React.Fragment> = () => (
   <div
     style={{
       display: 'grid',
-      gridTemplateColumns: Object.keys(colors['skyBlueCrayola'])
+      gridTemplateColumns: Array.from({ length: 9 })
         .map((_) => '1fr')
         .join(' '),
       gap: 4,
