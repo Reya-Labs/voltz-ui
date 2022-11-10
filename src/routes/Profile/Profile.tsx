@@ -180,12 +180,18 @@ const Profile: React.FunctionComponent = () => {
         })
         .filter((v) => v);
 
+      const nextCollectionBadges = collectionBadges.map((b) => ({
+        ...b,
+        claimedAt: claimedVariants.indexOf(b.variant) !== -1 ? Date.now().valueOf() : b.claimedAt,
+      }));
+      const seasonUserId = getSeasonUserId(wallet.account || '', season.id);
+      setCollectionBadges(nextCollectionBadges);
+      setCacheValue(seasonUserId, nextCollectionBadges);
       setClaimButtonBulkMode(claimedVariants.length === variants.length ? 'claimed' : 'claim');
       setClaimButtonModes((p) => ({
         ...p,
         ...getClaimButtonModesForVariants(claimedVariants, 'claimed'),
       }));
-      setClaimButtonBulkMode(claimedVariants.length === variants.length ? 'claimed' : 'claim');
     } catch (err) {
       setClaimButtonBulkMode('claimError');
       setClaimButtonModes((p) => ({
