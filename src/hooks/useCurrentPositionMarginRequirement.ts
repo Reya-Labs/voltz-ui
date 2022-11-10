@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { AugmentedAMM } from '@utilities';
 
 export const useCurrentPositionMarginRequirement = (amm: AugmentedAMM) => {
-  const [currentPositionMarginRequirement, setCurrentPositionMarginRequirement] = useState<number>();
+  const [currentPositionMarginRequirement, setCurrentPositionMarginRequirement] =
+    useState<number>();
 
   // Load the users balance of the required token
   useEffect(() => {
