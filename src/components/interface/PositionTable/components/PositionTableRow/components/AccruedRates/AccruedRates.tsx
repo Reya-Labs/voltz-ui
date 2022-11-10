@@ -8,11 +8,11 @@ type AccruedRatesProps = {
 };
 
 const AccruedRates = ({ position, positionInfo }: AccruedRatesProps) => {
-    // remove positionInfo prop because this information is already in position
-    const renderValue = () => {
-        // we need to change to
-        // return `${formatNumber(position.receivingRate)}% / ${formatNumber(position.payingRate)}%`;
-        if (positionInfo?.variableRateSinceLastSwap && positionInfo?.fixedRateSinceLastSwap) {
+  // remove positionInfo prop because this information is already in position
+  const renderValue = () => {
+    // we need to change to
+    // return `${formatNumber(position.receivingRate)}% / ${formatNumber(position.payingRate)}%`;
+    if (positionInfo?.variableRateSinceLastSwap && positionInfo?.fixedRateSinceLastSwap) {
       if (position.positionType === 1) {
         return `${formatNumber(positionInfo?.fixedRateSinceLastSwap)}% / ${formatNumber(
           positionInfo?.variableRateSinceLastSwap,

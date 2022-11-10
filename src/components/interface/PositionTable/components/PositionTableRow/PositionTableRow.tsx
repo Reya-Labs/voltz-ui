@@ -65,19 +65,19 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     if (field === 'margin') {
       return (
         <CurrentMargin
-            // replace positionInfo?.accruedCashflow with position.accruedCashflow
-            accruedCashflow={
+          // replace positionInfo?.accruedCashflow with position.accruedCashflow
+          accruedCashflow={
             agent === Agents.LIQUIDITY_PROVIDER ? undefined : positionInfo?.accruedCashflow || 0
           }
-            // replace positionInfo?.margin with position.margin
-            margin={positionInfo?.margin}
-            // replace this with token={position.amm.tokenName}
-            token={
+          // replace positionInfo?.margin with position.margin
+          margin={positionInfo?.margin}
+          // replace this with token={position.amm.tokenName}
+          token={
             position.source.includes('FCM') ? position.amm.protocol : underlyingTokenName || ''
           }
           onSelect={agent === Agents.LIQUIDITY_PROVIDER ? handleEditMargin : undefined}
-            // replace this with marginEdit={true}
-            marginEdit={position.source.includes('FCM') ? false : true}
+          // replace this with marginEdit={true}
+          marginEdit={position.source.includes('FCM') ? false : true}
           isSettled={position.isSettled}
         />
       );
@@ -90,8 +90,8 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     if (field === 'notional') {
       return (
         <Notional
-            // replace position.effectiveVariableTokenBalance with position.variableTokenBalance
-            notional={
+          // replace position.effectiveVariableTokenBalance with position.variableTokenBalance
+          notional={
             agent === Agents.LIQUIDITY_PROVIDER
               ? formatNumber(position.notional)
               : formatNumber(Math.abs(position.effectiveVariableTokenBalance))

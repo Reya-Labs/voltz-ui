@@ -33,8 +33,8 @@ const Trader: React.FunctionComponent = () => {
   const { amms } = useAMMs();
   const { onChangeAgent } = useAgent();
   const { pathname, key } = useLocation();
-    // remove both for v2 (if agent is FIXED_TAKER or VARIABLE_TAKER, then get protocol.getTraderPositions(), otherwise protocol.getLPPositions())
-    const { positions, positionsByAgentGroup } = usePositions();
+  // remove both for v2 (if agent is FIXED_TAKER or VARIABLE_TAKER, then get protocol.getTraderPositions(), otherwise protocol.getLPPositions())
+  const { positions, positionsByAgentGroup } = usePositions();
   const { agent } = useAgent();
   const { account } = useWallet();
 
