@@ -80,16 +80,32 @@ Branch names can start with the prefixes found in the regex under '.husky/pre-co
 ### Short summary:
 
 **DEVELOPING**
-  * do branch from `develop`
+  * create a branch from `develop`, follow the naming convention for a branch
   * wait for approvals comments stuff
   * merge to `develop` using **Rebase strategy**
 
 **RELEASING**
- * do branch from `main`, name it `chore/release-YYYYMMDD`
+ * do branch from `main`, name it `release/YYYYMMDD` (important since this branch will create AWS Amplify env. where you can test your build before you merge/release it!)
  * git merge `develop` to that branch, accepting all changes from `develop`
  * create a PR against `main`
  * wait for approvals comments stuff
  * merge to `main` using **Squash and merge**
+
+## AWS Amplify
+
+Voltz UI uses AWS Amplify to create automate the process around creating builds that can be shared with the stakeholders.
+What this means is that any push to a branch will create an environment for the team to test against!
+
+### Rules
+
+**Environment branches (main & develop)**
+* merges to branch `main` always deploy to `app.voltz.xyz` with ENV variables specific for `main`
+* merges to branch `develop` always deploy to `test.voltz.xyz` with ENV variables specific for `develop`
+
+**Candidate branches:**
+* commits on branches that follow the pattern `feat/*`, `fix/*`, `chore/*`, `refactor/*` and `test/*` generate a build with same ENV variables as `develop`
+* commits on branches that follow the pattern `release/*` generate a build with same ENV variables as `main` 
+
 
 ## Tools
 
