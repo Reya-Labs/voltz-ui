@@ -12,7 +12,7 @@ import { BigNumber } from 'ethers';
  * @param positionAmm The AMM of position
  * @param currentPositionMarginRequirement The position's current margin requirement (initial/safety)
  */
-const isMarginWithdrawable = (
+export const isMarginWithdrawable = (
   margin?: number,
   position?: Position,
   positionAmm?: AugmentedAMM,
@@ -38,4 +38,3 @@ const isMarginWithdrawable = (
   return undefined;
 };
 
-export default isMarginWithdrawable;
