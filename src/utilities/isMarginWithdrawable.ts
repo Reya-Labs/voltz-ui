@@ -37,4 +37,3 @@ export const isMarginWithdrawable = (
 
   return undefined;
 };
-
