@@ -125,12 +125,13 @@ const Profile: React.FunctionComponent = () => {
         ...prev,
         [variant]: 'claimed',
       }));
-      setCollectionBadges((prev) => {
-        return prev.map((b) => ({
-          ...b,
-          claimedAt: b.variant === variant ? Date.now().valueOf() : b.claimedAt,
-        }));
-      });
+      const nextCollectionBadges = collectionBadges.map((b) => ({
+        ...b,
+        claimedAt: b.variant === variant ? Date.now().valueOf() : b.claimedAt,
+      }));
+      const seasonUserId = getSeasonUserId(wallet.account || '', season.id);
+      setCollectionBadges(nextCollectionBadges);
+      setCacheValue(seasonUserId, nextCollectionBadges);
     } catch (err) {
       setClaimButtonModes((prev) => ({
         ...prev,
