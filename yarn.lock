@@ -7082,6 +7082,19 @@
     toformat "^2.0.0"
     yalc "^1.0.0-pre.53"
 
+"@voltz-protocol/v2-sdk@1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/v2-sdk/-/v2-sdk-1.2.1.tgz#535790e88f29fc30633be1e75f2f299f4cbee557"
+  integrity sha512-Oc7N5yynlOJkpafiJ/vZOYecbsYxELi/AZzWsWrBAMmYsSVlV5WSYHWowVp1DMNtelrr9ZPaxziWJjJO3mUHVQ==
+  dependencies:
+    axios "^0.27.2"
+    coingecko-api "^1.0.10"
+    dotenv "^16.0.3"
+    ethers "^5.5.2"
+    graphql "^16.6.0"
+    graphql-request "^5.0.0"
+    lodash "^4.17.21"
+
 "@walletconnect/browser-utils@^1.8.0":
   version "1.8.0"
   resolved "https://registry.npmjs.org/@walletconnect/browser-utils/-/browser-utils-1.8.0.tgz"
@@ -11736,6 +11749,11 @@ dotenv@^16.0.0:
   resolved "https://registry.npmjs.org/dotenv/-/dotenv-16.0.0.tgz"
   integrity sha512-qD9WU0MPM4SWLPJy/r2Be+2WgQj8plChsyrCNQzW/0WjvcJQiKQJ9mH3ZgB3fxbUUxgc/11ZJ0Fi5KiimWGz2Q==
 
+dotenv@^16.0.3:
+  version "16.0.3"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.0.3.tgz#115aec42bac5053db3c456db30cc243a5a836a07"
+  integrity sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==
+
 dotenv@^5.0.1:
   version "5.0.1"
   resolved "https://registry.npmjs.org/dotenv/-/dotenv-5.0.1.tgz"
@@ -13981,6 +13999,11 @@ graphql@^16.3.0:
   version "16.3.0"
   resolved "https://registry.npmjs.org/graphql/-/graphql-16.3.0.tgz"
   integrity sha512-xm+ANmA16BzCT5pLjuXySbQVFwH3oJctUVdy81w1sV0vBU0KgDdBGtxQOUd5zqOBk/JayAFeG8Dlmeq74rjm/A==
+
+graphql@^16.6.0:
+  version "16.6.0"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.6.0.tgz#c2dcffa4649db149f6282af726c8c83f1c7c5fdb"
+  integrity sha512-KPIBPDlW7NxrbT/eh4qPXz5FiFdL5UbaA0XUNz2Rp3Z3hqBSkbj0GVjwFDztsWVauZUWsbKHgMg++sk8UX0bkw==
 
 gzip-size@^6.0.0:
   version "6.0.0"

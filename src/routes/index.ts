@@ -17,3 +17,4 @@ export { default as TradingLeague } from './TradingLeague/TradingLeague';
 export { default as Profile } from './Profile/Profile';
 export { default as ProfileV1 } from './ProfileV1/Profile';
 export { default as Ecosystem } from './Ecosystem/Ecosystem';
+export { default as TraderSDKV2 } from './TraderSDKV2/Trader';
