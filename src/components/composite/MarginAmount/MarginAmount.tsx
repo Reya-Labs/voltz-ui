@@ -50,13 +50,10 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
     : defaultMargin;
   const initialMarginRequirement = currentPositionMarginRequirement || defaultMargin;
 
-  let maxAmountToWithdraw =
+  const maxAmountToWithdraw =
     !isUndefined(marginAmount) && !isUndefined(initialMarginRequirement)
-      ? Math.max(marginAmount - initialMarginRequirement, 0)
+      ? Math.floor(Math.max(marginAmount - initialMarginRequirement, 0) * 10000) / 10000
       : undefined;
-  if (maxAmountToWithdraw) {
-    maxAmountToWithdraw = Math.floor(maxAmountToWithdraw * 10000) / 10000;
-  }
 
   const formattedMaxAmountToWithdraw = !isUndefined(maxAmountToWithdraw)
     ? formatCurrency(maxAmountToWithdraw, false, false, 2, 4)
