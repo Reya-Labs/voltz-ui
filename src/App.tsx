@@ -2,14 +2,14 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import TagManager from 'react-gtm-module';
 
 import {
-  routes,
-  TradingLeague,
-  Profile,
-  LiquidityProvider,
-  Trader,
-  FixedBorrower,
-  Ecosystem,
-  ProfileV1,
+    routes,
+    TradingLeague,
+    Profile,
+    LiquidityProvider,
+    Trader,
+    FixedBorrower,
+    Ecosystem,
+    ProfileV1, TraderSDKV2
 } from '@routes';
 import { AlphaBanner, GweiBar } from '@components/composite';
 import Box from '@mui/material/Box';
@@ -22,13 +22,16 @@ const App = () => {
     }
   }, []);
 
+  const TraderRoute = process.env.REACT_APP_TRADERSDKV2 && process.env.REACT_APP_TRADERSDKV2 !== `UNPROVIDED` ?
+      TraderSDKV2 : Trader;
+
   return (
     <>
       <Routes>
         <Route path="/">
           <Route index element={<Navigate to={routes.SWAP} />} />
-          <Route path={routes.SWAP} element={<Trader />} />
-          <Route path={routes.PORTFOLIO} element={<Trader />} />
+          <Route path={routes.SWAP} element={<TraderRoute />} />
+          <Route path={routes.PORTFOLIO} element={<TraderRoute />} />
           <Route path={routes.POOLS} element={<LiquidityProvider />} />
           <Route path={routes.LP_FARM} element={<LiquidityProvider />} />
           <Route path={routes.PRODUCTS} element={<Ecosystem />} />

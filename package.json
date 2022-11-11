@@ -73,7 +73,7 @@
     "@mui/material": "^5.2.8",
     "@mui/system": "^5.2.8",
     "@voltz-protocol/v1-sdk": "file:.yalc/@voltz-protocol/v1-sdk",
-    "@voltz-protocol/v2-sdk": "1.0.1",
+    "@voltz-protocol/v2-sdk": "1.2.0",
     "@walletconnect/ethereum-provider": "^1.8.0",
     "@walletconnect/web3-provider": "^1.8.0",
     "assert": "^2.0.0",
