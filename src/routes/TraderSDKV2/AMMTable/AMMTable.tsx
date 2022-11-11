@@ -12,6 +12,7 @@ import { AMM } from '@voltz-protocol/v2-sdk';
 
 export type AMMTableProps = {
   amms: AMM[];
+  onSelect: (amm: AMM) => void;
 };
 
 const commonOverrides: SystemStyleObject<Theme> = {
@@ -35,7 +36,7 @@ const commonOverrides: SystemStyleObject<Theme> = {
   },
 };
 
-const AMMTable: React.FunctionComponent<AMMTableProps> = ({ amms }) => {
+const AMMTable: React.FunctionComponent<AMMTableProps> = ({ amms, onSelect }) => {
   const { agent } = useAgent();
   const _variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'dark';
 
@@ -61,7 +62,7 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({ amms }) => {
           <AMMTableHead />
           <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
             {activePools.map((amm, index) => (
-              <AMMTableRow key={amm.id} amm={amm} index={index} />
+              <AMMTableRow onSelect={() => onSelect(amm)} key={amm.id} amm={amm} index={index} />
             ))}
           </TableBody>
         </Table>

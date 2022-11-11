@@ -8,6 +8,7 @@ import { isUndefined } from 'lodash';
 import AugmentedAMM from './augmentedAmm';
 import isBorrowing from './isBorrowing';
 import { v4 as uuidv4 } from 'uuid';
+import { AMM } from '@voltz-protocol/v2-sdk';
 
 const SESSION_ID = uuidv4();
 
@@ -91,4 +92,36 @@ export const pushEvent = (userAddress: string, payload: DataLayerEventPayload) =
     return;
   }
   window.dataLayer.push({ sessionId: SESSION_ID, userAddress: userAddress, ...payload });
+};
+
+export const getPoolButtonIdSDKV2 = (
+  marginAction: string,
+  liquidityAction: string,
+  notionalAction: string,
+  agent: Agents,
+  amm?: AMM,
+  borrow?: boolean,
+): string => {
+  const protocol = amm ? amm.protocol : '';
+  let showBorrow = '';
+  if (isUndefined(borrow)) {
+    if (amm) showBorrow = amm.isBorrowing ? '_borrow' : '';
+  } else {
+    showBorrow = borrow ? '_borrow' : '';
+  }
+  const showAgent =
+    agent === Agents.LIQUIDITY_PROVIDER ? 'lp' : agent === Agents.FIXED_TRADER ? 'ft' : 'vt';
+  return (
+    'Protocol:' +
+    protocol +
+    showBorrow +
+    '_MarginAction:' +
+    marginAction +
+    '_LiquidityAction:' +
+    liquidityAction +
+    '_NotionalAction:' +
+    notionalAction +
+    '_Agent:' +
+    showAgent
+  );
 };

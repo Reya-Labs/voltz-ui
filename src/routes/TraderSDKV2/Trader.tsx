@@ -2,27 +2,29 @@ import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import { useLocation, useSearchParams } from 'react-router-dom';
 
-import { AugmentedAMM, setPageTitle } from '@utilities';
+import { setPageTitle } from '@utilities';
 import { Agents } from '@contexts';
 import { PageTitleDesc } from '@components/composite';
 import { useAgent, useWallet } from '@hooks';
 import { Page, SwapFormModes } from '@components/interface';
-import ConnectedAMMTable from './ConnectedAMMTable/ConnectedAMMTable';
 import { getRenderMode } from './services';
-import { Protocol, Position } from '@voltz-protocol/v2-sdk';
+import { Protocol, Position, AMM } from '@voltz-protocol/v2-sdk';
 import { ethers } from 'ethers';
+import AMMTable from './AMMTable/AMMTable';
+import ConnectedSwapForm from './ConnectedSwapForm/ConnectedSwapForm';
+import { SwapFormProvider } from './SwapFormContext/SwapFormContext';
 
 const Trader: React.FunctionComponent = () => {
   const [formMode, setFormMode] = useState<SwapFormModes>();
-  // const [amm, setAMM] = useState<AugmentedAMM>();
+  const [amm, setAMM] = useState<AMM | null>(null);
   // const [settling, setSettling] = useState<boolean>(false);
-  // const [position, setPosition] = useState<Position>();
+  const [position, setPosition] = useState<Position | null>(null);
 
   // 1. build protocol object with the env. variable and trigger onLand() initializer (and remove useAmms())
   // at this moment, all AMMs are loaded
   // 2. add an useEffect when signer is connected and trigger onConnect(signer) (and remove usePositions())
   // protocol.positions (:Position[]) will be filled onConnect()
-  const [protocol, setProtocol] = React.useState<Protocol>(null);
+  const [protocol, setProtocol] = React.useState<Protocol | null>(null);
   useEffect(() => {
     const protocolInstance = new Protocol({
       factoryAddress: process.env.REACT_APP_FACTORY_ADDRESS || '',
@@ -40,9 +42,13 @@ const Trader: React.FunctionComponent = () => {
     });
     protocolInstance
       .onLand()
-      .then(() => setProtocol(protocolInstance))
+      .then(() => {
+        setProtocol(protocolInstance);
+        console.log('####', protocolInstance);
+      })
       .catch((err) => {
         // setError somehow or log it
+        console.log('####', err);
       });
   }, []);
 
@@ -95,9 +101,9 @@ const Trader: React.FunctionComponent = () => {
     }
   }, [setPageTitle, renderMode]);
 
-  const handleSelectAmm = (selectedAMM: AugmentedAMM) => {
+  const handleSelectAmm = (selectedAMM: AMM) => {
     setFormMode(SwapFormModes.NEW_POSITION);
-    // setAMM(selectedAMM);
+    setAMM(selectedAMM);
     // setPosition(findCurrentPosition(positions || [], selectedAMM, [1, 2]));
   };
   const handleSelectPosition = (
@@ -119,8 +125,8 @@ const Trader: React.FunctionComponent = () => {
   };
   const handleReset = () => {
     setFormMode(undefined);
-    //setAMM(undefined);
-    //setPosition(undefined);
+    setAMM(null);
+    setPosition(null);
   };
 
   return (
@@ -133,7 +139,7 @@ const Trader: React.FunctionComponent = () => {
               desc="Choose a pool and decide whether to trade fixed or variable rates."
             />
           </Box>
-          <ConnectedAMMTable protocol={protocol} />
+          <AMMTable amms={protocol.allPools} onSelect={handleSelectAmm} />
         </Box>
       )}
 
@@ -163,20 +169,16 @@ const Trader: React.FunctionComponent = () => {
 
       {renderMode === 'form' && (
         <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
-          {/*{amm && (*/}
-          {/*  <AMMProvider amm={amm}>*/}
-          {/*    <PositionProvider position={position}>*/}
-          {/*      <SwapFormProvider*/}
-          {/*        mode={formMode}*/}
-          {/*        defaultValues={{*/}
-          {/*          notional: formMode === SwapFormModes.EDIT_NOTIONAL ? 0 : undefined,*/}
-          {/*        }}*/}
-          {/*      >*/}
-          {/*        <ConnectedSwapForm onReset={handleReset} />*/}
-          {/*      </SwapFormProvider>*/}
-          {/*    </PositionProvider>*/}
-          {/*  </AMMProvider>*/}
-          {/*)}*/}
+          {amm && (
+            <SwapFormProvider
+              mode={formMode}
+              defaultValues={{
+                notional: formMode === SwapFormModes.EDIT_NOTIONAL ? 0 : undefined,
+              }}
+            >
+              <ConnectedSwapForm amm={amm} position={position} onReset={handleReset} />
+            </SwapFormProvider>
+          )}
         </Box>
       )}
     </Page>

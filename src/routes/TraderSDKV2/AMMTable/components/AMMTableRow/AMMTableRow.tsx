@@ -18,9 +18,10 @@ import { DateTime } from 'luxon';
 export type AMMTableRowProps = {
   amm: AMM;
   index: number;
+  onSelect: () => void;
 };
 
-const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ amm, index }) => {
+const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ onSelect, amm, index }) => {
   // here we can pass AMM object that this row represents
 
   const wallet = useWallet();
@@ -56,7 +57,7 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ amm, index }) 
     if (isNull(wallet.account)) {
       wallet.setRequired(true);
     } else {
-      // onSelect();
+      onSelect();
     }
   };
 
