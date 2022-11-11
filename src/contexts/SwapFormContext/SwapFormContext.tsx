@@ -147,7 +147,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   const [leverage, setLeverage] = useState<SwapFormState['leverage']>(defaultLeverage);
   const [margin, setMargin] = useState<SwapFormState['margin']>(defaultMargin);
   const [marginAction, setMarginAction] = useState<SwapFormMarginAction>(defaultMarginAction);
-  const currentPositionMarginRequirement = useCurrentPositionMarginRequirement(poolAmm);
+  const currentPositionMarginRequirement = useCurrentPositionMarginRequirement(poolAmm, 1, 999);
   const [notional, setNotional] = useState<SwapFormState['notional']>(defaultNotional);
   const [partialCollateralization, setPartialCollateralization] = useState<boolean>(
     defaultPartialCollateralization,

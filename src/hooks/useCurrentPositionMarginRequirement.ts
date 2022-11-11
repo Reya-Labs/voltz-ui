@@ -1,17 +1,25 @@
 import { useState, useEffect } from 'react';
 import { AugmentedAMM } from '@utilities';
 
-export const useCurrentPositionMarginRequirement = (amm: AugmentedAMM) => {
+export const useCurrentPositionMarginRequirement = (
+  amm: AugmentedAMM,
+  fixedRateLower?: number,
+  fixedRateUpper?: number,
+) => {
   const [currentPositionMarginRequirement, setCurrentPositionMarginRequirement] =
     useState<number>();
 
   // Load the users balance of the required token
   useEffect(() => {
     const getData = async () => {
-      try {
-        const mrm = await amm.getPositionMarginRequirement(1, 999);
-        setCurrentPositionMarginRequirement(mrm);
-      } catch (e) {
+      if (fixedRateLower && fixedRateUpper) {
+        try {
+          const mrm = await amm.getPositionMarginRequirement(fixedRateLower, fixedRateUpper);
+          setCurrentPositionMarginRequirement(mrm);
+        } catch (e) {
+          setCurrentPositionMarginRequirement(undefined);
+        }
+      } else {
         setCurrentPositionMarginRequirement(undefined);
       }
     };
