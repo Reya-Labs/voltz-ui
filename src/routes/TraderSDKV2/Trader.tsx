@@ -24,7 +24,7 @@ const Trader: React.FunctionComponent = () => {
   // protocol.positions (:Position[]) will be filled onConnect()
   const [protocol, setProtocol] = React.useState<Protocol>(null);
   useEffect(() => {
-    const protocol = new Protocol({
+    const protocolInstance = new Protocol({
       factoryAddress: process.env.REACT_APP_FACTORY_ADDRESS || '',
       provider: new ethers.providers.JsonRpcProvider(
         process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK || '',
@@ -38,7 +38,12 @@ const Trader: React.FunctionComponent = () => {
       graphEndpoint: process.env.REACT_APP_SUBGRAPH_URL || '',
       coingeckoApiKey: process.env.REACT_APP_COINGECKO_API_KEY || '',
     });
-    protocol.onLand().then(() => setProtocol(protocol));
+    protocolInstance
+      .onLand()
+      .then(() => setProtocol(protocolInstance))
+      .catch((err) => {
+        // setError somehow or log it
+      });
   }, []);
 
   const { onChangeAgent } = useAgent();
@@ -128,7 +133,7 @@ const Trader: React.FunctionComponent = () => {
               desc="Choose a pool and decide whether to trade fixed or variable rates."
             />
           </Box>
-          <ConnectedAMMTable protocol={protocol} onSelectItem={handleSelectAmm} />
+          <ConnectedAMMTable protocol={protocol} />
         </Box>
       )}
 
