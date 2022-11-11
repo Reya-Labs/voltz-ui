@@ -8,8 +8,8 @@ import { FormPanel } from '@components/interface';
 export type MintBurnInfoProps = {
   balance?: number;
   formState: MintBurnFormState;
-  minRequiredMargin?: number;
-  minRequiredMarginLoading: boolean;
+  mintMinimumMarginRequirement?: number;
+  mintMinimumMarginRequirementLoading: boolean;
   mode: MintBurnFormModes;
   underlyingTokenName?: string;
 };
@@ -17,8 +17,8 @@ export type MintBurnInfoProps = {
 const MintBurnInfo: React.FunctionComponent<MintBurnInfoProps> = ({
   balance,
   formState,
-  minRequiredMargin,
-  minRequiredMarginLoading,
+  mintMinimumMarginRequirement,
+  mintMinimumMarginRequirementLoading,
   mode = MintBurnFormModes.NEW_POSITION,
   underlyingTokenName = '',
 }) => {
@@ -30,12 +30,12 @@ const MintBurnInfo: React.FunctionComponent<MintBurnInfoProps> = ({
     <FormPanel noBackground>
       {mode !== MintBurnFormModes.EDIT_MARGIN &&
         isAddingLiquidity &&
-        (!isUndefined(minRequiredMargin) || minRequiredMarginLoading) && (
+        (!isUndefined(mintMinimumMarginRequirement) || mintMinimumMarginRequirementLoading) && (
           <Box sx={{ marginBottom: (theme) => theme.spacing(6) }}>
             <MintSummary
               balance={balance}
-              minRequiredMargin={minRequiredMargin}
-              loading={minRequiredMarginLoading}
+              loading={mintMinimumMarginRequirementLoading}
+              mintMinimumMarginRequirement={mintMinimumMarginRequirement}
               underlyingTokenName={underlyingTokenName}
             />
           </Box>

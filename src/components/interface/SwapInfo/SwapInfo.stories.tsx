@@ -93,7 +93,7 @@ const EditMarginSwapForm: React.FunctionComponent = (args) => {
       swapSummary={mockSwapData}
       swapSummaryLoading={false}
       balance={100}
-      minRequiredMargin={10}
+      currentPositionMarginRequirement={10}
       positionMargin={20}
       underlyingTokenName={'GIL'}
     />

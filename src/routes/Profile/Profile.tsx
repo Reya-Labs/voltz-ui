@@ -77,7 +77,8 @@ const Profile: React.FunctionComponent = () => {
       ...getClaimButtonModesForVariants(claimedInThePastVariants as BadgeVariant[], 'claimedDate'),
     }));
   };
-
+  const isClaimingInProgress = () =>
+    Object.values(claimButtonModes).some((bM) => bM === 'claiming');
   const fetchEnsDetails = async (account: string) => {
     const details = await getENSDetails(account);
     setName(details?.name || account);
@@ -94,6 +95,9 @@ const Profile: React.FunctionComponent = () => {
   };
 
   async function handleOnClaimButtonClick(variant: BadgeVariant) {
+    if (claimButtonBulkMode === 'claiming') {
+      return;
+    }
     const params = getSDKInitParams();
     if (!params) {
       return;
@@ -121,12 +125,13 @@ const Profile: React.FunctionComponent = () => {
         ...prev,
         [variant]: 'claimed',
       }));
-      setCollectionBadges((prev) => {
-        return prev.map((b) => ({
-          ...b,
-          claimedAt: b.variant === variant ? Date.now().valueOf() : b.claimedAt,
-        }));
-      });
+      const nextCollectionBadges = collectionBadges.map((b) => ({
+        ...b,
+        claimedAt: b.variant === variant ? Date.now().valueOf() : b.claimedAt,
+      }));
+      const seasonUserId = getSeasonUserId(wallet.account || '', season.id);
+      setCollectionBadges(nextCollectionBadges);
+      setCacheValue(seasonUserId, nextCollectionBadges);
     } catch (err) {
       setClaimButtonModes((prev) => ({
         ...prev,
@@ -138,6 +143,9 @@ const Profile: React.FunctionComponent = () => {
   async function handleOnClaimBulkClick(variants: BadgeVariant[]) {
     const params = getSDKInitParams();
     if (!params) {
+      return;
+    }
+    if (isClaimingInProgress()) {
       return;
     }
     const badges = collectionBadges.filter(
@@ -172,12 +180,18 @@ const Profile: React.FunctionComponent = () => {
         })
         .filter((v) => v);
 
+      const nextCollectionBadges = collectionBadges.map((b) => ({
+        ...b,
+        claimedAt: claimedVariants.indexOf(b.variant) !== -1 ? Date.now().valueOf() : b.claimedAt,
+      }));
+      const seasonUserId = getSeasonUserId(wallet.account || '', season.id);
+      setCollectionBadges(nextCollectionBadges);
+      setCacheValue(seasonUserId, nextCollectionBadges);
       setClaimButtonBulkMode(claimedVariants.length === variants.length ? 'claimed' : 'claim');
       setClaimButtonModes((p) => ({
         ...p,
         ...getClaimButtonModesForVariants(claimedVariants, 'claimed'),
       }));
-      setClaimButtonBulkMode(claimedVariants.length === variants.length ? 'claimed' : 'claim');
     } catch (err) {
       setClaimButtonBulkMode('claimError');
       setClaimButtonModes((p) => ({
@@ -220,6 +234,9 @@ const Profile: React.FunctionComponent = () => {
       achievedBadges={collectionBadges}
       loading={loading}
       onSeasonChange={(newSeason) => {
+        if (claimButtonBulkMode === 'claiming' || isClaimingInProgress()) {
+          return;
+        }
         setSeason(newSeason);
         setClaimButtonBulkMode('claim');
       }}
