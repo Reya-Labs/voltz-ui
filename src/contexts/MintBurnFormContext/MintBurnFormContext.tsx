@@ -129,7 +129,11 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   const { amm: poolAmm, mintMinimumMarginRequirement } = useAMMContext();
   const { position, amm: positionAmm, positionInfo } = usePositionContext();
 
-  const currentPositionMarginRequirement = useCurrentPositionMarginRequirement(poolAmm);
+  const currentPositionMarginRequirement = useCurrentPositionMarginRequirement(
+    poolAmm,
+    position?.fixedRateLower.toNumber(),
+    position?.fixedRateUpper.toNumber(),
+  );
 
   const defaultFixedHigh =
     position?.fixedRateUpper.toNumber() ?? defaultValues.fixedHigh ?? undefined;
