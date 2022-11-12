@@ -6,16 +6,16 @@ import { isUndefined } from 'lodash';
 
 export type SwapSummaryEditMarginProps = {
   balance?: number;
+  currentPositionMarginRequirement: number;
   loading?: boolean;
-  minRequiredMargin: number;
   positionMargin: number;
   underlyingTokenName?: string;
 };
 
 const SwapSummaryEditMargin: React.FunctionComponent<SwapSummaryEditMarginProps> = ({
   balance,
+  currentPositionMarginRequirement,
   loading = false,
-  minRequiredMargin,
   positionMargin,
   underlyingTokenName = '',
 }) => {
@@ -27,12 +27,12 @@ const SwapSummaryEditMargin: React.FunctionComponent<SwapSummaryEditMarginProps>
     />
   );
 
-  const rows = !isUndefined(minRequiredMargin)
+  const rows = !isUndefined(currentPositionMarginRequirement)
     ? [
         {
           label: 'MINIMUM REQUIRED MARGIN:',
           value: `${formatCurrency(
-            roundUpDecimal(minRequiredMargin, 4),
+            roundUpDecimal(currentPositionMarginRequirement, 4),
             true,
           )} ${underlyingTokenName}`,
           highlight: true,

@@ -172,11 +172,12 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
       <MintBurnForm
         approvalsNeeded={form.approvalsNeeded}
         balance={form.totalBalance}
+        currentPositionMarginRequirement={form.currentPositionMarginRequirement}
         endDate={targetAmm.endDateTime}
         errors={form.errors}
         formState={form.state}
         hintState={form.hintState}
-        isFormValid={form.isValid && !form.minRequiredMargin.errorMessage}
+        isFormValid={form.isValid && !form.mintMinimumMarginRequirement.errorMessage}
         isTradeVierified={form.isTradeVerified}
         mode={form.mode}
         onCancel={onReset}
@@ -198,7 +199,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
         startDate={targetAmm.startDateTime}
         submitButtonState={form.submitButtonState}
         tokenApprovals={form.tokenApprovals}
-        tradeInfoErrorMessage={form.minRequiredMargin.errorMessage}
+        tradeInfoErrorMessage={form.mintMinimumMarginRequirement.errorMessage}
         underlyingTokenName={targetAmm.underlyingToken.name}
         variableApy={typeof resultVariableApy === 'number' ? resultVariableApy : undefined}
         fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr : undefined}
@@ -206,8 +207,8 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
       <MintBurnInfo
         balance={form.balance}
         formState={form.state}
-        minRequiredMargin={form.minRequiredMargin.result}
-        minRequiredMarginLoading={form.minRequiredMargin.loading}
+        mintMinimumMarginRequirement={form.mintMinimumMarginRequirement.result}
+        mintMinimumMarginRequirementLoading={form.mintMinimumMarginRequirement.loading}
         mode={form.mode}
         underlyingTokenName={targetAmm.underlyingToken.name}
       />

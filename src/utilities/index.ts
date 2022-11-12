@@ -16,3 +16,4 @@ export * from './googleAnalytics';
 export * from './getAgent';
 export * from './getENSDetails';
 export * from './doNothing';
+export * from './isMarginWithdrawable';
