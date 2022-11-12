@@ -74,16 +74,17 @@ Branch names can start with the prefixes found in the regex under '.husky/pre-co
 **DEVELOPING**
   * create a branch from `develop`, follow the naming convention for a branch
   * wait for approval, resolve comments and make sure you have a green build
-  * merge to `develop` using **Rebase strategy**
+  * merge to `develop` using **Rebase and merge**
 
 **RELEASING**
- * create a branch from `main`
+ * create a branch from `develop`
    * name it `release/YYYYMMDD` (**important** since this branch will create AWS Amplify env. where you can test your build before you merge/release it!)
    * add proper description! Important since this will be automatically included in the merge commit message
- * git merge `develop` to that branch, accepting all changes from `develop`
+ * git merge `main` to that branch
+   * if any conflicts, resolve them by accepting all changes from `release/YYYYMMDD`
  * create a PR against `main`
  * wait for approval, resolve comments and make sure you have a green build
- * merge to `main` using **Merge commit**
+ * merge to `main` using **Create a merge commit**
 
 ## AWS Amplify
 
