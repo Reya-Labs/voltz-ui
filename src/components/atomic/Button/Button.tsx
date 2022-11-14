@@ -91,8 +91,8 @@ export function Button<C extends React.ElementType>({
       return {
         backgroundColor: 'transparent',
         color: colors.wildStrawberry,
-        border: '1px solid #5C0026',
-        borderColor: '#5C0026',
+        border: `1px solid ${colors.wildStrawberry5}`,
+        borderColor: colors.wildStrawberry5,
         '&:hover': {
           borderColor: colors.wildStrawberry,
           backgroundColor: 'transparent',
