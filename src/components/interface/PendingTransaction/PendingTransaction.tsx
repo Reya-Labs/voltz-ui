@@ -8,6 +8,7 @@ import {
   getAgentFromPosition,
   getAmmProtocol,
   getPoolButtonId,
+  isBorrowing,
   pushEvent,
   setPageTitle,
 } from '@utilities';
@@ -210,6 +211,15 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
     }
   }
 
+  const buttonId = getPoolButtonId(
+    margin && margin < 0 ? 'REMOVE' : 'ADD',
+    (liquidityAction ?? '').toString(),
+    showNegativeNotional ? 'REMOVE' : 'ADD',
+    agent,
+    isBorrowing(amm.rateOracle.protocolId),
+    amm.protocol,
+  );
+
   const renderStatus = () => {
     if (activeTransaction.resolvedAt && isFetched) {
       return (
@@ -240,13 +250,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               href={transactionLink}
               variant="caption"
               color="primary.light"
-              id={getPoolButtonId(
-                margin && margin < 0 ? 'REMOVE' : 'ADD',
-                (liquidityAction ?? '').toString(),
-                showNegativeNotional ? 'REMOVE' : 'ADD',
-                agent,
-                amm,
-              )}
+              id={buttonId}
             >
               View on etherscan
             </Link>
@@ -259,13 +263,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
             <Button
               variant="contained"
               onClick={onComplete}
-              id={getPoolButtonId(
-                margin && margin < 0 ? 'REMOVE' : 'ADD',
-                (liquidityAction ?? '').toString(),
-                showNegativeNotional ? 'REMOVE' : 'ADD',
-                agent,
-                amm,
-              )}
+              id={buttonId}
             >
               Go to your portfolio
             </Button>
@@ -311,15 +309,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
             <Button
               variant="contained"
               onClick={onBack}
-              id={
-                getPoolButtonId(
-                  margin && margin < 0 ? 'REMOVE' : 'ADD',
-                  (liquidityAction ?? '').toString(),
-                  showNegativeNotional ? 'REMOVE' : 'ADD',
-                  agent,
-                  amm,
-                ) + '_FAILED'
-              }
+              id={buttonId + '_FAILED'}
             >
               Back
             </Button>
@@ -356,13 +346,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               target="_blank"
               variant="caption"
               color="primary.light"
-              id={getPoolButtonId(
-                margin && margin < 0 ? 'REMOVE' : 'ADD',
-                (liquidityAction ?? '').toString(),
-                showNegativeNotional ? 'REMOVE' : 'ADD',
-                agent,
-                amm,
-              )}
+              id={buttonId}
             >
               View on etherscan
             </Link>
@@ -373,19 +357,10 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               textAlign: 'center',
             }}
           >
-            {/* <Typography variant="caption" color="secondary">
-              Wait a few moments for the blockchain data to synchronize
-            </Typography> */}
             <Button
               variant="contained"
               onClick={onComplete}
-              id={getPoolButtonId(
-                margin && margin < 0 ? 'REMOVE' : 'ADD',
-                (liquidityAction ?? '').toString(),
-                showNegativeNotional ? 'REMOVE' : 'ADD',
-                agent,
-                amm,
-              )}
+              id={buttonId}
             >
               Go to your portfolio
             </Button>

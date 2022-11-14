@@ -1,12 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 import { Agents, SwapFormSubmitButtonHintStates } from '@contexts';
-import { isUndefined } from 'lodash';
-import AugmentedAMM from './augmentedAmm';
-import isBorrowing from './isBorrowing';
 import { v4 as uuidv4 } from 'uuid';
 
 const SESSION_ID = uuidv4();
@@ -16,16 +8,11 @@ export const getPoolButtonId = (
   liquidityAction: string,
   notionalAction: string,
   agent: Agents,
-  amm?: AugmentedAMM,
-  borrow?: boolean,
+  isBorrowing: boolean,
+  protocol: string,
 ): string => {
-  const protocol = amm ? amm.protocol : '';
-  let showBorrow = '';
-  if (isUndefined(borrow)) {
-    if (amm) showBorrow = isBorrowing(amm.rateOracle.protocolId) ? '_borrow' : '';
-  } else {
-    showBorrow = borrow ? '_borrow' : '';
-  }
+  const showBorrow = isBorrowing ? '_borrow' : '';
+
   const showAgent =
     agent === Agents.LIQUIDITY_PROVIDER ? 'lp' : agent === Agents.FIXED_TRADER ? 'ft' : 'vt';
   return (

@@ -25,6 +25,7 @@ import {
   AugmentedAMM,
   getNotionalActionFromHintState,
   getPoolButtonId,
+  isBorrowing,
   setPageTitle,
 } from '@utilities';
 import { isUndefined } from 'lodash';
@@ -223,6 +224,15 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
     }
   }
 
+  const buttonId = getPoolButtonId(
+    form.state.marginAction.toString(),
+    '',
+    getNotionalActionFromHintState(form.hintState),
+    agent,
+    isBorrowing(targetAmm.rateOracle.protocolId),
+    targetAmm.protocol,
+  );
+
   return (
     <>
       {position ? (
@@ -230,13 +240,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
           formMode={form.mode}
           onPortfolio={handleComplete}
           position={position}
-          gaButtonId={getPoolButtonId(
-            form.state.marginAction.toString(),
-            '',
-            getNotionalActionFromHintState(form.hintState),
-            agent,
-            targetAmm,
-          )}
+          gaButtonId={buttonId}
         />
       ) : (
         <FormPanel noBackground />
@@ -264,13 +268,7 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         onChangePartialCollateralization={form.setPartialCollateralization}
         onSubmit={handleSubmit}
         protocol={targetAmm.protocol}
-        gaButtonId={getPoolButtonId(
-          form.state.marginAction.toString(),
-          '',
-          getNotionalActionFromHintState(form.hintState),
-          agent,
-          targetAmm,
-        )}
+        gaButtonId={buttonId}
         startDate={targetAmm.startDateTime}
         swapInfo={form.swapInfo.data}
         swapInfoLoading={form.swapInfo.loading}
