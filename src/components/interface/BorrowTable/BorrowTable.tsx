@@ -269,7 +269,7 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
       >
         <Box
           sx={{
-            backgroundColor: '#2667FF',
+            backgroundColor: colors.ultramarineBlue,
             borderRadius: '5px',
             width: '4px',
             height: '4px',
