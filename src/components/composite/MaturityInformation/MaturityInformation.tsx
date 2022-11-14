@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { DateTime } from 'luxon';
-import Decimal from 'decimal.js';
 
 import { withLabel } from '../../hoc';
 import { formatDateTime } from '@utilities';
@@ -25,11 +24,9 @@ const MaturityInformation: React.FunctionComponent<MaturityInformationProps> = (
     // Durations here are both negative (due to diffNow) but that cancels out when calculating percentage
     const totalSeparation = startDate.diff(endDate);
     const separationfromStart = startDate.diffNow();
-    const percentage = new Decimal(separationfromStart.milliseconds)
-      .dividedBy(new Decimal(totalSeparation.milliseconds))
-      .times(100);
+    const percentage = (separationfromStart.milliseconds * 100) / totalSeparation.milliseconds;
 
-    return percentage.trunc().toNumber();
+    return Math.floor(percentage);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startDateMillis, endDateMillis]);
 
