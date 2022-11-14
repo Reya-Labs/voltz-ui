@@ -243,14 +243,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
         }
       }
     }
-  }, [
-    swapInfo.call,
-    notional,
-    agent,
-    approvalsNeeded,
-    marginAction,
-    ammCtx.variableApy.result,
-  ]);
+  }, [swapInfo.call, notional, agent, approvalsNeeded, marginAction, ammCtx.variableApy.result]);
 
   useEffect(() => {
     if (
@@ -420,7 +413,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
 
     if (!isRemovingMargin) {
       if (!tokenApprovals.underlyingTokenApprovedForPeriphery) {
-          return SwapFormSubmitButtonStates.APPROVE_UT_PERIPHERY;
+        return SwapFormSubmitButtonStates.APPROVE_UT_PERIPHERY;
       }
     }
 

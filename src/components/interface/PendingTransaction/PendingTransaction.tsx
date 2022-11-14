@@ -246,12 +246,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               paddingBottom: (theme) => theme.spacing(8),
             }}
           >
-            <Link
-              href={transactionLink}
-              variant="caption"
-              color="primary.light"
-              id={buttonId}
-            >
+            <Link href={transactionLink} variant="caption" color="primary.light" id={buttonId}>
               View on etherscan
             </Link>
           </Box>
@@ -260,11 +255,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               paddingBottom: (theme) => theme.spacing(10),
             }}
           >
-            <Button
-              variant="contained"
-              onClick={onComplete}
-              id={buttonId}
-            >
+            <Button variant="contained" onClick={onComplete} id={buttonId}>
               Go to your portfolio
             </Button>
           </Box>
@@ -306,11 +297,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               paddingBottom: (theme) => theme.spacing(10),
             }}
           >
-            <Button
-              variant="contained"
-              onClick={onBack}
-              id={buttonId + '_FAILED'}
-            >
+            <Button variant="contained" onClick={onBack} id={buttonId + '_FAILED'}>
               Back
             </Button>
           </Box>
@@ -357,11 +344,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               textAlign: 'center',
             }}
           >
-            <Button
-              variant="contained"
-              onClick={onComplete}
-              id={buttonId}
-            >
+            <Button variant="contained" onClick={onComplete} id={buttonId}>
               Go to your portfolio
             </Button>
           </Box>

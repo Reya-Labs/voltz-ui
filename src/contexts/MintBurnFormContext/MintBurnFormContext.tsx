@@ -510,9 +510,9 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
       const isWithdrawable = isMarginWithdrawable(
         margin,
         positionAmm?.descale(BigNumber.from(position?.margin.toString())),
-        positionInfo?.result?.safetyThreshold
+        positionInfo?.result?.safetyThreshold,
       );
-    
+
       if (!isUndefined(isWithdrawable) && !isWithdrawable) {
         valid = false;
         if (touched.current.includes('margin')) {
@@ -594,10 +594,10 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
     mode,
     positionInfo: positionInfo
       ? {
-        loading: positionInfo.loading,
-        errorMessage: positionInfo.errorMessage ?? undefined,
-        result: positionInfo.result ?? undefined,
-      }
+          loading: positionInfo.loading,
+          errorMessage: positionInfo.errorMessage ?? undefined,
+          result: positionInfo.result ?? undefined,
+        }
       : undefined,
     setFixedHigh: updateFixedHigh,
     setFixedLow: updateFixedLow,

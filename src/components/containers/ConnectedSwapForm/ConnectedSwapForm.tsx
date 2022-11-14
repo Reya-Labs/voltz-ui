@@ -108,8 +108,8 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
 
     if (!form.isRemovingMargin) {
       if (!form.tokenApprovals.underlyingTokenApprovedForPeriphery) {
-          void form.tokenApprovals.approveUnderlyingTokenForPeriphery();
-          return;
+        void form.tokenApprovals.approveUnderlyingTokenForPeriphery();
+        return;
       }
     }
 

@@ -38,7 +38,8 @@ export const useTokenApproval = (amm: AugmentedAMM) => {
     setLastApproval(undefined);
     setLastError(undefined);
 
-   amm.isUnderlyingTokenApprovedForPeriphery()
+    amm
+      .isUnderlyingTokenApprovedForPeriphery()
       .then((response) => {
         setUnderlyingTokenApprovedForPeriphery(response ?? false);
       })
@@ -48,10 +49,7 @@ export const useTokenApproval = (amm: AugmentedAMM) => {
       .finally(() => {
         setCheckingApprovals(false);
       });
-  }, [
-    amm,
-    setUnderlyingTokenApprovedForPeriphery,
-  ]);
+  }, [amm, setUnderlyingTokenApprovedForPeriphery]);
 
   const approveUnderlyingTokenForPeriphery = useCallback(async () => {
     setApproving(true);
@@ -68,17 +66,11 @@ export const useTokenApproval = (amm: AugmentedAMM) => {
     }
   }, [amm, setApproving, setUnderlyingTokenApprovedForPeriphery]);
 
-  const getNextApproval = useCallback(
-    (): ApprovalInfo | undefined => {
-      if (!underlyingTokenApprovedForPeriphery) {
-        return { text: amm.underlyingToken.name, type: ApprovalType.UTOKEN_PERIPHERY };
-      }
-    },
-    [
-      amm,
-      underlyingTokenApprovedForPeriphery,
-    ],
-  );
+  const getNextApproval = useCallback((): ApprovalInfo | undefined => {
+    if (!underlyingTokenApprovedForPeriphery) {
+      return { text: amm.underlyingToken.name, type: ApprovalType.UTOKEN_PERIPHERY };
+    }
+  }, [amm, underlyingTokenApprovedForPeriphery]);
 
   return {
     approving,
