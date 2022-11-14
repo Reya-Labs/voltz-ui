@@ -12,7 +12,7 @@ export const PillTypography = styled(Typography)`
 
 export const WildStrawberryPill = styled(PillTypography)`
   color: ${colors.wildStrawberry};
-  background: ${colors.wildStrawberry3};
+  background: ${colors.wildStrawberry6};
 `;
 
 export const OrangeYellowPill = styled(PillTypography)`
