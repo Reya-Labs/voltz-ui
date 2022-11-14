@@ -159,7 +159,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   const [margin, setMargin] = useState<MintBurnFormState['margin']>(defaultMargin);
   const [marginAction, setMarginAction] = useState<MintBurnFormMarginAction>(defaultMarginAction);
   const [notional, setNotional] = useState<MintBurnFormState['notional']>(defaultNotional);
-  const tokenApprovals = useTokenApproval(poolAmm, true);
+  const tokenApprovals = useTokenApproval(poolAmm);
 
   const approvalsNeeded = !tokenApprovals.underlyingTokenApprovedForPeriphery;
   const [errors, setErrors] = useState<MintBurnFormContext['errors']>({});
@@ -225,7 +225,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
         return MintBurnFormHintStates.ERROR_TOKEN_APPROVAL;
       }
 
-      if (tokenApprovals.getNextApproval(false)) {
+      if (tokenApprovals.getNextApproval()) {
         if (tokenApprovals.lastApproval) {
           return MintBurnFormHintStates.APPROVE_NEXT_TOKEN;
         } else {

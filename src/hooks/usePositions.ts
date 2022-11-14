@@ -7,7 +7,7 @@ import { DateTime } from 'luxon';
 import { actions, selectors } from '@store';
 import { useAgent, useWallet, useSelector, useDispatch } from '@hooks';
 import { Agents } from '@contexts';
-import { FCMPositionFactory, MEPositionFactory } from '@factories';
+import { MEPositionFactory } from '@factories';
 
 export type usePositionsResult = {
   positions?: Position[];
@@ -22,13 +22,6 @@ const usePositions = (): usePositionsResult => {
   const { signer, wallet, loading, error } = useWallet();
   const isSignerAvailable = !isNull(signer);
   const positionCount = wallet?.positions.length;
-  const fcmPositionCount = wallet?.fcmPositions.length;
-
-  const fcmPositions = useMemo(() => {
-    if (wallet && wallet.fcmPositions && !loading && !error) {
-      return wallet.fcmPositions.map((positionData) => FCMPositionFactory(positionData, signer));
-    }
-  }, [fcmPositionCount, loading, error, isSignerAvailable]);
 
   const mePositions = useMemo(() => {
     if (wallet && wallet.positions && !loading && !error) {
@@ -37,11 +30,7 @@ const usePositions = (): usePositionsResult => {
   }, [positionCount, loading, error, isSignerAvailable]);
 
   const positions = useMemo(() => {
-    const _positions = mePositions
-      ? fcmPositions
-        ? mePositions.concat(fcmPositions)
-        : mePositions
-      : fcmPositions;
+    const _positions = mePositions;
     if (_positions) {
       _positions.sort((a, b) => {
         if (JSBI.GT(a.createdTimestamp, b.createdTimestamp)) {
@@ -54,7 +43,7 @@ const usePositions = (): usePositionsResult => {
       });
     }
     return _positions;
-  }, [mePositions, fcmPositions]);
+  }, [mePositions]);
 
   const positionsByAgent = useMemo(() => {
     return positions?.filter(({ positionType }) => {

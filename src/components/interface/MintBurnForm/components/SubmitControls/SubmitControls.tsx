@@ -66,12 +66,12 @@ const SubmitControls = ({
               {tokenApprovals.lastApproval?.text}
             </Text>
             <Text green> approved!</Text> Let's now approve{' '}
-            <Text bold>{tokenApprovals.getNextApproval(false)?.text}</Text>
+            <Text bold>{tokenApprovals.getNextApproval()?.text}</Text>
           </>
         );
       }
       case MintBurnFormHintStates.APPROVE_TOKEN: {
-        return `Please approve ${tokenApprovals.getNextApproval(false)?.text || ''}`;
+        return `Please approve ${tokenApprovals.getNextApproval()?.text || ''}`;
       }
       case MintBurnFormHintStates.APPROVING: {
         return 'Waiting for confirmation';
