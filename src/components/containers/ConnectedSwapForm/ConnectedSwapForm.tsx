@@ -66,8 +66,6 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
       ammId: targetAmm.id,
       margin: Math.abs(form.state.margin as number) * (form.isRemovingMargin ? -1 : 1),
       notional: form.state.notional as number,
-      partialCollateralization:
-        agent === Agents.FIXED_TRADER ? form.state.partialCollateralization : true,
     };
 
     if (form.mode === SwapFormModes.ROLLOVER) {
@@ -91,10 +89,6 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         return actions.updatePositionMarginAction(targetAmm, transaction);
       case SwapFormActions.SWAP:
         return actions.swapAction(targetAmm, transaction);
-      case SwapFormActions.FCM_SWAP:
-        return actions.fcmSwapAction(targetAmm, transaction);
-      // case SwapFormActions.FCM_UNWIND:
-      //   return actions.fcmUnwindAction(targetAmm, transaction);
     }
   };
 
@@ -113,22 +107,9 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
     if (!form.isValid) return;
 
     if (!form.isRemovingMargin) {
-      if (form.action === SwapFormActions.FCM_SWAP || form.action === SwapFormActions.FCM_UNWIND) {
-        if (!form.tokenApprovals.FCMApproved) {
-          void form.tokenApprovals.approveFCM();
-          return;
-        } else if (!form.tokenApprovals.yieldBearingTokenApprovedForFCM) {
-          void form.tokenApprovals.approveYieldBearingTokenForFCM();
-          return;
-        } else if (!form.tokenApprovals.underlyingTokenApprovedForFCM) {
-          void form.tokenApprovals.approveUnderlyingTokenForFCM();
-          return;
-        }
-      } else {
-        if (!form.tokenApprovals.underlyingTokenApprovedForPeriphery) {
+      if (!form.tokenApprovals.underlyingTokenApprovedForPeriphery) {
           void form.tokenApprovals.approveUnderlyingTokenForPeriphery();
           return;
-        }
       }
     }
 
@@ -184,43 +165,6 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
           />
         );
       }
-
-      case SwapFormActions.FCM_SWAP:
-      case SwapFormActions.ROLLOVER_FCM_SWAP: {
-        return (
-          <PendingTransaction
-            amm={targetAmm}
-            position={position}
-            isEditingMargin={false}
-            isRollover={form.mode === SwapFormModes.ROLLOVER}
-            transactionId={transactionId}
-            onComplete={handleComplete}
-            isFCMSwap={true}
-            notional={form.swapInfo.data?.availableNotional}
-            margin={form.swapInfo.data?.marginRequirement}
-            onBack={handleGoBack}
-            variableApy={typeof resultVariableApy === 'number' ? resultVariableApy : undefined}
-            fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr : undefined}
-          />
-        );
-      }
-
-      case SwapFormActions.FCM_UNWIND: {
-        return (
-          <PendingTransaction
-            amm={targetAmm}
-            position={position}
-            isEditingMargin={false}
-            transactionId={transactionId}
-            onComplete={handleComplete}
-            isFCMUnwind={true}
-            notional={form.swapInfo.data?.availableNotional}
-            onBack={handleGoBack}
-            variableApy={typeof resultVariableApy === 'number' ? resultVariableApy : undefined}
-            fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr : undefined}
-          />
-        );
-      }
     }
   }
 
@@ -254,9 +198,6 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         formAction={form.action}
         formState={form.state}
         hintState={form.hintState}
-        isFCMAction={form.isFCMAction}
-        // isFCMAvailable={targetAmm.isFCM}
-        isFCMAvailable={false}
         isFormValid={form.isValid}
         isTradeVerified={form.isTradeVerified}
         mode={mode}
@@ -265,7 +206,6 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
         onChangeMargin={form.setMargin}
         onChangeMarginAction={form.setMarginAction}
         onChangeNotional={form.setNotional}
-        onChangePartialCollateralization={form.setPartialCollateralization}
         onSubmit={handleSubmit}
         protocol={targetAmm.protocol}
         gaButtonId={buttonId}

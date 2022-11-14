@@ -37,15 +37,9 @@ const mockAmm = {
 
 const mockTokenApprovals = {
   approving: false,
-  approveFCM: () => Promise.resolve(),
-  approveUnderlyingTokenForFCM: () => Promise.resolve(),
   approveUnderlyingTokenForPeriphery: () => Promise.resolve(),
-  approveYieldBearingTokenForFCM: () => Promise.resolve(),
   checkingApprovals: false,
-  FCMApproved: true,
-  underlyingTokenApprovedForFCM: true,
   underlyingTokenApprovedForPeriphery: true,
-  yieldBearingTokenApprovedForFCM: true,
 } as ReturnType<typeof useTokenApproval>;
 
 // Creating a new position

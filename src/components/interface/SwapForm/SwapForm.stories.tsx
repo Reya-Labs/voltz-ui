@@ -49,15 +49,9 @@ const mockSwapData = {
 
 const mockTokenApprovals = {
   approving: false,
-  approveFCM: () => Promise.resolve(),
-  approveUnderlyingTokenForFCM: () => Promise.resolve(),
   approveUnderlyingTokenForPeriphery: () => Promise.resolve(),
-  approveYieldBearingTokenForFCM: () => Promise.resolve(),
   checkingApprovals: false,
-  FCMApproved: true,
-  underlyingTokenApprovedForFCM: true,
   underlyingTokenApprovedForPeriphery: true,
-  yieldBearingTokenApprovedForFCM: true,
 } as ReturnType<typeof useTokenApproval>;
 
 // Creating a new position
@@ -81,8 +75,6 @@ const NewPositionSwapForm: React.FunctionComponent = (args) => {
       errors={form.errors}
       formState={form.state}
       hintState={SwapFormSubmitButtonHintStates.READY_TO_TRADE}
-      isFCMAction={false}
-      isFCMAvailable={true}
       isFormValid={form.isValid}
       isTradeVerified={true}
       formAction={SwapFormActions.SWAP}
@@ -92,7 +84,6 @@ const NewPositionSwapForm: React.FunctionComponent = (args) => {
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction}
       onChangeNotional={form.setNotional}
-      onChangePartialCollateralization={form.setPartialCollateralization}
       onSubmit={() => form.validate()}
       submitButtonState={SwapFormSubmitButtonStates.TRADE_FIXED}
       swapInfo={mockSwapData}
@@ -130,8 +121,6 @@ const EditingMarginSwapForm: React.FunctionComponent = (args) => {
       errors={form.errors}
       formState={form.state}
       hintState={SwapFormSubmitButtonHintStates.READY_TO_TRADE}
-      isFCMAction={false}
-      isFCMAvailable={true}
       isFormValid={form.isValid}
       isTradeVerified={true}
       mode={mode}
@@ -141,7 +130,6 @@ const EditingMarginSwapForm: React.FunctionComponent = (args) => {
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction}
       onChangeNotional={form.setNotional}
-      onChangePartialCollateralization={form.setPartialCollateralization}
       onSubmit={() => form.validate()}
       submitButtonState={SwapFormSubmitButtonStates.TRADE_FIXED}
       swapInfo={mockSwapData}

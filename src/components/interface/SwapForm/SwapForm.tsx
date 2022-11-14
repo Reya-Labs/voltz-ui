@@ -9,7 +9,6 @@ import {
   SwapFormSubmitButtonHintStates,
   SwapFormSubmitButtonStates,
 } from '@contexts';
-import { PositionBadge } from '@components/atomic';
 import { FormPanel } from '@components/interface';
 import {
   IconLabel,
@@ -19,7 +18,7 @@ import {
   MarginAmount,
 } from '@components/composite';
 import { TraderControls, MarginControls, SubmitControls, Leverage } from './components';
-import { colors, SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '@theme';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from './types';
 
@@ -33,8 +32,6 @@ export type SwapProps = {
   formAction: SwapFormActions;
   healthFactor?: number;
   hintState: SwapFormSubmitButtonHintStates;
-  isFCMAction: boolean;
-  isFCMAvailable: boolean;
   isFormValid: boolean;
   isTradeVerified: boolean;
   maxMargin?: number;
@@ -44,7 +41,6 @@ export type SwapProps = {
   onChangeMargin: (value: number | undefined) => void;
   onChangeMarginAction: (value: SwapFormMarginAction) => void;
   onChangeNotional: (value: number | undefined) => void;
-  onChangePartialCollateralization: (value: boolean) => void;
   onSubmit: () => void;
   protocol?: string;
   gaButtonId?: string;
@@ -69,8 +65,6 @@ const Swap: React.FunctionComponent<SwapProps> = ({
   formState,
   healthFactor,
   hintState,
-  isFCMAction,
-  isFCMAvailable,
   isFormValid,
   isTradeVerified,
   maxMargin,
@@ -80,7 +74,6 @@ const Swap: React.FunctionComponent<SwapProps> = ({
   onChangeMargin,
   onChangeMarginAction,
   onChangeNotional,
-  onChangePartialCollateralization,
   onSubmit,
   protocol,
   gaButtonId,
@@ -101,20 +94,6 @@ const Swap: React.FunctionComponent<SwapProps> = ({
 
   return (
     <FormPanel boxShadowType={agent === Agents.FIXED_TRADER ? 'FT' : 'VT'}>
-      {!formState.partialCollateralization && (
-        <Box
-          sx={{ display: 'flex', alignItems: 'center', marginBottom: (theme) => theme.spacing(6) }}
-        >
-          <PositionBadge variant="FC" sx={{ display: 'inline-block', marginLeft: 0 }} />
-          <IconLabel
-            icon="information-circle"
-            label=""
-            info="Please note that for the initial phase of the Voltz protocol mainnet launch, users who have supplied assets to the FCM will not accrue underling protocol rewards (ie COMP and AAVE). The Voltz Labs team will push an update in the coming weeks to allow for accruing and claiming of underling protocol rewards going forward."
-            iconSx={{ color: colors.skyBlueCrayola.base, height: '14px', width: '14px', top: '0' }}
-          />
-        </Box>
-      )}
-
       <ProtocolInformation protocol={protocol} variableApy={variableApy} fixedApr={fixedApr} />
 
       <Box sx={bottomSpacing}>
@@ -146,11 +125,8 @@ const Swap: React.FunctionComponent<SwapProps> = ({
         <Box sx={{ ...bottomSpacing, display: 'flex' }}>
           <TraderControls
             agent={agent}
-            isFCMAvailable={isFCMAvailable}
             isEdit={mode === SwapFormModes.EDIT_NOTIONAL}
-            partialCollateralization={formState.partialCollateralization}
             onChangeAgent={onChangeAgent}
-            onChangePartialCollateralization={onChangePartialCollateralization}
           />
         </Box>
       )}
@@ -162,11 +138,7 @@ const Swap: React.FunctionComponent<SwapProps> = ({
             label="notional amount"
             defaultNotional={mode === SwapFormModes.EDIT_NOTIONAL ? 0 : undefined}
             isEditing={mode === SwapFormModes.EDIT_NOTIONAL}
-            info={
-              formAction === SwapFormActions.FCM_SWAP || formAction === SwapFormActions.FCM_UNWIND
-                ? "Choose the notional you wish to trade. The notional amount is the total size of your trade and, since you're fully collateralising your position, is the amount of margin required too."
-                : 'Choose the notional you wish to trade. The notional amount is the total size of your trade.'
-            }
+            info={'Choose the notional you wish to trade. The notional amount is the total size of your trade.'}
             notional={formState.notional}
             onChangeNotional={onChangeNotional}
             underlyingTokenName={underlyingTokenName}
@@ -175,7 +147,7 @@ const Swap: React.FunctionComponent<SwapProps> = ({
       )}
 
       {(mode === SwapFormModes.NEW_POSITION || mode === SwapFormModes.ROLLOVER) &&
-        ((agent === Agents.FIXED_TRADER && formState.partialCollateralization) ||
+        ((agent === Agents.FIXED_TRADER) ||
           agent === Agents.VARIABLE_TRADER) && (
           <Box sx={{ ...bottomSpacing, display: 'flex' }}>
             <Leverage
@@ -222,7 +194,6 @@ const Swap: React.FunctionComponent<SwapProps> = ({
       <SubmitControls
         approvalsNeeded={approvalsNeeded}
         hintState={hintState}
-        isFCMAction={isFCMAction}
         isFormValid={isFormValid}
         isTradeVerified={isTradeVerified}
         mode={mode}

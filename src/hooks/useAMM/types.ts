@@ -7,8 +7,6 @@ export type MintMinimumMarginRequirementPayload = Omit<
 
 export enum GetInfoType {
   NORMAL_SWAP = 'NORMAL_SWAP',
-  FCM_SWAP = 'FCM_SWAP',
-  FCM_UNWIND = 'FCM_UNWIND',
 }
 
 export type SwapInfoPayload = {
