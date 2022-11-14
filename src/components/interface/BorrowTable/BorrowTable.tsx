@@ -1,6 +1,9 @@
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
+import { colors, SystemStyleObject, Theme } from '@theme';
+import { Typography, Panel } from '@components/atomic';
+import { Box } from '@mui/material';
 import TableContainer from '@mui/material/TableContainer';
 import { BorrowAMM, Position } from '@voltz-protocol/v1-sdk';
 import React, { useMemo, useRef } from 'react';
@@ -285,7 +288,7 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
       >
         <Box
           sx={{
-            backgroundColor: '#4DE5FF',
+            backgroundColor: colors.skyBlueCrayola,
             borderRadius: '5px',
             width: '4px',
             height: '4px',

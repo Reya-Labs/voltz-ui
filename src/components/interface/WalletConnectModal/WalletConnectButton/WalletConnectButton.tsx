@@ -76,9 +76,7 @@ export const WalletConnectButton: React.FunctionComponent<WalletConnectButtonPro
   return (
     <Button
       startIcon={
-        <CircleIcon
-          sx={{ width: 4, height: 4, borderRadius: 200, color: colors.wildStrawberry }}
-        />
+        <CircleIcon sx={{ width: 4, height: 4, borderRadius: 200, color: colors.wildStrawberry }} />
       }
       sx={{ marginLeft: (theme) => theme.spacing(4), fontSize: 16 }}
       variant="darker"

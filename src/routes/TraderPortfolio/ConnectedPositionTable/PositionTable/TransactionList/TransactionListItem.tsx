@@ -73,10 +73,7 @@ export const TransactionListItem = ({
   return (
     <ListItem sx={rowStyles}>
       <Box sx={cellStyles}>
-        <Typography
-          variant="body2"
-          sx={{ color: colors.lavenderWeb3, textTransform: 'uppercase' }}
-        >
+        <Typography variant="body2" sx={{ color: colors.lavenderWeb3, textTransform: 'uppercase' }}>
           {data.date}
         </Typography>
       </Box>
