@@ -7,7 +7,7 @@ import { isUndefined } from 'lodash';
  * @param marginToBeWithdrawan Margin to be withdrawn
  * @param positionMargin Current position margin
  * @param positionMarginRequirement Current position margin requirement
-*/
+ */
 export const isMarginWithdrawable = (
   marginToBeWithdrawan?: number,
   positionMargin?: number,

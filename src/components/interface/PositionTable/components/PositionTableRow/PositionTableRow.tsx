@@ -53,11 +53,13 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     const underlyingTokenName = position.amm.underlyingToken.name; // Introduced this so margin and notional show the correct underlying token unit e.g. Eth not stEth, USDC not aUSDC
 
     if (field === 'accruedRates') {
-      return <AccruedRates
-        positionType={position.positionType}
-        avgFixedRate={positionInfo?.fixedRateSinceLastSwap}
-        variableRate={positionInfo?.variableRateSinceLastSwap}
-      />;
+      return (
+        <AccruedRates
+          positionType={position.positionType}
+          avgFixedRate={positionInfo?.fixedRateSinceLastSwap}
+          variableRate={positionInfo?.variableRateSinceLastSwap}
+        />
+      );
     }
 
     if (field === 'fixedApr') {
@@ -82,11 +84,13 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     }
 
     if (field === 'maturity') {
-      return <MaturityInformation
-        label="Maturity"
-        startDate={position.amm.startDateTime}
-        endDate={position.amm.endDateTime}
-      />
+      return (
+        <MaturityInformation
+          label="Maturity"
+          startDate={position.amm.startDateTime}
+          endDate={position.amm.endDateTime}
+        />
+      );
     }
 
     if (field === 'notional') {

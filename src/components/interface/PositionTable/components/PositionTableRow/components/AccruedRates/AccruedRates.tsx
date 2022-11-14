@@ -11,13 +11,9 @@ const AccruedRates = ({ positionType, avgFixedRate, variableRate }: AccruedRates
   const renderValue = () => {
     if (variableRate && avgFixedRate) {
       if (positionType === 1) {
-        return `${formatNumber(avgFixedRate)}% / ${formatNumber(
-          variableRate,
-        )}%`;
+        return `${formatNumber(avgFixedRate)}% / ${formatNumber(variableRate)}%`;
       } else {
-        return `${formatNumber(variableRate)}% / ${formatNumber(
-          avgFixedRate,
-        )}%`;
+        return `${formatNumber(variableRate)}% / ${formatNumber(avgFixedRate)}%`;
       }
     } else {
       return `- / -`;

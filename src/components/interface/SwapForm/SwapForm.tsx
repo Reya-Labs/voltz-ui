@@ -138,7 +138,9 @@ const Swap: React.FunctionComponent<SwapProps> = ({
             label="notional amount"
             defaultNotional={mode === SwapFormModes.EDIT_NOTIONAL ? 0 : undefined}
             isEditing={mode === SwapFormModes.EDIT_NOTIONAL}
-            info={'Choose the notional you wish to trade. The notional amount is the total size of your trade.'}
+            info={
+              'Choose the notional you wish to trade. The notional amount is the total size of your trade.'
+            }
             notional={formState.notional}
             onChangeNotional={onChangeNotional}
             underlyingTokenName={underlyingTokenName}
@@ -147,8 +149,7 @@ const Swap: React.FunctionComponent<SwapProps> = ({
       )}
 
       {(mode === SwapFormModes.NEW_POSITION || mode === SwapFormModes.ROLLOVER) &&
-        ((agent === Agents.FIXED_TRADER) ||
-          agent === Agents.VARIABLE_TRADER) && (
+        (agent === Agents.FIXED_TRADER || agent === Agents.VARIABLE_TRADER) && (
           <Box sx={{ ...bottomSpacing, display: 'flex' }}>
             <Leverage
               availableNotional={swapInfo?.availableNotional ?? undefined}
