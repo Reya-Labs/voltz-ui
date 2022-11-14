@@ -53,7 +53,11 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     const underlyingTokenName = position.amm.underlyingToken.name; // Introduced this so margin and notional show the correct underlying token unit e.g. Eth not stEth, USDC not aUSDC
 
     if (field === 'accruedRates') {
-      return <AccruedRates position={position} positionInfo={positionInfo} />;
+      return <AccruedRates 
+        positionType={position.positionType} 
+        avgFixedRate={positionInfo?.fixedRateSinceLastSwap} 
+        variableRate={positionInfo?.variableRateSinceLastSwap} 
+      />;
     }
 
     if (field === 'fixedApr') {
