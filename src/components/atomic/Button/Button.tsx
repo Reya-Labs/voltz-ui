@@ -106,9 +106,8 @@ export function Button<C extends React.ElementType>({
         '&:hover': {
           backgroundColor: 'transparent',
         },
-        color: '#40F99B',
-        borderWidth: 1,
-        borderColor: '#40F99B',
+        color: colors.skyBlueCrayola,
+        border: `1px solid ${colors.skyBlueCrayola}`,
       };
     }
 
@@ -118,9 +117,8 @@ export function Button<C extends React.ElementType>({
         '&:hover': {
           backgroundColor: 'transparent',
         },
-        color: '#F1D302',
-        borderWidth: 1,
-        borderColor: '#F1D302',
+        color: colors.orangeYellow,
+        border: `1px solid ${colors.orangeYellow}`,
       };
     }
 
@@ -130,9 +128,8 @@ export function Button<C extends React.ElementType>({
         '&:hover': {
           backgroundColor: 'transparent',
         },
-        color: '#F61067',
-        borderWidth: 1,
-        borderColor: '#F61067',
+        color: colors.wildStrawberry,
+        border: `1px solid ${colors.wildStrawberry}`,
       };
     }
 

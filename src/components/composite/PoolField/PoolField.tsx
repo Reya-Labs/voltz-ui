@@ -63,7 +63,7 @@ export const PoolField = ({ agent, protocol, isBorrowing, isBorrowTable }: PoolF
 
   const getPoolLabel = () => (
     <>
-      <Box component="span" sx={{ color: '#9B97AD' }}>
+      <Box component="span" sx={{ color: colors.lavenderWeb2 }}>
         POOL
       </Box>
       {isBorrowing && (

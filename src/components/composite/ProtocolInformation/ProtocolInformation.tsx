@@ -47,7 +47,7 @@ export const ProtocolInformation: React.FunctionComponent<ProtocolInformationPro
   const { amm } = useAMMContext();
   const getPoolLabel = () => (
     <>
-      <Box component="span" sx={{ color: '#9B97AD' }}>
+      <Box component="span" sx={{ color: colors.lavenderWeb2 }}>
         POOL
       </Box>
       {amm && isBorrowing(amm.rateOracle.protocolId) && (

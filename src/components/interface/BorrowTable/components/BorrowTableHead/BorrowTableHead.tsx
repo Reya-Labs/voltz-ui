@@ -4,8 +4,8 @@ import TableRow from '@mui/material/TableRow';
 import { SystemStyleObject, Theme } from '@mui/system';
 import React from 'react';
 
-import { Typography } from '../../../../atomic/Typography/Typography';
-import { FixedBorrowTableFields, VariableBorrowTableFields } from '../../types';
+import { VariableBorrowTableFields, FixedBorrowTableFields } from '../../types';
+import { colors } from '@theme';
 
 export type BorrowTableHeadProps = {
   labels: [VariableBorrowTableFields | FixedBorrowTableFields, string][];
@@ -62,7 +62,7 @@ export const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({
                 textTransform: 'uppercase',
                 fontWeight: 400,
                 fontSize: 12,
-                color: '#9B97AD',
+                color: colors.lavenderWeb2,
               }}
               variant="subtitle1"
             >
