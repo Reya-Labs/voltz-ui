@@ -105,7 +105,8 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
         <List sx={{ padding: '0', margin: '0' }}>
           {positions.map((pos, index) => {
             const rolloverAmm = findCurrentAmm(amms || [], pos);
-            const rolloverAvailable = rolloverAmm && rolloverAmm.id !== pos.amm.id;
+            const rolloverAvailable = rolloverAmm ? rolloverAmm.id !== pos.amm.id : false;
+            const info = portfolioData?.info ? portfolioData.info[pos.id] : undefined;
 
             return (
               <ListItem sx={listItemStyles} key={pos.id}>
@@ -114,10 +115,13 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                   sx={{ width: '100%', padding: (theme) => `0 ${theme.spacing(4)}` }}
                 >
                   <PositionTableHead
+                    beforeMaturity={info?.beforeMaturity}
+                    healthFactor={info?.healthFactor}
+                    fixedRateHealthFactor={info?.fixedRateHealthFactor}
+                    fixedApr={info?.fixedApr}
+                    fees={info?.fees}
                     currencyCode="USD"
                     currencySymbol="$"
-                    isFCM={pos.source === 'FCM'}
-                    info={portfolioData?.info ? portfolioData.info[pos.id] : undefined}
                     feesPositive={true}
                     isSettled={pos.isSettled}
                     positionType={pos.positionType}
@@ -128,7 +132,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                       pos.amm.protocol,
                       isBorrowing(pos.amm.rateOracle.protocolId),
                     )}
-                    rolloverAmm={rolloverAvailable ? rolloverAmm : undefined}
+                    rolloverAvailable={rolloverAvailable}
                     onSelect={
                       agent === Agents.LIQUIDITY_PROVIDER
                         ? undefined
