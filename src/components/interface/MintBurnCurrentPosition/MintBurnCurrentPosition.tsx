@@ -1,11 +1,8 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-// import { SystemStyleObject, Theme } from '@theme';
-import { Position } from '@voltz-protocol/v1-sdk';
 import { Button, Ellipsis, PositionBadge, SummaryPanel } from '@components/atomic';
 import { FormPanel } from '@components/interface';
 import { formatCurrency, formatNumber } from '@utilities';
-import { BigNumber } from 'ethers';
 import { usePositionContext } from '@contexts';
 import { colors } from '@theme';
 import { MintBurnFormModes } from '@contexts';
@@ -14,28 +11,30 @@ import { isUndefined } from 'lodash';
 export type MintBurnCurrentPositionProps = {
   formMode: MintBurnFormModes;
   onPortfolio: () => void;
-  position: Position;
+  notional: number;
+  margin: number;
+  underlyingTokenName: string;
+  fixedRateUpper: number;
+  fixedRateLower: number;
 };
 
 export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPositionProps> = ({
   formMode,
   onPortfolio,
-  position,
+  notional,
+  margin,
+  underlyingTokenName,
+  fixedRateUpper,
+  fixedRateLower,
 }) => {
-  // const bottomSpacing: SystemStyleObject<Theme> = {
-  //   marginBottom: (theme) => theme.spacing(6)
-  // }
   const { positionInfo } = usePositionContext();
 
   const currentPositionBadgeText = `${
     positionInfo?.result?.beforeMaturity === false ? 'Previous' : 'Current'
   } position: LP`;
-  const notional = position.notional;
-  const margin = position.amm.descale(BigNumber.from(position.margin.toString()));
   const leverage = notional / margin;
   const fees = positionInfo?.result?.fees;
   const cashflow = positionInfo?.result?.settlementCashflow;
-  const underlyingTokenName = position.amm.underlyingToken.name || '';
 
   const getHealthFactor = () => {
     if (positionInfo?.loading) {
@@ -77,11 +76,11 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
     },
     {
       label: 'FIXED LOW',
-      value: `${formatNumber(position?.fixedRateLower.toNumber())}%`,
+      value: `${formatNumber(fixedRateLower)}%`,
     },
     {
       label: 'FIXED HIGH',
-      value: `${formatNumber(position?.fixedRateUpper.toNumber())}%`,
+      value: `${formatNumber(fixedRateUpper)}%`,
     },
     {
       label: 'HEALTH FACTOR',

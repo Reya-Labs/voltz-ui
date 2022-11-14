@@ -1,10 +1,6 @@
 import { Position } from '@voltz-protocol/v1-sdk';
-import { AugmentedAMM, AugmentedBorrowAMM } from '@utilities';
+import { AugmentedBorrowAMM } from '@utilities';
 import { DateTime } from 'luxon';
-
-export const getBorrowAmmsfromAmms = (amms: AugmentedAMM[]) => {
-  return amms.map((amm) => new AugmentedBorrowAMM({ id: amm.id, amm: amm }));
-};
 
 export const getTotalVariableDebt = async (
   borrowAmms: AugmentedBorrowAMM[],
