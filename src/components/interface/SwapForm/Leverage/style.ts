@@ -4,11 +4,11 @@ export const activeButtonStyle: SystemStyleObject<Theme> = {
   flex: 1,
   color: colors.lavenderWeb,
   border: `1px solid ${colors.lavenderWeb4}`,
-  backgroundColor: '#43405B',
+  backgroundColor: colors.liberty2,
 };
 export const buttonStyle: SystemStyleObject<Theme> = {
   flex: 1,
-  backgroundColor: '#2D2B3D',
+  backgroundColor: colors.liberty4,
   color: colors.lavenderWeb,
 };
 

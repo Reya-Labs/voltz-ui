@@ -50,10 +50,10 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
   const replacementRowStyle: SystemStyleObject<Theme> = {
     fontSize: 18,
     fontWeight: '400',
-    color: '#48435E',
+    color: colors.liberty2,
     display: 'flex',
     justifyContent: 'center',
-    backgroundColor: `#151221`,
+    backgroundColor: colors.liberty6,
     borderRadius: 2,
     padding: '10px',
     marginTop: (theme) => theme.spacing(-3),

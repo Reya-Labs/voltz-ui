@@ -1,12 +1,13 @@
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
+import { colors } from '@theme';
 
 export const NotificationBox = styled(Box)`
   padding: ${({ theme }) => theme.spacing(2, 4)};
 `;
 
 export const NotificationContainer = styled(Box)`
-  background-color: #19152a;
+  background-color: ${colors.liberty6};
   display: flex;
   align-items: center;
   justify-content: space-between;

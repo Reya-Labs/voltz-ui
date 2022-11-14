@@ -14,7 +14,7 @@ export const Skeleton = styled(SkeletonComponent)`
 `;
 
 export const ContainerBox = styled(Box)`
-  background-color: #2b2548;
+  background-color: ${colors.liberty4};
   border-radius: 8px;
   padding: ${({ theme }) => theme.spacing(2, 2, 2, 4)};
   display: flex;

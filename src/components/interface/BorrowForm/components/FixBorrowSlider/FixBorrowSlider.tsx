@@ -59,7 +59,7 @@ export const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
     textTransform: 'uppercase',
     fontWeight: 400,
     fontSize: 12,
-    color: '#A6A2B4',
+    color: colors.lavenderWeb1,
     verticalAlign: 'middle',
     marginTop: (theme) => theme.spacing(4),
   };
@@ -72,11 +72,11 @@ export const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
         paddingTop: 1,
       },
       '& .MuiSlider-rail': {
-        background: '#002BB1',
+        background: colors.ultramarineBlue2,
         height: 13,
       },
       '& .MuiSlider-track': {
-        background: '#009AB3',
+        background: colors.skyBlueCrayola2,
         height: 13,
       },
       '& .MuiSlider-mark': {
@@ -132,7 +132,7 @@ export const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
                   underlyingTokenName === 'ETH' ? 4 : 2,
                 )} ${underlyingTokenName}`
               : 'Loading...'}
-            <Box sx={{ color: '#A6A2B4', fontWeight: 400 }}>
+            <Box sx={{ color: colors.lavenderWeb2, fontWeight: 400 }}>
               &thinsp;{' '}
               {!variableDebt.loading ? ` (${formatNumber(selectedFixedDebtPercentage)}%)` : ''}
             </Box>
@@ -147,7 +147,7 @@ export const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
                   underlyingTokenName === 'ETH' ? 4 : 2,
                 )} ${underlyingTokenName}`
               : 'Loading...'}
-            <Box sx={{ color: '#A6A2B4', fontWeight: 400 }}>
+            <Box sx={{ color: colors.lavenderWeb2, fontWeight: 400 }}>
               &thinsp;
               {!variableDebt.loading ? ` (${formatNumber(selectedVariableDebtPercentage)}%)` : ''}
             </Box>

@@ -46,19 +46,19 @@ export const Panel: React.FunctionComponent<PanelProps> = React.forwardRef(
             backgroundColor: `secondary.darken050`,
           };
 
-        case 'iconLabel':
-          return {
-            borderRadius: 1,
-            padding: (theme) => `${theme.spacing(3)} ${theme.spacing(4)}`,
-            maxWidth: 200,
-            backgroundColor: '#0F0C1D',
-            borderColor: '#383545',
-            borderStyle: 'solid',
-            boxShadow: '0px 4px 15px rgba(229, 225, 249, 0.1)',
-            '& > *': {
-              color: `${variant}.light`,
-            },
-          };
+      case 'iconLabel':
+        return {
+          borderRadius: 1,
+          padding: (theme) => `${theme.spacing(3)} ${theme.spacing(4)}`,
+          maxWidth: 200,
+          backgroundColor: colors.liberty7,
+          borderColor: colors.liberty3,
+          borderStyle: 'solid',
+          boxShadow: '0px 4px 15px rgba(229, 225, 249, 0.1)',
+          '& > *': {
+            color: `${variant}.light`,
+          },
+        };
 
       case 'error':
         return {

@@ -55,7 +55,7 @@ export const Debt: React.FunctionComponent<DebtProps> = ({
         {renderValueInUSD()}
         <Box
           sx={{
-            color: '#A6A2B4',
+            color: colors.lavenderWeb2,
             fontSize: 12,
             align: 'left',
             marginLeft: (theme) => theme.spacing(-1.7),

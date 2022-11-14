@@ -18,18 +18,18 @@ export const buttonSx: SystemStyleObject<Theme> = {
   borderRadius: '8px',
 
   '&:hover': {
-    background: '#352E56',
+    background: colors.liberty3,
     opacity: 1,
   },
 
   [`&.${OPEN_CLASS}`]: {
-    background: '#352E56',
+    background: colors.liberty3,
     opacity: 1,
     borderRadius: '8px 8px 0px 0px',
   },
 
   [`&.${ACTIVE_CLASS}`]: {
-    background: '#352E56',
+    background: colors.liberty3,
     opacity: 1,
   },
 };
@@ -42,7 +42,7 @@ export const subMenuButtonSx: SystemStyleObject<Theme> = {
   letterSpacing: '0.02em',
   color: colors.lavenderWeb,
   textDecoration: 'none',
-  background: '#251F3F',
+  background: colors.liberty4,
   padding: (theme) => theme.spacing(2, 4),
   borderRadius: '8px',
 
@@ -50,11 +50,11 @@ export const subMenuButtonSx: SystemStyleObject<Theme> = {
     textDecoration: 'none',
     borderRadius: '8px',
     borderBottomColor: 'transparent',
-    background: '#0E0C16',
+    background: colors.liberty7,
   },
 
   [`&.${ACTIVE_CLASS}`]: {
-    background: '#0E0C16',
+    background: colors.liberty7,
   },
 };
 
@@ -76,7 +76,7 @@ export const buttonGroupSx: SystemStyleObject<Theme> = {
 
 export const popoverOverrideSx: SystemStyleObject<Theme> = {
   '& .MuiPaper-root': {
-    background: '#352E56',
+    background: colors.liberty3,
     borderRadius: '0px 8px 8px 8px',
   },
   '& .MuiButtonGroup-root': {

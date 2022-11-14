@@ -1,5 +1,6 @@
 import { styled } from '@mui/material/styles';
 import ToggleButtonComponent from '@mui/material/ToggleButton';
+import { colors } from '@theme';
 
 import { Typography } from '../../../../components/atomic/Typography/Typography';
 
@@ -19,10 +20,10 @@ export const ToggleButton = styled(ToggleButtonComponent)`
   }
 
   &.MuiToggleButtonGroup-grouped:hover {
-    background: #251f3f;
+    background: ${colors.liberty4};
   }
 
   &.Mui-selected {
-    background: #2b2548;
+    background: ${colors.liberty4};
   }
 `;

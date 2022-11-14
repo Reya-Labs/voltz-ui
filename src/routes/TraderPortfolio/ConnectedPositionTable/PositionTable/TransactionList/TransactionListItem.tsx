@@ -28,7 +28,7 @@ const rowStyles: SystemStyleObject<Theme> = {
 };
 
 const cellStyles: SystemStyleObject<Theme> = {
-  color: '#fff',
+  color: colors.lavenderWeb,
   padding: (theme) => `${theme.spacing(2)} ${theme.spacing(3)}`,
   display: 'flex',
   alignItems: 'center',

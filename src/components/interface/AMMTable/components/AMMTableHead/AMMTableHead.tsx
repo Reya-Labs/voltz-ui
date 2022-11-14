@@ -6,6 +6,7 @@ import React from 'react';
 
 import { Typography } from '../../../../atomic/Typography/Typography';
 import { labels } from '../../constants';
+import { colors } from '@theme';
 
 export const AMMTableHead: React.FunctionComponent = () => {
   const cellSx: SystemStyleObject<Theme> = {
@@ -35,7 +36,7 @@ export const AMMTableHead: React.FunctionComponent = () => {
                 textTransform: 'uppercase',
                 fontWeight: 400,
                 fontSize: 12,
-                color: '#5A576D',
+                color: colors.lavenderWeb5,
               }}
               variant="subtitle1"
             >

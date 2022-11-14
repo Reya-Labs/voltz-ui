@@ -35,8 +35,8 @@ export const BorrowPortfolioSummary = ({
   }
 
   const sideWidth = (isVar: boolean, isLimit: boolean): SystemStyleObject<Theme> => {
-    const varColor = '#002BB1';
-    const fixColor = '#009AB3';
+    const varColor = colors.ultramarineBlue2;
+    const fixColor = colors.skyBlueCrayola2;
     const height = '20px';
     // show small line eve if percentage is zero
     if (isLimit) {
@@ -61,7 +61,7 @@ export const BorrowPortfolioSummary = ({
     textTransform: 'uppercase',
     fontWeight: 400,
     fontSize: 14,
-    color: '#A6A2B4',
+    color: colors.lavenderWeb2,
     verticalAlign: 'middle',
     marginTop: (theme) => theme.spacing(1),
   };
@@ -72,8 +72,8 @@ export const BorrowPortfolioSummary = ({
     if (debt !== undefined && percentage !== undefined) {
       return (
         <Box sx={{ display: 'flex', justifyContent: justify, textAlign: align }}>
-          {`${currencySymbol + formatCurrency(debt, true, false, 2, 2)} ${currencyCode}`}
-          <Box sx={{ color: '#A6A2B4', fontWeight: 400 }}>
+          {currencySymbol + formatCurrency(debt, true, false, 2, 2) + ' ' + currencyCode}
+          <Box sx={{ color: colors.lavenderWeb2, fontWeight: 400 }}>
             {' '}
             &nbsp;
             {`(${formatNumber(percentage)}%)`}
@@ -173,9 +173,9 @@ export const BorrowPortfolioSummary = ({
     <>
       <Box
         sx={{
-          backgroundColor: `#19152A`,
+          backgroundColor: colors.liberty6,
           borderRadius: '4px',
-          border: '1px solid #2D2B3D',
+          border: `1px solid ${colors.liberty4}`,
           padding: (theme) => theme.spacing(4),
           marginTop: (theme) => theme.spacing(8),
         }}

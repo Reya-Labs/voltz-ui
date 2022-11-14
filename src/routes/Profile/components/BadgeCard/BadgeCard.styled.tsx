@@ -21,7 +21,7 @@ const highlightAnimation = keyframes`
 `;
 
 export const Container = styled(Box)`
-  background-color: #19152a;
+  background-color: ${colors.liberty6};
   border-radius: 8px;
   padding: ${({ theme }) => theme.spacing(4)};
   display: flex;

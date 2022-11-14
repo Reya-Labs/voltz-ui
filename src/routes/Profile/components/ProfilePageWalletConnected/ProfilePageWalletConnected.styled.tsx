@@ -91,7 +91,7 @@ export const BadgeCollectionTypographyBox = styled(Box)`
 `;
 
 export const BadgeCollectionBox = styled(Box)`
-  background-color: #1e1932;
+  background-color: ${colors.liberty5};
   border-radius: 8px;
   padding: ${({ theme }) => theme.spacing(4)};
   margin-top: ${({ theme }) => theme.spacing(3)};

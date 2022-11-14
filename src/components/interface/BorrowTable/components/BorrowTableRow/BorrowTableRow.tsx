@@ -127,7 +127,7 @@ export const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({
     }
     if (variant === 'main') {
       return {
-        backgroundColor: `#19152B`, // this affects the colour of the Pool table rows
+        backgroundColor: colors.liberty6,
         borderRadius: '8px',
       };
     }
@@ -151,10 +151,10 @@ export const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({
         <Button
           id={gaButtonId}
           sx={{
-            backgroundColor: '#19152B',
+            backgroundColor: colors.liberty6,
             color: 'primary.light',
             '&:hover': {
-              backgroundColor: '#19152B',
+              backgroundColor: colors.liberty6,
               borderStyle: 'none none solid none',
               borderColor: 'primary.light',
               borderRadius: '0px',

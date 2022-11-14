@@ -15,7 +15,7 @@ const labelStyles: SystemStyleObject<Theme> = {
   textTransform: 'uppercase',
   fontWeight: 400,
   fontSize: 14,
-  color: '#B3AFC6',
+  color: colors.lavenderWeb1,
 };
 const titleStyles: SystemStyleObject<Theme> = {
   fontSize: '40px',
