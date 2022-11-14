@@ -22,6 +22,7 @@ import {
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import * as s from './services';
 import { isMarginWithdrawable } from '@utilities';
+import { BigNumber } from 'ethers';
 
 // updateLeverage instead of setLeverage when notional updates
 // have reset flag in onChange in Leverage to be able to reset leverage when box is modified.
@@ -702,8 +703,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     if (marginAction === SwapFormMarginAction.REMOVE) {
       const isWithdrawable = isMarginWithdrawable(
         margin,
-        position,
-        positionAmm,
+        positionAmm?.descale(BigNumber.from(position?.margin.toString())),
         currentPositionMarginRequirement,
       );
       if (!isUndefined(isWithdrawable) && !isWithdrawable) {

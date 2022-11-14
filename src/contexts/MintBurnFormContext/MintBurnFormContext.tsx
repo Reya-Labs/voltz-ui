@@ -16,6 +16,7 @@ import React, { createContext, useCallback, useContext, useEffect, useRef, useSt
 import { debounce, isUndefined } from 'lodash';
 import { PositionInfo } from '@voltz-protocol/v1-sdk';
 import { isMarginWithdrawable } from '@utilities';
+import { BigNumber } from 'ethers';
 
 export enum MintBurnFormModes {
   NEW_POSITION = 'NEW_POSITION',
@@ -508,10 +509,10 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
     if (marginAction === MintBurnFormMarginAction.REMOVE) {
       const isWithdrawable = isMarginWithdrawable(
         margin,
-        position,
-        positionAmm,
-        currentPositionMarginRequirement,
+        positionAmm?.descale(BigNumber.from(position?.margin.toString())),
+        positionInfo?.result?.safetyThreshold
       );
+    
       if (!isUndefined(isWithdrawable) && !isWithdrawable) {
         valid = false;
         if (touched.current.includes('margin')) {
@@ -593,10 +594,10 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
     mode,
     positionInfo: positionInfo
       ? {
-          loading: positionInfo.loading,
-          errorMessage: positionInfo.errorMessage ?? undefined,
-          result: positionInfo.result ?? undefined,
-        }
+        loading: positionInfo.loading,
+        errorMessage: positionInfo.errorMessage ?? undefined,
+        result: positionInfo.result ?? undefined,
+      }
       : undefined,
     setFixedHigh: updateFixedHigh,
     setFixedLow: updateFixedLow,
