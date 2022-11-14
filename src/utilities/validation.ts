@@ -46,7 +46,7 @@ export const hasEnoughTokens = async (
  * Checks if the user has enough underlying tokens.
  * Returns boolean if validation was able to proceed, undefined if not.
  * @param amm - the amm for the position
- * @param mmount - the amount of underlying tokens to check
+ * @param amount - the amount of underlying tokens to check
  */
 export const hasEnoughUnderlyingTokens = async (
   amm: AugmentedAMM,

@@ -1,39 +1,30 @@
-import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
-import { AugmentedAMM } from '@utilities';
 import { isUndefined } from 'lodash';
-import { BigNumber } from 'ethers';
 
 /**
  * Returns undefined if any of the arguments are undefined
  * Returns true if margin is withdrawable
  * Return false if margin is not withdrawable
- * @param margin Margin to be withdrawn
- * @param position Position to be withdrawn from
- * @param positionAmm The AMM of position
- * @param currentPositionMarginRequirement The position's current margin requirement (initial/safety)
- */
+ * @param marginToBeWithdrawan Margin to be withdrawn
+ * @param positionMargin Current position margin
+ * @param positionMarginRequirement Current position margin requirement
+*/
 export const isMarginWithdrawable = (
-  margin?: number,
-  position?: Position,
-  positionAmm?: AugmentedAMM,
-  currentPositionMarginRequirement?: number,
+  marginToBeWithdrawan?: number,
+  positionMargin?: number,
+  positionMarginRequirement?: number,
 ): boolean | undefined => {
   if (
-    position &&
-    positionAmm &&
-    !isUndefined(currentPositionMarginRequirement) &&
-    !isUndefined(margin) &&
-    margin !== 0
+    !isUndefined(positionMarginRequirement) &&
+    !isUndefined(positionMargin) &&
+    !isUndefined(marginToBeWithdrawan) &&
+    marginToBeWithdrawan !== 0
   ) {
-    const originalMargin = positionAmm.descale(BigNumber.from(position.margin.toString()));
-    const remainingMargin = originalMargin - margin;
+    const remainingMargin = positionMargin - marginToBeWithdrawan;
 
-    if (remainingMargin < currentPositionMarginRequirement) {
+    if (remainingMargin < positionMarginRequirement) {
       return false;
     }
 
     return true;
   }
-
-  return undefined;
 };
