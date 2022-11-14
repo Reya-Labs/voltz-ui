@@ -10,7 +10,7 @@ export const ClaimButton = styled(Button)<{ disabled: boolean }>`
   font-size: 14px;
   line-height: 20px;
   border-radius: 8px;
-  background: #1e1a33;
+  background: ${colors.liberty6}
   width: 100%;
   padding: ${({ theme }) => theme.spacing(2, 4)};
   color: ${({ disabled }) => (disabled ? colors.lavenderWeb2 : colors.skyBlueCrayola)};
