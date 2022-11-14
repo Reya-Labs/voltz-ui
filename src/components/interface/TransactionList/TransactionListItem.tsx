@@ -1,11 +1,4 @@
 import React from 'react';
-import {
-  FCMPositionTransaction,
-  TraderPositionTransaction,
-  TransactionType,
-  LPPositionTransaction,
-} from './types';
-import { Position } from '@voltz-protocol/v1-sdk';
 import Box from '@mui/material/Box';
 import ListItem from '@mui/material/ListItem';
 import { colors, SystemStyleObject, Theme } from '@theme';
@@ -16,8 +9,8 @@ interface TransactionListItemProps {
   listId?: string | number;
   onOpenClose?: () => void;
   open?: boolean;
-  position: Position;
-  transaction: TraderPositionTransaction | FCMPositionTransaction | LPPositionTransaction;
+  isLiquidation: boolean;
+  transactionData: ReturnType<typeof getTransactionData>;
 }
 
 const rowStyles: SystemStyleObject<Theme> = {
@@ -62,11 +55,10 @@ const TransactionListItem = ({
   listId,
   onOpenClose,
   open = false,
-  position,
-  transaction,
+  transactionData,
+  isLiquidation,
 }: TransactionListItemProps) => {
-  const data = getTransactionData(position, transaction);
-  const isLiquidation = transaction.type === TransactionType.LIQUIDATION;
+  const data = transactionData;
 
   const openCloseStyles: SystemStyleObject<Theme> = {
     color: colors.lavenderWeb.base,
