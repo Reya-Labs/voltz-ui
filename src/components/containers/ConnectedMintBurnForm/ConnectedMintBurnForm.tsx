@@ -22,6 +22,7 @@ import { updateFixedRate } from './utilities';
 import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
 import { AugmentedAMM, getPoolButtonId, setPageTitle } from '@utilities';
 import { isUndefined } from 'lodash';
+import { BigNumber } from 'ethers';
 
 export type ConnectedMintBurnFormProps = {
   onReset: () => void;
@@ -164,7 +165,11 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
         <MintBurnCurrentPosition
           formMode={form.mode}
           onPortfolio={handleComplete}
-          position={position}
+          notional={position.notional}
+          margin={position.amm.descale(BigNumber.from(position.margin.toString()))}
+          underlyingTokenName={position.amm.underlyingToken.name || ''}
+          fixedRateLower={position?.fixedRateLower.toNumber()}
+          fixedRateUpper={position?.fixedRateUpper.toNumber()}
         />
       ) : (
         <FormPanel noBackground />
