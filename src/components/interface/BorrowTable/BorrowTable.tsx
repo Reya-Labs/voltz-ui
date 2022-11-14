@@ -114,7 +114,7 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
   const renderVariableTable = () => {
     const liveMarkets = tableData.map((datum, index) => {
       if (datum && DateTime.now() < datum.endDate) {
-        const position = findCurrentBorrowPosition(positions || [], borrowAmms[index]);
+        const position = findCurrentBorrowPosition(positions || [], borrowAmms[index].id);
         return { datum: datum, borrowAmms: borrowAmms[index], position: position, index: index };
       }
     });
@@ -230,7 +230,7 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
   const renderFixedTable = () => {
     const marketsWithPosition = tableData.map((datum, index) => {
       if (datum && DateTime.now() < datum.endDate) {
-        const position = findCurrentBorrowPosition(positions || [], borrowAmms[index]);
+        const position = findCurrentBorrowPosition(positions || [], borrowAmms[index].id);
         if (position) {
           return { datum: datum, borrowAmms: borrowAmms[index], position: position, index: index };
         }
