@@ -15,7 +15,15 @@ import { ReactComponent as Lido } from '../PoolField/lido-icon.svg';
 import { ReactComponent as Rocket } from '../PoolField/rocket-icon.svg';
 import { ReactComponent as USDC } from '../PoolField/usdc-icon.svg';
 import { ReactComponent as USDT } from '../PoolField/usdt-icon.svg';
-import { FixedAPR, MaturityEndDate, VariableAPY } from './components';
+import { ReactComponent as ETH } from '../PoolField/eth-icon.svg';
+
+import { Typography } from '@components/atomic';
+import IconLabel from '../IconLabel/IconLabel';
+import { VariableAPY, FixedAPR, MaturityEndDate } from './components';
+import { isBorrowing } from '@utilities';
+import { useAMMContext, Agents } from '@contexts';
+import { DateTime } from 'luxon';
+import { colors } from '@theme';
 
 export type ProtocolInformationProps = {
   protocol?: string;
@@ -43,7 +51,7 @@ export const ProtocolInformation: React.FunctionComponent<ProtocolInformationPro
         POOL
       </Box>
       {amm && isBorrowing(amm.rateOracle.protocolId) && (
-        <Box component="span" sx={{ color: '#FF4AA9' }}>
+        <Box component="span" sx={{ color: colors.wildStrawberry }}>
           {'  '}
           <strong>BORROWING</strong>
         </Box>

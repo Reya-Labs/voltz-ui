@@ -78,23 +78,23 @@ export function Button<C extends React.ElementType>({
     if (props.variant === 'red') {
       return {
         backgroundColor: selected ? 'secondary.darken030' : 'secondary.dark',
-        color: '#ff4aa9',
+        color: colors.wildStrawberry,
         '&:hover': {
           backgroundColor: 'secondary.darken030',
         },
         borderWidth: 1,
-        borderColor: '#ff4aa9',
+        borderColor: colors.wildStrawberry,
       };
     }
 
     if (props.variant === 'red2') {
       return {
         backgroundColor: 'transparent',
-        color: '#ff4aa9',
+        color: colors.wildStrawberry,
         border: '1px solid #5C0026',
         borderColor: '#5C0026',
         '&:hover': {
-          borderColor: '#FF4AA9',
+          borderColor: colors.wildStrawberry,
           backgroundColor: 'transparent',
         },
       };

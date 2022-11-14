@@ -11,6 +11,8 @@ import { ReactComponent as Lido } from './lido-icon.svg';
 import { ReactComponent as Rocket } from './rocket-icon.svg';
 import { ReactComponent as USDC } from './usdc-icon.svg';
 import { ReactComponent as USDT } from './usdt-icon.svg';
+import { ReactComponent as ETH } from './eth-icon.svg';
+import { colors } from '@theme';
 
 export type PoolFieldProps = {
   agent?: Agents;
@@ -65,7 +67,7 @@ export const PoolField = ({ agent, protocol, isBorrowing, isBorrowTable }: PoolF
         POOL
       </Box>
       {isBorrowing && (
-        <Box component="span" sx={{ color: '#FF4AA9' }}>
+        <Box component="span" sx={{ color: colors.wildStrawberry }}>
           {'  '}
           <strong>BORROWING</strong>
         </Box>
