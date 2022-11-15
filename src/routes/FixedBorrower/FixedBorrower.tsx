@@ -30,7 +30,7 @@ const FixedBorrower: React.FunctionComponent = () => {
   const handleSelectBorrowAMM = (selectedBorrowAMM: AugmentedBorrowAMM) => {
     setIsForm(true);
     setBorrowAMM(selectedBorrowAMM);
-    setPosition(findCurrentBorrowPosition(positions || [], selectedBorrowAMM));
+    setPosition(findCurrentBorrowPosition(positions || [], selectedBorrowAMM.id));
   };
 
   useEffect(() => {

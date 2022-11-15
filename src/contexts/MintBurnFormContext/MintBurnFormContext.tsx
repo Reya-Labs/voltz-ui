@@ -16,6 +16,7 @@ import React, { createContext, useCallback, useContext, useEffect, useRef, useSt
 import { debounce, isUndefined } from 'lodash';
 import { PositionInfo } from '@voltz-protocol/v1-sdk';
 import { isMarginWithdrawable } from '@utilities';
+import { BigNumber } from 'ethers';
 
 export enum MintBurnFormModes {
   NEW_POSITION = 'NEW_POSITION',
@@ -158,7 +159,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   const [margin, setMargin] = useState<MintBurnFormState['margin']>(defaultMargin);
   const [marginAction, setMarginAction] = useState<MintBurnFormMarginAction>(defaultMarginAction);
   const [notional, setNotional] = useState<MintBurnFormState['notional']>(defaultNotional);
-  const tokenApprovals = useTokenApproval(poolAmm, true);
+  const tokenApprovals = useTokenApproval(poolAmm);
 
   const approvalsNeeded = !tokenApprovals.underlyingTokenApprovedForPeriphery;
   const [errors, setErrors] = useState<MintBurnFormContext['errors']>({});
@@ -224,7 +225,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
         return MintBurnFormHintStates.ERROR_TOKEN_APPROVAL;
       }
 
-      if (tokenApprovals.getNextApproval(false)) {
+      if (tokenApprovals.getNextApproval()) {
         if (tokenApprovals.lastApproval) {
           return MintBurnFormHintStates.APPROVE_NEXT_TOKEN;
         } else {
@@ -508,10 +509,10 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
     if (marginAction === MintBurnFormMarginAction.REMOVE) {
       const isWithdrawable = isMarginWithdrawable(
         margin,
-        position,
-        positionAmm,
-        currentPositionMarginRequirement,
+        positionAmm?.descale(BigNumber.from(position?.margin.toString())),
+        positionInfo?.result?.safetyThreshold,
       );
+
       if (!isUndefined(isWithdrawable) && !isWithdrawable) {
         valid = false;
         if (touched.current.includes('margin')) {

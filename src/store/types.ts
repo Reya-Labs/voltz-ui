@@ -69,8 +69,6 @@ export type ActionType =
   | 'mint'
   | 'burn'
   | 'swap'
-  | 'fcmSwap'
-  | 'fcmUnwind'
   | 'updatePositionMargin'
   | 'settlePosition'
   | 'add-transaction'
@@ -118,14 +116,6 @@ export type SwapAction = TransactionAction & {
   type: 'swap';
 };
 
-export type FCMSwapAction = TransactionAction & {
-  type: 'fcmSwap';
-};
-
-export type FCMUnwindAction = TransactionAction & {
-  type: 'fcmUnwind';
-};
-
 export type UpdatePositionMarginAction = TransactionAction & {
   type: 'updatePositionMargin';
 };
@@ -168,8 +158,6 @@ export type Action =
   | MintAction
   | BurnAction
   | SwapAction
-  | FCMSwapAction
-  | FCMUnwindAction
   | UpdatePositionMarginAction
   | SettlePositionAction
   | CloseTransactionAction

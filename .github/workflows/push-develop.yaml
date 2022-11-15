@@ -1,11 +1,11 @@
-name: Push to main branch
+name: Push to develop branch
 on:
   push:
     branches:
-      - main
+      - develop
 jobs:
   release:
-    name: Release
+    name: Release UI
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -27,7 +27,7 @@ jobs:
         run: make ts-check
       - name: Run tests
         run: make test
-      - name: Release
+      - name: Release UI
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PUBLISHING_TOKEN }}
         run: make release

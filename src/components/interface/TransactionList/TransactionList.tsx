@@ -3,8 +3,9 @@ import { Position } from '@voltz-protocol/v1-sdk';
 import { List } from '@mui/material';
 import { colors, SystemStyleObject, Theme } from '@theme';
 import TransactionListItem from './TransactionListItem';
-import { getTransactions, sortTransactions } from './services';
+import { getTransactionData, getTransactions, sortTransactions } from './services';
 import { useUniqueId } from '@hooks';
+import { TransactionType } from './types';
 
 interface TransactionListProps {
   position: Position;
@@ -33,10 +34,10 @@ const TransactionList = ({ position }: TransactionListProps) => {
         <TransactionListItem
           key={tx.id}
           listId={id}
-          position={position}
-          transaction={tx}
           onOpenClose={i === 0 ? handleOpenClose : undefined}
           open={open}
+          transactionData={getTransactionData(position, tx)}
+          isLiquidation={tx.type === TransactionType.LIQUIDATION}
         />
       ))}
     </List>

@@ -22,6 +22,7 @@ import {
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import * as s from './services';
 import { isMarginWithdrawable } from '@utilities';
+import { BigNumber } from 'ethers';
 
 // updateLeverage instead of setLeverage when notional updates
 // have reset flag in onChange in Leverage to be able to reset leverage when box is modified.
@@ -32,10 +33,7 @@ export enum SwapFormMarginAction {
 }
 
 export enum SwapFormSubmitButtonStates {
-  APPROVE_FCM = 'APPROVE_FCM',
-  APPROVE_UT_FCM = 'APPROVE_UT_FCM',
   APPROVE_UT_PERIPHERY = 'APPROVE_UT_PERIPHERY',
-  APPROVE_YBT_FCM = 'APPROVE_YBT_FCM',
   APPROVING = 'APPROVING',
   CHECKING = 'CHECKING',
   INITIALISING = 'INITIALISING',
@@ -70,7 +68,6 @@ export type SwapFormState = {
   margin?: number;
   marginAction: SwapFormMarginAction;
   notional?: number;
-  partialCollateralization: boolean;
   resetDeltaState: boolean;
 };
 
@@ -87,7 +84,6 @@ export type SwapFormContext = {
   errors: Record<string, string>;
   hintState: SwapFormSubmitButtonHintStates;
   isAddingMargin: boolean;
-  isFCMAction: boolean;
   isRemovingMargin: boolean;
   isTradeVerified: boolean;
   isValid: boolean;
@@ -96,7 +92,6 @@ export type SwapFormContext = {
   setMargin: (value: SwapFormState['margin']) => void;
   setMarginAction: (value: SwapFormState['marginAction']) => void;
   setNotional: (value: SwapFormState['notional']) => void;
-  setPartialCollateralization: (value: SwapFormState['partialCollateralization']) => void;
   state: SwapFormState;
   swapInfo: {
     data?: InfoPostSwap;
@@ -134,9 +129,6 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     mode === SwapFormModes.ROLLOVER && position
       ? Math.abs(position.effectiveVariableTokenBalance)
       : defaultValues.notional;
-  const defaultPartialCollateralization = position
-    ? position.source !== 'FCM'
-    : defaultValues.partialCollateralization ?? true;
 
   const ammCtx = useAMMContext();
   const { agent, onChangeAgent } = useAgent();
@@ -149,9 +141,6 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   const [marginAction, setMarginAction] = useState<SwapFormMarginAction>(defaultMarginAction);
   const currentPositionMarginRequirement = useCurrentPositionMarginRequirement(poolAmm, 1, 999);
   const [notional, setNotional] = useState<SwapFormState['notional']>(defaultNotional);
-  const [partialCollateralization, setPartialCollateralization] = useState<boolean>(
-    defaultPartialCollateralization,
-  );
   const { swapInfo, expectedApyInfo } = useAMMContext();
   const cachedSwapInfoMinRequiredMargin = useRef<number>();
   const [cachedSwapInfoAvailableNotional, setCachedSwapInfoAvailableNotional] = useState<number>();
@@ -164,20 +153,16 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   const [isValid, setIsValid] = useState<boolean>(false);
   const touched = useRef<string[]>([]);
 
-  const action = s.getFormAction(mode, partialCollateralization, agent);
+  const action = s.getFormAction(mode);
   const isAddingMargin =
     (mode === SwapFormModes.EDIT_MARGIN || mode === SwapFormModes.EDIT_NOTIONAL) &&
     marginAction === SwapFormMarginAction.ADD;
-  const isFCMAction =
-    action === SwapFormActions.FCM_SWAP ||
-    action === SwapFormActions.FCM_UNWIND ||
-    action === SwapFormActions.ROLLOVER_FCM_SWAP;
   const isRemovingMargin =
     (mode === SwapFormModes.EDIT_MARGIN || mode === SwapFormModes.EDIT_NOTIONAL) &&
     marginAction === SwapFormMarginAction.REMOVE;
   const isTradeVerified = !!swapInfo.result && !swapInfo.loading && !swapInfo.errorMessage;
 
-  const approvalsNeeded = s.approvalsNeeded(action, tokenApprovals, isRemovingMargin);
+  const approvalsNeeded = s.approvalsNeeded(tokenApprovals, isRemovingMargin);
 
   const [resetDeltaState, setResetDeltaState] = useState<boolean>(false);
   const [userSimulatedVariableApyUpdated, setUserSimulatedVariableApyUpdated] =
@@ -256,43 +241,9 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
           });
           break;
         }
-
-        case SwapFormActions.FCM_SWAP: {
-          asyncCallsLoading.current = [];
-          swapInfo.call({
-            position,
-            margin,
-            notional,
-            type: GetInfoType.FCM_SWAP,
-          });
-          break;
-        }
-
-        case SwapFormActions.ROLLOVER_FCM_SWAP: {
-          asyncCallsLoading.current = [];
-          swapInfo.call({
-            margin,
-            notional,
-            type: GetInfoType.FCM_SWAP,
-          });
-          break;
-        }
-
-        // case SwapFormActions.FCM_UNWIND: {
-        //   swapInfo.call({ notional, type: GetInfoType.FCM_UNWIND });
-        //   break;
-        // }
       }
     }
-  }, [
-    swapInfo.call,
-    notional,
-    agent,
-    approvalsNeeded,
-    partialCollateralization,
-    marginAction,
-    ammCtx.variableApy.result,
-  ]);
+  }, [swapInfo.call, notional, agent, approvalsNeeded, marginAction, ammCtx.variableApy.result]);
 
   useEffect(() => {
     if (
@@ -368,7 +319,6 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     margin,
     marginAction,
     notional,
-    partialCollateralization,
     swapInfo.result?.marginRequirement,
     swapInfo.result?.fee,
     isValid,
@@ -411,7 +361,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
         return SwapFormSubmitButtonHintStates.ERROR_TOKEN_APPROVAL;
       }
 
-      if (tokenApprovals.getNextApproval(isFCMAction)) {
+      if (tokenApprovals.getNextApproval()) {
         if (tokenApprovals.lastApproval) {
           return SwapFormSubmitButtonHintStates.APPROVE_NEXT_TOKEN;
         } else {
@@ -462,20 +412,8 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     }
 
     if (!isRemovingMargin) {
-      if (action === SwapFormActions.FCM_SWAP || action === SwapFormActions.FCM_UNWIND) {
-        if (!tokenApprovals.FCMApproved) {
-          return SwapFormSubmitButtonStates.APPROVE_FCM;
-        }
-        if (!tokenApprovals.yieldBearingTokenApprovedForFCM) {
-          return SwapFormSubmitButtonStates.APPROVE_YBT_FCM;
-        }
-        if (!tokenApprovals.underlyingTokenApprovedForFCM) {
-          return SwapFormSubmitButtonStates.APPROVE_UT_FCM;
-        }
-      } else {
-        if (!tokenApprovals.underlyingTokenApprovedForPeriphery) {
-          return SwapFormSubmitButtonStates.APPROVE_UT_PERIPHERY;
-        }
+      if (!tokenApprovals.underlyingTokenApprovedForPeriphery) {
+        return SwapFormSubmitButtonStates.APPROVE_UT_PERIPHERY;
       }
     }
 
@@ -574,13 +512,6 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       touched.current.push('notional');
     }
     setNotional(value);
-  };
-
-  const updatePartialCollateralization = (value: SwapFormState['partialCollateralization']) => {
-    if (!touched.current.includes('partialCollateralization')) {
-      touched.current.push('partialCollateralization');
-    }
-    setPartialCollateralization(value);
   };
 
   const validate = async () => {
@@ -702,8 +633,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     if (marginAction === SwapFormMarginAction.REMOVE) {
       const isWithdrawable = isMarginWithdrawable(
         margin,
-        position,
-        positionAmm,
+        positionAmm?.descale(BigNumber.from(position?.margin.toString())),
         currentPositionMarginRequirement,
       );
       if (!isUndefined(isWithdrawable) && !isWithdrawable) {
@@ -805,7 +735,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     errors,
     hintState: getHintState(),
     isAddingMargin,
-    isFCMAction,
+    isFCMAction: false,
     isTradeVerified,
     isRemovingMargin,
     isValid,
@@ -815,7 +745,6 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     setMargin: updateMargin,
     setMarginAction: updateMarginAction,
     setNotional: updateNotional,
-    setPartialCollateralization: updatePartialCollateralization,
     swapInfo: {
       data: swapInfo.result || undefined,
       errorMessage: swapInfo.errorMessage || undefined,
@@ -828,7 +757,6 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       margin,
       marginAction,
       notional,
-      partialCollateralization,
       resetDeltaState,
     },
     submitButtonState: getSubmitButtonState(),

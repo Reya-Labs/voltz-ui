@@ -78,7 +78,8 @@ export const sortTransactions = (
 };
 
 /**
- * Returns the data needed to render a transaction row in an easy to use format
+ * Returns the data needed to render a transaction row in an easy-to-use format
+ * @param position - the position
  * @param tx - the transaction to compile the data for
  */
 export const getTransactionData = (

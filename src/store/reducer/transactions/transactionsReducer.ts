@@ -12,8 +12,6 @@ const transactionsReducer = (state: State['transactions'], action: Action) => {
     case 'mint':
     case 'burn':
     case 'swap':
-    case 'fcmSwap':
-    case 'fcmUnwind':
     case 'updatePositionMargin':
     case 'settlePosition':
     case 'rolloverMint':

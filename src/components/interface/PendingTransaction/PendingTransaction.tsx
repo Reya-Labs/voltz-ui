@@ -8,6 +8,7 @@ import {
   getAgentFromPosition,
   getAmmProtocol,
   getPoolButtonId,
+  isBorrowing,
   pushEvent,
   setPageTitle,
 } from '@utilities';
@@ -210,6 +211,15 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
     }
   }
 
+  const buttonId = getPoolButtonId(
+    margin && margin < 0 ? 'REMOVE' : 'ADD',
+    (liquidityAction ?? '').toString(),
+    showNegativeNotional ? 'REMOVE' : 'ADD',
+    agent,
+    isBorrowing(amm.rateOracle.protocolId),
+    amm.protocol,
+  );
+
   const renderStatus = () => {
     if (activeTransaction.resolvedAt && isFetched) {
       return (
@@ -236,18 +246,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               paddingBottom: (theme) => theme.spacing(8),
             }}
           >
-            <Link
-              href={transactionLink}
-              variant="caption"
-              color="primary.light"
-              id={getPoolButtonId(
-                margin && margin < 0 ? 'REMOVE' : 'ADD',
-                (liquidityAction ?? '').toString(),
-                showNegativeNotional ? 'REMOVE' : 'ADD',
-                agent,
-                amm,
-              )}
-            >
+            <Link href={transactionLink} variant="caption" color="primary.light" id={buttonId}>
               View on etherscan
             </Link>
           </Box>
@@ -256,17 +255,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               paddingBottom: (theme) => theme.spacing(10),
             }}
           >
-            <Button
-              variant="contained"
-              onClick={onComplete}
-              id={getPoolButtonId(
-                margin && margin < 0 ? 'REMOVE' : 'ADD',
-                (liquidityAction ?? '').toString(),
-                showNegativeNotional ? 'REMOVE' : 'ADD',
-                agent,
-                amm,
-              )}
-            >
+            <Button variant="contained" onClick={onComplete} id={buttonId}>
               Go to your portfolio
             </Button>
           </Box>
@@ -308,19 +297,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               paddingBottom: (theme) => theme.spacing(10),
             }}
           >
-            <Button
-              variant="contained"
-              onClick={onBack}
-              id={
-                getPoolButtonId(
-                  margin && margin < 0 ? 'REMOVE' : 'ADD',
-                  (liquidityAction ?? '').toString(),
-                  showNegativeNotional ? 'REMOVE' : 'ADD',
-                  agent,
-                  amm,
-                ) + '_FAILED'
-              }
-            >
+            <Button variant="contained" onClick={onBack} id={buttonId + '_FAILED'}>
               Back
             </Button>
           </Box>
@@ -356,13 +333,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               target="_blank"
               variant="caption"
               color="primary.light"
-              id={getPoolButtonId(
-                margin && margin < 0 ? 'REMOVE' : 'ADD',
-                (liquidityAction ?? '').toString(),
-                showNegativeNotional ? 'REMOVE' : 'ADD',
-                agent,
-                amm,
-              )}
+              id={buttonId}
             >
               View on etherscan
             </Link>
@@ -373,20 +344,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
               textAlign: 'center',
             }}
           >
-            {/* <Typography variant="caption" color="secondary">
-              Wait a few moments for the blockchain data to synchronize
-            </Typography> */}
-            <Button
-              variant="contained"
-              onClick={onComplete}
-              id={getPoolButtonId(
-                margin && margin < 0 ? 'REMOVE' : 'ADD',
-                (liquidityAction ?? '').toString(),
-                showNegativeNotional ? 'REMOVE' : 'ADD',
-                agent,
-                amm,
-              )}
-            >
+            <Button variant="contained" onClick={onComplete} id={buttonId}>
               Go to your portfolio
             </Button>
           </Box>

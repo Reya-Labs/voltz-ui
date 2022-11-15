@@ -4,10 +4,9 @@ import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '@theme';
 import { Agents, useAMMContext } from '@contexts';
 import { Typography } from '@components/atomic';
-import { PoolField } from '@components/composite';
-import { lpLabels } from '../../constants';
-import { traderLabels } from '../../constants';
-import { FixedAPR, Notional, CurrentMargin, Maturity, AccruedRates } from './components';
+import { PoolField, MaturityInformation } from '@components/composite';
+import { lpLabels, traderLabels } from '../../constants';
+import { FixedAPR, Notional, CurrentMargin, AccruedRates } from './components';
 import { useAgent } from '@hooks';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 import { formatNumber, isBorrowing } from '@utilities';
@@ -53,7 +52,13 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     const underlyingTokenName = position.amm.underlyingToken.name; // Introduced this so margin and notional show the correct underlying token unit e.g. Eth not stEth, USDC not aUSDC
 
     if (field === 'accruedRates') {
-      return <AccruedRates position={position} positionInfo={positionInfo} />;
+      return (
+        <AccruedRates
+          positionType={position.positionType}
+          avgFixedRate={positionInfo?.fixedRateSinceLastSwap}
+          variableRate={positionInfo?.variableRateSinceLastSwap}
+        />
+      );
     }
 
     if (field === 'fixedApr') {
@@ -78,7 +83,13 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     }
 
     if (field === 'maturity') {
-      return <Maturity position={position} />;
+      return (
+        <MaturityInformation
+          label="Maturity"
+          startDate={position.amm.startDateTime}
+          endDate={position.amm.endDateTime}
+        />
+      );
     }
 
     if (field === 'notional') {
