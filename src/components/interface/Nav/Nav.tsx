@@ -55,25 +55,21 @@ const Nav: React.FunctionComponent = React.memo(() => (
     >
       Liquidity Providers
     </NavLink>
-
-    {process.env.REACT_APP_COMMUNITY && process.env.REACT_APP_COMMUNITY !== `UNPROVIDED` && (
-      <NavLink
-        isNew={true}
-        subLinks={[
-          {
-            text: 'PROFILE',
-            link: `/${routes.PROFILE}`,
-          },
-          {
-            text: 'TRADING LEAGUE',
-            link: `/${routes.TRADING_LEAGUE}`,
-          },
-        ]}
-      >
-        Community
-      </NavLink>
-    )}
-
+    <NavLink
+      isNew={true}
+      subLinks={[
+        {
+          text: 'PROFILE',
+          link: `/${routes.PROFILE}`,
+        },
+        {
+          text: 'TRADING LEAGUE',
+          link: `/${routes.TRADING_LEAGUE}`,
+        },
+      ]}
+    >
+      Community
+    </NavLink>
     <NavLink
       isNew={true}
       subLinks={
