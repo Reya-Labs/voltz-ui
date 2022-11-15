@@ -1,8 +1,7 @@
 import { Box } from '@mui/material';
-import { PoolField, ProgressBar } from '@components/composite';
+import { PoolField, IconLabel, ProgressBar } from '@components/composite';
 import { Agents } from '@contexts';
 import { Panel, Typography } from '@components/atomic';
-import { IconLabel } from '@components/composite';
 import { AugmentedMellowLpVault, formatCurrency } from '@utilities';
 import { isUndefined } from 'lodash';
 

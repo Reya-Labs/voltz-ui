@@ -4,9 +4,9 @@ import { Box } from '@mui/system';
 import { AugmentedMellowLpVault } from '@utilities';
 import { isNull } from 'lodash';
 import { useEffect, useState } from 'react';
-import { Panel } from '../../atomic';
-import MellowLPTable from '../../interface/MellowLPTable/MellowLPTable';
-import EcosystemHeader from '../../../components/interface/EcosystemHeader/EcosystemHeader';
+import { Panel } from '../../../components/atomic';
+import MellowLPTable from '../MellowLPTable/MellowLPTable';
+import EcosystemHeader from '../EcosystemHeader/EcosystemHeader';
 
 export type ConnectedMellowLPTableProps = {
   onSelectItem: (item: AugmentedMellowLpVault) => void;

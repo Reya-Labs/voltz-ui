@@ -1,5 +1,5 @@
 import { Box } from '@mui/system';
-import { Panel, Typography } from '../../atomic';
+import { Panel, Typography } from '../../../components/atomic';
 import { titleStyles, copyStyles, boxStyles, tagStyles } from './styles';
 
 export type EcosystemHeaderProps = {

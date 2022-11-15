@@ -3,8 +3,8 @@ import { routes } from '@routes';
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { DepositStates, getSubmissionState } from './mappers';
-import MellowLpDepositForm from '../../interface/MellowLpDepositForm/MellowLpDepositForm';
-import { Panel } from '../../atomic';
+import MellowLpDepositForm from '../MellowLpDepositForm/MellowLpDepositForm';
+import { Panel } from '../../../components/atomic';
 
 export type ConnectedMellowLpDepositFormProps = {
   vault: AugmentedMellowLpVault;
