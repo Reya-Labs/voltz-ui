@@ -3,6 +3,7 @@ import { AugmentedMellowLpVault } from '@utilities';
 import LPMellowVaultDepositInfo from './components/LPMellowVaultDepositInfo';
 import LPMellowVaultDepositWindow from './components/LPMellowVaultDepositWindow';
 import MellowLpDepositFormHeader from './components/MellowLpDepositFormHeader';
+import React from 'react';
 
 export type MellowLpDepositFormProps = {
   lpVault: AugmentedMellowLpVault;

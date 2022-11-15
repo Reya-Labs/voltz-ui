@@ -1,8 +1,9 @@
 import { Panel, Typography } from '@components/atomic';
 import { Box } from '@mui/system';
-import { ReactComponent as Mellow } from '../../MellowLPTable/components/mellow-icon.svg';
+import { ReactComponent as Mellow } from '../../mellow-icon.svg';
 import { Button } from '@mui/material';
 import { titleStyles, copyStyles, boxStyles, tagStyles } from './styles';
+import React from 'react';
 
 export type MellowLpDepositFormHeaderProps = {
   onCancel: () => void;

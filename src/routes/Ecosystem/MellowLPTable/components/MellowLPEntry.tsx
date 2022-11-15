@@ -2,11 +2,12 @@ import { Agents } from '@contexts';
 import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { AugmentedMellowLpVault } from '@utilities';
-import PoolField from '../../../composite/PoolField/PoolField';
+import PoolField from '../../../../components/composite/PoolField/PoolField';
 import LPMellowVaultInfo from './LPMellowVaultInfo';
-import { ReactComponent as Mellow } from './mellow-icon.svg';
+import { ReactComponent as Mellow } from '../../mellow-icon.svg';
 import MellowLPPosition from './MellowLPPosition';
 import { boxStyles, tagStyles, titleStyles, copyStyles } from './styles';
+import React from 'react';
 
 export type MellowLPEntryProps = {
   onSelectItem: () => void;
