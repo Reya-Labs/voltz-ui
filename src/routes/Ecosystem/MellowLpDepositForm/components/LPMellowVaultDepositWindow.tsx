@@ -5,6 +5,7 @@ import { AugmentedMellowLpVault, formatCurrency, toUSFormat } from '@utilities';
 import { Panel, Typography, Button } from '@components/atomic';
 import { colors } from '@theme';
 import { isUndefined } from 'lodash';
+import React from 'react';
 
 export type LPMellowVaultDepositWindowProps = {
   lpVault: AugmentedMellowLpVault;

@@ -2,11 +2,10 @@ import { Page } from '@components/interface';
 import Box from '@mui/material/Box';
 import { Agents } from '@contexts';
 
-import ConnectedMellowLpDepositForm from '../../components/containers/ConnectedMellowLpDepositForm/ConnectedMellowLpDepositForm';
-import ConnectedMellowLPTable from '../../components/containers/ConnectedMellowLPTable/ConnectedMellowLPTable';
-import { AugmentedMellowLpVault } from '@utilities';
+import ConnectedMellowLpDepositForm from './ConnectedMellowLpDepositForm/ConnectedMellowLpDepositForm';
+import ConnectedMellowLPTable from './ConnectedMellowLPTable/ConnectedMellowLPTable';
+import { AugmentedMellowLpVault, setPageTitle } from '@utilities';
 import { useEffect, useState } from 'react';
-import { setPageTitle } from '@utilities';
 import { isNull } from 'lodash';
 import { useWallet } from '@hooks';
 import { useLocation } from 'react-router-dom';
