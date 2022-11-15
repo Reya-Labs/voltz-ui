@@ -10,7 +10,6 @@ import { SwapFormModes } from '../../types';
 interface SubmitControlsProps {
   approvalsNeeded: boolean;
   hintState: SwapFormSubmitButtonHintStates;
-  isFCMAction: boolean;
   isFormValid: boolean;
   isTradeVerified: boolean;
   mode: SwapFormModes;
@@ -47,7 +46,6 @@ const Text = ({ bold, children, green, red }: TextProps) => (
 const SubmitControls = ({
   approvalsNeeded,
   hintState,
-  isFCMAction,
   isFormValid,
   isTradeVerified,
   mode,
@@ -69,12 +67,12 @@ const SubmitControls = ({
               {tokenApprovals.lastApproval?.text}
             </Text>
             <Text green> approved!</Text> Let's now approve{' '}
-            <Text bold>{tokenApprovals.getNextApproval(isFCMAction)?.text}</Text>
+            <Text bold>{tokenApprovals.getNextApproval()?.text}</Text>
           </>
         );
       }
       case SwapFormSubmitButtonHintStates.APPROVE_TOKEN: {
-        return `Please approve ${tokenApprovals.getNextApproval(isFCMAction)?.text || ''}`;
+        return `Please approve ${tokenApprovals.getNextApproval()?.text || ''}`;
       }
       case SwapFormSubmitButtonHintStates.APPROVING: {
         return 'Waiting for confirmation';
@@ -127,27 +125,10 @@ const SubmitControls = ({
 
   const getSubmitText = () => {
     switch (submitButtonState) {
-      case SwapFormSubmitButtonStates.APPROVE_FCM: {
-        return 'Approve FCM';
-      }
-      case SwapFormSubmitButtonStates.APPROVE_UT_FCM: {
-        return (
-          <Box>
-            Approve <Text>{underlyingTokenName}</Text> for fees
-          </Box>
-        );
-      }
       case SwapFormSubmitButtonStates.APPROVE_UT_PERIPHERY: {
         return (
           <Box>
             Approve <Text>{underlyingTokenName}</Text>
-          </Box>
-        );
-      }
-      case SwapFormSubmitButtonStates.APPROVE_YBT_FCM: {
-        return (
-          <Box>
-            Approve <Text>{protocol}</Text> for trade
           </Box>
         );
       }

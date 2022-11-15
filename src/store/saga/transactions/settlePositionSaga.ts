@@ -29,16 +29,11 @@ function* settlePositionSaga(action: SettlePositionAction) {
 
   let result: ContractReceipt | void;
   try {
-    if (source.includes('FCM')) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      result = yield call([amm, 'settleFCMTrader']);
-    } else {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      result = yield call([amm, 'settlePosition'], {
-        fixedLow: fixedLow,
-        fixedHigh: fixedHigh,
-      });
-    }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    result = yield call([amm, 'settlePosition'], {
+      fixedLow: fixedLow,
+      fixedHigh: fixedHigh,
+    });
   } catch (error) {
     yield put(
       actions.updateTransaction({

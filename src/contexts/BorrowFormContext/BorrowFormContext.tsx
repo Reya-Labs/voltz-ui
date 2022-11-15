@@ -9,7 +9,6 @@ import { hasEnoughUnderlyingTokens, lessThanEpsilon } from '@utilities';
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { Agents, useAMMContext, useBorrowAMMContext, usePositionContext } from '@contexts';
 import { isUndefined } from 'lodash';
-import { SwapFormActions } from '@components/interface';
 import * as s from '../SwapFormContext/services';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk/dist/types/entities';
 
@@ -89,8 +88,8 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
 
   const isTradeInfoLoading = borrowSwapInfoAsyncState.current < 4;
 
-  const tokenApprovals = useTokenApproval(amm, true);
-  const approvalsNeeded = s.approvalsNeeded(SwapFormActions.SWAP, tokenApprovals, false);
+  const tokenApprovals = useTokenApproval(amm);
+  const approvalsNeeded = s.approvalsNeeded(tokenApprovals, false);
   const isTradeVerified =
     !isTradeInfoLoading && !!borrowSwapInfo.result && !borrowSwapInfo.errorMessage;
 
@@ -268,7 +267,7 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
       return BorrowFormSubmitButtonHintStates.ERROR_TOKEN_APPROVAL;
     }
 
-    if (tokenApprovals.getNextApproval(false)) {
+    if (tokenApprovals.getNextApproval()) {
       if (tokenApprovals.lastApproval) {
         return BorrowFormSubmitButtonHintStates.APPROVE_NEXT_TOKEN;
       } else {

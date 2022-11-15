@@ -105,16 +105,6 @@ export const useAMM = (amm?: AugmentedAMM) => {
           break;
         }
 
-        case GetInfoType.FCM_SWAP: {
-          result = await amm?.getInfoPostFCMSwap({ notional: args.notional });
-          break;
-        }
-
-        case GetInfoType.FCM_UNWIND: {
-          result = await amm?.getInfoPostFCMUnwind({ notionalToUnwind: args.notional });
-          break;
-        }
-
         default: {
           throw new Error('Unrecognized operation type');
         }

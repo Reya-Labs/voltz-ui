@@ -20,7 +20,7 @@ import {
 } from '@components/interface';
 import { updateFixedRate } from './utilities';
 import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
-import { AugmentedAMM, getPoolButtonId, setPageTitle } from '@utilities';
+import { AugmentedAMM, getPoolButtonId, isBorrowing, setPageTitle } from '@utilities';
 import { isUndefined } from 'lodash';
 import { BigNumber } from 'ethers';
 
@@ -199,7 +199,8 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
           form.state.liquidityAction.toString(),
           '',
           agent,
-          targetAmm,
+          isBorrowing(targetAmm.rateOracle.protocolId),
+          targetAmm.protocol,
         )}
         startDate={targetAmm.startDateTime}
         submitButtonState={form.submitButtonState}
