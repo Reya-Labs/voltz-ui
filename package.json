@@ -1,6 +1,6 @@
 {
   "name": "voltz-ui",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A UI client for the Voltz Protocol",
   "license": "MIT",
   "scripts": {
@@ -105,9 +105,12 @@
           }
         }
       ],
-      ["@semantic-release/npm", {
-        "npmPublish": false
-      }],
+      [
+        "@semantic-release/npm",
+        {
+          "npmPublish": false
+        }
+      ],
       "@semantic-release/release-notes-generator",
       [
         "@semantic-release/git",
