@@ -1,16 +1,32 @@
-import { BigNumber, Signer } from 'ethers';
+import { BigNumber, providers, Signer } from 'ethers';
 import { CommunitySBT } from '../typechain-sbt';
-export declare type SBTConstructorArgs = {
+export type SBTConstructorArgs = {
     id: string;
     signer: Signer | null;
 };
-export declare type BadgeRecord = {
+export type BadgeRecord = {
     badgeType: number;
     awardedTimestamp: number;
+};
+export declare enum BadgeClaimingStatus {
+    CLAIMED = 0,
+    CLAIMING = 1,
+    NOT_CLAIMED = 2
+}
+export type BadgeWithStatus = {
+    badgeType: number;
+    claimingStatus: BadgeClaimingStatus;
+};
+export type GetBadgesStatusArgs = {
+    apiKey: string;
+    subgraphUrl: string;
+    season: number;
+    potentialClaimingBadgeTypes: Array<number>;
 };
 declare class SBT {
     readonly id: string;
     readonly signer: Signer | null;
+    readonly provider: providers.Provider | undefined;
     contract: CommunitySBT | null;
     /**
      *
@@ -40,6 +56,8 @@ declare class SBT {
     getUserBalance(user: string): Promise<BigNumber | void>;
     getTokenOwner(tokenId: string): Promise<string | void>;
     getTotalSupply(): Promise<BigNumber | void>;
+    getBadgeStatus(args: GetBadgesStatusArgs): Promise<Array<BadgeWithStatus>>;
+    claimedBadgesInSubgraph(subgraphUrl: string, userAddress: string, season: number): Promise<Array<BadgeWithStatus>>;
 }
 export default SBT;
 //# sourceMappingURL=communitySbt.d.ts.map

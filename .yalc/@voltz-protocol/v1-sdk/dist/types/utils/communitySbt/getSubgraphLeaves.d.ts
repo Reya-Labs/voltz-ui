@@ -1,4 +1,4 @@
-export declare type LeafEntry = {
+export type LeafEntry = {
     owner: string;
     metadataURI: string;
 };

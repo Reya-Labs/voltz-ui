@@ -14,7 +14,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -35,11 +35,32 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.BadgeClaimingStatus = void 0;
 var typechain_sbt_1 = require("../typechain-sbt");
 var getSubgraphLeaves_1 = require("../utils/communitySbt/getSubgraphLeaves");
 var getSubgraphRoot_1 = require("../utils/communitySbt/getSubgraphRoot");
 var merkle_tree_1 = require("../utils/communitySbt/merkle-tree");
+var axios_1 = __importDefault(require("axios"));
+var client_1 = require("@apollo/client");
+var cross_fetch_1 = __importDefault(require("cross-fetch"));
+var constants_1 = require("../constants");
+var helpers_1 = require("../utils/communitySbt/helpers");
+var TxBadgeStatus;
+(function (TxBadgeStatus) {
+    TxBadgeStatus[TxBadgeStatus["SUCCESSFUL"] = 0] = "SUCCESSFUL";
+    TxBadgeStatus[TxBadgeStatus["FAILED"] = 1] = "FAILED";
+    TxBadgeStatus[TxBadgeStatus["PENDING"] = 2] = "PENDING";
+})(TxBadgeStatus || (TxBadgeStatus = {}));
+var BadgeClaimingStatus;
+(function (BadgeClaimingStatus) {
+    BadgeClaimingStatus[BadgeClaimingStatus["CLAIMED"] = 0] = "CLAIMED";
+    BadgeClaimingStatus[BadgeClaimingStatus["CLAIMING"] = 1] = "CLAIMING";
+    BadgeClaimingStatus[BadgeClaimingStatus["NOT_CLAIMED"] = 2] = "NOT_CLAIMED";
+})(BadgeClaimingStatus = exports.BadgeClaimingStatus || (exports.BadgeClaimingStatus = {}));
 var SBT = /** @class */ (function () {
     /**
      *
@@ -52,6 +73,7 @@ var SBT = /** @class */ (function () {
         this.signer = signer;
         if (signer) {
             this.contract = typechain_sbt_1.CommunitySBT__factory.connect(id, signer);
+            this.provider = signer.provider;
         }
         else {
             this.contract = null;
@@ -85,7 +107,7 @@ var SBT = /** @class */ (function () {
                         if (!rootEntity) {
                             throw new Error('No root found');
                         }
-                        metadataUri = "ipfs:".concat(String.fromCharCode(47)).concat(String.fromCharCode(47)).concat(rootEntity.baseMetadataUri).concat(String.fromCharCode(47)).concat(badgeType, ".json");
+                        metadataUri = "".concat(rootEntity.baseMetadataUri).concat(badgeType, ".json");
                         leafInfo = {
                             account: owner,
                             metadataURI: metadataUri
@@ -150,7 +172,7 @@ var SBT = /** @class */ (function () {
                         if (!rootEntity) {
                             return [3 /*break*/, 4];
                         }
-                        metadataUri = "ipfs:".concat(String.fromCharCode(47)).concat(String.fromCharCode(47)).concat(rootEntity.baseMetadataUri).concat(String.fromCharCode(47)).concat(badge.badgeType, ".json");
+                        metadataUri = "".concat(rootEntity.baseMetadataUri).concat(badge.badgeType, ".json");
                         leafInfo = {
                             account: owner,
                             metadataURI: metadataUri
@@ -229,6 +251,122 @@ var SBT = /** @class */ (function () {
                     case 1:
                         totalSupply = _b.sent();
                         return [2 /*return*/, totalSupply];
+                }
+            });
+        });
+    };
+    SBT.prototype.getBadgeStatus = function (args) {
+        var _a, _b;
+        return __awaiter(this, void 0, void 0, function () {
+            var userAddress, network, networkName, getURL, resp, transactions, txBadges, _i, transactions_1, transaction, status_1, badgeType, badgeTypes, _c, badgeTypes_1, badgeType, _d, _e, badgeType, subgraphClaimedBadges, badgeStatuses;
+            return __generator(this, function (_f) {
+                switch (_f.label) {
+                    case 0:
+                        if (!this.signer) {
+                            throw new Error("No provider found");
+                        }
+                        return [4 /*yield*/, this.signer.getAddress()];
+                    case 1:
+                        userAddress = _f.sent();
+                        return [4 /*yield*/, ((_a = this.provider) === null || _a === void 0 ? void 0 : _a.getNetwork())];
+                    case 2:
+                        network = _f.sent();
+                        networkName = network ? network.name : "";
+                        getURL = (0, helpers_1.getEtherscanURL)(networkName, args.apiKey, userAddress);
+                        return [4 /*yield*/, axios_1.default.get(getURL)];
+                    case 3:
+                        resp = _f.sent();
+                        if (!resp.data) {
+                            throw new Error("Etherscan api failed");
+                        }
+                        transactions = resp.data.result;
+                        txBadges = new Map();
+                        for (_i = 0, transactions_1 = transactions; _i < transactions_1.length; _i++) {
+                            transaction = transactions_1[_i];
+                            if (transaction.to.toLowerCase() !== ((_b = this.contract) === null || _b === void 0 ? void 0 : _b.address.toLowerCase())) {
+                                continue;
+                            }
+                            status_1 = transaction.txreceipt_status === 1 ?
+                                TxBadgeStatus.SUCCESSFUL
+                                : TxBadgeStatus.FAILED;
+                            if (transaction.methodId === constants_1.REDEEM_METHOD_ID) {
+                                badgeType = (0, helpers_1.decodeBadgeType)(transaction.input);
+                                txBadges.set(badgeType, status_1);
+                            }
+                            else if (transaction.methodId === constants_1.MULTI_REDEEM_METHOD_ID) {
+                                badgeTypes = (0, helpers_1.decodeMultipleBadgeTypes)(transaction.input);
+                                for (_c = 0, badgeTypes_1 = badgeTypes; _c < badgeTypes_1.length; _c++) {
+                                    badgeType = badgeTypes_1[_c];
+                                    txBadges.set(badgeType, status_1);
+                                }
+                            }
+                        }
+                        // if badges of interest are not part of those 50 transactions, set them as pending
+                        for (_d = 0, _e = args.potentialClaimingBadgeTypes; _d < _e.length; _d++) {
+                            badgeType = _e[_d];
+                            if (!txBadges.get(badgeType)) {
+                                txBadges.set(badgeType, TxBadgeStatus.PENDING);
+                            }
+                        }
+                        return [4 /*yield*/, this.claimedBadgesInSubgraph(args.subgraphUrl, userAddress, args.season)];
+                    case 4:
+                        subgraphClaimedBadges = _f.sent();
+                        badgeStatuses = subgraphClaimedBadges.map(function (badge) {
+                            if (badge.claimingStatus === BadgeClaimingStatus.CLAIMED) {
+                                return badge;
+                            }
+                            var txStatus = txBadges.get(badge.badgeType);
+                            // badge not found in recent successful txs or in potential pending txs
+                            // meaning their status is desided by the subgraph
+                            if (!txStatus || txStatus === TxBadgeStatus.FAILED) {
+                                return {
+                                    badgeType: badge.badgeType,
+                                    claimingStatus: badge.claimingStatus
+                                };
+                            }
+                            else { // subgraph is not updated yet
+                                return {
+                                    badgeType: badge.badgeType,
+                                    claimingStatus: BadgeClaimingStatus.CLAIMING
+                                };
+                            }
+                        });
+                        return [2 /*return*/, badgeStatuses];
+                }
+            });
+        });
+    };
+    SBT.prototype.claimedBadgesInSubgraph = function (subgraphUrl, userAddress, season) {
+        return __awaiter(this, void 0, void 0, function () {
+            var badgeQuery, client, id, data, badgesClaimed, _i, _a, badge;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        badgeQuery = "\n            query( $id: BigInt) {\n                badges(first: 50, where: {seasonUser_contains: $id}) {\n                    id\n                    badgeType\n                    badgeName\n                    awardedTimestamp\n                    mintedTimestamp\n                }\n            }\n        ";
+                        client = new client_1.ApolloClient({
+                            cache: new client_1.InMemoryCache(),
+                            link: new client_1.HttpLink({ uri: subgraphUrl, fetch: cross_fetch_1.default })
+                        });
+                        id = "".concat(userAddress, "#").concat(season);
+                        return [4 /*yield*/, client.query({
+                                query: (0, client_1.gql)(badgeQuery),
+                                variables: {
+                                    id: id,
+                                },
+                            })];
+                    case 1:
+                        data = _b.sent();
+                        badgesClaimed = new Array();
+                        for (_i = 0, _a = data.data.badges; _i < _a.length; _i++) {
+                            badge = _a[_i];
+                            badgesClaimed.push({
+                                badgeType: badge.badgeType,
+                                claimingStatus: data.data.badge.mintedTimestamp == 0 ?
+                                    BadgeClaimingStatus.NOT_CLAIMED
+                                    : BadgeClaimingStatus.CLAIMED // only from subgraph's perspective
+                            });
+                        }
+                        return [2 /*return*/, badgesClaimed];
                 }
             });
         });

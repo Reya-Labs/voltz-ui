@@ -58,3 +58,7 @@ export function getGasBuffer(value: BigNumber): BigNumber {
 }
 
 export const WETH9 = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2';
+
+// https://etherscan.io/address/0xa8ef4f40c4694be9a2e4e27a0501f04f00b454f3#writeContract
+export const MULTI_REDEEM_METHOD_ID = '0x6323ffa5';
+export const REDEEM_METHOD_ID = '0x79a4aaa3';

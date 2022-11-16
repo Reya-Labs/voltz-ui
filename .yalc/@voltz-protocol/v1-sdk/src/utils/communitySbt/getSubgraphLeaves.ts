@@ -52,7 +52,7 @@ export type LeafEntry = {
             const props = entry.id.split("#");
             const address = props[0];
 
-            const metadataURI = `ipfs:${String.fromCharCode(47)}${String.fromCharCode(47)}${baseMetadataUri}${String.fromCharCode(47)}${badgeType}.json`;
+            const metadataURI = `${baseMetadataUri}${badgeType}.json`;
 
             const snpashotEntry: LeafEntry = {
             owner: address,
