@@ -3,9 +3,8 @@ import Box from '@mui/material/Box';
 import { Button, Ellipsis, PositionBadge, SummaryPanel } from '@components/atomic';
 import { FormPanel } from '@components/interface';
 import { formatCurrency, formatNumber } from '@utilities';
-import { usePositionContext } from '@contexts';
+import { usePositionContext, MintBurnFormModes } from '@contexts';
 import { colors } from '@theme';
-import { MintBurnFormModes } from '@contexts';
 import { isUndefined } from 'lodash';
 
 export type MintBurnCurrentPositionProps = {

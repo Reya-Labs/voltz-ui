@@ -3,9 +3,8 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Button, Ellipsis } from '@components/atomic';
 import { colors } from '@theme';
-import { BorrowFormSubmitButtonHintStates, BorrowFormSubmitButtonStates } from '@contexts';
+import { BorrowFormSubmitButtonHintStates, BorrowFormSubmitButtonStates, Agents } from '@contexts';
 import { ReactNode } from 'react';
-import { Agents } from '@contexts';
 
 interface SubmitControlsProps {
   approvalsNeeded: boolean;

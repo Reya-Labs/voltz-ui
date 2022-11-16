@@ -3,12 +3,15 @@ import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
 import { UseAsyncFunctionResult, useTokenApproval } from '@hooks';
 import { FormPanel } from '@components/interface';
-import { MaskedIntegerField, InputTokenLabel } from '@components/composite';
-import { IconLabel, ProtocolInformation } from '@components/composite';
-import { SubmitControls } from './components';
+import {
+  MaskedIntegerField,
+  InputTokenLabel,
+  IconLabel,
+  ProtocolInformation,
+} from '@components/composite';
+import { SubmitControls, FixBorrow } from './components';
 import { SystemStyleObject, Theme } from '@theme';
 
-import { FixBorrow } from './components';
 import { Agents, BorrowFormSubmitButtonHintStates, BorrowFormSubmitButtonStates } from '@contexts';
 import { formatCurrency, getPoolButtonId } from '@utilities';
 
