@@ -1,12 +1,17 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 
-import { SwapSummary, SwapSummaryEditMargin, DescriptionBox, WarningBox } from './components';
+import {
+  SwapSummary,
+  SwapSummaryEditMargin,
+  DescriptionBox,
+  WarningBox,
+  ExpectedAPY,
+} from './components';
 import { colors, SystemStyleObject, Theme } from '@theme';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from '../SwapForm/types';
 import { isUndefined } from 'lodash';
-import { ExpectedAPY } from './components';
 import { FormPanel } from '@components/interface';
 
 export type SwapInfoProps = {
