@@ -3,12 +3,7 @@ import { Position } from '@voltz-protocol/v1-sdk';
 import { BigNumber } from 'ethers';
 import JSBI from 'jsbi';
 import { Icons } from '@components/atomic';
-import {
-  TransactionType,
-  TraderPositionTransaction,
-  LPPositionTransaction,
-  FCMPositionTransaction,
-} from './types';
+import { TransactionType, TraderPositionTransaction, LPPositionTransaction } from './types';
 
 /**
  * Takes a currency value from a transaction and returns the decimal number version
@@ -37,14 +32,14 @@ export const getAvgFix = (fixedTokenDeltaUnbalanced: JSBI, variableTokenDelta: J
  * @param position - the position to compile an array of transactions for
  */
 export const getTransactions = (position: Position) => {
-  if (position.source === 'ME' && position.positionType !== 3) {
+  if (position.positionType !== 3) {
     return [
       ...position.swaps.map((tx) => ({ ...tx, type: TransactionType.SWAP })),
       ...position.marginUpdates.map((tx) => ({ ...tx, type: TransactionType.MARGIN_UPDATE })),
       ...position.settlements.map((tx) => ({ ...tx, type: TransactionType.SETTLEMENT })),
       ...position.liquidations.map((tx) => ({ ...tx, type: TransactionType.LIQUIDATION })),
     ] as TraderPositionTransaction[];
-  } else if (position.source === 'ME' && position.positionType === 3) {
+  } else {
     return [
       ...position.mints.map((tx) => ({ ...tx, type: TransactionType.MINT })),
       ...position.burns.map((tx) => ({ ...tx, type: TransactionType.BURN })),
@@ -52,12 +47,6 @@ export const getTransactions = (position: Position) => {
       ...position.settlements.map((tx) => ({ ...tx, type: TransactionType.SETTLEMENT })),
       ...position.liquidations.map((tx) => ({ ...tx, type: TransactionType.LIQUIDATION })),
     ] as LPPositionTransaction[];
-  } else {
-    return [
-      ...position.fcmSwaps.map((tx) => ({ ...tx, type: TransactionType.FCM_SWAP })),
-      ...position.fcmUnwinds.map((tx) => ({ ...tx, type: TransactionType.FCM_UNWIND })),
-      ...position.fcmSettlements.map((tx) => ({ ...tx, type: TransactionType.FCM_SETTLEMENT })),
-    ] as FCMPositionTransaction[];
   }
 };
 
@@ -67,7 +56,7 @@ export const getTransactions = (position: Position) => {
  * @param transactions
  */
 export const sortTransactions = (
-  transactions: TraderPositionTransaction[] | FCMPositionTransaction[] | LPPositionTransaction[],
+  transactions: TraderPositionTransaction[] | LPPositionTransaction[],
 ) => {
   transactions.sort((a, b) => {
     const timeA = JSBI.toNumber(a.transactionTimestamp);
@@ -84,15 +73,12 @@ export const sortTransactions = (
  */
 export const getTransactionData = (
   position: Position,
-  tx: TraderPositionTransaction | FCMPositionTransaction | LPPositionTransaction,
+  tx: TraderPositionTransaction | LPPositionTransaction,
 ) => {
   const token = position.amm.underlyingToken.name || '';
 
   const iconMap: Record<TransactionType, Icons> = {
     [TransactionType.BURN]: 'tx-burn',
-    [TransactionType.FCM_SWAP]: 'tx-swap',
-    [TransactionType.FCM_SETTLEMENT]: 'tx-settle',
-    [TransactionType.FCM_UNWIND]: 'tx-swap',
     [TransactionType.LIQUIDATION]: 'tx-liquidation',
     [TransactionType.MARGIN_UPDATE]: 'tx-margin-update',
     [TransactionType.MINT]: 'tx-mint',
@@ -104,12 +90,6 @@ export const getTransactionData = (
     switch (tx.type) {
       case TransactionType.BURN:
         return 'BURN';
-      case TransactionType.FCM_SWAP:
-        return 'SWAP (FT)';
-      case TransactionType.FCM_SETTLEMENT:
-        return 'SETTLE';
-      case TransactionType.FCM_UNWIND:
-        return 'UNWIND (VT)';
       case TransactionType.LIQUIDATION:
         return 'LIQUIDATION';
       case TransactionType.MARGIN_UPDATE:
@@ -133,8 +113,6 @@ export const getTransactionData = (
 
   switch (tx.type) {
     case TransactionType.SWAP:
-    case TransactionType.FCM_SWAP:
-    case TransactionType.FCM_UNWIND:
       return {
         ...baseData,
         items: [
@@ -160,7 +138,6 @@ export const getTransactionData = (
       };
 
     case TransactionType.SETTLEMENT:
-    case TransactionType.FCM_SETTLEMENT:
       return {
         ...baseData,
         items: [
