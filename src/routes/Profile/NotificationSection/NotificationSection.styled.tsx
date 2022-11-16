@@ -5,13 +5,19 @@ export const NotificationBox = styled(Box)`
   padding: ${({ theme }) => theme.spacing(2, 4)};
 `;
 
-export const NotificationsContainer = styled(Box)`
+export const NotificationContainer = styled(Box)`
   background-color: #19152a;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: ${({ theme }) => theme.spacing(6)};
   border-radius: 8px;
+`;
+
+export const NotificationsContainer = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  row-gap: ${({ theme }) => theme.spacing(2)};
+  margin-top: ${({ theme }) => theme.spacing(6)};
 `;
 
 export const ButtonBox = styled(Box)`
