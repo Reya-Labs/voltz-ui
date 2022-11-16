@@ -1,24 +1,22 @@
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import { providers } from 'ethers';
-import { AugmentedMellowLpVault } from '@utilities';
 import { getMellowLPAddresses } from './utils';
 
+import { MellowLpVault } from '@voltz-protocol/v1-sdk';
+
 export type useMellowLPVaultsResult = {
-  lpVaults?: AugmentedMellowLpVault[];
+  lpVaults?: MellowLpVault[];
   loading: boolean;
   error: boolean;
 };
 
 const useMellowLPVaults = (): useMellowLPVaultsResult => {
-  const handleRefetch = useCallback(async () => {}, []);
-
   const lpVaults = useMemo(() => {
     const addresses = getMellowLPAddresses(process.env.REACT_APP_MELLOW_VAULTS);
 
     return addresses.map(
       (item) =>
-        new AugmentedMellowLpVault({
-          refetch: handleRefetch,
+        new MellowLpVault({
           ethWrapperAddress: process.env.REACT_APP_MELLOW_ETH_WRAPPER || '',
           voltzVaultAddress: item.voltzVaultAddress,
           erc20RootVaultAddress: item.erc20RootVaultAddress,

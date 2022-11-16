@@ -1,12 +1,13 @@
 import { Box } from '@mui/system';
-import { AugmentedMellowLpVault } from '@utilities';
 import LPMellowVaultDepositInfo from './components/LPMellowVaultDepositInfo';
 import LPMellowVaultDepositWindow from './components/LPMellowVaultDepositWindow';
 import MellowLpDepositFormHeader from './components/MellowLpDepositFormHeader';
 import React from 'react';
 
+import { MellowLpVault } from '@voltz-protocol/v1-sdk';
+
 export type MellowLpDepositFormProps = {
-  lpVault: AugmentedMellowLpVault;
+  lpVault: MellowLpVault;
   onChangeDeposit: (value: number | undefined) => void;
   submitText: string;
   hintText: {

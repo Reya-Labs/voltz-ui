@@ -1,4 +1,4 @@
-import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
+import { Position } from '@voltz-protocol/v1-sdk';
 
 /**
  * Returns the current position that the user has for the given amm

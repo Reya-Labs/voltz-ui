@@ -9,7 +9,8 @@ import {
   useMintBurnForm,
 } from '@contexts';
 import MintBurnInfo from './MintBurnInfo';
-import { AugmentedAMM } from '@utilities';
+
+import { AMM } from '@voltz-protocol/v1-sdk';
 
 export default {
   title: 'Interface/MintBurnInfo',
@@ -29,7 +30,7 @@ const mockAmm = {
     id: '0x123456789',
     name: 'gil',
   },
-} as unknown as AugmentedAMM;
+} as unknown as AMM;
 
 // Creating a new position
 const NewPositionTemplate: ComponentStory<typeof MintBurnInfo> = (args) => (

@@ -1,4 +1,4 @@
-import { AMMGetInfoPostMintArgs, Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
+import { AMMGetInfoPostMintArgs, Position } from '@voltz-protocol/v1-sdk';
 
 export type MintMinimumMarginRequirementPayload = Omit<
   AMMGetInfoPostMintArgs,

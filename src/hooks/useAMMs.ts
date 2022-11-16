@@ -1,18 +1,18 @@
 import { useMemo, useCallback } from 'react';
 import isNull from 'lodash/isNull';
-import { Token, RateOracle } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
-import { AugmentedAMM } from '@utilities';
 import { Amm_OrderBy, useGetAmMsQuery } from '@graphql';
 import useWallet from './useWallet';
 import JSBI from 'jsbi';
 import { useLocation } from 'react-router-dom';
 
+import { Token, RateOracle, AMM } from '@voltz-protocol/v1-sdk';
+
 export type UseAMMsArgs = {};
 
 export type UseAMMsResult = {
-  amms?: AugmentedAMM[];
+  amms?: AMM[];
   loading: boolean;
   error: boolean;
 };
@@ -49,8 +49,7 @@ const useAMMs = (): UseAMMsResult => {
           totalNotionalTraded,
           totalLiquidity,
         }) =>
-          new AugmentedAMM({
-            refetch: handleRefetch,
+          new AMM({
             id: ammId,
             signer,
             provider: providers.getDefaultProvider(process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK),

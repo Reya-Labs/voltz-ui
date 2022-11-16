@@ -6,13 +6,7 @@ import {
   GetInfoType,
   ExpectedInfoPayload,
 } from './types';
-import { AugmentedAMM } from '@utilities';
-import {
-  InfoPostSwap,
-  Position,
-  PositionInfo,
-  ExpectedApyInfo,
-} from '@voltz-protocol/v1-sdk/dist/types/entities';
+import { InfoPostSwap, Position, PositionInfo, ExpectedApyInfo, AMM } from '@voltz-protocol/v1-sdk';
 
 import useAgent from '../useAgent';
 import useAsyncFunction, { UseAsyncFunctionResult } from '../useAsyncFunction';
@@ -30,7 +24,7 @@ export type useAMMReturnType = {
   expectedApyInfo: UseAsyncFunctionResult<ExpectedInfoPayload, ExpectedApyInfo | void>;
 };
 
-export const useAMM = (amm?: AugmentedAMM) => {
+export const useAMM = (amm?: AMM) => {
   const { agent } = useAgent();
 
   const ammCaps = useAsyncFunction(

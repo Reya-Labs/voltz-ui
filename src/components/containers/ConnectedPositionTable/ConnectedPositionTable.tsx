@@ -1,8 +1,7 @@
-import { Position } from '@voltz-protocol/v1-sdk';
 import React, { ReactNode, useCallback, useState } from 'react';
 
 import { data } from '@utilities';
-import { usePositions, useSelector, useWallet } from '@hooks';
+import { usePositions, useSelector, useWallet, useDispatch } from '@hooks';
 import {
   PendingTransaction,
   PortfolioHeader,
@@ -12,16 +11,16 @@ import {
 import { Loading, Panel, RouteLink, Typography } from '@components/atomic';
 import { Agents, usePortfolioContext } from '@contexts';
 import { actions, selectors } from '@store';
-import { useDispatch } from '@hooks';
-import { AugmentedAMM } from '@utilities';
 import { routes } from '@routes';
 import Box from '@mui/material/Box';
 import { colors } from '@theme';
 
+import { AMM, Position } from '@voltz-protocol/v1-sdk';
+
 export type ConnectedAMMTableProps = {
   onSelectItem: (item: Position, mode: 'margin' | 'liquidity' | 'rollover' | 'notional') => void;
   agent: Agents;
-  amm?: AugmentedAMM;
+  amm?: AMM;
   handleCompletedSettling: () => void;
 };
 
@@ -48,7 +47,7 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
 
   const handleSettle = useCallback(
     (position: Position) => {
-      const positionAmm = position.amm as AugmentedAMM;
+      const positionAmm = position.amm;
       const transaction = {
         notional: 0,
         margin: 0,
@@ -128,7 +127,7 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
         <PendingTransaction
-          amm={positionToSettle.position.amm as AugmentedAMM}
+          amm={positionToSettle.position.amm}
           position={positionToSettle.position}
           isEditingMargin={false}
           isSettle={true}

@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { AugmentedAMM } from '@utilities';
 import { isUndefined } from 'lodash';
 
+import { AMM } from '@voltz-protocol/v1-sdk';
+
 export const useCurrentPositionMarginRequirement = (
-  amm: AugmentedAMM,
+  amm: AMM,
   fixedRateLower?: number,
   fixedRateUpper?: number,
 ) => {

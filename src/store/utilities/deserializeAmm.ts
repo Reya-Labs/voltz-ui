@@ -1,14 +1,11 @@
 import { providers } from 'ethers';
-import { Token, RateOracle } from '@voltz-protocol/v1-sdk';
 
-import { AugmentedAMM } from '@utilities';
 import { SerializedAMM } from '../types';
 import JSBI from 'jsbi';
 
-const deserializeAmm = (
-  serializedAmm: SerializedAMM,
-  signer: providers.JsonRpcSigner,
-): AugmentedAMM => {
+import { Token, RateOracle, AMM } from '@voltz-protocol/v1-sdk';
+
+const deserializeAmm = (serializedAmm: SerializedAMM, signer: providers.JsonRpcSigner): AMM => {
   const {
     id,
     updatedTimestamp,
@@ -28,7 +25,7 @@ const deserializeAmm = (
     totalLiquidity,
     totalNotionalTraded,
   } = serializedAmm;
-  const amm = new AugmentedAMM({
+  const amm = new AMM({
     id,
     signer,
     provider: providers.getDefaultProvider(process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK),

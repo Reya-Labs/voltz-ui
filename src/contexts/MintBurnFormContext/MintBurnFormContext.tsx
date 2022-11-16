@@ -6,17 +6,17 @@ import {
 } from '@hooks';
 import { useAMMContext, usePositionContext, Agents } from '@contexts';
 import {
-  AugmentedAMM,
   DataLayerEventPayload,
   getAmmProtocol,
   hasEnoughUnderlyingTokens,
   pushEvent,
+  isMarginWithdrawable,
 } from '@utilities';
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { debounce, isUndefined } from 'lodash';
-import { PositionInfo } from '@voltz-protocol/v1-sdk';
-import { isMarginWithdrawable } from '@utilities';
 import { BigNumber } from 'ethers';
+
+import { AMM, PositionInfo } from '@voltz-protocol/v1-sdk';
 
 export enum MintBurnFormModes {
   NEW_POSITION = 'NEW_POSITION',
@@ -149,7 +149,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
       : defaultValues.notional ?? undefined;
 
   const balance = useBalance(
-    (position?.amm as AugmentedAMM) || poolAmm,
+    (position?.amm as AMM) || poolAmm,
     mode === MintBurnFormModes.ROLLOVER ? position : undefined,
   );
   const [fixedHigh, setFixedHigh] = useState<MintBurnFormState['fixedHigh']>(defaultFixedHigh);

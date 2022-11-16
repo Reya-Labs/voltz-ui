@@ -5,7 +5,7 @@ import TableBody from '@mui/material/TableBody';
 import { colors, SystemStyleObject, Theme } from '@theme';
 import { Position } from '@voltz-protocol/v1-sdk';
 
-import { AugmentedAMM, data, findCurrentAmm, getRowButtonId, isBorrowing } from '@utilities';
+import { data, findCurrentAmm, getRowButtonId, isBorrowing } from '@utilities';
 import { Panel } from '@components/atomic';
 import { PositionTableFields } from './types';
 import { PositionTableHead, PositionTableRow } from './components';
@@ -152,7 +152,7 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                   >
                     <Table size="medium" sx={{ ...commonOverrides }}>
                       <TableBody>
-                        <AMMProvider amm={pos.amm as AugmentedAMM}>
+                        <AMMProvider amm={pos.amm}>
                           <PositionTableRow
                             position={pos}
                             positionInfo={

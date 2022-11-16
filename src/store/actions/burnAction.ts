@@ -1,8 +1,9 @@
-import { AugmentedAMM } from '@utilities';
 import { BurnAction, Transaction } from '../types';
 import { serializeAmm, createId } from '../utilities';
 
-const burnAction = (amm: AugmentedAMM, transaction: Omit<Transaction, 'id'>): BurnAction => ({
+import { AMM } from '@voltz-protocol/v1-sdk';
+
+const burnAction = (amm: AMM, transaction: Omit<Transaction, 'id'>): BurnAction => ({
   type: 'burn',
   payload: {
     amm: serializeAmm(amm),

@@ -1,5 +1,5 @@
 import { Agents } from '@contexts';
-import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
+import { Position } from '@voltz-protocol/v1-sdk';
 
 /**
  * It takes a position and returns the agent type

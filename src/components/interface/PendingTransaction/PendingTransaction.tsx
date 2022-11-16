@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 
 import {
-  AugmentedAMM,
   DataLayerEventPayload,
   getAgentFromPosition,
   getAmmProtocol,
@@ -11,19 +10,20 @@ import {
   isBorrowing,
   pushEvent,
   setPageTitle,
+  formatCurrency,
 } from '@utilities';
 import { useWallet, useSelector, useAgent } from '@hooks';
 import { selectors } from '@store';
 import { AMMProvider, MintBurnFormLiquidityAction, useAMMsContext } from '@contexts';
 import { Button, Panel, Typography, Loading } from '@components/atomic';
 import { ProtocolInformation, WalletAddressDisplay } from '@components/composite';
-import { formatCurrency } from '@utilities';
 import { isUndefined } from 'lodash';
-import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
 import { Wallet } from '@graphql';
 
+import { AMM, Position } from '@voltz-protocol/v1-sdk';
+
 export type PendingTransactionProps = {
-  amm: AugmentedAMM;
+  amm: AMM;
   position?: Position;
   transactionId?: string;
   isEditingMargin?: boolean;

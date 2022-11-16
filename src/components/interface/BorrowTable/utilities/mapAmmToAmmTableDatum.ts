@@ -1,10 +1,8 @@
-import { AugmentedBorrowAMM } from '@utilities';
 import { BorrowAMMTableDatum } from '../types';
 
-const mapAmmToAmmTableDatum = ({
-  id,
-  amm,
-}: AugmentedBorrowAMM): BorrowAMMTableDatum | undefined => {
+import { BorrowAMM } from '@voltz-protocol/v1-sdk';
+
+const mapAmmToAmmTableDatum = ({ id, amm }: BorrowAMM): BorrowAMMTableDatum | undefined => {
   if (amm) {
     return {
       id,

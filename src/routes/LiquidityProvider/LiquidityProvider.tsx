@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import { Link, useLocation } from 'react-router-dom';
-import { Position } from '@voltz-protocol/v1-sdk';
+import { AMM, Position } from '@voltz-protocol/v1-sdk';
 
-import { AugmentedAMM, findCurrentAmm, findCurrentPosition, setPageTitle } from '@utilities';
+import { findCurrentAmm, findCurrentPosition, setPageTitle } from '@utilities';
 import {
   Agents,
   AMMProvider,
@@ -24,7 +24,7 @@ import { Button } from '@mui/material';
 import { routes } from '@routes';
 
 const LiquidityProvider: React.FunctionComponent = () => {
-  const [amm, setAMM] = useState<AugmentedAMM>();
+  const [amm, setAMM] = useState<AMM>();
   const [formMode, setFormMode] = useState<MintBurnFormModes>();
   const [position, setPosition] = useState<Position>();
   const [settling, setSettling] = useState<boolean>(false);
@@ -66,7 +66,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
     }
   }, [setPageTitle, renderMode, position]);
 
-  const handleSelectAmm = (selectedAMM: AugmentedAMM) => {
+  const handleSelectAmm = (selectedAMM: AMM) => {
     setFormMode(MintBurnFormModes.NEW_POSITION);
     setAMM(selectedAMM);
     setPosition(findCurrentPosition(positions || [], selectedAMM, [3]));
@@ -83,9 +83,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
 
     setFormMode(newMode);
     setAMM(
-      mode === 'rollover'
-        ? findCurrentAmm(amms || [], selectedPosition)
-        : (selectedPosition.amm as AugmentedAMM),
+      mode === 'rollover' ? findCurrentAmm(amms || [], selectedPosition) : selectedPosition.amm,
     );
     setPosition(selectedPosition);
   };
