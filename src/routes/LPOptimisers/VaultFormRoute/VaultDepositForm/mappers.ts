@@ -51,7 +51,7 @@ export const getSubmissionState = ({
       action: () => {},
       hintText: {
         text: 'Insufficient Funds',
-        textColor: colors.vzCustomRed1.base,
+        textColor: colors.wildStrawberry,
       },
       loading: false,
       disabled: true,
@@ -82,7 +82,7 @@ export const getSubmissionState = ({
         action: () => {},
         hintText: {
           text: error,
-          textColor: colors.vzCustomRed1.base,
+          textColor: colors.wildStrawberry,
         },
         loading: false,
         disabled: true,
@@ -95,7 +95,7 @@ export const getSubmissionState = ({
         action: approve,
         hintText: {
           text: error,
-          textColor: colors.vzCustomRed1.base,
+          textColor: colors.wildStrawberry,
         },
         loading: false,
         disabled: false,
@@ -108,7 +108,7 @@ export const getSubmissionState = ({
         action: deposit,
         hintText: {
           text: error,
-          textColor: colors.vzCustomRed1.base,
+          textColor: colors.wildStrawberry,
         },
         loading: false,
         disabled: false,
@@ -147,7 +147,7 @@ export const getSubmissionState = ({
           selectedDeposit > 0
             ? {
                 text: tokenName === 'ETH' ? '' : 'Tokens approved.',
-                textColor: colors.vzCustomGreen1.base,
+                textColor: colors.skyBlueCrayola,
                 suffixText: "Let's deposit.",
               }
             : {
@@ -180,7 +180,7 @@ export const getSubmissionState = ({
           prefixText: 'Deposited',
           text: `${selectedDeposit} ${tokenName}`,
           suffixText: 'successfully',
-          textColor: colors.skyBlueCrayola.base,
+          textColor: colors.skyBlueCrayola,
         },
         loading: false,
         disabled: false,
