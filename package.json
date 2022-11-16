@@ -47,25 +47,65 @@
       "develop"
     ],
     "plugins": [
-      ["@semantic-release/commit-analyzer", {
-        "preset": "angular",
-        "releaseRules": [
-          {"type": "build", "release": "patch"},
-          {"type": "chore", "release": "patch"},
-          {"type": "ci", "release": "patch"},
-          {"type": "docs", "release": "patch"},
-          {"type": "feat", "release": "minor"},
-          {"type": "fix", "release": "patch"},
-          {"type": "perf", "release": "patch"},
-          {"type": "refactor", "release": "patch"},
-          {"type": "revert", "release": "patch"},
-          {"type": "style", "release": "patch"},
-          {"type": "test", "release": "patch"}
-        ],
-        "parserOpts": {
-          "noteKeywords": ["BREAKING CHANGE", "BREAKING CHANGES"]
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "angular",
+          "releaseRules": [
+            {
+              "type": "build",
+              "release": "patch"
+            },
+            {
+              "type": "chore",
+              "release": "patch"
+            },
+            {
+              "type": "ci",
+              "release": "patch"
+            },
+            {
+              "type": "docs",
+              "release": "patch"
+            },
+            {
+              "type": "feat",
+              "release": "minor"
+            },
+            {
+              "type": "fix",
+              "release": "patch"
+            },
+            {
+              "type": "perf",
+              "release": "patch"
+            },
+            {
+              "type": "refactor",
+              "release": "patch"
+            },
+            {
+              "type": "revert",
+              "release": "patch"
+            },
+            {
+              "type": "style",
+              "release": "patch"
+            },
+            {
+              "type": "test",
+              "release": "patch"
+            }
+          ],
+          "parserOpts": {
+            "noteKeywords": [
+              "BREAKING CHANGE",
+              "BREAKING CHANGES"
+            ]
+          }
         }
-      }],
+      ],
+      "@semantic-release/npm",
       "@semantic-release/release-notes-generator",
       [
         "@semantic-release/git",
@@ -129,6 +169,7 @@
     "@graphql-codegen/typescript-resolvers": "2.5.2",
     "@pmmmwh/react-refresh-webpack-plugin": "0.5.4",
     "@semantic-release/git": "10.0.1",
+    "@semantic-release/npm": "9.0.1",
     "@storybook/addon-actions": "6.5.12",
     "@storybook/addon-essentials": "6.5.12",
     "@storybook/addon-links": "6.5.12",
