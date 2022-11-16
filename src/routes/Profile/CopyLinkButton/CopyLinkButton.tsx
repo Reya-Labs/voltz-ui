@@ -1,11 +1,12 @@
 import React from 'react';
 import {
   CopyLinkButton as CopyLinkButtonUI,
-  TickWrapper,
+  IconWrapper,
   CopyLinkErrorTypography,
 } from './CopyLinkButton.styled';
 import { Tick } from '../Tick/Tick';
 import { BouncedLoading } from '../BouncedLoading/BouncedLoading';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 type CopyLinkButtonMode = 'copy' | 'copying' | 'copied' | 'copyError';
 
@@ -37,10 +38,15 @@ export const CopyLinkButton: React.FunctionComponent<CopyLinkButtonProps> = ({ o
         disabled={DISABLED_MAP[mode]}
       >
         {MODE_COPY_MAP[mode]}
+        {(mode === 'copy' || mode === 'copyError') && (
+          <IconWrapper>
+            <ContentCopyIcon fontSize="inherit" />
+          </IconWrapper>
+        )}
         {mode === 'copied' && (
-          <TickWrapper>
+          <IconWrapper>
             <Tick />
-          </TickWrapper>
+          </IconWrapper>
         )}
         {mode === 'copying' && <BouncedLoading />}
       </CopyLinkButtonUI>
