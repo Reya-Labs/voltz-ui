@@ -16,8 +16,10 @@ export const CopyLinkButton = styled(Button)<{ disabled: boolean }>`
     disabled ? colors.lavenderWeb.darken015 : colors.skyBlueCrayola.base};
 `;
 
-export const TickWrapper = styled('div')`
+export const IconWrapper = styled('div')`
   margin-left: ${({ theme }) => theme.spacing(1)};
+  display: flex;
+  align-items: center;
 `;
 
 export const CopyLinkErrorTypography = styled('span')`
