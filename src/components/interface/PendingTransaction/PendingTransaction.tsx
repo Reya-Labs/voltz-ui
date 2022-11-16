@@ -29,8 +29,6 @@ export type PendingTransactionProps = {
   isEditingMargin?: boolean;
   showNegativeNotional?: boolean;
   liquidityAction?: MintBurnFormLiquidityAction;
-  isFCMSwap?: boolean;
-  isFCMUnwind?: boolean;
   isRollover?: boolean;
   isSettle?: boolean;
   notional?: number;
@@ -48,8 +46,6 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   liquidityAction,
   isEditingMargin,
   showNegativeNotional,
-  isFCMSwap,
-  isFCMUnwind,
   isRollover,
   isSettle,
   notional,
@@ -422,10 +418,6 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
       return 'Margin undefined';
     }
 
-    if (isFCMSwap) {
-      return `${formatCurrency(margin)} ${amm.protocol}`;
-    }
-
     return `${formatCurrency(margin)} ${amm.underlyingToken.name}`;
   };
 
@@ -462,18 +454,17 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
           </Box>
         )}
 
-        {(isUndefined(liquidityAction) || liquidityAction) &&
-          (isUndefined(isFCMUnwind) || !isFCMUnwind) && (
-            <Box
-              sx={{
-                marginBottom: (theme) => theme.spacing(4),
-              }}
-            >
-              <Typography label="MARGIN" variant="body2">
-                {renderMargin()}
-              </Typography>
-            </Box>
-          )}
+        {(isUndefined(liquidityAction) || liquidityAction) && (
+          <Box
+            sx={{
+              marginBottom: (theme) => theme.spacing(4),
+            }}
+          >
+            <Typography label="MARGIN" variant="body2">
+              {renderMargin()}
+            </Typography>
+          </Box>
+        )}
       </Panel>
     </Panel>
   );

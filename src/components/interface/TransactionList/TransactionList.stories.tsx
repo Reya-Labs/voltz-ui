@@ -111,46 +111,6 @@ VariablePosition.args = {
   } as unknown as Position,
 };
 
-export const FCMPosition = Template.bind({});
-FCMPosition.args = {
-  position: {
-    source: 'FCM',
-    amm: {
-      descale,
-      underlyingToken: {
-        name: 'GIL',
-      },
-    },
-    fcmSwaps: [
-      {
-        id: 1,
-        transactionTimestamp: JSBI.BigInt(1651574608),
-        desiredNotional: JSBI.BigInt(1053848420000000000000000),
-        fixedTokenDeltaUnbalanced: JSBI.BigInt(3550000000000000000),
-        cumulativeFeeIncurred: JSBI.BigInt(15340000000000000000),
-        variableTokenDelta: JSBI.BigInt(15340000000000000000),
-      },
-    ],
-    fcmUnwinds: [
-      {
-        id: 2,
-        transactionTimestamp: JSBI.BigInt(1621574608),
-        desiredNotional: JSBI.BigInt(1053848420000000000000000),
-        fixedTokenDeltaUnbalanced: JSBI.BigInt(3550000000000000000),
-        cumulativeFeeIncurred: JSBI.BigInt(15340000000000000000),
-        variableTokenDelta: JSBI.BigInt(15340000000000000000),
-      },
-    ],
-    fcmSettlements: [
-      {
-        id: 3,
-        transactionTimestamp: JSBI.BigInt(1631574608),
-        settlementCashflow: JSBI.BigInt(1053848420000000000000000),
-      },
-    ],
-  } as unknown as Position,
-};
-
 export const LPPosition = Template.bind({});
 LPPosition.args = {
   position: {

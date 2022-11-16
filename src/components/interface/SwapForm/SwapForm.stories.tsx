@@ -29,10 +29,7 @@ const mockAmm = {
   getFixedApr: () => Promise.resolve(),
   getInstantApy: () => Promise.resolve(),
   hasEnoughUnderlyingTokens: () => true,
-  isFCMApproved: () => true,
-  isUnderlyingTokenApprovedForFCM: () => true,
   isUnderlyingTokenApprovedForPeriphery: () => true,
-  isYieldBearingTokenApprovedForFCM: () => true,
   underlyingToken: {
     id: '0x123456789',
     name: 'gil',

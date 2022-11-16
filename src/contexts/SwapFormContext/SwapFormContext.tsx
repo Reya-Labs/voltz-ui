@@ -8,7 +8,6 @@ import {
   pushEvent,
   DataLayerEventPayload,
   getAmmProtocol,
-  hasEnoughTokens,
   hasEnoughUnderlyingTokens,
   lessThan,
   isMarginWithdrawable,
@@ -552,30 +551,15 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
         addError(err, 'margin', 'Insufficient funds');
       }
     } else {
-      if (action === SwapFormActions.FCM_SWAP) {
-        if (
-          notional !== 0 &&
-          (await hasEnoughTokens(
-            positionAmm || poolAmm,
-            swapInfo.result?.fee,
-            notional,
-            mode === SwapFormModes.ROLLOVER ? position : undefined,
-          )) === false
-        ) {
-          valid = false;
-          addError(err, 'notional', 'Insufficient funds');
-        }
-      } else {
-        if (
-          (await hasEnoughUnderlyingTokens(
-            positionAmm || poolAmm,
-            swapInfo.result?.fee,
-            mode === SwapFormModes.ROLLOVER ? position : undefined,
-          )) === false
-        ) {
-          valid = false;
-          addError(err, 'notional', 'Insufficient funds');
-        }
+      if (
+        (await hasEnoughUnderlyingTokens(
+          positionAmm || poolAmm,
+          swapInfo.result?.fee,
+          mode === SwapFormModes.ROLLOVER ? position : undefined,
+        )) === false
+      ) {
+        valid = false;
+        addError(err, 'notional', 'Insufficient funds');
       }
     }
 
@@ -738,7 +722,6 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     errors,
     hintState: getHintState(),
     isAddingMargin,
-    isFCMAction: false,
     isTradeVerified,
     isRemovingMargin,
     isValid,
