@@ -75,7 +75,6 @@ export const PortfolioProvider: React.FunctionComponent<PortfolioProviderProps> 
     }
   }, [loaded]);
 
-  // 0x3044fa8f672424a31acf0069b9691e19a91a2711#0xf8f6b70a36f4398f0853a311dc6699aba8333cc1
   const loadPositionInfo = (position: Position) => {
     const posInfo = positionsInfo[position.id];
     if (posInfo) {

@@ -88,7 +88,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
         action: action,
       },
       pool: getAmmProtocol(amm),
-      agent: isSettle ? getAgentFromPosition(position) : agent,
+      agent: isSettle ? getAgentFromPosition(position?.positionType) : agent,
     };
     pushEvent(account ?? '', payload);
   }, []);
@@ -118,7 +118,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
           failMessage: activeTransaction.failureMessage || 'Unrecognized error',
         },
         pool: getAmmProtocol(amm),
-        agent: isSettle ? getAgentFromPosition(position) : agent,
+        agent: isSettle ? getAgentFromPosition(position?.positionType) : agent,
       };
       pushEvent(account ?? '', payload);
     }
@@ -156,7 +156,7 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
           action: action,
         },
         pool: getAmmProtocol(amm),
-        agent: isSettle ? getAgentFromPosition(position) : agent,
+        agent: isSettle ? getAgentFromPosition(position?.positionType) : agent,
       };
       pushEvent(account ?? '', payload);
     }

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { Typography } from '@components/atomic';
-import { MaskedIntegerField, IconLabel } from '@components/composite';
+import { IconLabel, MaskedIntegerField } from '@components/composite';
 import Box from '@mui/material/Box';
 import { colors } from '@theme';
 import {
