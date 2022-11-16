@@ -1,20 +1,16 @@
-import {
-  ClaimButtonBox,
-  ClaimNotificationBox,
-  ClaimNotificationContainer,
-} from './ClaimSection.styled';
-import { ClaimNotification } from '../ClaimNotification/ClaimNotification';
+import { ButtonBox, NotificationBox, NotificationsContainer } from './NotificationSection.styled';
+import { ProfileNotification } from '../ClaimNotification/ProfileNotification';
 import { ClaimButton, ClaimButtonProps } from '../ClaimButton/ClaimButton';
 import React from 'react';
 import { BoldText } from '../BoldText.styled';
 
-type ClaimSectionProps = {
+type NotificationSectionProps = {
   isOnGoingSeason: boolean;
   notClaimedBadgesCount: number;
   claimButtonBulkMode: ClaimButtonProps['mode'];
   onClaimBulkClick: () => void;
 };
-export const ClaimSection: React.FunctionComponent<ClaimSectionProps> = ({
+export const NotificationSection: React.FunctionComponent<NotificationSectionProps> = ({
   isOnGoingSeason,
   notClaimedBadgesCount,
   claimButtonBulkMode,
@@ -22,19 +18,19 @@ export const ClaimSection: React.FunctionComponent<ClaimSectionProps> = ({
 }) => {
   if (isOnGoingSeason) {
     return (
-      <ClaimNotificationContainer>
-        <ClaimNotificationBox>
-          <ClaimNotification pillText="CLAIM" text="UNAVAILABLE UNTIL THE END OF THE SEASON" />
-        </ClaimNotificationBox>
-      </ClaimNotificationContainer>
+      <NotificationsContainer>
+        <NotificationBox>
+          <ProfileNotification pillText="CLAIM" text="UNAVAILABLE UNTIL THE END OF THE SEASON" />
+        </NotificationBox>
+      </NotificationsContainer>
     );
   }
   return (
-    <ClaimNotificationContainer>
-      <ClaimNotificationBox>
+    <NotificationsContainer>
+      <NotificationBox>
         {notClaimedBadgesCount !== 0 ? (
           <>
-            <ClaimNotification
+            <ProfileNotification
               pillText={claimButtonBulkMode === 'claimError' ? 'ERROR' : 'BULK CLAIM'}
               text={
                 claimButtonBulkMode === 'claimError' ? (
@@ -48,14 +44,14 @@ export const ClaimSection: React.FunctionComponent<ClaimSectionProps> = ({
             />
           </>
         ) : (
-          <ClaimNotification pillText="KEEP TRADING" text="NO NEW BADGES TO CLAIM YET" />
+          <ProfileNotification pillText="KEEP TRADING" text="NO NEW BADGES TO CLAIM YET" />
         )}
-      </ClaimNotificationBox>
+      </NotificationBox>
       {notClaimedBadgesCount !== 0 ? (
-        <ClaimButtonBox>
+        <ButtonBox>
           <ClaimButton displayError={false} mode={claimButtonBulkMode} onClick={onClaimBulkClick} />
-        </ClaimButtonBox>
+        </ButtonBox>
       ) : null}
-    </ClaimNotificationContainer>
+    </NotificationsContainer>
   );
 };
