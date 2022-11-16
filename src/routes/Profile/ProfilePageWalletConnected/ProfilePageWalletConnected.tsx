@@ -29,7 +29,7 @@ import {
 import { Season } from '../../../hooks/season/types';
 import { SeasonToggle } from '../SeasonToggle/SeasonToggle';
 import { ClaimButtonProps } from '../ClaimButton/ClaimButton';
-import { ClaimSection } from '../ClaimSection/ClaimSection';
+import { NotificationSection } from '../NotificationSection/NotificationSection';
 import { BoldText } from '../BoldText.styled';
 
 export type ProfilePageWalletConnectedProps = {
@@ -96,7 +96,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
             <BoldText>{seasonStartDateFormatted}</BoldText> and{' '}
             <BoldText>{seasonEndDateFormatted}</BoldText>.
           </Subheading>
-          <ClaimSection
+          <NotificationSection
             isOnGoingSeason={isOnGoingSeason}
             notClaimedBadgesCount={notClaimedBadges.length}
             claimButtonBulkMode={claimButtonBulkMode}
