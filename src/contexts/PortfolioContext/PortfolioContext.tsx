@@ -1,5 +1,4 @@
 import { useAgent } from '@hooks';
-import { Position, PositionInfo } from '@voltz-protocol/v1-sdk/dist/types/entities';
 import { createContext, useContext, useEffect, useState, useRef } from 'react';
 import { useAMMsContext } from '../AMMsContext/AMMsContext';
 import {
@@ -10,6 +9,8 @@ import {
   getTotalMargin,
   getTotalNotional,
 } from './services';
+
+import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 
 export type PortfolioProviderProps = {
   positions?: Position[];

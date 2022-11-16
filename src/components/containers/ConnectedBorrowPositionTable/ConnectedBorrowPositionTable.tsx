@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import { SystemStyleObject, Theme } from '@theme';
 
-import { AugmentedBorrowAMM } from '@utilities';
 import { useBorrowAMMs, useBorrowPositions, useWallet } from '@hooks';
 import { Agents } from '@contexts';
 import { Loading, Panel } from '@components/atomic';
@@ -16,8 +15,10 @@ import BorrowPortfolioHeader, {
   BorrowPortfolioHeaderProps,
 } from '../../../components/interface/BorrowPortfolioHeader/BorrowPortfolioHeader';
 
+import { BorrowAMM } from '@voltz-protocol/v1-sdk';
+
 export type ConnectedBorrowAMMTableProps = {
-  onSelectItem: (item: AugmentedBorrowAMM) => void;
+  onSelectItem: (item: BorrowAMM) => void;
   agent: Agents;
 };
 

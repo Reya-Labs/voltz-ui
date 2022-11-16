@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import { AugmentedAMM } from '@utilities';
-import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
+import { AMM, Position } from '@voltz-protocol/v1-sdk';
 
-export const useBalance = (amm: AugmentedAMM, rolloverPosition?: Position) => {
+export const useBalance = (amm: AMM, rolloverPosition?: Position) => {
   const [balance, setBalance] = useState<number>(0);
 
   useEffect(() => {

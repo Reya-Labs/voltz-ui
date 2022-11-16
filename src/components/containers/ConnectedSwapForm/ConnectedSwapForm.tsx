@@ -22,13 +22,14 @@ import {
 } from '@contexts';
 import { BigNumber } from 'ethers';
 import {
-  AugmentedAMM,
   getNotionalActionFromHintState,
   getPoolButtonId,
   isBorrowing,
   setPageTitle,
 } from '@utilities';
 import { isUndefined } from 'lodash';
+
+import { AMM } from '@voltz-protocol/v1-sdk';
 
 export type ConnectedSwapFormProps = {
   onReset: () => void;
@@ -69,9 +70,9 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
     };
 
     if (form.mode === SwapFormModes.ROLLOVER) {
-      return actions.rolloverSwapAction(positionAmm as AugmentedAMM, {
+      return actions.rolloverSwapAction(positionAmm as AMM, {
         ...transaction,
-        ammId: (positionAmm as AugmentedAMM).id,
+        ammId: (positionAmm as AMM).id,
         isFT: agent === Agents.FIXED_TRADER,
         fixedRateLimit: undefined,
         margin: targetAmm.isETH ? 0 : Math.abs(form.state.margin as number),

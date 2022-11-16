@@ -3,9 +3,9 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { AgentProvider, AMMProvider, SwapFormProvider } from '@contexts';
 import SwapInfo from './SwapInfo';
-import { AugmentedAMM } from '@utilities';
-import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from '../SwapForm/types';
+
+import { AMM, InfoPostSwap } from '@voltz-protocol/v1-sdk';
 
 export default {
   title: 'Interface/SwapInfo',
@@ -26,7 +26,7 @@ const mockAmm = {
     id: '0x123456789',
     name: 'gil',
   },
-} as unknown as AugmentedAMM;
+} as unknown as AMM;
 
 const mockSwapData = {
   marginRequirement: 55,

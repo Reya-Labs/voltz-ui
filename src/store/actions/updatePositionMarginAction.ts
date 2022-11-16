@@ -1,9 +1,10 @@
-import { AugmentedAMM } from '@utilities';
 import { UpdatePositionMarginAction, Transaction } from '../types';
 import { serializeAmm, createId } from '../utilities';
 
+import { AMM } from '@voltz-protocol/v1-sdk';
+
 const updatePositionMarginAction = (
-  amm: AugmentedAMM,
+  amm: AMM,
   transaction: Omit<Transaction, 'id'>,
 ): UpdatePositionMarginAction => ({
   type: 'updatePositionMargin',

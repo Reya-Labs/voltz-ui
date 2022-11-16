@@ -1,9 +1,10 @@
-import { AugmentedAMM } from '@utilities';
 import { RolloverMintAction, RolloverMintTransaction } from '../types';
 import { serializeAmm, createId } from '../utilities';
 
+import { AMM } from '@voltz-protocol/v1-sdk';
+
 const rolloverMintAction = (
-  amm: AugmentedAMM,
+  amm: AMM,
   transaction: Omit<RolloverMintTransaction, 'id'>,
 ): RolloverMintAction => ({
   type: 'rolloverMint',

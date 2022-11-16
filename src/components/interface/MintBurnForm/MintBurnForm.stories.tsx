@@ -13,7 +13,7 @@ import {
 } from '@contexts';
 import MintBurnForm from './MintBurnForm';
 import { useTokenApproval } from '@hooks';
-import { AugmentedAMM } from '@utilities';
+import { AMM } from '@voltz-protocol/v1-sdk';
 
 export default {
   title: 'Interface/MintBurnForm',
@@ -33,7 +33,7 @@ const mockAmm = {
     id: '0x123456789',
     name: 'gil',
   },
-} as unknown as AugmentedAMM;
+} as unknown as AMM;
 
 const mockTokenApprovals = {
   approving: false,

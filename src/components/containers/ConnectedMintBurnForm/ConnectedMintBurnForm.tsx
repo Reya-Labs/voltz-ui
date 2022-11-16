@@ -19,10 +19,11 @@ import {
   PendingTransaction,
 } from '@components/interface';
 import { updateFixedRate } from './utilities';
-import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
-import { AugmentedAMM, getPoolButtonId, isBorrowing, setPageTitle } from '@utilities';
+import { getPoolButtonId, isBorrowing, setPageTitle } from '@utilities';
 import { isUndefined } from 'lodash';
 import { BigNumber } from 'ethers';
+
+import { AMM, Position } from '@voltz-protocol/v1-sdk';
 
 export type ConnectedMintBurnFormProps = {
   onReset: () => void;
@@ -65,9 +66,9 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     };
 
     if (form.mode === MintBurnFormModes.ROLLOVER) {
-      return actions.rolloverMintAction(positionAmm as AugmentedAMM, {
+      return actions.rolloverMintAction(positionAmm as AMM, {
         ...transaction,
-        ammId: (positionAmm as AugmentedAMM).id,
+        ammId: (positionAmm as AMM).id,
         margin: targetAmm.isETH ? 0 : Math.abs(form.state.margin as number),
         marginEth: targetAmm.isETH ? Math.abs(form.state.margin as number) : undefined,
         newMarginEngine: targetAmm.marginEngineAddress,

@@ -13,8 +13,8 @@ import {
   MarginUpdate,
   Liquidation,
   Settlement,
+  AMM,
 } from '@voltz-protocol/v1-sdk';
-import { AugmentedAMM } from '@utilities';
 import { Wallet } from '@contexts';
 
 type MEPositionQueryData = NonNullable<GetWalletQuery['wallet']>['positions'][number];
@@ -84,7 +84,7 @@ export const MEPositionFactory = (
     positionType: parseInt(positionType as string),
     isSettled,
     owner: ownerAddress,
-    amm: new AugmentedAMM({
+    amm: new AMM({
       id: ammId,
       signer,
       provider: providers.getDefaultProvider(process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK),

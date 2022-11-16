@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import { AugmentedAMM } from '@utilities';
 import { isUndefined } from 'lodash';
+import { AMM } from '@voltz-protocol/v1-sdk';
 
 export enum ApprovalType {
   UTOKEN_PERIPHERY = 'UnderlyingTokenPeriphery',
@@ -16,7 +16,7 @@ export type ApprovalErrorResponse = {
   message: string;
 };
 
-export const useTokenApproval = (amm: AugmentedAMM) => {
+export const useTokenApproval = (amm: AMM) => {
   const [checkingApprovals, setCheckingApprovals] = useState(false);
   const [approving, setApproving] = useState(false);
   const [lastApproval, setLastApproval] = useState<ApprovalInfo>();

@@ -1,8 +1,8 @@
-import { AugmentedAMM } from '@utilities';
 import { isUndefined } from 'lodash';
+import { AMM } from '@voltz-protocol/v1-sdk';
 
 export type UpdateFixedRateArgs = {
-  amm?: AugmentedAMM;
+  amm?: AMM;
   fixedRate?: number;
   setFixedRate: (value: number | undefined) => void;
 };

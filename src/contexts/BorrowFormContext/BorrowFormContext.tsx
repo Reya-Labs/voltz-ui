@@ -10,7 +10,8 @@ import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { Agents, useAMMContext, useBorrowAMMContext, usePositionContext } from '@contexts';
 import { isUndefined } from 'lodash';
 import * as s from '../SwapFormContext/services';
-import { InfoPostSwap } from '@voltz-protocol/v1-sdk/dist/types/entities';
+
+import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 
 export type BorrowFormProviderProps = {};
 

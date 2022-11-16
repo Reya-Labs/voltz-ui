@@ -4,19 +4,20 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import { SystemStyleObject, Theme } from '@theme';
 
-import { data, AugmentedAMM } from '@utilities';
-import { AMMProvider } from '@contexts';
+import { data } from '@utilities';
+import { AMMProvider, Agents } from '@contexts';
 import { Panel } from '@components/atomic';
 import { AMMTableFields } from './types';
 import { labels } from './constants';
 import { mapAmmToAmmTableDatum } from './utilities';
 import { AMMTableFooter, AMMTableHead, AMMTableRow } from './components';
 import { useAgent } from '@hooks';
-import { Agents } from '@contexts';
 import { DateTime } from 'luxon';
 
+import { AMM } from '@voltz-protocol/v1-sdk';
+
 export type AMMTableProps = {
-  amms: AugmentedAMM[];
+  amms: AMM[];
   order: data.TableOrder;
   onSetOrder: (order: data.TableOrder) => void;
   orderBy: AMMTableFields;
@@ -26,7 +27,7 @@ export type AMMTableProps = {
   onSetPage: (page: number) => void;
   size: number | null;
   onSetSize: (size: number) => void;
-  onSelectItem: (datum: AugmentedAMM) => void;
+  onSelectItem: (datum: AMM) => void;
 };
 
 const AMMTable: React.FunctionComponent<AMMTableProps> = ({

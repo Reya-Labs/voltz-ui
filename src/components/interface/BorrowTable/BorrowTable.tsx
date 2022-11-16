@@ -3,13 +3,12 @@ import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import { SystemStyleObject, Theme } from '@theme';
-import { Typography } from '@components/atomic';
+import { Typography, Panel } from '@components/atomic';
 import { Box } from '@mui/material';
 
-import { data, AugmentedBorrowAMM, findCurrentBorrowPosition, getRowButtonId } from '@utilities';
+import { data, findCurrentBorrowPosition, getRowButtonId } from '@utilities';
 import { mapAmmToAmmTableDatum } from './utilities';
 import { BorrowAMMProvider, PositionProvider } from '@contexts';
-import { Panel } from '@components/atomic';
 import {
   FixedBorrowTableFields,
   labelsFixed,
@@ -20,13 +19,13 @@ import {
 import { BorrowTableHead } from './components';
 import { DateTime } from 'luxon';
 import BorrowTableRow from './components/BorrowTableRow/BorrowTableRow';
-import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
+import { BorrowAMM, Position } from '@voltz-protocol/v1-sdk';
 
 export type BorrowTableProps = {
   showVariable: boolean;
   showFixed: boolean;
   positions: Position[];
-  borrowAmms: AugmentedBorrowAMM[];
+  borrowAmms: BorrowAMM[];
   order: data.TableOrder;
   variableOrderBy: VariableBorrowTableFields;
   onSetVariableOrderBy: (orderBy: VariableBorrowTableFields) => void;
@@ -34,7 +33,7 @@ export type BorrowTableProps = {
   onSetFixedOrderBy: (orderBy: FixedBorrowTableFields) => void;
   page: number;
   size: number | null;
-  onSelectItem: (datum: AugmentedBorrowAMM) => void;
+  onSelectItem: (datum: BorrowAMM) => void;
   onLoaded: (loaded: boolean) => void;
   commonOverrides: SystemStyleObject<Theme>;
 };
@@ -162,7 +161,7 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
     marketsWithPosition: (
       | {
           datum: BorrowAMMTableDatum;
-          borrowAmms: AugmentedBorrowAMM;
+          borrowAmms: BorrowAMM;
           position: Position;
           index: number;
         }
@@ -196,7 +195,7 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
     liveMarkets: (
       | {
           datum: BorrowAMMTableDatum;
-          borrowAmms: AugmentedBorrowAMM;
+          borrowAmms: BorrowAMM;
           position: Position | undefined;
           index: number;
         }

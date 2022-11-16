@@ -1,8 +1,9 @@
-import { AugmentedAMM } from '@utilities';
 import { MintAction, Transaction } from '../types';
 import { serializeAmm, createId } from '../utilities';
 
-const mintAction = (amm: AugmentedAMM, transaction: Omit<Transaction, 'id'>): MintAction => ({
+import { AMM } from '@voltz-protocol/v1-sdk';
+
+const mintAction = (amm: AMM, transaction: Omit<Transaction, 'id'>): MintAction => ({
   type: 'mint',
   payload: {
     amm: serializeAmm(amm),

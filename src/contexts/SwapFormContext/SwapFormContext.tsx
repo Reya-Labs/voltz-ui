@@ -8,9 +8,12 @@ import {
   pushEvent,
   DataLayerEventPayload,
   getAmmProtocol,
+  hasEnoughTokens,
+  hasEnoughUnderlyingTokens,
+  lessThan,
+  isMarginWithdrawable,
 } from '@utilities';
 import { debounce, isNumber, isUndefined } from 'lodash';
-import { hasEnoughTokens, hasEnoughUnderlyingTokens, lessThan } from '@utilities';
 import {
   GetInfoType,
   useAgent,
@@ -19,10 +22,10 @@ import {
   useTokenApproval,
   useWallet,
 } from '@hooks';
-import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import * as s from './services';
-import { isMarginWithdrawable } from '@utilities';
 import { BigNumber } from 'ethers';
+
+import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 
 // updateLeverage instead of setLeverage when notional updates
 // have reset flag in onChange in Leverage to be able to reset leverage when box is modified.

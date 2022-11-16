@@ -1,13 +1,13 @@
-import { AugmentedMellowLpVault } from '@utilities';
 import { routes } from '@routes';
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { DepositStates, getSubmissionState } from './mappers';
 import MellowLpDepositForm from '../MellowLpDepositForm/MellowLpDepositForm';
 import { Panel } from '../../../components/atomic';
+import { MellowLpVault } from '@voltz-protocol/v1-sdk';
 
 export type ConnectedMellowLpDepositFormProps = {
-  vault: AugmentedMellowLpVault;
+  vault: MellowLpVault;
   onReset: () => void;
 };
 

@@ -1,9 +1,10 @@
-import { AugmentedAMM } from '@utilities';
 import { SettlePositionAction, Transaction } from '../types';
 import { serializeAmm, createId } from '../utilities';
 
+import { AMM } from '@voltz-protocol/v1-sdk';
+
 const settlePositionAction = (
-  amm: AugmentedAMM,
+  amm: AMM,
   transaction: Omit<Transaction, 'id'>,
 ): SettlePositionAction => ({
   type: 'settlePosition',

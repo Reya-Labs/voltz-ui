@@ -1,16 +1,15 @@
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useMemo, useRef, createContext, useContext } from 'react';
 import { useAsyncFunction, UseAsyncFunctionResult } from '@hooks';
-import { AugmentedAMM } from '@utilities';
-import { createContext, useContext } from 'react';
-import { Position, PositionInfo } from '@voltz-protocol/v1-sdk/dist/types/entities';
 import { Wallet } from '@graphql';
+
+import { AMM, Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 
 export type AMMsProviderProps = {};
 
 export type AMMsContext = {
-  variableApy: (amm: AugmentedAMM) => UseAsyncFunctionResult<AugmentedAMM, number | void>;
-  fixedApr: (amm: AugmentedAMM) => UseAsyncFunctionResult<AugmentedAMM, number | void>;
-  removeFixedApr: (amm: AugmentedAMM) => void;
+  variableApy: (amm: AMM) => UseAsyncFunctionResult<AMM, number | void>;
+  fixedApr: (amm: AMM) => UseAsyncFunctionResult<AMM, number | void>;
+  removeFixedApr: (amm: AMM) => void;
   positionsInfo: Record<string, PositionInfo | undefined>;
   cachePositionInfo: (info: PositionInfo, position: Position) => void;
   isPositionFeched: (wallet: Wallet, previousWallet: Wallet, position?: Position) => boolean;
@@ -23,7 +22,7 @@ export const AMMsProvider: React.FunctionComponent<AMMsProviderProps> = ({ child
   const variableApys = useRef<Record<string, number>>({});
   const fixedAprs = useRef<Record<string, number | undefined>>({});
 
-  const removeFixedApr = useCallback((amm: AugmentedAMM) => {
+  const removeFixedApr = useCallback((amm: AMM) => {
     fixedAprs.current[amm.id] = undefined;
   }, []);
 
@@ -65,7 +64,7 @@ export const AMMsProvider: React.FunctionComponent<AMMsProviderProps> = ({ child
     return false;
   };
 
-  const useVariableApy = (amm: AugmentedAMM) =>
+  const useVariableApy = (amm: AMM) =>
     useAsyncFunction(
       async () => {
         if (variableApys.current[amm.id]) {
@@ -81,7 +80,7 @@ export const AMMsProvider: React.FunctionComponent<AMMsProviderProps> = ({ child
       useMemo(() => undefined, []),
     );
 
-  const useFixedApr = (amm: AugmentedAMM) =>
+  const useFixedApr = (amm: AMM) =>
     useAsyncFunction(
       async () => {
         if (fixedAprs.current[amm.id]) {
