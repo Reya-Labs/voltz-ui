@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { createContext, useContext } from 'react';
 import { useAMM } from '@hooks';
-import { AugmentedAMM } from '@utilities';
-import { createContext, useContext } from 'react';
+
+import { AMM } from '@voltz-protocol/v1-sdk';
 
 export type AMMProviderProps = {
-  amm: AugmentedAMM;
+  amm: AMM;
 };
 
 export type AMMContext = ReturnType<typeof useAMM> & {
-  amm: AugmentedAMM;
+  amm: AMM;
 };
 
 const AMMCtx = createContext<AMMContext>({} as unknown as AMMContext);

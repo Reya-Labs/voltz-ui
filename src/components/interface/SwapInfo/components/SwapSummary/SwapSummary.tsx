@@ -2,8 +2,9 @@ import React from 'react';
 import SummaryPanel from '../../../../atomic/SummaryPanel/SummaryPanel';
 import { IconLabel } from '@components/composite';
 import { formatCurrency, formatNumber, roundUpDecimal } from '@utilities';
-import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions } from '../../../SwapForm/types';
+
+import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 
 export type SwapSummaryProps = {
   data: InfoPostSwap | void | null;

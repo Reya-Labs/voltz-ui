@@ -4,11 +4,13 @@ import { Agents } from '@contexts';
 
 import ConnectedMellowLpDepositForm from './ConnectedMellowLpDepositForm/ConnectedMellowLpDepositForm';
 import ConnectedMellowLPTable from './ConnectedMellowLPTable/ConnectedMellowLPTable';
-import { AugmentedMellowLpVault, setPageTitle } from '@utilities';
+import { setPageTitle } from '@utilities';
 import { useEffect, useState } from 'react';
 import { isNull } from 'lodash';
 import { useWallet } from '@hooks';
 import { useLocation } from 'react-router-dom';
+
+import { MellowLpVault } from '@voltz-protocol/v1-sdk';
 
 export enum EcosystemRenderMode {
   MELLOW_DEPOSIT_FORM,
@@ -19,10 +21,10 @@ const Ecosystem: React.FunctionComponent = () => {
   const wallet = useWallet();
 
   const [renderMode, setRenderMode] = useState<EcosystemRenderMode>(EcosystemRenderMode.PAGE);
-  const [currentVault, setCurrentVault] = useState<AugmentedMellowLpVault>();
+  const [currentVault, setCurrentVault] = useState<MellowLpVault>();
   const location = useLocation();
 
-  const handleSelectMellowLpVault = (selectedVault: AugmentedMellowLpVault) => {
+  const handleSelectMellowLpVault = (selectedVault: MellowLpVault) => {
     if (isNull(wallet.account)) {
       wallet.setRequired(true);
     } else {

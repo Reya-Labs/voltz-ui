@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 
-import { data, AugmentedAMM } from '@utilities';
+import { data } from '@utilities';
 import { useAMMs } from '@hooks';
 import { AMMTable, AMMTableFields } from '@components/interface';
 
+import { AMM } from '@voltz-protocol/v1-sdk';
+
 export type ConnectedAMMTableProps = {
-  onSelectItem: (item: AugmentedAMM) => void;
+  onSelectItem: (item: AMM) => void;
 };
 
 const ConnectedAMMTable: React.FunctionComponent<ConnectedAMMTableProps> = ({ onSelectItem }) => {

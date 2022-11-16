@@ -1,6 +1,6 @@
-import { Position } from '@voltz-protocol/v1-sdk/dist/types/entities';
 import { isUndefined } from 'lodash';
-import AugmentedAMM from './augmentedAmm';
+
+import { AMM, Position } from '@voltz-protocol/v1-sdk';
 
 /**
  * Checks if the user has enough underlying and yield bearing tokens.
@@ -10,7 +10,7 @@ import AugmentedAMM from './augmentedAmm';
  * @param yieldBearingTokenAmount - the amount of yield bearing tokens to check
  */
 export const hasEnoughTokens = async (
-  amm: AugmentedAMM,
+  amm: AMM,
   underlyingTokenAmount: number | undefined,
   yieldBearingTokenAmount: number | undefined,
   rolloverPosition?: Position | undefined,
@@ -49,7 +49,7 @@ export const hasEnoughTokens = async (
  * @param amount - the amount of underlying tokens to check
  */
 export const hasEnoughUnderlyingTokens = async (
-  amm: AugmentedAMM,
+  amm: AMM,
   amount: number | undefined,
   rolloverPosition?: Position | undefined,
 ) => {

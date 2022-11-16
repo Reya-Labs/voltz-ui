@@ -1,4 +1,4 @@
-import { Token } from '@voltz-protocol/v1-sdk/dist/types/entities';
+import { Token } from '@voltz-protocol/v1-sdk';
 
 export enum UnderlyingProtocol {
   COMPOUND = 'COMPOUND',

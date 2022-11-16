@@ -1,5 +1,7 @@
-import { AugmentedAMM, isBorrowing } from '@utilities';
+import { isBorrowing } from '@utilities';
 import { AMMTableDatum } from '../types';
+
+import { AMM } from '@voltz-protocol/v1-sdk';
 
 const mapAmmToAmmTableDatum = ({
   id,
@@ -7,7 +9,7 @@ const mapAmmToAmmTableDatum = ({
   startDateTime,
   endDateTime,
   rateOracle,
-}: AugmentedAMM): AMMTableDatum => {
+}: AMM): AMMTableDatum => {
   return {
     id,
     protocol,

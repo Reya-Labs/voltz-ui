@@ -1,10 +1,12 @@
 import { Box, Button, Skeleton, Typography } from '@mui/material';
-import { AugmentedMellowLpVault, formatCurrency } from '@utilities';
+import { formatCurrency } from '@utilities';
 import { isUndefined } from 'lodash';
 import React from 'react';
 
+import { MellowLpVault } from '@voltz-protocol/v1-sdk';
+
 export type MellowLPPositionProps = {
-  lpVault: AugmentedMellowLpVault;
+  lpVault: MellowLpVault;
   handleClick: () => void;
   disabled: boolean;
 };

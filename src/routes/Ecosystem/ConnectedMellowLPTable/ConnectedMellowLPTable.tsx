@@ -1,15 +1,16 @@
 import { Agents } from '@contexts';
 import { useMellowLPVaults, useWallet } from '@hooks';
 import { Box } from '@mui/system';
-import { AugmentedMellowLpVault } from '@utilities';
 import { isNull } from 'lodash';
 import { useEffect, useState } from 'react';
 import { Panel } from '../../../components/atomic';
 import MellowLPTable from '../MellowLPTable/MellowLPTable';
 import EcosystemHeader from '../EcosystemHeader/EcosystemHeader';
 
+import { MellowLpVault } from '@voltz-protocol/v1-sdk';
+
 export type ConnectedMellowLPTableProps = {
-  onSelectItem: (item: AugmentedMellowLpVault) => void;
+  onSelectItem: (item: MellowLpVault) => void;
   agent: Agents;
 };
 

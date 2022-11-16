@@ -1,8 +1,9 @@
-import { AugmentedAMM } from '@utilities';
 import { SwapAction, Transaction } from '../types';
 import { serializeAmm, createId } from '../utilities';
 
-const swapAction = (amm: AugmentedAMM, transaction: Omit<Transaction, 'id'>): SwapAction => ({
+import { AMM } from '@voltz-protocol/v1-sdk';
+
+const swapAction = (amm: AMM, transaction: Omit<Transaction, 'id'>): SwapAction => ({
   type: 'swap',
   payload: {
     amm: serializeAmm(amm),

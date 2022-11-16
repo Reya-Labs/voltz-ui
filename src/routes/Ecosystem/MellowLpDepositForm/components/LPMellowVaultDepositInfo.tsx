@@ -2,11 +2,13 @@ import { Box } from '@mui/material';
 import { PoolField, IconLabel, ProgressBar } from '@components/composite';
 import { Agents } from '@contexts';
 import { Panel, Typography } from '@components/atomic';
-import { AugmentedMellowLpVault, formatCurrency } from '@utilities';
+import { formatCurrency } from '@utilities';
 import { isUndefined } from 'lodash';
 
+import { MellowLpVault } from '@voltz-protocol/v1-sdk';
+
 export type LPMellowVaultDepositInfoProps = {
-  lpVault: AugmentedMellowLpVault;
+  lpVault: MellowLpVault;
 };
 const LPMellowVaulDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoProps> = ({
   lpVault,

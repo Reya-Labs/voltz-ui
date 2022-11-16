@@ -1,10 +1,11 @@
 import { Box } from '@mui/system';
-import { AugmentedMellowLpVault } from '@utilities';
 import MellowLPEntry from './components/MellowLPEntry';
 
+import { MellowLpVault } from '@voltz-protocol/v1-sdk';
+
 export type MellowLPTableProps = {
-  lpVaults: AugmentedMellowLpVault[];
-  onSelectItem: (item: AugmentedMellowLpVault) => void;
+  lpVaults: MellowLpVault[];
+  onSelectItem: (item: MellowLpVault) => void;
   disabled: boolean;
 };
 

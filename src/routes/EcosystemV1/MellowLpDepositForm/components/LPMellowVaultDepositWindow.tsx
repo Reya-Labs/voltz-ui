@@ -1,14 +1,15 @@
 import { FormPanel } from '@components/interface';
 import { IconLabel, InputTokenLabel, MaskedIntegerField } from '@components/composite';
 import { Box } from '@mui/system';
-import { AugmentedMellowLpVault, formatCurrency, toUSFormat } from '@utilities';
+import { formatCurrency, toUSFormat } from '@utilities';
+import { MellowLpVault } from '@voltz-protocol/v1-sdk';
 import { Panel, Typography, Button } from '@components/atomic';
 import { colors } from '@theme';
 import { isUndefined } from 'lodash';
 import React from 'react';
 
 export type LPMellowVaultDepositWindowProps = {
-  lpVault: AugmentedMellowLpVault;
+  lpVault: MellowLpVault;
   onChangeDeposit: (value: number | undefined) => void;
   submitText: string;
   hintText: {

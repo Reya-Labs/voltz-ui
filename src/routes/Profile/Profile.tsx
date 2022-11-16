@@ -13,9 +13,10 @@ import { getENSDetails, setPageTitle } from '@utilities';
 import { Season } from '../../hooks/season/types';
 import { ClaimButtonProps } from './ClaimButton/ClaimButton';
 import { getCacheValue, invalidateCache, setCacheValue } from './cache';
-import { CommunitySBT } from '@voltz-protocol/v1-sdk';
 import { getClaimButtonModesForVariants } from './helpers';
 import { DateTime } from 'luxon';
+
+import { CommunitySBT } from '@voltz-protocol/v1-sdk';
 
 const Profile: React.FunctionComponent = () => {
   const wallet = useWallet();

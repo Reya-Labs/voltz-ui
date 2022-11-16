@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { createContext, useContext } from 'react';
 import { useBorrowAMM } from '@hooks';
-import { AugmentedBorrowAMM } from '@utilities';
-import { createContext, useContext } from 'react';
+import { BorrowAMM } from '@voltz-protocol/v1-sdk';
 
 export type BorrowAMMProviderProps = {
-  amm: AugmentedBorrowAMM;
+  amm: BorrowAMM;
 };
 
 export type BorrowAMMContext = ReturnType<typeof useBorrowAMM> & {
-  amm: AugmentedBorrowAMM;
+  amm: BorrowAMM;
 };
 
 const BorrowAMMCtx = createContext<BorrowAMMContext>({} as unknown as BorrowAMMContext);

@@ -1,9 +1,8 @@
-import { Position } from '@voltz-protocol/v1-sdk';
-import { AugmentedBorrowAMM } from '@utilities';
 import { DateTime } from 'luxon';
+import { BorrowAMM, Position } from '@voltz-protocol/v1-sdk';
 
 export const getTotalVariableDebt = async (
-  borrowAmms: AugmentedBorrowAMM[],
+  borrowAmms: BorrowAMM[],
   positions: Position[] | undefined,
 ) => {
   let sum: number = 0;
@@ -33,10 +32,7 @@ export const getTotalVariableDebt = async (
   return [sum, countVariablePositions];
 };
 
-export const getTotalFixedDebt = async (
-  borrowAmms: AugmentedBorrowAMM[],
-  positions: Position[],
-) => {
+export const getTotalFixedDebt = async (borrowAmms: BorrowAMM[], positions: Position[]) => {
   let sum: number = 0;
   let countFixedPositions: number = 0;
   for (const p of positions) {

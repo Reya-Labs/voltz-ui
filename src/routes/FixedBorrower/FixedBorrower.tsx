@@ -1,25 +1,27 @@
 import React, { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
-import { Position } from '@voltz-protocol/v1-sdk';
 
 import { setPageTitle, findCurrentBorrowPosition } from '@utilities';
-import { Agents, BorrowAMMProvider, BorrowFormProvider } from '@contexts';
+import {
+  Agents,
+  BorrowAMMProvider,
+  BorrowFormProvider,
+  AMMProvider,
+  PositionProvider,
+} from '@contexts';
 import { useBorrowPositions, useWallet } from '@hooks';
 
 import { Page } from '@components/interface';
 import ConnectedBorrowForm from '../../components/containers/ConnectedBorrowForm/ConnectedBorrowForm';
 import ConnectedBorrowPositionTable from '../../components/containers/ConnectedBorrowPositionTable/ConnectedBorrowPositionTable';
 import { getRenderMode } from './services';
-import AugmentedBorrowAMM from '../../utilities/augmentedBorrowAmm';
 
-import { AMMProvider, PositionProvider } from '@contexts';
-
-import { AugmentedAMM } from '@utilities';
+import { Position, AMM, BorrowAMM } from '@voltz-protocol/v1-sdk';
 
 const FixedBorrower: React.FunctionComponent = () => {
   const [isForm, setIsForm] = useState<boolean>();
-  const [borrowAmm, setBorrowAMM] = useState<AugmentedBorrowAMM>();
+  const [borrowAmm, setBorrowAMM] = useState<BorrowAMM>();
   const [position, setPosition] = useState<Position>();
 
   const { positions } = useBorrowPositions();
@@ -27,7 +29,7 @@ const FixedBorrower: React.FunctionComponent = () => {
 
   const renderMode = getRenderMode(isForm);
 
-  const handleSelectBorrowAMM = (selectedBorrowAMM: AugmentedBorrowAMM) => {
+  const handleSelectBorrowAMM = (selectedBorrowAMM: BorrowAMM) => {
     setIsForm(true);
     setBorrowAMM(selectedBorrowAMM);
     setPosition(findCurrentBorrowPosition(positions || [], selectedBorrowAMM.id));
@@ -75,7 +77,7 @@ const FixedBorrower: React.FunctionComponent = () => {
         >
           {borrowAmm && borrowAmm.amm && (
             <BorrowAMMProvider amm={borrowAmm}>
-              <AMMProvider amm={new AugmentedAMM(borrowAmm.amm)}>
+              <AMMProvider amm={new AMM(borrowAmm.amm)}>
                 <PositionProvider position={position}>
                   <BorrowFormProvider>
                     <ConnectedBorrowForm onReset={handleReset} />

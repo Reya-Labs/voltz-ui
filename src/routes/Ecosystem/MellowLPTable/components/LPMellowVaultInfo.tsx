@@ -1,10 +1,11 @@
 import { Box, Skeleton, Typography } from '@mui/material';
-import { AugmentedMellowLpVault, formatCurrency } from '@utilities';
+import { formatCurrency } from '@utilities';
 import { isUndefined } from 'lodash';
 import { ProgressBar } from '@components/composite';
+import { MellowLpVault } from '@voltz-protocol/v1-sdk';
 
 export type LPMellowVaultInfoProps = {
-  lpVault: AugmentedMellowLpVault;
+  lpVault: MellowLpVault;
 };
 const LPMellowVaultInfo: React.FunctionComponent<LPMellowVaultInfoProps> = ({
   lpVault,

@@ -1,18 +1,18 @@
 import { useMemo, useCallback } from 'react';
 import isNull from 'lodash/isNull';
-import { Token, RateOracle } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
-import { AugmentedAMM, AugmentedBorrowAMM } from '@utilities';
 import { Amm_OrderBy, useGetAmMsQuery } from '@graphql';
 import useWallet from './useWallet';
 import JSBI from 'jsbi';
 import { DateTime } from 'luxon';
 
+import { Token, RateOracle, BorrowAMM, AMM } from '@voltz-protocol/v1-sdk';
+
 export type UseAMMsArgs = {};
 
 export type UseBorrowAMMsResult = {
-  borrowAmms?: AugmentedBorrowAMM[];
+  borrowAmms?: BorrowAMM[];
   loading: boolean;
   error: boolean;
 };
@@ -48,8 +48,7 @@ const useBorrowAMMs = (): UseBorrowAMMsResult => {
           totalNotionalTraded,
           totalLiquidity,
         }) =>
-          new AugmentedAMM({
-            refetch: handleRefetch,
+          new AMM({
             id: ammId,
             signer,
             provider: providers.getDefaultProvider(process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK),
@@ -79,7 +78,7 @@ const useBorrowAMMs = (): UseBorrowAMMsResult => {
       if (!process.env.REACT_APP_WHITELIST || process.env.REACT_APP_WHITELIST === `UNPROVIDED`) {
         const borrowMarkets = ammsData.filter((amm) => [5, 6].includes(amm.rateOracle.protocolId));
         const liveBorrowMarkets = borrowMarkets.filter((amm) => DateTime.now() < amm.endDateTime);
-        return liveBorrowMarkets.map((amm) => new AugmentedBorrowAMM({ id: amm.id, amm: amm }));
+        return liveBorrowMarkets.map((amm) => new BorrowAMM({ id: amm.id, amm: amm }));
       } else {
         if (process.env.REACT_APP_WHITELIST) {
           const whitelist = process.env.REACT_APP_WHITELIST.split(',').map((s) => s.trim());
@@ -88,7 +87,7 @@ const useBorrowAMMs = (): UseBorrowAMMsResult => {
             [5, 6].includes(amm.rateOracle.protocolId),
           );
           const liveBorrowMarkets = borrowMarkets.filter((amm) => DateTime.now() < amm.endDateTime);
-          return liveBorrowMarkets.map((amm) => new AugmentedBorrowAMM({ id: amm.id, amm: amm }));
+          return liveBorrowMarkets.map((amm) => new BorrowAMM({ id: amm.id, amm: amm }));
         }
       }
     }

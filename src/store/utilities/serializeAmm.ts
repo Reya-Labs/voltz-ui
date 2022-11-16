@@ -1,7 +1,8 @@
-import { AugmentedAMM } from '@utilities';
 import { SerializedAMM } from '../types';
 
-const serializeAmm = (amm: AugmentedAMM): SerializedAMM => ({
+import { AMM } from '@voltz-protocol/v1-sdk';
+
+const serializeAmm = (amm: AMM): SerializedAMM => ({
   id: amm.id,
   updatedTimestamp: amm.updatedTimestamp.toString(),
   factoryAddress: amm.factoryAddress,

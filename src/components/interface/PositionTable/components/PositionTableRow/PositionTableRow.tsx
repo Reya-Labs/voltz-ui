@@ -8,9 +8,10 @@ import { PoolField, MaturityInformation } from '@components/composite';
 import { lpLabels, traderLabels } from '../../constants';
 import { FixedAPR, Notional, CurrentMargin, AccruedRates } from './components';
 import { useAgent } from '@hooks';
-import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 import { formatNumber, isBorrowing } from '@utilities';
 import { isNumber } from 'lodash';
+
+import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 
 export type PositionTableRowProps = {
   position: Position;
