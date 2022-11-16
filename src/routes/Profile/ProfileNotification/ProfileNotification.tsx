@@ -9,7 +9,7 @@ export const ProfileNotification: React.FunctionComponent<ProfileNotificationPro
   pillText,
   text,
 }) => (
-  <NotificationTypography data-testid="ClaimNotification" variant="body2">
+  <NotificationTypography data-testid="ProfileNotification" variant="body2">
     <PillBox text={pillText} variant="wildStrawberry" />
     {text}
   </NotificationTypography>
