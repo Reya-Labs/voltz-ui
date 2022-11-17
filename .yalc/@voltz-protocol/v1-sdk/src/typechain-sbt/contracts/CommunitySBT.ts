@@ -44,12 +44,12 @@ export declare namespace CommunitySBT {
 
   export type LeafInfoStruct = {
     account: PromiseOrValue<string>;
-    metadataURI: PromiseOrValue<string>;
+    badgeId: PromiseOrValue<BigNumberish>;
   };
 
-  export type LeafInfoStructOutput = [string, string] & {
+  export type LeafInfoStructOutput = [string, BigNumber] & {
     account: string;
-    metadataURI: string;
+    badgeId: BigNumber;
   };
 }
 
@@ -59,26 +59,27 @@ export interface CommunitySBTInterface extends utils.Interface {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
-    "getTokenIdHash(address,string)": FunctionFragment;
+    "getTokenIdHash(address,bytes32,uint96)": FunctionFragment;
     "invalidateRoot(bytes32)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "locked(uint256)": FunctionFragment;
-    "multiRedeem((address,string)[],bytes32[][],bytes32[])": FunctionFragment;
+    "multiRedeem((address,uint96)[],bytes32[][],bytes32[])": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
-    "redeem((address,string),bytes32[],bytes32)": FunctionFragment;
+    "redeem((address,uint96),bytes32[],bytes32)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
+    "rootData(bytes32)": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
+    "tokenData(uint256)": FunctionFragment;
     "tokenURI(uint256)": FunctionFragment;
     "totalSupply()": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "validRoots(bytes32)": FunctionFragment;
   };
 
   getFunction(
@@ -97,16 +98,17 @@ export interface CommunitySBTInterface extends utils.Interface {
       | "ownerOf"
       | "redeem"
       | "renounceOwnership"
+      | "rootData"
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
       | "setApprovalForAll"
       | "supportsInterface"
       | "symbol"
+      | "tokenData"
       | "tokenURI"
       | "totalSupply"
       | "transferFrom"
       | "transferOwnership"
-      | "validRoots"
   ): FunctionFragment;
 
   encodeFunctionData(
@@ -127,7 +129,11 @@ export interface CommunitySBTInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "getTokenIdHash",
-    values: [PromiseOrValue<string>, PromiseOrValue<string>]
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<BytesLike>,
+      PromiseOrValue<BigNumberish>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "invalidateRoot",
@@ -168,6 +174,10 @@ export interface CommunitySBTInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "rootData",
+    values: [PromiseOrValue<BytesLike>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "safeTransferFrom(address,address,uint256)",
     values: [
       PromiseOrValue<string>,
@@ -194,6 +204,10 @@ export interface CommunitySBTInterface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "tokenData",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "tokenURI",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
@@ -212,10 +226,6 @@ export interface CommunitySBTInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "validRoots",
-    values: [PromiseOrValue<BytesLike>]
   ): string;
 
   decodeFunctionResult(functionFragment: "addNewRoot", data: BytesLike): Result;
@@ -250,6 +260,7 @@ export interface CommunitySBTInterface extends utils.Interface {
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "rootData", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "safeTransferFrom(address,address,uint256)",
     data: BytesLike
@@ -267,6 +278,7 @@ export interface CommunitySBTInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "tokenData", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalSupply",
@@ -280,7 +292,6 @@ export interface CommunitySBTInterface extends utils.Interface {
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "validRoots", data: BytesLike): Result;
 
   events: {
     "Approval(address,address,uint256)": EventFragment;
@@ -449,7 +460,8 @@ export interface CommunitySBT extends BaseContract {
 
     getTokenIdHash(
       account: PromiseOrValue<string>,
-      metadataURI: PromiseOrValue<string>,
+      merkleRoot: PromiseOrValue<BytesLike>,
+      badgeId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[string]>;
 
@@ -496,6 +508,11 @@ export interface CommunitySBT extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    rootData(
+      arg0: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<[boolean, string] & { isValid: boolean; metadataURI: string }>;
+
     "safeTransferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
@@ -524,6 +541,13 @@ export interface CommunitySBT extends BaseContract {
 
     symbol(overrides?: CallOverrides): Promise<[string]>;
 
+    tokenData(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, string] & { badgeId: BigNumber; merkleRoot: string }
+    >;
+
     tokenURI(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -542,11 +566,6 @@ export interface CommunitySBT extends BaseContract {
       newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
-
-    validRoots(
-      arg0: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
   };
 
   addNewRoot(
@@ -572,7 +591,8 @@ export interface CommunitySBT extends BaseContract {
 
   getTokenIdHash(
     account: PromiseOrValue<string>,
-    metadataURI: PromiseOrValue<string>,
+    merkleRoot: PromiseOrValue<BytesLike>,
+    badgeId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<string>;
 
@@ -619,6 +639,11 @@ export interface CommunitySBT extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  rootData(
+    arg0: PromiseOrValue<BytesLike>,
+    overrides?: CallOverrides
+  ): Promise<[boolean, string] & { isValid: boolean; metadataURI: string }>;
+
   "safeTransferFrom(address,address,uint256)"(
     from: PromiseOrValue<string>,
     to: PromiseOrValue<string>,
@@ -647,6 +672,11 @@ export interface CommunitySBT extends BaseContract {
 
   symbol(overrides?: CallOverrides): Promise<string>;
 
+  tokenData(
+    arg0: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<[BigNumber, string] & { badgeId: BigNumber; merkleRoot: string }>;
+
   tokenURI(
     tokenId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
@@ -665,11 +695,6 @@ export interface CommunitySBT extends BaseContract {
     newOwner: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
-
-  validRoots(
-    arg0: PromiseOrValue<BytesLike>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
 
   callStatic: {
     addNewRoot(
@@ -695,7 +720,8 @@ export interface CommunitySBT extends BaseContract {
 
     getTokenIdHash(
       account: PromiseOrValue<string>,
-      metadataURI: PromiseOrValue<string>,
+      merkleRoot: PromiseOrValue<BytesLike>,
+      badgeId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string>;
 
@@ -740,6 +766,11 @@ export interface CommunitySBT extends BaseContract {
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
+    rootData(
+      arg0: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<[boolean, string] & { isValid: boolean; metadataURI: string }>;
+
     "safeTransferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
@@ -768,6 +799,13 @@ export interface CommunitySBT extends BaseContract {
 
     symbol(overrides?: CallOverrides): Promise<string>;
 
+    tokenData(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, string] & { badgeId: BigNumber; merkleRoot: string }
+    >;
+
     tokenURI(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -786,11 +824,6 @@ export interface CommunitySBT extends BaseContract {
       newOwner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    validRoots(
-      arg0: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
   };
 
   filters: {
@@ -882,7 +915,8 @@ export interface CommunitySBT extends BaseContract {
 
     getTokenIdHash(
       account: PromiseOrValue<string>,
-      metadataURI: PromiseOrValue<string>,
+      merkleRoot: PromiseOrValue<BytesLike>,
+      badgeId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -929,6 +963,11 @@ export interface CommunitySBT extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    rootData(
+      arg0: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     "safeTransferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
@@ -957,6 +996,11 @@ export interface CommunitySBT extends BaseContract {
 
     symbol(overrides?: CallOverrides): Promise<BigNumber>;
 
+    tokenData(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     tokenURI(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -974,11 +1018,6 @@ export interface CommunitySBT extends BaseContract {
     transferOwnership(
       newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    validRoots(
-      arg0: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
 
@@ -1006,7 +1045,8 @@ export interface CommunitySBT extends BaseContract {
 
     getTokenIdHash(
       account: PromiseOrValue<string>,
-      metadataURI: PromiseOrValue<string>,
+      merkleRoot: PromiseOrValue<BytesLike>,
+      badgeId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1053,6 +1093,11 @@ export interface CommunitySBT extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    rootData(
+      arg0: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     "safeTransferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
@@ -1081,6 +1126,11 @@ export interface CommunitySBT extends BaseContract {
 
     symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    tokenData(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     tokenURI(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -1098,11 +1148,6 @@ export interface CommunitySBT extends BaseContract {
     transferOwnership(
       newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    validRoots(
-      arg0: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };
 }

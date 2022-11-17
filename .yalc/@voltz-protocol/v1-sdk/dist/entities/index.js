@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CommunitySBT = exports.MellowLpVault = exports.FCMSettlement = exports.FCMUnwind = exports.FCMSwap = exports.Settlement = exports.Liquidation = exports.MarginUpdate = exports.Swap = exports.Burn = exports.Mint = exports.RateOracle = exports.Token = exports.Position = exports.BorrowAMM = exports.AMM = void 0;
+exports.BadgeClaimingStatus = exports.CommunitySBT = exports.MellowLpVault = exports.FCMSettlement = exports.FCMUnwind = exports.FCMSwap = exports.Settlement = exports.Liquidation = exports.MarginUpdate = exports.Swap = exports.Burn = exports.Mint = exports.RateOracle = exports.Token = exports.Position = exports.BorrowAMM = exports.AMM = void 0;
 var amm_1 = require("./amm");
 Object.defineProperty(exports, "AMM", { enumerable: true, get: function () { return __importDefault(amm_1).default; } });
 var borrowAMM_1 = require("./borrowAMM");
@@ -36,3 +36,4 @@ var mellowLpVault_1 = require("./mellowLpVault");
 Object.defineProperty(exports, "MellowLpVault", { enumerable: true, get: function () { return __importDefault(mellowLpVault_1).default; } });
 var communitySbt_1 = require("./communitySbt");
 Object.defineProperty(exports, "CommunitySBT", { enumerable: true, get: function () { return __importDefault(communitySbt_1).default; } });
+Object.defineProperty(exports, "BadgeClaimingStatus", { enumerable: true, get: function () { return communitySbt_1.BadgeClaimingStatus; } });
