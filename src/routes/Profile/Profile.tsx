@@ -17,6 +17,7 @@ import { getClaimButtonModesForVariants } from './helpers';
 import { DateTime } from 'luxon';
 
 import { CommunitySBT } from '@voltz-protocol/v1-sdk';
+import { BadgeClaimingStatus } from '@voltz-protocol/v1-sdk/dist/types/entities/communitySbt';
 
 const Profile: React.FunctionComponent = () => {
   const wallet = useWallet();
@@ -68,14 +69,65 @@ const Profile: React.FunctionComponent = () => {
           claimedAt < DateTime.now().startOf('day').valueOf(),
       ),
     );
-    const notClaimedVariants = SEASON_BADGE_VARIANTS[season.id].filter((badgeVariant) =>
+    let notClaimedVariants = SEASON_BADGE_VARIANTS[season.id].filter((badgeVariant) =>
       result!.find(({ claimedAt, variant }) => variant === badgeVariant && !claimedAt),
     );
+    const claimingVariants: BadgeVariant[] = [];
+
+    // check with SDK if some of them are claimed or claiming is in progress
+    if (notClaimedVariants.length !== 0) {
+      const badgeTypes = [];
+      for (const notClaimedVariant of notClaimedVariants) {
+        const badgeType = result.find((b) => b.variant === notClaimedVariant)?.badgeResponseRaw
+          ?.badgeType;
+        if (badgeType) {
+          badgeTypes.push(badgeType);
+        }
+      }
+      if (badgeTypes.length !== 0) {
+        const params = getSDKInitParams();
+        if (
+          params &&
+          process.env.REACT_APP_ETHERSCAN_API_KEY &&
+          process.env.REACT_APP_SUBGRAPH_BADGES_URL
+        ) {
+          try {
+            const communitySBT = new CommunitySBT(params);
+            const claimingStatuses =
+              (await communitySBT.getBadgeStatus({
+                apiKey: process.env.REACT_APP_ETHERSCAN_API_KEY,
+                subgraphUrl: process.env.REACT_APP_SUBGRAPH_BADGES_URL,
+                season: season.id,
+                potentialClaimingBadgeTypes: badgeTypes.map((bT) => parseInt(bT, 10)),
+              })) || [];
+            for (const claimStatus of claimingStatuses) {
+              const badgeVariant = result.find(
+                (b) =>
+                  parseInt(b.badgeResponseRaw?.badgeType || '-1', 10) === claimStatus.badgeType,
+              )?.variant;
+              if (!badgeVariant) {
+                continue;
+              }
+              if (claimStatus.claimingStatus === BadgeClaimingStatus.CLAIMING) {
+                notClaimedVariants = notClaimedVariants.filter((v) => v !== badgeVariant);
+                claimingVariants.push(badgeVariant);
+              }
+              if (claimStatus.claimingStatus === BadgeClaimingStatus.CLAIMED) {
+                notClaimedVariants = notClaimedVariants.filter((v) => v !== badgeVariant);
+                claimedTodayVariants.push(badgeVariant);
+              }
+            }
+          } catch (err) {}
+        }
+      }
+    }
+
     setClaimButtonModes((p) => ({
       ...p,
       ...getClaimButtonModesForVariants(notClaimedVariants as BadgeVariant[], 'claim'),
       ...getClaimButtonModesForVariants(claimedTodayVariants as BadgeVariant[], 'claimed'),
       ...getClaimButtonModesForVariants(claimedInThePastVariants as BadgeVariant[], 'claimedDate'),
+      ...getClaimButtonModesForVariants(claimingVariants, 'claiming'),
     }));
   };
   const isClaimingInProgress = () =>
