@@ -20,9 +20,9 @@ var toSignificantRounding = (_a = {},
     _a[types_1.Rounding.ROUND_UP] = Decimal.ROUND_UP,
     _a);
 var toFixedRounding = (_b = {},
-    _b[types_1.Rounding.ROUND_DOWN] = 0 /* RoundDown */,
-    _b[types_1.Rounding.ROUND_HALF_UP] = 1 /* RoundHalfUp */,
-    _b[types_1.Rounding.ROUND_UP] = 3 /* RoundUp */,
+    _b[types_1.Rounding.ROUND_DOWN] = 0 /* RoundingMode.RoundDown */,
+    _b[types_1.Rounding.ROUND_HALF_UP] = 1 /* RoundingMode.RoundHalfUp */,
+    _b[types_1.Rounding.ROUND_UP] = 3 /* RoundingMode.RoundUp */,
     _b);
 var Fraction = /** @class */ (function () {
     function Fraction(numerator, denominator) {

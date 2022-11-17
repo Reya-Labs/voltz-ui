@@ -1,5 +1,5 @@
 import JSBI from 'jsbi';
-export declare type MarginUpdateConstructorArgs = {
+export type MarginUpdateConstructorArgs = {
     id: string;
     transactionId: string;
     transactionTimestamp: JSBI;
