@@ -50,9 +50,7 @@ export const CopyLinkButton: React.FunctionComponent<CopyLinkButtonProps> = ({ o
         )}
         {mode === 'copying' && <BouncedLoading />}
       </CopyLinkButtonUI>
-      {mode === 'copyError' && (
-        <CopyLinkErrorTypography>Error when copying, try again</CopyLinkErrorTypography>
-      )}
+      {mode === 'copyError' && <CopyLinkErrorTypography>Oops, try again</CopyLinkErrorTypography>}
     </>
   );
 };
