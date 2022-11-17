@@ -1,5 +1,5 @@
 import { Signer, providers, BigNumberish, BigNumber, ContractReceipt, Contract } from 'ethers';
-export declare type MellowLpVaultArgs = {
+export type MellowLpVaultArgs = {
     ethWrapperAddress: string;
     voltzVaultAddress: string;
     erc20RootVaultAddress: string;

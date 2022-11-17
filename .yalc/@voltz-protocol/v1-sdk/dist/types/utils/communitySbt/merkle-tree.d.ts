@@ -1,6 +1,5 @@
 import { BigNumber } from "ethers";
-import { LeafEntry } from "./getSubgraphLeaves";
-export declare const getRoot: (leaves: Array<LeafEntry>) => string;
-export declare const getProof: (address: string, badgeType: number, metadataURI: string, leaves: Array<LeafEntry>) => string[];
-export declare const getTokenId: (account: string, metadataURI: string) => BigNumber;
+import { LeafInfo } from "../../entities/communitySbt";
+export declare const getProof: (address: string, badgeType: number, leaves: Array<LeafInfo>) => string[];
+export declare const getTokenId: (account: string, merkleRoot: string, badgeType: number) => BigNumber;
 //# sourceMappingURL=merkle-tree.d.ts.map

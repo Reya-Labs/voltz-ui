@@ -1,5 +1,5 @@
 import JSBI from 'jsbi';
-export declare type SwapConstructorArgs = {
+export type SwapConstructorArgs = {
     id: string;
     transactionId: string;
     transactionTimestamp: JSBI;
