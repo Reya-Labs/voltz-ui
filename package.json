@@ -142,6 +142,7 @@
     "aws-amplify": "4.3.13",
     "axios": "0.27.2",
     "chroma-js": "2.1.2",
+    "copy-to-clipboard": "3.3.3",
     "ethereumjs-abi": "0.6.8",
     "ethers": "5.5.4",
     "graphql": "16.3.0",
