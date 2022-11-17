@@ -56,4 +56,3 @@ export const getConfig = (): {
     PROVIDER: provider,
   };
 };
-
