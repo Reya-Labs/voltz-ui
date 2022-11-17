@@ -23,16 +23,16 @@ export const Subheading = styled(Typography)`
   color: ${colors.lavenderWeb.darken015};
 `;
 
-export const ComingSoonBox = styled(Box)`
+export const CommunityEngagementBox = styled(Box)`
   margin-top: ${({ theme }) => theme.spacing(6)};
   padding: ${({ theme }) => theme.spacing(0, 4)};
 `;
 
-export const ComingSoonTypography = styled(Typography)`
+export const CommunityEngagementTypography = styled(Typography)`
   font-weight: 400;
 `;
 
-export const ComingSoonGrid = styled(Grid)`
+export const CommunityEngagementGrid = styled(Grid)`
   margin-top: ${({ theme }) => theme.spacing(6)};
   row-gap: ${({ theme }) => theme.spacing(2)};
 `;

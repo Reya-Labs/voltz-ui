@@ -30,7 +30,7 @@ describe('<ProfilePageWalletConnected />', () => {
       'CLAIMUNAVAILABLE UNTIL THE END OF THE SEASON',
     );
 
-    expect(screen.getAllByTestId('BadgeCard')).toHaveLength(6);
+    expect(screen.getAllByTestId('BadgeCard')).toHaveLength(9);
     expect(screen.queryAllByTestId('ClaimButton')).toHaveLength(0);
 
     // todo: add test for season filter
