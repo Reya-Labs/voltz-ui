@@ -106,7 +106,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
             notClaimedBadgesCount={notClaimedBadges.length}
             claimButtonBulkMode={claimButtonBulkMode}
             onClaimBulkClick={() =>
-              onClaimBulkClick(notClaimedBadges.map((b) => b.variant as BadgeVariant))
+              onClaimBulkClick(notClaimedBadges.map((b) => b.variant))
             }
             copyLinkButtonMode={copyLinkButtonMode}
             onCopyLinkButtonClick={onCopyLinkButtonClick}
