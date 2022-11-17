@@ -42,6 +42,9 @@ export const BADGE_VARIANT_TRADER_LP_MAP: Record<BadgeVariant, 'trader' | 'lp' |
   governorz: '',
   diplomatz: '',
   senatorz: '',
+  referror: '',
+  notionalInfluencer: '',
+  whaleWhisperer: '',
 };
 
 export const TIER_COPY_MAP: Record<BadgeTier, string> = {
@@ -92,6 +95,9 @@ export const BADGE_VARIANT_TITLE_COPY_MAP: Record<BadgeVariant, string> = {
   governorz: 'GOVERNORZ',
   diplomatz: 'DIPLOMATZ',
   senatorz: 'SENATORZ',
+  referror: 'REFERROR',
+  notionalInfluencer: 'NOTIONAL INFLUENCER',
+  whaleWhisperer: 'WHALE WHISPERER',
 };
 
 export const BADGE_VARIANT_DESCRIPTION_COPY_MAP: Record<BadgeVariant, string> = {
@@ -134,6 +140,12 @@ export const BADGE_VARIANT_DESCRIPTION_COPY_MAP: Record<BadgeVariant, string> = 
   diplomatz: 'A Badge for those supporting thousands speaking different languages.',
   senatorz: 'A Badge for those supporting voltz community beyond the unthinkable.',
   governorz: 'A Badge for being there and contributing the layer 0 of our community.',
+  referror:
+    'You brought quite a crew with you. Voltz is build to empower defi and your help has been rewarded.',
+  notionalInfluencer:
+    'New achievement unlocked, all those referrals are paving the way to new defi pillars.',
+  whaleWhisperer:
+    "At this point you are a voltz influencer, you've reached the highest level and are walking among IRS gods.",
 };
 
 export const BADGE_VARIANT_TIER_MAP: Record<BadgeVariant, BadgeTier> = {
@@ -176,6 +188,9 @@ export const BADGE_VARIANT_TIER_MAP: Record<BadgeVariant, BadgeTier> = {
   governorz: 'tier1',
   diplomatz: 'tier2',
   senatorz: 'tier3',
+  referror: 'tier1',
+  notionalInfluencer: 'tier2',
+  whaleWhisperer: 'tier3',
 };
 
 export const getClaimButtonModesForVariants = (
