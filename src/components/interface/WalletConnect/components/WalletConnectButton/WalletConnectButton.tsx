@@ -2,10 +2,11 @@ import React, { useMemo } from 'react';
 import Box from '@mui/material/Box';
 
 import { Wallet } from '@contexts';
-import { Button, Icon, Icons } from '@components/atomic';
+import { Button, Icon } from '@components/atomic';
 import CircleIcon from '@mui/icons-material/Circle';
 
 import './web3modal.scss';
+import { Icons } from '@components/atomic';
 import { colors } from '@theme';
 import { AvatarAddress } from '../../../AvatarAddress/AvatarAddress';
 

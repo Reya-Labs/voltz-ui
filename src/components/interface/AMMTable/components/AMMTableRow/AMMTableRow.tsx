@@ -4,9 +4,10 @@ import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '@mui/system';
 import isNull from 'lodash/isNull';
 
-import { Agents, useAMMsContext, useAMMContext } from '@contexts';
+import { Agents, useAMMsContext } from '@contexts';
 import { Button } from '@components/atomic';
 import { PoolField, MaturityInformation } from '@components/composite';
+import { useAMMContext } from '@contexts';
 import { useAgent, useWallet } from '@hooks';
 import { AMMTableDatum } from '../../types';
 import { labels } from '../../constants';

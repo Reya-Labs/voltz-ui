@@ -10,7 +10,6 @@ import { SEASONS } from '../../../hooks/season/constants';
 import { Season } from '../../../hooks/season/types';
 import { BadgeVariant, SEASON_BADGE_VARIANTS } from '@graphql';
 import { ClaimButtonProps } from '../ClaimButton/ClaimButton';
-import { CopyLinkButtonProps } from '../CopyLinkButton/CopyLinkButton';
 
 export default {
   title: 'Interface/ProfilePageWalletConnected',
@@ -19,7 +18,6 @@ export default {
 } as ComponentMeta<typeof ProfilePageWalletConnected>;
 
 const Template: ComponentStory<typeof ProfilePageWalletConnected> = (args) => {
-  const [copyLinkButtonMode, setCopyLinkButtonMode] = useState<CopyLinkButtonProps['mode']>('copy');
   const [season, setSeason] = useState<Season>(args.season);
   const [claimButtonBulkMode, setClaimButtonBulkMode] = useState<ClaimButtonProps['mode']>('claim');
   const [achievedBadges, setAchievedBadges] = useState<
@@ -41,21 +39,6 @@ const Template: ComponentStory<typeof ProfilePageWalletConnected> = (args) => {
     setAchievedBadges(season.id === 0 ? seasonOGBadges : season1Badges);
     setClaimButtonBulkMode('claim');
   }, []);
-
-  // fake copying
-  function handleOnCopyLinkButtonClick() {
-    setCopyLinkButtonMode('copying');
-    try {
-      setTimeout(() => {
-        setCopyLinkButtonMode('copied');
-        setTimeout(() => {
-          setCopyLinkButtonMode('copy');
-        }, 1500);
-      }, 3000);
-    } catch (e) {
-      setCopyLinkButtonMode('copyError');
-    }
-  }
 
   function handleOnClaimButtonClick(variant: BadgeVariant) {
     setClaimButtonModes((prev) => ({
@@ -101,8 +84,6 @@ const Template: ComponentStory<typeof ProfilePageWalletConnected> = (args) => {
       onClaimButtonClick={handleOnClaimButtonClick}
       onClaimBulkClick={handleOnClaimBulkClick}
       achievedBadges={achievedBadges}
-      copyLinkButtonMode={copyLinkButtonMode}
-      onCopyLinkButtonClick={handleOnCopyLinkButtonClick}
     />
   );
 };
