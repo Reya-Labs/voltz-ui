@@ -9,7 +9,7 @@ export declare const ZERO: JSBI;
 export declare const ONE: JSBI;
 export declare const Q96: JSBI;
 export declare const Q192: JSBI;
-export declare type BigintIsh = JSBI | string | number;
+export type BigintIsh = JSBI | string | number;
 export declare enum Rounding {
     ROUND_DOWN = 0,
     ROUND_HALF_UP = 1,
@@ -34,4 +34,6 @@ export declare const MAX_FIXED_RATE = 1001;
 export declare const ONE_YEAR_IN_SECONDS = 31536000;
 export declare function getGasBuffer(value: BigNumber): BigNumber;
 export declare const WETH9 = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
+export declare const MULTI_REDEEM_METHOD_ID = "0x6323ffa5";
+export declare const REDEEM_METHOD_ID = "0x79a4aaa3";
 //# sourceMappingURL=constants.d.ts.map
