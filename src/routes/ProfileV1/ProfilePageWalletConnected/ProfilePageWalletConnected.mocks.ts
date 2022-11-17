@@ -1,7 +1,7 @@
-import { BadgeVariant } from '@graphql';
+import { BadgeVariant1 } from '../getters/getPhase1Badges';
 
 type CollectionBadge = {
-  variant: BadgeVariant;
+  variant: BadgeVariant1;
   achievedAt?: number;
 };
 

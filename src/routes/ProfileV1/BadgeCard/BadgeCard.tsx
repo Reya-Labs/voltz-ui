@@ -2,7 +2,6 @@ import React from 'react';
 import { Badge } from '../Badge/Badge';
 import { BadgePill } from '../BadgePill/BadgePill';
 import { BADGE_VARIANT_DESCRIPTION_COPY_MAP, BADGE_VARIANT_TITLE_COPY_MAP } from '../helpers';
-import { BadgeVariant } from '@graphql';
 import {
   BadgeBox,
   BadgePillBox,
@@ -12,9 +11,10 @@ import {
   TitleSkeleton,
   TitleTypography,
 } from './BadgeCard.styled';
+import { BadgeVariant1 } from '../getters/getPhase1Badges';
 
 export type BadgeCardProps = {
-  variant: BadgeVariant;
+  variant: BadgeVariant1;
   loading?: boolean;
 };
 
