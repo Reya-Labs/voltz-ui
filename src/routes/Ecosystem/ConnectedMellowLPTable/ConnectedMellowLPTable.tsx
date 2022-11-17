@@ -17,7 +17,7 @@ export type ConnectedMellowLPTableProps = {
 const ConnectedMellowLPTable: React.FunctionComponent<ConnectedMellowLPTableProps> = ({
   onSelectItem,
 }) => {
-  const { lpVaults } = useMellowLPVaults();
+  const lpVaults = useMellowLPVaults();
 
   const { signer } = useWallet();
   const isSignerAvailable = !isNull(signer);
