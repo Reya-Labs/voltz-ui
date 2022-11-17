@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { MellowLpVault } from '@voltz-protocol/v1-sdk';
-import { config } from '../../config';
+import { config } from './config';
 
 export type useMellowLPVaultsResult = {
   lpVaults?: MellowLpVault[];
