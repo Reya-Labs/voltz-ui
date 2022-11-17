@@ -2,14 +2,19 @@ import React, { useEffect } from 'react';
 import { useCurrentSeason, useWallet } from '@hooks';
 import { ProfilePageNoWallet } from './ProfilePageNoWallet/ProfilePageNoWallet';
 import { ProfilePageWalletConnected } from './ProfilePageWalletConnected/ProfilePageWalletConnected';
-import { GetProfileBadgesResponse, SEASON_BADGE_VARIANTS } from '@graphql';
 import { getENSDetails, setPageTitle } from '@utilities';
 import { Season } from '../../hooks/season/types';
-import { getPhase1Badges } from './getters/getPhase1Badges';
+import {
+  SEASON_BADGE_VARIANTS,
+  getPhase1Badges,
+  GetProfileBadgesResponse1,
+} from './getters/getPhase1Badges';
 
 const Profile: React.FunctionComponent = () => {
   const wallet = useWallet();
-  const [achievedBadges, setAchievedBadges] = React.useState<GetProfileBadgesResponse>([]);
+  const [achievedBadges, setAchievedBadges] = React.useState<
+    GetProfileBadgesResponse1['achievedBadges']
+  >([]);
   const [loading, setLoading] = React.useState(true);
   const [name, setName] = React.useState('');
   const currentActiveSeason = useCurrentSeason();

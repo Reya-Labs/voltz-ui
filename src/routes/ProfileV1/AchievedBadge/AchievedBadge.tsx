@@ -10,12 +10,12 @@ import {
   TitleTypography,
 } from './AchivedBadge.styled';
 import { formatPOSIXTimestamp } from '@utilities';
-import { BadgeVariant } from '@graphql';
 import { ComingSoonBadges } from '../types';
+import { BadgeVariant1 } from '../getters/getPhase1Badges';
 
 export type AchievedBadgeProps = {
   achievedAt?: number;
-  variant: BadgeVariant | ComingSoonBadges;
+  variant: BadgeVariant1 | ComingSoonBadges;
   loading?: boolean;
 };
 export const AchievedBadge: React.FunctionComponent<AchievedBadgeProps> = ({

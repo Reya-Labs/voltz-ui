@@ -1,4 +1,5 @@
 import { GraphQLClient, gql } from 'graphql-request';
+import { Season } from '../../../hooks/season/types';
 
 export type BadgeVariant1 =
   // season 1
@@ -240,3 +241,47 @@ export async function getPhase1Badges(owner: string): Promise<GetProfileBadgesRe
     return DEFAULT_RESPONSE;
   }
 }
+
+export const SEASON_BADGE_VARIANTS: Record<`${Season['id']}`, string[]> = {
+  0: [
+    'ogFixedTrader',
+    'ogDeltaDegen',
+    'ogLeverageCrowbar',
+    'ogIrsConnoisseur',
+    'ogSushiRoll',
+    'ogDegenStuff',
+    'ogTopTrader',
+    'ogOkBoomer',
+    'ogDryIce',
+    'ogMaxBidding',
+    'ogYikes',
+    'ogLpoor',
+    'ogMoneyMoneyMoney',
+    'ogWaterHose',
+    'ogRainMaker',
+    'ogBeWaterMyFriend',
+  ],
+  1: [
+    'fixedTrader',
+    'deltaDegen',
+    'leverageCrowbar',
+    'irsConnoisseur',
+    'sushiRoll',
+    'degenStuff',
+    'topTrader',
+    'okBoomer',
+    'dryIce',
+    'maxBidding',
+    'yikes',
+    'lpoor',
+    'mellowLpVault',
+    'moneyMoneyMoney',
+    'waterHose',
+    'rainMaker',
+    'beWaterMyFriend',
+  ],
+  2: [],
+  3: [],
+  4: [],
+  5: [],
+};

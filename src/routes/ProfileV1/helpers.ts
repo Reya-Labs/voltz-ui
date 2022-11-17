@@ -1,8 +1,8 @@
 import { BadgeTier, ComingSoonBadges } from './types';
-import { BadgeVariant } from '@graphql';
+import { BadgeVariant1 } from './getters/getPhase1Badges';
 
 export const BADGE_VARIANT_TRADER_LP_MAP: Record<
-  BadgeVariant | ComingSoonBadges,
+  BadgeVariant1 | ComingSoonBadges,
   'trader' | 'lp' | ''
 > = {
   // season 1
@@ -39,7 +39,6 @@ export const BADGE_VARIANT_TRADER_LP_MAP: Record<
   ogMaxBidding: 'trader',
   ogOkBoomer: 'trader',
   ogDryIce: 'lp',
-  mellowLpVault: 'lp',
   // coming soon...
   governorz: '',
   diplomatz: '',
@@ -55,7 +54,7 @@ export const TIER_COPY_MAP: Record<BadgeTier, string> = {
   easterEgg: 'EASTER EGG',
 };
 
-export const BADGE_VARIANT_TITLE_COPY_MAP: Record<BadgeVariant | ComingSoonBadges, string> = {
+export const BADGE_VARIANT_TITLE_COPY_MAP: Record<BadgeVariant1 | ComingSoonBadges, string> = {
   // season
   degenStuff: 'DEGEN STUFF',
   deltaDegen: 'DELTA DEGEN',
@@ -73,7 +72,6 @@ export const BADGE_VARIANT_TITLE_COPY_MAP: Record<BadgeVariant | ComingSoonBadge
   maxBidding: 'MAX BIDDING',
   okBoomer: 'OK BOOMER',
   dryIce: 'DRY ICE',
-  mellowLpVault: 'MELLOW VAULT OPTIMIZOOOOOR',
   // season OG
   ogDegenStuff: 'DEGEN STUFF',
   ogDeltaDegen: 'DELTA DEGEN',
@@ -98,7 +96,7 @@ export const BADGE_VARIANT_TITLE_COPY_MAP: Record<BadgeVariant | ComingSoonBadge
   theOgActivity: 'THE OG ACTIVITY',
 };
 
-export const BADGE_VARIANT_DESCRIPTION_COPY_MAP: Record<BadgeVariant, string> = {
+export const BADGE_VARIANT_DESCRIPTION_COPY_MAP: Record<BadgeVariant1, string> = {
   // season 1
   degenStuff: '500k+ is serious levels of notional. Hats off to the degen king.',
   deltaDegen: 'Only degens can see the delta on that variable position.',
@@ -116,7 +114,6 @@ export const BADGE_VARIANT_DESCRIPTION_COPY_MAP: Record<BadgeVariant, string> = 
   maxBidding: 'There is only one button on your keyboard: max bidding, max leverage',
   okBoomer: '2x leverage is OK. We all start somewhere, you just started small.',
   dryIce: 'Providing liquidity but below 2x notional.',
-  mellowLpVault: 'Providing liquidity for the highest performance.',
   // season OG
   ogDegenStuff: '500k+ is serious levels of notional. Hats off to the degen king.',
   ogDeltaDegen: 'Only degens can see the delta on that variable position.',
@@ -136,7 +133,7 @@ export const BADGE_VARIANT_DESCRIPTION_COPY_MAP: Record<BadgeVariant, string> = 
   ogDryIce: 'Providing liquidity but below 2x notional.',
 };
 
-export const BADGE_VARIANT_TIER_MAP: Record<BadgeVariant | ComingSoonBadges, BadgeTier> = {
+export const BADGE_VARIANT_TIER_MAP: Record<BadgeVariant1 | ComingSoonBadges, BadgeTier> = {
   // season 1
   degenStuff: 'tier3',
   deltaDegen: 'tier1',
@@ -154,7 +151,6 @@ export const BADGE_VARIANT_TIER_MAP: Record<BadgeVariant | ComingSoonBadges, Bad
   maxBidding: 'easterEgg',
   okBoomer: 'easterEgg',
   dryIce: 'easterEgg',
-  mellowLpVault: 'tier1',
   // season og
   ogDegenStuff: 'tier3',
   ogDeltaDegen: 'tier1',
