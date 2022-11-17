@@ -27,7 +27,7 @@ const networkConfigurations = {
   },
 };
 
-const getConfig = (): {
+export const getConfig = (): {
   MELLOW_ETH_WRAPPER: string;
   MELLOW_VAULTS: {
     voltzVault: string;
@@ -57,4 +57,3 @@ const getConfig = (): {
   };
 };
 
-export const config = getConfig();
