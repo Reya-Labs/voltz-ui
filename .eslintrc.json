@@ -7,6 +7,7 @@
     "plugin:import/recommended",
     "plugin:import/typescript"
   ],
+  "plugins": ["unused-imports"],
   "parser": "@typescript-eslint/parser",
   "env": {
     "jest": true,
@@ -15,6 +16,7 @@
   },
   "ignorePatterns": ["src/graphql/generated.ts"],
   "rules": {
+    "unused-imports/no-unused-imports-ts": "error",
     "eqeqeq": "error",
     "no-unused-vars": "off",
     "no-use-before-define": "off",
