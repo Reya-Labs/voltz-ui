@@ -1,5 +1,4 @@
 import { providers } from 'ethers';
-import { isUndefined } from 'lodash';
 
 const networkConfigurations = {
   mainnet: {
@@ -39,7 +38,7 @@ const getConfig = (): {
 } => {
   const network = process.env.REACT_APP_NETWORK;
 
-  if (isUndefined(network)) {
+  if (!network) {
     throw new Error(`Network not specified as an environment variable.`);
   }
 
