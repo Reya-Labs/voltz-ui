@@ -16,8 +16,10 @@ import { getCacheValue, invalidateCache, setCacheValue } from './cache';
 import { getClaimButtonModesForVariants } from './helpers';
 import { DateTime } from 'luxon';
 import { CopyLinkButtonProps } from './CopyLinkButton/CopyLinkButton';
+import copy from 'copy-to-clipboard';
 
 import { CommunitySBT } from '@voltz-protocol/v1-sdk';
+import { getReferrerLink } from './get-referrer-link';
 
 const Profile: React.FunctionComponent = () => {
   const wallet = useWallet();
@@ -205,20 +207,27 @@ const Profile: React.FunctionComponent = () => {
     }
   }
 
-  function handleOnCopyLinkButtonClick() {
-    // todo: implement logic for fetching the referrer link
+  async function handleOnCopyLinkButtonClick() {
+    if (!wallet.account) {
+      return;
+    }
     setCopyLinkButtonMode('copying');
+    const link = await getReferrerLink(wallet.account);
+    if (!link) {
+      setCopyLinkButtonMode('copyError');
+      return;
+    }
     try {
+      copy(link);
+      setCopyLinkButtonMode('copied');
       setTimeout(() => {
-        setCopyLinkButtonMode('copied');
-        setTimeout(() => {
-          setCopyLinkButtonMode('copy');
-        }, 1500);
-      }, 3000);
+        setCopyLinkButtonMode('copy');
+      }, 1500);
     } catch (e) {
       setCopyLinkButtonMode('copyError');
     }
   }
+
   useEffect(() => {
     if (!wallet.account) {
       return;
