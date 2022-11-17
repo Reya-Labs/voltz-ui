@@ -7,8 +7,8 @@ import {
   ClaimErrorTypography,
 } from './ClaimButton.styled';
 import { Confetti } from './Confetti/Confetti';
-import { Tick } from '../Tick/Tick';
-import { BouncedLoading } from '../BouncedLoading/BouncedLoading';
+import { Tick } from './Tick/Tick';
+import { BouncedLoading } from './BouncedLoading/BouncedLoading';
 import { formatPOSIXTimestamp } from '@utilities';
 
 type ClaimButtonMode = 'claim' | 'claimed' | 'claiming' | 'claimedDate' | 'claimError';

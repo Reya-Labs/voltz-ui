@@ -7,9 +7,7 @@ export type PillTypographyVariant = Extract<
   'wildStrawberry' | 'orangeYellow' | 'skyBlueCrayola' | 'vzCustomPink' | 'vzCustomMarine'
 >;
 
-export const PillTypography = styled(Typography, {
-  shouldForwardProp: (prop) => prop !== 'coloringVariant',
-})<{ coloringVariant: PillTypographyVariant }>`
+export const PillTypography = styled(Typography)<{ coloringVariant: PillTypographyVariant }>`
   font-size: 14px;
   line-height: 14px;
   padding: ${({ theme }) => theme.spacing(1, 2)};

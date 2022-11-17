@@ -29,9 +29,8 @@ import {
 import { Season } from '../../../hooks/season/types';
 import { SeasonToggle } from '../SeasonToggle/SeasonToggle';
 import { ClaimButtonProps } from '../ClaimButton/ClaimButton';
-import { NotificationSection } from '../NotificationSection/NotificationSection';
+import { ClaimSection } from '../ClaimSection/ClaimSection';
 import { BoldText } from '../BoldText.styled';
-import { CopyLinkButtonProps } from '../CopyLinkButton/CopyLinkButton';
 
 export type ProfilePageWalletConnectedProps = {
   account: string;
@@ -46,8 +45,6 @@ export type ProfilePageWalletConnectedProps = {
   seasonOptions: Season[];
   onClaimButtonClick?: (badgeVariant: BadgeVariant) => void;
   claimButtonModes?: Record<BadgeVariant, ClaimButtonProps['mode']>;
-  onCopyLinkButtonClick?: () => void;
-  copyLinkButtonMode: CopyLinkButtonProps['mode'];
 };
 
 export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWalletConnectedProps> =
@@ -64,8 +61,6 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
     onClaimBulkClick = doNothing,
     claimButtonModes = {},
     claimButtonBulkMode,
-    copyLinkButtonMode,
-    onCopyLinkButtonClick = doNothing,
   }) => {
     const badgeCardRefs = useRef<Record<string, BadgeCardHandle>>({});
 
@@ -101,15 +96,13 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
             <BoldText>{seasonStartDateFormatted}</BoldText> and{' '}
             <BoldText>{seasonEndDateFormatted}</BoldText>.
           </Subheading>
-          <NotificationSection
+          <ClaimSection
             isOnGoingSeason={isOnGoingSeason}
             notClaimedBadgesCount={notClaimedBadges.length}
             claimButtonBulkMode={claimButtonBulkMode}
             onClaimBulkClick={() =>
               onClaimBulkClick(notClaimedBadges.map((b) => b.variant as BadgeVariant))
             }
-            copyLinkButtonMode={copyLinkButtonMode}
-            onCopyLinkButtonClick={onCopyLinkButtonClick}
           />
           <BadgeCollectionBox>
             <BadgeCollectionTypographyBox>

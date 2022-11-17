@@ -2,7 +2,8 @@ import React from 'react';
 import TableCell from '@mui/material/TableCell';
 
 import { useWallet } from '@hooks';
-import { Typography, Button } from '@components/atomic';
+import { Typography } from '@components/atomic';
+import { Button } from '@components/atomic';
 import isNull from 'lodash/isNull';
 import { isUndefined } from 'lodash';
 import { formatCurrency, formatNumber } from '@utilities';
