@@ -1,5 +1,5 @@
 import JSBI from 'jsbi';
-export declare type BurnConstructorArgs = {
+export type BurnConstructorArgs = {
     id: string;
     transactionId: string;
     transactionTimestamp: JSBI;

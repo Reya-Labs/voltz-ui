@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.7.1",
+    "@graphprotocol/graph-cli": "^0.35.0",
     "@metamask/detect-provider": "^1.2.0",
     "big.js": "^6.1.1",
     "coingecko-api": "^1.0.10",
@@ -38,6 +39,7 @@
     "lodash": "^4.17.21",
     "luxon": "^2.3.0",
     "merkletreejs": "^0.3.0",
+    "react": "^18.2.0",
     "tiny-invariant": "^1.2.0",
     "toformat": "^2.0.0",
     "yalc": "^1.0.0-pre.53"
@@ -71,5 +73,5 @@
       ]
     ]
   },
-  "yalcSig": "66d0f7d21662562bd10a23b5b3c592ec"
+  "yalcSig": "90fc62455c029ee6e69f3c1dcadd2f8f"
 }

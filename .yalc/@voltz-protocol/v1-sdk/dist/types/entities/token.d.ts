@@ -1,4 +1,4 @@
-export declare type TokenConstructorArgs = {
+export type TokenConstructorArgs = {
     id: string;
     name: string;
     decimals: number;

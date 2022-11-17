@@ -1,5 +1,5 @@
 import JSBI from 'jsbi';
-export declare type LiquidationConstructorArgs = {
+export type LiquidationConstructorArgs = {
     id: string;
     transactionId: string;
     transactionTimestamp: JSBI;
