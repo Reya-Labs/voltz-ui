@@ -11,7 +11,7 @@ import Mint from './mint';
 import Settlement from './settlement';
 import Swap from './swap';
 import { Price } from './fractions/price';
-export declare type PositionConstructorArgs = {
+export type PositionConstructorArgs = {
     source: string;
     id: string;
     createdTimestamp: JSBI;

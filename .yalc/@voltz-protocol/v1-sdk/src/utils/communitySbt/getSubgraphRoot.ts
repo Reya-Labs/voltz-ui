@@ -21,7 +21,7 @@ export type RootEntity = {
   endTimestamp: number;
 };
 
-export async function getRoot(
+export async function getRootFromSubgraph(
   timestamp: number,
   subgraphUrl: string,
 ): Promise<RootEntity | undefined> {

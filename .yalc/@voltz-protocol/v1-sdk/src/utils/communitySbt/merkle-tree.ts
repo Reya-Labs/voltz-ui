@@ -1,25 +1,21 @@
 import { MerkleTree } from "merkletreejs";
 import keccak256 from "keccak256";
 import { BigNumber, ethers } from "ethers";
-import { LeafEntry } from "./getSubgraphLeaves";
+import { LeafInfo } from "../../entities/communitySbt";
 
-const getLeaf = (address: string, badgeUrl: string): Buffer => {
-
+const getLeaf = (address: string, badgeType: number): Buffer => {
   return Buffer.from(
     ethers.utils
-      .solidityKeccak256(
-        ["address", "string"],
-        [address, badgeUrl]
-      )
+      .solidityKeccak256(["address", "uint96"], [address, badgeType])
       .slice(2),
     "hex"
   );
 };
 
-const getMerkleTree = (leaves: Array<LeafEntry>): MerkleTree => {
+const getMerkleTree = (leaves: Array<LeafInfo>): MerkleTree => {
 
   const leafNodes = leaves.map((entry) => {
-    return getLeaf(entry.owner, entry.metadataURI);
+    return getLeaf(entry.account, entry.badgeId);
   });
 
   const merkleTree = new MerkleTree(leafNodes, keccak256, { sortPairs: true });
@@ -27,7 +23,7 @@ const getMerkleTree = (leaves: Array<LeafEntry>): MerkleTree => {
   return merkleTree;
 };
 
-export const getRoot = (leaves: Array<LeafEntry>): string => {
+const getRoot = (leaves: Array<LeafInfo>): string => {
   const merkleTree = getMerkleTree(leaves);
 
   return merkleTree.getHexRoot();
@@ -36,12 +32,11 @@ export const getRoot = (leaves: Array<LeafEntry>): string => {
 export const getProof = (
   address: string,
   badgeType: number,
-  metadataURI: string,
-  leaves: Array<LeafEntry>
+  leaves: Array<LeafInfo>
 ): string[] => {
   const merkleTree = getMerkleTree(leaves);
 
-  const proof = merkleTree.getHexProof(getLeaf(address, metadataURI));
+  const proof = merkleTree.getHexProof(getLeaf(address, badgeType));
 
   if (proof.length === 0) {
     throw `Cannot prove something that is not in tree: { address: ${address}, badgeType: ${badgeType}}`;
@@ -50,8 +45,15 @@ export const getProof = (
   return proof;
 };
 
-export const getTokenId = (account: string, metadataURI: string): BigNumber => {
+export const getTokenId = (
+  account: string,
+  merkleRoot: string,
+  badgeType: number
+): BigNumber => {
   return BigNumber.from(
-    ethers.utils.solidityKeccak256(["address", "string"], [account, metadataURI])
+    ethers.utils.solidityKeccak256(
+      ["address", "bytes32", "uint96"],
+      [account, merkleRoot, badgeType]
+    )
   );
 };
