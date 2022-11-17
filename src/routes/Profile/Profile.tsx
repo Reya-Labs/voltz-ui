@@ -16,8 +16,7 @@ import { getCacheValue, invalidateCache, setCacheValue } from './cache';
 import { getClaimButtonModesForVariants } from './helpers';
 import { DateTime } from 'luxon';
 
-import { CommunitySBT } from '@voltz-protocol/v1-sdk';
-import { BadgeClaimingStatus } from '@voltz-protocol/v1-sdk/dist/types/entities/communitySbt';
+import { CommunitySBT, BadgeClaimingStatus } from '@voltz-protocol/v1-sdk';
 
 const Profile: React.FunctionComponent = () => {
   const wallet = useWallet();
