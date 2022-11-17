@@ -23,7 +23,10 @@ describe('<ProfilePageWalletConnected />', () => {
     expect(screen.getByText('YOUR BADGE COLLECTION')).not.toBeNull();
     expect(screen.getByText('October 1st 2022')).not.toBeNull();
     expect(screen.getByText('December 31st 2022')).not.toBeNull();
-    expect(screen.getByTestId('ClaimNotification').textContent).toBe(
+    expect(screen.getAllByTestId('ProfileNotification')[0].textContent).toBe(
+      'BONUSEARN BADGES BY INVITING OTHERS',
+    );
+    expect(screen.getAllByTestId('ProfileNotification')[1].textContent).toBe(
       'CLAIMUNAVAILABLE UNTIL THE END OF THE SEASON',
     );
 
