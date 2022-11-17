@@ -1,11 +1,7 @@
 import { gql, GraphQLClient } from 'graphql-request';
 import { Season } from '../../../hooks/season/types';
 import { BADGE_TYPE_BADGE_VARIANT_MAP, SEASON_BADGE_VARIANTS } from './mappers';
-import {
-  BadgesQueryResponse,
-  BadgeVariant,
-  GetProfileBadgesResponse,
-} from './types';
+import { BadgesQueryResponse, BadgeVariant, GetProfileBadgesResponse } from './types';
 import { getDefaultResponse, getSeasonUserId, toMillis } from './helpers';
 
 const getBadgesQueryString = (owner: string, seasonId: Season['id']) => `
