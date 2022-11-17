@@ -15,7 +15,6 @@ import { ClaimButtonProps } from './ClaimButton/ClaimButton';
 import { getCacheValue, invalidateCache, setCacheValue } from './cache';
 import { getClaimButtonModesForVariants } from './helpers';
 import { DateTime } from 'luxon';
-import { CopyLinkButtonProps } from './CopyLinkButton/CopyLinkButton';
 
 import { CommunitySBT } from '@voltz-protocol/v1-sdk';
 
@@ -32,8 +31,6 @@ const Profile: React.FunctionComponent = () => {
   const [claimButtonModes, setClaimButtonModes] = useState<
     Record<BadgeVariant, ClaimButtonProps['mode']>
   >(getClaimButtonModesForVariants(SEASON_BADGE_VARIANTS[season.id] as BadgeVariant[], 'claim'));
-
-  const [copyLinkButtonMode, setCopyLinkButtonMode] = useState<CopyLinkButtonProps['mode']>('copy');
 
   const fetchBadges = async (seasonId: Season['id'], account: string) => {
     return await getSeasonBadges({
@@ -205,20 +202,6 @@ const Profile: React.FunctionComponent = () => {
     }
   }
 
-  function handleOnCopyLinkButtonClick() {
-    // todo: implement logic for fetching the referrer link
-    setCopyLinkButtonMode('copying');
-    try {
-      setTimeout(() => {
-        setCopyLinkButtonMode('copied');
-        setTimeout(() => {
-          setCopyLinkButtonMode('copy');
-        }, 1500);
-      }, 3000);
-    } catch (e) {
-      setCopyLinkButtonMode('copyError');
-    }
-  }
   useEffect(() => {
     if (!wallet.account) {
       return;
@@ -264,8 +247,6 @@ const Profile: React.FunctionComponent = () => {
       claimButtonModes={claimButtonModes}
       onClaimButtonClick={handleOnClaimButtonClick}
       onClaimBulkClick={handleOnClaimBulkClick}
-      copyLinkButtonMode={copyLinkButtonMode}
-      onCopyLinkButtonClick={handleOnCopyLinkButtonClick}
     />
   );
 };

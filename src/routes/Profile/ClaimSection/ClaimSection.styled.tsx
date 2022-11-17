@@ -1,25 +1,19 @@
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 
-export const NotificationBox = styled(Box)`
+export const ClaimNotificationBox = styled(Box)`
   padding: ${({ theme }) => theme.spacing(2, 4)};
 `;
 
-export const NotificationContainer = styled(Box)`
+export const ClaimNotificationContainer = styled(Box)`
   background-color: #19152a;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-top: ${({ theme }) => theme.spacing(6)};
   border-radius: 8px;
 `;
 
-export const NotificationsContainer = styled(Box)`
-  display: flex;
-  flex-direction: column;
-  row-gap: ${({ theme }) => theme.spacing(2)};
-  margin-top: ${({ theme }) => theme.spacing(6)};
-`;
-
-export const ButtonBox = styled(Box)`
+export const ClaimButtonBox = styled(Box)`
   width: 150px;
 `;
