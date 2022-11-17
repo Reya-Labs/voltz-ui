@@ -57,6 +57,9 @@ import {
   Senatorz,
   Governorz,
   Diplomatz,
+  NotionalInfluencer,
+  Referror,
+  WhaleWhisperer,
 } from './icons';
 
 export type Icons =
@@ -119,7 +122,10 @@ export type Icons =
   // non-programmatic badges
   | 'senatorz'
   | 'governorz'
-  | 'diplomatz';
+  | 'diplomatz'
+  | 'whaleWhisperer'
+  | 'notionalInfluencer'
+  | 'referror';
 
 export const iconMap: Record<Icons, ElementType> = {
   'arrow-left': ArrowLeft as ElementType,
@@ -178,7 +184,11 @@ export const iconMap: Record<Icons, ElementType> = {
   ogMaxBidding: OGMaxBidding as ElementType,
   ogOkBoomer: OGOkBoomer as ElementType,
   ogDryIce: OGDryIce as ElementType,
+  // non-programmatic badges
   senatorz: Senatorz as ElementType,
   diplomatz: Diplomatz as ElementType,
   governorz: Governorz as ElementType,
+  notionalInfluencer: NotionalInfluencer as ElementType,
+  referror: Referror as ElementType,
+  whaleWhisperer: WhaleWhisperer as ElementType,
 };

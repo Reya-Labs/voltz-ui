@@ -54,6 +54,9 @@ const Icon: React.FunctionComponent<IconProps> = ({ name, sx, link, ...props }) 
       case 'diplomatz':
       case 'governorz':
       case 'senatorz':
+      case 'notionalInfluencer':
+      case 'referror':
+      case 'whaleWhisperer':
         return {
           viewBox: '0 0 459 459',
         };

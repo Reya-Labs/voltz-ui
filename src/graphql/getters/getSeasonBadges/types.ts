@@ -57,6 +57,12 @@ export type ProgrammaticBadges =
   | 'ogOkBoomer'
   | 'ogDryIce';
 
-export type NonProgrammaticBadges = 'governorz' | 'diplomatz' | 'senatorz';
+export type NonProgrammaticBadges =
+  | 'governorz'
+  | 'diplomatz'
+  | 'senatorz'
+  | 'whaleWhisperer'
+  | 'notionalInfluencer'
+  | 'referror';
 
 export type BadgeVariant = ProgrammaticBadges | NonProgrammaticBadges;
