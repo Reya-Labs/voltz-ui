@@ -105,9 +105,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
             isOnGoingSeason={isOnGoingSeason}
             notClaimedBadgesCount={notClaimedBadges.length}
             claimButtonBulkMode={claimButtonBulkMode}
-            onClaimBulkClick={() =>
-              onClaimBulkClick(notClaimedBadges.map((b) => b.variant))
-            }
+            onClaimBulkClick={() => onClaimBulkClick(notClaimedBadges.map((b) => b.variant))}
             copyLinkButtonMode={copyLinkButtonMode}
             onCopyLinkButtonClick={onCopyLinkButtonClick}
           />
