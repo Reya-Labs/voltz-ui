@@ -1,14 +1,13 @@
 import { Agents } from '@contexts';
-import { Position } from '@voltz-protocol/v1-sdk';
+import { isUndefined } from 'lodash';
 
 /**
- * It takes a position and returns the agent type
- * @param {Position} [position] - Position - the position object that you want to get the agent from
+ * It takes a position type and returns the agent type
+ * @param positionType The position type
  * @returns The agent type
  */
-export const getAgentFromPosition = (position?: Position) => {
-  if (!position) return;
-  const positionType = position.positionType;
+export const getAgentFromPosition = (positionType?: number) => {
+  if (isUndefined(positionType)) return;
   let agent: Agents;
   switch (positionType) {
     case 1:
