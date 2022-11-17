@@ -43,10 +43,13 @@ const Trader: React.FunctionComponent = () => {
 
   const referrerKey = 'invitedBy';
   const [searchParams] = useSearchParams();
-  if (!!searchParams.get(referrerKey) && !localStorage.getItem(referrerKey)) {
+  if (
+    (!!searchParams.get(referrerKey) && !localStorage.getItem(referrerKey)) ||
+    localStorage.getItem(referrerKey)?.length !== 8 // Earlier, pre-release keys may have used more than 8 characters but we overwrite these
+  ) {
     // Referrer is set in URL and has not already been saved in storage; save to storage now
     // We do deliberately do not overwrite any existing value because we want to credit the first referral link that was followed
-    localStorage.setItem('invitedBy', searchParams.get('invitedBy') || '');
+    localStorage.setItem(referrerKey, searchParams.get(referrerKey) || '');
   }
 
   useEffect(() => {
