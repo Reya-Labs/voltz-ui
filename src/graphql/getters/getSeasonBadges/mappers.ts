@@ -39,7 +39,7 @@ export const BADGE_TYPE_BADGE_VARIANT_MAP: Record<string, BadgeVariant> = {
   '15': 'ogTopTrader',
 };
 
-export const SEASON_BADGE_VARIANTS: Record<`${Season['id']}`, string[]> = {
+export const SEASON_BADGE_VARIANTS: Record<`${Season['id']}`, BadgeVariant[]> = {
   0: [
     'ogFixedTrader',
     'ogDeltaDegen',

@@ -32,8 +32,8 @@ const Profile: React.FunctionComponent = () => {
   const [claimButtonBulkMode, setClaimButtonBulkMode] = useState<ClaimButtonProps['mode']>('claim');
   const [claimButtonModes, setClaimButtonModes] = useState<
     Record<BadgeVariant, ClaimButtonProps['mode']>
-  >(getClaimButtonModesForVariants(SEASON_BADGE_VARIANTS[season.id] as BadgeVariant[], 'claim'));
-
+  >(getClaimButtonModesForVariants(SEASON_BADGE_VARIANTS[season.id], 'claim'));
+  const [claimingVariantsToBePooled, setClaimingVariantsToBePooled] = useState<BadgeVariant[]>([]);
   const [copyLinkButtonMode, setCopyLinkButtonMode] = useState<CopyLinkButtonProps['mode']>('copy');
   const isOnGoingSeason = season.id === currentActiveSeason.id;
 
@@ -73,8 +73,9 @@ const Profile: React.FunctionComponent = () => {
           claimedAt < DateTime.now().startOf('day').valueOf(),
       ),
     );
-    let notClaimedVariants = SEASON_BADGE_VARIANTS[season.id].filter((badgeVariant) =>
-      result!.find(({ claimedAt, variant }) => variant === badgeVariant && !claimedAt),
+    let notClaimedVariants: BadgeVariant[] = SEASON_BADGE_VARIANTS[season.id].filter(
+      (badgeVariant) =>
+        result!.find(({ claimedAt, variant }) => variant === badgeVariant && !claimedAt),
     );
     const claimingVariants: BadgeVariant[] = [];
 
@@ -82,6 +83,40 @@ const Profile: React.FunctionComponent = () => {
     const notClaimedInStorage = notClaimedVariants.filter((nCB) =>
       getFromStorage(getId(account, nCB)),
     );
+    const statusOfClaiming = await getStatusOfClaimingFromSDK(account, notClaimedInStorage, result);
+    statusOfClaiming.claimed.forEach((badgeVariant) => {
+      notClaimedVariants = notClaimedVariants.filter((v) => v !== badgeVariant);
+      claimedTodayVariants.push(badgeVariant);
+    });
+    statusOfClaiming.claiming.forEach((badgeVariant) => {
+      notClaimedVariants = notClaimedVariants.filter((v) => v !== badgeVariant);
+      claimingVariants.push(badgeVariant);
+    });
+
+    setClaimButtonModes((p) => ({
+      ...p,
+      ...getClaimButtonModesForVariants(notClaimedVariants, 'claim'),
+      ...getClaimButtonModesForVariants(claimedTodayVariants, 'claimed'),
+      ...getClaimButtonModesForVariants(claimedInThePastVariants, 'claimedDate'),
+      ...getClaimButtonModesForVariants(claimingVariants, 'claiming'),
+    }));
+    setClaimingVariantsToBePooled(claimingVariants);
+  };
+
+  const getStatusOfClaimingFromSDK = async (
+    account: string,
+    notClaimedInStorage: BadgeVariant[],
+    result: GetProfileBadgesResponse,
+  ) => {
+    const response: {
+      claimed: BadgeVariant[];
+      claiming: BadgeVariant[];
+      notClaimed: BadgeVariant[];
+    } = {
+      claimed: [],
+      claiming: [],
+      notClaimed: [],
+    };
     if (!isOnGoingSeason && notClaimedInStorage.length !== 0) {
       const badgeTypes = [];
       for (const notClaimedVariant of notClaimedInStorage) {
@@ -116,33 +151,28 @@ const Profile: React.FunctionComponent = () => {
                 continue;
               }
               if (claimStatus.claimingStatus === BadgeClaimingStatus.CLAIMING) {
-                notClaimedVariants = notClaimedVariants.filter((v) => v !== badgeVariant);
-                claimingVariants.push(badgeVariant);
+                response.claiming.push(badgeVariant);
               }
               if (claimStatus.claimingStatus === BadgeClaimingStatus.CLAIMED) {
-                notClaimedVariants = notClaimedVariants.filter((v) => v !== badgeVariant);
-                claimedTodayVariants.push(badgeVariant);
+                response.claimed.push(badgeVariant);
                 deleteFromStorage(getId(account, badgeVariant));
               }
               if (claimStatus.claimingStatus === BadgeClaimingStatus.NOT_CLAIMED) {
+                response.notClaimed.push(badgeVariant);
                 deleteFromStorage(getId(account, badgeVariant));
               }
             }
           } catch (err) {
             console.error(err);
+            return response;
           }
         }
       }
+      return response;
     }
-
-    setClaimButtonModes((p) => ({
-      ...p,
-      ...getClaimButtonModesForVariants(notClaimedVariants as BadgeVariant[], 'claim'),
-      ...getClaimButtonModesForVariants(claimedTodayVariants as BadgeVariant[], 'claimed'),
-      ...getClaimButtonModesForVariants(claimedInThePastVariants as BadgeVariant[], 'claimedDate'),
-      ...getClaimButtonModesForVariants(claimingVariants, 'claiming'),
-    }));
+    return response;
   };
+
   const isClaimingInProgress = () =>
     Object.values(claimButtonModes).some((bM) => bM === 'claiming');
   const fetchEnsDetails = async (account: string) => {
@@ -313,6 +343,47 @@ const Profile: React.FunctionComponent = () => {
     setPageTitle('Profile', wallet.account);
     invalidateCache();
   }, []);
+
+  useEffect(() => {
+    if (!wallet.account) {
+      return;
+    }
+    if (claimingVariantsToBePooled.length === 0) {
+      return;
+    }
+    const timeout = window.setTimeout(() => {
+      if (!wallet.account) {
+        return;
+      }
+      const claimingVariants: BadgeVariant[] = [];
+      const claimed: BadgeVariant[] = Object.keys(claimButtonModes)
+        .filter((k) => claimButtonModes[k as BadgeVariant] === 'claimed')
+        .map((k) => k as BadgeVariant);
+      // check with SDK if some of them are claimed or claiming is in progress
+      void getStatusOfClaimingFromSDK(
+        wallet.account,
+        claimingVariantsToBePooled,
+        collectionBadges,
+      ).then((statusOfClaiming) => {
+        statusOfClaiming.claimed.forEach((badgeVariant) => {
+          claimed.push(badgeVariant);
+        });
+        statusOfClaiming.claiming.forEach((badgeVariant) => {
+          claimingVariants.push(badgeVariant);
+        });
+
+        setClaimButtonModes((p) => ({
+          ...p,
+          ...getClaimButtonModesForVariants(claimed, 'claimed'),
+          ...getClaimButtonModesForVariants(claimingVariants, 'claiming'),
+        }));
+        setClaimingVariantsToBePooled(claimingVariants);
+      });
+    }, 5000);
+    return () => {
+      window.clearTimeout(timeout);
+    };
+  }, [claimingVariantsToBePooled, wallet.account]);
 
   if (!wallet.account) {
     return <ProfilePageNoWallet />;
