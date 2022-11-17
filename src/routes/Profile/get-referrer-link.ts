@@ -23,9 +23,7 @@ export const getReferrerLink = async (account: string) => {
     if (status !== 200 || !data.refers_with_code) {
       return undefined;
     }
-    const link = `${window.location.origin}/?invitedBy=${data.refers_with_code}`;
-    debugger;
-    return link;
+    return `${window.location.origin}/?invitedBy=${data.refers_with_code}`;
   } catch (e) {
     return undefined;
   }
