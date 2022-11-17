@@ -6,11 +6,11 @@ export declare const errorMessageMapping: {
 export declare const extractErrorSignature: (message: string) => string;
 export declare const getErrorSignature: (error: any, environment: string) => string;
 export declare const getReadableErrorMessage: (error: any, environment: string) => string;
-export declare type RawInfoPostMint = {
+export type RawInfoPostMint = {
     marginRequirement: BigNumber;
 };
 export declare const decodeInfoPostMint: (error: any, environment: string) => RawInfoPostMint;
-export declare type RawInfoPostSwap = {
+export type RawInfoPostSwap = {
     marginRequirement: BigNumber;
     tick: number;
     fee: BigNumber;
