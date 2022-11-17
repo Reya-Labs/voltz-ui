@@ -8,6 +8,10 @@ export type BadgeRecord = {
     badgeType: number;
     awardedTimestamp: number;
 };
+export type LeafInfo = {
+    account: string;
+    badgeId: number;
+};
 export declare enum BadgeClaimingStatus {
     CLAIMED = 0,
     CLAIMING = 1,

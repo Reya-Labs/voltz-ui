@@ -39,11 +39,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getRoot = void 0;
+exports.getRootFromSubgraph = void 0;
 var client_1 = require("@apollo/client");
 var cross_fetch_1 = __importDefault(require("cross-fetch"));
 var rootsQuery = "\n  query($timestamp: BigInt) {\n    roots(where: {startTimestamp_lte: $timestamp, endTimestamp_gt: $timestamp}) {\n        id\n        root\n        startTimestamp\n        endTimestamp\n        metadataURIBase\n    }\n  }\n";
-function getRoot(timestamp, subgraphUrl) {
+function getRootFromSubgraph(timestamp, subgraphUrl) {
     return __awaiter(this, void 0, void 0, function () {
         var client, data, rootEntity;
         return __generator(this, function (_a) {
@@ -75,4 +75,4 @@ function getRoot(timestamp, subgraphUrl) {
         });
     });
 }
-exports.getRoot = getRoot;
+exports.getRootFromSubgraph = getRootFromSubgraph;

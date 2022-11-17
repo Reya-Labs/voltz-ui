@@ -89,7 +89,7 @@ var SBT = /** @class */ (function () {
      */
     SBT.prototype.redeemSbt = function (badgeType, owner, awardedTimestamp, subgraphAPI) {
         return __awaiter(this, void 0, void 0, function () {
-            var rootEntity, metadataUri, leafInfo, startTimestamp, endTimestamp, leaves, proof, tokenId, tx, err_1;
+            var rootEntity, leafInfo, startTimestamp, endTimestamp, leaves, proof, tokenId, tx, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -101,23 +101,22 @@ var SBT = /** @class */ (function () {
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 7, , 8]);
-                        return [4 /*yield*/, (0, getSubgraphRoot_1.getRoot)(awardedTimestamp, subgraphAPI)];
+                        return [4 /*yield*/, (0, getSubgraphRoot_1.getRootFromSubgraph)(awardedTimestamp, subgraphAPI)];
                     case 2:
                         rootEntity = _a.sent();
                         if (!rootEntity) {
                             throw new Error('No root found');
                         }
-                        metadataUri = "".concat(rootEntity.baseMetadataUri).concat(badgeType, ".json");
                         leafInfo = {
                             account: owner,
-                            metadataURI: metadataUri
+                            badgeId: badgeType
                         };
                         startTimestamp = rootEntity.startTimestamp;
                         endTimestamp = rootEntity.endTimestamp;
-                        return [4 /*yield*/, (0, getSubgraphLeaves_1.createLeaves)(startTimestamp, endTimestamp, rootEntity.baseMetadataUri, subgraphAPI)];
+                        return [4 /*yield*/, (0, getSubgraphLeaves_1.createLeaves)(startTimestamp, endTimestamp, subgraphAPI)];
                     case 3:
                         leaves = _a.sent();
-                        proof = (0, merkle_tree_1.getProof)(owner, badgeType, metadataUri, leaves);
+                        proof = (0, merkle_tree_1.getProof)(owner, badgeType, leaves);
                         return [4 /*yield*/, this.contract.callStatic.redeem(leafInfo, proof, rootEntity.merkleRoot)];
                     case 4:
                         tokenId = _a.sent();
@@ -146,7 +145,7 @@ var SBT = /** @class */ (function () {
    */
     SBT.prototype.redeemMultipleSbts = function (badges, owner, subgraphAPI) {
         return __awaiter(this, void 0, void 0, function () {
-            var data, claimedBadgeTypes, _i, badges_1, badge, rootEntity, metadataUri, leafInfo, startTimestamp, endTimestamp, leaves, proof, tx, err_2;
+            var data, claimedBadgeTypes, _i, badges_1, badge, rootEntity, leafInfo, startTimestamp, endTimestamp, leaves, proof, tx, err_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -166,23 +165,22 @@ var SBT = /** @class */ (function () {
                     case 1:
                         if (!(_i < badges_1.length)) return [3 /*break*/, 5];
                         badge = badges_1[_i];
-                        return [4 /*yield*/, (0, getSubgraphRoot_1.getRoot)(badge.awardedTimestamp, subgraphAPI)];
+                        return [4 /*yield*/, (0, getSubgraphRoot_1.getRootFromSubgraph)(badge.awardedTimestamp, subgraphAPI)];
                     case 2:
                         rootEntity = _a.sent();
                         if (!rootEntity) {
                             return [3 /*break*/, 4];
                         }
-                        metadataUri = "".concat(rootEntity.baseMetadataUri).concat(badge.badgeType, ".json");
                         leafInfo = {
                             account: owner,
-                            metadataURI: metadataUri
+                            badgeId: badge.badgeType
                         };
                         startTimestamp = rootEntity.startTimestamp;
                         endTimestamp = rootEntity.endTimestamp;
-                        return [4 /*yield*/, (0, getSubgraphLeaves_1.createLeaves)(startTimestamp, endTimestamp, rootEntity.baseMetadataUri, subgraphAPI)];
+                        return [4 /*yield*/, (0, getSubgraphLeaves_1.createLeaves)(startTimestamp, endTimestamp, subgraphAPI)];
                     case 3:
                         leaves = _a.sent();
-                        proof = (0, merkle_tree_1.getProof)(owner, badge.badgeType, metadataUri, leaves);
+                        proof = (0, merkle_tree_1.getProof)(owner, badge.badgeType, leaves);
                         data.leaves.push(leafInfo);
                         data.proofs.push(proof);
                         data.roots.push(rootEntity.merkleRoot);
@@ -347,7 +345,7 @@ var SBT = /** @class */ (function () {
                             cache: new client_1.InMemoryCache(),
                             link: new client_1.HttpLink({ uri: subgraphUrl, fetch: cross_fetch_1.default })
                         });
-                        id = "".concat(userAddress, "#").concat(season);
+                        id = "".concat(userAddress.toLowerCase(), "#").concat(season);
                         return [4 /*yield*/, client.query({
                                 query: (0, client_1.gql)(badgeQuery),
                                 variables: {
@@ -360,8 +358,8 @@ var SBT = /** @class */ (function () {
                         for (_i = 0, _a = data.data.badges; _i < _a.length; _i++) {
                             badge = _a[_i];
                             badgesClaimed.push({
-                                badgeType: badge.badgeType,
-                                claimingStatus: data.data.badge.mintedTimestamp == 0 ?
+                                badgeType: parseInt(badge.badgeType, 10),
+                                claimingStatus: parseInt(badge.mintedTimestamp, 10) === 0 ?
                                     BadgeClaimingStatus.NOT_CLAIMED
                                     : BadgeClaimingStatus.CLAIMED // only from subgraph's perspective
                             });

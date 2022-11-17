@@ -18,6 +18,7 @@ import { DateTime } from 'luxon';
 import { CopyLinkButtonProps } from './CopyLinkButton/CopyLinkButton';
 
 import { CommunitySBT, BadgeClaimingStatus } from '@voltz-protocol/v1-sdk';
+import { deleteFromStorage, getFromStorage, getId, setToStorage } from './claim-status-storage';
 
 const Profile: React.FunctionComponent = () => {
   const wallet = useWallet();
@@ -34,6 +35,7 @@ const Profile: React.FunctionComponent = () => {
   >(getClaimButtonModesForVariants(SEASON_BADGE_VARIANTS[season.id] as BadgeVariant[], 'claim'));
 
   const [copyLinkButtonMode, setCopyLinkButtonMode] = useState<CopyLinkButtonProps['mode']>('copy');
+  const isOnGoingSeason = season.id === currentActiveSeason.id;
 
   const fetchBadges = async (seasonId: Season['id'], account: string) => {
     return await getSeasonBadges({
@@ -77,9 +79,12 @@ const Profile: React.FunctionComponent = () => {
     const claimingVariants: BadgeVariant[] = [];
 
     // check with SDK if some of them are claimed or claiming is in progress
-    if (notClaimedVariants.length !== 0) {
+    const notClaimedInStorage = notClaimedVariants.filter((nCB) =>
+      getFromStorage(getId(account, nCB)),
+    );
+    if (!isOnGoingSeason && notClaimedInStorage.length !== 0) {
       const badgeTypes = [];
-      for (const notClaimedVariant of notClaimedVariants) {
+      for (const notClaimedVariant of notClaimedInStorage) {
         const badgeType = result.find((b) => b.variant === notClaimedVariant)?.badgeResponseRaw
           ?.badgeType;
         if (badgeType) {
@@ -117,9 +122,15 @@ const Profile: React.FunctionComponent = () => {
               if (claimStatus.claimingStatus === BadgeClaimingStatus.CLAIMED) {
                 notClaimedVariants = notClaimedVariants.filter((v) => v !== badgeVariant);
                 claimedTodayVariants.push(badgeVariant);
+                deleteFromStorage(getId(account, badgeVariant));
+              }
+              if (claimStatus.claimingStatus === BadgeClaimingStatus.NOT_CLAIMED) {
+                deleteFromStorage(getId(account, badgeVariant));
               }
             }
-          } catch (err) {}
+          } catch (err) {
+            console.error(err);
+          }
         }
       }
     }
@@ -169,12 +180,14 @@ const Profile: React.FunctionComponent = () => {
       [variant]: 'claiming',
     }));
     try {
+      setToStorage(getId(owner, badge.variant));
       await communitySBT.redeemSbt(
         parseInt(badge.badgeResponseRaw.badgeType, 10),
         owner,
         parseInt(badge.badgeResponseRaw.awardedTimestamp, 10),
         subgraphAPI,
       );
+      deleteFromStorage(getId(owner, badge.variant));
 
       setClaimButtonModes((prev) => ({
         ...prev,
@@ -188,6 +201,7 @@ const Profile: React.FunctionComponent = () => {
       setCollectionBadges(nextCollectionBadges);
       setCacheValue(seasonUserId, nextCollectionBadges);
     } catch (err) {
+      deleteFromStorage(getId(owner, badge.variant));
       setClaimButtonModes((prev) => ({
         ...prev,
         [variant]: 'claimError',
@@ -218,6 +232,9 @@ const Profile: React.FunctionComponent = () => {
       ...getClaimButtonModesForVariants(variants, 'claiming'),
     }));
     try {
+      badges.forEach((badge) => {
+        setToStorage(getId(owner, badge.variant));
+      });
       const response = await communitySBT.redeemMultipleSbts(
         badges.map((badge) => ({
           badgeType: parseInt(badge.badgeResponseRaw!.badgeType, 10),
@@ -226,6 +243,9 @@ const Profile: React.FunctionComponent = () => {
         owner,
         subgraphAPI,
       );
+      badges.forEach((badge) => {
+        deleteFromStorage(getId(owner, badge.variant));
+      });
       const claimedVariants = response.claimedBadgeTypes
         .map((bT) => {
           const badge = collectionBadges.find(
@@ -253,6 +273,9 @@ const Profile: React.FunctionComponent = () => {
         ...p,
         ...getClaimButtonModesForVariants(variants, 'claimError'),
       }));
+      badges.forEach((badge) => {
+        deleteFromStorage(getId(owner, badge.variant));
+      });
     }
   }
 
@@ -297,7 +320,7 @@ const Profile: React.FunctionComponent = () => {
 
   return (
     <ProfilePageWalletConnected
-      isOnGoingSeason={season.id === currentActiveSeason.id}
+      isOnGoingSeason={isOnGoingSeason}
       season={season}
       account={name}
       achievedBadges={collectionBadges}

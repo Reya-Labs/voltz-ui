@@ -1,6 +1,3 @@
-export type LeafEntry = {
-    owner: string;
-    metadataURI: string;
-};
-export declare function createLeaves(seasonStart: number, seasonEnd: number, baseMetadataUri: string, subgraphUrl: string): Promise<Array<LeafEntry>>;
+import { LeafInfo } from '../../entities/communitySbt';
+export declare function createLeaves(seasonStart: number, seasonEnd: number, subgraphUrl: string): Promise<Array<LeafInfo>>;
 //# sourceMappingURL=getSubgraphLeaves.d.ts.map

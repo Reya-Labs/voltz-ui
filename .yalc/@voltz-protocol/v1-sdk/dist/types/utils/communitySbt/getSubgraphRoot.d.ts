@@ -5,5 +5,5 @@ export type RootEntity = {
     startTimestamp: number;
     endTimestamp: number;
 };
-export declare function getRoot(timestamp: number, subgraphUrl: string): Promise<RootEntity | undefined>;
+export declare function getRootFromSubgraph(timestamp: number, subgraphUrl: string): Promise<RootEntity | undefined>;
 //# sourceMappingURL=getSubgraphRoot.d.ts.map

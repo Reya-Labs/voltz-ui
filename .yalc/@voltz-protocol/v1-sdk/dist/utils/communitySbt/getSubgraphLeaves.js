@@ -43,9 +43,9 @@ exports.createLeaves = void 0;
 var client_1 = require("@apollo/client");
 var cross_fetch_1 = __importDefault(require("cross-fetch"));
 var tokensQuery = "\n  query( $seasonStart: BigInt, $seasonEnd: BigInt, $firstCount: Int, $skipCount: Int) {\n    badges(first: $firstCount, skip: $skipCount, where: {awardedTimestamp_gte: $seasonStart, awardedTimestamp_lt: $seasonEnd}) {\n        id\n        badgeType\n        badgeName\n        awardedTimestamp\n        mintedTimestamp\n    }\n  }\n";
-function createLeaves(seasonStart, seasonEnd, baseMetadataUri, subgraphUrl) {
+function createLeaves(seasonStart, seasonEnd, subgraphUrl) {
     return __awaiter(this, void 0, void 0, function () {
-        var client, firstCount, skipCount, snapshot, data, _i, _a, entry, badgeType, props, address, metadataURI, snpashotEntry;
+        var client, firstCount, skipCount, snapshot, data, _i, _a, entry, badgeType, props, address, snpashotEntry;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -76,10 +76,9 @@ function createLeaves(seasonStart, seasonEnd, baseMetadataUri, subgraphUrl) {
                         badgeType = parseInt(entry.badgeType);
                         props = entry.id.split("#");
                         address = props[0];
-                        metadataURI = "".concat(baseMetadataUri).concat(badgeType, ".json");
                         snpashotEntry = {
-                            owner: address,
-                            metadataURI: metadataURI
+                            account: address,
+                            badgeId: badgeType
                         };
                         snapshot.push(snpashotEntry);
                     }

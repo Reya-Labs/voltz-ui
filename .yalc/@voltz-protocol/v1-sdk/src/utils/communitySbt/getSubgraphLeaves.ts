@@ -1,5 +1,6 @@
 import { ApolloClient, InMemoryCache, gql, HttpLink } from '@apollo/client'
 import fetch from 'cross-fetch';
+import { LeafInfo } from '../../entities/communitySbt';
 
 const tokensQuery = `
   query( $seasonStart: BigInt, $seasonEnd: BigInt, $firstCount: Int, $skipCount: Int) {
@@ -13,16 +14,10 @@ const tokensQuery = `
   }
 `;
 
-export type LeafEntry = {
-    owner: string,
-    metadataURI: string
-}
-
  export async function createLeaves(
     seasonStart: number,
     seasonEnd: number,
-    baseMetadataUri: string,
-    subgraphUrl: string) : Promise<Array<LeafEntry>> {
+    subgraphUrl: string) : Promise<Array<LeafInfo>> {
 
     const client = new ApolloClient({
         cache: new InMemoryCache(),
@@ -32,7 +27,7 @@ export type LeafEntry = {
     const firstCount = 1000;
     let skipCount = 0;
 
-    let snapshot: Array<LeafEntry> = [];
+    let snapshot: Array<LeafInfo> = [];
 
     while (true) {
         const data = await client
@@ -52,11 +47,9 @@ export type LeafEntry = {
             const props = entry.id.split("#");
             const address = props[0];
 
-            const metadataURI = `${baseMetadataUri}${badgeType}.json`;
-
-            const snpashotEntry: LeafEntry = {
-            owner: address,
-            metadataURI: metadataURI
+            const snpashotEntry = {
+                account: address,
+                badgeId: badgeType
             }
             snapshot.push(snpashotEntry);
         }

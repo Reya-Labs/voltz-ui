@@ -1,7 +1,7 @@
 import { BigNumber, Bytes, ethers, providers, Signer } from 'ethers';
 import { CommunitySBT, CommunitySBT__factory } from '../typechain-sbt';
 import { createLeaves } from '../utils/communitySbt/getSubgraphLeaves';
-import { getRoot } from '../utils/communitySbt/getSubgraphRoot';
+import { getRootFromSubgraph } from '../utils/communitySbt/getSubgraphRoot';
 import { getProof } from '../utils/communitySbt/merkle-tree';
 import  axios from 'axios';
 import { ApolloClient, InMemoryCache, gql, HttpLink } from '@apollo/client'
@@ -19,15 +19,23 @@ export type BadgeRecord = {
     awardedTimestamp: number;
 };
 
-type LeafInfo = {
+export type LeafInfo = {
     account: string;
-    metadataURI: string;
+    badgeId: number;
 }
 
 type MultiRedeemData = {
     leaves: Array<LeafInfo>;
     proofs: Array<string[]>;
     roots: Array<Bytes>;
+}
+
+type BadgeResponse = {
+    id: string;
+    badgeType: string;
+    badgeName: string;
+    awardedTimestamp: string;
+    mintedTimestamp: string;
 }
 
 enum TxBadgeStatus {
@@ -102,21 +110,20 @@ class SBT {
 
     try {
         // create merkle tree from subgraph derived leaves and get the root
-        const rootEntity = await getRoot(awardedTimestamp, subgraphAPI);
+        const rootEntity = await getRootFromSubgraph(awardedTimestamp, subgraphAPI);
         if(!rootEntity) {
             throw new Error('No root found')
         }
-        const metadataUri = `${rootEntity.baseMetadataUri}${badgeType}.json`;
-        const leafInfo = {
+        const leafInfo : LeafInfo = {
             account: owner,
-            metadataURI: metadataUri
+            badgeId: badgeType
         }
 
         const startTimestamp = rootEntity.startTimestamp;
         const endTimestamp = rootEntity.endTimestamp;
 
-        const leaves = await createLeaves(startTimestamp, endTimestamp, rootEntity.baseMetadataUri, subgraphAPI);
-        const proof = getProof(owner, badgeType, metadataUri, leaves);
+        const leaves = await createLeaves(startTimestamp, endTimestamp, subgraphAPI);
+        const proof = getProof(owner, badgeType, leaves);
 
 
         const tokenId = await this.contract.callStatic.redeem(leafInfo, proof, rootEntity.merkleRoot);
@@ -159,20 +166,19 @@ class SBT {
         const claimedBadgeTypes: number[] = [];
         for (const badge of badges) {
             // create merkle tree from subgraph derived leaves and get the root
-            const rootEntity = await getRoot(badge.awardedTimestamp, subgraphAPI);
+            const rootEntity = await getRootFromSubgraph(badge.awardedTimestamp, subgraphAPI);
             if(!rootEntity) {
                 continue;
             }
-            const metadataUri = `${rootEntity.baseMetadataUri}${badge.badgeType}.json`;
             const leafInfo: LeafInfo = {
                 account: owner,
-                metadataURI: metadataUri
+                badgeId: badge.badgeType
             }
             const startTimestamp = rootEntity.startTimestamp;
             const endTimestamp = rootEntity.endTimestamp;
 
-            const leaves = await createLeaves(startTimestamp, endTimestamp, rootEntity.baseMetadataUri, subgraphAPI);
-            const proof = getProof(owner, badge.badgeType, metadataUri, leaves);
+            const leaves = await createLeaves(startTimestamp, endTimestamp, subgraphAPI);
+            const proof = getProof(owner, badge.badgeType, leaves);
 
             data.leaves.push(leafInfo);
             data.proofs.push(proof);
@@ -295,8 +301,10 @@ class SBT {
             cache: new InMemoryCache(),
             link: new HttpLink({ uri: subgraphUrl, fetch })
         })
-        const id = `${userAddress}#${season}`
-        const data = await client.query({
+        const id = `${userAddress.toLowerCase()}#${season}`
+        const data = await client.query<{
+            badges: BadgeResponse[]
+        }>({
             query: gql(badgeQuery),
             variables: {
                 id: id,
@@ -306,8 +314,8 @@ class SBT {
         let badgesClaimed = new Array<BadgeWithStatus>();
         for (const badge of data.data.badges) {
             badgesClaimed.push({
-                badgeType: badge.badgeType, 
-                claimingStatus: data.data.badge.mintedTimestamp == 0 ? 
+                badgeType: parseInt(badge.badgeType, 10),
+                claimingStatus: parseInt(badge.mintedTimestamp, 10) === 0 ?
                     BadgeClaimingStatus.NOT_CLAIMED 
                     : BadgeClaimingStatus.CLAIMED // only from subgraph's perspective
             });
