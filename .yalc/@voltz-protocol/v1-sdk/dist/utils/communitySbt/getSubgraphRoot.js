@@ -14,7 +14,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -39,11 +39,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getRoot = void 0;
+exports.getRootFromSubgraph = void 0;
 var client_1 = require("@apollo/client");
 var cross_fetch_1 = __importDefault(require("cross-fetch"));
 var rootsQuery = "\n  query($timestamp: BigInt) {\n    roots(where: {startTimestamp_lte: $timestamp, endTimestamp_gt: $timestamp}) {\n        id\n        root\n        startTimestamp\n        endTimestamp\n        metadataURIBase\n    }\n  }\n";
-function getRoot(timestamp, subgraphUrl) {
+function getRootFromSubgraph(timestamp, subgraphUrl) {
     return __awaiter(this, void 0, void 0, function () {
         var client, data, rootEntity;
         return __generator(this, function (_a) {
@@ -75,4 +75,4 @@ function getRoot(timestamp, subgraphUrl) {
         });
     });
 }
-exports.getRoot = getRoot;
+exports.getRootFromSubgraph = getRootFromSubgraph;
