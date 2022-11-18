@@ -2,7 +2,7 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var _a, _b;
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Fraction = void 0;
 var jsbi_1 = __importDefault(require("jsbi"));
@@ -19,11 +19,6 @@ var toSignificantRounding = (_a = {},
     _a[types_1.Rounding.ROUND_HALF_UP] = Decimal.ROUND_HALF_UP,
     _a[types_1.Rounding.ROUND_UP] = Decimal.ROUND_UP,
     _a);
-var toFixedRounding = (_b = {},
-    _b[types_1.Rounding.ROUND_DOWN] = 0 /* RoundingMode.RoundDown */,
-    _b[types_1.Rounding.ROUND_HALF_UP] = 1 /* RoundingMode.RoundHalfUp */,
-    _b[types_1.Rounding.ROUND_UP] = 3 /* RoundingMode.RoundUp */,
-    _b);
 var Fraction = /** @class */ (function () {
     function Fraction(numerator, denominator) {
         if (denominator === void 0) { denominator = jsbi_1.default.BigInt(1); }
@@ -111,13 +106,11 @@ var Fraction = /** @class */ (function () {
     };
     Fraction.prototype.toFixed = function (decimalPlaces, 
     // eslint-disable-next-line @typescript-eslint/ban-types
-    format, rounding) {
+    format) {
         if (format === void 0) { format = { groupSeparator: '' }; }
-        if (rounding === void 0) { rounding = types_1.Rounding.ROUND_HALF_UP; }
         (0, tiny_invariant_1.default)(Number.isInteger(decimalPlaces), "".concat(decimalPlaces, " is not an integer."));
         (0, tiny_invariant_1.default)(decimalPlaces >= 0, "".concat(decimalPlaces, " is negative."));
         Big.DP = decimalPlaces;
-        Big.RM = toFixedRounding[rounding];
         return new Big(this.numerator.toString())
             .div(this.denominator.toString())
             .toFormat(decimalPlaces, format);

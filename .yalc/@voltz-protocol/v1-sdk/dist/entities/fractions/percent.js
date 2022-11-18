@@ -56,7 +56,7 @@ var Percent = /** @class */ (function (_super) {
     };
     Percent.prototype.toFixed = function (decimalPlaces, format, rounding) {
         if (decimalPlaces === void 0) { decimalPlaces = 2; }
-        return _super.prototype.multiply.call(this, ONE_HUNDRED).toFixed(decimalPlaces, format, rounding);
+        return _super.prototype.multiply.call(this, ONE_HUNDRED).toFixed(decimalPlaces, format);
     };
     return Percent;
 }(fraction_1.default));
