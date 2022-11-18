@@ -1,5 +1,5 @@
 import { Bytes } from 'ethers';
-export type RootEntity = {
+export declare type RootEntity = {
     merkleRoot: Bytes;
     baseMetadataUri: string;
     startTimestamp: number;

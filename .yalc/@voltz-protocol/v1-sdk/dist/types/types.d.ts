@@ -1,6 +1,6 @@
 import JSBI from 'jsbi';
 import { BigNumberish } from 'ethers';
-export type BigIntish = JSBI | string | number;
+export declare type BigIntish = JSBI | string | number;
 export declare enum TradeType {
     FIXED_TAKER = 0,
     VARIABLE_TAKER = 1
@@ -10,7 +10,7 @@ export declare enum Rounding {
     ROUND_HALF_UP = 1,
     ROUND_UP = 2
 }
-export type SwapPeripheryParams = {
+export declare type SwapPeripheryParams = {
     marginEngine: string;
     isFT: boolean;
     notional: BigNumberish;
@@ -19,7 +19,7 @@ export type SwapPeripheryParams = {
     tickUpper: BigNumberish;
     marginDelta: BigNumberish;
 };
-export type MintOrBurnParams = {
+export declare type MintOrBurnParams = {
     marginEngine: string;
     tickLower: BigNumberish;
     tickUpper: BigNumberish;
