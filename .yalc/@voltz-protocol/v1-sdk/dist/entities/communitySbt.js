@@ -14,7 +14,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -38,12 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.NON_PROGRAMATIC_BADGES_VARIANT = exports.TOP_BADGES_VARIANT = exports.NON_SUBGRAPH_BADGES_SEASONS = exports.BadgeClaimingStatus = void 0;
-var client_1 = require("@apollo/client");
 exports.NON_PROGRAMATIC_BADGES_VARIANT = exports.TOP_BADGES_VARIANT = exports.NON_SUBGRAPH_BADGES_SEASONS = exports.BadgeClaimingStatus = void 0;
 var client_1 = require("@apollo/client");
 var typechain_sbt_1 = require("../typechain-sbt");
@@ -68,71 +63,22 @@ var BadgeClaimingStatus;
 })(BadgeClaimingStatus = exports.BadgeClaimingStatus || (exports.BadgeClaimingStatus = {}));
 exports.NON_SUBGRAPH_BADGES_SEASONS = {
     0: [
-        'ogTopTrader',
-        'ogBeWaterMyFriend'
+        '15',
+        '12'
     ],
     1: [
-        'topTrader',
-        'beWaterMyFriend',
-        'diplomatz',
-        'governorz',
-        'senatorz',
-        'theOgActivity'
+        '31',
+        '28',
+        '33',
+        '34',
+        '35'
     ]
 };
-exports.TOP_BADGES_VARIANT = {
-    'topTrader': '31',
-    'beWaterMyFriend': '28',
-    'ogTopTrader': '15',
-    'ogBeWaterMyFriend': '12'
-};
+exports.TOP_BADGES_VARIANT = ['31', '28', '15', '12'];
 exports.NON_PROGRAMATIC_BADGES_VARIANT = {
     'diplomatz': '33',
     'governorz': '34',
-    'senatorz': '35',
-    'theOgActivity': '36'
-};
-var axios_1 = __importDefault(require("axios"));
-var cross_fetch_1 = __importDefault(require("cross-fetch"));
-var constants_1 = require("../constants");
-var helpers_1 = require("../utils/communitySbt/helpers");
-var TxBadgeStatus;
-(function (TxBadgeStatus) {
-    TxBadgeStatus[TxBadgeStatus["SUCCESSFUL"] = 0] = "SUCCESSFUL";
-    TxBadgeStatus[TxBadgeStatus["FAILED"] = 1] = "FAILED";
-    TxBadgeStatus[TxBadgeStatus["PENDING"] = 2] = "PENDING";
-})(TxBadgeStatus || (TxBadgeStatus = {}));
-var BadgeClaimingStatus;
-(function (BadgeClaimingStatus) {
-    BadgeClaimingStatus[BadgeClaimingStatus["CLAIMED"] = 0] = "CLAIMED";
-    BadgeClaimingStatus[BadgeClaimingStatus["CLAIMING"] = 1] = "CLAIMING";
-    BadgeClaimingStatus[BadgeClaimingStatus["NOT_CLAIMED"] = 2] = "NOT_CLAIMED";
-})(BadgeClaimingStatus = exports.BadgeClaimingStatus || (exports.BadgeClaimingStatus = {}));
-exports.NON_SUBGRAPH_BADGES_SEASONS = {
-    0: [
-        'ogTopTrader',
-        'ogBeWaterMyFriend'
-    ],
-    1: [
-        'topTrader',
-        'beWaterMyFriend',
-        'diplomatz',
-        'governorz',
-        'senatorz',
-        'theOgActivity'
-    ]
-};
-exports.TOP_BADGES_VARIANT = {
-    'topTrader': '31',
-    'beWaterMyFriend': '28',
-    'ogTopTrader': '15',
-    'ogBeWaterMyFriend': '12'
-};
-exports.NON_PROGRAMATIC_BADGES_VARIANT = {
-    'diplomatz': '33',
-    'governorz': '34',
-    'senatorz': '35',
-    'theOgActivity': '36'
+    'senatorz': '35'
 };
 var SBT = /** @class */ (function () {
     /**
@@ -146,7 +92,6 @@ var SBT = /** @class */ (function () {
         this.signer = signer;
         if (signer) {
             this.contract = typechain_sbt_1.CommunitySBT__factory.connect(id, signer);
-            this.provider = signer.provider;
             this.provider = signer.provider;
         }
         else {
@@ -175,7 +120,7 @@ var SBT = /** @class */ (function () {
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 7, , 8]);
-                        return [4 /*yield*/, (0, getSubgraphRoot_1.getRootFromSubgraphFromSubgraph)(awardedTimestamp, subgraphAPI)];
+                        return [4 /*yield*/, (0, getSubgraphRoot_1.getRootFromSubgraph)(awardedTimestamp, subgraphAPI)];
                     case 2:
                         rootEntity = _a.sent();
                         if (!rootEntity) {
@@ -183,14 +128,14 @@ var SBT = /** @class */ (function () {
                         }
                         leafInfo = {
                             account: owner,
-                            badgeId: badgeType
+                            badgeId: parseInt(badgeType)
                         };
                         startTimestamp = rootEntity.startTimestamp;
                         endTimestamp = rootEntity.endTimestamp;
                         return [4 /*yield*/, (0, getSubgraphLeaves_1.createLeaves)(startTimestamp, endTimestamp, subgraphAPI)];
                     case 3:
                         leaves = _a.sent();
-                        proof = (0, merkle_tree_1.getProof)(owner, badgeType, leaves);
+                        proof = (0, merkle_tree_1.getProof)(owner, parseInt(badgeType), leaves);
                         return [4 /*yield*/, this.contract.callStatic.redeem(leafInfo, proof, rootEntity.merkleRoot)];
                     case 4:
                         tokenId = _a.sent();
@@ -239,7 +184,7 @@ var SBT = /** @class */ (function () {
                     case 1:
                         if (!(_i < badges_1.length)) return [3 /*break*/, 5];
                         badge = badges_1[_i];
-                        return [4 /*yield*/, (0, getSubgraphRoot_1.getRootFromSubgraphFromSubgraph)(badge.awardedTimestamp, subgraphAPI)];
+                        return [4 /*yield*/, (0, getSubgraphRoot_1.getRootFromSubgraph)(badge.awardedTimestamp, subgraphAPI)];
                     case 2:
                         rootEntity = _a.sent();
                         if (!rootEntity) {
@@ -247,18 +192,18 @@ var SBT = /** @class */ (function () {
                         }
                         leafInfo = {
                             account: owner,
-                            badgeId: badge.badgeType
+                            badgeId: parseInt(badge.badgeType)
                         };
                         startTimestamp = rootEntity.startTimestamp;
                         endTimestamp = rootEntity.endTimestamp;
                         return [4 /*yield*/, (0, getSubgraphLeaves_1.createLeaves)(startTimestamp, endTimestamp, subgraphAPI)];
                     case 3:
                         leaves = _a.sent();
-                        proof = (0, merkle_tree_1.getProof)(owner, badge.badgeType, leaves);
+                        proof = (0, merkle_tree_1.getProof)(owner, parseInt(badge.badgeType), leaves);
                         data.leaves.push(leafInfo);
                         data.proofs.push(proof);
                         data.roots.push(rootEntity.merkleRoot);
-                        claimedBadgeTypes.push(badge.badgeType);
+                        claimedBadgeTypes.push(parseInt(badge.badgeType));
                         _a.label = 4;
                     case 4:
                         _i++;
@@ -272,7 +217,7 @@ var SBT = /** @class */ (function () {
                     case 7:
                         tx = _a.sent();
                         return [2 /*return*/, {
-                                claimedBadgeTypes: claimedBadgeTypes,,
+                                claimedBadgeTypes: claimedBadgeTypes,
                             }];
                     case 8:
                         err_2 = _a.sent();
@@ -283,19 +228,20 @@ var SBT = /** @class */ (function () {
         });
     };
     SBT.prototype.getSeasonBadges = function (_a) {
+        var _b;
         var subgraphUrl = _a.subgraphUrl, dbUrl = _a.dbUrl, userId = _a.userId, seasonId = _a.seasonId;
         return __awaiter(this, void 0, void 0, function () {
-            var badgeQuery, client, id, data, nonProgBadges, subgraphBadges, badgesResponse, _i, subgraphBadges_1, badge, _b, _c, badgeVariant, topBadge, nonProgBadge, error_1;
-            return __generator(this, function (_d) {
-                switch (_d.label) {
+            var badgeQuery, client, id, data, nonProgBadges, subgraphBadges, badgesResponse, _i, subgraphBadges_1, badge, topLpType, topTraderType, topLpBadge, topTraderBadge, _c, _d, badgeType, nonProgBadge, error_1;
+            return __generator(this, function (_e) {
+                switch (_e.label) {
                     case 0:
                         if (!subgraphUrl || !dbUrl) {
                             return [2 /*return*/, []];
                         }
-                        _d.label = 1;
+                        _e.label = 1;
                     case 1:
-                        _d.trys.push([1, 9, , 10]);
-                        badgeQuery = "\n                query( $id: BigInt) {\n                    seasonUser(id: $id) {\n                        id\n                        badges {\n                          id\n                          awardedTimestamp\n                          mintedTimestamp\n                          badgeType\n                          badgeName\n                        }\n                    }\n                }\n            ";
+                        _e.trys.push([1, 6, , 7]);
+                        badgeQuery = "\n                query( $id: BigInt) {\n                    seasonUser(id: $id) {\n                        id\n                        badges {\n                          id\n                          awardedTimestamp\n                          mintedTimestamp\n                          badgeType\n                        }\n                    }\n                }\n            ";
                         client = new client_1.ApolloClient({
                             cache: new client_1.InMemoryCache(),
                             link: new client_1.HttpLink({ uri: subgraphUrl, fetch: cross_fetch_1.default })
@@ -308,129 +254,148 @@ var SBT = /** @class */ (function () {
                                 },
                             })];
                     case 2:
-                        data = _d.sent();
-                        if (!data.data.seasonUser) {
+                        data = _e.sent();
+                        if (!((_b = data === null || data === void 0 ? void 0 : data.data) === null || _b === void 0 ? void 0 : _b.seasonUser)) {
                             return [2 /*return*/, []]; // empty array
                         }
                         return [4 /*yield*/, this.getNonProgramaticBadges(userId, dbUrl)];
                     case 3:
-                        nonProgBadges = _d.sent();
+                        nonProgBadges = _e.sent();
                         subgraphBadges = data.data.seasonUser.badges;
                         badgesResponse = [];
                         for (_i = 0, subgraphBadges_1 = subgraphBadges; _i < subgraphBadges_1.length; _i++) {
                             badge = subgraphBadges_1[_i];
-                            badgesResponse.push(badge);
+                            if (parseInt(badge.awardedTimestamp) > 0) {
+                                badgesResponse.push({
+                                    id: badge.id,
+                                    badgeType: badge.badgeType,
+                                    awardedTimestampMs: (0, helpers_1.toMillis)(parseInt(badge.awardedTimestamp)),
+                                    mintedTimestampMs: (0, helpers_1.toMillis)(parseInt(badge.mintedTimestamp)),
+                                });
+                            }
                         }
-                        _b = 0, _c = exports.NON_SUBGRAPH_BADGES_SEASONS[seasonId];
-                        _d.label = 4;
+                        topLpType = seasonId === 0 ? "12" : "28";
+                        topTraderType = seasonId === 0 ? "15" : "31";
+                        return [4 /*yield*/, this.getTopTraderBadge(subgraphUrl, userId, seasonId, topLpType, false)];
                     case 4:
-                        if (!(_b < _c.length)) return [3 /*break*/, 8];
-                        badgeVariant = _c[_b];
-                        if (!exports.TOP_BADGES_VARIANT[badgeVariant]) return [3 /*break*/, 6];
-                        return [4 /*yield*/, this.getTopTraderBadge(subgraphUrl, userId, seasonId, exports.TOP_BADGES_VARIANT[badgeVariant])];
+                        topLpBadge = _e.sent();
+                        return [4 /*yield*/, this.getTopTraderBadge(subgraphUrl, userId, seasonId, topTraderType, true)];
                     case 5:
-                        topBadge = _d.sent();
-                        if (topBadge) {
-                            badgesResponse.push(topBadge);
+                        topTraderBadge = _e.sent();
+                        if (topLpBadge)
+                            badgesResponse.push(topLpBadge);
+                        if (topTraderBadge)
+                            badgesResponse.push(topTraderBadge);
+                        // get non-programatic badges
+                        for (_c = 0, _d = exports.NON_SUBGRAPH_BADGES_SEASONS[seasonId]; _c < _d.length; _c++) {
+                            badgeType = _d[_c];
+                            if (nonProgBadges[badgeType]) {
+                                nonProgBadge = nonProgBadges[badgeType];
+                                badgesResponse.push(nonProgBadge);
+                            }
                         }
-                        return [3 /*break*/, 7];
+                        return [2 /*return*/, badgesResponse];
                     case 6:
-                        if (exports.NON_PROGRAMATIC_BADGES_VARIANT[badgeVariant] && nonProgBadges[badgeVariant]) {
-                            nonProgBadge = nonProgBadges[badgeVariant];
-                            badgesResponse.push(nonProgBadge);
-                        }
-                        _d.label = 7;
-                    case 7:
-                        _b++;
-                        return [3 /*break*/, 4];
-                    case 8: return [2 /*return*/, badgesResponse];
-                    case 9:
-                        error_1 = _d.sent();
+                        error_1 = _e.sent();
                         return [2 /*return*/, []];
-                    case 10: return [2 /*return*/];
+                    case 7: return [2 /*return*/];
                 }
             });
         });
     };
-    SBT.prototype.getTopTraderBadge = function (subgraphUrl, userId, seasonId, badgeType) {
+    SBT.prototype.getTopTraderBadge = function (subgraphUrl, userId, seasonId, badgeType, isTrader) {
+        var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
-            var badgeQuery, client, id, isNotional, unit, data, _i, _a, seasonUser, badge, error_2;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var pointzQuery, client, id, unit, data, _i, _c, pointz, badgeQuery, idBadge, badgeData, badge, error_2;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
                     case 0:
                         if (!process.env.REACT_APP_SUBGRAPH_BADGES_URL) {
                             return [2 /*return*/, undefined];
                         }
-                        _b.label = 1;
+                        _d.label = 1;
                     case 1:
-                        _b.trys.push([1, 3, , 4]);
-                        badgeQuery = "\n                query( $id: BigInt, $unit: String) {\n                    seasonUsers(first: 5, orderBy: $unit, orderDirection: desc) {\n                        id\n                        badges {\n                        id\n                        awardedTimestamp\n                        mintedTimestamp\n                        badgeType\n                        badgeName\n                        }\n                        totalNotionalTraded\n                        totalLiquidityProvided\n                    }\n                }\n            ";
+                        _d.trys.push([1, 7, , 8]);
+                        pointzQuery = "\n                query( $id: BigInt, $unit: String) {\n                    seasonUserPointzs(first: 5, orderBy: $unit, orderDirection: desc){\n                        id\n                        seasonUser {\n                            id\n                        }\n                        weightedNotionalTraded\n                        weightedLiquidityProvided\n                        lastMintTradeTimestamp\n                        lastSwapTimestamp\n                    }\n                }\n            ";
                         client = new client_1.ApolloClient({
                             cache: new client_1.InMemoryCache(),
                             link: new client_1.HttpLink({ uri: subgraphUrl, fetch: cross_fetch_1.default })
                         });
                         id = "".concat(userId.toLowerCase(), "#").concat(seasonId);
-                        isNotional = badgeType.indexOf("trade") > -1;
-                        unit = isNotional ? "totalNotionalTraded" : "totalLiquidityProvided";
+                        unit = isTrader ? "weightedNotionalTraded" : "weightedLiquidityProvided";
                         return [4 /*yield*/, client.query({
-                                query: (0, client_1.gql)(badgeQuery),
+                                query: (0, client_1.gql)(pointzQuery),
                                 variables: {
                                     id: id,
                                     unit: unit
                                 },
                             })];
                     case 2:
-                        data = _b.sent();
-                        if (!data.data.seasonUsers) {
+                        data = _d.sent();
+                        if (!((_a = data === null || data === void 0 ? void 0 : data.data) === null || _a === void 0 ? void 0 : _a.seasonUserPointzs)) {
                             return [2 /*return*/, undefined];
                         }
-                        for (_i = 0, _a = data.data.seasonUsers; _i < _a.length; _i++) {
-                            seasonUser = _a[_i];
-                            if (seasonUser.id === userId.toLowerCase()) {
-                                badge = {
-                                    id: "".concat(userId, "#").concat(seasonId, "#").concat(badgeType),
-                                    badgeType: badgeType,
-                                    badgeName: exports.TOP_BADGES_VARIANT[badgeType],
-                                    awardedTimestamp: isNotional ? seasonUser.notionalAwardedTimestamp : seasonUser.liquidityAwardedTimestamp,
-                                    mintedTimestamp: isNotional ? seasonUser.notionalMintedTimestamp : seasonUser.liquidityMintedTimestamp,
-                                };
-                                return [2 /*return*/, badge];
-                            }
-                        }
-                        return [3 /*break*/, 4];
+                        _i = 0, _c = data.data.seasonUserPointzs;
+                        _d.label = 3;
                     case 3:
-                        error_2 = _b.sent();
+                        if (!(_i < _c.length)) return [3 /*break*/, 6];
+                        pointz = _c[_i];
+                        if (!(pointz.seasonUser.id === userId.toLowerCase())) return [3 /*break*/, 5];
+                        badgeQuery = "\n                        query( $id: BigInt) {\n                            badge(id: $id){\n                                id\n                                mintedTimestamp\n                            }\n                        }\n                    ";
+                        idBadge = "".concat(userId.toLowerCase(), "#").concat(badgeType, "#").concat(seasonId);
+                        return [4 /*yield*/, client.query({
+                                query: (0, client_1.gql)(badgeQuery),
+                                variables: {
+                                    id: idBadge,
+                                },
+                            })];
+                    case 4:
+                        badgeData = _d.sent();
+                        badge = {
+                            id: "".concat(userId, "#").concat(seasonId, "#").concat(badgeType),
+                            badgeType: badgeType,
+                            awardedTimestampMs: (0, helpers_1.toMillis)(parseInt(isTrader ? pointz.lastSwapTimestamp : pointz.lastMintTradeTimestamp)),
+                            mintedTimestampMs: (0, helpers_1.toMillis)(parseInt(((_b = badgeData === null || badgeData === void 0 ? void 0 : badgeData.data) === null || _b === void 0 ? void 0 : _b.badge) ? badgeData.data.badge.mintedTimestamp : "0")),
+                        };
+                        return [2 /*return*/, badge];
+                    case 5:
+                        _i++;
+                        return [3 /*break*/, 3];
+                    case 6: return [3 /*break*/, 8];
+                    case 7:
+                        error_2 = _d.sent();
                         return [2 /*return*/, undefined];
-                    case 4: return [2 /*return*/];
+                    case 8: return [2 /*return*/];
                 }
             });
         });
     };
     SBT.prototype.getNonProgramaticBadges = function (userId, nonProgramaticBadgesUrl) {
         return __awaiter(this, void 0, void 0, function () {
-            var badgeResponssRecord, resp, badges;
+            var badgeResponseRecord, resp, badges;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        badgeResponssRecord = {};
-                        return [4 /*yield*/, axios_1.default.get(nonProgramaticBadgesUrl + userId)];
+                        badgeResponseRecord = {};
+                        return [4 /*yield*/, axios_1.default.get("".concat(nonProgramaticBadgesUrl, "/get-badges/").concat(userId))];
                     case 1:
                         resp = _a.sent();
                         if (!resp.data) {
-                            return [2 /*return*/, badgeResponssRecord];
+                            return [2 /*return*/, badgeResponseRecord];
                         }
                         badges = resp.data.badges;
-                        badges.map(function (entry) {
+                        badges.forEach(function (entry) {
                             var badgeType = exports.NON_PROGRAMATIC_BADGES_VARIANT[entry.badge];
-                            badgeResponssRecord[entry.badge] = {
-                                id: "".concat(userId, "#").concat(10000, "#").concat(badgeType),
-                                badgeType: badgeType,
-                                badgeName: exports.NON_PROGRAMATIC_BADGES_VARIANT[badgeType],
-                                awardedTimestamp: entry.awardedTimestamp.toString(),
-                                mintedTimestamp: entry.mintedTimestamp.toString(),
-                            };
+                            if (badgeType) {
+                                badgeResponseRecord[badgeType] = {
+                                    id: "".concat(userId, "#").concat(badgeType, "#1"),
+                                    badgeType: badgeType,
+                                    awardedTimestampMs: (0, helpers_1.toMillis)(entry.awardedTimestamp),
+                                    mintedTimestampMs: (0, helpers_1.toMillis)(entry.mintedTimestamp),
+                                };
+                            }
                         });
-                        return [2 /*return*/, badgeResponssRecord];
+                        return [2 /*return*/, badgeResponseRecord];
                 }
             });
         });
@@ -564,123 +529,7 @@ var SBT = /** @class */ (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        badgeQuery = "\n            query( $id: BigInt) {\n                badges(first: 50, where: {seasonUser_contains: $id}) {\n                    id\n                    badgeType\n                    badgeName\n                    awardedTimestamp\n                    mintedTimestamp\n                }\n            }\n        ";
-                        client = new client_1.ApolloClient({
-                            cache: new client_1.InMemoryCache(),
-                            link: new client_1.HttpLink({ uri: subgraphUrl, fetch: cross_fetch_1.default })
-                        });
-                        id = "".concat(userAddress.toLowerCase(), "#").concat(season);
-                        return [4 /*yield*/, client.query({
-                                query: (0, client_1.gql)(badgeQuery),
-                                variables: {
-                                    id: id,
-                                },
-                            })];
-                    case 1:
-                        data = _b.sent();
-                        badgesClaimed = new Array();
-                        for (_i = 0, _a = data.data.badges; _i < _a.length; _i++) {
-                            badge = _a[_i];
-                            badgesClaimed.push({
-                                badgeType: parseInt(badge.badgeType, 10),
-                                claimingStatus: parseInt(badge.mintedTimestamp, 10) === 0 ?
-                                    BadgeClaimingStatus.NOT_CLAIMED
-                                    : BadgeClaimingStatus.CLAIMED // only from subgraph's perspective
-                            });
-                        }
-                        return [2 /*return*/, badgesClaimed];
-                }
-            });
-        });
-    };
-    SBT.prototype.getBadgeStatus = function (args) {
-        var _a, _b;
-        return __awaiter(this, void 0, void 0, function () {
-            var userAddress, network, networkName, getURL, resp, transactions, txBadges, _i, transactions_1, transaction, status_1, badgeType, badgeTypes, _c, badgeTypes_1, badgeType, _d, _e, badgeType, subgraphClaimedBadges, badgeStatuses;
-            return __generator(this, function (_f) {
-                switch (_f.label) {
-                    case 0:
-                        if (!this.signer) {
-                            throw new Error("No provider found");
-                        }
-                        return [4 /*yield*/, this.signer.getAddress()];
-                    case 1:
-                        userAddress = _f.sent();
-                        return [4 /*yield*/, ((_a = this.provider) === null || _a === void 0 ? void 0 : _a.getNetwork())];
-                    case 2:
-                        network = _f.sent();
-                        networkName = network ? network.name : "";
-                        getURL = (0, helpers_1.getEtherscanURL)(networkName, args.apiKey, userAddress);
-                        return [4 /*yield*/, axios_1.default.get(getURL)];
-                    case 3:
-                        resp = _f.sent();
-                        if (!resp.data) {
-                            throw new Error("Etherscan api failed");
-                        }
-                        transactions = resp.data.result;
-                        txBadges = new Map();
-                        for (_i = 0, transactions_1 = transactions; _i < transactions_1.length; _i++) {
-                            transaction = transactions_1[_i];
-                            if (transaction.to.toLowerCase() !== ((_b = this.contract) === null || _b === void 0 ? void 0 : _b.address.toLowerCase())) {
-                                continue;
-                            }
-                            status_1 = transaction.txreceipt_status === 1 ?
-                                TxBadgeStatus.SUCCESSFUL
-                                : TxBadgeStatus.FAILED;
-                            if (transaction.methodId === constants_1.REDEEM_METHOD_ID) {
-                                badgeType = (0, helpers_1.decodeBadgeType)(transaction.input);
-                                txBadges.set(badgeType, status_1);
-                            }
-                            else if (transaction.methodId === constants_1.MULTI_REDEEM_METHOD_ID) {
-                                badgeTypes = (0, helpers_1.decodeMultipleBadgeTypes)(transaction.input);
-                                for (_c = 0, badgeTypes_1 = badgeTypes; _c < badgeTypes_1.length; _c++) {
-                                    badgeType = badgeTypes_1[_c];
-                                    txBadges.set(badgeType, status_1);
-                                }
-                            }
-                        }
-                        // if badges of interest are not part of those 50 transactions, set them as pending
-                        for (_d = 0, _e = args.potentialClaimingBadgeTypes; _d < _e.length; _d++) {
-                            badgeType = _e[_d];
-                            if (!txBadges.get(badgeType)) {
-                                txBadges.set(badgeType, TxBadgeStatus.PENDING);
-                            }
-                        }
-                        return [4 /*yield*/, this.claimedBadgesInSubgraph(args.subgraphUrl, userAddress, args.season)];
-                    case 4:
-                        subgraphClaimedBadges = _f.sent();
-                        badgeStatuses = subgraphClaimedBadges.map(function (badge) {
-                            if (badge.claimingStatus === BadgeClaimingStatus.CLAIMED) {
-                                return badge;
-                            }
-                            var txStatus = txBadges.get(badge.badgeType);
-                            // badge not found in recent successful txs or in potential pending txs
-                            // meaning their status is desided by the subgraph
-                            if (!txStatus || txStatus === TxBadgeStatus.FAILED) {
-                                return {
-                                    badgeType: badge.badgeType,
-                                    claimingStatus: badge.claimingStatus
-                                };
-                            }
-                            else { // subgraph is not updated yet
-                                return {
-                                    badgeType: badge.badgeType,
-                                    claimingStatus: BadgeClaimingStatus.CLAIMING
-                                };
-                            }
-                        });
-                        return [2 /*return*/, badgeStatuses];
-                }
-            });
-        });
-    };
-    SBT.prototype.claimedBadgesInSubgraph = function (subgraphUrl, userAddress, season) {
-        return __awaiter(this, void 0, void 0, function () {
-            var badgeQuery, client, id, data, badgesClaimed, _i, _a, badge;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        badgeQuery = "\n            query( $id: BigInt) {\n                badges(first: 50, where: {seasonUser_contains: $id}) {\n                    id\n                    badgeType\n                    badgeName\n                    awardedTimestamp\n                    mintedTimestamp\n                }\n            }\n        ";
+                        badgeQuery = "\n            query( $id: BigInt) {\n                badges(first: 50, where: {seasonUser_contains: $id}) {\n                    id\n                    badgeType\n                    awardedTimestamp\n                    mintedTimestamp\n                }\n            }\n        ";
                         client = new client_1.ApolloClient({
                             cache: new client_1.InMemoryCache(),
                             link: new client_1.HttpLink({ uri: subgraphUrl, fetch: cross_fetch_1.default })

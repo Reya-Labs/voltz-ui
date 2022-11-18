@@ -1,5 +1,5 @@
 import { BadgeVariant, NonProgrammaticBadges } from './types';
-import { Season } from '../../../hooks/season/types';
+import { Season } from '../../../../hooks/season/types';
 
 export const BADGE_TYPE_BADGE_VARIANT_MAP: Record<string, BadgeVariant> = {
   // season 1
@@ -41,6 +41,9 @@ export const BADGE_TYPE_BADGE_VARIANT_MAP: Record<string, BadgeVariant> = {
   '34': 'governorz',
   '33': 'diplomatz',
   '35': 'senatorz',
+  '-1': 'whaleWhisperer',
+  '-2': 'notionalInfluencer',
+  '-3': 'referror',
 };
 
 export const NON_PROGRAMMATIC_BADGES: NonProgrammaticBadges[] = [

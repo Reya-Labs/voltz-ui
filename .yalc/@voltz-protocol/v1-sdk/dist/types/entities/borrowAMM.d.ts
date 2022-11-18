@@ -6,11 +6,11 @@ import RateOracle from './rateOracle';
 import Token from './token';
 import Position from './position';
 import AMM, { AMMGetInfoPostSwapArgs, InfoPostSwap } from './amm';
-export declare type BorrowAMMConstructorArgs = {
+export type BorrowAMMConstructorArgs = {
     id: string;
     amm: AMM;
 };
-export declare type BorrowSwapInfo = InfoPostSwap & {
+export type BorrowSwapInfo = InfoPostSwap & {
     borrowMarginRequirement: number;
 };
 declare class BorrowAMM {

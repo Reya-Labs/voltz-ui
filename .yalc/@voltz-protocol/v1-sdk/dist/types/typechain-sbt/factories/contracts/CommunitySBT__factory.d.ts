@@ -2,7 +2,7 @@ import { Signer, ContractFactory, Overrides } from "ethers";
 import type { Provider, TransactionRequest } from "@ethersproject/providers";
 import type { PromiseOrValue } from "../../common";
 import type { CommunitySBT, CommunitySBTInterface } from "../../contracts/CommunitySBT";
-declare type CommunitySBTConstructorParams = [signer?: Signer] | ConstructorParameters<typeof ContractFactory>;
+type CommunitySBTConstructorParams = [signer?: Signer] | ConstructorParameters<typeof ContractFactory>;
 export declare class CommunitySBT__factory extends ContractFactory {
     constructor(...args: CommunitySBTConstructorParams);
     deploy(name: PromiseOrValue<string>, symbol: PromiseOrValue<string>, overrides?: Overrides & {

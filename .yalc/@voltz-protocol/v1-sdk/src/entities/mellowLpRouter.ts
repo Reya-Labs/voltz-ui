@@ -210,21 +210,25 @@ class MellowLpRouter {
 
       const nft = await erc20RootVaultContract.nft();
 
-      const strategyParams = await erc20RootVaultContract.strategyParams(nft);
-      console.log('strategy params:', strategyParams);
-      console.log('token limit', strategyParams.tokenLimit.toString());
+      for (const erc20RootVaultGovernanceContract of this.readOnlyContracts
+        .erc20RootVaultGovernance) {
+        const strategyParams = await erc20RootVaultGovernanceContract.strategyParams(nft);
+        console.log('governance contract address: ', erc20RootVaultGovernanceContract.address);
+        console.log('strategy params:', strategyParams);
+        console.log('token limit', strategyParams.tokenLimit.toString());
 
-      const vaultCumulative = this.descale(tvl.minTokenAmounts[0], this.tokenDecimals);
-      const vaultCap = this.descale(
-        totalLpTokens.mul(toBn('1', 18)).div(strategyParams.tokenLimit),
-        16,
-      );
+        const vaultCumulative = this.descale(tvl.minTokenAmounts[0], this.tokenDecimals);
+        const vaultCap = this.descale(
+          totalLpTokens.mul(toBn('1', 18)).div(strategyParams.tokenLimit),
+          16,
+        );
 
-      console.log('vault cumulative:', vaultCumulative);
-      console.log('vault cap:', vaultCap);
+        console.log('vault cumulative:', vaultCumulative);
+        console.log('vault cap:', vaultCap);
 
-      this.vaultCumulative += vaultCumulative;
-      this.vaultCap += vaultCap;
+        this.vaultCumulative += vaultCumulative;
+        this.vaultCap += vaultCap;
+      }
     }
   };
 

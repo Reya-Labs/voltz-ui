@@ -6,7 +6,7 @@ import RateOracle from './rateOracle';
 import Token from './token';
 import { Price } from './fractions/price';
 import Position from './position';
-export declare type AMMConstructorArgs = {
+export type AMMConstructorArgs = {
     id: string;
     signer: Signer | null;
     provider?: providers.Provider;
@@ -26,11 +26,11 @@ export declare type AMMConstructorArgs = {
     totalLiquidity: JSBI;
     wethAddress?: string;
 };
-export declare type CapInfo = {
+export type CapInfo = {
     accumulated: number;
     cap: number;
 };
-export declare type AMMGetInfoPostSwapArgs = {
+export type AMMGetInfoPostSwapArgs = {
     position?: Position;
     isFT: boolean;
     notional: number;
@@ -39,7 +39,7 @@ export declare type AMMGetInfoPostSwapArgs = {
     fixedHigh: number;
     margin?: number;
 };
-export declare type AMMSwapArgs = {
+export type AMMSwapArgs = {
     isFT: boolean;
     notional: number;
     margin: number;
@@ -49,7 +49,7 @@ export declare type AMMSwapArgs = {
     validationOnly?: boolean;
     fullyCollateralisedVTSwap?: boolean;
 };
-export declare type AMMSwapWithWethArgs = {
+export type AMMSwapWithWethArgs = {
     isFT: boolean;
     notional: number;
     margin: number;
@@ -59,7 +59,7 @@ export declare type AMMSwapWithWethArgs = {
     fixedHigh: number;
     validationOnly?: boolean;
 };
-export declare type InfoPostSwap = {
+export type InfoPostSwap = {
     marginRequirement: number;
     availableNotional: number;
     fee: number;
@@ -70,7 +70,7 @@ export declare type InfoPostSwap = {
     fixedTokenDeltaUnbalanced: number;
     maxAvailableNotional?: number;
 };
-export declare type ExpectedApyArgs = {
+export type ExpectedApyArgs = {
     margin: number;
     position?: Position;
     fixedLow: number;
@@ -79,11 +79,11 @@ export declare type ExpectedApyArgs = {
     availableNotional: number;
     predictedVariableApy: number;
 };
-export declare type ExpectedApyInfo = {
+export type ExpectedApyInfo = {
     expectedApy: number;
     expectedCashflow: number;
 };
-export declare type AMMRolloverWithSwapArgs = {
+export type AMMRolloverWithSwapArgs = {
     isFT: boolean;
     notional: number;
     margin: number;
@@ -97,14 +97,14 @@ export declare type AMMRolloverWithSwapArgs = {
     oldFixedHigh: number;
     validationOnly?: boolean;
 };
-export declare type AMMMintArgs = {
+export type AMMMintArgs = {
     fixedLow: number;
     fixedHigh: number;
     notional: number;
     margin: number;
     validationOnly?: boolean;
 };
-export declare type AMMMintWithWethArgs = {
+export type AMMMintWithWethArgs = {
     fixedLow: number;
     fixedHigh: number;
     notional: number;
@@ -112,12 +112,12 @@ export declare type AMMMintWithWethArgs = {
     margin: number;
     validationOnly?: boolean;
 };
-export declare type AMMGetInfoPostMintArgs = {
+export type AMMGetInfoPostMintArgs = {
     fixedLow: number;
     fixedHigh: number;
     notional: number;
 };
-export declare type AMMRolloverWithMintArgs = {
+export type AMMRolloverWithMintArgs = {
     fixedLow: number;
     fixedHigh: number;
     notional: number;
@@ -129,7 +129,7 @@ export declare type AMMRolloverWithMintArgs = {
     oldFixedHigh: number;
     validationOnly?: boolean;
 };
-export declare type AMMGetInfoPostRolloverWithMintArgs = {
+export type AMMGetInfoPostRolloverWithMintArgs = {
     fixedLow: number;
     fixedHigh: number;
     notional: number;
@@ -138,32 +138,32 @@ export declare type AMMGetInfoPostRolloverWithMintArgs = {
     oldFixedLow: number;
     oldFixedHigh: number;
 };
-export declare type AMMBurnArgs = Omit<AMMMintArgs, 'margin'>;
-export declare type AMMUpdatePositionMarginArgs = {
+export type AMMBurnArgs = Omit<AMMMintArgs, 'margin'>;
+export type AMMUpdatePositionMarginArgs = {
     owner?: string;
     fixedLow: number;
     fixedHigh: number;
     marginDelta: number;
 };
-export declare type AMMLiquidatePositionArgs = {
+export type AMMLiquidatePositionArgs = {
     owner: string;
     fixedLow: number;
     fixedHigh: number;
 };
-export declare type AMMSettlePositionArgs = {
+export type AMMSettlePositionArgs = {
     owner?: string;
     fixedLow: number;
     fixedHigh: number;
 };
-export declare type fcmSwapArgs = {
+export type fcmSwapArgs = {
     notional: number;
     fixedRateLimit?: number;
 };
-export declare type fcmUnwindArgs = {
+export type fcmUnwindArgs = {
     notionalToUnwind: number;
     fixedRateLimit?: number;
 };
-export declare type PositionInfo = {
+export type PositionInfo = {
     notionalInUSD: number;
     marginInUSD: number;
     margin: number;
@@ -180,7 +180,7 @@ export declare type PositionInfo = {
     healthFactor?: number;
     fixedRateHealthFactor?: number;
 };
-export declare type ClosestTickAndFixedRate = {
+export type ClosestTickAndFixedRate = {
     closestUsableTick: number;
     closestUsableFixedRate: Price;
 };
