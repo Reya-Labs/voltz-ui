@@ -30,6 +30,7 @@ export { default as Settlement } from './settlement';
 export { default as FCMSwap } from './fcmSwap';
 export { default as FCMUnwind } from './fcmUnwind';
 export { default as FCMSettlement } from './fcmSettlement';
+export { default as MellowLpRouter } from './mellowLpRouter';
 export { default as MellowLpVault } from './mellowLpVault';
 export {
   default as CommunitySBT,

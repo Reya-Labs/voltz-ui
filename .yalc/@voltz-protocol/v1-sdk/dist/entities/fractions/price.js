@@ -48,7 +48,7 @@ var Price = /** @class */ (function (_super) {
     };
     Price.prototype.toFixed = function (decimalPlaces, format, rounding) {
         if (decimalPlaces === void 0) { decimalPlaces = 4; }
-        return _super.prototype.toFixed.call(this, decimalPlaces, format, rounding);
+        return _super.prototype.toFixed.call(this, decimalPlaces, format);
     };
     return Price;
 }(fraction_1.Fraction));

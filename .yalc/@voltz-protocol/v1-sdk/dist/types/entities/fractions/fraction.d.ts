@@ -17,7 +17,7 @@ export declare class Fraction {
     multiply(other: Fraction | BigIntish): Fraction;
     divide(other: Fraction | BigIntish): Fraction;
     toSignificant(significantDigits: number, format?: object, rounding?: Rounding): string;
-    toFixed(decimalPlaces: number, format?: object, rounding?: Rounding): string;
+    toFixed(decimalPlaces: number, format?: object): string;
     toNumber(): number;
     /**
      * Helper method for converting any super class back to a fraction
