@@ -2,6 +2,7 @@ import { WalletName, WalletRiskAssessment } from './types';
 import detectEthereumProvider from '@metamask/detect-provider';
 import WalletConnectProvider from '@walletconnect/ethereum-provider';
 import { ethers } from 'ethers';
+import { getReferrer } from '../../utilities/referrer-store/referrer-store';
 
 const referralAndSignaturesUrl = `${
   process.env.REACT_APP_REFERRAL_AND_SIGNATURE_SERVICE_URL || 'https://voltz-rest-api.herokuapp.com'
@@ -75,7 +76,7 @@ export const checkForTOSSignature = async (
   if (!termsAccepted) {
     try {
       // The latest terms of service have not been accepted. Get a signature now.
-      const referralCode = localStorage.getItem('invitedBy') || '';
+      const referralCode = getReferrer() || '';
       const signature = await signer.signMessage(latestTOS);
       const response = await saveSignatureWithTOS(
         signerAddress,
