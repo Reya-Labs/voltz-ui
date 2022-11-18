@@ -38,9 +38,9 @@ export const BADGE_TYPE_BADGE_VARIANT_MAP: Record<string, BadgeVariant> = {
   '14': 'ogMaxBidding',
   '15': 'ogTopTrader',
   // non-programmatic badges
-  '-1': 'governorz',
-  '-2': 'diplomatz',
-  '-3': 'senatorz',
+  '34': 'governorz',
+  '33': 'diplomatz',
+  '35': 'senatorz',
 };
 
 export const NON_PROGRAMMATIC_BADGES: NonProgrammaticBadges[] = [

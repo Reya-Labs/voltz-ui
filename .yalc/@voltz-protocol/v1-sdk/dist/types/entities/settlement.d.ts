@@ -1,5 +1,5 @@
 import JSBI from 'jsbi';
-export type SettlementConstructorArgs = {
+export declare type SettlementConstructorArgs = {
     id: string;
     transactionId: string;
     transactionTimestamp: JSBI;

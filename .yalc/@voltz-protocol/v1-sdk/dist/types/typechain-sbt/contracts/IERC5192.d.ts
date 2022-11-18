@@ -19,13 +19,13 @@ export interface IERC5192Interface extends utils.Interface {
 export interface LockedEventObject {
     tokenId: BigNumber;
 }
-export type LockedEvent = TypedEvent<[BigNumber], LockedEventObject>;
-export type LockedEventFilter = TypedEventFilter<LockedEvent>;
+export declare type LockedEvent = TypedEvent<[BigNumber], LockedEventObject>;
+export declare type LockedEventFilter = TypedEventFilter<LockedEvent>;
 export interface UnlockedEventObject {
     tokenId: BigNumber;
 }
-export type UnlockedEvent = TypedEvent<[BigNumber], UnlockedEventObject>;
-export type UnlockedEventFilter = TypedEventFilter<UnlockedEvent>;
+export declare type UnlockedEvent = TypedEvent<[BigNumber], UnlockedEventObject>;
+export declare type UnlockedEventFilter = TypedEventFilter<UnlockedEvent>;
 export interface IERC5192 extends BaseContract {
     connect(signerOrProvider: Signer | Provider | string): this;
     attach(addressOrName: string): this;

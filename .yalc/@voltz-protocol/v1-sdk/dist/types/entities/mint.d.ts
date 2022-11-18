@@ -1,5 +1,5 @@
 import JSBI from 'jsbi';
-export type MintConstructorArgs = {
+export declare type MintConstructorArgs = {
     id: string;
     transactionId: string;
     transactionTimestamp: JSBI;
