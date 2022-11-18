@@ -1,10 +1,11 @@
 import { MellowLpVault } from '@voltz-protocol/v1-sdk';
+import { useMemo } from 'react';
 import { getConfig } from './config';
 
 const useMellowLPVaults = (): MellowLpVault[] => {
   const config = getConfig();
 
-  return config.MELLOW_VAULTS.map(
+  const lpVaults = useMemo(() => config.MELLOW_VAULTS.map(
     (item) =>
       new MellowLpVault({
         ethWrapperAddress: config.MELLOW_ETH_WRAPPER,
@@ -13,7 +14,9 @@ const useMellowLPVaults = (): MellowLpVault[] => {
         erc20RootVaultGovernanceAddress: item.erc20RootVaultGovernance,
         provider: config.PROVIDER,
       }),
-  );
+  ), []);
+
+  return lpVaults;
 };
 
 export default useMellowLPVaults;
