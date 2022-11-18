@@ -6,10 +6,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { ethers } from 'ethers';
 import { GraphQLClient, gql } from 'graphql-request';
-// import { getAllReferrals } from '../../contexts/WalletContext/services';
 import axios from 'axios';
 
-const ONE_YEAR = 31536000;
+const ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;
 
 const getActivityQuery = (skip: number) => `
   {
@@ -39,9 +38,16 @@ const getActivityQuery = (skip: number) => `
 `;
 
 const geckoEthToUsd = async () => {
+  if (!process.env.REACT_APP_COINGECKO_API_KEY) {
+    return 0;
+  }
   for (let attempt = 0; attempt < 5; attempt++) {
     try {
-      const data = await axios.get(
+      const data = await axios.get<{
+        ethereum: {
+          usd: number;
+        };
+      }>(
         `https://pro-api.coingecko.com/api/v3/simple/price?x_cg_pro_api_key=${process.env.REACT_APP_COINGECKO_API_KEY}&ids=ethereum&vs_currencies=usd`,
       );
       return data.data.ethereum.usd;
@@ -59,17 +65,7 @@ type Activity = {
   total: Map<string, number>;
 };
 
-// // [MOCK]
-// // eslint-disable-next-line @typescript-eslint/require-await
-// const getReferrals: () => Promise < Map<string, string[]> > = async () => {
-//   const mockReferrals = new Map<string, string[]>();
-//   mockReferrals.set("0xf8f6b70a36f4398f0853a311dc6699aba8333cc1", ["0xf8f6b70a36f4398f0853a311dc6699aba8333cc1"]);
-
-//   return mockReferrals;
-// }
-
 export async function getActivity({ from, end }: ActivityArgs): Promise<Activity> {
-  // export async function getActivity({ from, end }: ActivityArgs): Promise<Activity> {
   const endpoint = 'https://api.thegraph.com/subgraphs/name/voltzprotocol/mainnet-v1';
   const graphQLClient = new GraphQLClient(endpoint);
 
@@ -111,7 +107,8 @@ export async function getActivity({ from, end }: ActivityArgs): Promise<Activity
           );
 
           if (from < swapTime && swapTime <= to) {
-            const timeWeightedNotional = (Math.abs(swapNotional) * (termEnd - swapTime)) / ONE_YEAR;
+            const timeWeightedNotional =
+              (Math.abs(swapNotional) * (termEnd - swapTime)) / ONE_YEAR_SECONDS;
             switch (token) {
               case 'ETH': {
                 score += timeWeightedNotional * ethPrice;
@@ -135,25 +132,7 @@ export async function getActivity({ from, end }: ActivityArgs): Promise<Activity
     }
   }
 
-  // const referrals = await getAllReferrals();
-  const total = new Map(scores);
-
-  // for (const [referral, referees] of Object.entries(referrals)) {
-  //   let referralScore = 0;
-  //   for (const referee of referees) {
-  //     const tb = scores.get(referee.toLowerCase());
-  //     referralScore += tb || 0;
-  //   }
-
-  //   const ta = total.get(referral.toLowerCase());
-  //   if (ta) {
-  //     total.set(referral.toLowerCase(), ta + 0.3 * referralScore);
-  //   } else {
-  //     total.set(referral.toLowerCase(), 0.3 * referralScore);
-  //   }
-  // }
-
   return {
-    total,
+    total: new Map(scores),
   };
 }
