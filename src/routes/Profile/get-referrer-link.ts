@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { routes } from '@routes';
 
 const cached: Record<string, string> = {};
 export const getReferrerLink = async (account: string) => {
@@ -23,7 +24,7 @@ export const getReferrerLink = async (account: string) => {
     if (!data?.refers_with_code) {
       return undefined;
     }
-    const link = `${window.location.origin}/?invitedBy=${data.refers_with_code}`;
+    const link = `${window.location.origin}/#/${routes.PROFILE}?invitedBy=${data.refers_with_code}`;
     cached[account] = link;
     return link;
   } catch (e) {
