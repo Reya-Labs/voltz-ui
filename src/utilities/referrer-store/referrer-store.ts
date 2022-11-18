@@ -1,5 +1,6 @@
 const REFERRER_LOCAL_STORAGE_KEY = 'invitedBy';
 const VALID_REFERRER_LENGTH = 8;
+export const REFERRER_QUERY_PARAM_KEY = 'invitedBy';
 
 /**
  * It takes a string as an argument and saves it to local storage

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { routes } from '@routes';
+import { REFERRER_QUERY_PARAM_KEY } from '../../utilities/referrer-store/referrer-store';
 
 const cached: Record<string, string> = {};
 export const getReferrerLink = async (account: string) => {
@@ -24,7 +25,7 @@ export const getReferrerLink = async (account: string) => {
     if (!data?.refers_with_code) {
       return undefined;
     }
-    const link = `${window.location.origin}/#/${routes.PROFILE}?invitedBy=${data.refers_with_code}`;
+    const link = `${window.location.origin}/#/${routes.PROFILE}?${REFERRER_QUERY_PARAM_KEY}=${data.refers_with_code}`;
     cached[account] = link;
     return link;
   } catch (e) {

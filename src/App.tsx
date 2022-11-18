@@ -20,12 +20,13 @@ import {
   isRefererStored,
   isValidReferrerStored,
   isValidReferrerValue,
+  REFERRER_QUERY_PARAM_KEY,
   setReferrer,
 } from './utilities/referrer-store/referrer-store';
 
 const App = () => {
   const [searchParams] = useSearchParams();
-  const searchParamsReferrer = searchParams.get('invitedBy');
+  const searchParamsReferrer = searchParams.get(REFERRER_QUERY_PARAM_KEY);
 
   useEffect(() => {
     if (process.env.REACT_APP_GTM_CODE) {
@@ -33,7 +34,7 @@ const App = () => {
     }
   }, []);
 
-  // referrer logic - run everytime params change for invitedBy
+  // referrer logic - run everytime params change for ${REFERRER_QUERY_PARAM_KEY}
   useEffect(() => {
     // Earlier, pre-release keys may have used more than 8 characters, but we overwrite these
     if (!isValidReferrerStored()) {
