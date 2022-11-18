@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 
 import { findCurrentAmm, findCurrentPosition, setPageTitle } from '@utilities';
@@ -40,17 +40,6 @@ const Trader: React.FunctionComponent = () => {
     setAMM(undefined);
     onChangeAgent(Agents.FIXED_TRADER);
   }, [setFormMode, setAMM, pathnameWithoutPrefix, onChangeAgent]);
-
-  const referrerKey = 'invitedBy';
-  const [searchParams] = useSearchParams();
-  if (
-    (!!searchParams.get(referrerKey) && !localStorage.getItem(referrerKey)) ||
-    localStorage.getItem(referrerKey)?.length !== 8 // Earlier, pre-release keys may have used more than 8 characters but we overwrite these
-  ) {
-    // Referrer is set in URL and has not already been saved in storage; save to storage now
-    // We do deliberately do not overwrite any existing value because we want to credit the first referral link that was followed
-    localStorage.setItem(referrerKey, searchParams.get(referrerKey) || '');
-  }
 
   useEffect(() => {
     handleReset();
