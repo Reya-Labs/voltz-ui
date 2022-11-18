@@ -14,7 +14,7 @@ const LPMellowVaulDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoP
   lpVault,
 }: LPMellowVaultDepositInfoProps) => {
   const getCapBar = () => {
-    if (isUndefined(lpVault.vaultCap) || isUndefined(lpVault.vaultAccumulative)) {
+    if (isUndefined(lpVault.vaultCap) || isUndefined(lpVault.vaultCumulative)) {
       return null;
     }
 
@@ -34,7 +34,7 @@ const LPMellowVaulDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoP
           }
           middleContent={
             <Typography variant="h6" color="#E5E1F9" marginLeft="0px">
-              {formatCurrency(lpVault.vaultAccumulative, true)}
+              {formatCurrency(lpVault.vaultCumulative ?? 0, true)}
             </Typography>
           }
           rightContent={

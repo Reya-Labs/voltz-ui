@@ -116,10 +116,10 @@ var MellowLpVault = /** @class */ (function () {
                         date = (0, timestampWadToDateTime_1.default)(maturityWad);
                         this.maturity = "".concat(date.day, " ").concat(date.monthShort, " ").concat(date.year % 100);
                         console.log('maturity:', this.maturity);
-                        return [4 /*yield*/, this.refreshVaultAccumulative()];
+                        return [4 /*yield*/, this.refreshVaultCumulative()];
                     case 6:
                         _b.sent();
-                        console.log('vault accumulative refreshed', this.vaultAccumulative);
+                        console.log('vault accumulative refreshed', this.vaultCumulative);
                         console.log('vault cap refreshed', this.vaultCap);
                         return [4 /*yield*/, this.refreshVaultExpectedApy()];
                     case 7:
@@ -171,13 +171,13 @@ var MellowLpVault = /** @class */ (function () {
                 }
             });
         }); };
-        this.refreshVaultAccumulative = function () { return __awaiter(_this, void 0, void 0, function () {
+        this.refreshVaultCumulative = function () { return __awaiter(_this, void 0, void 0, function () {
             var totalLpTokens, tvl, nft, strategyParams;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         if ((0, lodash_1.isUndefined)(this.readOnlyContracts)) {
-                            this.vaultAccumulative = 0;
+                            this.vaultCumulative = 0;
                             this.vaultCap = 0;
                             return [2 /*return*/];
                         }
@@ -185,7 +185,7 @@ var MellowLpVault = /** @class */ (function () {
                     case 1:
                         totalLpTokens = _a.sent();
                         if (totalLpTokens.eq(0)) {
-                            this.vaultAccumulative = 0;
+                            this.vaultCumulative = 0;
                             this.vaultCap = 0;
                             return [2 /*return*/];
                         }
@@ -201,7 +201,7 @@ var MellowLpVault = /** @class */ (function () {
                         strategyParams = _a.sent();
                         console.log('strategy params:', strategyParams);
                         console.log('token limit', strategyParams.tokenLimit.toString());
-                        this.vaultAccumulative = this.descale(tvl.minTokenAmounts[0], this.tokenDecimals);
+                        this.vaultCumulative = this.descale(tvl.minTokenAmounts[0], this.tokenDecimals);
                         this.vaultCap = this.descale(totalLpTokens.mul((0, evm_bn_1.toBn)('1', 18)).div(strategyParams.tokenLimit), 16);
                         return [2 /*return*/];
                 }
@@ -422,7 +422,7 @@ var MellowLpVault = /** @class */ (function () {
                         return [3 /*break*/, 23];
                     case 23:
                         _b.trys.push([23, 25, , 26]);
-                        return [4 /*yield*/, this.refreshVaultAccumulative()];
+                        return [4 /*yield*/, this.refreshVaultCumulative()];
                     case 24:
                         _b.sent();
                         return [3 /*break*/, 26];

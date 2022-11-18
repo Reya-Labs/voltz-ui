@@ -40,7 +40,7 @@ export type NonProgramaticBadgeResponse = {
     mintedTimestamp: number;
 };
 export declare const NON_SUBGRAPH_BADGES_SEASONS: Record<number, string[]>;
-export declare const TOP_BADGES_VARIANT: Array<string>;
+export declare const TOP_BADGES_VARIANT: Record<string, string[]>;
 export declare const NON_PROGRAMATIC_BADGES_VARIANT: Record<string, string>;
 declare class SBT {
     readonly id: string;
@@ -78,7 +78,7 @@ declare class SBT {
         userId: string;
         seasonId: number;
     }): Promise<BadgeResponse[]>;
-    getTopTraderBadge(subgraphUrl: string, userId: string, seasonId: number, badgeType: string, isTrader: boolean): Promise<BadgeResponse | undefined>;
+    getTopTraderBadge(subgraphUrl: string, userId: string, seasonId: number, isTrader: boolean, badgeType?: string): Promise<BadgeResponse | undefined>;
     getNonProgramaticBadges(userId: string, nonProgramaticBadgesUrl: string): Promise<Record<string, BadgeResponse>>;
     getUserBalance(user: string): Promise<BigNumber | void>;
     getTokenOwner(tokenId: string): Promise<string | void>;

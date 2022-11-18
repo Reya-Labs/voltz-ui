@@ -1,30 +1,29 @@
 import { Box } from '@mui/material';
-import { PoolField, IconLabel, ProgressBar } from '@components/composite';
-import { Agents } from '@contexts';
+import { ProgressBar } from '@components/composite';
 import { Panel, Typography } from '@components/atomic';
 import { formatCurrency } from '@utilities';
 import { isUndefined } from 'lodash';
+import { VaultField } from '../../Common/VaultField';
 
 export type LPMellowVaultDepositInfoProps = {
   vaultCap?: number;
-  vaultAccumulative?: number;
+  vaultCumulative?: number;
   tokenName: string;
-  protocol: string;
-  expectedApy: number;
+  protocol?: string;
+  expectedApy: string;
   maturity: string;
   userDeposit?: number;
 };
 const LPMellowVaultDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoProps> = ({
   vaultCap,
-  vaultAccumulative,
+  vaultCumulative,
   tokenName,
-  protocol,
   expectedApy,
   maturity,
   userDeposit,
 }: LPMellowVaultDepositInfoProps) => {
   const getCapBar = () => {
-    if (isUndefined(vaultCap) || isUndefined(vaultAccumulative)) {
+    if (isUndefined(vaultCap) || isUndefined(vaultCumulative)) {
       return;
     }
 
@@ -44,7 +43,7 @@ const LPMellowVaultDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfo
           }
           middleContent={
             <Typography variant="h6" color="#E5E1F9" marginLeft="0px">
-              {formatCurrency(vaultAccumulative, true)}
+              {formatCurrency(vaultCumulative, true)}
             </Typography>
           }
           rightContent={
@@ -61,48 +60,7 @@ const LPMellowVaultDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfo
   const renderContent = () => {
     return (
       <Panel variant="dark" sx={{ width: '100%', maxWidth: '366px', background: 'transparent' }}>
-        <PoolField
-          agent={Agents.LIQUIDITY_PROVIDER}
-          protocol={protocol}
-          isBorrowing={false}
-          isBorrowTable={true}
-        />
-
-        <Box sx={{ marginTop: '16px', display: 'flex' }}>
-          <Typography
-            variant="body2"
-            sx={{ fontSize: '24px', color: '#FF4AA9', fontFamily: 'DM Sans', fontWeight: '700' }}
-            label={
-              <IconLabel
-                label="Estimated Historic APY"
-                icon="information-circle"
-                info="This shows the estimated returns that would have been generated had the strategy been running from Jul 22 to Oct 22."
-              />
-            }
-          >
-            {`${expectedApy > 30 ? '>30' : expectedApy.toFixed(2)}%`}
-          </Typography>
-
-          <Typography
-            variant="body2"
-            sx={{
-              fontSize: '16px',
-              color: '#E5E1F9',
-              fontFamily: 'DM Sans',
-              fontWeight: '700',
-              marginTop: '8px',
-            }}
-            label={
-              <IconLabel
-                label="Running until"
-                icon="information-circle"
-                info="This strategy will run until 31 Dec 22. At this point depositors can collect any returns that may have been generated and withdraw their funds."
-              />
-            }
-          >
-            {maturity}
-          </Typography>
-        </Box>
+        <VaultField maturity={maturity} expectedApy={expectedApy}/>
 
         {getCapBar()}
 
