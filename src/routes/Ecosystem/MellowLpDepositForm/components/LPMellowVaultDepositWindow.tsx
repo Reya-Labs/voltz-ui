@@ -7,10 +7,9 @@ import { colors } from '@theme';
 import { isUndefined } from 'lodash';
 import React from 'react';
 
-import { MellowLpVault } from '@voltz-protocol/v1-sdk';
-
 export type LPMellowVaultDepositWindowProps = {
-  lpVault: MellowLpVault;
+  userWalletBalance?: number;
+  tokenName: string;
   onChangeDeposit: (value: number | undefined) => void;
   submitText: string;
   hintText: {
@@ -23,7 +22,8 @@ export type LPMellowVaultDepositWindowProps = {
 };
 
 const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWindowProps> = ({
-  lpVault,
+  userWalletBalance,
+  tokenName,
   onChangeDeposit,
   submitText,
   hintText,
@@ -31,9 +31,9 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
   onSubmit,
 }: LPMellowVaultDepositWindowProps) => {
   const subtext = `WALLET BALANCE: ${
-    isUndefined(lpVault.userWalletBalance)
+    isUndefined(userWalletBalance)
       ? '---'
-      : `${formatCurrency(lpVault.userWalletBalance, true)} ${lpVault.tokenName}`
+      : `${formatCurrency(userWalletBalance, true)} ${tokenName}`
   }`;
 
   const handleChange = (newValue: string | undefined) => {
@@ -102,7 +102,7 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
         <MaskedIntegerField
           allowDecimals
           allowNegativeValue={false}
-          suffix={<InputTokenLabel tokenName={lpVault.tokenName} />}
+          suffix={<InputTokenLabel tokenName={tokenName} />}
           suffixPadding={90}
           label={
             <IconLabel
