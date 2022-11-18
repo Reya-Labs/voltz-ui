@@ -44,7 +44,7 @@ class Percent extends Fraction {
   }
 
   public toFixed(decimalPlaces: number = 2, format?: object, rounding?: Rounding): string {
-    return super.multiply(ONE_HUNDRED).toFixed(decimalPlaces, format, rounding);
+    return super.multiply(ONE_HUNDRED).toFixed(decimalPlaces, format);
   }
 }
 
