@@ -23,12 +23,14 @@ const ConnectedMellowLPTable: React.FunctionComponent<ConnectedMellowLPTableProp
         sx={{
           padding: 0,
           width: '100%',
-          maxWidth: '988px',
+          maxWidth: '1088px',
           margin: '0 auto',
           background: 'transparent',
         }}
       >
         <EcosystemHeader
+          lpOptimizerTag={`LP OPTIMISER`}
+          lpOptimizerCount={lpVaults ? lpVaults.length : 0}
           alphaVaultTag={`ALPHA VAULT`}
           alphaVaultCount={0}
         />

@@ -57,7 +57,7 @@ class MellowLpVault {
   public maturity?: string;
   public protocolId?: number;
 
-  public vaultAccumulative?: number;
+  public vaultCumulative?: number;
   public vaultCap?: number;
   public vaultExpectedApy?: number;
 
@@ -159,8 +159,8 @@ class MellowLpVault {
 
     console.log('maturity:', this.maturity);
 
-    await this.refreshVaultAccumulative();
-    console.log('vault accumulative refreshed', this.vaultAccumulative);
+    await this.refreshVaultCumulative();
+    console.log('vault accumulative refreshed', this.vaultCumulative);
     console.log('vault cap refreshed', this.vaultCap);
 
     await this.refreshVaultExpectedApy();
@@ -243,9 +243,9 @@ class MellowLpVault {
     return `${prefix}${this.tokenName}`;
   }
 
-  refreshVaultAccumulative = async (): Promise<void> => {
+  refreshVaultCumulative = async (): Promise<void> => {
     if (isUndefined(this.readOnlyContracts)) {
-      this.vaultAccumulative = 0;
+      this.vaultCumulative = 0;
       this.vaultCap = 0;
       return;
     }
@@ -253,7 +253,7 @@ class MellowLpVault {
     const totalLpTokens = await this.readOnlyContracts.erc20RootVault.totalSupply();
 
     if (totalLpTokens.eq(0)) {
-      this.vaultAccumulative = 0;
+      this.vaultCumulative = 0;
       this.vaultCap = 0;
       return;
     }
@@ -268,7 +268,7 @@ class MellowLpVault {
     console.log('strategy params:', strategyParams);
     console.log('token limit', strategyParams.tokenLimit.toString());
 
-    this.vaultAccumulative = this.descale(tvl.minTokenAmounts[0], this.tokenDecimals);
+    this.vaultCumulative = this.descale(tvl.minTokenAmounts[0], this.tokenDecimals);
     this.vaultCap = this.descale(
       totalLpTokens.mul(toBn('1', 18)).div(strategyParams.tokenLimit),
       16,
@@ -470,7 +470,7 @@ class MellowLpVault {
       }
 
       try {
-        await this.refreshVaultAccumulative();
+        await this.refreshVaultCumulative();
       } catch (_) {
         console.error('Vault accumulative failed to refresh after deposit');
       }

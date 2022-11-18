@@ -5,16 +5,16 @@ import { ProgressBar } from '@components/composite';
 
 export type LPMellowVaultInfoProps = {
   vaultCap?: number;
-  vaultAccumulative?: number;
+  vaultCumulative?: number;
   tokenName: string;
 };
 const LPMellowVaultInfo: React.FunctionComponent<LPMellowVaultInfoProps> = ({
   vaultCap,
-  vaultAccumulative,
+  vaultCumulative,
   tokenName,
 }: LPMellowVaultInfoProps) => {
   const getCapBar = () => {
-    const loading = isUndefined(vaultCap) || isUndefined(vaultAccumulative);
+    const loading = isUndefined(vaultCap) || isUndefined(vaultCumulative);
     const percentage = loading ? 0 : Math.floor((vaultCap || 0) * 100 + 0.5) / 100;
 
     return (
@@ -37,7 +37,7 @@ const LPMellowVaultInfo: React.FunctionComponent<LPMellowVaultInfoProps> = ({
               }
               middleContent={
                 <Typography variant="h6" color="#E5E1F9" marginLeft="0px">
-                  {formatCurrency(vaultAccumulative || 0, true)}
+                  {formatCurrency(vaultCumulative || 0, true)}
                 </Typography>
               }
               rightContent={

@@ -28,7 +28,7 @@ declare class MellowLpVault {
     signer?: Signer;
     maturity?: string;
     protocolId?: number;
-    vaultAccumulative?: number;
+    vaultCumulative?: number;
     vaultCap?: number;
     vaultExpectedApy?: number;
     userDeposit?: number;
@@ -45,7 +45,7 @@ declare class MellowLpVault {
     get isETH(): boolean;
     get tokenDecimals(): number;
     get protocol(): string;
-    refreshVaultAccumulative: () => Promise<void>;
+    refreshVaultCumulative: () => Promise<void>;
     refreshVaultExpectedApy: () => Promise<void>;
     refreshUserDeposit: () => Promise<void>;
     refreshWalletBalance: () => Promise<void>;

@@ -12,7 +12,7 @@ const LPMellowVaultInfo: React.FunctionComponent<LPMellowVaultInfoProps> = ({
   lpVault,
 }: LPMellowVaultInfoProps) => {
   const getCapBar = () => {
-    const loading = isUndefined(lpVault.vaultCap) || isUndefined(lpVault.vaultAccumulative);
+    const loading = isUndefined(lpVault.vaultCap) || isUndefined(lpVault.vaultCumulative);
     const percentage = loading ? 0 : Math.floor((lpVault?.vaultCap || 0) * 100 + 0.5) / 100;
 
     return (
@@ -35,7 +35,7 @@ const LPMellowVaultInfo: React.FunctionComponent<LPMellowVaultInfoProps> = ({
               }
               middleContent={
                 <Typography variant="h6" color="#E5E1F9" marginLeft="0px">
-                  {formatCurrency(lpVault?.vaultAccumulative || 0, true)}
+                  {formatCurrency(lpVault?.vaultCumulative || 0, true)}
                 </Typography>
               }
               rightContent={

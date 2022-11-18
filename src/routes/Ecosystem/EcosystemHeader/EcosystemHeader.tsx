@@ -3,11 +3,15 @@ import { Panel, Typography } from '../../../components/atomic';
 import { titleStyles, copyStyles, boxStyles, tagStyles } from './styles';
 
 export type EcosystemHeaderProps = {
+  lpOptimizerTag: string;
+  lpOptimizerCount: number;
   alphaVaultTag: string;
   alphaVaultCount: number;
 };
 
 const EcosystemHeader = ({
+  lpOptimizerTag,
+  lpOptimizerCount,
   alphaVaultTag,
   alphaVaultCount,
 }: EcosystemHeaderProps) => {
@@ -24,8 +28,7 @@ const EcosystemHeader = ({
           </Typography>
         </Box>
         <Box sx={{ marginTop: '16px', display: 'flex' }}>
-          {/* TODO: add back LP OPTIMISER tag when count > 1  */}
-          {/* <Box sx={{ ...boxStyles, border: '1px solid #FF4AA9' }}>
+          <Box sx={{ ...boxStyles, border: '1px solid #FF4AA9', marginRight: '8px' }}>
             <Typography variant="h6" sx={{ ...tagStyles, color: '#FF4AA9' }}>
               {lpOptimizerTag}
               {lpOptimizerCount > 0 ? ':' : ''}
@@ -33,7 +36,7 @@ const EcosystemHeader = ({
             <Typography variant="h6" sx={{ ...tagStyles, color: '#E5E1F9', paddingLeft: '8px' }}>
               {lpOptimizerCount ? lpOptimizerCount : 's00n'}
             </Typography>
-          </Box> */}
+          </Box>
 
           <Box sx={{ ...boxStyles, border: '1px solid #2667FF' }}>
             <Typography variant="h6" sx={{ ...tagStyles, color: '#2667FF' }}>
