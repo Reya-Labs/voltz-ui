@@ -1,3 +1,28 @@
+<p align="center">
+  <a href="https://app.voltz.xyz/">
+    <picture>
+      <img src="https://media-exp1.licdn.com/dms/image/D4D16AQHyqUgavAAOUA/profile-displaybackgroundimage-shrink_200_800/0/1664801799041?e=1674086400&v=beta&t=AGn611qP9keyyEF7kuovi_G3bXNPyvk-SZ3i9HTo40U" alt="Voltz" width="600" />
+    </picture>
+  </a>
+</p>
+
+<p align="center">Powering Voltz UI and beyond!!!</p>
+
+
+<p align="center">
+  <a href="https://discord.com/invite/NZgsbT8kWX">
+    <img src="https://img.shields.io/badge/discord-join-7289DA.svg?logo=discord&longCache=true&style=flat" />
+  </a>
+  <a href="https://twitter.com/intent/follow?screen_name=voltz_xyz">
+    <img src="https://badgen.net/twitter/follow/voltz_xyz?icon=twitter&label=%voltz_xyz" alt="Official Twitter Handle" />
+  </a>
+</p>
+
+<p align="center">
+voltz-ui is a frontend repository powered by React. It is the home of all the pages and components that provide the UI/UX for <a href="https://app.voltz.xyz">app.voltz.xyz</a>.
+</p>
+
+
 # Installation
 
 1. Run `yarn`
