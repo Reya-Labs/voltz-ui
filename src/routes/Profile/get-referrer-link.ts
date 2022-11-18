@@ -1,9 +1,13 @@
 import axios from 'axios';
 
+const cached: Record<string, string> = {};
 export const getReferrerLink = async (account: string) => {
   const baseUrl = process.env.REACT_APP_REFERRAL_AND_SIGNATURE_SERVICE_URL;
   if (!baseUrl || !account) {
     return undefined;
+  }
+  if (cached[account]) {
+    return cached[account];
   }
 
   try {
@@ -16,14 +20,12 @@ export const getReferrerLink = async (account: string) => {
       }>(`${baseUrl}/get-refers-with/${account}`)
     )?.data;
 
-    if (!data) {
+    if (!data?.refers_with_code) {
       return undefined;
     }
-    const status = data.status ? parseInt(data.status, 10) : 200;
-    if (status !== 200 || !data.refers_with_code) {
-      return undefined;
-    }
-    return `${window.location.origin}/?invitedBy=${data.refers_with_code}`;
+    const link = `${window.location.origin}/?invitedBy=${data.refers_with_code}`;
+    cached[account] = link;
+    return link;
   } catch (e) {
     return undefined;
   }
