@@ -3,12 +3,12 @@ import { Panel } from '../../../components/atomic';
 import MellowLPTable from '../MellowLPTable/MellowLPTable';
 import EcosystemHeader from '../EcosystemHeader/EcosystemHeader';
 
-import { MellowLpVault } from '@voltz-protocol/v1-sdk';
+import { MellowProduct } from '../types';
 
 export type ConnectedMellowLPTableProps = {
-  lpVaults: MellowLpVault[];
+  lpVaults: MellowProduct[];
   dataLoading: boolean;
-  onSelectItem: (item: MellowLpVault) => void;
+  onSelectItem: (item: MellowProduct) => void;
 };
 
 const ConnectedMellowLPTable: React.FunctionComponent<ConnectedMellowLPTableProps> = ({

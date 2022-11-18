@@ -8,11 +8,11 @@ import MellowLPPosition from './MellowLPPosition';
 import { boxStyles, tagStyles, titleStyles, copyStyles } from './styles';
 import React from 'react';
 
-import { MellowLpVault } from '@voltz-protocol/v1-sdk';
+import { MellowProduct } from '../../types';
 
 export type MellowLPEntryProps = {
   onSelectItem: () => void;
-  lpVault: MellowLpVault;
+  lpVault: MellowProduct;
   dataLoading: boolean;
 };
 
@@ -73,7 +73,11 @@ const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
         )}
 
         <Box sx={{ marginLeft: '8px', marginTop: '16px' }}>
-          <LPMellowVaultInfo lpVault={lpVault} />
+          <LPMellowVaultInfo 
+            vaultCap={lpVault.vaultCap}
+            vaultAccumulative={lpVault.vaultAccumulative}
+            tokenName={lpVault.tokenName}
+          />
         </Box>
       </Box>
       <Box
