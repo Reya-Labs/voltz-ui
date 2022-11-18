@@ -40,10 +40,20 @@ const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
           borderRadius: '8px 8px 0px 0px',
         }}
       >
-        <Box sx={{ ...boxStyles }}>
-          <Typography variant="h6" sx={{ ...tagStyles }}>
-            LP OPTIMISER
-          </Typography>
+        <Box sx={{ display: 'flex' }}>
+          <Box sx={{ ...boxStyles }}>
+            <Typography variant="h6" sx={{ ...tagStyles }}>
+              LP OPTIMISER
+            </Typography>
+          </Box>
+
+          {lpVault.metadata.deprecated && (
+            <Box sx={{ ...boxStyles }}>
+              <Typography variant="h6" sx={{ ...tagStyles }}>
+                DEPRECATED
+              </Typography>
+            </Box>
+          )}
         </Box>
 
         <Box sx={{ display: 'flex', marginLeft: '8px', marginTop: '16px', alignItems: 'center' }}>
@@ -54,7 +64,10 @@ const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
           </Typography>
         </Box>
 
-        <VaultField maturity={lpVault.metadata.maturity} expectedApy={lpVault.metadata.estimatedHistoricApy} />
+        <VaultField
+          maturity={lpVault.metadata.maturity}
+          expectedApy={lpVault.metadata.estimatedHistoricApy}
+        />
 
         <Typography variant="h6" sx={copyStyles}>
           The Mellow LP Optimiser runs a permissionless strategy that takes deposits and generates
@@ -63,18 +76,20 @@ const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
 
         <Box sx={{ ...boxStyles, padding: '2px 4px' }}>
           <Typography variant="h6" sx={{ ...tagStyles }}>
-            {`${lpVault.metadata.underlyingPools.length} ${lpVault.metadata.token} POOLS`}
+            {`${lpVault.metadata.underlyingPools.length} ${lpVault.metadata.token} ${
+              lpVault.metadata.underlyingPools.length === 1 ? 'POOL' : 'POOLS'
+            }`}
           </Typography>
         </Box>
 
-        <Typography variant="h6" sx={{...copyStyles, marginTop: '8px'}}>
+        <Typography variant="h6" sx={{ ...copyStyles, marginTop: '8px' }}>
           LIQUIDITY SPREAD ACROSS
         </Typography>
 
         <Box sx={{ marginLeft: '8px', marginTop: '4px' }}>
-          {lpVault.metadata.underlyingPools.map((pool) =>
-            (<PoolField protocol={pool} isBorrowing={false} isBorrowTable={true} />)
-          )}
+          {lpVault.metadata.underlyingPools.map((pool) => (
+            <PoolField protocol={pool} isBorrowing={false} isBorrowTable={true} />
+          ))}
         </Box>
 
         <Box sx={{ marginLeft: '8px', marginTop: '16px' }}>
@@ -88,11 +103,17 @@ const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
       <Box
         sx={{
           background: '#1E1A33',
-          padding: (theme) => theme.spacing(2, 4),
+          padding: '16px 16px 16px 24px',
           borderRadius: '0px 0px 8px 8px',
         }}
       >
-        <MellowLPPosition userDeposit={lpVault.vault.userDeposit} tokenName={lpVault.metadata.token} handleClick={onSelectItem} dataLoading={dataLoading} />
+        <MellowLPPosition
+          userDeposit={lpVault.vault.userDeposit}
+          tokenName={lpVault.metadata.token}
+          handleClick={onSelectItem}
+          dataLoading={dataLoading}
+          disabled={lpVault.metadata.deprecated}
+        />
       </Box>
     </Box>
   );

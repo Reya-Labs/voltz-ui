@@ -6,47 +6,38 @@ import { getConfig } from './config';
 const useMellowLPVaults = (): MellowProduct[] => {
   const config = getConfig();
 
-  const lpVaults = useMemo(
-    () => {
-      const vaults: MellowProduct[] = config.MELLOW_VAULTS.map(
-        (item) => {
-          const vault = new MellowLpVault({
-            ethWrapperAddress: config.MELLOW_ETH_WRAPPER,
-            voltzVaultAddress: item.voltzVault,
-            erc20RootVaultAddress: item.erc20RootVault,
-            erc20RootVaultGovernanceAddress: item.erc20RootVaultGovernance,
-            provider: config.PROVIDER,
-          });
+  const lpVaults = useMemo(() => {
+    const vaults: MellowProduct[] = config.MELLOW_VAULTS.map((item) => {
+      const vault = new MellowLpVault({
+        ethWrapperAddress: config.MELLOW_ETH_WRAPPER,
+        voltzVaultAddress: item.voltzVault,
+        erc20RootVaultAddress: item.erc20RootVault,
+        erc20RootVaultGovernanceAddress: item.erc20RootVaultGovernance,
+        provider: config.PROVIDER,
+      });
 
-          return {
-            vault,
-            metadata: item.metadata,
-          }
-        }
-          ,
-      );
+      return {
+        vault,
+        metadata: item.metadata,
+      };
+    });
 
-      const routers: MellowProduct[] = config.MELLOW_ROUTERS.map(
-        (item) => {
-          const vault = new MellowLpRouter({
-            mellowRouterAddress: item.router,
-            defaultWeights: item.defaultWeights,
-            provider: config.PROVIDER,
-            pivot: item.pivot,
-          });
+    const routers: MellowProduct[] = config.MELLOW_ROUTERS.map((item) => {
+      const vault = new MellowLpRouter({
+        mellowRouterAddress: item.router,
+        defaultWeights: item.defaultWeights,
+        provider: config.PROVIDER,
+        pivot: item.pivot,
+      });
 
-          return {
-            vault,
-            metadata: item.metadata,
-          }
-        }
-      );
+      return {
+        vault,
+        metadata: item.metadata,
+      };
+    });
 
-      return vaults.concat(routers);
-    }
-    ,
-    [],
-  );
+    return vaults.concat(routers);
+  }, []);
 
   return lpVaults;
 };

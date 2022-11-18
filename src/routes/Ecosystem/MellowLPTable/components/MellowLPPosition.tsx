@@ -8,6 +8,7 @@ export type MellowLPPositionProps = {
   tokenName: string;
   handleClick: () => void;
   dataLoading: boolean;
+  disabled: boolean;
 };
 
 const MellowLPPosition: React.FunctionComponent<MellowLPPositionProps> = ({
@@ -15,13 +16,14 @@ const MellowLPPosition: React.FunctionComponent<MellowLPPositionProps> = ({
   tokenName,
   handleClick,
   dataLoading,
+  disabled,
 }: MellowLPPositionProps) => {
   const getPositionInfo = () => {
     if (dataLoading) {
       return (
         <Skeleton
           variant="text"
-          sx={{ width: '100%', fontSize: '14px', lineHeight: '20px', padding: '4px' }}
+          sx={{ width: '100%', fontSize: '14px', lineHeight: '20px', padding: '4px 4px 4px 12px' }}
         />
       );
     }
@@ -35,23 +37,23 @@ const MellowLPPosition: React.FunctionComponent<MellowLPPositionProps> = ({
           >
             {`Your position: ${isUndefined(userDeposit) ? ' ---' : ''}`}
           </Typography>
-          {!isUndefined(userDeposit) && (<Typography
-            variant="h6"
-            sx={{
-              fontSize: '14px',
-              color: 'primary.light',
-              textTransform: 'uppercase',
-              marginLeft: '4px',
-            }}
-          >
-            {(userDeposit) ?
-              `${formatCurrency(userDeposit)} ${tokenName}`
-              : "---"}
-          </Typography>)}
+          {!isUndefined(userDeposit) && (
+            <Typography
+              variant="h6"
+              sx={{
+                fontSize: '14px',
+                color: 'primary.light',
+                textTransform: 'uppercase',
+                marginLeft: '4px',
+              }}
+            >
+              {userDeposit ? `${formatCurrency(userDeposit)} ${tokenName}` : '---'}
+            </Typography>
+          )}
         </Box>
         <Button
           onClick={handleClick}
-          disabled={dataLoading}
+          disabled={disabled || dataLoading}
           sx={{
             background: 'transparent',
             color: 'primary.light',

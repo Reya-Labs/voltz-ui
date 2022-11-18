@@ -15,16 +15,13 @@ const MellowLPTable: React.FunctionComponent<MellowLPTableProps> = ({
 }: MellowLPTableProps) => {
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-      {
-        lpVaults.map((product) => (
-          <MellowLPEntry
-            lpVault={product}
-            onSelectItem={() => onSelectItem(product)}
-            dataLoading={dataLoading}
-          />
-        ))
-      }
-
+      {lpVaults.map((product) => (
+        <MellowLPEntry
+          lpVault={product}
+          onSelectItem={() => onSelectItem(product)}
+          dataLoading={dataLoading}
+        />
+      ))}
     </Box>
   );
 };
