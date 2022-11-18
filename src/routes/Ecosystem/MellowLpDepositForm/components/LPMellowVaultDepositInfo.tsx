@@ -59,7 +59,7 @@ const LPMellowVaultDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfo
   const renderContent = () => {
     return (
       <Panel variant="dark" sx={{ width: '100%', maxWidth: '366px', background: 'transparent' }}>
-        <VaultField maturity={maturity} expectedApy={expectedApy}/>
+        <VaultField maturity={maturity} expectedApy={expectedApy} />
 
         {getCapBar()}
 
@@ -77,9 +77,7 @@ const LPMellowVaultDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfo
             YOUR POSITION:
           </Typography>
           <Typography variant="h6" sx={{ fontSize: '14px', color: '#4DE5FF', paddingLeft: '8px' }}>
-            {isUndefined(userDeposit)
-              ? '---'
-              : `${formatCurrency(userDeposit, true)} ${tokenName}`}
+            {isUndefined(userDeposit) ? '---' : `${formatCurrency(userDeposit, true)} ${tokenName}`}
           </Typography>
         </Box>
 
