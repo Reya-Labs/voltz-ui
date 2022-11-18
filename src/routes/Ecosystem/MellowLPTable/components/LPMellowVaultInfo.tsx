@@ -2,17 +2,20 @@ import { Box, Skeleton, Typography } from '@mui/material';
 import { formatCurrency } from '@utilities';
 import { isUndefined } from 'lodash';
 import { ProgressBar } from '@components/composite';
-import { MellowLpVault } from '@voltz-protocol/v1-sdk';
 
 export type LPMellowVaultInfoProps = {
-  lpVault: MellowLpVault;
+  vaultCap?: number;
+  vaultAccumulative?: number;
+  tokenName: string;
 };
 const LPMellowVaultInfo: React.FunctionComponent<LPMellowVaultInfoProps> = ({
-  lpVault,
+  vaultCap,
+  vaultAccumulative,
+  tokenName,
 }: LPMellowVaultInfoProps) => {
   const getCapBar = () => {
-    const loading = isUndefined(lpVault.vaultCap) || isUndefined(lpVault.vaultAccumulative);
-    const percentage = loading ? 0 : Math.floor((lpVault?.vaultCap || 0) * 100 + 0.5) / 100;
+    const loading = isUndefined(vaultCap) || isUndefined(vaultAccumulative);
+    const percentage = loading ? 0 : Math.floor((vaultCap || 0) * 100 + 0.5) / 100;
 
     return (
       <Box>
@@ -29,12 +32,12 @@ const LPMellowVaultInfo: React.FunctionComponent<LPMellowVaultInfoProps> = ({
             <ProgressBar
               leftContent={
                 <Typography variant="h6" color="#E5E1F9" marginLeft="0px">
-                  {lpVault.tokenName}
+                  {tokenName}
                 </Typography>
               }
               middleContent={
                 <Typography variant="h6" color="#E5E1F9" marginLeft="0px">
-                  {formatCurrency(lpVault?.vaultAccumulative || 0, true)}
+                  {formatCurrency(vaultAccumulative || 0, true)}
                 </Typography>
               }
               rightContent={
