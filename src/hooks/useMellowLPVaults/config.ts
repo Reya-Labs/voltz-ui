@@ -1,4 +1,5 @@
 import { providers } from 'ethers';
+import { MellowProductMetadata } from 'src/routes/Ecosystem/types';
 
 type NetworkConfiguration = {
   MELLOW_ETH_WRAPPER: string;
@@ -6,15 +7,17 @@ type NetworkConfiguration = {
     voltzVault: string;
     erc20RootVault: string;
     erc20RootVaultGovernance: string;
+    metadata: MellowProductMetadata;
   }[];
   MELLOW_ROUTERS: {
     router: string;
     defaultWeights: number[];
-    maturity: string;
+    pivot: number;
+    metadata: MellowProductMetadata;
   }[],
 }
 
-const networkConfigurations: {[key: string]: NetworkConfiguration}  = {
+const networkConfigurations: { [key: string]: NetworkConfiguration } = {
   mainnet: {
     MELLOW_ETH_WRAPPER: '0x07D6D75CA125a252AEf4d5647198446e5EDc5BBa',
     MELLOW_VAULTS: [
@@ -22,7 +25,16 @@ const networkConfigurations: {[key: string]: NetworkConfiguration}  = {
         voltzVault: '0xBBC446081cb7515a524D31e4afDB19dfc6BAa124',
         erc20RootVault: '0xC99c70492Bc15c056813d1ddA95C89Bb285Cdc86',
         erc20RootVaultGovernance: '0x973495e81180Cd6Ead654328A0bEbE01c8ad53EA',
+        metadata: {
+          title: 'MELLOW VAULT - stETH',
+          token: 'ETH',
+          maturity: '31 Dec 22',
+          estimatedHistoricApy: '>30%',
+          description: 'The Mellow LP Optimiser runs a permissionless strategy that takes deposits and generates optimised LP fees by providing liquidity on Voltz Protocol.',
+          underlyingPools: ['stETH'],
+      }
       },
+
     ],
     MELLOW_ROUTERS: [],
   },
@@ -33,17 +45,41 @@ const networkConfigurations: {[key: string]: NetworkConfiguration}  = {
         voltzVault: '0x1b876d1b5A8636EFe9835D8ed0231c1429cBfc40',
         erc20RootVault: '0x62E224d9ae2f4702CC88695e6Ea4aA16D0925BdB',
         erc20RootVaultGovernance: '0x4DCc9Ad7ff5964d13ee4A6932922f1a24f3f8e25',
+        metadata: {
+          title: 'MELLOW VAULT - cETH',
+          token: 'ETH',
+          maturity: '21 Nov 22',
+          estimatedHistoricApy: '>30%',
+          description: 'The Mellow LP Optimiser runs a permissionless strategy that takes deposits and generates optimised LP fees by providing liquidity on Voltz Protocol.',
+          underlyingPools: ['cETH'],
+      }
       },
     ],
     MELLOW_ROUTERS: [{
       router: "0x631CAD693b6f0463B2C2729299FccA8731553bB4",
       defaultWeights: [100, 0],
-      maturity: "31 Dec 22",
+      pivot: 0,
+      metadata: {
+        title: 'MELLOW VAULT - ETH',
+        token: 'ETH',
+        maturity: '31 Dec 22',
+        estimatedHistoricApy: '>30%',
+        description: 'The Mellow LP Optimiser runs a permissionless strategy that takes deposits and generates optimised LP fees by providing liquidity on Voltz Protocol.',
+        underlyingPools: ['cETH'],
+    }
     },
     {
       router: "0x631CAD693b6f0463B2C2729299FccA8731553bB4",
       defaultWeights: [100, 0],
-      maturity: "31 Mar 23",
+      pivot: 1,
+      metadata: {
+        title: 'MELLOW VAULT - ETH',
+        token: 'ETH',
+        maturity: '31 Mar 23',
+        estimatedHistoricApy: '>30%',
+        description: 'The Mellow LP Optimiser runs a permissionless strategy that takes deposits and generates optimised LP fees by providing liquidity on Voltz Protocol.',
+        underlyingPools: ['cETH'],
+    }
     }],
   },
   default: {

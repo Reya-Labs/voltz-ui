@@ -10,7 +10,6 @@ import { useMellowLPVaults, useWallet } from '@hooks';
 import { useLocation } from 'react-router-dom';
 
 import { MellowProduct } from './types';
-import { MellowLpVault } from '@voltz-protocol/v1-sdk/dist/types/entities';
 
 export enum EcosystemRenderMode {
   MELLOW_DEPOSIT_FORM,
@@ -78,7 +77,7 @@ const Ecosystem: React.FunctionComponent = () => {
     if (lpVaults) {
       setVaultsLoaded(false);
       setDataLoading(true);
-      const request = Promise.allSettled(lpVaults.map((item) => item.vaultInit()));
+      const request = Promise.allSettled(lpVaults.map((item) => item.vault.vaultInit()));
 
       void request.then(
         (_) => {
@@ -96,7 +95,7 @@ const Ecosystem: React.FunctionComponent = () => {
     if (lpVaults && isSignerAvailable && vaultsLoaded) {
       setDataLoading(true);
 
-      const request = Promise.allSettled(lpVaults.map((item) => item.userInit(signer)));
+      const request = Promise.allSettled(lpVaults.map((item) => item.vault.userInit(signer)));
 
       void request.then(
         (_) => {
@@ -138,7 +137,7 @@ const Ecosystem: React.FunctionComponent = () => {
           }}
         >
           {currentVault && (
-            <ConnectedMellowLpDepositForm onReset={handleReset} vault={currentVault as MellowLpVault} />
+            <ConnectedMellowLpDepositForm onReset={handleReset} vault={currentVault} />
           )}
         </Box>
       )}

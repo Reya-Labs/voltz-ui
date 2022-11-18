@@ -7,7 +7,7 @@ import { getProof } from '../utils/communitySbt/merkle-tree';
 import  axios from 'axios';
 import fetch from 'cross-fetch';
 import { MULTI_REDEEM_METHOD_ID, REDEEM_METHOD_ID } from '../constants';
-import { decodeBadgeType, decodeMultipleBadgeTypes, getBadgeTypeFromMetadataUri, getEtherscanURL, toMillis } from '../utils/communitySbt/helpers';
+import { decodeBadgeType, decodeMultipleBadgeTypes, getBadgeTypeFromMetadataUri, getEtherscanURL, getTopBadgeType, toMillis } from '../utils/communitySbt/helpers';
 
 export type SBTConstructorArgs = {
     id: string;
@@ -97,7 +97,12 @@ export const NON_SUBGRAPH_BADGES_SEASONS: Record<number, string[]>  = {
         '35'
     ]
 }
-export const TOP_BADGES_VARIANT: Array<string> = ['31', '28', '15', '12']
+
+export const TOP_BADGES_VARIANT: Record<string, string[]> = {
+    'trader': ['15', '31'],
+    'liquidityProvider': ['12', '28']
+}
+
 
 export const NON_PROGRAMATIC_BADGES_VARIANT: Record<string, string> = {
     'diplomatz' : '33',
@@ -303,11 +308,11 @@ class SBT {
                 }
             }
 
-            const topLpType = seasonId === 0 ? "12" : "28";
-            const topTraderType = seasonId === 0 ? "15" : "31"
+            const topLpType = getTopBadgeType(seasonId, false);
+            const topTraderType = getTopBadgeType(seasonId, false)
 
-            const topLpBadge =  await this.getTopTraderBadge(subgraphUrl, userId, seasonId, topLpType, false);
-            const topTraderBadge =  await this.getTopTraderBadge(subgraphUrl, userId, seasonId, topTraderType, true);
+            const topLpBadge =  await this.getTopTraderBadge(subgraphUrl, userId, seasonId, false, topLpType);
+            const topTraderBadge =  await this.getTopTraderBadge(subgraphUrl, userId, seasonId, true, topTraderType);
             if (topLpBadge) badgesResponse.push(topLpBadge);
             if (topTraderBadge) badgesResponse.push(topTraderBadge);
 
@@ -328,10 +333,10 @@ class SBT {
         subgraphUrl: string,
         userId: string,
         seasonId: number,
-        badgeType: string,
-        isTrader: boolean
+        isTrader: boolean,
+        badgeType?: string,
       ): Promise<BadgeResponse | undefined> {
-        if (!process.env.REACT_APP_SUBGRAPH_BADGES_URL) {
+        if (!subgraphUrl || !badgeType) {
             return undefined;
           }
         try {

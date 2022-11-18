@@ -50,7 +50,7 @@ var IERC20Minimal_json_1 = require("../ABIs/IERC20Minimal.json");
 var MellowMultiVaultRouterABI_json_1 = require("../ABIs/MellowMultiVaultRouterABI.json");
 var MellowLpRouter = /** @class */ (function () {
     function MellowLpRouter(_a) {
-        var mellowRouterAddress = _a.mellowRouterAddress, defaultWeights = _a.defaultWeights, provider = _a.provider;
+        var mellowRouterAddress = _a.mellowRouterAddress, defaultWeights = _a.defaultWeights, provider = _a.provider, pivot = _a.pivot;
         var _this = this;
         this.defaultWeights = [];
         this.vaultInitialized = false;
@@ -85,6 +85,9 @@ var MellowLpRouter = /** @class */ (function () {
                         return [4 /*yield*/, mellowRouterContract.getVaults()];
                     case 2:
                         ERC20RootVaultAddresses = _c.sent();
+                        if (!(0, lodash_1.isUndefined)(this.pivot)) {
+                            ERC20RootVaultAddresses = ERC20RootVaultAddresses.slice(this.pivot, this.pivot + 1);
+                        }
                         erc20RootVaultContracts = ERC20RootVaultAddresses.map(function (address) { return new ethers_1.ethers.Contract(address, Erc20RootVault_json_1.abi, _this.provider); });
                         erc20RootVaultGovernanceAddresses = [];
                         _i = 0, erc20RootVaultContracts_1 = erc20RootVaultContracts;
@@ -229,6 +232,9 @@ var MellowLpRouter = /** @class */ (function () {
                         return [4 /*yield*/, this.readOnlyContracts.mellowRouterContract.getLPTokenBalances(this.userAddress)];
                     case 1:
                         lpTokensBalances = _a.sent();
+                        if (!(0, lodash_1.isUndefined)(this.pivot)) {
+                            lpTokensBalances = lpTokensBalances.slice(this.pivot, this.pivot + 1);
+                        }
                         i = 0;
                         _a.label = 2;
                     case 2:
@@ -435,6 +441,7 @@ var MellowLpRouter = /** @class */ (function () {
         this.mellowRouterAddress = mellowRouterAddress;
         this.defaultWeights = defaultWeights;
         this.provider = provider;
+        this.pivot = pivot;
     }
     Object.defineProperty(MellowLpRouter.prototype, "tokenName", {
         get: function () {
