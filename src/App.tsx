@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useSearchParams } from 'react-router-dom';
 import TagManager from 'react-gtm-module';
 
 import {
@@ -15,13 +15,43 @@ import {
 import { AlphaBanner, GweiBar } from '@components/composite';
 import Box from '@mui/material/Box';
 import { useEffect } from 'react';
+import {
+  deleteReferrer,
+  isRefererStored,
+  isValidReferrerStored,
+  isValidReferrerValue,
+  REFERRER_QUERY_PARAM_KEY,
+  setReferrer,
+} from './utilities/referrer-store/referrer-store';
 
 const App = () => {
+  const [searchParams] = useSearchParams();
+  const searchParamsReferrer = searchParams.get(REFERRER_QUERY_PARAM_KEY);
+
   useEffect(() => {
     if (process.env.REACT_APP_GTM_CODE) {
       TagManager.initialize({ gtmId: process.env.REACT_APP_GTM_CODE });
     }
   }, []);
+
+  // referrer logic - run everytime params change for ${REFERRER_QUERY_PARAM_KEY}
+  useEffect(() => {
+    // Earlier, pre-release keys may have used more than 8 characters, but we overwrite these
+    if (!isValidReferrerStored()) {
+      deleteReferrer();
+    }
+
+    const isValidReferrer = isValidReferrerValue(searchParamsReferrer);
+    if (!isValidReferrer) {
+      return;
+    }
+
+    // Referrer is set in URL and has not already been saved in storage; save to storage now
+    // We do deliberately do not overwrite any existing value because we want to credit the first referral link that was followed
+    if (!isRefererStored()) {
+      setReferrer(searchParamsReferrer!);
+    }
+  }, [searchParamsReferrer]);
 
   return (
     <>

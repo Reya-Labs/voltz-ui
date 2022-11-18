@@ -2,6 +2,11 @@ import { WalletName, WalletRiskAssessment } from './types';
 import detectEthereumProvider from '@metamask/detect-provider';
 import WalletConnectProvider from '@walletconnect/ethereum-provider';
 import { ethers } from 'ethers';
+import { getReferrer } from '../../utilities/referrer-store/referrer-store';
+
+const referralAndSignaturesUrl = `${
+  process.env.REACT_APP_REFERRAL_AND_SIGNATURE_SERVICE_URL || 'https://voltz-rest-api.herokuapp.com'
+}`;
 
 export type SignatureResponse = {
   signature?: string;
@@ -59,7 +64,7 @@ export const checkForTOSSignature = async (
 
   if (
     !!signatureData?.walletAddress &&
-    signatureData.walletAddress === signerAddress &&
+    signatureData.walletAddress.toLowerCase() === signerAddress.toLowerCase() &&
     signatureData.message &&
     signatureData.message === latestTOS
   ) {
@@ -71,8 +76,14 @@ export const checkForTOSSignature = async (
   if (!termsAccepted) {
     try {
       // The latest terms of service have not been accepted. Get a signature now.
+      const referralCode = getReferrer() || '';
       const signature = await signer.signMessage(latestTOS);
-      const response = await saveSignatureWithTOS(signerAddress, signature, latestTOS);
+      const response = await saveSignatureWithTOS(
+        signerAddress,
+        signature,
+        latestTOS,
+        referralCode,
+      );
 
       if (!response.ok) {
         throw new Error('Error saving signature');
@@ -89,14 +100,11 @@ export const checkForTOSSignature = async (
  */
 export const getSignature = async (walletAddress: string) => {
   try {
-    const resp = await fetch(
-      `https://voltz-rest-api.herokuapp.com/get-signature/${walletAddress}`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+    const resp = await fetch(`${referralAndSignaturesUrl}/get-signature/${walletAddress}`, {
+      headers: {
+        'Content-Type': 'application/json',
       },
-    );
+    });
 
     // https://voltz-rest-api.herokuapp.com//get-signature/0x45556408e543158f74403e882E3C8c23eCD9f732
 
@@ -257,14 +265,16 @@ const saveSignatureWithTOS = async (
   walletAddress: string,
   signature: string,
   termsOfService: string,
+  referralCode: string,
 ) => {
   // Build formData object.
   const formData = new FormData();
   formData.append('signature', signature);
   formData.append('walletAddress', walletAddress);
   formData.append('message', termsOfService);
+  referralCode && formData.append('referralCode', referralCode);
 
-  return await fetch(`https://voltz-rest-api.herokuapp.com/add-signature`, {
+  return await fetch(`${referralAndSignaturesUrl}/add-signature`, {
     method: 'POST',
     mode: 'cors',
     cache: 'no-cache',
