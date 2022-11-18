@@ -1,6 +1,20 @@
 import { providers } from 'ethers';
 
-const networkConfigurations = {
+type NetworkConfiguration = {
+  MELLOW_ETH_WRAPPER: string;
+  MELLOW_VAULTS: {
+    voltzVault: string;
+    erc20RootVault: string;
+    erc20RootVaultGovernance: string;
+  }[];
+  MELLOW_ROUTERS: {
+    router: string;
+    defaultWeights: number[];
+    maturity: string;
+  }[],
+}
+
+const networkConfigurations: {[key: string]: NetworkConfiguration}  = {
   mainnet: {
     MELLOW_ETH_WRAPPER: '0x07D6D75CA125a252AEf4d5647198446e5EDc5BBa',
     MELLOW_VAULTS: [
@@ -10,6 +24,7 @@ const networkConfigurations = {
         erc20RootVaultGovernance: '0x973495e81180Cd6Ead654328A0bEbE01c8ad53EA',
       },
     ],
+    MELLOW_ROUTERS: [],
   },
   goerli: {
     MELLOW_ETH_WRAPPER: '0xcF2f79d8DF97E09BF5c4DBF3F953aeEF4f4a204d',
@@ -20,20 +35,25 @@ const networkConfigurations = {
         erc20RootVaultGovernance: '0x4DCc9Ad7ff5964d13ee4A6932922f1a24f3f8e25',
       },
     ],
+    MELLOW_ROUTERS: [{
+      router: "0x631CAD693b6f0463B2C2729299FccA8731553bB4",
+      defaultWeights: [100, 0],
+      maturity: "31 Dec 22",
+    },
+    {
+      router: "0x631CAD693b6f0463B2C2729299FccA8731553bB4",
+      defaultWeights: [100, 0],
+      maturity: "31 Mar 23",
+    }],
   },
   default: {
     MELLOW_ETH_WRAPPER: '0x0000000000000000000000000000000000000000',
     MELLOW_VAULTS: [],
+    MELLOW_ROUTERS: [],
   },
 };
 
-export const getConfig = (): {
-  MELLOW_ETH_WRAPPER: string;
-  MELLOW_VAULTS: {
-    voltzVault: string;
-    erc20RootVault: string;
-    erc20RootVaultGovernance: string;
-  }[];
+export const getConfig = (): NetworkConfiguration & {
   PROVIDER: providers.BaseProvider;
 } => {
   const network = process.env.REACT_APP_NETWORK;

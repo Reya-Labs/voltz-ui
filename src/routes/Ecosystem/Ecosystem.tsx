@@ -9,7 +9,8 @@ import { isNull } from 'lodash';
 import { useMellowLPVaults, useWallet } from '@hooks';
 import { useLocation } from 'react-router-dom';
 
-import { MellowLpVault } from '@voltz-protocol/v1-sdk';
+import { MellowProduct } from './types';
+import { MellowLpVault } from '@voltz-protocol/v1-sdk/dist/types/entities';
 
 export enum EcosystemRenderMode {
   MELLOW_DEPOSIT_FORM,
@@ -20,10 +21,10 @@ const Ecosystem: React.FunctionComponent = () => {
   const wallet = useWallet();
 
   const [renderMode, setRenderMode] = useState<EcosystemRenderMode>(EcosystemRenderMode.PAGE);
-  const [currentVault, setCurrentVault] = useState<MellowLpVault>();
+  const [currentVault, setCurrentVault] = useState<MellowProduct>();
   const location = useLocation();
 
-  const handleSelectMellowLpVault = (selectedVault: MellowLpVault) => {
+  const handleSelectMellowLpVault = (selectedVault: MellowProduct) => {
     if (isNull(wallet.account)) {
       wallet.setRequired(true);
     } else {
@@ -137,7 +138,7 @@ const Ecosystem: React.FunctionComponent = () => {
           }}
         >
           {currentVault && (
-            <ConnectedMellowLpDepositForm onReset={handleReset} vault={currentVault} />
+            <ConnectedMellowLpDepositForm onReset={handleReset} vault={currentVault as MellowLpVault} />
           )}
         </Box>
       )}

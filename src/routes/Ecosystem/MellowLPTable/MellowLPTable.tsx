@@ -1,11 +1,10 @@
 import { Box } from '@mui/system';
+import { MellowProduct } from '../types';
 import MellowLPEntry from './components/MellowLPEntry';
 
-import { MellowLpVault } from '@voltz-protocol/v1-sdk';
-
 export type MellowLPTableProps = {
-  lpVaults: MellowLpVault[];
-  onSelectItem: (item: MellowLpVault) => void;
+  lpVaults: MellowProduct[];
+  onSelectItem: (item: MellowProduct) => void;
   dataLoading: boolean;
 };
 
