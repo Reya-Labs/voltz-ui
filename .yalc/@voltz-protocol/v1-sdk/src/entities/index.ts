@@ -37,4 +37,5 @@ export {
   BadgeRecord,
   BadgeClaimingStatus,
   BadgeWithStatus,
+  BadgeResponse,
 } from './communitySbt';

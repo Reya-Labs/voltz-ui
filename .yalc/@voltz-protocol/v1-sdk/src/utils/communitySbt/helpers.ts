@@ -35,3 +35,17 @@ export function getEtherscanURL(network: string, apiKey: string, userAddress: st
             return "";
     }
 }
+
+/**
+ * "Convert seconds to milliseconds, but only if the input is a number and not zero."
+ *
+ * @param {number} seconds - number - The number of seconds to convert to milliseconds.
+ * @returns A function that takes a number and returns a number or undefined.
+ */
+ export function toMillis(seconds: number): number | undefined {
+    if (isNaN(seconds) || seconds === 0) {
+      return undefined;
+    }
+  
+    return seconds * 1000;
+  };

@@ -6,11 +6,11 @@ import {
   ProfilePageWalletConnectedProps,
 } from './ProfilePageWalletConnected';
 import { season1Badges, seasonOGBadges } from './ProfilePageWalletConnected.mocks';
-import { SEASONS } from '../../../hooks/season/constants';
-import { Season } from '../../../hooks/season/types';
-import { BadgeVariant, SEASON_BADGE_VARIANTS } from '@graphql';
+import { SEASONS } from '../../../../hooks/season/constants';
+import { Season } from '../../../../hooks/season/types';
 import { ClaimButtonProps } from '../ClaimButton/ClaimButton';
 import { CopyLinkButtonProps } from '../CopyLinkButton/CopyLinkButton';
+import { BadgeVariant, SEASON_BADGE_VARIANTS } from '../../data/getSeasonBadges';
 
 export default {
   title: 'Interface/ProfilePageWalletConnected',

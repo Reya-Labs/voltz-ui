@@ -17,7 +17,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -162,9 +162,9 @@ var MellowLpRouter = /** @class */ (function () {
             });
         }); };
         this.refreshVaultCumulative = function () { return __awaiter(_this, void 0, void 0, function () {
-            var _i, _a, erc20RootVaultContract, totalLpTokens, tvl, nft, strategyParams, vaultCumulative, vaultCap;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var _i, _a, erc20RootVaultContract, totalLpTokens, tvl, nft, _b, _c, erc20RootVaultGovernanceContract, strategyParams, vaultCumulative, vaultCap;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
                     case 0:
                         this.vaultCumulative = 0;
                         this.vaultCap = 0;
@@ -172,23 +172,30 @@ var MellowLpRouter = /** @class */ (function () {
                             return [2 /*return*/];
                         }
                         _i = 0, _a = this.readOnlyContracts.erc20RootVault;
-                        _b.label = 1;
+                        _d.label = 1;
                     case 1:
-                        if (!(_i < _a.length)) return [3 /*break*/, 7];
+                        if (!(_i < _a.length)) return [3 /*break*/, 9];
                         erc20RootVaultContract = _a[_i];
                         return [4 /*yield*/, erc20RootVaultContract.totalSupply()];
                     case 2:
-                        totalLpTokens = _b.sent();
+                        totalLpTokens = _d.sent();
                         return [4 /*yield*/, erc20RootVaultContract.tvl()];
                     case 3:
-                        tvl = _b.sent();
+                        tvl = _d.sent();
                         console.log('accumulated (tvl):', tvl.minTokenAmounts[0].toString());
                         return [4 /*yield*/, erc20RootVaultContract.nft()];
                     case 4:
-                        nft = _b.sent();
-                        return [4 /*yield*/, erc20RootVaultContract.strategyParams(nft)];
+                        nft = _d.sent();
+                        _b = 0, _c = this.readOnlyContracts
+                            .erc20RootVaultGovernance;
+                        _d.label = 5;
                     case 5:
-                        strategyParams = _b.sent();
+                        if (!(_b < _c.length)) return [3 /*break*/, 8];
+                        erc20RootVaultGovernanceContract = _c[_b];
+                        return [4 /*yield*/, erc20RootVaultGovernanceContract.strategyParams(nft)];
+                    case 6:
+                        strategyParams = _d.sent();
+                        console.log('governance contract address: ', erc20RootVaultGovernanceContract.address);
                         console.log('strategy params:', strategyParams);
                         console.log('token limit', strategyParams.tokenLimit.toString());
                         vaultCumulative = this.descale(tvl.minTokenAmounts[0], this.tokenDecimals);
@@ -197,11 +204,14 @@ var MellowLpRouter = /** @class */ (function () {
                         console.log('vault cap:', vaultCap);
                         this.vaultCumulative += vaultCumulative;
                         this.vaultCap += vaultCap;
-                        _b.label = 6;
-                    case 6:
+                        _d.label = 7;
+                    case 7:
+                        _b++;
+                        return [3 /*break*/, 5];
+                    case 8:
                         _i++;
                         return [3 /*break*/, 1];
-                    case 7: return [2 /*return*/];
+                    case 9: return [2 /*return*/];
                 }
             });
         }); };

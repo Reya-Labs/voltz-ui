@@ -1,4 +1,4 @@
-import { BadgeVariant } from '@graphql';
+import { BadgeVariant } from '../../data/getSeasonBadges';
 
 type CollectionBadge = {
   variant: BadgeVariant;

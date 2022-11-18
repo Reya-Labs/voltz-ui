@@ -1,24 +1,11 @@
+import { BadgeResponse } from '@voltz-protocol/v1-sdk/dist/types/entities/communitySbt';
+
 export type GetProfileBadgesResponse = {
   badgeResponseRaw?: BadgeResponse;
   variant: BadgeVariant;
   achievedAt?: number;
   claimedAt?: number;
 }[];
-
-export type BadgeResponse = {
-  id: string;
-  badgeType: string;
-  badgeName: string;
-  awardedTimestamp: string;
-  mintedTimestamp: string;
-};
-
-export type BadgesQueryResponse = {
-  seasonUser: {
-    id: string;
-    badges: BadgeResponse[];
-  };
-};
 
 export type ProgrammaticBadges =
   // season 1
