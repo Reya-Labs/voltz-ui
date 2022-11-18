@@ -20,6 +20,7 @@ import copy from 'copy-to-clipboard';
 
 import { CommunitySBT } from '@voltz-protocol/v1-sdk';
 import { getReferrerLink } from './get-referrer-link';
+import { Signer } from 'ethers';
 
 const Profile: React.FunctionComponent = () => {
   const wallet = useWallet();
@@ -40,7 +41,8 @@ const Profile: React.FunctionComponent = () => {
   const fetchBadges = async (seasonId: Season['id'], account: string) => {
     return await getSeasonBadges({
       userId: account,
-      seasonId,
+      seasonId: seasonId,
+      signer: wallet.signer as Signer
     });
   };
 

@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "build-release": "rm -rf dist; tsc -p tsconfig.dist.json",
+    "build-release": "rm -rf dist; rm -rf dist; tsc -p tsconfig.dist.json",
     "prettier": "prettier 'src/**/*.ts'",
     "prettier:fix": "prettier --write 'src/**/*.ts'",
     "eslint": "eslint 'src/**/*.ts'",
@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.7.1",
+    "@graphprotocol/graph-cli": "^0.35.0",
     "@graphprotocol/graph-cli": "^0.35.0",
     "@metamask/detect-provider": "^1.2.0",
     "big.js": "^6.1.1",
@@ -38,6 +39,7 @@
     "lodash": "^4.17.21",
     "luxon": "^2.3.0",
     "merkletreejs": "^0.3.0",
+    "react": "^18.2.0",
     "react": "^18.2.0",
     "tiny-invariant": "^1.2.0",
     "toformat": "^2.0.0",
@@ -72,5 +74,5 @@
       ]
     ]
   },
-  "yalcSig": "53f74df1c9388855cdc37d245c7f8192"
+  "yalcSig": "4a39502c5a6382ac4f7acdbf4b956da1"
 }
