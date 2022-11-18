@@ -33,6 +33,6 @@ export class Price extends Fraction {
   }
 
   public toFixed(decimalPlaces: number = 4, format?: object, rounding?: Rounding): string {
-    return super.toFixed(decimalPlaces, format, rounding);
+    return super.toFixed(decimalPlaces, format);
   }
 }

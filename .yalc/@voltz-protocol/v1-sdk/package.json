@@ -12,13 +12,12 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "build-release": "tsc -p tsconfig.dist.json",
+    "build-release": "rm -rf dist; tsc -p tsconfig.dist.json",
     "prettier": "prettier 'src/**/*.ts'",
     "prettier:fix": "prettier --write 'src/**/*.ts'",
     "eslint": "eslint 'src/**/*.ts'",
     "eslint:fix": "eslint --fix 'src/**/*.ts'",
-    "test": "jest",
-    "test:watch": "jest --watch",
+    "test": "npx hardhat test",
     "release": "semantic-release",
     "irs-setup": "ts-node scripts/setup.ts",
     "decode-error": "ts-node src/utils/errors/decodeError.ts"
@@ -73,5 +72,5 @@
       ]
     ]
   },
-  "yalcSig": "90fc62455c029ee6e69f3c1dcadd2f8f"
+  "yalcSig": "53f74df1c9388855cdc37d245c7f8192"
 }

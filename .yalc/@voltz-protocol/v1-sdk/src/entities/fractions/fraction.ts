@@ -3,7 +3,7 @@ import invariant from 'tiny-invariant';
 import toFormat from 'toformat';
 import Fractionjs from 'fraction.js';
 import _Decimal from 'decimal.js-light';
-import _Big, { RoundingMode } from 'big.js';
+import _Big from 'big.js';
 
 import { BigIntish, Rounding } from '../../types';
 
@@ -14,12 +14,6 @@ const toSignificantRounding = {
   [Rounding.ROUND_DOWN]: Decimal.ROUND_DOWN,
   [Rounding.ROUND_HALF_UP]: Decimal.ROUND_HALF_UP,
   [Rounding.ROUND_UP]: Decimal.ROUND_UP,
-};
-
-const toFixedRounding = {
-  [Rounding.ROUND_DOWN]: RoundingMode.RoundDown,
-  [Rounding.ROUND_HALF_UP]: RoundingMode.RoundHalfUp,
-  [Rounding.ROUND_UP]: RoundingMode.RoundUp,
 };
 
 export class Fraction {
@@ -151,13 +145,11 @@ export class Fraction {
     decimalPlaces: number,
     // eslint-disable-next-line @typescript-eslint/ban-types
     format: object = { groupSeparator: '' },
-    rounding: Rounding = Rounding.ROUND_HALF_UP,
   ): string {
     invariant(Number.isInteger(decimalPlaces), `${decimalPlaces} is not an integer.`);
     invariant(decimalPlaces >= 0, `${decimalPlaces} is negative.`);
 
     Big.DP = decimalPlaces;
-    Big.RM = toFixedRounding[rounding];
     return new Big(this.numerator.toString())
       .div(this.denominator.toString())
       .toFormat(decimalPlaces, format);
