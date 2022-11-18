@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import Typography from '../../../components/atomic/Typography/Typography';
+import Typography from '../../../../components/atomic/Typography/Typography';
 import ToggleButtonComponent from '@mui/material/ToggleButton';
 
 export const SeasonTypography = styled(Typography)`

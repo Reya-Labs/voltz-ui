@@ -1,6 +1,7 @@
 import { BadgeTier } from './types';
-import { BadgeVariant } from '@graphql';
-import { ClaimButtonProps } from './ClaimButton/ClaimButton';
+import { ClaimButtonProps } from './components/ClaimButton/ClaimButton';
+import { Season } from '../../hooks/season/types';
+import { BadgeVariant } from './data/getSeasonBadges';
 
 export const BADGE_VARIANT_TRADER_LP_MAP: Record<BadgeVariant, 'trader' | 'lp' | ''> = {
   // season 1
@@ -204,3 +205,6 @@ export const getClaimButtonModesForVariants = (
     }),
     {} as Record<BadgeVariant, ClaimButtonProps['mode']>,
   );
+
+export const getSeasonUserId = (userId: string, seasonId: Season['id']) =>
+  `${userId.toLowerCase()}#${seasonId}`;

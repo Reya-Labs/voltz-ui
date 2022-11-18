@@ -1,8 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { Badge } from '../Badge/Badge';
 import { BadgePill } from '../BadgePill/BadgePill';
-import { BADGE_VARIANT_DESCRIPTION_COPY_MAP, BADGE_VARIANT_TITLE_COPY_MAP } from '../helpers';
-import { BadgeVariant } from '@graphql';
+import { BADGE_VARIANT_DESCRIPTION_COPY_MAP, BADGE_VARIANT_TITLE_COPY_MAP } from '../../helpers';
 import {
   BadgeBox,
   BadgePillBox,
@@ -18,6 +17,7 @@ import {
   TitleTypography,
 } from './BadgeCard.styled';
 import { ClaimButtonProps, ClaimButton } from '../ClaimButton/ClaimButton';
+import { BadgeVariant } from '../../data/getSeasonBadges';
 
 export type BadgeCardProps = {
   variant: BadgeVariant;

@@ -1,6 +1,6 @@
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
-import { Season } from '../../../hooks/season/types';
+import { Season } from '../../../../hooks/season/types';
 import { ToggleButton, SeasonTypography } from './SeasonToggle.styled';
 import { doNothing } from '@utilities';
 import React from 'react';

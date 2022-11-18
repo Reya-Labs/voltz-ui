@@ -1,5 +1,5 @@
 import { Signer, providers, BigNumberish, BigNumber, ContractReceipt, Contract } from 'ethers';
-export declare type MellowLpRouterArgs = {
+export type MellowLpRouterArgs = {
     mellowRouterAddress: string;
     defaultWeights: number[];
     provider?: providers.Provider;

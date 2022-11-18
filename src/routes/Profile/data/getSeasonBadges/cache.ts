@@ -1,4 +1,4 @@
-import { GetProfileBadgesResponse } from '@graphql';
+import { GetProfileBadgesResponse } from './index';
 
 let SEASON_BADGE_CACHE: Record<string, GetProfileBadgesResponse | undefined> = {};
 

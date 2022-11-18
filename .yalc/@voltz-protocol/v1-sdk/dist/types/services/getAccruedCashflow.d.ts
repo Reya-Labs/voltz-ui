@@ -1,15 +1,15 @@
 import { Swap } from '../entities';
 import { BaseRateOracle } from '../typechain';
-export declare type AccruedCashflowInfo = {
+export type AccruedCashflowInfo = {
     avgFixedRate: number;
     accruedCashflow: number;
 };
-export declare type TransformedSwap = {
+export type TransformedSwap = {
     avgFixedRate: number;
     notional: number;
     time: number;
 };
-export declare type AccruedCashflowArgs = {
+export type AccruedCashflowArgs = {
     swaps: TransformedSwap[];
     rateOracle: BaseRateOracle;
     currentTime: number;

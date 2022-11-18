@@ -1,5 +1,5 @@
 import JSBI from 'jsbi';
-export declare type FCMUnwindConstructorArgs = {
+export type FCMUnwindConstructorArgs = {
     id: string;
     transactionId: string;
     transactionTimestamp: JSBI;

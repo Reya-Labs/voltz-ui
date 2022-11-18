@@ -4,9 +4,8 @@ import { doNothing, elideAddress, formatDateTimeWithOrdinal } from '@utilities';
 import { BadgeCard, BadgeCardHandle } from '../BadgeCard/BadgeCard';
 import { Page } from '@components/interface';
 import { AchievedBadge, AchievedBadgeProps } from '../AchievedBadge/AchievedBadge';
-import { BADGE_VARIANT_TIER_MAP } from '../helpers';
+import { BADGE_VARIANT_TIER_MAP } from '../../helpers';
 import { Badge } from '../Badge/Badge';
-import { BadgeVariant, NON_PROGRAMMATIC_BADGES } from '@graphql';
 import {
   Account,
   AchievedBadgesGrid,
@@ -26,12 +25,13 @@ import {
   NoAchievedBadgesTypography,
   Subheading,
 } from './ProfilePageWalletConnected.styled';
-import { Season } from '../../../hooks/season/types';
+import { Season } from '../../../../hooks/season/types';
 import { SeasonToggle } from '../SeasonToggle/SeasonToggle';
 import { ClaimButtonProps } from '../ClaimButton/ClaimButton';
 import { NotificationSection } from '../NotificationSection/NotificationSection';
 import { BoldText } from '../BoldText.styled';
 import { CopyLinkButtonProps } from '../CopyLinkButton/CopyLinkButton';
+import { BadgeVariant, NON_PROGRAMMATIC_BADGES } from '../../data/getSeasonBadges';
 
 export type ProfilePageWalletConnectedProps = {
   account: string;

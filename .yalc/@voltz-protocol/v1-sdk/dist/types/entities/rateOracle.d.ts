@@ -1,4 +1,4 @@
-export declare type RateOracleConstructorArgs = {
+export type RateOracleConstructorArgs = {
     id: string;
     protocolId: number;
 };

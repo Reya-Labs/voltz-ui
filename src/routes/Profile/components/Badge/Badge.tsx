@@ -1,6 +1,6 @@
 import React from 'react';
-import { BadgeVariant } from '@graphql';
 import { Skeleton, Icon } from './Badge.styled';
+import { BadgeVariant } from '../../data/getSeasonBadges';
 
 export type BadgeProps = {
   variant: BadgeVariant | 'noClaimedBadges';

@@ -1,26 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { useCurrentSeason, usePastSeasons, useWallet } from '@hooks';
-import { ProfilePageNoWallet } from './ProfilePageNoWallet/ProfilePageNoWallet';
-import { ProfilePageWalletConnected } from './ProfilePageWalletConnected/ProfilePageWalletConnected';
-import {
-  BadgeVariant,
-  GetProfileBadgesResponse,
-  getSeasonBadges,
-  getSeasonUserId,
-  SEASON_BADGE_VARIANTS,
-} from '@graphql';
+import { ProfilePageNoWallet } from './components/ProfilePageNoWallet/ProfilePageNoWallet';
+import { ProfilePageWalletConnected } from './components/ProfilePageWalletConnected/ProfilePageWalletConnected';
 import { getENSDetails, setPageTitle } from '@utilities';
 import { Season } from '../../hooks/season/types';
-import { ClaimButtonProps } from './ClaimButton/ClaimButton';
-import { getCacheValue, invalidateCache, setCacheValue } from './cache';
-import { getClaimButtonModesForVariants } from './helpers';
+import { ClaimButtonProps } from './components/ClaimButton/ClaimButton';
+import { getCacheValue, invalidateCache, setCacheValue } from './data/getSeasonBadges/cache';
+import { getClaimButtonModesForVariants, getSeasonUserId } from './helpers';
 import { DateTime } from 'luxon';
-import { CopyLinkButtonProps } from './CopyLinkButton/CopyLinkButton';
+import { CopyLinkButtonProps } from './components/CopyLinkButton/CopyLinkButton';
 import copy from 'copy-to-clipboard';
 
 import { CommunitySBT } from '@voltz-protocol/v1-sdk';
 import { getReferrerLink } from './get-referrer-link';
 import { Signer } from 'ethers';
+import {
+  BadgeVariant,
+  GetProfileBadgesResponse,
+  getSeasonBadges,
+  SEASON_BADGE_VARIANTS,
+} from './data/getSeasonBadges';
 
 const Profile: React.FunctionComponent = () => {
   const wallet = useWallet();
@@ -42,7 +41,7 @@ const Profile: React.FunctionComponent = () => {
     return await getSeasonBadges({
       userId: account,
       seasonId: seasonId,
-      signer: wallet.signer as Signer
+      signer: wallet.signer as Signer,
     });
   };
 
@@ -113,7 +112,7 @@ const Profile: React.FunctionComponent = () => {
     const badge = collectionBadges.find((b) => b.variant === variant);
     const subgraphAPI = process.env.REACT_APP_SUBGRAPH_BADGES_URL;
     const owner = wallet.account;
-    if (!badge?.badgeResponseRaw || badge.claimedAt || !owner || !subgraphAPI) {
+    if (!badge?.badgeResponseRaw?.awardedTimestampMs || badge.claimedAt || !owner || !subgraphAPI) {
       return;
     }
     const communitySBT = new CommunitySBT(params);
@@ -123,9 +122,9 @@ const Profile: React.FunctionComponent = () => {
     }));
     try {
       await communitySBT.redeemSbt(
-        parseInt(badge.badgeResponseRaw.badgeType, 10),
+        badge.badgeResponseRaw.badgeType,
         owner,
-        parseInt(badge.badgeResponseRaw.awardedTimestamp, 10),
+        badge.badgeResponseRaw.awardedTimestampMs,
         subgraphAPI,
       );
 
@@ -173,8 +172,8 @@ const Profile: React.FunctionComponent = () => {
     try {
       const response = await communitySBT.redeemMultipleSbts(
         badges.map((badge) => ({
-          badgeType: parseInt(badge.badgeResponseRaw!.badgeType, 10),
-          awardedTimestamp: parseInt(badge.badgeResponseRaw!.awardedTimestamp, 10),
+          badgeType: badge.badgeResponseRaw!.badgeType,
+          awardedTimestamp: badge.badgeResponseRaw!.awardedTimestampMs || 0,
         })),
         owner,
         subgraphAPI,

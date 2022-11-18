@@ -1,7 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import { BadgePill } from '../BadgePill/BadgePill';
-import { BADGE_VARIANT_TITLE_COPY_MAP } from '../helpers';
+import { BADGE_VARIANT_TITLE_COPY_MAP } from '../../helpers';
 import {
   AchievedAtTypography,
   AchievedContainerBox,
@@ -11,7 +11,7 @@ import {
   TitleTypography,
 } from './AchivedBadge.styled';
 import { formatPOSIXTimestamp } from '@utilities';
-import { BadgeVariant } from '@graphql';
+import { BadgeVariant } from '../../data/getSeasonBadges';
 
 export type AchievedBadgeProps = {
   achievedAt?: number;

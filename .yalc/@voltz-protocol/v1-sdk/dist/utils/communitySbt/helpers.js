@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getEtherscanURL = exports.decodeMultipleBadgeTypes = exports.decodeBadgeType = exports.getBadgeTypeFromMetadataUri = void 0;
+exports.toMillis = exports.getEtherscanURL = exports.decodeMultipleBadgeTypes = exports.decodeBadgeType = exports.getBadgeTypeFromMetadataUri = void 0;
 var ethers_1 = require("ethers");
 var typechain_sbt_1 = require("../../typechain-sbt");
 function getBadgeTypeFromMetadataUri(metadataURI) {
@@ -39,3 +39,17 @@ function getEtherscanURL(network, apiKey, userAddress) {
     }
 }
 exports.getEtherscanURL = getEtherscanURL;
+/**
+ * "Convert seconds to milliseconds, but only if the input is a number and not zero."
+ *
+ * @param {number} seconds - number - The number of seconds to convert to milliseconds.
+ * @returns A function that takes a number and returns a number or undefined.
+ */
+function toMillis(seconds) {
+    if (isNaN(seconds) || seconds === 0) {
+        return undefined;
+    }
+    return seconds * 1000;
+}
+exports.toMillis = toMillis;
+;
