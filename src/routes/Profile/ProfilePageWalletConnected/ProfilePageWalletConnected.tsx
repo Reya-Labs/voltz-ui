@@ -4,9 +4,9 @@ import { doNothing, elideAddress, formatDateTimeWithOrdinal } from '@utilities';
 import { BadgeCard, BadgeCardHandle } from '../BadgeCard/BadgeCard';
 import { Page } from '@components/interface';
 import { AchievedBadge, AchievedBadgeProps } from '../AchievedBadge/AchievedBadge';
-import { BADGE_VARIANT_TIER_MAP, COMING_SOON_BADGES } from '../helpers';
+import { BADGE_VARIANT_TIER_MAP } from '../helpers';
 import { Badge } from '../Badge/Badge';
-import { BadgeVariant } from '@graphql';
+import { BadgeVariant, NON_PROGRAMMATIC_BADGES } from '@graphql';
 import {
   Account,
   AchievedBadgesGrid,
@@ -17,9 +17,9 @@ import {
   AchievedBadgesListSubheading,
   BadgeCollectionBox,
   BadgeCollectionTypographyBox,
-  ComingSoonBox,
-  ComingSoonGrid,
-  ComingSoonTypography,
+  CommunityEngagementBox,
+  CommunityEngagementGrid,
+  CommunityEngagementTypography,
   ContainerBox,
   Heading,
   NoAchievedBadgesBox,
@@ -105,9 +105,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
             isOnGoingSeason={isOnGoingSeason}
             notClaimedBadgesCount={notClaimedBadges.length}
             claimButtonBulkMode={claimButtonBulkMode}
-            onClaimBulkClick={() =>
-              onClaimBulkClick(notClaimedBadges.map((b) => b.variant as BadgeVariant))
-            }
+            onClaimBulkClick={() => onClaimBulkClick(notClaimedBadges.map((b) => b.variant))}
             copyLinkButtonMode={copyLinkButtonMode}
             onCopyLinkButtonClick={onCopyLinkButtonClick}
           />
@@ -133,10 +131,10 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
                   <BadgeCard
                     ref={(ref: BadgeCardHandle) => (badgeCardRefs.current[badge.variant] = ref)}
                     key={`${badge.variant}${index}`}
-                    variant={badge.variant as BadgeVariant}
+                    variant={badge.variant}
                     loading={loading}
-                    onClaimButtonClick={() => onClaimButtonClick(badge.variant as BadgeVariant)}
-                    claimButtonMode={claimButtonModes[badge.variant as BadgeVariant] || 'claim'}
+                    onClaimButtonClick={() => onClaimButtonClick(badge.variant)}
+                    claimButtonMode={claimButtonModes[badge.variant] || 'claim'}
                     claimedAt={badge.claimedAt}
                     disableClaiming={isOnGoingSeason}
                   />
@@ -166,20 +164,22 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
                   key={`${badge.variant}${index}`}
                   {...badge}
                   loading={loading}
-                  onClick={() => handleSmoothScroll(badge.variant as BadgeVariant)}
+                  onClick={() => handleSmoothScroll(badge.variant)}
                 />
               ))}
             </AchievedBadgesListGrid>
           </AchievedBadgesListBox>
 
-          <ComingSoonBox>
-            <ComingSoonTypography variant="h2">COMING SOON</ComingSoonTypography>
-            <ComingSoonGrid itemsPerRow={1}>
-              {COMING_SOON_BADGES.map((badge, index) => (
+          <CommunityEngagementBox>
+            <CommunityEngagementTypography variant="h2">
+              COMMUNITY ENGAGEMENT
+            </CommunityEngagementTypography>
+            <CommunityEngagementGrid itemsPerRow={1}>
+              {NON_PROGRAMMATIC_BADGES.map((badge, index) => (
                 <AchievedBadge key={`${badge}${index}`} variant={badge} loading={loading} />
               ))}
-            </ComingSoonGrid>
-          </ComingSoonBox>
+            </CommunityEngagementGrid>
+          </CommunityEngagementBox>
         </ContainerBox>
       </Page>
     );

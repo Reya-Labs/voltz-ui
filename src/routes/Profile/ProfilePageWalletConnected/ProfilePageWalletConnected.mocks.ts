@@ -63,6 +63,30 @@ export const season1Badges: CollectionBadge[] = [
     variant: 'mellowLpVault',
     achievedAt: new Date('02/02/2022').valueOf(),
   },
+  {
+    variant: 'governorz',
+    achievedAt: new Date('02/02/2022').valueOf(),
+  },
+  {
+    variant: 'senatorz',
+    achievedAt: new Date('02/02/2022').valueOf(),
+  },
+  {
+    variant: 'diplomatz',
+    achievedAt: new Date('02/02/2022').valueOf(),
+  },
+  {
+    variant: 'whaleWhisperer',
+    achievedAt: new Date('02/02/2022').valueOf(),
+  },
+  {
+    variant: 'notionalInfluencer',
+    achievedAt: new Date('02/02/2022').valueOf(),
+  },
+  {
+    variant: 'referror',
+    achievedAt: new Date('02/02/2022').valueOf(),
+  },
 ];
 export const seasonOGBadges: CollectionBadge[] = [
   {

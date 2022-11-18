@@ -1,4 +1,4 @@
-import { BadgeVariant } from './types';
+import { BadgeVariant, NonProgrammaticBadges } from './types';
 import { Season } from '../../../hooks/season/types';
 
 export const BADGE_TYPE_BADGE_VARIANT_MAP: Record<string, BadgeVariant> = {
@@ -37,7 +37,20 @@ export const BADGE_TYPE_BADGE_VARIANT_MAP: Record<string, BadgeVariant> = {
   '13': 'ogYikes',
   '14': 'ogMaxBidding',
   '15': 'ogTopTrader',
+  // non-programmatic badges
+  '-1': 'governorz',
+  '-2': 'diplomatz',
+  '-3': 'senatorz',
 };
+
+export const NON_PROGRAMMATIC_BADGES: NonProgrammaticBadges[] = [
+  'governorz',
+  'diplomatz',
+  'senatorz',
+  'whaleWhisperer',
+  'notionalInfluencer',
+  'referror',
+];
 
 export const SEASON_BADGE_VARIANTS: Record<`${Season['id']}`, string[]> = {
   0: [
@@ -57,6 +70,7 @@ export const SEASON_BADGE_VARIANTS: Record<`${Season['id']}`, string[]> = {
     'ogWaterHose',
     'ogRainMaker',
     'ogBeWaterMyFriend',
+    ...NON_PROGRAMMATIC_BADGES,
   ],
   1: [
     'fixedTrader',
@@ -76,6 +90,7 @@ export const SEASON_BADGE_VARIANTS: Record<`${Season['id']}`, string[]> = {
     'waterHose',
     'rainMaker',
     'beWaterMyFriend',
+    ...NON_PROGRAMMATIC_BADGES,
   ],
   2: [],
   3: [],
