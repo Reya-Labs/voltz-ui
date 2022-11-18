@@ -20,7 +20,7 @@ export type BadgesQueryResponse = {
   };
 };
 
-export type BadgeVariant =
+export type ProgrammaticBadges =
   // season 1
   | 'degenStuff'
   | 'deltaDegen'
@@ -56,3 +56,13 @@ export type BadgeVariant =
   | 'ogMaxBidding'
   | 'ogOkBoomer'
   | 'ogDryIce';
+
+export type NonProgrammaticBadges =
+  | 'governorz'
+  | 'diplomatz'
+  | 'senatorz'
+  | 'whaleWhisperer'
+  | 'notionalInfluencer'
+  | 'referror';
+
+export type BadgeVariant = ProgrammaticBadges | NonProgrammaticBadges;

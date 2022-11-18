@@ -1,7 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import { BadgePill } from '../BadgePill/BadgePill';
-import { BADGE_VARIANT_TITLE_COPY_MAP, COMING_SOON_BADGES } from '../helpers';
+import { BADGE_VARIANT_TITLE_COPY_MAP } from '../helpers';
 import {
   AchievedAtTypography,
   AchievedContainerBox,
@@ -12,12 +12,11 @@ import {
 } from './AchivedBadge.styled';
 import { formatPOSIXTimestamp } from '@utilities';
 import { BadgeVariant } from '@graphql';
-import { ComingSoonBadges } from '../types';
 
 export type AchievedBadgeProps = {
   achievedAt?: number;
   claimedAt?: number;
-  variant: BadgeVariant | ComingSoonBadges;
+  variant: BadgeVariant;
   loading?: boolean;
   onClick?: () => void;
 };
@@ -42,11 +41,7 @@ export const AchievedBadge: React.FunctionComponent<AchievedBadgeProps> = ({
         {BADGE_VARIANT_TITLE_COPY_MAP[variant].toUpperCase()}
       </TitleTypography>
       <AchievedAtTypography variant="body2">
-        {achievedAt
-          ? `Achieved: ${formatPOSIXTimestamp(achievedAt)}`
-          : COMING_SOON_BADGES.indexOf(variant as ComingSoonBadges) !== -1
-          ? 'Contribute...'
-          : 'Keep trading...'}
+        {achievedAt ? `Achieved: ${formatPOSIXTimestamp(achievedAt)}` : 'Keep trading...'}
       </AchievedAtTypography>
     </Container>
   );

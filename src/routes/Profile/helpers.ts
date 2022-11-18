@@ -1,11 +1,8 @@
-import { BadgeTier, ComingSoonBadges } from './types';
+import { BadgeTier } from './types';
 import { BadgeVariant } from '@graphql';
 import { ClaimButtonProps } from './ClaimButton/ClaimButton';
 
-export const BADGE_VARIANT_TRADER_LP_MAP: Record<
-  BadgeVariant | ComingSoonBadges,
-  'trader' | 'lp' | ''
-> = {
+export const BADGE_VARIANT_TRADER_LP_MAP: Record<BadgeVariant, 'trader' | 'lp' | ''> = {
   // season 1
   degenStuff: 'trader',
   deltaDegen: 'trader',
@@ -41,11 +38,13 @@ export const BADGE_VARIANT_TRADER_LP_MAP: Record<
   ogOkBoomer: 'trader',
   ogDryIce: 'lp',
   mellowLpVault: 'lp',
-  // coming soon...
+  // non-programmatic badges
   governorz: '',
   diplomatz: '',
   senatorz: '',
-  theOgActivity: '',
+  referror: '',
+  notionalInfluencer: '',
+  whaleWhisperer: '',
 };
 
 export const TIER_COPY_MAP: Record<BadgeTier, string> = {
@@ -56,7 +55,7 @@ export const TIER_COPY_MAP: Record<BadgeTier, string> = {
   easterEgg: 'EASTER EGG',
 };
 
-export const BADGE_VARIANT_TITLE_COPY_MAP: Record<BadgeVariant | ComingSoonBadges, string> = {
+export const BADGE_VARIANT_TITLE_COPY_MAP: Record<BadgeVariant, string> = {
   // season
   degenStuff: 'DEGEN STUFF',
   deltaDegen: 'DELTA DEGEN',
@@ -92,11 +91,13 @@ export const BADGE_VARIANT_TITLE_COPY_MAP: Record<BadgeVariant | ComingSoonBadge
   ogMaxBidding: 'MAX BIDDING',
   ogOkBoomer: 'OK BOOMER',
   ogDryIce: 'DRY ICE',
-  // coming soon...
+  // non-programmatic badges
   governorz: 'GOVERNORZ',
   diplomatz: 'DIPLOMATZ',
   senatorz: 'SENATORZ',
-  theOgActivity: 'THE OG ACTIVITY',
+  referror: 'REFERROR',
+  notionalInfluencer: 'NOTIONAL INFLUENCER',
+  whaleWhisperer: 'WHALE WHISPERER',
 };
 
 export const BADGE_VARIANT_DESCRIPTION_COPY_MAP: Record<BadgeVariant, string> = {
@@ -135,9 +136,19 @@ export const BADGE_VARIANT_DESCRIPTION_COPY_MAP: Record<BadgeVariant, string> = 
   ogMaxBidding: 'There is only one button on your keyboard: max bidding, max leverage',
   ogOkBoomer: '2x leverage is OK. We all start somewhere, you just started small.',
   ogDryIce: 'Providing liquidity but below 2x notional.',
+  // non-programmatic badges
+  diplomatz: 'A Badge for those supporting thousands speaking different languages.',
+  senatorz: 'A Badge for those supporting voltz community beyond the unthinkable.',
+  governorz: 'A Badge for being there and contributing the layer 0 of our community.',
+  referror:
+    'You brought quite a crew with you. Voltz is build to empower defi and your help has been rewarded.',
+  notionalInfluencer:
+    'New achievement unlocked, all those referrals are paving the way to new defi pillars.',
+  whaleWhisperer:
+    "At this point you are a voltz influencer, you've reached the highest level and are walking among IRS gods.",
 };
 
-export const BADGE_VARIANT_TIER_MAP: Record<BadgeVariant | ComingSoonBadges, BadgeTier> = {
+export const BADGE_VARIANT_TIER_MAP: Record<BadgeVariant, BadgeTier> = {
   // season 1
   degenStuff: 'tier3',
   deltaDegen: 'tier1',
@@ -173,19 +184,14 @@ export const BADGE_VARIANT_TIER_MAP: Record<BadgeVariant | ComingSoonBadges, Bad
   ogMaxBidding: 'easterEgg',
   ogOkBoomer: 'easterEgg',
   ogDryIce: 'easterEgg',
-  // coming soon...
+  // non-programmatic badges
   governorz: 'tier1',
   diplomatz: 'tier2',
   senatorz: 'tier3',
-  theOgActivity: 'legendary',
+  referror: 'tier1',
+  notionalInfluencer: 'tier2',
+  whaleWhisperer: 'tier3',
 };
-
-export const COMING_SOON_BADGES: ComingSoonBadges[] = [
-  'governorz',
-  'diplomatz',
-  'senatorz',
-  'theOgActivity',
-];
 
 export const getClaimButtonModesForVariants = (
   variants: BadgeVariant[],

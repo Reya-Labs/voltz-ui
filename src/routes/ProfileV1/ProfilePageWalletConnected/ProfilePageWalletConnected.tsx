@@ -6,7 +6,6 @@ import { Page } from '@components/interface';
 import { AchievedBadge, AchievedBadgeProps } from '../AchievedBadge/AchievedBadge';
 import { BADGE_VARIANT_TIER_MAP, COMING_SOON_BADGES } from '../helpers';
 import { Badge } from '../Badge/Badge';
-import { BadgeVariant } from '@graphql';
 import {
   Account,
   AchievedBadgesGrid,
@@ -32,6 +31,7 @@ import {
   Subheading,
 } from './ProfilePageWalletConnected.styled';
 import { Season } from '../../../hooks/season/types';
+import { BadgeVariant1 } from '../getters/getPhase1Badges';
 
 type ProfilePageProps = {
   account: string;
@@ -101,7 +101,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
               collection.map((badge, index) => (
                 <BadgeCard
                   key={`${badge.variant}${index}`}
-                  variant={badge.variant as BadgeVariant}
+                  variant={badge.variant as BadgeVariant1}
                   loading={loading}
                 />
               ))}

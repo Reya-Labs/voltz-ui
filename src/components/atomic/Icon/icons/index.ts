@@ -59,3 +59,11 @@ export { ReactComponent as OGTopTrader } from './badges/og/ogTopTrader.svg';
 export { ReactComponent as OGYikes } from './badges/og/ogYikes.svg';
 export { ReactComponent as OGSushiRoll } from './badges/og/ogSushiRoll.svg';
 export { ReactComponent as OGWaterHose } from './badges/og/ogWaterHose.svg';
+
+// non-programmatic badges
+export { ReactComponent as Diplomatz } from './badges/non-programmatic/diplomatz.svg';
+export { ReactComponent as Governorz } from './badges/non-programmatic/governorz.svg';
+export { ReactComponent as Senatorz } from './badges/non-programmatic/senatorz.svg';
+export { ReactComponent as NotionalInfluencer } from './badges/non-programmatic/notionalInfluencer.svg';
+export { ReactComponent as Referror } from './badges/non-programmatic/referror.svg';
+export { ReactComponent as WhaleWhisperer } from './badges/non-programmatic/whaleWhisperer.svg';

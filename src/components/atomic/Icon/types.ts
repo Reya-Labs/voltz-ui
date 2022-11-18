@@ -54,6 +54,12 @@ import {
   OGRainmaker,
   OGMoneyMoneyMoney,
   MellowLpVault,
+  Senatorz,
+  Governorz,
+  Diplomatz,
+  NotionalInfluencer,
+  Referror,
+  WhaleWhisperer,
 } from './icons';
 
 export type Icons =
@@ -76,6 +82,8 @@ export type Icons =
   | 'voltz'
   | 'walletConnect'
   | 'warning-circle'
+  // badges
+  | 'noClaimedBadges'
   // season 1 badges
   | 'degenStuff'
   | 'deltaDegen'
@@ -92,7 +100,6 @@ export type Icons =
   | 'yikes'
   | 'maxBidding'
   | 'dryIce'
-  | 'noClaimedBadges'
   | 'okBoomer'
   | 'mellowLpVault'
   // season OG badges
@@ -111,7 +118,14 @@ export type Icons =
   | 'ogYikes'
   | 'ogMaxBidding'
   | 'ogDryIce'
-  | 'ogOkBoomer';
+  | 'ogOkBoomer'
+  // non-programmatic badges
+  | 'senatorz'
+  | 'governorz'
+  | 'diplomatz'
+  | 'whaleWhisperer'
+  | 'notionalInfluencer'
+  | 'referror';
 
 export const iconMap: Record<Icons, ElementType> = {
   'arrow-left': ArrowLeft as ElementType,
@@ -170,4 +184,11 @@ export const iconMap: Record<Icons, ElementType> = {
   ogMaxBidding: OGMaxBidding as ElementType,
   ogOkBoomer: OGOkBoomer as ElementType,
   ogDryIce: OGDryIce as ElementType,
+  // non-programmatic badges
+  senatorz: Senatorz as ElementType,
+  diplomatz: Diplomatz as ElementType,
+  governorz: Governorz as ElementType,
+  notionalInfluencer: NotionalInfluencer as ElementType,
+  referror: Referror as ElementType,
+  whaleWhisperer: WhaleWhisperer as ElementType,
 };

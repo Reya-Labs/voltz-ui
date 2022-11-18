@@ -1,6 +1,6 @@
 import React from 'react';
 import { PillProps, Pill } from '@components/atomic';
-import { BadgeTier, ComingSoonBadges } from '../types';
+import { BadgeTier } from '../types';
 import { BADGE_VARIANT_TIER_MAP, BADGE_VARIANT_TRADER_LP_MAP, TIER_COPY_MAP } from '../helpers';
 import { BadgeVariant } from '@graphql';
 import { Skeleton } from './BadgePill.styled';
@@ -14,7 +14,7 @@ const TIER_PILL_VARIANT_MAP: Record<BadgeTier, PillProps['variant']> = {
 };
 
 export const BadgePill: React.FunctionComponent<{
-  variant: BadgeVariant | ComingSoonBadges;
+  variant: BadgeVariant;
   loading?: boolean;
 }> = ({ loading, variant }) => {
   if (loading) {
