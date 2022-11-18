@@ -29,8 +29,6 @@ const ConnectedMellowLPTable: React.FunctionComponent<ConnectedMellowLPTableProp
         }}
       >
         <EcosystemHeader
-          lpOptimizerTag={`LP OPTIMISER`}
-          lpOptimizerCount={lpVaults ? lpVaults.length : 0}
           alphaVaultTag={`ALPHA VAULT`}
           alphaVaultCount={0}
         />

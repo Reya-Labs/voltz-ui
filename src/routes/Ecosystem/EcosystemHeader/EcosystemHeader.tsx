@@ -3,15 +3,11 @@ import { Panel, Typography } from '../../../components/atomic';
 import { titleStyles, copyStyles, boxStyles, tagStyles } from './styles';
 
 export type EcosystemHeaderProps = {
-  lpOptimizerTag: string;
-  lpOptimizerCount: number;
   alphaVaultTag: string;
   alphaVaultCount: number;
 };
 
 const EcosystemHeader = ({
-  lpOptimizerTag,
-  lpOptimizerCount,
   alphaVaultTag,
   alphaVaultCount,
 }: EcosystemHeaderProps) => {

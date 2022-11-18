@@ -44,7 +44,8 @@ const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = (
         />
 
         <LPMellowVaultDepositWindow
-          lpVault={lpVault}
+          userWalletBalance={lpVault.userWalletBalance}
+          tokenName={lpVault.tokenName}
           onChangeDeposit={onChangeDeposit}
           submitText={submitText}
           hintText={hintText}
