@@ -1,5 +1,5 @@
 import { Agents } from '@contexts';
-import { useMellowLPVaults, useWallet } from '@hooks';
+import { useMellowLPVaultsV1, useWallet } from '@hooks';
 import { Box } from '@mui/system';
 import { isNull } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -17,7 +17,7 @@ export type ConnectedMellowLPTableProps = {
 const ConnectedMellowLPTable: React.FunctionComponent<ConnectedMellowLPTableProps> = ({
   onSelectItem,
 }) => {
-  const lpVaults = useMellowLPVaults();
+  const lpVaults = useMellowLPVaultsV1();
 
   const { signer } = useWallet();
   const isSignerAvailable = !isNull(signer);
