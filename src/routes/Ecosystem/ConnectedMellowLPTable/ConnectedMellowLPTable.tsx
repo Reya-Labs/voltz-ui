@@ -36,7 +36,11 @@ const ConnectedMellowLPTable: React.FunctionComponent<ConnectedMellowLPTableProp
         />
         {lpVaults && (
           <Box sx={{ marginTop: '32px' }}>
-            <MellowLPTable lpVaults={lpVaults} onSelectItem={onSelectItem} dataLoading={dataLoading} />
+            <MellowLPTable
+              lpVaults={lpVaults}
+              onSelectItem={onSelectItem}
+              dataLoading={dataLoading}
+            />
           </Box>
         )}
       </Panel>
