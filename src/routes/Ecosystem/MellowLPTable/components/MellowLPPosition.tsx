@@ -1,22 +1,23 @@
 import { Box, Button, Skeleton, Typography } from '@mui/material';
 import { formatCurrency } from '@utilities';
-import { MellowLpVault } from '@voltz-protocol/v1-sdk';
 import { isUndefined } from 'lodash';
 import React from 'react';
 
 export type MellowLPPositionProps = {
-  lpVault: MellowLpVault;
+  userDeposit?: number;
+  tokenName: string;
   handleClick: () => void;
-  disabled: boolean;
+  dataLoading: boolean;
 };
 
 const MellowLPPosition: React.FunctionComponent<MellowLPPositionProps> = ({
-  lpVault,
+  userDeposit,
+  tokenName,
   handleClick,
-  disabled,
+  dataLoading,
 }: MellowLPPositionProps) => {
   const getPositionInfo = () => {
-    if (isUndefined(lpVault.userDeposit)) {
+    if (dataLoading) {
       return (
         <Skeleton
           variant="text"
@@ -32,9 +33,9 @@ const MellowLPPosition: React.FunctionComponent<MellowLPPositionProps> = ({
             variant="h6"
             sx={{ fontSize: '14px', color: '#9B97AD', textTransform: 'uppercase' }}
           >
-            Your position:
+            {`Your position: ${isUndefined(userDeposit) ? ' ---' : ''}`}
           </Typography>
-          <Typography
+          {!isUndefined(userDeposit) && (<Typography
             variant="h6"
             sx={{
               fontSize: '14px',
@@ -43,12 +44,14 @@ const MellowLPPosition: React.FunctionComponent<MellowLPPositionProps> = ({
               marginLeft: '4px',
             }}
           >
-            {formatCurrency(lpVault.userDeposit)} {lpVault.tokenName}
-          </Typography>
+            {(userDeposit) ?
+              `${formatCurrency(userDeposit)} ${tokenName}`
+              : "---"}
+          </Typography>)}
         </Box>
         <Button
           onClick={handleClick}
-          disabled={disabled}
+          disabled={dataLoading}
           sx={{
             background: 'transparent',
             color: 'primary.light',

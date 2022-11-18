@@ -5,20 +5,30 @@ import { Panel, Typography } from '@components/atomic';
 import { formatCurrency } from '@utilities';
 import { isUndefined } from 'lodash';
 
-import { MellowLpVault } from '@voltz-protocol/v1-sdk';
-
 export type LPMellowVaultDepositInfoProps = {
-  lpVault: MellowLpVault;
+  vaultCap?: number;
+  vaultAccumulative?: number;
+  tokenName: string;
+  protocol: string;
+  expectedApy: number;
+  maturity: string;
+  userDeposit?: number;
 };
-const LPMellowVaulDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoProps> = ({
-  lpVault,
+const LPMellowVaultDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoProps> = ({
+  vaultCap,
+  vaultAccumulative,
+  tokenName,
+  protocol,
+  expectedApy,
+  maturity,
+  userDeposit,
 }: LPMellowVaultDepositInfoProps) => {
   const getCapBar = () => {
-    if (isUndefined(lpVault.vaultCap) || isUndefined(lpVault.vaultAccumulative)) {
-      return null;
+    if (isUndefined(vaultCap) || isUndefined(vaultAccumulative)) {
+      return;
     }
 
-    const percentage = Math.floor(lpVault.vaultCap * 100 + 0.5) / 100;
+    const percentage = Math.floor(vaultCap * 100 + 0.5) / 100;
 
     return (
       <Box sx={{ marginTop: '16px' }}>
@@ -28,12 +38,12 @@ const LPMellowVaulDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoP
         <ProgressBar
           leftContent={
             <Typography variant="h6" color="#E5E1F9" marginLeft="0px">
-              {lpVault.tokenName}
+              {tokenName}
             </Typography>
           }
           middleContent={
             <Typography variant="h6" color="#E5E1F9" marginLeft="0px">
-              {formatCurrency(lpVault.vaultAccumulative, true)}
+              {formatCurrency(vaultAccumulative, true)}
             </Typography>
           }
           rightContent={
@@ -52,7 +62,7 @@ const LPMellowVaulDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoP
       <Panel variant="dark" sx={{ width: '100%', maxWidth: '366px', background: 'transparent' }}>
         <PoolField
           agent={Agents.LIQUIDITY_PROVIDER}
-          protocol={lpVault.protocol}
+          protocol={protocol}
           isBorrowing={false}
           isBorrowTable={true}
         />
@@ -69,9 +79,7 @@ const LPMellowVaulDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoP
               />
             }
           >
-            {isUndefined(lpVault.vaultExpectedApy)
-              ? '---'
-              : `${lpVault.vaultExpectedApy > 30 ? '>30' : lpVault.vaultExpectedApy.toFixed(2)}%`}
+            {`${expectedApy > 30 ? '>30' : expectedApy.toFixed(2)}%`}
           </Typography>
 
           <Typography
@@ -91,7 +99,7 @@ const LPMellowVaulDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoP
               />
             }
           >
-            {isUndefined(lpVault.maturity) ? '---' : lpVault.maturity}
+            {maturity}
           </Typography>
         </Box>
 
@@ -111,9 +119,9 @@ const LPMellowVaulDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoP
             YOUR POSITION:
           </Typography>
           <Typography variant="h6" sx={{ fontSize: '14px', color: '#4DE5FF', paddingLeft: '8px' }}>
-            {isUndefined(lpVault.userDeposit)
+            {isUndefined(userDeposit)
               ? '---'
-              : `${formatCurrency(lpVault.userDeposit, true)} ${lpVault.tokenName}`}
+              : `${formatCurrency(userDeposit, true)} ${tokenName}`}
           </Typography>
         </Box>
 
@@ -142,4 +150,4 @@ const LPMellowVaulDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoP
   return renderContent();
 };
 
-export default LPMellowVaulDepositInfo;
+export default LPMellowVaultDepositInfo;

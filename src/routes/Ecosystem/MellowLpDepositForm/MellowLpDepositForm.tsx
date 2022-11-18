@@ -33,7 +33,16 @@ const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = (
     <>
       <MellowLpDepositFormHeader onCancel={onCancel} />
       <Box sx={{ display: 'flex' }}>
-        <LPMellowVaultDepositInfo lpVault={lpVault} />
+        <LPMellowVaultDepositInfo
+          vaultCap={lpVault.vaultCap}
+          vaultAccumulative={lpVault.vaultAccumulative}
+          tokenName={lpVault.tokenName}
+          protocol={lpVault.protocol}
+          expectedApy={lpVault.vaultExpectedApy ?? 0}
+          maturity={lpVault.maturity ?? "---"}
+          userDeposit={lpVault.userDeposit}
+        />
+
         <LPMellowVaultDepositWindow
           lpVault={lpVault}
           onChangeDeposit={onChangeDeposit}

@@ -13,13 +13,13 @@ import { MellowLpVault } from '@voltz-protocol/v1-sdk';
 export type MellowLPEntryProps = {
   onSelectItem: () => void;
   lpVault: MellowLpVault;
-  disabled: boolean;
+  dataLoading: boolean;
 };
 
 const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
   lpVault,
   onSelectItem,
-  disabled,
+  dataLoading,
 }: MellowLPEntryProps) => {
   return (
     <Box
@@ -83,7 +83,7 @@ const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
           borderRadius: '0px 0px 8px 8px',
         }}
       >
-        <MellowLPPosition lpVault={lpVault} handleClick={onSelectItem} disabled={disabled} />
+        <MellowLPPosition userDeposit={lpVault.userDeposit} tokenName={lpVault.tokenName} handleClick={onSelectItem} dataLoading={dataLoading} />
       </Box>
     </Box>
   );
