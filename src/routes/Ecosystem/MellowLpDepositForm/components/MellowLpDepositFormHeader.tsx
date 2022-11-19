@@ -6,10 +6,12 @@ import { titleStyles, copyStyles, boxStyles, tagStyles } from './styles';
 import React from 'react';
 
 export type MellowLpDepositFormHeaderProps = {
+  vaultDescription: string;
   onCancel: () => void;
 };
 
 const MellowLpDepositHeaderForm: React.FunctionComponent<MellowLpDepositFormHeaderProps> = ({
+  vaultDescription,
   onCancel,
 }) => {
   const renderContent = () => {
@@ -23,8 +25,7 @@ const MellowLpDepositHeaderForm: React.FunctionComponent<MellowLpDepositFormHead
             </Typography>
           </Box>
           <Typography variant="body1" sx={copyStyles}>
-            The Mellow LP Optimiser runs a permissionless strategy that takes deposits and generates
-            optimised LP fees by providing liquidity on Voltz Protocol.
+            {vaultDescription}
           </Typography>
         </Box>
 

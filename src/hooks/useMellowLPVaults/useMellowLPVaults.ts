@@ -7,7 +7,7 @@ const useMellowLPVaults = (): MellowProduct[] => {
   const config = getConfig();
 
   const lpVaults = useMemo(() => {
-    const vaults: MellowProduct[] = config.MELLOW_VAULTS.map((item) => {
+    const vaults: MellowProduct[] = config.MELLOW_VAULTS.filter((item) => item.show).map((item) => {
       const vault = new MellowLpVault({
         ethWrapperAddress: config.MELLOW_ETH_WRAPPER,
         voltzVaultAddress: item.voltzVault,
@@ -22,19 +22,21 @@ const useMellowLPVaults = (): MellowProduct[] => {
       };
     });
 
-    const routers: MellowProduct[] = config.MELLOW_ROUTERS.map((item) => {
-      const vault = new MellowLpRouter({
-        mellowRouterAddress: item.router,
-        defaultWeights: item.defaultWeights,
-        provider: config.PROVIDER,
-        pivot: item.pivot,
-      });
+    const routers: MellowProduct[] = config.MELLOW_ROUTERS.filter((item) => item.show).map(
+      (item) => {
+        const vault = new MellowLpRouter({
+          mellowRouterAddress: item.router,
+          defaultWeights: item.defaultWeights,
+          provider: config.PROVIDER,
+          pivot: item.pivot,
+        });
 
-      return {
-        vault,
-        metadata: item.metadata,
-      };
-    });
+        return {
+          vault,
+          metadata: item.metadata,
+        };
+      },
+    );
 
     return vaults.concat(routers);
   }, []);

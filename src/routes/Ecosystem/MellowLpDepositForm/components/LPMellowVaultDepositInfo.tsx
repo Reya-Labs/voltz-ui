@@ -4,30 +4,23 @@ import { Panel, Typography } from '@components/atomic';
 import { formatCurrency } from '@utilities';
 import { isUndefined } from 'lodash';
 import { VaultField } from '../../Common/VaultField';
+import { MellowProduct } from '../../types';
 
 export type LPMellowVaultDepositInfoProps = {
-  vaultCap?: number;
-  vaultCumulative?: number;
-  tokenName: string;
-  protocol?: string;
-  expectedApy: string;
-  maturity: string;
-  userDeposit?: number;
+  mellowProduct: MellowProduct;
 };
 const LPMellowVaultDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoProps> = ({
-  vaultCap,
-  vaultCumulative,
-  tokenName,
-  expectedApy,
-  maturity,
-  userDeposit,
+  mellowProduct,
 }: LPMellowVaultDepositInfoProps) => {
   const getCapBar = () => {
-    if (isUndefined(vaultCap) || isUndefined(vaultCumulative)) {
+    if (
+      isUndefined(mellowProduct.vault.vaultCap) ||
+      isUndefined(mellowProduct.vault.vaultCumulative)
+    ) {
       return;
     }
 
-    const percentage = Math.floor(vaultCap * 100 + 0.5) / 100;
+    const percentage = Math.floor(mellowProduct.vault.vaultCap * 100 + 0.5) / 100;
 
     return (
       <Box sx={{ marginTop: '16px' }}>
@@ -37,12 +30,12 @@ const LPMellowVaultDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfo
         <ProgressBar
           leftContent={
             <Typography variant="h6" color="#E5E1F9" marginLeft="0px">
-              {tokenName}
+              {mellowProduct.metadata.token}
             </Typography>
           }
           middleContent={
             <Typography variant="h6" color="#E5E1F9" marginLeft="0px">
-              {formatCurrency(vaultCumulative, true)}
+              {formatCurrency(mellowProduct.vault.vaultCumulative, true)}
             </Typography>
           }
           rightContent={
@@ -59,7 +52,11 @@ const LPMellowVaultDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfo
   const renderContent = () => {
     return (
       <Panel variant="dark" sx={{ width: '100%', maxWidth: '366px', background: 'transparent' }}>
-        <VaultField maturity={maturity} expectedApy={expectedApy} />
+        <VaultField
+          title={mellowProduct.metadata.title}
+          maturity={mellowProduct.metadata.maturity}
+          expectedApy={mellowProduct.metadata.estimatedHistoricApy}
+        />
 
         {getCapBar()}
 
@@ -77,28 +74,19 @@ const LPMellowVaultDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfo
             YOUR POSITION:
           </Typography>
           <Typography variant="h6" sx={{ fontSize: '14px', color: '#4DE5FF', paddingLeft: '8px' }}>
-            {isUndefined(userDeposit) ? '---' : `${formatCurrency(userDeposit, true)} ${tokenName}`}
+            {isUndefined(mellowProduct.vault.userDeposit)
+              ? '---'
+              : `${formatCurrency(mellowProduct.vault.userDeposit, true)} ${
+                  mellowProduct.metadata.token
+                }`}
           </Typography>
         </Box>
 
-        <Typography variant="body1" sx={{ fontSize: '14px', color: '#9B97AD', marginTop: '8px' }}>
-          The Mellow LP Optimiser runs a permissionless strategy that takes deposits and provides
-          liquidity into Voltz Protocol pools. The liquidity provided is optimised to try and
-          maximise yield for depositors.
-        </Typography>
-        <Typography variant="body1" sx={{ fontSize: '14px', color: '#9B97AD', marginTop: '8px' }}>
-          In a typical Voltz Protocol pool, LPs need to specify margin, leverage and chosen
-          fixed-rate tick ranges. The Mellow LP Optimiser abstracts away these complexities and
-          automatically chooses an optimal amount of leverage and tick ranges for liquidity
-          supplied.
-        </Typography>
-        <Typography variant="body1" sx={{ fontSize: '14px', color: '#9B97AD', marginTop: '8px' }}>
-          For this pool, users simply deposit ETH in order to get access to optimised LP yields on
-          the Voltz Protocol stETH pool.
-        </Typography>
-        <Typography variant="body1" sx={{ fontSize: '14px', color: '#9B97AD', marginTop: '8px' }}>
-          Remember, returns are not guaranteed and you may get back less than you put in.
-        </Typography>
+        {mellowProduct.metadata.explanations.map((item) => (
+          <Typography variant="body1" sx={{ fontSize: '14px', color: '#9B97AD', marginTop: '8px' }}>
+            {item}
+          </Typography>
+        ))}
       </Panel>
     );
   };
