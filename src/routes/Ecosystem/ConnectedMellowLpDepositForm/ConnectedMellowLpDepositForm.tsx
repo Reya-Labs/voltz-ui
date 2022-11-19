@@ -96,8 +96,6 @@ const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMellowLpDep
       variant="dark"
       sx={{
         padding: 0,
-        width: '100%',
-        maxWidth: '748px',
         margin: '0 auto',
         background: 'transparent',
       }}
