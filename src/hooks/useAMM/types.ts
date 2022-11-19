@@ -19,13 +19,6 @@ export type SwapInfoPayload = {
   fixedHigh?: number;
 };
 
-export type MinimumMarginAmountSwapPayload = {
-  fixedLow: number;
-  fixedHigh: number;
-  notional: number;
-  isFT: boolean;
-};
-
 export type ExpectedInfoPayload = {
   margin: number;
   position?: Position;

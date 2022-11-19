@@ -37,5 +37,3 @@ export const PositionProvider: React.FunctionComponent<PositionProviderProps> = 
 export const usePositionContext = (): PositionContext => {
   return useContext(positionCtx);
 };
-
-export default PositionProvider;

@@ -3,14 +3,6 @@ import { DateTime } from 'luxon';
 export type FixedBorrowTableFields = 'protocol' | 'debt' | 'fixedApr' | 'maturity';
 export type VariableBorrowTableFields = 'protocol' | 'debt' | 'variableApy';
 
-export type FixedBorrowTableDatum = {
-  id: string;
-  protocol: string;
-  startDate: DateTime;
-  endDate: DateTime;
-  isBorrowing: boolean;
-};
-
 export const FixedBorrowTableLabels: Record<FixedBorrowTableFields, string> = {
   protocol: 'Pool',
   fixedApr: 'Fixed APR',

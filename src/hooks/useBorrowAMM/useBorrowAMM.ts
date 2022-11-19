@@ -145,5 +145,3 @@ export const useBorrowAMM = (borrowAmm: BorrowAMM) => {
     ],
   );
 };
-
-export default useBorrowAMM;
