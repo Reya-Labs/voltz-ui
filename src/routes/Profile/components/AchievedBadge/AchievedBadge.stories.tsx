@@ -1,7 +1,7 @@
+import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { AchievedBadge } from './AchievedBadge';
-import React from 'react';
 
 export default {
   title: 'Interface/AchievedBadge',
