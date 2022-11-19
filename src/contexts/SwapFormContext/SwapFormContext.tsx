@@ -2,15 +2,15 @@ import React, { createContext, useCallback, useContext, useEffect, useRef, useSt
 import { Agents, useAMMContext, usePositionContext } from '@contexts';
 import { SwapFormActions, SwapFormModes } from '@components/interface';
 import {
-  lessThanEpsilon,
-  formatNumber,
-  stringToBigFloat,
-  pushEvent,
   DataLayerEventPayload,
+  formatNumber,
   getAmmProtocol,
   hasEnoughUnderlyingTokens,
-  lessThan,
   isMarginWithdrawable,
+  lessThan,
+  lessThanEpsilon,
+  pushEvent,
+  stringToBigFloat,
 } from '@utilities';
 import { debounce, isNumber, isUndefined } from 'lodash';
 import {
@@ -442,8 +442,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     }
 
     if (resetToDefaultLeverage) {
-      const currentNotional = notional;
-      if (!isUndefined(currentNotional)) {
+      if (!isUndefined(notional)) {
         setResetDeltaState(!resetDeltaState);
       }
     } else {

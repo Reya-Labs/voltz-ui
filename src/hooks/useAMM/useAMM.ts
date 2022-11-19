@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 import { Agents } from '@contexts';
 import {
+  ExpectedInfoPayload,
+  GetInfoType,
   MintMinimumMarginRequirementPayload,
   SwapInfoPayload,
-  GetInfoType,
-  ExpectedInfoPayload,
 } from './types';
-import { InfoPostSwap, Position, PositionInfo, ExpectedApyInfo, AMM } from '@voltz-protocol/v1-sdk';
+import { AMM, ExpectedApyInfo, InfoPostSwap, Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 
 import useAgent from '../useAgent';
 import useAsyncFunction, { UseAsyncFunctionResult } from '../useAsyncFunction';
@@ -29,8 +29,7 @@ export const useAMM = (amm?: AMM) => {
 
   const ammCaps = useAsyncFunction(
     async () => {
-      const result = await amm?.getCapPercentage();
-      return result;
+      return amm?.getCapPercentage();
     },
     useMemo(() => undefined, [!!amm?.provider]),
   );
@@ -48,9 +47,7 @@ export const useAMM = (amm?: AMM) => {
         return;
       }
 
-      const result = await amm?.getInfoPostMint({ ...args });
-
-      return result;
+      return amm?.getInfoPostMint({ ...args });
     },
     useMemo(() => undefined, [!!amm?.signer]),
     100,
