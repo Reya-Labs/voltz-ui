@@ -2,7 +2,6 @@ import React from 'react';
 import { addDecorator } from '@storybook/react';
 import { BrowserRouter } from 'react-router-dom';
 
-import { Background } from '@components/atomic';
 import { ThemeProvider } from '@theme';
 
 export const parameters = {
@@ -18,8 +17,6 @@ export const parameters = {
 
 addDecorator((story) => (
   <ThemeProvider>
-    <BrowserRouter>
-      <Background sx={{ paddingRight: 2 }}>{story()}</Background>
-    </BrowserRouter>
+    <BrowserRouter>{story()}</BrowserRouter>
   </ThemeProvider>
 ));
