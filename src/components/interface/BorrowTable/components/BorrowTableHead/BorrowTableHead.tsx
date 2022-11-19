@@ -5,19 +5,14 @@ import TableRow from '@mui/material/TableRow';
 import { SystemStyleObject, Theme } from '@mui/system';
 import { Typography } from '@components/atomic';
 
-import { data } from '@utilities';
 import { VariableBorrowTableFields, FixedBorrowTableFields } from '../../types';
 
 export type BorrowTableHeadProps = {
-  order: data.TableOrder;
-  orderBy: VariableBorrowTableFields | FixedBorrowTableFields;
   labels: [VariableBorrowTableFields | FixedBorrowTableFields, string][];
   isFixedPositions: boolean;
 };
 
 const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({
-  order,
-  orderBy,
   labels,
   isFixedPositions,
 }) => {
@@ -58,16 +53,10 @@ const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({
             key={field}
             align={['fixedApr', 'variableApy'].includes(field) ? 'center' : 'left'}
             padding="normal"
-            sortDirection={orderBy === field ? order : false}
+            sortDirection={'debt' === field ? 'desc' : false}
             sx={cellSx}
             width={cellWidth.get(field)}
           >
-            {/* <TableSortLabel
-              active={orderBy === field}
-              direction={orderBy === field ? order : 'asc'}
-              onClick={createSortHandler(field)}
-            > */}
-            {/* {label} */}
             <Typography
               variant="subtitle1"
               sx={{
@@ -79,7 +68,6 @@ const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({
             >
               {label}
             </Typography>
-            {/* </TableSortLabel> */}
           </TableCell>
         ))}
         {loadExtraCell}
