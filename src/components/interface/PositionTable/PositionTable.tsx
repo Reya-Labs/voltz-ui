@@ -5,9 +5,8 @@ import TableBody from '@mui/material/TableBody';
 import { colors, SystemStyleObject, Theme } from '@theme';
 import { Position } from '@voltz-protocol/v1-sdk';
 
-import { data, findCurrentAmm, getRowButtonId, isBorrowing } from '@utilities';
+import { findCurrentAmm, getRowButtonId, isBorrowing } from '@utilities';
 import { Panel } from '@components/atomic';
-import { PositionTableFields } from './types';
 import { PositionTableHead, PositionTableRow } from './components';
 import { Agents, AMMProvider, PortfolioContext } from '@contexts';
 import TransactionList from '../TransactionList/TransactionList';
@@ -17,17 +16,7 @@ import { useAgent, useAMMs } from '@hooks';
 
 export type PositionTableProps = {
   positions: Position[];
-  order: data.TableOrder;
-  onSetOrder: (order: data.TableOrder) => void;
-  orderBy: PositionTableFields;
-  onSetOrderBy: (orderBy: PositionTableFields) => void;
-  page: number;
-  pages: number;
-  onSetPage: (page: number) => void;
-  size: number | null;
-  onSetSize: (size: number) => void;
   onSelectItem: (datum: Position, mode: 'margin' | 'liquidity' | 'rollover' | 'notional') => void;
-  agent: Agents;
   onSettle: (position: Position) => void;
   portfolioData: PortfolioContext;
 };

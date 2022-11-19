@@ -6,16 +6,10 @@ import { SystemStyleObject, Theme } from '@theme';
 import { Typography, Panel } from '@components/atomic';
 import { Box } from '@mui/material';
 
-import { data, findCurrentBorrowPosition, getRowButtonId } from '@utilities';
+import { findCurrentBorrowPosition, getRowButtonId } from '@utilities';
 import { mapAmmToAmmTableDatum } from './utilities';
 import { BorrowAMMProvider, PositionProvider } from '@contexts';
-import {
-  FixedBorrowTableFields,
-  labelsFixed,
-  labelsVariable,
-  VariableBorrowTableFields,
-  BorrowAMMTableDatum,
-} from './types';
+import { labelsFixed, labelsVariable, BorrowAMMTableDatum } from './types';
 import { BorrowTableHead } from './components';
 import { DateTime } from 'luxon';
 import BorrowTableRow from './components/BorrowTableRow/BorrowTableRow';
@@ -26,13 +20,6 @@ export type BorrowTableProps = {
   showFixed: boolean;
   positions: Position[];
   borrowAmms: BorrowAMM[];
-  order: data.TableOrder;
-  variableOrderBy: VariableBorrowTableFields;
-  onSetVariableOrderBy: (orderBy: VariableBorrowTableFields) => void;
-  fixedOrderBy: FixedBorrowTableFields;
-  onSetFixedOrderBy: (orderBy: FixedBorrowTableFields) => void;
-  page: number;
-  size: number | null;
   onSelectItem: (datum: BorrowAMM) => void;
   onLoaded: (loaded: boolean) => void;
   commonOverrides: SystemStyleObject<Theme>;
@@ -43,11 +30,6 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
   showFixed,
   positions,
   borrowAmms,
-  order,
-  variableOrderBy,
-  fixedOrderBy,
-  page,
-  size,
   onSelectItem,
   onLoaded,
   commonOverrides,
@@ -85,7 +67,7 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
     counted.current.noFixedRows = false;
     counted.current.noVariableRows = false;
     return unfilteredDatum;
-  }, [order, page, size]);
+  }, [borrowAmms]);
 
   const renderNoFixedPositions = () => {
     if (!counted.current.noFixedRows) {
@@ -139,12 +121,7 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
             aria-labelledby="tableTitle"
             size="medium"
           >
-            <BorrowTableHead
-              order={order}
-              orderBy={variableOrderBy}
-              labels={labelsVariable}
-              isFixedPositions={false}
-            />
+            <BorrowTableHead labels={labelsVariable} isFixedPositions={false} />
             <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
               {showPositions &&
                 showVariable &&
@@ -257,12 +234,7 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
             aria-labelledby="tableTitle"
             size="medium"
           >
-            <BorrowTableHead
-              order={order}
-              orderBy={fixedOrderBy}
-              labels={labelsFixed}
-              isFixedPositions={true}
-            />
+            <BorrowTableHead labels={labelsFixed} isFixedPositions={true} />
             <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
               {showPositions && renderFixedRows(marketsWithPosition)}
             </TableBody>

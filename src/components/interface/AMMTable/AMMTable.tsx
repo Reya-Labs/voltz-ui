@@ -4,10 +4,8 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import { SystemStyleObject, Theme } from '@theme';
 
-import { data } from '@utilities';
 import { AMMProvider, Agents } from '@contexts';
 import { Panel } from '@components/atomic';
-import { AMMTableFields } from './types';
 import { labels } from './constants';
 import { mapAmmToAmmTableDatum } from './utilities';
 import { AMMTableFooter, AMMTableHead, AMMTableRow } from './components';
@@ -18,10 +16,6 @@ import { AMM } from '@voltz-protocol/v1-sdk';
 
 export type AMMTableProps = {
   amms: AMM[];
-  order: data.TableOrder;
-  onSetOrder: (order: data.TableOrder) => void;
-  orderBy: AMMTableFields;
-  onSetOrderBy: (orderBy: AMMTableFields) => void;
   page: number;
   pages: number;
   onSetPage: (page: number) => void;
@@ -32,10 +26,6 @@ export type AMMTableProps = {
 
 const AMMTable: React.FunctionComponent<AMMTableProps> = ({
   amms,
-  order,
-  onSetOrder,
-  orderBy,
-  onSetOrderBy,
   page,
   pages,
   onSetPage,
@@ -63,13 +53,10 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({
       marginBottom: (theme) => theme.spacing(1),
     },
   };
-  const handleSort = (field: AMMTableFields) => {
-    onSetOrder(field === orderBy ? (order === 'asc' ? 'desc' : 'asc') : 'asc');
-    onSetOrderBy(field);
-  };
+
   const tableData = useMemo(() => {
     return amms.map(mapAmmToAmmTableDatum);
-  }, [order, page, size]);
+  }, [page, size]);
   const handleSelectRow = (index: number) => () => {
     onSelectItem(amms[index]);
   };
@@ -94,7 +81,7 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({
           aria-labelledby="tableTitle"
           size="medium"
         >
-          <AMMTableHead order={order} orderBy={orderBy} onSort={handleSort} />
+          <AMMTableHead />
           <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
             {tableData.map((datum, index) => {
               if (DateTime.now() < datum.endDate) {

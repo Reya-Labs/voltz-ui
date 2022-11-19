@@ -1,13 +1,7 @@
 import React, { ReactNode, useCallback, useState } from 'react';
 
-import { data } from '@utilities';
 import { usePositions, useSelector, useWallet, useDispatch } from '@hooks';
-import {
-  PendingTransaction,
-  PortfolioHeader,
-  PositionTable,
-  PositionTableFields,
-} from '@components/interface';
+import { PendingTransaction, PortfolioHeader, PositionTable } from '@components/interface';
 import { Loading, Panel, RouteLink, Typography } from '@components/atomic';
 import { Agents, usePortfolioContext } from '@contexts';
 import { actions, selectors } from '@store';
@@ -29,12 +23,7 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
   agent,
   handleCompletedSettling,
 }) => {
-  const [order, setOrder] = useState<data.TableOrder>('desc');
-  const [orderBy, setOrderBy] = useState<PositionTableFields>('maturity');
-  const [page, setPage] = useState(0);
-  const [size, setSize] = useState<number | null>(null);
   const { positionsByAgentGroup, loading, error } = usePositions();
-  const pages = 0;
   const { status } = useWallet();
 
   const [positionToSettle, setPositionToSettle] = useState<
@@ -159,18 +148,8 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
         <Box sx={{ marginTop: (theme) => theme.spacing(14) }}>
           <PositionTable
             positions={positionsByAgentGroup}
-            order={order}
-            onSetOrder={setOrder}
-            orderBy={orderBy}
-            onSetOrderBy={setOrderBy}
-            page={page}
-            pages={pages}
-            onSetPage={setPage}
-            size={size}
-            onSetSize={setSize}
             onSelectItem={onSelectItem}
             onSettle={handleSettle}
-            agent={agent}
             portfolioData={portfolioData}
           />
         </Box>

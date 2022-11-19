@@ -1,6 +1,5 @@
 export * from './amm';
 export * from './borrowAmm';
-export * as data from './data';
 export * from './elideAddress';
 export { default as getErrorMessage } from './getErrorMessage';
 export { default as isBorrowing } from './isBorrowing';

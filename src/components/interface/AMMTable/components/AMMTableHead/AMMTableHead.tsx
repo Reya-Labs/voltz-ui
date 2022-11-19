@@ -4,18 +4,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { SystemStyleObject, Theme } from '@mui/system';
 import { Typography } from '@components/atomic';
-
-import { data } from '@utilities';
-import { AMMTableFields } from '../../types';
 import { labels } from '../../constants';
 
-export type AMMTableHeadProps = {
-  order: data.TableOrder;
-  orderBy: AMMTableFields;
-  onSort: (field: AMMTableFields) => void;
-};
-
-const AMMTableHead: React.FunctionComponent<AMMTableHeadProps> = ({ order, orderBy, onSort }) => {
+const AMMTableHead: React.FunctionComponent = () => {
   const cellSx: SystemStyleObject<Theme> = {
     '&.MuiTableCell-root': {
       borderBottom: 0,
@@ -35,15 +26,9 @@ const AMMTableHead: React.FunctionComponent<AMMTableHeadProps> = ({ order, order
             key={field}
             align="left"
             padding="normal"
-            sortDirection={orderBy === field ? order : false}
+            sortDirection={'maturity' === field ? 'desc' : false}
             sx={cellSx}
           >
-            {/* <TableSortLabel
-              active={orderBy === field}
-              direction={orderBy === field ? order : 'asc'}
-              onClick={createSortHandler(field)}
-            > */}
-            {/* {label} */}
             <Typography
               variant="subtitle1"
               sx={{
@@ -55,7 +40,6 @@ const AMMTableHead: React.FunctionComponent<AMMTableHeadProps> = ({ order, order
             >
               {label}
             </Typography>
-            {/* </TableSortLabel> */}
           </TableCell>
         ))}
         <TableCell align="left" padding="normal" sx={cellSx}></TableCell>
