@@ -5,7 +5,6 @@ import MellowLpDepositFormHeader from './components/MellowLpDepositFormHeader';
 import React from 'react';
 
 import { MellowProduct } from '../types';
-import { MellowLpVault } from '@voltz-protocol/v1-sdk';
 
 export type MellowLpDepositFormProps = {
   lpVault: MellowProduct;
@@ -32,21 +31,15 @@ const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = (
 }: MellowLpDepositFormProps) => {
   return (
     <>
-      <MellowLpDepositFormHeader onCancel={onCancel} />
+      <MellowLpDepositFormHeader
+        vaultDescription={lpVault.metadata.description}
+        onCancel={onCancel}
+      />
       <Box sx={{ display: 'flex' }}>
-        <LPMellowVaultDepositInfo
-          vaultCap={lpVault.vault.vaultCap}
-          vaultCumulative={lpVault.vault.vaultCumulative}
-          tokenName={lpVault.metadata.token}
-          protocol={lpVault.vault instanceof MellowLpVault ? lpVault.vault.protocol : undefined}
-          expectedApy={lpVault.metadata.estimatedHistoricApy}
-          maturity={lpVault.metadata.maturity}
-          userDeposit={lpVault.vault.userDeposit}
-        />
+        <LPMellowVaultDepositInfo mellowProduct={lpVault} />
 
         <LPMellowVaultDepositWindow
-          userWalletBalance={lpVault.vault.userWalletBalance}
-          tokenName={lpVault.metadata.token}
+          mellowProduct={lpVault}
           onChangeDeposit={onChangeDeposit}
           submitText={submitText}
           hintText={hintText}
