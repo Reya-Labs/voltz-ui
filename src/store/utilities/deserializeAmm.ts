@@ -3,7 +3,7 @@ import { providers } from 'ethers';
 import { SerializedAMM } from '../types';
 import JSBI from 'jsbi';
 
-import { Token, RateOracle, AMM } from '@voltz-protocol/v1-sdk';
+import { AMM, RateOracle, Token } from '@voltz-protocol/v1-sdk';
 
 const deserializeAmm = (serializedAmm: SerializedAMM, signer: providers.JsonRpcSigner): AMM => {
   const {
@@ -25,7 +25,7 @@ const deserializeAmm = (serializedAmm: SerializedAMM, signer: providers.JsonRpcS
     totalLiquidity,
     totalNotionalTraded,
   } = serializedAmm;
-  const amm = new AMM({
+  return new AMM({
     id,
     signer,
     provider: providers.getDefaultProvider(process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK),
@@ -48,8 +48,6 @@ const deserializeAmm = (serializedAmm: SerializedAMM, signer: providers.JsonRpcS
     totalNotionalTraded: JSBI.BigInt(totalNotionalTraded),
     totalLiquidity: JSBI.BigInt(totalLiquidity),
   });
-
-  return amm;
 };
 
 export default deserializeAmm;
