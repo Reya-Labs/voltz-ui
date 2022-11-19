@@ -74,7 +74,10 @@ exports.NON_SUBGRAPH_BADGES_SEASONS = {
         '35'
     ]
 };
-exports.TOP_BADGES_VARIANT = ['31', '28', '15', '12'];
+exports.TOP_BADGES_VARIANT = {
+    'trader': ['15', '31'],
+    'liquidityProvider': ['12', '28']
+};
 exports.NON_PROGRAMATIC_BADGES_VARIANT = {
     'diplomatz': '33',
     'governorz': '34',
@@ -274,12 +277,12 @@ var SBT = /** @class */ (function () {
                                 });
                             }
                         }
-                        topLpType = seasonId === 0 ? "12" : "28";
-                        topTraderType = seasonId === 0 ? "15" : "31";
-                        return [4 /*yield*/, this.getTopTraderBadge(subgraphUrl, userId, seasonId, topLpType, false)];
+                        topLpType = (0, helpers_1.getTopBadgeType)(seasonId, false);
+                        topTraderType = (0, helpers_1.getTopBadgeType)(seasonId, false);
+                        return [4 /*yield*/, this.getTopTraderBadge(subgraphUrl, userId, seasonId, false, topLpType)];
                     case 4:
                         topLpBadge = _e.sent();
-                        return [4 /*yield*/, this.getTopTraderBadge(subgraphUrl, userId, seasonId, topTraderType, true)];
+                        return [4 /*yield*/, this.getTopTraderBadge(subgraphUrl, userId, seasonId, true, topTraderType)];
                     case 5:
                         topTraderBadge = _e.sent();
                         if (topLpBadge)
@@ -303,14 +306,14 @@ var SBT = /** @class */ (function () {
             });
         });
     };
-    SBT.prototype.getTopTraderBadge = function (subgraphUrl, userId, seasonId, badgeType, isTrader) {
+    SBT.prototype.getTopTraderBadge = function (subgraphUrl, userId, seasonId, isTrader, badgeType) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var pointzQuery, client, id, unit, data, _i, _c, pointz, badgeQuery, idBadge, badgeData, badge, error_2;
             return __generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
-                        if (!process.env.REACT_APP_SUBGRAPH_BADGES_URL) {
+                        if (!subgraphUrl || !badgeType) {
                             return [2 /*return*/, undefined];
                         }
                         _d.label = 1;

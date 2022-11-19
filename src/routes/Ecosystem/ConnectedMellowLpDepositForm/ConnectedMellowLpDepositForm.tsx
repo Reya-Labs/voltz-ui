@@ -5,10 +5,10 @@ import { DepositStates, getSubmissionState } from './mappers';
 import MellowLpDepositForm from '../MellowLpDepositForm/MellowLpDepositForm';
 import { Panel } from '../../../components/atomic';
 
-import { MellowLpVault } from '@voltz-protocol/v1-sdk';
+import { MellowProduct } from '../types';
 
 export type ConnectedMellowLpDepositFormProps = {
-  vault: MellowLpVault;
+  vault: MellowProduct;
   onReset: () => void;
 };
 
@@ -23,12 +23,12 @@ const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMellowLpDep
   const [depositState, setDepositState] = useState<DepositStates>(DepositStates.INITIALISING);
   const [error, setError] = useState<string>('');
 
-  const sufficientFunds = (vault.userWalletBalance ?? 0) >= selectedDeposit;
+  const sufficientFunds = (vault.vault.userWalletBalance ?? 0) >= selectedDeposit;
 
   const deposit = () => {
     if (selectedDeposit > 0) {
       setDepositState(DepositStates.DEPOSITING);
-      void vault.deposit(selectedDeposit).then(
+      void vault.vault.deposit(selectedDeposit).then(
         () => {
           setDepositState(DepositStates.DEPOSIT_DONE);
         },
@@ -45,7 +45,7 @@ const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMellowLpDep
 
   const approve = () => {
     setDepositState(DepositStates.APPROVING);
-    void vault.approveToken().then(
+    void vault.vault.approveToken().then(
       () => {
         setDepositState(DepositStates.APPROVED);
       },
@@ -57,7 +57,7 @@ const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMellowLpDep
   };
 
   useEffect(() => {
-    void vault.isTokenApproved().then(
+    void vault.vault.isTokenApproved().then(
       (resp) => {
         if (resp) {
           setDepositState(DepositStates.APPROVED);
@@ -79,7 +79,7 @@ const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMellowLpDep
     selectedDeposit,
     sufficientFunds,
     error,
-    tokenName: vault.tokenName,
+    tokenName: vault.metadata.token,
   });
 
   const handleGoBack = () => {
@@ -96,8 +96,6 @@ const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMellowLpDep
       variant="dark"
       sx={{
         padding: 0,
-        width: '100%',
-        maxWidth: '748px',
         margin: '0 auto',
         background: 'transparent',
       }}

@@ -2,12 +2,14 @@ import { Signer, providers, BigNumberish, BigNumber, ContractReceipt, Contract }
 export type MellowLpRouterArgs = {
     mellowRouterAddress: string;
     defaultWeights: number[];
+    pivot?: number;
     provider?: providers.Provider;
 };
 declare class MellowLpRouter {
     readonly mellowRouterAddress: string;
     readonly provider?: providers.Provider;
     readonly defaultWeights: number[];
+    readonly pivot?: number;
     readOnlyContracts?: {
         token: Contract;
         mellowRouterContract: Contract;
@@ -27,7 +29,7 @@ declare class MellowLpRouter {
     userAddress?: string;
     vaultInitialized: boolean;
     userInitialized: boolean;
-    constructor({ mellowRouterAddress, defaultWeights, provider }: MellowLpRouterArgs);
+    constructor({ mellowRouterAddress, defaultWeights, provider, pivot }: MellowLpRouterArgs);
     descale: (amount: BigNumberish, decimals: number) => number;
     scale: (amount: number) => BigNumber;
     vaultInit: () => Promise<void>;

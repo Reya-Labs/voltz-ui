@@ -1,16 +1,15 @@
 import { Page } from '@components/interface';
 import Box from '@mui/material/Box';
-import { Agents } from '@contexts';
 
 import ConnectedMellowLpDepositForm from './ConnectedMellowLpDepositForm/ConnectedMellowLpDepositForm';
 import ConnectedMellowLPTable from './ConnectedMellowLPTable/ConnectedMellowLPTable';
 import { setPageTitle } from '@utilities';
 import { useEffect, useState } from 'react';
 import { isNull } from 'lodash';
-import { useWallet } from '@hooks';
+import { useMellowLPVaults, useWallet } from '@hooks';
 import { useLocation } from 'react-router-dom';
 
-import { MellowLpVault } from '@voltz-protocol/v1-sdk';
+import { MellowProduct } from './types';
 
 export enum EcosystemRenderMode {
   MELLOW_DEPOSIT_FORM,
@@ -21,10 +20,10 @@ const Ecosystem: React.FunctionComponent = () => {
   const wallet = useWallet();
 
   const [renderMode, setRenderMode] = useState<EcosystemRenderMode>(EcosystemRenderMode.PAGE);
-  const [currentVault, setCurrentVault] = useState<MellowLpVault>();
+  const [currentVault, setCurrentVault] = useState<MellowProduct>();
   const location = useLocation();
 
-  const handleSelectMellowLpVault = (selectedVault: MellowLpVault) => {
+  const handleSelectMellowLpVault = (selectedVault: MellowProduct) => {
     if (isNull(wallet.account)) {
       wallet.setRequired(true);
     } else {
@@ -66,6 +65,49 @@ const Ecosystem: React.FunctionComponent = () => {
     handleReset();
   }, [location.key]);
 
+  const lpVaults = useMellowLPVaults();
+
+  const { signer } = useWallet();
+  const isSignerAvailable = !isNull(signer);
+
+  const [dataLoading, setDataLoading] = useState<boolean>(false);
+  const [vaultsLoaded, setVaultsLoaded] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (lpVaults) {
+      setVaultsLoaded(false);
+      setDataLoading(true);
+      const request = Promise.allSettled(lpVaults.map((item) => item.vault.vaultInit()));
+
+      void request.then(
+        (_) => {
+          setVaultsLoaded(true);
+          setDataLoading(false);
+        },
+        (_) => {
+          setDataLoading(false);
+        },
+      );
+    }
+  }, [lpVaults]);
+
+  useEffect(() => {
+    if (lpVaults && isSignerAvailable && vaultsLoaded) {
+      setDataLoading(true);
+
+      const request = Promise.allSettled(lpVaults.map((item) => item.vault.userInit(signer)));
+
+      void request.then(
+        (_) => {
+          setDataLoading(false);
+        },
+        (_) => {
+          setDataLoading(false);
+        },
+      );
+    }
+  }, [lpVaults, isSignerAvailable, vaultsLoaded]);
+
   return (
     <Page>
       {renderMode === EcosystemRenderMode.PAGE && (
@@ -78,7 +120,8 @@ const Ecosystem: React.FunctionComponent = () => {
           }}
         >
           <ConnectedMellowLPTable
-            agent={Agents.LIQUIDITY_PROVIDER}
+            lpVaults={lpVaults}
+            dataLoading={dataLoading}
             onSelectItem={handleSelectMellowLpVault}
           />
         </Box>
@@ -88,8 +131,6 @@ const Ecosystem: React.FunctionComponent = () => {
         <Box
           sx={{
             height: '100%',
-            display: 'flex',
-            justifyContent: 'center',
             backdropFilter: 'blur(8px)',
           }}
         >

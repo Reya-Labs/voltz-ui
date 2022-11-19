@@ -1,26 +1,29 @@
 import { Box, Button, Skeleton, Typography } from '@mui/material';
 import { formatCurrency } from '@utilities';
-import { MellowLpVault } from '@voltz-protocol/v1-sdk';
 import { isUndefined } from 'lodash';
 import React from 'react';
 
 export type MellowLPPositionProps = {
-  lpVault: MellowLpVault;
+  userDeposit?: number;
+  tokenName: string;
   handleClick: () => void;
+  dataLoading: boolean;
   disabled: boolean;
 };
 
 const MellowLPPosition: React.FunctionComponent<MellowLPPositionProps> = ({
-  lpVault,
+  userDeposit,
+  tokenName,
   handleClick,
+  dataLoading,
   disabled,
 }: MellowLPPositionProps) => {
   const getPositionInfo = () => {
-    if (isUndefined(lpVault.userDeposit)) {
+    if (dataLoading) {
       return (
         <Skeleton
           variant="text"
-          sx={{ width: '100%', fontSize: '14px', lineHeight: '20px', padding: '4px' }}
+          sx={{ width: '100%', fontSize: '14px', lineHeight: '20px', padding: '4px 4px 4px 12px' }}
         />
       );
     }
@@ -32,23 +35,25 @@ const MellowLPPosition: React.FunctionComponent<MellowLPPositionProps> = ({
             variant="h6"
             sx={{ fontSize: '14px', color: '#9B97AD', textTransform: 'uppercase' }}
           >
-            Your position:
+            {`Your position: ${isUndefined(userDeposit) ? ' ---' : ''}`}
           </Typography>
-          <Typography
-            variant="h6"
-            sx={{
-              fontSize: '14px',
-              color: 'primary.light',
-              textTransform: 'uppercase',
-              marginLeft: '4px',
-            }}
-          >
-            {formatCurrency(lpVault.userDeposit)} {lpVault.tokenName}
-          </Typography>
+          {!isUndefined(userDeposit) && (
+            <Typography
+              variant="h6"
+              sx={{
+                fontSize: '14px',
+                color: 'primary.light',
+                textTransform: 'uppercase',
+                marginLeft: '4px',
+              }}
+            >
+              {userDeposit ? `${formatCurrency(userDeposit)} ${tokenName}` : '---'}
+            </Typography>
+          )}
         </Box>
         <Button
           onClick={handleClick}
-          disabled={disabled}
+          disabled={disabled || dataLoading}
           sx={{
             background: 'transparent',
             color: 'primary.light',

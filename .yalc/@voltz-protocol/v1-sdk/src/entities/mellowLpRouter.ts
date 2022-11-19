@@ -25,6 +25,7 @@ import { abi as MellowMultiVaultRouterABI } from '../ABIs/MellowMultiVaultRouter
 export type MellowLpRouterArgs = {
   mellowRouterAddress: string; // live in env variable per router contract
   defaultWeights: number[]; // live in env variable per router contract
+  pivot?: number;
   provider?: providers.Provider;
 };
 
@@ -32,6 +33,7 @@ class MellowLpRouter {
   public readonly mellowRouterAddress: string;
   public readonly provider?: providers.Provider;
   public readonly defaultWeights: number[] = [];
+  public readonly pivot?: number;
 
   public readOnlyContracts?: {
     token: Contract;
@@ -59,10 +61,11 @@ class MellowLpRouter {
   public vaultInitialized = false;
   public userInitialized = false;
 
-  public constructor({ mellowRouterAddress, defaultWeights, provider }: MellowLpRouterArgs) {
+  public constructor({ mellowRouterAddress, defaultWeights, provider, pivot }: MellowLpRouterArgs) {
     this.mellowRouterAddress = mellowRouterAddress;
     this.defaultWeights = defaultWeights;
     this.provider = provider;
+    this.pivot = pivot;
   }
 
   descale = (amount: BigNumberish, decimals: number): number => {
@@ -99,7 +102,11 @@ class MellowLpRouter {
     console.log('token address:', tokenAddress);
 
     // erc20rootvault addresses
-    const ERC20RootVaultAddresses = await mellowRouterContract.getVaults();
+    let ERC20RootVaultAddresses: string[] = await mellowRouterContract.getVaults();
+
+    if (!isUndefined(this.pivot)) {
+      ERC20RootVaultAddresses = ERC20RootVaultAddresses.slice(this.pivot, this.pivot + 1);
+    }
 
     // Map the addresses so that each of them is instantiated into a contract
     const erc20RootVaultContracts = ERC20RootVaultAddresses.map(
@@ -242,9 +249,12 @@ class MellowLpRouter {
       return;
     }
 
-    const lpTokensBalances = await this.readOnlyContracts.mellowRouterContract.getLPTokenBalances(
-      this.userAddress,
-    );
+    let lpTokensBalances: BigNumber[] =
+      await this.readOnlyContracts.mellowRouterContract.getLPTokenBalances(this.userAddress);
+
+    if (!isUndefined(this.pivot)) {
+      lpTokensBalances = lpTokensBalances.slice(this.pivot, this.pivot + 1);
+    }
 
     for (let i = 0; i < this.readOnlyContracts.erc20RootVault.length; i += 1) {
       const erc20RootVaultContract = this.readOnlyContracts.erc20RootVault[i];

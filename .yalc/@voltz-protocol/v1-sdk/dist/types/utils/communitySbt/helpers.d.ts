@@ -3,6 +3,7 @@ export declare function getBadgeTypeFromMetadataUri(metadataURI: string): number
 export declare function decodeBadgeType(input: Bytes): number;
 export declare function decodeMultipleBadgeTypes(input: Bytes): number[];
 export declare function getEtherscanURL(network: string, apiKey: string, userAddress: string): string;
+export declare function getTopBadgeType(season: number, isTrader: boolean): string | undefined;
 /**
  * "Convert seconds to milliseconds, but only if the input is a number and not zero."
  *

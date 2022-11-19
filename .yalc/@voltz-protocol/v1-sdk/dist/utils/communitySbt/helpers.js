@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toMillis = exports.getEtherscanURL = exports.decodeMultipleBadgeTypes = exports.decodeBadgeType = exports.getBadgeTypeFromMetadataUri = void 0;
+exports.toMillis = exports.getTopBadgeType = exports.getEtherscanURL = exports.decodeMultipleBadgeTypes = exports.decodeBadgeType = exports.getBadgeTypeFromMetadataUri = void 0;
 var ethers_1 = require("ethers");
+var communitySbt_1 = require("../../entities/communitySbt");
 var typechain_sbt_1 = require("../../typechain-sbt");
 function getBadgeTypeFromMetadataUri(metadataURI) {
     var filenamme = metadataURI.split('/')[3];
@@ -39,6 +40,11 @@ function getEtherscanURL(network, apiKey, userAddress) {
     }
 }
 exports.getEtherscanURL = getEtherscanURL;
+function getTopBadgeType(season, isTrader) {
+    var actor = isTrader ? 'trader' : 'liquidityProvider';
+    return communitySbt_1.NON_SUBGRAPH_BADGES_SEASONS[season].find(function (b) { return communitySbt_1.TOP_BADGES_VARIANT[actor].includes(b); });
+}
+exports.getTopBadgeType = getTopBadgeType;
 /**
  * "Convert seconds to milliseconds, but only if the input is a number and not zero."
  *
