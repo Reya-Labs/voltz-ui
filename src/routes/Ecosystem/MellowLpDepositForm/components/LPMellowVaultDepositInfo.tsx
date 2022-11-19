@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import { ProgressBar } from '@components/composite';
-import { Panel, Typography } from '@components/atomic';
+import { Typography } from '@components/atomic';
 import { formatCurrency } from '@utilities';
 import { isUndefined } from 'lodash';
 import { VaultField } from '../../Common/VaultField';
@@ -51,7 +51,7 @@ const LPMellowVaultDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfo
 
   const renderContent = () => {
     return (
-      <Panel variant="dark" sx={{ width: '100%', maxWidth: '366px', background: 'transparent' }}>
+      <Box>
         <VaultField
           title={mellowProduct.metadata.title}
           maturity={mellowProduct.metadata.maturity}
@@ -81,13 +81,7 @@ const LPMellowVaultDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfo
                 }`}
           </Typography>
         </Box>
-
-        {mellowProduct.metadata.explanations.map((item) => (
-          <Typography variant="body1" sx={{ fontSize: '14px', color: '#9B97AD', marginTop: '8px' }}>
-            {item}
-          </Typography>
-        ))}
-      </Panel>
+      </Box>
     );
   };
 

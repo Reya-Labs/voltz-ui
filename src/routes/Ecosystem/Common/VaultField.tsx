@@ -25,7 +25,7 @@ export const VaultField: React.FunctionComponent<VaultFieldProps> = ({
           {title}
         </Typography>
       </Box>
-      <Box sx={{ marginTop: '16px', display: 'flex', maxWidth: '275px' }}>
+      <Box sx={{ marginTop: '16px', display: 'flex', maxWidth: '275px', marginLeft: '8px' }}>
         <Typography
           variant="body2"
           sx={{ fontSize: '24px', color: '#FF4AA9', fontFamily: 'DM Sans', fontWeight: '700' }}

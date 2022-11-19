@@ -131,8 +131,6 @@ const Ecosystem: React.FunctionComponent = () => {
         <Box
           sx={{
             height: '100%',
-            display: 'flex',
-            justifyContent: 'center',
             backdropFilter: 'blur(8px)',
           }}
         >
