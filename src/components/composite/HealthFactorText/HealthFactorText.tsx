@@ -35,5 +35,3 @@ export const HealthFactorText = ({
     </>
   );
 };
-
-export default HealthFactorText;

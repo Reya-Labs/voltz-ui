@@ -110,5 +110,3 @@ export const PortfolioProvider: React.FunctionComponent<PortfolioProviderProps> 
 };
 
 export const usePortfolioContext = () => useContext(PortfolioCtx);
-
-export default PortfolioProvider;

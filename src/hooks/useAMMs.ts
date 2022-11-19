@@ -9,8 +9,6 @@ import { useLocation } from 'react-router-dom';
 
 import { Token, RateOracle, AMM } from '@voltz-protocol/v1-sdk';
 
-export type UseAMMsArgs = {};
-
 export type UseAMMsResult = {
   amms?: AMM[];
   loading: boolean;

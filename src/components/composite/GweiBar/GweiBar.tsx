@@ -54,5 +54,3 @@ export const GweiBar: React.FunctionComponent<GweiBarProps> = () => {
     </Box>
   );
 };
-
-export default GweiBar;

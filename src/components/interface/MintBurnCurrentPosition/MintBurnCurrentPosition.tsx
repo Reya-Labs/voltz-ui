@@ -151,5 +151,3 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
     </FormPanel>
   );
 };
-
-export default MintBurnCurrentPosition;

@@ -110,5 +110,3 @@ export const AMMsProvider: React.FunctionComponent<AMMsProviderProps> = ({ child
 export const useAMMsContext = (): AMMsContext => {
   return useContext(AMMsCtx);
 };
-
-export default AMMsProvider;

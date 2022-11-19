@@ -9,8 +9,6 @@ import { DateTime } from 'luxon';
 
 import { Token, RateOracle, BorrowAMM, AMM } from '@voltz-protocol/v1-sdk';
 
-export type UseAMMsArgs = {};
-
 export type UseBorrowAMMsResult = {
   borrowAmms?: BorrowAMM[];
   loading: boolean;

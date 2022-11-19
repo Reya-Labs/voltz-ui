@@ -17,9 +17,7 @@ import { formatCurrency, getPoolButtonId } from '@utilities';
 
 export type BorrowProps = {
   protocol?: string;
-  startDate?: DateTime;
   endDate?: DateTime;
-  notional?: number;
   onChangeNotional: (value: number) => void;
   underlyingTokenName?: string;
   approvalsNeeded: boolean;
@@ -46,10 +44,8 @@ export type BorrowProps = {
 
 const BorrowForm: React.FunctionComponent<BorrowProps> = ({
   protocol,
-  startDate,
   endDate,
   errors,
-  notional,
   onChangeNotional,
   underlyingTokenName,
   approvalsNeeded,

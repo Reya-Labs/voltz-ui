@@ -30,5 +30,3 @@ export const BorrowAMMProvider: React.FunctionComponent<BorrowAMMProviderProps> 
 export const useBorrowAMMContext = (): BorrowAMMContext => {
   return useContext(BorrowAMMCtx);
 };
-
-export default BorrowAMMProvider;
