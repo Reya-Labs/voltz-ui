@@ -1,14 +1,15 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import Ellipsis from './Ellipsis';
+import { Ellipsis } from './Ellipsis';
 
 export default {
   title: 'Atomic/Ellipsis',
   component: Ellipsis,
+  args: {},
 } as ComponentMeta<typeof Ellipsis>;
 
-const Template: ComponentStory<typeof Ellipsis> = (args) => <Ellipsis />;
+const Template: ComponentStory<typeof Ellipsis> = (args) => <Ellipsis {...args} />;
 
-export const Primary = Template.bind({});
-Primary.args = {};
+export const Default = Template.bind({});
+Default.args = {};
