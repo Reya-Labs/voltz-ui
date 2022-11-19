@@ -1,5 +1,4 @@
 import { Box } from '@mui/system';
-import LPMellowVaultInfo from './LPMellowVaultInfo';
 import MellowLPPosition from './MellowLPPosition';
 import { boxStyles, tagStyles, copyStyles } from './styles';
 import React from 'react';
@@ -82,14 +81,6 @@ const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
           {lpVault.metadata.underlyingPools.map((pool) => (
             <PoolField protocol={pool} isBorrowing={false} isBorrowTable={true} />
           ))}
-        </Box>
-
-        <Box sx={{ marginLeft: '8px', marginTop: '16px' }}>
-          <LPMellowVaultInfo
-            vaultCap={lpVault.vault.vaultCap}
-            vaultCumulative={lpVault.vault.vaultCumulative}
-            tokenName={lpVault.metadata.token}
-          />
         </Box>
       </Box>
       <Box
