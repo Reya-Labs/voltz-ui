@@ -50,6 +50,8 @@ const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = (
         maxWidth: '398px',
         background: '#19152A',
         padding: (theme) => theme.spacing(4),
+        marginLeft: 'auto',
+        marginRight: 'auto',
       }}
     >
       <LPMellowVaultDepositInfo mellowProduct={lpVault} />
