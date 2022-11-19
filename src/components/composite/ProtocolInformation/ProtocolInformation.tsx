@@ -92,6 +92,7 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
   const protocolInfo = protocolIconMemo;
   const tokenInfo = tokenIconMemo;
 
+  const isSTETHOrRETH = protocol === 'stETH' || protocol === 'rETH';
   return (
     <Box
       sx={{
@@ -109,9 +110,9 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
           <IconLabel
             label={getPoolLabel()}
             icon="information-circle"
-            removeIcon={protocol === 'stETH' || protocol === 'rETH' ? false : true}
+            removeIcon={!isSTETHOrRETH}
             info={
-              protocol === 'stETH' || protocol === 'rETH'
+              isSTETHOrRETH
                 ? `Trade rates in the ${protocol} pool by depositing ETH as margin. ${protocol} cannot be used as a form of margin until post-merge.`
                 : ''
             }
