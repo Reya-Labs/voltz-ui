@@ -6,10 +6,10 @@ import { Panel, Typography, Button } from '@components/atomic';
 import { colors } from '@theme';
 import { isUndefined } from 'lodash';
 import React from 'react';
+import { MellowProduct } from '../../types';
 
 export type LPMellowVaultDepositWindowProps = {
-  userWalletBalance?: number;
-  tokenName: string;
+  mellowProduct: MellowProduct;
   onChangeDeposit: (value: number | undefined) => void;
   submitText: string;
   hintText: {
@@ -22,8 +22,7 @@ export type LPMellowVaultDepositWindowProps = {
 };
 
 const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWindowProps> = ({
-  userWalletBalance,
-  tokenName,
+  mellowProduct,
   onChangeDeposit,
   submitText,
   hintText,
@@ -31,9 +30,11 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
   onSubmit,
 }: LPMellowVaultDepositWindowProps) => {
   const subtext = `WALLET BALANCE: ${
-    isUndefined(userWalletBalance)
+    isUndefined(mellowProduct.vault.userWalletBalance)
       ? '---'
-      : `${formatCurrency(userWalletBalance, true)} ${tokenName}`
+      : `${formatCurrency(mellowProduct.vault.userWalletBalance, true)} ${
+          mellowProduct.metadata.token
+        }`
   }`;
 
   const handleChange = (newValue: string | undefined) => {
@@ -95,14 +96,14 @@ const LPMellowVaultDepositWindow: React.FunctionComponent<LPMellowVaultDepositWi
           fontWeight: '400',
         }}
       >
-        The Mellow LP Optimiser is available for the Voltz Protocol stETH pool.
+        {mellowProduct.metadata.depositDescription}
       </Typography>
 
       <Box sx={{ marginTop: '16px' }}>
         <MaskedIntegerField
           allowDecimals
           allowNegativeValue={false}
-          suffix={<InputTokenLabel tokenName={tokenName} />}
+          suffix={<InputTokenLabel tokenName={mellowProduct.metadata.token} />}
           suffixPadding={90}
           label={
             <IconLabel

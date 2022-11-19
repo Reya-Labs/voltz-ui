@@ -1,8 +1,7 @@
 import { Box } from '@mui/system';
 import LPMellowVaultInfo from './LPMellowVaultInfo';
-import { ReactComponent as Mellow } from '../../mellow-icon.svg';
 import MellowLPPosition from './MellowLPPosition';
-import { boxStyles, tagStyles, titleStyles, copyStyles } from './styles';
+import { boxStyles, tagStyles, copyStyles } from './styles';
 import React from 'react';
 import { Typography } from '@components/atomic';
 import { PoolField } from '@components/composite';
@@ -56,15 +55,8 @@ const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
           )}
         </Box>
 
-        <Box sx={{ display: 'flex', marginLeft: '8px', marginTop: '16px', alignItems: 'center' }}>
-          <Mellow />
-
-          <Typography variant="h1" sx={titleStyles}>
-            {lpVault.metadata.title}
-          </Typography>
-        </Box>
-
         <VaultField
+          title={lpVault.metadata.title}
           maturity={lpVault.metadata.maturity}
           expectedApy={lpVault.metadata.estimatedHistoricApy}
         />
