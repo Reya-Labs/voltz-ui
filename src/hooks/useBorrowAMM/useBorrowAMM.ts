@@ -4,7 +4,7 @@ import useAsyncFunction, { UseAsyncFunctionResult } from '../useAsyncFunction';
 import { DateTime } from 'luxon';
 import { SwapInfoPayload } from '../useAMM/types';
 
-import { Position, BorrowAMM } from '@voltz-protocol/v1-sdk';
+import { BorrowAMM, Position } from '@voltz-protocol/v1-sdk';
 import { BorrowSwapInfo } from '@voltz-protocol/v1-sdk/dist/types/entities/borrowAMM';
 
 export type useBorrowAMMReturnType = {
@@ -23,8 +23,7 @@ export type useBorrowAMMReturnType = {
 export const useBorrowAMM = (borrowAmm: BorrowAMM) => {
   const underlyingDebtInNativeTokens = useAsyncFunction(
     async () => {
-      const result = await borrowAmm?.getUnderlyingBorrowBalance();
-      return result;
+      return borrowAmm?.getUnderlyingBorrowBalance();
     },
     useMemo(() => undefined, [!!borrowAmm?.provider]),
   );
@@ -32,11 +31,9 @@ export const useBorrowAMM = (borrowAmm: BorrowAMM) => {
   const variableDebtInNativeTokens = useAsyncFunction(
     async (position: Position | undefined) => {
       if (position) {
-        const resultPos = await borrowAmm.getAggregatedBorrowBalance(position);
-        return resultPos;
+        return await borrowAmm.getAggregatedBorrowBalance(position);
       } else {
-        const resultPos = await borrowAmm.getUnderlyingBorrowBalance();
-        return resultPos;
+        return await borrowAmm.getUnderlyingBorrowBalance();
       }
     },
     useMemo(() => undefined, [!!borrowAmm?.provider, borrowAmm.aaveVariableDebtToken]),
@@ -44,16 +41,14 @@ export const useBorrowAMM = (borrowAmm: BorrowAMM) => {
 
   const fixedDebtInNativeTokens = useAsyncFunction(
     async (position: Position) => {
-      const result = await borrowAmm?.getFixedBorrowBalance(position);
-      return result;
+      return borrowAmm?.getFixedBorrowBalance(position);
     },
     useMemo(() => undefined, [!!borrowAmm?.provider]),
   );
 
   const underlyingDebtInUSD = useAsyncFunction(
     async () => {
-      const result = await borrowAmm?.getUnderlyingBorrowBalanceInUSD();
-      return result;
+      return borrowAmm?.getUnderlyingBorrowBalanceInUSD();
     },
     useMemo(() => undefined, [!!borrowAmm?.provider]),
   );
@@ -61,11 +56,9 @@ export const useBorrowAMM = (borrowAmm: BorrowAMM) => {
   const variableDebtInUSD = useAsyncFunction(
     async (position: Position | undefined) => {
       if (position) {
-        const resultPos = await borrowAmm.getAggregatedBorrowBalanceInUSD(position);
-        return resultPos;
+        return await borrowAmm.getAggregatedBorrowBalanceInUSD(position);
       } else {
-        const resultPos = await borrowAmm.getUnderlyingBorrowBalanceInUSD();
-        return resultPos;
+        return await borrowAmm.getUnderlyingBorrowBalanceInUSD();
       }
     },
     useMemo(() => undefined, [!!borrowAmm?.provider, borrowAmm.aaveVariableDebtToken]),
@@ -73,8 +66,7 @@ export const useBorrowAMM = (borrowAmm: BorrowAMM) => {
 
   const fixedDebtInUSD = useAsyncFunction(
     async (position: Position) => {
-      const result = await borrowAmm?.getFixedBorrowBalanceInUSD(position);
-      return result;
+      return borrowAmm?.getFixedBorrowBalanceInUSD(position);
     },
     useMemo(() => undefined, [!!borrowAmm?.provider]),
   );
@@ -83,8 +75,7 @@ export const useBorrowAMM = (borrowAmm: BorrowAMM) => {
     async () => {
       const amm = borrowAmm?.amm;
       if (amm) {
-        const apy = await amm?.getInstantApy();
-        return apy;
+        return amm?.getInstantApy();
       }
       return 0;
     },
@@ -94,13 +85,12 @@ export const useBorrowAMM = (borrowAmm: BorrowAMM) => {
   const borrowSwapInfo = useAsyncFunction(
     async (args: SwapInfoPayload) => {
       if (borrowAmm) {
-        const info = await borrowAmm.getBorrowInfo({
+        return await borrowAmm.getBorrowInfo({
           isFT: false,
           fixedLow: 0.001,
           fixedHigh: 990,
           ...args,
         });
-        return info;
       }
       return undefined;
     },

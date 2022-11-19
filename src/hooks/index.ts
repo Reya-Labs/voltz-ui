@@ -8,7 +8,6 @@ export { default as useAMMs } from './useAMMs';
 export { default as useBorrowAMMs } from './useBorrowAMMs';
 export { default as useAsyncFunction } from './useAsyncFunction';
 export type { UseAsyncFunctionResult } from './useAsyncFunction';
-export { default as useDebounce } from './useDebounce';
 export { default as useDispatch } from './useDispatch';
 export { default as useCurrentPositionMarginRequirement } from './useCurrentPositionMarginRequirement';
 export { default as usePositions } from './usePositions';

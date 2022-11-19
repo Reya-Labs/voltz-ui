@@ -2,7 +2,7 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import { Neons } from './Neons/Neons';
 
-const Background: React.FunctionComponent = ({ children }) => (
+export const Background: React.FunctionComponent = ({ children }) => (
   <Box
     sx={{
       display: 'flex',
@@ -29,5 +29,3 @@ const Background: React.FunctionComponent = ({ children }) => (
     {children}
   </Box>
 );
-
-export default Background;

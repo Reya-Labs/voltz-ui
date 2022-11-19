@@ -13,18 +13,19 @@ export const GweiBar: React.FunctionComponent<GweiBarProps> = () => {
   const [blockNumber, setBlockNumber] = useState<number>();
   const [gwei, setGwei] = useState<number>();
 
-  useEffect(() => {
-    if (provider) {
-      Promise.allSettled([provider.getBlockNumber(), provider.getGasPrice()]).then((resps) => {
-        if (resps[0].status === 'fulfilled') {
-          setBlockNumber(resps[0].value);
-        }
-        if (resps[1].status === 'fulfilled') {
-          setGwei(resps[1].value.toNumber());
-        }
-      });
+  const fetchDetails = React.useCallback(async () => {
+    if (!provider) {
+      return;
     }
+    const block = await provider.getBlockNumber();
+    const gasPrice = await provider.getGasPrice();
+    setBlockNumber(block);
+    setGwei(gasPrice.toNumber());
   }, [provider]);
+
+  useEffect(() => {
+    void fetchDetails();
+  }, [fetchDetails]);
 
   if (!provider || isUndefined(blockNumber) || isUndefined(gwei)) {
     return null;

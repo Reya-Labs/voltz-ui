@@ -1,10 +1,10 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 
-import { Background } from '@components/atomic';
 import Nav from '../Nav/Nav';
 import WalletConnect from '../WalletConnect/WalletConnect';
 import Workbench from './workbench.svg';
+import { Background } from './Background/Background';
 
 interface PageProps {
   children?: React.ReactNode;

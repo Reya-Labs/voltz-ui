@@ -16,6 +16,17 @@
   },
   "ignorePatterns": ["src/graphql/generated.ts"],
   "rules": {
+    "react/forbid-dom-props": ["warn", { "forbid": [{
+      "propName": "style",
+      "message": "Avoid using inline styles for components. Use styled components instead."
+    }]}],
+    "react/forbid-component-props": ["warn", { "forbid": [{
+      "propName": "style",
+      "message": "Avoid using inline styles for components. Use styled components instead."
+    }, {
+      "propName": "sx",
+      "message": "Avoid using inline styles for components. Use styled components instead."
+    }]}],
     "unused-imports/no-unused-imports-ts": "error",
     "eqeqeq": "error",
     "no-unused-vars": "off",
