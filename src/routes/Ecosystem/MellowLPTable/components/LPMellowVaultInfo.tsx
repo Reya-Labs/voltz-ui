@@ -27,7 +27,6 @@ const LPMellowVaultInfo: React.FunctionComponent<LPMellowVaultInfoProps> = ({
               DEPOSITS
             </Typography>
             <ProgressBar
-              isMaturity={true}
               leftContent={
                 <Typography variant="h6" color="#E5E1F9" marginLeft="0px">
                   {lpVault.tokenName}
