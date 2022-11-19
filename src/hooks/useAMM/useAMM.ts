@@ -166,5 +166,3 @@ export const useAMM = (amm?: AMM) => {
     ],
   );
 };
-
-export default useAMM;

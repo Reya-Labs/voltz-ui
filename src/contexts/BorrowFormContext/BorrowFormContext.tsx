@@ -428,5 +428,3 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
 export const useBorrowFormContext = (): BorrowFormContext => {
   return useContext(borrowFormCtx);
 };
-
-export default BorrowFormProvider;

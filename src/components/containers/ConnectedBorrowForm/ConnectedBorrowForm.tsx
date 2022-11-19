@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from '@hooks';
 import { routes } from '@routes';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { actions, selectors } from '@store';
 
 import { useNavigate } from 'react-router-dom';
@@ -122,10 +122,8 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
       <FormPanel noBackground />
       <BorrowForm
         protocol={amm.protocol}
-        startDate={amm.startDateTime}
         endDate={amm.endDateTime}
         errors={form.errors}
-        notional={0}
         onChangeNotional={form.setNotional}
         underlyingTokenName={amm.underlyingToken.name}
         approvalsNeeded={form.approvalsNeeded}

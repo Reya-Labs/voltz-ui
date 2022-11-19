@@ -31,5 +31,3 @@ export const BulletLabel: React.FunctionComponent<BulletLabelProps> = ({ sx = {}
     </Typography>
   );
 };
-
-export default BulletLabel;
