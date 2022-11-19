@@ -32,11 +32,11 @@ const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = (
   onSubmit,
   onCancel,
 }: MellowLpDepositFormProps) => {
-  const subtext = `WALLET BALANCE: ${isUndefined(lpVault.vault.userWalletBalance)
+  const subtext = `WALLET BALANCE: ${
+    isUndefined(lpVault.vault.userWalletBalance)
       ? '---'
-      : `${formatCurrency(lpVault.vault.userWalletBalance, true)} ${lpVault.metadata.token
-      }`
-    }`;
+      : `${formatCurrency(lpVault.vault.userWalletBalance, true)} ${lpVault.metadata.token}`
+  }`;
 
   const handleChange = (newValue: string | undefined) => {
     const usFormatted = toUSFormat(newValue);
@@ -93,7 +93,7 @@ const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = (
           size="medium"
           variant="contained"
           sx={{
-            backgroundColor: '#2D2B3D'
+            backgroundColor: '#2D2B3D',
           }}
         >
           BACK
@@ -123,20 +123,23 @@ const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = (
           ABOUT YOUR FUNDS
         </Typography>
 
-        {
-          ['Funds deposited will be locked into the pool until the pool reaches maturity. At this point the withdrawal mechanism will be enabled.',
-            'Remember, returns are not guaranteed and you may get back less than you put in.'].map(item => (<Typography
-              variant="body1"
-              sx={{
-                fontSize: '12px',
-                color: '#9B97AD',
-                marginTop: (theme) => theme.spacing(2.5),
-                fontWeight: '400',
-                lineHeight: '1.5',
-              }}
-            >
-              {item}
-            </Typography>))}
+        {[
+          'Funds deposited will be locked into the pool until the pool reaches maturity. At this point the withdrawal mechanism will be enabled.',
+          'Remember, returns are not guaranteed and you may get back less than you put in.',
+        ].map((item) => (
+          <Typography
+            variant="body1"
+            sx={{
+              fontSize: '12px',
+              color: '#9B97AD',
+              marginTop: (theme) => theme.spacing(2.5),
+              fontWeight: '400',
+              lineHeight: '1.5',
+            }}
+          >
+            {item}
+          </Typography>
+        ))}
       </Panel>
     </FormPanel>
   );
