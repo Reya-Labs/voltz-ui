@@ -146,7 +146,7 @@ var MellowLpRouter = /** @class */ (function () {
                         _a.userAddress = _b.sent();
                         console.log('user address', this.userAddress);
                         this.writeContracts = {
-                            token: new ethers_1.Contract(this.readOnlyContracts.token.address, IERC20Minimal_json_1.abi, this.provider),
+                            token: new ethers_1.Contract(this.readOnlyContracts.token.address, IERC20Minimal_json_1.abi, this.signer),
                             erc20RootVault: this.readOnlyContracts.erc20RootVault.map(function (contract) { return new ethers_1.ethers.Contract(contract.address, Erc20RootVault_json_1.abi, _this.signer); }),
                             mellowRouter: new ethers_1.ethers.Contract(this.mellowRouterAddress, MellowMultiVaultRouterABI_json_1.abi, this.signer),
                         };

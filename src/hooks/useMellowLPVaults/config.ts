@@ -54,7 +54,7 @@ const networkConfigurations: { [key: string]: NetworkConfiguration } = {
     MELLOW_ETH_WRAPPER: '0xcF2f79d8DF97E09BF5c4DBF3F953aeEF4f4a204d',
     MELLOW_VAULTS: [
       {
-        show: false,
+        show: true,
         voltzVault: '0x1b876d1b5A8636EFe9835D8ed0231c1429cBfc40',
         erc20RootVault: '0x62E224d9ae2f4702CC88695e6Ea4aA16D0925BdB',
         erc20RootVaultGovernance: '0x4DCc9Ad7ff5964d13ee4A6932922f1a24f3f8e25',
@@ -128,7 +128,7 @@ const networkConfigurations: { [key: string]: NetworkConfiguration } = {
         },
       },
       {
-        show: false,
+        show: true,
         router: '0xE6cc2CcAd204D96821241a8cfBC7e31041bA7340',
         defaultWeights: [100],
         pivot: 0,
