@@ -54,7 +54,7 @@ const networkConfigurations: { [key: string]: NetworkConfiguration } = {
     MELLOW_ETH_WRAPPER: '0xcF2f79d8DF97E09BF5c4DBF3F953aeEF4f4a204d',
     MELLOW_VAULTS: [
       {
-        show: true,
+        show: false,
         voltzVault: '0x1b876d1b5A8636EFe9835D8ed0231c1429cBfc40',
         erc20RootVault: '0x62E224d9ae2f4702CC88695e6Ea4aA16D0925BdB',
         erc20RootVaultGovernance: '0x4DCc9Ad7ff5964d13ee4A6932922f1a24f3f8e25',
@@ -80,7 +80,7 @@ const networkConfigurations: { [key: string]: NetworkConfiguration } = {
     ],
     MELLOW_ROUTERS: [
       {
-        show: true,
+        show: false,
         router: '0x631CAD693b6f0463B2C2729299FccA8731553bB4',
         defaultWeights: [100, 0],
         pivot: 0,
@@ -104,7 +104,7 @@ const networkConfigurations: { [key: string]: NetworkConfiguration } = {
         },
       },
       {
-        show: true,
+        show: false,
         router: '0x631CAD693b6f0463B2C2729299FccA8731553bB4',
         defaultWeights: [100, 0],
         pivot: 1,
@@ -128,7 +128,7 @@ const networkConfigurations: { [key: string]: NetworkConfiguration } = {
         },
       },
       {
-        show: true,
+        show: false,
         router: '0xE6cc2CcAd204D96821241a8cfBC7e31041bA7340',
         defaultWeights: [100],
         pivot: 0,
@@ -153,7 +153,7 @@ const networkConfigurations: { [key: string]: NetworkConfiguration } = {
       },
       {
         show: true,
-        router: '0x5e25887EA7507e1646C3637c5CCCE29D7D2c1E9C',
+        router: '0x69a2564dd743049de7fac0b6b6a7626feb596745',
         defaultWeights: [100],
         pivot: 0,
         metadata: {
