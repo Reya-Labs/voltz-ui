@@ -47,7 +47,7 @@ const MellowLPPosition: React.FunctionComponent<MellowLPPositionProps> = ({
                 marginLeft: '4px',
               }}
             >
-              {userDeposit ? `${formatCurrency(userDeposit)} ${tokenName}` : '---'}
+              {isUndefined(userDeposit) ? '---' : `${formatCurrency(userDeposit)} ${tokenName}`}
             </Typography>
           )}
         </Box>
