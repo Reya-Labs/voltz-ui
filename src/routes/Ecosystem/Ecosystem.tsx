@@ -1,5 +1,4 @@
 import { Page } from '@components/interface';
-import Box from '@mui/material/Box';
 
 import ConnectedMellowLpDepositForm from './ConnectedMellowLpDepositForm/ConnectedMellowLpDepositForm';
 import ConnectedMellowLPTable from './ConnectedMellowLPTable/ConnectedMellowLPTable';
@@ -10,6 +9,7 @@ import { useMellowLPVaults, useWallet } from '@hooks';
 import { useLocation } from 'react-router-dom';
 
 import { MellowProduct } from './types';
+import { Box } from './Ecosystem.styled';
 
 export enum EcosystemRenderMode {
   MELLOW_DEPOSIT_FORM,
@@ -111,14 +111,7 @@ const Ecosystem: React.FunctionComponent = () => {
   return (
     <Page>
       {renderMode === EcosystemRenderMode.PAGE && (
-        <Box
-          sx={{
-            height: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            backdropFilter: 'blur(8px)',
-          }}
-        >
+        <Box>
           <ConnectedMellowLPTable
             lpVaults={lpVaults}
             dataLoading={dataLoading}
@@ -128,12 +121,7 @@ const Ecosystem: React.FunctionComponent = () => {
       )}
 
       {renderMode === EcosystemRenderMode.MELLOW_DEPOSIT_FORM && (
-        <Box
-          sx={{
-            height: '100%',
-            backdropFilter: 'blur(8px)',
-          }}
-        >
+        <Box>
           {currentVault && (
             <ConnectedMellowLpDepositForm onReset={handleReset} vault={currentVault} />
           )}

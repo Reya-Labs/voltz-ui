@@ -8,6 +8,7 @@ import { isUndefined } from 'lodash';
 import React from 'react';
 import { MellowProduct } from '../types';
 import LPMellowVaultDepositInfo from './components/LPMellowVaultDepositInfo';
+import { Agents } from '@contexts';
 
 export type MellowLpDepositFormProps = {
   lpVault: MellowProduct;
@@ -44,7 +45,9 @@ const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = (
   };
 
   return (
+    <Box>
     <FormPanel
+      boxShadowType='LP'
       sx={{
         width: '100%',
         maxWidth: '398px',
@@ -82,7 +85,7 @@ const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = (
           disabled={disabled}
           onClick={onSubmit}
           size="medium"
-          variant="contained"
+          agent={Agents.LIQUIDITY_PROVIDER}
           sx={{
             width: '256px',
             marginRight: '24px',
@@ -93,10 +96,7 @@ const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = (
         <Button
           onClick={onCancel}
           size="medium"
-          variant="contained"
-          sx={{
-            backgroundColor: '#2D2B3D',
-          }}
+          variant="dark"
         >
           BACK
         </Button>
@@ -144,6 +144,7 @@ const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = (
         ))}
       </Panel>
     </FormPanel>
+    </Box>
   );
 };
 
