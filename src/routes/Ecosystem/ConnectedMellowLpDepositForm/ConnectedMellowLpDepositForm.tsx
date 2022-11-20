@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { DepositStates, getSubmissionState } from './mappers';
 import MellowLpDepositForm from '../MellowLpDepositForm/MellowLpDepositForm';
-import { Panel } from '../../../components/atomic';
 
 import { MellowProduct } from '../types';
 
@@ -92,24 +91,15 @@ const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMellowLpDep
   };
 
   return (
-    <Panel
-      variant="dark"
-      sx={{
-        padding: 0,
-        margin: '0 auto',
-        background: 'transparent',
-      }}
-    >
-      <MellowLpDepositForm
-        lpVault={vault}
-        onChangeDeposit={onChangeDeposit}
-        submitText={submissionState.submitText}
-        hintText={submissionState.hintText}
-        disabled={!sufficientFunds || submissionState.disabled}
-        onSubmit={submissionState.action}
-        onCancel={handleGoBack}
-      />
-    </Panel>
+    <MellowLpDepositForm
+      lpVault={vault}
+      onChangeDeposit={onChangeDeposit}
+      submitText={submissionState.submitText}
+      hintText={submissionState.hintText}
+      disabled={!sufficientFunds || submissionState.disabled}
+      onSubmit={submissionState.action}
+      onCancel={handleGoBack}
+    />
   );
 };
 
