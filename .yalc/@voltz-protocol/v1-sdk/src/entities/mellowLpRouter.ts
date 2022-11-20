@@ -161,7 +161,7 @@ class MellowLpRouter {
     console.log('user address', this.userAddress);
 
     this.writeContracts = {
-      token: new Contract(this.readOnlyContracts.token.address, IERC20MinimalABI, this.provider),
+      token: new Contract(this.readOnlyContracts.token.address, IERC20MinimalABI, this.signer),
       erc20RootVault: this.readOnlyContracts.erc20RootVault.map(
         (contract) => new ethers.Contract(contract.address, Erc20RootVaultABI, this.signer),
       ),
