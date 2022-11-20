@@ -106,7 +106,7 @@ const networkConfigurations: { [key: string]: NetworkConfiguration } = {
       {
         show: false,
         router: '0x631CAD693b6f0463B2C2729299FccA8731553bB4',
-        defaultWeights: [100, 0],
+        defaultWeights: [0, 100],
         pivot: 1,
         metadata: {
           title: 'MELLOW VAULT - ETH',
