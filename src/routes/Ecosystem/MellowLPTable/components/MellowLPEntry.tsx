@@ -29,10 +29,6 @@ const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
       <Box
         sx={{
           padding: (theme) => theme.spacing(4),
-          maxWidth: '308px',
-          maxHeight: '408px',
-          width: '100%',
-          height: '100%',
           backgroundColor: '#19152A',
           filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
           borderRadius: '8px 8px 0px 0px',
