@@ -4,28 +4,37 @@ import MellowLPEntry from './components/MellowLPEntry';
 import { group } from './utils';
 
 export type MellowLPTableProps = {
-  lpVaults: MellowProduct[];
+  mellowProducts: MellowProduct[];
   onSelectItem: (item: MellowProduct) => void;
   dataLoading: boolean;
 };
 
 const MellowLPTable: React.FunctionComponent<MellowLPTableProps> = ({
-  lpVaults,
+  mellowProducts,
   onSelectItem,
   dataLoading,
 }: MellowLPTableProps) => {
+  const groupedMellowProducts = group<MellowProduct>(mellowProducts, 3);
+
   return (
     <>
-      {group<MellowProduct>(lpVaults, 3).map((line, index) =>
-      (<Box sx={{ display:'flex', justifyContent: 'space-between', marginTop: index > 0 ? '16px' : '0px' }}>
-        {line.map((product) => (
-          <MellowLPEntry
-            lpVault={product}
-            onSelectItem={() => onSelectItem(product)}
-            dataLoading={dataLoading}
-          />
-        ))}
-      </Box>))}
+      {groupedMellowProducts.map((row, index) => (
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginTop: index > 0 ? '16px' : '0px',
+          }}
+        >
+          {row.map((product) => (
+            <MellowLPEntry
+              lpVault={product}
+              onSelectItem={() => onSelectItem(product)}
+              dataLoading={dataLoading}
+            />
+          ))}
+        </Box>
+      ))}
     </>
   );
 };
