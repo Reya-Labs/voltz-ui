@@ -45,9 +45,8 @@ const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = (
   };
 
   return (
-    <Box>
     <FormPanel
-      boxShadowType='LP'
+      boxShadowType="LP"
       sx={{
         width: '100%',
         maxWidth: '398px',
@@ -93,11 +92,7 @@ const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = (
         >
           {submitText}
         </Button>
-        <Button
-          onClick={onCancel}
-          size="medium"
-          variant="dark"
-        >
+        <Button onClick={onCancel} size="medium" variant="dark">
           BACK
         </Button>
       </Box>
@@ -144,7 +139,6 @@ const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = (
         ))}
       </Panel>
     </FormPanel>
-    </Box>
   );
 };
 
