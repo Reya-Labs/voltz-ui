@@ -22,9 +22,9 @@ const Template: ComponentStory<typeof ProfilePageWalletConnected> = (args) => {
   const [copyLinkButtonMode, setCopyLinkButtonMode] = useState<CopyLinkButtonProps['mode']>('copy');
   const [season, setSeason] = useState<Season>(args.season);
   const [claimButtonBulkMode, setClaimButtonBulkMode] = useState<ClaimButtonProps['mode']>('claim');
-  const [achievedBadges, setAchievedBadges] = useState<
-    ProfilePageWalletConnectedProps['achievedBadges']
-  >([]);
+  const [achievedBadges, setAchievedBadges] = useState<ProfilePageWalletConnectedProps['badges']>(
+    [],
+  );
   const [claimButtonModes, setClaimButtonModes] = useState<
     Record<BadgeVariant, ClaimButtonProps['mode']>
   >(
@@ -100,7 +100,7 @@ const Template: ComponentStory<typeof ProfilePageWalletConnected> = (args) => {
       claimButtonModes={claimButtonModes}
       onClaimButtonClick={handleOnClaimButtonClick}
       onClaimBulkClick={handleOnClaimBulkClick}
-      achievedBadges={achievedBadges}
+      badges={achievedBadges}
       copyLinkButtonMode={copyLinkButtonMode}
       onCopyLinkButtonClick={handleOnCopyLinkButtonClick}
     />
@@ -110,7 +110,7 @@ const Template: ComponentStory<typeof ProfilePageWalletConnected> = (args) => {
 export const Default = Template.bind({});
 Default.args = {
   account: '0xb01F14d1C9000D453241221EB54648F1C378c970',
-  achievedBadges: season1Badges,
+  badges: season1Badges,
   season: SEASONS[1],
   seasonOptions: [SEASONS[0], SEASONS[1]],
 };
@@ -118,7 +118,7 @@ Default.args = {
 export const Loading = Template.bind({});
 Loading.args = {
   account: '0xb01F14d1C9000D453241221EB54648F1C378c970',
-  achievedBadges: season1Badges,
+  badges: season1Badges,
   season: SEASONS[1],
   loading: true,
   isOnGoingSeason: true,
