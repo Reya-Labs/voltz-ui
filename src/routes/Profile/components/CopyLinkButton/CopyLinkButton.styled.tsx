@@ -14,7 +14,7 @@ export const CopyLinkButton = styled(Button)<{ disabled: boolean }>`
   width: 100%;
   padding: ${({ theme }) => theme.spacing(2, 4)};
   color: ${({ disabled }) =>
-    disabled ? colors.lavenderWeb.darken015 : colors.skyBlueCrayola.base};
+    disabled ? colors.lavenderWeb2 : colors.skyBlueCrayola};
 `;
 
 export const IconWrapper = styled('div')`
@@ -30,6 +30,6 @@ export const CopyLinkErrorTypography = styled('span')`
   font-size: 12px;
   line-height: 14px;
   letter-spacing: 0.02em;
-  color: ${colors.vzCustomRed1.base};
+  color: ${colors.wildStrawberry};
   margin-top: ${({ theme }) => theme.spacing(1)};
 `;

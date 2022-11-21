@@ -14,5 +14,5 @@ export const TagContainer = styled(Box)`
 
 export const TagTypography = styled(Typography)`
   font-size: 14px;
-  color: ${colors.wildStrawberry.base};
+  color: ${colors.wildStrawberry};
 `;

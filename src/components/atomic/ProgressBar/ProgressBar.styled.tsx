@@ -22,7 +22,7 @@ export const ProgressBarPercentageBox = styled(Box)<{ percentage: number }>`
 
 export const ProgressBarBoxContainer = styled(Box)`
   width: 100%;
-  background: ${colors.lavenderWeb.darken030};
+  background: ${colors.lavenderWeb5};
   height: 4px;
   margin-top: ${({ theme }) => theme.spacing(1)};
 `;

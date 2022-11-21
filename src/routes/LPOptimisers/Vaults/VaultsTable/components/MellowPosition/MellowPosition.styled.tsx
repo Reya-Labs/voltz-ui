@@ -39,7 +39,7 @@ export const PositionTypography = styled(Typography)`
 export const DepositTypography = styled(Typography)`
   font-size: 14px;
   text-transform: uppercase;
-  color: ${colors.skyBlueCrayola.base};
+  color: ${colors.skyBlueCrayola};
   margin-left: ${({ theme }) => theme.spacing(1)};
 `;
 
