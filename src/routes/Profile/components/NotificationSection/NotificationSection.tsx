@@ -77,6 +77,10 @@ export const NotificationSection: React.FunctionComponent<NotificationSectionPro
         {notClaimedBadgesCount !== 0 ? (
           <ButtonBox>
             <ClaimButton
+              copies={{
+                claim: 'Claim All',
+                claimError: 'Claim All',
+              }}
               displayError={false}
               mode={claimButtonBulkMode}
               onClick={onClaimBulkClick}
