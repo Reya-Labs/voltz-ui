@@ -18,7 +18,9 @@
     "storybook": "start-storybook -p 6006",
     "test": "jest --silent",
     "test:watch": "jest --watch",
-    "chromatic": "npx chromatic --project-token=e40b8c3e3eea"
+    "chromatic": "npx chromatic --project-token=e40b8c3e3eea",
+    "sdk:add-local": "npx yalc add @voltz-protocol/v1-sdk",
+    "sdk:update-local": "npx yalc update @voltz-protocol/v1-sdk"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
