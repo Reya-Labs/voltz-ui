@@ -18,6 +18,7 @@ export type ClaimButtonProps = {
   claimedAt?: number;
   onClick?: () => void;
   displayError: boolean;
+  copies?: Partial<Record<ClaimButtonProps['mode'], string>>;
 };
 
 const MODE_COPY_MAP: Record<ClaimButtonProps['mode'], string> = {
@@ -41,6 +42,7 @@ export const ClaimButton: React.FunctionComponent<ClaimButtonProps> = ({
   mode,
   claimedAt,
   displayError,
+  copies,
 }) => {
   const [showConfetti, setShowConfetti] = useState(false);
   const initialModeRef = useRef<ClaimButtonMode>(mode);
@@ -49,11 +51,15 @@ export const ClaimButton: React.FunctionComponent<ClaimButtonProps> = ({
   const handleTickAnimationEnd = useCallback(() => {
     setShowConfetti(initialModeRef.current !== 'claimed');
   }, []);
+  const copyMap = {
+    ...MODE_COPY_MAP,
+    ...copies,
+  };
 
   return (
     <>
       <ButtonUI data-testid="ClaimButton" onClick={onClick} disabled={DISABLED_MAP[mode]}>
-        <Wrapper>{MODE_COPY_MAP[mode]}</Wrapper>
+        <Wrapper>{copyMap[mode]}</Wrapper>
         {mode === 'claimed' && (
           <TickWrapper>
             <Tick onAnimationEnd={handleTickAnimationEnd} />
