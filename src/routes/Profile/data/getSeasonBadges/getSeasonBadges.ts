@@ -25,7 +25,7 @@ export async function getSeasonBadges({
 
     const subgraphUrl = process.env.REACT_APP_SUBGRAPH_BADGES_URL;
     const nonProgDbUrl = process.env.REACT_APP_DB_BADGES_URL;
-    const referralsDbUrl = process.env.REACT_APP_REFERRER_DB_BADGES_URL;
+    const referralsDbUrl = process.env.REACT_APP_REFERRAL_AND_SIGNATURE_SERVICE_URL;
     if (!subgraphUrl || !nonProgDbUrl) {
       return getDefaultResponse(seasonId);
     }
