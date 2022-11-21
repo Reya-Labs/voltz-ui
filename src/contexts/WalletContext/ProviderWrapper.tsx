@@ -70,7 +70,11 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
           const walletAddress = await newSigner.getAddress();
 
           // Do checks that could stop us allowing the wallet to connect
-          if (!process.env.REACT_APP_SKIP_TOS_CHECK) {
+          const skipTOSCheck =
+            process.env.REACT_APP_SKIP_TOS_CHECK &&
+            process.env.REACT_APP_SKIP_TOS_CHECK !== 'UNPROVIDED';
+
+          if (!skipTOSCheck) {
             await services.checkForTOSSignature(newSigner, walletAddress);
           }
           await services.checkForCorrectNetwork(newProvider);
