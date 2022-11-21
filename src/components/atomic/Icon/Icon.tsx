@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { SystemStyleObject, Theme } from '@theme';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import isArray from 'lodash/isArray';
@@ -8,11 +7,9 @@ import { Icons, iconMap } from './types';
 
 export type IconProps = SvgIconProps & {
   name: Icons;
-  link?: string;
 };
 
-const Icon: React.FunctionComponent<IconProps> = ({ name, sx, link, ...props }) => {
-  const navigate = useNavigate();
+const Icon: React.FunctionComponent<IconProps> = ({ name, sx, ...props }) => {
   const NamedIcon = iconMap[name];
 
   const extraProps = (iconName: Icons) => {
@@ -99,16 +96,9 @@ const Icon: React.FunctionComponent<IconProps> = ({ name, sx, link, ...props }) 
 
     return [sx];
   };
-  const handleClick = () => link && navigate(link);
 
   return (
-    <SvgIcon
-      component={NamedIcon}
-      sx={[defaultSx, ...getSx()]}
-      onClick={handleClick}
-      {...extraProps(name)}
-      {...props}
-    />
+    <SvgIcon component={NamedIcon} sx={[defaultSx, ...getSx()]} {...extraProps(name)} {...props} />
   );
 };
 

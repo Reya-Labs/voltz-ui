@@ -27,18 +27,6 @@ const WalletSelect: React.FunctionComponent<WalletSelectProps> = ({ wallet, onSe
       <Typography variant="h6" sx={{ marginBottom: (theme) => theme.spacing(6) }}>
         CONNECT A WALLET
       </Typography>
-      {/* todo: bring back when disclaimers are ready */}
-      {/* <Typography variant="body1" sx={{ marginBottom: (theme) => theme.spacing(6) }}>
-        By connecting a wallet, you agree to{' '}
-        <Link href="#" variant="body1" color="warning.light">
-          Voltz Labs Terms of Service
-        </Link>{' '}
-        and acknowledge that you have read and understand the{' '}
-        <Link href="#" variant="body1" color="warning.light">
-          Voltz Protocol Disclaimer
-        </Link>
-        .
-      </Typography> */}
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
         {walletOptions.map(({ title, name }) => (
           <WalletOptionButton
