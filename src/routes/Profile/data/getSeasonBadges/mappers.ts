@@ -50,9 +50,9 @@ export const NON_PROGRAMMATIC_BADGES: NonProgrammaticBadges[] = [
   'governorz',
   'diplomatz',
   'senatorz',
-  'whaleWhisperer',
-  'notionalInfluencer',
   'referror',
+  'notionalInfluencer',
+  'whaleWhisperer',
 ];
 
 export const SEASON_BADGE_VARIANTS: Record<`${Season['id']}`, string[]> = {
