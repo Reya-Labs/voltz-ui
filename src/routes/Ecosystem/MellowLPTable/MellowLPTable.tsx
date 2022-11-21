@@ -15,8 +15,9 @@ const MellowLPTable: React.FunctionComponent<MellowLPTableProps> = ({
   dataLoading,
 }: MellowLPTableProps) => (
   <MellowLPGrid itemsPerRow={3}>
-    {mellowProducts.map((product) => (
+    {mellowProducts.map((product, index) => (
       <MellowLPEntry
+        key={index}
         lpVault={product}
         onSelectItem={() => onSelectItem(product)}
         dataLoading={dataLoading}

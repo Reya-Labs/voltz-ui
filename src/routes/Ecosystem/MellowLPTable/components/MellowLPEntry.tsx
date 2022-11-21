@@ -76,8 +76,13 @@ const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
         </Typography>
 
         <Box sx={{ marginLeft: '8px', marginTop: '4px' }}>
-          {lpVault.metadata.underlyingPools.map((pool) => (
-            <PoolField protocol={pool} isBorrowing={false} isBorrowTable={true} />
+          {lpVault.metadata.underlyingPools.map((pool, index) => (
+            <PoolField
+              key={`${pool}-${index}`}
+              protocol={pool}
+              isBorrowing={false}
+              isBorrowTable={true}
+            />
           ))}
         </Box>
       </Box>

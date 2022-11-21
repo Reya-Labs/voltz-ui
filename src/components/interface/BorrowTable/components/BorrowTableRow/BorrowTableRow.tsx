@@ -181,12 +181,24 @@ const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({
       return (
         // todo: <TableRow key={index} sx={{...anotherObject,  ...typeStyleOverrides() }}>
         <TableRow key={index} sx={{ ...typeStyleOverrides() }}>
-          {(isFixedPositions ? labelsFixed : labelsVariable).map(([field, lable]) => {
+          {(isFixedPositions ? labelsFixed : labelsVariable).map(([field], indexKey) => {
             if (field === 'variableApy') {
-              return <BorrowVariableAPY loading={loadingVarApy} variableApy={resultVarApy} />;
+              return (
+                <BorrowVariableAPY
+                  key={indexKey}
+                  loading={loadingVarApy}
+                  variableApy={resultVarApy}
+                />
+              );
             }
             if (field === 'fixedApr') {
-              return <BorrowFixedAPR loading={loadingFixedApr} fixedApr={resultFixedApr} />;
+              return (
+                <BorrowFixedAPR
+                  key={indexKey}
+                  loading={loadingFixedApr}
+                  fixedApr={resultFixedApr}
+                />
+              );
             }
             if (field === 'protocol') {
               // modify to show svgs
@@ -197,10 +209,11 @@ const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({
               );
             }
             if (field === 'maturity') {
-              return <BorrowMaturity />;
+              return <BorrowMaturity key={indexKey} />;
             }
             return (
               <Debt
+                key={indexKey}
                 debtInUSD={isFixedPositions ? resultFixed : resultVar}
                 loadingDebt={
                   isFixedPositions

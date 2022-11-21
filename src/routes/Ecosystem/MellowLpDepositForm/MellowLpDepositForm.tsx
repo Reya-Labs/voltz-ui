@@ -125,6 +125,7 @@ const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = (
           'Remember, returns are not guaranteed and you may get back less than you put in.',
         ].map((item) => (
           <Typography
+            key={item}
             variant="body1"
             sx={{
               fontSize: '12px',

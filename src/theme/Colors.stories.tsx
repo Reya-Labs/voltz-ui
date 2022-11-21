@@ -59,7 +59,7 @@ const AllColorsTemplate: ComponentStory<typeof React.Fragment> = () => (
     {Object.keys(colors)
       .sort()
       .map((c) => (
-        <ColorSetTile colorSet={colors[c as BaseColors]} color={c as BaseColors} />
+        <ColorSetTile key={c} colorSet={colors[c as BaseColors]} color={c as BaseColors} />
       ))}
   </div>
 );
