@@ -129,7 +129,7 @@ const networkConfigurations: { [key: string]: NetworkConfiguration } = {
       },
       {
         show: true,
-        router: '0xE6cc2CcAd204D96821241a8cfBC7e31041bA7340',
+        router: '0x704F6E9cB4f7e041CC89B6a49DF8EE2027a55164',
         defaultWeights: [100],
         pivot: 0,
         metadata: {
@@ -153,8 +153,8 @@ const networkConfigurations: { [key: string]: NetworkConfiguration } = {
       },
       {
         show: true,
-        router: '0x69a2564dd743049de7fac0b6b6a7626feb596745',
-        defaultWeights: [100],
+        router: '0x9f397CD24103A0a0252DeC82a88e656480C53fB7',
+        defaultWeights: [100, 0],
         pivot: 0,
         metadata: {
           title: 'MELLOW VAULT - USDC',
