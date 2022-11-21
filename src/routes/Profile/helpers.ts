@@ -138,9 +138,9 @@ export const BADGE_VARIANT_DESCRIPTION_COPY_MAP: Record<BadgeVariant, string> = 
   ogOkBoomer: '2x leverage is OK. We all start somewhere, you just started small.',
   ogDryIce: 'Providing liquidity but below 2x notional.',
   // non-programmatic badges
-  diplomatz: 'A Badge for those supporting thousands speaking different languages.',
-  senatorz: 'A Badge for those supporting voltz community beyond the unthinkable.',
-  governorz: 'A Badge for being there and contributing the layer 0 of our community.',
+  diplomatz: 'For those supporting thousands speaking in different languages.',
+  senatorz: 'For supporting Voltz community beyond the unthinkable.',
+  governorz: 'For being there and contributing to the layer 0 of our community.',
   referror:
     'You brought quite a crew with you. Voltz is build to empower defi and your help has been rewarded.',
   notionalInfluencer:

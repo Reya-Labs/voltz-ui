@@ -31,11 +31,15 @@ import { ClaimButtonProps } from '../ClaimButton/ClaimButton';
 import { NotificationSection } from '../NotificationSection/NotificationSection';
 import { BoldText } from '../BoldText.styled';
 import { CopyLinkButtonProps } from '../CopyLinkButton/CopyLinkButton';
-import { BadgeVariant, NON_PROGRAMMATIC_BADGES } from '../../data/getSeasonBadges';
+import {
+  BadgeVariant,
+  NON_PROGRAMMATIC_BADGES,
+  NonProgrammaticBadges,
+} from '../../data/getSeasonBadges';
 
 export type ProfilePageWalletConnectedProps = {
   account: string;
-  achievedBadges: AchievedBadgeProps[];
+  badges: AchievedBadgeProps[];
   season: Season;
   loading?: boolean;
   isOnGoingSeason: boolean;
@@ -54,7 +58,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
   ({
     account,
     season,
-    achievedBadges,
+    badges,
     loading,
     isOnGoingSeason,
     seasonBadgeVariants = [],
@@ -72,17 +76,23 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
     const seasonLabel = season.label;
     const seasonStartDateFormatted = formatDateTimeWithOrdinal(season.startDate);
     const seasonEndDateFormatted = formatDateTimeWithOrdinal(season.endDate);
-    const achievedBadgesMemo: AchievedBadgeProps[] = React.useMemo(() => {
+    const badgesMemo: AchievedBadgeProps[] = React.useMemo(() => {
       return seasonBadgeVariants
-        .map((variant) => achievedBadges.find((c) => c.variant === variant))
+        .map((variant) => badges.find((c) => c.variant === variant))
         .filter((b) => b)
         .filter((b) =>
           BADGE_VARIANT_TIER_MAP[b!.variant] === 'easterEgg' ? b!.achievedAt : true,
         ) as AchievedBadgeProps[];
-    }, [seasonBadgeVariants, achievedBadges]);
+    }, [seasonBadgeVariants, badges]);
 
-    const collection = achievedBadgesMemo.filter((aB) => aB.achievedAt);
-    const notClaimedBadges = collection.filter((b) => !b.claimedAt);
+    const achievedBadges = badgesMemo.filter((aB) => aB.achievedAt);
+    const collectionBadges = badgesMemo.filter(
+      (aB) => NON_PROGRAMMATIC_BADGES.indexOf(aB.variant as NonProgrammaticBadges) === -1,
+    );
+    const communityEngagementBadges = badgesMemo.filter(
+      (aB) => NON_PROGRAMMATIC_BADGES.indexOf(aB.variant as NonProgrammaticBadges) !== -1,
+    );
+    const notClaimedBadges = achievedBadges.filter((b) => !b.claimedAt);
     const handleSmoothScroll = React.useCallback((variant: BadgeVariant) => {
       badgeCardRefs.current[variant]?.scrollIntoView();
     }, []);
@@ -114,7 +124,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
               <Typography variant="h2">YOUR BADGE COLLECTION</Typography>
               <SeasonToggle seasons={seasonOptions} onChange={onSeasonChange} season={season} />
             </BadgeCollectionTypographyBox>
-            <AchievedBadgesGrid itemsPerRow={!loading && collection.length === 0 ? 1 : 3}>
+            <AchievedBadgesGrid itemsPerRow={!loading && achievedBadges.length === 0 ? 1 : 3}>
               {loading &&
                 Array.from({ length: 3 }, (index) => index).map((_, index) => (
                   <BadgeCard
@@ -126,8 +136,8 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
                   />
                 ))}
               {!loading &&
-                collection.length !== 0 &&
-                collection.map((badge, index) => (
+                achievedBadges.length !== 0 &&
+                achievedBadges.map((badge, index) => (
                   <BadgeCard
                     ref={(ref: BadgeCardHandle) => (badgeCardRefs.current[badge.variant] = ref)}
                     key={`${badge.variant}${index}`}
@@ -139,7 +149,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
                     disableClaiming={isOnGoingSeason}
                   />
                 ))}
-              {!loading && collection.length === 0 && (
+              {!loading && achievedBadges.length === 0 && (
                 <NoAchievedBadgesBox>
                   <Badge variant="noClaimedBadges" />
                   <NoAchievedBadgesTypography variant="body2">
@@ -159,7 +169,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
               Make contributions to the community or trade on the protocol to earn badges{' '}
             </AchievedBadgesListSubheading>
             <AchievedBadgesListGrid itemsPerRow={1}>
-              {achievedBadgesMemo.map((badge, index) => (
+              {collectionBadges.map((badge, index) => (
                 <AchievedBadge
                   key={`${badge.variant}${index}`}
                   {...badge}
@@ -175,8 +185,13 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
               COMMUNITY ENGAGEMENT
             </CommunityEngagementTypography>
             <CommunityEngagementGrid itemsPerRow={1}>
-              {NON_PROGRAMMATIC_BADGES.map((badge, index) => (
-                <AchievedBadge key={`${badge}${index}`} variant={badge} loading={loading} />
+              {communityEngagementBadges.map((badge, index) => (
+                <AchievedBadge
+                  key={`${badge.variant}${index}`}
+                  {...badge}
+                  loading={loading}
+                  onClick={() => handleSmoothScroll(badge.variant)}
+                />
               ))}
             </CommunityEngagementGrid>
           </CommunityEngagementBox>
