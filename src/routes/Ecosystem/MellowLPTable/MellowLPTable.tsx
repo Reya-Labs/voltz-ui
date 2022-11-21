@@ -1,5 +1,5 @@
 import { MellowProduct } from '../types';
-import MellowLPEntry from './components/MellowLPEntry';
+import MellowLPEntry from './components/MellowLPEntry/MellowLPEntry';
 import { MellowLPGrid } from './MellowLPTable.styled';
 import React from 'react';
 
