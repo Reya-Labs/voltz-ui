@@ -259,7 +259,7 @@ const Profile: React.FunctionComponent = () => {
       isOnGoingSeason={season.id === currentActiveSeason.id}
       season={season}
       account={name}
-      achievedBadges={collectionBadges}
+      badges={collectionBadges}
       loading={loading}
       onSeasonChange={(newSeason) => {
         if (claimButtonBulkMode === 'claiming' || isClaimingInProgress()) {
