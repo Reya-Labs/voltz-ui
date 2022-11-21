@@ -24,6 +24,7 @@ const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
       sx={{
         display: 'flex',
         flexDirection: 'column',
+        justifyContent: 'space-between',
       }}
     >
       <Box
@@ -32,6 +33,7 @@ const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
           backgroundColor: '#19152A',
           filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
           borderRadius: '8px 8px 0px 0px',
+          flex: 1,
         }}
       >
         <Box sx={{ display: 'flex' }}>
