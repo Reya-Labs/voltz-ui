@@ -9,7 +9,7 @@ import { useMellowLPVaults, useWallet } from '@hooks';
 import { useLocation } from 'react-router-dom';
 
 import { MellowProduct } from './types';
-import { Box, SystemStyleObject, Theme } from '@mui/system';
+import { ConnectedMellowBox } from './Ecosystem.styled';
 
 export enum EcosystemRenderMode {
   MELLOW_DEPOSIT_FORM,
@@ -91,13 +91,6 @@ const Ecosystem: React.FunctionComponent = () => {
     }
   }, [lpVaults]);
 
-  const boxStyles: SystemStyleObject<Theme> = {
-    height: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    backdropFilter: 'blur(8px)',
-  };
-
   useEffect(() => {
     if (lpVaults && isSignerAvailable && vaultsLoaded) {
       setDataLoading(true);
@@ -118,21 +111,21 @@ const Ecosystem: React.FunctionComponent = () => {
   return (
     <Page>
       {renderMode === EcosystemRenderMode.PAGE && (
-        <Box sx={boxStyles}>
+        <ConnectedMellowBox>
           <ConnectedMellowLPTable
             lpVaults={lpVaults}
             dataLoading={dataLoading}
             onSelectItem={handleSelectMellowLpVault}
           />
-        </Box>
+        </ConnectedMellowBox>
       )}
 
       {renderMode === EcosystemRenderMode.MELLOW_DEPOSIT_FORM && (
-        <Box sx={boxStyles}>
+        <ConnectedMellowBox>
           {currentVault && (
             <ConnectedMellowLpDepositForm onReset={handleReset} vault={currentVault} />
           )}
-        </Box>
+        </ConnectedMellowBox>
       )}
     </Page>
   );
