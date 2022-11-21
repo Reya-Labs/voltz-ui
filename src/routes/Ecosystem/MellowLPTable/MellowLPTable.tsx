@@ -1,7 +1,7 @@
-import { Box } from '@mui/system';
 import { MellowProduct } from '../types';
 import MellowLPEntry from './components/MellowLPEntry';
-import { group } from './utils';
+import { MellowLPGrid } from './MellowLPTable.styled';
+import React from 'react';
 
 export type MellowLPTableProps = {
   mellowProducts: MellowProduct[];
@@ -13,30 +13,16 @@ const MellowLPTable: React.FunctionComponent<MellowLPTableProps> = ({
   mellowProducts,
   onSelectItem,
   dataLoading,
-}: MellowLPTableProps) => {
-  const groupedMellowProducts = group<MellowProduct>(mellowProducts, 3);
-
-  return (
-    <>
-      {groupedMellowProducts.map((row, index) => (
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginTop: index > 0 ? '16px' : '0px',
-          }}
-        >
-          {row.map((product) => (
-            <MellowLPEntry
-              lpVault={product}
-              onSelectItem={() => onSelectItem(product)}
-              dataLoading={dataLoading}
-            />
-          ))}
-        </Box>
-      ))}
-    </>
-  );
-};
+}: MellowLPTableProps) => (
+  <MellowLPGrid itemsPerRow={3}>
+    {mellowProducts.map((product) => (
+      <MellowLPEntry
+        lpVault={product}
+        onSelectItem={() => onSelectItem(product)}
+        dataLoading={dataLoading}
+      />
+    ))}
+  </MellowLPGrid>
+);
 
 export default MellowLPTable;
