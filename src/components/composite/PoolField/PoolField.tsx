@@ -21,16 +21,18 @@ export type PoolFieldProps = {
 
 const PoolField = ({ agent, protocol, isBorrowing, isBorrowTable }: PoolFieldProps) => {
   const protocolIcon = () => {
+    // todo: this seems duplicated in other files as well
+    // extract a component
     const prefix = protocol[0];
     switch (prefix) {
       case 'c':
-        return ['Compound', <Compound />];
+        return ['Compound', <Compound key="Compound" />];
       case 'a':
-        return ['Aave', <Aave />];
+        return ['Aave', <Aave key="Aave" />];
       case 's':
-        return ['Lido', <Lido />];
+        return ['Lido', <Lido key="Lido" />];
       case 'r':
-        return ['Rocket', <Rocket />];
+        return ['Rocket', <Rocket key="Rocket" />];
       default:
         return ['', ''];
     }
@@ -40,15 +42,15 @@ const PoolField = ({ agent, protocol, isBorrowing, isBorrowTable }: PoolFieldPro
     const token = protocol.substring(1);
     switch (token) {
       case 'DAI':
-        return ['DAI', <DAI />];
+        return ['DAI', <DAI key="DAI" />];
       case 'USDC':
-        return ['USDC', <USDC />];
+        return ['USDC', <USDC key="USDC" />];
       case 'ETH':
-        return ['ETH', <ETH />];
+        return ['ETH', <ETH key="ETH" />];
       case 'tETH':
-        return ['ETH', <ETH />];
+        return ['ETH', <ETH key="tETH" />];
       case 'USDT':
-        return ['USDT', <USDT />];
+        return ['USDT', <USDT key="USDT" />];
       default:
         return ['', ''];
     }

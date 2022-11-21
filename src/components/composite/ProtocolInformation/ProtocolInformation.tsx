@@ -56,13 +56,13 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
       const prefix = protocol[0];
       switch (prefix) {
         case 'c':
-          return ['Compound', <Compound width="38" height="38" />];
+          return ['Compound', <Compound key="Compound" width="38" height="38" />];
         case 'a':
-          return ['Aave', <Aave width="38" height="38" />];
+          return ['Aave', <Aave key="Aave" width="38" height="38" />];
         case 's':
-          return ['Lido', <Lido width="38" height="38" />];
+          return ['Lido', <Lido key="Lido" width="38" height="38" />];
         case 'r':
-          return ['Rocket', <Rocket width="38" height="38" />];
+          return ['Rocket', <Rocket key="Rocket" width="38" height="38" />];
         default:
           return ['', ''];
       }
@@ -75,13 +75,13 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
       const token = protocol[0] === 's' ? protocol.substring(2) : protocol.substring(1);
       switch (token) {
         case 'DAI':
-          return ['DAI', <DAI width="38" height="38" />];
+          return ['DAI', <DAI key="DAI" width="38" height="38" />];
         case 'USDC':
-          return ['USDC', <USDC width="38" height="38" />];
+          return ['USDC', <USDC key="USDC" width="38" height="38" />];
         case 'ETH':
-          return ['ETH', <ETH width="38" height="38" />];
+          return ['ETH', <ETH key="ETH" width="38" height="38" />];
         case 'USDT':
-          return ['USDT', <USDT width="38" height="38" />];
+          return ['USDT', <USDT key="USDT" width="38" height="38" />];
         default:
           return ['', ''];
       }

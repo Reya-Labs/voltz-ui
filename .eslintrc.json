@@ -16,6 +16,7 @@
   },
   "ignorePatterns": ["src/graphql/generated.ts"],
   "rules": {
+    "react/jsx-key": ["error"],
     "react/forbid-dom-props": ["warn", { "forbid": [{
       "propName": "style",
       "message": "Avoid using inline styles for components. Use styled components instead."
