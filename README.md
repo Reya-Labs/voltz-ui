@@ -69,8 +69,8 @@ REACT_APP_SKIP_WALLET_SCREENING=Y
 1. SDK -> Run `yarn build-release` (this prepares the JS build files)
 2. SDK -> Run `yarn link`
 3. UI repo, to test local version(link) -> Run `yarn link @voltz-protocol/v1-sdk`
-4. UI repo, to remove testing local version (unlink) -> run `yarn unlink @voltz-protocol/v1-sdk`
-5. On any changes in SDK re-run steps `1-4`
+4. On any changes in SDK re-run steps `1-3`
+5. UI repo, to remove testing local version (unlink) -> run `yarn unlink @voltz-protocol/v1-sdk`
 
 
 (Or if you can find a way around the caching problem, stopping and starting `yarn start` should be sufficient)
