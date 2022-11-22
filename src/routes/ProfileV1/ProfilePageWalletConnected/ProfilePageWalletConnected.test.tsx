@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { composeStories } from '@storybook/testing-react';
 
 import * as stories from './ProfilePageWalletConnected.stories';
+import { HashRouter } from "react-router-dom";
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -13,7 +14,11 @@ const { Default } = composeStories(stories);
 
 describe('<ProfilePageWalletConnected />', () => {
   it('should render proper UI when claimed badges present', () => {
-    render(<Default />);
+    render(
+      <HashRouter>
+        <Default />
+      </HashRouter>
+    );
 
     expect(screen.getByText('WELCOME TO YOUR PROFILE')).not.toBeNull();
     expect(screen.getByText('0XB01F...C970')).not.toBeNull();
