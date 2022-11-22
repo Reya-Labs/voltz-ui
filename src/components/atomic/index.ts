@@ -8,7 +8,6 @@ export { default as Panel } from './Panel/Panel';
 export { default as ToggleButton } from './ToggleButton/ToggleButton';
 export { default as Typography } from './Typography/Typography';
 export { default as RouteLink } from './RouteLink/RouteLink';
-export * from './SelectInput/SelectInput';
 export { default as SummaryPanel } from './SummaryPanel/SummaryPanel';
 export * from './PositionBadge/PositionBadge';
 export { Pill } from './Pill';

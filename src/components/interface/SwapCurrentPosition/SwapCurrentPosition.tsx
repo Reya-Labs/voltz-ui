@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import Box from '@mui/material/Box';
-// import { SystemStyleObject, Theme } from '@theme';
 import { Position } from '@voltz-protocol/v1-sdk';
 import { Button, Ellipsis, PositionBadge, SummaryPanel } from '@components/atomic';
 import { FormPanel, SwapFormModes } from '@components/interface';
@@ -23,9 +22,6 @@ const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionProps> = (
   position,
   gaButtonId,
 }) => {
-  // const bottomSpacing: SystemStyleObject<Theme> = {
-  //   marginBottom: (theme) => theme.spacing(6)
-  // }
   const { positionInfo } = usePositionContext();
 
   const currentPositionBadgeText = `${
