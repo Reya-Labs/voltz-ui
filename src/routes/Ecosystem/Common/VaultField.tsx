@@ -6,6 +6,7 @@ import { titleStyles } from './styles';
 import { ReactComponent as USDC } from './usdc-icon.svg';
 import { ReactComponent as ETH } from './eth-icon.svg';
 import { ReactComponent as DAI } from './dai-icon.svg';
+import { ReactComponent as USDT } from './usdt-icon.svg';
 
 const getTokenIcon = (token: string) => {
   switch (token) { 
@@ -18,6 +19,9 @@ const getTokenIcon = (token: string) => {
     case 'DAI': {
       return <DAI />;
     } 
+    case 'USDT': {
+      return <USDT />;
+    }
     default: {
       return <USDC />;
     } 
