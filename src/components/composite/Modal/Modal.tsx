@@ -2,54 +2,37 @@ import React, { cloneElement } from 'react';
 import MuiModal, { ModalProps as MuiModalProps } from '@mui/material/Modal';
 import isString from 'lodash/isString';
 
-import { useStateMemo } from '@hooks';
 import { Button } from '@components/atomic';
+import { doNothing } from '@utilities';
 
 export type TriggerProps = {
   onClick: () => void;
 };
 
 export type ModalProps = Omit<MuiModalProps, 'open'> & {
-  open?: boolean;
-  onOpen?: () => void;
+  open: boolean;
+  onOpen: () => void;
   trigger: React.FunctionComponent<TriggerProps> | React.ReactElement | string;
 };
 
 const Modal: React.FunctionComponent<ModalProps> = ({
   trigger: Trigger,
-  open: defaultOpen = false,
-  onOpen,
-  onClose,
+  open,
+  onOpen = doNothing,
+  onClose = doNothing,
+  children,
   ...props
 }) => {
-  const [open, setOpen] = useStateMemo(defaultOpen);
-  const handleClickTrigger = () => {
-    if (onOpen) {
-      onOpen();
-    }
-
-    setOpen(true);
-  };
   const renderTrigger = () => {
     if (isString(Trigger)) {
-      return <Button onClick={handleClickTrigger}>{Trigger}</Button>;
+      return <Button onClick={onOpen}>{Trigger}</Button>;
     }
 
     if (React.isValidElement(Trigger)) {
-      return cloneElement(Trigger, { onClick: handleClickTrigger });
+      return cloneElement(Trigger, { onClick: onOpen });
     }
 
-    return <Trigger onClick={handleClickTrigger} />;
-  };
-  const handleClose = (
-    event: Record<string, unknown>,
-    reason: 'escapeKeyDown' | 'backdropClick',
-  ) => {
-    if (onClose) {
-      onClose(event, reason);
-    }
-
-    setOpen(false);
+    return <Trigger onClick={onOpen} />;
   };
 
   return (
@@ -58,14 +41,16 @@ const Modal: React.FunctionComponent<ModalProps> = ({
       <MuiModal
         {...props}
         open={open}
-        onClose={handleClose}
+        onClose={onClose}
         sx={{
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
           backdropFilter: 'blur(2px)',
         }}
-      />
+      >
+        {children}
+      </MuiModal>
     </>
   );
 };
