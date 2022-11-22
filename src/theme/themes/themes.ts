@@ -1,10 +1,10 @@
 import dark from './dark';
 import light from './light';
-import { Themes } from './constants';
+import { Theme } from '@mui/material/styles';
 
-const themes = {
-  [Themes.DARK]: dark,
-  [Themes.LIGHT]: light,
+const themes: Record<'light' | 'dark', Theme> = {
+  dark: dark,
+  light: light,
 };
 
 export default themes;
