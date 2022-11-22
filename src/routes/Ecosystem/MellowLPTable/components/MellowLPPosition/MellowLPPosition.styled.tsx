@@ -16,6 +16,12 @@ export const MellowLPPositionBox = styled(Box)`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex: 1;
+  padding: ${({ theme }) => theme.spacing(4, 4, 4, 6)};
+`;
+
+export const MellowLPPositionBoxAndButtonContainer = styled(Box)`
+  display: flex;
 `;
 
 export const MellowLPPositionInfoBox = styled(Box)`
@@ -36,18 +42,11 @@ export const DepositTypography = styled(Typography)`
 `;
 
 export const DepositButton = styled(Button)`
-  background: transparent;
+  background: #38305b;
+  border-radius: 0px 0px 8px 0px;
+  padding: ${({ theme }) => theme.spacing(2.5)};
   color: ${colors.skyBlueCrayola.base};
-  padding: 4px 1px;
   font-size: 14px;
   line-height: 20px;
   box-shadow: none;
-  border-style: none none none none;
-  border-radius: 0;
-  &:hover {
-    background: transparent;
-    border-style: none none solid none;
-    border-color: ${colors.skyBlueCrayola.base};
-    border-radius: 0;
-  }
 `;
