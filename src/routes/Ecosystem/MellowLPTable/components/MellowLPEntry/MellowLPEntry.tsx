@@ -35,37 +35,35 @@ const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
           expectedApy={lpVault.metadata.estimatedHistoricApy}
         />
 
-        <DescriptionTypography variant="h6">
-          {lpVault.metadata.description}
-        </DescriptionTypography>
+        <DescriptionTypography variant="h6">{lpVault.metadata.description}</DescriptionTypography>
 
         <PoolTag>
-          {`${lpVault.metadata.underlyingPools.length} ${lpVault.metadata.token} ${lpVault.metadata.underlyingPools.length === 1 ? 'POOL' : 'POOLS'
-            }`}
+          {`${lpVault.metadata.underlyingPools.length} ${lpVault.metadata.token} ${
+            lpVault.metadata.underlyingPools.length === 1 ? 'POOL' : 'POOLS'
+          }`}
         </PoolTag>
 
         <TitleTypography variant="h6">LIQUIDITY SPREAD ACROSS</TitleTypography>
 
         <PoolFieldsBox>
           {lpVault.metadata.underlyingPools.map((pool) => (
-            <PoolFieldTypography
-              variant="body2"
-              key={pool}
-            >
+            <PoolFieldTypography variant="body2" key={pool}>
               {pool}
             </PoolFieldTypography>
           ))}
         </PoolFieldsBox>
       </MellowLPEntryInfoBox>
-      {!lpVault.metadata.soon && (<PositionBox>
-        <MellowLPPosition
-          userDeposit={lpVault.vault.userDeposit}
-          tokenName={lpVault.metadata.token}
-          handleClick={onSelectItem}
-          dataLoading={dataLoading}
-          disabled={lpVault.metadata.deprecated}
-        />
-      </PositionBox>)}
+      {!lpVault.metadata.soon && (
+        <PositionBox>
+          <MellowLPPosition
+            userDeposit={lpVault.vault.userDeposit}
+            tokenName={lpVault.metadata.token}
+            handleClick={onSelectItem}
+            dataLoading={dataLoading}
+            disabled={lpVault.metadata.deprecated}
+          />
+        </PositionBox>
+      )}
     </MellowLPEntryContainerBox>
   );
 };

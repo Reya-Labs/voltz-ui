@@ -60,4 +60,4 @@ export const PoolFieldTypography = styled(Typography)`
   letter-spacing: 0.02cm;
   line-height: 100%;
   margin-top: ${({ theme }) => theme.spacing(1)};
-`
+`;
