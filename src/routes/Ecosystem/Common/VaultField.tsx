@@ -25,10 +25,10 @@ export const VaultField: React.FunctionComponent<VaultFieldProps> = ({
           {title}
         </Typography>
       </Box>
-      <Box sx={{ marginTop: '16px', display: 'flex', maxWidth: '275px', marginLeft: '8px' }}>
+      <Box sx={{ marginTop: '16px', display: "flex", flexDirection: "row", gap: "32px", marginLeft: '8px' }}>
         <Typography
           variant="body2"
-          sx={{ fontSize: '24px', color: '#FF4AA9', fontFamily: 'DM Sans', fontWeight: '700' }}
+          sx={{ fontSize: '24px', color: '#FF4AA9', fontFamily: 'DM Sans', fontWeight: '700', width: '156px' }}
           label={
             <IconLabel
               label="Estimated Historic APY"
@@ -40,27 +40,26 @@ export const VaultField: React.FunctionComponent<VaultFieldProps> = ({
           {expectedApy}
         </Typography>
 
-        <Box>
-          <Typography
-            variant="body2"
-            sx={{
-              fontSize: '16px',
-              color: '#E5E1F9',
-              fontFamily: 'DM Sans',
-              fontWeight: '700',
-              marginTop: '8px',
-            }}
-            label={
-              <IconLabel
-                label="Running until"
-                icon="information-circle"
-                info={`This strategy will run until ${maturity}. At this point depositors can collect any returns that may have been generated and withdraw their funds.`}
-              />
-            }
-          >
-            {maturity}
-          </Typography>
-        </Box>
+        <Typography
+          variant="body2"
+          sx={{
+            fontSize: '24px',
+            color: '#E5E1F9',
+            fontFamily: 'DM Sans',
+            fontWeight: '700',
+            width: '130px',
+            marginTop: '8px',
+          }}
+          label={
+            <IconLabel
+              label="Maturity"
+              icon="information-circle"
+              info={`This strategy will run until ${maturity}. At this point depositors can collect any returns that may have been generated and withdraw their funds.`}
+            />
+          }
+        >
+          {maturity}
+        </Typography>
       </Box>
     </Box>
   );
