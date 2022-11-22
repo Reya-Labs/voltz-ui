@@ -3,23 +3,44 @@ import { Typography } from '@components/atomic';
 import { Box } from '@mui/system';
 import React from 'react';
 import { titleStyles } from './styles';
-import { ReactComponent as Mellow } from '../mellow-icon.svg';
+import { ReactComponent as USDC } from './usdc-icon.svg';
+import { ReactComponent as ETH } from './eth-icon.svg';
+import { ReactComponent as DAI } from './dai-icon.svg';
+
+const getTokenIcon = (token: string) => {
+  switch (token) { 
+    case 'USDC': {
+      return <USDC />;
+    }
+    case 'ETH': {
+      return <ETH />;
+    } 
+    case 'DAI': {
+      return <DAI />;
+    } 
+    default: {
+      return <USDC />;
+    } 
+  }
+}
 
 type VaultFieldProps = {
   title: string;
+  token: string;
   expectedApy: string;
   maturity: string;
 };
 
 export const VaultField: React.FunctionComponent<VaultFieldProps> = ({
   title,
+  token,
   expectedApy,
   maturity,
 }: VaultFieldProps) => {
   return (
     <Box>
       <Box sx={{ display: 'flex', marginLeft: '8px', marginTop: '16px', alignItems: 'center' }}>
-        <Mellow />
+        {getTokenIcon(token)}
 
         <Typography variant="h1" sx={titleStyles}>
           {title}
@@ -48,7 +69,6 @@ export const VaultField: React.FunctionComponent<VaultFieldProps> = ({
             fontFamily: 'DM Sans',
             fontWeight: '700',
             width: '130px',
-            marginTop: '8px',
           }}
           label={
             <IconLabel
