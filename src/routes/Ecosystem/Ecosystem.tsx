@@ -77,7 +77,9 @@ const Ecosystem: React.FunctionComponent = () => {
     if (lpVaults) {
       setVaultsLoaded(false);
       setDataLoading(true);
-      const request = Promise.allSettled(lpVaults.filter((item) => !item.metadata.soon).map((item) => item.vault.vaultInit()));
+      const request = Promise.allSettled(
+        lpVaults.filter((item) => !item.metadata.soon).map((item) => item.vault.vaultInit()),
+      );
 
       void request.then(
         (_) => {
@@ -95,7 +97,9 @@ const Ecosystem: React.FunctionComponent = () => {
     if (lpVaults && isSignerAvailable && vaultsLoaded) {
       setDataLoading(true);
 
-      const request = Promise.allSettled(lpVaults.filter((item) => !item.metadata.soon).map((item) => item.vault.userInit(signer)));
+      const request = Promise.allSettled(
+        lpVaults.filter((item) => !item.metadata.soon).map((item) => item.vault.userInit(signer)),
+      );
 
       void request.then(
         (_) => {

@@ -60,21 +60,11 @@ const Nav: React.FunctionComponent = React.memo(() => (
     >
       Liquidity Providers
     </NavLink>
-    <NavLink
-      link={`/${routes.BORROW_POS}`}
-    >
-      Fixed Borrow
-    </NavLink>
-    <NavLink
-      isNew={true}
-      link={`/${routes.TRADING_LEAGUE}`}
-    >
+    <NavLink link={`/${routes.BORROW_POS}`}>Fixed Borrow</NavLink>
+    <NavLink isNew={true} link={`/${routes.TRADING_LEAGUE}`}>
       Leaderboard
     </NavLink>
-    <NavLink
-      isNew={true}
-      link={`/${routes.PROFILE}`}
-    >
+    <NavLink isNew={true} link={`/${routes.PROFILE}`}>
       Profile
     </NavLink>
   </Box>
