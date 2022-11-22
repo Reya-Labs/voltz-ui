@@ -7,8 +7,6 @@ export type MellowProductMetadata = {
   maturity: string;
   estimatedHistoricApy: string;
   description: string;
-  explanations: string[];
-  depositDescription: string;
   underlyingPools: string[];
 };
 
