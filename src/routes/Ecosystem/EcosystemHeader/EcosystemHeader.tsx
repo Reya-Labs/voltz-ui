@@ -1,58 +1,20 @@
-import { Box } from '@mui/system';
-import { Panel, Typography } from '../../../components/atomic';
-import { titleStyles, copyStyles, boxStyles, tagStyles } from './styles';
+import {
+  DescriptionTypography,
+  EcosystemHeaderBox,
+  LearnMoreLink,
+  TitleTypography,
+} from './EcosystemHeader.styled';
+import React from 'react';
 
-export type EcosystemHeaderProps = {
-  lpOptimizerTag: string;
-  lpOptimizerCount: number;
-  alphaVaultTag: string;
-  alphaVaultCount: number;
-};
-
-const EcosystemHeader = ({
-  lpOptimizerTag,
-  lpOptimizerCount,
-  alphaVaultTag,
-  alphaVaultCount,
-}: EcosystemHeaderProps) => {
-  const renderContent = () => {
-    return (
-      <Panel sx={{ padding: 0, background: 'transparent' }}>
-        <Box>
-          <Typography variant="h1" sx={titleStyles}>
-            VOLTZ ECOSYSTEM
-          </Typography>
-          <Typography variant="body1" sx={copyStyles}>
-            Access a world of new products, integrations, protocols and applications built on top of
-            Voltz Protocol.
-          </Typography>
-        </Box>
-        <Box sx={{ marginTop: '16px', display: 'flex' }}>
-          <Box sx={{ ...boxStyles, border: '1px solid #FF4AA9', marginRight: '8px' }}>
-            <Typography variant="h6" sx={{ ...tagStyles, color: '#FF4AA9' }}>
-              {lpOptimizerTag}
-              {lpOptimizerCount > 0 ? ':' : ''}
-            </Typography>
-            <Typography variant="h6" sx={{ ...tagStyles, color: '#E5E1F9', paddingLeft: '8px' }}>
-              {lpOptimizerCount ? lpOptimizerCount : 's00n'}
-            </Typography>
-          </Box>
-
-          <Box sx={{ ...boxStyles, border: '1px solid #2667FF' }}>
-            <Typography variant="h6" sx={{ ...tagStyles, color: '#2667FF' }}>
-              {alphaVaultTag}
-              {alphaVaultCount > 0 ? ':' : ''}
-            </Typography>
-            <Typography variant="h6" sx={{ ...tagStyles, color: '#E5E1F9', paddingLeft: '8px' }}>
-              {alphaVaultCount ? alphaVaultCount : 's00n'}
-            </Typography>
-          </Box>
-        </Box>
-      </Panel>
-    );
-  };
-
-  return renderContent();
-};
+const EcosystemHeader: React.FunctionComponent = React.memo(() => (
+  <EcosystemHeaderBox>
+    <TitleTypography variant="h1">LP OPTIMISER VAULTS</TitleTypography>
+    <DescriptionTypography variant="body1">
+      The Voltz-Mellow Vaults run automated strategies, optimizing deposits for high LP fees while
+      taking away the complex math, empowering every user to become a Voltz LP.
+    </DescriptionTypography>
+    <LearnMoreLink to="https://voltz.xyz">LEARN MORE</LearnMoreLink>
+  </EcosystemHeaderBox>
+));
 
 export default EcosystemHeader;

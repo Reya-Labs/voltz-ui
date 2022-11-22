@@ -1,14 +1,14 @@
 import { MellowLpRouter, MellowLpVault } from '@voltz-protocol/v1-sdk';
 
 export type MellowProductMetadata = {
-  title: string;
+  show: boolean;
+  soon: boolean;
   deprecated: boolean;
+  title: string;
   token: string;
   maturity: string;
   estimatedHistoricApy: string;
   description: string;
-  explanations: string[];
-  depositDescription: string;
   underlyingPools: string[];
 };
 

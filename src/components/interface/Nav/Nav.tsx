@@ -42,10 +42,15 @@ const Nav: React.FunctionComponent = React.memo(() => (
     </NavLink>
 
     <NavLink
+      isNew={true}
       subLinks={[
         {
           text: 'LP POOLS',
           link: `/${routes.POOLS}`,
+        },
+        {
+          text: 'LP OPTIMISERS',
+          link: `/${routes.PRODUCTS}`,
         },
         {
           text: 'POSITIONS',
@@ -55,44 +60,12 @@ const Nav: React.FunctionComponent = React.memo(() => (
     >
       Liquidity Providers
     </NavLink>
-    <NavLink
-      isNew={true}
-      subLinks={[
-        {
-          text: 'PROFILE',
-          link: `/${routes.PROFILE}`,
-        },
-        {
-          text: 'TRADING LEAGUE',
-          link: `/${routes.TRADING_LEAGUE}`,
-        },
-      ]}
-    >
-      Community
+    <NavLink link={`/${routes.BORROW_POS}`}>Fixed Borrow</NavLink>
+    <NavLink isNew={true} link={`/${routes.TRADING_LEAGUE}`}>
+      Leaderboard
     </NavLink>
-    <NavLink
-      isNew={true}
-      subLinks={
-        process.env.REACT_APP_ECOSYSTEM && process.env.REACT_APP_ECOSYSTEM !== `UNPROVIDED`
-          ? [
-              {
-                text: 'PRODUCTS',
-                link: `/${routes.PRODUCTS}`,
-              },
-              {
-                text: 'FIXED BORROW',
-                link: `/${routes.BORROW_POS}`,
-              },
-            ]
-          : [
-              {
-                text: 'FIXED BORROW',
-                link: `/${routes.BORROW_POS}`,
-              },
-            ]
-      }
-    >
-      Ecosystem
+    <NavLink isNew={true} link={`/${routes.PROFILE}`}>
+      Profile
     </NavLink>
   </Box>
 ));

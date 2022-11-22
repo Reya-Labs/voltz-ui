@@ -26,11 +26,12 @@ export const DescriptionTypography = styled(Typography)`
   color: #9b97ad;
 
   margin-left: ${({ theme }) => theme.spacing(2)};
-  margin-top: ${({ theme }) => theme.spacing(4)};
+  margin-top: ${({ theme }) => theme.spacing(6)};
 `;
 
 export const PoolTag = styled(Tag)`
   padding: ${({ theme }) => theme.spacing(0.5, 1)};
+  margin-top: ${({ theme }) => theme.spacing(6)};
 `;
 
 export const TitleTypography = styled(DescriptionTypography)`
@@ -47,6 +48,15 @@ export const PoolFieldsBox = styled(Box)`
 
 export const PositionBox = styled(Box)`
   background: #1e1a33;
-  padding: ${({ theme }) => theme.spacing(4, 4, 4, 6)};
   border-radius: 0px 0px 8px 8px;
+`;
+
+export const PoolFieldTypography = styled(Typography)`
+  font-size: 18px;
+  text-transform: uppercase;
+  vertical-align: middle;
+  font-weight: 700;
+  letter-spacing: 0.02cm;
+  line-height: 100%;
+  margin-top: ${({ theme }) => theme.spacing(1)};
 `;
