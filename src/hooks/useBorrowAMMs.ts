@@ -8,6 +8,7 @@ import JSBI from 'jsbi';
 import { DateTime } from 'luxon';
 
 import { Token, RateOracle, BorrowAMM, AMM } from '@voltz-protocol/v1-sdk';
+import isBorrowing from '../utilities/isBorrowing';
 
 export type UseBorrowAMMsResult = {
   borrowAmms?: BorrowAMM[];
@@ -74,16 +75,14 @@ const useBorrowAMMs = (): UseBorrowAMMsResult => {
           }),
       );
       if (!process.env.REACT_APP_WHITELIST || process.env.REACT_APP_WHITELIST === `UNPROVIDED`) {
-        const borrowMarkets = ammsData.filter((amm) => [5, 6].includes(amm.rateOracle.protocolId));
+        const borrowMarkets = ammsData.filter((amm) => isBorrowing(amm.rateOracle.protocolId));
         const liveBorrowMarkets = borrowMarkets.filter((amm) => DateTime.now() < amm.endDateTime);
         return liveBorrowMarkets.map((amm) => new BorrowAMM({ id: amm.id, amm: amm }));
       } else {
         if (process.env.REACT_APP_WHITELIST) {
           const whitelist = process.env.REACT_APP_WHITELIST.split(',').map((s) => s.trim());
           ammsData = ammsData?.filter((amm) => whitelist.includes(amm.id));
-          const borrowMarkets = ammsData.filter((amm) =>
-            [5, 6].includes(amm.rateOracle.protocolId),
-          );
+          const borrowMarkets = ammsData.filter((amm) => isBorrowing(amm.rateOracle.protocolId));
           const liveBorrowMarkets = borrowMarkets.filter((amm) => DateTime.now() < amm.endDateTime);
           return liveBorrowMarkets.map((amm) => new BorrowAMM({ id: amm.id, amm: amm }));
         }
