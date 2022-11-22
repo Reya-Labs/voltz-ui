@@ -7,7 +7,7 @@ const EcosystemHeader = () => {
     <Panel sx={{ padding: 0, background: 'transparent' }}>
       <Box sx={{ maxWidth: '743px' }}>
         <Typography variant="h1" sx={titleStyles}>
-          VOLTZ ECOSYSTEM
+          LP OPTIMIZER VAULTS
         </Typography>
         <Typography variant="body1" sx={copyStyles}>
           The Voltz-Mellow Vaults run automated strategies, optimizing deposits for high LP fees
