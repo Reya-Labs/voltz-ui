@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
 import RouteLink from '../../../components/atomic/RouteLink/RouteLink';
-import Box from '@mui/system/Box';
+import Box from '@mui/material/Box';
 import { Typography } from '../../../components/atomic';
 import { colors } from '@theme';
 
