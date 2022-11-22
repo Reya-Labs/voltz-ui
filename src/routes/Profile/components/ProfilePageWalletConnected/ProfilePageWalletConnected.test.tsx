@@ -16,7 +16,7 @@ describe('<ProfilePageWalletConnected />', () => {
     render(
       <HashRouter>
         <Default />
-      </HashRouter>
+      </HashRouter>,
     );
 
     expect(screen.getByText('WELCOME TO YOUR PROFILE')).not.toBeNull();
