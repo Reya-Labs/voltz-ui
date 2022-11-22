@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { composeStories } from '@storybook/testing-react';
 
 import * as stories from './ProfilePageWalletConnected.stories';
-import { HashRouter } from "react-router-dom";
+import { HashRouter } from 'react-router-dom';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -17,7 +17,7 @@ describe('<ProfilePageWalletConnected />', () => {
     render(
       <HashRouter>
         <Default />
-      </HashRouter>
+      </HashRouter>,
     );
 
     expect(screen.getByText('WELCOME TO YOUR PROFILE')).not.toBeNull();
