@@ -9,24 +9,24 @@ import { ReactComponent as DAI } from './dai-icon.svg';
 import { ReactComponent as USDT } from './usdt-icon.svg';
 
 const getTokenIcon = (token: string) => {
-  switch (token) { 
+  switch (token) {
     case 'USDC': {
       return <USDC />;
     }
     case 'ETH': {
       return <ETH />;
-    } 
+    }
     case 'DAI': {
       return <DAI />;
-    } 
+    }
     case 'USDT': {
       return <USDT />;
     }
     default: {
       return <USDC />;
-    } 
+    }
   }
-}
+};
 
 type VaultFieldProps = {
   title: string;
@@ -50,10 +50,24 @@ export const VaultField: React.FunctionComponent<VaultFieldProps> = ({
           {title}
         </Typography>
       </Box>
-      <Box sx={{ marginTop: '16px', display: "flex", flexDirection: "row", gap: "32px", marginLeft: '8px' }}>
+      <Box
+        sx={{
+          marginTop: '16px',
+          display: 'flex',
+          flexDirection: 'row',
+          gap: '32px',
+          marginLeft: '8px',
+        }}
+      >
         <Typography
           variant="body2"
-          sx={{ fontSize: '24px', color: '#FF4AA9', fontFamily: 'DM Sans', fontWeight: '700', width: '156px' }}
+          sx={{
+            fontSize: '24px',
+            color: '#FF4AA9',
+            fontFamily: 'DM Sans',
+            fontWeight: '700',
+            width: '156px',
+          }}
           label={
             <IconLabel
               label="Estimated Historic APY"

@@ -28,7 +28,7 @@ const ConnectedMellowLPTable: React.FunctionComponent<ConnectedMellowLPTableProp
           background: 'transparent',
         }}
       >
-        <EcosystemHeader/>
+        <EcosystemHeader />
         {lpVaults && (
           <Box sx={{ marginTop: '32px' }}>
             <MellowLPTable
