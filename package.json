@@ -20,7 +20,8 @@
     "test:watch": "jest --watch",
     "chromatic": "npx chromatic --project-token=e40b8c3e3eea",
     "sdk:add-local": "npx yalc add @voltz-protocol/v1-sdk",
-    "sdk:update-local": "npx yalc update @voltz-protocol/v1-sdk"
+    "sdk:update-local": "npx yalc update @voltz-protocol/v1-sdk",
+    "code-quality:check": "npx concurrently 'yarn ts:check' 'yarn prettier:check' 'yarn lint:check --quiet'"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
@@ -212,6 +213,7 @@
     "camelcase": "6.3.0",
     "case-sensitive-paths-webpack-plugin": "2.4.0",
     "chromatic": "6.3.4",
+    "concurrently": "7.6.0",
     "copy-webpack-plugin": "10.2.1",
     "css-loader": "6.5.1",
     "css-minimizer-webpack-plugin": "3.3.1",
