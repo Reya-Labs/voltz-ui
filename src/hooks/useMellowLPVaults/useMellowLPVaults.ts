@@ -38,7 +38,7 @@ const useMellowLPVaults = (): MellowProduct[] => {
       },
     );
 
-    return vaults.concat(routers);
+    return routers.concat(vaults);
   }, []);
 
   return lpVaults;
