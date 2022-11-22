@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { composeStories } from '@storybook/testing-react';
 
 import * as stories from './ProfilePageNoWallet.stories';
-import { HashRouter } from "react-router-dom";
+import { HashRouter } from 'react-router-dom';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -16,7 +16,7 @@ test('renders proper UI', () => {
   render(
     <HashRouter>
       <Default />
-    </HashRouter>
+    </HashRouter>,
   );
 
   expect(screen.getByText('WELCOME TO VOLTZ COMMUNITY')).not.toBeNull();
