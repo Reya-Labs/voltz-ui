@@ -12,13 +12,8 @@ export const MellowLPEntryContainerBox = styled(Box)`
 export const MellowLPEntryInfoBox = styled(Box)`
   padding: ${({ theme }) => theme.spacing(4)};
   background-color: #19152a;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   border-radius: 8px 8px 0 0;
   flex: 1;
-`;
-
-export const MellowLPEntryTagBox = styled(Box)`
-  display: flex;
 `;
 
 export const DescriptionTypography = styled(Typography)`

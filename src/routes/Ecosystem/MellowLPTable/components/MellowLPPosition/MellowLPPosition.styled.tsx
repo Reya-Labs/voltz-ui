@@ -22,6 +22,7 @@ export const MellowLPPositionBox = styled(Box)`
 
 export const MellowLPPositionBoxAndButtonContainer = styled(Box)`
   display: flex;
+  border-radius: 0px 0px 8px 8px;
 `;
 
 export const MellowLPPositionInfoBox = styled(Box)`
