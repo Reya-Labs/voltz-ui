@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toMillis = exports.getTopBadgeType = exports.getEtherscanURL = exports.decodeMultipleBadgeTypes = exports.decodeBadgeType = exports.getBadgeTypeFromMetadataUri = void 0;
+exports.get100KRefereeBenchmark = exports.get2MRefereeBenchmark = exports.toMillis = exports.getTopBadgeType = exports.getEtherscanURL = exports.decodeMultipleBadgeTypes = exports.decodeBadgeType = exports.getBadgeTypeFromMetadataUri = void 0;
 var ethers_1 = require("ethers");
+var constants_1 = require("../../constants");
 var communitySbt_1 = require("../../entities/communitySbt");
 var typechain_sbt_1 = require("../../typechain-sbt");
 function getBadgeTypeFromMetadataUri(metadataURI) {
@@ -59,3 +60,13 @@ function toMillis(seconds) {
 }
 exports.toMillis = toMillis;
 ;
+function get2MRefereeBenchmark(subgraphUrl) {
+    return subgraphUrl.includes("goerli") || subgraphUrl.includes("testnet") ?
+        constants_1.GOERLI_TWO_MILLON : constants_1.MAINNET_TWO_MILLON;
+}
+exports.get2MRefereeBenchmark = get2MRefereeBenchmark;
+function get100KRefereeBenchmark(subgraphUrl) {
+    return subgraphUrl.includes("goerli") || subgraphUrl.includes("testnet") ?
+        constants_1.GOERLI_ONE_HUNDRED_THOUSAND : constants_1.MAINNET_ONE_HUNDRED_THOUSAND;
+}
+exports.get100KRefereeBenchmark = get100KRefereeBenchmark;

@@ -36,4 +36,8 @@ export declare function getGasBuffer(value: BigNumber): BigNumber;
 export declare const WETH9 = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
 export declare const MULTI_REDEEM_METHOD_ID = "0x6323ffa5";
 export declare const REDEEM_METHOD_ID = "0x79a4aaa3";
+export declare const MAINNET_ONE_HUNDRED_THOUSAND = 100000;
+export declare const MAINNET_TWO_MILLON = 2000000;
+export declare const GOERLI_ONE_HUNDRED_THOUSAND = 1;
+export declare const GOERLI_TWO_MILLON = 200;
 //# sourceMappingURL=constants.d.ts.map

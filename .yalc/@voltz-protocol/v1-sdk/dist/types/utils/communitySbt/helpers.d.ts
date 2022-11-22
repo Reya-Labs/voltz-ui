@@ -11,4 +11,6 @@ export declare function getTopBadgeType(season: number, isTrader: boolean): stri
  * @returns A function that takes a number and returns a number or undefined.
  */
 export declare function toMillis(seconds: number): number | undefined;
+export declare function get2MRefereeBenchmark(subgraphUrl: string): number;
+export declare function get100KRefereeBenchmark(subgraphUrl: string): number;
 //# sourceMappingURL=helpers.d.ts.map

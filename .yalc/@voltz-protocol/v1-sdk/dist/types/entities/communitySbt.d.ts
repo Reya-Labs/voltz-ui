@@ -73,8 +73,8 @@ declare class SBT {
     redeemMultipleSbts(badges: BadgeRecord[], owner: string, subgraphAPI: string): Promise<{
         claimedBadgeTypes: number[];
     }>;
-    getSeasonBadges({ subgraphUrl, nonProgDbUrl, referralsDbUrl, userId, seasonId, }: {
-        subgraphUrl?: string;
+    getSeasonBadges({ badgesSubgraphUrl, nonProgDbUrl, referralsDbUrl, userId, seasonId, }: {
+        badgesSubgraphUrl?: string;
         nonProgDbUrl?: string;
         referralsDbUrl?: string;
         userId: string;

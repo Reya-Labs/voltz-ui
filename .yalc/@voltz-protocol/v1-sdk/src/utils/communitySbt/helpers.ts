@@ -1,4 +1,5 @@
 import { Bytes, ethers } from "ethers";
+import { GOERLI_ONE_HUNDRED_THOUSAND, GOERLI_TWO_MILLON, MAINNET_ONE_HUNDRED_THOUSAND, MAINNET_TWO_MILLON } from "../../constants";
 import { NON_SUBGRAPH_BADGES_SEASONS, TOP_BADGES_VARIANT } from "../../entities/communitySbt";
 import { CommunitySBT__factory } from "../../typechain-sbt";
 
@@ -55,3 +56,13 @@ export function getTopBadgeType(season: number, isTrader: boolean): string | und
   
     return seconds * 1000;
 };
+
+export function get2MRefereeBenchmark(subgraphUrl: string) : number {
+    return subgraphUrl.includes("goerli") || subgraphUrl.includes("testnet") ? 
+        GOERLI_TWO_MILLON : MAINNET_TWO_MILLON;
+}
+
+export function get100KRefereeBenchmark(subgraphUrl: string) : number {
+    return subgraphUrl.includes("goerli") || subgraphUrl.includes("testnet") ? 
+        GOERLI_ONE_HUNDRED_THOUSAND : MAINNET_ONE_HUNDRED_THOUSAND;
+}

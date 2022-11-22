@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.REDEEM_METHOD_ID = exports.MULTI_REDEEM_METHOD_ID = exports.WETH9 = exports.getGasBuffer = exports.ONE_YEAR_IN_SECONDS = exports.MAX_FIXED_RATE = exports.MIN_FIXED_RATE = exports.MAX_TICK = exports.MIN_TICK = exports.Rounding = exports.Q192 = exports.Q96 = exports.ONE = exports.ZERO = exports.NEGATIVE_ONE = exports.ADDRESS_ZERO = exports.TresholdApprovalBn = exports.MaxUint256Bn = exports.MaxUint256 = void 0;
+exports.GOERLI_TWO_MILLON = exports.GOERLI_ONE_HUNDRED_THOUSAND = exports.MAINNET_TWO_MILLON = exports.MAINNET_ONE_HUNDRED_THOUSAND = exports.REDEEM_METHOD_ID = exports.MULTI_REDEEM_METHOD_ID = exports.WETH9 = exports.getGasBuffer = exports.ONE_YEAR_IN_SECONDS = exports.MAX_FIXED_RATE = exports.MIN_FIXED_RATE = exports.MAX_TICK = exports.MIN_TICK = exports.Rounding = exports.Q192 = exports.Q96 = exports.ONE = exports.ZERO = exports.NEGATIVE_ONE = exports.ADDRESS_ZERO = exports.TresholdApprovalBn = exports.MaxUint256Bn = exports.MaxUint256 = void 0;
 var ethers_1 = require("ethers");
 var jsbi_1 = __importDefault(require("jsbi"));
 exports.MaxUint256 = jsbi_1.default.BigInt('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff');
@@ -48,3 +48,8 @@ exports.WETH9 = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2';
 // https://etherscan.io/address/0xa8ef4f40c4694be9a2e4e27a0501f04f00b454f3#writeContract
 exports.MULTI_REDEEM_METHOD_ID = '0x6323ffa5';
 exports.REDEEM_METHOD_ID = '0x79a4aaa3';
+// benchmarks for referrees notional amount
+exports.MAINNET_ONE_HUNDRED_THOUSAND = 100000;
+exports.MAINNET_TWO_MILLON = 2000000;
+exports.GOERLI_ONE_HUNDRED_THOUSAND = 1;
+exports.GOERLI_TWO_MILLON = 200;

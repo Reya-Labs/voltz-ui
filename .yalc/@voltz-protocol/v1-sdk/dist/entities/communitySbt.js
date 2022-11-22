@@ -40,7 +40,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.REFERROR_BADGES_VARIANT = exports.NON_PROGRAMATIC_BADGES_VARIANT = exports.TOP_BADGES_VARIANT = exports.NON_SUBGRAPH_BADGES_SEASONS = exports.BadgeClaimingStatus = void 0;
-var ethers_1 = require("ethers");
 var client_1 = require("@apollo/client");
 var typechain_sbt_1 = require("../typechain-sbt");
 var getSubgraphLeaves_1 = require("../utils/communitySbt/getSubgraphLeaves");
@@ -242,22 +241,19 @@ var SBT = /** @class */ (function () {
     };
     SBT.prototype.getSeasonBadges = function (_a) {
         var _b;
-        var subgraphUrl = _a.subgraphUrl, nonProgDbUrl = _a.nonProgDbUrl, referralsDbUrl = _a.referralsDbUrl, userId = _a.userId, seasonId = _a.seasonId;
+        var badgesSubgraphUrl = _a.badgesSubgraphUrl, nonProgDbUrl = _a.nonProgDbUrl, referralsDbUrl = _a.referralsDbUrl, userId = _a.userId, seasonId = _a.seasonId;
         return __awaiter(this, void 0, void 0, function () {
-            var badgeQuery, client, id, data, nonProgBadges, referroorBadges, subgraphBadges, badgesResponse, _i, subgraphBadges_1, badge, topLpType, topTraderType, topLpBadge, topTraderBadge, _c, _d, badgeType, nonProgBadge, referroorBadge, error_1;
+            var badgesResponse, badgeQuery, client, id, data, subgraphBadges, _i, subgraphBadges_1, badge, referroorBadges, nonProgBadges, _c, _d, badgeType, nonProgBadge, referroorBadge, topLpType, topTraderType, topLpBadge, topTraderBadge, error_1;
             return __generator(this, function (_e) {
                 switch (_e.label) {
                     case 0:
-                        if (!subgraphUrl || !nonProgDbUrl || !referralsDbUrl) {
-                            return [2 /*return*/, []];
-                        }
-                        _e.label = 1;
-                    case 1:
-                        _e.trys.push([1, 7, , 8]);
-                        badgeQuery = "\n                query( $id: String) {\n                    seasonUser(id: $id) {\n                        id\n                        badges {\n                          id\n                          awardedTimestamp\n                          mintedTimestamp\n                          badgeType\n                        }\n                    }\n                }\n            ";
+                        _e.trys.push([0, 10, , 11]);
+                        badgesResponse = [];
+                        if (!badgesSubgraphUrl) return [3 /*break*/, 2];
+                        badgeQuery = "\n                    query( $id: String) {\n                        seasonUser(id: $id) {\n                            id\n                            badges {\n                            id\n                            awardedTimestamp\n                            mintedTimestamp\n                            badgeType\n                            }\n                        }\n                    }\n                ";
                         client = new client_1.ApolloClient({
                             cache: new client_1.InMemoryCache(),
-                            link: new client_1.HttpLink({ uri: subgraphUrl, fetch: cross_fetch_1.default })
+                            link: new client_1.HttpLink({ uri: badgesSubgraphUrl, fetch: cross_fetch_1.default })
                         });
                         id = "".concat(userId.toLowerCase(), "#").concat(seasonId);
                         return [4 /*yield*/, client.query({
@@ -266,16 +262,9 @@ var SBT = /** @class */ (function () {
                                     id: id,
                                 },
                             })];
-                    case 2:
+                    case 1:
                         data = _e.sent();
-                        return [4 /*yield*/, this.getNonProgramaticBadges(userId, nonProgDbUrl)];
-                    case 3:
-                        nonProgBadges = _e.sent();
-                        return [4 /*yield*/, this.getReferrorBadges(userId, referralsDbUrl, subgraphUrl, seasonId)];
-                    case 4:
-                        referroorBadges = _e.sent();
                         subgraphBadges = (((_b = data === null || data === void 0 ? void 0 : data.data) === null || _b === void 0 ? void 0 : _b.seasonUser) ? data.data.seasonUser.badges : []);
-                        badgesResponse = [];
                         for (_i = 0, subgraphBadges_1 = subgraphBadges; _i < subgraphBadges_1.length; _i++) {
                             badge = subgraphBadges_1[_i];
                             if (parseInt(badge.awardedTimestamp) > 0) {
@@ -287,19 +276,22 @@ var SBT = /** @class */ (function () {
                                 });
                             }
                         }
-                        topLpType = (0, helpers_1.getTopBadgeType)(seasonId, false);
-                        topTraderType = (0, helpers_1.getTopBadgeType)(seasonId, false);
-                        return [4 /*yield*/, this.getTopTraderBadge(subgraphUrl, userId, seasonId, false, topLpType)];
+                        _e.label = 2;
+                    case 2:
+                        referroorBadges = {};
+                        nonProgBadges = {};
+                        if (!nonProgDbUrl) return [3 /*break*/, 4];
+                        return [4 /*yield*/, this.getNonProgramaticBadges(userId, nonProgDbUrl)];
+                    case 3:
+                        nonProgBadges = _e.sent();
+                        _e.label = 4;
+                    case 4:
+                        if (!(referralsDbUrl && badgesSubgraphUrl)) return [3 /*break*/, 6];
+                        return [4 /*yield*/, this.getReferrorBadges(userId, referralsDbUrl, badgesSubgraphUrl, seasonId)];
                     case 5:
-                        topLpBadge = _e.sent();
-                        return [4 /*yield*/, this.getTopTraderBadge(subgraphUrl, userId, seasonId, true, topTraderType)];
+                        referroorBadges = _e.sent();
+                        _e.label = 6;
                     case 6:
-                        topTraderBadge = _e.sent();
-                        if (topLpBadge)
-                            badgesResponse.push(topLpBadge);
-                        if (topTraderBadge)
-                            badgesResponse.push(topTraderBadge);
-                        // get non-programatic badges
                         for (_c = 0, _d = exports.NON_SUBGRAPH_BADGES_SEASONS[seasonId]; _c < _d.length; _c++) {
                             badgeType = _d[_c];
                             if (nonProgBadges[badgeType]) {
@@ -311,11 +303,25 @@ var SBT = /** @class */ (function () {
                                 badgesResponse.push(referroorBadge);
                             }
                         }
-                        return [2 /*return*/, badgesResponse];
+                        if (!badgesSubgraphUrl) return [3 /*break*/, 9];
+                        topLpType = (0, helpers_1.getTopBadgeType)(seasonId, false);
+                        topTraderType = (0, helpers_1.getTopBadgeType)(seasonId, false);
+                        return [4 /*yield*/, this.getTopTraderBadge(badgesSubgraphUrl, userId, seasonId, false, topLpType)];
                     case 7:
+                        topLpBadge = _e.sent();
+                        return [4 /*yield*/, this.getTopTraderBadge(badgesSubgraphUrl, userId, seasonId, true, topTraderType)];
+                    case 8:
+                        topTraderBadge = _e.sent();
+                        if (topLpBadge)
+                            badgesResponse.push(topLpBadge);
+                        if (topTraderBadge)
+                            badgesResponse.push(topTraderBadge);
+                        _e.label = 9;
+                    case 9: return [2 /*return*/, badgesResponse];
+                    case 10:
                         error_1 = _e.sent();
                         return [2 /*return*/, []];
-                    case 8: return [2 /*return*/];
+                    case 11: return [2 /*return*/];
                 }
             });
         });
@@ -420,7 +426,7 @@ var SBT = /** @class */ (function () {
     SBT.prototype.getReferrorBadges = function (userId, referroorBadgesUrl, subgraphUrl, seasonId) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var badgeResponseRecord, resp, referees, refrees100K, refrees2M, _loop_1, _i, referees_1, referee, badgeType, badgeType;
+            var badgeResponseRecord, resp, referees, refereesWith100kNotionalTraded, refereesWith2mNotionalTraded, _loop_1, _i, referees_1, referee, badgeType, badgeType;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -432,8 +438,8 @@ var SBT = /** @class */ (function () {
                             return [2 /*return*/, badgeResponseRecord];
                         }
                         referees = resp.data;
-                        refrees100K = 0;
-                        refrees2M = 0;
+                        refereesWith100kNotionalTraded = 0;
+                        refereesWith2mNotionalTraded = 0;
                         _loop_1 = function (referee) {
                             var badgeQuery, client, id, data, totalPointz;
                             return __generator(this, function (_c) {
@@ -456,14 +462,14 @@ var SBT = /** @class */ (function () {
                                         if (!((_a = data === null || data === void 0 ? void 0 : data.data) === null || _a === void 0 ? void 0 : _a.seasonUsers)) {
                                             return [2 /*return*/, "continue"];
                                         }
-                                        totalPointz = ethers_1.BigNumber.from(0);
+                                        totalPointz = 0;
                                         data.data.seasonUsers.forEach(function (user) {
-                                            totalPointz = totalPointz.add(ethers_1.BigNumber.from(user.totalWeightedNotionalTraded));
+                                            totalPointz = totalPointz + parseFloat(user.totalWeightedNotionalTraded);
                                         });
-                                        if (totalPointz.gte(ethers_1.BigNumber.from("100000"))) {
-                                            refrees100K++;
-                                            if (totalPointz.gte(ethers_1.BigNumber.from("2000000"))) {
-                                                refrees2M++;
+                                        if (totalPointz >= (0, helpers_1.get100KRefereeBenchmark)(subgraphUrl)) {
+                                            refereesWith100kNotionalTraded++;
+                                            if (totalPointz >= (0, helpers_1.get2MRefereeBenchmark)(subgraphUrl)) {
+                                                refereesWith2mNotionalTraded++;
                                             }
                                         }
                                         return [2 /*return*/];
@@ -484,15 +490,15 @@ var SBT = /** @class */ (function () {
                         return [3 /*break*/, 2];
                     case 5:
                         ;
-                        if (refrees100K > 0) {
+                        if (refereesWith100kNotionalTraded > 0) {
                             badgeType = '36';
                             badgeResponseRecord[badgeType] = this.createReferroorBadgeRecord(badgeType, userId, seasonId);
-                            if (refrees100K >= 10) {
+                            if (refereesWith100kNotionalTraded >= 10) {
                                 badgeType = '37'; // Notional Influence
                                 badgeResponseRecord[badgeType] = this.createReferroorBadgeRecord(badgeType, userId, seasonId);
                             }
                         }
-                        if (refrees2M > 0) {
+                        if (refereesWith2mNotionalTraded > 0) {
                             badgeType = '38';
                             badgeResponseRecord[badgeType] = this.createReferroorBadgeRecord(badgeType, userId, seasonId);
                         }
