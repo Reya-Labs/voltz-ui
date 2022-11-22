@@ -29,46 +29,31 @@ const networkConfigurations: { [key: string]: NetworkConfiguration } = {
         erc20RootVault: '0xC99c70492Bc15c056813d1ddA95C89Bb285Cdc86',
         erc20RootVaultGovernance: '0x973495e81180Cd6Ead654328A0bEbE01c8ad53EA',
         metadata: {
-          title: 'MELLOW VAULT - stETH',
+          title: 'MELLOW - ETH',
           token: 'ETH',
           maturity: '31 Dec 22',
           estimatedHistoricApy: '>30%',
           description:
-            'The Mellow LP Optimiser runs a permissionless strategy that takes deposits and generates optimised LP fees by providing liquidity on Voltz Protocol.',
-          explanations: [
-            'The Mellow LP Optimiser runs a permissionless strategy that takes deposits and provides liquidity into Voltz Protocol pools. The liquidity provided is optimised to try and maximise yield for depositors.',
-            'In a typical Voltz Protocol pool, LPs need to specify margin, leverage and chosen fixed-rate tick ranges. The Mellow LP Optimiser abstracts away these complexities and automatically chooses an optimal amount of leverage and tick ranges for liquidity supplied.',
-            'For this pool, users simply deposit ETH in order to get access to optimised LP yields on the Voltz Protocol stETH pool.',
-            'Remember, returns are not guaranteed and you may get back less than you put in.',
-          ],
-          depositDescription:
-            'The Mellow LP Optimiser is available for the Voltz Protocol stETH pool.',
-          underlyingPools: ['stETH'],
+            'Optimised for LPing across pools in 10x levered positions.',
+          underlyingPools: ['LIDO - ETH'],
           deprecated: true,
         },
       },
     ],
-    MELLOW_ROUTERS: [{
+    MELLOW_ROUTERS: [
+    {
       show: true,
-      router: '0xD6e133B9C82F04734B48d5808800078038231a22',
-      defaultWeights: [100],
+      router: '0xF875B4BD81b1be40775652d8fDC174512C36DB20',
+      defaultWeights: [100, 0],
       pivot: 0,
       metadata: {
-        title: 'MELLOW VAULT - DAI',
-        token: 'DAI',
+        title: 'MELLOW - USDC',
+        token: 'USDC',
         maturity: '31 Dec 22',
-        estimatedHistoricApy: '10.3%',
+        estimatedHistoricApy: '6.51%',
         description:
-          'The Mellow LP Optimiser runs a permissionless strategy that takes deposits and generates optimised LP fees by providing liquidity on Voltz Protocol.',
-        explanations: [
-          'The Mellow LP Optimiser runs a permissionless strategy that takes deposits and provides liquidity into Voltz Protocol pools. The liquidity provided is optimised to try and maximise yield for depositors.',
-          'In a typical Voltz Protocol pool, LPs need to specify margin, leverage and chosen fixed-rate tick ranges. The Mellow LP Optimiser abstracts away these complexities and automatically chooses an optimal amount of leverage and tick ranges for liquidity supplied.',
-          'For this pool, users simply deposit ETH in order to get access to optimised LP yields on the Voltz Protocol cUSDC pools.',
-          'Remember, returns are not guaranteed and you may get back less than you put in.',
-        ],
-        depositDescription:
-          'The Mellow LP Optimiser is available for the Voltz Protocol aDAI and cDAI pools.',
-        underlyingPools: ['aDAI', 'cDAI'],
+          'Optimised for LPing across pools in 50x levered positions.',
+        underlyingPools: ['AAVE - USDC LEND'],
         deprecated: false,
       },
     },
@@ -78,45 +63,29 @@ const networkConfigurations: { [key: string]: NetworkConfiguration } = {
       defaultWeights: [100],
       pivot: 0,
       metadata: {
-        title: 'MELLOW VAULT - ETH',
+        title: 'MELLOW - ETH',
         token: 'ETH',
         maturity: '31 Dec 22',
         estimatedHistoricApy: '10.96%',
         description:
           'Optimised for Lping across pools in 50x levered positions.',
-        explanations: [
-          'The Mellow LP Optimiser runs a permissionless strategy that takes deposits and provides liquidity into Voltz Protocol pools. The liquidity provided is optimised to try and maximise yield for depositors.',
-          'In a typical Voltz Protocol pool, LPs need to specify margin, leverage and chosen fixed-rate tick ranges. The Mellow LP Optimiser abstracts away these complexities and automatically chooses an optimal amount of leverage and tick ranges for liquidity supplied.',
-          'For this pool, users simply deposit ETH in order to get access to optimised LP yields on the Voltz Protocol cUSDC pools.',
-          'Remember, returns are not guaranteed and you may get back less than you put in.',
-        ],
-        depositDescription:
-          'The Mellow LP Optimiser is available for the Voltz Protocol aDAI and cDAI pools.',
         underlyingPools: ['AAVE - ETH BORROW', 'AAVE - ETH LEND', 'LIDO - ETH', 'ROCKET - ETH'],
         deprecated: false,
       },
     },
     {
       show: true,
-      router: '0xF875B4BD81b1be40775652d8fDC174512C36DB20',
-      defaultWeights: [100, 0],
+      router: '0xD6e133B9C82F04734B48d5808800078038231a22',
+      defaultWeights: [100],
       pivot: 0,
       metadata: {
-        title: 'MELLOW VAULT - USDC',
-        token: 'USDC',
+        title: 'MELLOW - DAI',
+        token: 'DAI',
         maturity: '31 Dec 22',
-        estimatedHistoricApy: '6.51%',
+        estimatedHistoricApy: '10.3%',
         description:
-          'The Mellow LP Optimiser runs a permissionless strategy that takes deposits and generates optimised LP fees by providing liquidity on Voltz Protocol.',
-        explanations: [
-          'The Mellow LP Optimiser runs a permissionless strategy that takes deposits and provides liquidity into Voltz Protocol pools. The liquidity provided is optimised to try and maximise yield for depositors.',
-          'In a typical Voltz Protocol pool, LPs need to specify margin, leverage and chosen fixed-rate tick ranges. The Mellow LP Optimiser abstracts away these complexities and automatically chooses an optimal amount of leverage and tick ranges for liquidity supplied.',
-          'For this pool, users simply deposit ETH in order to get access to optimised LP yields on the Voltz Protocol cUSDC pools.',
-          'Remember, returns are not guaranteed and you may get back less than you put in.',
-        ],
-        depositDescription:
-          'The Mellow LP Optimiser is available for the Voltz Protocol aDAI and cDAI pools.',
-        underlyingPools: ['aUSDC'],
+          'Optimised for LPing across pools in 50x levered positions.',
+        underlyingPools: ['AAVE - DAI LEND', 'COMPOUND - DAI LEND'],
         deprecated: false,
       },
     },
@@ -126,24 +95,48 @@ const networkConfigurations: { [key: string]: NetworkConfiguration } = {
       defaultWeights: [0, 100],
       pivot: 1,
       metadata: {
-        title: 'MELLOW VAULT - USDC',
+        title: 'MELLOW - USDC',
         token: 'USDC',
         maturity: '31 Mar 23',
         estimatedHistoricApy: '17.66%',
         description:
-          'The Mellow LP Optimiser runs a permissionless strategy that takes deposits and generates optimised LP fees by providing liquidity on Voltz Protocol.',
-        explanations: [
-          'The Mellow LP Optimiser runs a permissionless strategy that takes deposits and provides liquidity into Voltz Protocol pools. The liquidity provided is optimised to try and maximise yield for depositors.',
-          'In a typical Voltz Protocol pool, LPs need to specify margin, leverage and chosen fixed-rate tick ranges. The Mellow LP Optimiser abstracts away these complexities and automatically chooses an optimal amount of leverage and tick ranges for liquidity supplied.',
-          'For this pool, users simply deposit ETH in order to get access to optimised LP yields on the Voltz Protocol cUSDC pools.',
-          'Remember, returns are not guaranteed and you may get back less than you put in.',
-        ],
-        depositDescription:
-          'The Mellow LP Optimiser is available for the Voltz Protocol aDAI and cDAI pools.',
-        underlyingPools: ['aUSDC'],
+          'Optimised for LPing across pools in 50x levered positions.',
+        underlyingPools: ['AAVE - USDC BORROW'],
         deprecated: false,
       },
-    }
+    },
+    {
+      show: true,
+      router: '0x0000000000000000000000000000000000000000',
+      defaultWeights: [],
+      pivot: 0,
+      metadata: {
+        title: 'MELLOW - ETH',
+        token: 'ETH',
+        maturity: '31 Mar 23',
+        estimatedHistoricApy: 's00n',
+        description:
+          'Optimised for LPing across pools in 50x levered positions.',
+        underlyingPools: ['AAVE - ETH BORROW'],
+        deprecated: true,
+      },
+    },
+    {
+      show: true,
+      router: '0x0000000000000000000000000000000000000000',
+      defaultWeights: [],
+      pivot: 0,
+      metadata: {
+        title: 'MELLOW - USDT',
+        token: 'USDT',
+        maturity: '31 Mar 23',
+        estimatedHistoricApy: 's00n',
+        description:
+          'Optimised for LPing across pools in 50x levered positions.',
+        underlyingPools: ['COMPOUND - USDT BORROW'],
+        deprecated: true,
+      },
+    },
   ],
   },
   goerli: {
@@ -155,20 +148,12 @@ const networkConfigurations: { [key: string]: NetworkConfiguration } = {
         erc20RootVault: '0x62E224d9ae2f4702CC88695e6Ea4aA16D0925BdB',
         erc20RootVaultGovernance: '0x4DCc9Ad7ff5964d13ee4A6932922f1a24f3f8e25',
         metadata: {
-          title: 'MELLOW VAULT - cETH',
+          title: 'MELLOW - cETH',
           token: 'ETH',
           maturity: '21 Nov 22',
           estimatedHistoricApy: '>30%',
           description:
             'The Mellow LP Optimiser runs a permissionless strategy that takes deposits and generates optimised LP fees by providing liquidity on Voltz Protocol.',
-          explanations: [
-            'The Mellow LP Optimiser runs a permissionless strategy that takes deposits and provides liquidity into Voltz Protocol pools. The liquidity provided is optimised to try and maximise yield for depositors.',
-            'In a typical Voltz Protocol pool, LPs need to specify margin, leverage and chosen fixed-rate tick ranges. The Mellow LP Optimiser abstracts away these complexities and automatically chooses an optimal amount of leverage and tick ranges for liquidity supplied.',
-            'For this pool, users simply deposit ETH in order to get access to optimised LP yields on the Voltz Protocol cETH pool.',
-            'Remember, returns are not guaranteed and you may get back less than you put in.',
-          ],
-          depositDescription:
-            'The Mellow LP Optimiser is available for the Voltz Protocol cETH pool.',
           underlyingPools: ['cETH'],
           deprecated: true,
         },
@@ -181,20 +166,12 @@ const networkConfigurations: { [key: string]: NetworkConfiguration } = {
         defaultWeights: [100, 0],
         pivot: 0,
         metadata: {
-          title: 'MELLOW VAULT - ETH',
+          title: 'MELLOW - ETH',
           token: 'ETH',
           maturity: '31 Dec 22',
           estimatedHistoricApy: '>30%',
           description:
             'The Mellow LP Optimiser runs a permissionless strategy that takes deposits and generates optimised LP fees by providing liquidity on Voltz Protocol.',
-          explanations: [
-            'The Mellow LP Optimiser runs a permissionless strategy that takes deposits and provides liquidity into Voltz Protocol pools. The liquidity provided is optimised to try and maximise yield for depositors.',
-            'In a typical Voltz Protocol pool, LPs need to specify margin, leverage and chosen fixed-rate tick ranges. The Mellow LP Optimiser abstracts away these complexities and automatically chooses an optimal amount of leverage and tick ranges for liquidity supplied.',
-            'For this pool, users simply deposit ETH in order to get access to optimised LP yields on the Voltz Protocol cETH pool.',
-            'Remember, returns are not guaranteed and you may get back less than you put in.',
-          ],
-          depositDescription:
-            'The Mellow LP Optimiser is available for the Voltz Protocol cETH pool.',
           underlyingPools: ['cETH'],
           deprecated: false,
         },
@@ -205,20 +182,12 @@ const networkConfigurations: { [key: string]: NetworkConfiguration } = {
         defaultWeights: [0, 100],
         pivot: 1,
         metadata: {
-          title: 'MELLOW VAULT - ETH',
+          title: 'MELLOW - ETH',
           token: 'ETH',
           maturity: '31 Mar 23',
           estimatedHistoricApy: '>30%',
           description:
             'The Mellow LP Optimiser runs a permissionless strategy that takes deposits and generates optimised LP fees by providing liquidity on Voltz Protocol.',
-          explanations: [
-            'The Mellow LP Optimiser runs a permissionless strategy that takes deposits and provides liquidity into Voltz Protocol pools. The liquidity provided is optimised to try and maximise yield for depositors.',
-            'In a typical Voltz Protocol pool, LPs need to specify margin, leverage and chosen fixed-rate tick ranges. The Mellow LP Optimiser abstracts away these complexities and automatically chooses an optimal amount of leverage and tick ranges for liquidity supplied.',
-            'For this pool, users simply deposit ETH in order to get access to optimised LP yields on the Voltz Protocol cETH pool.',
-            'Remember, returns are not guaranteed and you may get back less than you put in.',
-          ],
-          depositDescription:
-            'The Mellow LP Optimiser is available for the Voltz Protocol cETH pool.',
           underlyingPools: ['cETH'],
           deprecated: false,
         },
@@ -229,20 +198,12 @@ const networkConfigurations: { [key: string]: NetworkConfiguration } = {
         defaultWeights: [100],
         pivot: 0,
         metadata: {
-          title: 'MELLOW VAULT - ETH',
+          title: 'MELLOW - ETH',
           token: 'ETH',
           maturity: '07 Dec 22',
           estimatedHistoricApy: '>30%',
           description:
             'The Mellow LP Optimiser runs a permissionless strategy that takes deposits and generates optimised LP fees by providing liquidity on Voltz Protocol.',
-          explanations: [
-            'The Mellow LP Optimiser runs a permissionless strategy that takes deposits and provides liquidity into Voltz Protocol pools. The liquidity provided is optimised to try and maximise yield for depositors.',
-            'In a typical Voltz Protocol pool, LPs need to specify margin, leverage and chosen fixed-rate tick ranges. The Mellow LP Optimiser abstracts away these complexities and automatically chooses an optimal amount of leverage and tick ranges for liquidity supplied.',
-            'For this pool, users simply deposit ETH in order to get access to optimised LP yields on the Voltz Protocol cETH pools.',
-            'Remember, returns are not guaranteed and you may get back less than you put in.',
-          ],
-          depositDescription:
-            'The Mellow LP Optimiser is available for the Voltz Protocol cETH pools.',
           underlyingPools: ['cETH', 'cETH'],
           deprecated: false,
         },
@@ -253,20 +214,12 @@ const networkConfigurations: { [key: string]: NetworkConfiguration } = {
         defaultWeights: [100, 0],
         pivot: 0,
         metadata: {
-          title: 'MELLOW VAULT - USDC',
+          title: 'MELLOW - USDC',
           token: 'USDC',
           maturity: '07 Dec 22',
           estimatedHistoricApy: '>30%',
           description:
             'The Mellow LP Optimiser runs a permissionless strategy that takes deposits and generates optimised LP fees by providing liquidity on Voltz Protocol.',
-          explanations: [
-            'The Mellow LP Optimiser runs a permissionless strategy that takes deposits and provides liquidity into Voltz Protocol pools. The liquidity provided is optimised to try and maximise yield for depositors.',
-            'In a typical Voltz Protocol pool, LPs need to specify margin, leverage and chosen fixed-rate tick ranges. The Mellow LP Optimiser abstracts away these complexities and automatically chooses an optimal amount of leverage and tick ranges for liquidity supplied.',
-            'For this pool, users simply deposit ETH in order to get access to optimised LP yields on the Voltz Protocol cUSDC pools.',
-            'Remember, returns are not guaranteed and you may get back less than you put in.',
-          ],
-          depositDescription:
-            'The Mellow LP Optimiser is available for the Voltz Protocol cUSDC pools.',
           underlyingPools: ['cUSDC', 'cUSDC'],
           deprecated: false,
         },

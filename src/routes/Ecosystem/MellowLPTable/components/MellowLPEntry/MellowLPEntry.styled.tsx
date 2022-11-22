@@ -51,3 +51,13 @@ export const PositionBox = styled(Box)`
   padding: ${({ theme }) => theme.spacing(4, 4, 4, 6)};
   border-radius: 0px 0px 8px 8px;
 `;
+
+export const PoolFieldTypography = styled(Typography)`
+  font-size: 18px;
+  text-transform: uppercase;
+  vertical-align: middle;
+  font-weight: 700;
+  letter-spacing: 0.02cm;
+  line-height: 100%;
+  margin-top: ${({ theme }) => theme.spacing(1)};
+`

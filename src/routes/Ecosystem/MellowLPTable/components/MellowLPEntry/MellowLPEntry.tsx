@@ -8,11 +8,11 @@ import {
   MellowLPEntryContainerBox,
   MellowLPEntryInfoBox,
   PoolFieldsBox,
+  PoolFieldTypography,
   PoolTag,
   PositionBox,
   TitleTypography,
 } from './MellowLPEntry.styled';
-import { Typography } from '@components/atomic';
 
 export type MellowLPEntryProps = {
   onSelectItem: () => void;
@@ -47,21 +47,12 @@ const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
 
         <PoolFieldsBox>
           {lpVault.metadata.underlyingPools.map((pool) => (
-            <Typography
+            <PoolFieldTypography
               variant="body2"
-              sx={{
-                fontSize: 18,
-                textTransform: 'uppercase',
-                verticalAlign: 'middle',
-                fontWeight: 700,
-                letterSpacing: '0.02em',
-                lineHeight: '100%',
-                marginTop: (theme) => theme.spacing(1),
-              }}
               key={pool}
             >
               {pool}
-            </Typography>
+            </PoolFieldTypography>
           ))}
         </PoolFieldsBox>
       </MellowLPEntryInfoBox>
