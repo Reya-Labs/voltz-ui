@@ -6,7 +6,7 @@ install:
 	npx husky add .husky/commit-msg "yarn commitlint --edit $1"
 
 install-ci:
-	yarn --frozen-lockfile
+	yarn --frozen-lockfile --prefer-offline
 
 test:
 	yarn test
