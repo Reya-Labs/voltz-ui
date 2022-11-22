@@ -49,7 +49,6 @@ const MellowLPPosition: React.FunctionComponent<MellowLPPositionProps> = ({
         </MellowLPPositionInfoBox>
       </MellowLPPositionBox>
       <DepositButton
-        title={disabled ? 'TODO: COSTIN FIX COPY' : undefined}
         onClick={handleClick}
         disabled={disabled}
       >

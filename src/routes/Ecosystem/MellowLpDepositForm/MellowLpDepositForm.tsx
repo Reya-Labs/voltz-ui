@@ -121,7 +121,7 @@ const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = (
         </Typography>
 
         {[
-          'Funds deposited will be locked into the pool until the pool reaches maturity. At this point the withdrawal mechanism will be enabled.',
+          'Deposits are transferred to pools once a day, at 7pm UTC, to reduce gas costs, and will be locked into the pool until the pool reaches maturity. At this point the withdrawal mechanism will be enabled.',
           'Remember, returns are not guaranteed and you may get back less than you put in.',
         ].map((item) => (
           <Typography
