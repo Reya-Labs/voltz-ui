@@ -26,11 +26,12 @@ export const DescriptionTypography = styled(Typography)`
   color: #9b97ad;
 
   margin-left: ${({ theme }) => theme.spacing(2)};
-  margin-top: ${({ theme }) => theme.spacing(4)};
+  margin-top: ${({ theme }) => theme.spacing(6)};
 `;
 
 export const PoolTag = styled(Tag)`
   padding: ${({ theme }) => theme.spacing(0.5, 1)};
+  margin-top: ${({ theme }) => theme.spacing(6)};
 `;
 
 export const TitleTypography = styled(DescriptionTypography)`
