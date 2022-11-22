@@ -48,7 +48,6 @@ export const PoolFieldsBox = styled(Box)`
 
 export const PositionBox = styled(Box)`
   background: #1e1a33;
-  padding: ${({ theme }) => theme.spacing(4, 4, 4, 6)};
   border-radius: 0px 0px 8px 8px;
 `;
 

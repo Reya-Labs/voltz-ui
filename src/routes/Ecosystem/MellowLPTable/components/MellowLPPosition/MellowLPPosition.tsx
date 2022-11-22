@@ -5,6 +5,7 @@ import {
   DepositButton,
   DepositTypography,
   MellowLPPositionBox,
+  MellowLPPositionBoxAndButtonContainer,
   MellowLPPositionInfoBox,
   MellowLPPositionSkeleton,
   PositionTypography,
@@ -34,21 +35,27 @@ const MellowLPPosition: React.FunctionComponent<MellowLPPositionProps> = ({
   }
 
   return (
-    <MellowLPPositionBox>
-      <MellowLPPositionInfoBox>
-        <PositionTypography variant="h6">
-          {`Your position: ${isUndefined(userDeposit) ? ' ---' : ''}`}
-        </PositionTypography>
-        {!isUndefined(userDeposit) && (
-          <DepositTypography variant="h6">
-            {isUndefined(userDeposit) ? '---' : `${formatCurrency(userDeposit)} ${tokenName}`}
-          </DepositTypography>
-        )}
-      </MellowLPPositionInfoBox>
-      <DepositButton onClick={handleClick} disabled={disabled || dataLoading}>
+    <MellowLPPositionBoxAndButtonContainer>
+      <MellowLPPositionBox>
+        <MellowLPPositionInfoBox>
+          <PositionTypography variant="h6">
+            {`Your position: ${isUndefined(userDeposit) ? ' ---' : ''}`}
+          </PositionTypography>
+          {!isUndefined(userDeposit) && (
+            <DepositTypography variant="h6">
+              {isUndefined(userDeposit) ? '---' : `${formatCurrency(userDeposit)} ${tokenName}`}
+            </DepositTypography>
+          )}
+        </MellowLPPositionInfoBox>
+      </MellowLPPositionBox>
+      <DepositButton
+        title={disabled ? 'TODO: COSTIN FIX COPY' : undefined}
+        onClick={handleClick}
+        disabled={disabled}
+      >
         DEPOSIT
       </DepositButton>
-    </MellowLPPositionBox>
+    </MellowLPPositionBoxAndButtonContainer>
   );
 };
 
