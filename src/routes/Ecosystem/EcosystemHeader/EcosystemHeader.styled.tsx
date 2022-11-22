@@ -1,10 +1,9 @@
 import { styled } from '@mui/material/styles';
-import RouteLink from '../../../components/atomic/RouteLink/RouteLink';
 import Box from '@mui/material/Box';
 import { Typography } from '../../../components/atomic';
 import { colors } from '@theme';
 
-export const LearnMoreLink = styled(RouteLink)`
+export const LearnMoreLink = styled('a')`
   text-decoration: none;
   font-family: 'PixelOperatorMono', monospace;
   font-style: normal;
@@ -12,6 +11,13 @@ export const LearnMoreLink = styled(RouteLink)`
   font-size: 18px;
   line-height: 14px;
   letter-spacing: 0.02em;
+  color: ${colors.skyBlueCrayola.base};
+
+  &:visited,
+  &:hover,
+  &:active {
+    color: ${colors.skyBlueCrayola.base};
+  }
 `;
 
 export const EcosystemHeaderBox = styled(Box)`

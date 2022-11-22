@@ -46,7 +46,6 @@ const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = (
 
   return (
     <FormPanel
-      boxShadowType="LP"
       sx={{
         width: '100%',
         maxWidth: '398px',
@@ -79,20 +78,36 @@ const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = (
         />
       </Box>
 
-      <Box sx={{ display: 'flex', marginTop: (theme) => theme.spacing(4) }}>
+      <Box
+        sx={{
+          display: 'flex',
+          marginTop: (theme) => theme.spacing(4),
+          justifyContent: 'space-between',
+          columnGap: (theme) => theme.spacing(6),
+        }}
+      >
         <Button
           disabled={disabled}
           onClick={onSubmit}
           size="medium"
           agent={Agents.LIQUIDITY_PROVIDER}
           sx={{
-            width: '256px',
-            marginRight: '24px',
+            padding: '16px',
+            background: colors.skyBlueCrayola.darken030,
+            color: colors.skyBlueCrayola.base,
+            flex: 1,
           }}
         >
           {submitText}
         </Button>
-        <Button onClick={onCancel} size="medium" variant="dark">
+        <Button
+          onClick={onCancel}
+          size="medium"
+          variant="dark"
+          sx={{
+            color: colors.skyBlueCrayola.base,
+          }}
+        >
           BACK
         </Button>
       </Box>
@@ -158,7 +173,7 @@ const HintText: React.FunctionComponent<{
       }}
     >
       <span style={{ color: textColor }}> {text}</span>
-      {suffixText}
+      {suffixText ? ` ${suffixText}` : null}
     </Typography>
   );
 };
