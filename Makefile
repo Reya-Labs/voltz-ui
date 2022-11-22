@@ -20,6 +20,9 @@ eslint-check:
 prettier-check: 
 	yarn prettier:check
 
+code-quality-check:
+	yarn code-quality:check
+
 build:
 	yarn build
 

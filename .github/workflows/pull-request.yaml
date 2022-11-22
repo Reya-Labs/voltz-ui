@@ -20,11 +20,7 @@ jobs:
           node-version: 'lts/*'
       - name: Install dependencies
         run: make install-ci
-      - name: Eslint check
-        run: make eslint-check
-      - name: Prettier check
-        run: make prettier-check
-      - name: Typescript check
-        run: make ts-check
+      - name: Prettier check, Eslint check, Typescript check
+        run: make code-quality-check
       - name: Run tests
         run: make test 
