@@ -30,7 +30,8 @@ const networkConfigurations: { [key: string]: NetworkConfiguration } = {
           token: 'ETH',
           maturity: '31 Dec 22',
           estimatedHistoricApy: '>30%',
-          description: 'Optimised for LPing across pools in 10x levered positions.',
+          description:
+            'This vault is no longer accepting deposits. Funds will become available for withdrawal at pool maturity.',
           underlyingPools: ['LIDO - ETH'],
           show: true,
           soon: false,

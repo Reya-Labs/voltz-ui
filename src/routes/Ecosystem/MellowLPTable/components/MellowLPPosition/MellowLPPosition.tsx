@@ -48,10 +48,7 @@ const MellowLPPosition: React.FunctionComponent<MellowLPPositionProps> = ({
           )}
         </MellowLPPositionInfoBox>
       </MellowLPPositionBox>
-      <DepositButton
-        onClick={handleClick}
-        disabled={disabled}
-      >
+      <DepositButton onClick={handleClick} disabled={disabled}>
         DEPOSIT
       </DepositButton>
     </MellowLPPositionBoxAndButtonContainer>
