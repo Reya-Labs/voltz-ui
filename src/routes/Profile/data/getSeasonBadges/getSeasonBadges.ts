@@ -23,15 +23,14 @@ export async function getSeasonBadges({
       signer: signer,
     });
 
-    const subgraphUrl = process.env.REACT_APP_SUBGRAPH_BADGES_URL;
-    const dbUrl = process.env.REACT_APP_DB_BADGES_URL;
-    if (!subgraphUrl || !dbUrl) {
-      return getDefaultResponse(seasonId);
-    }
+    const badgesSubgraphUrl = process.env.REACT_APP_SUBGRAPH_BADGES_URL;
+    const nonProgDbUrl = process.env.REACT_APP_DB_BADGES_URL;
+    const referralsDbUrl = process.env.REACT_APP_REFERRAL_AND_SIGNATURE_SERVICE_URL;
 
     const badges = await SBT.getSeasonBadges({
-      subgraphUrl: subgraphUrl,
-      dbUrl: dbUrl,
+      badgesSubgraphUrl: badgesSubgraphUrl,
+      nonProgDbUrl: nonProgDbUrl,
+      referralsDbUrl: referralsDbUrl,
       userId: userId,
       seasonId: seasonId,
     });
