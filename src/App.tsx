@@ -63,7 +63,7 @@ const App = () => {
           <Route path={routes.POOLS} element={<LiquidityProvider />} />
           <Route path={routes.LP_FARM} element={<LiquidityProvider />} />
           <Route
-            path={routes.PRODUCTS}
+            path={routes.LP_OPTIMISERS}
             element={
               process.env.REACT_APP_PRODUCTS_P2 &&
               process.env.REACT_APP_PRODUCTS_P2 !== `UNPROVIDED` ? (

@@ -83,7 +83,7 @@ const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMellowLpDep
 
   const handleGoBack = () => {
     onReset();
-    navigate(`/${routes.PRODUCTS}`);
+    navigate(`/${routes.LP_OPTIMISERS}`);
   };
 
   const onChangeDeposit = (value: number | undefined): void => {

@@ -7,7 +7,7 @@ export const routes = {
   TRM_POST: 'trm-post',
   TRADING_LEAGUE: 'trading-league',
   PROFILE: 'profile',
-  PRODUCTS: 'products',
+  LP_OPTIMISERS: 'lp-optimisers',
 };
 
 export { default as LiquidityProvider } from './LiquidityProvider/LiquidityProvider';
