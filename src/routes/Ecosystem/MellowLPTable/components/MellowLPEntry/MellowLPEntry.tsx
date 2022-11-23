@@ -53,17 +53,17 @@ const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
           ))}
         </PoolFieldsBox>
       </MellowLPEntryInfoBox>
-      {!lpVault.metadata.soon && (
+      {
         <PositionBox>
           <MellowLPPosition
             userDeposit={lpVault.vault.userDeposit}
             tokenName={lpVault.metadata.token}
             handleClick={onSelectItem}
             dataLoading={dataLoading}
-            disabled={lpVault.metadata.deprecated}
+            disabled={lpVault.metadata.soon || lpVault.metadata.deprecated}
           />
         </PositionBox>
-      )}
+      }
     </MellowLPEntryContainerBox>
   );
 };
