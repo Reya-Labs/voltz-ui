@@ -10,21 +10,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
           persist-credentials: false
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 'lts/*'
+          cache: 'yarn'
       - name: Install dependencies
         run: make install-ci
-      - name: Eslint check
-        run: make eslint-check
-      - name: Prettier check
-        run: make prettier-check
-      - name: Typescript check
-        run: make ts-check
+      - name: Prettier check, Eslint check, Typescript check
+        run: make code-quality-check
       - name: Run tests
         run: make test 
