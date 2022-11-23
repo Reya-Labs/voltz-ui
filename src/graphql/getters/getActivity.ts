@@ -147,5 +147,5 @@ export async function getActivity({
       rank: index,
     }));
 
-  return rankResult.sort((a, b) => b.points - a.points);
+  return rankResult;
 }
