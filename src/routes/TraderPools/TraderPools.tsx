@@ -71,22 +71,20 @@ const TraderPools: React.FunctionComponent = () => {
         </Box>
       )}
 
-      {renderMode === 'form' && (
+      {renderMode === 'form' && amm && (
         <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
-          {amm && (
-            <AMMProvider amm={amm}>
-              <PositionProvider position={position}>
-                <SwapFormProvider
-                  mode={formMode}
-                  defaultValues={{
-                    notional: formMode === SwapFormModes.EDIT_NOTIONAL ? 0 : undefined,
-                  }}
-                >
-                  <ConnectedSwapForm onReset={handleReset} />
-                </SwapFormProvider>
-              </PositionProvider>
-            </AMMProvider>
-          )}
+          <AMMProvider amm={amm}>
+            <PositionProvider position={position}>
+              <SwapFormProvider
+                mode={formMode}
+                defaultValues={{
+                  notional: formMode === SwapFormModes.EDIT_NOTIONAL ? 0 : undefined,
+                }}
+              >
+                <ConnectedSwapForm onReset={handleReset} />
+              </SwapFormProvider>
+            </PositionProvider>
+          </AMMProvider>
         </Box>
       )}
     </Page>
