@@ -30,7 +30,7 @@ const Nav: React.FunctionComponent = React.memo(() => (
       subLinks={[
         {
           text: 'TRADER POOLS',
-          link: `/${routes.SWAP}`,
+          link: `/${routes.TRADER_POOLS}`,
         },
         {
           text: 'PORTFOLIO',
@@ -46,7 +46,7 @@ const Nav: React.FunctionComponent = React.memo(() => (
       subLinks={[
         {
           text: 'LP POOLS',
-          link: `/${routes.POOLS}`,
+          link: `/${routes.LP_POOLS}`,
         },
         {
           text: 'LP OPTIMISERS',
