@@ -142,11 +142,11 @@ export const BADGE_VARIANT_DESCRIPTION_COPY_MAP: Record<BadgeVariant, string> = 
   senatorz: 'For supporting Voltz community beyond the unthinkable.',
   governorz: 'For being there and contributing to the layer 0 of our community.',
   referror:
-    'You brought quite a crew with you. Voltz is build to empower defi and your help has been rewarded.',
+    'You brought quite a crew with you. Voltz is built to empower DeFi and your help has been rewarded.',
   notionalInfluencer:
-    'New achievement unlocked, all those referrals are paving the way to new defi pillars.',
+    'New achievement unlocked, all those referrals are paving the way to new DeFi pillars.',
   whaleWhisperer:
-    "At this point you are a voltz influencer, you've reached the highest level and are walking among IRS gods.",
+    "At this point you are a Voltz influencer, you've reached the highest level and are walking among IRS gods.",
 };
 
 export const BADGE_VARIANT_TIER_MAP: Record<BadgeVariant, BadgeTier> = {

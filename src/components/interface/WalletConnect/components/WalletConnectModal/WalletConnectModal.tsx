@@ -22,7 +22,7 @@ const WalletConnectModal: React.FunctionComponent = () => {
     if (name === 'disconnect') {
       wallet.disconnect();
     } else {
-      wallet.connect(name);
+      void wallet.connect(name);
     }
   };
 

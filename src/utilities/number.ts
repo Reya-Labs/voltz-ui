@@ -1,10 +1,4 @@
 /**
- * Returns true or false if the given number has a decimal part
- * @param num - number to process
- */
-export const hasDecimal = (num: number): boolean => !!(num % 1);
-
-/**
  * Takes a number and returns a currency string representation with thousand separators
  * @param num - the number to process
  * @param forceDecimals - force the showing of decimals (will show .00 on amounts)
@@ -19,9 +13,10 @@ export const formatCurrency = (
   minDecimals = 2,
   maxDecimals = 2,
 ): string => {
+  const hasDecimal = !!(num % 1);
   const value = num.toLocaleString(navigator.language, {
     maximumFractionDigits: maxDecimals,
-    minimumFractionDigits: hasDecimal(num) || forceDecimals ? minDecimals : 0,
+    minimumFractionDigits: hasDecimal || forceDecimals ? minDecimals : 0,
   });
   return `${showPlusSign && num > 0 ? '+' : ''}${value}`;
 };

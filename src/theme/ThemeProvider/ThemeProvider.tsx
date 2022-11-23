@@ -1,27 +1,14 @@
-import React, { FunctionComponent, SetStateAction } from 'react';
+import React, { FunctionComponent } from 'react';
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 
-import { useStateMemo } from '@hooks';
-import { Themes, themes } from '../themes';
-
-export const ThemeContext = React.createContext((_themeName: SetStateAction<Themes>): void => {});
+import { themes } from '../themes';
 
 export type ThemeProviderProps = {
-  theme?: Themes;
+  theme: keyof typeof themes;
 };
 
-const ThemeProvider: FunctionComponent<ThemeProviderProps> = ({
-  children,
-  theme: defaultThemeName,
-}) => {
-  const [themeName, _setThemeName] = useStateMemo(defaultThemeName || Themes.DARK);
-  const theme = themes[themeName];
-
-  return (
-    <ThemeContext.Provider value={_setThemeName}>
-      <MuiThemeProvider theme={theme}>{children}</MuiThemeProvider>
-    </ThemeContext.Provider>
-  );
-};
+const ThemeProvider: FunctionComponent<ThemeProviderProps> = ({ children, theme }) => (
+  <MuiThemeProvider theme={themes[theme]}>{children}</MuiThemeProvider>
+);
 
 export default ThemeProvider;
