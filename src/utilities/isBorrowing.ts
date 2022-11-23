@@ -4,8 +4,7 @@
  * @returns A boolean value.
  */
 const isBorrowing = (rateOracleProtocolId: number): boolean => {
-  const borrowIds = [5, 6];
-  return borrowIds.includes(rateOracleProtocolId);
+  return rateOracleProtocolId === 5 || rateOracleProtocolId === 6;
 };
 
 export default isBorrowing;

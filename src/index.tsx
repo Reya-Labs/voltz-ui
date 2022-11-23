@@ -32,7 +32,7 @@ try {
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider>
+    <ThemeProvider theme="dark">
       <ReduxProvider store={store}>
         <VoltzGraphProvider>
           <WalletProvider>

@@ -19,6 +19,7 @@ import {
   Agents,
   usePositionContext,
 } from '@contexts';
+import isBorrowing from '../../../utilities/isBorrowing';
 
 export type ConnectedBorrowFormProps = {
   onReset: () => void;
@@ -48,7 +49,7 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
   }, [callVariableApy]);
 
   const protocol = () => {
-    if ([5, 6].includes(amm.rateOracle.protocolId)) {
+    if (isBorrowing(amm.rateOracle.protocolId)) {
       return 'borrow_' + amm.protocol;
     }
     return amm.protocol;

@@ -110,7 +110,7 @@ const LiquidityProvider: React.FunctionComponent = () => {
             {process.env.REACT_APP_ECOSYSTEM && process.env.REACT_APP_ECOSYSTEM !== `UNPROVIDED` ? (
               <Button
                 component={Link}
-                to={`/${routes.PRODUCTS}`}
+                to={`/${routes.LP_OPTIMISERS}`}
                 sx={{
                   color: 'primary.base',
                   marginTop: (theme) => theme.spacing(2),

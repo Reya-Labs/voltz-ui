@@ -50,7 +50,7 @@ const Nav: React.FunctionComponent = React.memo(() => (
         },
         {
           text: 'LP OPTIMISERS',
-          link: `/${routes.PRODUCTS}`,
+          link: `/${routes.LP_OPTIMISERS}`,
         },
         {
           text: 'POSITIONS',
