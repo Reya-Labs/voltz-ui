@@ -6,11 +6,12 @@ import {
   TradingLeague,
   Profile,
   LiquidityProvider,
-  Trader,
   FixedBorrower,
   Ecosystem,
   ProfileV1,
   EcosystemV1,
+  Portfolio,
+  TraderPools,
 } from '@routes';
 import { AlphaBanner, GweiBar } from '@components/composite';
 import Box from '@mui/material/Box';
@@ -57,10 +58,10 @@ const App = () => {
     <>
       <Routes>
         <Route path="/">
-          <Route index element={<Navigate to={routes.SWAP} />} />
-          <Route path={routes.SWAP} element={<Trader />} />
-          <Route path={routes.PORTFOLIO} element={<Trader />} />
-          <Route path={routes.POOLS} element={<LiquidityProvider />} />
+          <Route index element={<Navigate to={routes.TRADER_POOLS} />} />
+          <Route path={routes.TRADER_POOLS} element={<TraderPools />} />
+          <Route path={routes.PORTFOLIO} element={<Portfolio />} />
+          <Route path={routes.LP_POOLS} element={<LiquidityProvider />} />
           <Route path={routes.LP_FARM} element={<LiquidityProvider />} />
           <Route
             path={routes.LP_OPTIMISERS}

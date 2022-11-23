@@ -11,7 +11,7 @@ export const getRenderMode = (
   pathnameWithoutPrefix: string,
 ) => {
   if (!formMode) {
-    if (pathnameWithoutPrefix === routes.POOLS) {
+    if (pathnameWithoutPrefix === routes.LP_POOLS) {
       return 'pools';
     } else {
       return 'portfolio';

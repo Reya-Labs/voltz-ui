@@ -87,7 +87,9 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
     return (
       <Panel variant="main" sx={{ width: '100%', textAlign: 'center' }}>
         <RouteLink
-          to={agent === Agents.LIQUIDITY_PROVIDER ? `/${routes.POOLS}` : `/${routes.SWAP}`}
+          to={
+            agent === Agents.LIQUIDITY_PROVIDER ? `/${routes.LP_POOLS}` : `/${routes.TRADER_POOLS}`
+          }
         >
           OPEN YOUR FIRST POSITION
         </RouteLink>
