@@ -89,7 +89,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
 
   const handleComplete = () => {
     onReset();
-    navigate(`/${routes.LP_FARM}`);
+    navigate(`/${routes.LP_PORTFOLIO}`);
   };
 
   const handleGoBack = () => {

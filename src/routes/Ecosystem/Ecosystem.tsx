@@ -5,7 +5,7 @@ import ConnectedMellowLPTable from './ConnectedMellowLPTable/ConnectedMellowLPTa
 import { setPageTitle } from '@utilities';
 import { useEffect, useState } from 'react';
 import { isNull } from 'lodash';
-import { useBackListener, useMellowLPVaults, useWallet } from '@hooks';
+import { useMellowLPVaults, useWallet } from '@hooks';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { MellowProduct } from './types';
@@ -117,14 +117,6 @@ const Ecosystem: React.FunctionComponent = () => {
       );
     }
   }, [lpVaults, isSignerAvailable, vaultsLoaded]);
-
-  useBackListener((e: Event) => {
-    if (renderMode !== EcosystemRenderMode.MELLOW_DEPOSIT_FORM) {
-      return;
-    }
-    e.preventDefault();
-    handleGoBack();
-  });
 
   return (
     <Page>

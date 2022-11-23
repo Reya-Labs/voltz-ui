@@ -54,7 +54,7 @@ const Nav: React.FunctionComponent = React.memo(() => (
         },
         {
           text: 'POSITIONS',
-          link: `/${routes.LP_FARM}`,
+          link: `/${routes.LP_PORTFOLIO}`,
         },
       ]}
     >
