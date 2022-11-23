@@ -1,5 +1,5 @@
 export const routes = {
-  LP_FARM: 'lp-positions',
+  LP_PORTFOLIO: 'lp-positions',
   LP_POOLS: 'lp-pools',
   PORTFOLIO: 'portfolio',
   TRADER_POOLS: 'trader-pools',
@@ -9,7 +9,8 @@ export const routes = {
   LP_OPTIMISERS: 'lp-optimisers',
 };
 
-export { default as LiquidityProvider } from './LiquidityProvider/LiquidityProvider';
+export { default as LPPools } from './LPPools/LPPools';
+export { default as LPPortfolio } from './LPPortfolio/LPPortfolio';
 export { default as TraderPools } from './TraderPools/TraderPools';
 export { default as Portfolio } from './Portfolio/Portfolio';
 export { default as FixedBorrower } from './FixedBorrower/FixedBorrower';
