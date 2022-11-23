@@ -100,17 +100,15 @@ const LPPools: React.FunctionComponent = () => {
         </Box>
       )}
 
-      {renderMode === 'form' && (
+      {renderMode === 'form' && amm && (
         <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
-          {amm && (
-            <AMMProvider amm={amm}>
-              <PositionProvider position={position}>
-                <MintBurnFormProvider mode={formMode as MintBurnFormModes}>
-                  <ConnectedMintBurnForm onReset={handleReset} />
-                </MintBurnFormProvider>
-              </PositionProvider>
-            </AMMProvider>
-          )}
+          <AMMProvider amm={amm}>
+            <PositionProvider position={position}>
+              <MintBurnFormProvider mode={formMode as MintBurnFormModes}>
+                <ConnectedMintBurnForm onReset={handleReset} />
+              </MintBurnFormProvider>
+            </PositionProvider>
+          </AMMProvider>
         </Box>
       )}
     </Page>
