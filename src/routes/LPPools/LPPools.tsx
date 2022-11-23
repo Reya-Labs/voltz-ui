@@ -15,10 +15,10 @@ import { useAgent, usePositions, useWallet } from '@hooks';
 
 import { Page } from '@components/interface';
 import { PageTitleDesc } from '@components/composite';
-import ConnectedAMMTable from '../../components/containers/ConnectedAMMTable/ConnectedAMMTable';
 import ConnectedMintBurnForm from '../../components/containers/ConnectedMintBurnForm/ConnectedMintBurnForm';
 import { Button } from '@mui/material';
 import { routes } from '@routes';
+import AMMTable from '../../components/interface/AMMTable/AMMTable';
 
 const LPPools: React.FunctionComponent = () => {
   const [amm, setAMM] = useState<AMM>();
@@ -96,7 +96,7 @@ const LPPools: React.FunctionComponent = () => {
               </Button>
             ) : null}
           </Box>
-          <ConnectedAMMTable onSelectItem={handleSelectAmm} />
+          <AMMTable onSelectItem={handleSelectAmm} />
         </Box>
       )}
 

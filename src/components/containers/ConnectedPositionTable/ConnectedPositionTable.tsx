@@ -11,14 +11,14 @@ import { colors } from '@theme';
 
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 
-export type ConnectedAMMTableProps = {
+export type ConnectedPositionTableProps = {
   onSelectItem: (item: Position, mode: 'margin' | 'liquidity' | 'rollover' | 'notional') => void;
   agent: Agents;
   amm?: AMM;
   handleCompletedSettling: () => void;
 };
 
-const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = ({
+const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTableProps> = ({
   onSelectItem,
   agent,
   handleCompletedSettling,
