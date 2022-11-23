@@ -20,3 +20,4 @@ export { default as useCurrentSeason } from './season/useCurrentSeason';
 export { default as usePastSeasons } from './season/usePastSeasons';
 export { default as useMellowLPVaults } from './useMellowLPVaults/useMellowLPVaults';
 export { default as useMellowLPVaultsV1 } from './useMellowLPVaults/useMellowLPVaultsV1';
+export * from './useBackListener/useBackListener';

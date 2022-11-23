@@ -1,5 +1,3 @@
-import { routes } from '@routes';
-import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { DepositStates, getSubmissionState } from './mappers';
 import MellowLpDepositForm from '../MellowLpDepositForm/MellowLpDepositForm';
@@ -8,15 +6,13 @@ import { MellowProduct } from '../types';
 
 export type ConnectedMellowLpDepositFormProps = {
   vault: MellowProduct;
-  onReset: () => void;
+  onCancel: () => void;
 };
 
 const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMellowLpDepositFormProps> = ({
   vault,
-  onReset,
+  onCancel,
 }) => {
-  const navigate = useNavigate();
-
   const [selectedDeposit, setSelectedDeposit] = useState<number>(0);
 
   const [depositState, setDepositState] = useState<DepositStates>(DepositStates.INITIALISING);
@@ -81,11 +77,6 @@ const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMellowLpDep
     tokenName: vault.metadata.token,
   });
 
-  const handleGoBack = () => {
-    onReset();
-    navigate(`/${routes.LP_OPTIMISERS}`);
-  };
-
   const onChangeDeposit = (value: number | undefined): void => {
     setSelectedDeposit(value ?? 0);
   };
@@ -98,7 +89,7 @@ const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMellowLpDep
       hintText={submissionState.hintText}
       disabled={!sufficientFunds || submissionState.disabled}
       onSubmit={submissionState.action}
-      onCancel={handleGoBack}
+      onCancel={onCancel}
     />
   );
 };
