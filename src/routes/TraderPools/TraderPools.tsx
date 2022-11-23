@@ -8,8 +8,8 @@ import { Agents, AMMProvider, PositionProvider, SwapFormProvider } from '@contex
 import { PageTitleDesc } from '@components/composite';
 import { useAgent, usePositions, useWallet } from '@hooks';
 import { Page, SwapFormModes } from '@components/interface';
-import ConnectedAMMTable from '../../components/containers/ConnectedAMMTable/ConnectedAMMTable';
 import ConnectedSwapForm from '../../components/containers/ConnectedSwapForm/ConnectedSwapForm';
+import AMMTable from '../../components/interface/AMMTable/AMMTable';
 
 const TraderPools: React.FunctionComponent = () => {
   const [formMode, setFormMode] = useState<SwapFormModes>();
@@ -67,7 +67,7 @@ const TraderPools: React.FunctionComponent = () => {
               desc="Choose a pool and decide whether to trade fixed or variable rates."
             />
           </Box>
-          <ConnectedAMMTable onSelectItem={handleSelectAmm} />
+          <AMMTable onSelectItem={handleSelectAmm} />
         </Box>
       )}
 
