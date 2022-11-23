@@ -46,8 +46,8 @@ const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
         <TitleTypography variant="h6">LIQUIDITY SPREAD ACROSS</TitleTypography>
 
         <PoolFieldsBox>
-          {lpVault.metadata.underlyingPools.map((pool) => (
-            <PoolFieldTypography variant="body2" key={pool}>
+          {lpVault.metadata.underlyingPools.map((pool, index) => (
+            <PoolFieldTypography variant="body2" key={`${pool}-${index}`}>
               {pool}
             </PoolFieldTypography>
           ))}
