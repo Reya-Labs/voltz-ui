@@ -29,7 +29,7 @@ export type ConnectedMintBurnFormProps = {
   onReset: () => void;
 };
 
-const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps> = ({
+export const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps> = ({
   onReset,
 }) => {
   const { amm: targetAmm } = useAMMContext();
@@ -222,5 +222,3 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     </>
   );
 };
-
-export default ConnectedMintBurnForm;

@@ -18,7 +18,7 @@ export type MintBurnInfoProps = {
   underlyingTokenName?: string;
 };
 
-const MintBurnInfo: React.FunctionComponent<MintBurnInfoProps> = ({
+export const MintBurnInfo: React.FunctionComponent<MintBurnInfoProps> = ({
   balance,
   formState,
   mintMinimumMarginRequirement,
@@ -47,5 +47,3 @@ const MintBurnInfo: React.FunctionComponent<MintBurnInfoProps> = ({
     </FormPanel>
   );
 };
-
-export default MintBurnInfo;

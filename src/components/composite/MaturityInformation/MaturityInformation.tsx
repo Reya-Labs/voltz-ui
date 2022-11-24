@@ -10,7 +10,7 @@ export type MaturityInformationProps = {
   endDate?: DateTime;
 };
 
-const MaturityInformation: React.FunctionComponent<MaturityInformationProps> = ({
+const MaturityInformationComponent: React.FunctionComponent<MaturityInformationProps> = ({
   startDate,
   endDate,
 }) => {
@@ -41,4 +41,6 @@ const MaturityInformation: React.FunctionComponent<MaturityInformationProps> = (
   );
 };
 
-export default withLabel<MaturityInformationProps>(MaturityInformation);
+export const MaturityInformation = withLabel<MaturityInformationProps>(
+  MaturityInformationComponent,
+);

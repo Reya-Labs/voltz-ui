@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import { colors, SystemStyleObject, Theme } from '../../../theme';
-import PortfolioHeaderValue from './PortfolioHeaderValue';
-import PortfolioHeaderBox from './PortfolioHeaderBox';
+import { PortfolioHeaderValue } from './PortfolioHeaderValue';
+import { PortfolioHeaderBox } from './PortfolioHeaderBox';
 
 export type PortfolioHeaderHealthProps = {
   positionsDanger: number | undefined;
@@ -22,7 +22,7 @@ const itemTextStyles: SystemStyleObject<Theme> = {
   fontSize: '14px',
 };
 
-const PortfolioHeaderHealth = ({
+export const PortfolioHeaderHealth = ({
   positionsDanger,
   positionsHealthy,
   positionsWarning,
@@ -52,5 +52,3 @@ const PortfolioHeaderHealth = ({
     </PortfolioHeaderValue>
   );
 };
-
-export default PortfolioHeaderHealth;

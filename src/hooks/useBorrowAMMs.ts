@@ -8,7 +8,7 @@ import JSBI from 'jsbi';
 import { DateTime } from 'luxon';
 
 import { Token, RateOracle, BorrowAMM, AMM } from '@voltz-protocol/v1-sdk';
-import isBorrowing from '../utilities/isBorrowing';
+import { isBorrowing } from '../utilities';
 
 export type UseBorrowAMMsResult = {
   borrowAmms?: BorrowAMM[];

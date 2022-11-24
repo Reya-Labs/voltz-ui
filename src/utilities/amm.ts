@@ -1,4 +1,4 @@
-import isBorrowing from './isBorrowing';
+import { isBorrowing } from './isBorrowing';
 
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 

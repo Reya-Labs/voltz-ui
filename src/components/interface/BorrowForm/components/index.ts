@@ -1,2 +1,2 @@
-export { default as SubmitControls } from './SubmitControls/SubmitControls';
-export { default as FixBorrow } from './FixBorrow/FixBorrow';
+export * from './SubmitControls/SubmitControls';
+export * from './FixBorrow/FixBorrow';

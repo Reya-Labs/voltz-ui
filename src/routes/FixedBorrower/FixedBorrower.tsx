@@ -13,8 +13,8 @@ import {
 import { useBorrowPositions, useWallet } from '../../hooks';
 
 import { Page } from '@components/interface';
-import ConnectedBorrowForm from '../../components/containers/ConnectedBorrowForm/ConnectedBorrowForm';
-import ConnectedBorrowPositionTable from '../../components/containers/ConnectedBorrowPositionTable/ConnectedBorrowPositionTable';
+import { ConnectedBorrowForm } from '../../components/containers/ConnectedBorrowForm/ConnectedBorrowForm';
+import { ConnectedBorrowPositionTable } from '../../components/containers/ConnectedBorrowPositionTable/ConnectedBorrowPositionTable';
 import { getRenderMode } from './services';
 
 import { Position, AMM, BorrowAMM } from '@voltz-protocol/v1-sdk';

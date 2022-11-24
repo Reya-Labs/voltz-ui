@@ -25,7 +25,7 @@ import {
   setReferrer,
 } from './utilities/referrer-store/referrer-store';
 
-const App = () => {
+export const App = () => {
   const [searchParams] = useSearchParams();
   const searchParamsReferrer = searchParams.get(REFERRER_QUERY_PARAM_KEY);
 
@@ -90,5 +90,3 @@ const App = () => {
     </>
   );
 };
-
-export default App;

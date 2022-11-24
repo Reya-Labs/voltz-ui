@@ -1,1 +1,1 @@
-export { default as MintSummary } from './MintSummary/MintSummary';
+export * from './MintSummary/MintSummary';

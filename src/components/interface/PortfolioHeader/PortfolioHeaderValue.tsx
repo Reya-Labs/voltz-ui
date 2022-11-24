@@ -17,7 +17,7 @@ const valueBoxLabelStyles: SystemStyleObject<Theme> = {
   whiteSpace: 'nowrap',
 };
 
-const PortfolioHeaderValue = ({ children, hint, label }: PortfolioHeaderValueProps) => (
+export const PortfolioHeaderValue = ({ children, hint, label }: PortfolioHeaderValueProps) => (
   <Box>
     <Typography variant="body2" sx={valueBoxLabelStyles}>
       {label}
@@ -25,5 +25,3 @@ const PortfolioHeaderValue = ({ children, hint, label }: PortfolioHeaderValuePro
     {children}
   </Box>
 );
-
-export default PortfolioHeaderValue;

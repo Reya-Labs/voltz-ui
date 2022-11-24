@@ -10,7 +10,10 @@ export type WalletDisplayProps = {
   onChangeWallet: () => void;
 };
 
-const WalletDisplay: React.FunctionComponent<WalletDisplayProps> = ({ wallet, onChangeWallet }) => {
+export const WalletDisplay: React.FunctionComponent<WalletDisplayProps> = ({
+  wallet,
+  onChangeWallet,
+}) => {
   if (isNull(wallet.name) || wallet.name === 'disconnect') {
     return null;
   }
@@ -52,5 +55,3 @@ const WalletDisplay: React.FunctionComponent<WalletDisplayProps> = ({ wallet, on
     </>
   );
 };
-
-export default WalletDisplay;

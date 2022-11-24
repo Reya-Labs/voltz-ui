@@ -8,7 +8,7 @@ export type LiquidityControlsProps = {
   value: MintBurnFormLiquidityAction;
 };
 
-const LiquidityControls = ({ onChange, value }: LiquidityControlsProps) => {
+export const LiquidityControls = ({ onChange, value }: LiquidityControlsProps) => {
   const iconLabel = (
     <IconLabel label="Add or Burn Liquidity" icon="information-circle" info="" removeIcon />
   );
@@ -38,5 +38,3 @@ const LiquidityControls = ({ onChange, value }: LiquidityControlsProps) => {
     </Box>
   );
 };
-
-export default LiquidityControls;

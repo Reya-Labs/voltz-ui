@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import PendingTransaction, { PendingTransactionProps } from './PendingTransaction';
+import { PendingTransaction, PendingTransactionProps } from './PendingTransaction';
 
 export default {
   title: 'Interface/PendingTransaction',

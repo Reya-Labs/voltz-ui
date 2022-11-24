@@ -23,7 +23,7 @@ export type LeverageProps = {
 // Set the leverage options in this array
 const LEVERAGE_OPTIONS = [100, 500, 1000];
 
-const Leverage = ({
+export const Leverage = ({
   availableNotional,
   minMargin,
   notional,
@@ -104,5 +104,3 @@ const Leverage = ({
     </Box>
   );
 };
-
-export default Leverage;

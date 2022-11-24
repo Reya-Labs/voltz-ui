@@ -1,5 +1,5 @@
 import React from 'react';
-import SummaryPanel from '../../../../atomic/SummaryPanel/SummaryPanel';
+import { SummaryPanel } from '../../../../atomic/SummaryPanel/SummaryPanel';
 import { IconLabel } from '@components/composite';
 import { formatCurrency, roundUpDecimal } from '../../../../../utilities';
 import { isUndefined } from 'lodash';
@@ -12,7 +12,7 @@ export type SwapSummaryEditMarginProps = {
   underlyingTokenName?: string;
 };
 
-const SwapSummaryEditMargin: React.FunctionComponent<SwapSummaryEditMarginProps> = ({
+export const SwapSummaryEditMargin: React.FunctionComponent<SwapSummaryEditMarginProps> = ({
   balance,
   currentPositionMarginRequirement,
   loading = false,
@@ -52,5 +52,3 @@ const SwapSummaryEditMargin: React.FunctionComponent<SwapSummaryEditMarginProps>
 
   return <SummaryPanel label={label} loading={loading} rows={rows} />;
 };
-
-export default SwapSummaryEditMargin;

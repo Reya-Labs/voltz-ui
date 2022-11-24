@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import isUndefined from 'lodash/isUndefined';
 
-import IconLabel from '../IconLabel/IconLabel';
-import MaskedIntegerField from '../MaskedIntegerField/MaskedIntegerField';
-import InputTokenLabel from '../InputTokenLabel/InputTokenLabel';
+import { IconLabel } from '../IconLabel/IconLabel';
+import { MaskedIntegerField } from '../MaskedIntegerField/MaskedIntegerField';
+import { InputTokenLabel } from '../InputTokenLabel/InputTokenLabel';
 import { toUSFormat } from '../../../utilities';
 
 export type NotionalAmountProps = {
@@ -19,7 +19,7 @@ export type NotionalAmountProps = {
   isEditing?: boolean;
 };
 
-const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
+export const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
   label,
   info,
   defaultNotional,
@@ -60,5 +60,3 @@ const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
     />
   );
 };
-
-export default NotionalAmount;

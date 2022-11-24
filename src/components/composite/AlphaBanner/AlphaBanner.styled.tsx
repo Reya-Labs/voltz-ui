@@ -1,4 +1,4 @@
-import Typography from '../../atomic/Typography/Typography';
+import { Typography } from '../../atomic/Typography/Typography';
 import { styled } from '@mui/material/styles';
 import { colors } from '../../../theme';
 import { keyframes } from '@mui/system';

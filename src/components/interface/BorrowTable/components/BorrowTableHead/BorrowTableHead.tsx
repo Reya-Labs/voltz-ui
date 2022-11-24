@@ -12,7 +12,7 @@ export type BorrowTableHeadProps = {
   isFixedPositions: boolean;
 };
 
-const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({
+export const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({
   labels,
   isFixedPositions,
 }) => {
@@ -75,5 +75,3 @@ const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({
     </TableHead>
   );
 };
-
-export default BorrowTableHead;

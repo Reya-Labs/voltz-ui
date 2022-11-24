@@ -18,7 +18,6 @@ interface SubmitControlsProps {
   mode: SwapFormModes;
   onCancel: () => void;
   onSubmit: () => void;
-  protocol?: string;
   gaButtonId?: string;
   submitButtonState: SwapFormSubmitButtonStates;
   swapInfoLoading: boolean;
@@ -46,7 +45,7 @@ const Text = ({ bold, children, green, red }: TextProps) => (
   </Box>
 );
 
-const SubmitControls = ({
+export const SubmitControls = ({
   approvalsNeeded,
   hintState,
   isFormValid,
@@ -54,7 +53,6 @@ const SubmitControls = ({
   mode,
   onCancel,
   onSubmit,
-  protocol,
   gaButtonId,
   submitButtonState,
   tokenApprovals,
@@ -221,5 +219,3 @@ const SubmitControls = ({
     </>
   );
 };
-
-export default SubmitControls;

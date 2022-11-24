@@ -1,5 +1,5 @@
 import React from 'react';
-import SummaryPanel from '../../../../atomic/SummaryPanel/SummaryPanel';
+import { SummaryPanel } from '../../../../atomic/SummaryPanel/SummaryPanel';
 import { IconLabel } from '@components/composite';
 import { formatCurrency, roundUpDecimal } from '../../../../../utilities';
 import { isUndefined } from 'lodash';
@@ -11,7 +11,7 @@ export type MintSummaryProps = {
   underlyingTokenName?: string;
 };
 
-const MintSummary: React.FunctionComponent<MintSummaryProps> = ({
+export const MintSummary: React.FunctionComponent<MintSummaryProps> = ({
   balance,
   loading,
   mintMinimumMarginRequirement,
@@ -49,5 +49,3 @@ const MintSummary: React.FunctionComponent<MintSummaryProps> = ({
 
   return <SummaryPanel label={label} loading={loading} rows={rows} />;
 };
-
-export default MintSummary;

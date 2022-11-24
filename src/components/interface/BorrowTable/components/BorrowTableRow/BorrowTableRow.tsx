@@ -20,8 +20,7 @@ export type BorrowTableRowProps = {
   gaButtonId?: string;
 };
 
-// todo: panel component, adjust the styling
-const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({
+export const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({
   datum,
   index,
   onSelect,
@@ -233,5 +232,3 @@ const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({
 
   return <>{renderTable()}</>;
 };
-
-export default BorrowTableRow;

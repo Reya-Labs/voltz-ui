@@ -1,3 +1,3 @@
-export { default as WalletConnectButton } from '../../WalletConnectButton/WalletConnectButton';
-export { default as WalletDisplay } from './WalletDisplay/WalletDisplay';
-export { default as WalletSelect } from './WalletSelect/WalletSelect';
+export * from '../../WalletConnectButton/WalletConnectButton';
+export * from './WalletDisplay/WalletDisplay';
+export * from './WalletSelect/WalletSelect';

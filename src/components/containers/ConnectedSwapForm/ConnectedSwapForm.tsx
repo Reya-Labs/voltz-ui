@@ -35,7 +35,7 @@ export type ConnectedSwapFormProps = {
   onReset: () => void;
 };
 
-const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ onReset }) => {
+export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ onReset }) => {
   const { agent } = useAgent();
   const { amm: targetAmm } = useAMMContext();
   const { amm: positionAmm } = usePositionContext();
@@ -245,5 +245,3 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
     </>
   );
 };
-
-export default ConnectedSwapForm;

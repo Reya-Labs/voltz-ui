@@ -55,7 +55,7 @@ export type SwapProps = {
   fixedApr?: number;
 };
 
-const Swap: React.FunctionComponent<SwapProps> = ({
+export const SwapForm: React.FunctionComponent<SwapProps> = ({
   approvalsNeeded,
   balance,
   currentPositionMarginRequirement,
@@ -210,5 +210,3 @@ const Swap: React.FunctionComponent<SwapProps> = ({
     </FormPanel>
   );
 };
-
-export default Swap;

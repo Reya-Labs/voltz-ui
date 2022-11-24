@@ -17,7 +17,7 @@ const Text: React.FunctionComponent = React.memo(() => (
   </>
 ));
 
-const AlphaBanner: React.FunctionComponent = React.memo(() => (
+export const AlphaBanner: React.FunctionComponent = React.memo(() => (
   <BannerContainer aria-label="Voltz alpha - Currently in alpha launch. LFG.">
     <BannerBox>
       <Text />
@@ -31,5 +31,3 @@ const AlphaBanner: React.FunctionComponent = React.memo(() => (
     </BannerBox>
   </BannerContainer>
 ));
-
-export default AlphaBanner;

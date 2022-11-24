@@ -46,7 +46,7 @@ export type BorrowProps = {
   fixedApr?: number;
 };
 
-const BorrowForm: React.FunctionComponent<BorrowProps> = ({
+export const BorrowForm: React.FunctionComponent<BorrowProps> = ({
   protocol,
   endDate,
   errors,
@@ -139,18 +139,6 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
           errorText={errors['margin']}
         />
       </Box>
-
-      {/* <SubmitControls
-        approvalsNeeded={approvalsNeeded}
-        isFormValid={isFormValid}
-        isTradeVerified={isTradeVerified}
-        onCancel={onCancel}
-        onSubmit={onSubmit}
-        protocol={protocol}
-        tokenApprovals={tokenApprovals}
-        tradeInfoErrorMessage={tradeInfoErrorMessage}
-        underlyingTokenName={underlyingTokenName}
-      /> */}
       <SubmitControls
         approvalsNeeded={approvalsNeeded}
         hintState={hintState}
@@ -160,7 +148,6 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
         onSubmit={onSubmit}
         gaButtonId={getPoolButtonId('', '', '', Agents.VARIABLE_TRADER, true, '')}
         submitButtonState={submitButtonState}
-        // swapInfoLoading={swapInfoLoading}
         tokenApprovals={tokenApprovals}
         tradeInfoErrorMessage={tradeInfoErrorMessage}
         underlyingTokenName={underlyingTokenName}
@@ -168,5 +155,3 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
     </FormPanel>
   );
 };
-
-export default BorrowForm;

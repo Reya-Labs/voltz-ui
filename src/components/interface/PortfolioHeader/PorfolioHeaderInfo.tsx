@@ -6,14 +6,13 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import { isUndefined } from 'lodash';
 import { useAgent } from '../../../hooks';
-import PortfolioHeaderValue from './PortfolioHeaderValue';
-import PortfolioHeaderBox from './PortfolioHeaderBox';
+import { PortfolioHeaderValue } from './PortfolioHeaderValue';
+import { PortfolioHeaderBox } from './PortfolioHeaderBox';
 import { Agents } from '../../../contexts';
 
 export type PortfolioHeaderInfoProps = {
   currencyCode?: string;
   currencySymbol?: string;
-  feesApy?: number;
   netMargin?: number;
   netMarginDiff?: number;
   netRatePaying?: number;
@@ -29,10 +28,9 @@ const listItemStyles: SystemStyleObject<Theme> = {
   },
 };
 
-const PortfolioHeaderInfo = ({
+export const PortfolioHeaderInfo = ({
   currencyCode = '',
   currencySymbol = '',
-  feesApy,
   netMargin,
   netMarginDiff,
   netRatePaying,

@@ -7,7 +7,7 @@ type AccruedRatesProps = {
   variableRate?: number;
 };
 
-const AccruedRates = ({ positionType, avgFixedRate, variableRate }: AccruedRatesProps) => {
+export const AccruedRates = ({ positionType, avgFixedRate, variableRate }: AccruedRatesProps) => {
   const renderValue = () => {
     if (variableRate && avgFixedRate) {
       if (positionType === 1) {
@@ -26,5 +26,3 @@ const AccruedRates = ({ positionType, avgFixedRate, variableRate }: AccruedRates
     </Typography>
   );
 };
-
-export default AccruedRates;

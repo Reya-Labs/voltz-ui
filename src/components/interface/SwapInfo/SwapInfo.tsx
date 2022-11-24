@@ -34,7 +34,7 @@ export type SwapInfoProps = {
   userSimulatedVariableApyUpdated?: boolean;
 };
 
-const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
+export const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
   balance,
   formAction,
   currentPositionMarginRequirement,
@@ -124,26 +124,15 @@ const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
       {mode === SwapFormModes.EDIT_MARGIN &&
         !isUndefined(currentPositionMarginRequirement) &&
         !isUndefined(positionMargin) && (
-          <>
-            {/* {mode !== SwapFormModes.EDIT_MARGIN && (
-            <Box component={'hr'} sx={{ 
-              border: 'none',
-              borderBottom: `1px solid ${colors.lavenderWeb.darken045}`,
-              margin: (theme) => `${theme.spacing(4)} 0`,
-            }}/>
-          )} */}
-            <Box sx={bottomSpacing}>
-              <SwapSummaryEditMargin
-                balance={balance}
-                currentPositionMarginRequirement={currentPositionMarginRequirement}
-                positionMargin={positionMargin}
-                underlyingTokenName={underlyingTokenName}
-              />
-            </Box>
-          </>
+          <Box sx={bottomSpacing}>
+            <SwapSummaryEditMargin
+              balance={balance}
+              currentPositionMarginRequirement={currentPositionMarginRequirement}
+              positionMargin={positionMargin}
+              underlyingTokenName={underlyingTokenName}
+            />
+          </Box>
         )}
     </FormPanel>
   );
 };
-
-export default SwapInfo;

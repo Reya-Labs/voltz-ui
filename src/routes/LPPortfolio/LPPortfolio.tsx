@@ -15,8 +15,8 @@ import {
 import { useAgent, useAMMs, usePositions, useWallet } from '../../hooks';
 
 import { Page } from '@components/interface';
-import ConnectedMintBurnForm from '../../components/containers/ConnectedMintBurnForm/ConnectedMintBurnForm';
-import ConnectedPositionTable from '../../components/containers/ConnectedPositionTable/ConnectedPositionTable';
+import { ConnectedMintBurnForm } from '../../components/containers/ConnectedMintBurnForm/ConnectedMintBurnForm';
+import { ConnectedPositionTable } from '../../components/containers/ConnectedPositionTable/ConnectedPositionTable';
 
 const LPPortfolio: React.FunctionComponent = () => {
   const [amm, setAMM] = useState<AMM>();

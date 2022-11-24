@@ -2,7 +2,7 @@ import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { AgentProvider } from '../../../contexts';
-import ToggleButton from './ToggleButton';
+import { ToggleButton } from './ToggleButton';
 
 export default {
   title: 'Atomic/ToggleButton',

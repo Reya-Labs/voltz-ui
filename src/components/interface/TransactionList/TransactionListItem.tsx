@@ -51,7 +51,7 @@ const iconStyles: SystemStyleObject<Theme> = {
   height: '16px',
 };
 
-const TransactionListItem = ({
+export const TransactionListItem = ({
   listId,
   onOpenClose,
   open = false,
@@ -115,5 +115,3 @@ const TransactionListItem = ({
     </ListItem>
   );
 };
-
-export default TransactionListItem;

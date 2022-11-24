@@ -2,7 +2,7 @@ import React from 'react';
 import { DateTime, Duration } from 'luxon';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import MaturityInformation from './MaturityInformation';
+import { MaturityInformation } from './MaturityInformation';
 
 export default {
   title: 'Composite/MaturityInformation',

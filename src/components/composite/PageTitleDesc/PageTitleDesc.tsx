@@ -6,7 +6,7 @@ interface PageTitleDescProps {
   desc: string;
 }
 
-const PageTitleDesc = ({ title, desc }: PageTitleDescProps) => (
+export const PageTitleDesc = ({ title, desc }: PageTitleDescProps) => (
   <>
     <Typography variant="h1">{title}</Typography>
     <Typography
@@ -21,5 +21,3 @@ const PageTitleDesc = ({ title, desc }: PageTitleDescProps) => (
     </Typography>
   </>
 );
-
-export default PageTitleDesc;

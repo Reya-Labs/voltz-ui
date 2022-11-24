@@ -55,7 +55,7 @@ export type MintBurnFormProps = {
   fixedApr?: number;
 };
 
-const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
+export const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   approvalsNeeded = false,
   balance,
   currentPositionMarginRequirement,
@@ -193,5 +193,3 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
     </FormPanel>
   );
 };
-
-export default MintBurnForm;

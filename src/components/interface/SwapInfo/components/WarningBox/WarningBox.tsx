@@ -7,7 +7,7 @@ export type WarningBoxProps = {
   warningText: string;
 };
 
-const WarningBox: React.FunctionComponent<WarningBoxProps> = ({ warningText }) => {
+export const WarningBox: React.FunctionComponent<WarningBoxProps> = ({ warningText }) => {
   return (
     <Box sx={{ bgcolor: colors.orangeYellow.darken030, borderRadius: 2 }}>
       <Typography
@@ -37,5 +37,3 @@ const WarningBox: React.FunctionComponent<WarningBoxProps> = ({ warningText }) =
     </Box>
   );
 };
-
-export default WarningBox;

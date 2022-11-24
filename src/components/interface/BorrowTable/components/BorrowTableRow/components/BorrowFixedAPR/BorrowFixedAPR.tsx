@@ -9,7 +9,10 @@ export type BorrowBorrowFixedAPR = {
   fixedApr: number | null | void;
 };
 
-const BorrowFixedAPR: React.FunctionComponent<BorrowBorrowFixedAPR> = ({ loading, fixedApr }) => {
+export const BorrowFixedAPR: React.FunctionComponent<BorrowBorrowFixedAPR> = ({
+  loading,
+  fixedApr,
+}) => {
   const renderValue = () => {
     if (loading) {
       return '---';
@@ -39,5 +42,3 @@ const BorrowFixedAPR: React.FunctionComponent<BorrowBorrowFixedAPR> = ({ loading
     </TableCell>
   );
 };
-
-export default BorrowFixedAPR;

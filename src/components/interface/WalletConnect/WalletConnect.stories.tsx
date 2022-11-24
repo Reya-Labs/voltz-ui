@@ -2,7 +2,7 @@ import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { Wallet } from '../../../contexts';
-import WalletConnect from './WalletConnect';
+import { WalletConnect } from './WalletConnect';
 
 export default {
   title: 'Interface/WalletConnect',

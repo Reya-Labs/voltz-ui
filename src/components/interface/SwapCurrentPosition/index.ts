@@ -1,1 +1,1 @@
-export { default as SwapCurrentPosition } from './SwapCurrentPosition';
+export * from './SwapCurrentPosition';

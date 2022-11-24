@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import isUndefined from 'lodash/isUndefined';
 
-import IconLabel from '../IconLabel/IconLabel';
-import MaskedIntegerField from '../MaskedIntegerField/MaskedIntegerField';
-import InputTokenLabel from '../InputTokenLabel/InputTokenLabel';
+import { IconLabel } from '../IconLabel/IconLabel';
+import { MaskedIntegerField } from '../MaskedIntegerField/MaskedIntegerField';
+import { InputTokenLabel } from '../InputTokenLabel/InputTokenLabel';
 import { formatCurrency, toUSFormat } from '../../../utilities';
 import { HealthFactorText } from '@components/composite';
 import { usePositionContext } from '../../../contexts';
@@ -22,7 +22,7 @@ export type MarginAmountProps = {
   error?: string;
 };
 
-const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
+export const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
   balance,
   underlyingTokenName,
   defaultMargin,
@@ -139,5 +139,3 @@ const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
     />
   );
 };
-
-export default MarginAmount;

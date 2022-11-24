@@ -7,7 +7,9 @@ export type WalletAddressDisplayProps = {
   address: string | null;
 };
 
-const WalletAddressDisplay: React.FunctionComponent<WalletAddressDisplayProps> = ({ address }) => {
+export const WalletAddressDisplay: React.FunctionComponent<WalletAddressDisplayProps> = ({
+  address,
+}) => {
   if (!address) {
     return null;
   }
@@ -21,5 +23,3 @@ const WalletAddressDisplay: React.FunctionComponent<WalletAddressDisplayProps> =
     </Typography>
   );
 };
-
-export default WalletAddressDisplay;

@@ -41,7 +41,7 @@ const errorLabelStyles: SystemStyleObject<Theme> = {
   marginTop: (theme) => theme.spacing(1),
 };
 
-const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
+export const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
   bottomText,
   dynamic,
   error,
@@ -167,5 +167,3 @@ const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
     </FormControl>
   );
 };
-
-export default MaskedIntegerField;

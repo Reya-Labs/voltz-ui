@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import AlphaBanner from './AlphaBanner';
+import { AlphaBanner } from './AlphaBanner';
 
 export default {
   title: 'Composite/AlphaBanner',

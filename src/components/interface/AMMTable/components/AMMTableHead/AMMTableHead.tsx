@@ -6,7 +6,7 @@ import { SystemStyleObject, Theme } from '@mui/system';
 import { Typography } from '@components/atomic';
 import { labels } from '../../constants';
 
-const AMMTableHead: React.FunctionComponent = () => {
+export const AMMTableHead: React.FunctionComponent = () => {
   const cellSx: SystemStyleObject<Theme> = {
     '&.MuiTableCell-root': {
       borderBottom: 0,
@@ -47,5 +47,3 @@ const AMMTableHead: React.FunctionComponent = () => {
     </TableHead>
   );
 };
-
-export default AMMTableHead;

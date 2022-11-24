@@ -1,1 +1,1 @@
-export { default as WalletOptionButton } from './WalletOptionButton/WalletOptionButton';
+export * from './WalletOptionButton/WalletOptionButton';

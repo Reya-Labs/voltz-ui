@@ -6,7 +6,7 @@ import { NavLink } from './NavLink/NavLink';
 import { iconSx } from './NavLink/style';
 import { colors } from '../../../theme';
 
-const Nav: React.FunctionComponent = React.memo(() => (
+export const Nav: React.FunctionComponent = React.memo(() => (
   <Box
     sx={{
       display: 'flex',
@@ -69,5 +69,3 @@ const Nav: React.FunctionComponent = React.memo(() => (
     </NavLink>
   </Box>
 ));
-
-export default Nav;

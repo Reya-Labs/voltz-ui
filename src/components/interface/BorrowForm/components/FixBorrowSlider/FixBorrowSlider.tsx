@@ -36,7 +36,7 @@ const errorLabelStyles: SystemStyleObject<Theme> = {
   marginTop: (theme) => theme.spacing(-2),
 };
 
-const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
+export const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
   variableDebt,
   underlyingTokenName,
   selectedFixedDebt,
@@ -163,13 +163,11 @@ const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
         components={{ Thumb: FixBorrowThumbComponent }}
         defaultValue={0}
         value={sliderValue ?? selectedFixedDebtPercentage}
-        // valueLabelDisplay="auto"
         step={2.5}
         marks
         min={0}
         max={100}
         onChange={handleChangeCommitted}
-        // onChangeCommitted={handleChangeCommitted}
         disabled={variableDebt.loading}
         sx={{ ...colorStyleOverrides() }}
       />
@@ -182,5 +180,3 @@ const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
     </Box>
   );
 };
-
-export default FixBorrowSlider;

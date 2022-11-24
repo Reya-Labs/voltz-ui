@@ -18,7 +18,7 @@ export type ConnectedPositionTableProps = {
   handleCompletedSettling: () => void;
 };
 
-const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTableProps> = ({
+export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTableProps> = ({
   onSelectItem,
   agent,
   handleCompletedSettling,
@@ -141,12 +141,7 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTableProp
 
     return (
       <>
-        <PortfolioHeader
-          currencyCode="USD"
-          currencySymbol="$"
-          feesApy={agent === Agents.LIQUIDITY_PROVIDER ? 3.55 : undefined}
-          portfolioData={portfolioData}
-        />
+        <PortfolioHeader currencyCode="USD" currencySymbol="$" portfolioData={portfolioData} />
         <Box sx={{ marginTop: (theme) => theme.spacing(14) }}>
           <PositionTable
             positions={positionsByAgentGroup}
@@ -183,5 +178,3 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTableProp
 
   return renderContent();
 };
-
-export default ConnectedPositionTable;

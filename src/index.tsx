@@ -19,7 +19,7 @@ import store from './store';
 import { VoltzGraphProvider } from './graphql';
 import { ThemeProvider } from './theme';
 import { AgentProvider, AMMsProvider, WalletProvider } from './contexts';
-import App from './App';
+import { App } from './App';
 
 try {
   if (process.env.NODE_ENV !== 'development') {

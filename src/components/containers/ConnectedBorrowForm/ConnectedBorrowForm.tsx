@@ -19,13 +19,15 @@ import {
   Agents,
   usePositionContext,
 } from '../../../contexts';
-import isBorrowing from '../../../utilities/isBorrowing';
+import { isBorrowing } from '../../../utilities';
 
 export type ConnectedBorrowFormProps = {
   onReset: () => void;
 };
 
-const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = ({ onReset }) => {
+export const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = ({
+  onReset,
+}) => {
   const { amm: borrowAmm } = useBorrowAMMContext();
   const { amm } = useAMMContext();
   const form = useBorrowFormContext();
@@ -161,5 +163,3 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
     </>
   );
 };
-
-export default ConnectedBorrowForm;

@@ -8,7 +8,7 @@ import {
   MintBurnFormProvider,
   useMintBurnForm,
 } from '../../../contexts';
-import MintBurnInfo from './MintBurnInfo';
+import { MintBurnInfo } from './MintBurnInfo';
 
 import { AMM } from '@voltz-protocol/v1-sdk';
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { AgentProvider } from '../../../contexts';
-import SummaryPanel from './SummaryPanel';
+import { SummaryPanel } from './SummaryPanel';
 
 export default {
   title: 'Atomic/SummaryPanel',

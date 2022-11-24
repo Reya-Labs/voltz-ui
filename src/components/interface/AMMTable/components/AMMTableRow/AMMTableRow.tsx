@@ -23,7 +23,7 @@ export type AMMTableRowProps = {
   onSelect: () => void;
 };
 
-const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({
+export const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({
   protocol,
   isBorrowing,
   startDate,
@@ -123,5 +123,3 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({
     </TableRow>
   );
 };
-
-export default AMMTableRow;

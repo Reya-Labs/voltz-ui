@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { colors } from '../../../theme';
 import { Grid } from '../../../components/layout/Grid';
 import { Pill } from '../../../components/atomic/Pill';
-import Typography from '../../../components/atomic/Typography/Typography';
+import { Typography } from '../../../components/atomic/Typography/Typography';
 
 export const ContainerBox = styled(Box)`
   width: 724px;

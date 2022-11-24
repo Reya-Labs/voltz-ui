@@ -15,7 +15,7 @@ export type IconLabelProps = {
   iconSx?: SystemStyleObject<Theme>;
 };
 
-const IconLabel: React.FunctionComponent<IconLabelProps> = ({
+export const IconLabel: React.FunctionComponent<IconLabelProps> = ({
   label,
   icon,
   info,
@@ -123,5 +123,3 @@ const IconLabel: React.FunctionComponent<IconLabelProps> = ({
     </>
   );
 };
-
-export default IconLabel;

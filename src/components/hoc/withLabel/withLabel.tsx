@@ -14,7 +14,7 @@ export type WithLabelProps = {
 };
 
 // wrapper that gives the label and optionally does the tooltip
-const withLabel = <T,>(WrappedComponent: React.FunctionComponent<T>) => {
+export const withLabel = <T,>(WrappedComponent: React.FunctionComponent<T>) => {
   const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
   const ComponentWithLabel: React.FunctionComponent<T & WithLabelProps> = ({
@@ -62,5 +62,3 @@ const withLabel = <T,>(WrappedComponent: React.FunctionComponent<T>) => {
 
   return ComponentWithLabel;
 };
-
-export default withLabel;

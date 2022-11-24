@@ -9,7 +9,7 @@ import { findCurrentAmm, getRowButtonId, isBorrowing } from '../../../utilities'
 import { Panel } from '@components/atomic';
 import { PositionTableHead, PositionTableRow } from './components';
 import { Agents, AMMProvider, PortfolioContext } from '../../../contexts';
-import TransactionList from '../TransactionList/TransactionList';
+import { TransactionList } from '../TransactionList/TransactionList';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import { useAgent, useAMMs } from '../../../hooks';
@@ -21,7 +21,7 @@ export type PositionTableProps = {
   portfolioData: PortfolioContext;
 };
 
-const PositionTable: React.FunctionComponent<PositionTableProps> = ({
+export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   positions,
   onSelectItem,
   onSettle,
@@ -168,5 +168,3 @@ const PositionTable: React.FunctionComponent<PositionTableProps> = ({
     </>
   );
 };
-
-export default PositionTable;

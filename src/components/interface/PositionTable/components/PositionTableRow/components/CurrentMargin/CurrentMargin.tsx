@@ -17,7 +17,7 @@ export type CurrentMarginProps = {
   isSettled: boolean;
 };
 
-const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({
+export const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({
   marginEdit,
   margin,
   accruedCashflow,
@@ -85,9 +85,3 @@ const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({
     </TableCell>
   );
 };
-
-// border: 1px solid #5C0026;
-// box-sizing: border-box;
-// border-radius: 4px;
-
-export default CurrentMargin;

@@ -12,7 +12,7 @@ export type DebtProps = {
   tokenName: string | undefined;
 };
 
-const Debt: React.FunctionComponent<DebtProps> = ({
+export const Debt: React.FunctionComponent<DebtProps> = ({
   debtInUSD,
   loadingDebt,
   debtInToken,
@@ -69,5 +69,3 @@ const Debt: React.FunctionComponent<DebtProps> = ({
     </TableCell>
   );
 };
-
-export default Debt;

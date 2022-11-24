@@ -15,7 +15,7 @@ export type RateOptionsProps = {
   onChangeFixedHigh: RateOptionsInputProps['onChange'];
 };
 
-const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
+export const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
   defaultFixedLow,
   defaultFixedHigh,
   fixedLow,
@@ -58,5 +58,3 @@ const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
     </Box>
   );
 };
-
-export default RateOptions;

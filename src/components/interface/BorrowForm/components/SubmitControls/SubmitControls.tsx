@@ -43,7 +43,7 @@ const Text = ({ bold, children, green, red }: TextProps) => (
   </Box>
 );
 
-const SubmitControls = ({
+export const SubmitControls = ({
   approvalsNeeded,
   isFormValid,
   isTradeVerified,
@@ -190,5 +190,3 @@ const SubmitControls = ({
     </>
   );
 };
-
-export default SubmitControls;

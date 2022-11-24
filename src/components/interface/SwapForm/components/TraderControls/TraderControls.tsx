@@ -10,7 +10,7 @@ export type TraderControlsProps = {
   onChangeAgent: (agent: Agents) => void;
 };
 
-const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
+export const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
   agent,
   isEdit,
   onChangeAgent,
@@ -73,5 +73,3 @@ const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
     </Box>
   );
 };
-
-export default TraderControls;

@@ -6,7 +6,7 @@ import { AgentProps, Agents } from '../../../contexts';
 import { useAgentWithOverride } from '../../../hooks';
 import { SxProps } from '@mui/system';
 
-function Button<C extends React.ElementType>({
+export function Button<C extends React.ElementType>({
   agent: agentOverride,
   selected,
   link,
@@ -235,5 +235,3 @@ function Button<C extends React.ElementType>({
     />
   );
 }
-
-export default Button;

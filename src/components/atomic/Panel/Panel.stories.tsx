@@ -1,8 +1,8 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import Typography, { TypographyProps } from '../Typography/Typography';
-import Panel from './Panel';
+import { Typography, TypographyProps } from '../Typography/Typography';
+import { Panel } from './Panel';
 
 export default {
   title: 'Atomic/Panel',

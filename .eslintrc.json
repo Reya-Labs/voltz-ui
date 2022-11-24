@@ -16,6 +16,7 @@
   },
   "ignorePatterns": ["src/graphql/generated.ts"],
   "rules": {
+    "import/no-default-export": ["warn"],
     "react/jsx-key": ["error"],
     "react/forbid-dom-props": ["warn", { "forbid": [{
       "propName": "style",

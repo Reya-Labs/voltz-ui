@@ -83,5 +83,3 @@ export const FormPanel: React.FunctionComponent<FormPanelProps> = ({
     </Panel>
   );
 };
-
-export default FormPanel;

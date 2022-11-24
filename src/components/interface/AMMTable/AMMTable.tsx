@@ -17,7 +17,7 @@ export type AMMTableProps = {
   onSelectItem: (amm: AMM) => void;
 };
 
-const AMMTable: React.FunctionComponent<AMMTableProps> = ({ onSelectItem }) => {
+export const AMMTable: React.FunctionComponent<AMMTableProps> = ({ onSelectItem }) => {
   const { amms, loading, error } = useAMMs();
   const { agent } = useAgent();
 
@@ -64,5 +64,3 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({ onSelectItem }) => {
     </Panel>
   );
 };
-
-export default AMMTable;

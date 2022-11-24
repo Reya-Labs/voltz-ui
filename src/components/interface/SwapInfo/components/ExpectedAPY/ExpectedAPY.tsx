@@ -138,7 +138,6 @@ export const ExpectedAPY = ({
       >
         <Box
           sx={{
-            // display: 'inline-block',
             padding: (theme) => theme.spacing(4),
             marginRight: (theme) => theme.spacing(16),
             maxWidth: '80px',
@@ -165,7 +164,6 @@ export const ExpectedAPY = ({
         </Box>
         <Box
           sx={{
-            // display: 'inline-block',
             padding: (theme) => theme.spacing(4),
             maxWidth: '100px',
             width: '100px',
@@ -201,5 +199,3 @@ export const ExpectedAPY = ({
     </>
   );
 };
-
-export default ExpectedAPY;

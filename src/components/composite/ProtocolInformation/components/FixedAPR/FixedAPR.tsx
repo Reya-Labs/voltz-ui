@@ -12,22 +12,7 @@ export type FixedAPRProps = {
   fixedApr?: number;
 };
 
-const FixedAPR: React.FunctionComponent<FixedAPRProps> = ({ agent, fixedApr }) => {
-  // const { fixedApr } = useAMMContext();
-  // const { result, loading, call } = fixedApr;
-
-  // useEffect(() => {
-  //   call();
-  // }, [call]);
-
-  const renderValue = () => {
-    if (isUndefined(fixedApr)) {
-      return <Box sx={{ fontSize: 18 }}>Loading...</Box>;
-    }
-
-    return `${formatNumber(fixedApr)}%`;
-  };
-
+export const FixedAPR: React.FunctionComponent<FixedAPRProps> = ({ agent, fixedApr }) => {
   return (
     <Typography
       variant="h3"
@@ -35,9 +20,11 @@ const FixedAPR: React.FunctionComponent<FixedAPRProps> = ({ agent, fixedApr }) =
       agentStyling
       agent={agent}
     >
-      {renderValue()}
+      {isUndefined(fixedApr) ? (
+        <Box sx={{ fontSize: 18 }}>Loading...</Box>
+      ) : (
+        `${formatNumber(fixedApr)}%`
+      )}
     </Typography>
   );
 };
-
-export default FixedAPR;

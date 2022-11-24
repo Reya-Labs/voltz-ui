@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Typography from '../../../../../components/atomic/Typography/Typography';
+import { Typography } from '../../../../../components/atomic/Typography/Typography';
 import { Tag } from '../Tag/Tag';
 
 export const MellowLPEntryContainerBox = styled(Box)`

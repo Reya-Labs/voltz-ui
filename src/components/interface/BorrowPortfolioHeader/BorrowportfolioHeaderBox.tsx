@@ -22,7 +22,7 @@ const titleStyles: SystemStyleObject<Theme> = {
   marginTop: (theme) => theme.spacing(2),
 };
 
-const BorrowPortfolioHeaderBox = ({
+export const BorrowPortfolioHeaderBox = ({
   aggregatedDebt,
   loading,
   currencyCode,
@@ -43,4 +43,3 @@ const BorrowPortfolioHeaderBox = ({
     </Box>
   );
 };
-export default BorrowPortfolioHeaderBox;

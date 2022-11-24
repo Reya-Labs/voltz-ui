@@ -16,7 +16,7 @@ export type SwapCurrentPositionProps = {
   gaButtonId?: string;
 };
 
-const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionProps> = ({
+export const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionProps> = ({
   formMode,
   onPortfolio,
   position,
@@ -140,5 +140,3 @@ const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionProps> = (
     </FormPanel>
   );
 };
-
-export default SwapCurrentPosition;

@@ -12,7 +12,7 @@ import { BorrowAMMProvider, PositionProvider } from '../../../contexts';
 import { labelsFixed, labelsVariable, BorrowAMMTableDatum } from './types';
 import { BorrowTableHead } from './components';
 import { DateTime } from 'luxon';
-import BorrowTableRow from './components/BorrowTableRow/BorrowTableRow';
+import { BorrowTableRow } from './components/BorrowTableRow/BorrowTableRow';
 import { BorrowAMM, Position } from '@voltz-protocol/v1-sdk';
 
 export type BorrowTableProps = {
@@ -92,6 +92,7 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
     );
   };
 
+  // todo: FB -> incorrect usage of map
   const renderVariableTable = () => {
     const liveMarkets = tableData.map((datum, index) => {
       if (datum && DateTime.now() < datum.endDate) {

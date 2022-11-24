@@ -20,7 +20,7 @@ export type PositionTableRowProps = {
   onSelect: (mode: 'margin' | 'liquidity' | 'notional') => void;
 };
 
-const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
+export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
   position,
   positionInfo,
   index,
@@ -135,5 +135,3 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     </TableRow>
   );
 };
-
-export default PositionTableRow;

@@ -5,7 +5,6 @@ import { SystemStyleObject, Theme } from '../../../theme';
 import { formatCurrency, formatNumber } from '../../../utilities';
 
 export type BorrowPortfolioSummaryProps = {
-  commonOverrides: SystemStyleObject<Theme>;
   currencyCode: string;
   currencySymbol: string;
   fixedDebt?: number;
@@ -14,8 +13,7 @@ export type BorrowPortfolioSummaryProps = {
   variablePositionsCount?: number;
 };
 
-const BorrowPortfolioSummary = ({
-  commonOverrides,
+export const BorrowPortfolioSummary = ({
   currencyCode,
   currencySymbol,
   fixedDebt,
@@ -188,5 +186,3 @@ const BorrowPortfolioSummary = ({
     </>
   );
 };
-
-export default BorrowPortfolioSummary;

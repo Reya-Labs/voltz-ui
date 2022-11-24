@@ -8,8 +8,8 @@ import { Agents, AMMProvider, PositionProvider, SwapFormProvider } from '../../c
 import { PageTitleDesc } from '@components/composite';
 import { useAgent, usePositions, useWallet } from '../../hooks';
 import { Page, SwapFormModes } from '@components/interface';
-import ConnectedSwapForm from '../../components/containers/ConnectedSwapForm/ConnectedSwapForm';
-import AMMTable from '../../components/interface/AMMTable/AMMTable';
+import { ConnectedSwapForm } from '../../components/containers/ConnectedSwapForm/ConnectedSwapForm';
+import { AMMTable } from '../../components/interface/AMMTable/AMMTable';
 
 const TraderPools: React.FunctionComponent = () => {
   const [formMode, setFormMode] = useState<SwapFormModes>();

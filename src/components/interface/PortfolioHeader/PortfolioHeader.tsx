@@ -1,20 +1,18 @@
 import Box from '@mui/material/Box';
-import PortfolioHeaderInfo from './PorfolioHeaderInfo';
-import PortfolioHeaderHealth from './PortfolioHeaderHealth';
+import { PortfolioHeaderInfo } from './PorfolioHeaderInfo';
+import { PortfolioHeaderHealth } from './PortfolioHeaderHealth';
 import { PortfolioContext } from '../../../contexts';
 import { NetNotional } from './NetNotional/NetNotional';
 
 export type PortfolioHeaderProps = {
   currencyCode?: string;
   currencySymbol?: string;
-  feesApy?: number;
   portfolioData: PortfolioContext;
 };
 
-const PortfolioHeader = ({
+export const PortfolioHeader = ({
   currencyCode = '',
   currencySymbol = '',
-  feesApy,
   portfolioData,
 }: PortfolioHeaderProps) => {
   return (
@@ -35,7 +33,6 @@ const PortfolioHeader = ({
           <PortfolioHeaderInfo
             currencyCode={currencyCode}
             currencySymbol={currencySymbol}
-            feesApy={feesApy}
             netMargin={portfolioData.totalMargin}
             netMarginDiff={portfolioData.totalAccruedCashflow}
             netRatePaying={portfolioData.netPayingRate}
@@ -53,5 +50,3 @@ const PortfolioHeader = ({
     </>
   );
 };
-
-export default PortfolioHeader;

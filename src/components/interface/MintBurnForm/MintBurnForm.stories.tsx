@@ -11,7 +11,7 @@ import {
   useMintBurnForm,
   AMMProvider,
 } from '../../../contexts';
-import MintBurnForm from './MintBurnForm';
+import { MintBurnForm } from './MintBurnForm';
 import { useTokenApproval } from '../../../hooks';
 import { AMM } from '@voltz-protocol/v1-sdk';
 

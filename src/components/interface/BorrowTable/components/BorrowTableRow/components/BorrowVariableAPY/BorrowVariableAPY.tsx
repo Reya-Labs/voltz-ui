@@ -9,7 +9,7 @@ export type BorrowVariableAPYProps = {
   variableApy: number | null | void;
 };
 
-const BorrowVariableAPY: React.FunctionComponent<BorrowVariableAPYProps> = ({
+export const BorrowVariableAPY: React.FunctionComponent<BorrowVariableAPYProps> = ({
   loading,
   variableApy,
 }) => {
@@ -42,5 +42,3 @@ const BorrowVariableAPY: React.FunctionComponent<BorrowVariableAPYProps> = ({
     </TableCell>
   );
 };
-
-export default BorrowVariableAPY;

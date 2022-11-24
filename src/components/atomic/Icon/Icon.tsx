@@ -9,7 +9,7 @@ export type IconProps = SvgIconProps & {
   name: Icons;
 };
 
-const Icon: React.FunctionComponent<IconProps> = ({ name, sx, ...props }) => {
+export const Icon: React.FunctionComponent<IconProps> = ({ name, sx, ...props }) => {
   const NamedIcon = iconMap[name];
 
   const extraProps = (iconName: Icons) => {
@@ -101,5 +101,3 @@ const Icon: React.FunctionComponent<IconProps> = ({ name, sx, ...props }) => {
     <SvgIcon component={NamedIcon} sx={[defaultSx, ...getSx()]} {...extraProps(name)} {...props} />
   );
 };
-
-export default Icon;

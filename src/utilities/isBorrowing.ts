@@ -3,8 +3,6 @@
  * @param {number} rateOracleProtocolId - The ID of the rate oracle protocol.
  * @returns A boolean value.
  */
-const isBorrowing = (rateOracleProtocolId: number): boolean => {
+export const isBorrowing = (rateOracleProtocolId: number): boolean => {
   return rateOracleProtocolId === 5 || rateOracleProtocolId === 6;
 };
-
-export default isBorrowing;

@@ -21,7 +21,10 @@ export const walletOptions: WalletOption[] = [
   { title: 'Disconnect', name: 'disconnect' },
 ];
 
-const WalletSelect: React.FunctionComponent<WalletSelectProps> = ({ wallet, onSelectWallet }) => {
+export const WalletSelect: React.FunctionComponent<WalletSelectProps> = ({
+  wallet,
+  onSelectWallet,
+}) => {
   return (
     <>
       <Typography variant="h6" sx={{ marginBottom: (theme) => theme.spacing(6) }}>
@@ -47,5 +50,3 @@ const WalletSelect: React.FunctionComponent<WalletSelectProps> = ({ wallet, onSe
     </>
   );
 };
-
-export default WalletSelect;

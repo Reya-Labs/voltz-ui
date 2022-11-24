@@ -10,7 +10,7 @@ import {
   SwapFormSubmitButtonStates,
   useSwapFormContext,
 } from '../../../contexts';
-import SwapForm from './SwapForm';
+import { SwapForm } from './SwapForm';
 import { useTokenApproval } from '../../../hooks';
 import { SwapFormActions, SwapFormModes } from './types';
 

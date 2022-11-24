@@ -1,1 +1,1 @@
-export { default as MintBurnInfo } from './MintBurnInfo';
+export * from './MintBurnInfo';

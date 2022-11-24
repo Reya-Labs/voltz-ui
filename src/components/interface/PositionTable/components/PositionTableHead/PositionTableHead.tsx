@@ -42,7 +42,7 @@ const labelStyles: SystemStyleObject<Theme> = {
   verticalAlign: 'middle',
 };
 
-const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
+export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
   currencyCode = '',
   currencySymbol = '',
   feesPositive = true,
@@ -178,5 +178,3 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
     </Box>
   );
 };
-
-export default PositionTableHead;

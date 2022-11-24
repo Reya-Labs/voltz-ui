@@ -43,7 +43,7 @@ export type SubmitControlsProps = {
   underlyingTokenName?: string;
 };
 
-const SubmitControls = ({
+export const SubmitControls = ({
   approvalsNeeded,
   hintState,
   isFormValid,
@@ -204,5 +204,3 @@ const SubmitControls = ({
     </>
   );
 };
-
-export default SubmitControls;
