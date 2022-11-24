@@ -4,9 +4,9 @@ import { setPageTitle } from '../../utilities';
 import { Page } from '@components/interface';
 import { useCurrentSeason, useWallet } from '../../hooks';
 import Leaderboard from './Leaderboard/Leaderboard';
-import { CommunitySBT, RankType } from '@voltz-protocol/v1-sdk/';
+import { RankType } from '@voltz-protocol/v1-sdk/';
 import { isUndefined } from 'lodash';
-import { getSDKInitParams } from '../Profile/helpers';
+import { getCommunitySbt } from '../Profile/helpers';
 const PER_PAGE = 10;
 
 const TradingLeague: React.FunctionComponent = () => {
@@ -35,14 +35,11 @@ const TradingLeague: React.FunctionComponent = () => {
   const fetchRankings = async () => {
     setLoading(true);
     let result: RankType[] = [];
-    const params = getSDKInitParams(signer);
-    if (params) {
-      const SBT = new CommunitySBT(params);
-      result = await SBT.getRanking({
-        seasonStart: season.startDate.toSeconds(),
-        seasonEnd: season.endDate.toSeconds(),
-      });
-    }
+    const SBT = getCommunitySbt(signer);
+    result = await SBT.getRanking({
+      seasonStart: season.startDate.toSeconds(),
+      seasonEnd: season.endDate.toSeconds(),
+    });
     setUserRanking(result, wallet.account);
     setRankings(result);
     setLoading(false);
