@@ -8,7 +8,6 @@ import {
   FixedBorrower,
   Ecosystem,
   ProfileV1,
-  EcosystemV1,
   Portfolio,
   TraderPools,
   LPPools,
@@ -64,17 +63,7 @@ const App = () => {
           <Route path={routes.PORTFOLIO} element={<Portfolio />} />
           <Route path={routes.LP_POOLS} element={<LPPools />} />
           <Route path={routes.LP_PORTFOLIO} element={<LPPortfolio />} />
-          <Route
-            path={routes.LP_OPTIMISERS}
-            element={
-              process.env.REACT_APP_PRODUCTS_P2 &&
-              process.env.REACT_APP_PRODUCTS_P2 !== `UNPROVIDED` ? (
-                <Ecosystem />
-              ) : (
-                <EcosystemV1 />
-              )
-            }
-          />
+          <Route path={routes.LP_OPTIMISERS} element={<Ecosystem />} />
           <Route path={routes.BORROW_POS} element={<FixedBorrower />} />
           <Route
             path={routes.PROFILE}
