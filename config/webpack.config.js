@@ -250,7 +250,6 @@ module.exports = function (webpackEnv) {
         '@graphql': 'src/graphql',
         '@utilities': 'src/utilities',
         '@theme': 'src/theme',
-        '@factories': 'src/factories',
         // Allows for better profiling with ReactDevTools
         ...(isEnvProductionProfile && {
           'react-dom$': 'react-dom/profiling',

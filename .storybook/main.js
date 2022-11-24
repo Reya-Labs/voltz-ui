@@ -35,7 +35,6 @@ module.exports = {
     config.resolve.alias['@store'] = path.resolve(path.dirname(__dirname), 'src/store');
     config.resolve.alias['@graphql'] = path.resolve(path.dirname(__dirname), 'src/graphql');
     config.resolve.alias['@utilities'] = path.resolve(path.dirname(__dirname), 'src/utilities');
-    config.resolve.alias['@factories'] = path.resolve(path.dirname(__dirname), 'src/factories');
     return config;
   },
   features: {
