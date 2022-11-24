@@ -6,7 +6,7 @@ import { Typography, Button } from '@components/atomic';
 import { isUndefined, isNull } from 'lodash';
 import { formatCurrency, formatNumber } from '../../../../../../../utilities';
 
-import { colors } from '@theme';
+import { colors } from '../../../../../../../theme';
 
 export type CurrentMarginProps = {
   marginEdit?: boolean;

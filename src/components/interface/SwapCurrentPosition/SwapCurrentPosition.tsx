@@ -6,7 +6,7 @@ import { FormPanel, SwapFormModes } from '@components/interface';
 import { formatCurrency } from '../../../utilities';
 import { BigNumber } from 'ethers';
 import { usePositionContext } from '../../../contexts';
-import { colors } from '@theme';
+import { colors } from '../../../theme';
 import { isUndefined } from 'lodash';
 
 export type SwapCurrentPositionProps = {

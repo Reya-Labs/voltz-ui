@@ -4,7 +4,7 @@ import MuiTypography, { TypographyProps as MuiTypographyProps } from '@mui/mater
 import { AgentProps, Agents } from '../../../contexts';
 import { useAgentWithOverride } from '../../../hooks';
 import { withLabel } from '../../hoc';
-import { SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '../../../theme';
 
 export type TypographyProps = React.ComponentProps<typeof Typography>;
 

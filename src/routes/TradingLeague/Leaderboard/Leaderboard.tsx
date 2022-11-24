@@ -3,7 +3,7 @@ import { Typography } from '@components/atomic';
 import { Grid } from '@components/layout';
 import { Box, Button } from '@mui/material';
 import { DateTime } from 'luxon';
-import { colors } from '@theme';
+import { colors } from '../../../theme';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import ChevronLeft from '@mui/icons-material/ChevronLeft';
 import { Header } from '../Header/Header';

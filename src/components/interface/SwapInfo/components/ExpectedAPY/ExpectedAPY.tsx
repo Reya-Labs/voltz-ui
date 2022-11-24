@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Typography } from '@components/atomic';
 import { IconLabel, MaskedIntegerField } from '@components/composite';
 import Box from '@mui/material/Box';
-import { colors } from '@theme';
+import { colors } from '../../../../../theme';
 import {
   DataLayerEventPayload,
   formatNumber,

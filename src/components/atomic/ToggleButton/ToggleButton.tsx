@@ -3,7 +3,7 @@ import MuiToggleButton, {
   ToggleButtonProps as MuiToggleButtonProps,
 } from '@mui/material/ToggleButton';
 
-import { colors, SystemStyleObject, Theme } from '@theme';
+import { colors, SystemStyleObject, Theme } from '../../../theme';
 import { AgentProps, Agents } from '../../../contexts';
 import { useAgentWithOverride } from '../../../hooks';
 

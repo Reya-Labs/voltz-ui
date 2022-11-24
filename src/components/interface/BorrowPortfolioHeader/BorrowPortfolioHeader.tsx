@@ -1,7 +1,7 @@
 import { Panel } from '@components/atomic';
 import BorrowPortfolioHeaderBox from './BorrowportfolioHeaderBox';
 import BorrowPortfolioSummary from './BorrowPortfolioSummary';
-import { SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '../../../theme';
 
 export type BorrowPortfolioHeaderProps = {
   commonOverrides: SystemStyleObject<Theme>;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
-import { SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '../../../theme';
 
 import { useBorrowAMMs, useBorrowPositions, useWallet } from '../../../hooks';
 import { Agents } from '../../../contexts';

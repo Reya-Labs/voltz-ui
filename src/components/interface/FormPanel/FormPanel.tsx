@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import Box from '@mui/material/Box';
 import { Panel } from '@components/atomic';
-import { SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '../../../theme';
 
 export type FormPanelProps = {
   boxShadowType?: 'LP' | 'FT' | 'VT';

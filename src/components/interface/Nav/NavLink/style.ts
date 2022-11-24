@@ -1,4 +1,4 @@
-import { colors, SystemStyleObject, Theme } from '@theme';
+import { colors, SystemStyleObject, Theme } from '../../../../theme';
 
 export const iconSx: SystemStyleObject<Theme> = {
   width: '100%',

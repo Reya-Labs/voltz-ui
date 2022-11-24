@@ -11,7 +11,7 @@ import {
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Popover from '@mui/material/Popover';
 import CircleIcon from '@mui/icons-material/Circle';
-import { colors } from '@theme';
+import { colors } from '../../../../theme';
 import { Link } from 'react-router-dom';
 
 type NavLinkProps = {

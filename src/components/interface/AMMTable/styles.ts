@@ -1,4 +1,4 @@
-import { SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '../../../theme';
 
 export const commonOverrides: SystemStyleObject<Theme> = {
   '& .MuiTableCell-root': {

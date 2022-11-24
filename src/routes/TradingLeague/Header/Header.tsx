@@ -1,5 +1,5 @@
 import { Typography } from '@components/atomic';
-import { colors } from '@theme';
+import { colors } from '../../../theme';
 import { Box } from '@mui/material';
 import React from 'react';
 

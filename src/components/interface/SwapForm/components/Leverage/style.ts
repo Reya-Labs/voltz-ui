@@ -1,4 +1,4 @@
-import { colors, SystemStyleObject, Theme } from '@theme';
+import { colors, SystemStyleObject, Theme } from '../../../../../theme';
 
 export const activeButtonStyle: SystemStyleObject<Theme> = {
   flex: 1,

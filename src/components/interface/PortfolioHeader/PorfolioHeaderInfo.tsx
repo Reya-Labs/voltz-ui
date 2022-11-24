@@ -1,4 +1,4 @@
-import { colors, SystemStyleObject, Theme } from '@theme';
+import { colors, SystemStyleObject, Theme } from '../../../theme';
 
 import { formatCurrency, formatNumber } from '../../../utilities';
 import Box from '@mui/material/Box';

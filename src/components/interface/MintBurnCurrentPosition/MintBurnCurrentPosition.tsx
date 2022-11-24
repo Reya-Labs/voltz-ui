@@ -4,7 +4,7 @@ import { Button, Ellipsis, PositionBadge, SummaryPanel } from '@components/atomi
 import { FormPanel } from '@components/interface';
 import { formatCurrency, formatNumber } from '../../../utilities';
 import { usePositionContext, MintBurnFormModes } from '../../../contexts';
-import { colors } from '@theme';
+import { colors } from '../../../theme';
 import { isUndefined } from 'lodash';
 
 export type MintBurnCurrentPositionProps = {

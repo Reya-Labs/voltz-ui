@@ -1,7 +1,7 @@
 import SkeletonComponent from '@mui/material/Skeleton';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import { colors } from '@theme';
+import { colors } from '../../../../theme';
 import Typography from '../../../../components/atomic/Typography/Typography';
 
 export const Skeleton = styled(SkeletonComponent)`

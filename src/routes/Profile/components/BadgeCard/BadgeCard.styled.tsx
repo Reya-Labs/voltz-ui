@@ -2,7 +2,7 @@ import SkeletonComponent from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import Typography from '../../../../components/atomic/Typography/Typography';
-import { colors } from '@theme';
+import { colors } from '../../../../theme';
 import { keyframes } from '@mui/system';
 
 const highlightAnimation = keyframes`

@@ -4,7 +4,7 @@ import { routes } from '../../../routes';
 import { Icon } from '../../atomic';
 import { NavLink } from './NavLink/NavLink';
 import { iconSx } from './NavLink/style';
-import { colors } from '@theme';
+import { colors } from '../../../theme';
 
 const Nav: React.FunctionComponent = React.memo(() => (
   <Box

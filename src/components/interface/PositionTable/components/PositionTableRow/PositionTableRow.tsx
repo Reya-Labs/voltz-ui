@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import { SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '../../../../../theme';
 import { Agents, useAMMContext } from '../../../../../contexts';
 import { Typography } from '@components/atomic';
 import { PoolField, MaturityInformation } from '@components/composite';
