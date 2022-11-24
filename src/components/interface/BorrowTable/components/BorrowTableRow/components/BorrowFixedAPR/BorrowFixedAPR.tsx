@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Typography } from '@components/atomic';
 import TableCell from '@mui/material/TableCell';
-import { formatNumber } from '@utilities';
+import { formatNumber } from '../../../../../../../utilities';
 
 export type BorrowBorrowFixedAPR = {
   loading: boolean;

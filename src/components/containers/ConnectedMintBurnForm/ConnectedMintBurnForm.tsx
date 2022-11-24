@@ -19,7 +19,7 @@ import {
   PendingTransaction,
 } from '@components/interface';
 import { updateFixedRate } from './utilities';
-import { getPoolButtonId, isBorrowing, setPageTitle } from '@utilities';
+import { getPoolButtonId, isBorrowing, setPageTitle } from '../../../utilities';
 import { isUndefined } from 'lodash';
 import { BigNumber } from 'ethers';
 

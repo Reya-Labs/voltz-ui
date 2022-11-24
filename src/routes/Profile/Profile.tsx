@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useCurrentSeason, usePastSeasons, useWallet } from '../../hooks';
 import { ProfilePageNoWallet } from './components/ProfilePageNoWallet/ProfilePageNoWallet';
 import { ProfilePageWalletConnected } from './components/ProfilePageWalletConnected/ProfilePageWalletConnected';
-import { getENSDetails, setPageTitle } from '@utilities';
+import { getENSDetails, setPageTitle } from '../../utilities';
 import { Season } from '../../hooks/season/types';
 import { ClaimButtonProps } from './components/ClaimButton/ClaimButton';
 import { getCacheValue, invalidateCache, setCacheValue } from './data/getSeasonBadges/cache';

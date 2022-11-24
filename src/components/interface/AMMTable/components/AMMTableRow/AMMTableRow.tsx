@@ -10,7 +10,7 @@ import { PoolField, MaturityInformation } from '@components/composite';
 import { useAgent, useWallet } from '../../../../../hooks';
 import { labels } from '../../constants';
 import { VariableAPY, FixedAPR } from './components';
-import { getRowButtonId } from '@utilities';
+import { getRowButtonId } from '../../../../../utilities';
 import { isNumber } from 'lodash';
 import { DateTime } from 'luxon';
 

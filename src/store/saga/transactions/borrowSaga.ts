@@ -4,7 +4,7 @@ import { ContractReceipt, providers } from 'ethers';
 import { call, put } from 'redux-saga/effects';
 import { DateTime } from 'luxon';
 
-import { getErrorMessage } from '@utilities';
+import { getErrorMessage } from '../../../utilities';
 import { BorrowAction } from '../../types';
 import { deserializeAmm, getSigner } from '../../utilities';
 import * as actions from '../../actions';

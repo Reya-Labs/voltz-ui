@@ -246,7 +246,6 @@ module.exports = function (webpackEnv) {
       alias: {
         '@components': 'src/components',
         '@contexts': 'src/contexts',
-        '@utilities': 'src/utilities',
         '@theme': 'src/theme',
         // Allows for better profiling with ReactDevTools
         ...(isEnvProductionProfile && {

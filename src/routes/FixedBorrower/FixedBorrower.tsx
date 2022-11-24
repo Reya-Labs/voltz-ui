@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 
-import { setPageTitle, findCurrentBorrowPosition } from '@utilities';
+import { setPageTitle, findCurrentBorrowPosition } from '../../utilities';
 import {
   Agents,
   BorrowAMMProvider,

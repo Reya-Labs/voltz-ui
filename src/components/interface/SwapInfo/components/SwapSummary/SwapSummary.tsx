@@ -1,7 +1,7 @@
 import React from 'react';
 import SummaryPanel from '../../../../atomic/SummaryPanel/SummaryPanel';
 import { IconLabel } from '@components/composite';
-import { formatCurrency, formatNumber, roundUpDecimal } from '@utilities';
+import { formatCurrency, formatNumber, roundUpDecimal } from '../../../../../utilities';
 import { SwapFormActions } from '../../../SwapForm/types';
 
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';

@@ -2,7 +2,7 @@ import { Page } from '@components/interface';
 
 import ConnectedMellowLpDepositForm from './ConnectedMellowLpDepositForm/ConnectedMellowLpDepositForm';
 import ConnectedMellowLPTable from './ConnectedMellowLPTable/ConnectedMellowLPTable';
-import { setPageTitle } from '@utilities';
+import { setPageTitle } from '../../utilities';
 import { useEffect, useState } from 'react';
 import { isNull } from 'lodash';
 import { useMellowLPVaults, useWallet } from '../../hooks';

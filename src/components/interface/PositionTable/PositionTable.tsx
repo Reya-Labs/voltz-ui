@@ -5,7 +5,7 @@ import TableBody from '@mui/material/TableBody';
 import { colors, SystemStyleObject, Theme } from '@theme';
 import { Position } from '@voltz-protocol/v1-sdk';
 
-import { findCurrentAmm, getRowButtonId, isBorrowing } from '@utilities';
+import { findCurrentAmm, getRowButtonId, isBorrowing } from '../../../utilities';
 import { Panel } from '@components/atomic';
 import { PositionTableHead, PositionTableRow } from './components';
 import { Agents, AMMProvider, PortfolioContext } from '@contexts';

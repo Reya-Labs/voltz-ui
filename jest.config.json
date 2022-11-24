@@ -18,9 +18,8 @@
   "moduleNameMapper": {
     "^.+\\.module\\.(css)$": "identity-obj-proxy",
     "@contexts": "<rootDir>/src/contexts",
-    "@utilities": "<rootDir>/src/utilities",
     "@components": "<rootDir>/src/components",
-    "@theme": "<rootDir>/src/theme",
+    "@theme": "<rootDir>/src/theme"
   },
   "modulePaths": [],
   "resetMocks": true,

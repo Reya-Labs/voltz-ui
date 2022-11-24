@@ -26,7 +26,7 @@ import {
   getPoolButtonId,
   isBorrowing,
   setPageTitle,
-} from '@utilities';
+} from '../../../utilities';
 import { isUndefined } from 'lodash';
 
 import { AMM } from '@voltz-protocol/v1-sdk';

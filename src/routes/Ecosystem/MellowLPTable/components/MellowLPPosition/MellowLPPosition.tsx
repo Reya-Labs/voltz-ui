@@ -1,4 +1,4 @@
-import { formatCurrency } from '@utilities';
+import { formatCurrency } from '../../../../../utilities';
 import { isUndefined } from 'lodash';
 import React from 'react';
 import {

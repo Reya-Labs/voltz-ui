@@ -7,7 +7,7 @@ import InputLabel from '@mui/material/InputLabel';
 
 import isEmpty from 'lodash/isEmpty';
 import { useUniqueId } from '../../../hooks';
-import { OverrideTypes } from '@utilities';
+import { OverrideTypes } from '../../../utilities';
 import { Typography } from '@components/atomic';
 import { colors, inputStyles, SystemStyleObject, Theme } from '@theme';
 import { isUndefined } from 'lodash';

@@ -11,7 +11,7 @@ import {
   lessThanEpsilon,
   pushEvent,
   stringToBigFloat,
-} from '@utilities';
+} from '../../utilities';
 import { debounce, isNumber, isUndefined } from 'lodash';
 import {
   GetInfoType,

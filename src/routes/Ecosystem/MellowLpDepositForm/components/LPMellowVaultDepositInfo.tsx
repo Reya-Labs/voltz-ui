@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import { ProgressBar } from '@components/composite';
 import { Typography } from '@components/atomic';
-import { formatCurrency } from '@utilities';
+import { formatCurrency } from '../../../../utilities';
 import { isUndefined } from 'lodash';
 import { VaultField } from '../../Common/VaultField';
 import { MellowProduct } from '../../types';

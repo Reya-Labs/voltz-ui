@@ -1,4 +1,4 @@
-import { formatCurrency, formatNumber, formatTimestamp } from '@utilities';
+import { formatCurrency, formatNumber, formatTimestamp } from '../../../utilities';
 import { Position } from '@voltz-protocol/v1-sdk';
 import { BigNumber } from 'ethers';
 import JSBI from 'jsbi';

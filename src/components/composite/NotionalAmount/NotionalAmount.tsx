@@ -4,7 +4,7 @@ import isUndefined from 'lodash/isUndefined';
 import IconLabel from '../IconLabel/IconLabel';
 import MaskedIntegerField from '../MaskedIntegerField/MaskedIntegerField';
 import InputTokenLabel from '../InputTokenLabel/InputTokenLabel';
-import { toUSFormat } from '@utilities';
+import { toUSFormat } from '../../../utilities';
 
 export type NotionalAmountProps = {
   label: string;

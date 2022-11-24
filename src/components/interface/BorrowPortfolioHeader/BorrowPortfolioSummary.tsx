@@ -2,7 +2,7 @@ import { Box, Grid } from '@mui/material';
 
 import { Typography } from '@components/atomic';
 import { SystemStyleObject, Theme } from '@theme';
-import { formatCurrency, formatNumber } from '@utilities';
+import { formatCurrency, formatNumber } from '../../../utilities';
 
 export type BorrowPortfolioSummaryProps = {
   commonOverrides: SystemStyleObject<Theme>;

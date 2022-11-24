@@ -1,7 +1,7 @@
 import { FormPanel } from '@components/interface';
 import { IconLabel, InputTokenLabel, MaskedIntegerField } from '@components/composite';
 import { Box } from '@mui/system';
-import { formatCurrency, toUSFormat } from '@utilities';
+import { formatCurrency, toUSFormat } from '../../../utilities';
 import { Panel, Typography, Button } from '@components/atomic';
 import { colors } from '@theme';
 import { isUndefined } from 'lodash';

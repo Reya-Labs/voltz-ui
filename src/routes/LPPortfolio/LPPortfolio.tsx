@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { useLocation } from 'react-router-dom';
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 
-import { findCurrentAmm, setPageTitle } from '@utilities';
+import { findCurrentAmm, setPageTitle } from '../../utilities';
 import {
   Agents,
   AMMProvider,

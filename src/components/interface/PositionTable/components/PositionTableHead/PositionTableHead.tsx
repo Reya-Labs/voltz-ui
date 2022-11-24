@@ -1,7 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import { colors, SystemStyleObject, Theme } from '@theme';
-import { formatCurrency, formatNumber } from '@utilities';
+import { formatCurrency, formatNumber } from '../../../../../utilities';
 import { Button, getPositionBadgeVariant, PositionBadge, Typography } from '@components/atomic';
 import { BulletLabel, getHealthTextColor, HealthFactorText } from '@components/composite';
 import { isUndefined } from 'lodash';

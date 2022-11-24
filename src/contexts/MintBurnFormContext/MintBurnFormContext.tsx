@@ -11,7 +11,7 @@ import {
   hasEnoughUnderlyingTokens,
   pushEvent,
   isMarginWithdrawable,
-} from '@utilities';
+} from '../../utilities';
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { debounce, isUndefined } from 'lodash';
 import { BigNumber } from 'ethers';

@@ -1,7 +1,7 @@
 import { Typography } from '@components/atomic';
 import { Stack } from '@mui/material';
 
-import { formatCurrency, formatNumber } from '@utilities';
+import { formatCurrency, formatNumber } from '../../../../../utilities';
 
 import { Box } from '@mui/system';
 

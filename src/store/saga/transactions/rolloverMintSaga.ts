@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 import { RolloverMintAction } from '../../types';
 import { deserializeAmm, getSigner } from '../../utilities';
 import * as actions from '../../actions';
-import { getErrorMessage } from '@utilities';
+import { getErrorMessage } from '../../../utilities';
 
 import { AMMRolloverWithMintArgs } from '@voltz-protocol/v1-sdk/dist/types/entities/amm';
 

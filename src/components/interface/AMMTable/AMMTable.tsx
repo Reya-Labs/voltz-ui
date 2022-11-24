@@ -11,7 +11,7 @@ import { DateTime } from 'luxon';
 
 import { AMM } from '@voltz-protocol/v1-sdk';
 import { commonOverrides } from './styles';
-import { isBorrowing } from '@utilities';
+import { isBorrowing } from '../../../utilities';
 
 export type AMMTableProps = {
   onSelectItem: (datum: AMM) => void;

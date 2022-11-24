@@ -11,7 +11,7 @@ import {
   pushEvent,
   setPageTitle,
   formatCurrency,
-} from '@utilities';
+} from '../../../utilities';
 import { useWallet, useSelector, useAgent } from '../../../hooks';
 import { selectors } from '../../../store';
 import { AMMProvider, MintBurnFormLiquidityAction, useAMMsContext } from '@contexts';

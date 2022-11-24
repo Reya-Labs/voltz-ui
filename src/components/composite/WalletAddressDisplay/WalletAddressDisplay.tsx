@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { elideAddress } from '@utilities';
+import { elideAddress } from '../../../utilities';
 import { Typography } from '@components/atomic';
 
 export type WalletAddressDisplayProps = {

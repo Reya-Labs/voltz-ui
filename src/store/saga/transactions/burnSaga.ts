@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 import { BurnAction } from '../../types';
 import { deserializeAmm, getSigner } from '../../utilities';
 import * as actions from '../../actions';
-import { getErrorMessage } from '@utilities';
+import { getErrorMessage } from '../../../utilities';
 
 function* burnSaga(action: BurnAction) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

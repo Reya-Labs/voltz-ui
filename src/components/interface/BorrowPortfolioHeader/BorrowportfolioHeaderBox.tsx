@@ -1,7 +1,7 @@
 import { SystemStyleObject, Theme } from '@theme';
 import { Typography } from '@components/atomic';
 import Box from '@mui/material/Box';
-import { formatCurrency } from '@utilities';
+import { formatCurrency } from '../../../utilities';
 
 export type BorrowPortfolioHeaderBoxProps = {
   aggregatedDebt?: number;

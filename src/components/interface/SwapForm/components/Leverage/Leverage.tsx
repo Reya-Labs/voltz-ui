@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import { MaskedIntegerField, IconLabel } from '@components/composite';
 import { isNumber, isUndefined } from 'lodash';
-import { formatNumber, notFormatted, stringToBigFloat, toUSFormat } from '@utilities';
+import { formatNumber, notFormatted, stringToBigFloat, toUSFormat } from '../../../../../utilities';
 import { Button } from '@mui/material';
 import { activeButtonStyle, buttonStyle, leverageBoxStyle } from './style';
 

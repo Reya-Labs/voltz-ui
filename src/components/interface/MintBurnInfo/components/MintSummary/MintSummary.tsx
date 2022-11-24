@@ -1,7 +1,7 @@
 import React from 'react';
 import SummaryPanel from '../../../../atomic/SummaryPanel/SummaryPanel';
 import { IconLabel } from '@components/composite';
-import { formatCurrency, roundUpDecimal } from '@utilities';
+import { formatCurrency, roundUpDecimal } from '../../../../../utilities';
 import { isUndefined } from 'lodash';
 
 export type MintSummaryProps = {

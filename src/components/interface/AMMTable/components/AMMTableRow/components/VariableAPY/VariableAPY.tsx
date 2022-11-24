@@ -2,7 +2,7 @@ import React from 'react';
 import TableCell from '@mui/material/TableCell';
 
 import { Typography } from '@components/atomic';
-import { formatNumber } from '@utilities';
+import { formatNumber } from '../../../../../../../utilities';
 import { isUndefined } from 'lodash';
 
 export type VariableAPYProps = {
