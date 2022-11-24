@@ -6,16 +6,16 @@ import { getENSDetails, setPageTitle } from '../../utilities';
 import { Season } from '../../hooks/season/types';
 import { ClaimButtonProps } from './components/ClaimButton/ClaimButton';
 import { getCacheValue, invalidateCache, setCacheValue } from './data/getSeasonBadges/cache';
-import { getClaimButtonModesForVariants, getSeasonUserId } from './helpers';
+import { getClaimButtonModesForVariants, getSDKInitParams, getSeasonUserId } from './helpers';
 import { DateTime } from 'luxon';
 import { CopyLinkButtonProps } from './components/CopyLinkButton/CopyLinkButton';
 import copy from 'copy-to-clipboard';
 
 import { CommunitySBT } from '@voltz-protocol/v1-sdk';
 import { getReferrerLink } from './get-referrer-link';
-import { Signer } from 'ethers';
 import {
   BadgeVariant,
+  getDefaultResponse,
   GetProfileBadgesResponse,
   getSeasonBadges,
   SEASON_BADGE_VARIANTS,
@@ -37,11 +37,15 @@ const Profile: React.FunctionComponent = () => {
 
   const [copyLinkButtonMode, setCopyLinkButtonMode] = useState<CopyLinkButtonProps['mode']>('copy');
 
-  const fetchBadges = async (seasonId: Season['id'], account: string) => {
+  const fetchBadges = async ( account: string) => {
+    const params = getSDKInitParams(wallet.signer);
+    if (!params) {
+      return getDefaultResponse(season.id);
+    }
     return await getSeasonBadges({
       userId: account,
-      seasonId: seasonId,
-      signer: wallet.signer as Signer,
+      season: season,
+      sbt: new CommunitySBT(params)
     });
   };
 
@@ -51,7 +55,7 @@ const Profile: React.FunctionComponent = () => {
 
     if (!result) {
       setLoading(true);
-      result = await fetchBadges(seasonId, account);
+      result = await fetchBadges(account);
       setCacheValue(seasonUserId, result);
       setLoading(false);
     }
@@ -91,21 +95,11 @@ const Profile: React.FunctionComponent = () => {
     setName(details?.name || account);
   };
 
-  const getSDKInitParams = () => {
-    if (!process.env.REACT_APP_COMMUNITY_SBT_ADDRESS || !Boolean(wallet.signer)) {
-      return undefined;
-    }
-    return {
-      id: process.env.REACT_APP_COMMUNITY_SBT_ADDRESS,
-      signer: wallet.signer,
-    };
-  };
-
   async function handleOnClaimButtonClick(variant: BadgeVariant) {
     if (claimButtonBulkMode === 'claiming') {
       return;
     }
-    const params = getSDKInitParams();
+    const params = getSDKInitParams(wallet.signer);
     if (!params) {
       return;
     }
@@ -124,8 +118,8 @@ const Profile: React.FunctionComponent = () => {
       await communitySBT.redeemSbt(
         badge.badgeResponseRaw.badgeType,
         owner,
+        season.id,
         badge.badgeResponseRaw.awardedTimestampMs,
-        subgraphAPI,
       );
 
       setClaimButtonModes((prev) => ({
@@ -148,7 +142,7 @@ const Profile: React.FunctionComponent = () => {
   }
 
   async function handleOnClaimBulkClick(variants: BadgeVariant[]) {
-    const params = getSDKInitParams();
+    const params = getSDKInitParams(wallet.signer);
     if (!params) {
       return;
     }
@@ -176,7 +170,7 @@ const Profile: React.FunctionComponent = () => {
           awardedTimestamp: badge.badgeResponseRaw!.awardedTimestampMs || 0,
         })),
         owner,
-        subgraphAPI,
+        season.id,
       );
       const claimedVariants = response.claimedBadgeTypes
         .map((bT) => {

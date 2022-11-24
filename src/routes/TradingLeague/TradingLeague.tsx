@@ -3,12 +3,14 @@ import Box from '@mui/material/Box';
 import { setPageTitle } from '../../utilities';
 import { Page } from '@components/interface';
 import { useCurrentSeason, useWallet } from '../../hooks';
-import { getActivity, RankType } from '../../graphql';
 import Leaderboard from './Leaderboard/Leaderboard';
+import { CommunitySBT, RankType } from '@voltz-protocol/v1-sdk/';
+import { isUndefined } from 'lodash';
+import { getSDKInitParams } from '../Profile/helpers';
 const PER_PAGE = 10;
 
 const TradingLeague: React.FunctionComponent = () => {
-  const { account } = useWallet();
+  const { account, signer } = useWallet();
   const [loading, setLoading] = useState(true);
   const season = useCurrentSeason();
   const [rankings, setRankings] = useState<RankType[]>([]);
@@ -32,26 +34,24 @@ const TradingLeague: React.FunctionComponent = () => {
 
   const fetchRankings = async () => {
     setLoading(true);
-    const result = await getActivity({
-      from: season.startDate.toSeconds(),
-      ignoredWalletIds:
-        process.env.REACT_APP_IGNORED_LEAGUE_WALLETS &&
-        process.env.REACT_APP_IGNORED_LEAGUE_WALLETS !== 'UNPROVIDED'
-          ? process.env.REACT_APP_IGNORED_LEAGUE_WALLETS.split(',')
-              .map((s) => s.trim().toLowerCase())
-              .reduce((pV, cI) => ({ ...pV, [cI]: true }), {})
-          : {},
-    });
+    let result: RankType[] = [];
+    const params = getSDKInitParams(signer);
+    if (params) {
+      const SBT = new CommunitySBT(params);
+      result = await SBT.getRanking({
+        seasonStart: season.startDate.toSeconds(),
+        seasonEnd: season.endDate.toSeconds(),
+      });
+    }
     setUserRanking(result, wallet.account);
     setRankings(result);
     setLoading(false);
   };
 
   const setUserRanking = (rankingResults: RankType[], walletAddress?: string | null) => {
-    const userEntry: RankType | undefined = rankingResults.find((r) => r.address === walletAddress);
-
+    const userEntry: RankType | undefined = rankingResults.find((r) => r.address.toLowerCase() === walletAddress?.toLowerCase());
     setUserPoints(userEntry?.points || -1);
-    setUserRank(userEntry?.rank || -1);
+    setUserRank( userEntry ? (isUndefined(userEntry.rank) ? -1 : userEntry.rank) : -1);
   };
 
   useEffect(() => {
