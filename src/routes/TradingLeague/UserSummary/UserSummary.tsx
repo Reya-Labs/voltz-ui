@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import { Typography } from '@components/atomic';
-import { formatDateTime } from '@utilities';
+import { formatDateTime } from '../../../utilities';
 import { DateTime } from 'luxon';
 import React from 'react';
 import { colors } from '@theme';

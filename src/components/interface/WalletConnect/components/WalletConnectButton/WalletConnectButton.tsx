@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import Box from '@mui/material/Box';
 
-import { Wallet } from '@contexts';
+import { Wallet } from '../../../../../contexts';
 import { Button, Icon, Icons } from '@components/atomic';
 import CircleIcon from '@mui/icons-material/Circle';
 

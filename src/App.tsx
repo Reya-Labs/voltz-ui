@@ -5,13 +5,14 @@ import {
   routes,
   TradingLeague,
   Profile,
-  LiquidityProvider,
-  Trader,
   FixedBorrower,
   Ecosystem,
   ProfileV1,
-  EcosystemV1,
-} from '@routes';
+  Portfolio,
+  TraderPools,
+  LPPools,
+  LPPortfolio,
+} from './routes';
 import { AlphaBanner, GweiBar } from '@components/composite';
 import Box from '@mui/material/Box';
 import { useEffect } from 'react';
@@ -57,22 +58,12 @@ const App = () => {
     <>
       <Routes>
         <Route path="/">
-          <Route index element={<Navigate to={routes.SWAP} />} />
-          <Route path={routes.SWAP} element={<Trader />} />
-          <Route path={routes.PORTFOLIO} element={<Trader />} />
-          <Route path={routes.POOLS} element={<LiquidityProvider />} />
-          <Route path={routes.LP_FARM} element={<LiquidityProvider />} />
-          <Route
-            path={routes.LP_OPTIMISERS}
-            element={
-              process.env.REACT_APP_PRODUCTS_P2 &&
-              process.env.REACT_APP_PRODUCTS_P2 !== `UNPROVIDED` ? (
-                <Ecosystem />
-              ) : (
-                <EcosystemV1 />
-              )
-            }
-          />
+          <Route index element={<Navigate to={routes.TRADER_POOLS} />} />
+          <Route path={routes.TRADER_POOLS} element={<TraderPools />} />
+          <Route path={routes.PORTFOLIO} element={<Portfolio />} />
+          <Route path={routes.LP_POOLS} element={<LPPools />} />
+          <Route path={routes.LP_PORTFOLIO} element={<LPPortfolio />} />
+          <Route path={routes.LP_OPTIMISERS} element={<Ecosystem />} />
           <Route path={routes.BORROW_POS} element={<FixedBorrower />} />
           <Route
             path={routes.PROFILE}

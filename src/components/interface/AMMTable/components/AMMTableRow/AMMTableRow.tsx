@@ -4,24 +4,33 @@ import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '@mui/system';
 import isNull from 'lodash/isNull';
 
-import { Agents, useAMMsContext, useAMMContext } from '@contexts';
+import { Agents, useAMMsContext, useAMMContext } from '../../../../../contexts';
 import { Button } from '@components/atomic';
 import { PoolField, MaturityInformation } from '@components/composite';
-import { useAgent, useWallet } from '@hooks';
-import { AMMTableDatum } from '../../types';
+import { useAgent, useWallet } from '../../../../../hooks';
 import { labels } from '../../constants';
 import { VariableAPY, FixedAPR } from './components';
-import { getRowButtonId } from '@utilities';
+import { getRowButtonId } from '../../../../../utilities';
 import { isNumber } from 'lodash';
+import { DateTime } from 'luxon';
 
 export type AMMTableRowProps = {
-  datum: AMMTableDatum;
+  protocol: string;
+  startDate: DateTime;
+  endDate: DateTime;
+  isBorrowing: boolean;
   index: number;
   onSelect: () => void;
 };
 
-// todo: panel component, adjust the styling
-const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, onSelect }) => {
+const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({
+  protocol,
+  isBorrowing,
+  startDate,
+  endDate,
+  index,
+  onSelect,
+}) => {
   const wallet = useWallet();
   const { agent } = useAgent();
   const variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'main';
@@ -38,13 +47,6 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
   useEffect(() => {
     callFixedApr();
   }, [callFixedApr]);
-
-  // add object to sx prop
-  // todo:
-  //
-  // const anotherObject = {
-  //   margin: ...
-  // }
 
   const typeStyleOverrides = (): SystemStyleObject<Theme> => {
     if (!variant) {
@@ -80,7 +82,6 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
   };
 
   return (
-    // todo: <TableRow key={index} sx={{...anotherObject,  ...typeStyleOverrides() }}>
     <TableRow key={index} sx={{ ...typeStyleOverrides() }}>
       {labels.map(([field, label]) => {
         if (field === 'variableApy') {
@@ -93,18 +94,10 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
 
         const renderDisplay = () => {
           if (field === 'maturity') {
-            return (
-              <MaturityInformation
-                label={label}
-                startDate={datum.startDate}
-                endDate={datum.endDate}
-              />
-            );
+            return <MaturityInformation label={label} startDate={startDate} endDate={endDate} />;
           }
 
-          return (
-            <PoolField agent={agent} protocol={datum.protocol} isBorrowing={datum.isBorrowing} />
-          );
+          return <PoolField agent={agent} protocol={protocol} isBorrowing={isBorrowing} />;
         };
 
         return <TableCell key={field}>{renderDisplay()}</TableCell>;
@@ -113,11 +106,7 @@ const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({ datum, index, 
         <Button
           variant="contained"
           onClick={handleClick}
-          id={getRowButtonId(
-            agent === Agents.LIQUIDITY_PROVIDER,
-            datum.protocol,
-            datum.isBorrowing,
-          )}
+          id={getRowButtonId(agent === Agents.LIQUIDITY_PROVIDER, protocol, isBorrowing)}
           sx={{
             paddingTop: (theme) => theme.spacing(3),
             paddingBottom: (theme) => theme.spacing(3),

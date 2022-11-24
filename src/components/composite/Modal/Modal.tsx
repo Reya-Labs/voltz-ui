@@ -3,7 +3,7 @@ import MuiModal, { ModalProps as MuiModalProps } from '@mui/material/Modal';
 import isString from 'lodash/isString';
 
 import { Button } from '@components/atomic';
-import { doNothing } from '@utilities';
+import { doNothing } from '../../../utilities';
 
 export type TriggerProps = {
   onClick: () => void;

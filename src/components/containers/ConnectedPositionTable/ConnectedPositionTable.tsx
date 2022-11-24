@@ -1,24 +1,24 @@
 import React, { ReactNode, useCallback, useState } from 'react';
 
-import { usePositions, useSelector, useWallet, useDispatch } from '@hooks';
+import { usePositions, useSelector, useWallet, useDispatch } from '../../../hooks';
 import { PendingTransaction, PortfolioHeader, PositionTable } from '@components/interface';
 import { Loading, Panel, RouteLink, Typography } from '@components/atomic';
-import { Agents, usePortfolioContext } from '@contexts';
-import { actions, selectors } from '@store';
-import { routes } from '@routes';
+import { Agents, usePortfolioContext } from '../../../contexts';
+import { actions, selectors } from '../../../store';
+import { routes } from '../../../routes';
 import Box from '@mui/material/Box';
 import { colors } from '@theme';
 
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 
-export type ConnectedAMMTableProps = {
+export type ConnectedPositionTableProps = {
   onSelectItem: (item: Position, mode: 'margin' | 'liquidity' | 'rollover' | 'notional') => void;
   agent: Agents;
   amm?: AMM;
   handleCompletedSettling: () => void;
 };
 
-const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = ({
+const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTableProps> = ({
   onSelectItem,
   agent,
   handleCompletedSettling,
@@ -87,7 +87,9 @@ const ConnectedPositionTable: React.FunctionComponent<ConnectedAMMTableProps> = 
     return (
       <Panel variant="main" sx={{ width: '100%', textAlign: 'center' }}>
         <RouteLink
-          to={agent === Agents.LIQUIDITY_PROVIDER ? `/${routes.POOLS}` : `/${routes.SWAP}`}
+          to={
+            agent === Agents.LIQUIDITY_PROVIDER ? `/${routes.LP_POOLS}` : `/${routes.TRADER_POOLS}`
+          }
         >
           OPEN YOUR FIRST POSITION
         </RouteLink>

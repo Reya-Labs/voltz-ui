@@ -3,15 +3,15 @@ import {
   useCurrentPositionMarginRequirement,
   useTokenApproval,
   useWallet,
-} from '@hooks';
-import { useAMMContext, usePositionContext, Agents } from '@contexts';
+} from '../../hooks';
+import { useAMMContext, usePositionContext, Agents } from '../../contexts';
 import {
   DataLayerEventPayload,
   getAmmProtocol,
   hasEnoughUnderlyingTokens,
   pushEvent,
   isMarginWithdrawable,
-} from '@utilities';
+} from '../../utilities';
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { debounce, isUndefined } from 'lodash';
 import { BigNumber } from 'ethers';

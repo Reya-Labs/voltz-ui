@@ -1,7 +1,7 @@
 import React from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
-import { UseAsyncFunctionResult, useTokenApproval } from '@hooks';
+import { UseAsyncFunctionResult, useTokenApproval } from '../../../hooks';
 import { FormPanel } from '@components/interface';
 import {
   MaskedIntegerField,
@@ -12,8 +12,12 @@ import {
 import { SubmitControls, FixBorrow } from './components';
 import { SystemStyleObject, Theme } from '@theme';
 
-import { Agents, BorrowFormSubmitButtonHintStates, BorrowFormSubmitButtonStates } from '@contexts';
-import { formatCurrency, getPoolButtonId } from '@utilities';
+import {
+  Agents,
+  BorrowFormSubmitButtonHintStates,
+  BorrowFormSubmitButtonStates,
+} from '../../../contexts';
+import { formatCurrency, getPoolButtonId } from '../../../utilities';
 
 export type BorrowProps = {
   protocol?: string;

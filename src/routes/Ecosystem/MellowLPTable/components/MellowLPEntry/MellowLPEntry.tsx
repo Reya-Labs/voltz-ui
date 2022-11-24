@@ -46,24 +46,24 @@ const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
         <TitleTypography variant="h6">LIQUIDITY SPREAD ACROSS</TitleTypography>
 
         <PoolFieldsBox>
-          {lpVault.metadata.underlyingPools.map((pool) => (
-            <PoolFieldTypography variant="body2" key={pool}>
+          {lpVault.metadata.underlyingPools.map((pool, index) => (
+            <PoolFieldTypography variant="body2" key={`${pool}-${index}`}>
               {pool}
             </PoolFieldTypography>
           ))}
         </PoolFieldsBox>
       </MellowLPEntryInfoBox>
-      {!lpVault.metadata.soon && (
+      {
         <PositionBox>
           <MellowLPPosition
             userDeposit={lpVault.vault.userDeposit}
             tokenName={lpVault.metadata.token}
             handleClick={onSelectItem}
             dataLoading={dataLoading}
-            disabled={lpVault.metadata.deprecated}
+            disabled={lpVault.metadata.soon || lpVault.metadata.deprecated}
           />
         </PositionBox>
-      )}
+      }
     </MellowLPEntryContainerBox>
   );
 };

@@ -4,8 +4,8 @@ import MuiToggleButton, {
 } from '@mui/material/ToggleButton';
 
 import { colors, SystemStyleObject, Theme } from '@theme';
-import { AgentProps, Agents } from '@contexts';
-import { useAgentWithOverride } from '@hooks';
+import { AgentProps, Agents } from '../../../contexts';
+import { useAgentWithOverride } from '../../../hooks';
 
 export type ToggleButtonProps = MuiToggleButtonProps & AgentProps;
 

@@ -12,7 +12,7 @@ import {
 } from '@components/composite';
 import { LiquidityControls, SubmitControls } from './components';
 import { MarginControls } from '../SwapForm/components';
-import { useTokenApproval } from '@hooks';
+import { useTokenApproval } from '../../../hooks';
 import {
   MintBurnFormHintStates,
   MintBurnFormLiquidityAction,
@@ -20,7 +20,7 @@ import {
   MintBurnFormModes,
   MintBurnFormState,
   MintBurnFormSubmitButtonStates,
-} from '@contexts';
+} from '../../../contexts';
 import { SystemStyleObject, Theme } from '@theme';
 
 export type MintBurnFormProps = {

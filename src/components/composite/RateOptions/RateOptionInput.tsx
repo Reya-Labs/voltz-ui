@@ -1,4 +1,4 @@
-import { toUSFormat } from '@utilities';
+import { toUSFormat } from '../../../utilities';
 import React, { useCallback, useState } from 'react';
 import IconLabel from '../IconLabel/IconLabel';
 import MaskedIntegerField from '../MaskedIntegerField/MaskedIntegerField';

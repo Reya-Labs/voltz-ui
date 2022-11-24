@@ -245,14 +245,7 @@ module.exports = function (webpackEnv) {
         .filter((ext) => useTypeScript || !ext.includes('ts')),
       alias: {
         '@components': 'src/components',
-        '@contexts': 'src/contexts',
-        '@hooks': 'src/hooks',
-        '@store': 'src/store',
-        '@graphql': 'src/graphql',
-        '@utilities': 'src/utilities',
         '@theme': 'src/theme',
-        '@routes': 'src/routes',
-        '@factories': 'src/factories',
         // Allows for better profiling with ReactDevTools
         ...(isEnvProductionProfile && {
           'react-dom$': 'react-dom/profiling',

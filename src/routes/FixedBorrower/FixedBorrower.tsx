@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 
-import { setPageTitle, findCurrentBorrowPosition } from '@utilities';
+import { setPageTitle, findCurrentBorrowPosition } from '../../utilities';
 import {
   Agents,
   BorrowAMMProvider,
   BorrowFormProvider,
   AMMProvider,
   PositionProvider,
-} from '@contexts';
-import { useBorrowPositions, useWallet } from '@hooks';
+} from '../../contexts';
+import { useBorrowPositions, useWallet } from '../../hooks';
 
 import { Page } from '@components/interface';
 import ConnectedBorrowForm from '../../components/containers/ConnectedBorrowForm/ConnectedBorrowForm';

@@ -3,7 +3,7 @@ import TableCell from '@mui/material/TableCell';
 
 import { Typography } from '@components/atomic';
 import Box from '@mui/material/Box';
-import { formatNumber } from '@utilities';
+import { formatNumber } from '../../../../../../../utilities';
 
 export type DebtProps = {
   debtInUSD: number | null | void;

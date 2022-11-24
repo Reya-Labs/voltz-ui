@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import { useCurrentSeason, useWallet } from '@hooks';
+import { useCurrentSeason, useWallet } from '../../hooks';
 import { ProfilePageNoWallet } from './ProfilePageNoWallet/ProfilePageNoWallet';
 import { ProfilePageWalletConnected } from './ProfilePageWalletConnected/ProfilePageWalletConnected';
-import { getENSDetails, setPageTitle } from '@utilities';
+import { getENSDetails, setPageTitle } from '../../utilities';
 import { Season } from '../../hooks/season/types';
 import {
   SEASON_BADGE_VARIANTS,

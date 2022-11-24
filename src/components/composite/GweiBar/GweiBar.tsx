@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
-import { useWallet } from '@hooks';
+import { useWallet } from '../../../hooks';
 import { isUndefined } from 'lodash';
 import { Typography } from '@components/atomic';
 import { BulletLabel } from '@components/composite';

@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { Agents, useAMMContext, usePositionContext } from '@contexts';
+import { Agents, useAMMContext, usePositionContext } from '../../contexts';
 import { SwapFormActions, SwapFormModes } from '@components/interface';
 import {
   DataLayerEventPayload,
@@ -11,7 +11,7 @@ import {
   lessThanEpsilon,
   pushEvent,
   stringToBigFloat,
-} from '@utilities';
+} from '../../utilities';
 import { debounce, isNumber, isUndefined } from 'lodash';
 import {
   GetInfoType,
@@ -20,7 +20,7 @@ import {
   useCurrentPositionMarginRequirement,
   useTokenApproval,
   useWallet,
-} from '@hooks';
+} from '../../hooks';
 import * as s from './services';
 import { BigNumber } from 'ethers';
 

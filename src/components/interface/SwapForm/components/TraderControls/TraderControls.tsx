@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import Box from '@mui/material/Box';
 
-import { Agents, usePositionContext } from '@contexts';
+import { Agents, usePositionContext } from '../../../../../contexts';
 import { IconLabel, ToggleButtonGroup } from '@components/composite';
 
 export type TraderControlsProps = {

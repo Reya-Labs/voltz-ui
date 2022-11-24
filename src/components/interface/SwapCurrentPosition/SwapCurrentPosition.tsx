@@ -3,9 +3,9 @@ import Box from '@mui/material/Box';
 import { Position } from '@voltz-protocol/v1-sdk';
 import { Button, Ellipsis, PositionBadge, SummaryPanel } from '@components/atomic';
 import { FormPanel, SwapFormModes } from '@components/interface';
-import { formatCurrency } from '@utilities';
+import { formatCurrency } from '../../../utilities';
 import { BigNumber } from 'ethers';
-import { usePositionContext } from '@contexts';
+import { usePositionContext } from '../../../contexts';
 import { colors } from '@theme';
 import { isUndefined } from 'lodash';
 

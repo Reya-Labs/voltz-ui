@@ -1,14 +1,14 @@
 import { FormPanel } from '@components/interface';
 import { IconLabel, InputTokenLabel, MaskedIntegerField } from '@components/composite';
 import { Box } from '@mui/system';
-import { formatCurrency, toUSFormat } from '@utilities';
+import { formatCurrency, toUSFormat } from '../../../utilities';
 import { Panel, Typography, Button } from '@components/atomic';
 import { colors } from '@theme';
 import { isUndefined } from 'lodash';
 import React from 'react';
 import { MellowProduct } from '../types';
 import LPMellowVaultDepositInfo from './components/LPMellowVaultDepositInfo';
-import { Agents } from '@contexts';
+import { Agents } from '../../../contexts';
 
 export type MellowLpDepositFormProps = {
   lpVault: MellowProduct;

@@ -1,7 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 
-import { Wallet, WalletName } from '@contexts';
+import { Wallet, WalletName } from '../../../../../../../contexts';
 import { Icons, Typography } from '@components/atomic';
 import { WalletOptionButton } from './components';
 

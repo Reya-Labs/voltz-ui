@@ -1,4 +1,4 @@
-import { Agents } from '@contexts';
+import { Agents } from '../contexts';
 import { isUndefined } from 'lodash';
 
 /**

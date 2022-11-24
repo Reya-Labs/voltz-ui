@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { routes } from '@routes';
-import { actions, selectors } from '@store';
-import { useAgent, useDispatch, useSelector } from '@hooks';
+import { routes } from '../../../routes';
+import { actions, selectors } from '../../../store';
+import { useAgent, useDispatch, useSelector } from '../../../hooks';
 import {
   MintBurnFormActions,
   MintBurnFormModes,
@@ -10,7 +10,7 @@ import {
   useAMMsContext,
   useMintBurnForm,
   usePositionContext,
-} from '@contexts';
+} from '../../../contexts';
 import {
   FormPanel,
   MintBurnCurrentPosition,
@@ -19,7 +19,7 @@ import {
   PendingTransaction,
 } from '@components/interface';
 import { updateFixedRate } from './utilities';
-import { getPoolButtonId, isBorrowing, setPageTitle } from '@utilities';
+import { getPoolButtonId, isBorrowing, setPageTitle } from '../../../utilities';
 import { isUndefined } from 'lodash';
 import { BigNumber } from 'ethers';
 
@@ -89,7 +89,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
 
   const handleComplete = () => {
     onReset();
-    navigate(`/${routes.LP_FARM}`);
+    navigate(`/${routes.LP_PORTFOLIO}`);
   };
 
   const handleGoBack = () => {

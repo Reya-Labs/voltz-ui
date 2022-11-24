@@ -12,10 +12,10 @@ import {
   pushEvent,
   stringToBigFloat,
   toUSFormat,
-} from '@utilities';
+} from '../../../../../utilities';
 import { isUndefined } from 'lodash';
-import { useAgent, useWallet } from '@hooks';
-import { useAMMContext } from '@contexts';
+import { useAgent, useWallet } from '../../../../../hooks';
+import { useAMMContext } from '../../../../../contexts';
 
 interface ExpectedAPYProps {
   expectedApy?: number;

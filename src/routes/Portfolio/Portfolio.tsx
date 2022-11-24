@@ -3,23 +3,20 @@ import Box from '@mui/material/Box';
 import { useLocation } from 'react-router-dom';
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 
-import { findCurrentAmm, findCurrentPosition, setPageTitle } from '@utilities';
+import { findCurrentAmm, setPageTitle } from '../../utilities';
 import {
   Agents,
   AMMProvider,
   PositionProvider,
   SwapFormProvider,
   PortfolioProvider,
-} from '@contexts';
-import { PageTitleDesc } from '@components/composite';
-import { useAgent, useAMMs, usePositions, useWallet } from '@hooks';
+} from '../../contexts';
+import { useAgent, useAMMs, usePositions, useWallet } from '../../hooks';
 import { Page, SwapFormModes } from '@components/interface';
-import ConnectedAMMTable from '../../components/containers/ConnectedAMMTable/ConnectedAMMTable';
 import ConnectedPositionTable from '../../components/containers/ConnectedPositionTable/ConnectedPositionTable';
 import ConnectedSwapForm from '../../components/containers/ConnectedSwapForm/ConnectedSwapForm';
-import { getRenderMode } from './services';
 
-const Trader: React.FunctionComponent = () => {
+const Portfolio: React.FunctionComponent = () => {
   const [formMode, setFormMode] = useState<SwapFormModes>();
   const [amm, setAMM] = useState<AMM>();
   const [position, setPosition] = useState<Position>();
@@ -27,19 +24,18 @@ const Trader: React.FunctionComponent = () => {
 
   const { amms } = useAMMs();
   const { onChangeAgent } = useAgent();
-  const { pathname, key } = useLocation();
-  const { positions, positionsByAgentGroup } = usePositions();
+  const { key } = useLocation();
+  const { positionsByAgentGroup } = usePositions();
   const { agent } = useAgent();
   const { account } = useWallet();
 
-  const pathnameWithoutPrefix = pathname.slice(1);
-  const renderMode = getRenderMode(formMode, pathnameWithoutPrefix);
+  const renderMode = formMode ? 'form' : 'portfolio';
 
   useEffect(() => {
     setFormMode(undefined);
     setAMM(undefined);
     onChangeAgent(Agents.FIXED_TRADER);
-  }, [setFormMode, setAMM, pathnameWithoutPrefix, onChangeAgent]);
+  }, [setFormMode, setAMM, onChangeAgent]);
 
   useEffect(() => {
     handleReset();
@@ -51,10 +47,6 @@ const Trader: React.FunctionComponent = () => {
 
   useEffect(() => {
     switch (renderMode) {
-      case 'pools': {
-        setPageTitle('Trader Pools', account);
-        break;
-      }
       case 'portfolio': {
         setPageTitle('Trader Portfolio', account);
         break;
@@ -66,11 +58,6 @@ const Trader: React.FunctionComponent = () => {
     }
   }, [setPageTitle, renderMode, position]);
 
-  const handleSelectAmm = (selectedAMM: AMM) => {
-    setFormMode(SwapFormModes.NEW_POSITION);
-    setAMM(selectedAMM);
-    setPosition(findCurrentPosition(positions || [], selectedAMM, [1, 2]));
-  };
   const handleSelectPosition = (
     selectedPosition: Position,
     mode: 'margin' | 'liquidity' | 'rollover' | 'notional',
@@ -94,18 +81,6 @@ const Trader: React.FunctionComponent = () => {
 
   return (
     <Page>
-      {renderMode === 'pools' && (
-        <Box sx={{ width: '100%', maxWidth: '800px', margin: '0 auto' }}>
-          <Box sx={{ marginBottom: (theme) => theme.spacing(12) }}>
-            <PageTitleDesc
-              title="Trade Fixed or Variable Rates"
-              desc="Choose a pool and decide whether to trade fixed or variable rates."
-            />
-          </Box>
-          <ConnectedAMMTable onSelectItem={handleSelectAmm} />
-        </Box>
-      )}
-
       {settling && renderMode === 'portfolio' && (
         <PortfolioProvider
           positions={agent !== Agents.LIQUIDITY_PROVIDER ? positionsByAgentGroup : undefined}
@@ -152,4 +127,4 @@ const Trader: React.FunctionComponent = () => {
   );
 };
 
-export default Trader;
+export default Portfolio;

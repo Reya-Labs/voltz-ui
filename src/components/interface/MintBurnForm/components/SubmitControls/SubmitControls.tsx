@@ -1,11 +1,11 @@
 import React, { ReactNode } from 'react';
-import { useTokenApproval } from '@hooks';
+import { useTokenApproval } from '../../../../../hooks';
 import { Button, Ellipsis, Typography } from '@components/atomic';
 import {
   MintBurnFormHintStates,
   MintBurnFormModes,
   MintBurnFormSubmitButtonStates,
-} from '@contexts';
+} from '../../../../../contexts';
 import { colors } from '@theme';
 import { Box } from '@mui/system';
 

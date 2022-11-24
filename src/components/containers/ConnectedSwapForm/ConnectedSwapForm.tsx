@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { routes } from '@routes';
-import { actions, selectors } from '@store';
-import { useAgent, useDispatch, useSelector, useWallet } from '@hooks';
+import { routes } from '../../../routes';
+import { actions, selectors } from '../../../store';
+import { useAgent, useDispatch, useSelector, useWallet } from '../../../hooks';
 import {
   SwapCurrentPosition,
   SwapForm,
@@ -19,14 +19,14 @@ import {
   useAMMsContext,
   usePositionContext,
   useSwapFormContext,
-} from '@contexts';
+} from '../../../contexts';
 import { BigNumber } from 'ethers';
 import {
   getNotionalActionFromHintState,
   getPoolButtonId,
   isBorrowing,
   setPageTitle,
-} from '@utilities';
+} from '../../../utilities';
 import { isUndefined } from 'lodash';
 
 import { AMM } from '@voltz-protocol/v1-sdk';

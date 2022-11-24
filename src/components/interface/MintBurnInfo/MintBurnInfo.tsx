@@ -1,7 +1,11 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import { MintSummary } from './components';
-import { MintBurnFormLiquidityAction, MintBurnFormModes, MintBurnFormState } from '@contexts';
+import {
+  MintBurnFormLiquidityAction,
+  MintBurnFormModes,
+  MintBurnFormState,
+} from '../../../contexts';
 import { isUndefined } from 'lodash';
 import { FormPanel } from '@components/interface';
 

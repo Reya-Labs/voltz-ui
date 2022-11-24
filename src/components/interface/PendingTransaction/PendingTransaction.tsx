@@ -11,14 +11,14 @@ import {
   pushEvent,
   setPageTitle,
   formatCurrency,
-} from '@utilities';
-import { useWallet, useSelector, useAgent } from '@hooks';
-import { selectors } from '@store';
-import { AMMProvider, MintBurnFormLiquidityAction, useAMMsContext } from '@contexts';
+} from '../../../utilities';
+import { useWallet, useSelector, useAgent } from '../../../hooks';
+import { selectors } from '../../../store';
+import { AMMProvider, MintBurnFormLiquidityAction, useAMMsContext } from '../../../contexts';
 import { Button, Panel, Typography, Loading } from '@components/atomic';
 import { ProtocolInformation, WalletAddressDisplay } from '@components/composite';
 import { isUndefined } from 'lodash';
-import { Wallet } from '@graphql';
+import { Wallet } from '../../../graphql';
 
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 
