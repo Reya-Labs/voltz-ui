@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from '../../../hooks';
-import { routes } from '@routes';
+import { routes } from '../../../routes';
 import React, { useEffect, useState } from 'react';
 import { actions, selectors } from '@store';
 

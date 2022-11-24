@@ -1,6 +1,6 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import { routes } from '@routes';
+import { routes } from '../../../routes';
 import { Icon } from '../../atomic';
 import { NavLink } from './NavLink/NavLink';
 import { iconSx } from './NavLink/style';

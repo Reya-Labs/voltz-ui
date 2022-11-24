@@ -5,7 +5,7 @@ import { PendingTransaction, PortfolioHeader, PositionTable } from '@components/
 import { Loading, Panel, RouteLink, Typography } from '@components/atomic';
 import { Agents, usePortfolioContext } from '@contexts';
 import { actions, selectors } from '@store';
-import { routes } from '@routes';
+import { routes } from '../../../routes';
 import Box from '@mui/material/Box';
 import { colors } from '@theme';
 

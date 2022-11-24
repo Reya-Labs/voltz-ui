@@ -17,7 +17,7 @@ import { Page } from '@components/interface';
 import { PageTitleDesc } from '@components/composite';
 import ConnectedMintBurnForm from '../../components/containers/ConnectedMintBurnForm/ConnectedMintBurnForm';
 import { Button } from '@mui/material';
-import { routes } from '@routes';
+import { routes } from '../../routes';
 import AMMTable from '../../components/interface/AMMTable/AMMTable';
 
 const LPPools: React.FunctionComponent = () => {

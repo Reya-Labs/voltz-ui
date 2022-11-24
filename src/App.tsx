@@ -12,7 +12,7 @@ import {
   TraderPools,
   LPPools,
   LPPortfolio,
-} from '@routes';
+} from './routes';
 import { AlphaBanner, GweiBar } from '@components/composite';
 import Box from '@mui/material/Box';
 import { useEffect } from 'react';

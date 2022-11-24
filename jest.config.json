@@ -23,7 +23,6 @@
     "@factories": "<rootDir>/src/factories",
     "@components": "<rootDir>/src/components",
     "@theme": "<rootDir>/src/theme",
-    "@routes": "<rootDir>/src/routes",
     "@store": "<rootDir>/src/store"
   },
   "modulePaths": [],
