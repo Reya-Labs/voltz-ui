@@ -6,7 +6,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { BigNumber, ethers } from 'ethers';
 
 import { useGetWalletQuery } from '../../graphql';
-import { selectors } from '@store';
+import { selectors } from '../../store';
 import { useSelector } from '../../hooks';
 import { WalletName, WalletStatus } from './types';
 import WalletContext from './WalletContext';

@@ -28,7 +28,6 @@
       "@theme": ["src/theme"],
       "@components/*": ["src/components"],
       "@contexts": ["src/contexts"],
-      "@store": ["src/store"],
       "@utilities": ["src/utilities"],
     },
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */

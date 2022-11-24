@@ -15,7 +15,6 @@
       "@theme": ["src/theme"],
       "@components/*": ["src/components"],
       "@contexts": ["src/contexts"],
-      "@store": ["src/store"],
       "@utilities": ["src/utilities"],
     },
     "resolveJsonModule": true,

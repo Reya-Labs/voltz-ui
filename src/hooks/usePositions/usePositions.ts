@@ -3,7 +3,7 @@ import { useMemo, useEffect } from 'react';
 import isNull from 'lodash/isNull';
 import { DateTime } from 'luxon';
 
-import { actions, selectors } from '@store';
+import { actions, selectors } from '../../store';
 import { useAgent, useWallet, useSelector, useDispatch } from '../../hooks';
 import { Agents } from '@contexts';
 import { MEPositionFactory } from './mePositionFactory';

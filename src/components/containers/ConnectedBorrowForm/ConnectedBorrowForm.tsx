@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from '../../../hooks';
 import { routes } from '../../../routes';
 import React, { useEffect, useState } from 'react';
-import { actions, selectors } from '@store';
+import { actions, selectors } from '../../../store';
 
 import { useNavigate } from 'react-router-dom';
 import {

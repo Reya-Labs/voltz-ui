@@ -21,7 +21,6 @@
     "@utilities": "<rootDir>/src/utilities",
     "@components": "<rootDir>/src/components",
     "@theme": "<rootDir>/src/theme",
-    "@store": "<rootDir>/src/store"
   },
   "modulePaths": [],
   "resetMocks": true,
