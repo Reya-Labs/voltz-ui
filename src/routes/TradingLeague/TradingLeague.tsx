@@ -4,7 +4,7 @@ import { setPageTitle } from '../../utilities';
 import { Page } from '@components/interface';
 import { useCurrentSeason, useWallet } from '../../hooks';
 import Leaderboard from './Leaderboard/Leaderboard';
-import { RankType } from '@voltz-protocol/v1-sdk/';
+import { RankType } from '@voltz-protocol/v1-sdk';
 import { isUndefined } from 'lodash';
 import { getCommunitySbt } from '../Profile/helpers';
 const PER_PAGE = 10;
