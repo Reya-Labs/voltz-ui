@@ -2,40 +2,30 @@ import { Season } from '../../../../hooks/season/types';
 import { BADGE_TYPE_BADGE_VARIANT_MAP, SEASON_BADGE_VARIANTS } from './mappers';
 import { BadgeVariant, GetProfileBadgesResponse } from './types';
 import { getDefaultResponse } from './helpers';
-import { Signer } from 'ethers';
 import { CommunitySBT } from '@voltz-protocol/v1-sdk';
 
 export async function getSeasonBadges({
   userId,
-  seasonId,
-  signer,
+  season,
+  sbt
 }: {
   userId: string;
-  seasonId: Season['id'];
-  signer: Signer;
+  season: Season;
+  sbt: CommunitySBT
 }): Promise<GetProfileBadgesResponse> {
   if (!process.env.REACT_APP_SUBGRAPH_BADGES_URL) {
-    return getDefaultResponse(seasonId);
+    return getDefaultResponse(season.id);
   }
   try {
-    const SBT = new CommunitySBT({
-      id: `${userId}#${seasonId}`,
-      signer: signer,
-    });
 
-    const badgesSubgraphUrl = process.env.REACT_APP_SUBGRAPH_BADGES_URL;
-    const nonProgDbUrl = process.env.REACT_APP_DB_BADGES_URL;
-    const referralsDbUrl = process.env.REACT_APP_REFERRAL_AND_SIGNATURE_SERVICE_URL;
-
-    const badges = await SBT.getSeasonBadges({
-      badgesSubgraphUrl: badgesSubgraphUrl,
-      nonProgDbUrl: nonProgDbUrl,
-      referralsDbUrl: referralsDbUrl,
+    const badges = await sbt.getSeasonBadges({
       userId: userId,
-      seasonId: seasonId,
+      seasonId: season.id,
+      seasonStart: season.startDate.toSeconds(),
+      seasonEnd: season.endDate.toSeconds()
     });
 
-    return SEASON_BADGE_VARIANTS[seasonId].map((badgeVariant) => {
+    return SEASON_BADGE_VARIANTS[season.id].map((badgeVariant) => {
       const badge = badges.find((b) => BADGE_TYPE_BADGE_VARIANT_MAP[b.badgeType] === badgeVariant);
       if (!badge) {
         return {
@@ -50,6 +40,6 @@ export async function getSeasonBadges({
       };
     });
   } catch (error) {
-    return getDefaultResponse(seasonId);
+    return getDefaultResponse(season.id);
   }
 }
