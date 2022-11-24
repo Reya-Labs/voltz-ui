@@ -8,7 +8,7 @@ import { isUndefined } from 'lodash';
 import { useAgent } from '../../../hooks';
 import PortfolioHeaderValue from './PortfolioHeaderValue';
 import PortfolioHeaderBox from './PortfolioHeaderBox';
-import { Agents } from '@contexts';
+import { Agents } from '../../../contexts';
 
 export type PortfolioHeaderInfoProps = {
   currencyCode?: string;

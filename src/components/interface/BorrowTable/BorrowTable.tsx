@@ -8,7 +8,7 @@ import { Box } from '@mui/material';
 
 import { findCurrentBorrowPosition, getRowButtonId } from '../../../utilities';
 import { mapAmmToAmmTableDatum } from './utilities';
-import { BorrowAMMProvider, PositionProvider } from '@contexts';
+import { BorrowAMMProvider, PositionProvider } from '../../../contexts';
 import { labelsFixed, labelsVariable, BorrowAMMTableDatum } from './types';
 import { BorrowTableHead } from './components';
 import { DateTime } from 'luxon';

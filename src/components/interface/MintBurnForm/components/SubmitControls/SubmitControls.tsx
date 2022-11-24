@@ -5,7 +5,7 @@ import {
   MintBurnFormHintStates,
   MintBurnFormModes,
   MintBurnFormSubmitButtonStates,
-} from '@contexts';
+} from '../../../../../contexts';
 import { colors } from '@theme';
 import { Box } from '@mui/system';
 

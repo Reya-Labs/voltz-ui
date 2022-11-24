@@ -8,7 +8,7 @@ import { Position } from '@voltz-protocol/v1-sdk';
 import { findCurrentAmm, getRowButtonId, isBorrowing } from '../../../utilities';
 import { Panel } from '@components/atomic';
 import { PositionTableHead, PositionTableRow } from './components';
-import { Agents, AMMProvider, PortfolioContext } from '@contexts';
+import { Agents, AMMProvider, PortfolioContext } from '../../../contexts';
 import TransactionList from '../TransactionList/TransactionList';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';

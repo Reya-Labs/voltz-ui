@@ -10,7 +10,7 @@ import {
   MintBurnFormModes,
   MintBurnFormProvider,
   PositionProvider,
-} from '@contexts';
+} from '../../contexts';
 import { useAgent, usePositions, useWallet } from '../../hooks';
 
 import { Page } from '@components/interface';

@@ -3,7 +3,7 @@ import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 
-import { AMMProvider, Agents } from '@contexts';
+import { AMMProvider, Agents } from '../../../contexts';
 import { Panel } from '@components/atomic';
 import { AMMTableHead, AMMTableRow } from './components';
 import { useAgent, useAMMs } from '../../../hooks';

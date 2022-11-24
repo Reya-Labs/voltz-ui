@@ -1,6 +1,6 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { AgentProvider } from '@contexts';
+import { AgentProvider } from '../../../contexts';
 import PositionTable from './PositionTable';
 
 export default {

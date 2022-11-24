@@ -1,4 +1,4 @@
-import { Agents } from '@contexts';
+import { Agents } from '../../../contexts';
 import Box from '@mui/material/Box';
 import CustomPoolField from './CustomPoolField';
 import { Typography } from '@components/atomic';

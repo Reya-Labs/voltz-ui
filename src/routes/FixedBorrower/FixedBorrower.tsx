@@ -9,7 +9,7 @@ import {
   BorrowFormProvider,
   AMMProvider,
   PositionProvider,
-} from '@contexts';
+} from '../../contexts';
 import { useBorrowPositions, useWallet } from '../../hooks';
 
 import { Page } from '@components/interface';

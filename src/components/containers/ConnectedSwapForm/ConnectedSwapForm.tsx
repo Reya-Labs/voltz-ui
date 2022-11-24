@@ -19,7 +19,7 @@ import {
   useAMMsContext,
   usePositionContext,
   useSwapFormContext,
-} from '@contexts';
+} from '../../../contexts';
 import { BigNumber } from 'ethers';
 import {
   getNotionalActionFromHintState,

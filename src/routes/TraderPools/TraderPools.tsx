@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 
 import { findCurrentPosition, setPageTitle } from '../../utilities';
-import { Agents, AMMProvider, PositionProvider, SwapFormProvider } from '@contexts';
+import { Agents, AMMProvider, PositionProvider, SwapFormProvider } from '../../contexts';
 import { PageTitleDesc } from '@components/composite';
 import { useAgent, usePositions, useWallet } from '../../hooks';
 import { Page, SwapFormModes } from '@components/interface';

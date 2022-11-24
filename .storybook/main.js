@@ -31,7 +31,6 @@ module.exports = {
     ];
     config.resolve.alias['@theme'] = path.resolve(path.dirname(__dirname), 'src/theme');
     config.resolve.alias['@components'] = path.resolve(path.dirname(__dirname), 'src/components');
-    config.resolve.alias['@contexts'] = path.resolve(path.dirname(__dirname), 'src/contexts');
     return config;
   },
   features: {

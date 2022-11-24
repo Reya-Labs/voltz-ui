@@ -8,7 +8,7 @@ import {
   SwapFormState,
   SwapFormSubmitButtonHintStates,
   SwapFormSubmitButtonStates,
-} from '@contexts';
+} from '../../../contexts';
 import { FormPanel } from '@components/interface';
 import {
   IconLabel,

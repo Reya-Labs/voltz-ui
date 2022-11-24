@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { Wallet } from '@contexts';
+import { Wallet } from '../../../contexts';
 import WalletConnect from './WalletConnect';
 
 export default {

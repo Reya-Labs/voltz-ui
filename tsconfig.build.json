@@ -14,7 +14,6 @@
     "paths": {
       "@theme": ["src/theme"],
       "@components/*": ["src/components"],
-      "@contexts": ["src/contexts"]
     },
     "resolveJsonModule": true,
     "allowJs": true,

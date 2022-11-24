@@ -6,7 +6,7 @@ import { Button, getPositionBadgeVariant, PositionBadge, Typography } from '@com
 import { BulletLabel, getHealthTextColor, HealthFactorText } from '@components/composite';
 import { isUndefined } from 'lodash';
 import { useAgent } from '../../../../../hooks';
-import { Agents } from '@contexts';
+import { Agents } from '../../../../../contexts';
 import { ReactComponent as EditIcon } from './editPosition.svg';
 
 export type PositionTableHeadProps = {

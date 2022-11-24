@@ -11,7 +11,7 @@ import {
   MintBurnFormProvider,
   PositionProvider,
   PortfolioProvider,
-} from '@contexts';
+} from '../../contexts';
 import { useAgent, useAMMs, usePositions, useWallet } from '../../hooks';
 
 import { Page } from '@components/interface';

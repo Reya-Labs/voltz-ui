@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { Agents, useAMMContext, usePositionContext } from '@contexts';
+import { Agents, useAMMContext, usePositionContext } from '../../contexts';
 import { SwapFormActions, SwapFormModes } from '@components/interface';
 import {
   DataLayerEventPayload,

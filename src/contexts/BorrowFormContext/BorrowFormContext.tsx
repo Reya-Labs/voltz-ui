@@ -7,7 +7,7 @@ import {
 } from '../../hooks';
 import { hasEnoughUnderlyingTokens, lessThanEpsilon } from '../../utilities';
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
-import { Agents, useAMMContext, useBorrowAMMContext, usePositionContext } from '@contexts';
+import { Agents, useAMMContext, useBorrowAMMContext, usePositionContext } from '../../contexts';
 import { isUndefined } from 'lodash';
 import * as s from '../SwapFormContext/services';
 

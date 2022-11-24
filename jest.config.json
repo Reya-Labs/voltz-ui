@@ -17,7 +17,6 @@
   ],
   "moduleNameMapper": {
     "^.+\\.module\\.(css)$": "identity-obj-proxy",
-    "@contexts": "<rootDir>/src/contexts",
     "@components": "<rootDir>/src/components",
     "@theme": "<rootDir>/src/theme"
   },

@@ -20,7 +20,7 @@ import {
   MintBurnFormModes,
   MintBurnFormState,
   MintBurnFormSubmitButtonStates,
-} from '@contexts';
+} from '../../../contexts';
 import { SystemStyleObject, Theme } from '@theme';
 
 export type MintBurnFormProps = {

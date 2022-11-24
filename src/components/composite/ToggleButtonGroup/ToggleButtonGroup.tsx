@@ -3,7 +3,7 @@ import MuiToggleButtonGroup, {
   ToggleButtonGroupProps as MuiToggleButtonGroupProps,
 } from '@mui/material/ToggleButtonGroup';
 
-import { AgentProps } from '@contexts';
+import { AgentProps } from '../../../contexts';
 import { useAgentWithOverride } from '../../../hooks';
 import { withLabel, WithLabelProps } from '../../hoc';
 import { ToggleButton } from '../../atomic';

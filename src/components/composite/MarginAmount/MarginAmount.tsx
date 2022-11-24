@@ -6,7 +6,7 @@ import MaskedIntegerField from '../MaskedIntegerField/MaskedIntegerField';
 import InputTokenLabel from '../InputTokenLabel/InputTokenLabel';
 import { formatCurrency, toUSFormat } from '../../../utilities';
 import { HealthFactorText } from '@components/composite';
-import { usePositionContext } from '@contexts';
+import { usePositionContext } from '../../../contexts';
 
 export type MarginAmountProps = {
   balance?: number;

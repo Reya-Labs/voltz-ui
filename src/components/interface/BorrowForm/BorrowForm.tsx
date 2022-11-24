@@ -12,7 +12,11 @@ import {
 import { SubmitControls, FixBorrow } from './components';
 import { SystemStyleObject, Theme } from '@theme';
 
-import { Agents, BorrowFormSubmitButtonHintStates, BorrowFormSubmitButtonStates } from '@contexts';
+import {
+  Agents,
+  BorrowFormSubmitButtonHintStates,
+  BorrowFormSubmitButtonStates,
+} from '../../../contexts';
 import { formatCurrency, getPoolButtonId } from '../../../utilities';
 
 export type BorrowProps = {

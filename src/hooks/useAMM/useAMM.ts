@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Agents } from '@contexts';
+import { Agents } from '../../contexts';
 import {
   ExpectedInfoPayload,
   GetInfoType,

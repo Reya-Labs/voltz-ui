@@ -14,7 +14,7 @@ import { Typography } from '@components/atomic';
 import IconLabel from '../IconLabel/IconLabel';
 import { VariableAPY, FixedAPR, MaturityEndDate } from './components';
 import { isBorrowing } from '../../../utilities';
-import { useAMMContext, Agents } from '@contexts';
+import { useAMMContext, Agents } from '../../../contexts';
 import { DateTime } from 'luxon';
 
 export type ProtocolInformationProps = {

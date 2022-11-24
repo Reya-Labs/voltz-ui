@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { AgentProvider, AMMProvider, SwapFormProvider } from '@contexts';
+import { AgentProvider, AMMProvider, SwapFormProvider } from '../../../contexts';
 import SwapInfo from './SwapInfo';
 import { SwapFormActions, SwapFormModes } from '../SwapForm/types';
 

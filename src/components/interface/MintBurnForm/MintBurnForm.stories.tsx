@@ -10,7 +10,7 @@ import {
   MintBurnFormSubmitButtonStates,
   useMintBurnForm,
   AMMProvider,
-} from '@contexts';
+} from '../../../contexts';
 import MintBurnForm from './MintBurnForm';
 import { useTokenApproval } from '../../../hooks';
 import { AMM } from '@voltz-protocol/v1-sdk';

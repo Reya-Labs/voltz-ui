@@ -10,7 +10,7 @@ import {
   useAMMsContext,
   useMintBurnForm,
   usePositionContext,
-} from '@contexts';
+} from '../../../contexts';
 import {
   FormPanel,
   MintBurnCurrentPosition,

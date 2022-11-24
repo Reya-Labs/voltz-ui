@@ -18,7 +18,7 @@ import {
   useBorrowFormContext,
   Agents,
   usePositionContext,
-} from '@contexts';
+} from '../../../contexts';
 import isBorrowing from '../../../utilities/isBorrowing';
 
 export type ConnectedBorrowFormProps = {
