@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { Box, SystemStyleObject, Theme } from '@mui/system';
 import { Typography } from '@components/atomic';
-import { colors } from '@theme';
+import { colors } from '../../../theme';
 
 interface SummaryPanelProps {
   label?: ReactNode;

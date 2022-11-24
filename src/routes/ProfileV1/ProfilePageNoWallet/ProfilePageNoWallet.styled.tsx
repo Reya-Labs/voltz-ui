@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import { colors } from '@theme';
+import { colors } from '../../../theme';
 import { Pill } from '../../../components/atomic/Pill';
 import Typography from '../../../components/atomic/Typography/Typography';
 

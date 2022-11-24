@@ -10,7 +10,7 @@ import { UseAsyncFunctionResult } from '../../../../../hooks';
 
 import Slider, { SliderThumb } from '@mui/material/Slider';
 
-import { colors, SystemStyleObject, Theme } from '@theme';
+import { colors, SystemStyleObject, Theme } from '../../../../../theme';
 
 export type FixBorrowSliderProps = {
   variableDebt: UseAsyncFunctionResult<unknown, number | void>;

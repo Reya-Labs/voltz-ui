@@ -29,7 +29,6 @@ module.exports = {
         Buffer: ['buffer', 'Buffer'],
       }),
     ];
-    config.resolve.alias['@theme'] = path.resolve(path.dirname(__dirname), 'src/theme');
     config.resolve.alias['@components'] = path.resolve(path.dirname(__dirname), 'src/components');
     return config;
   },

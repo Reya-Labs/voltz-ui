@@ -6,7 +6,7 @@ import { Button, Icon, Icons } from '@components/atomic';
 import CircleIcon from '@mui/icons-material/Circle';
 
 import './web3modal.scss';
-import { colors } from '@theme';
+import { colors } from '../../../../../theme';
 import { AvatarAddress } from '../../../AvatarAddress/AvatarAddress';
 
 export type WalletConnectButtonProps = {

@@ -7,7 +7,7 @@ import { Agents, usePortfolioContext } from '../../../contexts';
 import { actions, selectors } from '../../../store';
 import { routes } from '../../../routes';
 import Box from '@mui/material/Box';
-import { colors } from '@theme';
+import { colors } from '../../../theme';
 
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 

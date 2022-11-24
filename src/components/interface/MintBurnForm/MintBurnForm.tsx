@@ -21,7 +21,7 @@ import {
   MintBurnFormState,
   MintBurnFormSubmitButtonStates,
 } from '../../../contexts';
-import { SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '../../../theme';
 
 export type MintBurnFormProps = {
   approvalsNeeded?: boolean;

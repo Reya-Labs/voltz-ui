@@ -2,7 +2,7 @@ import React from 'react';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import { colors, SystemStyleObject, Theme } from '@theme';
+import { colors, SystemStyleObject, Theme } from '../../../theme';
 import { Position } from '@voltz-protocol/v1-sdk';
 
 import { findCurrentAmm, getRowButtonId, isBorrowing } from '../../../utilities';

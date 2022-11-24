@@ -1,5 +1,5 @@
 import React from 'react';
-import { SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '../../../theme';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import isArray from 'lodash/isArray';
 

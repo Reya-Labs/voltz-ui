@@ -1,6 +1,6 @@
 import { Typography } from '@components/atomic';
 import { Stack } from '@mui/material';
-import { colors } from '@theme';
+import { colors } from '../../../../../theme';
 
 import { IconLabel } from '@components/composite';
 import { Box } from '@mui/system';

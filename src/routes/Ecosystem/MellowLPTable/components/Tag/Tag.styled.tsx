@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Typography from '../../../../../components/atomic/Typography/Typography';
-import { colors } from '@theme';
+import { colors } from '../../../../../theme';
 
 export const TagContainer = styled(Box)`
   display: flex;

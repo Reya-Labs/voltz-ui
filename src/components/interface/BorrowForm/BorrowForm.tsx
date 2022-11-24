@@ -10,7 +10,7 @@ import {
   ProtocolInformation,
 } from '@components/composite';
 import { SubmitControls, FixBorrow } from './components';
-import { SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '../../../theme';
 
 import {
   Agents,

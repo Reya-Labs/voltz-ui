@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import { Typography } from '../../../components/atomic';
-import { colors } from '@theme';
+import { colors } from '../../../theme';
 
 export const LearnMoreLink = styled('a')`
   text-decoration: none;

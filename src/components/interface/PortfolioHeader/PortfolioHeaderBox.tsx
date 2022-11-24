@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { colors, SystemStyleObject, Theme } from '@theme';
+import { colors, SystemStyleObject, Theme } from '../../../theme';
 import { Typography } from '@components/atomic';
 import Box from '@mui/material/Box';
 

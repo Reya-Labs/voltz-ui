@@ -18,7 +18,7 @@ import {
   MarginAmount,
 } from '@components/composite';
 import { TraderControls, MarginControls, SubmitControls, Leverage } from './components';
-import { SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '../../../theme';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from './types';
 

@@ -1,5 +1,5 @@
 import { Typography } from '@components/atomic';
-import { colors } from '@theme';
+import { colors } from '../../../../theme';
 import CountUp from 'react-countup';
 import React from 'react';
 

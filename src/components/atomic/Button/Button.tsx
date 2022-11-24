@@ -1,5 +1,5 @@
 import React from 'react';
-import { SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '../../../theme';
 import MuiButton, { ButtonProps as MuiButtonProps } from '@mui/material/Button';
 
 import { AgentProps, Agents } from '../../../contexts';

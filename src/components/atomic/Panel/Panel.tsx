@@ -1,5 +1,5 @@
 import React from 'react';
-import { colors, SystemStyleObject, Theme } from '@theme';
+import { colors, SystemStyleObject, Theme } from '../../../theme';
 import Box from '@mui/material/Box';
 
 export type PanelProps = {

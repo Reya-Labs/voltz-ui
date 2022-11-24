@@ -7,7 +7,7 @@ import { useTokenApproval } from '../../../../../hooks';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Button, Ellipsis } from '@components/atomic';
-import { colors } from '@theme';
+import { colors } from '../../../../../theme';
 import { SwapFormModes } from '../../types';
 
 interface SubmitControlsProps {

@@ -1,7 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import ListItem from '@mui/material/ListItem';
-import { colors, SystemStyleObject, Theme } from '@theme';
+import { colors, SystemStyleObject, Theme } from '../../../theme';
 import { Button, Icon, Typography } from '@components/atomic';
 import { getTransactionData } from './services';
 

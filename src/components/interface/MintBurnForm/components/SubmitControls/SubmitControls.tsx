@@ -6,7 +6,7 @@ import {
   MintBurnFormModes,
   MintBurnFormSubmitButtonStates,
 } from '../../../../../contexts';
-import { colors } from '@theme';
+import { colors } from '../../../../../theme';
 import { Box } from '@mui/system';
 
 type TextProps = {

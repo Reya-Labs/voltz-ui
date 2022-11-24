@@ -1,4 +1,4 @@
-import { SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '../../../theme';
 import { Typography } from '@components/atomic';
 import Box from '@mui/material/Box';
 import { formatCurrency } from '../../../utilities';

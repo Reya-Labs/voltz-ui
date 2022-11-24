@@ -14,7 +14,7 @@ import { commonOverrides } from './styles';
 import { isBorrowing } from '../../../utilities';
 
 export type AMMTableProps = {
-  onSelectItem: (datum: AMM) => void;
+  onSelectItem: (amm: AMM) => void;
 };
 
 const AMMTable: React.FunctionComponent<AMMTableProps> = ({ onSelectItem }) => {
@@ -24,10 +24,6 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({ onSelectItem }) => {
   if (!amms || loading || error) {
     return null;
   }
-
-  const handleSelectRow = (index: number) => () => {
-    onSelectItem(amms[index]);
-  };
 
   return (
     <Panel
@@ -58,7 +54,7 @@ const AMMTable: React.FunctionComponent<AMMTableProps> = ({ onSelectItem }) => {
                     startDate={amm.startDateTime}
                     endDate={amm.endDateTime}
                     index={index}
-                    onSelect={handleSelectRow(index)}
+                    onSelect={() => onSelectItem(amm)}
                   />
                 </AMMProvider>
               ))}

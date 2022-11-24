@@ -8,7 +8,7 @@ import {
   WarningBox,
   ExpectedAPY,
 } from './components';
-import { colors, SystemStyleObject, Theme } from '@theme';
+import { colors, SystemStyleObject, Theme } from '../../../theme';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from '../SwapForm/types';
 import { isUndefined } from 'lodash';
