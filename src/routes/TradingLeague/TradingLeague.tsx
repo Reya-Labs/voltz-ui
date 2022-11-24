@@ -46,9 +46,11 @@ const TradingLeague: React.FunctionComponent = () => {
   };
 
   const setUserRanking = (rankingResults: RankType[], walletAddress?: string | null) => {
-    const userEntry: RankType | undefined = rankingResults.find((r) => r.address.toLowerCase() === walletAddress?.toLowerCase());
+    const userEntry: RankType | undefined = rankingResults.find(
+      (r) => r.address.toLowerCase() === walletAddress?.toLowerCase(),
+    );
     setUserPoints(userEntry?.points || -1);
-    setUserRank( userEntry ? (isUndefined(userEntry.rank) ? -1 : userEntry.rank) : -1);
+    setUserRank(userEntry ? (isUndefined(userEntry.rank) ? -1 : userEntry.rank) : -1);
   };
 
   useEffect(() => {

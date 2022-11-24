@@ -213,21 +213,22 @@ export const getSeasonUserId = (userId: string, seasonId: Season['id']) =>
   `${userId.toLowerCase()}#${seasonId}`;
 
 export const getCommunitySbt = (signer: Signer | null) => {
-    const ignoredWalletIds = process.env.REACT_APP_IGNORED_LEAGUE_WALLETS &&
-      process.env.REACT_APP_IGNORED_LEAGUE_WALLETS !== 'UNPROVIDED'
-        ? process.env.REACT_APP_IGNORED_LEAGUE_WALLETS.split(',')
-            .map((s) => s.trim().toLowerCase())
-            .reduce((pV, cI) => ({ ...pV, [cI]: true }), {})
-        : {};
-    const params : SBTConstructorArgs = {
-      id: process.env.REACT_APP_COMMUNITY_SBT_ADDRESS || "",
-      signer: signer,
-      badgesSubgraphUrl: process.env.REACT_APP_SUBGRAPH_BADGES_URL,
-      nonProgDbUrl: process.env.REACT_APP_DB_BADGES_URL,
-      referralsDbUrl: process.env.REACT_APP_REFERRAL_AND_SIGNATURE_SERVICE_URL,
-      subgraphUrl: process.env.REACT_APP_SUBGRAPH_URL,
-      coingeckoKey: process.env.REACT_APP_COINGECKO_API_KEY,
-      ignoredWalletIds: ignoredWalletIds
-    };
-    return new CommunitySBT(params);
+  const ignoredWalletIds =
+    process.env.REACT_APP_IGNORED_LEAGUE_WALLETS &&
+    process.env.REACT_APP_IGNORED_LEAGUE_WALLETS !== 'UNPROVIDED'
+      ? process.env.REACT_APP_IGNORED_LEAGUE_WALLETS.split(',')
+          .map((s) => s.trim().toLowerCase())
+          .reduce((pV, cI) => ({ ...pV, [cI]: true }), {})
+      : {};
+  const params: SBTConstructorArgs = {
+    id: process.env.REACT_APP_COMMUNITY_SBT_ADDRESS || '',
+    signer: signer,
+    badgesSubgraphUrl: process.env.REACT_APP_SUBGRAPH_BADGES_URL,
+    nonProgDbUrl: process.env.REACT_APP_DB_BADGES_URL,
+    referralsDbUrl: process.env.REACT_APP_REFERRAL_AND_SIGNATURE_SERVICE_URL,
+    subgraphUrl: process.env.REACT_APP_SUBGRAPH_URL,
+    coingeckoKey: process.env.REACT_APP_COINGECKO_API_KEY,
+    ignoredWalletIds: ignoredWalletIds,
   };
+  return new CommunitySBT(params);
+};
