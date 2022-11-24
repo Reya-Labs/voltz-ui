@@ -8,6 +8,12 @@ import { ethers } from 'ethers';
 import { GraphQLClient, gql } from 'graphql-request';
 import axios from 'axios';
 
+export type RankType = {
+  address: string;
+  points: number;
+  rank: number;
+};
+
 const ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;
 
 const getActivityQuery = (skip: number) => `
@@ -59,13 +65,14 @@ const geckoEthToUsd = async () => {
 type ActivityArgs = {
   from: number;
   end?: number;
+  ignoredWalletIds: Record<string, boolean>;
 };
 
-type Activity = {
-  total: Map<string, number>;
-};
-
-export async function getActivity({ from, end }: ActivityArgs): Promise<Activity> {
+export async function getActivity({
+  from,
+  end,
+  ignoredWalletIds,
+}: ActivityArgs): Promise<RankType[]> {
   const endpoint = 'https://api.thegraph.com/subgraphs/name/voltzprotocol/mainnet-v1';
   const graphQLClient = new GraphQLClient(endpoint);
 
@@ -76,7 +83,7 @@ export async function getActivity({ from, end }: ActivityArgs): Promise<Activity
     to = end;
   }
 
-  const scores: Map<string, number> = new Map<string, number>();
+  const scores: Record<string, number> = {};
 
   let skip = 0;
   while (true) {
@@ -122,8 +129,8 @@ export async function getActivity({ from, end }: ActivityArgs): Promise<Activity
         }
       }
 
-      if (score > 0) {
-        scores.set(wallet.id as string, score);
+      if (score > 0 && !ignoredWalletIds[wallet.id.toLowerCase()]) {
+        scores[wallet.id] = score;
       }
     }
 
@@ -132,7 +139,13 @@ export async function getActivity({ from, end }: ActivityArgs): Promise<Activity
     }
   }
 
-  return {
-    total: new Map(scores),
-  };
+  const rankResult: RankType[] = Object.keys(scores)
+    .sort((a, b) => scores[b] - scores[a])
+    .map((walletId, index) => ({
+      address: walletId,
+      points: scores[walletId] ?? 0,
+      rank: index,
+    }));
+
+  return rankResult;
 }
