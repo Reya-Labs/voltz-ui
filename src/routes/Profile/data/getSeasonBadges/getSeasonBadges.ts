@@ -7,22 +7,21 @@ import { CommunitySBT } from '@voltz-protocol/v1-sdk';
 export async function getSeasonBadges({
   userId,
   season,
-  sbt
+  sbt,
 }: {
   userId: string;
   season: Season;
-  sbt: CommunitySBT
+  sbt: CommunitySBT;
 }): Promise<GetProfileBadgesResponse> {
   if (!process.env.REACT_APP_SUBGRAPH_BADGES_URL) {
     return getDefaultResponse(season.id);
   }
   try {
-
     const badges = await sbt.getSeasonBadges({
       userId: userId,
       seasonId: season.id,
       seasonStart: season.startDate.toSeconds(),
-      seasonEnd: season.endDate.toSeconds()
+      seasonEnd: season.endDate.toSeconds(),
     });
 
     return SEASON_BADGE_VARIANTS[season.id].map((badgeVariant) => {

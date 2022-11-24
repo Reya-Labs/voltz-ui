@@ -35,12 +35,12 @@ const Profile: React.FunctionComponent = () => {
 
   const [copyLinkButtonMode, setCopyLinkButtonMode] = useState<CopyLinkButtonProps['mode']>('copy');
 
-  const fetchBadges = async ( account: string) => {
+  const fetchBadges = async (account: string) => {
     const sbt = getCommunitySbt(wallet.signer);
     return await getSeasonBadges({
       userId: account,
       season: season,
-      sbt: sbt
+      sbt: sbt,
     });
   };
 
