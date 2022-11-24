@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument */
 
 import JSBI from 'jsbi';
-import { GetWalletQuery } from '@graphql';
+import { GetWalletQuery } from '../../graphql';
 import { providers } from 'ethers';
 import {
   Position,

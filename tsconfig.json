@@ -29,7 +29,6 @@
       "@components/*": ["src/components"],
       "@contexts": ["src/contexts"],
       "@store": ["src/store"],
-      "@graphql": ["src/graphql"],
       "@utilities": ["src/utilities"],
     },
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */

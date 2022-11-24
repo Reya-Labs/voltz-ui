@@ -247,7 +247,6 @@ module.exports = function (webpackEnv) {
         '@components': 'src/components',
         '@contexts': 'src/contexts',
         '@store': 'src/store',
-        '@graphql': 'src/graphql',
         '@utilities': 'src/utilities',
         '@theme': 'src/theme',
         // Allows for better profiling with ReactDevTools

@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { setPageTitle } from '@utilities';
 import { Page } from '@components/interface';
 import { useCurrentSeason, useWallet } from '../../hooks';
-import { getActivity, RankType } from '@graphql';
+import { getActivity, RankType } from '../../graphql';
 import Leaderboard from './Leaderboard/Leaderboard';
 const PER_PAGE = 10;
 

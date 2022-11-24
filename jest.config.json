@@ -19,7 +19,6 @@
     "^.+\\.module\\.(css)$": "identity-obj-proxy",
     "@contexts": "<rootDir>/src/contexts",
     "@utilities": "<rootDir>/src/utilities",
-    "@graphql": "<rootDir>/src/graphql",
     "@components": "<rootDir>/src/components",
     "@theme": "<rootDir>/src/theme",
     "@store": "<rootDir>/src/store"

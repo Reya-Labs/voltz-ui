@@ -33,7 +33,6 @@ module.exports = {
     config.resolve.alias['@components'] = path.resolve(path.dirname(__dirname), 'src/components');
     config.resolve.alias['@contexts'] = path.resolve(path.dirname(__dirname), 'src/contexts');
     config.resolve.alias['@store'] = path.resolve(path.dirname(__dirname), 'src/store');
-    config.resolve.alias['@graphql'] = path.resolve(path.dirname(__dirname), 'src/graphql');
     config.resolve.alias['@utilities'] = path.resolve(path.dirname(__dirname), 'src/utilities');
     return config;
   },

@@ -9,7 +9,7 @@ import ChevronLeft from '@mui/icons-material/ChevronLeft';
 import { Header } from '../Header/Header';
 import { Entry } from '../Entry/Entry';
 import { LeaderboardHeader } from '../LeaderboardHeader/LeaderboardHeader';
-import { RankType } from '@graphql';
+import { RankType } from '../../../graphql';
 
 export type RankingTableProps = {
   rankings: RankType[];
