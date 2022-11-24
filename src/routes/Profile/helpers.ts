@@ -3,6 +3,8 @@ import { ClaimButtonProps } from './components/ClaimButton/ClaimButton';
 import { Season } from '../../hooks/season/types';
 import { BadgeVariant } from './data/getSeasonBadges';
 import { Signer } from 'ethers';
+import { CommunitySBT } from '@voltz-protocol/v1-sdk';
+import { SBTConstructorArgs } from '@voltz-protocol/v1-sdk/dist/types/entities/communitySbt';
 
 export const BADGE_VARIANT_TRADER_LP_MAP: Record<BadgeVariant, 'trader' | 'lp' | ''> = {
   // season 1
@@ -210,25 +212,15 @@ export const getClaimButtonModesForVariants = (
 export const getSeasonUserId = (userId: string, seasonId: Season['id']) =>
   `${userId.toLowerCase()}#${seasonId}`;
 
-export const getSDKInitParams = (signer: Signer | null) => {
+export const getCommunitySbt = (signer: Signer | null) => {
     const ignoredWalletIds = process.env.REACT_APP_IGNORED_LEAGUE_WALLETS &&
       process.env.REACT_APP_IGNORED_LEAGUE_WALLETS !== 'UNPROVIDED'
         ? process.env.REACT_APP_IGNORED_LEAGUE_WALLETS.split(',')
             .map((s) => s.trim().toLowerCase())
             .reduce((pV, cI) => ({ ...pV, [cI]: true }), {})
         : {};
-    if (!process.env.REACT_APP_COMMUNITY_SBT_ADDRESS ||
-       !Boolean(signer) ||
-       !process.env.REACT_APP_SUBGRAPH_BADGES_URL ||
-       !process.env.REACT_APP_DB_BADGES_URL ||
-       !process.env.REACT_APP_REFERRAL_AND_SIGNATURE_SERVICE_URL ||
-       !process.env.REACT_APP_IGNORED_LEAGUE_WALLETS || 
-       !process.env.REACT_APP_COINGECKO_API_KEY
-    ) {
-      return undefined;
-    }
-    return {
-      id: process.env.REACT_APP_COMMUNITY_SBT_ADDRESS,
+    const params : SBTConstructorArgs = {
+      id: process.env.REACT_APP_COMMUNITY_SBT_ADDRESS || "",
       signer: signer,
       badgesSubgraphUrl: process.env.REACT_APP_SUBGRAPH_BADGES_URL,
       nonProgDbUrl: process.env.REACT_APP_DB_BADGES_URL,
@@ -237,4 +229,5 @@ export const getSDKInitParams = (signer: Signer | null) => {
       coingeckoKey: process.env.REACT_APP_COINGECKO_API_KEY,
       ignoredWalletIds: ignoredWalletIds
     };
+    return new CommunitySBT(params);
   };

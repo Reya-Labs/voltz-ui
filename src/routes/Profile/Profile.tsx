@@ -6,16 +6,14 @@ import { getENSDetails, setPageTitle } from '../../utilities';
 import { Season } from '../../hooks/season/types';
 import { ClaimButtonProps } from './components/ClaimButton/ClaimButton';
 import { getCacheValue, invalidateCache, setCacheValue } from './data/getSeasonBadges/cache';
-import { getClaimButtonModesForVariants, getSDKInitParams, getSeasonUserId } from './helpers';
+import { getClaimButtonModesForVariants, getCommunitySbt, getSeasonUserId } from './helpers';
 import { DateTime } from 'luxon';
 import { CopyLinkButtonProps } from './components/CopyLinkButton/CopyLinkButton';
 import copy from 'copy-to-clipboard';
 
-import { CommunitySBT } from '@voltz-protocol/v1-sdk';
 import { getReferrerLink } from './get-referrer-link';
 import {
   BadgeVariant,
-  getDefaultResponse,
   GetProfileBadgesResponse,
   getSeasonBadges,
   SEASON_BADGE_VARIANTS,
@@ -38,14 +36,11 @@ const Profile: React.FunctionComponent = () => {
   const [copyLinkButtonMode, setCopyLinkButtonMode] = useState<CopyLinkButtonProps['mode']>('copy');
 
   const fetchBadges = async ( account: string) => {
-    const params = getSDKInitParams(wallet.signer);
-    if (!params) {
-      return getDefaultResponse(season.id);
-    }
+    const sbt = getCommunitySbt(wallet.signer);
     return await getSeasonBadges({
       userId: account,
       season: season,
-      sbt: new CommunitySBT(params)
+      sbt: sbt
     });
   };
 
@@ -99,17 +94,13 @@ const Profile: React.FunctionComponent = () => {
     if (claimButtonBulkMode === 'claiming') {
       return;
     }
-    const params = getSDKInitParams(wallet.signer);
-    if (!params) {
-      return;
-    }
     const badge = collectionBadges.find((b) => b.variant === variant);
     const subgraphAPI = process.env.REACT_APP_SUBGRAPH_BADGES_URL;
     const owner = wallet.account;
     if (!badge?.badgeResponseRaw?.awardedTimestampMs || badge.claimedAt || !owner || !subgraphAPI) {
       return;
     }
-    const communitySBT = new CommunitySBT(params);
+    const communitySBT = getCommunitySbt(wallet.signer);
     setClaimButtonModes((prev) => ({
       ...prev,
       [variant]: 'claiming',
@@ -142,10 +133,6 @@ const Profile: React.FunctionComponent = () => {
   }
 
   async function handleOnClaimBulkClick(variants: BadgeVariant[]) {
-    const params = getSDKInitParams(wallet.signer);
-    if (!params) {
-      return;
-    }
     if (isClaimingInProgress()) {
       return;
     }
@@ -157,7 +144,7 @@ const Profile: React.FunctionComponent = () => {
     if (!badges.length || !owner || !subgraphAPI) {
       return;
     }
-    const communitySBT = new CommunitySBT(params);
+    const communitySBT = getCommunitySbt(wallet.signer);
     setClaimButtonBulkMode('claiming');
     setClaimButtonModes((p) => ({
       ...p,
