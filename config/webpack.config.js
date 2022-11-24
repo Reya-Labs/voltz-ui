@@ -246,7 +246,6 @@ module.exports = function (webpackEnv) {
       alias: {
         '@components': 'src/components',
         '@contexts': 'src/contexts',
-        '@hooks': 'src/hooks',
         '@store': 'src/store',
         '@graphql': 'src/graphql',
         '@utilities': 'src/utilities',

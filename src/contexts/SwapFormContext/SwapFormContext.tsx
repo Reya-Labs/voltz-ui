@@ -20,7 +20,7 @@ import {
   useCurrentPositionMarginRequirement,
   useTokenApproval,
   useWallet,
-} from '@hooks';
+} from '../../hooks';
 import * as s from './services';
 import { BigNumber } from 'ethers';
 

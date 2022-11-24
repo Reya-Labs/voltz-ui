@@ -11,7 +11,7 @@ import {
   SwapFormProvider,
   PortfolioProvider,
 } from '@contexts';
-import { useAgent, useAMMs, usePositions, useWallet } from '@hooks';
+import { useAgent, useAMMs, usePositions, useWallet } from '../../hooks';
 import { Page, SwapFormModes } from '@components/interface';
 import ConnectedPositionTable from '../../components/containers/ConnectedPositionTable/ConnectedPositionTable';
 import ConnectedSwapForm from '../../components/containers/ConnectedSwapForm/ConnectedSwapForm';

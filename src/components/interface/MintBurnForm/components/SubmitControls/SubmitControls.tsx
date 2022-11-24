@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { useTokenApproval } from '@hooks';
+import { useTokenApproval } from '../../../../../hooks';
 import { Button, Ellipsis, Typography } from '@components/atomic';
 import {
   MintBurnFormHintStates,

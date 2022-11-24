@@ -14,7 +14,7 @@ import {
   toUSFormat,
 } from '@utilities';
 import { isUndefined } from 'lodash';
-import { useAgent, useWallet } from '@hooks';
+import { useAgent, useWallet } from '../../../../../hooks';
 import { useAMMContext } from '@contexts';
 
 interface ExpectedAPYProps {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import { SystemStyleObject, Theme } from '@theme';
 
-import { useBorrowAMMs, useBorrowPositions, useWallet } from '@hooks';
+import { useBorrowAMMs, useBorrowPositions, useWallet } from '../../../hooks';
 import { Agents } from '@contexts';
 import { Loading, Panel } from '@components/atomic';
 import BorrowTable from '../../../components/interface/BorrowTable/BorrowTable';

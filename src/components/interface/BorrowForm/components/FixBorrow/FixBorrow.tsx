@@ -5,7 +5,7 @@ import { colors } from '@theme';
 import { IconLabel } from '@components/composite';
 import { Box } from '@mui/system';
 import FixBorrowSlider from '../FixBorrowSlider/FixBorrowSlider';
-import { UseAsyncFunctionResult } from '@hooks';
+import { UseAsyncFunctionResult } from '../../../../../hooks';
 import { formatNumber } from '@utilities';
 
 export type FixBorrowProps = {

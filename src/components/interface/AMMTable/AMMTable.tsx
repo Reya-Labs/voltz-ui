@@ -6,7 +6,7 @@ import TableBody from '@mui/material/TableBody';
 import { AMMProvider, Agents } from '@contexts';
 import { Panel } from '@components/atomic';
 import { AMMTableHead, AMMTableRow } from './components';
-import { useAgent, useAMMs } from '@hooks';
+import { useAgent, useAMMs } from '../../../hooks';
 import { DateTime } from 'luxon';
 
 import { AMM } from '@voltz-protocol/v1-sdk';

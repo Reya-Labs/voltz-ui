@@ -7,7 +7,7 @@ import { Typography } from '@components/atomic';
 import { PoolField, MaturityInformation } from '@components/composite';
 import { lpLabels, traderLabels } from '../../constants';
 import { FixedAPR, Notional, CurrentMargin, AccruedRates } from './components';
-import { useAgent } from '@hooks';
+import { useAgent } from '../../../../../hooks';
 import { formatNumber, isBorrowing } from '@utilities';
 import { isNumber } from 'lodash';
 

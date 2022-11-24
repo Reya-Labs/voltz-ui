@@ -1,7 +1,7 @@
 import React from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
-import { useAgent, useTokenApproval } from '@hooks';
+import { useAgent, useTokenApproval } from '../../../hooks';
 import {
   Agents,
   SwapFormMarginAction,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useCurrentSeason, usePastSeasons, useWallet } from '@hooks';
+import { useCurrentSeason, usePastSeasons, useWallet } from '../../hooks';
 import { ProfilePageNoWallet } from './components/ProfilePageNoWallet/ProfilePageNoWallet';
 import { ProfilePageWalletConnected } from './components/ProfilePageWalletConnected/ProfilePageWalletConnected';
 import { getENSDetails, setPageTitle } from '@utilities';

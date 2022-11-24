@@ -1,7 +1,7 @@
 import React from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
-import { UseAsyncFunctionResult, useTokenApproval } from '@hooks';
+import { UseAsyncFunctionResult, useTokenApproval } from '../../../hooks';
 import { FormPanel } from '@components/interface';
 import {
   MaskedIntegerField,

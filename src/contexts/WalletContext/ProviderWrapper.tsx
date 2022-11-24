@@ -7,7 +7,7 @@ import { BigNumber, ethers } from 'ethers';
 
 import { useGetWalletQuery } from '@graphql';
 import { selectors } from '@store';
-import { useSelector } from '@hooks';
+import { useSelector } from '../../hooks';
 import { WalletName, WalletStatus } from './types';
 import WalletContext from './WalletContext';
 import { getErrorMessage } from '@utilities';

@@ -12,7 +12,7 @@ import {
   setPageTitle,
   formatCurrency,
 } from '@utilities';
-import { useWallet, useSelector, useAgent } from '@hooks';
+import { useWallet, useSelector, useAgent } from '../../../hooks';
 import { selectors } from '@store';
 import { AMMProvider, MintBurnFormLiquidityAction, useAMMsContext } from '@contexts';
 import { Button, Panel, Typography, Loading } from '@components/atomic';

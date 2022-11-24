@@ -11,7 +11,7 @@ import {
   MintBurnFormProvider,
   PositionProvider,
 } from '@contexts';
-import { useAgent, usePositions, useWallet } from '@hooks';
+import { useAgent, usePositions, useWallet } from '../../hooks';
 
 import { Page } from '@components/interface';
 import { PageTitleDesc } from '@components/composite';

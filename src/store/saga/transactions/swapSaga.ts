@@ -11,7 +11,6 @@ import { deserializeAmm, getSigner } from '../../utilities';
 import * as actions from '../../actions';
 
 function* swapSaga(action: SwapAction) {
-  // function * means it is async function
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const signer: providers.JsonRpcSigner | null = yield getSigner();
 

@@ -18,7 +18,6 @@
   "moduleNameMapper": {
     "^.+\\.module\\.(css)$": "identity-obj-proxy",
     "@contexts": "<rootDir>/src/contexts",
-    "@hooks": "<rootDir>/src/hooks",
     "@utilities": "<rootDir>/src/utilities",
     "@graphql": "<rootDir>/src/graphql",
     "@factories": "<rootDir>/src/factories",

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { routes } from '@routes';
 import { actions, selectors } from '@store';
-import { useAgent, useDispatch, useSelector, useWallet } from '@hooks';
+import { useAgent, useDispatch, useSelector, useWallet } from '../../../hooks';
 import {
   SwapCurrentPosition,
   SwapForm,

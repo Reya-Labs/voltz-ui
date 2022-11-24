@@ -1,6 +1,6 @@
 import React, { ReactNode, useCallback, useState } from 'react';
 
-import { usePositions, useSelector, useWallet, useDispatch } from '@hooks';
+import { usePositions, useSelector, useWallet, useDispatch } from '../../../hooks';
 import { PendingTransaction, PortfolioHeader, PositionTable } from '@components/interface';
 import { Loading, Panel, RouteLink, Typography } from '@components/atomic';
 import { Agents, usePortfolioContext } from '@contexts';

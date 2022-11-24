@@ -6,7 +6,7 @@ import isEmpty from 'lodash/isEmpty';
 import upperCase from 'lodash/upperCase';
 import isString from 'lodash/isString';
 
-import { useUniqueId } from '@hooks';
+import { useUniqueId } from '../../../hooks';
 
 export type WithLabelProps = {
   label?: React.ReactNode;

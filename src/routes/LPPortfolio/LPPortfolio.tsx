@@ -12,7 +12,7 @@ import {
   PositionProvider,
   PortfolioProvider,
 } from '@contexts';
-import { useAgent, useAMMs, usePositions, useWallet } from '@hooks';
+import { useAgent, useAMMs, usePositions, useWallet } from '../../hooks';
 
 import { Page } from '@components/interface';
 import ConnectedMintBurnForm from '../../components/containers/ConnectedMintBurnForm/ConnectedMintBurnForm';

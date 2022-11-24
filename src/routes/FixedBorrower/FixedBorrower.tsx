@@ -10,7 +10,7 @@ import {
   AMMProvider,
   PositionProvider,
 } from '@contexts';
-import { useBorrowPositions, useWallet } from '@hooks';
+import { useBorrowPositions, useWallet } from '../../hooks';
 
 import { Page } from '@components/interface';
 import ConnectedBorrowForm from '../../components/containers/ConnectedBorrowForm/ConnectedBorrowForm';

@@ -12,7 +12,7 @@ import { Agents, AMMProvider, PortfolioContext } from '@contexts';
 import TransactionList from '../TransactionList/TransactionList';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import { useAgent, useAMMs } from '@hooks';
+import { useAgent, useAMMs } from '../../../hooks';
 
 export type PositionTableProps = {
   positions: Position[];

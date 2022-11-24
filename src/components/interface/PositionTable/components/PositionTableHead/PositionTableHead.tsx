@@ -5,7 +5,7 @@ import { formatCurrency, formatNumber } from '@utilities';
 import { Button, getPositionBadgeVariant, PositionBadge, Typography } from '@components/atomic';
 import { BulletLabel, getHealthTextColor, HealthFactorText } from '@components/composite';
 import { isUndefined } from 'lodash';
-import { useAgent } from '@hooks';
+import { useAgent } from '../../../../../hooks';
 import { Agents } from '@contexts';
 import { ReactComponent as EditIcon } from './editPosition.svg';
 

@@ -7,7 +7,7 @@ import isNull from 'lodash/isNull';
 import { Agents, useAMMsContext, useAMMContext } from '@contexts';
 import { Button } from '@components/atomic';
 import { PoolField, MaturityInformation } from '@components/composite';
-import { useAgent, useWallet } from '@hooks';
+import { useAgent, useWallet } from '../../../../../hooks';
 import { labels } from '../../constants';
 import { VariableAPY, FixedAPR } from './components';
 import { getRowButtonId } from '@utilities';

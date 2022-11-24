@@ -3,7 +3,7 @@ import {
   useCurrentPositionMarginRequirement,
   useTokenApproval,
   useWallet,
-} from '@hooks';
+} from '../../hooks';
 import { useAMMContext, usePositionContext, Agents } from '@contexts';
 import {
   DataLayerEventPayload,

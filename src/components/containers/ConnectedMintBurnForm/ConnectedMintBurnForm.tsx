@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '@routes';
 import { actions, selectors } from '@store';
-import { useAgent, useDispatch, useSelector } from '@hooks';
+import { useAgent, useDispatch, useSelector } from '../../../hooks';
 import {
   MintBurnFormActions,
   MintBurnFormModes,
