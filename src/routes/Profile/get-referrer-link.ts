@@ -25,7 +25,7 @@ export const getReferrerLink = async (account: string) => {
     if (!data?.refers_with_code) {
       return undefined;
     }
-    const link = `${window.location.origin}/#/${routes.TRADER_POOLS}?${REFERRER_QUERY_PARAM_KEY}=${data.refers_with_code}`;
+    const link = `${window.location.origin}/#/${routes.WELCOME}?${REFERRER_QUERY_PARAM_KEY}=${data.refers_with_code}`;
     cached[account] = link;
     return link;
   } catch (e) {

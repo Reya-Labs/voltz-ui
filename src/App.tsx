@@ -59,6 +59,10 @@ const App = () => {
       <Routes>
         <Route path="/">
           <Route index element={<Navigate to={routes.TRADER_POOLS} />} />
+          <Route
+            path={routes.WELCOME}
+            element={<Navigate replace={true} to={`/${routes.TRADER_POOLS}`} />}
+          />
           <Route path={routes.TRADER_POOLS} element={<TraderPools />} />
           <Route path={routes.PORTFOLIO} element={<Portfolio />} />
           <Route path={routes.LP_POOLS} element={<LPPools />} />
