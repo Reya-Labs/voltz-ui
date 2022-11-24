@@ -66,7 +66,7 @@ const Ecosystem: React.FunctionComponent = () => {
         break;
       }
       case EcosystemRenderMode.PAGE: {
-        setPageTitle('Ecosystem Page');
+        setPageTitle('LP Optimisers');
         break;
       }
     }
