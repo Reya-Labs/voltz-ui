@@ -7381,6 +7381,19 @@
     tiny-invariant "^1.2.0"
     toformat "^2.0.0"
 
+"@voltz-protocol/v2-sdk@1.3.2":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/v2-sdk/-/v2-sdk-1.3.2.tgz#d1c454ba4ebabfe395bff1abfc5afb878be19856"
+  integrity sha512-OjUCurFARRawPlJDQTGqgTZwOKa6l7oXSmTSuKNaio78PSu0opLsGv0HdAfQQkz7p197tLI1nXA1cprXvt0jtw==
+  dependencies:
+    axios "^0.27.2"
+    coingecko-api "^1.0.10"
+    dotenv "^16.0.3"
+    ethers "^5.5.2"
+    graphql "^16.6.0"
+    graphql-request "^5.0.0"
+    lodash "^4.17.21"
+
 "@walletconnect/browser-utils@^1.8.0":
   version "1.8.0"
   resolved "https://registry.npmjs.org/@walletconnect/browser-utils/-/browser-utils-1.8.0.tgz"
@@ -8671,7 +8684,7 @@ axios@0.21.4, axios@^0.21.0, axios@^0.21.1, axios@^0.21.2:
   dependencies:
     follow-redirects "^1.14.0"
 
-axios@0.27.2:
+axios@0.27.2, axios@^0.27.2:
   version "0.27.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.27.2.tgz#207658cc8621606e586c85db4b41a750e756d972"
   integrity sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==
@@ -12296,6 +12309,11 @@ dotenv@^16.0.0:
   resolved "https://registry.npmjs.org/dotenv/-/dotenv-16.0.0.tgz"
   integrity sha512-qD9WU0MPM4SWLPJy/r2Be+2WgQj8plChsyrCNQzW/0WjvcJQiKQJ9mH3ZgB3fxbUUxgc/11ZJ0Fi5KiimWGz2Q==
 
+dotenv@^16.0.3:
+  version "16.0.3"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.0.3.tgz#115aec42bac5053db3c456db30cc243a5a836a07"
+  integrity sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==
+
 dotenv@^5.0.1:
   version "5.0.1"
   resolved "https://registry.npmjs.org/dotenv/-/dotenv-5.0.1.tgz"
@@ -14604,7 +14622,7 @@ graphql-executor@0.0.18:
   resolved "https://registry.npmjs.org/graphql-executor/-/graphql-executor-0.0.18.tgz"
   integrity sha512-upUSl7tfZCZ5dWG1XkOvpG70Yk3duZKcCoi/uJso4WxJVT6KIrcK4nZ4+2X/hzx46pL8wAukgYHY6iNmocRN+g==
 
-graphql-request@5.0.0:
+graphql-request@5.0.0, graphql-request@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/graphql-request/-/graphql-request-5.0.0.tgz#7504a807d0e11be11a3c448e900f0cc316aa18ef"
   integrity sha512-SpVEnIo2J5k2+Zf76cUkdvIRaq5FMZvGQYnA4lUWYbc99m+fHh4CZYRRO/Ff4tCLQ613fzCm3SiDT64ubW5Gyw==
@@ -14654,6 +14672,11 @@ graphql@16.3.0:
   version "16.3.0"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.3.0.tgz#a91e24d10babf9e60c706919bb182b53ccdffc05"
   integrity sha512-xm+ANmA16BzCT5pLjuXySbQVFwH3oJctUVdy81w1sV0vBU0KgDdBGtxQOUd5zqOBk/JayAFeG8Dlmeq74rjm/A==
+
+graphql@^16.6.0:
+  version "16.6.0"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.6.0.tgz#c2dcffa4649db149f6282af726c8c83f1c7c5fdb"
+  integrity sha512-KPIBPDlW7NxrbT/eh4qPXz5FiFdL5UbaA0XUNz2Rp3Z3hqBSkbj0GVjwFDztsWVauZUWsbKHgMg++sk8UX0bkw==
 
 gzip-size@^6.0.0:
   version "6.0.0"

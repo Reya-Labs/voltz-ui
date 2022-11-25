@@ -12,7 +12,9 @@ import { ConnectedSwapForm } from '../../components/containers/ConnectedSwapForm
 import { AMMTable } from '../../components/interface/AMMTable/AMMTable';
 
 export const TraderPools: React.FunctionComponent = () => {
-  const { amms = [], loading, error } = useAMMs();
+  const shouldUseSDKV2 = process.env.USE_SDK_V2 && process.env.USE_SDK_V2 !== 'UNPROVIDED';
+
+  const { amms = [], loading, error } = useAMMs(shouldUseSDKV2);
   const [formMode, setFormMode] = useState<SwapFormModes>();
   const [amm, setAMM] = useState<AMM>();
   const [position, setPosition] = useState<Position>();

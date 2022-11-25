@@ -1,31 +1,74 @@
-import { useMemo, useCallback } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import isNull from 'lodash/isNull';
-import { providers } from 'ethers';
+import { ethers, providers } from 'ethers';
 
-import { Amm_OrderBy, useGetAmMsQuery } from '../graphql';
+import { Amm_OrderBy, useGetAmMsLazyQuery } from '../graphql';
 import useWallet from './useWallet';
 import JSBI from 'jsbi';
 import { useLocation } from 'react-router-dom';
 
 import { Token, RateOracle, AMM } from '@voltz-protocol/v1-sdk';
+import { Protocol, AMM as AMMSDKV2 } from '@voltz-protocol/v2-sdk';
 import { routes } from '../routes';
 
 export type UseAMMsResult = {
-  amms?: AMM[];
+  amms?: (AMM | AMMSDKV2)[];
   loading: boolean;
   error: boolean;
 };
 
-const useAMMs = (): UseAMMsResult => {
+// todo: move it to some utility
+const sdkV2AmmEntity = new Protocol({
+  factoryAddress: process.env.REACT_APP_FACTORY_ADDRESS || '',
+  provider: new ethers.providers.JsonRpcProvider(
+    process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK || '',
+  ),
+  lpWhitelistedAmms: (process.env.REACT_APP_LP_ONLY_WHITELIST || '')
+    .split(',')
+    .map((s) => s.trim().toLowerCase()),
+  traderWhitelistedAmms: (process.env.REACT_APP_WHITELIST || '')
+    .split(',')
+    .map((s) => s.trim().toLowerCase()),
+  graphEndpoint: process.env.REACT_APP_SUBGRAPH_URL || '',
+  coingeckoApiKey: process.env.REACT_APP_COINGECKO_API_KEY || '',
+});
+
+const useAMMs = (
+  shouldUseSDKV2: boolean = false,
+  filterBy: 'TRADER' | 'LP' | 'BORROW' = 'TRADER',
+): UseAMMsResult => {
   const { signer } = useWallet();
   const { pathname } = useLocation();
   const isSignerAvailable = !isNull(signer);
-  const { data, loading, error, refetch } = useGetAmMsQuery({
-    variables: { orderBy: Amm_OrderBy.Id },
-  });
-  const handleRefetch = useCallback(async () => {
-    await refetch();
-  }, [refetch]);
+  const [dataSDKV2, setDataSDKV2] = useState<AMMSDKV2[]>();
+  const [errorSDKV2, setErrorSDKV2] = useState<boolean>();
+  const [loadingSDKV2, setLoadingSDKV2] = useState<boolean>();
+  const [query, { data, loading, error }] = useGetAmMsLazyQuery();
+
+  useEffect(() => {
+    if (!shouldUseSDKV2) {
+      void query({
+        variables: { orderBy: Amm_OrderBy.Id },
+      });
+      return;
+    }
+
+    setLoadingSDKV2(true);
+    sdkV2AmmEntity
+      .onLand()
+      .then(() => {
+        const amms = sdkV2AmmEntity.getAMMs({
+          filterBy,
+          active: true,
+        });
+        setDataSDKV2(amms);
+        setLoadingSDKV2(false);
+      })
+      .catch((err) => {
+        setErrorSDKV2(true);
+        setLoadingSDKV2(false);
+      });
+  }, [shouldUseSDKV2]);
 
   const amms = useMemo(() => {
     if (data && !loading && !error) {
@@ -98,7 +141,7 @@ const useAMMs = (): UseAMMsResult => {
         }
       }
     }
-  }, [loading, error, isSignerAvailable, handleRefetch]);
+  }, [loading, error, isSignerAvailable]);
 
   return { amms, loading, error: !!error };
 };
