@@ -4,7 +4,8 @@
   "description": "A UI client for the Voltz Protocol",
   "license": "MIT",
   "scripts": {
-    "build": "node scripts/build.js",
+    "prebuild": "yarn code-quality:check",
+    "build": "GENERATE_SOURCEMAP=false node scripts/build.js",
     "build-storybook": "build-storybook",
     "generate": "graphql-codegen --config graphql-codegen.yaml",
     "ts:check": "tsc --noEmit",
@@ -14,7 +15,7 @@
     "prettier:fix": "prettier --write './src/**/*.{ts,tsx}' './scripts/**/*.js' './.storybook/**/*.js'",
     "prepare": "is-ci || husky install",
     "release": "semantic-release",
-    "start": "node scripts/start.js",
+    "start": "GENERATE_SOURCEMAP=false node scripts/start.js",
     "storybook": "start-storybook -p 6006",
     "test": "jest --silent",
     "test:watch": "jest --watch",
@@ -22,11 +23,6 @@
     "sdk:add-local": "npx yalc add @voltz-protocol/v1-sdk",
     "sdk:update-local": "npx yalc update @voltz-protocol/v1-sdk",
     "code-quality:check": "npx concurrently 'yarn ts:check' 'yarn prettier:check' 'yarn lint:check --quiet'"
-  },
-  "lint-staged": {
-    "src/**/*.{ts,tsx}": [
-      "eslint --fix"
-    ]
   },
   "babel": {
     "presets": [
@@ -226,7 +222,6 @@
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-storybook": "0.6.6",
     "eslint-plugin-unused-imports": "2.0.0",
-    "eslint-webpack-plugin": "3.2.0",
     "file-loader": "6.2.0",
     "fs-extra": "10.0.0",
     "html-webpack-plugin": "5.5.0",
@@ -234,7 +229,6 @@
     "identity-obj-proxy": "3.0.0",
     "is-ci": "3.0.1",
     "jest": "27.4.7",
-    "lint-staged": "11.1.2",
     "mini-css-extract-plugin": "2.5.0",
     "prettier": "2.4.1",
     "react-app-polyfill": "3.0.0",
