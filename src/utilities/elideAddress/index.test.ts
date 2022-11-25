@@ -1,4 +1,4 @@
-import { elideAddress } from '@utilities';
+import { elideAddress } from './index';
 
 describe('elideAddress', () => {
   test.each([

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Typography } from '@components/atomic';
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 
 export type NotionalProps = {
   notional?: string;
@@ -8,7 +8,7 @@ export type NotionalProps = {
   token: string;
 };
 
-const Notional: React.FunctionComponent<NotionalProps> = ({ notional, onEdit, token }) => {
+export const Notional: React.FunctionComponent<NotionalProps> = ({ notional, onEdit, token }) => {
   return (
     <>
       <Typography variant="body2" label="Notional" sx={{ fontSize: 18 }}>
@@ -28,5 +28,3 @@ const Notional: React.FunctionComponent<NotionalProps> = ({ notional, onEdit, to
     </>
   );
 };
-
-export default Notional;

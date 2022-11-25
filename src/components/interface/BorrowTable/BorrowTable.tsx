@@ -2,17 +2,17 @@ import React, { useMemo, useRef } from 'react';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import { SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '../../../theme';
 import { Typography, Panel } from '@components/atomic';
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
 
-import { findCurrentBorrowPosition, getRowButtonId } from '@utilities';
+import { findCurrentBorrowPosition, getRowButtonId } from '../../../utilities';
 import { mapAmmToAmmTableDatum } from './utilities';
-import { BorrowAMMProvider, PositionProvider } from '@contexts';
+import { BorrowAMMProvider, PositionProvider } from '../../../contexts';
 import { labelsFixed, labelsVariable, BorrowAMMTableDatum } from './types';
 import { BorrowTableHead } from './components';
 import { DateTime } from 'luxon';
-import BorrowTableRow from './components/BorrowTableRow/BorrowTableRow';
+import { BorrowTableRow } from './components/BorrowTableRow/BorrowTableRow';
 import { BorrowAMM, Position } from '@voltz-protocol/v1-sdk';
 
 export type BorrowTableProps = {
@@ -92,6 +92,7 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
     );
   };
 
+  // todo: FB -> incorrect usage of map
   const renderVariableTable = () => {
     const liveMarkets = tableData.map((datum, index) => {
       if (datum && DateTime.now() < datum.endDate) {

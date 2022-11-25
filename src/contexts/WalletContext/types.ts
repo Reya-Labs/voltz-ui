@@ -1,5 +1,5 @@
 import { BigNumber, ethers } from 'ethers';
-import { GetWalletQuery } from '@graphql';
+import { GetWalletQuery } from '../../graphql';
 
 export type WalletStatus =
   | 'initializing'

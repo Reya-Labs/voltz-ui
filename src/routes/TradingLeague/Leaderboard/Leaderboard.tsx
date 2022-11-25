@@ -1,15 +1,16 @@
 import React from 'react';
 import { Typography } from '@components/atomic';
 import { Grid } from '@components/layout';
-import { Box, Button } from '@mui/material';
-import { RankType } from '../types';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 import { DateTime } from 'luxon';
-import { colors } from '@theme';
+import { colors } from '../../../theme';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import ChevronLeft from '@mui/icons-material/ChevronLeft';
 import { Header } from '../Header/Header';
 import { Entry } from '../Entry/Entry';
 import { LeaderboardHeader } from '../LeaderboardHeader/LeaderboardHeader';
+import { RankType } from '@voltz-protocol/v1-sdk';
 
 export type RankingTableProps = {
   rankings: RankType[];
@@ -78,8 +79,8 @@ const Leaderboard: React.FunctionComponent<RankingTableProps> = ({
         <Header />
         {!loading &&
           rankings.length !== 0 &&
-          rankings.map((ranking, index) => {
-            const rank = index + 1 + page * perPage;
+          rankings.map((ranking) => {
+            const rank = ranking.rank + 1 + page * perPage;
             return (
               <Entry
                 key={ranking.address}

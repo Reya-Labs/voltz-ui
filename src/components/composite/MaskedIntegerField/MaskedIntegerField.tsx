@@ -6,11 +6,11 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 
 import isEmpty from 'lodash/isEmpty';
-import { useUniqueId } from '@hooks';
-import { OverrideTypes } from '@utilities';
+import { useUniqueId } from '../../../hooks';
+import { OverrideTypes } from '../../../utilities';
 import { Typography } from '@components/atomic';
-import { colors, inputStyles, SystemStyleObject, Theme } from '@theme';
-import { isUndefined } from 'lodash';
+import { colors, inputStyles, SystemStyleObject, Theme } from '../../../theme';
+import isUndefined from 'lodash/isUndefined';
 
 export type MaskedIntegerFieldProps = OverrideTypes<
   CurrencyInputProps,
@@ -41,7 +41,7 @@ const errorLabelStyles: SystemStyleObject<Theme> = {
   marginTop: (theme) => theme.spacing(1),
 };
 
-const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
+export const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
   bottomText,
   dynamic,
   error,
@@ -167,5 +167,3 @@ const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps> = ({
     </FormControl>
   );
 };
-
-export default MaskedIntegerField;

@@ -3,7 +3,7 @@ import MuiModal, { ModalProps as MuiModalProps } from '@mui/material/Modal';
 import isString from 'lodash/isString';
 
 import { Button } from '@components/atomic';
-import { doNothing } from '@utilities';
+import { doNothing } from '../../../utilities';
 
 export type TriggerProps = {
   onClick: () => void;
@@ -15,7 +15,7 @@ export type ModalProps = Omit<MuiModalProps, 'open'> & {
   trigger: React.FunctionComponent<TriggerProps> | React.ReactElement | string;
 };
 
-const Modal: React.FunctionComponent<ModalProps> = ({
+export const Modal: React.FunctionComponent<ModalProps> = ({
   trigger: Trigger,
   open,
   onOpen = doNothing,
@@ -54,5 +54,3 @@ const Modal: React.FunctionComponent<ModalProps> = ({
     </>
   );
 };
-
-export default Modal;

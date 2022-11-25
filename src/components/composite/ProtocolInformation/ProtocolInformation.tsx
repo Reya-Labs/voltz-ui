@@ -11,10 +11,10 @@ import { ReactComponent as USDT } from '../PoolField/usdt-icon.svg';
 import { ReactComponent as ETH } from '../PoolField/eth-icon.svg';
 
 import { Typography } from '@components/atomic';
-import IconLabel from '../IconLabel/IconLabel';
+import { IconLabel } from '../IconLabel/IconLabel';
 import { VariableAPY, FixedAPR, MaturityEndDate } from './components';
-import { isBorrowing } from '@utilities';
-import { useAMMContext, Agents } from '@contexts';
+import { isBorrowing } from '../../../utilities';
+import { useAMMContext, Agents } from '../../../contexts';
 import { DateTime } from 'luxon';
 
 export type ProtocolInformationProps = {
@@ -27,7 +27,7 @@ export type ProtocolInformationProps = {
   isSettle?: boolean;
 };
 
-const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = ({
+export const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = ({
   protocol,
   isBorrowForm,
   endDate,
@@ -171,5 +171,3 @@ const ProtocolInformation: React.FunctionComponent<ProtocolInformationProps> = (
     </Box>
   );
 };
-
-export default ProtocolInformation;

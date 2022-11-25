@@ -1,10 +1,13 @@
 import { ReactNode } from 'react';
-import { SwapFormSubmitButtonHintStates, SwapFormSubmitButtonStates } from '@contexts';
-import { useTokenApproval } from '@hooks';
+import {
+  SwapFormSubmitButtonHintStates,
+  SwapFormSubmitButtonStates,
+} from '../../../../../contexts';
+import { useTokenApproval } from '../../../../../hooks';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Button, Ellipsis } from '@components/atomic';
-import { colors } from '@theme';
+import { colors } from '../../../../../theme';
 import { SwapFormModes } from '../../types';
 
 interface SubmitControlsProps {
@@ -15,7 +18,6 @@ interface SubmitControlsProps {
   mode: SwapFormModes;
   onCancel: () => void;
   onSubmit: () => void;
-  protocol?: string;
   gaButtonId?: string;
   submitButtonState: SwapFormSubmitButtonStates;
   swapInfoLoading: boolean;
@@ -43,7 +45,7 @@ const Text = ({ bold, children, green, red }: TextProps) => (
   </Box>
 );
 
-const SubmitControls = ({
+export const SubmitControls = ({
   approvalsNeeded,
   hintState,
   isFormValid,
@@ -51,7 +53,6 @@ const SubmitControls = ({
   mode,
   onCancel,
   onSubmit,
-  protocol,
   gaButtonId,
   submitButtonState,
   tokenApprovals,
@@ -218,5 +219,3 @@ const SubmitControls = ({
     </>
   );
 };
-
-export default SubmitControls;

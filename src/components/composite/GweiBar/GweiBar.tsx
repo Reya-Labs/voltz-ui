@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
-import { useWallet } from '@hooks';
-import { isUndefined } from 'lodash';
+import { useWallet } from '../../../hooks';
+import isUndefined from 'lodash/isUndefined';
 import { Typography } from '@components/atomic';
 import { BulletLabel } from '@components/composite';
-import { colors } from '@theme';
+import { colors } from '../../../theme';
 
 export type GweiBarProps = {};
 

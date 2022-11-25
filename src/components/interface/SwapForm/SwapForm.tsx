@@ -1,14 +1,14 @@
 import React from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
-import { useAgent, useTokenApproval } from '@hooks';
+import { useAgent, useTokenApproval } from '../../../hooks';
 import {
   Agents,
   SwapFormMarginAction,
   SwapFormState,
   SwapFormSubmitButtonHintStates,
   SwapFormSubmitButtonStates,
-} from '@contexts';
+} from '../../../contexts';
 import { FormPanel } from '@components/interface';
 import {
   IconLabel,
@@ -18,7 +18,7 @@ import {
   MarginAmount,
 } from '@components/composite';
 import { TraderControls, MarginControls, SubmitControls, Leverage } from './components';
-import { SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '../../../theme';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from './types';
 
@@ -55,7 +55,7 @@ export type SwapProps = {
   fixedApr?: number;
 };
 
-const Swap: React.FunctionComponent<SwapProps> = ({
+export const SwapForm: React.FunctionComponent<SwapProps> = ({
   approvalsNeeded,
   balance,
   currentPositionMarginRequirement,
@@ -210,5 +210,3 @@ const Swap: React.FunctionComponent<SwapProps> = ({
     </FormPanel>
   );
 };
-
-export default Swap;

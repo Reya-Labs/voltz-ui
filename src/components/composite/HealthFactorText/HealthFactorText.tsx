@@ -1,6 +1,6 @@
 import React from 'react';
-import { isUndefined } from 'lodash';
-import { colors } from '@theme';
+import isUndefined from 'lodash/isUndefined';
+import { colors } from '../../../theme';
 
 interface HealthFactorTextProps {
   healthFactor?: number;

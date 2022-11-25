@@ -3,12 +3,11 @@ import Box from '@mui/material/Box';
 
 import { WalletConnectModal } from './components';
 
-const WalletConnect: React.FunctionComponent = () => {
+// todo: FB do we really need this component?
+export const WalletConnect: React.FunctionComponent = () => {
   return (
     <Box sx={{ display: 'flex' }}>
       <WalletConnectModal />
     </Box>
   );
 };
-
-export default WalletConnect;

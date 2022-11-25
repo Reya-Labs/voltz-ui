@@ -9,9 +9,9 @@ import {
   SwapFormSubmitButtonHintStates,
   SwapFormSubmitButtonStates,
   useSwapFormContext,
-} from '@contexts';
-import SwapForm from './SwapForm';
-import { useTokenApproval } from '@hooks';
+} from '../../../contexts';
+import { SwapForm } from './SwapForm';
+import { useTokenApproval } from '../../../hooks';
 import { SwapFormActions, SwapFormModes } from './types';
 
 import { AMM, InfoPostSwap } from '@voltz-protocol/v1-sdk';

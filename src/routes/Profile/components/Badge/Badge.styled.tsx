@@ -1,6 +1,6 @@
 import SkeletonComponent from '@mui/material/Skeleton';
 import { styled } from '@mui/material/styles';
-import IconComponent from '../../../../components/atomic/Icon/Icon';
+import { Icon as IconComponent } from '../../../../components/atomic/Icon/Icon';
 
 export const Skeleton = styled(SkeletonComponent)`
   width: 168px;

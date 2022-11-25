@@ -16,6 +16,26 @@
   },
   "ignorePatterns": ["src/graphql/generated.ts"],
   "rules": {
+    "no-restricted-imports": ["error",
+      {
+        "paths": [
+          {
+            "name": "lodash",
+            "message": "Import [module] from lodash/[module] instead to avoid bloating bundle size."
+          },
+          {
+            "name": "@mui/material",
+            "message": "Import [module] from @mui/material/[module] instead to avoid bloating bundle size."
+          }
+        ],
+        "patterns": [
+          {
+            "group": ["**/dist/**"],
+            "message": "Don't import types/modules from 'dist' directories!"
+          }
+        ]
+      }],
+    "import/no-default-export": ["warn"],
     "react/jsx-key": ["error"],
     "react/forbid-dom-props": ["warn", { "forbid": [{
       "propName": "style",

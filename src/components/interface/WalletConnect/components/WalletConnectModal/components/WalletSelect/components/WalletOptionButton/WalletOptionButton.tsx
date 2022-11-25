@@ -9,7 +9,7 @@ export type WalletOptionButtonProps = {
   selected: boolean;
 };
 
-const WalletOptionButton: React.FunctionComponent<WalletOptionButtonProps> = ({
+export const WalletOptionButton: React.FunctionComponent<WalletOptionButtonProps> = ({
   onClick,
   title,
   icon,
@@ -38,5 +38,3 @@ const WalletOptionButton: React.FunctionComponent<WalletOptionButtonProps> = ({
     {icon && <Icon name={icon} sx={{ width: 22 }} />}
   </Button>
 );
-
-export default WalletOptionButton;

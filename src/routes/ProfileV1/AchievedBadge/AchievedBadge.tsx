@@ -9,7 +9,7 @@ import {
   Skeleton,
   TitleTypography,
 } from './AchivedBadge.styled';
-import { formatPOSIXTimestamp } from '@utilities';
+import { formatPOSIXTimestamp } from '../../../utilities';
 import { ComingSoonBadges } from '../types';
 import { BadgeVariant1 } from '../getters/getPhase1Badges';
 

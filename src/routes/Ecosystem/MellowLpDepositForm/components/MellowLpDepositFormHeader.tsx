@@ -1,7 +1,7 @@
 import { Panel, Typography } from '@components/atomic';
-import { Box } from '@mui/system';
+import Box from '@mui/material/Box';
 import { ReactComponent as Mellow } from '../../mellow-icon.svg';
-import { Button } from '@mui/material';
+import Button from '@mui/material/Button';
 import { titleStyles, copyStyles, boxStyles, tagStyles } from './styles';
 import React from 'react';
 

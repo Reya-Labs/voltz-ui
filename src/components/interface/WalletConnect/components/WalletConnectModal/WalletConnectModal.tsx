@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
-import { useWallet } from '@hooks';
+import { useWallet } from '../../../../../hooks';
 import { Panel } from '@components/atomic';
 import { Modal } from '@components/composite';
 import { WalletConnectButton, WalletDisplay, WalletSelect } from './components';
-import { WalletName } from '@contexts';
+import { WalletName } from '../../../../../contexts';
 
-const WalletConnectModal: React.FunctionComponent = () => {
+export const WalletConnectModal: React.FunctionComponent = () => {
   const wallet = useWallet();
   const [open, setOpen] = useState(false);
   const [selecting, setSelecting] = useState(true);
@@ -69,5 +69,3 @@ const WalletConnectModal: React.FunctionComponent = () => {
     </Modal>
   );
 };
-
-export default WalletConnectModal;

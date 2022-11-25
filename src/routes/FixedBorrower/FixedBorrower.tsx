@@ -2,24 +2,24 @@ import React, { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 
-import { setPageTitle, findCurrentBorrowPosition } from '@utilities';
+import { setPageTitle, findCurrentBorrowPosition } from '../../utilities';
 import {
   Agents,
   BorrowAMMProvider,
   BorrowFormProvider,
   AMMProvider,
   PositionProvider,
-} from '@contexts';
-import { useBorrowPositions, useWallet } from '@hooks';
+} from '../../contexts';
+import { useBorrowPositions, useWallet } from '../../hooks';
 
 import { Page } from '@components/interface';
-import ConnectedBorrowForm from '../../components/containers/ConnectedBorrowForm/ConnectedBorrowForm';
-import ConnectedBorrowPositionTable from '../../components/containers/ConnectedBorrowPositionTable/ConnectedBorrowPositionTable';
+import { ConnectedBorrowForm } from '../../components/containers/ConnectedBorrowForm/ConnectedBorrowForm';
+import { ConnectedBorrowPositionTable } from '../../components/containers/ConnectedBorrowPositionTable/ConnectedBorrowPositionTable';
 import { getRenderMode } from './services';
 
 import { Position, AMM, BorrowAMM } from '@voltz-protocol/v1-sdk';
 
-const FixedBorrower: React.FunctionComponent = () => {
+export const FixedBorrower: React.FunctionComponent = () => {
   const [isForm, setIsForm] = useState<boolean>();
   const [borrowAmm, setBorrowAMM] = useState<BorrowAMM>();
   const [position, setPosition] = useState<Position>();
@@ -100,5 +100,3 @@ const FixedBorrower: React.FunctionComponent = () => {
     </Page>
   );
 };
-
-export default FixedBorrower;

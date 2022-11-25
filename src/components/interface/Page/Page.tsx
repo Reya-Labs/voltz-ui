@@ -1,8 +1,8 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 
-import Nav from '../Nav/Nav';
-import WalletConnect from '../WalletConnect/WalletConnect';
+import { Nav } from '../Nav/Nav';
+import { WalletConnect } from '../WalletConnect/WalletConnect';
 import Workbench from './workbench.svg';
 import { Background } from './Background/Background';
 
@@ -10,7 +10,7 @@ interface PageProps {
   children?: React.ReactNode;
 }
 
-const Page: React.FunctionComponent<PageProps> = ({ children }: PageProps) => (
+export const Page: React.FunctionComponent<PageProps> = ({ children }: PageProps) => (
   <Background>
     <Box
       sx={{
@@ -43,5 +43,3 @@ const Page: React.FunctionComponent<PageProps> = ({ children }: PageProps) => (
     </Box>
   </Background>
 );
-
-export default Page;

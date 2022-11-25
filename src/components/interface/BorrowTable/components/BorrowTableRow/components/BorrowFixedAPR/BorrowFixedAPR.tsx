@@ -2,14 +2,17 @@ import React from 'react';
 
 import { Typography } from '@components/atomic';
 import TableCell from '@mui/material/TableCell';
-import { formatNumber } from '@utilities';
+import { formatNumber } from '../../../../../../../utilities';
 
 export type BorrowBorrowFixedAPR = {
   loading: boolean;
   fixedApr: number | null | void;
 };
 
-const BorrowFixedAPR: React.FunctionComponent<BorrowBorrowFixedAPR> = ({ loading, fixedApr }) => {
+export const BorrowFixedAPR: React.FunctionComponent<BorrowBorrowFixedAPR> = ({
+  loading,
+  fixedApr,
+}) => {
   const renderValue = () => {
     if (loading) {
       return '---';
@@ -39,5 +42,3 @@ const BorrowFixedAPR: React.FunctionComponent<BorrowBorrowFixedAPR> = ({ loading
     </TableCell>
   );
 };
-
-export default BorrowFixedAPR;

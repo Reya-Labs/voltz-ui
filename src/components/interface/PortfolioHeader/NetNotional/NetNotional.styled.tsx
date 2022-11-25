@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import Typography from '../../../atomic/Typography/Typography';
+import { Typography } from '../../../atomic/Typography/Typography';
 
 export const TitleTypography = styled(Typography)`
   font-size: 12px;

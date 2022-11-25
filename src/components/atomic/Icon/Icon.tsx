@@ -1,5 +1,5 @@
 import React from 'react';
-import { SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '../../../theme';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import isArray from 'lodash/isArray';
 
@@ -9,7 +9,7 @@ export type IconProps = SvgIconProps & {
   name: Icons;
 };
 
-const Icon: React.FunctionComponent<IconProps> = ({ name, sx, ...props }) => {
+export const Icon: React.FunctionComponent<IconProps> = ({ name, sx, ...props }) => {
   const NamedIcon = iconMap[name];
 
   const extraProps = (iconName: Icons) => {
@@ -101,5 +101,3 @@ const Icon: React.FunctionComponent<IconProps> = ({ name, sx, ...props }) => {
     <SvgIcon component={NamedIcon} sx={[defaultSx, ...getSx()]} {...extraProps(name)} {...props} />
   );
 };
-
-export default Icon;

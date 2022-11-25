@@ -1,4 +1,4 @@
-import { Agents } from '@contexts';
+import { Agents } from '../contexts';
 
 // things that can occur after the transaction has been mined or fails
 export type TransactionUpdate = {

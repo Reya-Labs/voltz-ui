@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 
-import { findCurrentAmm, findCurrentPosition, setPageTitle } from '@utilities';
+import { findCurrentAmm, setPageTitle } from '../../utilities';
 import {
   Agents,
   AMMProvider,
@@ -11,19 +11,14 @@ import {
   MintBurnFormProvider,
   PositionProvider,
   PortfolioProvider,
-} from '@contexts';
-import { useAgent, useAMMs, usePositions, useWallet } from '@hooks';
+} from '../../contexts';
+import { useAgent, useAMMs, usePositions, useWallet } from '../../hooks';
 
 import { Page } from '@components/interface';
-import { PageTitleDesc } from '@components/composite';
-import ConnectedAMMTable from '../../components/containers/ConnectedAMMTable/ConnectedAMMTable';
-import ConnectedMintBurnForm from '../../components/containers/ConnectedMintBurnForm/ConnectedMintBurnForm';
-import ConnectedPositionTable from '../../components/containers/ConnectedPositionTable/ConnectedPositionTable';
-import { getRenderMode } from './services';
-import { Button } from '@mui/material';
-import { routes } from '@routes';
+import { ConnectedMintBurnForm } from '../../components/containers/ConnectedMintBurnForm/ConnectedMintBurnForm';
+import { ConnectedPositionTable } from '../../components/containers/ConnectedPositionTable/ConnectedPositionTable';
 
-const LiquidityProvider: React.FunctionComponent = () => {
+export const LPPortfolio: React.FunctionComponent = () => {
   const [amm, setAMM] = useState<AMM>();
   const [formMode, setFormMode] = useState<MintBurnFormModes>();
   const [position, setPosition] = useState<Position>();
@@ -31,19 +26,18 @@ const LiquidityProvider: React.FunctionComponent = () => {
 
   const { amms } = useAMMs();
   const { onChangeAgent, agent } = useAgent();
-  const { pathname, key } = useLocation();
-  const { positions, positionsByAgentGroup } = usePositions();
+  const { key } = useLocation();
+  const { positionsByAgentGroup } = usePositions();
   const { account } = useWallet();
 
-  const pathnameWithoutPrefix = pathname.slice(1);
-  const renderMode = getRenderMode(formMode, pathnameWithoutPrefix);
+  const renderMode = formMode ? 'form' : 'portfolio';
 
   useEffect(() => {
     setFormMode(undefined);
     setAMM(undefined);
     setPosition(undefined);
     onChangeAgent(Agents.LIQUIDITY_PROVIDER);
-  }, [setFormMode, setAMM, pathnameWithoutPrefix, onChangeAgent]);
+  }, [setFormMode, setAMM, onChangeAgent]);
 
   useEffect(() => {
     handleReset();
@@ -51,10 +45,6 @@ const LiquidityProvider: React.FunctionComponent = () => {
 
   useEffect(() => {
     switch (renderMode) {
-      case 'pools': {
-        setPageTitle('Liquidity Provider Pools', account);
-        break;
-      }
       case 'portfolio': {
         setPageTitle('Liquidity Provider Portfolio', account);
         break;
@@ -65,12 +55,6 @@ const LiquidityProvider: React.FunctionComponent = () => {
       }
     }
   }, [setPageTitle, renderMode, position]);
-
-  const handleSelectAmm = (selectedAMM: AMM) => {
-    setFormMode(MintBurnFormModes.NEW_POSITION);
-    setAMM(selectedAMM);
-    setPosition(findCurrentPosition(positions || [], selectedAMM, [3]));
-  };
 
   const handleSelectPosition = (
     selectedPosition: Position,
@@ -100,36 +84,6 @@ const LiquidityProvider: React.FunctionComponent = () => {
 
   return (
     <Page>
-      {renderMode === 'pools' && (
-        <Box sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
-          <Box sx={{ marginBottom: (theme) => theme.spacing(12) }}>
-            <PageTitleDesc
-              title="Provide Liquidity"
-              desc="Choose a pool and provide liquidity within your chosen ranges."
-            />
-            {process.env.REACT_APP_ECOSYSTEM && process.env.REACT_APP_ECOSYSTEM !== `UNPROVIDED` ? (
-              <Button
-                component={Link}
-                to={`/${routes.LP_OPTIMISERS}`}
-                sx={{
-                  color: 'primary.base',
-                  marginTop: (theme) => theme.spacing(2),
-                  padding: (theme) => theme.spacing(0.5, 1),
-                  fontSize: '18px',
-                  lineHeight: '14px',
-                  '&:hover': {
-                    background: 'transparent',
-                  },
-                }}
-              >
-                LP OPTIMISER VAULT
-              </Button>
-            ) : null}
-          </Box>
-          <ConnectedAMMTable onSelectItem={handleSelectAmm} />
-        </Box>
-      )}
-
       {settling && renderMode === 'portfolio' && (
         <PortfolioProvider
           positions={agent === Agents.LIQUIDITY_PROVIDER ? positionsByAgentGroup : undefined}
@@ -172,5 +126,3 @@ const LiquidityProvider: React.FunctionComponent = () => {
     </Page>
   );
 };
-
-export default LiquidityProvider;

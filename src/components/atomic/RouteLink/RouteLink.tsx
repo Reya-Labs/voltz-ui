@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link, LinkProps } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-import { useAgent } from '@hooks';
-import { Agents } from '@contexts';
+import { useAgent } from '../../../hooks';
+import { Agents } from '../../../contexts';
 
 const StyledRouteLink = styled(Link)<LinkProps>(({}) => ({}));
 
-const RouteLink = ({ children, to, ...props }: LinkProps) => {
+export const RouteLink = ({ children, to, ...props }: LinkProps) => {
   const agentCtx = useAgent();
 
   return (
@@ -29,5 +29,3 @@ const RouteLink = ({ children, to, ...props }: LinkProps) => {
     </StyledRouteLink>
   );
 };
-
-export default RouteLink;

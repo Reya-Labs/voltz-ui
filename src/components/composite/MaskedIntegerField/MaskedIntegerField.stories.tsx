@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import MaskedIntegerField from './MaskedIntegerField';
+import { MaskedIntegerField } from './MaskedIntegerField';
 
 export default {
   title: 'Composite/MaskedIntegerField',

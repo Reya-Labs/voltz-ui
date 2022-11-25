@@ -1,14 +1,14 @@
 import React from 'react';
 import MuiTypography, { TypographyProps as MuiTypographyProps } from '@mui/material/Typography';
 
-import { AgentProps, Agents } from '@contexts';
-import { useAgentWithOverride } from '@hooks';
+import { AgentProps, Agents } from '../../../contexts';
+import { useAgentWithOverride } from '../../../hooks';
 import { withLabel } from '../../hoc';
-import { SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '../../../theme';
 
-export type TypographyProps = React.ComponentProps<typeof Typography>;
+export type TypographyProps = React.ComponentProps<typeof TypographyComponent>;
 
-function Typography<C extends React.ElementType>(
+function TypographyComponent<C extends React.ElementType>(
   props: MuiTypographyProps<C, { component?: C }> &
     AgentProps & {
       agentStyling?: boolean;
@@ -52,4 +52,4 @@ function Typography<C extends React.ElementType>(
   );
 }
 
-export default withLabel<TypographyProps>(Typography);
+export const Typography = withLabel<TypographyProps>(TypographyComponent);

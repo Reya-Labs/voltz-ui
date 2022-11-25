@@ -1,10 +1,10 @@
 import React, { useCallback, useState } from 'react';
 import { Position } from '@voltz-protocol/v1-sdk';
-import { List } from '@mui/material';
-import { colors, SystemStyleObject, Theme } from '@theme';
-import TransactionListItem from './TransactionListItem';
+import List from '@mui/material/List';
+import { colors, SystemStyleObject, Theme } from '../../../theme';
+import { TransactionListItem } from './TransactionListItem';
 import { getTransactionData, getTransactions, sortTransactions } from './services';
-import { useUniqueId } from '@hooks';
+import { useUniqueId } from '../../../hooks';
 import { TransactionType } from './types';
 
 interface TransactionListProps {
@@ -19,7 +19,7 @@ const listStyles: SystemStyleObject<Theme> = {
   borderRadius: `8px`,
 };
 
-const TransactionList = ({ position }: TransactionListProps) => {
+export const TransactionList = ({ position }: TransactionListProps) => {
   const transactions = sortTransactions(getTransactions(position));
   const [open, setOpen] = useState(false);
   const id = useUniqueId();
@@ -43,5 +43,3 @@ const TransactionList = ({ position }: TransactionListProps) => {
     </List>
   );
 };
-
-export default TransactionList;

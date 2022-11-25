@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { Agents, AgentSettings } from '@contexts';
+import { Agents, AgentSettings } from '../contexts';
 import useAgent from './useAgent';
 
 const useAgentWithOverride = (agentOverride: Agents | undefined): AgentSettings => {

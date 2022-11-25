@@ -1,4 +1,4 @@
-import { colors } from '@theme';
+import { colors } from '../../../theme';
 import React from 'react';
 import Box from '@mui/material/Box';
 import { Typography } from '@components/atomic';

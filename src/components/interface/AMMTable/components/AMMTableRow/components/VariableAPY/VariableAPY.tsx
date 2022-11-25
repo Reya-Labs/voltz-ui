@@ -2,14 +2,14 @@ import React from 'react';
 import TableCell from '@mui/material/TableCell';
 
 import { Typography } from '@components/atomic';
-import { formatNumber } from '@utilities';
-import { isUndefined } from 'lodash';
+import { formatNumber } from '../../../../../../../utilities';
+import isUndefined from 'lodash/isUndefined';
 
 export type VariableAPYProps = {
   variableApy?: number;
 };
 
-const VariableAPY: React.FunctionComponent<VariableAPYProps> = ({ variableApy }) => {
+export const VariableAPY: React.FunctionComponent<VariableAPYProps> = ({ variableApy }) => {
   const renderValue = () => {
     if (isUndefined(variableApy)) {
       return 'Loading...';
@@ -26,5 +26,3 @@ const VariableAPY: React.FunctionComponent<VariableAPYProps> = ({ variableApy })
     </TableCell>
   );
 };
-
-export default VariableAPY;

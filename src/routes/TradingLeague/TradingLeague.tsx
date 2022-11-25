@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
-import { setPageTitle } from '@utilities';
+import { setPageTitle } from '../../utilities';
 import { Page } from '@components/interface';
-import { useCurrentSeason, useWallet } from '@hooks';
-import { RankType } from './types';
-import { getActivity } from '@graphql';
+import { useCurrentSeason, useWallet } from '../../hooks';
 import Leaderboard from './Leaderboard/Leaderboard';
+import { RankType } from '@voltz-protocol/v1-sdk';
+import { getCommunitySbt } from '../Profile/helpers';
 const PER_PAGE = 10;
 
-const TradingLeague: React.FunctionComponent = () => {
-  const { account } = useWallet();
+export const TradingLeague: React.FunctionComponent = () => {
+  const { account, signer } = useWallet();
   const [loading, setLoading] = useState(true);
   const season = useCurrentSeason();
-  const [rankingResults, setRankingResults] = useState<RankType[]>([]);
+  const [rankings, setRankings] = useState<RankType[]>([]);
   const wallet = useWallet();
   const [userRank, setUserRank] = useState<number>(-1);
   const [userPoints, setUserPoints] = useState<number>(-1);
   const [page, setPage] = useState<number>(0);
-  const [ranking, setRanking] = useState<Map<string, number>>();
-  const maxPages = Math.floor(rankingResults.length / PER_PAGE) + 1;
+  const maxPages = Math.floor(rankings.length / PER_PAGE) + 1;
 
   const handleOnNextPage = () => {
     if (page + 1 < maxPages) {
@@ -34,41 +33,27 @@ const TradingLeague: React.FunctionComponent = () => {
 
   const fetchRankings = async () => {
     setLoading(true);
-    const result = (await getActivity({ from: season.startDate.toSeconds() })).total;
-    setRanking(result);
-    mapAndSetRankingResults(result);
+    let result: RankType[] = [];
+    const SBT = getCommunitySbt(signer);
+    result = await SBT.getRanking({
+      seasonStart: season.startDate.toSeconds(),
+      seasonEnd: season.endDate.toSeconds(),
+    });
+    setUserRanking(result, wallet.account);
+    setRankings(result);
     setLoading(false);
   };
 
-  const mapAndSetRankingResults = (rankingMap: Map<string, number> | undefined) => {
-    if (!rankingMap) {
-      return;
-    }
-
-    const rankResult: RankType[] = [];
-    const keys = Array.from(rankingMap.keys());
-    keys.forEach((address) => {
-      const value = rankingMap.get(address);
-      rankResult.push({ address: address, points: value ?? 0 });
-    });
-
-    const sorted = rankResult.sort((a, b) => b.points - a.points);
-
-    if (sorted) {
-      for (let rank = 0; rank < sorted.length; rank++) {
-        const entry = sorted[rank];
-        if (entry.address === wallet.account) {
-          setUserPoints(entry.points);
-          setUserRank(rank);
-        }
-      }
-    }
-
-    setRankingResults(sorted);
+  const setUserRanking = (rankingResults: RankType[], walletAddress?: string | null) => {
+    const userEntry: RankType | undefined = rankingResults.find(
+      (r) => r.address.toLowerCase() === walletAddress?.toLowerCase(),
+    );
+    setUserPoints(userEntry?.points || -1);
+    setUserRank(userEntry?.rank ?? -1);
   };
 
   useEffect(() => {
-    mapAndSetRankingResults(ranking);
+    setUserRanking(rankings, wallet.account);
   }, [wallet.account]);
 
   useEffect(() => {
@@ -87,7 +72,7 @@ const TradingLeague: React.FunctionComponent = () => {
       >
         <Leaderboard
           loading={loading}
-          rankings={rankingResults.slice(page * 10, page * 10 + PER_PAGE)}
+          rankings={rankings.slice(page * 10, page * 10 + PER_PAGE)}
           maxPages={maxPages}
           userAddress={wallet.account || ''}
           userRank={userRank}
@@ -104,5 +89,3 @@ const TradingLeague: React.FunctionComponent = () => {
     </Page>
   );
 };
-
-export default TradingLeague;

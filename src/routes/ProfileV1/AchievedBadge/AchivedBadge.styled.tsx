@@ -1,8 +1,8 @@
 import SkeletonComponent from '@mui/material/Skeleton';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import { colors } from '@theme';
-import Typography from '../../../components/atomic/Typography/Typography';
+import { colors } from '../../../theme';
+import { Typography } from '../../../components/atomic/Typography/Typography';
 
 export const Skeleton = styled(SkeletonComponent)`
   padding: ${({ theme }) => theme.spacing(2, 2, 2, 4)};

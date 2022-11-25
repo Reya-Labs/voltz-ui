@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography } from '@components/atomic';
-import { elideAddress, formatDateTimeWithOrdinal } from '@utilities';
+import { elideAddress, formatDateTimeWithOrdinal } from '../../../utilities';
 import { BadgeCard } from '../BadgeCard/BadgeCard';
 import { Page } from '@components/interface';
 import { AchievedBadge, AchievedBadgeProps } from '../AchievedBadge/AchievedBadge';

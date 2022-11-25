@@ -3,13 +3,13 @@ import MuiToggleButton, {
   ToggleButtonProps as MuiToggleButtonProps,
 } from '@mui/material/ToggleButton';
 
-import { colors, SystemStyleObject, Theme } from '@theme';
-import { AgentProps, Agents } from '@contexts';
-import { useAgentWithOverride } from '@hooks';
+import { colors, SystemStyleObject, Theme } from '../../../theme';
+import { AgentProps, Agents } from '../../../contexts';
+import { useAgentWithOverride } from '../../../hooks';
 
 export type ToggleButtonProps = MuiToggleButtonProps & AgentProps;
 
-const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
+export const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
   agent: agentOverride,
   selected,
   ...props
@@ -22,21 +22,6 @@ const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
       '&.Mui-selected': {
         zIndex: '1',
       },
-      // todo: ideally round the corners
-      // '&:not(:first-of-type)': {
-      //   borderTopLeftRadius: 0,
-      //   borderBottomLeftRadius: 0,
-      //   '&.Mui-selected': {
-      //     borderRadius: 1,
-      //   },
-      // },
-      // '&:not(:last-of-type)': {
-      //   borderTopRightRadius: 0,
-      //   borderBottomRightRadius: 0,
-      //   '&.Mui-selected': {
-      //     borderRadius: 1,
-      //   },
-      // },
     },
   };
   const agentStyleOverrides = (): SystemStyleObject<Theme> => {
@@ -46,10 +31,6 @@ const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
           backgroundColor: 'primary.darken010',
           color: 'primary.darken030',
           borderColor: 'primary.light',
-          // '&:hover': {
-          //   backgroundColor: 'primary.light',
-          //   color: 'primary.light',
-          // },
           '&.Mui-selected': {
             color: 'primary.light',
             backgroundColor: 'primary.darken030',
@@ -68,9 +49,6 @@ const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
           backgroundColor: 'tertiary.base',
           color: 'secondary.light',
           borderColor: 'primary.light',
-          // '&:hover': {
-          //   backgroundColor: 'primary.light',
-          // },
           '&.Mui-selected': {
             backgroundColor: 'tertiary.base',
             '&:hover': {
@@ -130,5 +108,3 @@ const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
     />
   );
 };
-
-export default ToggleButton;

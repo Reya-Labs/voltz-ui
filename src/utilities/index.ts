@@ -1,8 +1,8 @@
 export * from './amm';
 export * from './borrowAmm';
 export * from './elideAddress';
-export { default as getErrorMessage } from './getErrorMessage';
-export { default as isBorrowing } from './isBorrowing';
+export * from './getErrorMessage';
+export * from './isBorrowing';
 export * from './overrideTypes';
 export * from './number';
 export * from './page';

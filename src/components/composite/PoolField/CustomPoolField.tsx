@@ -15,7 +15,7 @@ const valueBoxLabelStyles: SystemStyleObject<Theme> = {
   whiteSpace: 'nowrap',
 };
 
-const CustomPoolField = ({ children, label }: CustomPoolFieldProps) => (
+export const CustomPoolField = ({ children, label }: CustomPoolFieldProps) => (
   <Box>
     <Typography variant="body2" sx={valueBoxLabelStyles}>
       {label}
@@ -23,5 +23,3 @@ const CustomPoolField = ({ children, label }: CustomPoolFieldProps) => (
     {children}
   </Box>
 );
-
-export default CustomPoolField;

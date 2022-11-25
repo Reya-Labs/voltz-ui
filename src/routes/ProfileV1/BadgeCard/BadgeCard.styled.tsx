@@ -1,8 +1,8 @@
 import SkeletonComponent from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
-import Typography from '../../../components/atomic/Typography/Typography';
-import { colors } from '@theme';
+import { Typography } from '../../../components/atomic/Typography/Typography';
+import { colors } from '../../../theme';
 
 export const Container = styled(Box)`
   background-color: #19152a;

@@ -2,7 +2,7 @@ import { styled } from '@mui/material/styles';
 import Skeleton from '@mui/material/Skeleton';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import Typography from '../../../../../components/atomic/Typography/Typography';
+import { Typography } from '../../../../../components/atomic/Typography/Typography';
 import colors from '../../../../../theme/colors';
 
 export const MellowLPPositionSkeleton = styled(Skeleton)`

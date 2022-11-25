@@ -2,17 +2,17 @@ import React from 'react';
 import Box from '@mui/material/Box';
 
 import { Typography } from '@components/atomic';
-import IconLabel from '../../../IconLabel/IconLabel';
-import { Agents } from '@contexts';
-import { formatNumber } from '@utilities';
-import { isUndefined } from 'lodash';
+import { IconLabel } from '../../../IconLabel/IconLabel';
+import { Agents } from '../../../../../contexts';
+import { formatNumber } from '../../../../../utilities';
+import isUndefined from 'lodash/isUndefined';
 
 export type VariableAPYProps = {
   agent?: Agents;
   variableApy?: number;
 };
 
-const VariableAPY: React.FunctionComponent<VariableAPYProps> = ({ agent, variableApy }) => {
+export const VariableAPY: React.FunctionComponent<VariableAPYProps> = ({ agent, variableApy }) => {
   const renderValue = () => {
     if (isUndefined(variableApy)) {
       return <Box sx={{ fontSize: 18 }}>Loading...</Box>;
@@ -39,5 +39,3 @@ const VariableAPY: React.FunctionComponent<VariableAPYProps> = ({ agent, variabl
     </Typography>
   );
 };
-
-export default VariableAPY;

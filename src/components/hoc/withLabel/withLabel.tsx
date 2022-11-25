@@ -6,7 +6,7 @@ import isEmpty from 'lodash/isEmpty';
 import upperCase from 'lodash/upperCase';
 import isString from 'lodash/isString';
 
-import { useUniqueId } from '@hooks';
+import { useUniqueId } from '../../../hooks';
 
 export type WithLabelProps = {
   label?: React.ReactNode;
@@ -14,7 +14,7 @@ export type WithLabelProps = {
 };
 
 // wrapper that gives the label and optionally does the tooltip
-const withLabel = <T,>(WrappedComponent: React.FunctionComponent<T>) => {
+export const withLabel = <T,>(WrappedComponent: React.FunctionComponent<T>) => {
   const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
   const ComponentWithLabel: React.FunctionComponent<T & WithLabelProps> = ({
@@ -62,5 +62,3 @@ const withLabel = <T,>(WrappedComponent: React.FunctionComponent<T>) => {
 
   return ComponentWithLabel;
 };
-
-export default withLabel;

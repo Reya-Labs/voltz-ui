@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { DateTime } from 'luxon';
 
 import { withLabel } from '../../hoc';
-import { formatDateTime } from '@utilities';
+import { formatDateTime } from '../../../utilities';
 import { ProgressBar } from '@components/composite';
 
 export type MaturityInformationProps = {
@@ -10,7 +10,7 @@ export type MaturityInformationProps = {
   endDate?: DateTime;
 };
 
-const MaturityInformation: React.FunctionComponent<MaturityInformationProps> = ({
+const MaturityInformationComponent: React.FunctionComponent<MaturityInformationProps> = ({
   startDate,
   endDate,
 }) => {
@@ -41,4 +41,6 @@ const MaturityInformation: React.FunctionComponent<MaturityInformationProps> = (
   );
 };
 
-export default withLabel<MaturityInformationProps>(MaturityInformation);
+export const MaturityInformation = withLabel<MaturityInformationProps>(
+  MaturityInformationComponent,
+);

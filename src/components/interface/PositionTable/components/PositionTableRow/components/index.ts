@@ -1,4 +1,4 @@
-export { default as AccruedRates } from './AccruedRates/AccruedRates';
-export { default as CurrentMargin } from './CurrentMargin/CurrentMargin';
-export { default as FixedAPR } from './FixedAPR/FixedAPR';
-export { default as Notional } from './Notional/Notional';
+export * from './AccruedRates/AccruedRates';
+export * from './CurrentMargin/CurrentMargin';
+export * from './FixedAPR/FixedAPR';
+export * from './Notional/Notional';

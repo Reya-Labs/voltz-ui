@@ -1,5 +1,7 @@
 #!/bin/sh
 
+. "$(dirname "$0")/_/husky.sh"
+
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
 REGEX="^(develop|main|staging|((feat|fix|docs|chore|refactor|release|test)\/.+))$"
 
@@ -9,7 +11,3 @@ if ! [[ $BRANCH =~ $REGEX ]]; then
   echo "Required prefix can be one of: feat|fix|docs|chore|refactor|release|test"
   exit 1
 fi
-
-. "$(dirname "$0")/_/husky.sh"
-
-yarn lint-staged

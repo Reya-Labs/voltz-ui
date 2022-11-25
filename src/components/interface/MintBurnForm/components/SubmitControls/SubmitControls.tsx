@@ -1,13 +1,13 @@
 import React, { ReactNode } from 'react';
-import { useTokenApproval } from '@hooks';
+import { useTokenApproval } from '../../../../../hooks';
 import { Button, Ellipsis, Typography } from '@components/atomic';
 import {
   MintBurnFormHintStates,
   MintBurnFormModes,
   MintBurnFormSubmitButtonStates,
-} from '@contexts';
-import { colors } from '@theme';
-import { Box } from '@mui/system';
+} from '../../../../../contexts';
+import { colors } from '../../../../../theme';
+import Box from '@mui/material/Box';
 
 type TextProps = {
   bold?: boolean;
@@ -43,7 +43,7 @@ export type SubmitControlsProps = {
   underlyingTokenName?: string;
 };
 
-const SubmitControls = ({
+export const SubmitControls = ({
   approvalsNeeded,
   hintState,
   isFormValid,
@@ -204,5 +204,3 @@ const SubmitControls = ({
     </>
   );
 };
-
-export default SubmitControls;

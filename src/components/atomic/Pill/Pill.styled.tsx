@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
-import Typography from '../Typography/Typography';
-import { BaseColors, colors } from '@theme';
+import { Typography } from '../Typography/Typography';
+import { BaseColors, colors } from '../../../theme';
 
 export type PillTypographyVariant = Extract<
   BaseColors,

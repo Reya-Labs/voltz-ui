@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { colors, SystemStyleObject, Theme } from '@theme';
+import { colors, SystemStyleObject, Theme } from '../../../theme';
 import { Typography } from '@components/atomic';
 import Box from '@mui/material/Box';
 
@@ -25,12 +25,10 @@ const valueBoxTextStyles: SystemStyleObject<Theme> = {
   whiteSpace: 'nowrap',
 };
 
-const PortfolioHeaderBox = ({ children, sx, textSx }: PortfolioHeaderBoxProps) => (
+export const PortfolioHeaderBox = ({ children, sx, textSx }: PortfolioHeaderBoxProps) => (
   <Box sx={{ ...valueBoxStyles, ...sx }}>
     <Typography variant="body2" sx={{ ...valueBoxTextStyles, ...textSx }}>
       {children}
     </Typography>
   </Box>
 );
-
-export default PortfolioHeaderBox;

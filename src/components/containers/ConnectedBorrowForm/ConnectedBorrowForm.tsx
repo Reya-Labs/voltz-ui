@@ -1,7 +1,7 @@
-import { useDispatch, useSelector } from '@hooks';
-import { routes } from '@routes';
+import { useDispatch, useSelector } from '../../../hooks';
+import { routes } from '../../../routes';
 import React, { useEffect, useState } from 'react';
-import { actions, selectors } from '@store';
+import { actions, selectors } from '../../../store';
 
 import { useNavigate } from 'react-router-dom';
 import {
@@ -18,14 +18,16 @@ import {
   useBorrowFormContext,
   Agents,
   usePositionContext,
-} from '@contexts';
-import isBorrowing from '../../../utilities/isBorrowing';
+} from '../../../contexts';
+import { isBorrowing } from '../../../utilities';
 
 export type ConnectedBorrowFormProps = {
   onReset: () => void;
 };
 
-const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = ({ onReset }) => {
+export const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = ({
+  onReset,
+}) => {
   const { amm: borrowAmm } = useBorrowAMMContext();
   const { amm } = useAMMContext();
   const form = useBorrowFormContext();
@@ -161,5 +163,3 @@ const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormProps> = (
     </>
   );
 };
-
-export default ConnectedBorrowForm;

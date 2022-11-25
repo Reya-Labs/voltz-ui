@@ -1,4 +1,4 @@
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 

@@ -4,5 +4,5 @@ export { default as ThemeProvider } from './ThemeProvider/ThemeProvider';
 export * from './themes';
 export * from './themes/dark/sharedStyles';
 
-export type { SystemStyleObject } from '@mui/system/styleFunctionSx/styleFunctionSx';
-export type { Theme } from '@mui/material/styles/createTheme';
+export type { SystemStyleObject } from '@mui/system';
+export type { Theme } from '@mui/material/styles';

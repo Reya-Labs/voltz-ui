@@ -1,8 +1,9 @@
 import { Typography } from '@components/atomic';
 
 import { DateTime } from 'luxon';
-import { formatDateTime } from '@utilities';
-import { Box } from '@mui/system';
+import { formatDateTime } from '../../../../../utilities';
+import Box from '@mui/material/Box';
+import React from 'react';
 
 export type MaturityEndDateProps = {
   endDate?: DateTime;
@@ -12,7 +13,7 @@ function removeSubstring(str: string, from: number, to: number): string {
   return str.slice(0, from) + str.slice(to);
 }
 
-const MaturityEndDate: React.FunctionComponent<MaturityEndDateProps> = ({ endDate }) => {
+export const MaturityEndDate: React.FunctionComponent<MaturityEndDateProps> = ({ endDate }) => {
   const formattedEndDate = endDate ? removeSubstring(formatDateTime(endDate), -4, -2) : '';
 
   return (
@@ -23,5 +24,3 @@ const MaturityEndDate: React.FunctionComponent<MaturityEndDateProps> = ({ endDat
     </Box>
   );
 };
-
-export default MaturityEndDate;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { colors, SystemStyleObject, Theme } from '@theme';
+import { colors, SystemStyleObject, Theme } from '../../../theme';
 import Box from '@mui/material/Box';
 
 export type PanelProps = {
@@ -9,7 +9,7 @@ export type PanelProps = {
   sx?: SystemStyleObject<Theme>;
 };
 
-const Panel: React.FunctionComponent<PanelProps> = React.forwardRef(
+export const Panel: React.FunctionComponent<PanelProps> = React.forwardRef(
   ({ variant, borderRadius = 'small', padding = 'large', sx, children }, ref) => {
     const commonOverrides: SystemStyleObject<Theme> = {
       border: 1,
@@ -94,5 +94,3 @@ const Panel: React.FunctionComponent<PanelProps> = React.forwardRef(
     );
   },
 );
-
-export default Panel;

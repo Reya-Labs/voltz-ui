@@ -1,8 +1,8 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { Agents, AgentProvider } from '@contexts';
-import ToggleButtonGroup from './ToggleButtonGroup';
+import { Agents, AgentProvider } from '../../../contexts';
+import { ToggleButtonGroup } from './ToggleButtonGroup';
 
 export default {
   title: 'Composite/ToggleButtonGroup',

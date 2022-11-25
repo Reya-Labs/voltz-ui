@@ -1,10 +1,8 @@
 import { Panel } from '@components/atomic';
-import BorrowPortfolioHeaderBox from './BorrowportfolioHeaderBox';
-import BorrowPortfolioSummary from './BorrowPortfolioSummary';
-import { SystemStyleObject, Theme } from '@theme';
+import { BorrowPortfolioHeaderBox } from './BorrowportfolioHeaderBox';
+import { BorrowPortfolioSummary } from './BorrowPortfolioSummary';
 
 export type BorrowPortfolioHeaderProps = {
-  commonOverrides: SystemStyleObject<Theme>;
   currencyCode: string;
   currencySymbol: string;
   fixedDebt?: number;
@@ -14,8 +12,7 @@ export type BorrowPortfolioHeaderProps = {
   loading?: boolean;
 };
 
-const BorrowPortfolioHeader = ({
-  commonOverrides,
+export const BorrowPortfolioHeader = ({
   currencyCode,
   currencySymbol,
   fixedDebt,
@@ -43,7 +40,6 @@ const BorrowPortfolioHeader = ({
         />
 
         <BorrowPortfolioSummary
-          commonOverrides={commonOverrides}
           currencyCode={currencyCode}
           currencySymbol={currencySymbol}
           fixedDebt={fixedDebt}
@@ -55,5 +51,3 @@ const BorrowPortfolioHeader = ({
     </>
   );
 };
-
-export default BorrowPortfolioHeader;

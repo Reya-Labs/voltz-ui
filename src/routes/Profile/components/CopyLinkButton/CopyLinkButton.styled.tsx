@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
-import { colors } from '@theme';
+import { colors } from '../../../../theme';
 
 export const CopyLinkButton = styled(Button)<{ disabled: boolean }>`
   font-family: 'PixelOperatorMono', monospace;

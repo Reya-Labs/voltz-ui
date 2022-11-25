@@ -1,4 +1,4 @@
-import { useAMM } from '@hooks';
+import { useAMM } from '../../hooks';
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 import { createContext, useContext } from 'react';
 

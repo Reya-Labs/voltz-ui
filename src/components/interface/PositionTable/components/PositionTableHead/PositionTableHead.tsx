@@ -1,12 +1,12 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import { colors, SystemStyleObject, Theme } from '@theme';
-import { formatCurrency, formatNumber } from '@utilities';
+import { colors, SystemStyleObject, Theme } from '../../../../../theme';
+import { formatCurrency, formatNumber } from '../../../../../utilities';
 import { Button, getPositionBadgeVariant, PositionBadge, Typography } from '@components/atomic';
 import { BulletLabel, getHealthTextColor, HealthFactorText } from '@components/composite';
-import { isUndefined } from 'lodash';
-import { useAgent } from '@hooks';
-import { Agents } from '@contexts';
+import isUndefined from 'lodash/isUndefined';
+import { useAgent } from '../../../../../hooks';
+import { Agents } from '../../../../../contexts';
 import { ReactComponent as EditIcon } from './editPosition.svg';
 
 export type PositionTableHeadProps = {
@@ -42,7 +42,7 @@ const labelStyles: SystemStyleObject<Theme> = {
   verticalAlign: 'middle',
 };
 
-const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
+export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
   currencyCode = '',
   currencySymbol = '',
   feesPositive = true,
@@ -178,5 +178,3 @@ const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
     </Box>
   );
 };
-
-export default PositionTableHead;

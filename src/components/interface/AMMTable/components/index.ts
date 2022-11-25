@@ -1,3 +1,2 @@
-export { default as AMMTableFooter } from './AMMTableFooter/AMMTableFooter';
-export { default as AMMTableHead } from './AMMTableHead/AMMTableHead';
-export { default as AMMTableRow } from './AMMTableRow/AMMTableRow';
+export * from './AMMTableHead/AMMTableHead';
+export * from './AMMTableRow/AMMTableRow';

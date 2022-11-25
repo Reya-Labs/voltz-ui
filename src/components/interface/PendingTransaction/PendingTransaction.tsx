@@ -11,14 +11,14 @@ import {
   pushEvent,
   setPageTitle,
   formatCurrency,
-} from '@utilities';
-import { useWallet, useSelector, useAgent } from '@hooks';
-import { selectors } from '@store';
-import { AMMProvider, MintBurnFormLiquidityAction, useAMMsContext } from '@contexts';
+} from '../../../utilities';
+import { useWallet, useSelector, useAgent } from '../../../hooks';
+import { selectors } from '../../../store';
+import { AMMProvider, MintBurnFormLiquidityAction, useAMMsContext } from '../../../contexts';
 import { Button, Panel, Typography, Loading } from '@components/atomic';
 import { ProtocolInformation, WalletAddressDisplay } from '@components/composite';
-import { isUndefined } from 'lodash';
-import { Wallet } from '@graphql';
+import isUndefined from 'lodash/isUndefined';
+import { Wallet } from '../../../graphql';
 
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 
@@ -39,7 +39,7 @@ export type PendingTransactionProps = {
   fixedApr?: number;
 };
 
-const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
+export const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
   amm,
   position,
   transactionId,
@@ -306,14 +306,6 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Box
             sx={{
-              paddingTop: (theme) => theme.spacing(6),
-              paddingBottom: (theme) => theme.spacing(8),
-            }}
-          >
-            {/* <Loading /> */}
-          </Box>
-          <Box
-            sx={{
               paddingBottom: (theme) => theme.spacing(2),
             }}
           >
@@ -469,5 +461,3 @@ const PendingTransaction: React.FunctionComponent<PendingTransactionProps> = ({
     </Panel>
   );
 };
-
-export default PendingTransaction;

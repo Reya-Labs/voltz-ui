@@ -8,7 +8,7 @@ export type MarginControlsProps<T> = {
   value: T;
 };
 
-const MarginControls = <T,>({ onChange, values, value }: MarginControlsProps<T>) => {
+export const MarginControls = <T,>({ onChange, values, value }: MarginControlsProps<T>) => {
   const iconLabel = (
     <IconLabel label="Add or Remove Margin" icon="information-circle" info="" removeIcon />
   );
@@ -38,5 +38,3 @@ const MarginControls = <T,>({ onChange, values, value }: MarginControlsProps<T>)
     </Box>
   );
 };
-
-export default MarginControls;

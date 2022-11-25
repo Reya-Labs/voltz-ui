@@ -2,29 +2,41 @@ import { Page } from '@components/interface';
 
 import ConnectedMellowLpDepositForm from './ConnectedMellowLpDepositForm/ConnectedMellowLpDepositForm';
 import ConnectedMellowLPTable from './ConnectedMellowLPTable/ConnectedMellowLPTable';
-import { setPageTitle } from '@utilities';
-import { useEffect, useState } from 'react';
-import { isNull } from 'lodash';
-import { useMellowLPVaults, useWallet } from '@hooks';
-import { useLocation } from 'react-router-dom';
+import { setPageTitle } from '../../utilities';
+import React, { useEffect, useState } from 'react';
+import { useMellowLPVaults, useWallet } from '../../hooks';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { MellowProduct } from './types';
 import { ConnectedMellowBox } from './Ecosystem.styled';
+import { routes } from '../index';
 
 export enum EcosystemRenderMode {
   MELLOW_DEPOSIT_FORM,
   PAGE,
 }
 
-const Ecosystem: React.FunctionComponent = () => {
+export const Ecosystem: React.FunctionComponent = () => {
   const wallet = useWallet();
 
   const [renderMode, setRenderMode] = useState<EcosystemRenderMode>(EcosystemRenderMode.PAGE);
   const [currentVault, setCurrentVault] = useState<MellowProduct>();
   const location = useLocation();
+  const navigate = useNavigate();
+  const lpVaults = useMellowLPVaults();
+
+  const { signer } = useWallet();
+
+  const [dataLoading, setDataLoading] = useState<boolean>(false);
+  const [vaultsLoaded, setVaultsLoaded] = useState<boolean>(false);
+
+  const handleGoBack = () => {
+    handleReset();
+    navigate(`/${routes.LP_OPTIMISERS}`);
+  };
 
   const handleSelectMellowLpVault = (selectedVault: MellowProduct) => {
-    if (isNull(wallet.account)) {
+    if (!wallet.account) {
       wallet.setRequired(true);
     } else {
       setRenderMode(EcosystemRenderMode.MELLOW_DEPOSIT_FORM);
@@ -52,7 +64,7 @@ const Ecosystem: React.FunctionComponent = () => {
         break;
       }
       case EcosystemRenderMode.PAGE: {
-        setPageTitle('Ecosystem Page');
+        setPageTitle('LP Optimisers');
         break;
       }
     }
@@ -64,14 +76,6 @@ const Ecosystem: React.FunctionComponent = () => {
     }
     handleReset();
   }, [location.key]);
-
-  const lpVaults = useMellowLPVaults();
-
-  const { signer } = useWallet();
-  const isSignerAvailable = !isNull(signer);
-
-  const [dataLoading, setDataLoading] = useState<boolean>(false);
-  const [vaultsLoaded, setVaultsLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     if (lpVaults) {
@@ -94,7 +98,7 @@ const Ecosystem: React.FunctionComponent = () => {
   }, [lpVaults]);
 
   useEffect(() => {
-    if (lpVaults && isSignerAvailable && vaultsLoaded) {
+    if (lpVaults && signer && vaultsLoaded) {
       setDataLoading(true);
 
       const request = Promise.allSettled(
@@ -110,7 +114,7 @@ const Ecosystem: React.FunctionComponent = () => {
         },
       );
     }
-  }, [lpVaults, isSignerAvailable, vaultsLoaded]);
+  }, [lpVaults, signer, vaultsLoaded]);
 
   return (
     <Page>
@@ -127,12 +131,10 @@ const Ecosystem: React.FunctionComponent = () => {
       {renderMode === EcosystemRenderMode.MELLOW_DEPOSIT_FORM && (
         <ConnectedMellowBox>
           {currentVault && (
-            <ConnectedMellowLpDepositForm onReset={handleReset} vault={currentVault} />
+            <ConnectedMellowLpDepositForm onCancel={handleGoBack} vault={currentVault} />
           )}
         </ConnectedMellowBox>
       )}
     </Page>
   );
 };
-
-export default Ecosystem;

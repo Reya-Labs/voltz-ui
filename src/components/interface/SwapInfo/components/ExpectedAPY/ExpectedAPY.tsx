@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Typography } from '@components/atomic';
 import { IconLabel, MaskedIntegerField } from '@components/composite';
 import Box from '@mui/material/Box';
-import { colors } from '@theme';
+import { colors } from '../../../../../theme';
 import {
   DataLayerEventPayload,
   formatNumber,
@@ -12,10 +12,10 @@ import {
   pushEvent,
   stringToBigFloat,
   toUSFormat,
-} from '@utilities';
-import { isUndefined } from 'lodash';
-import { useAgent, useWallet } from '@hooks';
-import { useAMMContext } from '@contexts';
+} from '../../../../../utilities';
+import isUndefined from 'lodash/isUndefined';
+import { useAgent, useWallet } from '../../../../../hooks';
+import { useAMMContext } from '../../../../../contexts';
 
 interface ExpectedAPYProps {
   expectedApy?: number;
@@ -138,7 +138,6 @@ export const ExpectedAPY = ({
       >
         <Box
           sx={{
-            // display: 'inline-block',
             padding: (theme) => theme.spacing(4),
             marginRight: (theme) => theme.spacing(16),
             maxWidth: '80px',
@@ -165,7 +164,6 @@ export const ExpectedAPY = ({
         </Box>
         <Box
           sx={{
-            // display: 'inline-block',
             padding: (theme) => theme.spacing(4),
             maxWidth: '100px',
             width: '100px',
@@ -201,5 +199,3 @@ export const ExpectedAPY = ({
     </>
   );
 };
-
-export default ExpectedAPY;

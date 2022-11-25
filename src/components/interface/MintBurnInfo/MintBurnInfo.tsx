@@ -1,8 +1,12 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import { MintSummary } from './components';
-import { MintBurnFormLiquidityAction, MintBurnFormModes, MintBurnFormState } from '@contexts';
-import { isUndefined } from 'lodash';
+import {
+  MintBurnFormLiquidityAction,
+  MintBurnFormModes,
+  MintBurnFormState,
+} from '../../../contexts';
+import isUndefined from 'lodash/isUndefined';
 import { FormPanel } from '@components/interface';
 
 export type MintBurnInfoProps = {
@@ -14,7 +18,7 @@ export type MintBurnInfoProps = {
   underlyingTokenName?: string;
 };
 
-const MintBurnInfo: React.FunctionComponent<MintBurnInfoProps> = ({
+export const MintBurnInfo: React.FunctionComponent<MintBurnInfoProps> = ({
   balance,
   formState,
   mintMinimumMarginRequirement,
@@ -43,5 +47,3 @@ const MintBurnInfo: React.FunctionComponent<MintBurnInfoProps> = ({
     </FormPanel>
   );
 };
-
-export default MintBurnInfo;

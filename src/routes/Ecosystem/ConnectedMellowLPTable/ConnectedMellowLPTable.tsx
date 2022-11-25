@@ -1,4 +1,4 @@
-import { Box } from '@mui/system';
+import Box from '@mui/material/Box';
 import { Panel } from '../../../components/atomic';
 import MellowLPTable from '../MellowLPTable/MellowLPTable';
 import EcosystemHeader from '../EcosystemHeader/EcosystemHeader';

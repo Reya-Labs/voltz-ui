@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter } from 'react-router-dom';
 import { Provider as ReduxProvider } from 'react-redux';
-import Amplify from 'aws-amplify';
+import { Amplify } from 'aws-amplify';
 
 import './fonts/PixelOperator/PixelOperatorMono8.woff';
 import './fonts/PixelOperator/PixelOperatorMono8-Bold.woff';
@@ -19,14 +19,11 @@ import store from './store';
 import { VoltzGraphProvider } from './graphql';
 import { ThemeProvider } from './theme';
 import { AgentProvider, AMMsProvider, WalletProvider } from './contexts';
-import App from './App';
+import { App } from './App';
 
 try {
   if (process.env.NODE_ENV !== 'development') {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const awsExports = require('./aws-exports');
-
-    Amplify.configure(awsExports);
+    Amplify.configure(require('./aws-exports'));
   }
 } catch (_error) {}
 

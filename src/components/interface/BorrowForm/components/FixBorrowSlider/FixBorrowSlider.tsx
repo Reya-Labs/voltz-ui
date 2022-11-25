@@ -1,16 +1,15 @@
 import { Typography } from '@components/atomic';
-import { Stack } from '@mui/material';
+import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
 
-import { formatCurrency, formatNumber } from '@utilities';
-
-import { Box } from '@mui/system';
+import { formatCurrency, formatNumber } from '../../../../../utilities';
 
 import React, { useState } from 'react';
-import { UseAsyncFunctionResult } from '@hooks';
+import { UseAsyncFunctionResult } from '../../../../../hooks';
 
 import Slider, { SliderThumb } from '@mui/material/Slider';
 
-import { colors, SystemStyleObject, Theme } from '@theme';
+import { colors, SystemStyleObject, Theme } from '../../../../../theme';
 
 export type FixBorrowSliderProps = {
   variableDebt: UseAsyncFunctionResult<unknown, number | void>;
@@ -36,7 +35,7 @@ const errorLabelStyles: SystemStyleObject<Theme> = {
   marginTop: (theme) => theme.spacing(-2),
 };
 
-const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
+export const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
   variableDebt,
   underlyingTokenName,
   selectedFixedDebt,
@@ -163,13 +162,11 @@ const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
         components={{ Thumb: FixBorrowThumbComponent }}
         defaultValue={0}
         value={sliderValue ?? selectedFixedDebtPercentage}
-        // valueLabelDisplay="auto"
         step={2.5}
         marks
         min={0}
         max={100}
         onChange={handleChangeCommitted}
-        // onChangeCommitted={handleChangeCommitted}
         disabled={variableDebt.loading}
         sx={{ ...colorStyleOverrides() }}
       />
@@ -182,5 +179,3 @@ const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
     </Box>
   );
 };
-
-export default FixBorrowSlider;

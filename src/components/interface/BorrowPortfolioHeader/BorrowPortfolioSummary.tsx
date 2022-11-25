@@ -1,11 +1,11 @@
-import { Box, Grid } from '@mui/material';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 
 import { Typography } from '@components/atomic';
-import { SystemStyleObject, Theme } from '@theme';
-import { formatCurrency, formatNumber } from '@utilities';
+import { SystemStyleObject, Theme } from '../../../theme';
+import { formatCurrency, formatNumber } from '../../../utilities';
 
 export type BorrowPortfolioSummaryProps = {
-  commonOverrides: SystemStyleObject<Theme>;
   currencyCode: string;
   currencySymbol: string;
   fixedDebt?: number;
@@ -14,8 +14,7 @@ export type BorrowPortfolioSummaryProps = {
   variablePositionsCount?: number;
 };
 
-const BorrowPortfolioSummary = ({
-  commonOverrides,
+export const BorrowPortfolioSummary = ({
   currencyCode,
   currencySymbol,
   fixedDebt,
@@ -188,5 +187,3 @@ const BorrowPortfolioSummary = ({
     </>
   );
 };
-
-export default BorrowPortfolioSummary;

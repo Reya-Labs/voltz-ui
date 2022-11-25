@@ -5,9 +5,9 @@ import { DateTime } from 'luxon';
 import { RolloverMintAction } from '../../types';
 import { deserializeAmm, getSigner } from '../../utilities';
 import * as actions from '../../actions';
-import { getErrorMessage } from '@utilities';
+import { getErrorMessage } from '../../../utilities';
 
-import { AMMRolloverWithMintArgs } from '@voltz-protocol/v1-sdk/dist/types/entities/amm';
+import { AMMRolloverWithMintArgs } from '@voltz-protocol/v1-sdk';
 
 function* rolloverMintSaga(action: RolloverMintAction) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

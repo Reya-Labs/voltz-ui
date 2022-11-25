@@ -1,6 +1,6 @@
 import { IconLabel } from '@components/composite';
 import { Typography } from '@components/atomic';
-import { Box } from '@mui/system';
+import Box from '@mui/material/Box';
 import React from 'react';
 import { titleStyles } from './styles';
 import { ReactComponent as USDC } from './usdc-icon.svg';

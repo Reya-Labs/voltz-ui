@@ -1,12 +1,11 @@
 import React, { useMemo } from 'react';
 import Box from '@mui/material/Box';
 
-import { Wallet } from '@contexts';
+import { Wallet } from '../../../../../contexts';
 import { Button, Icon, Icons } from '@components/atomic';
 import CircleIcon from '@mui/icons-material/Circle';
 
-import './web3modal.scss';
-import { colors } from '@theme';
+import { colors } from '../../../../../theme';
 import { AvatarAddress } from '../../../AvatarAddress/AvatarAddress';
 
 export type WalletConnectButtonProps = {
@@ -14,7 +13,7 @@ export type WalletConnectButtonProps = {
   wallet: Wallet;
 };
 
-const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = ({
+export const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = ({
   onClick,
   wallet: { status, name, account, balance, walletError },
 }) => {
@@ -88,5 +87,3 @@ const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = (
     </Button>
   );
 };
-
-export default WalletConnectButton;

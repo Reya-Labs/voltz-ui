@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import { SystemStyleObject, Theme } from '@theme';
-import { Agents, useAMMContext } from '@contexts';
+import { SystemStyleObject, Theme } from '../../../../../theme';
+import { Agents, useAMMContext } from '../../../../../contexts';
 import { Typography } from '@components/atomic';
 import { PoolField, MaturityInformation } from '@components/composite';
 import { lpLabels, traderLabels } from '../../constants';
 import { FixedAPR, Notional, CurrentMargin, AccruedRates } from './components';
-import { useAgent } from '@hooks';
-import { formatNumber, isBorrowing } from '@utilities';
-import { isNumber } from 'lodash';
+import { useAgent } from '../../../../../hooks';
+import { formatNumber, isBorrowing } from '../../../../../utilities';
+import isNumber from 'lodash/isNumber';
 
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 
@@ -20,7 +20,7 @@ export type PositionTableRowProps = {
   onSelect: (mode: 'margin' | 'liquidity' | 'notional') => void;
 };
 
-const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
+export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
   position,
   positionInfo,
   index,
@@ -135,5 +135,3 @@ const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
     </TableRow>
   );
 };
-
-export default PositionTableRow;

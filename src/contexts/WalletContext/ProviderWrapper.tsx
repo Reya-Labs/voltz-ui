@@ -5,12 +5,12 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { BigNumber, ethers } from 'ethers';
 
-import { useGetWalletQuery } from '@graphql';
-import { selectors } from '@store';
-import { useSelector } from '@hooks';
+import { useGetWalletQuery } from '../../graphql';
+import { selectors } from '../../store';
+import { useSelector } from '../../hooks';
 import { WalletName, WalletStatus } from './types';
 import WalletContext from './WalletContext';
-import { getErrorMessage } from '@utilities';
+import { getErrorMessage } from '../../utilities';
 import * as services from './services';
 
 export type ProviderWrapperProps = {

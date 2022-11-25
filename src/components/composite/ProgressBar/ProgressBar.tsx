@@ -33,5 +33,3 @@ export const ProgressBar = ({
     </ProgressBarBoxContainer>
   </ProgressBarContainer>
 );
-
-export default ProgressBar;

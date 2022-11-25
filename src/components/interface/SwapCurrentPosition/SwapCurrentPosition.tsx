@@ -3,11 +3,11 @@ import Box from '@mui/material/Box';
 import { Position } from '@voltz-protocol/v1-sdk';
 import { Button, Ellipsis, PositionBadge, SummaryPanel } from '@components/atomic';
 import { FormPanel, SwapFormModes } from '@components/interface';
-import { formatCurrency } from '@utilities';
+import { formatCurrency } from '../../../utilities';
 import { BigNumber } from 'ethers';
-import { usePositionContext } from '@contexts';
-import { colors } from '@theme';
-import { isUndefined } from 'lodash';
+import { usePositionContext } from '../../../contexts';
+import { colors } from '../../../theme';
+import isUndefined from 'lodash/isUndefined';
 
 export type SwapCurrentPositionProps = {
   formMode: SwapFormModes;
@@ -16,7 +16,7 @@ export type SwapCurrentPositionProps = {
   gaButtonId?: string;
 };
 
-const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionProps> = ({
+export const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionProps> = ({
   formMode,
   onPortfolio,
   position,
@@ -140,5 +140,3 @@ const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionProps> = (
     </FormPanel>
   );
 };
-
-export default SwapCurrentPosition;

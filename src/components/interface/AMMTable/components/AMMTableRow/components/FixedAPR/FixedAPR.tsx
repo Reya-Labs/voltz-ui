@@ -2,14 +2,14 @@ import React from 'react';
 
 import { Typography } from '@components/atomic';
 import TableCell from '@mui/material/TableCell';
-import { formatNumber } from '@utilities';
-import { isUndefined } from 'lodash';
+import { formatNumber } from '../../../../../../../utilities';
+import isUndefined from 'lodash/isUndefined';
 
 export type FixedAPRProps = {
   fixedApr?: number;
 };
 
-const FixedAPR: React.FunctionComponent<FixedAPRProps> = ({ fixedApr }) => {
+export const FixedAPR: React.FunctionComponent<FixedAPRProps> = ({ fixedApr }) => {
   const renderValue = () => {
     if (isUndefined(fixedApr)) {
       return 'Loading...';
@@ -26,5 +26,3 @@ const FixedAPR: React.FunctionComponent<FixedAPRProps> = ({ fixedApr }) => {
     </TableCell>
   );
 };
-
-export default FixedAPR;

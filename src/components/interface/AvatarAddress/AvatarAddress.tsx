@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
-import { elideAddress, getENSDetails } from '@utilities';
+import { elideAddress, getENSDetails } from '../../../utilities';
 import Box from '@mui/material/Box';
-import { colors, Theme } from '@theme';
+import { colors, Theme } from '../../../theme';
 import { Typography } from '@components/atomic';
 import { MetaMaskAvatar } from './MetaMaskAvatar/MetaMaskAvatar';
 import Skeleton from '@mui/material/Skeleton';

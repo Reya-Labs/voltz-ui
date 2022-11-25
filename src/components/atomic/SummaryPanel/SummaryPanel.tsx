@@ -1,7 +1,8 @@
 import React, { ReactNode } from 'react';
-import { Box, SystemStyleObject, Theme } from '@mui/system';
+import { SystemStyleObject, Theme } from '@mui/system';
 import { Typography } from '@components/atomic';
-import { colors } from '@theme';
+import { colors } from '../../../theme';
+import Box from '@mui/material/Box';
 
 interface SummaryPanelProps {
   label?: ReactNode;
@@ -9,7 +10,7 @@ interface SummaryPanelProps {
   rows?: { label: string; value: ReactNode; highlight?: boolean; bold?: boolean }[];
 }
 
-const SummaryPanel = ({ label, loading, rows }: SummaryPanelProps) => {
+export const SummaryPanel = ({ label, loading, rows }: SummaryPanelProps) => {
   const rowStyles: SystemStyleObject<Theme> = {
     display: 'flex',
     alignItems: 'end',
@@ -78,5 +79,3 @@ const SummaryPanel = ({ label, loading, rows }: SummaryPanelProps) => {
 
   return null;
 };
-
-export default SummaryPanel;

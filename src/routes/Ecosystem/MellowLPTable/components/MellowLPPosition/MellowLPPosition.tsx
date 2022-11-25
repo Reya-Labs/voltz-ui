@@ -1,5 +1,5 @@
-import { formatCurrency } from '@utilities';
-import { isUndefined } from 'lodash';
+import { formatCurrency } from '../../../../../utilities';
+import isUndefined from 'lodash/isUndefined';
 import React from 'react';
 import {
   DepositButton,

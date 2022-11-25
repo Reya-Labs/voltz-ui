@@ -1,9 +1,13 @@
-import { useTokenApproval } from '@hooks';
+import { useTokenApproval } from '../../../../../hooks';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Button, Ellipsis } from '@components/atomic';
-import { colors } from '@theme';
-import { BorrowFormSubmitButtonHintStates, BorrowFormSubmitButtonStates, Agents } from '@contexts';
+import { colors } from '../../../../../theme';
+import {
+  BorrowFormSubmitButtonHintStates,
+  BorrowFormSubmitButtonStates,
+  Agents,
+} from '../../../../../contexts';
 import { ReactNode } from 'react';
 
 interface SubmitControlsProps {
@@ -39,7 +43,7 @@ const Text = ({ bold, children, green, red }: TextProps) => (
   </Box>
 );
 
-const SubmitControls = ({
+export const SubmitControls = ({
   approvalsNeeded,
   isFormValid,
   isTradeVerified,
@@ -186,5 +190,3 @@ const SubmitControls = ({
     </>
   );
 };
-
-export default SubmitControls;

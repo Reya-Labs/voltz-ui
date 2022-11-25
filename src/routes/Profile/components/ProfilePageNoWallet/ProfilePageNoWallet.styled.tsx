@@ -1,8 +1,8 @@
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import { colors } from '@theme';
+import { colors } from '../../../../theme';
 import { Pill } from '../../../../components/atomic/Pill';
-import Typography from '../../../../components/atomic/Typography/Typography';
+import { Typography } from '../../../../components/atomic/Typography/Typography';
 
 export const ContainerBox = styled(Box)`
   width: 724px;

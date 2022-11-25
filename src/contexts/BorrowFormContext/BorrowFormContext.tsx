@@ -4,11 +4,11 @@ import {
   UseAsyncFunctionResult,
   useBalance,
   useTokenApproval,
-} from '@hooks';
-import { hasEnoughUnderlyingTokens, lessThanEpsilon } from '@utilities';
+} from '../../hooks';
+import { hasEnoughUnderlyingTokens, lessThanEpsilon } from '../../utilities';
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
-import { Agents, useAMMContext, useBorrowAMMContext, usePositionContext } from '@contexts';
-import { isUndefined } from 'lodash';
+import { Agents, useAMMContext, useBorrowAMMContext, usePositionContext } from '../../contexts';
+import isUndefined from 'lodash/isUndefined';
 import * as s from '../SwapFormContext/services';
 
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';

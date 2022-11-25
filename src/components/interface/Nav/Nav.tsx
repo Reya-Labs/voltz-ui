@@ -1,12 +1,12 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import { routes } from '@routes';
+import { routes } from '../../../routes';
 import { Icon } from '../../atomic';
 import { NavLink } from './NavLink/NavLink';
 import { iconSx } from './NavLink/style';
-import { colors } from '@theme';
+import { colors } from '../../../theme';
 
-const Nav: React.FunctionComponent = React.memo(() => (
+export const Nav: React.FunctionComponent = React.memo(() => (
   <Box
     sx={{
       display: 'flex',
@@ -30,7 +30,7 @@ const Nav: React.FunctionComponent = React.memo(() => (
       subLinks={[
         {
           text: 'TRADER POOLS',
-          link: `/${routes.SWAP}`,
+          link: `/${routes.TRADER_POOLS}`,
         },
         {
           text: 'PORTFOLIO',
@@ -46,7 +46,7 @@ const Nav: React.FunctionComponent = React.memo(() => (
       subLinks={[
         {
           text: 'LP POOLS',
-          link: `/${routes.POOLS}`,
+          link: `/${routes.LP_POOLS}`,
         },
         {
           text: 'LP OPTIMISERS',
@@ -54,7 +54,7 @@ const Nav: React.FunctionComponent = React.memo(() => (
         },
         {
           text: 'POSITIONS',
-          link: `/${routes.LP_FARM}`,
+          link: `/${routes.LP_PORTFOLIO}`,
         },
       ]}
     >
@@ -69,5 +69,3 @@ const Nav: React.FunctionComponent = React.memo(() => (
     </NavLink>
   </Box>
 ));
-
-export default Nav;

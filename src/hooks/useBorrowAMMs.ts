@@ -2,13 +2,13 @@ import { useMemo, useCallback } from 'react';
 import isNull from 'lodash/isNull';
 import { providers } from 'ethers';
 
-import { Amm_OrderBy, useGetAmMsQuery } from '@graphql';
+import { Amm_OrderBy, useGetAmMsQuery } from '../graphql';
 import useWallet from './useWallet';
 import JSBI from 'jsbi';
 import { DateTime } from 'luxon';
 
 import { Token, RateOracle, BorrowAMM, AMM } from '@voltz-protocol/v1-sdk';
-import isBorrowing from '../utilities/isBorrowing';
+import { isBorrowing } from '../utilities';
 
 export type UseBorrowAMMsResult = {
   borrowAmms?: BorrowAMM[];

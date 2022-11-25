@@ -1,6 +1,6 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import TransactionList from './TransactionList';
+import { TransactionList } from './TransactionList';
 import JSBI from 'jsbi';
 import { BigNumber } from 'ethers';
 

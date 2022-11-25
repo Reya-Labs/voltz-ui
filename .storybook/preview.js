@@ -2,7 +2,7 @@ import React from 'react';
 import { addDecorator } from '@storybook/react';
 import { BrowserRouter } from 'react-router-dom';
 
-import { ThemeProvider } from '@theme';
+import { ThemeProvider } from '../src/theme';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
@@ -16,7 +16,9 @@ export const parameters = {
 };
 
 addDecorator((story) => (
-  <ThemeProvider>
-    <BrowserRouter>{story()}</BrowserRouter>
+  <ThemeProvider theme="dark">
+    <div style={{ background: '#383545', height: '100vh', padding: 32 }}>
+      <BrowserRouter>{story()}</BrowserRouter>
+    </div>
   </ThemeProvider>
 ));

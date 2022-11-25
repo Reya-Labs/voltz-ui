@@ -12,7 +12,7 @@ import {
 } from '@components/composite';
 import { LiquidityControls, SubmitControls } from './components';
 import { MarginControls } from '../SwapForm/components';
-import { useTokenApproval } from '@hooks';
+import { useTokenApproval } from '../../../hooks';
 import {
   MintBurnFormHintStates,
   MintBurnFormLiquidityAction,
@@ -20,8 +20,8 @@ import {
   MintBurnFormModes,
   MintBurnFormState,
   MintBurnFormSubmitButtonStates,
-} from '@contexts';
-import { SystemStyleObject, Theme } from '@theme';
+} from '../../../contexts';
+import { SystemStyleObject, Theme } from '../../../theme';
 
 export type MintBurnFormProps = {
   approvalsNeeded?: boolean;
@@ -55,7 +55,7 @@ export type MintBurnFormProps = {
   fixedApr?: number;
 };
 
-const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
+export const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
   approvalsNeeded = false,
   balance,
   currentPositionMarginRequirement,
@@ -193,5 +193,3 @@ const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
     </FormPanel>
   );
 };
-
-export default MintBurnForm;

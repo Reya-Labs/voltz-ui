@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { routes } from '@routes';
-import { actions, selectors } from '@store';
-import { useAgent, useDispatch, useSelector } from '@hooks';
+import { routes } from '../../../routes';
+import { actions, selectors } from '../../../store';
+import { useAgent, useDispatch, useSelector } from '../../../hooks';
 import {
   MintBurnFormActions,
   MintBurnFormModes,
@@ -10,7 +10,7 @@ import {
   useAMMsContext,
   useMintBurnForm,
   usePositionContext,
-} from '@contexts';
+} from '../../../contexts';
 import {
   FormPanel,
   MintBurnCurrentPosition,
@@ -19,8 +19,8 @@ import {
   PendingTransaction,
 } from '@components/interface';
 import { updateFixedRate } from './utilities';
-import { getPoolButtonId, isBorrowing, setPageTitle } from '@utilities';
-import { isUndefined } from 'lodash';
+import { getPoolButtonId, isBorrowing, setPageTitle } from '../../../utilities';
+import isUndefined from 'lodash/isUndefined';
 import { BigNumber } from 'ethers';
 
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
@@ -29,7 +29,7 @@ export type ConnectedMintBurnFormProps = {
   onReset: () => void;
 };
 
-const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps> = ({
+export const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps> = ({
   onReset,
 }) => {
   const { amm: targetAmm } = useAMMContext();
@@ -89,7 +89,7 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
 
   const handleComplete = () => {
     onReset();
-    navigate(`/${routes.LP_FARM}`);
+    navigate(`/${routes.LP_PORTFOLIO}`);
   };
 
   const handleGoBack = () => {
@@ -222,5 +222,3 @@ const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFormProps>
     </>
   );
 };
-
-export default ConnectedMintBurnForm;

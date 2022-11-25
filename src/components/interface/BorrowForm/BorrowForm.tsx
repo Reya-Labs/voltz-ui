@@ -1,7 +1,7 @@
 import React from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
-import { UseAsyncFunctionResult, useTokenApproval } from '@hooks';
+import { UseAsyncFunctionResult, useTokenApproval } from '../../../hooks';
 import { FormPanel } from '@components/interface';
 import {
   MaskedIntegerField,
@@ -10,10 +10,14 @@ import {
   ProtocolInformation,
 } from '@components/composite';
 import { SubmitControls, FixBorrow } from './components';
-import { SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '../../../theme';
 
-import { Agents, BorrowFormSubmitButtonHintStates, BorrowFormSubmitButtonStates } from '@contexts';
-import { formatCurrency, getPoolButtonId } from '@utilities';
+import {
+  Agents,
+  BorrowFormSubmitButtonHintStates,
+  BorrowFormSubmitButtonStates,
+} from '../../../contexts';
+import { formatCurrency, getPoolButtonId } from '../../../utilities';
 
 export type BorrowProps = {
   protocol?: string;
@@ -42,7 +46,7 @@ export type BorrowProps = {
   fixedApr?: number;
 };
 
-const BorrowForm: React.FunctionComponent<BorrowProps> = ({
+export const BorrowForm: React.FunctionComponent<BorrowProps> = ({
   protocol,
   endDate,
   errors,
@@ -135,18 +139,6 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
           errorText={errors['margin']}
         />
       </Box>
-
-      {/* <SubmitControls
-        approvalsNeeded={approvalsNeeded}
-        isFormValid={isFormValid}
-        isTradeVerified={isTradeVerified}
-        onCancel={onCancel}
-        onSubmit={onSubmit}
-        protocol={protocol}
-        tokenApprovals={tokenApprovals}
-        tradeInfoErrorMessage={tradeInfoErrorMessage}
-        underlyingTokenName={underlyingTokenName}
-      /> */}
       <SubmitControls
         approvalsNeeded={approvalsNeeded}
         hintState={hintState}
@@ -156,7 +148,6 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
         onSubmit={onSubmit}
         gaButtonId={getPoolButtonId('', '', '', Agents.VARIABLE_TRADER, true, '')}
         submitButtonState={submitButtonState}
-        // swapInfoLoading={swapInfoLoading}
         tokenApprovals={tokenApprovals}
         tradeInfoErrorMessage={tradeInfoErrorMessage}
         underlyingTokenName={underlyingTokenName}
@@ -164,5 +155,3 @@ const BorrowForm: React.FunctionComponent<BorrowProps> = ({
     </FormPanel>
   );
 };
-
-export default BorrowForm;

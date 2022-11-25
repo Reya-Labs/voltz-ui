@@ -1,6 +1,6 @@
-import { Agents } from '@contexts';
+import { Agents } from '../../../contexts';
 import Box from '@mui/material/Box';
-import CustomPoolField from './CustomPoolField';
+import { CustomPoolField } from './CustomPoolField';
 import { Typography } from '@components/atomic';
 
 import { ReactComponent as Aave } from './aave-icon.svg';
@@ -19,7 +19,7 @@ export type PoolFieldProps = {
   isBorrowTable?: boolean;
 };
 
-const PoolField = ({ agent, protocol, isBorrowing, isBorrowTable }: PoolFieldProps) => {
+export const PoolField = ({ agent, protocol, isBorrowing, isBorrowTable }: PoolFieldProps) => {
   const protocolIcon = () => {
     // todo: this seems duplicated in other files as well
     // extract a component
@@ -123,5 +123,3 @@ const PoolField = ({ agent, protocol, isBorrowing, isBorrowTable }: PoolFieldPro
     return <CustomPoolField label={getPoolLabel()}>{renderPool()}</CustomPoolField>;
   }
 };
-
-export default PoolField;

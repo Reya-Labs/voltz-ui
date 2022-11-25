@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '../../../theme';
 import { Typography } from '@components/atomic';
 import CircleIcon from '@mui/icons-material/Circle';
 

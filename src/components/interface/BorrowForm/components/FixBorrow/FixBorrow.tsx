@@ -1,12 +1,13 @@
 import { Typography } from '@components/atomic';
-import { Stack } from '@mui/material';
-import { colors } from '@theme';
+import Stack from '@mui/material/Stack';
+import { colors } from '../../../../../theme';
 
 import { IconLabel } from '@components/composite';
-import { Box } from '@mui/system';
-import FixBorrowSlider from '../FixBorrowSlider/FixBorrowSlider';
-import { UseAsyncFunctionResult } from '@hooks';
-import { formatNumber } from '@utilities';
+import Box from '@mui/material/Box';
+import { FixBorrowSlider } from '../FixBorrowSlider/FixBorrowSlider';
+import { UseAsyncFunctionResult } from '../../../../../hooks';
+import { formatNumber } from '../../../../../utilities';
+import React from 'react';
 
 export type FixBorrowProps = {
   variableDebt: UseAsyncFunctionResult<unknown, number | void>;
@@ -21,7 +22,7 @@ export type FixBorrowProps = {
   errorText?: string;
 };
 
-const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
+export const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
   variableDebt,
   underlyingTokenName = '',
   selectedFixedDebt,
@@ -88,5 +89,3 @@ const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
     </Box>
   );
 };
-
-export default FixBorrow;

@@ -1,7 +1,7 @@
-import { SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '../../../theme';
 import { Typography } from '@components/atomic';
 import Box from '@mui/material/Box';
-import { formatCurrency } from '@utilities';
+import { formatCurrency } from '../../../utilities';
 
 export type BorrowPortfolioHeaderBoxProps = {
   aggregatedDebt?: number;
@@ -22,7 +22,7 @@ const titleStyles: SystemStyleObject<Theme> = {
   marginTop: (theme) => theme.spacing(2),
 };
 
-const BorrowPortfolioHeaderBox = ({
+export const BorrowPortfolioHeaderBox = ({
   aggregatedDebt,
   loading,
   currencyCode,
@@ -43,4 +43,3 @@ const BorrowPortfolioHeaderBox = ({
     </Box>
   );
 };
-export default BorrowPortfolioHeaderBox;

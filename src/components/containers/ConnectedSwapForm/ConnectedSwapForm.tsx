@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { routes } from '@routes';
-import { actions, selectors } from '@store';
-import { useAgent, useDispatch, useSelector, useWallet } from '@hooks';
+import { routes } from '../../../routes';
+import { actions, selectors } from '../../../store';
+import { useAgent, useDispatch, useSelector, useWallet } from '../../../hooks';
 import {
   SwapCurrentPosition,
   SwapForm,
@@ -19,15 +19,15 @@ import {
   useAMMsContext,
   usePositionContext,
   useSwapFormContext,
-} from '@contexts';
+} from '../../../contexts';
 import { BigNumber } from 'ethers';
 import {
   getNotionalActionFromHintState,
   getPoolButtonId,
   isBorrowing,
   setPageTitle,
-} from '@utilities';
-import { isUndefined } from 'lodash';
+} from '../../../utilities';
+import isUndefined from 'lodash/isUndefined';
 
 import { AMM } from '@voltz-protocol/v1-sdk';
 
@@ -35,7 +35,7 @@ export type ConnectedSwapFormProps = {
   onReset: () => void;
 };
 
-const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ onReset }) => {
+export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ onReset }) => {
   const { agent } = useAgent();
   const { amm: targetAmm } = useAMMContext();
   const { amm: positionAmm } = usePositionContext();
@@ -245,5 +245,3 @@ const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> = ({ on
     </>
   );
 };
-
-export default ConnectedSwapForm;

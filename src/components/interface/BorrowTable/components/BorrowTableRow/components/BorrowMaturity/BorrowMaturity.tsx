@@ -1,11 +1,11 @@
 import React from 'react';
 import TableCell from '@mui/material/TableCell';
 
-import { useBorrowAMMContext } from '@contexts';
+import { useBorrowAMMContext } from '../../../../../../../contexts';
 import { Typography } from '@components/atomic';
-import { formatDateTime } from '@utilities';
+import { formatDateTime } from '../../../../../../../utilities';
 
-const BorrowMaturity: React.FunctionComponent = () => {
+export const BorrowMaturity: React.FunctionComponent = () => {
   const { endDate } = useBorrowAMMContext();
 
   const renderValue = () => {
@@ -24,5 +24,3 @@ const BorrowMaturity: React.FunctionComponent = () => {
     </TableCell>
   );
 };
-
-export default BorrowMaturity;

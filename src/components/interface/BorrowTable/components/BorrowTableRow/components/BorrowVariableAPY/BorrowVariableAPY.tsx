@@ -2,14 +2,14 @@ import React from 'react';
 import TableCell from '@mui/material/TableCell';
 
 import { Typography } from '@components/atomic';
-import { formatNumber } from '@utilities';
+import { formatNumber } from '../../../../../../../utilities';
 
 export type BorrowVariableAPYProps = {
   loading: boolean;
   variableApy: number | null | void;
 };
 
-const BorrowVariableAPY: React.FunctionComponent<BorrowVariableAPYProps> = ({
+export const BorrowVariableAPY: React.FunctionComponent<BorrowVariableAPYProps> = ({
   loading,
   variableApy,
 }) => {
@@ -42,5 +42,3 @@ const BorrowVariableAPY: React.FunctionComponent<BorrowVariableAPYProps> = ({
     </TableCell>
   );
 };
-
-export default BorrowVariableAPY;

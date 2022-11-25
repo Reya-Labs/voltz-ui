@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import { useCurrentSeason, useWallet } from '@hooks';
+import { useCurrentSeason, useWallet } from '../../hooks';
 import { ProfilePageNoWallet } from './ProfilePageNoWallet/ProfilePageNoWallet';
 import { ProfilePageWalletConnected } from './ProfilePageWalletConnected/ProfilePageWalletConnected';
-import { getENSDetails, setPageTitle } from '@utilities';
+import { getENSDetails, setPageTitle } from '../../utilities';
 import { Season } from '../../hooks/season/types';
 import {
   SEASON_BADGE_VARIANTS,
@@ -10,7 +10,7 @@ import {
   GetProfileBadgesResponse1,
 } from './getters/getPhase1Badges';
 
-const Profile: React.FunctionComponent = () => {
+export const ProfileV1: React.FunctionComponent = () => {
   const wallet = useWallet();
   const [achievedBadges, setAchievedBadges] = React.useState<
     GetProfileBadgesResponse1['achievedBadges']
@@ -58,5 +58,3 @@ const Profile: React.FunctionComponent = () => {
     />
   );
 };
-
-export default Profile;

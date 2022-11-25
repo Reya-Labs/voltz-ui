@@ -14,7 +14,7 @@ const TOKEN_NAME_ICON_MAP: Record<string, IconProps['name']> = {
   USDT: 'token-usdt',
 };
 
-const InputTokenLabel = ({ tokenName }: InputTokenLabelProps) => {
+export const InputTokenLabel = ({ tokenName }: InputTokenLabelProps) => {
   const iconName = TOKEN_NAME_ICON_MAP[tokenName.toUpperCase()];
   const icon = iconName ? <Icon name={iconName} sx={{ display: 'block' }} /> : null;
 
@@ -25,5 +25,3 @@ const InputTokenLabel = ({ tokenName }: InputTokenLabelProps) => {
     </Box>
   );
 };
-
-export default InputTokenLabel;

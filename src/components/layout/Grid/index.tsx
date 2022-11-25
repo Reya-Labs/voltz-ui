@@ -1,5 +1,5 @@
 import React from 'react';
-import { SystemStyleObject, Theme } from '@theme';
+import { SystemStyleObject, Theme } from '../../../theme';
 import { Box } from './Grid.styled';
 
 type GridProps = {

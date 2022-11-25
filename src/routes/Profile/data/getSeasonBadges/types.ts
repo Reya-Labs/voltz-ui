@@ -1,4 +1,4 @@
-import { BadgeResponse } from '@voltz-protocol/v1-sdk/dist/types/entities/communitySbt';
+import { BadgeResponse } from '@voltz-protocol/v1-sdk';
 
 export type GetProfileBadgesResponse = {
   badgeResponseRaw?: BadgeResponse;

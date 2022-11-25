@@ -1,7 +1,7 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { AgentProvider } from '@contexts';
-import PositionTable from './PositionTable';
+import { AgentProvider } from '../../../contexts';
+import { PositionTable } from './PositionTable';
 
 export default {
   title: 'Interface/PositionTable',

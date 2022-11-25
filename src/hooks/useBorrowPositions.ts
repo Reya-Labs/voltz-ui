@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import { Position } from '@voltz-protocol/v1-sdk';
 
-import { useAgent, usePositions } from '@hooks';
+import usePositions from './usePositions/usePositions';
+import useAgent from './useAgent';
 
 export type useBorrowPositionsResult = {
   positions?: Position[];

@@ -1,14 +1,14 @@
 import React, { useCallback } from 'react';
 import Box from '@mui/material/Box';
 import { IconLabel, ToggleButtonGroup } from '@components/composite';
-import { MintBurnFormLiquidityAction } from '@contexts';
+import { MintBurnFormLiquidityAction } from '../../../../../contexts';
 
 export type LiquidityControlsProps = {
   onChange: (value: MintBurnFormLiquidityAction) => void;
   value: MintBurnFormLiquidityAction;
 };
 
-const LiquidityControls = ({ onChange, value }: LiquidityControlsProps) => {
+export const LiquidityControls = ({ onChange, value }: LiquidityControlsProps) => {
   const iconLabel = (
     <IconLabel label="Add or Burn Liquidity" icon="information-circle" info="" removeIcon />
   );
@@ -38,5 +38,3 @@ const LiquidityControls = ({ onChange, value }: LiquidityControlsProps) => {
     </Box>
   );
 };
-
-export default LiquidityControls;

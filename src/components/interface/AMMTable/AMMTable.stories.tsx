@@ -1,7 +1,7 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { AgentProvider } from '@contexts';
-import AMMTable from './AMMTable';
+import { AgentProvider } from '../../../contexts';
+import { AMMTable } from './AMMTable';
 
 export default {
   title: 'Interface/AMMTable',

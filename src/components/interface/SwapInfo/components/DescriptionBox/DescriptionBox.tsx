@@ -7,7 +7,7 @@ export type DescriptionBoxProps = {
   descriptionText: string;
 };
 
-const DescriptionBox: React.FunctionComponent<DescriptionBoxProps> = ({
+export const DescriptionBox: React.FunctionComponent<DescriptionBoxProps> = ({
   titleText,
   descriptionText,
 }) => {
@@ -28,5 +28,3 @@ const DescriptionBox: React.FunctionComponent<DescriptionBoxProps> = ({
     </Box>
   );
 };
-
-export default DescriptionBox;

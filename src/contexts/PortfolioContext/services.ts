@@ -1,5 +1,5 @@
-import { isUndefined } from 'lodash';
-import { Agents } from '@contexts';
+import isUndefined from 'lodash/isUndefined';
+import { Agents } from '../../contexts';
 
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 

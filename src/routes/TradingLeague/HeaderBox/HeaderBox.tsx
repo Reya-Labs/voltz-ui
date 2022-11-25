@@ -1,5 +1,5 @@
 import React from 'react';
-import { colors } from '@theme';
+import { colors } from '../../../theme';
 import { Typography } from '@components/atomic';
 import Box from '@mui/material/Box';
 
