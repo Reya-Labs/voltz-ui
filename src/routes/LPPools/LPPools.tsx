@@ -16,7 +16,7 @@ import { useAgent, usePositions, useWallet } from '../../hooks';
 import { Page } from '@components/interface';
 import { PageTitleDesc } from '@components/composite';
 import { ConnectedMintBurnForm } from '../../components/containers/ConnectedMintBurnForm/ConnectedMintBurnForm';
-import { Button } from '@mui/material';
+import Button from '@mui/material/Button';
 import { routes } from '../../routes';
 import { AMMTable } from '../../components/interface/AMMTable/AMMTable';
 

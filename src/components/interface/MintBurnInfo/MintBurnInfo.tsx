@@ -6,7 +6,7 @@ import {
   MintBurnFormModes,
   MintBurnFormState,
 } from '../../../contexts';
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 import { FormPanel } from '@components/interface';
 
 export type MintBurnInfoProps = {

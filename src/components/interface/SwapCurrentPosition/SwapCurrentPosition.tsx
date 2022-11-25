@@ -7,7 +7,7 @@ import { formatCurrency } from '../../../utilities';
 import { BigNumber } from 'ethers';
 import { usePositionContext } from '../../../contexts';
 import { colors } from '../../../theme';
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 
 export type SwapCurrentPositionProps = {
   formMode: SwapFormModes;

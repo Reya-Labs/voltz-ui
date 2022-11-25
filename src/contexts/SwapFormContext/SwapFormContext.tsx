@@ -12,7 +12,9 @@ import {
   pushEvent,
   stringToBigFloat,
 } from '../../utilities';
-import { debounce, isNumber, isUndefined } from 'lodash';
+import debounce from 'lodash/debounce';
+import isNumber from 'lodash/isNumber';
+import isUndefined from 'lodash/isUndefined';
 import {
   GetInfoType,
   useAgent,

@@ -3,7 +3,7 @@ import TableCell from '@mui/material/TableCell';
 
 import { useWallet } from '../../../../../../../hooks';
 import { Typography, Button } from '@components/atomic';
-import { isUndefined, isNull } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 import { formatCurrency, formatNumber } from '../../../../../../../utilities';
 
 import { colors } from '../../../../../../../theme';
@@ -29,7 +29,7 @@ export const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({
 
   const handleClick = () => {
     if (onSelect) {
-      if (isNull(wallet.account)) {
+      if (!wallet.account) {
         wallet.setRequired(true);
       } else {
         onSelect();

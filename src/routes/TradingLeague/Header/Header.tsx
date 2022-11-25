@@ -1,6 +1,6 @@
 import { Typography } from '@components/atomic';
 import { colors } from '../../../theme';
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
 import React from 'react';
 
 export const Header: React.FunctionComponent = () => (

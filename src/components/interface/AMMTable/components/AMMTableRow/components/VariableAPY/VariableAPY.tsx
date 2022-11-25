@@ -3,7 +3,7 @@ import TableCell from '@mui/material/TableCell';
 
 import { Typography } from '@components/atomic';
 import { formatNumber } from '../../../../../../../utilities';
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 
 export type VariableAPYProps = {
   variableApy?: number;

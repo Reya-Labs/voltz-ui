@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
 import { SystemStyleObject, Theme } from '@mui/system';
 import { colors } from '../../../theme';
 import { Typography } from '@components/atomic';

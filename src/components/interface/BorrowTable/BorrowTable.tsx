@@ -4,7 +4,7 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import { SystemStyleObject, Theme } from '../../../theme';
 import { Typography, Panel } from '@components/atomic';
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
 
 import { findCurrentBorrowPosition, getRowButtonId } from '../../../utilities';
 import { mapAmmToAmmTableDatum } from './utilities';

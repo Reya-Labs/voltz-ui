@@ -3,8 +3,7 @@ import { Page } from '@components/interface';
 import ConnectedMellowLpDepositForm from './ConnectedMellowLpDepositForm/ConnectedMellowLpDepositForm';
 import ConnectedMellowLPTable from './ConnectedMellowLPTable/ConnectedMellowLPTable';
 import { setPageTitle } from '../../utilities';
-import { useEffect, useState } from 'react';
-import { isNull } from 'lodash';
+import React, { useEffect, useState } from 'react';
 import { useMellowLPVaults, useWallet } from '../../hooks';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -27,7 +26,6 @@ const Ecosystem: React.FunctionComponent = () => {
   const lpVaults = useMellowLPVaults();
 
   const { signer } = useWallet();
-  const isSignerAvailable = !isNull(signer);
 
   const [dataLoading, setDataLoading] = useState<boolean>(false);
   const [vaultsLoaded, setVaultsLoaded] = useState<boolean>(false);
@@ -38,7 +36,7 @@ const Ecosystem: React.FunctionComponent = () => {
   };
 
   const handleSelectMellowLpVault = (selectedVault: MellowProduct) => {
-    if (isNull(wallet.account)) {
+    if (!wallet.account) {
       wallet.setRequired(true);
     } else {
       setRenderMode(EcosystemRenderMode.MELLOW_DEPOSIT_FORM);
@@ -100,7 +98,7 @@ const Ecosystem: React.FunctionComponent = () => {
   }, [lpVaults]);
 
   useEffect(() => {
-    if (lpVaults && isSignerAvailable && vaultsLoaded) {
+    if (lpVaults && signer && vaultsLoaded) {
       setDataLoading(true);
 
       const request = Promise.allSettled(
@@ -116,7 +114,7 @@ const Ecosystem: React.FunctionComponent = () => {
         },
       );
     }
-  }, [lpVaults, isSignerAvailable, vaultsLoaded]);
+  }, [lpVaults, signer, vaultsLoaded]);
 
   return (
     <Page>

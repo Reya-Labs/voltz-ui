@@ -5,7 +5,7 @@ import { FormPanel } from '@components/interface';
 import { formatCurrency, formatNumber } from '../../../utilities';
 import { usePositionContext, MintBurnFormModes } from '../../../contexts';
 import { colors } from '../../../theme';
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 
 export type MintBurnCurrentPositionProps = {
   formMode: MintBurnFormModes;

@@ -2,7 +2,7 @@ import { Typography } from '@components/atomic';
 
 import { DateTime } from 'luxon';
 import { formatDateTime } from '../../../../../utilities';
-import { Box } from '@mui/system';
+import Box from '@mui/material/Box';
 import React from 'react';
 
 export type MaturityEndDateProps = {

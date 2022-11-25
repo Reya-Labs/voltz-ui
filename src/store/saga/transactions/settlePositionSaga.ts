@@ -5,7 +5,7 @@ import { getErrorMessage } from '../../../utilities';
 import { SettlePositionAction } from '../../types';
 import { deserializeAmm, getSigner } from '../../utilities';
 import * as actions from '../../actions';
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 
 function* settlePositionSaga(action: SettlePositionAction) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

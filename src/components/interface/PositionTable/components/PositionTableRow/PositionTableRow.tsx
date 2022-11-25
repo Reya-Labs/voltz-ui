@@ -9,7 +9,7 @@ import { lpLabels, traderLabels } from '../../constants';
 import { FixedAPR, Notional, CurrentMargin, AccruedRates } from './components';
 import { useAgent } from '../../../../../hooks';
 import { formatNumber, isBorrowing } from '../../../../../utilities';
-import { isNumber } from 'lodash';
+import isNumber from 'lodash/isNumber';
 
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 

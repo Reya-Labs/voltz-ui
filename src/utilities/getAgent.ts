@@ -1,5 +1,5 @@
 import { Agents } from '../contexts';
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 
 /**
  * It takes a position type and returns the agent type

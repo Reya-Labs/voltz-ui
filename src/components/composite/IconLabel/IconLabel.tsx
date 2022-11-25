@@ -1,8 +1,6 @@
 import React, { ReactNode, useState } from 'react';
 import Box from '@mui/material/Box';
 import Popover from '@mui/material/Popover';
-import isNull from 'lodash/isNull';
-import upperCase from 'lodash/upperCase';
 
 import { Icon, Icons, Panel, Typography } from '@components/atomic';
 import { SystemStyleObject, Theme } from '../../../theme';
@@ -29,7 +27,7 @@ export const IconLabel: React.FunctionComponent<IconLabelProps> = ({
   const handlePopoverClose = () => {
     setAnchor(null);
   };
-  const open = !isNull(anchor);
+  const open = Boolean(anchor);
 
   let _display = 'inline';
 
@@ -39,7 +37,7 @@ export const IconLabel: React.FunctionComponent<IconLabelProps> = ({
 
   return (
     <>
-      {typeof label === 'string' ? upperCase(label) : label}
+      {typeof label === 'string' ? label.toUpperCase() : label}
       <Icon
         name={icon}
         aria-owns={open ? 'mouse-over-popover' : undefined}

@@ -13,7 +13,7 @@ import {
   stringToBigFloat,
   toUSFormat,
 } from '../../../../../utilities';
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 import { useAgent, useWallet } from '../../../../../hooks';
 import { useAMMContext } from '../../../../../contexts';
 

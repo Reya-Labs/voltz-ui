@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Position } from '@voltz-protocol/v1-sdk';
-import { List } from '@mui/material';
+import List from '@mui/material/List';
 import { colors, SystemStyleObject, Theme } from '../../../theme';
 import { TransactionListItem } from './TransactionListItem';
 import { getTransactionData, getTransactions, sortTransactions } from './services';

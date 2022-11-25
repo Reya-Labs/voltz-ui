@@ -11,7 +11,7 @@ import { useAgent, useWallet } from '../../../../../hooks';
 import { labels } from '../../constants';
 import { VariableAPY, FixedAPR } from './components';
 import { getRowButtonId } from '../../../../../utilities';
-import { isNumber } from 'lodash';
+import isNumber from 'lodash/isNumber';
 import { DateTime } from 'luxon';
 
 export type AMMTableRowProps = {

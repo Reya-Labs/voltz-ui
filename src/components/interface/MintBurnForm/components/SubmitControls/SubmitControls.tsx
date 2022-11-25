@@ -7,7 +7,7 @@ import {
   MintBurnFormSubmitButtonStates,
 } from '../../../../../contexts';
 import { colors } from '../../../../../theme';
-import { Box } from '@mui/system';
+import Box from '@mui/material/Box';
 
 type TextProps = {
   bold?: boolean;

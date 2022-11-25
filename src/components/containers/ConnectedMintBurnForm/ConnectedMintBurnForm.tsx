@@ -20,7 +20,7 @@ import {
 } from '@components/interface';
 import { updateFixedRate } from './utilities';
 import { getPoolButtonId, isBorrowing, setPageTitle } from '../../../utilities';
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 import { BigNumber } from 'ethers';
 
 import { AMM, Position } from '@voltz-protocol/v1-sdk';

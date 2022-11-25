@@ -1,10 +1,10 @@
 import { FormPanel } from '@components/interface';
 import { IconLabel, InputTokenLabel, MaskedIntegerField } from '@components/composite';
-import { Box } from '@mui/system';
+import Box from '@mui/material/Box';
 import { formatCurrency, toUSFormat } from '../../../utilities';
 import { Panel, Typography, Button } from '@components/atomic';
 import { colors } from '../../../theme';
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 import React from 'react';
 import { MellowProduct } from '../types';
 import LPMellowVaultDepositInfo from './components/LPMellowVaultDepositInfo';

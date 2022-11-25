@@ -1,9 +1,9 @@
 import { Typography } from '@components/atomic';
-import { Stack } from '@mui/material';
+import Stack from '@mui/material/Stack';
 import { colors } from '../../../../../theme';
 
 import { IconLabel } from '@components/composite';
-import { Box } from '@mui/system';
+import Box from '@mui/material/Box';
 import { FixBorrowSlider } from '../FixBorrowSlider/FixBorrowSlider';
 import { UseAsyncFunctionResult } from '../../../../../hooks';
 import { formatNumber } from '../../../../../utilities';

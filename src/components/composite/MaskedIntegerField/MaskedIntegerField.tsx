@@ -10,7 +10,7 @@ import { useUniqueId } from '../../../hooks';
 import { OverrideTypes } from '../../../utilities';
 import { Typography } from '@components/atomic';
 import { colors, inputStyles, SystemStyleObject, Theme } from '../../../theme';
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 
 export type MaskedIntegerFieldProps = OverrideTypes<
   CurrencyInputProps,

@@ -11,7 +11,7 @@ import {
 import { colors, SystemStyleObject, Theme } from '../../../theme';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from '../SwapForm/types';
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 import { FormPanel } from '@components/interface';
 
 export type SwapInfoProps = {

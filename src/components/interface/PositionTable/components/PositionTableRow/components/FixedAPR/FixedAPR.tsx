@@ -3,7 +3,7 @@ import React from 'react';
 import { Typography } from '@components/atomic';
 import { IconLabel } from '@components/composite';
 import { formatNumber } from '../../../../../../../utilities';
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 
 export type FixedAPRProps = {
   fixedApr?: number;

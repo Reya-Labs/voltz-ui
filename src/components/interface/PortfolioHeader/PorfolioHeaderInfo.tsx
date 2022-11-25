@@ -4,7 +4,7 @@ import { formatCurrency, formatNumber } from '../../../utilities';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 import { useAgent } from '../../../hooks';
 import { PortfolioHeaderValue } from './PortfolioHeaderValue';
 import { PortfolioHeaderBox } from './PortfolioHeaderBox';

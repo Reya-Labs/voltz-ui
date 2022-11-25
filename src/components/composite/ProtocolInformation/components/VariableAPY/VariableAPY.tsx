@@ -5,7 +5,7 @@ import { Typography } from '@components/atomic';
 import { IconLabel } from '../../../IconLabel/IconLabel';
 import { Agents } from '../../../../../contexts';
 import { formatNumber } from '../../../../../utilities';
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 
 export type VariableAPYProps = {
   agent?: Agents;

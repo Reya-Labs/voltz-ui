@@ -1,9 +1,8 @@
 import { Typography } from '@components/atomic';
-import { Stack } from '@mui/material';
+import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
 
 import { formatCurrency, formatNumber } from '../../../../../utilities';
-
-import { Box } from '@mui/system';
 
 import React, { useState } from 'react';
 import { UseAsyncFunctionResult } from '../../../../../hooks';
