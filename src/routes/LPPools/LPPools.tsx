@@ -20,7 +20,7 @@ import Button from '@mui/material/Button';
 import { routes } from '../../routes';
 import { AMMTable } from '../../components/interface/AMMTable/AMMTable';
 
-const LPPools: React.FunctionComponent = () => {
+export const LPPools: React.FunctionComponent = () => {
   const [amm, setAMM] = useState<AMM>();
   const [formMode, setFormMode] = useState<MintBurnFormModes>();
   const [position, setPosition] = useState<Position>();
@@ -114,5 +114,3 @@ const LPPools: React.FunctionComponent = () => {
     </Page>
   );
 };
-
-export default LPPools;

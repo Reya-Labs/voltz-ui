@@ -16,7 +16,7 @@ import { Page, SwapFormModes } from '@components/interface';
 import { ConnectedPositionTable } from '../../components/containers/ConnectedPositionTable/ConnectedPositionTable';
 import { ConnectedSwapForm } from '../../components/containers/ConnectedSwapForm/ConnectedSwapForm';
 
-const Portfolio: React.FunctionComponent = () => {
+export const Portfolio: React.FunctionComponent = () => {
   const [formMode, setFormMode] = useState<SwapFormModes>();
   const [amm, setAMM] = useState<AMM>();
   const [position, setPosition] = useState<Position>();
@@ -126,5 +126,3 @@ const Portfolio: React.FunctionComponent = () => {
     </Page>
   );
 };
-
-export default Portfolio;

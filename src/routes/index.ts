@@ -10,12 +10,12 @@ export const routes = {
   LP_OPTIMISERS: 'lp-optimisers',
 };
 
-export { default as LPPools } from './LPPools/LPPools';
-export { default as LPPortfolio } from './LPPortfolio/LPPortfolio';
-export { default as TraderPools } from './TraderPools/TraderPools';
-export { default as Portfolio } from './Portfolio/Portfolio';
-export { default as FixedBorrower } from './FixedBorrower/FixedBorrower';
-export { default as TradingLeague } from './TradingLeague/TradingLeague';
-export { default as Profile } from './Profile/Profile';
-export { default as ProfileV1 } from './ProfileV1/Profile';
-export { default as Ecosystem } from './Ecosystem/Ecosystem';
+export * from './LPPools/LPPools';
+export * from './LPPortfolio/LPPortfolio';
+export * from './TraderPools/TraderPools';
+export * from './Portfolio/Portfolio';
+export * from './FixedBorrower/FixedBorrower';
+export * from './TradingLeague/TradingLeague';
+export * from './Profile/Profile';
+export * from './ProfileV1/Profile';
+export * from './Ecosystem/Ecosystem';

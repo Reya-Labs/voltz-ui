@@ -8,6 +8,7 @@ import JSBI from 'jsbi';
 import { useLocation } from 'react-router-dom';
 
 import { Token, RateOracle, AMM } from '@voltz-protocol/v1-sdk';
+import { routes } from '../routes';
 
 export type UseAMMsResult = {
   amms?: AMM[];
@@ -78,8 +79,8 @@ const useAMMs = (): UseAMMsResult => {
         return ammsData;
       } else {
         if (
-          pathname !== '/trader-pools' &&
-          pathname !== '/portfolio' &&
+          pathname !== `/${routes.TRADER_POOLS}` &&
+          pathname !== `/${routes.PORTFOLIO}` &&
           process.env.REACT_APP_LP_ONLY_WHITELIST
         ) {
           const whitelist = process.env.REACT_APP_LP_ONLY_WHITELIST.split(',').map((s) =>

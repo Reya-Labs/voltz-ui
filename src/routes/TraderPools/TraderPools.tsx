@@ -11,7 +11,7 @@ import { Page, SwapFormModes } from '@components/interface';
 import { ConnectedSwapForm } from '../../components/containers/ConnectedSwapForm/ConnectedSwapForm';
 import { AMMTable } from '../../components/interface/AMMTable/AMMTable';
 
-const TraderPools: React.FunctionComponent = () => {
+export const TraderPools: React.FunctionComponent = () => {
   const [formMode, setFormMode] = useState<SwapFormModes>();
   const [amm, setAMM] = useState<AMM>();
   const [position, setPosition] = useState<Position>();
@@ -90,5 +90,3 @@ const TraderPools: React.FunctionComponent = () => {
     </Page>
   );
 };
-
-export default TraderPools;

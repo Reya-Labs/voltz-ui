@@ -19,7 +19,7 @@ import {
   SEASON_BADGE_VARIANTS,
 } from './data/getSeasonBadges';
 
-const Profile: React.FunctionComponent = () => {
+export const Profile: React.FunctionComponent = () => {
   const wallet = useWallet();
   const [collectionBadges, setCollectionBadges] = React.useState<GetProfileBadgesResponse>([]);
   const pastSeasons = usePastSeasons();
@@ -260,5 +260,3 @@ const Profile: React.FunctionComponent = () => {
     />
   );
 };
-
-export default Profile;
