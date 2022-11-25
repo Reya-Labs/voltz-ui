@@ -14,6 +14,7 @@ import {
   LPPortfolio,
 } from './routes';
 import { AlphaBanner, GweiBar } from '@components/composite';
+import { Page } from '@components/interface';
 import Box from '@mui/material/Box';
 import { useEffect } from 'react';
 import {
@@ -55,7 +56,7 @@ export const App = () => {
   }, [searchParamsReferrer]);
 
   return (
-    <>
+    <Page>
       <Routes>
         <Route path="/">
           <Route index element={<Navigate to={routes.TRADER_POOLS} />} />
@@ -87,6 +88,6 @@ export const App = () => {
         <GweiBar />
         <AlphaBanner />
       </Box>
-    </>
+    </Page>
   );
 };

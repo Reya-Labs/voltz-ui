@@ -12,7 +12,6 @@ import {
 } from '../../contexts';
 import { useBorrowPositions, useWallet } from '../../hooks';
 
-import { Page } from '@components/interface';
 import { ConnectedBorrowForm } from '../../components/containers/ConnectedBorrowForm/ConnectedBorrowForm';
 import { ConnectedBorrowPositionTable } from '../../components/containers/ConnectedBorrowPositionTable/ConnectedBorrowPositionTable';
 import { getRenderMode } from './services';
@@ -65,7 +64,7 @@ export const FixedBorrower: React.FunctionComponent = () => {
   };
 
   return (
-    <Page>
+    <>
       {renderMode === 'fix-borrow' && (
         <Box
           sx={{
@@ -97,6 +96,6 @@ export const FixedBorrower: React.FunctionComponent = () => {
           />
         </Box>
       )}
-    </Page>
+    </>
   );
 };

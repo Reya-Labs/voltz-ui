@@ -13,7 +13,6 @@ import {
 } from '../../contexts';
 import { useAgent, useAMMs, usePositions, useWallet } from '../../hooks';
 
-import { Page } from '@components/interface';
 import { PageTitleDesc } from '@components/composite';
 import { ConnectedMintBurnForm } from '../../components/containers/ConnectedMintBurnForm/ConnectedMintBurnForm';
 import Button from '@mui/material/Button';
@@ -71,7 +70,7 @@ export const LPPools: React.FunctionComponent = () => {
   };
 
   return (
-    <Page>
+    <>
       {renderMode === 'pools' && (
         <Box sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
           <Box sx={{ marginBottom: (theme) => theme.spacing(12) }}>
@@ -113,6 +112,6 @@ export const LPPools: React.FunctionComponent = () => {
           </AMMProvider>
         </Box>
       )}
-    </Page>
+    </>
   );
 };

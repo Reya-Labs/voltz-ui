@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 import { Typography } from '@components/atomic';
 import { doNothing, elideAddress, formatDateTimeWithOrdinal } from '../../../../utilities';
 import { BadgeCard, BadgeCardHandle } from '../BadgeCard/BadgeCard';
-import { Page } from '@components/interface';
 import { AchievedBadge, AchievedBadgeProps } from '../AchievedBadge/AchievedBadge';
 import { BADGE_VARIANT_TIER_MAP } from '../../helpers';
 import { Badge } from '../Badge/Badge';
@@ -97,105 +96,103 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
       badgeCardRefs.current[variant]?.scrollIntoView();
     }, []);
     return (
-      <Page>
-        <ContainerBox>
-          <Heading variant="h1">
-            WELCOME TO YOUR PROFILE&nbsp;
-            <Account>{elideAddress(account.toUpperCase())}</Account>
-          </Heading>
-          <Subheading data-testid="Profile-BadgesExplained" variant="body2">
-            Earn badges through your contribution to the community and activity on the protocol.
-            Badges are earned throughout each Season, with minting available at the end of each
-            Season. The more you collect the greater your contribution.{' '}
-            <BoldText>{seasonLabel}</BoldText> {isOnGoingSeason ? 'runs' : 'ran'} between{' '}
-            <BoldText>{seasonStartDateFormatted}</BoldText> and{' '}
-            <BoldText>{seasonEndDateFormatted}</BoldText>.
-          </Subheading>
-          <NotificationSection
-            isOnGoingSeason={isOnGoingSeason}
-            notClaimedBadgesCount={notClaimedBadges.length}
-            claimButtonBulkMode={claimButtonBulkMode}
-            onClaimBulkClick={() => onClaimBulkClick(notClaimedBadges.map((b) => b.variant))}
-            copyLinkButtonMode={copyLinkButtonMode}
-            onCopyLinkButtonClick={onCopyLinkButtonClick}
-          />
-          <BadgeCollectionBox>
-            <BadgeCollectionTypographyBox>
-              <Typography variant="h2">YOUR BADGE COLLECTION</Typography>
-              <SeasonToggle seasons={seasonOptions} onChange={onSeasonChange} season={season} />
-            </BadgeCollectionTypographyBox>
-            <AchievedBadgesGrid itemsPerRow={!loading && achievedBadges.length === 0 ? 1 : 3}>
-              {loading &&
-                Array.from({ length: 3 }, (index) => index).map((_, index) => (
-                  <BadgeCard
-                    claimButtonMode="claim"
-                    key={index}
-                    loading={loading}
-                    variant="degenStuff"
-                    disableClaiming={true}
-                  />
-                ))}
-              {!loading &&
-                achievedBadges.length !== 0 &&
-                achievedBadges.map((badge, index) => (
-                  <BadgeCard
-                    ref={(ref: BadgeCardHandle) => (badgeCardRefs.current[badge.variant] = ref)}
-                    key={`${badge.variant}${index}`}
-                    variant={badge.variant}
-                    loading={loading}
-                    onClaimButtonClick={() => onClaimButtonClick(badge.variant)}
-                    claimButtonMode={claimButtonModes[badge.variant] || 'claim'}
-                    claimedAt={badge.claimedAt}
-                    disableClaiming={isOnGoingSeason}
-                  />
-                ))}
-              {!loading && achievedBadges.length === 0 && (
-                <NoAchievedBadgesBox>
-                  <Badge variant="noClaimedBadges" />
-                  <NoAchievedBadgesTypography variant="body2">
-                    Make contributions to the community or trade on the protocol to earn badges
-                  </NoAchievedBadgesTypography>
-                </NoAchievedBadgesBox>
-              )}
-            </AchievedBadgesGrid>
-          </BadgeCollectionBox>
-
-          <AchievedBadgesListBox>
-            <AchievedBadgesListHeading variant="h2">
-              THE COLLECTION -&nbsp;
-              <AchievedBadgesListSeason>{seasonLabel.toUpperCase()}</AchievedBadgesListSeason>
-            </AchievedBadgesListHeading>
-            <AchievedBadgesListSubheading variant="body2">
-              Make contributions to the community or trade on the protocol to earn badges{' '}
-            </AchievedBadgesListSubheading>
-            <AchievedBadgesListGrid itemsPerRow={1}>
-              {collectionBadges.map((badge, index) => (
-                <AchievedBadge
-                  key={`${badge.variant}${index}`}
-                  {...badge}
+      <ContainerBox>
+        <Heading variant="h1">
+          WELCOME TO YOUR PROFILE&nbsp;
+          <Account>{elideAddress(account.toUpperCase())}</Account>
+        </Heading>
+        <Subheading data-testid="Profile-BadgesExplained" variant="body2">
+          Earn badges through your contribution to the community and activity on the protocol.
+          Badges are earned throughout each Season, with minting available at the end of each
+          Season. The more you collect the greater your contribution.{' '}
+          <BoldText>{seasonLabel}</BoldText> {isOnGoingSeason ? 'runs' : 'ran'} between{' '}
+          <BoldText>{seasonStartDateFormatted}</BoldText> and{' '}
+          <BoldText>{seasonEndDateFormatted}</BoldText>.
+        </Subheading>
+        <NotificationSection
+          isOnGoingSeason={isOnGoingSeason}
+          notClaimedBadgesCount={notClaimedBadges.length}
+          claimButtonBulkMode={claimButtonBulkMode}
+          onClaimBulkClick={() => onClaimBulkClick(notClaimedBadges.map((b) => b.variant))}
+          copyLinkButtonMode={copyLinkButtonMode}
+          onCopyLinkButtonClick={onCopyLinkButtonClick}
+        />
+        <BadgeCollectionBox>
+          <BadgeCollectionTypographyBox>
+            <Typography variant="h2">YOUR BADGE COLLECTION</Typography>
+            <SeasonToggle seasons={seasonOptions} onChange={onSeasonChange} season={season} />
+          </BadgeCollectionTypographyBox>
+          <AchievedBadgesGrid itemsPerRow={!loading && achievedBadges.length === 0 ? 1 : 3}>
+            {loading &&
+              Array.from({ length: 3 }, (index) => index).map((_, index) => (
+                <BadgeCard
+                  claimButtonMode="claim"
+                  key={index}
                   loading={loading}
-                  onClick={() => handleSmoothScroll(badge.variant)}
+                  variant="degenStuff"
+                  disableClaiming={true}
                 />
               ))}
-            </AchievedBadgesListGrid>
-          </AchievedBadgesListBox>
-
-          <CommunityEngagementBox>
-            <CommunityEngagementTypography variant="h2">
-              COMMUNITY ENGAGEMENT
-            </CommunityEngagementTypography>
-            <CommunityEngagementGrid itemsPerRow={1}>
-              {communityEngagementBadges.map((badge, index) => (
-                <AchievedBadge
+            {!loading &&
+              achievedBadges.length !== 0 &&
+              achievedBadges.map((badge, index) => (
+                <BadgeCard
+                  ref={(ref: BadgeCardHandle) => (badgeCardRefs.current[badge.variant] = ref)}
                   key={`${badge.variant}${index}`}
-                  {...badge}
+                  variant={badge.variant}
                   loading={loading}
-                  onClick={() => handleSmoothScroll(badge.variant)}
+                  onClaimButtonClick={() => onClaimButtonClick(badge.variant)}
+                  claimButtonMode={claimButtonModes[badge.variant] || 'claim'}
+                  claimedAt={badge.claimedAt}
+                  disableClaiming={isOnGoingSeason}
                 />
               ))}
-            </CommunityEngagementGrid>
-          </CommunityEngagementBox>
-        </ContainerBox>
-      </Page>
+            {!loading && achievedBadges.length === 0 && (
+              <NoAchievedBadgesBox>
+                <Badge variant="noClaimedBadges" />
+                <NoAchievedBadgesTypography variant="body2">
+                  Make contributions to the community or trade on the protocol to earn badges
+                </NoAchievedBadgesTypography>
+              </NoAchievedBadgesBox>
+            )}
+          </AchievedBadgesGrid>
+        </BadgeCollectionBox>
+
+        <AchievedBadgesListBox>
+          <AchievedBadgesListHeading variant="h2">
+            THE COLLECTION -&nbsp;
+            <AchievedBadgesListSeason>{seasonLabel.toUpperCase()}</AchievedBadgesListSeason>
+          </AchievedBadgesListHeading>
+          <AchievedBadgesListSubheading variant="body2">
+            Make contributions to the community or trade on the protocol to earn badges{' '}
+          </AchievedBadgesListSubheading>
+          <AchievedBadgesListGrid itemsPerRow={1}>
+            {collectionBadges.map((badge, index) => (
+              <AchievedBadge
+                key={`${badge.variant}${index}`}
+                {...badge}
+                loading={loading}
+                onClick={() => handleSmoothScroll(badge.variant)}
+              />
+            ))}
+          </AchievedBadgesListGrid>
+        </AchievedBadgesListBox>
+
+        <CommunityEngagementBox>
+          <CommunityEngagementTypography variant="h2">
+            COMMUNITY ENGAGEMENT
+          </CommunityEngagementTypography>
+          <CommunityEngagementGrid itemsPerRow={1}>
+            {communityEngagementBadges.map((badge, index) => (
+              <AchievedBadge
+                key={`${badge.variant}${index}`}
+                {...badge}
+                loading={loading}
+                onClick={() => handleSmoothScroll(badge.variant)}
+              />
+            ))}
+          </CommunityEngagementGrid>
+        </CommunityEngagementBox>
+      </ContainerBox>
     );
   };

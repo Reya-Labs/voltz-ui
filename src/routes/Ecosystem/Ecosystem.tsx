@@ -1,5 +1,3 @@
-import { Page } from '@components/interface';
-
 import ConnectedMellowLpDepositForm from './ConnectedMellowLpDepositForm/ConnectedMellowLpDepositForm';
 import ConnectedMellowLPTable from './ConnectedMellowLPTable/ConnectedMellowLPTable';
 import { setPageTitle } from '../../utilities';
@@ -117,7 +115,7 @@ export const Ecosystem: React.FunctionComponent = () => {
   }, [lpVaults, signer, vaultsLoaded]);
 
   return (
-    <Page>
+    <>
       {renderMode === EcosystemRenderMode.PAGE && (
         <ConnectedMellowBox>
           <ConnectedMellowLPTable
@@ -135,6 +133,6 @@ export const Ecosystem: React.FunctionComponent = () => {
           )}
         </ConnectedMellowBox>
       )}
-    </Page>
+    </>
   );
 };
