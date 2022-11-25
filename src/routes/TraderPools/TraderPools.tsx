@@ -6,12 +6,13 @@ import { AMM, Position } from '@voltz-protocol/v1-sdk';
 import { findCurrentPosition, setPageTitle } from '../../utilities';
 import { Agents, AMMProvider, PositionProvider, SwapFormProvider } from '../../contexts';
 import { PageTitleDesc } from '@components/composite';
-import { useAgent, usePositions, useWallet } from '../../hooks';
+import { useAgent, useAMMs, usePositions, useWallet } from '../../hooks';
 import { Page, SwapFormModes } from '@components/interface';
 import { ConnectedSwapForm } from '../../components/containers/ConnectedSwapForm/ConnectedSwapForm';
 import { AMMTable } from '../../components/interface/AMMTable/AMMTable';
 
 export const TraderPools: React.FunctionComponent = () => {
+  const { amms = [], loading, error } = useAMMs();
   const [formMode, setFormMode] = useState<SwapFormModes>();
   const [amm, setAMM] = useState<AMM>();
   const [position, setPosition] = useState<Position>();
@@ -67,7 +68,7 @@ export const TraderPools: React.FunctionComponent = () => {
               desc="Choose a pool and decide whether to trade fixed or variable rates."
             />
           </Box>
-          <AMMTable onSelectItem={handleSelectAmm} />
+          <AMMTable amms={amms} loading={loading} error={error} onSelectItem={handleSelectAmm} />
         </Box>
       )}
 

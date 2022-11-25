@@ -19,7 +19,6 @@ export type AMMTableRowProps = {
   startDate: DateTime;
   endDate: DateTime;
   isBorrowing: boolean;
-  index: number;
   onSelect: () => void;
 };
 
@@ -28,7 +27,6 @@ export const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({
   isBorrowing,
   startDate,
   endDate,
-  index,
   onSelect,
 }) => {
   const wallet = useWallet();
@@ -82,7 +80,7 @@ export const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({
   };
 
   return (
-    <TableRow key={index} sx={{ ...typeStyleOverrides() }}>
+    <TableRow sx={{ ...typeStyleOverrides() }}>
       {labels.map(([field, label]) => {
         if (field === 'variableApy') {
           return <VariableAPY variableApy={isNumber(resultVarApy) ? resultVarApy : undefined} />;

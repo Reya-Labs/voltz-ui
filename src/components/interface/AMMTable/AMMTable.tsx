@@ -6,7 +6,7 @@ import TableBody from '@mui/material/TableBody';
 import { AMMProvider, Agents } from '../../../contexts';
 import { Panel } from '@components/atomic';
 import { AMMTableHead, AMMTableRow } from './components';
-import { useAgent, useAMMs } from '../../../hooks';
+import { useAgent } from '../../../hooks';
 import { DateTime } from 'luxon';
 
 import { AMM } from '@voltz-protocol/v1-sdk';
@@ -15,13 +15,20 @@ import { isBorrowing } from '../../../utilities';
 
 export type AMMTableProps = {
   onSelectItem: (amm: AMM) => void;
+  loading: boolean;
+  amms: AMM[];
+  error: boolean;
 };
 
-export const AMMTable: React.FunctionComponent<AMMTableProps> = ({ onSelectItem }) => {
-  const { amms, loading, error } = useAMMs();
+export const AMMTable: React.FunctionComponent<AMMTableProps> = ({
+  amms,
+  loading,
+  error,
+  onSelectItem,
+}) => {
   const { agent } = useAgent();
 
-  if (!amms || loading || error) {
+  if (error || loading) {
     return null;
   }
 
@@ -46,14 +53,13 @@ export const AMMTable: React.FunctionComponent<AMMTableProps> = ({ onSelectItem 
           <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
             {amms
               .filter((amm) => DateTime.now() < amm.endDateTime)
-              .map((amm, index) => (
-                <AMMProvider amm={amms[index]} key={amm.id}>
+              .map((amm) => (
+                <AMMProvider amm={amm} key={amm.id}>
                   <AMMTableRow
                     protocol={amm.protocol}
                     isBorrowing={isBorrowing(amm.rateOracle.protocolId)}
                     startDate={amm.startDateTime}
                     endDate={amm.endDateTime}
-                    index={index}
                     onSelect={() => onSelectItem(amm)}
                   />
                 </AMMProvider>

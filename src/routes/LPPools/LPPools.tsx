@@ -11,7 +11,7 @@ import {
   MintBurnFormProvider,
   PositionProvider,
 } from '../../contexts';
-import { useAgent, usePositions, useWallet } from '../../hooks';
+import { useAgent, useAMMs, usePositions, useWallet } from '../../hooks';
 
 import { Page } from '@components/interface';
 import { PageTitleDesc } from '@components/composite';
@@ -21,6 +21,8 @@ import { routes } from '../../routes';
 import { AMMTable } from '../../components/interface/AMMTable/AMMTable';
 
 export const LPPools: React.FunctionComponent = () => {
+  const { amms = [], loading, error } = useAMMs();
+
   const [amm, setAMM] = useState<AMM>();
   const [formMode, setFormMode] = useState<MintBurnFormModes>();
   const [position, setPosition] = useState<Position>();
@@ -96,7 +98,7 @@ export const LPPools: React.FunctionComponent = () => {
               </Button>
             ) : null}
           </Box>
-          <AMMTable onSelectItem={handleSelectAmm} />
+          <AMMTable amms={amms} loading={loading} error={error} onSelectItem={handleSelectAmm} />
         </Box>
       )}
 
