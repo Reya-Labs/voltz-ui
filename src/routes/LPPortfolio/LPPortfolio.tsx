@@ -14,7 +14,6 @@ import {
 } from '../../contexts';
 import { useAgent, useAMMs, usePositions, useWallet } from '../../hooks';
 
-import { Page } from '@components/interface';
 import { ConnectedMintBurnForm } from '../../components/containers/ConnectedMintBurnForm/ConnectedMintBurnForm';
 import { ConnectedPositionTable } from '../../components/containers/ConnectedPositionTable/ConnectedPositionTable';
 
@@ -83,7 +82,7 @@ export const LPPortfolio: React.FunctionComponent = () => {
   };
 
   return (
-    <Page>
+    <>
       {settling && renderMode === 'portfolio' && (
         <PortfolioProvider
           positions={agent === Agents.LIQUIDITY_PROVIDER ? positionsByAgentGroup : undefined}
@@ -123,6 +122,6 @@ export const LPPortfolio: React.FunctionComponent = () => {
           )}
         </Box>
       )}
-    </Page>
+    </>
   );
 };

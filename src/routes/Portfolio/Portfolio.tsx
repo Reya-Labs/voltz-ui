@@ -12,7 +12,7 @@ import {
   PortfolioProvider,
 } from '../../contexts';
 import { useAgent, useAMMs, usePositions, useWallet } from '../../hooks';
-import { Page, SwapFormModes } from '@components/interface';
+import { SwapFormModes } from '@components/interface';
 import { ConnectedPositionTable } from '../../components/containers/ConnectedPositionTable/ConnectedPositionTable';
 import { ConnectedSwapForm } from '../../components/containers/ConnectedSwapForm/ConnectedSwapForm';
 
@@ -80,7 +80,7 @@ export const Portfolio: React.FunctionComponent = () => {
   };
 
   return (
-    <Page>
+    <>
       {settling && renderMode === 'portfolio' && (
         <PortfolioProvider
           positions={agent !== Agents.LIQUIDITY_PROVIDER ? positionsByAgentGroup : undefined}
@@ -123,6 +123,6 @@ export const Portfolio: React.FunctionComponent = () => {
           )}
         </Box>
       )}
-    </Page>
+    </>
   );
 };

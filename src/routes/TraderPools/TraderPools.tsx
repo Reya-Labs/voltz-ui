@@ -7,7 +7,7 @@ import { findCurrentPosition, setPageTitle } from '../../utilities';
 import { Agents, AMMProvider, PositionProvider, SwapFormProvider } from '../../contexts';
 import { PageTitleDesc } from '@components/composite';
 import { useAgent, useAMMs, usePositions, useWallet } from '../../hooks';
-import { Page, SwapFormModes } from '@components/interface';
+import { SwapFormModes } from '@components/interface';
 import { ConnectedSwapForm } from '../../components/containers/ConnectedSwapForm/ConnectedSwapForm';
 import { AMMTable } from '../../components/interface/AMMTable/AMMTable';
 
@@ -59,7 +59,7 @@ export const TraderPools: React.FunctionComponent = () => {
   };
 
   return (
-    <Page>
+    <>
       {renderMode === 'pools' && (
         <Box sx={{ width: '100%', maxWidth: '800px', margin: '0 auto' }}>
           <Box sx={{ marginBottom: (theme) => theme.spacing(12) }}>
@@ -88,6 +88,6 @@ export const TraderPools: React.FunctionComponent = () => {
           </AMMProvider>
         </Box>
       )}
-    </Page>
+    </>
   );
 };
