@@ -10,7 +10,7 @@ import {
   GetProfileBadgesResponse1,
 } from './getters/getPhase1Badges';
 
-const Profile: React.FunctionComponent = () => {
+export const ProfileV1: React.FunctionComponent = () => {
   const wallet = useWallet();
   const [achievedBadges, setAchievedBadges] = React.useState<
     GetProfileBadgesResponse1['achievedBadges']
@@ -58,5 +58,3 @@ const Profile: React.FunctionComponent = () => {
     />
   );
 };
-
-export default Profile;

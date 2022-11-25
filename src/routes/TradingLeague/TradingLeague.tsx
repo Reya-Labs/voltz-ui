@@ -8,7 +8,7 @@ import { RankType } from '@voltz-protocol/v1-sdk';
 import { getCommunitySbt } from '../Profile/helpers';
 const PER_PAGE = 10;
 
-const TradingLeague: React.FunctionComponent = () => {
+export const TradingLeague: React.FunctionComponent = () => {
   const { account, signer } = useWallet();
   const [loading, setLoading] = useState(true);
   const season = useCurrentSeason();
@@ -89,5 +89,3 @@ const TradingLeague: React.FunctionComponent = () => {
     </Page>
   );
 };
-
-export default TradingLeague;

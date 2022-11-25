@@ -16,7 +16,7 @@ export enum EcosystemRenderMode {
   PAGE,
 }
 
-const Ecosystem: React.FunctionComponent = () => {
+export const Ecosystem: React.FunctionComponent = () => {
   const wallet = useWallet();
 
   const [renderMode, setRenderMode] = useState<EcosystemRenderMode>(EcosystemRenderMode.PAGE);
@@ -138,5 +138,3 @@ const Ecosystem: React.FunctionComponent = () => {
     </Page>
   );
 };
-
-export default Ecosystem;

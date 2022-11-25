@@ -18,7 +18,7 @@ import { Page } from '@components/interface';
 import { ConnectedMintBurnForm } from '../../components/containers/ConnectedMintBurnForm/ConnectedMintBurnForm';
 import { ConnectedPositionTable } from '../../components/containers/ConnectedPositionTable/ConnectedPositionTable';
 
-const LPPortfolio: React.FunctionComponent = () => {
+export const LPPortfolio: React.FunctionComponent = () => {
   const [amm, setAMM] = useState<AMM>();
   const [formMode, setFormMode] = useState<MintBurnFormModes>();
   const [position, setPosition] = useState<Position>();
@@ -126,5 +126,3 @@ const LPPortfolio: React.FunctionComponent = () => {
     </Page>
   );
 };
-
-export default LPPortfolio;

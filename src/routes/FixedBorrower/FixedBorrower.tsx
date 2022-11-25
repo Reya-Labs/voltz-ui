@@ -19,7 +19,7 @@ import { getRenderMode } from './services';
 
 import { Position, AMM, BorrowAMM } from '@voltz-protocol/v1-sdk';
 
-const FixedBorrower: React.FunctionComponent = () => {
+export const FixedBorrower: React.FunctionComponent = () => {
   const [isForm, setIsForm] = useState<boolean>();
   const [borrowAmm, setBorrowAMM] = useState<BorrowAMM>();
   const [position, setPosition] = useState<Position>();
@@ -100,5 +100,3 @@ const FixedBorrower: React.FunctionComponent = () => {
     </Page>
   );
 };
-
-export default FixedBorrower;
