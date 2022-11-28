@@ -1,8 +1,9 @@
-import { WalletName, WalletRiskAssessment } from './types';
 import detectEthereumProvider from '@metamask/detect-provider';
 import WalletConnectProvider from '@walletconnect/ethereum-provider';
 import { ethers } from 'ethers';
+
 import { getReferrer } from '../../utilities/referrer-store/referrer-store';
+import { WalletName, WalletRiskAssessment } from './types';
 
 const referralAndSignaturesUrl = `${
   process.env.REACT_APP_REFERRAL_AND_SIGNATURE_SERVICE_URL || 'https://voltz-rest-api.herokuapp.com'

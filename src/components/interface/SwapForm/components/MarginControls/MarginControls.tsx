@@ -1,5 +1,6 @@
-import React, { useCallback } from 'react';
 import Box from '@mui/material/Box';
+import React, { useCallback } from 'react';
+
 import { IconLabel } from '../../../../composite/IconLabel/IconLabel';
 import { ToggleButtonGroup } from '../../../../composite/ToggleButtonGroup/ToggleButtonGroup';
 
@@ -11,7 +12,7 @@ export type MarginControlsProps<T> = {
 
 export const MarginControls = <T,>({ onChange, values, value }: MarginControlsProps<T>) => {
   const iconLabel = (
-    <IconLabel label="Add or Remove Margin" icon="information-circle" info="" removeIcon />
+    <IconLabel icon="information-circle" info="" label="Add or Remove Margin" removeIcon />
   );
 
   const handleChange = useCallback(
@@ -32,8 +33,8 @@ export const MarginControls = <T,>({ onChange, values, value }: MarginControlsPr
     >
       <ToggleButtonGroup
         label={iconLabel}
-        options={Object.values(values)}
         option={value}
+        options={Object.values(values)}
         onChangeOption={handleChange}
       />
     </Box>

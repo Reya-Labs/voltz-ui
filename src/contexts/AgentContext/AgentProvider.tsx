@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-import { Agents } from './types';
 import { AgentContext } from './AgentContext';
+import { Agents } from './types';
 
 type AgentProviderProps = {
   defaultAgent?: Agents;

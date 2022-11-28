@@ -1,9 +1,9 @@
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 
-import { Typography } from '../../atomic/Typography/Typography';
 import { SystemStyleObject, Theme } from '../../../theme';
 import { formatCurrency, formatNumber } from '../../../utilities/number';
+import { Typography } from '../../atomic/Typography/Typography';
 
 export type BorrowPortfolioSummaryProps = {
   currencyCode: string;
@@ -87,45 +87,45 @@ export const BorrowPortfolioSummary = ({
 
   const renderDebtSummary = () => {
     return (
-      <Grid container sx={{ marginBottom: (theme) => theme.spacing(4) }}>
-        <Grid item xs={6}>
-          <Typography variant="subtitle1" sx={{ ...labelStyles }}>
+      <Grid sx={{ marginBottom: (theme) => theme.spacing(4) }} container>
+        <Grid xs={6} item>
+          <Typography sx={{ ...labelStyles }} variant="subtitle1">
             <Box sx={{ display: 'flex', justifyContent: 'flex-start', textAlign: 'left' }}>
               Fixed Debt
             </Box>
           </Typography>
         </Grid>
-        <Grid item xs={6}>
-          <Typography variant="subtitle1" sx={{ ...labelStyles }}>
+        <Grid xs={6} item>
+          <Typography sx={{ ...labelStyles }} variant="subtitle1">
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', textAlign: 'right' }}>
               Variable Debt
             </Box>
           </Typography>
         </Grid>
 
-        <Grid item xs={6}>
+        <Grid xs={6} item>
           <Typography
-            variant="body2"
             sx={{
               fontSize: 20,
               textTransform: 'uppercase',
               verticalAlign: 'middle',
               fontWeight: 700,
             }}
+            variant="body2"
           >
             {renderDebt(fixedDebt, percentageFixed, false)}
           </Typography>
         </Grid>
 
-        <Grid item xs={6}>
+        <Grid xs={6} item>
           <Typography
-            variant="body2"
             sx={{
               fontSize: 20,
               textTransform: 'uppercase',
               verticalAlign: 'middle',
               fontWeight: 700,
             }}
+            variant="body2"
           >
             {renderDebt(variableDebt, percentageVariable, true)}
           </Typography>
@@ -136,7 +136,7 @@ export const BorrowPortfolioSummary = ({
   const renderBar = () => {
     return (
       <Grid container>
-        <Grid item xs={12} display="flex">
+        <Grid display="flex" xs={12} item>
           <Box sx={{ ...sideWidth(false, true) }}></Box>
           <Box sx={{ ...sideWidth(false, false) }}></Box>
 
@@ -149,8 +149,8 @@ export const BorrowPortfolioSummary = ({
   const renderPositionsCount = () => {
     return (
       <Grid container>
-        <Grid item xs={6}>
-          <Typography variant="subtitle1" sx={{ ...labelStyles }}>
+        <Grid xs={6} item>
+          <Typography sx={{ ...labelStyles }} variant="subtitle1">
             <Box sx={{ display: 'flex', justifyContent: 'flex-start', textAlign: 'left' }}>
               {fixedPositionsCount !== undefined ? fixedPositionsCount : '---'}{' '}
               {fixedPositionsCount === 1 ? 'POSITION' : 'POSITIONS'}
@@ -158,8 +158,8 @@ export const BorrowPortfolioSummary = ({
           </Typography>
         </Grid>
 
-        <Grid item xs={6}>
-          <Typography variant="body2" sx={{ ...labelStyles }}>
+        <Grid xs={6} item>
+          <Typography sx={{ ...labelStyles }} variant="body2">
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', textAlign: 'right' }}>
               {variablePositionsCount !== undefined ? variablePositionsCount : '---'}{' '}
               {variablePositionsCount === 1 ? 'POSITION' : 'POSITIONS'}

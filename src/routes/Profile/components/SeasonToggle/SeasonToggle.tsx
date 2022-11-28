@@ -1,9 +1,9 @@
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import React from 'react';
 
 import { Season } from '../../../../hooks/season/types';
-import { ToggleButton, SeasonTypography } from './SeasonToggle.styled';
 import { doNothing } from '../../../../utilities/doNothing';
-import React from 'react';
+import { SeasonTypography, ToggleButton } from './SeasonToggle.styled';
 
 type SeasonToggleProps = {
   seasons: Season[];
@@ -17,13 +17,13 @@ export const SeasonToggle: React.FunctionComponent<SeasonToggleProps> = ({
 }) => {
   return (
     <ToggleButtonGroup
+      aria-label="text alignment"
       value={season.id}
       exclusive
       onChange={(_, activeSeasonId) => {
         const activeSeason = seasons.find((s) => s.id === activeSeasonId);
         activeSeason && onChange(activeSeason);
       }}
-      aria-label="text alignment"
     >
       {seasons.map((option) => (
         <ToggleButton key={option.id} value={option.id}>

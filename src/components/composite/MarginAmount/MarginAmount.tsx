@@ -1,12 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react';
 import isUndefined from 'lodash/isUndefined';
+import React, { useCallback, useEffect, useState } from 'react';
 
-import { IconLabel } from '../IconLabel/IconLabel';
-import { MaskedIntegerField } from '../MaskedIntegerField/MaskedIntegerField';
-import { InputTokenLabel } from '../InputTokenLabel/InputTokenLabel';
+import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';
 import { formatCurrency, toUSFormat } from '../../../utilities/number';
 import { HealthFactorText } from '../HealthFactorText/HealthFactorText';
-import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';
+import { IconLabel } from '../IconLabel/IconLabel';
+import { InputTokenLabel } from '../InputTokenLabel/InputTokenLabel';
+import { MaskedIntegerField } from '../MaskedIntegerField/MaskedIntegerField';
 
 export type MarginAmountProps = {
   balance?: number;
@@ -102,18 +102,18 @@ export const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
 
   return (
     <MaskedIntegerField
-      allowDecimals
       allowNegativeValue={false}
       decimalsLimit={4}
-      subtext={
-        isAdditional
-          ? `BALANCE: ${formattedBalance}`
-          : `MAX WITHDRAWAL: ${formattedMaxAmountToWithdraw}`
-      }
-      suffix={<InputTokenLabel tokenName={underlyingTokenName || ''} />}
-      suffixPadding={90}
+      error={!!error}
+      errorText={error}
       label={
         <IconLabel
+          icon="information-circle"
+          info={
+            isAdditional
+              ? 'Your chosen margin is defined based on your leverage and notional amount traded. You are required to deposit margin in order to execute a trade.'
+              : 'Margin in underlying tokens to withdraw from the margin account.'
+          }
           label={
             !isEditing
               ? 'Chosen margin'
@@ -121,21 +121,21 @@ export const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
               ? 'Margin amount to add'
               : 'Margin amount to withdraw'
           }
-          icon="information-circle"
-          info={
-            isAdditional
-              ? 'Your chosen margin is defined based on your leverage and notional amount traded. You are required to deposit margin in order to execute a trade.'
-              : 'Margin in underlying tokens to withdraw from the margin account.'
-          }
         />
       }
       labelRight={
         !isUndefined(healthFactor) ? <HealthFactorText healthFactor={healthFactor} /> : undefined
       }
+      subtext={
+        isAdditional
+          ? `BALANCE: ${formattedBalance}`
+          : `MAX WITHDRAWAL: ${formattedMaxAmountToWithdraw}`
+      }
+      suffix={<InputTokenLabel tokenName={underlyingTokenName || ''} />}
+      suffixPadding={90}
       value={inputValue}
+      allowDecimals
       onChange={handleChange}
-      error={!!error}
-      errorText={error}
     />
   );
 };

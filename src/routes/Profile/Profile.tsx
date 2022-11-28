@@ -1,26 +1,26 @@
+import copy from 'copy-to-clipboard';
+import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
+
+import { Season } from '../../hooks/season/types';
+import { useCurrentSeason } from '../../hooks/season/useCurrentSeason';
+import { usePastSeasons } from '../../hooks/season/usePastSeasons';
 import { useWallet } from '../../hooks/useWallet';
+import { getENSDetails } from '../../utilities/getENSDetails';
+import { setPageTitle } from '../../utilities/page';
+import { ClaimButtonProps } from './components/ClaimButton/ClaimButton';
+import { CopyLinkButtonProps } from './components/CopyLinkButton/CopyLinkButton';
 import { ProfilePageNoWallet } from './components/ProfilePageNoWallet/ProfilePageNoWallet';
 import { ProfilePageWalletConnected } from './components/ProfilePageWalletConnected/ProfilePageWalletConnected';
-import { Season } from '../../hooks/season/types';
-import { ClaimButtonProps } from './components/ClaimButton/ClaimButton';
-import { getCacheValue, invalidateCache, setCacheValue } from './data/getSeasonBadges/cache';
-import { getClaimButtonModesForVariants, getCommunitySbt, getSeasonUserId } from './helpers';
-import { DateTime } from 'luxon';
-import { CopyLinkButtonProps } from './components/CopyLinkButton/CopyLinkButton';
-import copy from 'copy-to-clipboard';
-
-import { getReferrerLink } from './get-referrer-link';
 import {
   BadgeVariant,
   GetProfileBadgesResponse,
   getSeasonBadges,
   SEASON_BADGE_VARIANTS,
 } from './data/getSeasonBadges';
-import { useCurrentSeason } from '../../hooks/season/useCurrentSeason';
-import { usePastSeasons } from '../../hooks/season/usePastSeasons';
-import { setPageTitle } from '../../utilities/page';
-import { getENSDetails } from '../../utilities/getENSDetails';
+import { getCacheValue, invalidateCache, setCacheValue } from './data/getSeasonBadges/cache';
+import { getReferrerLink } from './get-referrer-link';
+import { getClaimButtonModesForVariants, getCommunitySbt, getSeasonUserId } from './helpers';
 
 export const Profile: React.FunctionComponent = () => {
   const wallet = useWallet();
@@ -240,11 +240,19 @@ export const Profile: React.FunctionComponent = () => {
 
   return (
     <ProfilePageWalletConnected
-      isOnGoingSeason={season.id === currentActiveSeason.id}
-      season={season}
       account={name}
       badges={collectionBadges}
+      claimButtonBulkMode={claimButtonBulkMode}
+      claimButtonModes={claimButtonModes}
+      copyLinkButtonMode={copyLinkButtonMode}
+      isOnGoingSeason={season.id === currentActiveSeason.id}
       loading={loading}
+      season={season}
+      seasonBadgeVariants={SEASON_BADGE_VARIANTS[season.id]}
+      seasonOptions={[...pastSeasons, currentActiveSeason]}
+      onClaimBulkClick={handleOnClaimBulkClick}
+      onClaimButtonClick={handleOnClaimButtonClick}
+      onCopyLinkButtonClick={handleOnCopyLinkButtonClick}
       onSeasonChange={(newSeason) => {
         if (claimButtonBulkMode === 'claiming' || isClaimingInProgress()) {
           return;
@@ -252,14 +260,6 @@ export const Profile: React.FunctionComponent = () => {
         setSeason(newSeason);
         setClaimButtonBulkMode('claim');
       }}
-      seasonBadgeVariants={SEASON_BADGE_VARIANTS[season.id]}
-      seasonOptions={[...pastSeasons, currentActiveSeason]}
-      claimButtonBulkMode={claimButtonBulkMode}
-      claimButtonModes={claimButtonModes}
-      onClaimButtonClick={handleOnClaimButtonClick}
-      onClaimBulkClick={handleOnClaimBulkClick}
-      copyLinkButtonMode={copyLinkButtonMode}
-      onCopyLinkButtonClick={handleOnCopyLinkButtonClick}
     />
   );
 };

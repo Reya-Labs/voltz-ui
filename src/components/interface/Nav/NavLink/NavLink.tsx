@@ -1,5 +1,11 @@
-import { Button } from '../../../atomic/Button/Button';
+import CircleIcon from '@mui/icons-material/Circle';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Popover from '@mui/material/Popover';
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+
+import { colors } from '../../../../theme';
+import { Button } from '../../../atomic/Button/Button';
 import {
   ACTIVE_CLASS,
   buttonGroupSx,
@@ -8,11 +14,6 @@ import {
   popoverOverrideSx,
   subMenuButtonSx,
 } from './style';
-import ButtonGroup from '@mui/material/ButtonGroup';
-import Popover from '@mui/material/Popover';
-import CircleIcon from '@mui/icons-material/Circle';
-import { colors } from '../../../../theme';
-import { Link, useLocation } from 'react-router-dom';
 
 type NavLinkProps = {
   link?: string;
@@ -60,12 +61,6 @@ export const NavLink: React.FunctionComponent<NavLinkProps> = ({
   return (
     <React.Fragment>
       <Button
-        component={link ? Link : 'button'}
-        to={link || ''}
-        role="link"
-        sx={buttonSx}
-        variant="text"
-        onClick={hasSubLinks ? handlePopoverOpen : undefined}
         className={
           isPopoverOpen
             ? OPEN_CLASS
@@ -77,38 +72,44 @@ export const NavLink: React.FunctionComponent<NavLinkProps> = ({
             ? ACTIVE_CLASS
             : undefined
         }
+        component={link ? Link : 'button'}
+        role="link"
         startIcon={isNew ? newLinkIndicator : null}
+        sx={buttonSx}
+        to={link || ''}
+        variant="text"
+        onClick={hasSubLinks ? handlePopoverOpen : undefined}
       >
         {children}
       </Button>
       {hasSubLinks ? (
         <Popover
-          open={isPopoverOpen}
           anchorEl={anchorPopoverElement}
-          onClose={handlePopoverClose}
           anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'left',
           }}
-          sx={popoverOverrideSx}
           elevation={0}
+          open={isPopoverOpen}
+          sx={popoverOverrideSx}
+          onClose={handlePopoverClose}
         >
           <ButtonGroup
+            aria-label="vertical outlined button group"
             orientation="vertical"
             sx={buttonGroupSx}
-            aria-label="vertical outlined button group"
           >
             {subLinks?.map((subLink) => (
               <Button
-                component={Link}
-                to={subLink.link}
                 key={subLink.text}
-                role="link"
-                variant="text"
-                sx={subMenuButtonSx}
-                onClick={handlePopoverClose}
-                startIcon={subLink.isNew ? newLinkIndicator : null}
                 className={isActiveLink(subLink.link, [], pathname) ? ACTIVE_CLASS : undefined}
+                component={Link}
+                role="link"
+                startIcon={subLink.isNew ? newLinkIndicator : null}
+                sx={subMenuButtonSx}
+                to={subLink.link}
+                variant="text"
+                onClick={handlePopoverClose}
               >
                 {subLink.text}
               </Button>

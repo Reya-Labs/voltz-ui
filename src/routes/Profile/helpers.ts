@@ -1,9 +1,10 @@
-import { BadgeTier } from './types';
-import { ClaimButtonProps } from './components/ClaimButton/ClaimButton';
-import { Season } from '../../hooks/season/types';
-import { BadgeVariant } from './data/getSeasonBadges';
-import { Signer } from 'ethers';
 import { CommunitySBT, SBTConstructorArgs } from '@voltz-protocol/v1-sdk';
+import { Signer } from 'ethers';
+
+import { Season } from '../../hooks/season/types';
+import { ClaimButtonProps } from './components/ClaimButton/ClaimButton';
+import { BadgeVariant } from './data/getSeasonBadges';
+import { BadgeTier } from './types';
 
 export const BADGE_VARIANT_TRADER_LP_MAP: Record<BadgeVariant, 'trader' | 'lp' | ''> = {
   // season 1

@@ -1,4 +1,5 @@
-import { GraphQLClient, gql } from 'graphql-request';
+import { gql, GraphQLClient } from 'graphql-request';
+
 import { Season } from '../../../hooks/season/types';
 
 export type BadgeVariant1 =

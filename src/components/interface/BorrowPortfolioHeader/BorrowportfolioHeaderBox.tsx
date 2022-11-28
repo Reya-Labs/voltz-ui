@@ -1,7 +1,8 @@
-import { SystemStyleObject, Theme } from '../../../theme';
-import { Typography } from '../../atomic/Typography/Typography';
 import Box from '@mui/material/Box';
+
+import { SystemStyleObject, Theme } from '../../../theme';
 import { formatCurrency } from '../../../utilities/number';
+import { Typography } from '../../atomic/Typography/Typography';
 
 export type BorrowPortfolioHeaderBoxProps = {
   aggregatedDebt?: number;
@@ -34,10 +35,10 @@ export const BorrowPortfolioHeaderBox = ({
       : 'Loading...';
   return (
     <Box sx={{ textTransform: 'uppercase' }}>
-      <Typography variant="subtitle1" sx={labelStyles}>
+      <Typography sx={labelStyles} variant="subtitle1">
         Total Borrowing
       </Typography>
-      <Typography variant="h1" sx={titleStyles}>
+      <Typography sx={titleStyles} variant="h1">
         {renderedValue}
       </Typography>
     </Box>

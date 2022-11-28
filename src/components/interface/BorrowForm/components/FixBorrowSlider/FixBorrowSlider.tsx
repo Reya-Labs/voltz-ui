@@ -1,15 +1,12 @@
-import { Typography } from '../../../../atomic/Typography/Typography';
-import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-
-import { formatCurrency, formatNumber } from '../../../../../utilities/number';
-
-import React, { useState } from 'react';
-import { UseAsyncFunctionResult } from '../../../../../hooks/useAsyncFunction';
-
 import Slider, { SliderThumb } from '@mui/material/Slider';
+import Stack from '@mui/material/Stack';
+import React, { useState } from 'react';
 
+import { UseAsyncFunctionResult } from '../../../../../hooks/useAsyncFunction';
 import { colors, SystemStyleObject, Theme } from '../../../../../theme';
+import { formatCurrency, formatNumber } from '../../../../../utilities/number';
+import { Typography } from '../../../../atomic/Typography/Typography';
 
 export type FixBorrowSliderProps = {
   variableDebt: UseAsyncFunctionResult<unknown, number | void>;
@@ -97,13 +94,13 @@ export const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
         {children}
         <div>
           <svg
-            width="17"
+            fill="none"
             height="18"
             viewBox="0 0 17 18"
-            fill="none"
+            width="17"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <rect x="6.46875" width="4.04734" height="18" fill="#E5E1F9" />
+            <rect fill="#E5E1F9" height="18" width="4.04734" x="6.46875" />
             <path d="M16.5859 9L12.0327 11.5981L12.0327 6.40192L16.5859 9Z" fill="#E5E1F9" />
             <path d="M0.396484 9L4.94974 6.40192L4.94974 11.5981L0.396484 9Z" fill="#E5E1F9" />
           </svg>
@@ -115,17 +112,17 @@ export const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
   return (
     <Box>
       <Stack>
-        <Stack direction="row" justifyContent="space-between" alignItems="baseline" spacing={1}>
-          <Typography variant="subtitle1" sx={{ ...labelStyles }}>
+        <Stack alignItems="baseline" direction="row" justifyContent="space-between" spacing={1}>
+          <Typography sx={{ ...labelStyles }} variant="subtitle1">
             Fixed Debt
           </Typography>
-          <Typography variant="subtitle1" sx={{ ...labelStyles }}>
+          <Typography sx={{ ...labelStyles }} variant="subtitle1">
             Variable Debt
           </Typography>
         </Stack>
 
-        <Stack direction="row" justifyContent="space-between" alignItems="center">
-          <Typography variant="body2" display="flex" fontSize="14px" fontWeight="700">
+        <Stack alignItems="center" direction="row" justifyContent="space-between">
+          <Typography display="flex" fontSize="14px" fontWeight="700" variant="body2">
             {!variableDebt.loading
               ? `${formatCurrency(
                   selectedFixedDebt,
@@ -140,7 +137,7 @@ export const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
               {!variableDebt.loading ? ` (${formatNumber(selectedFixedDebtPercentage)}%)` : ''}
             </Box>
           </Typography>
-          <Typography variant="body2" display="flex" fontSize="14px" fontWeight="700">
+          <Typography display="flex" fontSize="14px" fontWeight="700" variant="body2">
             {!variableDebt.loading
               ? `${formatCurrency(
                   selectedVariableDebt,
@@ -161,18 +158,18 @@ export const FixBorrowSlider: React.FunctionComponent<FixBorrowSliderProps> = ({
       <Slider
         components={{ Thumb: FixBorrowThumbComponent }}
         defaultValue={0}
-        value={sliderValue ?? selectedFixedDebtPercentage}
-        step={2.5}
-        marks
-        min={0}
-        max={100}
-        onChange={handleChangeCommitted}
         disabled={variableDebt.loading}
+        max={100}
+        min={0}
+        step={2.5}
         sx={{ ...colorStyleOverrides() }}
+        value={sliderValue ?? selectedFixedDebtPercentage}
+        marks
+        onChange={handleChangeCommitted}
       />
 
       {error && errorText && (
-        <Typography variant="body2" sx={errorLabelStyles}>
+        <Typography sx={errorLabelStyles} variant="body2">
           {errorText}
         </Typography>
       )}

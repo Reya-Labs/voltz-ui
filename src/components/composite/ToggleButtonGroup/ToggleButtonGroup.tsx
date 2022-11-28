@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
 import MuiToggleButtonGroup, {
   ToggleButtonGroupProps as MuiToggleButtonGroupProps,
 } from '@mui/material/ToggleButtonGroup';
+import React, { useState } from 'react';
 
 import { AgentProps } from '../../../contexts/AgentContext/types';
 import { useAgentWithOverride } from '../../../hooks/useAgentWithOverride';
@@ -34,10 +34,10 @@ const ToggleButtonGroupComponent = <T,>({
 
   return (
     <MuiToggleButtonGroup
+      disabled={disabled}
       value={option || activeOption}
       exclusive
       onChange={handleChange}
-      disabled={disabled}
     >
       {options.map((optionItem: T) => (
         <ToggleButton key={optionItem as unknown as string} value={optionItem}>

@@ -1,22 +1,21 @@
-import React, { useMemo } from 'react';
 import Box from '@mui/material/Box';
-
-import { ReactComponent as Aave } from '../PoolField/aave-icon.svg';
-import { ReactComponent as Compound } from '../PoolField/compound-icon.svg';
-import { ReactComponent as Lido } from '../PoolField/lido-icon.svg';
-import { ReactComponent as Rocket } from '../PoolField/rocket-icon.svg';
-import { ReactComponent as DAI } from '../PoolField/dai-icon.svg';
-import { ReactComponent as USDC } from '../PoolField/usdc-icon.svg';
-import { ReactComponent as USDT } from '../PoolField/usdt-icon.svg';
-import { ReactComponent as ETH } from '../PoolField/eth-icon.svg';
-
-import { Typography } from '../../atomic/Typography/Typography';
-import { IconLabel } from '../IconLabel/IconLabel';
-import { VariableAPY, FixedAPR, MaturityEndDate } from './components';
-import { isBorrowing } from '../../../utilities/isBorrowing';
 import { DateTime } from 'luxon';
+import React, { useMemo } from 'react';
+
 import { Agents } from '../../../contexts/AgentContext/types';
 import { useAMMContext } from '../../../contexts/AMMContext/AMMContext';
+import { isBorrowing } from '../../../utilities/isBorrowing';
+import { Typography } from '../../atomic/Typography/Typography';
+import { IconLabel } from '../IconLabel/IconLabel';
+import { ReactComponent as Aave } from '../PoolField/aave-icon.svg';
+import { ReactComponent as Compound } from '../PoolField/compound-icon.svg';
+import { ReactComponent as DAI } from '../PoolField/dai-icon.svg';
+import { ReactComponent as ETH } from '../PoolField/eth-icon.svg';
+import { ReactComponent as Lido } from '../PoolField/lido-icon.svg';
+import { ReactComponent as Rocket } from '../PoolField/rocket-icon.svg';
+import { ReactComponent as USDC } from '../PoolField/usdc-icon.svg';
+import { ReactComponent as USDT } from '../PoolField/usdt-icon.svg';
+import { FixedAPR, MaturityEndDate, VariableAPY } from './components';
 
 export type ProtocolInformationProps = {
   protocol?: string;
@@ -57,13 +56,13 @@ export const ProtocolInformation: React.FunctionComponent<ProtocolInformationPro
       const prefix = protocol[0];
       switch (prefix) {
         case 'c':
-          return ['Compound', <Compound key="Compound" width="38" height="38" />];
+          return ['Compound', <Compound key="Compound" height="38" width="38" />];
         case 'a':
-          return ['Aave', <Aave key="Aave" width="38" height="38" />];
+          return ['Aave', <Aave key="Aave" height="38" width="38" />];
         case 's':
-          return ['Lido', <Lido key="Lido" width="38" height="38" />];
+          return ['Lido', <Lido key="Lido" height="38" width="38" />];
         case 'r':
-          return ['Rocket', <Rocket key="Rocket" width="38" height="38" />];
+          return ['Rocket', <Rocket key="Rocket" height="38" width="38" />];
         default:
           return ['', ''];
       }
@@ -76,13 +75,13 @@ export const ProtocolInformation: React.FunctionComponent<ProtocolInformationPro
       const token = protocol[0] === 's' ? protocol.substring(2) : protocol.substring(1);
       switch (token) {
         case 'DAI':
-          return ['DAI', <DAI key="DAI" width="38" height="38" />];
+          return ['DAI', <DAI key="DAI" height="38" width="38" />];
         case 'USDC':
-          return ['USDC', <USDC key="USDC" width="38" height="38" />];
+          return ['USDC', <USDC key="USDC" height="38" width="38" />];
         case 'ETH':
-          return ['ETH', <ETH key="ETH" width="38" height="38" />];
+          return ['ETH', <ETH key="ETH" height="38" width="38" />];
         case 'USDT':
-          return ['USDT', <USDT key="USDT" width="38" height="38" />];
+          return ['USDT', <USDT key="USDT" height="38" width="38" />];
         default:
           return ['', ''];
       }
@@ -109,17 +108,16 @@ export const ProtocolInformation: React.FunctionComponent<ProtocolInformationPro
       <Typography
         label={
           <IconLabel
-            label={getPoolLabel()}
             icon="information-circle"
-            removeIcon={!isSTETHOrRETH}
             info={
               isSTETHOrRETH
                 ? `Trade rates in the ${protocol} pool by depositing ETH as margin. ${protocol} cannot be used as a form of margin until post-merge.`
                 : ''
             }
+            label={getPoolLabel()}
+            removeIcon={!isSTETHOrRETH}
           />
         }
-        variant="body2"
         sx={{
           fontSize: 32,
           textTransform: 'uppercase',
@@ -129,6 +127,7 @@ export const ProtocolInformation: React.FunctionComponent<ProtocolInformationPro
           lineHeight: '110%',
           marginBottom: (theme) => theme.spacing(4),
         }}
+        variant="body2"
       >
         {protocolInfo && tokenInfo && (
           <Box sx={{ display: 'flex', alignContent: 'center' }}>

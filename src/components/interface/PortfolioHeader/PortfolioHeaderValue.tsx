@@ -1,7 +1,8 @@
-import { ReactNode } from 'react';
-import { Typography } from '../../atomic/Typography/Typography';
 import Box from '@mui/material/Box';
+import { ReactNode } from 'react';
+
 import { SystemStyleObject, Theme } from '../../../theme';
+import { Typography } from '../../atomic/Typography/Typography';
 
 export type PortfolioHeaderValueProps = {
   children?: ReactNode;
@@ -19,7 +20,7 @@ const valueBoxLabelStyles: SystemStyleObject<Theme> = {
 
 export const PortfolioHeaderValue = ({ children, hint, label }: PortfolioHeaderValueProps) => (
   <Box>
-    <Typography variant="body2" sx={valueBoxLabelStyles}>
+    <Typography sx={valueBoxLabelStyles} variant="body2">
       {label}
     </Typography>
     {children}

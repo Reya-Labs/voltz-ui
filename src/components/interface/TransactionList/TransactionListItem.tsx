@@ -1,11 +1,11 @@
-import React from 'react';
 import Box from '@mui/material/Box';
 import ListItem from '@mui/material/ListItem';
+import React from 'react';
+
 import { colors, SystemStyleObject, Theme } from '../../../theme';
-import { Typography } from '../../atomic/Typography/Typography';
 import { Button } from '../../atomic/Button/Button';
 import { Icon } from '../../atomic/Icon/Icon';
-
+import { Typography } from '../../atomic/Typography/Typography';
 import { getTransactionData } from './services';
 
 interface TransactionListItemProps {
@@ -74,8 +74,8 @@ export const TransactionListItem = ({
     <ListItem sx={rowStyles}>
       <Box sx={cellStyles}>
         <Typography
-          variant="body2"
           sx={{ color: colors.lavenderWeb.darken020, textTransform: 'uppercase' }}
+          variant="body2"
         >
           {data.date}
         </Typography>
@@ -85,20 +85,20 @@ export const TransactionListItem = ({
       </Box>
       <Box sx={cellStyles}>
         <Typography
-          variant="body2"
           sx={isLiquidation ? { color: colors.vzCustomRed1.base } : undefined}
+          variant="body2"
         >
           {data.label}
         </Typography>
       </Box>
       {data.items.map((item) => (
-        <Box sx={cellStyles} key={item.label}>
-          <Typography variant="body2" sx={labelStyles}>
+        <Box key={item.label} sx={cellStyles}>
+          <Typography sx={labelStyles} variant="body2">
             {item.label}
           </Typography>
           <Typography
-            variant="body2"
             sx={isLiquidation ? { color: colors.vzCustomRed1.base } : undefined}
+            variant="body2"
           >
             {item.value}
           </Typography>
@@ -106,11 +106,11 @@ export const TransactionListItem = ({
       ))}
       {onOpenClose && (
         <Button
-          onClick={onOpenClose}
-          variant="text"
-          sx={openCloseStyles}
-          aria-expanded={open}
           aria-controls={listId?.toString()}
+          aria-expanded={open}
+          sx={openCloseStyles}
+          variant="text"
+          onClick={onOpenClose}
         >
           {open ? 'X' : 'TX History'}
         </Button>

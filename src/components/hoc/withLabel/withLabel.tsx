@@ -1,10 +1,10 @@
-import React from 'react';
+import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
-import Box from '@mui/material/Box';
 import isEmpty from 'lodash/isEmpty';
-import upperCase from 'lodash/upperCase';
 import isString from 'lodash/isString';
+import upperCase from 'lodash/upperCase';
+import React from 'react';
 
 import { useUniqueId } from '../../../hooks/useUniqueId';
 
@@ -38,9 +38,8 @@ export const withLabel = <T,>(WrappedComponent: React.FunctionComponent<T>) => {
     return (
       <FormControl sx={{ width: '100%' }}>
         <InputLabel
-          shrink
-          htmlFor={id}
           error={error}
+          htmlFor={id}
           sx={{
             position: 'relative',
             transform: 'none',
@@ -48,6 +47,7 @@ export const withLabel = <T,>(WrappedComponent: React.FunctionComponent<T>) => {
             marginBottom: (theme) => theme.spacing(2),
             overflow: 'visible',
           }}
+          shrink
         >
           {renderLabel()}
         </InputLabel>

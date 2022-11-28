@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { DepositStates, getSubmissionState } from './mappers';
-import MellowLpDepositForm from '../MellowLpDepositForm/MellowLpDepositForm';
+import React, { useEffect, useState } from 'react';
 
+import MellowLpDepositForm from '../MellowLpDepositForm/MellowLpDepositForm';
 import { MellowProduct } from '../types';
+import { DepositStates, getSubmissionState } from './mappers';
 
 export type ConnectedMellowLpDepositFormProps = {
   vault: MellowProduct;
@@ -83,13 +83,13 @@ const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMellowLpDep
 
   return (
     <MellowLpDepositForm
-      lpVault={vault}
-      onChangeDeposit={onChangeDeposit}
-      submitText={submissionState.submitText}
-      hintText={submissionState.hintText}
       disabled={!sufficientFunds || submissionState.disabled}
-      onSubmit={submissionState.action}
+      hintText={submissionState.hintText}
+      lpVault={vault}
+      submitText={submissionState.submitText}
       onCancel={onCancel}
+      onChangeDeposit={onChangeDeposit}
+      onSubmit={submissionState.action}
     />
   );
 };

@@ -1,5 +1,6 @@
-import { styled, keyframes } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import { keyframes, styled } from '@mui/material/styles';
+
 import { colors } from '../../../theme';
 import { Typography } from '../Typography/Typography';
 

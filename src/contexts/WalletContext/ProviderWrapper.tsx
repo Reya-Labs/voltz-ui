@@ -2,16 +2,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import React, { useState, useCallback, useEffect } from 'react';
 import { BigNumber, ethers } from 'ethers';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { useGetWalletQuery } from '../../graphql';
-import { selectors } from '../../store';
 import { useSelector } from '../../hooks/useSelector';
-import { WalletName, WalletStatus } from './types';
-import { WalletContext } from './WalletContext';
+import { selectors } from '../../store';
 import { getErrorMessage } from '../../utilities/getErrorMessage';
 import * as services from './services';
+import { WalletName, WalletStatus } from './types';
+import { WalletContext } from './WalletContext';
 
 export type ProviderWrapperProps = {
   status: WalletStatus;

@@ -1,15 +1,15 @@
-import React, { ReactNode } from 'react';
-import CurrencyInput, { CurrencyInputProps } from 'react-currency-input-field';
-import { InputBaseProps } from '@mui/material/InputBase';
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
+import { InputBaseProps } from '@mui/material/InputBase';
 import InputLabel from '@mui/material/InputLabel';
-
 import isEmpty from 'lodash/isEmpty';
-import { useUniqueId } from '../../../hooks/useUniqueId';
-import { Typography } from '../../atomic/Typography/Typography';
-import { colors, inputStyles, SystemStyleObject, Theme } from '../../../theme';
 import isUndefined from 'lodash/isUndefined';
+import React, { ReactNode } from 'react';
+import CurrencyInput, { CurrencyInputProps } from 'react-currency-input-field';
+
+import { useUniqueId } from '../../../hooks/useUniqueId';
+import { colors, inputStyles, SystemStyleObject, Theme } from '../../../theme';
+import { Typography } from '../../atomic/Typography/Typography';
 
 type OverrideTypes<T1, T2> = Omit<T1, keyof T2> & T2;
 
@@ -64,7 +64,7 @@ export const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps
   };
 
   return (
-    <FormControl variant="outlined" sx={{ width: '100%' }}>
+    <FormControl sx={{ width: '100%' }} variant="outlined">
       <Box
         sx={{
           display: 'flex',
@@ -76,12 +76,12 @@ export const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps
         <>
           {!isEmpty(label) ? (
             <InputLabel
-              shrink
-              htmlFor={inputId}
               error={error}
+              htmlFor={inputId}
               sx={{
                 color: (theme) => (error ? `${theme.palette.error.base} !important` : undefined),
               }}
+              shrink
             >
               {label}
             </InputLabel>
@@ -90,12 +90,12 @@ export const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps
           )}
           {!isEmpty(labelRight) ? (
             <Typography
-              variant="body2"
               sx={{
                 ...textStyles,
                 color: colors.lavenderWeb.darken010,
                 marginBottom: (theme) => theme.spacing(2),
               }}
+              variant="body2"
             >
               {labelRight}
             </Typography>
@@ -119,12 +119,12 @@ export const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps
         }}
       >
         <CurrencyInput
-          intlConfig={{ locale: navigator.language }}
-          id={inputId}
           decimalsLimit={2}
+          id={inputId}
+          intlConfig={{ locale: navigator.language }}
           maxLength={9}
-          onValueChange={handleChange}
           suffix={undefined}
+          onValueChange={handleChange}
           {...props}
         />
         {suffix && (
@@ -156,12 +156,12 @@ export const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps
         )}
       </Box>
       {bottomText && (
-        <Typography variant="body2" sx={textStyles}>
+        <Typography sx={textStyles} variant="body2">
           {bottomText}
         </Typography>
       )}
       {error && errorText && (
-        <Typography variant="body2" sx={errorLabelStyles}>
+        <Typography sx={errorLabelStyles} variant="body2">
           {errorText}
         </Typography>
       )}

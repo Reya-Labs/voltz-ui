@@ -1,16 +1,16 @@
-import { Agents } from '../../../contexts/AgentContext/types';
 import Box from '@mui/material/Box';
-import { CustomPoolField } from './CustomPoolField';
-import { Typography } from '../../atomic/Typography/Typography';
 
+import { Agents } from '../../../contexts/AgentContext/types';
+import { Typography } from '../../atomic/Typography/Typography';
 import { ReactComponent as Aave } from './aave-icon.svg';
 import { ReactComponent as Compound } from './compound-icon.svg';
+import { CustomPoolField } from './CustomPoolField';
+import { ReactComponent as DAI } from './dai-icon.svg';
+import { ReactComponent as ETH } from './eth-icon.svg';
 import { ReactComponent as Lido } from './lido-icon.svg';
 import { ReactComponent as Rocket } from './rocket-icon.svg';
-import { ReactComponent as DAI } from './dai-icon.svg';
 import { ReactComponent as USDC } from './usdc-icon.svg';
 import { ReactComponent as USDT } from './usdt-icon.svg';
-import { ReactComponent as ETH } from './eth-icon.svg';
 
 export type PoolFieldProps = {
   agent?: Agents;
@@ -75,7 +75,6 @@ export const PoolField = ({ agent, protocol, isBorrowing, isBorrowTable }: PoolF
 
   const renderPool = () => (
     <Typography
-      variant="body2"
       sx={{
         fontSize: 18,
         textTransform: 'uppercase',
@@ -85,6 +84,7 @@ export const PoolField = ({ agent, protocol, isBorrowing, isBorrowTable }: PoolF
         lineHeight: '100%',
         marginTop: (theme) => theme.spacing(1),
       }}
+      variant="body2"
     >
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Box

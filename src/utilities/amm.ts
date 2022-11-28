@@ -1,6 +1,6 @@
-import { isBorrowing } from './isBorrowing';
-
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
+
+import { isBorrowing } from './isBorrowing';
 
 /**
  * Returns the current position that the user has for the given amm

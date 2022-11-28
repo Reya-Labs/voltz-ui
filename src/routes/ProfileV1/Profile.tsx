@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react';
-import { useWallet } from '../../hooks/useWallet';
-import { ProfilePageNoWallet } from './ProfilePageNoWallet/ProfilePageNoWallet';
-import { ProfilePageWalletConnected } from './ProfilePageWalletConnected/ProfilePageWalletConnected';
+
 import { Season } from '../../hooks/season/types';
-import {
-  SEASON_BADGE_VARIANTS,
-  getPhase1Badges,
-  GetProfileBadgesResponse1,
-} from './getters/getPhase1Badges';
 import { useCurrentSeason } from '../../hooks/season/useCurrentSeason';
+import { useWallet } from '../../hooks/useWallet';
 import { getENSDetails } from '../../utilities/getENSDetails';
 import { setPageTitle } from '../../utilities/page';
+import {
+  getPhase1Badges,
+  GetProfileBadgesResponse1,
+  SEASON_BADGE_VARIANTS,
+} from './getters/getPhase1Badges';
+import { ProfilePageNoWallet } from './ProfilePageNoWallet/ProfilePageNoWallet';
+import { ProfilePageWalletConnected } from './ProfilePageWalletConnected/ProfilePageWalletConnected';
 
 export const ProfileV1: React.FunctionComponent = () => {
   const wallet = useWallet();
@@ -52,10 +53,10 @@ export const ProfileV1: React.FunctionComponent = () => {
 
   return (
     <ProfilePageWalletConnected
-      season={currentActiveSeason}
       account={name}
       achievedBadges={achievedBadges}
       loading={loading}
+      season={currentActiveSeason}
       seasonBadgeVariants={SEASON_BADGE_VARIANTS[currentActiveSeason.id]}
     />
   );

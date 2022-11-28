@@ -1,7 +1,8 @@
-import { colors } from '../../../theme';
-import { styled } from '@mui/material/styles';
-import { Icon } from '../../atomic/Icon/Icon';
 import Box from '@mui/material/Box';
+import { styled } from '@mui/material/styles';
+
+import { colors } from '../../../theme';
+import { Icon } from '../../atomic/Icon/Icon';
 
 export const NavBox = styled(Box)`
   display: flex;

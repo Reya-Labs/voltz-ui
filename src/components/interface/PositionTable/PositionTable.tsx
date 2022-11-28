@@ -1,23 +1,23 @@
-import React from 'react';
-import TableContainer from '@mui/material/TableContainer';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import { colors, SystemStyleObject, Theme } from '../../../theme';
-import { Position } from '@voltz-protocol/v1-sdk';
-
-import { Panel } from '../../atomic/Panel/Panel';
-import { PositionTableHead, PositionTableRow } from './components';
-import { TransactionList } from '../TransactionList/TransactionList';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableContainer from '@mui/material/TableContainer';
+import { Position } from '@voltz-protocol/v1-sdk';
+import React from 'react';
+
 import { Agents } from '../../../contexts/AgentContext/types';
-import { PortfolioContext } from '../../../contexts/PortfolioContext/PortfolioContext';
-import { useAMMs } from '../../../hooks/useAMMs';
-import { useAgent } from '../../../hooks/useAgent';
 import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
+import { PortfolioContext } from '../../../contexts/PortfolioContext/PortfolioContext';
+import { useAgent } from '../../../hooks/useAgent';
+import { useAMMs } from '../../../hooks/useAMMs';
+import { colors, SystemStyleObject, Theme } from '../../../theme';
+import { findCurrentAmm } from '../../../utilities/amm';
 import { getRowButtonId } from '../../../utilities/googleAnalytics';
 import { isBorrowing } from '../../../utilities/isBorrowing';
-import { findCurrentAmm } from '../../../utilities/amm';
+import { Panel } from '../../atomic/Panel/Panel';
+import { TransactionList } from '../TransactionList/TransactionList';
+import { PositionTableHead, PositionTableRow } from './components';
 
 export type PositionTableProps = {
   positions: Position[];
@@ -103,36 +103,36 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
             const info = portfolioData?.info ? portfolioData.info[pos.id] : undefined;
 
             return (
-              <ListItem sx={listItemStyles} key={pos.id}>
+              <ListItem key={pos.id} sx={listItemStyles}>
                 <Panel
-                  variant="main"
                   sx={{ width: '100%', padding: (theme) => `0 ${theme.spacing(4)}` }}
+                  variant="main"
                 >
                   <PositionTableHead
                     beforeMaturity={info?.beforeMaturity}
-                    healthFactor={info?.healthFactor}
-                    fixedRateHealthFactor={info?.fixedRateHealthFactor}
-                    fixedApr={info?.fixedApr}
-                    fees={info?.fees}
                     currencyCode="USD"
                     currencySymbol="$"
+                    fees={info?.fees}
                     feesPositive={true}
-                    isSettled={pos.isSettled}
-                    positionType={pos.positionType}
-                    onRollover={() => handleSelectRow(index, 'rollover')}
-                    onSettle={() => onSettle(pos)}
+                    fixedApr={info?.fixedApr}
+                    fixedRateHealthFactor={info?.fixedRateHealthFactor}
                     gaButtonId={getRowButtonId(
                       agent === Agents.LIQUIDITY_PROVIDER,
                       pos.amm.protocol,
                       isBorrowing(pos.amm.rateOracle.protocolId),
                     )}
+                    healthFactor={info?.healthFactor}
+                    isSettled={pos.isSettled}
+                    positionType={pos.positionType}
                     rolloverAvailable={rolloverAvailable}
+                    onRollover={() => handleSelectRow(index, 'rollover')}
                     onSelect={
                       agent === Agents.LIQUIDITY_PROVIDER
                         ? undefined
                         : (mode: 'margin' | 'liquidity' | 'notional') =>
                             handleSelectRow(index, mode)
                     }
+                    onSettle={() => onSettle(pos)}
                   />
 
                   <TableContainer
@@ -148,12 +148,12 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                       <TableBody>
                         <AMMProvider amm={pos.amm}>
                           <PositionTableRow
+                            key={pos.id}
+                            index={index}
                             position={pos}
                             positionInfo={
                               portfolioData?.info ? portfolioData.info[pos.id] : undefined
                             }
-                            key={pos.id}
-                            index={index}
                             onSelect={(mode: 'margin' | 'liquidity' | 'notional') =>
                               handleSelectRow(index, mode)
                             }

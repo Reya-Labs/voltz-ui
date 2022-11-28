@@ -1,7 +1,7 @@
-import { BurnAction, Transaction } from '../types';
-import { serializeAmm, createId } from '../utilities';
-
 import { AMM } from '@voltz-protocol/v1-sdk';
+
+import { BurnAction, Transaction } from '../types';
+import { createId, serializeAmm } from '../utilities';
 
 const burnAction = (amm: AMM, transaction: Omit<Transaction, 'id'>): BurnAction => ({
   type: 'burn',

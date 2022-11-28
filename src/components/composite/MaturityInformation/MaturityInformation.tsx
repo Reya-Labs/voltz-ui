@@ -1,9 +1,9 @@
-import React, { useMemo } from 'react';
 import { DateTime } from 'luxon';
+import React, { useMemo } from 'react';
 
-import { withLabel } from '../../hoc/withLabel/withLabel';
 import { formatDateTime } from '../../../utilities/date';
 import { ProgressBar } from '../../atomic/ProgressBar/ProgressBar';
+import { withLabel } from '../../hoc/withLabel/withLabel';
 
 export type MaturityInformationProps = {
   startDate?: DateTime;
@@ -35,8 +35,8 @@ const MaturityInformationComponent: React.FunctionComponent<MaturityInformationP
   return (
     <ProgressBar
       leftContent={percentageComplete >= 100 ? 'COMPLETED' : formattedEndDate}
-      rightContent={`${Math.min(percentageComplete, 100)}%`}
       percentageComplete={percentageComplete}
+      rightContent={`${Math.min(percentageComplete, 100)}%`}
     />
   );
 };

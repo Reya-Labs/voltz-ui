@@ -1,15 +1,16 @@
 import React, { useCallback, useRef, useState } from 'react';
+
+import { formatPOSIXTimestamp } from '../../../../utilities/date';
+import { BouncedLoading } from '../BouncedLoading/BouncedLoading';
+import { Tick } from '../Tick/Tick';
 import {
-  ClaimedAtTypography,
   ClaimButton as ClaimButtonUI,
+  ClaimedAtTypography,
+  ClaimErrorTypography,
   StretchClaimButton,
   TickWrapper,
-  ClaimErrorTypography,
 } from './ClaimButton.styled';
 import { Confetti } from './Confetti/Confetti';
-import { Tick } from '../Tick/Tick';
-import { BouncedLoading } from '../BouncedLoading/BouncedLoading';
-import { formatPOSIXTimestamp } from '../../../../utilities/date';
 
 type ClaimButtonMode = 'claim' | 'claimed' | 'claiming' | 'claimedDate' | 'claimError';
 
@@ -58,7 +59,7 @@ export const ClaimButton: React.FunctionComponent<ClaimButtonProps> = ({
 
   return (
     <>
-      <ButtonUI data-testid="ClaimButton" onClick={onClick} disabled={DISABLED_MAP[mode]}>
+      <ButtonUI data-testid="ClaimButton" disabled={DISABLED_MAP[mode]} onClick={onClick}>
         <Wrapper>{copyMap[mode]}</Wrapper>
         {mode === 'claimed' && (
           <TickWrapper>

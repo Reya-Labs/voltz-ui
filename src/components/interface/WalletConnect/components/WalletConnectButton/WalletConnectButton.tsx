@@ -1,14 +1,13 @@
-import React, { useMemo } from 'react';
+import CircleIcon from '@mui/icons-material/Circle';
 import Box from '@mui/material/Box';
+import React, { useMemo } from 'react';
 
 import { Wallet } from '../../../../../contexts/WalletContext/types';
-import CircleIcon from '@mui/icons-material/Circle';
-
 import { colors } from '../../../../../theme';
-import { AvatarAddress } from '../../../AvatarAddress/AvatarAddress';
 import { Button } from '../../../../atomic/Button/Button';
 import { Icon } from '../../../../atomic/Icon/Icon';
 import { Icons } from '../../../../atomic/Icon/types';
+import { AvatarAddress } from '../../../AvatarAddress/AvatarAddress';
 
 export type WalletConnectButtonProps = {
   onClick?: () => void;
@@ -37,13 +36,13 @@ export const WalletConnectButton: React.FunctionComponent<WalletConnectButtonPro
     return (
       <Box sx={{ marginLeft: (theme) => theme.spacing(4), display: 'flex' }}>
         <Button
-          variant="red"
-          sx={{ zIndex: 1, left: (theme) => theme.spacing(-2), fontSize: 16 }}
           startIcon={
             <CircleIcon
               sx={{ width: 4, height: 4, borderRadius: 200, color: colors.wildStrawberry.base }}
             />
           }
+          sx={{ zIndex: 1, left: (theme) => theme.spacing(-2), fontSize: 16 }}
+          variant="red"
           onClick={onClick}
         >
           {walletError}
@@ -56,18 +55,18 @@ export const WalletConnectButton: React.FunctionComponent<WalletConnectButtonPro
     return (
       <Box sx={{ marginLeft: (theme) => theme.spacing(4), display: 'flex' }}>
         <Button
-          variant="dark"
-          sx={{ zIndex: 1, left: (theme) => theme.spacing(-2), fontSize: 16 }}
           endIcon={name && <Icon name={name as Icons} sx={{ width: 16 }} />}
+          sx={{ zIndex: 1, left: (theme) => theme.spacing(-2), fontSize: 16 }}
+          variant="dark"
           onClick={onClick}
         >
           <AvatarAddress
             address={account}
-            size={16}
             nameSx={{
               fontSize: '16px',
               lineHeight: '14px',
             }}
+            size={16}
           />
         </Button>
       </Box>
@@ -76,13 +75,13 @@ export const WalletConnectButton: React.FunctionComponent<WalletConnectButtonPro
 
   return (
     <Button
-      variant="darker"
-      sx={{ marginLeft: (theme) => theme.spacing(4), fontSize: 16 }}
       startIcon={
         <CircleIcon
           sx={{ width: 4, height: 4, borderRadius: 200, color: colors.wildStrawberry.base }}
         />
       }
+      sx={{ marginLeft: (theme) => theme.spacing(4), fontSize: 16 }}
+      variant="darker"
       onClick={onClick}
     >
       {text}

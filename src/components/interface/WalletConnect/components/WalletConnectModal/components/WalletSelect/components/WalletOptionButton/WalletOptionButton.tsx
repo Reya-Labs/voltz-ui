@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Typography } from '../../../../../../../../atomic/Typography/Typography';
 import { Button } from '../../../../../../../../atomic/Button/Button';
 import { Icon, IconProps } from '../../../../../../../../atomic/Icon/Icon';
+import { Typography } from '../../../../../../../../atomic/Typography/Typography';
 
 export type WalletOptionButtonProps = {
   onClick: () => void;
@@ -18,8 +18,7 @@ export const WalletOptionButton: React.FunctionComponent<WalletOptionButtonProps
   selected,
 }) => (
   <Button
-    onClick={onClick}
-    variant="darker"
+    selected={selected}
     sx={{
       width: '100%',
       display: 'flex',
@@ -31,7 +30,8 @@ export const WalletOptionButton: React.FunctionComponent<WalletOptionButtonProps
         marginTop: '0',
       },
     }}
-    selected={selected}
+    variant="darker"
+    onClick={onClick}
   >
     <Typography variant="h6">
       {selected && '• '}

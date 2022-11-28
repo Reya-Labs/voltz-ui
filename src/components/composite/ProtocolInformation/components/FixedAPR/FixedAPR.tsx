@@ -1,11 +1,11 @@
-import React from 'react';
 import Box from '@mui/material/Box';
+import isUndefined from 'lodash/isUndefined';
+import React from 'react';
 
-import { Typography } from '../../../../atomic/Typography/Typography';
-import { IconLabel } from '../../../IconLabel/IconLabel';
 import { Agents } from '../../../../../contexts/AgentContext/types';
 import { formatNumber } from '../../../../../utilities/number';
-import isUndefined from 'lodash/isUndefined';
+import { Typography } from '../../../../atomic/Typography/Typography';
+import { IconLabel } from '../../../IconLabel/IconLabel';
 
 export type FixedAPRProps = {
   agent?: Agents;
@@ -15,10 +15,10 @@ export type FixedAPRProps = {
 export const FixedAPR: React.FunctionComponent<FixedAPRProps> = ({ agent, fixedApr }) => {
   return (
     <Typography
-      variant="h3"
-      label={<IconLabel label="fixed apr" icon="information-circle" info="something" removeIcon />}
-      agentStyling
       agent={agent}
+      label={<IconLabel icon="information-circle" info="something" label="fixed apr" removeIcon />}
+      variant="h3"
+      agentStyling
     >
       {isUndefined(fixedApr) ? (
         <Box sx={{ fontSize: 18 }}>Loading...</Box>

@@ -1,8 +1,9 @@
-import React from 'react';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { SystemStyleObject, Theme } from '@mui/system';
+import React from 'react';
+
 import { Typography } from '../../../../atomic/Typography/Typography';
 import { labels } from '../../constants';
 
@@ -30,13 +31,13 @@ export const AMMTableHead: React.FunctionComponent = () => {
             sx={cellSx}
           >
             <Typography
-              variant="subtitle1"
               sx={{
                 textTransform: 'uppercase',
                 fontWeight: 400,
                 fontSize: 12,
                 color: '#5A576D',
               }}
+              variant="subtitle1"
             >
               {label}
             </Typography>

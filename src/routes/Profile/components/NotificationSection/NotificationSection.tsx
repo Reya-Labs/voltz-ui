@@ -1,14 +1,15 @@
+import React from 'react';
+
+import { BoldText } from '../BoldText.styled';
+import { ClaimButton, ClaimButtonProps } from '../ClaimButton/ClaimButton';
+import { CopyLinkButton, CopyLinkButtonProps } from '../CopyLinkButton/CopyLinkButton';
+import { ProfileNotification } from '../ProfileNotification/ProfileNotification';
 import {
   ButtonBox,
   NotificationBox,
   NotificationContainer,
   NotificationsContainer,
 } from './NotificationSection.styled';
-import { ProfileNotification } from '../ProfileNotification/ProfileNotification';
-import { ClaimButton, ClaimButtonProps } from '../ClaimButton/ClaimButton';
-import React from 'react';
-import { BoldText } from '../BoldText.styled';
-import { CopyLinkButton, CopyLinkButtonProps } from '../CopyLinkButton/CopyLinkButton';
 
 type NotificationSectionProps = {
   isOnGoingSeason: boolean;

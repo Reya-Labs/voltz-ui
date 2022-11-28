@@ -1,14 +1,13 @@
-import { useMemo, useCallback } from 'react';
-import isNull from 'lodash/isNull';
+import { AMM, RateOracle, Token } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
-
-import { Amm_OrderBy, useGetAmMsQuery } from '../graphql';
-import { useWallet } from './useWallet';
 import JSBI from 'jsbi';
+import isNull from 'lodash/isNull';
+import { useCallback, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { Token, RateOracle, AMM } from '@voltz-protocol/v1-sdk';
+import { Amm_OrderBy, useGetAmMsQuery } from '../graphql';
 import { routes } from '../routes/paths';
+import { useWallet } from './useWallet';
 
 export type UseAMMsResult = {
   amms?: AMM[];

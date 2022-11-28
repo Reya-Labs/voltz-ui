@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box';
-import CountUp from 'react-countup';
 import React, { FunctionComponent } from 'react';
+import CountUp from 'react-countup';
+
 import { formatCurrency } from '../../../../utilities/number';
 import { TitleTypography, TotalNotionalTypography } from './NetNotional.styled';
 
@@ -18,12 +19,12 @@ export const NetNotional: FunctionComponent<NetNotionalProps> = React.memo(
         {totalNotional === undefined ? 'Loading...' : null}
         {totalNotional !== undefined ? (
           <CountUp
-            start={0}
-            end={totalNotional}
+            decimals={2}
             delay={0}
             duration={0.7}
-            decimals={2}
+            end={totalNotional}
             formattingFn={(value) => `${currencySymbol}${formatCurrency(value)} ${currencyCode}`}
+            start={0}
           >
             {({ countUpRef }) => <span ref={countUpRef} />}
           </CountUp>

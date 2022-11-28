@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { AgentProvider } from '../../../contexts/AgentContext/AgentProvider';
 import { PositionTable } from './PositionTable';

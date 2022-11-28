@@ -1,9 +1,24 @@
 import React, { useRef } from 'react';
+
 import { Typography } from '../../../../components/atomic/Typography/Typography';
-import { BadgeCard, BadgeCardHandle } from '../BadgeCard/BadgeCard';
-import { AchievedBadge, AchievedBadgeProps } from '../AchievedBadge/AchievedBadge';
+import { Season } from '../../../../hooks/season/types';
+import { formatDateTimeWithOrdinal } from '../../../../utilities/date';
+import { doNothing } from '../../../../utilities/doNothing';
+import { elideAddress } from '../../../../utilities/elideAddress';
+import {
+  BadgeVariant,
+  NON_PROGRAMMATIC_BADGES,
+  NonProgrammaticBadges,
+} from '../../data/getSeasonBadges';
 import { BADGE_VARIANT_TIER_MAP } from '../../helpers';
+import { AchievedBadge, AchievedBadgeProps } from '../AchievedBadge/AchievedBadge';
 import { Badge } from '../Badge/Badge';
+import { BadgeCard, BadgeCardHandle } from '../BadgeCard/BadgeCard';
+import { BoldText } from '../BoldText.styled';
+import { ClaimButtonProps } from '../ClaimButton/ClaimButton';
+import { CopyLinkButtonProps } from '../CopyLinkButton/CopyLinkButton';
+import { NotificationSection } from '../NotificationSection/NotificationSection';
+import { SeasonToggle } from '../SeasonToggle/SeasonToggle';
 import {
   Account,
   AchievedBadgesGrid,
@@ -23,20 +38,6 @@ import {
   NoAchievedBadgesTypography,
   Subheading,
 } from './ProfilePageWalletConnected.styled';
-import { Season } from '../../../../hooks/season/types';
-import { SeasonToggle } from '../SeasonToggle/SeasonToggle';
-import { ClaimButtonProps } from '../ClaimButton/ClaimButton';
-import { NotificationSection } from '../NotificationSection/NotificationSection';
-import { BoldText } from '../BoldText.styled';
-import { CopyLinkButtonProps } from '../CopyLinkButton/CopyLinkButton';
-import {
-  BadgeVariant,
-  NON_PROGRAMMATIC_BADGES,
-  NonProgrammaticBadges,
-} from '../../data/getSeasonBadges';
-import { elideAddress } from '../../../../utilities/elideAddress';
-import { doNothing } from '../../../../utilities/doNothing';
-import { formatDateTimeWithOrdinal } from '../../../../utilities/date';
 
 export type ProfilePageWalletConnectedProps = {
   account: string;
@@ -112,41 +113,41 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
           <BoldText>{seasonEndDateFormatted}</BoldText>.
         </Subheading>
         <NotificationSection
+          claimButtonBulkMode={claimButtonBulkMode}
+          copyLinkButtonMode={copyLinkButtonMode}
           isOnGoingSeason={isOnGoingSeason}
           notClaimedBadgesCount={notClaimedBadges.length}
-          claimButtonBulkMode={claimButtonBulkMode}
           onClaimBulkClick={() => onClaimBulkClick(notClaimedBadges.map((b) => b.variant))}
-          copyLinkButtonMode={copyLinkButtonMode}
           onCopyLinkButtonClick={onCopyLinkButtonClick}
         />
         <BadgeCollectionBox>
           <BadgeCollectionTypographyBox>
             <Typography variant="h2">YOUR BADGE COLLECTION</Typography>
-            <SeasonToggle seasons={seasonOptions} onChange={onSeasonChange} season={season} />
+            <SeasonToggle season={season} seasons={seasonOptions} onChange={onSeasonChange} />
           </BadgeCollectionTypographyBox>
           <AchievedBadgesGrid itemsPerRow={!loading && achievedBadges.length === 0 ? 1 : 3}>
             {loading &&
               Array.from({ length: 3 }, (index) => index).map((_, index) => (
                 <BadgeCard
-                  claimButtonMode="claim"
                   key={index}
+                  claimButtonMode="claim"
+                  disableClaiming={true}
                   loading={loading}
                   variant="degenStuff"
-                  disableClaiming={true}
                 />
               ))}
             {!loading &&
               achievedBadges.length !== 0 &&
               achievedBadges.map((badge, index) => (
                 <BadgeCard
-                  ref={(ref: BadgeCardHandle) => (badgeCardRefs.current[badge.variant] = ref)}
                   key={`${badge.variant}${index}`}
-                  variant={badge.variant}
-                  loading={loading}
-                  onClaimButtonClick={() => onClaimButtonClick(badge.variant)}
+                  ref={(ref: BadgeCardHandle) => (badgeCardRefs.current[badge.variant] = ref)}
                   claimButtonMode={claimButtonModes[badge.variant] || 'claim'}
                   claimedAt={badge.claimedAt}
                   disableClaiming={isOnGoingSeason}
+                  loading={loading}
+                  variant={badge.variant}
+                  onClaimButtonClick={() => onClaimButtonClick(badge.variant)}
                 />
               ))}
             {!loading && achievedBadges.length === 0 && (

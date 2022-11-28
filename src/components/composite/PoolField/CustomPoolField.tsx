@@ -1,7 +1,8 @@
-import { ReactNode } from 'react';
-import { Typography } from '../../atomic/Typography/Typography';
 import Box from '@mui/material/Box';
 import { SystemStyleObject, Theme } from '@mui/system';
+import { ReactNode } from 'react';
+
+import { Typography } from '../../atomic/Typography/Typography';
 
 export type CustomPoolFieldProps = {
   children?: ReactNode;
@@ -17,7 +18,7 @@ const valueBoxLabelStyles: SystemStyleObject<Theme> = {
 
 export const CustomPoolField = ({ children, label }: CustomPoolFieldProps) => (
   <Box>
-    <Typography variant="body2" sx={valueBoxLabelStyles}>
+    <Typography sx={valueBoxLabelStyles} variant="body2">
       {label}
     </Typography>
     {children}

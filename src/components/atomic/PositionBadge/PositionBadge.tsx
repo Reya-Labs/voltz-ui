@@ -1,6 +1,7 @@
-import React from 'react';
 import Box from '@mui/material/Box';
 import { SystemStyleObject, Theme } from '@mui/system';
+import React from 'react';
+
 import { colors } from '../../../theme';
 import { Typography } from '../Typography/Typography';
 
@@ -75,8 +76,8 @@ export const PositionBadge = ({ size = 'medium', sx = {}, text, variant }: Posit
     return (
       <Box sx={{ ...sx, ...styles[variant] }}>
         <Typography
-          variant="body2"
           sx={{ color: 'unset', fontSize: size === 'small' ? '12px' : '14px', lineHeight: '1' }}
+          variant="body2"
         >
           {text || labels[variant]}
         </Typography>

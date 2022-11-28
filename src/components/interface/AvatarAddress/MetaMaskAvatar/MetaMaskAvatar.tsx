@@ -1,4 +1,5 @@
 import { FunctionComponent } from 'react';
+
 import { getMetamaskAvatar } from './get-metamask-avatar';
 
 type Props = {
@@ -20,11 +21,11 @@ export const MetaMaskAvatar: FunctionComponent<Props> = ({ address, size }) => (
     }}
   >
     <img
+      alt="avatar"
       src={getMetamaskAvatar({
         address,
         size,
       })}
-      alt="avatar"
     />
   </div>
 );

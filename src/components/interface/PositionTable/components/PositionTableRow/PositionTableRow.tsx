@@ -1,20 +1,20 @@
-import React, { useEffect } from 'react';
-import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import { SystemStyleObject, Theme } from '../../../../../theme';
-import { Typography } from '../../../../atomic/Typography/Typography';
-import { PoolField } from '../../../../composite/PoolField/PoolField';
-import { lpLabels, traderLabels } from '../../constants';
-import { FixedAPR, Notional, CurrentMargin, AccruedRates } from './components';
-import { useAgent } from '../../../../../hooks/useAgent';
-import isNumber from 'lodash/isNumber';
-
+import TableRow from '@mui/material/TableRow';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
-import { MaturityInformation } from '../../../../composite/MaturityInformation/MaturityInformation';
+import isNumber from 'lodash/isNumber';
+import React, { useEffect } from 'react';
+
 import { Agents } from '../../../../../contexts/AgentContext/types';
 import { useAMMContext } from '../../../../../contexts/AMMContext/AMMContext';
+import { useAgent } from '../../../../../hooks/useAgent';
+import { SystemStyleObject, Theme } from '../../../../../theme';
 import { isBorrowing } from '../../../../../utilities/isBorrowing';
 import { formatNumber } from '../../../../../utilities/number';
+import { Typography } from '../../../../atomic/Typography/Typography';
+import { MaturityInformation } from '../../../../composite/MaturityInformation/MaturityInformation';
+import { PoolField } from '../../../../composite/PoolField/PoolField';
+import { lpLabels, traderLabels } from '../../constants';
+import { AccruedRates, CurrentMargin, FixedAPR, Notional } from './components';
 
 export type PositionTableRowProps = {
   position: Position;
@@ -58,8 +58,8 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
     if (field === 'accruedRates') {
       return (
         <AccruedRates
-          positionType={position.positionType}
           avgFixedRate={positionInfo?.fixedRateSinceLastSwap}
+          positionType={position.positionType}
           variableRate={positionInfo?.variableRateSinceLastSwap}
         />
       );
@@ -75,11 +75,11 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
           accruedCashflow={
             agent === Agents.LIQUIDITY_PROVIDER ? undefined : positionInfo?.accruedCashflow || 0
           }
+          isSettled={position.isSettled}
           margin={positionInfo?.margin}
+          marginEdit={true}
           token={underlyingTokenName || ''}
           onSelect={agent === Agents.LIQUIDITY_PROVIDER ? handleEditMargin : undefined}
-          marginEdit={true}
-          isSettled={position.isSettled}
         />
       );
     }
@@ -87,9 +87,9 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
     if (field === 'maturity') {
       return (
         <MaturityInformation
+          endDate={position.amm.endDateTime}
           label="Maturity"
           startDate={position.amm.startDateTime}
-          endDate={position.amm.endDateTime}
         />
       );
     }
@@ -112,15 +112,15 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
       return (
         <PoolField
           agent={agent}
-          protocol={position.amm.protocol}
           isBorrowing={isBorrowing(position.amm.rateOracle.protocolId)}
+          protocol={position.amm.protocol}
         />
       );
     }
 
     if (field === 'rateRange') {
       return (
-        <Typography variant="h5" label={label}>
+        <Typography label={label} variant="h5">
           {formatNumber(position.fixedRateLower.toNumber())}% /{' '}
           {formatNumber(position.fixedRateUpper.toNumber())}%
         </Typography>

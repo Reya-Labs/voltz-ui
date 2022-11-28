@@ -1,9 +1,9 @@
-import { Typography } from '../../../../atomic/Typography/Typography';
-
-import { DateTime } from 'luxon';
-import { formatDateTime } from '../../../../../utilities/date';
 import Box from '@mui/material/Box';
+import { DateTime } from 'luxon';
 import React from 'react';
+
+import { formatDateTime } from '../../../../../utilities/date';
+import { Typography } from '../../../../atomic/Typography/Typography';
 
 export type MaturityEndDateProps = {
   endDate?: DateTime;
@@ -18,7 +18,7 @@ export const MaturityEndDate: React.FunctionComponent<MaturityEndDateProps> = ({
 
   return (
     <Box>
-      <Typography variant="h3" label="Fixed Until" sx={{ fontSize: 24 }}>
+      <Typography label="Fixed Until" sx={{ fontSize: 24 }} variant="h3">
         {formattedEndDate}
       </Typography>
     </Box>

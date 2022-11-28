@@ -1,6 +1,7 @@
-import { formatCurrency } from '../../../../../utilities/number';
 import isUndefined from 'lodash/isUndefined';
 import React from 'react';
+
+import { formatCurrency } from '../../../../../utilities/number';
 import {
   DepositButton,
   DepositTypography,
@@ -48,7 +49,7 @@ const MellowLPPosition: React.FunctionComponent<MellowLPPositionProps> = ({
           )}
         </MellowLPPositionInfoBox>
       </MellowLPPositionBox>
-      <DepositButton onClick={handleClick} disabled={disabled}>
+      <DepositButton disabled={disabled} onClick={handleClick}>
         DEPOSIT
       </DepositButton>
     </MellowLPPositionBoxAndButtonContainer>

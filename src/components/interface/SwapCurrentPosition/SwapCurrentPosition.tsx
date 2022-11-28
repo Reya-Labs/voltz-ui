@@ -1,17 +1,18 @@
-import React, { useEffect } from 'react';
 import Box from '@mui/material/Box';
 import { Position } from '@voltz-protocol/v1-sdk';
+import { BigNumber } from 'ethers';
+import isUndefined from 'lodash/isUndefined';
+import React, { useEffect } from 'react';
+
+import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';
+import { colors } from '../../../theme';
+import { formatCurrency } from '../../../utilities/number';
 import { Button } from '../../atomic/Button/Button';
 import { Ellipsis } from '../../atomic/Ellipsis/Ellipsis';
 import { PositionBadge } from '../../atomic/PositionBadge/PositionBadge';
 import { SummaryPanel } from '../../atomic/SummaryPanel/SummaryPanel';
-import { BigNumber } from 'ethers';
-import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';
-import { colors } from '../../../theme';
-import isUndefined from 'lodash/isUndefined';
 import { FormPanel } from '../FormPanel/FormPanel';
 import { SwapFormModes } from '../SwapForm';
-import { formatCurrency } from '../../../utilities/number';
 
 export type SwapCurrentPositionProps = {
   formMode: SwapFormModes;
@@ -122,21 +123,21 @@ export const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionPro
         >
           <PositionBadge
             size="small"
-            variant="FC"
-            text={currentPositionBadgeText}
             sx={{ display: 'inline-block', marginLeft: 0 }}
+            text={currentPositionBadgeText}
+            variant="FC"
           />
         </Box>
         <SummaryPanel label="Position information" rows={rows} />
         <Button
+          id={gaButtonId}
+          size="vs"
           sx={{
             marginTop: (theme) => theme.spacing(6),
             flexGrow: 0,
           }}
           variant="dark-link"
-          size="vs"
           onClick={onPortfolio}
-          id={gaButtonId}
         >
           Portfolio
         </Button>

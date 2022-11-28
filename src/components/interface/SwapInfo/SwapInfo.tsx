@@ -1,18 +1,18 @@
-import React from 'react';
 import Box from '@mui/material/Box';
+import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
+import isUndefined from 'lodash/isUndefined';
+import React from 'react';
 
+import { colors, SystemStyleObject, Theme } from '../../../theme';
+import { FormPanel } from '../FormPanel/FormPanel';
+import { SwapFormActions, SwapFormModes } from '../SwapForm/types';
 import {
+  DescriptionBox,
+  ExpectedAPY,
   SwapSummary,
   SwapSummaryEditMargin,
-  DescriptionBox,
   WarningBox,
-  ExpectedAPY,
 } from './components';
-import { colors, SystemStyleObject, Theme } from '../../../theme';
-import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
-import { SwapFormActions, SwapFormModes } from '../SwapForm/types';
-import isUndefined from 'lodash/isUndefined';
-import { FormPanel } from '../FormPanel/FormPanel';
 
 export type SwapInfoProps = {
   balance?: number;
@@ -68,8 +68,8 @@ export const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
               expectedApy={expectedApy}
               expectedCashflow={expectedCashflow}
               userSimulatedVariableApy={userSimulatedVariableApy}
-              onChangeUserSimulatedVariableApy={onChangeUserSimulatedVariableApy}
               userSimulatedVariableApyUpdated={userSimulatedVariableApyUpdated}
+              onChangeUserSimulatedVariableApy={onChangeUserSimulatedVariableApy}
             />
             <Box
               component={'hr'}
@@ -86,8 +86,8 @@ export const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
         <>
           <Box sx={bottomSpacing}>
             <DescriptionBox
-              titleText="Fixing your Borrowing Costs"
               descriptionText="Voltz Protocol lets you convert your variable borrowing costs into fixed borrowing costs. These will be fixed until the end of the pools term, as seen under 'Fixed Until'. To fix your existing borrowing, use the slider to determine what proportion you wish to fix and click 'Fix Rate'. This will trigger a transaction that will cover the fixed cost of borrowing upfront, along with fees paid to Liquidity Providers, who collectively cover your variable liabilities."
+              titleText="Fixing your Borrowing Costs"
             />
           </Box>
         </>
@@ -111,11 +111,11 @@ export const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
             <Box sx={bottomSpacing}>
               <SwapSummary
                 data={swapSummary}
+                formAction={formAction}
                 loading={swapSummaryLoading}
+                maxAvailableNotional={maxAvailableNotional}
                 underlyingTokenName={underlyingTokenName}
                 yieldBearingTokenName={protocol}
-                formAction={formAction}
-                maxAvailableNotional={maxAvailableNotional}
               />
             </Box>
           </>

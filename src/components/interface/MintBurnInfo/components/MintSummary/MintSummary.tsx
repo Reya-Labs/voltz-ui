@@ -1,8 +1,9 @@
+import isUndefined from 'lodash/isUndefined';
 import React from 'react';
+
+import { formatCurrency, roundUpDecimal } from '../../../../../utilities/number';
 import { SummaryPanel } from '../../../../atomic/SummaryPanel/SummaryPanel';
 import { IconLabel } from '../../../../composite/IconLabel/IconLabel';
-import { formatCurrency, roundUpDecimal } from '../../../../../utilities/number';
-import isUndefined from 'lodash/isUndefined';
 
 export type MintSummaryProps = {
   balance?: number;
@@ -19,9 +20,9 @@ export const MintSummary: React.FunctionComponent<MintSummaryProps> = ({
 }) => {
   const label = (
     <IconLabel
-      label="trade information"
       icon="information-circle"
       info="Your minimum required margin is defined based on your leverage and notional amount traded. You are required to deposit margin in order to execute a trade."
+      label="trade information"
     />
   );
 

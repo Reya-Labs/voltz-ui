@@ -1,11 +1,11 @@
-import React from 'react';
 import MuiToggleButton, {
   ToggleButtonProps as MuiToggleButtonProps,
 } from '@mui/material/ToggleButton';
+import React from 'react';
 
-import { colors, SystemStyleObject, Theme } from '../../../../theme';
-import { useAgentWithOverride } from '../../../../hooks/useAgentWithOverride';
 import { AgentProps, Agents } from '../../../../contexts/AgentContext/types';
+import { useAgentWithOverride } from '../../../../hooks/useAgentWithOverride';
+import { colors, SystemStyleObject, Theme } from '../../../../theme';
 
 export type ToggleButtonProps = MuiToggleButtonProps & AgentProps;
 
@@ -101,10 +101,10 @@ export const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
     <MuiToggleButton
       {...props}
       selected={selected}
+      sx={{ ...styleOverrides, ...agentStyleOverrides(), ...stateStyleOverrides() }}
+      disableFocusRipple
       disableRipple
       disableTouchRipple
-      disableFocusRipple
-      sx={{ ...styleOverrides, ...agentStyleOverrides(), ...stateStyleOverrides() }}
     />
   );
 };

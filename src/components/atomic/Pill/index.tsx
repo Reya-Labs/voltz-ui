@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { PillTypography, PillTypographyVariant } from './Pill.styled';
 
 export type PillProps = {
@@ -8,7 +9,7 @@ export type PillProps = {
 };
 
 export const Pill = ({ text, variant, className }: PillProps) => (
-  <PillTypography component="span" className={className} coloringVariant={variant}>
+  <PillTypography className={className} coloringVariant={variant} component="span">
     {text}
   </PillTypography>
 );

@@ -1,22 +1,22 @@
-import React from 'react';
-import { colors } from '../../../theme';
-import { Typography } from '../../../components/atomic/Typography/Typography';
 import Box from '@mui/material/Box';
+import React from 'react';
+
+import { Typography } from '../../../components/atomic/Typography/Typography';
+import { colors } from '../../../theme';
 
 const HeaderBox = () => (
   <Box>
     <Typography
-      variant="h1"
       sx={{
         fontSize: '40px',
         lineHeight: '120%',
         fontWeight: 700,
       }}
+      variant="h1"
     >
       VOLTZ TRADING LEAGUE
     </Typography>
     <Typography
-      variant="subtitle1"
       sx={{
         fontWeight: 400,
         lineHeight: '160%',
@@ -25,6 +25,7 @@ const HeaderBox = () => (
         fontSize: '14px',
         fontFamily: 'DM Sans',
       }}
+      variant="subtitle1"
     >
       Compete against other traderz in the Voltz Trading League. The more active you are, the more
       pointz you earn. Pointz reset at the end of each season, with the Top Traderz earning

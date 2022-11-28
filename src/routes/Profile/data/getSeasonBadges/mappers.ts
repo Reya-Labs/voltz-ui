@@ -1,5 +1,5 @@
-import { BadgeVariant, NonProgrammaticBadges } from './types';
 import { Season } from '../../../../hooks/season/types';
+import { BadgeVariant, NonProgrammaticBadges } from './types';
 
 export const BADGE_TYPE_BADGE_VARIANT_MAP: Record<string, BadgeVariant> = {
   // season 1

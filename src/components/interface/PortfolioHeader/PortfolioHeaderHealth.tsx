@@ -1,7 +1,8 @@
 import Box from '@mui/material/Box';
+
 import { colors, SystemStyleObject, Theme } from '../../../theme';
-import { PortfolioHeaderValue } from './PortfolioHeaderValue';
 import { PortfolioHeaderBox } from './PortfolioHeaderBox';
+import { PortfolioHeaderValue } from './PortfolioHeaderValue';
 
 export type PortfolioHeaderHealthProps = {
   positionsDanger: number | undefined;

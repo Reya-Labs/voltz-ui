@@ -1,12 +1,12 @@
-import React from 'react';
 import Box from '@mui/material/Box';
+import React from 'react';
 
 import { Nav } from '../Nav/Nav';
 import { WalletConnect } from '../WalletConnect/WalletConnect';
-import Workbench from './workbench.svg';
+import { AlphaBanner } from './AlphaBanner/AlphaBanner';
 import { Background } from './Background/Background';
 import { GweiBar } from './GweiBar/GweiBar';
-import { AlphaBanner } from './AlphaBanner/AlphaBanner';
+import Workbench from './workbench.svg';
 
 interface PageProps {
   children?: React.ReactNode;

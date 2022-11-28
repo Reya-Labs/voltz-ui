@@ -1,12 +1,13 @@
-import { Typography } from '../../../../atomic/Typography/Typography';
-import Stack from '@mui/material/Stack';
-import { colors } from '../../../../../theme';
-import { IconLabel } from '../../../../composite/IconLabel/IconLabel';
 import Box from '@mui/material/Box';
-import { FixBorrowSlider } from '../FixBorrowSlider/FixBorrowSlider';
-import { UseAsyncFunctionResult } from '../../../../../hooks/useAsyncFunction';
-import { formatNumber } from '../../../../../utilities/number';
+import Stack from '@mui/material/Stack';
 import React from 'react';
+
+import { UseAsyncFunctionResult } from '../../../../../hooks/useAsyncFunction';
+import { colors } from '../../../../../theme';
+import { formatNumber } from '../../../../../utilities/number';
+import { Typography } from '../../../../atomic/Typography/Typography';
+import { IconLabel } from '../../../../composite/IconLabel/IconLabel';
+import { FixBorrowSlider } from '../FixBorrowSlider/FixBorrowSlider';
 
 export type FixBorrowProps = {
   variableDebt: UseAsyncFunctionResult<unknown, number | void>;
@@ -52,21 +53,21 @@ export const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
 
   return (
     <Box>
-      <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
+      <Stack alignItems="center" direction="row" justifyContent="space-between" spacing={1}>
         <Box>
-          <Typography variant="body2" sx={{ fontSize: 20, fontWeight: 700 }}>
+          <Typography sx={{ fontSize: 20, fontWeight: 700 }} variant="body2">
             <IconLabel
-              label="Variable Debt"
               icon="information-circle"
               info="Your current variable debt on Aave or Compound that has not been set to a Voltz fixed rate yet"
+              label="Variable Debt"
             />
           </Typography>
         </Box>
 
         <Box>
           <Typography
-            variant="body2"
             sx={{ fontSize: 20, fontWeight: 700, color: colors.skyBlueCrayola.base }}
+            variant="body2"
           >
             {renderValue()}
           </Typography>
@@ -74,16 +75,16 @@ export const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
       </Stack>
 
       <FixBorrowSlider
-        variableDebt={variableDebt}
+        error={error}
+        errorText={errorText}
+        handleSliderChange={handleChange}
         selectedFixedDebt={selectedFixedDebt}
         selectedFixedDebtPercentage={selectedFixedDebtPercentage}
         selectedVariableDebt={selectedVariableDebt}
         selectedVariableDebtPercentage={selectedVariableDebtPercentage}
-        handleSliderChange={handleChange}
-        underlyingTokenName={underlyingTokenName}
         swapSummaryLoading={swapSummaryLoading}
-        error={error}
-        errorText={errorText}
+        underlyingTokenName={underlyingTokenName}
+        variableDebt={variableDebt}
       />
     </Box>
   );

@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+
 import { Typography } from '../../../atomic/Typography/Typography';
 
 export const TitleTypography = styled(Typography)`

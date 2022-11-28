@@ -1,6 +1,6 @@
-import { SerializedAMM } from '../types';
-
 import { AMM } from '@voltz-protocol/v1-sdk';
+
+import { SerializedAMM } from '../types';
 
 const serializeAmm = (amm: AMM): SerializedAMM => ({
   id: amm.id,

@@ -1,24 +1,23 @@
+import Box from '@mui/material/Box';
+import { AMM, Position } from '@voltz-protocol/v1-sdk';
 import React, { ReactNode, useCallback, useState } from 'react';
 
-import { actions, selectors } from '../../../store';
+import { Agents } from '../../../contexts/AgentContext/types';
+import { usePortfolioContext } from '../../../contexts/PortfolioContext/PortfolioContext';
+import { useDispatch } from '../../../hooks/useDispatch';
+import { usePositions } from '../../../hooks/usePositions/usePositions';
+import { useSelector } from '../../../hooks/useSelector';
+import { useWallet } from '../../../hooks/useWallet';
 import { routes } from '../../../routes/paths';
-import Box from '@mui/material/Box';
+import { actions, selectors } from '../../../store';
 import { colors } from '../../../theme';
-import { Typography } from '../../atomic/Typography/Typography';
 import { Loading } from '../../atomic/Loading/Loading';
 import { Panel } from '../../atomic/Panel/Panel';
 import { RouteLink } from '../../atomic/RouteLink/RouteLink';
+import { Typography } from '../../atomic/Typography/Typography';
 import { PendingTransaction } from '../../interface/PendingTransaction/PendingTransaction';
-import { PositionTable } from '../../interface/PositionTable/PositionTable';
 import { PortfolioHeader } from '../../interface/PortfolioHeader/PortfolioHeader';
-
-import { AMM, Position } from '@voltz-protocol/v1-sdk';
-import { useWallet } from '../../../hooks/useWallet';
-import { Agents } from '../../../contexts/AgentContext/types';
-import { usePortfolioContext } from '../../../contexts/PortfolioContext/PortfolioContext';
-import { usePositions } from '../../../hooks/usePositions/usePositions';
-import { useSelector } from '../../../hooks/useSelector';
-import { useDispatch } from '../../../hooks/useDispatch';
+import { PositionTable } from '../../interface/PositionTable/PositionTable';
 
 export type ConnectedPositionTableProps = {
   onSelectItem: (item: Position, mode: 'margin' | 'liquidity' | 'rollover' | 'notional') => void;
@@ -76,8 +75,8 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
 
   const renderConnectWallet = () => {
     return (
-      <Panel variant="main" sx={{ width: '100%', textAlign: 'center' }}>
-        <Typography variant="h6" sx={{ color: colors.skyBlueCrayola.base }}>
+      <Panel sx={{ width: '100%', textAlign: 'center' }} variant="main">
+        <Typography sx={{ color: colors.skyBlueCrayola.base }} variant="h6">
           CONNECT YOUR WALLET
         </Typography>
       </Panel>
@@ -86,7 +85,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
 
   const renderLoading = () => {
     return (
-      <Panel variant="grey-dashed" sx={{ width: '100%' }}>
+      <Panel sx={{ width: '100%' }} variant="grey-dashed">
         <Loading sx={{ margin: '0 auto' }} />
       </Panel>
     );
@@ -94,7 +93,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
 
   const renderNoPositions = () => {
     return (
-      <Panel variant="main" sx={{ width: '100%', textAlign: 'center' }}>
+      <Panel sx={{ width: '100%', textAlign: 'center' }} variant="main">
         <RouteLink
           to={
             agent === Agents.LIQUIDITY_PROVIDER ? `/${routes.LP_POOLS}` : `/${routes.TRADER_POOLS}`
@@ -128,18 +127,18 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
         <PendingTransaction
           amm={positionToSettle.position.amm}
-          position={positionToSettle.position}
           isEditingMargin={false}
           isSettle={true}
-          transactionId={positionToSettle.txId}
-          onComplete={handleTransactionFinished}
+          margin={netWithdraw}
           notional={
             agent === Agents.LIQUIDITY_PROVIDER
               ? Math.abs(positionToSettle.position.notional)
               : Math.abs(positionToSettle.position.effectiveVariableTokenBalance)
           }
-          margin={netWithdraw}
+          position={positionToSettle.position}
+          transactionId={positionToSettle.txId}
           onBack={handleTransactionFinished}
+          onComplete={handleTransactionFinished}
         />
       </Box>
     );
@@ -153,10 +152,10 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
         <PortfolioHeader currencyCode="USD" currencySymbol="$" portfolioData={portfolioData} />
         <Box sx={{ marginTop: (theme) => theme.spacing(14) }}>
           <PositionTable
+            portfolioData={portfolioData}
             positions={positionsByAgentGroup}
             onSelectItem={onSelectItem}
             onSettle={handleSettle}
-            portfolioData={portfolioData}
           />
         </Box>
       </>
@@ -179,7 +178,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
     }
 
     return (
-      <Panel variant="dark" sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
+      <Panel sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }} variant="dark">
         {content}
       </Panel>
     );

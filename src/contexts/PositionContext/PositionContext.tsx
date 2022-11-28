@@ -1,6 +1,7 @@
-import { useAMM } from '../../hooks/useAMM/useAMM';
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 import React, { createContext, useContext } from 'react';
+
+import { useAMM } from '../../hooks/useAMM/useAMM';
 
 export type PositionProviderProps = {
   position?: Position;

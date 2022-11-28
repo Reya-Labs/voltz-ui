@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { SystemStyleObject, Theme } from '../../../theme';
 import { Box } from './Grid.styled';
 
@@ -19,7 +20,7 @@ export const Grid: React.FunctionComponent<GridProps> = ({
     [itemsPerRow],
   );
   return (
-    <Box templateLayout={templateLayout} sx={sx} className={className}>
+    <Box className={className} sx={sx} templateLayout={templateLayout}>
       {children}
     </Box>
   );

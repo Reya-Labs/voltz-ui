@@ -1,5 +1,5 @@
-import isUndefined from 'lodash/isUndefined';
 import { AMM } from '@voltz-protocol/v1-sdk';
+import isUndefined from 'lodash/isUndefined';
 
 export type UpdateFixedRateArgs = {
   amm?: AMM;

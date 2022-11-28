@@ -1,27 +1,26 @@
-import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
-import { Link, useLocation } from 'react-router-dom';
+import Button from '@mui/material/Button';
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
-
-import { useWallet } from '../../hooks/useWallet';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 import { PageTitleDesc } from '../../components/composite/PageTitleDesc/PageTitleDesc';
 import { ConnectedMintBurnForm } from '../../components/containers/ConnectedMintBurnForm/ConnectedMintBurnForm';
-import Button from '@mui/material/Button';
-import { routes } from '../paths';
 import { AMMTable } from '../../components/interface/AMMTable/AMMTable';
+import { Agents } from '../../contexts/AgentContext/types';
+import { AMMProvider } from '../../contexts/AMMContext/AMMContext';
 import {
   MintBurnFormModes,
   MintBurnFormProvider,
 } from '../../contexts/MintBurnFormContext/MintBurnFormContext';
-import { AMMProvider } from '../../contexts/AMMContext/AMMContext';
-import { Agents } from '../../contexts/AgentContext/types';
 import { PositionProvider } from '../../contexts/PositionContext/PositionContext';
-import { usePositions } from '../../hooks/usePositions/usePositions';
-import { useAMMs } from '../../hooks/useAMMs';
 import { useAgent } from '../../hooks/useAgent';
-import { setPageTitle } from '../../utilities/page';
+import { useAMMs } from '../../hooks/useAMMs';
+import { usePositions } from '../../hooks/usePositions/usePositions';
+import { useWallet } from '../../hooks/useWallet';
 import { findCurrentPosition } from '../../utilities/amm';
+import { setPageTitle } from '../../utilities/page';
+import { routes } from '../paths';
 
 export const LPPools: React.FunctionComponent = () => {
   const { amms = [], loading, error } = useAMMs();
@@ -79,13 +78,12 @@ export const LPPools: React.FunctionComponent = () => {
         <Box sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
           <Box sx={{ marginBottom: (theme) => theme.spacing(12) }}>
             <PageTitleDesc
-              title="Provide Liquidity"
               desc="Choose a pool and provide liquidity within your chosen ranges."
+              title="Provide Liquidity"
             />
             {process.env.REACT_APP_ECOSYSTEM && process.env.REACT_APP_ECOSYSTEM !== `UNPROVIDED` ? (
               <Button
                 component={Link}
-                to={`/${routes.LP_OPTIMISERS}`}
                 sx={{
                   color: 'primary.base',
                   marginTop: (theme) => theme.spacing(2),
@@ -96,12 +94,13 @@ export const LPPools: React.FunctionComponent = () => {
                     background: 'transparent',
                   },
                 }}
+                to={`/${routes.LP_OPTIMISERS}`}
               >
                 LP OPTIMISER VAULT
               </Button>
             ) : null}
           </Box>
-          <AMMTable amms={amms} loading={loading} error={error} onSelectItem={handleSelectAmm} />
+          <AMMTable amms={amms} error={error} loading={loading} onSelectItem={handleSelectAmm} />
         </Box>
       )}
 

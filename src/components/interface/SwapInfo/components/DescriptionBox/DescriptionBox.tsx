@@ -1,5 +1,6 @@
-import React from 'react';
 import Box from '@mui/material/Box';
+import React from 'react';
+
 import { Typography } from '../../../../atomic/Typography/Typography';
 
 export type DescriptionBoxProps = {
@@ -14,15 +15,15 @@ export const DescriptionBox: React.FunctionComponent<DescriptionBoxProps> = ({
   return (
     <Box>
       <Typography
-        variant="h3"
         sx={{
           fontSize: '24px',
           paddingBottom: (theme) => theme.spacing(3),
         }}
+        variant="h3"
       >
         {titleText}
       </Typography>
-      <Typography variant="body1" sx={{ fontSize: '14px' }}>
+      <Typography sx={{ fontSize: '14px' }} variant="body1">
         {descriptionText}
       </Typography>
     </Box>

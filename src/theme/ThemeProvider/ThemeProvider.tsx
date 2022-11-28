@@ -1,5 +1,5 @@
-import React, { FunctionComponent } from 'react';
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
+import React, { FunctionComponent } from 'react';
 
 import { themes } from '../themes';
 

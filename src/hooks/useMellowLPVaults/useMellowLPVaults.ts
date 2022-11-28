@@ -1,6 +1,7 @@
 import { MellowLpRouter, MellowLpVault } from '@voltz-protocol/v1-sdk';
 import { useMemo } from 'react';
 import { MellowProduct } from 'src/routes/Ecosystem/types';
+
 import { getConfig } from './config';
 
 export const useMellowLPVaults = (): MellowProduct[] => {

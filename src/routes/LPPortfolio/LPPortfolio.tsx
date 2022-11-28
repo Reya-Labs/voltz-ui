@@ -1,26 +1,24 @@
-import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
-import { useLocation } from 'react-router-dom';
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
-
-import { Agents } from '../../contexts/AgentContext/types';
-import { AMMProvider } from '../../contexts/AMMContext/AMMContext';
-import { PositionProvider } from '../../contexts/PositionContext/PositionContext';
-import { PortfolioProvider } from '../../contexts/PortfolioContext/PortfolioContext';
-
-import { useWallet } from '../../hooks/useWallet';
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import { ConnectedMintBurnForm } from '../../components/containers/ConnectedMintBurnForm/ConnectedMintBurnForm';
 import { ConnectedPositionTable } from '../../components/containers/ConnectedPositionTable/ConnectedPositionTable';
+import { Agents } from '../../contexts/AgentContext/types';
+import { AMMProvider } from '../../contexts/AMMContext/AMMContext';
 import {
   MintBurnFormModes,
   MintBurnFormProvider,
 } from '../../contexts/MintBurnFormContext/MintBurnFormContext';
-import { usePositions } from '../../hooks/usePositions/usePositions';
-import { useAMMs } from '../../hooks/useAMMs';
+import { PortfolioProvider } from '../../contexts/PortfolioContext/PortfolioContext';
+import { PositionProvider } from '../../contexts/PositionContext/PositionContext';
 import { useAgent } from '../../hooks/useAgent';
-import { setPageTitle } from '../../utilities/page';
+import { useAMMs } from '../../hooks/useAMMs';
+import { usePositions } from '../../hooks/usePositions/usePositions';
+import { useWallet } from '../../hooks/useWallet';
 import { findCurrentAmm } from '../../utilities/amm';
+import { setPageTitle } from '../../utilities/page';
 
 export const LPPortfolio: React.FunctionComponent = () => {
   const [amm, setAMM] = useState<AMM>();
@@ -93,10 +91,10 @@ export const LPPortfolio: React.FunctionComponent = () => {
           positions={agent === Agents.LIQUIDITY_PROVIDER ? positionsByAgentGroup : undefined}
         >
           <ConnectedPositionTable
-            amm={amm}
-            onSelectItem={handleSelectPosition}
             agent={Agents.LIQUIDITY_PROVIDER}
+            amm={amm}
             handleCompletedSettling={handleCompletedSettling}
+            onSelectItem={handleSelectPosition}
           />
         </PortfolioProvider>
       )}
@@ -106,10 +104,10 @@ export const LPPortfolio: React.FunctionComponent = () => {
           positions={agent === Agents.LIQUIDITY_PROVIDER ? positionsByAgentGroup : undefined}
         >
           <ConnectedPositionTable
-            amm={amm}
-            onSelectItem={handleSelectPosition}
             agent={Agents.LIQUIDITY_PROVIDER}
+            amm={amm}
             handleCompletedSettling={handleCompletedSettling}
+            onSelectItem={handleSelectPosition}
           />
         </PortfolioProvider>
       )}

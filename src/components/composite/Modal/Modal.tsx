@@ -1,9 +1,9 @@
-import React, { cloneElement } from 'react';
 import MuiModal, { ModalProps as MuiModalProps } from '@mui/material/Modal';
 import isString from 'lodash/isString';
+import React, { cloneElement } from 'react';
 
-import { Button } from '../../atomic/Button/Button';
 import { doNothing } from '../../../utilities/doNothing';
+import { Button } from '../../atomic/Button/Button';
 
 export type TriggerProps = {
   onClick: () => void;
@@ -41,13 +41,13 @@ export const Modal: React.FunctionComponent<ModalProps> = ({
       <MuiModal
         {...props}
         open={open}
-        onClose={onClose}
         sx={{
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
           backdropFilter: 'blur(2px)',
         }}
+        onClose={onClose}
       >
         {children}
       </MuiModal>

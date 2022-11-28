@@ -1,7 +1,11 @@
-import React from 'react';
 import Box from '@mui/material/Box';
+import React from 'react';
+
+import { formatPOSIXTimestamp } from '../../../utilities/date';
 import { BadgePill } from '../BadgePill/BadgePill';
+import { BadgeVariant1 } from '../getters/getPhase1Badges';
 import { BADGE_VARIANT_TITLE_COPY_MAP, COMING_SOON_BADGES } from '../helpers';
+import { ComingSoonBadges } from '../types';
 import {
   AchievedAtTypography,
   BadgePillBox,
@@ -9,9 +13,6 @@ import {
   Skeleton,
   TitleTypography,
 } from './AchivedBadge.styled';
-import { formatPOSIXTimestamp } from '../../../utilities/date';
-import { ComingSoonBadges } from '../types';
-import { BadgeVariant1 } from '../getters/getPhase1Badges';
 
 export type AchievedBadgeProps = {
   achievedAt?: number;
@@ -26,7 +27,7 @@ export const AchievedBadge: React.FunctionComponent<AchievedBadgeProps> = ({
   loading ? (
     <Skeleton data-testid="AchievedBadge-Skeleton" variant="rectangular" />
   ) : (
-    <ContainerBox isAchieved={Boolean(achievedAt)} data-testid={`AchievedBadge-${variant}`}>
+    <ContainerBox data-testid={`AchievedBadge-${variant}`} isAchieved={Boolean(achievedAt)}>
       <BadgePillBox>
         <Box>
           <BadgePill variant={variant} />

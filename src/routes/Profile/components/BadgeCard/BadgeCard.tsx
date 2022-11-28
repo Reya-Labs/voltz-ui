@@ -1,7 +1,10 @@
 import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
+
+import { BadgeVariant } from '../../data/getSeasonBadges';
+import { BADGE_VARIANT_DESCRIPTION_COPY_MAP, BADGE_VARIANT_TITLE_COPY_MAP } from '../../helpers';
 import { Badge } from '../Badge/Badge';
 import { BadgePill } from '../BadgePill/BadgePill';
-import { BADGE_VARIANT_DESCRIPTION_COPY_MAP, BADGE_VARIANT_TITLE_COPY_MAP } from '../../helpers';
+import { ClaimButton, ClaimButtonProps } from '../ClaimButton/ClaimButton';
 import {
   BadgeBox,
   BadgePillBox,
@@ -16,8 +19,6 @@ import {
   TitleSkeleton,
   TitleTypography,
 } from './BadgeCard.styled';
-import { ClaimButtonProps, ClaimButton } from '../ClaimButton/ClaimButton';
-import { BadgeVariant } from '../../data/getSeasonBadges';
 
 export type BadgeCardProps = {
   variant: BadgeVariant;
@@ -50,9 +51,9 @@ export const BadgeCard = forwardRef<BadgeCardHandle, BadgeCardProps>(
     const ContainerUI = highlight ? HighlightedContainer : Container;
     return (
       <ContainerUI
-        onAnimationEnd={() => setHighlight(false)}
         ref={containerRef}
         data-testid="BadgeCard"
+        onAnimationEnd={() => setHighlight(false)}
       >
         <BadgePillBox>
           <BadgePill loading={loading} variant={variant} />
@@ -85,9 +86,9 @@ export const BadgeCard = forwardRef<BadgeCardHandle, BadgeCardProps>(
             ) : (
               <ClaimButton
                 claimedAt={claimedAt}
-                onClick={onClaimButtonClick}
-                mode={claimButtonMode}
                 displayError={true}
+                mode={claimButtonMode}
+                onClick={onClaimButtonClick}
               />
             )}
           </ClaimButtonBox>

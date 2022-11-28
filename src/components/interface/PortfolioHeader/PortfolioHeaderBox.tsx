@@ -1,7 +1,8 @@
+import Box from '@mui/material/Box';
 import React, { ReactNode } from 'react';
+
 import { colors, SystemStyleObject, Theme } from '../../../theme';
 import { Typography } from '../../atomic/Typography/Typography';
-import Box from '@mui/material/Box';
 
 export type PortfolioHeaderBoxProps = {
   children?: ReactNode;
@@ -27,7 +28,7 @@ const valueBoxTextStyles: SystemStyleObject<Theme> = {
 
 export const PortfolioHeaderBox = ({ children, sx, textSx }: PortfolioHeaderBoxProps) => (
   <Box sx={{ ...valueBoxStyles, ...sx }}>
-    <Typography variant="body2" sx={{ ...valueBoxTextStyles, ...textSx }}>
+    <Typography sx={{ ...valueBoxTextStyles, ...textSx }} variant="body2">
       {children}
     </Typography>
   </Box>

@@ -1,10 +1,11 @@
 import React from 'react';
+
 import {
+  BannerBox,
+  BannerContainer,
   BannerTypographySkyBlueCrayola,
   BannerTypographyUltramarineBlue,
   BannerTypographyWildStrawberry,
-  BannerBox,
-  BannerContainer,
 } from './AlphaBanner.styled';
 
 const Text: React.FunctionComponent = React.memo(() => (

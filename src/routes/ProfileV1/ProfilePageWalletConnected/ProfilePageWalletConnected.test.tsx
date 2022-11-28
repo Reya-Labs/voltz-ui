@@ -1,9 +1,9 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
 import { composeStories } from '@storybook/testing-react';
+import { render, screen } from '@testing-library/react';
+import React from 'react';
+import { HashRouter } from 'react-router-dom';
 
 import * as stories from './ProfilePageWalletConnected.stories';
-import { HashRouter } from 'react-router-dom';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),

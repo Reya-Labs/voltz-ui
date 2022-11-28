@@ -1,22 +1,22 @@
-import React, { useMemo, useRef } from 'react';
-import TableContainer from '@mui/material/TableContainer';
+import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import { SystemStyleObject, Theme } from '../../../theme';
-import { Typography } from '../../atomic/Typography/Typography';
-import { Panel } from '../../atomic/Panel/Panel';
-import Box from '@mui/material/Box';
-
-import { mapAmmToAmmTableDatum } from './utilities';
-import { labelsFixed, labelsVariable, BorrowAMMTableDatum } from './types';
-import { BorrowTableHead } from './components';
-import { DateTime } from 'luxon';
-import { BorrowTableRow } from './components/BorrowTableRow/BorrowTableRow';
+import TableContainer from '@mui/material/TableContainer';
 import { BorrowAMM, Position } from '@voltz-protocol/v1-sdk';
-import { PositionProvider } from '../../../contexts/PositionContext/PositionContext';
+import { DateTime } from 'luxon';
+import React, { useMemo, useRef } from 'react';
+
 import { BorrowAMMProvider } from '../../../contexts/BorrowAMMContext/BorrowAMMContext';
-import { getRowButtonId } from '../../../utilities/googleAnalytics';
+import { PositionProvider } from '../../../contexts/PositionContext/PositionContext';
+import { SystemStyleObject, Theme } from '../../../theme';
 import { findCurrentBorrowPosition } from '../../../utilities/borrowAmm';
+import { getRowButtonId } from '../../../utilities/googleAnalytics';
+import { Panel } from '../../atomic/Panel/Panel';
+import { Typography } from '../../atomic/Typography/Typography';
+import { BorrowTableHead } from './components';
+import { BorrowTableRow } from './components/BorrowTableRow/BorrowTableRow';
+import { BorrowAMMTableDatum, labelsFixed, labelsVariable } from './types';
+import { mapAmmToAmmTableDatum } from './utilities';
 
 export type BorrowTableProps = {
   showVariable: boolean;
@@ -78,7 +78,7 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
       counted.current.noFixedRows = true;
     }
     return (
-      <Typography variant="body2" sx={{ ...replacementRowStyle }}>
+      <Typography sx={{ ...replacementRowStyle }} variant="body2">
         YOU DON'T HAVE ANY FIXED DEBT
       </Typography>
     );
@@ -89,7 +89,7 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
       counted.current.noVariableRows = true;
     }
     return (
-      <Typography variant="body2" sx={{ ...replacementRowStyle }}>
+      <Typography sx={{ ...replacementRowStyle }} variant="body2">
         YOU DON'T HAVE ANY VARIABLE DEBT
       </Typography>
     );
@@ -117,15 +117,15 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
       <>
         <TableContainer>
           <Table
+            aria-labelledby="tableTitle"
+            size="medium"
             sx={{
               borderCollapse: 'separate',
               borderSpacing: '0px 16px',
               ...commonOverrides,
             }}
-            aria-labelledby="tableTitle"
-            size="medium"
           >
-            <BorrowTableHead labels={labelsVariable} isFixedPositions={false} />
+            <BorrowTableHead isFixedPositions={false} labels={labelsVariable} />
             <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
               {showPositions &&
                 showVariable &&
@@ -158,10 +158,10 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
                 <PositionProvider position={info.position}>
                   <BorrowTableRow
                     datum={info.datum}
-                    index={info.index}
-                    onSelect={handleSelectRow(info.index)}
-                    isFixedPositions={true}
                     handleLoadedRow={handleLoadedRow}
+                    index={info.index}
+                    isFixedPositions={true}
+                    onSelect={handleSelectRow(info.index)}
                   />
                 </PositionProvider>
               </BorrowAMMProvider>
@@ -192,11 +192,11 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
                 <PositionProvider position={info.position}>
                   <BorrowTableRow
                     datum={info.datum}
-                    index={info.index}
-                    onSelect={handleSelectRow(info.index)}
-                    isFixedPositions={false}
-                    handleLoadedRow={handleLoadedRow}
                     gaButtonId={getRowButtonId(false, info.datum.protocol, true)}
+                    handleLoadedRow={handleLoadedRow}
+                    index={info.index}
+                    isFixedPositions={false}
+                    onSelect={handleSelectRow(info.index)}
                   />
                 </PositionProvider>
               </BorrowAMMProvider>
@@ -230,15 +230,15 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
       <>
         <TableContainer>
           <Table
+            aria-labelledby="tableTitle"
+            size="medium"
             sx={{
               borderCollapse: 'separate',
               borderSpacing: '0px 16px',
               ...commonOverrides,
             }}
-            aria-labelledby="tableTitle"
-            size="medium"
           >
-            <BorrowTableHead labels={labelsFixed} isFixedPositions={true} />
+            <BorrowTableHead isFixedPositions={true} labels={labelsFixed} />
             <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
               {showPositions && renderFixedRows(marketsWithPosition)}
             </TableBody>
@@ -255,15 +255,15 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
 
   return (
     <Panel
-      variant={'dark'}
       borderRadius="large"
       padding="container"
       sx={{ paddingTop: 0, paddingBottom: 0, background: 'transparent' }}
+      variant={'dark'}
     >
       {/* VARIABLE POSITIONS TABLE */}
       <Typography
-        variant="body2"
         sx={{ fontSize: '18px', fontWeight: 700, display: 'flex', alignContent: 'center' }}
+        variant="body2"
       >
         <Box
           sx={{
@@ -281,8 +281,8 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
 
       {/* FIXED POSITIONS TABLE */}
       <Typography
-        variant="body2"
         sx={{ fontSize: '18px', fontWeight: 700, display: 'flex', alignContent: 'center' }}
+        variant="body2"
       >
         <Box
           sx={{
