@@ -43,8 +43,7 @@ export const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({
       return 'Margin';
     }
 
-    const formattedAccFlow = formatCurrency(Math.abs(accruedCashflow));
-    const accFlowValue = parseFloat(formattedAccFlow);
+    const formattedAccFlow = formatCurrency(accruedCashflow, false, true);
 
     return (
       <>
@@ -52,15 +51,14 @@ export const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({
         <span
           style={{
             color:
-              accFlowValue > 0
+              accruedCashflow > 0
                 ? colors.vzCustomGreen1.base
-                : accFlowValue < 0
+                : accruedCashflow < 0
                 ? colors.vzCustomRed1.base
                 : undefined,
           }}
         >
           {' '}
-          {accFlowValue > 0 ? '+' : accFlowValue < 0 ? '-' : ''}
           {formattedAccFlow} {token}
         </span>
       </>
