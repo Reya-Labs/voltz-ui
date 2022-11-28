@@ -8,4 +8,6 @@ export const routes = {
   TRADING_LEAGUE: 'trading-league',
   PROFILE: 'profile',
   LP_OPTIMISERS: 'lp-optimisers',
+  // old route for lp-optimisers, redirects to lp-optimisers
+  PRODUCTS: 'products',
 };
