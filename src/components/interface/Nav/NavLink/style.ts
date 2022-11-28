@@ -1,21 +1,5 @@
 import { colors, SystemStyleObject, Theme } from '../../../../theme';
 
-export const iconSx: SystemStyleObject<Theme> = {
-  width: '100%',
-  height: '100%',
-  cursor: 'pointer',
-  transition: 'filter 150ms ease-in',
-  '&:hover': {
-    filter: `drop-shadow(0px 4px 20px ${colors.wildStrawberry.base}) drop-shadow(0px 0px 40px ${colors.wildStrawberry.base})`,
-  },
-  '&:hover > path': {
-    fill: colors.lavenderWeb.base,
-  },
-  '& > path': {
-    fill: colors.lavenderWeb.darken010,
-  },
-};
-
 export const OPEN_CLASS = 'open';
 export const ACTIVE_CLASS = 'active';
 
