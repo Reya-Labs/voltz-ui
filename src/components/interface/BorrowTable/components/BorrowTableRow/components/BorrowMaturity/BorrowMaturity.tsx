@@ -1,9 +1,9 @@
 import React from 'react';
 import TableCell from '@mui/material/TableCell';
 
-import { useBorrowAMMContext } from '../../../../../../../contexts';
-import { Typography } from '@components/atomic';
-import { formatDateTime } from '../../../../../../../utilities';
+import { useBorrowAMMContext } from '../../../../../../../contexts/BorrowAMMContext/BorrowAMMContext';
+import { Typography } from '../../../../../../atomic/Typography/Typography';
+import { formatDateTime } from '../../../../../../../utilities/date';
 
 export const BorrowMaturity: React.FunctionComponent = () => {
   const { endDate } = useBorrowAMMContext();

@@ -1,21 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { Typography } from '@components/atomic';
-import { IconLabel, MaskedIntegerField } from '@components/composite';
+import { Typography } from '../../../../atomic/Typography/Typography';
+import { IconLabel } from '../../../../composite/IconLabel/IconLabel';
+import { MaskedIntegerField } from '../../../../composite/MaskedIntegerField/MaskedIntegerField';
 import Box from '@mui/material/Box';
 import { colors } from '../../../../../theme';
+import isUndefined from 'lodash/isUndefined';
+import { useWallet } from '../../../../../hooks/useWallet';
+import { useAMMContext } from '../../../../../contexts/AMMContext/AMMContext';
+import { useAgent } from '../../../../../hooks/useAgent';
 import {
-  DataLayerEventPayload,
   formatNumber,
-  getAmmProtocol,
   notFormatted,
-  pushEvent,
   stringToBigFloat,
   toUSFormat,
-} from '../../../../../utilities';
-import isUndefined from 'lodash/isUndefined';
-import { useAgent, useWallet } from '../../../../../hooks';
-import { useAMMContext } from '../../../../../contexts';
+} from '../../../../../utilities/number';
+import { DataLayerEventPayload, pushEvent } from '../../../../../utilities/googleAnalytics';
+import { getAmmProtocol } from '../../../../../utilities/amm';
 
 interface ExpectedAPYProps {
   expectedApy?: number;

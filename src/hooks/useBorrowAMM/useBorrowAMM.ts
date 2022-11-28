@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import useAsyncFunction, { UseAsyncFunctionResult } from '../useAsyncFunction';
+import { useAsyncFunction, UseAsyncFunctionResult } from '../useAsyncFunction';
 import { DateTime } from 'luxon';
 import { SwapInfoPayload } from '../useAMM/types';
 

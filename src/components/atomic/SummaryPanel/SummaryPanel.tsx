@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { SystemStyleObject, Theme } from '@mui/system';
-import { Typography } from '@components/atomic';
+import { Typography } from '../Typography/Typography';
 import { colors } from '../../../theme';
 import Box from '@mui/material/Box';
 

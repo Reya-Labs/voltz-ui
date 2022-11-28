@@ -8,7 +8,7 @@ export type WalletProviderProps = {
   accountOverride?: string;
 };
 
-const WalletProvider: React.FunctionComponent<WalletProviderProps> = ({
+export const WalletProvider: React.FunctionComponent<WalletProviderProps> = ({
   children,
   accountOverride,
 }) => {
@@ -35,5 +35,3 @@ const WalletProvider: React.FunctionComponent<WalletProviderProps> = ({
     </ProviderWrapper>
   );
 };
-
-export default WalletProvider;

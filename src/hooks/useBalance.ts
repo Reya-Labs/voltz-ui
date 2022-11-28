@@ -21,5 +21,3 @@ export const useBalance = (amm: AMM, rolloverPosition?: Position) => {
 
   return balance;
 };
-
-export default useBalance;

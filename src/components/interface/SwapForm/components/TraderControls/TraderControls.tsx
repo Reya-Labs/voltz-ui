@@ -1,8 +1,10 @@
 import React, { useRef } from 'react';
 import Box from '@mui/material/Box';
 
-import { Agents, usePositionContext } from '../../../../../contexts';
-import { IconLabel, ToggleButtonGroup } from '@components/composite';
+import { IconLabel } from '../../../../composite/IconLabel/IconLabel';
+import { ToggleButtonGroup } from '../../../../composite/ToggleButtonGroup/ToggleButtonGroup';
+import { usePositionContext } from '../../../../../contexts/PositionContext/PositionContext';
+import { Agents } from '../../../../../contexts/AgentContext/types';
 
 export type TraderControlsProps = {
   agent: Agents;

@@ -4,8 +4,8 @@ import { ContractReceipt, providers } from 'ethers';
 import { call, put } from 'redux-saga/effects';
 import { DateTime } from 'luxon';
 
-import { Agents } from '../../../contexts';
-import { getErrorMessage } from '../../../utilities';
+import { Agents } from '../../../contexts/AgentContext/types';
+import { getErrorMessage } from '../../../utilities/getErrorMessage';
 import { SwapAction } from '../../types';
 import { deserializeAmm, getSigner } from '../../utilities';
 import * as actions from '../../actions';

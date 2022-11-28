@@ -1,9 +1,7 @@
 import { useContext } from 'react';
+import { Wallet } from '../contexts/WalletContext/types';
+import { WalletContext } from '../contexts/WalletContext/WalletContext';
 
-import { WalletContext, Wallet } from '../contexts';
-
-const useWallet = (): Wallet => {
+export const useWallet = (): Wallet => {
   return useContext(WalletContext);
 };
-
-export default useWallet;

@@ -1,13 +1,17 @@
 import React, { useEffect } from 'react';
 import Box from '@mui/material/Box';
 import { Position } from '@voltz-protocol/v1-sdk';
-import { Button, Ellipsis, PositionBadge, SummaryPanel } from '@components/atomic';
-import { FormPanel, SwapFormModes } from '@components/interface';
-import { formatCurrency } from '../../../utilities';
+import { Button } from '../../atomic/Button/Button';
+import { Ellipsis } from '../../atomic/Ellipsis/Ellipsis';
+import { PositionBadge } from '../../atomic/PositionBadge/PositionBadge';
+import { SummaryPanel } from '../../atomic/SummaryPanel/SummaryPanel';
 import { BigNumber } from 'ethers';
-import { usePositionContext } from '../../../contexts';
+import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';
 import { colors } from '../../../theme';
 import isUndefined from 'lodash/isUndefined';
+import { FormPanel } from '../FormPanel/FormPanel';
+import { SwapFormModes } from '../SwapForm';
+import { formatCurrency } from '../../../utilities/number';
 
 export type SwapCurrentPositionProps = {
   formMode: SwapFormModes;

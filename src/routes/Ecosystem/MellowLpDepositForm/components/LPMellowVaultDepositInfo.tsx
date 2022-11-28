@@ -1,15 +1,16 @@
 import Box from '@mui/material/Box';
-import { ProgressBar } from '@components/composite';
-import { Typography } from '@components/atomic';
-import { formatCurrency } from '../../../../utilities';
+import { ProgressBar } from '../../../../components/atomic/ProgressBar/ProgressBar';
+import { Typography } from '../../../../components/atomic/Typography/Typography';
+import { formatCurrency } from '../../../../utilities/number';
 import isUndefined from 'lodash/isUndefined';
 import { VaultField } from '../../Common/VaultField';
 import { MellowProduct } from '../../types';
+import React from 'react';
 
 export type LPMellowVaultDepositInfoProps = {
   mellowProduct: MellowProduct;
 };
-const LPMellowVaultDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoProps> = ({
+export const LPMellowVaultDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoProps> = ({
   mellowProduct,
 }: LPMellowVaultDepositInfoProps) => {
   const getCapBar = () => {
@@ -49,44 +50,38 @@ const LPMellowVaultDepositInfo: React.FunctionComponent<LPMellowVaultDepositInfo
     );
   };
 
-  const renderContent = () => {
-    return (
-      <Box>
-        <VaultField
-          title={mellowProduct.metadata.title}
-          token={mellowProduct.metadata.token}
-          maturity={mellowProduct.metadata.maturity}
-          expectedApy={mellowProduct.metadata.estimatedHistoricApy}
-        />
+  return (
+    <Box>
+      <VaultField
+        title={mellowProduct.metadata.title}
+        token={mellowProduct.metadata.token}
+        maturity={mellowProduct.metadata.maturity}
+        expectedApy={mellowProduct.metadata.estimatedHistoricApy}
+      />
 
-        {getCapBar()}
+      {getCapBar()}
 
-        <Box
-          sx={{
-            display: 'flex',
-            borderRadius: '4px',
-            padding: '8px 16px',
-            border: '1px solid #1E1933',
-            background: '#1E1933',
-            marginTop: '16px',
-          }}
-        >
-          <Typography variant="h6" sx={{ fontSize: '14px', color: '#8B879D' }}>
-            YOUR POSITION:
-          </Typography>
-          <Typography variant="h6" sx={{ fontSize: '14px', color: '#4DE5FF', paddingLeft: '8px' }}>
-            {isUndefined(mellowProduct.vault.userDeposit)
-              ? '---'
-              : `${formatCurrency(mellowProduct.vault.userDeposit, true)} ${
-                  mellowProduct.metadata.token
-                }`}
-          </Typography>
-        </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          borderRadius: '4px',
+          padding: '8px 16px',
+          border: '1px solid #1E1933',
+          background: '#1E1933',
+          marginTop: '16px',
+        }}
+      >
+        <Typography variant="h6" sx={{ fontSize: '14px', color: '#8B879D' }}>
+          YOUR POSITION:
+        </Typography>
+        <Typography variant="h6" sx={{ fontSize: '14px', color: '#4DE5FF', paddingLeft: '8px' }}>
+          {isUndefined(mellowProduct.vault.userDeposit)
+            ? '---'
+            : `${formatCurrency(mellowProduct.vault.userDeposit, true)} ${
+                mellowProduct.metadata.token
+              }`}
+        </Typography>
       </Box>
-    );
-  };
-
-  return renderContent();
+    </Box>
+  );
 };
-
-export default LPMellowVaultDepositInfo;

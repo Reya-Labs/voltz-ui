@@ -3,7 +3,7 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { SystemStyleObject, Theme } from '@mui/system';
-import { Typography } from '@components/atomic';
+import { Typography } from '../../../../atomic/Typography/Typography';
 
 import { VariableBorrowTableFields, FixedBorrowTableFields } from '../../types';
 

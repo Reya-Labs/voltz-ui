@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link, LinkProps } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-import { useAgent } from '../../../hooks';
-import { Agents } from '../../../contexts';
+import { useAgent } from '../../../hooks/useAgent';
+import { Agents } from '../../../contexts/AgentContext/types';
 
 const StyledRouteLink = styled(Link)<LinkProps>(({}) => ({}));
 

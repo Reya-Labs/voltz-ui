@@ -1,13 +1,13 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import { MintSummary } from './components';
+import isUndefined from 'lodash/isUndefined';
+import { FormPanel } from '../FormPanel/FormPanel';
 import {
   MintBurnFormLiquidityAction,
   MintBurnFormModes,
   MintBurnFormState,
-} from '../../../contexts';
-import isUndefined from 'lodash/isUndefined';
-import { FormPanel } from '@components/interface';
+} from '../../../contexts/MintBurnFormContext/MintBurnFormContext';
 
 export type MintBurnInfoProps = {
   balance?: number;

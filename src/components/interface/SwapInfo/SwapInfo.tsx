@@ -12,7 +12,7 @@ import { colors, SystemStyleObject, Theme } from '../../../theme';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from '../SwapForm/types';
 import isUndefined from 'lodash/isUndefined';
-import { FormPanel } from '@components/interface';
+import { FormPanel } from '../FormPanel/FormPanel';
 
 export type SwapInfoProps = {
   balance?: number;

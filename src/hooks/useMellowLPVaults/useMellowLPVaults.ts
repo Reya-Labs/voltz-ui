@@ -3,10 +3,10 @@ import { useMemo } from 'react';
 import { MellowProduct } from 'src/routes/Ecosystem/types';
 import { getConfig } from './config';
 
-const useMellowLPVaults = (): MellowProduct[] => {
+export const useMellowLPVaults = (): MellowProduct[] => {
   const config = getConfig();
 
-  const lpVaults = useMemo(() => {
+  return useMemo(() => {
     const vaults: MellowProduct[] = config.MELLOW_VAULTS.filter((item) => item.metadata.show).map(
       (item) => {
         const vault = new MellowLpVault({
@@ -42,8 +42,4 @@ const useMellowLPVaults = (): MellowProduct[] => {
 
     return routers.concat(vaults);
   }, []);
-
-  return lpVaults;
 };
-
-export default useMellowLPVaults;

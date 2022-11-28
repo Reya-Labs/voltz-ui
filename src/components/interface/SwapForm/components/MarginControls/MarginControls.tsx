@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import Box from '@mui/material/Box';
-import { IconLabel, ToggleButtonGroup } from '@components/composite';
+import { IconLabel } from '../../../../composite/IconLabel/IconLabel';
+import { ToggleButtonGroup } from '../../../../composite/ToggleButtonGroup/ToggleButtonGroup';
 
 export type MarginControlsProps<T> = {
   onChange: (value: T) => void;

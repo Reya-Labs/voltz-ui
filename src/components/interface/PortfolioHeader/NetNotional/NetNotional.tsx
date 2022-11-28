@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import CountUp from 'react-countup';
 import React, { FunctionComponent } from 'react';
-import { formatCurrency } from '../../../../utilities';
+import { formatCurrency } from '../../../../utilities/number';
 import { TitleTypography, TotalNotionalTypography } from './NetNotional.styled';
 
 export type NetNotionalProps = {

@@ -1,18 +1,16 @@
 import React from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
-import { FormPanel } from '@components/interface';
-import {
-  IconLabel,
-  ProtocolInformation,
-  MaturityInformation,
-  RateOptions,
-  MarginAmount,
-  NotionalAmount,
-} from '@components/composite';
+import { FormPanel } from '../FormPanel/FormPanel';
+import { IconLabel } from '../../composite/IconLabel/IconLabel';
+import { ProtocolInformation } from '../../composite/ProtocolInformation/ProtocolInformation';
+import { RateOptions } from '../../composite/RateOptions/RateOptions';
+import { MarginAmount } from '../../composite/MarginAmount/MarginAmount';
+import { NotionalAmount } from '../../composite/NotionalAmount/NotionalAmount';
 import { LiquidityControls, SubmitControls } from './components';
 import { MarginControls } from '../SwapForm/components';
-import { useTokenApproval } from '../../../hooks';
+import { SystemStyleObject, Theme } from '../../../theme';
+import { MaturityInformation } from '../../composite/MaturityInformation/MaturityInformation';
 import {
   MintBurnFormHintStates,
   MintBurnFormLiquidityAction,
@@ -20,8 +18,8 @@ import {
   MintBurnFormModes,
   MintBurnFormState,
   MintBurnFormSubmitButtonStates,
-} from '../../../contexts';
-import { SystemStyleObject, Theme } from '../../../theme';
+} from '../../../contexts/MintBurnFormContext/MintBurnFormContext';
+import { useTokenApproval } from '../../../hooks/useTokenApproval';
 
 export type MintBurnFormProps = {
   approvalsNeeded?: boolean;

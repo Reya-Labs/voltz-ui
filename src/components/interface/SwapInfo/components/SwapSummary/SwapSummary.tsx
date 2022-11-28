@@ -1,10 +1,10 @@
 import React from 'react';
 import { SummaryPanel } from '../../../../atomic/SummaryPanel/SummaryPanel';
-import { IconLabel } from '@components/composite';
-import { formatCurrency, formatNumber, roundUpDecimal } from '../../../../../utilities';
-import { SwapFormActions } from '../../../SwapForm/types';
+import { IconLabel } from '../../../../composite/IconLabel/IconLabel';
+import { SwapFormActions } from '../../../SwapForm';
 
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
+import { formatCurrency, formatNumber, roundUpDecimal } from '../../../../../utilities/number';
 
 export type SwapSummaryProps = {
   data: InfoPostSwap | void | null;

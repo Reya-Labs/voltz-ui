@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 
-const useDebounceFunc = (func: Function, duration: number = 300): (() => void) => {
+export const useDebounceFunc = (func: Function, duration: number = 300): (() => void) => {
   const timeoutRef = useRef<number>();
 
   const trigger = useCallback(() => {
@@ -17,5 +17,3 @@ const useDebounceFunc = (func: Function, duration: number = 300): (() => void) =
 
   return trigger;
 };
-
-export default useDebounceFunc;

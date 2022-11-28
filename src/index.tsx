@@ -17,9 +17,11 @@ import './fonts/DM_Sans/DMSans-Regular.woff';
 import './index.css';
 import store from './store';
 import { VoltzGraphProvider } from './graphql';
-import { ThemeProvider } from './theme';
-import { AgentProvider, AMMsProvider, WalletProvider } from './contexts';
+import { ThemeProvider } from './theme/ThemeProvider/ThemeProvider';
 import { App } from './App';
+import { WalletProvider } from './contexts/WalletContext/WalletProvider';
+import { AMMsProvider } from './contexts/AMMsContext/AMMsContext';
+import { AgentProvider } from './contexts/AgentContext/AgentProvider';
 
 try {
   if (process.env.NODE_ENV !== 'development') {

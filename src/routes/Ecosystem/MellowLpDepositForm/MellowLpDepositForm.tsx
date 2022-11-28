@@ -1,14 +1,19 @@
-import { FormPanel } from '@components/interface';
-import { IconLabel, InputTokenLabel, MaskedIntegerField } from '@components/composite';
+import { IconLabel } from '../../../components/composite/IconLabel/IconLabel';
+import { InputTokenLabel } from '../../../components/composite/InputTokenLabel/InputTokenLabel';
+import { MaskedIntegerField } from '../../../components/composite/MaskedIntegerField/MaskedIntegerField';
+
 import Box from '@mui/material/Box';
-import { formatCurrency, toUSFormat } from '../../../utilities';
-import { Panel, Typography, Button } from '@components/atomic';
+import { formatCurrency, toUSFormat } from '../../../utilities/number';
+import { Typography } from '../../../components/atomic/Typography/Typography';
+import { Panel } from '../../../components/atomic/Panel/Panel';
+import { Button } from '../../../components/atomic/Button/Button';
 import { colors } from '../../../theme';
 import isUndefined from 'lodash/isUndefined';
 import React from 'react';
 import { MellowProduct } from '../types';
-import LPMellowVaultDepositInfo from './components/LPMellowVaultDepositInfo';
-import { Agents } from '../../../contexts';
+import { LPMellowVaultDepositInfo } from './components/LPMellowVaultDepositInfo';
+import { Agents } from '../../../contexts/AgentContext/types';
+import { FormPanel } from '../../../components/interface/FormPanel/FormPanel';
 
 export type MellowLpDepositFormProps = {
   lpVault: MellowProduct;

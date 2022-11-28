@@ -1,16 +1,16 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import {
-  AgentProvider,
-  Agents,
-  AMMProvider,
-  MintBurnFormModes,
-  MintBurnFormProvider,
-  useMintBurnForm,
-} from '../../../contexts';
 import { MintBurnInfo } from './MintBurnInfo';
 
 import { AMM } from '@voltz-protocol/v1-sdk';
+import { Agents } from '../../../contexts/AgentContext/types';
+import {
+  MintBurnFormModes,
+  MintBurnFormProvider,
+  useMintBurnForm,
+} from '../../../contexts/MintBurnFormContext/MintBurnFormContext';
+import { AgentProvider } from '../../../contexts/AgentContext/AgentProvider';
+import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
 
 export default {
   title: 'Interface/MintBurnInfo',

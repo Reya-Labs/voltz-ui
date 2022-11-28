@@ -1,23 +1,20 @@
-import {
-  useBalance,
-  useCurrentPositionMarginRequirement,
-  useTokenApproval,
-  useWallet,
-} from '../../hooks';
-import { useAMMContext, usePositionContext, Agents } from '../../contexts';
-import {
-  DataLayerEventPayload,
-  getAmmProtocol,
-  hasEnoughUnderlyingTokens,
-  pushEvent,
-  isMarginWithdrawable,
-} from '../../utilities';
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import debounce from 'lodash/debounce';
 import isUndefined from 'lodash/isUndefined';
 import { BigNumber } from 'ethers';
 
 import { AMM, PositionInfo } from '@voltz-protocol/v1-sdk';
+import { useWallet } from '../../hooks/useWallet';
+import { useBalance } from '../../hooks/useBalance';
+import { useCurrentPositionMarginRequirement } from '../../hooks/useCurrentPositionMarginRequirement';
+import { usePositionContext } from '../PositionContext/PositionContext';
+import { Agents } from '../AgentContext/types';
+import { useAMMContext } from '../AMMContext/AMMContext';
+import { useTokenApproval } from '../../hooks/useTokenApproval';
+import { DataLayerEventPayload, pushEvent } from '../../utilities/googleAnalytics';
+import { hasEnoughUnderlyingTokens } from '../../utilities/validation';
+import { getAmmProtocol } from '../../utilities/amm';
+import { isMarginWithdrawable } from '../../utilities/isMarginWithdrawable';
 
 export enum MintBurnFormModes {
   NEW_POSITION = 'NEW_POSITION',

@@ -2,8 +2,11 @@ import React, { ReactNode, useState } from 'react';
 import Box from '@mui/material/Box';
 import Popover from '@mui/material/Popover';
 
-import { Icon, Icons, Panel, Typography } from '@components/atomic';
 import { SystemStyleObject, Theme } from '../../../theme';
+import { Typography } from '../../atomic/Typography/Typography';
+import { Icon } from '../../atomic/Icon/Icon';
+import { Icons } from '../../atomic/Icon/types';
+import { Panel } from '../../atomic/Panel/Panel';
 
 export type IconLabelProps = {
   label: string | ReactNode;

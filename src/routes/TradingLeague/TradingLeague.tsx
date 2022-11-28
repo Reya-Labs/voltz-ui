@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
-import { setPageTitle } from '../../utilities';
-import { useCurrentSeason, useWallet } from '../../hooks';
+import { setPageTitle } from '../../utilities/page';
+import { useCurrentSeason } from '../../hooks/season/useCurrentSeason';
+import { useWallet } from '../../hooks/useWallet';
 import Leaderboard from './Leaderboard/Leaderboard';
 import { RankType } from '@voltz-protocol/v1-sdk';
 import { getCommunitySbt } from '../Profile/helpers';

@@ -1,11 +1,11 @@
-import { Typography } from '@components/atomic';
+import { Typography } from '../../../../atomic/Typography/Typography';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 
-import { formatCurrency, formatNumber } from '../../../../../utilities';
+import { formatCurrency, formatNumber } from '../../../../../utilities/number';
 
 import React, { useState } from 'react';
-import { UseAsyncFunctionResult } from '../../../../../hooks';
+import { UseAsyncFunctionResult } from '../../../../../hooks/useAsyncFunction';
 
 import Slider, { SliderThumb } from '@mui/material/Slider';
 

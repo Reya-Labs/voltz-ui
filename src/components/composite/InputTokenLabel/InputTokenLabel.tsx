@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import React from 'react';
-import { Icon, IconProps } from '@components/atomic';
+import { Icon, IconProps } from '../../atomic/Icon/Icon';
 
 type InputTokenLabelProps = {
   tokenName: string;

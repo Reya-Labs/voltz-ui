@@ -1,4 +1,4 @@
-import { Agents } from '../contexts';
+import { Agents } from '../contexts/AgentContext/types';
 import isUndefined from 'lodash/isUndefined';
 
 /**

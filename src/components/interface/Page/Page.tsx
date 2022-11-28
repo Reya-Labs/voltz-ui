@@ -5,6 +5,8 @@ import { Nav } from '../Nav/Nav';
 import { WalletConnect } from '../WalletConnect/WalletConnect';
 import Workbench from './workbench.svg';
 import { Background } from './Background/Background';
+import { GweiBar } from './GweiBar/GweiBar';
+import { AlphaBanner } from './AlphaBanner/AlphaBanner';
 
 interface PageProps {
   children?: React.ReactNode;
@@ -40,6 +42,10 @@ export const Page: React.FunctionComponent<PageProps> = ({ children }: PageProps
       >
         {children}
       </Box>
+    </Box>
+    <Box sx={{ position: 'fixed', bottom: '0', left: '0', width: '100%' }}>
+      <GweiBar />
+      <AlphaBanner />
     </Box>
   </Background>
 );

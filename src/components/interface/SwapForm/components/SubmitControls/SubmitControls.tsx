@@ -1,14 +1,15 @@
 import { ReactNode } from 'react';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import { Button } from '../../../../atomic/Button/Button';
+import { Ellipsis } from '../../../../atomic/Ellipsis/Ellipsis';
+import { colors } from '../../../../../theme';
+import { SwapFormModes } from '../../types';
+import { useTokenApproval } from '../../../../../hooks/useTokenApproval';
 import {
   SwapFormSubmitButtonHintStates,
   SwapFormSubmitButtonStates,
-} from '../../../../../contexts';
-import { useTokenApproval } from '../../../../../hooks';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import { Button, Ellipsis } from '@components/atomic';
-import { colors } from '../../../../../theme';
-import { SwapFormModes } from '../../types';
+} from '../../../../../contexts/SwapFormContext/enums';
 
 interface SubmitControlsProps {
   approvalsNeeded: boolean;

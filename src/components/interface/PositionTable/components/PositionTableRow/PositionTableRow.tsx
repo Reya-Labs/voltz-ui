@@ -2,16 +2,19 @@ import React, { useEffect } from 'react';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '../../../../../theme';
-import { Agents, useAMMContext } from '../../../../../contexts';
-import { Typography } from '@components/atomic';
-import { PoolField, MaturityInformation } from '@components/composite';
+import { Typography } from '../../../../atomic/Typography/Typography';
+import { PoolField } from '../../../../composite/PoolField/PoolField';
 import { lpLabels, traderLabels } from '../../constants';
 import { FixedAPR, Notional, CurrentMargin, AccruedRates } from './components';
-import { useAgent } from '../../../../../hooks';
-import { formatNumber, isBorrowing } from '../../../../../utilities';
+import { useAgent } from '../../../../../hooks/useAgent';
 import isNumber from 'lodash/isNumber';
 
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
+import { MaturityInformation } from '../../../../composite/MaturityInformation/MaturityInformation';
+import { Agents } from '../../../../../contexts/AgentContext/types';
+import { useAMMContext } from '../../../../../contexts/AMMContext/AMMContext';
+import { isBorrowing } from '../../../../../utilities/isBorrowing';
+import { formatNumber } from '../../../../../utilities/number';
 
 export type PositionTableRowProps = {
   position: Position;

@@ -11,9 +11,6 @@
     "rootDir": "src",
     "moduleResolution": "node",
     "baseUrl": "./",
-    "paths": {
-      "@components/*": ["src/components"],
-    },
     "resolveJsonModule": true,
     "allowJs": true,
     "outDir": "./build",

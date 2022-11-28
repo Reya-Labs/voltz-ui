@@ -1,11 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
-import { MaskedIntegerField, IconLabel } from '@components/composite';
+import { IconLabel } from '../../../../composite/IconLabel/IconLabel';
+import { MaskedIntegerField } from '../../../../composite/MaskedIntegerField/MaskedIntegerField';
 import isUndefined from 'lodash/isUndefined';
 import isNumber from 'lodash/isNumber';
-import { formatNumber, notFormatted, stringToBigFloat, toUSFormat } from '../../../../../utilities';
 import Button from '@mui/material/Button';
 import { activeButtonStyle, buttonStyle, leverageBoxStyle } from './style';
+import {
+  formatNumber,
+  notFormatted,
+  stringToBigFloat,
+  toUSFormat,
+} from '../../../../../utilities/number';
 
 /**
  * margin: for a new position this is just the ratio between notional and minimum margin required

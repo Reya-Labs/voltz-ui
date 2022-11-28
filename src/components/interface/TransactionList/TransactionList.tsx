@@ -4,7 +4,7 @@ import List from '@mui/material/List';
 import { colors, SystemStyleObject, Theme } from '../../../theme';
 import { TransactionListItem } from './TransactionListItem';
 import { getTransactionData, getTransactions, sortTransactions } from './services';
-import { useUniqueId } from '../../../hooks';
+import { useUniqueId } from '../../../hooks/useUniqueId';
 import { TransactionType } from './types';
 
 interface TransactionListProps {

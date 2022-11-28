@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { colors, SystemStyleObject, Theme } from '../../../theme';
-import { Typography } from '@components/atomic';
+import { Typography } from '../../atomic/Typography/Typography';
 import Box from '@mui/material/Box';
 
 export type PortfolioHeaderBoxProps = {

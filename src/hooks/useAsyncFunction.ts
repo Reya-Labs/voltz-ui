@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import useDebounceFunc from './useDebounceFunc';
+import { useDebounceFunc } from './useDebounceFunc';
 
 export type UseAsyncFunctionResult<ArgsType, ResultType> = {
   result: ResultType | null;
@@ -8,7 +8,7 @@ export type UseAsyncFunctionResult<ArgsType, ResultType> = {
   call: (args?: ArgsType) => void;
 };
 
-const useAsyncFunction = <ArgsType, ResultType>(
+export const useAsyncFunction = <ArgsType, ResultType>(
   asyncFunction: (args: ArgsType) => Promise<ResultType>,
   lock?: () => void,
   debounceDelay = 0,
@@ -78,5 +78,3 @@ const useAsyncFunction = <ArgsType, ResultType>(
     [result, errorMessage, loading, call],
   );
 };
-
-export default useAsyncFunction;
