@@ -41,7 +41,7 @@ export const LPMellowVaultDepositInfo: React.FunctionComponent<LPMellowVaultDepo
           }
           rightContent={
             <Typography variant="h6" color="#E5E1F9" marginLeft="0px">
-              {percentage.toString() + '%'}
+              {`${percentage.toString()}%`}
             </Typography>
           }
           percentageComplete={percentage}

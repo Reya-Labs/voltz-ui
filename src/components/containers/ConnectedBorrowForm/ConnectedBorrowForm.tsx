@@ -48,7 +48,7 @@ export const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormPro
 
   const protocol = () => {
     if (isBorrowing(amm.rateOracle.protocolId)) {
-      return 'borrow_' + amm.protocol;
+      return `borrow_${amm.protocol}`;
     }
     return amm.protocol;
   };

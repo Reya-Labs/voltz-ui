@@ -301,7 +301,7 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
               paddingBottom: (theme) => theme.spacing(10),
             }}
           >
-            <Button variant="contained" onClick={onBack} id={buttonId + '_FAILED'}>
+            <Button variant="contained" onClick={onBack} id={`${buttonId}_FAILED`}>
               Back
             </Button>
           </Box>

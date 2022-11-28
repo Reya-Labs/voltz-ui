@@ -30,7 +30,7 @@ export const BorrowPortfolioHeaderBox = ({
 }: BorrowPortfolioHeaderBoxProps) => {
   const renderedValue =
     aggregatedDebt !== undefined && !loading
-      ? currencySymbol + formatCurrency(aggregatedDebt) + ' ' + currencyCode
+      ? `${currencySymbol}${formatCurrency(aggregatedDebt)} ${currencyCode}`
       : 'Loading...';
   return (
     <Box sx={{ textTransform: 'uppercase' }}>

@@ -48,6 +48,7 @@
       "propName": "sx",
       "message": "Avoid using inline styles for components. Use styled components instead."
     }]}],
+    "prefer-template": "error",
     "unused-imports/no-unused-imports-ts": "error",
     "eqeqeq": "error",
     "no-unused-vars": "off",

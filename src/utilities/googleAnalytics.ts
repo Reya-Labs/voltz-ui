@@ -16,25 +16,13 @@ export const getPoolButtonId = (
 
   const showAgent =
     agent === Agents.LIQUIDITY_PROVIDER ? 'lp' : agent === Agents.FIXED_TRADER ? 'ft' : 'vt';
-  return (
-    'Protocol:' +
-    protocol +
-    showBorrow +
-    '_MarginAction:' +
-    marginAction +
-    '_LiquidityAction:' +
-    liquidityAction +
-    '_NotionalAction:' +
-    notionalAction +
-    '_Agent:' +
-    showAgent
-  );
+  return `Protocol:${protocol}${showBorrow}_MarginAction:${marginAction}_LiquidityAction:${liquidityAction}_NotionalAction:${notionalAction}_Agent:${showAgent}`;
 };
 
 export const getRowButtonId = (isLp: boolean, protocol: string, borrow?: boolean): string => {
   const showBorrow = borrow ? '_borrow' : '';
   const showAgent = isLp ? 'lp' : 'trader';
-  return 'ROW_Protocol:' + protocol + showBorrow + '_Agent:' + showAgent;
+  return `ROW_Protocol:${protocol}${showBorrow}_Agent:${showAgent}`;
 };
 
 export const getNotionalActionFromHintState = (hint: SwapFormSubmitButtonHintStates): string => {

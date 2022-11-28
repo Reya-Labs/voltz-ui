@@ -92,7 +92,7 @@ export const ExpectedAPY = ({
       if (value < -1000) {
         return '<-1,000%';
       }
-      return formatNumber(value, 0, 2) + '%';
+      return `${formatNumber(value, 0, 2)}%`;
     }
     return '---';
   };
@@ -100,7 +100,7 @@ export const ExpectedAPY = ({
   const formatCashflow = (value: number | undefined) => {
     if (value) {
       if (Math.abs(value) >= 1000000000 - 0.5) {
-        return formatNumber(value / 1000000000, 0, 3) + 'bn';
+        return `${formatNumber(value / 1000000000, 0, 3)}bn`;
       }
       if (Math.abs(value) >= 1000000 - 0.5) {
         return formatNumber(value, 0, 0);
@@ -193,7 +193,7 @@ export const ExpectedAPY = ({
               color: colors.lavenderWeb.darken010,
             }}
           >
-            {'APY: ' + formatExpectedApy(expectedApy)}
+            {`APY: ${formatExpectedApy(expectedApy)}`}
           </Typography>
         </Box>
       </Box>
