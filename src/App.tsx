@@ -66,6 +66,10 @@ export const App = () => {
           <Route path={routes.PORTFOLIO} element={<Portfolio />} />
           <Route path={routes.LP_POOLS} element={<LPPools />} />
           <Route path={routes.LP_PORTFOLIO} element={<LPPortfolio />} />
+          <Route
+            path={routes.PRODUCTS}
+            element={<Navigate replace={true} to={`/${routes.LP_OPTIMISERS}`} />}
+          />
           <Route path={routes.LP_OPTIMISERS} element={<Ecosystem />} />
           <Route path={routes.BORROW_POS} element={<FixedBorrower />} />
           <Route
