@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Typography } from '@components/atomic';
+import { Typography } from '../Typography/Typography';
 import {
   MiddleContentTypography,
   ProgressBarBox,

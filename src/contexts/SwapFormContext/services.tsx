@@ -1,5 +1,5 @@
-import { SwapFormActions, SwapFormModes } from '@components/interface';
-import { useTokenApproval } from '../../hooks';
+import { SwapFormActions, SwapFormModes } from '../../components/interface/SwapForm';
+import { useTokenApproval } from '../../hooks/useTokenApproval';
 
 /**
  * Returns true or false if approvals are needed for this user to trade

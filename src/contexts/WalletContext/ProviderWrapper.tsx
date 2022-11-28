@@ -7,10 +7,10 @@ import { BigNumber, ethers } from 'ethers';
 
 import { useGetWalletQuery } from '../../graphql';
 import { selectors } from '../../store';
-import { useSelector } from '../../hooks';
+import { useSelector } from '../../hooks/useSelector';
 import { WalletName, WalletStatus } from './types';
-import WalletContext from './WalletContext';
-import { getErrorMessage } from '../../utilities';
+import { WalletContext } from './WalletContext';
+import { getErrorMessage } from '../../utilities/getErrorMessage';
 import * as services from './services';
 
 export type ProviderWrapperProps = {

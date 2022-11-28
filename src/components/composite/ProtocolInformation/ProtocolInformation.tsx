@@ -10,12 +10,13 @@ import { ReactComponent as USDC } from '../PoolField/usdc-icon.svg';
 import { ReactComponent as USDT } from '../PoolField/usdt-icon.svg';
 import { ReactComponent as ETH } from '../PoolField/eth-icon.svg';
 
-import { Typography } from '@components/atomic';
+import { Typography } from '../../atomic/Typography/Typography';
 import { IconLabel } from '../IconLabel/IconLabel';
 import { VariableAPY, FixedAPR, MaturityEndDate } from './components';
-import { isBorrowing } from '../../../utilities';
-import { useAMMContext, Agents } from '../../../contexts';
+import { isBorrowing } from '../../../utilities/isBorrowing';
 import { DateTime } from 'luxon';
+import { Agents } from '../../../contexts/AgentContext/types';
+import { useAMMContext } from '../../../contexts/AMMContext/AMMContext';
 
 export type ProtocolInformationProps = {
   protocol?: string;

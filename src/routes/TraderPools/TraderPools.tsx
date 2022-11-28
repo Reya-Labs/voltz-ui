@@ -3,13 +3,20 @@ import Box from '@mui/material/Box';
 import { useLocation } from 'react-router-dom';
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 
-import { findCurrentPosition, setPageTitle } from '../../utilities';
-import { Agents, AMMProvider, PositionProvider, SwapFormProvider } from '../../contexts';
-import { PageTitleDesc } from '@components/composite';
-import { useAgent, useAMMs, usePositions, useWallet } from '../../hooks';
-import { SwapFormModes } from '@components/interface';
+import { Agents } from '../../contexts/AgentContext/types';
+import { AMMProvider } from '../../contexts/AMMContext/AMMContext';
+import { PositionProvider } from '../../contexts/PositionContext/PositionContext';
+import { SwapFormProvider } from '../../contexts/SwapFormContext/SwapFormContext';
+import { PageTitleDesc } from '../../components/composite/PageTitleDesc/PageTitleDesc';
+import { useWallet } from '../../hooks/useWallet';
 import { ConnectedSwapForm } from '../../components/containers/ConnectedSwapForm/ConnectedSwapForm';
 import { AMMTable } from '../../components/interface/AMMTable/AMMTable';
+import { SwapFormModes } from '../../components/interface/SwapForm';
+import { usePositions } from '../../hooks/usePositions/usePositions';
+import { useAMMs } from '../../hooks/useAMMs';
+import { useAgent } from '../../hooks/useAgent';
+import { setPageTitle } from '../../utilities/page';
+import { findCurrentPosition } from '../../utilities/amm';
 
 export const TraderPools: React.FunctionComponent = () => {
   const { amms = [], loading, error } = useAMMs();

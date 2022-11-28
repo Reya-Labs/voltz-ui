@@ -1,9 +1,8 @@
 import { useContext } from 'react';
 
-import { AgentContext, AgentSettings } from '../contexts';
+import { AgentSettings } from '../contexts/AgentContext/types';
+import { AgentContext } from '../contexts/AgentContext/AgentContext';
 
-const useAgent = (): AgentSettings => {
+export const useAgent = (): AgentSettings => {
   return useContext(AgentContext);
 };
-
-export default useAgent;

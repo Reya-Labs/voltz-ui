@@ -1,25 +1,21 @@
-import { useDispatch, useSelector } from '../../../hooks';
-import { routes } from '../../../routes';
+import { routes } from '../../../routes/paths';
 import React, { useEffect, useState } from 'react';
 import { actions, selectors } from '../../../store';
 
 import { useNavigate } from 'react-router-dom';
-import {
-  BorrowForm,
-  PendingTransaction,
-  SwapFormActions,
-  SwapFormModes,
-  SwapInfo,
-  FormPanel,
-} from '@components/interface';
-import {
-  useAMMContext,
-  useBorrowAMMContext,
-  useBorrowFormContext,
-  Agents,
-  usePositionContext,
-} from '../../../contexts';
-import { isBorrowing } from '../../../utilities';
+import { BorrowForm } from '../../interface/BorrowForm/BorrowForm';
+import { PendingTransaction } from '../../interface/PendingTransaction/PendingTransaction';
+import { isBorrowing } from '../../../utilities/isBorrowing';
+import { FormPanel } from '../../interface/FormPanel/FormPanel';
+import { SwapInfo } from '../../interface/SwapInfo';
+import { SwapFormActions, SwapFormModes } from '../../interface/SwapForm';
+import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';
+import { useBorrowAMMContext } from '../../../contexts/BorrowAMMContext/BorrowAMMContext';
+import { Agents } from '../../../contexts/AgentContext/types';
+import { useAMMContext } from '../../../contexts/AMMContext/AMMContext';
+import { useBorrowFormContext } from '../../../contexts/BorrowFormContext/BorrowFormContext';
+import { useDispatch } from '../../../hooks/useDispatch';
+import { useSelector } from '../../../hooks/useSelector';
 
 export type ConnectedBorrowFormProps = {
   onReset: () => void;

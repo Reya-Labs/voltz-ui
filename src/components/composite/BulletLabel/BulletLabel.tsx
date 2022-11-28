@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { SystemStyleObject, Theme } from '../../../theme';
-import { Typography } from '@components/atomic';
+import { Typography } from '../../atomic/Typography/Typography';
 import CircleIcon from '@mui/icons-material/Circle';
 
 export type BulletLabelProps = {

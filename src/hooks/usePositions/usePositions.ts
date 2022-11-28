@@ -4,11 +4,14 @@ import isNull from 'lodash/isNull';
 import { DateTime } from 'luxon';
 
 import { actions, selectors } from '../../store';
-import { useAgent, useWallet, useSelector, useDispatch } from '../../hooks';
-import { Agents } from '../../contexts';
 import { MEPositionFactory } from './mePositionFactory';
 
 import { Position } from '@voltz-protocol/v1-sdk';
+import { useWallet } from '../useWallet';
+import { Agents } from '../../contexts/AgentContext/types';
+import { useAgent } from '../useAgent';
+import { useDispatch } from '../useDispatch';
+import { useSelector } from '../useSelector';
 
 export type usePositionsResult = {
   positions?: Position[];
@@ -18,7 +21,7 @@ export type usePositionsResult = {
   error: boolean;
 };
 
-const usePositions = (): usePositionsResult => {
+export const usePositions = (): usePositionsResult => {
   const { agent } = useAgent();
   const { signer, wallet, loading, error } = useWallet();
   const isSignerAvailable = !isNull(signer);
@@ -136,5 +139,3 @@ const usePositions = (): usePositionsResult => {
 
   return { positions, positionsByAgent, positionsByAgentGroup, loading, error };
 };
-
-export default usePositions;

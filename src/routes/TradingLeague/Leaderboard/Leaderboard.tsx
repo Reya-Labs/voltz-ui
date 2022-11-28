@@ -1,6 +1,5 @@
 import React from 'react';
-import { Typography } from '@components/atomic';
-import { Grid } from '@components/layout';
+import { Typography } from '../../../components/atomic/Typography/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { DateTime } from 'luxon';
@@ -11,6 +10,7 @@ import { Header } from '../Header/Header';
 import { Entry } from '../Entry/Entry';
 import { LeaderboardHeader } from '../LeaderboardHeader/LeaderboardHeader';
 import { RankType } from '@voltz-protocol/v1-sdk';
+import { Grid } from '../../../components/layout/Grid';
 
 export type RankingTableProps = {
   rankings: RankType[];

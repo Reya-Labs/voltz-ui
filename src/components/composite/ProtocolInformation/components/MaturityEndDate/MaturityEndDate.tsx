@@ -1,7 +1,7 @@
-import { Typography } from '@components/atomic';
+import { Typography } from '../../../../atomic/Typography/Typography';
 
 import { DateTime } from 'luxon';
-import { formatDateTime } from '../../../../../utilities';
+import { formatDateTime } from '../../../../../utilities/date';
 import Box from '@mui/material/Box';
 import React from 'react';
 

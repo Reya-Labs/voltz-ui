@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 import { DateTime } from 'luxon';
 
-import { withLabel } from '../../hoc';
-import { formatDateTime } from '../../../utilities';
-import { ProgressBar } from '@components/composite';
+import { withLabel } from '../../hoc/withLabel/withLabel';
+import { formatDateTime } from '../../../utilities/date';
+import { ProgressBar } from '../../atomic/ProgressBar/ProgressBar';
 
 export type MaturityInformationProps = {
   startDate?: DateTime;

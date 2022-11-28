@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button, Typography } from '@components/atomic';
+import { Button } from '../../../../../../atomic/Button/Button';
 import isUndefined from 'lodash/isUndefined';
+import { Typography } from '../../../../../../atomic/Typography/Typography';
 
 export type NotionalProps = {
   notional?: string;

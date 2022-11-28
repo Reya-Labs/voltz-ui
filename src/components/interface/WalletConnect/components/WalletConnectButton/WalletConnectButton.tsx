@@ -1,12 +1,14 @@
 import React, { useMemo } from 'react';
 import Box from '@mui/material/Box';
 
-import { Wallet } from '../../../../../contexts';
-import { Button, Icon, Icons } from '@components/atomic';
+import { Wallet } from '../../../../../contexts/WalletContext/types';
 import CircleIcon from '@mui/icons-material/Circle';
 
 import { colors } from '../../../../../theme';
 import { AvatarAddress } from '../../../AvatarAddress/AvatarAddress';
+import { Button } from '../../../../atomic/Button/Button';
+import { Icon } from '../../../../atomic/Icon/Icon';
+import { Icons } from '../../../../atomic/Icon/types';
 
 export type WalletConnectButtonProps = {
   onClick?: () => void;

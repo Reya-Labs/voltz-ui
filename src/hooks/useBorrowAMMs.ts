@@ -3,12 +3,12 @@ import isNull from 'lodash/isNull';
 import { providers } from 'ethers';
 
 import { Amm_OrderBy, useGetAmMsQuery } from '../graphql';
-import useWallet from './useWallet';
+import { useWallet } from './useWallet';
 import JSBI from 'jsbi';
 import { DateTime } from 'luxon';
 
 import { Token, RateOracle, BorrowAMM, AMM } from '@voltz-protocol/v1-sdk';
-import { isBorrowing } from '../utilities';
+import { isBorrowing } from '../utilities/isBorrowing';
 
 export type UseBorrowAMMsResult = {
   borrowAmms?: BorrowAMM[];
@@ -16,7 +16,7 @@ export type UseBorrowAMMsResult = {
   error: boolean;
 };
 
-const useBorrowAMMs = (): UseBorrowAMMsResult => {
+export const useBorrowAMMs = (): UseBorrowAMMsResult => {
   const { signer } = useWallet();
   const isSignerAvailable = !isNull(signer);
   const { data, loading, error, refetch } = useGetAmMsQuery({
@@ -92,5 +92,3 @@ const useBorrowAMMs = (): UseBorrowAMMsResult => {
 
   return { borrowAmms, loading, error: !!error };
 };
-
-export default useBorrowAMMs;

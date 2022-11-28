@@ -1,4 +1,4 @@
-import { Button } from '@components/atomic';
+import { Button } from '../../../atomic/Button/Button';
 import React from 'react';
 import {
   ACTIVE_CLASS,

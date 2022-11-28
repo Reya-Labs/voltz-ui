@@ -1,9 +1,10 @@
-import { formatCurrency, formatNumber, formatTimestamp } from '../../../utilities';
 import { Position } from '@voltz-protocol/v1-sdk';
 import { BigNumber } from 'ethers';
 import JSBI from 'jsbi';
-import { Icons } from '@components/atomic';
+import { Icons } from '../../atomic/Icon/types';
 import { TransactionType, TraderPositionTransaction, LPPositionTransaction } from './types';
+import { formatTimestamp } from '../../../utilities/date';
+import { formatCurrency, formatNumber } from '../../../utilities/number';
 
 /**
  * Takes a currency value from a transaction and returns the decimal number version

@@ -2,9 +2,9 @@ import React from 'react';
 import { SystemStyleObject, Theme } from '../../../theme';
 import MuiButton, { ButtonProps as MuiButtonProps } from '@mui/material/Button';
 
-import { AgentProps, Agents } from '../../../contexts';
-import { useAgentWithOverride } from '../../../hooks';
+import { useAgentWithOverride } from '../../../hooks/useAgentWithOverride';
 import { SxProps } from '@mui/system';
+import { AgentProps, Agents } from '../../../contexts/AgentContext/types';
 
 export function Button<C extends React.ElementType>({
   agent: agentOverride,

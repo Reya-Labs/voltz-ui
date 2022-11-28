@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react';
-import { useBorrowAMM } from '../../hooks';
+import { useBorrowAMM } from '../../hooks/useBorrowAMM/useBorrowAMM';
 import { BorrowAMM } from '@voltz-protocol/v1-sdk';
 
 export type BorrowAMMProviderProps = {

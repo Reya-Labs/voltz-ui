@@ -1,6 +1,5 @@
-import { styled } from '@mui/material/styles';
+import { styled, keyframes } from '@mui/material/styles';
 import { colors } from '../../../../theme';
-import { keyframes } from '@mui/system';
 
 const swipe1 = keyframes`
   0% {

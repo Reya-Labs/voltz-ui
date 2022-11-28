@@ -1,5 +1,4 @@
-import { useAgent } from '../../hooks';
-import { createContext, useContext, useEffect, useState, useRef } from 'react';
+import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
 import { useAMMsContext } from '../AMMsContext/AMMsContext';
 import {
   getHealthCounters,
@@ -11,6 +10,7 @@ import {
 } from './services';
 
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
+import { useAgent } from '../../hooks/useAgent';
 
 export type PortfolioProviderProps = {
   positions?: Position[];

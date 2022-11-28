@@ -1,23 +1,23 @@
 import React from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
-import { UseAsyncFunctionResult, useTokenApproval } from '../../../hooks';
-import { FormPanel } from '@components/interface';
-import {
-  MaskedIntegerField,
-  InputTokenLabel,
-  IconLabel,
-  ProtocolInformation,
-} from '@components/composite';
+import { IconLabel } from '../../composite/IconLabel/IconLabel';
+import { InputTokenLabel } from '../../composite/InputTokenLabel/InputTokenLabel';
+import { MaskedIntegerField } from '../../composite/MaskedIntegerField/MaskedIntegerField';
+import { ProtocolInformation } from '../../composite/ProtocolInformation/ProtocolInformation';
+
 import { SubmitControls, FixBorrow } from './components';
 import { SystemStyleObject, Theme } from '../../../theme';
-
+import { FormPanel } from '../FormPanel/FormPanel';
 import {
-  Agents,
   BorrowFormSubmitButtonHintStates,
   BorrowFormSubmitButtonStates,
-} from '../../../contexts';
-import { formatCurrency, getPoolButtonId } from '../../../utilities';
+} from '../../../contexts/BorrowFormContext/BorrowFormContext';
+import { Agents } from '../../../contexts/AgentContext/types';
+import { UseAsyncFunctionResult } from '../../../hooks/useAsyncFunction';
+import { useTokenApproval } from '../../../hooks/useTokenApproval';
+import { getPoolButtonId } from '../../../utilities/googleAnalytics';
+import { formatCurrency } from '../../../utilities/number';
 
 export type BorrowProps = {
   protocol?: string;

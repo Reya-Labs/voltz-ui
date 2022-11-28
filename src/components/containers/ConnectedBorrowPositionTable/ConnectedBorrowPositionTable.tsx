@@ -2,18 +2,21 @@ import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import { SystemStyleObject, Theme } from '../../../theme';
 
-import { useBorrowAMMs, useBorrowPositions, useWallet } from '../../../hooks';
-import { Agents } from '../../../contexts';
-import { Loading, Panel } from '@components/atomic';
-import BorrowTable from '../../../components/interface/BorrowTable/BorrowTable';
+import { Agents } from '../../../contexts/AgentContext/types';
+import BorrowTable from '../../interface/BorrowTable/BorrowTable';
+import { Loading } from '../../atomic/Loading/Loading';
+import { Panel } from '../../atomic/Panel/Panel';
 
 import { getTotalVariableDebt, getTotalFixedDebt } from './services';
 import {
   BorrowPortfolioHeader,
   BorrowPortfolioHeaderProps,
-} from '../../../components/interface/BorrowPortfolioHeader/BorrowPortfolioHeader';
+} from '../../interface/BorrowPortfolioHeader/BorrowPortfolioHeader';
 
 import { BorrowAMM } from '@voltz-protocol/v1-sdk';
+import { useWallet } from '../../../hooks/useWallet';
+import { useBorrowAMMs } from '../../../hooks/useBorrowAMMs';
+import { useBorrowPositions } from '../../../hooks/useBorrowPositions';
 
 export type ConnectedBorrowAMMTableProps = {
   onSelectItem: (item: BorrowAMM) => void;

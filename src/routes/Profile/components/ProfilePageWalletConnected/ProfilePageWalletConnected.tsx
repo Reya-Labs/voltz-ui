@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
-import { Typography } from '@components/atomic';
-import { doNothing, elideAddress, formatDateTimeWithOrdinal } from '../../../../utilities';
+import { Typography } from '../../../../components/atomic/Typography/Typography';
 import { BadgeCard, BadgeCardHandle } from '../BadgeCard/BadgeCard';
 import { AchievedBadge, AchievedBadgeProps } from '../AchievedBadge/AchievedBadge';
 import { BADGE_VARIANT_TIER_MAP } from '../../helpers';
@@ -35,6 +34,9 @@ import {
   NON_PROGRAMMATIC_BADGES,
   NonProgrammaticBadges,
 } from '../../data/getSeasonBadges';
+import { elideAddress } from '../../../../utilities/elideAddress';
+import { doNothing } from '../../../../utilities/doNothing';
+import { formatDateTimeWithOrdinal } from '../../../../utilities/date';
 
 export type ProfilePageWalletConnectedProps = {
   account: string;

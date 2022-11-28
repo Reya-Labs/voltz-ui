@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
-import { useWallet } from '../../../../../hooks';
-import { Panel } from '@components/atomic';
-import { Modal } from '@components/composite';
+import { useWallet } from '../../../../../hooks/useWallet';
+import { Panel } from '../../../../atomic/Panel/Panel';
+import { Modal } from '../../../../composite/Modal/Modal';
 import { WalletConnectButton, WalletDisplay, WalletSelect } from './components';
-import { WalletName } from '../../../../../contexts';
+import { WalletName } from '../../../../../contexts/WalletContext/types';
 
 export const WalletConnectModal: React.FunctionComponent = () => {
   const wallet = useWallet();

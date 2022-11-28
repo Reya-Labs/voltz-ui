@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useCurrentSeason, usePastSeasons, useWallet } from '../../hooks';
+import { useWallet } from '../../hooks/useWallet';
 import { ProfilePageNoWallet } from './components/ProfilePageNoWallet/ProfilePageNoWallet';
 import { ProfilePageWalletConnected } from './components/ProfilePageWalletConnected/ProfilePageWalletConnected';
-import { getENSDetails, setPageTitle } from '../../utilities';
 import { Season } from '../../hooks/season/types';
 import { ClaimButtonProps } from './components/ClaimButton/ClaimButton';
 import { getCacheValue, invalidateCache, setCacheValue } from './data/getSeasonBadges/cache';
@@ -18,6 +17,10 @@ import {
   getSeasonBadges,
   SEASON_BADGE_VARIANTS,
 } from './data/getSeasonBadges';
+import { useCurrentSeason } from '../../hooks/season/useCurrentSeason';
+import { usePastSeasons } from '../../hooks/season/usePastSeasons';
+import { setPageTitle } from '../../utilities/page';
+import { getENSDetails } from '../../utilities/getENSDetails';
 
 export const Profile: React.FunctionComponent = () => {
   const wallet = useWallet();

@@ -2,7 +2,6 @@ import { Routes, Route, Navigate, useSearchParams } from 'react-router-dom';
 import TagManager from 'react-gtm-module';
 
 import {
-  routes,
   TradingLeague,
   Profile,
   FixedBorrower,
@@ -13,9 +12,8 @@ import {
   LPPools,
   LPPortfolio,
 } from './routes';
-import { AlphaBanner, GweiBar } from '@components/composite';
-import { Page } from '@components/interface';
-import Box from '@mui/material/Box';
+import { routes } from './routes/paths';
+import { Page } from './components/interface/Page/Page';
 import { useEffect } from 'react';
 import {
   deleteReferrer,
@@ -84,10 +82,6 @@ export const App = () => {
           <Route path={routes.TRADING_LEAGUE} element={<TradingLeague />} />
         </Route>
       </Routes>
-      <Box sx={{ position: 'fixed', bottom: '0', left: '0', width: '100%' }}>
-        <GweiBar />
-        <AlphaBanner />
-      </Box>
     </Page>
   );
 };

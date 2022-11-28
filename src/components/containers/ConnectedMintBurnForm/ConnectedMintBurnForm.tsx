@@ -1,29 +1,32 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { routes } from '../../../routes';
+import { routes } from '../../../routes/paths';
 import { actions, selectors } from '../../../store';
-import { useAgent, useDispatch, useSelector } from '../../../hooks';
-import {
-  MintBurnFormActions,
-  MintBurnFormModes,
-  useAMMContext,
-  useAMMsContext,
-  useMintBurnForm,
-  usePositionContext,
-} from '../../../contexts';
-import {
-  FormPanel,
-  MintBurnCurrentPosition,
-  MintBurnForm,
-  MintBurnInfo,
-  PendingTransaction,
-} from '@components/interface';
+
 import { updateFixedRate } from './utilities';
-import { getPoolButtonId, isBorrowing, setPageTitle } from '../../../utilities';
 import isUndefined from 'lodash/isUndefined';
 import { BigNumber } from 'ethers';
 
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
+import { PendingTransaction } from '../../interface/PendingTransaction/PendingTransaction';
+import { MintBurnInfo } from '../../interface/MintBurnInfo';
+import { MintBurnCurrentPosition } from '../../interface/MintBurnCurrentPosition/MintBurnCurrentPosition';
+import { FormPanel } from '../../interface/FormPanel/FormPanel';
+import { MintBurnForm } from '../../interface/MintBurnForm';
+import { useAMMsContext } from '../../../contexts/AMMsContext/AMMsContext';
+import {
+  MintBurnFormActions,
+  MintBurnFormModes,
+  useMintBurnForm,
+} from '../../../contexts/MintBurnFormContext/MintBurnFormContext';
+import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';
+import { useAMMContext } from '../../../contexts/AMMContext/AMMContext';
+import { useAgent } from '../../../hooks/useAgent';
+import { useDispatch } from '../../../hooks/useDispatch';
+import { useSelector } from '../../../hooks/useSelector';
+import { getPoolButtonId } from '../../../utilities/googleAnalytics';
+import { setPageTitle } from '../../../utilities/page';
+import { isBorrowing } from '../../../utilities/isBorrowing';
 
 export type ConnectedMintBurnFormProps = {
   onReset: () => void;

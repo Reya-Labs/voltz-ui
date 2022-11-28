@@ -1,12 +1,11 @@
-import { Typography } from '@components/atomic';
+import { Typography } from '../../../../atomic/Typography/Typography';
 import Stack from '@mui/material/Stack';
 import { colors } from '../../../../../theme';
-
-import { IconLabel } from '@components/composite';
+import { IconLabel } from '../../../../composite/IconLabel/IconLabel';
 import Box from '@mui/material/Box';
 import { FixBorrowSlider } from '../FixBorrowSlider/FixBorrowSlider';
-import { UseAsyncFunctionResult } from '../../../../../hooks';
-import { formatNumber } from '../../../../../utilities';
+import { UseAsyncFunctionResult } from '../../../../../hooks/useAsyncFunction';
+import { formatNumber } from '../../../../../utilities/number';
 import React from 'react';
 
 export type FixBorrowProps = {

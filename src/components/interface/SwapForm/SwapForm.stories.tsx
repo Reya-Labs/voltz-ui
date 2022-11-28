@@ -2,19 +2,21 @@ import React from 'react';
 import { DateTime, Duration } from 'luxon';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import {
-  AgentProvider,
-  AMMProvider,
-  SwapFormProvider,
-  SwapFormSubmitButtonHintStates,
-  SwapFormSubmitButtonStates,
-  useSwapFormContext,
-} from '../../../contexts';
 import { SwapForm } from './SwapForm';
-import { useTokenApproval } from '../../../hooks';
 import { SwapFormActions, SwapFormModes } from './types';
 
 import { AMM, InfoPostSwap } from '@voltz-protocol/v1-sdk';
+import {
+  SwapFormProvider,
+  useSwapFormContext,
+} from '../../../contexts/SwapFormContext/SwapFormContext';
+import { useTokenApproval } from '../../../hooks/useTokenApproval';
+import { AgentProvider } from '../../../contexts/AgentContext/AgentProvider';
+import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
+import {
+  SwapFormSubmitButtonHintStates,
+  SwapFormSubmitButtonStates,
+} from '../../../contexts/SwapFormContext/enums';
 
 export default {
   title: 'Interface/SwapForm',

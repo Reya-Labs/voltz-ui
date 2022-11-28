@@ -1,13 +1,13 @@
 import Box from '@mui/material/Box';
-import { Typography } from '@components/atomic';
-import { formatDateTime } from '../../../utilities';
+import { Typography } from '../../../components/atomic/Typography/Typography';
+import { formatDateTime } from '../../../utilities/date';
 import { DateTime } from 'luxon';
 import React from 'react';
 import { colors } from '../../../theme';
 import { Header } from '../Header/Header';
 import { Entry } from '../Entry/Entry';
 import { Percentage } from './Percentage/Percentage';
-import { ProgressBarBox } from '../../../components/composite/ProgressBar/ProgressBar.styled';
+import { ProgressBarBox } from '../../../components/atomic/ProgressBar/ProgressBar.styled';
 
 export type RankingUserSummaryProps = {
   seasonNumber: string;

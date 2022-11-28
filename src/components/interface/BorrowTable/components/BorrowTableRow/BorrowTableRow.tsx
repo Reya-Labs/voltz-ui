@@ -4,12 +4,13 @@ import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '@mui/system';
 import isNull from 'lodash/isNull';
 
-import { Button } from '@components/atomic';
-import { useWallet } from '../../../../../hooks';
+import { Button } from '../../../../atomic/Button/Button';
+import { useWallet } from '../../../../../hooks/useWallet';
 import { BorrowAMMTableDatum, labelsVariable, labelsFixed } from '../../types';
 import { BorrowVariableAPY, BorrowFixedAPR, Debt, BorrowMaturity } from './components';
-import { useBorrowAMMContext, usePositionContext } from '../../../../../contexts';
-import { PoolField } from '@components/composite';
+import { PoolField } from '../../../../composite/PoolField/PoolField';
+import { usePositionContext } from '../../../../../contexts/PositionContext/PositionContext';
+import { useBorrowAMMContext } from '../../../../../contexts/BorrowAMMContext/BorrowAMMContext';
 
 export type BorrowTableRowProps = {
   datum: BorrowAMMTableDatum;

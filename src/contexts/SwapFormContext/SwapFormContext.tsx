@@ -1,71 +1,34 @@
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { Agents, useAMMContext, usePositionContext } from '../../contexts';
-import { SwapFormActions, SwapFormModes } from '@components/interface';
-import {
-  DataLayerEventPayload,
-  formatNumber,
-  getAmmProtocol,
-  hasEnoughUnderlyingTokens,
-  isMarginWithdrawable,
-  lessThan,
-  lessThanEpsilon,
-  pushEvent,
-  stringToBigFloat,
-} from '../../utilities';
 import debounce from 'lodash/debounce';
 import isNumber from 'lodash/isNumber';
 import isUndefined from 'lodash/isUndefined';
-import {
-  GetInfoType,
-  useAgent,
-  useBalance,
-  useCurrentPositionMarginRequirement,
-  useTokenApproval,
-  useWallet,
-} from '../../hooks';
 import * as s from './services';
 import { BigNumber } from 'ethers';
 
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
+import { SwapFormActions, SwapFormModes } from '../../components/interface/SwapForm';
+import { GetInfoType } from '../../hooks/useAMM/types';
+import { useWallet } from '../../hooks/useWallet';
+import { useBalance } from '../../hooks/useBalance';
+import { useCurrentPositionMarginRequirement } from '../../hooks/useCurrentPositionMarginRequirement';
+import { usePositionContext } from '../PositionContext/PositionContext';
+import { Agents } from '../AgentContext/types';
+import { useAMMContext } from '../AMMContext/AMMContext';
+import { useTokenApproval } from '../../hooks/useTokenApproval';
+import { useAgent } from '../../hooks/useAgent';
+import { DataLayerEventPayload, pushEvent } from '../../utilities/googleAnalytics';
+import { hasEnoughUnderlyingTokens, lessThan, lessThanEpsilon } from '../../utilities/validation';
+import { formatNumber, stringToBigFloat } from '../../utilities/number';
+import { getAmmProtocol } from '../../utilities/amm';
+import { isMarginWithdrawable } from '../../utilities/isMarginWithdrawable';
+import {
+  SwapFormMarginAction,
+  SwapFormSubmitButtonHintStates,
+  SwapFormSubmitButtonStates,
+} from './enums';
 
 // updateLeverage instead of setLeverage when notional updates
 // have reset flag in onChange in Leverage to be able to reset leverage when box is modified.
-
-export enum SwapFormMarginAction {
-  ADD = 'add',
-  REMOVE = 'remove',
-}
-
-export enum SwapFormSubmitButtonStates {
-  APPROVE_UT_PERIPHERY = 'APPROVE_UT_PERIPHERY',
-  APPROVING = 'APPROVING',
-  CHECKING = 'CHECKING',
-  INITIALISING = 'INITIALISING',
-  ROLLOVER_TRADE = 'ROLLOVER_TRADE',
-  TRADE_FIXED = 'TRADE_FIXED',
-  TRADE_VARIABLE = 'TRADE_VARIABLE',
-  UPDATE_POSITION = 'UPDATE_POSITION',
-  UPDATE = 'UPDATE',
-}
-
-export enum SwapFormSubmitButtonHintStates {
-  APPROVE_NEXT_TOKEN = 'APPROVE_NEXT_TOKEN',
-  APPROVE_TOKEN = 'APPROVE_TOKEN',
-  APPROVING = 'APPROVING',
-  CHECKING = 'CHECKING',
-  ERROR_TOKEN_APPROVAL = 'ERROR_TOKEN_APPROVAL',
-  FORM_INVALID = 'FORM_INVALID',
-  FORM_INVALID_BALANCE = 'FORM_INVALID_BALANCE',
-  FORM_INVALID_INCOMPLETE = 'FORM_INVALID_INCOMPLETE',
-  FORM_INVALID_TRADE = 'FORM_INVALID_TRADE',
-  INITIALISING = 'INITIALISING',
-  READY_TO_TRADE_TOKENS_APPROVED = 'READY_TO_TRADE_TOKENS_APPROVED',
-  READY_TO_TRADE = 'READY_TO_TRADE',
-  ADD_AND_REMOVE = 'ADD_AND_REMOVE',
-  ADD_AND_ADD = 'ADD_AND_ADD',
-  REMOVE_AND_REMOVE = 'REMOVE_AND_REMOVE',
-  REMOVE_AND_ADD = 'REMOVE_AND_ADD',
-}
 
 export type SwapFormState = {
   leverage: number;
@@ -647,6 +610,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
           addError(err, 'notional', 'Removed too much notional');
         }
       }
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if (isVT && agent === Agents.FIXED_TRADER) {
         const newVariableTokenBalance =
           position.effectiveVariableTokenBalance - (notional ? notional : 0);

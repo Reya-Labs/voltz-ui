@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { Position } from '@voltz-protocol/v1-sdk';
 
-import usePositions from './usePositions/usePositions';
-import useAgent from './useAgent';
+import { usePositions } from './usePositions/usePositions';
+import { useAgent } from './useAgent';
 
 export type useBorrowPositionsResult = {
   positions?: Position[];
@@ -10,7 +10,7 @@ export type useBorrowPositionsResult = {
   error: boolean;
 };
 
-const useBorrowPositions = (): useBorrowPositionsResult => {
+export const useBorrowPositions = (): useBorrowPositionsResult => {
   const { agent } = useAgent();
   const { positions, loading: loadingPos, error: errorPos } = usePositions();
 
@@ -26,5 +26,3 @@ const useBorrowPositions = (): useBorrowPositionsResult => {
 
   return { positions: borrowPositions, loading: loadingPos, error: errorPos };
 };
-
-export default useBorrowPositions;

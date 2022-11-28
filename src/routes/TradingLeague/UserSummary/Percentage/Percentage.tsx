@@ -1,4 +1,4 @@
-import { Typography } from '@components/atomic';
+import { Typography } from '../../../../components/atomic/Typography/Typography';
 import { colors } from '../../../../theme';
 import CountUp from 'react-countup';
 import React from 'react';

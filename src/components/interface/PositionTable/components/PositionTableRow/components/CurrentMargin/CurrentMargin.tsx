@@ -1,10 +1,11 @@
 import React from 'react';
 import TableCell from '@mui/material/TableCell';
 
-import { useWallet } from '../../../../../../../hooks';
-import { Typography, Button } from '@components/atomic';
+import { useWallet } from '../../../../../../../hooks/useWallet';
+import { Typography } from '../../../../../../atomic/Typography/Typography';
+import { Button } from '../../../../../../atomic/Button/Button';
 import isUndefined from 'lodash/isUndefined';
-import { formatCurrency, formatNumber } from '../../../../../../../utilities';
+import { formatCurrency, formatNumber } from '../../../../../../../utilities/number';
 
 import { colors } from '../../../../../../../theme';
 

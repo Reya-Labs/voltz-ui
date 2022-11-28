@@ -2,8 +2,8 @@ import React, { cloneElement } from 'react';
 import MuiModal, { ModalProps as MuiModalProps } from '@mui/material/Modal';
 import isString from 'lodash/isString';
 
-import { Button } from '@components/atomic';
-import { doNothing } from '../../../utilities';
+import { Button } from '../../atomic/Button/Button';
+import { doNothing } from '../../../utilities/doNothing';
 
 export type TriggerProps = {
   onClick: () => void;

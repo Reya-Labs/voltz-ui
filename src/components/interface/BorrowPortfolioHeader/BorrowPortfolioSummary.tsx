@@ -1,9 +1,9 @@
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 
-import { Typography } from '@components/atomic';
+import { Typography } from '../../atomic/Typography/Typography';
 import { SystemStyleObject, Theme } from '../../../theme';
-import { formatCurrency, formatNumber } from '../../../utilities';
+import { formatCurrency, formatNumber } from '../../../utilities/number';
 
 export type BorrowPortfolioSummaryProps = {
   currencyCode: string;

@@ -1,14 +1,15 @@
-import { useTokenApproval } from '../../../../../hooks';
+import { useTokenApproval } from '../../../../../hooks/useTokenApproval';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { Button, Ellipsis } from '@components/atomic';
+import { Button } from '../../../../atomic/Button/Button';
+import { Ellipsis } from '../../../../atomic/Ellipsis/Ellipsis';
 import { colors } from '../../../../../theme';
+import { ReactNode } from 'react';
 import {
   BorrowFormSubmitButtonHintStates,
   BorrowFormSubmitButtonStates,
-  Agents,
-} from '../../../../../contexts';
-import { ReactNode } from 'react';
+} from '../../../../../contexts/BorrowFormContext/BorrowFormContext';
+import { Agents } from '../../../../../contexts/AgentContext/types';
 
 interface SubmitControlsProps {
   approvalsNeeded: boolean;

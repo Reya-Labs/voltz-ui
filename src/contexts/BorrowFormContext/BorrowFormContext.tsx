@@ -1,17 +1,18 @@
-import {
-  GetInfoType,
-  useAgent,
-  UseAsyncFunctionResult,
-  useBalance,
-  useTokenApproval,
-} from '../../hooks';
-import { hasEnoughUnderlyingTokens, lessThanEpsilon } from '../../utilities';
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
-import { Agents, useAMMContext, useBorrowAMMContext, usePositionContext } from '../../contexts';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import isUndefined from 'lodash/isUndefined';
 import * as s from '../SwapFormContext/services';
 
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
+import { usePositionContext } from '../PositionContext/PositionContext';
+import { useBorrowAMMContext } from '../BorrowAMMContext/BorrowAMMContext';
+import { Agents } from '../AgentContext/types';
+import { useAMMContext } from '../AMMContext/AMMContext';
+import { GetInfoType } from '../../hooks/useAMM/types';
+import { useBalance } from '../../hooks/useBalance';
+import { UseAsyncFunctionResult } from '../../hooks/useAsyncFunction';
+import { useTokenApproval } from '../../hooks/useTokenApproval';
+import { useAgent } from '../../hooks/useAgent';
+import { hasEnoughUnderlyingTokens, lessThanEpsilon } from '../../utilities/validation';
 
 export type BorrowFormProviderProps = {};
 

@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react';
-import { useAMM } from '../../hooks';
+import { useAMM } from '../../hooks/useAMM/useAMM';
 import { AMM } from '@voltz-protocol/v1-sdk';
 
 export type AMMProviderProps = {
@@ -27,5 +27,3 @@ export const AMMProvider: React.FunctionComponent<AMMProviderProps> = ({ amm, ch
 export const useAMMContext = (): AMMContext => {
   return useContext(AMMCtx);
 };
-
-export default AMMProvider;

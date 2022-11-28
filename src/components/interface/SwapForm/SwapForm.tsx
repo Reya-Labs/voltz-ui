@@ -1,26 +1,26 @@
 import React from 'react';
 import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
-import { useAgent, useTokenApproval } from '../../../hooks';
-import {
-  Agents,
-  SwapFormMarginAction,
-  SwapFormState,
-  SwapFormSubmitButtonHintStates,
-  SwapFormSubmitButtonStates,
-} from '../../../contexts';
-import { FormPanel } from '@components/interface';
-import {
-  IconLabel,
-  ProtocolInformation,
-  MaturityInformation,
-  NotionalAmount,
-  MarginAmount,
-} from '@components/composite';
+import { MarginAmount } from '../../composite/MarginAmount/MarginAmount';
+import { NotionalAmount } from '../../composite/NotionalAmount/NotionalAmount';
+import { ProtocolInformation } from '../../composite/ProtocolInformation/ProtocolInformation';
+import { IconLabel } from '../../composite/IconLabel/IconLabel';
+
 import { TraderControls, MarginControls, SubmitControls, Leverage } from './components';
 import { SystemStyleObject, Theme } from '../../../theme';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from './types';
+import { MaturityInformation } from '../../composite/MaturityInformation/MaturityInformation';
+import { FormPanel } from '../FormPanel/FormPanel';
+import {
+  SwapFormMarginAction,
+  SwapFormSubmitButtonHintStates,
+  SwapFormSubmitButtonStates,
+} from '../../../contexts/SwapFormContext/enums';
+import { Agents } from '../../../contexts/AgentContext/types';
+import { useTokenApproval } from '../../../hooks/useTokenApproval';
+import { useAgent } from '../../../hooks/useAgent';
+import { SwapFormState } from '../../../contexts/SwapFormContext/SwapFormContext';
 
 export type SwapProps = {
   approvalsNeeded: boolean;

@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import { PortfolioHeaderInfo } from './PorfolioHeaderInfo';
 import { PortfolioHeaderHealth } from './PortfolioHeaderHealth';
-import { PortfolioContext } from '../../../contexts';
+import { PortfolioContext } from '../../../contexts/PortfolioContext/PortfolioContext';
 import { NetNotional } from './NetNotional/NetNotional';
 
 export type PortfolioHeaderProps = {

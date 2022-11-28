@@ -1,4 +1,5 @@
-import { Agents, SwapFormSubmitButtonHintStates } from '../contexts';
+import { SwapFormSubmitButtonHintStates } from '../contexts/SwapFormContext/enums';
+import { Agents } from '../contexts/AgentContext/types';
 import { v4 as uuidv4 } from 'uuid';
 
 const SESSION_ID = uuidv4();
