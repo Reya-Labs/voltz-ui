@@ -3,22 +3,25 @@ import Box from '@mui/material/Box';
 import { Link, useLocation } from 'react-router-dom';
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 
-import { findCurrentPosition, setPageTitle } from '../../utilities';
-import {
-  Agents,
-  AMMProvider,
-  MintBurnFormModes,
-  MintBurnFormProvider,
-  PositionProvider,
-} from '../../contexts';
-import { useAgent, useAMMs, usePositions, useWallet } from '../../hooks';
+import { useWallet } from '../../hooks/useWallet';
 
-import { Page } from '@components/interface';
-import { PageTitleDesc } from '@components/composite';
+import { PageTitleDesc } from '../../components/composite/PageTitleDesc/PageTitleDesc';
 import { ConnectedMintBurnForm } from '../../components/containers/ConnectedMintBurnForm/ConnectedMintBurnForm';
 import Button from '@mui/material/Button';
-import { routes } from '../../routes';
+import { routes } from '../paths';
 import { AMMTable } from '../../components/interface/AMMTable/AMMTable';
+import {
+  MintBurnFormModes,
+  MintBurnFormProvider,
+} from '../../contexts/MintBurnFormContext/MintBurnFormContext';
+import { AMMProvider } from '../../contexts/AMMContext/AMMContext';
+import { Agents } from '../../contexts/AgentContext/types';
+import { PositionProvider } from '../../contexts/PositionContext/PositionContext';
+import { usePositions } from '../../hooks/usePositions/usePositions';
+import { useAMMs } from '../../hooks/useAMMs';
+import { useAgent } from '../../hooks/useAgent';
+import { setPageTitle } from '../../utilities/page';
+import { findCurrentPosition } from '../../utilities/amm';
 
 export const LPPools: React.FunctionComponent = () => {
   const { amms = [], loading, error } = useAMMs();
@@ -71,7 +74,7 @@ export const LPPools: React.FunctionComponent = () => {
   };
 
   return (
-    <Page>
+    <>
       {renderMode === 'pools' && (
         <Box sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
           <Box sx={{ marginBottom: (theme) => theme.spacing(12) }}>
@@ -113,6 +116,6 @@ export const LPPools: React.FunctionComponent = () => {
           </AMMProvider>
         </Box>
       )}
-    </Page>
+    </>
   );
 };

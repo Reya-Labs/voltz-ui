@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
-import { useCurrentSeason, useWallet } from '../../hooks';
+import { useWallet } from '../../hooks/useWallet';
 import { ProfilePageNoWallet } from './ProfilePageNoWallet/ProfilePageNoWallet';
 import { ProfilePageWalletConnected } from './ProfilePageWalletConnected/ProfilePageWalletConnected';
-import { getENSDetails, setPageTitle } from '../../utilities';
 import { Season } from '../../hooks/season/types';
 import {
   SEASON_BADGE_VARIANTS,
   getPhase1Badges,
   GetProfileBadgesResponse1,
 } from './getters/getPhase1Badges';
+import { useCurrentSeason } from '../../hooks/season/useCurrentSeason';
+import { getENSDetails } from '../../utilities/getENSDetails';
+import { setPageTitle } from '../../utilities/page';
 
 export const ProfileV1: React.FunctionComponent = () => {
   const wallet = useWallet();

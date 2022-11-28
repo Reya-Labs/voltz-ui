@@ -3,12 +3,12 @@ import isNull from 'lodash/isNull';
 import { providers } from 'ethers';
 
 import { Amm_OrderBy, useGetAmMsQuery } from '../graphql';
-import useWallet from './useWallet';
+import { useWallet } from './useWallet';
 import JSBI from 'jsbi';
 import { useLocation } from 'react-router-dom';
 
 import { Token, RateOracle, AMM } from '@voltz-protocol/v1-sdk';
-import { routes } from '../routes';
+import { routes } from '../routes/paths';
 
 export type UseAMMsResult = {
   amms?: AMM[];
@@ -16,7 +16,7 @@ export type UseAMMsResult = {
   error: boolean;
 };
 
-const useAMMs = (): UseAMMsResult => {
+export const useAMMs = (): UseAMMsResult => {
   const { signer } = useWallet();
   const { pathname } = useLocation();
   const isSignerAvailable = !isNull(signer);
@@ -102,5 +102,3 @@ const useAMMs = (): UseAMMsResult => {
 
   return { amms, loading, error: !!error };
 };
-
-export default useAMMs;

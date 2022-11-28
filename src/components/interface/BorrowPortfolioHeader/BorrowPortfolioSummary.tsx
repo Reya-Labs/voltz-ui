@@ -1,9 +1,9 @@
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 
-import { Typography } from '@components/atomic';
+import { Typography } from '../../atomic/Typography/Typography';
 import { SystemStyleObject, Theme } from '../../../theme';
-import { formatCurrency, formatNumber } from '../../../utilities';
+import { formatCurrency, formatNumber } from '../../../utilities/number';
 
 export type BorrowPortfolioSummaryProps = {
   currencyCode: string;
@@ -51,7 +51,7 @@ export const BorrowPortfolioSummary = ({
     const width = isVar ? (sum === 0 ? 100 : percentageVariable) : percentageFixed;
 
     return {
-      width: (width * 0.99).toString() + '%',
+      width: `${(width * 0.99).toString()}%`,
       backgroundColor: isVar ? varColor : fixColor,
       height: height,
     };
@@ -72,11 +72,11 @@ export const BorrowPortfolioSummary = ({
     if (debt !== undefined && percentage !== undefined) {
       return (
         <Box sx={{ display: 'flex', justifyContent: justify, textAlign: align }}>
-          {currencySymbol + formatCurrency(debt, true, false, 2, 2) + ' ' + currencyCode}
+          {`${currencySymbol + formatCurrency(debt, true, false, 2, 2)} ${currencyCode}`}
           <Box sx={{ color: '#A6A2B4', fontWeight: 400 }}>
             {' '}
             &nbsp;
-            {'(' + formatNumber(percentage) + '%)'}
+            {`(${formatNumber(percentage)}%)`}
           </Box>
         </Box>
       );

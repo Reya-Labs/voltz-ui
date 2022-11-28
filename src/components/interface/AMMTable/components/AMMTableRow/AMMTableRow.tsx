@@ -4,15 +4,19 @@ import TableCell from '@mui/material/TableCell';
 import { SystemStyleObject, Theme } from '@mui/system';
 import isNull from 'lodash/isNull';
 
-import { Agents, useAMMsContext, useAMMContext } from '../../../../../contexts';
-import { Button } from '@components/atomic';
-import { PoolField, MaturityInformation } from '@components/composite';
-import { useAgent, useWallet } from '../../../../../hooks';
+import { Button } from '../../../../atomic/Button/Button';
+import { PoolField } from '../../../../composite/PoolField/PoolField';
+import { MaturityInformation } from '../../../../composite/MaturityInformation/MaturityInformation';
 import { labels } from '../../constants';
 import { VariableAPY, FixedAPR } from './components';
-import { getRowButtonId } from '../../../../../utilities';
 import isNumber from 'lodash/isNumber';
 import { DateTime } from 'luxon';
+import { useWallet } from '../../../../../hooks/useWallet';
+import { useAMMsContext } from '../../../../../contexts/AMMsContext/AMMsContext';
+import { Agents } from '../../../../../contexts/AgentContext/types';
+import { useAMMContext } from '../../../../../contexts/AMMContext/AMMContext';
+import { useAgent } from '../../../../../hooks/useAgent';
+import { getRowButtonId } from '../../../../../utilities/googleAnalytics';
 
 export type AMMTableRowProps = {
   protocol: string;

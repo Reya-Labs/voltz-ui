@@ -82,5 +82,3 @@ export const useTokenApproval = (amm: AMM) => {
     underlyingTokenApprovedForPeriphery,
   };
 };
-
-export default useTokenApproval;

@@ -14,6 +14,10 @@ export const Icon: React.FunctionComponent<IconProps> = ({ name, sx, ...props })
 
   const extraProps = (iconName: Icons) => {
     switch (iconName) {
+      case 'voltz':
+        return {
+          viewBox: '0 0 20 30',
+        };
       case 'degenStuff':
       case 'deltaDegen':
       case 'irsConnoisseur':

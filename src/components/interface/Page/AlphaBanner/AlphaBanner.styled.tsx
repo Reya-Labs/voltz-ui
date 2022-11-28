@@ -1,7 +1,6 @@
-import { Typography } from '../../atomic/Typography/Typography';
-import { styled } from '@mui/material/styles';
-import { colors } from '../../../theme';
-import { keyframes } from '@mui/system';
+import { Typography } from '../../../atomic/Typography/Typography';
+import { styled, keyframes } from '@mui/material/styles';
+import { colors } from '../../../../theme';
 import Box from '@mui/material/Box';
 
 const slide = keyframes`

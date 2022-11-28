@@ -3,18 +3,21 @@ import Box from '@mui/material/Box';
 import { useLocation } from 'react-router-dom';
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 
-import { findCurrentAmm, setPageTitle } from '../../utilities';
-import {
-  Agents,
-  AMMProvider,
-  PositionProvider,
-  SwapFormProvider,
-  PortfolioProvider,
-} from '../../contexts';
-import { useAgent, useAMMs, usePositions, useWallet } from '../../hooks';
-import { Page, SwapFormModes } from '@components/interface';
+import { Agents } from '../../contexts/AgentContext/types';
+import { AMMProvider } from '../../contexts/AMMContext/AMMContext';
+import { PositionProvider } from '../../contexts/PositionContext/PositionContext';
+import { SwapFormProvider } from '../../contexts/SwapFormContext/SwapFormContext';
+import { PortfolioProvider } from '../../contexts/PortfolioContext/PortfolioContext';
+
+import { useWallet } from '../../hooks/useWallet';
 import { ConnectedPositionTable } from '../../components/containers/ConnectedPositionTable/ConnectedPositionTable';
 import { ConnectedSwapForm } from '../../components/containers/ConnectedSwapForm/ConnectedSwapForm';
+import { SwapFormModes } from '../../components/interface/SwapForm';
+import { usePositions } from '../../hooks/usePositions/usePositions';
+import { useAMMs } from '../../hooks/useAMMs';
+import { useAgent } from '../../hooks/useAgent';
+import { setPageTitle } from '../../utilities/page';
+import { findCurrentAmm } from '../../utilities/amm';
 
 export const Portfolio: React.FunctionComponent = () => {
   const [formMode, setFormMode] = useState<SwapFormModes>();
@@ -80,7 +83,7 @@ export const Portfolio: React.FunctionComponent = () => {
   };
 
   return (
-    <Page>
+    <>
       {settling && renderMode === 'portfolio' && (
         <PortfolioProvider
           positions={agent !== Agents.LIQUIDITY_PROVIDER ? positionsByAgentGroup : undefined}
@@ -123,6 +126,6 @@ export const Portfolio: React.FunctionComponent = () => {
           )}
         </Box>
       )}
-    </Page>
+    </>
   );
 };

@@ -1,13 +1,22 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import { colors, SystemStyleObject, Theme } from '../../../../../theme';
-import { formatCurrency, formatNumber } from '../../../../../utilities';
-import { Button, getPositionBadgeVariant, PositionBadge, Typography } from '@components/atomic';
-import { BulletLabel, getHealthTextColor, HealthFactorText } from '@components/composite';
+import { formatCurrency, formatNumber } from '../../../../../utilities/number';
+import { Button } from '../../../../atomic/Button/Button';
+import {
+  getPositionBadgeVariant,
+  PositionBadge,
+} from '../../../../atomic/PositionBadge/PositionBadge';
 import isUndefined from 'lodash/isUndefined';
-import { useAgent } from '../../../../../hooks';
-import { Agents } from '../../../../../contexts';
+import { Agents } from '../../../../../contexts/AgentContext/types';
 import { ReactComponent as EditIcon } from './editPosition.svg';
+import { Typography } from '../../../../atomic/Typography/Typography';
+import { BulletLabel } from '../../../../composite/BulletLabel/BulletLabel';
+import {
+  HealthFactorText,
+  getHealthTextColor,
+} from '../../../../composite/HealthFactorText/HealthFactorText';
+import { useAgent } from '../../../../../hooks/useAgent';
 
 export type PositionTableHeadProps = {
   currencyCode: string;

@@ -1,6 +1,5 @@
 export * from './types';
 export { default as colors } from './colors';
-export { default as ThemeProvider } from './ThemeProvider/ThemeProvider';
 export * from './themes';
 export * from './themes/dark/sharedStyles';
 

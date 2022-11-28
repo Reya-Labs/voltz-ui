@@ -5,14 +5,19 @@ import TableBody from '@mui/material/TableBody';
 import { colors, SystemStyleObject, Theme } from '../../../theme';
 import { Position } from '@voltz-protocol/v1-sdk';
 
-import { findCurrentAmm, getRowButtonId, isBorrowing } from '../../../utilities';
-import { Panel } from '@components/atomic';
+import { Panel } from '../../atomic/Panel/Panel';
 import { PositionTableHead, PositionTableRow } from './components';
-import { Agents, AMMProvider, PortfolioContext } from '../../../contexts';
 import { TransactionList } from '../TransactionList/TransactionList';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import { useAgent, useAMMs } from '../../../hooks';
+import { Agents } from '../../../contexts/AgentContext/types';
+import { PortfolioContext } from '../../../contexts/PortfolioContext/PortfolioContext';
+import { useAMMs } from '../../../hooks/useAMMs';
+import { useAgent } from '../../../hooks/useAgent';
+import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
+import { getRowButtonId } from '../../../utilities/googleAnalytics';
+import { isBorrowing } from '../../../utilities/isBorrowing';
+import { findCurrentAmm } from '../../../utilities/amm';
 
 export type PositionTableProps = {
   positions: Position[];

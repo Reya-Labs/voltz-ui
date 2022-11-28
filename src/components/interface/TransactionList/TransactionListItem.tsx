@@ -2,7 +2,10 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import ListItem from '@mui/material/ListItem';
 import { colors, SystemStyleObject, Theme } from '../../../theme';
-import { Button, Icon, Typography } from '@components/atomic';
+import { Typography } from '../../atomic/Typography/Typography';
+import { Button } from '../../atomic/Button/Button';
+import { Icon } from '../../atomic/Icon/Icon';
+
 import { getTransactionData } from './services';
 
 interface TransactionListItemProps {

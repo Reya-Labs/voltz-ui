@@ -1,19 +1,19 @@
 import React from 'react';
 import { DateTime, Duration } from 'luxon';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { MintBurnForm } from './MintBurnForm';
+import { AMM } from '@voltz-protocol/v1-sdk';
 import {
-  AgentProvider,
-  Agents,
+  MintBurnFormHintStates,
   MintBurnFormModes,
   MintBurnFormProvider,
-  MintBurnFormHintStates,
   MintBurnFormSubmitButtonStates,
   useMintBurnForm,
-  AMMProvider,
-} from '../../../contexts';
-import { MintBurnForm } from './MintBurnForm';
-import { useTokenApproval } from '../../../hooks';
-import { AMM } from '@voltz-protocol/v1-sdk';
+} from '../../../contexts/MintBurnFormContext/MintBurnFormContext';
+import { Agents } from '../../../contexts/AgentContext/types';
+import { useTokenApproval } from '../../../hooks/useTokenApproval';
+import { AgentProvider } from '../../../contexts/AgentContext/AgentProvider';
+import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
 
 export default {
   title: 'Interface/MintBurnForm',

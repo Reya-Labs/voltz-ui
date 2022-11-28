@@ -30,5 +30,3 @@ export const useCurrentPositionMarginRequirement = (
 
   return currentPositionMarginRequirement;
 };
-
-export default useCurrentPositionMarginRequirement;

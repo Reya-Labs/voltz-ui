@@ -1,8 +1,8 @@
 import React from 'react';
 import { SummaryPanel } from '../../../../atomic/SummaryPanel/SummaryPanel';
-import { IconLabel } from '@components/composite';
-import { formatCurrency, roundUpDecimal } from '../../../../../utilities';
+import { IconLabel } from '../../../../composite/IconLabel/IconLabel';
 import isUndefined from 'lodash/isUndefined';
+import { formatCurrency, roundUpDecimal } from '../../../../../utilities/number';
 
 export type SwapSummaryEditMarginProps = {
   balance?: number;

@@ -2,7 +2,7 @@ import React from 'react';
 import { addDecorator } from '@storybook/react';
 import { BrowserRouter } from 'react-router-dom';
 
-import { ThemeProvider } from '../src/theme';
+import { ThemeProvider } from '../src/theme/ThemeProvider/ThemeProvider';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },

@@ -2,7 +2,6 @@ import { Routes, Route, Navigate, useSearchParams } from 'react-router-dom';
 import TagManager from 'react-gtm-module';
 
 import {
-  routes,
   TradingLeague,
   Profile,
   FixedBorrower,
@@ -13,8 +12,8 @@ import {
   LPPools,
   LPPortfolio,
 } from './routes';
-import { AlphaBanner, GweiBar } from '@components/composite';
-import Box from '@mui/material/Box';
+import { routes } from './routes/paths';
+import { Page } from './components/interface/Page/Page';
 import { useEffect } from 'react';
 import {
   deleteReferrer,
@@ -55,7 +54,7 @@ export const App = () => {
   }, [searchParamsReferrer]);
 
   return (
-    <>
+    <Page>
       <Routes>
         <Route path="/">
           <Route index element={<Navigate to={routes.TRADER_POOLS} />} />
@@ -67,6 +66,10 @@ export const App = () => {
           <Route path={routes.PORTFOLIO} element={<Portfolio />} />
           <Route path={routes.LP_POOLS} element={<LPPools />} />
           <Route path={routes.LP_PORTFOLIO} element={<LPPortfolio />} />
+          <Route
+            path={routes.PRODUCTS}
+            element={<Navigate replace={true} to={`/${routes.LP_OPTIMISERS}`} />}
+          />
           <Route path={routes.LP_OPTIMISERS} element={<Ecosystem />} />
           <Route path={routes.BORROW_POS} element={<FixedBorrower />} />
           <Route
@@ -83,10 +86,6 @@ export const App = () => {
           <Route path={routes.TRADING_LEAGUE} element={<TradingLeague />} />
         </Route>
       </Routes>
-      <Box sx={{ position: 'fixed', bottom: '0', left: '0', width: '100%' }}>
-        <GweiBar />
-        <AlphaBanner />
-      </Box>
-    </>
+    </Page>
   );
 };

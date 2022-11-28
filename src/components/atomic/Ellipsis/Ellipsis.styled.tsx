@@ -1,5 +1,4 @@
-import { styled } from '@mui/material/styles';
-import { keyframes } from '@mui/system';
+import { styled, keyframes } from '@mui/material/styles';
 
 const ellipsisAnimation = keyframes`
   0% {

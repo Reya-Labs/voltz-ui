@@ -7,8 +7,6 @@ export type ThemeProviderProps = {
   theme: keyof typeof themes;
 };
 
-const ThemeProvider: FunctionComponent<ThemeProviderProps> = ({ children, theme }) => (
+export const ThemeProvider: FunctionComponent<ThemeProviderProps> = ({ children, theme }) => (
   <MuiThemeProvider theme={themes[theme]}>{children}</MuiThemeProvider>
 );
-
-export default ThemeProvider;

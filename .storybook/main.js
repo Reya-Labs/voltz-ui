@@ -29,7 +29,6 @@ module.exports = {
         Buffer: ['buffer', 'Buffer'],
       }),
     ];
-    config.resolve.alias['@components'] = path.resolve(path.dirname(__dirname), 'src/components');
     return config;
   },
   features: {

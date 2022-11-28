@@ -1,13 +1,15 @@
 import React, { ReactNode } from 'react';
-import { useTokenApproval } from '../../../../../hooks';
-import { Button, Ellipsis, Typography } from '@components/atomic';
+import { colors } from '../../../../../theme';
+import Box from '@mui/material/Box';
+import { Typography } from '../../../../atomic/Typography/Typography';
+import { Button } from '../../../../atomic/Button/Button';
+import { Ellipsis } from '../../../../atomic/Ellipsis/Ellipsis';
 import {
   MintBurnFormHintStates,
   MintBurnFormModes,
   MintBurnFormSubmitButtonStates,
-} from '../../../../../contexts';
-import { colors } from '../../../../../theme';
-import Box from '@mui/material/Box';
+} from '../../../../../contexts/MintBurnFormContext/MintBurnFormContext';
+import { useTokenApproval } from '../../../../../hooks/useTokenApproval';
 
 type TextProps = {
   bold?: boolean;

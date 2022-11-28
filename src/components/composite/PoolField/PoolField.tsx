@@ -1,7 +1,7 @@
-import { Agents } from '../../../contexts';
+import { Agents } from '../../../contexts/AgentContext/types';
 import Box from '@mui/material/Box';
 import { CustomPoolField } from './CustomPoolField';
-import { Typography } from '@components/atomic';
+import { Typography } from '../../atomic/Typography/Typography';
 
 import { ReactComponent as Aave } from './aave-icon.svg';
 import { ReactComponent as Compound } from './compound-icon.svg';

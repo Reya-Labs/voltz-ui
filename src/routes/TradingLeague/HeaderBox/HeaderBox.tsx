@@ -1,6 +1,6 @@
 import React from 'react';
 import { colors } from '../../../theme';
-import { Typography } from '@components/atomic';
+import { Typography } from '../../../components/atomic/Typography/Typography';
 import Box from '@mui/material/Box';
 
 const HeaderBox = () => (

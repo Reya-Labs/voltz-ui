@@ -1,5 +1,5 @@
-import { Typography } from '@components/atomic';
-import { formatNumber } from '../../../../../../../utilities';
+import { Typography } from '../../../../../../atomic/Typography/Typography';
+import { formatNumber } from '../../../../../../../utilities/number';
 
 type AccruedRatesProps = {
   positionType: number;

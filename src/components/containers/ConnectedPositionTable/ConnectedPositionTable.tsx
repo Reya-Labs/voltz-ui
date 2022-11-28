@@ -1,15 +1,24 @@
 import React, { ReactNode, useCallback, useState } from 'react';
 
-import { usePositions, useSelector, useWallet, useDispatch } from '../../../hooks';
-import { PendingTransaction, PortfolioHeader, PositionTable } from '@components/interface';
-import { Loading, Panel, RouteLink, Typography } from '@components/atomic';
-import { Agents, usePortfolioContext } from '../../../contexts';
 import { actions, selectors } from '../../../store';
-import { routes } from '../../../routes';
+import { routes } from '../../../routes/paths';
 import Box from '@mui/material/Box';
 import { colors } from '../../../theme';
+import { Typography } from '../../atomic/Typography/Typography';
+import { Loading } from '../../atomic/Loading/Loading';
+import { Panel } from '../../atomic/Panel/Panel';
+import { RouteLink } from '../../atomic/RouteLink/RouteLink';
+import { PendingTransaction } from '../../interface/PendingTransaction/PendingTransaction';
+import { PositionTable } from '../../interface/PositionTable/PositionTable';
+import { PortfolioHeader } from '../../interface/PortfolioHeader/PortfolioHeader';
 
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
+import { useWallet } from '../../../hooks/useWallet';
+import { Agents } from '../../../contexts/AgentContext/types';
+import { usePortfolioContext } from '../../../contexts/PortfolioContext/PortfolioContext';
+import { usePositions } from '../../../hooks/usePositions/usePositions';
+import { useSelector } from '../../../hooks/useSelector';
+import { useDispatch } from '../../../hooks/useDispatch';
 
 export type ConnectedPositionTableProps = {
   onSelectItem: (item: Position, mode: 'margin' | 'liquidity' | 'rollover' | 'notional') => void;

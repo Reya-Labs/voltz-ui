@@ -1,8 +1,8 @@
 import React from 'react';
 import TableCell from '@mui/material/TableCell';
 
-import { Typography } from '@components/atomic';
-import { formatNumber } from '../../../../../../../utilities';
+import { Typography } from '../../../../../../atomic/Typography/Typography';
+import { formatNumber } from '../../../../../../../utilities/number';
 
 export type BorrowVariableAPYProps = {
   loading: boolean;

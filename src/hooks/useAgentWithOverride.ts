@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 
-import { Agents, AgentSettings } from '../contexts';
-import useAgent from './useAgent';
+import { Agents, AgentSettings } from '../contexts/AgentContext/types';
+import { useAgent } from './useAgent';
 
-const useAgentWithOverride = (agentOverride: Agents | undefined): AgentSettings => {
+export const useAgentWithOverride = (agentOverride: Agents | undefined): AgentSettings => {
   const { agent, onChangeAgent } = useAgent();
 
   useEffect(() => {
@@ -21,5 +21,3 @@ const useAgentWithOverride = (agentOverride: Agents | undefined): AgentSettings 
     onChangeAgent,
   };
 };
-
-export default useAgentWithOverride;

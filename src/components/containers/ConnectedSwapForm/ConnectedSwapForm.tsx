@@ -1,35 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { routes } from '../../../routes';
+import { routes } from '../../../routes/paths';
 import { actions, selectors } from '../../../store';
-import { useAgent, useDispatch, useSelector, useWallet } from '../../../hooks';
-import {
-  SwapCurrentPosition,
-  SwapForm,
-  SwapInfo,
-  PendingTransaction,
-  SwapFormActions,
-  FormPanel,
-  SwapFormModes,
-} from '@components/interface';
-import {
-  Agents,
-  useAMMContext,
-  useAMMsContext,
-  usePositionContext,
-  useSwapFormContext,
-} from '../../../contexts';
 import { BigNumber } from 'ethers';
-import {
-  getNotionalActionFromHintState,
-  getPoolButtonId,
-  isBorrowing,
-  setPageTitle,
-} from '../../../utilities';
 import isUndefined from 'lodash/isUndefined';
 
 import { AMM } from '@voltz-protocol/v1-sdk';
+import { SwapForm, SwapFormActions, SwapFormModes } from '../../interface/SwapForm';
+import { PendingTransaction } from '../../interface/PendingTransaction/PendingTransaction';
+import { SwapCurrentPosition } from '../../interface/SwapCurrentPosition';
+import { FormPanel } from '../../interface/FormPanel/FormPanel';
+import { SwapInfo } from '../../interface/SwapInfo';
+import { useWallet } from '../../../hooks/useWallet';
+import { useAMMsContext } from '../../../contexts/AMMsContext/AMMsContext';
+import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';
+import { Agents } from '../../../contexts/AgentContext/types';
+import { useAMMContext } from '../../../contexts/AMMContext/AMMContext';
+import { useSwapFormContext } from '../../../contexts/SwapFormContext/SwapFormContext';
+import { useAgent } from '../../../hooks/useAgent';
+import { useDispatch } from '../../../hooks/useDispatch';
+import { useSelector } from '../../../hooks/useSelector';
+import {
+  getNotionalActionFromHintState,
+  getPoolButtonId,
+} from '../../../utilities/googleAnalytics';
+import { setPageTitle } from '../../../utilities/page';
+import { isBorrowing } from '../../../utilities/isBorrowing';
 
 export type ConnectedSwapFormProps = {
   onReset: () => void;

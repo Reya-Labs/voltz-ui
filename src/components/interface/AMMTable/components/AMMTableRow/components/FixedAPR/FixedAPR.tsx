@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Typography } from '@components/atomic';
+import { Typography } from '../../../../../../atomic/Typography/Typography';
 import TableCell from '@mui/material/TableCell';
-import { formatNumber } from '../../../../../../../utilities';
+import { formatNumber } from '../../../../../../../utilities/number';
 import isUndefined from 'lodash/isUndefined';
 
 export type FixedAPRProps = {

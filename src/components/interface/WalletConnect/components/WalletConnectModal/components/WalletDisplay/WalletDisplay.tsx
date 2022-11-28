@@ -2,8 +2,11 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import isNull from 'lodash/isNull';
 
-import { Wallet } from '../../../../../../../contexts';
-import { Button, Icon, Panel, Typography } from '@components/atomic';
+import { Wallet } from '../../../../../../../contexts/WalletContext/types';
+import { Typography } from '../../../../../../atomic/Typography/Typography';
+import { Button } from '../../../../../../atomic/Button/Button';
+import { Icon } from '../../../../../../atomic/Icon/Icon';
+import { Panel } from '../../../../../../atomic/Panel/Panel';
 
 export type WalletDisplayProps = {
   wallet: Wallet;

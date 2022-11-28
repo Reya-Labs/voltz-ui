@@ -3,20 +3,24 @@ import Box from '@mui/material/Box';
 import { useLocation } from 'react-router-dom';
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 
-import { findCurrentAmm, setPageTitle } from '../../utilities';
-import {
-  Agents,
-  AMMProvider,
-  MintBurnFormModes,
-  MintBurnFormProvider,
-  PositionProvider,
-  PortfolioProvider,
-} from '../../contexts';
-import { useAgent, useAMMs, usePositions, useWallet } from '../../hooks';
+import { Agents } from '../../contexts/AgentContext/types';
+import { AMMProvider } from '../../contexts/AMMContext/AMMContext';
+import { PositionProvider } from '../../contexts/PositionContext/PositionContext';
+import { PortfolioProvider } from '../../contexts/PortfolioContext/PortfolioContext';
 
-import { Page } from '@components/interface';
+import { useWallet } from '../../hooks/useWallet';
+
 import { ConnectedMintBurnForm } from '../../components/containers/ConnectedMintBurnForm/ConnectedMintBurnForm';
 import { ConnectedPositionTable } from '../../components/containers/ConnectedPositionTable/ConnectedPositionTable';
+import {
+  MintBurnFormModes,
+  MintBurnFormProvider,
+} from '../../contexts/MintBurnFormContext/MintBurnFormContext';
+import { usePositions } from '../../hooks/usePositions/usePositions';
+import { useAMMs } from '../../hooks/useAMMs';
+import { useAgent } from '../../hooks/useAgent';
+import { setPageTitle } from '../../utilities/page';
+import { findCurrentAmm } from '../../utilities/amm';
 
 export const LPPortfolio: React.FunctionComponent = () => {
   const [amm, setAMM] = useState<AMM>();
@@ -83,7 +87,7 @@ export const LPPortfolio: React.FunctionComponent = () => {
   };
 
   return (
-    <Page>
+    <>
       {settling && renderMode === 'portfolio' && (
         <PortfolioProvider
           positions={agent === Agents.LIQUIDITY_PROVIDER ? positionsByAgentGroup : undefined}
@@ -123,6 +127,6 @@ export const LPPortfolio: React.FunctionComponent = () => {
           )}
         </Box>
       )}
-    </Page>
+    </>
   );
 };

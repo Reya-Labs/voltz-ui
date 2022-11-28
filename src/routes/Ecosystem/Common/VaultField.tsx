@@ -1,5 +1,5 @@
-import { IconLabel } from '@components/composite';
-import { Typography } from '@components/atomic';
+import { Typography } from '../../../components/atomic/Typography/Typography';
+import { IconLabel } from '../../../components/composite/IconLabel/IconLabel';
 import Box from '@mui/material/Box';
 import React from 'react';
 import { titleStyles } from './styles';

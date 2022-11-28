@@ -231,7 +231,6 @@ module.exports = function (webpackEnv) {
       // https://github.com/facebook/create-react-app/issues/290
       extensions: paths.moduleFileExtensions.map((ext) => `.${ext}`),
       alias: {
-        '@components': 'src/components',
         // Allows for better profiling with ReactDevTools
         ...(isEnvProductionProfile && {
           'react-dom$': 'react-dom/profiling',

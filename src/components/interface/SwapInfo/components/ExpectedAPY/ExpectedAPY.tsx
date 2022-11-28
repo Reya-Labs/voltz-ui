@@ -1,21 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { Typography } from '@components/atomic';
-import { IconLabel, MaskedIntegerField } from '@components/composite';
+import { Typography } from '../../../../atomic/Typography/Typography';
+import { IconLabel } from '../../../../composite/IconLabel/IconLabel';
+import { MaskedIntegerField } from '../../../../composite/MaskedIntegerField/MaskedIntegerField';
 import Box from '@mui/material/Box';
 import { colors } from '../../../../../theme';
+import isUndefined from 'lodash/isUndefined';
+import { useWallet } from '../../../../../hooks/useWallet';
+import { useAMMContext } from '../../../../../contexts/AMMContext/AMMContext';
+import { useAgent } from '../../../../../hooks/useAgent';
 import {
-  DataLayerEventPayload,
   formatNumber,
-  getAmmProtocol,
   notFormatted,
-  pushEvent,
   stringToBigFloat,
   toUSFormat,
-} from '../../../../../utilities';
-import isUndefined from 'lodash/isUndefined';
-import { useAgent, useWallet } from '../../../../../hooks';
-import { useAMMContext } from '../../../../../contexts';
+} from '../../../../../utilities/number';
+import { DataLayerEventPayload, pushEvent } from '../../../../../utilities/googleAnalytics';
+import { getAmmProtocol } from '../../../../../utilities/amm';
 
 interface ExpectedAPYProps {
   expectedApy?: number;
@@ -91,7 +92,7 @@ export const ExpectedAPY = ({
       if (value < -1000) {
         return '<-1,000%';
       }
-      return formatNumber(value, 0, 2) + '%';
+      return `${formatNumber(value, 0, 2)}%`;
     }
     return '---';
   };
@@ -99,7 +100,7 @@ export const ExpectedAPY = ({
   const formatCashflow = (value: number | undefined) => {
     if (value) {
       if (Math.abs(value) >= 1000000000 - 0.5) {
-        return formatNumber(value / 1000000000, 0, 3) + 'bn';
+        return `${formatNumber(value / 1000000000, 0, 3)}bn`;
       }
       if (Math.abs(value) >= 1000000 - 0.5) {
         return formatNumber(value, 0, 0);
@@ -192,7 +193,7 @@ export const ExpectedAPY = ({
               color: colors.lavenderWeb.darken010,
             }}
           >
-            {'APY: ' + formatExpectedApy(expectedApy)}
+            {`APY: ${formatExpectedApy(expectedApy)}`}
           </Typography>
         </Box>
       </Box>

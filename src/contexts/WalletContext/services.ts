@@ -221,7 +221,7 @@ export async function getWalletRiskAssessment(walletId: string) {
       headers: {
         Accept: 'application/json',
         'Content-type': 'application/json',
-        Authorization: 'Basic ' + btoa(process.env.REACT_APP_TRM_API_KEY || ''),
+        Authorization: `Basic ${btoa(process.env.REACT_APP_TRM_API_KEY || '')}`,
       },
       body: JSON.stringify([
         {

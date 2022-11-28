@@ -1,8 +1,7 @@
-import { styled } from '@mui/material/styles';
+import { styled, keyframes } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import { colors } from '../../../theme';
-import { keyframes } from '@mui/system';
-import { Typography } from '../../atomic/Typography/Typography';
+import { Typography } from '../Typography/Typography';
 
 const grow = (percentage: number) => {
   return keyframes`

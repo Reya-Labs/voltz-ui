@@ -1,5 +1,5 @@
 import isUndefined from 'lodash/isUndefined';
-import { Agents } from '../../contexts';
+import { Agents } from '../../contexts/AgentContext/types';
 
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 

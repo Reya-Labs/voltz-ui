@@ -1,7 +1,7 @@
 import { colors } from '../../../theme';
 import React from 'react';
 import Box from '@mui/material/Box';
-import { Typography } from '@components/atomic';
+import { Typography } from '../../../components/atomic/Typography/Typography';
 import Skeleton from '@mui/material/Skeleton';
 import { ReactComponent as Gold } from './icons/gold.svg';
 import { ReactComponent as Silver } from './icons/silver.svg';

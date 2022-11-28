@@ -1,15 +1,14 @@
-import { Page } from '@components/interface';
-
 import ConnectedMellowLpDepositForm from './ConnectedMellowLpDepositForm/ConnectedMellowLpDepositForm';
 import ConnectedMellowLPTable from './ConnectedMellowLPTable/ConnectedMellowLPTable';
-import { setPageTitle } from '../../utilities';
+import { setPageTitle } from '../../utilities/page';
 import React, { useEffect, useState } from 'react';
-import { useMellowLPVaults, useWallet } from '../../hooks';
+import { useMellowLPVaults } from '../../hooks/useMellowLPVaults/useMellowLPVaults';
+import { useWallet } from '../../hooks/useWallet';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { MellowProduct } from './types';
 import { ConnectedMellowBox } from './Ecosystem.styled';
-import { routes } from '../index';
+import { routes } from '../paths';
 
 export enum EcosystemRenderMode {
   MELLOW_DEPOSIT_FORM,
@@ -117,7 +116,7 @@ export const Ecosystem: React.FunctionComponent = () => {
   }, [lpVaults, signer, vaultsLoaded]);
 
   return (
-    <Page>
+    <>
       {renderMode === EcosystemRenderMode.PAGE && (
         <ConnectedMellowBox>
           <ConnectedMellowLPTable
@@ -135,6 +134,6 @@ export const Ecosystem: React.FunctionComponent = () => {
           )}
         </ConnectedMellowBox>
       )}
-    </Page>
+    </>
   );
 };

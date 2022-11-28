@@ -1,6 +1,6 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import { Typography } from '@components/atomic';
+import { Typography } from '../../../../atomic/Typography/Typography';
 import { colors } from '../../../../../theme';
 
 export type WarningBoxProps = {

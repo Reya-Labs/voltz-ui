@@ -16,8 +16,7 @@
     "node"
   ],
   "moduleNameMapper": {
-    "^.+\\.module\\.(css)$": "identity-obj-proxy",
-    "@components": "<rootDir>/src/components"
+    "^.+\\.module\\.(css)$": "identity-obj-proxy"
   },
   "modulePaths": [],
   "resetMocks": true,

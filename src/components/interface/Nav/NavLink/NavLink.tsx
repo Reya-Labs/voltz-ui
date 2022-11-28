@@ -1,4 +1,4 @@
-import { Button } from '@components/atomic';
+import { Button } from '../../../atomic/Button/Button';
 import React from 'react';
 import {
   ACTIVE_CLASS,
@@ -12,7 +12,7 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import Popover from '@mui/material/Popover';
 import CircleIcon from '@mui/icons-material/Circle';
 import { colors } from '../../../../theme';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 type NavLinkProps = {
   link?: string;
@@ -24,9 +24,10 @@ type NavLinkProps = {
   }[];
 };
 
-function isActiveLink(link: string = '', subLinks: string[] = []): boolean {
-  const windowPath = window.location.href;
-  return (link && windowPath.indexOf(link) !== -1) || subLinks?.some((l) => isActiveLink(l));
+function isActiveLink(link: string = '', subLinks: string[] = [], pathName: string): boolean {
+  return (
+    (link && pathName.indexOf(link) !== -1) || subLinks?.some((l) => isActiveLink(l, [], pathName))
+  );
 }
 
 export const NavLink: React.FunctionComponent<NavLinkProps> = ({
@@ -35,11 +36,11 @@ export const NavLink: React.FunctionComponent<NavLinkProps> = ({
   link,
   isNew,
 }) => {
+  const { pathname } = useLocation();
   const hasSubLinks = subLinks && subLinks.length !== 0;
   const [anchorPopoverElement, setAnchorPopoverElement] = React.useState<HTMLButtonElement | null>(
     null,
   );
-
   const handlePopoverOpen = (event: React.MouseEvent<HTMLButtonElement>) =>
     setAnchorPopoverElement(event.currentTarget);
   const handlePopoverClose = () => setAnchorPopoverElement(null);
@@ -71,6 +72,7 @@ export const NavLink: React.FunctionComponent<NavLinkProps> = ({
             : isActiveLink(
                 link,
                 subLinks?.map((l) => l.link),
+                pathname,
               )
             ? ACTIVE_CLASS
             : undefined
@@ -106,7 +108,7 @@ export const NavLink: React.FunctionComponent<NavLinkProps> = ({
                 sx={subMenuButtonSx}
                 onClick={handlePopoverClose}
                 startIcon={subLink.isNew ? newLinkIndicator : null}
-                className={isActiveLink(subLink.link) ? ACTIVE_CLASS : undefined}
+                className={isActiveLink(subLink.link, [], pathname) ? ACTIVE_CLASS : undefined}
               >
                 {subLink.text}
               </Button>

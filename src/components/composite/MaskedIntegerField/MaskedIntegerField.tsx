@@ -6,11 +6,12 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 
 import isEmpty from 'lodash/isEmpty';
-import { useUniqueId } from '../../../hooks';
-import { OverrideTypes } from '../../../utilities';
-import { Typography } from '@components/atomic';
+import { useUniqueId } from '../../../hooks/useUniqueId';
+import { Typography } from '../../atomic/Typography/Typography';
 import { colors, inputStyles, SystemStyleObject, Theme } from '../../../theme';
 import isUndefined from 'lodash/isUndefined';
+
+type OverrideTypes<T1, T2> = Omit<T1, keyof T2> & T2;
 
 export type MaskedIntegerFieldProps = OverrideTypes<
   CurrencyInputProps,

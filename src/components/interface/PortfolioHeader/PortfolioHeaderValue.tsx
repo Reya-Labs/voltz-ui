@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Typography } from '@components/atomic';
+import { Typography } from '../../atomic/Typography/Typography';
 import Box from '@mui/material/Box';
 import { SystemStyleObject, Theme } from '../../../theme';
 

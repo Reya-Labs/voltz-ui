@@ -1,9 +1,9 @@
 import React from 'react';
 import TableCell from '@mui/material/TableCell';
 
-import { Typography } from '@components/atomic';
+import { Typography } from '../../../../../../atomic/Typography/Typography';
 import Box from '@mui/material/Box';
-import { formatNumber } from '../../../../../../../utilities';
+import { formatNumber } from '../../../../../../../utilities/number';
 
 export type DebtProps = {
   debtInUSD: number | null | void;

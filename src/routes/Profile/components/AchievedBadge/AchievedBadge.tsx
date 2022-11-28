@@ -10,7 +10,7 @@ import {
   Skeleton,
   TitleTypography,
 } from './AchivedBadge.styled';
-import { formatPOSIXTimestamp } from '../../../../utilities';
+import { formatPOSIXTimestamp } from '../../../../utilities/date';
 import { BadgeVariant } from '../../data/getSeasonBadges';
 
 export type AchievedBadgeProps = {

@@ -1,6 +1,8 @@
 import React from 'react';
 
-import { Button, Icon, IconProps, Typography } from '@components/atomic';
+import { Typography } from '../../../../../../../../atomic/Typography/Typography';
+import { Button } from '../../../../../../../../atomic/Button/Button';
+import { Icon, IconProps } from '../../../../../../../../atomic/Icon/Icon';
 
 export type WalletOptionButtonProps = {
   onClick: () => void;

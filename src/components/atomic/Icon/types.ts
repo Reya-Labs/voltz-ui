@@ -9,8 +9,6 @@ import {
   DeltaDegen,
   DryIce,
   Ethereum,
-  InterfaceAlertInformationCircle,
-  InterfaceAlertWarningCircle,
   IrsConnoisseur,
   LeverageCrowbar,
   Liquidation,
@@ -60,6 +58,8 @@ import {
   NotionalInfluencer,
   Referror,
   WhaleWhisperer,
+  InformationCircle,
+  WarningCircle,
 } from './icons';
 
 export type Icons =
@@ -131,11 +131,11 @@ export const iconMap: Record<Icons, ElementType> = {
   'arrow-left': ArrowLeft as ElementType,
   'arrow-right': ArrowRight as ElementType,
   ethereum: Ethereum as ElementType,
-  'information-circle': InterfaceAlertInformationCircle as ElementType,
+  'information-circle': InformationCircle as ElementType,
   metamask: Metamask as ElementType,
   voltz: Voltz as ElementType,
   walletConnect: WalletConnect as ElementType,
-  'warning-circle': InterfaceAlertWarningCircle as ElementType,
+  'warning-circle': WarningCircle as ElementType,
   'token-dai': TokenDai as ElementType,
   'token-eth': TokenEth as ElementType,
   'token-lido': TokenLido as ElementType,

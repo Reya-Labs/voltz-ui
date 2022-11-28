@@ -1,26 +1,34 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
-
-import {
-  DataLayerEventPayload,
-  getAgentFromPosition,
-  getAmmProtocol,
-  getPoolButtonId,
-  isBorrowing,
-  pushEvent,
-  setPageTitle,
-  formatCurrency,
-} from '../../../utilities';
-import { useWallet, useSelector, useAgent } from '../../../hooks';
 import { selectors } from '../../../store';
-import { AMMProvider, MintBurnFormLiquidityAction, useAMMsContext } from '../../../contexts';
-import { Button, Panel, Typography, Loading } from '@components/atomic';
-import { ProtocolInformation, WalletAddressDisplay } from '@components/composite';
+import { ProtocolInformation } from '../../composite/ProtocolInformation/ProtocolInformation';
+import { WalletAddressDisplay } from '../../composite/WalletAddressDisplay/WalletAddressDisplay';
+
 import isUndefined from 'lodash/isUndefined';
 import { Wallet } from '../../../graphql';
+import { Typography } from '../../atomic/Typography/Typography';
+import { Button } from '../../atomic/Button/Button';
+import { Panel } from '../../atomic/Panel/Panel';
+import { Loading } from '../../atomic/Loading/Loading';
 
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
+import { MintBurnFormLiquidityAction } from '../../../contexts/MintBurnFormContext/MintBurnFormContext';
+import { useWallet } from '../../../hooks/useWallet';
+import { useAMMsContext } from '../../../contexts/AMMsContext/AMMsContext';
+import { useAgent } from '../../../hooks/useAgent';
+import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
+import { useSelector } from '../../../hooks/useSelector';
+import {
+  DataLayerEventPayload,
+  getPoolButtonId,
+  pushEvent,
+} from '../../../utilities/googleAnalytics';
+import { getAgentFromPosition } from '../../../utilities/getAgent';
+import { setPageTitle } from '../../../utilities/page';
+import { isBorrowing } from '../../../utilities/isBorrowing';
+import { getAmmProtocol } from '../../../utilities/amm';
+import { formatCurrency } from '../../../utilities/number';
 
 export type PendingTransactionProps = {
   amm: AMM;
@@ -293,7 +301,7 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
               paddingBottom: (theme) => theme.spacing(10),
             }}
           >
-            <Button variant="contained" onClick={onBack} id={buttonId + '_FAILED'}>
+            <Button variant="contained" onClick={onBack} id={`${buttonId}_FAILED`}>
               Back
             </Button>
           </Box>

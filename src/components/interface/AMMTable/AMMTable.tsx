@@ -3,15 +3,16 @@ import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 
-import { AMMProvider, Agents } from '../../../contexts';
-import { Panel } from '@components/atomic';
+import { Panel } from '../../atomic/Panel/Panel';
 import { AMMTableHead, AMMTableRow } from './components';
-import { useAgent } from '../../../hooks';
 import { DateTime } from 'luxon';
 
 import { AMM } from '@voltz-protocol/v1-sdk';
 import { commonOverrides } from './styles';
-import { isBorrowing } from '../../../utilities';
+import { isBorrowing } from '../../../utilities/isBorrowing';
+import { Agents } from '../../../contexts/AgentContext/types';
+import { useAgent } from '../../../hooks/useAgent';
+import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
 
 export type AMMTableProps = {
   onSelectItem: (amm: AMM) => void;

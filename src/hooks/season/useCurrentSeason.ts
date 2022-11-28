@@ -1,7 +1,7 @@
 import { SEASONS } from './constants';
 import { Season } from './types';
 
-const useCurrentSeason = (): Season => {
+export const useCurrentSeason = (): Season => {
   const now = Date.now().valueOf();
 
   for (const season of SEASONS) {
@@ -14,5 +14,3 @@ const useCurrentSeason = (): Season => {
 
   return SEASONS[0];
 };
-
-export default useCurrentSeason;

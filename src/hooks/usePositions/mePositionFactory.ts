@@ -15,7 +15,7 @@ import {
   Settlement,
   AMM,
 } from '@voltz-protocol/v1-sdk';
-import { Wallet } from '../../contexts';
+import { Wallet } from '../../contexts/WalletContext/types';
 
 type MEPositionQueryData = NonNullable<GetWalletQuery['wallet']>['positions'][number];
 

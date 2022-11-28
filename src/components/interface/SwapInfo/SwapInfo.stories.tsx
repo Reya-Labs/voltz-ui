@@ -1,11 +1,13 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { AgentProvider, AMMProvider, SwapFormProvider } from '../../../contexts';
 import { SwapInfo } from './SwapInfo';
-import { SwapFormActions, SwapFormModes } from '../SwapForm/types';
+import { SwapFormActions, SwapFormModes } from '../SwapForm';
 
 import { AMM, InfoPostSwap } from '@voltz-protocol/v1-sdk';
+import { SwapFormProvider } from '../../../contexts/SwapFormContext/SwapFormContext';
+import { AgentProvider } from '../../../contexts/AgentContext/AgentProvider';
+import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
 
 export default {
   title: 'Interface/SwapInfo',

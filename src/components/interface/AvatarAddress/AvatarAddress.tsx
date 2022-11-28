@@ -1,11 +1,12 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
-import { elideAddress, getENSDetails } from '../../../utilities';
 import Box from '@mui/material/Box';
 import { colors, Theme } from '../../../theme';
-import { Typography } from '@components/atomic';
+import { Typography } from '../../atomic/Typography/Typography';
 import { MetaMaskAvatar } from './MetaMaskAvatar/MetaMaskAvatar';
 import Skeleton from '@mui/material/Skeleton';
 import { SxProps } from '@mui/system';
+import { elideAddress } from '../../../utilities/elideAddress';
+import { getENSDetails } from '../../../utilities/getENSDetails';
 
 export const AvatarAddress: FunctionComponent<{
   address?: string | null;

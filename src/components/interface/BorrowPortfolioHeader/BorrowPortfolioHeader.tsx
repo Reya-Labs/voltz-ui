@@ -1,4 +1,4 @@
-import { Panel } from '@components/atomic';
+import { Panel } from '../../atomic/Panel/Panel';
 import { BorrowPortfolioHeaderBox } from './BorrowportfolioHeaderBox';
 import { BorrowPortfolioSummary } from './BorrowPortfolioSummary';
 

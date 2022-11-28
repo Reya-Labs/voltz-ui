@@ -1,10 +1,10 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 
-import { Typography } from '@components/atomic';
-import { IconLabel } from '@components/composite';
-import { Agents } from '../../../../../contexts';
-import { formatNumber } from '../../../../../utilities';
+import { Typography } from '../../../../atomic/Typography/Typography';
+import { IconLabel } from '../../../IconLabel/IconLabel';
+import { Agents } from '../../../../../contexts/AgentContext/types';
+import { formatNumber } from '../../../../../utilities/number';
 import isUndefined from 'lodash/isUndefined';
 
 export type FixedAPRProps = {

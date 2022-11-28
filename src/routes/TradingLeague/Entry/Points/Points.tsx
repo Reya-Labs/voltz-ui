@@ -1,7 +1,7 @@
-import { Typography } from '@components/atomic';
+import { Typography } from '../../../../components/atomic/Typography/Typography';
 import { colors } from '../../../../theme';
 import CountUp from 'react-countup';
-import { formatNumber } from '../../../../utilities';
+import { formatNumber } from '../../../../utilities/number';
 import React from 'react';
 
 type PointsProps = {
