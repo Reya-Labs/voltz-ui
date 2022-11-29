@@ -6,9 +6,8 @@ import { useEffect, useMemo } from 'react';
 
 import { Agents } from '../../contexts/AgentContext/types';
 import { actions, selectors } from '../../store';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { useAgent } from '../useAgent';
-import { useDispatch } from '../useDispatch';
-import { useSelector } from '../useSelector';
 import { useWallet } from '../useWallet';
 import { MEPositionFactory } from './mePositionFactory';
 
@@ -80,10 +79,10 @@ export const usePositions = (): usePositionsResult => {
       });
   }, [positions, agent]);
 
-  const unresolvedTransactions = useSelector(selectors.unresolvedTransactionsSelector);
+  const unresolvedTransactions = useAppSelector(selectors.unresolvedTransactionsSelector);
   const shouldTryToCloseTransactions =
     unresolvedTransactions.length > 0 && positions && positions.length > 0;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // [might be broken]
   useEffect(() => {

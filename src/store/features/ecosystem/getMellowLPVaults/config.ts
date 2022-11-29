@@ -1,7 +1,25 @@
+import { MellowLpRouter, MellowLpVault } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
-import { MellowProductMetadata } from 'src/routes/Ecosystem/types';
 
-type NetworkConfiguration = {
+export type MellowProduct = {
+  id: string;
+  vault: MellowLpVault | MellowLpRouter;
+  metadata: MellowProductMetadata;
+};
+
+export type MellowProductMetadata = {
+  show: boolean;
+  soon: boolean;
+  deprecated: boolean;
+  title: string;
+  token: string;
+  maturity: string;
+  estimatedHistoricApy: string;
+  description: string;
+  underlyingPools: string[];
+};
+
+export type NetworkConfiguration = {
   MELLOW_ETH_WRAPPER: string;
   MELLOW_VAULTS: {
     voltzVault: string;

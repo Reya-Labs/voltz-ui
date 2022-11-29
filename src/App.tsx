@@ -14,6 +14,7 @@ import {
   TraderPools,
   TradingLeague,
 } from './routes';
+import { EcosystemDeposit } from './routes/EcosystemDeposit/EcosystemDeposit';
 import { routes } from './routes/paths';
 import {
   deleteReferrer,
@@ -71,6 +72,7 @@ export const App = () => {
             path={routes.PRODUCTS}
           />
           <Route element={<Ecosystem />} path={routes.LP_OPTIMISERS} />
+          <Route element={<EcosystemDeposit />} path={routes.LP_OPTIMISERS_DEPOSIT} />
           <Route element={<FixedBorrower />} path={routes.BORROW_POS} />
           <Route
             element={
