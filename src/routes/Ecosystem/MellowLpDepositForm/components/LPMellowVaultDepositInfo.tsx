@@ -3,6 +3,7 @@ import React from 'react';
 
 import { ProgressBar } from '../../../../components/atomic/ProgressBar/ProgressBar';
 import { Typography } from '../../../../components/atomic/Typography/Typography';
+import { colors } from '../../../../theme';
 import { formatCurrency } from '../../../../utilities/number';
 import { VaultField } from '../../Common/VaultField';
 import { MellowProduct } from '../../types';
@@ -36,18 +37,18 @@ export const LPMellowVaultDepositInfo: React.FunctionComponent<LPMellowVaultDepo
         <CapBarTitleTypography>DEPOSITS</CapBarTitleTypography>
         <ProgressBar
           leftContent={
-            <Typography color="#E5E1F9" marginLeft="0px" variant="h6">
+            <Typography color={colors.lavenderWeb.base} marginLeft="0px" variant="h6">
               {mellowProduct.metadata.token}
             </Typography>
           }
           middleContent={
-            <Typography color="#E5E1F9" marginLeft="0px" variant="h6">
+            <Typography color={colors.lavenderWeb.base} marginLeft="0px" variant="h6">
               {formatCurrency(mellowProduct.vault.vaultCumulative, true)}
             </Typography>
           }
           percentageComplete={percentage}
           rightContent={
-            <Typography color="#E5E1F9" marginLeft="0px" variant="h6">
+            <Typography color={colors.lavenderWeb.base} marginLeft="0px" variant="h6">
               {`${percentage.toString()}%`}
             </Typography>
           }

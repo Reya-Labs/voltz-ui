@@ -2,6 +2,8 @@ import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
+import { colors } from '../../../../theme';
+
 export const VaultInfoBox = styled(Typography)`
   display: flex;
   flex-direction: column;
@@ -57,7 +59,7 @@ export const PositionLabelTypography = styled(Typography)`
 
   letter-spacing: 0.02em;
 
-  color: #8B879D;
+  color: #8b879d;
 `;
 
 export const PositionValueTypography = styled(Typography)`
@@ -69,5 +71,5 @@ export const PositionValueTypography = styled(Typography)`
 
   letter-spacing: 0.02em;
 
-  color: #4DE5FF;
+  color: ${colors.skyBlueCrayola.base};
 `;
