@@ -49,7 +49,7 @@ export const PoolFieldsBox = styled(Box)`
 
 export const PositionBox = styled(Box)`
   background: #1e1a33;
-  border-radius:${({ theme }) => theme.spacing(0, 0, 2, 2)};
+  border-radius: ${({ theme }) => theme.spacing(0, 0, 2, 2)};
 
   align-self: stretch;
 `;
