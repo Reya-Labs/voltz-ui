@@ -1,9 +1,8 @@
 import React from 'react';
 
-import { EcosystemHeader } from '../EcosystemHeader/EcosystemHeader';
-import { MellowProduct } from '../types';
-import { MellowLPEntry } from './components/MellowLPEntry/MellowLPEntry';
-import { MellowLPGrid, MellowTableBox } from './MellowLPTable.styled';
+import { MellowProduct } from '../../../store/features/ecosystem/getMellowLPVaults/config';
+import MellowLPEntry from './components/MellowLPEntry/MellowLPEntry';
+import { MellowLPGrid } from './MellowLPTable.styled';
 
 export type MellowLPTableProps = {
   mellowProducts: MellowProduct[];
@@ -11,24 +10,21 @@ export type MellowLPTableProps = {
   dataLoading: boolean;
 };
 
-export const MellowLPTable: React.FunctionComponent<MellowLPTableProps> = ({
+const MellowLPTable: React.FunctionComponent<MellowLPTableProps> = ({
   mellowProducts,
   onSelectItem,
   dataLoading,
 }: MellowLPTableProps) => (
-  <MellowTableBox>
-    <EcosystemHeader />
-    {mellowProducts && (
-      <MellowLPGrid itemsPerRow={3}>
-        {mellowProducts.map((product, index) => (
-          <MellowLPEntry
-            key={index}
-            dataLoading={dataLoading}
-            lpVault={product}
-            onSelectItem={() => onSelectItem(product)}
-          />
-        ))}
-      </MellowLPGrid>
-    )}
-  </MellowTableBox>
+  <MellowLPGrid itemsPerRow={3}>
+    {mellowProducts.map((product, index) => (
+      <MellowLPEntry
+        key={index}
+        dataLoading={dataLoading}
+        lpVault={product}
+        onSelectItem={() => onSelectItem(product)}
+      />
+    ))}
+  </MellowLPGrid>
 );
+
+export default MellowLPTable;
