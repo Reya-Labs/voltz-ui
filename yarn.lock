@@ -7371,10 +7371,10 @@
     "@typescript-eslint/types" "5.9.1"
     eslint-visitor-keys "^3.0.0"
 
-"@voltz-protocol/v1-sdk@1.2.8":
-  version "1.2.8"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.2.8.tgz#36bebc07ab5b5a69b65d7a427155f9a5deb2c1db"
-  integrity sha512-+hWxAVpK4cZ/fWBUpCRHmkexntEvQqRH9NEHc6br0geQAEB7eZ9HMpccvZjIYKrZLc/luhIcicyAyjm62TH7zA==
+"@voltz-protocol/v1-sdk@1.2.9":
+  version "1.2.9"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.2.9.tgz#e1626ca6b5c6dc585efb0590e5d860f669a125fd"
+  integrity sha512-8rMgm4qAhRTRvr3CjrO/0owpzb2M04Ou/GAFfcAXLqAzeO60dOmuFNV5ZplPv1NgQGdm/apxIWZFJGQV+mkMvA==
   dependencies:
     "@apollo/client" "^3.7.1"
     "@graphprotocol/graph-cli" "^0.35.0"
