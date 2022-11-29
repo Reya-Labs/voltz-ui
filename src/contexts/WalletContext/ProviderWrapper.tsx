@@ -6,8 +6,8 @@ import { BigNumber, ethers } from 'ethers';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { useGetWalletQuery } from '../../graphql';
-import { useSelector } from '../../hooks/useSelector';
 import { selectors } from '../../store';
+import { useAppSelector } from '../../store/hooks';
 import { getErrorMessage } from '../../utilities/getErrorMessage';
 import * as services from './services';
 import { WalletName, WalletStatus } from './types';
@@ -134,7 +134,7 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
     await refetch();
   }, [refetch]);
 
-  const unresolvedTransactions = useSelector(selectors.unresolvedTransactionsSelector);
+  const unresolvedTransactions = useAppSelector(selectors.unresolvedTransactionsSelector);
   const shouldPoll = unresolvedTransactions.length > 0;
 
   useEffect(() => {

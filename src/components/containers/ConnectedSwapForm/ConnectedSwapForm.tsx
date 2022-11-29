@@ -10,11 +10,10 @@ import { useAMMsContext } from '../../../contexts/AMMsContext/AMMsContext';
 import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';
 import { useSwapFormContext } from '../../../contexts/SwapFormContext/SwapFormContext';
 import { useAgent } from '../../../hooks/useAgent';
-import { useDispatch } from '../../../hooks/useDispatch';
-import { useSelector } from '../../../hooks/useSelector';
 import { useWallet } from '../../../hooks/useWallet';
 import { routes } from '../../../routes/paths';
 import { actions, selectors } from '../../../store';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
   getNotionalActionFromHintState,
   getPoolButtonId,
@@ -36,14 +35,14 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
   const { amm: targetAmm } = useAMMContext();
   const { amm: positionAmm } = usePositionContext();
   const { account } = useWallet();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const form = useSwapFormContext();
   const navigate = useNavigate();
   const { position } = usePositionContext();
 
   const { mode } = form;
   const [transactionId, setTransactionId] = useState<string | undefined>();
-  const activeTransaction = useSelector(selectors.transactionSelector)(transactionId); // contains a failureMessage attribute that will contain whatever came out from the sdk
+  const activeTransaction = useAppSelector(selectors.transactionSelector)(transactionId); // contains a failureMessage attribute that will contain whatever came out from the sdk
 
   const { variableApy, fixedApr } = useAMMsContext();
   const { result: resultFixedApr, call: callFixedApr } = fixedApr(targetAmm);
