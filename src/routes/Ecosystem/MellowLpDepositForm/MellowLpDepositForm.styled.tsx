@@ -9,11 +9,11 @@ export const FormBox = styled(Box)`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 16px;
-  gap: 16px;
+  padding: ${({ theme }) => theme.spacing(4)};
+  gap: ${({ theme }) => theme.spacing(4)};
 
   background: #19152a;
-  border-radius: 8px;
+  border-radius: ${({ theme }) => theme.spacing(2)};
 
   width: 398px;
   position: absolute;
@@ -24,7 +24,7 @@ export const FullButtonBox = styled(Box)`
   flex-direction: column;
   align-items: flex-start;
   padding: 0px;
-  gap: 8px;
+  gap: ${({ theme }) => theme.spacing(2)};
 
   align-self: stretch;
 `;
@@ -34,7 +34,7 @@ export const ButtonBox = styled(Box)`
   flex-direction: row;
   align-items: flex-start;
   padding: 0px;
-  gap: 24px;
+  gap: ${({ theme }) => theme.spacing(6)};
 
   width: 100%;
 `;
@@ -44,8 +44,8 @@ export const SumbitButton = styled(Button)`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 16px 24px;
-  gap: 10px;
+  padding: ${({ theme }) => theme.spacing(4, 6)};
+  gap: ${({ theme }) => theme.spacing(2.5)};
 
   background: #00556d;
   border-radius: 4px;
@@ -58,8 +58,8 @@ export const BackButton = styled(Button)`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 16px 24px;
-  gap: 10px;
+  padding: ${({ theme }) => theme.spacing(4, 6)};
+  gap: ${({ theme }) => theme.spacing(2.5)};
 
   background: #2d2b3d;
   border-radius: 4px;
@@ -71,11 +71,11 @@ export const DescriptionBox = styled(Box)`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 16px;
-  gap: 10px;
+  padding: ${({ theme }) => theme.spacing(4)};
+  gap: ${({ theme }) => theme.spacing(2.5)};
 
   background: #28233b;
-  border-radius: 4px;
+  border-radius: ${({ theme }) => theme.spacing(1)};
 `;
 
 export const DescriptionTitleTypography = styled(Typography)`

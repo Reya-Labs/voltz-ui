@@ -9,7 +9,7 @@ export const VaultFieldBox = styled(Box)`
   flex-direction: column;
   align-items: flex-start;
   padding: 0px;
-  gap: 16px;
+  gap: ${({ theme }) => theme.spacing(4)};
 `;
 
 export const TitleBox = styled(Box)`
@@ -17,7 +17,7 @@ export const TitleBox = styled(Box)`
   flex-direction: row;
   align-items: center;
   padding: 0px;
-  gap: 16px;
+  gap: ${({ theme }) => theme.spacing(4)};
 `;
 
 export const TitleTypography = styled(Typography)`
@@ -37,7 +37,7 @@ export const VaultMetricsBox = styled(Box)`
   flex-direction: row;
   align-items: flex-start;
   padding: 0px;
-  gap: 64px;
+  gap: ${({ theme }) => theme.spacing(16)};
 `;
 
 export const VaultApyTypography = styled(CustomTypography)`
