@@ -6,8 +6,8 @@ import { useWallet } from '../../hooks/useWallet';
 import { setPageTitle } from '../../utilities/page';
 import { routes } from '../paths';
 import { ConnectedMellowLpDepositForm } from './ConnectedMellowLpDepositForm/ConnectedMellowLpDepositForm';
-import ConnectedMellowLPTable from './ConnectedMellowLPTable/ConnectedMellowLPTable';
 import { ConnectedMellowBox } from './Ecosystem.styled';
+import { MellowLPTable } from './MellowLPTable/MellowLPTable';
 import { MellowProduct } from './types';
 
 export enum EcosystemRenderMode {
@@ -119,9 +119,9 @@ export const Ecosystem: React.FunctionComponent = () => {
     <>
       {renderMode === EcosystemRenderMode.PAGE && (
         <ConnectedMellowBox>
-          <ConnectedMellowLPTable
+          <MellowLPTable
             dataLoading={dataLoading}
-            lpVaults={lpVaults}
+            mellowProducts={lpVaults}
             onSelectItem={handleSelectMellowLpVault}
           />
         </ConnectedMellowBox>
