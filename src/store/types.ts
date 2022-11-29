@@ -65,7 +65,7 @@ export type SerializedAMM = {
   totalNotionalTraded: string;
 };
 
-export type ActionType =
+type ActionType =
   | 'mint'
   | 'burn'
   | 'swap'
