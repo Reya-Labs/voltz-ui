@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import { MellowProduct } from '../../../store/features/ecosystem/getMellowLPVaults/config';
 import MellowLpDepositForm from '../../Ecosystem/MellowLpDepositForm/MellowLpDepositForm';
-import { MellowProduct } from '../types';
 import { DepositStates, getSubmissionState } from './mappers';
 
 export type ConnectedMellowLpDepositFormProps = {
