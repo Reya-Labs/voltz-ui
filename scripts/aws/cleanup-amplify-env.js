@@ -50,9 +50,15 @@ const emptyBucket = async (name) => {
   }
 };
 
+// Buckets that we need for main and develop to continue to work
+const BUCKETS_TO_IGNORE = {
+  'amplify-viktor-developui-122522-deployment': true,
+  'amplify-viktor-mainui-125046-deployment': true,
+};
+
 const run = async () => {
-  const buckets = (await getAllBuckets())?.filter(
-    (bucket) => bucket.Name?.indexOf('amplify-') !== -1,
+  const buckets = (await getAllBuckets())?.filter((bucket) =>
+    BUCKETS_TO_IGNORE[bucket?.Name] ? false : bucket.Name?.indexOf('amplify-') !== -1,
   );
   for (const bucket of buckets) {
     await emptyBucket(bucket.Name);
