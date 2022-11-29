@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
 import { Typography as CustomTypography } from '../../../components/atomic/Typography/Typography';
+import { colors } from '../../../theme';
 
 export const VaultFieldBox = styled(Box)`
   display: flex;
@@ -29,7 +30,7 @@ export const TitleTypography = styled(Typography)`
 
   letter-spacing: 0.02em;
 
-  color: #e5e1f9;
+  color: ${colors.lavenderWeb.base};
 `;
 
 export const VaultMetricsBox = styled(Box)`
@@ -47,7 +48,7 @@ export const VaultApyTypography = styled(CustomTypography)`
   font-size: 24px;
   line-height: 120%;
 
-  color: #ff4aa9;
+  color: ${colors.wildStrawberry.base};
 `;
 
 export const VaultMaturityTypography = styled(CustomTypography)`
@@ -57,5 +58,5 @@ export const VaultMaturityTypography = styled(CustomTypography)`
   font-size: 24px;
   line-height: 120%;
 
-  color: #e5e1f9;
+  color: ${colors.lavenderWeb.base};
 `;

@@ -50,7 +50,7 @@ export const SumbitButton = styled(Button)`
   background: #00556d;
   border-radius: 4px;
 
-  color: #4de5ff;
+  color: ${colors.skyBlueCrayola.base};
   flex: 1;
 `;
 
@@ -64,7 +64,7 @@ export const BackButton = styled(Button)`
   background: #2d2b3d;
   border-radius: 4px;
 
-  color: #4de5ff;
+  color: ${colors.skyBlueCrayola.base};
 `;
 
 export const DescriptionBox = styled(Box)`
