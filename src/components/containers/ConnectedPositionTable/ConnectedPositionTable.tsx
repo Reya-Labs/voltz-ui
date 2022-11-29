@@ -4,12 +4,11 @@ import React, { ReactNode, useCallback, useState } from 'react';
 
 import { Agents } from '../../../contexts/AgentContext/types';
 import { usePortfolioContext } from '../../../contexts/PortfolioContext/PortfolioContext';
-import { useDispatch } from '../../../hooks/useDispatch';
 import { usePositions } from '../../../hooks/usePositions/usePositions';
-import { useSelector } from '../../../hooks/useSelector';
 import { useWallet } from '../../../hooks/useWallet';
 import { routes } from '../../../routes/paths';
 import { actions, selectors } from '../../../store';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { colors } from '../../../theme';
 import { Loading } from '../../atomic/Loading/Loading';
 import { Panel } from '../../atomic/Panel/Panel';
@@ -37,8 +36,8 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
   const [positionToSettle, setPositionToSettle] = useState<
     { txId: string; position: Position } | undefined
   >();
-  const activeTransaction = useSelector(selectors.transactionSelector)(positionToSettle?.txId); // contains a failureMessage attribute that will contain whatever came out from the sdk
-  const dispatch = useDispatch();
+  const activeTransaction = useAppSelector(selectors.transactionSelector)(positionToSettle?.txId); // contains a failureMessage attribute that will contain whatever came out from the sdk
+  const dispatch = useAppDispatch();
 
   const portfolioData = usePortfolioContext();
 
