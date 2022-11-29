@@ -1,5 +1,6 @@
-import { NotificationTypography, PillBox } from './ProfileNotification.styled';
 import React from 'react';
+
+import { NotificationTypography, PillBox } from './ProfileNotification.styled';
 
 type ProfileNotificationProps = {
   text: React.ReactNode;

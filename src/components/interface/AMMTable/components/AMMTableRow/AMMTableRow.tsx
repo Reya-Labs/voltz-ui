@@ -1,22 +1,22 @@
-import React, { useEffect } from 'react';
-import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
 import { SystemStyleObject, Theme } from '@mui/system';
 import isNull from 'lodash/isNull';
-
-import { Button } from '../../../../atomic/Button/Button';
-import { PoolField } from '../../../../composite/PoolField/PoolField';
-import { MaturityInformation } from '../../../../composite/MaturityInformation/MaturityInformation';
-import { labels } from '../../constants';
-import { VariableAPY, FixedAPR } from './components';
 import isNumber from 'lodash/isNumber';
 import { DateTime } from 'luxon';
-import { useWallet } from '../../../../../hooks/useWallet';
-import { useAMMsContext } from '../../../../../contexts/AMMsContext/AMMsContext';
+import React, { useEffect } from 'react';
+
 import { Agents } from '../../../../../contexts/AgentContext/types';
 import { useAMMContext } from '../../../../../contexts/AMMContext/AMMContext';
+import { useAMMsContext } from '../../../../../contexts/AMMsContext/AMMsContext';
 import { useAgent } from '../../../../../hooks/useAgent';
+import { useWallet } from '../../../../../hooks/useWallet';
 import { getRowButtonId } from '../../../../../utilities/googleAnalytics';
+import { Button } from '../../../../atomic/Button/Button';
+import { MaturityInformation } from '../../../../composite/MaturityInformation/MaturityInformation';
+import { PoolField } from '../../../../composite/PoolField/PoolField';
+import { labels } from '../../constants';
+import { FixedAPR, VariableAPY } from './components';
 
 export type AMMTableRowProps = {
   protocol: string;
@@ -96,18 +96,16 @@ export const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({
 
         const renderDisplay = () => {
           if (field === 'maturity') {
-            return <MaturityInformation label={label} startDate={startDate} endDate={endDate} />;
+            return <MaturityInformation endDate={endDate} label={label} startDate={startDate} />;
           }
 
-          return <PoolField agent={agent} protocol={protocol} isBorrowing={isBorrowing} />;
+          return <PoolField agent={agent} isBorrowing={isBorrowing} protocol={protocol} />;
         };
 
         return <TableCell key={field}>{renderDisplay()}</TableCell>;
       })}
       <TableCell align="center">
         <Button
-          variant="contained"
-          onClick={handleClick}
           id={getRowButtonId(agent === Agents.LIQUIDITY_PROVIDER, protocol, isBorrowing)}
           sx={{
             paddingTop: (theme) => theme.spacing(3),
@@ -118,6 +116,8 @@ export const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({
             lineHeight: 1,
             boxShadow: 'none',
           }}
+          variant="contained"
+          onClick={handleClick}
         >
           {agent === Agents.LIQUIDITY_PROVIDER ? 'PROVIDE LIQUIDITY' : 'TRADE'}
         </Button>

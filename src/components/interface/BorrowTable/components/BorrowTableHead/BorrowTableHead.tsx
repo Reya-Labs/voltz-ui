@@ -1,11 +1,11 @@
-import React from 'react';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { SystemStyleObject, Theme } from '@mui/system';
-import { Typography } from '../../../../atomic/Typography/Typography';
+import React from 'react';
 
-import { VariableBorrowTableFields, FixedBorrowTableFields } from '../../types';
+import { Typography } from '../../../../atomic/Typography/Typography';
+import { FixedBorrowTableFields, VariableBorrowTableFields } from '../../types';
 
 export type BorrowTableHeadProps = {
   labels: [VariableBorrowTableFields | FixedBorrowTableFields, string][];
@@ -38,10 +38,10 @@ export const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({
     <></>
   ) : (
     <TableCell
-      width={cellWidth.get('maturity')}
       align="left"
       padding="normal"
       sx={cellSx}
+      width={cellWidth.get('maturity')}
     ></TableCell>
   );
 
@@ -58,13 +58,13 @@ export const BorrowTableHead: React.FunctionComponent<BorrowTableHeadProps> = ({
             width={cellWidth.get(field)}
           >
             <Typography
-              variant="subtitle1"
               sx={{
                 textTransform: 'uppercase',
                 fontWeight: 400,
                 fontSize: 12,
                 color: '#9B97AD',
               }}
+              variant="subtitle1"
             >
               {label}
             </Typography>

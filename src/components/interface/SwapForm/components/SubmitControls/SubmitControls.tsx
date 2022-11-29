@@ -1,15 +1,16 @@
-import { ReactNode } from 'react';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { Button } from '../../../../atomic/Button/Button';
-import { Ellipsis } from '../../../../atomic/Ellipsis/Ellipsis';
-import { colors } from '../../../../../theme';
-import { SwapFormModes } from '../../types';
-import { useTokenApproval } from '../../../../../hooks/useTokenApproval';
+import Typography from '@mui/material/Typography';
+import { ReactNode } from 'react';
+
 import {
   SwapFormSubmitButtonHintStates,
   SwapFormSubmitButtonStates,
 } from '../../../../../contexts/SwapFormContext/enums';
+import { useTokenApproval } from '../../../../../hooks/useTokenApproval';
+import { colors } from '../../../../../theme';
+import { Button } from '../../../../atomic/Button/Button';
+import { Ellipsis } from '../../../../atomic/Ellipsis/Ellipsis';
+import { SwapFormModes } from '../../types';
 
 interface SubmitControlsProps {
   approvalsNeeded: boolean;
@@ -65,7 +66,7 @@ export const SubmitControls = ({
       case SwapFormSubmitButtonHintStates.APPROVE_NEXT_TOKEN: {
         return (
           <>
-            <Text green bold>
+            <Text bold green>
               {tokenApprovals.lastApproval?.text}
             </Text>
             <Text green> approved!</Text> Let's now approve{' '}
@@ -189,31 +190,31 @@ export const SubmitControls = ({
               isFormValid &&
               !isTradeVerified)
           }
-          onClick={onSubmit}
+          id={gaButtonId}
           size="large"
           sx={{ flexGrow: 1 }}
-          id={gaButtonId}
+          onClick={onSubmit}
         >
           {getSubmitText()}
         </Button>
 
         <Button
+          id={gaButtonId}
           sx={{ marginLeft: (theme) => theme.spacing(7), flexGrow: 0 }}
           variant="dark"
           onClick={onCancel}
-          id={gaButtonId}
         >
           Back
         </Button>
       </Box>
 
       <Typography
-        variant="body2"
         sx={{
           marginTop: (theme) => theme.spacing(2),
           color: colors.lavenderWeb.darken015,
           fontSize: '12px',
         }}
+        variant="body2"
       >
         {getHint()}
       </Typography>

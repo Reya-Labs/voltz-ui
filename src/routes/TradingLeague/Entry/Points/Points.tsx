@@ -1,8 +1,9 @@
+import React from 'react';
+import CountUp from 'react-countup';
+
 import { Typography } from '../../../../components/atomic/Typography/Typography';
 import { colors } from '../../../../theme';
-import CountUp from 'react-countup';
 import { formatNumber } from '../../../../utilities/number';
-import React from 'react';
 
 type PointsProps = {
   points: number;
@@ -10,7 +11,6 @@ type PointsProps = {
 
 const PointsTypography: React.FunctionComponent = ({ children }) => (
   <Typography
-    variant="body2"
     sx={{
       color: colors.lavenderWeb.base,
       fontSize: '18px',
@@ -19,6 +19,7 @@ const PointsTypography: React.FunctionComponent = ({ children }) => (
       padding: (theme) => theme.spacing(0, 4),
       textAlign: 'right',
     }}
+    variant="body2"
   >
     {children}
   </Typography>
@@ -31,7 +32,7 @@ export const Points: React.FunctionComponent<PointsProps> = ({ points }) => {
 
   return (
     <PointsTypography>
-      <CountUp start={0} end={points} delay={0} formattingFn={formatNumber}>
+      <CountUp delay={0} end={points} formattingFn={formatNumber} start={0}>
         {({ countUpRef }) => <span ref={countUpRef} />}
       </CountUp>
     </PointsTypography>

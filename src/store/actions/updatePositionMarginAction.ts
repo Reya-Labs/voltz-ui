@@ -1,7 +1,7 @@
-import { UpdatePositionMarginAction, Transaction } from '../types';
-import { serializeAmm, createId } from '../utilities';
-
 import { AMM } from '@voltz-protocol/v1-sdk';
+
+import { Transaction, UpdatePositionMarginAction } from '../types';
+import { createId, serializeAmm } from '../utilities';
 
 const updatePositionMarginAction = (
   amm: AMM,

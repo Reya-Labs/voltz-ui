@@ -1,10 +1,10 @@
+import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import React from 'react';
+
+import { formatCurrency, formatNumber, roundUpDecimal } from '../../../../../utilities/number';
 import { SummaryPanel } from '../../../../atomic/SummaryPanel/SummaryPanel';
 import { IconLabel } from '../../../../composite/IconLabel/IconLabel';
 import { SwapFormActions } from '../../../SwapForm';
-
-import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
-import { formatCurrency, formatNumber, roundUpDecimal } from '../../../../../utilities/number';
 
 export type SwapSummaryProps = {
   data: InfoPostSwap | void | null;
@@ -26,7 +26,6 @@ export const SwapSummary: React.FunctionComponent<SwapSummaryProps> = ({
   const label =
     yieldBearingTokenName.substring(0, 6) === 'borrow' ? (
       <IconLabel
-        label="trade information"
         icon="information-circle"
         info={
           <>
@@ -39,10 +38,10 @@ export const SwapSummary: React.FunctionComponent<SwapSummaryProps> = ({
             <br />
           </>
         }
+        label="trade information"
       />
     ) : (
       <IconLabel
-        label="trade information"
         icon="information-circle"
         info={
           <>
@@ -62,6 +61,7 @@ export const SwapSummary: React.FunctionComponent<SwapSummaryProps> = ({
             If you don't have any this will be the same as your Minimum Required Margin
           </>
         }
+        label="trade information"
       />
     );
 

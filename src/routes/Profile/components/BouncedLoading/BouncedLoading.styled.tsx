@@ -1,4 +1,5 @@
-import { styled, keyframes } from '@mui/material/styles';
+import { keyframes, styled } from '@mui/material/styles';
+
 import { colors } from '../../../../theme';
 
 const bounce = keyframes`

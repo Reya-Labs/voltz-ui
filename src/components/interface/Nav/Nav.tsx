@@ -1,7 +1,8 @@
 import React from 'react';
+
 import { routes } from '../../../routes/paths';
-import { NavLink } from './NavLink/NavLink';
 import { NavBox, VoltzIcon, VoltzIconBox } from './Nav.styled';
+import { NavLink } from './NavLink/NavLink';
 
 export const Nav: React.FunctionComponent = React.memo(() => (
   <NavBox>

@@ -1,7 +1,8 @@
-import React, { ReactNode } from 'react';
 import Box from '@mui/material/Box';
-import { Panel } from '../../atomic/Panel/Panel';
+import React, { ReactNode } from 'react';
+
 import { SystemStyleObject, Theme } from '../../../theme';
+import { Panel } from '../../atomic/Panel/Panel';
 
 export type FormPanelProps = {
   boxShadowType?: 'LP' | 'FT' | 'VT';
@@ -39,7 +40,6 @@ export const FormPanel: React.FunctionComponent<FormPanelProps> = ({
   if (isBorrowForm)
     return (
       <Panel
-        variant="dark"
         sx={{
           marginLeft: 4,
           marginRight: 4,
@@ -48,6 +48,7 @@ export const FormPanel: React.FunctionComponent<FormPanelProps> = ({
           boxShadow: () => getBoxShadow(),
           ...sx,
         }}
+        variant="dark"
       >
         {children}
       </Panel>
@@ -70,7 +71,6 @@ export const FormPanel: React.FunctionComponent<FormPanelProps> = ({
 
   return (
     <Panel
-      variant="dark"
       sx={{
         marginLeft: 4,
         marginRight: 4,
@@ -78,6 +78,7 @@ export const FormPanel: React.FunctionComponent<FormPanelProps> = ({
         boxShadow: () => getBoxShadow(),
         ...sx,
       }}
+      variant="dark"
     >
       {children}
     </Panel>

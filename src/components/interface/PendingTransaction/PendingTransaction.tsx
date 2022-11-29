@@ -1,34 +1,33 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
-import { selectors } from '../../../store';
-import { ProtocolInformation } from '../../composite/ProtocolInformation/ProtocolInformation';
-import { WalletAddressDisplay } from '../../composite/WalletAddressDisplay/WalletAddressDisplay';
-
-import isUndefined from 'lodash/isUndefined';
-import { Wallet } from '../../../graphql';
-import { Typography } from '../../atomic/Typography/Typography';
-import { Button } from '../../atomic/Button/Button';
-import { Panel } from '../../atomic/Panel/Panel';
-import { Loading } from '../../atomic/Loading/Loading';
-
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
-import { MintBurnFormLiquidityAction } from '../../../contexts/MintBurnFormContext/MintBurnFormContext';
-import { useWallet } from '../../../hooks/useWallet';
-import { useAMMsContext } from '../../../contexts/AMMsContext/AMMsContext';
-import { useAgent } from '../../../hooks/useAgent';
+import isUndefined from 'lodash/isUndefined';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+
 import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
+import { useAMMsContext } from '../../../contexts/AMMsContext/AMMsContext';
+import { MintBurnFormLiquidityAction } from '../../../contexts/MintBurnFormContext/MintBurnFormContext';
+import { Wallet } from '../../../graphql';
+import { useAgent } from '../../../hooks/useAgent';
 import { useSelector } from '../../../hooks/useSelector';
+import { useWallet } from '../../../hooks/useWallet';
+import { selectors } from '../../../store';
+import { getAmmProtocol } from '../../../utilities/amm';
+import { getAgentFromPosition } from '../../../utilities/getAgent';
 import {
   DataLayerEventPayload,
   getPoolButtonId,
   pushEvent,
 } from '../../../utilities/googleAnalytics';
-import { getAgentFromPosition } from '../../../utilities/getAgent';
-import { setPageTitle } from '../../../utilities/page';
 import { isBorrowing } from '../../../utilities/isBorrowing';
-import { getAmmProtocol } from '../../../utilities/amm';
 import { formatCurrency } from '../../../utilities/number';
+import { setPageTitle } from '../../../utilities/page';
+import { Button } from '../../atomic/Button/Button';
+import { Loading } from '../../atomic/Loading/Loading';
+import { Panel } from '../../atomic/Panel/Panel';
+import { Typography } from '../../atomic/Typography/Typography';
+import { ProtocolInformation } from '../../composite/ProtocolInformation/ProtocolInformation';
+import { WalletAddressDisplay } from '../../composite/WalletAddressDisplay/WalletAddressDisplay';
 
 export type PendingTransactionProps = {
   amm: AMM;
@@ -235,7 +234,7 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
             }}
           >
             <Box sx={{ height: 30, width: 30 }}>
-              <img src="/images/done.png" alt="Done" height="100%" width="100%" />
+              <img alt="Done" height="100%" src="/images/done.png" width="100%" />
             </Box>
           </Box>
           <Box
@@ -250,7 +249,7 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
               paddingBottom: (theme) => theme.spacing(8),
             }}
           >
-            <Link href={transactionLink} variant="caption" color="primary.light" id={buttonId}>
+            <Link color="primary.light" href={transactionLink} id={buttonId} variant="caption">
               View on etherscan
             </Link>
           </Box>
@@ -259,7 +258,7 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
               paddingBottom: (theme) => theme.spacing(10),
             }}
           >
-            <Button variant="contained" onClick={onComplete} id={buttonId}>
+            <Button id={buttonId} variant="contained" onClick={onComplete}>
               Go to your portfolio
             </Button>
           </Box>
@@ -277,7 +276,7 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
             }}
           >
             <Box sx={{ height: 30, width: 30 }}>
-              <img src="/images/failed.png" alt="Done" height="100%" width="100%" />
+              <img alt="Done" height="100%" src="/images/failed.png" width="100%" />
             </Box>
           </Box>
           <Box
@@ -292,7 +291,7 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
               paddingBottom: (theme) => theme.spacing(8),
             }}
           >
-            <Typography variant="body2" align="center" color="error">
+            <Typography align="center" color="error" variant="body2">
               {activeTransaction.failureMessage || 'Unrecognized error'}
             </Typography>
           </Box>
@@ -301,7 +300,7 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
               paddingBottom: (theme) => theme.spacing(10),
             }}
           >
-            <Button variant="contained" onClick={onBack} id={`${buttonId}_FAILED`}>
+            <Button id={`${buttonId}_FAILED`} variant="contained" onClick={onBack}>
               Back
             </Button>
           </Box>
@@ -325,11 +324,11 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
             }}
           >
             <Link
+              color="primary.light"
               href={transactionLink}
+              id={buttonId}
               target="_blank"
               variant="caption"
-              color="primary.light"
-              id={buttonId}
             >
               View on etherscan
             </Link>
@@ -340,7 +339,7 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
               textAlign: 'center',
             }}
           >
-            <Button variant="contained" onClick={onComplete} id={buttonId}>
+            <Button id={buttonId} variant="contained" onClick={onComplete}>
               Go to your portfolio
             </Button>
           </Box>
@@ -373,7 +372,7 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
           <WalletAddressDisplay address={account} />
         </Box>
         <Box>
-          <Typography variant="caption" color="secondary" sx={{}}>
+          <Typography color="secondary" sx={{}} variant="caption">
             Confirm this transaction in your wallet
           </Typography>
         </Box>
@@ -382,7 +381,7 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
             paddingBottom: (theme) => theme.spacing(10),
           }}
         >
-          <Typography variant="caption" color="secondary" sx={{}}>
+          <Typography color="secondary" sx={{}} variant="caption">
             if you haven't already
           </Typography>
         </Box>
@@ -423,22 +422,22 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
 
   return (
     <Panel
-      variant="dark"
       sx={{
         marginTop: 12,
         width: (theme) => theme.spacing(97),
         boxShadow: '0px 0px 60px rgba(255, 89, 156, 0.2)',
       }}
+      variant="dark"
     >
       {renderStatus()}
       <Panel variant="main">
         <AMMProvider amm={amm}>
           <ProtocolInformation
-            protocol={amm.protocol}
+            fixedApr={fixedApr}
             isRollover={isRollover}
             isSettle={isSettle}
+            protocol={amm.protocol}
             variableApy={variableApy}
-            fixedApr={fixedApr}
           />
         </AMMProvider>
 

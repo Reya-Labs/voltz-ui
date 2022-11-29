@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
 import { useDebounceFunc } from './useDebounceFunc';
 
 export type UseAsyncFunctionResult<ArgsType, ResultType> = {

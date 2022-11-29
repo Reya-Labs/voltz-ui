@@ -1,7 +1,7 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+import React from 'react';
 
 import { BadgeCard } from './BadgeCard';
-import React from 'react';
 
 export default {
   title: 'Interface/BadgeCardV1',

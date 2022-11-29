@@ -1,8 +1,8 @@
+import TableCell from '@mui/material/TableCell';
 import React from 'react';
 
-import { Typography } from '../../../../../../atomic/Typography/Typography';
-import TableCell from '@mui/material/TableCell';
 import { formatNumber } from '../../../../../../../utilities/number';
+import { Typography } from '../../../../../../atomic/Typography/Typography';
 
 export type BorrowBorrowFixedAPR = {
   loading: boolean;
@@ -28,7 +28,6 @@ export const BorrowFixedAPR: React.FunctionComponent<BorrowBorrowFixedAPR> = ({
   return (
     <TableCell align="center" width="20%">
       <Typography
-        variant="body2"
         sx={{
           fontSize: 18,
           color: 'primary.light',
@@ -36,6 +35,7 @@ export const BorrowFixedAPR: React.FunctionComponent<BorrowBorrowFixedAPR> = ({
           letterSpacing: '0.02em',
           lineHeight: '130%',
         }}
+        variant="body2"
       >
         {renderValue()}
       </Typography>

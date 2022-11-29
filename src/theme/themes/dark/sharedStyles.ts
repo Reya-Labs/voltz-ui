@@ -4,6 +4,7 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 
 import { SystemStyleObject, Theme } from '@mui/system';
+
 import colors from '../../colors';
 
 type inputStylesProps = {

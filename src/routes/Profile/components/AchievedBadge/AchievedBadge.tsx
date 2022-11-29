@@ -1,7 +1,10 @@
-import React from 'react';
 import Box from '@mui/material/Box';
-import { BadgePill } from '../BadgePill/BadgePill';
+import React from 'react';
+
+import { formatPOSIXTimestamp } from '../../../../utilities/date';
+import { BadgeVariant } from '../../data/getSeasonBadges';
 import { BADGE_VARIANT_TITLE_COPY_MAP } from '../../helpers';
+import { BadgePill } from '../BadgePill/BadgePill';
 import {
   AchievedAtTypography,
   AchievedContainerBox,
@@ -10,8 +13,6 @@ import {
   Skeleton,
   TitleTypography,
 } from './AchivedBadge.styled';
-import { formatPOSIXTimestamp } from '../../../../utilities/date';
-import { BadgeVariant } from '../../data/getSeasonBadges';
 
 export type AchievedBadgeProps = {
   achievedAt?: number;
@@ -31,7 +32,7 @@ export const AchievedBadge: React.FunctionComponent<AchievedBadgeProps> = ({
   }
   const Container = Boolean(achievedAt) ? AchievedContainerBox : ContainerBox;
   return (
-    <Container onClick={onClick} data-testid={`AchievedBadge-${variant}`}>
+    <Container data-testid={`AchievedBadge-${variant}`} onClick={onClick}>
       <BadgePillBox>
         <Box>
           <BadgePill variant={variant} />

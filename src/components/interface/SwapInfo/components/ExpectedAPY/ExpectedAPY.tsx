@@ -1,22 +1,22 @@
+import Box from '@mui/material/Box';
+import isUndefined from 'lodash/isUndefined';
 import { useEffect, useRef, useState } from 'react';
 
-import { Typography } from '../../../../atomic/Typography/Typography';
-import { IconLabel } from '../../../../composite/IconLabel/IconLabel';
-import { MaskedIntegerField } from '../../../../composite/MaskedIntegerField/MaskedIntegerField';
-import Box from '@mui/material/Box';
-import { colors } from '../../../../../theme';
-import isUndefined from 'lodash/isUndefined';
-import { useWallet } from '../../../../../hooks/useWallet';
 import { useAMMContext } from '../../../../../contexts/AMMContext/AMMContext';
 import { useAgent } from '../../../../../hooks/useAgent';
+import { useWallet } from '../../../../../hooks/useWallet';
+import { colors } from '../../../../../theme';
+import { getAmmProtocol } from '../../../../../utilities/amm';
+import { DataLayerEventPayload, pushEvent } from '../../../../../utilities/googleAnalytics';
 import {
   formatNumber,
   notFormatted,
   stringToBigFloat,
   toUSFormat,
 } from '../../../../../utilities/number';
-import { DataLayerEventPayload, pushEvent } from '../../../../../utilities/googleAnalytics';
-import { getAmmProtocol } from '../../../../../utilities/amm';
+import { Typography } from '../../../../atomic/Typography/Typography';
+import { IconLabel } from '../../../../composite/IconLabel/IconLabel';
+import { MaskedIntegerField } from '../../../../composite/MaskedIntegerField/MaskedIntegerField';
 
 interface ExpectedAPYProps {
   expectedApy?: number;
@@ -119,8 +119,8 @@ export const ExpectedAPY = ({
       <Box sx={{ marginBottom: (theme) => theme.spacing(4) }}>
         <Typography
           label={<Typography variant="h4">P&L Calculator</Typography>}
-          variant="body1"
           sx={{ color: colors.lavenderWeb.darken020, fontSize: '14px' }}
+          variant="body1"
         >
           Use the P&L Calculator to compute your expected cash flow, and implied APY, for a range of
           simulated market conditions. To begin, adjust the variable rate to see how your expected
@@ -147,20 +147,20 @@ export const ExpectedAPY = ({
           }}
         >
           <MaskedIntegerField
-            allowDecimals
-            dynamic
             inputSize="small"
             label={
               <IconLabel
-                label={'Expected Variable APY'}
                 icon="information-circle"
                 info="Select the variable APY you wish to simulate. This calculation will assume the variable rate [immediately] moves to your selected rate and then stays there until maturity."
+                label={'Expected Variable APY'}
               />
             }
-            onChange={handleChangeInput}
             suffix="%"
             suffixPadding={0}
             value={notFormatted(userInput)}
+            allowDecimals
+            dynamic
+            onChange={handleChangeInput}
           />
         </Box>
         <Box
@@ -171,27 +171,27 @@ export const ExpectedAPY = ({
           }}
         >
           <Typography
-            variant="body2"
             fontSize={24}
             label={
               <IconLabel
-                label="Expected Casfhlow"
                 icon="information-circle"
                 info=" The cashflow you would generate based on your position and simulated Variable APY. "
+                label="Expected Casfhlow"
               />
             }
             sx={{
               marginTop: '-4px',
             }}
+            variant="body2"
           >
             {formatCashflow(expectedCashflow)}
           </Typography>
           <Typography
-            variant="body2"
             fontSize={12}
             sx={{
               color: colors.lavenderWeb.darken010,
             }}
+            variant="body2"
           >
             {`APY: ${formatExpectedApy(expectedApy)}`}
           </Typography>

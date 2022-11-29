@@ -1,11 +1,12 @@
 import Box from '@mui/material/Box';
+import isUndefined from 'lodash/isUndefined';
+import React from 'react';
+
 import { ProgressBar } from '../../../../components/atomic/ProgressBar/ProgressBar';
 import { Typography } from '../../../../components/atomic/Typography/Typography';
 import { formatCurrency } from '../../../../utilities/number';
-import isUndefined from 'lodash/isUndefined';
 import { VaultField } from '../../Common/VaultField';
 import { MellowProduct } from '../../types';
-import React from 'react';
 
 export type LPMellowVaultDepositInfoProps = {
   mellowProduct: MellowProduct;
@@ -25,26 +26,26 @@ export const LPMellowVaultDepositInfo: React.FunctionComponent<LPMellowVaultDepo
 
     return (
       <Box sx={{ marginTop: '16px' }}>
-        <Typography variant="h6" sx={{ fontSize: '12px', color: '#9B97AD', marginLeft: '0px' }}>
+        <Typography sx={{ fontSize: '12px', color: '#9B97AD', marginLeft: '0px' }} variant="h6">
           DEPOSITS
         </Typography>
         <ProgressBar
           leftContent={
-            <Typography variant="h6" color="#E5E1F9" marginLeft="0px">
+            <Typography color="#E5E1F9" marginLeft="0px" variant="h6">
               {mellowProduct.metadata.token}
             </Typography>
           }
           middleContent={
-            <Typography variant="h6" color="#E5E1F9" marginLeft="0px">
+            <Typography color="#E5E1F9" marginLeft="0px" variant="h6">
               {formatCurrency(mellowProduct.vault.vaultCumulative, true)}
             </Typography>
           }
+          percentageComplete={percentage}
           rightContent={
-            <Typography variant="h6" color="#E5E1F9" marginLeft="0px">
+            <Typography color="#E5E1F9" marginLeft="0px" variant="h6">
               {`${percentage.toString()}%`}
             </Typography>
           }
-          percentageComplete={percentage}
         />
       </Box>
     );
@@ -53,10 +54,10 @@ export const LPMellowVaultDepositInfo: React.FunctionComponent<LPMellowVaultDepo
   return (
     <Box>
       <VaultField
+        expectedApy={mellowProduct.metadata.estimatedHistoricApy}
+        maturity={mellowProduct.metadata.maturity}
         title={mellowProduct.metadata.title}
         token={mellowProduct.metadata.token}
-        maturity={mellowProduct.metadata.maturity}
-        expectedApy={mellowProduct.metadata.estimatedHistoricApy}
       />
 
       {getCapBar()}
@@ -71,10 +72,10 @@ export const LPMellowVaultDepositInfo: React.FunctionComponent<LPMellowVaultDepo
           marginTop: '16px',
         }}
       >
-        <Typography variant="h6" sx={{ fontSize: '14px', color: '#8B879D' }}>
+        <Typography sx={{ fontSize: '14px', color: '#8B879D' }} variant="h6">
           YOUR POSITION:
         </Typography>
-        <Typography variant="h6" sx={{ fontSize: '14px', color: '#4DE5FF', paddingLeft: '8px' }}>
+        <Typography sx={{ fontSize: '14px', color: '#4DE5FF', paddingLeft: '8px' }} variant="h6">
           {isUndefined(mellowProduct.vault.userDeposit)
             ? '---'
             : `${formatCurrency(mellowProduct.vault.userDeposit, true)} ${

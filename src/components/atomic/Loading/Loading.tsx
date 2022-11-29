@@ -1,5 +1,6 @@
-import React from 'react';
 import Box from '@mui/material/Box';
+import React from 'react';
+
 import { SystemStyleObject, Theme } from '../../../theme';
 
 type LoadingProps = {
@@ -9,7 +10,7 @@ type LoadingProps = {
 export const Loading: React.FunctionComponent<LoadingProps> = ({ sx = {} }) => {
   return (
     <Box sx={{ height: 40, width: 40, ...sx }}>
-      <img src="/images/loading.gif" alt="loading" height="100%" width="100%" />
+      <img alt="loading" height="100%" src="/images/loading.gif" width="100%" />
     </Box>
   );
 };

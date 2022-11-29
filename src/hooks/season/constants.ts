@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon';
+
 import { Season } from './types';
 
 export const SEASONS: Season[] = [

@@ -1,9 +1,9 @@
-import React from 'react';
-import TableCell from '@mui/material/TableCell';
-
-import { Typography } from '../../../../../../atomic/Typography/Typography';
 import Box from '@mui/material/Box';
+import TableCell from '@mui/material/TableCell';
+import React from 'react';
+
 import { formatNumber } from '../../../../../../../utilities/number';
+import { Typography } from '../../../../../../atomic/Typography/Typography';
 
 export type DebtProps = {
   debtInUSD: number | null | void;
@@ -49,8 +49,8 @@ export const Debt: React.FunctionComponent<DebtProps> = ({
   return (
     <TableCell align="left" width="25%">
       <Typography
-        variant="body2"
         sx={{ fontSize: 18, fontWeight: 400, letterSpacing: '0.02em', lineHeight: '100%' }}
+        variant="body2"
       >
         {renderValueInUSD()}
         <Box

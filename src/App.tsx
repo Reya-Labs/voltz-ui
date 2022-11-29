@@ -1,20 +1,20 @@
-import { Routes, Route, Navigate, useSearchParams } from 'react-router-dom';
+import { useEffect } from 'react';
 import TagManager from 'react-gtm-module';
+import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
 
+import { Page } from './components/interface/Page/Page';
 import {
-  TradingLeague,
-  Profile,
-  FixedBorrower,
   Ecosystem,
-  ProfileV1,
-  Portfolio,
-  TraderPools,
+  FixedBorrower,
   LPPools,
   LPPortfolio,
+  Portfolio,
+  Profile,
+  ProfileV1,
+  TraderPools,
+  TradingLeague,
 } from './routes';
 import { routes } from './routes/paths';
-import { Page } from './components/interface/Page/Page';
-import { useEffect } from 'react';
 import {
   deleteReferrer,
   isRefererStored,
@@ -57,23 +57,22 @@ export const App = () => {
     <Page>
       <Routes>
         <Route path="/">
-          <Route index element={<Navigate to={routes.TRADER_POOLS} />} />
+          <Route element={<Navigate to={routes.TRADER_POOLS} />} index />
           <Route
-            path={routes.WELCOME}
             element={<Navigate replace={true} to={`/${routes.TRADER_POOLS}`} />}
+            path={routes.WELCOME}
           />
-          <Route path={routes.TRADER_POOLS} element={<TraderPools />} />
-          <Route path={routes.PORTFOLIO} element={<Portfolio />} />
-          <Route path={routes.LP_POOLS} element={<LPPools />} />
-          <Route path={routes.LP_PORTFOLIO} element={<LPPortfolio />} />
+          <Route element={<TraderPools />} path={routes.TRADER_POOLS} />
+          <Route element={<Portfolio />} path={routes.PORTFOLIO} />
+          <Route element={<LPPools />} path={routes.LP_POOLS} />
+          <Route element={<LPPortfolio />} path={routes.LP_PORTFOLIO} />
           <Route
-            path={routes.PRODUCTS}
             element={<Navigate replace={true} to={`/${routes.LP_OPTIMISERS}`} />}
+            path={routes.PRODUCTS}
           />
-          <Route path={routes.LP_OPTIMISERS} element={<Ecosystem />} />
-          <Route path={routes.BORROW_POS} element={<FixedBorrower />} />
+          <Route element={<Ecosystem />} path={routes.LP_OPTIMISERS} />
+          <Route element={<FixedBorrower />} path={routes.BORROW_POS} />
           <Route
-            path={routes.PROFILE}
             element={
               process.env.REACT_APP_COMMUNITY_P2 &&
               process.env.REACT_APP_COMMUNITY_P2 !== `UNPROVIDED` ? (
@@ -82,8 +81,9 @@ export const App = () => {
                 <ProfileV1 />
               )
             }
+            path={routes.PROFILE}
           />
-          <Route path={routes.TRADING_LEAGUE} element={<TradingLeague />} />
+          <Route element={<TradingLeague />} path={routes.TRADING_LEAGUE} />
         </Route>
       </Routes>
     </Page>

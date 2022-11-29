@@ -1,6 +1,5 @@
-import isUndefined from 'lodash/isUndefined';
-
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
+import isUndefined from 'lodash/isUndefined';
 
 /**
  * Checks if the user has enough underlying tokens.

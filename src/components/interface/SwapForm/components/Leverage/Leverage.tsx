@@ -1,17 +1,18 @@
-import { useEffect, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
-import { IconLabel } from '../../../../composite/IconLabel/IconLabel';
-import { MaskedIntegerField } from '../../../../composite/MaskedIntegerField/MaskedIntegerField';
-import isUndefined from 'lodash/isUndefined';
-import isNumber from 'lodash/isNumber';
 import Button from '@mui/material/Button';
-import { activeButtonStyle, buttonStyle, leverageBoxStyle } from './style';
+import isNumber from 'lodash/isNumber';
+import isUndefined from 'lodash/isUndefined';
+import { useEffect, useRef, useState } from 'react';
+
 import {
   formatNumber,
   notFormatted,
   stringToBigFloat,
   toUSFormat,
 } from '../../../../../utilities/number';
+import { IconLabel } from '../../../../composite/IconLabel/IconLabel';
+import { MaskedIntegerField } from '../../../../composite/MaskedIntegerField/MaskedIntegerField';
+import { activeButtonStyle, buttonStyle, leverageBoxStyle } from './style';
 
 /**
  * margin: for a new position this is just the ratio between notional and minimum margin required
@@ -76,15 +77,15 @@ export const Leverage = ({
     <Box sx={{ display: 'flex', width: '100%' }}>
       <Box sx={{ flexGrow: '0', width: '80px' }}>
         <MaskedIntegerField
-          allowDecimals
           disabled={isDisabledLeverageBox}
-          dynamic
           inputSize="small"
-          label={<IconLabel label={'Leverage'} icon="information-circle" info={hint} />}
-          onChange={handleChangeInput}
+          label={<IconLabel icon="information-circle" info={hint} label={'Leverage'} />}
           suffix="x"
           suffixPadding={0}
           value={notFormatted(inputValue)}
+          allowDecimals
+          dynamic
+          onChange={handleChangeInput}
         />
       </Box>
       <Box sx={leverageBoxStyle}>
@@ -92,10 +93,10 @@ export const Leverage = ({
           return (
             <Button
               key={opt}
-              variant={'contained'}
-              size="small"
               color="secondary"
+              size="small"
               sx={opt === activeOption ? activeButtonStyle : buttonStyle}
+              variant={'contained'}
               onClick={() => {
                 onChange(opt);
                 setActiveOption(opt);

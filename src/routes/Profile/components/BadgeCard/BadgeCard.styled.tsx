@@ -1,6 +1,7 @@
-import SkeletonComponent from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
-import { styled, keyframes } from '@mui/material/styles';
+import SkeletonComponent from '@mui/material/Skeleton';
+import { keyframes, styled } from '@mui/material/styles';
+
 import { Typography } from '../../../../components/atomic/Typography/Typography';
 import { colors } from '../../../../theme';
 

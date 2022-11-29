@@ -1,5 +1,5 @@
-import { BadgeTier, ComingSoonBadges } from './types';
 import { BadgeVariant1 } from './getters/getPhase1Badges';
+import { BadgeTier, ComingSoonBadges } from './types';
 
 export const BADGE_VARIANT_TRADER_LP_MAP: Record<
   BadgeVariant1 | ComingSoonBadges,

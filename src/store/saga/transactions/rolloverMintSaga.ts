@@ -1,13 +1,12 @@
+import { AMMRolloverWithMintArgs } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt, providers } from 'ethers';
-import { call, put } from 'redux-saga/effects';
 import { DateTime } from 'luxon';
+import { call, put } from 'redux-saga/effects';
 
+import { getErrorMessage } from '../../../utilities/getErrorMessage';
+import * as actions from '../../actions';
 import { RolloverMintAction } from '../../types';
 import { deserializeAmm, getSigner } from '../../utilities';
-import * as actions from '../../actions';
-import { getErrorMessage } from '../../../utilities/getErrorMessage';
-
-import { AMMRolloverWithMintArgs } from '@voltz-protocol/v1-sdk';
 
 function* rolloverMintSaga(action: RolloverMintAction) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

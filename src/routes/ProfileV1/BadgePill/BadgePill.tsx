@@ -1,9 +1,10 @@
 import React from 'react';
-import { PillProps, Pill } from '../../../components/atomic/Pill';
-import { BadgeTier, ComingSoonBadges } from '../types';
-import { BADGE_VARIANT_TIER_MAP, BADGE_VARIANT_TRADER_LP_MAP, TIER_COPY_MAP } from '../helpers';
-import { Skeleton } from './BadgePill.styled';
+
+import { Pill, PillProps } from '../../../components/atomic/Pill';
 import { BadgeVariant1 } from '../getters/getPhase1Badges';
+import { BADGE_VARIANT_TIER_MAP, BADGE_VARIANT_TRADER_LP_MAP, TIER_COPY_MAP } from '../helpers';
+import { BadgeTier, ComingSoonBadges } from '../types';
+import { Skeleton } from './BadgePill.styled';
 
 const TIER_PILL_VARIANT_MAP: Record<BadgeTier, PillProps['variant']> = {
   tier1: 'wildStrawberry',

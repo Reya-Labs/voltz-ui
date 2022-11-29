@@ -1,22 +1,19 @@
-import React, { useState, useEffect } from 'react';
-
 import Box from '@mui/material/Box';
-
-import { useWallet } from '../../hooks/useWallet';
+import { AMM, BorrowAMM, Position } from '@voltz-protocol/v1-sdk';
+import React, { useEffect, useState } from 'react';
+import { setPageTitle } from 'src/utilities/page';
 
 import { ConnectedBorrowForm } from '../../components/containers/ConnectedBorrowForm/ConnectedBorrowForm';
 import { ConnectedBorrowPositionTable } from '../../components/containers/ConnectedBorrowPositionTable/ConnectedBorrowPositionTable';
-import { getRenderMode } from './services';
-
-import { Position, AMM, BorrowAMM } from '@voltz-protocol/v1-sdk';
-import { BorrowAMMProvider } from '../../contexts/BorrowAMMContext/BorrowAMMContext';
-import { PositionProvider } from '../../contexts/PositionContext/PositionContext';
-import { AMMProvider } from '../../contexts/AMMContext/AMMContext';
 import { Agents } from '../../contexts/AgentContext/types';
+import { AMMProvider } from '../../contexts/AMMContext/AMMContext';
+import { BorrowAMMProvider } from '../../contexts/BorrowAMMContext/BorrowAMMContext';
 import { BorrowFormProvider } from '../../contexts/BorrowFormContext/BorrowFormContext';
+import { PositionProvider } from '../../contexts/PositionContext/PositionContext';
 import { useBorrowPositions } from '../../hooks/useBorrowPositions';
-import { setPageTitle } from 'src/utilities/page';
+import { useWallet } from '../../hooks/useWallet';
 import { findCurrentBorrowPosition } from '../../utilities/borrowAmm';
+import { getRenderMode } from './services';
 
 export const FixedBorrower: React.FunctionComponent = () => {
   const [isForm, setIsForm] = useState<boolean>();
@@ -91,8 +88,8 @@ export const FixedBorrower: React.FunctionComponent = () => {
       {renderMode === 'borrow-positions' && (
         <Box sx={{ backdropFilter: 'blur(8px)', height: '100%', paddingBottom: '200px' }}>
           <ConnectedBorrowPositionTable
-            onSelectItem={handleSelectBorrowAMM}
             agent={Agents.VARIABLE_TRADER}
+            onSelectItem={handleSelectBorrowAMM}
           />
         </Box>
       )}

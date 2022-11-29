@@ -1,12 +1,12 @@
-import React, { ReactNode, useState } from 'react';
 import Box from '@mui/material/Box';
 import Popover from '@mui/material/Popover';
+import React, { ReactNode, useState } from 'react';
 
 import { SystemStyleObject, Theme } from '../../../theme';
-import { Typography } from '../../atomic/Typography/Typography';
 import { Icon } from '../../atomic/Icon/Icon';
 import { Icons } from '../../atomic/Icon/types';
 import { Panel } from '../../atomic/Panel/Panel';
+import { Typography } from '../../atomic/Typography/Typography';
 
 export type IconLabelProps = {
   label: string | ReactNode;
@@ -42,11 +42,9 @@ export const IconLabel: React.FunctionComponent<IconLabelProps> = ({
     <>
       {typeof label === 'string' ? label.toUpperCase() : label}
       <Icon
-        name={icon}
-        aria-owns={open ? 'mouse-over-popover' : undefined}
         aria-haspopup="true"
-        onMouseEnter={handlePopoverOpen}
-        onMouseLeave={handlePopoverClose}
+        aria-owns={open ? 'mouse-over-popover' : undefined}
+        name={icon}
         sx={{
           height: 10,
           width: 10,
@@ -56,10 +54,18 @@ export const IconLabel: React.FunctionComponent<IconLabelProps> = ({
           display: _display,
           ...iconSx,
         }}
+        onMouseEnter={handlePopoverOpen}
+        onMouseLeave={handlePopoverClose}
       />
       {info && (
         <Popover
+          anchorEl={anchor}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
           id="mouse-over-popover"
+          open={open}
           sx={{
             pointerEvents: 'none',
             '& .MuiPaper-root': {
@@ -71,28 +77,22 @@ export const IconLabel: React.FunctionComponent<IconLabelProps> = ({
               overflow: 'hidden',
             },
           }}
-          open={open}
-          anchorEl={anchor}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-          }}
           transformOrigin={{
             vertical: 'bottom',
             horizontal: 'center',
           }}
-          onClose={handlePopoverClose}
           disableRestoreFocus
+          onClose={handlePopoverClose}
         >
           <Panel variant="iconLabel">
             <Typography
-              variant="caption"
               sx={{
                 fontFamily: 'DM Sans',
                 fontStyle: 'normal',
                 fontSize: 12,
                 lineHeight: '150%',
               }}
+              variant="caption"
             >
               {info}
             </Typography>

@@ -1,9 +1,9 @@
+import TableCell from '@mui/material/TableCell';
+import isUndefined from 'lodash/isUndefined';
 import React from 'react';
 
-import { Typography } from '../../../../../../atomic/Typography/Typography';
-import TableCell from '@mui/material/TableCell';
 import { formatNumber } from '../../../../../../../utilities/number';
-import isUndefined from 'lodash/isUndefined';
+import { Typography } from '../../../../../../atomic/Typography/Typography';
 
 export type FixedAPRProps = {
   fixedApr?: number;
@@ -20,7 +20,7 @@ export const FixedAPR: React.FunctionComponent<FixedAPRProps> = ({ fixedApr }) =
 
   return (
     <TableCell>
-      <Typography variant="body2" label="Fixed APR" agentStyling sx={{ fontSize: 18 }}>
+      <Typography label="Fixed APR" sx={{ fontSize: 18 }} variant="body2" agentStyling>
         {renderValue()}
       </Typography>
     </TableCell>

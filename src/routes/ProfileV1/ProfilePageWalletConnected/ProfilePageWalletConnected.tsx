@@ -1,9 +1,14 @@
 import React from 'react';
+
 import { Typography } from '../../../components/atomic/Typography/Typography';
-import { BadgeCard } from '../BadgeCard/BadgeCard';
+import { Season } from '../../../hooks/season/types';
+import { formatDateTimeWithOrdinal } from '../../../utilities/date';
+import { elideAddress } from '../../../utilities/elideAddress';
 import { AchievedBadge, AchievedBadgeProps } from '../AchievedBadge/AchievedBadge';
-import { BADGE_VARIANT_TIER_MAP, COMING_SOON_BADGES } from '../helpers';
 import { Badge } from '../Badge/Badge';
+import { BadgeCard } from '../BadgeCard/BadgeCard';
+import { BadgeVariant1 } from '../getters/getPhase1Badges';
+import { BADGE_VARIANT_TIER_MAP, COMING_SOON_BADGES } from '../helpers';
 import {
   Account,
   AchievedBadgesGrid,
@@ -28,10 +33,6 @@ import {
   PillBox,
   Subheading,
 } from './ProfilePageWalletConnected.styled';
-import { Season } from '../../../hooks/season/types';
-import { BadgeVariant1 } from '../getters/getPhase1Badges';
-import { elideAddress } from '../../../utilities/elideAddress';
-import { formatDateTimeWithOrdinal } from '../../../utilities/date';
 
 type ProfilePageProps = {
   account: string;
@@ -99,8 +100,8 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
             collection.map((badge, index) => (
               <BadgeCard
                 key={`${badge.variant}${index}`}
-                variant={badge.variant as BadgeVariant1}
                 loading={loading}
+                variant={badge.variant as BadgeVariant1}
               />
             ))}
           {!loading && collection.length === 0 && (
@@ -133,7 +134,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageProp
         <ComingSoonTypography variant="h2">COMING SOON</ComingSoonTypography>
         <ComingSoonGrid itemsPerRow={1}>
           {COMING_SOON_BADGES.map((badge, index) => (
-            <AchievedBadge key={`${badge}${index}`} variant={badge} loading={loading} />
+            <AchievedBadge key={`${badge}${index}`} loading={loading} variant={badge} />
           ))}
         </ComingSoonGrid>
       </ComingSoonBox>

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
-import { useWallet } from '../../../../hooks/useWallet';
 import isUndefined from 'lodash/isUndefined';
+import React, { useEffect, useState } from 'react';
+
+import { useWallet } from '../../../../hooks/useWallet';
+import { colors } from '../../../../theme';
 import { Typography } from '../../../atomic/Typography/Typography';
 import { BulletLabel } from '../../../composite/BulletLabel/BulletLabel';
-import { colors } from '../../../../theme';
 
 export type GweiBarProps = {};
 

@@ -1,8 +1,9 @@
-import React, { ReactNode } from 'react';
-import { SystemStyleObject, Theme } from '@mui/system';
-import { Typography } from '../Typography/Typography';
-import { colors } from '../../../theme';
 import Box from '@mui/material/Box';
+import { SystemStyleObject, Theme } from '@mui/system';
+import React, { ReactNode } from 'react';
+
+import { colors } from '../../../theme';
+import { Typography } from '../Typography/Typography';
 
 interface SummaryPanelProps {
   label?: ReactNode;
@@ -38,7 +39,7 @@ export const SummaryPanel = ({ label, loading, rows }: SummaryPanelProps) => {
 
   if (loading) {
     return (
-      <Typography variant="body2" sx={{ color: colors.skyBlueCrayola.base }}>
+      <Typography sx={{ color: colors.skyBlueCrayola.base }} variant="body2">
         Loading...
       </Typography>
     );
@@ -48,26 +49,26 @@ export const SummaryPanel = ({ label, loading, rows }: SummaryPanelProps) => {
     return (
       <Box>
         {rows.map((row, index) => (
-          <Box sx={rowStyles} key={row.label}>
+          <Box key={row.label} sx={rowStyles}>
             <Typography
-              variant="body2"
               label={index === 0 ? label : undefined}
               sx={{
                 ...valueStyles,
                 color: row.highlight ? colors.lavenderWeb.base : colors.lavenderWeb.darken015,
                 fontWeight: row.bold ? 'bold' : undefined,
               }}
+              variant="body2"
             >
               {row.label}
             </Typography>
             <Typography
-              variant="body2"
               sx={{
                 ...valueStyles,
                 color: row.highlight ? colors.skyBlueCrayola.base : colors.lavenderWeb.darken015,
                 fontWeight: row.bold ? 'bold' : undefined,
                 whiteSpace: 'nowrap',
               }}
+              variant="body2"
             >
               {row.value}
             </Typography>

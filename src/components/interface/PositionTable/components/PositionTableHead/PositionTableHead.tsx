@@ -1,5 +1,9 @@
-import React from 'react';
 import Box from '@mui/material/Box';
+import isUndefined from 'lodash/isUndefined';
+import React from 'react';
+
+import { Agents } from '../../../../../contexts/AgentContext/types';
+import { useAgent } from '../../../../../hooks/useAgent';
 import { colors, SystemStyleObject, Theme } from '../../../../../theme';
 import { formatCurrency, formatNumber } from '../../../../../utilities/number';
 import { Button } from '../../../../atomic/Button/Button';
@@ -7,16 +11,13 @@ import {
   getPositionBadgeVariant,
   PositionBadge,
 } from '../../../../atomic/PositionBadge/PositionBadge';
-import isUndefined from 'lodash/isUndefined';
-import { Agents } from '../../../../../contexts/AgentContext/types';
-import { ReactComponent as EditIcon } from './editPosition.svg';
 import { Typography } from '../../../../atomic/Typography/Typography';
 import { BulletLabel } from '../../../../composite/BulletLabel/BulletLabel';
 import {
-  HealthFactorText,
   getHealthTextColor,
+  HealthFactorText,
 } from '../../../../composite/HealthFactorText/HealthFactorText';
-import { useAgent } from '../../../../../hooks/useAgent';
+import { ReactComponent as EditIcon } from './editPosition.svg';
 
 export type PositionTableHeadProps = {
   currencyCode: string;
@@ -92,7 +93,7 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
               marginLeft: (theme) => theme.spacing(4),
             }}
           >
-            <Typography variant="body2" sx={{ ...labelStyles }}>
+            <Typography sx={{ ...labelStyles }} variant="body2">
               Fees:
               <Box component="span" sx={{ color: getTextColor(feesPositive) }}>
                 {' '}
@@ -139,11 +140,11 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
             />
             {onSelect && (
               <Button
-                variant="darker"
-                onClick={handleEditNotional}
+                id={gaButtonId}
                 size="vs"
                 sx={{ display: 'flex', padding: '4px 8px', fontSize: '14px' }}
-                id={gaButtonId}
+                variant="darker"
+                onClick={handleEditNotional}
               >
                 <Box sx={{ marginRight: '4px' }}>Edit </Box>
                 <EditIcon />
@@ -155,22 +156,22 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
         {beforeMaturity === false && !isSettled && (
           <>
             <Button
-              variant={positionType === 1 ? 'darker-link' : 'darker'}
-              size="xs"
-              onClick={onSettle}
               id={gaButtonId}
+              size="xs"
+              variant={positionType === 1 ? 'darker-link' : 'darker'}
+              onClick={onSettle}
             >
               Settle
             </Button>
             {rolloverAvailable && (
               <Button
+                id={gaButtonId}
+                size="xs"
+                sx={{ marginLeft: (theme) => theme.spacing(4) }}
                 variant={
                   positionType === 1 ? 'rollover1' : positionType === 2 ? 'rollover2' : 'rollover3'
                 }
-                size="xs"
-                sx={{ marginLeft: (theme) => theme.spacing(4) }}
                 onClick={onRollover}
-                id={gaButtonId}
               >
                 Rollover
               </Button>
@@ -179,7 +180,7 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
         )}
 
         {beforeMaturity === false && isSettled && (
-          <Button variant={positionType === 1 ? 'darker-link' : 'darker'} size="xs" disabled>
+          <Button size="xs" variant={positionType === 1 ? 'darker-link' : 'darker'} disabled>
             Settled
           </Button>
         )}

@@ -1,10 +1,10 @@
-import React from 'react';
 import Box from '@mui/material/Box';
+import React from 'react';
 
-import { Icons } from '../../../../../../atomic/Icon/types';
-import { WalletOptionButton } from './components';
-import { Typography } from '../../../../../../atomic/Typography/Typography';
 import { Wallet, WalletName } from '../../../../../../../contexts/WalletContext/types';
+import { Icons } from '../../../../../../atomic/Icon/types';
+import { Typography } from '../../../../../../atomic/Typography/Typography';
+import { WalletOptionButton } from './components';
 
 type WalletOption = {
   title: string;
@@ -28,23 +28,23 @@ export const WalletSelect: React.FunctionComponent<WalletSelectProps> = ({
 }) => {
   return (
     <>
-      <Typography variant="h6" sx={{ marginBottom: (theme) => theme.spacing(6) }}>
+      <Typography sx={{ marginBottom: (theme) => theme.spacing(6) }} variant="h6">
         CONNECT A WALLET
       </Typography>
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
         {walletOptions.map(({ title, name }) => (
           <WalletOptionButton
             key={title}
-            title={title}
             icon={name as Icons}
-            onClick={() => onSelectWallet(name)}
             selected={name === wallet.name && wallet.status === 'connected'}
+            title={title}
+            onClick={() => onSelectWallet(name)}
           />
         ))}
       </Box>
       <Typography
-        variant="h2"
         sx={{ marginTop: (theme) => theme.spacing(22), textAlign: 'center' }}
+        variant="h2"
       >
         MORE OPTIONS COMING SOON
       </Typography>

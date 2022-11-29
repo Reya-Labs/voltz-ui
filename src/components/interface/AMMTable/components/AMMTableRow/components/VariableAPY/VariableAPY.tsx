@@ -1,9 +1,9 @@
-import React from 'react';
 import TableCell from '@mui/material/TableCell';
-
-import { Typography } from '../../../../../../atomic/Typography/Typography';
-import { formatNumber } from '../../../../../../../utilities/number';
 import isUndefined from 'lodash/isUndefined';
+import React from 'react';
+
+import { formatNumber } from '../../../../../../../utilities/number';
+import { Typography } from '../../../../../../atomic/Typography/Typography';
 
 export type VariableAPYProps = {
   variableApy?: number;
@@ -20,7 +20,7 @@ export const VariableAPY: React.FunctionComponent<VariableAPYProps> = ({ variabl
 
   return (
     <TableCell>
-      <Typography variant="body2" label="Variable APY" agentStyling sx={{ fontSize: 18 }}>
+      <Typography label="Variable APY" sx={{ fontSize: 18 }} variant="body2" agentStyling>
         {renderValue()}
       </Typography>
     </TableCell>

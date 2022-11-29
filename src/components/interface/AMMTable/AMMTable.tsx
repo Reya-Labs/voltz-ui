@@ -1,18 +1,17 @@
-import React from 'react';
-import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
+import TableContainer from '@mui/material/TableContainer';
+import { AMM } from '@voltz-protocol/v1-sdk';
+import { DateTime } from 'luxon';
+import React from 'react';
 
+import { Agents } from '../../../contexts/AgentContext/types';
+import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
+import { useAgent } from '../../../hooks/useAgent';
+import { isBorrowing } from '../../../utilities/isBorrowing';
 import { Panel } from '../../atomic/Panel/Panel';
 import { AMMTableHead, AMMTableRow } from './components';
-import { DateTime } from 'luxon';
-
-import { AMM } from '@voltz-protocol/v1-sdk';
 import { commonOverrides } from './styles';
-import { isBorrowing } from '../../../utilities/isBorrowing';
-import { Agents } from '../../../contexts/AgentContext/types';
-import { useAgent } from '../../../hooks/useAgent';
-import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
 
 export type AMMTableProps = {
   onSelectItem: (amm: AMM) => void;
@@ -35,32 +34,32 @@ export const AMMTable: React.FunctionComponent<AMMTableProps> = ({
 
   return (
     <Panel
-      variant={agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'dark'}
       borderRadius="large"
       padding="container"
       sx={{ paddingTop: 0, paddingBottom: 0 }}
+      variant={agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'dark'}
     >
       <TableContainer>
         <Table
+          aria-labelledby="tableTitle"
+          size="medium"
           sx={{
             borderCollapse: 'separate',
             borderSpacing: '0px 16px',
             ...commonOverrides,
           }}
-          aria-labelledby="tableTitle"
-          size="medium"
         >
           <AMMTableHead />
           <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
             {amms
               .filter((amm) => DateTime.now() < amm.endDateTime)
               .map((amm) => (
-                <AMMProvider amm={amm} key={amm.id}>
+                <AMMProvider key={amm.id} amm={amm}>
                   <AMMTableRow
-                    protocol={amm.protocol}
-                    isBorrowing={isBorrowing(amm.rateOracle.protocolId)}
-                    startDate={amm.startDateTime}
                     endDate={amm.endDateTime}
+                    isBorrowing={isBorrowing(amm.rateOracle.protocolId)}
+                    protocol={amm.protocol}
+                    startDate={amm.startDateTime}
                     onSelect={() => onSelectItem(amm)}
                   />
                 </AMMProvider>

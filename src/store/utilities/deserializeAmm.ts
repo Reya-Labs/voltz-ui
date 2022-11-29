@@ -1,9 +1,8 @@
+import { AMM, RateOracle, Token } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
-
-import { SerializedAMM } from '../types';
 import JSBI from 'jsbi';
 
-import { AMM, RateOracle, Token } from '@voltz-protocol/v1-sdk';
+import { SerializedAMM } from '../types';
 
 const deserializeAmm = (serializedAmm: SerializedAMM, signer: providers.JsonRpcSigner): AMM => {
   const {

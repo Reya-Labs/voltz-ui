@@ -1,11 +1,12 @@
 import { ContractReceipt, providers } from 'ethers';
-import { call, put } from 'redux-saga/effects';
+import isUndefined from 'lodash/isUndefined';
 import { DateTime } from 'luxon';
+import { call, put } from 'redux-saga/effects';
+
 import { getErrorMessage } from '../../../utilities/getErrorMessage';
+import * as actions from '../../actions';
 import { SettlePositionAction } from '../../types';
 import { deserializeAmm, getSigner } from '../../utilities';
-import * as actions from '../../actions';
-import isUndefined from 'lodash/isUndefined';
 
 function* settlePositionSaga(action: SettlePositionAction) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

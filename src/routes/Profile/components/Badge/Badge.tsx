@@ -1,6 +1,7 @@
 import React from 'react';
-import { Skeleton, Icon } from './Badge.styled';
+
 import { BadgeVariant } from '../../data/getSeasonBadges';
+import { Icon, Skeleton } from './Badge.styled';
 
 export type BadgeProps = {
   variant: BadgeVariant | 'noClaimedBadges';

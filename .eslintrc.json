@@ -1,72 +1,59 @@
 {
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "jest": true
+  },
   "extends": [
     "react-app",
     "react-app/jest",
-    "prettier",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:import/recommended",
-    "plugin:import/typescript"
+    "plugin:import/typescript",
+    "prettier"
   ],
-  "plugins": ["unused-imports"],
+  "ignorePatterns": [
+    "src/graphql/generated.ts"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "**/*.stories.*"
+      ],
+      "rules": {
+        "import/no-anonymous-default-export": "off"
+      }
+    }
+  ],
   "parser": "@typescript-eslint/parser",
-  "env": {
-    "jest": true,
-    "browser": true,
-    "es2021": true
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "project": [
+      "./tsconfig.json"
+    ]
   },
-  "ignorePatterns": ["src/graphql/generated.ts"],
+  "plugins": [
+    "unused-imports",
+    "simple-import-sort"
+  ],
   "rules": {
-    "no-restricted-imports": ["error",
-      {
-        "paths": [
-          {
-            "name": "lodash",
-            "message": "Import [module] from lodash/[module] instead to avoid bloating bundle size."
-          },
-          {
-            "name": "@mui/material",
-            "message": "Import [module] from @mui/material/[module] instead to avoid bloating bundle size."
-          }
-        ],
-        "patterns": [
-          {
-            "group": ["**/dist/**"],
-            "message": "Don't import types/modules from 'dist' directories!"
-          }
-        ]
-      }],
-    "import/no-default-export": ["warn"],
-    "react/jsx-key": ["error"],
-    "react/forbid-dom-props": ["warn", { "forbid": [{
-      "propName": "style",
-      "message": "Avoid using inline styles for components. Use styled components instead."
-    }]}],
-    "react/forbid-component-props": ["warn", { "forbid": [{
-      "propName": "style",
-      "message": "Avoid using inline styles for components. Use styled components instead."
-    }, {
-      "propName": "sx",
-      "message": "Avoid using inline styles for components. Use styled components instead."
-    }]}],
-    "prefer-template": "error",
-    "unused-imports/no-unused-imports-ts": "error",
-    "eqeqeq": "error",
-    "no-unused-vars": "off",
-    "no-use-before-define": "off",
-    "no-console": ["error", { "allow": ["debug", "warn", "error"] }],
-    "no-shadow": "off",
-    "@typescript-eslint/no-use-before-define": ["error"],
     "@typescript-eslint/indent": "off",
-    "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/no-explicit-any": "error",
-    "@typescript-eslint/no-shadow": ["error"],
     "@typescript-eslint/no-floating-promises": "warn",
-    "react/jsx-props-no-spreading": "off",
-    "react/react-in-jsx-scope": "off",
-    "react/jsx-filename-extension": [2, { "extensions": [".ts", ".tsx"] }],
-    "import/prefer-default-export": "off",
-    "import/no-unresolved": "off",
+    "@typescript-eslint/no-shadow": [
+      "error"
+    ],
+    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-use-before-define": [
+      "error"
+    ],
+    "eqeqeq": "error",
     "import/extensions": "off",
+    "import/no-default-export": [
+      "warn"
+    ],
     "import/no-extraneous-dependencies": [
       "error",
       {
@@ -79,22 +66,99 @@
           "**/*.stories.tsx"
         ]
       }
-    ]
-  },
-  "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "project": ["./tsconfig.json"]
-  },
-  "overrides": [
-    {
-      "files": [
-        "**/*.stories.*"
-      ],
-      "rules": {
-        "import/no-anonymous-default-export": "off"
+    ],
+    "import/no-unresolved": "off",
+    "import/prefer-default-export": "off",
+    "no-console": [
+      "error",
+      {
+        "allow": [
+          "debug",
+          "warn",
+          "error"
+        ]
       }
-    }
-  ]
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "message": "Import [module] from lodash/[module] instead to avoid bloating bundle size.",
+            "name": "lodash"
+          },
+          {
+            "message": "Import [module] from @mui/material/[module] instead to avoid bloating bundle size.",
+            "name": "@mui/material"
+          }
+        ],
+        "patterns": [
+          {
+            "group": [
+              "**/dist/**"
+            ],
+            "message": "Don't import types/modules from 'dist' directories!"
+          }
+        ]
+      }
+    ],
+    "no-shadow": "off",
+    "no-unused-vars": "off",
+    "no-use-before-define": "off",
+    "prefer-template": "error",
+    "react/forbid-component-props": [
+      "warn",
+      {
+        "forbid": [
+          {
+            "message": "Avoid using inline styles for components. Use styled components instead.",
+            "propName": "style"
+          },
+          {
+            "message": "Avoid using inline styles for components. Use styled components instead.",
+            "propName": "sx"
+          }
+        ]
+      }
+    ],
+    "react/forbid-dom-props": [
+      "warn",
+      {
+        "forbid": [
+          {
+            "message": "Avoid using inline styles for components. Use styled components instead.",
+            "propName": "style"
+          }
+        ]
+      }
+    ],
+    "react/jsx-filename-extension": [
+      "error",
+      {
+        "extensions": [
+          ".ts",
+          ".tsx"
+        ]
+      }
+    ],
+    "react/jsx-key": [
+      "error"
+    ],
+    "react/jsx-props-no-spreading": "off",
+    "react/jsx-sort-props": [
+      "error",
+      {
+        "callbacksLast": true,
+        "ignoreCase": true,
+        "noSortAlphabetically": false,
+        "reservedFirst": true,
+        "shorthandFirst": false,
+        "shorthandLast": true
+      }
+    ],
+    "react/react-in-jsx-scope": "off",
+    "simple-import-sort/exports": "error",
+    "simple-import-sort/imports": "error",
+    "unused-imports/no-unused-imports-ts": "error"
+  }
 }

@@ -1,8 +1,8 @@
-import MellowLPPosition from '../MellowLPPosition/MellowLPPosition';
 import React from 'react';
 
-import { MellowProduct } from '../../../types';
 import { VaultField } from '../../../Common/VaultField';
+import { MellowProduct } from '../../../types';
+import MellowLPPosition from '../MellowLPPosition/MellowLPPosition';
 import {
   DescriptionTypography,
   MellowLPEntryContainerBox,
@@ -29,10 +29,10 @@ const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
     <MellowLPEntryContainerBox>
       <MellowLPEntryInfoBox>
         <VaultField
+          expectedApy={lpVault.metadata.estimatedHistoricApy}
+          maturity={lpVault.metadata.maturity}
           title={lpVault.metadata.title}
           token={lpVault.metadata.token}
-          maturity={lpVault.metadata.maturity}
-          expectedApy={lpVault.metadata.estimatedHistoricApy}
         />
 
         <DescriptionTypography variant="h6">{lpVault.metadata.description}</DescriptionTypography>
@@ -47,7 +47,7 @@ const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
 
         <PoolFieldsBox>
           {lpVault.metadata.underlyingPools.map((pool, index) => (
-            <PoolFieldTypography variant="body2" key={`${pool}-${index}`}>
+            <PoolFieldTypography key={`${pool}-${index}`} variant="body2">
               {pool}
             </PoolFieldTypography>
           ))}
@@ -56,11 +56,11 @@ const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
       {
         <PositionBox>
           <MellowLPPosition
-            userDeposit={lpVault.vault.userDeposit}
-            tokenName={lpVault.metadata.token}
-            handleClick={onSelectItem}
             dataLoading={dataLoading}
             disabled={lpVault.metadata.soon || lpVault.metadata.deprecated}
+            handleClick={onSelectItem}
+            tokenName={lpVault.metadata.token}
+            userDeposit={lpVault.vault.userDeposit}
           />
         </PositionBox>
       }

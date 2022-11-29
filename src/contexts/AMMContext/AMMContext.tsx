@@ -1,6 +1,7 @@
-import React, { createContext, useContext } from 'react';
-import { useAMM } from '../../hooks/useAMM/useAMM';
 import { AMM } from '@voltz-protocol/v1-sdk';
+import React, { createContext, useContext } from 'react';
+
+import { useAMM } from '../../hooks/useAMM/useAMM';
 
 export type AMMProviderProps = {
   amm: AMM;

@@ -1,16 +1,16 @@
-import React, { useEffect } from 'react';
-import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
 import { SystemStyleObject, Theme } from '@mui/system';
 import isNull from 'lodash/isNull';
+import React, { useEffect } from 'react';
 
-import { Button } from '../../../../atomic/Button/Button';
-import { useWallet } from '../../../../../hooks/useWallet';
-import { BorrowAMMTableDatum, labelsVariable, labelsFixed } from '../../types';
-import { BorrowVariableAPY, BorrowFixedAPR, Debt, BorrowMaturity } from './components';
-import { PoolField } from '../../../../composite/PoolField/PoolField';
-import { usePositionContext } from '../../../../../contexts/PositionContext/PositionContext';
 import { useBorrowAMMContext } from '../../../../../contexts/BorrowAMMContext/BorrowAMMContext';
+import { usePositionContext } from '../../../../../contexts/PositionContext/PositionContext';
+import { useWallet } from '../../../../../hooks/useWallet';
+import { Button } from '../../../../atomic/Button/Button';
+import { PoolField } from '../../../../composite/PoolField/PoolField';
+import { BorrowAMMTableDatum, labelsFixed, labelsVariable } from '../../types';
+import { BorrowFixedAPR, BorrowMaturity, BorrowVariableAPY, Debt } from './components';
 
 export type BorrowTableRowProps = {
   datum: BorrowAMMTableDatum;
@@ -150,7 +150,6 @@ export const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({
     return (
       <TableCell align="left" width="20%">
         <Button
-          onClick={handleClick}
           id={gaButtonId}
           sx={{
             backgroundColor: '#19152B',
@@ -168,6 +167,7 @@ export const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({
             borderStyle: 'none none none none',
             borderRadius: '0px',
           }}
+          onClick={handleClick}
         >
           FIX RATE
         </Button>
@@ -195,8 +195,8 @@ export const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({
               return (
                 <BorrowFixedAPR
                   key={indexKey}
-                  loading={loadingFixedApr}
                   fixedApr={resultFixedApr}
+                  loading={loadingFixedApr}
                 />
               );
             }
@@ -204,7 +204,7 @@ export const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({
               // modify to show svgs
               return (
                 <TableCell key={'protocol'} width="35%">
-                  <PoolField protocol={datum.protocol} isBorrowing={false} isBorrowTable={true} />
+                  <PoolField isBorrowing={false} isBorrowTable={true} protocol={datum.protocol} />
                 </TableCell>
               );
             }
@@ -214,13 +214,13 @@ export const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({
             return (
               <Debt
                 key={indexKey}
+                debtInToken={isFixedPositions ? resultFixedInToken : resultVarInToken}
                 debtInUSD={isFixedPositions ? resultFixed : resultVar}
                 loadingDebt={
                   isFixedPositions
                     ? loadingFixed || loadingFixedInToken
                     : loadingVar || loadingVarInToken
                 }
-                debtInToken={isFixedPositions ? resultFixedInToken : resultVarInToken}
                 tokenName={datum.underlyingTokenName}
               />
             );

@@ -1,10 +1,10 @@
-import React, { useRef } from 'react';
 import Box from '@mui/material/Box';
+import React, { useRef } from 'react';
 
+import { Agents } from '../../../../../contexts/AgentContext/types';
+import { usePositionContext } from '../../../../../contexts/PositionContext/PositionContext';
 import { IconLabel } from '../../../../composite/IconLabel/IconLabel';
 import { ToggleButtonGroup } from '../../../../composite/ToggleButtonGroup/ToggleButtonGroup';
-import { usePositionContext } from '../../../../../contexts/PositionContext/PositionContext';
-import { Agents } from '../../../../../contexts/AgentContext/types';
 
 export type TraderControlsProps = {
   agent: Agents;
@@ -59,18 +59,18 @@ export const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
       }}
     >
       <ToggleButtonGroup
+        agent={agent}
+        defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
         label={
           <IconLabel
-            label="rates"
             icon="information-circle"
             info="Choose between taking a fixed or variable position."
+            label="rates"
           />
         }
-        options={Object.values(agentOptionTitles)}
         option={agentOptionTitles[agent]}
-        defaultOption={agentOptionTitles[Agents.FIXED_TRADER]}
+        options={Object.values(agentOptionTitles)}
         onChangeOption={handleChangeMode}
-        agent={agent}
       />
     </Box>
   );

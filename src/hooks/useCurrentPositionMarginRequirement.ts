@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
-import isUndefined from 'lodash/isUndefined';
-
 import { AMM } from '@voltz-protocol/v1-sdk';
+import isUndefined from 'lodash/isUndefined';
+import { useEffect, useState } from 'react';
 
 export const useCurrentPositionMarginRequirement = (
   amm: AMM,

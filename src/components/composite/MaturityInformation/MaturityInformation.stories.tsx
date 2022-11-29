@@ -1,6 +1,6 @@
-import React from 'react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { DateTime, Duration } from 'luxon';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import React from 'react';
 
 import { MaturityInformation } from './MaturityInformation';
 
@@ -26,7 +26,7 @@ const Template: ComponentStory<typeof MaturityInformation> = ({
     ? DateTime.fromMillis(endDateMillis as unknown as number)
     : undefined;
 
-  return <MaturityInformation {...args} startDate={startDate} endDate={endDate} />;
+  return <MaturityInformation {...args} endDate={endDate} startDate={startDate} />;
 };
 
 export const Basic = Template.bind({});

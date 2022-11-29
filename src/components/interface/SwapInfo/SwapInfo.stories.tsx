@@ -1,13 +1,12 @@
-import React from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
-
-import { SwapInfo } from './SwapInfo';
-import { SwapFormActions, SwapFormModes } from '../SwapForm';
-
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { AMM, InfoPostSwap } from '@voltz-protocol/v1-sdk';
-import { SwapFormProvider } from '../../../contexts/SwapFormContext/SwapFormContext';
+import React from 'react';
+
 import { AgentProvider } from '../../../contexts/AgentContext/AgentProvider';
 import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
+import { SwapFormProvider } from '../../../contexts/SwapFormContext/SwapFormContext';
+import { SwapFormActions, SwapFormModes } from '../SwapForm';
+import { SwapInfo } from './SwapInfo';
 
 export default {
   title: 'Interface/SwapInfo',
@@ -56,8 +55,8 @@ const NewPositionSwapForm: React.FunctionComponent = (args) => {
   return (
     <SwapInfo
       {...args}
-      mode={mode}
       formAction={SwapFormActions.SWAP}
+      mode={mode}
       swapSummary={mockSwapData}
       swapSummaryLoading={false}
     />
@@ -87,13 +86,13 @@ const EditMarginSwapForm: React.FunctionComponent = (args) => {
   return (
     <SwapInfo
       {...args}
-      mode={mode}
-      formAction={SwapFormActions.SWAP}
-      swapSummary={mockSwapData}
-      swapSummaryLoading={false}
       balance={100}
       currentPositionMarginRequirement={10}
+      formAction={SwapFormActions.SWAP}
+      mode={mode}
       positionMargin={20}
+      swapSummary={mockSwapData}
+      swapSummaryLoading={false}
       underlyingTokenName={'GIL'}
     />
   );

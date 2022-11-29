@@ -1,10 +1,9 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Position } from '@voltz-protocol/v1-sdk';
+import { BigNumber } from 'ethers';
+import JSBI from 'jsbi';
 
 import { TransactionList } from './TransactionList';
-import JSBI from 'jsbi';
-import { BigNumber } from 'ethers';
-
-import { Position } from '@voltz-protocol/v1-sdk';
 
 export default {
   title: 'Interface/TransactionList',

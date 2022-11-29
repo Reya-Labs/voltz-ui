@@ -1,6 +1,7 @@
 import { styled } from '@mui/material/styles';
-import { Typography } from '../../../../components/atomic/Typography/Typography';
 import ToggleButtonComponent from '@mui/material/ToggleButton';
+
+import { Typography } from '../../../../components/atomic/Typography/Typography';
 
 export const SeasonTypography = styled(Typography)`
   font-weight: 400;

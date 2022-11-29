@@ -1,5 +1,5 @@
-import { DateTime } from 'luxon';
 import { BorrowAMM, Position } from '@voltz-protocol/v1-sdk';
+import { DateTime } from 'luxon';
 
 export const getTotalVariableDebt = async (
   borrowAmms: BorrowAMM[],

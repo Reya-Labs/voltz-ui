@@ -1,7 +1,8 @@
-import { styled } from '@mui/material/styles';
-import Skeleton from '@mui/material/Skeleton';
-import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Skeleton from '@mui/material/Skeleton';
+import { styled } from '@mui/material/styles';
+
 import { Typography } from '../../../../../components/atomic/Typography/Typography';
 import colors from '../../../../../theme/colors';
 

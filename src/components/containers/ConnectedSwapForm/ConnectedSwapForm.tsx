@@ -1,32 +1,31 @@
+import { AMM } from '@voltz-protocol/v1-sdk';
+import { BigNumber } from 'ethers';
+import isUndefined from 'lodash/isUndefined';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { routes } from '../../../routes/paths';
-import { actions, selectors } from '../../../store';
-import { BigNumber } from 'ethers';
-import isUndefined from 'lodash/isUndefined';
-
-import { AMM } from '@voltz-protocol/v1-sdk';
-import { SwapForm, SwapFormActions, SwapFormModes } from '../../interface/SwapForm';
-import { PendingTransaction } from '../../interface/PendingTransaction/PendingTransaction';
-import { SwapCurrentPosition } from '../../interface/SwapCurrentPosition';
-import { FormPanel } from '../../interface/FormPanel/FormPanel';
-import { SwapInfo } from '../../interface/SwapInfo';
-import { useWallet } from '../../../hooks/useWallet';
-import { useAMMsContext } from '../../../contexts/AMMsContext/AMMsContext';
-import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';
 import { Agents } from '../../../contexts/AgentContext/types';
 import { useAMMContext } from '../../../contexts/AMMContext/AMMContext';
+import { useAMMsContext } from '../../../contexts/AMMsContext/AMMsContext';
+import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';
 import { useSwapFormContext } from '../../../contexts/SwapFormContext/SwapFormContext';
 import { useAgent } from '../../../hooks/useAgent';
 import { useDispatch } from '../../../hooks/useDispatch';
 import { useSelector } from '../../../hooks/useSelector';
+import { useWallet } from '../../../hooks/useWallet';
+import { routes } from '../../../routes/paths';
+import { actions, selectors } from '../../../store';
 import {
   getNotionalActionFromHintState,
   getPoolButtonId,
 } from '../../../utilities/googleAnalytics';
-import { setPageTitle } from '../../../utilities/page';
 import { isBorrowing } from '../../../utilities/isBorrowing';
+import { setPageTitle } from '../../../utilities/page';
+import { FormPanel } from '../../interface/FormPanel/FormPanel';
+import { PendingTransaction } from '../../interface/PendingTransaction/PendingTransaction';
+import { SwapCurrentPosition } from '../../interface/SwapCurrentPosition';
+import { SwapForm, SwapFormActions, SwapFormModes } from '../../interface/SwapForm';
+import { SwapInfo } from '../../interface/SwapInfo';
 
 export type ConnectedSwapFormProps = {
   onReset: () => void;
@@ -128,14 +127,14 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
         return (
           <PendingTransaction
             amm={targetAmm}
-            position={position}
-            isEditingMargin={true}
-            transactionId={transactionId}
-            onComplete={handleComplete}
-            margin={Math.abs(form.state.margin as number) * (form.isRemovingMargin ? -1 : 1)}
-            onBack={handleGoBack}
-            variableApy={typeof resultVariableApy === 'number' ? resultVariableApy : undefined}
             fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr : undefined}
+            isEditingMargin={true}
+            margin={Math.abs(form.state.margin as number) * (form.isRemovingMargin ? -1 : 1)}
+            position={position}
+            transactionId={transactionId}
+            variableApy={typeof resultVariableApy === 'number' ? resultVariableApy : undefined}
+            onBack={handleGoBack}
+            onComplete={handleComplete}
           />
         );
       }
@@ -149,17 +148,17 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
         return (
           <PendingTransaction
             amm={targetAmm}
-            position={position}
-            isEditingMargin={false}
-            showNegativeNotional={form.mode === SwapFormModes.EDIT_NOTIONAL && isRemovingNotional}
-            isRollover={form.mode === SwapFormModes.ROLLOVER}
-            transactionId={transactionId}
-            onComplete={handleComplete}
-            notional={form.swapInfo.data?.availableNotional}
-            margin={Math.abs(form.state.margin as number) * (form.isRemovingMargin ? -1 : 1)}
-            onBack={handleGoBack}
-            variableApy={typeof resultVariableApy === 'number' ? resultVariableApy : undefined}
             fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr : undefined}
+            isEditingMargin={false}
+            isRollover={form.mode === SwapFormModes.ROLLOVER}
+            margin={Math.abs(form.state.margin as number) * (form.isRemovingMargin ? -1 : 1)}
+            notional={form.swapInfo.data?.availableNotional}
+            position={position}
+            showNegativeNotional={form.mode === SwapFormModes.EDIT_NOTIONAL && isRemovingNotional}
+            transactionId={transactionId}
+            variableApy={typeof resultVariableApy === 'number' ? resultVariableApy : undefined}
+            onBack={handleGoBack}
+            onComplete={handleComplete}
           />
         );
       }
@@ -180,9 +179,9 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
       {position ? (
         <SwapCurrentPosition
           formMode={form.mode}
-          onPortfolio={handleComplete}
-          position={position}
           gaButtonId={buttonId}
+          position={position}
+          onPortfolio={handleComplete}
         />
       ) : (
         <FormPanel noBackground />
@@ -193,34 +192,37 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
         currentPositionMarginRequirement={form.currentPositionMarginRequirement}
         endDate={targetAmm.endDateTime}
         errors={form.errors}
+        fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr : undefined}
         formAction={form.action}
         formState={form.state}
+        gaButtonId={buttonId}
         hintState={form.hintState}
         isFormValid={form.isValid}
         isTradeVerified={form.isTradeVerified}
         mode={mode}
+        protocol={targetAmm.protocol}
+        startDate={targetAmm.startDateTime}
+        submitButtonState={form.submitButtonState}
+        swapInfo={form.swapInfo.data}
+        swapInfoLoading={form.swapInfo.loading}
+        tokenApprovals={form.tokenApprovals}
+        tradeInfoErrorMessage={form.swapInfo.errorMessage}
+        underlyingTokenName={targetAmm.underlyingToken.name}
+        variableApy={typeof resultVariableApy === 'number' ? resultVariableApy : undefined}
         onCancel={onReset}
         onChangeLeverage={form.setLeverage}
         onChangeMargin={form.setMargin}
         onChangeMarginAction={form.setMarginAction}
         onChangeNotional={form.setNotional}
         onSubmit={handleSubmit}
-        protocol={targetAmm.protocol}
-        gaButtonId={buttonId}
-        startDate={targetAmm.startDateTime}
-        swapInfo={form.swapInfo.data}
-        swapInfoLoading={form.swapInfo.loading}
-        submitButtonState={form.submitButtonState}
-        tokenApprovals={form.tokenApprovals}
-        tradeInfoErrorMessage={form.swapInfo.errorMessage}
-        underlyingTokenName={targetAmm.underlyingToken.name}
-        variableApy={typeof resultVariableApy === 'number' ? resultVariableApy : undefined}
-        fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr : undefined}
       />
       <SwapInfo
         balance={form.balance}
         currentPositionMarginRequirement={form.currentPositionMarginRequirement}
+        expectedApy={form.expectedApy}
+        expectedCashflow={form.expectedCashflow}
         formAction={form.action}
+        maxAvailableNotional={form.swapInfo.maxAvailableNotional}
         mode={mode}
         positionMargin={
           position?.margin
@@ -231,13 +233,10 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
         swapSummary={!isUndefined(form.state.notional) ? form.swapInfo.data : undefined}
         swapSummaryLoading={form.swapInfo.loading}
         underlyingTokenName={targetAmm.underlyingToken.name}
-        warningText={form.warningText}
-        maxAvailableNotional={form.swapInfo.maxAvailableNotional}
-        expectedApy={form.expectedApy}
-        expectedCashflow={form.expectedCashflow}
         userSimulatedVariableApy={form.userSimulatedVariableApy}
-        onChangeUserSimulatedVariableApy={form.setUserSimulatedVariableApy}
         userSimulatedVariableApyUpdated={form.userSimulatedVariableApyUpdated}
+        warningText={form.warningText}
+        onChangeUserSimulatedVariableApy={form.setUserSimulatedVariableApy}
       />
     </>
   );

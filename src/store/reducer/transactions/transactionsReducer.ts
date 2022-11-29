@@ -1,4 +1,4 @@
-import { State, Action } from '../../types';
+import { Action, State } from '../../types';
 import addTransactionReducer from './addTransactionReducer';
 import closeTransactionReducer from './closeTransactionReducer';
 import updateTransactionReducer from './updateTransactionReducer';
