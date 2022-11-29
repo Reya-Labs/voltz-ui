@@ -8,7 +8,7 @@ export const MellowTableBox = styled(Box)`
   flex-direction: column;
   align-items: flex-start;
   padding: 0px;
-  gap: 32px;
+  gap: ${({ theme }) => theme.spacing(8)};
 
   width: 1084px;
 `;

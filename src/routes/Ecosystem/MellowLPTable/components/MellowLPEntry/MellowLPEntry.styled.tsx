@@ -16,8 +16,8 @@ export const MellowLPEntryInfoBox = styled(Box)`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 16px;
-  gap: 24px;
+  padding: ${({ theme }) => theme.spacing(4)};
+  gap: ${({ theme }) => theme.spacing(6)};
 
   background: #19152a;
   border-width: 1px 1px 0px 1px;
@@ -37,8 +37,8 @@ export const PoolOutlineBox = styled(Box)`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 3px 0px;
-  gap: 8px;
+  padding: ${({ theme }) => theme.spacing(1, 0)};
+  gap: ${({ theme }) => theme.spacing(2)};
 `;
 
 export const PoolFieldsBox = styled(Box)`
@@ -49,7 +49,7 @@ export const PoolFieldsBox = styled(Box)`
 
 export const PositionBox = styled(Box)`
   background: #1e1a33;
-  border-radius: 0px 0px 8px 8px;
+  border-radius:${({ theme }) => theme.spacing(0, 0, 2, 2)};
 
   align-self: stretch;
 `;

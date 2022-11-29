@@ -7,7 +7,7 @@ export const VaultInfoBox = styled(Typography)`
   flex-direction: column;
   align-items: flex-start;
   padding: 0px;
-  gap: 16px;
+  gap: ${({ theme }) => theme.spacing(4)};
 
   align-self: stretch;
 `;
@@ -30,7 +30,7 @@ export const CapBarBox = styled(Box)`
   flex-direction: column;
   align-items: flex-start;
   padding: 0px;
-  gap: 4px;
+  gap: ${({ theme }) => theme.spacing(1)};
 
   align-self: stretch;
 `;
@@ -39,11 +39,11 @@ export const PositionBox = styled(Box)`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 8px 16px;
-  gap: 8px;
+  padding: ${({ theme }) => theme.spacing(2, 4)};
+  gap: ${({ theme }) => theme.spacing(2)};
 
   background: #1e1933;
-  border-radius: 4px;
+  border-radius: ${({ theme }) => theme.spacing(1)};
 
   align-self: stretch;
 `;
