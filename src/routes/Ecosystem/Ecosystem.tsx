@@ -5,7 +5,7 @@ import { useMellowLPVaults } from '../../hooks/useMellowLPVaults/useMellowLPVaul
 import { useWallet } from '../../hooks/useWallet';
 import { setPageTitle } from '../../utilities/page';
 import { routes } from '../paths';
-import ConnectedMellowLpDepositForm from './ConnectedMellowLpDepositForm/ConnectedMellowLpDepositForm';
+import { ConnectedMellowLpDepositForm } from './ConnectedMellowLpDepositForm/ConnectedMellowLpDepositForm';
 import ConnectedMellowLPTable from './ConnectedMellowLPTable/ConnectedMellowLPTable';
 import { ConnectedMellowBox } from './Ecosystem.styled';
 import { MellowProduct } from './types';
