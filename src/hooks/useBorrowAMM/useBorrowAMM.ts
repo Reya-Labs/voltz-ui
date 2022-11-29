@@ -1,10 +1,9 @@
+import { BorrowAMM, BorrowSwapInfo, Position } from '@voltz-protocol/v1-sdk';
+import { DateTime } from 'luxon';
 import { useMemo } from 'react';
 
-import { useAsyncFunction, UseAsyncFunctionResult } from '../useAsyncFunction';
-import { DateTime } from 'luxon';
 import { SwapInfoPayload } from '../useAMM/types';
-
-import { BorrowSwapInfo, BorrowAMM, Position } from '@voltz-protocol/v1-sdk';
+import { useAsyncFunction, UseAsyncFunctionResult } from '../useAsyncFunction';
 
 export type useBorrowAMMReturnType = {
   underlyingDebtInNativeTokens: UseAsyncFunctionResult<unknown, number | void>;

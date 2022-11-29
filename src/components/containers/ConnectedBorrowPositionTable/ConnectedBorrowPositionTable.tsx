@@ -1,22 +1,20 @@
-import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
-import { SystemStyleObject, Theme } from '../../../theme';
+import { BorrowAMM } from '@voltz-protocol/v1-sdk';
+import React, { useEffect, useState } from 'react';
 
 import { Agents } from '../../../contexts/AgentContext/types';
-import BorrowTable from '../../interface/BorrowTable/BorrowTable';
+import { useBorrowAMMs } from '../../../hooks/useBorrowAMMs';
+import { useBorrowPositions } from '../../../hooks/useBorrowPositions';
+import { useWallet } from '../../../hooks/useWallet';
+import { SystemStyleObject, Theme } from '../../../theme';
 import { Loading } from '../../atomic/Loading/Loading';
 import { Panel } from '../../atomic/Panel/Panel';
-
-import { getTotalVariableDebt, getTotalFixedDebt } from './services';
 import {
   BorrowPortfolioHeader,
   BorrowPortfolioHeaderProps,
 } from '../../interface/BorrowPortfolioHeader/BorrowPortfolioHeader';
-
-import { BorrowAMM } from '@voltz-protocol/v1-sdk';
-import { useWallet } from '../../../hooks/useWallet';
-import { useBorrowAMMs } from '../../../hooks/useBorrowAMMs';
-import { useBorrowPositions } from '../../../hooks/useBorrowPositions';
+import BorrowTable from '../../interface/BorrowTable/BorrowTable';
+import { getTotalFixedDebt, getTotalVariableDebt } from './services';
 
 export type ConnectedBorrowAMMTableProps = {
   onSelectItem: (item: BorrowAMM) => void;
@@ -97,31 +95,31 @@ export const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorr
     ) {
       return (
         <Panel
-          variant="dark"
           padding="small"
           sx={{ width: '100%', maxWidth: '800px', margin: '0 auto', background: 'transparent' }}
+          variant="dark"
         >
           <BorrowPortfolioHeader
             currencyCode={headerProps.currencyCode}
             currencySymbol={headerProps.currencySymbol}
             fixedDebt={headerProps.fixedDebt}
-            variableDebt={headerProps.variableDebt}
             fixedPositionsCount={headerProps.fixedPositionsCount}
-            variablePositionsCount={headerProps.variablePositionsCount}
             loading={loadingItems}
+            variableDebt={headerProps.variableDebt}
+            variablePositionsCount={headerProps.variablePositionsCount}
           />
           <Box sx={{ marginTop: (theme) => theme.spacing(8) }}>
             <BorrowTable
+              borrowAmms={borrowAmms}
+              commonOverrides={commonOverrides}
+              positions={positions}
+              showFixed={headerProps.fixedPositionsCount === undefined}
               showVariable={
                 headerProps.variablePositionsCount !== undefined &&
                 headerProps.variablePositionsCount > 0
               }
-              showFixed={headerProps.fixedPositionsCount === undefined}
-              positions={positions}
-              borrowAmms={borrowAmms}
-              onSelectItem={onSelectItem}
-              commonOverrides={commonOverrides}
               onLoaded={setLoadingItems}
+              onSelectItem={onSelectItem}
             />
           </Box>
         </Panel>
@@ -130,7 +128,6 @@ export const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorr
 
     return (
       <Panel
-        variant="grey-dashed"
         padding="small"
         sx={{
           width: '100%',
@@ -139,6 +136,7 @@ export const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorr
           background: 'transparent',
           marginBottom: '600px',
         }}
+        variant="grey-dashed"
       >
         <Loading sx={{ margin: '0 auto' }} />
       </Panel>

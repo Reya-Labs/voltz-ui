@@ -1,8 +1,8 @@
+import { BigNumber } from 'ethers';
 import React, { useState } from 'react';
 
-import { WalletName, WalletStatus } from './types';
 import ProviderWrapper from './ProviderWrapper';
-import { BigNumber } from 'ethers';
+import { WalletName, WalletStatus } from './types';
 
 export type WalletProviderProps = {
   accountOverride?: string;
@@ -20,16 +20,16 @@ export const WalletProvider: React.FunctionComponent<WalletProviderProps> = ({
 
   return (
     <ProviderWrapper
-      status={status}
-      setStatus={setStatus}
       account={account}
-      setAccount={setAccount}
-      name={name}
-      setName={setName}
       balance={balance}
-      setBalance={setBalance}
+      name={name}
       required={required}
+      setAccount={setAccount}
+      setBalance={setBalance}
+      setName={setName}
       setRequired={setRequired}
+      setStatus={setStatus}
+      status={status}
     >
       {children}
     </ProviderWrapper>

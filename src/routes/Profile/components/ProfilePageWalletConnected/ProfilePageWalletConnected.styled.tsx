@@ -1,8 +1,9 @@
-import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import { colors } from '../../../../theme';
-import { Grid } from '../../../../components/layout/Grid';
+import { styled } from '@mui/material/styles';
+
 import { Typography } from '../../../../components/atomic/Typography/Typography';
+import { Grid } from '../../../../components/layout/Grid';
+import { colors } from '../../../../theme';
 
 export const ContainerBox = styled(Box)`
   width: 724px;

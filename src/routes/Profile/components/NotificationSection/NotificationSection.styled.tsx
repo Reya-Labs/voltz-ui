@@ -1,5 +1,5 @@
-import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import { styled } from '@mui/material/styles';
 
 export const NotificationBox = styled(Box)`
   padding: ${({ theme }) => theme.spacing(2, 4)};

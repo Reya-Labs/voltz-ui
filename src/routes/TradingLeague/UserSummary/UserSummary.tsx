@@ -1,13 +1,14 @@
 import Box from '@mui/material/Box';
-import { Typography } from '../../../components/atomic/Typography/Typography';
-import { formatDateTime } from '../../../utilities/date';
 import { DateTime } from 'luxon';
 import React from 'react';
-import { colors } from '../../../theme';
-import { Header } from '../Header/Header';
-import { Entry } from '../Entry/Entry';
-import { Percentage } from './Percentage/Percentage';
+
 import { ProgressBarBox } from '../../../components/atomic/ProgressBar/ProgressBar.styled';
+import { Typography } from '../../../components/atomic/Typography/Typography';
+import { colors } from '../../../theme';
+import { formatDateTime } from '../../../utilities/date';
+import { Entry } from '../Entry/Entry';
+import { Header } from '../Header/Header';
+import { Percentage } from './Percentage/Percentage';
 
 export type RankingUserSummaryProps = {
   seasonNumber: string;
@@ -60,13 +61,13 @@ const UserSummary = ({
           }}
         >
           <Typography
-            variant="subtitle1"
             sx={{
               color: colors.wildStrawberry.base,
               fontSize: '14px',
               lineHeight: '14px',
               fontWeight: 400,
             }}
+            variant="subtitle1"
           >
             SEASON&nbsp;
             <span
@@ -112,12 +113,12 @@ const UserSummary = ({
 
       <Box sx={{ marginBottom: (theme) => theme.spacing(6) }}>
         <Typography
-          variant="h1"
           sx={{
             fontSize: '16px',
             lineHeight: '120%',
             fontWeight: 700,
           }}
+          variant="h1"
         >
           POINTZ SYSTEM
         </Typography>
@@ -139,13 +140,13 @@ const UserSummary = ({
 
       <Box>
         <Typography
-          variant="h1"
           sx={{
             fontSize: '16px',
             lineHeight: '120%',
             fontWeight: 700,
             marginBottom: (theme) => theme.spacing(2),
           }}
+          variant="h1"
         >
           CURRENT POSITION
         </Typography>
@@ -158,11 +159,11 @@ const UserSummary = ({
         >
           <Header />
           <Entry
-            variant="me"
-            points={userPoints || 0}
-            rank={userRank || 0}
             address={userAddress || ''}
             loading={loading}
+            points={userPoints || 0}
+            rank={userRank || 0}
+            variant="me"
           />
         </Box>
       </Box>

@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
-import isUndefined from 'lodash/isUndefined';
 import { AMM } from '@voltz-protocol/v1-sdk';
+import isUndefined from 'lodash/isUndefined';
+import { useCallback, useEffect, useState } from 'react';
 
 export enum ApprovalType {
   UTOKEN_PERIPHERY = 'UnderlyingTokenPeriphery',

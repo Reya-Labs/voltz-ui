@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
 import isUndefined from 'lodash/isUndefined';
+import React, { useState } from 'react';
 
-import { IconLabel } from '../IconLabel/IconLabel';
-import { MaskedIntegerField } from '../MaskedIntegerField/MaskedIntegerField';
-import { InputTokenLabel } from '../InputTokenLabel/InputTokenLabel';
 import { toUSFormat } from '../../../utilities/number';
+import { IconLabel } from '../IconLabel/IconLabel';
+import { InputTokenLabel } from '../InputTokenLabel/InputTokenLabel';
+import { MaskedIntegerField } from '../MaskedIntegerField/MaskedIntegerField';
 
 export type NotionalAmountProps = {
   label: string;
@@ -46,17 +46,17 @@ export const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = ({
 
   return (
     <MaskedIntegerField
-      allowDecimals
       allowNegativeValue={false}
-      suffix={<InputTokenLabel tokenName={underlyingTokenName || ''} />}
-      suffixPadding={90}
-      label={<IconLabel label={label} icon="information-circle" info={info} />}
       defaultValue={value}
-      onChange={handleChange}
+      disabled={disabled}
       error={!!error}
       errorText={error}
+      label={<IconLabel icon="information-circle" info={info} label={label} />}
       subtext={subtext}
-      disabled={disabled}
+      suffix={<InputTokenLabel tokenName={underlyingTokenName || ''} />}
+      suffixPadding={90}
+      allowDecimals
+      onChange={handleChange}
     />
   );
 };

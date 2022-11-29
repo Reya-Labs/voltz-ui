@@ -1,7 +1,8 @@
+import React from 'react';
+
 import { MellowProduct } from '../types';
 import MellowLPEntry from './components/MellowLPEntry/MellowLPEntry';
 import { MellowLPGrid } from './MellowLPTable.styled';
-import React from 'react';
 
 export type MellowLPTableProps = {
   mellowProducts: MellowProduct[];
@@ -18,9 +19,9 @@ const MellowLPTable: React.FunctionComponent<MellowLPTableProps> = ({
     {mellowProducts.map((product, index) => (
       <MellowLPEntry
         key={index}
+        dataLoading={dataLoading}
         lpVault={product}
         onSelectItem={() => onSelectItem(product)}
-        dataLoading={dataLoading}
       />
     ))}
   </MellowLPGrid>

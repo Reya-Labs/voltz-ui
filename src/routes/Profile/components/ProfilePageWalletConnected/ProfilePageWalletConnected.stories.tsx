@@ -1,16 +1,16 @@
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React, { useEffect, useState } from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
 
+import { SEASONS } from '../../../../hooks/season/constants';
+import { Season } from '../../../../hooks/season/types';
+import { BadgeVariant, SEASON_BADGE_VARIANTS } from '../../data/getSeasonBadges';
+import { ClaimButtonProps } from '../ClaimButton/ClaimButton';
+import { CopyLinkButtonProps } from '../CopyLinkButton/CopyLinkButton';
 import {
   ProfilePageWalletConnected,
   ProfilePageWalletConnectedProps,
 } from './ProfilePageWalletConnected';
 import { season1Badges, seasonOGBadges } from './ProfilePageWalletConnected.mocks';
-import { SEASONS } from '../../../../hooks/season/constants';
-import { Season } from '../../../../hooks/season/types';
-import { ClaimButtonProps } from '../ClaimButton/ClaimButton';
-import { CopyLinkButtonProps } from '../CopyLinkButton/CopyLinkButton';
-import { BadgeVariant, SEASON_BADGE_VARIANTS } from '../../data/getSeasonBadges';
 
 export default {
   title: 'Interface/ProfilePageWalletConnected',
@@ -88,21 +88,21 @@ const Template: ComponentStory<typeof ProfilePageWalletConnected> = (args) => {
   return (
     <ProfilePageWalletConnected
       {...args}
+      badges={achievedBadges}
       claimButtonBulkMode={claimButtonBulkMode}
+      claimButtonModes={claimButtonModes}
+      copyLinkButtonMode={copyLinkButtonMode}
+      isOnGoingSeason={season.id === 1}
       season={season}
       seasonBadgeVariants={SEASON_BADGE_VARIANTS[season.id]}
+      onClaimBulkClick={handleOnClaimBulkClick}
+      onClaimButtonClick={handleOnClaimButtonClick}
+      onCopyLinkButtonClick={handleOnCopyLinkButtonClick}
       onSeasonChange={(newSeason) => {
         setSeason(newSeason);
         setAchievedBadges(newSeason.id === 0 ? seasonOGBadges : season1Badges);
         setClaimButtonBulkMode('claim');
       }}
-      isOnGoingSeason={season.id === 1}
-      claimButtonModes={claimButtonModes}
-      onClaimButtonClick={handleOnClaimButtonClick}
-      onClaimBulkClick={handleOnClaimBulkClick}
-      badges={achievedBadges}
-      copyLinkButtonMode={copyLinkButtonMode}
-      onCopyLinkButtonClick={handleOnCopyLinkButtonClick}
     />
   );
 };

@@ -1,10 +1,11 @@
-import React, { useCallback, useState } from 'react';
-import { Position } from '@voltz-protocol/v1-sdk';
 import List from '@mui/material/List';
-import { colors, SystemStyleObject, Theme } from '../../../theme';
-import { TransactionListItem } from './TransactionListItem';
-import { getTransactionData, getTransactions, sortTransactions } from './services';
+import { Position } from '@voltz-protocol/v1-sdk';
+import React, { useCallback, useState } from 'react';
+
 import { useUniqueId } from '../../../hooks/useUniqueId';
+import { colors, SystemStyleObject, Theme } from '../../../theme';
+import { getTransactionData, getTransactions, sortTransactions } from './services';
+import { TransactionListItem } from './TransactionListItem';
 import { TransactionType } from './types';
 
 interface TransactionListProps {
@@ -29,15 +30,15 @@ export const TransactionList = ({ position }: TransactionListProps) => {
   }, [open, setOpen]);
 
   return (
-    <List sx={listStyles} id={id}>
+    <List id={id} sx={listStyles}>
       {(open ? transactions : [transactions[0]]).map((tx, i) => (
         <TransactionListItem
           key={tx.id}
+          isLiquidation={tx.type === TransactionType.LIQUIDATION}
           listId={id}
-          onOpenClose={i === 0 ? handleOpenClose : undefined}
           open={open}
           transactionData={getTransactionData(position, tx)}
-          isLiquidation={tx.type === TransactionType.LIQUIDATION}
+          onOpenClose={i === 0 ? handleOpenClose : undefined}
         />
       ))}
     </List>

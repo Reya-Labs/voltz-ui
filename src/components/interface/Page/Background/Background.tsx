@@ -1,5 +1,6 @@
-import React from 'react';
 import Box from '@mui/material/Box';
+import React from 'react';
+
 import { Neons } from './Neons/Neons';
 
 export const Background: React.FunctionComponent = ({ children }) => (

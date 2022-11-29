@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
-import { useLocation } from 'react-router-dom';
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
+import { PageTitleDesc } from '../../components/composite/PageTitleDesc/PageTitleDesc';
+import { ConnectedSwapForm } from '../../components/containers/ConnectedSwapForm/ConnectedSwapForm';
+import { AMMTable } from '../../components/interface/AMMTable/AMMTable';
+import { SwapFormModes } from '../../components/interface/SwapForm';
 import { Agents } from '../../contexts/AgentContext/types';
 import { AMMProvider } from '../../contexts/AMMContext/AMMContext';
 import { PositionProvider } from '../../contexts/PositionContext/PositionContext';
 import { SwapFormProvider } from '../../contexts/SwapFormContext/SwapFormContext';
-import { PageTitleDesc } from '../../components/composite/PageTitleDesc/PageTitleDesc';
-import { useWallet } from '../../hooks/useWallet';
-import { ConnectedSwapForm } from '../../components/containers/ConnectedSwapForm/ConnectedSwapForm';
-import { AMMTable } from '../../components/interface/AMMTable/AMMTable';
-import { SwapFormModes } from '../../components/interface/SwapForm';
-import { usePositions } from '../../hooks/usePositions/usePositions';
-import { useAMMs } from '../../hooks/useAMMs';
 import { useAgent } from '../../hooks/useAgent';
-import { setPageTitle } from '../../utilities/page';
+import { useAMMs } from '../../hooks/useAMMs';
+import { usePositions } from '../../hooks/usePositions/usePositions';
+import { useWallet } from '../../hooks/useWallet';
 import { findCurrentPosition } from '../../utilities/amm';
+import { setPageTitle } from '../../utilities/page';
 
 export const TraderPools: React.FunctionComponent = () => {
   const { amms = [], loading, error } = useAMMs();
@@ -71,11 +71,11 @@ export const TraderPools: React.FunctionComponent = () => {
         <Box sx={{ width: '100%', maxWidth: '800px', margin: '0 auto' }}>
           <Box sx={{ marginBottom: (theme) => theme.spacing(12) }}>
             <PageTitleDesc
-              title="Trade Fixed or Variable Rates"
               desc="Choose a pool and decide whether to trade fixed or variable rates."
+              title="Trade Fixed or Variable Rates"
             />
           </Box>
-          <AMMTable amms={amms} loading={loading} error={error} onSelectItem={handleSelectAmm} />
+          <AMMTable amms={amms} error={error} loading={loading} onSelectItem={handleSelectAmm} />
         </Box>
       )}
 
@@ -84,10 +84,10 @@ export const TraderPools: React.FunctionComponent = () => {
           <AMMProvider amm={amm}>
             <PositionProvider position={position}>
               <SwapFormProvider
-                mode={formMode}
                 defaultValues={{
                   notional: formMode === SwapFormModes.EDIT_NOTIONAL ? 0 : undefined,
                 }}
+                mode={formMode}
               >
                 <ConnectedSwapForm onReset={handleReset} />
               </SwapFormProvider>

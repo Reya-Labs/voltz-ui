@@ -1,21 +1,21 @@
-import { routes } from '../../../routes/paths';
 import React, { useEffect, useState } from 'react';
-import { actions, selectors } from '../../../store';
-
 import { useNavigate } from 'react-router-dom';
-import { BorrowForm } from '../../interface/BorrowForm/BorrowForm';
-import { PendingTransaction } from '../../interface/PendingTransaction/PendingTransaction';
-import { isBorrowing } from '../../../utilities/isBorrowing';
-import { FormPanel } from '../../interface/FormPanel/FormPanel';
-import { SwapInfo } from '../../interface/SwapInfo';
-import { SwapFormActions, SwapFormModes } from '../../interface/SwapForm';
-import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';
-import { useBorrowAMMContext } from '../../../contexts/BorrowAMMContext/BorrowAMMContext';
+
 import { Agents } from '../../../contexts/AgentContext/types';
 import { useAMMContext } from '../../../contexts/AMMContext/AMMContext';
+import { useBorrowAMMContext } from '../../../contexts/BorrowAMMContext/BorrowAMMContext';
 import { useBorrowFormContext } from '../../../contexts/BorrowFormContext/BorrowFormContext';
+import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';
 import { useDispatch } from '../../../hooks/useDispatch';
 import { useSelector } from '../../../hooks/useSelector';
+import { routes } from '../../../routes/paths';
+import { actions, selectors } from '../../../store';
+import { isBorrowing } from '../../../utilities/isBorrowing';
+import { BorrowForm } from '../../interface/BorrowForm/BorrowForm';
+import { FormPanel } from '../../interface/FormPanel/FormPanel';
+import { PendingTransaction } from '../../interface/PendingTransaction/PendingTransaction';
+import { SwapFormActions, SwapFormModes } from '../../interface/SwapForm';
+import { SwapInfo } from '../../interface/SwapInfo';
 
 export type ConnectedBorrowFormProps = {
   onReset: () => void;
@@ -102,16 +102,16 @@ export const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormPro
     return (
       <PendingTransaction
         amm={amm}
-        position={position}
+        fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr : undefined}
         isEditingMargin={false}
         isRollover={false}
-        transactionId={transactionId}
-        onComplete={handleComplete}
-        notional={form.selectedFixedDebt}
         margin={form.margin}
-        onBack={handleGoBack}
+        notional={form.selectedFixedDebt}
+        position={position}
+        transactionId={transactionId}
         variableApy={typeof resultVariableApy === 'number' ? resultVariableApy : undefined}
-        fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr : undefined}
+        onBack={handleGoBack}
+        onComplete={handleComplete}
       />
     );
   }
@@ -120,30 +120,30 @@ export const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormPro
     <>
       <FormPanel noBackground />
       <BorrowForm
-        protocol={amm.protocol}
+        approvalsNeeded={form.approvalsNeeded}
+        balance={form.balance}
         endDate={amm.endDateTime}
         errors={form.errors}
-        onChangeNotional={form.setNotional}
-        underlyingTokenName={amm.underlyingToken.name}
-        approvalsNeeded={form.approvalsNeeded}
+        fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr : undefined}
+        hintState={form.hintState}
         isFormValid={form.isValid}
         isTradeVerified={form.isTradeVerified}
-        onCancel={onReset}
-        onSubmit={handleSubmit}
-        tokenApprovals={form.tokenApprovals}
-        variableDebt={form.variableDebt}
+        margin={form.margin}
+        protocol={amm.protocol}
         selectedFixedDebt={form.selectedFixedDebt}
         selectedFixedDebtPercentage={form.selectedFixedDebtPercentage}
         selectedVariableDebt={form.selectedVariableDebt}
         selectedVariableDebtPercentage={form.selectedVariableDebtPercentage}
-        hintState={form.hintState}
         submitButtonState={form.submitButtonState}
-        margin={form.margin}
-        tradeInfoErrorMessage={form.borrowInfo.errorMessage}
         swapSummaryLoading={form.borrowInfo.loading}
-        balance={form.balance}
+        tokenApprovals={form.tokenApprovals}
+        tradeInfoErrorMessage={form.borrowInfo.errorMessage}
+        underlyingTokenName={amm.underlyingToken.name}
         variableApy={typeof resultVariableApy === 'number' ? resultVariableApy : undefined}
-        fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr : undefined}
+        variableDebt={form.variableDebt}
+        onCancel={onReset}
+        onChangeNotional={form.setNotional}
+        onSubmit={handleSubmit}
       />
       <SwapInfo
         balance={form.selectedFixedDebt}

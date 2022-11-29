@@ -1,16 +1,16 @@
-import React from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { MintBurnInfo } from './MintBurnInfo';
-
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { AMM } from '@voltz-protocol/v1-sdk';
+import React from 'react';
+
+import { AgentProvider } from '../../../contexts/AgentContext/AgentProvider';
 import { Agents } from '../../../contexts/AgentContext/types';
+import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
 import {
   MintBurnFormModes,
   MintBurnFormProvider,
   useMintBurnForm,
 } from '../../../contexts/MintBurnFormContext/MintBurnFormContext';
-import { AgentProvider } from '../../../contexts/AgentContext/AgentProvider';
-import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
+import { MintBurnInfo } from './MintBurnInfo';
 
 export default {
   title: 'Interface/MintBurnInfo',
@@ -52,8 +52,8 @@ const NewPositionMintBurnForm: React.FunctionComponent = (args) => {
       {...args}
       balance={balance}
       formState={form.state}
-      mintMinimumMarginRequirementLoading={false}
       mintMinimumMarginRequirement={mintMinimumMarginRequirement}
+      mintMinimumMarginRequirementLoading={false}
       mode={form.mode}
       underlyingTokenName={'GIL'}
     />

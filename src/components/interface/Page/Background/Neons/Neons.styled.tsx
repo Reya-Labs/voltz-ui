@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+
 import { ReactComponent as NeonBoxInnerSvg } from './neon-inner.svg';
 import { ReactComponent as NeonBoxOuterSvg } from './neon-outer.svg';
 

@@ -1,12 +1,12 @@
-import React from 'react';
 import Box from '@mui/material/Box';
 import isNull from 'lodash/isNull';
+import React from 'react';
 
 import { Wallet } from '../../../../../../../contexts/WalletContext/types';
-import { Typography } from '../../../../../../atomic/Typography/Typography';
 import { Button } from '../../../../../../atomic/Button/Button';
 import { Icon } from '../../../../../../atomic/Icon/Icon';
 import { Panel } from '../../../../../../atomic/Panel/Panel';
+import { Typography } from '../../../../../../atomic/Typography/Typography';
 
 export type WalletDisplayProps = {
   wallet: Wallet;
@@ -23,10 +23,10 @@ export const WalletDisplay: React.FunctionComponent<WalletDisplayProps> = ({
 
   return (
     <>
-      <Typography variant="h6" sx={{ marginBottom: (theme) => theme.spacing(6) }}>
+      <Typography sx={{ marginBottom: (theme) => theme.spacing(6) }} variant="h6">
         ACCOUNT
       </Typography>
-      <Panel variant="dark" sx={{ display: 'flex', flexDirection: 'column' }}>
+      <Panel sx={{ display: 'flex', flexDirection: 'column' }} variant="dark">
         <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
           <Typography variant="h2">CONNECTED WITH {wallet.name.toUpperCase()}</Typography>
           <Icon
@@ -42,12 +42,12 @@ export const WalletDisplay: React.FunctionComponent<WalletDisplayProps> = ({
             alignItems: 'center',
           }}
         >
-          <Icon name="information-circle" color="info" sx={{ position: 'relative', top: '-2px' }} />
+          <Icon color="info" name="information-circle" sx={{ position: 'relative', top: '-2px' }} />
           <Box sx={{ display: 'flex', alignItems: 'baseline' }}>
             <Button
-              variant="text"
               color="error"
               sx={{ marginLeft: (theme) => theme.spacing(1), fontSize: 18, top: '-2px' }}
+              variant="text"
               onClick={onChangeWallet}
             >
               CHANGE WALLET

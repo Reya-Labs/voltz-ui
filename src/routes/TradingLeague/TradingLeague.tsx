@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
-import { setPageTitle } from '../../utilities/page';
+import { RankType } from '@voltz-protocol/v1-sdk';
+import React, { useEffect, useState } from 'react';
+
 import { useCurrentSeason } from '../../hooks/season/useCurrentSeason';
 import { useWallet } from '../../hooks/useWallet';
-import Leaderboard from './Leaderboard/Leaderboard';
-import { RankType } from '@voltz-protocol/v1-sdk';
+import { setPageTitle } from '../../utilities/page';
 import { getCommunitySbt } from '../Profile/helpers';
+import Leaderboard from './Leaderboard/Leaderboard';
 const PER_PAGE = 10;
 
 export const TradingLeague: React.FunctionComponent = () => {
@@ -71,18 +72,18 @@ export const TradingLeague: React.FunctionComponent = () => {
     >
       <Leaderboard
         loading={loading}
-        rankings={rankings.slice(page * 10, page * 10 + PER_PAGE)}
         maxPages={maxPages}
-        userAddress={wallet.account || ''}
-        userRank={userRank}
-        userPoints={userPoints}
+        page={page}
+        perPage={PER_PAGE}
+        rankings={rankings.slice(page * 10, page * 10 + PER_PAGE)}
+        seasonEndDate={season.endDate}
         seasonNumber={season.shortName}
         seasonStartDate={season.startDate}
-        seasonEndDate={season.endDate}
-        page={page}
+        userAddress={wallet.account || ''}
+        userPoints={userPoints}
+        userRank={userRank}
         onNextPage={handleOnNextPage}
         onPrevPage={handleOnPrevPage}
-        perPage={PER_PAGE}
       />
     </Box>
   );

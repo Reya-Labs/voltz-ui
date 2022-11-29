@@ -1,6 +1,6 @@
-import { BorrowAMMTableDatum } from '../types';
-
 import { BorrowAMM } from '@voltz-protocol/v1-sdk';
+
+import { BorrowAMMTableDatum } from '../types';
 
 const mapAmmToAmmTableDatum = ({ id, amm }: BorrowAMM): BorrowAMMTableDatum => {
   return {

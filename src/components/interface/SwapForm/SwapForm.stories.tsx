@@ -1,22 +1,21 @@
-import React from 'react';
-import { DateTime, Duration } from 'luxon';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
-
-import { SwapForm } from './SwapForm';
-import { SwapFormActions, SwapFormModes } from './types';
-
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { AMM, InfoPostSwap } from '@voltz-protocol/v1-sdk';
-import {
-  SwapFormProvider,
-  useSwapFormContext,
-} from '../../../contexts/SwapFormContext/SwapFormContext';
-import { useTokenApproval } from '../../../hooks/useTokenApproval';
+import { DateTime, Duration } from 'luxon';
+import React from 'react';
+
 import { AgentProvider } from '../../../contexts/AgentContext/AgentProvider';
 import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
 import {
   SwapFormSubmitButtonHintStates,
   SwapFormSubmitButtonStates,
 } from '../../../contexts/SwapFormContext/enums';
+import {
+  SwapFormProvider,
+  useSwapFormContext,
+} from '../../../contexts/SwapFormContext/SwapFormContext';
+import { useTokenApproval } from '../../../hooks/useTokenApproval';
+import { SwapForm } from './SwapForm';
+import { SwapFormActions, SwapFormModes } from './types';
 
 export default {
   title: 'Interface/SwapForm',
@@ -72,22 +71,22 @@ const NewPositionSwapForm: React.FunctionComponent = (args) => {
       {...args}
       approvalsNeeded={false}
       errors={form.errors}
+      formAction={SwapFormActions.SWAP}
       formState={form.state}
       hintState={SwapFormSubmitButtonHintStates.READY_TO_TRADE}
       isFormValid={form.isValid}
       isTradeVerified={true}
-      formAction={SwapFormActions.SWAP}
       mode={mode}
+      submitButtonState={SwapFormSubmitButtonStates.TRADE_FIXED}
+      swapInfo={mockSwapData}
+      swapInfoLoading={false}
+      tokenApprovals={mockTokenApprovals}
       onCancel={() => alert('cancel')}
       onChangeLeverage={form.setLeverage}
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction}
       onChangeNotional={form.setNotional}
       onSubmit={() => form.validate()}
-      submitButtonState={SwapFormSubmitButtonStates.TRADE_FIXED}
-      swapInfo={mockSwapData}
-      swapInfoLoading={false}
-      tokenApprovals={mockTokenApprovals}
     />
   );
 };
@@ -118,22 +117,22 @@ const EditingMarginSwapForm: React.FunctionComponent = (args) => {
       {...args}
       approvalsNeeded={false}
       errors={form.errors}
+      formAction={SwapFormActions.SWAP}
       formState={form.state}
       hintState={SwapFormSubmitButtonHintStates.READY_TO_TRADE}
       isFormValid={form.isValid}
       isTradeVerified={true}
       mode={mode}
-      formAction={SwapFormActions.SWAP}
+      submitButtonState={SwapFormSubmitButtonStates.TRADE_FIXED}
+      swapInfo={mockSwapData}
+      swapInfoLoading={false}
+      tokenApprovals={mockTokenApprovals}
       onCancel={() => alert('cancel')}
       onChangeLeverage={form.setLeverage}
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction}
       onChangeNotional={form.setNotional}
       onSubmit={() => form.validate()}
-      submitButtonState={SwapFormSubmitButtonStates.TRADE_FIXED}
-      swapInfo={mockSwapData}
-      swapInfoLoading={false}
-      tokenApprovals={mockTokenApprovals}
     />
   );
 };

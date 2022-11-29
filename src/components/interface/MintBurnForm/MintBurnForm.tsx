@@ -1,16 +1,7 @@
-import React from 'react';
-import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
-import { FormPanel } from '../FormPanel/FormPanel';
-import { IconLabel } from '../../composite/IconLabel/IconLabel';
-import { ProtocolInformation } from '../../composite/ProtocolInformation/ProtocolInformation';
-import { RateOptions } from '../../composite/RateOptions/RateOptions';
-import { MarginAmount } from '../../composite/MarginAmount/MarginAmount';
-import { NotionalAmount } from '../../composite/NotionalAmount/NotionalAmount';
-import { LiquidityControls, SubmitControls } from './components';
-import { MarginControls } from '../SwapForm/components';
-import { SystemStyleObject, Theme } from '../../../theme';
-import { MaturityInformation } from '../../composite/MaturityInformation/MaturityInformation';
+import { DateTime } from 'luxon';
+import React from 'react';
+
 import {
   MintBurnFormHintStates,
   MintBurnFormLiquidityAction,
@@ -20,6 +11,16 @@ import {
   MintBurnFormSubmitButtonStates,
 } from '../../../contexts/MintBurnFormContext/MintBurnFormContext';
 import { useTokenApproval } from '../../../hooks/useTokenApproval';
+import { SystemStyleObject, Theme } from '../../../theme';
+import { IconLabel } from '../../composite/IconLabel/IconLabel';
+import { MarginAmount } from '../../composite/MarginAmount/MarginAmount';
+import { MaturityInformation } from '../../composite/MaturityInformation/MaturityInformation';
+import { NotionalAmount } from '../../composite/NotionalAmount/NotionalAmount';
+import { ProtocolInformation } from '../../composite/ProtocolInformation/ProtocolInformation';
+import { RateOptions } from '../../composite/RateOptions/RateOptions';
+import { FormPanel } from '../FormPanel/FormPanel';
+import { MarginControls } from '../SwapForm/components';
+import { LiquidityControls, SubmitControls } from './components';
 
 export type MintBurnFormProps = {
   approvalsNeeded?: boolean;
@@ -93,19 +94,19 @@ export const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
 
   return (
     <FormPanel boxShadowType="LP">
-      <ProtocolInformation protocol={protocol} fixedApr={fixedApr} variableApy={variableApy} />
+      <ProtocolInformation fixedApr={fixedApr} protocol={protocol} variableApy={variableApy} />
       <Box sx={bottomSpacing}>
         <MaturityInformation
+          endDate={endDate}
           label={
             <IconLabel
-              label="maturity"
               icon="information-circle"
               info="The proportion between the time elapsed since the initiation of the pool and the entire duration."
+              label="maturity"
               removeIcon
             />
           }
           startDate={startDate}
-          endDate={endDate}
         />
       </Box>
 
@@ -118,8 +119,8 @@ export const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
       {mode === MintBurnFormModes.EDIT_MARGIN && (
         <Box sx={{ ...bottomSpacing, display: 'flex' }}>
           <MarginControls
-            values={MintBurnFormMarginAction}
             value={formState.marginAction}
+            values={MintBurnFormMarginAction}
             onChange={onChangeMarginAction}
           />
         </Box>
@@ -127,32 +128,32 @@ export const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
 
       <Box sx={{ ...bottomSpacing, display: 'flex' }}>
         <RateOptions
-          fixedLow={formState.fixedLow}
-          fixedLowDisabled={
-            mode === MintBurnFormModes.EDIT_LIQUIDITY || mode === MintBurnFormModes.EDIT_MARGIN
-          }
-          fixedLowError={errors['fixedLow']}
           fixedHigh={formState.fixedHigh}
           fixedHighDisabled={
             mode === MintBurnFormModes.EDIT_LIQUIDITY || mode === MintBurnFormModes.EDIT_MARGIN
           }
           fixedHighError={errors['fixedHigh']}
-          onChangeFixedLow={onChangeFixedLow}
+          fixedLow={formState.fixedLow}
+          fixedLowDisabled={
+            mode === MintBurnFormModes.EDIT_LIQUIDITY || mode === MintBurnFormModes.EDIT_MARGIN
+          }
+          fixedLowError={errors['fixedLow']}
           onChangeFixedHigh={onChangeFixedHigh}
+          onChangeFixedLow={onChangeFixedLow}
         />
       </Box>
 
       {mode !== MintBurnFormModes.EDIT_MARGIN && (
         <Box sx={bottomSpacing}>
           <NotionalAmount
-            label={isAddingLiquidity ? 'Notional liquidity Provided' : 'Notional liquidity removed'}
+            error={errors['notional']}
             info={`Choose the notional amount of liquidity you wish to ${
               isAddingLiquidity ? 'provide' : 'remove'
             }.`}
+            label={isAddingLiquidity ? 'Notional liquidity Provided' : 'Notional liquidity removed'}
             notional={formState.notional}
-            onChangeNotional={onChangeNotional}
-            error={errors['notional']}
             underlyingTokenName={underlyingTokenName}
+            onChangeNotional={onChangeNotional}
           />
         </Box>
       )}
@@ -162,31 +163,31 @@ export const MintBurnForm: React.FunctionComponent<MintBurnFormProps> = ({
           <MarginAmount
             balance={balance}
             currentPositionMarginRequirement={currentPositionMarginRequirement}
-            underlyingTokenName={underlyingTokenName}
-            maxMargin={maxMargin}
-            margin={formState.margin}
+            error={errors['margin']}
             healthFactor={healthFactor}
             isAdditional={formState.marginAction === MintBurnFormMarginAction.ADD}
             isEditing={mode === MintBurnFormModes.EDIT_MARGIN}
+            margin={formState.margin}
+            maxMargin={maxMargin}
+            underlyingTokenName={underlyingTokenName}
             onChangeMargin={onChangeMargin}
-            error={errors['margin']}
           />
         </Box>
       )}
 
       <SubmitControls
         approvalsNeeded={approvalsNeeded}
+        gaButtonId={gaButtonId}
         hintState={hintState}
         isFormValid={isFormValid}
         isTradeVerified={isTradeVierified}
         mode={mode}
-        onCancel={onCancel}
-        onSubmit={onSubmit}
-        gaButtonId={gaButtonId}
         submitButtonState={submitButtonState}
         tokenApprovals={tokenApprovals}
         tradeInfoErrorMessage={tradeInfoErrorMessage}
         underlyingTokenName={underlyingTokenName}
+        onCancel={onCancel}
+        onSubmit={onSubmit}
       />
     </FormPanel>
   );

@@ -1,10 +1,11 @@
+import React from 'react';
+
 import {
   DescriptionTypography,
   EcosystemHeaderBox,
   LearnMoreLink,
   TitleTypography,
 } from './EcosystemHeader.styled';
-import React from 'react';
 
 const EcosystemHeader: React.FunctionComponent = React.memo(() => (
   <EcosystemHeaderBox>

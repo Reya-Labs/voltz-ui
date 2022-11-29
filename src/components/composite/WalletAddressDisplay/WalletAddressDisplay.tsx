@@ -16,8 +16,8 @@ export const WalletAddressDisplay: React.FunctionComponent<WalletAddressDisplayP
 
   return (
     <Typography
-      variant="body1"
       sx={{ marginLeft: (theme) => theme.spacing(4), fontWeight: 'bold' }}
+      variant="body1"
     >
       {elideAddress(address)}
     </Typography>

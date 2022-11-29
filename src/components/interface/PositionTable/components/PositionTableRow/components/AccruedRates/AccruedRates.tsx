@@ -1,5 +1,5 @@
-import { Typography } from '../../../../../../atomic/Typography/Typography';
 import { formatNumber } from '../../../../../../../utilities/number';
+import { Typography } from '../../../../../../atomic/Typography/Typography';
 
 type AccruedRatesProps = {
   positionType: number;
@@ -21,7 +21,7 @@ export const AccruedRates = ({ positionType, avgFixedRate, variableRate }: Accru
   };
 
   return (
-    <Typography variant="body2" label="Receiving x Paying" sx={{ fontSize: 18 }}>
+    <Typography label="Receiving x Paying" sx={{ fontSize: 18 }} variant="body2">
       {renderValue()}
     </Typography>
   );

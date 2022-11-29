@@ -1,5 +1,6 @@
-import React from 'react';
 import Box from '@mui/material/Box';
+import React from 'react';
+
 import RateOptionsInput, { RateOptionsInputProps } from './RateOptionInput';
 
 export type RateOptionsProps = {
@@ -43,8 +44,8 @@ export const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
         error={fixedLowError}
         hint="The lower rate of the fixed rate range within which to deposit liquidity"
         label="Fixed rate low"
-        onChange={onChangeFixedLow}
         value={fixedLow}
+        onChange={onChangeFixedLow}
       />
       <RateOptionsInput
         defaultValue={defaultFixedHigh}
@@ -52,8 +53,8 @@ export const RateOptions: React.FunctionComponent<RateOptionsProps> = ({
         error={fixedHighError}
         hint="The upper rate of the fixed rate range within which to deposit liquidity"
         label="Fixed rate high"
-        onChange={onChangeFixedHigh}
         value={fixedHigh}
+        onChange={onChangeFixedHigh}
       />
     </Box>
   );

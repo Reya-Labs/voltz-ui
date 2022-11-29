@@ -1,14 +1,14 @@
-import { colors, SystemStyleObject, Theme } from '../../../theme';
-
-import { formatCurrency, formatNumber } from '../../../utilities/number';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import isUndefined from 'lodash/isUndefined';
-import { useAgent } from '../../../hooks/useAgent';
-import { PortfolioHeaderValue } from './PortfolioHeaderValue';
-import { PortfolioHeaderBox } from './PortfolioHeaderBox';
+
 import { Agents } from '../../../contexts/AgentContext/types';
+import { useAgent } from '../../../hooks/useAgent';
+import { colors, SystemStyleObject, Theme } from '../../../theme';
+import { formatCurrency, formatNumber } from '../../../utilities/number';
+import { PortfolioHeaderBox } from './PortfolioHeaderBox';
+import { PortfolioHeaderValue } from './PortfolioHeaderValue';
 
 export type PortfolioHeaderInfoProps = {
   currencyCode?: string;

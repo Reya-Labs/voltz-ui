@@ -1,7 +1,7 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+import React from 'react';
 
 import { CopyLinkButton } from './CopyLinkButton';
-import React from 'react';
 
 export default {
   title: 'Interface/CopyLinkButton',

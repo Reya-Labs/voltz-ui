@@ -1,5 +1,6 @@
-import { toUSFormat } from '../../../utilities/number';
 import React, { useCallback, useState } from 'react';
+
+import { toUSFormat } from '../../../utilities/number';
 import { IconLabel } from '../IconLabel/IconLabel';
 import { MaskedIntegerField } from '../MaskedIntegerField/MaskedIntegerField';
 
@@ -47,19 +48,19 @@ const RateOptionsInput: React.FunctionComponent<RateOptionsInputProps> = ({
 
   return (
     <MaskedIntegerField
-      allowDecimals
       allowNegativeValue={false}
       decimalsLimit={3}
       disabled={!!disabled}
       error={!!error}
       errorText={error}
       inputSize="small"
+      label={<IconLabel icon="information-circle" info={hint} label={label} />}
       suffix="%"
       suffixPadding={20}
-      label={<IconLabel label={label} icon="information-circle" info={hint} />}
       value={inputValue}
-      onChange={handleChange}
+      allowDecimals
       onBlur={handleBlur}
+      onChange={handleChange}
     />
   );
 };

@@ -1,23 +1,23 @@
-import React from 'react';
-import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
-import { IconLabel } from '../../composite/IconLabel/IconLabel';
-import { InputTokenLabel } from '../../composite/InputTokenLabel/InputTokenLabel';
-import { MaskedIntegerField } from '../../composite/MaskedIntegerField/MaskedIntegerField';
-import { ProtocolInformation } from '../../composite/ProtocolInformation/ProtocolInformation';
+import { DateTime } from 'luxon';
+import React from 'react';
 
-import { SubmitControls, FixBorrow } from './components';
-import { SystemStyleObject, Theme } from '../../../theme';
-import { FormPanel } from '../FormPanel/FormPanel';
+import { Agents } from '../../../contexts/AgentContext/types';
 import {
   BorrowFormSubmitButtonHintStates,
   BorrowFormSubmitButtonStates,
 } from '../../../contexts/BorrowFormContext/BorrowFormContext';
-import { Agents } from '../../../contexts/AgentContext/types';
 import { UseAsyncFunctionResult } from '../../../hooks/useAsyncFunction';
 import { useTokenApproval } from '../../../hooks/useTokenApproval';
+import { SystemStyleObject, Theme } from '../../../theme';
 import { getPoolButtonId } from '../../../utilities/googleAnalytics';
 import { formatCurrency } from '../../../utilities/number';
+import { IconLabel } from '../../composite/IconLabel/IconLabel';
+import { InputTokenLabel } from '../../composite/InputTokenLabel/InputTokenLabel';
+import { MaskedIntegerField } from '../../composite/MaskedIntegerField/MaskedIntegerField';
+import { ProtocolInformation } from '../../composite/ProtocolInformation/ProtocolInformation';
+import { FormPanel } from '../FormPanel/FormPanel';
+import { FixBorrow, SubmitControls } from './components';
 
 export type BorrowProps = {
   protocol?: string;
@@ -94,63 +94,63 @@ export const BorrowForm: React.FunctionComponent<BorrowProps> = ({
     <FormPanel isBorrowForm={true}>
       <Box sx={{ marginBottom: (theme) => theme.spacing(8) }}>
         <ProtocolInformation
-          protocol={protocol}
-          isBorrowForm={true}
           endDate={endDate}
-          variableApy={variableApy}
           fixedApr={fixedApr}
+          isBorrowForm={true}
+          protocol={protocol}
+          variableApy={variableApy}
         />
       </Box>
 
       <Box sx={{ marginBottom: (theme) => theme.spacing(2) }}>
         <FixBorrow
-          variableDebt={variableDebt}
-          underlyingTokenName={underlyingTokenName}
+          error={!!errors['slider']}
+          errorText={errors['slider']}
+          handleChange={onChangeNotional}
           selectedFixedDebt={selectedFixedDebt}
           selectedFixedDebtPercentage={selectedFixedDebtPercentage}
           selectedVariableDebt={selectedVariableDebt}
           selectedVariableDebtPercentage={selectedVariableDebtPercentage}
-          handleChange={onChangeNotional}
           swapSummaryLoading={swapSummaryLoading}
-          error={!!errors['slider']}
-          errorText={errors['slider']}
+          underlyingTokenName={underlyingTokenName}
+          variableDebt={variableDebt}
         />
       </Box>
 
       <Box sx={bottomSpacing}>
         <MaskedIntegerField
-          allowDecimals
           allowNegativeValue={false}
-          suffix={<InputTokenLabel tokenName={underlyingTokenName || ''} />}
-          suffixPadding={90}
+          disabled={true}
+          error={!!errors['margin']}
+          errorText={errors['margin']}
           label={
             <IconLabel
-              label={'margin required to fix rate'}
               icon="information-circle"
               info={
                 'Margin required to enter position where you are paying the fixed rate on the selected amount (includes fees)'
               }
+              label={'margin required to fix rate'}
             />
           }
-          value={formattedMargin}
           subtext={`WALLET BALANCE: ${formattedBalance}`}
-          disabled={true}
-          error={!!errors['margin']}
-          errorText={errors['margin']}
+          suffix={<InputTokenLabel tokenName={underlyingTokenName || ''} />}
+          suffixPadding={90}
+          value={formattedMargin}
+          allowDecimals
         />
       </Box>
       <SubmitControls
         approvalsNeeded={approvalsNeeded}
+        gaButtonId={getPoolButtonId('', '', '', Agents.VARIABLE_TRADER, true, '')}
         hintState={hintState}
         isFormValid={isFormValid}
         isTradeVerified={isTradeVerified}
-        onCancel={onCancel}
-        onSubmit={onSubmit}
-        gaButtonId={getPoolButtonId('', '', '', Agents.VARIABLE_TRADER, true, '')}
         submitButtonState={submitButtonState}
         tokenApprovals={tokenApprovals}
         tradeInfoErrorMessage={tradeInfoErrorMessage}
         underlyingTokenName={underlyingTokenName}
+        onCancel={onCancel}
+        onSubmit={onSubmit}
       />
     </FormPanel>
   );

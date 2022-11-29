@@ -1,18 +1,10 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { routes } from '../../../routes/paths';
-import { actions, selectors } from '../../../store';
-
-import { updateFixedRate } from './utilities';
-import isUndefined from 'lodash/isUndefined';
-import { BigNumber } from 'ethers';
-
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
-import { PendingTransaction } from '../../interface/PendingTransaction/PendingTransaction';
-import { MintBurnInfo } from '../../interface/MintBurnInfo';
-import { MintBurnCurrentPosition } from '../../interface/MintBurnCurrentPosition/MintBurnCurrentPosition';
-import { FormPanel } from '../../interface/FormPanel/FormPanel';
-import { MintBurnForm } from '../../interface/MintBurnForm';
+import { BigNumber } from 'ethers';
+import isUndefined from 'lodash/isUndefined';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { useAMMContext } from '../../../contexts/AMMContext/AMMContext';
 import { useAMMsContext } from '../../../contexts/AMMsContext/AMMsContext';
 import {
   MintBurnFormActions,
@@ -20,13 +12,20 @@ import {
   useMintBurnForm,
 } from '../../../contexts/MintBurnFormContext/MintBurnFormContext';
 import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';
-import { useAMMContext } from '../../../contexts/AMMContext/AMMContext';
 import { useAgent } from '../../../hooks/useAgent';
 import { useDispatch } from '../../../hooks/useDispatch';
 import { useSelector } from '../../../hooks/useSelector';
+import { routes } from '../../../routes/paths';
+import { actions, selectors } from '../../../store';
 import { getPoolButtonId } from '../../../utilities/googleAnalytics';
-import { setPageTitle } from '../../../utilities/page';
 import { isBorrowing } from '../../../utilities/isBorrowing';
+import { setPageTitle } from '../../../utilities/page';
+import { FormPanel } from '../../interface/FormPanel/FormPanel';
+import { MintBurnCurrentPosition } from '../../interface/MintBurnCurrentPosition/MintBurnCurrentPosition';
+import { MintBurnForm } from '../../interface/MintBurnForm';
+import { MintBurnInfo } from '../../interface/MintBurnInfo';
+import { PendingTransaction } from '../../interface/PendingTransaction/PendingTransaction';
+import { updateFixedRate } from './utilities';
 
 export type ConnectedMintBurnFormProps = {
   onReset: () => void;
@@ -144,21 +143,21 @@ export const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFor
     return (
       <PendingTransaction
         amm={targetAmm}
-        position={position}
+        fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr : undefined}
         isEditingMargin={form.mode === MintBurnFormModes.EDIT_MARGIN}
-        liquidityAction={form.state.liquidityAction}
         isRollover={form.mode === MintBurnFormModes.ROLLOVER}
-        transactionId={transactionId}
-        onComplete={handleComplete}
-        notional={form.state.notional}
+        liquidityAction={form.state.liquidityAction}
         margin={
           isUndefined(form.state.margin && form.isRemovingMargin)
             ? 0
             : Math.abs(form.state.margin as number) * (form.isRemovingMargin ? -1 : 1)
         }
-        onBack={handleGoBack}
+        notional={form.state.notional}
+        position={position}
+        transactionId={transactionId}
         variableApy={typeof resultVariableApy === 'number' ? resultVariableApy : undefined}
-        fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr : undefined}
+        onBack={handleGoBack}
+        onComplete={handleComplete}
       />
     );
   }
@@ -167,13 +166,13 @@ export const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFor
     <>
       {position ? (
         <MintBurnCurrentPosition
-          formMode={form.mode}
-          onPortfolio={handleComplete}
-          notional={position.notional}
-          margin={position.amm.descale(BigNumber.from(position.margin.toString()))}
-          underlyingTokenName={position.amm.underlyingToken.name || ''}
           fixedRateLower={position?.fixedRateLower.toNumber()}
           fixedRateUpper={position?.fixedRateUpper.toNumber()}
+          formMode={form.mode}
+          margin={position.amm.descale(BigNumber.from(position.margin.toString()))}
+          notional={position.notional}
+          underlyingTokenName={position.amm.underlyingToken.name || ''}
+          onPortfolio={handleComplete}
         />
       ) : (
         <FormPanel noBackground />
@@ -184,20 +183,8 @@ export const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFor
         currentPositionMarginRequirement={form.currentPositionMarginRequirement}
         endDate={targetAmm.endDateTime}
         errors={form.errors}
+        fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr : undefined}
         formState={form.state}
-        hintState={form.hintState}
-        isFormValid={form.isValid && !form.mintMinimumMarginRequirement.errorMessage}
-        isTradeVierified={form.isTradeVerified}
-        mode={form.mode}
-        onCancel={onReset}
-        onChangeFixedLow={handleSetFixedLow}
-        onChangeFixedHigh={handleSetFixedHigh}
-        onChangeLiquidityAction={form.setLiquidityAction}
-        onChangeMargin={form.setMargin}
-        onChangeMarginAction={form.setMarginAction}
-        onChangeNotional={form.setNotional}
-        onSubmit={handleSubmit}
-        protocol={targetAmm.protocol}
         gaButtonId={getPoolButtonId(
           form.state.marginAction.toString(),
           form.state.liquidityAction.toString(),
@@ -206,13 +193,25 @@ export const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFor
           isBorrowing(targetAmm.rateOracle.protocolId),
           targetAmm.protocol,
         )}
+        hintState={form.hintState}
+        isFormValid={form.isValid && !form.mintMinimumMarginRequirement.errorMessage}
+        isTradeVierified={form.isTradeVerified}
+        mode={form.mode}
+        protocol={targetAmm.protocol}
         startDate={targetAmm.startDateTime}
         submitButtonState={form.submitButtonState}
         tokenApprovals={form.tokenApprovals}
         tradeInfoErrorMessage={form.mintMinimumMarginRequirement.errorMessage}
         underlyingTokenName={targetAmm.underlyingToken.name}
         variableApy={typeof resultVariableApy === 'number' ? resultVariableApy : undefined}
-        fixedApr={typeof resultFixedApr === 'number' ? resultFixedApr : undefined}
+        onCancel={onReset}
+        onChangeFixedHigh={handleSetFixedHigh}
+        onChangeFixedLow={handleSetFixedLow}
+        onChangeLiquidityAction={form.setLiquidityAction}
+        onChangeMargin={form.setMargin}
+        onChangeMarginAction={form.setMarginAction}
+        onChangeNotional={form.setNotional}
+        onSubmit={handleSubmit}
       />
       <MintBurnInfo
         balance={form.balance}

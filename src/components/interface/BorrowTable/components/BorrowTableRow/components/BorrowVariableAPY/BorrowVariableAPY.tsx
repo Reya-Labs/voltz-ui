@@ -1,8 +1,8 @@
-import React from 'react';
 import TableCell from '@mui/material/TableCell';
+import React from 'react';
 
-import { Typography } from '../../../../../../atomic/Typography/Typography';
 import { formatNumber } from '../../../../../../../utilities/number';
+import { Typography } from '../../../../../../atomic/Typography/Typography';
 
 export type BorrowVariableAPYProps = {
   loading: boolean;
@@ -28,7 +28,6 @@ export const BorrowVariableAPY: React.FunctionComponent<BorrowVariableAPYProps> 
   return (
     <TableCell align="center" width="20%">
       <Typography
-        variant="body2"
         sx={{
           fontSize: 18,
           color: '#2667FF',
@@ -36,6 +35,7 @@ export const BorrowVariableAPY: React.FunctionComponent<BorrowVariableAPYProps> 
           letterSpacing: '0.02em',
           lineHeight: '130%',
         }}
+        variant="body2"
       >
         {renderValue()}
       </Typography>

@@ -1,10 +1,10 @@
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { ProfilePageWalletConnected } from './ProfilePageWalletConnected';
-import { season1Badges } from './ProfilePageWalletConnected.mocks';
 import { SEASONS } from '../../../hooks/season/constants';
 import { SEASON_BADGE_VARIANTS } from '../getters/getPhase1Badges';
+import { ProfilePageWalletConnected } from './ProfilePageWalletConnected';
+import { season1Badges } from './ProfilePageWalletConnected.mocks';
 
 export default {
   title: 'Interface/ProfilePageWalletConnectedV1',

@@ -1,21 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument */
 
-import JSBI from 'jsbi';
-import { GetWalletQuery } from '../../graphql';
-import { providers } from 'ethers';
 import {
-  Position,
-  Token,
-  RateOracle,
-  Mint,
-  Burn,
-  Swap,
-  MarginUpdate,
-  Liquidation,
-  Settlement,
   AMM,
+  Burn,
+  Liquidation,
+  MarginUpdate,
+  Mint,
+  Position,
+  RateOracle,
+  Settlement,
+  Swap,
+  Token,
 } from '@voltz-protocol/v1-sdk';
+import { providers } from 'ethers';
+import JSBI from 'jsbi';
+
 import { Wallet } from '../../contexts/WalletContext/types';
+import { GetWalletQuery } from '../../graphql';
 
 type MEPositionQueryData = NonNullable<GetWalletQuery['wallet']>['positions'][number];
 

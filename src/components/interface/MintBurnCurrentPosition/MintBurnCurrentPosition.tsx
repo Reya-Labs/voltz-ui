@@ -1,15 +1,16 @@
-import React from 'react';
 import Box from '@mui/material/Box';
+import isUndefined from 'lodash/isUndefined';
+import React from 'react';
+
+import { MintBurnFormModes } from '../../../contexts/MintBurnFormContext/MintBurnFormContext';
+import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';
+import { colors } from '../../../theme';
+import { formatCurrency, formatNumber } from '../../../utilities/number';
 import { Button } from '../../atomic/Button/Button';
 import { Ellipsis } from '../../atomic/Ellipsis/Ellipsis';
 import { PositionBadge } from '../../atomic/PositionBadge/PositionBadge';
 import { SummaryPanel } from '../../atomic/SummaryPanel/SummaryPanel';
-import { formatCurrency, formatNumber } from '../../../utilities/number';
-import { colors } from '../../../theme';
-import isUndefined from 'lodash/isUndefined';
 import { FormPanel } from '../FormPanel/FormPanel';
-import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';
-import { MintBurnFormModes } from '../../../contexts/MintBurnFormContext/MintBurnFormContext';
 
 export type MintBurnCurrentPositionProps = {
   formMode: MintBurnFormModes;
@@ -134,20 +135,20 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
         >
           <PositionBadge
             size="small"
-            variant="FC"
-            text={currentPositionBadgeText}
             sx={{ display: 'inline-block', marginLeft: 0 }}
+            text={currentPositionBadgeText}
+            variant="FC"
           />
         </Box>
         <SummaryPanel label="Position information" rows={rows} />
         <Button
+          size="small"
           sx={{
             marginTop: (theme) => theme.spacing(6),
             flexGrow: 0,
           }}
           variant="dark-link"
           onClick={onPortfolio}
-          size="small"
         >
           Portfolio
         </Button>

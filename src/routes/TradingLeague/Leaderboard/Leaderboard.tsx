@@ -1,16 +1,17 @@
-import React from 'react';
-import { Typography } from '../../../components/atomic/Typography/Typography';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import { DateTime } from 'luxon';
-import { colors } from '../../../theme';
-import ChevronRight from '@mui/icons-material/ChevronRight';
 import ChevronLeft from '@mui/icons-material/ChevronLeft';
-import { Header } from '../Header/Header';
-import { Entry } from '../Entry/Entry';
-import { LeaderboardHeader } from '../LeaderboardHeader/LeaderboardHeader';
+import ChevronRight from '@mui/icons-material/ChevronRight';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import { RankType } from '@voltz-protocol/v1-sdk';
+import { DateTime } from 'luxon';
+import React from 'react';
+
+import { Typography } from '../../../components/atomic/Typography/Typography';
 import { Grid } from '../../../components/layout/Grid';
+import { colors } from '../../../theme';
+import { Entry } from '../Entry/Entry';
+import { Header } from '../Header/Header';
+import { LeaderboardHeader } from '../LeaderboardHeader/LeaderboardHeader';
 
 export type RankingTableProps = {
   rankings: RankType[];
@@ -49,15 +50,14 @@ const Leaderboard: React.FunctionComponent<RankingTableProps> = ({
     <Box>
       <LeaderboardHeader
         loading={loading}
+        seasonEndDate={seasonEndDate}
         seasonNumber={seasonNumber}
         seasonStartDate={seasonStartDate}
-        seasonEndDate={seasonEndDate}
-        userRank={userRank}
         userAddress={userAddress}
         userPoints={userPoints}
+        userRank={userRank}
       />
       <Typography
-        variant="body2"
         sx={{
           fontSize: '24px',
           marginTop: (theme) => theme.spacing(4),
@@ -65,6 +65,7 @@ const Leaderboard: React.FunctionComponent<RankingTableProps> = ({
           display: 'flex',
           alignContent: 'center',
         }}
+        variant="body2"
       >
         SEASON {seasonNumber} LEADERBOARD
       </Typography>
@@ -84,9 +85,9 @@ const Leaderboard: React.FunctionComponent<RankingTableProps> = ({
             return (
               <Entry
                 key={ranking.address}
+                address={ranking.address}
                 points={ranking.points}
                 rank={rank}
-                address={ranking.address}
                 variant={
                   rank === 1
                     ? 'rank1'
@@ -105,19 +106,19 @@ const Leaderboard: React.FunctionComponent<RankingTableProps> = ({
           Array.from({ length: 10 }, () => ({})).map((ranking, index) => {
             return (
               <Entry
+                key={index}
+                address={''}
+                loading={true}
                 points={index}
                 rank={index}
                 variant={'rank1'}
-                address={''}
-                loading={true}
-                key={index}
               />
             );
           })}
         {!loading &&
           userAddress &&
           !inRange(page * perPage, page * perPage + perPage, userRank) && (
-            <Entry points={userPoints} rank={userRank + 1} address={userAddress} variant="me" />
+            <Entry address={userAddress} points={userPoints} rank={userRank + 1} variant="me" />
           )}
       </Grid>
       {!loading && (
@@ -125,17 +126,17 @@ const Leaderboard: React.FunctionComponent<RankingTableProps> = ({
           sx={{ display: 'flex', justifyContent: 'center', marginTop: (theme) => theme.spacing(4) }}
         >
           <Button
-            onClick={onPrevPage}
-            variant={'text'}
+            startIcon={
+              <ChevronLeft sx={{ width: 14, height: 14, color: colors.lavenderWeb.base }} />
+            }
             sx={{
               fontSize: '12px',
               lineHeight: '12px',
               color: colors.lavenderWeb.base,
               padding: (theme) => theme.spacing(2),
             }}
-            startIcon={
-              <ChevronLeft sx={{ width: 14, height: 14, color: colors.lavenderWeb.base }} />
-            }
+            variant={'text'}
+            onClick={onPrevPage}
           >
             PREVIOUS 01
           </Button>
@@ -156,8 +157,6 @@ const Leaderboard: React.FunctionComponent<RankingTableProps> = ({
             />
           </Box>
           <Button
-            onClick={onNextPage}
-            variant={'text'}
             endIcon={
               <ChevronRight sx={{ width: 14, height: 14, color: colors.lavenderWeb.base }} />
             }
@@ -167,6 +166,8 @@ const Leaderboard: React.FunctionComponent<RankingTableProps> = ({
               color: colors.lavenderWeb.base,
               padding: (theme) => theme.spacing(2),
             }}
+            variant={'text'}
+            onClick={onNextPage}
           >
             {maxPages.toString().padStart(2, '0')} NEXT
           </Button>

@@ -1,7 +1,7 @@
-import isUndefined from 'lodash/isUndefined';
-import { Agents } from '../../contexts/AgentContext/types';
-
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
+import isUndefined from 'lodash/isUndefined';
+
+import { Agents } from '../../contexts/AgentContext/types';
 
 /**
  * Returns the health counts for the given set of positions

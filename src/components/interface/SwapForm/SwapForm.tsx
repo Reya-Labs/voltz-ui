@@ -1,26 +1,26 @@
-import React from 'react';
-import { DateTime } from 'luxon';
 import Box from '@mui/material/Box';
-import { MarginAmount } from '../../composite/MarginAmount/MarginAmount';
-import { NotionalAmount } from '../../composite/NotionalAmount/NotionalAmount';
-import { ProtocolInformation } from '../../composite/ProtocolInformation/ProtocolInformation';
-import { IconLabel } from '../../composite/IconLabel/IconLabel';
-
-import { TraderControls, MarginControls, SubmitControls, Leverage } from './components';
-import { SystemStyleObject, Theme } from '../../../theme';
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
-import { SwapFormActions, SwapFormModes } from './types';
-import { MaturityInformation } from '../../composite/MaturityInformation/MaturityInformation';
-import { FormPanel } from '../FormPanel/FormPanel';
+import { DateTime } from 'luxon';
+import React from 'react';
+
+import { Agents } from '../../../contexts/AgentContext/types';
 import {
   SwapFormMarginAction,
   SwapFormSubmitButtonHintStates,
   SwapFormSubmitButtonStates,
 } from '../../../contexts/SwapFormContext/enums';
-import { Agents } from '../../../contexts/AgentContext/types';
-import { useTokenApproval } from '../../../hooks/useTokenApproval';
-import { useAgent } from '../../../hooks/useAgent';
 import { SwapFormState } from '../../../contexts/SwapFormContext/SwapFormContext';
+import { useAgent } from '../../../hooks/useAgent';
+import { useTokenApproval } from '../../../hooks/useTokenApproval';
+import { SystemStyleObject, Theme } from '../../../theme';
+import { IconLabel } from '../../composite/IconLabel/IconLabel';
+import { MarginAmount } from '../../composite/MarginAmount/MarginAmount';
+import { MaturityInformation } from '../../composite/MaturityInformation/MaturityInformation';
+import { NotionalAmount } from '../../composite/NotionalAmount/NotionalAmount';
+import { ProtocolInformation } from '../../composite/ProtocolInformation/ProtocolInformation';
+import { FormPanel } from '../FormPanel/FormPanel';
+import { Leverage, MarginControls, SubmitControls, TraderControls } from './components';
+import { SwapFormActions, SwapFormModes } from './types';
 
 export type SwapProps = {
   approvalsNeeded: boolean;
@@ -94,28 +94,28 @@ export const SwapForm: React.FunctionComponent<SwapProps> = ({
 
   return (
     <FormPanel boxShadowType={agent === Agents.FIXED_TRADER ? 'FT' : 'VT'}>
-      <ProtocolInformation protocol={protocol} variableApy={variableApy} fixedApr={fixedApr} />
+      <ProtocolInformation fixedApr={fixedApr} protocol={protocol} variableApy={variableApy} />
 
       <Box sx={bottomSpacing}>
         <MaturityInformation
+          endDate={endDate}
           label={
             <IconLabel
-              label="maturity"
               icon="information-circle"
               info="The proportion between the time elapsed since the initiation of the pool and the entire duration."
+              label="maturity"
               removeIcon
             />
           }
           startDate={startDate}
-          endDate={endDate}
         />
       </Box>
 
       {mode === SwapFormModes.EDIT_MARGIN && (
         <Box sx={{ ...bottomSpacing, display: 'flex' }}>
           <MarginControls
-            values={SwapFormMarginAction}
             value={formState.marginAction}
+            values={SwapFormMarginAction}
             onChange={onChangeMarginAction}
           />
         </Box>
@@ -134,16 +134,16 @@ export const SwapForm: React.FunctionComponent<SwapProps> = ({
       {mode !== SwapFormModes.EDIT_MARGIN && (
         <Box sx={bottomSpacing}>
           <NotionalAmount
-            error={errors['notional']}
-            label="notional amount"
             defaultNotional={mode === SwapFormModes.EDIT_NOTIONAL ? 0 : undefined}
-            isEditing={mode === SwapFormModes.EDIT_NOTIONAL}
+            error={errors['notional']}
             info={
               'Choose the notional you wish to trade. The notional amount is the total size of your trade.'
             }
+            isEditing={mode === SwapFormModes.EDIT_NOTIONAL}
+            label="notional amount"
             notional={formState.notional}
-            onChangeNotional={onChangeNotional}
             underlyingTokenName={underlyingTokenName}
+            onChangeNotional={onChangeNotional}
           />
         </Box>
       )}
@@ -155,9 +155,9 @@ export const SwapForm: React.FunctionComponent<SwapProps> = ({
               availableNotional={swapInfo?.availableNotional ?? undefined}
               minMargin={swapInfo?.marginRequirement ?? undefined}
               notional={formState.notional}
-              onChange={onChangeLeverage}
-              value={formState.leverage}
               resetDeltaState={formState.resetDeltaState}
+              value={formState.leverage}
+              onChange={onChangeLeverage}
             />
           </Box>
         )}
@@ -165,8 +165,8 @@ export const SwapForm: React.FunctionComponent<SwapProps> = ({
       {mode === SwapFormModes.EDIT_NOTIONAL && (
         <Box sx={{ ...bottomSpacing, display: 'flex' }}>
           <MarginControls
-            values={SwapFormMarginAction}
             value={formState.marginAction}
+            values={SwapFormMarginAction}
             onChange={onChangeMarginAction}
           />
         </Box>
@@ -179,33 +179,33 @@ export const SwapForm: React.FunctionComponent<SwapProps> = ({
           <MarginAmount
             balance={balance}
             currentPositionMarginRequirement={currentPositionMarginRequirement}
+            defaultMargin={0}
             error={errors['margin']}
             healthFactor={healthFactor}
             isAdditional={formState.marginAction === SwapFormMarginAction.ADD}
             isEditing={mode === SwapFormModes.EDIT_MARGIN || mode === SwapFormModes.EDIT_NOTIONAL}
-            defaultMargin={0}
             margin={formState.margin}
             maxMargin={maxMargin}
-            onChangeMargin={onChangeMargin}
             underlyingTokenName={underlyingTokenName}
+            onChangeMargin={onChangeMargin}
           />
         </Box>
       )}
 
       <SubmitControls
         approvalsNeeded={approvalsNeeded}
+        gaButtonId={gaButtonId}
         hintState={hintState}
         isFormValid={isFormValid}
         isTradeVerified={isTradeVerified}
         mode={mode}
-        onCancel={onCancel}
-        onSubmit={onSubmit}
-        gaButtonId={gaButtonId}
         submitButtonState={submitButtonState}
         swapInfoLoading={swapInfoLoading}
         tokenApprovals={tokenApprovals}
         tradeInfoErrorMessage={tradeInfoErrorMessage}
         underlyingTokenName={underlyingTokenName}
+        onCancel={onCancel}
+        onSubmit={onSubmit}
       />
     </FormPanel>
   );

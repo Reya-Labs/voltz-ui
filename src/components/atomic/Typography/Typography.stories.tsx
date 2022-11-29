@@ -1,9 +1,9 @@
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { Typography } from './Typography';
-import { Agents } from '../../../contexts/AgentContext/types';
 import { AgentProvider } from '../../../contexts/AgentContext/AgentProvider';
+import { Agents } from '../../../contexts/AgentContext/types';
+import { Typography } from './Typography';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {

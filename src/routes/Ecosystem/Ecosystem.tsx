@@ -1,14 +1,14 @@
-import ConnectedMellowLpDepositForm from './ConnectedMellowLpDepositForm/ConnectedMellowLpDepositForm';
-import ConnectedMellowLPTable from './ConnectedMellowLPTable/ConnectedMellowLPTable';
-import { setPageTitle } from '../../utilities/page';
 import React, { useEffect, useState } from 'react';
-import { useMellowLPVaults } from '../../hooks/useMellowLPVaults/useMellowLPVaults';
-import { useWallet } from '../../hooks/useWallet';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { MellowProduct } from './types';
-import { ConnectedMellowBox } from './Ecosystem.styled';
+import { useMellowLPVaults } from '../../hooks/useMellowLPVaults/useMellowLPVaults';
+import { useWallet } from '../../hooks/useWallet';
+import { setPageTitle } from '../../utilities/page';
 import { routes } from '../paths';
+import ConnectedMellowLpDepositForm from './ConnectedMellowLpDepositForm/ConnectedMellowLpDepositForm';
+import ConnectedMellowLPTable from './ConnectedMellowLPTable/ConnectedMellowLPTable';
+import { ConnectedMellowBox } from './Ecosystem.styled';
+import { MellowProduct } from './types';
 
 export enum EcosystemRenderMode {
   MELLOW_DEPOSIT_FORM,
@@ -120,8 +120,8 @@ export const Ecosystem: React.FunctionComponent = () => {
       {renderMode === EcosystemRenderMode.PAGE && (
         <ConnectedMellowBox>
           <ConnectedMellowLPTable
-            lpVaults={lpVaults}
             dataLoading={dataLoading}
+            lpVaults={lpVaults}
             onSelectItem={handleSelectMellowLpVault}
           />
         </ConnectedMellowBox>
@@ -130,7 +130,7 @@ export const Ecosystem: React.FunctionComponent = () => {
       {renderMode === EcosystemRenderMode.MELLOW_DEPOSIT_FORM && (
         <ConnectedMellowBox>
           {currentVault && (
-            <ConnectedMellowLpDepositForm onCancel={handleGoBack} vault={currentVault} />
+            <ConnectedMellowLpDepositForm vault={currentVault} onCancel={handleGoBack} />
           )}
         </ConnectedMellowBox>
       )}

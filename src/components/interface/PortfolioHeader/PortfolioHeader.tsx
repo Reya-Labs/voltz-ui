@@ -1,8 +1,9 @@
 import Box from '@mui/material/Box';
-import { PortfolioHeaderInfo } from './PorfolioHeaderInfo';
-import { PortfolioHeaderHealth } from './PortfolioHeaderHealth';
+
 import { PortfolioContext } from '../../../contexts/PortfolioContext/PortfolioContext';
 import { NetNotional } from './NetNotional/NetNotional';
+import { PortfolioHeaderInfo } from './PorfolioHeaderInfo';
+import { PortfolioHeaderHealth } from './PortfolioHeaderHealth';
 
 export type PortfolioHeaderProps = {
   currencyCode?: string;
@@ -18,9 +19,9 @@ export const PortfolioHeader = ({
   return (
     <>
       <NetNotional
-        totalNotional={portfolioData.totalNotional}
-        currencySymbol={currencySymbol}
         currencyCode={currencyCode}
+        currencySymbol={currencySymbol}
+        totalNotional={portfolioData.totalNotional}
       />
       <Box
         sx={{

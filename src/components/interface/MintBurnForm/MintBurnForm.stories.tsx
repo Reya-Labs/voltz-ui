@@ -1,8 +1,11 @@
-import React from 'react';
-import { DateTime, Duration } from 'luxon';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { MintBurnForm } from './MintBurnForm';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { AMM } from '@voltz-protocol/v1-sdk';
+import { DateTime, Duration } from 'luxon';
+import React from 'react';
+
+import { AgentProvider } from '../../../contexts/AgentContext/AgentProvider';
+import { Agents } from '../../../contexts/AgentContext/types';
+import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
 import {
   MintBurnFormHintStates,
   MintBurnFormModes,
@@ -10,10 +13,8 @@ import {
   MintBurnFormSubmitButtonStates,
   useMintBurnForm,
 } from '../../../contexts/MintBurnFormContext/MintBurnFormContext';
-import { Agents } from '../../../contexts/AgentContext/types';
 import { useTokenApproval } from '../../../hooks/useTokenApproval';
-import { AgentProvider } from '../../../contexts/AgentContext/AgentProvider';
-import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
+import { MintBurnForm } from './MintBurnForm';
 
 export default {
   title: 'Interface/MintBurnForm',
@@ -66,16 +67,16 @@ const NewPositionMintBurnForm: React.FunctionComponent = (args) => {
       isFormValid={form.isValid}
       isTradeVierified={true}
       mode={form.mode}
+      submitButtonState={MintBurnFormSubmitButtonStates.ADD_LIQUIDITY}
+      tokenApprovals={mockTokenApprovals}
       onCancel={() => alert('cancel')}
-      onChangeFixedLow={form.setFixedLow}
       onChangeFixedHigh={form.setFixedHigh}
+      onChangeFixedLow={form.setFixedLow}
       onChangeLiquidityAction={form.setLiquidityAction}
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction}
       onChangeNotional={form.setNotional}
       onSubmit={() => form.validate()}
-      submitButtonState={MintBurnFormSubmitButtonStates.ADD_LIQUIDITY}
-      tokenApprovals={mockTokenApprovals}
     />
   );
 };
@@ -93,8 +94,8 @@ const EditingMarginTemplate: ComponentStory<typeof MintBurnForm> = (args) => (
   <AgentProvider defaultAgent={Agents.LIQUIDITY_PROVIDER}>
     <AMMProvider amm={mockAmm}>
       <MintBurnFormProvider
-        mode={MintBurnFormModes.EDIT_MARGIN}
         defaultValues={{ fixedLow: 2, fixedHigh: 6 }}
+        mode={MintBurnFormModes.EDIT_MARGIN}
       >
         <EditingMarginMintBurnForm {...args} />
       </MintBurnFormProvider>
@@ -115,16 +116,16 @@ const EditingMarginMintBurnForm: React.FunctionComponent = (args) => {
       isFormValid={form.isValid}
       isTradeVierified={true}
       mode={form.mode}
+      submitButtonState={MintBurnFormSubmitButtonStates.DEPOSIT_MARGIN}
+      tokenApprovals={mockTokenApprovals}
       onCancel={() => alert('cancel')}
-      onChangeFixedLow={form.setFixedLow}
       onChangeFixedHigh={form.setFixedHigh}
+      onChangeFixedLow={form.setFixedLow}
       onChangeLiquidityAction={form.setLiquidityAction}
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction}
       onChangeNotional={form.setNotional}
       onSubmit={() => form.validate()}
-      submitButtonState={MintBurnFormSubmitButtonStates.DEPOSIT_MARGIN}
-      tokenApprovals={mockTokenApprovals}
     />
   );
 };
@@ -142,8 +143,8 @@ const EditingLiquidityTemplate: ComponentStory<typeof MintBurnForm> = (args) => 
   <AgentProvider defaultAgent={Agents.LIQUIDITY_PROVIDER}>
     <AMMProvider amm={mockAmm}>
       <MintBurnFormProvider
-        mode={MintBurnFormModes.EDIT_LIQUIDITY}
         defaultValues={{ fixedLow: 2, fixedHigh: 6 }}
+        mode={MintBurnFormModes.EDIT_LIQUIDITY}
       >
         <EditingLiquidityMintBurnForm {...args} />
       </MintBurnFormProvider>
@@ -164,16 +165,16 @@ const EditingLiquidityMintBurnForm: React.FunctionComponent = (args) => {
       isFormValid={form.isValid}
       isTradeVierified={true}
       mode={form.mode}
+      submitButtonState={MintBurnFormSubmitButtonStates.ADD_LIQUIDITY}
+      tokenApprovals={mockTokenApprovals}
       onCancel={() => alert('cancel')}
-      onChangeFixedLow={form.setFixedLow}
       onChangeFixedHigh={form.setFixedHigh}
+      onChangeFixedLow={form.setFixedLow}
       onChangeLiquidityAction={form.setLiquidityAction}
       onChangeMargin={form.setMargin}
       onChangeMarginAction={form.setMarginAction}
       onChangeNotional={form.setNotional}
       onSubmit={() => form.validate()}
-      submitButtonState={MintBurnFormSubmitButtonStates.ADD_LIQUIDITY}
-      tokenApprovals={mockTokenApprovals}
     />
   );
 };

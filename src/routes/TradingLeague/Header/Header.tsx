@@ -1,7 +1,8 @@
-import { Typography } from '../../../components/atomic/Typography/Typography';
-import { colors } from '../../../theme';
 import Box from '@mui/material/Box';
 import React from 'react';
+
+import { Typography } from '../../../components/atomic/Typography/Typography';
+import { colors } from '../../../theme';
 
 export const Header: React.FunctionComponent = () => (
   <Box
@@ -11,7 +12,6 @@ export const Header: React.FunctionComponent = () => (
     }}
   >
     <Typography
-      variant="subtitle1"
       sx={{
         lineHeight: '14px',
         letterSpacing: '0.02em',
@@ -20,11 +20,11 @@ export const Header: React.FunctionComponent = () => (
         width: '67px',
         color: colors.lavenderWeb.darken015,
       }}
+      variant="subtitle1"
     >
       RANK
     </Typography>
     <Typography
-      variant="subtitle1"
       sx={{
         lineHeight: '14px',
         letterSpacing: '0.02em',
@@ -33,11 +33,11 @@ export const Header: React.FunctionComponent = () => (
         flex: 1,
         color: colors.lavenderWeb.darken015,
       }}
+      variant="subtitle1"
     >
       TRADER
     </Typography>
     <Typography
-      variant="subtitle1"
       sx={{
         lineHeight: '14px',
         letterSpacing: '0.02em',
@@ -45,6 +45,7 @@ export const Header: React.FunctionComponent = () => (
         fontSize: '12px',
         color: colors.lavenderWeb.darken015,
       }}
+      variant="subtitle1"
     >
       POINTS
     </Typography>

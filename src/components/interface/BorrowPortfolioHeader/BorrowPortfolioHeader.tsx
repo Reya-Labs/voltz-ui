@@ -29,22 +29,22 @@ export const BorrowPortfolioHeader = ({
         sx={{ paddingTop: 0, paddingBottom: 0, background: 'transparent' }}
       >
         <BorrowPortfolioHeaderBox
-          loading={loading}
-          currencyCode={currencyCode}
-          currencySymbol={currencySymbol}
           aggregatedDebt={
             variableDebt !== undefined && fixedDebt !== undefined
               ? variableDebt + fixedDebt
               : undefined
           }
+          currencyCode={currencyCode}
+          currencySymbol={currencySymbol}
+          loading={loading}
         />
 
         <BorrowPortfolioSummary
           currencyCode={currencyCode}
           currencySymbol={currencySymbol}
           fixedDebt={fixedDebt}
-          variableDebt={variableDebt}
           fixedPositionsCount={fixedPositionsCount}
+          variableDebt={variableDebt}
           variablePositionsCount={variablePositionsCount}
         />
       </Panel>

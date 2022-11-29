@@ -1,12 +1,13 @@
-import { colors } from '../../../theme';
-import React from 'react';
 import Box from '@mui/material/Box';
-import { Typography } from '../../../components/atomic/Typography/Typography';
 import Skeleton from '@mui/material/Skeleton';
+import React from 'react';
+
+import { Typography } from '../../../components/atomic/Typography/Typography';
+import { AvatarAddress } from '../../../components/interface/AvatarAddress/AvatarAddress';
+import { colors } from '../../../theme';
+import { ReactComponent as Bronze } from './icons/bronze.svg';
 import { ReactComponent as Gold } from './icons/gold.svg';
 import { ReactComponent as Silver } from './icons/silver.svg';
-import { ReactComponent as Bronze } from './icons/bronze.svg';
-import { AvatarAddress } from '../../../components/interface/AvatarAddress/AvatarAddress';
 import { Points } from './Points/Points';
 
 export type RankingEntryProps = {
@@ -34,13 +35,13 @@ export const Entry: React.FunctionComponent<RankingEntryProps> = ({
 }) =>
   loading ? (
     <Skeleton
-      variant="rectangular"
       sx={{
         padding: (theme) => theme.spacing(2, 2, 2, 8),
         borderRadius: '8px',
         fontSize: '18px',
         lineHeight: '24px',
       }}
+      variant="rectangular"
     />
   ) : (
     <Box
@@ -60,13 +61,13 @@ export const Entry: React.FunctionComponent<RankingEntryProps> = ({
         }}
       >
         <Typography
-          variant="body2"
           sx={{
             color: colors.lavenderWeb.base,
             fontSize: '18px',
             lineHeight: '24px',
             fontWeight: 400,
           }}
+          variant="body2"
         >
           {rank <= 0 ? '---' : rank}
           {rank === 1 && <Gold style={{ marginLeft: '8px' }} />}
@@ -83,13 +84,13 @@ export const Entry: React.FunctionComponent<RankingEntryProps> = ({
           <AvatarAddress address={address} size={24} />
         ) : (
           <Typography
-            variant="body2"
             sx={{
               color: colors.lavenderWeb.base,
               fontSize: '18px',
               lineHeight: '24px',
               fontWeight: 400,
             }}
+            variant="body2"
           >
             ---
           </Typography>

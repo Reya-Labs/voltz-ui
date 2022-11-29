@@ -1,7 +1,8 @@
+import CircleIcon from '@mui/icons-material/Circle';
 import React, { ReactNode } from 'react';
+
 import { SystemStyleObject, Theme } from '../../../theme';
 import { Typography } from '../../atomic/Typography/Typography';
-import CircleIcon from '@mui/icons-material/Circle';
 
 export type BulletLabelProps = {
   sx?: SystemStyleObject<Theme>;
@@ -18,7 +19,7 @@ const labelStyles: SystemStyleObject<Theme> = {
 
 export const BulletLabel: React.FunctionComponent<BulletLabelProps> = ({ sx = {}, text }) => {
   return (
-    <Typography variant="body2" sx={{ ...labelStyles, ...sx }}>
+    <Typography sx={{ ...labelStyles, ...sx }} variant="body2">
       <CircleIcon
         sx={{
           width: 4,

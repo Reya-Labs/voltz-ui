@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
+import { WalletName } from '../../../../../contexts/WalletContext/types';
 import { useWallet } from '../../../../../hooks/useWallet';
 import { Panel } from '../../../../atomic/Panel/Panel';
 import { Modal } from '../../../../composite/Modal/Modal';
 import { WalletConnectButton, WalletDisplay, WalletSelect } from './components';
-import { WalletName } from '../../../../../contexts/WalletContext/types';
 
 export const WalletConnectModal: React.FunctionComponent = () => {
   const wallet = useWallet();
@@ -50,12 +50,11 @@ export const WalletConnectModal: React.FunctionComponent = () => {
   return (
     <Modal
       open={open}
-      onOpen={handleOpen}
-      onClose={handleClose}
       trigger={<WalletConnectButton wallet={wallet} />}
+      onClose={handleClose}
+      onOpen={handleOpen}
     >
       <Panel
-        variant="darker"
         sx={{
           minWidth: 400,
           maxWidth: 400,
@@ -63,6 +62,7 @@ export const WalletConnectModal: React.FunctionComponent = () => {
           display: 'flex',
           flexDirection: 'column',
         }}
+        variant="darker"
       >
         {renderContent()}
       </Panel>

@@ -1,5 +1,6 @@
-import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+
 import { colors } from '../../../../theme';
 
 export const ClaimButton = styled(Button)<{ disabled: boolean }>`

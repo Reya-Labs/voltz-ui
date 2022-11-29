@@ -1,8 +1,9 @@
-import React, { useCallback } from 'react';
 import Box from '@mui/material/Box';
-import { ToggleButtonGroup } from '../../../../composite/ToggleButtonGroup/ToggleButtonGroup';
-import { IconLabel } from '../../../../composite/IconLabel/IconLabel';
+import React, { useCallback } from 'react';
+
 import { MintBurnFormLiquidityAction } from '../../../../../contexts/MintBurnFormContext/MintBurnFormContext';
+import { IconLabel } from '../../../../composite/IconLabel/IconLabel';
+import { ToggleButtonGroup } from '../../../../composite/ToggleButtonGroup/ToggleButtonGroup';
 
 export type LiquidityControlsProps = {
   onChange: (value: MintBurnFormLiquidityAction) => void;
@@ -11,7 +12,7 @@ export type LiquidityControlsProps = {
 
 export const LiquidityControls = ({ onChange, value }: LiquidityControlsProps) => {
   const iconLabel = (
-    <IconLabel label="Add or Burn Liquidity" icon="information-circle" info="" removeIcon />
+    <IconLabel icon="information-circle" info="" label="Add or Burn Liquidity" removeIcon />
   );
 
   const handleChange = useCallback(
@@ -32,8 +33,8 @@ export const LiquidityControls = ({ onChange, value }: LiquidityControlsProps) =
     >
       <ToggleButtonGroup
         label={iconLabel}
-        options={Object.values(MintBurnFormLiquidityAction)}
         option={value}
+        options={Object.values(MintBurnFormLiquidityAction)}
         onChangeOption={handleChange}
       />
     </Box>

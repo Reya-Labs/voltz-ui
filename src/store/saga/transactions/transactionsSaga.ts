@@ -1,13 +1,13 @@
 import { takeLatest } from 'redux-saga/effects';
 
+import borrowSaga from './borrowSaga';
+import burnSaga from './burnSaga';
 import mintSaga from './mintSaga';
+import rolloverMintSaga from './rolloverMintSaga';
+import rolloverSwapSaga from './rolloverSwapSaga';
 import settlePositionSaga from './settlePositionSaga';
 import swapSaga from './swapSaga';
 import updatePositionMarginSaga from './updatePositionMarginSaga';
-import burnSaga from './burnSaga';
-import rolloverMintSaga from './rolloverMintSaga';
-import rolloverSwapSaga from './rolloverSwapSaga';
-import borrowSaga from './borrowSaga';
 
 function* transactionsSaga() {
   yield takeLatest('mint', mintSaga);

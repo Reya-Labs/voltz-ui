@@ -1,23 +1,22 @@
-import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
-import { useLocation } from 'react-router-dom';
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
-import { Agents } from '../../contexts/AgentContext/types';
-import { AMMProvider } from '../../contexts/AMMContext/AMMContext';
-import { PositionProvider } from '../../contexts/PositionContext/PositionContext';
-import { SwapFormProvider } from '../../contexts/SwapFormContext/SwapFormContext';
-import { PortfolioProvider } from '../../contexts/PortfolioContext/PortfolioContext';
-
-import { useWallet } from '../../hooks/useWallet';
 import { ConnectedPositionTable } from '../../components/containers/ConnectedPositionTable/ConnectedPositionTable';
 import { ConnectedSwapForm } from '../../components/containers/ConnectedSwapForm/ConnectedSwapForm';
 import { SwapFormModes } from '../../components/interface/SwapForm';
-import { usePositions } from '../../hooks/usePositions/usePositions';
-import { useAMMs } from '../../hooks/useAMMs';
+import { Agents } from '../../contexts/AgentContext/types';
+import { AMMProvider } from '../../contexts/AMMContext/AMMContext';
+import { PortfolioProvider } from '../../contexts/PortfolioContext/PortfolioContext';
+import { PositionProvider } from '../../contexts/PositionContext/PositionContext';
+import { SwapFormProvider } from '../../contexts/SwapFormContext/SwapFormContext';
 import { useAgent } from '../../hooks/useAgent';
-import { setPageTitle } from '../../utilities/page';
+import { useAMMs } from '../../hooks/useAMMs';
+import { usePositions } from '../../hooks/usePositions/usePositions';
+import { useWallet } from '../../hooks/useWallet';
 import { findCurrentAmm } from '../../utilities/amm';
+import { setPageTitle } from '../../utilities/page';
 
 export const Portfolio: React.FunctionComponent = () => {
   const [formMode, setFormMode] = useState<SwapFormModes>();
@@ -89,9 +88,9 @@ export const Portfolio: React.FunctionComponent = () => {
           positions={agent !== Agents.LIQUIDITY_PROVIDER ? positionsByAgentGroup : undefined}
         >
           <ConnectedPositionTable
-            onSelectItem={handleSelectPosition}
             agent={Agents.FIXED_TRADER}
             handleCompletedSettling={handleCompletedSettling}
+            onSelectItem={handleSelectPosition}
           />
         </PortfolioProvider>
       )}
@@ -101,9 +100,9 @@ export const Portfolio: React.FunctionComponent = () => {
           positions={agent !== Agents.LIQUIDITY_PROVIDER ? positionsByAgentGroup : undefined}
         >
           <ConnectedPositionTable
-            onSelectItem={handleSelectPosition}
             agent={Agents.FIXED_TRADER}
             handleCompletedSettling={handleCompletedSettling}
+            onSelectItem={handleSelectPosition}
           />
         </PortfolioProvider>
       )}
@@ -114,10 +113,10 @@ export const Portfolio: React.FunctionComponent = () => {
             <AMMProvider amm={amm}>
               <PositionProvider position={position}>
                 <SwapFormProvider
-                  mode={formMode}
                   defaultValues={{
                     notional: formMode === SwapFormModes.EDIT_NOTIONAL ? 0 : undefined,
                   }}
+                  mode={formMode}
                 >
                   <ConnectedSwapForm onReset={handleReset} />
                 </SwapFormProvider>

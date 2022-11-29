@@ -1,17 +1,16 @@
+import { Position } from '@voltz-protocol/v1-sdk';
 import JSBI from 'jsbi';
-import { useMemo, useEffect } from 'react';
 import isNull from 'lodash/isNull';
 import { DateTime } from 'luxon';
+import { useEffect, useMemo } from 'react';
 
-import { actions, selectors } from '../../store';
-import { MEPositionFactory } from './mePositionFactory';
-
-import { Position } from '@voltz-protocol/v1-sdk';
-import { useWallet } from '../useWallet';
 import { Agents } from '../../contexts/AgentContext/types';
+import { actions, selectors } from '../../store';
 import { useAgent } from '../useAgent';
 import { useDispatch } from '../useDispatch';
 import { useSelector } from '../useSelector';
+import { useWallet } from '../useWallet';
+import { MEPositionFactory } from './mePositionFactory';
 
 export type usePositionsResult = {
   positions?: Position[];

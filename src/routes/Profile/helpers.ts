@@ -1,9 +1,10 @@
-import { BadgeTier } from './types';
-import { ClaimButtonProps } from './components/ClaimButton/ClaimButton';
-import { Season } from '../../hooks/season/types';
-import { BadgeVariant } from './data/getSeasonBadges';
-import { Signer } from 'ethers';
 import { CommunitySBT, SBTConstructorArgs } from '@voltz-protocol/v1-sdk';
+import { Signer } from 'ethers';
+
+import { Season } from '../../hooks/season/types';
+import { ClaimButtonProps } from './components/ClaimButton/ClaimButton';
+import { BadgeVariant } from './data/getSeasonBadges';
+import { BadgeTier } from './types';
 
 export const BADGE_VARIANT_TRADER_LP_MAP: Record<BadgeVariant, 'trader' | 'lp' | ''> = {
   // season 1
@@ -115,7 +116,7 @@ export const BADGE_VARIANT_DESCRIPTION_COPY_MAP: Record<BadgeVariant, string> = 
   beWaterMyFriend: 'A top 5 Liquidity Provider finish this season.',
   rainMaker: 'No luck needed for the degen gods. Going big 500k+ notional provided.',
   waterHose: 'You left no pool unturned, provided liquidity to 3+ pools.',
-  moneyMoneyMoney: '100k leverage. You provided real liquidity here, market maker status.',
+  moneyMoneyMoney: '100x leverage. You provided real liquidity here, market maker status.',
   lpoor: 'You provided liquidity and the protocol just got a little more robust.',
   yikes: 'Oof you’re the largest liquidation this season. There was no second best.',
   maxBidding: 'There is only one button on your keyboard: max bidding, max leverage',
@@ -133,7 +134,7 @@ export const BADGE_VARIANT_DESCRIPTION_COPY_MAP: Record<BadgeVariant, string> = 
   ogBeWaterMyFriend: 'A top 5 Liquidity Provider finish this season.',
   ogRainMaker: 'No luck needed for the degen gods. Going big 500k+ notional provided.',
   ogWaterHose: 'You left no pool unturned, provided liquidity to 3+ pools.',
-  ogMoneyMoneyMoney: '100k leverage. You provided real liquidity here, market maker status.',
+  ogMoneyMoneyMoney: '100x leverage. You provided real liquidity here, market maker status.',
   ogLpoor: 'You provided liquidity and the protocol just got a little more robust.',
   ogYikes: 'Oof you’re the largest liquidation this season. There was no second best.',
   ogMaxBidding: 'There is only one button on your keyboard: max bidding, max leverage',

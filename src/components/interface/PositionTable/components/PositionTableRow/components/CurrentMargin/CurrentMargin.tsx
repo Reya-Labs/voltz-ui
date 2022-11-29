@@ -1,13 +1,12 @@
-import React from 'react';
 import TableCell from '@mui/material/TableCell';
+import isUndefined from 'lodash/isUndefined';
+import React from 'react';
 
 import { useWallet } from '../../../../../../../hooks/useWallet';
-import { Typography } from '../../../../../../atomic/Typography/Typography';
-import { Button } from '../../../../../../atomic/Button/Button';
-import isUndefined from 'lodash/isUndefined';
-import { formatCurrency, formatNumber } from '../../../../../../../utilities/number';
-
 import { colors } from '../../../../../../../theme';
+import { formatCurrency, formatNumber } from '../../../../../../../utilities/number';
+import { Button } from '../../../../../../atomic/Button/Button';
+import { Typography } from '../../../../../../atomic/Typography/Typography';
 
 export type CurrentMarginProps = {
   marginEdit?: boolean;
@@ -67,16 +66,16 @@ export const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({
 
   return (
     <TableCell>
-      <Typography variant="body2" label={getNetMarginLabel()} sx={{ fontSize: 18 }}>
+      <Typography label={getNetMarginLabel()} sx={{ fontSize: 18 }} variant="body2">
         {!isUndefined(margin) ? `${formatNumber(margin)} ${token}` : 'Loading...'}
       </Typography>
 
       {marginEdit && onSelect && (
         <Button
-          variant="red2"
-          onClick={handleClick}
           size="small"
           sx={{ width: '100%', display: 'flex' }}
+          variant="red2"
+          onClick={handleClick}
         >
           Edit
         </Button>

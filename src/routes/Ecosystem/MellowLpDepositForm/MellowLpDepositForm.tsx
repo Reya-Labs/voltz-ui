@@ -1,19 +1,19 @@
+import Box from '@mui/material/Box';
+import isUndefined from 'lodash/isUndefined';
+import React from 'react';
+
+import { Button } from '../../../components/atomic/Button/Button';
+import { Panel } from '../../../components/atomic/Panel/Panel';
+import { Typography } from '../../../components/atomic/Typography/Typography';
 import { IconLabel } from '../../../components/composite/IconLabel/IconLabel';
 import { InputTokenLabel } from '../../../components/composite/InputTokenLabel/InputTokenLabel';
 import { MaskedIntegerField } from '../../../components/composite/MaskedIntegerField/MaskedIntegerField';
-
-import Box from '@mui/material/Box';
-import { formatCurrency, toUSFormat } from '../../../utilities/number';
-import { Typography } from '../../../components/atomic/Typography/Typography';
-import { Panel } from '../../../components/atomic/Panel/Panel';
-import { Button } from '../../../components/atomic/Button/Button';
+import { FormPanel } from '../../../components/interface/FormPanel/FormPanel';
+import { Agents } from '../../../contexts/AgentContext/types';
 import { colors } from '../../../theme';
-import isUndefined from 'lodash/isUndefined';
-import React from 'react';
+import { formatCurrency, toUSFormat } from '../../../utilities/number';
 import { MellowProduct } from '../types';
 import { LPMellowVaultDepositInfo } from './components/LPMellowVaultDepositInfo';
-import { Agents } from '../../../contexts/AgentContext/types';
-import { FormPanel } from '../../../components/interface/FormPanel/FormPanel';
 
 export type MellowLpDepositFormProps = {
   lpVault: MellowProduct;
@@ -63,23 +63,23 @@ const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = (
       <LPMellowVaultDepositInfo mellowProduct={lpVault} />
       <Box sx={{ marginTop: '16px' }}>
         <MaskedIntegerField
-          allowDecimals
           allowNegativeValue={false}
-          suffix={<InputTokenLabel tokenName={lpVault.metadata.token} />}
-          suffixPadding={90}
+          defaultValue={0}
           label={
             <IconLabel
-              label={'AMOUNT'}
               icon="information-circle"
               info={
                 'Choose the amount you wish to deposit into the strategy. Remember you won’t be able to withdraw until the pool matures. '
               }
+              label={'AMOUNT'}
             />
           }
-          defaultValue={0}
-          onChange={handleChange}
           subtext={subtext}
           subtextSize={12}
+          suffix={<InputTokenLabel tokenName={lpVault.metadata.token} />}
+          suffixPadding={90}
+          allowDecimals
+          onChange={handleChange}
         />
       </Box>
 
@@ -92,26 +92,26 @@ const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = (
         }}
       >
         <Button
-          disabled={disabled}
-          onClick={onSubmit}
-          size="medium"
           agent={Agents.LIQUIDITY_PROVIDER}
+          disabled={disabled}
+          size="medium"
           sx={{
             padding: '16px',
             background: colors.skyBlueCrayola.darken030,
             color: colors.skyBlueCrayola.base,
             flex: 1,
           }}
+          onClick={onSubmit}
         >
           {submitText}
         </Button>
         <Button
-          onClick={onCancel}
           size="medium"
-          variant="dark"
           sx={{
             color: colors.skyBlueCrayola.base,
           }}
+          variant="dark"
+          onClick={onCancel}
         >
           BACK
         </Button>
@@ -128,7 +128,6 @@ const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = (
         }}
       >
         <Typography
-          variant="h1"
           sx={{
             fontSize: '14px',
             color: '#C6C2DA',
@@ -136,6 +135,7 @@ const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = (
             marginLeft: '0px',
             lineHeight: '120%',
           }}
+          variant="h1"
         >
           ABOUT YOUR FUNDS
         </Typography>
@@ -146,7 +146,6 @@ const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = (
         ].map((item) => (
           <Typography
             key={item}
-            variant="body1"
             sx={{
               fontSize: '12px',
               color: '#9B97AD',
@@ -154,6 +153,7 @@ const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = (
               fontWeight: '400',
               lineHeight: '1.5',
             }}
+            variant="body1"
           >
             {item}
           </Typography>
@@ -170,12 +170,12 @@ const HintText: React.FunctionComponent<{
 }> = ({ text, suffixText, textColor }) => {
   return (
     <Typography
-      variant="body2"
       sx={{
         marginTop: (theme) => theme.spacing(2),
         color: colors.lavenderWeb.darken015,
         fontSize: '12px',
       }}
+      variant="body2"
     >
       <span style={{ color: textColor }}> {text}</span>
       {suffixText ? ` ${suffixText}` : null}

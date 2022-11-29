@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from 'react';
+
 import { Container } from './BouncedLoading.styled';
 
 export const BouncedLoading: FunctionComponent = () => {

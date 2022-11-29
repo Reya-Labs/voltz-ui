@@ -1,15 +1,15 @@
+import { AMM, ExpectedApyInfo, InfoPostSwap, Position, PositionInfo } from '@voltz-protocol/v1-sdk';
 import { useMemo } from 'react';
+
 import { Agents } from '../../contexts/AgentContext/types';
+import { useAgent } from '../useAgent';
+import { useAsyncFunction, UseAsyncFunctionResult } from '../useAsyncFunction';
 import {
   ExpectedInfoPayload,
   GetInfoType,
   MintMinimumMarginRequirementPayload,
   SwapInfoPayload,
 } from './types';
-import { AMM, ExpectedApyInfo, InfoPostSwap, Position, PositionInfo } from '@voltz-protocol/v1-sdk';
-
-import { useAgent } from '../useAgent';
-import { useAsyncFunction, UseAsyncFunctionResult } from '../useAsyncFunction';
 
 export type useAMMReturnType = {
   ammCaps: UseAsyncFunctionResult<unknown, number | void>;

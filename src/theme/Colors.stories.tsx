@@ -1,5 +1,6 @@
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+
 import colors from './colors';
 import { BaseColors, ColorSet, ColorVariations } from './types';
 
@@ -59,7 +60,7 @@ const AllColorsTemplate: ComponentStory<typeof React.Fragment> = () => (
     {Object.keys(colors)
       .sort()
       .map((c) => (
-        <ColorSetTile key={c} colorSet={colors[c as BaseColors]} color={c as BaseColors} />
+        <ColorSetTile key={c} color={c as BaseColors} colorSet={colors[c as BaseColors]} />
       ))}
   </div>
 );

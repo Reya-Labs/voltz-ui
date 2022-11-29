@@ -1,31 +1,31 @@
-import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
+import { BigNumber } from 'ethers';
 import debounce from 'lodash/debounce';
 import isNumber from 'lodash/isNumber';
 import isUndefined from 'lodash/isUndefined';
-import * as s from './services';
-import { BigNumber } from 'ethers';
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
-import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { SwapFormActions, SwapFormModes } from '../../components/interface/SwapForm';
+import { useAgent } from '../../hooks/useAgent';
 import { GetInfoType } from '../../hooks/useAMM/types';
-import { useWallet } from '../../hooks/useWallet';
 import { useBalance } from '../../hooks/useBalance';
 import { useCurrentPositionMarginRequirement } from '../../hooks/useCurrentPositionMarginRequirement';
-import { usePositionContext } from '../PositionContext/PositionContext';
+import { useTokenApproval } from '../../hooks/useTokenApproval';
+import { useWallet } from '../../hooks/useWallet';
+import { getAmmProtocol } from '../../utilities/amm';
+import { DataLayerEventPayload, pushEvent } from '../../utilities/googleAnalytics';
+import { isMarginWithdrawable } from '../../utilities/isMarginWithdrawable';
+import { formatNumber, stringToBigFloat } from '../../utilities/number';
+import { hasEnoughUnderlyingTokens, lessThan, lessThanEpsilon } from '../../utilities/validation';
 import { Agents } from '../AgentContext/types';
 import { useAMMContext } from '../AMMContext/AMMContext';
-import { useTokenApproval } from '../../hooks/useTokenApproval';
-import { useAgent } from '../../hooks/useAgent';
-import { DataLayerEventPayload, pushEvent } from '../../utilities/googleAnalytics';
-import { hasEnoughUnderlyingTokens, lessThan, lessThanEpsilon } from '../../utilities/validation';
-import { formatNumber, stringToBigFloat } from '../../utilities/number';
-import { getAmmProtocol } from '../../utilities/amm';
-import { isMarginWithdrawable } from '../../utilities/isMarginWithdrawable';
+import { usePositionContext } from '../PositionContext/PositionContext';
 import {
   SwapFormMarginAction,
   SwapFormSubmitButtonHintStates,
   SwapFormSubmitButtonStates,
 } from './enums';
+import * as s from './services';
 
 // updateLeverage instead of setLeverage when notional updates
 // have reset flag in onChange in Leverage to be able to reset leverage when box is modified.
