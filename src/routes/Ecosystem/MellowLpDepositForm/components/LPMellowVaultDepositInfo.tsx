@@ -10,7 +10,8 @@ import {
   CapBarBox,
   CapBarTitleTypography,
   PositionBox,
-  PositionTypography,
+  PositionLabelTypography,
+  PositionValueTypography,
   VaultInfoBox,
 } from './LPMellowVaultDepositInfo.styled';
 
@@ -67,14 +68,14 @@ export const LPMellowVaultDepositInfo: React.FunctionComponent<LPMellowVaultDepo
       {getCapBar()}
 
       <PositionBox>
-        <PositionTypography color={'#8B879D'}>YOUR POSITION:</PositionTypography>
-        <PositionTypography color={'#4DE5FF'}>
+        <PositionLabelTypography>YOUR POSITION:</PositionLabelTypography>
+        <PositionValueTypography>
           {isUndefined(mellowProduct.vault.userDeposit)
             ? '---'
             : `${formatCurrency(mellowProduct.vault.userDeposit, true)} ${
                 mellowProduct.metadata.token
               }`}
-        </PositionTypography>
+        </PositionValueTypography>
       </PositionBox>
     </VaultInfoBox>
   );
