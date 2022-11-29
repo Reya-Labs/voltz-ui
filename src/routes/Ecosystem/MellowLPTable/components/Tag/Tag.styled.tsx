@@ -8,9 +8,7 @@ export const TagContainer = styled(Box)`
   display: flex;
   border-radius: 4px;
   padding: ${({ theme }) => theme.spacing(1, 2)};
-  margin-top: ${({ theme }) => theme.spacing(4)};
   background: #472043;
-  margin-left: ${({ theme }) => theme.spacing(2)};
   width: 100px;
   justify-content: center;
 `;
