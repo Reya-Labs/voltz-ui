@@ -48,7 +48,7 @@ export const PositionBox = styled(Box)`
   align-self: stretch;
 `;
 
-export const PositionTypography = styled(Typography)<{ color: string }>`
+export const PositionLabelTypography = styled(Typography)`
   font-family: 'PixelOperatorMono', monospace;
   font-style: normal;
   font-weight: 400;
@@ -57,5 +57,17 @@ export const PositionTypography = styled(Typography)<{ color: string }>`
 
   letter-spacing: 0.02em;
 
-  color: ${({ color }) => color};
+  color: #8B879D;
+`;
+
+export const PositionValueTypography = styled(Typography)`
+  font-family: 'PixelOperatorMono', monospace;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+
+  letter-spacing: 0.02em;
+
+  color: #4DE5FF;
 `;
