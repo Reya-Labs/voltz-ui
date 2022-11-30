@@ -42,7 +42,7 @@ export const VaultMetricsBox = styled(Box)`
 `;
 
 export const VaultApyTypography = styled(CustomTypography)`
-  font-family: 'DM Sans';
+  font-family: 'DM Sans', sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 24px;
@@ -52,7 +52,7 @@ export const VaultApyTypography = styled(CustomTypography)`
 `;
 
 export const VaultMaturityTypography = styled(CustomTypography)`
-  font-family: 'DM Sans';
+  font-family: 'DM Sans', sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 24px;
