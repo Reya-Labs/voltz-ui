@@ -22,6 +22,11 @@
 voltz-ui is a frontend repository powered by React. It is the home of all the pages and components that provide the UI/UX for <a href="https://app.voltz.xyz">app.voltz.xyz</a>.
 </p>
 
+<br />
+
+| Statements                  | Branches                | Functions                 | Lines             |
+| --------------------------- | ----------------------- | ------------------------- | ----------------- |
+| ![Statements](#statements#) | ![Branches](#branches#) | ![Functions](#functions#) | ![Lines](#lines#) |
 
 # Installation
 

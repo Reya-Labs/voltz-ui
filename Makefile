@@ -6,6 +6,9 @@ install-ci:
 test:
 	yarn test
 
+test-coverage:
+	yarn test:coverage
+
 ts-check:
 	yarn ts:check
 
