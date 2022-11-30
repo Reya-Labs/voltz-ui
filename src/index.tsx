@@ -35,7 +35,7 @@ try {
 Sentry.init({
   dsn: 'https://89896542d0164e8795cd7ee0504edcb0@o4504239616294912.ingest.sentry.io/4504246851338240',
   integrations: [new BrowserTracing()],
-
+  release: `${process.env.APP_NAME || ''}@${process.env.APP_VERSION || ''}`,
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for performance monitoring.
   // We recommend adjusting this value in production
