@@ -24,6 +24,8 @@ jobs:
         run: make code-quality-check
       - name: Run tests
         run: make test-coverage
+      - name: Generate coverage badges
+        run: make generate-coverage-badges
       - name: Release UI
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PUBLISHING_TOKEN }}
