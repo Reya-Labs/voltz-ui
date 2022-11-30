@@ -3,15 +3,15 @@ import React from 'react';
 import { VaultField } from '../../../Common/VaultField';
 import { MellowProduct } from '../../../types';
 import MellowLPPosition from '../MellowLPPosition/MellowLPPosition';
+import { Tag } from '../Tag/Tag';
 import {
   DescriptionTypography,
   MellowLPEntryContainerBox,
   MellowLPEntryInfoBox,
   PoolFieldsBox,
   PoolFieldTypography,
-  PoolTag,
+  PoolOutlineBox,
   PositionBox,
-  TitleTypography,
 } from './MellowLPEntry.styled';
 
 export type MellowLPEntryProps = {
@@ -20,7 +20,7 @@ export type MellowLPEntryProps = {
   dataLoading: boolean;
 };
 
-const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
+export const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
   lpVault,
   onSelectItem,
   dataLoading,
@@ -37,35 +37,34 @@ const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
 
         <DescriptionTypography variant="h6">{lpVault.metadata.description}</DescriptionTypography>
 
-        <PoolTag>
-          {`${lpVault.metadata.underlyingPools.length} ${lpVault.metadata.token} ${
-            lpVault.metadata.underlyingPools.length === 1 ? 'POOL' : 'POOLS'
-          }`}
-        </PoolTag>
+        <PoolOutlineBox>
+          <Tag>
+            {`${lpVault.metadata.underlyingPools.length} ${lpVault.metadata.token} ${
+              lpVault.metadata.underlyingPools.length === 1 ? 'POOL' : 'POOLS'
+            }`}
+          </Tag>
 
-        <TitleTypography variant="h6">LIQUIDITY SPREAD ACROSS</TitleTypography>
+          <DescriptionTypography variant="h6">LIQUIDITY SPREAD ACROSS</DescriptionTypography>
 
-        <PoolFieldsBox>
-          {lpVault.metadata.underlyingPools.map((pool, index) => (
-            <PoolFieldTypography key={`${pool}-${index}`} variant="body2">
-              {pool}
-            </PoolFieldTypography>
-          ))}
-        </PoolFieldsBox>
+          <PoolFieldsBox>
+            {lpVault.metadata.underlyingPools.map((pool, index) => (
+              <PoolFieldTypography key={`${pool}-${index}`} variant="body2">
+                {pool}
+              </PoolFieldTypography>
+            ))}
+          </PoolFieldsBox>
+        </PoolOutlineBox>
       </MellowLPEntryInfoBox>
-      {
-        <PositionBox>
-          <MellowLPPosition
-            dataLoading={dataLoading}
-            disabled={lpVault.metadata.soon || lpVault.metadata.deprecated}
-            handleClick={onSelectItem}
-            tokenName={lpVault.metadata.token}
-            userDeposit={lpVault.vault.userDeposit}
-          />
-        </PositionBox>
-      }
+
+      <PositionBox>
+        <MellowLPPosition
+          dataLoading={dataLoading}
+          disabled={lpVault.metadata.soon || lpVault.metadata.deprecated}
+          handleClick={onSelectItem}
+          tokenName={lpVault.metadata.token}
+          userDeposit={lpVault.vault.userDeposit}
+        />
+      </PositionBox>
     </MellowLPEntryContainerBox>
   );
 };
-
-export default MellowLPEntry;
