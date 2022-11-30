@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
-import { colors } from '../../../../theme';
+import { colors } from '../../../../../theme';
 
 export const VaultInfoBox = styled(Typography)`
   display: flex;

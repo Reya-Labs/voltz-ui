@@ -1,12 +1,12 @@
 import isUndefined from 'lodash/isUndefined';
 import React from 'react';
 
-import { ProgressBar } from '../../../../components/atomic/ProgressBar/ProgressBar';
-import { Typography } from '../../../../components/atomic/Typography/Typography';
-import { MellowProduct } from '../../../../store/features/ecosystem/getMellowLPVaults/config';
-import { colors } from '../../../../theme';
-import { formatCurrency } from '../../../../utilities/number';
-import { VaultField } from '../../../Ecosystem/Common/VaultField';
+import { ProgressBar } from '../../../../../components/atomic/ProgressBar/ProgressBar';
+import { Typography } from '../../../../../components/atomic/Typography/Typography';
+import { MellowProduct } from '../../../../../store/features/ecosystem/getMellowLPVaults/config';
+import { colors } from '../../../../../theme';
+import { formatCurrency } from '../../../../../utilities/number';
+import { VaultField } from '../../../VaultField/VaultField';
 import {
   CapBarBox,
   CapBarTitleTypography,

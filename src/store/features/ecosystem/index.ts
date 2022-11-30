@@ -6,13 +6,13 @@ import { MellowProduct } from './getMellowLPVaults/config';
 import { getMellowLPVaults } from './getMellowLPVaults/getMellowLPVaults';
 import { rejectThunkWithError } from './helpers';
 
-export const vaultInitThunk = createAsyncThunk<
+export const initialiseVaultsThunk = createAsyncThunk<
   Promise<unknown>,
   void,
   {
     state: RootState;
   }
->('ecosystem/vaultInit', async (_, thunkAPI) => {
+>('ecosystem/initialiseVaults', async (_, thunkAPI) => {
   try {
     const { lpVaults } = thunkAPI.getState().ecosystem;
     await Promise.allSettled(
@@ -23,7 +23,7 @@ export const vaultInitThunk = createAsyncThunk<
   }
 });
 
-export const userInitThunk = createAsyncThunk<
+export const initialiseVaultsForSignerThunk = createAsyncThunk<
   Promise<unknown>,
   {
     signer: providers.JsonRpcSigner;
@@ -31,7 +31,7 @@ export const userInitThunk = createAsyncThunk<
   {
     state: RootState;
   }
->('ecosystem/userInit', async ({ signer }, thunkAPI) => {
+>('ecosystem/initialiseVaultsForSigner', async ({ signer }, thunkAPI) => {
   try {
     const { lpVaults, vaultsLoadedState } = thunkAPI.getState().ecosystem;
     if (vaultsLoadedState !== 'succeeded') {
@@ -65,22 +65,22 @@ export const slice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(vaultInitThunk.pending, (state) => {
+      .addCase(initialiseVaultsThunk.pending, (state) => {
         state.vaultsLoadedState = 'pending';
       })
-      .addCase(vaultInitThunk.rejected, (state) => {
+      .addCase(initialiseVaultsThunk.rejected, (state) => {
         state.vaultsLoadedState = 'failed';
       })
-      .addCase(vaultInitThunk.fulfilled, (state) => {
+      .addCase(initialiseVaultsThunk.fulfilled, (state) => {
         state.vaultsLoadedState = 'succeeded';
       })
-      .addCase(userInitThunk.pending, (state) => {
+      .addCase(initialiseVaultsForSignerThunk.pending, (state) => {
         state.signerLoadedState = 'pending';
       })
-      .addCase(userInitThunk.rejected, (state) => {
+      .addCase(initialiseVaultsForSignerThunk.rejected, (state) => {
         state.signerLoadedState = 'failed';
       })
-      .addCase(userInitThunk.fulfilled, (state) => {
+      .addCase(initialiseVaultsForSignerThunk.fulfilled, (state) => {
         state.signerLoadedState = 'succeeded';
       });
   },

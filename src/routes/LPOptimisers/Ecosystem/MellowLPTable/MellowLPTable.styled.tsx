@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import Box from '@mui/system/Box';
 
-import { Grid } from '../../../components/layout/Grid';
+import { Grid } from '../../../../components/layout/Grid';
 
 export const MellowTableBox = styled(Box)`
   display: flex;

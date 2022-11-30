@@ -14,7 +14,7 @@ import {
   TraderPools,
   TradingLeague,
 } from './routes';
-import { EcosystemDeposit } from './routes/EcosystemDeposit/EcosystemDeposit';
+import { EcosystemDeposit } from './routes/LPOptimisers/EcosystemDeposit/EcosystemDeposit';
 import { routes } from './routes/paths';
 import {
   deleteReferrer,

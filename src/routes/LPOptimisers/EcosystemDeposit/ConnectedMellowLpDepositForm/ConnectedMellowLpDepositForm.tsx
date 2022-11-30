@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 
-import { MellowProduct } from '../../../store/features/ecosystem/getMellowLPVaults/config';
+import { MellowProduct } from '../../../../store/features/ecosystem/getMellowLPVaults/config';
 import { MellowLpDepositForm } from '../MellowLpDepositForm/MellowLpDepositForm';
 import { DepositStates, getSubmissionState } from './mappers';
 
 export type ConnectedMellowLpDepositFormProps = {
   vault: MellowProduct;
   onCancel: () => void;
+  loading: boolean;
 };
 
 export const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMellowLpDepositFormProps> =
-  ({ vault, onCancel }) => {
+  ({ loading, vault, onCancel }) => {
     const [selectedDeposit, setSelectedDeposit] = useState<number>(0);
 
     const [depositState, setDepositState] = useState<DepositStates>(DepositStates.INITIALISING);
@@ -81,8 +82,9 @@ export const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMell
 
     return (
       <MellowLpDepositForm
-        disabled={!sufficientFunds || submissionState.disabled}
+        disabled={!sufficientFunds || submissionState.disabled || loading}
         hintText={submissionState.hintText}
+        loading={loading || depositState === DepositStates.INITIALISING}
         lpVault={vault}
         submitText={submissionState.submitText}
         onCancel={onCancel}

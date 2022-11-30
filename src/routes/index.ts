@@ -1,5 +1,5 @@
-export * from './Ecosystem/Ecosystem';
 export * from './FixedBorrower/FixedBorrower';
+export * from './LPOptimisers/Ecosystem/Ecosystem';
 export * from './LPPools/LPPools';
 export * from './LPPortfolio/LPPortfolio';
 export * from './Portfolio/Portfolio';

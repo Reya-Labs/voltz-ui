@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { MellowProduct } from '../../../../../store/features/ecosystem/getMellowLPVaults/config';
-import { VaultField } from '../../../Common/VaultField';
+import { MellowProduct } from '../../../../../../store/features/ecosystem/getMellowLPVaults/config';
+import { VaultField } from '../../../../VaultField/VaultField';
 import MellowLPPosition from '../MellowLPPosition/MellowLPPosition';
 import { Tag } from '../Tag/Tag';
 import {
