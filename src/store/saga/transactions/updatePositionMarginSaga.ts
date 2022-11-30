@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/react';
 import { ContractReceipt, providers } from 'ethers';
 import { DateTime } from 'luxon';
 import { call, put } from 'redux-saga/effects';
@@ -32,6 +33,7 @@ function* updatePositionMarginSaga(action: UpdatePositionMarginAction) {
       fixedHigh: fixedHigh || 999,
     });
   } catch (error) {
+    Sentry.captureException(error);
     yield put(
       actions.updateTransaction({
         id,

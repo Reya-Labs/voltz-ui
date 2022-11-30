@@ -436,20 +436,16 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
     }
 
     if (!isUndefined(margin)) {
-      try {
-        const hasEnoughFunds = await hasEnoughUnderlyingTokens(
-          positionAmm || poolAmm,
-          margin,
-          mode === MintBurnFormModes.ROLLOVER ? position : undefined,
-        );
-        if (!hasEnoughFunds) {
-          valid = false;
-          if (touched.current.includes('margin')) {
-            err['margin'] = 'Insufficient funds';
-          }
+      const hasEnoughFunds = await hasEnoughUnderlyingTokens(
+        positionAmm || poolAmm,
+        margin,
+        mode === MintBurnFormModes.ROLLOVER ? position : undefined,
+      );
+      if (!hasEnoughFunds) {
+        valid = false;
+        if (touched.current.includes('margin')) {
+          err['margin'] = 'Insufficient funds';
         }
-      } catch (e) {
-        // If error, just skip this check
       }
     }
 
@@ -484,20 +480,16 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
     if (marginAction === MintBurnFormMarginAction.ADD) {
       // check user has sufficient funds
       if (!isUndefined(margin) && margin !== 0) {
-        try {
-          const hasEnoughFunds = await hasEnoughUnderlyingTokens(
-            positionAmm || poolAmm,
-            margin,
-            mode === MintBurnFormModes.ROLLOVER ? position : undefined,
-          );
-          if (!hasEnoughFunds) {
-            valid = false;
-            if (touched.current.includes('margin')) {
-              err['margin'] = 'Insufficient funds';
-            }
+        const hasEnoughFunds = await hasEnoughUnderlyingTokens(
+          positionAmm || poolAmm,
+          margin,
+          mode === MintBurnFormModes.ROLLOVER ? position : undefined,
+        );
+        if (!hasEnoughFunds) {
+          valid = false;
+          if (touched.current.includes('margin')) {
+            err['margin'] = 'Insufficient funds';
           }
-        } catch (e) {
-          // If error, just skip this check
         }
       }
     }
@@ -548,20 +540,16 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
     if (liquidityAction === MintBurnFormLiquidityAction.ADD) {
       // check user has sufficient funds
       if (!isUndefined(margin)) {
-        try {
-          const hasEnoughFunds = await hasEnoughUnderlyingTokens(
-            positionAmm || poolAmm,
-            margin,
-            mode === MintBurnFormModes.ROLLOVER ? position : undefined,
-          );
-          if (!hasEnoughFunds) {
-            valid = false;
-            if (touched.current.includes('margin')) {
-              err['margin'] = 'Insufficient funds';
-            }
+        const hasEnoughFunds = await hasEnoughUnderlyingTokens(
+          positionAmm || poolAmm,
+          margin,
+          mode === MintBurnFormModes.ROLLOVER ? position : undefined,
+        );
+        if (!hasEnoughFunds) {
+          valid = false;
+          if (touched.current.includes('margin')) {
+            err['margin'] = 'Insufficient funds';
           }
-        } catch (e) {
-          // If error, just skip this check
         }
       }
     }

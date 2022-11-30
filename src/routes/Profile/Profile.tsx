@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/react';
 import copy from 'copy-to-clipboard';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
@@ -127,7 +128,8 @@ export const Profile: React.FunctionComponent = () => {
       const seasonUserId = getSeasonUserId(wallet.account || '', season.id);
       setCollectionBadges(nextCollectionBadges);
       setCacheValue(seasonUserId, nextCollectionBadges);
-    } catch (err) {
+    } catch (error) {
+      Sentry.captureException(error);
       setClaimButtonModes((prev) => ({
         ...prev,
         [variant]: 'claimError',
@@ -183,7 +185,8 @@ export const Profile: React.FunctionComponent = () => {
         ...p,
         ...getClaimButtonModesForVariants(claimedVariants, 'claimed'),
       }));
-    } catch (err) {
+    } catch (error) {
+      Sentry.captureException(error);
       setClaimButtonBulkMode('claimError');
       setClaimButtonModes((p) => ({
         ...p,
@@ -208,7 +211,8 @@ export const Profile: React.FunctionComponent = () => {
       setTimeout(() => {
         setCopyLinkButtonMode('copy');
       }, 1500);
-    } catch (e) {
+    } catch (error) {
+      Sentry.captureException(error);
       setCopyLinkButtonMode('copyError');
     }
   }

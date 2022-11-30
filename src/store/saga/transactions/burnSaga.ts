@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/react';
 import { ContractReceipt, providers } from 'ethers';
 import { DateTime } from 'luxon';
 import { call, put } from 'redux-saga/effects';
@@ -37,6 +38,7 @@ function* burnSaga(action: BurnAction) {
       notional: burntNotional,
     });
   } catch (error) {
+    Sentry.captureException(error);
     yield put(
       actions.updateTransaction({
         id,

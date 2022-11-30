@@ -1,4 +1,5 @@
 import detectEthereumProvider from '@metamask/detect-provider';
+import * as Sentry from '@sentry/react';
 import WalletConnectProvider from '@walletconnect/ethereum-provider';
 import { ethers } from 'ethers';
 
@@ -89,7 +90,8 @@ export const checkForTOSSignature = async (
       if (!response.ok) {
         throw new Error('Error saving signature');
       }
-    } catch (e) {
+    } catch (error) {
+      Sentry.captureException(error);
       throw new Error('Error processing signature');
     }
   }
@@ -116,9 +118,10 @@ export const getSignature = async (walletAddress: string) => {
     } else {
       throw await resp.text();
     }
-  } catch (e) {
+  } catch (error) {
     // eslint-disable-next-line
-    console.warn('TOS check failed', e);
+    console.warn('TOS check failed', error);
+    Sentry.captureException(error);
     throw new Error(unavailableText);
   }
 };
@@ -174,7 +177,8 @@ export const getWalletProviderMetamask = async () => {
       await provider.send('eth_requestAccounts', []);
 
       return provider;
-    } catch (e) {
+    } catch (error) {
+      Sentry.captureException(error);
       return undefined; // Assume user cancelled
     }
   }
@@ -193,14 +197,16 @@ export const getWalletProviderWalletConnect = async () => {
     provider = new WalletConnectProvider({
       infuraId: process.env.REACT_APP_WALLETCONNECT_INFURA_ID,
     });
-  } catch (e) {
+  } catch (error) {
+    Sentry.captureException(error);
     throw new Error('WalletConnect not available');
   }
 
   // Now try and get the user to log into their wallet
   try {
     await provider.connect(); //  Enable session (triggers QR Code modal)
-  } catch (e) {
+  } catch (error) {
+    Sentry.captureException(error);
     return undefined; // assume user cancelled login
   }
 
@@ -239,9 +245,10 @@ export async function getWalletRiskAssessment(walletId: string) {
     } else {
       throw await result.text();
     }
-  } catch (e) {
+  } catch (error) {
     // eslint-disable-next-line
-    console.warn('Wallet screening failed', e);
+    Sentry.captureException(error);
+    console.warn('Wallet screening failed', error);
     throw new Error(unavailableText);
   }
 }
