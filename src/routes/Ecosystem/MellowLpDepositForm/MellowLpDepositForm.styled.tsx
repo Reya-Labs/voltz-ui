@@ -92,7 +92,7 @@ export const DescriptionTitleTypography = styled(Typography)`
 `;
 
 export const DescriptionBodyTypography = styled(Typography)`
-  font-family: 'DM Sans';
+  font-family: 'DM Sans', sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
