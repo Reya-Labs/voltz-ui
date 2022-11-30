@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/react';
 import { ContractReceipt, providers } from 'ethers';
 import isUndefined from 'lodash/isUndefined';
 import { DateTime } from 'luxon';
@@ -36,6 +37,7 @@ function* settlePositionSaga(action: SettlePositionAction) {
       fixedHigh: fixedHigh,
     });
   } catch (error) {
+    Sentry.captureException(error);
     yield put(
       actions.updateTransaction({
         id,
