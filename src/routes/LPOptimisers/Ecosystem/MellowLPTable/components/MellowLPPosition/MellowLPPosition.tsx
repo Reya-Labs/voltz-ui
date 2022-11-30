@@ -1,7 +1,7 @@
 import isUndefined from 'lodash/isUndefined';
 import React from 'react';
 
-import { formatCurrency } from '../../../../../utilities/number';
+import { formatCurrency } from '../../../../../../utilities/number';
 import {
   DepositButton,
   DepositTypography,

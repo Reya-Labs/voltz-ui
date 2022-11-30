@@ -11,7 +11,7 @@ import {
 
 export const NoVaultFound: React.FunctionComponent = React.memo(() => (
   <ContainerBox>
-    <Heading variant="h1">🧐 OOPS</Heading>
+    <Heading variant="h1">🧐 OOPS!</Heading>
     <Subheading variant="body2">It seems we cannot find the vault you are after!</Subheading>
     <ConnectWalletBox>
       <ConnectWalletTypography variant="body2">

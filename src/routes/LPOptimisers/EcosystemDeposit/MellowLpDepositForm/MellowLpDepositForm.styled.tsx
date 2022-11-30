@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
-import { colors } from '../../../theme';
+import { colors } from '../../../../theme';
 
 export const FormBox = styled(Box)`
   display: flex;
@@ -39,13 +39,12 @@ export const ButtonBox = styled(Box)`
   width: 100%;
 `;
 
-export const SumbitButton = styled(Button)`
+export const SubmitButton = styled(Button)`
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   padding: ${({ theme }) => theme.spacing(4, 6)};
-  gap: ${({ theme }) => theme.spacing(2.5)};
 
   background: #00556d;
   border-radius: 4px;

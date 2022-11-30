@@ -1,11 +1,12 @@
 import isUndefined from 'lodash/isUndefined';
 import React from 'react';
 
-import { IconLabel } from '../../../components/composite/IconLabel/IconLabel';
-import { InputTokenLabel } from '../../../components/composite/InputTokenLabel/InputTokenLabel';
-import { MaskedIntegerField } from '../../../components/composite/MaskedIntegerField/MaskedIntegerField';
-import { MellowProduct } from '../../../store/features/ecosystem/getMellowLPVaults/config';
-import { formatCurrency, toUSFormat } from '../../../utilities/number';
+import { Ellipsis } from '../../../../components/atomic/Ellipsis/Ellipsis';
+import { IconLabel } from '../../../../components/composite/IconLabel/IconLabel';
+import { InputTokenLabel } from '../../../../components/composite/InputTokenLabel/InputTokenLabel';
+import { MaskedIntegerField } from '../../../../components/composite/MaskedIntegerField/MaskedIntegerField';
+import { MellowProduct } from '../../../../store/features/ecosystem/getMellowLPVaults/config';
+import { formatCurrency, toUSFormat } from '../../../../utilities/number';
 import { LPMellowVaultDepositInfo } from './components/LPMellowVaultDepositInfo';
 import {
   BackButton,
@@ -17,7 +18,7 @@ import {
   FullButtonBox,
   HintTextTypography,
   PrefixHintTextSpan,
-  SumbitButton,
+  SubmitButton,
 } from './MellowLpDepositForm.styled';
 
 export type MellowLpDepositFormProps = {
@@ -31,6 +32,7 @@ export type MellowLpDepositFormProps = {
   };
   onSubmit: () => void;
   disabled: boolean;
+  loading: boolean;
   onCancel: () => void;
 };
 
@@ -42,6 +44,7 @@ export const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormPro
   disabled,
   onSubmit,
   onCancel,
+  loading,
 }: MellowLpDepositFormProps) => {
   const subtext = `WALLET BALANCE: ${
     isUndefined(lpVault.vault.userWalletBalance)
@@ -79,9 +82,16 @@ export const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormPro
 
       <FullButtonBox>
         <ButtonBox>
-          <SumbitButton disabled={disabled} onClick={onSubmit}>
-            {submitText}
-          </SumbitButton>
+          <SubmitButton disabled={disabled} onClick={onSubmit}>
+            {loading ? (
+              <>
+                INITIALISING
+                <Ellipsis />
+              </>
+            ) : (
+              submitText
+            )}
+          </SubmitButton>
           <BackButton onClick={onCancel}>BACK</BackButton>
         </ButtonBox>
 

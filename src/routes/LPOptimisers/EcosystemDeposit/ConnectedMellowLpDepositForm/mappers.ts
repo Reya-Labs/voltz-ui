@@ -1,4 +1,4 @@
-import { colors } from '../../../theme';
+import { colors } from '../../../../theme';
 
 export enum DepositStates {
   INITIALISING = 'INITIALISING',
@@ -52,7 +52,7 @@ export const getSubmissionState = ({
   switch (depositState) {
     case DepositStates.INITIALISING: {
       return {
-        submitText: 'Initialising...',
+        submitText: 'Initialising',
         action: () => {},
         hintText: {
           text: 'Initialising, please wait',
