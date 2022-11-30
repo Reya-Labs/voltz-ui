@@ -20,7 +20,6 @@
     "start": "GENERATE_SOURCEMAP=false node scripts/start.js",
     "storybook": "start-storybook -p 6006",
     "test": "jest --silent",
-    "test:ci": "yarn test --ci --coverage",
     "test:watch": "jest --watch",
     "chromatic": "npx chromatic --project-token=e40b8c3e3eea",
     "sdk:add-local": "npx yalc add @voltz-protocol/v1-sdk",

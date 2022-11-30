@@ -18,12 +18,6 @@
   </a>
 </p>
 
-![Branches](./badges/coverage-branches.svg)
-![Functions](./badges/coverage-functions.svg)
-![Lines](./badges/coverage-lines.svg)
-![Statements](./badges/coverage-statements.svg)
-![Jest coverage](./badges/coverage-jest%20coverage.svg)
-
 <p align="center">
 voltz-ui is a frontend repository powered by React. It is the home of all the pages and components that provide the UI/UX for <a href="https://app.voltz.xyz">app.voltz.xyz</a>.
 </p>

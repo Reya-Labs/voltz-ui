@@ -3,7 +3,6 @@
     "src/**/*.{js,jsx,ts,tsx}",
     "!src/**/*.d.ts"
   ],
-  "coverageReporters": ["json-summary"],
   "moduleFileExtensions": [
     "web.js",
     "js",

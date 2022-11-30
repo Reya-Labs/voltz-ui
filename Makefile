@@ -4,7 +4,7 @@ install-ci:
 	yarn --frozen-lockfile --prefer-offline
 
 test:
-	yarn test:ci
+	yarn test
 
 ts-check:
 	yarn ts:check
