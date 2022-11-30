@@ -7,8 +7,8 @@ import { MellowProduct } from '../../store/features/ecosystem/getMellowLPVaults/
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { setPageTitle } from '../../utilities/page';
 import { routes } from '../paths';
-import ConnectedMellowLPTable from './ConnectedMellowLPTable/ConnectedMellowLPTable';
 import { ConnectedMellowBox } from './Ecosystem.styled';
+import { MellowLPTable } from './MellowLPTable/MellowLPTable';
 
 export const Ecosystem: React.FunctionComponent = () => {
   const wallet = useWallet();
@@ -49,9 +49,9 @@ export const Ecosystem: React.FunctionComponent = () => {
 
   return (
     <ConnectedMellowBox>
-      <ConnectedMellowLPTable
+      <MellowLPTable
         dataLoading={vaultsLoaded !== 'succeeded'}
-        lpVaults={lpVaults}
+        mellowProducts={lpVaults}
         onSelectItem={handleSelectMellowLpVault}
       />
     </ConnectedMellowBox>

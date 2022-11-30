@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../store/hooks';
 import { setPageTitle } from '../../utilities/page';
 import { routes } from '../paths';
-import ConnectedMellowLpDepositForm from './ConnectedMellowLpDepositForm/ConnectedMellowLpDepositForm';
+import { ConnectedMellowLpDepositForm } from './ConnectedMellowLpDepositForm/ConnectedMellowLpDepositForm';
 import { ConnectedMellowBox } from './EcosystemDeposit.styled';
 
 export const EcosystemDeposit: React.FunctionComponent = () => {
