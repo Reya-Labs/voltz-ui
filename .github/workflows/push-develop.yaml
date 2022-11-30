@@ -24,6 +24,10 @@ jobs:
         run: make code-quality-check
       - name: Run tests
         run: make test
+      - name: Generating coverage badges
+        uses: jpb06/jest-badges-action@latest
+        with:
+          branches: develop
       - name: Release UI
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PUBLISHING_TOKEN }}
