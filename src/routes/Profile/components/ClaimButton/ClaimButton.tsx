@@ -1,8 +1,8 @@
 import React, { useCallback, useRef, useState } from 'react';
 
+import { BouncedLoading } from '../../../../components/atomic/BouncedLoading/BouncedLoading';
+import { Tick } from '../../../../components/atomic/Tick/Tick';
 import { formatPOSIXTimestamp } from '../../../../utilities/date';
-import { BouncedLoading } from '../BouncedLoading/BouncedLoading';
-import { Tick } from '../Tick/Tick';
 import {
   ClaimButton as ClaimButtonUI,
   ClaimedAtTypography,

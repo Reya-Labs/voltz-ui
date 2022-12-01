@@ -1,8 +1,8 @@
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import React from 'react';
 
-import { BouncedLoading } from '../BouncedLoading/BouncedLoading';
-import { Tick } from '../Tick/Tick';
+import { BouncedLoading } from '../../../../components/atomic/BouncedLoading/BouncedLoading';
+import { Tick } from '../../../../components/atomic/Tick/Tick';
 import {
   CopyLinkButton as CopyLinkButtonUI,
   CopyLinkErrorTypography,
