@@ -26,8 +26,4 @@ jobs:
       - name: Run tests
         run: make test-coverage
       - name: Post test coverage comment
-        uses: raulanatol/jest-coverage-comment-action@main
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          only-changes: false
-          use-existing-reports: true
+        uses: MishaKav/jest-coverage-comment@main
