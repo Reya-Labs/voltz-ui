@@ -6,6 +6,12 @@ install-ci:
 test:
 	yarn test
 
+test-coverage:
+	yarn test:coverage
+
+generate-coverage-badges:
+	yarn generate:coverage-badges
+
 ts-check:
 	yarn ts:check
 
