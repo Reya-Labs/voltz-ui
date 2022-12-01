@@ -24,4 +24,10 @@ jobs:
       - name: Prettier check, Eslint check, Typescript check
         run: make code-quality-check
       - name: Run tests
-        run: make test 
+        run: make test
+      - name: Post test coverage comment
+        uses: raulanatol/jest-coverage-comment-action@main
+        with:
+          github-token: ${{ secrets.GH_PUBLISHING_TOKEN }}
+          jest-command: 'yarn test:coverage'
+          only-changes: false
