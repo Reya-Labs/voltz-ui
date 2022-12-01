@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/react';
 import { AMMRolloverWithSwapArgs } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt, providers } from 'ethers';
 import { DateTime } from 'luxon';
@@ -46,6 +47,7 @@ function* rolloverSwapSaga(action: RolloverSwapAction) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     result = yield call([amm, 'rolloverWithSwap'], args);
   } catch (error) {
+    Sentry.captureException(error);
     yield put(
       actions.updateTransaction({
         id,

@@ -7,7 +7,7 @@ import {
   TitleTypography,
 } from './EcosystemHeader.styled';
 
-const EcosystemHeader: React.FunctionComponent = React.memo(() => (
+export const EcosystemHeader: React.FunctionComponent = React.memo(() => (
   <EcosystemHeaderBox>
     <TitleTypography variant="h1">LP OPTIMISER VAULTS</TitleTypography>
     <DescriptionTypography variant="body1">
@@ -22,5 +22,3 @@ const EcosystemHeader: React.FunctionComponent = React.memo(() => (
     </LearnMoreLink>
   </EcosystemHeaderBox>
 ));
-
-export default EcosystemHeader;

@@ -1,13 +1,18 @@
-import Box from '@mui/material/Box';
 import React from 'react';
 
-import { Typography } from '../../../components/atomic/Typography/Typography';
 import { IconLabel } from '../../../components/composite/IconLabel/IconLabel';
 import { ReactComponent as DAI } from './dai-icon.svg';
 import { ReactComponent as ETH } from './eth-icon.svg';
-import { titleStyles } from './styles';
 import { ReactComponent as USDC } from './usdc-icon.svg';
 import { ReactComponent as USDT } from './usdt-icon.svg';
+import {
+  TitleBox,
+  TitleTypography,
+  VaultApyTypography,
+  VaultFieldBox,
+  VaultMaturityTypography,
+  VaultMetricsBox,
+} from './VaultField.styled';
 
 const getTokenIcon = (token: string) => {
   switch (token) {
@@ -43,24 +48,15 @@ export const VaultField: React.FunctionComponent<VaultFieldProps> = ({
   maturity,
 }: VaultFieldProps) => {
   return (
-    <Box>
-      <Box sx={{ display: 'flex', marginLeft: '8px', marginTop: '16px', alignItems: 'center' }}>
+    <VaultFieldBox>
+      <TitleBox>
         {getTokenIcon(token)}
 
-        <Typography sx={titleStyles} variant="h1">
-          {title}
-        </Typography>
-      </Box>
-      <Box
-        sx={{
-          marginTop: '16px',
-          display: 'flex',
-          flexDirection: 'row',
-          gap: '32px',
-          marginLeft: '8px',
-        }}
-      >
-        <Typography
+        <TitleTypography>{title}</TitleTypography>
+      </TitleBox>
+
+      <VaultMetricsBox>
+        <VaultApyTypography
           label={
             <IconLabel
               icon="information-circle"
@@ -68,19 +64,11 @@ export const VaultField: React.FunctionComponent<VaultFieldProps> = ({
               label="Estimated Historic APY"
             />
           }
-          sx={{
-            fontSize: '24px',
-            color: '#FF4AA9',
-            fontFamily: 'DM Sans',
-            fontWeight: '700',
-            width: '156px',
-          }}
-          variant="body2"
         >
           {expectedApy}
-        </Typography>
+        </VaultApyTypography>
 
-        <Typography
+        <VaultMaturityTypography
           label={
             <IconLabel
               icon="information-circle"
@@ -88,18 +76,10 @@ export const VaultField: React.FunctionComponent<VaultFieldProps> = ({
               label="Maturity"
             />
           }
-          sx={{
-            fontSize: '24px',
-            color: '#E5E1F9',
-            fontFamily: 'DM Sans',
-            fontWeight: '700',
-            width: '130px',
-          }}
-          variant="body2"
         >
           {maturity}
-        </Typography>
-      </Box>
-    </Box>
+        </VaultMaturityTypography>
+      </VaultMetricsBox>
+    </VaultFieldBox>
   );
 };

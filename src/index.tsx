@@ -10,6 +10,8 @@ import './fonts/DM_Sans/DMSans-MediumItalic.woff';
 import './fonts/DM_Sans/DMSans-Regular.woff';
 import './index.css';
 
+import * as Sentry from '@sentry/react';
+import { BrowserTracing } from '@sentry/tracing';
 import { Amplify } from 'aws-amplify';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -28,7 +30,18 @@ try {
   if (process.env.NODE_ENV !== 'development') {
     Amplify.configure(require('./aws-exports'));
   }
-} catch (_error) {}
+} catch (_) {}
+
+Sentry.init({
+  environment: window.location.host,
+  dsn: 'https://89896542d0164e8795cd7ee0504edcb0@o4504239616294912.ingest.sentry.io/4504246851338240',
+  integrations: [new BrowserTracing()],
+  release: `${process.env.APP_NAME || ''}@${process.env.APP_VERSION || ''}`,
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+});
 
 ReactDOM.render(
   <React.StrictMode>

@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/react';
 import axios from 'axios';
 
 import { routes } from '../../routes/paths';
@@ -29,7 +30,8 @@ export const getReferrerLink = async (account: string) => {
     const link = `${window.location.origin}/#/${routes.WELCOME}?${REFERRER_QUERY_PARAM_KEY}=${data.refers_with_code}`;
     cached[account] = link;
     return link;
-  } catch (e) {
+  } catch (error) {
+    Sentry.captureException(error);
     return undefined;
   }
 };

@@ -45,16 +45,12 @@ const Template: ComponentStory<typeof ProfilePageWalletConnected> = (args) => {
   // fake copying
   function handleOnCopyLinkButtonClick() {
     setCopyLinkButtonMode('copying');
-    try {
+    setTimeout(() => {
+      setCopyLinkButtonMode('copied');
       setTimeout(() => {
-        setCopyLinkButtonMode('copied');
-        setTimeout(() => {
-          setCopyLinkButtonMode('copy');
-        }, 1500);
-      }, 3000);
-    } catch (e) {
-      setCopyLinkButtonMode('copyError');
-    }
+        setCopyLinkButtonMode('copy');
+      }, 1500);
+    }, 3000);
   }
 
   function handleOnClaimButtonClick(variant: BadgeVariant) {
