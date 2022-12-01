@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import {
   initialiseVaultsForSignerThunk,
   initialiseVaultsThunk,
+  resetVaultsAction,
 } from '../../store/features/ecosystem';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
@@ -24,8 +25,8 @@ export const useLPVaults = (signer: providers.JsonRpcSigner | null) => {
   }, [shouldInitVaults]);
 
   useEffect(() => {
-    // todo: Costin can we unload vaults if user logs out?
     if (!signer) {
+      dispatch(resetVaultsAction());
       return;
     }
     if (!vaultsInitialised) {

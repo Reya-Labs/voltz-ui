@@ -62,7 +62,12 @@ const initialState: SliceState = {
 export const slice = createSlice({
   name: 'ecosystem',
   initialState,
-  reducers: {},
+  reducers: {
+    resetVaultsAction: (state) => {
+      // todo: Filip and Costin fix this by not keeping SDK stuff in UI
+      state.lpVaults = getMellowLPVaults() as never;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(initialiseVaultsThunk.pending, (state) => {
@@ -86,4 +91,5 @@ export const slice = createSlice({
   },
 });
 
+export const { resetVaultsAction } = slice.actions;
 export const ecosystemReducer = slice.reducer;
