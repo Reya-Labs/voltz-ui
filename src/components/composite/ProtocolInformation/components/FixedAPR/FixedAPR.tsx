@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box';
 import isUndefined from 'lodash/isUndefined';
 import React from 'react';
 
@@ -16,15 +15,12 @@ export const FixedAPR: React.FunctionComponent<FixedAPRProps> = ({ agent, fixedA
   return (
     <Typography
       agent={agent}
+      data-testid="FixedAPR"
       label={<IconLabel icon="information-circle" info="something" label="fixed apr" removeIcon />}
       variant="h3"
       agentStyling
     >
-      {isUndefined(fixedApr) ? (
-        <Box sx={{ fontSize: 18 }}>Loading...</Box>
-      ) : (
-        `${formatNumber(fixedApr)}%`
-      )}
+      {isUndefined(fixedApr) ? 'Loading...' : `${formatNumber(fixedApr)}%`}
     </Typography>
   );
 };

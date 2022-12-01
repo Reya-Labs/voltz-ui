@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box';
 import isUndefined from 'lodash/isUndefined';
 import React from 'react';
 
@@ -15,7 +14,7 @@ export type VariableAPYProps = {
 export const VariableAPY: React.FunctionComponent<VariableAPYProps> = ({ agent, variableApy }) => {
   const renderValue = () => {
     if (isUndefined(variableApy)) {
-      return <Box sx={{ fontSize: 18 }}>Loading...</Box>;
+      return 'Loading...';
     }
 
     return `${formatNumber(variableApy * 100)}%`;
@@ -24,8 +23,10 @@ export const VariableAPY: React.FunctionComponent<VariableAPYProps> = ({ agent, 
   return (
     <Typography
       agent={agent}
+      data-testid="VariableAPY"
       label={
         <IconLabel
+          data-testid="VariableAPY-Icon"
           icon="information-circle"
           info="The historical Annual Percentage Yield of the pool. The value is computed by aggregating the historical rates of the underlying rate oracle over a fixed look-back window."
           label="variable apy"
