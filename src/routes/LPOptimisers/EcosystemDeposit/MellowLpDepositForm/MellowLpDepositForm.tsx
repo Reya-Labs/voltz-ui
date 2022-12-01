@@ -7,6 +7,7 @@ import { InputTokenLabel } from '../../../../components/composite/InputTokenLabe
 import { MaskedIntegerField } from '../../../../components/composite/MaskedIntegerField/MaskedIntegerField';
 import { MellowProduct } from '../../../../store/features/ecosystem/getMellowLPVaults/config';
 import { formatCurrency, toUSFormat } from '../../../../utilities/number';
+import { DepositButton } from '../DepositButton/DepositButton';
 import { LPMellowVaultDepositInfo } from './components/LPMellowVaultDepositInfo';
 import {
   BackButton,
@@ -18,7 +19,6 @@ import {
   FullButtonBox,
   HintTextTypography,
   PrefixHintTextSpan,
-  SubmitButton,
 } from './MellowLpDepositForm.styled';
 
 export type MellowLpDepositFormProps = {
@@ -33,6 +33,7 @@ export type MellowLpDepositFormProps = {
   onSubmit: () => void;
   disabled: boolean;
   loading: boolean;
+  success: boolean;
   onCancel: () => void;
 };
 
@@ -45,6 +46,7 @@ export const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormPro
   onSubmit,
   onCancel,
   loading,
+  success,
 }: MellowLpDepositFormProps) => {
   const subtext = `WALLET BALANCE: ${
     isUndefined(lpVault.vault.userWalletBalance)
@@ -82,20 +84,13 @@ export const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormPro
 
       <FullButtonBox>
         <ButtonBox>
-          <SubmitButton disabled={disabled} onClick={onSubmit}>
-            {loading ? (
-              <>
-                INITIALISING
-                <Ellipsis />
-              </>
-            ) : (
-              submitText
-            )}
-          </SubmitButton>
+          <DepositButton disabled={disabled} loading={loading} success={success} onClick={onSubmit}>
+            {submitText}
+          </DepositButton>
           <BackButton onClick={onCancel}>BACK</BackButton>
         </ButtonBox>
 
-        <HintText {...hintText} />
+        <HintText {...hintText} loading={loading} />
       </FullButtonBox>
 
       <DescriptionBox>
@@ -116,10 +111,13 @@ const HintText: React.FunctionComponent<{
   text: string;
   suffixText?: string;
   textColor?: string;
-}> = ({ text, suffixText, textColor }) => {
+  loading: boolean;
+}> = ({ loading, text, suffixText, textColor }) => {
   return (
     <HintTextTypography>
-      <PrefixHintTextSpan color={textColor}>{text}</PrefixHintTextSpan>
+      <PrefixHintTextSpan color={textColor}>
+        {text} {loading ? <Ellipsis /> : null}
+      </PrefixHintTextSpan>
       {suffixText ? ` ${suffixText}` : null}
     </HintTextTypography>
   );

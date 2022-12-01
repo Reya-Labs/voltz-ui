@@ -60,7 +60,7 @@ export const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMell
           }
         },
         (err: Error) => {
-          setError(`Error occured while retrieving information. ${err.message ?? ''}`);
+          setError(`Error occurred while retrieving information. ${err.message ?? ''}`);
           setDepositState(DepositStates.PROVIDER_ERROR);
         },
       );
@@ -74,6 +74,7 @@ export const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMell
       sufficientFunds,
       error,
       tokenName: vault.metadata.token,
+      loading,
     });
 
     const onChangeDeposit = (value: number | undefined): void => {
@@ -84,9 +85,10 @@ export const ConnectedMellowLpDepositForm: React.FunctionComponent<ConnectedMell
       <MellowLpDepositForm
         disabled={!sufficientFunds || submissionState.disabled || loading}
         hintText={submissionState.hintText}
-        loading={loading || depositState === DepositStates.INITIALISING}
+        loading={submissionState.loading}
         lpVault={vault}
         submitText={submissionState.submitText}
+        success={submissionState.success}
         onCancel={onCancel}
         onChangeDeposit={onChangeDeposit}
         onSubmit={submissionState.action}

@@ -12,23 +12,7 @@ export enum DepositStates {
   DEPOSIT_DONE = 'DEPOSIT_DONE',
 }
 
-export const getSubmissionState = ({
-  depositState,
-  deposit,
-  approve,
-  selectedDeposit,
-  sufficientFunds,
-  error,
-  tokenName,
-}: {
-  depositState: DepositStates;
-  deposit: () => void;
-  approve: () => void;
-  selectedDeposit: number;
-  sufficientFunds: boolean;
-  error: string;
-  tokenName: string;
-}): {
+type SubmissionState = {
   submitText: string;
   hintText: {
     text: string;
@@ -37,7 +21,29 @@ export const getSubmissionState = ({
   };
   action: () => void;
   disabled: boolean;
-} => {
+  loading: boolean;
+  success: boolean;
+};
+
+export const getSubmissionState = ({
+  depositState,
+  deposit,
+  approve,
+  selectedDeposit,
+  sufficientFunds,
+  error,
+  tokenName,
+  loading,
+}: {
+  depositState: DepositStates;
+  deposit: () => void;
+  approve: () => void;
+  selectedDeposit: number;
+  sufficientFunds: boolean;
+  error: string;
+  tokenName: string;
+  loading: boolean;
+}): SubmissionState => {
   if (!sufficientFunds) {
     return {
       submitText: 'Deposit',
@@ -46,19 +52,28 @@ export const getSubmissionState = ({
         text: 'Insufficient Funds',
         textColor: colors.vzCustomRed1.base,
       },
+      loading: false,
       disabled: true,
+      success: false,
     };
   }
+  const initialisingState: SubmissionState = {
+    submitText: 'Initialising',
+    action: () => {},
+    hintText: {
+      text: 'Initialising, please wait',
+    },
+    loading: true,
+    disabled: true,
+    success: false,
+  };
+  if (loading) {
+    return initialisingState;
+  }
+  debugger;
   switch (depositState) {
     case DepositStates.INITIALISING: {
-      return {
-        submitText: 'Initialising',
-        action: () => {},
-        hintText: {
-          text: 'Initialising, please wait',
-        },
-        disabled: true,
-      };
+      return initialisingState;
     }
     case DepositStates.PROVIDER_ERROR: {
       return {
@@ -68,7 +83,9 @@ export const getSubmissionState = ({
           text: error,
           textColor: colors.vzCustomRed1.base,
         },
+        loading: false,
         disabled: true,
+        success: false,
       };
     }
     case DepositStates.APPROVE_FAILED: {
@@ -79,7 +96,9 @@ export const getSubmissionState = ({
           text: error,
           textColor: colors.vzCustomRed1.base,
         },
+        loading: false,
         disabled: false,
+        success: false,
       };
     }
     case DepositStates.DEPOSIT_FAILED: {
@@ -90,7 +109,9 @@ export const getSubmissionState = ({
           text: error,
           textColor: colors.vzCustomRed1.base,
         },
+        loading: false,
         disabled: false,
+        success: false,
       };
     }
     case DepositStates.APPROVE_REQUIRED: {
@@ -100,17 +121,21 @@ export const getSubmissionState = ({
         hintText: {
           text: `Please approve ${tokenName}`,
         },
+        loading: false,
         disabled: false,
+        success: false,
       };
     }
     case DepositStates.APPROVING: {
       return {
-        submitText: 'Approving...',
+        submitText: 'Approving',
         action: () => {},
         hintText: {
           text: 'Waiting for confirmation',
         },
+        loading: true,
         disabled: true,
+        success: false,
       };
     }
     case DepositStates.APPROVED: {
@@ -127,28 +152,34 @@ export const getSubmissionState = ({
             : {
                 text: 'Please input amount',
               },
+        loading: false,
         disabled: !(selectedDeposit > 0),
+        success: false,
       };
     }
     case DepositStates.DEPOSITING: {
       return {
-        submitText: 'Depositing...',
+        submitText: 'Depositing',
         action: () => {},
         hintText: {
           text: 'Waiting for confirmation',
         },
+        loading: true,
         disabled: true,
+        success: false,
       };
     }
     case DepositStates.DEPOSIT_DONE: {
       return {
-        submitText: 'Deposit',
+        submitText: 'Deposited',
         action: deposit,
         hintText: {
           text: 'Deposited',
           textColor: colors.vzCustomGreen1.base,
         },
+        loading: false,
         disabled: false,
+        success: true,
       };
     }
   }

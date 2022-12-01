@@ -25,8 +25,11 @@ export const useLPVaults = (signer: providers.JsonRpcSigner | null) => {
   }, [shouldInitVaults]);
 
   useEffect(() => {
-    if (!signer) {
+    if (!signer && vaultsInitialised) {
       dispatch(resetVaultsAction());
+      return;
+    }
+    if (!signer) {
       return;
     }
     if (!vaultsInitialised) {

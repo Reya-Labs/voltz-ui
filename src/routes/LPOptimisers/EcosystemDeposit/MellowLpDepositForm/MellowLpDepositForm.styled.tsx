@@ -39,20 +39,6 @@ export const ButtonBox = styled(Box)`
   width: 100%;
 `;
 
-export const SubmitButton = styled(Button)`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: ${({ theme }) => theme.spacing(4, 6)};
-
-  background: #00556d;
-  border-radius: 4px;
-
-  color: ${colors.skyBlueCrayola.base};
-  flex: 1;
-`;
-
 export const BackButton = styled(Button)`
   display: flex;
   flex-direction: row;
