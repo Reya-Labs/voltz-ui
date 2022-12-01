@@ -26,6 +26,9 @@ const Template: ComponentStory<typeof DepositButton> = (args) => (
 
 export const Default = Template.bind({});
 const args: React.ComponentProps<typeof DepositButton> = {
-  mode: 'copy',
+  disabled: false,
+  success: false,
+  loading: false,
+  children: 'Deposit',
 };
 Default.args = args;

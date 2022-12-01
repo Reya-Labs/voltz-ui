@@ -19,19 +19,39 @@ export const getENSDetails = async (address?: string | null): Promise<ENSDetails
   if (CACHED_ENS[address] !== undefined) {
     return CACHED_ENS[address];
   }
+
   const provider = new ethers.providers.Web3Provider(window.ethereum as never);
-  const name = await provider.lookupAddress(address);
+  let name;
+  try {
+    name = await provider.lookupAddress(address);
+  } catch (err) {
+    name = null;
+  }
+
   if (!name) {
     CACHED_ENS[address] = null;
     return null;
   }
-  const resolver = await provider.getResolver(name);
+
+  let resolver;
+  try {
+    resolver = await provider.getResolver(name);
+  } catch (err) {
+    resolver = null;
+  }
+
   if (!resolver) {
     CACHED_ENS[address] = null;
     return null;
   }
 
-  const avatar = await resolver?.getAvatar();
+  let avatar;
+  try {
+    avatar = await resolver?.getAvatar();
+  } catch (err) {
+    avatar = null;
+  }
+
   const result = {
     name: name,
     avatarUrl: avatar?.url,
