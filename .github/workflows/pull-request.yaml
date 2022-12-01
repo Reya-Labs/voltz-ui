@@ -28,6 +28,6 @@ jobs:
       - name: Post test coverage comment
         uses: raulanatol/jest-coverage-comment-action@main
         with:
-          github-token: ${{ secrets.GH_PUBLISHING_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           only-changes: false
           use-existing-reports: true
