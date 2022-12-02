@@ -73,6 +73,11 @@ function getClientEnvironment(publicUrl) {
         APP_VERSION: packageJsonVersion,
         // Application name
         APP_NAME: packageJsonName,
+        // Sentry DSN
+        SENTRY_DSN:
+          'https://89896542d0164e8795cd7ee0504edcb0@o4504239616294912.ingest.sentry.io/4504246851338240',
+        // Sentry release
+        SENTRY_RELEASE: `${packageJsonName}@${packageJsonVersion}`,
         // Useful for determining whether we’re running in production mode.
         // Most importantly, it switches React into the correct mode.
         NODE_ENV: process.env.NODE_ENV || 'development',

@@ -1,10 +1,10 @@
-import * as Sentry from '@sentry/react';
 import { AMMRolloverWithSwapArgs } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt, providers } from 'ethers';
 import { DateTime } from 'luxon';
 import { call, put } from 'redux-saga/effects';
 
 import { getErrorMessage } from '../../../../../utilities/getErrorMessage';
+import { sentryTracker } from '../../../../../utilities/sentry';
 import { RolloverSwapAction } from '../../../../types';
 import * as actions from '../../actions';
 import { deserializeAmm, getSigner } from '../../utilities';
@@ -47,7 +47,7 @@ function* rolloverSwapSaga(action: RolloverSwapAction) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     result = yield call([amm, 'rolloverWithSwap'], args);
   } catch (error) {
-    Sentry.captureException(error);
+    sentryTracker.captureException(error);
     yield put(
       actions.updateTransaction({
         id,

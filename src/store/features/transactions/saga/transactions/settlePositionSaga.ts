@@ -1,10 +1,10 @@
-import * as Sentry from '@sentry/react';
 import { ContractReceipt, providers } from 'ethers';
 import isUndefined from 'lodash/isUndefined';
 import { DateTime } from 'luxon';
 import { call, put } from 'redux-saga/effects';
 
 import { getErrorMessage } from '../../../../../utilities/getErrorMessage';
+import { sentryTracker } from '../../../../../utilities/sentry';
 import { SettlePositionAction } from '../../../../types';
 import * as actions from '../../actions';
 import { deserializeAmm, getSigner } from '../../utilities';
@@ -37,7 +37,7 @@ function* settlePositionSaga(action: SettlePositionAction) {
       fixedHigh: fixedHigh,
     });
   } catch (error) {
-    Sentry.captureException(error);
+    sentryTracker.captureException(error);
     yield put(
       actions.updateTransaction({
         id,
