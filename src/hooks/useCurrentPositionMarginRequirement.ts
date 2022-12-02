@@ -1,7 +1,8 @@
-import * as Sentry from '@sentry/react';
 import { AMM } from '@voltz-protocol/v1-sdk';
 import isUndefined from 'lodash/isUndefined';
 import { useEffect, useState } from 'react';
+
+import { sentryTracker } from '../utilities/sentry';
 
 export const useCurrentPositionMarginRequirement = (
   amm: AMM,
@@ -19,7 +20,7 @@ export const useCurrentPositionMarginRequirement = (
           const mrm = await amm.getPositionMarginRequirement(fixedRateLower, fixedRateUpper);
           setCurrentPositionMarginRequirement(mrm);
         } catch (e) {
-          Sentry.captureException(e);
+          sentryTracker.captureException(e);
           setCurrentPositionMarginRequirement(undefined);
         }
       } else {

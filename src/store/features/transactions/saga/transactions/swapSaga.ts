@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import * as Sentry from '@sentry/react';
 import { ContractReceipt, providers } from 'ethers';
 import { DateTime } from 'luxon';
 import { call, put } from 'redux-saga/effects';
 
 import { Agents } from '../../../../../contexts/AgentContext/types';
 import { getErrorMessage } from '../../../../../utilities/getErrorMessage';
+import { sentryTracker } from '../../../../../utilities/sentry';
 import { SwapAction } from '../../../../types';
 import * as actions from '../../actions';
 import { deserializeAmm, getSigner } from '../../utilities';
@@ -40,7 +40,7 @@ function* swapSaga(action: SwapAction) {
       fullyCollateralisedVTSwap: fullyCollateralisedVTSwap,
     });
   } catch (error) {
-    Sentry.captureException(error);
+    sentryTracker.captureException(error);
     yield put(
       actions.updateTransaction({
         id,

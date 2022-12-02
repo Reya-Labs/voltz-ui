@@ -1,7 +1,8 @@
-import * as Sentry from '@sentry/react';
 import { AMM } from '@voltz-protocol/v1-sdk';
 import isUndefined from 'lodash/isUndefined';
 import { useCallback, useEffect, useState } from 'react';
+
+import { sentryTracker } from '../utilities/sentry';
 
 export enum ApprovalType {
   UTOKEN_PERIPHERY = 'UnderlyingTokenPeriphery',
@@ -61,7 +62,7 @@ export const useTokenApproval = (amm: AMM) => {
       setLastApproval({ text: amm.underlyingToken.name, type: ApprovalType.UTOKEN_PERIPHERY });
       setApproving(false);
     } catch (e) {
-      Sentry.captureException(e);
+      sentryTracker.captureException(e);
       handleApprovalError(e as ApprovalErrorResponse);
       setUnderlyingTokenApprovedForPeriphery(false);
       setApproving(false);

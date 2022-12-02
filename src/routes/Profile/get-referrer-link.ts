@@ -1,8 +1,8 @@
-import * as Sentry from '@sentry/react';
 import axios from 'axios';
 
 import { routes } from '../../routes/paths';
 import { REFERRER_QUERY_PARAM_KEY } from '../../utilities/referrer-store/referrer-store';
+import { sentryTracker } from '../../utilities/sentry';
 
 const cached: Record<string, string> = {};
 export const getReferrerLink = async (account: string) => {
@@ -31,7 +31,7 @@ export const getReferrerLink = async (account: string) => {
     cached[account] = link;
     return link;
   } catch (error) {
-    Sentry.captureException(error);
+    sentryTracker.captureException(error);
     return undefined;
   }
 };
