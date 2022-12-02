@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { sentryTracker } from '../utilities/sentry';
+import { getSentryTracker } from '../utilities/sentry';
 import { useDebounceFunc } from './useDebounceFunc';
 
 export type UseAsyncFunctionResult<ArgsType, ResultType> = {
@@ -56,7 +56,7 @@ export const useAsyncFunction = <ArgsType, ResultType>(
       } else {
         setErrorMessage('Unrecognized Error');
       }
-      sentryTracker.captureException(_error);
+      getSentryTracker().captureException(_error);
       setResult(null);
     }
 

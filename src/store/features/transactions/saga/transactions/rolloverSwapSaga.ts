@@ -4,7 +4,7 @@ import { DateTime } from 'luxon';
 import { call, put } from 'redux-saga/effects';
 
 import { getErrorMessage } from '../../../../../utilities/getErrorMessage';
-import { sentryTracker } from '../../../../../utilities/sentry';
+import { getSentryTracker } from '../../../../../utilities/sentry';
 import { RolloverSwapAction } from '../../../../types';
 import * as actions from '../../actions';
 import { deserializeAmm, getSigner } from '../../utilities';
@@ -47,7 +47,7 @@ function* rolloverSwapSaga(action: RolloverSwapAction) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     result = yield call([amm, 'rolloverWithSwap'], args);
   } catch (error) {
-    sentryTracker.captureException(error);
+    getSentryTracker().captureException(error);
     yield put(
       actions.updateTransaction({
         id,

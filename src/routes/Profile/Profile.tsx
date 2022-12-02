@@ -8,7 +8,7 @@ import { usePastSeasons } from '../../hooks/season/usePastSeasons';
 import { useWallet } from '../../hooks/useWallet';
 import { getENSDetails } from '../../utilities/getENSDetails';
 import { setPageTitle } from '../../utilities/page';
-import { sentryTracker } from '../../utilities/sentry';
+import { getSentryTracker } from '../../utilities/sentry';
 import { ClaimButtonProps } from './components/ClaimButton/ClaimButton';
 import { CopyLinkButtonProps } from './components/CopyLinkButton/CopyLinkButton';
 import { ProfilePageNoWallet } from './components/ProfilePageNoWallet/ProfilePageNoWallet';
@@ -129,7 +129,7 @@ export const Profile: React.FunctionComponent = () => {
       setCollectionBadges(nextCollectionBadges);
       setCacheValue(seasonUserId, nextCollectionBadges);
     } catch (error) {
-      sentryTracker.captureException(error);
+      getSentryTracker().captureException(error);
       setClaimButtonModes((prev) => ({
         ...prev,
         [variant]: 'claimError',
@@ -186,7 +186,7 @@ export const Profile: React.FunctionComponent = () => {
         ...getClaimButtonModesForVariants(claimedVariants, 'claimed'),
       }));
     } catch (error) {
-      sentryTracker.captureException(error);
+      getSentryTracker().captureException(error);
       setClaimButtonBulkMode('claimError');
       setClaimButtonModes((p) => ({
         ...p,
@@ -212,7 +212,7 @@ export const Profile: React.FunctionComponent = () => {
         setCopyLinkButtonMode('copy');
       }, 1500);
     } catch (error) {
-      sentryTracker.captureException(error);
+      getSentryTracker().captureException(error);
       setCopyLinkButtonMode('copyError');
     }
   }

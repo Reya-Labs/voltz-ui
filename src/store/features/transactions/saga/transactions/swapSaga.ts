@@ -6,7 +6,7 @@ import { call, put } from 'redux-saga/effects';
 
 import { Agents } from '../../../../../contexts/AgentContext/types';
 import { getErrorMessage } from '../../../../../utilities/getErrorMessage';
-import { sentryTracker } from '../../../../../utilities/sentry';
+import { getSentryTracker } from '../../../../../utilities/sentry';
 import { SwapAction } from '../../../../types';
 import * as actions from '../../actions';
 import { deserializeAmm, getSigner } from '../../utilities';
@@ -40,7 +40,7 @@ function* swapSaga(action: SwapAction) {
       fullyCollateralisedVTSwap: fullyCollateralisedVTSwap,
     });
   } catch (error) {
-    sentryTracker.captureException(error);
+    getSentryTracker().captureException(error);
     yield put(
       actions.updateTransaction({
         id,

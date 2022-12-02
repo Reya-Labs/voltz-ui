@@ -1,7 +1,8 @@
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 import isUndefined from 'lodash/isUndefined';
 
-import { sentryTracker } from './sentry';
+import { getSentryTracker } from './sentry';
+
 /**
  * Checks if the user has enough underlying tokens.
  * Returns boolean if validation was able to proceed, undefined if not.
@@ -26,7 +27,7 @@ export const hasEnoughUnderlyingTokens = async (
           : undefined,
       );
     } catch (error) {
-      sentryTracker.captureException(error);
+      getSentryTracker().captureException(error);
     }
   }
 };

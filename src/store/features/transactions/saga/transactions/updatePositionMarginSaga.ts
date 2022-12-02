@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import { call, put } from 'redux-saga/effects';
 
 import { getErrorMessage } from '../../../../../utilities/getErrorMessage';
-import { sentryTracker } from '../../../../../utilities/sentry';
+import { getSentryTracker } from '../../../../../utilities/sentry';
 import { UpdatePositionMarginAction } from '../../../../types';
 import * as actions from '../../actions';
 import { deserializeAmm, getSigner } from '../../utilities';
@@ -33,7 +33,7 @@ function* updatePositionMarginSaga(action: UpdatePositionMarginAction) {
       fixedHigh: fixedHigh || 999,
     });
   } catch (error) {
-    sentryTracker.captureException(error);
+    getSentryTracker().captureException(error);
     yield put(
       actions.updateTransaction({
         id,
