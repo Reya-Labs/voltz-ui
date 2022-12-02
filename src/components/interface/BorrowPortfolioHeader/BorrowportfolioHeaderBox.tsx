@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 
-import { SystemStyleObject, Theme } from '../../../theme';
+import { colors, SystemStyleObject, Theme } from '../../../theme';
 import { formatCurrency } from '../../../utilities/number';
 import { Typography } from '../../atomic/Typography/Typography';
 

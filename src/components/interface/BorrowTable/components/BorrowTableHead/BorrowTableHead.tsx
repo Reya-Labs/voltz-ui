@@ -4,8 +4,9 @@ import TableRow from '@mui/material/TableRow';
 import { SystemStyleObject, Theme } from '@mui/system';
 import React from 'react';
 
-import { VariableBorrowTableFields, FixedBorrowTableFields } from '../../types';
-import { colors } from '@theme';
+import { colors } from '../../../../../theme';
+import { Typography } from '../../../../atomic/Typography/Typography';
+import { FixedBorrowTableFields, VariableBorrowTableFields } from '../../types';
 
 export type BorrowTableHeadProps = {
   labels: [VariableBorrowTableFields | FixedBorrowTableFields, string][];

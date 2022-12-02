@@ -73,7 +73,7 @@ export const TransactionListItem = ({
   return (
     <ListItem sx={rowStyles}>
       <Box sx={cellStyles}>
-        <Typography variant="body2" sx={{ color: colors.lavenderWeb3, textTransform: 'uppercase' }}>
+        <Typography sx={{ color: colors.lavenderWeb3, textTransform: 'uppercase' }} variant="body2">
           {data.date}
         </Typography>
       </Box>
@@ -82,8 +82,8 @@ export const TransactionListItem = ({
       </Box>
       <Box sx={cellStyles}>
         <Typography
-          variant="body2"
           sx={isLiquidation ? { color: colors.wildStrawberry } : undefined}
+          variant="body2"
         >
           {data.label}
         </Typography>
@@ -94,8 +94,8 @@ export const TransactionListItem = ({
             {item.label}
           </Typography>
           <Typography
-            variant="body2"
             sx={isLiquidation ? { color: colors.wildStrawberry } : undefined}
+            variant="body2"
           >
             {item.value}
           </Typography>

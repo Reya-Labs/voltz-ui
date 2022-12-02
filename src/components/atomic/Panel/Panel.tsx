@@ -46,36 +46,36 @@ export const Panel: React.FunctionComponent<PanelProps> = React.forwardRef(
             backgroundColor: `secondary.darken050`,
           };
 
-      case 'iconLabel':
-        return {
-          borderRadius: 1,
-          padding: (theme) => `${theme.spacing(3)} ${theme.spacing(4)}`,
-          maxWidth: 200,
-          backgroundColor: colors.liberty7,
-          borderColor: colors.liberty3,
-          borderStyle: 'solid',
-          boxShadow: '0px 4px 15px rgba(229, 225, 249, 0.1)',
-          '& > *': {
-            color: `${variant}.light`,
-          },
-        };
+        case 'iconLabel':
+          return {
+            borderRadius: 1,
+            padding: (theme) => `${theme.spacing(3)} ${theme.spacing(4)}`,
+            maxWidth: 200,
+            backgroundColor: colors.liberty7,
+            borderColor: colors.liberty3,
+            borderStyle: 'solid',
+            boxShadow: '0px 4px 15px rgba(229, 225, 249, 0.1)',
+            '& > *': {
+              color: `${variant}.light`,
+            },
+          };
 
-      case 'error':
-        return {
-          background: 'transparent',
-          border: `2px dashed ${colors.wildStrawberry}`,
-          borderColor: colors.wildStrawberry,
-          color: colors.wildStrawberry,
-          textAlign: 'center',
-        };
+        case 'error':
+          return {
+            background: 'transparent',
+            border: `2px dashed ${colors.wildStrawberry}`,
+            borderColor: colors.wildStrawberry,
+            color: colors.wildStrawberry,
+            textAlign: 'center',
+          };
 
-      case 'grey-dashed':
-        return {
-          background: 'transparent',
-          border: `2px dashed ${colors.lavenderWeb6}`,
-          borderColor: colors.lavenderWeb6,
-          textAlign: 'center',
-        };
+        case 'grey-dashed':
+          return {
+            background: 'transparent',
+            border: `2px dashed ${colors.lavenderWeb6}`,
+            borderColor: colors.lavenderWeb6,
+            textAlign: 'center',
+          };
 
         default:
           return {

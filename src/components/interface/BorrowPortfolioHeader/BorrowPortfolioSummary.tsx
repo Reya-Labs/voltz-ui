@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 
-import { SystemStyleObject, Theme } from '../../../theme';
+import { colors, SystemStyleObject, Theme } from '../../../theme';
 import { formatCurrency, formatNumber } from '../../../utilities/number';
 import { Typography } from '../../atomic/Typography/Typography';
 
@@ -72,7 +72,7 @@ export const BorrowPortfolioSummary = ({
     if (debt !== undefined && percentage !== undefined) {
       return (
         <Box sx={{ display: 'flex', justifyContent: justify, textAlign: align }}>
-          {currencySymbol + formatCurrency(debt, true, false, 2, 2) + ' ' + currencyCode}
+          {`${currencySymbol + formatCurrency(debt, true, false, 2, 2)} ${currencyCode}`}
           <Box sx={{ color: colors.lavenderWeb2, fontWeight: 400 }}>
             {' '}
             &nbsp;

@@ -1,6 +1,7 @@
 import { styled } from '@mui/material/styles';
-import Typography from '../Typography/Typography';
-import { colors } from '@theme';
+
+import { colors } from '../../../theme';
+import { Typography } from '../Typography/Typography';
 
 export const PillTypography = styled(Typography)`
   font-size: 14px;

@@ -12,12 +12,12 @@ export const LearnMoreLink = styled('a')`
   font-size: 18px;
   line-height: 14px;
   letter-spacing: 0.02em;
-  color: ${colors.skyBlueCrayola.base};
+  color: ${colors.skyBlueCrayola};
 
   &:visited,
   &:hover,
   &:active {
-    color: ${colors.skyBlueCrayola.base};
+    color: ${colors.skyBlueCrayola};
   }
 `;
 
@@ -30,13 +30,13 @@ export const HeaderBox = styled(Box)`
 export const TitleTypography = styled(Typography)`
   font-size: 40px;
   line-height: 1.2;
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
   font-weight: 700;
   margin-bottom: ${({ theme }) => theme.spacing(2)};
 `;
 
 export const DescriptionTypography = styled(Typography)`
   font-size: 14px;
-  color: ${colors.lavenderWeb.darken015};
+  color: ${colors.lavenderWeb2};
   margin-bottom: ${({ theme }) => theme.spacing(4)};
 `;

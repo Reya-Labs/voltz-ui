@@ -6,6 +6,7 @@ import React, { useEffect } from 'react';
 import { useBorrowAMMContext } from '../../../../../contexts/BorrowAMMContext/BorrowAMMContext';
 import { usePositionContext } from '../../../../../contexts/PositionContext/PositionContext';
 import { useWallet } from '../../../../../hooks/useWallet';
+import { colors } from '../../../../../theme';
 import { Button } from '../../../../atomic/Button/Button';
 import { PoolField } from '../../../../composite/PoolField/PoolField';
 import { BorrowAMMTableDatum, labelsFixed, labelsVariable } from '../../types';

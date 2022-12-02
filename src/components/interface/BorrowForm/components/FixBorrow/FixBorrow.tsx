@@ -66,8 +66,8 @@ export const FixBorrow: React.FunctionComponent<FixBorrowProps> = ({
 
         <Box>
           <Typography
-            variant="body2"
             sx={{ fontSize: 20, fontWeight: 700, color: colors.skyBlueCrayola }}
+            variant="body2"
           >
             {renderValue()}
           </Typography>

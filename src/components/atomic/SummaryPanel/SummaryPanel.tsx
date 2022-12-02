@@ -39,7 +39,7 @@ export const SummaryPanel = ({ label, loading, rows }: SummaryPanelProps) => {
 
   if (loading) {
     return (
-      <Typography variant="body2" sx={{ color: colors.skyBlueCrayola }}>
+      <Typography sx={{ color: colors.skyBlueCrayola }} variant="body2">
         Loading...
       </Typography>
     );

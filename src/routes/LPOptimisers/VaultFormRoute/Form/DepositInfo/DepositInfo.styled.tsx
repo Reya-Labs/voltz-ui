@@ -48,7 +48,7 @@ export const PositionValueTypography = styled(Typography)`
 
   letter-spacing: 0.02em;
 
-  color: ${colors.skyBlueCrayola.base};
+  color: ${colors.skyBlueCrayola};
 `;
 
 export const PendingDepositTypography = styled(Typography)`

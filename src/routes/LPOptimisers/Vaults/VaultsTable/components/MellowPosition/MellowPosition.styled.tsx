@@ -47,7 +47,7 @@ export const DepositButton = styled(Button)`
   background: #38305b;
   border-radius: 0px 0px 8px 0px;
   padding: ${({ theme }) => theme.spacing(2.5)};
-  color: ${colors.skyBlueCrayola.base};
+  color: ${colors.skyBlueCrayola};
   font-size: 14px;
   line-height: 20px;
   box-shadow: none;

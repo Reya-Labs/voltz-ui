@@ -25,7 +25,7 @@ export const Subheading = styled(Typography)`
   font-size: 14px;
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
-  color: ${colors.lavenderWeb.darken015};
+  color: ${colors.lavenderWeb2};
 `;
 
 export const ConnectWalletBox = styled(Box)`
@@ -36,5 +36,5 @@ export const ConnectWalletBox = styled(Box)`
 `;
 
 export const ConnectWalletTypography = styled(Typography)`
-  color: ${colors.lavenderWeb.darken015};
+  color: ${colors.lavenderWeb2};
 `;

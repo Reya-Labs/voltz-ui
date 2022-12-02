@@ -1,16 +1,13 @@
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import { colors, SystemStyleObject, Theme } from '@theme';
-import { Typography, Panel } from '@components/atomic';
-import { Box } from '@mui/material';
 import TableContainer from '@mui/material/TableContainer';
 import { BorrowAMM, Position } from '@voltz-protocol/v1-sdk';
 import React, { useMemo, useRef } from 'react';
 
 import { BorrowAMMProvider } from '../../../contexts/BorrowAMMContext/BorrowAMMContext';
 import { PositionProvider } from '../../../contexts/PositionContext/PositionContext';
-import { SystemStyleObject, Theme } from '../../../theme';
+import { colors, SystemStyleObject, Theme } from '../../../theme';
 import { findCurrentBorrowPosition } from '../../../utilities/borrowAmm';
 import { getRowButtonId } from '../../../utilities/googleAnalytics';
 import { Panel } from '../../atomic/Panel/Panel';

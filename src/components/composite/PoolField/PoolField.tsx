@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box';
 
 import { Agents } from '../../../contexts/AgentContext/types';
+import { colors } from '../../../theme';
 import { Typography } from '../../atomic/Typography/Typography';
 import { ReactComponent as Aave } from './aave-icon.svg';
 import { ReactComponent as Compound } from './compound-icon.svg';
@@ -11,8 +12,6 @@ import { ReactComponent as Lido } from './lido-icon.svg';
 import { ReactComponent as Rocket } from './rocket-icon.svg';
 import { ReactComponent as USDC } from './usdc-icon.svg';
 import { ReactComponent as USDT } from './usdt-icon.svg';
-import { ReactComponent as ETH } from './eth-icon.svg';
-import { colors } from '@theme';
 
 export type PoolFieldProps = {
   agent?: Agents;

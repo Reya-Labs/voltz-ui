@@ -4,6 +4,7 @@ import React, { useMemo } from 'react';
 
 import { Agents } from '../../../contexts/AgentContext/types';
 import { useAMMContext } from '../../../contexts/AMMContext/AMMContext';
+import { colors } from '../../../theme';
 import { isBorrowing } from '../../../utilities/isBorrowing';
 import { Typography } from '../../atomic/Typography/Typography';
 import { IconLabel } from '../IconLabel/IconLabel';
@@ -15,15 +16,7 @@ import { ReactComponent as Lido } from '../PoolField/lido-icon.svg';
 import { ReactComponent as Rocket } from '../PoolField/rocket-icon.svg';
 import { ReactComponent as USDC } from '../PoolField/usdc-icon.svg';
 import { ReactComponent as USDT } from '../PoolField/usdt-icon.svg';
-import { ReactComponent as ETH } from '../PoolField/eth-icon.svg';
-
-import { Typography } from '@components/atomic';
-import IconLabel from '../IconLabel/IconLabel';
-import { VariableAPY, FixedAPR, MaturityEndDate } from './components';
-import { isBorrowing } from '@utilities';
-import { useAMMContext, Agents } from '@contexts';
-import { DateTime } from 'luxon';
-import { colors } from '@theme';
+import { FixedAPR, MaturityEndDate, VariableAPY } from './components';
 
 export type ProtocolInformationProps = {
   protocol?: string;

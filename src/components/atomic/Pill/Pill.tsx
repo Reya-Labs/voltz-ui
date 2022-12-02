@@ -1,11 +1,12 @@
 import React from 'react';
+
 import {
-  WildStrawberryPill,
-  OrangeYellowPill,
-  SkyBlueCrayolaPill,
   LibertyDarkPill,
   LibertyPill,
+  OrangeYellowPill,
   PillTypography,
+  SkyBlueCrayolaPill,
+  WildStrawberryPill,
 } from './Pill.styled';
 
 export type PillProps = {
@@ -26,7 +27,7 @@ export const Pill = ({ text, variant, className }: PillProps) => {
   const PillUI = PillUIMap[variant] || PillUIMap['wildStrawberry'];
 
   return (
-    <PillUI component="span" className={className} coloringVariant={variant}>
+    <PillUI className={className} coloringVariant={variant} component="span">
       {text}
     </PillUI>
   );

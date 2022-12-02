@@ -12,8 +12,8 @@ export const NavBox = styled(Box)`
 export const VoltzIconBox = styled(Box)`
   cursor: pointer;
   margin-right: ${({ theme }) => theme.spacing(4)};
-  filter: drop-shadow(0px 4px 20px ${colors.wildStrawberry.base})
-    drop-shadow(0px 0px 40px ${colors.wildStrawberry.base});
+  filter: drop-shadow(0px 4px 20px ${colors.wildStrawberry})
+    drop-shadow(0px 0px 40px ${colors.wildStrawberry});
 `;
 export const VoltzIcon = styled(Icon)`
   width: 100%;
@@ -21,13 +21,13 @@ export const VoltzIcon = styled(Icon)`
   cursor: pointer;
   transition: filter 150ms ease-in;
   &:hover {
-    filter: drop-shadow(0px 4px 20px ${colors.wildStrawberry.base})
-      drop-shadow(0px 0px 40px ${colors.wildStrawberry.base});
+    filter: drop-shadow(0px 4px 20px ${colors.wildStrawberry})
+      drop-shadow(0px 0px 40px ${colors.wildStrawberry});
   }
   &:hover > path {
-    fill: ${colors.lavenderWeb.base};
+    fill: ${colors.lavenderWeb};
   }
   & > path {
-    fill: ${colors.lavenderWeb.darken010};
+    fill: ${colors.lavenderWeb1};
   }
 `;

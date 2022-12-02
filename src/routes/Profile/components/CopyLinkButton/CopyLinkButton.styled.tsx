@@ -13,8 +13,7 @@ export const CopyLinkButton = styled(Button)<{ disabled: boolean }>`
   background: #1e1a33;
   width: 100%;
   padding: ${({ theme }) => theme.spacing(2, 4)};
-  color: ${({ disabled }) =>
-    disabled ? colors.lavenderWeb2 : colors.skyBlueCrayola};
+  color: ${({ disabled }) => (disabled ? colors.lavenderWeb2 : colors.skyBlueCrayola)};
 `;
 
 export const IconWrapper = styled('div')`

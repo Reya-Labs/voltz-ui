@@ -76,8 +76,8 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
 
   const renderConnectWallet = () => {
     return (
-      <Panel variant="main" sx={{ width: '100%', textAlign: 'center' }}>
-        <Typography variant="h6" sx={{ color: colors.skyBlueCrayola }}>
+      <Panel sx={{ width: '100%', textAlign: 'center' }} variant="main">
+        <Typography sx={{ color: colors.skyBlueCrayola }} variant="h6">
           CONNECT YOUR WALLET
         </Typography>
       </Panel>

@@ -21,7 +21,7 @@ export const BlueActionButton = styled(ActionButton)`
 export const DarkBlueActionButton = styled(ActionButton)`
   /* Liberty 4 */
   background: #2b2548;
-  color: ${colors.skyBlueCrayola.base};
+  color: ${colors.skyBlueCrayola};
 `;
 
 export const IconWrapper = styled('div')`

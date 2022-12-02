@@ -4,7 +4,7 @@ import React from 'react';
 
 import { AgentProps, Agents } from '../../../contexts/AgentContext/types';
 import { useAgentWithOverride } from '../../../hooks/useAgentWithOverride';
-import { SystemStyleObject, Theme } from '../../../theme';
+import { colors, SystemStyleObject, Theme } from '../../../theme';
 
 export function Button<C extends React.ElementType>({
   agent: agentOverride,

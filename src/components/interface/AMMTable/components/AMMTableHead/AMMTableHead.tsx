@@ -4,9 +4,9 @@ import TableRow from '@mui/material/TableRow';
 import { SystemStyleObject, Theme } from '@mui/system';
 import React from 'react';
 
+import { colors } from '../../../../../theme';
 import { Typography } from '../../../../atomic/Typography/Typography';
 import { labels } from '../../constants';
-import { colors } from '@theme';
 
 export const AMMTableHead: React.FunctionComponent = () => {
   const cellSx: SystemStyleObject<Theme> = {

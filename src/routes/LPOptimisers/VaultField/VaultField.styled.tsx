@@ -30,7 +30,7 @@ export const TitleTypography = styled(Typography)`
 
   letter-spacing: 0.02em;
 
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
 `;
 
 export const VaultMetricsBox = styled(Box)`
@@ -48,7 +48,7 @@ export const VaultApyTypography = styled(CustomTypography)`
   font-size: 24px;
   line-height: 120%;
 
-  color: ${colors.wildStrawberry.base};
+  color: ${colors.wildStrawberry};
 `;
 
 export const VaultMaturityTypography = styled(CustomTypography)`
@@ -58,5 +58,5 @@ export const VaultMaturityTypography = styled(CustomTypography)`
   font-size: 24px;
   line-height: 120%;
 
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
 `;
