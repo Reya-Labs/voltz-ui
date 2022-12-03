@@ -10,7 +10,6 @@ import {
   LPPortfolio,
   Portfolio,
   Profile,
-  ProfileV1,
   TraderPools,
   TradingLeague,
 } from './routes';
@@ -74,17 +73,7 @@ export const App = () => {
           <Route element={<Ecosystem />} path={routes.LP_OPTIMISERS} />
           <Route element={<EcosystemDeposit />} path={routes.LP_OPTIMISERS_DEPOSIT} />
           <Route element={<FixedBorrower />} path={routes.BORROW_POS} />
-          <Route
-            element={
-              process.env.REACT_APP_COMMUNITY_P2 &&
-              process.env.REACT_APP_COMMUNITY_P2 !== `UNPROVIDED` ? (
-                <Profile />
-              ) : (
-                <ProfileV1 />
-              )
-            }
-            path={routes.PROFILE}
-          />
+          <Route element={<Profile />} path={routes.PROFILE} />
           <Route element={<TradingLeague />} path={routes.TRADING_LEAGUE} />
         </Route>
       </Routes>
