@@ -4,7 +4,7 @@ import React from 'react';
 import { ConnectWallet } from './ConnectWallet';
 
 export default {
-  title: 'Interface/ConnectWallet',
+  title: 'Composite/ConnectWallet',
   component: ConnectWallet,
   args: {},
 } as ComponentMeta<typeof ConnectWallet>;
@@ -12,4 +12,8 @@ export default {
 const Template: ComponentStory<typeof ConnectWallet> = (args) => <ConnectWallet {...args} />;
 
 export const Default = Template.bind({});
-Default.args = {};
+Default.args = {
+  connectWalletText: 'CONNECT YOUR WALLET',
+  heading: '🚫 PROHIBITED',
+  subheading: 'Your wallet needs to be connected before proceeding.',
+};

@@ -2,6 +2,7 @@ import copy from 'copy-to-clipboard';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 
+import { ConnectWallet } from '../../components/composite/ConnectWallet/ConnectWallet';
 import { Season } from '../../hooks/season/types';
 import { useCurrentSeason } from '../../hooks/season/useCurrentSeason';
 import { usePastSeasons } from '../../hooks/season/usePastSeasons';
@@ -11,7 +12,6 @@ import { setPageTitle } from '../../utilities/page';
 import { getSentryTracker } from '../../utilities/sentry';
 import { ClaimButtonProps } from './components/ClaimButton/ClaimButton';
 import { CopyLinkButtonProps } from './components/CopyLinkButton/CopyLinkButton';
-import { ProfilePageNoWallet } from './components/ProfilePageNoWallet/ProfilePageNoWallet';
 import { ProfilePageWalletConnected } from './components/ProfilePageWalletConnected/ProfilePageWalletConnected';
 import {
   BadgeVariant,
@@ -239,7 +239,13 @@ export const Profile: React.FunctionComponent = () => {
   }, []);
 
   if (!wallet.account) {
-    return <ProfilePageNoWallet />;
+    return (
+      <ConnectWallet
+        connectWalletText="CONNECT YOUR WALLET TO SEE YOUR BADGE COLLECTION"
+        heading="WELCOME TO VOLTZ COMMUNITY"
+        subheading="Please connect your wallet"
+      />
+    );
   }
 
   return (

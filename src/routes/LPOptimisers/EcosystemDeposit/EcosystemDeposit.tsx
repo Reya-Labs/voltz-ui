@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { ConnectWallet } from '../../../components/composite/ConnectWallet/ConnectWallet';
 import { useWallet } from '../../../hooks/useWallet';
 import { setPageTitle } from '../../../utilities/page';
 import { routes } from '../../paths';
 import { useLPVaults } from '../useLPVaults';
 import { ConnectedMellowLpDepositForm } from './ConnectedMellowLpDepositForm/ConnectedMellowLpDepositForm';
-import { ConnectWallet } from './ConnectWallet/ConnectWallet';
 import { ConnectedMellowBox } from './EcosystemDeposit.styled';
 import { NoVaultFound } from './NoVaultFound/NoVaultFound';
 
@@ -24,7 +24,13 @@ export const EcosystemDeposit: React.FunctionComponent = () => {
   }, []);
 
   if (!signer) {
-    return <ConnectWallet />;
+    return (
+      <ConnectWallet
+        connectWalletText="CONNECT YOUR WALLET"
+        heading="🚫 PROHIBITED"
+        subheading="Your wallet needs to be connected before proceeding."
+      />
+    );
   }
 
   if (!currentVault) {
