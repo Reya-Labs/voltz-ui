@@ -8,9 +8,8 @@ import { MintAction } from '../../../../types';
 import * as actions from '../../actions';
 import { deserializeAmm, getSigner } from '../../utilities';
 
-function* mintSaga(action: MintAction) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const signer: providers.JsonRpcSigner | null = yield getSigner();
+export function* mintSaga(action: MintAction) {
+  const signer: providers.JsonRpcSigner | null = getSigner();
 
   if (!signer) {
     return;
@@ -63,5 +62,3 @@ function* mintSaga(action: MintAction) {
     );
   }
 }
-
-export default mintSaga;

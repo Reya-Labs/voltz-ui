@@ -11,9 +11,8 @@ import { SwapAction } from '../../../../types';
 import * as actions from '../../actions';
 import { deserializeAmm, getSigner } from '../../utilities';
 
-function* swapSaga(action: SwapAction) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const signer: providers.JsonRpcSigner | null = yield getSigner();
+export function* swapSaga(action: SwapAction) {
+  const signer: providers.JsonRpcSigner | null = getSigner();
 
   if (!signer) {
     return;
@@ -66,5 +65,3 @@ function* swapSaga(action: SwapAction) {
     );
   }
 }
-
-export default swapSaga;

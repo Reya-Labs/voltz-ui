@@ -1,6 +1,5 @@
 import { Position } from '@voltz-protocol/v1-sdk';
 import JSBI from 'jsbi';
-import isNull from 'lodash/isNull';
 import { DateTime } from 'luxon';
 import { useEffect, useMemo } from 'react';
 
@@ -22,7 +21,7 @@ export type usePositionsResult = {
 export const usePositions = (): usePositionsResult => {
   const { agent } = useAgent();
   const { signer, wallet, loading, error } = useWallet();
-  const isSignerAvailable = !isNull(signer);
+  const isSignerAvailable = Boolean(signer);
   const positionCount = wallet?.positions.length;
 
   const mePositions = useMemo(() => {

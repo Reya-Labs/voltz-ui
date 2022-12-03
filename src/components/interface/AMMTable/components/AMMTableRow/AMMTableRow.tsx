@@ -1,7 +1,6 @@
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import { SystemStyleObject, Theme } from '@mui/system';
-import isNull from 'lodash/isNull';
 import isNumber from 'lodash/isNumber';
 import { DateTime } from 'luxon';
 import React, { useEffect } from 'react';
@@ -76,7 +75,7 @@ export const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({
   };
 
   const handleClick = () => {
-    if (isNull(wallet.account)) {
+    if (!wallet.account) {
       wallet.setRequired(true);
     } else {
       onSelect();

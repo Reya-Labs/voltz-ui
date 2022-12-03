@@ -1,7 +1,6 @@
 import { AMM, BorrowAMM, RateOracle, Token } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 import JSBI from 'jsbi';
-import isNull from 'lodash/isNull';
 import { DateTime } from 'luxon';
 import { useCallback, useMemo } from 'react';
 
@@ -17,7 +16,7 @@ export type UseBorrowAMMsResult = {
 
 export const useBorrowAMMs = (): UseBorrowAMMsResult => {
   const { signer } = useWallet();
-  const isSignerAvailable = !isNull(signer);
+  const isSignerAvailable = Boolean(signer);
   const { data, loading, error, refetch } = useGetAmMsQuery({
     variables: { orderBy: Amm_OrderBy.Id },
   });

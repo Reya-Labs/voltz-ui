@@ -9,9 +9,8 @@ import { SettlePositionAction } from '../../../../types';
 import * as actions from '../../actions';
 import { deserializeAmm, getSigner } from '../../utilities';
 
-function* settlePositionSaga(action: SettlePositionAction) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const signer: providers.JsonRpcSigner | null = yield getSigner();
+export function* settlePositionSaga(action: SettlePositionAction) {
+  const signer: providers.JsonRpcSigner | null = getSigner();
 
   if (!signer) {
     return;
@@ -63,5 +62,3 @@ function* settlePositionSaga(action: SettlePositionAction) {
     );
   }
 }
-
-export default settlePositionSaga;

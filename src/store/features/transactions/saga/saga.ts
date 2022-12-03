@@ -1,9 +1,7 @@
 import { spawn } from 'redux-saga/effects';
 
-import transactionsSaga from './transactions';
+import { transactionsSaga } from './transactions/transactionsSaga';
 
-function* saga() {
+export function* saga() {
   yield spawn(transactionsSaga);
 }
-
-export default saga;

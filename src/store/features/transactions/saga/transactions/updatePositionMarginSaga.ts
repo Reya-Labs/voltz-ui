@@ -8,9 +8,8 @@ import { UpdatePositionMarginAction } from '../../../../types';
 import * as actions from '../../actions';
 import { deserializeAmm, getSigner } from '../../utilities';
 
-function* updatePositionMarginSaga(action: UpdatePositionMarginAction) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const signer: providers.JsonRpcSigner | null = yield getSigner();
+export function* updatePositionMarginSaga(action: UpdatePositionMarginAction) {
+  const signer: providers.JsonRpcSigner | null = getSigner();
 
   if (!signer) {
     return;
@@ -59,5 +58,3 @@ function* updatePositionMarginSaga(action: UpdatePositionMarginAction) {
     );
   }
 }
-
-export default updatePositionMarginSaga;

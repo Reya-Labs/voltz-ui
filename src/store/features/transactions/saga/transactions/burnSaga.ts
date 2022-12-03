@@ -8,9 +8,8 @@ import { BurnAction } from '../../../../types';
 import * as actions from '../../actions';
 import { deserializeAmm, getSigner } from '../../utilities';
 
-function* burnSaga(action: BurnAction) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const signer: providers.JsonRpcSigner | null = yield getSigner();
+export function* burnSaga(action: BurnAction) {
+  const signer: providers.JsonRpcSigner | null = getSigner();
 
   if (!signer) {
     return;
@@ -68,5 +67,3 @@ function* burnSaga(action: BurnAction) {
     );
   }
 }
-
-export default burnSaga;

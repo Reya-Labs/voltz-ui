@@ -1,7 +1,6 @@
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import { SystemStyleObject, Theme } from '@mui/system';
-import isNull from 'lodash/isNull';
 import React, { useEffect } from 'react';
 
 import { useBorrowAMMContext } from '../../../../../contexts/BorrowAMMContext/BorrowAMMContext';
@@ -136,7 +135,7 @@ export const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({
   };
 
   const handleClick = () => {
-    if (isNull(wallet.account)) {
+    if (!wallet.account) {
       wallet.setRequired(true);
     } else {
       onSelect();

@@ -4,7 +4,7 @@ import createSagaMiddleware from 'redux-saga';
 
 import { ecosystemReducer } from './features/ecosystem';
 import { transactionsReducer } from './features/transactions/reducer/transactions/transactionsReducer';
-import saga from './features/transactions/saga';
+import { saga } from './features/transactions/saga/saga';
 
 const reducer = combineReducers({
   transactions: transactionsReducer,

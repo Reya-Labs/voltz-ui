@@ -9,9 +9,8 @@ import { RolloverSwapAction } from '../../../../types';
 import * as actions from '../../actions';
 import { deserializeAmm, getSigner } from '../../utilities';
 
-function* rolloverSwapSaga(action: RolloverSwapAction) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const signer: providers.JsonRpcSigner | null = yield getSigner();
+export function* rolloverSwapSaga(action: RolloverSwapAction) {
+  const signer: providers.JsonRpcSigner | null = getSigner();
 
   if (!signer) {
     return;
@@ -73,5 +72,3 @@ function* rolloverSwapSaga(action: RolloverSwapAction) {
     );
   }
 }
-
-export default rolloverSwapSaga;
