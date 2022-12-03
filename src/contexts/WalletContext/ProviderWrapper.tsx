@@ -75,7 +75,7 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
             process.env.REACT_APP_SKIP_TOS_CHECK !== 'UNPROVIDED';
 
           if (!skipTOSCheck) {
-            await services.checkForTOSSignature(newSigner, walletAddress);
+            await services.checkForTOSSignature(newSigner);
           }
           await services.checkForCorrectNetwork(newProvider);
           if (!process.env.REACT_APP_SKIP_WALLET_SCREENING) {

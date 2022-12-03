@@ -165,7 +165,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
     let content: ReactNode = null;
 
     if (activeTransaction && positionToSettle) {
-      return renderPendingTransaction(); // We return this one immediately as we dont want it wrapped in a Panel
+      return renderPendingTransaction(); // We return this one immediately as we don't want it wrapped in a Panel
     } else if (loading || status === 'connecting') {
       content = renderLoading();
     } else if (error || status !== 'connected') {

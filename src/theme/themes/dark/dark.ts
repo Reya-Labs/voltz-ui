@@ -4,7 +4,7 @@ import colors from '../../colors';
 
 // AB notes:
 // this defines all the cokour overrides for different parts of the UI
-// changes the colours for all of the UI
+// changes the colours for all the UI
 // the colours for agents: FT, VT and LP
 // colours organised into themes, themes used in compoents and currently 1 theme
 // also have a global context
@@ -285,7 +285,7 @@ const dark = createTheme({
     },
     MuiMenuItem: {
       styleOverrides: {
-        root: ({ ownerState }) => ({
+        root: () => ({
           fontFamily: 'PixelOperatorMono',
           fontSize: '16px',
           lineHeight: '14px',

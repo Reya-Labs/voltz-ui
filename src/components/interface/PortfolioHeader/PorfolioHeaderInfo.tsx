@@ -101,5 +101,3 @@ export const PortfolioHeaderInfo = ({
     </List>
   );
 };
-
-export default PortfolioHeaderInfo;

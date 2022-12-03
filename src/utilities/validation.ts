@@ -33,19 +33,30 @@ export const hasEnoughUnderlyingTokens = async (
 };
 
 /**
- * Checks if a is less than b.
- * Returns boolean if validation was able to proceed, undefined if not.
- * @param a - the number to check
- * @param b - the second number that you want to compare against
+ * If both valueA and valueB are defined, return true if valueA is less than valueB, otherwise return undefined.
+ * @param {number | undefined} valueA - number | undefined
+ * @param {number | undefined} valueB - number | undefined
+ * @returns A function that takes two numbers and returns true if the first number is less than the second number.
  */
-export const lessThan = (a: number | undefined, b: number | undefined) => {
-  if (!isUndefined(a) && !isUndefined(b)) {
-    return a < b;
+export const lessThan = (valueA: number | undefined, valueB: number | undefined) => {
+  if (!isUndefined(valueA) && !isUndefined(valueB)) {
+    return valueA < valueB;
   }
 };
 
-export const lessThanEpsilon = (a: number | undefined, b: number | undefined, eps: number) => {
-  if (!isUndefined(a) && !isUndefined(b)) {
-    return a + eps < b;
+/**
+ * If valueA and valueB are defined, return true if valueA + eps is less than valueB.
+ * @param {number | undefined} valueA - The first number to compare
+ * @param {number | undefined} valueB - The second number to compare
+ * @param {number} eps - The epsilon value to use for the comparison.
+ * @returns A function that takes 3 arguments and returns valueA boolean.
+ */
+export const lessThanEpsilon = (
+  valueA: number | undefined,
+  valueB: number | undefined,
+  eps: number,
+) => {
+  if (!isUndefined(valueA) && !isUndefined(valueB)) {
+    return valueA + eps < valueB;
   }
 };

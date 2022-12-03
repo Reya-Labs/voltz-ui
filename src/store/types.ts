@@ -146,14 +146,6 @@ export type RolloverSwapAction = RolloverSwapTransactionAction & {
   type: 'rolloverSwap';
 };
 
-export type BorrowAction = {
-  type: 'borrow';
-  payload: {
-    transaction: Transaction;
-    amm: SerializedAMM;
-  };
-};
-
 export type Action =
   | MintAction
   | BurnAction
@@ -163,5 +155,4 @@ export type Action =
   | CloseTransactionAction
   | UpdateTransactionAction
   | RolloverMintAction
-  | RolloverSwapAction
-  | BorrowAction;
+  | RolloverSwapAction;

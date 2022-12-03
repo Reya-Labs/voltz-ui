@@ -53,8 +53,8 @@ export const getTransactions = (position: Position) => {
 };
 
 /**
- * Sorts an array of transactions obtained via the getTransactions function. Transactions are sorted
- * newest first.
+ * Sorts an array of transactions obtained via the getTransactions function.
+ * Transactions are sorted with the newest first.
  * @param transactions
  */
 export const sortTransactions = (

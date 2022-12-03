@@ -17,7 +17,7 @@ export const approvalsNeeded = (
 };
 
 /**
- * Returns what action the form is currently set to make (SWAP etc)
+ * Returns what action the form is currently set to make (SWAP etc.)
  * @param mode - the mode the form is in
  */
 export const getFormAction = (mode: SwapFormModes): SwapFormActions => {

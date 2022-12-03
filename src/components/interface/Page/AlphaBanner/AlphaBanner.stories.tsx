@@ -9,7 +9,7 @@ export default {
   argTypes: {},
 } as ComponentMeta<typeof AlphaBanner>;
 
-const Template: ComponentStory<typeof AlphaBanner> = (args) => <AlphaBanner />;
+const Template: ComponentStory<typeof AlphaBanner> = (args) => <AlphaBanner {...args} />;
 
 export const Basic = Template.bind({});
 Basic.args = {};

@@ -55,10 +55,7 @@ export const checkForRiskyWallet = async (walletAddress: string) => {
  * avoid having to sign the terms every time you connect your wallet.
  * @param signer - The ethers signer
  */
-export const checkForTOSSignature = async (
-  signer: ethers.providers.JsonRpcSigner,
-  walletAddress: string,
-) => {
+export const checkForTOSSignature = async (signer: ethers.providers.JsonRpcSigner) => {
   const signerAddress = await signer.getAddress();
   const signatureData = await getSignature(signerAddress);
   const latestTOS = getTOSText();
@@ -127,7 +124,7 @@ export const getSignature = async (walletAddress: string) => {
 };
 
 /**
- * Returns the terms of service text that users have to agree to to connect their wallet.
+ * Returns the terms of service text that users have to agree to connect their wallet.
  * Note - Any changes, including whitespace, will mean a new signature is required.
  */
 export const getTOSText = () => {
@@ -172,7 +169,7 @@ export const getWalletProviderMetamask = async () => {
       // the user closing the login modal correctly (cancels login request so modal pops up next time).
       // await provider.send("wallet_requestPermissions", [{ eth_accounts: {} }]);
 
-      // Triggers login modal, but if the user closes the login modal, the request isnt cancelled, so the modal
+      // Triggers login modal, but if the user closes the login modal, the request isn't cancelled, so the modal
       // does not pop up again the next time they choose login with metamask (unless they refresh the page).
       await provider.send('eth_requestAccounts', []);
 

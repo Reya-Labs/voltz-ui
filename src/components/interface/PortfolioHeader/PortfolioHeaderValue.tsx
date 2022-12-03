@@ -6,7 +6,6 @@ import { Typography } from '../../atomic/Typography/Typography';
 
 export type PortfolioHeaderValueProps = {
   children?: ReactNode;
-  hint?: string;
   label: ReactNode;
 };
 
@@ -18,7 +17,7 @@ const valueBoxLabelStyles: SystemStyleObject<Theme> = {
   whiteSpace: 'nowrap',
 };
 
-export const PortfolioHeaderValue = ({ children, hint, label }: PortfolioHeaderValueProps) => (
+export const PortfolioHeaderValue = ({ children, label }: PortfolioHeaderValueProps) => (
   <Box>
     <Typography sx={valueBoxLabelStyles} variant="body2">
       {label}

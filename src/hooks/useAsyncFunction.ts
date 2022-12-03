@@ -46,7 +46,7 @@ export const useAsyncFunction = <ArgsType, ResultType>(
       const data = await request.current;
 
       // We need to stop older (cancelled) requests from overwriting the current data
-      // req.current will always point to the latest request, where as req will get stale.
+      // req.current will always point to the latest request, whereas req will get stale.
       if (req === request.current) {
         setResult(data);
       }
