@@ -1,5 +1,5 @@
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
-import isUndefined from 'lodash/isUndefined';
+import isUndefined from 'lodash.isundefined';
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 
 import { useAgent } from '../../hooks/useAgent';

@@ -1,6 +1,6 @@
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 import { BigNumber } from 'ethers';
-import isUndefined from 'lodash/isUndefined';
+import isUndefined from 'lodash.isundefined';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,10 +13,9 @@ import {
 } from '../../../contexts/MintBurnFormContext/MintBurnFormContext';
 import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';
 import { useAgent } from '../../../hooks/useAgent';
-import { useDispatch } from '../../../hooks/useDispatch';
-import { useSelector } from '../../../hooks/useSelector';
 import { routes } from '../../../routes/paths';
 import { actions, selectors } from '../../../store';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { getPoolButtonId } from '../../../utilities/googleAnalytics';
 import { isBorrowing } from '../../../utilities/isBorrowing';
 import { setPageTitle } from '../../../utilities/page';
@@ -37,13 +36,13 @@ export const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFor
   const { amm: targetAmm } = useAMMContext();
   const { amm: positionAmm } = usePositionContext();
   const { agent } = useAgent();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const form = useMintBurnForm();
   const navigate = useNavigate();
   const { position } = usePositionContext();
 
   const [transactionId, setTransactionId] = useState<string | undefined>();
-  const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
+  const activeTransaction = useAppSelector(selectors.transactionSelector)(transactionId);
 
   const { fixedApr, variableApy } = useAMMsContext();
   const { result: resultFixedApr, call: callFixedApr } = fixedApr(targetAmm);

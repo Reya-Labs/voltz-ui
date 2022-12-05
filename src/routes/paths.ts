@@ -8,6 +8,7 @@ export const routes = {
   TRADING_LEAGUE: 'trading-league',
   PROFILE: 'profile',
   LP_OPTIMISERS: 'lp-optimisers',
+  LP_OPTIMISERS_DEPOSIT: 'lp-optimisers/deposit/:vaultId',
   // old route for lp-optimisers, redirects to lp-optimisers
   PRODUCTS: 'products',
 };

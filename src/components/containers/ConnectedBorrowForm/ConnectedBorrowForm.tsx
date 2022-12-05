@@ -6,10 +6,9 @@ import { useAMMContext } from '../../../contexts/AMMContext/AMMContext';
 import { useBorrowAMMContext } from '../../../contexts/BorrowAMMContext/BorrowAMMContext';
 import { useBorrowFormContext } from '../../../contexts/BorrowFormContext/BorrowFormContext';
 import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';
-import { useDispatch } from '../../../hooks/useDispatch';
-import { useSelector } from '../../../hooks/useSelector';
 import { routes } from '../../../routes/paths';
 import { actions, selectors } from '../../../store';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { isBorrowing } from '../../../utilities/isBorrowing';
 import { BorrowForm } from '../../interface/BorrowForm/BorrowForm';
 import { FormPanel } from '../../interface/FormPanel/FormPanel';
@@ -29,10 +28,10 @@ export const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormPro
   const form = useBorrowFormContext();
   const { position } = usePositionContext();
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [transactionId, setTransactionId] = useState<string | undefined>();
-  const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
+  const activeTransaction = useAppSelector(selectors.transactionSelector)(transactionId);
 
   const { fixedApr, variableApy } = useAMMContext();
   const { result: resultFixedApr, call: callFixedApr } = fixedApr;

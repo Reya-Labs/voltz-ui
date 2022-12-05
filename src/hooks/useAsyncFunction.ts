@@ -1,6 +1,6 @@
-import * as Sentry from '@sentry/react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { getSentryTracker } from '../utilities/sentry';
 import { useDebounceFunc } from './useDebounceFunc';
 
 export type UseAsyncFunctionResult<ArgsType, ResultType> = {
@@ -46,7 +46,7 @@ export const useAsyncFunction = <ArgsType, ResultType>(
       const data = await request.current;
 
       // We need to stop older (cancelled) requests from overwriting the current data
-      // req.current will always point to the latest request, where as req will get stale.
+      // req.current will always point to the latest request, whereas req will get stale.
       if (req === request.current) {
         setResult(data);
       }
@@ -56,7 +56,7 @@ export const useAsyncFunction = <ArgsType, ResultType>(
       } else {
         setErrorMessage('Unrecognized Error');
       }
-      Sentry.captureException(_error);
+      getSentryTracker().captureException(_error);
       setResult(null);
     }
 

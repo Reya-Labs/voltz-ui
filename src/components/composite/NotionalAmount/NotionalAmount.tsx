@@ -1,4 +1,4 @@
-import isUndefined from 'lodash/isUndefined';
+import isUndefined from 'lodash.isundefined';
 import React, { useState } from 'react';
 
 import { toUSFormat } from '../../../utilities/number';

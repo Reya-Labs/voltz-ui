@@ -1,7 +1,7 @@
 import { AMM, PositionInfo } from '@voltz-protocol/v1-sdk';
 import { BigNumber } from 'ethers';
-import debounce from 'lodash/debounce';
-import isUndefined from 'lodash/isUndefined';
+import debounce from 'lodash.debounce';
+import isUndefined from 'lodash.isundefined';
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
 import { useBalance } from '../../hooks/useBalance';

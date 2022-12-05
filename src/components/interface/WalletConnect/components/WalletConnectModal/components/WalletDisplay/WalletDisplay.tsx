@@ -1,5 +1,4 @@
 import Box from '@mui/material/Box';
-import isNull from 'lodash/isNull';
 import React from 'react';
 
 import { Wallet } from '../../../../../../../contexts/WalletContext/types';
@@ -17,7 +16,7 @@ export const WalletDisplay: React.FunctionComponent<WalletDisplayProps> = ({
   wallet,
   onChangeWallet,
 }) => {
-  if (isNull(wallet.name) || wallet.name === 'disconnect') {
+  if (!wallet.name || wallet.name === 'disconnect') {
     return null;
   }
 

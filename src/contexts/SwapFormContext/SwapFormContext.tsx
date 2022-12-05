@@ -1,8 +1,8 @@
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { BigNumber } from 'ethers';
-import debounce from 'lodash/debounce';
-import isNumber from 'lodash/isNumber';
-import isUndefined from 'lodash/isUndefined';
+import debounce from 'lodash.debounce';
+import isNumber from 'lodash.isnumber';
+import isUndefined from 'lodash.isundefined';
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
 import { SwapFormActions, SwapFormModes } from '../../components/interface/SwapForm';

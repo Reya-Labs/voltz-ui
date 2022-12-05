@@ -147,7 +147,7 @@ export const ProtocolInformation: React.FunctionComponent<ProtocolInformationPro
       )}
 
       {!isRollover && !isSettle && isBorrowForm !== true && (
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '56%' }}>
+        <Box sx={{ display: 'flex' }}>
           <FixedAPR fixedApr={fixedApr} />
           <VariableAPY variableApy={variableApy} />
         </Box>

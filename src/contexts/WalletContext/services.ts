@@ -1,9 +1,9 @@
 import detectEthereumProvider from '@metamask/detect-provider';
-import * as Sentry from '@sentry/react';
 import WalletConnectProvider from '@walletconnect/ethereum-provider';
 import { ethers } from 'ethers';
 
 import { getReferrer } from '../../utilities/referrer-store/referrer-store';
+import { getSentryTracker } from '../../utilities/sentry';
 import { WalletName, WalletRiskAssessment } from './types';
 
 const referralAndSignaturesUrl = `${
@@ -55,10 +55,7 @@ export const checkForRiskyWallet = async (walletAddress: string) => {
  * avoid having to sign the terms every time you connect your wallet.
  * @param signer - The ethers signer
  */
-export const checkForTOSSignature = async (
-  signer: ethers.providers.JsonRpcSigner,
-  walletAddress: string,
-) => {
+export const checkForTOSSignature = async (signer: ethers.providers.JsonRpcSigner) => {
   const signerAddress = await signer.getAddress();
   const signatureData = await getSignature(signerAddress);
   const latestTOS = getTOSText();
@@ -91,7 +88,7 @@ export const checkForTOSSignature = async (
         throw new Error('Error saving signature');
       }
     } catch (error) {
-      Sentry.captureException(error);
+      getSentryTracker().captureException(error);
       throw new Error('Error processing signature');
     }
   }
@@ -121,13 +118,13 @@ export const getSignature = async (walletAddress: string) => {
   } catch (error) {
     // eslint-disable-next-line
     console.warn('TOS check failed', error);
-    Sentry.captureException(error);
+    getSentryTracker().captureException(error);
     throw new Error(unavailableText);
   }
 };
 
 /**
- * Returns the terms of service text that users have to agree to to connect their wallet.
+ * Returns the terms of service text that users have to agree to connect their wallet.
  * Note - Any changes, including whitespace, will mean a new signature is required.
  */
 export const getTOSText = () => {
@@ -172,13 +169,13 @@ export const getWalletProviderMetamask = async () => {
       // the user closing the login modal correctly (cancels login request so modal pops up next time).
       // await provider.send("wallet_requestPermissions", [{ eth_accounts: {} }]);
 
-      // Triggers login modal, but if the user closes the login modal, the request isnt cancelled, so the modal
+      // Triggers login modal, but if the user closes the login modal, the request isn't cancelled, so the modal
       // does not pop up again the next time they choose login with metamask (unless they refresh the page).
       await provider.send('eth_requestAccounts', []);
 
       return provider;
     } catch (error) {
-      Sentry.captureException(error);
+      getSentryTracker().captureException(error);
       return undefined; // Assume user cancelled
     }
   }
@@ -198,7 +195,7 @@ export const getWalletProviderWalletConnect = async () => {
       infuraId: process.env.REACT_APP_WALLETCONNECT_INFURA_ID,
     });
   } catch (error) {
-    Sentry.captureException(error);
+    getSentryTracker().captureException(error);
     throw new Error('WalletConnect not available');
   }
 
@@ -206,7 +203,7 @@ export const getWalletProviderWalletConnect = async () => {
   try {
     await provider.connect(); //  Enable session (triggers QR Code modal)
   } catch (error) {
-    Sentry.captureException(error);
+    getSentryTracker().captureException(error);
     return undefined; // assume user cancelled login
   }
 
@@ -247,7 +244,7 @@ export async function getWalletRiskAssessment(walletId: string) {
     }
   } catch (error) {
     // eslint-disable-next-line
-    Sentry.captureException(error);
+    getSentryTracker().captureException(error);
     console.warn('Wallet screening failed', error);
     throw new Error(unavailableText);
   }

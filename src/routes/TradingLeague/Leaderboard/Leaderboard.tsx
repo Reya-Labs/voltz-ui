@@ -81,7 +81,7 @@ const Leaderboard: React.FunctionComponent<RankingTableProps> = ({
         {!loading &&
           rankings.length !== 0 &&
           rankings.map((ranking) => {
-            const rank = ranking.rank + 1 + page * perPage;
+            const rank = ranking.rank + 1;
             return (
               <Entry
                 key={ranking.address}

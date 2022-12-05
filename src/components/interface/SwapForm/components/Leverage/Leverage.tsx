@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import isNumber from 'lodash/isNumber';
-import isUndefined from 'lodash/isUndefined';
+import isNumber from 'lodash.isnumber';
+import isUndefined from 'lodash.isundefined';
 import { useEffect, useRef, useState } from 'react';
 
 import {

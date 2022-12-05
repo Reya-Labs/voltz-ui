@@ -1,4 +1,4 @@
-import isUndefined from 'lodash/isUndefined';
+import isUndefined from 'lodash.isundefined';
 import React from 'react';
 
 import { formatCurrency, roundUpDecimal } from '../../../../../utilities/number';

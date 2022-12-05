@@ -1,17 +1,17 @@
-import * as Sentry from '@sentry/react';
 import copy from 'copy-to-clipboard';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 
+import { ConnectWallet } from '../../components/composite/ConnectWallet/ConnectWallet';
 import { Season } from '../../hooks/season/types';
 import { useCurrentSeason } from '../../hooks/season/useCurrentSeason';
 import { usePastSeasons } from '../../hooks/season/usePastSeasons';
 import { useWallet } from '../../hooks/useWallet';
 import { getENSDetails } from '../../utilities/getENSDetails';
 import { setPageTitle } from '../../utilities/page';
+import { getSentryTracker } from '../../utilities/sentry';
 import { ClaimButtonProps } from './components/ClaimButton/ClaimButton';
 import { CopyLinkButtonProps } from './components/CopyLinkButton/CopyLinkButton';
-import { ProfilePageNoWallet } from './components/ProfilePageNoWallet/ProfilePageNoWallet';
 import { ProfilePageWalletConnected } from './components/ProfilePageWalletConnected/ProfilePageWalletConnected';
 import {
   BadgeVariant,
@@ -129,7 +129,7 @@ export const Profile: React.FunctionComponent = () => {
       setCollectionBadges(nextCollectionBadges);
       setCacheValue(seasonUserId, nextCollectionBadges);
     } catch (error) {
-      Sentry.captureException(error);
+      getSentryTracker().captureException(error);
       setClaimButtonModes((prev) => ({
         ...prev,
         [variant]: 'claimError',
@@ -186,7 +186,7 @@ export const Profile: React.FunctionComponent = () => {
         ...getClaimButtonModesForVariants(claimedVariants, 'claimed'),
       }));
     } catch (error) {
-      Sentry.captureException(error);
+      getSentryTracker().captureException(error);
       setClaimButtonBulkMode('claimError');
       setClaimButtonModes((p) => ({
         ...p,
@@ -212,7 +212,7 @@ export const Profile: React.FunctionComponent = () => {
         setCopyLinkButtonMode('copy');
       }, 1500);
     } catch (error) {
-      Sentry.captureException(error);
+      getSentryTracker().captureException(error);
       setCopyLinkButtonMode('copyError');
     }
   }
@@ -239,7 +239,13 @@ export const Profile: React.FunctionComponent = () => {
   }, []);
 
   if (!wallet.account) {
-    return <ProfilePageNoWallet />;
+    return (
+      <ConnectWallet
+        connectWalletText="CONNECT YOUR WALLET TO SEE YOUR BADGE COLLECTION"
+        heading="WELCOME TO VOLTZ COMMUNITY"
+        subheading="Please connect your wallet"
+      />
+    );
   }
 
   return (

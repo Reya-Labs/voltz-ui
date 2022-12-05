@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
-import isUndefined from 'lodash/isUndefined';
+import isUndefined from 'lodash.isundefined';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
@@ -9,9 +9,9 @@ import { useAMMsContext } from '../../../contexts/AMMsContext/AMMsContext';
 import { MintBurnFormLiquidityAction } from '../../../contexts/MintBurnFormContext/MintBurnFormContext';
 import { Wallet } from '../../../graphql';
 import { useAgent } from '../../../hooks/useAgent';
-import { useSelector } from '../../../hooks/useSelector';
 import { useWallet } from '../../../hooks/useWallet';
 import { selectors } from '../../../store';
+import { useAppSelector } from '../../../store/hooks';
 import { getAmmProtocol } from '../../../utilities/amm';
 import { getAgentFromPosition } from '../../../utilities/getAgent';
 import {
@@ -102,7 +102,7 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
     }
   }, [margin]);
 
-  const activeTransaction = useSelector(selectors.transactionSelector)(transactionId);
+  const activeTransaction = useAppSelector(selectors.transactionSelector)(transactionId);
   const trasactionState = useMemo(() => {
     return [activeTransaction?.resolvedAt, activeTransaction?.succeededAt];
   }, []);

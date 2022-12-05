@@ -24,7 +24,7 @@ export const findCurrentPosition = (
 
 /**
  * Finds the latest amm that corresponds to the given position.
- * Please note that the returned amm will be for the latest pool, where as the position amm may correspond to an old (matured) pool.
+ * Please note that the returned amm will be for the latest pool, whereas the position amm may correspond to an old (matured) pool.
  * @param amms - the array of available pools
  * @param selectedPosition - the selected position to find the current amm for
  */

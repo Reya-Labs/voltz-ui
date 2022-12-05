@@ -46,10 +46,14 @@ export const BADGE_TYPE_BADGE_VARIANT_MAP: Record<string, BadgeVariant> = {
   '38': 'whaleWhisperer',
 };
 
-export const NON_PROGRAMMATIC_BADGES: NonProgrammaticBadges[] = [
+export const NON_PROGRAMMATIC_BADGES_DISCORD: NonProgrammaticBadges[] = [
   'governorz',
   'diplomatz',
   'senatorz',
+];
+
+export const NON_PROGRAMMATIC_BADGES: NonProgrammaticBadges[] = [
+  ...NON_PROGRAMMATIC_BADGES_DISCORD,
   'referror',
   'notionalInfluencer',
   'whaleWhisperer',

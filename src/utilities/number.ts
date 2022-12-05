@@ -1,5 +1,5 @@
 /**
- * Takes a number and returns a currency string representation with thousand separators
+ * Takes a number and returns a currency string representation with thousands separators
  * @param num - the number to process
  * @param forceDecimals - force the showing of decimals (will show .00 on amounts)
  * @param showPlusSign - will add '+' at the start of positive values
@@ -22,7 +22,7 @@ export const formatCurrency = (
 };
 
 /**
- * Takes a number and returns a string representation with thousand separators
+ * Takes a number and returns a string representation with thousands separators
  * @param num - the number to process
  */
 export const formatNumber = (num: number, minDecimals = 2, maxDecimals = 2): string => {
@@ -54,7 +54,7 @@ const withCommaDecimalSeparator = (): boolean => {
 };
 
 export const notFormatted = (val: string | undefined): string | undefined => {
-  let formattedValue = val;
+  let formattedValue: string | undefined;
   if (withCommaDecimalSeparator()) {
     formattedValue = val?.split('.').join('');
   } else {

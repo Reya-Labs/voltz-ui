@@ -1,7 +1,6 @@
 import { AMM, RateOracle, Token } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 import JSBI from 'jsbi';
-import isNull from 'lodash/isNull';
 import { useCallback, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -18,7 +17,7 @@ export type UseAMMsResult = {
 export const useAMMs = (): UseAMMsResult => {
   const { signer } = useWallet();
   const { pathname } = useLocation();
-  const isSignerAvailable = !isNull(signer);
+  const isSignerAvailable = Boolean(signer);
   const { data, loading, error, refetch } = useGetAmMsQuery({
     variables: { orderBy: Amm_OrderBy.Id },
   });

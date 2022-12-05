@@ -1,4 +1,4 @@
-import isUndefined from 'lodash/isUndefined';
+import isUndefined from 'lodash.isundefined';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';

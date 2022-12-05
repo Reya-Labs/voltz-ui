@@ -1,8 +1,8 @@
 import { createContext } from 'react';
 
-import { Wallet, WalletName } from './types';
+import { Wallet } from './types';
 
-const defaultConnect = (name: WalletName) => Promise.resolve();
+const defaultConnect = () => Promise.resolve();
 const defaultDisconnect = () => {};
 
 export const WalletContext = createContext<Wallet>({
