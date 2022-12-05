@@ -1,4 +1,4 @@
-import memoize from 'lodash/memoize';
+import memoize from 'lodash.memoize';
 import { createSelector } from 'reselect';
 
 import transactionsSelector from './transactionsSelector';

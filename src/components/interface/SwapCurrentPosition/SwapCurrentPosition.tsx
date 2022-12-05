@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import { Position } from '@voltz-protocol/v1-sdk';
 import { BigNumber } from 'ethers';
-import isUndefined from 'lodash/isUndefined';
+import isUndefined from 'lodash.isundefined';
 import React, { useEffect } from 'react';
 
 import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';

@@ -1,6 +1,6 @@
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 import { BigNumber } from 'ethers';
-import isUndefined from 'lodash/isUndefined';
+import isUndefined from 'lodash.isundefined';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 

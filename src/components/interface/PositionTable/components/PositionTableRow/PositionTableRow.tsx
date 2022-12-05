@@ -1,7 +1,7 @@
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
-import isNumber from 'lodash/isNumber';
+import isNumber from 'lodash.isnumber';
 import React, { useEffect } from 'react';
 
 import { Agents } from '../../../../../contexts/AgentContext/types';

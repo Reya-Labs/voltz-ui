@@ -1,5 +1,4 @@
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
-import isArray from 'lodash/isArray';
 import React from 'react';
 
 import { SystemStyleObject, Theme } from '../../../theme';
@@ -94,7 +93,7 @@ export const Icon: React.FunctionComponent<IconProps> = ({ name, sx, ...props })
       return [];
     }
 
-    if (isArray(sx)) {
+    if (Array.isArray(sx)) {
       return sx;
     }
 

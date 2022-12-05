@@ -2,8 +2,7 @@ import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import { InputBaseProps } from '@mui/material/InputBase';
 import InputLabel from '@mui/material/InputLabel';
-import isEmpty from 'lodash/isEmpty';
-import isUndefined from 'lodash/isUndefined';
+import isUndefined from 'lodash.isundefined';
 import React, { ReactNode } from 'react';
 import CurrencyInput, { CurrencyInputProps } from 'react-currency-input-field';
 
@@ -74,7 +73,7 @@ export const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps
         }}
       >
         <>
-          {!isEmpty(label) ? (
+          {label ? (
             <InputLabel
               error={error}
               htmlFor={inputId}
@@ -88,7 +87,7 @@ export const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps
           ) : (
             <div />
           )}
-          {!isEmpty(labelRight) ? (
+          {labelRight ? (
             <Typography
               sx={{
                 ...textStyles,

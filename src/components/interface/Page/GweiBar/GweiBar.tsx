@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import isUndefined from 'lodash/isUndefined';
+import isUndefined from 'lodash.isundefined';
 import React, { useEffect, useState } from 'react';
 
 import { useWallet } from '../../../../hooks/useWallet';

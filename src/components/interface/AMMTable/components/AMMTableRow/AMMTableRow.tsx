@@ -1,7 +1,7 @@
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import { SystemStyleObject, Theme } from '@mui/system';
-import isNumber from 'lodash/isNumber';
+import isNumber from 'lodash.isnumber';
 import { DateTime } from 'luxon';
 import React, { useEffect } from 'react';
 

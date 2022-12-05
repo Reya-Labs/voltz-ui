@@ -1,5 +1,5 @@
 import { ContractReceipt, providers } from 'ethers';
-import isUndefined from 'lodash/isUndefined';
+import isUndefined from 'lodash.isundefined';
 import { DateTime } from 'luxon';
 import { call, put } from 'redux-saga/effects';
 

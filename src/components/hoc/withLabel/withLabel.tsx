@@ -1,9 +1,6 @@
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
-import isEmpty from 'lodash/isEmpty';
-import isString from 'lodash/isString';
-import upperCase from 'lodash/upperCase';
 import React from 'react';
 
 import { useUniqueId } from '../../../hooks/useUniqueId';
@@ -24,14 +21,14 @@ export const withLabel = <T,>(WrappedComponent: React.FunctionComponent<T>) => {
   }) => {
     const id = useUniqueId();
     const renderLabel = () => {
-      if (isString(label)) {
-        return upperCase(label);
+      if (typeof label === 'string') {
+        return label.toUpperCase();
       }
 
       return label;
     };
 
-    if (isEmpty(label)) {
+    if (!label) {
       return <WrappedComponent {...(props as T)} />;
     }
 

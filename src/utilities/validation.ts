@@ -1,5 +1,5 @@
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
-import isUndefined from 'lodash/isUndefined';
+import isUndefined from 'lodash.isundefined';
 
 import { getSentryTracker } from './sentry';
 

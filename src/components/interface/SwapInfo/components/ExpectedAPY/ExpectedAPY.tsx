@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import isUndefined from 'lodash/isUndefined';
+import isUndefined from 'lodash.isundefined';
 import { useEffect, useRef, useState } from 'react';
 
 import { useAMMContext } from '../../../../../contexts/AMMContext/AMMContext';

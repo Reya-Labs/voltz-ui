@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import isUndefined from 'lodash/isUndefined';
+import isUndefined from 'lodash.isundefined';
 
 import { Agents } from '../../../contexts/AgentContext/types';
 import { useAgent } from '../../../hooks/useAgent';

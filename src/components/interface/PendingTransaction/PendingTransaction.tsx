@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
-import isUndefined from 'lodash/isUndefined';
+import isUndefined from 'lodash.isundefined';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';

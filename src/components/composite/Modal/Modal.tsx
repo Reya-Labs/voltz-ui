@@ -1,5 +1,4 @@
 import MuiModal, { ModalProps as MuiModalProps } from '@mui/material/Modal';
-import isString from 'lodash/isString';
 import React, { cloneElement } from 'react';
 
 import { doNothing } from '../../../utilities/doNothing';
@@ -24,7 +23,7 @@ export const Modal: React.FunctionComponent<ModalProps> = ({
   ...props
 }) => {
   const renderTrigger = () => {
-    if (isString(Trigger)) {
+    if (typeof Trigger === 'string') {
       return <Button onClick={onOpen}>{Trigger}</Button>;
     }
 
