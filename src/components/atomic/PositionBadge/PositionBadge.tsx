@@ -37,8 +37,8 @@ const baseStyles: SystemStyleObject<Theme> = {
 const styles: Record<PositionBadgeVariant, SystemStyleObject<Theme>> = {
   FT: {
     ...baseStyles,
-    borderColor: 'primary.base',
-    color: 'primary.base',
+    borderColor: colors.skyBlueCrayola,
+    color: colors.skyBlueCrayola,
     background: colors.skyBlueCrayola5,
   },
   VT: {
@@ -56,8 +56,8 @@ const styles: Record<PositionBadgeVariant, SystemStyleObject<Theme>> = {
   },
   FC: {
     ...baseStyles,
-    borderColor: 'primary.base',
-    color: 'primary.base',
+    borderColor: colors.skyBlueCrayola,
+    color: colors.skyBlueCrayola,
     background: 'transparent',
   },
 };

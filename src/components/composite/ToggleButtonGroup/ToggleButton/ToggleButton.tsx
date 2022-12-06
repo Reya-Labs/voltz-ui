@@ -28,14 +28,14 @@ export const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
     switch (agent) {
       case Agents.FIXED_TRADER: {
         return {
-          backgroundColor: 'primary.darken010',
-          color: 'primary.darken030',
+          backgroundColor: colors.skyBlueCrayola1,
+          color: colors.skyBlueCrayola5,
           borderColor: colors.skyBlueCrayola,
           '&.Mui-selected': {
             color: colors.skyBlueCrayola,
-            backgroundColor: 'primary.darken030',
+            backgroundColor: colors.skyBlueCrayola5,
             '&:hover': {
-              backgroundColor: 'primary.darken030',
+              backgroundColor: colors.skyBlueCrayola5,
             },
             '&:not(:first-of-type)': {
               borderColor: colors.skyBlueCrayola,

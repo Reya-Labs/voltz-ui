@@ -3,7 +3,7 @@ import React from 'react';
 
 import { AgentProps, Agents } from '../../../contexts/AgentContext/types';
 import { useAgentWithOverride } from '../../../hooks/useAgentWithOverride';
-import { SystemStyleObject, Theme } from '../../../theme';
+import { colors, SystemStyleObject, Theme } from '../../../theme';
 import { withLabel } from '../../hoc/withLabel/withLabel';
 
 export type TypographyProps = React.ComponentProps<typeof TypographyComponent>;
@@ -25,7 +25,7 @@ function TypographyComponent<C extends React.ElementType>(
 
     if (agent === Agents.FIXED_TRADER) {
       return {
-        color: 'primary.base',
+        color: colors.skyBlueCrayola,
       };
     }
 

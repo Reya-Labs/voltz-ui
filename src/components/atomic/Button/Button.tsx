@@ -32,10 +32,10 @@ export function Button<C extends React.ElementType>({
     // selecting different colours from the pallet to style the component
     if (agent === Agents.FIXED_TRADER) {
       return {
-        backgroundColor: 'primary.darken030',
+        backgroundColor: colors.skyBlueCrayola5,
         color: colors.skyBlueCrayola,
         '&:hover': {
-          backgroundColor: 'primary.darken030',
+          backgroundColor: colors.skyBlueCrayola5,
           borderColor: colors.skyBlueCrayola,
           boxShadow: '0px 4px 20px 0px #4de5ff33',
         },
@@ -146,7 +146,7 @@ export function Button<C extends React.ElementType>({
     if (props.variant === 'dark-link') {
       return {
         backgroundColor: selected ? 'secondary.darken030' : 'secondary.dark',
-        color: 'primary.base',
+        color: colors.skyBlueCrayola,
         '&:hover': {
           backgroundColor: 'secondary.darken030',
         },
@@ -166,7 +166,7 @@ export function Button<C extends React.ElementType>({
     if (props.variant === 'darker-link') {
       return {
         backgroundColor: selected ? 'secondary.dark' : 'secondary.darken045',
-        color: 'primary.base',
+        color: colors.skyBlueCrayola,
         '&:hover': {
           backgroundColor: 'secondary.darken035',
         },
@@ -187,11 +187,11 @@ export function Button<C extends React.ElementType>({
 
     if (props.variant === 'rollover1') {
       return {
-        backgroundColor: 'primary.base',
+        backgroundColor: colors.skyBlueCrayola,
         color: 'tertiary.darken035',
         fontWeight: 'bold',
         '&:hover': {
-          backgroundColor: 'primary.darken015',
+          backgroundColor: colors.skyBlueCrayola2,
           boxShadow: 'none',
         },
       };
@@ -212,7 +212,7 @@ export function Button<C extends React.ElementType>({
     if (props.variant === 'rollover3') {
       return {
         backgroundColor: 'secondary.darken050',
-        color: 'primary.base',
+        color: colors.skyBlueCrayola,
         fontWeight: 'bold',
         '&:hover': {
           backgroundColor: 'secondary.darken045',
