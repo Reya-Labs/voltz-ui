@@ -18,7 +18,19 @@ export const getMellowLPVaults = (): MellowProduct[] => {
       return {
         id: item.voltzVault,
         vault,
-        metadata: item.metadata,
+        metadata: {
+          ...item.metadata,
+          estimatedHistoricApy: 'TODO: COSTIN DA MAN',
+          underlyingPools: ['LIDO-ETH'],
+          vaults: [
+            {
+              maturityTimestampMS: 1672444800000,
+              pools: ['LIDO-ETH'],
+              estimatedHistoricApy: '>30%',
+              weight: 100,
+            },
+          ],
+        },
       };
     },
   );
@@ -27,15 +39,21 @@ export const getMellowLPVaults = (): MellowProduct[] => {
     (item) => {
       const vault = new MellowLpRouter({
         mellowRouterAddress: item.router,
-        defaultWeights: item.defaultWeights,
+        defaultWeights: item.vaults.map((v) =>
+          Date.now().valueOf() > v.maturityTimestampMS ? 0 : v.weight,
+        ),
         provider: config.PROVIDER,
-        pivot: item.pivot,
       });
 
       return {
-        id: `${item.router}-${item.pivot}`,
+        id: `mellow-${item.metadata.token.toLowerCase()}`,
         vault,
-        metadata: item.metadata,
+        metadata: {
+          ...item.metadata,
+          vaults: item.vaults,
+          estimatedHistoricApy: 'TODO: COSTIN DA MAN',
+          underlyingPools: item.vaults.reduce((pV, cI) => [...pV, ...cI.pools], [] as string[]),
+        },
       };
     },
   );

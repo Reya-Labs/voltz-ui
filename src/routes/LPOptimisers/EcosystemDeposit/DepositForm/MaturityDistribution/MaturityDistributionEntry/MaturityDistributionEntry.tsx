@@ -1,7 +1,7 @@
+import { DateTime } from 'luxon';
 import React, { useState } from 'react';
 
 import { IconLabel } from '../../../../../../components/composite/IconLabel/IconLabel';
-import { formatPOSIXTimestamp } from '../../../../../../utilities/date';
 import { doNothing } from '../../../../../../utilities/doNothing';
 import {
   DistributionInput,
@@ -61,7 +61,9 @@ export const MaturityDistributionEntry: React.FunctionComponent<MaturityDistribu
         </DistributionInputWrapper>
       </EvenBox>
       <EvenBox>
-        <MaturityTypography>{formatPOSIXTimestamp(maturityTimestamp)}</MaturityTypography>
+        <MaturityTypography>
+          {DateTime.fromMillis(maturityTimestamp).toFormat('dd LLL yyyy')}
+        </MaturityTypography>
       </EvenBox>
       <EvenBox>
         {poolsCount !== 0 ? (

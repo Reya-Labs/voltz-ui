@@ -4,19 +4,6 @@ import { MellowProduct } from '../../../../store/features/ecosystem/getMellowLPV
 import { DepositForm, DepositFormProps } from '../DepositForm/DepositForm';
 import { DepositStates, getSubmissionState } from './mappers';
 
-const automaticWeights: DepositFormProps['weights'] = [
-  {
-    distribution: 90,
-    maturityTimestamp: 1680220800000,
-    pools: ['sETH', 'rETH'],
-  },
-  {
-    distribution: 10,
-    maturityTimestamp: 1672444800000,
-    pools: ['sETH', 'rETH', 'sETH'],
-  },
-];
-
 export type ConnectedMellowLpDepositFormProps = {
   vault: MellowProduct;
   onCancel: () => void;
@@ -28,6 +15,12 @@ export const ConnectedDepositForm: React.FunctionComponent<ConnectedMellowLpDepo
   vault,
   onCancel,
 }) => {
+  const automaticWeights: DepositFormProps['weights'] = vault.metadata.vaults.map((v) => ({
+    distribution: v.weight,
+    maturityTimestamp: v.maturityTimestampMS,
+    pools: v.pools,
+  }));
+
   const [selectedDeposit, setSelectedDeposit] = useState<number>(0);
   const [distribution, setDistribution] = useState<'automatic' | 'manual'>('automatic');
   const [manualWeights, setManualWeights] = useState<DepositFormProps['weights']>(
@@ -37,19 +30,26 @@ export const ConnectedDepositForm: React.FunctionComponent<ConnectedMellowLpDepo
   const [error, setError] = useState<string>('');
 
   const sufficientFunds = (vault.vault.userWalletBalance ?? 0) >= selectedDeposit;
+  const weights = distribution === 'automatic' ? automaticWeights : manualWeights;
+  const combinedWeightValue = weights.reduce((total, weight) => total + weight.distribution, 0);
 
   const deposit = () => {
     if (selectedDeposit > 0) {
       setDepositState(DepositStates.DEPOSITING);
-      void vault.vault.deposit(selectedDeposit).then(
-        () => {
-          setDepositState(DepositStates.DEPOSIT_DONE);
-        },
-        (err: Error) => {
-          setError(`Deposit failed. ${err.message ?? ''}`);
-          setDepositState(DepositStates.DEPOSIT_FAILED);
-        },
-      );
+      void vault.vault
+        .deposit(
+          selectedDeposit,
+          weights.map((w) => w.distribution),
+        )
+        .then(
+          () => {
+            setDepositState(DepositStates.DEPOSIT_DONE);
+          },
+          (err: Error) => {
+            setError(`Deposit failed. ${err.message ?? ''}`);
+            setDepositState(DepositStates.DEPOSIT_FAILED);
+          },
+        );
     } else {
       setError('Please input amount');
       setDepositState(DepositStates.DEPOSIT_FAILED);
@@ -103,9 +103,6 @@ export const ConnectedDepositForm: React.FunctionComponent<ConnectedMellowLpDepo
   const onChangeDeposit = (value: number | undefined): void => {
     setSelectedDeposit(value ?? 0);
   };
-
-  const weights = distribution === 'automatic' ? automaticWeights : manualWeights;
-  const combinedWeightValue = weights.reduce((total, weight) => total + weight.distribution, 0);
 
   return (
     <DepositForm

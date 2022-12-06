@@ -30,7 +30,6 @@ export const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
       <MellowLPEntryInfoBox>
         <VaultField
           expectedApy={lpVault.metadata.estimatedHistoricApy}
-          maturity={lpVault.metadata.maturity}
           title={lpVault.metadata.title}
           token={lpVault.metadata.token}
         />
