@@ -46,13 +46,13 @@ export const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
 
       case Agents.VARIABLE_TRADER: {
         return {
-          backgroundColor: 'tertiary.base',
+          backgroundColor: colors.ultramarineBlue,
           color: colors.lavenderWeb,
           borderColor: colors.skyBlueCrayola,
           '&.Mui-selected': {
-            backgroundColor: 'tertiary.base',
+            backgroundColor: colors.ultramarineBlue,
             '&:hover': {
-              backgroundColor: 'tertiary.base',
+              backgroundColor: colors.ultramarineBlue,
             },
             '&:not(:first-of-type)': {
               borderColor: colors.lavenderWeb,

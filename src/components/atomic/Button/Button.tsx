@@ -44,11 +44,11 @@ export function Button<C extends React.ElementType>({
 
     if (agent === Agents.VARIABLE_TRADER) {
       return {
-        backgroundColor: 'tertiary.light',
+        backgroundColor: colors.ultramarineBlue,
         color: colors.lavenderWeb,
         '&:hover': {
-          backgroundColor: 'tertiary.darken010',
-          borderColor: 'tertiary.light',
+          backgroundColor: colors.ultramarineBlue1,
+          borderColor: colors.ultramarineBlue,
           boxShadow: '0px 4px 20px 0px #2667FF4D',
         },
       };
@@ -188,7 +188,7 @@ export function Button<C extends React.ElementType>({
     if (props.variant === 'rollover1') {
       return {
         backgroundColor: colors.skyBlueCrayola,
-        color: 'tertiary.darken035',
+        color: colors.ultramarineBlue6,
         fontWeight: 'bold',
         '&:hover': {
           backgroundColor: colors.skyBlueCrayola2,
@@ -199,11 +199,11 @@ export function Button<C extends React.ElementType>({
 
     if (props.variant === 'rollover2') {
       return {
-        backgroundColor: 'tertiary.base',
+        backgroundColor: colors.ultramarineBlue,
         color: colors.lavenderWeb,
         fontWeight: 'bold',
         '&:hover': {
-          backgroundColor: 'tertiary.darken015',
+          backgroundColor: colors.ultramarineBlue2,
           boxShadow: 'none',
         },
       };

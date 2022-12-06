@@ -45,7 +45,7 @@ const styles: Record<PositionBadgeVariant, SystemStyleObject<Theme>> = {
     ...baseStyles,
     borderColor: colors.lavenderWeb,
     color: colors.lavenderWeb,
-    background: 'tertiary.base',
+    background: colors.ultramarineBlue,
   },
   LP: {
     ...baseStyles,

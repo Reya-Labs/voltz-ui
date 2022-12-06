@@ -22,7 +22,7 @@ export const RouteLink = ({ children, to, ...props }: LinkProps) => {
         fontFamily: 'PixelOperatorMono',
         color: () => {
           if (agentCtx.agent === Agents.FIXED_TRADER) return colors.skyBlueCrayola;
-          if (agentCtx.agent === Agents.VARIABLE_TRADER) return 'tertiary.base';
+          if (agentCtx.agent === Agents.VARIABLE_TRADER) return colors.ultramarineBlue;
           return 'error.base';
         },
       }}

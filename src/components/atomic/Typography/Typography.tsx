@@ -31,7 +31,7 @@ function TypographyComponent<C extends React.ElementType>(
 
     if (agent === Agents.VARIABLE_TRADER) {
       return {
-        color: 'tertiary.light',
+        color: colors.ultramarineBlue,
       };
     }
 
