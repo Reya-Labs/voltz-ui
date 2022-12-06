@@ -10,7 +10,6 @@ import {
   TitleTypography,
   VaultApyTypography,
   VaultFieldBox,
-  VaultMaturityTypography,
   VaultMetricsBox,
 } from './VaultField.styled';
 
@@ -68,17 +67,17 @@ export const VaultField: React.FunctionComponent<VaultFieldProps> = ({
           {expectedApy}
         </VaultApyTypography>
 
-        <VaultMaturityTypography
-          label={
-            <IconLabel
-              icon="information-circle"
-              info={`This strategy will run until ${maturity}. At this point depositors can collect any returns that may have been generated and withdraw their funds.`}
-              label="Maturity"
-            />
-          }
-        >
-          {maturity}
-        </VaultMaturityTypography>
+        {/*<VaultMaturityTypography*/}
+        {/*  label={*/}
+        {/*    <IconLabel*/}
+        {/*      icon="information-circle"*/}
+        {/*      info={`This strategy will run until ${maturity}. At this point depositors can collect any returns that may have been generated and withdraw their funds.`}*/}
+        {/*      label="Maturity"*/}
+        {/*    />*/}
+        {/*  }*/}
+        {/*>*/}
+        {/*  {maturity}*/}
+        {/*</VaultMaturityTypography>*/}
       </VaultMetricsBox>
     </VaultFieldBox>
   );

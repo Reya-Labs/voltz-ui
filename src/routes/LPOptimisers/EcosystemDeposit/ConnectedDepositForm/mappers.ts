@@ -70,7 +70,7 @@ export const getSubmissionState = ({
   if (loading) {
     return initialisingState;
   }
-  debugger;
+
   switch (depositState) {
     case DepositStates.INITIALISING: {
       return initialisingState;

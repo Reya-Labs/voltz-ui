@@ -3,27 +3,28 @@ import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
+import { MaskedIntegerField } from '../../../../components/composite/MaskedIntegerField/MaskedIntegerField';
 import { colors } from '../../../../theme';
 
 export const FormBox = styled(Box)`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: ${({ theme }) => theme.spacing(4)};
+  padding: ${({ theme }) => theme.spacing(6)};
   gap: ${({ theme }) => theme.spacing(4)};
 
   background: #19152a;
-  border-radius: ${({ theme }) => theme.spacing(2)};
-
-  width: 398px;
-  position: absolute;
+  border-radius: 8px;
+  width: 400px;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 export const FullButtonBox = styled(Box)`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 0px;
+  padding: 0;
   gap: ${({ theme }) => theme.spacing(2)};
 
   align-self: stretch;
@@ -46,7 +47,7 @@ export const BackButton = styled(Button)`
   padding: ${({ theme }) => theme.spacing(4, 6)};
   gap: ${({ theme }) => theme.spacing(2.5)};
 
-  background: #2d2b3d;
+  background: #1e1933;
   border-radius: 4px;
 
   color: ${colors.skyBlueCrayola.base};
@@ -59,7 +60,7 @@ export const DescriptionBox = styled(Box)`
   padding: ${({ theme }) => theme.spacing(4)};
   gap: ${({ theme }) => theme.spacing(2.5)};
 
-  background: #28233b;
+  background: #1e1933;
   border-radius: ${({ theme }) => theme.spacing(1)};
 `;
 
@@ -101,4 +102,16 @@ export const HintTextTypography = styled(Typography)`
 
 export const PrefixHintTextSpan = styled('span')<{ color?: string }>`
   color: ${({ color = 'inherit' }) => color};
+`;
+
+export const MaskedIntegerFieldStyled = styled(MaskedIntegerField)`
+  border-color: #5d5296 !important;
+  background-color: #2b2548 !important;
+`;
+
+export const MaturityDistributionsBox = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  row-gap: ${({ theme }) => theme.spacing(4)};
+  width: 100%;
 `;
