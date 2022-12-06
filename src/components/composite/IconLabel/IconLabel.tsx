@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Popover from '@mui/material/Popover';
 import React, { ReactNode, useState } from 'react';
 
-import { SystemStyleObject, Theme } from '../../../theme';
+import { colors, SystemStyleObject, Theme } from '../../../theme';
 import { Icon } from '../../atomic/Icon/Icon';
 import { SupportedIcons } from '../../atomic/Icon/types';
 import { Panel } from '../../atomic/Panel/Panel';
@@ -106,7 +106,7 @@ export const IconLabel: React.FunctionComponent<IconLabelProps> = ({
               position: 'relative',
               mt: '10px',
               '&::before': {
-                backgroundColor: 'secondary.darken045',
+                backgroundColor: colors.lavenderWeb8,
                 content: '""',
                 display: 'block',
                 position: 'absolute',

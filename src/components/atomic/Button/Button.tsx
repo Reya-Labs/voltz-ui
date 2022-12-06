@@ -45,7 +45,7 @@ export function Button<C extends React.ElementType>({
     if (agent === Agents.VARIABLE_TRADER) {
       return {
         backgroundColor: 'tertiary.light',
-        color: 'secondary.light',
+        color: colors.lavenderWeb,
         '&:hover': {
           backgroundColor: 'tertiary.darken010',
           borderColor: 'tertiary.light',
@@ -56,10 +56,10 @@ export function Button<C extends React.ElementType>({
 
     if (agent === Agents.LIQUIDITY_PROVIDER) {
       return {
-        backgroundColor: 'secondary.dark',
+        backgroundColor: colors.lavenderWeb7,
         color: colors.skyBlueCrayola,
         '&:hover': {
-          backgroundColor: 'secondary.darken035',
+          backgroundColor: colors.lavenderWeb6,
           boxShadow: '0px 4px 20px 0px #4DE5FF40',
         },
       };
@@ -70,17 +70,17 @@ export function Button<C extends React.ElementType>({
   const stateStyleOverrides = (): SystemStyleObject<Theme> => {
     if (props.disabled) {
       return {
-        backgroundColor: 'secondary.dark',
-        color: 'secondary.darken015',
+        backgroundColor: colors.lavenderWeb7,
+        color: colors.lavenderWeb2,
       };
     }
 
     if (props.variant === 'red') {
       return {
-        backgroundColor: selected ? 'secondary.darken030' : 'secondary.dark',
+        backgroundColor: selected ? colors.lavenderWeb5 : colors.lavenderWeb7,
         color: colors.wildStrawberry,
         '&:hover': {
-          backgroundColor: 'secondary.darken030',
+          backgroundColor: colors.lavenderWeb5,
         },
         borderWidth: 1,
         borderColor: colors.wildStrawberry,
@@ -102,7 +102,7 @@ export function Button<C extends React.ElementType>({
 
     if (props.variant === 'healthy') {
       return {
-        backgroundColor: 'secondary.dark',
+        backgroundColor: colors.lavenderWeb7,
         '&:hover': {
           backgroundColor: 'transparent',
         },
@@ -113,7 +113,7 @@ export function Button<C extends React.ElementType>({
 
     if (props.variant === 'warning') {
       return {
-        backgroundColor: 'secondary.dark',
+        backgroundColor: colors.lavenderWeb7,
         '&:hover': {
           backgroundColor: 'transparent',
         },
@@ -124,7 +124,7 @@ export function Button<C extends React.ElementType>({
 
     if (props.variant === 'danger') {
       return {
-        backgroundColor: 'secondary.dark',
+        backgroundColor: colors.lavenderWeb7,
         '&:hover': {
           backgroundColor: 'transparent',
         },
@@ -135,40 +135,40 @@ export function Button<C extends React.ElementType>({
 
     if (props.variant === 'dark') {
       return {
-        backgroundColor: selected ? 'secondary.darken030' : 'secondary.dark',
-        color: 'secondary.light',
+        backgroundColor: selected ? colors.lavenderWeb5 : colors.lavenderWeb7,
+        color: colors.lavenderWeb,
         '&:hover': {
-          backgroundColor: 'secondary.darken030',
+          backgroundColor: colors.lavenderWeb5,
         },
       };
     }
 
     if (props.variant === 'dark-link') {
       return {
-        backgroundColor: selected ? 'secondary.darken030' : 'secondary.dark',
+        backgroundColor: selected ? colors.lavenderWeb5 : colors.lavenderWeb7,
         color: colors.skyBlueCrayola,
         '&:hover': {
-          backgroundColor: 'secondary.darken030',
+          backgroundColor: colors.lavenderWeb5,
         },
       };
     }
 
     if (props.variant === 'darker') {
       return {
-        backgroundColor: selected ? 'secondary.dark' : 'secondary.darken045',
-        color: 'secondary.light',
+        backgroundColor: selected ? colors.lavenderWeb7 : colors.lavenderWeb8,
+        color: colors.lavenderWeb,
         '&:hover': {
-          backgroundColor: 'secondary.darken035',
+          backgroundColor: colors.lavenderWeb6,
         },
       };
     }
 
     if (props.variant === 'darker-link') {
       return {
-        backgroundColor: selected ? 'secondary.dark' : 'secondary.darken045',
+        backgroundColor: selected ? colors.lavenderWeb7 : colors.lavenderWeb8,
         color: colors.skyBlueCrayola,
         '&:hover': {
-          backgroundColor: 'secondary.darken035',
+          backgroundColor: colors.lavenderWeb6,
         },
       };
     }
@@ -200,7 +200,7 @@ export function Button<C extends React.ElementType>({
     if (props.variant === 'rollover2') {
       return {
         backgroundColor: 'tertiary.base',
-        color: 'secondary.base',
+        color: colors.lavenderWeb,
         fontWeight: 'bold',
         '&:hover': {
           backgroundColor: 'tertiary.darken015',
@@ -211,11 +211,11 @@ export function Button<C extends React.ElementType>({
 
     if (props.variant === 'rollover3') {
       return {
-        backgroundColor: 'secondary.darken050',
+        backgroundColor: colors.lavenderWeb8,
         color: colors.skyBlueCrayola,
         fontWeight: 'bold',
         '&:hover': {
-          backgroundColor: 'secondary.darken045',
+          backgroundColor: colors.lavenderWeb8,
           boxShadow: 'none',
         },
       };

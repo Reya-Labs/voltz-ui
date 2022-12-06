@@ -43,8 +43,8 @@ const styles: Record<PositionBadgeVariant, SystemStyleObject<Theme>> = {
   },
   VT: {
     ...baseStyles,
-    borderColor: 'secondary.base',
-    color: 'secondary.base',
+    borderColor: colors.lavenderWeb,
+    color: colors.lavenderWeb,
     background: 'tertiary.base',
   },
   LP: {

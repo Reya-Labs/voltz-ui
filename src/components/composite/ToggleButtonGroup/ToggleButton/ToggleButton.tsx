@@ -47,7 +47,7 @@ export const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
       case Agents.VARIABLE_TRADER: {
         return {
           backgroundColor: 'tertiary.base',
-          color: 'secondary.light',
+          color: colors.lavenderWeb,
           borderColor: colors.skyBlueCrayola,
           '&.Mui-selected': {
             backgroundColor: 'tertiary.base',
@@ -55,7 +55,7 @@ export const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
               backgroundColor: 'tertiary.base',
             },
             '&:not(:first-of-type)': {
-              borderColor: 'secondary.light',
+              borderColor: colors.lavenderWeb,
             },
           },
         };
@@ -63,19 +63,19 @@ export const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
 
       case Agents.LIQUIDITY_PROVIDER: {
         return {
-          backgroundColor: 'secondary.dark',
+          backgroundColor: colors.lavenderWeb7,
           color: colors.skyBlueCrayola,
-          borderColor: 'secondary.light',
+          borderColor: colors.lavenderWeb,
           '&:hover': {
-            backgroundColor: 'secondary.darken035',
+            backgroundColor: colors.lavenderWeb6,
           },
           '&.Mui-selected': {
-            backgroundColor: 'secondary.main',
+            backgroundColor: colors.lavenderWeb3,
             '&:hover': {
-              backgroundColor: 'secondary.darken015',
+              backgroundColor: colors.lavenderWeb2,
             },
             '&:not(:first-of-type)': {
-              borderColor: 'secondary.light',
+              borderColor: colors.lavenderWeb,
             },
           },
         };
