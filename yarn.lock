@@ -5471,7 +5471,7 @@
     lodash "^4.17.4"
     read-pkg-up "^7.0.0"
 
-"@sentry/browser@7.22.0", "@sentry/browser@^7.22.0":
+"@sentry/browser@7.22.0":
   version "7.22.0"
   resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-7.22.0.tgz#c4f283cd7825db0db59ac97c3334c939982ace94"
   integrity sha512-8MA+f46+T3G7fb4BYYX9Wl3bMDloG5a3Ng0GWdBeq6DE2tXVHeCvba8Yrrcnn1qFHpmnOn5Nz4xWBUDs3uBFxA==
@@ -5501,7 +5501,7 @@
     hoist-non-react-statics "^3.3.2"
     tslib "^1.9.3"
 
-"@sentry/tracing@7.22.0", "@sentry/tracing@^7.22.0":
+"@sentry/tracing@7.22.0":
   version "7.22.0"
   resolved "https://registry.yarnpkg.com/@sentry/tracing/-/tracing-7.22.0.tgz#ec29325ee2c5959670097c104e47a78797cef17b"
   integrity sha512-s68aSnrRaWQ+Z5oG9ozIegUkofZy9PwicuXYEPA8K/R30F1CVpHvDZ/3KlFnByl+aXTbAyLBQzN2sAObB5g4pQ==
@@ -7462,17 +7462,14 @@
     "@typescript-eslint/types" "5.9.1"
     eslint-visitor-keys "^3.0.0"
 
-"@voltz-protocol/v1-sdk@1.3.1":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.3.1.tgz#7c8a1668ee1b9c4ea4c5154079a994fe82f79d23"
-  integrity sha512-fxe5wY7pu+WxOE/OdWtLb4mH1h/t2ZIAMJLe09P+h6br0jjPBGjzYfjt9Fb8qnFLJnnA52+uvjc4gLnGr1RddA==
+"@voltz-protocol/v1-sdk@1.2.8":
+  version "1.2.8"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.2.8.tgz#36bebc07ab5b5a69b65d7a427155f9a5deb2c1db"
+  integrity sha512-+hWxAVpK4cZ/fWBUpCRHmkexntEvQqRH9NEHc6br0geQAEB7eZ9HMpccvZjIYKrZLc/luhIcicyAyjm62TH7zA==
   dependencies:
     "@apollo/client" "^3.7.1"
-    "@ethersproject/address" "^5.7.0"
     "@graphprotocol/graph-cli" "^0.35.0"
     "@metamask/detect-provider" "^1.2.0"
-    "@sentry/browser" "^7.22.0"
-    "@sentry/tracing" "^7.22.0"
     big.js "^6.1.1"
     coingecko-api "^1.0.10"
     cross-fetch "^3.1.5"
