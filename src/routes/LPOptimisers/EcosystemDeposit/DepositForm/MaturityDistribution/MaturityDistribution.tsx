@@ -1,7 +1,10 @@
 import React from 'react';
 
 import { doNothing } from '../../../../../utilities/doNothing';
-import { MaturityDistributionsBox } from '../DepositForm.styled';
+import {
+  MaturityDistributionErrorTypography,
+  MaturityDistributionsBox,
+} from '../DepositForm.styled';
 import { MaturityDistributionBox } from './MaturityDistribution.styled';
 import { MaturityDistributionEntry } from './MaturityDistributionEntry/MaturityDistributionEntry';
 import { MaturityDistributionHeader } from './MaturityDistributionHeader/MaturityDistributionHeader';
@@ -10,33 +13,56 @@ import {
   MaturityDistributionToggleProps,
 } from './MaturityDistributionToggle/MaturityDistributionToggle';
 
+type Weight = {
+  distribution: number;
+  maturityTimestamp: number;
+  pools: string[];
+};
 export type MaturityDistributionProps = {
   distribution: MaturityDistributionToggleProps['distribution'];
-  onChangeDistribution: MaturityDistributionToggleProps['onChange'];
-  weights: {
-    distribution: number;
-    maturityTimestamp: number;
-    pools: string[];
-  }[];
+  onDistributionToggle: MaturityDistributionToggleProps['onChange'];
+  onManualDistributionsUpdate: (newManualWeights: Weight[]) => void;
+  weights: Weight[];
+  combinedWeightValue: number;
+  disabledToggle: boolean;
 };
 
 export const MaturityDistribution: React.FunctionComponent<MaturityDistributionProps> = ({
   distribution,
-  onChangeDistribution = doNothing,
+  onDistributionToggle = doNothing,
+  onManualDistributionsUpdate = doNothing,
   weights,
+  combinedWeightValue,
+  disabledToggle,
 }) => (
   <MaturityDistributionBox>
-    <MaturityDistributionToggle distribution={distribution} onChange={onChangeDistribution} />
+    <MaturityDistributionToggle
+      disabled={disabledToggle}
+      distribution={distribution}
+      onChange={onDistributionToggle}
+    />
     <MaturityDistributionHeader />
     <MaturityDistributionsBox>
       {weights.map((weight, index) => (
         <MaturityDistributionEntry
-          key={index}
+          key={`${index}-${distribution}`}
           disabled={distribution === 'automatic'}
-          onChange={doNothing}
+          onChange={(newDistribution) => {
+            if (distribution === 'automatic') {
+              return;
+            }
+            const weightCopies = weights.map((m) => ({ ...m }));
+            weightCopies[index].distribution = newDistribution;
+            onManualDistributionsUpdate(weightCopies);
+          }}
           {...weight}
         />
       ))}
     </MaturityDistributionsBox>
+    {combinedWeightValue !== 100 ? (
+      <MaturityDistributionErrorTypography>
+        The total distribution is now {combinedWeightValue}%, it has to be 100%.
+      </MaturityDistributionErrorTypography>
+    ) : null}
   </MaturityDistributionBox>
 );

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
 import { MellowProduct } from '../../../../store/features/ecosystem/getMellowLPVaults/config';
-import { DepositForm } from '../DepositForm/DepositForm';
+import { DepositForm, DepositFormProps } from '../DepositForm/DepositForm';
 import { DepositStates, getSubmissionState } from './mappers';
 
-const weights = [
+const automaticWeights: DepositFormProps['weights'] = [
   {
     distribution: 90,
     maturityTimestamp: 1680220800000,
@@ -30,7 +30,9 @@ export const ConnectedDepositForm: React.FunctionComponent<ConnectedMellowLpDepo
 }) => {
   const [selectedDeposit, setSelectedDeposit] = useState<number>(0);
   const [distribution, setDistribution] = useState<'automatic' | 'manual'>('automatic');
-
+  const [manualWeights, setManualWeights] = useState<DepositFormProps['weights']>(
+    automaticWeights.map((a) => ({ ...a })),
+  );
   const [depositState, setDepositState] = useState<DepositStates>(DepositStates.INITIALISING);
   const [error, setError] = useState<string>('');
 
@@ -68,6 +70,10 @@ export const ConnectedDepositForm: React.FunctionComponent<ConnectedMellowLpDepo
   };
 
   useEffect(() => {
+    if (loading || !vault?.id) {
+      return;
+    }
+
     void vault.vault.isTokenApproved().then(
       (resp) => {
         if (resp) {
@@ -81,7 +87,7 @@ export const ConnectedDepositForm: React.FunctionComponent<ConnectedMellowLpDepo
         setDepositState(DepositStates.PROVIDER_ERROR);
       },
     );
-  }, [vault, selectedDeposit]);
+  }, [vault.id, loading]);
 
   const submissionState = getSubmissionState({
     depositState,
@@ -98,9 +104,15 @@ export const ConnectedDepositForm: React.FunctionComponent<ConnectedMellowLpDepo
     setSelectedDeposit(value ?? 0);
   };
 
+  const weights = distribution === 'automatic' ? automaticWeights : manualWeights;
+  const combinedWeightValue = weights.reduce((total, weight) => total + weight.distribution, 0);
+
   return (
     <DepositForm
-      disabled={!sufficientFunds || submissionState.disabled || loading}
+      combinedWeightValue={combinedWeightValue}
+      disabled={
+        !sufficientFunds || submissionState.disabled || loading || combinedWeightValue !== 100
+      }
       distribution={distribution}
       hintText={submissionState.hintText}
       loading={submissionState.loading}
@@ -110,7 +122,8 @@ export const ConnectedDepositForm: React.FunctionComponent<ConnectedMellowLpDepo
       weights={weights}
       onCancel={onCancel}
       onChangeDeposit={onChangeDeposit}
-      onChangeDistribution={setDistribution}
+      onDistributionToggle={setDistribution}
+      onManualDistributionsUpdate={setManualWeights}
       onSubmit={submissionState.action}
     />
   );

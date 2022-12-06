@@ -39,9 +39,11 @@ export type DepositFormProps = {
   loading: boolean;
   success: boolean;
   onCancel: () => void;
+  combinedWeightValue: number;
   weights: MaturityDistributionProps['weights'];
   distribution: MaturityDistributionProps['distribution'];
-  onChangeDistribution: MaturityDistributionProps['onChangeDistribution'];
+  onDistributionToggle: MaturityDistributionProps['onDistributionToggle'];
+  onManualDistributionsUpdate: MaturityDistributionProps['onManualDistributionsUpdate'];
 };
 
 export const DepositForm: React.FunctionComponent<DepositFormProps> = ({
@@ -56,7 +58,9 @@ export const DepositForm: React.FunctionComponent<DepositFormProps> = ({
   success,
   weights,
   distribution,
-  onChangeDistribution,
+  onDistributionToggle,
+  onManualDistributionsUpdate,
+  combinedWeightValue,
 }: DepositFormProps) => {
   const subtext = `WALLET BALANCE: ${
     isUndefined(lpVault.vault.userWalletBalance)
@@ -73,9 +77,12 @@ export const DepositForm: React.FunctionComponent<DepositFormProps> = ({
     <FormBox>
       <DepositInfo mellowProduct={lpVault} />
       <MaturityDistribution
+        combinedWeightValue={combinedWeightValue}
+        disabledToggle={loading}
         distribution={distribution}
         weights={weights}
-        onChangeDistribution={onChangeDistribution}
+        onDistributionToggle={onDistributionToggle}
+        onManualDistributionsUpdate={onManualDistributionsUpdate}
       />
       <MaskedIntegerFieldStyled
         allowNegativeValue={false}
