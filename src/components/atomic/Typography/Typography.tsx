@@ -37,7 +37,7 @@ function TypographyComponent<C extends React.ElementType>(
 
     if (agent === Agents.LIQUIDITY_PROVIDER) {
       return {
-        color: 'error.base',
+        color: colors.wildStrawberry,
       };
     }
 
