@@ -78,7 +78,7 @@ export const MaskedIntegerField: React.FunctionComponent<MaskedIntegerFieldProps
               error={error}
               htmlFor={inputId}
               sx={{
-                color: (theme) => (error ? `${theme.palette.error.base} !important` : undefined),
+                color: (theme) => (error ? `${colors.wildStrawberry} !important` : undefined),
               }}
               shrink
             >

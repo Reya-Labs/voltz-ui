@@ -139,7 +139,7 @@ const dark = createTheme({
             }
 
             if (ownerState.error) {
-              return theme.palette.error.base;
+              return colors.wildStrawberry;
             }
 
             return colors.lavenderWeb1;
@@ -150,7 +150,7 @@ const dark = createTheme({
             }
 
             if (ownerState.error) {
-              return theme.palette.error.darken010;
+              return colors.wildStrawberry1;
             }
 
             return colors.lavenderWeb6;
@@ -170,7 +170,7 @@ const dark = createTheme({
 
           return {
             fontFamily: 'PixelOperatorMono',
-            backgroundColor: theme.palette.secondary.darken040,
+            backgroundColor: colors.lavenderWeb7,
             borderColor: borderColor(),
             borderRadius: theme.spacing(1),
             lineHeight: '14px',

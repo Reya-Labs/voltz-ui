@@ -30,19 +30,19 @@ export const inputStyles = ({
     '&:hover': {
       '*, input, .MuiSelect-select': {
         borderColor: (theme) => {
-          if (error) return theme.palette.error.darken010;
+          if (error) return colors.wildStrawberry1;
           if (disabled) return 'transparent';
           return colors.lavenderWeb5;
         },
         color: (theme) => {
-          if (error) return theme.palette.error.base;
+          if (error) return colors.wildStrawberry;
           if (disabled) return colors.lavenderWeb5;
           if (dynamic) return colors.lavenderWeb1;
           return colors.lavenderWeb2;
         },
         '::placeholder': {
           color: (theme) => {
-            if (error) return theme.palette.error.base;
+            if (error) return colors.wildStrawberry;
             if (disabled) return colors.lavenderWeb5;
             if (dynamic) return colors.lavenderWeb1;
             return colors.lavenderWeb2;
@@ -54,16 +54,16 @@ export const inputStyles = ({
       '*, input, .MuiSelect-select': {
         outline: 'none',
         borderColor: (theme) => {
-          if (error) return theme.palette.error.darken010;
+          if (error) return colors.wildStrawberry1;
           return colors.lavenderWeb2;
         },
         color: (theme) => {
-          if (error) return theme.palette.error.base;
+          if (error) return colors.wildStrawberry;
           return colors.lavenderWeb;
         },
         '::placeholder': {
           color: (theme) => {
-            if (error) return theme.palette.error.base;
+            if (error) return colors.wildStrawberry;
             return colors.lavenderWeb;
           },
         },
@@ -76,7 +76,7 @@ export const inputStyles = ({
 
   const childElementStyles: SystemStyleObject<Theme> = {
     color: (theme) => {
-      if (error) return theme.palette.error.base;
+      if (error) return colors.wildStrawberry;
       if (dynamic) return colors.lavenderWeb1;
       return colors.lavenderWeb5;
     },
@@ -86,15 +86,13 @@ export const inputStyles = ({
 
   const inputFieldStyles: SystemStyleObject<Theme> = {
     backgroundColor: (theme) =>
-      background === 'standard'
-        ? theme.palette.secondary.darken040
-        : theme.palette.secondary.darken045,
+      background === 'standard' ? colors.lavenderWeb7 : colors.lavenderWeb8,
     borderStyle: 'solid',
     borderWidth: '1px',
     borderRadius: (theme) => theme.spacing(1),
     borderColor: (theme) => {
-      if (error) return theme.palette.error.darken010;
-      return theme.palette.secondary.darken040;
+      if (error) return colors.wildStrawberry1;
+      return colors.lavenderWeb7;
     },
     minHeight: 'auto !important',
     boxSizing: 'border-box',
@@ -104,7 +102,7 @@ export const inputStyles = ({
     '::placeholder': {
       transition: 'color 0.1s linear',
       color: (theme) => {
-        if (error) return theme.palette.error.base;
+        if (error) return colors.wildStrawberry;
         if (disabled) return colors.lavenderWeb5;
         if (dynamic) return colors.lavenderWeb1;
         return colors.lavenderWeb5;
@@ -184,7 +182,7 @@ export const inputStyles = ({
     '.subtext': {
       fontSize: `${subtextSize || 14}px`,
       color: (theme) => {
-        if (error) return theme.palette.error.base;
+        if (error) return colors.wildStrawberry;
         return colors.lavenderWeb3;
       },
     },
