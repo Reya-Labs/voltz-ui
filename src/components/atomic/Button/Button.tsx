@@ -33,10 +33,10 @@ export function Button<C extends React.ElementType>({
     if (agent === Agents.FIXED_TRADER) {
       return {
         backgroundColor: 'primary.darken030',
-        color: 'primary.light',
+        color: colors.skyBlueCrayola,
         '&:hover': {
           backgroundColor: 'primary.darken030',
-          borderColor: 'primary.light',
+          borderColor: colors.skyBlueCrayola,
           boxShadow: '0px 4px 20px 0px #4de5ff33',
         },
       };
@@ -57,7 +57,7 @@ export function Button<C extends React.ElementType>({
     if (agent === Agents.LIQUIDITY_PROVIDER) {
       return {
         backgroundColor: 'secondary.dark',
-        color: 'primary.light',
+        color: colors.skyBlueCrayola,
         '&:hover': {
           backgroundColor: 'secondary.darken035',
           boxShadow: '0px 4px 20px 0px #4DE5FF40',

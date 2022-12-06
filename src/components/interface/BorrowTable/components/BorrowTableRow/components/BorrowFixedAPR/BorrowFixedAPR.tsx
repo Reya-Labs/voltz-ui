@@ -1,6 +1,7 @@
 import TableCell from '@mui/material/TableCell';
 import React from 'react';
 
+import colors from '../../../../../../../theme/colors';
 import { formatNumber } from '../../../../../../../utilities/number';
 import { Typography } from '../../../../../../atomic/Typography/Typography';
 
@@ -30,7 +31,7 @@ export const BorrowFixedAPR: React.FunctionComponent<BorrowBorrowFixedAPR> = ({
       <Typography
         sx={{
           fontSize: 18,
-          color: 'primary.light',
+          color: colors.skyBlueCrayola,
           fontWeight: 700,
           letterSpacing: '0.02em',
           lineHeight: '130%',

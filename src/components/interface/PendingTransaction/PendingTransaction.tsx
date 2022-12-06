@@ -12,6 +12,7 @@ import { useAgent } from '../../../hooks/useAgent';
 import { useWallet } from '../../../hooks/useWallet';
 import { selectors } from '../../../store';
 import { useAppSelector } from '../../../store/hooks';
+import colors from '../../../theme/colors';
 import { getAmmProtocol } from '../../../utilities/amm';
 import { getAgentFromPosition } from '../../../utilities/getAgent';
 import {
@@ -239,7 +240,12 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
               paddingBottom: (theme) => theme.spacing(8),
             }}
           >
-            <Link color="primary.light" href={transactionLink} id={buttonId} variant="caption">
+            <Link
+              color={colors.skyBlueCrayola}
+              href={transactionLink}
+              id={buttonId}
+              variant="caption"
+            >
               View on etherscan
             </Link>
           </Box>
@@ -314,7 +320,7 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
             }}
           >
             <Link
-              color="primary.light"
+              color={colors.skyBlueCrayola}
               href={transactionLink}
               id={buttonId}
               target="_blank"

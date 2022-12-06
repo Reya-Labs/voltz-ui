@@ -2,6 +2,7 @@ import TableCell from '@mui/material/TableCell';
 import React from 'react';
 
 import { useBorrowAMMContext } from '../../../../../../../contexts/BorrowAMMContext/BorrowAMMContext';
+import { colors } from '../../../../../../../theme';
 import { formatDateTime } from '../../../../../../../utilities/date';
 import { Typography } from '../../../../../../atomic/Typography/Typography';
 
@@ -18,7 +19,7 @@ export const BorrowMaturity: React.FunctionComponent = () => {
 
   return (
     <TableCell width="20%">
-      <Typography sx={{ fontSize: 18, color: 'primary.light' }} variant="body2">
+      <Typography sx={{ fontSize: 18, color: colors.skyBlueCrayola }} variant="body2">
         {renderValue()}
       </Typography>
     </TableCell>

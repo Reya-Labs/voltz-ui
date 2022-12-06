@@ -30,15 +30,15 @@ export const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
         return {
           backgroundColor: 'primary.darken010',
           color: 'primary.darken030',
-          borderColor: 'primary.light',
+          borderColor: colors.skyBlueCrayola,
           '&.Mui-selected': {
-            color: 'primary.light',
+            color: colors.skyBlueCrayola,
             backgroundColor: 'primary.darken030',
             '&:hover': {
               backgroundColor: 'primary.darken030',
             },
             '&:not(:first-of-type)': {
-              borderColor: 'primary.light',
+              borderColor: colors.skyBlueCrayola,
             },
           },
         };
@@ -48,7 +48,7 @@ export const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
         return {
           backgroundColor: 'tertiary.base',
           color: 'secondary.light',
-          borderColor: 'primary.light',
+          borderColor: colors.skyBlueCrayola,
           '&.Mui-selected': {
             backgroundColor: 'tertiary.base',
             '&:hover': {
@@ -64,7 +64,7 @@ export const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ({
       case Agents.LIQUIDITY_PROVIDER: {
         return {
           backgroundColor: 'secondary.dark',
-          color: 'primary.light',
+          color: colors.skyBlueCrayola,
           borderColor: 'secondary.light',
           '&:hover': {
             backgroundColor: 'secondary.darken035',

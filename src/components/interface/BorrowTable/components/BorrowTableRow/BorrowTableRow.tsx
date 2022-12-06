@@ -153,11 +153,11 @@ export const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({
           id={gaButtonId}
           sx={{
             backgroundColor: colors.liberty6,
-            color: 'primary.light',
+            color: colors.skyBlueCrayola,
             '&:hover': {
               backgroundColor: colors.liberty6,
               borderStyle: 'none none solid none',
-              borderColor: 'primary.light',
+              borderColor: colors.skyBlueCrayola,
               borderRadius: '0px',
             },
             padding: '4px 1px',
