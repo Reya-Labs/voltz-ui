@@ -4,7 +4,6 @@ import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
 
 import { Page } from './components/interface/Page/Page';
 import { FixedBorrower } from './routes/FixedBorrower/FixedBorrower';
-import { EcosystemDepositDeprecated } from './routes/LPOptimisers/deprecated/EcosystemDepositV1/EcosystemDeposit';
 import { Ecosystem } from './routes/LPOptimisers/Ecosystem/Ecosystem';
 import { EcosystemDeposit } from './routes/LPOptimisers/EcosystemDeposit/EcosystemDeposit';
 import { LPPools } from './routes/LPPools/LPPools';
@@ -70,17 +69,7 @@ export const App = () => {
             path={routes.PRODUCTS}
           />
           <Route element={<Ecosystem />} path={routes.LP_OPTIMISERS} />
-          <Route
-            element={
-              process.env.REACT_APP_LP_OPTIMISER_DEPOSIT_MATURITY_DISTRIBUTION &&
-              process.env.REACT_APP_LP_OPTIMISER_DEPOSIT_MATURITY_DISTRIBUTION !== 'UNPROVIDED' ? (
-                <EcosystemDeposit />
-              ) : (
-                <EcosystemDepositDeprecated />
-              )
-            }
-            path={routes.LP_OPTIMISERS_DEPOSIT}
-          />
+          <Route element={<EcosystemDeposit />} path={routes.LP_OPTIMISERS_DEPOSIT} />
           <Route element={<FixedBorrower />} path={routes.BORROW_POS} />
           <Route element={<Profile />} path={routes.PROFILE} />
           <Route element={<TradingLeague />} path={routes.TRADING_LEAGUE} />
