@@ -4,11 +4,9 @@ import React from 'react';
 import { Ellipsis } from '../../../../components/atomic/Ellipsis/Ellipsis';
 import { IconLabel } from '../../../../components/composite/IconLabel/IconLabel';
 import { InputTokenLabel } from '../../../../components/composite/InputTokenLabel/InputTokenLabel';
-import { MaskedIntegerField } from '../../../../components/composite/MaskedIntegerField/MaskedIntegerField';
 import { MellowProduct } from '../../../../store/features/ecosystem/getMellowLPVaults/config';
 import { formatCurrency, toUSFormat } from '../../../../utilities/number';
 import { DepositButton } from '../DepositButton/DepositButton';
-import { LPMellowVaultDepositInfo } from './components/LPMellowVaultDepositInfo';
 import {
   BackButton,
   ButtonBox,
@@ -18,10 +16,16 @@ import {
   FormBox,
   FullButtonBox,
   HintTextTypography,
+  MaskedIntegerFieldStyled,
   PrefixHintTextSpan,
-} from './MellowLpDepositForm.styled';
+} from './DepositForm.styled';
+import { DepositInfo } from './DepositInfo/DepositInfo';
+import {
+  MaturityDistribution,
+  MaturityDistributionProps,
+} from './MaturityDistribution/MaturityDistribution';
 
-export type MellowLpDepositFormProps = {
+export type DepositFormProps = {
   lpVault: MellowProduct;
   onChangeDeposit: (value: number | undefined) => void;
   submitText: string;
@@ -35,9 +39,12 @@ export type MellowLpDepositFormProps = {
   loading: boolean;
   success: boolean;
   onCancel: () => void;
+  weights: MaturityDistributionProps['weights'];
+  distribution: MaturityDistributionProps['distribution'];
+  onChangeDistribution: MaturityDistributionProps['onChangeDistribution'];
 };
 
-export const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormProps> = ({
+export const DepositForm: React.FunctionComponent<DepositFormProps> = ({
   lpVault,
   onChangeDeposit,
   submitText,
@@ -47,7 +54,10 @@ export const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormPro
   onCancel,
   loading,
   success,
-}: MellowLpDepositFormProps) => {
+  weights,
+  distribution,
+  onChangeDistribution,
+}: DepositFormProps) => {
   const subtext = `WALLET BALANCE: ${
     isUndefined(lpVault.vault.userWalletBalance)
       ? '---'
@@ -61,8 +71,13 @@ export const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormPro
 
   return (
     <FormBox>
-      <LPMellowVaultDepositInfo mellowProduct={lpVault} />
-      <MaskedIntegerField
+      <DepositInfo mellowProduct={lpVault} />
+      <MaturityDistribution
+        distribution={distribution}
+        weights={weights}
+        onChangeDistribution={onChangeDistribution}
+      />
+      <MaskedIntegerFieldStyled
         allowNegativeValue={false}
         defaultValue={0}
         label={
@@ -95,7 +110,6 @@ export const MellowLpDepositForm: React.FunctionComponent<MellowLpDepositFormPro
 
       <DescriptionBox>
         <DescriptionTitleTypography>ABOUT YOUR FUNDS</DescriptionTitleTypography>
-
         {[
           'Deposits are transferred to pools once a day, at 7pm UTC, to reduce gas costs, and will be locked into the pool until the pool reaches maturity. At this point the withdrawal mechanism will be enabled.',
           'Remember, returns are not guaranteed and you may get back less than you put in.',
@@ -116,7 +130,8 @@ const HintText: React.FunctionComponent<{
   return (
     <HintTextTypography>
       <PrefixHintTextSpan color={textColor}>
-        {text} {loading ? <Ellipsis /> : null}
+        {text}
+        {loading ? <Ellipsis /> : null}
       </PrefixHintTextSpan>
       {suffixText ? ` ${suffixText}` : null}
     </HintTextTypography>

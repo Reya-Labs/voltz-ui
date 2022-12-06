@@ -14,29 +14,6 @@ export const VaultInfoBox = styled(Typography)`
   align-self: stretch;
 `;
 
-export const CapBarTitleTypography = styled(Typography)`
-  font-family: 'PixelOperatorMono', monospace;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 14px;
-
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-
-  color: #9b97ad;
-`;
-
-export const CapBarBox = styled(Box)`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 0px;
-  gap: ${({ theme }) => theme.spacing(1)};
-
-  align-self: stretch;
-`;
-
 export const PositionBox = styled(Box)`
   display: flex;
   flex-direction: row;
@@ -54,7 +31,7 @@ export const PositionLabelTypography = styled(Typography)`
   font-family: 'PixelOperatorMono', monospace;
   font-style: normal;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 20px;
 
   letter-spacing: 0.02em;
@@ -66,7 +43,7 @@ export const PositionValueTypography = styled(Typography)`
   font-family: 'PixelOperatorMono', monospace;
   font-style: normal;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 20px;
 
   letter-spacing: 0.02em;
