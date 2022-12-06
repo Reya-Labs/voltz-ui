@@ -115,3 +115,12 @@ export const MaturityDistributionsBox = styled(Box)`
   row-gap: ${({ theme }) => theme.spacing(4)};
   width: 100%;
 `;
+
+export const MaturityDistributionErrorTypography = styled(Typography)`
+  color: ${colors.wildStrawberry.base};
+  font-family: 'PixelOperatorMono', monospace;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
+  margin-top: ${({ theme }) => theme.spacing(2)};
+`;

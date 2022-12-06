@@ -128,7 +128,7 @@ export const getSubmissionState = ({
     }
     case DepositStates.APPROVING: {
       return {
-        submitText: 'Approving',
+        submitText: 'Pending',
         action: () => {},
         hintText: {
           text: 'Waiting for confirmation',
@@ -159,7 +159,7 @@ export const getSubmissionState = ({
     }
     case DepositStates.DEPOSITING: {
       return {
-        submitText: 'Depositing',
+        submitText: 'Pending',
         action: () => {},
         hintText: {
           text: 'Waiting for confirmation',

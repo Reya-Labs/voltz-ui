@@ -29,9 +29,10 @@ const distributions: {
 export type MaturityDistributionToggleProps = {
   distribution: Distribution;
   onChange: (distribution: Distribution) => void;
+  disabled: boolean;
 };
 export const MaturityDistributionToggle: React.FunctionComponent<MaturityDistributionToggleProps> =
-  ({ distribution, onChange = doNothing }) => {
+  ({ disabled, distribution, onChange = doNothing }) => {
     return (
       <MaturityDistributionBox>
         <MaturityDistributionInputLabel shrink>
@@ -50,7 +51,7 @@ export const MaturityDistributionToggle: React.FunctionComponent<MaturityDistrib
           }}
         >
           {distributions.map((option) => (
-            <ToggleButton key={option.id} value={option.id}>
+            <ToggleButton key={option.id} disabled={disabled} value={option.id}>
               <MaturityDistributionTypography>{option.label}</MaturityDistributionTypography>
             </ToggleButton>
           ))}

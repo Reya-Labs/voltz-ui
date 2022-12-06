@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { IconLabel } from '../../../../../../components/composite/IconLabel/IconLabel';
 import { formatPOSIXTimestamp } from '../../../../../../utilities/date';
+import { doNothing } from '../../../../../../utilities/doNothing';
 import {
   DistributionInput,
   DistributionInputWrapper,
-  DistributionTypography,
   EvenBox,
   MaturityDistributionBox,
   MaturityTypography,
@@ -21,33 +21,44 @@ type MaturityDistributionEntryProps = {
 };
 export const MaturityDistributionEntry: React.FunctionComponent<MaturityDistributionEntryProps> = ({
   distribution,
-  onChange,
+  onChange = doNothing,
   disabled,
   maturityTimestamp,
   pools,
 }) => {
   const poolsCount = pools.length;
+  const [value, setValue] = useState(distribution.toString());
+  const handleOnBlur = (nextValue: number) => {
+    onChange(nextValue);
+    setValue(nextValue.toString());
+  };
   return (
     <MaturityDistributionBox>
       <EvenBox>
-        {disabled ? (
-          <DistributionTypography>{distribution} %</DistributionTypography>
-        ) : (
-          <DistributionInputWrapper>
-            <DistributionInput
-              max="100"
-              min="0"
-              type="number"
-              value={distribution}
-              onChange={(event) => {
-                const value = parseInt(event.target.value, 10);
-                if (isNaN(value) || value < 0 || value > 100) {
-                  return;
-                }
-              }}
-            />
-          </DistributionInputWrapper>
-        )}
+        <DistributionInputWrapper>
+          <DistributionInput
+            disabled={disabled}
+            max="100"
+            min="0"
+            type="number"
+            value={value}
+            onBlur={() => {
+              const valueParsed = parseInt(value, 10);
+              if (isNaN(valueParsed)) {
+                handleOnBlur(0);
+                return;
+              }
+              if (valueParsed < 0 || valueParsed > 100) {
+                handleOnBlur(distribution);
+                return;
+              }
+              handleOnBlur(valueParsed);
+            }}
+            onChange={(event) => {
+              setValue(event.target.value);
+            }}
+          />
+        </DistributionInputWrapper>
       </EvenBox>
       <EvenBox>
         <MaturityTypography>{formatPOSIXTimestamp(maturityTimestamp)}</MaturityTypography>

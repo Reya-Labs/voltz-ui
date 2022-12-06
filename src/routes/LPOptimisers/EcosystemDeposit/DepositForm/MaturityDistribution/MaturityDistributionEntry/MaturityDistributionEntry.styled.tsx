@@ -5,18 +5,6 @@ import { styled } from '@mui/material/styles';
 import { Typography } from '../../../../../../components/atomic/Typography/Typography';
 import colors from '../../../../../../theme/colors';
 
-export const DistributionTypography = styled(Typography)`
-  padding: ${({ theme }) => theme.spacing(2.5, 4)};
-  background: #1e1933;
-  border-radius: 4px;
-  color: ${colors.lavenderWeb.darken015};
-  font-family: 'PixelOperatorMono', monospace;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 14px;
-  display: inline-block;
-`;
-
 export const DistributionInputWrapper = styled('div')`
   font-family: 'PixelOperatorMono', monospace;
   font-weight: 400;
@@ -45,6 +33,10 @@ export const DistributionInput = styled('input')`
   outline: none;
   &:focus {
     color: ${colors.lavenderWeb.base};
+  }
+  &:disabled {
+    background: #1e1933;
+    border: 1px solid #1e1933;
   }
 
   /* Chrome, Safari, Edge, Opera */
