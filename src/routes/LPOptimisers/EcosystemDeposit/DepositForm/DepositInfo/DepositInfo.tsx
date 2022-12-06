@@ -20,7 +20,6 @@ export const DepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoProps>
   <VaultInfoBox>
     <VaultField
       expectedApy={mellowProduct.metadata.estimatedHistoricApy}
-      maturity={mellowProduct.metadata.maturity}
       title={mellowProduct.metadata.title}
       token={mellowProduct.metadata.token}
     />

@@ -37,14 +37,12 @@ type VaultFieldProps = {
   title: string;
   token: string;
   expectedApy: string;
-  maturity: string;
 };
 
 export const VaultField: React.FunctionComponent<VaultFieldProps> = ({
   title,
   token,
   expectedApy,
-  maturity,
 }: VaultFieldProps) => {
   return (
     <VaultFieldBox>
@@ -53,7 +51,6 @@ export const VaultField: React.FunctionComponent<VaultFieldProps> = ({
 
         <TitleTypography>{title}</TitleTypography>
       </TitleBox>
-
       <VaultMetricsBox>
         <VaultApyTypography
           label={
@@ -66,18 +63,6 @@ export const VaultField: React.FunctionComponent<VaultFieldProps> = ({
         >
           {expectedApy}
         </VaultApyTypography>
-
-        {/*<VaultMaturityTypography*/}
-        {/*  label={*/}
-        {/*    <IconLabel*/}
-        {/*      icon="information-circle"*/}
-        {/*      info={`This strategy will run until ${maturity}. At this point depositors can collect any returns that may have been generated and withdraw their funds.`}*/}
-        {/*      label="Maturity"*/}
-        {/*    />*/}
-        {/*  }*/}
-        {/*>*/}
-        {/*  {maturity}*/}
-        {/*</VaultMaturityTypography>*/}
       </VaultMetricsBox>
     </VaultFieldBox>
   );
