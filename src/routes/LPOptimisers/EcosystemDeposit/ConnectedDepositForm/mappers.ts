@@ -15,6 +15,7 @@ export enum DepositStates {
 type SubmissionState = {
   submitText: string;
   hintText: {
+    prefixText?: string;
     text: string;
     suffixText?: string;
     textColor?: string;
@@ -162,7 +163,9 @@ export const getSubmissionState = ({
         submitText: 'Pending',
         action: () => {},
         hintText: {
-          text: 'Waiting for confirmation',
+          prefixText: 'Depositing',
+          text: `${selectedDeposit} ${tokenName}`,
+          textColor: colors.skyBlueCrayola.base,
         },
         loading: true,
         disabled: true,
@@ -174,8 +177,10 @@ export const getSubmissionState = ({
         submitText: 'Deposited',
         action: deposit,
         hintText: {
-          text: 'Deposited',
-          textColor: colors.vzCustomGreen1.base,
+          prefixText: 'Deposited',
+          text: `${selectedDeposit} ${tokenName}`,
+          suffixText: 'successfully',
+          textColor: colors.skyBlueCrayola.base,
         },
         loading: false,
         disabled: false,

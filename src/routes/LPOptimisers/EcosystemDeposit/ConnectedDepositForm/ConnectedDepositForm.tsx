@@ -87,7 +87,7 @@ export const ConnectedDepositForm: React.FunctionComponent<ConnectedMellowLpDepo
         setDepositState(DepositStates.PROVIDER_ERROR);
       },
     );
-  }, [vault.id, loading]);
+  }, [vault.id, loading, selectedDeposit]);
 
   const submissionState = getSubmissionState({
     depositState,

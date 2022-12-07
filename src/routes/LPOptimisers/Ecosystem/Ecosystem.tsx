@@ -12,7 +12,7 @@ import { MellowLPTable } from './MellowLPTable/MellowLPTable';
 export const Ecosystem: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const { signer, setRequired } = useWallet();
-  const { lpVaults, vaultsInitialised } = useLPVaults(signer);
+  const { lpVaults, vaultsInitialised, vaultsInitialisedWithSigner } = useLPVaults(signer);
   const handleSelectMellowLpVault = (selectedVault: MellowProduct) => {
     if (!signer) {
       setRequired(true);
@@ -29,7 +29,7 @@ export const Ecosystem: React.FunctionComponent = () => {
   return (
     <ConnectedMellowBox>
       <MellowLPTable
-        dataLoading={!vaultsInitialised}
+        dataLoading={signer ? !vaultsInitialisedWithSigner : !vaultsInitialised}
         mellowProducts={lpVaults}
         onSelectItem={handleSelectMellowLpVault}
       />
