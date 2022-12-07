@@ -75,7 +75,7 @@ export const DepositForm: React.FunctionComponent<DepositFormProps> = ({
 
   return (
     <FormBox>
-      <DepositInfo mellowProduct={lpVault} />
+      <DepositInfo mellowProduct={lpVault} weights={weights.map((w) => w.distribution)} />
       <MaturityDistribution
         combinedWeightValue={combinedWeightValue}
         disabledToggle={loading}
@@ -129,17 +129,17 @@ export const DepositForm: React.FunctionComponent<DepositFormProps> = ({
 };
 
 const HintText: React.FunctionComponent<{
+  prefixText?: string;
   text: string;
   suffixText?: string;
   textColor?: string;
   loading: boolean;
-}> = ({ loading, text, suffixText, textColor }) => {
+}> = ({ loading, prefixText, text, suffixText, textColor }) => {
   return (
     <HintTextTypography>
-      <PrefixHintTextSpan color={textColor}>
-        {text}
-        {loading ? <Ellipsis /> : null}
-      </PrefixHintTextSpan>
+      {prefixText ? `${prefixText} ` : null}
+      <PrefixHintTextSpan color={textColor}>{text}</PrefixHintTextSpan>
+      {loading ? <Ellipsis /> : null}
       {suffixText ? ` ${suffixText}` : null}
     </HintTextTypography>
   );

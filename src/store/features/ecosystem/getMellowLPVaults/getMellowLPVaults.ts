@@ -20,16 +20,10 @@ export const getMellowLPVaults = (): MellowProduct[] => {
         vault,
         metadata: {
           ...item.metadata,
-          estimatedHistoricApy: 'TODO: COSTIN DA MAN',
-          underlyingPools: ['LIDO-ETH'],
-          vaults: [
-            {
-              maturityTimestampMS: 1672444800000,
-              pools: ['LIDO-ETH'],
-              estimatedHistoricApy: '>30%',
-              weight: 100,
-            },
-          ],
+          underlyingPools: item.metadata.vaults.reduce(
+            (allPools, currentVault) => [...allPools, ...currentVault.pools],
+            [] as string[],
+          ),
         },
       };
     },
@@ -39,7 +33,7 @@ export const getMellowLPVaults = (): MellowProduct[] => {
     (item) => {
       const vault = new MellowLpRouter({
         mellowRouterAddress: item.router,
-        defaultWeights: item.vaults.map((v) =>
+        defaultWeights: item.metadata.vaults.map((v) =>
           Date.now().valueOf() > v.maturityTimestampMS ? 0 : v.weight,
         ),
         provider: config.PROVIDER,
@@ -50,9 +44,10 @@ export const getMellowLPVaults = (): MellowProduct[] => {
         vault,
         metadata: {
           ...item.metadata,
-          vaults: item.vaults,
-          estimatedHistoricApy: 'TODO: COSTIN DA MAN',
-          underlyingPools: item.vaults.reduce((pV, cI) => [...pV, ...cI.pools], [] as string[]),
+          underlyingPools: item.metadata.vaults.reduce(
+            (allPools, currentVault) => [...allPools, ...currentVault.pools],
+            [] as string[],
+          ),
         },
       };
     },

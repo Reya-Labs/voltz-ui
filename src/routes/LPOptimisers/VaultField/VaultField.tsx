@@ -36,14 +36,26 @@ const getTokenIcon = (token: string) => {
 type VaultFieldProps = {
   title: string;
   token: string;
-  expectedApy: string;
+  expectedApys: number[];
+  weights: number[];
 };
 
 export const VaultField: React.FunctionComponent<VaultFieldProps> = ({
   title,
   token,
-  expectedApy,
+  expectedApys,
+  weights,
 }: VaultFieldProps) => {
+  let apySum = 0;
+  let weightSum = 0;
+
+  for (let i = 0; i < expectedApys.length; i++) {
+    apySum += expectedApys[i] * weights[i];
+    weightSum += weights[i];
+  }
+
+  const averageApy = weightSum > 0 ? apySum / weightSum : 0;
+
   return (
     <VaultFieldBox>
       <TitleBox>
@@ -61,7 +73,7 @@ export const VaultField: React.FunctionComponent<VaultFieldProps> = ({
             />
           }
         >
-          {expectedApy}
+          {averageApy > 30 ? '>30' : averageApy.toFixed(2)}%
         </VaultApyTypography>
       </VaultMetricsBox>
     </VaultFieldBox>

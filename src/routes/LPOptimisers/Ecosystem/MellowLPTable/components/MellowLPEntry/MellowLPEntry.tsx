@@ -29,9 +29,10 @@ export const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
     <MellowLPEntryContainerBox>
       <MellowLPEntryInfoBox>
         <VaultField
-          expectedApy={lpVault.metadata.estimatedHistoricApy}
+          expectedApys={lpVault.metadata.vaults.map((v) => v.estimatedHistoricApy)}
           title={lpVault.metadata.title}
           token={lpVault.metadata.token}
+          weights={lpVault.metadata.vaults.map((v) => v.weight)}
         />
 
         <DescriptionTypography variant="h6">{lpVault.metadata.description}</DescriptionTypography>

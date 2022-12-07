@@ -50,3 +50,18 @@ export const PositionValueTypography = styled(Typography)`
 
   color: ${colors.skyBlueCrayola.base};
 `;
+
+export const PendingDepositTypography = styled(Typography)`
+  font-family: 'PixelOperatorMono', monospace;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
+
+  margin-top: ${({ theme }) => theme.spacing(-2)};
+  color: ${colors.lavenderWeb.darken010};
+`;
+
+export const PendingDepositAmountSpan = styled('span')`
+  color: ${colors.skyBlueCrayola.base};
+`;

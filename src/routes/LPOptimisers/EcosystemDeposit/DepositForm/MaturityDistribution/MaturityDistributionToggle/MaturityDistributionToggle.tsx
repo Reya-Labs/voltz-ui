@@ -38,7 +38,7 @@ export const MaturityDistributionToggle: React.FunctionComponent<MaturityDistrib
         <MaturityDistributionInputLabel shrink>
           <IconLabel
             icon="information-circle"
-            info="Chose if you want the LP optimiser to optimise the maturity distribution for you or if you would like to customise it yourself."
+            info="Choose if you want the LP optimiser to optimise the maturity distribution for you or if you would like to customise it yourself."
             label="MATURITY DISTRIBUTION"
           />
         </MaturityDistributionInputLabel>
