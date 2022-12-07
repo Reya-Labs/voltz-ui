@@ -79,13 +79,24 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
     const seasonStartDateFormatted = formatDateTimeWithOrdinal(season.startDate);
     const seasonEndDateFormatted = formatDateTimeWithOrdinal(season.endDate);
     const badgesMemo: AchievedBadgeProps[] = React.useMemo(() => {
+      if (loading) {
+        return seasonBadgeVariants.map(
+          (variant) =>
+            ({
+              variant,
+              achievedAt: undefined,
+              claimedAt: undefined,
+            } as AchievedBadgeProps),
+        );
+      }
+
       return seasonBadgeVariants
         .map((variant) => badges.find((c) => c.variant === variant))
         .filter((b) => b)
         .filter((b) =>
           BADGE_VARIANT_TIER_MAP[b!.variant] === 'easterEgg' ? b!.achievedAt : true,
         ) as AchievedBadgeProps[];
-    }, [seasonBadgeVariants, badges]);
+    }, [loading, seasonBadgeVariants, badges]);
 
     const achievedBadges = badgesMemo.filter((aB) => aB.achievedAt);
     const collectionBadges = badgesMemo.filter(
