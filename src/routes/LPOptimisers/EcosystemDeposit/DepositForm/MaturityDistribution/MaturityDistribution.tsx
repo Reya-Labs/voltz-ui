@@ -36,11 +36,11 @@ export const MaturityDistribution: React.FunctionComponent<MaturityDistributionP
   disabledToggle,
 }) => (
   <MaturityDistributionBox>
-    <MaturityDistributionToggle
+    {weights.length > 1 && (<MaturityDistributionToggle
       disabled={disabledToggle}
       distribution={distribution}
       onChange={onDistributionToggle}
-    />
+    />)}
     <MaturityDistributionHeader />
     <MaturityDistributionsBox>
       {weights.map((weight, index) => (
