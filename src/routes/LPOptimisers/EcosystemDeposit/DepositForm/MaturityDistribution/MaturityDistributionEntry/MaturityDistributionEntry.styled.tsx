@@ -13,14 +13,14 @@ export const DistributionInputWrapper = styled('div')`
   color: ${colors.lavenderWeb.darken015};
   &::after {
     content: '%';
-    margin-left: ${({ theme }) => theme.spacing(-3.75)};
+    margin-left: ${({ theme }) => theme.spacing(-4.5)};
   }
   &:focus-within::after {
     color: ${colors.lavenderWeb.base};
   }
 `;
 export const DistributionInput = styled('input')`
-  padding: ${({ theme }) => theme.spacing(2, 2, 2, 3.5)};
+  padding: ${({ theme }) => theme.spacing(2, 3.5, 2, 3.5)};
   background-color: #2b2548;
   border: 1px solid #5d5296;
   border-radius: 4px;
