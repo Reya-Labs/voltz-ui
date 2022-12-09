@@ -13,7 +13,7 @@ export const DistributionInputWrapper = styled('div')`
   color: ${colors.lavenderWeb.darken015};
   &::after {
     content: '%';
-    margin-left: ${({ theme }) => theme.spacing(-4.5)};
+    margin-left: ${({ theme }) => theme.spacing(-4)};
   }
   &:focus-within::after {
     color: ${colors.lavenderWeb.base};

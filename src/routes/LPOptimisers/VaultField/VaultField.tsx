@@ -47,14 +47,12 @@ export const VaultField: React.FunctionComponent<VaultFieldProps> = ({
   weights,
 }: VaultFieldProps) => {
   let apySum = 0;
-  let weightSum = 0;
 
   for (let i = 0; i < expectedApys.length; i++) {
     apySum += expectedApys[i] * weights[i];
-    weightSum += weights[i];
   }
 
-  const averageApy = weightSum > 0 ? apySum / weightSum : 0;
+  const averageApy = apySum / 100;
 
   return (
     <VaultFieldBox>

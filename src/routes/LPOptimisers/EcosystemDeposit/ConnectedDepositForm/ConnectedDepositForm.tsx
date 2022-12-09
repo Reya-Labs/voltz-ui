@@ -19,6 +19,7 @@ export const ConnectedDepositForm: React.FunctionComponent<ConnectedMellowLpDepo
     distribution: v.weight,
     maturityTimestamp: v.maturityTimestampMS,
     pools: v.pools,
+    vaultDisabled: v.weight === 0,
   }));
 
   const [selectedDeposit, setSelectedDeposit] = useState<number>(0);

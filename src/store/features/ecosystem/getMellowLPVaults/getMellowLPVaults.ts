@@ -33,9 +33,6 @@ export const getMellowLPVaults = (): MellowProduct[] => {
     (item) => {
       const vault = new MellowLpRouter({
         mellowRouterAddress: item.router,
-        defaultWeights: item.metadata.vaults.map((v) =>
-          Date.now().valueOf() > v.maturityTimestampMS ? 0 : v.weight,
-        ),
         provider: config.PROVIDER,
       });
 
