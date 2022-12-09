@@ -50,7 +50,7 @@ export const MaturityDistribution: React.FunctionComponent<MaturityDistributionP
       {weights.map((weight, index) => (
         <MaturityDistributionEntry
           key={`${index}-${distribution}`}
-          disabled={distribution === 'automatic'}
+          disabled={distribution === 'automatic' || weights[index].vaultDisabled}
           onChange={(newDistribution) => {
             if (distribution === 'automatic') {
               return;
