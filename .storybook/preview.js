@@ -17,7 +17,7 @@ export const parameters = {
 
 addDecorator((story) => (
   <ThemeProvider theme="dark">
-    <div style={{ background: '#383545', height: '100vh', padding: 32 }}>
+    <div style={{ background: '#383545', minHeight: '100vh', padding: 32 }}>
       <BrowserRouter>{story()}</BrowserRouter>
     </div>
   </ThemeProvider>
