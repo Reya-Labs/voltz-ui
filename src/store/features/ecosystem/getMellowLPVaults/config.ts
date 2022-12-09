@@ -248,7 +248,10 @@ const disableMaturedWeights = (config: NetworkConfiguration): NetworkConfigurati
           vaults: router.metadata.vaults.map((vault) => {
             return {
               ...vault,
-              weight: Date.now().valueOf() > vault.maturityTimestampMS - 48 * ONE_HOUR_IN_MS? 0 : vault.weight,
+              weight:
+                Date.now().valueOf() > vault.maturityTimestampMS - 48 * ONE_HOUR_IN_MS
+                  ? 0
+                  : vault.weight,
             };
           }),
         },
