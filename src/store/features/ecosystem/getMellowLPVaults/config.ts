@@ -235,6 +235,26 @@ const networkConfigurations: { [key: string]: NetworkConfiguration } = {
   },
 };
 
+const disableMaturedWeights = (config: NetworkConfiguration): NetworkConfiguration => {
+  return {
+    ...config,
+    MELLOW_ROUTERS: config.MELLOW_ROUTERS.map((router) => {
+      return {
+        ...router,
+        metadata: {
+          ...router.metadata,
+          vaults: router.metadata.vaults.map((vault) => {
+            return {
+              ...vault,
+              weight: Date.now().valueOf() > vault.maturityTimestampMS ? 0 : vault.weight,
+            };
+          }),
+        },
+      };
+    }),
+  };
+};
+
 export const getConfig = (): NetworkConfiguration & {
   PROVIDER: providers.BaseProvider;
 } => {
@@ -251,10 +271,13 @@ export const getConfig = (): NetworkConfiguration & {
     );
   }
 
+  let config = networkConfigurations[network as keyof typeof networkConfigurations];
+  config = disableMaturedWeights(config);
+
   const provider = providers.getDefaultProvider(process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK);
 
   return {
-    ...networkConfigurations[network as keyof typeof networkConfigurations],
+    ...config,
     PROVIDER: provider,
   };
 };

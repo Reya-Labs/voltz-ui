@@ -62,7 +62,9 @@ export const MaturityDistributionEntry: React.FunctionComponent<MaturityDistribu
       </EvenBox>
       <EvenBox>
         <MaturityTypography>
-          {DateTime.fromMillis(maturityTimestamp).toFormat('dd LLL yyyy')}
+          {maturityTimestamp > Date.now().valueOf()
+            ? DateTime.fromMillis(maturityTimestamp).toFormat('dd LLL yyyy')
+            : 'MATURED'}
         </MaturityTypography>
       </EvenBox>
       <EvenBox>

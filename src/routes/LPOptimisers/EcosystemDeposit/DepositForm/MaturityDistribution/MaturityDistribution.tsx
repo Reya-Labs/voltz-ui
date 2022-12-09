@@ -17,7 +17,9 @@ type Weight = {
   distribution: number;
   maturityTimestamp: number;
   pools: string[];
+  vaultDisabled: boolean;
 };
+
 export type MaturityDistributionProps = {
   distribution: MaturityDistributionToggleProps['distribution'];
   onDistributionToggle: MaturityDistributionToggleProps['onChange'];
