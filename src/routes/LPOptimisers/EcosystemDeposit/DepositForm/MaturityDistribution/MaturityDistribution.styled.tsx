@@ -1,8 +1,8 @@
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 
-export const ConnectedMellowBox = styled(Box)`
-  height: 100%;
+export const MaturityDistributionBox = styled(Box)`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  width: 100%;
 `;

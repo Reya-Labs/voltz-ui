@@ -6,7 +6,7 @@ import { useWallet } from '../../../hooks/useWallet';
 import { setPageTitle } from '../../../utilities/page';
 import { routes } from '../../paths';
 import { useLPVaults } from '../useLPVaults';
-import { ConnectedMellowLpDepositForm } from './ConnectedMellowLpDepositForm/ConnectedMellowLpDepositForm';
+import { ConnectedDepositForm } from './ConnectedDepositForm/ConnectedDepositForm';
 import { ConnectedMellowBox } from './EcosystemDeposit.styled';
 import { NoVaultFound } from './NoVaultFound/NoVaultFound';
 
@@ -39,11 +39,7 @@ export const EcosystemDeposit: React.FunctionComponent = () => {
 
   return (
     <ConnectedMellowBox>
-      <ConnectedMellowLpDepositForm
-        loading={loading}
-        vault={currentVault}
-        onCancel={handleGoBack}
-      />
+      <ConnectedDepositForm loading={loading} vault={currentVault} onCancel={handleGoBack} />
     </ConnectedMellowBox>
   );
 };

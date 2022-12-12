@@ -3,18 +3,16 @@ import TagManager from 'react-gtm-module';
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
 
 import { Page } from './components/interface/Page/Page';
-import {
-  Ecosystem,
-  FixedBorrower,
-  LPPools,
-  LPPortfolio,
-  Portfolio,
-  Profile,
-  TraderPools,
-  TradingLeague,
-} from './routes';
+import { FixedBorrower } from './routes/FixedBorrower/FixedBorrower';
+import { Ecosystem } from './routes/LPOptimisers/Ecosystem/Ecosystem';
 import { EcosystemDeposit } from './routes/LPOptimisers/EcosystemDeposit/EcosystemDeposit';
+import { LPPools } from './routes/LPPools/LPPools';
+import { LPPortfolio } from './routes/LPPortfolio/LPPortfolio';
 import { routes } from './routes/paths';
+import { Portfolio } from './routes/Portfolio/Portfolio';
+import { Profile } from './routes/Profile/Profile';
+import { TraderPools } from './routes/TraderPools/TraderPools';
+import { TradingLeague } from './routes/TradingLeague/TradingLeague';
 import {
   deleteReferrer,
   isRefererStored,

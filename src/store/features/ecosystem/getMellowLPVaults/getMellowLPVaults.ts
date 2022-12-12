@@ -18,7 +18,13 @@ export const getMellowLPVaults = (): MellowProduct[] => {
       return {
         id: item.voltzVault,
         vault,
-        metadata: item.metadata,
+        metadata: {
+          ...item.metadata,
+          underlyingPools: item.metadata.vaults.reduce(
+            (allPools, currentVault) => [...allPools, ...currentVault.pools],
+            [] as string[],
+          ),
+        },
       };
     },
   );
@@ -27,15 +33,19 @@ export const getMellowLPVaults = (): MellowProduct[] => {
     (item) => {
       const vault = new MellowLpRouter({
         mellowRouterAddress: item.router,
-        defaultWeights: item.defaultWeights,
         provider: config.PROVIDER,
-        pivot: item.pivot,
       });
 
       return {
-        id: `${item.router}-${item.pivot}`,
+        id: `mellow-${item.metadata.token.toLowerCase()}`,
         vault,
-        metadata: item.metadata,
+        metadata: {
+          ...item.metadata,
+          underlyingPools: item.metadata.vaults.reduce(
+            (allPools, currentVault) => [...allPools, ...currentVault.pools],
+            [] as string[],
+          ),
+        },
       };
     },
   );
