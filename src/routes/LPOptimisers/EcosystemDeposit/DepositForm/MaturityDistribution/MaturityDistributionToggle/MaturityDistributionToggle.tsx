@@ -47,6 +47,9 @@ export const MaturityDistributionToggle: React.FunctionComponent<MaturityDistrib
           value={distribution}
           exclusive
           onChange={(_, distributionId) => {
+            if (!distributionId) {
+              return;
+            }
             onChange(distributionId as Distribution);
           }}
         >
