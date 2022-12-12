@@ -51,11 +51,38 @@ export const App = () => {
     }
   }, [searchParamsReferrer]);
 
+  // todo: temporary until Mellow updates on their page
+  const redirects = [
+    {
+      from: 'lp-optimisers/deposit/0xF875B4BD81b1be40775652d8fDC174512C36DB20-0',
+      to: '/lp-optimisers/deposit/mellow-usdc',
+    },
+    {
+      from: 'lp-optimisers/deposit/0xF875B4BD81b1be40775652d8fDC174512C36DB20-1',
+      to: '/lp-optimisers/deposit/mellow-usdc',
+    },
+    {
+      from: 'lp-optimisers/deposit/0x1963efb3B756e7D17D0e54645339e7E037705cc1-0',
+      to: '/lp-optimisers/deposit/mellow-eth',
+    },
+    {
+      from: 'lp-optimisers/deposit/0xD6e133B9C82F04734B48d5808800078038231a22-0',
+      to: '/lp-optimisers/deposit/mellow-dai',
+    },
+    {
+      from: 'lp-optimisers/deposit/0x9c1100A321ab778cE5d3B42c7b99f44afc3A4c41-0',
+      to: '/lp-optimisers/deposit/mellow-usdt',
+    },
+  ];
+
   return (
     <Page>
       <Routes>
         <Route path="/">
           <Route element={<Navigate to={routes.TRADER_POOLS} />} index />
+          {redirects.map((r) => (
+            <Route key={r.from} element={<Navigate replace={true} to={r.to} />} path={r.from} />
+          ))}
           <Route
             element={<Navigate replace={true} to={`/${routes.TRADER_POOLS}`} />}
             path={routes.WELCOME}
