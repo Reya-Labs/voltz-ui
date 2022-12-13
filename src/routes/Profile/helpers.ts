@@ -218,7 +218,21 @@ export const getCommunitySbt = (signer: Signer | null) => {
     process.env.REACT_APP_IGNORED_LEAGUE_WALLETS !== 'UNPROVIDED'
       ? process.env.REACT_APP_IGNORED_LEAGUE_WALLETS.split(',')
           .map((s) => s.trim().toLowerCase())
-          .reduce((pV, cI) => ({ ...pV, [cI]: true }), {})
+          .reduce((pV, cV) => ({ ...pV, [cV]: true }), {})
+      : {};
+  const badgesCids =
+    process.env.REACT_APP_BADGES_IPFS_CIDS &&
+    process.env.REACT_APP_BADGES_IPFS_CIDS !== 'UNPROVIDED'
+      ? process.env.REACT_APP_BADGES_IPFS_CIDS.split(',')
+          .map((s) => s.trim())
+          .reduce((pV, cV, cI) => ({ ...pV, [cI]: cV }), {})
+      : {};
+  const leavesCids =
+    process.env.REACT_APP_LEAVES_IPFS_CIDS &&
+    process.env.REACT_APP_LEAVES_IPFS_CIDS !== 'UNPROVIDED'
+      ? process.env.REACT_APP_LEAVES_IPFS_CIDS.split(',')
+          .map((s) => s.trim())
+          .reduce((pV, cV, cI) => ({ ...pV, [cI]: cV }), {})
       : {};
   const params: SBTConstructorArgs = {
     id: process.env.REACT_APP_COMMUNITY_SBT_ADDRESS || '',
@@ -229,6 +243,8 @@ export const getCommunitySbt = (signer: Signer | null) => {
     subgraphUrl: process.env.REACT_APP_SUBGRAPH_URL,
     coingeckoKey: process.env.REACT_APP_COINGECKO_API_KEY,
     ignoredWalletIds: ignoredWalletIds,
+    badgesCids: badgesCids,
+    leavesCids: leavesCids
   };
   return new CommunitySBT(params);
 };
