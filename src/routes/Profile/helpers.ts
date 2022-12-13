@@ -244,7 +244,7 @@ export const getCommunitySbt = (signer: Signer | null) => {
     coingeckoKey: process.env.REACT_APP_COINGECKO_API_KEY,
     ignoredWalletIds: ignoredWalletIds,
     badgesCids: badgesCids,
-    leavesCids: leavesCids
+    leavesCids: leavesCids,
   };
   return new CommunitySBT(params);
 };
