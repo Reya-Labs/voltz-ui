@@ -1,6 +1,6 @@
+import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useState } from 'react';
 
-import { MellowProduct } from '../../../../store/features/ecosystem/getMellowLPVaults/config';
 import { DepositForm, DepositFormProps } from '../DepositForm/DepositForm';
 import { DepositStates, getSubmissionState } from './mappers';
 
@@ -30,14 +30,14 @@ export const ConnectedDepositForm: React.FunctionComponent<ConnectedMellowLpDepo
   const [depositState, setDepositState] = useState<DepositStates>(DepositStates.INITIALISING);
   const [error, setError] = useState<string>('');
 
-  const sufficientFunds = (vault.vault.userWalletBalance ?? 0) >= selectedDeposit;
+  const sufficientFunds = (vault.userWalletBalance ?? 0) >= selectedDeposit;
   const weights = distribution === 'automatic' ? automaticWeights : manualWeights;
   const combinedWeightValue = weights.reduce((total, weight) => total + weight.distribution, 0);
 
   const deposit = () => {
     if (selectedDeposit > 0) {
       setDepositState(DepositStates.DEPOSITING);
-      void vault.vault
+      void vault
         .deposit(
           selectedDeposit,
           weights.map((w) => w.distribution),
@@ -59,7 +59,7 @@ export const ConnectedDepositForm: React.FunctionComponent<ConnectedMellowLpDepo
 
   const approve = () => {
     setDepositState(DepositStates.APPROVING);
-    void vault.vault.approveToken().then(
+    void vault.approveToken().then(
       () => {
         setDepositState(DepositStates.APPROVED);
       },
@@ -75,7 +75,7 @@ export const ConnectedDepositForm: React.FunctionComponent<ConnectedMellowLpDepo
       return;
     }
 
-    void vault.vault.isTokenApproved().then(
+    void vault.isTokenApproved().then(
       (resp) => {
         if (resp) {
           setDepositState(DepositStates.APPROVED);

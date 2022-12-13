@@ -1,8 +1,7 @@
-import { MellowLpRouter } from '@voltz-protocol/v1-sdk/';
+import { MellowLpRouter, MellowProduct } from '@voltz-protocol/v1-sdk';
 import isUndefined from 'lodash.isundefined';
 import React from 'react';
 
-import { MellowProduct } from '../../../../../store/features/ecosystem/getMellowLPVaults/config';
 import { formatCurrency } from '../../../../../utilities/number';
 import { VaultField } from '../../../VaultField/VaultField';
 import {
@@ -33,18 +32,16 @@ export const DepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoProps>
     <PositionBox>
       <PositionLabelTypography>YOUR POSITION:</PositionLabelTypography>
       <PositionValueTypography>
-        {isUndefined(mellowProduct.vault.userDeposit)
+        {isUndefined(mellowProduct.userDeposit)
           ? '---'
-          : `${formatCurrency(mellowProduct.vault.userDeposit, true)} ${
-              mellowProduct.metadata.token
-            }`}
+          : `${formatCurrency(mellowProduct.userDeposit, true)} ${mellowProduct.metadata.token}`}
       </PositionValueTypography>
     </PositionBox>
-    {mellowProduct.vault instanceof MellowLpRouter && mellowProduct.vault.userPendingDeposit > 0 && (
+    {mellowProduct instanceof MellowLpRouter && mellowProduct.userPendingDeposit > 0 && (
       <PendingDepositTypography>
         {`Pending `}
         <PendingDepositAmountSpan>
-          {`${mellowProduct.vault.userPendingDeposit.toFixed(2)} ${mellowProduct.metadata.token}`}
+          {`${mellowProduct.userPendingDeposit.toFixed(2)} ${mellowProduct.metadata.token}`}
         </PendingDepositAmountSpan>
         {` will be deposited at 7PM UTC`}
       </PendingDepositTypography>

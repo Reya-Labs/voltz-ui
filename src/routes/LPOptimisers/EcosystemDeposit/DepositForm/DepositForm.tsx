@@ -1,10 +1,10 @@
+import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import isUndefined from 'lodash.isundefined';
 import React from 'react';
 
 import { Ellipsis } from '../../../../components/atomic/Ellipsis/Ellipsis';
 import { IconLabel } from '../../../../components/composite/IconLabel/IconLabel';
 import { InputTokenLabel } from '../../../../components/composite/InputTokenLabel/InputTokenLabel';
-import { MellowProduct } from '../../../../store/features/ecosystem/getMellowLPVaults/config';
 import { formatCurrency, toUSFormat } from '../../../../utilities/number';
 import { DepositButton } from '../DepositButton/DepositButton';
 import {
@@ -63,9 +63,9 @@ export const DepositForm: React.FunctionComponent<DepositFormProps> = ({
   combinedWeightValue,
 }: DepositFormProps) => {
   const subtext = `WALLET BALANCE: ${
-    isUndefined(lpVault.vault.userWalletBalance)
+    isUndefined(lpVault.userWalletBalance)
       ? '---'
-      : `${formatCurrency(lpVault.vault.userWalletBalance, true)} ${lpVault.metadata.token}`
+      : `${formatCurrency(lpVault.userWalletBalance, true)} ${lpVault.metadata.token}`
   }`;
 
   const handleChange = (newValue: string | undefined) => {

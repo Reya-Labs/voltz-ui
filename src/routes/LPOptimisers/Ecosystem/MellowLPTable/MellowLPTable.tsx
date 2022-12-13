@@ -1,6 +1,6 @@
+import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
-import { MellowProduct } from '../../../../store/features/ecosystem/getMellowLPVaults/config';
 import { EcosystemHeader } from '../EcosystemHeader/EcosystemHeader';
 import { MellowLPEntry } from './components/MellowLPEntry/MellowLPEntry';
 import { MellowLPGrid, MellowTableBox } from './MellowLPTable.styled';
