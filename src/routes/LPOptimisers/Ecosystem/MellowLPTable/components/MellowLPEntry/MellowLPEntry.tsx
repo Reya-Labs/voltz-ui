@@ -1,6 +1,6 @@
+import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
-import { MellowProduct } from '../../../../../../store/features/ecosystem/getMellowLPVaults/config';
 import { VaultField } from '../../../../VaultField/VaultField';
 import MellowLPPosition from '../MellowLPPosition/MellowLPPosition';
 import { Tag } from '../Tag/Tag';
@@ -62,7 +62,7 @@ export const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
           disabled={lpVault.metadata.soon || lpVault.metadata.deprecated}
           handleClick={onSelectItem}
           tokenName={lpVault.metadata.token}
-          userDeposit={lpVault.vault.userDeposit}
+          userDeposit={lpVault.userDeposit}
         />
       </PositionBox>
     </MellowLPEntryContainerBox>

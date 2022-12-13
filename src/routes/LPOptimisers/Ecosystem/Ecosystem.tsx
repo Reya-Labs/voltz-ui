@@ -1,8 +1,8 @@
+import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import React, { useEffect } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 
 import { useWallet } from '../../../hooks/useWallet';
-import { MellowProduct } from '../../../store/features/ecosystem/getMellowLPVaults/config';
 import { setPageTitle } from '../../../utilities/page';
 import { routes } from '../../paths';
 import { useLPVaults } from '../useLPVaults';

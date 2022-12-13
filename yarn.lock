@@ -5481,25 +5481,6 @@
     "@sentry/utils" "7.25.0"
     tslib "^1.9.3"
 
-"@sentry/browser@^7.22.0":
-  version "7.22.0"
-  resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-7.22.0.tgz#c4f283cd7825db0db59ac97c3334c939982ace94"
-  integrity sha512-8MA+f46+T3G7fb4BYYX9Wl3bMDloG5a3Ng0GWdBeq6DE2tXVHeCvba8Yrrcnn1qFHpmnOn5Nz4xWBUDs3uBFxA==
-  dependencies:
-    "@sentry/core" "7.22.0"
-    "@sentry/types" "7.22.0"
-    "@sentry/utils" "7.22.0"
-    tslib "^1.9.3"
-
-"@sentry/core@7.22.0":
-  version "7.22.0"
-  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-7.22.0.tgz#8e50f288e5e8fcaa2774daffd2487e042a392893"
-  integrity sha512-qYJiJrL1mfQQln84mNunBRUkXq7xDGQQoNh4Sz9VYP5698va51zmS5BLYRCZ5CkPwRYNuhUqlUXN7bpYGYOOIA==
-  dependencies:
-    "@sentry/types" "7.22.0"
-    "@sentry/utils" "7.22.0"
-    tslib "^1.9.3"
-
 "@sentry/core@7.25.0":
   version "7.25.0"
   resolved "https://registry.yarnpkg.com/@sentry/core/-/core-7.25.0.tgz#a743825316483a77a35979a943285368e1681c2c"
@@ -5520,7 +5501,7 @@
     hoist-non-react-statics "^3.3.2"
     tslib "^1.9.3"
 
-"@sentry/tracing@7.25.0", "@sentry/tracing@^7.22.0":
+"@sentry/tracing@7.25.0":
   version "7.25.0"
   resolved "https://registry.yarnpkg.com/@sentry/tracing/-/tracing-7.25.0.tgz#159970d59926dc51f1bc23c22194f9b3ae5afe10"
   integrity sha512-8KjMfJu3+7IcU+65r+sH0rDVTBxhcTZkGTURqFzty9RO3fpY6dTtXZIB3Pni9m+rF6Sz+6HrMKopD9g0yW17XQ==
@@ -5530,23 +5511,10 @@
     "@sentry/utils" "7.25.0"
     tslib "^1.9.3"
 
-"@sentry/types@7.22.0":
-  version "7.22.0"
-  resolved "https://registry.yarnpkg.com/@sentry/types/-/types-7.22.0.tgz#58e4ce77b523048e0f31e2ea4b597946d76f6079"
-  integrity sha512-LhCL+wb1Jch+OesB2CIt6xpfO1Ab6CRvoNYRRzVumWPLns1T3ZJkarYfhbLaOEIb38EIbPgREdxn2AJT560U4Q==
-
 "@sentry/types@7.25.0":
   version "7.25.0"
   resolved "https://registry.yarnpkg.com/@sentry/types/-/types-7.25.0.tgz#e1bd44b99803b49715a9b0e557799217ef9339fd"
   integrity sha512-m/tVeuZpbYNQjp4BYOz7bBxZEWdTHdTgXg9YlztUOCf5JDDujpxYp2Pyp4+cDDulzFIixXzRH7FRiKsOJ0WF7w==
-
-"@sentry/utils@7.22.0":
-  version "7.22.0"
-  resolved "https://registry.yarnpkg.com/@sentry/utils/-/utils-7.22.0.tgz#fb46dc2761e2d44cf70bc3e1fba61d55852904b5"
-  integrity sha512-1GiNw1opIngxg0nktCTc9wibh4/LV12kclrnB9dAOHrqazZXHXZRAkjqrhQphKcMpT+3By91W6EofjaDt5a/hg==
-  dependencies:
-    "@sentry/types" "7.22.0"
-    tslib "^1.9.3"
 
 "@sentry/utils@7.25.0":
   version "7.25.0"
@@ -7494,17 +7462,17 @@
     "@typescript-eslint/types" "5.9.1"
     eslint-visitor-keys "^3.0.0"
 
-"@voltz-protocol/v1-sdk@1.6.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.6.0.tgz#82785d900cdbd95f7f0577b08dc97f68bf4c601a"
-  integrity sha512-oN/i+HK3nKgX5KmiKzUIO+SXeLBnEHoqQnhs9gMyNO7UOjeTc7hYkl8rp/NY9KwZ35AIAkaDTAEbKFF1snZNFQ==
+"@voltz-protocol/v1-sdk@1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.7.0.tgz#71e9dcfeaa3d9a036f40133225919c6ed70c89a9"
+  integrity sha512-KTnyXOQnotUG7Td+MJ9wZ+dfE2Mi3lL2jG8HpBUsu2c+2erRJZNGqGepCP6+NisO+e8++ec++6o6Vpd0vNA1yA==
   dependencies:
     "@apollo/client" "^3.7.1"
     "@ethersproject/address" "^5.7.0"
     "@graphprotocol/graph-cli" "^0.35.0"
     "@metamask/detect-provider" "^1.2.0"
-    "@sentry/browser" "^7.22.0"
-    "@sentry/tracing" "^7.22.0"
+    "@sentry/browser" "7.25.0"
+    "@sentry/tracing" "7.25.0"
     big.js "^6.1.1"
     coingecko-api "^1.0.10"
     cross-fetch "^3.1.5"
