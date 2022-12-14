@@ -220,20 +220,8 @@ export const getCommunitySbt = (signer: Signer | null) => {
           .map((s) => s.trim().toLowerCase())
           .reduce((pV, cV) => ({ ...pV, [cV]: true }), {})
       : {};
-  const badgesCids =
-    process.env.REACT_APP_BADGES_IPFS_CIDS &&
-    process.env.REACT_APP_BADGES_IPFS_CIDS !== 'UNPROVIDED'
-      ? process.env.REACT_APP_BADGES_IPFS_CIDS.split(',')
-          .map((s) => s.trim())
-          .reduce((pV, cV, cI) => ({ ...pV, [cI]: cV }), {})
-      : {};
-  const leavesCids =
-    process.env.REACT_APP_LEAVES_IPFS_CIDS &&
-    process.env.REACT_APP_LEAVES_IPFS_CIDS !== 'UNPROVIDED'
-      ? process.env.REACT_APP_LEAVES_IPFS_CIDS.split(',')
-          .map((s) => s.trim())
-          .reduce((pV, cV, cI) => ({ ...pV, [cI]: cV }), {})
-      : {};
+  const badgesCids = parseCidsList(process.env.REACT_APP_BADGES_IPFS_CIDS);
+  const leavesCids = parseCidsList(process.env.REACT_APP_LEAVES_IPFS_CIDS);
   const params: SBTConstructorArgs = {
     id: process.env.REACT_APP_COMMUNITY_SBT_ADDRESS || '',
     signer: signer,
@@ -247,4 +235,10 @@ export const getCommunitySbt = (signer: Signer | null) => {
     leavesCids: leavesCids,
   };
   return new CommunitySBT(params);
+};
+
+const parseCidsList = (cidsEnvVar: string | undefined): Array<string> => {
+  const cidsArray =
+    cidsEnvVar && cidsEnvVar !== 'UNPROVIDED' ? cidsEnvVar.split(',').map((s) => s.trim()) : [];
+  return cidsArray;
 };
