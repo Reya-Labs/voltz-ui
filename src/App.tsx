@@ -3,6 +3,7 @@ import TagManager from 'react-gtm-module';
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
 
 import { Page } from './components/interface/Page/Page';
+import { DeprecatedLPPortfolio } from './routes/deprecated/LPPortfolio/LPPortfolio';
 import { FixedBorrower } from './routes/FixedBorrower/FixedBorrower';
 import { Ecosystem } from './routes/LPOptimisers/Ecosystem/Ecosystem';
 import { EcosystemDeposit } from './routes/LPOptimisers/EcosystemDeposit/EcosystemDeposit';
@@ -13,6 +14,7 @@ import { Portfolio } from './routes/Portfolio/Portfolio';
 import { Profile } from './routes/Profile/Profile';
 import { TraderPools } from './routes/TraderPools/TraderPools';
 import { TradingLeague } from './routes/TradingLeague/TradingLeague';
+import { isEnvVarProvided } from './utilities/is-env-var-provided';
 import {
   deleteReferrer,
   isRefererStored,
@@ -90,7 +92,16 @@ export const App = () => {
           <Route element={<TraderPools />} path={routes.TRADER_POOLS} />
           <Route element={<Portfolio />} path={routes.PORTFOLIO} />
           <Route element={<LPPools />} path={routes.LP_POOLS} />
-          <Route element={<LPPortfolio />} path={routes.LP_PORTFOLIO} />
+          <Route
+            element={
+              isEnvVarProvided(process.env.ROLLOVER_PORTFOLIO) ? (
+                <LPPortfolio />
+              ) : (
+                <DeprecatedLPPortfolio />
+              )
+            }
+            path={routes.LP_PORTFOLIO}
+          />
           <Route
             element={<Navigate replace={true} to={`/${routes.LP_OPTIMISERS}`} />}
             path={routes.PRODUCTS}
