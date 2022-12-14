@@ -27,13 +27,6 @@ export type useAMMReturnType = {
 export const useAMM = (amm?: AMM) => {
   const { agent } = useAgent();
 
-  const ammCaps = useAsyncFunction(
-    async () => {
-      return amm?.getCapPercentage();
-    },
-    useMemo(() => undefined, [!!amm?.provider]),
-  );
-
   const fixedApr = useAsyncFunction(
     (amm?.getFixedApr || Promise.reject).bind(amm),
     useMemo(() => undefined, [!!amm?.provider]),
@@ -147,7 +140,6 @@ export const useAMM = (amm?: AMM) => {
   return useMemo(
     () =>
       ({
-        ammCaps,
         fixedApr,
         mintMinimumMarginRequirement,
         positionInfo,
@@ -155,14 +147,6 @@ export const useAMM = (amm?: AMM) => {
         variableApy,
         expectedApyInfo,
       } as useAMMReturnType),
-    [
-      ammCaps,
-      fixedApr,
-      mintMinimumMarginRequirement,
-      positionInfo,
-      swapInfo,
-      variableApy,
-      expectedApyInfo,
-    ],
+    [fixedApr, mintMinimumMarginRequirement, positionInfo, swapInfo, variableApy, expectedApyInfo],
   );
 };

@@ -50,7 +50,6 @@ export const useAMMs = (): UseAMMsResult => {
             id: ammId,
             signer,
             provider: providers.getDefaultProvider(process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK),
-            environment: process.env.REACT_APP_DECODING_TAG || 'NO_ENV',
             rateOracle: new RateOracle({
               id: rateOracleAddress,
               protocolId: parseInt(protocolId as string, 10),
@@ -62,7 +61,6 @@ export const useAMMs = (): UseAMMsResult => {
             }),
             factoryAddress: process.env.REACT_APP_FACTORY_ADDRESS || '0x',
             marginEngineAddress,
-            fcmAddress,
             updatedTimestamp: ammUpdatedTimestamp as JSBI,
             termStartTimestamp: termStartTimestamp as JSBI,
             termEndTimestamp: termEndTimestamp as JSBI,
