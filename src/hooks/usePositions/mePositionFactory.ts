@@ -34,7 +34,6 @@ export const MEPositionFactory = (
     createdTimestamp: positionCreatedTimestamp,
     amm: {
       id: ammId,
-      fcm: { id: fcmAddress },
       marginEngine: { id: marginEngineAddress },
       rateOracle: {
         id: rateOracleAddress,
@@ -89,7 +88,6 @@ export const MEPositionFactory = (
       id: ammId,
       signer,
       provider: providers.getDefaultProvider(process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK),
-      environment: process.env.REACT_APP_DECODING_TAG || 'PROD',
       rateOracle: new RateOracle({
         id: rateOracleAddress,
         protocolId: parseInt(protocolId as string, 10),
@@ -101,7 +99,6 @@ export const MEPositionFactory = (
       }),
       factoryAddress: process.env.REACT_APP_FACTORY_ADDRESS || '0x',
       marginEngineAddress,
-      fcmAddress,
       updatedTimestamp: JSBI.BigInt(ammUpdatedTimestamp),
       termStartTimestamp: JSBI.BigInt(termStartTimestamp),
       termEndTimestamp: JSBI.BigInt(termEndTimestamp),
@@ -188,11 +185,6 @@ export const MEPositionFactory = (
           settlementCashflow: JSBI.BigInt(args.settlementCashflow),
         }),
     ),
-    fcmSwaps: [],
-    fcmUnwinds: [],
-    fcmSettlements: [],
-    marginInScaledYieldBearingTokens: JSBI.BigInt(0),
-    source: 'ME',
     totalNotionalTraded: positionTotalNotionalTraded as JSBI,
     sumOfWeightedFixedRate: sumOfWeightedFixedRate as JSBI,
   });
