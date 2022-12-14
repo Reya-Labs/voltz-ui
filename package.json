@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "prebuild": "yarn code-quality:check",
-    "build": "(is-ci && export CI_BUILD=true) || GENERATE_SOURCEMAP=false node scripts/build.js",
+    "build": "GENERATE_SOURCEMAP=false node scripts/build.js",
     "build-storybook": "build-storybook",
     "generate": "graphql-codegen --config graphql-codegen.yaml",
     "ts:check": "yarn ts:check-types && yarn ts:circular-check",
@@ -144,7 +144,7 @@
     "@reduxjs/toolkit": "1.9.0",
     "@sentry/react": "7.25.0",
     "@sentry/tracing": "7.25.0",
-    "@voltz-protocol/v1-sdk": "1.10.1",
+    "@voltz-protocol/v1-sdk": "1.10.2",
     "@walletconnect/ethereum-provider": "1.8.0",
     "@walletconnect/web3-provider": "1.8.0",
     "aws-amplify": "4.3.13",
