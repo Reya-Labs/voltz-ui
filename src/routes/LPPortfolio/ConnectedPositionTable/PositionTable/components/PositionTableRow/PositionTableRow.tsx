@@ -1,19 +1,15 @@
-import TableCell from '@mui/material/TableCell';
-import TableRow from '@mui/material/TableRow';
 import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
-import isNumber from 'lodash.isnumber';
 import React, { useEffect } from 'react';
 
-import { Typography } from '../../../../../../components/atomic/Typography/Typography';
 import { MaturityInformation } from '../../../../../../components/composite/MaturityInformation/MaturityInformation';
-import { PoolField } from '../../../../../../components/composite/PoolField/PoolField';
-import { Agents } from '../../../../../../contexts/AgentContext/types';
 import { useAMMContext } from '../../../../../../contexts/AMMContext/AMMContext';
-import { SystemStyleObject, Theme } from '../../../../../../theme';
 import { isBorrowing } from '../../../../../../utilities/isBorrowing';
 import { formatNumber } from '../../../../../../utilities/number';
-import { lpLabels } from '../../constants';
-import { AccruedRates, CurrentMargin, FixedAPR, Notional } from './components';
+import { AccruedRates } from './components/AccruedRates/AccruedRates';
+import { Margin } from './components/Margin/Margin';
+import { Notional } from './components/Notional/Notional';
+import { Pool } from './components/Pool/Pool';
+import { CellBox, MaturityLabelTypography, RowBox } from './PositionTableRow.styled';
 
 export type PositionTableRowProps = {
   position: Position;
@@ -29,16 +25,11 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
   onSelect,
 }) => {
   const { fixedApr } = useAMMContext();
-  const { result: resultFixedApr, call: callFixedApr } = fixedApr;
-
+  const { call: callFixedApr } = fixedApr;
+  // todo: Costin do we need this?
   useEffect(() => {
     callFixedApr();
   }, [callFixedApr]);
-
-  const typeStyleOverrides: SystemStyleObject<Theme> = {
-    backgroundColor: `secondary.darken050`, // this affects the colour of the positions rows in the LP positions
-    borderRadius: 2,
-  };
 
   const handleEditMargin = () => {
     onSelect('margin');
@@ -48,83 +39,46 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
     onSelect('liquidity');
   };
 
-  const renderTableCell = (field: string, label: string) => {
-    const underlyingTokenName = position.amm.underlyingToken.name; // Introduced this so margin and notional show the correct underlying token unit e.g. Eth not stEth, USDC not aUSDC
+  // Introduced this so margin and notional show the correct underlying token unit e.g. Eth not stEth, USDC not aUSDC
+  const underlyingTokenName = position.amm.underlyingToken.name;
 
-    if (field === 'accruedRates') {
-      return (
-        <AccruedRates
-          avgFixedRate={positionInfo?.fixedRateSinceLastSwap}
-          positionType={position.positionType}
-          variableRate={positionInfo?.variableRateSinceLastSwap}
+  return (
+    <RowBox key={index}>
+      <CellBox>
+        <Pool
+          isBorrowing={isBorrowing(position.amm.rateOracle.protocolId)}
+          protocol={position.amm.protocol}
         />
-      );
-    }
-
-    if (field === 'fixedApr') {
-      return <FixedAPR fixedApr={isNumber(resultFixedApr) ? resultFixedApr : undefined} />;
-    }
-
-    if (field === 'margin') {
-      return (
-        <CurrentMargin
-          accruedCashflow={undefined}
-          isSettled={position.isSettled}
-          margin={positionInfo?.margin}
-          marginEdit={true}
-          token={underlyingTokenName || ''}
-          onSelect={handleEditMargin}
-        />
-      );
-    }
-
-    if (field === 'maturity') {
-      return (
-        <MaturityInformation
-          endDate={position.amm.endDateTime}
-          label="Maturity"
-          startDate={position.amm.startDateTime}
-        />
-      );
-    }
-
-    if (field === 'notional') {
-      return (
+      </CellBox>
+      <CellBox>
         <Notional
           notional={formatNumber(position.notional)}
           token={underlyingTokenName || ''}
           onEdit={handleEditLPNotional}
         />
-      );
-    }
-
-    if (field === 'pool') {
-      return (
-        <PoolField
-          agent={Agents.LIQUIDITY_PROVIDER}
-          isBorrowing={isBorrowing(position.amm.rateOracle.protocolId)}
-          protocol={position.amm.protocol}
+      </CellBox>
+      <CellBox>
+        <Margin
+          accruedCashflow={undefined}
+          isSettled={position.isSettled}
+          margin={positionInfo?.margin}
+          token={underlyingTokenName || ''}
+          onSelect={handleEditMargin}
         />
-      );
-    }
-
-    if (field === 'rateRange') {
-      return (
-        <Typography label={label} variant="h5">
-          {formatNumber(position.fixedRateLower.toNumber())}% /{' '}
-          {formatNumber(position.fixedRateUpper.toNumber())}%
-        </Typography>
-      );
-    }
-
-    return null;
-  };
-
-  return (
-    <TableRow key={index} sx={{ ...typeStyleOverrides }}>
-      {lpLabels.map(([field, label]) => {
-        return <TableCell key={field}>{renderTableCell(field, label)}</TableCell>;
-      })}
-    </TableRow>
+      </CellBox>
+      <CellBox>
+        <AccruedRates
+          fixedRateLower={position.fixedRateLower.toNumber()}
+          fixedRateUpper={position.fixedRateUpper.toNumber()}
+        />
+      </CellBox>
+      <CellBox>
+        <MaturityLabelTypography>MATURITY</MaturityLabelTypography>
+        <MaturityInformation
+          endDate={position.amm.endDateTime}
+          startDate={position.amm.startDateTime}
+        />
+      </CellBox>
+    </RowBox>
   );
 };

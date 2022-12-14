@@ -1,24 +1,26 @@
-import TableCell from '@mui/material/TableCell';
 import isUndefined from 'lodash.isundefined';
 import React from 'react';
 
-import { Button } from '../../../../../../../../components/atomic/Button/Button';
-import { Typography } from '../../../../../../../../components/atomic/Typography/Typography';
 import { useWallet } from '../../../../../../../../hooks/useWallet';
 import { colors } from '../../../../../../../../theme';
 import { formatCurrency, formatNumber } from '../../../../../../../../utilities/number';
+import {
+  EditButton,
+  MarginBox,
+  MarginLabelBox,
+  MarginLabelTypography,
+  MarginValueTypography,
+} from './Margin.styled';
 
 export type CurrentMarginProps = {
-  marginEdit?: boolean;
   margin?: number;
   accruedCashflow?: number;
   token: string;
-  onSelect?: () => void;
+  onSelect: () => void;
   isSettled: boolean;
 };
 
-export const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({
-  marginEdit,
+export const Margin: React.FunctionComponent<CurrentMarginProps> = ({
   margin,
   accruedCashflow,
   token,
@@ -51,9 +53,9 @@ export const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({
           style={{
             color:
               accruedCashflow > 0
-                ? colors.vzCustomGreen1.base
+                ? colors.skyBlueCrayola.base
                 : accruedCashflow < 0
-                ? colors.vzCustomRed1.base
+                ? colors.wildStrawberry.base
                 : undefined,
           }}
         >
@@ -63,23 +65,15 @@ export const CurrentMargin: React.FunctionComponent<CurrentMarginProps> = ({
       </>
     );
   };
-
   return (
-    <TableCell>
-      <Typography label={getNetMarginLabel()} sx={{ fontSize: 18 }} variant="body2">
+    <MarginBox>
+      <MarginLabelBox>
+        <MarginLabelTypography>{getNetMarginLabel()}</MarginLabelTypography>
+        <EditButton onClick={handleClick}>Edit</EditButton>
+      </MarginLabelBox>
+      <MarginValueTypography>
         {!isUndefined(margin) ? `${formatNumber(margin)} ${token}` : 'Loading...'}
-      </Typography>
-
-      {marginEdit && onSelect && (
-        <Button
-          size="small"
-          sx={{ width: '100%', display: 'flex' }}
-          variant="red2"
-          onClick={handleClick}
-        >
-          Edit
-        </Button>
-      )}
-    </TableCell>
+      </MarginValueTypography>
+    </MarginBox>
   );
 };

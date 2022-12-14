@@ -2,27 +2,31 @@ import Box from '@mui/material/Box';
 import isUndefined from 'lodash.isundefined';
 import React from 'react';
 
-import { Button } from '../../../../../../components/atomic/Button/Button';
-import {
-  getPositionBadgeVariant,
-  PositionBadge,
-} from '../../../../../../components/atomic/PositionBadge/PositionBadge';
-import { Typography } from '../../../../../../components/atomic/Typography/Typography';
+import { PositionBadge } from '../../../../../../components/atomic/PositionBadge/PositionBadge';
 import { BulletLabel } from '../../../../../../components/composite/BulletLabel/BulletLabel';
 import {
   getHealthTextColor,
   HealthFactorText,
 } from '../../../../../../components/composite/HealthFactorText/HealthFactorText';
-import { colors, SystemStyleObject, Theme } from '../../../../../../theme';
+import { SystemStyleObject, Theme } from '../../../../../../theme';
 import { formatCurrency, formatNumber } from '../../../../../../utilities/number';
 import { ReactComponent as EditIcon } from './editPosition.svg';
+import {
+  EditButton,
+  FeesBox,
+  FeesTypography,
+  NegativeFeesValueTypography,
+  PositiveFeesValueTypography,
+  RolloverButton,
+  SettleButton,
+  SettledButton,
+} from './PositionTableHead.styled';
 
 export type PositionTableHeadProps = {
   currencyCode: string;
   currencySymbol: string;
   feesPositive: boolean;
   isSettled: boolean;
-  positionType: number;
   onRollover: () => void;
   onSettle: () => void;
   rolloverAvailable: boolean;
@@ -39,15 +43,6 @@ const containerStyles: SystemStyleObject<Theme> = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  padding: (theme) => `${theme.spacing(4)} 0`,
-};
-
-const labelStyles: SystemStyleObject<Theme> = {
-  fontSize: '14px',
-  lineHeight: '1',
-  textTransform: 'uppercase',
-  display: 'flex',
-  verticalAlign: 'middle',
 };
 
 export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
@@ -55,7 +50,6 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
   currencySymbol = '',
   feesPositive = true,
   isSettled,
-  positionType,
   onRollover,
   onSettle,
   rolloverAvailable,
@@ -65,47 +59,32 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
   healthFactor,
   fixedRateHealthFactor,
   fixedApr,
-  fees: feesProp,
+  fees,
 }) => {
-  const currentFixedRate = fixedApr;
-  const fees = feesProp;
-
   const handleEditNotional = () => {
     onSelect && onSelect('notional');
   };
-
+  const FeesValueTypography = feesPositive
+    ? PositiveFeesValueTypography
+    : NegativeFeesValueTypography;
   return (
     <Box sx={containerStyles}>
       <Box sx={{ display: 'flex' }}>
-        <PositionBadge variant={getPositionBadgeVariant(positionType)} />
-
+        <PositionBadge variant="LP" />
         {!isUndefined(fees) && (
-          <Box
-            sx={{
-              padding: (theme) => `${theme.spacing(1)} ${theme.spacing(2)}`,
-              marginLeft: (theme) => theme.spacing(4),
-            }}
-          >
-            <Typography sx={{ ...labelStyles }} variant="body2">
-              Fees:
-              <Box
-                component="span"
-                sx={{
-                  color: feesPositive ? colors.skyBlueCrayola.base : colors.wildStrawberry.base,
-                }}
-              >
-                {' '}
-                {!feesPositive && '-'}
-                {currencySymbol}
-                {formatCurrency(Math.abs(fees))} {currencyCode}
-              </Box>
-            </Typography>
-          </Box>
+          <FeesBox>
+            <FeesTypography>FEES:&nbsp;</FeesTypography>
+            <FeesValueTypography>
+              {!feesPositive && '-'}
+              {currencySymbol}
+              {formatCurrency(Math.abs(fees))} {currencyCode}
+            </FeesValueTypography>
+          </FeesBox>
         )}
       </Box>
 
       <Box sx={{ display: 'flex' }}>
-        {beforeMaturity && !isUndefined(currentFixedRate) && !isUndefined(healthFactor) && (
+        {beforeMaturity && !isUndefined(fixedApr) && !isUndefined(healthFactor) && (
           <Box
             sx={{
               padding: (theme) => `${theme.spacing(1)} ${theme.spacing(2)}`,
@@ -114,7 +93,7 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
           >
             <BulletLabel
               sx={{ color: getHealthTextColor(fixedRateHealthFactor) }}
-              text={<>Current fixed rate: {formatNumber(currentFixedRate)}%</>}
+              text={<>Current fixed rate: {formatNumber(fixedApr)}%</>}
             />
           </Box>
         )}
@@ -137,50 +116,29 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
               text={<HealthFactorText healthFactor={healthFactor} />}
             />
             {onSelect && (
-              <Button
-                id={gaButtonId}
-                size="vs"
-                sx={{ display: 'flex', padding: '4px 8px', fontSize: '14px' }}
-                variant="darker"
-                onClick={handleEditNotional}
-              >
-                <Box sx={{ marginRight: '4px' }}>Edit </Box>
+              <EditButton id={gaButtonId} onClick={handleEditNotional}>
+                Edit&nbsp;
                 <EditIcon />
-              </Button>
+              </EditButton>
             )}
           </Box>
         )}
 
         {beforeMaturity === false && !isSettled && (
           <>
-            <Button
-              id={gaButtonId}
-              size="xs"
-              variant={positionType === 1 ? 'darker-link' : 'darker'}
-              onClick={onSettle}
-            >
+            <SettleButton id={gaButtonId} onClick={onSettle}>
               Settle
-            </Button>
+            </SettleButton>
             {rolloverAvailable && (
-              <Button
-                id={gaButtonId}
-                size="xs"
-                sx={{ marginLeft: (theme) => theme.spacing(4) }}
-                variant={
-                  positionType === 1 ? 'rollover1' : positionType === 2 ? 'rollover2' : 'rollover3'
-                }
-                onClick={onRollover}
-              >
+              <RolloverButton id={gaButtonId} onClick={onRollover}>
                 Rollover
-              </Button>
+              </RolloverButton>
             )}
           </>
         )}
 
         {beforeMaturity === false && isSettled && (
-          <Button size="xs" variant={positionType === 1 ? 'darker-link' : 'darker'} disabled>
-            Settled
-          </Button>
+          <SettledButton disabled={true}>Settled</SettledButton>
         )}
       </Box>
     </Box>
