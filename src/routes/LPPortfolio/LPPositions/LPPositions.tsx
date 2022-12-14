@@ -18,7 +18,7 @@ import { usePositions } from '../../../hooks/usePositions/usePositions';
 import { useWallet } from '../../../hooks/useWallet';
 import { findCurrentAmm } from '../../../utilities/amm';
 import { setPageTitle } from '../../../utilities/page';
-import { ConnectedPositionTable } from '../ConnectedPositionTable/ConnectedPositionTable';
+import { ConnectedPositionTable } from './ConnectedPositionTable/ConnectedPositionTable';
 
 export const LPPositions: React.FunctionComponent = () => {
   const [amm, setAMM] = useState<AMM>();
