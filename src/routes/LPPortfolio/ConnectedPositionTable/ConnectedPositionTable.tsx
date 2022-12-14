@@ -14,6 +14,7 @@ import { actions, selectors } from '../../../store';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { routes } from '../../paths';
 import { PortfolioHeader } from './PortfolioHeader/PortfolioHeader';
+import { PositionStatus, PositionStatusToggle } from './PositionStatusToggle/PositionStatusToggle';
 import { PositionTable } from './PositionTable/PositionTable';
 
 export type ConnectedPositionTableProps = {
@@ -28,6 +29,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
 }) => {
   const { positionsByAgentGroup, loading } = usePositions();
   const { status } = useWallet();
+  const [positionStatus, setPositionStatus] = useState<PositionStatus>('open');
 
   const [positionToSettle, setPositionToSettle] = useState<
     { txId: string; position: Position } | undefined
@@ -117,10 +119,14 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
     return (
       <>
         <PortfolioHeader currencyCode="USD" currencySymbol="$" portfolioData={portfolioData} />
-        <Box sx={{ marginTop: (theme) => theme.spacing(14) }}>
+        <PositionStatusToggle status={positionStatus} onChange={setPositionStatus} />
+        <Box sx={{ marginTop: (theme) => theme.spacing(6) }}>
           <PositionTable
             portfolioData={portfolioData}
-            positions={positionsByAgentGroup}
+            positions={positionsByAgentGroup.filter((p) => {
+              const isSettled = positionStatus === 'settled';
+              return p.isSettled === isSettled;
+            })}
             onSelectItem={onSelectItem}
             onSettle={handleSettle}
           />
