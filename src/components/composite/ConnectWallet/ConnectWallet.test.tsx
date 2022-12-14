@@ -19,7 +19,7 @@ test('renders proper UI', () => {
     </HashRouter>,
   );
 
-  expect(screen.getByText('🚫 PROHIBITED')).not.toBeNull();
+  expect(screen.getByText('🚫 RESTRICTED')).not.toBeNull();
   expect(screen.getByText('Your wallet needs to be connected before proceeding.')).not.toBeNull();
   expect(screen.getByText('CONNECT YOUR WALLET')).not.toBeNull();
 });

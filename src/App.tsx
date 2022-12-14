@@ -94,7 +94,7 @@ export const App = () => {
           <Route element={<LPPools />} path={routes.LP_POOLS} />
           <Route
             element={
-              isEnvVarProvided(process.env.ROLLOVER_PORTFOLIO) ? (
+              isEnvVarProvided(process.env.REACT_APP_ROLLOVER_PORTFOLIO) ? (
                 <LPPortfolio />
               ) : (
                 <DeprecatedLPPortfolio />
