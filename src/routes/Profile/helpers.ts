@@ -218,8 +218,10 @@ export const getCommunitySbt = (signer: Signer | null) => {
     process.env.REACT_APP_IGNORED_LEAGUE_WALLETS !== 'UNPROVIDED'
       ? process.env.REACT_APP_IGNORED_LEAGUE_WALLETS.split(',')
           .map((s) => s.trim().toLowerCase())
-          .reduce((pV, cI) => ({ ...pV, [cI]: true }), {})
+          .reduce((pV, cV) => ({ ...pV, [cV]: true }), {})
       : {};
+  const badgesCids = parseCidsList(process.env.REACT_APP_BADGES_IPFS_CIDS);
+  const leavesCids = parseCidsList(process.env.REACT_APP_LEAVES_IPFS_CIDS);
   const params: SBTConstructorArgs = {
     id: process.env.REACT_APP_COMMUNITY_SBT_ADDRESS || '',
     signer: signer,
@@ -229,6 +231,14 @@ export const getCommunitySbt = (signer: Signer | null) => {
     subgraphUrl: process.env.REACT_APP_SUBGRAPH_URL,
     coingeckoKey: process.env.REACT_APP_COINGECKO_API_KEY,
     ignoredWalletIds: ignoredWalletIds,
+    badgesCids: badgesCids,
+    leavesCids: leavesCids,
   };
   return new CommunitySBT(params);
+};
+
+const parseCidsList = (cidsEnvVar: string | undefined): Array<string> => {
+  const cidsArray =
+    cidsEnvVar && cidsEnvVar !== 'UNPROVIDED' ? cidsEnvVar.split(',').map((s) => s.trim()) : [];
+  return cidsArray;
 };

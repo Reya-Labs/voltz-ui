@@ -25,7 +25,7 @@ code-quality-check:
 	yarn code-quality:check
 
 build:
-	yarn build
+	CI_BUILD=true yarn build
 
 release:
 	yarn release

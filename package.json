@@ -1,11 +1,11 @@
 {
   "name": "voltz-ui",
-  "version": "1.31.0",
+  "version": "1.32.1",
   "description": "A UI client for the Voltz Protocol",
   "license": "MIT",
   "scripts": {
     "prebuild": "yarn code-quality:check",
-    "build": "(is-ci && export CI_BUILD=true) || GENERATE_SOURCEMAP=false node scripts/build.js",
+    "build": "GENERATE_SOURCEMAP=false node scripts/build.js",
     "build-storybook": "build-storybook",
     "generate": "graphql-codegen --config graphql-codegen.yaml",
     "ts:check": "yarn ts:check-types && yarn ts:circular-check",
