@@ -20,7 +20,6 @@ export type Transaction = TransactionUpdate & {
   fixedHigh?: number;
   oldFixedLow?: number;
   oldFixedHigh?: number;
-  source?: string;
   notional: number;
   margin: number;
   partialCollateralization?: boolean;
@@ -49,7 +48,6 @@ export type SerializedAMM = {
   id: string;
   updatedTimestamp: string;
   factoryAddress: string;
-  fcmAddress: string;
   marginEngineAddress: string;
   termStartTimestamp: string;
   termEndTimestamp: string;
