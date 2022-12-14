@@ -26,7 +26,7 @@ const options: {
 
 export type Props = {
   status: PositionStatus;
-  onChange: (distribution: PositionStatus) => void;
+  onChange: (position: PositionStatus) => void;
 };
 export const PositionStatusToggle: React.FunctionComponent<Props> = ({
   status,

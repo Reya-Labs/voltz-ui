@@ -1,28 +1,28 @@
-import { Typography } from '../../../../../../../../components/atomic/Typography/Typography';
 import { formatNumber } from '../../../../../../../../utilities/number';
+import {
+  AccruedRatesBox,
+  AccruedRatesLabelTypography,
+  AccruedRatesValueTypography,
+} from './AccruedRates.styled';
 
 type AccruedRatesProps = {
-  positionType: number;
-  avgFixedRate?: number;
-  variableRate?: number;
+  fixedRateUpper?: number;
+  fixedRateLower?: number;
 };
 
-export const AccruedRates = ({ positionType, avgFixedRate, variableRate }: AccruedRatesProps) => {
+export const AccruedRates = ({ fixedRateUpper, fixedRateLower }: AccruedRatesProps) => {
   const renderValue = () => {
-    if (variableRate && avgFixedRate) {
-      if (positionType === 1) {
-        return `${formatNumber(avgFixedRate)}% / ${formatNumber(variableRate)}%`;
-      } else {
-        return `${formatNumber(variableRate)}% / ${formatNumber(avgFixedRate)}%`;
-      }
+    if (fixedRateLower && fixedRateUpper) {
+      return `${formatNumber(fixedRateLower)}% / ${formatNumber(fixedRateUpper)}%`;
     } else {
       return `- / -`;
     }
   };
 
   return (
-    <Typography label="Receiving x Paying" sx={{ fontSize: 18 }} variant="body2">
-      {renderValue()}
-    </Typography>
+    <AccruedRatesBox>
+      <AccruedRatesLabelTypography>Receiving / Paying</AccruedRatesLabelTypography>
+      <AccruedRatesValueTypography>{renderValue()}</AccruedRatesValueTypography>
+    </AccruedRatesBox>
   );
 };

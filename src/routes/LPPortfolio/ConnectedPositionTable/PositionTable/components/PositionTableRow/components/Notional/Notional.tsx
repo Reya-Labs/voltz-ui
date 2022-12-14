@@ -1,32 +1,30 @@
 import isUndefined from 'lodash.isundefined';
 import React from 'react';
 
-import { Button } from '../../../../../../../../components/atomic/Button/Button';
-import { Typography } from '../../../../../../../../components/atomic/Typography/Typography';
+import {
+  EditButton,
+  NotionalBox,
+  NotionalLabelBox,
+  NotionalLabelTypography,
+  NotionalValueTypography,
+} from './Notional.styled';
 
 export type NotionalProps = {
   notional?: string;
-  onEdit?: () => void;
+  onEdit: () => void;
   token: string;
 };
 
 export const Notional: React.FunctionComponent<NotionalProps> = ({ notional, onEdit, token }) => {
   return (
-    <>
-      <Typography label="Notional" sx={{ fontSize: 18 }} variant="body2">
+    <NotionalBox>
+      <NotionalLabelBox>
+        <NotionalLabelTypography>NOTIONAL</NotionalLabelTypography>
+        <EditButton onClick={onEdit}>Edit</EditButton>
+      </NotionalLabelBox>
+      <NotionalValueTypography>
         {isUndefined(notional) ? 'Loading...' : `${notional} ${token}`}
-      </Typography>
-
-      {onEdit && (
-        <Button
-          size="small"
-          sx={{ width: '100%', display: 'flex' }}
-          variant="red2"
-          onClick={onEdit}
-        >
-          Edit
-        </Button>
-      )}
-    </>
+      </NotionalValueTypography>
+    </NotionalBox>
   );
 };
