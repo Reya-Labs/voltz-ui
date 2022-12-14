@@ -61,6 +61,7 @@ const initialState: SliceState = {
   }),
 };
 
+
 export const slice = createSlice({
   name: 'ecosystem',
   initialState,
