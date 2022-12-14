@@ -27,7 +27,7 @@ export const EcosystemDeposit: React.FunctionComponent = () => {
     return (
       <ConnectWallet
         connectWalletText="CONNECT YOUR WALLET"
-        heading="🚫 PROHIBITED"
+        heading="🚫 RESTRICTED"
         subheading="Your wallet needs to be connected before proceeding."
       />
     );
