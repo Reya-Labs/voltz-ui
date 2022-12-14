@@ -21,9 +21,7 @@ const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const createEnvironmentHash = require('./webpack/persistentCache/createEnvironmentHash');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-
-// Source maps are resource heavy and can cause out of memory issue for large source files.
-const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
+const SentryWebpackPlugin = require('@sentry/webpack-plugin');
 
 const reactRefreshRuntimeEntry = require.resolve('react-refresh/runtime');
 const reactRefreshWebpackPluginRuntimeEntry = require.resolve(
@@ -41,9 +39,6 @@ const babelRuntimeRegenerator = require.resolve('@babel/runtime/regenerator', {
 // Some apps do not need the benefits of saving a web request, so not inlining the chunk
 // makes for a smoother build process.
 const shouldInlineRuntimeChunk = process.env.INLINE_RUNTIME_CHUNK !== 'false';
-
-const emitErrorsAsWarnings = process.env.ESLINT_NO_DEV_ERRORS === 'true';
-const disableESLintPlugin = process.env.DISABLE_ESLINT_PLUGIN === 'true';
 
 const imageInlineSizeLimit = parseInt(process.env.IMAGE_INLINE_SIZE_LIMIT || '10000');
 
@@ -70,8 +65,26 @@ const hasJsxRuntime = (() => {
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
 module.exports = function (webpackEnv) {
+  // We will provide `paths.publicUrlOrPath` to our app
+  // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
+  // Omit trailing slash as %PUBLIC_URL%/xyz looks better than %PUBLIC_URL%xyz.
+  // Get environment variables to inject into our app.
+  const env = getClientEnvironment(paths.publicUrlOrPath.slice(0, -1));
+
   const isEnvDevelopment = webpackEnv === 'development';
   const isEnvProduction = webpackEnv === 'production';
+
+  // upload if source maps are enabled and sentry if build is run on develop/master configured
+  const SENTRY_RELEASE = env.raw.SENTRY_RELEASE;
+  const BRANCH_NAME = env.raw.BRANCH_NAME;
+  // sentry is only allowed to publish source maps to develop and main only
+  const SENTRY_BRANCHES = ['develop', 'main'];
+  const isSentryAllowedToPublishSourceMaps = SENTRY_BRANCHES.indexOf(BRANCH_NAME) !== -1;
+  const shouldUploadSentrySourceMaps =
+    isSentryAllowedToPublishSourceMaps && process.env.CI_BUILD === 'true' && isEnvProduction;
+  // Source maps are resource heavy and can cause out of memory issue for large source files.
+  const shouldUseSourceMap =
+    shouldUploadSentrySourceMaps || process.env.GENERATE_SOURCEMAP !== 'false';
 
   // Variable used for enabling profiling in Production
   // passed into alias object. Uses a flag if passed into the build command
@@ -79,12 +92,6 @@ module.exports = function (webpackEnv) {
 
   // Variable used for enabling bundle size analysis
   const analyseBundleSize = process.argv.includes('--bundle-size');
-
-  // We will provide `paths.publicUrlOrPath` to our app
-  // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
-  // Omit trailing slash as %PUBLIC_URL%/xyz looks better than %PUBLIC_URL%xyz.
-  // Get environment variables to inject into our app.
-  const env = getClientEnvironment(paths.publicUrlOrPath.slice(0, -1));
 
   const shouldUseReactRefresh = env.raw.FAST_REFRESH;
 
@@ -538,6 +545,21 @@ module.exports = function (webpackEnv) {
         Buffer: ['buffer', 'Buffer'],
       }),
       analyseBundleSize && new BundleAnalyzerPlugin(),
+      shouldUploadSentrySourceMaps &&
+        new SentryWebpackPlugin({
+          org: 'voltz-labs-ge',
+          project: 'voltz-ui',
+
+          // Specify the directory containing build artifacts
+          include: './build/static/js',
+
+          // Auth tokens can be obtained from https://sentry.io/settings/account/api/auth-tokens/
+          // and needs the `org:read`, `project:releases`, `project:read` scopes
+          authToken: 'a24e3732ef634d7da3ae11d2f8c644a6388c0fe0c0d34692b53d7cbbec9ff1b9',
+          // The Sentry Webpack plugin will automatically inject a release value into the SDK so you must either omit the release option from Sentry.init or make sure Sentry.init's release option matches the plugin's release option exactly
+          // Must be same with the one we initialize the Sentry tracker with
+          release: SENTRY_RELEASE,
+        }),
     ].filter(Boolean),
     // Turn off performance processing because we utilize
     // our own hints via the FileSizeReporter

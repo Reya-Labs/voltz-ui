@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "prebuild": "yarn code-quality:check",
-    "build": "GENERATE_SOURCEMAP=false node scripts/build.js",
+    "build": "(is-ci && export CI_BUILD=true) || GENERATE_SOURCEMAP=false node scripts/build.js",
     "build-storybook": "build-storybook",
     "generate": "graphql-codegen --config graphql-codegen.yaml",
     "ts:check": "yarn ts:check-types && yarn ts:circular-check",
@@ -187,6 +187,7 @@
     "@pmmmwh/react-refresh-webpack-plugin": "0.5.4",
     "@semantic-release/git": "10.0.1",
     "@semantic-release/npm": "9.0.1",
+    "@sentry/webpack-plugin": "1.20.0",
     "@storybook/addon-actions": "6.5.12",
     "@storybook/addon-essentials": "6.5.12",
     "@storybook/addon-links": "6.5.12",

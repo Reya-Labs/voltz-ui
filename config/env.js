@@ -3,8 +3,29 @@
 const fs = require('fs');
 const path = require('path');
 const paths = require('./paths');
+const { execSync } = require('child_process');
 const packageJsonVersion = require('../package.json').version;
 const packageJsonName = require('../package.json').name;
+
+function getCommitHash() {
+  try {
+    return execSync('git rev-parse --short HEAD').toString().trim();
+  } catch (e) {
+    console.error(e);
+    console.error('Cannot get the commit hash.');
+    process.exit(1);
+  }
+}
+
+function getBranchName() {
+  try {
+    return execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+  } catch (e) {
+    console.error(e);
+    console.error('Cannot get the branch name.');
+    process.exit(1);
+  }
+}
 
 // Make sure that including paths.js after env.js will read .env variables.
 delete require.cache[require.resolve('./paths')];
@@ -60,6 +81,13 @@ process.env.NODE_PATH = (process.env.NODE_PATH || '')
 // injected into the application via DefinePlugin in webpack configuration.
 const REACT_APP = /^REACT_APP_/i;
 
+// branch name
+const BRANCH_NAME = getBranchName();
+
+const SENTRY_DSN =
+  'https://89896542d0164e8795cd7ee0504edcb0@o4504239616294912.ingest.sentry.io/4504246851338240';
+const SENTRY_RELEASE = `${packageJsonName}@${packageJsonVersion}-${getBranchName()}-${getCommitHash()}`;
+
 function getClientEnvironment(publicUrl) {
   const raw = Object.keys(process.env)
     .filter((key) => REACT_APP.test(key))
@@ -73,11 +101,12 @@ function getClientEnvironment(publicUrl) {
         APP_VERSION: packageJsonVersion,
         // Application name
         APP_NAME: packageJsonName,
+        // Branch name
+        BRANCH_NAME,
         // Sentry DSN
-        SENTRY_DSN:
-          'https://89896542d0164e8795cd7ee0504edcb0@o4504239616294912.ingest.sentry.io/4504246851338240',
+        SENTRY_DSN,
         // Sentry release
-        SENTRY_RELEASE: `${packageJsonName}@${packageJsonVersion}`,
+        SENTRY_RELEASE,
         // Useful for determining whether we’re running in production mode.
         // Most importantly, it switches React into the correct mode.
         NODE_ENV: process.env.NODE_ENV || 'development',
