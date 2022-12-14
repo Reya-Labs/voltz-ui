@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { ConnectedMintBurnForm } from '../../../components/containers/ConnectedMintBurnForm/ConnectedMintBurnForm';
+import { Agents } from '../../../contexts/AgentContext/types';
 import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
 import {
   MintBurnFormModes,
@@ -11,6 +12,7 @@ import {
 } from '../../../contexts/MintBurnFormContext/MintBurnFormContext';
 import { PortfolioProvider } from '../../../contexts/PortfolioContext/PortfolioContext';
 import { PositionProvider } from '../../../contexts/PositionContext/PositionContext';
+import { useAgent } from '../../../hooks/useAgent';
 import { useAMMs } from '../../../hooks/useAMMs';
 import { usePositions } from '../../../hooks/usePositions/usePositions';
 import { useWallet } from '../../../hooks/useWallet';
@@ -23,6 +25,7 @@ export const LPPositions: React.FunctionComponent = () => {
   const [formMode, setFormMode] = useState<MintBurnFormModes>();
   const [position, setPosition] = useState<Position>();
   const [settling, setSettling] = useState<boolean>(false);
+  const { onChangeAgent } = useAgent();
 
   const { amms } = useAMMs();
   const { key } = useLocation();
@@ -35,7 +38,8 @@ export const LPPositions: React.FunctionComponent = () => {
     setFormMode(undefined);
     setAMM(undefined);
     setPosition(undefined);
-  }, [setFormMode, setAMM]);
+    onChangeAgent(Agents.LIQUIDITY_PROVIDER);
+  }, [onChangeAgent, setFormMode, setAMM]);
 
   useEffect(() => {
     handleReset();
