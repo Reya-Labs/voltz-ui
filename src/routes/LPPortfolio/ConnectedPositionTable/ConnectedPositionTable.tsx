@@ -6,7 +6,6 @@ import { Loading } from '../../../components/atomic/Loading/Loading';
 import { Panel } from '../../../components/atomic/Panel/Panel';
 import { RouteLink } from '../../../components/atomic/RouteLink/RouteLink';
 import { PendingTransaction } from '../../../components/interface/PendingTransaction/PendingTransaction';
-import { PositionTable } from '../../../components/interface/PositionTable/PositionTable';
 import { Agents } from '../../../contexts/AgentContext/types';
 import { usePortfolioContext } from '../../../contexts/PortfolioContext/PortfolioContext';
 import { usePositions } from '../../../hooks/usePositions/usePositions';
@@ -15,6 +14,7 @@ import { actions, selectors } from '../../../store';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { routes } from '../../paths';
 import { PortfolioHeader } from './PortfolioHeader/PortfolioHeader';
+import { PositionTable } from './PositionTable/PositionTable';
 
 export type ConnectedPositionTableProps = {
   onSelectItem: (item: Position, mode: 'margin' | 'liquidity' | 'rollover' | 'notional') => void;
