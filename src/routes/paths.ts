@@ -9,6 +9,7 @@ export const routes = {
   PROFILE: 'profile',
   LP_OPTIMISERS: 'lp-optimisers',
   LP_OPTIMISERS_DEPOSIT: 'lp-optimisers/deposit/:vaultId',
+  LP_OPTIMISERS_MANAGE: 'lp-optimisers/manage/:vaultId',
   // old route for lp-optimisers, redirects to lp-optimisers
   PRODUCTS: 'products',
 };
