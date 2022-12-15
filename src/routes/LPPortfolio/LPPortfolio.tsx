@@ -2,8 +2,9 @@ import React from 'react';
 
 import { ConnectWallet } from '../../components/composite/ConnectWallet/ConnectWallet';
 import { useWallet } from '../../hooks/useWallet';
-import { LPPortfolioBox } from './LPPortfolio.styled';
+import { ContentBox, LPPortfolioBox, Split } from './LPPortfolio.styled';
 import { LPPositions } from './LPPositions/LPPositions';
+import { Optimisers } from './Optimisers/Optimisers';
 
 export const LPPortfolio: React.FunctionComponent = () => {
   const { status } = useWallet();
@@ -22,7 +23,15 @@ export const LPPortfolio: React.FunctionComponent = () => {
 
   return (
     <LPPortfolioBox>
-      <LPPositions />
+      <ContentBox>
+        <LPPositions />
+      </ContentBox>
+      <ContentBox>
+        <Split />
+      </ContentBox>
+      <ContentBox>
+        <Optimisers />
+      </ContentBox>
     </LPPortfolioBox>
   );
 };
