@@ -41,14 +41,14 @@ export const TransactionListItem = ({
           <Icon name={data.icon} />
         </CellBox>
         <LabelCellBox>
-          <LabelTypography sx={isLiquidation ? { color: colors.vzCustomRed1.base } : undefined}>
+          <LabelTypography sx={isLiquidation ? { color: colors.wildStrawberry.base } : undefined}>
             {data.label}
           </LabelTypography>
         </LabelCellBox>
         {data.items.map((item, index) => (
           <CellBox key={`${item.label}-${index}`}>
             <ItemLabelTypography>{item.label}:</ItemLabelTypography>
-            <LabelTypography sx={isLiquidation ? { color: colors.vzCustomRed1.base } : undefined}>
+            <LabelTypography sx={isLiquidation ? { color: colors.wildStrawberry.base } : undefined}>
               {item.value}
             </LabelTypography>
           </CellBox>
