@@ -151,5 +151,5 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
     return content;
   };
 
-  return renderContent();
+  return <>{renderContent()}</>;
 };
