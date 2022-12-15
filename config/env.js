@@ -23,17 +23,7 @@ function getBranchName() {
     const branchName = execSync('git log -1 --pretty=%D HEAD | sed "s/.*origin\\///g;s/, .*//g"')
       .toString()
       .trim();
-    const branchName2 = execSync(
-      "git branch --remote --verbose --no-abbrev --contains | sed -rne 's/^[^\\/]*\\/([^\\ ]+).*$/\\1/p'",
-    )
-      .toString()
-      .trim();
-    const branchName3 = execSync('git branch --remote --contains | sed "s|[[:space:]]*origin/||"')
-      .toString()
-      .trim();
     console.log(`Branch name: ${branchName}`);
-    console.log(`Branch name2: ${branchName2}`);
-    console.log(`Branch name3: ${branchName3}`);
     return branchName;
   } catch (e) {
     console.error(e);
@@ -96,8 +86,8 @@ process.env.NODE_PATH = (process.env.NODE_PATH || '')
 // injected into the application via DefinePlugin in webpack configuration.
 const REACT_APP = /^REACT_APP_/i;
 
-// branch name
-const BRANCH_NAME = getBranchName();
+// either provided via _BRANCH_NAME_ or try to detect it
+const BRANCH_NAME = process.env._BRANCH_NAME_ || getBranchName();
 
 const SENTRY_DSN =
   'https://89896542d0164e8795cd7ee0504edcb0@o4504239616294912.ingest.sentry.io/4504246851338240';
