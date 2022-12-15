@@ -4,9 +4,9 @@ import { Loading } from '../../../components/atomic/Loading/Loading';
 import { Panel } from '../../../components/atomic/Panel/Panel';
 import { useWallet } from '../../../hooks/useWallet';
 import { useLPVaults } from '../../LPOptimisers/useLPVaults';
-import { Entry } from './Entry/Entry';
 import { Header } from './Header/Header';
 import { LPOptimisersTypography, OptimisersBox } from './Optimisers.styled';
+import { VaultListItem } from './VaultListItem/VaultListItem';
 
 export const Optimisers: React.FunctionComponent = () => {
   const { signer } = useWallet();
@@ -28,19 +28,19 @@ export const Optimisers: React.FunctionComponent = () => {
       {lpVaults
         .filter((vault) => vault.userDeposit > 0)
         .map((vault) => (
-          <Entry
+          <VaultListItem
             key={vault.id}
-            entries={vault.metadata.vaults.map((vVaults, index) => ({
-              maturityTimestampMS: vVaults.maturityTimestampMS,
-              isCompleted: vault.withdrawable(index),
-              pools: vVaults.pools.length,
-              balance: vault.userIndividualComittedDeposits[index],
-              distribution: vVaults.weight,
-            }))}
             id={vault.id}
             token={vault.metadata.token}
             totalApy={0}
             totalBalance={vault.userDeposit}
+            vaults={vault.metadata.vaults.map((vVaults, index) => ({
+              maturityTimestampMS: vVaults.maturityTimestampMS,
+              isCompleted: vault.withdrawable(index),
+              poolsCount: vVaults.pools.length,
+              currentBalance: vault.userIndividualComittedDeposits[index],
+              distribution: vVaults.weight,
+            }))}
           />
         ))}
     </OptimisersBox>

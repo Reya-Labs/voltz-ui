@@ -5,13 +5,13 @@ import { Link } from 'react-router-dom';
 import { Typography } from '../../../../components/atomic/Typography/Typography';
 import { colors } from '../../../../theme';
 
-export const EntryBox = styled(Box)`
+export const VaultListItemBox = styled(Box)`
   display: flex;
   flex-direction: column;
   border-radius: 4px;
 `;
 
-export const EntryTopBox = styled(Box)`
+export const VaultListItemTopBox = styled(Box)`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -24,7 +24,7 @@ export const EntryTopBox = styled(Box)`
 
 export const NameBox = styled(Box)`
   width: 220px;
-  margin-right: 48px;
+  margin-right: 19px;
 
   display: flex;
   flex-direction: row;
@@ -43,32 +43,35 @@ export const NameTypography = styled(Typography)`
   color: #e1ddf7;
 `;
 
-export const BalanceTypography = styled(Typography)`
-  margin-right: 64px;
+export const TotalBalanceTypography = styled(Typography)`
+  margin-right: 47px;
 
   font-family: 'PixelOperatorMono', monospace;
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
   line-height: 130%;
-
+  min-width: 100px;
+  text-align: center;
   /* Lavender Web 3 */
   color: #857ea5;
 `;
 
-const APYTypography = styled(Typography)`
+const TotalAPYTypography = styled(Typography)`
   font-family: 'PixelOperatorMono', monospace;
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
   line-height: 130%;
+  min-width: 35px;
+  text-align: center;
 `;
 
-export const PositiveAPYTypography = styled(APYTypography)`
+export const PositiveAPYTypography = styled(TotalAPYTypography)`
   color: ${colors.skyBlueCrayola.base};
 `;
 
-export const NegativeAPYTypography = styled(APYTypography)`
+export const NegativeAPYTypography = styled(TotalAPYTypography)`
   color: ${colors.wildStrawberry.base};
 `;
 
@@ -104,7 +107,7 @@ export const ManageButton = styled(Link)`
   padding: 6px 13px;
 `;
 
-export const EntryBottomBox = styled(Box)`
+export const VaultListItemBottomBox = styled(Box)`
   /* Auto layout */
   display: flex;
   flex-direction: column;
@@ -153,7 +156,7 @@ export const HeaderBalanceTypography = styled(HeaderTypography)`
 `;
 export const HeaderPoolsTypography = styled(HeaderTypography)``;
 
-export const EntryInfo = styled(Box)`
+export const VaultListItemInfo = styled(Box)`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -209,7 +212,7 @@ const ValueBox = styled(Box)`
 export const DistributionBox = styled(ValueBox)`
   min-width: 52px;
 `;
-export const BalanceBox = styled(ValueBox)`
+export const CurrentBalanceBox = styled(ValueBox)`
   min-width: 68px;
 `;
-export const PoolsBox = styled(ValueBox)``;
+export const PoolsCountBox = styled(ValueBox)``;
