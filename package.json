@@ -1,6 +1,6 @@
 {
   "name": "voltz-ui",
-  "version": "1.34.0",
+  "version": "1.34.1",
   "description": "A UI client for the Voltz Protocol",
   "license": "MIT",
   "scripts": {
