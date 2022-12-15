@@ -1,78 +1,48 @@
 import React from 'react';
 
-import { Entry, EntryProps } from './Entry/Entry';
+import { Loading } from '../../../components/atomic/Loading/Loading';
+import { Panel } from '../../../components/atomic/Panel/Panel';
+import { useWallet } from '../../../hooks/useWallet';
+import { useLPVaults } from '../../LPOptimisers/useLPVaults';
+import { Entry } from './Entry/Entry';
 import { Header } from './Header/Header';
 import { LPOptimisersTypography, OptimisersBox } from './Optimisers.styled';
 
-const entries: EntryProps[] = [
-  {
-    id: 'eth',
-    token: 'eth',
-    totalBalance: 245000,
-    totalApy: -2.33,
-    entries: [
-      {
-        maturityTimestampMS: 1672441200000,
-        isCompleted: true,
-        pools: 2,
-        balance: 39000,
-        distribution: 0,
-      },
-      {
-        maturityTimestampMS: 1680213600000,
-        isCompleted: false,
-        pools: 2,
-        balance: 390000,
-        distribution: 70,
-      },
-      {
-        maturityTimestampMS: 1703977200000,
-        isCompleted: false,
-        pools: 2,
-        balance: 390,
-        distribution: 30,
-      },
-    ],
-  },
-  {
-    id: 'dai',
-    token: 'dai',
-    totalBalance: 245000,
-    totalApy: 2.33,
-    entries: [
-      {
-        maturityTimestampMS: 1672441200000,
-        isCompleted: true,
-        pools: 2,
-        balance: 3900,
-        distribution: 0,
-      },
-      {
-        maturityTimestampMS: 1680213600000,
-        isCompleted: false,
-        pools: 2,
-        balance: 3900,
-        distribution: 70,
-      },
-      {
-        maturityTimestampMS: 1703977200000,
-        isCompleted: false,
-        pools: 2,
-        balance: 3900,
-        distribution: 30,
-      },
-    ],
-  },
-];
-
 export const Optimisers: React.FunctionComponent = () => {
+  const { signer } = useWallet();
+  const { lpVaults, vaultsInitialised, vaultsInitialisedWithSigner } = useLPVaults(signer);
+
+  if (!signer || !vaultsInitialised || !vaultsInitialisedWithSigner) {
+    return (
+      <OptimisersBox>
+        <Panel sx={{ width: '100%' }} variant="grey-dashed">
+          <Loading sx={{ margin: '0 auto' }} />
+        </Panel>
+      </OptimisersBox>
+    );
+  }
   return (
     <OptimisersBox>
       <LPOptimisersTypography>LP OPTIMISERS</LPOptimisersTypography>
       <Header />
-      {entries.map((entry) => (
-        <Entry key={entry.id} {...entry} />
-      ))}
+      {lpVaults
+        .filter((vault) => vault.userDeposit > 0)
+        .map((vault) => (
+          <Entry
+            key={vault.id}
+            entries={vault.metadata.vaults.map((vVaults, index) => ({
+              maturityTimestampMS: vVaults.maturityTimestampMS,
+              isCompleted: vault.withdrawable(index),
+              pools: vVaults.pools.length,
+              balance: vault.userIndividualComittedDeposits[index],
+              distribution: vVaults.weight,
+            }))}
+            id={vault.id}
+            token={vault.metadata.token}
+            totalApy={0}
+            totalBalance={vault.userDeposit}
+          />
+        ))}
     </OptimisersBox>
   );
 };

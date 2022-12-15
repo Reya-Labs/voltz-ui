@@ -29,7 +29,7 @@ import {
 
 export type EntryProps = {
   id: string;
-  token: 'eth' | 'dai' | 'lido' | 'usdc' | 'usdt';
+  token: string;
   totalBalance: number;
   totalApy: number;
   entries: {
@@ -52,7 +52,7 @@ export const Entry: React.FunctionComponent<EntryProps> = ({
     <EntryBox>
       <EntryTopBox>
         <NameBox>
-          <Icon name={`token-${token}`} />
+          <Icon name={`token-${token as 'eth' | 'dai' | 'lido' | 'usdc' | 'usdt'}`} />
           <NameTypography>Mellow - {token.toUpperCase()}</NameTypography>
         </NameBox>
         <BalanceTypography>${formatter.format(totalBalance).toUpperCase()}</BalanceTypography>
