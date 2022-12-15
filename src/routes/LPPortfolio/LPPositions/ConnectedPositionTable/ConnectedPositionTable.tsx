@@ -148,7 +148,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
       content = renderPositionTable();
     }
 
-    return <Box sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>{content}</Box>;
+    return content;
   };
 
   return renderContent();
