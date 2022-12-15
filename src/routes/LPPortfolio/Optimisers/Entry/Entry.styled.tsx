@@ -3,10 +3,12 @@ import { styled } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 
 import { Typography } from '../../../../components/atomic/Typography/Typography';
+import { colors } from '../../../../theme';
 
 export const EntryBox = styled(Box)`
   display: flex;
   flex-direction: column;
+  border-radius: 4px;
 `;
 
 export const EntryTopBox = styled(Box)`
@@ -54,16 +56,20 @@ export const BalanceTypography = styled(Typography)`
   color: #857ea5;
 `;
 
-export const APYTypography = styled(Typography)`
+const APYTypography = styled(Typography)`
   font-family: 'PixelOperatorMono', monospace;
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
   line-height: 130%;
-  /* or 23px */
+`;
 
-  /* Wild Strawberry */
-  color: #ff4aa9;
+export const PositiveAPYTypography = styled(APYTypography)`
+  color: ${colors.skyBlueCrayola.base};
+`;
+
+export const NegativeAPYTypography = styled(APYTypography)`
+  color: ${colors.wildStrawberry.base};
 `;
 
 export const DepositButton = styled(Link)`
@@ -79,14 +85,13 @@ export const DepositButton = styled(Link)`
   padding: 8px 13px;
   text-decoration: none;
   margin-left: auto;
-  /* Sky Blue Crayola */
-  color: #4de5ff;
+  color: ${colors.skyBlueCrayola.base};
 `;
 
 export const ManageButton = styled(Link)`
   /* Liberty 4 */
   background: #2b2548;
-  border-radius: 0px 0px 4px 0px;
+  border-radius: 0px 4px 4px 0px;
 
   font-family: 'PixelOperatorMono', monospace;
   font-style: normal;
@@ -94,8 +99,7 @@ export const ManageButton = styled(Link)`
   font-size: 16px;
   line-height: 14px;
   text-decoration: none;
-  /* Sky Blue Crayola */
-  color: #4de5ff;
+  color: ${colors.skyBlueCrayola.base};
   margin-left: auto;
   padding: 6px 13px;
 `;
@@ -137,16 +141,15 @@ const HeaderTypography = styled(Typography)`
 `;
 
 export const HeaderMaturityTypography = styled(HeaderTypography)`
-  margin-right: 172px;
+  margin-right: 188px;
 `;
 
 export const HeaderDistributionTypography = styled(HeaderTypography)`
-  margin-right: 30px;
+  margin-right: 68px;
 `;
 
 export const HeaderBalanceTypography = styled(HeaderTypography)`
-  margin-right: 52px;
-  color: #e1ddf7;
+  margin-right: 66px;
 `;
 export const HeaderPoolsTypography = styled(HeaderTypography)``;
 
@@ -176,8 +179,7 @@ export const MaturityDateTypography = styled(Typography)`
   font-size: 14px;
   line-height: 130%;
 
-  /* Lavender Web */
-  color: #e1ddf7;
+  color: ${colors.lavenderWeb.base};
 `;
 
 export const MaturityCompleteTypography = styled(MaturityDateTypography)`
@@ -201,10 +203,13 @@ const ValueBox = styled(Box)`
   font-size: 16px;
   line-height: 14px;
 
-  /* Lavender Web */
-  color: #e1ddf7;
+  color: ${colors.lavenderWeb.base};
 `;
 
-export const DistributionBox = styled(ValueBox)``;
-export const BalanceBox = styled(ValueBox)``;
+export const DistributionBox = styled(ValueBox)`
+  min-width: 52px;
+`;
+export const BalanceBox = styled(ValueBox)`
+  min-width: 68px;
+`;
 export const PoolsBox = styled(ValueBox)``;

@@ -7,7 +7,7 @@ import { colors } from '../../../theme';
 export const OptimisersBox = styled(Box)`
   display: flex;
   flex-direction: column;
-  row-gap: 24px;
+  row-gap: 8px;
 `;
 
 export const LPOptimisersTypography = styled(Typography)`
