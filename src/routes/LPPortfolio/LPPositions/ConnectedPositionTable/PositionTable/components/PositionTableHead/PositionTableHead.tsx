@@ -12,14 +12,19 @@ import { SystemStyleObject, Theme } from '../../../../../../../theme';
 import { formatCurrency, formatNumber } from '../../../../../../../utilities/number';
 import { ReactComponent as EditIcon } from './editPosition.svg';
 import {
+  ActionsBox,
+  CurrentFixedRateBox,
   EditButton,
   FeesBox,
   FeesTypography,
+  NegativeCurrentFixedRateTypography,
   NegativeFeesValueTypography,
+  PositiveCurrentFixedRateTypography,
   PositiveFeesValueTypography,
   RolloverButton,
   SettleButton,
   SettledButton,
+  WarningCurrentFixedRateTypography,
 } from './PositionTableHead.styled';
 
 export type PositionTableHeadProps = {
@@ -67,6 +72,13 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
   const FeesValueTypography = feesPositive
     ? PositiveFeesValueTypography
     : NegativeFeesValueTypography;
+
+  const CurrentFixedRateTypography =
+    fixedRateHealthFactor === 1
+      ? NegativeCurrentFixedRateTypography
+      : fixedRateHealthFactor === 2
+      ? WarningCurrentFixedRateTypography
+      : PositiveCurrentFixedRateTypography;
   return (
     <Box sx={containerStyles}>
       <Box sx={{ display: 'flex' }}>
@@ -83,19 +95,12 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
         )}
       </Box>
 
-      <Box sx={{ display: 'flex' }}>
+      <ActionsBox>
         {beforeMaturity && !isUndefined(fixedApr) && !isUndefined(healthFactor) && (
-          <Box
-            sx={{
-              padding: (theme) => `${theme.spacing(1)} ${theme.spacing(2)}`,
-              marginLeft: (theme) => theme.spacing(2),
-            }}
-          >
-            <BulletLabel
-              sx={{ color: getHealthTextColor(fixedRateHealthFactor) }}
-              text={<>Current fixed rate: {formatNumber(fixedApr)}%</>}
-            />
-          </Box>
+          <CurrentFixedRateBox>
+            CURRENT FIXED:&nbsp;
+            <CurrentFixedRateTypography>{formatNumber(fixedApr)}%</CurrentFixedRateTypography>
+          </CurrentFixedRateBox>
         )}
 
         {beforeMaturity && !isUndefined(healthFactor) && (
@@ -140,7 +145,7 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
         {beforeMaturity === false && isSettled && (
           <SettledButton disabled={true}>Settled</SettledButton>
         )}
-      </Box>
+      </ActionsBox>
     </Box>
   );
 };

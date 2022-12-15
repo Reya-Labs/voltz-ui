@@ -74,3 +74,50 @@ export const FeesBox = styled(Box)`
   border-radius: 4px;
   margin-left: 16px;
 `;
+
+export const CurrentFixedRateBox = styled(Box)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 4px 8px;
+  gap: 8px;
+
+  /* Liberty 6 */
+  background: #19152a;
+  border-radius: 4px;
+
+  font-family: 'PixelOperatorMono', monospace;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 120%;
+
+  /* Lavender Web 2 */
+  color: #a49ebf;
+`;
+
+const CurrentFixedRateTypography = styled(Typography)`
+  font-family: 'PixelOperatorMono', monospace;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 120%;
+`;
+
+export const PositiveCurrentFixedRateTypography = styled(CurrentFixedRateTypography)`
+  color: ${colors.skyBlueCrayola.base};
+`;
+
+export const WarningCurrentFixedRateTypography = styled(CurrentFixedRateTypography)`
+  color: ${colors.orangeYellow.base};
+`;
+
+export const NegativeCurrentFixedRateTypography = styled(CurrentFixedRateTypography)`
+  color: ${colors.wildStrawberry.base};
+`;
+
+export const ActionsBox = styled(Box)`
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+`;
