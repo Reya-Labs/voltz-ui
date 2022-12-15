@@ -47,7 +47,6 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
         margin: 0,
         ammId: positionAmm.id,
         agent: Agents.LIQUIDITY_PROVIDER,
-        source: position.source,
         fixedLow: position.fixedRateLower.toNumber(),
         fixedHigh: position.fixedRateUpper.toNumber(),
       };
