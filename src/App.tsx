@@ -108,6 +108,10 @@ export const App = () => {
           />
           <Route element={<Ecosystem />} path={routes.LP_OPTIMISERS} />
           <Route element={<EcosystemDeposit />} path={routes.LP_OPTIMISERS_DEPOSIT} />
+          <Route
+            element={<h1 style={{ color: 'white' }}>Still WIP</h1>}
+            path={routes.LP_OPTIMISERS_MANAGE}
+          />
           <Route element={<FixedBorrower />} path={routes.BORROW_POS} />
           <Route element={<Profile />} path={routes.PROFILE} />
           <Route element={<TradingLeague />} path={routes.TRADING_LEAGUE} />

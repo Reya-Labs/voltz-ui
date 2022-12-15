@@ -29,6 +29,7 @@ export const PoolLabelTypography = styled(Typography)`
 export const PoolBorrowingLabelTypography = styled(PoolLabelTypography)`
   color: ${colors.wildStrawberry.base};
   font-weight: 700;
+  display: inline-block;
 `;
 
 export const PoolValueTypography = styled(Typography)`

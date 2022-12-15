@@ -1,7 +1,9 @@
 import React from 'react';
+import { generatePath } from 'react-router-dom';
 
 import { Icon } from '../../../../components/atomic/Icon/Icon';
 import { formatPOSIXTimestamp } from '../../../../utilities/date';
+import { routes } from '../../../paths';
 import {
   BalanceBox,
   BalanceTypography,
@@ -45,6 +47,7 @@ export const Entry: React.FunctionComponent<EntryProps> = ({
   totalApy,
   totalBalance,
   token,
+  id,
 }) => {
   const formatter = Intl.NumberFormat('en', { notation: 'compact' });
   const TotalAPYTypography = totalApy >= 0 ? PositiveAPYTypography : NegativeAPYTypography;
@@ -57,7 +60,9 @@ export const Entry: React.FunctionComponent<EntryProps> = ({
         </NameBox>
         <BalanceTypography>${formatter.format(totalBalance).toUpperCase()}</BalanceTypography>
         <TotalAPYTypography>{totalApy}%</TotalAPYTypography>
-        <DepositButton to={'unknown'}>DEPOSIT</DepositButton>
+        <DepositButton to={`/${generatePath(routes.LP_OPTIMISERS_DEPOSIT, { vaultId: id })}`}>
+          DEPOSIT
+        </DepositButton>
       </EntryTopBox>
       <EntryBottomBox>
         <HeaderBox>
@@ -80,7 +85,11 @@ export const Entry: React.FunctionComponent<EntryProps> = ({
             <DistributionBox>{formatter.format(distribution)}%</DistributionBox>
             <BalanceBox>${formatter.format(balance)}</BalanceBox>
             <PoolsBox>{pools}</PoolsBox>
-            {isCompleted ? <ManageButton to={'manage'}>Manage</ManageButton> : null}
+            {isCompleted ? (
+              <ManageButton to={`/${generatePath(routes.LP_OPTIMISERS_MANAGE, { vaultId: id })}`}>
+                Manage
+              </ManageButton>
+            ) : null}
           </EntryInfo>
         ))}
       </EntryBottomBox>
