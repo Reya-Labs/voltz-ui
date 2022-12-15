@@ -1,7 +1,6 @@
 import { Position } from '@voltz-protocol/v1-sdk';
 
 export enum TransactionType {
-  SWAP = 'SWAP',
   MARGIN_UPDATE = 'MARGIN_UPDATE',
   SETTLEMENT = 'SETTLEMENT',
   LIQUIDATION = 'LIQUIDATION',
@@ -9,9 +8,6 @@ export enum TransactionType {
   BURN = 'BURN',
 }
 
-export type SwapTransaction = Position['swaps'][number] & {
-  type: TransactionType.SWAP;
-};
 export type MarginUpdateTransaction = Position['marginUpdates'][number] & {
   type: TransactionType.MARGIN_UPDATE;
 };
@@ -28,11 +24,6 @@ export type BurnTransaction = Position['burns'][number] & {
   type: TransactionType.BURN;
 };
 
-export type TraderPositionTransaction =
-  | SwapTransaction
-  | MarginUpdateTransaction
-  | SettlementTransaction
-  | LiquidationTransaction;
 export type LPPositionTransaction =
   | MintTransaction
   | BurnTransaction

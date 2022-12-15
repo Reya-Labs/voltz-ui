@@ -4,28 +4,16 @@ import JSBI from 'jsbi';
 
 import { Icons } from '../../../../../../../components/atomic/Icon/types';
 import { formatTimestamp } from '../../../../../../../utilities/date';
-import { formatCurrency, formatNumber } from '../../../../../../../utilities/number';
-import { LPPositionTransaction, TraderPositionTransaction, TransactionType } from './types';
+import { formatCurrency } from '../../../../../../../utilities/number';
+import { LPPositionTransaction, TransactionType } from './types';
 
 /**
  * Takes a currency value from a transaction and returns the decimal number version
+ * @param position - the position
  * @param num - The transaction currency number (these are JSBI objects)
  */
 export const getDescaledValue = (position: Position, num: JSBI) => {
   return position.amm.descale(BigNumber.from(num.toString()));
-};
-
-/**
- * Returns the 'avg fix' percentage value for the given parameters
- * @param fixedTokenDeltaUnbalanced
- * @param variableTokenDelta
- */
-export const getAvgFix = (fixedTokenDeltaUnbalanced: JSBI, variableTokenDelta: JSBI) => {
-  return Math.abs(
-    JSBI.toNumber(
-      JSBI.divide(JSBI.multiply(fixedTokenDeltaUnbalanced, JSBI.BigInt(1000)), variableTokenDelta),
-    ) / 1000,
-  );
 };
 
 /**
@@ -34,22 +22,13 @@ export const getAvgFix = (fixedTokenDeltaUnbalanced: JSBI, variableTokenDelta: J
  * @param position - the position to compile an array of transactions for
  */
 export const getTransactions = (position: Position) => {
-  if (position.positionType !== 3) {
-    return [
-      ...position.swaps.map((tx) => ({ ...tx, type: TransactionType.SWAP })),
-      ...position.marginUpdates.map((tx) => ({ ...tx, type: TransactionType.MARGIN_UPDATE })),
-      ...position.settlements.map((tx) => ({ ...tx, type: TransactionType.SETTLEMENT })),
-      ...position.liquidations.map((tx) => ({ ...tx, type: TransactionType.LIQUIDATION })),
-    ] as TraderPositionTransaction[];
-  } else {
-    return [
-      ...position.mints.map((tx) => ({ ...tx, type: TransactionType.MINT })),
-      ...position.burns.map((tx) => ({ ...tx, type: TransactionType.BURN })),
-      ...position.marginUpdates.map((tx) => ({ ...tx, type: TransactionType.MARGIN_UPDATE })),
-      ...position.settlements.map((tx) => ({ ...tx, type: TransactionType.SETTLEMENT })),
-      ...position.liquidations.map((tx) => ({ ...tx, type: TransactionType.LIQUIDATION })),
-    ] as LPPositionTransaction[];
-  }
+  return [
+    ...position.mints.map((tx) => ({ ...tx, type: TransactionType.MINT })),
+    ...position.burns.map((tx) => ({ ...tx, type: TransactionType.BURN })),
+    ...position.marginUpdates.map((tx) => ({ ...tx, type: TransactionType.MARGIN_UPDATE })),
+    ...position.settlements.map((tx) => ({ ...tx, type: TransactionType.SETTLEMENT })),
+    ...position.liquidations.map((tx) => ({ ...tx, type: TransactionType.LIQUIDATION })),
+  ] as LPPositionTransaction[];
 };
 
 /**
@@ -57,9 +36,7 @@ export const getTransactions = (position: Position) => {
  * Transactions are sorted with the newest first.
  * @param transactions
  */
-export const sortTransactions = (
-  transactions: TraderPositionTransaction[] | LPPositionTransaction[],
-) => {
+export const sortTransactions = (transactions: LPPositionTransaction[]) => {
   transactions.sort((a, b) => {
     const timeA = JSBI.toNumber(a.transactionTimestamp);
     const timeB = JSBI.toNumber(b.transactionTimestamp);
@@ -73,19 +50,15 @@ export const sortTransactions = (
  * @param position - the position
  * @param tx - the transaction to compile the data for
  */
-export const getTransactionData = (
-  position: Position,
-  tx: TraderPositionTransaction | LPPositionTransaction,
-) => {
+export const getTransactionData = (position: Position, tx: LPPositionTransaction) => {
   const token = position.amm.underlyingToken.name || '';
 
-  const iconMap: Record<TransactionType, Icons> = {
+  const iconMap: Record<LPPositionTransaction['type'], Icons> = {
     [TransactionType.BURN]: 'tx-burn',
     [TransactionType.LIQUIDATION]: 'tx-liquidation',
     [TransactionType.MARGIN_UPDATE]: 'tx-margin-update',
     [TransactionType.MINT]: 'tx-mint',
     [TransactionType.SETTLEMENT]: 'tx-settle',
-    [TransactionType.SWAP]: 'tx-swap',
   };
 
   const getLabel = () => {
@@ -100,8 +73,6 @@ export const getTransactionData = (
         return 'MINT';
       case TransactionType.SETTLEMENT:
         return 'SETTLE';
-      case TransactionType.SWAP:
-        return `SWAP ${JSBI.GT(tx.variableTokenDelta, 0) ? 'VT' : 'FT'}`;
     }
   };
 
@@ -114,31 +85,6 @@ export const getTransactionData = (
   };
 
   switch (tx.type) {
-    case TransactionType.SWAP:
-      return {
-        ...baseData,
-        items: [
-          {
-            label: 'notional',
-            value: `${formatCurrency(
-              Math.abs(getDescaledValue(position, tx.variableTokenDelta)),
-            )} ${token}`,
-          },
-          {
-            label: 'avg fix',
-            value: `${formatNumber(
-              getAvgFix(tx.fixedTokenDeltaUnbalanced, tx.variableTokenDelta),
-            )} %`,
-          },
-          {
-            label: 'fees',
-            value: `${formatCurrency(
-              getDescaledValue(position, tx.cumulativeFeeIncurred),
-            )} ${token}`,
-          },
-        ],
-      };
-
     case TransactionType.SETTLEMENT:
       return {
         ...baseData,
