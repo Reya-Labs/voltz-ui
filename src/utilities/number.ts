@@ -80,6 +80,10 @@ export const stringToBigFloat = (val: string): number => {
 };
 
 export const compactFormat = (val: number): string => {
-  const formatter = Intl.NumberFormat('en', { notation: 'compact' });
+  const formatter = Intl.NumberFormat(navigator.language, {
+    notation: 'compact',
+    maximumFractionDigits: 2,
+    minimumFractionDigits: 0,
+  });
   return formatter.format(val);
 };
