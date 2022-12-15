@@ -78,3 +78,8 @@ export const stringToBigFloat = (val: string): number => {
   }
   return parseFloat(formattedValue);
 };
+
+export const compactFormat = (val: number): string => {
+  const formatter = Intl.NumberFormat('en', { notation: 'compact' });
+  return formatter.format(val);
+};
