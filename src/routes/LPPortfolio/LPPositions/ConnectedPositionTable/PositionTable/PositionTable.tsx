@@ -62,7 +62,6 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                     isSettled={pos.isSettled}
                     rolloverAvailable={rolloverAvailable}
                     onRollover={() => handleSelectRow(index, 'rollover')}
-                    onSelect={undefined}
                     onSettle={() => onSettle(pos)}
                   />
 
