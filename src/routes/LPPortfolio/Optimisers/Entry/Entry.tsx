@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { Icon } from '../../../../components/atomic/Icon/Icon';
+import { formatPOSIXTimestamp } from '../../../../utilities/date';
 import {
-  APYTypography,
   BalanceBox,
   BalanceTypography,
   DepositButton,
@@ -22,37 +22,68 @@ import {
   MaturityInfoBox,
   NameBox,
   NameTypography,
+  NegativeAPYTypography,
   PoolsBox,
+  PositiveAPYTypography,
 } from './Entry.styled';
 
-export const Entry: React.FunctionComponent = () => (
-  <EntryBox>
-    <EntryTopBox>
-      <NameBox>
-        <Icon name="token-eth" />
-        <NameTypography>Mellow - ETH</NameTypography>
-      </NameBox>
-      <BalanceTypography>$245K</BalanceTypography>
-      <APYTypography>-2.33%</APYTypography>
-      <DepositButton to={'unknown'}>DEPOSIT</DepositButton>
-    </EntryTopBox>
-    <EntryBottomBox>
-      <HeaderBox>
-        <HeaderMaturityTypography>MATURITY</HeaderMaturityTypography>
-        <HeaderDistributionTypography>DISTRIBUTION</HeaderDistributionTypography>
-        <HeaderBalanceTypography>CURRENT BALANCE</HeaderBalanceTypography>
-        <HeaderPoolsTypography>POOLS</HeaderPoolsTypography>
-      </HeaderBox>
-      <EntryInfo>
-        <MaturityInfoBox>
-          <MaturityDateTypography>31/12/2022 -</MaturityDateTypography>
-          <MaturityCompleteTypography>&nbsp;Completed</MaturityCompleteTypography>
-        </MaturityInfoBox>
-        <DistributionBox>0%</DistributionBox>
-        <BalanceBox>$3.9K</BalanceBox>
-        <PoolsBox>2</PoolsBox>
-        <ManageButton to={'manage'}>Manage</ManageButton>
-      </EntryInfo>
-    </EntryBottomBox>
-  </EntryBox>
-);
+export type EntryProps = {
+  id: string;
+  token: 'eth' | 'dai' | 'lido' | 'usdc' | 'usdt';
+  totalBalance: number;
+  totalApy: number;
+  entries: {
+    maturityTimestampMS: number;
+    isCompleted: boolean;
+    pools: number;
+    balance: number;
+    distribution: number;
+  }[];
+};
+export const Entry: React.FunctionComponent<EntryProps> = ({
+  entries,
+  totalApy,
+  totalBalance,
+  token,
+}) => {
+  const formatter = Intl.NumberFormat('en', { notation: 'compact' });
+  const TotalAPYTypography = totalApy >= 0 ? PositiveAPYTypography : NegativeAPYTypography;
+  return (
+    <EntryBox>
+      <EntryTopBox>
+        <NameBox>
+          <Icon name={`token-${token}`} />
+          <NameTypography>Mellow - {token.toUpperCase()}</NameTypography>
+        </NameBox>
+        <BalanceTypography>${formatter.format(totalBalance).toUpperCase()}</BalanceTypography>
+        <TotalAPYTypography>{totalApy}%</TotalAPYTypography>
+        <DepositButton to={'unknown'}>DEPOSIT</DepositButton>
+      </EntryTopBox>
+      <EntryBottomBox>
+        <HeaderBox>
+          <HeaderMaturityTypography>MATURITY</HeaderMaturityTypography>
+          <HeaderDistributionTypography>DISTRIBUTION</HeaderDistributionTypography>
+          <HeaderBalanceTypography>CURRENT BALANCE</HeaderBalanceTypography>
+          <HeaderPoolsTypography>POOLS</HeaderPoolsTypography>
+        </HeaderBox>
+        {entries.map(({ pools, balance, distribution, isCompleted, maturityTimestampMS }) => (
+          <EntryInfo key={maturityTimestampMS}>
+            <MaturityInfoBox>
+              <MaturityDateTypography>
+                {formatPOSIXTimestamp(maturityTimestampMS)}
+                {isCompleted ? ' -' : ''}
+              </MaturityDateTypography>
+              {isCompleted ? (
+                <MaturityCompleteTypography>&nbsp;Completed</MaturityCompleteTypography>
+              ) : null}
+            </MaturityInfoBox>
+            <DistributionBox>{formatter.format(distribution)}%</DistributionBox>
+            <BalanceBox>${formatter.format(balance)}</BalanceBox>
+            <PoolsBox>{pools}</PoolsBox>
+            {isCompleted ? <ManageButton to={'manage'}>Manage</ManageButton> : null}
+          </EntryInfo>
+        ))}
+      </EntryBottomBox>
+    </EntryBox>
+  );
+};

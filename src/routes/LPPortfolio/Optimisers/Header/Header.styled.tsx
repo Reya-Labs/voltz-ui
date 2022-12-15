@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 
 import { Typography } from '../../../../components/atomic/Typography/Typography';
+import { colors } from '../../../../theme';
 
 export const HeaderBox = styled(Box)`
   display: flex;
@@ -17,10 +18,8 @@ export const HeaderTypography = styled(Typography)`
   font-weight: 400;
   font-size: 12px;
   line-height: 140%;
-  /* identical to box height, or 17px */
 
-  /* Lavender Web */
-  color: #e1ddf7;
+  color: ${colors.lavenderWeb.base};
 `;
 
 export const NameTypography = styled(HeaderTypography)`
