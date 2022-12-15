@@ -26,7 +26,7 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
 }) => {
   const { fixedApr } = useAMMContext();
   const { call: callFixedApr } = fixedApr;
-  // todo: Costin do we need this?
+
   useEffect(() => {
     callFixedApr();
   }, [callFixedApr]);
