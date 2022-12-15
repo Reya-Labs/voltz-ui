@@ -4,7 +4,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ConnectWallet } from '../../../components/composite/ConnectWallet/ConnectWallet';
 import { useWallet } from '../../../hooks/useWallet';
 import { setPageTitle } from '../../../utilities/page';
-import { routes } from '../../paths';
 import { useLPVaults } from '../useLPVaults';
 import { ConnectedDepositForm } from './ConnectedDepositForm/ConnectedDepositForm';
 import { ConnectedMellowBox } from './EcosystemDeposit.styled';
@@ -12,7 +11,7 @@ import { NoVaultFound } from './NoVaultFound/NoVaultFound';
 
 export const EcosystemDeposit: React.FunctionComponent = () => {
   const navigate = useNavigate();
-  const handleGoBack = () => navigate(`/${routes.LP_OPTIMISERS}`);
+  const handleGoBack = () => navigate(-1);
   const { vaultId } = useParams();
   const { signer } = useWallet();
   const { lpVaults, vaultsInitialised, vaultsInitialisedWithSigner } = useLPVaults(signer);
