@@ -20,7 +20,6 @@ const BaseButton = styled(Button)`
   color: #e1ddf7;
 `;
 
-export const EditButton = styled(BaseButton)``;
 export const SettleButton = styled(BaseButton)``;
 export const RolloverButton = styled(BaseButton)`
   font-weight: 700;
@@ -75,7 +74,7 @@ export const FeesBox = styled(Box)`
   margin-left: 16px;
 `;
 
-export const CurrentFixedRateBox = styled(Box)`
+export const InfoBox = styled(Box)`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -96,7 +95,7 @@ export const CurrentFixedRateBox = styled(Box)`
   color: #a49ebf;
 `;
 
-const CurrentFixedRateTypography = styled(Typography)`
+const InfoTypography = styled(Typography)`
   font-family: 'PixelOperatorMono', monospace;
   font-style: normal;
   font-weight: 400;
@@ -104,15 +103,15 @@ const CurrentFixedRateTypography = styled(Typography)`
   line-height: 120%;
 `;
 
-export const PositiveCurrentFixedRateTypography = styled(CurrentFixedRateTypography)`
+export const PositiveTypography = styled(InfoTypography)`
   color: ${colors.skyBlueCrayola.base};
 `;
 
-export const WarningCurrentFixedRateTypography = styled(CurrentFixedRateTypography)`
+export const WarningTypography = styled(InfoTypography)`
   color: ${colors.orangeYellow.base};
 `;
 
-export const NegativeCurrentFixedRateTypography = styled(CurrentFixedRateTypography)`
+export const NegativeTypography = styled(InfoTypography)`
   color: ${colors.wildStrawberry.base};
 `;
 

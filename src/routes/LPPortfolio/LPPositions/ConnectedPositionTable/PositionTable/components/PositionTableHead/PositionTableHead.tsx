@@ -3,28 +3,22 @@ import isUndefined from 'lodash.isundefined';
 import React from 'react';
 
 import { PositionBadge } from '../../../../../../../components/atomic/PositionBadge/PositionBadge';
-import { BulletLabel } from '../../../../../../../components/composite/BulletLabel/BulletLabel';
-import {
-  getHealthTextColor,
-  HealthFactorText,
-} from '../../../../../../../components/composite/HealthFactorText/HealthFactorText';
 import { SystemStyleObject, Theme } from '../../../../../../../theme';
 import { formatCurrency, formatNumber } from '../../../../../../../utilities/number';
-import { ReactComponent as EditIcon } from './editPosition.svg';
+import { HealthFactorText } from './HealthFactorText/HealthFactorText';
 import {
   ActionsBox,
-  CurrentFixedRateBox,
-  EditButton,
   FeesBox,
   FeesTypography,
-  NegativeCurrentFixedRateTypography,
+  InfoBox,
   NegativeFeesValueTypography,
-  PositiveCurrentFixedRateTypography,
+  NegativeTypography,
   PositiveFeesValueTypography,
+  PositiveTypography,
   RolloverButton,
   SettleButton,
   SettledButton,
-  WarningCurrentFixedRateTypography,
+  WarningTypography,
 } from './PositionTableHead.styled';
 
 export type PositionTableHeadProps = {
@@ -36,7 +30,6 @@ export type PositionTableHeadProps = {
   onSettle: () => void;
   rolloverAvailable: boolean;
   gaButtonId: string;
-  onSelect?: (mode: 'margin' | 'liquidity' | 'notional') => void;
   beforeMaturity?: boolean;
   healthFactor?: number;
   fixedRateHealthFactor?: number;
@@ -59,26 +52,23 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
   onSettle,
   rolloverAvailable,
   gaButtonId,
-  onSelect,
   beforeMaturity,
   healthFactor,
   fixedRateHealthFactor,
   fixedApr,
   fees,
 }) => {
-  const handleEditNotional = () => {
-    onSelect && onSelect('notional');
-  };
   const FeesValueTypography = feesPositive
     ? PositiveFeesValueTypography
     : NegativeFeesValueTypography;
 
   const CurrentFixedRateTypography =
     fixedRateHealthFactor === 1
-      ? NegativeCurrentFixedRateTypography
+      ? NegativeTypography
       : fixedRateHealthFactor === 2
-      ? WarningCurrentFixedRateTypography
-      : PositiveCurrentFixedRateTypography;
+      ? WarningTypography
+      : PositiveTypography;
+
   return (
     <Box sx={containerStyles}>
       <Box sx={{ display: 'flex' }}>
@@ -96,37 +86,15 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
       </Box>
 
       <ActionsBox>
-        {beforeMaturity && !isUndefined(fixedApr) && !isUndefined(healthFactor) && (
-          <CurrentFixedRateBox>
+        {beforeMaturity && !isUndefined(fixedApr) && (
+          <InfoBox>
             CURRENT FIXED:&nbsp;
             <CurrentFixedRateTypography>{formatNumber(fixedApr)}%</CurrentFixedRateTypography>
-          </CurrentFixedRateBox>
+          </InfoBox>
         )}
 
         {beforeMaturity && !isUndefined(healthFactor) && (
-          <Box
-            sx={{
-              padding: (theme) => `${theme.spacing(1)} ${theme.spacing(2)}`,
-              marginLeft: (theme) => theme.spacing(2),
-              display: 'flex',
-            }}
-          >
-            <BulletLabel
-              sx={{
-                color: getHealthTextColor(healthFactor),
-                alignItems: 'center',
-                marginRight: '8px',
-                fontSize: '14px',
-              }}
-              text={<HealthFactorText healthFactor={healthFactor} />}
-            />
-            {onSelect && (
-              <EditButton id={gaButtonId} onClick={handleEditNotional}>
-                Edit&nbsp;
-                <EditIcon />
-              </EditButton>
-            )}
-          </Box>
+          <HealthFactorText healthFactor={healthFactor} />
         )}
 
         {beforeMaturity === false && !isSettled && (
