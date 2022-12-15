@@ -19,7 +19,12 @@ function getCommitHash() {
 
 function getBranchName() {
   try {
-    return execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+    console.log('Detecting branch name...');
+    const branchName = execSync('git log -1 --pretty=%D HEAD | sed "s/.*origin\\///g;s/, .*//g"')
+      .toString()
+      .trim();
+    console.log(`Branch name: ${branchName}`);
+    return branchName;
   } catch (e) {
     console.error(e);
     console.error('Cannot get the branch name.');
