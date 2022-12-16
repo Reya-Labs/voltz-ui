@@ -3,7 +3,7 @@ import Box from '@mui/system/Box';
 
 import { Grid } from '../../../../components/layout/Grid';
 
-export const MellowTableBox = styled(Box)`
+export const VaultsTableBox = styled(Box)`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -13,7 +13,7 @@ export const MellowTableBox = styled(Box)`
   width: 1084px;
 `;
 
-export const MellowLPGrid = styled(Grid)`
+export const VaultsGrid = styled(Grid)`
   row-gap: ${({ theme }) => theme.spacing(8)};
   column-gap: ${({ theme }) => theme.spacing(8)};
 `;

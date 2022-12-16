@@ -6,14 +6,14 @@ import { styled } from '@mui/material/styles';
 import { Typography } from '../../../../../../components/atomic/Typography/Typography';
 import colors from '../../../../../../theme/colors';
 
-export const MellowLPPositionSkeleton = styled(Skeleton)`
+export const MellowPositionSkeleton = styled(Skeleton)`
   width: 100%;
   font-size: 14px;
   line-height: 20px;
   padding: ${({ theme }) => theme.spacing(1, 1, 1, 3)};
 `;
 
-export const MellowLPPositionBox = styled(Box)`
+export const MellowPositionBox = styled(Box)`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -21,12 +21,12 @@ export const MellowLPPositionBox = styled(Box)`
   padding: ${({ theme }) => theme.spacing(4, 4, 4, 6)};
 `;
 
-export const MellowLPPositionBoxAndButtonContainer = styled(Box)`
+export const MellowPositionBoxAndButtonContainer = styled(Box)`
   display: flex;
   border-radius: 0px 0px 8px 8px;
 `;
 
-export const MellowLPPositionInfoBox = styled(Box)`
+export const MellowPositionInfoBox = styled(Box)`
   display: flex;
 `;
 

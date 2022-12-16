@@ -2,32 +2,32 @@ import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
 import { VaultField } from '../../../../VaultField/VaultField';
-import MellowLPPosition from '../MellowLPPosition/MellowLPPosition';
+import { MellowPosition } from '../MellowPosition/MellowPosition';
 import { Tag } from '../Tag/Tag';
 import {
   DescriptionTypography,
-  MellowLPEntryContainerBox,
-  MellowLPEntryInfoBox,
   PoolFieldsBox,
   PoolFieldTypography,
   PoolOutlineBox,
   PositionBox,
-} from './MellowLPEntry.styled';
+  VaultEntryContainerBox,
+  VaultEntryInfoBox,
+} from './VaultEntry.styled';
 
-export type MellowLPEntryProps = {
+export type VaultEntryProps = {
   onSelectItem: () => void;
   lpVault: MellowProduct;
   dataLoading: boolean;
 };
 
-export const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
+export const VaultEntry: React.FunctionComponent<VaultEntryProps> = ({
   lpVault,
   onSelectItem,
   dataLoading,
-}: MellowLPEntryProps) => {
+}: VaultEntryProps) => {
   return (
-    <MellowLPEntryContainerBox>
-      <MellowLPEntryInfoBox>
+    <VaultEntryContainerBox>
+      <VaultEntryInfoBox>
         <VaultField
           expectedApys={lpVault.metadata.vaults.map((v) => v.estimatedHistoricApy)}
           title={lpVault.metadata.title}
@@ -54,10 +54,10 @@ export const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
             ))}
           </PoolFieldsBox>
         </PoolOutlineBox>
-      </MellowLPEntryInfoBox>
+      </VaultEntryInfoBox>
 
       <PositionBox>
-        <MellowLPPosition
+        <MellowPosition
           dataLoading={dataLoading}
           disabled={lpVault.metadata.soon || lpVault.metadata.deprecated}
           handleClick={onSelectItem}
@@ -65,6 +65,6 @@ export const MellowLPEntry: React.FunctionComponent<MellowLPEntryProps> = ({
           userDeposit={lpVault.userDeposit}
         />
       </PositionBox>
-    </MellowLPEntryContainerBox>
+    </VaultEntryContainerBox>
   );
 };

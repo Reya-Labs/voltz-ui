@@ -5,8 +5,8 @@ import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
 import { Page } from './components/interface/Page/Page';
 import { DeprecatedLPPortfolio } from './routes/deprecated/LPPortfolio/LPPortfolio';
 import { FixedBorrower } from './routes/FixedBorrower/FixedBorrower';
-import { Ecosystem } from './routes/LPOptimisers/Ecosystem/Ecosystem';
-import { EcosystemDeposit } from './routes/LPOptimisers/EcosystemDeposit/EcosystemDeposit';
+import { VaultFormRoute } from './routes/LPOptimisers/VaultFormRoute/VaultFormRoute';
+import { Vaults } from './routes/LPOptimisers/Vaults/Vaults';
 import { LPPools } from './routes/LPPools/LPPools';
 import { LPPortfolio } from './routes/LPPortfolio/LPPortfolio';
 import { routes } from './routes/paths';
@@ -106,12 +106,9 @@ export const App = () => {
             element={<Navigate replace={true} to={`/${routes.LP_OPTIMISERS}`} />}
             path={routes.PRODUCTS}
           />
-          <Route element={<Ecosystem />} path={routes.LP_OPTIMISERS} />
-          <Route element={<EcosystemDeposit />} path={routes.LP_OPTIMISERS_DEPOSIT} />
-          <Route
-            element={<h1 style={{ color: 'white' }}>Still WIP</h1>}
-            path={routes.LP_OPTIMISERS_MANAGE}
-          />
+          <Route element={<Vaults />} path={routes.LP_OPTIMISERS} />
+          <Route element={<VaultFormRoute />} path={routes.LP_OPTIMISERS_VAULT_FORM} />
+          <Route element={<VaultFormRoute />} path={routes.LP_OPTIMISERS_VAULT_FORM} />
           <Route element={<FixedBorrower />} path={routes.BORROW_POS} />
           <Route element={<Profile />} path={routes.PROFILE} />
           <Route element={<TradingLeague />} path={routes.TRADING_LEAGUE} />

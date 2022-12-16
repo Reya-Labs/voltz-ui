@@ -21,7 +21,7 @@ export const LearnMoreLink = styled('a')`
   }
 `;
 
-export const EcosystemHeaderBox = styled(Box)`
+export const HeaderBox = styled(Box)`
   padding: 0;
   background: transparent;
   max-width: 743px;
