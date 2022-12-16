@@ -101,13 +101,10 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
     loading,
   });
 
-  const onChangeDeposit = (value: number | undefined): void => {
-    setSelectedDeposit(value ?? 0);
-  };
-
   return (
     <DepositForm
       combinedWeightValue={combinedWeightValue}
+      depositValue={selectedDeposit.toString()}
       disabled={
         !sufficientFunds || submissionState.disabled || loading || combinedWeightValue !== 100
       }
@@ -118,7 +115,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
       submitText={submissionState.submitText}
       success={submissionState.success}
       weights={weights}
-      onChangeDeposit={onChangeDeposit}
+      onChangeDeposit={setSelectedDeposit}
       onDistributionToggle={setDistribution}
       onGoBack={onGoBack}
       onManualDistributionsUpdate={setManualWeights}

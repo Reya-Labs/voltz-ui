@@ -16,7 +16,8 @@ import {
 
 export type FormProps = {
   lpVault: MellowProduct;
-  onChangeDeposit: (value: number | undefined) => void;
+  onChangeDeposit: (value: number) => void;
+  depositValue: string;
   submitText: string;
   hintText: {
     text: string;
@@ -50,6 +51,7 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
   onDistributionToggle,
   onManualDistributionsUpdate,
   combinedWeightValue,
+  depositValue,
 }: FormProps) => {
   const subtext = `WALLET BALANCE: ${
     isUndefined(lpVault.userWalletBalance)
@@ -59,7 +61,7 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
 
   const handleChange = (newValue: string | undefined) => {
     const usFormatted = toUSFormat(newValue);
-    onChangeDeposit(!isUndefined(usFormatted) ? parseFloat(usFormatted) : undefined);
+    onChangeDeposit(!isUndefined(usFormatted) ? parseFloat(usFormatted) : 0);
   };
 
   return (
@@ -77,6 +79,7 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
         disabled={false}
         subtext={subtext}
         token={lpVault.metadata.token}
+        value={depositValue}
         onChange={handleChange}
       />
       <FullButtonBox>

@@ -27,7 +27,7 @@ export const Optimisers: React.FunctionComponent = () => {
       <Header />
       {lpVaults
         .filter((vault) => vault.userDeposit > 0)
-        .map((vault, index) => (
+        .map((vault) => (
           <VaultListItem
             key={vault.id}
             depositable={vault.depositable}
@@ -35,10 +35,9 @@ export const Optimisers: React.FunctionComponent = () => {
             token={vault.metadata.token}
             totalApy={0}
             totalBalance={vault.userDeposit}
-            vaultIndex={index}
             vaults={vault.metadata.vaults.map((vVaults, vaultIndex) => ({
               maturityTimestampMS: vVaults.maturityTimestampMS,
-              isCompleted: vault.withdrawable(index),
+              isCompleted: vault.withdrawable(vaultIndex),
               poolsCount: vVaults.pools.length,
               currentBalance: vault.userIndividualCommittedDeposits[vaultIndex],
               distribution: vVaults.weight,

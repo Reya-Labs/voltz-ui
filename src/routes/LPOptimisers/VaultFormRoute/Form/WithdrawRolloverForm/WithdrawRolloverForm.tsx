@@ -25,6 +25,7 @@ type WithdrawRolloverFormProps = {
   };
   onRolloverClick: () => void;
   onWithdrawClick: () => void;
+  depositValue: string;
   rolloverDisabled: boolean;
   withdrawDisabled: boolean;
   rolloverLoading: boolean;
@@ -60,6 +61,7 @@ export const WithdrawRolloverForm: React.FunctionComponent<WithdrawRolloverFormP
   weights,
   distribution,
   onDistributionToggle,
+  depositValue,
   onManualDistributionsUpdate,
   combinedWeightValue,
 }: WithdrawRolloverFormProps) => {
@@ -80,7 +82,12 @@ export const WithdrawRolloverForm: React.FunctionComponent<WithdrawRolloverFormP
         onDistributionToggle={onDistributionToggle}
         onManualDistributionsUpdate={onManualDistributionsUpdate}
       />
-      <DepositAmountInput disabled={true} subtext={subtext} token={lpVault.metadata.token} />
+      <DepositAmountInput
+        disabled={true}
+        subtext={subtext}
+        token={lpVault.metadata.token}
+        value={depositValue}
+      />
       <FullButtonBox>
         <ButtonBox>
           {withdrawHidden ? null : (
@@ -107,9 +114,10 @@ export const WithdrawRolloverForm: React.FunctionComponent<WithdrawRolloverFormP
               {rolloverSubmitText}
             </FormActionButton>
           )}
+          {!rolloverHidden ? null : <BackButton onClick={onGoBack}>BACK</BackButton>}
         </ButtonBox>
         <HintText {...hintText} loading={loading} />
-        <BackButton onClick={onGoBack}>BACK</BackButton>
+        {!rolloverHidden ? <BackButton onClick={onGoBack}>BACK</BackButton> : null}
       </FullButtonBox>
       <AboutYourFunds depositsText="Rollover deposits" />
     </FormBox>
