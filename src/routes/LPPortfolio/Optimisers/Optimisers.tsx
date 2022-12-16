@@ -39,7 +39,7 @@ export const Optimisers: React.FunctionComponent = () => {
               maturityTimestampMS: vVaults.maturityTimestampMS,
               isCompleted: vault.withdrawable(index),
               poolsCount: vVaults.pools.length,
-              currentBalance: vault.userIndividualComittedDeposits[index],
+              currentBalance: vault.userIndividualCommittedDeposits[index],
               distribution: vVaults.weight,
             }))}
           />
