@@ -30,6 +30,7 @@ export const Optimisers: React.FunctionComponent = () => {
         .map((vault) => (
           <VaultListItem
             key={vault.id}
+            depositable={vault.depositable}
             id={vault.id}
             token={vault.metadata.token}
             totalApy={0}
