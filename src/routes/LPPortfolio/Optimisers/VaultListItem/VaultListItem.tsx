@@ -35,6 +35,7 @@ export type VaultListItemProps = {
   token: string;
   totalBalance: number;
   totalApy: number;
+  depositable: boolean;
   vaults: {
     maturityTimestampMS: number;
     isCompleted: boolean;
@@ -48,6 +49,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
   totalApy,
   totalBalance,
   token,
+  depositable,
   id,
 }) => {
   const TotalAPYTypography = totalApy >= 0 ? PositiveAPYTypography : NegativeAPYTypography;
@@ -62,14 +64,16 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
           ${compactFormat(totalBalance).toUpperCase()}
         </TotalBalanceTypography>
         <TotalAPYTypography>{totalApy}%</TotalAPYTypography>
-        <DepositButton
-          to={`/${generatePath(routes.LP_OPTIMISERS_VAULT_FORM, {
-            actions: 'deposit',
-            vaultId: id,
-          })}`}
-        >
-          DEPOSIT
-        </DepositButton>
+        {depositable && (
+          <DepositButton
+            to={`/${generatePath(routes.LP_OPTIMISERS_VAULT_FORM, {
+              actions: 'deposit',
+              vaultId: id,
+            })}`}
+          >
+            DEPOSIT
+          </DepositButton>
+        )}
       </VaultListItemTopBox>
       <VaultListItemBottomBox>
         <HeaderBox>
