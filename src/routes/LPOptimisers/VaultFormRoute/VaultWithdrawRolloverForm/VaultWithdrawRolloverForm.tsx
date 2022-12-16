@@ -1,18 +1,21 @@
-import { MellowProduct } from '@voltz-protocol/v1-sdk';
-import React, { useEffect, useState } from 'react';
+import { MellowLpRouter, MellowProduct } from '@voltz-protocol/v1-sdk';
+import React, { useState } from 'react';
 
-import { DepositForm, FormProps } from '../Form/DepositForm/DepositForm';
-import { DepositStates, getSubmissionState } from './mappers';
+import { FormProps } from '../Form/DepositForm/DepositForm';
+import { WithdrawRolloverForm } from '../Form/WithdrawRolloverForm/WithdrawRolloverForm';
+import { getSubmissionState, RolloverStates, WithdrawStates } from './mappers';
 
 export type VaultWithdrawRolloverFormProps = {
   vault: MellowProduct;
   onGoBack: () => void;
   loading: boolean;
+  vaultIndex: number;
 };
 
 export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRolloverFormProps> = ({
   loading,
   vault,
+  vaultIndex,
   onGoBack,
 }) => {
   const automaticWeights: FormProps['weights'] = vault.metadata.vaults.map((v) => ({
@@ -22,107 +25,86 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
     vaultDisabled: v.weight === 0,
   }));
 
-  const [selectedDeposit, setSelectedDeposit] = useState<number>(0);
   const [distribution, setDistribution] = useState<'automatic' | 'manual'>('automatic');
   const [manualWeights, setManualWeights] = useState<FormProps['weights']>(
     automaticWeights.map((a) => ({ ...a })),
   );
-  const [depositState, setDepositState] = useState<DepositStates>(DepositStates.INITIALISING);
+  const [withdrawOrRolloverState, setWithdrawOrRolloverState] = useState<
+    WithdrawStates | RolloverStates
+  >(WithdrawStates.INITIALISING);
   const [error, setError] = useState<string>('');
 
-  const sufficientFunds = (vault.userWalletBalance ?? 0) >= selectedDeposit;
   const weights = distribution === 'automatic' ? automaticWeights : manualWeights;
   const combinedWeightValue = weights.reduce((total, weight) => total + weight.distribution, 0);
 
-  const deposit = () => {
-    if (selectedDeposit > 0) {
-      setDepositState(DepositStates.DEPOSITING);
-      void vault
-        .deposit(
-          selectedDeposit,
-          weights.map((w) => w.distribution),
-        )
-        .then(
-          () => {
-            setDepositState(DepositStates.DEPOSIT_DONE);
-          },
-          (err: Error) => {
-            setError(`Deposit failed. ${err.message ?? ''}`);
-            setDepositState(DepositStates.DEPOSIT_FAILED);
-          },
-        );
-    } else {
-      setError('Please input amount');
-      setDepositState(DepositStates.DEPOSIT_FAILED);
-    }
-  };
-
-  const approve = () => {
-    setDepositState(DepositStates.APPROVING);
-    void vault.approveToken().then(
-      () => {
-        setDepositState(DepositStates.APPROVED);
-      },
-      (err: Error) => {
-        setError(`Approval failed. ${err.message ?? ''}`);
-        setDepositState(DepositStates.APPROVE_FAILED);
-      },
-    );
-  };
-
-  useEffect(() => {
-    if (loading || !vault?.id) {
+  const withdraw = () => {
+    if (!vault.withdrawable) {
       return;
     }
-
-    void vault.isTokenApproved().then(
-      (resp) => {
-        if (resp) {
-          setDepositState(DepositStates.APPROVED);
-        } else {
-          setDepositState(DepositStates.APPROVE_REQUIRED);
-        }
+    setWithdrawOrRolloverState(WithdrawStates.WITHDRAW_PENDING);
+    void vault.withdraw(vaultIndex).then(
+      () => {
+        setWithdrawOrRolloverState(WithdrawStates.WITHDRAW_DONE);
       },
       (err: Error) => {
-        setError(`Error occurred while retrieving information. ${err.message ?? ''}`);
-        setDepositState(DepositStates.PROVIDER_ERROR);
+        setError(`Withdraw failed. ${err.message ?? ''}`);
+        setWithdrawOrRolloverState(WithdrawStates.WITHDRAW_FAILED);
       },
     );
-  }, [vault.id, loading, selectedDeposit]);
+  };
+
+  const rollover = () => {
+    if (!vault.rolloverable) {
+      return;
+    }
+    setWithdrawOrRolloverState(RolloverStates.ROLLOVER_PENDING);
+    void (vault as MellowLpRouter)
+      .rollover(
+        vaultIndex,
+        weights.map((w) => w.distribution),
+      )
+      .then(
+        () => {
+          setWithdrawOrRolloverState(RolloverStates.ROLLOVER_DONE);
+        },
+        (err: Error) => {
+          setError(`Rollover failed. ${err.message ?? ''}`);
+          setWithdrawOrRolloverState(RolloverStates.ROLLOVER_FAILED);
+        },
+      );
+  };
 
   const submissionState = getSubmissionState({
-    depositState,
-    deposit,
-    approve,
-    selectedDeposit,
-    sufficientFunds,
+    rollover,
+    withdraw,
+    withdrawOrRolloverState,
     error,
     tokenName: vault.metadata.token,
     loading,
   });
 
-  const onChangeDeposit = (value: number | undefined): void => {
-    setSelectedDeposit(value ?? 0);
-  };
-
   return (
-    <DepositForm
+    <WithdrawRolloverForm
       combinedWeightValue={combinedWeightValue}
-      disabled={
-        !sufficientFunds || submissionState.disabled || loading || combinedWeightValue !== 100
-      }
       distribution={distribution}
       hintText={submissionState.hintText}
-      loading={submissionState.loading}
       lpVault={vault}
-      submitText={submissionState.submitText}
-      success={submissionState.success}
+      rolloverDisabled={submissionState.disabled || loading || combinedWeightValue !== 100}
+      rolloverHidden={!vault.rolloverable}
+      rolloverLoading={submissionState.rollover.loading}
+      rolloverSubmitText={submissionState.rollover.submitText}
+      rolloverSuccess={submissionState.withdraw.success}
       weights={weights}
-      onChangeDeposit={onChangeDeposit}
+      withdrawDisabled={submissionState.disabled || loading}
+      withdrawHidden={!vault.withdrawable}
+      withdrawLoading={submissionState.withdraw.loading}
+      withdrawSubmitText={submissionState.withdraw.submitText}
+      withdrawSuccess={submissionState.rollover.success}
       onDistributionToggle={setDistribution}
       onGoBack={onGoBack}
       onManualDistributionsUpdate={setManualWeights}
-      onSubmit={submissionState.action}
+      onRolloverClick={submissionState.rollover.action}
+      onWithdrawClick={submissionState.withdraw.action}
     />
   );
 };

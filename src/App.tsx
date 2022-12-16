@@ -80,8 +80,8 @@ export const App = () => {
             path={routes.PRODUCTS}
           />
           <Route element={<Vaults />} path={routes.LP_OPTIMISERS} />
-          <Route element={<VaultFormRoute />} path={routes.LP_OPTIMISERS_VAULT_FORM} />
-          <Route element={<VaultFormRoute />} path={routes.LP_OPTIMISERS_VAULT_FORM} />
+          <Route element={<VaultFormRoute />} path={routes.LP_OPTIMISERS_DEPOSIT_FORM} />
+          <Route element={<VaultFormRoute />} path={routes.LP_OPTIMISERS_WITHDRAW_ROLLOVER_FORM} />
           <Route element={<FixedBorrower />} path={routes.BORROW_POS} />
           <Route element={<Profile />} path={routes.PROFILE} />
           <Route element={<TradingLeague />} path={routes.TRADING_LEAGUE} />

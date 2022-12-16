@@ -1,190 +1,189 @@
 import { colors } from '../../../../theme';
 
-export enum DepositStates {
+export enum WithdrawStates {
   INITIALISING = 'INITIALISING',
-  PROVIDER_ERROR = 'PROVIDER_ERROR',
-  APPROVE_REQUIRED = 'APPROVE_REQUIRED',
-  APPROVING = 'APPROVING',
-  APPROVE_FAILED = 'APPROVE_FAILED',
-  APPROVED = 'APPROVED',
-  DEPOSITING = 'DEPOSITING',
-  DEPOSIT_FAILED = 'DEPOSIT_FAILED',
-  DEPOSIT_DONE = 'DEPOSIT_DONE',
+  WITHDRAW_PENDING = 'WITHDRAW_PENDING',
+  WITHDRAW_FAILED = 'WITHDRAW_FAILED',
+  WITHDRAW_DONE = 'WITHDRAW_DONE',
+}
+
+export enum RolloverStates {
+  INITIALISING = 'INITIALISING',
+  ROLLOVER_PENDING = 'ROLLOVER_PENDING',
+  ROLLOVER_FAILED = 'ROLLOVER_FAILED',
+  ROLLOVER_DONE = 'ROLLOVER_DONE',
 }
 
 type SubmissionState = {
-  submitText: string;
   hintText: {
     prefixText?: string;
     text: string;
     suffixText?: string;
     textColor?: string;
   };
-  action: () => void;
   disabled: boolean;
-  loading: boolean;
-  success: boolean;
+  withdraw: {
+    submitText: string;
+    action: () => void;
+    success: boolean;
+    loading: boolean;
+  };
+  rollover: {
+    submitText: string;
+    action: () => void;
+    success: boolean;
+    loading: boolean;
+  };
 };
 
 export const getSubmissionState = ({
-  depositState,
-  deposit,
-  approve,
-  selectedDeposit,
-  sufficientFunds,
+  withdrawOrRolloverState,
+  withdraw,
+  rollover,
   error,
-  tokenName,
   loading,
 }: {
-  depositState: DepositStates;
-  deposit: () => void;
-  approve: () => void;
-  selectedDeposit: number;
-  sufficientFunds: boolean;
+  withdrawOrRolloverState: WithdrawStates | RolloverStates;
+  withdraw: () => void;
+  rollover: () => void;
   error: string;
   tokenName: string;
   loading: boolean;
 }): SubmissionState => {
-  if (!sufficientFunds) {
-    return {
-      submitText: 'Deposit',
-      action: () => {},
-      hintText: {
-        text: 'Insufficient Funds',
-        textColor: colors.vzCustomRed1.base,
-      },
-      loading: false,
-      disabled: true,
-      success: false,
-    };
-  }
   const initialisingState: SubmissionState = {
-    submitText: 'Initialising',
-    action: () => {},
     hintText: {
       text: 'Initialising, please wait',
     },
-    loading: true,
     disabled: true,
-    success: false,
+    withdraw: {
+      submitText: 'Initialising',
+      action: () => {},
+      success: false,
+      loading: true,
+    },
+    rollover: {
+      submitText: 'Initialising',
+      action: () => {},
+      success: false,
+      loading: true,
+    },
   };
-  if (loading) {
+
+  if (
+    loading ||
+    withdrawOrRolloverState === WithdrawStates.INITIALISING ||
+    withdrawOrRolloverState === RolloverStates.INITIALISING
+  ) {
     return initialisingState;
   }
+  const errorState = {
+    hintText: {
+      text: error,
+      textColor: colors.vzCustomRed1.base,
+    },
+    disabled: false,
+    withdraw: {
+      submitText: 'WITHDRAW ALL',
+      action: withdraw,
+      success: false,
+      loading: false,
+    },
+    rollover: {
+      submitText: 'ROLLOVER ALL',
+      action: rollover,
+      success: false,
+      loading: false,
+    },
+  };
 
-  switch (depositState) {
-    case DepositStates.INITIALISING: {
-      return initialisingState;
-    }
-    case DepositStates.PROVIDER_ERROR: {
+  switch (withdrawOrRolloverState) {
+    case WithdrawStates.WITHDRAW_FAILED:
+    case RolloverStates.ROLLOVER_FAILED:
+      return errorState;
+    case WithdrawStates.WITHDRAW_PENDING: {
       return {
-        submitText: 'Provider Error',
-        action: () => {},
         hintText: {
-          text: error,
-          textColor: colors.vzCustomRed1.base,
-        },
-        loading: false,
-        disabled: true,
-        success: false,
-      };
-    }
-    case DepositStates.APPROVE_FAILED: {
-      return {
-        submitText: 'Approve',
-        action: approve,
-        hintText: {
-          text: error,
-          textColor: colors.vzCustomRed1.base,
-        },
-        loading: false,
-        disabled: false,
-        success: false,
-      };
-    }
-    case DepositStates.DEPOSIT_FAILED: {
-      return {
-        submitText: 'Deposit',
-        action: deposit,
-        hintText: {
-          text: error,
-          textColor: colors.vzCustomRed1.base,
-        },
-        loading: false,
-        disabled: false,
-        success: false,
-      };
-    }
-    case DepositStates.APPROVE_REQUIRED: {
-      return {
-        submitText: 'Approve',
-        action: approve,
-        hintText: {
-          text: `Please approve ${tokenName}`,
-        },
-        loading: false,
-        disabled: false,
-        success: false,
-      };
-    }
-    case DepositStates.APPROVING: {
-      return {
-        submitText: 'Pending',
-        action: () => {},
-        hintText: {
-          text: 'Waiting for confirmation',
-        },
-        loading: true,
-        disabled: true,
-        success: false,
-      };
-    }
-    case DepositStates.APPROVED: {
-      return {
-        submitText: 'Deposit',
-        action: deposit,
-        hintText:
-          selectedDeposit > 0
-            ? {
-                text: tokenName === 'ETH' ? '' : 'Tokens approved.',
-                textColor: colors.vzCustomGreen1.base,
-                suffixText: "Let's deposit.",
-              }
-            : {
-                text: 'Please input amount',
-              },
-        loading: false,
-        disabled: !(selectedDeposit > 0),
-        success: false,
-      };
-    }
-    case DepositStates.DEPOSITING: {
-      return {
-        submitText: 'Pending',
-        action: () => {},
-        hintText: {
-          prefixText: 'Depositing',
-          text: `${selectedDeposit} ${tokenName}`,
+          prefixText: 'Withdraw in progress',
+          text: '',
           textColor: colors.skyBlueCrayola.base,
         },
-        loading: true,
         disabled: true,
-        success: false,
+        withdraw: {
+          submitText: 'Pending',
+          action: withdraw,
+          success: false,
+          loading: true,
+        },
+        rollover: {
+          submitText: 'ROLLOVER ALL',
+          action: rollover,
+          success: false,
+          loading: false,
+        },
       };
     }
-    case DepositStates.DEPOSIT_DONE: {
+    case WithdrawStates.WITHDRAW_DONE: {
       return {
-        submitText: 'Deposited',
-        action: deposit,
         hintText: {
-          prefixText: 'Deposited',
-          text: `${selectedDeposit} ${tokenName}`,
-          suffixText: 'successfully',
+          text: 'Withdrawn successful',
           textColor: colors.skyBlueCrayola.base,
         },
-        loading: false,
-        disabled: false,
-        success: true,
+        disabled: true,
+        withdraw: {
+          submitText: 'WITHDRAWN',
+          action: withdraw,
+          success: true,
+          loading: false,
+        },
+        rollover: {
+          submitText: 'ROLLOVER ALL',
+          action: rollover,
+          success: false,
+          loading: false,
+        },
+      };
+    }
+    case RolloverStates.ROLLOVER_PENDING: {
+      return {
+        hintText: {
+          prefixText: 'Rollover in progress',
+          text: '',
+          textColor: colors.skyBlueCrayola.base,
+        },
+        disabled: true,
+        withdraw: {
+          submitText: 'WITHDRAW ALL',
+          action: withdraw,
+          success: false,
+          loading: false,
+        },
+        rollover: {
+          submitText: 'Pending',
+          action: rollover,
+          success: false,
+          loading: true,
+        },
+      };
+    }
+    case RolloverStates.ROLLOVER_DONE: {
+      return {
+        hintText: {
+          text: 'Rollover successful',
+          textColor: colors.skyBlueCrayola.base,
+        },
+        disabled: true,
+        withdraw: {
+          submitText: 'WITHDRAW ALL',
+          action: withdraw,
+          success: false,
+          loading: false,
+        },
+        rollover: {
+          submitText: 'ROLLOVER DONE',
+          action: rollover,
+          success: true,
+          loading: false,
+        },
       };
     }
   }

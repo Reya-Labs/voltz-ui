@@ -13,7 +13,7 @@ import { VaultWithdrawRolloverForm } from './VaultWithdrawRolloverForm/VaultWith
 export const VaultFormRoute: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const handleGoBack = () => navigate(-1);
-  const { vaultId, actions } = useParams();
+  const { vaultId, actions, vaultIndex } = useParams();
   const { signer } = useWallet();
   const { lpVaults, vaultsInitialised, vaultsInitialisedWithSigner } = useLPVaults(signer);
   const currentVault = lpVaults.find((v) => v.id === vaultId);
@@ -40,13 +40,23 @@ export const VaultFormRoute: React.FunctionComponent = () => {
   if (actions !== 'manage' && actions !== 'deposit') {
     return <NoVaultFound />;
   }
+  const vaultIndexParsed = vaultIndex === undefined ? undefined : parseInt(vaultIndex, 10);
+
+  if (actions === 'manage' && isNaN(vaultIndexParsed as number)) {
+    return <NoVaultFound />;
+  }
 
   return (
     <VaultFormBox>
       {actions === 'deposit' ? (
         <VaultDepositForm loading={loading} vault={currentVault} onGoBack={handleGoBack} />
       ) : (
-        <VaultWithdrawRolloverForm loading={loading} vault={currentVault} onGoBack={handleGoBack} />
+        <VaultWithdrawRolloverForm
+          loading={loading}
+          vault={currentVault}
+          vaultIndex={vaultIndexParsed as number}
+          onGoBack={handleGoBack}
+        />
       )}
     </VaultFormBox>
   );
