@@ -6,13 +6,14 @@ import { useWallet } from '../../../hooks/useWallet';
 import { setPageTitle } from '../../../utilities/page';
 import { useLPVaults } from '../useLPVaults';
 import { NoVaultFound } from './NoVaultFound/NoVaultFound';
-import { VaultForm } from './VaultForm/VaultForm';
+import { VaultDepositForm } from './VaultDepositForm/VaultDepositForm';
 import { VaultFormBox } from './VaultFormRoute.styled';
+import { VaultWithdrawRolloverForm } from './VaultWithdrawRolloverForm/VaultWithdrawRolloverForm';
 
 export const VaultFormRoute: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const handleGoBack = () => navigate(-1);
-  const { vaultId } = useParams();
+  const { vaultId, actions } = useParams();
   const { signer } = useWallet();
   const { lpVaults, vaultsInitialised, vaultsInitialisedWithSigner } = useLPVaults(signer);
   const currentVault = lpVaults.find((v) => v.id === vaultId);
@@ -36,9 +37,17 @@ export const VaultFormRoute: React.FunctionComponent = () => {
     return <NoVaultFound />;
   }
 
+  if (actions !== 'manage' && actions !== 'deposit') {
+    return <NoVaultFound />;
+  }
+
   return (
     <VaultFormBox>
-      <VaultForm loading={loading} vault={currentVault} onCancel={handleGoBack} />
+      {actions === 'deposit' ? (
+        <VaultDepositForm loading={loading} vault={currentVault} onGoBack={handleGoBack} />
+      ) : (
+        <VaultWithdrawRolloverForm loading={loading} vault={currentVault} onGoBack={handleGoBack} />
+      )}
     </VaultFormBox>
   );
 };

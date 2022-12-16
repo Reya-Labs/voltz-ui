@@ -1,19 +1,19 @@
 import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useState } from 'react';
 
-import { Form, FormProps } from '../Form/Form';
+import { DepositForm, FormProps } from '../Form/DepositForm/DepositForm';
 import { DepositStates, getSubmissionState } from './mappers';
 
-export type VaultFormProps = {
+export type VaultWithdrawRolloverFormProps = {
   vault: MellowProduct;
-  onCancel: () => void;
+  onGoBack: () => void;
   loading: boolean;
 };
 
-export const VaultForm: React.FunctionComponent<VaultFormProps> = ({
+export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRolloverFormProps> = ({
   loading,
   vault,
-  onCancel,
+  onGoBack,
 }) => {
   const automaticWeights: FormProps['weights'] = vault.metadata.vaults.map((v) => ({
     distribution: v.weight,
@@ -106,7 +106,7 @@ export const VaultForm: React.FunctionComponent<VaultFormProps> = ({
   };
 
   return (
-    <Form
+    <DepositForm
       combinedWeightValue={combinedWeightValue}
       disabled={
         !sufficientFunds || submissionState.disabled || loading || combinedWeightValue !== 100
@@ -118,9 +118,9 @@ export const VaultForm: React.FunctionComponent<VaultFormProps> = ({
       submitText={submissionState.submitText}
       success={submissionState.success}
       weights={weights}
-      onCancel={onCancel}
       onChangeDeposit={onChangeDeposit}
       onDistributionToggle={setDistribution}
+      onGoBack={onGoBack}
       onManualDistributionsUpdate={setManualWeights}
       onSubmit={submissionState.action}
     />
