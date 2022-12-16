@@ -1,15 +1,15 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
-import { DepositButton } from './DepositButton';
+import { FormActionButton } from './FormActionButton';
 
 export default {
-  title: 'Interface/DepositButton',
-  component: DepositButton,
+  title: 'Interface/FormActionButton',
+  component: FormActionButton,
   args: {},
-} as ComponentMeta<typeof DepositButton>;
+} as ComponentMeta<typeof FormActionButton>;
 
-const Template: ComponentStory<typeof DepositButton> = (args) => (
+const Template: ComponentStory<typeof FormActionButton> = (args) => (
   <div
     style={{
       display: 'flex',
@@ -20,15 +20,17 @@ const Template: ComponentStory<typeof DepositButton> = (args) => (
       margin: '0 auto',
     }}
   >
-    <DepositButton {...args} />
+    <FormActionButton {...args} />
   </div>
 );
 
 export const Default = Template.bind({});
-const args: React.ComponentProps<typeof DepositButton> = {
+const args: React.ComponentProps<typeof FormActionButton> = {
   disabled: false,
   success: false,
   loading: false,
+  variant: 'blue',
   children: 'Deposit',
+  dataTestId: 'DepositButton',
 };
 Default.args = args;
