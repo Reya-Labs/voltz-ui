@@ -64,9 +64,11 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
           ${compactFormat(totalBalance).toUpperCase()}
         </TotalBalanceTypography>
         <TotalAPYTypography>{totalApy}%</TotalAPYTypography>
-        {depositable && (<DepositButton to={`/${generatePath(routes.LP_OPTIMISERS_DEPOSIT, { vaultId: id })}`}>
-          DEPOSIT
-        </DepositButton>)}
+        {depositable && (
+          <DepositButton to={`/${generatePath(routes.LP_OPTIMISERS_DEPOSIT, { vaultId: id })}`}>
+            DEPOSIT
+          </DepositButton>
+        )}
       </VaultListItemTopBox>
       <VaultListItemBottomBox>
         <HeaderBox>
