@@ -86,7 +86,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
   return (
     <WithdrawRolloverForm
       combinedWeightValue={combinedWeightValue}
-      depositValue={vault.userIndividualCommittedDeposits[vaultIndex].toString()}
+      depositValue={vault.userIndividualCommittedDeposits[vaultIndex]?.toString()}
       distribution={distribution}
       hintText={submissionState.hintText}
       lpVault={vault}
