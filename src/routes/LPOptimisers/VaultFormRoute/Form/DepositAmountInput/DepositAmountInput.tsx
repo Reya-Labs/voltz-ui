@@ -8,7 +8,7 @@ type Props = {
   subtext: string;
   token: string;
   disabled: boolean;
-  onChange: (newValue: string | undefined) => void;
+  onChange?: (newValue: string | undefined) => void;
 };
 export const DepositAmountInput: React.FunctionComponent<Props> = ({
   subtext,

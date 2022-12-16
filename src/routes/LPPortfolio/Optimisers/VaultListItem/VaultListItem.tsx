@@ -43,6 +43,7 @@ export type VaultListItemProps = {
     distribution: number;
   }[];
   depositable: boolean;
+  vaultIndex: number;
 };
 export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
   vaults,
@@ -51,6 +52,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
   token,
   depositable,
   id,
+  vaultIndex,
 }) => {
   const TotalAPYTypography = totalApy >= 0 ? PositiveAPYTypography : NegativeAPYTypography;
   return (
@@ -66,7 +68,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
         <TotalAPYTypography>{totalApy}%</TotalAPYTypography>
         {depositable ? (
           <DepositButton
-            to={`/${generatePath(routes.LP_OPTIMISERS_VAULT_FORM, {
+            to={`/${generatePath(routes.LP_OPTIMISERS_DEPOSIT_FORM, {
               actions: 'deposit',
               vaultId: id,
             })}`}
@@ -99,9 +101,10 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
               <PoolsCountBox>{poolsCount}</PoolsCountBox>
               {isCompleted ? (
                 <ManageButton
-                  to={`/${generatePath(routes.LP_OPTIMISERS_VAULT_FORM, {
+                  to={`/${generatePath(routes.LP_OPTIMISERS_WITHDRAW_ROLLOVER_FORM, {
                     actions: 'manage',
                     vaultId: id,
+                    vaultIndex: vaultIndex.toString(),
                   })}`}
                 >
                   Manage

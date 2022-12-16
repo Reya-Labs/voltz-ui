@@ -2,7 +2,7 @@ import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import isUndefined from 'lodash.isundefined';
 import React from 'react';
 
-import { formatCurrency, toUSFormat } from '../../../../../utilities/number';
+import { formatCurrency } from '../../../../../utilities/number';
 import { AboutYourFunds } from '../AboutYourFunds/AboutYourFunds';
 import { BackButton, ButtonBox, FormBox, FullButtonBox } from '../CommonForm.styled';
 import { DepositAmountInput } from '../DepositAmountInput/DepositAmountInput';
@@ -14,19 +14,25 @@ import {
   MaturityDistributionProps,
 } from '../MaturityDistribution/MaturityDistribution';
 
-export type FormProps = {
+type WithdrawRolloverFormProps = {
   lpVault: MellowProduct;
-  onChangeDeposit: (value: number | undefined) => void;
-  submitText: string;
+  rolloverSubmitText: string;
+  withdrawSubmitText: string;
   hintText: {
     text: string;
     suffixText?: string;
     textColor?: string;
   };
-  onSubmit: () => void;
-  disabled: boolean;
-  loading: boolean;
-  success: boolean;
+  onRolloverClick: () => void;
+  onWithdrawClick: () => void;
+  rolloverDisabled: boolean;
+  withdrawDisabled: boolean;
+  rolloverLoading: boolean;
+  withdrawLoading: boolean;
+  rolloverSuccess: boolean;
+  withdrawSuccess: boolean;
+  withdrawHidden: boolean;
+  rolloverHidden: boolean;
   onGoBack: () => void;
   combinedWeightValue: number;
   weights: MaturityDistributionProps['weights'];
@@ -35,33 +41,34 @@ export type FormProps = {
   onManualDistributionsUpdate: MaturityDistributionProps['onManualDistributionsUpdate'];
 };
 
-export const WithdrawRolloverForm: React.FunctionComponent<FormProps> = ({
+export const WithdrawRolloverForm: React.FunctionComponent<WithdrawRolloverFormProps> = ({
   lpVault,
-  onChangeDeposit,
-  submitText,
+  rolloverSuccess,
+  rolloverHidden,
+  withdrawHidden,
+  rolloverDisabled,
+  rolloverLoading,
+  rolloverSubmitText,
+  onRolloverClick,
+  onWithdrawClick,
+  withdrawDisabled,
+  withdrawLoading,
+  withdrawSuccess,
+  withdrawSubmitText,
   hintText,
-  disabled,
-  onSubmit,
   onGoBack,
-  loading,
-  success,
   weights,
   distribution,
   onDistributionToggle,
   onManualDistributionsUpdate,
   combinedWeightValue,
-}: FormProps) => {
+}: WithdrawRolloverFormProps) => {
   const subtext = `WALLET BALANCE: ${
     isUndefined(lpVault.userWalletBalance)
       ? '---'
       : `${formatCurrency(lpVault.userWalletBalance, true)} ${lpVault.metadata.token}`
   }`;
-
-  const handleChange = (newValue: string | undefined) => {
-    const usFormatted = toUSFormat(newValue);
-    onChangeDeposit(!isUndefined(usFormatted) ? parseFloat(usFormatted) : undefined);
-  };
-
+  const loading = rolloverLoading || withdrawLoading;
   return (
     <FormBox>
       <DepositInfo mellowProduct={lpVault} weights={weights.map((w) => w.distribution)} />
@@ -73,34 +80,33 @@ export const WithdrawRolloverForm: React.FunctionComponent<FormProps> = ({
         onDistributionToggle={onDistributionToggle}
         onManualDistributionsUpdate={onManualDistributionsUpdate}
       />
-      <DepositAmountInput
-        disabled={true}
-        subtext={subtext}
-        token={lpVault.metadata.token}
-        onChange={handleChange}
-      />
+      <DepositAmountInput disabled={true} subtext={subtext} token={lpVault.metadata.token} />
       <FullButtonBox>
         <ButtonBox>
-          <FormActionButton
-            dataTestId="WithdrawAllButton"
-            disabled={disabled}
-            loading={loading}
-            success={success}
-            variant="dark-blue"
-            onClick={onSubmit}
-          >
-            {submitText}
-          </FormActionButton>
-          <FormActionButton
-            dataTestId="RolloverAllButton"
-            disabled={disabled}
-            loading={loading}
-            success={success}
-            variant="blue"
-            onClick={onSubmit}
-          >
-            {submitText}
-          </FormActionButton>
+          {withdrawHidden ? null : (
+            <FormActionButton
+              dataTestId="WithdrawAllButton"
+              disabled={withdrawDisabled}
+              loading={withdrawLoading}
+              success={withdrawSuccess}
+              variant="dark-blue"
+              onClick={onWithdrawClick}
+            >
+              {withdrawSubmitText}
+            </FormActionButton>
+          )}
+          {rolloverHidden ? null : (
+            <FormActionButton
+              dataTestId="RolloverAllButton"
+              disabled={rolloverDisabled}
+              loading={rolloverLoading}
+              success={rolloverSuccess}
+              variant="blue"
+              onClick={onRolloverClick}
+            >
+              {rolloverSubmitText}
+            </FormActionButton>
+          )}
         </ButtonBox>
         <HintText {...hintText} loading={loading} />
         <BackButton onClick={onGoBack}>BACK</BackButton>

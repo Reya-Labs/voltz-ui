@@ -17,7 +17,7 @@ export const Vaults: React.FunctionComponent = () => {
     if (!signer) {
       setRequired(true);
     } else {
-      const path = generatePath(routes.LP_OPTIMISERS_VAULT_FORM, {
+      const path = generatePath(routes.LP_OPTIMISERS_DEPOSIT_FORM, {
         actions: 'deposit',
         vaultId: selectedVault.id,
       });
