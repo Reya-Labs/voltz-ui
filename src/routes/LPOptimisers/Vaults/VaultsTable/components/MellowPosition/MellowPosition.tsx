@@ -5,14 +5,14 @@ import { formatCurrency } from '../../../../../../utilities/number';
 import {
   DepositButton,
   DepositTypography,
-  MellowLPPositionBox,
-  MellowLPPositionBoxAndButtonContainer,
-  MellowLPPositionInfoBox,
-  MellowLPPositionSkeleton,
+  MellowPositionBox,
+  MellowPositionBoxAndButtonContainer,
+  MellowPositionInfoBox,
+  MellowPositionSkeleton,
   PositionTypography,
-} from './MellowLPPosition.styled';
+} from './MellowPosition.styled';
 
-export type MellowLPPositionProps = {
+export type MellowPositionProps = {
   userDeposit?: number;
   tokenName: string;
   handleClick: () => void;
@@ -20,25 +20,25 @@ export type MellowLPPositionProps = {
   disabled: boolean;
 };
 
-const MellowLPPosition: React.FunctionComponent<MellowLPPositionProps> = ({
+export const MellowPosition: React.FunctionComponent<MellowPositionProps> = ({
   userDeposit,
   tokenName,
   handleClick,
   dataLoading,
   disabled,
-}: MellowLPPositionProps) => {
+}: MellowPositionProps) => {
   if (dataLoading) {
     return (
-      <MellowLPPositionBox>
-        <MellowLPPositionSkeleton variant="text" />
-      </MellowLPPositionBox>
+      <MellowPositionBox>
+        <MellowPositionSkeleton variant="text" />
+      </MellowPositionBox>
     );
   }
 
   return (
-    <MellowLPPositionBoxAndButtonContainer>
-      <MellowLPPositionBox>
-        <MellowLPPositionInfoBox>
+    <MellowPositionBoxAndButtonContainer>
+      <MellowPositionBox>
+        <MellowPositionInfoBox>
           <PositionTypography variant="h6">
             {`Your position: ${isUndefined(userDeposit) ? ' ---' : ''}`}
           </PositionTypography>
@@ -47,13 +47,11 @@ const MellowLPPosition: React.FunctionComponent<MellowLPPositionProps> = ({
               {isUndefined(userDeposit) ? '---' : `${formatCurrency(userDeposit)} ${tokenName}`}
             </DepositTypography>
           )}
-        </MellowLPPositionInfoBox>
-      </MellowLPPositionBox>
+        </MellowPositionInfoBox>
+      </MellowPositionBox>
       <DepositButton disabled={disabled} onClick={handleClick}>
         DEPOSIT
       </DepositButton>
-    </MellowLPPositionBoxAndButtonContainer>
+    </MellowPositionBoxAndButtonContainer>
   );
 };
-
-export default MellowLPPosition;

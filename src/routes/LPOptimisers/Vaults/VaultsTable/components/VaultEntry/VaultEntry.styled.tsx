@@ -3,14 +3,14 @@ import { styled } from '@mui/material/styles';
 
 import { Typography } from '../../../../../../components/atomic/Typography/Typography';
 
-export const MellowLPEntryContainerBox = styled(Box)`
+export const VaultEntryContainerBox = styled(Box)`
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 0px;
 `;
 
-export const MellowLPEntryInfoBox = styled(Box)`
+export const VaultEntryInfoBox = styled(Box)`
   box-sizing: border-box;
 
   display: flex;

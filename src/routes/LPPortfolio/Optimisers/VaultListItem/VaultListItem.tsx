@@ -62,7 +62,12 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
           ${compactFormat(totalBalance).toUpperCase()}
         </TotalBalanceTypography>
         <TotalAPYTypography>{totalApy}%</TotalAPYTypography>
-        <DepositButton to={`/${generatePath(routes.LP_OPTIMISERS_DEPOSIT, { vaultId: id })}`}>
+        <DepositButton
+          to={`/${generatePath(routes.LP_OPTIMISERS_VAULT_FORM, {
+            actions: 'deposit',
+            vaultId: id,
+          })}`}
+        >
           DEPOSIT
         </DepositButton>
       </VaultListItemTopBox>
@@ -89,7 +94,12 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
               <CurrentBalanceBox>${compactFormat(currentBalance)}</CurrentBalanceBox>
               <PoolsCountBox>{poolsCount}</PoolsCountBox>
               {isCompleted ? (
-                <ManageButton to={`/${generatePath(routes.LP_OPTIMISERS_MANAGE, { vaultId: id })}`}>
+                <ManageButton
+                  to={`/${generatePath(routes.LP_OPTIMISERS_VAULT_FORM, {
+                    actions: 'manage',
+                    vaultId: id,
+                  })}`}
+                >
                   Manage
                 </ManageButton>
               ) : null}

@@ -5,11 +5,11 @@ import { ConnectWallet } from '../../../components/composite/ConnectWallet/Conne
 import { useWallet } from '../../../hooks/useWallet';
 import { setPageTitle } from '../../../utilities/page';
 import { useLPVaults } from '../useLPVaults';
-import { ConnectedDepositForm } from './ConnectedDepositForm/ConnectedDepositForm';
-import { ConnectedMellowBox } from './EcosystemDeposit.styled';
 import { NoVaultFound } from './NoVaultFound/NoVaultFound';
+import { VaultForm } from './VaultForm/VaultForm';
+import { VaultFormBox } from './VaultFormRoute.styled';
 
-export const EcosystemDeposit: React.FunctionComponent = () => {
+export const VaultFormRoute: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const handleGoBack = () => navigate(-1);
   const { vaultId } = useParams();
@@ -37,8 +37,8 @@ export const EcosystemDeposit: React.FunctionComponent = () => {
   }
 
   return (
-    <ConnectedMellowBox>
-      <ConnectedDepositForm loading={loading} vault={currentVault} onCancel={handleGoBack} />
-    </ConnectedMellowBox>
+    <VaultFormBox>
+      <VaultForm loading={loading} vault={currentVault} onCancel={handleGoBack} />
+    </VaultFormBox>
   );
 };

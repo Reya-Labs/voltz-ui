@@ -4,13 +4,13 @@ import React, { useEffect, useState } from 'react';
 import { DepositForm, DepositFormProps } from '../DepositForm/DepositForm';
 import { DepositStates, getSubmissionState } from './mappers';
 
-export type ConnectedMellowLpDepositFormProps = {
+export type VaultFormProps = {
   vault: MellowProduct;
   onCancel: () => void;
   loading: boolean;
 };
 
-export const ConnectedDepositForm: React.FunctionComponent<ConnectedMellowLpDepositFormProps> = ({
+export const VaultForm: React.FunctionComponent<VaultFormProps> = ({
   loading,
   vault,
   onCancel,

@@ -140,6 +140,7 @@
     "@metamask/jazzicon": "2.0.0",
     "@mui/icons-material": "5.6.0",
     "@mui/material": "5.3.1",
+    "@mui/system": "5.3.0",
     "@reduxjs/toolkit": "1.9.0",
     "@sentry/react": "7.25.0",
     "@sentry/tracing": "7.25.0",

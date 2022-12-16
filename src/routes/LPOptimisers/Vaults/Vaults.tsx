@@ -6,10 +6,10 @@ import { useWallet } from '../../../hooks/useWallet';
 import { setPageTitle } from '../../../utilities/page';
 import { routes } from '../../paths';
 import { useLPVaults } from '../useLPVaults';
-import { ConnectedMellowBox } from './Ecosystem.styled';
-import { MellowLPTable } from './MellowLPTable/MellowLPTable';
+import { VaultsBox } from './Vaults.styled';
+import { VaultsTable } from './VaultsTable/VaultsTable';
 
-export const Ecosystem: React.FunctionComponent = () => {
+export const Vaults: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const { signer, setRequired } = useWallet();
   const { lpVaults, vaultsInitialised, vaultsInitialisedWithSigner } = useLPVaults(signer);
@@ -17,7 +17,10 @@ export const Ecosystem: React.FunctionComponent = () => {
     if (!signer) {
       setRequired(true);
     } else {
-      const path = generatePath(routes.LP_OPTIMISERS_DEPOSIT, { vaultId: selectedVault.id });
+      const path = generatePath(routes.LP_OPTIMISERS_VAULT_FORM, {
+        actions: 'deposit',
+        vaultId: selectedVault.id,
+      });
       navigate(`/${path}`);
     }
   };
@@ -27,12 +30,12 @@ export const Ecosystem: React.FunctionComponent = () => {
   }, []);
 
   return (
-    <ConnectedMellowBox>
-      <MellowLPTable
+    <VaultsBox>
+      <VaultsTable
         dataLoading={signer ? !vaultsInitialisedWithSigner : !vaultsInitialised}
         mellowProducts={lpVaults}
         onSelectItem={handleSelectMellowLpVault}
       />
-    </ConnectedMellowBox>
+    </VaultsBox>
   );
 };

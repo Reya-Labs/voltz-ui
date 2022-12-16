@@ -1,14 +1,9 @@
 import React from 'react';
 
-import {
-  DescriptionTypography,
-  EcosystemHeaderBox,
-  LearnMoreLink,
-  TitleTypography,
-} from './EcosystemHeader.styled';
+import { DescriptionTypography, HeaderBox, LearnMoreLink, TitleTypography } from './Header.styled';
 
-export const EcosystemHeader: React.FunctionComponent = React.memo(() => (
-  <EcosystemHeaderBox>
+export const Header: React.FunctionComponent = React.memo(() => (
+  <HeaderBox>
     <TitleTypography variant="h1">LP OPTIMISER VAULTS</TitleTypography>
     <DescriptionTypography variant="body1">
       The Voltz-Mellow Vaults run automated strategies, optimizing deposits for high LP fees while
@@ -20,5 +15,5 @@ export const EcosystemHeader: React.FunctionComponent = React.memo(() => (
     >
       LEARN MORE
     </LearnMoreLink>
-  </EcosystemHeaderBox>
+  </HeaderBox>
 ));
