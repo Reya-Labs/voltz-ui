@@ -1,10 +1,7 @@
 import React from 'react';
 
 import { doNothing } from '../../../../../utilities/doNothing';
-import {
-  MaturityDistributionErrorTypography,
-  MaturityDistributionsBox,
-} from '../DepositForm.styled';
+import { MaturityDistributionErrorTypography, MaturityDistributionsBox } from '../Form.styled';
 import { MaturityDistributionBox } from './MaturityDistribution.styled';
 import { MaturityDistributionEntry } from './MaturityDistributionEntry/MaturityDistributionEntry';
 import { MaturityDistributionHeader } from './MaturityDistributionHeader/MaturityDistributionHeader';

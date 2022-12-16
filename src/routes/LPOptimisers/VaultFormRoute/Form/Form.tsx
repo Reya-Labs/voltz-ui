@@ -7,6 +7,7 @@ import { IconLabel } from '../../../../components/composite/IconLabel/IconLabel'
 import { InputTokenLabel } from '../../../../components/composite/InputTokenLabel/InputTokenLabel';
 import { formatCurrency, toUSFormat } from '../../../../utilities/number';
 import { DepositButton } from '../DepositButton/DepositButton';
+import { DepositInfo } from './DepositInfo/DepositInfo';
 import {
   BackButton,
   ButtonBox,
@@ -18,14 +19,13 @@ import {
   HintTextTypography,
   MaskedIntegerFieldStyled,
   PrefixHintTextSpan,
-} from './DepositForm.styled';
-import { DepositInfo } from './DepositInfo/DepositInfo';
+} from './Form.styled';
 import {
   MaturityDistribution,
   MaturityDistributionProps,
 } from './MaturityDistribution/MaturityDistribution';
 
-export type DepositFormProps = {
+export type FormProps = {
   lpVault: MellowProduct;
   onChangeDeposit: (value: number | undefined) => void;
   submitText: string;
@@ -46,7 +46,7 @@ export type DepositFormProps = {
   onManualDistributionsUpdate: MaturityDistributionProps['onManualDistributionsUpdate'];
 };
 
-export const DepositForm: React.FunctionComponent<DepositFormProps> = ({
+export const Form: React.FunctionComponent<FormProps> = ({
   lpVault,
   onChangeDeposit,
   submitText,
@@ -61,7 +61,7 @@ export const DepositForm: React.FunctionComponent<DepositFormProps> = ({
   onDistributionToggle,
   onManualDistributionsUpdate,
   combinedWeightValue,
-}: DepositFormProps) => {
+}: FormProps) => {
   const subtext = `WALLET BALANCE: ${
     isUndefined(lpVault.userWalletBalance)
       ? '---'

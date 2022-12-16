@@ -1,7 +1,7 @@
 import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useState } from 'react';
 
-import { DepositForm, DepositFormProps } from '../DepositForm/DepositForm';
+import { Form, FormProps } from '../Form/Form';
 import { DepositStates, getSubmissionState } from './mappers';
 
 export type VaultFormProps = {
@@ -15,7 +15,7 @@ export const VaultForm: React.FunctionComponent<VaultFormProps> = ({
   vault,
   onCancel,
 }) => {
-  const automaticWeights: DepositFormProps['weights'] = vault.metadata.vaults.map((v) => ({
+  const automaticWeights: FormProps['weights'] = vault.metadata.vaults.map((v) => ({
     distribution: v.weight,
     maturityTimestamp: v.maturityTimestampMS,
     pools: v.pools,
@@ -24,7 +24,7 @@ export const VaultForm: React.FunctionComponent<VaultFormProps> = ({
 
   const [selectedDeposit, setSelectedDeposit] = useState<number>(0);
   const [distribution, setDistribution] = useState<'automatic' | 'manual'>('automatic');
-  const [manualWeights, setManualWeights] = useState<DepositFormProps['weights']>(
+  const [manualWeights, setManualWeights] = useState<FormProps['weights']>(
     automaticWeights.map((a) => ({ ...a })),
   );
   const [depositState, setDepositState] = useState<DepositStates>(DepositStates.INITIALISING);
@@ -106,7 +106,7 @@ export const VaultForm: React.FunctionComponent<VaultFormProps> = ({
   };
 
   return (
-    <DepositForm
+    <Form
       combinedWeightValue={combinedWeightValue}
       disabled={
         !sufficientFunds || submissionState.disabled || loading || combinedWeightValue !== 100
