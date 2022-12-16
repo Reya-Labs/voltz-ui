@@ -59,7 +59,7 @@ export const VaultEntry: React.FunctionComponent<VaultEntryProps> = ({
       <PositionBox>
         <MellowPosition
           dataLoading={dataLoading}
-          disabled={lpVault.metadata.soon || lpVault.metadata.deprecated}
+          disabled={lpVault.metadata.soon || !lpVault.depositable}
           handleClick={onSelectItem}
           tokenName={lpVault.metadata.token}
           userDeposit={lpVault.userDeposit}
