@@ -1,14 +1,14 @@
 import { colors } from '../../../../theme';
 
 export enum WithdrawStates {
-  INITIALISING = 'INITIALISING',
+  READY = 'READY',
   WITHDRAW_PENDING = 'WITHDRAW_PENDING',
   WITHDRAW_FAILED = 'WITHDRAW_FAILED',
   WITHDRAW_DONE = 'WITHDRAW_DONE',
 }
 
 export enum RolloverStates {
-  INITIALISING = 'INITIALISING',
+  READY = 'READY',
   ROLLOVER_PENDING = 'ROLLOVER_PENDING',
   ROLLOVER_FAILED = 'ROLLOVER_FAILED',
   ROLLOVER_DONE = 'ROLLOVER_DONE',
@@ -69,11 +69,7 @@ export const getSubmissionState = ({
     },
   };
 
-  if (
-    loading ||
-    withdrawOrRolloverState === WithdrawStates.INITIALISING ||
-    withdrawOrRolloverState === RolloverStates.INITIALISING
-  ) {
+  if (loading) {
     return initialisingState;
   }
   const errorState = {
@@ -97,6 +93,27 @@ export const getSubmissionState = ({
   };
 
   switch (withdrawOrRolloverState) {
+    case WithdrawStates.READY:
+    case RolloverStates.READY:
+      return {
+        hintText: {
+          text: 'Rollover deposit will be completed at 7PM UTC',
+          textColor: colors.lavenderWeb.darken010,
+        },
+        disabled: false,
+        withdraw: {
+          submitText: 'WITHDRAW ALL',
+          action: withdraw,
+          success: false,
+          loading: false,
+        },
+        rollover: {
+          submitText: 'ROLLOVER ALL',
+          action: rollover,
+          success: false,
+          loading: false,
+        },
+      };
     case WithdrawStates.WITHDRAW_FAILED:
     case RolloverStates.ROLLOVER_FAILED:
       return errorState;

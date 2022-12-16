@@ -43,7 +43,6 @@ export type VaultListItemProps = {
     distribution: number;
   }[];
   depositable: boolean;
-  vaultIndex: number;
 };
 export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
   vaults,
@@ -52,7 +51,6 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
   token,
   depositable,
   id,
-  vaultIndex,
 }) => {
   const TotalAPYTypography = totalApy >= 0 ? PositiveAPYTypography : NegativeAPYTypography;
   return (
@@ -85,7 +83,10 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
           <HeaderPoolsTypography>POOLS</HeaderPoolsTypography>
         </HeaderBox>
         {vaults.map(
-          ({ poolsCount, currentBalance, distribution, isCompleted, maturityTimestampMS }) => (
+          (
+            { poolsCount, currentBalance, distribution, isCompleted, maturityTimestampMS },
+            vaultIndex,
+          ) => (
             <VaultListItemInfo key={maturityTimestampMS}>
               <MaturityInfoBox>
                 <MaturityDateTypography>
@@ -99,7 +100,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
               <DistributionBox>{distribution}%</DistributionBox>
               <CurrentBalanceBox>${compactFormat(currentBalance)}</CurrentBalanceBox>
               <PoolsCountBox>{poolsCount}</PoolsCountBox>
-              {isCompleted ? (
+              {isCompleted && currentBalance > 0 ? (
                 <ManageButton
                   to={`/${generatePath(routes.LP_OPTIMISERS_WITHDRAW_ROLLOVER_FORM, {
                     actions: 'manage',

@@ -7,6 +7,7 @@ import { MaskedIntegerFieldStyled } from './DepositAmountInput.styled';
 type Props = {
   subtext: string;
   token: string;
+  value: string;
   disabled: boolean;
   onChange?: (newValue: string | undefined) => void;
 };
@@ -15,6 +16,7 @@ export const DepositAmountInput: React.FunctionComponent<Props> = ({
   token,
   onChange,
   disabled,
+  value,
 }) => (
   <MaskedIntegerFieldStyled
     allowNegativeValue={false}
@@ -33,6 +35,7 @@ export const DepositAmountInput: React.FunctionComponent<Props> = ({
     subtextSize={12}
     suffix={<InputTokenLabel tokenName={token} />}
     suffixPadding={90}
+    value={value}
     allowDecimals
     onChange={onChange}
   />

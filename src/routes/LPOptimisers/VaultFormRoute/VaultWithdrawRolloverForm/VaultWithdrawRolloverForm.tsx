@@ -31,14 +31,14 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
   );
   const [withdrawOrRolloverState, setWithdrawOrRolloverState] = useState<
     WithdrawStates | RolloverStates
-  >(WithdrawStates.INITIALISING);
+  >(WithdrawStates.READY);
   const [error, setError] = useState<string>('');
 
   const weights = distribution === 'automatic' ? automaticWeights : manualWeights;
   const combinedWeightValue = weights.reduce((total, weight) => total + weight.distribution, 0);
 
   const withdraw = () => {
-    if (!vault.withdrawable) {
+    if (!vault.withdrawable(vaultIndex)) {
       return;
     }
     setWithdrawOrRolloverState(WithdrawStates.WITHDRAW_PENDING);
@@ -54,7 +54,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
   };
 
   const rollover = () => {
-    if (!vault.rolloverable) {
+    if (!vault.rolloverable(vaultIndex)) {
       return;
     }
     setWithdrawOrRolloverState(RolloverStates.ROLLOVER_PENDING);
@@ -86,11 +86,12 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
   return (
     <WithdrawRolloverForm
       combinedWeightValue={combinedWeightValue}
+      depositValue={vault.userIndividualCommittedDeposits[vaultIndex].toString()}
       distribution={distribution}
       hintText={submissionState.hintText}
       lpVault={vault}
       rolloverDisabled={submissionState.disabled || loading || combinedWeightValue !== 100}
-      rolloverHidden={!vault.rolloverable}
+      rolloverHidden={!vault.rolloverable(vaultIndex)}
       rolloverLoading={submissionState.rollover.loading}
       rolloverSubmitText={submissionState.rollover.submitText}
       rolloverSuccess={submissionState.withdraw.success}
