@@ -7,13 +7,17 @@ import { useAMMs } from '../../../../../hooks/useAMMs';
 import { findCurrentAmm } from '../../../../../utilities/amm';
 import { getRowButtonId } from '../../../../../utilities/googleAnalytics';
 import { isBorrowing } from '../../../../../utilities/isBorrowing';
-import { PositionTableHead, PositionTableRow } from './components';
+import { PositionTableHead } from './components/PositionTableHead/PositionTableHead';
+import { PositionTableRow } from './components/PositionTableRow/PositionTableRow';
 import { TransactionList } from './components/TransactionList/TransactionList';
 import { PositionsList, PositionsListItemBox, PositionsListTopBox } from './PositionTable.styled';
 
 export type PositionTableProps = {
   positions: Position[];
-  onSelectItem: (datum: Position, mode: 'margin' | 'liquidity' | 'rollover' | 'notional') => void;
+  onSelectItem: (
+    position: Position,
+    mode: 'margin' | 'liquidity' | 'rollover' | 'notional',
+  ) => void;
   onSettle: (position: Position) => void;
   portfolioData: PortfolioContext;
 };
@@ -27,23 +31,23 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   const { amms } = useAMMs();
 
   const handleSelectRow = (
-    index: number,
+    position: Position,
     mode: 'margin' | 'liquidity' | 'rollover' | 'notional',
   ) => {
-    onSelectItem(positions[index], mode);
+    onSelectItem(position, mode);
   };
 
   return (
     <>
       {positions.length > 0 && (
         <PositionsList itemsPerRow={1}>
-          {positions.map((pos, index) => {
-            const rolloverAmm = findCurrentAmm(amms || [], pos);
-            const rolloverAvailable = rolloverAmm ? rolloverAmm.id !== pos.amm.id : false;
-            const info = portfolioData?.info ? portfolioData.info[pos.id] : undefined;
+          {positions.map((position, index) => {
+            const rolloverAmm = findCurrentAmm(amms || [], position);
+            const rolloverAvailable = rolloverAmm ? rolloverAmm.id !== position.amm.id : false;
+            const info = portfolioData?.info ? portfolioData.info[position.id] : undefined;
 
             return (
-              <PositionsListItemBox key={pos.id}>
+              <PositionsListItemBox key={position.id}>
                 <PositionsListTopBox>
                   <PositionTableHead
                     beforeMaturity={info?.beforeMaturity}
@@ -55,29 +59,30 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                     fixedRateHealthFactor={info?.fixedRateHealthFactor}
                     gaButtonId={getRowButtonId(
                       true,
-                      pos.amm.protocol,
-                      isBorrowing(pos.amm.rateOracle.protocolId),
+                      position.amm.protocol,
+                      isBorrowing(position.amm.rateOracle.protocolId),
                     )}
                     healthFactor={info?.healthFactor}
-                    isSettled={pos.isSettled}
+                    isSettled={position.isSettled}
                     rolloverAvailable={rolloverAvailable}
-                    onRollover={() => handleSelectRow(index, 'rollover')}
-                    onSettle={() => onSettle(pos)}
+                    onRollover={() => handleSelectRow(position, 'rollover')}
+                    onSettle={() => onSettle(position)}
                   />
 
-                  <AMMProvider amm={pos.amm}>
+                  <AMMProvider amm={position.amm}>
                     <PositionTableRow
-                      key={pos.id}
-                      index={index}
-                      position={pos}
-                      positionInfo={portfolioData?.info ? portfolioData.info[pos.id] : undefined}
+                      key={position.id}
+                      position={position}
+                      positionInfo={
+                        portfolioData?.info ? portfolioData.info[position.id] : undefined
+                      }
                       onSelect={(mode: 'margin' | 'liquidity' | 'notional') =>
-                        handleSelectRow(index, mode)
+                        handleSelectRow(position, mode)
                       }
                     />
                   </AMMProvider>
                 </PositionsListTopBox>
-                <TransactionList position={pos} />
+                <TransactionList position={position} />
               </PositionsListItemBox>
             );
           })}

@@ -18,6 +18,7 @@ export type CurrentMarginProps = {
   token: string;
   onSelect: () => void;
   isSettled: boolean;
+  hideEdit: boolean;
 };
 
 export const Margin: React.FunctionComponent<CurrentMarginProps> = ({
@@ -26,6 +27,7 @@ export const Margin: React.FunctionComponent<CurrentMarginProps> = ({
   token,
   onSelect,
   isSettled,
+  hideEdit,
 }) => {
   const wallet = useWallet();
 
@@ -69,7 +71,7 @@ export const Margin: React.FunctionComponent<CurrentMarginProps> = ({
     <MarginBox>
       <MarginLabelBox>
         <MarginLabelTypography>{getNetMarginLabel()}</MarginLabelTypography>
-        <EditButton onClick={handleClick}>Edit</EditButton>
+        {hideEdit ? null : <EditButton onClick={handleClick}>Edit</EditButton>}
       </MarginLabelBox>
       <MarginValueTypography>
         {!isUndefined(margin) ? `${formatNumber(margin)} ${token}` : 'Loading...'}

@@ -14,8 +14,6 @@ const MaturityInformationComponent: React.FunctionComponent<MaturityInformationP
   startDate,
   endDate,
 }) => {
-  const startDateMillis = startDate?.toMillis();
-  const endDateMillis = endDate?.toMillis();
   const percentageComplete = useMemo((): number => {
     if (!startDate || !endDate) {
       return 0;
@@ -23,12 +21,11 @@ const MaturityInformationComponent: React.FunctionComponent<MaturityInformationP
 
     // Durations here are both negative (due to diffNow) but that cancels out when calculating percentage
     const totalSeparation = startDate.diff(endDate);
-    const separationfromStart = startDate.diffNow();
-    const percentage = (separationfromStart.milliseconds * 100) / totalSeparation.milliseconds;
+    const separationFromStart = startDate.diffNow();
+    const percentage = (separationFromStart.milliseconds * 100) / totalSeparation.milliseconds;
 
     return Math.floor(percentage);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [startDateMillis, endDateMillis]);
+  }, [startDate, endDate]);
 
   const formattedEndDate = endDate ? formatDateTime(endDate) : '';
 

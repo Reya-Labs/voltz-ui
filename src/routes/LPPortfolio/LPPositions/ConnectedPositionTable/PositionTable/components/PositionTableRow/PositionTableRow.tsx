@@ -14,14 +14,12 @@ import { CellBox, MaturityLabelTypography, RowBox } from './PositionTableRow.sty
 export type PositionTableRowProps = {
   position: Position;
   positionInfo: PositionInfo | undefined;
-  index: number;
   onSelect: (mode: 'margin' | 'liquidity' | 'notional') => void;
 };
 
 export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
   position,
   positionInfo,
-  index,
   onSelect,
 }) => {
   const { fixedApr } = useAMMContext();
@@ -41,9 +39,10 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
 
   // Introduced this so margin and notional show the correct underlying token unit e.g. Eth not stEth, USDC not aUSDC
   const underlyingTokenName = position.amm.underlyingToken.name;
+  const hideEdit = position.amm.endDateTime.toMillis() <= Date.now().valueOf();
 
   return (
-    <RowBox key={index}>
+    <RowBox>
       <CellBox>
         <Pool
           isBorrowing={isBorrowing(position.amm.rateOracle.protocolId)}
@@ -52,6 +51,7 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
       </CellBox>
       <CellBox>
         <Notional
+          hideEdit={hideEdit}
           notional={formatNumber(position.notional)}
           token={underlyingTokenName || ''}
           onEdit={handleEditLPNotional}
@@ -60,6 +60,7 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
       <CellBox>
         <Margin
           accruedCashflow={undefined}
+          hideEdit={hideEdit}
           isSettled={position.isSettled}
           margin={positionInfo?.margin}
           token={underlyingTokenName || ''}
