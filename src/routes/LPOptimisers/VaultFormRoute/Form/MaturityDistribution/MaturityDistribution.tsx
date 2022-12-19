@@ -37,8 +37,8 @@ export const MaturityDistribution: React.FunctionComponent<MaturityDistributionP
   combinedWeightValue,
   disabledToggle,
 }) => {
-  const canEditWeights =
-    distribution === 'automatic' ? false : weights.every((w) => w.vaultDisabled);
+  const allVaultsWeightEditingDisabled =
+    distribution === 'automatic' ? true : weights.every((w) => w.vaultDisabled);
 
   return (
     <MaturityDistributionBox>
@@ -67,7 +67,9 @@ export const MaturityDistribution: React.FunctionComponent<MaturityDistributionP
           />
         ))}
       </MaturityDistributionsBox>
-      {distribution === 'manual' && !canEditWeights && combinedWeightValue !== 100 ? (
+      {distribution === 'manual' &&
+      !allVaultsWeightEditingDisabled &&
+      combinedWeightValue !== 100 ? (
         <MaturityDistributionErrorTypography>
           The total distribution is {combinedWeightValue}%, it has to be 100%.
         </MaturityDistributionErrorTypography>
