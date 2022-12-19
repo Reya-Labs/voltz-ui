@@ -23,6 +23,7 @@ import {
   NegativeAPYTypography,
   PoolsCountBox,
   PositiveAPYTypography,
+  TokenTypography,
   TotalBalanceTypography,
   VaultListItemBottomBox,
   VaultListItemBox,
@@ -61,7 +62,8 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
           <NameTypography>Mellow - {token.toUpperCase()}</NameTypography>
         </NameBox>
         <TotalBalanceTypography>
-          ${compactFormat(totalBalance).toUpperCase()}
+          {compactFormat(totalBalance).toUpperCase()}
+          <TokenTypography>{token.toUpperCase()}</TokenTypography>
         </TotalBalanceTypography>
         <TotalAPYTypography>{totalApy}%</TotalAPYTypography>
         {depositable ? (
@@ -97,8 +99,14 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
                   <MaturityCompleteTypography>&nbsp;Completed</MaturityCompleteTypography>
                 ) : null}
               </MaturityInfoBox>
-              <DistributionBox>{distribution}%</DistributionBox>
-              <CurrentBalanceBox>${compactFormat(currentBalance)}</CurrentBalanceBox>
+              <DistributionBox>
+                {distribution}
+                <TokenTypography>%</TokenTypography>
+              </DistributionBox>
+              <CurrentBalanceBox>
+                {compactFormat(currentBalance)}
+                <TokenTypography>{token.toUpperCase()}</TokenTypography>
+              </CurrentBalanceBox>
               <PoolsCountBox>{poolsCount}</PoolsCountBox>
               {isCompleted && currentBalance > 0 ? (
                 <ManageButton

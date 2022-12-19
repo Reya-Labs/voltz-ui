@@ -53,6 +53,10 @@ export const TotalBalanceTypography = styled(Typography)`
   line-height: 130%;
   min-width: 100px;
   text-align: center;
+  color: ${colors.lavenderWeb.base};
+`;
+
+export const TokenTypography = styled('span')`
   /* Lavender Web 3 */
   color: #857ea5;
 `;
