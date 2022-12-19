@@ -32,8 +32,6 @@ type WithdrawRolloverFormProps = {
   withdrawLoading: boolean;
   rolloverSuccess: boolean;
   withdrawSuccess: boolean;
-  withdrawHidden: boolean;
-  rolloverHidden: boolean;
   onGoBack: () => void;
   combinedWeightValue: number;
   weights: MaturityDistributionProps['weights'];
@@ -45,8 +43,6 @@ type WithdrawRolloverFormProps = {
 export const WithdrawRolloverForm: React.FunctionComponent<WithdrawRolloverFormProps> = ({
   lpVault,
   rolloverSuccess,
-  rolloverHidden,
-  withdrawHidden,
   rolloverDisabled,
   rolloverLoading,
   rolloverSubmitText,
@@ -90,34 +86,29 @@ export const WithdrawRolloverForm: React.FunctionComponent<WithdrawRolloverFormP
       />
       <FullButtonBox>
         <ButtonBox>
-          {withdrawHidden ? null : (
-            <FormActionButton
-              dataTestId="WithdrawAllButton"
-              disabled={withdrawDisabled}
-              loading={withdrawLoading}
-              success={withdrawSuccess}
-              variant="dark-blue"
-              onClick={onWithdrawClick}
-            >
-              {withdrawSubmitText}
-            </FormActionButton>
-          )}
-          {rolloverHidden ? null : (
-            <FormActionButton
-              dataTestId="RolloverAllButton"
-              disabled={rolloverDisabled}
-              loading={rolloverLoading}
-              success={rolloverSuccess}
-              variant="blue"
-              onClick={onRolloverClick}
-            >
-              {rolloverSubmitText}
-            </FormActionButton>
-          )}
-          {!rolloverHidden ? null : <BackButton onClick={onGoBack}>BACK</BackButton>}
+          <FormActionButton
+            dataTestId="WithdrawAllButton"
+            disabled={withdrawDisabled}
+            loading={withdrawLoading}
+            success={withdrawSuccess}
+            variant="dark-blue"
+            onClick={onWithdrawClick}
+          >
+            {withdrawSubmitText}
+          </FormActionButton>
+          <FormActionButton
+            dataTestId="RolloverAllButton"
+            disabled={rolloverDisabled}
+            loading={rolloverLoading}
+            success={rolloverSuccess}
+            variant="blue"
+            onClick={onRolloverClick}
+          >
+            {rolloverSubmitText}
+          </FormActionButton>
         </ButtonBox>
         <HintText {...hintText} loading={loading} />
-        {!rolloverHidden ? <BackButton onClick={onGoBack}>BACK</BackButton> : null}
+        <BackButton onClick={onGoBack}>BACK</BackButton>
       </FullButtonBox>
       <AboutYourFunds depositsText="Rollover deposits" />
     </FormBox>
