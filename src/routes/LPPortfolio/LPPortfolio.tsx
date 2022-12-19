@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { ConnectWallet } from '../../components/composite/ConnectWallet/ConnectWallet';
+import { MintBurnFormModes } from '../../contexts/MintBurnFormContext/MintBurnFormContext';
 import { useWallet } from '../../hooks/useWallet';
 import { ContentBox, LPPortfolioBox, Split } from './LPPortfolio.styled';
 import { LPPositions } from './LPPositions/LPPositions';
@@ -8,6 +9,7 @@ import { Optimisers } from './Optimisers/Optimisers';
 
 export const LPPortfolio: React.FunctionComponent = () => {
   const { status } = useWallet();
+  const [formMode, setFormMode] = useState<MintBurnFormModes>();
 
   if (status !== 'connected') {
     return (
@@ -24,12 +26,16 @@ export const LPPortfolio: React.FunctionComponent = () => {
   return (
     <LPPortfolioBox>
       <ContentBox>
-        <LPPositions />
+        <LPPositions formMode={formMode} setFormMode={setFormMode} />
       </ContentBox>
       <ContentBox>
         <Split />
       </ContentBox>
-      <ContentBox>
+      <ContentBox
+        sx={{
+          display: Boolean(formMode) ? 'none' : undefined,
+        }}
+      >
         <Optimisers />
       </ContentBox>
     </LPPortfolioBox>
