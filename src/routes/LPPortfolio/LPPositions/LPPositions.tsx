@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { ConnectedMintBurnForm } from '../../../components/containers/ConnectedMintBurnForm/ConnectedMintBurnForm';
@@ -20,9 +20,11 @@ import { findCurrentAmm } from '../../../utilities/amm';
 import { setPageTitle } from '../../../utilities/page';
 import { ConnectedPositionTable } from './ConnectedPositionTable/ConnectedPositionTable';
 
-export const LPPositions: React.FunctionComponent = () => {
+export const LPPositions: React.FunctionComponent<{
+  formMode: MintBurnFormModes | undefined;
+  setFormMode: Dispatch<SetStateAction<MintBurnFormModes | undefined>>;
+}> = ({ formMode, setFormMode }) => {
   const [amm, setAMM] = useState<AMM>();
-  const [formMode, setFormMode] = useState<MintBurnFormModes>();
   const [position, setPosition] = useState<Position>();
   const [settling, setSettling] = useState<boolean>(false);
   const { onChangeAgent } = useAgent();
@@ -96,12 +98,12 @@ export const LPPositions: React.FunctionComponent = () => {
         </PortfolioProvider>
       )}
 
-      {renderMode === 'form' && (
+      {formMode && renderMode === 'form' && (
         <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
           {amm && (
             <AMMProvider amm={amm}>
               <PositionProvider position={position}>
-                <MintBurnFormProvider mode={formMode as MintBurnFormModes}>
+                <MintBurnFormProvider mode={formMode}>
                   <ConnectedMintBurnForm onReset={handleReset} />
                 </MintBurnFormProvider>
               </PositionProvider>
