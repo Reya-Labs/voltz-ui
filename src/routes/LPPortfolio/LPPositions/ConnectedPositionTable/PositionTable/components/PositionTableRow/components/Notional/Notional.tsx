@@ -13,14 +13,20 @@ export type NotionalProps = {
   notional?: string;
   onEdit: () => void;
   token: string;
+  hideEdit: boolean;
 };
 
-export const Notional: React.FunctionComponent<NotionalProps> = ({ notional, onEdit, token }) => {
+export const Notional: React.FunctionComponent<NotionalProps> = ({
+  hideEdit,
+  notional,
+  onEdit,
+  token,
+}) => {
   return (
     <NotionalBox>
       <NotionalLabelBox>
         <NotionalLabelTypography>NOTIONAL</NotionalLabelTypography>
-        <EditButton onClick={onEdit}>Edit</EditButton>
+        {hideEdit ? null : <EditButton onClick={onEdit}>Edit</EditButton>}
       </NotionalLabelBox>
       <NotionalValueTypography>
         {isUndefined(notional) ? 'Loading...' : `${notional} ${token}`}
