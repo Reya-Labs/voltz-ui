@@ -152,7 +152,7 @@ export const HeaderMaturityTypography = styled(HeaderTypography)`
 `;
 
 export const HeaderDistributionTypography = styled(HeaderTypography)`
-  margin-right: 68px;
+  margin-right: 76px;
 `;
 
 export const HeaderBalanceTypography = styled(HeaderTypography)`
@@ -217,6 +217,6 @@ export const DistributionBox = styled(ValueBox)`
   min-width: 52px;
 `;
 export const CurrentBalanceBox = styled(ValueBox)`
-  min-width: 68px;
+  min-width: 81px;
 `;
 export const PoolsCountBox = styled(ValueBox)``;
