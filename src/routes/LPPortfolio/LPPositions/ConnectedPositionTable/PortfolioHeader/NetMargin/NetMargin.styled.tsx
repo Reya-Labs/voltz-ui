@@ -22,7 +22,7 @@ export const NetMarginTypography = styled(Typography)`
   font-weight: 400;
   font-size: 12px;
   line-height: 14px;
-  color: ${colors.lavenderWeb.darken010};
+  color: ${colors.lavenderWeb1};
 `;
 
 const NetMarginDiffTypography = styled(Typography)`
@@ -34,10 +34,10 @@ const NetMarginDiffTypography = styled(Typography)`
 `;
 
 export const PositiveNetMarginDiffTypography = styled(NetMarginDiffTypography)`
-  color: ${colors.skyBlueCrayola.base};
+  color: ${colors.skyBlueCrayola};
 `;
 export const NegativeNetMarginDiffTypography = styled(NetMarginDiffTypography)`
-  color: ${colors.wildStrawberry.base};
+  color: ${colors.wildStrawberry};
 `;
 export const NetMarginValueBox = styled(Box)`
   padding: 8px 14px;
@@ -53,5 +53,5 @@ export const NetMarginValueTypography = styled(Typography)`
   font-size: 16px;
   line-height: 14px;
 
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
 `;

@@ -13,15 +13,15 @@ const BaseTypography = styled(Typography)`
 `;
 
 export const HealthyTypography = styled(BaseTypography)`
-  color: ${colors.skyBlueCrayola.base};
+  color: ${colors.skyBlueCrayola};
 `;
 
 export const WarningTypography = styled(BaseTypography)`
-  color: ${colors.orangeYellow.base};
+  color: ${colors.orangeYellow};
 `;
 
 export const DangerTypography = styled(BaseTypography)`
-  color: ${colors.wildStrawberry.base};
+  color: ${colors.wildStrawberry};
 `;
 
 export const HealthFactorBox = styled(Box)`

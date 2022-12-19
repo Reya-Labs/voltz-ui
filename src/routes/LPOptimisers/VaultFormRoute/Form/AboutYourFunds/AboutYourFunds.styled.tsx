@@ -41,5 +41,5 @@ export const DescriptionBodyTypography = styled(Typography)`
 `;
 
 export const HighlightedText = styled('span')`
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
 `;

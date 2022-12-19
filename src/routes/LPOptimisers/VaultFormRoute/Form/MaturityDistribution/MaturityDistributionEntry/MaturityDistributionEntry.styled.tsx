@@ -10,13 +10,13 @@ export const DistributionInputWrapper = styled('div')`
   font-weight: 400;
   font-size: 16px;
   line-height: 14px;
-  color: ${colors.lavenderWeb.darken015};
+  color: ${colors.lavenderWeb2};
   &::after {
     content: '%';
     margin-left: ${({ theme }) => theme.spacing(-4)};
   }
   &:focus-within::after {
-    color: ${colors.lavenderWeb.base};
+    color: ${colors.lavenderWeb};
   }
 `;
 export const DistributionInput = styled('input')`
@@ -24,7 +24,7 @@ export const DistributionInput = styled('input')`
   background-color: #2b2548;
   border: 1px solid #5d5296;
   border-radius: 4px;
-  color: ${colors.lavenderWeb.darken015};
+  color: ${colors.lavenderWeb2};
   font-family: 'PixelOperatorMono', monospace;
   font-weight: 400;
   font-size: 16px;
@@ -32,7 +32,7 @@ export const DistributionInput = styled('input')`
   display: inline-block;
   outline: none;
   &:focus {
-    color: ${colors.lavenderWeb.base};
+    color: ${colors.lavenderWeb};
   }
   &:disabled {
     background: #1e1933;
@@ -53,7 +53,7 @@ export const DistributionInput = styled('input')`
 `;
 
 export const MaturityTypography = styled(Typography)`
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
   font-family: 'PixelOperatorMono', monospace;
   font-weight: 400;
   font-size: 18px;
@@ -61,7 +61,7 @@ export const MaturityTypography = styled(Typography)`
 `;
 
 export const PoolInputLabel = styled(InputLabel)`
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
   font-family: 'PixelOperatorMono', monospace;
   font-weight: 700;
   font-size: 18px;

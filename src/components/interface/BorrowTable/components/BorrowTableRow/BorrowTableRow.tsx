@@ -123,7 +123,7 @@ export const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({
   const typeStyleOverrides = (): SystemStyleObject<Theme> => {
     if (!variant) {
       return {
-        backgroundColor: `primary.dark`,
+        backgroundColor: colors.skyBlueCrayola7,
       };
     }
     if (variant === 'main') {

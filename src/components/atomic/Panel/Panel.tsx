@@ -26,24 +26,24 @@ export const Panel: React.FunctionComponent<PanelProps> = React.forwardRef(
     const typeStyleOverrides = (): SystemStyleObject<Theme> => {
       if (!variant) {
         return {
-          backgroundColor: `primary.dark`,
+          backgroundColor: colors.skyBlueCrayola7,
         };
       }
 
       switch (variant) {
         case 'main':
           return {
-            backgroundColor: `secondary.darken040`,
+            backgroundColor: colors.lavenderWeb6,
           };
 
         case 'dark':
           return {
-            backgroundColor: `secondary.darken045`,
+            backgroundColor: colors.lavenderWeb7,
           };
 
         case 'darker':
           return {
-            backgroundColor: `secondary.darken050`,
+            backgroundColor: colors.lavenderWeb8,
           };
 
         case 'iconLabel':
@@ -56,7 +56,7 @@ export const Panel: React.FunctionComponent<PanelProps> = React.forwardRef(
             borderStyle: 'solid',
             boxShadow: '0px 4px 15px rgba(229, 225, 249, 0.1)',
             '& > *': {
-              color: `${variant}.light`,
+              color: colors.liberty3,
             },
           };
 
@@ -79,10 +79,10 @@ export const Panel: React.FunctionComponent<PanelProps> = React.forwardRef(
 
         default:
           return {
-            backgroundColor: `${variant}.main`,
-            borderColor: `${variant}.light`,
+            backgroundColor: colors.skyBlueCrayola3,
+            borderColor: colors.skyBlueCrayola,
             '& > *': {
-              color: `${variant}.light`,
+              color: colors.skyBlueCrayola,
             },
           };
       }

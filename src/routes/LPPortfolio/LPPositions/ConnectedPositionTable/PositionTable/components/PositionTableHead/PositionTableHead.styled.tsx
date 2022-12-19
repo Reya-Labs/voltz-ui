@@ -57,11 +57,11 @@ const FeesValueTypography = styled(Typography)`
 `;
 
 export const PositiveFeesValueTypography = styled(FeesValueTypography)`
-  color: ${colors.skyBlueCrayola.base};
+  color: ${colors.skyBlueCrayola};
 `;
 
 export const NegativeFeesValueTypography = styled(FeesValueTypography)`
-  color: ${colors.wildStrawberry.base};
+  color: ${colors.wildStrawberry};
 `;
 
 export const FeesBox = styled(Box)`
@@ -104,15 +104,15 @@ const InfoTypography = styled(Typography)`
 `;
 
 export const PositiveTypography = styled(InfoTypography)`
-  color: ${colors.skyBlueCrayola.base};
+  color: ${colors.skyBlueCrayola};
 `;
 
 export const WarningTypography = styled(InfoTypography)`
-  color: ${colors.orangeYellow.base};
+  color: ${colors.orangeYellow};
 `;
 
 export const NegativeTypography = styled(InfoTypography)`
-  color: ${colors.wildStrawberry.base};
+  color: ${colors.wildStrawberry};
 `;
 
 export const ActionsBox = styled(Box)`

@@ -20,7 +20,7 @@ export const ToggleBox = styled(Box)`
 `;
 
 export const MaturityDistributionErrorTypography = styled(Typography)`
-  color: ${colors.wildStrawberry.base};
+  color: ${colors.wildStrawberry};
   font-family: 'PixelOperatorMono', monospace;
   font-weight: 400;
   font-size: 12px;

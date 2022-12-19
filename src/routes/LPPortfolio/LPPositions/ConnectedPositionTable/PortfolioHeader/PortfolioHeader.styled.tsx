@@ -14,7 +14,7 @@ export const LPPositionsTypography = styled(Typography)`
 
   text-transform: uppercase;
 
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
   margin-bottom: ${({ theme }) => theme.spacing(2)};
 `;
 

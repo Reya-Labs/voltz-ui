@@ -37,7 +37,7 @@ export const ToggleButton = styled(ToggleButtonComponent)`
 
   &.Mui-selected {
     background: #2b2548;
-    color: ${colors.lavenderWeb.base};
+    color: ${colors.lavenderWeb};
   }
 `;
 

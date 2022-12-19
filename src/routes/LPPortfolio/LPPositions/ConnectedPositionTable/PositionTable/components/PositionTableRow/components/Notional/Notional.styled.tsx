@@ -58,5 +58,5 @@ export const EditButton = styled(Button)`
   line-height: 14px;
   padding: 0px;
 
-  color: ${colors.wildStrawberry.base};
+  color: ${colors.wildStrawberry};
 `;

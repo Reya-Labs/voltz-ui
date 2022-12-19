@@ -19,6 +19,6 @@ export const LPOptimisersTypography = styled(Typography)`
 
   text-transform: uppercase;
 
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
   margin-bottom: ${({ theme }) => theme.spacing(2)};
 `;

@@ -23,7 +23,7 @@ export const PositionsHealthTypography = styled(Typography)`
   font-weight: 400;
   font-size: 12px;
   line-height: 14px;
-  color: ${colors.lavenderWeb.darken010};
+  color: ${colors.lavenderWeb1};
 `;
 export const PositionHealthInfo = styled(Box)`
   display: flex;
@@ -52,13 +52,13 @@ const Circle = styled(CircleIcon)`
 `;
 
 export const HealthyCircle = styled(Circle)`
-  color: ${colors.skyBlueCrayola.base};
+  color: ${colors.skyBlueCrayola};
 `;
 
 export const WarningCircle = styled(Circle)`
-  color: ${colors.orangeYellow.base};
+  color: ${colors.orangeYellow};
 `;
 
 export const DangerCircle = styled(Circle)`
-  color: ${colors.wildStrawberry.base};
+  color: ${colors.wildStrawberry};
 `;

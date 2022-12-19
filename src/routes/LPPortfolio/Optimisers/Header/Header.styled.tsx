@@ -19,7 +19,7 @@ export const HeaderTypography = styled(Typography)`
   font-size: 12px;
   line-height: 140%;
 
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
 `;
 
 export const NameTypography = styled(HeaderTypography)`

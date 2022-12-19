@@ -9,7 +9,7 @@ export const HintTextTypography = styled(Typography)`
   font-weight: 400;
   font-size: 12px;
   line-height: 14px;
-  color: ${colors.lavenderWeb.darken015};
+  color: ${colors.lavenderWeb2};
 
   letter-spacing: 0.02em;
 `;

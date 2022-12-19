@@ -48,5 +48,5 @@ export const BackButton = styled(Button)`
   background: #1e1933;
   border-radius: 4px;
 
-  color: ${colors.skyBlueCrayola.base};
+  color: ${colors.skyBlueCrayola};
 `;

@@ -6,7 +6,7 @@ import { colors } from '../../../../../../theme';
 export const TitleTypography = styled(Typography)`
   font-size: 12px;
   line-height: 14px;
-  color: ${colors.lavenderWeb.darken010};
+  color: ${colors.lavenderWeb1};
 `;
 
 export const TotalNotionalTypography = styled(Typography)`
@@ -14,5 +14,5 @@ export const TotalNotionalTypography = styled(Typography)`
   line-height: 48px;
   margin-top: ${({ theme }) => theme.spacing(2)};
   text-transform: uppercase;
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
 `;

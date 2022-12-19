@@ -59,9 +59,9 @@ export const PendingDepositTypography = styled(Typography)`
   line-height: 14px;
 
   margin-top: ${({ theme }) => theme.spacing(-2)};
-  color: ${colors.lavenderWeb.darken010};
+  color: ${colors.lavenderWeb1};
 `;
 
 export const PendingDepositAmountSpan = styled('span')`
-  color: ${colors.skyBlueCrayola.base};
+  color: ${colors.skyBlueCrayola};
 `;

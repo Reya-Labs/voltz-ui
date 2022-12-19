@@ -165,7 +165,7 @@ export const getSubmissionState = ({
         hintText: {
           prefixText: 'Depositing',
           text: `${selectedDeposit} ${tokenName}`,
-          textColor: colors.skyBlueCrayola.base,
+          textColor: colors.skyBlueCrayola,
         },
         loading: true,
         disabled: true,

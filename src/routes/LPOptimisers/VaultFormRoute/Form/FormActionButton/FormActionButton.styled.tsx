@@ -15,7 +15,7 @@ export const ActionButton = styled(Button)<{ disabled: boolean }>`
 
 export const BlueActionButton = styled(ActionButton)`
   background: #00556d;
-  color: ${colors.skyBlueCrayola.base};
+  color: ${colors.skyBlueCrayola};
 `;
 
 export const DarkBlueActionButton = styled(ActionButton)`

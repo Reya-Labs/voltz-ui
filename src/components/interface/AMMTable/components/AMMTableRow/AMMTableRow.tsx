@@ -10,6 +10,7 @@ import { useAMMContext } from '../../../../../contexts/AMMContext/AMMContext';
 import { useAMMsContext } from '../../../../../contexts/AMMsContext/AMMsContext';
 import { useAgent } from '../../../../../hooks/useAgent';
 import { useWallet } from '../../../../../hooks/useWallet';
+import colors from '../../../../../theme/colors';
 import { getRowButtonId } from '../../../../../utilities/googleAnalytics';
 import { Button } from '../../../../atomic/Button/Button';
 import { MaturityInformation } from '../../../../composite/MaturityInformation/MaturityInformation';
@@ -52,20 +53,20 @@ export const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({
   const typeStyleOverrides = (): SystemStyleObject<Theme> => {
     if (!variant) {
       return {
-        backgroundColor: `primary.dark`,
+        backgroundColor: colors.skyBlueCrayola7,
       };
     }
 
     switch (variant) {
       case 'main':
         return {
-          backgroundColor: `secondary.darken040`, // this affects the colour of the Pool table rows
+          backgroundColor: colors.lavenderWeb6, // this affects the colour of the Pool table rows
           borderRadius: 2,
         };
 
       case 'darker':
         return {
-          backgroundColor: `secondary.darken045`,
+          backgroundColor: colors.lavenderWeb7,
           borderRadius: 2,
         };
 

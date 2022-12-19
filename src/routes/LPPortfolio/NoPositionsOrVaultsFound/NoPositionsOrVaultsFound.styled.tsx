@@ -41,7 +41,7 @@ export const TitleTypography = styled(Typography)`
   margin-bottom: 24px;
 
   /* Lavender Web */
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
 `;
 
 export const DescriptionTypography = styled(Typography)`
@@ -52,7 +52,7 @@ export const DescriptionTypography = styled(Typography)`
   font-size: 16px;
   line-height: 160%;
   /* Lavender Web */
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
 `;
 
 export const NavigateButton = styled(Link)`
@@ -67,6 +67,6 @@ export const NavigateButton = styled(Link)`
   font-size: 16px;
   line-height: 14px;
   text-decoration: none;
-  color: ${colors.skyBlueCrayola.base};
+  color: ${colors.skyBlueCrayola};
   padding: 8px 13px;
 `;

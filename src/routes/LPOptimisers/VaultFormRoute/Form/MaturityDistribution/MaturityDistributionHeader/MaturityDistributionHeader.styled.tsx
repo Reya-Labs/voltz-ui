@@ -10,7 +10,7 @@ export const MaturityDistributionHeaderTypography = styled(Typography)`
   font-size: 12px;
   line-height: 14px;
   font-family: 'PixelOperatorMono', monospace;
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
   flex: 1;
 `;
 
@@ -28,6 +28,6 @@ export const MaturityDistributionInputLabel = styled(InputLabel)`
   font-size: 12px;
   line-height: 14px;
   font-family: 'PixelOperatorMono', monospace;
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
   flex: 1;
 `;
