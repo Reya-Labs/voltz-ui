@@ -36,37 +36,42 @@ export const MaturityDistribution: React.FunctionComponent<MaturityDistributionP
   weights,
   combinedWeightValue,
   disabledToggle,
-}) => (
-  <MaturityDistributionBox>
-    {weights.length > 1 && (
-      <MaturityDistributionToggle
-        disabled={disabledToggle}
-        distribution={distribution}
-        onChange={onDistributionToggle}
-      />
-    )}
-    <MaturityDistributionHeader />
-    <MaturityDistributionsBox>
-      {weights.map((weight, index) => (
-        <MaturityDistributionEntry
-          key={`${index}-${distribution}`}
-          disabled={distribution === 'automatic' || weights[index].vaultDisabled}
-          onChange={(newDistribution) => {
-            if (distribution === 'automatic') {
-              return;
-            }
-            const weightCopies = weights.map((m) => ({ ...m }));
-            weightCopies[index].distribution = newDistribution;
-            onManualDistributionsUpdate(weightCopies);
-          }}
-          {...weight}
+}) => {
+  const canEditWeights =
+    distribution === 'automatic' ? false : weights.every((w) => w.vaultDisabled);
+
+  return (
+    <MaturityDistributionBox>
+      {weights.length > 1 && (
+        <MaturityDistributionToggle
+          disabled={disabledToggle}
+          distribution={distribution}
+          onChange={onDistributionToggle}
         />
-      ))}
-    </MaturityDistributionsBox>
-    {combinedWeightValue !== 100 ? (
-      <MaturityDistributionErrorTypography>
-        The total distribution is now {combinedWeightValue}%, it has to be 100%.
-      </MaturityDistributionErrorTypography>
-    ) : null}
-  </MaturityDistributionBox>
-);
+      )}
+      <MaturityDistributionHeader />
+      <MaturityDistributionsBox>
+        {weights.map((weight, index) => (
+          <MaturityDistributionEntry
+            key={`${index}-${distribution}`}
+            disabled={distribution === 'automatic' || weights[index].vaultDisabled}
+            onChange={(newDistribution) => {
+              if (distribution === 'automatic') {
+                return;
+              }
+              const weightCopies = weights.map((m) => ({ ...m }));
+              weightCopies[index].distribution = newDistribution;
+              onManualDistributionsUpdate(weightCopies);
+            }}
+            {...weight}
+          />
+        ))}
+      </MaturityDistributionsBox>
+      {distribution === 'manual' && !canEditWeights && combinedWeightValue !== 100 ? (
+        <MaturityDistributionErrorTypography>
+          The total distribution is {combinedWeightValue}%, it has to be 100%.
+        </MaturityDistributionErrorTypography>
+      ) : null}
+    </MaturityDistributionBox>
+  );
+};
