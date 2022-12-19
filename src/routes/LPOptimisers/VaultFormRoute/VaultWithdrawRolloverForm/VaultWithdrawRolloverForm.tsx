@@ -1,4 +1,4 @@
-import { MellowLpRouter, MellowProduct } from '@voltz-protocol/v1-sdk';
+import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import React, { useState } from 'react';
 
 import { FormProps } from '../Form/DepositForm/DepositForm';
@@ -58,7 +58,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
       return;
     }
     setWithdrawOrRolloverState(RolloverStates.ROLLOVER_PENDING);
-    void (vault as MellowLpRouter)
+    void vault
       .rollover(
         vaultIndex,
         weights.map((w) => w.distribution),
