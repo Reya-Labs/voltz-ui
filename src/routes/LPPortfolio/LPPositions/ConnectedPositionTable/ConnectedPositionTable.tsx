@@ -13,6 +13,7 @@ import { useWallet } from '../../../../hooks/useWallet';
 import { actions, selectors } from '../../../../store';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import { routes } from '../../../paths';
+import { NoPositionsOrVaultsFound } from '../../NoPositionsOrVaultsFound/NoPositionsOrVaultsFound';
 import { PortfolioHeader } from './PortfolioHeader/PortfolioHeader';
 import { PositionStatus, PositionStatusToggle } from './PositionStatusToggle/PositionStatusToggle';
 import { PositionTable } from './PositionTable/PositionTable';
@@ -114,21 +115,36 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
 
   const renderPositionTable = () => {
     if (!positionsByAgentGroup) return null;
+    const positions = positionsByAgentGroup.filter((p) => {
+      const isSettled = positionStatus === 'settled';
+      return p.isSettled === isSettled;
+    });
 
     return (
       <>
         <PortfolioHeader currencyCode="USD" currencySymbol="$" portfolioData={portfolioData} />
         <PositionStatusToggle status={positionStatus} onChange={setPositionStatus} />
         <Box sx={{ marginTop: (theme) => theme.spacing(6) }}>
-          <PositionTable
-            portfolioData={portfolioData}
-            positions={positionsByAgentGroup.filter((p) => {
-              const isSettled = positionStatus === 'settled';
-              return p.isSettled === isSettled;
-            })}
-            onSelectItem={onSelectItem}
-            onSettle={handleSettle}
-          />
+          {positionStatus === 'open' && positions.length === 0 ? (
+            <NoPositionsOrVaultsFound
+              description="Open your first position here:"
+              navigateTo={`/${routes.LP_POOLS}`}
+              navigateToText="LP POOLS"
+              title="You haven’t provided liquidity to any pool yet."
+            />
+          ) : positionStatus === 'settled' && positions.length === 0 ? (
+            <NoPositionsOrVaultsFound
+              description="Settled positions are listed here, to help you keep track of all your LP activities."
+              title="Settled positions will appear here."
+            />
+          ) : (
+            <PositionTable
+              portfolioData={portfolioData}
+              positions={positions}
+              onSelectItem={onSelectItem}
+              onSettle={handleSettle}
+            />
+          )}
         </Box>
       </>
     );
