@@ -10,8 +10,8 @@ export type TriggerProps = {
 
 export type ModalProps = Omit<MuiModalProps, 'open'> & {
   open: boolean;
-  onOpen: () => void;
-  trigger: React.FunctionComponent<TriggerProps> | React.ReactElement | string;
+  onOpen?: () => void;
+  trigger?: React.FunctionComponent<TriggerProps> | React.ReactElement | string;
 };
 
 export const Modal: React.FunctionComponent<ModalProps> = ({
@@ -23,6 +23,10 @@ export const Modal: React.FunctionComponent<ModalProps> = ({
   ...props
 }) => {
   const renderTrigger = () => {
+    if (!Trigger) {
+      return null;
+    }
+
     if (typeof Trigger === 'string') {
       return <Button onClick={onOpen}>{Trigger}</Button>;
     }
