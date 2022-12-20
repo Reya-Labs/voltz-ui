@@ -30,30 +30,46 @@ const options: {
 
 export type AutomaticRolloverToggleProps = {
   automaticRolloverState: AutomaticRolloverState;
-  onChange: (value: AutomaticRolloverState) => void;
   disabled: boolean;
-  transactionStatus: string;
   showTooltip: boolean;
+  onChangePromise: (value: AutomaticRolloverState) => Promise<void>;
 };
 export const AutomaticRolloverToggle: React.FunctionComponent<AutomaticRolloverToggleProps> = ({
   disabled,
   automaticRolloverState,
-  onChange = doNothing,
-  transactionStatus,
   showTooltip,
+  onChangePromise = doNothing,
 }) => {
+  const [transactionStatus, setTransactionStatus] = useState<
+    'idle' | 'pending' | 'error' | 'success'
+  >('idle');
+  const [transactionStatusText, setTransactionStatusText] = useState('Waiting for confirmation...');
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<AutomaticRolloverState | undefined>(
     undefined,
   );
-  const handleOnProceed = () => {
-    if (selectedOption) {
-      onChange(selectedOption);
-    }
+  const resetModal = () => {
+    setTransactionStatus('idle');
+    setTransactionStatusText('Waiting for confirmation...');
     setIsOpen(false);
   };
+  const handleOnProceed = async () => {
+    if (!selectedOption) {
+      return;
+    }
+    try {
+      setTransactionStatus('pending');
+      setTransactionStatusText('Transaction in progress');
+      await onChangePromise(selectedOption);
+      setIsOpen(false);
+      resetModal();
+    } catch (error) {
+      setTransactionStatus('error');
+      setTransactionStatusText((error as Error)?.message || 'Something went wrong...');
+    }
+  };
   const handleOnCancel = () => {
-    setIsOpen(false);
+    resetModal();
   };
   const handleOpen = (selectedAutoRolloverState: AutomaticRolloverState) => {
     setSelectedOption(selectedAutoRolloverState);
@@ -73,6 +89,7 @@ export const AutomaticRolloverToggle: React.FunctionComponent<AutomaticRolloverT
       <Modal open={isOpen} onClose={handleOnCancel}>
         <ActiveRolloverModalContent
           transactionStatus={transactionStatus}
+          transactionStatusText={transactionStatusText}
           onCancel={handleOnCancel}
           onProceed={handleOnProceed}
         />

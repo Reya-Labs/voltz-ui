@@ -2,7 +2,10 @@ import React from 'react';
 import { generatePath } from 'react-router-dom';
 
 import { Icon } from '../../../../components/atomic/Icon/Icon';
-import { AutomaticRolloverToggle } from '../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
+import {
+  AutomaticRolloverToggle,
+  AutomaticRolloverToggleProps,
+} from '../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
 import { formatPOSIXTimestamp } from '../../../../utilities/date';
 import { doNothing } from '../../../../utilities/doNothing';
 import { compactFormat } from '../../../../utilities/number';
@@ -47,12 +50,11 @@ export type VaultListItemProps = {
     distribution: number;
   }[];
   depositable: boolean;
-  automaticRolloverState: 'active' | 'inactive';
-  onChangeAutomaticRolloverState: (
+  automaticRolloverState: AutomaticRolloverToggleProps['automaticRolloverState'];
+  onChangeAutomaticRolloverStatePromise: (
     vaultId: string,
-    automaticRolloverState: 'active' | 'inactive',
-  ) => void;
-  automaticRolloverStatus: string;
+    automaticRolloverState: AutomaticRolloverToggleProps['automaticRolloverState'],
+  ) => Promise<void>;
 };
 export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
   vaults,
@@ -62,8 +64,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
   depositable,
   id,
   automaticRolloverState,
-  onChangeAutomaticRolloverState = doNothing,
-  automaticRolloverStatus,
+  onChangeAutomaticRolloverStatePromise = doNothing,
 }) => {
   const TotalAPYTypography = totalApy >= 0 ? PositiveAPYTypography : NegativeAPYTypography;
 
@@ -94,10 +95,9 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
             automaticRolloverState={automaticRolloverState}
             disabled={false}
             showTooltip={false}
-            transactionStatus={automaticRolloverStatus}
-            onChange={(value) => {
-              onChangeAutomaticRolloverState(id, value);
-            }}
+            onChangePromise={async (value) =>
+              await onChangeAutomaticRolloverStatePromise(id, value)
+            }
           />
         </ActionsBox>
       </VaultListItemTopBox>

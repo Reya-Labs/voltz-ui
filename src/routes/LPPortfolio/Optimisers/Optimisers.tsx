@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import { Loading } from '../../../components/atomic/Loading/Loading';
 import { Panel } from '../../../components/atomic/Panel/Panel';
+import { AutomaticRolloverToggleProps } from '../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
 import { useWallet } from '../../../hooks/useWallet';
 import { useLPVaults } from '../../LPOptimisers/useLPVaults';
 import { routes } from '../../paths';
@@ -16,9 +17,6 @@ export const Optimisers: React.FunctionComponent = () => {
   // todo: read the value from SDK
   const [automaticRolloverState, setAutomaticRolloverState] = useState<'active' | 'inactive'>(
     'inactive',
-  );
-  const [automaticRolloverStatus, setAutomaticRolloverStatus] = useState<string>(
-    'Waiting for confirmation...',
   );
   if (!signer || !vaultsInitialised || !vaultsInitialisedWithSigner) {
     return (
@@ -44,6 +42,18 @@ export const Optimisers: React.FunctionComponent = () => {
       </OptimisersBox>
     );
   }
+  const automaticRolloverChangePromise = async (
+    vaultId: string,
+    value: AutomaticRolloverToggleProps['automaticRolloverState'],
+  ) => {
+    try {
+      // todo: SDK integration here
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setAutomaticRolloverState(value);
+    } catch (err) {
+      throw new Error('Error');
+    }
+  };
 
   return (
     <OptimisersBox>
@@ -53,7 +63,6 @@ export const Optimisers: React.FunctionComponent = () => {
         <VaultListItem
           key={vault.id}
           automaticRolloverState={automaticRolloverState}
-          automaticRolloverStatus={automaticRolloverStatus}
           depositable={vault.depositable}
           id={vault.id}
           token={vault.metadata.token}
@@ -66,10 +75,7 @@ export const Optimisers: React.FunctionComponent = () => {
             currentBalance: vault.userIndividualCommittedDeposits[vaultIndex],
             distribution: vVaults.weight,
           }))}
-          onChangeAutomaticRolloverState={(id, value) => {
-            setAutomaticRolloverState(value);
-            setAutomaticRolloverStatus('Todo: finish SDK integration');
-          }}
+          onChangeAutomaticRolloverStatePromise={automaticRolloverChangePromise}
         />
       ))}
     </OptimisersBox>
