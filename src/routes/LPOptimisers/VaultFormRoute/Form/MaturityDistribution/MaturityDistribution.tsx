@@ -2,9 +2,14 @@ import React from 'react';
 
 import { doNothing } from '../../../../../utilities/doNothing';
 import {
+  AutomaticRolloverToggle,
+  AutomaticRolloverToggleProps,
+} from './AutomaticRolloverToggle/AutomaticRolloverToggle';
+import {
   MaturityDistributionBox,
   MaturityDistributionErrorTypography,
   MaturityDistributionsBox,
+  ToggleBox,
 } from './MaturityDistribution.styled';
 import { MaturityDistributionEntry } from './MaturityDistributionEntry/MaturityDistributionEntry';
 import { MaturityDistributionHeader } from './MaturityDistributionHeader/MaturityDistributionHeader';
@@ -27,6 +32,9 @@ export type MaturityDistributionProps = {
   weights: Weight[];
   combinedWeightValue: number;
   disabledToggle: boolean;
+  automaticRolloverStatus?: string;
+  automaticRolloverState?: AutomaticRolloverToggleProps['automaticRolloverState'];
+  onAutomaticRolloverStateToggle?: AutomaticRolloverToggleProps['onChange'];
 };
 
 export const MaturityDistribution: React.FunctionComponent<MaturityDistributionProps> = ({
@@ -36,19 +44,32 @@ export const MaturityDistribution: React.FunctionComponent<MaturityDistributionP
   weights,
   combinedWeightValue,
   disabledToggle,
+  automaticRolloverState,
+  onAutomaticRolloverStateToggle,
+  automaticRolloverStatus,
 }) => {
   const allVaultsWeightEditingDisabled =
     distribution === 'automatic' ? true : weights.every((w) => w.vaultDisabled);
 
   return (
     <MaturityDistributionBox>
-      {weights.length > 1 && (
-        <MaturityDistributionToggle
-          disabled={disabledToggle}
-          distribution={distribution}
-          onChange={onDistributionToggle}
-        />
-      )}
+      <ToggleBox>
+        {weights.length > 1 && (
+          <MaturityDistributionToggle
+            disabled={disabledToggle}
+            distribution={distribution}
+            onChange={onDistributionToggle}
+          />
+        )}
+        {automaticRolloverStatus && onAutomaticRolloverStateToggle && automaticRolloverState && (
+          <AutomaticRolloverToggle
+            automaticRolloverState={automaticRolloverState}
+            disabled={disabledToggle}
+            transactionStatus={automaticRolloverStatus}
+            onChange={onAutomaticRolloverStateToggle}
+          />
+        )}
+      </ToggleBox>
       <MaturityDistributionHeader />
       <MaturityDistributionsBox>
         {weights.map((weight, index) => (
