@@ -10,6 +10,14 @@ export const MaturityDistributionBox = styled(Box)`
   width: 100%;
 `;
 
+export const ToggleBox = styled(Box)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+`;
+
 export const MaturityDistributionErrorTypography = styled(Typography)`
   color: ${colors.wildStrawberry.base};
   font-family: 'PixelOperatorMono', monospace;

@@ -9,7 +9,7 @@ export const HeaderBox = styled(Box)`
   flex-direction: row;
   /* Liberty 6 */
   border-bottom: 1px solid #19152a;
-  padding: 0px 38px;
+  padding: 0px 24px 0px 38px;
 `;
 
 export const HeaderTypography = styled(Typography)`
@@ -31,3 +31,6 @@ export const BalanceTypography = styled(HeaderTypography)`
 `;
 
 export const APYTypography = styled(HeaderTypography)``;
+export const AutomaticRolloverTypography = styled(HeaderTypography)`
+  margin-left: auto;
+`;

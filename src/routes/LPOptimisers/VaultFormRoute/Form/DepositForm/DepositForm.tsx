@@ -9,6 +9,7 @@ import { DepositAmountInput } from '../DepositAmountInput/DepositAmountInput';
 import { DepositInfo } from '../DepositInfo/DepositInfo';
 import { FormActionButton } from '../FormActionButton/FormActionButton';
 import { HintText } from '../HintText/HintText';
+import { AutomaticRolloverToggleProps } from '../MaturityDistribution/AutomaticRolloverToggle/AutomaticRolloverToggle';
 import {
   MaturityDistribution,
   MaturityDistributionProps,
@@ -34,6 +35,9 @@ export type FormProps = {
   distribution: MaturityDistributionProps['distribution'];
   onDistributionToggle: MaturityDistributionProps['onDistributionToggle'];
   onManualDistributionsUpdate: MaturityDistributionProps['onManualDistributionsUpdate'];
+  automaticRolloverState: AutomaticRolloverToggleProps['automaticRolloverState'];
+  automaticRolloverStatus: AutomaticRolloverToggleProps['transactionStatus'];
+  onAutomaticRolloverStateToggle: AutomaticRolloverToggleProps['onChange'];
 };
 
 export const DepositForm: React.FunctionComponent<FormProps> = ({
@@ -52,6 +56,9 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
   onManualDistributionsUpdate,
   combinedWeightValue,
   depositValue,
+  automaticRolloverState,
+  onAutomaticRolloverStateToggle,
+  automaticRolloverStatus,
 }: FormProps) => {
   const subtext = `WALLET BALANCE: ${
     isUndefined(lpVault.userWalletBalance)
@@ -63,10 +70,13 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
     <FormBox>
       <DepositInfo mellowProduct={lpVault} weights={weights.map((w) => w.distribution)} />
       <MaturityDistribution
+        automaticRolloverState={automaticRolloverState}
+        automaticRolloverStatus={automaticRolloverStatus}
         combinedWeightValue={combinedWeightValue}
         disabledToggle={loading}
         distribution={distribution}
         weights={weights}
+        onAutomaticRolloverStateToggle={onAutomaticRolloverStateToggle}
         onDistributionToggle={onDistributionToggle}
         onManualDistributionsUpdate={onManualDistributionsUpdate}
       />

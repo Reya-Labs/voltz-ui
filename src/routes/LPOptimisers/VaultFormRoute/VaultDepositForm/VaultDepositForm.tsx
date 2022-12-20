@@ -24,6 +24,13 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
 
   const [selectedDeposit, setSelectedDeposit] = useState<number>(0);
   const [distribution, setDistribution] = useState<'automatic' | 'manual'>('automatic');
+  // todo: read the value from SDK
+  const [automaticRolloverState, setAutomaticRolloverState] = useState<'active' | 'inactive'>(
+    'inactive',
+  );
+  const [automaticRolloverStatus, setAutomaticRolloverStatus] = useState<string>(
+    'Waiting for confirmation...',
+  );
   const [manualWeights, setManualWeights] = useState<FormProps['weights']>(
     automaticWeights.map((a) => ({ ...a })),
   );
@@ -103,6 +110,8 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
 
   return (
     <DepositForm
+      automaticRolloverState={automaticRolloverState}
+      automaticRolloverStatus={automaticRolloverStatus}
       combinedWeightValue={combinedWeightValue}
       depositValue={selectedDeposit}
       disabled={
@@ -115,6 +124,11 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
       submitText={submissionState.submitText}
       success={submissionState.success}
       weights={weights}
+      onAutomaticRolloverStateToggle={(state) => {
+        // todo: do SDK integration here
+        setAutomaticRolloverState(state);
+        setAutomaticRolloverStatus('TODO: integration with SDK');
+      }}
       onChangeDeposit={setSelectedDeposit}
       onDistributionToggle={setDistribution}
       onGoBack={onGoBack}
