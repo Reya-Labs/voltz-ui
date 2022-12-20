@@ -25,7 +25,7 @@ type WithdrawRolloverFormProps = {
   };
   onRolloverClick: () => void;
   onWithdrawClick: () => void;
-  depositValue: string;
+  depositValue: number;
   rolloverDisabled: boolean;
   withdrawDisabled: boolean;
   rolloverLoading: boolean;
