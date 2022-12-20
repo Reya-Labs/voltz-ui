@@ -1,6 +1,7 @@
 import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useState } from 'react';
 
+import { AutomaticRolloverToggleProps } from '../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
 import { DepositForm, FormProps } from '../Form/DepositForm/DepositForm';
 import { DepositStates, getSubmissionState } from './mappers';
 
@@ -25,12 +26,8 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
   const [selectedDeposit, setSelectedDeposit] = useState<number>(0);
   const [distribution, setDistribution] = useState<'automatic' | 'manual'>('automatic');
   // todo: read the value from SDK
-  const [automaticRolloverState, setAutomaticRolloverState] = useState<'active' | 'inactive'>(
-    'inactive',
-  );
-  const [automaticRolloverStatus, setAutomaticRolloverStatus] = useState<string>(
-    'Waiting for confirmation...',
-  );
+  const [automaticRolloverState, setAutomaticRolloverState] =
+    useState<AutomaticRolloverToggleProps['automaticRolloverState']>('inactive');
   const [manualWeights, setManualWeights] = useState<FormProps['weights']>(
     automaticWeights.map((a) => ({ ...a })),
   );
@@ -108,10 +105,22 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
     loading,
   });
 
+  const automaticRolloverChangePromise = async (
+    value: AutomaticRolloverToggleProps['automaticRolloverState'],
+  ) => {
+    try {
+      // todo: SDK integration here
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setAutomaticRolloverState(value);
+    } catch (err) {
+      throw new Error('Error');
+    }
+  };
+
   return (
     <DepositForm
+      automaticRolloverChangePromise={automaticRolloverChangePromise}
       automaticRolloverState={automaticRolloverState}
-      automaticRolloverStatus={automaticRolloverStatus}
       combinedWeightValue={combinedWeightValue}
       depositValue={selectedDeposit}
       disabled={
@@ -124,11 +133,6 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
       submitText={submissionState.submitText}
       success={submissionState.success}
       weights={weights}
-      onAutomaticRolloverStateToggle={(state) => {
-        // todo: do SDK integration here
-        setAutomaticRolloverState(state);
-        setAutomaticRolloverStatus('TODO: integration with SDK');
-      }}
       onChangeDeposit={setSelectedDeposit}
       onDistributionToggle={setDistribution}
       onGoBack={onGoBack}

@@ -36,8 +36,7 @@ export type FormProps = {
   onDistributionToggle: MaturityDistributionProps['onDistributionToggle'];
   onManualDistributionsUpdate: MaturityDistributionProps['onManualDistributionsUpdate'];
   automaticRolloverState: AutomaticRolloverToggleProps['automaticRolloverState'];
-  automaticRolloverStatus: AutomaticRolloverToggleProps['transactionStatus'];
-  onAutomaticRolloverStateToggle: AutomaticRolloverToggleProps['onChange'];
+  automaticRolloverChangePromise: AutomaticRolloverToggleProps['onChangePromise'];
 };
 
 export const DepositForm: React.FunctionComponent<FormProps> = ({
@@ -57,8 +56,7 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
   combinedWeightValue,
   depositValue,
   automaticRolloverState,
-  onAutomaticRolloverStateToggle,
-  automaticRolloverStatus,
+  automaticRolloverChangePromise,
 }: FormProps) => {
   const subtext = `WALLET BALANCE: ${
     isUndefined(lpVault.userWalletBalance)
@@ -70,13 +68,12 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
     <FormBox>
       <DepositInfo mellowProduct={lpVault} weights={weights.map((w) => w.distribution)} />
       <MaturityDistribution
+        automaticRolloverChangePromise={automaticRolloverChangePromise}
         automaticRolloverState={automaticRolloverState}
-        automaticRolloverStatus={automaticRolloverStatus}
         combinedWeightValue={combinedWeightValue}
         disabledToggle={loading}
         distribution={distribution}
         weights={weights}
-        onAutomaticRolloverStateToggle={onAutomaticRolloverStateToggle}
         onDistributionToggle={onDistributionToggle}
         onManualDistributionsUpdate={onManualDistributionsUpdate}
       />
