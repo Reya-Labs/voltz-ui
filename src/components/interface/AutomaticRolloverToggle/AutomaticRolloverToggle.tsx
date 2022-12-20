@@ -1,9 +1,9 @@
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import React, { useState } from 'react';
 
-import { IconLabel } from '../../../../../../components/composite/IconLabel/IconLabel';
-import { Modal } from '../../../../../../components/composite/Modal/Modal';
-import { doNothing } from '../../../../../../utilities/doNothing';
+import { doNothing } from '../../../utilities/doNothing';
+import { IconLabel } from '../../composite/IconLabel/IconLabel';
+import { Modal } from '../../composite/Modal/Modal';
 import { ActiveRolloverModalContent } from './ActiveRolloverModalContent/ActiveRolloverModalContent';
 import {
   AutomaticRolloverToggleBox,
@@ -33,12 +33,14 @@ export type AutomaticRolloverToggleProps = {
   onChange: (value: AutomaticRolloverState) => void;
   disabled: boolean;
   transactionStatus: string;
+  showTooltip: boolean;
 };
 export const AutomaticRolloverToggle: React.FunctionComponent<AutomaticRolloverToggleProps> = ({
   disabled,
   automaticRolloverState,
   onChange = doNothing,
   transactionStatus,
+  showTooltip,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<AutomaticRolloverState | undefined>(
@@ -59,9 +61,15 @@ export const AutomaticRolloverToggle: React.FunctionComponent<AutomaticRolloverT
   };
   return (
     <AutomaticRolloverToggleBox>
-      <AutomaticRolloverToggleInputLabel shrink>
-        <IconLabel icon="information-circle" info="TODO: Missing copy" label="AUTOMATIC ROLLOVER" />
-      </AutomaticRolloverToggleInputLabel>
+      {showTooltip ? (
+        <AutomaticRolloverToggleInputLabel shrink>
+          <IconLabel
+            icon="information-circle"
+            info="TODO: Missing copy"
+            label="AUTOMATIC ROLLOVER"
+          />
+        </AutomaticRolloverToggleInputLabel>
+      ) : null}
       <Modal open={isOpen} onClose={handleOnCancel}>
         <ActiveRolloverModalContent
           transactionStatus={transactionStatus}

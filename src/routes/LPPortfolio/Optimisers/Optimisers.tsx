@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Loading } from '../../../components/atomic/Loading/Loading';
 import { Panel } from '../../../components/atomic/Panel/Panel';
@@ -13,7 +13,13 @@ import { VaultListItem } from './VaultListItem/VaultListItem';
 export const Optimisers: React.FunctionComponent = () => {
   const { signer } = useWallet();
   const { lpVaults, vaultsInitialised, vaultsInitialisedWithSigner } = useLPVaults(signer);
-
+  // todo: read the value from SDK
+  const [automaticRolloverState, setAutomaticRolloverState] = useState<'active' | 'inactive'>(
+    'inactive',
+  );
+  const [automaticRolloverStatus, setAutomaticRolloverStatus] = useState<string>(
+    'Waiting for confirmation...',
+  );
   if (!signer || !vaultsInitialised || !vaultsInitialisedWithSigner) {
     return (
       <OptimisersBox>
@@ -46,6 +52,8 @@ export const Optimisers: React.FunctionComponent = () => {
       {vaultsWithDeposit.map((vault) => (
         <VaultListItem
           key={vault.id}
+          automaticRolloverState={automaticRolloverState}
+          automaticRolloverStatus={automaticRolloverStatus}
           depositable={vault.depositable}
           id={vault.id}
           token={vault.metadata.token}
@@ -58,6 +66,10 @@ export const Optimisers: React.FunctionComponent = () => {
             currentBalance: vault.userIndividualCommittedDeposits[vaultIndex],
             distribution: vVaults.weight,
           }))}
+          onChangeAutomaticRolloverState={(id, value) => {
+            setAutomaticRolloverState(value);
+            setAutomaticRolloverStatus('Todo: finish SDK integration');
+          }}
         />
       ))}
     </OptimisersBox>

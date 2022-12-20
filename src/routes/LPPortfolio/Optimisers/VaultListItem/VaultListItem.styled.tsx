@@ -11,6 +11,14 @@ export const VaultListItemBox = styled(Box)`
   border-radius: 4px;
 `;
 
+export const ActionsBox = styled(Box)`
+  margin-left: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 16px;
+`;
+
 export const VaultListItemTopBox = styled(Box)`
   display: flex;
   flex-direction: row;
@@ -91,7 +99,6 @@ export const DepositButton = styled(Link)`
   line-height: 14px;
   padding: 8px 13px;
   text-decoration: none;
-  margin-left: auto;
   color: ${colors.skyBlueCrayola.base};
 `;
 
