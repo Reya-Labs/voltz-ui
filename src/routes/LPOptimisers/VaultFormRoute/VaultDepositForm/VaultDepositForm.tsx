@@ -104,7 +104,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
   return (
     <DepositForm
       combinedWeightValue={combinedWeightValue}
-      depositValue={selectedDeposit.toString()}
+      depositValue={selectedDeposit}
       disabled={
         !sufficientFunds || submissionState.disabled || loading || combinedWeightValue !== 100
       }

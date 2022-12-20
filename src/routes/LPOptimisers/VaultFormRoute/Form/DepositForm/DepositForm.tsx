@@ -2,7 +2,7 @@ import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import isUndefined from 'lodash.isundefined';
 import React from 'react';
 
-import { formatCurrency, toUSFormat } from '../../../../../utilities/number';
+import { formatCurrency } from '../../../../../utilities/number';
 import { AboutYourFunds } from '../AboutYourFunds/AboutYourFunds';
 import { BackButton, ButtonBox, FormBox, FullButtonBox } from '../CommonForm.styled';
 import { DepositAmountInput } from '../DepositAmountInput/DepositAmountInput';
@@ -17,7 +17,7 @@ import {
 export type FormProps = {
   lpVault: MellowProduct;
   onChangeDeposit: (value: number) => void;
-  depositValue: string;
+  depositValue: number;
   submitText: string;
   hintText: {
     text: string;
@@ -59,11 +59,6 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
       : `${formatCurrency(lpVault.userWalletBalance, true)} ${lpVault.metadata.token}`
   }`;
 
-  const handleChange = (newValue: string | undefined) => {
-    const usFormatted = toUSFormat(newValue);
-    onChangeDeposit(!isUndefined(usFormatted) ? parseFloat(usFormatted) : 0);
-  };
-
   return (
     <FormBox>
       <DepositInfo mellowProduct={lpVault} weights={weights.map((w) => w.distribution)} />
@@ -80,7 +75,7 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
         subtext={subtext}
         token={lpVault.metadata.token}
         value={depositValue}
-        onChange={handleChange}
+        onChange={onChangeDeposit}
       />
       <FullButtonBox>
         <ButtonBox>
