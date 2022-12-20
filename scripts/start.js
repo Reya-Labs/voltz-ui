@@ -27,14 +27,10 @@ const {
   prepareUrls,
 } = require('react-dev-utils/WebpackDevServerUtils');
 const openBrowser = require('react-dev-utils/openBrowser');
-const semver = require('semver');
 const paths = require('../config/paths');
 const configFactory = require('../config/webpack.config');
 const createDevServerConfig = require('../config/webpackDevServer.config');
-const getClientEnvironment = require('../config/env');
-const react = require(require.resolve('react', { paths: [paths.appPath] }));
 
-const env = getClientEnvironment(paths.publicUrlOrPath.slice(0, -1));
 const useYarn = fs.existsSync(paths.yarnLockFile);
 const isInteractive = process.stdout.isTTY;
 
@@ -45,19 +41,7 @@ if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
 
 // Tools like Cloud9 rely on this.
 const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 3000;
-const HOST = process.env.HOST || '0.0.0.0';
-
-if (process.env.HOST) {
-  console.log(
-    chalk.cyan(
-      `Attempting to bind to HOST environment variable: ${chalk.yellow(
-        chalk.bold(process.env.HOST),
-      )}`,
-    ),
-  );
-  console.log(`If this was unintentional, check that you haven't mistakenly set it in your shell.`);
-  console.log(`Learn more here: ${chalk.yellow('https://cra.link/advanced-config')}`);
-}
+const HOST = '0.0.0.0';
 
 // We require that you explicitly set browsers and do not fall back to
 // browserslist defaults.
@@ -103,14 +87,6 @@ checkBrowsers(paths.appPath, isInteractive)
     devServer.startCallback(() => {
       if (isInteractive) {
         clearConsole();
-      }
-
-      if (env.raw.FAST_REFRESH && semver.lt(react.version, '16.10.0')) {
-        console.log(
-          chalk.yellow(
-            `Fast Refresh requires React 16.10 or higher. You are using React ${react.version}.`,
-          ),
-        );
       }
 
       console.log(chalk.cyan('Starting the development server...\n'));

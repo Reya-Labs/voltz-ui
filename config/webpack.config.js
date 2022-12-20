@@ -360,7 +360,7 @@ module.exports = function (webpackEnv) {
                 compact: isEnvProduction,
               },
             },
-            // Process any JS outside of the app with Babel.
+            // Process any JS outside the app with Babel.
             // Unlike the application JS, we only compile the standard ES features.
             {
               test: /\.(js|mjs)$/,
@@ -390,7 +390,7 @@ module.exports = function (webpackEnv) {
             // In production, we use MiniCSSExtractPlugin to extract that CSS
             // to a file, but in development "style" loader enables hot editing
             // of CSS.
-            // By default we support CSS Modules with the extension .module.css
+            // By default, we support CSS Modules with the extension .module.css
             {
               test: cssRegex,
               exclude: cssModuleRegex,

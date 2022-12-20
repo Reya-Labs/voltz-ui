@@ -255,7 +255,6 @@
     "resolve-url-loader": "4.0.0",
     "semantic-release": "19.0.5",
     "semantic-release-cli": "5.4.4",
-    "semver": "7.3.5",
     "source-map-loader": "3.0.1",
     "style-loader": "3.3.1",
     "terser-webpack-plugin": "5.3.0",
