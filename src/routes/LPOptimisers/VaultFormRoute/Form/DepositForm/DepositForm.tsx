@@ -2,6 +2,7 @@ import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import isUndefined from 'lodash.isundefined';
 import React from 'react';
 
+import { AutomaticRolloverToggleProps } from '../../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
 import { formatCurrency } from '../../../../../utilities/number';
 import { AboutYourFunds } from '../AboutYourFunds/AboutYourFunds';
 import { BackButton, ButtonBox, FormBox, FullButtonBox } from '../CommonForm.styled';
@@ -9,7 +10,6 @@ import { DepositAmountInput } from '../DepositAmountInput/DepositAmountInput';
 import { DepositInfo } from '../DepositInfo/DepositInfo';
 import { FormActionButton } from '../FormActionButton/FormActionButton';
 import { HintText } from '../HintText/HintText';
-import { AutomaticRolloverToggleProps } from '../MaturityDistribution/AutomaticRolloverToggle/AutomaticRolloverToggle';
 import {
   MaturityDistribution,
   MaturityDistributionProps,

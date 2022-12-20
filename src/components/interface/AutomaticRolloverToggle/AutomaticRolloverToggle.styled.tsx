@@ -3,8 +3,8 @@ import InputLabel from '@mui/material/InputLabel';
 import { styled } from '@mui/material/styles';
 import ToggleButtonComponent from '@mui/material/ToggleButton';
 
-import { Typography } from '../../../../../../components/atomic/Typography/Typography';
-import colors from '../../../../../../theme/colors';
+import colors from '../../../theme/colors';
+import { Typography } from '../../atomic/Typography/Typography';
 
 export const AutomaticRolloverToggleTypography = styled(Typography)`
   font-weight: 400;
@@ -19,7 +19,6 @@ export const AutomaticRolloverToggleBox = styled(Box)`
   display: flex;
   flex-direction: column;
   row-gap: ${({ theme }) => theme.spacing(2)};
-  margin-bottom: ${({ theme }) => theme.spacing(4)};
 `;
 
 export const ToggleButton = styled(ToggleButtonComponent)`

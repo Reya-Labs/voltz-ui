@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { doNothing } from '../../../../../utilities/doNothing';
 import {
   AutomaticRolloverToggle,
   AutomaticRolloverToggleProps,
-} from './AutomaticRolloverToggle/AutomaticRolloverToggle';
+} from '../../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
+import { doNothing } from '../../../../../utilities/doNothing';
 import {
   MaturityDistributionBox,
   MaturityDistributionErrorTypography,
@@ -65,6 +65,7 @@ export const MaturityDistribution: React.FunctionComponent<MaturityDistributionP
           <AutomaticRolloverToggle
             automaticRolloverState={automaticRolloverState}
             disabled={disabledToggle}
+            showTooltip={true}
             transactionStatus={automaticRolloverStatus}
             onChange={onAutomaticRolloverStateToggle}
           />

@@ -2,10 +2,13 @@ import React from 'react';
 import { generatePath } from 'react-router-dom';
 
 import { Icon } from '../../../../components/atomic/Icon/Icon';
+import { AutomaticRolloverToggle } from '../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
 import { formatPOSIXTimestamp } from '../../../../utilities/date';
+import { doNothing } from '../../../../utilities/doNothing';
 import { compactFormat } from '../../../../utilities/number';
 import { routes } from '../../../paths';
 import {
+  ActionsBox,
   CurrentBalanceBox,
   DepositButton,
   DistributionBox,
@@ -44,6 +47,12 @@ export type VaultListItemProps = {
     distribution: number;
   }[];
   depositable: boolean;
+  automaticRolloverState: 'active' | 'inactive';
+  onChangeAutomaticRolloverState: (
+    vaultId: string,
+    automaticRolloverState: 'active' | 'inactive',
+  ) => void;
+  automaticRolloverStatus: string;
 };
 export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
   vaults,
@@ -52,8 +61,12 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
   token,
   depositable,
   id,
+  automaticRolloverState,
+  onChangeAutomaticRolloverState = doNothing,
+  automaticRolloverStatus,
 }) => {
   const TotalAPYTypography = totalApy >= 0 ? PositiveAPYTypography : NegativeAPYTypography;
+
   return (
     <VaultListItemBox>
       <VaultListItemTopBox>
@@ -66,16 +79,27 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
           <TokenTypography>{token.toUpperCase()}</TokenTypography>
         </TotalBalanceTypography>
         <TotalAPYTypography>{totalApy}%</TotalAPYTypography>
-        {depositable ? (
-          <DepositButton
-            to={`/${generatePath(routes.LP_OPTIMISERS_DEPOSIT_FORM, {
-              actions: 'deposit',
-              vaultId: id,
-            })}`}
-          >
-            DEPOSIT
-          </DepositButton>
-        ) : null}
+        <ActionsBox>
+          {depositable ? (
+            <DepositButton
+              to={`/${generatePath(routes.LP_OPTIMISERS_DEPOSIT_FORM, {
+                actions: 'deposit',
+                vaultId: id,
+              })}`}
+            >
+              DEPOSIT
+            </DepositButton>
+          ) : null}
+          <AutomaticRolloverToggle
+            automaticRolloverState={automaticRolloverState}
+            disabled={false}
+            showTooltip={false}
+            transactionStatus={automaticRolloverStatus}
+            onChange={(value) => {
+              onChangeAutomaticRolloverState(id, value);
+            }}
+          />
+        </ActionsBox>
       </VaultListItemTopBox>
       <VaultListItemBottomBox>
         <HeaderBox>
