@@ -12,11 +12,11 @@ import {
   Swap,
   Token,
 } from '@voltz-protocol/v1-sdk';
-import { providers } from 'ethers';
 import JSBI from 'jsbi';
 
 import { Wallet } from '../../contexts/WalletContext/types';
 import { GetWalletQuery } from '../../graphql';
+import { getConfig } from '../voltz-config/config';
 
 type MEPositionQueryData = NonNullable<GetWalletQuery['wallet']>['positions'][number];
 
@@ -70,6 +70,8 @@ export const MEPositionFactory = (
     settlements,
   } = positionData;
 
+  const config = getConfig();
+
   return new Position({
     id: positionId,
     createdTimestamp: JSBI.BigInt(positionCreatedTimestamp),
@@ -87,7 +89,7 @@ export const MEPositionFactory = (
     amm: new AMM({
       id: ammId,
       signer,
-      provider: providers.getDefaultProvider(process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK),
+      provider: config.PROVIDER,
       rateOracle: new RateOracle({
         id: rateOracleAddress,
         protocolId: parseInt(protocolId as string, 10),
@@ -97,7 +99,7 @@ export const MEPositionFactory = (
         name: tokenName,
         decimals: decimals as number,
       }),
-      factoryAddress: process.env.REACT_APP_FACTORY_ADDRESS || '0x',
+      factoryAddress: config.factoryAddress,
       marginEngineAddress,
       updatedTimestamp: JSBI.BigInt(ammUpdatedTimestamp),
       termStartTimestamp: JSBI.BigInt(termStartTimestamp),
