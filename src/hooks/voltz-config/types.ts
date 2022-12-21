@@ -2,7 +2,7 @@ type PoolConfiguration = {
     name: string;
     id: string;
     show: {
-        show: boolean;
+        general: boolean;
         trader: boolean;
     };
     traderWithdrawable: boolean;
