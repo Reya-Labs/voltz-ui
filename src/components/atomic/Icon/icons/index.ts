@@ -83,7 +83,7 @@ export { ReactComponent as S2MellowLpVaultTier1 } from './badges/season2/s2Mello
 export { ReactComponent as S2MellowLpVaultTier2 } from './badges/season2/s2MellowLpVaultTier2.svg';
 export { ReactComponent as S2MellowLpVaultTier3 } from './badges/season2/s2MellowLpVaultTier3.svg';
 export { ReactComponent as S2MoneyMoneyMoney } from './badges/season2/s2MoneyMoneyMoney.svg';
-export { ReactComponent as S2Rainmaker } from './badges/season2/s2RainMaker.svg';
+export { ReactComponent as S2Rainmaker } from './badges/season2/s2Rainmaker.svg';
 export { ReactComponent as S2SushiRoll } from './badges/season2/s2SushiRoll.svg';
 export { ReactComponent as S2TopTrader } from './badges/season2/s2TopTrader.svg';
 export { ReactComponent as S2WaterHose } from './badges/season2/s2WaterHose.svg';
