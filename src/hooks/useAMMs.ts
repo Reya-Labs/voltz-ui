@@ -1,5 +1,4 @@
 import { AMM, RateOracle, Token } from '@voltz-protocol/v1-sdk';
-import { providers } from 'ethers';
 import JSBI from 'jsbi';
 import { useCallback, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -7,6 +6,7 @@ import { useLocation } from 'react-router-dom';
 import { Amm_OrderBy, useGetAmMsQuery } from '../graphql';
 import { routes } from '../routes/paths';
 import { useWallet } from './useWallet';
+import { getConfig } from './voltz-config/config';
 
 export type UseAMMsResult = {
   amms?: AMM[];
@@ -27,6 +27,8 @@ export const useAMMs = (): UseAMMsResult => {
 
   const amms = useMemo(() => {
     if (data && !loading && !error) {
+      const config = getConfig();
+
       let ammsData = data.amms.map(
         ({
           id: ammId,
@@ -48,7 +50,7 @@ export const useAMMs = (): UseAMMsResult => {
           new AMM({
             id: ammId,
             signer,
-            provider: providers.getDefaultProvider(process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK),
+            provider: config.PROVIDER,
             rateOracle: new RateOracle({
               id: rateOracleAddress,
               protocolId: parseInt(protocolId as string, 10),
@@ -58,7 +60,7 @@ export const useAMMs = (): UseAMMsResult => {
               name: tokenName,
               decimals: decimals as number,
             }),
-            factoryAddress: process.env.REACT_APP_FACTORY_ADDRESS || '0x',
+            factoryAddress: config.factoryAddress || '0x',
             marginEngineAddress,
             updatedTimestamp: ammUpdatedTimestamp as JSBI,
             termStartTimestamp: termStartTimestamp as JSBI,
@@ -70,28 +72,21 @@ export const useAMMs = (): UseAMMsResult => {
             totalLiquidity: totalLiquidity as JSBI,
           }),
       );
-      if (!process.env.REACT_APP_WHITELIST || process.env.REACT_APP_WHITELIST === `UNPROVIDED`) {
-        return ammsData;
-      } else {
+
+      if (config.apply) {
+        const whitelist = config.pools.filter((pool) => pool.show).map((pool) => pool.id);
+        ammsData = ammsData?.filter((amm) => whitelist.includes(amm.id.toLowerCase()));
+
         if (
-          pathname !== `/${routes.TRADER_POOLS}` &&
-          pathname !== `/${routes.PORTFOLIO}` &&
-          process.env.REACT_APP_LP_ONLY_WHITELIST
+          pathname === `/${routes.TRADER_POOLS}` ||
+          pathname === `/${routes.PORTFOLIO}`
         ) {
-          const whitelist = process.env.REACT_APP_LP_ONLY_WHITELIST.split(',').map((s) =>
-            s.trim().toLowerCase(),
-          );
-          ammsData = ammsData?.filter((amm) => whitelist.includes(amm.id.toLowerCase()));
-          return ammsData;
-        }
-        if (process.env.REACT_APP_WHITELIST) {
-          const whitelist = process.env.REACT_APP_WHITELIST.split(',').map((s) =>
-            s.trim().toLowerCase(),
-          );
-          ammsData = ammsData?.filter((amm) => whitelist.includes(amm.id.toLowerCase()));
-          return ammsData;
+          const traderWhitelist = config.pools.filter((pool) => pool.show.trader).map((pool) => pool.id);
+          ammsData = ammsData?.filter((amm) => traderWhitelist.includes(amm.id.toLowerCase()));
         }
       }
+
+      return ammsData;
     }
   }, [loading, error, isSignerAvailable, handleRefetch]);
 
