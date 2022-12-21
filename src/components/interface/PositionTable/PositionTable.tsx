@@ -5,6 +5,7 @@ import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import { Position } from '@voltz-protocol/v1-sdk';
 import React from 'react';
+import { getConfig } from 'src/hooks/voltz-config/config';
 
 import { Agents } from '../../../contexts/AgentContext/types';
 import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
@@ -93,6 +94,8 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
     onSelectItem(positions[index], mode);
   };
 
+  const config = getConfig();
+
   return (
     <>
       {positions.length > 0 && (
@@ -123,6 +126,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                     )}
                     healthFactor={info?.healthFactor}
                     isSettled={pos.isSettled}
+                    poolTraderWithdrawable={config.pools.find((pool) => pool.id === pos.amm.id)?.traderWithdrawable || true}
                     positionType={pos.positionType}
                     rolloverAvailable={rolloverAvailable}
                     onRollover={() => handleSelectRow(index, 'rollover')}

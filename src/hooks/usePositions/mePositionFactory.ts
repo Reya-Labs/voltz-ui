@@ -7,47 +7,29 @@ import {
   MarginUpdate,
   Mint,
   Position,
-  RateOracle,
   Settlement,
   Swap,
-  Token,
 } from '@voltz-protocol/v1-sdk';
 import JSBI from 'jsbi';
 
-import { Wallet } from '../../contexts/WalletContext/types';
 import { GetWalletQuery } from '../../graphql';
-import { getConfig } from '../voltz-config/config';
 
 type MEPositionQueryData = NonNullable<GetWalletQuery['wallet']>['positions'][number];
 
 /**
  * Takes the data received for an ME position from GetWalletQuery and returns a Position class instance
  * @param positionData - The data for a ME position received from the GetWalletQuery graphql query
- * @param signer - The wallet signer
+ * @param amms - The list of amms
  */
 export const MEPositionFactory = (
   positionData: MEPositionQueryData,
-  signer: Wallet['signer'],
-): Position => {
+  amms: AMM[],
+): Position | undefined => {
   const {
     id: positionId,
     createdTimestamp: positionCreatedTimestamp,
     amm: {
-      id: ammId,
-      marginEngine: { id: marginEngineAddress },
-      rateOracle: {
-        id: rateOracleAddress,
-        protocolId,
-        token: { id: tokenAddress, name: tokenName, decimals },
-      },
-      tickSpacing,
-      termStartTimestamp,
-      termEndTimestamp,
-      updatedTimestamp: ammUpdatedTimestamp,
-      tick,
-      txCount,
-      totalNotionalTraded: ammTotalNotionalTraded,
-      totalLiquidity,
+      id: ammId
     },
     owner: { id: ownerAddress },
     tickLower,
@@ -70,7 +52,10 @@ export const MEPositionFactory = (
     settlements,
   } = positionData;
 
-  const config = getConfig();
+  const correspondingAmm = amms.find((amm) => amm.id === ammId);
+  if (!correspondingAmm) {
+    return;
+  }
 
   return new Position({
     id: positionId,
@@ -86,30 +71,7 @@ export const MEPositionFactory = (
     positionType: parseInt(positionType as string),
     isSettled,
     owner: ownerAddress,
-    amm: new AMM({
-      id: ammId,
-      signer,
-      provider: config.PROVIDER,
-      rateOracle: new RateOracle({
-        id: rateOracleAddress,
-        protocolId: parseInt(protocolId as string, 10),
-      }),
-      underlyingToken: new Token({
-        id: tokenAddress,
-        name: tokenName,
-        decimals: decimals as number,
-      }),
-      factoryAddress: config.factoryAddress,
-      marginEngineAddress,
-      updatedTimestamp: JSBI.BigInt(ammUpdatedTimestamp),
-      termStartTimestamp: JSBI.BigInt(termStartTimestamp),
-      termEndTimestamp: JSBI.BigInt(termEndTimestamp),
-      tick: parseInt(tick as string),
-      tickSpacing: parseInt(tickSpacing as string),
-      txCount: parseInt(txCount as string),
-      totalNotionalTraded: ammTotalNotionalTraded as JSBI,
-      totalLiquidity: totalLiquidity as JSBI,
-    }),
+    amm: correspondingAmm,
     mints: mints.map(
       (args) =>
         new Mint({

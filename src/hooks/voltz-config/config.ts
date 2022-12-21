@@ -15,6 +15,7 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
                     show: true,
                     trader: true,
                 },
+                traderWithdrawable: true,
             },
             {
                 name: 'aUSDC_v2',
@@ -23,6 +24,7 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
                     show: true,
                     trader: true,
                 },
+                traderWithdrawable: true,
             },
             {
                 name: 'aUSDC_v3',
@@ -31,22 +33,25 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
                     show: true,
                     trader: true,
                 },
+                traderWithdrawable: true,
             },
             {
                 name: 'aUSDC_v4',
                 id: '0x6db5e4e8732dd6cb1b6e5fbe39fd102d8e76c512', // vamm address
                 show: {
-                    show: false,
+                    show: true,
                     trader: false,
                 },
+                traderWithdrawable: true,
             },
             {
                 name: 'aUSDC_v5',
                 id: '0x368811e781c4300561d1cc204f7333a778d87ad5', // vamm address
                 show: {
-                    show: false,
+                    show: true,
                     trader: false,
                 },
+                traderWithdrawable: true,
             },
 
             // borrow aUSDC pools
@@ -57,6 +62,7 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
                     show: true,
                     trader: true,
                 },
+                traderWithdrawable: true,
             },
 
             // aDAI pools
@@ -67,6 +73,7 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
                     show: true,
                     trader: true,
                 },
+                traderWithdrawable: true,
             },
             {
                 name: 'aDAI_v2',
@@ -75,6 +82,7 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
                     show: true,
                     trader: true,
                 },
+                traderWithdrawable: true,
             },
             {
                 name: 'aDAI_v3',
@@ -83,14 +91,16 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
                     show: true,
                     trader: true,
                 },
+                traderWithdrawable: true,
             },
             {
                 name: 'aDAI_v4',
                 id: '0x7df7aa512f1eb4dd5c1b69486f45fe895ba41ece', // vamm address
                 show: {
-                    show: false,
+                    show: true,
                     trader: false,
                 },
+                traderWithdrawable: true,
             },
             
             // cDAI pools
@@ -101,6 +111,7 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
                     show: true,
                     trader: true,
                 },
+                traderWithdrawable: true,
             },
             {
                 name: 'cDAI_v2',
@@ -109,6 +120,7 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
                     show: true,
                     trader: true,
                 },
+                traderWithdrawable: true,
             },
             {
                 name: 'cDAI_v3',
@@ -117,14 +129,16 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
                     show: true,
                     trader: true,
                 },
+                traderWithdrawable: true,
             },
             {
                 name: 'cDAI_v4',
                 id: '0xef05af8b766b33e8c0fe768278dee326946a4858', // vamm address
                 show: {
-                    show: false,
+                    show: true,
                     trader: false,
                 },
+                traderWithdrawable: true,
             },
 
             // stETH pools
@@ -135,14 +149,16 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
                     show: true,
                     trader: true,
                 },
+                traderWithdrawable: true,
             },
             {
                 name: 'stETH_v2',
                 id: '0x05cae5fe1faab605f795b018be6ba979c2c89cdb', // vamm address
                 show: {
-                    show: false,
+                    show: true,
                     trader: false,
                 },
+                traderWithdrawable: true,
             },
 
             // rETH pools
@@ -153,14 +169,16 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
                     show: true,
                     trader: true,
                 },
+                traderWithdrawable: true,
             },
             {
                 name: 'rETH_v2',
                 id: '0xe07324a394acfff8fe24a09c3f2e2bd62e929efb', // vamm address
                 show: {
-                    show: false,
+                    show: true,
                     trader: false,
                 },
+                traderWithdrawable: true,
             },
 
             // aETH pools
@@ -171,6 +189,7 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
                     show: true,
                     trader: true,
                 },
+                traderWithdrawable: true,
                 rollover: '0x27ed5d356937213f97c9f9cb7593d876e5d30f42',
             },
 
@@ -182,6 +201,7 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
                     show: true,
                     trader: true,
                 },
+                traderWithdrawable: true,
             },
             {
                 name: 'borrow_aETH_v2',
@@ -190,6 +210,7 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
                     show: true,
                     trader: true,
                 },
+                traderWithdrawable: true,
             },
 
             // borrow cUSDT pools
@@ -200,6 +221,7 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
                     show: true,
                     trader: true,
                 },
+                traderWithdrawable: true,
             },
 
             // borrow aUSDT pools
@@ -207,9 +229,10 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
                 name: 'borrow_aUSDT_v1',
                 id: '0x9a37bcc8ff3055d7223b169bc9c9fe2157a1b60e', // vamm address
                 show: {
-                    show: false,
+                    show: true,
                     trader: false,
                 },
+                traderWithdrawable: true,
             },
         ]
     },
