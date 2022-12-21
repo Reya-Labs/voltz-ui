@@ -126,7 +126,10 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                     )}
                     healthFactor={info?.healthFactor}
                     isSettled={pos.isSettled}
-                    poolTraderWithdrawable={config.pools.find((pool) => pool.id === pos.amm.id)?.traderWithdrawable ?? true}
+                    poolTraderWithdrawable={
+                      config.pools.find((pool) => pool.id === pos.amm.id)?.traderWithdrawable ??
+                      true
+                    }
                     positionType={pos.positionType}
                     rolloverAvailable={rolloverAvailable}
                     onRollover={() => handleSelectRow(index, 'rollover')}
