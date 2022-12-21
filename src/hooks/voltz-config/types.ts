@@ -5,6 +5,7 @@ type PoolConfiguration = {
         show: boolean;
         trader: boolean;
     };
+    traderWithdrawable: boolean;
     rollover?: string;
 };
 

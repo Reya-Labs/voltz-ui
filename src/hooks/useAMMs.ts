@@ -84,6 +84,8 @@ export const useAMMs = (): UseAMMsResult => {
           const traderWhitelist = config.pools.filter((pool) => pool.show.trader).map((pool) => pool.id);
           ammsData = ammsData?.filter((amm) => traderWhitelist.includes(amm.id.toLowerCase()));
         }
+
+        ammsData.sort((a, b) => config.pools.findIndex((p) => p.id === a.id.toLowerCase()) - config.pools.findIndex((p) => p.id === b.id.toLowerCase()));
       }
 
       return ammsData;

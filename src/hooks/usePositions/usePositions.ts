@@ -7,6 +7,7 @@ import { Agents } from '../../contexts/AgentContext/types';
 import { actions, selectors } from '../../store';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { useAgent } from '../useAgent';
+import { useAMMs } from '../useAMMs';
 import { useWallet } from '../useWallet';
 import { MEPositionFactory } from './mePositionFactory';
 
@@ -20,15 +21,14 @@ export type usePositionsResult = {
 
 export const usePositions = (): usePositionsResult => {
   const { agent } = useAgent();
-  const { signer, wallet, loading, error } = useWallet();
-  const isSignerAvailable = Boolean(signer);
-  const positionCount = wallet?.positions.length;
+  const { wallet, loading: walletLoading, error: walletError } = useWallet();
+  const { amms, loading: ammLoading, error: ammError } = useAMMs();
 
   const mePositions = useMemo(() => {
-    if (wallet && wallet.positions && !loading && !error) {
-      return wallet.positions.map((positionData) => MEPositionFactory(positionData, signer));
+    if (wallet && wallet.positions && !walletLoading && !walletError && amms && !ammLoading && !ammError) {
+      return wallet.positions.map((positionData) => MEPositionFactory(positionData, amms)).filter((position) => Boolean(position)) as Position[];
     }
-  }, [positionCount, loading, error, isSignerAvailable]);
+  }, [wallet, walletLoading, walletError, amms, ammLoading, ammError]);
 
   const positions = useMemo(() => {
     const _positions = mePositions;
@@ -134,5 +134,5 @@ export const usePositions = (): usePositionsResult => {
     }
   }, [shouldTryToCloseTransactions, positions, dispatch]);
 
-  return { positions, positionsByAgent, positionsByAgentGroup, loading, error };
+  return { positions, positionsByAgent, positionsByAgentGroup, loading: walletLoading || ammLoading, error: walletError || ammError };
 };

@@ -20,6 +20,7 @@ import {
 import { ReactComponent as EditIcon } from './editPosition.svg';
 
 export type PositionTableHeadProps = {
+  poolTraderWithdrawable: boolean;
   currencyCode: string;
   currencySymbol: string;
   feesPositive: boolean;
@@ -53,6 +54,7 @@ const labelStyles: SystemStyleObject<Theme> = {
 };
 
 export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
+  poolTraderWithdrawable,
   currencyCode = '',
   currencySymbol = '',
   feesPositive = true,
@@ -153,7 +155,7 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
           </Box>
         )}
 
-        {beforeMaturity === false && !isSettled && (
+        {beforeMaturity === false && !isSettled && poolTraderWithdrawable && (
           <>
             <Button
               id={gaButtonId}
