@@ -25,8 +25,18 @@ export const usePositions = (): usePositionsResult => {
   const { amms, loading: ammLoading, error: ammError } = useAMMs();
 
   const mePositions = useMemo(() => {
-    if (wallet && wallet.positions && !walletLoading && !walletError && amms && !ammLoading && !ammError) {
-      return wallet.positions.map((positionData) => MEPositionFactory(positionData, amms)).filter((position) => Boolean(position)) as Position[];
+    if (
+      wallet &&
+      wallet.positions &&
+      !walletLoading &&
+      !walletError &&
+      amms &&
+      !ammLoading &&
+      !ammError
+    ) {
+      return wallet.positions
+        .map((positionData) => MEPositionFactory(positionData, amms))
+        .filter((position) => Boolean(position)) as Position[];
     }
   }, [wallet, walletLoading, walletError, amms, ammLoading, ammError]);
 
@@ -134,5 +144,11 @@ export const usePositions = (): usePositionsResult => {
     }
   }, [shouldTryToCloseTransactions, positions, dispatch]);
 
-  return { positions, positionsByAgent, positionsByAgentGroup, loading: walletLoading || ammLoading, error: walletError || ammError };
+  return {
+    positions,
+    positionsByAgent,
+    positionsByAgentGroup,
+    loading: walletLoading || ammLoading,
+    error: walletError || ammError,
+  };
 };

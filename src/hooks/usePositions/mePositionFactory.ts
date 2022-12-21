@@ -28,9 +28,7 @@ export const MEPositionFactory = (
   const {
     id: positionId,
     createdTimestamp: positionCreatedTimestamp,
-    amm: {
-      id: ammId
-    },
+    amm: { id: ammId },
     owner: { id: ownerAddress },
     tickLower,
     tickUpper,
