@@ -74,7 +74,7 @@ export const useAMMs = (): UseAMMsResult => {
       );
 
       if (config.apply) {
-        const whitelist = config.pools.filter((pool) => pool.show).map((pool) => pool.id);
+        const whitelist = config.pools.filter((pool) => pool.show.general).map((pool) => pool.id);
         ammsData = ammsData?.filter((amm) => whitelist.includes(amm.id.toLowerCase()));
 
         if (
