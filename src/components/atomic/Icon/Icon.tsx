@@ -17,6 +17,7 @@ export const Icon: React.FunctionComponent<IconProps> = ({ name, sx, ...props })
         return {
           viewBox: '0 0 20 30',
         };
+      case 'noClaimedBadges':
       case 'degenStuff':
       case 'deltaDegen':
       case 'irsConnoisseur':
@@ -33,8 +34,11 @@ export const Icon: React.FunctionComponent<IconProps> = ({ name, sx, ...props })
       case 'maxBidding':
       case 'okBoomer':
       case 'dryIce':
-      case 'noClaimedBadges':
       case 'mellowLpVault':
+      case 'mellowLpVaultTier1':
+      case 'mellowLpVaultTier2':
+      case 'mellowLpVaultTier3':
+      case '0BCMellowLpVault':
       case 'ogDegenStuff':
       case 'ogDeltaDegen':
       case 'ogIrsConnoisseur':
@@ -51,6 +55,23 @@ export const Icon: React.FunctionComponent<IconProps> = ({ name, sx, ...props })
       case 'ogMaxBidding':
       case 'ogOkBoomer':
       case 'ogDryIce':
+      case 's2DegenStuff':
+      case 's2DeltaDegen':
+      case 's2IrsConnoisseur':
+      case 's2LeverageCrowbar':
+      case 's2FixedTrader':
+      case 's2SushiRoll':
+      case 's2TopTrader':
+      case 's2BeWaterMyFriend':
+      case 's2RainMaker':
+      case 's2WaterHose':
+      case 's2MoneyMoneyMoney':
+      case 's2Lpoor':
+      case 's2Yikes':
+      case 's2MaxBidding':
+      case 's2MellowLpVaultTier1':
+      case 's2MellowLpVaultTier2':
+      case 's2MellowLpVaultTier3':
       case 'diplomatz':
       case 'governorz':
       case 'senatorz':

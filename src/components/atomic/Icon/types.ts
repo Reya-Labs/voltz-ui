@@ -1,6 +1,7 @@
 import { ElementType } from 'react';
 
 import {
+  _0BCMellowLpVault,
   ArrowLeft,
   ArrowRight,
   BeWaterMyFriend,
@@ -20,6 +21,9 @@ import {
   MarginUpdate,
   MaxBidding,
   MellowLpVault,
+  MellowLpVaultTier1,
+  MellowLpVaultTier2,
+  MellowLpVaultTier3,
   Metamask,
   Mint,
   MoneyMoneyMoney,
@@ -44,6 +48,23 @@ import {
   OkBoomer,
   Rainmaker,
   Referror,
+  S2BeWaterMyFriend,
+  S2DegenStuff,
+  S2DeltaDegen,
+  S2FixedTrader,
+  S2IrsConnoisseur,
+  S2LeverageCrowbar,
+  S2Lpoor,
+  S2MaxBidding,
+  S2MellowLpVaultTier1,
+  S2MellowLpVaultTier2,
+  S2MellowLpVaultTier3,
+  S2MoneyMoneyMoney,
+  S2Rainmaker,
+  S2SushiRoll,
+  S2TopTrader,
+  S2WaterHose,
+  S2Yikes,
   Senatorz,
   Settle,
   SushiRoll,
@@ -102,6 +123,10 @@ export type Icons =
   | 'dryIce'
   | 'okBoomer'
   | 'mellowLpVault'
+  | 'mellowLpVaultTier1'
+  | 'mellowLpVaultTier2'
+  | 'mellowLpVaultTier3'
+  | '0BCMellowLpVault'
   // season OG badges
   | 'ogDegenStuff'
   | 'ogDeltaDegen'
@@ -119,13 +144,31 @@ export type Icons =
   | 'ogMaxBidding'
   | 'ogDryIce'
   | 'ogOkBoomer'
-  // non-programmatic badges
+  // season1, season2 & og non-programmatic badges
   | 'senatorz'
   | 'governorz'
   | 'diplomatz'
   | 'whaleWhisperer'
   | 'notionalInfluencer'
-  | 'referror';
+  | 'referror'
+  // season 2 badges
+  | 's2DegenStuff'
+  | 's2DeltaDegen'
+  | 's2IrsConnoisseur'
+  | 's2LeverageCrowbar'
+  | 's2FixedTrader'
+  | 's2SushiRoll'
+  | 's2TopTrader'
+  | 's2BeWaterMyFriend'
+  | 's2RainMaker'
+  | 's2WaterHose'
+  | 's2MoneyMoneyMoney'
+  | 's2Lpoor'
+  | 's2Yikes'
+  | 's2MaxBidding'
+  | 's2MellowLpVaultTier1'
+  | 's2MellowLpVaultTier2'
+  | 's2MellowLpVaultTier3';
 
 export const iconMap: Record<Icons, ElementType> = {
   'arrow-left': ArrowLeft as ElementType,
@@ -167,6 +210,11 @@ export const iconMap: Record<Icons, ElementType> = {
   okBoomer: OkBoomer as ElementType,
   dryIce: DryIce as ElementType,
   mellowLpVault: MellowLpVault as ElementType,
+  mellowLpVaultTier1: MellowLpVaultTier1 as ElementType,
+  mellowLpVaultTier2: MellowLpVaultTier2 as ElementType,
+  mellowLpVaultTier3: MellowLpVaultTier3 as ElementType,
+  '0BCMellowLpVault': _0BCMellowLpVault as ElementType,
+
   // badges season OG
   ogDegenStuff: OGDegenStuff as ElementType,
   ogDeltaDegen: OGDeltaDegen as ElementType,
@@ -184,11 +232,29 @@ export const iconMap: Record<Icons, ElementType> = {
   ogMaxBidding: OGMaxBidding as ElementType,
   ogOkBoomer: OGOkBoomer as ElementType,
   ogDryIce: OGDryIce as ElementType,
-  // non-programmatic badges
+  // season1, season2 & og non-programmatic badges
   senatorz: Senatorz as ElementType,
   diplomatz: Diplomatz as ElementType,
   governorz: Governorz as ElementType,
   notionalInfluencer: NotionalInfluencer as ElementType,
   referror: Referror as ElementType,
   whaleWhisperer: WhaleWhisperer as ElementType,
+  // season2 badges
+  s2DegenStuff: S2DegenStuff as ElementType,
+  s2DeltaDegen: S2DeltaDegen as ElementType,
+  s2IrsConnoisseur: S2IrsConnoisseur as ElementType,
+  s2LeverageCrowbar: S2LeverageCrowbar as ElementType,
+  s2FixedTrader: S2FixedTrader as ElementType,
+  s2SushiRoll: S2SushiRoll as ElementType,
+  s2TopTrader: S2TopTrader as ElementType,
+  s2BeWaterMyFriend: S2BeWaterMyFriend as ElementType,
+  s2RainMaker: S2Rainmaker as ElementType,
+  s2WaterHose: S2WaterHose as ElementType,
+  s2MoneyMoneyMoney: S2MoneyMoneyMoney as ElementType,
+  s2Lpoor: S2Lpoor as ElementType,
+  s2Yikes: S2Yikes as ElementType,
+  s2MaxBidding: S2MaxBidding as ElementType,
+  s2MellowLpVaultTier1: S2MellowLpVaultTier1 as ElementType,
+  s2MellowLpVaultTier2: S2MellowLpVaultTier2 as ElementType,
+  s2MellowLpVaultTier3: S2MellowLpVaultTier3 as ElementType,
 };

@@ -10,7 +10,7 @@ import {
   ProfilePageWalletConnected,
   ProfilePageWalletConnectedProps,
 } from './ProfilePageWalletConnected';
-import { season1Badges, seasonOGBadges } from './ProfilePageWalletConnected.mocks';
+import { mockBadges } from './ProfilePageWalletConnected.mocks';
 
 export default {
   title: 'Interface/ProfilePageWalletConnected',
@@ -38,7 +38,7 @@ const Template: ComponentStory<typeof ProfilePageWalletConnected> = (args) => {
   );
 
   useEffect(() => {
-    setAchievedBadges(season.id === 0 ? seasonOGBadges : season1Badges);
+    setAchievedBadges(mockBadges[season.id]);
     setClaimButtonBulkMode('claim');
   }, []);
 
@@ -96,7 +96,7 @@ const Template: ComponentStory<typeof ProfilePageWalletConnected> = (args) => {
       onCopyLinkButtonClick={handleOnCopyLinkButtonClick}
       onSeasonChange={(newSeason) => {
         setSeason(newSeason);
-        setAchievedBadges(newSeason.id === 0 ? seasonOGBadges : season1Badges);
+        setAchievedBadges(mockBadges[newSeason.id]);
         setClaimButtonBulkMode('claim');
       }}
     />
@@ -106,15 +106,15 @@ const Template: ComponentStory<typeof ProfilePageWalletConnected> = (args) => {
 export const Default = Template.bind({});
 Default.args = {
   account: '0xb01F14d1C9000D453241221EB54648F1C378c970',
-  badges: season1Badges,
+  badges: mockBadges[1],
   season: SEASONS[1],
-  seasonOptions: [SEASONS[0], SEASONS[1]],
+  seasonOptions: [SEASONS[0], SEASONS[1], SEASONS[2]],
 };
 
 export const Loading = Template.bind({});
 Loading.args = {
   account: '0xb01F14d1C9000D453241221EB54648F1C378c970',
-  badges: season1Badges,
+  badges: mockBadges[1],
   season: SEASONS[1],
   loading: true,
   isOnGoingSeason: true,
