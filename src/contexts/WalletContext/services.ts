@@ -26,7 +26,10 @@ const unavailableText = 'Service unavailable, please try again shortly';
 export const checkForCorrectNetwork = async (provider: ethers.providers.JsonRpcProvider) => {
   try {
     const network = await provider.getNetwork();
-    if (network.name !== process.env.REACT_APP_REQUIRED_ETHEREUM_NETWORK) {
+    if (
+      !!process.env.REACT_APP_REQUIRED_ETHEREUM_NETWORK &&
+      network.name !== process.env.REACT_APP_REQUIRED_ETHEREUM_NETWORK
+    ) {
       throw new Error(
         `Connected to '${network.name}' instead of '${
           process.env.REACT_APP_REQUIRED_ETHEREUM_NETWORK || '<unknown>'
