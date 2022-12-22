@@ -98,12 +98,12 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
       }
       rolloverLoading={submissionState.rollover.loading}
       rolloverSubmitText={submissionState.rollover.submitText}
-      rolloverSuccess={submissionState.withdraw.success}
+      rolloverSuccess={submissionState.rollover.success}
       weights={weights}
       withdrawDisabled={submissionState.disabled || loading || !vault.withdrawable(vaultIndex)}
       withdrawLoading={submissionState.withdraw.loading}
       withdrawSubmitText={submissionState.withdraw.submitText}
-      withdrawSuccess={submissionState.rollover.success}
+      withdrawSuccess={submissionState.withdraw.success}
       onDistributionToggle={setDistribution}
       onGoBack={onGoBack}
       onManualDistributionsUpdate={setManualWeights}
