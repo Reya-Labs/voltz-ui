@@ -18,7 +18,7 @@ export type ApprovalErrorResponse = {
   message: string;
 };
 
-export const useTokenApproval = (amm: AMM) => {
+export const useTokenApproval = (amm: AMM, margin?: number) => {
   const [checkingApprovals, setCheckingApprovals] = useState(false);
   const [approving, setApproving] = useState(false);
   const [lastApproval, setLastApproval] = useState<ApprovalInfo>();
@@ -41,7 +41,7 @@ export const useTokenApproval = (amm: AMM) => {
     setLastError(undefined);
 
     amm
-      .isUnderlyingTokenApprovedForPeriphery()
+      .isTokenApprovedForPeriphery(amm.underlyingToken.id, margin)
       .then((response) => {
         setUnderlyingTokenApprovedForPeriphery(response ?? false);
       })
@@ -51,7 +51,7 @@ export const useTokenApproval = (amm: AMM) => {
       .finally(() => {
         setCheckingApprovals(false);
       });
-  }, [amm, setUnderlyingTokenApprovedForPeriphery]);
+  }, [amm, margin, setUnderlyingTokenApprovedForPeriphery]);
 
   const approveUnderlyingTokenForPeriphery = useCallback(async () => {
     setApproving(true);

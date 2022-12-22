@@ -110,7 +110,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   const { swapInfo, expectedApyInfo } = useAMMContext();
   const cachedSwapInfoMinRequiredMargin = useRef<number>();
   const [cachedSwapInfoAvailableNotional, setCachedSwapInfoAvailableNotional] = useState<number>();
-  const tokenApprovals = useTokenApproval(poolAmm);
+  const tokenApprovals = useTokenApproval(poolAmm, margin);
   const [userSimulatedVariableApy, setUserSimulatedVariableApy] = useState<number | undefined>(
     undefined,
   );
