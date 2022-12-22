@@ -1,5 +1,4 @@
 import { AMM } from '@voltz-protocol/v1-sdk';
-import { BigNumber } from 'ethers';
 import isUndefined from 'lodash.isundefined';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -223,11 +222,7 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
         formAction={form.action}
         maxAvailableNotional={form.swapInfo.maxAvailableNotional}
         mode={mode}
-        positionMargin={
-          position?.margin
-            ? targetAmm.descale(BigNumber.from(positionInfo?.result?.margin.toString()))
-            : undefined
-        }
+        positionMargin={positionInfo?.result?.margin}
         protocol={targetAmm.protocol}
         swapSummary={!isUndefined(form.state.notional) ? form.swapInfo.data : undefined}
         swapSummaryLoading={form.swapInfo.loading}
