@@ -52,7 +52,7 @@ export const MaturityDistribution: React.FunctionComponent<MaturityDistributionP
   return (
     <MaturityDistributionBox>
       <ToggleBox>
-        {weights.length > 1 && (
+        {weights.filter(w => w.distribution > 0).length > 1 && (
           <MaturityDistributionToggle
             disabled={disabledToggle}
             distribution={distribution}
@@ -70,25 +70,32 @@ export const MaturityDistribution: React.FunctionComponent<MaturityDistributionP
       </ToggleBox>
       <MaturityDistributionHeader />
       <MaturityDistributionsBox>
-        {weights.map((weight, index) => (
-          <MaturityDistributionEntry
-            key={`${index}-${distribution}`}
-            disabled={distribution === 'automatic' || weights[index].vaultDisabled}
-            onChange={(newDistribution) => {
-              if (distribution === 'automatic') {
-                return;
-              }
-              const weightCopies = weights.map((m) => ({ ...m }));
-              weightCopies[index].distribution = newDistribution;
-              onManualDistributionsUpdate(weightCopies);
-            }}
-            {...weight}
-          />
-        ))}
+        {weights.map((weight, index) => {
+          if (weight.distribution === 0) {
+            return null;
+          }
+
+          return (
+            <MaturityDistributionEntry
+              key={`${index}-${distribution}`}
+              disabled={distribution === 'automatic' || weights[index].vaultDisabled}
+              onChange={(newDistribution) => {
+                if (distribution === 'automatic') {
+                  return;
+                }
+                const weightCopies = weights.map((m) => ({ ...m }));
+                weightCopies[index].distribution = newDistribution;
+                onManualDistributionsUpdate(weightCopies);
+              }}
+              {...weight}
+            />
+          )
+        }
+        )}
       </MaturityDistributionsBox>
       {distribution === 'manual' &&
-      !allVaultsWeightEditingDisabled &&
-      combinedWeightValue !== 100 ? (
+        !allVaultsWeightEditingDisabled &&
+        combinedWeightValue !== 100 ? (
         <MaturityDistributionErrorTypography>
           The total distribution is {combinedWeightValue}%, it has to be 100%.
         </MaturityDistributionErrorTypography>
