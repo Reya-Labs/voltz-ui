@@ -1,5 +1,4 @@
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
-import { BigNumber } from 'ethers';
 import isUndefined from 'lodash.isundefined';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -168,7 +167,7 @@ export const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFor
           fixedRateLower={position?.fixedRateLower.toNumber()}
           fixedRateUpper={position?.fixedRateUpper.toNumber()}
           formMode={form.mode}
-          margin={position.amm.descale(BigNumber.from(positionInfo?.result?.margin.toString()))}
+          margin={positionInfo?.result?.margin || 0}
           notional={position.notional}
           underlyingTokenName={position.amm.underlyingToken.name || ''}
           onPortfolio={handleComplete}

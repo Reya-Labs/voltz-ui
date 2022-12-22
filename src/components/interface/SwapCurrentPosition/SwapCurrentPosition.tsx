@@ -1,6 +1,5 @@
 import Box from '@mui/material/Box';
 import { Position } from '@voltz-protocol/v1-sdk';
-import { BigNumber } from 'ethers';
 import isUndefined from 'lodash.isundefined';
 import React, { useEffect } from 'react';
 
@@ -33,7 +32,7 @@ export const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionPro
     positionInfo?.result?.beforeMaturity === false ? 'Previous' : 'Current'
   } position: ${position.positionType === 1 ? 'Fix taker' : 'Variable taker'}`;
   const notional = Math.abs(position.effectiveVariableTokenBalance);
-  const margin = position.amm.descale(BigNumber.from(position.margin.toString()));
+  const margin = positionInfo?.result?.margin || 0;
   const leverage = notional / margin;
   const underlyingTokenName = position.amm.underlyingToken.name || '';
   const settlementCashflow = positionInfo?.result?.settlementCashflow;
