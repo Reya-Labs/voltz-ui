@@ -7,7 +7,7 @@ import { toUSFormat } from '../../../../../utilities/number';
 import { MaskedIntegerFieldStyled } from './DepositAmountInput.styled';
 
 type Props = {
-  subtext: string;
+  subtext?: string;
   token: string;
   value: number;
   disabled: boolean;

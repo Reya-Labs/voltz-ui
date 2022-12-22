@@ -1,8 +1,6 @@
 import { MellowProduct } from '@voltz-protocol/v1-sdk';
-import isUndefined from 'lodash.isundefined';
 import React from 'react';
 
-import { formatCurrency } from '../../../../../utilities/number';
 import { AboutYourFunds } from '../AboutYourFunds/AboutYourFunds';
 import { BackButton, ButtonBox, FormBox, FullButtonBox } from '../CommonForm.styled';
 import { DepositAmountInput } from '../DepositAmountInput/DepositAmountInput';
@@ -61,11 +59,6 @@ export const WithdrawRolloverForm: React.FunctionComponent<WithdrawRolloverFormP
   onManualDistributionsUpdate,
   combinedWeightValue,
 }: WithdrawRolloverFormProps) => {
-  const subtext = `WALLET BALANCE: ${
-    isUndefined(lpVault.userWalletBalance)
-      ? '---'
-      : `${formatCurrency(lpVault.userWalletBalance, true)} ${lpVault.metadata.token}`
-  }`;
   const loading = rolloverLoading || withdrawLoading;
   return (
     <FormBox>
@@ -80,7 +73,6 @@ export const WithdrawRolloverForm: React.FunctionComponent<WithdrawRolloverFormP
       />
       <DepositAmountInput
         disabled={true}
-        subtext={subtext}
         token={lpVault.metadata.token}
         value={depositValue}
       />
