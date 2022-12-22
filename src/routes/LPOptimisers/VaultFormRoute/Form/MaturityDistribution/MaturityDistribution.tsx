@@ -72,6 +72,7 @@ export const MaturityDistribution: React.FunctionComponent<MaturityDistributionP
       <MaturityDistributionsBox>
         {weights.map((weight, index) => {
           if (weight.distribution === 0) {
+            // can't replace this with filter because it screws up index
             return null;
           }
 
