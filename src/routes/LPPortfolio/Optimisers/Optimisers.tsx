@@ -72,7 +72,7 @@ export const Optimisers: React.FunctionComponent = () => {
             maturityTimestampMS: vVaults.maturityTimestampMS,
             isCompleted: vault.withdrawable(vaultIndex),
             poolsCount: vVaults.pools.length,
-            currentBalance: vault.userIndividualCommittedDeposits[vaultIndex],
+            currentBalance: vault.userIndividualDeposits[vaultIndex],
             distribution: vVaults.weight,
           }))}
           onChangeAutomaticRolloverStatePromise={automaticRolloverChangePromise}
