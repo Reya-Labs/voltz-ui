@@ -150,7 +150,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
                   </ManageButton>
                 ) : null}
               </VaultListItemInfo>
-            )
+            );
           },
         )}
       </VaultListItemBottomBox>

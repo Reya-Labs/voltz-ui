@@ -71,11 +71,7 @@ export const WithdrawRolloverForm: React.FunctionComponent<WithdrawRolloverFormP
         onDistributionToggle={onDistributionToggle}
         onManualDistributionsUpdate={onManualDistributionsUpdate}
       />
-      <DepositAmountInput
-        disabled={true}
-        token={lpVault.metadata.token}
-        value={depositValue}
-      />
+      <DepositAmountInput disabled={true} token={lpVault.metadata.token} value={depositValue} />
       <FullButtonBox>
         <ButtonBox>
           <FormActionButton
