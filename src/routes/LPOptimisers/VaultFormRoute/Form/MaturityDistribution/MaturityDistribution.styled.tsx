@@ -16,6 +16,7 @@ export const ToggleBox = styled(Box)`
   justify-content: space-between;
   width: 100%;
   box-sizing: border-box;
+  margin-bottom: ${({ theme }) => theme.spacing(4)};
 `;
 
 export const MaturityDistributionErrorTypography = styled(Typography)`

@@ -19,7 +19,6 @@ export const MaturityDistributionBox = styled(Box)`
   display: flex;
   flex-direction: column;
   row-gap: ${({ theme }) => theme.spacing(2)};
-  margin-bottom: ${({ theme }) => theme.spacing(4)};
 `;
 
 export const ToggleButton = styled(ToggleButtonComponent)`
