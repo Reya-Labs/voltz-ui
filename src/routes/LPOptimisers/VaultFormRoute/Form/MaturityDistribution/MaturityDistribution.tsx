@@ -1,3 +1,4 @@
+import { closeOrPastMaturity } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
 import {
@@ -52,7 +53,7 @@ export const MaturityDistribution: React.FunctionComponent<MaturityDistributionP
   return (
     <MaturityDistributionBox>
       <ToggleBox>
-        {weights.filter((w) => w.distribution > 0).length > 1 && (
+        {weights.length > 1 && (
           <MaturityDistributionToggle
             disabled={disabledToggle}
             distribution={distribution}
@@ -71,7 +72,7 @@ export const MaturityDistribution: React.FunctionComponent<MaturityDistributionP
       <MaturityDistributionHeader />
       <MaturityDistributionsBox>
         {weights.map((weight, index) => {
-          if (weight.distribution === 0) {
+          if (closeOrPastMaturity(weight.maturityTimestamp)) {
             // can't replace this with filter because it screws up index
             return null;
           }

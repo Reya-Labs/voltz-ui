@@ -39,7 +39,7 @@ export const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFor
   const dispatch = useAppDispatch();
   const form = useMintBurnForm();
   const navigate = useNavigate();
-  const { position } = usePositionContext();
+  const { position, positionInfo } = usePositionContext();
 
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useAppSelector(selectors.transactionSelector)(transactionId);
@@ -168,7 +168,7 @@ export const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFor
           fixedRateLower={position?.fixedRateLower.toNumber()}
           fixedRateUpper={position?.fixedRateUpper.toNumber()}
           formMode={form.mode}
-          margin={position.amm.descale(BigNumber.from(position.margin.toString()))}
+          margin={position.amm.descale(BigNumber.from(positionInfo?.result?.margin.toString()))}
           notional={position.notional}
           underlyingTokenName={position.amm.underlyingToken.name || ''}
           onPortfolio={handleComplete}
