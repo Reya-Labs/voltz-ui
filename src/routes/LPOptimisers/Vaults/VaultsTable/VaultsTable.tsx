@@ -20,7 +20,7 @@ export const VaultsTable: React.FunctionComponent<VaultsTableProps> = ({
     <Header />
     {mellowProducts && (
       <VaultsGrid itemsPerRow={3}>
-        {mellowProducts.map((product, index) => (
+        {mellowProducts.filter(mellowProduct => !mellowProduct.expired).map((product, index) => (
           <VaultEntry
             key={index}
             dataLoading={dataLoading}

@@ -2,7 +2,6 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import { AMM } from '@voltz-protocol/v1-sdk';
-import { DateTime } from 'luxon';
 import React from 'react';
 
 import { Agents } from '../../../contexts/AgentContext/types';
@@ -52,7 +51,7 @@ export const AMMTable: React.FunctionComponent<AMMTableProps> = ({
           <AMMTableHead />
           <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
             {amms
-              .filter((amm) => DateTime.now() < amm.endDateTime)
+              .filter((amm) => Date.now().valueOf() < amm.endDateTime.toMillis())
               .map((amm) => (
                 <AMMProvider key={amm.id} amm={amm}>
                   <AMMTableRow

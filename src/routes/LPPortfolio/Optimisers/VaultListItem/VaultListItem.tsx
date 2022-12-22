@@ -113,7 +113,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
             { poolsCount, currentBalance, distribution, isCompleted, maturityTimestampMS },
             vaultIndex,
           ) => {
-            if (currentBalance <= 0) {
+            if (isCompleted && currentBalance <= 0) {
               // can't replace this with filter because it screws up vaultIndex
               return null;
             }

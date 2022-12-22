@@ -38,7 +38,7 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
   const dispatch = useAppDispatch();
   const form = useSwapFormContext();
   const navigate = useNavigate();
-  const { position } = usePositionContext();
+  const { position, positionInfo } = usePositionContext();
 
   const { mode } = form;
   const [transactionId, setTransactionId] = useState<string | undefined>();
@@ -225,7 +225,7 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
         mode={mode}
         positionMargin={
           position?.margin
-            ? targetAmm.descale(BigNumber.from(position.margin.toString()))
+            ? targetAmm.descale(BigNumber.from(positionInfo?.result?.margin.toString()))
             : undefined
         }
         protocol={targetAmm.protocol}

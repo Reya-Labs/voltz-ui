@@ -1,5 +1,4 @@
 import { BorrowAMM } from '@voltz-protocol/v1-sdk';
-import { DateTime } from 'luxon';
 import { useMemo } from 'react';
 
 import { isBorrowing } from '../utilities/isBorrowing';
@@ -17,7 +16,7 @@ export const useBorrowAMMs = (): UseBorrowAMMsResult => {
   const borrowAmms = useMemo(() => {
     if (amms && !loading && !error) {
       const borrowMarkets = amms.filter((amm) => isBorrowing(amm.rateOracle.protocolId));
-      const liveBorrowMarkets = borrowMarkets.filter((amm) => DateTime.now() < amm.endDateTime);
+      const liveBorrowMarkets = borrowMarkets.filter((amm) => Date.now().valueOf() < amm.endDateTime.toMillis());
       return liveBorrowMarkets.map((amm) => new BorrowAMM({ id: amm.id, amm: amm }));
     }
   }, [loading, error, amms]);
