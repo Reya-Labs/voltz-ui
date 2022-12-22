@@ -142,7 +142,7 @@ export const getSubmissionState = ({
     case WithdrawStates.WITHDRAW_DONE: {
       return {
         hintText: {
-          text: 'Withdrawn successful',
+          text: 'Withdrawn successfully',
           textColor: colors.skyBlueCrayola.base,
         },
         disabled: true,
@@ -185,7 +185,7 @@ export const getSubmissionState = ({
     case RolloverStates.ROLLOVER_DONE: {
       return {
         hintText: {
-          text: 'Rollover successful',
+          text: 'Rolled over successfully',
           textColor: colors.skyBlueCrayola.base,
         },
         disabled: true,
