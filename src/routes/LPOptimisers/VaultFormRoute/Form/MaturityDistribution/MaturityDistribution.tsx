@@ -52,7 +52,7 @@ export const MaturityDistribution: React.FunctionComponent<MaturityDistributionP
   return (
     <MaturityDistributionBox>
       <ToggleBox>
-        {weights.filter(w => w.distribution > 0).length > 1 && (
+        {weights.filter((w) => w.distribution > 0).length > 1 && (
           <MaturityDistributionToggle
             disabled={disabledToggle}
             distribution={distribution}
@@ -89,13 +89,12 @@ export const MaturityDistribution: React.FunctionComponent<MaturityDistributionP
               }}
               {...weight}
             />
-          )
-        }
-        )}
+          );
+        })}
       </MaturityDistributionsBox>
       {distribution === 'manual' &&
-        !allVaultsWeightEditingDisabled &&
-        combinedWeightValue !== 100 ? (
+      !allVaultsWeightEditingDisabled &&
+      combinedWeightValue !== 100 ? (
         <MaturityDistributionErrorTypography>
           The total distribution is {combinedWeightValue}%, it has to be 100%.
         </MaturityDistributionErrorTypography>
