@@ -112,39 +112,46 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
           (
             { poolsCount, currentBalance, distribution, isCompleted, maturityTimestampMS },
             vaultIndex,
-          ) => (
-            <VaultListItemInfo key={maturityTimestampMS}>
-              <MaturityInfoBox>
-                <MaturityDateTypography>
-                  {formatPOSIXTimestamp(maturityTimestampMS)}
-                  {isCompleted ? ' -' : ''}
-                </MaturityDateTypography>
+          ) => {
+            if (currentBalance <= 0) {
+              // can't replace this with filter because it screws up vaultIndex
+              return null;
+            }
+
+            return (
+              <VaultListItemInfo key={maturityTimestampMS}>
+                <MaturityInfoBox>
+                  <MaturityDateTypography>
+                    {formatPOSIXTimestamp(maturityTimestampMS)}
+                    {isCompleted ? ' -' : ''}
+                  </MaturityDateTypography>
+                  {isCompleted ? (
+                    <MaturityCompleteTypography>&nbsp;Completed</MaturityCompleteTypography>
+                  ) : null}
+                </MaturityInfoBox>
+                <DistributionBox>
+                  {distribution}
+                  <TokenTypography>%</TokenTypography>
+                </DistributionBox>
+                <CurrentBalanceBox>
+                  {compactFormat(currentBalance)}
+                  <TokenTypography>{token.toUpperCase()}</TokenTypography>
+                </CurrentBalanceBox>
+                <PoolsCountBox>{poolsCount}</PoolsCountBox>
                 {isCompleted ? (
-                  <MaturityCompleteTypography>&nbsp;Completed</MaturityCompleteTypography>
+                  <ManageButton
+                    to={`/${generatePath(routes.LP_OPTIMISERS_WITHDRAW_ROLLOVER_FORM, {
+                      actions: 'manage',
+                      vaultId: id,
+                      vaultIndex: vaultIndex.toString(),
+                    })}`}
+                  >
+                    Manage
+                  </ManageButton>
                 ) : null}
-              </MaturityInfoBox>
-              <DistributionBox>
-                {distribution}
-                <TokenTypography>%</TokenTypography>
-              </DistributionBox>
-              <CurrentBalanceBox>
-                {compactFormat(currentBalance)}
-                <TokenTypography>{token.toUpperCase()}</TokenTypography>
-              </CurrentBalanceBox>
-              <PoolsCountBox>{poolsCount}</PoolsCountBox>
-              {isCompleted && currentBalance > 0 ? (
-                <ManageButton
-                  to={`/${generatePath(routes.LP_OPTIMISERS_WITHDRAW_ROLLOVER_FORM, {
-                    actions: 'manage',
-                    vaultId: id,
-                    vaultIndex: vaultIndex.toString(),
-                  })}`}
-                >
-                  Manage
-                </ManageButton>
-              ) : null}
-            </VaultListItemInfo>
-          ),
+              </VaultListItemInfo>
+            )
+          },
         )}
       </VaultListItemBottomBox>
     </VaultListItemBox>
