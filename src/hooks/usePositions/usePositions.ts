@@ -98,13 +98,7 @@ export const usePositions = (): usePositionsResult => {
     if (shouldTryToCloseTransactions) {
       unresolvedTransactions.forEach((unresolvedTransaction) => {
         const matchingPosition = positions.find(
-          ({
-            amm: { id: ammId },
-            fixedRateLower,
-            fixedRateUpper,
-            effectiveFixedTokenBalance,
-            positionType,
-          }) => {
+          ({ amm: { id: ammId }, fixedRateLower, fixedRateUpper, positionType }) => {
             if (ammId !== unresolvedTransaction.ammId) {
               return false;
             }
@@ -113,10 +107,7 @@ export const usePositions = (): usePositionsResult => {
               return false;
             }
 
-            if (
-              effectiveFixedTokenBalance > 0 &&
-              unresolvedTransaction.agent !== Agents.FIXED_TRADER
-            ) {
+            if (positionType === 1 && unresolvedTransaction.agent !== Agents.FIXED_TRADER) {
               return false;
             }
 

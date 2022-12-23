@@ -50,13 +50,13 @@ export const getNetPayingRate = (
       const variableRate = info.variableRateSinceLastSwap;
 
       if (!isUndefined(fixedRate) && position.positionType !== 1) {
-        netPayingRate += fixedRate * Math.abs(position.effectiveVariableTokenBalance);
-        totalNotional += Math.abs(position.effectiveVariableTokenBalance);
+        netPayingRate += fixedRate * Math.abs(info.variableTokenBalance);
+        totalNotional += Math.abs(info.variableTokenBalance);
       }
 
       if (!isUndefined(variableRate) && position.positionType === 1) {
-        netPayingRate += variableRate * Math.abs(position.effectiveVariableTokenBalance);
-        totalNotional += Math.abs(position.effectiveVariableTokenBalance);
+        netPayingRate += variableRate * Math.abs(info.variableTokenBalance);
+        totalNotional += Math.abs(info.variableTokenBalance);
       }
     }
   });
@@ -92,13 +92,13 @@ export const getNetReceivingRate = (
       const variableRate = info.variableRateSinceLastSwap;
 
       if (!isUndefined(fixedRate) && position.positionType === 1) {
-        netReceivingRate += fixedRate * Math.abs(position.effectiveVariableTokenBalance);
-        totalNotional += Math.abs(position.effectiveVariableTokenBalance);
+        netReceivingRate += fixedRate * Math.abs(info.variableTokenBalance);
+        totalNotional += Math.abs(info.variableTokenBalance);
       }
 
       if (!isUndefined(variableRate) && position.positionType !== 1) {
-        netReceivingRate += variableRate * Math.abs(position.effectiveVariableTokenBalance);
-        totalNotional += Math.abs(position.effectiveVariableTokenBalance);
+        netReceivingRate += variableRate * Math.abs(info.variableTokenBalance);
+        totalNotional += Math.abs(info.variableTokenBalance);
       }
     }
   });

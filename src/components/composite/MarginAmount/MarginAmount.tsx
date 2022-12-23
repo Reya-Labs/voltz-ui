@@ -41,13 +41,10 @@ export const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
     }
   };
 
-  const positionForm = usePositionContext();
+  const { positionInfo } = usePositionContext();
 
-  const divisor = underlyingTokenName?.includes('USD') ? 1e6 : 1e18;
-  const portfolioMarginInfo = positionForm.position?.margin.toString();
-  const marginAmount = !isUndefined(portfolioMarginInfo)
-    ? parseInt(portfolioMarginInfo) / divisor
-    : defaultMargin;
+  const portfolioMarginInfo = positionInfo?.result?.margin;
+  const marginAmount = portfolioMarginInfo || defaultMargin;
   const initialMarginRequirement = currentPositionMarginRequirement || defaultMargin;
 
   const maxAmountToWithdraw =

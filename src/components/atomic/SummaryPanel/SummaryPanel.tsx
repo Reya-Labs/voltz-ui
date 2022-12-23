@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import { SystemStyleObject, Theme } from '@mui/system';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import { colors } from '../../../theme';
 import { Typography } from '../Typography/Typography';

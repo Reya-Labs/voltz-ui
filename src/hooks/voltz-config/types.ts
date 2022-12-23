@@ -11,6 +11,7 @@ type PoolConfiguration = {
 
 export type NetworkConfiguration = {
   factoryAddress: string;
+  wethAddress: string;
   apply: boolean;
   pools: PoolConfiguration[];
 };

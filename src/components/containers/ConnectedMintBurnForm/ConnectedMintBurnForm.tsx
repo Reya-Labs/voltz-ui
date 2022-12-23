@@ -167,8 +167,8 @@ export const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFor
           fixedRateLower={position?.fixedRateLower.toNumber()}
           fixedRateUpper={position?.fixedRateUpper.toNumber()}
           formMode={form.mode}
-          margin={positionInfo?.result?.margin || 0}
-          notional={position.notional}
+          margin={positionInfo?.result?.margin}
+          notional={positionInfo?.result?.notional}
           underlyingTokenName={position.amm.underlyingToken.name || ''}
           onPortfolio={handleComplete}
         />

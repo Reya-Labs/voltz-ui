@@ -72,9 +72,7 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
     if (field === 'margin') {
       return (
         <CurrentMargin
-          accruedCashflow={
-            agent === Agents.LIQUIDITY_PROVIDER ? undefined : positionInfo?.accruedCashflow || 0
-          }
+          accruedCashflow={positionInfo?.accruedCashflow}
           isSettled={position.isSettled}
           margin={positionInfo?.margin}
           marginEdit={true}
@@ -97,11 +95,7 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
     if (field === 'notional') {
       return (
         <Notional
-          notional={
-            agent === Agents.LIQUIDITY_PROVIDER
-              ? formatNumber(position.notional)
-              : formatNumber(Math.abs(position.effectiveVariableTokenBalance))
-          }
+          notional={positionInfo?.notional}
           token={underlyingTokenName || ''}
           onEdit={agent === Agents.LIQUIDITY_PROVIDER ? handleEditLPNotional : undefined}
         />

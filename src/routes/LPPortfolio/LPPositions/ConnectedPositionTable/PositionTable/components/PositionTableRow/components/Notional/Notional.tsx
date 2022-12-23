@@ -1,6 +1,7 @@
 import isUndefined from 'lodash.isundefined';
 import React from 'react';
 
+import { formatNumber } from '../../../../../../../../../utilities/number';
 import {
   EditButton,
   NotionalBox,
@@ -10,7 +11,7 @@ import {
 } from './Notional.styled';
 
 export type NotionalProps = {
-  notional?: string;
+  notional?: number;
   onEdit: () => void;
   token: string;
   hideEdit: boolean;
@@ -29,7 +30,7 @@ export const Notional: React.FunctionComponent<NotionalProps> = ({
         {hideEdit ? null : <EditButton onClick={onEdit}>Edit</EditButton>}
       </NotionalLabelBox>
       <NotionalValueTypography>
-        {isUndefined(notional) ? 'Loading...' : `${notional} ${token}`}
+        {isUndefined(notional) ? 'Loading...' : `${formatNumber(notional)} ${token}`}
       </NotionalValueTypography>
     </NotionalBox>
   );
