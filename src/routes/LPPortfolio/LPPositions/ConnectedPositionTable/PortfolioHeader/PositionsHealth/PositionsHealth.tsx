@@ -29,11 +29,11 @@ export const PositionsHealth = ({
         <HealthyCircle />
       </PositionHealthInfo>
       <PositionHealthInfo>
-        {positionsWarning} HEALTHY&nbsp;
+        {positionsWarning} WARNING&nbsp;
         <WarningCircle />
       </PositionHealthInfo>
       <PositionHealthInfo>
-        {positionsDanger} HEALTHY&nbsp;
+        {positionsDanger} DANGER&nbsp;
         <DangerCircle />
       </PositionHealthInfo>
     </PositionsHealthInfoBox>
