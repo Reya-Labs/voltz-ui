@@ -16,7 +16,9 @@ export const useBorrowAMMs = (): UseBorrowAMMsResult => {
   const borrowAmms = useMemo(() => {
     if (amms && !loading && !error) {
       const borrowMarkets = amms.filter((amm) => isBorrowing(amm.rateOracle.protocolId));
-      const liveBorrowMarkets = borrowMarkets.filter((amm) => Date.now().valueOf() < amm.endDateTime.toMillis());
+      const liveBorrowMarkets = borrowMarkets.filter(
+        (amm) => Date.now().valueOf() < amm.endDateTime.toMillis(),
+      );
       return liveBorrowMarkets.map((amm) => new BorrowAMM({ id: amm.id, amm: amm }));
     }
   }, [loading, error, amms]);
