@@ -21,7 +21,7 @@ export const AccruedRates = ({ fixedRateUpper, fixedRateLower }: AccruedRatesPro
 
   return (
     <AccruedRatesBox>
-      <AccruedRatesLabelTypography>Receiving / Paying</AccruedRatesLabelTypography>
+      <AccruedRatesLabelTypography>Lower x Upper</AccruedRatesLabelTypography>
       <AccruedRatesValueTypography>{renderValue()}</AccruedRatesValueTypography>
     </AccruedRatesBox>
   );

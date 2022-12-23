@@ -62,14 +62,10 @@ export const useAMMs = (): UseAMMsResult => {
             }),
             factoryAddress: config.factoryAddress || '0x',
             marginEngineAddress,
-            updatedTimestamp: ammUpdatedTimestamp as JSBI,
             termStartTimestamp: termStartTimestamp as JSBI,
             termEndTimestamp: termEndTimestamp as JSBI,
-            tick: parseInt(tick as string, 10),
             tickSpacing: parseInt(tickSpacing as string, 10),
-            txCount: parseInt(txCount as string, 10),
-            totalNotionalTraded: totalNotionalTraded as JSBI,
-            totalLiquidity: totalLiquidity as JSBI,
+            wethAddress: config.wethAddress,
           }),
       );
 

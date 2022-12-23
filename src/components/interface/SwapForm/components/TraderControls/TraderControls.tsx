@@ -19,10 +19,10 @@ export const TraderControls: React.FunctionComponent<TraderControlsProps> = ({
 }) => {
   const initAgent = useRef<Agents>(agent);
 
-  const { position } = usePositionContext();
-  if (position) {
+  const { positionInfo } = usePositionContext();
+  if (positionInfo && positionInfo.result) {
     initAgent.current =
-      position.effectiveVariableTokenBalance > 0 ? Agents.VARIABLE_TRADER : Agents.FIXED_TRADER;
+      positionInfo.result.variableTokenBalance > 0 ? Agents.VARIABLE_TRADER : Agents.FIXED_TRADER;
   }
 
   if (!agent || agent === Agents.LIQUIDITY_PROVIDER) {

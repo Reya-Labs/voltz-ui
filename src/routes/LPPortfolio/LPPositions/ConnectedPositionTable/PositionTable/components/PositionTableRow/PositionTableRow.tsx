@@ -4,7 +4,6 @@ import React, { useEffect } from 'react';
 import { MaturityInformation } from '../../../../../../../components/composite/MaturityInformation/MaturityInformation';
 import { useAMMContext } from '../../../../../../../contexts/AMMContext/AMMContext';
 import { isBorrowing } from '../../../../../../../utilities/isBorrowing';
-import { formatNumber } from '../../../../../../../utilities/number';
 import { AccruedRates } from './components/AccruedRates/AccruedRates';
 import { Margin } from './components/Margin/Margin';
 import { Notional } from './components/Notional/Notional';
@@ -52,7 +51,7 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
       <CellBox>
         <Notional
           hideEdit={hideEdit}
-          notional={formatNumber(position.notional)}
+          notional={positionInfo?.notional}
           token={underlyingTokenName || ''}
           onEdit={handleEditLPNotional}
         />

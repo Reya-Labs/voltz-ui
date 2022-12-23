@@ -15,8 +15,8 @@ import { FormPanel } from '../FormPanel/FormPanel';
 export type MintBurnCurrentPositionProps = {
   formMode: MintBurnFormModes;
   onPortfolio: () => void;
-  notional: number;
-  margin: number;
+  notional?: number;
+  margin?: number;
   underlyingTokenName: string;
   fixedRateUpper: number;
   fixedRateLower: number;
@@ -36,7 +36,6 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
   const currentPositionBadgeText = `${
     positionInfo?.result?.beforeMaturity === false ? 'Previous' : 'Current'
   } position: LP`;
-  const leverage = notional / margin;
   const fees = positionInfo?.result?.fees;
   const cashflow = positionInfo?.result?.settlementCashflow;
 
@@ -72,11 +71,11 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
   const rows: React.ComponentProps<typeof SummaryPanel>['rows'] = [
     {
       label: 'NOTIONAL',
-      value: `${formatCurrency(notional)} ${underlyingTokenName}`,
+      value: isUndefined(notional) ? <Ellipsis /> : `${formatCurrency(notional)} ${underlyingTokenName}`,
     },
     {
       label: 'LEVERAGE',
-      value: `${formatCurrency(leverage)}x`,
+      value: isUndefined(notional) || isUndefined(margin) ? <Ellipsis /> : `${formatCurrency(notional / margin)}x`,
     },
     {
       label: 'FIXED LOW',
@@ -92,7 +91,7 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
     },
     {
       label: 'CURRENT MARGIN',
-      value: `${formatCurrency(margin)} ${underlyingTokenName}`,
+      value: isUndefined(margin) ? <Ellipsis /> : `${formatCurrency(margin)} ${underlyingTokenName}`,
       highlight: true,
     },
   ];
@@ -117,7 +116,7 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
     rows.push({
       label: 'NET BALANCE',
       value:
-        !isUndefined(cashflow) && !isUndefined(fees) ? (
+        !isUndefined(cashflow) && !isUndefined(fees) && !isUndefined(margin) ? (
           `${formatCurrency(cashflow + margin + fees)} ${underlyingTokenName}`
         ) : (
           <Ellipsis />

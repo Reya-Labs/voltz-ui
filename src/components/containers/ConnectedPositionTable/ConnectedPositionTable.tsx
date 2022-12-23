@@ -128,11 +128,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
           isEditingMargin={false}
           isSettle={true}
           margin={netWithdraw}
-          notional={
-            agent === Agents.LIQUIDITY_PROVIDER
-              ? Math.abs(positionToSettle.position.notional)
-              : Math.abs(positionToSettle.position.effectiveVariableTokenBalance)
-          }
+          notional={spData?.notional}
           position={positionToSettle.position}
           transactionId={positionToSettle.txId}
           onBack={handleTransactionFinished}

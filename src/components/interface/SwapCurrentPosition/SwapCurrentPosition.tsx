@@ -31,15 +31,14 @@ export const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionPro
   const currentPositionBadgeText = `${
     positionInfo?.result?.beforeMaturity === false ? 'Previous' : 'Current'
   } position: ${position.positionType === 1 ? 'Fix taker' : 'Variable taker'}`;
-  const notional = Math.abs(position.effectiveVariableTokenBalance);
-  const margin = positionInfo?.result?.margin || 0;
-  const leverage = notional / margin;
+  const notional = positionInfo?.result?.notional;
+  const margin = positionInfo?.result?.margin;
   const underlyingTokenName = position.amm.underlyingToken.name || '';
   const settlementCashflow = positionInfo?.result?.settlementCashflow;
 
   const getHealthFactor = () => {
     if (positionInfo?.loading) {
-      return 'loading...';
+      return <Ellipsis />;
     } else {
       let healthColour = '';
       let text = '';
@@ -69,11 +68,11 @@ export const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionPro
   const rows: React.ComponentProps<typeof SummaryPanel>['rows'] = [
     {
       label: 'NOTIONAL',
-      value: `${formatCurrency(notional)} ${underlyingTokenName}`,
+      value: isUndefined(notional) ? <Ellipsis /> : `${formatCurrency(notional)} ${underlyingTokenName}`,
     },
     {
       label: 'LEVERAGE',
-      value: `${formatCurrency(leverage)}x`,
+      value: isUndefined(notional) || isUndefined(margin) ? <Ellipsis /> :`${formatCurrency(notional / margin)}x`,
     },
     {
       label: 'HEALTH FACTOR',
@@ -81,7 +80,7 @@ export const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionPro
     },
     {
       label: 'CURRENT MARGIN',
-      value: `${formatCurrency(margin)} ${underlyingTokenName}`,
+      value: isUndefined(margin) ? <Ellipsis /> :`${formatCurrency(margin)} ${underlyingTokenName}`,
       highlight: true,
     },
   ];
