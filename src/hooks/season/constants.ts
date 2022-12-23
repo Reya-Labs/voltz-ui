@@ -15,13 +15,13 @@ export const SEASONS: Season[] = [
     label: 'Season 01',
     shortName: '01',
     startDate: DateTime.fromSQL('2022-10-01 00:00:00'),
-    endDate: DateTime.fromSQL('2022-12-31 23:59:59'),
+    endDate: DateTime.fromSQL('2022-12-14 16:27:42'),
   },
   {
     id: 2,
     label: 'Season 02',
     shortName: '02',
-    startDate: DateTime.fromSQL('2023-01-01 00:00:00'),
+    startDate: DateTime.fromSQL('2022-12-14 16:27:43'),
     endDate: DateTime.fromSQL('2023-03-31 23:59:59'),
   },
   {
