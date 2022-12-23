@@ -71,11 +71,20 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
   const rows: React.ComponentProps<typeof SummaryPanel>['rows'] = [
     {
       label: 'NOTIONAL',
-      value: isUndefined(notional) ? <Ellipsis /> : `${formatCurrency(notional)} ${underlyingTokenName}`,
+      value: isUndefined(notional) ? (
+        <Ellipsis />
+      ) : (
+        `${formatCurrency(notional)} ${underlyingTokenName}`
+      ),
     },
     {
       label: 'LEVERAGE',
-      value: isUndefined(notional) || isUndefined(margin) ? <Ellipsis /> : `${formatCurrency(notional / margin)}x`,
+      value:
+        isUndefined(notional) || isUndefined(margin) ? (
+          <Ellipsis />
+        ) : (
+          `${formatCurrency(notional / margin)}x`
+        ),
     },
     {
       label: 'FIXED LOW',
@@ -91,7 +100,11 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
     },
     {
       label: 'CURRENT MARGIN',
-      value: isUndefined(margin) ? <Ellipsis /> : `${formatCurrency(margin)} ${underlyingTokenName}`,
+      value: isUndefined(margin) ? (
+        <Ellipsis />
+      ) : (
+        `${formatCurrency(margin)} ${underlyingTokenName}`
+      ),
       highlight: true,
     },
   ];
