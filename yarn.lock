@@ -7647,8 +7647,10 @@
     "@typescript-eslint/types" "5.9.1"
     eslint-visitor-keys "^3.0.0"
 
-"@voltz-protocol/v1-sdk@file:.yalc/@voltz-protocol/v1-sdk":
-  version "1.21.0"
+"@voltz-protocol/v1-sdk@1.23.0":
+  version "1.23.0"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.23.0.tgz#7a3554642b71741d0ee31572e156601184565cb2"
+  integrity sha512-KDlVtUHnCSDxS92F0akDwqrKCisMfnLSOWm8+2h5A+mF0BZimin9Ja4bRgRbXR2d2aWr9CfMJ2x5F6M3x8i7aw==
   dependencies:
     "@apollo/client" "^3.7.1"
     "@ethersproject/address" "^5.7.0"
@@ -7656,6 +7658,7 @@
     "@metamask/detect-provider" "^1.2.0"
     "@sentry/browser" "7.25.0"
     "@sentry/tracing" "7.25.0"
+    axios "^0.27.2"
     big.js "^6.1.1"
     coingecko-api "^1.0.10"
     cross-fetch "^3.1.5"
@@ -8994,7 +8997,7 @@ axios@0.26.0:
   dependencies:
     follow-redirects "^1.14.8"
 
-axios@0.27.2:
+axios@0.27.2, axios@^0.27.2:
   version "0.27.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.27.2.tgz#207658cc8621606e586c85db4b41a750e756d972"
   integrity sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==
