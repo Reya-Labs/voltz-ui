@@ -73,7 +73,7 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
     <Box sx={containerStyles}>
       <Box sx={{ display: 'flex' }}>
         <PositionBadge variant="LP" />
-        {!isUndefined(fees) && (
+        {!isUndefined(fees) && !isSettled && (
           <FeesBox>
             <FeesTypography>FEES:&nbsp;</FeesTypography>
             <FeesValueTypography>
