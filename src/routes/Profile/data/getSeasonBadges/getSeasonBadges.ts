@@ -14,9 +14,6 @@ export async function getSeasonBadges({
   season: Season;
   sbt: CommunitySBT;
 }): Promise<GetProfileBadgesResponse> {
-  if (!process.env.REACT_APP_SUBGRAPH_BADGES_URL) {
-    return getDefaultResponse(season.id);
-  }
   try {
     const badges = await sbt.getSeasonBadges({
       userId: userId,
