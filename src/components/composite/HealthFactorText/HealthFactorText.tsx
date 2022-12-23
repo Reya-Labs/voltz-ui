@@ -1,5 +1,4 @@
 import isUndefined from 'lodash.isundefined';
-import React from 'react';
 
 import { colors } from '../../../theme';
 
