@@ -14,10 +14,9 @@ import { VaultListItem } from './VaultListItem/VaultListItem';
 export const Optimisers: React.FunctionComponent = () => {
   const { signer } = useWallet();
   const { lpVaults, vaultsInitialised, vaultsInitialisedWithSigner } = useLPVaults(signer);
-  // todo: read the value from SDK
-  const [automaticRolloverState, setAutomaticRolloverState] = useState<'active' | 'inactive'>(
-    'inactive',
-  );
+  const [localStateOfRollover, setLocalStateOfRollover] = useState<
+    Record<string, () => Promise<boolean>>
+  >({});
   if (!signer || !vaultsInitialised || !vaultsInitialisedWithSigner) {
     return (
       <OptimisersBox>
@@ -47,11 +46,18 @@ export const Optimisers: React.FunctionComponent = () => {
     value: AutomaticRolloverToggleProps['automaticRolloverState'],
   ) => {
     try {
-      // todo: SDK integration here
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setAutomaticRolloverState(value);
+      const vault = lpVaults.find((v) => v.id === vaultId);
+      if (!vault) {
+        return;
+      }
+      const registration = value === 'active';
+      await vault.registerForAutoRollover(registration);
+      setLocalStateOfRollover({
+        ...localStateOfRollover,
+        [vaultId]: () => new Promise((resolve) => resolve(registration)),
+      });
     } catch (err) {
-      throw new Error('Error');
+      throw new Error((err as Error).message);
     }
   };
 
@@ -62,8 +68,13 @@ export const Optimisers: React.FunctionComponent = () => {
       {vaultsWithDeposit.map((vault) => (
         <VaultListItem
           key={vault.id}
-          automaticRolloverState={automaticRolloverState}
+          automaticRolloverStatePromise={
+            localStateOfRollover[vault.id]
+              ? localStateOfRollover[vault.id]
+              : vault.getAutorolloverRegistrationFlag
+          }
           depositable={vault.depositable}
+          gasCostPromise={(registration: boolean) => vault.gasRegisterForAutoRollover(registration)}
           id={vault.id}
           token={vault.metadata.token}
           totalBalance={vault.userDeposit}

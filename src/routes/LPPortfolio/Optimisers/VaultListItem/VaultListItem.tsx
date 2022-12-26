@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { generatePath } from 'react-router-dom';
 
 import { Icon } from '../../../../components/atomic/Icon/Icon';
@@ -9,6 +9,7 @@ import {
 import { formatPOSIXTimestamp } from '../../../../utilities/date';
 import { doNothing } from '../../../../utilities/doNothing';
 import { compactFormat } from '../../../../utilities/number';
+import { getSentryTracker } from '../../../../utilities/sentry';
 import { routes } from '../../../paths';
 import {
   ActionsBox,
@@ -47,11 +48,12 @@ export type VaultListItemProps = {
     distribution: number;
   }[];
   depositable: boolean;
-  automaticRolloverState: AutomaticRolloverToggleProps['automaticRolloverState'];
+  automaticRolloverStatePromise: () => Promise<boolean>;
   onChangeAutomaticRolloverStatePromise: (
     vaultId: string,
     automaticRolloverState: AutomaticRolloverToggleProps['automaticRolloverState'],
   ) => Promise<void>;
+  gasCostPromise: AutomaticRolloverToggleProps['gasCostPromise'];
 };
 export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
   vaults,
@@ -59,9 +61,24 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
   token,
   depositable,
   id,
-  automaticRolloverState,
+  automaticRolloverStatePromise,
   onChangeAutomaticRolloverStatePromise = doNothing,
+  gasCostPromise,
 }) => {
+  const [automaticRolloverState, setAutomaticRolloverState] = useState<
+    AutomaticRolloverToggleProps['automaticRolloverState'] | undefined
+  >();
+
+  useEffect(() => {
+    automaticRolloverStatePromise()
+      .then((value) => {
+        setAutomaticRolloverState(value ? 'active' : 'inactive');
+      })
+      .catch((err) => {
+        getSentryTracker().captureException(err);
+      });
+  }, [automaticRolloverStatePromise]);
+
   return (
     <VaultListItemBox>
       <VaultListItemTopBox>
@@ -84,14 +101,19 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
               DEPOSIT
             </DepositButton>
           ) : null}
-          <AutomaticRolloverToggle
-            automaticRolloverState={automaticRolloverState}
-            disabled={false}
-            showTooltip={false}
-            onChangePromise={async (value) =>
-              await onChangeAutomaticRolloverStatePromise(id, value)
-            }
-          />
+          {automaticRolloverState !== undefined ? (
+            <AutomaticRolloverToggle
+              automaticRolloverState={automaticRolloverState}
+              disabled={false}
+              gasCostPromise={gasCostPromise}
+              nextRolloverState={automaticRolloverState === 'active' ? 'inactive' : 'active'}
+              showTooltip={false}
+              triggersOnChainTransaction={true}
+              onChangePromise={async (value) =>
+                await onChangeAutomaticRolloverStatePromise(id, value)
+              }
+            />
+          ) : null}
         </ActionsBox>
       </VaultListItemTopBox>
       <VaultListItemBottomBox>

@@ -2,6 +2,7 @@ import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useState } from 'react';
 
 import { AutomaticRolloverToggleProps } from '../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
+import { getSentryTracker } from '../../../../utilities/sentry';
 import { DepositForm, FormProps } from '../Form/DepositForm/DepositForm';
 import { DepositStates, getSubmissionState } from './mappers';
 
@@ -24,10 +25,12 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
   }));
 
   const [selectedDeposit, setSelectedDeposit] = useState<number>(0);
+  const [hasUserOptedInOutAutoRollover, setHasUserOptedInOutAutoRollover] =
+    useState<boolean>(false);
   const [distribution, setDistribution] = useState<'automatic' | 'manual'>('automatic');
-  // todo: read the value from SDK
-  const [automaticRolloverState, setAutomaticRolloverState] =
-    useState<AutomaticRolloverToggleProps['automaticRolloverState']>('inactive');
+  const [automaticRolloverState, setAutomaticRolloverState] = useState<
+    undefined | AutomaticRolloverToggleProps['automaticRolloverState']
+  >();
   const [manualWeights, setManualWeights] = useState<FormProps['weights']>(
     automaticWeights.map((a) => ({ ...a })),
   );
@@ -45,10 +48,12 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
         .deposit(
           selectedDeposit,
           weights.map((w) => w.distribution),
+          hasUserOptedInOutAutoRollover ? automaticRolloverState === 'active' : undefined,
         )
         .then(
           () => {
             setDepositState(DepositStates.DEPOSIT_DONE);
+            setHasUserOptedInOutAutoRollover(false);
           },
           (err: Error) => {
             setError(`Deposit failed. ${err.message ?? ''}`);
@@ -94,6 +99,15 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
     );
   }, [vault.id, loading, selectedDeposit]);
 
+  useEffect(() => {
+    vault
+      .getAutorolloverRegistrationFlag()
+      .then((value) => setAutomaticRolloverState(value ? 'active' : 'inactive'))
+      .catch((err) => {
+        getSentryTracker().captureException(err);
+      });
+  }, [vault.id]);
+
   const submissionState = getSubmissionState({
     depositState,
     deposit,
@@ -105,21 +119,14 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
     loading,
   });
 
-  const automaticRolloverChangePromise = async (
-    value: AutomaticRolloverToggleProps['automaticRolloverState'],
-  ) => {
-    try {
-      // todo: SDK integration here
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setAutomaticRolloverState(value);
-    } catch (err) {
-      throw new Error('Error');
-    }
-  };
-
   return (
     <DepositForm
-      automaticRolloverChangePromise={automaticRolloverChangePromise}
+      automaticRolloverChangePromise={(value) => {
+        return new Promise((resolve) => {
+          setAutomaticRolloverState(value);
+          setHasUserOptedInOutAutoRollover(value !== automaticRolloverState);
+        });
+      }}
       automaticRolloverState={automaticRolloverState}
       combinedWeightValue={combinedWeightValue}
       depositValue={selectedDeposit}
@@ -127,6 +134,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
         !sufficientFunds || submissionState.disabled || loading || combinedWeightValue !== 100
       }
       distribution={distribution}
+      gasCostPromise={vault.gasRegisterForAutoRollover}
       hintText={submissionState.hintText}
       loading={submissionState.loading}
       lpVault={vault}

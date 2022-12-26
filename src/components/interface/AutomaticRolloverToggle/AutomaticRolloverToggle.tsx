@@ -34,12 +34,18 @@ export type AutomaticRolloverToggleProps = {
   disabled: boolean;
   showTooltip: boolean;
   onChangePromise: (value: AutomaticRolloverState) => Promise<void>;
+  triggersOnChainTransaction: boolean;
+  gasCostPromise: (registration: boolean) => Promise<number>;
+  nextRolloverState: 'active' | 'inactive';
 };
 export const AutomaticRolloverToggle: React.FunctionComponent<AutomaticRolloverToggleProps> = ({
   disabled,
   automaticRolloverState,
   showTooltip,
   onChangePromise = doNothing,
+  triggersOnChainTransaction,
+  gasCostPromise,
+  nextRolloverState,
 }) => {
   const [transactionStatus, setTransactionStatus] = useState<
     'idle' | 'pending' | 'error' | 'success'
@@ -94,8 +100,11 @@ export const AutomaticRolloverToggle: React.FunctionComponent<AutomaticRolloverT
       ) : null}
       <Modal open={isOpen} onClose={handleOnCancel}>
         <ActiveRolloverModalContent
+          gasCostPromise={gasCostPromise}
+          nextRolloverState={nextRolloverState}
           transactionStatus={transactionStatus}
           transactionStatusText={transactionStatusText}
+          triggersOnChainTransaction={triggersOnChainTransaction}
           onCancel={handleOnCancel}
           onProceed={handleOnProceed}
         />
