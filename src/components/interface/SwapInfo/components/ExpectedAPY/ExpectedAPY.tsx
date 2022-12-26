@@ -10,7 +10,7 @@ import { getAmmProtocol } from '../../../../../utilities/amm';
 import { DataLayerEventPayload, pushEvent } from '../../../../../utilities/googleAnalytics';
 import {
   formatNumber,
-  notFormatted,
+  removeFormat,
   stringToBigFloat,
   toUSFormat,
 } from '../../../../../utilities/number';
@@ -157,7 +157,7 @@ export const ExpectedAPY = ({
             }
             suffix="%"
             suffixPadding={0}
-            value={notFormatted(userInput)}
+            value={removeFormat(userInput)}
             allowDecimals
             dynamic
             onChange={handleChangeInput}

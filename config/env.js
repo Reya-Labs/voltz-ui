@@ -3,8 +3,34 @@
 const fs = require('fs');
 const path = require('path');
 const paths = require('./paths');
+const { execSync } = require('child_process');
 const packageJsonVersion = require('../package.json').version;
 const packageJsonName = require('../package.json').name;
+
+function getCommitHash() {
+  try {
+    return execSync('git rev-parse --short HEAD').toString().trim();
+  } catch (e) {
+    console.error(e);
+    console.error('Cannot get the commit hash.');
+    process.exit(1);
+  }
+}
+
+function getBranchName() {
+  try {
+    console.log('Detecting branch name...');
+    const branchName = execSync('git log -1 --pretty=%D HEAD | sed "s/.*origin\\///g;s/, .*//g"')
+      .toString()
+      .trim();
+    console.log(`Branch name: ${branchName}`);
+    return branchName;
+  } catch (e) {
+    console.error(e);
+    console.error('Cannot get the branch name.');
+    process.exit(1);
+  }
+}
 
 // Make sure that including paths.js after env.js will read .env variables.
 delete require.cache[require.resolve('./paths')];
@@ -60,6 +86,13 @@ process.env.NODE_PATH = (process.env.NODE_PATH || '')
 // injected into the application via DefinePlugin in webpack configuration.
 const REACT_APP = /^REACT_APP_/i;
 
+// either provided via _BRANCH_NAME_ or try to detect it
+const BRANCH_NAME = process.env._BRANCH_NAME_ || getBranchName();
+
+const SENTRY_DSN =
+  'https://89896542d0164e8795cd7ee0504edcb0@o4504239616294912.ingest.sentry.io/4504246851338240';
+const SENTRY_RELEASE = `${packageJsonName}@${packageJsonVersion}-${BRANCH_NAME}-${getCommitHash()}`;
+
 function getClientEnvironment(publicUrl) {
   const raw = Object.keys(process.env)
     .filter((key) => REACT_APP.test(key))
@@ -73,11 +106,12 @@ function getClientEnvironment(publicUrl) {
         APP_VERSION: packageJsonVersion,
         // Application name
         APP_NAME: packageJsonName,
+        // Branch name
+        BRANCH_NAME,
         // Sentry DSN
-        SENTRY_DSN:
-          'https://89896542d0164e8795cd7ee0504edcb0@o4504239616294912.ingest.sentry.io/4504246851338240',
+        SENTRY_DSN,
         // Sentry release
-        SENTRY_RELEASE: `${packageJsonName}@${packageJsonVersion}`,
+        SENTRY_RELEASE,
         // Useful for determining whether we’re running in production mode.
         // Most importantly, it switches React into the correct mode.
         NODE_ENV: process.env.NODE_ENV || 'development',
@@ -94,8 +128,8 @@ function getClientEnvironment(publicUrl) {
         WDS_SOCKET_HOST: process.env.WDS_SOCKET_HOST,
         WDS_SOCKET_PATH: process.env.WDS_SOCKET_PATH,
         WDS_SOCKET_PORT: process.env.WDS_SOCKET_PORT,
-        // Whether or not react-refresh is enabled.
-        // It is defined here so it is available in the webpackHotDevClient.
+        // Whether react-refresh is enabled.
+        // It is defined here, so it is available in the webpackHotDevClient.
         FAST_REFRESH: process.env.FAST_REFRESH !== 'false',
       },
     );

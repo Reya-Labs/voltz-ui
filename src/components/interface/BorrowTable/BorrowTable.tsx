@@ -3,7 +3,6 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import { BorrowAMM, Position } from '@voltz-protocol/v1-sdk';
-import { DateTime } from 'luxon';
 import React, { useMemo, useRef } from 'react';
 
 import { BorrowAMMProvider } from '../../../contexts/BorrowAMMContext/BorrowAMMContext';
@@ -98,7 +97,7 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
   // todo: FB -> incorrect usage of map
   const renderVariableTable = () => {
     const liveMarkets = tableData.map((datum, index) => {
-      if (datum && DateTime.now() < datum.endDate) {
+      if (datum && Date.now().valueOf() < datum.endDate.toMillis()) {
         const position = findCurrentBorrowPosition(positions || [], borrowAmms[index].id);
         return { datum: datum, borrowAmms: borrowAmms[index], position: position, index: index };
       }
@@ -209,7 +208,7 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
 
   const renderFixedTable = () => {
     const marketsWithPosition = tableData.map((datum, index) => {
-      if (datum && DateTime.now() < datum.endDate) {
+      if (datum && Date.now().valueOf() < datum.endDate.toMillis()) {
         const position = findCurrentBorrowPosition(positions || [], borrowAmms[index].id);
         if (position) {
           return { datum: datum, borrowAmms: borrowAmms[index], position: position, index: index };

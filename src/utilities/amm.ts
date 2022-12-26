@@ -1,5 +1,6 @@
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 
+import { getConfig } from '../hooks/voltz-config/config';
 import { isBorrowing } from './isBorrowing';
 
 /**
@@ -29,7 +30,18 @@ export const findCurrentPosition = (
  * @param selectedPosition - the selected position to find the current amm for
  */
 export const findCurrentAmm = (amms: AMM[], selectedPosition: Position) => {
-  // First find pools that match rate oracle and underlying token
+  // First see if there's strong preference for some rollover pool
+  const config = getConfig();
+  const pool = config.pools.find(
+    (p) => p.id.toLowerCase() === selectedPosition.amm.id.toLowerCase(),
+  );
+
+  if (pool && pool.rollover) {
+    const customRollover = pool.rollover;
+    return amms.find((amm) => amm.id.toLowerCase() === customRollover.toLowerCase());
+  }
+
+  // Otherwise, find pools that match rate oracle and underlying token
   const matchingAmms = (amms || []).filter((amm) => {
     return (
       amm.rateOracle.id === selectedPosition.amm.rateOracle.id && // check that these are from the same source - rocket, lido etc
@@ -39,7 +51,7 @@ export const findCurrentAmm = (amms: AMM[], selectedPosition: Position) => {
   });
 
   // There could be multiple pools that match. Find the one with the latest end time
-  if (matchingAmms.length) {
+  if (matchingAmms.length > 0) {
     matchingAmms.sort((a, b) => +a.endDateTime - +b.endDateTime);
     return matchingAmms.pop();
   }

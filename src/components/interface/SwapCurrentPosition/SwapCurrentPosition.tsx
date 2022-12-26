@@ -1,6 +1,5 @@
 import Box from '@mui/material/Box';
 import { Position } from '@voltz-protocol/v1-sdk';
-import { BigNumber } from 'ethers';
 import isUndefined from 'lodash.isundefined';
 import React, { useEffect } from 'react';
 
@@ -32,15 +31,14 @@ export const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionPro
   const currentPositionBadgeText = `${
     positionInfo?.result?.beforeMaturity === false ? 'Previous' : 'Current'
   } position: ${position.positionType === 1 ? 'Fix taker' : 'Variable taker'}`;
-  const notional = Math.abs(position.effectiveVariableTokenBalance);
-  const margin = position.amm.descale(BigNumber.from(position.margin.toString()));
-  const leverage = notional / margin;
+  const notional = positionInfo?.result?.notional;
+  const margin = positionInfo?.result?.margin;
   const underlyingTokenName = position.amm.underlyingToken.name || '';
   const settlementCashflow = positionInfo?.result?.settlementCashflow;
 
   const getHealthFactor = () => {
     if (positionInfo?.loading) {
-      return 'loading...';
+      return <Ellipsis />;
     } else {
       let healthColour = '';
       let text = '';
@@ -70,11 +68,20 @@ export const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionPro
   const rows: React.ComponentProps<typeof SummaryPanel>['rows'] = [
     {
       label: 'NOTIONAL',
-      value: `${formatCurrency(notional)} ${underlyingTokenName}`,
+      value: isUndefined(notional) ? (
+        <Ellipsis />
+      ) : (
+        `${formatCurrency(notional)} ${underlyingTokenName}`
+      ),
     },
     {
       label: 'LEVERAGE',
-      value: `${formatCurrency(leverage)}x`,
+      value:
+        isUndefined(notional) || isUndefined(margin) ? (
+          <Ellipsis />
+        ) : (
+          `${formatCurrency(notional / margin)}x`
+        ),
     },
     {
       label: 'HEALTH FACTOR',
@@ -82,7 +89,11 @@ export const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionPro
     },
     {
       label: 'CURRENT MARGIN',
-      value: `${formatCurrency(margin)} ${underlyingTokenName}`,
+      value: isUndefined(margin) ? (
+        <Ellipsis />
+      ) : (
+        `${formatCurrency(margin)} ${underlyingTokenName}`
+      ),
       highlight: true,
     },
   ];
@@ -101,7 +112,7 @@ export const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionPro
     rows.push({
       label: 'NET BALANCE',
       value:
-        positionInfo?.result && !isUndefined(settlementCashflow) ? (
+        !isUndefined(settlementCashflow) && !isUndefined(margin) ? (
           `${formatCurrency(settlementCashflow + margin)} ${underlyingTokenName}`
         ) : (
           <Ellipsis />

@@ -1,5 +1,4 @@
 import { BorrowAMM, Position } from '@voltz-protocol/v1-sdk';
-import { DateTime } from 'luxon';
 
 export const getTotalVariableDebt = async (
   borrowAmms: BorrowAMM[],
@@ -12,7 +11,7 @@ export const getTotalVariableDebt = async (
     let hasPosition: boolean = false;
     if (positions && positions.length !== 0) {
       for (const p of positions) {
-        if (b.amm && p.amm.id === b.amm.id && DateTime.now() < b.amm.endDateTime) {
+        if (b.amm && p.amm.id === b.amm.id && Date.now().valueOf() < b.amm.endDateTime.toMillis()) {
           const varDebt = await b.getAggregatedBorrowBalanceInUSD(p);
           countVariablePositions += varDebt === 0 ? 0 : 1;
           sum += varDebt;
@@ -22,7 +21,7 @@ export const getTotalVariableDebt = async (
     }
 
     if (!hasPosition) {
-      if (b.amm && DateTime.now() < b.amm.endDateTime) {
+      if (b.amm && Date.now().valueOf() < b.amm.endDateTime.toMillis()) {
         const varDebt = await b.getUnderlyingBorrowBalanceInUSD();
         countVariablePositions += varDebt === 0 ? 0 : 1;
         sum += varDebt;
@@ -38,7 +37,7 @@ export const getTotalFixedDebt = async (borrowAmms: BorrowAMM[], positions: Posi
   for (const p of positions) {
     if (p.positionType === 2) {
       for (const b of borrowAmms) {
-        if (b.amm && p.amm.id === b.amm.id && DateTime.now() < b.amm.endDateTime) {
+        if (b.amm && p.amm.id === b.amm.id && Date.now().valueOf() < b.amm.endDateTime.toMillis()) {
           const fixDebt = await b.getFixedBorrowBalanceInUSD(p);
           countFixedPositions += fixDebt === 0 ? 0 : 1;
           sum += fixDebt;

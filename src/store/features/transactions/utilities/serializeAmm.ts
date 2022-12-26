@@ -4,15 +4,11 @@ import { SerializedAMM } from '../../../types';
 
 const serializeAmm = (amm: AMM): SerializedAMM => ({
   id: amm.id,
-  updatedTimestamp: amm.updatedTimestamp.toString(),
   factoryAddress: amm.factoryAddress,
-  fcmAddress: amm.fcmAddress,
   marginEngineAddress: amm.marginEngineAddress,
   termStartTimestamp: amm.termStartTimestamp.toString(),
   termEndTimestamp: amm.termEndTimestamp.toString(),
   tickSpacing: amm.tickSpacing.toString(),
-  tick: amm.tick.toString(),
-  txCount: amm.txCount.toString(),
   rateOracle: {
     id: amm.rateOracle.id,
     protocolId: amm.rateOracle.protocolId.toString(),
@@ -22,8 +18,7 @@ const serializeAmm = (amm: AMM): SerializedAMM => ({
       decimals: amm.underlyingToken.decimals.toString(),
     },
   },
-  totalLiquidity: amm.totalLiquidity.toString(),
-  totalNotionalTraded: amm.totalNotionalTraded.toString(),
+  wethAddress: amm.wethAddress,
 });
 
 export default serializeAmm;

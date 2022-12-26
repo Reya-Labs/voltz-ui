@@ -1,9 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { getMellowLPVaults, MellowProduct } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
 import { RootState } from '../../store';
-import { MellowProduct } from './getMellowLPVaults/config';
-import { getMellowLPVaults } from './getMellowLPVaults/getMellowLPVaults';
 import { rejectThunkWithError } from './helpers';
 
 export const initialiseVaultsThunk = createAsyncThunk<
@@ -16,7 +15,7 @@ export const initialiseVaultsThunk = createAsyncThunk<
   try {
     const { lpVaults } = thunkAPI.getState().ecosystem;
     await Promise.allSettled(
-      lpVaults.filter((m) => !m.metadata.soon).map((item) => item.vault.vaultInit()),
+      lpVaults.filter((m) => !m.metadata.soon).map((item) => item.vaultInit()),
     );
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
@@ -38,7 +37,7 @@ export const initialiseVaultsForSignerThunk = createAsyncThunk<
       return;
     }
     await Promise.allSettled(
-      lpVaults.filter((m) => !m.metadata.soon).map((item) => item.vault.userInit(signer)),
+      lpVaults.filter((m) => !m.metadata.soon).map((item) => item.userInit(signer)),
     );
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
@@ -56,7 +55,10 @@ const initialState: SliceState = {
   vaultsLoadedState: 'idle',
   signerLoadedState: 'idle',
   selectedVaultId: undefined,
-  lpVaults: getMellowLPVaults(),
+  lpVaults: getMellowLPVaults({
+    network: process.env.REACT_APP_NETWORK || '',
+    providerURL: process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK || '',
+  }),
 };
 
 export const slice = createSlice({
@@ -65,7 +67,10 @@ export const slice = createSlice({
   reducers: {
     resetVaultsAction: (state) => {
       // todo: Filip and Costin fix this by not keeping SDK stuff in UI
-      state.lpVaults = getMellowLPVaults() as never;
+      state.lpVaults = getMellowLPVaults({
+        network: process.env.REACT_APP_NETWORK || '',
+        providerURL: process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK || '',
+      }) as never;
     },
   },
   extraReducers: (builder) => {

@@ -25,7 +25,11 @@ export type ProgrammaticBadges =
   | 'maxBidding'
   | 'okBoomer'
   | 'dryIce'
+  | '0BCMellowLpVault'
   | 'mellowLpVault'
+  | 'mellowLpVaultTier1'
+  | 'mellowLpVaultTier2'
+  | 'mellowLpVaultTier3'
   // season OG
   | 'ogDegenStuff'
   | 'ogDeltaDegen'
@@ -42,7 +46,25 @@ export type ProgrammaticBadges =
   | 'ogYikes'
   | 'ogMaxBidding'
   | 'ogOkBoomer'
-  | 'ogDryIce';
+  | 'ogDryIce'
+  // season 2
+  | 's2DegenStuff'
+  | 's2DeltaDegen'
+  | 's2IrsConnoisseur'
+  | 's2LeverageCrowbar'
+  | 's2FixedTrader'
+  | 's2SushiRoll'
+  | 's2TopTrader'
+  | 's2BeWaterMyFriend'
+  | 's2RainMaker'
+  | 's2WaterHose'
+  | 's2MoneyMoneyMoney'
+  | 's2Lpoor'
+  | 's2Yikes'
+  | 's2MaxBidding'
+  | 's2MellowLpVaultTier1'
+  | 's2MellowLpVaultTier2'
+  | 's2MellowLpVaultTier3';
 
 export type NonProgrammaticBadges =
   | 'governorz'

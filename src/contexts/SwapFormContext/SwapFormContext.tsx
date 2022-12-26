@@ -1,5 +1,4 @@
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
-import { BigNumber } from 'ethers';
 import debounce from 'lodash.debounce';
 import isNumber from 'lodash.isnumber';
 import isUndefined from 'lodash.isundefined';
@@ -86,15 +85,15 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   mode = SwapFormModes.NEW_POSITION,
 }) => {
   const { amm: poolAmm } = useAMMContext();
-  const { amm: positionAmm, position } = usePositionContext();
+  const { amm: positionAmm, position, positionInfo } = usePositionContext();
   const { account } = useWallet();
 
   const defaultLeverage = defaultValues.leverage ?? 100;
   const defaultMargin = defaultValues.margin ?? undefined;
   const defaultMarginAction = defaultValues.marginAction || SwapFormMarginAction.ADD;
   const defaultNotional =
-    mode === SwapFormModes.ROLLOVER && position
-      ? Math.abs(position.effectiveVariableTokenBalance)
+    mode === SwapFormModes.ROLLOVER && positionInfo && positionInfo.result
+      ? Math.abs(positionInfo.result.variableTokenBalance)
       : defaultValues.notional;
 
   const ammCtx = useAMMContext();
@@ -348,8 +347,8 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       if (mode === SwapFormModes.EDIT_NOTIONAL || mode === SwapFormModes.EDIT_MARGIN) {
         const isRemovingNotional =
           (agent === Agents.VARIABLE_TRADER &&
-            (position?.effectiveVariableTokenBalance ?? 0) < 0) ||
-          (agent === Agents.FIXED_TRADER && (position?.effectiveVariableTokenBalance ?? 0) > 0);
+            (positionInfo?.result?.variableTokenBalance ?? 0) < 0) ||
+          (agent === Agents.FIXED_TRADER && (positionInfo?.result?.variableTokenBalance ?? 0) > 0);
         if (isRemovingNotional && isRemovingMargin) {
           return SwapFormSubmitButtonHintStates.REMOVE_AND_REMOVE;
         }
@@ -584,7 +583,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     if (marginAction === SwapFormMarginAction.REMOVE) {
       const isWithdrawable = isMarginWithdrawable(
         margin,
-        positionAmm?.descale(BigNumber.from(position?.margin.toString())),
+        positionInfo?.result?.margin,
         currentPositionMarginRequirement,
       );
       if (!isUndefined(isWithdrawable) && !isWithdrawable) {
@@ -600,11 +599,11 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     }
 
     // Check if notional/margin exceeds position balance
-    if (position && swapInfo.result) {
-      const isVT = position.effectiveVariableTokenBalance > 0;
+    if (positionInfo && positionInfo.result && swapInfo.result) {
+      const isVT = positionInfo.result.variableTokenBalance > 0;
       if (!isVT && agent === Agents.VARIABLE_TRADER) {
         const newVariableTokenBalance =
-          position.effectiveVariableTokenBalance + (notional ? notional : 0);
+          positionInfo.result.variableTokenBalance + (notional ? notional : 0);
         if (newVariableTokenBalance > 0) {
           valid = false;
           addError(err, 'notional', 'Removed too much notional');
@@ -613,7 +612,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if (isVT && agent === Agents.FIXED_TRADER) {
         const newVariableTokenBalance =
-          position.effectiveVariableTokenBalance - (notional ? notional : 0);
+          positionInfo.result.variableTokenBalance - (notional ? notional : 0);
         if (newVariableTokenBalance < 0) {
           valid = false;
           addError(err, 'notional', 'Removed too much notional');

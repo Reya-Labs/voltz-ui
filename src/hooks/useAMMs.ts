@@ -1,5 +1,4 @@
 import { AMM, RateOracle, Token } from '@voltz-protocol/v1-sdk';
-import { providers } from 'ethers';
 import JSBI from 'jsbi';
 import { useCallback, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -7,6 +6,7 @@ import { useLocation } from 'react-router-dom';
 import { Amm_OrderBy, useGetAmMsQuery } from '../graphql';
 import { routes } from '../routes/paths';
 import { useWallet } from './useWallet';
+import { getConfig } from './voltz-config/config';
 
 export type UseAMMsResult = {
   amms?: AMM[];
@@ -27,10 +27,11 @@ export const useAMMs = (): UseAMMsResult => {
 
   const amms = useMemo(() => {
     if (data && !loading && !error) {
+      const config = getConfig();
+
       let ammsData = data.amms.map(
         ({
           id: ammId,
-          fcm: { id: fcmAddress },
           marginEngine: { id: marginEngineAddress },
           rateOracle: {
             id: rateOracleAddress,
@@ -49,8 +50,7 @@ export const useAMMs = (): UseAMMsResult => {
           new AMM({
             id: ammId,
             signer,
-            provider: providers.getDefaultProvider(process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK),
-            environment: process.env.REACT_APP_DECODING_TAG || 'NO_ENV',
+            provider: config.PROVIDER,
             rateOracle: new RateOracle({
               id: rateOracleAddress,
               protocolId: parseInt(protocolId as string, 10),
@@ -60,41 +60,34 @@ export const useAMMs = (): UseAMMsResult => {
               name: tokenName,
               decimals: decimals as number,
             }),
-            factoryAddress: process.env.REACT_APP_FACTORY_ADDRESS || '0x',
+            factoryAddress: config.factoryAddress || '0x',
             marginEngineAddress,
-            fcmAddress,
-            updatedTimestamp: ammUpdatedTimestamp as JSBI,
             termStartTimestamp: termStartTimestamp as JSBI,
             termEndTimestamp: termEndTimestamp as JSBI,
-            tick: parseInt(tick as string, 10),
             tickSpacing: parseInt(tickSpacing as string, 10),
-            txCount: parseInt(txCount as string, 10),
-            totalNotionalTraded: totalNotionalTraded as JSBI,
-            totalLiquidity: totalLiquidity as JSBI,
+            wethAddress: config.wethAddress,
           }),
       );
-      if (!process.env.REACT_APP_WHITELIST || process.env.REACT_APP_WHITELIST === `UNPROVIDED`) {
-        return ammsData;
-      } else {
-        if (
-          pathname !== `/${routes.TRADER_POOLS}` &&
-          pathname !== `/${routes.PORTFOLIO}` &&
-          process.env.REACT_APP_LP_ONLY_WHITELIST
-        ) {
-          const whitelist = process.env.REACT_APP_LP_ONLY_WHITELIST.split(',').map((s) =>
-            s.trim().toLowerCase(),
-          );
-          ammsData = ammsData?.filter((amm) => whitelist.includes(amm.id.toLowerCase()));
-          return ammsData;
+
+      if (config.apply) {
+        const whitelist = config.pools.filter((pool) => pool.show.general).map((pool) => pool.id);
+        ammsData = ammsData?.filter((amm) => whitelist.includes(amm.id.toLowerCase()));
+
+        if (pathname === `/${routes.TRADER_POOLS}` || pathname === `/${routes.PORTFOLIO}`) {
+          const traderWhitelist = config.pools
+            .filter((pool) => pool.show.trader)
+            .map((pool) => pool.id);
+          ammsData = ammsData?.filter((amm) => traderWhitelist.includes(amm.id.toLowerCase()));
         }
-        if (process.env.REACT_APP_WHITELIST) {
-          const whitelist = process.env.REACT_APP_WHITELIST.split(',').map((s) =>
-            s.trim().toLowerCase(),
-          );
-          ammsData = ammsData?.filter((amm) => whitelist.includes(amm.id.toLowerCase()));
-          return ammsData;
-        }
+
+        ammsData.sort(
+          (a, b) =>
+            config.pools.findIndex((p) => p.id === a.id.toLowerCase()) -
+            config.pools.findIndex((p) => p.id === b.id.toLowerCase()),
+        );
       }
+
+      return ammsData;
     }
   }, [loading, error, isSignerAvailable, handleRefetch]);
 

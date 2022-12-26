@@ -1,5 +1,4 @@
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
-import { BigNumber } from 'ethers';
 import isUndefined from 'lodash.isundefined';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -39,7 +38,7 @@ export const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFor
   const dispatch = useAppDispatch();
   const form = useMintBurnForm();
   const navigate = useNavigate();
-  const { position } = usePositionContext();
+  const { position, positionInfo } = usePositionContext();
 
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useAppSelector(selectors.transactionSelector)(transactionId);
@@ -168,8 +167,8 @@ export const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFor
           fixedRateLower={position?.fixedRateLower.toNumber()}
           fixedRateUpper={position?.fixedRateUpper.toNumber()}
           formMode={form.mode}
-          margin={position.amm.descale(BigNumber.from(position.margin.toString()))}
-          notional={position.notional}
+          margin={positionInfo?.result?.margin}
+          notional={positionInfo?.result?.notional}
           underlyingTokenName={position.amm.underlyingToken.name || ''}
           onPortfolio={handleComplete}
         />

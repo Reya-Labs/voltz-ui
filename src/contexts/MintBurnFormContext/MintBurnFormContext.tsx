@@ -1,5 +1,4 @@
 import { AMM, PositionInfo } from '@voltz-protocol/v1-sdk';
-import { BigNumber } from 'ethers';
 import debounce from 'lodash.debounce';
 import isUndefined from 'lodash.isundefined';
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
@@ -142,8 +141,8 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   const defaultMargin = defaultValues.margin ?? undefined;
   const defaultMarginAction = defaultValues.marginAction ?? MintBurnFormMarginAction.ADD;
   const defaultNotional =
-    mode === MintBurnFormModes.ROLLOVER && position
-      ? position.notional
+    mode === MintBurnFormModes.ROLLOVER && positionInfo && positionInfo.result
+      ? positionInfo.result.notional
       : defaultValues.notional ?? undefined;
 
   const balance = useBalance(
@@ -499,7 +498,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
     if (marginAction === MintBurnFormMarginAction.REMOVE) {
       const isWithdrawable = isMarginWithdrawable(
         margin,
-        positionAmm?.descale(BigNumber.from(position?.margin.toString())),
+        positionInfo?.result?.margin,
         positionInfo?.result?.safetyThreshold,
       );
 

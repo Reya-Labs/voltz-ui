@@ -7,15 +7,11 @@ import {
   MarginUpdate,
   Mint,
   Position,
-  RateOracle,
   Settlement,
   Swap,
-  Token,
 } from '@voltz-protocol/v1-sdk';
-import { providers } from 'ethers';
 import JSBI from 'jsbi';
 
-import { Wallet } from '../../contexts/WalletContext/types';
 import { GetWalletQuery } from '../../graphql';
 
 type MEPositionQueryData = NonNullable<GetWalletQuery['wallet']>['positions'][number];
@@ -23,46 +19,22 @@ type MEPositionQueryData = NonNullable<GetWalletQuery['wallet']>['positions'][nu
 /**
  * Takes the data received for an ME position from GetWalletQuery and returns a Position class instance
  * @param positionData - The data for a ME position received from the GetWalletQuery graphql query
- * @param signer - The wallet signer
+ * @param amms - The list of amms
  */
 export const MEPositionFactory = (
   positionData: MEPositionQueryData,
-  signer: Wallet['signer'],
-): Position => {
+  amms: AMM[],
+): Position | undefined => {
   const {
     id: positionId,
     createdTimestamp: positionCreatedTimestamp,
-    amm: {
-      id: ammId,
-      fcm: { id: fcmAddress },
-      marginEngine: { id: marginEngineAddress },
-      rateOracle: {
-        id: rateOracleAddress,
-        protocolId,
-        token: { id: tokenAddress, name: tokenName, decimals },
-      },
-      tickSpacing,
-      termStartTimestamp,
-      termEndTimestamp,
-      updatedTimestamp: ammUpdatedTimestamp,
-      tick,
-      txCount,
-      totalNotionalTraded: ammTotalNotionalTraded,
-      totalLiquidity,
-    },
+    amm: { id: ammId },
     owner: { id: ownerAddress },
     tickLower,
     tickUpper,
     updatedTimestamp: positionUpdatedTimestamp,
-    liquidity,
-    margin,
-    fixedTokenBalance,
-    variableTokenBalance,
-    accumulatedFees,
     positionType,
     isSettled,
-    totalNotionalTraded: positionTotalNotionalTraded,
-    sumOfWeightedFixedRate,
     mints,
     burns,
     swaps,
@@ -71,46 +43,21 @@ export const MEPositionFactory = (
     settlements,
   } = positionData;
 
+  const correspondingAmm = amms.find((amm) => amm.id === ammId);
+  if (!correspondingAmm) {
+    return;
+  }
+
   return new Position({
     id: positionId,
     createdTimestamp: JSBI.BigInt(positionCreatedTimestamp),
     updatedTimestamp: JSBI.BigInt(positionUpdatedTimestamp),
     tickLower: parseInt(tickLower as string),
     tickUpper: parseInt(tickUpper as string),
-    liquidity: JSBI.BigInt(liquidity),
-    margin: JSBI.BigInt(margin),
-    fixedTokenBalance: JSBI.BigInt(fixedTokenBalance),
-    variableTokenBalance: JSBI.BigInt(variableTokenBalance),
-    accumulatedFees: JSBI.BigInt(accumulatedFees),
     positionType: parseInt(positionType as string),
     isSettled,
     owner: ownerAddress,
-    amm: new AMM({
-      id: ammId,
-      signer,
-      provider: providers.getDefaultProvider(process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK),
-      environment: process.env.REACT_APP_DECODING_TAG || 'PROD',
-      rateOracle: new RateOracle({
-        id: rateOracleAddress,
-        protocolId: parseInt(protocolId as string, 10),
-      }),
-      underlyingToken: new Token({
-        id: tokenAddress,
-        name: tokenName,
-        decimals: decimals as number,
-      }),
-      factoryAddress: process.env.REACT_APP_FACTORY_ADDRESS || '0x',
-      marginEngineAddress,
-      fcmAddress,
-      updatedTimestamp: JSBI.BigInt(ammUpdatedTimestamp),
-      termStartTimestamp: JSBI.BigInt(termStartTimestamp),
-      termEndTimestamp: JSBI.BigInt(termEndTimestamp),
-      tick: parseInt(tick as string),
-      tickSpacing: parseInt(tickSpacing as string),
-      txCount: parseInt(txCount as string),
-      totalNotionalTraded: ammTotalNotionalTraded as JSBI,
-      totalLiquidity: totalLiquidity as JSBI,
-    }),
+    amm: correspondingAmm,
     mints: mints.map(
       (args) =>
         new Mint({
@@ -188,12 +135,5 @@ export const MEPositionFactory = (
           settlementCashflow: JSBI.BigInt(args.settlementCashflow),
         }),
     ),
-    fcmSwaps: [],
-    fcmUnwinds: [],
-    fcmSettlements: [],
-    marginInScaledYieldBearingTokens: JSBI.BigInt(0),
-    source: 'ME',
-    totalNotionalTraded: positionTotalNotionalTraded as JSBI,
-    sumOfWeightedFixedRate: sumOfWeightedFixedRate as JSBI,
   });
 };

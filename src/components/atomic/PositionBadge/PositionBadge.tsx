@@ -24,9 +24,14 @@ const labels: Record<PositionBadgeVariant, string> = {
 const baseStyles: SystemStyleObject<Theme> = {
   border: '1px solid transparent',
   display: 'inline-block',
-  padding: (theme) => `${theme.spacing(1)} ${theme.spacing(2)}`,
+  padding: (theme) => theme.spacing(1, 2),
   textTransform: 'uppercase',
   borderRadius: '4px',
+  fontFamily: 'PixelOperatorMono',
+  fontStyle: 'normal',
+  fontWeight: 400,
+  fontSize: '14px',
+  lineHeight: '14px',
 };
 
 const styles: Record<PositionBadgeVariant, SystemStyleObject<Theme>> = {
@@ -45,8 +50,9 @@ const styles: Record<PositionBadgeVariant, SystemStyleObject<Theme>> = {
   LP: {
     ...baseStyles,
     borderColor: colors.lavenderWeb.darken045,
-    color: 'primary.base',
-    background: colors.lavenderWeb.darken045,
+    color: colors.skyBlueCrayola.base,
+    /* Liberty 6 */
+    background: '#19152A',
   },
   FC: {
     ...baseStyles,

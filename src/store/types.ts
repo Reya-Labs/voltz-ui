@@ -20,7 +20,6 @@ export type Transaction = TransactionUpdate & {
   fixedHigh?: number;
   oldFixedLow?: number;
   oldFixedHigh?: number;
-  source?: string;
   notional: number;
   margin: number;
   partialCollateralization?: boolean;
@@ -47,22 +46,17 @@ export type State = {
 
 export type SerializedAMM = {
   id: string;
-  updatedTimestamp: string;
   factoryAddress: string;
-  fcmAddress: string;
   marginEngineAddress: string;
   termStartTimestamp: string;
   termEndTimestamp: string;
   tickSpacing: string;
-  tick: string;
-  txCount: string;
   rateOracle: {
     id: string;
     protocolId: string;
     token: { id: string; name: string; decimals: string };
   };
-  totalLiquidity: string;
-  totalNotionalTraded: string;
+  wethAddress: string;
 };
 
 type ActionType =
