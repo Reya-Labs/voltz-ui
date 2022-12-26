@@ -98,6 +98,12 @@
               "**/dist/**"
             ],
             "message": "Don't import types/modules from 'dist' directories!"
+          },
+          {
+            "group": [
+              "src/**"
+            ],
+            "message": "Don't import from 'src' directory! Use relative paths instead!"
           }
         ]
       }
@@ -117,6 +123,10 @@
           {
             "message": "Avoid using inline styles for components. Use styled components instead.",
             "propName": "sx"
+          },
+          {
+            "message": "Use data-testid instead.",
+            "propName": "data-testId"
           }
         ]
       }

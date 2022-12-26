@@ -2,7 +2,7 @@ import { Position } from '@voltz-protocol/v1-sdk';
 import { BigNumber } from 'ethers';
 import JSBI from 'jsbi';
 
-import { Icons } from '../../../../../../../components/atomic/Icon/types';
+import { SupportedIcons } from '../../../../../../../components/atomic/Icon/types';
 import { formatTimestamp } from '../../../../../../../utilities/date';
 import { formatCurrency } from '../../../../../../../utilities/number';
 import { LPPositionTransaction, TransactionType } from './types';
@@ -53,7 +53,7 @@ export const sortTransactions = (transactions: LPPositionTransaction[]) => {
 export const getTransactionData = (position: Position, tx: LPPositionTransaction) => {
   const token = position.amm.underlyingToken.name || '';
 
-  const iconMap: Record<LPPositionTransaction['type'], Icons> = {
+  const iconMap: Record<LPPositionTransaction['type'], SupportedIcons> = {
     [TransactionType.BURN]: 'tx-burn',
     [TransactionType.LIQUIDATION]: 'tx-liquidation',
     [TransactionType.MARGIN_UPDATE]: 'tx-margin-update',

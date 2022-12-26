@@ -2,16 +2,16 @@ import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import React from 'react';
 
 import { SystemStyleObject, Theme } from '../../../theme';
-import { iconMap, Icons } from './types';
+import { iconMap, SupportedIcons } from './types';
 
 export type IconProps = SvgIconProps & {
-  name: Icons;
+  name: SupportedIcons;
 };
 
 export const Icon: React.FunctionComponent<IconProps> = ({ name, sx, ...props }) => {
   const NamedIcon = iconMap[name];
 
-  const extraProps = (iconName: Icons) => {
+  const extraProps = (iconName: SupportedIcons) => {
     switch (iconName) {
       case 'voltz':
         return {
@@ -122,6 +122,12 @@ export const Icon: React.FunctionComponent<IconProps> = ({ name, sx, ...props })
   };
 
   return (
-    <SvgIcon component={NamedIcon} sx={[defaultSx, ...getSx()]} {...extraProps(name)} {...props} />
+    <SvgIcon
+      component={NamedIcon}
+      data-testid={`Icon-${name}`}
+      sx={[defaultSx, ...getSx()]}
+      {...extraProps(name)}
+      {...props}
+    />
   );
 };

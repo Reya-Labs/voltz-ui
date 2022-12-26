@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import React from 'react';
 
 import { Wallet, WalletName } from '../../../../../../../contexts/WalletContext/types';
-import { Icons } from '../../../../../../atomic/Icon/types';
+import { SupportedIcons } from '../../../../../../atomic/Icon/types';
 import { Typography } from '../../../../../../atomic/Typography/Typography';
 import { WalletOptionButton } from './components';
 
@@ -35,7 +35,7 @@ export const WalletSelect: React.FunctionComponent<WalletSelectProps> = ({
         {walletOptions.map(({ title, name }) => (
           <WalletOptionButton
             key={title}
-            icon={name as Icons}
+            icon={name as SupportedIcons}
             selected={name === wallet.name && wallet.status === 'connected'}
             title={title}
             onClick={() => onSelectWallet(name)}

@@ -6,7 +6,7 @@ import { Wallet } from '../../../../../contexts/WalletContext/types';
 import { colors } from '../../../../../theme';
 import { Button } from '../../../../atomic/Button/Button';
 import { Icon } from '../../../../atomic/Icon/Icon';
-import { Icons } from '../../../../atomic/Icon/types';
+import { SupportedIcons } from '../../../../atomic/Icon/types';
 import { AvatarAddress } from '../../../AvatarAddress/AvatarAddress';
 
 export type WalletConnectButtonProps = {
@@ -55,7 +55,7 @@ export const WalletConnectButton: React.FunctionComponent<WalletConnectButtonPro
     return (
       <Box sx={{ marginLeft: (theme) => theme.spacing(4), display: 'flex' }}>
         <Button
-          endIcon={name && <Icon name={name as Icons} sx={{ width: 16 }} />}
+          endIcon={name && <Icon name={name as SupportedIcons} sx={{ width: 16 }} />}
           sx={{ zIndex: 1, left: (theme) => theme.spacing(-2), fontSize: 16 }}
           variant="dark"
           onClick={onClick}

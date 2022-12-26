@@ -5,13 +5,13 @@ import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import { Position } from '@voltz-protocol/v1-sdk';
 import React from 'react';
-import { getConfig } from 'src/hooks/voltz-config/config';
 
 import { Agents } from '../../../contexts/AgentContext/types';
 import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
 import { PortfolioContext } from '../../../contexts/PortfolioContext/PortfolioContext';
 import { useAgent } from '../../../hooks/useAgent';
 import { useAMMs } from '../../../hooks/useAMMs';
+import { getConfig } from '../../../hooks/voltz-config/config';
 import { colors, SystemStyleObject, Theme } from '../../../theme';
 import { findCurrentAmm } from '../../../utilities/amm';
 import { getRowButtonId } from '../../../utilities/googleAnalytics';

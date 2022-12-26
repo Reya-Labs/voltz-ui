@@ -1,7 +1,6 @@
 import Box from '@mui/material/Box';
 import { AMM, BorrowAMM, Position } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useState } from 'react';
-import { setPageTitle } from 'src/utilities/page';
 
 import { ConnectedBorrowForm } from '../../components/containers/ConnectedBorrowForm/ConnectedBorrowForm';
 import { ConnectedBorrowPositionTable } from '../../components/containers/ConnectedBorrowPositionTable/ConnectedBorrowPositionTable';
@@ -13,6 +12,7 @@ import { PositionProvider } from '../../contexts/PositionContext/PositionContext
 import { useBorrowPositions } from '../../hooks/useBorrowPositions';
 import { useWallet } from '../../hooks/useWallet';
 import { findCurrentBorrowPosition } from '../../utilities/borrowAmm';
+import { setPageTitle } from '../../utilities/page';
 import { getRenderMode } from './services';
 
 export const FixedBorrower: React.FunctionComponent = () => {
