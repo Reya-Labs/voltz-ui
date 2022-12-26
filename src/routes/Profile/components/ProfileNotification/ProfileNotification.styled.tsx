@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
 
-import { Pill } from '../../../../components/atomic/Pill';
+import { Pill } from '../../../../components/atomic/Pill/Pill';
 import { Typography } from '../../../../components/atomic/Typography/Typography';
 import { colors } from '../../../../theme';
 

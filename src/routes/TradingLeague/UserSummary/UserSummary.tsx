@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import { DateTime } from 'luxon';
 import React from 'react';
 
-import { ProgressBarBox } from '../../../components/atomic/ProgressBar/ProgressBar.styled';
+import { ProgressBarPercentageBox } from '../../../components/atomic/ProgressBar/ProgressBar.styled';
 import { Typography } from '../../../components/atomic/Typography/Typography';
 import { colors } from '../../../theme';
 import { formatDateTime } from '../../../utilities/date';
@@ -106,7 +106,7 @@ const UserSummary = ({
               marginTop: (theme) => theme.spacing(1),
             }}
           >
-            <ProgressBarBox percentage={Math.min(percentage, 100)} />
+            <ProgressBarPercentageBox percentage={Math.min(percentage, 100)} />
           </Box>
         </Box>
       </Box>

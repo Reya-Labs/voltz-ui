@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Pill, PillProps } from '../../../../components/atomic/Pill';
+import { Pill, PillProps } from '../../../../components/atomic/Pill/Pill';
 import { BadgeVariant } from '../../data/getSeasonBadges';
 import { BADGE_VARIANT_TIER_MAP, BADGE_VARIANT_TRADER_LP_MAP, TIER_COPY_MAP } from '../../helpers';
 import { BadgeTier } from '../../types';

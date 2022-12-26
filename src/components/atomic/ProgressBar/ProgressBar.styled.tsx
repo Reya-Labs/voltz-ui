@@ -15,7 +15,7 @@ const grow = (percentage: number) => {
 `;
 };
 
-export const ProgressBarBox = styled(Box)<{ percentage: number }>`
+export const ProgressBarPercentageBox = styled(Box)<{ percentage: number }>`
   width: 0;
   background: ${colors.lavenderWeb.base};
   height: 100%;

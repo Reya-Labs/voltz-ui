@@ -92,5 +92,3 @@ export const PositionBadge = ({ size = 'medium', sx = {}, text, variant }: Posit
 
   return null;
 };
-
-export default PositionBadge;
