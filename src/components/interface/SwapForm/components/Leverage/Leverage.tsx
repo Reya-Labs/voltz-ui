@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import {
   formatNumber,
-  notFormatted,
+  removeFormat,
   stringToBigFloat,
   toUSFormat,
 } from '../../../../../utilities/number';
@@ -82,7 +82,7 @@ export const Leverage = ({
           label={<IconLabel icon="information-circle" info={hint} label={'Leverage'} />}
           suffix="x"
           suffixPadding={0}
-          value={notFormatted(inputValue)}
+          value={removeFormat(inputValue)}
           allowDecimals
           dynamic
           onChange={handleChangeInput}
