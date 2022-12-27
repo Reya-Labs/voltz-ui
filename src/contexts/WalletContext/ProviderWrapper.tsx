@@ -9,6 +9,7 @@ import { useGetWalletQuery } from '../../graphql';
 import { selectors } from '../../store';
 import { useAppSelector } from '../../store/hooks';
 import { getErrorMessage } from '../../utilities/getErrorMessage';
+import { getSentryTracker } from '../../utilities/sentry';
 import * as services from './services';
 import { WalletName, WalletStatus } from './types';
 import { WalletContext } from './WalletContext';
@@ -104,8 +105,10 @@ const ProviderWrapper: React.FunctionComponent<ProviderWrapperProps> = ({
           errorMessage = 'Wrong network';
         } else if (errorMessage.includes('Risky Account Detected')) {
           errorMessage = 'Risky Account Detected';
+          getSentryTracker().captureException(error);
         } else {
           errorMessage = 'Failed connection';
+          getSentryTracker().captureException(error);
         }
 
         disconnect(errorMessage || null);
