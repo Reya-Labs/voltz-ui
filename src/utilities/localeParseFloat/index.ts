@@ -8,7 +8,7 @@ export const localeParseFloat = (
   const parsedStringNumber = Array.from(stringNumber, (c) =>
     c === thousandsSeparator ? '' : c === decimalSeparator ? '.' : c,
   ).join('');
-  debugger;
+
   // Now it can be parsed
   return parseFloat(parsedStringNumber);
 };
