@@ -26,9 +26,7 @@ import {
   MaturityInfoBox,
   NameBox,
   NameTypography,
-  NegativeAPYTypography,
   PoolsCountBox,
-  PositiveAPYTypography,
   TokenTypography,
   TotalBalanceTypography,
   VaultListItemBottomBox,
@@ -41,7 +39,6 @@ export type VaultListItemProps = {
   id: string;
   token: string;
   totalBalance: number;
-  totalApy: number;
   vaults: {
     maturityTimestampMS: number;
     isCompleted: boolean;
@@ -58,7 +55,6 @@ export type VaultListItemProps = {
 };
 export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
   vaults,
-  totalApy,
   totalBalance,
   token,
   depositable,
@@ -66,8 +62,6 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
   automaticRolloverState,
   onChangeAutomaticRolloverStatePromise = doNothing,
 }) => {
-  const TotalAPYTypography = totalApy >= 0 ? PositiveAPYTypography : NegativeAPYTypography;
-
   return (
     <VaultListItemBox>
       <VaultListItemTopBox>
@@ -79,7 +73,6 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
           {compactFormat(totalBalance).toUpperCase()}
           <TokenTypography>{token.toUpperCase()}</TokenTypography>
         </TotalBalanceTypography>
-        <TotalAPYTypography>{totalApy}%</TotalAPYTypography>
         <ActionsBox>
           {depositable ? (
             <DepositButton

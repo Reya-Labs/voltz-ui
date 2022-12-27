@@ -69,24 +69,6 @@ export const TokenTypography = styled('span')`
   color: #857ea5;
 `;
 
-const TotalAPYTypography = styled(Typography)`
-  font-family: 'PixelOperatorMono', monospace;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 130%;
-  min-width: 35px;
-  text-align: center;
-`;
-
-export const PositiveAPYTypography = styled(TotalAPYTypography)`
-  color: ${colors.skyBlueCrayola.base};
-`;
-
-export const NegativeAPYTypography = styled(TotalAPYTypography)`
-  color: ${colors.wildStrawberry.base};
-`;
-
 export const DepositButton = styled(Link)`
   /* Liberty 4 */
   background: #2b2548;
