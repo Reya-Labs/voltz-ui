@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { IconLabel } from '../../../../../components/composite/IconLabel/IconLabel';
 import { InputTokenLabel } from '../../../../../components/composite/InputTokenLabel/InputTokenLabel';
 import { doNothing } from '../../../../../utilities/doNothing';
+import { localeParseFloat } from '../../../../../utilities/localeParseFloat';
 import { toUSFormat } from '../../../../../utilities/number';
 import { MaskedIntegerFieldStyled } from './DepositAmountInput.styled';
 
@@ -47,7 +48,7 @@ export const DepositAmountInput: React.FunctionComponent<Props> = ({
       value={inputValue}
       allowDecimals
       onBlur={() => {
-        const valueParsed = parseFloat(inputValue || '0');
+        const valueParsed = localeParseFloat(inputValue || '0');
         if (isNaN(valueParsed)) {
           handleOnBlur(0);
           return;
