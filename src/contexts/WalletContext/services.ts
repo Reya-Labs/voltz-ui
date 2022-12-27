@@ -2,7 +2,7 @@ import detectEthereumProvider from '@metamask/detect-provider';
 import WalletConnectProvider from '@walletconnect/ethereum-provider';
 import { ethers } from 'ethers';
 
-import { getReferrer } from '../../utilities/referrer-store/referrer-store';
+import { getReferrer } from '../../utilities/referrer-store';
 import { getSentryTracker } from '../../utilities/sentry';
 import { WalletName, WalletRiskAssessment } from './types';
 

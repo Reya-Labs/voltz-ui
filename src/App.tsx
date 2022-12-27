@@ -20,9 +20,9 @@ import {
   isRefererStored,
   isValidReferrerStored,
   isValidReferrerValue,
-  REFERRER_QUERY_PARAM_KEY,
   setReferrer,
-} from './utilities/referrer-store/referrer-store';
+} from './utilities/referrer-store';
+import { REFERRER_QUERY_PARAM_KEY } from './utilities/referrer-store/constants';
 
 export const App = () => {
   const [searchParams] = useSearchParams();

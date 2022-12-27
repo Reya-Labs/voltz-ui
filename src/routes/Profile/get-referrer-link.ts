@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { routes } from '../../routes/paths';
-import { REFERRER_QUERY_PARAM_KEY } from '../../utilities/referrer-store/referrer-store';
+import { REFERRER_QUERY_PARAM_KEY } from '../../utilities/referrer-store/constants';
 import { getSentryTracker } from '../../utilities/sentry';
 
 const cached: Record<string, string> = {};
