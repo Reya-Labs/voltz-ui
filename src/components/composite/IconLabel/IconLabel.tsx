@@ -4,13 +4,13 @@ import React, { ReactNode, useState } from 'react';
 
 import { SystemStyleObject, Theme } from '../../../theme';
 import { Icon } from '../../atomic/Icon/Icon';
-import { Icons } from '../../atomic/Icon/types';
+import { SupportedIcons } from '../../atomic/Icon/types';
 import { Panel } from '../../atomic/Panel/Panel';
 import { Typography } from '../../atomic/Typography/Typography';
 
 export type IconLabelProps = {
   label: string | ReactNode;
-  icon: Icons;
+  icon: SupportedIcons;
   info?: ReactNode;
   removeIcon?: boolean;
   iconSx?: SystemStyleObject<Theme>;

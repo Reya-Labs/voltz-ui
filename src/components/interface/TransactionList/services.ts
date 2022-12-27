@@ -4,7 +4,7 @@ import JSBI from 'jsbi';
 
 import { formatTimestamp } from '../../../utilities/date';
 import { formatCurrency, formatNumber } from '../../../utilities/number';
-import { Icons } from '../../atomic/Icon/types';
+import { SupportedIcons } from '../../atomic/Icon/types';
 import { LPPositionTransaction, TraderPositionTransaction, TransactionType } from './types';
 
 /**
@@ -79,7 +79,7 @@ export const getTransactionData = (
 ) => {
   const token = position.amm.underlyingToken.name || '';
 
-  const iconMap: Record<TransactionType, Icons> = {
+  const iconMap: Record<TransactionType, SupportedIcons> = {
     [TransactionType.BURN]: 'tx-burn',
     [TransactionType.LIQUIDATION]: 'tx-liquidation',
     [TransactionType.MARGIN_UPDATE]: 'tx-margin-update',

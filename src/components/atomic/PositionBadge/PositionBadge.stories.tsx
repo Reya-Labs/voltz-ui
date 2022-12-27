@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
-import PositionBadge from './PositionBadge';
+import { PositionBadge } from './PositionBadge';
 
 export default {
   title: 'Atomic/PositionBadge',

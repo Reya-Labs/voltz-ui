@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 
 import { colors } from '../../../theme';
-import { Pill } from '../../atomic/Pill';
+import { Pill } from '../../atomic/Pill/Pill';
 import { Typography } from '../../atomic/Typography/Typography';
 
 export const ContainerBox = styled(Box)`

@@ -83,7 +83,7 @@ import {
   Yikes,
 } from './icons';
 
-export type Icons =
+export type SupportedIcons =
   | 'arrow-left'
   | 'arrow-right'
   | 'ethereum'
@@ -170,7 +170,7 @@ export type Icons =
   | 's2MellowLpVaultTier2'
   | 's2MellowLpVaultTier3';
 
-export const iconMap: Record<Icons, ElementType> = {
+export const iconMap: Record<SupportedIcons, ElementType> = {
   'arrow-left': ArrowLeft as ElementType,
   'arrow-right': ArrowRight as ElementType,
   ethereum: Ethereum as ElementType,
