@@ -2,7 +2,8 @@
   "coverageReporters": ["lcov", "json-summary"],
   "collectCoverageFrom": [
     "src/**/*.{js,jsx,ts,tsx}",
-    "!src/**/*.d.ts"
+    "!src/**/*.d.ts",
+    "!src/**/*.stories.{js,jsx,ts,tsx}"
   ],
   "moduleFileExtensions": [
     "web.js",
@@ -27,7 +28,7 @@
   "setupFiles": [
     "react-app-polyfill/jsdom"
   ],
-  "setupFilesAfterEnv": [],
+  "setupFilesAfterEnv": ["@testing-library/jest-dom/extend-expect"],
   "testEnvironment": "jsdom",
   "testMatch": [
     "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",

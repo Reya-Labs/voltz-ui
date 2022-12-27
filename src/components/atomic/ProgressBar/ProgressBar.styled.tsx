@@ -4,8 +4,7 @@ import { keyframes, styled } from '@mui/material/styles';
 import { colors } from '../../../theme';
 import { Typography } from '../Typography/Typography';
 
-const grow = (percentage: number) => {
-  return keyframes`
+const grow = (percentage: number) => keyframes`
   0% {
     width: 0;
   }
@@ -13,7 +12,6 @@ const grow = (percentage: number) => {
     width: ${percentage}%;
   }
 `;
-};
 
 export const ProgressBarPercentageBox = styled(Box)<{ percentage: number }>`
   width: 0;
