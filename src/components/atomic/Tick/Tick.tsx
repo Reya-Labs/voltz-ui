@@ -7,7 +7,7 @@ type TickProps = {
 };
 
 export const Tick: React.FunctionComponent<TickProps> = React.memo(({ onAnimationEnd }) => (
-  <IconAnimated>
+  <IconAnimated data-testid="Tick">
     <TickContainer>
       <TickPart1
         viewBox="0 0 25 52"

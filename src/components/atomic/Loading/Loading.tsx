@@ -1,16 +1,7 @@
-import Box from '@mui/material/Box';
 import React from 'react';
 
-import { SystemStyleObject, Theme } from '../../../theme';
+import { LoadingBox } from './Loading.styled';
 
-type LoadingProps = {
-  sx?: SystemStyleObject<Theme>;
-};
-
-export const Loading: React.FunctionComponent<LoadingProps> = ({ sx = {} }) => {
-  return (
-    <Box sx={{ height: 40, width: 40, ...sx }}>
-      <img alt="loading" height="100%" src="/images/loading.gif" width="100%" />
-    </Box>
-  );
-};
+export const Loading: React.FunctionComponent = React.memo(() => (
+  <LoadingBox data-testid="Loading-Box" />
+));

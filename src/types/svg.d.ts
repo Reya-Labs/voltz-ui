@@ -4,3 +4,6 @@ declare module '*.svg' {
   const src: string;
   export default src;
 }
+declare module '*.gif' {
+  export default '' as string;
+}

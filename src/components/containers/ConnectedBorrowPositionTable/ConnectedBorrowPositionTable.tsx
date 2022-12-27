@@ -138,7 +138,7 @@ export const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorr
         }}
         variant="grey-dashed"
       >
-        <Loading sx={{ margin: '0 auto' }} />
+        <Loading />
       </Panel>
     );
   };

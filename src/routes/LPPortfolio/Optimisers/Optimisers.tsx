@@ -22,7 +22,7 @@ export const Optimisers: React.FunctionComponent = () => {
     return (
       <OptimisersBox>
         <Panel sx={{ width: '100%' }} variant="grey-dashed">
-          <Loading sx={{ margin: '0 auto' }} />
+          <Loading />
         </Panel>
       </OptimisersBox>
     );
@@ -66,7 +66,6 @@ export const Optimisers: React.FunctionComponent = () => {
           depositable={vault.depositable}
           id={vault.id}
           token={vault.metadata.token}
-          totalApy={0}
           totalBalance={vault.userDeposit}
           vaults={vault.metadata.vaults.map((vVaults, vaultIndex) => ({
             maturityTimestampMS: vVaults.maturityTimestampMS,

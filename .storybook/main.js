@@ -14,6 +14,10 @@ module.exports = {
   },
   webpackFinal: async (config) => {
     config.module.rules.push({
+      test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+      type: 'asset',
+    });
+    config.module.rules.push({
       test: /\.svg$/,
       use: ['@svgr/webpack', 'file-loader'],
     });

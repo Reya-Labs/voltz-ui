@@ -73,7 +73,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
   const renderLoading = () => {
     return (
       <Panel sx={{ width: '100%' }} variant="grey-dashed">
-        <Loading sx={{ margin: '0 auto' }} />
+        <Loading />
       </Panel>
     );
   };
