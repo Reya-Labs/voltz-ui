@@ -52,13 +52,14 @@ export const VaultField: React.FunctionComponent<VaultFieldProps> = ({
     apySum += expectedApys[i] * weights[i];
   }
 
-  const averageApy = apySum / 100;
+  // todo: Costin change these values to be correct ones
+  const averageApyFrom = -apySum / 100;
+  const averageApyTo = apySum / 100;
 
   return (
     <VaultFieldBox>
       <TitleBox>
         {getTokenIcon(token)}
-
         <TitleTypography>{title}</TitleTypography>
       </TitleBox>
       <VaultMetricsBox>
@@ -66,12 +67,12 @@ export const VaultField: React.FunctionComponent<VaultFieldProps> = ({
           label={
             <IconLabel
               icon="information-circle"
-              info="This shows the estimated returns that would have been generated had the strategy been running from Jul 22 to Oct 22."
-              label="Estimated Historic APY"
+              info="Estimated return of this strategy had it been running during the last quarter of 2022, depending on when the deposit was made."
+              label="ESTIMATED APY RANGING FROM"
             />
           }
         >
-          {averageApy > 30 ? '>30' : averageApy.toFixed(2)}%
+          {Number(averageApyFrom.toFixed(2))}% to {Number(averageApyTo.toFixed(2))}%
         </VaultApyTypography>
       </VaultMetricsBox>
     </VaultFieldBox>
