@@ -17,16 +17,6 @@ const shortMonths = [
 ];
 
 /**
- * Takes a date and returns a string representation: 01 Mar 2022
- * @param date - The date to process
- */
-export const formatDate = (date: Date) => {
-  return `${date.getDate().toString().padStart(2, '0')} ${
-    shortMonths[date.getMonth()]
-  } ${date.getFullYear()}`;
-};
-
-/**
  * Takes a Luxon DateTime and returns a string representation: 01 Mar 2022
  * @param dateTime - The DateTime to process
  */
@@ -41,7 +31,10 @@ export const formatDateTime = (dateTime: DateTime) => {
  * @param timestamp - The timestamp to process
  */
 export const formatTimestamp = (timestamp: string | number | JSBI) => {
-  return formatDate(new Date(parseInt(timestamp.toString(), 10) * 1000));
+  const date = new Date(parseInt(timestamp.toString(), 10) * 1000);
+  return `${date.getDate().toString().padStart(2, '0')} ${
+    shortMonths[date.getMonth()]
+  } ${date.getFullYear()}`;
 };
 
 /**
@@ -58,8 +51,9 @@ export const formatPOSIXTimestamp = (timestamp: number): string => {
 };
 
 /**
- * Takes a DateTime and returns a string representatio
- * @param dateTime - The DateTime to process
+ * It takes a DateTime object and returns a string with the ordinal suffix added to the day of the month
+ * @param {DateTime} dateTime - The DateTime object to format
+ * @returns A string
  */
 export const formatDateTimeWithOrdinal = (dateTime: DateTime): string => {
   const formatted = dateTime.toFormat('DDD');
@@ -83,7 +77,7 @@ export const formatDateTimeWithOrdinal = (dateTime: DateTime): string => {
  * @param {number} num - The number to get the suffix for.
  * @returns the suffix of a number.
  */
-export function getNumberSuffix(num: number): string {
+function getNumberSuffix(num: number): string {
   const th = 'th';
   const rd = 'rd';
   const nd = 'nd';

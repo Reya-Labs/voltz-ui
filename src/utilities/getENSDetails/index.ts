@@ -10,17 +10,21 @@ const CACHED_ENS: Record<string, ENSDetails | null> = {};
 /**
  * It takes an Ethereum address and returns an object with the ENS name and avatar URL
  * @param {string | null} [address] - The address to look up.
- * @returns An object with the name and avatarUrl of the ENS address.
+ * @param {unknown} web3Provider - This is the web3 provider that you're using. If
+ * you're using Metamask, this is window.ethereum.
  */
-export const getENSDetails = async (address?: string | null): Promise<ENSDetails | null> => {
-  if (!address || !window.ethereum) {
+export const getENSDetails = async (
+  address: string | null = '',
+  web3Provider: unknown = window.ethereum,
+): Promise<ENSDetails | null> => {
+  if (!address || !web3Provider) {
     return null;
   }
   if (CACHED_ENS[address] !== undefined) {
     return CACHED_ENS[address];
   }
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum as never);
+  const provider = new ethers.providers.Web3Provider(web3Provider as never);
   let name;
   try {
     name = await provider.lookupAddress(address);
@@ -47,7 +51,7 @@ export const getENSDetails = async (address?: string | null): Promise<ENSDetails
 
   let avatar;
   try {
-    avatar = await resolver?.getAvatar();
+    avatar = await resolver.getAvatar();
   } catch (err) {
     avatar = null;
   }
