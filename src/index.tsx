@@ -26,7 +26,7 @@ import { ThemeProvider } from './theme/ThemeProvider/ThemeProvider';
 import { initSentryTracker } from './utilities/sentry';
 
 try {
-  if (process.env.NODE_ENV !== 'development') {
+  if (process.env.CI_BUILD !== 'true' && process.env.NODE_ENV !== 'development') {
     Amplify.configure(require('./aws-exports'));
   }
 } catch (_) {}
