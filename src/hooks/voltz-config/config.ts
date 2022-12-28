@@ -191,7 +191,6 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
           trader: true,
         },
         traderWithdrawable: false,
-        rollover: '0x27ed5d356937213f97c9f9cb7593d876e5d30f42',
       },
 
       // borrow aETH pools
