@@ -1,0 +1,22 @@
+name: Upload sentry source maps - main branch
+on:
+  push:
+    branches:
+      - main
+jobs:
+  release:
+    name: Upload sentry source maps
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'lts/*'
+          cache: 'yarn'
+      - name: Create build and upload source maps
+        run: make build
