@@ -131,6 +131,8 @@ function getClientEnvironment(publicUrl) {
         // Whether react-refresh is enabled.
         // It is defined here, so it is available in the webpackHotDevClient.
         FAST_REFRESH: process.env.FAST_REFRESH !== 'false',
+        // CI_BUILD flag
+        CI_BUILD: process.env.CI_BUILD,
       },
     );
   // Stringify all values so we can feed into webpack DefinePlugin
