@@ -7647,10 +7647,10 @@
     "@typescript-eslint/types" "5.9.1"
     eslint-visitor-keys "^3.0.0"
 
-"@voltz-protocol/v1-sdk@1.25.0":
-  version "1.25.0"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.25.0.tgz#5ef51cb70654657cb3e054e529c742dee8597931"
-  integrity sha512-m1W2uEUhyNqPXiV6Jc2vdg6k+379maNxzrCJ8a0v1e1o3vQ9XzVora9Sm+z2gl4CJ3HinL+7AQm4n3Wh32Fpdw==
+"@voltz-protocol/v1-sdk@1.25.1":
+  version "1.25.1"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.25.1.tgz#f28caf56fa5d1048dc31f03b6167931bb30ddcf0"
+  integrity sha512-IlAj6VJkCfole35Mit7cMEeEf+e3yW0aZywyJcL2osnVGIakZL+ZJtrk+ZAhy4yxx+q/x17QxqPaHRp3ycIFSw==
   dependencies:
     "@apollo/client" "^3.7.1"
     "@ethersproject/address" "^5.7.0"
