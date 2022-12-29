@@ -1,9 +1,7 @@
-import { SEASONS } from './constants';
-import { Season } from './types';
+import { SEASONS } from '../constants';
+import { Season } from '../types';
 
-export const useCurrentSeason = (): Season => {
-  const now = Date.now().valueOf();
-
+export const useCurrentSeason = (now: number = Date.now().valueOf()): Season => {
   for (const season of SEASONS) {
     const seasonStartDate = season.startDate.toMillis();
     const seasonEndDate = season.endDate.toMillis();

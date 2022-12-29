@@ -1,8 +1,8 @@
 import Box from '@mui/material/Box';
 import { DateTime } from 'luxon';
 
-import HeaderBox from '../HeaderBox/HeaderBox';
-import UserSummary from '../UserSummary/UserSummary';
+import { HeaderBox } from '../HeaderBox/HeaderBox';
+import { UserSummary } from '../UserSummary/UserSummary';
 
 export type RankingTableHeaderProps = {
   loading: boolean;

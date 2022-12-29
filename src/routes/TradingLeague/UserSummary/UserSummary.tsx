@@ -21,7 +21,7 @@ export type RankingUserSummaryProps = {
   loading: boolean;
 };
 
-const UserSummary = ({
+export const UserSummary = ({
   loading,
   seasonNumber,
   seasonStartDate,
@@ -170,5 +170,3 @@ const UserSummary = ({
     </Box>
   );
 };
-
-export default UserSummary;

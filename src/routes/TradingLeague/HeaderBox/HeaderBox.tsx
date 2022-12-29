@@ -4,7 +4,7 @@ import React from 'react';
 import { Typography } from '../../../components/atomic/Typography/Typography';
 import { colors } from '../../../theme';
 
-const HeaderBox = () => (
+export const HeaderBox = React.memo(() => (
   <Box>
     <Typography
       sx={{
@@ -32,6 +32,4 @@ const HeaderBox = () => (
       legendary status forever...
     </Typography>
   </Box>
-);
-
-export default HeaderBox;
+));
