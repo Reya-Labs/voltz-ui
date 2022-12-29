@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 
 import { MaturityInformation } from '../../../../../../../components/composite/MaturityInformation/MaturityInformation';
 import { useAMMContext } from '../../../../../../../contexts/AMMContext/AMMContext';
+import { MATURITY_WINDOW } from '../../../../../../../utilities/constants';
 import { isBorrowing } from '../../../../../../../utilities/isBorrowing';
 import { AccruedRates } from './components/AccruedRates/AccruedRates';
 import { Margin } from './components/Margin/Margin';
@@ -38,7 +39,7 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
 
   // Introduced this so margin and notional show the correct underlying token unit e.g. Eth not stEth, USDC not aUSDC
   const underlyingTokenName = position.amm.underlyingToken.name;
-  const hideEdit = position.amm.endDateTime.toMillis() <= Date.now().valueOf();
+  const hideEdit = position.amm.endDateTime.toMillis() <= Date.now().valueOf() + MATURITY_WINDOW;
 
   return (
     <RowBox>

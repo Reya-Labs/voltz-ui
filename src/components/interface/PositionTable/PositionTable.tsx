@@ -14,6 +14,7 @@ import { useAMMs } from '../../../hooks/useAMMs';
 import { getConfig } from '../../../hooks/voltz-config/config';
 import { colors, SystemStyleObject, Theme } from '../../../theme';
 import { findCurrentAmm } from '../../../utilities/amm';
+import { MATURITY_WINDOW } from '../../../utilities/constants';
 import { getRowButtonId } from '../../../utilities/googleAnalytics';
 import { isBorrowing } from '../../../utilities/isBorrowing';
 import { Panel } from '../../atomic/Panel/Panel';
@@ -104,6 +105,8 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
             const rolloverAmm = findCurrentAmm(amms || [], pos);
             const rolloverAvailable = rolloverAmm ? rolloverAmm.id !== pos.amm.id : false;
             const info = portfolioData?.info ? portfolioData.info[pos.id] : undefined;
+            const closeToMaturity =
+              Date.now().valueOf() + MATURITY_WINDOW > pos.amm.endDateTime.toMillis();
 
             return (
               <ListItem key={pos.id} sx={listItemStyles}>
@@ -134,7 +137,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                     rolloverAvailable={rolloverAvailable}
                     onRollover={() => handleSelectRow(index, 'rollover')}
                     onSelect={
-                      agent === Agents.LIQUIDITY_PROVIDER
+                      agent === Agents.LIQUIDITY_PROVIDER || closeToMaturity
                         ? undefined
                         : (mode: 'margin' | 'liquidity' | 'notional') =>
                             handleSelectRow(index, mode)
