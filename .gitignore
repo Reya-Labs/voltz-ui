@@ -31,3 +31,4 @@ amplifytools.xcconfig
 .vscode/settings.json
 .yalc
 yalc.lock
+coverage
