@@ -25,11 +25,7 @@ export type ProgrammaticBadges =
   | 'maxBidding'
   | 'okBoomer'
   | 'dryIce'
-  | '0BCMellowLpVault'
   | 'mellowLpVault'
-  | 'mellowLpVaultTier1'
-  | 'mellowLpVaultTier2'
-  | 'mellowLpVaultTier3'
   // season OG
   | 'ogDegenStuff'
   | 'ogDeltaDegen'
