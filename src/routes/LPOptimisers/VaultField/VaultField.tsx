@@ -36,7 +36,7 @@ const getTokenIcon = (token: string) => {
 type VaultFieldProps = {
   title: string;
   token: string;
-  expectedApys: number[];
+  expectedApys: [number, number][];
   weights: number[];
 };
 
@@ -46,19 +46,20 @@ export const VaultField: React.FunctionComponent<VaultFieldProps> = ({
   expectedApys,
   weights,
 }: VaultFieldProps) => {
-  let apySum = 0;
+  const apySum: [number, number] = [0, 0];
 
   for (let i = 0; i < expectedApys.length; i++) {
-    apySum += expectedApys[i] * weights[i];
+    apySum[0] += expectedApys[i][0] * weights[i];
+    apySum[1] += expectedApys[i][1] * weights[i];
   }
 
-  const averageApy = apySum / 100;
+  const averageApyFrom = apySum[0] / 100;
+  const averageApyTo = apySum[1] / 100;
 
   return (
     <VaultFieldBox>
       <TitleBox>
         {getTokenIcon(token)}
-
         <TitleTypography>{title}</TitleTypography>
       </TitleBox>
       <VaultMetricsBox>
@@ -66,12 +67,12 @@ export const VaultField: React.FunctionComponent<VaultFieldProps> = ({
           label={
             <IconLabel
               icon="information-circle"
-              info="This shows the estimated returns that would have been generated had the strategy been running from Jul 22 to Oct 22."
-              label="Estimated Historic APY"
+              info="Estimated return of this strategy had it been running during the last quarter of 2022, depending on when the deposit was made."
+              label="ESTIMATED APY RANGING FROM"
             />
           }
         >
-          {averageApy > 30 ? '>30' : averageApy.toFixed(2)}%
+          {Number(Math.round(averageApyFrom))}% to {Number(Math.round(averageApyTo))}%
         </VaultApyTypography>
       </VaultMetricsBox>
     </VaultFieldBox>

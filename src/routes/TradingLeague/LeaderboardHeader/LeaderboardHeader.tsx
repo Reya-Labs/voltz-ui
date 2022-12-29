@@ -1,8 +1,8 @@
 import Box from '@mui/material/Box';
 import { DateTime } from 'luxon';
 
-import HeaderBox from '../HeaderBox/HeaderBox';
-import UserSummary from '../UserSummary/UserSummary';
+import { TradingLeagueHeader } from '../TradingLeagueHeader/TradingLeagueHeader';
+import { UserSummary } from '../UserSummary/UserSummary';
 
 export type RankingTableHeaderProps = {
   loading: boolean;
@@ -24,9 +24,8 @@ export const LeaderboardHeader = ({
   userPoints,
 }: RankingTableHeaderProps) => (
   <Box>
-    <HeaderBox />
+    <TradingLeagueHeader />
     <UserSummary
-      invitedTraders={1}
       loading={loading}
       seasonEndDate={seasonEndDate}
       seasonNumber={seasonNumber}

@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box';
 import { RankType } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useState } from 'react';
 
@@ -6,7 +5,8 @@ import { useCurrentSeason } from '../../hooks/season/useCurrentSeason';
 import { useWallet } from '../../hooks/useWallet';
 import { setPageTitle } from '../../utilities/page';
 import { getCommunitySbt } from '../Profile/helpers';
-import Leaderboard from './Leaderboard/Leaderboard';
+import { Leaderboard } from './Leaderboard/Leaderboard';
+import { TradingLeagueBox } from './TradingLeague.styled';
 const PER_PAGE = 10;
 
 export const TradingLeague: React.FunctionComponent = () => {
@@ -63,13 +63,7 @@ export const TradingLeague: React.FunctionComponent = () => {
   }, []);
 
   return (
-    <Box
-      sx={{
-        width: '724px',
-        margin: '0 auto',
-        background: 'transparent',
-      }}
-    >
+    <TradingLeagueBox>
       <Leaderboard
         loading={loading}
         maxPages={maxPages}
@@ -85,6 +79,6 @@ export const TradingLeague: React.FunctionComponent = () => {
         onNextPage={handleOnNextPage}
         onPrevPage={handleOnPrevPage}
       />
-    </Box>
+    </TradingLeagueBox>
   );
 };

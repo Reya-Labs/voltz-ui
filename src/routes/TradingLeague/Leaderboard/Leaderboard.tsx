@@ -31,7 +31,7 @@ export type RankingTableProps = {
 
 const inRange = (start: number, end: number, num: number) => start <= num && num <= end;
 
-const Leaderboard: React.FunctionComponent<RankingTableProps> = ({
+export const Leaderboard: React.FunctionComponent<RankingTableProps> = ({
   rankings,
   seasonNumber,
   seasonStartDate,
@@ -176,5 +176,3 @@ const Leaderboard: React.FunctionComponent<RankingTableProps> = ({
     </Box>
   );
 };
-
-export default Leaderboard;

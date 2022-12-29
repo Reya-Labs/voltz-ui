@@ -7,6 +7,7 @@ import React from 'react';
 import { Agents } from '../../../contexts/AgentContext/types';
 import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
 import { useAgent } from '../../../hooks/useAgent';
+import { MATURITY_WINDOW } from '../../../utilities/constants';
 import { isBorrowing } from '../../../utilities/isBorrowing';
 import { Panel } from '../../atomic/Panel/Panel';
 import { AMMTableHead, AMMTableRow } from './components';
@@ -51,7 +52,7 @@ export const AMMTable: React.FunctionComponent<AMMTableProps> = ({
           <AMMTableHead />
           <TableBody sx={{ position: 'relative', top: (theme) => `-${theme.spacing(3)}` }}>
             {amms
-              .filter((amm) => Date.now().valueOf() < amm.endDateTime.toMillis())
+              .filter((amm) => Date.now().valueOf() + MATURITY_WINDOW < amm.endDateTime.toMillis())
               .map((amm) => (
                 <AMMProvider key={amm.id} amm={amm}>
                   <AMMTableRow

@@ -99,9 +99,8 @@ export const Profile: React.FunctionComponent = () => {
       return;
     }
     const badge = collectionBadges.find((b) => b.variant === variant);
-    const subgraphAPI = process.env.REACT_APP_SUBGRAPH_BADGES_URL;
     const owner = wallet.account;
-    if (!badge?.badgeResponseRaw?.awardedTimestampMs || badge.claimedAt || !owner || !subgraphAPI) {
+    if (!badge?.badgeResponseRaw?.awardedTimestampMs || badge.claimedAt || !owner) {
       return;
     }
     const communitySBT = getCommunitySbt(wallet.signer);

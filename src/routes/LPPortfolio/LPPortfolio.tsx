@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { ConnectWallet } from '../../components/composite/ConnectWallet/ConnectWallet';
 import { MintBurnFormModes } from '../../contexts/MintBurnFormContext/MintBurnFormContext';
 import { useWallet } from '../../hooks/useWallet';
+import { selectors } from '../../store';
+import { useAppSelector } from '../../store/hooks';
 import { ContentBox, LPPortfolioBox, Split } from './LPPortfolio.styled';
 import { LPPositions } from './LPPositions/LPPositions';
 import { Optimisers } from './Optimisers/Optimisers';
@@ -10,6 +12,7 @@ import { Optimisers } from './Optimisers/Optimisers';
 export const LPPortfolio: React.FunctionComponent = () => {
   const { status } = useWallet();
   const [formMode, setFormMode] = useState<MintBurnFormModes>();
+  const hasActiveTransactions = (useAppSelector(selectors.transactionsSelector)?.length || 0) !== 0;
 
   if (status !== 'connected') {
     return (
@@ -33,7 +36,7 @@ export const LPPortfolio: React.FunctionComponent = () => {
       </ContentBox>
       <ContentBox
         sx={{
-          display: Boolean(formMode) ? 'none' : undefined,
+          display: Boolean(formMode) || hasActiveTransactions ? 'none' : undefined,
         }}
       >
         <Optimisers />
