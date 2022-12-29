@@ -72,7 +72,7 @@ export const VaultField: React.FunctionComponent<VaultFieldProps> = ({
             />
           }
         >
-          {Number(averageApyFrom.toFixed(2))}% to {Number(averageApyTo.toFixed(2))}%
+          {Number(Math.round(averageApyFrom))}% to {Number(Math.round(averageApyTo))}%
         </VaultApyTypography>
       </VaultMetricsBox>
     </VaultFieldBox>
