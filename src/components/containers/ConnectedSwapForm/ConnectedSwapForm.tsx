@@ -21,9 +21,10 @@ import { isBorrowing } from '../../../utilities/isBorrowing';
 import { setPageTitle } from '../../../utilities/page';
 import { FormPanel } from '../../interface/FormPanel/FormPanel';
 import { PendingTransaction } from '../../interface/PendingTransaction/PendingTransaction';
-import { SwapCurrentPosition } from '../../interface/SwapCurrentPosition';
-import { SwapForm, SwapFormActions, SwapFormModes } from '../../interface/SwapForm';
-import { SwapInfo } from '../../interface/SwapInfo';
+import { SwapCurrentPosition } from '../../interface/SwapCurrentPosition/SwapCurrentPosition';
+import { SwapForm } from '../../interface/SwapForm/SwapForm';
+import { SwapFormActions, SwapFormModes } from '../../interface/SwapForm/types';
+import { SwapInfo } from '../../interface/SwapInfo/SwapInfo';
 
 export type ConnectedSwapFormProps = {
   onReset: () => void;
@@ -92,7 +93,7 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
 
   const handleComplete = () => {
     onReset();
-    navigate(`/${routes.PORTFOLIO}`);
+    navigate(`/${routes.TRADER_PORTFOLIO}`);
   };
 
   const handleGoBack = () => {

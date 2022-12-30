@@ -20,10 +20,10 @@ import { isBorrowing } from '../../../utilities/isBorrowing';
 import { setPageTitle } from '../../../utilities/page';
 import { FormPanel } from '../../interface/FormPanel/FormPanel';
 import { MintBurnCurrentPosition } from '../../interface/MintBurnCurrentPosition/MintBurnCurrentPosition';
-import { MintBurnForm } from '../../interface/MintBurnForm';
+import { MintBurnForm } from '../../interface/MintBurnForm/MintBurnForm';
 import { MintBurnInfo } from '../../interface/MintBurnInfo';
 import { PendingTransaction } from '../../interface/PendingTransaction/PendingTransaction';
-import { updateFixedRate } from './utilities';
+import { updateFixedRate } from './utilities/updateFixedRate';
 
 export type ConnectedMintBurnFormProps = {
   onReset: () => void;

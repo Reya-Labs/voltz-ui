@@ -1,7 +1,7 @@
 export const routes = {
-  LP_PORTFOLIO: 'lp-positions',
+  LP_PORTFOLIO: 'lp-portfolio',
   LP_POOLS: 'lp-pools',
-  PORTFOLIO: 'portfolio',
+  TRADER_PORTFOLIO: 'portfolio',
   TRADER_POOLS: 'trader-pools',
   WELCOME: 'welcome',
   BORROW_POS: 'borrow-positions',
@@ -11,5 +11,6 @@ export const routes = {
   LP_OPTIMISERS_DEPOSIT_FORM: 'lp-optimisers/:actions/:vaultId',
   LP_OPTIMISERS_WITHDRAW_ROLLOVER_FORM: 'lp-optimisers/:actions/:vaultId/:vaultIndex',
   // old route for lp-optimisers, redirects to lp-optimisers
-  PRODUCTS: 'products',
+  DEPRECATED_PRODUCTS: 'products',
+  DEPRECATED_LP_PORTFOLIO: 'lp-positions',
 };

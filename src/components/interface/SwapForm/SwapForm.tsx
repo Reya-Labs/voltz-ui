@@ -19,7 +19,10 @@ import { MaturityInformation } from '../../composite/MaturityInformation/Maturit
 import { NotionalAmount } from '../../composite/NotionalAmount/NotionalAmount';
 import { ProtocolInformation } from '../../composite/ProtocolInformation/ProtocolInformation';
 import { FormPanel } from '../FormPanel/FormPanel';
-import { Leverage, MarginControls, SubmitControls, TraderControls } from './components';
+import { Leverage } from './Leverage/Leverage';
+import { MarginControls } from './MarginControls/MarginControls';
+import { SubmitControls } from './SubmitControls/SubmitControls';
+import { TraderControls } from './TraderControls/TraderControls';
 import { SwapFormActions, SwapFormModes } from './types';
 
 export type SwapProps = {

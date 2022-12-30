@@ -17,12 +17,12 @@ export const Nav: React.FunctionComponent = React.memo(() => (
     <NavLink
       subLinks={[
         {
-          text: 'TRADER POOLS',
+          text: 'POOLS',
           link: `/${routes.TRADER_POOLS}`,
         },
         {
           text: 'PORTFOLIO',
-          link: `/${routes.PORTFOLIO}`,
+          link: `/${routes.TRADER_PORTFOLIO}`,
         },
       ]}
     >
@@ -33,16 +33,17 @@ export const Nav: React.FunctionComponent = React.memo(() => (
       isNew={true}
       subLinks={[
         {
-          text: 'LP POOLS',
+          text: 'POOLS',
           link: `/${routes.LP_POOLS}`,
         },
         {
-          text: 'LP OPTIMISERS',
+          text: 'OPTIMISERS',
           link: `/${routes.LP_OPTIMISERS}`,
         },
         {
-          text: 'POSITIONS',
+          text: 'PORTFOLIO',
           link: `/${routes.LP_PORTFOLIO}`,
+          isNew: true,
         },
       ]}
     >

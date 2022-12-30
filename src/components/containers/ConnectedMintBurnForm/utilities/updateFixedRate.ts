@@ -7,7 +7,7 @@ export type UpdateFixedRateArgs = {
   setFixedRate: (value: number | undefined) => void;
 };
 
-const updateFixedRate =
+export const updateFixedRate =
   ({ amm, setFixedRate }: UpdateFixedRateArgs) =>
   (newFixedRate: number | undefined) => {
     if (!amm) {
@@ -19,5 +19,3 @@ const updateFixedRate =
       : amm.getNextUsableFixedRate(newFixedRate, 0);
     setFixedRate(nextFixedRate);
   };
-
-export default updateFixedRate;

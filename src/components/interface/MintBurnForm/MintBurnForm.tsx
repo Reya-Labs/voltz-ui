@@ -19,8 +19,9 @@ import { NotionalAmount } from '../../composite/NotionalAmount/NotionalAmount';
 import { ProtocolInformation } from '../../composite/ProtocolInformation/ProtocolInformation';
 import { RateOptions } from '../../composite/RateOptions/RateOptions';
 import { FormPanel } from '../FormPanel/FormPanel';
-import { MarginControls } from '../SwapForm/components';
-import { LiquidityControls, SubmitControls } from './components';
+import { MarginControls } from '../SwapForm/MarginControls/MarginControls';
+import { LiquidityControls } from './LiquidityControls/LiquidityControls';
+import { SubmitControls } from './SubmitControls/SubmitControls';
 
 export type MintBurnFormProps = {
   approvalsNeeded?: boolean;

@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import React from 'react';
 
 import { Nav } from '../Nav/Nav';
-import { WalletConnect } from '../WalletConnect/WalletConnect';
+import { WalletConnectModal } from '../WalletConnectModal/WalletConnectModal';
 import { AlphaBanner } from './AlphaBanner/AlphaBanner';
 import { Background } from './Background/Background';
 import { GweiBar } from './GweiBar/GweiBar';
@@ -22,7 +22,7 @@ export const Page: React.FunctionComponent<PageProps> = ({ children }: PageProps
       }}
     >
       <Nav />
-      <WalletConnect />
+      <WalletConnectModal />
     </Box>
 
     <Box

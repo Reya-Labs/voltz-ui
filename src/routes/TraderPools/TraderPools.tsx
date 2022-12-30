@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 import { PageTitleDesc } from '../../components/composite/PageTitleDesc/PageTitleDesc';
 import { ConnectedSwapForm } from '../../components/containers/ConnectedSwapForm/ConnectedSwapForm';
 import { AMMTable } from '../../components/interface/AMMTable/AMMTable';
-import { SwapFormModes } from '../../components/interface/SwapForm';
+import { SwapFormModes } from '../../components/interface/SwapForm/types';
 import { Agents } from '../../contexts/AgentContext/types';
 import { AMMProvider } from '../../contexts/AMMContext/AMMContext';
 import { PositionProvider } from '../../contexts/PositionContext/PositionContext';

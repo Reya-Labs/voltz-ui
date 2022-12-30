@@ -73,7 +73,7 @@ export const useAMMs = (): UseAMMsResult => {
         const whitelist = config.pools.filter((pool) => pool.show.general).map((pool) => pool.id);
         ammsData = ammsData?.filter((amm) => whitelist.includes(amm.id.toLowerCase()));
 
-        if (pathname === `/${routes.TRADER_POOLS}` || pathname === `/${routes.PORTFOLIO}`) {
+        if (pathname === `/${routes.TRADER_POOLS}` || pathname === `/${routes.TRADER_PORTFOLIO}`) {
           const traderWhitelist = config.pools
             .filter((pool) => pool.show.trader)
             .map((pool) => pool.id);

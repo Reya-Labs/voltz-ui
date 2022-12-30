@@ -6,13 +6,11 @@ import React from 'react';
 import { colors, SystemStyleObject, Theme } from '../../../theme';
 import { FormPanel } from '../FormPanel/FormPanel';
 import { SwapFormActions, SwapFormModes } from '../SwapForm/types';
-import {
-  DescriptionBox,
-  ExpectedAPY,
-  SwapSummary,
-  SwapSummaryEditMargin,
-  WarningBox,
-} from './components';
+import { DescriptionBox } from './DescriptionBox/DescriptionBox';
+import { ExpectedAPY } from './ExpectedAPY/ExpectedAPY';
+import { SwapSummary } from './SwapSummary/SwapSummary';
+import { SwapSummaryEditMargin } from './SwapSummary/SwapSummaryEditMargin';
+import { WarningBox } from './WarningBox/WarningBox';
 
 export type SwapInfoProps = {
   balance?: number;

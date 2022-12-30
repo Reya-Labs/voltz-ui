@@ -4,7 +4,7 @@ import isNumber from 'lodash.isnumber';
 import isUndefined from 'lodash.isundefined';
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
-import { SwapFormActions, SwapFormModes } from '../../components/interface/SwapForm';
+import { SwapFormActions, SwapFormModes } from '../../components/interface/SwapForm/types';
 import { useAgent } from '../../hooks/useAgent';
 import { GetInfoType } from '../../hooks/useAMM/types';
 import { useBalance } from '../../hooks/useBalance';
