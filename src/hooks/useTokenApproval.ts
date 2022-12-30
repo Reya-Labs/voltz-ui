@@ -18,7 +18,7 @@ export type ApprovalErrorResponse = {
   message: string;
 };
 
-export const useTokenApproval = (amm: AMM, margin?: number) => {
+export const useTokenApproval = (amm: AMM, forceErc20Check: boolean, margin?: number) => {
   const [checkingApprovals, setCheckingApprovals] = useState(false);
   const [approving, setApproving] = useState(false);
   const [lastApproval, setLastApproval] = useState<ApprovalInfo>();
@@ -41,7 +41,10 @@ export const useTokenApproval = (amm: AMM, margin?: number) => {
     setLastError(undefined);
 
     amm
-      .isTokenApprovedForPeriphery(amm.underlyingToken.id, margin)
+      .isTokenApprovedForPeriphery({
+        forceErc20Check: forceErc20Check,
+        approvalAmount: margin,
+      })
       .then((response) => {
         setUnderlyingTokenApprovedForPeriphery(response ?? false);
       })

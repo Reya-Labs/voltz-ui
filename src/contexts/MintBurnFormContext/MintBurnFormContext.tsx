@@ -4,7 +4,6 @@ import isUndefined from 'lodash.isundefined';
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
 import { useBalance } from '../../hooks/useBalance';
-import { useCurrentPositionMarginRequirement } from '../../hooks/useCurrentPositionMarginRequirement';
 import { useTokenApproval } from '../../hooks/useTokenApproval';
 import { useWallet } from '../../hooks/useWallet';
 import { getAmmProtocol } from '../../utilities/amm';
@@ -122,11 +121,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   const { amm: poolAmm, mintMinimumMarginRequirement } = useAMMContext();
   const { position, amm: positionAmm } = usePositionContext();
 
-  const currentPositionMarginRequirement = useCurrentPositionMarginRequirement(
-    poolAmm,
-    position?.fixedRateLower.toNumber(),
-    position?.fixedRateUpper.toNumber(),
-  );
+  const currentPositionMarginRequirement = position?.safetyThreshold;
 
   const defaultFixedHigh =
     position?.fixedRateUpper.toNumber() ?? defaultValues.fixedHigh ?? undefined;
@@ -151,7 +146,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   const [margin, setMargin] = useState<MintBurnFormState['margin']>(defaultMargin);
   const [marginAction, setMarginAction] = useState<MintBurnFormMarginAction>(defaultMarginAction);
   const [notional, setNotional] = useState<MintBurnFormState['notional']>(defaultNotional);
-  const tokenApprovals = useTokenApproval(poolAmm);
+  const tokenApprovals = useTokenApproval(poolAmm, mode === MintBurnFormModes.ROLLOVER, margin);
 
   const approvalsNeeded = !tokenApprovals.underlyingTokenApprovedForPeriphery;
   const [errors, setErrors] = useState<MintBurnFormContext['errors']>({});
