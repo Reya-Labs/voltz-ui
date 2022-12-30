@@ -146,8 +146,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
 
                   <TableContainer
                     sx={
-                      pos.isPoolMatured &&
-                      !pos.isSettled
+                      pos.isPoolMatured && !pos.isSettled
                         ? getMaturedTableBorderStyles(pos.positionType)
                         : undefined
                     }

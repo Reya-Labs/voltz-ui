@@ -16,7 +16,7 @@ export const hasEnoughUnderlyingTokens = async (
   rolloverPosition?: Position,
 ) => {
   try {
-    return ((await amm.underlyingTokens()) + (rolloverPosition?.settlementBalance || 0)) >= amount;
+    return (await amm.underlyingTokens()) + (rolloverPosition?.settlementBalance || 0) >= amount;
   } catch (error) {
     getSentryTracker().captureException(error);
   }

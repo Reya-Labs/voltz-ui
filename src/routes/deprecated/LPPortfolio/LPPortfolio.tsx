@@ -29,7 +29,11 @@ export const DeprecatedLPPortfolio: React.FunctionComponent = () => {
   const { amms } = useAMMs();
   const { onChangeAgent, agent } = useAgent();
   const { key } = useLocation();
-  const { positionsByAgentGroup, loading: loadingPositions, error: errorPositions } = usePositions();
+  const {
+    positionsByAgentGroup,
+    loading: loadingPositions,
+    error: errorPositions,
+  } = usePositions();
   const { account } = useWallet();
 
   const renderMode = formMode ? 'form' : 'portfolio';
@@ -97,7 +101,6 @@ export const DeprecatedLPPortfolio: React.FunctionComponent = () => {
             loadingPositions={loadingPositions}
             positions={positionsByAgentGroup}
             onSelectItem={handleSelectPosition}
-            
           />
         </PortfolioProvider>
       )}

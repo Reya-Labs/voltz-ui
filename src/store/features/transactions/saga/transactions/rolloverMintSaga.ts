@@ -18,15 +18,8 @@ export function* rolloverMintSaga(action: RolloverMintAction) {
 
   const amm = deserializeAmm(action.payload.amm, signer);
 
-  const {
-    id,
-    fixedLow,
-    fixedHigh,
-    notional,
-    margin,
-    newMarginEngine,
-    rolloverPosition,
-  } = action.payload.transaction;
+  const { id, fixedLow, fixedHigh, notional, margin, newMarginEngine, rolloverPosition } =
+    action.payload.transaction;
 
   if (!fixedLow || !fixedHigh) {
     return;

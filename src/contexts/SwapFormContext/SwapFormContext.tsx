@@ -345,8 +345,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     } else {
       if (mode === SwapFormModes.EDIT_NOTIONAL || mode === SwapFormModes.EDIT_MARGIN) {
         const isRemovingNotional =
-          (agent === Agents.VARIABLE_TRADER &&
-            (position?.variableTokenBalance ?? 0) < 0) ||
+          (agent === Agents.VARIABLE_TRADER && (position?.variableTokenBalance ?? 0) < 0) ||
           (agent === Agents.FIXED_TRADER && (position?.variableTokenBalance ?? 0) > 0);
         if (isRemovingNotional && isRemovingMargin) {
           return SwapFormSubmitButtonHintStates.REMOVE_AND_REMOVE;
@@ -568,9 +567,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
 
     // check user has sufficient funds
     if (marginAction === SwapFormMarginAction.ADD) {
-      if (
-        (await hasEnoughUnderlyingTokens(positionAmm || poolAmm, margin || 0)) === false
-      ) {
+      if ((await hasEnoughUnderlyingTokens(positionAmm || poolAmm, margin || 0)) === false) {
         valid = false;
         addError(err, 'margin', 'Insufficient funds');
       }
@@ -600,8 +597,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     if (position && swapInfo.result) {
       const isVT = position.variableTokenBalance > 0;
       if (!isVT && agent === Agents.VARIABLE_TRADER) {
-        const newVariableTokenBalance =
-          position.variableTokenBalance + (notional ? notional : 0);
+        const newVariableTokenBalance = position.variableTokenBalance + (notional ? notional : 0);
         if (newVariableTokenBalance > 0) {
           valid = false;
           addError(err, 'notional', 'Removed too much notional');
@@ -609,8 +605,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       }
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if (isVT && agent === Agents.FIXED_TRADER) {
-        const newVariableTokenBalance =
-          position.variableTokenBalance - (notional ? notional : 0);
+        const newVariableTokenBalance = position.variableTokenBalance - (notional ? notional : 0);
         if (newVariableTokenBalance < 0) {
           valid = false;
           addError(err, 'notional', 'Removed too much notional');
