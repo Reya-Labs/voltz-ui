@@ -70,9 +70,7 @@ export const PortfolioProvider: React.FunctionComponent<PortfolioProviderProps> 
   const loadPositionInfo = (position: Position) => {
     position.refreshInfo().then(() => {
       setLoaded(JSON.stringify(position));
-    }).catch(() => {
-      loadPositionInfo(position);
-    });
+    }).catch(() => {});
   };
 
   const value = {
