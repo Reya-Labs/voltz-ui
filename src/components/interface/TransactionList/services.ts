@@ -187,7 +187,7 @@ export const getTransactionData = (
         items: [
           {
             label: 'notional',
-            value: `${formatCurrency(position.getNotionalFromLiquidity(tx.amount))} ${token}`,
+            value: `${formatCurrency(position.getNotionalFromLiquidity(BigNumber.from(tx.amount.toString())))} ${token}`,
           },
         ],
       };

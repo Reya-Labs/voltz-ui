@@ -41,28 +41,27 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
     <>
       {positions.length > 0 && (
         <PositionsList itemsPerRow={1}>
-          {positions.map((position, index) => {
+          {positions.map((position) => {
             const rolloverAmm = findCurrentAmm(amms || [], position);
             const rolloverAvailable = rolloverAmm ? rolloverAmm.id !== position.amm.id : false;
-            const info = portfolioData?.info ? portfolioData.info[position.id] : undefined;
 
             return (
               <PositionsListItemBox key={position.id}>
                 <PositionsListTopBox>
                   <PositionTableHead
-                    beforeMaturity={info?.beforeMaturity}
+                    beforeMaturity={!position.isPoolMatured}
                     currencyCode="USD"
                     currencySymbol="$"
-                    fees={info?.feesInUSD}
+                    fees={position.feesInUSD}
                     feesPositive={true}
-                    fixedApr={info?.fixedApr}
-                    fixedRateHealthFactor={info?.fixedRateHealthFactor}
+                    fixedApr={position.poolAPR}
+                    fixedRateHealthFactor={position.fixedRateHealthFactor}
                     gaButtonId={getRowButtonId(
                       true,
                       position.amm.protocol,
                       isBorrowing(position.amm.rateOracle.protocolId),
                     )}
-                    healthFactor={info?.healthFactor}
+                    healthFactor={position.healthFactor}
                     isSettled={position.isSettled}
                     rolloverAvailable={rolloverAvailable}
                     onRollover={() => handleSelectRow(position, 'rollover')}
@@ -73,9 +72,6 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                     <PositionTableRow
                       key={position.id}
                       position={position}
-                      positionInfo={
-                        portfolioData?.info ? portfolioData.info[position.id] : undefined
-                      }
                       onSelect={(mode: 'margin' | 'liquidity' | 'notional') =>
                         handleSelectRow(position, mode)
                       }
