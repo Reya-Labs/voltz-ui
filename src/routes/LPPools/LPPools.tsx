@@ -81,24 +81,22 @@ export const LPPools: React.FunctionComponent = () => {
               desc="Choose a pool and provide liquidity within your chosen ranges."
               title="Provide Liquidity"
             />
-            {process.env.REACT_APP_ECOSYSTEM && process.env.REACT_APP_ECOSYSTEM !== `UNPROVIDED` ? (
-              <Button
-                component={Link}
-                sx={{
-                  color: 'primary.base',
-                  marginTop: (theme) => theme.spacing(2),
-                  padding: (theme) => theme.spacing(0.5, 1),
-                  fontSize: '18px',
-                  lineHeight: '14px',
-                  '&:hover': {
-                    background: 'transparent',
-                  },
-                }}
-                to={`/${routes.LP_OPTIMISERS}`}
-              >
-                LP OPTIMISER VAULT
-              </Button>
-            ) : null}
+            <Button
+              component={Link}
+              sx={{
+                color: 'primary.base',
+                marginTop: (theme) => theme.spacing(2),
+                padding: (theme) => theme.spacing(0.5, 1),
+                fontSize: '18px',
+                lineHeight: '14px',
+                '&:hover': {
+                  background: 'transparent',
+                },
+              }}
+              to={`/${routes.LP_OPTIMISERS}`}
+            >
+              LP OPTIMISER VAULT
+            </Button>
           </Box>
           <AMMTable amms={amms} error={error} loading={loading} onSelectItem={handleSelectAmm} />
         </Box>

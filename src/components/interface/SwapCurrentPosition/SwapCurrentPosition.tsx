@@ -10,7 +10,7 @@ import { Ellipsis } from '../../atomic/Ellipsis/Ellipsis';
 import { PositionBadge } from '../../atomic/PositionBadge/PositionBadge';
 import { SummaryPanel } from '../../atomic/SummaryPanel/SummaryPanel';
 import { FormPanel } from '../FormPanel/FormPanel';
-import { SwapFormModes } from '../SwapForm';
+import { SwapFormModes } from '../SwapForm/types';
 
 export type SwapCurrentPositionProps = {
   formMode: SwapFormModes;

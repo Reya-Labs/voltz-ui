@@ -9,9 +9,9 @@ import { Vaults } from './routes/LPOptimisers/Vaults/Vaults';
 import { LPPools } from './routes/LPPools/LPPools';
 import { LPPortfolio } from './routes/LPPortfolio/LPPortfolio';
 import { routes } from './routes/paths';
-import { Portfolio } from './routes/Portfolio/Portfolio';
 import { Profile } from './routes/Profile/Profile';
 import { TraderPools } from './routes/TraderPools/TraderPools';
+import { TraderPortfolio } from './routes/TraderPortfolio/TraderPortfolio';
 import { TradingLeague } from './routes/TradingLeague/TradingLeague';
 import {
   deleteReferrer,
@@ -61,19 +61,24 @@ export const App = () => {
             path={routes.WELCOME}
           />
           <Route element={<TraderPools />} path={routes.TRADER_POOLS} />
-          <Route element={<Portfolio />} path={routes.PORTFOLIO} />
+          <Route element={<TraderPortfolio />} path={routes.TRADER_PORTFOLIO} />
           <Route element={<LPPools />} path={routes.LP_POOLS} />
           <Route element={<LPPortfolio />} path={routes.LP_PORTFOLIO} />
-          <Route
-            element={<Navigate replace={true} to={`/${routes.LP_OPTIMISERS}`} />}
-            path={routes.PRODUCTS}
-          />
           <Route element={<Vaults />} path={routes.LP_OPTIMISERS} />
           <Route element={<VaultFormRoute />} path={routes.LP_OPTIMISERS_DEPOSIT_FORM} />
           <Route element={<VaultFormRoute />} path={routes.LP_OPTIMISERS_WITHDRAW_ROLLOVER_FORM} />
           <Route element={<FixedBorrower />} path={routes.BORROW_POS} />
           <Route element={<Profile />} path={routes.PROFILE} />
           <Route element={<TradingLeague />} path={routes.TRADING_LEAGUE} />
+          {/*deprecated redirects*/}
+          <Route
+            element={<Navigate replace={true} to={`/${routes.LP_OPTIMISERS}`} />}
+            path={routes.DEPRECATED_PRODUCTS}
+          />
+          <Route
+            element={<Navigate replace={true} to={`/${routes.LP_PORTFOLIO}`} />}
+            path={routes.DEPRECATED_LP_PORTFOLIO}
+          />
         </Route>
       </Routes>
     </Page>
