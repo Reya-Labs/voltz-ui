@@ -1,4 +1,4 @@
-import { AMM } from '@voltz-protocol/v1-sdk';
+import { AMM, Position } from '@voltz-protocol/v1-sdk';
 import isUndefined from 'lodash.isundefined';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -69,8 +69,12 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
         ammId: (positionAmm as AMM).id,
         isFT: agent === Agents.FIXED_TRADER,
         margin: targetAmm.isETH ? 0 : Math.abs(form.state.margin as number),
-        marginEth: targetAmm.isETH ? Math.abs(form.state.margin as number) : undefined,
         newMarginEngine: targetAmm.marginEngineAddress,
+        rolloverPosition: {
+          tickLower: (position as Position).tickLower,
+          tickUpper: (position as Position).tickUpper,
+          settlementBalance: (position as Position).settlementBalance,
+        },
       });
     }
 

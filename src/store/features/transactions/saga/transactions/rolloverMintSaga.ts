@@ -24,10 +24,8 @@ export function* rolloverMintSaga(action: RolloverMintAction) {
     fixedHigh,
     notional,
     margin,
-    marginEth,
     newMarginEngine,
-    oldFixedHigh,
-    oldFixedLow,
+    rolloverPosition,
   } = action.payload.transaction;
 
   if (!fixedLow || !fixedHigh) {
@@ -40,10 +38,8 @@ export function* rolloverMintSaga(action: RolloverMintAction) {
       fixedHigh,
       notional,
       margin,
-      marginEth,
       newMarginEngine,
-      oldFixedLow: oldFixedLow,
-      oldFixedHigh: oldFixedHigh,
+      rolloverPosition,
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

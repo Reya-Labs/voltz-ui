@@ -18,7 +18,7 @@ export function* rolloverSwapSaga(action: RolloverSwapAction) {
 
   const amm = deserializeAmm(action.payload.amm, signer);
 
-  const { id, isFT, notional, margin, newMarginEngine } =
+  const { id, isFT, notional, margin, newMarginEngine, rolloverPosition } =
     action.payload.transaction;
 
   try {
@@ -29,8 +29,7 @@ export function* rolloverSwapSaga(action: RolloverSwapAction) {
       notional,
       margin,
       newMarginEngine,
-      oldFixedLow: 1,
-      oldFixedHigh: 999,
+      rolloverPosition,
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

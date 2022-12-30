@@ -69,11 +69,13 @@ export const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFor
       return actions.rolloverMintAction(positionAmm as AMM, {
         ...transaction,
         ammId: (positionAmm as AMM).id,
-        margin: targetAmm.isETH ? 0 : Math.abs(form.state.margin as number),
-        marginEth: targetAmm.isETH ? Math.abs(form.state.margin as number) : undefined,
+        margin: Math.abs(form.state.margin as number),
         newMarginEngine: targetAmm.marginEngineAddress,
-        oldFixedHigh: (position as Position).fixedRateUpper.toNumber(),
-        oldFixedLow: (position as Position).fixedRateLower.toNumber(),
+        rolloverPosition: {
+          tickLower: (position as Position).tickLower,
+          tickUpper: (position as Position).tickUpper,
+          settlementBalance: (position as Position).settlementBalance,
+        },
       });
     }
 

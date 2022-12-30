@@ -5,19 +5,13 @@ export const useBalance = (amm: AMM, rolloverPosition?: Position) => {
   const [balance, setBalance] = useState<number>(0);
 
   useEffect(() => {
-    const rolloverParams = rolloverPosition
-      ? {
-          fixedHigh: rolloverPosition.fixedRateUpper.toNumber(),
-          fixedLow: rolloverPosition.fixedRateLower.toNumber(),
-        }
-      : undefined;
-
     const getBalance = async () => {
-      const newBalance = await amm.underlyingTokens(rolloverParams);
-      setBalance(newBalance);
+      const settlementBalance = rolloverPosition?.settlementBalance || 0;
+      const newBalance = await amm.underlyingTokens();
+      setBalance(newBalance + settlementBalance);
     };
-    getBalance();
-  }, [amm.id]);
+    void getBalance();
+  }, [amm, amm.id, rolloverPosition]);
 
   return balance;
 };
