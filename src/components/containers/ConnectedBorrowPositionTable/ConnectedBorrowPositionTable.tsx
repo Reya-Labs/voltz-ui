@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Agents } from '../../../contexts/AgentContext/types';
 import { useBorrowAMMs } from '../../../hooks/useBorrowAMMs';
-import { useBorrowPositions } from '../../../hooks/useBorrowPositions';
+import { usePositions } from '../../../hooks/usePositions/usePositions';
 import { useWallet } from '../../../hooks/useWallet';
 import { SystemStyleObject, Theme } from '../../../theme';
 import { Loading } from '../../atomic/Loading/Loading';
@@ -26,7 +26,7 @@ export const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorr
     const [loadingItems, setLoadingItems] = useState<boolean>(true);
 
     const { borrowAmms, loading, error } = useBorrowAMMs();
-    const { positions, loading: loadingPos, error: errorPos } = useBorrowPositions();
+    const { borrowPositions, loading: loadingPos, error: errorPos } = usePositions();
     const wallet = useWallet();
 
     const commonOverrides: SystemStyleObject<Theme> = {
@@ -58,10 +58,10 @@ export const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorr
     const [headerProps, setHeaderProps] = useState<BorrowPortfolioHeaderProps>(defaultHeaderProps);
 
     const loadBorrowPositionsSummary = () => {
-      if (!loadingPos && !errorPos && !loading && !error && positions && borrowAmms) {
-        const requestVariable = getTotalVariableDebt(borrowAmms, positions);
+      if (!loadingPos && !errorPos && !loading && !error && borrowPositions && borrowAmms) {
+        const requestVariable = getTotalVariableDebt(borrowAmms, borrowPositions);
         requestVariable.then(([varDebt, varPositionsCount]) => {
-          const requestFixed = getTotalFixedDebt(borrowAmms, positions);
+          const requestFixed = getTotalFixedDebt(borrowAmms, borrowPositions);
           requestFixed.then(([fixDebt, fixPositionsCount]) => {
             setHeaderProps({
               currencyCode: 'USD',
@@ -78,7 +78,7 @@ export const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorr
 
     useEffect(() => {
       loadBorrowPositionsSummary();
-    }, [borrowAmms, error, loading, positions, loadingPos, errorPos]);
+    }, [borrowAmms, error, loading, borrowPositions, loadingPos, errorPos]);
 
     if (!borrowAmms || loading || error) {
       return null;
@@ -87,7 +87,7 @@ export const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorr
     if (
       wallet.status !== 'connecting' &&
       borrowAmms &&
-      positions &&
+      borrowPositions &&
       !loadingPos &&
       !errorPos &&
       !loading &&
@@ -112,7 +112,7 @@ export const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorr
             <BorrowTable
               borrowAmms={borrowAmms}
               commonOverrides={commonOverrides}
-              positions={positions}
+              positions={borrowPositions}
               showFixed={headerProps.fixedPositionsCount === undefined}
               showVariable={
                 headerProps.variablePositionsCount !== undefined &&

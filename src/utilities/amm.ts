@@ -12,13 +12,10 @@ import { isBorrowing } from './isBorrowing';
 export const findCurrentPosition = (
   positions: Position[],
   selectedAmm: AMM,
-  positionTypes: (1 | 2 | 3)[] = [1, 2, 3],
 ) => {
   return (positions || []).find((p) => {
     return (
-      p.amm.id === selectedAmm.id &&
-      positionTypes.includes(p.positionType as 1 | 2 | 3) && // filter by position type
-      (p.tickLower !== -69000 || p.tickUpper !== 69060) // omit borrow positions
+      p.amm.id === selectedAmm.id    
     );
   });
 };
