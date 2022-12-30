@@ -33,7 +33,6 @@ export const PortfolioProvider: React.FunctionComponent<PortfolioProviderProps> 
   children,
   positions,
 }) => {
-  const [loaded, setLoaded] = useState<string>('');
   const [healthCounters, setHealthCounters] =
     useState<{ danger: number; warning: number; healthy: number }>();
   const [totalNotional, setTotalNotional] = useState<number | undefined>();
@@ -45,19 +44,7 @@ export const PortfolioProvider: React.FunctionComponent<PortfolioProviderProps> 
   const { agent } = useAgent();
 
   useEffect(() => {
-    if (positions) {
-      for (let i = 0; i < positions.length; i++) {
-        void loadPositionInfo(positions[i]);
-      }
-    }
-  }, [positions]);
-
-  useEffect(() => {
-    if (
-      loaded.length > 0 &&
-      positions &&
-      positions.length > 0
-    ) {
+    if (positions && positions.length > 0) {
       setHealthCounters(getHealthCounters(positions));
       setTotalNotional(getTotalNotional(positions));
       setTotalMargin(getTotalMargin(positions));
@@ -65,17 +52,10 @@ export const PortfolioProvider: React.FunctionComponent<PortfolioProviderProps> 
       setNetReceivingRate(getNetReceivingRate(positions, agent));
       setNetPayingRate(getNetPayingRate(positions, agent));
     }
-  }, [loaded]);
-
-  const loadPositionInfo = (position: Position) => {
-    position.refreshInfo().then(() => {
-      setLoaded(JSON.stringify(position));
-    }).catch(() => {});
-  };
+  }, [positions]);
 
   const value = {
-    loadPosition: loadPositionInfo,
-    positions: positions,
+    positions,
     healthCounters,
     totalNotional,
     totalMargin,

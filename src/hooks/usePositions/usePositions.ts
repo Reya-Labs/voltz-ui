@@ -1,7 +1,7 @@
 import { Position } from '@voltz-protocol/v1-sdk';
 import JSBI from 'jsbi';
 import { DateTime } from 'luxon';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { Agents } from '../../contexts/AgentContext/types';
 import { actions, selectors } from '../../store';
@@ -23,8 +23,10 @@ export const usePositions = (): usePositionsResult => {
   const { agent } = useAgent();
   const { wallet, loading: walletLoading, error: walletError } = useWallet();
   const { amms, loading: ammLoading, error: ammError } = useAMMs();
+  const [mePositions, setMePositions] = useState<Position[]>();
 
-  const mePositions = useMemo(() => {
+  useEffect(() => {
+    let shouldUpdate = true;
     if (
       wallet &&
       wallet.positions &&
@@ -34,9 +36,20 @@ export const usePositions = (): usePositionsResult => {
       !ammLoading &&
       !ammError
     ) {
-      return wallet.positions
+      const walletPositions = wallet.positions
         .map((positionData) => MEPositionFactory(positionData, amms))
         .filter((position) => Boolean(position)) as Position[];
+
+      setMePositions(walletPositions);
+      void Promise.all(walletPositions.map((p) => p.refreshInfo())).then(() => {
+        if (shouldUpdate) {
+          setMePositions([...walletPositions]);
+        }
+      });
+
+      return () => {
+        shouldUpdate = false;
+      };
     }
   }, [wallet, walletLoading, walletError, amms, ammLoading, ammError]);
 
