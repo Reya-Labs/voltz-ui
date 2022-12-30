@@ -1,3 +1,5 @@
+import { Position } from '@voltz-protocol/v1-sdk';
+
 import { Agents } from '../contexts/AgentContext/types';
 
 // things that can occur after the transaction has been mined or fails
@@ -18,8 +20,6 @@ export type Transaction = TransactionUpdate & {
   ammId: string;
   fixedLow?: number;
   fixedHigh?: number;
-  oldFixedLow?: number;
-  oldFixedHigh?: number;
   notional: number;
   margin: number;
   partialCollateralization?: boolean;
@@ -27,15 +27,13 @@ export type Transaction = TransactionUpdate & {
 };
 
 export type RolloverMintTransaction = Transaction & {
-  marginEth?: number;
+  rolloverPosition: Position;
   newMarginEngine: string;
-  oldFixedLow: number;
-  oldFixedHigh: number;
 };
 
 export type RolloverSwapTransaction = Transaction & {
+  rolloverPosition: Position;
   isFT: boolean;
-  marginEth?: number;
   newMarginEngine: string;
 };
 

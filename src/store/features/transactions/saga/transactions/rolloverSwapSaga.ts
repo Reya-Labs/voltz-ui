@@ -18,7 +18,7 @@ export function* rolloverSwapSaga(action: RolloverSwapAction) {
 
   const amm = deserializeAmm(action.payload.amm, signer);
 
-  const { id, isFT, notional, margin, marginEth, newMarginEngine } =
+  const { id, isFT, notional, margin, newMarginEngine } =
     action.payload.transaction;
 
   try {
@@ -28,7 +28,6 @@ export function* rolloverSwapSaga(action: RolloverSwapAction) {
       isFT,
       notional,
       margin,
-      marginEth,
       newMarginEngine,
       oldFixedLow: 1,
       oldFixedHigh: 999,
