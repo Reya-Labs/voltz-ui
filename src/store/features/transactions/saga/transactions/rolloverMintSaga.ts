@@ -50,7 +50,6 @@ export function* rolloverMintSaga(action: RolloverMintAction) {
       newMarginEngine,
       oldFixedLow: oldFixedLow,
       oldFixedHigh: oldFixedHigh,
-      validationOnly: !!process.env.REACT_APP_ROLLOVER_VALIDATE_ONLY,
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

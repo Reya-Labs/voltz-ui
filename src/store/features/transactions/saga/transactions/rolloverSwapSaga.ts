@@ -22,7 +22,7 @@ export function* rolloverSwapSaga(action: RolloverSwapAction) {
     return;
   }
 
-  const { id, fixedRateLimit, isFT, notional, margin, marginEth, newMarginEngine } =
+  const { id, isFT, notional, margin, marginEth, newMarginEngine } =
     action.payload.transaction;
 
   let result: ContractReceipt | void;
@@ -30,7 +30,6 @@ export function* rolloverSwapSaga(action: RolloverSwapAction) {
     const args: AMMRolloverWithSwapArgs = {
       fixedLow: 1,
       fixedHigh: 999,
-      fixedRateLimit,
       isFT,
       notional,
       margin,
@@ -40,7 +39,6 @@ export function* rolloverSwapSaga(action: RolloverSwapAction) {
       newMarginEngine,
       oldFixedLow: 1,
       oldFixedHigh: 999,
-      validationOnly: !!process.env.REACT_APP_ROLLOVER_VALIDATE_ONLY,
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

@@ -68,7 +68,6 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
         ...transaction,
         ammId: (positionAmm as AMM).id,
         isFT: agent === Agents.FIXED_TRADER,
-        fixedRateLimit: undefined,
         margin: targetAmm.isETH ? 0 : Math.abs(form.state.margin as number),
         marginEth: targetAmm.isETH ? Math.abs(form.state.margin as number) : undefined,
         newMarginEngine: targetAmm.marginEngineAddress,
