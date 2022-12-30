@@ -27,7 +27,7 @@ export const Portfolio: React.FunctionComponent = () => {
   const { amms } = useAMMs();
   const { onChangeAgent } = useAgent();
   const { key } = useLocation();
-  const { positionsByAgentGroup } = usePositions();
+  const { positionsByAgentGroup, loading: loadingPositions, error: errorPositions } = usePositions();
   const { agent } = useAgent();
   const { account } = useWallet();
 
@@ -89,7 +89,10 @@ export const Portfolio: React.FunctionComponent = () => {
         >
           <ConnectedPositionTable
             agent={Agents.FIXED_TRADER}
+            errorPositions={errorPositions}
             handleCompletedSettling={handleCompletedSettling}
+            loadingPositions={loadingPositions}
+            positions={positionsByAgentGroup}
             onSelectItem={handleSelectPosition}
           />
         </PortfolioProvider>
@@ -101,7 +104,10 @@ export const Portfolio: React.FunctionComponent = () => {
         >
           <ConnectedPositionTable
             agent={Agents.FIXED_TRADER}
+            errorPositions={errorPositions}
             handleCompletedSettling={handleCompletedSettling}
+            loadingPositions={loadingPositions}
+            positions={positionsByAgentGroup}
             onSelectItem={handleSelectPosition}
           />
         </PortfolioProvider>

@@ -22,7 +22,7 @@ export const FixedBorrower: React.FunctionComponent = () => {
   const [position, setPosition] = useState<Position>();
   const { onChangeAgent } = useAgent();
 
-  const { borrowPositions } = usePositions();
+  const { borrowPositions, loading: loadingPositions, error: errorPositions } = usePositions();
   const { account } = useWallet();
 
   const renderMode = getRenderMode(isForm);
@@ -91,6 +91,9 @@ export const FixedBorrower: React.FunctionComponent = () => {
         <Box sx={{ backdropFilter: 'blur(8px)', height: '100%', paddingBottom: '200px' }}>
           <ConnectedBorrowPositionTable
             agent={Agents.VARIABLE_TRADER}
+            borrowPositions={borrowPositions}
+            errorPositions={errorPositions}
+            loadingPositions={loadingPositions}
             onSelectItem={handleSelectBorrowAMM}
           />
         </Box>
