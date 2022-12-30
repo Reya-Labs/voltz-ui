@@ -42,9 +42,8 @@ export const PortfolioProvider: React.FunctionComponent<PortfolioProviderProps> 
   const [netPayingRate, setNetPayingRate] = useState<number | undefined>();
 
   const { agent } = useAgent();
-
   useEffect(() => {
-    if (positions && positions.length > 0) {
+    if (positions && positions.length !== 0 && positions.every((p) => p.initialized)) {
       setHealthCounters(getHealthCounters(positions));
       setTotalNotional(getTotalNotional(positions));
       setTotalMargin(getTotalMargin(positions));
@@ -52,7 +51,7 @@ export const PortfolioProvider: React.FunctionComponent<PortfolioProviderProps> 
       setNetReceivingRate(getNetReceivingRate(positions, agent));
       setNetPayingRate(getNetPayingRate(positions, agent));
     }
-  }, [positions]);
+  }, [agent, positions]);
 
   const value = {
     positions,
