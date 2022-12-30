@@ -116,7 +116,7 @@ export const SubmitControls = ({
       case BorrowFormSubmitButtonStates.APPROVE_UT_PERIPHERY: {
         return (
           <Box>
-            Approve <Text>{underlyingTokenName}</Text>
+            Approve <Text>{underlyingTokenName === 'ETH' ? 'WETH' : underlyingTokenName}</Text>
           </Box>
         );
       }
