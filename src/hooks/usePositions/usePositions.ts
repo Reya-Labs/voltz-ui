@@ -54,7 +54,7 @@ export const usePositions = (): usePositionsResult => {
         })
         .map((positionData) => MEPositionFactory(positionData, amms))
         .filter((position) => Boolean(position)) as Position[];
-      
+
       setMePositions(walletPositions);
       void Promise.all(walletPositions.map((p) => p.refreshInfo())).then(() => {
         if (shouldUpdate) {

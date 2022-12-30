@@ -7,9 +7,7 @@ import { Agents } from '../../contexts/AgentContext/types';
  * Returns the health counts for the given set of positions
  * @param positions - The array of positions shown in the portfolio
  */
-export const getHealthCounters = (
-  positions: Position[],
-) => {
+export const getHealthCounters = (positions: Position[]) => {
   let healthy = 0;
   let warning = 0;
   let danger = 0;
@@ -31,10 +29,7 @@ export const getHealthCounters = (
  * @param positions - The array of positions shown in the portfolio
  * @param agent - The current agent
  */
-export const getNetPayingRate = (
-  positions: Position[],
-  agent: Agents,
-) => {
+export const getNetPayingRate = (positions: Position[], agent: Agents) => {
   let netPayingRate = 0;
   let totalNotional = 0;
 
@@ -57,10 +52,7 @@ export const getNetPayingRate = (
  * @param positions - The array of positions shown in the portfolio
  * @param agent - The current agent
  */
-export const getNetReceivingRate = (
-  positions: Position[],
-  agent: Agents,
-) => {
+export const getNetReceivingRate = (positions: Position[], agent: Agents) => {
   let netReceivingRate = 0;
   let totalNotional = 0;
 
@@ -82,9 +74,7 @@ export const getNetReceivingRate = (
  * Returns the total accrued cashflow figure for the given set of positions
  * @param positions - The array of positions shown in the portfolio
  */
-export const getTotalAccruedCashflow = (
-  positions: Position[],
-) => {
+export const getTotalAccruedCashflow = (positions: Position[]) => {
   return positions.reduce(
     (runningTotal, position) => runningTotal + position.accruedCashflowInUSD,
     0,
@@ -95,24 +85,14 @@ export const getTotalAccruedCashflow = (
  * Returns the total margin figure for the given set of positions
  * @param positions - The array of positions shown in the portfolio
  */
-export const getTotalMargin = (
-  positions: Position[],
-) => {
-  return positions.reduce(
-    (runningTotal, position) => runningTotal + position.marginInUSD,
-    0,
-  );
+export const getTotalMargin = (positions: Position[]) => {
+  return positions.reduce((runningTotal, position) => runningTotal + position.marginInUSD, 0);
 };
 
 /**
  * Returns the total notional figure for the given positions
  * @param positions - The array of positions shown in the portfolio
  */
-export const getTotalNotional = (
-  positions: Position[],
-) => {
-  return positions.reduce(
-    (runningTotal, position) => runningTotal + position.notionalInUSD,
-    0,
-  );
+export const getTotalNotional = (positions: Position[]) => {
+  return positions.reduce((runningTotal, position) => runningTotal + position.notionalInUSD, 0);
 };

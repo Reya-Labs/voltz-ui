@@ -97,7 +97,11 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
           amm={positionToSettle.position.amm}
           isEditingMargin={false}
           isSettle={true}
-          margin={positionToSettle.position.margin + positionToSettle.position.settlementCashflow + positionToSettle.position.fees}
+          margin={
+            positionToSettle.position.margin +
+            positionToSettle.position.settlementCashflow +
+            positionToSettle.position.fees
+          }
           notional={positionToSettle.position.notional}
           position={positionToSettle.position}
           transactionId={positionToSettle.txId}

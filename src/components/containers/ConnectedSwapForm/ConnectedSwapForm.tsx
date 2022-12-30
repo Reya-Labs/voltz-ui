@@ -143,8 +143,7 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
       case SwapFormActions.SWAP:
       case SwapFormActions.ROLLOVER_SWAP: {
         const isRemovingNotional =
-          (agent === Agents.VARIABLE_TRADER &&
-            (position?.variableTokenBalance ?? 0) < 0) ||
+          (agent === Agents.VARIABLE_TRADER && (position?.variableTokenBalance ?? 0) < 0) ||
           (agent === Agents.FIXED_TRADER && (position?.variableTokenBalance ?? 0) > 0);
         return (
           <PendingTransaction

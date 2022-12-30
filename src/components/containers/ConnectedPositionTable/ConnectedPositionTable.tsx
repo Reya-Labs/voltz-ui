@@ -111,9 +111,9 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
 
     let netWithdraw = undefined;
     if (agent === Agents.LIQUIDITY_PROVIDER) {
-      netWithdraw = positionToSettle.position.margin + positionToSettle.position.settlementCashflow
+      netWithdraw = positionToSettle.position.margin + positionToSettle.position.settlementCashflow;
     } else {
-      netWithdraw = positionToSettle.position.margin + positionToSettle.position.settlementCashflow
+      netWithdraw = positionToSettle.position.margin + positionToSettle.position.settlementCashflow;
     }
 
     return (

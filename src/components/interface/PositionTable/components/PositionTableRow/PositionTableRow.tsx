@@ -55,10 +55,7 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
 
     if (field === 'accruedRates') {
       return (
-        <AccruedRates
-          payingRate={position.payingRate}
-          receivingRate={position.receivingRate}
-        />
+        <AccruedRates payingRate={position.payingRate} receivingRate={position.receivingRate} />
       );
     }
 

@@ -128,10 +128,7 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
   }, [activeTransaction?.failedAt]);
 
   const isFetched = useMemo(() => {
-    if (
-      previousWallet.current &&
-      !loadingRefetch     
-    ) {
+    if (previousWallet.current && !loadingRefetch) {
       fetchRef.current = 0;
       removeFixedApr(amm);
       return true;
@@ -178,12 +175,7 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
     )
       return;
     if (activeTransaction && (activeTransaction.resolvedAt || activeTransaction.succeededAt)) {
-      if (
-        fetch < fetchLimit &&
-        !loadingRefetch &&
-        wallet &&
-        previousWallet.current
-      ) {
+      if (fetch < fetchLimit && !loadingRefetch && wallet && previousWallet.current) {
         setLoadingRefetch(true);
         /* eslint-disable @typescript-eslint/no-unsafe-call */
         refetch().then(() => {

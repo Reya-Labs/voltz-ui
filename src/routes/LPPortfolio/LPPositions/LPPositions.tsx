@@ -31,7 +31,11 @@ export const LPPositions: React.FunctionComponent<{
 
   const { amms } = useAMMs();
   const { key } = useLocation();
-  const { positionsByAgentGroup, loading: loadingPositions, error: errorPositions } = usePositions();
+  const {
+    positionsByAgentGroup,
+    loading: loadingPositions,
+    error: errorPositions,
+  } = usePositions();
   const { account } = useWallet();
 
   const renderMode = formMode ? 'form' : 'portfolio';

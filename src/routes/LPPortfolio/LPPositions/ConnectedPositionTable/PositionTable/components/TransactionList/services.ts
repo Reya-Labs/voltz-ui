@@ -133,7 +133,9 @@ export const getTransactionData = (position: Position, tx: LPPositionTransaction
         items: [
           {
             label: 'notional',
-            value: `${formatCurrency(position.getNotionalFromLiquidity(BigNumber.from(tx.amount.toString())))} ${token}`,
+            value: `${formatCurrency(
+              position.getNotionalFromLiquidity(BigNumber.from(tx.amount.toString())),
+            )} ${token}`,
           },
         ],
       };

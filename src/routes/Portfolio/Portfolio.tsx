@@ -27,7 +27,11 @@ export const Portfolio: React.FunctionComponent = () => {
   const { amms } = useAMMs();
   const { onChangeAgent } = useAgent();
   const { key } = useLocation();
-  const { positionsByAgentGroup, loading: loadingPositions, error: errorPositions } = usePositions();
+  const {
+    positionsByAgentGroup,
+    loading: loadingPositions,
+    error: errorPositions,
+  } = usePositions();
   const { agent } = useAgent();
   const { account } = useWallet();
 

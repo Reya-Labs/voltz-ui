@@ -59,7 +59,14 @@ export const ConnectedBorrowPositionTable: React.FunctionComponent<ConnectedBorr
     const [headerProps, setHeaderProps] = useState<BorrowPortfolioHeaderProps>(defaultHeaderProps);
 
     const loadBorrowPositionsSummary = () => {
-      if (!loadingPositions && !errorPositions && !loading && !error && borrowPositions && borrowAmms) {
+      if (
+        !loadingPositions &&
+        !errorPositions &&
+        !loading &&
+        !error &&
+        borrowPositions &&
+        borrowAmms
+      ) {
         const requestVariable = getTotalVariableDebt(borrowAmms, borrowPositions);
         requestVariable.then(([varDebt, varPositionsCount]) => {
           const requestFixed = getTotalFixedDebt(borrowAmms, borrowPositions);
