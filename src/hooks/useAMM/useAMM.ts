@@ -80,7 +80,6 @@ export const useAMM = (amm?: AMM) => {
             position: args.position,
             isFT: agent === Agents.FIXED_TRADER,
             notional: args.notional,
-            fixedRateLimit: args.fixedRateLimit,
             fixedLow: args.fixedLow ?? 1,
             fixedHigh: args.fixedHigh ?? 999,
             margin: args.margin,

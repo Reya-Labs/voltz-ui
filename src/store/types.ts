@@ -34,7 +34,6 @@ export type RolloverMintTransaction = Transaction & {
 };
 
 export type RolloverSwapTransaction = Transaction & {
-  fixedRateLimit?: number;
   isFT: boolean;
   marginEth?: number;
   newMarginEngine: string;
