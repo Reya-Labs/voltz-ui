@@ -131,7 +131,7 @@ export const SubmitControls = ({
       case SwapFormSubmitButtonStates.APPROVE_UT_PERIPHERY: {
         return (
           <Box>
-            Approve <Text>{underlyingTokenName}</Text>
+            Approve <Text>{underlyingTokenName === 'ETH' ? 'WETH' : underlyingTokenName}</Text>
           </Box>
         );
       }
