@@ -13,7 +13,6 @@ import { MEPositionFactory } from './mePositionFactory';
 
 export type usePositionsResult = {
   positions?: Position[];
-  positionsByAgent?: Position[];
   positionsByAgentGroup?: Position[];
   loading: boolean;
   error: boolean;
@@ -68,21 +67,6 @@ export const usePositions = (): usePositionsResult => {
     }
     return _positions;
   }, [mePositions]);
-
-  const positionsByAgent = useMemo(() => {
-    return positions?.filter(({ positionType }) => {
-      switch (agent) {
-        case Agents.LIQUIDITY_PROVIDER:
-          return positionType === 3;
-
-        case Agents.FIXED_TRADER:
-          return positionType === 1;
-
-        case Agents.VARIABLE_TRADER:
-          return positionType === 2;
-      }
-    });
-  }, [positions, agent]);
 
   const positionsByAgentGroup = useMemo(() => {
     return positions
@@ -150,7 +134,6 @@ export const usePositions = (): usePositionsResult => {
 
   return {
     positions,
-    positionsByAgent,
     positionsByAgentGroup,
     loading: walletLoading || ammLoading,
     error: walletError || ammError,
