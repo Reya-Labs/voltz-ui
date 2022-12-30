@@ -120,7 +120,7 @@ export const getSubmissionState = ({
         submitText: 'Approve',
         action: approve,
         hintText: {
-          text: `Please approve ${tokenName}`,
+          text: `Please approve ${tokenName === 'ETH' ? 'WETH' : tokenName}`,
         },
         loading: false,
         disabled: false,
