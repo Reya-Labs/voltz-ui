@@ -35,10 +35,25 @@ export const usePositions = (): usePositionsResult => {
       !ammLoading &&
       !ammError
     ) {
+      if (!agent) {
+        return;
+      }
+
       const walletPositions = wallet.positions
+        .filter(({ positionType }) => {
+          const pType = parseInt(positionType as string, 10);
+          if (isNaN(pType)) {
+            return false;
+          }
+
+          if (agent === Agents.LIQUIDITY_PROVIDER) {
+            return pType === 3;
+          }
+
+          return pType === 1 || pType === 2;
+        })
         .map((positionData) => MEPositionFactory(positionData, amms))
         .filter((position) => Boolean(position)) as Position[];
-
       setMePositions(walletPositions);
       void Promise.all(walletPositions.map((p) => p.refreshInfo())).then(() => {
         if (shouldUpdate) {
@@ -50,24 +65,17 @@ export const usePositions = (): usePositionsResult => {
         shouldUpdate = false;
       };
     }
-  }, [wallet, walletLoading, walletError, amms, ammLoading, ammError]);
+  }, [agent, wallet, walletLoading, walletError, amms, ammLoading, ammError]);
 
   const positionsByAgentGroup = useMemo(() => {
     return mePositions
-      .filter(({ positionType }) => {
-        if (agent === Agents.LIQUIDITY_PROVIDER) {
-          return positionType === 3;
-        } else {
-          return (positionType === 1 || positionType === 2);
-        }
-      })
       .sort((a, b) => {
         return b.createdTimestamp - a.createdTimestamp; // sort positions by timestamp
       })
       .sort((a, b) => {
         return Number(a.isSettled) - Number(b.isSettled); // sort settled positions to the bottom
       });
-  }, [mePositions, agent]);
+  }, [mePositions]);
 
   const unresolvedTransactions = useAppSelector(selectors.unresolvedTransactionsSelector);
   const shouldTryToCloseTransactions =
