@@ -1,4 +1,4 @@
-import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
+import { Position } from '@voltz-protocol/v1-sdk';
 import isUndefined from 'lodash.isundefined';
 
 import { Agents } from '../../contexts/AgentContext/types';
@@ -6,18 +6,16 @@ import { Agents } from '../../contexts/AgentContext/types';
 /**
  * Returns the health counts for the given set of positions
  * @param positions - The array of positions shown in the portfolio
- * @param positionInfo - The position info object
  */
 export const getHealthCounters = (
   positions: Position[],
-  positionInfo: Record<Position['id'], PositionInfo>,
 ) => {
   let healthy = 0;
   let warning = 0;
   let danger = 0;
 
   positions.forEach((position) => {
-    const healthFactor = positionInfo[position.id]?.healthFactor;
+    const healthFactor = position?.healthFactor;
     if (!isUndefined(healthFactor)) {
       if (healthFactor === 1) danger += 1;
       if (healthFactor === 2) warning += 1;
@@ -31,34 +29,18 @@ export const getHealthCounters = (
 /**
  * Returns the total net paying rate figure for the given set of positions
  * @param positions - The array of positions shown in the portfolio
- * @param positionInfo - The position info object
  * @param agent - The current agent
  */
 export const getNetPayingRate = (
   positions: Position[],
-  positionInfo: Record<Position['id'], PositionInfo>,
   agent: Agents,
 ) => {
   let netPayingRate = 0;
   let totalNotional = 0;
 
   positions.forEach((position) => {
-    const info = positionInfo[position.id];
-
-    if (info) {
-      const fixedRate = info.fixedRateSinceLastSwap;
-      const variableRate = info.variableRateSinceLastSwap;
-
-      if (!isUndefined(fixedRate) && position.positionType !== 1) {
-        netPayingRate += fixedRate * Math.abs(info.variableTokenBalance);
-        totalNotional += Math.abs(info.variableTokenBalance);
-      }
-
-      if (!isUndefined(variableRate) && position.positionType === 1) {
-        netPayingRate += variableRate * Math.abs(info.variableTokenBalance);
-        totalNotional += Math.abs(info.variableTokenBalance);
-      }
-    }
+    netPayingRate += position.payingRate * Math.abs(position.variableTokenBalance);
+    totalNotional += Math.abs(position.variableTokenBalance);
   });
 
   if (agent !== Agents.LIQUIDITY_PROVIDER) {
@@ -73,34 +55,18 @@ export const getNetPayingRate = (
 /**
  * Returns the total net receiving rate figure for the given set of positions
  * @param positions - The array of positions shown in the portfolio
- * @param positionInfo - The position info object
  * @param agent - The current agent
  */
 export const getNetReceivingRate = (
   positions: Position[],
-  positionInfo: Record<Position['id'], PositionInfo>,
   agent: Agents,
 ) => {
   let netReceivingRate = 0;
   let totalNotional = 0;
 
   positions.forEach((position) => {
-    const info = positionInfo[position.id];
-
-    if (info) {
-      const fixedRate = info.fixedRateSinceLastSwap;
-      const variableRate = info.variableRateSinceLastSwap;
-
-      if (!isUndefined(fixedRate) && position.positionType === 1) {
-        netReceivingRate += fixedRate * Math.abs(info.variableTokenBalance);
-        totalNotional += Math.abs(info.variableTokenBalance);
-      }
-
-      if (!isUndefined(variableRate) && position.positionType !== 1) {
-        netReceivingRate += variableRate * Math.abs(info.variableTokenBalance);
-        totalNotional += Math.abs(info.variableTokenBalance);
-      }
-    }
+    netReceivingRate += position.receivingRate * Math.abs(position.variableTokenBalance);
+    totalNotional += Math.abs(position.variableTokenBalance);
   });
 
   if (agent !== Agents.LIQUIDITY_PROVIDER) {
@@ -115,14 +81,12 @@ export const getNetReceivingRate = (
 /**
  * Returns the total accrued cashflow figure for the given set of positions
  * @param positions - The array of positions shown in the portfolio
- * @param positionInfo - The position info object
  */
 export const getTotalAccruedCashflow = (
   positions: Position[],
-  positionInfo: Record<Position['id'], PositionInfo>,
 ) => {
   return positions.reduce(
-    (runningTotal, position) => runningTotal + positionInfo[position.id]?.accruedCashflowInUSD || 0,
+    (runningTotal, position) => runningTotal + position.accruedCashflowInUSD,
     0,
   );
 };
@@ -130,14 +94,12 @@ export const getTotalAccruedCashflow = (
 /**
  * Returns the total margin figure for the given set of positions
  * @param positions - The array of positions shown in the portfolio
- * @param positionInfo - The position info object
  */
 export const getTotalMargin = (
   positions: Position[],
-  positionInfo: Record<Position['id'], PositionInfo>,
 ) => {
   return positions.reduce(
-    (runningTotal, position) => runningTotal + positionInfo[position.id]?.marginInUSD || 0,
+    (runningTotal, position) => runningTotal + position.marginInUSD,
     0,
   );
 };
@@ -145,14 +107,12 @@ export const getTotalMargin = (
 /**
  * Returns the total notional figure for the given positions
  * @param positions - The array of positions shown in the portfolio
- * @param agent - The current agent
  */
 export const getTotalNotional = (
   positions: Position[],
-  positionInfo: Record<Position['id'], PositionInfo>,
 ) => {
   return positions.reduce(
-    (runningTotal, position) => runningTotal + positionInfo[position.id]?.notionalInUSD || 0,
+    (runningTotal, position) => runningTotal + position.notionalInUSD,
     0,
   );
 };

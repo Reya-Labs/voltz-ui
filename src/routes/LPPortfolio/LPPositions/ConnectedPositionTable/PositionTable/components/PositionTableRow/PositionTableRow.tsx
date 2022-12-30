@@ -1,4 +1,4 @@
-import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
+import { Position } from '@voltz-protocol/v1-sdk';
 import React, { useEffect } from 'react';
 
 import { MaturityInformation } from '../../../../../../../components/composite/MaturityInformation/MaturityInformation';
@@ -13,13 +13,11 @@ import { CellBox, MaturityLabelTypography, RowBox } from './PositionTableRow.sty
 
 export type PositionTableRowProps = {
   position: Position;
-  positionInfo: PositionInfo | undefined;
   onSelect: (mode: 'margin' | 'liquidity' | 'notional') => void;
 };
 
 export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
   position,
-  positionInfo,
   onSelect,
 }) => {
   const { fixedApr } = useAMMContext();
@@ -52,7 +50,7 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
       <CellBox>
         <Notional
           hideEdit={hideEdit}
-          notional={positionInfo?.notional}
+          notional={position.notional}
           token={underlyingTokenName || ''}
           onEdit={handleEditLPNotional}
         />
@@ -62,7 +60,7 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
           accruedCashflow={undefined}
           hideEdit={hideEdit}
           isSettled={position.isSettled}
-          margin={positionInfo?.margin}
+          margin={position.margin}
           token={underlyingTokenName || ''}
           onSelect={handleEditMargin}
         />

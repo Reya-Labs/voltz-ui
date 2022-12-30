@@ -106,19 +106,11 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
   const renderPendingTransaction = () => {
     if (!positionToSettle) return null;
 
-    const spData = portfolioData.info[positionToSettle.position.id];
-
     let netWithdraw = undefined;
     if (agent === Agents.LIQUIDITY_PROVIDER) {
-      netWithdraw =
-        typeof spData?.fees === 'number' && typeof spData?.settlementCashflow === 'number'
-          ? spData?.margin + spData?.settlementCashflow
-          : undefined;
+      netWithdraw = positionToSettle.position.margin + positionToSettle.position.settlementCashflow
     } else {
-      netWithdraw =
-        typeof spData?.settlementCashflow === 'number'
-          ? spData?.margin + spData?.settlementCashflow
-          : undefined;
+      netWithdraw = positionToSettle.position.margin + positionToSettle.position.settlementCashflow
     }
 
     return (
@@ -128,7 +120,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
           isEditingMargin={false}
           isSettle={true}
           margin={netWithdraw}
-          notional={spData?.notional}
+          notional={positionToSettle.position.notional}
           position={positionToSettle.position}
           transactionId={positionToSettle.txId}
           onBack={handleTransactionFinished}

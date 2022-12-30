@@ -89,16 +89,14 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
   const renderPendingTransaction = () => {
     if (!positionToSettle) return null;
 
-    const spData = portfolioData.info[positionToSettle.position.id];
-
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
         <PendingTransaction
           amm={positionToSettle.position.amm}
           isEditingMargin={false}
           isSettle={true}
-          margin={spData ? spData.margin + spData.settlementCashflow + spData.fees : undefined}
-          notional={spData?.notional}
+          margin={positionToSettle.position.margin + positionToSettle.position.settlementCashflow + positionToSettle.position.fees}
+          notional={positionToSettle.position.notional}
           position={positionToSettle.position}
           transactionId={positionToSettle.txId}
           onBack={handleTransactionFinished}

@@ -41,9 +41,9 @@ export const MarginAmount: React.FunctionComponent<MarginAmountProps> = ({
     }
   };
 
-  const { positionInfo } = usePositionContext();
+  const { position } = usePositionContext();
 
-  const portfolioMarginInfo = positionInfo?.result?.margin;
+  const portfolioMarginInfo = position?.margin;
   const marginAmount = portfolioMarginInfo || defaultMargin;
   const initialMarginRequirement = currentPositionMarginRequirement || defaultMargin;
 

@@ -1,4 +1,4 @@
-import { AMM, ExpectedApyInfo, InfoPostSwap, Position, PositionInfo } from '@voltz-protocol/v1-sdk';
+import { AMM, ExpectedApyInfo, InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import { useMemo } from 'react';
 
 import { Agents } from '../../contexts/AgentContext/types';
@@ -17,7 +17,6 @@ export type useAMMReturnType = {
     MintMinimumMarginRequirementPayload,
     number | void
   >;
-  positionInfo: UseAsyncFunctionResult<Position, PositionInfo | void>;
   swapInfo: UseAsyncFunctionResult<SwapInfoPayload, InfoPostSwap | void>;
   variableApy: UseAsyncFunctionResult<unknown, number | void>;
   expectedApyInfo: UseAsyncFunctionResult<ExpectedInfoPayload, ExpectedApyInfo | void>;
@@ -43,25 +42,6 @@ export const useAMM = (amm?: AMM) => {
     },
     useMemo(() => undefined, [!!amm?.signer]),
     100,
-  );
-
-  const positionInfo = useAsyncFunction(
-    async (position: Position) => {
-      const recipient = await amm?.signer?.getAddress();
-
-      if (!recipient) {
-        return;
-      }
-
-      const result = await amm?.getPositionInformation(position);
-
-      if (!result) {
-        return;
-      }
-
-      return result;
-    },
-    useMemo(() => undefined, [!!amm?.signer, agent]),
   );
 
   const swapInfo = useAsyncFunction(
@@ -140,11 +120,10 @@ export const useAMM = (amm?: AMM) => {
       ({
         fixedApr,
         mintMinimumMarginRequirement,
-        positionInfo,
         swapInfo,
         variableApy,
         expectedApyInfo,
       } as useAMMReturnType),
-    [fixedApr, mintMinimumMarginRequirement, positionInfo, swapInfo, variableApy, expectedApyInfo],
+    [fixedApr, mintMinimumMarginRequirement, swapInfo, variableApy, expectedApyInfo],
   );
 };

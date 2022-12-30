@@ -1,9 +1,8 @@
 import Box from '@mui/material/Box';
 import { Position } from '@voltz-protocol/v1-sdk';
 import isUndefined from 'lodash.isundefined';
-import React, { useEffect } from 'react';
+import React from 'react';
 
-import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';
 import { colors } from '../../../theme';
 import { formatCurrency } from '../../../utilities/number';
 import { Button } from '../../atomic/Button/Button';
@@ -26,24 +25,22 @@ export const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionPro
   position,
   gaButtonId,
 }) => {
-  const { positionInfo } = usePositionContext();
-
   const currentPositionBadgeText = `${
-    positionInfo?.result?.beforeMaturity === false ? 'Previous' : 'Current'
+    position?.isPoolMatured === true ? 'Previous' : 'Current'
   } position: ${position.positionType === 1 ? 'Fix taker' : 'Variable taker'}`;
-  const notional = positionInfo?.result?.notional;
-  const margin = positionInfo?.result?.margin;
+  const notional = position.notional;
+  const margin = position.margin;
   const underlyingTokenName = position.amm.underlyingToken.name || '';
-  const settlementCashflow = positionInfo?.result?.settlementCashflow;
+  const settlementCashflow = position.settlementCashflow;
 
   const getHealthFactor = () => {
-    if (positionInfo?.loading) {
+    if (!position.initialized) {
       return <Ellipsis />;
     } else {
       let healthColour = '';
       let text = '';
 
-      switch (positionInfo?.result?.healthFactor) {
+      switch (position.healthFactor) {
         case 1: {
           healthColour = colors.vzCustomRed1.base;
           text = 'DANGER';
@@ -85,7 +82,7 @@ export const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionPro
     },
     {
       label: 'HEALTH FACTOR',
-      value: positionInfo?.loading ? <Ellipsis /> : getHealthFactor(),
+      value: !position.initialized ? <Ellipsis /> : getHealthFactor(),
     },
     {
       label: 'CURRENT MARGIN',
@@ -121,10 +118,6 @@ export const SwapCurrentPosition: React.FunctionComponent<SwapCurrentPositionPro
       bold: true,
     });
   }
-
-  useEffect(() => {
-    positionInfo?.call(position);
-  }, [position]);
 
   return (
     <FormPanel noBackground>

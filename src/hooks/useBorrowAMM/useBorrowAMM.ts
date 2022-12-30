@@ -99,8 +99,7 @@ export const useBorrowAMM = (borrowAmm: BorrowAMM) => {
     async (position: Position) => {
       const amm = borrowAmm?.amm;
       if (amm && position.amm.id === amm.id) {
-        const positionInfo = await amm.getPositionInformation(position);
-        return positionInfo.fixedRateSinceLastSwap;
+        return await amm.getFixedApr();
       }
       return undefined;
     },

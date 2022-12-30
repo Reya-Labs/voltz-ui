@@ -31,22 +31,22 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
   fixedRateUpper,
   fixedRateLower,
 }) => {
-  const { positionInfo } = usePositionContext();
+  const { position } = usePositionContext();
 
   const currentPositionBadgeText = `${
-    positionInfo?.result?.beforeMaturity === false ? 'Previous' : 'Current'
+    position?.isPoolMatured === true ? 'Previous' : 'Current'
   } position: LP`;
-  const fees = positionInfo?.result?.fees;
-  const cashflow = positionInfo?.result?.settlementCashflow;
+  const fees = position?.fees;
+  const cashflow = position?.settlementCashflow;
 
   const getHealthFactor = () => {
-    if (positionInfo?.loading) {
+    if (!position?.initialized) {
       return 'loading...';
     } else {
       let healthColour = '';
       let text = '';
 
-      switch (positionInfo?.result?.healthFactor) {
+      switch (position?.healthFactor) {
         case 1: {
           healthColour = colors.vzCustomRed1.base;
           text = 'DANGER';
@@ -96,7 +96,7 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
     },
     {
       label: 'HEALTH FACTOR',
-      value: positionInfo?.loading ? <Ellipsis /> : getHealthFactor(),
+      value: !position?.initialized ? <Ellipsis /> : getHealthFactor(),
     },
     {
       label: 'CURRENT MARGIN',

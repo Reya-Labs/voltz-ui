@@ -32,9 +32,7 @@ export const MEPositionFactory = (
     owner: { id: ownerAddress },
     tickLower,
     tickUpper,
-    updatedTimestamp: positionUpdatedTimestamp,
     positionType,
-    isSettled,
     mints,
     burns,
     swaps,
@@ -50,12 +48,10 @@ export const MEPositionFactory = (
 
   return new Position({
     id: positionId,
-    createdTimestamp: JSBI.BigInt(positionCreatedTimestamp),
-    updatedTimestamp: JSBI.BigInt(positionUpdatedTimestamp),
+    createdTimestamp: parseInt(positionCreatedTimestamp as string),
     tickLower: parseInt(tickLower as string),
     tickUpper: parseInt(tickUpper as string),
     positionType: parseInt(positionType as string),
-    isSettled,
     owner: ownerAddress,
     amm: correspondingAmm,
     mints: mints.map(

@@ -37,7 +37,7 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
   const dispatch = useAppDispatch();
   const form = useSwapFormContext();
   const navigate = useNavigate();
-  const { position, positionInfo } = usePositionContext();
+  const { position } = usePositionContext();
 
   const { mode } = form;
   const [transactionId, setTransactionId] = useState<string | undefined>();
@@ -140,8 +140,8 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
       case SwapFormActions.ROLLOVER_SWAP: {
         const isRemovingNotional =
           (agent === Agents.VARIABLE_TRADER &&
-            (positionInfo?.result?.variableTokenBalance ?? 0) < 0) ||
-          (agent === Agents.FIXED_TRADER && (positionInfo?.result?.variableTokenBalance ?? 0) > 0);
+            (position?.variableTokenBalance ?? 0) < 0) ||
+          (agent === Agents.FIXED_TRADER && (position?.variableTokenBalance ?? 0) > 0);
         return (
           <PendingTransaction
             amm={targetAmm}
@@ -221,7 +221,7 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
         formAction={form.action}
         maxAvailableNotional={form.swapInfo.maxAvailableNotional}
         mode={mode}
-        positionMargin={positionInfo?.result?.margin}
+        positionMargin={position?.margin}
         protocol={targetAmm.protocol}
         swapSummary={!isUndefined(form.state.notional) ? form.swapInfo.data : undefined}
         swapSummaryLoading={form.swapInfo.loading}

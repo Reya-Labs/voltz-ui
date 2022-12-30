@@ -104,7 +104,6 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
           {positions.map((pos, index) => {
             const rolloverAmm = findCurrentAmm(amms || [], pos);
             const rolloverAvailable = rolloverAmm ? rolloverAmm.id !== pos.amm.id : false;
-            const info = portfolioData?.info ? portfolioData.info[pos.id] : undefined;
             const closeToMaturity =
               Date.now().valueOf() + MATURITY_WINDOW > pos.amm.endDateTime.toMillis();
 
@@ -115,19 +114,19 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                   variant="main"
                 >
                   <PositionTableHead
-                    beforeMaturity={info?.beforeMaturity}
+                    beforeMaturity={!pos.isPoolMatured}
                     currencyCode="USD"
                     currencySymbol="$"
-                    fees={info?.fees}
+                    fees={pos.fees}
                     feesPositive={true}
-                    fixedApr={info?.fixedApr}
-                    fixedRateHealthFactor={info?.fixedRateHealthFactor}
+                    fixedApr={pos.poolAPR}
+                    fixedRateHealthFactor={pos.fixedRateHealthFactor}
                     gaButtonId={getRowButtonId(
                       agent === Agents.LIQUIDITY_PROVIDER,
                       pos.amm.protocol,
                       isBorrowing(pos.amm.rateOracle.protocolId),
                     )}
-                    healthFactor={info?.healthFactor}
+                    healthFactor={pos.healthFactor}
                     isSettled={pos.isSettled}
                     poolTraderWithdrawable={
                       config.pools.find((pool) => pool.id === pos.amm.id)?.traderWithdrawable ??
@@ -147,8 +146,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
 
                   <TableContainer
                     sx={
-                      portfolioData?.info &&
-                      portfolioData?.info[pos.id]?.beforeMaturity === false &&
+                      pos.isPoolMatured &&
                       !pos.isSettled
                         ? getMaturedTableBorderStyles(pos.positionType)
                         : undefined
@@ -161,9 +159,6 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                             key={pos.id}
                             index={index}
                             position={pos}
-                            positionInfo={
-                              portfolioData?.info ? portfolioData.info[pos.id] : undefined
-                            }
                             onSelect={(mode: 'margin' | 'liquidity' | 'notional') =>
                               handleSelectRow(index, mode)
                             }
