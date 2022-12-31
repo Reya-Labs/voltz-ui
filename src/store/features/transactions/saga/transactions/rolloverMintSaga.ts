@@ -18,43 +18,33 @@ export function* rolloverMintSaga(action: RolloverMintAction) {
 
   const amm = deserializeAmm(action.payload.amm, signer);
 
-  if (!amm) {
-    return;
-  }
+  const { id, fixedLow, fixedHigh, notional, margin, newMarginEngine, rolloverPosition } =
+    action.payload.transaction;
 
-  const {
-    id,
-    fixedLow,
-    fixedHigh,
-    notional,
-    margin,
-    marginEth,
-    newMarginEngine,
-    oldFixedHigh,
-    oldFixedLow,
-  } = action.payload.transaction;
   if (!fixedLow || !fixedHigh) {
     return;
   }
 
-  let result: ContractReceipt | void;
   try {
     const args: AMMRolloverWithMintArgs = {
       fixedLow,
       fixedHigh,
       notional,
       margin,
-      marginEth,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/unbound-method
-      owner: yield call([signer, 'getAddress']),
       newMarginEngine,
-      oldFixedLow: oldFixedLow,
-      oldFixedHigh: oldFixedHigh,
-      validationOnly: !!process.env.REACT_APP_ROLLOVER_VALIDATE_ONLY,
+      rolloverPosition,
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    result = yield call([amm, 'rolloverWithMint'], args);
+    const result: ContractReceipt = yield call([amm, 'rolloverWithMint'], args);
+
+    yield put(
+      actions.updateTransaction({
+        id,
+        succeededAt: DateTime.now().toISO(),
+        txid: result.transactionHash,
+      }),
+    );
   } catch (error) {
     getSentryTracker().captureException(error);
     yield put(
@@ -66,19 +56,5 @@ export function* rolloverMintSaga(action: RolloverMintAction) {
     );
 
     return;
-  }
-
-  if (!result) {
-    yield put(
-      actions.updateTransaction({ id, failedAt: DateTime.now().toISO(), failureMessage: 'error' }),
-    );
-  } else {
-    yield put(
-      actions.updateTransaction({
-        id,
-        succeededAt: DateTime.now().toISO(),
-        txid: result.transactionHash,
-      }),
-    );
   }
 }

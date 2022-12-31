@@ -18,8 +18,6 @@ export type Transaction = TransactionUpdate & {
   ammId: string;
   fixedLow?: number;
   fixedHigh?: number;
-  oldFixedLow?: number;
-  oldFixedHigh?: number;
   notional: number;
   margin: number;
   partialCollateralization?: boolean;
@@ -27,16 +25,21 @@ export type Transaction = TransactionUpdate & {
 };
 
 export type RolloverMintTransaction = Transaction & {
-  marginEth?: number;
+  rolloverPosition: {
+    tickLower: number;
+    tickUpper: number;
+    settlementBalance: number;
+  };
   newMarginEngine: string;
-  oldFixedLow: number;
-  oldFixedHigh: number;
 };
 
 export type RolloverSwapTransaction = Transaction & {
-  fixedRateLimit?: number;
+  rolloverPosition: {
+    tickLower: number;
+    tickUpper: number;
+    settlementBalance: number;
+  };
   isFT: boolean;
-  marginEth?: number;
   newMarginEngine: string;
 };
 

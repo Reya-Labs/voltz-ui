@@ -14,7 +14,6 @@ export type SwapInfoPayload = {
   margin?: number;
   notional: number;
   type: GetInfoType;
-  fixedRateLimit?: number;
   fixedLow?: number;
   fixedHigh?: number;
 };

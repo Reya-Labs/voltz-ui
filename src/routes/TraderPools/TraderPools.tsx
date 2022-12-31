@@ -26,7 +26,7 @@ export const TraderPools: React.FunctionComponent = () => {
 
   const { onChangeAgent } = useAgent();
   const { key } = useLocation();
-  const { positions } = usePositions();
+  const { positionsByAgentGroup } = usePositions();
   const { account } = useWallet();
 
   const renderMode = formMode ? 'form' : 'pools';
@@ -57,7 +57,7 @@ export const TraderPools: React.FunctionComponent = () => {
   const handleSelectAmm = (selectedAMM: AMM) => {
     setFormMode(SwapFormModes.NEW_POSITION);
     setAMM(selectedAMM);
-    setPosition(findCurrentPosition(positions || [], selectedAMM, [1, 2]));
+    setPosition(findCurrentPosition(positionsByAgentGroup || [], selectedAMM));
   };
   const handleReset = () => {
     setFormMode(undefined);

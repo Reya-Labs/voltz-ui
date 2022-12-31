@@ -2,19 +2,14 @@ import { formatNumber } from '../../../../../../../utilities/number';
 import { Typography } from '../../../../../../atomic/Typography/Typography';
 
 type AccruedRatesProps = {
-  positionType: number;
-  avgFixedRate?: number;
-  variableRate?: number;
+  receivingRate: number;
+  payingRate: number;
 };
 
-export const AccruedRates = ({ positionType, avgFixedRate, variableRate }: AccruedRatesProps) => {
+export const AccruedRates = ({ receivingRate, payingRate }: AccruedRatesProps) => {
   const renderValue = () => {
-    if (variableRate && avgFixedRate) {
-      if (positionType === 1) {
-        return `${formatNumber(avgFixedRate)}% / ${formatNumber(variableRate)}%`;
-      } else {
-        return `${formatNumber(variableRate)}% / ${formatNumber(avgFixedRate)}%`;
-      }
+    if (receivingRate && payingRate) {
+      return `${formatNumber(receivingRate)}% / ${formatNumber(payingRate)}%`;
     } else {
       return `- / -`;
     }

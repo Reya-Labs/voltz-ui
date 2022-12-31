@@ -31,7 +31,11 @@ export const LPPositions: React.FunctionComponent<{
 
   const { amms } = useAMMs();
   const { key } = useLocation();
-  const { positionsByAgentGroup } = usePositions();
+  const {
+    positionsByAgentGroup,
+    loading: loadingPositions,
+    error: errorPositions,
+  } = usePositions();
   const { account } = useWallet();
 
   const renderMode = formMode ? 'form' : 'portfolio';
@@ -91,8 +95,10 @@ export const LPPositions: React.FunctionComponent<{
       {renderMode === 'portfolio' && (
         <PortfolioProvider positions={positionsByAgentGroup}>
           <ConnectedPositionTable
-            amm={amm}
+            errorPositions={errorPositions}
             handleCompletedSettling={handleCompletedSettling}
+            loadingPositions={loadingPositions}
+            positions={positionsByAgentGroup}
             onSelectItem={handleSelectPosition}
           />
         </PortfolioProvider>

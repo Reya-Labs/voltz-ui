@@ -9,7 +9,8 @@ import { AMMProvider } from '../../contexts/AMMContext/AMMContext';
 import { BorrowAMMProvider } from '../../contexts/BorrowAMMContext/BorrowAMMContext';
 import { BorrowFormProvider } from '../../contexts/BorrowFormContext/BorrowFormContext';
 import { PositionProvider } from '../../contexts/PositionContext/PositionContext';
-import { useBorrowPositions } from '../../hooks/useBorrowPositions';
+import { useAgent } from '../../hooks/useAgent';
+import { usePositions } from '../../hooks/usePositions/usePositions';
 import { useWallet } from '../../hooks/useWallet';
 import { findCurrentBorrowPosition } from '../../utilities/borrowAmm';
 import { setPageTitle } from '../../utilities/page';
@@ -19,8 +20,9 @@ export const FixedBorrower: React.FunctionComponent = () => {
   const [isForm, setIsForm] = useState<boolean>();
   const [borrowAmm, setBorrowAMM] = useState<BorrowAMM>();
   const [position, setPosition] = useState<Position>();
+  const { onChangeAgent } = useAgent();
 
-  const { positions } = useBorrowPositions();
+  const { borrowPositions, loading: loadingPositions, error: errorPositions } = usePositions();
   const { account } = useWallet();
 
   const renderMode = getRenderMode(isForm);
@@ -28,7 +30,7 @@ export const FixedBorrower: React.FunctionComponent = () => {
   const handleSelectBorrowAMM = (selectedBorrowAMM: BorrowAMM) => {
     setIsForm(true);
     setBorrowAMM(selectedBorrowAMM);
-    setPosition(findCurrentBorrowPosition(positions || [], selectedBorrowAMM.id));
+    setPosition(findCurrentBorrowPosition(borrowPositions, selectedBorrowAMM.id));
   };
 
   useEffect(() => {
@@ -38,7 +40,7 @@ export const FixedBorrower: React.FunctionComponent = () => {
   useEffect(() => {
     setBorrowAMM(undefined);
     setPosition(undefined);
-    // onChangeAgent(Agents.BORROW_TRADER);
+    onChangeAgent(Agents.VARIABLE_TRADER);
   }, [setBorrowAMM, setPosition]);
 
   useEffect(() => {
@@ -89,6 +91,9 @@ export const FixedBorrower: React.FunctionComponent = () => {
         <Box sx={{ backdropFilter: 'blur(8px)', height: '100%', paddingBottom: '200px' }}>
           <ConnectedBorrowPositionTable
             agent={Agents.VARIABLE_TRADER}
+            borrowPositions={borrowPositions}
+            errorPositions={errorPositions}
+            loadingPositions={loadingPositions}
             onSelectItem={handleSelectBorrowAMM}
           />
         </Box>

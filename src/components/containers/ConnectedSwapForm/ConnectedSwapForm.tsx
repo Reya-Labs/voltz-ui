@@ -1,4 +1,4 @@
-import { AMM } from '@voltz-protocol/v1-sdk';
+import { AMM, Position } from '@voltz-protocol/v1-sdk';
 import isUndefined from 'lodash.isundefined';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -37,7 +37,7 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
   const dispatch = useAppDispatch();
   const form = useSwapFormContext();
   const navigate = useNavigate();
-  const { position, positionInfo } = usePositionContext();
+  const { position } = usePositionContext();
 
   const { mode } = form;
   const [transactionId, setTransactionId] = useState<string | undefined>();
@@ -68,10 +68,13 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
         ...transaction,
         ammId: (positionAmm as AMM).id,
         isFT: agent === Agents.FIXED_TRADER,
-        fixedRateLimit: undefined,
         margin: targetAmm.isETH ? 0 : Math.abs(form.state.margin as number),
-        marginEth: targetAmm.isETH ? Math.abs(form.state.margin as number) : undefined,
         newMarginEngine: targetAmm.marginEngineAddress,
+        rolloverPosition: {
+          tickLower: (position as Position).tickLower,
+          tickUpper: (position as Position).tickUpper,
+          settlementBalance: (position as Position).settlementBalance,
+        },
       });
     }
 
@@ -140,9 +143,8 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
       case SwapFormActions.SWAP:
       case SwapFormActions.ROLLOVER_SWAP: {
         const isRemovingNotional =
-          (agent === Agents.VARIABLE_TRADER &&
-            (positionInfo?.result?.variableTokenBalance ?? 0) < 0) ||
-          (agent === Agents.FIXED_TRADER && (positionInfo?.result?.variableTokenBalance ?? 0) > 0);
+          (agent === Agents.VARIABLE_TRADER && (position?.variableTokenBalance ?? 0) < 0) ||
+          (agent === Agents.FIXED_TRADER && (position?.variableTokenBalance ?? 0) > 0);
         return (
           <PendingTransaction
             amm={targetAmm}
@@ -222,7 +224,7 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
         formAction={form.action}
         maxAvailableNotional={form.swapInfo.maxAvailableNotional}
         mode={mode}
-        positionMargin={positionInfo?.result?.margin}
+        positionMargin={position?.margin}
         protocol={targetAmm.protocol}
         swapSummary={!isUndefined(form.state.notional) ? form.swapInfo.data : undefined}
         swapSummaryLoading={form.swapInfo.loading}

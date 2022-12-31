@@ -29,7 +29,11 @@ export const DeprecatedLPPortfolio: React.FunctionComponent = () => {
   const { amms } = useAMMs();
   const { onChangeAgent, agent } = useAgent();
   const { key } = useLocation();
-  const { positionsByAgentGroup } = usePositions();
+  const {
+    positionsByAgentGroup,
+    loading: loadingPositions,
+    error: errorPositions,
+  } = usePositions();
   const { account } = useWallet();
 
   const renderMode = formMode ? 'form' : 'portfolio';
@@ -92,8 +96,10 @@ export const DeprecatedLPPortfolio: React.FunctionComponent = () => {
         >
           <ConnectedPositionTable
             agent={Agents.LIQUIDITY_PROVIDER}
-            amm={amm}
+            errorPositions={errorPositions}
             handleCompletedSettling={handleCompletedSettling}
+            loadingPositions={loadingPositions}
+            positions={positionsByAgentGroup}
             onSelectItem={handleSelectPosition}
           />
         </PortfolioProvider>
@@ -105,8 +111,10 @@ export const DeprecatedLPPortfolio: React.FunctionComponent = () => {
         >
           <ConnectedPositionTable
             agent={Agents.LIQUIDITY_PROVIDER}
-            amm={amm}
+            errorPositions={errorPositions}
             handleCompletedSettling={handleCompletedSettling}
+            loadingPositions={loadingPositions}
+            positions={positionsByAgentGroup}
             onSelectItem={handleSelectPosition}
           />
         </PortfolioProvider>

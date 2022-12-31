@@ -38,7 +38,7 @@ export const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFor
   const dispatch = useAppDispatch();
   const form = useMintBurnForm();
   const navigate = useNavigate();
-  const { position, positionInfo } = usePositionContext();
+  const { position } = usePositionContext();
 
   const [transactionId, setTransactionId] = useState<string | undefined>();
   const activeTransaction = useAppSelector(selectors.transactionSelector)(transactionId);
@@ -69,11 +69,13 @@ export const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFor
       return actions.rolloverMintAction(positionAmm as AMM, {
         ...transaction,
         ammId: (positionAmm as AMM).id,
-        margin: targetAmm.isETH ? 0 : Math.abs(form.state.margin as number),
-        marginEth: targetAmm.isETH ? Math.abs(form.state.margin as number) : undefined,
+        margin: Math.abs(form.state.margin as number),
         newMarginEngine: targetAmm.marginEngineAddress,
-        oldFixedHigh: (position as Position).fixedRateUpper.toNumber(),
-        oldFixedLow: (position as Position).fixedRateLower.toNumber(),
+        rolloverPosition: {
+          tickLower: (position as Position).tickLower,
+          tickUpper: (position as Position).tickUpper,
+          settlementBalance: (position as Position).settlementBalance,
+        },
       });
     }
 
@@ -167,8 +169,8 @@ export const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFor
           fixedRateLower={position?.fixedRateLower.toNumber()}
           fixedRateUpper={position?.fixedRateUpper.toNumber()}
           formMode={form.mode}
-          margin={positionInfo?.result?.margin}
-          notional={positionInfo?.result?.notional}
+          margin={position?.margin}
+          notional={position?.notional}
           underlyingTokenName={position.amm.underlyingToken.name || ''}
           onPortfolio={handleComplete}
         />

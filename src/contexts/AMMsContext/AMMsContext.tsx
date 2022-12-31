@@ -1,7 +1,6 @@
-import { AMM, Position, PositionInfo } from '@voltz-protocol/v1-sdk';
+import { AMM } from '@voltz-protocol/v1-sdk';
 import React, { createContext, useCallback, useContext, useMemo, useRef } from 'react';
 
-import { Wallet } from '../../graphql';
 import { useAsyncFunction, UseAsyncFunctionResult } from '../../hooks/useAsyncFunction';
 
 export type AMMsProviderProps = {};
@@ -10,9 +9,6 @@ export type AMMsContext = {
   variableApy: (amm: AMM) => UseAsyncFunctionResult<AMM, number | void>;
   fixedApr: (amm: AMM) => UseAsyncFunctionResult<AMM, number | void>;
   removeFixedApr: (amm: AMM) => void;
-  positionsInfo: Record<string, PositionInfo | undefined>;
-  cachePositionInfo: (info: PositionInfo, position: Position) => void;
-  isPositionFeched: (wallet: Wallet, previousWallet: Wallet, position?: Position) => boolean;
 };
 
 const AMMsCtx = createContext<AMMsContext>({} as unknown as AMMsContext);
@@ -25,44 +21,6 @@ export const AMMsProvider: React.FunctionComponent<AMMsProviderProps> = ({ child
   const removeFixedApr = useCallback((amm: AMM) => {
     fixedAprs.current[amm.id] = undefined;
   }, []);
-
-  const positionsInfo = useRef<Record<string, PositionInfo | undefined>>({});
-
-  const cachePositionInfo = (info: PositionInfo, position: Position) => {
-    positionsInfo.current[position.id] = info;
-  };
-
-  const isPositionFeched = (wallet: Wallet, previousWallet: Wallet, position?: Position) => {
-    if (position) {
-      positionsInfo.current[position.id] = undefined;
-    }
-
-    if (!position) {
-      if (wallet.positions && wallet.positions.length > previousWallet.positions.length) {
-        return true;
-      }
-    } else {
-      let newPosition: Position | undefined = undefined;
-      if (position && wallet.positions) {
-        const poss = wallet.positions.filter(
-          (pos) => pos.id === position.id,
-        ) as unknown as Position[];
-        newPosition = poss[0];
-      }
-      if (position && newPosition) {
-        if (
-          newPosition.swaps.length > position.swaps.length ||
-          newPosition.burns.length > position.burns.length ||
-          newPosition.mints.length > position.mints.length ||
-          newPosition.marginUpdates.length > position.marginUpdates.length ||
-          newPosition.settlements.length > position.settlements.length
-        ) {
-          return true;
-        }
-      }
-    }
-    return false;
-  };
 
   const useVariableApy = (amm: AMM) =>
     useAsyncFunction(
@@ -100,9 +58,6 @@ export const AMMsProvider: React.FunctionComponent<AMMsProviderProps> = ({ child
     variableApy: useVariableApy,
     fixedApr: useFixedApr,
     removeFixedApr: removeFixedApr,
-    positionsInfo: positionsInfo.current,
-    cachePositionInfo,
-    isPositionFeched,
   };
 
   return <AMMsCtx.Provider value={value}>{children}</AMMsCtx.Provider>;

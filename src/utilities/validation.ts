@@ -12,23 +12,13 @@ import { getSentryTracker } from './sentry';
  */
 export const hasEnoughUnderlyingTokens = async (
   amm: AMM,
-  amount: number | undefined,
-  rolloverPosition?: Position | undefined,
+  amount: number,
+  rolloverPosition?: Position,
 ) => {
-  if (!isUndefined(amount)) {
-    try {
-      return await amm.hasEnoughUnderlyingTokens(
-        amount,
-        rolloverPosition
-          ? {
-              fixedHigh: rolloverPosition.fixedRateUpper.toNumber(),
-              fixedLow: rolloverPosition.fixedRateLower.toNumber(),
-            }
-          : undefined,
-      );
-    } catch (error) {
-      getSentryTracker().captureException(error);
-    }
+  try {
+    return (await amm.underlyingTokens()) + (rolloverPosition?.settlementBalance || 0) >= amount;
+  } catch (error) {
+    getSentryTracker().captureException(error);
   }
 };
 

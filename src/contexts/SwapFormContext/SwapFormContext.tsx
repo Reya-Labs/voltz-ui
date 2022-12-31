@@ -8,7 +8,6 @@ import { SwapFormActions, SwapFormModes } from '../../components/interface/SwapF
 import { useAgent } from '../../hooks/useAgent';
 import { GetInfoType } from '../../hooks/useAMM/types';
 import { useBalance } from '../../hooks/useBalance';
-import { useCurrentPositionMarginRequirement } from '../../hooks/useCurrentPositionMarginRequirement';
 import { useTokenApproval } from '../../hooks/useTokenApproval';
 import { useWallet } from '../../hooks/useWallet';
 import { getAmmProtocol } from '../../utilities/amm';
@@ -85,15 +84,15 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   mode = SwapFormModes.NEW_POSITION,
 }) => {
   const { amm: poolAmm } = useAMMContext();
-  const { amm: positionAmm, position, positionInfo } = usePositionContext();
+  const { amm: positionAmm, position } = usePositionContext();
   const { account } = useWallet();
 
   const defaultLeverage = defaultValues.leverage ?? 100;
   const defaultMargin = defaultValues.margin ?? undefined;
   const defaultMarginAction = defaultValues.marginAction || SwapFormMarginAction.ADD;
   const defaultNotional =
-    mode === SwapFormModes.ROLLOVER && positionInfo && positionInfo.result
-      ? Math.abs(positionInfo.result.variableTokenBalance)
+    mode === SwapFormModes.ROLLOVER && position
+      ? Math.abs(position.variableTokenBalance)
       : defaultValues.notional;
 
   const ammCtx = useAMMContext();
@@ -105,12 +104,12 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   const [leverage, setLeverage] = useState<SwapFormState['leverage']>(defaultLeverage);
   const [margin, setMargin] = useState<SwapFormState['margin']>(defaultMargin);
   const [marginAction, setMarginAction] = useState<SwapFormMarginAction>(defaultMarginAction);
-  const currentPositionMarginRequirement = useCurrentPositionMarginRequirement(poolAmm, 1, 999);
+  const currentPositionMarginRequirement = position?.safetyThreshold;
   const [notional, setNotional] = useState<SwapFormState['notional']>(defaultNotional);
   const { swapInfo, expectedApyInfo } = useAMMContext();
   const cachedSwapInfoMinRequiredMargin = useRef<number>();
   const [cachedSwapInfoAvailableNotional, setCachedSwapInfoAvailableNotional] = useState<number>();
-  const tokenApprovals = useTokenApproval(poolAmm, margin);
+  const tokenApprovals = useTokenApproval(poolAmm, mode === SwapFormModes.ROLLOVER, margin);
   const [userSimulatedVariableApy, setUserSimulatedVariableApy] = useState<number | undefined>(
     undefined,
   );
@@ -346,9 +345,8 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     } else {
       if (mode === SwapFormModes.EDIT_NOTIONAL || mode === SwapFormModes.EDIT_MARGIN) {
         const isRemovingNotional =
-          (agent === Agents.VARIABLE_TRADER &&
-            (positionInfo?.result?.variableTokenBalance ?? 0) < 0) ||
-          (agent === Agents.FIXED_TRADER && (positionInfo?.result?.variableTokenBalance ?? 0) > 0);
+          (agent === Agents.VARIABLE_TRADER && (position?.variableTokenBalance ?? 0) < 0) ||
+          (agent === Agents.FIXED_TRADER && (position?.variableTokenBalance ?? 0) > 0);
         if (isRemovingNotional && isRemovingMargin) {
           return SwapFormSubmitButtonHintStates.REMOVE_AND_REMOVE;
         }
@@ -506,7 +504,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
         margin !== 0 &&
         (await hasEnoughUnderlyingTokens(
           positionAmm || poolAmm,
-          margin,
+          margin || 0,
           mode === SwapFormModes.ROLLOVER ? position : undefined,
         )) === false
       ) {
@@ -517,7 +515,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       if (
         (await hasEnoughUnderlyingTokens(
           positionAmm || poolAmm,
-          swapInfo.result?.fee,
+          swapInfo.result?.fee || 0,
           mode === SwapFormModes.ROLLOVER ? position : undefined,
         )) === false
       ) {
@@ -569,10 +567,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
 
     // check user has sufficient funds
     if (marginAction === SwapFormMarginAction.ADD) {
-      if (
-        margin !== 0 &&
-        (await hasEnoughUnderlyingTokens(positionAmm || poolAmm, margin)) === false
-      ) {
+      if ((await hasEnoughUnderlyingTokens(positionAmm || poolAmm, margin || 0)) === false) {
         valid = false;
         addError(err, 'margin', 'Insufficient funds');
       }
@@ -583,7 +578,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     if (marginAction === SwapFormMarginAction.REMOVE) {
       const isWithdrawable = isMarginWithdrawable(
         margin,
-        positionInfo?.result?.margin,
+        position?.margin,
         currentPositionMarginRequirement,
       );
       if (!isUndefined(isWithdrawable) && !isWithdrawable) {
@@ -599,11 +594,10 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     }
 
     // Check if notional/margin exceeds position balance
-    if (positionInfo && positionInfo.result && swapInfo.result) {
-      const isVT = positionInfo.result.variableTokenBalance > 0;
+    if (position && swapInfo.result) {
+      const isVT = position.variableTokenBalance > 0;
       if (!isVT && agent === Agents.VARIABLE_TRADER) {
-        const newVariableTokenBalance =
-          positionInfo.result.variableTokenBalance + (notional ? notional : 0);
+        const newVariableTokenBalance = position.variableTokenBalance + (notional ? notional : 0);
         if (newVariableTokenBalance > 0) {
           valid = false;
           addError(err, 'notional', 'Removed too much notional');
@@ -611,8 +605,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       }
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if (isVT && agent === Agents.FIXED_TRADER) {
-        const newVariableTokenBalance =
-          positionInfo.result.variableTokenBalance - (notional ? notional : 0);
+        const newVariableTokenBalance = position.variableTokenBalance - (notional ? notional : 0);
         if (newVariableTokenBalance < 0) {
           valid = false;
           addError(err, 'notional', 'Removed too much notional');

@@ -1,10 +1,9 @@
-import { AMM, PositionInfo } from '@voltz-protocol/v1-sdk';
+import { AMM } from '@voltz-protocol/v1-sdk';
 import debounce from 'lodash.debounce';
 import isUndefined from 'lodash.isundefined';
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
 import { useBalance } from '../../hooks/useBalance';
-import { useCurrentPositionMarginRequirement } from '../../hooks/useCurrentPositionMarginRequirement';
 import { useTokenApproval } from '../../hooks/useTokenApproval';
 import { useWallet } from '../../hooks/useWallet';
 import { getAmmProtocol } from '../../utilities/amm';
@@ -98,11 +97,6 @@ export type MintBurnFormContext = {
     result?: number;
   };
   mode: MintBurnFormModes;
-  positionInfo?: {
-    errorMessage?: string;
-    loading: boolean;
-    result?: PositionInfo;
-  };
   setFixedHigh: (value: MintBurnFormState['fixedHigh']) => void;
   setFixedLow: (value: MintBurnFormState['fixedLow']) => void;
   setLiquidityAction: (value: MintBurnFormState['liquidityAction']) => void;
@@ -125,13 +119,9 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
 }) => {
   const { account } = useWallet();
   const { amm: poolAmm, mintMinimumMarginRequirement } = useAMMContext();
-  const { position, amm: positionAmm, positionInfo } = usePositionContext();
+  const { position, amm: positionAmm } = usePositionContext();
 
-  const currentPositionMarginRequirement = useCurrentPositionMarginRequirement(
-    poolAmm,
-    position?.fixedRateLower.toNumber(),
-    position?.fixedRateUpper.toNumber(),
-  );
+  const currentPositionMarginRequirement = position?.safetyThreshold;
 
   const defaultFixedHigh =
     position?.fixedRateUpper.toNumber() ?? defaultValues.fixedHigh ?? undefined;
@@ -141,8 +131,8 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   const defaultMargin = defaultValues.margin ?? undefined;
   const defaultMarginAction = defaultValues.marginAction ?? MintBurnFormMarginAction.ADD;
   const defaultNotional =
-    mode === MintBurnFormModes.ROLLOVER && positionInfo && positionInfo.result
-      ? positionInfo.result.notional
+    mode === MintBurnFormModes.ROLLOVER && position
+      ? position.notional
       : defaultValues.notional ?? undefined;
 
   const balance = useBalance(
@@ -156,7 +146,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
   const [margin, setMargin] = useState<MintBurnFormState['margin']>(defaultMargin);
   const [marginAction, setMarginAction] = useState<MintBurnFormMarginAction>(defaultMarginAction);
   const [notional, setNotional] = useState<MintBurnFormState['notional']>(defaultNotional);
-  const tokenApprovals = useTokenApproval(poolAmm);
+  const tokenApprovals = useTokenApproval(poolAmm, mode === MintBurnFormModes.ROLLOVER, margin);
 
   const approvalsNeeded = !tokenApprovals.underlyingTokenApprovedForPeriphery;
   const [errors, setErrors] = useState<MintBurnFormContext['errors']>({});
@@ -166,7 +156,7 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
     !mintMinimumMarginRequirement.loading &&
     !mintMinimumMarginRequirement.errorMessage;
   const minimumRequiredMargin = mintMinimumMarginRequirement.result ?? undefined;
-  const totalBalance = balance + (positionInfo?.result?.accruedCashflow ?? 0);
+  const totalBalance = balance + (position?.accruedCashflow || 0);
   const touched = useRef<string[]>([]);
 
   const isAddingLiquidity =
@@ -292,11 +282,6 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
       });
     }
   }, [mintMinimumMarginRequirement.call, notional, fixedLow, fixedHigh]);
-
-  // Load the position info (if we have a current position)
-  useEffect(() => {
-    if (position) positionInfo?.call(position);
-  }, [position]);
 
   // validate the form after values change
   useEffect(() => {
@@ -498,8 +483,8 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
     if (marginAction === MintBurnFormMarginAction.REMOVE) {
       const isWithdrawable = isMarginWithdrawable(
         margin,
-        positionInfo?.result?.margin,
-        positionInfo?.result?.safetyThreshold,
+        position?.margin,
+        position?.safetyThreshold,
       );
 
       if (!isUndefined(isWithdrawable) && !isWithdrawable) {
@@ -577,13 +562,6 @@ export const MintBurnFormProvider: React.FunctionComponent<MintBurnFormProviderP
       result: mintMinimumMarginRequirement.result ?? undefined,
     },
     mode,
-    positionInfo: positionInfo
-      ? {
-          loading: positionInfo.loading,
-          errorMessage: positionInfo.errorMessage ?? undefined,
-          result: positionInfo.result ?? undefined,
-        }
-      : undefined,
     setFixedHigh: updateFixedHigh,
     setFixedLow: updateFixedLow,
     setLiquidityAction: updateLiquidityAction,

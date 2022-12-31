@@ -8,11 +8,10 @@ import { Position } from '@voltz-protocol/v1-sdk';
 export const findCurrentBorrowPosition = (positions: Position[], selectedAmmId: string) => {
   // CT: need to check if VT > 0 as well
   return (positions || []).find((p) => {
-    return (
-      p.amm.id === selectedAmmId &&
-      p.positionType === 2 &&
-      p.tickLower === -69000 &&
-      p.tickUpper === 69060
-    );
+    return p.amm.id === selectedAmmId && isBorrowingPosition(p);
   });
+};
+
+export const isBorrowingPosition = (p: Position) => {
+  return p.positionType === 2 && p.tickLower === -69000 && p.tickUpper === 69060;
 };

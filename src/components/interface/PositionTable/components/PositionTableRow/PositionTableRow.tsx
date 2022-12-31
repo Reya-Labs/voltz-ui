@@ -1,6 +1,6 @@
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import { Position, PositionInfo } from '@voltz-protocol/v1-sdk';
+import { Position } from '@voltz-protocol/v1-sdk';
 import isNumber from 'lodash.isnumber';
 import React, { useEffect } from 'react';
 
@@ -18,14 +18,12 @@ import { AccruedRates, CurrentMargin, FixedAPR, Notional } from './components';
 
 export type PositionTableRowProps = {
   position: Position;
-  positionInfo: PositionInfo | undefined;
   index: number;
   onSelect: (mode: 'margin' | 'liquidity' | 'notional') => void;
 };
 
 export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
   position,
-  positionInfo,
   index,
   onSelect,
 }) => {
@@ -57,11 +55,7 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
 
     if (field === 'accruedRates') {
       return (
-        <AccruedRates
-          avgFixedRate={positionInfo?.fixedRateSinceLastSwap}
-          positionType={position.positionType}
-          variableRate={positionInfo?.variableRateSinceLastSwap}
-        />
+        <AccruedRates payingRate={position.payingRate} receivingRate={position.receivingRate} />
       );
     }
 
@@ -72,9 +66,9 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
     if (field === 'margin') {
       return (
         <CurrentMargin
-          accruedCashflow={positionInfo?.accruedCashflow}
+          accruedCashflow={position.accruedCashflow}
           isSettled={position.isSettled}
-          margin={positionInfo?.margin}
+          margin={position.margin}
           marginEdit={true}
           token={underlyingTokenName || ''}
           onSelect={agent === Agents.LIQUIDITY_PROVIDER ? handleEditMargin : undefined}
@@ -95,7 +89,7 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
     if (field === 'notional') {
       return (
         <Notional
-          notional={positionInfo?.notional}
+          notional={position.notional}
           token={underlyingTokenName || ''}
           onEdit={agent === Agents.LIQUIDITY_PROVIDER ? handleEditLPNotional : undefined}
         />

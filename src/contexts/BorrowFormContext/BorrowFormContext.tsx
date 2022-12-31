@@ -90,7 +90,7 @@ export const BorrowFormProvider: React.FunctionComponent<BorrowFormProviderProps
 
   const isTradeInfoLoading = borrowSwapInfoAsyncState.current < 4;
 
-  const tokenApprovals = useTokenApproval(amm);
+  const tokenApprovals = useTokenApproval(amm, false, margin);
   const approvalsNeeded = s.approvalsNeeded(tokenApprovals, false);
   const isTradeVerified =
     !isTradeInfoLoading && !!borrowSwapInfo.result && !borrowSwapInfo.errorMessage;

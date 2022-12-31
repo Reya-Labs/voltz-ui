@@ -9,17 +9,9 @@ import { isBorrowing } from './isBorrowing';
  * @param selectedAmm - the selected amm
  * @param positionTypes - an array of position type ids to match. 1=Fixed, 2=Variable, 3=LP
  */
-export const findCurrentPosition = (
-  positions: Position[],
-  selectedAmm: AMM,
-  positionTypes: (1 | 2 | 3)[] = [1, 2, 3],
-) => {
+export const findCurrentPosition = (positions: Position[], selectedAmm: AMM) => {
   return (positions || []).find((p) => {
-    return (
-      p.amm.id === selectedAmm.id &&
-      positionTypes.includes(p.positionType as 1 | 2 | 3) && // filter by position type
-      (p.tickLower !== -69000 || p.tickUpper !== 69060) // omit borrow positions
-    );
+    return p.amm.id === selectedAmm.id;
   });
 };
 

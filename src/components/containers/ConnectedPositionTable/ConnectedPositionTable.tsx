@@ -1,10 +1,9 @@
 import Box from '@mui/material/Box';
-import { AMM, Position } from '@voltz-protocol/v1-sdk';
+import { Position } from '@voltz-protocol/v1-sdk';
 import React, { ReactNode, useCallback, useState } from 'react';
 
 import { Agents } from '../../../contexts/AgentContext/types';
 import { usePortfolioContext } from '../../../contexts/PortfolioContext/PortfolioContext';
-import { usePositions } from '../../../hooks/usePositions/usePositions';
 import { useWallet } from '../../../hooks/useWallet';
 import { routes } from '../../../routes/paths';
 import { actions, selectors } from '../../../store';
@@ -21,16 +20,20 @@ import { PositionTable } from '../../interface/PositionTable/PositionTable';
 export type ConnectedPositionTableProps = {
   onSelectItem: (item: Position, mode: 'margin' | 'liquidity' | 'rollover' | 'notional') => void;
   agent: Agents;
-  amm?: AMM;
+  positions: Position[];
+  loadingPositions: boolean;
+  errorPositions: boolean;
   handleCompletedSettling: () => void;
 };
 
 export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTableProps> = ({
   onSelectItem,
   agent,
+  positions,
+  loadingPositions,
+  errorPositions,
   handleCompletedSettling,
 }) => {
-  const { positionsByAgentGroup, loading, error } = usePositions();
   const { status } = useWallet();
 
   const [positionToSettle, setPositionToSettle] = useState<
@@ -106,19 +109,11 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
   const renderPendingTransaction = () => {
     if (!positionToSettle) return null;
 
-    const spData = portfolioData.info[positionToSettle.position.id];
-
     let netWithdraw = undefined;
     if (agent === Agents.LIQUIDITY_PROVIDER) {
-      netWithdraw =
-        typeof spData?.fees === 'number' && typeof spData?.settlementCashflow === 'number'
-          ? spData?.margin + spData?.settlementCashflow
-          : undefined;
+      netWithdraw = positionToSettle.position.margin + positionToSettle.position.settlementCashflow;
     } else {
-      netWithdraw =
-        typeof spData?.settlementCashflow === 'number'
-          ? spData?.margin + spData?.settlementCashflow
-          : undefined;
+      netWithdraw = positionToSettle.position.margin + positionToSettle.position.settlementCashflow;
     }
 
     return (
@@ -128,7 +123,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
           isEditingMargin={false}
           isSettle={true}
           margin={netWithdraw}
-          notional={spData?.notional}
+          notional={positionToSettle.position.notional}
           position={positionToSettle.position}
           transactionId={positionToSettle.txId}
           onBack={handleTransactionFinished}
@@ -139,15 +134,13 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
   };
 
   const renderPositionTable = () => {
-    if (!positionsByAgentGroup) return null;
-
     return (
       <>
         <PortfolioHeader currencyCode="USD" currencySymbol="$" portfolioData={portfolioData} />
         <Box sx={{ marginTop: (theme) => theme.spacing(14) }}>
           <PositionTable
             portfolioData={portfolioData}
-            positions={positionsByAgentGroup}
+            positions={positions}
             onSelectItem={onSelectItem}
             onSettle={handleSettle}
           />
@@ -161,11 +154,11 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
 
     if (activeTransaction && positionToSettle) {
       return renderPendingTransaction(); // We return this one immediately as we don't want it wrapped in a Panel
-    } else if (loading || status === 'connecting') {
+    } else if (loadingPositions || status === 'connecting') {
       content = renderLoading();
-    } else if (error || status !== 'connected') {
+    } else if (errorPositions || status !== 'connected') {
       content = renderConnectWallet();
-    } else if (!positionsByAgentGroup) {
+    } else if (positions.length === 0) {
       content = renderNoPositions();
     } else {
       content = renderPositionTable();
