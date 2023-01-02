@@ -34,7 +34,7 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
           general: true,
           trader: true,
         },
-        traderWithdrawable: false,
+        traderWithdrawable: true,
       },
       {
         name: 'aUSDC_v4',
@@ -92,7 +92,7 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
           general: true,
           trader: true,
         },
-        traderWithdrawable: false,
+        traderWithdrawable: true,
       },
       {
         name: 'aDAI_v4',
@@ -130,7 +130,7 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
           general: true,
           trader: true,
         },
-        traderWithdrawable: false,
+        traderWithdrawable: true,
       },
       {
         name: 'cDAI_v4',
@@ -150,7 +150,7 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
           general: true,
           trader: true,
         },
-        traderWithdrawable: false,
+        traderWithdrawable: true,
       },
       {
         name: 'stETH_v2',
@@ -170,7 +170,7 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
           general: true,
           trader: true,
         },
-        traderWithdrawable: false,
+        traderWithdrawable: true,
       },
       {
         name: 'rETH_v2',
@@ -190,7 +190,7 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
           general: true,
           trader: true,
         },
-        traderWithdrawable: false,
+        traderWithdrawable: true,
       },
 
       // borrow aETH pools
@@ -201,7 +201,7 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
           general: true,
           trader: true,
         },
-        traderWithdrawable: false,
+        traderWithdrawable: true,
       },
       {
         name: 'borrow_aETH_v2',
