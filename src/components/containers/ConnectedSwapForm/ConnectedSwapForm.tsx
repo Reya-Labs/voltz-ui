@@ -69,7 +69,7 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
         ...transaction,
         ammId: (positionAmm as AMM).id,
         isFT: agent === Agents.FIXED_TRADER,
-        margin: targetAmm.isETH ? 0 : Math.abs(form.state.margin as number),
+        margin: Math.abs(form.state.margin as number),
         newMarginEngine: targetAmm.marginEngineAddress,
         rolloverPosition: {
           tickLower: (position as Position).tickLower,
