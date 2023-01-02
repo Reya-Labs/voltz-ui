@@ -13,8 +13,8 @@ import { isBorrowing } from '../../../utilities/isBorrowing';
 import { BorrowForm } from '../../interface/BorrowForm/BorrowForm';
 import { FormPanel } from '../../interface/FormPanel/FormPanel';
 import { PendingTransaction } from '../../interface/PendingTransaction/PendingTransaction';
-import { SwapFormActions, SwapFormModes } from '../../interface/SwapForm';
-import { SwapInfo } from '../../interface/SwapInfo';
+import { SwapFormActions, SwapFormModes } from '../../interface/SwapForm/types';
+import { SwapInfo } from '../../interface/SwapInfo/SwapInfo';
 
 export type ConnectedBorrowFormProps = {
   onReset: () => void;

@@ -5,7 +5,7 @@ import React from 'react';
 import { AgentProvider } from '../../../contexts/AgentContext/AgentProvider';
 import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
 import { SwapFormProvider } from '../../../contexts/SwapFormContext/SwapFormContext';
-import { SwapFormActions, SwapFormModes } from '../SwapForm';
+import { SwapFormActions, SwapFormModes } from '../SwapForm/types';
 import { SwapInfo } from './SwapInfo';
 
 export default {

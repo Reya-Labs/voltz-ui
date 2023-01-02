@@ -1,4 +1,4 @@
-import { SwapFormActions, SwapFormModes } from '../../components/interface/SwapForm';
+import { SwapFormActions, SwapFormModes } from '../../components/interface/SwapForm/types';
 import { useTokenApproval } from '../../hooks/useTokenApproval';
 
 /**

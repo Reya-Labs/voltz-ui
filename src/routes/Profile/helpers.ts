@@ -1,4 +1,4 @@
-import { CommunitySBT, SBTConstructorArgs } from '@voltz-protocol/v1-sdk';
+import { CommunitySBT } from '@voltz-protocol/v1-sdk';
 import { Signer } from 'ethers';
 
 import { Season } from '../../hooks/season/types';
@@ -311,7 +311,7 @@ export const getCommunitySbt = (signer: Signer | null) => {
       : {};
   const badgesCids = parseCidsList(process.env.REACT_APP_BADGES_IPFS_CIDS);
   const leavesCids = parseCidsList(process.env.REACT_APP_LEAVES_IPFS_CIDS);
-  const params: SBTConstructorArgs = {
+  return new CommunitySBT({
     id: process.env.REACT_APP_COMMUNITY_SBT_ADDRESS || '',
     signer: signer,
     currentBadgesSubgraphUrl: process.env.REACT_APP_CURRENT_SUBGRAPH_BADGES_URL,
@@ -323,8 +323,7 @@ export const getCommunitySbt = (signer: Signer | null) => {
     ignoredWalletIds: ignoredWalletIds,
     badgesCids: badgesCids,
     leavesCids: leavesCids,
-  };
-  return new CommunitySBT(params);
+  });
 };
 
 const parseCidsList = (cidsEnvVar: string | undefined): Array<string> => {
