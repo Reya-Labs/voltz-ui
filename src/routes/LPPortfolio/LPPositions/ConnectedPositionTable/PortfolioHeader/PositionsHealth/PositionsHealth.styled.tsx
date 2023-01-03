@@ -30,19 +30,14 @@ export const PositionHealthInfo = styled(Box)`
   flex-direction: row;
   align-items: center;
   padding: 8px;
-
-  /* Liberty 5 */
-  background: #1e1933;
+  background: ${colors.liberty5};
   border-radius: 4px;
-
   font-family: 'PixelOperatorMono', monospace;
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
   line-height: 14px;
-
-  /* Lavender Web */
-  color: #e5e1f9;
+  color: ${colors.lavenderWeb};
 `;
 
 const Circle = styled(CircleIcon)`

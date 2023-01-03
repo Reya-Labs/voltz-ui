@@ -39,7 +39,7 @@ export const EndsTypography = styled(Typography)`
   font-size: 14px;
   line-height: 14px;
   font-weight: 400;
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
 `;
 
 export const SeasonAndProgressBarBox = styled(Box)`
@@ -49,7 +49,7 @@ export const SeasonAndProgressBarBox = styled(Box)`
 `;
 
 export const SeasonBox = styled(Box)`
-  border: 1px solid ${colors.wildStrawberry.base};
+  border: 1px solid ${colors.wildStrawberry};
   padding: ${({ theme }) => theme.spacing(1, 2)};
   margin-right: ${({ theme }) => theme.spacing(4)};
   border-radius: 4px;
@@ -59,7 +59,7 @@ export const SeasonBox = styled(Box)`
 
 export const SeasonTypography = styled(Typography)`
   font-family: 'PixelOperatorMono', monospace;
-  color: ${colors.wildStrawberry.base};
+  color: ${colors.wildStrawberry};
   font-size: 14px;
   line-height: 14px;
   font-weight: 400;
@@ -67,7 +67,7 @@ export const SeasonTypography = styled(Typography)`
 
 export const SeasonNumberTypography = styled('span')`
   font-family: 'PixelOperatorMono', monospace;
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
   font-size: 14px;
   line-height: 14px;
   font-weight: 400;

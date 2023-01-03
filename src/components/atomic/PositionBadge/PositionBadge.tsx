@@ -51,8 +51,7 @@ const styles: Record<PositionBadgeVariant, SystemStyleObject<Theme>> = {
     ...baseStyles,
     borderColor: colors.lavenderWeb8,
     color: colors.skyBlueCrayola,
-    /* Liberty 6 */
-    background: '#19152A',
+    background: colors.liberty6,
   },
   FC: {
     ...baseStyles,

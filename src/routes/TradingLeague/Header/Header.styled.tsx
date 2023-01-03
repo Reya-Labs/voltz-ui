@@ -10,7 +10,7 @@ const BaseTypography = styled(Typography)`
   letter-spacing: 0.02em;
   font-weight: 400;
   font-size: 12px;
-  color: ${colors.lavenderWeb.darken015};
+  color: ${colors.lavenderWeb2};
 `;
 export const RankTypography = styled(BaseTypography)`
   width: 67px;

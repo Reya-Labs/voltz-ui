@@ -2,9 +2,10 @@ import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
+import { colors } from '../../../../../../../theme';
+
 export const RowBox = styled(Box)`
-  /* Liberty 7 */
-  background-color: #0f0d18;
+  background-color: ${colors.liberty7};
   border-radius: 8px;
   padding: 16px;
   display: flex;
@@ -17,17 +18,12 @@ export const CellBox = styled(Box)`
 `;
 
 export const MaturityLabelTypography = styled(Typography)`
-  /* Label */
   font-family: 'PixelOperatorMono', monospace;
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
   line-height: 14px;
-  /* identical to box height, or 117% */
-
   letter-spacing: 0.02em;
   text-transform: uppercase;
-
-  /* Lavender Web 2 */
-  color: #a49ebf;
+  color: ${colors.lavenderWeb2};
 `;

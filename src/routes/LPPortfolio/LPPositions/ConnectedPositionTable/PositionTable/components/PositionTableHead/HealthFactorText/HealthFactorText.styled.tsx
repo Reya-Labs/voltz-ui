@@ -31,8 +31,7 @@ export const HealthFactorBox = styled(Box)`
   padding: 4px 8px;
   gap: 8px;
 
-  /* Liberty 6 */
-  background: #19152a;
+  background: ${colors.liberty6};
   border-radius: 4px;
 
   font-family: 'PixelOperatorMono', monospace;
@@ -40,7 +39,5 @@ export const HealthFactorBox = styled(Box)`
   font-weight: 400;
   font-size: 12px;
   line-height: 120%;
-
-  /* Lavender Web 2 */
-  color: #a49ebf;
+  color: ${colors.lavenderWeb2};
 `;

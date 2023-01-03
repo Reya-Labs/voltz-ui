@@ -1,6 +1,8 @@
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 
+import { colors } from '../../theme';
+
 export const LPPortfolioBox = styled(Box)`
   display: flex;
   flex-direction: column;
@@ -8,8 +10,7 @@ export const LPPortfolioBox = styled(Box)`
 `;
 
 export const Split = styled('hr')`
-  /* Liberty 3 */
-  border: 1px solid #38305b;
+  border: 1px solid ${colors.liberty3};
 `;
 
 export const ContentBox = styled(Box)`

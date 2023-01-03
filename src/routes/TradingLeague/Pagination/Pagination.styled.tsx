@@ -15,13 +15,13 @@ export const PaginationBox = styled(Box)`
 export const ActionButton = styled(Button)`
   font-size: 12px;
   line-height: 12px;
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
   padding: ${({ theme }) => theme.spacing(2)};
 `;
 
 export const BarBox = styled(Box)`
   width: 96px;
-  background: ${colors.lavenderWeb.darken030};
+  background: ${colors.lavenderWeb5};
   margin: ${({ theme }) => theme.spacing(2)};
 `;
 
@@ -29,7 +29,7 @@ export const AnimatedBarBox = styled(Box, {
   shouldForwardProp: (prop) => prop !== 'width',
 })<{ width: number }>`
   width: ${({ width }) => width}%;
-  background: ${colors.lavenderWeb.base};
+  background: ${colors.lavenderWeb};
   height: 100%;
   transition: width 500ms ease-in;
 `;
@@ -37,11 +37,11 @@ export const AnimatedBarBox = styled(Box, {
 export const ChevronLeftIcon = styled(ChevronLeft)`
   width: 14px;
   height: 14px;
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
 `;
 
 export const ChevronRightIcon = styled(ChevronRight)`
   width: 14px;
   height: 14px;
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
 `;

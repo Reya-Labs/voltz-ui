@@ -15,6 +15,6 @@ export const SubtitleTypography = styled(Typography)`
   font-weight: 400;
   line-height: 160%;
   margin-top: ${({ theme }) => theme.spacing(2)};
-  color: ${colors.lavenderWeb.darken015};
+  color: ${colors.lavenderWeb2};
   font-size: 14px;
 `;

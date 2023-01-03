@@ -5,7 +5,7 @@ import { colors } from '../../../../theme';
 
 export const PointsTypography = styled(Typography)`
   font-family: 'PixelOperatorMono', monospace;
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
   font-size: 18px;
   line-height: 24px;
   font-weight: 400;

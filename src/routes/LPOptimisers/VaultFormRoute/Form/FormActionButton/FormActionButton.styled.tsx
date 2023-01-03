@@ -19,8 +19,7 @@ export const BlueActionButton = styled(ActionButton)`
 `;
 
 export const DarkBlueActionButton = styled(ActionButton)`
-  /* Liberty 4 */
-  background: #2b2548;
+  background: ${colors.liberty4};
   color: ${colors.skyBlueCrayola};
 `;
 

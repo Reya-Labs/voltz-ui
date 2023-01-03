@@ -6,8 +6,7 @@ import { Typography } from '../../../../../../../components/atomic/Typography/Ty
 import { colors } from '../../../../../../../theme';
 
 const BaseButton = styled(Button)`
-  /* Liberty 6 */
-  background: #19152a;
+  background: ${colors.liberty6};
   border-radius: 4px;
 
   font-family: 'PixelOperatorMono', monospace;
@@ -16,23 +15,19 @@ const BaseButton = styled(Button)`
   font-size: 14px;
   line-height: 14px;
   padding: 4px 8px;
-  /* Lavender Web */
-  color: #e1ddf7;
+  color: ${colors.lavenderWeb};
 `;
 
 export const SettleButton = styled(BaseButton)``;
 export const RolloverButton = styled(BaseButton)`
   font-weight: 700;
-  /* Liberty 7 */
-  background: #0f0d18;
-  /* Sky Blue Crayola */
-  color: #4de5ff;
+  background: ${colors.liberty7};
+  color: ${colors.skyBlueCrayola};
 
   margin-left: 4px;
 `;
 export const SettledButton = styled(BaseButton)`
-  /* Lavender Web 5 */
-  color: #4d476a;
+  color: ${colors.lavenderWeb5};
 `;
 
 export const FeesTypography = styled(Typography)`
@@ -41,9 +36,7 @@ export const FeesTypography = styled(Typography)`
   font-weight: 400;
   font-size: 14px;
   line-height: 14px;
-
-  /* Lavender Web */
-  color: #e5e1f9;
+  color: ${colors.lavenderWeb};
 `;
 
 const FeesValueTypography = styled(Typography)`
@@ -69,7 +62,7 @@ export const FeesBox = styled(Box)`
 
   padding: 4px 8px;
   /* Lavender Web 4 */
-  border: 1px solid #2d2b3d;
+  border: 1px solid ${colors.lavenderWeb4};
   border-radius: 4px;
   margin-left: 16px;
 `;
@@ -81,8 +74,7 @@ export const InfoBox = styled(Box)`
   padding: 4px 8px;
   gap: 8px;
 
-  /* Liberty 6 */
-  background: #19152a;
+  background: ${colors.liberty6};
   border-radius: 4px;
 
   font-family: 'PixelOperatorMono', monospace;
@@ -91,8 +83,7 @@ export const InfoBox = styled(Box)`
   font-size: 12px;
   line-height: 120%;
 
-  /* Lavender Web 2 */
-  color: #a49ebf;
+  color: ${colors.lavenderWeb2};
 `;
 
 const InfoTypography = styled(Typography)`

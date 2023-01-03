@@ -12,14 +12,9 @@ export const ContentBox = styled(Box)`
   align-items: flex-start;
   padding: 24px;
   gap: 16px;
-
   width: 340px;
-
-  /* Liberty 6 */
-  background: #19152a;
-
-  /* Liberty 3 */
-  border: 1px solid #38305b;
+  background: ${colors.liberty6};
+  border: 1px solid ${colors.liberty3};
   border-radius: 8px;
 `;
 
@@ -29,9 +24,7 @@ export const TitleTypography = styled(Typography)`
   font-weight: 700;
   font-size: 20px;
   line-height: 130%;
-
-  /* Lavender Web */
-  color: #e1ddf7;
+  color: ${colors.lavenderWeb};
 `;
 
 export const DescriptionTypography = styled(Typography)`
@@ -40,9 +33,7 @@ export const DescriptionTypography = styled(Typography)`
   font-weight: 400;
   font-size: 16px;
   line-height: 160%;
-
-  /* Lavender Web 2 */
-  color: #a49ebf;
+  color: ${colors.lavenderWeb2};
 `;
 
 export const GasCostBox = styled(Box)`
@@ -58,9 +49,7 @@ export const GasCostTypography = styled(Typography)`
   font-weight: 400;
   font-size: 16px;
   line-height: 160%;
-
-  /* Lavender Web 3 */
-  color: #857ea5;
+  color: ${colors.lavenderWeb3};
 `;
 
 export const ButtonBox = styled(Box)`
@@ -83,7 +72,7 @@ export const ProceedButton = styled(Button)`
   background: #00556d;
   border-radius: 4px;
 
-  color: ${colors.skyBlueCrayola.base};
+  color: ${colors.skyBlueCrayola};
   flex: 1;
 `;
 
@@ -94,11 +83,10 @@ export const CancelButton = styled(Button)`
   padding: ${({ theme }) => theme.spacing(4, 6)};
   gap: ${({ theme }) => theme.spacing(2.5)};
 
-  /* Liberty 5 */
-  background: #1e1933;
+  background: ${colors.liberty5};
   border-radius: 4px;
 
-  color: ${colors.skyBlueCrayola.base};
+  color: ${colors.skyBlueCrayola};
   flex: 1;
 `;
 
@@ -118,19 +106,17 @@ const TransactionStatusTextTypography = styled(Typography)`
 `;
 
 export const IdleTransactionStatusTextTypography = styled(TransactionStatusTextTypography)`
-  /* Lavender Web 2 */
-  color: #a49ebf;
+  color: ${colors.lavenderWeb2};
 `;
 
 export const SuccessTransactionStatusTextTypography = styled(TransactionStatusTextTypography)`
-  color: ${colors.skyBlueCrayola.base};
+  color: ${colors.skyBlueCrayola};
 `;
 
 export const PendingTransactionStatusTextTypography = styled(TransactionStatusTextTypography)`
-  /* Lavender Web 2 */
-  color: #a49ebf;
+  color: ${colors.lavenderWeb2};
 `;
 
 export const ErrorTransactionStatusTextTypography = styled(TransactionStatusTextTypography)`
-  color: ${colors.wildStrawberry.base};
+  color: ${colors.wildStrawberry};
 `;

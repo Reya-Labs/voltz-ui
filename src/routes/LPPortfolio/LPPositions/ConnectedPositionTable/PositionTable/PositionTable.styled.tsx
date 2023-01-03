@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 
 import { Grid } from '../../../../../components/layout/Grid';
+import { colors } from '../../../../../theme';
 
 export const PositionsList = styled(Grid)`
   margin-top: ${({ theme }) => theme.spacing(6)};
@@ -11,8 +12,7 @@ export const PositionsList = styled(Grid)`
 export const PositionsListItemBox = styled(Box)`
   display: flex;
   flex-direction: column;
-  /* Liberty 5 */
-  background: #1e1933;
+  background: ${colors.liberty5};
   border-radius: 8px;
 `;
 

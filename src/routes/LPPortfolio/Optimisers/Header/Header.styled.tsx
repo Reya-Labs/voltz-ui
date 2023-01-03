@@ -7,8 +7,7 @@ import { colors } from '../../../../theme';
 export const HeaderBox = styled(Box)`
   display: flex;
   flex-direction: row;
-  /* Liberty 6 */
-  border-bottom: 1px solid #19152a;
+  border-bottom: 1px solid ${colors.liberty6};
   padding: 0px 24px 0px 38px;
 `;
 

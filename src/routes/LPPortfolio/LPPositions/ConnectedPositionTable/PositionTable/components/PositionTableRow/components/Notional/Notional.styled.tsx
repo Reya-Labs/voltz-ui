@@ -28,9 +28,7 @@ export const NotionalLabelTypography = styled(Typography)`
 
   letter-spacing: 0.02em;
   text-transform: uppercase;
-
-  /* Lavender Web 2 */
-  color: #a49ebf;
+  color: ${colors.lavenderWeb2};
 `;
 
 export const NotionalValueTypography = styled(Typography)`
@@ -41,14 +39,11 @@ export const NotionalValueTypography = styled(Typography)`
   line-height: 130%;
 
   letter-spacing: 0.02em;
-
-  /* Lavender Web */
-  color: #e1ddf7;
+  color: ${colors.lavenderWeb};
 `;
 
 export const EditButton = styled(Button)`
-  /* Liberty 6 */
-  background: #19152a;
+  background: ${colors.liberty6};
   border-radius: 4px;
 
   font-family: 'PixelOperatorMono', monospace;

@@ -18,19 +18,14 @@ export const MarginLabelBox = styled(Box)`
 `;
 
 export const MarginLabelTypography = styled(Typography)`
-  /* Label */
   font-family: 'PixelOperatorMono', monospace;
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
   line-height: 14px;
-  /* identical to box height, or 117% */
-
   letter-spacing: 0.02em;
   text-transform: uppercase;
-
-  /* Lavender Web 2 */
-  color: #a49ebf;
+  color: ${colors.lavenderWeb2};
 `;
 
 export const MarginValueTypography = styled(Typography)`
@@ -39,16 +34,12 @@ export const MarginValueTypography = styled(Typography)`
   font-weight: 700;
   font-size: 16px;
   line-height: 130%;
-
   letter-spacing: 0.02em;
-
-  /* Lavender Web */
-  color: #e1ddf7;
+  color: ${colors.lavenderWeb};
 `;
 
 export const EditButton = styled(Button)`
-  /* Liberty 6 */
-  background: #19152a;
+  background: ${colors.liberty6};
   border-radius: 4px;
 
   font-family: 'PixelOperatorMono', monospace;

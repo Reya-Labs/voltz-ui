@@ -24,9 +24,7 @@ export const VaultListItemTopBox = styled(Box)`
   flex-direction: row;
   align-items: center;
   padding: 4px 8px 4px 16px;
-
-  /* Liberty 5 */
-  background: #1e1933;
+  background: ${colors.liberty5};
   border-radius: 8px 8px 0px 0px;
 `;
 
@@ -46,9 +44,7 @@ export const NameTypography = styled(Typography)`
   font-weight: 700;
   font-size: 16px;
   line-height: 130%;
-
-  /* Lavender Web */
-  color: #e1ddf7;
+  color: ${colors.lavenderWeb};
 `;
 
 export const TotalBalanceTypography = styled(Typography)`
@@ -61,17 +57,15 @@ export const TotalBalanceTypography = styled(Typography)`
   line-height: 130%;
   min-width: 100px;
   text-align: center;
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
 `;
 
 export const TokenTypography = styled('span')`
-  /* Lavender Web 3 */
-  color: #857ea5;
+  color: ${colors.lavenderWeb3};
 `;
 
 export const DepositButton = styled(Link)`
-  /* Liberty 4 */
-  background: #2b2548;
+  background: ${colors.liberty4};
   border-radius: 4px;
 
   font-family: 'PixelOperatorMono', monospace;
@@ -81,12 +75,11 @@ export const DepositButton = styled(Link)`
   line-height: 14px;
   padding: 8px 13px;
   text-decoration: none;
-  color: ${colors.skyBlueCrayola.base};
+  color: ${colors.skyBlueCrayola};
 `;
 
 export const ManageButton = styled(Link)`
-  /* Liberty 4 */
-  background: #2b2548;
+  background: ${colors.liberty4};
   border-radius: 0px 4px 4px 0px;
 
   font-family: 'PixelOperatorMono', monospace;
@@ -95,26 +88,21 @@ export const ManageButton = styled(Link)`
   font-size: 16px;
   line-height: 14px;
   text-decoration: none;
-  color: ${colors.skyBlueCrayola.base};
+  color: ${colors.skyBlueCrayola};
   margin-left: auto;
   padding: 6px 13px;
 `;
 
 export const VaultListItemBottomBox = styled(Box)`
-  /* Auto layout */
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding: 8px 16px 16px;
   gap: 4px;
-
-  /* Liberty 7 */
-  background: #0f0d18;
-
-  /* Liberty 5 */
+  background: ${colors.liberty7};
   border-width: 0px 1px 1px 1px;
   border-style: solid;
-  border-color: #1e1933;
+  border-color: ${colors.liberty5};
   border-radius: 0px 0px 8px 8px;
   box-sizing: border-box;
 `;
@@ -131,9 +119,7 @@ const HeaderTypography = styled(Typography)`
   font-weight: 400;
   font-size: 12px;
   line-height: 140%;
-
-  /* Lavender Web 2 */
-  color: #a49ebf;
+  color: ${colors.lavenderWeb2};
 `;
 
 export const HeaderMaturityTypography = styled(HeaderTypography)`
@@ -155,9 +141,7 @@ export const VaultListItemInfo = styled(Box)`
   align-items: center;
   padding: 0px 0px 0px 24px;
   gap: 61px;
-
-  /* Liberty 6 */
-  background: #19152a;
+  background: ${colors.liberty6};
   border-radius: 4px;
   width: 100%;
   box-sizing: border-box;
@@ -175,12 +159,11 @@ export const MaturityDateTypography = styled(Typography)`
   font-size: 14px;
   line-height: 130%;
 
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
 `;
 
 export const MaturityCompleteTypography = styled(MaturityDateTypography)`
-  /* Sky Blue Crayola 2 */
-  color: #369dae;
+  color: ${colors.skyBlueCrayola2};
 `;
 
 const ValueBox = styled(Box)`
@@ -189,17 +172,13 @@ const ValueBox = styled(Box)`
   justify-content: center;
   align-items: center;
   padding: 6px 14px;
-
-  /* Liberty 5 */
-  background: #1e1933;
-
+  background: ${colors.liberty5};
   font-family: 'PixelOperatorMono', monospace;
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
   line-height: 14px;
-
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
 `;
 
 export const DistributionBox = styled(ValueBox)`

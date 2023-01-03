@@ -17,7 +17,7 @@ export const EntrySkeleton = styled(Skeleton)`
 
 export const RankTypography = styled(Typography)`
   font-family: 'PixelOperatorMono', monospace;
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
   font-size: 18px;
   line-height: 24px;
   font-weight: 400;
@@ -25,7 +25,7 @@ export const RankTypography = styled(Typography)`
 
 export const NoAddressTypography = styled(Typography)`
   font-family: 'PixelOperatorMono', monospace;
-  color: ${colors.lavenderWeb.base};
+  color: ${colors.lavenderWeb};
   font-size: 18px;
   line-height: 24px;
   font-weight: 400;

@@ -41,8 +41,7 @@ export const NegativeNetMarginDiffTypography = styled(NetMarginDiffTypography)`
 `;
 export const NetMarginValueBox = styled(Box)`
   padding: 8px 14px;
-  /* Liberty 4 */
-  background: #2b2548;
+  background: ${colors.liberty4};
   border-radius: 4px;
 `;
 
