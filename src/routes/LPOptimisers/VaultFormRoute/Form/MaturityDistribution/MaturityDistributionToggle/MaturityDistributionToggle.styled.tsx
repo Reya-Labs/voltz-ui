@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 import ToggleButtonComponent from '@mui/material/ToggleButton';
 
 import { Typography } from '../../../../../../components/atomic/Typography/Typography';
-import colors from '../../../../../../theme/colors';
+import { colors } from '../../../../../../theme';
 
 export const MaturityDistributionTypography = styled(Typography)`
   font-weight: 400;

@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 
-import colors from '../../../../theme/colors';
+import { colors } from '../../../../theme/colors';
 import { Typography } from '../../../atomic/Typography/Typography';
 
 export const ContentBox = styled(Box)`

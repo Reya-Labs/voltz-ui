@@ -12,7 +12,7 @@ import { useAgent } from '../../../hooks/useAgent';
 import { useWallet } from '../../../hooks/useWallet';
 import { selectors } from '../../../store';
 import { useAppSelector } from '../../../store/hooks';
-import colors from '../../../theme/colors';
+import { colors } from '../../../theme';
 import { getAmmProtocol } from '../../../utilities/amm';
 import { getAgentFromPosition } from '../../../utilities/getAgent';
 import {

@@ -5,7 +5,7 @@
 
 import { SystemStyleObject, Theme } from '@mui/system';
 
-import colors from '../../colors';
+import { colors } from '../../colors';
 
 type inputStylesProps = {
   background?: 'standard' | 'dark';

@@ -1,7 +1,7 @@
 import TableCell from '@mui/material/TableCell';
 import React from 'react';
 
-import colors from '../../../../../../../theme/colors';
+import { colors } from '../../../../../../../theme';
 import { formatNumber } from '../../../../../../../utilities/number';
 import { Typography } from '../../../../../../atomic/Typography/Typography';
 

@@ -1,6 +1,6 @@
 import { createTheme } from '@mui/material/styles';
 
-import colors from '../../colors';
+import { colors } from '../../colors';
 
 const dark = createTheme({
   spacing: 4,

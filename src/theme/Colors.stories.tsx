@@ -1,8 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
-import colors from './colors';
-import { BaseColors } from './types';
+import { colors } from './colors';
 
 const ColorTile: React.FunctionComponent<{ name: string; value: string }> = ({ name, value }) => (
   <div
@@ -46,7 +45,7 @@ const AllColorsTemplate: ComponentStory<typeof React.Fragment> = () => (
     {Object.keys(colors)
       .sort()
       .map((c) => (
-        <ColorTile key={`colors.${c}`} name={`colors.${c}`} value={colors[c as BaseColors]} />
+        <ColorTile key={`colors.${c}`} name={`colors.${c}`} value={colors[c]} />
       ))}
   </div>
 );

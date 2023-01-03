@@ -3,7 +3,7 @@ import InputLabel from '@mui/material/InputLabel';
 import { styled } from '@mui/material/styles';
 import ToggleButtonComponent from '@mui/material/ToggleButton';
 
-import colors from '../../../theme/colors';
+import { colors } from '../../../theme';
 import { Typography } from '../../atomic/Typography/Typography';
 
 export const AutomaticRolloverToggleTypography = styled(Typography)`

@@ -1,4 +1,4 @@
-export { default as colors } from './colors';
+export * from './colors';
 export * from './themes';
 export * from './themes/dark/sharedStyles';
 export * from './types';
