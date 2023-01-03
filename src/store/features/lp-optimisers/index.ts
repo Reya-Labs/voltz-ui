@@ -11,9 +11,9 @@ export const initialiseVaultsThunk = createAsyncThunk<
   {
     state: RootState;
   }
->('ecosystem/initialiseVaults', async (_, thunkAPI) => {
+>('lp-optimisers/initialiseVaults', async (_, thunkAPI) => {
   try {
-    const { lpVaults } = thunkAPI.getState().ecosystem;
+    const { lpVaults } = thunkAPI.getState().lpOptimisers;
     await Promise.allSettled(
       lpVaults.filter((m) => !m.metadata.soon).map((item) => item.vaultInit()),
     );
@@ -30,9 +30,9 @@ export const initialiseVaultsForSignerThunk = createAsyncThunk<
   {
     state: RootState;
   }
->('ecosystem/initialiseVaultsForSigner', async ({ signer }, thunkAPI) => {
+>('lp-optimisers/initialiseVaultsForSigner', async ({ signer }, thunkAPI) => {
   try {
-    const { lpVaults, vaultsLoadedState } = thunkAPI.getState().ecosystem;
+    const { lpVaults, vaultsLoadedState } = thunkAPI.getState().lpOptimisers;
     if (vaultsLoadedState !== 'succeeded') {
       return;
     }
@@ -62,7 +62,7 @@ const initialState: SliceState = {
 };
 
 export const slice = createSlice({
-  name: 'ecosystem',
+  name: 'lpOptimisers',
   initialState,
   reducers: {
     resetVaultsAction: (state) => {
@@ -97,4 +97,4 @@ export const slice = createSlice({
 });
 
 export const { resetVaultsAction } = slice.actions;
-export const ecosystemReducer = slice.reducer;
+export const lpOptimisersReducer = slice.reducer;

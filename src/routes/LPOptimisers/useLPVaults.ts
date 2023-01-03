@@ -5,7 +5,7 @@ import {
   initialiseVaultsForSignerThunk,
   initialiseVaultsThunk,
   resetVaultsAction,
-} from '../../store/features/ecosystem';
+} from '../../store/features/lp-optimisers';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
 export const useLPVaults = (signer: providers.JsonRpcSigner | null) => {

@@ -2,13 +2,13 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
 
-import { ecosystemReducer } from './features/ecosystem';
+import { lpOptimisersReducer } from './features/lp-optimisers';
 import { transactionsReducer } from './features/transactions/reducer/transactions/transactionsReducer';
 import { saga } from './features/transactions/saga/saga';
 
 const reducer = combineReducers({
   transactions: transactionsReducer,
-  ecosystem: ecosystemReducer,
+  lpOptimisers: lpOptimisersReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();

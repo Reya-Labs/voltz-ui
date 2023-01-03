@@ -38,11 +38,6 @@ export const useAMMs = (): UseAMMsResult => {
           tickSpacing,
           termStartTimestamp,
           termEndTimestamp,
-          updatedTimestamp: ammUpdatedTimestamp,
-          tick,
-          txCount,
-          totalNotionalTraded,
-          totalLiquidity,
         }) =>
           new AMM({
             id: ammId,
