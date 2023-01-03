@@ -1,6 +1,6 @@
 import { AMM, RateOracle, Token } from '@voltz-protocol/v1-sdk';
 import JSBI from 'jsbi';
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { Amm_OrderBy, useGetAmMsQuery } from '../graphql';
@@ -18,12 +18,9 @@ export const useAMMs = (): UseAMMsResult => {
   const { signer } = useWallet();
   const { pathname } = useLocation();
   const isSignerAvailable = Boolean(signer);
-  const { data, loading, error, refetch } = useGetAmMsQuery({
+  const { data, loading, error } = useGetAmMsQuery({
     variables: { orderBy: Amm_OrderBy.Id },
   });
-  const handleRefetch = useCallback(async () => {
-    await refetch();
-  }, [refetch]);
 
   const amms = useMemo(() => {
     if (data && !loading && !error) {
@@ -89,7 +86,7 @@ export const useAMMs = (): UseAMMsResult => {
 
       return ammsData;
     }
-  }, [loading, error, isSignerAvailable, handleRefetch]);
+  }, [loading, error, isSignerAvailable]);
 
   return { amms, loading, error: !!error };
 };
