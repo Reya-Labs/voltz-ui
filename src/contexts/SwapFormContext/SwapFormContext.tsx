@@ -502,22 +502,22 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     ) {
       if (
         margin !== 0 &&
-        (await hasEnoughUnderlyingTokens(
+        !(await hasEnoughUnderlyingTokens(
           positionAmm || poolAmm,
           margin || 0,
           mode === SwapFormModes.ROLLOVER ? position : undefined,
-        )) === false
+        ))
       ) {
         valid = false;
         addError(err, 'margin', 'Insufficient funds');
       }
     } else {
       if (
-        (await hasEnoughUnderlyingTokens(
+        !(await hasEnoughUnderlyingTokens(
           positionAmm || poolAmm,
           swapInfo.result?.fee || 0,
           mode === SwapFormModes.ROLLOVER ? position : undefined,
-        )) === false
+        ))
       ) {
         valid = false;
         addError(err, 'notional', 'Insufficient funds');
@@ -530,7 +530,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       action === SwapFormActions.UPDATE ||
       action === SwapFormActions.ROLLOVER_SWAP
     ) {
-      if (isUndefined(margin) || lessThan(margin, swapInfo.result?.marginRequirement) === true) {
+      if (isUndefined(margin) || lessThan(margin, swapInfo.result?.marginRequirement)) {
         valid = false;
         addError(err, 'margin', 'Not enough margin');
       }
@@ -546,7 +546,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     if (
       asyncCallsLoading.current.includes('swapInfo') &&
       !swapInfo.loading &&
-      lessThanEpsilon(swapInfo.result?.availableNotional, notional, 0.00001) === true
+      lessThanEpsilon(swapInfo.result?.availableNotional, notional, 0.00001)
     ) {
       warnText =
         'There is not enough liquidity in the pool to support your entire trade, meaning only a proportion of your trade will go through. You can see the details of this in the Trade Information box below.';
@@ -567,7 +567,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
 
     // check user has sufficient funds
     if (marginAction === SwapFormMarginAction.ADD) {
-      if ((await hasEnoughUnderlyingTokens(positionAmm || poolAmm, margin || 0)) === false) {
+      if (!(await hasEnoughUnderlyingTokens(positionAmm || poolAmm, margin || 0))) {
         valid = false;
         addError(err, 'margin', 'Insufficient funds');
       }
