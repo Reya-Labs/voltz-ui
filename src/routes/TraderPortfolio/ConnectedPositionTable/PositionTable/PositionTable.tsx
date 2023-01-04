@@ -9,7 +9,6 @@ import React from 'react';
 import { Panel } from '../../../../components/atomic/Panel/Panel';
 import { Agents } from '../../../../contexts/AgentContext/types';
 import { AMMProvider } from '../../../../contexts/AMMContext/AMMContext';
-import { PortfolioContext } from '../../../../contexts/PortfolioContext/PortfolioContext';
 import { useAgent } from '../../../../hooks/useAgent';
 import { useAMMs } from '../../../../hooks/useAMMs';
 import { getConfig } from '../../../../hooks/voltz-config/config';
@@ -25,14 +24,12 @@ export type PositionTableProps = {
   positions: Position[];
   onSelectItem: (datum: Position, mode: 'margin' | 'liquidity' | 'rollover' | 'notional') => void;
   onSettle: (position: Position) => void;
-  portfolioData: PortfolioContext;
 };
 
 export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   positions,
   onSelectItem,
   onSettle,
-  portfolioData,
 }) => {
   const { amms } = useAMMs();
   const { agent } = useAgent();

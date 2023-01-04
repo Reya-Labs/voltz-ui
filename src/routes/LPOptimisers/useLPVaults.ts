@@ -9,12 +9,12 @@ import {
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
 export const useLPVaults = (signer: providers.JsonRpcSigner | null) => {
-  const vaultsLoaded = useAppSelector((state) => state.ecosystem.vaultsLoadedState);
-  const signerLoadedState = useAppSelector((state) => state.ecosystem.signerLoadedState);
+  const vaultsLoaded = useAppSelector((state) => state.lpOptimisers.vaultsLoadedState);
+  const signerLoadedState = useAppSelector((state) => state.lpOptimisers.signerLoadedState);
   const shouldInitVaults = vaultsLoaded === 'idle';
   const vaultsInitialised = vaultsLoaded === 'succeeded';
   const vaultsInitialisedWithSigner = signerLoadedState === 'succeeded';
-  const lpVaults = useAppSelector((state) => state.ecosystem.lpVaults);
+  const lpVaults = useAppSelector((state) => state.lpOptimisers.lpVaults);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
