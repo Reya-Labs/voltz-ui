@@ -52,10 +52,7 @@ type QueryAMM = {
   termEndTimestamp: JSBI;
 };
 
-export const getAMMs = async (
-  whiteListedIds: string[] = [],
-  aMMsSortOrderIds: string[] = [],
-): Promise<QueryAMM[]> => {
+export const getAMMs = async (aMMsSortOrderIds: string[] = []): Promise<QueryAMM[]> => {
   try {
     const result = await client.query<{
       amms: QueryAMM[];
@@ -63,21 +60,17 @@ export const getAMMs = async (
       query: gql(query),
       variables: { orderBy: 'id' },
     });
-    let aMMs = result.data.amms;
-    // should be part of graphql query
-    if (whiteListedIds.length !== 0) {
-      aMMs = result.data.amms.filter((amm) => whiteListedIds.includes(amm.id.toLowerCase()));
-    }
-
+    const aMMs = result.data.amms;
     if (aMMsSortOrderIds.length === 0) {
       return aMMs;
     }
-
-    return aMMs.sort(
-      (a, b) =>
-        aMMsSortOrderIds.findIndex((p) => p.toLowerCase() === a.id.toLowerCase()) -
-        aMMsSortOrderIds.findIndex((p) => p.toLowerCase() === b.id.toLowerCase()),
-    );
+    return aMMs
+      .slice()
+      .sort(
+        (a, b) =>
+          aMMsSortOrderIds.findIndex((p) => p.toLowerCase() === a.id.toLowerCase()) -
+          aMMsSortOrderIds.findIndex((p) => p.toLowerCase() === b.id.toLowerCase()),
+      );
   } catch (err) {
     throw err;
   }
