@@ -23,7 +23,7 @@ import { setPageTitle } from '../../utilities/page';
 import { routes } from '../paths';
 
 export const LPPools: React.FunctionComponent = () => {
-  const { amms = [], loading, error } = useAMMs();
+  const { aMMs, loading, error } = useAMMs();
 
   const [amm, setAMM] = useState<AMM>();
   const [formMode, setFormMode] = useState<MintBurnFormModes>();
@@ -98,7 +98,7 @@ export const LPPools: React.FunctionComponent = () => {
               LP OPTIMISER VAULT
             </Button>
           </Box>
-          <AMMTable amms={amms} error={error} loading={loading} onSelectItem={handleSelectAmm} />
+          <AMMTable amms={aMMs} error={error} loading={loading} onSelectItem={handleSelectAmm} />
         </Box>
       )}
 

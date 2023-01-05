@@ -1,8 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AMM, RateOracle, Token } from '@voltz-protocol/v1-sdk';
+import { AMM, BorrowAMM, RateOracle, Token } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
 import { getConfig } from '../../../hooks/voltz-config/config';
+import { isBorrowing } from '../../../utilities/isBorrowing';
+import { RootState } from '../../store';
 import { getAMMs } from './getAMMs';
 import { rejectThunkWithError } from './helpers';
 
@@ -10,10 +12,8 @@ const config = getConfig();
 
 export const initialiseAMMsThunk = createAsyncThunk<
   Awaited<ReturnType<typeof getAMMs> | ReturnType<typeof rejectThunkWithError>>,
-  {
-    trader: boolean;
-  }
->('aMMs/initialiseAMMs', async ({ trader }, thunkAPI) => {
+  void
+>('aMMs/initialiseAMMs', async (_, thunkAPI) => {
   try {
     const whiteList: string[] = [];
     if (config.apply) {
@@ -21,12 +21,6 @@ export const initialiseAMMsThunk = createAsyncThunk<
         .filter((pool) => pool.show.general)
         .map((pool) => pool.id.toLowerCase());
       whiteList.concat(generalPools);
-      if (trader) {
-        const traderPools = config.pools
-          .filter((pool) => pool.show.trader)
-          .map((pool) => pool.id.toLowerCase());
-        whiteList.concat(traderPools);
-      }
     }
 
     return await getAMMs(
@@ -34,7 +28,6 @@ export const initialiseAMMsThunk = createAsyncThunk<
       config.pools.map((p) => p.id.toLowerCase()),
     );
   } catch (err) {
-    debugger;
     return rejectThunkWithError(thunkAPI, err);
   }
 });
@@ -53,7 +46,7 @@ export const slice = createSlice({
   name: 'aMMs',
   initialState,
   reducers: {
-    setSignerAction: (
+    setSignerForAMMsAction: (
       state,
       action: PayloadAction<{
         signer: providers.JsonRpcSigner | null;
@@ -110,5 +103,26 @@ export const slice = createSlice({
   },
 });
 
-export const { setSignerAction } = slice.actions;
+export const { setSignerForAMMsAction } = slice.actions;
 export const aMMsReducer = slice.reducer;
+
+export const selectAMMs = (state: RootState): AMM[] => state.aMMs.aMMs;
+
+export const selectTraderAMMs = (state: RootState): AMM[] => {
+  const traderPoolsIds = config.pools
+    .filter((pool) => pool.show.trader)
+    .map((pool) => pool.id.toLowerCase());
+  if (traderPoolsIds.length === 0) {
+    return state.aMMs.aMMs;
+  }
+  return state.aMMs.aMMs.filter((amm) => traderPoolsIds.includes(amm.id.toLowerCase()));
+};
+
+export const selectBorrowAMMs = (state: RootState): BorrowAMM[] => {
+  const aMMs = state.aMMs.aMMs;
+  const borrowMarkets = aMMs.filter((amm) => isBorrowing(amm.rateOracle.protocolId));
+  const liveBorrowMarkets = borrowMarkets.filter(
+    (amm) => Date.now().valueOf() < amm.endDateTime.toMillis(),
+  );
+  return liveBorrowMarkets.map((amm) => new BorrowAMM({ id: amm.id, amm: amm }));
+};
