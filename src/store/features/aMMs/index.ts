@@ -15,18 +15,7 @@ export const initialiseAMMsThunk = createAsyncThunk<
   void
 >('aMMs/initialiseAMMs', async (_, thunkAPI) => {
   try {
-    const whiteList: string[] = [];
-    if (config.apply) {
-      const generalPools = config.pools
-        .filter((pool) => pool.show.general)
-        .map((pool) => pool.id.toLowerCase());
-      whiteList.concat(generalPools);
-    }
-
-    return await getAMMs(
-      whiteList,
-      config.pools.map((p) => p.id.toLowerCase()),
-    );
+    return await getAMMs(config.pools.map((p) => p.id.toLowerCase()));
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
@@ -106,7 +95,16 @@ export const slice = createSlice({
 export const { setSignerForAMMsAction } = slice.actions;
 export const aMMsReducer = slice.reducer;
 
-export const selectAMMs = (state: RootState): AMM[] => state.aMMs.aMMs;
+export const selectAMMs = (state: RootState): AMM[] => {
+  const generalPoolIds = config.apply
+    ? config.pools.filter((pool) => pool.show.general).map((pool) => pool.id.toLowerCase())
+    : [];
+
+  if (generalPoolIds.length === 0) {
+    return state.aMMs.aMMs;
+  }
+  return state.aMMs.aMMs.filter((amm) => generalPoolIds.includes(amm.id.toLowerCase()));
+};
 
 export const selectTraderAMMs = (state: RootState): AMM[] => {
   const traderPoolsIds = config.pools
