@@ -45,7 +45,11 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
     if (selectedDeposit > 0) {
       pushEvent(account ?? '', {
         event: 'tx_submitted',
-        eventValue: 'deposit',
+        eventValue: {
+          action: 'deposit',
+          amount: selectedDeposit,
+          distribution: distribution,
+        },
       });
 
       setDepositState(DepositStates.DEPOSITING);
@@ -58,7 +62,11 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
           () => {
             pushEvent(account ?? '', {
               event: 'successful_tx',
-              eventValue: 'deposit',
+              eventValue: {
+                action: 'deposit',
+                amount: selectedDeposit,
+                distribution: distribution,
+              },
             });
             setDepositState(DepositStates.DEPOSIT_DONE);
           },
@@ -67,7 +75,11 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
             setDepositState(DepositStates.DEPOSIT_FAILED);
             pushEvent(account ?? '', {
               event: 'failed_tx',
-              eventValue: 'deposit',
+              eventValue: {
+                action: 'deposit',
+                amount: selectedDeposit,
+                distribution: distribution,
+              },
             });
           },
         );
