@@ -19,7 +19,7 @@ import { findCurrentPosition } from '../../utilities/amm';
 import { setPageTitle } from '../../utilities/page';
 
 export const TraderPools: React.FunctionComponent = () => {
-  const { aMMs, loading, error } = useAMMs();
+  const { traderAMMs, loading, error } = useAMMs();
   const [formMode, setFormMode] = useState<SwapFormModes>();
   const [amm, setAMM] = useState<AMM>();
   const [position, setPosition] = useState<Position>();
@@ -75,7 +75,12 @@ export const TraderPools: React.FunctionComponent = () => {
               title="Trade Fixed or Variable Rates"
             />
           </Box>
-          <AMMTable amms={aMMs} error={error} loading={loading} onSelectItem={handleSelectAmm} />
+          <AMMTable
+            amms={traderAMMs}
+            error={error}
+            loading={loading}
+            onSelectItem={handleSelectAmm}
+          />
         </Box>
       )}
 
