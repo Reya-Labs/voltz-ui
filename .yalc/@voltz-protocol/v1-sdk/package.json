@@ -1,0 +1,138 @@
+{
+  "name": "@voltz-protocol/v1-sdk",
+  "version": "1.31.0",
+  "description": "A TypeScript wrapper for the Voltz smart contract",
+  "main": "dist/index.js",
+  "types": "dist/types",
+  "license": "MIT",
+  "files": [
+    "src/**/*",
+    "dist/**/*",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prebuild-release": "yarn code-quality:check",
+    "build-release": "node scripts/release.js",
+    "prettier": "prettier 'src/**/*.ts'",
+    "prettier:fix": "prettier --write 'src/**/*.ts'",
+    "prettier:check": "prettier --check 'src/**/*.ts'",
+    "lint:check": "eslint 'src/**/*.{ts,tsx}'",
+    "lint:fix": "eslint --fix 'src/**/*.ts'",
+    "test": "npx jest tests/jest/*.ts && npx hardhat test",
+    "release": "semantic-release",
+    "irs-setup": "ts-node scripts/setup.ts",
+    "decode-error": "ts-node src/utils/errors/decodeError.ts",
+    "code-quality:check": "npx concurrently 'yarn prettier:check' 'yarn lint:check'"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.7.1",
+    "@ethersproject/address": "^5.7.0",
+    "@graphprotocol/graph-cli": "^0.35.0",
+    "@metamask/detect-provider": "^1.2.0",
+    "@sentry/browser": "7.25.0",
+    "@sentry/tracing": "7.25.0",
+    "axios": "^0.27.2",
+    "big.js": "^6.1.1",
+    "coingecko-api": "^1.0.10",
+    "cross-fetch": "^3.1.5",
+    "decimal.js-light": "^2.5.1",
+    "ethers": "^5.5.2",
+    "evm-bn": "^1.1.1",
+    "fraction.js": "^4.2.0",
+    "jsbi": "^4.2.0",
+    "keccak256": "^1.0.6",
+    "lodash": "^4.17.21",
+    "luxon": "^2.3.0",
+    "merkletreejs": "^0.3.0",
+    "react": "^18.2.0",
+    "tiny-invariant": "^1.2.0",
+    "toformat": "^2.0.0"
+  },
+  "lint-staged": {
+    "src/**/*.ts": [
+      "eslint --fix"
+    ]
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "release": {
+    "branches": [
+      "main"
+    ],
+    "plugins": [
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "angular",
+          "releaseRules": [
+            {
+              "type": "build",
+              "release": "patch"
+            },
+            {
+              "type": "chore",
+              "release": "patch"
+            },
+            {
+              "type": "ci",
+              "release": "patch"
+            },
+            {
+              "type": "docs",
+              "release": "patch"
+            },
+            {
+              "type": "feat",
+              "release": "minor"
+            },
+            {
+              "type": "fix",
+              "release": "patch"
+            },
+            {
+              "type": "perf",
+              "release": "patch"
+            },
+            {
+              "type": "refactor",
+              "release": "patch"
+            },
+            {
+              "type": "revert",
+              "release": "patch"
+            },
+            {
+              "type": "style",
+              "release": "patch"
+            },
+            {
+              "type": "test",
+              "release": "patch"
+            }
+          ],
+          "parserOpts": {
+            "noteKeywords": [
+              "BREAKING CHANGE",
+              "BREAKING CHANGES"
+            ]
+          }
+        }
+      ],
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/npm",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "dist/**/*.{js}",
+            "package.json"
+          ],
+          "message": "chore: Release ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+        }
+      ]
+    ]
+  },
+  "yalcSig": "a112c23cc01b03e3d719fadf9397d519"
+}

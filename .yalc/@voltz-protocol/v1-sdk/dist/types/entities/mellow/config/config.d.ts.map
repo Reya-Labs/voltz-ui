@@ -1,0 +1,1 @@
+{"version":3,"file":"config.d.ts","sourceRoot":"/","sources":["entities/mellow/config/config.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,SAAS,EAAE,MAAM,QAAQ,CAAC;AACnC,OAAO,EAAE,oBAAoB,EAAE,MAAM,SAAS,CAAC;AAsS/C,eAAO,MAAM,SAAS;aAIX,MAAM;iBACF,MAAM;MACjB,oBAAoB,GAAG;IACzB,QAAQ,EAAE,UAAU,YAAY,CAAC;CAsBlC,CAAC"}

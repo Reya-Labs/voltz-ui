@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","sourceRoot":"/","sources":["entities/amm/index.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;AAAA,wCAAsB;AACtB,0CAAwB","sourcesContent":["export * from './amm';\nexport * from './types';\n"]}

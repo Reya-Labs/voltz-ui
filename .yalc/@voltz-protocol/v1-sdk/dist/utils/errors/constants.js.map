@@ -1,0 +1,1 @@
+{"version":3,"file":"constants.js","sourceRoot":"/","sources":["utils/errors/constants.ts"],"names":[],"mappings":";;;AAAa,QAAA,sBAAsB,GACjC,kEAAkE,CAAC","sourcesContent":["export const CRITICAL_ERROR_MESSAGE =\n  'Phew, that was unexpected. Reach out to our support via Discord!';\n"]}
