@@ -11,9 +11,15 @@ export type TxEventPayload = {
   failMessage?: string;
 };
 
+type DepositFormEventPayload = {
+  distribution: 'automatic' | 'manual';
+  amount: number;
+  action: string;
+};
+
 export type DataLayerEventPayload = {
   event: DataLayerEventName;
-  eventValue: string | number | TxEventPayload;
+  eventValue: string | number | TxEventPayload | DepositFormEventPayload;
   pool?: string;
   agent?: Agents;
 };
