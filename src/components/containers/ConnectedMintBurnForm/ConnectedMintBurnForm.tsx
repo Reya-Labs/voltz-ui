@@ -15,7 +15,7 @@ import { useAgent } from '../../../hooks/useAgent';
 import { routes } from '../../../routes/paths';
 import { actions, selectors } from '../../../store';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { getPoolButtonId } from '../../../utilities/googleAnalytics';
+import { getPoolButtonId } from '../../../utilities/googleAnalytics/helpers';
 import { isBorrowing } from '../../../utilities/isBorrowing';
 import { setPageTitle } from '../../../utilities/page';
 import { FormPanel } from '../../interface/FormPanel/FormPanel';

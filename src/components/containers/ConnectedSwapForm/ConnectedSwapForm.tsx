@@ -13,10 +13,7 @@ import { useWallet } from '../../../hooks/useWallet';
 import { routes } from '../../../routes/paths';
 import { actions, selectors } from '../../../store';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import {
-  getNotionalActionFromHintState,
-  getPoolButtonId,
-} from '../../../utilities/googleAnalytics';
+import { getPoolButtonId } from '../../../utilities/googleAnalytics/helpers';
 import { isBorrowing } from '../../../utilities/isBorrowing';
 import { setPageTitle } from '../../../utilities/page';
 import { FormPanel } from '../../interface/FormPanel/FormPanel';
@@ -25,6 +22,7 @@ import { SwapCurrentPosition } from '../../interface/SwapCurrentPosition/SwapCur
 import { SwapForm } from '../../interface/SwapForm/SwapForm';
 import { SwapFormActions, SwapFormModes } from '../../interface/SwapForm/types';
 import { SwapInfo } from '../../interface/SwapInfo/SwapInfo';
+import { getNotionalActionFromHintState } from './helpers';
 
 export type ConnectedSwapFormProps = {
   onReset: () => void;

@@ -14,11 +14,8 @@ import { selectors } from '../../../store';
 import { useAppSelector } from '../../../store/hooks';
 import { getAmmProtocol } from '../../../utilities/amm';
 import { getAgentFromPosition } from '../../../utilities/getAgent';
-import {
-  DataLayerEventPayload,
-  getPoolButtonId,
-  pushEvent,
-} from '../../../utilities/googleAnalytics';
+import { DataLayerEventPayload, pushEvent } from '../../../utilities/googleAnalytics';
+import { getPoolButtonId } from '../../../utilities/googleAnalytics/helpers';
 import { isBorrowing } from '../../../utilities/isBorrowing';
 import { formatCurrency } from '../../../utilities/number';
 import { setPageTitle } from '../../../utilities/page';
