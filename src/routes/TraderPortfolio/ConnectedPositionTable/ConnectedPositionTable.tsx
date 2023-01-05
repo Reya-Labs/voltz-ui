@@ -139,7 +139,6 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
         <PortfolioHeader currencyCode="USD" currencySymbol="$" portfolioData={portfolioData} />
         <Box sx={{ marginTop: (theme) => theme.spacing(14) }}>
           <PositionTable
-            portfolioData={portfolioData}
             positions={positions}
             onSelectItem={onSelectItem}
             onSettle={handleSettle}

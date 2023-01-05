@@ -64,6 +64,7 @@ export const getAMMs = async (
       variables: { orderBy: 'id' },
     });
     let aMMs = result.data.amms;
+    // should be part of graphql query
     if (whiteListedIds.length !== 0) {
       aMMs = result.data.amms.filter((amm) => whiteListedIds.includes(amm.id.toLowerCase()));
     }

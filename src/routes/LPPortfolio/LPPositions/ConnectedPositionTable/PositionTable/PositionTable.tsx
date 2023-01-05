@@ -2,7 +2,6 @@ import { Position } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
 import { AMMProvider } from '../../../../../contexts/AMMContext/AMMContext';
-import { PortfolioContext } from '../../../../../contexts/PortfolioContext/PortfolioContext';
 import { useAMMs } from '../../../../../hooks/useAMMs';
 import { findCurrentAmm } from '../../../../../utilities/amm';
 import { getRowButtonId } from '../../../../../utilities/googleAnalytics/helpers';
@@ -19,16 +18,14 @@ export type PositionTableProps = {
     mode: 'margin' | 'liquidity' | 'rollover' | 'notional',
   ) => void;
   onSettle: (position: Position) => void;
-  portfolioData: PortfolioContext;
 };
 
 export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   positions,
   onSelectItem,
   onSettle,
-  portfolioData,
 }) => {
-  const { amms } = useAMMs();
+  const { aMMs } = useAMMs();
 
   const handleSelectRow = (
     position: Position,
@@ -36,54 +33,52 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   ) => {
     onSelectItem(position, mode);
   };
-
+  if (positions.length === 0) {
+    return null;
+  }
   return (
-    <>
-      {positions.length > 0 && (
-        <PositionsList itemsPerRow={1}>
-          {positions.map((position) => {
-            const rolloverAmm = findCurrentAmm(amms || [], position);
-            const rolloverAvailable = rolloverAmm ? rolloverAmm.id !== position.amm.id : false;
+    <PositionsList itemsPerRow={1}>
+      {positions.map((position) => {
+        const rolloverAmm = findCurrentAmm(aMMs, position);
+        const rolloverAvailable = rolloverAmm ? rolloverAmm.id !== position.amm.id : false;
 
-            return (
-              <PositionsListItemBox key={position.id}>
-                <PositionsListTopBox>
-                  <PositionTableHead
-                    beforeMaturity={!position.isPoolMatured}
-                    currencyCode="USD"
-                    currencySymbol="$"
-                    fees={position.feesInUSD}
-                    feesPositive={true}
-                    fixedApr={position.poolAPR}
-                    fixedRateHealthFactor={position.fixedRateHealthFactor}
-                    gaButtonId={getRowButtonId(
-                      true,
-                      position.amm.protocol,
-                      isBorrowing(position.amm.rateOracle.protocolId),
-                    )}
-                    healthFactor={position.healthFactor}
-                    isSettled={position.isSettled}
-                    rolloverAvailable={rolloverAvailable}
-                    onRollover={() => handleSelectRow(position, 'rollover')}
-                    onSettle={() => onSettle(position)}
-                  />
+        return (
+          <PositionsListItemBox key={position.id}>
+            <PositionsListTopBox>
+              <PositionTableHead
+                beforeMaturity={!position.isPoolMatured}
+                currencyCode="USD"
+                currencySymbol="$"
+                fees={position.feesInUSD}
+                feesPositive={true}
+                fixedApr={position.poolAPR}
+                fixedRateHealthFactor={position.fixedRateHealthFactor}
+                gaButtonId={getRowButtonId(
+                  true,
+                  position.amm.protocol,
+                  isBorrowing(position.amm.rateOracle.protocolId),
+                )}
+                healthFactor={position.healthFactor}
+                isSettled={position.isSettled}
+                rolloverAvailable={rolloverAvailable}
+                onRollover={() => handleSelectRow(position, 'rollover')}
+                onSettle={() => onSettle(position)}
+              />
 
-                  <AMMProvider amm={position.amm}>
-                    <PositionTableRow
-                      key={position.id}
-                      position={position}
-                      onSelect={(mode: 'margin' | 'liquidity' | 'notional') =>
-                        handleSelectRow(position, mode)
-                      }
-                    />
-                  </AMMProvider>
-                </PositionsListTopBox>
-                <TransactionList position={position} />
-              </PositionsListItemBox>
-            );
-          })}
-        </PositionsList>
-      )}
-    </>
+              <AMMProvider amm={position.amm}>
+                <PositionTableRow
+                  key={position.id}
+                  position={position}
+                  onSelect={(mode: 'margin' | 'liquidity' | 'notional') =>
+                    handleSelectRow(position, mode)
+                  }
+                />
+              </AMMProvider>
+            </PositionsListTopBox>
+            <TransactionList position={position} />
+          </PositionsListItemBox>
+        );
+      })}
+    </PositionsList>
   );
 };

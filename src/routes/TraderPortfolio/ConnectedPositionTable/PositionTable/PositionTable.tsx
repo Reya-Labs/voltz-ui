@@ -31,7 +31,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   onSelectItem,
   onSettle,
 }) => {
-  const { amms } = useAMMs();
+  const { aMMs } = useAMMs();
   const { agent } = useAgent();
 
   const commonOverrides: SystemStyleObject<Theme> = {
@@ -94,83 +94,80 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
 
   const config = getConfig();
 
+  if (positions.length === 0) {
+    return null;
+  }
+
   return (
-    <>
-      {positions.length > 0 && (
-        <List sx={{ padding: '0', margin: '0' }}>
-          {positions.map((pos, index) => {
-            const rolloverAmm = findCurrentAmm(amms || [], pos);
-            const rolloverAvailable = rolloverAmm ? rolloverAmm.id !== pos.amm.id : false;
-            const closeToMaturity =
-              Date.now().valueOf() + MATURITY_WINDOW > pos.amm.endDateTime.toMillis();
+    <List sx={{ padding: '0', margin: '0' }}>
+      {positions.map((pos, index) => {
+        const rolloverAmm = findCurrentAmm(aMMs, pos);
+        const rolloverAvailable = rolloverAmm ? rolloverAmm.id !== pos.amm.id : false;
+        const closeToMaturity =
+          Date.now().valueOf() + MATURITY_WINDOW > pos.amm.endDateTime.toMillis();
 
-            return (
-              <ListItem key={pos.id} sx={listItemStyles}>
-                <Panel
-                  sx={{ width: '100%', padding: (theme) => `0 ${theme.spacing(4)}` }}
-                  variant="main"
-                >
-                  <PositionTableHead
-                    beforeMaturity={!pos.isPoolMatured}
-                    currencyCode="USD"
-                    currencySymbol="$"
-                    fees={pos.fees}
-                    feesPositive={true}
-                    fixedApr={pos.poolAPR}
-                    fixedRateHealthFactor={pos.fixedRateHealthFactor}
-                    gaButtonId={getRowButtonId(
-                      agent === Agents.LIQUIDITY_PROVIDER,
-                      pos.amm.protocol,
-                      isBorrowing(pos.amm.rateOracle.protocolId),
-                    )}
-                    healthFactor={pos.healthFactor}
-                    isSettled={pos.isSettled}
-                    poolTraderWithdrawable={
-                      config.pools.find((pool) => pool.id === pos.amm.id)?.traderWithdrawable ??
-                      true
-                    }
-                    positionType={pos.positionType}
-                    rolloverAvailable={rolloverAvailable}
-                    onRollover={() => handleSelectRow(index, 'rollover')}
-                    onSelect={
-                      agent === Agents.LIQUIDITY_PROVIDER || closeToMaturity
-                        ? undefined
-                        : (mode: 'margin' | 'liquidity' | 'notional') =>
-                            handleSelectRow(index, mode)
-                    }
-                    onSettle={() => onSettle(pos)}
-                  />
+        return (
+          <ListItem key={pos.id} sx={listItemStyles}>
+            <Panel
+              sx={{ width: '100%', padding: (theme) => `0 ${theme.spacing(4)}` }}
+              variant="main"
+            >
+              <PositionTableHead
+                beforeMaturity={!pos.isPoolMatured}
+                currencyCode="USD"
+                currencySymbol="$"
+                fees={pos.fees}
+                feesPositive={true}
+                fixedApr={pos.poolAPR}
+                fixedRateHealthFactor={pos.fixedRateHealthFactor}
+                gaButtonId={getRowButtonId(
+                  agent === Agents.LIQUIDITY_PROVIDER,
+                  pos.amm.protocol,
+                  isBorrowing(pos.amm.rateOracle.protocolId),
+                )}
+                healthFactor={pos.healthFactor}
+                isSettled={pos.isSettled}
+                poolTraderWithdrawable={
+                  config.pools.find((pool) => pool.id === pos.amm.id)?.traderWithdrawable ?? true
+                }
+                positionType={pos.positionType}
+                rolloverAvailable={rolloverAvailable}
+                onRollover={() => handleSelectRow(index, 'rollover')}
+                onSelect={
+                  agent === Agents.LIQUIDITY_PROVIDER || closeToMaturity
+                    ? undefined
+                    : (mode: 'margin' | 'liquidity' | 'notional') => handleSelectRow(index, mode)
+                }
+                onSettle={() => onSettle(pos)}
+              />
 
-                  <TableContainer
-                    sx={
-                      pos.isPoolMatured && !pos.isSettled
-                        ? getMaturedTableBorderStyles(pos.positionType)
-                        : undefined
-                    }
-                  >
-                    <Table size="medium" sx={{ ...commonOverrides }}>
-                      <TableBody>
-                        <AMMProvider amm={pos.amm}>
-                          <PositionTableRow
-                            key={pos.id}
-                            index={index}
-                            position={pos}
-                            onSelect={(mode: 'margin' | 'liquidity' | 'notional') =>
-                              handleSelectRow(index, mode)
-                            }
-                          />
-                        </AMMProvider>
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-
-                  <TransactionList position={pos} />
-                </Panel>
-              </ListItem>
-            );
-          })}
-        </List>
-      )}
-    </>
+              <TableContainer
+                sx={
+                  pos.isPoolMatured && !pos.isSettled
+                    ? getMaturedTableBorderStyles(pos.positionType)
+                    : undefined
+                }
+              >
+                <Table size="medium" sx={{ ...commonOverrides }}>
+                  <TableBody>
+                    <AMMProvider amm={pos.amm}>
+                      <PositionTableRow
+                        key={pos.id}
+                        index={index}
+                        position={pos}
+                        onSelect={(mode: 'margin' | 'liquidity' | 'notional') =>
+                          handleSelectRow(index, mode)
+                        }
+                      />
+                    </AMMProvider>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <TransactionList position={pos} />
+            </Panel>
+          </ListItem>
+        );
+      })}
+    </List>
   );
 };

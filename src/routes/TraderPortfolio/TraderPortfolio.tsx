@@ -24,7 +24,7 @@ export const TraderPortfolio: React.FunctionComponent = () => {
   const [position, setPosition] = useState<Position>();
   const [settling, setSettling] = useState<boolean>(false);
 
-  const { amms } = useAMMs();
+  const { aMMs } = useAMMs();
   const { onChangeAgent } = useAgent();
   const { key } = useLocation();
   const {
@@ -74,9 +74,7 @@ export const TraderPortfolio: React.FunctionComponent = () => {
     if (mode === 'notional') newMode = SwapFormModes.EDIT_NOTIONAL;
 
     setFormMode(newMode);
-    setAMM(
-      mode === 'rollover' ? findCurrentAmm(amms || [], selectedPosition) : selectedPosition.amm,
-    );
+    setAMM(mode === 'rollover' ? findCurrentAmm(aMMs, selectedPosition) : selectedPosition.amm);
     setPosition(selectedPosition);
   };
   const handleReset = () => {

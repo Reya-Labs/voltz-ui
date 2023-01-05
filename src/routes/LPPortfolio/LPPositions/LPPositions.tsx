@@ -29,7 +29,7 @@ export const LPPositions: React.FunctionComponent<{
   const [settling, setSettling] = useState<boolean>(false);
   const { onChangeAgent } = useAgent();
 
-  const { amms } = useAMMs();
+  const { aMMs } = useAMMs();
   const { key } = useLocation();
   const {
     positionsByAgentGroup,
@@ -74,9 +74,7 @@ export const LPPositions: React.FunctionComponent<{
     if (mode === 'rollover') newMode = MintBurnFormModes.ROLLOVER;
 
     setFormMode(newMode);
-    setAMM(
-      mode === 'rollover' ? findCurrentAmm(amms || [], selectedPosition) : selectedPosition.amm,
-    );
+    setAMM(mode === 'rollover' ? findCurrentAmm(aMMs, selectedPosition) : selectedPosition.amm);
     setPosition(selectedPosition);
   };
 

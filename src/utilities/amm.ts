@@ -21,7 +21,7 @@ export const findCurrentPosition = (positions: Position[], selectedAmm: AMM) => 
  * @param amms - the array of available pools
  * @param selectedPosition - the selected position to find the current amm for
  */
-export const findCurrentAmm = (amms: AMM[], selectedPosition: Position) => {
+export const findCurrentAmm = (amms: AMM[] = [], selectedPosition: Position) => {
   // First see if there's strong preference for some rollover pool
   const config = getConfig();
   const pool = config.pools.find(

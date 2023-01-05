@@ -138,7 +138,6 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
             />
           ) : (
             <PositionTable
-              portfolioData={portfolioData}
               positions={filteredPositions}
               onSelectItem={onSelectItem}
               onSettle={handleSettle}
