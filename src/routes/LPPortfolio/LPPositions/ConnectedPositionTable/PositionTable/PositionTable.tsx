@@ -5,7 +5,7 @@ import { AMMProvider } from '../../../../../contexts/AMMContext/AMMContext';
 import { PortfolioContext } from '../../../../../contexts/PortfolioContext/PortfolioContext';
 import { useAMMs } from '../../../../../hooks/useAMMs';
 import { findCurrentAmm } from '../../../../../utilities/amm';
-import { getRowButtonId } from '../../../../../utilities/googleAnalytics';
+import { getRowButtonId } from '../../../../../utilities/googleAnalytics/helpers';
 import { isBorrowing } from '../../../../../utilities/isBorrowing';
 import { PositionTableHead } from './components/PositionTableHead/PositionTableHead';
 import { PositionTableRow } from './components/PositionTableRow/PositionTableRow';

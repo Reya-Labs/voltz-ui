@@ -2,6 +2,8 @@ import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useState } from 'react';
 
 import { AutomaticRolloverToggleProps } from '../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
+import { useWallet } from '../../../../hooks/useWallet';
+import { pushEvent } from '../../../../utilities/googleAnalytics';
 import { DepositForm, FormProps } from '../Form/DepositForm/DepositForm';
 import { DepositStates, getSubmissionState } from './mappers';
 
@@ -16,6 +18,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
   vault,
   onGoBack,
 }) => {
+  const { account } = useWallet();
   const automaticWeights: FormProps['weights'] = vault.metadata.vaults.map((v) => ({
     distribution: v.weight,
     maturityTimestamp: v.maturityTimestampMS,
@@ -40,6 +43,11 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
 
   const deposit = () => {
     if (selectedDeposit > 0) {
+      pushEvent(account ?? '', {
+        event: 'tx_submitted',
+        eventValue: 'deposit',
+      });
+
       setDepositState(DepositStates.DEPOSITING);
       void vault
         .deposit(
@@ -48,11 +56,19 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
         )
         .then(
           () => {
+            pushEvent(account ?? '', {
+              event: 'successful_tx',
+              eventValue: 'deposit',
+            });
             setDepositState(DepositStates.DEPOSIT_DONE);
           },
           (err: Error) => {
             setError(`Deposit failed. ${err.message ?? ''}`);
             setDepositState(DepositStates.DEPOSIT_FAILED);
+            pushEvent(account ?? '', {
+              event: 'failed_tx',
+              eventValue: 'deposit',
+            });
           },
         );
     } else {

@@ -7,7 +7,7 @@ declare global {
   interface Window {
     dataLayer?: {
       push: (payload?: any) => void;
-    };
+    } | null;
     wallet?: {
       provider: ethers.providers.Web3Provider;
       signer: ethers.providers.JsonRpcSigner;
