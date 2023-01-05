@@ -20,8 +20,8 @@ export const VaultFormRoute: React.FunctionComponent = () => {
 
   const loading = !vaultsInitialised || !vaultsInitialisedWithSigner;
   useEffect(() => {
-    setPageTitle('Deposit Form');
-  }, []);
+    setPageTitle(actions === 'deposit' ? 'Deposit Form' : 'Rollover/Withdraw Form');
+  }, [actions]);
 
   if (!signer) {
     return (

@@ -10,7 +10,7 @@ import {
 import { UseAsyncFunctionResult } from '../../../hooks/useAsyncFunction';
 import { useTokenApproval } from '../../../hooks/useTokenApproval';
 import { SystemStyleObject, Theme } from '../../../theme';
-import { getPoolButtonId } from '../../../utilities/googleAnalytics';
+import { getPoolButtonId } from '../../../utilities/googleAnalytics/helpers';
 import { formatCurrency } from '../../../utilities/number';
 import { IconLabel } from '../../composite/IconLabel/IconLabel';
 import { InputTokenLabel } from '../../composite/InputTokenLabel/InputTokenLabel';

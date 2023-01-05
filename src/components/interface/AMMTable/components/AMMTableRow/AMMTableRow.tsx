@@ -10,7 +10,7 @@ import { useAMMContext } from '../../../../../contexts/AMMContext/AMMContext';
 import { useAMMsContext } from '../../../../../contexts/AMMsContext/AMMsContext';
 import { useAgent } from '../../../../../hooks/useAgent';
 import { useWallet } from '../../../../../hooks/useWallet';
-import { getRowButtonId } from '../../../../../utilities/googleAnalytics';
+import { getRowButtonId } from '../../../../../utilities/googleAnalytics/helpers';
 import { Button } from '../../../../atomic/Button/Button';
 import { MaturityInformation } from '../../../../composite/MaturityInformation/MaturityInformation';
 import { PoolField } from '../../../../composite/PoolField/PoolField';

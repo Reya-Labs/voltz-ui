@@ -9,7 +9,7 @@ import { BorrowAMMProvider } from '../../../contexts/BorrowAMMContext/BorrowAMMC
 import { PositionProvider } from '../../../contexts/PositionContext/PositionContext';
 import { SystemStyleObject, Theme } from '../../../theme';
 import { findCurrentBorrowPosition } from '../../../utilities/borrowAmm';
-import { getRowButtonId } from '../../../utilities/googleAnalytics';
+import { getRowButtonId } from '../../../utilities/googleAnalytics/helpers';
 import { Panel } from '../../atomic/Panel/Panel';
 import { Typography } from '../../atomic/Typography/Typography';
 import { BorrowTableHead } from './components';
