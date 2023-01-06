@@ -87,22 +87,7 @@ export const TraderPortfolio: React.FunctionComponent = () => {
 
   return (
     <>
-      {settling && renderMode === 'portfolio' && (
-        <PortfolioProvider
-          positions={agent !== Agents.LIQUIDITY_PROVIDER ? positionsByAgentGroup : undefined}
-        >
-          <ConnectedPositionTable
-            agent={Agents.FIXED_TRADER}
-            errorPositions={errorPositions}
-            handleCompletedSettling={handleCompletedSettling}
-            loadingPositions={loadingPositions}
-            positions={positionsByAgentGroup}
-            onSelectItem={handleSelectPosition}
-          />
-        </PortfolioProvider>
-      )}
-
-      {!settling && renderMode === 'portfolio' && (
+      {renderMode === 'portfolio' && (
         <PortfolioProvider
           positions={agent !== Agents.LIQUIDITY_PROVIDER ? positionsByAgentGroup : undefined}
         >
