@@ -2,13 +2,10 @@ import { createContext } from 'react';
 
 import { Wallet } from './types';
 
-const defaultConnect = () => Promise.resolve();
-const defaultDisconnect = () => {};
-
 export const WalletContext = createContext<Wallet>({
   status: 'initializing',
-  connect: defaultConnect,
-  disconnect: defaultDisconnect,
+  connect: () => Promise.resolve(),
+  disconnect: () => {},
   account: null,
   name: null,
   provider: null,
