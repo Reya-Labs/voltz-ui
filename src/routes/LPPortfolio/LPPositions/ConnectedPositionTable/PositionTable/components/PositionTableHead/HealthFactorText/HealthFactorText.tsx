@@ -1,3 +1,4 @@
+import { HealthFactorStatus } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
 import {
@@ -8,19 +9,23 @@ import {
 } from './HealthFactorText.styled';
 
 interface HealthFactorTextProps {
-  healthFactor: number;
+  healthFactor: HealthFactorStatus;
 }
 
 export const HealthFactorText = ({ healthFactor }: HealthFactorTextProps) => {
   const HealthFactorTypography =
-    healthFactor === 1
+    healthFactor === HealthFactorStatus.DANGER
       ? DangerTypography
-      : healthFactor === 2
+      : healthFactor === HealthFactorStatus.WARNING
       ? WarningTypography
       : HealthyTypography;
 
   const healthFactorText =
-    healthFactor === 1 ? 'DANGER' : healthFactor === 2 ? 'WARNING' : 'HEALTHY';
+    healthFactor === HealthFactorStatus.DANGER
+      ? 'DANGER'
+      : healthFactor === HealthFactorStatus.WARNING
+      ? 'WARNING'
+      : 'HEALTHY';
 
   return (
     <HealthFactorBox>

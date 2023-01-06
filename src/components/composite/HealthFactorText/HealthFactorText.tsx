@@ -1,3 +1,4 @@
+import { HealthFactorStatus } from '@voltz-protocol/v1-sdk';
 import isUndefined from 'lodash.isundefined';
 
 import { colors } from '../../../theme';
@@ -9,9 +10,9 @@ interface HealthFactorTextProps {
 }
 
 export const getHealthTextColor = (healthFactor = 1) => {
-  return healthFactor === 1
+  return healthFactor === HealthFactorStatus.DANGER
     ? colors.vzCustomRed1.base
-    : healthFactor === 2
+    : healthFactor === HealthFactorStatus.WARNING
     ? colors.vzCustomYellow1.base
     : colors.vzCustomGreen2.base;
 };
@@ -24,7 +25,11 @@ export const HealthFactorText = ({
   if (isUndefined(healthFactor)) return null;
 
   const healthFactorText =
-    healthFactor === 1 ? 'DANGER' : healthFactor === 2 ? 'WARNING' : 'HEALTHY';
+    healthFactor === HealthFactorStatus.DANGER
+      ? 'DANGER'
+      : healthFactor === HealthFactorStatus.WARNING
+      ? 'WARNING'
+      : 'HEALTHY';
 
   return (
     <>

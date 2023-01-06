@@ -1,5 +1,4 @@
-import { Position } from '@voltz-protocol/v1-sdk';
-import isUndefined from 'lodash.isundefined';
+import { HealthFactorStatus, Position } from '@voltz-protocol/v1-sdk';
 
 import { Agents } from '../../contexts/AgentContext/types';
 
@@ -13,12 +12,10 @@ export const getHealthCounters = (positions: Position[]) => {
   let danger = 0;
 
   positions.forEach((position) => {
-    const healthFactor = position?.healthFactor;
-    if (!isUndefined(healthFactor)) {
-      if (healthFactor === 1) danger += 1;
-      if (healthFactor === 2) warning += 1;
-      if (healthFactor === 3) healthy += 1;
-    }
+    const healthFactor = position.healthFactor;
+    if (healthFactor === HealthFactorStatus.DANGER) danger += 1;
+    if (healthFactor === HealthFactorStatus.WARNING) warning += 1;
+    if (healthFactor === HealthFactorStatus.HEALTHY) healthy += 1;
   });
 
   return { healthy, warning, danger };
