@@ -34,12 +34,8 @@ export const TradingLeague: React.FunctionComponent = () => {
 
   const fetchRankings = async () => {
     setLoading(true);
-    let result: RankType[] = [];
     const SBT = getCommunitySbt(signer);
-    result = await SBT.getRanking({
-      seasonStart: season.startDate.toSeconds(),
-      seasonEnd: season.endDate.toSeconds(),
-    });
+    const { traderRankResults: result } = await SBT.getRanking(season.id);
     setUserRanking(result, wallet.account);
     setRankings(result);
     setLoading(false);
