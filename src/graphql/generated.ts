@@ -3560,7 +3560,6 @@ export type GetWalletQuery = {
     __typename?: 'Wallet';
     id: string;
     positionCount: any;
-    fcmPositionCount: any;
     positions: Array<{
       __typename?: 'Position';
       id: string;
@@ -3641,68 +3640,6 @@ export type GetWalletQuery = {
       }>;
       settlements: Array<{
         __typename?: 'Settlement';
-        id: string;
-        settlementCashflow: any;
-        transaction: { __typename?: 'Transaction'; id: string; createdTimestamp: any };
-      }>;
-    }>;
-    fcmPositions: Array<{
-      __typename?: 'FCMPosition';
-      id: string;
-      createdTimestamp: any;
-      updatedTimestamp: any;
-      fixedTokenBalance: any;
-      variableTokenBalance: any;
-      marginInScaledYieldBearingTokens: any;
-      isSettled: boolean;
-      totalNotionalTraded: any;
-      sumOfWeightedFixedRate: any;
-      amm: {
-        __typename?: 'AMM';
-        id: string;
-        createdTimestamp: any;
-        tickSpacing: any;
-        termStartTimestamp: any;
-        termEndTimestamp: any;
-        totalNotionalTraded: any;
-        totalLiquidity: any;
-        updatedTimestamp: any;
-        tick: any;
-        txCount: any;
-        fcm: { __typename?: 'FCM'; id: string };
-        marginEngine: { __typename?: 'MarginEngine'; id: string };
-        rateOracle: {
-          __typename?: 'RateOracle';
-          id: string;
-          protocolId: any;
-          token: { __typename?: 'UnderlyingToken'; id: string; name: string; decimals: any };
-        };
-      };
-      owner: { __typename?: 'Wallet'; id: string };
-      fcmSwaps: Array<{
-        __typename?: 'FCMSwap';
-        id: string;
-        desiredNotional: any;
-        sqrtPriceLimitX96: any;
-        cumulativeFeeIncurred: any;
-        fixedTokenDelta: any;
-        variableTokenDelta: any;
-        fixedTokenDeltaUnbalanced: any;
-        transaction: { __typename?: 'Transaction'; id: string; createdTimestamp: any };
-      }>;
-      fcmUnwinds: Array<{
-        __typename?: 'FCMUnwind';
-        id: string;
-        desiredNotional: any;
-        sqrtPriceLimitX96: any;
-        cumulativeFeeIncurred: any;
-        fixedTokenDelta: any;
-        variableTokenDelta: any;
-        fixedTokenDeltaUnbalanced: any;
-        transaction: { __typename?: 'Transaction'; id: string; createdTimestamp: any };
-      }>;
-      fcmSettlements: Array<{
-        __typename?: 'FCMSettlement';
         id: string;
         settlementCashflow: any;
         transaction: { __typename?: 'Transaction'; id: string; createdTimestamp: any };
@@ -5200,82 +5137,6 @@ export const GetWalletDocument = gql`
           notionalUnwound
         }
         settlements {
-          id
-          transaction {
-            id
-            createdTimestamp
-          }
-          settlementCashflow
-        }
-      }
-      fcmPositionCount
-      fcmPositions {
-        id
-        createdTimestamp
-        amm {
-          id
-          createdTimestamp
-          fcm {
-            id
-          }
-          marginEngine {
-            id
-          }
-          rateOracle {
-            id
-            protocolId
-            token {
-              id
-              name
-              decimals
-            }
-          }
-          tickSpacing
-          termStartTimestamp
-          termEndTimestamp
-          totalNotionalTraded
-          totalLiquidity
-          updatedTimestamp
-          tick
-          txCount
-        }
-        owner {
-          id
-        }
-        updatedTimestamp
-        fixedTokenBalance
-        variableTokenBalance
-        marginInScaledYieldBearingTokens
-        isSettled
-        totalNotionalTraded
-        sumOfWeightedFixedRate
-        fcmSwaps {
-          id
-          transaction {
-            id
-            createdTimestamp
-          }
-          desiredNotional
-          sqrtPriceLimitX96
-          cumulativeFeeIncurred
-          fixedTokenDelta
-          variableTokenDelta
-          fixedTokenDeltaUnbalanced
-        }
-        fcmUnwinds {
-          id
-          transaction {
-            id
-            createdTimestamp
-          }
-          desiredNotional
-          sqrtPriceLimitX96
-          cumulativeFeeIncurred
-          fixedTokenDelta
-          variableTokenDelta
-          fixedTokenDeltaUnbalanced
-        }
-        fcmSettlements {
           id
           transaction {
             id
