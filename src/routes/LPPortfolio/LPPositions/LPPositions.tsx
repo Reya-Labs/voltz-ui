@@ -10,7 +10,6 @@ import {
   MintBurnFormModes,
   MintBurnFormProvider,
 } from '../../../contexts/MintBurnFormContext/MintBurnFormContext';
-import { PortfolioProvider } from '../../../contexts/PortfolioContext/PortfolioContext';
 import { PositionProvider } from '../../../contexts/PositionContext/PositionContext';
 import { useAgent } from '../../../hooks/useAgent';
 import { useAMMs } from '../../../hooks/useAMMs';
@@ -91,15 +90,14 @@ export const LPPositions: React.FunctionComponent<{
   return (
     <>
       {renderMode === 'portfolio' && (
-        <PortfolioProvider positions={positionsByAgentGroup}>
-          <ConnectedPositionTable
-            errorPositions={errorPositions}
-            handleCompletedSettling={handleCompletedSettling}
-            loadingPositions={loadingPositions}
-            positions={positionsByAgentGroup}
-            onSelectItem={handleSelectPosition}
-          />
-        </PortfolioProvider>
+        <ConnectedPositionTable
+          agent={Agents.LIQUIDITY_PROVIDER}
+          errorPositions={errorPositions}
+          handleCompletedSettling={handleCompletedSettling}
+          loadingPositions={loadingPositions}
+          positions={positionsByAgentGroup}
+          onSelectItem={handleSelectPosition}
+        />
       )}
 
       {formMode && renderMode === 'form' && (

@@ -170,6 +170,7 @@
     "react/react-in-jsx-scope": "off",
     "simple-import-sort/exports": "error",
     "simple-import-sort/imports": "error",
-    "unused-imports/no-unused-imports-ts": "error"
+    "unused-imports/no-unused-imports-ts": "error",
+    "no-debugger": "error"
   }
 }

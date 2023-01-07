@@ -1,4 +1,4 @@
-import { HealthFactorStatus, Position } from '@voltz-protocol/v1-sdk';
+import { HealthFactorStatus } from '@voltz-protocol/v1-sdk';
 
 import { Agents } from '../../contexts/AgentContext/types';
 
@@ -6,11 +6,14 @@ import { Agents } from '../../contexts/AgentContext/types';
  * Returns the health counts for the given set of positions
  * @param positions - The array of positions shown in the portfolio
  */
-export const getHealthCounters = (positions: Position[]) => {
+export const getHealthCounters = (
+  positions: {
+    healthFactor: HealthFactorStatus;
+  }[],
+) => {
   let healthy = 0;
   let warning = 0;
   let danger = 0;
-
   positions.forEach((position) => {
     const healthFactor = position.healthFactor;
     if (healthFactor === HealthFactorStatus.DANGER) danger += 1;
@@ -26,7 +29,13 @@ export const getHealthCounters = (positions: Position[]) => {
  * @param positions - The array of positions shown in the portfolio
  * @param agent - The current agent
  */
-export const getNetPayingRate = (positions: Position[], agent: Agents) => {
+export const getNetPayingRate = (
+  positions: {
+    payingRate: number;
+    variableTokenBalance: number;
+  }[],
+  agent: Agents,
+) => {
   let netPayingRate = 0;
   let totalNotional = 0;
 
@@ -49,7 +58,13 @@ export const getNetPayingRate = (positions: Position[], agent: Agents) => {
  * @param positions - The array of positions shown in the portfolio
  * @param agent - The current agent
  */
-export const getNetReceivingRate = (positions: Position[], agent: Agents) => {
+export const getNetReceivingRate = (
+  positions: {
+    receivingRate: number;
+    variableTokenBalance: number;
+  }[],
+  agent: Agents,
+) => {
   let netReceivingRate = 0;
   let totalNotional = 0;
 
@@ -71,7 +86,11 @@ export const getNetReceivingRate = (positions: Position[], agent: Agents) => {
  * Returns the total accrued cashflow figure for the given set of positions
  * @param positions - The array of positions shown in the portfolio
  */
-export const getTotalAccruedCashflow = (positions: Position[]) => {
+export const getTotalAccruedCashflow = (
+  positions: {
+    accruedCashflowInUSD: number;
+  }[],
+) => {
   return positions.reduce(
     (runningTotal, position) => runningTotal + position.accruedCashflowInUSD,
     0,
@@ -82,7 +101,11 @@ export const getTotalAccruedCashflow = (positions: Position[]) => {
  * Returns the total margin figure for the given set of positions
  * @param positions - The array of positions shown in the portfolio
  */
-export const getTotalMargin = (positions: Position[]) => {
+export const getTotalMargin = (
+  positions: {
+    marginInUSD: number;
+  }[],
+) => {
   return positions.reduce((runningTotal, position) => runningTotal + position.marginInUSD, 0);
 };
 
@@ -90,6 +113,10 @@ export const getTotalMargin = (positions: Position[]) => {
  * Returns the total notional figure for the given positions
  * @param positions - The array of positions shown in the portfolio
  */
-export const getTotalNotional = (positions: Position[]) => {
+export const getTotalNotional = (
+  positions: {
+    notionalInUSD: number;
+  }[],
+) => {
   return positions.reduce((runningTotal, position) => runningTotal + position.notionalInUSD, 0);
 };
