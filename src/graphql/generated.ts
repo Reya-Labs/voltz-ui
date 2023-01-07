@@ -41,6 +41,7 @@ export type Amm = {
   totalNotionalTraded: Scalars['BigInt'];
   txCount: Scalars['BigInt'];
   updatedTimestamp: Scalars['BigInt'];
+  vammPriceChangeCount: Scalars['BigInt'];
 };
 
 export type AmmBurnsArgs = {
@@ -94,6 +95,7 @@ export type AmmSwapsArgs = {
 export type Amm_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  burns_?: InputMaybe<Burn_Filter>;
   createdTimestamp?: InputMaybe<Scalars['BigInt']>;
   createdTimestamp_gt?: InputMaybe<Scalars['BigInt']>;
   createdTimestamp_gte?: InputMaybe<Scalars['BigInt']>;
@@ -103,6 +105,7 @@ export type Amm_Filter = {
   createdTimestamp_not?: InputMaybe<Scalars['BigInt']>;
   createdTimestamp_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   fcm?: InputMaybe<Scalars['String']>;
+  fcm_?: InputMaybe<Fcm_Filter>;
   fcm_contains?: InputMaybe<Scalars['String']>;
   fcm_contains_nocase?: InputMaybe<Scalars['String']>;
   fcm_ends_with?: InputMaybe<Scalars['String']>;
@@ -130,7 +133,9 @@ export type Amm_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  liquidations_?: InputMaybe<Liquidation_Filter>;
   marginEngine?: InputMaybe<Scalars['String']>;
+  marginEngine_?: InputMaybe<MarginEngine_Filter>;
   marginEngine_contains?: InputMaybe<Scalars['String']>;
   marginEngine_contains_nocase?: InputMaybe<Scalars['String']>;
   marginEngine_ends_with?: InputMaybe<Scalars['String']>;
@@ -150,7 +155,10 @@ export type Amm_Filter = {
   marginEngine_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   marginEngine_starts_with?: InputMaybe<Scalars['String']>;
   marginEngine_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  marginUpdates_?: InputMaybe<MarginUpdate_Filter>;
+  mints_?: InputMaybe<Mint_Filter>;
   rateOracle?: InputMaybe<Scalars['String']>;
+  rateOracle_?: InputMaybe<RateOracle_Filter>;
   rateOracle_contains?: InputMaybe<Scalars['String']>;
   rateOracle_contains_nocase?: InputMaybe<Scalars['String']>;
   rateOracle_ends_with?: InputMaybe<Scalars['String']>;
@@ -170,6 +178,8 @@ export type Amm_Filter = {
   rateOracle_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   rateOracle_starts_with?: InputMaybe<Scalars['String']>;
   rateOracle_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  settlements_?: InputMaybe<Settlement_Filter>;
+  swaps_?: InputMaybe<Swap_Filter>;
   termEndTimestamp?: InputMaybe<Scalars['BigInt']>;
   termEndTimestamp_gt?: InputMaybe<Scalars['BigInt']>;
   termEndTimestamp_gte?: InputMaybe<Scalars['BigInt']>;
@@ -234,6 +244,14 @@ export type Amm_Filter = {
   updatedTimestamp_lte?: InputMaybe<Scalars['BigInt']>;
   updatedTimestamp_not?: InputMaybe<Scalars['BigInt']>;
   updatedTimestamp_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  vammPriceChangeCount?: InputMaybe<Scalars['BigInt']>;
+  vammPriceChangeCount_gt?: InputMaybe<Scalars['BigInt']>;
+  vammPriceChangeCount_gte?: InputMaybe<Scalars['BigInt']>;
+  vammPriceChangeCount_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  vammPriceChangeCount_lt?: InputMaybe<Scalars['BigInt']>;
+  vammPriceChangeCount_lte?: InputMaybe<Scalars['BigInt']>;
+  vammPriceChangeCount_not?: InputMaybe<Scalars['BigInt']>;
+  vammPriceChangeCount_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
 };
 
 export enum Amm_OrderBy {
@@ -256,6 +274,7 @@ export enum Amm_OrderBy {
   TotalNotionalTraded = 'totalNotionalTraded',
   TxCount = 'txCount',
   UpdatedTimestamp = 'updatedTimestamp',
+  VammPriceChangeCount = 'vammPriceChangeCount',
 }
 
 export type BlockChangedFilter = {
@@ -282,6 +301,7 @@ export type Burn_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   amm?: InputMaybe<Scalars['String']>;
+  amm_?: InputMaybe<Amm_Filter>;
   amm_contains?: InputMaybe<Scalars['String']>;
   amm_contains_nocase?: InputMaybe<Scalars['String']>;
   amm_ends_with?: InputMaybe<Scalars['String']>;
@@ -318,6 +338,7 @@ export type Burn_Filter = {
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
   position?: InputMaybe<Scalars['String']>;
+  position_?: InputMaybe<Position_Filter>;
   position_contains?: InputMaybe<Scalars['String']>;
   position_contains_nocase?: InputMaybe<Scalars['String']>;
   position_ends_with?: InputMaybe<Scalars['String']>;
@@ -358,6 +379,7 @@ export type Burn_Filter = {
   sender_starts_with?: InputMaybe<Scalars['String']>;
   sender_starts_with_nocase?: InputMaybe<Scalars['String']>;
   transaction?: InputMaybe<Scalars['String']>;
+  transaction_?: InputMaybe<Transaction_Filter>;
   transaction_contains?: InputMaybe<Scalars['String']>;
   transaction_contains_nocase?: InputMaybe<Scalars['String']>;
   transaction_ends_with?: InputMaybe<Scalars['String']>;
@@ -471,6 +493,7 @@ export type FcmPositionSnapshot_Filter = {
   createdTimestamp_not?: InputMaybe<Scalars['BigInt']>;
   createdTimestamp_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   fcmPosition?: InputMaybe<Scalars['String']>;
+  fcmPosition_?: InputMaybe<FcmPosition_Filter>;
   fcmPosition_contains?: InputMaybe<Scalars['String']>;
   fcmPosition_contains_nocase?: InputMaybe<Scalars['String']>;
   fcmPosition_ends_with?: InputMaybe<Scalars['String']>;
@@ -560,6 +583,7 @@ export type FcmPosition_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   amm?: InputMaybe<Scalars['String']>;
+  amm_?: InputMaybe<Amm_Filter>;
   amm_contains?: InputMaybe<Scalars['String']>;
   amm_contains_nocase?: InputMaybe<Scalars['String']>;
   amm_ends_with?: InputMaybe<Scalars['String']>;
@@ -587,6 +611,9 @@ export type FcmPosition_Filter = {
   createdTimestamp_lte?: InputMaybe<Scalars['BigInt']>;
   createdTimestamp_not?: InputMaybe<Scalars['BigInt']>;
   createdTimestamp_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fcmSettlements_?: InputMaybe<FcmSettlement_Filter>;
+  fcmSwaps_?: InputMaybe<FcmSwap_Filter>;
+  fcmUnwinds_?: InputMaybe<FcmUnwind_Filter>;
   fixedTokenBalance?: InputMaybe<Scalars['BigInt']>;
   fixedTokenBalance_gt?: InputMaybe<Scalars['BigInt']>;
   fixedTokenBalance_gte?: InputMaybe<Scalars['BigInt']>;
@@ -616,6 +643,7 @@ export type FcmPosition_Filter = {
   marginInScaledYieldBearingTokens_not?: InputMaybe<Scalars['BigInt']>;
   marginInScaledYieldBearingTokens_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   owner?: InputMaybe<Scalars['String']>;
+  owner_?: InputMaybe<Wallet_Filter>;
   owner_contains?: InputMaybe<Scalars['String']>;
   owner_contains_nocase?: InputMaybe<Scalars['String']>;
   owner_ends_with?: InputMaybe<Scalars['String']>;
@@ -643,6 +671,7 @@ export type FcmPosition_Filter = {
   snapshotCount_lte?: InputMaybe<Scalars['BigInt']>;
   snapshotCount_not?: InputMaybe<Scalars['BigInt']>;
   snapshotCount_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  snapshots_?: InputMaybe<FcmPositionSnapshot_Filter>;
   sumOfWeightedFixedRate?: InputMaybe<Scalars['BigInt']>;
   sumOfWeightedFixedRate_gt?: InputMaybe<Scalars['BigInt']>;
   sumOfWeightedFixedRate_gte?: InputMaybe<Scalars['BigInt']>;
@@ -709,6 +738,7 @@ export type FcmSettlement_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   amm?: InputMaybe<Scalars['String']>;
+  amm_?: InputMaybe<Amm_Filter>;
   amm_contains?: InputMaybe<Scalars['String']>;
   amm_contains_nocase?: InputMaybe<Scalars['String']>;
   amm_ends_with?: InputMaybe<Scalars['String']>;
@@ -729,6 +759,7 @@ export type FcmSettlement_Filter = {
   amm_starts_with?: InputMaybe<Scalars['String']>;
   amm_starts_with_nocase?: InputMaybe<Scalars['String']>;
   fcmPosition?: InputMaybe<Scalars['String']>;
+  fcmPosition_?: InputMaybe<FcmPosition_Filter>;
   fcmPosition_contains?: InputMaybe<Scalars['String']>;
   fcmPosition_contains_nocase?: InputMaybe<Scalars['String']>;
   fcmPosition_ends_with?: InputMaybe<Scalars['String']>;
@@ -765,6 +796,7 @@ export type FcmSettlement_Filter = {
   settlementCashflow_not?: InputMaybe<Scalars['BigInt']>;
   settlementCashflow_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   transaction?: InputMaybe<Scalars['String']>;
+  transaction_?: InputMaybe<Transaction_Filter>;
   transaction_contains?: InputMaybe<Scalars['String']>;
   transaction_contains_nocase?: InputMaybe<Scalars['String']>;
   transaction_ends_with?: InputMaybe<Scalars['String']>;
@@ -812,6 +844,7 @@ export type FcmSwap_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   amm?: InputMaybe<Scalars['String']>;
+  amm_?: InputMaybe<Amm_Filter>;
   amm_contains?: InputMaybe<Scalars['String']>;
   amm_contains_nocase?: InputMaybe<Scalars['String']>;
   amm_ends_with?: InputMaybe<Scalars['String']>;
@@ -848,6 +881,7 @@ export type FcmSwap_Filter = {
   desiredNotional_not?: InputMaybe<Scalars['BigInt']>;
   desiredNotional_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   fcmPosition?: InputMaybe<Scalars['String']>;
+  fcmPosition_?: InputMaybe<FcmPosition_Filter>;
   fcmPosition_contains?: InputMaybe<Scalars['String']>;
   fcmPosition_contains_nocase?: InputMaybe<Scalars['String']>;
   fcmPosition_ends_with?: InputMaybe<Scalars['String']>;
@@ -900,6 +934,7 @@ export type FcmSwap_Filter = {
   sqrtPriceLimitX96_not?: InputMaybe<Scalars['BigInt']>;
   sqrtPriceLimitX96_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   transaction?: InputMaybe<Scalars['String']>;
+  transaction_?: InputMaybe<Transaction_Filter>;
   transaction_contains?: InputMaybe<Scalars['String']>;
   transaction_contains_nocase?: InputMaybe<Scalars['String']>;
   transaction_ends_with?: InputMaybe<Scalars['String']>;
@@ -960,6 +995,7 @@ export type FcmUnwind_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   amm?: InputMaybe<Scalars['String']>;
+  amm_?: InputMaybe<Amm_Filter>;
   amm_contains?: InputMaybe<Scalars['String']>;
   amm_contains_nocase?: InputMaybe<Scalars['String']>;
   amm_ends_with?: InputMaybe<Scalars['String']>;
@@ -996,6 +1032,7 @@ export type FcmUnwind_Filter = {
   desiredNotional_not?: InputMaybe<Scalars['BigInt']>;
   desiredNotional_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   fcmPosition?: InputMaybe<Scalars['String']>;
+  fcmPosition_?: InputMaybe<FcmPosition_Filter>;
   fcmPosition_contains?: InputMaybe<Scalars['String']>;
   fcmPosition_contains_nocase?: InputMaybe<Scalars['String']>;
   fcmPosition_ends_with?: InputMaybe<Scalars['String']>;
@@ -1048,6 +1085,7 @@ export type FcmUnwind_Filter = {
   sqrtPriceLimitX96_not?: InputMaybe<Scalars['BigInt']>;
   sqrtPriceLimitX96_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   transaction?: InputMaybe<Scalars['String']>;
+  transaction_?: InputMaybe<Transaction_Filter>;
   transaction_contains?: InputMaybe<Scalars['String']>;
   transaction_contains_nocase?: InputMaybe<Scalars['String']>;
   transaction_ends_with?: InputMaybe<Scalars['String']>;
@@ -1094,6 +1132,7 @@ export type Fcm_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   amm?: InputMaybe<Scalars['String']>;
+  amm_?: InputMaybe<Amm_Filter>;
   amm_contains?: InputMaybe<Scalars['String']>;
   amm_contains_nocase?: InputMaybe<Scalars['String']>;
   amm_ends_with?: InputMaybe<Scalars['String']>;
@@ -1175,6 +1214,7 @@ export type Liquidation_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   amm?: InputMaybe<Scalars['String']>;
+  amm_?: InputMaybe<Amm_Filter>;
   amm_contains?: InputMaybe<Scalars['String']>;
   amm_contains_nocase?: InputMaybe<Scalars['String']>;
   amm_ends_with?: InputMaybe<Scalars['String']>;
@@ -1231,6 +1271,7 @@ export type Liquidation_Filter = {
   notionalUnwound_not?: InputMaybe<Scalars['BigInt']>;
   notionalUnwound_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   position?: InputMaybe<Scalars['String']>;
+  position_?: InputMaybe<Position_Filter>;
   position_contains?: InputMaybe<Scalars['String']>;
   position_contains_nocase?: InputMaybe<Scalars['String']>;
   position_ends_with?: InputMaybe<Scalars['String']>;
@@ -1259,6 +1300,7 @@ export type Liquidation_Filter = {
   reward_not?: InputMaybe<Scalars['BigInt']>;
   reward_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   transaction?: InputMaybe<Scalars['String']>;
+  transaction_?: InputMaybe<Transaction_Filter>;
   transaction_contains?: InputMaybe<Scalars['String']>;
   transaction_contains_nocase?: InputMaybe<Scalars['String']>;
   transaction_ends_with?: InputMaybe<Scalars['String']>;
@@ -1300,6 +1342,7 @@ export type MarginEngine_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   amm?: InputMaybe<Scalars['String']>;
+  amm_?: InputMaybe<Amm_Filter>;
   amm_contains?: InputMaybe<Scalars['String']>;
   amm_contains_nocase?: InputMaybe<Scalars['String']>;
   amm_ends_with?: InputMaybe<Scalars['String']>;
@@ -1348,6 +1391,7 @@ export type MarginUpdate_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   amm?: InputMaybe<Scalars['String']>;
+  amm_?: InputMaybe<Amm_Filter>;
   amm_contains?: InputMaybe<Scalars['String']>;
   amm_contains_nocase?: InputMaybe<Scalars['String']>;
   amm_ends_with?: InputMaybe<Scalars['String']>;
@@ -1404,6 +1448,7 @@ export type MarginUpdate_Filter = {
   marginDelta_not?: InputMaybe<Scalars['BigInt']>;
   marginDelta_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   position?: InputMaybe<Scalars['String']>;
+  position_?: InputMaybe<Position_Filter>;
   position_contains?: InputMaybe<Scalars['String']>;
   position_contains_nocase?: InputMaybe<Scalars['String']>;
   position_ends_with?: InputMaybe<Scalars['String']>;
@@ -1424,6 +1469,7 @@ export type MarginUpdate_Filter = {
   position_starts_with?: InputMaybe<Scalars['String']>;
   position_starts_with_nocase?: InputMaybe<Scalars['String']>;
   transaction?: InputMaybe<Scalars['String']>;
+  transaction_?: InputMaybe<Transaction_Filter>;
   transaction_contains?: InputMaybe<Scalars['String']>;
   transaction_contains_nocase?: InputMaybe<Scalars['String']>;
   transaction_ends_with?: InputMaybe<Scalars['String']>;
@@ -1468,6 +1514,7 @@ export type Mint_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   amm?: InputMaybe<Scalars['String']>;
+  amm_?: InputMaybe<Amm_Filter>;
   amm_contains?: InputMaybe<Scalars['String']>;
   amm_contains_nocase?: InputMaybe<Scalars['String']>;
   amm_ends_with?: InputMaybe<Scalars['String']>;
@@ -1504,6 +1551,7 @@ export type Mint_Filter = {
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
   position?: InputMaybe<Scalars['String']>;
+  position_?: InputMaybe<Position_Filter>;
   position_contains?: InputMaybe<Scalars['String']>;
   position_contains_nocase?: InputMaybe<Scalars['String']>;
   position_ends_with?: InputMaybe<Scalars['String']>;
@@ -1544,6 +1592,7 @@ export type Mint_Filter = {
   sender_starts_with?: InputMaybe<Scalars['String']>;
   sender_starts_with_nocase?: InputMaybe<Scalars['String']>;
   transaction?: InputMaybe<Scalars['String']>;
+  transaction_?: InputMaybe<Transaction_Filter>;
   transaction_contains?: InputMaybe<Scalars['String']>;
   transaction_contains_nocase?: InputMaybe<Scalars['String']>;
   transaction_ends_with?: InputMaybe<Scalars['String']>;
@@ -1744,6 +1793,7 @@ export type PositionSnapshot_Filter = {
   positionType_lte?: InputMaybe<Scalars['BigInt']>;
   positionType_not?: InputMaybe<Scalars['BigInt']>;
   positionType_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  position_?: InputMaybe<Position_Filter>;
   position_contains?: InputMaybe<Scalars['String']>;
   position_contains_nocase?: InputMaybe<Scalars['String']>;
   position_ends_with?: InputMaybe<Scalars['String']>;
@@ -1816,6 +1866,7 @@ export type Position_Filter = {
   accumulatedFees_not?: InputMaybe<Scalars['BigInt']>;
   accumulatedFees_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   amm?: InputMaybe<Scalars['String']>;
+  amm_?: InputMaybe<Amm_Filter>;
   amm_contains?: InputMaybe<Scalars['String']>;
   amm_contains_nocase?: InputMaybe<Scalars['String']>;
   amm_ends_with?: InputMaybe<Scalars['String']>;
@@ -1835,6 +1886,7 @@ export type Position_Filter = {
   amm_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   amm_starts_with?: InputMaybe<Scalars['String']>;
   amm_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  burns_?: InputMaybe<Burn_Filter>;
   createdTimestamp?: InputMaybe<Scalars['BigInt']>;
   createdTimestamp_gt?: InputMaybe<Scalars['BigInt']>;
   createdTimestamp_gte?: InputMaybe<Scalars['BigInt']>;
@@ -1863,6 +1915,7 @@ export type Position_Filter = {
   isSettled_in?: InputMaybe<Array<Scalars['Boolean']>>;
   isSettled_not?: InputMaybe<Scalars['Boolean']>;
   isSettled_not_in?: InputMaybe<Array<Scalars['Boolean']>>;
+  liquidations_?: InputMaybe<Liquidation_Filter>;
   liquidity?: InputMaybe<Scalars['BigInt']>;
   liquidity_gt?: InputMaybe<Scalars['BigInt']>;
   liquidity_gte?: InputMaybe<Scalars['BigInt']>;
@@ -1872,6 +1925,7 @@ export type Position_Filter = {
   liquidity_not?: InputMaybe<Scalars['BigInt']>;
   liquidity_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   margin?: InputMaybe<Scalars['BigInt']>;
+  marginUpdates_?: InputMaybe<MarginUpdate_Filter>;
   margin_gt?: InputMaybe<Scalars['BigInt']>;
   margin_gte?: InputMaybe<Scalars['BigInt']>;
   margin_in?: InputMaybe<Array<Scalars['BigInt']>>;
@@ -1879,7 +1933,9 @@ export type Position_Filter = {
   margin_lte?: InputMaybe<Scalars['BigInt']>;
   margin_not?: InputMaybe<Scalars['BigInt']>;
   margin_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  mints_?: InputMaybe<Mint_Filter>;
   owner?: InputMaybe<Scalars['String']>;
+  owner_?: InputMaybe<Wallet_Filter>;
   owner_contains?: InputMaybe<Scalars['String']>;
   owner_contains_nocase?: InputMaybe<Scalars['String']>;
   owner_ends_with?: InputMaybe<Scalars['String']>;
@@ -1907,6 +1963,7 @@ export type Position_Filter = {
   positionType_lte?: InputMaybe<Scalars['BigInt']>;
   positionType_not?: InputMaybe<Scalars['BigInt']>;
   positionType_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  settlements_?: InputMaybe<Settlement_Filter>;
   snapshotCount?: InputMaybe<Scalars['BigInt']>;
   snapshotCount_gt?: InputMaybe<Scalars['BigInt']>;
   snapshotCount_gte?: InputMaybe<Scalars['BigInt']>;
@@ -1915,6 +1972,7 @@ export type Position_Filter = {
   snapshotCount_lte?: InputMaybe<Scalars['BigInt']>;
   snapshotCount_not?: InputMaybe<Scalars['BigInt']>;
   snapshotCount_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  snapshots_?: InputMaybe<PositionSnapshot_Filter>;
   sumOfWeightedFixedRate?: InputMaybe<Scalars['BigInt']>;
   sumOfWeightedFixedRate_gt?: InputMaybe<Scalars['BigInt']>;
   sumOfWeightedFixedRate_gte?: InputMaybe<Scalars['BigInt']>;
@@ -1923,6 +1981,7 @@ export type Position_Filter = {
   sumOfWeightedFixedRate_lte?: InputMaybe<Scalars['BigInt']>;
   sumOfWeightedFixedRate_not?: InputMaybe<Scalars['BigInt']>;
   sumOfWeightedFixedRate_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  swaps_?: InputMaybe<Swap_Filter>;
   tickLower?: InputMaybe<Scalars['BigInt']>;
   tickLower_gt?: InputMaybe<Scalars['BigInt']>;
   tickLower_gte?: InputMaybe<Scalars['BigInt']>;
@@ -2036,6 +2095,8 @@ export type Query = {
   transactions: Array<Transaction>;
   underlyingToken?: Maybe<UnderlyingToken>;
   underlyingTokens: Array<UnderlyingToken>;
+  vammpriceChange?: Maybe<VammPriceChange>;
+  vammpriceChanges: Array<VammPriceChange>;
   wallet?: Maybe<Wallet>;
   wallets: Array<Wallet>;
 };
@@ -2364,6 +2425,22 @@ export type QueryUnderlyingTokensArgs = {
   where?: InputMaybe<UnderlyingToken_Filter>;
 };
 
+export type QueryVammpriceChangeArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+export type QueryVammpriceChangesArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<VammPriceChange_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<VammPriceChange_Filter>;
+};
+
 export type QueryWalletArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
@@ -2407,6 +2484,7 @@ export type RateOracle_Filter = {
   protocolId_not?: InputMaybe<Scalars['BigInt']>;
   protocolId_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   token?: InputMaybe<Scalars['String']>;
+  token_?: InputMaybe<UnderlyingToken_Filter>;
   token_contains?: InputMaybe<Scalars['String']>;
   token_contains_nocase?: InputMaybe<Scalars['String']>;
   token_ends_with?: InputMaybe<Scalars['String']>;
@@ -2447,6 +2525,7 @@ export type Settlement_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   amm?: InputMaybe<Scalars['String']>;
+  amm_?: InputMaybe<Amm_Filter>;
   amm_contains?: InputMaybe<Scalars['String']>;
   amm_contains_nocase?: InputMaybe<Scalars['String']>;
   amm_ends_with?: InputMaybe<Scalars['String']>;
@@ -2475,6 +2554,7 @@ export type Settlement_Filter = {
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
   position?: InputMaybe<Scalars['String']>;
+  position_?: InputMaybe<Position_Filter>;
   position_contains?: InputMaybe<Scalars['String']>;
   position_contains_nocase?: InputMaybe<Scalars['String']>;
   position_ends_with?: InputMaybe<Scalars['String']>;
@@ -2503,6 +2583,7 @@ export type Settlement_Filter = {
   settlementCashflow_not?: InputMaybe<Scalars['BigInt']>;
   settlementCashflow_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   transaction?: InputMaybe<Scalars['String']>;
+  transaction_?: InputMaybe<Transaction_Filter>;
   transaction_contains?: InputMaybe<Scalars['String']>;
   transaction_contains_nocase?: InputMaybe<Scalars['String']>;
   transaction_ends_with?: InputMaybe<Scalars['String']>;
@@ -2576,6 +2657,8 @@ export type Subscription = {
   transactions: Array<Transaction>;
   underlyingToken?: Maybe<UnderlyingToken>;
   underlyingTokens: Array<UnderlyingToken>;
+  vammpriceChange?: Maybe<VammPriceChange>;
+  vammpriceChanges: Array<VammPriceChange>;
   wallet?: Maybe<Wallet>;
   wallets: Array<Wallet>;
 };
@@ -2904,6 +2987,22 @@ export type SubscriptionUnderlyingTokensArgs = {
   where?: InputMaybe<UnderlyingToken_Filter>;
 };
 
+export type SubscriptionVammpriceChangeArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+export type SubscriptionVammpriceChangesArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<VammPriceChange_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<VammPriceChange_Filter>;
+};
+
 export type SubscriptionWalletArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
@@ -2939,6 +3038,7 @@ export type Swap_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   amm?: InputMaybe<Scalars['String']>;
+  amm_?: InputMaybe<Amm_Filter>;
   amm_contains?: InputMaybe<Scalars['String']>;
   amm_contains_nocase?: InputMaybe<Scalars['String']>;
   amm_ends_with?: InputMaybe<Scalars['String']>;
@@ -2999,6 +3099,7 @@ export type Swap_Filter = {
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
   position?: InputMaybe<Scalars['String']>;
+  position_?: InputMaybe<Position_Filter>;
   position_contains?: InputMaybe<Scalars['String']>;
   position_contains_nocase?: InputMaybe<Scalars['String']>;
   position_ends_with?: InputMaybe<Scalars['String']>;
@@ -3047,6 +3148,7 @@ export type Swap_Filter = {
   sqrtPriceLimitX96_not?: InputMaybe<Scalars['BigInt']>;
   sqrtPriceLimitX96_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   transaction?: InputMaybe<Scalars['String']>;
+  transaction_?: InputMaybe<Transaction_Filter>;
   transaction_contains?: InputMaybe<Scalars['String']>;
   transaction_contains_nocase?: InputMaybe<Scalars['String']>;
   transaction_ends_with?: InputMaybe<Scalars['String']>;
@@ -3157,6 +3259,7 @@ export type Transaction_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   amm?: InputMaybe<Scalars['String']>;
+  amm_?: InputMaybe<Amm_Filter>;
   amm_contains?: InputMaybe<Scalars['String']>;
   amm_contains_nocase?: InputMaybe<Scalars['String']>;
   amm_ends_with?: InputMaybe<Scalars['String']>;
@@ -3184,6 +3287,7 @@ export type Transaction_Filter = {
   blockNumber_lte?: InputMaybe<Scalars['BigInt']>;
   blockNumber_not?: InputMaybe<Scalars['BigInt']>;
   blockNumber_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  burns_?: InputMaybe<Burn_Filter>;
   createdTimestamp?: InputMaybe<Scalars['BigInt']>;
   createdTimestamp_gt?: InputMaybe<Scalars['BigInt']>;
   createdTimestamp_gte?: InputMaybe<Scalars['BigInt']>;
@@ -3208,6 +3312,11 @@ export type Transaction_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  liquidations_?: InputMaybe<Liquidation_Filter>;
+  marginUpdates_?: InputMaybe<MarginUpdate_Filter>;
+  mints_?: InputMaybe<Mint_Filter>;
+  settlements_?: InputMaybe<Settlement_Filter>;
+  swaps_?: InputMaybe<Swap_Filter>;
 };
 
 export enum Transaction_OrderBy {
@@ -3278,6 +3387,71 @@ export enum UnderlyingToken_OrderBy {
   Name = 'name',
 }
 
+export type VammPriceChange = {
+  __typename?: 'VAMMPriceChange';
+  amm: Amm;
+  id: Scalars['ID'];
+  tick: Scalars['BigInt'];
+  timestamp: Scalars['BigInt'];
+};
+
+export type VammPriceChange_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  amm?: InputMaybe<Scalars['String']>;
+  amm_?: InputMaybe<Amm_Filter>;
+  amm_contains?: InputMaybe<Scalars['String']>;
+  amm_contains_nocase?: InputMaybe<Scalars['String']>;
+  amm_ends_with?: InputMaybe<Scalars['String']>;
+  amm_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_gt?: InputMaybe<Scalars['String']>;
+  amm_gte?: InputMaybe<Scalars['String']>;
+  amm_in?: InputMaybe<Array<Scalars['String']>>;
+  amm_lt?: InputMaybe<Scalars['String']>;
+  amm_lte?: InputMaybe<Scalars['String']>;
+  amm_not?: InputMaybe<Scalars['String']>;
+  amm_not_contains?: InputMaybe<Scalars['String']>;
+  amm_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  amm_not_ends_with?: InputMaybe<Scalars['String']>;
+  amm_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_not_in?: InputMaybe<Array<Scalars['String']>>;
+  amm_not_starts_with?: InputMaybe<Scalars['String']>;
+  amm_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  amm_starts_with?: InputMaybe<Scalars['String']>;
+  amm_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+  id_gt?: InputMaybe<Scalars['ID']>;
+  id_gte?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  id_lt?: InputMaybe<Scalars['ID']>;
+  id_lte?: InputMaybe<Scalars['ID']>;
+  id_not?: InputMaybe<Scalars['ID']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  tick?: InputMaybe<Scalars['BigInt']>;
+  tick_gt?: InputMaybe<Scalars['BigInt']>;
+  tick_gte?: InputMaybe<Scalars['BigInt']>;
+  tick_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  tick_lt?: InputMaybe<Scalars['BigInt']>;
+  tick_lte?: InputMaybe<Scalars['BigInt']>;
+  tick_not?: InputMaybe<Scalars['BigInt']>;
+  tick_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  timestamp?: InputMaybe<Scalars['BigInt']>;
+  timestamp_gt?: InputMaybe<Scalars['BigInt']>;
+  timestamp_gte?: InputMaybe<Scalars['BigInt']>;
+  timestamp_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  timestamp_lt?: InputMaybe<Scalars['BigInt']>;
+  timestamp_lte?: InputMaybe<Scalars['BigInt']>;
+  timestamp_not?: InputMaybe<Scalars['BigInt']>;
+  timestamp_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+};
+
+export enum VammPriceChange_OrderBy {
+  Amm = 'amm',
+  Id = 'id',
+  Tick = 'tick',
+  Timestamp = 'timestamp',
+}
+
 export type Wallet = {
   __typename?: 'Wallet';
   fcmPositionCount: Scalars['BigInt'];
@@ -3314,6 +3488,7 @@ export type Wallet_Filter = {
   fcmPositionCount_lte?: InputMaybe<Scalars['BigInt']>;
   fcmPositionCount_not?: InputMaybe<Scalars['BigInt']>;
   fcmPositionCount_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fcmPositions_?: InputMaybe<FcmPosition_Filter>;
   id?: InputMaybe<Scalars['ID']>;
   id_gt?: InputMaybe<Scalars['ID']>;
   id_gte?: InputMaybe<Scalars['ID']>;
@@ -3330,6 +3505,7 @@ export type Wallet_Filter = {
   positionCount_lte?: InputMaybe<Scalars['BigInt']>;
   positionCount_not?: InputMaybe<Scalars['BigInt']>;
   positionCount_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  positions_?: InputMaybe<Position_Filter>;
 };
 
 export enum Wallet_OrderBy {
@@ -3346,6 +3522,8 @@ export type _Block_ = {
   hash?: Maybe<Scalars['Bytes']>;
   /** The block number */
   number: Scalars['Int'];
+  /** Integer representation of the timestamp stored in blocks for the chain */
+  timestamp?: Maybe<Scalars['Int']>;
 };
 
 /** The type for the top-level _meta field */
@@ -3371,35 +3549,6 @@ export enum _SubgraphErrorPolicy_ {
   /** If the subgraph has indexing errors, data will be omitted. The default. */
   Deny = 'deny',
 }
-
-export type GetAmMsQueryVariables = Exact<{
-  orderBy: Amm_OrderBy;
-}>;
-
-export type GetAmMsQuery = {
-  __typename?: 'Query';
-  amms: Array<{
-    __typename?: 'AMM';
-    id: string;
-    createdTimestamp: any;
-    tickSpacing: any;
-    termStartTimestamp: any;
-    termEndTimestamp: any;
-    totalNotionalTraded: any;
-    totalLiquidity: any;
-    updatedTimestamp: any;
-    tick: any;
-    txCount: any;
-    fcm: { __typename?: 'FCM'; id: string };
-    marginEngine: { __typename?: 'MarginEngine'; id: string };
-    rateOracle: {
-      __typename?: 'RateOracle';
-      id: string;
-      protocolId: any;
-      token: { __typename?: 'UnderlyingToken'; id: string; name: string; decimals: any };
-    };
-  }>;
-};
 
 export type GetWalletQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -3721,6 +3870,9 @@ export type ResolversTypes = ResolversObject<{
   UnderlyingToken: ResolverTypeWrapper<Partial<UnderlyingToken>>;
   UnderlyingToken_filter: ResolverTypeWrapper<Partial<UnderlyingToken_Filter>>;
   UnderlyingToken_orderBy: ResolverTypeWrapper<Partial<UnderlyingToken_OrderBy>>;
+  VAMMPriceChange: ResolverTypeWrapper<Partial<VammPriceChange>>;
+  VAMMPriceChange_filter: ResolverTypeWrapper<Partial<VammPriceChange_Filter>>;
+  VAMMPriceChange_orderBy: ResolverTypeWrapper<Partial<VammPriceChange_OrderBy>>;
   Wallet: ResolverTypeWrapper<Partial<Wallet>>;
   Wallet_filter: ResolverTypeWrapper<Partial<Wallet_Filter>>;
   Wallet_orderBy: ResolverTypeWrapper<Partial<Wallet_OrderBy>>;
@@ -3782,6 +3934,8 @@ export type ResolversParentTypes = ResolversObject<{
   Transaction_filter: Partial<Transaction_Filter>;
   UnderlyingToken: Partial<UnderlyingToken>;
   UnderlyingToken_filter: Partial<UnderlyingToken_Filter>;
+  VAMMPriceChange: Partial<VammPriceChange>;
+  VAMMPriceChange_filter: Partial<VammPriceChange_Filter>;
   Wallet: Partial<Wallet>;
   Wallet_filter: Partial<Wallet_Filter>;
   _Block_: Partial<_Block_>;
@@ -3872,6 +4026,7 @@ export type AmmResolvers<
   totalNotionalTraded?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   txCount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   updatedTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  vammPriceChangeCount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -4408,6 +4563,18 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryUnderlyingTokensArgs, 'first' | 'skip' | 'subgraphError'>
   >;
+  vammpriceChange?: Resolver<
+    Maybe<ResolversTypes['VAMMPriceChange']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryVammpriceChangeArgs, 'id' | 'subgraphError'>
+  >;
+  vammpriceChanges?: Resolver<
+    Array<ResolversTypes['VAMMPriceChange']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryVammpriceChangesArgs, 'first' | 'skip' | 'subgraphError'>
+  >;
   wallet?: Resolver<
     Maybe<ResolversTypes['Wallet']>,
     ParentType,
@@ -4735,6 +4902,20 @@ export type SubscriptionResolvers<
     ContextType,
     RequireFields<SubscriptionUnderlyingTokensArgs, 'first' | 'skip' | 'subgraphError'>
   >;
+  vammpriceChange?: SubscriptionResolver<
+    Maybe<ResolversTypes['VAMMPriceChange']>,
+    'vammpriceChange',
+    ParentType,
+    ContextType,
+    RequireFields<SubscriptionVammpriceChangeArgs, 'id' | 'subgraphError'>
+  >;
+  vammpriceChanges?: SubscriptionResolver<
+    Array<ResolversTypes['VAMMPriceChange']>,
+    'vammpriceChanges',
+    ParentType,
+    ContextType,
+    RequireFields<SubscriptionVammpriceChangesArgs, 'first' | 'skip' | 'subgraphError'>
+  >;
   wallet?: SubscriptionResolver<
     Maybe<ResolversTypes['Wallet']>,
     'wallet',
@@ -4827,6 +5008,17 @@ export type UnderlyingTokenResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type VammPriceChangeResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['VAMMPriceChange'] = ResolversParentTypes['VAMMPriceChange'],
+> = ResolversObject<{
+  amm?: Resolver<ResolversTypes['AMM'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  tick?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  timestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type WalletResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Wallet'] = ResolversParentTypes['Wallet'],
@@ -4855,6 +5047,7 @@ export type _Block_Resolvers<
 > = ResolversObject<{
   hash?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
   number?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  timestamp?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -4894,6 +5087,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Swap?: SwapResolvers<ContextType>;
   Transaction?: TransactionResolvers<ContextType>;
   UnderlyingToken?: UnderlyingTokenResolvers<ContextType>;
+  VAMMPriceChange?: VammPriceChangeResolvers<ContextType>;
   Wallet?: WalletResolvers<ContextType>;
   _Block_?: _Block_Resolvers<ContextType>;
   _Meta_?: _Meta_Resolvers<ContextType>;
@@ -4905,69 +5099,6 @@ export type DirectiveResolvers<ContextType = any> = ResolversObject<{
   subgraphId?: SubgraphIdDirectiveResolver<any, any, ContextType>;
 }>;
 
-export const GetAmMsDocument = gql`
-  query GetAMMs($orderBy: AMM_orderBy!) {
-    amms(first: 100, orderBy: $orderBy, orderDirection: asc) {
-      id
-      createdTimestamp
-      fcm {
-        id
-      }
-      marginEngine {
-        id
-      }
-      rateOracle {
-        id
-        protocolId
-        token {
-          id
-          name
-          decimals
-        }
-      }
-      tickSpacing
-      termStartTimestamp
-      termEndTimestamp
-      totalNotionalTraded
-      totalLiquidity
-      updatedTimestamp
-      tick
-      txCount
-    }
-  }
-`;
-
-/**
- * __useGetAmMsQuery__
- *
- * To run a query within a React component, call `useGetAmMsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAmMsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetAmMsQuery({
- *   variables: {
- *      orderBy: // value for 'orderBy'
- *   },
- * });
- */
-export function useGetAmMsQuery(
-  baseOptions: Apollo.QueryHookOptions<GetAmMsQuery, GetAmMsQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetAmMsQuery, GetAmMsQueryVariables>(GetAmMsDocument, options);
-}
-export function useGetAmMsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetAmMsQuery, GetAmMsQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetAmMsQuery, GetAmMsQueryVariables>(GetAmMsDocument, options);
-}
-export type GetAmMsQueryHookResult = ReturnType<typeof useGetAmMsQuery>;
-export type GetAmMsLazyQueryHookResult = ReturnType<typeof useGetAmMsLazyQuery>;
-export type GetAmMsQueryResult = Apollo.QueryResult<GetAmMsQuery, GetAmMsQueryVariables>;
 export const GetWalletDocument = gql`
   query GetWallet($id: ID!) {
     wallet(id: $id) {
