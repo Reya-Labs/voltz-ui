@@ -5,7 +5,7 @@ import { call, put } from 'redux-saga/effects';
 import { getErrorMessage } from '../../../../../utilities/getErrorMessage';
 import { getSentryTracker } from '../../../../../utilities/sentry';
 import { UpdatePositionMarginAction } from '../../../../types';
-import * as actions from '../../actions';
+import { updateTransaction } from '../../actions';
 import { deserializeAmm, getSigner } from '../../utilities';
 
 export function* updatePositionMarginSaga(action: UpdatePositionMarginAction) {
@@ -34,7 +34,7 @@ export function* updatePositionMarginSaga(action: UpdatePositionMarginAction) {
   } catch (error) {
     getSentryTracker().captureException(error);
     yield put(
-      actions.updateTransaction({
+      updateTransaction({
         id,
         failedAt: DateTime.now().toISO(),
         failureMessage: getErrorMessage(error),
@@ -45,12 +45,10 @@ export function* updatePositionMarginSaga(action: UpdatePositionMarginAction) {
   }
 
   if (!result) {
-    yield put(
-      actions.updateTransaction({ id, failedAt: DateTime.now().toISO(), failureMessage: 'error' }),
-    );
+    yield put(updateTransaction({ id, failedAt: DateTime.now().toISO(), failureMessage: 'error' }));
   } else {
     yield put(
-      actions.updateTransaction({
+      updateTransaction({
         id,
         succeededAt: DateTime.now().toISO(),
         txid: result.transactionHash,

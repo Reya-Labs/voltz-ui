@@ -6,7 +6,12 @@ import { selectors } from '../../store';
 import { useAppSelector } from '../../store/hooks';
 import { getErrorMessage } from '../../utilities/getErrorMessage';
 import { getSentryTracker } from '../../utilities/sentry';
-import * as services from './services';
+import {
+  checkForCorrectNetwork,
+  checkForRiskyWallet,
+  checkForTOSSignature,
+  getWalletProvider,
+} from './services';
 import { WalletName, WalletStatus } from './types';
 import { WalletContext } from './WalletContext';
 
@@ -39,7 +44,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
   const connect = useCallback(
     async (walletName: WalletName) => {
       try {
-        const newProvider = await services.getWalletProvider(walletName);
+        const newProvider = await getWalletProvider(walletName);
         setStatus('connecting');
 
         if (newProvider) {
@@ -52,11 +57,11 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
             process.env.REACT_APP_SKIP_TOS_CHECK !== 'UNPROVIDED';
 
           if (!skipTOSCheck) {
-            await services.checkForTOSSignature(newSigner);
+            await checkForTOSSignature(newSigner);
           }
-          await services.checkForCorrectNetwork(newProvider);
+          await checkForCorrectNetwork(newProvider);
           if (!process.env.REACT_APP_SKIP_WALLET_SCREENING) {
-            await services.checkForRiskyWallet(walletAddress);
+            await checkForRiskyWallet(walletAddress);
           }
 
           window.wallet = {

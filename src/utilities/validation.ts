@@ -23,18 +23,6 @@ export const hasEnoughUnderlyingTokens = async (
 };
 
 /**
- * If both valueA and valueB are defined, return true if valueA is less than valueB, otherwise return undefined.
- * @param {number | undefined} valueA - number | undefined
- * @param {number | undefined} valueB - number | undefined
- * @returns A function that takes two numbers and returns true if the first number is less than the second number.
- */
-export const lessThan = (valueA: number | undefined, valueB: number | undefined) => {
-  if (!isUndefined(valueA) && !isUndefined(valueB)) {
-    return valueA < valueB;
-  }
-};
-
-/**
  * If valueA and valueB are defined, return true if valueA + eps is less than valueB.
  * @param {number | undefined} valueA - The first number to compare
  * @param {number | undefined} valueB - The second number to compare

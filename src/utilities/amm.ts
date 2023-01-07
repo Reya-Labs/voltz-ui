@@ -7,7 +7,6 @@ import { isBorrowing } from './isBorrowing';
  * Returns the current position that the user has for the given amm
  * @param positions - the array of positions the user has
  * @param selectedAmm - the selected amm
- * @param positionTypes - an array of position type ids to match. 1=Fixed, 2=Variable, 3=LP
  */
 export const findCurrentPosition = (positions: Position[], selectedAmm: AMM) => {
   return (positions || []).find((p) => {

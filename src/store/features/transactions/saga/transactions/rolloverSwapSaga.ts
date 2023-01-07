@@ -6,7 +6,7 @@ import { call, put } from 'redux-saga/effects';
 import { getErrorMessage } from '../../../../../utilities/getErrorMessage';
 import { getSentryTracker } from '../../../../../utilities/sentry';
 import { RolloverSwapAction } from '../../../../types';
-import * as actions from '../../actions';
+import { updateTransaction } from '../../actions';
 import { deserializeAmm, getSigner } from '../../utilities';
 
 export function* rolloverSwapSaga(action: RolloverSwapAction) {
@@ -36,7 +36,7 @@ export function* rolloverSwapSaga(action: RolloverSwapAction) {
     const result: ContractReceipt = yield call([amm, 'rolloverWithSwap'], args);
 
     yield put(
-      actions.updateTransaction({
+      updateTransaction({
         id,
         succeededAt: DateTime.now().toISO(),
         txid: result.transactionHash,
@@ -45,7 +45,7 @@ export function* rolloverSwapSaga(action: RolloverSwapAction) {
   } catch (error) {
     getSentryTracker().captureException(error);
     yield put(
-      actions.updateTransaction({
+      updateTransaction({
         id,
         failedAt: DateTime.now().toISO(),
         failureMessage: getErrorMessage(error),
