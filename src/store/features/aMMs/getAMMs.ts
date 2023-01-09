@@ -39,7 +39,7 @@ const query = `
   }
 `;
 
-type QueryAMM = {
+export type QueryAMM = {
   id: string;
   marginEngine: { id: string };
   rateOracle: {
