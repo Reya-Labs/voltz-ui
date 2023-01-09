@@ -3,4 +3,4 @@
  * @param {string | null} [envVarValue] - The value of the environment variable.
  */
 export const isEnvVarProvided = (envVarValue?: string | null) =>
-  envVarValue && envVarValue !== 'UNPROVIDED';
+  envVarValue ? envVarValue !== 'UNPROVIDED' : false;

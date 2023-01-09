@@ -23,4 +23,6 @@ export const isMarginWithdrawable = (
 
     return remainingMargin >= positionMarginRequirement;
   }
+
+  return undefined;
 };

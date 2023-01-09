@@ -1,7 +1,7 @@
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 
-import { getConfig } from '../hooks/voltz-config/config';
-import { isBorrowing } from './isBorrowing';
+import { getConfig } from '../../hooks/voltz-config/config';
+import { isBorrowing } from '../isBorrowing';
 
 /**
  * Returns the current position that the user has for the given amm
@@ -33,7 +33,7 @@ export const findCurrentAmm = (amms: AMM[] = [], selectedPosition: Position) => 
   }
 
   // Otherwise, find pools that match rate oracle and underlying token
-  const matchingAmms = (amms || []).filter((amm) => {
+  const matchingAMMs = (amms || []).filter((amm) => {
     return (
       amm.rateOracle.id === selectedPosition.amm.rateOracle.id && // check that these are from the same source - rocket, lido etc
       amm.underlyingToken.id === selectedPosition.amm.underlyingToken.id && // check that the tokens match - aDAI !== aUSDC
@@ -42,9 +42,9 @@ export const findCurrentAmm = (amms: AMM[] = [], selectedPosition: Position) => 
   });
 
   // There could be multiple pools that match. Find the one with the latest end time
-  if (matchingAmms.length > 0) {
-    matchingAmms.sort((a, b) => +a.endDateTime - +b.endDateTime);
-    return matchingAmms.pop();
+  if (matchingAMMs.length > 0) {
+    matchingAMMs.sort((a, b) => +a.endDateTime - +b.endDateTime);
+    return matchingAMMs.pop();
   }
 
   return undefined;
@@ -55,7 +55,5 @@ export const findCurrentAmm = (amms: AMM[] = [], selectedPosition: Position) => 
  * @param amm - the amm
  */
 export const getAmmProtocol = (amm: AMM) => {
-  if (!amm.rateOracle.protocolId) return '';
-
   return amm.protocol + (isBorrowing(amm.rateOracle.protocolId) ? '_borrow' : '');
 };

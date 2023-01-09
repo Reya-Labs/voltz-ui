@@ -30,7 +30,7 @@ export const formatDateTime = (dateTime: DateTime) => {
  * Takes a timestamp and returns a string representation: 01 Mar 2022
  * @param timestamp - The timestamp to process
  */
-export const formatTimestamp = (timestamp: string | number | JSBI) => {
+export const formatTimestamp = (timestamp: JSBI) => {
   const date = new Date(parseInt(timestamp.toString(), 10) * 1000);
   return `${date.getDate().toString().padStart(2, '0')} ${
     shortMonths[date.getMonth()]
@@ -77,7 +77,7 @@ export const formatDateTimeWithOrdinal = (dateTime: DateTime): string => {
  * @param {number} num - The number to get the suffix for.
  * @returns the suffix of a number.
  */
-function getNumberSuffix(num: number): string {
+export function getNumberSuffix(num: number): string {
   const th = 'th';
   const rd = 'rd';
   const nd = 'nd';
