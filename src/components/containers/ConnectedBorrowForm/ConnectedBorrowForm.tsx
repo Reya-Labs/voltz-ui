@@ -9,7 +9,7 @@ import { usePositionContext } from '../../../contexts/PositionContext/PositionCo
 import { routes } from '../../../routes/paths';
 import { actions, selectors } from '../../../store';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { isBorrowing } from '../../../utilities/isBorrowing';
+import { isBorrowing } from '../../../utilities/amm';
 import { BorrowForm } from '../../interface/BorrowForm/BorrowForm';
 import { FormPanel } from '../../interface/FormPanel/FormPanel';
 import { PendingTransaction } from '../../interface/PendingTransaction/PendingTransaction';

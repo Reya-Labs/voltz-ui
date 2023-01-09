@@ -4,7 +4,7 @@ import React, { useMemo } from 'react';
 
 import { Agents } from '../../../contexts/AgentContext/types';
 import { useAMMContext } from '../../../contexts/AMMContext/AMMContext';
-import { isBorrowing } from '../../../utilities/isBorrowing';
+import { isBorrowing } from '../../../utilities/amm';
 import { Typography } from '../../atomic/Typography/Typography';
 import { IconLabel } from '../IconLabel/IconLabel';
 import { ReactComponent as Aave } from '../PoolField/aave-icon.svg';

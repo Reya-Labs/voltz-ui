@@ -11,7 +11,7 @@ import { Agents } from '../../../../../../contexts/AgentContext/types';
 import { useAMMContext } from '../../../../../../contexts/AMMContext/AMMContext';
 import { useAgent } from '../../../../../../hooks/useAgent';
 import { SystemStyleObject, Theme } from '../../../../../../theme';
-import { isBorrowing } from '../../../../../../utilities/isBorrowing';
+import { isBorrowing } from '../../../../../../utilities/amm';
 import { formatNumber } from '../../../../../../utilities/number';
 import { lpLabels, traderLabels } from '../../constants';
 import { AccruedRates, CurrentMargin, FixedAPR, Notional } from './components';

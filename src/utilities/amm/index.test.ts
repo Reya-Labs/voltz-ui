@@ -1,7 +1,7 @@
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 import { DateTime } from 'luxon';
 
-import { findCurrentAmm, findCurrentPosition, getAmmProtocol } from './index';
+import { findCurrentAmm, findCurrentPosition, getAmmProtocol, isBorrowing } from './index';
 
 jest.mock('../../hooks/voltz-config/config', () => ({
   getConfig: function () {
@@ -159,6 +159,19 @@ describe('utilities/amm', () => {
           },
         } as AMM),
       ).toBe('balancer_borrow');
+    });
+  });
+
+  describe('isBorrowing', () => {
+    test('returns true for rateOracleProtocolId 5 or 6', () => {
+      expect(isBorrowing(5)).toBe(true);
+      expect(isBorrowing(6)).toBe(true);
+    });
+
+    test('returns false when rateOracleProtocolId 5 or 6', () => {
+      expect(isBorrowing(7)).toBe(false);
+      expect(isBorrowing(8)).toBe(false);
+      expect(isBorrowing(4)).toBe(false);
     });
   });
 });

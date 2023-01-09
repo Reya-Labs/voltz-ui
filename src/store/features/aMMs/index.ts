@@ -3,7 +3,7 @@ import { AMM, BorrowAMM, RateOracle, Token } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
 import { getConfig } from '../../../hooks/voltz-config/config';
-import { isBorrowing } from '../../../utilities/isBorrowing';
+import { isBorrowing } from '../../../utilities/amm';
 import { RootState } from '../../store';
 import { getAMMs } from './getAMMs';
 import { rejectThunkWithError } from './helpers';

@@ -1,7 +1,6 @@
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 
 import { getConfig } from '../../hooks/voltz-config/config';
-import { isBorrowing } from '../isBorrowing';
 
 /**
  * Returns the current position that the user has for the given amm
@@ -56,4 +55,13 @@ export const findCurrentAmm = (amms: AMM[] = [], selectedPosition: Position) => 
  */
 export const getAmmProtocol = (amm: AMM) => {
   return amm.protocol + (isBorrowing(amm.rateOracle.protocolId) ? '_borrow' : '');
+};
+
+/**
+ * It returns true if the rateOracleProtocolId is 5 or 6, and false otherwise
+ * @param {number} rateOracleProtocolId - The ID of the rate oracle protocol.
+ * @returns A boolean value.
+ */
+export const isBorrowing = (rateOracleProtocolId: number): boolean => {
+  return rateOracleProtocolId === 5 || rateOracleProtocolId === 6;
 };
