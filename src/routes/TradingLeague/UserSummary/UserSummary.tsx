@@ -21,7 +21,7 @@ import {
   UserSummaryBox,
 } from './UserSummary.styled';
 
-export type RankingUserSummaryProps = {
+export type UserSummaryProps = {
   seasonNumber: string;
   seasonStartDate: DateTime;
   seasonEndDate: DateTime;
@@ -39,7 +39,7 @@ export const UserSummary = ({
   userRank,
   userAddress,
   userPoints,
-}: RankingUserSummaryProps) => {
+}: UserSummaryProps) => {
   const percentage = React.useMemo(() => {
     const now = Date.now().valueOf();
     return Math.round(
@@ -52,13 +52,12 @@ export const UserSummary = ({
   return (
     <UserSummaryBox>
       <SeasonAndProgressBarBox>
-        <SeasonBox>
+        <SeasonBox data-testid="UserSummary-SeasonBox">
           <SeasonTypography variant="subtitle1">
             SEASON&nbsp;
             <SeasonNumberTypography>{seasonNumber}</SeasonNumberTypography>
           </SeasonTypography>
         </SeasonBox>
-
         <ProgressBarBox>
           <ProgressBar
             leftContent={
@@ -69,11 +68,9 @@ export const UserSummary = ({
           />
         </ProgressBarBox>
       </SeasonAndProgressBarBox>
-
       <PointsSystemBox>
         <PointsSystem />
       </PointsSystemBox>
-
       <Box>
         <CurrentPositionTypography variant="h1">CURRENT POSITION</CurrentPositionTypography>
         <HeaderEntryBox>

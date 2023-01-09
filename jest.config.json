@@ -21,7 +21,7 @@
     "^.+\\.module\\.(css)$": "identity-obj-proxy"
   },
   "modulePaths": [],
-  "resetMocks": true,
+  "resetMocks": false,
   "roots": [
     "<rootDir>/src"
   ],
