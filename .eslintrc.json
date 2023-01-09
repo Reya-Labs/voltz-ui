@@ -171,6 +171,7 @@
     "simple-import-sort/exports": "error",
     "simple-import-sort/imports": "error",
     "unused-imports/no-unused-imports-ts": "error",
-    "no-debugger": "error"
+    "no-debugger": "error",
+    "testing-library/no-node-access": "warn"
   }
 }

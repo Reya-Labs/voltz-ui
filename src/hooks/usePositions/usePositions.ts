@@ -11,14 +11,14 @@ import { useAMMs } from '../useAMMs';
 import { useWallet } from '../useWallet';
 import { MEPositionFactory } from './mePositionFactory';
 
-export type usePositionsResult = {
+type UsePositionsResult = {
   positionsByAgentGroup: Position[];
   borrowPositions: Position[];
   loading: boolean;
   error: boolean;
 };
 
-export const usePositions = (): usePositionsResult => {
+export const usePositions = (): UsePositionsResult => {
   const { agent } = useAgent();
   const { wallet, loading: walletLoading, error: walletError } = useWallet();
   const { aMMs, loading: ammLoading, error: ammError } = useAMMs();
