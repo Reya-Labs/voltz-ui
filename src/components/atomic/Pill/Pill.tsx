@@ -9,7 +9,12 @@ export type PillProps = {
 };
 
 export const Pill = ({ text, variant, className }: PillProps) => (
-  <PillTypography className={className} coloringVariant={variant} component="span">
+  <PillTypography
+    className={className}
+    coloringVariant={variant}
+    component="span"
+    data-testid={`Pill-PillTypography-${variant}`}
+  >
     {text}
   </PillTypography>
 );
