@@ -3,7 +3,7 @@ import { RankType } from '@voltz-protocol/v1-sdk';
 import { DateTime } from 'luxon';
 import React from 'react';
 
-import { Entry, RankingEntryProps } from '../Entry/Entry';
+import { Entry, EntryProps } from '../Entry/Entry';
 import { Header } from '../Header/Header';
 import { LeaderboardHeader } from '../LeaderboardHeader/LeaderboardHeader';
 import { Pagination } from '../Pagination/Pagination';
@@ -26,7 +26,7 @@ export type RankingTableProps = {
 };
 
 const inRange = (start: number, end: number, num: number) => start <= num && num <= end;
-const entryVariant: Record<number, RankingEntryProps['variant']> = {
+const entryVariant: Record<number, EntryProps['variant']> = {
   1: 'rank1',
   2: 'rank2',
   3: 'rank3',
