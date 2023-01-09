@@ -7,11 +7,12 @@ import { NavLink } from './NavLink/NavLink';
 export const Nav: React.FunctionComponent = React.memo(() => (
   <NavBox>
     <VoltzIconBox
+      data-testid="Nav-VoltzIconBox"
       onClick={() => {
         window.open('https://voltz.xyz', '_blank');
       }}
     >
-      <VoltzIcon name="voltz" />
+      <VoltzIcon data-testid="Nav-VoltzIcon" name="voltz" />
     </VoltzIconBox>
 
     <NavLink
