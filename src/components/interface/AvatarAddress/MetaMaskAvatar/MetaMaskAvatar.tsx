@@ -1,6 +1,7 @@
 import { FunctionComponent } from 'react';
 
 import { getMetamaskAvatar } from './get-metamask-avatar';
+import { AvatarWrapper } from './MetaMaskAvatar.styled';
 
 type Props = {
   address: string;
@@ -8,24 +9,14 @@ type Props = {
 };
 
 export const MetaMaskAvatar: FunctionComponent<Props> = ({ address, size }) => (
-  <div
-    style={{
-      borderRadius: '50%',
-      padding: 0,
-      margin: 0,
-      width: size,
-      height: size,
-      display: 'inline-block',
-      background: 'rgb(242, 98, 2)',
-      overflow: 'hidden',
-    }}
-  >
+  <AvatarWrapper data-testid="MetaMaskAvatar-AvatarWrapper" size={size}>
     <img
       alt="avatar"
+      data-testid="MetaMaskAvatar-Image"
       src={getMetamaskAvatar({
         address,
         size,
       })}
     />
-  </div>
+  </AvatarWrapper>
 );
