@@ -71,7 +71,7 @@ REACT_APP_SKIP_WALLET_SCREENING=Y
 
 # Testing local version of SDK using `yalc`
 
-Refer to documentation of this process found in `README.md` of SDK. Follow this [https://github.com/Voltz-Protocol/v1-sdk#testing-local-version-in-ui-using-yalc](link) for details.
+Refer to documentation of this process found in `README.md` of SDK. Follow this [link](https://github.com/Voltz-Protocol/v1-sdk#testing-local-version-in-ui-using-yalc) for details.
 
 # Contributing
 
