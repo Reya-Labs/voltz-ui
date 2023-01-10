@@ -21,7 +21,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = ({
   maxPages,
   page,
 }) => (
-  <PaginationBox>
+  <PaginationBox data-testid="Pagination-PaginationBox">
     <ActionButton
       disabled={page === 0}
       startIcon={<ChevronLeftIcon />}

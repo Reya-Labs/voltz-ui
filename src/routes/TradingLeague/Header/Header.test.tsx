@@ -5,10 +5,8 @@ import { Header } from './Header';
 
 test('renders header with rank, trader, and points typography', () => {
   render(<Header />);
-  const rankElement = screen.getByText(/rank/i);
-  const traderElement = screen.getByText(/trader/i);
-  const pointsElement = screen.getByText(/points/i);
-  expect(rankElement).toBeInTheDocument();
-  expect(traderElement).toBeInTheDocument();
-  expect(pointsElement).toBeInTheDocument();
+  expect(screen.getByText(/rank/i)).toBeInTheDocument();
+  expect(screen.getByText(/trader/i)).toBeInTheDocument();
+  expect(screen.getByText(/points/i)).toBeInTheDocument();
+  expect(screen.getByTestId('Header-HeaderBox')).toBeInTheDocument();
 });
