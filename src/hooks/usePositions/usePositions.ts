@@ -2,9 +2,9 @@ import { Position } from '@voltz-protocol/v1-sdk';
 import { DateTime } from 'luxon';
 import { useEffect, useMemo, useState } from 'react';
 
+import { actions, selectors } from '../../app';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { Agents } from '../../contexts/AgentContext/types';
-import { actions, selectors } from '../../store';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { isBorrowingPosition } from '../../utilities/borrowAmm';
 import { useAgent } from '../useAgent';
 import { useAMMs } from '../useAMMs';

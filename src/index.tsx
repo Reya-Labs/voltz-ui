@@ -16,12 +16,12 @@ import ReactDOM from 'react-dom';
 import { Provider as ReduxProvider } from 'react-redux';
 import { HashRouter } from 'react-router-dom';
 
-import { App } from './App';
+import { store } from './app';
+import { AppRoutes } from './AppRoutes';
 import { AgentProvider } from './contexts/AgentContext/AgentProvider';
 import { AMMsProvider } from './contexts/AMMsContext/AMMsContext';
 import { WalletProvider } from './contexts/WalletContext/WalletProvider';
 import { VoltzGraphProvider } from './graphql';
-import store from './store';
 import { ThemeProvider } from './theme/ThemeProvider/ThemeProvider';
 import { initSentryTracker } from './utilities/sentry';
 
@@ -42,7 +42,7 @@ ReactDOM.render(
             <AgentProvider>
               <HashRouter>
                 <AMMsProvider>
-                  <App />
+                  <AppRoutes />
                 </AMMsProvider>
               </HashRouter>
             </AgentProvider>

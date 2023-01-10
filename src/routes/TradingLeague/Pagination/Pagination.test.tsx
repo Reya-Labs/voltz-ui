@@ -4,7 +4,7 @@ import React from 'react';
 import { Pagination } from './Pagination';
 
 describe('<Pagination />', () => {
-  test('renders pagination with correct number of pages', () => {
+  it('renders pagination with correct number of pages', () => {
     render(<Pagination maxPages={5} page={2} onNextPage={() => {}} onPrevPage={() => {}} />);
     const prevButton = screen.getByText(/previous 01/i);
     const nextButton = screen.getByText(/05 next/i);
@@ -12,7 +12,7 @@ describe('<Pagination />', () => {
     expect(nextButton).toBeInTheDocument();
   });
 
-  test('calls onPrevPage when prev button is clicked', () => {
+  it('calls onPrevPage when prev button is clicked', () => {
     const onPrevPageMock = jest.fn();
     render(<Pagination maxPages={5} page={2} onNextPage={() => {}} onPrevPage={onPrevPageMock} />);
     const prevButton = screen.getByText(/previous 01/i);
@@ -20,7 +20,7 @@ describe('<Pagination />', () => {
     expect(onPrevPageMock).toHaveBeenCalled();
   });
 
-  test('calls onNextPage when next button is clicked', () => {
+  it('calls onNextPage when next button is clicked', () => {
     const onNextPageMock = jest.fn();
     render(<Pagination maxPages={5} page={2} onNextPage={onNextPageMock} onPrevPage={() => {}} />);
     const nextButton = screen.getByText(/05 next/i);
@@ -28,13 +28,13 @@ describe('<Pagination />', () => {
     expect(onNextPageMock).toHaveBeenCalled();
   });
 
-  test('disables prev button on first page', () => {
+  it('disables prev button on first page', () => {
     render(<Pagination maxPages={5} page={0} onNextPage={() => {}} onPrevPage={() => {}} />);
     const prevButton = screen.getByText(/previous 01/i);
     expect(prevButton).toHaveAttribute('disabled');
   });
 
-  test('disables next button on last page', () => {
+  it('disables next button on last page', () => {
     render(<Pagination maxPages={5} page={4} onNextPage={() => {}} onPrevPage={() => {}} />);
     const nextButton = screen.getByText(/05 next/i);
     expect(nextButton).toHaveAttribute('disabled');

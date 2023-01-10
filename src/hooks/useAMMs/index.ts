@@ -7,8 +7,8 @@ import {
   selectBorrowAMMs,
   selectTraderAMMs,
   setSignerForAMMsAction,
-} from '../../store/features/aMMs';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
+} from '../../app/features/aMMs';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useWallet } from '../useWallet';
 
 export type UseAMMsResult = {

@@ -12,7 +12,7 @@ jest.mock('react-router-dom', () => ({
 }));
 
 describe('<AchievedBadge />', () => {
-  test('renders proper UI when achieved', () => {
+  it('renders proper UI when achieved', () => {
     render(<Default />);
 
     expect(screen.getByTestId('AchievedBadge-leverageCrowbar')).not.toBeNull();
@@ -21,7 +21,7 @@ describe('<AchievedBadge />', () => {
     expect(screen.getByText('TRADER: TIER 2')).not.toBeNull();
   });
 
-  test('renders proper UI when not achieved', () => {
+  it('renders proper UI when not achieved', () => {
     render(<NotAchieved />);
 
     expect(screen.getByTestId('AchievedBadge-beWaterMyFriend')).not.toBeNull();
@@ -30,7 +30,7 @@ describe('<AchievedBadge />', () => {
     expect(screen.getByText('LP: LEGENDARY')).not.toBeNull();
   });
 
-  test('renders proper UI when loading', () => {
+  it('renders proper UI when loading', () => {
     render(<Loading />);
     expect(screen.getByTestId('AchievedBadge-Skeleton')).not.toBeNull();
   });

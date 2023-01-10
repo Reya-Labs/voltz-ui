@@ -3,6 +3,8 @@ import isUndefined from 'lodash.isundefined';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { actions, selectors } from '../../../app';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { Agents } from '../../../contexts/AgentContext/types';
 import { useAMMContext } from '../../../contexts/AMMContext/AMMContext';
 import { useAMMsContext } from '../../../contexts/AMMsContext/AMMsContext';
@@ -11,8 +13,6 @@ import { useSwapFormContext } from '../../../contexts/SwapFormContext/SwapFormCo
 import { useAgent } from '../../../hooks/useAgent';
 import { useWallet } from '../../../hooks/useWallet';
 import { routes } from '../../../routes/paths';
-import { actions, selectors } from '../../../store';
-import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { isBorrowing } from '../../../utilities/amm';
 import { getPoolButtonId } from '../../../utilities/googleAnalytics/helpers';
 import { setPageTitle } from '../../../utilities/page';

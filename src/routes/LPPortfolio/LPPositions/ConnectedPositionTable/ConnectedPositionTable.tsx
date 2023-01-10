@@ -2,14 +2,14 @@ import Box from '@mui/material/Box';
 import { Position } from '@voltz-protocol/v1-sdk';
 import React, { ReactNode, useCallback, useState } from 'react';
 
+import { actions, selectors } from '../../../../app';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { Loading } from '../../../../components/atomic/Loading/Loading';
 import { Panel } from '../../../../components/atomic/Panel/Panel';
 import { RouteLink } from '../../../../components/atomic/RouteLink/RouteLink';
 import { PendingTransaction } from '../../../../components/interface/PendingTransaction/PendingTransaction';
 import { Agents } from '../../../../contexts/AgentContext/types';
 import { useWallet } from '../../../../hooks/useWallet';
-import { actions, selectors } from '../../../../store';
-import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import { routes } from '../../../paths';
 import { NoPositionsOrVaultsFound } from '../../NoPositionsOrVaultsFound/NoPositionsOrVaultsFound';
 import { PortfolioHeader } from './PortfolioHeader/PortfolioHeader';
