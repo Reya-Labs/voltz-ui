@@ -163,12 +163,12 @@ describe('utilities/amm', () => {
   });
 
   describe('isBorrowing', () => {
-    test('returns true for rateOracleProtocolId 5 or 6', () => {
+    it('returns true for rateOracleProtocolId 5 or 6', () => {
       expect(isBorrowing(5)).toBe(true);
       expect(isBorrowing(6)).toBe(true);
     });
 
-    test('returns false when rateOracleProtocolId 5 or 6', () => {
+    it('returns false when rateOracleProtocolId 5 or 6', () => {
       expect(isBorrowing(7)).toBe(false);
       expect(isBorrowing(8)).toBe(false);
       expect(isBorrowing(4)).toBe(false);

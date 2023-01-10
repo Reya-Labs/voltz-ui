@@ -22,7 +22,7 @@ import {
 } from './utilities/referrer-store';
 import { REFERRER_QUERY_PARAM_KEY } from './utilities/referrer-store/constants';
 
-export const App = () => {
+export const AppRoutes = () => {
   const [searchParams] = useSearchParams();
   const searchParamsReferrer = searchParams.get(REFERRER_QUERY_PARAM_KEY);
 

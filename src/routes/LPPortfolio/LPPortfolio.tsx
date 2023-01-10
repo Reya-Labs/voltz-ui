@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
+import { selectors } from '../../app';
+import { useAppSelector } from '../../app/hooks';
 import { ConnectWallet } from '../../components/composite/ConnectWallet/ConnectWallet';
 import { MintBurnFormModes } from '../../contexts/MintBurnFormContext/MintBurnFormContext';
 import { useWallet } from '../../hooks/useWallet';
-import { selectors } from '../../store';
-import { useAppSelector } from '../../store/hooks';
 import { ContentBox, LPPortfolioBox, Split } from './LPPortfolio.styled';
 import { LPPositions } from './LPPositions/LPPositions';
 import { Optimisers } from './Optimisers/Optimisers';
@@ -16,7 +16,7 @@ export const LPPortfolio: React.FunctionComponent = () => {
 
   if (status !== 'connected') {
     return (
-      <LPPortfolioBox>
+      <LPPortfolioBox data-testid="LPPortfolio-WalletNotConnected">
         <ConnectWallet
           connectWalletText="CONNECT YOUR WALLET"
           heading="🚫 RESTRICTED"
@@ -27,14 +27,15 @@ export const LPPortfolio: React.FunctionComponent = () => {
   }
 
   return (
-    <LPPortfolioBox>
-      <ContentBox>
+    <LPPortfolioBox data-testid="LPPortfolio-WalletConnected">
+      <ContentBox data-testid="LPPortfolio-LPPositions-ContentBox">
         <LPPositions formMode={formMode} setFormMode={setFormMode} />
       </ContentBox>
       <ContentBox>
         <Split />
       </ContentBox>
       <ContentBox
+        data-testid="LPPortfolio-Optimisers-ContentBox"
         sx={{
           display: Boolean(formMode) || hasActiveTransactions ? 'none' : undefined,
         }}

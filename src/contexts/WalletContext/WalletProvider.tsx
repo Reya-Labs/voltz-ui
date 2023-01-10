@@ -1,9 +1,9 @@
 import { BigNumber, ethers } from 'ethers';
 import React, { useCallback, useEffect, useState } from 'react';
 
+import { selectors } from '../../app';
+import { useAppSelector } from '../../app/hooks';
 import { useGetWalletQuery } from '../../graphql';
-import { selectors } from '../../store';
-import { useAppSelector } from '../../store/hooks';
 import { getErrorMessage } from '../../utilities/getErrorMessage';
 import { getSentryTracker } from '../../utilities/sentry';
 import {

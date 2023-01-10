@@ -12,14 +12,16 @@ jest.mock('react-router-dom', () => ({
 
 const { Default } = composeStories(stories);
 
-test('renders proper UI', () => {
-  render(
-    <HashRouter>
-      <Default />
-    </HashRouter>,
-  );
+describe('<ConnectWallet />', () => {
+  it('renders proper UI', () => {
+    render(
+      <HashRouter>
+        <Default />
+      </HashRouter>,
+    );
 
-  expect(screen.getByText('🚫 RESTRICTED')).not.toBeNull();
-  expect(screen.getByText('Your wallet needs to be connected before proceeding.')).not.toBeNull();
-  expect(screen.getByText('CONNECT YOUR WALLET')).not.toBeNull();
+    expect(screen.getByText('🚫 RESTRICTED')).not.toBeNull();
+    expect(screen.getByText('Your wallet needs to be connected before proceeding.')).not.toBeNull();
+    expect(screen.getByText('CONNECT YOUR WALLET')).not.toBeNull();
+  });
 });
