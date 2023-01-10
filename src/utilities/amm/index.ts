@@ -5,11 +5,11 @@ import { getConfig } from '../../hooks/voltz-config/config';
 /**
  * Returns the current position that the user has for the given amm
  * @param positions - the array of positions the user has
- * @param selectedAmm - the selected amm
+ * @param selectedAmmId - the selected amm id
  */
-export const findCurrentPosition = (positions: Position[], selectedAmm: AMM) => {
+export const findCurrentPosition = (positions: Position[], selectedAmmId: string) => {
   return (positions || []).find((p) => {
-    return p.amm.id === selectedAmm.id;
+    return p.amm.id === selectedAmmId;
   });
 };
 

@@ -63,7 +63,7 @@ export const LPPools: React.FunctionComponent = () => {
   const handleSelectAmm = (selectedAMM: AMM) => {
     setFormMode(MintBurnFormModes.NEW_POSITION);
     setAMM(selectedAMM);
-    setPosition(findCurrentPosition(positionsByAgentGroup || [], selectedAMM));
+    setPosition(findCurrentPosition(positionsByAgentGroup || [], selectedAMM.id));
   };
 
   const handleReset = () => {
