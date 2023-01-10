@@ -22,8 +22,8 @@ describe('utilities/amm', () => {
         { amm: { id: '2' } },
         { amm: { id: '3' } },
       ] as Position[];
-      const selectedAmm = { id: '2' } as AMM;
-      const result = findCurrentPosition(positions, selectedAmm);
+      const selectedAmmId = '2';
+      const result = findCurrentPosition(positions, selectedAmmId);
       expect(result).toEqual({ amm: { id: '2' } });
     });
 
@@ -33,14 +33,14 @@ describe('utilities/amm', () => {
         { amm: { id: '2' } },
         { amm: { id: '3' } },
       ] as Position[];
-      const selectedAmm = { id: '4' } as AMM;
-      const result = findCurrentPosition(positions, selectedAmm);
+      const selectedAmmId = '4';
+      const result = findCurrentPosition(positions, selectedAmmId);
       expect(result).toBeUndefined();
     });
 
     it('returns undefined when the positions list is empty', () => {
-      const selectedAmm = { id: '2' } as AMM;
-      const result = findCurrentPosition([], selectedAmm);
+      const selectedAmmId = '2';
+      const result = findCurrentPosition([], selectedAmmId);
       expect(result).toBeUndefined();
     });
   });

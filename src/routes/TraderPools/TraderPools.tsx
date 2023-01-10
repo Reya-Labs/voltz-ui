@@ -57,7 +57,7 @@ export const TraderPools: React.FunctionComponent = () => {
   const handleSelectAmm = (selectedAMM: AMM) => {
     setFormMode(SwapFormModes.NEW_POSITION);
     setAMM(selectedAMM);
-    setPosition(findCurrentPosition(positionsByAgentGroup || [], selectedAMM));
+    setPosition(findCurrentPosition(positionsByAgentGroup || [], selectedAMM.id));
   };
   const handleReset = () => {
     setFormMode(undefined);
