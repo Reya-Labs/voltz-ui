@@ -6,7 +6,13 @@ export const updateTransactionReducer = (
 ) => {
   const { id: transactionId, ...rest } = action.payload.update;
   const transactionToUpdate = state.find(({ id }) => id === transactionId);
+  if (!transactionToUpdate) {
+    return state;
+  }
   const restOfTransactions = state.filter(({ id }) => id !== transactionId);
-
-  return [...restOfTransactions, { ...transactionToUpdate, ...rest }];
+  const updatedTransaction = {
+    ...transactionToUpdate,
+    ...rest,
+  };
+  return [...restOfTransactions, updatedTransaction];
 };
