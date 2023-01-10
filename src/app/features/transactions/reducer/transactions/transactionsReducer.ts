@@ -1,9 +1,12 @@
-import { Action, State } from '../../../../types';
+import { Action, State, Transaction } from '../../../../types';
 import { addTransactionReducer } from './addTransactionReducer';
 import { closeTransactionReducer } from './closeTransactionReducer';
 import { updateTransactionReducer } from './updateTransactionReducer';
 
-export const transactionsReducer = (state: State['transactions'], action: Action) => {
+export const transactionsReducer = (
+  state: State['transactions'],
+  action: Action,
+): Transaction[] => {
   if (!state) {
     return [];
   }
