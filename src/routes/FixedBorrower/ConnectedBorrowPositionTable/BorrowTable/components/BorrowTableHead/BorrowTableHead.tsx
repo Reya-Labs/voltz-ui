@@ -4,7 +4,7 @@ import TableRow from '@mui/material/TableRow';
 import { SystemStyleObject, Theme } from '@mui/system';
 import React from 'react';
 
-import { Typography } from '../../../../atomic/Typography/Typography';
+import { Typography } from '../../../../../../components/atomic/Typography/Typography';
 import { FixedBorrowTableFields, VariableBorrowTableFields } from '../../types';
 
 export type BorrowTableHeadProps = {

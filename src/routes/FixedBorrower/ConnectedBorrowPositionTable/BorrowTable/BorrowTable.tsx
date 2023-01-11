@@ -5,17 +5,17 @@ import TableContainer from '@mui/material/TableContainer';
 import { BorrowAMM, Position } from '@voltz-protocol/v1-sdk';
 import React, { useMemo, useRef } from 'react';
 
-import { BorrowAMMProvider } from '../../../contexts/BorrowAMMContext/BorrowAMMContext';
-import { PositionProvider } from '../../../contexts/PositionContext/PositionContext';
-import { SystemStyleObject, Theme } from '../../../theme';
-import { findCurrentBorrowPosition } from '../../../utilities/borrowAmm';
-import { getRowButtonId } from '../../../utilities/googleAnalytics/helpers';
-import { Panel } from '../../atomic/Panel/Panel';
-import { Typography } from '../../atomic/Typography/Typography';
-import { BorrowTableHead } from './components';
+import { Panel } from '../../../../components/atomic/Panel/Panel';
+import { Typography } from '../../../../components/atomic/Typography/Typography';
+import { BorrowAMMProvider } from '../../../../contexts/BorrowAMMContext/BorrowAMMContext';
+import { PositionProvider } from '../../../../contexts/PositionContext/PositionContext';
+import { SystemStyleObject, Theme } from '../../../../theme';
+import { findCurrentBorrowPosition } from '../../../../utilities/borrowAmm';
+import { getRowButtonId } from '../../../../utilities/googleAnalytics/helpers';
+import { BorrowTableHead } from './components/BorrowTableHead/BorrowTableHead';
 import { BorrowTableRow } from './components/BorrowTableRow/BorrowTableRow';
+import { mapAmmToAmmTableDatum } from './helpers';
 import { BorrowAMMTableDatum, labelsFixed, labelsVariable } from './types';
-import { mapAmmToAmmTableDatum } from './utilities';
 
 export type BorrowTableProps = {
   showVariable: boolean;
@@ -27,7 +27,7 @@ export type BorrowTableProps = {
   commonOverrides: SystemStyleObject<Theme>;
 };
 
-const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
+export const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
   showVariable,
   showFixed,
   positions,
@@ -299,5 +299,3 @@ const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
     </Panel>
   );
 };
-
-export default BorrowTable;
