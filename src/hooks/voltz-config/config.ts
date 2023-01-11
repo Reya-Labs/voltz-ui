@@ -245,9 +245,18 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
   },
 };
 
+let cachedConfig:
+  | (NetworkConfiguration & {
+      PROVIDER: providers.BaseProvider;
+    })
+  | null = null;
+
 export const getConfig = (): NetworkConfiguration & {
   PROVIDER: providers.BaseProvider;
 } => {
+  if (cachedConfig) {
+    return cachedConfig;
+  }
   const network = process.env.REACT_APP_NETWORK || '';
   const providerURL = process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK || '';
 
@@ -265,8 +274,9 @@ export const getConfig = (): NetworkConfiguration & {
   const config = networkConfigurations[network as keyof typeof networkConfigurations];
   const provider = providers.getDefaultProvider(providerURL);
 
-  return {
+  cachedConfig = {
     ...config,
     PROVIDER: provider,
   };
+  return cachedConfig;
 };
