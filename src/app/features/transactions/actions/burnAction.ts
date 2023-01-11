@@ -3,7 +3,7 @@ import { AMM } from '@voltz-protocol/v1-sdk';
 import { BurnAction, Transaction } from '../../../types';
 import { createId, serializeAmm } from '../utilities';
 
-const burnAction = (amm: AMM, transaction: Omit<Transaction, 'id'>): BurnAction => ({
+export const burnAction = (amm: AMM, transaction: Omit<Transaction, 'id'>): BurnAction => ({
   type: 'burn',
   payload: {
     amm: serializeAmm(amm),
@@ -13,5 +13,3 @@ const burnAction = (amm: AMM, transaction: Omit<Transaction, 'id'>): BurnAction 
     },
   },
 });
-
-export default burnAction;

@@ -5,7 +5,7 @@ import { call, put } from 'redux-saga/effects';
 import { getErrorMessage } from '../../../../../utilities/getErrorMessage';
 import { getSentryTracker } from '../../../../../utilities/sentry';
 import { BurnAction } from '../../../../types';
-import { updateTransaction } from '../../actions';
+import { updateTransactionAction } from '../../actions';
 import { deserializeAmm, getSigner } from '../../utilities';
 
 export function* burnSaga(action: BurnAction) {
@@ -39,7 +39,7 @@ export function* burnSaga(action: BurnAction) {
   } catch (error) {
     getSentryTracker().captureException(error);
     yield put(
-      updateTransaction({
+      updateTransactionAction({
         id,
         failedAt: DateTime.now().toISO(),
         failureMessage: getErrorMessage(error),
@@ -51,7 +51,7 @@ export function* burnSaga(action: BurnAction) {
 
   if (!result) {
     yield put(
-      updateTransaction({
+      updateTransactionAction({
         id,
         failedAt: DateTime.now().toISO(),
         failureMessage: 'error',
@@ -59,7 +59,7 @@ export function* burnSaga(action: BurnAction) {
     );
   } else {
     yield put(
-      updateTransaction({
+      updateTransactionAction({
         id,
         succeededAt: DateTime.now().toISO(),
         txid: result.transactionHash,

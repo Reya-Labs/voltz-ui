@@ -1,4 +1,4 @@
-import { State, UpdateTransactionAction } from '../../../../types';
+import { State, UpdateTransactionAction } from '../../../types';
 
 export const updateTransactionReducer = (
   state: State['transactions'],

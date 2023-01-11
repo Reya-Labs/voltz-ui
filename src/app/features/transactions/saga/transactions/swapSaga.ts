@@ -8,7 +8,7 @@ import { Agents } from '../../../../../contexts/AgentContext/types';
 import { getErrorMessage } from '../../../../../utilities/getErrorMessage';
 import { getSentryTracker } from '../../../../../utilities/sentry';
 import { SwapAction } from '../../../../types';
-import { updateTransaction } from '../../actions';
+import { updateTransactionAction } from '../../actions';
 import { deserializeAmm, getSigner } from '../../utilities';
 
 export function* swapSaga(action: SwapAction) {
@@ -41,7 +41,7 @@ export function* swapSaga(action: SwapAction) {
   } catch (error) {
     getSentryTracker().captureException(error);
     yield put(
-      updateTransaction({
+      updateTransactionAction({
         id,
         failedAt: DateTime.now().toISO(),
         failureMessage: getErrorMessage(error),
@@ -52,10 +52,12 @@ export function* swapSaga(action: SwapAction) {
   }
 
   if (!result) {
-    yield put(updateTransaction({ id, failedAt: DateTime.now().toISO(), failureMessage: 'error' }));
+    yield put(
+      updateTransactionAction({ id, failedAt: DateTime.now().toISO(), failureMessage: 'error' }),
+    );
   } else {
     yield put(
-      updateTransaction({
+      updateTransactionAction({
         id,
         succeededAt: DateTime.now().toISO(),
         txid: result.transactionHash,

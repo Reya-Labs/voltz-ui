@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { actions, selectors } from '../../../app';
+import { closeTransactionAction } from '../../../app/features/transactions';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useAMMContext } from '../../../contexts/AMMContext/AMMContext';
 import { useAMMsContext } from '../../../contexts/AMMsContext/AMMsContext';
@@ -96,7 +97,7 @@ export const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFor
 
   const handleGoBack = () => {
     setPageTitle(`${position ? 'Edit' : 'New'} Liquidity Provider Position`);
-    const action = actions.closeTransaction(transactionId as string);
+    const action = closeTransactionAction(transactionId as string);
     dispatch(action);
   };
 

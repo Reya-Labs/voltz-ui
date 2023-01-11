@@ -3,7 +3,7 @@ import { AMM } from '@voltz-protocol/v1-sdk';
 import { SwapAction, Transaction } from '../../../types';
 import { createId, serializeAmm } from '../utilities';
 
-const swapAction = (amm: AMM, transaction: Omit<Transaction, 'id'>): SwapAction => ({
+export const swapAction = (amm: AMM, transaction: Omit<Transaction, 'id'>): SwapAction => ({
   type: 'swap',
   payload: {
     amm: serializeAmm(amm),
@@ -13,5 +13,3 @@ const swapAction = (amm: AMM, transaction: Omit<Transaction, 'id'>): SwapAction 
     },
   },
 });
-
-export default swapAction;
