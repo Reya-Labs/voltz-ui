@@ -245,15 +245,12 @@ export const networkConfigurations: { [key: string]: NetworkConfiguration } = {
   },
 };
 
-let cachedConfig:
-  | (NetworkConfiguration & {
-      PROVIDER: providers.BaseProvider;
-    })
-  | null = null;
-
-export const getConfig = (): NetworkConfiguration & {
+export type GetConfigResponse = NetworkConfiguration & {
   PROVIDER: providers.BaseProvider;
-} => {
+};
+let cachedConfig: GetConfigResponse | null = null;
+
+export const getConfig = (): GetConfigResponse => {
   if (cachedConfig) {
     return cachedConfig;
   }
