@@ -18,7 +18,7 @@ import {
 } from './Entry.styled';
 import { Points } from './Points/Points';
 
-export type RankingEntryProps = {
+export type EntryProps = {
   points: number;
   rank: number;
   address: string;
@@ -26,7 +26,7 @@ export type RankingEntryProps = {
   variant: 'rank1' | 'rank2' | 'rank3' | 'other' | 'me';
 };
 
-const VariantEntryBoxMap: Record<RankingEntryProps['variant'], React.FunctionComponent> = {
+const VariantEntryBoxMap: Record<EntryProps['variant'], React.FunctionComponent> = {
   rank1: Rank1EntryBox,
   rank2: Rank2EntryBox,
   rank3: Rank3EntryBox,
@@ -34,7 +34,7 @@ const VariantEntryBoxMap: Record<RankingEntryProps['variant'], React.FunctionCom
   me: MeEntryBox,
 };
 
-export const Entry: React.FunctionComponent<RankingEntryProps> = ({
+export const Entry: React.FunctionComponent<EntryProps> = ({
   points,
   rank,
   address,
@@ -42,7 +42,7 @@ export const Entry: React.FunctionComponent<RankingEntryProps> = ({
   variant,
 }) => {
   if (loading) {
-    return <EntrySkeleton variant="rectangular" />;
+    return <EntrySkeleton data-testid="Entry-EntrySkeleton" variant="rectangular" />;
   }
   const EntryBox = VariantEntryBoxMap[variant];
   return (

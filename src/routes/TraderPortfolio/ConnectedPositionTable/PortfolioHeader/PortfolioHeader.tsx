@@ -1,27 +1,33 @@
 import Box from '@mui/material/Box';
+import { Position } from '@voltz-protocol/v1-sdk';
 
-import { PortfolioContext } from '../../../../contexts/PortfolioContext/PortfolioContext';
+import { Agents } from '../../../../contexts/AgentContext/types';
+import { usePortfolioPositionsSummary } from '../../../../hooks/usePortfolioPositionsSummary';
 import { NetNotional } from './NetNotional/NetNotional';
 import { PortfolioHeaderInfo } from './PorfolioHeaderInfo';
 import { PortfolioHeaderHealth } from './PortfolioHeaderHealth';
 
 export type PortfolioHeaderProps = {
-  currencyCode?: string;
-  currencySymbol?: string;
-  portfolioData: PortfolioContext;
+  positions: Position[];
 };
 
-export const PortfolioHeader = ({
-  currencyCode = '',
-  currencySymbol = '',
-  portfolioData,
-}: PortfolioHeaderProps) => {
+const currencyCode = 'USD';
+const currencySymbol = '$';
+export const PortfolioHeader = ({ positions }: PortfolioHeaderProps) => {
+  const {
+    totalNotional,
+    totalMargin,
+    totalAccruedCashflow,
+    healthCounters,
+    netPayingRate,
+    netReceivingRate,
+  } = usePortfolioPositionsSummary(positions, Agents.FIXED_TRADER);
   return (
     <>
       <NetNotional
         currencyCode={currencyCode}
         currencySymbol={currencySymbol}
-        totalNotional={portfolioData.totalNotional}
+        totalNotional={totalNotional}
       />
       <Box
         sx={{
@@ -34,17 +40,17 @@ export const PortfolioHeader = ({
           <PortfolioHeaderInfo
             currencyCode={currencyCode}
             currencySymbol={currencySymbol}
-            netMargin={portfolioData.totalMargin}
-            netMarginDiff={portfolioData.totalAccruedCashflow}
-            netRatePaying={portfolioData.netPayingRate}
-            netRateReceiving={portfolioData.netReceivingRate}
+            netMargin={totalMargin}
+            netMarginDiff={totalAccruedCashflow}
+            netRatePaying={netPayingRate}
+            netRateReceiving={netReceivingRate}
           />
         </Box>
         <Box>
           <PortfolioHeaderHealth
-            positionsDanger={portfolioData.healthCounters?.danger}
-            positionsHealthy={portfolioData.healthCounters?.healthy}
-            positionsWarning={portfolioData.healthCounters?.warning}
+            positionsDanger={healthCounters?.danger}
+            positionsHealthy={healthCounters?.healthy}
+            positionsWarning={healthCounters?.warning}
           />
         </Box>
       </Box>

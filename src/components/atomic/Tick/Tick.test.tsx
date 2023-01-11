@@ -1,15 +1,18 @@
-import { composeStories } from '@storybook/testing-react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
-import * as stories from './Tick.stories';
-
-const { Default } = composeStories(stories);
+import { Tick } from './Tick';
 
 describe('<Tick />', () => {
-  it('should render proper UI', () => {
-    render(<Default />);
+  it('renders without crashing', () => {
+    render(<Tick />);
+  });
 
-    expect(screen.getByTestId('Tick')).not.toBeNull();
+  it('calls onAnimationEnd prop when animation ends', () => {
+    const onAnimationEnd = jest.fn();
+    render(<Tick onAnimationEnd={onAnimationEnd} />);
+    const tickElement = screen.getByTestId('Tick-TickPart1');
+    fireEvent.animationEnd(tickElement);
+    expect(onAnimationEnd).toHaveBeenCalled();
   });
 });

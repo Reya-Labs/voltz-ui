@@ -7,7 +7,6 @@ import { ConnectedSwapForm } from '../../components/containers/ConnectedSwapForm
 import { SwapFormModes } from '../../components/interface/SwapForm/types';
 import { Agents } from '../../contexts/AgentContext/types';
 import { AMMProvider } from '../../contexts/AMMContext/AMMContext';
-import { PortfolioProvider } from '../../contexts/PortfolioContext/PortfolioContext';
 import { PositionProvider } from '../../contexts/PositionContext/PositionContext';
 import { SwapFormProvider } from '../../contexts/SwapFormContext/SwapFormContext';
 import { useAgent } from '../../hooks/useAgent';
@@ -32,7 +31,6 @@ export const TraderPortfolio: React.FunctionComponent = () => {
     loading: loadingPositions,
     error: errorPositions,
   } = usePositions();
-  const { agent } = useAgent();
   const { account } = useWallet();
 
   const renderMode = formMode ? 'form' : 'portfolio';
@@ -87,34 +85,15 @@ export const TraderPortfolio: React.FunctionComponent = () => {
 
   return (
     <>
-      {settling && renderMode === 'portfolio' && (
-        <PortfolioProvider
-          positions={agent !== Agents.LIQUIDITY_PROVIDER ? positionsByAgentGroup : undefined}
-        >
-          <ConnectedPositionTable
-            agent={Agents.FIXED_TRADER}
-            errorPositions={errorPositions}
-            handleCompletedSettling={handleCompletedSettling}
-            loadingPositions={loadingPositions}
-            positions={positionsByAgentGroup}
-            onSelectItem={handleSelectPosition}
-          />
-        </PortfolioProvider>
-      )}
-
-      {!settling && renderMode === 'portfolio' && (
-        <PortfolioProvider
-          positions={agent !== Agents.LIQUIDITY_PROVIDER ? positionsByAgentGroup : undefined}
-        >
-          <ConnectedPositionTable
-            agent={Agents.FIXED_TRADER}
-            errorPositions={errorPositions}
-            handleCompletedSettling={handleCompletedSettling}
-            loadingPositions={loadingPositions}
-            positions={positionsByAgentGroup}
-            onSelectItem={handleSelectPosition}
-          />
-        </PortfolioProvider>
+      {renderMode === 'portfolio' && (
+        <ConnectedPositionTable
+          agent={Agents.FIXED_TRADER}
+          errorPositions={errorPositions}
+          handleCompletedSettling={handleCompletedSettling}
+          loadingPositions={loadingPositions}
+          positions={positionsByAgentGroup}
+          onSelectItem={handleSelectPosition}
+        />
       )}
 
       {renderMode === 'form' && (

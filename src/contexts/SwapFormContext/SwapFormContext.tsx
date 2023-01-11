@@ -14,7 +14,7 @@ import { getAmmProtocol } from '../../utilities/amm';
 import { DataLayerEventPayload, pushEvent } from '../../utilities/googleAnalytics';
 import { isMarginWithdrawable } from '../../utilities/isMarginWithdrawable';
 import { formatNumber, stringToBigFloat } from '../../utilities/number';
-import { hasEnoughUnderlyingTokens, lessThan, lessThanEpsilon } from '../../utilities/validation';
+import { hasEnoughUnderlyingTokens, lessThanEpsilon } from '../../utilities/validation';
 import { Agents } from '../AgentContext/types';
 import { useAMMContext } from '../AMMContext/AMMContext';
 import { usePositionContext } from '../PositionContext/PositionContext';
@@ -23,7 +23,7 @@ import {
   SwapFormSubmitButtonHintStates,
   SwapFormSubmitButtonStates,
 } from './enums';
-import * as s from './services';
+import { approvalsNeeded as approvalsNeededService, getFormAction, lessThan } from './services';
 
 // updateLeverage instead of setLeverage when notional updates
 // have reset flag in onChange in Leverage to be able to reset leverage when box is modified.
@@ -118,7 +118,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   const [isValid, setIsValid] = useState<boolean>(false);
   const touched = useRef<string[]>([]);
 
-  const action = s.getFormAction(mode);
+  const action = getFormAction(mode);
   const isAddingMargin =
     (mode === SwapFormModes.EDIT_MARGIN || mode === SwapFormModes.EDIT_NOTIONAL) &&
     marginAction === SwapFormMarginAction.ADD;
@@ -127,7 +127,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     marginAction === SwapFormMarginAction.REMOVE;
   const isTradeVerified = !!swapInfo.result && !swapInfo.loading && !swapInfo.errorMessage;
 
-  const approvalsNeeded = s.approvalsNeeded(tokenApprovals, isRemovingMargin);
+  const approvalsNeeded = approvalsNeededService(tokenApprovals, isRemovingMargin);
 
   const [resetDeltaState, setResetDeltaState] = useState<boolean>(false);
   const [userSimulatedVariableApyUpdated, setUserSimulatedVariableApyUpdated] =

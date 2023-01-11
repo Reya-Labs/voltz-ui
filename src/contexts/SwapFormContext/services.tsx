@@ -1,3 +1,5 @@
+import isUndefined from 'lodash.isundefined';
+
 import { SwapFormActions, SwapFormModes } from '../../components/interface/SwapForm/types';
 import { useTokenApproval } from '../../hooks/useTokenApproval';
 
@@ -26,4 +28,16 @@ export const getFormAction = (mode: SwapFormModes): SwapFormActions => {
   }
 
   return mode === SwapFormModes.ROLLOVER ? SwapFormActions.ROLLOVER_SWAP : SwapFormActions.SWAP;
+};
+
+/**
+ * If both valueA and valueB are defined, return true if valueA is less than valueB, otherwise return undefined.
+ * @param {number | undefined} valueA - number | undefined
+ * @param {number | undefined} valueB - number | undefined
+ * @returns A function that takes two numbers and returns true if the first number is less than the second number.
+ */
+export const lessThan = (valueA: number | undefined, valueB: number | undefined) => {
+  if (!isUndefined(valueA) && !isUndefined(valueB)) {
+    return valueA < valueB;
+  }
 };

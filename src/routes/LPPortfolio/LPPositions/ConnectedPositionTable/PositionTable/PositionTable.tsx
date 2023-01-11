@@ -3,9 +3,8 @@ import React from 'react';
 
 import { AMMProvider } from '../../../../../contexts/AMMContext/AMMContext';
 import { useAMMs } from '../../../../../hooks/useAMMs';
-import { findCurrentAmm } from '../../../../../utilities/amm';
+import { findCurrentAmm, isBorrowing } from '../../../../../utilities/amm';
 import { getRowButtonId } from '../../../../../utilities/googleAnalytics/helpers';
-import { isBorrowing } from '../../../../../utilities/isBorrowing';
 import { PositionTableHead } from './components/PositionTableHead/PositionTableHead';
 import { PositionTableRow } from './components/PositionTableRow/PositionTableRow';
 import { TransactionList } from './components/TransactionList/TransactionList';

@@ -3,8 +3,8 @@ import React, { useEffect } from 'react';
 
 import { MaturityInformation } from '../../../../../../../components/composite/MaturityInformation/MaturityInformation';
 import { useAMMContext } from '../../../../../../../contexts/AMMContext/AMMContext';
+import { isBorrowing } from '../../../../../../../utilities/amm';
 import { MATURITY_WINDOW } from '../../../../../../../utilities/constants';
-import { isBorrowing } from '../../../../../../../utilities/isBorrowing';
 import { AccruedRates } from './components/AccruedRates/AccruedRates';
 import { Margin } from './components/Margin/Margin';
 import { Notional } from './components/Notional/Notional';

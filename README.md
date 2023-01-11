@@ -26,7 +26,7 @@ voltz-ui is a frontend repository powered by React. It is the home of all the pa
 
 | Statements                  | Branches                | Functions                 | Lines             |
 | --------------------------- | ----------------------- | ------------------------- | ----------------- |
-| ![Statements](https://img.shields.io/badge/statements-8.31%25-red.svg?style=flat) | ![Branches](https://img.shields.io/badge/branches-5.3%25-red.svg?style=flat) | ![Functions](https://img.shields.io/badge/functions-9.51%25-red.svg?style=flat) | ![Lines](https://img.shields.io/badge/lines-8.37%25-red.svg?style=flat) |
+| ![Statements](https://img.shields.io/badge/statements-23.13%25-red.svg?style=flat) | ![Branches](https://img.shields.io/badge/branches-11.07%25-red.svg?style=flat) | ![Functions](https://img.shields.io/badge/functions-21.33%25-red.svg?style=flat) | ![Lines](https://img.shields.io/badge/lines-23.19%25-red.svg?style=flat) |
 
 # Installation
 
@@ -71,7 +71,7 @@ REACT_APP_SKIP_WALLET_SCREENING=Y
 
 # Testing local version of SDK using `yalc`
 
-Refer to documentation of this process found in `README.md` of SDK. Follow this [https://github.com/Voltz-Protocol/v1-sdk#testing-local-version-in-ui-using-yalc](link) for details.
+Refer to documentation of this process found in `README.md` of SDK. Follow this [link](https://github.com/Voltz-Protocol/v1-sdk#testing-local-version-in-ui-using-yalc) for details.
 
 # Contributing
 

@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { actions, selectors } from '../../../app';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { Agents } from '../../../contexts/AgentContext/types';
 import { useAMMContext } from '../../../contexts/AMMContext/AMMContext';
 import { useBorrowAMMContext } from '../../../contexts/BorrowAMMContext/BorrowAMMContext';
 import { useBorrowFormContext } from '../../../contexts/BorrowFormContext/BorrowFormContext';
 import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';
 import { routes } from '../../../routes/paths';
-import { actions, selectors } from '../../../store';
-import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { isBorrowing } from '../../../utilities/isBorrowing';
+import { isBorrowing } from '../../../utilities/amm';
 import { BorrowForm } from '../../interface/BorrowForm/BorrowForm';
 import { FormPanel } from '../../interface/FormPanel/FormPanel';
 import { PendingTransaction } from '../../interface/PendingTransaction/PendingTransaction';

@@ -13,10 +13,9 @@ import { useAgent } from '../../../../hooks/useAgent';
 import { useAMMs } from '../../../../hooks/useAMMs';
 import { getConfig } from '../../../../hooks/voltz-config/config';
 import { colors, SystemStyleObject, Theme } from '../../../../theme';
-import { findCurrentAmm } from '../../../../utilities/amm';
+import { findCurrentAmm, isBorrowing } from '../../../../utilities/amm';
 import { MATURITY_WINDOW } from '../../../../utilities/constants';
 import { getRowButtonId } from '../../../../utilities/googleAnalytics/helpers';
-import { isBorrowing } from '../../../../utilities/isBorrowing';
 import { PositionTableHead, PositionTableRow } from './components';
 import { TransactionList } from './TransactionList/TransactionList';
 

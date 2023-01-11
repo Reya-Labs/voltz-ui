@@ -2,23 +2,23 @@ import { Position } from '@voltz-protocol/v1-sdk';
 import { DateTime } from 'luxon';
 import { useEffect, useMemo, useState } from 'react';
 
+import { actions, selectors } from '../../app';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { Agents } from '../../contexts/AgentContext/types';
-import { actions, selectors } from '../../store';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { isBorrowingPosition } from '../../utilities/borrowAmm';
 import { useAgent } from '../useAgent';
 import { useAMMs } from '../useAMMs';
 import { useWallet } from '../useWallet';
 import { MEPositionFactory } from './mePositionFactory';
 
-export type usePositionsResult = {
+type UsePositionsResult = {
   positionsByAgentGroup: Position[];
   borrowPositions: Position[];
   loading: boolean;
   error: boolean;
 };
 
-export const usePositions = (): usePositionsResult => {
+export const usePositions = (): UsePositionsResult => {
   const { agent } = useAgent();
   const { wallet, loading: walletLoading, error: walletError } = useWallet();
   const { aMMs, loading: ammLoading, error: ammError } = useAMMs();

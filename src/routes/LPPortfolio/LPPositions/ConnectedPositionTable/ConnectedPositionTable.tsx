@@ -2,15 +2,14 @@ import Box from '@mui/material/Box';
 import { Position } from '@voltz-protocol/v1-sdk';
 import React, { ReactNode, useCallback, useState } from 'react';
 
+import { actions, selectors } from '../../../../app';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { Loading } from '../../../../components/atomic/Loading/Loading';
 import { Panel } from '../../../../components/atomic/Panel/Panel';
 import { RouteLink } from '../../../../components/atomic/RouteLink/RouteLink';
 import { PendingTransaction } from '../../../../components/interface/PendingTransaction/PendingTransaction';
 import { Agents } from '../../../../contexts/AgentContext/types';
-import { usePortfolioContext } from '../../../../contexts/PortfolioContext/PortfolioContext';
 import { useWallet } from '../../../../hooks/useWallet';
-import { actions, selectors } from '../../../../store';
-import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import { routes } from '../../../paths';
 import { NoPositionsOrVaultsFound } from '../../NoPositionsOrVaultsFound/NoPositionsOrVaultsFound';
 import { PortfolioHeader } from './PortfolioHeader/PortfolioHeader';
@@ -23,6 +22,7 @@ export type ConnectedPositionTableProps = {
   loadingPositions: boolean;
   errorPositions: boolean;
   handleCompletedSettling: () => void;
+  agent: Agents;
 };
 
 export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTableProps> = ({
@@ -30,6 +30,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
   positions,
   loadingPositions,
   handleCompletedSettling,
+  agent,
 }) => {
   const { status } = useWallet();
   const [positionStatus, setPositionStatus] = useState<PositionStatus>('open');
@@ -39,8 +40,6 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
   >();
   const activeTransaction = useAppSelector(selectors.transactionSelector)(positionToSettle?.txId); // contains a failureMessage attribute that will contain whatever came out from the sdk
   const dispatch = useAppDispatch();
-
-  const portfolioData = usePortfolioContext();
 
   const handleSettle = useCallback(
     (position: Position) => {
@@ -121,7 +120,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
 
     return (
       <>
-        <PortfolioHeader currencyCode="USD" currencySymbol="$" portfolioData={portfolioData} />
+        <PortfolioHeader positions={positions} />
         <PositionStatusToggle status={positionStatus} onChange={setPositionStatus} />
         <Box sx={{ marginTop: (theme) => theme.spacing(6) }}>
           {positionStatus === 'open' && filteredPositions.length === 0 ? (

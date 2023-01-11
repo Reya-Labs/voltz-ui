@@ -39,6 +39,7 @@ export const AvatarAddress: FunctionComponent<{
 
   return (
     <Box
+      data-testid="AvatarAddress"
       sx={{
         display: 'flex',
         columnGap: (theme) => theme.spacing(4),

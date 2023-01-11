@@ -1,4 +1,7 @@
-import { PortfolioContext } from '../../../../../contexts/PortfolioContext/PortfolioContext';
+import { Position } from '@voltz-protocol/v1-sdk';
+
+import { Agents } from '../../../../../contexts/AgentContext/types';
+import { usePortfolioPositionsSummary } from '../../../../../hooks/usePortfolioPositionsSummary';
 import { NetMargin } from './NetMargin/NetMargin';
 import { NetNotional } from './NetNotional/NetNotional';
 import {
@@ -9,41 +12,39 @@ import {
 import { PositionsHealth } from './PositionsHealth/PositionsHealth';
 
 export type PortfolioHeaderProps = {
-  currencyCode: string;
-  currencySymbol: string;
-  portfolioData: PortfolioContext;
+  positions: Position[];
 };
+const currencyCode = 'USD';
+const currencySymbol = '$';
 
-export const PortfolioHeader = ({
-  currencyCode,
-  currencySymbol,
-  portfolioData,
-}: PortfolioHeaderProps) => {
+export const PortfolioHeader = ({ positions }: PortfolioHeaderProps) => {
+  const { totalNotional, totalMargin, totalAccruedCashflow, healthCounters } =
+    usePortfolioPositionsSummary(positions, Agents.LIQUIDITY_PROVIDER);
   return (
     <>
       <LPPositionsTypography>LP POSITIONS</LPPositionsTypography>
       <NetNotional
         currencyCode={currencyCode}
         currencySymbol={currencySymbol}
-        totalNotional={portfolioData.totalNotional}
+        totalNotional={totalNotional}
       />
       <NetMarginAndPositionsHealthBox>
-        {portfolioData.totalMargin === undefined ||
-        portfolioData.totalAccruedCashflow === undefined ||
-        portfolioData.healthCounters === undefined ? (
+        {totalMargin === undefined ||
+        totalAccruedCashflow === undefined ||
+        healthCounters === undefined ? (
           <NetMarginAndPositionsHealthSkeleton variant="rectangular" />
         ) : (
           <>
             <NetMargin
               currencyCode={currencyCode}
               currencySymbol={currencySymbol}
-              netMargin={portfolioData.totalMargin}
-              netMarginDiff={portfolioData.totalAccruedCashflow}
+              netMargin={totalMargin}
+              netMarginDiff={totalAccruedCashflow}
             />
             <PositionsHealth
-              positionsDanger={portfolioData.healthCounters.danger}
-              positionsHealthy={portfolioData.healthCounters.healthy}
-              positionsWarning={portfolioData.healthCounters.warning}
+              positionsDanger={healthCounters.danger}
+              positionsHealthy={healthCounters.healthy}
+              positionsWarning={healthCounters.warning}
             />
           </>
         )}

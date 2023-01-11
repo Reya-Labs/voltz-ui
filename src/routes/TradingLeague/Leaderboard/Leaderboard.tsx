@@ -3,7 +3,7 @@ import { RankType } from '@voltz-protocol/v1-sdk';
 import { DateTime } from 'luxon';
 import React from 'react';
 
-import { Entry, RankingEntryProps } from '../Entry/Entry';
+import { Entry, EntryProps } from '../Entry/Entry';
 import { Header } from '../Header/Header';
 import { LeaderboardHeader } from '../LeaderboardHeader/LeaderboardHeader';
 import { Pagination } from '../Pagination/Pagination';
@@ -26,7 +26,7 @@ export type RankingTableProps = {
 };
 
 const inRange = (start: number, end: number, num: number) => start <= num && num <= end;
-const entryVariant: Record<number, RankingEntryProps['variant']> = {
+const entryVariant: Record<number, EntryProps['variant']> = {
   1: 'rank1',
   2: 'rank2',
   3: 'rank3',
@@ -46,8 +46,9 @@ export const Leaderboard: React.FunctionComponent<RankingTableProps> = ({
   onPrevPage,
   perPage,
 }) => {
+  const slicedRankings = rankings.slice(page * perPage, page * perPage + perPage);
   return (
-    <Box>
+    <Box data-testid="Leaderboard-Box">
       <LeaderboardHeader
         loading={loading}
         seasonEndDate={seasonEndDate}
@@ -57,12 +58,14 @@ export const Leaderboard: React.FunctionComponent<RankingTableProps> = ({
         userPoints={userPoints}
         userRank={userRank}
       />
-      <SeasonTypography variant="body2">SEASON {seasonNumber} LEADERBOARD</SeasonTypography>
+      <SeasonTypography data-testid="Leaderboard-SeasonTypography" variant="body2">
+        SEASON {seasonNumber} LEADERBOARD
+      </SeasonTypography>
       <LeaderboardGrid itemsPerRow={1}>
         <Header />
         {!loading &&
-          rankings.length !== 0 &&
-          rankings.map((ranking) => {
+          slicedRankings.length !== 0 &&
+          slicedRankings.map((ranking) => {
             const rank = ranking.rank + 1;
             return (
               <Entry
