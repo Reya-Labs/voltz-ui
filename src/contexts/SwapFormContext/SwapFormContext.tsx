@@ -14,7 +14,7 @@ import { getAmmProtocol } from '../../utilities/amm';
 import { DataLayerEventPayload, pushEvent } from '../../utilities/googleAnalytics';
 import { isMarginWithdrawable } from '../../utilities/isMarginWithdrawable';
 import { formatNumber, stringToBigFloat } from '../../utilities/number';
-import { hasEnoughUnderlyingTokens, lessThan, lessThanEpsilon } from '../../utilities/validation';
+import { hasEnoughUnderlyingTokens, lessThanEpsilon } from '../../utilities/validation';
 import { Agents } from '../AgentContext/types';
 import { useAMMContext } from '../AMMContext/AMMContext';
 import { usePositionContext } from '../PositionContext/PositionContext';
@@ -23,7 +23,7 @@ import {
   SwapFormSubmitButtonHintStates,
   SwapFormSubmitButtonStates,
 } from './enums';
-import * as s from './services';
+import { approvalsNeeded as approvalsNeededService, getFormAction, lessThan } from './services';
 
 // updateLeverage instead of setLeverage when notional updates
 // have reset flag in onChange in Leverage to be able to reset leverage when box is modified.
@@ -118,7 +118,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   const [isValid, setIsValid] = useState<boolean>(false);
   const touched = useRef<string[]>([]);
 
-  const action = s.getFormAction(mode);
+  const action = getFormAction(mode);
   const isAddingMargin =
     (mode === SwapFormModes.EDIT_MARGIN || mode === SwapFormModes.EDIT_NOTIONAL) &&
     marginAction === SwapFormMarginAction.ADD;
@@ -127,7 +127,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     marginAction === SwapFormMarginAction.REMOVE;
   const isTradeVerified = !!swapInfo.result && !swapInfo.loading && !swapInfo.errorMessage;
 
-  const approvalsNeeded = s.approvalsNeeded(tokenApprovals, isRemovingMargin);
+  const approvalsNeeded = approvalsNeededService(tokenApprovals, isRemovingMargin);
 
   const [resetDeltaState, setResetDeltaState] = useState<boolean>(false);
   const [userSimulatedVariableApyUpdated, setUserSimulatedVariableApyUpdated] =
@@ -502,22 +502,22 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     ) {
       if (
         margin !== 0 &&
-        (await hasEnoughUnderlyingTokens(
+        !(await hasEnoughUnderlyingTokens(
           positionAmm || poolAmm,
           margin || 0,
           mode === SwapFormModes.ROLLOVER ? position : undefined,
-        )) === false
+        ))
       ) {
         valid = false;
         addError(err, 'margin', 'Insufficient funds');
       }
     } else {
       if (
-        (await hasEnoughUnderlyingTokens(
+        !(await hasEnoughUnderlyingTokens(
           positionAmm || poolAmm,
           swapInfo.result?.fee || 0,
           mode === SwapFormModes.ROLLOVER ? position : undefined,
-        )) === false
+        ))
       ) {
         valid = false;
         addError(err, 'notional', 'Insufficient funds');
@@ -530,7 +530,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       action === SwapFormActions.UPDATE ||
       action === SwapFormActions.ROLLOVER_SWAP
     ) {
-      if (isUndefined(margin) || lessThan(margin, swapInfo.result?.marginRequirement) === true) {
+      if (isUndefined(margin) || lessThan(margin, swapInfo.result?.marginRequirement)) {
         valid = false;
         addError(err, 'margin', 'Not enough margin');
       }
@@ -546,7 +546,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
     if (
       asyncCallsLoading.current.includes('swapInfo') &&
       !swapInfo.loading &&
-      lessThanEpsilon(swapInfo.result?.availableNotional, notional, 0.00001) === true
+      lessThanEpsilon(swapInfo.result?.availableNotional, notional, 0.00001)
     ) {
       warnText =
         'There is not enough liquidity in the pool to support your entire trade, meaning only a proportion of your trade will go through. You can see the details of this in the Trade Information box below.';
@@ -567,7 +567,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
 
     // check user has sufficient funds
     if (marginAction === SwapFormMarginAction.ADD) {
-      if ((await hasEnoughUnderlyingTokens(positionAmm || poolAmm, margin || 0)) === false) {
+      if (!(await hasEnoughUnderlyingTokens(positionAmm || poolAmm, margin || 0))) {
         valid = false;
         addError(err, 'margin', 'Insufficient funds');
       }

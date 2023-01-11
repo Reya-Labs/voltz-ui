@@ -12,7 +12,7 @@ jest.mock('react-router-dom', () => ({
 }));
 
 describe('<BadgeCard />', () => {
-  test('renders proper UI', () => {
+  it('renders proper UI', () => {
     render(<Default />);
 
     expect(screen.getByTestId('Badge-leverageCrowbar')).not.toBeNull();

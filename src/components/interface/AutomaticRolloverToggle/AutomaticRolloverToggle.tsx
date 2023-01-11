@@ -2,7 +2,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import React, { useState } from 'react';
 
 import { doNothing } from '../../../utilities/doNothing';
-import { isEnvVarProvided } from '../../../utilities/is-env-var-provided';
+import { isEnvVarProvided } from '../../../utilities/isEnvVarProvided';
 import { IconLabel } from '../../composite/IconLabel/IconLabel';
 import { Modal } from '../../composite/Modal/Modal';
 import { ActiveRolloverModalContent } from './ActiveRolloverModalContent/ActiveRolloverModalContent';

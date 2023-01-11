@@ -1,6 +1,6 @@
 import jazzicon from '@metamask/jazzicon';
 
-import { encodeSvg } from '../encode-svg';
+import { encodeSvg } from '../encodeSvg';
 
 type ResolveAvatarParam = {
   address?: string | null;

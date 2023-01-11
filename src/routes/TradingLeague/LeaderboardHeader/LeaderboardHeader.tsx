@@ -23,7 +23,7 @@ export const LeaderboardHeader = ({
   userRank,
   userPoints,
 }: RankingTableHeaderProps) => (
-  <Box>
+  <Box data-testid="LeaderboardHeader-Box">
     <TradingLeagueHeader />
     <UserSummary
       loading={loading}

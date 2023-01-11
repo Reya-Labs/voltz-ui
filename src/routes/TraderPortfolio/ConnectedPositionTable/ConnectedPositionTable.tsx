@@ -2,16 +2,15 @@ import Box from '@mui/material/Box';
 import { Position } from '@voltz-protocol/v1-sdk';
 import React, { ReactNode, useCallback, useState } from 'react';
 
+import { actions, selectors } from '../../../app';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { Loading } from '../../../components/atomic/Loading/Loading';
 import { Panel } from '../../../components/atomic/Panel/Panel';
 import { RouteLink } from '../../../components/atomic/RouteLink/RouteLink';
 import { Typography } from '../../../components/atomic/Typography/Typography';
 import { PendingTransaction } from '../../../components/interface/PendingTransaction/PendingTransaction';
 import { Agents } from '../../../contexts/AgentContext/types';
-import { usePortfolioContext } from '../../../contexts/PortfolioContext/PortfolioContext';
 import { useWallet } from '../../../hooks/useWallet';
-import { actions, selectors } from '../../../store';
-import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { colors } from '../../../theme';
 import { routes } from '../../paths';
 import { PortfolioHeader } from './PortfolioHeader/PortfolioHeader';
@@ -41,8 +40,6 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
   >();
   const activeTransaction = useAppSelector(selectors.transactionSelector)(positionToSettle?.txId); // contains a failureMessage attribute that will contain whatever came out from the sdk
   const dispatch = useAppDispatch();
-
-  const portfolioData = usePortfolioContext();
 
   const handleSettle = useCallback(
     (position: Position) => {
@@ -136,10 +133,9 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
   const renderPositionTable = () => {
     return (
       <>
-        <PortfolioHeader currencyCode="USD" currencySymbol="$" portfolioData={portfolioData} />
+        <PortfolioHeader positions={positions} />
         <Box sx={{ marginTop: (theme) => theme.spacing(14) }}>
           <PositionTable
-            portfolioData={portfolioData}
             positions={positions}
             onSelectItem={onSelectItem}
             onSettle={handleSettle}

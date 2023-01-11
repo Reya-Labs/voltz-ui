@@ -130,7 +130,7 @@ export const getSignature = async (walletAddress: string) => {
  * Returns the terms of service text that users have to agree to connect their wallet.
  * Note - Any changes, including whitespace, will mean a new signature is required.
  */
-export const getTOSText = () => {
+const getTOSText = () => {
   const text = `
 Please sign this message to log in. This won't cost you any ETH.
 
@@ -158,7 +158,7 @@ export const getWalletProvider = async (name: WalletName) => {
 /**
  * Returns an ethers Web3Provider, which wraps the Metamask instance
  */
-export const getWalletProviderMetamask = async () => {
+const getWalletProviderMetamask = async () => {
   const externalProvider = await detectEthereumProvider();
   if (externalProvider) {
     try {
@@ -188,7 +188,7 @@ export const getWalletProviderMetamask = async () => {
 /**
  * Returns an ethers Web3Provider, which wraps the WalletConnect instance
  */
-export const getWalletProviderWalletConnect = async () => {
+const getWalletProviderWalletConnect = async () => {
   window.localStorage.removeItem('walletconnect');
   let provider;
 
@@ -221,7 +221,7 @@ export const getWalletProviderWalletConnect = async () => {
  * Makes a request to TRM to get a risk assessment for the given wallet ID
  * @param walletId - ID of the wallet to check
  */
-export async function getWalletRiskAssessment(walletId: string) {
+async function getWalletRiskAssessment(walletId: string) {
   try {
     const result = await fetch('https://api.trmlabs.com/public/v2/screening/addresses', {
       method: 'POST',
@@ -257,7 +257,7 @@ export async function getWalletRiskAssessment(walletId: string) {
  * Returns true or false based upon if the given risk assessment would suggest the wallet is risky
  * @param riskAssessment - Risk report foir a wallet obtained from using walletSecurityCheck
  */
-export const isWalletRisky = (riskAssessment?: WalletRiskAssessment) => {
+const isWalletRisky = (riskAssessment?: WalletRiskAssessment) => {
   const indicators = riskAssessment?.addressRiskIndicators;
   const redFlag =
     Array.isArray(indicators) && indicators.find((i) => i.categoryRiskScoreLevel >= 10);

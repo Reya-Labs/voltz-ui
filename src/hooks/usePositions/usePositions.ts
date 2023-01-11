@@ -2,26 +2,26 @@ import { Position } from '@voltz-protocol/v1-sdk';
 import { DateTime } from 'luxon';
 import { useEffect, useMemo, useState } from 'react';
 
+import { actions, selectors } from '../../app';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { Agents } from '../../contexts/AgentContext/types';
-import { actions, selectors } from '../../store';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { isBorrowingPosition } from '../../utilities/borrowAmm';
 import { useAgent } from '../useAgent';
 import { useAMMs } from '../useAMMs';
 import { useWallet } from '../useWallet';
 import { MEPositionFactory } from './mePositionFactory';
 
-export type usePositionsResult = {
+type UsePositionsResult = {
   positionsByAgentGroup: Position[];
   borrowPositions: Position[];
   loading: boolean;
   error: boolean;
 };
 
-export const usePositions = (): usePositionsResult => {
+export const usePositions = (): UsePositionsResult => {
   const { agent } = useAgent();
   const { wallet, loading: walletLoading, error: walletError } = useWallet();
-  const { amms, loading: ammLoading, error: ammError } = useAMMs();
+  const { aMMs, loading: ammLoading, error: ammError } = useAMMs();
   const [mePositions, setMePositions] = useState<Position[]>([]);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export const usePositions = (): usePositionsResult => {
       wallet.positions &&
       !walletLoading &&
       !walletError &&
-      amms &&
+      aMMs &&
       !ammLoading &&
       !ammError
     ) {
@@ -52,7 +52,7 @@ export const usePositions = (): usePositionsResult => {
 
           return pType === 1 || pType === 2;
         })
-        .map((positionData) => MEPositionFactory(positionData, amms))
+        .map((positionData) => MEPositionFactory(positionData, aMMs))
         .filter((position) => Boolean(position)) as Position[];
 
       setMePositions(walletPositions);
@@ -66,7 +66,7 @@ export const usePositions = (): usePositionsResult => {
         shouldUpdate = false;
       };
     }
-  }, [agent, wallet, walletLoading, walletError, amms, ammLoading, ammError]);
+  }, [agent, wallet, walletLoading, walletError, aMMs, ammLoading, ammError]);
 
   const positionsByAgentGroup = useMemo(() => {
     return mePositions

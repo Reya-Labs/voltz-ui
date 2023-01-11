@@ -3,6 +3,8 @@ import isUndefined from 'lodash.isundefined';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { actions, selectors } from '../../../app';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useAMMContext } from '../../../contexts/AMMContext/AMMContext';
 import { useAMMsContext } from '../../../contexts/AMMsContext/AMMsContext';
 import {
@@ -13,10 +15,8 @@ import {
 import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';
 import { useAgent } from '../../../hooks/useAgent';
 import { routes } from '../../../routes/paths';
-import { actions, selectors } from '../../../store';
-import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { getPoolButtonId } from '../../../utilities/googleAnalytics';
-import { isBorrowing } from '../../../utilities/isBorrowing';
+import { isBorrowing } from '../../../utilities/amm';
+import { getPoolButtonId } from '../../../utilities/googleAnalytics/helpers';
 import { setPageTitle } from '../../../utilities/page';
 import { FormPanel } from '../../interface/FormPanel/FormPanel';
 import { MintBurnCurrentPosition } from '../../interface/MintBurnCurrentPosition/MintBurnCurrentPosition';

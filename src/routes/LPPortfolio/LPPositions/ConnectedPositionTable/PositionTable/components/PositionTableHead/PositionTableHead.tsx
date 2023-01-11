@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import isUndefined from 'lodash.isundefined';
+import { HealthFactorStatus } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
 import { PositionBadge } from '../../../../../../../components/atomic/PositionBadge/PositionBadge';
@@ -31,10 +31,10 @@ export type PositionTableHeadProps = {
   rolloverAvailable: boolean;
   gaButtonId: string;
   beforeMaturity?: boolean;
-  healthFactor?: number;
-  fixedRateHealthFactor?: number;
-  fixedApr?: number;
-  fees?: number;
+  healthFactor: HealthFactorStatus;
+  fixedRateHealthFactor: HealthFactorStatus;
+  fixedApr: number;
+  fees: number;
 };
 
 const containerStyles: SystemStyleObject<Theme> = {
@@ -63,9 +63,9 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
     : NegativeFeesValueTypography;
 
   const CurrentFixedRateTypography =
-    fixedRateHealthFactor === 1
+    fixedRateHealthFactor === HealthFactorStatus.DANGER
       ? NegativeTypography
-      : fixedRateHealthFactor === 2
+      : fixedRateHealthFactor === HealthFactorStatus.WARNING
       ? WarningTypography
       : PositiveTypography;
 
@@ -73,7 +73,7 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
     <Box sx={containerStyles}>
       <Box sx={{ display: 'flex' }}>
         <PositionBadge variant="LP" />
-        {!isUndefined(fees) && !isSettled && (
+        {!isSettled && (
           <FeesBox>
             <FeesTypography>FEES:&nbsp;</FeesTypography>
             <FeesValueTypography>
@@ -86,16 +86,14 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
       </Box>
 
       <ActionsBox>
-        {beforeMaturity && !isUndefined(fixedApr) && (
+        {beforeMaturity && (
           <InfoBox>
             CURRENT FIXED:&nbsp;
             <CurrentFixedRateTypography>{formatNumber(fixedApr)}%</CurrentFixedRateTypography>
           </InfoBox>
         )}
 
-        {beforeMaturity && !isUndefined(healthFactor) && (
-          <HealthFactorText healthFactor={healthFactor} />
-        )}
+        {beforeMaturity && <HealthFactorText healthFactor={healthFactor} />}
 
         {beforeMaturity === false && !isSettled && (
           <>

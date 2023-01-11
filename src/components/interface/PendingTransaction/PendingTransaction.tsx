@@ -4,22 +4,18 @@ import { AMM, Position } from '@voltz-protocol/v1-sdk';
 import isUndefined from 'lodash.isundefined';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
+import { selectors } from '../../../app';
+import { useAppSelector } from '../../../app/hooks';
 import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
 import { useAMMsContext } from '../../../contexts/AMMsContext/AMMsContext';
 import { MintBurnFormLiquidityAction } from '../../../contexts/MintBurnFormContext/MintBurnFormContext';
 import { Wallet } from '../../../graphql';
 import { useAgent } from '../../../hooks/useAgent';
 import { useWallet } from '../../../hooks/useWallet';
-import { selectors } from '../../../store';
-import { useAppSelector } from '../../../store/hooks';
-import { getAmmProtocol } from '../../../utilities/amm';
+import { getAmmProtocol, isBorrowing } from '../../../utilities/amm';
 import { getAgentFromPosition } from '../../../utilities/getAgent';
-import {
-  DataLayerEventPayload,
-  getPoolButtonId,
-  pushEvent,
-} from '../../../utilities/googleAnalytics';
-import { isBorrowing } from '../../../utilities/isBorrowing';
+import { DataLayerEventPayload, pushEvent } from '../../../utilities/googleAnalytics';
+import { getPoolButtonId } from '../../../utilities/googleAnalytics/helpers';
 import { formatCurrency } from '../../../utilities/number';
 import { setPageTitle } from '../../../utilities/page';
 import { Button } from '../../atomic/Button/Button';

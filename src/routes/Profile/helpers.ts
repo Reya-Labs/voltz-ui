@@ -2,7 +2,7 @@ import { CommunitySBT } from '@voltz-protocol/v1-sdk';
 import { Signer } from 'ethers';
 
 import { Season } from '../../hooks/season/types';
-import { isEnvVarProvided } from '../../utilities/is-env-var-provided';
+import { isEnvVarProvided } from '../../utilities/isEnvVarProvided';
 import { ClaimButtonProps } from './components/ClaimButton/ClaimButton';
 import { BadgeVariant } from './data/getSeasonBadges';
 import { BadgeTier } from './types';

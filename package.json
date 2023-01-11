@@ -1,6 +1,6 @@
 {
   "name": "voltz-ui",
-  "version": "1.52.3",
+  "version": "1.54.10",
   "description": "A UI client for the Voltz Protocol",
   "license": "MIT",
   "scripts": {
@@ -24,8 +24,6 @@
     "test:watch": "jest --watch",
     "generate:coverage-badges": "npx istanbul-badges-readme --silent",
     "chromatic": "npx chromatic --project-token=e40b8c3e3eea",
-    "sdk:add-local": "npx yalc add @voltz-protocol/v1-sdk",
-    "sdk:update-local": "npx yalc update @voltz-protocol/v1-sdk",
     "code-quality:check": "npx concurrently 'yarn ts:check' 'yarn prettier:check' 'yarn lint:check --quiet'"
   },
   "babel": {

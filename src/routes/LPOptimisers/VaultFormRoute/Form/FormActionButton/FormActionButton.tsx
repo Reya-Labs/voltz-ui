@@ -4,7 +4,7 @@ import { BouncedLoading } from '../../../../../components/atomic/BouncedLoading/
 import { Tick } from '../../../../../components/atomic/Tick/Tick';
 import { BlueActionButton, DarkBlueActionButton, IconWrapper } from './FormActionButton.styled';
 
-export type DepositButtonProps = {
+export type FormActionButtonProps = {
   onClick?: () => void;
   disabled: boolean;
   success: boolean;
@@ -13,7 +13,7 @@ export type DepositButtonProps = {
   variant: 'blue' | 'dark-blue';
 };
 
-export const FormActionButton: React.FunctionComponent<DepositButtonProps> = ({
+export const FormActionButton: React.FunctionComponent<FormActionButtonProps> = ({
   children,
   onClick,
   disabled,

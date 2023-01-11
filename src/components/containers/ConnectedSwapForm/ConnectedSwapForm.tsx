@@ -3,6 +3,8 @@ import isUndefined from 'lodash.isundefined';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { actions, selectors } from '../../../app';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { Agents } from '../../../contexts/AgentContext/types';
 import { useAMMContext } from '../../../contexts/AMMContext/AMMContext';
 import { useAMMsContext } from '../../../contexts/AMMsContext/AMMsContext';
@@ -11,13 +13,8 @@ import { useSwapFormContext } from '../../../contexts/SwapFormContext/SwapFormCo
 import { useAgent } from '../../../hooks/useAgent';
 import { useWallet } from '../../../hooks/useWallet';
 import { routes } from '../../../routes/paths';
-import { actions, selectors } from '../../../store';
-import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import {
-  getNotionalActionFromHintState,
-  getPoolButtonId,
-} from '../../../utilities/googleAnalytics';
-import { isBorrowing } from '../../../utilities/isBorrowing';
+import { isBorrowing } from '../../../utilities/amm';
+import { getPoolButtonId } from '../../../utilities/googleAnalytics/helpers';
 import { setPageTitle } from '../../../utilities/page';
 import { FormPanel } from '../../interface/FormPanel/FormPanel';
 import { PendingTransaction } from '../../interface/PendingTransaction/PendingTransaction';
@@ -25,6 +22,7 @@ import { SwapCurrentPosition } from '../../interface/SwapCurrentPosition/SwapCur
 import { SwapForm } from '../../interface/SwapForm/SwapForm';
 import { SwapFormActions, SwapFormModes } from '../../interface/SwapForm/types';
 import { SwapInfo } from '../../interface/SwapInfo/SwapInfo';
+import { getNotionalActionFromHintState } from './helpers';
 
 export type ConnectedSwapFormProps = {
   onReset: () => void;

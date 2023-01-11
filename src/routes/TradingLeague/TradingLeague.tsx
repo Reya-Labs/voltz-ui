@@ -69,7 +69,7 @@ export const TradingLeague: React.FunctionComponent = () => {
         maxPages={maxPages}
         page={page}
         perPage={PER_PAGE}
-        rankings={rankings.slice(page * 10, page * 10 + PER_PAGE)}
+        rankings={rankings}
         seasonEndDate={season.endDate}
         seasonNumber={season.shortName}
         seasonStartDate={season.startDate}

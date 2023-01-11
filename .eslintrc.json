@@ -63,7 +63,8 @@
           "**/*.test.tsx",
           "**/*.spec.ts",
           "**/*.spec.tsx",
-          "src/setupTests.ts",
+          "src/test-helpers/setupTests.ts",
+          "src/test-helpers/renderWithProviders.tsx",
           "**/*.stories.tsx"
         ]
       }
@@ -170,6 +171,9 @@
     "react/react-in-jsx-scope": "off",
     "simple-import-sort/exports": "error",
     "simple-import-sort/imports": "error",
-    "unused-imports/no-unused-imports-ts": "error"
+    "unused-imports/no-unused-imports-ts": "error",
+    "no-debugger": "error",
+    "testing-library/no-node-access": "warn",
+    "testing-library/prefer-find-by": "off"
   }
 }

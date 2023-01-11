@@ -10,7 +10,6 @@ import {
   MintBurnFormModes,
   MintBurnFormProvider,
 } from '../../../contexts/MintBurnFormContext/MintBurnFormContext';
-import { PortfolioProvider } from '../../../contexts/PortfolioContext/PortfolioContext';
 import { PositionProvider } from '../../../contexts/PositionContext/PositionContext';
 import { useAgent } from '../../../hooks/useAgent';
 import { useAMMs } from '../../../hooks/useAMMs';
@@ -29,7 +28,7 @@ export const LPPositions: React.FunctionComponent<{
   const [settling, setSettling] = useState<boolean>(false);
   const { onChangeAgent } = useAgent();
 
-  const { amms } = useAMMs();
+  const { aMMs } = useAMMs();
   const { key } = useLocation();
   const {
     positionsByAgentGroup,
@@ -74,9 +73,7 @@ export const LPPositions: React.FunctionComponent<{
     if (mode === 'rollover') newMode = MintBurnFormModes.ROLLOVER;
 
     setFormMode(newMode);
-    setAMM(
-      mode === 'rollover' ? findCurrentAmm(amms || [], selectedPosition) : selectedPosition.amm,
-    );
+    setAMM(mode === 'rollover' ? findCurrentAmm(aMMs, selectedPosition) : selectedPosition.amm);
     setPosition(selectedPosition);
   };
 
@@ -93,15 +90,14 @@ export const LPPositions: React.FunctionComponent<{
   return (
     <>
       {renderMode === 'portfolio' && (
-        <PortfolioProvider positions={positionsByAgentGroup}>
-          <ConnectedPositionTable
-            errorPositions={errorPositions}
-            handleCompletedSettling={handleCompletedSettling}
-            loadingPositions={loadingPositions}
-            positions={positionsByAgentGroup}
-            onSelectItem={handleSelectPosition}
-          />
-        </PortfolioProvider>
+        <ConnectedPositionTable
+          agent={Agents.LIQUIDITY_PROVIDER}
+          errorPositions={errorPositions}
+          handleCompletedSettling={handleCompletedSettling}
+          loadingPositions={loadingPositions}
+          positions={positionsByAgentGroup}
+          onSelectItem={handleSelectPosition}
+        />
       )}
 
       {formMode && renderMode === 'form' && (
