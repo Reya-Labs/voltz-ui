@@ -3,7 +3,6 @@ import { AMM, BorrowAMM, Position } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useState } from 'react';
 
 import { ConnectedBorrowForm } from '../../components/containers/ConnectedBorrowForm/ConnectedBorrowForm';
-import { ConnectedBorrowPositionTable } from '../../components/containers/ConnectedBorrowPositionTable/ConnectedBorrowPositionTable';
 import { Agents } from '../../contexts/AgentContext/types';
 import { AMMProvider } from '../../contexts/AMMContext/AMMContext';
 import { BorrowAMMProvider } from '../../contexts/BorrowAMMContext/BorrowAMMContext';
@@ -14,6 +13,7 @@ import { usePositions } from '../../hooks/usePositions/usePositions';
 import { useWallet } from '../../hooks/useWallet';
 import { findCurrentBorrowPosition } from '../../utilities/borrowAmm';
 import { setPageTitle } from '../../utilities/page';
+import { ConnectedBorrowPositionTable } from './ConnectedBorrowPositionTable/ConnectedBorrowPositionTable';
 import { getRenderMode } from './services';
 
 export const FixedBorrower: React.FunctionComponent = () => {

@@ -2,17 +2,17 @@ import Box from '@mui/material/Box';
 import { BorrowAMM, Position } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useState } from 'react';
 
+import { Loading } from '../../../components/atomic/Loading/Loading';
+import { Panel } from '../../../components/atomic/Panel/Panel';
+import {
+  BorrowPortfolioHeader,
+  BorrowPortfolioHeaderProps,
+} from '../../../components/interface/BorrowPortfolioHeader/BorrowPortfolioHeader';
 import { Agents } from '../../../contexts/AgentContext/types';
 import { useAMMs } from '../../../hooks/useAMMs';
 import { useWallet } from '../../../hooks/useWallet';
 import { SystemStyleObject, Theme } from '../../../theme';
-import { Loading } from '../../atomic/Loading/Loading';
-import { Panel } from '../../atomic/Panel/Panel';
-import {
-  BorrowPortfolioHeader,
-  BorrowPortfolioHeaderProps,
-} from '../../interface/BorrowPortfolioHeader/BorrowPortfolioHeader';
-import BorrowTable from '../../interface/BorrowTable/BorrowTable';
+import { BorrowTable } from './BorrowTable/BorrowTable';
 import { getTotalFixedDebt, getTotalVariableDebt } from './services';
 
 export type ConnectedBorrowAMMTableProps = {

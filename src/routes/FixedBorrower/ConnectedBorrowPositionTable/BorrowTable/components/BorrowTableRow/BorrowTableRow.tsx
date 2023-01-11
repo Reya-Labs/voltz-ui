@@ -3,13 +3,16 @@ import TableRow from '@mui/material/TableRow';
 import { SystemStyleObject, Theme } from '@mui/system';
 import React, { useEffect } from 'react';
 
-import { useBorrowAMMContext } from '../../../../../contexts/BorrowAMMContext/BorrowAMMContext';
-import { usePositionContext } from '../../../../../contexts/PositionContext/PositionContext';
-import { useWallet } from '../../../../../hooks/useWallet';
-import { Button } from '../../../../atomic/Button/Button';
-import { PoolField } from '../../../../composite/PoolField/PoolField';
+import { Button } from '../../../../../../components/atomic/Button/Button';
+import { PoolField } from '../../../../../../components/composite/PoolField/PoolField';
+import { useBorrowAMMContext } from '../../../../../../contexts/BorrowAMMContext/BorrowAMMContext';
+import { usePositionContext } from '../../../../../../contexts/PositionContext/PositionContext';
+import { useWallet } from '../../../../../../hooks/useWallet';
 import { BorrowAMMTableDatum, labelsFixed, labelsVariable } from '../../types';
-import { BorrowFixedAPR, BorrowMaturity, BorrowVariableAPY, Debt } from './components';
+import { BorrowFixedAPR } from './components/BorrowFixedAPR/BorrowFixedAPR';
+import { BorrowMaturity } from './components/BorrowMaturity/BorrowMaturity';
+import { BorrowVariableAPY } from './components/BorrowVariableAPY/BorrowVariableAPY';
+import { Debt } from './components/Debt/Debt';
 
 export type BorrowTableRowProps = {
   datum: BorrowAMMTableDatum;
