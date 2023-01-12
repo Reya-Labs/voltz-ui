@@ -106,9 +106,7 @@ export const getTransactionData = (
         items: [
           {
             label: 'notional',
-            value: `${formatCurrency(
-              Math.abs(tx.variableTokenDelta),
-            )} ${token}`,
+            value: `${formatCurrency(Math.abs(tx.variableTokenDelta))} ${token}`,
           },
           {
             label: 'avg fix',
@@ -129,11 +127,7 @@ export const getTransactionData = (
         items: [
           {
             label: 'cashflow',
-            value: `${formatCurrency(
-              tx.settlementCashflow,
-              false,
-              true,
-            )} ${token}`,
+            value: `${formatCurrency(tx.settlementCashflow, false, true)} ${token}`,
           },
         ],
       };
