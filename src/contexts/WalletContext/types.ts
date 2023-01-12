@@ -20,14 +20,10 @@ export type Wallet = {
   provider: ethers.providers.JsonRpcProvider | null;
   signer: ethers.providers.JsonRpcSigner | null;
   balance: Record<string, BigNumber>;
-  wallet: GetWalletQuery['wallet'] | null;
-  loading: boolean;
-  error: boolean;
   required: boolean;
   setRequired: (required: boolean) => void;
   walletError: string | null;
   networkId?: string;
-  refetch: () => Promise<void>;
 };
 
 export interface WalletRiskAssessment {

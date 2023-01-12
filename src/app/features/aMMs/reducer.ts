@@ -69,8 +69,12 @@ export const slice = createSlice({
               }),
               factoryAddress: config.factoryAddress || '0x',
               marginEngineAddress,
-              termStartTimestampInMS: Number(ethers.utils.formatUnits(termStartTimestamp.toString(), 15)),
-              termEndTimestampInMS: Number(ethers.utils.formatUnits(termEndTimestamp.toString(), 15)),
+              termStartTimestampInMS: Number(
+                ethers.utils.formatUnits(termStartTimestamp.toString(), 15),
+              ),
+              termEndTimestampInMS: Number(
+                ethers.utils.formatUnits(termEndTimestamp.toString(), 15),
+              ),
               tickSpacing: parseInt(tickSpacing, 10),
               wethAddress: config.wethAddress,
             }),

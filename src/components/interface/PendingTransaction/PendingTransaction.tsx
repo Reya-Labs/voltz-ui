@@ -2,14 +2,12 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 import isUndefined from 'lodash.isundefined';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 
 import { selectors } from '../../../app';
 import { useAppSelector } from '../../../app/hooks';
 import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
-import { useAMMsContext } from '../../../contexts/AMMsContext/AMMsContext';
 import { MintBurnFormLiquidityAction } from '../../../contexts/MintBurnFormContext/MintBurnFormContext';
-import { Wallet } from '../../../graphql';
 import { useAgent } from '../../../hooks/useAgent';
 import { useWallet } from '../../../hooks/useWallet';
 import { getAmmProtocol, isBorrowing } from '../../../utilities/amm';
@@ -58,14 +56,8 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
   variableApy,
   fixedApr,
 }) => {
-  const previousWallet = useRef<Wallet>();
-  const [fetch, setFetch] = useState<number>(0);
-  const fetchRef = useRef<number>(0);
-  const fetchLimit = 20;
-  const { account, refetch, wallet } = useWallet();
-  const [loadingRefetch, setLoadingRefetch] = useState<boolean>(false);
+  const { account } = useWallet();
   const { agent } = useAgent();
-  const { removeFixedApr } = useAMMsContext();
   const cachedMargin = useRef<number | undefined>(margin);
 
   const action = useMemo(() => {
@@ -93,7 +85,7 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
   }, []);
 
   useEffect(() => {
-    if (!isUndefined(margin) && margin !== 0 && fetch === 0) {
+    if (!isUndefined(margin) && margin !== 0) {
       cachedMargin.current = margin;
     }
   }, [margin]);
@@ -123,23 +115,8 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
     }
   }, [activeTransaction?.failedAt]);
 
-  const isFetched = useMemo(() => {
-    if (previousWallet.current && !loadingRefetch) {
-      fetchRef.current = 0;
-      removeFixedApr(amm);
-      return true;
-    } else {
-      if (fetch >= fetchLimit) {
-        fetchRef.current = 0;
-        removeFixedApr(amm);
-        return true;
-      }
-    }
-    return false;
-  }, [fetch, loadingRefetch]);
-
   useEffect(() => {
-    if ((activeTransaction?.succeededAt || activeTransaction?.resolvedAt) && isFetched) {
+    if (activeTransaction?.succeededAt || activeTransaction?.resolvedAt) {
       setPageTitle('Successful Transaction', account);
       const payload: DataLayerEventPayload = {
         event: 'successful_tx',
@@ -155,35 +132,7 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
       };
       pushEvent(account ?? '', payload);
     }
-  }, [(activeTransaction?.succeededAt || activeTransaction?.resolvedAt) && isFetched]);
-
-  useEffect(() => {
-    if (!previousWallet.current && wallet) {
-      previousWallet.current = wallet as Wallet;
-    }
-  }, [wallet]);
-
-  useEffect(() => {
-    if (
-      activeTransaction &&
-      trasactionState[0] === activeTransaction.resolvedAt &&
-      trasactionState[1] === activeTransaction.succeededAt
-    )
-      return;
-    if (activeTransaction && (activeTransaction.resolvedAt || activeTransaction.succeededAt)) {
-      if (fetch < fetchLimit && !loadingRefetch && wallet && previousWallet.current) {
-        setLoadingRefetch(true);
-        /* eslint-disable @typescript-eslint/no-unsafe-call */
-        refetch().then(() => {
-          setTimeout(() => {
-            setLoadingRefetch(false);
-          }, 500);
-          fetchRef.current = fetch + 1;
-          setFetch(fetchRef.current);
-        });
-      }
-    }
-  }, [activeTransaction?.resolvedAt, activeTransaction?.succeededAt, fetch, loadingRefetch]);
+  }, [activeTransaction?.succeededAt || activeTransaction?.resolvedAt]);
 
   if (!activeTransaction) {
     return null;
@@ -210,7 +159,7 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
   );
 
   const renderStatus = () => {
-    if (activeTransaction.resolvedAt && isFetched) {
+    if (activeTransaction.resolvedAt) {
       return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Box
@@ -294,7 +243,7 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
       );
     }
 
-    if (activeTransaction.succeededAt && isFetched) {
+    if (activeTransaction.succeededAt) {
       return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Box
