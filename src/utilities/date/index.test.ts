@@ -1,4 +1,3 @@
-import JSBI from 'jsbi';
 import { DateTime } from 'luxon';
 
 import {
@@ -20,8 +19,8 @@ describe('utilities.date', () => {
   describe('formatTimestamp', () => {
     it('formats the timestamp correctly', () => {
       // corresponds to 02 Mar 2021
-      const timestamp = JSBI.BigInt('1614667200');
-      expect(formatTimestamp(timestamp)).toBe('02 Mar 2021');
+      const timestampInMS = 1614667200000;
+      expect(formatTimestamp(timestampInMS)).toBe('02 Mar 2021');
     });
   });
 

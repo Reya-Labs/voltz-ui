@@ -6,8 +6,8 @@ const serializeAmm = (amm: AMM): SerializedAMM => ({
   id: amm.id,
   factoryAddress: amm.factoryAddress,
   marginEngineAddress: amm.marginEngineAddress,
-  termStartTimestamp: amm.termStartTimestamp.toString(),
-  termEndTimestamp: amm.termEndTimestamp.toString(),
+  termStartTimestampInMS: amm.termStartTimestampInMS.toString(),
+  termEndTimestampInMS: amm.termEndTimestampInMS.toString(),
   tickSpacing: amm.tickSpacing.toString(),
   rateOracle: {
     id: amm.rateOracle.id,

@@ -1,6 +1,5 @@
 import { AMM, RateOracle, Token } from '@voltz-protocol/v1-sdk';
-import { providers } from 'ethers';
-import JSBI from 'jsbi';
+import { ethers, providers } from 'ethers';
 
 import { SerializedAMM } from '../../../types';
 
@@ -9,8 +8,8 @@ const deserializeAmm = (serializedAmm: SerializedAMM, signer: providers.JsonRpcS
     id,
     factoryAddress,
     marginEngineAddress,
-    termStartTimestamp,
-    termEndTimestamp,
+    termStartTimestampInMS,
+    termEndTimestampInMS,
     tickSpacing,
     rateOracle: {
       id: rateOracleAddress,
@@ -24,8 +23,8 @@ const deserializeAmm = (serializedAmm: SerializedAMM, signer: providers.JsonRpcS
     id,
     signer,
     provider: providers.getDefaultProvider(process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK),
-    termStartTimestamp: JSBI.BigInt(termStartTimestamp),
-    termEndTimestamp: JSBI.BigInt(termEndTimestamp),
+    termStartTimestampInMS: parseInt(termStartTimestampInMS, 10),
+    termEndTimestampInMS: parseInt(termEndTimestampInMS, 10),
     tickSpacing: parseInt(tickSpacing, 10),
     factoryAddress: factoryAddress || '0x',
     marginEngineAddress,
