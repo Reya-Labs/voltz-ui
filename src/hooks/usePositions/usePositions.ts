@@ -1,6 +1,6 @@
 import { getPositions, Position } from '@voltz-protocol/v1-sdk';
 import { DateTime } from 'luxon';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { selectors } from '../../app';
 import { updateTransactionAction } from '../../app/features/transactions';
@@ -20,36 +20,25 @@ type UsePositionsResult = {
 
 export const usePositions = (): UsePositionsResult => {
   const { agent } = useAgent();
-  const { wallet, loading: walletLoading, error: walletError } = useWallet();
+  const { account: userAddress } = useWallet();
   const { aMMs: amms, loading: ammLoading, error: ammError } = useAMMs();
-  const [ mePositions, setMePositions] = useState<Position[]>([]);
-  const [ fetchLoading, setFetchLoading ] = useState<boolean>(false);
-  const [ fetchError , setFetchError ] = useState<boolean>(false);
+  const [mePositions, setMePositions] = useState<Position[]>([]);
+  const [fetchLoading, setFetchLoading] = useState<boolean>(false);
+  const [fetchError, setFetchError] = useState<boolean>(false);
 
   useEffect(() => {
-    let shouldUpdate = true;
-    if (
-      wallet &&
-      !walletLoading &&
-      !walletError &&
-      amms &&
-      !ammLoading &&
-      !ammError
-    ) {
-      if (!agent) {
-        return;
-      }
-
+    if (userAddress && amms && amms.length > 0 && !ammLoading && !ammError && agent) {
       setFetchLoading(true);
       setFetchError(false);
 
+      console.log('items in usePositions:', amms);
+
       void getPositions({
-        userWalletId: wallet.id,
+        userWalletId: userAddress,
         amms,
-        subgraphURL: process.env.REACT_APP_SUBGRAPH_URL || "",
+        subgraphURL: process.env.REACT_APP_SUBGRAPH_URL || '',
         type: agent === Agents.LIQUIDITY_PROVIDER ? 'LP' : 'Trader',
-      }).then(({positions, error}) => {
-        shouldUpdate = true;
+      }).then(({ positions, error }) => {
         setMePositions([...positions]);
         setFetchLoading(false);
 
@@ -57,22 +46,8 @@ export const usePositions = (): UsePositionsResult => {
           setFetchError(true);
         }
       });
-
-      return () => {
-        shouldUpdate = false;
-      };
     }
-  }, [agent, wallet, walletLoading, walletError, amms, ammLoading, ammError]);
-
-  const positionsByAgentGroup = useMemo(() => {
-    return mePositions
-      .sort((a, b) => {
-        return b.createdTimestamp - a.createdTimestamp; // sort positions by timestamp
-      })
-      .sort((a, b) => {
-        return Number(a.isSettled) - Number(b.isSettled); // sort settled positions to the bottom
-      });
-  }, [mePositions]);
+  }, [agent, userAddress, !!amms, ammLoading, ammError]);
 
   const unresolvedTransactions = useAppSelector(selectors.unresolvedTransactionsSelector);
   const shouldTryToCloseTransactions =
@@ -122,9 +97,9 @@ export const usePositions = (): UsePositionsResult => {
   }, [shouldTryToCloseTransactions, mePositions, dispatch]);
 
   return {
-    positionsByAgentGroup: positionsByAgentGroup.filter((pos) => !isBorrowingPosition(pos)),
-    borrowPositions: positionsByAgentGroup.filter((pos) => isBorrowingPosition(pos)),
-    loading: walletLoading || ammLoading || fetchLoading,
-    error: walletError || ammError || fetchError,
+    positionsByAgentGroup: mePositions.filter((pos) => !isBorrowingPosition(pos)),
+    borrowPositions: mePositions.filter((pos) => isBorrowingPosition(pos)),
+    loading: ammLoading || fetchLoading,
+    error: ammError || fetchError,
   };
 };

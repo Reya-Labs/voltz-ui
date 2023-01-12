@@ -10,11 +10,7 @@ export const WalletContext = createContext<Wallet>({
   name: null,
   provider: null,
   signer: null,
-  wallet: null,
-  loading: false,
-  error: false,
   required: false,
   setRequired: (_required: boolean) => undefined,
   walletError: null,
-  refetch: () => Promise.resolve(),
 });

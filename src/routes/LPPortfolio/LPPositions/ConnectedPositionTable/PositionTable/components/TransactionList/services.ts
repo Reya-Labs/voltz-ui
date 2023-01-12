@@ -80,11 +80,7 @@ export const getTransactionData = (position: Position, tx: LPPositionTransaction
         items: [
           {
             label: 'cashflow',
-            value: `${formatCurrency(
-              tx.settlementCashflow,
-              false,
-              true,
-            )} ${token}`,
+            value: `${formatCurrency(tx.settlementCashflow, false, true)} ${token}`,
           },
         ],
       };
