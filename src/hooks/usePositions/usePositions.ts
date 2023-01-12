@@ -22,7 +22,9 @@ export const usePositions = (): UsePositionsResult => {
   const { agent } = useAgent();
   const { wallet, loading: walletLoading, error: walletError } = useWallet();
   const { aMMs: amms, loading: ammLoading, error: ammError } = useAMMs();
-  const [mePositions, setMePositions] = useState<Position[]>([]);
+  const [ mePositions, setMePositions] = useState<Position[]>([]);
+  const [ fetchLoading, setFetchLoading ] = useState<boolean>(false);
+  const [ fetchError , setFetchError ] = useState<boolean>(false);
 
   useEffect(() => {
     let shouldUpdate = true;
@@ -38,13 +40,22 @@ export const usePositions = (): UsePositionsResult => {
         return;
       }
 
+      setFetchLoading(true);
+      setFetchError(false);
+
       void getPositions({
         userWalletId: wallet.id,
         amms,
         subgraphURL: process.env.REACT_APP_SUBGRAPH_URL || "",
         type: agent === Agents.LIQUIDITY_PROVIDER ? 'LP' : 'Trader',
-      }).then(({positions}) => {
+      }).then(({positions, error}) => {
+        shouldUpdate = true;
         setMePositions([...positions]);
+        setFetchLoading(false);
+
+        if (error) {
+          setFetchError(true);
+        }
       });
 
       return () => {
@@ -113,7 +124,7 @@ export const usePositions = (): UsePositionsResult => {
   return {
     positionsByAgentGroup: positionsByAgentGroup.filter((pos) => !isBorrowingPosition(pos)),
     borrowPositions: positionsByAgentGroup.filter((pos) => isBorrowingPosition(pos)),
-    loading: walletLoading || ammLoading,
-    error: walletError || ammError,
+    loading: walletLoading || ammLoading || fetchLoading,
+    error: walletError || ammError || fetchError,
   };
 };
