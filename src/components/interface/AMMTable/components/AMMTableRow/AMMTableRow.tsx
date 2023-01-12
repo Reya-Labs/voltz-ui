@@ -3,7 +3,7 @@ import TableRow from '@mui/material/TableRow';
 import { SystemStyleObject, Theme } from '@mui/system';
 import isNumber from 'lodash.isnumber';
 import { DateTime } from 'luxon';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Agents } from '../../../../../contexts/AgentContext/types';
 import { useAMMContext } from '../../../../../contexts/AMMContext/AMMContext';
@@ -36,7 +36,7 @@ export const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({
   const { agent } = useAgent();
   const variant = agent === Agents.LIQUIDITY_PROVIDER ? 'darker' : 'main';
   const { amm } = useAMMContext();
-
+  const [waitForConnectedWallet, setWaitForConnectedWallet] = useState(false);
   const { variableApy, fixedApr } = useAMMsContext();
   const { result: resultFixedApr, call: callFixedApr } = fixedApr(amm);
   const { result: resultVarApy, call: callVarApy } = variableApy(amm);
@@ -48,6 +48,13 @@ export const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({
   useEffect(() => {
     callFixedApr();
   }, [callFixedApr]);
+
+  useEffect(() => {
+    if (wallet.account && waitForConnectedWallet) {
+      setWaitForConnectedWallet(false);
+      onSelect();
+    }
+  }, [onSelect, waitForConnectedWallet, wallet.account]);
 
   const typeStyleOverrides = (): SystemStyleObject<Theme> => {
     if (!variant) {
@@ -77,6 +84,7 @@ export const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({
   const handleClick = () => {
     if (!wallet.account) {
       wallet.setRequired(true);
+      setWaitForConnectedWallet(true);
     } else {
       onSelect();
     }
