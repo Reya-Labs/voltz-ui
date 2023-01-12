@@ -28,10 +28,10 @@ export const formatDateTime = (dateTime: DateTime) => {
 
 /**
  * Takes a timestamp and returns a string representation: 01 Mar 2022
- * @param timestamp - The timestamp to process
+ * @param timestampInMS - The timestamp to process in milliseconds
  */
-export const formatTimestamp = (timestamp: JSBI) => {
-  const date = new Date(parseInt(timestamp.toString(), 10) * 1000);
+export const formatTimestamp = (timestampInMS: number) => {
+  const date = new Date(timestampInMS);
   return `${date.getDate().toString().padStart(2, '0')} ${
     shortMonths[date.getMonth()]
   } ${date.getFullYear()}`;

@@ -1,20 +1,9 @@
 import { Position } from '@voltz-protocol/v1-sdk';
-import { BigNumber } from 'ethers';
-import JSBI from 'jsbi';
 
 import { SupportedIcons } from '../../../../../../../components/atomic/Icon/types';
 import { formatTimestamp } from '../../../../../../../utilities/date';
 import { formatCurrency } from '../../../../../../../utilities/number';
 import { LPPositionTransaction, TransactionType } from './types';
-
-/**
- * Takes a currency value from a transaction and returns the decimal number version
- * @param position - the position
- * @param num - The transaction currency number (these are JSBI objects)
- */
-export const getDescaledValue = (position: Position, num: JSBI) => {
-  return position.amm.descale(BigNumber.from(num.toString()));
-};
 
 /**
  * Outputs an array of transactions for a given position. The types of transaction differ
@@ -38,8 +27,8 @@ export const getTransactions = (position: Position) => {
  */
 export const sortTransactions = (transactions: LPPositionTransaction[]) => {
   transactions.sort((a, b) => {
-    const timeA = JSBI.toNumber(a.transactionTimestamp);
-    const timeB = JSBI.toNumber(b.transactionTimestamp);
+    const timeA = a.creationTimestampInMS;
+    const timeB = b.creationTimestampInMS;
     return timeB - timeA;
   });
   return transactions;
@@ -77,7 +66,7 @@ export const getTransactionData = (position: Position, tx: LPPositionTransaction
   };
 
   const baseData = {
-    date: formatTimestamp(tx.transactionTimestamp),
+    date: formatTimestamp(tx.creationTimestampInMS),
     icon: iconMap[tx.type],
     label: getLabel(),
     type: tx.type,
@@ -92,7 +81,7 @@ export const getTransactionData = (position: Position, tx: LPPositionTransaction
           {
             label: 'cashflow',
             value: `${formatCurrency(
-              getDescaledValue(position, tx.settlementCashflow),
+              tx.settlementCashflow,
               false,
               true,
             )} ${token}`,
@@ -106,7 +95,7 @@ export const getTransactionData = (position: Position, tx: LPPositionTransaction
         items: [
           {
             label: 'margin delta',
-            value: `${formatCurrency(getDescaledValue(position, tx.marginDelta))} ${token}`,
+            value: `${formatCurrency(tx.marginDelta)} ${token}`,
           },
         ],
       };
@@ -117,11 +106,11 @@ export const getTransactionData = (position: Position, tx: LPPositionTransaction
         items: [
           {
             label: 'unwound',
-            value: `${formatCurrency(getDescaledValue(position, tx.notionalUnwound))} ${token}`,
+            value: `${formatCurrency(tx.notionalUnwound)} ${token}`,
           },
           {
             label: 'cashflow',
-            value: `${formatCurrency(getDescaledValue(position, tx.reward), false, true)} ${token}`,
+            value: `${formatCurrency(tx.loss, false, true)} ${token}`,
           },
         ],
       };
@@ -133,9 +122,7 @@ export const getTransactionData = (position: Position, tx: LPPositionTransaction
         items: [
           {
             label: 'notional',
-            value: `${formatCurrency(
-              position.getNotionalFromLiquidity(BigNumber.from(tx.amount.toString())),
-            )} ${token}`,
+            value: `${formatCurrency(tx.liquidity)} ${token}`,
           },
         ],
       };

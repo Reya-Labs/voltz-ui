@@ -51,8 +51,8 @@ export type SerializedAMM = {
   id: string;
   factoryAddress: string;
   marginEngineAddress: string;
-  termStartTimestamp: string;
-  termEndTimestamp: string;
+  termStartTimestampInMS: string;
+  termEndTimestampInMS: string;
   tickSpacing: string;
   rateOracle: {
     id: string;

@@ -1,6 +1,4 @@
 import { Position } from '@voltz-protocol/v1-sdk';
-import { BigNumber } from 'ethers';
-import JSBI from 'jsbi';
 
 import { SupportedIcons } from '../../../../../components/atomic/Icon/types';
 import { formatTimestamp } from '../../../../../utilities/date';
@@ -8,24 +6,12 @@ import { formatCurrency, formatNumber } from '../../../../../utilities/number';
 import { LPPositionTransaction, TraderPositionTransaction, TransactionType } from './types';
 
 /**
- * Takes a currency value from a transaction and returns the decimal number version
- * @param num - The transaction currency number (these are JSBI objects)
- */
-export const getDescaledValue = (position: Position, num: JSBI) => {
-  return position.amm.descale(BigNumber.from(num.toString()));
-};
-
-/**
  * Returns the 'avg fix' percentage value for the given parameters
  * @param fixedTokenDeltaUnbalanced
  * @param variableTokenDelta
  */
-export const getAvgFix = (fixedTokenDeltaUnbalanced: JSBI, variableTokenDelta: JSBI) => {
-  return Math.abs(
-    JSBI.toNumber(
-      JSBI.divide(JSBI.multiply(fixedTokenDeltaUnbalanced, JSBI.BigInt(1000)), variableTokenDelta),
-    ) / 1000,
-  );
+export const getAvgFix = (fixedTokenDeltaUnbalanced: number, variableTokenDelta: number) => {
+  return Math.abs(fixedTokenDeltaUnbalanced / variableTokenDelta);
 };
 
 /**
@@ -61,8 +47,8 @@ export const sortTransactions = (
   transactions: TraderPositionTransaction[] | LPPositionTransaction[],
 ) => {
   transactions.sort((a, b) => {
-    const timeA = JSBI.toNumber(a.transactionTimestamp);
-    const timeB = JSBI.toNumber(b.transactionTimestamp);
+    const timeA = a.creationTimestampInMS;
+    const timeB = b.creationTimestampInMS;
     return timeB - timeA;
   });
   return transactions;
@@ -101,12 +87,12 @@ export const getTransactionData = (
       case TransactionType.SETTLEMENT:
         return 'SETTLE';
       case TransactionType.SWAP:
-        return `SWAP ${JSBI.GT(tx.variableTokenDelta, 0) ? 'VT' : 'FT'}`;
+        return `SWAP ${tx.variableTokenDelta > 0 ? 'VT' : 'FT'}`;
     }
   };
 
   const baseData = {
-    date: formatTimestamp(tx.transactionTimestamp),
+    date: formatTimestamp(tx.creationTimestampInMS),
     icon: iconMap[tx.type],
     label: getLabel(),
     type: tx.type,
@@ -121,20 +107,18 @@ export const getTransactionData = (
           {
             label: 'notional',
             value: `${formatCurrency(
-              Math.abs(getDescaledValue(position, tx.variableTokenDelta)),
+              Math.abs(tx.variableTokenDelta),
             )} ${token}`,
           },
           {
             label: 'avg fix',
             value: `${formatNumber(
-              getAvgFix(tx.fixedTokenDeltaUnbalanced, tx.variableTokenDelta),
+              getAvgFix(tx.unbalancedFixedTokenDelta, tx.variableTokenDelta),
             )} %`,
           },
           {
             label: 'fees',
-            value: `${formatCurrency(
-              getDescaledValue(position, tx.cumulativeFeeIncurred),
-            )} ${token}`,
+            value: `${formatCurrency(tx.fees)} ${token}`,
           },
         ],
       };
@@ -146,7 +130,7 @@ export const getTransactionData = (
           {
             label: 'cashflow',
             value: `${formatCurrency(
-              getDescaledValue(position, tx.settlementCashflow),
+              tx.settlementCashflow,
               false,
               true,
             )} ${token}`,
@@ -160,7 +144,7 @@ export const getTransactionData = (
         items: [
           {
             label: 'margin delta',
-            value: `${formatCurrency(getDescaledValue(position, tx.marginDelta))} ${token}`,
+            value: `${formatCurrency(tx.marginDelta)} ${token}`,
           },
         ],
       };
@@ -171,11 +155,11 @@ export const getTransactionData = (
         items: [
           {
             label: 'unwound',
-            value: `${formatCurrency(getDescaledValue(position, tx.notionalUnwound))} ${token}`,
+            value: `${formatCurrency(tx.notionalUnwound)} ${token}`,
           },
           {
             label: 'cashflow',
-            value: `${formatCurrency(getDescaledValue(position, tx.reward), false, true)} ${token}`,
+            value: `${formatCurrency(tx.loss, false, true)} ${token}`,
           },
         ],
       };
@@ -187,9 +171,7 @@ export const getTransactionData = (
         items: [
           {
             label: 'notional',
-            value: `${formatCurrency(
-              position.getNotionalFromLiquidity(BigNumber.from(tx.amount.toString())),
-            )} ${token}`,
+            value: `${formatCurrency(tx.liquidity)} ${token}`,
           },
         ],
       };
