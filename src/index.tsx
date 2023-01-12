@@ -24,6 +24,7 @@ import { WalletProvider } from './contexts/WalletContext/WalletProvider';
 import { VoltzGraphProvider } from './graphql';
 import { ThemeProvider } from './theme/ThemeProvider/ThemeProvider';
 import { initSentryTracker } from './utilities/sentry';
+import { init as initSDK } from '@voltz-protocol/v1-sdk';
 
 try {
   if (process.env.CI_BUILD !== 'true' && process.env.NODE_ENV !== 'development') {
@@ -31,6 +32,7 @@ try {
   }
 } catch (_) {}
 
+initSDK();
 initSentryTracker();
 
 ReactDOM.render(
