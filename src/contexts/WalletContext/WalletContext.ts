@@ -10,7 +10,6 @@ export const WalletContext = createContext<Wallet>({
   name: null,
   provider: null,
   signer: null,
-  balance: {},
   wallet: null,
   loading: false,
   error: false,

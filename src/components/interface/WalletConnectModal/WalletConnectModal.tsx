@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 import { WalletName } from '../../../contexts/WalletContext/types';
 import { useWallet } from '../../../hooks/useWallet';
-import { Panel } from '../../atomic/Panel/Panel';
 import { Modal } from '../../composite/Modal/Modal';
 import { WalletConnectButton } from './WalletConnectButton/WalletConnectButton';
 import { WalletDisplay } from './WalletDisplay/WalletDisplay';
@@ -14,6 +13,10 @@ export const WalletConnectModal: React.FunctionComponent = () => {
   const [selecting, setSelecting] = useState(true);
   const handleChangeWallet = () => setSelecting(true);
   const handleOpen = () => setOpen(true);
+  const handleModalClose = () => {
+    setOpen(!!wallet.account);
+    setSelecting(false);
+  };
   const handleClose = () => {
     setSelecting(false);
     setOpen(false);
@@ -21,19 +24,32 @@ export const WalletConnectModal: React.FunctionComponent = () => {
   };
   const handleSelectWallet = (name: WalletName) => {
     handleClose();
-    if (name === 'disconnect') {
-      wallet.disconnect();
-    } else {
-      void wallet.connect(name);
-    }
+    void wallet.connect(name);
+  };
+  const handleDisconnectWallet = () => {
+    handleClose();
+    wallet.disconnect();
   };
 
   const renderContent = () => {
     if (wallet.status === 'connected' && !selecting) {
-      return <WalletDisplay wallet={wallet} onChangeWallet={handleChangeWallet} />;
+      return (
+        <WalletDisplay
+          account={wallet?.account}
+          walletName={!wallet?.name || wallet.name === 'disconnect' ? null : wallet.name}
+          onChangeWallet={handleChangeWallet}
+          onDisconnectWallet={handleDisconnectWallet}
+        />
+      );
     }
 
-    return <WalletSelect wallet={wallet} onSelectWallet={handleSelectWallet} />;
+    return (
+      <WalletSelect
+        wallet={wallet}
+        onClose={handleModalClose}
+        onSelectWallet={handleSelectWallet}
+      />
+    );
   };
 
   useEffect(() => {
@@ -52,22 +68,17 @@ export const WalletConnectModal: React.FunctionComponent = () => {
   return (
     <Modal
       open={open}
-      trigger={<WalletConnectButton wallet={wallet} />}
+      trigger={
+        <WalletConnectButton
+          account={wallet?.account}
+          error={wallet?.walletError}
+          walletName={!wallet?.name || wallet.name === 'disconnect' ? null : wallet.name}
+        />
+      }
       onClose={handleClose}
       onOpen={handleOpen}
     >
-      <Panel
-        sx={{
-          minWidth: 400,
-          maxWidth: 400,
-          minHeight: 400,
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-        variant="darker"
-      >
-        {renderContent()}
-      </Panel>
+      {renderContent()}
     </Modal>
   );
 };

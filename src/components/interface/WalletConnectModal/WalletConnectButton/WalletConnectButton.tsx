@@ -1,62 +1,44 @@
-import CircleIcon from '@mui/icons-material/Circle';
-import Box from '@mui/material/Box';
-import React, { useMemo } from 'react';
+import React from 'react';
 
-import { Wallet } from '../../../../contexts/WalletContext/types';
-import { colors } from '../../../../theme';
-import { Button } from '../../../atomic/Button/Button';
 import { Icon } from '../../../atomic/Icon/Icon';
 import { SupportedIcons } from '../../../atomic/Icon/types';
 import { AvatarAddress } from '../../AvatarAddress/AvatarAddress';
+import { ButtonBox, IndicatorCircleIcon, WalletButton } from './WalletConnectButton.styled';
 
 export type WalletConnectButtonProps = {
   onClick?: () => void;
-  wallet: Wallet;
+  walletName?: 'metamask' | 'walletConnect' | null;
+  account?: string | null;
+  error?: string | null;
 };
 
 export const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = ({
   onClick,
-  wallet: { status, name, account, balance, walletError },
+  walletName,
+  account,
+  error,
 }) => {
-  const currency = 'ETH';
-  const text = useMemo(() => {
-    if (!balance) {
-      return 'Connect Wallet';
-    }
-
-    if (status === 'connected') {
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      return `${balance} ${currency}`;
-    }
-
-    return 'Connect wallet';
-  }, [balance, status]);
-
-  if (walletError) {
+  if (error) {
     return (
-      <Box sx={{ marginLeft: (theme) => theme.spacing(4), display: 'flex' }}>
-        <Button
-          startIcon={
-            <CircleIcon
-              sx={{ width: 4, height: 4, borderRadius: 200, color: colors.wildStrawberry.base }}
-            />
-          }
-          sx={{ zIndex: 1, left: (theme) => theme.spacing(-2), fontSize: 16 }}
+      <ButtonBox data-testid="WalletConnectButton-WalletError">
+        <WalletButton
+          data-testid="WalletConnectButton-WalletError-WalletButton"
+          startIcon={<IndicatorCircleIcon />}
           variant="red"
           onClick={onClick}
         >
-          {walletError}
-        </Button>
-      </Box>
+          {error}
+        </WalletButton>
+      </ButtonBox>
     );
   }
 
-  if (status === 'connected') {
+  if (account) {
     return (
-      <Box sx={{ marginLeft: (theme) => theme.spacing(4), display: 'flex' }}>
-        <Button
-          endIcon={name && <Icon name={name as SupportedIcons} sx={{ width: 16 }} />}
-          sx={{ zIndex: 1, left: (theme) => theme.spacing(-2), fontSize: 16 }}
+      <ButtonBox data-testid="WalletConnectButton-WalletConnected">
+        <WalletButton
+          data-testid="WalletConnectButton-WalletConnected-WalletButton"
+          endIcon={walletName && <Icon name={walletName as SupportedIcons} sx={{ width: 16 }} />}
           variant="dark"
           onClick={onClick}
         >
@@ -68,23 +50,21 @@ export const WalletConnectButton: React.FunctionComponent<WalletConnectButtonPro
             }}
             size={16}
           />
-        </Button>
-      </Box>
+        </WalletButton>
+      </ButtonBox>
     );
   }
 
   return (
-    <Button
-      startIcon={
-        <CircleIcon
-          sx={{ width: 4, height: 4, borderRadius: 200, color: colors.wildStrawberry.base }}
-        />
-      }
-      sx={{ marginLeft: (theme) => theme.spacing(4), fontSize: 16 }}
-      variant="darker"
-      onClick={onClick}
-    >
-      {text}
-    </Button>
+    <ButtonBox data-testid="WalletConnectButton-WalletConnect">
+      <WalletButton
+        data-testid="WalletConnectButton-WalletConnect-WalletButton"
+        startIcon={<IndicatorCircleIcon />}
+        variant="dark"
+        onClick={onClick}
+      >
+        Connect wallet
+      </WalletButton>
+    </ButtonBox>
   );
 };

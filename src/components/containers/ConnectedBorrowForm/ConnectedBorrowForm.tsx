@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { actions, selectors } from '../../../app';
+import { closeTransactionAction } from '../../../app/features/transactions';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { Agents } from '../../../contexts/AgentContext/types';
 import { useAMMContext } from '../../../contexts/AMMContext/AMMContext';
@@ -74,7 +75,7 @@ export const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormPro
 
   const handleGoBack = () => {
     form.setNotional(0);
-    const action = actions.closeTransaction(transactionId as string);
+    const action = closeTransactionAction(transactionId as string);
     dispatch(action);
   };
 

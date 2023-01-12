@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { actions, selectors } from '../../../app';
+import { closeTransactionAction } from '../../../app/features/transactions';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { Agents } from '../../../contexts/AgentContext/types';
 import { useAMMContext } from '../../../contexts/AMMContext/AMMContext';
@@ -96,7 +97,7 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
 
   const handleGoBack = () => {
     setPageTitle(`${position ? 'Edit' : 'New'} Trader Position`, account);
-    const action = actions.closeTransaction(transactionId as string);
+    const action = closeTransactionAction(transactionId as string);
     dispatch(action);
   };
 

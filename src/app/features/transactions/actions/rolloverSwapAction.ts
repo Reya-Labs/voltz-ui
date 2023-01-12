@@ -3,7 +3,7 @@ import { AMM } from '@voltz-protocol/v1-sdk';
 import { RolloverSwapAction, RolloverSwapTransaction } from '../../../types';
 import { createId, serializeAmm } from '../utilities';
 
-const rolloverSwapAction = (
+export const rolloverSwapAction = (
   amm: AMM,
   transaction: Omit<RolloverSwapTransaction, 'id'>,
 ): RolloverSwapAction => ({
@@ -16,5 +16,3 @@ const rolloverSwapAction = (
     },
   },
 });
-
-export default rolloverSwapAction;

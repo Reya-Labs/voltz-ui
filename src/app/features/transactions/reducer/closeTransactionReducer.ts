@@ -1,4 +1,4 @@
-import { CloseTransactionAction, State } from '../../../../types';
+import { CloseTransactionAction, State } from '../../../types';
 
 export const closeTransactionReducer = (
   state: State['transactions'],

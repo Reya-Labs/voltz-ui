@@ -3,7 +3,7 @@ import { AMM } from '@voltz-protocol/v1-sdk';
 import { MintAction, Transaction } from '../../../types';
 import { createId, serializeAmm } from '../utilities';
 
-const mintAction = (amm: AMM, transaction: Omit<Transaction, 'id'>): MintAction => ({
+export const mintAction = (amm: AMM, transaction: Omit<Transaction, 'id'>): MintAction => ({
   type: 'mint',
   payload: {
     amm: serializeAmm(amm),
@@ -13,5 +13,3 @@ const mintAction = (amm: AMM, transaction: Omit<Transaction, 'id'>): MintAction 
     },
   },
 });
-
-export default mintAction;

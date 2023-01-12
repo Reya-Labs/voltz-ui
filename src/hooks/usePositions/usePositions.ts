@@ -2,7 +2,8 @@ import { Position } from '@voltz-protocol/v1-sdk';
 import { DateTime } from 'luxon';
 import { useEffect, useMemo, useState } from 'react';
 
-import { actions, selectors } from '../../app';
+import { selectors } from '../../app';
+import { updateTransactionAction } from '../../app/features/transactions';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { Agents } from '../../contexts/AgentContext/types';
 import { isBorrowingPosition } from '../../utilities/borrowAmm';
@@ -115,7 +116,7 @@ export const usePositions = (): UsePositionsResult => {
 
         if (matchingPosition) {
           dispatch(
-            actions.updateTransaction({
+            updateTransactionAction({
               id: unresolvedTransaction.id,
               resolvedAt: DateTime.now().toISO(),
             }),

@@ -3,6 +3,7 @@ import { Position } from '@voltz-protocol/v1-sdk';
 import React, { ReactNode, useCallback, useState } from 'react';
 
 import { actions, selectors } from '../../../app';
+import { closeTransactionAction } from '../../../app/features/transactions';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { Loading } from '../../../components/atomic/Loading/Loading';
 import { Panel } from '../../../components/atomic/Panel/Panel';
@@ -65,8 +66,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
   const handleTransactionFinished = () => {
     handleCompletedSettling();
     if (positionToSettle) {
-      const action = actions.closeTransaction(positionToSettle.txId);
-      dispatch(action);
+      dispatch(closeTransactionAction(positionToSettle.txId));
       setPositionToSettle(undefined);
     }
   };

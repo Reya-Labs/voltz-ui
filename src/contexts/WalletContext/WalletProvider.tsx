@@ -1,4 +1,4 @@
-import { BigNumber, ethers } from 'ethers';
+import { ethers } from 'ethers';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { selectors } from '../../app';
@@ -23,7 +23,6 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
   const [status, setStatus] = useState<WalletStatus>('initializing');
   const [account, setAccount] = useState<string | null>(null);
   const [name, setName] = useState<WalletName | null>(null);
-  const [balance, setBalance] = useState<Record<string, BigNumber>>({});
   const [required, setRequired] = useState<boolean>(false);
 
   const disconnect = useCallback(
@@ -34,11 +33,10 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
       setName(null);
       localStorage.removeItem('connectedWalletName');
       setAccount(null);
-      setBalance({});
       setStatus('notConnected');
       setWalletError(errorMessage);
     },
-    [setAccount, setBalance, setStatus],
+    [setAccount, setStatus],
   );
 
   const connect = useCallback(
@@ -74,7 +72,6 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
           setName(walletName);
           localStorage.setItem('connectedWalletName', walletName);
           setAccount(walletAddress.toLowerCase()); // metamask wallet data will not load unless walletAddress is all lower case - why?
-          setBalance({});
           setStatus('connected');
           setWalletError(null);
         } else {
@@ -95,7 +92,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
         disconnect(errorMessage || null);
       }
     },
-    [disconnect, setAccount, setBalance, setStatus],
+    [disconnect, setAccount, setStatus],
   );
 
   // Reconnect wallet on page load
@@ -137,7 +134,6 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     name,
     signer,
     provider,
-    balance,
     wallet: data && data.wallet ? data.wallet : null,
     loading,
     error: !!error,

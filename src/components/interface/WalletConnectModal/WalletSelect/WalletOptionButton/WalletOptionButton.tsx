@@ -1,42 +1,30 @@
 import React from 'react';
 
-import { Button } from '../../../../atomic/Button/Button';
 import { Icon, IconProps } from '../../../../atomic/Icon/Icon';
 import { Typography } from '../../../../atomic/Typography/Typography';
+import { OptionButton } from './WalletOptionButton.styled';
 
 export type WalletOptionButtonProps = {
-  onClick: () => void;
+  onClick?: () => void;
   title: string;
   icon?: IconProps['name'];
-  selected: boolean;
+  disabled: boolean;
 };
 
 export const WalletOptionButton: React.FunctionComponent<WalletOptionButtonProps> = ({
   onClick,
   title,
   icon,
-  selected,
+  disabled,
 }) => (
-  <Button
-    selected={selected}
-    sx={{
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'space-between',
-      padding: (theme) => theme.spacing(4),
-      marginTop: (theme) => theme.spacing(4),
-
-      '&:first-of-type': {
-        marginTop: '0',
-      },
-    }}
+  <OptionButton
+    data-testid={`WalletOptionButton-${title}`}
+    disabled={disabled}
+    selected={disabled}
     variant="darker"
     onClick={onClick}
   >
-    <Typography variant="h6">
-      {selected && '• '}
-      {title}
-    </Typography>
-    {icon && <Icon name={icon} sx={{ width: 22 }} />}
-  </Button>
+    <Typography variant="h6">{title}</Typography>
+    {icon && <Icon name={icon} />}
+  </OptionButton>
 );

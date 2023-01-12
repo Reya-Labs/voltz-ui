@@ -3,7 +3,7 @@ import { AMM } from '@voltz-protocol/v1-sdk';
 import { SettlePositionAction, Transaction } from '../../../types';
 import { createId, serializeAmm } from '../utilities';
 
-const settlePositionAction = (
+export const settlePositionAction = (
   amm: AMM,
   transaction: Omit<Transaction, 'id'>,
 ): SettlePositionAction => ({
@@ -16,5 +16,3 @@ const settlePositionAction = (
     },
   },
 });
-
-export default settlePositionAction;

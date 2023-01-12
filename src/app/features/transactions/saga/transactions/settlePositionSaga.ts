@@ -6,7 +6,7 @@ import { call, put } from 'redux-saga/effects';
 import { getErrorMessage } from '../../../../../utilities/getErrorMessage';
 import { getSentryTracker } from '../../../../../utilities/sentry';
 import { SettlePositionAction } from '../../../../types';
-import { updateTransaction } from '../../actions';
+import { updateTransactionAction } from '../../actions';
 import { deserializeAmm, getSigner } from '../../utilities';
 
 export function* settlePositionSaga(action: SettlePositionAction) {
@@ -38,7 +38,7 @@ export function* settlePositionSaga(action: SettlePositionAction) {
   } catch (error) {
     getSentryTracker().captureException(error);
     yield put(
-      updateTransaction({
+      updateTransactionAction({
         id,
         failedAt: DateTime.now().toISO(),
         failureMessage: getErrorMessage(error),
@@ -49,10 +49,12 @@ export function* settlePositionSaga(action: SettlePositionAction) {
   }
 
   if (!result) {
-    yield put(updateTransaction({ id, failedAt: DateTime.now().toISO(), failureMessage: 'error' }));
+    yield put(
+      updateTransactionAction({ id, failedAt: DateTime.now().toISO(), failureMessage: 'error' }),
+    );
   } else {
     yield put(
-      updateTransaction({
+      updateTransactionAction({
         id,
         succeededAt: DateTime.now().toISO(),
         txid: result.transactionHash,
