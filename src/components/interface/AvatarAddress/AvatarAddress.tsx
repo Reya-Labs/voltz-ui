@@ -76,6 +76,7 @@ export const AvatarAddress: FunctionComponent<{
             />
           )}
           <Typography
+            data-testid="AvatarAddress-AddressTypography"
             sx={{
               color: colors.lavenderWeb.base,
               fontSize: '18px',
