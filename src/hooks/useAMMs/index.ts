@@ -36,12 +36,16 @@ export const useAMMs = (): UseAMMsResult => {
   }, [aMMsLoadedState, dispatch]);
 
   useEffect(() => {
+    if (aMMsLoadedState !== 'succeeded') {
+      return;
+    }
+
     void dispatch(
       setSignerForAMMsAction({
         signer,
       }),
     );
-  }, [dispatch, signer]);
+  }, [aMMsLoadedState, dispatch, signer]);
 
   return {
     aMMs,
