@@ -1,59 +1,54 @@
-import Box from '@mui/material/Box';
 import React from 'react';
 
-import { Wallet } from '../../../../contexts/WalletContext/types';
-import { Button } from '../../../atomic/Button/Button';
+import { elideAddress } from '../../../../utilities/elideAddress';
 import { Icon } from '../../../atomic/Icon/Icon';
-import { Panel } from '../../../atomic/Panel/Panel';
-import { Typography } from '../../../atomic/Typography/Typography';
+import {
+  ButtonBox,
+  ChangeWalletButton,
+  ConnectedWithTypography,
+  ContentBox,
+  DescriptionTypography,
+  DisconnectButton,
+  HeaderBox,
+} from './WalletDisplay.styled';
 
 export type WalletDisplayProps = {
-  wallet: Wallet;
+  walletName?: 'metamask' | 'walletConnect' | null;
   onChangeWallet: () => void;
+  onDisconnectWallet: () => void;
+  account?: string | null;
 };
 
 export const WalletDisplay: React.FunctionComponent<WalletDisplayProps> = ({
-  wallet,
+  walletName,
   onChangeWallet,
+  onDisconnectWallet,
+  account,
 }) => {
-  if (!wallet.name || wallet.name === 'disconnect') {
+  if (!walletName) {
     return null;
   }
 
   return (
-    <>
-      <Typography sx={{ marginBottom: (theme) => theme.spacing(6) }} variant="h6">
-        ACCOUNT
-      </Typography>
-      <Panel sx={{ display: 'flex', flexDirection: 'column' }} variant="dark">
-        <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
-          <Typography variant="h2">CONNECTED WITH {wallet.name.toUpperCase()}</Typography>
-          <Icon
-            name={wallet.name}
-            sx={{ marginLeft: (theme) => theme.spacing(4), paddingTop: 1 }}
-          />
-        </Box>
-        <Box
-          sx={{
-            marginTop: (theme) => theme.spacing(8),
-            display: 'flex',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-          }}
-        >
-          <Icon color="info" name="information-circle" sx={{ position: 'relative', top: '-2px' }} />
-          <Box sx={{ display: 'flex', alignItems: 'baseline' }}>
-            <Button
-              color="error"
-              sx={{ marginLeft: (theme) => theme.spacing(1), fontSize: 18, top: '-2px' }}
-              variant="text"
-              onClick={onChangeWallet}
-            >
-              CHANGE WALLET
-            </Button>
-          </Box>
-        </Box>
-      </Panel>
-    </>
+    <ContentBox data-testid="WalletDisplay-ContentBox">
+      <HeaderBox>
+        <ConnectedWithTypography variant="h2">
+          CONNECTED WITH {walletName.toUpperCase()}
+        </ConnectedWithTypography>
+        <Icon name={walletName} />
+      </HeaderBox>
+      <DescriptionTypography data-testid="WalletDisplay-DescriptionTypography">
+        Hey <b>{elideAddress(account)}!</b> Start trading with another <b>wallet</b>! Use the
+        options below.
+      </DescriptionTypography>
+      <ButtonBox>
+        <ChangeWalletButton data-testid="WalletDisplay-ChangeWalletButton" onClick={onChangeWallet}>
+          CHANGE
+        </ChangeWalletButton>
+        <DisconnectButton data-testid="WalletDisplay-DisconnectButton" onClick={onDisconnectWallet}>
+          DISCONNECT
+        </DisconnectButton>
+      </ButtonBox>
+    </ContentBox>
   );
 };
