@@ -1,4 +1,3 @@
-import JSBI from 'jsbi';
 import { DateTime } from 'luxon';
 
 const shortMonths = [
