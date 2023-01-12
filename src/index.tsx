@@ -10,6 +10,7 @@ import './fonts/DM_Sans/DMSans-MediumItalic.woff';
 import './fonts/DM_Sans/DMSans-Regular.woff';
 import './index.css';
 
+import { init as initSDK } from '@voltz-protocol/v1-sdk';
 import { Amplify } from 'aws-amplify';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -24,7 +25,6 @@ import { WalletProvider } from './contexts/WalletContext/WalletProvider';
 import { VoltzGraphProvider } from './graphql';
 import { ThemeProvider } from './theme/ThemeProvider/ThemeProvider';
 import { initSentryTracker } from './utilities/sentry';
-import { init as initSDK } from '@voltz-protocol/v1-sdk';
 
 try {
   if (process.env.CI_BUILD !== 'true' && process.env.NODE_ENV !== 'development') {

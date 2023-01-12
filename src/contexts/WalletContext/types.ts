@@ -1,7 +1,5 @@
 import { ethers } from 'ethers';
 
-import { GetWalletQuery } from '../../graphql';
-
 export type WalletStatus =
   | 'initializing'
   | 'unavailable'

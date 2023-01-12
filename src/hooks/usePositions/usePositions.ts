@@ -30,9 +30,7 @@ export const usePositions = (): UsePositionsResult => {
     if (userAddress && amms && amms.length > 0 && !ammLoading && !ammError && agent) {
       setFetchLoading(true);
       setFetchError(false);
-
-      console.log('items in usePositions:', amms);
-
+  
       void getPositions({
         userWalletId: userAddress,
         amms,

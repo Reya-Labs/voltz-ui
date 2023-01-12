@@ -1,5 +1,5 @@
 import { AMM, RateOracle, Token } from '@voltz-protocol/v1-sdk';
-import { ethers, providers } from 'ethers';
+import { providers } from 'ethers';
 
 import { SerializedAMM } from '../../../types';
 

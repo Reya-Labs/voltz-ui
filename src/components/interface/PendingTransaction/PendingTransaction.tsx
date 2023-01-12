@@ -91,9 +91,6 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
   }, [margin]);
 
   const activeTransaction = useAppSelector(selectors.transactionSelector)(transactionId);
-  const trasactionState = useMemo(() => {
-    return [activeTransaction?.resolvedAt, activeTransaction?.succeededAt];
-  }, []);
 
   useEffect(() => {
     if (activeTransaction?.failedAt) {
