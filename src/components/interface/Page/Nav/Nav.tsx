@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { routes } from '../../../routes/paths';
+import { routes } from '../../../../routes/paths';
 import { NavBox, VoltzIcon, VoltzIconBox } from './Nav.styled';
 import { NavLink } from './NavLink/NavLink';
 

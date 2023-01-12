@@ -2,15 +2,15 @@ import Box from '@mui/material/Box';
 import isUndefined from 'lodash.isundefined';
 import React from 'react';
 
-import { MintBurnFormModes } from '../../../contexts/MintBurnFormContext/MintBurnFormContext';
-import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';
-import { colors } from '../../../theme';
-import { formatCurrency, formatNumber } from '../../../utilities/number';
-import { Button } from '../../atomic/Button/Button';
-import { Ellipsis } from '../../atomic/Ellipsis/Ellipsis';
-import { PositionBadge } from '../../atomic/PositionBadge/PositionBadge';
-import { SummaryPanel } from '../../atomic/SummaryPanel/SummaryPanel';
-import { FormPanel } from '../FormPanel/FormPanel';
+import { MintBurnFormModes } from '../../../../contexts/MintBurnFormContext/MintBurnFormContext';
+import { usePositionContext } from '../../../../contexts/PositionContext/PositionContext';
+import { colors } from '../../../../theme';
+import { formatCurrency, formatNumber } from '../../../../utilities/number';
+import { Button } from '../../../atomic/Button/Button';
+import { Ellipsis } from '../../../atomic/Ellipsis/Ellipsis';
+import { PositionBadge } from '../../../atomic/PositionBadge/PositionBadge';
+import { SummaryPanel } from '../../../atomic/SummaryPanel/SummaryPanel';
+import { FormPanel } from '../../../interface/FormPanel/FormPanel';
 
 export type MintBurnCurrentPositionProps = {
   formMode: MintBurnFormModes;

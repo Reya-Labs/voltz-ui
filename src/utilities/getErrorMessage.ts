@@ -1,9 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-export const getErrorMessage = (error: any) => {
-  if (error && error.message) {
-    return error.message.toString() as string;
+export const getErrorMessage = (error: unknown): string => {
+  if (error && (error as Error).message) {
+    return (error as Error).message.toString();
   }
 
   return JSON.stringify(error);

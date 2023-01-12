@@ -13,7 +13,6 @@ import { Wallet } from '../../../graphql';
 import { useAgent } from '../../../hooks/useAgent';
 import { useWallet } from '../../../hooks/useWallet';
 import { getAmmProtocol, isBorrowing } from '../../../utilities/amm';
-import { getAgentFromPosition } from '../../../utilities/getAgent';
 import { DataLayerEventPayload, pushEvent } from '../../../utilities/googleAnalytics';
 import { getPoolButtonId } from '../../../utilities/googleAnalytics/helpers';
 import { formatCurrency } from '../../../utilities/number';
@@ -23,7 +22,8 @@ import { Loading } from '../../atomic/Loading/Loading';
 import { Panel } from '../../atomic/Panel/Panel';
 import { Typography } from '../../atomic/Typography/Typography';
 import { ProtocolInformation } from '../../composite/ProtocolInformation/ProtocolInformation';
-import { WalletAddressDisplay } from '../../composite/WalletAddressDisplay/WalletAddressDisplay';
+import { getAgentFromPosition } from './helpers';
+import { WalletAddressDisplay } from './WalletAddressDisplay/WalletAddressDisplay';
 
 export type PendingTransactionProps = {
   amm: AMM;

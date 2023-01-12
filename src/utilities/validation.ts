@@ -33,7 +33,7 @@ export const lessThanEpsilon = (
   valueA: number | undefined,
   valueB: number | undefined,
   eps: number,
-) => {
+): boolean | undefined => {
   if (!isUndefined(valueA) && !isUndefined(valueB)) {
     return valueA + eps < valueB;
   }

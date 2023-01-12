@@ -1,8 +1,8 @@
 import Popover from '@mui/material/Popover';
 import { styled } from '@mui/material/styles';
 
-import { colors } from '../../../../theme';
-import { Button } from '../../../atomic/Button/Button';
+import { colors } from '../../../../../theme';
+import { Button } from '../../../../atomic/Button/Button';
 
 export const NavLinkButton = styled(Button, {
   shouldForwardProp: (prop) => prop !== 'isActive' && prop !== 'isPopoverOpen',

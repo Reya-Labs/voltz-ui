@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react';
 
-import { toUSFormat } from '../../../utilities/number';
-import { IconLabel } from '../IconLabel/IconLabel';
-import { MaskedIntegerField } from '../MaskedIntegerField/MaskedIntegerField';
+import { toUSFormat } from '../../../../utilities/number';
+import { IconLabel } from '../../../composite/IconLabel/IconLabel';
+import { MaskedIntegerField } from '../../../composite/MaskedIntegerField/MaskedIntegerField';
 
 export type RateOptionsInputProps = {
   defaultValue?: number;

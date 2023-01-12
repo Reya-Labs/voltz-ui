@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 
-import { colors } from '../../../../../theme';
-import { Button } from '../../../../atomic/Button/Button';
+import { colors } from '../../../../../../theme';
+import { Button } from '../../../../../atomic/Button/Button';
 
 export const SubLinkButton = styled(Button)`
   font-family: 'PixelOperatorMono', monospace;

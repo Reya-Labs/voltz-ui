@@ -17,10 +17,10 @@ import { MarginAmount } from '../../composite/MarginAmount/MarginAmount';
 import { MaturityInformation } from '../../composite/MaturityInformation/MaturityInformation';
 import { NotionalAmount } from '../../composite/NotionalAmount/NotionalAmount';
 import { ProtocolInformation } from '../../composite/ProtocolInformation/ProtocolInformation';
-import { RateOptions } from '../../composite/RateOptions/RateOptions';
 import { FormPanel } from '../FormPanel/FormPanel';
 import { MarginControls } from '../SwapForm/MarginControls/MarginControls';
 import { LiquidityControls } from './LiquidityControls/LiquidityControls';
+import { RateOptions } from './RateOptions/RateOptions';
 import { SubmitControls } from './SubmitControls/SubmitControls';
 
 export type MintBurnFormProps = {
