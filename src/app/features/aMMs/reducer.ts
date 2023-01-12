@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AMM, RateOracle, Token } from '@voltz-protocol/v1-sdk';
-import { providers } from 'ethers';
+import { ethers, providers } from 'ethers';
 
 import { getConfig } from '../../../hooks/voltz-config/config';
 import { getAMMs } from './getAMMs';
@@ -69,8 +69,8 @@ export const slice = createSlice({
               }),
               factoryAddress: config.factoryAddress || '0x',
               marginEngineAddress,
-              termStartTimestamp: termStartTimestamp,
-              termEndTimestamp: termEndTimestamp,
+              termStartTimestampInMS: Number(ethers.utils.formatUnits(termStartTimestamp.toString(), 15)),
+              termEndTimestampInMS: Number(ethers.utils.formatUnits(termEndTimestamp.toString(), 15)),
               tickSpacing: parseInt(tickSpacing, 10),
               wethAddress: config.wethAddress,
             }),

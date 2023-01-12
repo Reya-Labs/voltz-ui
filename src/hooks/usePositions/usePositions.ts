@@ -1,4 +1,4 @@
-import { Position } from '@voltz-protocol/v1-sdk';
+import { getPositions, Position } from '@voltz-protocol/v1-sdk';
 import { DateTime } from 'luxon';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -10,7 +10,6 @@ import { isBorrowingPosition } from '../../utilities/borrowAmm';
 import { useAgent } from '../useAgent';
 import { useAMMs } from '../useAMMs';
 import { useWallet } from '../useWallet';
-import { MEPositionFactory } from './mePositionFactory';
 
 type UsePositionsResult = {
   positionsByAgentGroup: Position[];
@@ -22,17 +21,16 @@ type UsePositionsResult = {
 export const usePositions = (): UsePositionsResult => {
   const { agent } = useAgent();
   const { wallet, loading: walletLoading, error: walletError } = useWallet();
-  const { aMMs, loading: ammLoading, error: ammError } = useAMMs();
+  const { aMMs: amms, loading: ammLoading, error: ammError } = useAMMs();
   const [mePositions, setMePositions] = useState<Position[]>([]);
 
   useEffect(() => {
     let shouldUpdate = true;
     if (
       wallet &&
-      wallet.positions &&
       !walletLoading &&
       !walletError &&
-      aMMs &&
+      amms &&
       !ammLoading &&
       !ammError
     ) {
@@ -40,34 +38,20 @@ export const usePositions = (): UsePositionsResult => {
         return;
       }
 
-      const walletPositions = wallet.positions
-        .filter(({ positionType }) => {
-          const pType = parseInt(positionType as string, 10);
-          if (isNaN(pType)) {
-            return false;
-          }
-
-          if (agent === Agents.LIQUIDITY_PROVIDER) {
-            return pType === 3;
-          }
-
-          return pType === 1 || pType === 2;
-        })
-        .map((positionData) => MEPositionFactory(positionData, aMMs))
-        .filter((position) => Boolean(position)) as Position[];
-
-      setMePositions(walletPositions);
-      void Promise.all(walletPositions.map((p) => p.refreshInfo())).then(() => {
-        if (shouldUpdate) {
-          setMePositions([...walletPositions]);
-        }
+      void getPositions({
+        userWalletId: wallet.id,
+        amms,
+        subgraphURL: process.env.REACT_APP_SUBGRAPH_URL || "",
+        type: agent === Agents.LIQUIDITY_PROVIDER ? 'LP' : 'Trader',
+      }).then(({positions}) => {
+        setMePositions([...positions]);
       });
 
       return () => {
         shouldUpdate = false;
       };
     }
-  }, [agent, wallet, walletLoading, walletError, aMMs, ammLoading, ammError]);
+  }, [agent, wallet, walletLoading, walletError, amms, ammLoading, ammError]);
 
   const positionsByAgentGroup = useMemo(() => {
     return mePositions
