@@ -53,6 +53,51 @@ export const checkForRiskyWallet = async (walletAddress: string) => {
 };
 
 /**
+ * Check if the provided signature is valid for the smart contract at signer.getAddress(),
+ * using the checks defined in EIP-1271.
+ *
+ * For simplicity we use the user's Metamask provider and not Alchemy/Infura, though we could change
+ * that in future.
+ *
+ * @param signer - the signer fort the current wallet. May or may not be a contract wallet, but this
+ * function will only return true if it's a contract wallet.
+ * @param message - the text of a message (e.g. our terms of service). We will check whether or not the current wallet
+ * has signed this message according to the EIP1271 interface.
+ * @param signature - optional signature, used on-chain to verify that the message has been signed
+ * @returns True if we know that the message has been signed by the wallet in the signer, either using the provided signature or using
+ * EIP1271 on-chain with an empty signature.
+ */
+export const isMessageEIP1271Signed = async (
+  signer: ethers.providers.JsonRpcSigner,
+  message: string,
+  signature: string = '0x',
+): Promise<boolean> => {
+  const EIP1271_ABI = [
+    'function isValidSignature(bytes32 _message, bytes _signature) public view returns (bytes4)',
+  ];
+
+  // bytes4(keccak256("isValidSignature(bytes32,bytes)")
+  const EIP1271_magic_value = '0x1626ba7e';
+
+  // E.g. 0xd2b098b48bc04cb4a53d8e377e313b70539f402f
+  const walletAddress = await signer.getAddress();
+
+  const contractWallet = new ethers.Contract(walletAddress, EIP1271_ABI, signer);
+  const hashMessage = ethers.utils.hashMessage(message);
+
+  try {
+    const returnValue = await contractWallet.isValidSignature(hashMessage, signature);
+    if (returnValue.toString() === EIP1271_magic_value) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    // signature is not valid
+    return false;
+  }
+};
+
+/**
  * Will make the wallet open a prompt, asking the user to agree to the T&Cs. It will throw an
  * error if the user disagrees / closes the window. The signature is stored in a database to
  * avoid having to sign the terms every time you connect your wallet.
@@ -60,6 +105,7 @@ export const checkForRiskyWallet = async (walletAddress: string) => {
  */
 export const checkForTOSSignature = async (signer: ethers.providers.JsonRpcSigner) => {
   const signerAddress = await signer.getAddress();
+
   const signatureData = await getSignature(signerAddress);
   const latestTOS = getTOSText();
   let termsAccepted = false;
@@ -72,6 +118,9 @@ export const checkForTOSSignature = async (signer: ethers.providers.JsonRpcSigne
   ) {
     // Wallet matches, and signed data also matches
     // (signature was checked before being written to database)
+    termsAccepted = true;
+  } else if (await isMessageEIP1271Signed(signer, latestTOS)) {
+    // Acceptance of terms is verifiable on-chain. No need for our database.
     termsAccepted = true;
   }
 
@@ -88,7 +137,22 @@ export const checkForTOSSignature = async (signer: ethers.providers.JsonRpcSigne
       );
 
       if (!response.ok) {
-        throw new Error('Error saving signature');
+        // Signature validation failed on the back end
+        // One possible reason is that this is a smart contract wallet, which submits signature(s) from the
+        // controlling EOAs because it cannot sign anything by itself. For smart contract wallets, we verify
+        // signature signing using EIP-1271
+        const termsAcceptedBySmartContract = await isMessageEIP1271Signed(
+          signer,
+          latestTOS,
+          signature,
+        );
+
+        if (termsAcceptedBySmartContract) {
+          // TODO: save to database, but flag as unchecked
+          // Unchecked signatures are not trusted and can only be retrieved for use as EIP1271 input
+        } else {
+          throw new Error('Error saving signature');
+        }
       }
     } catch (error) {
       getSentryTracker().captureException(error);
