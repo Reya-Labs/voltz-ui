@@ -1,4 +1,4 @@
-import { BigNumber, ethers } from 'ethers';
+import { ethers } from 'ethers';
 
 import { GetWalletQuery } from '../../graphql';
 
@@ -19,7 +19,6 @@ export type Wallet = {
   name: WalletName | null;
   provider: ethers.providers.JsonRpcProvider | null;
   signer: ethers.providers.JsonRpcSigner | null;
-  balance: Record<string, BigNumber>;
   wallet: GetWalletQuery['wallet'] | null;
   loading: boolean;
   error: boolean;
