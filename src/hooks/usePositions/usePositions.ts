@@ -27,6 +27,7 @@ export const usePositions = (): UsePositionsResult => {
   const [fetchError, setFetchError] = useState<boolean>(false);
 
   useEffect(() => {
+    setMePositions([]);
     if (userAddress && amms && amms.length > 0 && !ammLoading && !ammError && agent) {
       setFetchLoading(true);
       setFetchError(false);
