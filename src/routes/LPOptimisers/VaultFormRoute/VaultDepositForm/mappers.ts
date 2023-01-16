@@ -160,7 +160,7 @@ export const getSubmissionState = ({
     }
     case DepositStates.DEPOSITING: {
       return {
-        submitText: 'Pending',
+        submitText: 'Depositing',
         action: () => {},
         hintText: {
           prefixText: 'Depositing',
