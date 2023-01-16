@@ -1,11 +1,15 @@
 import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import isUndefined from 'lodash.isundefined';
-import React from 'react';
+import React, { useState } from 'react';
 
+import { Modal } from '../../../../../components/composite/Modal/Modal';
 import { AutomaticRolloverToggleProps } from '../../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
+import { isCostReductionFlowEnabled } from '../../../../../utilities/is-cost-reduction-flow-enabled';
 import { formatCurrency } from '../../../../../utilities/number';
 import { AboutYourFunds } from '../AboutYourFunds/AboutYourFunds';
 import { BackButton, ButtonBox, FormBox, FullButtonBox } from '../CommonForm.styled';
+import { ConfirmBatchModalContent } from '../ConfirmBatchModalContent/ConfirmBatchModalContent';
+import { ConfirmDepositModalContent } from '../ConfirmDepositModalContent/ConfirmDepositModalContent';
 import { DepositAmountInput } from '../DepositAmountInput/DepositAmountInput';
 import { DepositInfo } from '../DepositInfo/DepositInfo';
 import { FormActionButton } from '../FormActionButton/FormActionButton';
@@ -65,47 +69,81 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
       ? '---'
       : `${formatCurrency(lpVault.userWalletBalance, true)} ${lpVault.metadata.token}`
   }`;
+  const [isConfirmDepositOpen, setIsConfirmDepositOpen] = useState(false);
+  const [isConfirmBatchOpen, setIsConfirmBatchOpen] = useState(false);
+  const handleConfirmDepositClose = () => setIsConfirmDepositOpen(false);
+  const handleConfirmDepositOpen = () => setIsConfirmDepositOpen(true);
+  const handleConfirmBatchClose = () => setIsConfirmBatchOpen(false);
+  const handleConfirmBatchOpen = () => setIsConfirmBatchOpen(true);
 
   return (
-    <FormBox>
-      <DepositInfo mellowProduct={lpVault} weights={weights.map((w) => w.distribution)} />
-      <MaturityDistribution
-        automaticRolloverChangePromise={automaticRolloverChangePromise}
-        automaticRolloverGasCost={automaticRolloverGasCost}
-        automaticRolloverState={automaticRolloverState}
-        combinedWeightValue={combinedWeightValue}
-        disabledToggle={loading}
-        distribution={distribution}
-        weights={weights}
-        onDistributionToggle={onDistributionToggle}
-        onManualDistributionsUpdate={onManualDistributionsUpdate}
-      />
-      <DepositAmountInput
-        disabled={false}
-        subtext={subtext}
-        token={lpVault.metadata.token}
-        value={depositValue}
-        onChange={onChangeDeposit}
-      />
-      <FullButtonBox>
-        <ButtonBox>
-          <FormActionButton
-            dataTestId="DepositButton"
-            disabled={disabled}
-            loading={loading}
-            success={success}
-            variant="blue"
-            onClick={onSubmit}
-          >
-            {submitText}
-          </FormActionButton>
-          <BackButton onClick={onGoBack}>BACK</BackButton>
-        </ButtonBox>
+    <>
+      <FormBox>
+        <DepositInfo mellowProduct={lpVault} weights={weights.map((w) => w.distribution)} />
+        <MaturityDistribution
+          automaticRolloverChangePromise={automaticRolloverChangePromise}
+          automaticRolloverGasCost={automaticRolloverGasCost}
+          automaticRolloverState={automaticRolloverState}
+          combinedWeightValue={combinedWeightValue}
+          disabledToggle={loading}
+          distribution={distribution}
+          weights={weights}
+          onDistributionToggle={onDistributionToggle}
+          onManualDistributionsUpdate={onManualDistributionsUpdate}
+        />
+        <DepositAmountInput
+          disabled={false}
+          subtext={subtext}
+          token={lpVault.metadata.token}
+          value={depositValue}
+          onChange={onChangeDeposit}
+        />
+        <FullButtonBox>
+          <ButtonBox>
+            <FormActionButton
+              dataTestId="DepositButton"
+              disabled={disabled}
+              loading={loading}
+              success={success}
+              variant="blue"
+              onClick={isCostReductionFlowEnabled() ? handleConfirmDepositOpen : onSubmit}
+            >
+              {submitText}
+            </FormActionButton>
+            <BackButton onClick={onGoBack}>BACK</BackButton>
+          </ButtonBox>
 
-        <HintText {...hintText} loading={loading} />
-      </FullButtonBox>
+          {isCostReductionFlowEnabled() ? null : <HintText {...hintText} loading={loading} />}
+        </FullButtonBox>
 
-      <AboutYourFunds depositsText="Deposits" />
-    </FormBox>
+        <AboutYourFunds depositsText="Deposits" />
+      </FormBox>
+      {isCostReductionFlowEnabled() ? (
+        <>
+          <Modal open={isConfirmDepositOpen} onClose={handleConfirmDepositClose}>
+            <ConfirmDepositModalContent
+              disabled={disabled}
+              hintText={hintText}
+              loading={loading}
+              submitText={submitText}
+              success={success}
+              onCancel={handleConfirmDepositClose}
+              onProceed={onSubmit}
+            />
+          </Modal>
+          <Modal open={isConfirmBatchOpen} onClose={handleConfirmBatchClose}>
+            <ConfirmBatchModalContent
+              disabled={disabled}
+              hintText={hintText}
+              loading={loading}
+              submitText={submitText}
+              success={success}
+              onCancel={handleConfirmBatchClose}
+              onProceed={onSubmit}
+            />
+          </Modal>
+        </>
+      ) : null}
+    </>
   );
 };
