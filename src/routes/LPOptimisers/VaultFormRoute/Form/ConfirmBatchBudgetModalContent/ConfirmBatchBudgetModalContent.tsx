@@ -4,10 +4,10 @@ import { IconLabel } from '../../../../../components/composite/IconLabel/IconLab
 import { FormActionButton } from '../FormActionButton/FormActionButton';
 import { HintText } from '../HintText/HintText';
 import {
+  BatchBudgetCurrencyTypography,
+  BatchBudgetTextTypography,
+  BatchBudgetValueTypography,
   BatchFeeContentBox,
-  BatchFeeCurrencyTypography,
-  BatchFeeTextTypography,
-  BatchFeeValueTypography,
   ButtonBox,
   CancelButton,
   ContentBox,
@@ -17,7 +17,7 @@ import {
   GasCostTypography,
   GasIcon,
   TitleTypography,
-} from './ConfirmDepositModalContent.styled';
+} from './ConfirmBatchBudgetModalContent.styled';
 
 type Props = {
   onProceed: () => void;
@@ -33,7 +33,7 @@ type Props = {
   success: boolean;
 };
 
-export const ConfirmDepositModalContent: React.FunctionComponent<Props> = ({
+export const ConfirmBatchBudgetModalContent: React.FunctionComponent<Props> = ({
   onCancel,
   onProceed,
   loading,
@@ -43,25 +43,22 @@ export const ConfirmDepositModalContent: React.FunctionComponent<Props> = ({
   disabled,
 }) => (
   <ContentBox>
-    <TitleTypography>Deposit</TitleTypography>
+    <TitleTypography>Batch deposits</TitleTypography>
     <DescriptionTypography>
       When depositing funds in the Optimiser, users pay a contribution to the batch budget fund.
-      Batches are done to reduce the gas cost of depositing in pools by splitting the costs between
-      those depositing funds.
+      These funds can be claimed by anyone by triggering the Optimiser batch.
     </DescriptionTypography>
     <BatchFeeContentBox>
-      <BatchFeeTextTypography>
-        BATCH FEE&nbsp;
-        <BatchFeeCurrencyTypography>
-          $<BatchFeeValueTypography>TODO: 27,00 USD</BatchFeeValueTypography>
-        </BatchFeeCurrencyTypography>
-      </BatchFeeTextTypography>
+      <BatchBudgetTextTypography>
+        BATCH BUDGET&nbsp;
+        <BatchBudgetCurrencyTypography>
+          $<BatchBudgetValueTypography>TODO: 234,00 USD</BatchBudgetValueTypography>
+        </BatchBudgetCurrencyTypography>
+      </BatchBudgetTextTypography>
     </BatchFeeContentBox>
     <GasCostBox>
       <GasIcon />
-      <GasCostTypography dataTestId="ConfirmDepositModalContent-GasCostTypography">
-        TODO: GET COST FROM SDK
-      </GasCostTypography>
+      <GasCostTypography>TODO: GET COST FROM SDK</GasCostTypography>
       <GasCostInputLabel shrink>
         <IconLabel
           icon="information-circle"
@@ -72,7 +69,7 @@ export const ConfirmDepositModalContent: React.FunctionComponent<Props> = ({
     </GasCostBox>
     <ButtonBox>
       <FormActionButton
-        dataTestId="ConfirmDepositModalContent-DepositButton"
+        dataTestId="DepositButton"
         disabled={disabled}
         loading={loading}
         success={success}
@@ -81,11 +78,7 @@ export const ConfirmDepositModalContent: React.FunctionComponent<Props> = ({
       >
         {submitText}
       </FormActionButton>
-      <CancelButton
-        data-testid="ConfirmDepositModalContent-CancelButton"
-        disabled={loading}
-        onClick={onCancel}
-      >
+      <CancelButton disabled={loading} onClick={onCancel}>
         CANCEL
       </CancelButton>
     </ButtonBox>
