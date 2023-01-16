@@ -99,7 +99,7 @@ export const usePositions = (): UsePositionsResult => {
   return {
     positionsByAgentGroup: mePositions.filter((pos) => !isBorrowingPosition(pos)),
     borrowPositions: mePositions.filter((pos) => isBorrowingPosition(pos)),
-    loading: (aMMsLoadedState === 'pending') || fetchLoading,
-    error: (aMMsLoadedState === 'failed') || fetchError,
+    loading: aMMsLoadedState === 'pending' || fetchLoading,
+    error: aMMsLoadedState === 'failed' || fetchError,
   };
 };
