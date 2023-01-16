@@ -8,7 +8,7 @@ import { isCostReductionFlowEnabled } from '../../../../../utilities/is-cost-red
 import { formatCurrency } from '../../../../../utilities/number';
 import { AboutYourFunds } from '../AboutYourFunds/AboutYourFunds';
 import { BackButton, ButtonBox, FormBox, FullButtonBox } from '../CommonForm.styled';
-import { ConfirmBatchModalContent } from '../ConfirmBatchModalContent/ConfirmBatchModalContent';
+import { ConfirmBatchBudgetModalContent } from '../ConfirmBatchBudgetModalContent/ConfirmBatchBudgetModalContent';
 import { ConfirmDepositModalContent } from '../ConfirmDepositModalContent/ConfirmDepositModalContent';
 import { DepositAmountInput } from '../DepositAmountInput/DepositAmountInput';
 import { DepositInfo } from '../DepositInfo/DepositInfo';
@@ -70,11 +70,11 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
       : `${formatCurrency(lpVault.userWalletBalance, true)} ${lpVault.metadata.token}`
   }`;
   const [isConfirmDepositOpen, setIsConfirmDepositOpen] = useState(false);
-  const [isConfirmBatchOpen, setIsConfirmBatchOpen] = useState(false);
+  const [isConfirmBatchBudgetOpen, setIsConfirmBatchBudgetOpen] = useState(false);
   const handleConfirmDepositClose = () => setIsConfirmDepositOpen(false);
   const handleConfirmDepositOpen = () => setIsConfirmDepositOpen(true);
-  const handleConfirmBatchClose = () => setIsConfirmBatchOpen(false);
-  const handleConfirmBatchOpen = () => setIsConfirmBatchOpen(true);
+  const handleConfirmBatchClose = () => setIsConfirmBatchBudgetOpen(false);
+  const handleConfirmBatchOpen = () => setIsConfirmBatchBudgetOpen(true);
 
   return (
     <>
@@ -131,8 +131,8 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
               onProceed={onSubmit}
             />
           </Modal>
-          <Modal open={isConfirmBatchOpen} onClose={handleConfirmBatchClose}>
-            <ConfirmBatchModalContent
+          <Modal open={isConfirmBatchBudgetOpen} onClose={handleConfirmBatchClose}>
+            <ConfirmBatchBudgetModalContent
               disabled={disabled}
               hintText={hintText}
               loading={loading}
