@@ -8,7 +8,6 @@ import { isCostReductionFlowEnabled } from '../../../../../utilities/is-cost-red
 import { formatCurrency } from '../../../../../utilities/number';
 import { AboutYourFunds } from '../AboutYourFunds/AboutYourFunds';
 import { BackButton, ButtonBox, FormBox, FullButtonBox } from '../CommonForm.styled';
-import { ConfirmBatchBudgetModalContent } from '../ConfirmBatchBudgetModalContent/ConfirmBatchBudgetModalContent';
 import { ConfirmDepositModalContent } from '../ConfirmDepositModalContent/ConfirmDepositModalContent';
 import { DepositAmountInput } from '../DepositAmountInput/DepositAmountInput';
 import { DepositInfo } from '../DepositInfo/DepositInfo';
@@ -70,11 +69,8 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
       : `${formatCurrency(lpVault.userWalletBalance, true)} ${lpVault.metadata.token}`
   }`;
   const [isConfirmDepositOpen, setIsConfirmDepositOpen] = useState(false);
-  const [isConfirmBatchBudgetOpen, setIsConfirmBatchBudgetOpen] = useState(false);
   const handleConfirmDepositClose = () => setIsConfirmDepositOpen(false);
   const handleConfirmDepositOpen = () => setIsConfirmDepositOpen(true);
-  const handleConfirmBatchClose = () => setIsConfirmBatchBudgetOpen(false);
-  const handleConfirmBatchOpen = () => setIsConfirmBatchBudgetOpen(true);
 
   return (
     <>
@@ -119,30 +115,17 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
         <AboutYourFunds depositsText="Deposits" />
       </FormBox>
       {isCostReductionFlowEnabled() ? (
-        <>
-          <Modal open={isConfirmDepositOpen} onClose={handleConfirmDepositClose}>
-            <ConfirmDepositModalContent
-              disabled={disabled}
-              hintText={hintText}
-              loading={loading}
-              submitText={submitText}
-              success={success}
-              onCancel={handleConfirmDepositClose}
-              onProceed={onSubmit}
-            />
-          </Modal>
-          <Modal open={isConfirmBatchBudgetOpen} onClose={handleConfirmBatchClose}>
-            <ConfirmBatchBudgetModalContent
-              disabled={disabled}
-              hintText={hintText}
-              loading={loading}
-              submitText={submitText}
-              success={success}
-              onCancel={handleConfirmBatchClose}
-              onProceed={onSubmit}
-            />
-          </Modal>
-        </>
+        <Modal open={isConfirmDepositOpen} onClose={handleConfirmDepositClose}>
+          <ConfirmDepositModalContent
+            disabled={disabled}
+            hintText={hintText}
+            loading={loading}
+            submitText={submitText}
+            success={success}
+            onCancel={handleConfirmDepositClose}
+            onProceed={onSubmit}
+          />
+        </Modal>
       ) : null}
     </>
   );

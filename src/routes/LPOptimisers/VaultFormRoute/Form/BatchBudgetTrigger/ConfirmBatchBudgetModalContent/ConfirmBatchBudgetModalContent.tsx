@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { IconLabel } from '../../../../../components/composite/IconLabel/IconLabel';
-import { FormActionButton } from '../FormActionButton/FormActionButton';
-import { HintText } from '../HintText/HintText';
+import { IconLabel } from '../../../../../../components/composite/IconLabel/IconLabel';
+import { FormActionButton } from '../../FormActionButton/FormActionButton';
+import { HintText } from '../../HintText/HintText';
 import {
   BatchBudgetCurrencyTypography,
   BatchBudgetTextTypography,
