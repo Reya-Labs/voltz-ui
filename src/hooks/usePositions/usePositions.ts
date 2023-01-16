@@ -3,12 +3,12 @@ import { DateTime } from 'luxon';
 import { useEffect, useState } from 'react';
 
 import { selectors } from '../../app';
+import { selectAMMs } from '../../app/features/aMMs';
 import { updateTransactionAction } from '../../app/features/transactions';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { Agents } from '../../contexts/AgentContext/types';
 import { isBorrowingPosition } from '../../utilities/borrowAmm';
 import { useAgent } from '../useAgent';
-import { useAMMs } from '../useAMMs';
 import { useWallet } from '../useWallet';
 
 type UsePositionsResult = {
@@ -21,20 +21,22 @@ type UsePositionsResult = {
 export const usePositions = (): UsePositionsResult => {
   const { agent } = useAgent();
   const { account: userAddress } = useWallet();
-  const { aMMs: amms, loading: ammLoading, error: ammError } = useAMMs();
+  const dispatch = useAppDispatch();
+  const aMMsLoadedState = useAppSelector((state) => state.aMMs.aMMsLoadedState);
+  const aMMs = useAppSelector(selectAMMs);
   const [mePositions, setMePositions] = useState<Position[]>([]);
   const [fetchLoading, setFetchLoading] = useState<boolean>(false);
   const [fetchError, setFetchError] = useState<boolean>(false);
 
   useEffect(() => {
     setMePositions([]);
-    if (userAddress && amms && amms.length > 0 && !ammLoading && !ammError && agent) {
+    if (userAddress && aMMsLoadedState === 'succeeded' && agent) {
       setFetchLoading(true);
       setFetchError(false);
 
       void getPositions({
         userWalletId: userAddress,
-        amms,
+        amms: aMMs,
         subgraphURL: process.env.REACT_APP_SUBGRAPH_URL || '',
         type: agent === Agents.LIQUIDITY_PROVIDER ? 'LP' : 'Trader',
       }).then(({ positions, error }) => {
@@ -46,12 +48,11 @@ export const usePositions = (): UsePositionsResult => {
         }
       });
     }
-  }, [agent, userAddress, !!amms, ammLoading, ammError]);
+  }, [agent, userAddress, !!aMMs, aMMsLoadedState]);
 
   const unresolvedTransactions = useAppSelector(selectors.unresolvedTransactionsSelector);
   const shouldTryToCloseTransactions =
     unresolvedTransactions.length > 0 && mePositions && mePositions.length > 0;
-  const dispatch = useAppDispatch();
 
   // [might be broken]
   useEffect(() => {
@@ -98,7 +99,7 @@ export const usePositions = (): UsePositionsResult => {
   return {
     positionsByAgentGroup: mePositions.filter((pos) => !isBorrowingPosition(pos)),
     borrowPositions: mePositions.filter((pos) => isBorrowingPosition(pos)),
-    loading: ammLoading || fetchLoading,
-    error: ammError || fetchError,
+    loading: (aMMsLoadedState === 'pending') || fetchLoading,
+    error: (aMMsLoadedState === 'failed') || fetchError,
   };
 };

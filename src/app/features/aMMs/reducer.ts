@@ -1,12 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AMM, RateOracle, Token } from '@voltz-protocol/v1-sdk';
-import { ethers, providers } from 'ethers';
+import { AMM, getAMMs } from '@voltz-protocol/v1-sdk';
+import { providers } from 'ethers';
 
-import { getConfig } from '../../../hooks/voltz-config/config';
-import { getAMMs } from './getAMMs';
 import { initialiseAMMsThunk } from './thunks';
-
-const config = getConfig();
 
 type SliceState = {
   aMMsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
@@ -40,45 +36,13 @@ export const slice = createSlice({
         state.aMMsLoadedState = 'failed';
       })
       .addCase(initialiseAMMsThunk.fulfilled, (state, action) => {
+        const { amms, error } = action.payload as Awaited<ReturnType<typeof getAMMs>>;
+        if (error) {
+          state.aMMsLoadedState = 'failed';
+          return;
+        }
         state.aMMsLoadedState = 'succeeded';
-        state.aMMs = (action.payload as Awaited<ReturnType<typeof getAMMs>>).map(
-          ({
-            id: ammId,
-            marginEngine: { id: marginEngineAddress },
-            rateOracle: {
-              id: rateOracleAddress,
-              protocolId,
-              token: { id: tokenAddress, name: tokenName, decimals },
-            },
-            tickSpacing,
-            termStartTimestamp,
-            termEndTimestamp,
-          }) =>
-            new AMM({
-              id: ammId,
-              signer: null,
-              provider: config.PROVIDER,
-              rateOracle: new RateOracle({
-                id: rateOracleAddress,
-                protocolId: parseInt(protocolId, 10),
-              }),
-              underlyingToken: new Token({
-                id: tokenAddress,
-                name: tokenName,
-                decimals: decimals,
-              }),
-              factoryAddress: config.factoryAddress || '0x',
-              marginEngineAddress,
-              termStartTimestampInMS: Number(
-                ethers.utils.formatUnits(termStartTimestamp.toString(), 15),
-              ),
-              termEndTimestampInMS: Number(
-                ethers.utils.formatUnits(termEndTimestamp.toString(), 15),
-              ),
-              tickSpacing: parseInt(tickSpacing, 10),
-              wethAddress: config.wethAddress,
-            }),
-        );
+        state.aMMs = amms;
       });
   },
 });

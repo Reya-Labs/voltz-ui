@@ -22,7 +22,6 @@ import { AppRoutes } from './AppRoutes';
 import { AgentProvider } from './contexts/AgentContext/AgentProvider';
 import { AMMsProvider } from './contexts/AMMsContext/AMMsContext';
 import { WalletProvider } from './contexts/WalletContext/WalletProvider';
-import { VoltzGraphProvider } from './graphql';
 import { ThemeProvider } from './theme/ThemeProvider/ThemeProvider';
 import { initSentryTracker } from './utilities/sentry';
 
@@ -39,17 +38,15 @@ ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme="dark">
       <ReduxProvider store={store}>
-        <VoltzGraphProvider>
-          <WalletProvider>
-            <AgentProvider>
-              <HashRouter>
-                <AMMsProvider>
-                  <AppRoutes />
-                </AMMsProvider>
-              </HashRouter>
-            </AgentProvider>
-          </WalletProvider>
-        </VoltzGraphProvider>
+        <WalletProvider>
+          <AgentProvider>
+            <HashRouter>
+              <AMMsProvider>
+                <AppRoutes />
+              </AMMsProvider>
+            </HashRouter>
+          </AgentProvider>
+        </WalletProvider>
       </ReduxProvider>
     </ThemeProvider>
   </React.StrictMode>,
