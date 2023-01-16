@@ -28,7 +28,6 @@
     "src"
   ],
   "exclude": [
-    "src/graphql/generated.ts",
     "**/__tests__/*.spec.ts",
     "**/*.stories.tsx"
   ]
