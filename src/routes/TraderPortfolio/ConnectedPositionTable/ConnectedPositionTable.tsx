@@ -90,11 +90,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
   const renderNoPositions = () => {
     return (
       <Panel sx={{ width: '100%', textAlign: 'center' }} variant="main">
-        <RouteLink
-          to={`/${routes.TRADER_POOLS}`}
-        >
-          OPEN YOUR FIRST POSITION
-        </RouteLink>
+        <RouteLink to={`/${routes.TRADER_POOLS}`}>OPEN YOUR FIRST POSITION</RouteLink>
       </Panel>
     );
   };
@@ -102,7 +98,8 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
   const renderPendingTransaction = () => {
     if (!positionToSettle) return null;
 
-    const netWithdraw = positionToSettle.position.margin + positionToSettle.position.settlementCashflow;
+    const netWithdraw =
+      positionToSettle.position.margin + positionToSettle.position.settlementCashflow;
 
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>

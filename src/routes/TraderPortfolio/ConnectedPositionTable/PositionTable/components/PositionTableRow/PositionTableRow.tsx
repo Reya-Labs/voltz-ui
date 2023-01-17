@@ -59,12 +59,7 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
     }
 
     if (field === 'notional') {
-      return (
-        <Notional
-          notional={position.notional}
-          token={underlyingTokenName || ''}
-        />
-      );
+      return <Notional notional={position.notional} token={underlyingTokenName || ''} />;
     }
 
     if (field === 'pool') {

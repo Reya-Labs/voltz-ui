@@ -141,11 +141,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                 <Table size="medium" sx={{ ...commonOverrides }}>
                   <TableBody>
                     <AMMProvider amm={pos.amm}>
-                      <PositionTableRow
-                        key={pos.id}
-                        index={index}
-                        position={pos}
-                      />
+                      <PositionTableRow key={pos.id} index={index} position={pos} />
                     </AMMProvider>
                   </TableBody>
                 </Table>

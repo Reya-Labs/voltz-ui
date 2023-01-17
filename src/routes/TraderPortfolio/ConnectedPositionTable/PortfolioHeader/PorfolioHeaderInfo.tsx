@@ -83,7 +83,6 @@ export const PortfolioHeaderInfo = ({
           </PortfolioHeaderBox>
         </PortfolioHeaderValue>
       </ListItem>
-
     </List>
   );
 };
