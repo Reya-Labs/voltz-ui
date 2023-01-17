@@ -7,6 +7,9 @@ const rejectThunkWithError = (
   },
   err: unknown,
 ) => {
+  if (typeof err === 'string') {
+    return thunkAPI.rejectWithValue(err);
+  }
   return thunkAPI.rejectWithValue((err as Error)?.message);
 };
 
@@ -15,11 +18,15 @@ export const initialiseAMMsThunk = createAsyncThunk<
   void
 >('aMMs/initialiseAMMs', async (_, thunkAPI) => {
   try {
-    return await getAMMs({
+    const { amms, error } = await getAMMs({
       network: process.env.REACT_APP_NETWORK || '',
       providerURL: process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK || '',
       subgraphURL: process.env.REACT_APP_SUBGRAPH_URL || '',
     });
+    if (error) {
+      return rejectThunkWithError(thunkAPI, error);
+    }
+    return amms;
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }

@@ -34,15 +34,11 @@ export const slice = createSlice({
       })
       .addCase(initialiseAMMsThunk.rejected, (state) => {
         state.aMMsLoadedState = 'failed';
+        state.aMMs = [];
       })
       .addCase(initialiseAMMsThunk.fulfilled, (state, action) => {
-        const { amms, error } = action.payload as Awaited<ReturnType<typeof getAMMs>>;
-        if (error) {
-          state.aMMsLoadedState = 'failed';
-          return;
-        }
         state.aMMsLoadedState = 'succeeded';
-        state.aMMs = amms;
+        state.aMMs = action.payload as Awaited<ReturnType<typeof getAMMs>>['amms'];
       });
   },
 });
