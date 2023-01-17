@@ -66,19 +66,16 @@ export const WalletConnectModal: React.FunctionComponent = () => {
   }, [wallet.required]);
 
   return (
-    <Modal
-      open={open}
-      trigger={
-        <WalletConnectButton
-          account={wallet?.account}
-          error={wallet?.walletError}
-          walletName={!wallet?.name || wallet.name === 'disconnect' ? null : wallet.name}
-        />
-      }
-      onClose={handleClose}
-      onOpen={handleOpen}
-    >
-      {renderContent()}
-    </Modal>
+    <>
+      <WalletConnectButton
+        account={wallet?.account}
+        error={wallet?.walletError}
+        walletName={!wallet?.name || wallet.name === 'disconnect' ? null : wallet.name}
+        onClick={handleOpen}
+      />
+      <Modal open={open} onClose={handleClose}>
+        {renderContent()}
+      </Modal>
+    </>
   );
 };
