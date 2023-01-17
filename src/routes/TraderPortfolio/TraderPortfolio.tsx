@@ -87,7 +87,6 @@ export const TraderPortfolio: React.FunctionComponent = () => {
     <>
       {renderMode === 'portfolio' && (
         <ConnectedPositionTable
-          agent={Agents.FIXED_TRADER}
           errorPositions={errorPositions}
           handleCompletedSettling={handleCompletedSettling}
           loadingPositions={loadingPositions}

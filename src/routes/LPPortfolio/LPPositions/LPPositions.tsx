@@ -91,7 +91,6 @@ export const LPPositions: React.FunctionComponent<{
     <>
       {renderMode === 'portfolio' && (
         <ConnectedPositionTable
-          agent={Agents.LIQUIDITY_PROVIDER}
           errorPositions={errorPositions}
           handleCompletedSettling={handleCompletedSettling}
           loadingPositions={loadingPositions}

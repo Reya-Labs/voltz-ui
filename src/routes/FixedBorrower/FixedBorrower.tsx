@@ -90,7 +90,6 @@ export const FixedBorrower: React.FunctionComponent = () => {
       {renderMode === 'borrow-positions' && (
         <Box sx={{ backdropFilter: 'blur(8px)', height: '100%', paddingBottom: '200px' }}>
           <ConnectedBorrowPositionTable
-            agent={Agents.VARIABLE_TRADER}
             borrowPositions={borrowPositions}
             errorPositions={errorPositions}
             loadingPositions={loadingPositions}

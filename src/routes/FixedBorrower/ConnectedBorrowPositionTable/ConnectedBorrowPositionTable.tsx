@@ -8,7 +8,6 @@ import {
   BorrowPortfolioHeader,
   BorrowPortfolioHeaderProps,
 } from '../../../components/interface/BorrowPortfolioHeader/BorrowPortfolioHeader';
-import { Agents } from '../../../contexts/AgentContext/types';
 import { useAMMs } from '../../../hooks/useAMMs';
 import { useWallet } from '../../../hooks/useWallet';
 import { SystemStyleObject, Theme } from '../../../theme';
@@ -17,7 +16,6 @@ import { getTotalFixedDebt, getTotalVariableDebt } from './services';
 
 export type ConnectedBorrowAMMTableProps = {
   onSelectItem: (item: BorrowAMM) => void;
-  agent: Agents;
   borrowPositions: Position[];
   errorPositions: boolean;
   loadingPositions: boolean;

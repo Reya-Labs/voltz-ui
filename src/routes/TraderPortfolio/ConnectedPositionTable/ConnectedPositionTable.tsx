@@ -19,7 +19,6 @@ import { PositionTable } from './PositionTable/PositionTable';
 
 export type ConnectedPositionTableProps = {
   onSelectItem: (item: Position, mode: 'margin' | 'liquidity' | 'rollover' | 'notional') => void;
-  agent: Agents;
   positions: Position[];
   loadingPositions: boolean;
   errorPositions: boolean;
@@ -28,7 +27,6 @@ export type ConnectedPositionTableProps = {
 
 export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTableProps> = ({
   onSelectItem,
-  agent,
   positions,
   loadingPositions,
   errorPositions,
@@ -49,7 +47,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
         notional: 0,
         margin: 0,
         ammId: positionAmm.id,
-        agent,
+        agent: Agents.FIXED_TRADER,
         fixedLow: position.fixedRateLower.toNumber(),
         fixedHigh: position.fixedRateUpper.toNumber(),
       };
@@ -60,7 +58,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
       });
       dispatch(settlePositionAction);
     },
-    [dispatch, agent],
+    [dispatch],
   );
 
   const handleTransactionFinished = () => {
@@ -93,9 +91,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
     return (
       <Panel sx={{ width: '100%', textAlign: 'center' }} variant="main">
         <RouteLink
-          to={
-            agent === Agents.LIQUIDITY_PROVIDER ? `/${routes.LP_POOLS}` : `/${routes.TRADER_POOLS}`
-          }
+          to={`/${routes.TRADER_POOLS}`}
         >
           OPEN YOUR FIRST POSITION
         </RouteLink>
@@ -106,12 +102,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
   const renderPendingTransaction = () => {
     if (!positionToSettle) return null;
 
-    let netWithdraw = undefined;
-    if (agent === Agents.LIQUIDITY_PROVIDER) {
-      netWithdraw = positionToSettle.position.margin + positionToSettle.position.settlementCashflow;
-    } else {
-      netWithdraw = positionToSettle.position.margin + positionToSettle.position.settlementCashflow;
-    }
+    const netWithdraw = positionToSettle.position.margin + positionToSettle.position.settlementCashflow;
 
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
