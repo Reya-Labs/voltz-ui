@@ -3,8 +3,6 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import isUndefined from 'lodash.isundefined';
 
-import { Agents } from '../../../../contexts/AgentContext/types';
-import { useAgent } from '../../../../hooks/useAgent';
 import { colors, SystemStyleObject, Theme } from '../../../../theme';
 import { formatCurrency, formatNumber } from '../../../../utilities/number';
 import { PortfolioHeaderBox } from './PortfolioHeaderBox';
@@ -36,7 +34,6 @@ export const PortfolioHeaderInfo = ({
   netRatePaying,
   netRateReceiving,
 }: PortfolioHeaderInfoProps) => {
-  const { agent } = useAgent();
   const getNetMarginLabel = () => (
     <>
       Net margin
@@ -70,34 +67,23 @@ export const PortfolioHeaderInfo = ({
           </PortfolioHeaderBox>
         </PortfolioHeaderValue>
       </ListItem>
-      {!(agent === Agents.LIQUIDITY_PROVIDER) && (
-        <ListItem sx={listItemStyles}>
-          <PortfolioHeaderValue label="Net rate receiving">
-            <PortfolioHeaderBox>
-              {isUndefined(netRateReceiving) && <>Loading...</>}
-              {!isUndefined(netRateReceiving) && <>{formatNumber(netRateReceiving)} %</>}
-            </PortfolioHeaderBox>
-          </PortfolioHeaderValue>
-        </ListItem>
-      )}
-      {!(agent === Agents.LIQUIDITY_PROVIDER) && (
-        <ListItem sx={listItemStyles}>
-          <PortfolioHeaderValue label="Net rate paying">
-            <PortfolioHeaderBox>
-              {isUndefined(netRatePaying) && <>Loading...</>}
-              {!isUndefined(netRatePaying) && <>{formatNumber(netRatePaying)} %</>}
-            </PortfolioHeaderBox>
-          </PortfolioHeaderValue>
-        </ListItem>
-      )}
-      {agent === Agents.LIQUIDITY_PROVIDER && (
-        <ListItem sx={listItemStyles}>
-          <PortfolioHeaderValue label="Fees APY">
-            <PortfolioHeaderBox>s00n</PortfolioHeaderBox>
-            {/* <PortfolioHeaderBox>{formatNumber(feesApy)} %</PortfolioHeaderBox> */}
-          </PortfolioHeaderValue>
-        </ListItem>
-      )}
+      <ListItem sx={listItemStyles}>
+        <PortfolioHeaderValue label="Net rate receiving">
+          <PortfolioHeaderBox>
+            {isUndefined(netRateReceiving) && <>Loading...</>}
+            {!isUndefined(netRateReceiving) && <>{formatNumber(netRateReceiving)} %</>}
+          </PortfolioHeaderBox>
+        </PortfolioHeaderValue>
+      </ListItem>
+      <ListItem sx={listItemStyles}>
+        <PortfolioHeaderValue label="Net rate paying">
+          <PortfolioHeaderBox>
+            {isUndefined(netRatePaying) && <>Loading...</>}
+            {!isUndefined(netRatePaying) && <>{formatNumber(netRatePaying)} %</>}
+          </PortfolioHeaderBox>
+        </PortfolioHeaderValue>
+      </ListItem>
+
     </List>
   );
 };

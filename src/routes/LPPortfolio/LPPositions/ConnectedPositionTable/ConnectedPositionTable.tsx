@@ -23,7 +23,6 @@ export type ConnectedPositionTableProps = {
   loadingPositions: boolean;
   errorPositions: boolean;
   handleCompletedSettling: () => void;
-  agent: Agents;
 };
 
 export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTableProps> = ({
@@ -31,7 +30,6 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
   positions,
   loadingPositions,
   handleCompletedSettling,
-  agent,
 }) => {
   const { status } = useWallet();
   const [positionStatus, setPositionStatus] = useState<PositionStatus>('open');
