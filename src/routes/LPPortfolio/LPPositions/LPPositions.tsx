@@ -34,7 +34,7 @@ export const LPPositions: React.FunctionComponent<{
     positionsByAgentGroup,
     loading: loadingPositions,
     error: errorPositions,
-  } = usePositions();
+  } = usePositions(Agents.LIQUIDITY_PROVIDER);
   const { account } = useWallet();
 
   const renderMode = formMode ? 'form' : 'portfolio';

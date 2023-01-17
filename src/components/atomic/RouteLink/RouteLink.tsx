@@ -1,5 +1,4 @@
 import { styled } from '@mui/material/styles';
-import React from 'react';
 import { Link, LinkProps } from 'react-router-dom';
 
 import { Agents } from '../../../contexts/AgentContext/types';

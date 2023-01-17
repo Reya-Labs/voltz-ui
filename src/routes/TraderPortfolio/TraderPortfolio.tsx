@@ -30,7 +30,7 @@ export const TraderPortfolio: React.FunctionComponent = () => {
     positionsByAgentGroup,
     loading: loadingPositions,
     error: errorPositions,
-  } = usePositions();
+  } = usePositions(Agents.FIXED_TRADER);
   const { account } = useWallet();
 
   const renderMode = formMode ? 'form' : 'portfolio';
