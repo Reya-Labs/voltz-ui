@@ -8,7 +8,6 @@ import { updateTransactionAction } from '../../app/features/transactions';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { Agents } from '../../contexts/AgentContext/types';
 import { isBorrowingPosition } from '../../utilities/borrowAmm';
-import { useAgent } from '../useAgent';
 import { useWallet } from '../useWallet';
 
 type UsePositionsResult = {
@@ -18,8 +17,7 @@ type UsePositionsResult = {
   error: boolean;
 };
 
-export const usePositions = (): UsePositionsResult => {
-  const { agent } = useAgent();
+export const usePositions = (agent: Agents): UsePositionsResult => {
   const { account: userAddress } = useWallet();
   const dispatch = useAppDispatch();
   const aMMsLoadedState = useAppSelector((state) => state.aMMs.aMMsLoadedState);
@@ -30,9 +28,17 @@ export const usePositions = (): UsePositionsResult => {
 
   useEffect(() => {
     setMePositions([]);
-    if (userAddress && aMMsLoadedState === 'succeeded' && agent) {
+    console.log("console: changers:", agent, userAddress, !!aMMs, aMMsLoadedState, Date.now().valueOf());
+    if (userAddress && aMMs && aMMs.length > 0 && aMMsLoadedState === 'succeeded' && agent) {
       setFetchLoading(true);
       setFetchError(false);
+
+      console.log("console: params", {
+        userWalletId: userAddress,
+        amms: aMMs,
+        subgraphURL: process.env.REACT_APP_SUBGRAPH_URL || '',
+        type: agent === Agents.LIQUIDITY_PROVIDER ? 'LP' : 'Trader',
+      });
 
       void getPositions({
         userWalletId: userAddress,
@@ -48,7 +54,7 @@ export const usePositions = (): UsePositionsResult => {
         }
       });
     }
-  }, [agent, userAddress, !!aMMs, aMMsLoadedState]);
+  }, [userAddress, !!aMMs, aMMsLoadedState]);
 
   const unresolvedTransactions = useAppSelector(selectors.unresolvedTransactionsSelector);
   const shouldTryToCloseTransactions =

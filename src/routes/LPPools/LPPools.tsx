@@ -31,7 +31,7 @@ export const LPPools: React.FunctionComponent = () => {
 
   const { onChangeAgent } = useAgent();
   const { key } = useLocation();
-  const { positionsByAgentGroup } = usePositions();
+  const { positionsByAgentGroup } = usePositions(Agents.LIQUIDITY_PROVIDER);
   const { account } = useWallet();
 
   const renderMode = formMode ? 'form' : 'pools';
