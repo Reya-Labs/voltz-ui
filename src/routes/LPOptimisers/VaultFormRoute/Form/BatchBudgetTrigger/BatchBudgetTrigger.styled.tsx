@@ -14,6 +14,7 @@ export const ContentBox = styled(Box)`
   align-items: flex-start;
   padding: 0px;
   gap: 12px;
+  width: 100%;
 `;
 
 export const DescriptionTypography = styled(Typography)`
@@ -37,12 +38,11 @@ export const ActionBox = styled(Box)`
   padding: 8px 16px;
   gap: 8px;
 
-  width: 334px;
-  height: 51.56px;
-
   /* Liberty 5 */
   background: #1e1933;
   border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 export const ActionLeftContentBox = styled(Box)`

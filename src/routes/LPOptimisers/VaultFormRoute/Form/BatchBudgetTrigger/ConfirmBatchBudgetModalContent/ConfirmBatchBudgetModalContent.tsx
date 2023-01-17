@@ -69,7 +69,7 @@ export const ConfirmBatchBudgetModalContent: React.FunctionComponent<Props> = ({
     </GasCostBox>
     <ButtonBox>
       <FormActionButton
-        dataTestId="DepositButton"
+        dataTestId="ConfirmBatchBudgetModalContent-BatchButton"
         disabled={disabled}
         loading={loading}
         success={success}
@@ -79,7 +79,7 @@ export const ConfirmBatchBudgetModalContent: React.FunctionComponent<Props> = ({
         {submitText}
       </FormActionButton>
       <CancelButton disabled={loading} onClick={onCancel}>
-        CANCEL
+        {success ? 'BACK' : 'CANCEL'}
       </CancelButton>
     </ButtonBox>
     <HintText {...hintText} loading={loading} />
