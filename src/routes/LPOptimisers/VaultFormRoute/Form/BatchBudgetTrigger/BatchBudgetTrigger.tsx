@@ -47,16 +47,12 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
   const handleOnProceed = () => {
     dispatch({
       type: 'batch_pending',
-      tokenName: 'TODO: SDK',
-      value: 1234,
     });
     const promise = new Promise((resolve) => setTimeout(resolve, 1500));
     promise
       .then(() => {
         dispatch({
           type: 'batch_success',
-          tokenName: 'TODO: SDK',
-          value: 1234,
         });
       })
       .catch(() => {
