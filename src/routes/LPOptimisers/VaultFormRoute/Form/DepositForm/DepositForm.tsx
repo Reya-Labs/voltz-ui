@@ -1,6 +1,6 @@
 import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import isUndefined from 'lodash.isundefined';
-import React, { useState } from 'react';
+import React from 'react';
 
 import { Modal } from '../../../../../components/composite/Modal/Modal';
 import { AutomaticRolloverToggleProps } from '../../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
@@ -11,6 +11,7 @@ import { BackButton, ButtonBox, FormBox, FullButtonBox } from '../CommonForm.sty
 import { ConfirmDepositModalContent } from '../ConfirmDepositModalContent/ConfirmDepositModalContent';
 import { DepositAmountInput } from '../DepositAmountInput/DepositAmountInput';
 import { DepositInfo } from '../DepositInfo/DepositInfo';
+import { DepositSuccessModalContent } from '../DepositSuccessModalContent/DepositSuccessModalContent';
 import { FormActionButton } from '../FormActionButton/FormActionButton';
 import { HintText } from '../HintText/HintText';
 import {
@@ -34,6 +35,12 @@ export type FormProps = {
   success: boolean;
   onGoBack: () => void;
   combinedWeightValue: number;
+  isConfirmDepositModalOpen: boolean;
+  isSuccessDepositModalOpen: boolean;
+  isBatchFlowOpen: boolean;
+  onConfirmDepositModalClose: () => void;
+  onSuccessDepositModalClose: () => void;
+  onBatchBudgetModalOpen: () => void;
   automaticRolloverGasCost: MaturityDistributionProps['automaticRolloverGasCost'];
   weights: MaturityDistributionProps['weights'];
   distribution: MaturityDistributionProps['distribution'];
@@ -58,9 +65,15 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
   onDistributionToggle,
   onManualDistributionsUpdate,
   combinedWeightValue,
+  isBatchFlowOpen,
   depositValue,
   automaticRolloverState,
   automaticRolloverChangePromise,
+  isConfirmDepositModalOpen,
+  onConfirmDepositModalClose,
+  isSuccessDepositModalOpen,
+  onSuccessDepositModalClose,
+  onBatchBudgetModalOpen,
   automaticRolloverGasCost,
 }: FormProps) => {
   const subtext = `WALLET BALANCE: ${
@@ -68,10 +81,6 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
       ? '---'
       : `${formatCurrency(lpVault.userWalletBalance, true)} ${lpVault.metadata.token}`
   }`;
-  const [isConfirmDepositOpen, setIsConfirmDepositOpen] = useState(false);
-  const handleConfirmDepositClose = () => setIsConfirmDepositOpen(false);
-  const handleConfirmDepositOpen = () => setIsConfirmDepositOpen(true);
-
   return (
     <>
       <FormBox>
@@ -102,7 +111,7 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
               loading={loading}
               success={success}
               variant="blue"
-              onClick={isCostReductionFlowEnabled() ? handleConfirmDepositOpen : onSubmit}
+              onClick={onSubmit}
             >
               {submitText}
             </FormActionButton>
@@ -115,17 +124,27 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
         <AboutYourFunds depositsText="Deposits" />
       </FormBox>
       {isCostReductionFlowEnabled() ? (
-        <Modal open={isConfirmDepositOpen} onClose={handleConfirmDepositClose}>
-          <ConfirmDepositModalContent
-            disabled={disabled}
-            hintText={hintText}
-            loading={loading}
-            submitText={submitText}
-            success={success}
-            onCancel={handleConfirmDepositClose}
-            onProceed={onSubmit}
-          />
-        </Modal>
+        <>
+          <Modal open={isConfirmDepositModalOpen} onClose={onConfirmDepositModalClose}>
+            <ConfirmDepositModalContent
+              disabled={disabled}
+              hintText={hintText}
+              loading={loading}
+              submitText={submitText}
+              success={success}
+              onCancel={onConfirmDepositModalClose}
+              onProceed={onSubmit}
+            />
+          </Modal>
+          <Modal open={isSuccessDepositModalOpen} onClose={onSuccessDepositModalClose}>
+            <DepositSuccessModalContent
+              isBatchFlowOpen={isBatchFlowOpen}
+              lpVault={lpVault}
+              onBatchBudgetModalClose={onSuccessDepositModalClose}
+              onBatchBudgetModalOpen={onBatchBudgetModalOpen}
+            />
+          </Modal>
+        </>
       ) : null}
     </>
   );
