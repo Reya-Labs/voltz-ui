@@ -29,3 +29,7 @@ export const NameTypography = styled(HeaderTypography)`
 export const BalanceTypography = styled(HeaderTypography)`
   margin-right: 56px;
 `;
+
+export const AutomaticRolloverTypography = styled(HeaderTypography)`
+  margin-left: auto;
+`;
