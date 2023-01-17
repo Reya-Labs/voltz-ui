@@ -33,13 +33,9 @@ type Actions =
     }
   | {
       type: 'batch_pending';
-      value: number;
-      tokenName: string;
     }
   | {
       type: 'batch_success';
-      value: number;
-      tokenName: string;
     };
 
 export const batchBudgetReducer = (state: BatchBudgetState, action: Actions) => {
@@ -70,8 +66,7 @@ export const batchBudgetReducer = (state: BatchBudgetState, action: Actions) => 
     return {
       submitText: 'Batching',
       hintText: {
-        prefixText: 'Batching',
-        text: `${action.value} ${action.tokenName}`,
+        text: '',
       },
       loading: true,
       disabled: true,
@@ -82,9 +77,7 @@ export const batchBudgetReducer = (state: BatchBudgetState, action: Actions) => 
     return {
       submitText: 'Batched',
       hintText: {
-        prefixText: 'Batched',
-        text: `${action.value} ${action.tokenName}`,
-        suffixText: 'successfully',
+        text: 'Batched successfully!',
         textColor: colors.skyBlueCrayola.base,
       },
       loading: false,
