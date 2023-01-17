@@ -3,6 +3,7 @@ import React, { useReducer, useState } from 'react';
 
 import { IconLabel } from '../../../../../components/composite/IconLabel/IconLabel';
 import { Modal } from '../../../../../components/composite/Modal/Modal';
+import { doNothing } from '../../../../../utilities/doNothing';
 import { batchBudgetReducer, initialState } from './batchBudgetReducer';
 import {
   ActionBox,
@@ -24,12 +25,24 @@ import { ConfirmBatchBudgetModalContent } from './ConfirmBatchBudgetModalContent
 
 type Props = {
   lpVault: MellowProduct;
+  onOpen?: () => void;
+  onClose?: () => void;
 };
 
-export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({ lpVault }) => {
+export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
+  lpVault,
+  onOpen = doNothing,
+  onClose = doNothing,
+}) => {
   const [isConfirmBatchBudgetOpen, setIsConfirmBatchBudgetOpen] = useState(false);
-  const handleConfirmBatchClose = () => setIsConfirmBatchBudgetOpen(false);
-  const handleConfirmBatchOpen = () => setIsConfirmBatchBudgetOpen(true);
+  const handleConfirmBatchClose = () => {
+    setIsConfirmBatchBudgetOpen(false);
+    onClose();
+  };
+  const handleConfirmBatchOpen = () => {
+    setIsConfirmBatchBudgetOpen(true);
+    onOpen();
+  };
   const [state, dispatch] = useReducer(batchBudgetReducer, initialState);
   const handleOnProceed = () => {
     dispatch({

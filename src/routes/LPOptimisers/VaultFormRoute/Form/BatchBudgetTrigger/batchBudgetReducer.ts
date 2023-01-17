@@ -23,27 +23,26 @@ export const initialState = {
   success: false,
 };
 
-export const batchBudgetReducer = (
-  state: BatchBudgetState,
-  action:
-    | {
-        type: 'initialise';
-      }
-    | {
-        type: 'batch_failed';
-        errorMessage: string;
-      }
-    | {
-        type: 'batch_pending';
-        value: number;
-        tokenName: string;
-      }
-    | {
-        type: 'batch_success';
-        value: number;
-        tokenName: string;
-      },
-) => {
+type Actions =
+  | {
+      type: 'initialise';
+    }
+  | {
+      type: 'batch_failed';
+      errorMessage: string;
+    }
+  | {
+      type: 'batch_pending';
+      value: number;
+      tokenName: string;
+    }
+  | {
+      type: 'batch_success';
+      value: number;
+      tokenName: string;
+    };
+
+export const batchBudgetReducer = (state: BatchBudgetState, action: Actions) => {
   if (action.type === 'initialise') {
     return {
       submitText: 'Initialising',
@@ -89,7 +88,7 @@ export const batchBudgetReducer = (
         textColor: colors.skyBlueCrayola.base,
       },
       loading: false,
-      disabled: false,
+      disabled: true,
       success: true,
     };
   }
