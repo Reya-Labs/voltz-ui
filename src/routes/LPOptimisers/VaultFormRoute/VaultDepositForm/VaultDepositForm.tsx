@@ -130,10 +130,13 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
     );
   }, [vault.id, loading, selectedDeposit]);
 
+  const openDepositModal = () => setDepositState(DepositStates.DEPOSIT_MODAL);
+
   const submissionState = getSubmissionState({
     depositState,
     deposit,
     approve,
+    openDepositModal,
     selectedDeposit,
     sufficientFunds,
     error,
@@ -162,16 +165,22 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
       }
       distribution={distribution}
       hintText={submissionState.hintText}
+      isBatchFlowOpen={submissionState.batchFlowOpen}
+      isConfirmDepositModalOpen={submissionState.confirmDepositModalOpen}
+      isSuccessDepositModalOpen={submissionState.successDepositModalOpen}
       loading={submissionState.loading}
       lpVault={vault}
       submitText={submissionState.submitText}
       success={submissionState.success}
       weights={weights}
+      onBatchBudgetModalOpen={() => setDepositState(DepositStates.BATCH_FLOW)}
       onChangeDeposit={setSelectedDeposit}
+      onConfirmDepositModalClose={() => setDepositState(DepositStates.APPROVED)}
       onDistributionToggle={setDistribution}
       onGoBack={onGoBack}
       onManualDistributionsUpdate={setManualWeights}
       onSubmit={submissionState.action}
+      onSuccessDepositModalClose={() => setDepositState(DepositStates.APPROVED)}
     />
   );
 };
