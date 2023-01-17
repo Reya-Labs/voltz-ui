@@ -39,6 +39,7 @@ export type VaultListItemProps = {
   id: string;
   token: string;
   totalBalance: number;
+  gasCost: number;
   vaults: {
     maturityTimestampMS: number;
     isCompleted: boolean;
@@ -59,6 +60,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
   token,
   depositable,
   id,
+  gasCost,
   automaticRolloverState,
   onChangeAutomaticRolloverStatePromise = doNothing,
 }) => {
@@ -87,7 +89,9 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
           <AutomaticRolloverToggle
             automaticRolloverState={automaticRolloverState}
             disabled={false}
+            gasCost={gasCost}
             showTooltip={false}
+            triggersOnChainTransaction={true}
             onChangePromise={async (value) =>
               await onChangeAutomaticRolloverStatePromise(id, value)
             }

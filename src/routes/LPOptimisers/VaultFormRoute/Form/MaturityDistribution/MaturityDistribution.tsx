@@ -33,6 +33,7 @@ export type MaturityDistributionProps = {
   weights: Weight[];
   combinedWeightValue: number;
   disabledToggle: boolean;
+  automaticRolloverGasCost?: number;
   automaticRolloverState?: AutomaticRolloverToggleProps['automaticRolloverState'];
   automaticRolloverChangePromise?: AutomaticRolloverToggleProps['onChangePromise'];
 };
@@ -46,6 +47,7 @@ export const MaturityDistribution: React.FunctionComponent<MaturityDistributionP
   disabledToggle,
   automaticRolloverState,
   automaticRolloverChangePromise,
+  automaticRolloverGasCost,
 }) => {
   const allVaultsWeightEditingDisabled =
     distribution === 'automatic' ? true : weights.every((w) => w.vaultDisabled);
@@ -60,14 +62,18 @@ export const MaturityDistribution: React.FunctionComponent<MaturityDistributionP
             onChange={onDistributionToggle}
           />
         )}
-        {automaticRolloverChangePromise && automaticRolloverState && (
-          <AutomaticRolloverToggle
-            automaticRolloverState={automaticRolloverState}
-            disabled={disabledToggle}
-            showTooltip={true}
-            onChangePromise={automaticRolloverChangePromise}
-          />
-        )}
+        {automaticRolloverGasCost !== undefined &&
+          automaticRolloverChangePromise &&
+          automaticRolloverState && (
+            <AutomaticRolloverToggle
+              automaticRolloverState={automaticRolloverState}
+              disabled={disabledToggle}
+              gasCost={automaticRolloverGasCost}
+              showTooltip={true}
+              triggersOnChainTransaction={false}
+              onChangePromise={automaticRolloverChangePromise}
+            />
+          )}
       </ToggleBox>
       <MaturityDistributionHeader />
       <MaturityDistributionsBox>

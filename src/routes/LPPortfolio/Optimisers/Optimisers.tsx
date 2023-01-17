@@ -14,10 +14,9 @@ import { VaultListItem } from './VaultListItem/VaultListItem';
 export const Optimisers: React.FunctionComponent = () => {
   const { signer } = useWallet();
   const { lpVaults, vaultsInitialised, vaultsInitialisedWithSigner } = useLPVaults(signer);
-  // todo: read the value from SDK
-  const [automaticRolloverState, setAutomaticRolloverState] = useState<'active' | 'inactive'>(
-    'inactive',
-  );
+  // TODO: remove this once the entire state is lifted to Redux properly,
+  // What is missing it Redux to give us some plain objects and not SDK classes
+  const [forcedRerenderCounter, setForcedRerenderCounter] = useState<number>(0);
   if (!signer || !vaultsInitialised || !vaultsInitialisedWithSigner) {
     return (
       <OptimisersBox>
@@ -47,11 +46,18 @@ export const Optimisers: React.FunctionComponent = () => {
     value: AutomaticRolloverToggleProps['automaticRolloverState'],
   ) => {
     try {
-      // todo: SDK integration here
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setAutomaticRolloverState(value);
+      const vault = lpVaults.find((v) => v.id === vaultId);
+      if (!vault) {
+        return;
+      }
+      const registration = value === 'active';
+      await vault.registerForAutoRollover(registration);
+      setForcedRerenderCounter(forcedRerenderCounter + 1);
     } catch (err) {
-      throw new Error('Error');
+      if (typeof err === 'string') {
+        throw new Error(err);
+      }
+      throw new Error((err as Error).message || 'Unknown!');
     }
   };
 
@@ -62,8 +68,11 @@ export const Optimisers: React.FunctionComponent = () => {
       {vaultsWithDeposit.map((vault) => (
         <VaultListItem
           key={vault.id}
-          automaticRolloverState={automaticRolloverState}
+          automaticRolloverState={
+            Boolean(vault.isRegisteredForAutoRollover) ? 'active' : 'inactive'
+          }
           depositable={vault.depositable}
+          gasCost={vault.autoRolloverRegistrationGasFeeUSD}
           id={vault.id}
           token={vault.metadata.token}
           totalBalance={vault.userDeposit}
