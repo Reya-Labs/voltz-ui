@@ -67,6 +67,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
       <Modal open={isConfirmBatchBudgetOpen} onClose={handleConfirmBatchClose}>
         <ConfirmBatchBudgetModalContent
           disabled={state.disabled}
+          error={state.error}
           hintText={state.hintText}
           loading={state.loading}
           submitText={state.submitText}

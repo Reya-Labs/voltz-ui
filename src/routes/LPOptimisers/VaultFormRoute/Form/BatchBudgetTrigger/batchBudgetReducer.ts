@@ -1,26 +1,19 @@
-import { colors } from '../../../../../theme';
-
 type BatchBudgetState = {
   submitText: string;
-  hintText: {
-    prefixText?: string;
-    text: string;
-    suffixText?: string;
-    textColor?: string;
-  };
+  hintText: string;
   disabled: boolean;
   loading: boolean;
   success: boolean;
+  error: boolean;
 };
 
-export const initialState = {
+export const initialState: BatchBudgetState = {
   submitText: 'Batch',
-  hintText: {
-    text: '',
-  },
+  hintText: '',
   loading: false,
   disabled: false,
   success: false,
+  error: false,
 };
 
 type Actions =
@@ -38,25 +31,22 @@ type Actions =
       type: 'batch_success';
     };
 
-export const batchBudgetReducer = (state: BatchBudgetState, action: Actions) => {
+export const batchBudgetReducer = (state: BatchBudgetState, action: Actions): BatchBudgetState => {
   if (action.type === 'initialise') {
     return {
       submitText: 'Initialising',
-      hintText: {
-        text: 'Initialising, please wait',
-      },
+      hintText: 'Initialising, please wait',
       loading: true,
       disabled: true,
       success: false,
+      error: false,
     };
   }
   if (action.type === 'batch_failed') {
     return {
       submitText: 'Batch',
-      hintText: {
-        text: action.errorMessage,
-        textColor: colors.vzCustomRed1.base,
-      },
+      hintText: action.errorMessage,
+      error: true,
       loading: false,
       disabled: false,
       success: false,
@@ -65,9 +55,8 @@ export const batchBudgetReducer = (state: BatchBudgetState, action: Actions) => 
   if (action.type === 'batch_pending') {
     return {
       submitText: 'Batching',
-      hintText: {
-        text: '',
-      },
+      hintText: '',
+      error: false,
       loading: true,
       disabled: true,
       success: false,
@@ -76,10 +65,8 @@ export const batchBudgetReducer = (state: BatchBudgetState, action: Actions) => 
   if (action.type === 'batch_success') {
     return {
       submitText: 'Batched',
-      hintText: {
-        text: 'Batched successfully!',
-        textColor: colors.skyBlueCrayola.base,
-      },
+      hintText: 'Batched successfully!',
+      error: false,
       loading: false,
       disabled: true,
       success: true,

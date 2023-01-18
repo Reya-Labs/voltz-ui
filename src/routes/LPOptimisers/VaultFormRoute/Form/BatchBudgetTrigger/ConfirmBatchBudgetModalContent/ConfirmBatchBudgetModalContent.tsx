@@ -2,7 +2,6 @@ import React from 'react';
 
 import { IconLabel } from '../../../../../../components/composite/IconLabel/IconLabel';
 import { FormActionButton } from '../../FormActionButton/FormActionButton';
-import { HintText } from '../../HintText/HintText';
 import {
   BatchBudgetCurrencyTypography,
   BatchBudgetTextTypography,
@@ -18,15 +17,13 @@ import {
   GasIcon,
   TitleTypography,
 } from './ConfirmBatchBudgetModalContent.styled';
+import { HintText } from './HintText/HintText';
 
 type Props = {
   onProceed: () => void;
   onCancel: () => void;
-  hintText: {
-    text: string;
-    suffixText?: string;
-    textColor?: string;
-  };
+  hintText: string;
+  error: boolean;
   submitText: string;
   disabled: boolean;
   loading: boolean;
@@ -41,6 +38,7 @@ export const ConfirmBatchBudgetModalContent: React.FunctionComponent<Props> = ({
   hintText,
   submitText,
   disabled,
+  error,
 }) => (
   <ContentBox>
     <TitleTypography>Batch deposits</TitleTypography>
@@ -82,6 +80,6 @@ export const ConfirmBatchBudgetModalContent: React.FunctionComponent<Props> = ({
         {success ? 'BACK' : 'CANCEL'}
       </CancelButton>
     </ButtonBox>
-    <HintText {...hintText} loading={loading} />
+    <HintText error={error} loading={loading} success={success} text={hintText} />
   </ContentBox>
 );
