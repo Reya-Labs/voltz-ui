@@ -3,7 +3,7 @@ import { Position } from '@voltz-protocol/v1-sdk';
 import { SupportedIcons } from '../../../../../../../components/atomic/Icon/types';
 import { formatTimestamp } from '../../../../../../../utilities/date';
 import { formatCurrency } from '../../../../../../../utilities/number';
-import { LPPositionTransaction, TransactionType } from './types';
+import { LPPositionTransaction, LPTransactionType } from './types';
 
 /**
  * Outputs an array of transactions for a given position. The types of transaction differ
@@ -12,11 +12,11 @@ import { LPPositionTransaction, TransactionType } from './types';
  */
 export const getTransactions = (position: Position) => {
   return [
-    ...position.mints.map((tx) => ({ ...tx, type: TransactionType.MINT })),
-    ...position.burns.map((tx) => ({ ...tx, type: TransactionType.BURN })),
-    ...position.marginUpdates.map((tx) => ({ ...tx, type: TransactionType.MARGIN_UPDATE })),
-    ...position.settlements.map((tx) => ({ ...tx, type: TransactionType.SETTLEMENT })),
-    ...position.liquidations.map((tx) => ({ ...tx, type: TransactionType.LIQUIDATION })),
+    ...position.mints.map((tx) => ({ ...tx, type: LPTransactionType.MINT })),
+    ...position.burns.map((tx) => ({ ...tx, type: LPTransactionType.BURN })),
+    ...position.marginUpdates.map((tx) => ({ ...tx, type: LPTransactionType.MARGIN_UPDATE })),
+    ...position.settlements.map((tx) => ({ ...tx, type: LPTransactionType.SETTLEMENT })),
+    ...position.liquidations.map((tx) => ({ ...tx, type: LPTransactionType.LIQUIDATION })),
   ] as LPPositionTransaction[];
 };
 
@@ -43,24 +43,24 @@ export const getTransactionData = (position: Position, tx: LPPositionTransaction
   const token = position.amm.underlyingToken.name || '';
 
   const iconMap: Record<LPPositionTransaction['type'], SupportedIcons> = {
-    [TransactionType.BURN]: 'tx-burn',
-    [TransactionType.LIQUIDATION]: 'tx-liquidation',
-    [TransactionType.MARGIN_UPDATE]: 'tx-margin-update',
-    [TransactionType.MINT]: 'tx-mint',
-    [TransactionType.SETTLEMENT]: 'tx-settle',
+    [LPTransactionType.BURN]: 'tx-burn',
+    [LPTransactionType.LIQUIDATION]: 'tx-liquidation',
+    [LPTransactionType.MARGIN_UPDATE]: 'tx-margin-update',
+    [LPTransactionType.MINT]: 'tx-mint',
+    [LPTransactionType.SETTLEMENT]: 'tx-settle',
   };
 
   const getLabel = () => {
     switch (tx.type) {
-      case TransactionType.BURN:
+      case LPTransactionType.BURN:
         return 'BURN';
-      case TransactionType.LIQUIDATION:
+      case LPTransactionType.LIQUIDATION:
         return 'LIQUIDATION';
-      case TransactionType.MARGIN_UPDATE:
+      case LPTransactionType.MARGIN_UPDATE:
         return 'MARGIN UPDATE';
-      case TransactionType.MINT:
+      case LPTransactionType.MINT:
         return 'MINT';
-      case TransactionType.SETTLEMENT:
+      case LPTransactionType.SETTLEMENT:
         return 'SETTLE';
     }
   };
@@ -74,7 +74,7 @@ export const getTransactionData = (position: Position, tx: LPPositionTransaction
   };
 
   switch (tx.type) {
-    case TransactionType.SETTLEMENT:
+    case LPTransactionType.SETTLEMENT:
       return {
         ...baseData,
         items: [
@@ -85,7 +85,7 @@ export const getTransactionData = (position: Position, tx: LPPositionTransaction
         ],
       };
 
-    case TransactionType.MARGIN_UPDATE:
+    case LPTransactionType.MARGIN_UPDATE:
       return {
         ...baseData,
         items: [
@@ -96,7 +96,7 @@ export const getTransactionData = (position: Position, tx: LPPositionTransaction
         ],
       };
 
-    case TransactionType.LIQUIDATION:
+    case LPTransactionType.LIQUIDATION:
       return {
         ...baseData,
         items: [
@@ -111,8 +111,8 @@ export const getTransactionData = (position: Position, tx: LPPositionTransaction
         ],
       };
 
-    case TransactionType.MINT:
-    case TransactionType.BURN:
+    case LPTransactionType.MINT:
+    case LPTransactionType.BURN:
       return {
         ...baseData,
         items: [

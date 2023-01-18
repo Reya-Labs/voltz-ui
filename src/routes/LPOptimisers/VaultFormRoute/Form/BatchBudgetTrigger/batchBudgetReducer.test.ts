@@ -56,7 +56,7 @@ describe('batchBudgetReducer', () => {
   });
 
   it('should throw error for unknown action', () => {
-    expect(() => batchBudgetReducer(initialState, { type: 'unknown' })).toThrowError(
+    expect(() => batchBudgetReducer(initialState, { type: 'unknown' } as never)).toThrowError(
       'Unknown action.',
     );
   });

@@ -6,7 +6,7 @@ import { useUniqueId } from '../../../../../hooks/useUniqueId';
 import { colors, SystemStyleObject, Theme } from '../../../../../theme';
 import { getTransactionData, getTransactions, sortTransactions } from './services';
 import { TransactionListItem } from './TransactionListItem';
-import { TransactionType } from './types';
+import { TraderTransactionType } from './types';
 
 interface TransactionListProps {
   position: Position;
@@ -34,7 +34,7 @@ export const TransactionList = ({ position }: TransactionListProps) => {
       {(open ? transactions : [transactions[0]]).map((tx, i) => (
         <TransactionListItem
           key={tx.id}
-          isLiquidation={tx.type === TransactionType.LIQUIDATION}
+          isLiquidation={tx.type === TraderTransactionType.LIQUIDATION}
           listId={id}
           open={open}
           transactionData={getTransactionData(position, tx)}

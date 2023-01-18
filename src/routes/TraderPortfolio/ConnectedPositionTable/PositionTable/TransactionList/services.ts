@@ -3,7 +3,7 @@ import { Position } from '@voltz-protocol/v1-sdk';
 import { SupportedIcons } from '../../../../../components/atomic/Icon/types';
 import { formatTimestamp } from '../../../../../utilities/date';
 import { formatCurrency, formatNumber } from '../../../../../utilities/number';
-import { LPPositionTransaction, TraderPositionTransaction, TransactionType } from './types';
+import { TraderPositionTransaction, TraderTransactionType } from './types';
 
 /**
  * Returns the 'avg fix' percentage value for the given parameters
@@ -20,22 +20,12 @@ export const getAvgFix = (fixedTokenDeltaUnbalanced: number, variableTokenDelta:
  * @param position - the position to compile an array of transactions for
  */
 export const getTransactions = (position: Position) => {
-  if (position.positionType !== 3) {
-    return [
-      ...position.swaps.map((tx) => ({ ...tx, type: TransactionType.SWAP })),
-      ...position.marginUpdates.map((tx) => ({ ...tx, type: TransactionType.MARGIN_UPDATE })),
-      ...position.settlements.map((tx) => ({ ...tx, type: TransactionType.SETTLEMENT })),
-      ...position.liquidations.map((tx) => ({ ...tx, type: TransactionType.LIQUIDATION })),
-    ] as TraderPositionTransaction[];
-  } else {
-    return [
-      ...position.mints.map((tx) => ({ ...tx, type: TransactionType.MINT })),
-      ...position.burns.map((tx) => ({ ...tx, type: TransactionType.BURN })),
-      ...position.marginUpdates.map((tx) => ({ ...tx, type: TransactionType.MARGIN_UPDATE })),
-      ...position.settlements.map((tx) => ({ ...tx, type: TransactionType.SETTLEMENT })),
-      ...position.liquidations.map((tx) => ({ ...tx, type: TransactionType.LIQUIDATION })),
-    ] as LPPositionTransaction[];
-  }
+  return [
+    ...position.swaps.map((tx) => ({ ...tx, type: TraderTransactionType.SWAP })),
+    ...position.marginUpdates.map((tx) => ({ ...tx, type: TraderTransactionType.MARGIN_UPDATE })),
+    ...position.settlements.map((tx) => ({ ...tx, type: TraderTransactionType.SETTLEMENT })),
+    ...position.liquidations.map((tx) => ({ ...tx, type: TraderTransactionType.LIQUIDATION })),
+  ] as TraderPositionTransaction[];
 };
 
 /**
@@ -43,9 +33,7 @@ export const getTransactions = (position: Position) => {
  * Transactions are sorted with the newest first.
  * @param transactions
  */
-export const sortTransactions = (
-  transactions: TraderPositionTransaction[] | LPPositionTransaction[],
-) => {
+export const sortTransactions = (transactions: TraderPositionTransaction[]) => {
   transactions.sort((a, b) => {
     const timeA = a.creationTimestampInMS;
     const timeB = b.creationTimestampInMS;
@@ -59,34 +47,25 @@ export const sortTransactions = (
  * @param position - the position
  * @param tx - the transaction to compile the data for
  */
-export const getTransactionData = (
-  position: Position,
-  tx: TraderPositionTransaction | LPPositionTransaction,
-) => {
+export const getTransactionData = (position: Position, tx: TraderPositionTransaction) => {
   const token = position.amm.underlyingToken.name || '';
 
-  const iconMap: Record<TransactionType, SupportedIcons> = {
-    [TransactionType.BURN]: 'tx-burn',
-    [TransactionType.LIQUIDATION]: 'tx-liquidation',
-    [TransactionType.MARGIN_UPDATE]: 'tx-margin-update',
-    [TransactionType.MINT]: 'tx-mint',
-    [TransactionType.SETTLEMENT]: 'tx-settle',
-    [TransactionType.SWAP]: 'tx-swap',
+  const iconMap: Record<TraderTransactionType, SupportedIcons> = {
+    [TraderTransactionType.LIQUIDATION]: 'tx-liquidation',
+    [TraderTransactionType.MARGIN_UPDATE]: 'tx-margin-update',
+    [TraderTransactionType.SETTLEMENT]: 'tx-settle',
+    [TraderTransactionType.SWAP]: 'tx-swap',
   };
 
   const getLabel = () => {
     switch (tx.type) {
-      case TransactionType.BURN:
-        return 'BURN';
-      case TransactionType.LIQUIDATION:
+      case TraderTransactionType.LIQUIDATION:
         return 'LIQUIDATION';
-      case TransactionType.MARGIN_UPDATE:
+      case TraderTransactionType.MARGIN_UPDATE:
         return 'MARGIN UPDATE';
-      case TransactionType.MINT:
-        return 'MINT';
-      case TransactionType.SETTLEMENT:
+      case TraderTransactionType.SETTLEMENT:
         return 'SETTLE';
-      case TransactionType.SWAP:
+      case TraderTransactionType.SWAP:
         return `SWAP ${tx.variableTokenDelta > 0 ? 'VT' : 'FT'}`;
     }
   };
@@ -100,7 +79,7 @@ export const getTransactionData = (
   };
 
   switch (tx.type) {
-    case TransactionType.SWAP:
+    case TraderTransactionType.SWAP:
       return {
         ...baseData,
         items: [
@@ -121,7 +100,7 @@ export const getTransactionData = (
         ],
       };
 
-    case TransactionType.SETTLEMENT:
+    case TraderTransactionType.SETTLEMENT:
       return {
         ...baseData,
         items: [
@@ -132,7 +111,7 @@ export const getTransactionData = (
         ],
       };
 
-    case TransactionType.MARGIN_UPDATE:
+    case TraderTransactionType.MARGIN_UPDATE:
       return {
         ...baseData,
         items: [
@@ -143,7 +122,7 @@ export const getTransactionData = (
         ],
       };
 
-    case TransactionType.LIQUIDATION:
+    case TraderTransactionType.LIQUIDATION:
       return {
         ...baseData,
         items: [
@@ -154,18 +133,6 @@ export const getTransactionData = (
           {
             label: 'cashflow',
             value: `${formatCurrency(tx.loss, false, true)} ${token}`,
-          },
-        ],
-      };
-
-    case TransactionType.MINT:
-    case TransactionType.BURN:
-      return {
-        ...baseData,
-        items: [
-          {
-            label: 'notional',
-            value: `${formatCurrency(tx.liquidity)} ${token}`,
           },
         ],
       };
