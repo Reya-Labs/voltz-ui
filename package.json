@@ -1,6 +1,6 @@
 {
   "name": "voltz-ui",
-  "version": "1.60.0",
+  "version": "1.60.1",
   "description": "A UI client for the Voltz Protocol",
   "license": "MIT",
   "scripts": {
@@ -125,7 +125,6 @@
     ]
   },
   "resolutions": {
-    "@apollo/client": "3.5.1",
     "@sentry/react": "7.25.0",
     "@sentry/tracing": "7.25.0"
   },
