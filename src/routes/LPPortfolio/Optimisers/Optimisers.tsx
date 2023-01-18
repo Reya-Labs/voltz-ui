@@ -82,6 +82,7 @@ export const Optimisers: React.FunctionComponent = () => {
             poolsCount: vVaults.pools.length,
             currentBalance: vault.userIndividualDeposits[vaultIndex],
             distribution: vVaults.weight,
+            canManageVaultPosition: vault.canManageVaultPosition(vaultIndex),
           }))}
           onChangeAutomaticRolloverStatePromise={automaticRolloverChangePromise}
         />
