@@ -7026,6 +7026,7 @@
   version "1.44.0"
   resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.44.0.tgz#e912db995d6c9bddb2fb9c2906e5fd7e3c4e743a"
   integrity sha512-v4QIR69rWMZs520nVlRiQCNkqi3rzQwl4kVzRh4dAIA1M62necaBtGEzkw0/O1843bG/NZFuDYjHMLSsG1BTBw==
+
   dependencies:
     "@ethersproject/address" "^5.7.0"
     "@metamask/detect-provider" "^1.2.0"
