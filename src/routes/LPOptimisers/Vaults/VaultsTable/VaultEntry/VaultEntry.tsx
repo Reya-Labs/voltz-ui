@@ -1,9 +1,9 @@
 import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
-import { isCostReductionFlowEnabled } from '../../../../../../utilities/is-cost-reduction-flow-enabled';
-import { VaultField } from '../../../../VaultField/VaultField';
-import { BatchBudgetTrigger } from '../../../../VaultFormRoute/Form/BatchBudgetTrigger/BatchBudgetTrigger';
+import { isCostReductionFlowEnabled } from '../../../../../utilities/is-cost-reduction-flow-enabled';
+import { VaultField } from '../../../VaultField/VaultField';
+import { BatchBudgetTrigger } from '../../../VaultFormRoute/Form/BatchBudgetTrigger/BatchBudgetTrigger';
 import { MellowPosition } from '../MellowPosition/MellowPosition';
 import { Tag } from '../Tag/Tag';
 import {
@@ -37,7 +37,9 @@ export const VaultEntry: React.FunctionComponent<VaultEntryProps> = ({
           weights={lpVault.metadata.vaults.map((v) => v.weight)}
         />
 
-        <DescriptionTypography variant="h6">{lpVault.metadata.description}</DescriptionTypography>
+        <DescriptionTypography data-testid="VaultEntry-DescriptionTypography" variant="h6">
+          {lpVault.metadata.description}
+        </DescriptionTypography>
 
         <PoolOutlineBox>
           <Tag>

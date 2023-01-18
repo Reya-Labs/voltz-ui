@@ -3,6 +3,8 @@ import React from 'react';
 import { Ellipsis } from '../../../../../components/atomic/Ellipsis/Ellipsis';
 import { HintTextTypography, PrefixHintTextSpan } from './HintText.styled';
 
+// TODO: remove this and use other HintText
+// Requires some prop refactoring first
 export const HintText: React.FunctionComponent<{
   prefixText?: string;
   text: string;

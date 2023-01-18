@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 
-import { Typography } from '../../../../../../components/atomic/Typography/Typography';
+import { Typography } from '../../../../../components/atomic/Typography/Typography';
 
 export const VaultEntryContainerBox = styled(Box)`
   display: flex;
