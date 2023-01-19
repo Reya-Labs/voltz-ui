@@ -86,7 +86,8 @@ export const isMessageEIP1271Signed = async (
   const hashMessage = ethers.utils.hashMessage(message);
 
   try {
-    const returnValue = await contractWallet.isValidSignature(hashMessage, signature);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    const returnValue = (await contractWallet.isValidSignature(hashMessage, signature)) as string;
     if (returnValue.toString() === EIP1271_magic_value) {
       return true;
     }
