@@ -19,6 +19,7 @@ const serializeAmm = (amm: AMM): SerializedAMM => ({
     },
   },
   wethAddress: amm.wethAddress,
+  minLeverageAllowed: amm.minLeverageAllowed,
 });
 
 export default serializeAmm;

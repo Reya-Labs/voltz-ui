@@ -3,9 +3,9 @@ import debounce from 'lodash.debounce';
 import isNumber from 'lodash.isnumber';
 import isUndefined from 'lodash.isundefined';
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { WarningBoxProps } from 'src/components/interface/SwapInfo/WarningBox/WarningBox';
 
 import { SwapFormActions, SwapFormModes } from '../../components/interface/SwapForm/types';
+import { WarningBoxProps } from '../../components/interface/SwapInfo/WarningBox/WarningBox';
 import { useAgent } from '../../hooks/useAgent';
 import { GetInfoType } from '../../hooks/useAMM/types';
 import { useBalance } from '../../hooks/useBalance';
@@ -279,7 +279,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
       );
       updateLeverage(newLeverage, false, false);
     }
-  }, [notional, cachedSwapInfoAvailableNotional]);
+  }, [notional, cachedSwapInfoAvailableNotional, cachedSwapInfoFees]);
 
   // Validate the form after values change
   useEffect(() => {
@@ -429,6 +429,9 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
         const formatted = formatNumber(minNotional / newLeverage + swapInfo.result?.fee, 0, 4);
         const newMargin = stringToBigFloat(formatted);
         setMargin(newMargin);
+        if (!touched.current.includes('margin')) {
+          touched.current.push('margin');
+        }
       }
     }
   };
