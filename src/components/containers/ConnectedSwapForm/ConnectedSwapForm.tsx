@@ -231,7 +231,7 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
         underlyingTokenName={targetAmm.underlyingToken.name}
         userSimulatedVariableApy={form.userSimulatedVariableApy}
         userSimulatedVariableApyUpdated={form.userSimulatedVariableApyUpdated}
-        warningText={form.warningText}
+        warningBoxes={form.warningBoxes}
         onChangeUserSimulatedVariableApy={form.setUserSimulatedVariableApy}
       />
     </>
