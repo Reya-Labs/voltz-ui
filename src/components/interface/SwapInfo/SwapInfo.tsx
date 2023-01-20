@@ -10,7 +10,7 @@ import { DescriptionBox } from './DescriptionBox/DescriptionBox';
 import { ExpectedAPY } from './ExpectedAPY/ExpectedAPY';
 import { SwapSummary } from './SwapSummary/SwapSummary';
 import { SwapSummaryEditMargin } from './SwapSummary/SwapSummaryEditMargin';
-import { WarningBox } from './WarningBox/WarningBox';
+import { WarningBox, WarningBoxProps } from './WarningBox/WarningBox';
 
 export type SwapInfoProps = {
   balance?: number;
@@ -22,7 +22,7 @@ export type SwapInfoProps = {
   swapSummary: InfoPostSwap | void | null;
   swapSummaryLoading: boolean;
   underlyingTokenName?: string;
-  warningText?: string;
+  warningBoxes?: WarningBoxProps[];
   maxAvailableNotional?: number;
   expectedApy?: number;
   expectedCashflow?: number;
@@ -42,7 +42,7 @@ export const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
   swapSummary,
   swapSummaryLoading,
   underlyingTokenName,
-  warningText,
+  warningBoxes,
   maxAvailableNotional,
   expectedApy,
   expectedCashflow,
@@ -92,11 +92,16 @@ export const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
       )}
 
       {(mode === SwapFormModes.NEW_POSITION || mode === SwapFormModes.FIX_BORROW) &&
-        !isUndefined(warningText) && (
+        !isUndefined(warningBoxes) && (
           <>
-            <Box sx={bottomSpacing}>
-              <WarningBox warningText={warningText} />
-            </Box>
+            {warningBoxes.map((warningBox) => {
+              return (
+                // eslint-disable-next-line react/jsx-key
+                <Box sx={bottomSpacing}>
+                  <WarningBox {...warningBox} />
+                </Box>
+              );
+            })}
           </>
         )}
 

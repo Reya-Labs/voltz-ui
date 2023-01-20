@@ -5,6 +5,7 @@ import isUndefined from 'lodash.isundefined';
 import { useEffect, useRef, useState } from 'react';
 
 import {
+  formatLeverage,
   formatNumber,
   removeFormat,
   stringToBigFloat,
@@ -22,6 +23,7 @@ import { activeButtonStyle, buttonStyle, leverageBoxStyle } from './style';
 export type LeverageProps = {
   availableNotional?: number;
   minMargin?: number;
+  fee?: number;
   notional?: number;
   onChange: (value: number, resetToDefaultLeverage?: boolean) => void;
   value: number;
@@ -29,11 +31,12 @@ export type LeverageProps = {
 };
 
 // Set the leverage options in this array
-const LEVERAGE_OPTIONS = [100, 500, 1000];
+const DEFAULT_LEVERAGE_OPTIONS = [100, 500, 1000];
 
 export const Leverage = ({
   availableNotional,
   minMargin,
+  fee,
   notional,
   onChange,
   value,
@@ -50,11 +53,32 @@ export const Leverage = ({
 
   const timer = useRef<number>();
 
-  const [activeOption, setActiveOption] = useState(LEVERAGE_OPTIONS[0]);
+  const maxLeverage =
+    isUndefined(availableNotional) ||
+    isUndefined(minMargin) ||
+    isUndefined(notional) ||
+    isUndefined(fee)
+      ? 0
+      : parseFloat((Math.min(notional, availableNotional) / (minMargin - fee)).toFixed(2));
+  const LEVERAGE_OPTIONS =
+    isUndefined(availableNotional) ||
+    isUndefined(minMargin) ||
+    isUndefined(notional) ||
+    isUndefined(fee) ||
+    maxLeverage === 0
+      ? DEFAULT_LEVERAGE_OPTIONS
+      : [
+          formatLeverage(maxLeverage / 4),
+          formatLeverage(maxLeverage / 2),
+          formatLeverage(maxLeverage),
+        ];
+
+  const [activeOption, setActiveOption] = useState(value);
 
   useEffect(() => {
     const formatted = formatNumber(value, 0, 2);
     setInputValue(formatted);
+    setActiveOption(parseFloat(formatted));
   }, [value, resetDeltaState]);
 
   const handleChangeInput = (inputVal: string | undefined) => {
@@ -64,7 +88,10 @@ export const Leverage = ({
       if (!isNaN(newValue)) {
         setInputValue(inputVal);
         window.clearInterval(timer.current);
-        timer.current = window.setTimeout(() => onChange(newValue), delay);
+        timer.current = window.setTimeout(() => {
+          onChange(newValue);
+          setActiveOption(newValue);
+        }, delay);
       }
     } else {
       setInputValue('');
@@ -99,6 +126,7 @@ export const Leverage = ({
               variant={'contained'}
               onClick={() => {
                 onChange(opt);
+                handleChangeInput(opt.toString());
                 setActiveOption(opt);
               }}
             >
