@@ -1,3 +1,5 @@
+import fetch from 'isomorphic-fetch';
+
 import { getSentryTracker } from '../../../utilities/sentry';
 import { WalletRiskAssessment } from '../types';
 import { UNAVAILABLE_TEXT } from './constants';
