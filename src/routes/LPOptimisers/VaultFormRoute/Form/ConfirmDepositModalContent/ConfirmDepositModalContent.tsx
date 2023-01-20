@@ -62,7 +62,6 @@ export const ConfirmDepositModalContent: React.FunctionComponent<Props> = ({
           <BatchFeeCurrencyTypography>---</BatchFeeCurrencyTypography>
         ) : (
           <>
-            $
             <BatchFeeCurrencyTypography>
               $<BatchFeeValueTypography>{formatCurrency(batchFee)} USD</BatchFeeValueTypography>
             </BatchFeeCurrencyTypography>
