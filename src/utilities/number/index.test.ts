@@ -1,6 +1,7 @@
 import {
   compactFormat,
   formatCurrency,
+  formatLeverage,
   formatNumber,
   removeFormat,
   roundUpDecimal,
@@ -171,5 +172,24 @@ describe('number', () => {
         expect(retValue).toEqual(expected);
       },
     );
+  });
+
+  describe('formatLeverage', () => {
+    test.each([
+      [-1, 0],
+      [0, 0],
+      [7, 7],
+      [17, 15],
+      [94, 90],
+      [123, 120],
+      [149, 145],
+      [200, 200],
+      [1234, 1200],
+      [1300, 1300],
+      [12345, 12300],
+    ])('given number=%p - formatLeverage should return expected output', (number, expected) => {
+      const retValue = formatLeverage(number);
+      expect(retValue).toEqual(expected);
+    });
   });
 });

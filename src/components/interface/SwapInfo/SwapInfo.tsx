@@ -94,10 +94,9 @@ export const SwapInfo: React.FunctionComponent<SwapInfoProps> = ({
       {(mode === SwapFormModes.NEW_POSITION || mode === SwapFormModes.FIX_BORROW) &&
         !isUndefined(warningBoxes) && (
           <>
-            {warningBoxes.map((warningBox) => {
+            {warningBoxes.map((warningBox, index) => {
               return (
-                // eslint-disable-next-line react/jsx-key
-                <Box sx={bottomSpacing}>
+                <Box key={index.toString()} sx={bottomSpacing}>
                   <WarningBox {...warningBox} />
                 </Box>
               );
