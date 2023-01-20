@@ -17,6 +17,7 @@ const deserializeAmm = (serializedAmm: SerializedAMM, signer: providers.JsonRpcS
       token: { id: tokenAddress, name: tokenName, decimals },
     },
     wethAddress,
+    minLeverageAllowed,
   } = serializedAmm;
 
   return new AMM({
@@ -35,6 +36,7 @@ const deserializeAmm = (serializedAmm: SerializedAMM, signer: providers.JsonRpcS
       decimals: parseInt(decimals, 10),
     }),
     wethAddress,
+    minLeverageAllowed,
   });
 };
 

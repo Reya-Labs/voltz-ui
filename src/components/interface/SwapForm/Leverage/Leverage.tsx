@@ -65,7 +65,7 @@ export const Leverage = ({
     isUndefined(minMargin) ||
     isUndefined(notional) ||
     isUndefined(fee) ||
-    maxLeverage === 0
+    maxLeverage <= 0
       ? DEFAULT_LEVERAGE_OPTIONS
       : [
           formatLeverage(maxLeverage / 4),

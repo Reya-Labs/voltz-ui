@@ -1,8 +1,8 @@
 import { InfoPostSwap } from '@voltz-protocol/v1-sdk';
 import isUndefined from 'lodash.isundefined';
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
-import { WarningBoxProps } from 'src/components/interface/SwapInfo/WarningBox/WarningBox';
 
+import { WarningBoxProps } from '../../components/interface/SwapInfo/WarningBox/WarningBox';
 import { useAgent } from '../../hooks/useAgent';
 import { GetInfoType } from '../../hooks/useAMM/types';
 import { UseAsyncFunctionResult } from '../../hooks/useAsyncFunction';
