@@ -56,12 +56,12 @@ export const checkForRiskyWallet = async (walletAddress: string) => {
  * Check if the provided signature is valid for the smart contract at signer.getAddress(),
  * using the checks defined in EIP-1271.
  *
- * For simplicity we use the user's Metamask provider and not Alchemy/Infura, though we could change
- * that in future.
+ * For simplicity, we use the user's Metamask provider and not Alchemy/Infura, though we could change
+ * that in the future.
  *
  * @param signer - the signer fort the current wallet. May or may not be a contract wallet, but this
  * function will only return true if it's a contract wallet.
- * @param message - the text of a message (e.g. our terms of service). We will check whether or not the current wallet
+ * @param message - the text of a message (e.g. our terms of service). We will check whether the current wallet
  * has signed this message according to the EIP1271 interface.
  * @param signature - optional signature, used on-chain to verify that the message has been signed
  * @returns True if we know that the message has been signed by the wallet in the signer, either using the provided signature or using
@@ -208,7 +208,7 @@ If you're connecting a hardware wallet, you'll need to sign the message on your 
 };
 
 /**
- * Attemps to get an ethers-wrapped provider for the given wallet name
+ * Attempts to get an ethers-wrapped provider for the given wallet name
  * @param name - The wallet name (E.G: metamask)
  */
 export const getWalletProvider = async (name: WalletName) => {
@@ -331,8 +331,11 @@ const isWalletRisky = (riskAssessment?: WalletRiskAssessment) => {
 
 /**
  * Saves a signature via the signatures API for the given wallet address
- * @param walletAddress - the wallet address to save the signature for
- * @param signature - thwe signature to save
+ * @param {string} walletAddress - The user's wallet address.
+ * @param {string} signature - The signature of the terms of service.
+ * @param {string} termsOfService - The terms of service that the user is agreeing to.
+ * @param {string} referralCode - The referral code of the user who referred the user.
+ * @returns A promise.
  */
 const saveSignatureWithTOS = async (
   walletAddress: string,
