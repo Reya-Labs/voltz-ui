@@ -53,15 +53,23 @@ export const GasCostBox = styled(Box)`
   align-items: center;
 `;
 
-export const GasCostTypography = styled(Typography)`
+const BaseGasCostTypography = styled(Typography)`
   font-family: 'PixelOperatorMono', monospace;
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
   line-height: 160%;
+  display: inline-block;
+`;
 
+export const GasCostTypography = styled(BaseGasCostTypography)`
   /* Lavender Web 3 */
-  color: #857ea5;
+  color: #e1ddf7;
+`;
+
+export const GasCostTokenTypography = styled(BaseGasCostTypography)`
+  /* Lavender Web 3 */
+  color: #a49ebf;
 `;
 
 export const ButtonBox = styled(Box)`

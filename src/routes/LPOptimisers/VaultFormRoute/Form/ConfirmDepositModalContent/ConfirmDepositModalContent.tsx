@@ -1,6 +1,8 @@
 import React from 'react';
 
 import { IconLabel } from '../../../../../components/composite/IconLabel/IconLabel';
+import { GasCostTokenTypography } from '../../../../../components/interface/AutomaticRolloverToggle/ActiveRolloverModalContent/ActiveRolloverModalContent.styled';
+import { formatCurrency } from '../../../../../utilities/number';
 import { FormActionButton } from '../FormActionButton/FormActionButton';
 import { HintText } from '../HintText/HintText';
 import {
@@ -31,6 +33,8 @@ type Props = {
   disabled: boolean;
   loading: boolean;
   success: boolean;
+  gasCost: number;
+  batchFee: number;
 };
 
 export const ConfirmDepositModalContent: React.FunctionComponent<Props> = ({
@@ -41,6 +45,8 @@ export const ConfirmDepositModalContent: React.FunctionComponent<Props> = ({
   hintText,
   submitText,
   disabled,
+  gasCost,
+  batchFee,
 }) => (
   <ContentBox>
     <TitleTypography>Deposit</TitleTypography>
@@ -52,16 +58,29 @@ export const ConfirmDepositModalContent: React.FunctionComponent<Props> = ({
     <BatchFeeContentBox>
       <BatchFeeTextTypography>
         BATCH FEE&nbsp;
-        <BatchFeeCurrencyTypography>
-          $<BatchFeeValueTypography>TODO: 27,00 USD</BatchFeeValueTypography>
-        </BatchFeeCurrencyTypography>
+        {batchFee === -1 ? (
+          <BatchFeeCurrencyTypography>---</BatchFeeCurrencyTypography>
+        ) : (
+          <>
+            $
+            <BatchFeeCurrencyTypography>
+              $<BatchFeeValueTypography>{formatCurrency(batchFee)} USD</BatchFeeValueTypography>
+            </BatchFeeCurrencyTypography>
+          </>
+        )}
       </BatchFeeTextTypography>
     </BatchFeeContentBox>
     <GasCostBox>
       <GasIcon />
-      <GasCostTypography dataTestId="ConfirmDepositModalContent-GasCostTypography">
-        TODO: GET COST FROM SDK
-      </GasCostTypography>
+      <GasCostTokenTypography dataTestId="ConfirmDepositModalContent-GasCostTypography">
+        {gasCost === -1 ? (
+          <GasCostTypography>---</GasCostTypography>
+        ) : (
+          <>
+            $<GasCostTypography>{formatCurrency(gasCost)}</GasCostTypography>
+          </>
+        )}
+      </GasCostTokenTypography>
       <GasCostInputLabel shrink>
         <IconLabel
           icon="information-circle"

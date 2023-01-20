@@ -72,7 +72,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
     lpVault
       .getSubmitBatchGasCost()
       .then((result) => {
-        setGasCost(result.toNumber());
+        setGasCost(result);
       })
       .catch(() => {
         setGasCost(-1);
