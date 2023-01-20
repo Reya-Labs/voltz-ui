@@ -18,13 +18,13 @@ import { Typography } from '../../../atomic/Typography/Typography';
 import { IconLabel } from '../../../composite/IconLabel/IconLabel';
 import { MaskedIntegerField } from '../../../composite/MaskedIntegerField/MaskedIntegerField';
 
-interface ExpectedAPYProps {
+type ExpectedAPYProps = {
   expectedApy?: number;
   expectedCashflow?: number;
   userSimulatedVariableApy?: number;
   onChangeUserSimulatedVariableApy: (value: number, resetToDefault?: boolean) => void;
   userSimulatedVariableApyUpdated: boolean;
-}
+};
 
 export const ExpectedAPY = ({
   expectedApy,

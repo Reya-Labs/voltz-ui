@@ -1,8 +1,8 @@
 import CircleIcon from '@mui/icons-material/Circle';
 import React, { ReactNode } from 'react';
 
-import { SystemStyleObject, Theme } from '../../../theme';
-import { Typography } from '../../atomic/Typography/Typography';
+import { Typography } from '../../../../../../../components/atomic/Typography/Typography';
+import { SystemStyleObject, Theme } from '../../../../../../../theme';
 
 export type BulletLabelProps = {
   sx?: SystemStyleObject<Theme>;

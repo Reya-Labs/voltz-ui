@@ -8,9 +8,9 @@ import { GweiBar } from './GweiBar/GweiBar';
 import { Nav } from './Nav/Nav';
 import Workbench from './workbench.svg';
 
-interface PageProps {
-  children?: React.ReactNode;
-}
+export type PageProps = {
+  children: React.ReactNode;
+};
 
 export const Page: React.FunctionComponent<PageProps> = ({ children }: PageProps) => (
   <Background>

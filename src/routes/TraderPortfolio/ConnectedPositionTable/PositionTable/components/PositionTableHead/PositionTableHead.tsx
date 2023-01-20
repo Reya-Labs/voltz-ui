@@ -7,12 +7,12 @@ import {
   getPositionBadgeVariant,
   PositionBadge,
 } from '../../../../../../components/atomic/PositionBadge/PositionBadge';
-import { BulletLabel } from '../../../../../../components/composite/BulletLabel/BulletLabel';
 import {
   getHealthTextColor,
   HealthFactorText,
 } from '../../../../../../components/composite/HealthFactorText/HealthFactorText';
 import { SystemStyleObject, Theme } from '../../../../../../theme';
+import { BulletLabel } from './BulletLabel/BulletLabel';
 import { ReactComponent as EditIcon } from './editPosition.svg';
 
 export type PositionTableHeadProps = {

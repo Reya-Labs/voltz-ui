@@ -12,7 +12,7 @@ import { colors } from '../../../../../theme';
 import { Button } from '../../../../atomic/Button/Button';
 import { Ellipsis } from '../../../../atomic/Ellipsis/Ellipsis';
 
-interface SubmitControlsProps {
+type SubmitControlsProps = {
   approvalsNeeded: boolean;
   isFormValid: boolean;
   isTradeVerified: boolean;
@@ -24,7 +24,7 @@ interface SubmitControlsProps {
   underlyingTokenName?: string;
   hintState: BorrowFormSubmitButtonHintStates;
   submitButtonState: BorrowFormSubmitButtonStates;
-}
+};
 
 type TextProps = {
   bold?: boolean;

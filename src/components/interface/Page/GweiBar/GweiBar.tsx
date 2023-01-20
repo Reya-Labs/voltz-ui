@@ -1,15 +1,10 @@
-import Box from '@mui/material/Box';
-import isUndefined from 'lodash.isundefined';
 import React, { useEffect, useState } from 'react';
 
 import { useWallet } from '../../../../hooks/useWallet';
-import { colors } from '../../../../theme';
 import { Typography } from '../../../atomic/Typography/Typography';
-import { BulletLabel } from '../../../composite/BulletLabel/BulletLabel';
+import { BlockNumberTypography, CircleIcon, GweiBarBox } from './GweiBar.styled';
 
-export type GweiBarProps = {};
-
-export const GweiBar: React.FunctionComponent<GweiBarProps> = () => {
+export const GweiBar: React.FunctionComponent = () => {
   const { provider } = useWallet();
   const [blockNumber, setBlockNumber] = useState<number>();
   const [gwei, setGwei] = useState<number>();
@@ -28,30 +23,19 @@ export const GweiBar: React.FunctionComponent<GweiBarProps> = () => {
     void fetchDetails();
   }, [fetchDetails]);
 
-  if (!provider || isUndefined(blockNumber) || isUndefined(gwei)) {
+  if (!provider || blockNumber === undefined || gwei === undefined) {
     return null;
   }
 
   return (
-    <Box
-      sx={{
-        height: '12px',
-        width: '100%',
-        padding: (theme) => theme.spacing(2),
-        display: 'flex',
-        alignItems: 'center',
-      }}
-    >
-      <Typography variant="body2">{gwei} gwei</Typography>
-      <Box
-        sx={{
-          height: '100%',
-          width: '1px',
-          background: colors.lavenderWeb.base,
-          margin: (theme) => `0 ${theme.spacing(4)}`,
-        }}
-      />
-      <BulletLabel sx={{ color: colors.vzCustomGreen2.base }} text={blockNumber} />
-    </Box>
+    <GweiBarBox data-testid="GweiBar-GweiBarBox">
+      <Typography data-testid="GweiBar-GweiTypography" variant="body2">
+        {gwei} gwei |&nbsp;
+      </Typography>
+      <BlockNumberTypography data-testid="GweiBar-BlockNumberTypography" variant="body2">
+        <CircleIcon />
+        {blockNumber}
+      </BlockNumberTypography>
+    </GweiBarBox>
   );
 };
