@@ -1,3 +1,5 @@
+import fetch from 'isomorphic-fetch';
+
 import { REFERRAL_AND_SIGNATURES_URL } from './constants';
 
 /**
@@ -12,7 +14,7 @@ export const saveSignatureWithTOS = async (
   walletAddress: string,
   signature: string,
   termsOfService: string,
-  referralCode: string,
+  referralCode?: string | null,
 ) => {
   // Build formData object.
   const formData = new FormData();
