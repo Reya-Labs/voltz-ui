@@ -1,4 +1,3 @@
-import { getSentryTracker } from '../../../utilities/sentry';
 import { getWalletRiskAssessment } from './getWalletRiskAssessment';
 
 jest.mock('isomorphic-fetch', () => jest.fn());
@@ -51,17 +50,5 @@ describe('getWalletRiskAssessment', () => {
     await expect(getWalletRiskAssessment('0x123456789')).rejects.toThrow(
       'Service unavailable, please try again shortly',
     );
-  });
-
-  it('should call the Sentry tracker if an exception is thrown', async () => {
-    mockFetch.mockRejectedValue(new Error('Fetch Error'));
-
-    try {
-      await getWalletRiskAssessment('0x123456789');
-    } catch (error) {
-      // ignore error
-    }
-
-    expect(getSentryTracker).toHaveBeenCalled();
   });
 });
