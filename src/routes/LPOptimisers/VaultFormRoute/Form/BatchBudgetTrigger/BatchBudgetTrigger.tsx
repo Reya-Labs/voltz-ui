@@ -1,9 +1,10 @@
 import { MellowProduct } from '@voltz-protocol/v1-sdk';
-import React, { useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 
 import { IconLabel } from '../../../../../components/composite/IconLabel/IconLabel';
 import { Modal } from '../../../../../components/composite/Modal/Modal';
 import { doNothing } from '../../../../../utilities/doNothing';
+import { formatCurrency } from '../../../../../utilities/number';
 import { batchBudgetReducer, initialState } from './batchBudgetReducer';
 import {
   ActionBox,
@@ -18,6 +19,7 @@ import {
   DescriptionTypography,
   GasCostBox,
   GasCostInputLabel,
+  GasCostTokenTypography,
   GasCostTypography,
   GasIcon,
 } from './BatchBudgetTrigger.styled';
@@ -34,6 +36,8 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
   onOpen = doNothing,
   onClose = doNothing,
 }) => {
+  const [gasCost, setGasCost] = useState(-1);
+  const [batchBudgetUSD, setBatchBudgetUSD] = useState(-1);
   const [isConfirmBatchBudgetOpen, setIsConfirmBatchBudgetOpen] = useState(false);
   const handleConfirmBatchClose = () => {
     setIsConfirmBatchBudgetOpen(false);
@@ -48,26 +52,49 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
     dispatch({
       type: 'batch_pending',
     });
-    const promise = new Promise((resolve) => setTimeout(resolve, 1500));
-    promise
+    lpVault
+      .submitAllBatchesForFee()
       .then(() => {
         dispatch({
           type: 'batch_success',
         });
       })
-      .catch(() => {
+      .catch((err) => {
+        const message = typeof err === 'string' ? err : (err as Error)?.message;
         dispatch({
           type: 'batch_failed',
-          errorMessage: 'TODO: SDK',
+          errorMessage: message || 'Ooops something went wrong!',
         });
       });
   };
+
+  useEffect(() => {
+    lpVault
+      .getSubmitBatchGasCost()
+      .then((result) => {
+        setGasCost(result.toNumber());
+      })
+      .catch(() => {
+        setGasCost(-1);
+      });
+    lpVault
+      .getBatchBudgetUsd()
+      .then((result) => {
+        setBatchBudgetUSD(result);
+      })
+      .catch(() => {
+        setBatchBudgetUSD(-1);
+      });
+  }, [lpVault]);
+  //
   return (
     <>
       <Modal open={isConfirmBatchBudgetOpen} onClose={handleConfirmBatchClose}>
         <ConfirmBatchBudgetModalContent
+          batchBudgetUSD={batchBudgetUSD}
           disabled={state.disabled}
           error={state.error}
+          gasCost={gasCost}
           hintText={state.hintText}
           loading={state.loading}
           submitText={state.submitText}
@@ -87,13 +114,30 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
               <BatchBudgetTextTypography>
                 BATCH BUDGET:&nbsp;
                 <BatchBudgetCurrencyTypography>
-                  $<BatchBudgetValueTypography>TODO: 234,00 USD</BatchBudgetValueTypography>
+                  {batchBudgetUSD === -1 ? (
+                    <BatchBudgetValueTypography>---</BatchBudgetValueTypography>
+                  ) : (
+                    <>
+                      $
+                      <BatchBudgetValueTypography>
+                        {formatCurrency(batchBudgetUSD)} USD
+                      </BatchBudgetValueTypography>
+                    </>
+                  )}
                 </BatchBudgetCurrencyTypography>
               </BatchBudgetTextTypography>
             </BatchBudgetContentBox>
             <GasCostBox>
               <GasIcon />
-              <GasCostTypography>TODO: GET COST FROM SDK</GasCostTypography>
+              <GasCostTokenTypography>
+                {gasCost === -1 ? (
+                  <GasCostTypography>---</GasCostTypography>
+                ) : (
+                  <>
+                    $<GasCostTypography>{formatCurrency(gasCost)}</GasCostTypography>
+                  </>
+                )}
+              </GasCostTokenTypography>
               <GasCostInputLabel shrink>
                 <IconLabel
                   icon="information-circle"
