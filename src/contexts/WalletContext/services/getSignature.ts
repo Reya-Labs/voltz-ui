@@ -1,7 +1,9 @@
+import fetch from 'isomorphic-fetch';
+
 import { getSentryTracker } from '../../../utilities/sentry';
 import { REFERRAL_AND_SIGNATURES_URL, UNAVAILABLE_TEXT } from './constants';
 
-type SignatureResponse = {
+export type SignatureResponse = {
   signature?: string;
   timestamp?: string;
   walletAddress?: string;
