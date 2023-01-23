@@ -154,7 +154,7 @@ export const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormPro
         swapSummary={form.borrowInfo.data}
         swapSummaryLoading={form.borrowInfo.loading}
         underlyingTokenName={amm.underlyingToken.name}
-        warningText={form.warningText}
+        warningBoxes={form.warningBoxes}
       />
     </>
   );

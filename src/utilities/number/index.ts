@@ -113,3 +113,30 @@ export const compactFormat = (value: number): string => {
   });
   return formatter.format(value);
 };
+
+/**
+ * It takes a floating point leverage and formats it to an rounded integer
+ * @param leverage The leverage number to format (can be float)
+ * @returns The formatted leverage (only integer)
+ */
+export const formatLeverage = (leverage: number): number => {
+  const formattedLeverage = Math.floor(leverage);
+
+  if (formattedLeverage < 0) {
+    return 0;
+  }
+
+  if (formattedLeverage < 10) {
+    return formattedLeverage;
+  }
+
+  if (formattedLeverage < 1000) {
+    return formattedLeverage - (formattedLeverage % 5);
+  }
+
+  if (formattedLeverage < 1000) {
+    return formattedLeverage - (formattedLeverage % 10);
+  }
+
+  return formattedLeverage - (formattedLeverage % 100);
+};

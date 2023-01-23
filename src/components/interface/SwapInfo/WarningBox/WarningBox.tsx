@@ -5,10 +5,14 @@ import { colors } from '../../../../theme';
 import { Typography } from '../../../atomic/Typography/Typography';
 
 export type WarningBoxProps = {
+  warningTitle?: string;
   warningText: string;
 };
 
-export const WarningBox: React.FunctionComponent<WarningBoxProps> = ({ warningText }) => {
+export const WarningBox: React.FunctionComponent<WarningBoxProps> = ({
+  warningTitle,
+  warningText,
+}) => {
   return (
     <Box sx={{ bgcolor: colors.orangeYellow.darken030, borderRadius: 2 }}>
       <Typography
@@ -20,7 +24,7 @@ export const WarningBox: React.FunctionComponent<WarningBoxProps> = ({ warningTe
         }}
         variant="h4"
       >
-        WARNING
+        {(warningTitle ?? 'Warning').toUpperCase()}
       </Typography>
       <Typography
         sx={{

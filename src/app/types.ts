@@ -60,6 +60,7 @@ export type SerializedAMM = {
     token: { id: string; name: string; decimals: string };
   };
   wethAddress: string;
+  minLeverageAllowed: number;
 };
 
 type ActionType =

@@ -10,6 +10,7 @@ import './fonts/DM_Sans/DMSans-MediumItalic.woff';
 import './fonts/DM_Sans/DMSans-Regular.woff';
 import './index.css';
 
+import { ThemeProvider } from '@mui/material/styles';
 import { init as initSDK } from '@voltz-protocol/v1-sdk';
 import { Amplify } from 'aws-amplify';
 import React from 'react';
@@ -22,7 +23,7 @@ import { AppRoutes } from './AppRoutes';
 import { AgentProvider } from './contexts/AgentContext/AgentProvider';
 import { AMMsProvider } from './contexts/AMMsContext/AMMsContext';
 import { WalletProvider } from './contexts/WalletContext/WalletProvider';
-import { ThemeProvider } from './theme/ThemeProvider/ThemeProvider';
+import { themes } from './theme';
 import { initSentryTracker } from './utilities/sentry';
 
 try {
@@ -36,7 +37,7 @@ initSentryTracker();
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme="dark">
+    <ThemeProvider theme={themes.dark}>
       <ReduxProvider store={store}>
         <WalletProvider>
           <AgentProvider>
