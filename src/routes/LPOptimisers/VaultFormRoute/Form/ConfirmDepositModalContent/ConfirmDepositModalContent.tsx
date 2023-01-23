@@ -6,13 +6,14 @@ import { formatCurrency } from '../../../../../utilities/number';
 import { FormActionButton } from '../FormActionButton/FormActionButton';
 import { HintText } from '../HintText/HintText';
 import {
-  BatchFeeContentBox,
-  BatchFeeCurrencyTypography,
-  BatchFeeTextTypography,
-  BatchFeeValueTypography,
   ButtonBox,
   CancelButton,
   ContentBox,
+  DepositBudgetTextTypography,
+  DepositBudgetUnderlyingTypography,
+  DepositBudgetUSDCurrencyTypography,
+  DepositBudgetValueBox,
+  DepositFeeContentBox,
   DescriptionTypography,
   GasCostBox,
   GasCostInputLabel,
@@ -34,7 +35,9 @@ type Props = {
   loading: boolean;
   success: boolean;
   gasCost: number;
-  batchFee: number;
+  depositFeeUSD: number;
+  depositFeeUnderlying: number;
+  token: string;
 };
 
 export const ConfirmDepositModalContent: React.FunctionComponent<Props> = ({
@@ -46,7 +49,9 @@ export const ConfirmDepositModalContent: React.FunctionComponent<Props> = ({
   submitText,
   disabled,
   gasCost,
-  batchFee,
+  depositFeeUSD,
+  depositFeeUnderlying,
+  token,
 }) => (
   <ContentBox>
     <TitleTypography>Deposit</TitleTypography>
@@ -55,20 +60,6 @@ export const ConfirmDepositModalContent: React.FunctionComponent<Props> = ({
       Batches are done to reduce the gas cost of depositing in pools by splitting the costs between
       those depositing funds.
     </DescriptionTypography>
-    <BatchFeeContentBox>
-      <BatchFeeTextTypography>
-        BATCH FEE&nbsp;
-        {batchFee === -1 ? (
-          <BatchFeeCurrencyTypography>---</BatchFeeCurrencyTypography>
-        ) : (
-          <>
-            <BatchFeeCurrencyTypography>
-              $<BatchFeeValueTypography>{formatCurrency(batchFee)} USD</BatchFeeValueTypography>
-            </BatchFeeCurrencyTypography>
-          </>
-        )}
-      </BatchFeeTextTypography>
-    </BatchFeeContentBox>
     <GasCostBox>
       <GasIcon />
       <GasCostTokenTypography dataTestId="ConfirmDepositModalContent-GasCostTypography">
@@ -88,6 +79,26 @@ export const ConfirmDepositModalContent: React.FunctionComponent<Props> = ({
         />
       </GasCostInputLabel>
     </GasCostBox>
+    <DepositFeeContentBox>
+      <DepositBudgetTextTypography>BATCH FEE&nbsp;</DepositBudgetTextTypography>
+      {depositFeeUSD === -1 || depositFeeUnderlying === -1 ? (
+        <DepositBudgetValueBox>
+          <DepositBudgetTextTypography>---</DepositBudgetTextTypography>
+        </DepositBudgetValueBox>
+      ) : (
+        <DepositBudgetValueBox>
+          <DepositBudgetUnderlyingTypography>
+            {formatCurrency(depositFeeUnderlying)}&nbsp;
+            {token.toUpperCase()}
+          </DepositBudgetUnderlyingTypography>
+          <DepositBudgetTextTypography>
+            <DepositBudgetUSDCurrencyTypography>$</DepositBudgetUSDCurrencyTypography>
+            {formatCurrency(depositFeeUSD)} USD
+          </DepositBudgetTextTypography>
+        </DepositBudgetValueBox>
+      )}
+    </DepositFeeContentBox>
+
     <ButtonBox>
       <FormActionButton
         dataTestId="ConfirmDepositModalContent-DepositButton"

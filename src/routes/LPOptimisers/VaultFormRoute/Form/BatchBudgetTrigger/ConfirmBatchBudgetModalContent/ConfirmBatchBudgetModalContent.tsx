@@ -5,7 +5,9 @@ import { formatCurrency } from '../../../../../../utilities/number';
 import { FormActionButton } from '../../FormActionButton/FormActionButton';
 import {
   BatchBudgetTextTypography,
-  BatchBudgetValueTypography,
+  BatchBudgetUnderlyingTypography,
+  BatchBudgetUSDCurrencyTypography,
+  BatchBudgetValueBox,
   BatchFeeContentBox,
   ButtonBox,
   CancelButton,
@@ -31,6 +33,8 @@ type Props = {
   success: boolean;
   gasCost: number;
   batchBudgetUSD: number;
+  batchBudgetUnderlying: number;
+  token: string;
 };
 
 export const ConfirmBatchBudgetModalContent: React.FunctionComponent<Props> = ({
@@ -44,6 +48,8 @@ export const ConfirmBatchBudgetModalContent: React.FunctionComponent<Props> = ({
   error,
   gasCost,
   batchBudgetUSD,
+  batchBudgetUnderlying,
+  token,
 }) => (
   <ContentBox>
     <TitleTypography>Batch deposits</TitleTypography>
@@ -51,21 +57,6 @@ export const ConfirmBatchBudgetModalContent: React.FunctionComponent<Props> = ({
       When depositing funds in the Optimiser, users pay a contribution to the batch budget fund.
       These funds can be claimed by anyone by triggering the Optimiser batch.
     </DescriptionTypography>
-    <BatchFeeContentBox>
-      <BatchBudgetTextTypography>
-        BATCH BUDGET&nbsp;
-        {batchBudgetUSD === -1 ? (
-          <BatchBudgetValueTypography>---</BatchBudgetValueTypography>
-        ) : (
-          <>
-            $
-            <BatchBudgetValueTypography>
-              {formatCurrency(batchBudgetUSD)} USD
-            </BatchBudgetValueTypography>
-          </>
-        )}
-      </BatchBudgetTextTypography>
-    </BatchFeeContentBox>
     <GasCostBox>
       <GasIcon />
       <GasCostTokenTypography>
@@ -85,6 +76,25 @@ export const ConfirmBatchBudgetModalContent: React.FunctionComponent<Props> = ({
         />
       </GasCostInputLabel>
     </GasCostBox>
+    <BatchFeeContentBox>
+      <BatchBudgetTextTypography>BATCH BUDGET&nbsp;</BatchBudgetTextTypography>
+      {batchBudgetUSD === -1 ? (
+        <BatchBudgetValueBox>
+          <BatchBudgetTextTypography>---</BatchBudgetTextTypography>
+        </BatchBudgetValueBox>
+      ) : (
+        <BatchBudgetValueBox>
+          <BatchBudgetUnderlyingTypography>
+            {formatCurrency(batchBudgetUnderlying)}&nbsp;
+            {token.toUpperCase()}
+          </BatchBudgetUnderlyingTypography>
+          <BatchBudgetTextTypography>
+            <BatchBudgetUSDCurrencyTypography>$</BatchBudgetUSDCurrencyTypography>
+            {formatCurrency(batchBudgetUSD)} USD
+          </BatchBudgetTextTypography>
+        </BatchBudgetValueBox>
+      )}
+    </BatchFeeContentBox>
     <ButtonBox>
       <FormActionButton
         dataTestId="ConfirmBatchBudgetModalContent-BatchButton"

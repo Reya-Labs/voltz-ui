@@ -26,7 +26,8 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
     vaultDisabled: v.weight === 0,
   }));
   const [depositGasCost, setDepositGasCost] = useState(-1);
-  const [batchFee, setBatchFee] = useState(-1);
+  const [depositFeeUSD, setDepositFeeUSD] = useState(-1);
+  const [depositFeeUnderlying, setDepositFeeUnderlying] = useState(-1);
   const [selectedDeposit, setSelectedDeposit] = useState<number>(0);
   const [distribution, setDistribution] = useState<'automatic' | 'manual'>('automatic');
   const [automaticRolloverState, setAutomaticRolloverState] = useState<
@@ -149,10 +150,19 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
     vault
       .getDepositFeeUsd()
       .then((result) => {
-        setBatchFee(result);
+        setDepositFeeUSD(result);
       })
       .catch((err) => {
-        setBatchFee(-1);
+        setDepositFeeUSD(-1);
+      });
+
+    vault
+      .getDepositFeeUnderlying()
+      .then((result) => {
+        setDepositFeeUnderlying(result);
+      })
+      .catch((err) => {
+        setDepositFeeUnderlying(-1);
       });
   };
 
@@ -182,8 +192,9 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
       }}
       automaticRolloverGasCost={vault.autoRolloverRegistrationGasFeeUSD}
       automaticRolloverState={automaticRolloverState}
-      batchFee={batchFee}
       combinedWeightValue={combinedWeightValue}
+      depositFeeUnderlying={depositFeeUnderlying}
+      depositFeeUSD={depositFeeUSD}
       depositGasCost={depositGasCost}
       depositValue={selectedDeposit}
       disabled={
