@@ -125,10 +125,14 @@ export const BatchFeeContentBox = styled(Box)`
   align-items: center;
   padding: 8px 16px;
   gap: 8px;
+  justify-content: space-between;
 
   /* Liberty 5 */
   background: #1e1933;
   border-radius: 4px;
+
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 const BatchBudgetText = styled(Typography)`
@@ -142,16 +146,23 @@ const BatchBudgetText = styled(Typography)`
   letter-spacing: 0.02em;
 `;
 
+export const BatchBudgetValueBox = styled(Box)`
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+`;
+
+export const BatchBudgetUSDCurrencyTypography = styled(BatchBudgetText)`
+  /* Lavender Web 5 */
+  color: #4d476a;
+`;
+
+export const BatchBudgetUnderlyingTypography = styled(BatchBudgetText)`
+  color: #4de5ff;
+`;
+
 export const BatchBudgetTextTypography = styled(BatchBudgetText)`
   color: #a49ebf;
-`;
-
-export const BatchBudgetCurrencyTypography = styled(BatchBudgetText)`
-  color: #297a88;
-`;
-
-export const BatchBudgetValueTypography = styled(BatchBudgetText)`
-  color: #4de5ff;
 `;
 
 export const GasCostInputLabel = styled(InputLabel)`

@@ -118,20 +118,24 @@ export const GasIcon = styled(LocalGasStationIcon)`
   line-height: 160%;
 `;
 
-export const BatchFeeContentBox = styled(Box)`
+export const DepositFeeContentBox = styled(Box)`
   /* Auto layout */
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 8px 16px;
   gap: 8px;
+  justify-content: space-between;
 
   /* Liberty 5 */
   background: #1e1933;
   border-radius: 4px;
+
+  width: 100%;
+  box-sizing: border-box;
 `;
 
-const BatchFeeText = styled(Typography)`
+const DepositFeeText = styled(Typography)`
   display: inline-block;
   font-family: 'PixelOperatorMono', monospace;
   font-style: normal;
@@ -142,16 +146,23 @@ const BatchFeeText = styled(Typography)`
   letter-spacing: 0.02em;
 `;
 
-export const BatchFeeTextTypography = styled(BatchFeeText)`
-  color: #a49ebf;
+export const DepositBudgetValueBox = styled(Box)`
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
 `;
 
-export const BatchFeeCurrencyTypography = styled(BatchFeeText)`
-  color: #297a88;
+export const DepositBudgetUSDCurrencyTypography = styled(DepositFeeText)`
+  /* Lavender Web 5 */
+  color: #4d476a;
 `;
 
-export const BatchFeeValueTypography = styled(BatchFeeText)`
+export const DepositBudgetUnderlyingTypography = styled(DepositFeeText)`
   color: #4de5ff;
+`;
+
+export const DepositBudgetTextTypography = styled(DepositFeeText)`
+  color: #a49ebf;
 `;
 
 export const GasCostInputLabel = styled(InputLabel)`

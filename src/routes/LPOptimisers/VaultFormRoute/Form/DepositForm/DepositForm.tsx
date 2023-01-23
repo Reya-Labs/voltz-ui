@@ -49,7 +49,8 @@ export type FormProps = {
   automaticRolloverState: AutomaticRolloverToggleProps['automaticRolloverState'];
   automaticRolloverChangePromise: AutomaticRolloverToggleProps['onChangePromise'];
   depositGasCost: number;
-  batchFee: number;
+  depositFeeUSD: number;
+  depositFeeUnderlying: number;
 };
 
 export const DepositForm: React.FunctionComponent<FormProps> = ({
@@ -78,7 +79,8 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
   onBatchBudgetModalOpen,
   automaticRolloverGasCost,
   depositGasCost,
-  batchFee,
+  depositFeeUSD,
+  depositFeeUnderlying,
 }: FormProps) => {
   const subtext = `WALLET BALANCE: ${
     isUndefined(lpVault.userWalletBalance)
@@ -131,13 +133,15 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
         <>
           <Modal open={isConfirmDepositModalOpen} onClose={onConfirmDepositModalClose}>
             <ConfirmDepositModalContent
-              batchFee={batchFee}
+              depositFeeUnderlying={depositFeeUnderlying}
+              depositFeeUSD={depositFeeUSD}
               disabled={disabled}
               gasCost={depositGasCost}
               hintText={hintText}
               loading={loading}
               submitText={submitText}
               success={success}
+              token={lpVault.metadata.token}
               onCancel={onConfirmDepositModalClose}
               onProceed={onSubmit}
             />

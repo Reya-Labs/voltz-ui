@@ -73,7 +73,6 @@ export const BatchButton = styled(Button)`
   border-radius: 4px;
 
   color: ${colors.skyBlueCrayola.base};
-  flex: 1;
 
   font-family: 'PixelOperatorMono', monospace;
   font-style: normal;
@@ -115,15 +114,25 @@ const BatchBudgetText = styled(Typography)`
   letter-spacing: 0.02em;
 `;
 
+export const BatchBudgetValueBox = styled(Box)`
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+`;
 export const BatchBudgetTextTypography = styled(BatchBudgetText)`
   color: #a49ebf;
 `;
 
-export const BatchBudgetCurrencyTypography = styled(BatchBudgetText)`
-  color: #297a88;
+export const BatchBudgetTextBox = styled(Box)`
+  color: #a49ebf;
 `;
 
-export const BatchBudgetValueTypography = styled(BatchBudgetText)`
+export const BatchBudgetUSDCurrencyTypography = styled(BatchBudgetText)`
+  /* Lavender Web 5 */
+  color: #4d476a;
+`;
+
+export const BatchBudgetUnderlyingTypography = styled(BatchBudgetText)`
   color: #4de5ff;
 `;
 

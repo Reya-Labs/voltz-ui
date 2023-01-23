@@ -11,9 +11,11 @@ import {
   ActionLeftContentBox,
   ActionRightContentBox,
   BatchBudgetContentBox,
-  BatchBudgetCurrencyTypography,
+  BatchBudgetTextBox,
   BatchBudgetTextTypography,
-  BatchBudgetValueTypography,
+  BatchBudgetUnderlyingTypography,
+  BatchBudgetUSDCurrencyTypography,
+  BatchBudgetValueBox,
   BatchButton,
   ContentBox,
   DescriptionTypography,
@@ -86,11 +88,12 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
         setBatchBudgetUSD(-1);
       });
   }, [lpVault]);
-  //
+
   return (
     <>
       <Modal open={isConfirmBatchBudgetOpen} onClose={handleConfirmBatchClose}>
         <ConfirmBatchBudgetModalContent
+          batchBudgetUnderlying={lpVault.batchBudgetUnderlying}
           batchBudgetUSD={batchBudgetUSD}
           disabled={state.disabled}
           error={state.error}
@@ -99,6 +102,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
           loading={state.loading}
           submitText={state.submitText}
           success={state.success}
+          token={lpVault.metadata.token}
           onCancel={handleConfirmBatchClose}
           onProceed={handleOnProceed}
         />
@@ -108,44 +112,48 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
           Trigger the batch of deposits, and claim the batch budget at any time! Careful with the
           batch gas cost.
         </DescriptionTypography>
+        <GasCostBox>
+          <GasIcon />
+          <GasCostTokenTypography>
+            {gasCost === -1 ? (
+              <GasCostTypography>---</GasCostTypography>
+            ) : (
+              <>
+                $<GasCostTypography>{formatCurrency(gasCost)}</GasCostTypography>
+              </>
+            )}
+          </GasCostTokenTypography>
+          <GasCostInputLabel shrink>
+            <IconLabel
+              icon="information-circle"
+              info="This gas calculation is only an estimation, and the final gas cost will be defined when the transaction is executed. You can change configurations on gas prices in your wallet provider."
+              label=""
+            />
+          </GasCostInputLabel>
+        </GasCostBox>
         <ActionBox>
           <ActionLeftContentBox>
             <BatchBudgetContentBox>
-              <BatchBudgetTextTypography>
-                BATCH BUDGET:&nbsp;
-                <BatchBudgetCurrencyTypography>
-                  {batchBudgetUSD === -1 ? (
-                    <BatchBudgetValueTypography>---</BatchBudgetValueTypography>
-                  ) : (
-                    <>
-                      $
-                      <BatchBudgetValueTypography>
-                        {formatCurrency(batchBudgetUSD)} USD
-                      </BatchBudgetValueTypography>
-                    </>
-                  )}
-                </BatchBudgetCurrencyTypography>
-              </BatchBudgetTextTypography>
-            </BatchBudgetContentBox>
-            <GasCostBox>
-              <GasIcon />
-              <GasCostTokenTypography>
-                {gasCost === -1 ? (
-                  <GasCostTypography>---</GasCostTypography>
+              <BatchBudgetTextTypography>BATCH BUDGET:&nbsp;</BatchBudgetTextTypography>
+              <BatchBudgetTextBox>
+                {batchBudgetUSD === -1 ? (
+                  <BatchBudgetValueBox>
+                    <BatchBudgetTextTypography>---</BatchBudgetTextTypography>
+                  </BatchBudgetValueBox>
                 ) : (
-                  <>
-                    $<GasCostTypography>{formatCurrency(gasCost)}</GasCostTypography>
-                  </>
+                  <BatchBudgetValueBox>
+                    <BatchBudgetUnderlyingTypography>
+                      {formatCurrency(lpVault.batchBudgetUnderlying)}&nbsp;
+                      {lpVault.metadata.token.toUpperCase()}
+                    </BatchBudgetUnderlyingTypography>
+                    <BatchBudgetTextTypography>
+                      <BatchBudgetUSDCurrencyTypography>$</BatchBudgetUSDCurrencyTypography>
+                      {formatCurrency(batchBudgetUSD)} USD
+                    </BatchBudgetTextTypography>
+                  </BatchBudgetValueBox>
                 )}
-              </GasCostTokenTypography>
-              <GasCostInputLabel shrink>
-                <IconLabel
-                  icon="information-circle"
-                  info="This gas calculation is only an estimation, and the final gas cost will be defined when the transaction is executed. You can change configurations on gas prices in your wallet provider."
-                  label=""
-                />
-              </GasCostInputLabel>
-            </GasCostBox>
+              </BatchBudgetTextBox>
+            </BatchBudgetContentBox>
           </ActionLeftContentBox>
           <ActionRightContentBox>
             <BatchButton
