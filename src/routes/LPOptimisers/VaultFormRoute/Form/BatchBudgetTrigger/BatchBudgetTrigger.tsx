@@ -115,15 +115,17 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
               <BatchBudgetTextBox>
                 {batchBudgetUSD === -1 ? (
                   <BatchBudgetValueBox>
-                    <BatchBudgetTextTypography>---</BatchBudgetTextTypography>
+                    <BatchBudgetTextTypography data-testid="BatchBudgetTrigger-BatchBudgetLoading">
+                      ---
+                    </BatchBudgetTextTypography>
                   </BatchBudgetValueBox>
                 ) : (
                   <BatchBudgetValueBox>
-                    <BatchBudgetUnderlyingTypography>
+                    <BatchBudgetUnderlyingTypography data-testid="BatchBudgetTrigger-BatchBudgetUnderlyingTypography">
                       {formatCurrency(lpVault.batchBudgetUnderlying)}&nbsp;
                       {lpVault.metadata.token.toUpperCase()}
                     </BatchBudgetUnderlyingTypography>
-                    <BatchBudgetTextTypography>
+                    <BatchBudgetTextTypography data-testid="BatchBudgetTrigger-BatchBudgetTextTypography">
                       <BatchBudgetUSDCurrencyTypography>$</BatchBudgetUSDCurrencyTypography>
                       {formatCurrency(batchBudgetUSD)} USD
                     </BatchBudgetTextTypography>

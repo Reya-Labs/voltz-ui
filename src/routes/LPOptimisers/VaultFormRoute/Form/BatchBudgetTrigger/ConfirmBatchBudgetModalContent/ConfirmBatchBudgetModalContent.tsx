@@ -46,9 +46,11 @@ export const ConfirmBatchBudgetModalContent: React.FunctionComponent<Props> = ({
   batchBudgetUnderlying,
   token,
 }) => (
-  <ContentBox>
-    <TitleTypography>Batch deposits</TitleTypography>
-    <DescriptionTypography>
+  <ContentBox data-testid="ConfirmBatchBudgetModalContent-ContentBox">
+    <TitleTypography data-testid="ConfirmBatchBudgetModalContent-TitleTypography">
+      Batch deposits
+    </TitleTypography>
+    <DescriptionTypography data-testid="ConfirmBatchBudgetModalContent-DescriptionTypography">
       When depositing funds in the Optimiser, users pay a contribution to the batch budget fund.
       These funds can be claimed by anyone by triggering the Optimiser batch.
     </DescriptionTypography>
@@ -57,15 +59,17 @@ export const ConfirmBatchBudgetModalContent: React.FunctionComponent<Props> = ({
       <BatchBudgetTextTypography>BATCH BUDGET&nbsp;</BatchBudgetTextTypography>
       {batchBudgetUSD === -1 ? (
         <BatchBudgetValueBox>
-          <BatchBudgetTextTypography>---</BatchBudgetTextTypography>
+          <BatchBudgetTextTypography data-testid="ConfirmBatchBudgetModalContent-BatchBudgetLoading">
+            ---
+          </BatchBudgetTextTypography>
         </BatchBudgetValueBox>
       ) : (
         <BatchBudgetValueBox>
-          <BatchBudgetUnderlyingTypography>
+          <BatchBudgetUnderlyingTypography data-testid="ConfirmBatchBudgetModalContent-BatchBudgetUnderlyingTypography">
             {formatCurrency(batchBudgetUnderlying)}&nbsp;
             {token.toUpperCase()}
           </BatchBudgetUnderlyingTypography>
-          <BatchBudgetTextTypography>
+          <BatchBudgetTextTypography data-testid="ConfirmBatchBudgetModalContent-BatchBudgetTextTypography">
             <BatchBudgetUSDCurrencyTypography>$</BatchBudgetUSDCurrencyTypography>
             {formatCurrency(batchBudgetUSD)} USD
           </BatchBudgetTextTypography>
@@ -83,7 +87,11 @@ export const ConfirmBatchBudgetModalContent: React.FunctionComponent<Props> = ({
       >
         {submitText}
       </FormActionButton>
-      <CancelButton disabled={loading} onClick={onCancel}>
+      <CancelButton
+        data-testid="ConfirmBatchBudgetModalContent-CancelButton"
+        disabled={loading}
+        onClick={onCancel}
+      >
         {success ? 'BACK' : 'CANCEL'}
       </CancelButton>
     </ButtonBox>
