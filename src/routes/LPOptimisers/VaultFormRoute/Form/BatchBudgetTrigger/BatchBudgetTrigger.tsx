@@ -1,10 +1,10 @@
 import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useReducer, useState } from 'react';
 
-import { IconLabel } from '../../../../../components/composite/IconLabel/IconLabel';
 import { Modal } from '../../../../../components/composite/Modal/Modal';
 import { doNothing } from '../../../../../utilities/doNothing';
 import { formatCurrency } from '../../../../../utilities/number';
+import { GasCost } from '../GasCost/GasCost';
 import { batchBudgetReducer, initialState } from './batchBudgetReducer';
 import {
   ActionBox,
@@ -19,11 +19,6 @@ import {
   BatchButton,
   ContentBox,
   DescriptionTypography,
-  GasCostBox,
-  GasCostInputLabel,
-  GasCostTokenTypography,
-  GasCostTypography,
-  GasIcon,
 } from './BatchBudgetTrigger.styled';
 import { ConfirmBatchBudgetModalContent } from './ConfirmBatchBudgetModalContent/ConfirmBatchBudgetModalContent';
 
@@ -112,25 +107,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
           Trigger the batch of deposits, and claim the batch budget at any time! Careful with the
           batch gas cost.
         </DescriptionTypography>
-        <GasCostBox>
-          <GasIcon />
-          <GasCostTokenTypography>
-            {gasCost === -1 ? (
-              <GasCostTypography>---</GasCostTypography>
-            ) : (
-              <>
-                $<GasCostTypography>{formatCurrency(gasCost)}</GasCostTypography>
-              </>
-            )}
-          </GasCostTokenTypography>
-          <GasCostInputLabel shrink>
-            <IconLabel
-              icon="information-circle"
-              info="This gas calculation is only an estimation, and the final gas cost will be defined when the transaction is executed. You can change configurations on gas prices in your wallet provider."
-              label=""
-            />
-          </GasCostInputLabel>
-        </GasCostBox>
+        <GasCost gasCost={gasCost} />
         <ActionBox>
           <ActionLeftContentBox>
             <BatchBudgetContentBox>
@@ -138,15 +115,17 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
               <BatchBudgetTextBox>
                 {batchBudgetUSD === -1 ? (
                   <BatchBudgetValueBox>
-                    <BatchBudgetTextTypography>---</BatchBudgetTextTypography>
+                    <BatchBudgetTextTypography data-testid="BatchBudgetTrigger-BatchBudgetLoading">
+                      ---
+                    </BatchBudgetTextTypography>
                   </BatchBudgetValueBox>
                 ) : (
                   <BatchBudgetValueBox>
-                    <BatchBudgetUnderlyingTypography>
+                    <BatchBudgetUnderlyingTypography data-testid="BatchBudgetTrigger-BatchBudgetUnderlyingTypography">
                       {formatCurrency(lpVault.batchBudgetUnderlying)}&nbsp;
                       {lpVault.metadata.token.toUpperCase()}
                     </BatchBudgetUnderlyingTypography>
-                    <BatchBudgetTextTypography>
+                    <BatchBudgetTextTypography data-testid="BatchBudgetTrigger-BatchBudgetTextTypography">
                       <BatchBudgetUSDCurrencyTypography>$</BatchBudgetUSDCurrencyTypography>
                       {formatCurrency(batchBudgetUSD)} USD
                     </BatchBudgetTextTypography>
