@@ -50,7 +50,7 @@ export const ButtonBox = styled(Box)`
   align-items: flex-start;
   justify-content: space-between;
   gap: 24px;
-  width: 55%;
+  width: 100%;
   box-sizing: border-box;
 `;
 
