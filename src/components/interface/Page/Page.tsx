@@ -1,16 +1,16 @@
 import Box from '@mui/material/Box';
 import React from 'react';
 
-import { Nav } from '../Nav/Nav';
 import { WalletConnectModal } from '../WalletConnectModal/WalletConnectModal';
 import { AlphaBanner } from './AlphaBanner/AlphaBanner';
 import { Background } from './Background/Background';
 import { GweiBar } from './GweiBar/GweiBar';
+import { Nav } from './Nav/Nav';
 import Workbench from './workbench.svg';
 
-interface PageProps {
-  children?: React.ReactNode;
-}
+export type PageProps = {
+  children: React.ReactNode;
+};
 
 export const Page: React.FunctionComponent<PageProps> = ({ children }: PageProps) => (
   <Background>

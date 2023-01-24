@@ -13,7 +13,6 @@
     "prettier"
   ],
   "ignorePatterns": [
-    "src/graphql/generated.ts",
     "src/types/*.d.ts"
   ],
   "overrides": [

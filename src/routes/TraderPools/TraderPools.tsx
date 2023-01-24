@@ -26,7 +26,7 @@ export const TraderPools: React.FunctionComponent = () => {
 
   const { onChangeAgent } = useAgent();
   const { key } = useLocation();
-  const { positionsByAgentGroup } = usePositions();
+  const { positionsByAgentGroup } = usePositions(Agents.FIXED_TRADER);
   const { account } = useWallet();
 
   const renderMode = formMode ? 'form' : 'pools';

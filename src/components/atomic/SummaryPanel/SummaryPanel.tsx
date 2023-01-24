@@ -5,11 +5,11 @@ import { ReactNode } from 'react';
 import { colors } from '../../../theme';
 import { Typography } from '../Typography/Typography';
 
-interface SummaryPanelProps {
+type SummaryPanelProps = {
   label?: ReactNode;
   loading?: boolean;
   rows?: { label: string; value: ReactNode; highlight?: boolean; bold?: boolean }[];
-}
+};
 
 export const SummaryPanel = ({ label, loading, rows }: SummaryPanelProps) => {
   const rowStyles: SystemStyleObject<Theme> = {

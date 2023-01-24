@@ -30,7 +30,7 @@ export const TraderPortfolio: React.FunctionComponent = () => {
     positionsByAgentGroup,
     loading: loadingPositions,
     error: errorPositions,
-  } = usePositions();
+  } = usePositions(Agents.FIXED_TRADER);
   const { account } = useWallet();
 
   const renderMode = formMode ? 'form' : 'portfolio';
@@ -87,7 +87,6 @@ export const TraderPortfolio: React.FunctionComponent = () => {
     <>
       {renderMode === 'portfolio' && (
         <ConnectedPositionTable
-          agent={Agents.FIXED_TRADER}
           errorPositions={errorPositions}
           handleCompletedSettling={handleCompletedSettling}
           loadingPositions={loadingPositions}

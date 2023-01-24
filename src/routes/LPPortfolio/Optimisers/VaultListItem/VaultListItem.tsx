@@ -39,9 +39,11 @@ export type VaultListItemProps = {
   id: string;
   token: string;
   totalBalance: number;
+  gasCost: number;
   vaults: {
     maturityTimestampMS: number;
     isCompleted: boolean;
+    canManageVaultPosition: boolean;
     poolsCount: number;
     currentBalance: number;
     distribution: number;
@@ -59,6 +61,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
   token,
   depositable,
   id,
+  gasCost,
   automaticRolloverState,
   onChangeAutomaticRolloverStatePromise = doNothing,
 }) => {
@@ -87,7 +90,9 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
           <AutomaticRolloverToggle
             automaticRolloverState={automaticRolloverState}
             disabled={false}
+            gasCost={gasCost}
             showTooltip={false}
+            triggersOnChainTransaction={true}
             onChangePromise={async (value) =>
               await onChangeAutomaticRolloverStatePromise(id, value)
             }
@@ -103,7 +108,14 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
         </HeaderBox>
         {vaults.map(
           (
-            { poolsCount, currentBalance, distribution, isCompleted, maturityTimestampMS },
+            {
+              canManageVaultPosition,
+              poolsCount,
+              currentBalance,
+              distribution,
+              isCompleted,
+              maturityTimestampMS,
+            },
             vaultIndex,
           ) => {
             if (isCompleted && currentBalance <= 0) {
@@ -131,7 +143,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
                   <TokenTypography>{token.toUpperCase()}</TokenTypography>
                 </CurrentBalanceBox>
                 <PoolsCountBox>{poolsCount}</PoolsCountBox>
-                {isCompleted ? (
+                {isCompleted && canManageVaultPosition ? (
                   <ManageButton
                     to={`/${generatePath(routes.LP_OPTIMISERS_WITHDRAW_ROLLOVER_FORM, {
                       actions: 'manage',

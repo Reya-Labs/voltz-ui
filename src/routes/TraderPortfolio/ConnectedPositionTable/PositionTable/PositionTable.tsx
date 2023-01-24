@@ -7,9 +7,7 @@ import { Position } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
 import { Panel } from '../../../../components/atomic/Panel/Panel';
-import { Agents } from '../../../../contexts/AgentContext/types';
 import { AMMProvider } from '../../../../contexts/AMMContext/AMMContext';
-import { useAgent } from '../../../../hooks/useAgent';
 import { useAMMs } from '../../../../hooks/useAMMs';
 import { getConfig } from '../../../../hooks/voltz-config/config';
 import { colors, SystemStyleObject, Theme } from '../../../../theme';
@@ -31,7 +29,6 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   onSettle,
 }) => {
   const { aMMs } = useAMMs();
-  const { agent } = useAgent();
 
   const commonOverrides: SystemStyleObject<Theme> = {
     '& .MuiTableCell-root': {
@@ -113,14 +110,8 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
             >
               <PositionTableHead
                 beforeMaturity={!pos.isPoolMatured}
-                currencyCode="USD"
-                currencySymbol="$"
-                fees={pos.fees}
-                feesPositive={true}
-                fixedApr={pos.poolAPR}
-                fixedRateHealthFactor={pos.fixedRateHealthFactor}
                 gaButtonId={getRowButtonId(
-                  agent === Agents.LIQUIDITY_PROVIDER,
+                  false,
                   pos.amm.protocol,
                   isBorrowing(pos.amm.rateOracle.protocolId),
                 )}
@@ -133,7 +124,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                 rolloverAvailable={rolloverAvailable}
                 onRollover={() => handleSelectRow(index, 'rollover')}
                 onSelect={
-                  agent === Agents.LIQUIDITY_PROVIDER || closeToMaturity
+                  closeToMaturity
                     ? undefined
                     : (mode: 'margin' | 'liquidity' | 'notional') => handleSelectRow(index, mode)
                 }
@@ -150,14 +141,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                 <Table size="medium" sx={{ ...commonOverrides }}>
                   <TableBody>
                     <AMMProvider amm={pos.amm}>
-                      <PositionTableRow
-                        key={pos.id}
-                        index={index}
-                        position={pos}
-                        onSelect={(mode: 'margin' | 'liquidity' | 'notional') =>
-                          handleSelectRow(index, mode)
-                        }
-                      />
+                      <PositionTableRow key={pos.id} index={index} position={pos} />
                     </AMMProvider>
                   </TableBody>
                 </Table>

@@ -1,10 +1,10 @@
 import Typography from '@mui/material/Typography';
 import React from 'react';
 
-interface PageTitleDescProps {
+type PageTitleDescProps = {
   title: string;
   desc: string;
-}
+};
 
 export const PageTitleDesc = ({ title, desc }: PageTitleDescProps) => (
   <>

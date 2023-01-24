@@ -25,17 +25,21 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
     pools: v.pools,
     vaultDisabled: v.weight === 0,
   }));
-
+  const [depositGasCost, setDepositGasCost] = useState(-1);
+  const [depositFeeUSD, setDepositFeeUSD] = useState(-1);
+  const [depositFeeUnderlying, setDepositFeeUnderlying] = useState(-1);
   const [selectedDeposit, setSelectedDeposit] = useState<number>(0);
   const [distribution, setDistribution] = useState<'automatic' | 'manual'>('automatic');
-  // todo: read the value from SDK
-  const [automaticRolloverState, setAutomaticRolloverState] =
-    useState<AutomaticRolloverToggleProps['automaticRolloverState']>('inactive');
+  const [automaticRolloverState, setAutomaticRolloverState] = useState<
+    AutomaticRolloverToggleProps['automaticRolloverState']
+  >(Boolean(vault.isRegisteredForAutoRollover) ? 'active' : 'inactive');
   const [manualWeights, setManualWeights] = useState<FormProps['weights']>(
     automaticWeights.map((a) => ({ ...a })),
   );
   const [depositState, setDepositState] = useState<DepositStates>(DepositStates.INITIALISING);
   const [error, setError] = useState<string>('');
+  const [hasUserOptedInOutAutoRollover, setHasUserOptedInOutAutoRollover] =
+    useState<boolean>(false);
 
   const sufficientFunds = (vault.userWalletBalance ?? 0) >= selectedDeposit;
   const weights = distribution === 'automatic' ? automaticWeights : manualWeights;
@@ -51,12 +55,12 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
           distribution: distribution,
         },
       });
-
       setDepositState(DepositStates.DEPOSITING);
       void vault
         .deposit(
           selectedDeposit,
           weights.map((w) => w.distribution),
+          hasUserOptedInOutAutoRollover ? automaticRolloverState === 'active' : undefined,
         )
         .then(
           () => {
@@ -69,6 +73,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
               },
             });
             setDepositState(DepositStates.DEPOSIT_DONE);
+            setHasUserOptedInOutAutoRollover(false);
           },
           (err: Error) => {
             setError(`Deposit failed. ${err.message ?? ''}`);
@@ -101,6 +106,11 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
       },
     );
   };
+  useEffect(() => {
+    if (vault.userInitialized) {
+      setAutomaticRolloverState(vault.isRegisteredForAutoRollover ? 'active' : 'inactive');
+    }
+  }, [vault.userInitialized]);
 
   useEffect(() => {
     if (loading || !vault?.id) {
@@ -122,10 +132,45 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
     );
   }, [vault.id, loading, selectedDeposit]);
 
+  const openDepositModal = () => {
+    setDepositState(DepositStates.DEPOSIT_MODAL);
+    vault
+      .getDepositGasCost(
+        selectedDeposit,
+        weights.map((w) => w.distribution),
+        hasUserOptedInOutAutoRollover ? automaticRolloverState === 'active' : undefined,
+      )
+      .then((result) => {
+        setDepositGasCost(result);
+      })
+      .catch((err) => {
+        setDepositGasCost(-1);
+      });
+
+    vault
+      .getDepositFeeUsd()
+      .then((result) => {
+        setDepositFeeUSD(result);
+      })
+      .catch((err) => {
+        setDepositFeeUSD(-1);
+      });
+
+    vault
+      .getDepositFeeUnderlying()
+      .then((result) => {
+        setDepositFeeUnderlying(result);
+      })
+      .catch((err) => {
+        setDepositFeeUnderlying(-1);
+      });
+  };
+
   const submissionState = getSubmissionState({
     depositState,
     deposit,
     approve,
+    openDepositModal,
     selectedDeposit,
     sufficientFunds,
     error,
@@ -133,39 +178,46 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
     loading,
   });
 
-  const automaticRolloverChangePromise = async (
-    value: AutomaticRolloverToggleProps['automaticRolloverState'],
-  ) => {
-    try {
-      // todo: SDK integration here
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setAutomaticRolloverState(value);
-    } catch (err) {
-      throw new Error('Error');
-    }
-  };
-
   return (
     <DepositForm
-      automaticRolloverChangePromise={automaticRolloverChangePromise}
+      automaticRolloverChangePromise={(value) => {
+        return new Promise((resolve) => {
+          setAutomaticRolloverState(value);
+          const registrationValue = value === 'active';
+          setHasUserOptedInOutAutoRollover(
+            registrationValue !== Boolean(vault.isRegisteredForAutoRollover),
+          );
+          resolve();
+        });
+      }}
+      automaticRolloverGasCost={vault.autoRolloverRegistrationGasFeeUSD}
       automaticRolloverState={automaticRolloverState}
       combinedWeightValue={combinedWeightValue}
+      depositFeeUnderlying={depositFeeUnderlying}
+      depositFeeUSD={depositFeeUSD}
+      depositGasCost={depositGasCost}
       depositValue={selectedDeposit}
       disabled={
         !sufficientFunds || submissionState.disabled || loading || combinedWeightValue !== 100
       }
       distribution={distribution}
       hintText={submissionState.hintText}
+      isBatchFlowOpen={submissionState.batchFlowOpen}
+      isConfirmDepositModalOpen={submissionState.confirmDepositModalOpen}
+      isSuccessDepositModalOpen={submissionState.successDepositModalOpen}
       loading={submissionState.loading}
       lpVault={vault}
       submitText={submissionState.submitText}
       success={submissionState.success}
       weights={weights}
+      onBatchBudgetModalOpen={() => setDepositState(DepositStates.BATCH_FLOW)}
       onChangeDeposit={setSelectedDeposit}
+      onConfirmDepositModalClose={() => setDepositState(DepositStates.APPROVED)}
       onDistributionToggle={setDistribution}
       onGoBack={onGoBack}
       onManualDistributionsUpdate={setManualWeights}
       onSubmit={submissionState.action}
+      onSuccessDepositModalClose={() => setDepositState(DepositStates.APPROVED)}
     />
   );
 };

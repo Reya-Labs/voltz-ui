@@ -3,11 +3,11 @@ import isUndefined from 'lodash.isundefined';
 
 import { colors } from '../../../theme';
 
-interface HealthFactorTextProps {
+type HealthFactorTextProps = {
   healthFactor?: number;
   label?: string;
   showNumber?: boolean;
-}
+};
 
 export const getHealthTextColor = (healthFactor = 1) => {
   return healthFactor === HealthFactorStatus.DANGER

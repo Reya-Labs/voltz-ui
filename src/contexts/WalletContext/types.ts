@@ -1,7 +1,5 @@
 import { ethers } from 'ethers';
 
-import { GetWalletQuery } from '../../graphql';
-
 export type WalletStatus =
   | 'initializing'
   | 'unavailable'
@@ -19,14 +17,10 @@ export type Wallet = {
   name: WalletName | null;
   provider: ethers.providers.JsonRpcProvider | null;
   signer: ethers.providers.JsonRpcSigner | null;
-  wallet: GetWalletQuery['wallet'] | null;
-  loading: boolean;
-  error: boolean;
   required: boolean;
   setRequired: (required: boolean) => void;
   walletError: string | null;
   networkId?: string;
-  refetch: () => Promise<void>;
 };
 
 export interface WalletRiskAssessment {

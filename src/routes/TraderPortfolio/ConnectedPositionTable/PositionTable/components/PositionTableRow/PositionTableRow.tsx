@@ -1,66 +1,39 @@
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import { Position } from '@voltz-protocol/v1-sdk';
-import isNumber from 'lodash.isnumber';
-import React, { useEffect } from 'react';
+import React from 'react';
 
-import { Typography } from '../../../../../../components/atomic/Typography/Typography';
 import { MaturityInformation } from '../../../../../../components/composite/MaturityInformation/MaturityInformation';
 import { PoolField } from '../../../../../../components/composite/PoolField/PoolField';
 import { Agents } from '../../../../../../contexts/AgentContext/types';
-import { useAMMContext } from '../../../../../../contexts/AMMContext/AMMContext';
-import { useAgent } from '../../../../../../hooks/useAgent';
 import { SystemStyleObject, Theme } from '../../../../../../theme';
 import { isBorrowing } from '../../../../../../utilities/amm';
-import { formatNumber } from '../../../../../../utilities/number';
-import { lpLabels, traderLabels } from '../../constants';
-import { AccruedRates, CurrentMargin, FixedAPR, Notional } from './components';
+import { traderLabels } from '../../constants';
+import { AccruedRates, CurrentMargin, Notional } from './components';
 
 export type PositionTableRowProps = {
   position: Position;
   index: number;
-  onSelect: (mode: 'margin' | 'liquidity' | 'notional') => void;
 };
 
 export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
   position,
   index,
-  onSelect,
 }) => {
-  const { agent } = useAgent();
-  const labels = agent === Agents.LIQUIDITY_PROVIDER ? lpLabels : traderLabels;
-
-  const { fixedApr } = useAMMContext();
-  const { result: resultFixedApr, call: callFixedApr } = fixedApr;
-
-  useEffect(() => {
-    callFixedApr();
-  }, [callFixedApr]);
+  const labels = traderLabels;
 
   const typeStyleOverrides: SystemStyleObject<Theme> = {
     backgroundColor: `secondary.darken050`, // this affects the colour of the positions rows in the LP positions
     borderRadius: 2,
   };
 
-  const handleEditMargin = () => {
-    onSelect('margin');
-  };
-
-  const handleEditLPNotional = () => {
-    onSelect('liquidity');
-  };
-
-  const renderTableCell = (field: string, label: string) => {
+  const renderTableCell = (field: string) => {
     const underlyingTokenName = position.amm.underlyingToken.name; // Introduced this so margin and notional show the correct underlying token unit e.g. Eth not stEth, USDC not aUSDC
 
     if (field === 'accruedRates') {
       return (
         <AccruedRates payingRate={position.payingRate} receivingRate={position.receivingRate} />
       );
-    }
-
-    if (field === 'fixedApr') {
-      return <FixedAPR fixedApr={isNumber(resultFixedApr) ? resultFixedApr : undefined} />;
     }
 
     if (field === 'margin') {
@@ -71,7 +44,6 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
           margin={position.margin}
           marginEdit={true}
           token={underlyingTokenName || ''}
-          onSelect={agent === Agents.LIQUIDITY_PROVIDER ? handleEditMargin : undefined}
         />
       );
     }
@@ -87,31 +59,16 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
     }
 
     if (field === 'notional') {
-      return (
-        <Notional
-          notional={position.notional}
-          token={underlyingTokenName || ''}
-          onEdit={agent === Agents.LIQUIDITY_PROVIDER ? handleEditLPNotional : undefined}
-        />
-      );
+      return <Notional notional={position.notional} token={underlyingTokenName || ''} />;
     }
 
     if (field === 'pool') {
       return (
         <PoolField
-          agent={agent}
+          agent={Agents.FIXED_TRADER}
           isBorrowing={isBorrowing(position.amm.rateOracle.protocolId)}
           protocol={position.amm.protocol}
         />
-      );
-    }
-
-    if (field === 'rateRange') {
-      return (
-        <Typography label={label} variant="h5">
-          {formatNumber(position.fixedRateLower.toNumber())}% /{' '}
-          {formatNumber(position.fixedRateUpper.toNumber())}%
-        </Typography>
       );
     }
 
@@ -120,8 +77,8 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
 
   return (
     <TableRow key={index} sx={{ ...typeStyleOverrides }}>
-      {labels.map(([field, label]) => {
-        return <TableCell key={field}>{renderTableCell(field, label)}</TableCell>;
+      {labels.map(([field]) => {
+        return <TableCell key={field}>{renderTableCell(field)}</TableCell>;
       })}
     </TableRow>
   );

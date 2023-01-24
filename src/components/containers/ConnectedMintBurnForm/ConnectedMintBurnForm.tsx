@@ -20,10 +20,10 @@ import { isBorrowing } from '../../../utilities/amm';
 import { getPoolButtonId } from '../../../utilities/googleAnalytics/helpers';
 import { setPageTitle } from '../../../utilities/page';
 import { FormPanel } from '../../interface/FormPanel/FormPanel';
-import { MintBurnCurrentPosition } from '../../interface/MintBurnCurrentPosition/MintBurnCurrentPosition';
 import { MintBurnForm } from '../../interface/MintBurnForm/MintBurnForm';
 import { MintBurnInfo } from '../../interface/MintBurnInfo';
 import { PendingTransaction } from '../../interface/PendingTransaction/PendingTransaction';
+import { MintBurnCurrentPosition } from './MintBurnCurrentPosition/MintBurnCurrentPosition';
 import { updateFixedRate } from './utilities/updateFixedRate';
 
 export type ConnectedMintBurnFormProps = {

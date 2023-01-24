@@ -10,6 +10,8 @@ import './fonts/DM_Sans/DMSans-MediumItalic.woff';
 import './fonts/DM_Sans/DMSans-Regular.woff';
 import './index.css';
 
+import { ThemeProvider } from '@mui/material/styles';
+import { init as initSDK } from '@voltz-protocol/v1-sdk';
 import { Amplify } from 'aws-amplify';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -21,8 +23,7 @@ import { AppRoutes } from './AppRoutes';
 import { AgentProvider } from './contexts/AgentContext/AgentProvider';
 import { AMMsProvider } from './contexts/AMMsContext/AMMsContext';
 import { WalletProvider } from './contexts/WalletContext/WalletProvider';
-import { VoltzGraphProvider } from './graphql';
-import { ThemeProvider } from './theme/ThemeProvider/ThemeProvider';
+import { themes } from './theme';
 import { initSentryTracker } from './utilities/sentry';
 
 try {
@@ -31,23 +32,22 @@ try {
   }
 } catch (_) {}
 
+initSDK();
 initSentryTracker();
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme="dark">
+    <ThemeProvider theme={themes.dark}>
       <ReduxProvider store={store}>
-        <VoltzGraphProvider>
-          <WalletProvider>
-            <AgentProvider>
-              <HashRouter>
-                <AMMsProvider>
-                  <AppRoutes />
-                </AMMsProvider>
-              </HashRouter>
-            </AgentProvider>
-          </WalletProvider>
-        </VoltzGraphProvider>
+        <WalletProvider>
+          <AgentProvider>
+            <HashRouter>
+              <AMMsProvider>
+                <AppRoutes />
+              </AMMsProvider>
+            </HashRouter>
+          </AgentProvider>
+        </WalletProvider>
       </ReduxProvider>
     </ThemeProvider>
   </React.StrictMode>,

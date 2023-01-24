@@ -2,7 +2,7 @@ import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
 import { Header } from '../Header/Header';
-import { VaultEntry } from './components/VaultEntry/VaultEntry';
+import { VaultEntry } from './VaultEntry/VaultEntry';
 import { VaultsGrid, VaultsTableBox } from './VaultsTable.styled';
 
 export type VaultsTableProps = {

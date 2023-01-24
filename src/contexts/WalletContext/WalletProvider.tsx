@@ -1,9 +1,6 @@
 import { ethers } from 'ethers';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { selectors } from '../../app';
-import { useAppSelector } from '../../app/hooks';
-import { useGetWalletQuery } from '../../graphql';
 import { getErrorMessage } from '../../utilities/getErrorMessage';
 import { getSentryTracker } from '../../utilities/sentry';
 import {
@@ -16,7 +13,6 @@ import { WalletName, WalletStatus } from './types';
 import { WalletContext } from './WalletContext';
 
 export const WalletProvider: React.FunctionComponent = ({ children }) => {
-  const [polling, setPolling] = useState(false);
   const [provider, setProvider] = useState<ethers.providers.JsonRpcProvider | null>(null);
   const [signer, setSigner] = useState<ethers.providers.JsonRpcSigner | null>(null);
   const [walletError, setWalletError] = useState<string | null>(null);
@@ -103,29 +99,6 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     }
   }, []);
 
-  const pollInterval = polling ? 500 : undefined;
-  const { data, loading, error, stopPolling, refetch } = useGetWalletQuery({
-    variables: { id: account || '' },
-    pollInterval,
-    fetchPolicy: 'no-cache',
-    nextFetchPolicy: 'no-cache',
-  });
-
-  const doRefetch = useCallback(async () => {
-    await refetch();
-  }, [refetch]);
-
-  const unresolvedTransactions = useAppSelector(selectors.unresolvedTransactionsSelector);
-  const shouldPoll = unresolvedTransactions.length > 0;
-
-  useEffect(() => {
-    setPolling(shouldPoll && !error);
-
-    if (!shouldPoll || error) {
-      stopPolling();
-    }
-  }, [error, shouldPoll, setPolling, stopPolling]);
-
   const value = {
     status,
     connect,
@@ -134,13 +107,9 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     name,
     signer,
     provider,
-    wallet: data && data.wallet ? data.wallet : null,
-    loading,
-    error: !!error,
     required,
     setRequired,
     walletError,
-    refetch: doRefetch,
   };
 
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;

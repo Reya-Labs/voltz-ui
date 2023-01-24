@@ -51,8 +51,8 @@ export type SerializedAMM = {
   id: string;
   factoryAddress: string;
   marginEngineAddress: string;
-  termStartTimestamp: string;
-  termEndTimestamp: string;
+  termStartTimestampInMS: string;
+  termEndTimestampInMS: string;
   tickSpacing: string;
   rateOracle: {
     id: string;
@@ -60,6 +60,7 @@ export type SerializedAMM = {
     token: { id: string; name: string; decimals: string };
   };
   wethAddress: string;
+  minLeverageAllowed: number;
 };
 
 type ActionType =

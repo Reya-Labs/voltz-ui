@@ -34,7 +34,7 @@ export const LPPositions: React.FunctionComponent<{
     positionsByAgentGroup,
     loading: loadingPositions,
     error: errorPositions,
-  } = usePositions();
+  } = usePositions(Agents.LIQUIDITY_PROVIDER);
   const { account } = useWallet();
 
   const renderMode = formMode ? 'form' : 'portfolio';
@@ -91,7 +91,6 @@ export const LPPositions: React.FunctionComponent<{
     <>
       {renderMode === 'portfolio' && (
         <ConnectedPositionTable
-          agent={Agents.LIQUIDITY_PROVIDER}
           errorPositions={errorPositions}
           handleCompletedSettling={handleCompletedSettling}
           loadingPositions={loadingPositions}

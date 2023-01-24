@@ -1,4 +1,5 @@
 import { colors } from '../../../../theme';
+import { isCostReductionFlowEnabled } from '../../../../utilities/is-cost-reduction-flow-enabled';
 
 export enum DepositStates {
   INITIALISING = 'INITIALISING',
@@ -7,9 +8,11 @@ export enum DepositStates {
   APPROVING = 'APPROVING',
   APPROVE_FAILED = 'APPROVE_FAILED',
   APPROVED = 'APPROVED',
+  DEPOSIT_MODAL = 'DEPOSIT_MODAL',
   DEPOSITING = 'DEPOSITING',
   DEPOSIT_FAILED = 'DEPOSIT_FAILED',
   DEPOSIT_DONE = 'DEPOSIT_DONE',
+  BATCH_FLOW = 'BATCH_FLOW',
 }
 
 type SubmissionState = {
@@ -24,11 +27,15 @@ type SubmissionState = {
   disabled: boolean;
   loading: boolean;
   success: boolean;
+  confirmDepositModalOpen: boolean;
+  successDepositModalOpen: boolean;
+  batchFlowOpen: boolean;
 };
 
 export const getSubmissionState = ({
   depositState,
   deposit,
+  openDepositModal,
   approve,
   selectedDeposit,
   sufficientFunds,
@@ -39,6 +46,7 @@ export const getSubmissionState = ({
   depositState: DepositStates;
   deposit: () => void;
   approve: () => void;
+  openDepositModal: () => void;
   selectedDeposit: number;
   sufficientFunds: boolean;
   error: string;
@@ -56,6 +64,9 @@ export const getSubmissionState = ({
       loading: false,
       disabled: true,
       success: false,
+      confirmDepositModalOpen: false,
+      successDepositModalOpen: false,
+      batchFlowOpen: false,
     };
   }
   const initialisingState: SubmissionState = {
@@ -67,6 +78,9 @@ export const getSubmissionState = ({
     loading: true,
     disabled: true,
     success: false,
+    confirmDepositModalOpen: false,
+    successDepositModalOpen: false,
+    batchFlowOpen: false,
   };
   if (loading) {
     return initialisingState;
@@ -87,6 +101,9 @@ export const getSubmissionState = ({
         loading: false,
         disabled: true,
         success: false,
+        confirmDepositModalOpen: false,
+        successDepositModalOpen: false,
+        batchFlowOpen: false,
       };
     }
     case DepositStates.APPROVE_FAILED: {
@@ -100,6 +117,9 @@ export const getSubmissionState = ({
         loading: false,
         disabled: false,
         success: false,
+        confirmDepositModalOpen: false,
+        successDepositModalOpen: false,
+        batchFlowOpen: false,
       };
     }
     case DepositStates.DEPOSIT_FAILED: {
@@ -113,6 +133,9 @@ export const getSubmissionState = ({
         loading: false,
         disabled: false,
         success: false,
+        confirmDepositModalOpen: isCostReductionFlowEnabled(),
+        successDepositModalOpen: false,
+        batchFlowOpen: false,
       };
     }
     case DepositStates.APPROVE_REQUIRED: {
@@ -125,6 +148,9 @@ export const getSubmissionState = ({
         loading: false,
         disabled: false,
         success: false,
+        confirmDepositModalOpen: false,
+        successDepositModalOpen: false,
+        batchFlowOpen: false,
       };
     }
     case DepositStates.APPROVING: {
@@ -137,12 +163,15 @@ export const getSubmissionState = ({
         loading: true,
         disabled: true,
         success: false,
+        confirmDepositModalOpen: false,
+        successDepositModalOpen: false,
+        batchFlowOpen: false,
       };
     }
     case DepositStates.APPROVED: {
       return {
         submitText: 'Deposit',
-        action: deposit,
+        action: isCostReductionFlowEnabled() ? openDepositModal : deposit,
         hintText:
           selectedDeposit > 0
             ? {
@@ -156,11 +185,31 @@ export const getSubmissionState = ({
         loading: false,
         disabled: !(selectedDeposit > 0),
         success: false,
+        confirmDepositModalOpen: false,
+        successDepositModalOpen: false,
+        batchFlowOpen: false,
+      };
+    }
+    case DepositStates.DEPOSIT_MODAL: {
+      return {
+        submitText: 'Deposit',
+        action: deposit,
+        hintText: {
+          text: tokenName === 'ETH' ? '' : 'Tokens approved.',
+          textColor: colors.vzCustomGreen1.base,
+          suffixText: "Let's deposit.",
+        },
+        loading: false,
+        disabled: !(selectedDeposit > 0),
+        success: false,
+        confirmDepositModalOpen: isCostReductionFlowEnabled(),
+        successDepositModalOpen: false,
+        batchFlowOpen: false,
       };
     }
     case DepositStates.DEPOSITING: {
       return {
-        submitText: 'Pending',
+        submitText: 'Depositing',
         action: () => {},
         hintText: {
           prefixText: 'Depositing',
@@ -170,6 +219,9 @@ export const getSubmissionState = ({
         loading: true,
         disabled: true,
         success: false,
+        confirmDepositModalOpen: isCostReductionFlowEnabled(),
+        successDepositModalOpen: false,
+        batchFlowOpen: false,
       };
     }
     case DepositStates.DEPOSIT_DONE: {
@@ -185,6 +237,27 @@ export const getSubmissionState = ({
         loading: false,
         disabled: false,
         success: true,
+        confirmDepositModalOpen: false,
+        successDepositModalOpen: isCostReductionFlowEnabled(),
+        batchFlowOpen: false,
+      };
+    }
+    case DepositStates.BATCH_FLOW: {
+      return {
+        submitText: 'Deposited',
+        action: deposit,
+        hintText: {
+          prefixText: 'Deposited',
+          text: `${selectedDeposit} ${tokenName}`,
+          suffixText: 'successfully',
+          textColor: colors.skyBlueCrayola.base,
+        },
+        loading: false,
+        disabled: false,
+        success: true,
+        confirmDepositModalOpen: false,
+        successDepositModalOpen: isCostReductionFlowEnabled(),
+        batchFlowOpen: isCostReductionFlowEnabled(),
       };
     }
   }

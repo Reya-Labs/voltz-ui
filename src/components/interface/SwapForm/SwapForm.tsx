@@ -156,6 +156,7 @@ export const SwapForm: React.FunctionComponent<SwapProps> = ({
           <Box sx={{ ...bottomSpacing, display: 'flex' }}>
             <Leverage
               availableNotional={swapInfo?.availableNotional ?? undefined}
+              fee={swapInfo?.fee ?? undefined}
               minMargin={swapInfo?.marginRequirement ?? undefined}
               notional={formState.notional}
               resetDeltaState={formState.resetDeltaState}

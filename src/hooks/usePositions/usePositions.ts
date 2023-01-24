@@ -1,16 +1,14 @@
-import { Position } from '@voltz-protocol/v1-sdk';
+import { getPositions, Position } from '@voltz-protocol/v1-sdk';
 import { DateTime } from 'luxon';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { selectors } from '../../app';
+import { selectAMMs } from '../../app/features/aMMs';
 import { updateTransactionAction } from '../../app/features/transactions';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { Agents } from '../../contexts/AgentContext/types';
 import { isBorrowingPosition } from '../../utilities/borrowAmm';
-import { useAgent } from '../useAgent';
-import { useAMMs } from '../useAMMs';
 import { useWallet } from '../useWallet';
-import { MEPositionFactory } from './mePositionFactory';
 
 type UsePositionsResult = {
   positionsByAgentGroup: Position[];
@@ -19,70 +17,40 @@ type UsePositionsResult = {
   error: boolean;
 };
 
-export const usePositions = (): UsePositionsResult => {
-  const { agent } = useAgent();
-  const { wallet, loading: walletLoading, error: walletError } = useWallet();
-  const { aMMs, loading: ammLoading, error: ammError } = useAMMs();
+export const usePositions = (agent: Agents): UsePositionsResult => {
+  const { account: userAddress } = useWallet();
+  const dispatch = useAppDispatch();
+  const aMMsLoadedState = useAppSelector((state) => state.aMMs.aMMsLoadedState);
+  const aMMs = useAppSelector(selectAMMs);
   const [mePositions, setMePositions] = useState<Position[]>([]);
+  const [fetchLoading, setFetchLoading] = useState<boolean>(false);
+  const [fetchError, setFetchError] = useState<boolean>(false);
 
   useEffect(() => {
-    let shouldUpdate = true;
-    if (
-      wallet &&
-      wallet.positions &&
-      !walletLoading &&
-      !walletError &&
-      aMMs &&
-      !ammLoading &&
-      !ammError
-    ) {
-      if (!agent) {
-        return;
-      }
+    setMePositions([]);
+    if (userAddress && aMMs && aMMs.length > 0 && aMMsLoadedState === 'succeeded' && agent) {
+      setFetchLoading(true);
+      setFetchError(false);
 
-      const walletPositions = wallet.positions
-        .filter(({ positionType }) => {
-          const pType = parseInt(positionType as string, 10);
-          if (isNaN(pType)) {
-            return false;
-          }
+      void getPositions({
+        userWalletId: userAddress,
+        amms: aMMs,
+        subgraphURL: process.env.REACT_APP_SUBGRAPH_URL || '',
+        type: agent === Agents.LIQUIDITY_PROVIDER ? 'LP' : 'Trader',
+      }).then(({ positions, error }) => {
+        setMePositions([...positions]);
+        setFetchLoading(false);
 
-          if (agent === Agents.LIQUIDITY_PROVIDER) {
-            return pType === 3;
-          }
-
-          return pType === 1 || pType === 2;
-        })
-        .map((positionData) => MEPositionFactory(positionData, aMMs))
-        .filter((position) => Boolean(position)) as Position[];
-
-      setMePositions(walletPositions);
-      void Promise.all(walletPositions.map((p) => p.refreshInfo())).then(() => {
-        if (shouldUpdate) {
-          setMePositions([...walletPositions]);
+        if (error) {
+          setFetchError(true);
         }
       });
-
-      return () => {
-        shouldUpdate = false;
-      };
     }
-  }, [agent, wallet, walletLoading, walletError, aMMs, ammLoading, ammError]);
-
-  const positionsByAgentGroup = useMemo(() => {
-    return mePositions
-      .sort((a, b) => {
-        return b.createdTimestamp - a.createdTimestamp; // sort positions by timestamp
-      })
-      .sort((a, b) => {
-        return Number(a.isSettled) - Number(b.isSettled); // sort settled positions to the bottom
-      });
-  }, [mePositions]);
+  }, [userAddress, !!aMMs, aMMsLoadedState]);
 
   const unresolvedTransactions = useAppSelector(selectors.unresolvedTransactionsSelector);
   const shouldTryToCloseTransactions =
     unresolvedTransactions.length > 0 && mePositions && mePositions.length > 0;
-  const dispatch = useAppDispatch();
 
   // [might be broken]
   useEffect(() => {
@@ -127,9 +95,9 @@ export const usePositions = (): UsePositionsResult => {
   }, [shouldTryToCloseTransactions, mePositions, dispatch]);
 
   return {
-    positionsByAgentGroup: positionsByAgentGroup.filter((pos) => !isBorrowingPosition(pos)),
-    borrowPositions: positionsByAgentGroup.filter((pos) => isBorrowingPosition(pos)),
-    loading: walletLoading || ammLoading,
-    error: walletError || ammError,
+    positionsByAgentGroup: mePositions.filter((pos) => !isBorrowingPosition(pos)),
+    borrowPositions: mePositions.filter((pos) => isBorrowingPosition(pos)),
+    loading: aMMsLoadedState === 'pending' || fetchLoading,
+    error: aMMsLoadedState === 'failed' || fetchError,
   };
 };

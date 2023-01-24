@@ -12,7 +12,7 @@ import { Button } from '../../../atomic/Button/Button';
 import { Ellipsis } from '../../../atomic/Ellipsis/Ellipsis';
 import { SwapFormModes } from '../types';
 
-interface SubmitControlsProps {
+type SubmitControlsProps = {
   approvalsNeeded: boolean;
   hintState: SwapFormSubmitButtonHintStates;
   isFormValid: boolean;
@@ -26,7 +26,7 @@ interface SubmitControlsProps {
   tokenApprovals: ReturnType<typeof useTokenApproval>;
   tradeInfoErrorMessage?: string;
   underlyingTokenName?: string;
-}
+};
 
 type TextProps = {
   bold?: boolean;

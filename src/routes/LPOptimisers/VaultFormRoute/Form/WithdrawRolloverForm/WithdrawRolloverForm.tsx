@@ -75,7 +75,7 @@ export const WithdrawRolloverForm: React.FunctionComponent<WithdrawRolloverFormP
       <FullButtonBox>
         <ButtonBox>
           <FormActionButton
-            dataTestId="WithdrawAllButton"
+            dataTestId="WithdrawRolloverForm-WithdrawAllButton"
             disabled={withdrawDisabled}
             loading={withdrawLoading}
             success={withdrawSuccess}
@@ -85,7 +85,7 @@ export const WithdrawRolloverForm: React.FunctionComponent<WithdrawRolloverFormP
             {withdrawSubmitText}
           </FormActionButton>
           <FormActionButton
-            dataTestId="RolloverAllButton"
+            dataTestId="WithdrawRolloverForm-RolloverAllButton"
             disabled={rolloverDisabled}
             loading={rolloverLoading}
             success={rolloverSuccess}
@@ -96,7 +96,9 @@ export const WithdrawRolloverForm: React.FunctionComponent<WithdrawRolloverFormP
           </FormActionButton>
         </ButtonBox>
         <HintText {...hintText} loading={loading} />
-        <BackButton onClick={onGoBack}>BACK</BackButton>
+        <BackButton data-testid="WithdrawRolloverForm-BackButton" onClick={onGoBack}>
+          BACK
+        </BackButton>
       </FullButtonBox>
       <AboutYourFunds depositsText="Rollover deposits" />
     </FormBox>

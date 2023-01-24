@@ -23,7 +23,7 @@ export const useBorrowAMM = (borrowAmm: BorrowAMM) => {
     async () => {
       return borrowAmm?.getUnderlyingBorrowBalance();
     },
-    useMemo(() => undefined, [!!borrowAmm?.provider]),
+    useMemo(() => undefined, [!!borrowAmm?.amm.provider]),
   );
 
   const variableDebtInNativeTokens = useAsyncFunction(
@@ -34,21 +34,21 @@ export const useBorrowAMM = (borrowAmm: BorrowAMM) => {
         return await borrowAmm.getUnderlyingBorrowBalance();
       }
     },
-    useMemo(() => undefined, [!!borrowAmm?.provider, borrowAmm.aaveVariableDebtToken]),
+    useMemo(() => undefined, [!!borrowAmm?.amm.provider, borrowAmm.aaveVariableDebtToken]),
   );
 
   const fixedDebtInNativeTokens = useAsyncFunction(
     async (position: Position) => {
       return borrowAmm?.getFixedBorrowBalance(position);
     },
-    useMemo(() => undefined, [!!borrowAmm?.provider]),
+    useMemo(() => undefined, [!!borrowAmm?.amm.provider]),
   );
 
   const underlyingDebtInUSD = useAsyncFunction(
     async () => {
       return borrowAmm?.getUnderlyingBorrowBalanceInUSD();
     },
-    useMemo(() => undefined, [!!borrowAmm?.provider]),
+    useMemo(() => undefined, [!!borrowAmm?.amm.provider]),
   );
 
   const variableDebtInUSD = useAsyncFunction(
@@ -59,14 +59,14 @@ export const useBorrowAMM = (borrowAmm: BorrowAMM) => {
         return await borrowAmm.getUnderlyingBorrowBalanceInUSD();
       }
     },
-    useMemo(() => undefined, [!!borrowAmm?.provider, borrowAmm.aaveVariableDebtToken]),
+    useMemo(() => undefined, [!!borrowAmm?.amm.provider, borrowAmm.aaveVariableDebtToken]),
   );
 
   const fixedDebtInUSD = useAsyncFunction(
     async (position: Position) => {
       return borrowAmm?.getFixedBorrowBalanceInUSD(position);
     },
-    useMemo(() => undefined, [!!borrowAmm?.provider]),
+    useMemo(() => undefined, [!!borrowAmm?.amm.provider]),
   );
 
   const variableApy = useAsyncFunction(
@@ -77,7 +77,7 @@ export const useBorrowAMM = (borrowAmm: BorrowAMM) => {
       }
       return 0;
     },
-    useMemo(() => undefined, [!!borrowAmm?.provider]),
+    useMemo(() => undefined, [!!borrowAmm?.amm.provider]),
   );
 
   const borrowSwapInfo = useAsyncFunction(
@@ -92,7 +92,7 @@ export const useBorrowAMM = (borrowAmm: BorrowAMM) => {
       }
       return undefined;
     },
-    useMemo(() => undefined, [!!borrowAmm?.provider]),
+    useMemo(() => undefined, [!!borrowAmm?.amm.provider]),
   );
 
   const fixedApr = useAsyncFunction(
@@ -103,7 +103,7 @@ export const useBorrowAMM = (borrowAmm: BorrowAMM) => {
       }
       return undefined;
     },
-    useMemo(() => undefined, [!!borrowAmm?.provider]),
+    useMemo(() => undefined, [!!borrowAmm?.amm.provider]),
   );
 
   const endDate = useMemo(() => {
