@@ -12,6 +12,7 @@ import {
   AutomaticRolloverToggleTypography,
   ToggleButton,
 } from './AutomaticRolloverToggle.styled';
+import { CannotRegisterRolloverModalContent } from './CannotRegisterRolloverModalContent/CannotRegisterRolloverModalContent';
 
 type AutomaticRolloverState = 'active' | 'inactive';
 
@@ -31,6 +32,7 @@ const options: {
 
 export type AutomaticRolloverToggleProps = {
   automaticRolloverState: AutomaticRolloverState;
+  canRegisterUnregister: boolean;
   disabled: boolean;
   showTooltip: boolean;
   gasCost: number;
@@ -38,6 +40,7 @@ export type AutomaticRolloverToggleProps = {
   onChangePromise: (value: AutomaticRolloverState) => Promise<void>;
 };
 export const AutomaticRolloverToggle: React.FunctionComponent<AutomaticRolloverToggleProps> = ({
+  canRegisterUnregister,
   disabled,
   automaticRolloverState,
   showTooltip,
@@ -100,14 +103,18 @@ export const AutomaticRolloverToggle: React.FunctionComponent<AutomaticRolloverT
         </AutomaticRolloverToggleInputLabel>
       ) : null}
       <Modal open={isOpen} onClose={handleOnCancel}>
-        <ActiveRolloverModalContent
-          gasCost={gasCost}
-          transactionStatus={transactionStatus}
-          transactionStatusText={transactionStatusText}
-          triggersOnChainTransaction={triggersOnChainTransaction}
-          onCancel={handleOnCancel}
-          onProceed={handleOnProceed}
-        />
+        {canRegisterUnregister ? (
+          <ActiveRolloverModalContent
+            gasCost={gasCost}
+            transactionStatus={transactionStatus}
+            transactionStatusText={transactionStatusText}
+            triggersOnChainTransaction={triggersOnChainTransaction}
+            onCancel={handleOnCancel}
+            onProceed={handleOnProceed}
+          />
+        ) : (
+          <CannotRegisterRolloverModalContent onProceed={handleOnCancel} />
+        )}
       </Modal>
       <ToggleButtonGroup
         aria-label="text alignment"
