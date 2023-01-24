@@ -116,25 +116,22 @@ export const Leverage = ({
         />
       </Box>
       <Box sx={leverageBoxStyle}>
-        {LEVERAGE_OPTIONS.map((opt) => {
-          return (
-            <Button
-              key={opt}
-              color="secondary"
-              size="small"
-              sx={opt === activeOption ? activeButtonStyle : buttonStyle}
-              variant={'contained'}
-              onClick={() => {
-                onChange(opt);
-                handleChangeInput(opt.toString());
-                setActiveOption(opt);
-              }}
-            >
-              {`${opt}x`}
-            </Button>
-          );
-        })}
-
+        {LEVERAGE_OPTIONS.map((opt, index) => (
+          <Button
+            key={`${opt}_${index}`}
+            color="secondary"
+            size="small"
+            sx={opt === activeOption ? activeButtonStyle : buttonStyle}
+            variant={'contained'}
+            onClick={() => {
+              onChange(opt);
+              handleChangeInput(opt.toString());
+              setActiveOption(opt);
+            }}
+          >
+            {`${opt}x`}
+          </Button>
+        ))}
         <Box />
       </Box>
     </Box>
