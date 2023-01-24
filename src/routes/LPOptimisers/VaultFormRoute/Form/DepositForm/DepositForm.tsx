@@ -95,6 +95,7 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
           automaticRolloverChangePromise={automaticRolloverChangePromise}
           automaticRolloverGasCost={automaticRolloverGasCost}
           automaticRolloverState={automaticRolloverState}
+          canRegisterUnregister={lpVault.canRegisterUnregister}
           combinedWeightValue={combinedWeightValue}
           disabledToggle={loading}
           distribution={distribution}

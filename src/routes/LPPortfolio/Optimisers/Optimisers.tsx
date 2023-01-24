@@ -71,6 +71,7 @@ export const Optimisers: React.FunctionComponent = () => {
           automaticRolloverState={
             Boolean(vault.isRegisteredForAutoRollover) ? 'active' : 'inactive'
           }
+          canRegisterUnregister={vault.canRegisterUnregister}
           depositable={vault.depositable}
           gasCost={vault.autoRolloverRegistrationGasFeeUSD}
           id={vault.id}

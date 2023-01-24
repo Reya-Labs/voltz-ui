@@ -27,6 +27,7 @@ type Weight = {
 };
 
 export type MaturityDistributionProps = {
+  canRegisterUnregister: boolean;
   distribution: MaturityDistributionToggleProps['distribution'];
   onDistributionToggle: MaturityDistributionToggleProps['onChange'];
   onManualDistributionsUpdate: (newManualWeights: Weight[]) => void;
@@ -39,6 +40,7 @@ export type MaturityDistributionProps = {
 };
 
 export const MaturityDistribution: React.FunctionComponent<MaturityDistributionProps> = ({
+  canRegisterUnregister,
   distribution,
   onDistributionToggle = doNothing,
   onManualDistributionsUpdate = doNothing,
@@ -67,6 +69,7 @@ export const MaturityDistribution: React.FunctionComponent<MaturityDistributionP
           automaticRolloverState && (
             <AutomaticRolloverToggle
               automaticRolloverState={automaticRolloverState}
+              canRegisterUnregister={canRegisterUnregister}
               disabled={disabledToggle}
               gasCost={automaticRolloverGasCost}
               showTooltip={true}
