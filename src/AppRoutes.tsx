@@ -4,12 +4,12 @@ import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
 
 import { Page } from './components/interface/Page/Page';
 import { FixedBorrower } from './routes/FixedBorrower/FixedBorrower';
-import { VaultFormRoute } from './routes/LPOptimisers/VaultFormRoute/VaultFormRoute';
-import { Vaults } from './routes/LPOptimisers/Vaults/Vaults';
 import { LPPools } from './routes/LPPools/LPPools';
 import { LPPortfolio } from './routes/LPPortfolio/LPPortfolio';
 import { routes } from './routes/paths';
 import { Profile } from './routes/Profile/Profile';
+import { VaultFormRoute } from './routes/StatelessOptimisers/VaultFormRoute/VaultFormRoute';
+import { Vaults } from './routes/StatelessOptimisers/Vaults/Vaults';
 import { TraderPools } from './routes/TraderPools/TraderPools';
 import { TraderPortfolio } from './routes/TraderPortfolio/TraderPortfolio';
 import { TradingLeague } from './routes/TradingLeague/TradingLeague';

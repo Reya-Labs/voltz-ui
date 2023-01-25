@@ -23,7 +23,7 @@ export type OptimiserInfo = {
     title: string;
     description: string;
     underlyingPools: string[];
-    tokenId: string;
+    tokenName: string;
 
     expired: boolean;
     depositable: boolean;
