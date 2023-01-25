@@ -11,6 +11,7 @@ import { MintBurnFormLiquidityAction } from '../../../contexts/MintBurnFormConte
 import { useAgent } from '../../../hooks/useAgent';
 import { useWallet } from '../../../hooks/useWallet';
 import { getAmmProtocol, isBorrowing } from '../../../utilities/amm';
+import { getViewOnEtherScanLink } from '../../../utilities/getViewOnEtherScanLink';
 import { DataLayerEventPayload, pushEvent } from '../../../utilities/googleAnalytics';
 import { getPoolButtonId } from '../../../utilities/googleAnalytics/helpers';
 import { formatCurrency } from '../../../utilities/number';
@@ -135,16 +136,10 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
     return null;
   }
 
-  let transactionLink: string | undefined = undefined;
-  if (activeTransaction.txid) {
-    if (process.env.REACT_APP_REQUIRED_ETHEREUM_NETWORK === 'goerli') {
-      transactionLink = `https://goerli.etherscan.io/tx/${activeTransaction.txid}`;
-    }
-
-    if (process.env.REACT_APP_REQUIRED_ETHEREUM_NETWORK === 'homestead') {
-      transactionLink = `https://etherscan.io/tx/${activeTransaction.txid}`;
-    }
-  }
+  const transactionLink: string | undefined = getViewOnEtherScanLink(
+    process.env.REACT_APP_REQUIRED_ETHEREUM_NETWORK,
+    activeTransaction.txid,
+  );
 
   const buttonId = getPoolButtonId(
     margin && margin < 0 ? 'REMOVE' : 'ADD',

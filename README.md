@@ -1,7 +1,7 @@
 <p align="center">
   <a href="https://app.voltz.xyz/">
     <picture>
-      <img src="https://media-exp1.licdn.com/dms/image/D4D16AQHyqUgavAAOUA/profile-displaybackgroundimage-shrink_200_800/0/1664801799041?e=1674086400&v=beta&t=AGn611qP9keyyEF7kuovi_G3bXNPyvk-SZ3i9HTo40U" alt="Voltz" width="600" />
+      <img src="./docs/voltz-background.jpeg" alt="Voltz" width="600" />
     </picture>
   </a>
 </p>
@@ -26,7 +26,7 @@ voltz-ui is a frontend repository powered by React. It is the home of all the pa
 
 | Statements                  | Branches                | Functions                 | Lines             |
 | --------------------------- | ----------------------- | ------------------------- | ----------------- |
-| ![Statements](https://img.shields.io/badge/statements-25.83%25-red.svg?style=flat) | ![Branches](https://img.shields.io/badge/branches-13.65%25-red.svg?style=flat) | ![Functions](https://img.shields.io/badge/functions-23.97%25-red.svg?style=flat) | ![Lines](https://img.shields.io/badge/lines-25.82%25-red.svg?style=flat) |
+| ![Statements](https://img.shields.io/badge/statements-27.37%25-red.svg?style=flat) | ![Branches](https://img.shields.io/badge/branches-14.48%25-red.svg?style=flat) | ![Functions](https://img.shields.io/badge/functions-25%25-red.svg?style=flat) | ![Lines](https://img.shields.io/badge/lines-27.4%25-red.svg?style=flat) |
 
 # Installation
 

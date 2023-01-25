@@ -50,6 +50,7 @@ export type VaultListItemProps = {
   }[];
   depositable: boolean;
   automaticRolloverState: AutomaticRolloverToggleProps['automaticRolloverState'];
+  canRegisterUnregister: boolean;
   onChangeAutomaticRolloverStatePromise: (
     vaultId: string,
     automaticRolloverState: AutomaticRolloverToggleProps['automaticRolloverState'],
@@ -63,6 +64,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
   id,
   gasCost,
   automaticRolloverState,
+  canRegisterUnregister,
   onChangeAutomaticRolloverStatePromise = doNothing,
 }) => {
   return (
@@ -89,6 +91,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
           ) : null}
           <AutomaticRolloverToggle
             automaticRolloverState={automaticRolloverState}
+            canRegisterUnregister={canRegisterUnregister}
             disabled={false}
             gasCost={gasCost}
             showTooltip={false}

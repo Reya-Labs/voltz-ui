@@ -51,6 +51,7 @@ export type FormProps = {
   depositGasCost: number;
   depositFeeUSD: number;
   depositFeeUnderlying: number;
+  depositTransactionId: string;
 };
 
 export const DepositForm: React.FunctionComponent<FormProps> = ({
@@ -81,6 +82,7 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
   depositGasCost,
   depositFeeUSD,
   depositFeeUnderlying,
+  depositTransactionId,
 }: FormProps) => {
   const subtext = `WALLET BALANCE: ${
     isUndefined(lpVault.userWalletBalance)
@@ -95,6 +97,7 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
           automaticRolloverChangePromise={automaticRolloverChangePromise}
           automaticRolloverGasCost={automaticRolloverGasCost}
           automaticRolloverState={automaticRolloverState}
+          canRegisterUnregister={lpVault.canRegisterUnregister}
           combinedWeightValue={combinedWeightValue}
           disabledToggle={loading}
           distribution={distribution}
@@ -148,6 +151,7 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
           </Modal>
           <Modal open={isSuccessDepositModalOpen} onClose={onSuccessDepositModalClose}>
             <DepositSuccessModalContent
+              depositTransactionId={depositTransactionId}
               isBatchFlowOpen={isBatchFlowOpen}
               lpVault={lpVault}
               onBatchBudgetModalClose={onSuccessDepositModalClose}

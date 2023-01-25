@@ -26,6 +26,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
     vaultDisabled: v.weight === 0,
   }));
   const [depositGasCost, setDepositGasCost] = useState(-1);
+  const [depositTransactionId, setDepositTransactionId] = useState('');
   const [depositFeeUSD, setDepositFeeUSD] = useState(-1);
   const [depositFeeUnderlying, setDepositFeeUnderlying] = useState(-1);
   const [selectedDeposit, setSelectedDeposit] = useState<number>(0);
@@ -63,7 +64,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
           hasUserOptedInOutAutoRollover ? automaticRolloverState === 'active' : undefined,
         )
         .then(
-          () => {
+          (receipt) => {
             pushEvent(account ?? '', {
               event: 'successful_tx',
               eventValue: {
@@ -74,6 +75,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
             });
             setDepositState(DepositStates.DEPOSIT_DONE);
             setHasUserOptedInOutAutoRollover(false);
+            setDepositTransactionId(receipt.transactionHash);
           },
           (err: Error) => {
             setError(`Deposit failed. ${err.message ?? ''}`);
@@ -196,6 +198,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
       depositFeeUnderlying={depositFeeUnderlying}
       depositFeeUSD={depositFeeUSD}
       depositGasCost={depositGasCost}
+      depositTransactionId={depositTransactionId}
       depositValue={selectedDeposit}
       disabled={
         !sufficientFunds || submissionState.disabled || loading || combinedWeightValue !== 100
