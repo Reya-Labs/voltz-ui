@@ -1,7 +1,7 @@
 <p align="center">
   <a href="https://app.voltz.xyz/">
     <picture>
-      <img src="https://media-exp1.licdn.com/dms/image/D4D16AQHyqUgavAAOUA/profile-displaybackgroundimage-shrink_200_800/0/1664801799041?e=1674086400&v=beta&t=AGn611qP9keyyEF7kuovi_G3bXNPyvk-SZ3i9HTo40U" alt="Voltz" width="600" />
+      <img src="./docs/voltz-background.jpeg" alt="Voltz" width="600" />
     </picture>
   </a>
 </p>
