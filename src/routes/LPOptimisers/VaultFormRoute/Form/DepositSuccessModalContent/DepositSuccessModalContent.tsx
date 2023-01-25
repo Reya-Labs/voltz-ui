@@ -2,6 +2,7 @@ import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
 import { doNothing } from '../../../../../utilities/doNothing';
+import { getViewOnEtherScanLink } from '../../../../../utilities/getViewOnEtherScanLink';
 import { routes } from '../../../../paths';
 import { BatchBudgetTrigger } from '../BatchBudgetTrigger/BatchBudgetTrigger';
 import {
@@ -19,6 +20,7 @@ type Props = {
   onBatchBudgetModalOpen: () => void;
   onBatchBudgetModalClose: () => void;
   isBatchFlowOpen: boolean;
+  depositTransactionId: string;
 };
 
 export const DepositSuccessModalContent: React.FunctionComponent<Props> = ({
@@ -26,8 +28,10 @@ export const DepositSuccessModalContent: React.FunctionComponent<Props> = ({
   onBatchBudgetModalClose = doNothing,
   lpVault,
   isBatchFlowOpen,
+  depositTransactionId,
 }) => (
   <ContentBox
+    data-testid="DepositSuccessModalContent-ContentBox"
     sx={{
       display: isBatchFlowOpen ? 'none' : undefined,
     }}
@@ -35,8 +39,19 @@ export const DepositSuccessModalContent: React.FunctionComponent<Props> = ({
     <TopBox>
       <CircledBlueCheckmark />
       <TitleTypography>TRANSACTION SUBMITTED</TitleTypography>
-      <ViewOnEtherScanLink href={'https://voltz.xyz'}>VIEW ON ETHERSCAN</ViewOnEtherScanLink>
-      <GotoYourPortfolioLink to={`${routes.LP_PORTFOLIO}`}>
+      <ViewOnEtherScanLink
+        data-testid="DepositSuccessModalContent-ViewOnEtherScanLink"
+        href={getViewOnEtherScanLink(
+          process.env.REACT_APP_REQUIRED_ETHEREUM_NETWORK,
+          depositTransactionId,
+        )}
+      >
+        VIEW ON ETHERSCAN
+      </ViewOnEtherScanLink>
+      <GotoYourPortfolioLink
+        data-testid="DepositSuccessModalContent-GotoYourPortfolioLink"
+        to={`/${routes.LP_PORTFOLIO}`}
+      >
         GO TO YOUR PORTFOLIO
       </GotoYourPortfolioLink>
     </TopBox>

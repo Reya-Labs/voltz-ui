@@ -34,7 +34,6 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
   onClose = doNothing,
 }) => {
   const [gasCost, setGasCost] = useState(-1);
-  const [batchBudgetUSD, setBatchBudgetUSD] = useState(-1);
   const [isConfirmBatchBudgetOpen, setIsConfirmBatchBudgetOpen] = useState(false);
   const handleConfirmBatchClose = () => {
     setIsConfirmBatchBudgetOpen(false);
@@ -74,14 +73,6 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
       .catch(() => {
         setGasCost(-1);
       });
-    lpVault
-      .getBatchBudgetUsd()
-      .then((result) => {
-        setBatchBudgetUSD(result);
-      })
-      .catch(() => {
-        setBatchBudgetUSD(-1);
-      });
   }, [lpVault]);
 
   return (
@@ -89,7 +80,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
       <Modal open={isConfirmBatchBudgetOpen} onClose={handleConfirmBatchClose}>
         <ConfirmBatchBudgetModalContent
           batchBudgetUnderlying={lpVault.batchBudgetUnderlying}
-          batchBudgetUSD={batchBudgetUSD}
+          batchBudgetUSD={lpVault.batchBudgetUsd}
           disabled={state.disabled}
           error={state.error}
           gasCost={gasCost}
@@ -113,24 +104,16 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
             <BatchBudgetContentBox>
               <BatchBudgetTextTypography>BATCH BUDGET:&nbsp;</BatchBudgetTextTypography>
               <BatchBudgetTextBox>
-                {batchBudgetUSD === -1 ? (
-                  <BatchBudgetValueBox>
-                    <BatchBudgetTextTypography data-testid="BatchBudgetTrigger-BatchBudgetLoading">
-                      ---
-                    </BatchBudgetTextTypography>
-                  </BatchBudgetValueBox>
-                ) : (
-                  <BatchBudgetValueBox>
-                    <BatchBudgetUnderlyingTypography data-testid="BatchBudgetTrigger-BatchBudgetUnderlyingTypography">
-                      {formatCurrency(lpVault.batchBudgetUnderlying)}&nbsp;
-                      {lpVault.metadata.token.toUpperCase()}
-                    </BatchBudgetUnderlyingTypography>
-                    <BatchBudgetTextTypography data-testid="BatchBudgetTrigger-BatchBudgetTextTypography">
-                      <BatchBudgetUSDCurrencyTypography>$</BatchBudgetUSDCurrencyTypography>
-                      {formatCurrency(batchBudgetUSD)} USD
-                    </BatchBudgetTextTypography>
-                  </BatchBudgetValueBox>
-                )}
+                <BatchBudgetValueBox>
+                  <BatchBudgetUnderlyingTypography data-testid="BatchBudgetTrigger-BatchBudgetUnderlyingTypography">
+                    {formatCurrency(lpVault.batchBudgetUnderlying)}&nbsp;
+                    {lpVault.metadata.token.toUpperCase()}
+                  </BatchBudgetUnderlyingTypography>
+                  <BatchBudgetTextTypography data-testid="BatchBudgetTrigger-BatchBudgetTextTypography">
+                    <BatchBudgetUSDCurrencyTypography>$</BatchBudgetUSDCurrencyTypography>
+                    {formatCurrency(lpVault.batchBudgetUsd)} USD
+                  </BatchBudgetTextTypography>
+                </BatchBudgetValueBox>
               </BatchBudgetTextBox>
             </BatchBudgetContentBox>
           </ActionLeftContentBox>
