@@ -17,10 +17,12 @@ const rejectThunkWithError = (
 
 export const initialiseOptimisersThunk = createAsyncThunk<
   OptimiserInfo | Awaited<ReturnType<typeof rejectThunkWithError>>,
-  void
->('stateless-optimisers/getProducts', async (_, thunkAPI) => {
+  {
+    userAddress: string | undefined,
+  }
+>('stateless-optimisers/getProducts', async ({userAddress}, thunkAPI) => {
   try {
-    const routers = await getAllMellowProducts();
+    const routers = await getAllMellowProducts(userAddress);
 
     // TODO: enrich this mapping
     const mappedRouters: OptimiserInfo[] = routers.map((r) => ({...r}));
