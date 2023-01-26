@@ -32,16 +32,16 @@ export const DepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoProps>
     <PositionBox>
       <PositionLabelTypography>YOUR POSITION:</PositionLabelTypography>
       <PositionValueTypography>
-        {isUndefined(mellowProduct.userRouterDeposit)
+        {isUndefined(mellowProduct.userOptimiserDeposit)
           ? '---'
-          : `${formatCurrency(mellowProduct.userRouterDeposit, true)} ${mellowProduct.tokenName}`}
+          : `${formatCurrency(mellowProduct.userOptimiserDeposit, true)} ${mellowProduct.tokenName}`}
       </PositionValueTypography>
     </PositionBox>
-    {mellowProduct.userRouterPendingDeposit > 0 && (
+    {mellowProduct.userOptimiserPendingDeposit > 0 && (
       <PendingDepositTypography>
         {`Pending `}
         <PendingDepositAmountSpan>
-          {`${mellowProduct.userRouterPendingDeposit.toFixed(2)} ${mellowProduct.tokenName}`}
+          {`${mellowProduct.userOptimiserPendingDeposit.toFixed(2)} ${mellowProduct.tokenName}`}
         </PendingDepositAmountSpan>
         {` will be deposited at 7PM UTC`}
       </PendingDepositTypography>

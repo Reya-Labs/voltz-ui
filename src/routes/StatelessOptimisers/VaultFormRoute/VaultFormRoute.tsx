@@ -16,7 +16,7 @@ export const VaultFormRoute: React.FunctionComponent = () => {
   const { vaultId, actions, vaultIndex } = useParams();
   const { signer } = useWallet();
   const { lpVaults, vaultsLoaded } = useLPVaults();
-  const currentVault = lpVaults.find((v) => v.routerId === vaultId);
+  const currentVault = lpVaults.find((v) => v.optimiserId === vaultId);
 
   const loading = !vaultsLoaded;
   useEffect(() => {

@@ -57,7 +57,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
     });
     // TODO: replace this with redux
     submitAllBatchesForFee({
-      routerId: lpVault.routerId,
+      optimiserId: lpVault.optimiserId,
       signer
     })
       .then(() => {
@@ -78,7 +78,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
     // TODO: replace this with redux
     submitAllBatchesForFee({
       onlyGasEstimate: true,
-      routerId: lpVault.routerId,
+      optimiserId: lpVault.optimiserId,
       signer,
     })
       .then(({gasEstimateUsd}) => {

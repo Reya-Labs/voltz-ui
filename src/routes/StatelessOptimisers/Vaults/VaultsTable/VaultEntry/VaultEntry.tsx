@@ -69,7 +69,7 @@ export const VaultEntry: React.FunctionComponent<VaultEntryProps> = ({
           disabled={lpVault.soon || !lpVault.depositable}
           handleClick={onSelectItem}
           tokenName={lpVault.tokenName}
-          userDeposit={lpVault.userRouterDeposit}
+          userDeposit={lpVault.userOptimiserDeposit}
         />
       </PositionBox>
     </VaultEntryContainerBox>
