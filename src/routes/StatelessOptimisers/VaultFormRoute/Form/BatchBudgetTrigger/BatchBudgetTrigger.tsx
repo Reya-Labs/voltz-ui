@@ -36,6 +36,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
   onClose = doNothing,
 }) => {
   const { signer } = useWallet();
+  
   const [gasCost, setGasCost] = useState(-1);
   const [isConfirmBatchBudgetOpen, setIsConfirmBatchBudgetOpen] = useState(false);
   const handleConfirmBatchClose = () => {
@@ -51,15 +52,15 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
     if (!signer) {
       return;
     }
-
+    
     dispatch({
       type: 'batch_pending',
     });
-    // TODO: replace this with redux
-    submitAllBatchesForFee({
-      optimiserId: lpVault.optimiserId,
-      signer
-    })
+        submitAllBatchesForFee({
+          optimiserId: lpVault.optimiserId,
+          signer
+        })
+    
       .then(() => {
         dispatch({
           type: 'batch_success',
@@ -75,27 +76,25 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
   };
 
   useEffect(() => {
-    // TODO: replace this with redux
-    submitAllBatchesForFee({
-      onlyGasEstimate: true,
-      optimiserId: lpVault.optimiserId,
-      signer,
-    })
-      .then(({gasEstimateUsd}) => {
-        setGasCost(gasEstimateUsd);
-      })
+        submitAllBatchesForFee({
+          onlyGasEstimate: true,
+          optimiserId: lpVault.optimiserId,
+          signer,
+        })
+          .then(({gasEstimateUsd}) => {
+            setGasCost(gasEstimateUsd);
+          })
       .catch(() => {
         setGasCost(-1);
       });
-  }, [lpVault]);
+  }, [lpVault, signer]);
 
   return (
     <>
       <Modal open={isConfirmBatchBudgetOpen} onClose={handleConfirmBatchClose}>
         <ConfirmBatchBudgetModalContent
           batchBudgetUnderlying={lpVault.accumulatedFees}
-          // TODO: convert this to USD
-          batchBudgetUSD={lpVault.accumulatedFees}
+          batchBudgetUSD={lpVault.accumulatedFeesUSD}
           disabled={state.disabled}
           error={state.error}
           gasCost={gasCost}
@@ -126,7 +125,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
                   </BatchBudgetUnderlyingTypography>
                   <BatchBudgetTextTypography data-testid="BatchBudgetTrigger-BatchBudgetTextTypography">
                     <BatchBudgetUSDCurrencyTypography>$</BatchBudgetUSDCurrencyTypography>
-                    {formatCurrency(lpVault.accumulatedFees)} USD 
+                    {formatCurrency(lpVault.accumulatedFeesUSD)} USD
                   </BatchBudgetTextTypography>
                 </BatchBudgetValueBox>
               </BatchBudgetTextBox>
