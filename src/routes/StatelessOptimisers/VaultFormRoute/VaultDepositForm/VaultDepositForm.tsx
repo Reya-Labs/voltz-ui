@@ -20,18 +20,21 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
   vault,
   onGoBack,
 }) => {
-  const { account, signer } = useWallet();
+  const { signer, account } = useWallet();
+
   const automaticWeights: FormProps['weights'] = vault.vaults.map((v) => ({
     distribution: v.defaultWeight,
     maturityTimestamp: v.maturityTimestampMS,
     pools: v.pools,
     vaultDisabled: v.defaultWeight === 0,
   }));
-  const [depositTransactionId, setDepositTransactionId] = useState('');
   const [depositGasCost, setDepositGasCost] = useState(-1);
+  const [depositTransactionId, setDepositTransactionId] = useState('');
   const [selectedDeposit, setSelectedDeposit] = useState<number>(0);
   const [distribution, setDistribution] = useState<'automatic' | 'manual'>('automatic');
-  const automaticRolloverState: AutomaticRolloverToggleProps['automaticRolloverState'] = vault.isUserRegisteredForAutoRollover ? 'active' : 'inactive';
+  const [automaticRolloverState, setAutomaticRolloverState] = useState<
+    AutomaticRolloverToggleProps['automaticRolloverState']
+  >(Boolean(vault.isUserRegisteredForAutoRollover) ? 'active' : 'inactive');
   const [manualWeights, setManualWeights] = useState<FormProps['weights']>(
     automaticWeights.map((a) => ({ ...a })),
   );
@@ -45,11 +48,12 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
   const combinedWeightValue = weights.reduce((total, weight) => total + weight.distribution, 0);
 
   const deposit = () => {
-    if (selectedDeposit > 0) {
-      if (!signer) {
-        return;
-      }
 
+    if (!signer) {
+      return;
+    }
+
+    if (selectedDeposit > 0) {
       pushEvent(account ?? '', {
         event: 'tx_submitted',
         eventValue: {
@@ -58,9 +62,8 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
           distribution: distribution,
         },
       });
-
       setDepositState(DepositStates.DEPOSITING);
-      // TODO: move this to redux
+
       void depositAndRegister({
         optimiserId: vault.optimiserId,
         amount: selectedDeposit,
@@ -106,7 +109,6 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
       return;
     }
 
-    // move this to redux
     setDepositState(DepositStates.APPROVING);
     void approveToken({
       tokenId: vault.tokenId,
@@ -128,7 +130,10 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
       return;
     }
 
-    // move this to redux
+    if (loading || !vault?.optimiserId) {
+      return;
+    }
+
     void isTokenApproved({
       tokenId: vault.tokenId,
       to: vault.optimiserId,
@@ -147,16 +152,14 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
         setDepositState(DepositStates.PROVIDER_ERROR);
       },
     );
-  }, [selectedDeposit, account, vault.optimiserId, vault.tokenId]);
+  }, [vault.optimiserId, loading, selectedDeposit, account, vault.tokenId]);
 
   const openDepositModal = () => {
-    
     if (!signer) {
       return;
     }
 
     setDepositState(DepositStates.DEPOSIT_MODAL);
-    // move this to redux
     void depositAndRegister({
       onlyGasEstimate: true,
       optimiserId: vault.optimiserId,
@@ -168,7 +171,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
       .then(({gasEstimateUsd}) => {
         setDepositGasCost(gasEstimateUsd);
       })
-      .catch((err) => {
+      .catch(() => {
         setDepositGasCost(-1);
       });
   };
@@ -189,6 +192,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
     <DepositForm
       automaticRolloverChangePromise={(value) => {
         return new Promise((resolve) => {
+          setAutomaticRolloverState(value);
           const registrationValue = value === 'active';
           setHasUserOptedInOutAutoRollover(
             registrationValue !== Boolean(vault.isUserRegisteredForAutoRollover),
@@ -196,13 +200,12 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
           resolve();
         });
       }}
-      // TODO: plug this in
+      // TODO: add number for rollover gas cost
       automaticRolloverGasCost={0}
       automaticRolloverState={automaticRolloverState}
       combinedWeightValue={combinedWeightValue}
       depositFeeUnderlying={vault.feePerDeposit}
-      // TODO: convert it to USD
-      depositFeeUSD={vault.feePerDeposit}
+      depositFeeUSD={vault.feePerDepositUSD}
       depositGasCost={depositGasCost}
       depositTransactionId={depositTransactionId}
       depositValue={selectedDeposit}
@@ -229,4 +232,4 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
       onSuccessDepositModalClose={() => setDepositState(DepositStates.APPROVED)}
     />
   );
-}
+};
