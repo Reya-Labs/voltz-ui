@@ -204,7 +204,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
           resolve();
         });
       }}
-      // TODO: add number for rollover gas cost
+      // TODO - SS: add number for rollover gas cost
       automaticRolloverGasCost={0}
       automaticRolloverState={automaticRolloverState}
       combinedWeightValue={combinedWeightValue}
