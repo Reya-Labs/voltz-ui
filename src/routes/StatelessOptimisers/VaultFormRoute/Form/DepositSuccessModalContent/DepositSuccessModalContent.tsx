@@ -1,6 +1,6 @@
-import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
+import { OptimiserInfo } from '../../../../../app/features/stateless-optimisers';
 import { doNothing } from '../../../../../utilities/doNothing';
 import { getViewOnEtherScanLink } from '../../../../../utilities/getViewOnEtherScanLink';
 import { routes } from '../../../../paths';
@@ -16,7 +16,7 @@ import {
 } from './DepositSuccessModalContent.styled';
 
 type Props = {
-  lpVault: MellowProduct;
+  lpVault: OptimiserInfo;
   onBatchBudgetModalOpen: () => void;
   onBatchBudgetModalClose: () => void;
   isBatchFlowOpen: boolean;

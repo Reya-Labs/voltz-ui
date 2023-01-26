@@ -1,7 +1,9 @@
-import { MellowProduct } from '@voltz-protocol/v1-sdk';
+import { submitAllBatchesForFee } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useReducer, useState } from 'react';
 
+import { OptimiserInfo } from '../../../../../app/features/stateless-optimisers';
 import { Modal } from '../../../../../components/composite/Modal/Modal';
+import { useWallet } from '../../../../../hooks/useWallet';
 import { doNothing } from '../../../../../utilities/doNothing';
 import { formatCurrency } from '../../../../../utilities/number';
 import { GasCost } from '../GasCost/GasCost';
@@ -23,7 +25,7 @@ import {
 import { ConfirmBatchBudgetModalContent } from './ConfirmBatchBudgetModalContent/ConfirmBatchBudgetModalContent';
 
 type Props = {
-  lpVault: MellowProduct;
+  lpVault: OptimiserInfo;
   onOpen?: () => void;
   onClose?: () => void;
 };
@@ -33,6 +35,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
   onOpen = doNothing,
   onClose = doNothing,
 }) => {
+  const { signer } = useWallet();
   const [gasCost, setGasCost] = useState(-1);
   const [isConfirmBatchBudgetOpen, setIsConfirmBatchBudgetOpen] = useState(false);
   const handleConfirmBatchClose = () => {
@@ -45,11 +48,18 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
   };
   const [state, dispatch] = useReducer(batchBudgetReducer, initialState);
   const handleOnProceed = () => {
+    if (!signer) {
+      return;
+    }
+
     dispatch({
       type: 'batch_pending',
     });
-    lpVault
-      .submitAllBatchesForFee()
+    // TODO: replace this with redux
+    submitAllBatchesForFee({
+      routerId: lpVault.routerId,
+      signer
+    })
       .then(() => {
         dispatch({
           type: 'batch_success',
@@ -65,10 +75,14 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
   };
 
   useEffect(() => {
-    lpVault
-      .getSubmitBatchGasCost()
-      .then((result) => {
-        setGasCost(result);
+    // TODO: replace this with redux
+    submitAllBatchesForFee({
+      onlyGasEstimate: true,
+      routerId: lpVault.routerId,
+      signer,
+    })
+      .then(({gasEstimateUsd}) => {
+        setGasCost(gasEstimateUsd);
       })
       .catch(() => {
         setGasCost(-1);
@@ -79,8 +93,9 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
     <>
       <Modal open={isConfirmBatchBudgetOpen} onClose={handleConfirmBatchClose}>
         <ConfirmBatchBudgetModalContent
-          batchBudgetUnderlying={lpVault.batchBudgetUnderlying}
-          batchBudgetUSD={lpVault.batchBudgetUsd}
+          batchBudgetUnderlying={lpVault.accumulatedFees}
+          // TODO: convert this to USD
+          batchBudgetUSD={lpVault.accumulatedFees}
           disabled={state.disabled}
           error={state.error}
           gasCost={gasCost}
@@ -88,7 +103,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
           loading={state.loading}
           submitText={state.submitText}
           success={state.success}
-          token={lpVault.metadata.token}
+          token={lpVault.tokenName}
           onCancel={handleConfirmBatchClose}
           onProceed={handleOnProceed}
         />
@@ -106,12 +121,12 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
               <BatchBudgetTextBox>
                 <BatchBudgetValueBox>
                   <BatchBudgetUnderlyingTypography data-testid="BatchBudgetTrigger-BatchBudgetUnderlyingTypography">
-                    {formatCurrency(lpVault.batchBudgetUnderlying)}&nbsp;
-                    {lpVault.metadata.token.toUpperCase()}
+                    {formatCurrency(lpVault.accumulatedFees)}&nbsp;
+                    {lpVault.tokenName.toUpperCase()}
                   </BatchBudgetUnderlyingTypography>
                   <BatchBudgetTextTypography data-testid="BatchBudgetTrigger-BatchBudgetTextTypography">
                     <BatchBudgetUSDCurrencyTypography>$</BatchBudgetUSDCurrencyTypography>
-                    {formatCurrency(lpVault.batchBudgetUsd)} USD
+                    {formatCurrency(lpVault.accumulatedFees)} USD 
                   </BatchBudgetTextTypography>
                 </BatchBudgetValueBox>
               </BatchBudgetTextBox>

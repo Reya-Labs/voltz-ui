@@ -13,9 +13,6 @@ export const useLPVaults = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!shouldInitVaults) {
-      return;
-    }
     void dispatch(initialiseOptimisersThunk({ userAddress: account ? account : undefined}));
   }, [shouldInitVaults, dispatch, account]);
 
