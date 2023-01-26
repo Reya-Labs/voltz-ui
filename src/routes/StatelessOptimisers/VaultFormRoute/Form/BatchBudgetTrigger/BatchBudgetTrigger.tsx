@@ -36,7 +36,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
   onClose = doNothing,
 }) => {
   const { signer } = useWallet();
-  
+
   const [gasCost, setGasCost] = useState(-1);
   const [isConfirmBatchBudgetOpen, setIsConfirmBatchBudgetOpen] = useState(false);
   const handleConfirmBatchClose = () => {
@@ -52,15 +52,14 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
     if (!signer) {
       return;
     }
-    
+
     dispatch({
       type: 'batch_pending',
     });
-        submitAllBatchesForFee({
-          optimiserId: lpVault.optimiserId,
-          signer
-        })
-    
+    submitAllBatchesForFee({
+      optimiserId: lpVault.optimiserId,
+      signer,
+    })
       .then(() => {
         dispatch({
           type: 'batch_success',
@@ -76,14 +75,14 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
   };
 
   useEffect(() => {
-        submitAllBatchesForFee({
-          onlyGasEstimate: true,
-          optimiserId: lpVault.optimiserId,
-          signer,
-        })
-          .then(({gasEstimateUsd}) => {
-            setGasCost(gasEstimateUsd);
-          })
+    submitAllBatchesForFee({
+      onlyGasEstimate: true,
+      optimiserId: lpVault.optimiserId,
+      signer,
+    })
+      .then(({ gasEstimateUsd }) => {
+        setGasCost(gasEstimateUsd);
+      })
       .catch(() => {
         setGasCost(-1);
       });

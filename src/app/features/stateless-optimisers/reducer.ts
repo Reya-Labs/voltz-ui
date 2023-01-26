@@ -1,6 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { depositOptimisersThunk, getOptimisersDepositGasFeeThunk, initialiseOptimisersThunk, rolloverOptimisersThunk, withdrawOptimisersThunk } from './thunks';
+import {
+  depositOptimisersThunk,
+  getOptimisersDepositGasFeeThunk,
+  initialiseOptimisersThunk,
+  rolloverOptimisersThunk,
+  withdrawOptimisersThunk,
+} from './thunks';
 import { OptimiserInfo } from './types';
 
 type SliceState = {
@@ -65,7 +71,9 @@ export const slice = createSlice({
         state.depositLoadedState = 'succeeded';
         const optimiserId = action.meta.arg.optimiserId;
 
-        const optimiserIndex = state.optimisers.findIndex((optimiser) => optimiser.optimiserId === optimiserId);
+        const optimiserIndex = state.optimisers.findIndex(
+          (optimiser) => optimiser.optimiserId === optimiserId,
+        );
         if (optimiserIndex >= 0) {
           state.optimisers[optimiserIndex] = action.payload as OptimiserInfo;
         }
@@ -93,7 +101,9 @@ export const slice = createSlice({
         state.withdrawLoadedState = 'succeeded';
         const optimiserId = action.meta.arg.optimiserId;
 
-        const optimiserIndex = state.optimisers.findIndex((optimiser) => optimiser.optimiserId === optimiserId);
+        const optimiserIndex = state.optimisers.findIndex(
+          (optimiser) => optimiser.optimiserId === optimiserId,
+        );
         if (optimiserIndex >= 0) {
           state.optimisers[optimiserIndex] = action.payload as OptimiserInfo;
         }
@@ -109,7 +119,9 @@ export const slice = createSlice({
         state.rolloverLoadedState = 'succeeded';
         const optimiserId = action.meta.arg.optimiserId;
 
-        const optimiserIndex = state.optimisers.findIndex((optimiser) => optimiser.optimiserId === optimiserId);
+        const optimiserIndex = state.optimisers.findIndex(
+          (optimiser) => optimiser.optimiserId === optimiserId,
+        );
         if (optimiserIndex >= 0) {
           state.optimisers[optimiserIndex] = action.payload as OptimiserInfo;
         }
