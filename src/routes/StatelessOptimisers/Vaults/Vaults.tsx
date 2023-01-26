@@ -20,7 +20,7 @@ export const Vaults: React.FunctionComponent = () => {
     } else {
       const path = generatePath(routes.LP_OPTIMISERS_DEPOSIT_FORM, {
         actions: 'deposit',
-        vaultId: selectedOptimiser.routerId,
+        vaultId: selectedOptimiser.optimiserId,
       });
       navigate(`/${path}`);
     }

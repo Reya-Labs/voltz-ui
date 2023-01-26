@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { depositAndRegister , getAllMellowProducts } from '@voltz-protocol/v1-sdk';
+import { depositAndRegister , getAllMellowProducts, rollover, withdraw } from '@voltz-protocol/v1-sdk';
 import { ethers } from 'ethers';
 
 import { OptimiserInfo } from './types';
@@ -39,14 +39,14 @@ export const initialiseOptimisersThunk = createAsyncThunk<
 export const depositOptimisersThunk = createAsyncThunk<
   OptimiserInfo | Awaited<ReturnType<typeof rejectThunkWithError>>,
  {
-    routerId: string;
+    optimiserId: string;
     amount: number;
     spareWeights: [string, number][];
     registration?: boolean;
     signer: ethers.Signer | null;
  }
 >('stateless-optimisers/deposit', async ({
-  routerId, amount, spareWeights, registration, signer
+  optimiserId, amount, spareWeights, registration, signer
 }, thunkAPI) => {
   try {
     if (!signer) {
@@ -54,18 +54,18 @@ export const depositOptimisersThunk = createAsyncThunk<
     }
   
     const response = await depositAndRegister({
-      routerId,
+      optimiserId,
       amount,
       spareWeights,
       registration,
       signer
     });
 
-    if (!response.newRouterState) {
+    if (!response.newOptimiserState) {
       throw new Error('New state not returned');
     }
 
-    return mapRouter(response.newRouterState);
+    return mapRouter(response.newOptimiserState);
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
@@ -74,14 +74,14 @@ export const depositOptimisersThunk = createAsyncThunk<
 export const getOptimisersDepositGasFeeThunk = createAsyncThunk<
   number | Awaited<ReturnType<typeof rejectThunkWithError>>,
  {
-    routerId: string;
+  optimiserId: string;
     amount: number;
     spareWeights: [string, number][];
     registration?: boolean;
     signer: ethers.Signer | null;
  }
 >('stateless-optimisers/deposit-gas-fee', async ({
-  routerId, amount, spareWeights, registration, signer
+  optimiserId, amount, spareWeights, registration, signer
 }, thunkAPI) => {
   try {
     if (!signer) {
@@ -90,7 +90,7 @@ export const getOptimisersDepositGasFeeThunk = createAsyncThunk<
   
     const response = await depositAndRegister({
       onlyGasEstimate: true,
-      routerId,
+      optimiserId,
       amount,
       spareWeights,
       registration,
@@ -98,6 +98,70 @@ export const getOptimisersDepositGasFeeThunk = createAsyncThunk<
     });
 
     return response.gasEstimateUsd;
+  } catch (err) {
+    return rejectThunkWithError(thunkAPI, err);
+  }
+});
+
+export const withdrawOptimisersThunk = createAsyncThunk<
+  OptimiserInfo | Awaited<ReturnType<typeof rejectThunkWithError>>,
+ {
+    optimiserId: string;
+    vaultId: string;
+    signer: ethers.Signer | null;
+ }
+>('stateless-optimisers/withdraw', async ({
+  optimiserId, vaultId, signer
+}, thunkAPI) => {
+  try {
+    if (!signer) {
+      throw new Error('Wallet not connected');
+    }
+  
+    const response = await withdraw({
+      optimiserId,
+      vaultId,
+      signer
+    });
+
+    if (!response.newOptimiserState) {
+      throw new Error('New state not returned');
+    }
+
+    return mapRouter(response.newOptimiserState);
+  } catch (err) {
+    return rejectThunkWithError(thunkAPI, err);
+  }
+});
+
+export const rolloverOptimisersThunk = createAsyncThunk<
+  OptimiserInfo | Awaited<ReturnType<typeof rejectThunkWithError>>,
+ {
+    optimiserId: string;
+    vaultId: string;
+    spareWeights: [string, number][];
+    signer: ethers.Signer | null;
+ }
+>('stateless-optimisers/rollover', async ({
+  optimiserId, vaultId, spareWeights, signer
+}, thunkAPI) => {
+  try {
+    if (!signer) {
+      throw new Error('Wallet not connected');
+    }
+  
+    const response = await rollover({
+      optimiserId,
+      vaultId,
+      spareWeights,
+      signer
+    });
+
+    if (!response.newOptimiserState) {
+      throw new Error('New state not returned');
+    }
+
+    return mapRouter(response.newOptimiserState);
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }

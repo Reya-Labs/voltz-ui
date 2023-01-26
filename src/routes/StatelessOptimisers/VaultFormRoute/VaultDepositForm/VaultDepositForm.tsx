@@ -62,7 +62,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
       setDepositState(DepositStates.DEPOSITING);
       // TODO: move this to redux
       void depositAndRegister({
-        routerId: vault.routerId,
+        optimiserId: vault.optimiserId,
         amount: selectedDeposit,
         spareWeights: weights.map((w, index) => [vault.vaults[index].vaultId, w.distribution]),
         registration: hasUserOptedInOutAutoRollover ? automaticRolloverState === 'active' : undefined,
@@ -110,7 +110,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
     setDepositState(DepositStates.APPROVING);
     void approveToken({
       tokenId: vault.tokenId,
-      to: vault.routerId,
+      to: vault.optimiserId,
       signer,
     }).then(
       () => {
@@ -131,7 +131,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
     // move this to redux
     void isTokenApproved({
       tokenId: vault.tokenId,
-      to: vault.routerId,
+      to: vault.optimiserId,
       threshold: selectedDeposit,
       userAddress: account,
     }).then(
@@ -147,7 +147,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
         setDepositState(DepositStates.PROVIDER_ERROR);
       },
     );
-  }, [selectedDeposit, account, vault.routerId, vault.tokenId]);
+  }, [selectedDeposit, account, vault.optimiserId, vault.tokenId]);
 
   const openDepositModal = () => {
     
@@ -159,7 +159,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
     // move this to redux
     void depositAndRegister({
       onlyGasEstimate: true,
-      routerId: vault.routerId,
+      optimiserId: vault.optimiserId,
       amount: selectedDeposit,
       spareWeights: weights.map((w, index) => [vault.vaults[index].vaultId, w.distribution]),
       registration: hasUserOptedInOutAutoRollover ? automaticRolloverState === 'active' : undefined,

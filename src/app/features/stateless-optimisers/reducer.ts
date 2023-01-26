@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { depositOptimisersThunk, getOptimisersDepositGasFeeThunk, initialiseOptimisersThunk } from './thunks';
+import { depositOptimisersThunk, getOptimisersDepositGasFeeThunk, initialiseOptimisersThunk, rolloverOptimisersThunk, withdrawOptimisersThunk } from './thunks';
 import { OptimiserInfo } from './types';
 
 type SliceState = {
@@ -8,17 +8,33 @@ type SliceState = {
   optimisers: OptimiserInfo[];
 
   depositLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
+  depositError: string;
 
   depositGasFeeLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
   depositGasFee: number;
+
+  withdrawLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
+  withdrawError: string;
+
+  rolloverLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
+  rolloverError: string;
 };
 
 const initialState: SliceState = {
   optimisersLoadedState: 'idle',
   optimisers: [],
+
   depositLoadedState: 'idle',
+  depositError: '',
+
   depositGasFeeLoadedState: 'idle',
   depositGasFee: 0,
+
+  withdrawLoadedState: 'idle',
+  withdrawError: '',
+
+  rolloverLoadedState: 'idle',
+  rolloverError: '',
 };
 
 export const slice = createSlice({
@@ -41,14 +57,15 @@ export const slice = createSlice({
       .addCase(depositOptimisersThunk.pending, (state) => {
         state.depositLoadedState = 'pending';
       })
-      .addCase(depositOptimisersThunk.rejected, (state) => {
+      .addCase(depositOptimisersThunk.rejected, (state, action) => {
         state.depositLoadedState = 'failed';
+        state.depositError = `Deposit failed. ${action.error.message ?? ''}`;
       })
       .addCase(depositOptimisersThunk.fulfilled, (state, action) => {
         state.depositLoadedState = 'succeeded';
-        const routerId = action.meta.arg.routerId
+        const optimiserId = action.meta.arg.optimiserId;
 
-        const optimiserIndex = state.optimisers.findIndex((optimiser) => optimiser.routerId === routerId);
+        const optimiserIndex = state.optimisers.findIndex((optimiser) => optimiser.optimiserId === optimiserId);
         if (optimiserIndex >= 0) {
           state.optimisers[optimiserIndex] = action.payload as OptimiserInfo;
         }
@@ -64,6 +81,38 @@ export const slice = createSlice({
       .addCase(getOptimisersDepositGasFeeThunk.fulfilled, (state, action) => {
         state.depositGasFeeLoadedState = 'succeeded';
         state.depositGasFee = action.payload as number;
+      })
+      .addCase(withdrawOptimisersThunk.pending, (state) => {
+        state.withdrawLoadedState = 'pending';
+      })
+      .addCase(withdrawOptimisersThunk.rejected, (state, action) => {
+        state.withdrawLoadedState = 'failed';
+        state.withdrawError = `Withdraw failed. ${action.error.message ?? ''}`;
+      })
+      .addCase(withdrawOptimisersThunk.fulfilled, (state, action) => {
+        state.withdrawLoadedState = 'succeeded';
+        const optimiserId = action.meta.arg.optimiserId;
+
+        const optimiserIndex = state.optimisers.findIndex((optimiser) => optimiser.optimiserId === optimiserId);
+        if (optimiserIndex >= 0) {
+          state.optimisers[optimiserIndex] = action.payload as OptimiserInfo;
+        }
+      })
+      .addCase(rolloverOptimisersThunk.pending, (state) => {
+        state.rolloverLoadedState = 'pending';
+      })
+      .addCase(rolloverOptimisersThunk.rejected, (state, action) => {
+        state.rolloverLoadedState = 'failed';
+        state.rolloverError = `Rollover failed. ${action.error.message ?? ''}`;
+      })
+      .addCase(rolloverOptimisersThunk.fulfilled, (state, action) => {
+        state.rolloverLoadedState = 'succeeded';
+        const optimiserId = action.meta.arg.optimiserId;
+
+        const optimiserIndex = state.optimisers.findIndex((optimiser) => optimiser.optimiserId === optimiserId);
+        if (optimiserIndex >= 0) {
+          state.optimisers[optimiserIndex] = action.payload as OptimiserInfo;
+        }
       });
   },
 });
