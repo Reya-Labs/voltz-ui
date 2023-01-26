@@ -1,4 +1,3 @@
-import { useAppSelector } from '../../../../app/hooks';
 import { colors } from '../../../../theme';
 
 export enum WithdrawStates {
@@ -38,18 +37,19 @@ type SubmissionState = {
 };
 
 export const getSubmissionState = ({
+  withdrawOrRolloverState,
   withdraw,
   rollover,
-  tokenName,
+  error,
   loading,
 }: {
+  withdrawOrRolloverState: WithdrawStates | RolloverStates;
   withdraw: () => void;
   rollover: () => void;
+  error: string;
   tokenName: string;
   loading: boolean;
 }): SubmissionState => {
-
-
   const initialisingState: SubmissionState = {
     hintText: {
       text: 'Initialising, please wait',
