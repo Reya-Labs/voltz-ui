@@ -1,10 +1,11 @@
+import { rollover as executeRollover,withdraw as executeWithdraw } from '@voltz-protocol/v1-sdk';
 import React, { useState } from 'react';
 
-import { OptimiserInfo, rolloverOptimisersThunk, withdrawOptimisersThunk } from '../../../../app/features/stateless-optimisers';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { OptimiserInfo } from '../../../../app/features/stateless-optimisers';
 import { useWallet } from '../../../../hooks/useWallet';
 import { FormProps } from '../Form/DepositForm/DepositForm';
 import { WithdrawRolloverForm } from '../Form/WithdrawRolloverForm/WithdrawRolloverForm';
+import { getSubmissionState, RolloverStates, WithdrawStates } from './mappers';
 
 export type VaultWithdrawRolloverFormProps = {
   vault: OptimiserInfo;
@@ -31,71 +32,100 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
   const [manualWeights, setManualWeights] = useState<FormProps['weights']>(
     automaticWeights.map((a) => ({ ...a })),
   );
-  const dispatch = useAppDispatch();
+  const [withdrawOrRolloverState, setWithdrawOrRolloverState] = useState<
+    WithdrawStates | RolloverStates
+  >(WithdrawStates.READY);
+  const [error, setError] = useState<string>('');
 
   const weights = distribution === 'automatic' ? automaticWeights : manualWeights;
   const combinedWeightValue = weights.reduce((total, weight) => total + weight.distribution, 0);
 
   const withdraw = () => {
+    if (!signer) {
+      return;
+    }
+  
     if (!vault.vaults[vaultIndex].withdrawable) {
       return;
     }
-
-    void dispatch(withdrawOptimisersThunk({
+  
+    setWithdrawOrRolloverState(WithdrawStates.WITHDRAW_PENDING);
+    void executeWithdraw({
       optimiserId: vault.optimiserId,
       vaultId: vault.vaults[vaultIndex].vaultId,
-      signer,
-    }));
+      signer
+    }).then(
+      () => {
+        setWithdrawOrRolloverState(WithdrawStates.WITHDRAW_DONE);
+      },
+      (err: Error) => {
+        setError(`Withdraw failed. ${err.message ?? ''}`);
+        setWithdrawOrRolloverState(WithdrawStates.WITHDRAW_FAILED);
+      },
+    );
   };
 
   const rollover = () => {
+    if (!signer) {
+      return;
+    }
+  
     if (!vault.vaults[vaultIndex].rolloverable) {
       return;
     }
-    
-    void dispatch(rolloverOptimisersThunk({
+    setWithdrawOrRolloverState(RolloverStates.ROLLOVER_PENDING);
+    void executeRollover({
       optimiserId: vault.optimiserId,
       vaultId: vault.vaults[vaultIndex].vaultId,
       spareWeights: weights.map((w, index) => [vault.vaults[index].vaultId, w.distribution]),
       signer,
-    }));
+    })
+      .then(
+        () => {
+          setWithdrawOrRolloverState(RolloverStates.ROLLOVER_DONE);
+        },
+        (err: Error) => {
+          setError(`Rollover failed. ${err.message ?? ''}`);
+          setWithdrawOrRolloverState(RolloverStates.ROLLOVER_FAILED);
+        },
+      );
   };
 
-  const withdrawLoadedState = useAppSelector((state) => state.statelessOptimisers.withdrawLoadedState);
-  const rolloverLoadedState = useAppSelector((state) => state.statelessOptimisers.rolloverLoadedState);
-
-  const actionDisabled = loading || !(withdrawLoadedState === 'idle' && rolloverLoadedState === 'idle');
-
-  const rolloverSubmitText = (loading) ? 'Initialising' : (rolloverLoadedState === 'pending' ? 'PENDING' : (rolloverLoadedState === 'succeeded' ? 'ROLLOVER DONE' : 'ROLLOVER'));
-  const withdrawSubmitText = (loading) ? 'Initialising' : (withdrawLoadedState === 'pending' ? 'PENDING' : (withdrawLoadedState === 'succeeded' ? 'WITHDRAWN' : 'WITHDRAW ALL'));
+  const submissionState = getSubmissionState({
+    rollover,
+    withdraw,
+    withdrawOrRolloverState,
+    error,
+    tokenName: vault.tokenName,
+    loading,
+  });
 
   return (
     <WithdrawRolloverForm
       combinedWeightValue={combinedWeightValue}
       depositValue={vault.vaults[vaultIndex].userVaultCommittedDeposit || 0}
       distribution={distribution}
-      hintText={{
-        text: 'Initialising, please wait',
-      }}
+      hintText={submissionState.hintText}
       lpVault={vault}
       rolloverDisabled={
-        actionDisabled ||
+        submissionState.disabled ||
+        loading ||
         combinedWeightValue !== 100 ||
         !vault.vaults[vaultIndex].rolloverable
       }
-      rolloverLoading={rolloverLoadedState === 'pending'}
-      rolloverSubmitText={rolloverSubmitText}
-      rolloverSuccess={rolloverLoadedState === 'succeeded'}
+      rolloverLoading={submissionState.rollover.loading}
+      rolloverSubmitText={submissionState.rollover.submitText}
+      rolloverSuccess={submissionState.rollover.success}
       weights={weights}
-      withdrawDisabled={actionDisabled || !vault.vaults[vaultIndex].withdrawable}
-      withdrawLoading={withdrawLoadedState === 'pending'}
-      withdrawSubmitText={withdrawSubmitText}
-      withdrawSuccess={withdrawLoadedState === 'succeeded'}
+      withdrawDisabled={submissionState.disabled || loading || !vault.vaults[vaultIndex].withdrawable}
+      withdrawLoading={submissionState.withdraw.loading}
+      withdrawSubmitText={submissionState.withdraw.submitText}
+      withdrawSuccess={submissionState.withdraw.success}
       onDistributionToggle={setDistribution}
       onGoBack={onGoBack}
       onManualDistributionsUpdate={setManualWeights}
-      onRolloverClick={rollover}
-      onWithdrawClick={withdraw}
+      onRolloverClick={submissionState.rollover.action}
+      onWithdrawClick={submissionState.withdraw.action}
     />
   );
 };
