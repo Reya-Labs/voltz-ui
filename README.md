@@ -16,6 +16,9 @@
   <a href="https://twitter.com/intent/follow?screen_name=voltz_xyz">
     <img src="https://badgen.net/twitter/follow/voltz_xyz?icon=twitter&label=%voltz_xyz" alt="Official Twitter Handle" />
   </a>
+  <img src="https://badgen.net/github/tag/Voltz-Protocol/voltz-ui" alt="Tag" />
+  <img src="https://badgen.net/github/checks/Voltz-Protocol/voltz-ui/main" alt="Checks" />
+  <img src="https://badgen.net/github/last-commit/Voltz-Protocol/voltz-ui/main" alt="Checks" />
 </p>
 
 <p align="center">
