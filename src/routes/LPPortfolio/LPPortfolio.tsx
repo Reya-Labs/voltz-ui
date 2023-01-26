@@ -7,7 +7,7 @@ import { MintBurnFormModes } from '../../contexts/MintBurnFormContext/MintBurnFo
 import { useWallet } from '../../hooks/useWallet';
 import { ContentBox, LPPortfolioBox, Split } from './LPPortfolio.styled';
 import { LPPositions } from './LPPositions/LPPositions';
-import { Optimisers } from './Optimisers/Optimisers';
+import { Optimisers } from './StatelessOptimisers/Optimisers';
 
 export const LPPortfolio: React.FunctionComponent = () => {
   const { status } = useWallet();
