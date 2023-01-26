@@ -47,6 +47,8 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
   const weights = distribution === 'automatic' ? automaticWeights : manualWeights;
   const combinedWeightValue = weights.reduce((total, weight) => total + weight.distribution, 0);
 
+  const spareWeights = weights.map((w, index): [string, number] => [vault.vaults[index].vaultId, w.distribution]).filter((w) => w[1] > 0);
+
   const deposit = () => {
 
     if (!signer) {
@@ -67,7 +69,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
       void depositAndRegister({
         optimiserId: vault.optimiserId,
         amount: selectedDeposit,
-        spareWeights: weights.map((w, index) => [vault.vaults[index].vaultId, w.distribution]),
+        spareWeights,
         registration: hasUserOptedInOutAutoRollover ? automaticRolloverState === 'active' : undefined,
         signer,
       })
@@ -164,7 +166,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
       onlyGasEstimate: true,
       optimiserId: vault.optimiserId,
       amount: selectedDeposit,
-      spareWeights: weights.map((w, index) => [vault.vaults[index].vaultId, w.distribution]),
+      spareWeights,
       registration: hasUserOptedInOutAutoRollover ? automaticRolloverState === 'active' : undefined,
       signer,
     })
