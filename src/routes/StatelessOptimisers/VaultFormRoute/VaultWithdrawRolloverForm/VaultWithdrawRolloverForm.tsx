@@ -1,12 +1,12 @@
-import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import React, { useState } from 'react';
 
+import { OptimiserInfo } from '../../../../app/features/stateless-optimisers';
 import { FormProps } from '../Form/DepositForm/DepositForm';
 import { WithdrawRolloverForm } from '../Form/WithdrawRolloverForm/WithdrawRolloverForm';
 import { getSubmissionState, RolloverStates, WithdrawStates } from './mappers';
 
 export type VaultWithdrawRolloverFormProps = {
-  vault: MellowProduct;
+  vault: OptimiserInfo;
   onGoBack: () => void;
   loading: boolean;
   vaultIndex: number;
@@ -18,11 +18,11 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
   vaultIndex,
   onGoBack,
 }) => {
-  const automaticWeights: FormProps['weights'] = vault.metadata.vaults.map((v) => ({
-    distribution: v.weight,
+  const automaticWeights: FormProps['weights'] = vault.vaults.map((v) => ({
+    distribution: v.defaultWeight,
     maturityTimestamp: v.maturityTimestampMS,
     pools: v.pools,
-    vaultDisabled: v.weight === 0,
+    vaultDisabled: v.defaultWeight === 0,
   }));
 
   const [distribution, setDistribution] = useState<'automatic' | 'manual'>('automatic');
@@ -38,40 +38,42 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
   const combinedWeightValue = weights.reduce((total, weight) => total + weight.distribution, 0);
 
   const withdraw = () => {
-    if (!vault.withdrawable(vaultIndex)) {
+    if (!vault.vaults[vaultIndex].withdrawable) {
       return;
     }
-    setWithdrawOrRolloverState(WithdrawStates.WITHDRAW_PENDING);
-    void vault.withdraw(vaultIndex).then(
-      () => {
-        setWithdrawOrRolloverState(WithdrawStates.WITHDRAW_DONE);
-      },
-      (err: Error) => {
-        setError(`Withdraw failed. ${err.message ?? ''}`);
-        setWithdrawOrRolloverState(WithdrawStates.WITHDRAW_FAILED);
-      },
-    );
+    // TODO: move to redux
+    // setWithdrawOrRolloverState(WithdrawStates.WITHDRAW_PENDING);
+    // void vault.withdraw(vaultIndex).then(
+    //   () => {
+    //     setWithdrawOrRolloverState(WithdrawStates.WITHDRAW_DONE);
+    //   },
+    //   (err: Error) => {
+    //     setError(`Withdraw failed. ${err.message ?? ''}`);
+    //     setWithdrawOrRolloverState(WithdrawStates.WITHDRAW_FAILED);
+    //   },
+    // );
   };
 
   const rollover = () => {
-    if (!vault.rolloverable(vaultIndex)) {
+    if (!vault.vaults[vaultIndex].rolloverable) {
       return;
     }
-    setWithdrawOrRolloverState(RolloverStates.ROLLOVER_PENDING);
-    void vault
-      .rollover(
-        vaultIndex,
-        weights.map((w) => w.distribution),
-      )
-      .then(
-        () => {
-          setWithdrawOrRolloverState(RolloverStates.ROLLOVER_DONE);
-        },
-        (err: Error) => {
-          setError(`Rollover failed. ${err.message ?? ''}`);
-          setWithdrawOrRolloverState(RolloverStates.ROLLOVER_FAILED);
-        },
-      );
+    // TODO: move to redux
+    // setWithdrawOrRolloverState(RolloverStates.ROLLOVER_PENDING);
+    // void vault
+    //   .rollover(
+    //     vaultIndex,
+    //     weights.map((w) => w.distribution),
+    //   )
+    //   .then(
+    //     () => {
+    //       setWithdrawOrRolloverState(RolloverStates.ROLLOVER_DONE);
+    //     },
+    //     (err: Error) => {
+    //       setError(`Rollover failed. ${err.message ?? ''}`);
+    //       setWithdrawOrRolloverState(RolloverStates.ROLLOVER_FAILED);
+    //     },
+    //   );
   };
 
   const submissionState = getSubmissionState({
@@ -79,14 +81,14 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
     withdraw,
     withdrawOrRolloverState,
     error,
-    tokenName: vault.metadata.token,
+    tokenName: vault.tokenName,
     loading,
   });
 
   return (
     <WithdrawRolloverForm
       combinedWeightValue={combinedWeightValue}
-      depositValue={vault.userIndividualCommittedDeposits[vaultIndex] || 0}
+      depositValue={vault.vaults[vaultIndex].userVaultCommittedDeposit || 0}
       distribution={distribution}
       hintText={submissionState.hintText}
       lpVault={vault}
@@ -94,13 +96,13 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
         submissionState.disabled ||
         loading ||
         combinedWeightValue !== 100 ||
-        !vault.rolloverable(vaultIndex)
+        !vault.vaults[vaultIndex].rolloverable
       }
       rolloverLoading={submissionState.rollover.loading}
       rolloverSubmitText={submissionState.rollover.submitText}
       rolloverSuccess={submissionState.rollover.success}
       weights={weights}
-      withdrawDisabled={submissionState.disabled || loading || !vault.withdrawable(vaultIndex)}
+      withdrawDisabled={submissionState.disabled || loading || !vault.vaults[vaultIndex].withdrawable}
       withdrawLoading={submissionState.withdraw.loading}
       withdrawSubmitText={submissionState.withdraw.submitText}
       withdrawSuccess={submissionState.withdraw.success}
