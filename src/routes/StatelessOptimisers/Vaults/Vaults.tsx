@@ -13,7 +13,7 @@ export const Vaults: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const { signer, setRequired } = useWallet();
   const { lpVaults, vaultsLoaded } = useLPVaults();
-  
+
   const handleSelectMellowLpVault = (selectedOptimiser: OptimiserInfo) => {
     if (!signer) {
       setRequired(true);

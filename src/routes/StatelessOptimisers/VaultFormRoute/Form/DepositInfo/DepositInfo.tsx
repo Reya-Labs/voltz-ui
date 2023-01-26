@@ -34,7 +34,9 @@ export const DepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoProps>
       <PositionValueTypography>
         {isUndefined(mellowProduct.userOptimiserDeposit)
           ? '---'
-          : `${formatCurrency(mellowProduct.userOptimiserDeposit, true)} ${mellowProduct.tokenName}`}
+          : `${formatCurrency(mellowProduct.userOptimiserDeposit, true)} ${
+              mellowProduct.tokenName
+            }`}
       </PositionValueTypography>
     </PositionBox>
     {mellowProduct.userOptimiserPendingDeposit > 0 && (
