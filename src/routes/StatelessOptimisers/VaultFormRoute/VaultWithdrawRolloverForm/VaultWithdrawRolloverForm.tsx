@@ -40,6 +40,8 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
   const weights = distribution === 'automatic' ? automaticWeights : manualWeights;
   const combinedWeightValue = weights.reduce((total, weight) => total + weight.distribution, 0);
 
+  const spareWeights = weights.map((w, index): [string, number] => [vault.vaults[index].vaultId, w.distribution]).filter((w) => w[1] > 0);
+
   const withdraw = () => {
     if (!signer) {
       return;
@@ -77,7 +79,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
     void executeRollover({
       optimiserId: vault.optimiserId,
       vaultId: vault.vaults[vaultIndex].vaultId,
-      spareWeights: weights.map((w, index) => [vault.vaults[index].vaultId, w.distribution]),
+      spareWeights,
       signer,
     })
       .then(
