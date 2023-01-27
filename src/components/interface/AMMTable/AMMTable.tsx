@@ -7,7 +7,8 @@ import React from 'react';
 import { Agents } from '../../../contexts/AgentContext/types';
 import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
 import { useAgent } from '../../../hooks/useAgent';
-import { isBorrowing } from '../../../utilities/amm';
+import { getConfig } from '../../../hooks/voltz-config/config';
+import { isAaveV3, isBorrowing } from '../../../utilities/amm';
 import { MATURITY_WINDOW } from '../../../utilities/constants';
 import { Panel } from '../../atomic/Panel/Panel';
 import { AMMTableHead, AMMTableRow } from './components';
@@ -57,6 +58,7 @@ export const AMMTable: React.FunctionComponent<AMMTableProps> = ({
                 <AMMProvider key={amm.id} amm={amm}>
                   <AMMTableRow
                     endDate={amm.endDateTime}
+                    isAaveV3={isAaveV3(getConfig().pools, amm.id)}
                     isBorrowing={isBorrowing(amm.rateOracle.protocolId)}
                     protocol={amm.protocol}
                     startDate={amm.startDateTime}
