@@ -4,7 +4,8 @@ import React, { useMemo } from 'react';
 
 import { Agents } from '../../../contexts/AgentContext/types';
 import { useAMMContext } from '../../../contexts/AMMContext/AMMContext';
-import { isBorrowing } from '../../../utilities/amm';
+import { getConfig } from '../../../hooks/voltz-config/config';
+import { isAaveV3, isBorrowing } from '../../../utilities/amm';
 import { Typography } from '../../atomic/Typography/Typography';
 import { IconLabel } from '../IconLabel/IconLabel';
 import { ReactComponent as Aave } from '../PoolField/aave-icon.svg';
@@ -42,6 +43,12 @@ export const ProtocolInformation: React.FunctionComponent<ProtocolInformationPro
       <Box component="span" sx={{ color: '#9B97AD' }}>
         POOL
       </Box>
+      {amm && isAaveV3(getConfig().pools, amm.id) && (
+        <Box component="span" sx={{ color: '#FF4AA9' }}>
+          {'  '}
+          <strong>AAVE V3</strong>
+        </Box>
+      )}
       {amm && isBorrowing(amm.rateOracle.protocolId) && (
         <Box component="span" sx={{ color: '#FF4AA9' }}>
           {'  '}
