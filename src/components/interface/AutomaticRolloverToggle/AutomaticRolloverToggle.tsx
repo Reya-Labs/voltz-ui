@@ -37,6 +37,7 @@ export type AutomaticRolloverToggleProps = {
   showTooltip: boolean;
   gasCost: number;
   triggersOnChainTransaction: boolean;
+  isVaultRegisteredForAutoRollover?: boolean;
   onChangePromise: (value: AutomaticRolloverState) => Promise<void>;
 };
 export const AutomaticRolloverToggle: React.FunctionComponent<AutomaticRolloverToggleProps> = ({
@@ -47,6 +48,7 @@ export const AutomaticRolloverToggle: React.FunctionComponent<AutomaticRolloverT
   onChangePromise = doNothing,
   triggersOnChainTransaction,
   gasCost,
+  isVaultRegisteredForAutoRollover,
 }) => {
   const [transactionStatus, setTransactionStatus] = useState<
     'idle' | 'pending' | 'error' | 'success'
@@ -89,7 +91,17 @@ export const AutomaticRolloverToggle: React.FunctionComponent<AutomaticRolloverT
   };
   const handleOpen = (selectedAutoRolloverState: AutomaticRolloverState) => {
     setSelectedOption(selectedAutoRolloverState);
-    setIsOpen(true);
+    if (triggersOnChainTransaction) {
+      setIsOpen(true);
+      return;
+    }
+    const nextAutoRolloverState = selectedAutoRolloverState === 'active';
+    const shouldAskForUserConfirmOnChange =
+      nextAutoRolloverState !== isVaultRegisteredForAutoRollover;
+    setIsOpen(shouldAskForUserConfirmOnChange);
+    if (!shouldAskForUserConfirmOnChange) {
+      void onChangePromise(selectedAutoRolloverState);
+    }
   };
   return (
     <AutomaticRolloverToggleBox>
