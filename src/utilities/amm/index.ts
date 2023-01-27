@@ -1,6 +1,7 @@
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 
 import { getConfig } from '../../hooks/voltz-config/config';
+import { NetworkConfiguration } from '@voltz-protocol/v1-sdk/src/entities/amm/voltz-config/types';
 
 /**
  * Returns the current position that the user has for the given amm
@@ -64,4 +65,14 @@ export const getAmmProtocol = (amm: AMM) => {
  */
 export const isBorrowing = (rateOracleProtocolId: number): boolean => {
   return rateOracleProtocolId === 5 || rateOracleProtocolId === 6;
+};
+
+/**
+ * Given an AMM ID, return whether it's an Aave V3 AMM
+ * @param pools - The pools object from the network configuration.
+ * @param {string} ammId - The ID of the AMM.
+ * @returns A boolean value.
+ */
+export const isAaveV3 = (pools: NetworkConfiguration['pools'], ammId: string): boolean => {
+  return pools.find((pool) => pool.id === ammId)?.isAaveV3 ?? false;
 };
