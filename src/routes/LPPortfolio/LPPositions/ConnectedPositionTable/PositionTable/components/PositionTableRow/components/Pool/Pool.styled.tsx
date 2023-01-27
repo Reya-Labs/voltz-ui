@@ -32,6 +32,12 @@ export const PoolBorrowingLabelTypography = styled(PoolLabelTypography)`
   display: inline-block;
 `;
 
+export const PoolAaveV3LabelTypography = styled(PoolLabelTypography)`
+  color: ${colors.wildStrawberry.base};
+  font-weight: 700;
+  display: inline-block;
+`;
+
 export const PoolValueTypography = styled(Typography)`
   font-family: 'DM Sans', sans-serif;
   font-style: normal;
