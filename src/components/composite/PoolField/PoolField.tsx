@@ -16,10 +16,17 @@ export type PoolFieldProps = {
   agent?: Agents;
   protocol: string;
   isBorrowing: boolean;
+  isAaveV3: boolean;
   isBorrowTable?: boolean;
 };
 
-export const PoolField = ({ agent, protocol, isBorrowing, isBorrowTable }: PoolFieldProps) => {
+export const PoolField = ({
+  isAaveV3,
+  agent,
+  protocol,
+  isBorrowing,
+  isBorrowTable,
+}: PoolFieldProps) => {
   const protocolIcon = () => {
     // todo: this seems duplicated in other files as well
     // extract a component
@@ -64,6 +71,12 @@ export const PoolField = ({ agent, protocol, isBorrowing, isBorrowTable }: PoolF
       <Box component="span" sx={{ color: '#9B97AD' }}>
         POOL
       </Box>
+      {isAaveV3 && (
+        <Box component="span" sx={{ color: '#FF4AA9' }}>
+          {'  '}
+          <strong>AAVE V3</strong>
+        </Box>
+      )}
       {isBorrowing && (
         <Box component="span" sx={{ color: '#FF4AA9' }}>
           {'  '}
