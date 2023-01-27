@@ -74,5 +74,5 @@ export const isBorrowing = (rateOracleProtocolId: number): boolean => {
  * @returns A boolean value.
  */
 export const isAaveV3 = (pools: NetworkConfiguration['pools'], ammId: string): boolean => {
-  return pools.find((pool) => pool.id === ammId)?.isAaveV3 ?? false;
+  return pools.find((pool) => pool.id.toLowerCase() === ammId.toLowerCase())?.isAaveV3 ?? false;
 };
