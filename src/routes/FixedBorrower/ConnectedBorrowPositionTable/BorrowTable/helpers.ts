@@ -1,8 +1,8 @@
 import { BorrowAMM } from '@voltz-protocol/v1-sdk';
 
-import { BorrowAMMTableDatum } from './types';
 import { getConfig } from '../../../../hooks/voltz-config/config';
 import { isAaveV3 } from '../../../../utilities/amm';
+import { BorrowAMMTableDatum } from './types';
 
 export const mapAmmToAmmTableDatum = ({ id, amm }: BorrowAMM): BorrowAMMTableDatum => ({
   id,
