@@ -52,7 +52,7 @@ export const ActiveRolloverModalContent: React.FunctionComponent<Props> = ({
     <ContentBox>
       <TitleTypography>AUTOMATIC ROLLOVER</TitleTypography>
       <DescriptionTypography>
-        {triggersOnChainTransaction
+        {!triggersOnChainTransaction
           ? `This configuration will be applied to all your funds in this Optimiser when you confirm the new deposit.
 Your choice will be saved on chain, so there will be an additional one-time, small gas fee.`
           : 'This transaction will save your choice on chain, so there will be a small gas fee.'}

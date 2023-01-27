@@ -101,6 +101,7 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
           combinedWeightValue={combinedWeightValue}
           disabledToggle={loading}
           distribution={distribution}
+          isVaultRegisteredForAutoRollover={lpVault.isRegisteredForAutoRollover}
           weights={weights}
           onDistributionToggle={onDistributionToggle}
           onManualDistributionsUpdate={onManualDistributionsUpdate}
