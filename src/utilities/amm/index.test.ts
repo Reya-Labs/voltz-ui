@@ -185,7 +185,7 @@ describe('utilities/amm', () => {
     const mockedPools = [
       { id: 'pool1', isAaveV3: false },
       { id: 'pool2', isAaveV3: true },
-      { id: 'pool3', isAaveV3: false },
+      { id: 'pool3' },
     ] as never;
 
     it('should return true if the given AMM ID is an Aave V3 AMM', () => {
