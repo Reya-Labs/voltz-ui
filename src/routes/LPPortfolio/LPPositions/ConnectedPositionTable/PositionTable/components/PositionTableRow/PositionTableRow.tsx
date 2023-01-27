@@ -3,7 +3,8 @@ import React, { useEffect } from 'react';
 
 import { MaturityInformation } from '../../../../../../../components/composite/MaturityInformation/MaturityInformation';
 import { useAMMContext } from '../../../../../../../contexts/AMMContext/AMMContext';
-import { isBorrowing } from '../../../../../../../utilities/amm';
+import { getConfig } from '../../../../../../../hooks/voltz-config/config';
+import { isAaveV3, isBorrowing } from '../../../../../../../utilities/amm';
 import { MATURITY_WINDOW } from '../../../../../../../utilities/constants';
 import { AccruedRates } from './components/AccruedRates/AccruedRates';
 import { Margin } from './components/Margin/Margin';
@@ -43,6 +44,7 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
     <RowBox>
       <CellBox>
         <Pool
+          isAaveV3={isAaveV3(getConfig().pools, position.amm.id)}
           isBorrowing={isBorrowing(position.amm.rateOracle.protocolId)}
           protocol={position.amm.protocol}
         />

@@ -14,11 +14,13 @@ import { AccruedRates, CurrentMargin, Notional } from './components';
 export type PositionTableRowProps = {
   position: Position;
   index: number;
+  isAaveV3: boolean;
 };
 
 export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = ({
   position,
   index,
+  isAaveV3,
 }) => {
   const labels = traderLabels;
 
@@ -66,6 +68,7 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
       return (
         <PoolField
           agent={Agents.FIXED_TRADER}
+          isAaveV3={isAaveV3}
           isBorrowing={isBorrowing(position.amm.rateOracle.protocolId)}
           protocol={position.amm.protocol}
         />

@@ -31,6 +31,7 @@ export const labelsVariable: [VariableBorrowTableFields, string][] = [
 
 export type BorrowAMMTableDatum = {
   id: string;
+  isAaveV3: boolean;
   protocol: string;
   underlyingTokenName: string | undefined;
   startDate: DateTime;
