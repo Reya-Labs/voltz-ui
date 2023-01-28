@@ -11,7 +11,7 @@ import { AMMProvider } from '../../../../contexts/AMMContext/AMMContext';
 import { useAMMs } from '../../../../hooks/useAMMs';
 import { getConfig } from '../../../../hooks/voltz-config/config';
 import { colors, SystemStyleObject, Theme } from '../../../../theme';
-import { findCurrentAmm, isBorrowing } from '../../../../utilities/amm';
+import { findCurrentAmm, isAaveV3, isBorrowing } from '../../../../utilities/amm';
 import { MATURITY_WINDOW } from '../../../../utilities/constants';
 import { getRowButtonId } from '../../../../utilities/googleAnalytics/helpers';
 import { PositionTableHead, PositionTableRow } from './components';
@@ -141,7 +141,12 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                 <Table size="medium" sx={{ ...commonOverrides }}>
                   <TableBody>
                     <AMMProvider amm={pos.amm}>
-                      <PositionTableRow key={pos.id} index={index} position={pos} />
+                      <PositionTableRow
+                        key={pos.id}
+                        index={index}
+                        isAaveV3={isAaveV3(getConfig().pools, pos.amm.id)}
+                        position={pos}
+                      />
                     </AMMProvider>
                   </TableBody>
                 </Table>

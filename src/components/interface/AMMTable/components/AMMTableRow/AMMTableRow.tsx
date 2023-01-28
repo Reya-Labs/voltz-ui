@@ -22,6 +22,7 @@ export type AMMTableRowProps = {
   startDate: DateTime;
   endDate: DateTime;
   isBorrowing: boolean;
+  isAaveV3: boolean;
   onSelect: () => void;
 };
 
@@ -31,6 +32,7 @@ export const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({
   startDate,
   endDate,
   onSelect,
+  isAaveV3,
 }) => {
   const wallet = useWallet();
   const { agent } = useAgent();
@@ -106,7 +108,14 @@ export const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({
             return <MaturityInformation endDate={endDate} label={label} startDate={startDate} />;
           }
 
-          return <PoolField agent={agent} isBorrowing={isBorrowing} protocol={protocol} />;
+          return (
+            <PoolField
+              agent={agent}
+              isAaveV3={isAaveV3}
+              isBorrowing={isBorrowing}
+              protocol={protocol}
+            />
+          );
         };
 
         return <TableCell key={field}>{renderDisplay()}</TableCell>;

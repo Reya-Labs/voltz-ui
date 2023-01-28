@@ -206,7 +206,12 @@ export const BorrowTableRow: React.FunctionComponent<BorrowTableRowProps> = ({
               // modify to show svgs
               return (
                 <TableCell key={'protocol'} width="35%">
-                  <PoolField isBorrowing={false} isBorrowTable={true} protocol={datum.protocol} />
+                  <PoolField
+                    isAaveV3={datum.isAaveV3}
+                    isBorrowing={false}
+                    isBorrowTable={true}
+                    protocol={datum.protocol}
+                  />
                 </TableCell>
               );
             }
