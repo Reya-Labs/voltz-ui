@@ -67,9 +67,18 @@ export const AppRoutes = () => {
           <Route element={<TraderPortfolio />} path={routes.TRADER_PORTFOLIO} />
           <Route element={<LPPools />} path={routes.LP_POOLS} />
           <Route element={<LPPortfolio />} path={routes.LP_PORTFOLIO} />
-          <Route element={isStatelessSDKEnabled() ? <Vaults /> : <DeprecatedVaults />} path={routes.LP_OPTIMISERS} />
-          <Route element={isStatelessSDKEnabled() ? <VaultFormRoute /> : <DeprecatedVaultFormRoute />} path={routes.LP_OPTIMISERS_DEPOSIT_FORM} />
-          <Route element={isStatelessSDKEnabled() ? <VaultFormRoute /> : <DeprecatedVaultFormRoute />} path={routes.LP_OPTIMISERS_WITHDRAW_ROLLOVER_FORM} />
+          <Route
+            element={isStatelessSDKEnabled() ? <Vaults /> : <DeprecatedVaults />}
+            path={routes.LP_OPTIMISERS}
+          />
+          <Route
+            element={isStatelessSDKEnabled() ? <VaultFormRoute /> : <DeprecatedVaultFormRoute />}
+            path={routes.LP_OPTIMISERS_DEPOSIT_FORM}
+          />
+          <Route
+            element={isStatelessSDKEnabled() ? <VaultFormRoute /> : <DeprecatedVaultFormRoute />}
+            path={routes.LP_OPTIMISERS_WITHDRAW_ROLLOVER_FORM}
+          />
           <Route element={<FixedBorrower />} path={routes.BORROW_POS} />
           <Route element={<Profile />} path={routes.PROFILE} />
           <Route element={<TradingLeague />} path={routes.TRADING_LEAGUE} />

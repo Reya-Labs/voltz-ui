@@ -56,7 +56,7 @@ export const Optimisers: React.FunctionComponent = () => {
         optimiserId: vault.optimiserId,
         registration,
         signer,
-      })
+      });
       setForcedRerenderCounter(forcedRerenderCounter + 1);
     } catch (err) {
       if (typeof err === 'string') {
