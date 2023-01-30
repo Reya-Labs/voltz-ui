@@ -22,11 +22,11 @@ const rejectThunkWithError = (
 export const initialiseOptimisersThunk = createAsyncThunk<
   OptimiserInfo | Awaited<ReturnType<typeof rejectThunkWithError>>,
   {
-    userAddress: string | undefined;
+    signer: ethers.Signer | null;
   }
->('stateless-optimisers/getProducts', async ({ userAddress }, thunkAPI) => {
+>('stateless-optimisers/getProducts', async ({ signer }, thunkAPI) => {
   try {
-    const routers = await getAllMellowProducts(userAddress);
+    const routers = await getAllMellowProducts(signer);
 
     const mappedRouters: OptimiserInfo[] = routers.map(mapRouter);
 

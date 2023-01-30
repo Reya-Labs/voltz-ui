@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useWallet } from '../../hooks/useWallet';
 
 export const useLPVaults = () => {
-  const { account } = useWallet();
+  const { signer } = useWallet();
 
   const vaultsLoaded = useAppSelector((state) => state.statelessOptimisers.optimisersLoadedState);
   const shouldInitVaults = vaultsLoaded === 'idle';
@@ -16,8 +16,8 @@ export const useLPVaults = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    void dispatch(initialiseOptimisersThunk({ userAddress: account ? account : undefined }));
-  }, [shouldInitVaults, dispatch, account]);
+    void dispatch(initialiseOptimisersThunk({ signer }));
+  }, [shouldInitVaults, dispatch, signer]);
 
   return {
     lpVaults,
