@@ -1,7 +1,7 @@
-import { MellowLpRouter, MellowProduct } from '@voltz-protocol/v1-sdk';
 import isUndefined from 'lodash.isundefined';
 import React from 'react';
 
+import { OptimiserInfo } from '../../../../../app/features/stateless-optimisers';
 import { formatCurrency } from '../../../../../utilities/number';
 import { VaultField } from '../../../VaultField/VaultField';
 import {
@@ -14,7 +14,7 @@ import {
 } from './DepositInfo.styled';
 
 export type LPMellowVaultDepositInfoProps = {
-  mellowProduct: MellowProduct;
+  mellowProduct: OptimiserInfo;
   weights: number[];
 };
 
@@ -24,24 +24,26 @@ export const DepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoProps>
 }: LPMellowVaultDepositInfoProps) => (
   <VaultInfoBox>
     <VaultField
-      expectedApys={mellowProduct.metadata.vaults.map((v) => v.estimatedHistoricApy)}
-      title={mellowProduct.metadata.title}
-      token={mellowProduct.metadata.token}
+      expectedApys={mellowProduct.vaults.map((v) => v.estimatedHistoricApy)}
+      title={mellowProduct.title}
+      token={mellowProduct.tokenName}
       weights={weights}
     />
     <PositionBox>
       <PositionLabelTypography>YOUR POSITION:</PositionLabelTypography>
       <PositionValueTypography>
-        {isUndefined(mellowProduct.userDeposit)
+        {isUndefined(mellowProduct.userOptimiserDeposit)
           ? '---'
-          : `${formatCurrency(mellowProduct.userDeposit, true)} ${mellowProduct.metadata.token}`}
+          : `${formatCurrency(mellowProduct.userOptimiserDeposit, true)} ${
+              mellowProduct.tokenName
+            }`}
       </PositionValueTypography>
     </PositionBox>
-    {mellowProduct instanceof MellowLpRouter && mellowProduct.userPendingDeposit > 0 && (
+    {mellowProduct.userOptimiserPendingDeposit > 0 && (
       <PendingDepositTypography>
         {`Pending `}
         <PendingDepositAmountSpan>
-          {`${mellowProduct.userPendingDeposit.toFixed(2)} ${mellowProduct.metadata.token}`}
+          {`${mellowProduct.userOptimiserPendingDeposit.toFixed(2)} ${mellowProduct.tokenName}`}
         </PendingDepositAmountSpan>
         {` will be deposited at 7PM UTC`}
       </PendingDepositTypography>

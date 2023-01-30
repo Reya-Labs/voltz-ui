@@ -1,53 +1,26 @@
-import { providers } from 'ethers';
 import { useEffect } from 'react';
 
 import {
-  initialiseVaultsForSignerThunk,
-  initialiseVaultsThunk,
-  resetVaultsAction,
-} from '../../app/features/lp-optimisers';
+  initialiseOptimisersThunk,
+  selectOptimisers,
+} from '../../app/features/stateless-optimisers';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useWallet } from '../../hooks/useWallet';
 
-export const useLPVaults = (signer: providers.JsonRpcSigner | null) => {
-  const vaultsLoaded = useAppSelector((state) => state.lpOptimisers.vaultsLoadedState);
-  const signerLoadedState = useAppSelector((state) => state.lpOptimisers.signerLoadedState);
+export const useLPVaults = () => {
+  const { signer } = useWallet();
+
+  const vaultsLoaded = useAppSelector((state) => state.statelessOptimisers.optimisersLoadedState);
   const shouldInitVaults = vaultsLoaded === 'idle';
-  const vaultsInitialised = vaultsLoaded === 'succeeded';
-  const vaultsInitialisedWithSigner = signerLoadedState === 'succeeded';
-  const lpVaults = useAppSelector((state) => state.lpOptimisers.lpVaults);
+  const lpVaults = useAppSelector(selectOptimisers);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!shouldInitVaults) {
-      return;
-    }
-    void dispatch(initialiseVaultsThunk());
-  }, [shouldInitVaults]);
-
-  useEffect(() => {
-    if (!signer && vaultsInitialised) {
-      dispatch(resetVaultsAction());
-      return;
-    }
-    if (!signer) {
-      return;
-    }
-    if (!vaultsInitialised) {
-      return;
-    }
-    if (vaultsInitialisedWithSigner) {
-      return;
-    }
-    void dispatch(
-      initialiseVaultsForSignerThunk({
-        signer,
-      }),
-    );
-  }, [signer, vaultsInitialised, vaultsInitialisedWithSigner]);
+    void dispatch(initialiseOptimisersThunk({ signer }));
+  }, [shouldInitVaults, dispatch, signer]);
 
   return {
     lpVaults,
-    vaultsInitialised,
-    vaultsInitialisedWithSigner,
+    vaultsLoaded: vaultsLoaded === 'succeeded',
   };
 };

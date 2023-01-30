@@ -1,13 +1,13 @@
-import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
+import { OptimiserInfo } from '../../../../app/features/stateless-optimisers';
 import { Header } from '../Header/Header';
 import { VaultEntry } from './VaultEntry/VaultEntry';
 import { VaultsGrid, VaultsTableBox } from './VaultsTable.styled';
 
 export type VaultsTableProps = {
-  mellowProducts: MellowProduct[];
-  onSelectItem: (item: MellowProduct) => void;
+  mellowProducts: OptimiserInfo[];
+  onSelectItem: (item: OptimiserInfo) => void;
   dataLoading: boolean;
 };
 
