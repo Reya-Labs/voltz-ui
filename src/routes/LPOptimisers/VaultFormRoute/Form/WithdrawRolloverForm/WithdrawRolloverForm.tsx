@@ -68,7 +68,7 @@ export const WithdrawRolloverForm: React.FunctionComponent<WithdrawRolloverFormP
         combinedWeightValue={combinedWeightValue}
         disabledToggle={loading}
         distribution={distribution}
-        isVaultRegisteredForAutoRollover={lpVault.isRegisteredForAutoRollover}
+        isVaultRegisteredForAutoRollover={lpVault.isUserRegisteredForAutoRollover}
         weights={weights}
         onDistributionToggle={onDistributionToggle}
         onManualDistributionsUpdate={onManualDistributionsUpdate}
