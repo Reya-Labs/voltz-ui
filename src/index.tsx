@@ -32,7 +32,11 @@ try {
   }
 } catch (_) {}
 
-initSDK();
+initSDK({
+  network: process.env.REACT_APP_NETWORK || '',
+  providerURL: process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK || '',
+});
+
 initSentryTracker();
 
 ReactDOM.render(
