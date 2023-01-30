@@ -64,8 +64,7 @@ export const WithdrawRolloverForm: React.FunctionComponent<WithdrawRolloverFormP
     <FormBox>
       <DepositInfo mellowProduct={lpVault} weights={weights.map((w) => w.distribution)} />
       <MaturityDistribution
-        // TODO - SS: change here
-        canRegisterUnregister={true}
+        canRegisterUnregister={lpVault.canRegisterUnregister}
         combinedWeightValue={combinedWeightValue}
         disabledToggle={loading}
         distribution={distribution}

@@ -76,11 +76,9 @@ export const Optimisers: React.FunctionComponent = () => {
           automaticRolloverState={
             Boolean(vault.isUserRegisteredForAutoRollover) ? 'active' : 'inactive'
           }
-          // TODO - SS: to adjust here
-          canRegisterUnregister={true}
+          canRegisterUnregister={vault.canRegisterUnregister}
           depositable={vault.depositable}
-          // TODO - SS: to adjust here
-          gasCost={0}
+          gasCost={vault.autorolloverGasCostInUSD}
           id={vault.optimiserId}
           token={vault.tokenName}
           totalBalance={vault.userOptimiserDeposit}
