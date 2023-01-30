@@ -1,6 +1,6 @@
-import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
+import { OptimiserInfo } from '../../../../../app/features/stateless-optimisers';
 import { AboutYourFunds } from '../AboutYourFunds/AboutYourFunds';
 import { BackButton, ButtonBox, FormBox, FullButtonBox } from '../CommonForm.styled';
 import { DepositAmountInput } from '../DepositAmountInput/DepositAmountInput';
@@ -13,7 +13,7 @@ import {
 } from '../MaturityDistribution/MaturityDistribution';
 
 type WithdrawRolloverFormProps = {
-  lpVault: MellowProduct;
+  lpVault: OptimiserInfo;
   rolloverSubmitText: string;
   withdrawSubmitText: string;
   hintText: {
@@ -72,7 +72,7 @@ export const WithdrawRolloverForm: React.FunctionComponent<WithdrawRolloverFormP
         onDistributionToggle={onDistributionToggle}
         onManualDistributionsUpdate={onManualDistributionsUpdate}
       />
-      <DepositAmountInput disabled={true} token={lpVault.metadata.token} value={depositValue} />
+      <DepositAmountInput disabled={true} token={lpVault.tokenName} value={depositValue} />
       <FullButtonBox>
         <ButtonBox>
           <FormActionButton

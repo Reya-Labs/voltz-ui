@@ -8,8 +8,7 @@ import { useWallet } from '../../hooks/useWallet';
 import { isStatelessSDKEnabled } from '../../utilities/is-stateless-sdk-enabled';
 import { ContentBox, LPPortfolioBox, Split } from './LPPortfolio.styled';
 import { LPPositions } from './LPPositions/LPPositions';
-import { Optimisers as DeprecatedOptimisers } from './Optimisers/Optimisers';
-import { Optimisers } from './StatelessOptimisers/Optimisers';
+import { Optimisers as DeprecatedOptimisers, Optimisers } from './Optimisers/Optimisers';
 
 export const LPPortfolio: React.FunctionComponent = () => {
   const { status } = useWallet();
