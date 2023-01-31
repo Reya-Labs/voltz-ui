@@ -22,6 +22,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
   onGoBack,
 }) => {
   const { signer } = useWallet();
+  const subvault = vault.vaults[vaultIndex];
 
   const automaticWeights: FormProps['weights'] = vault.vaults.map((v) => ({
     distribution: v.defaultWeight,
@@ -49,14 +50,14 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
       return;
     }
 
-    if (!vault.vaults[vaultIndex].withdrawable) {
+    if (!subvault.withdrawable) {
       return;
     }
 
     setWithdrawOrRolloverState(WithdrawStates.WITHDRAW_PENDING);
     void executeWithdraw({
       optimiserId: vault.optimiserId,
-      vaultId: vault.vaults[vaultIndex].vaultId,
+      vaultId: subvault.vaultId,
       signer,
     }).then(
       () => {
@@ -74,14 +75,14 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
       return;
     }
 
-    if (!vault.vaults[vaultIndex].rolloverable) {
+    if (!subvault.rolloverable) {
       return;
     }
 
     setWithdrawOrRolloverState(RolloverStates.ROLLOVER_PENDING);
     void executeRollover({
       optimiserId: vault.optimiserId,
-      vaultId: vault.vaults[vaultIndex].vaultId,
+      vaultId: subvault.vaultId,
       spareWeights,
       signer,
     }).then(
@@ -107,7 +108,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
   return (
     <WithdrawRolloverForm
       combinedWeightValue={combinedWeightValue}
-      depositValue={vault.vaults[vaultIndex].userVaultCommittedDeposit}
+      depositValue={subvault.userVaultCommittedDeposit}
       distribution={distribution}
       hintText={submissionState.hintText}
       lpVault={vault}
@@ -115,14 +116,14 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
         submissionState.disabled ||
         loading ||
         combinedWeightValue !== 100 ||
-        !vault.vaults[vaultIndex].rolloverable
+        !subvault.rolloverable
       }
       rolloverLoading={submissionState.rollover.loading}
       rolloverSubmitText={submissionState.rollover.submitText}
       rolloverSuccess={submissionState.rollover.success}
       weights={weights}
       withdrawDisabled={
-        submissionState.disabled || loading || !vault.vaults[vaultIndex].withdrawable
+        submissionState.disabled || loading || !subvault.withdrawable
       }
       withdrawLoading={submissionState.withdraw.loading}
       withdrawSubmitText={submissionState.withdraw.submitText}
