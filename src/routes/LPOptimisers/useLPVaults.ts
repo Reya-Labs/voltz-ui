@@ -11,13 +11,12 @@ export const useLPVaults = () => {
   const { signer } = useWallet();
 
   const vaultsLoaded = useAppSelector((state) => state.statelessOptimisers.optimisersLoadedState);
-  const shouldInitVaults = vaultsLoaded === 'idle';
   const lpVaults = useAppSelector(selectOptimisers);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     void dispatch(initialiseOptimisersThunk({ signer }));
-  }, [shouldInitVaults, dispatch, signer]);
+  }, [dispatch, signer]);
 
   return {
     lpVaults,

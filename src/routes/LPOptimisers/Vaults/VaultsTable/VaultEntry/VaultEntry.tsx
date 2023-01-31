@@ -1,6 +1,6 @@
-import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
+import { OptimiserInfo } from '../../../../../app/features/stateless-optimisers';
 import { isCostReductionFlowEnabled } from '../../../../../utilities/is-cost-reduction-flow-enabled';
 import { VaultField } from '../../../VaultField/VaultField';
 import { BatchBudgetTrigger } from '../../../VaultFormRoute/Form/BatchBudgetTrigger/BatchBudgetTrigger';
@@ -18,7 +18,7 @@ import {
 
 export type VaultEntryProps = {
   onSelectItem: () => void;
-  lpVault: MellowProduct;
+  lpVault: OptimiserInfo;
   dataLoading: boolean;
 };
 
@@ -31,27 +31,27 @@ export const VaultEntry: React.FunctionComponent<VaultEntryProps> = ({
     <VaultEntryContainerBox>
       <VaultEntryInfoBox>
         <VaultField
-          expectedApys={lpVault.metadata.vaults.map((v) => v.estimatedHistoricApy)}
-          title={lpVault.metadata.title}
-          token={lpVault.metadata.token}
-          weights={lpVault.metadata.vaults.map((v) => v.weight)}
+          expectedApys={lpVault.vaults.map((v) => v.estimatedHistoricApy)}
+          title={lpVault.title}
+          token={lpVault.tokenName}
+          weights={lpVault.vaults.map((v) => v.defaultWeight)}
         />
 
         <DescriptionTypography data-testid="VaultEntry-DescriptionTypography" variant="h6">
-          {lpVault.metadata.description}
+          {lpVault.description}
         </DescriptionTypography>
 
         <PoolOutlineBox>
           <Tag>
-            {`${lpVault.metadata.underlyingPools.length} ${lpVault.metadata.token} ${
-              lpVault.metadata.underlyingPools.length === 1 ? 'POOL' : 'POOLS'
+            {`${lpVault.underlyingPools.length} ${lpVault.tokenName} ${
+              lpVault.underlyingPools.length === 1 ? 'POOL' : 'POOLS'
             }`}
           </Tag>
 
           <DescriptionTypography variant="h6">LIQUIDITY SPREAD ACROSS</DescriptionTypography>
 
           <PoolFieldsBox>
-            {lpVault.metadata.underlyingPools.map((pool, index) => (
+            {lpVault.underlyingPools.map((pool, index) => (
               <PoolFieldTypography key={`${pool}-${index}`} variant="body2">
                 {pool}
               </PoolFieldTypography>
@@ -66,10 +66,10 @@ export const VaultEntry: React.FunctionComponent<VaultEntryProps> = ({
       <PositionBox>
         <MellowPosition
           dataLoading={dataLoading}
-          disabled={lpVault.metadata.soon || !lpVault.depositable}
+          disabled={lpVault.soon || !lpVault.depositable}
           handleClick={onSelectItem}
-          tokenName={lpVault.metadata.token}
-          userDeposit={lpVault.userDeposit}
+          tokenName={lpVault.tokenName}
+          userDeposit={lpVault.userOptimiserDeposit}
         />
       </PositionBox>
     </VaultEntryContainerBox>

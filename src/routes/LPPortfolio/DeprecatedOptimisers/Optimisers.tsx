@@ -4,7 +4,7 @@ import { Loading } from '../../../components/atomic/Loading/Loading';
 import { Panel } from '../../../components/atomic/Panel/Panel';
 import { AutomaticRolloverToggleProps } from '../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
 import { useWallet } from '../../../hooks/useWallet';
-import { useLPVaults } from '../../LPOptimisers/useLPVaults';
+import { useLPVaults } from '../../DeprecatedLPOptimisers/useLPVaults';
 import { routes } from '../../paths';
 import { NoPositionsOrVaultsFound } from '../NoPositionsOrVaultsFound/NoPositionsOrVaultsFound';
 import { Header } from './Header/Header';
