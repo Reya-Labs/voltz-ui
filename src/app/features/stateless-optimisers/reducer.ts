@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { initialiseOptimisersThunk } from './thunks';
 import { OptimiserInfo } from './types';
@@ -16,7 +16,20 @@ const initialState: SliceState = {
 export const slice = createSlice({
   name: 'stateless-optimisers',
   initialState,
-  reducers: {},
+  reducers: {
+    updateOptimiserState: (
+      state,
+      action: PayloadAction<{
+        optimiserId: string;
+        newOptimiserState: OptimiserInfo;
+      }>,
+    ) => {
+      const optimiserIndex = state.optimisers.findIndex((opt) => opt.optimiserId === action.payload.optimiserId);
+      if (optimiserIndex >= 0) {
+        state.optimisers[optimiserIndex] = action.payload.newOptimiserState;
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(initialiseOptimisersThunk.pending, (state) => {
@@ -33,4 +46,5 @@ export const slice = createSlice({
   },
 });
 
+export const { updateOptimiserState } = slice.actions;
 export const statelessOptimisersReducer = slice.reducer;

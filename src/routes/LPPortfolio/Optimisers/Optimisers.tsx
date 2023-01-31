@@ -1,6 +1,8 @@
 import { registerForAutoRollover } from '@voltz-protocol/v1-sdk';
 import React, { useState } from 'react';
 
+import { updateOptimiserState } from '../../../app/features/stateless-optimisers';
+import { useAppDispatch } from '../../../app/hooks';
 import { Loading } from '../../../components/atomic/Loading/Loading';
 import { Panel } from '../../../components/atomic/Panel/Panel';
 import { AutomaticRolloverToggleProps } from '../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
@@ -14,6 +16,8 @@ import { VaultListItem } from './VaultListItem/VaultListItem';
 
 export const Optimisers: React.FunctionComponent = () => {
   const { signer } = useWallet();
+  const appDispatch = useAppDispatch();
+
   const { lpVaults, vaultsLoaded } = useLPVaults('all');
   // TODO: remove this once the entire state is lifted to Redux properly,
   // What is missing it Redux to give us some plain objects and not SDK classes
@@ -56,6 +60,13 @@ export const Optimisers: React.FunctionComponent = () => {
         optimiserId: vault.optimiserId,
         registration,
         signer,
+      }).then(({newOptimiserState}) => {
+        if (newOptimiserState) {
+          void appDispatch(updateOptimiserState({
+            optimiserId: vault.optimiserId,
+            newOptimiserState,
+          }));
+        };
       });
       setForcedRerenderCounter(forcedRerenderCounter + 1);
     } catch (err) {

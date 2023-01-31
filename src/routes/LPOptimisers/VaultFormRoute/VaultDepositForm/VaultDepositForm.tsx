@@ -2,7 +2,8 @@ import { approveToken, depositAndRegister, isTokenApproved } from '@voltz-protoc
 import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
 
-import { OptimiserInfo } from '../../../../app/features/stateless-optimisers';
+import { OptimiserInfo, updateOptimiserState } from '../../../../app/features/stateless-optimisers';
+import { useAppDispatch } from '../../../../app/hooks';
 import { AutomaticRolloverToggleProps } from '../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
 import { useWallet } from '../../../../hooks/useWallet';
 import { pushEvent } from '../../../../utilities/googleAnalytics';
@@ -22,6 +23,8 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
   onGoBack,
 }) => {
   const { signer, account } = useWallet();
+  const appDispatch = useAppDispatch();
+
   const automaticWeights: FormProps['weights'] = vault.vaults.map((v) => ({
     distribution: v.defaultWeight,
     maturityTimestamp: v.maturityTimestampMS,
@@ -73,7 +76,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
           : undefined,
         signer,
       }).then(
-        ({ receipt }) => {
+        ({ receipt, newOptimiserState }) => {
           pushEvent(account ?? '', {
             event: 'successful_tx',
             eventValue: {
@@ -85,6 +88,13 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
           setDepositState(DepositStates.DEPOSIT_DONE);
           setHasUserOptedInOutAutoRollover(false);
           setDepositTransactionId((receipt as ethers.ContractReceipt).transactionHash);
+
+          if (newOptimiserState) {
+            void appDispatch(updateOptimiserState({
+              optimiserId: vault.optimiserId,
+              newOptimiserState,
+            }));
+          };
         },
         (err: Error) => {
           setError(`Deposit failed. ${err.message ?? ''}`);
