@@ -1,6 +1,8 @@
 import React from 'react';
 
 import { OptimiserInfo } from '../../../../app/features/stateless-optimisers';
+import { Loading } from '../../../../components/atomic/Loading/Loading';
+import { Panel } from '../../../../components/atomic/Panel/Panel';
 import { Header } from '../Header/Header';
 import { VaultEntry } from './VaultEntry/VaultEntry';
 import { VaultsGrid, VaultsTableBox } from './VaultsTable.styled';
@@ -18,6 +20,11 @@ export const VaultsTable: React.FunctionComponent<VaultsTableProps> = ({
 }: VaultsTableProps) => (
   <VaultsTableBox>
     <Header />
+    {
+      dataLoading && <Panel sx={{ width: '100%' }} variant="grey-dashed">
+      <Loading />
+    </Panel>
+    }
     {mellowProducts && (
       <VaultsGrid itemsPerRow={3}>
         {mellowProducts
