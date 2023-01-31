@@ -33,5 +33,3 @@ export const initialiseOptimisersThunk = createAsyncThunk<
     return rejectThunkWithError(thunkAPI, err);
   }
 });
-
-
