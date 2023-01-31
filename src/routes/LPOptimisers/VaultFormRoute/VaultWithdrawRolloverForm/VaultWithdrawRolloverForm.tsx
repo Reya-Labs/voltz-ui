@@ -24,7 +24,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
 }) => {
   const { signer } = useWallet();
   const appDispatch = useAppDispatch();
-  
+
   const subvault = vault.vaults[vaultIndex];
 
   const automaticWeights: FormProps['weights'] = vault.vaults.map((v) => ({
@@ -63,13 +63,15 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
       vaultId: subvault.vaultId,
       signer,
     }).then(
-      ( { newOptimiserState } ) => {
+      ({ newOptimiserState }) => {
         if (newOptimiserState) {
-          void appDispatch(updateOptimiserState({
-            optimiserId: vault.optimiserId,
-            newOptimiserState,
-          }));
-        };
+          void appDispatch(
+            updateOptimiserState({
+              optimiserId: vault.optimiserId,
+              newOptimiserState,
+            }),
+          );
+        }
 
         setWithdrawOrRolloverState(WithdrawStates.WITHDRAW_DONE);
       },
@@ -96,13 +98,15 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
       spareWeights,
       signer,
     }).then(
-      ( { newOptimiserState } ) => {
+      ({ newOptimiserState }) => {
         if (newOptimiserState) {
-          void appDispatch(updateOptimiserState({
-            optimiserId: vault.optimiserId,
-            newOptimiserState,
-          }));
-        };
+          void appDispatch(
+            updateOptimiserState({
+              optimiserId: vault.optimiserId,
+              newOptimiserState,
+            }),
+          );
+        }
 
         setWithdrawOrRolloverState(RolloverStates.ROLLOVER_DONE);
       },

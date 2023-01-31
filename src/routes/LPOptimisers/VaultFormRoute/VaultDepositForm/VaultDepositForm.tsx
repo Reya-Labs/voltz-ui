@@ -90,11 +90,13 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
           setDepositTransactionId((receipt as ethers.ContractReceipt).transactionHash);
 
           if (newOptimiserState) {
-            void appDispatch(updateOptimiserState({
-              optimiserId: vault.optimiserId,
-              newOptimiserState,
-            }));
-          };
+            void appDispatch(
+              updateOptimiserState({
+                optimiserId: vault.optimiserId,
+                newOptimiserState,
+              }),
+            );
+          }
         },
         (err: Error) => {
           setError(`Deposit failed. ${err.message ?? ''}`);

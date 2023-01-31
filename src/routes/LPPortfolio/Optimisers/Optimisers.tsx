@@ -60,13 +60,15 @@ export const Optimisers: React.FunctionComponent = () => {
         optimiserId: vault.optimiserId,
         registration,
         signer,
-      }).then(({newOptimiserState}) => {
+      }).then(({ newOptimiserState }) => {
         if (newOptimiserState) {
-          void appDispatch(updateOptimiserState({
-            optimiserId: vault.optimiserId,
-            newOptimiserState,
-          }));
-        };
+          void appDispatch(
+            updateOptimiserState({
+              optimiserId: vault.optimiserId,
+              newOptimiserState,
+            }),
+          );
+        }
       });
       setForcedRerenderCounter(forcedRerenderCounter + 1);
     } catch (err) {

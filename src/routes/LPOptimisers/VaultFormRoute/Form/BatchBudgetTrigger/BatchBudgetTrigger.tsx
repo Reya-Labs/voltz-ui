@@ -1,7 +1,10 @@
 import { submitAllBatchesForFee } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useReducer, useState } from 'react';
 
-import { OptimiserInfo , updateOptimiserState } from '../../../../../app/features/stateless-optimisers';
+import {
+  OptimiserInfo,
+  updateOptimiserState,
+} from '../../../../../app/features/stateless-optimisers';
 import { useAppDispatch } from '../../../../../app/hooks';
 import { Modal } from '../../../../../components/composite/Modal/Modal';
 import { useWallet } from '../../../../../hooks/useWallet';
@@ -68,11 +71,13 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
           type: 'batch_success',
         });
         if (newOptimiserState) {
-          void appDispatch(updateOptimiserState({
-            optimiserId: lpVault.optimiserId,
-            newOptimiserState,
-          }));
-        };
+          void appDispatch(
+            updateOptimiserState({
+              optimiserId: lpVault.optimiserId,
+              newOptimiserState,
+            }),
+          );
+        }
       })
       .catch((err) => {
         const message = typeof err === 'string' ? err : (err as Error)?.message;
