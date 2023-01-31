@@ -1,7 +1,8 @@
 import { rollover as executeRollover, withdraw as executeWithdraw } from '@voltz-protocol/v1-sdk';
 import React, { useState } from 'react';
 
-import { OptimiserInfo } from '../../../../app/features/stateless-optimisers';
+import { OptimiserInfo, updateOptimiserState } from '../../../../app/features/stateless-optimisers';
+import { useAppDispatch } from '../../../../app/hooks';
 import { useWallet } from '../../../../hooks/useWallet';
 import { getSpareWeights } from '../../Helpers/getSpareWeights';
 import { FormProps } from '../Form/DepositForm/DepositForm';
@@ -22,6 +23,8 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
   onGoBack,
 }) => {
   const { signer } = useWallet();
+  const appDispatch = useAppDispatch();
+  
   const subvault = vault.vaults[vaultIndex];
 
   const automaticWeights: FormProps['weights'] = vault.vaults.map((v) => ({
@@ -60,7 +63,14 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
       vaultId: subvault.vaultId,
       signer,
     }).then(
-      () => {
+      ( { newOptimiserState } ) => {
+        if (newOptimiserState) {
+          void appDispatch(updateOptimiserState({
+            optimiserId: vault.optimiserId,
+            newOptimiserState,
+          }));
+        };
+
         setWithdrawOrRolloverState(WithdrawStates.WITHDRAW_DONE);
       },
       (err: Error) => {
@@ -86,7 +96,14 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
       spareWeights,
       signer,
     }).then(
-      () => {
+      ( { newOptimiserState } ) => {
+        if (newOptimiserState) {
+          void appDispatch(updateOptimiserState({
+            optimiserId: vault.optimiserId,
+            newOptimiserState,
+          }));
+        };
+
         setWithdrawOrRolloverState(RolloverStates.ROLLOVER_DONE);
       },
       (err: Error) => {

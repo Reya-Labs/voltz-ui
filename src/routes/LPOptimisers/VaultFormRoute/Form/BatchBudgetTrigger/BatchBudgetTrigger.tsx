@@ -1,7 +1,8 @@
 import { submitAllBatchesForFee } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useReducer, useState } from 'react';
 
-import { OptimiserInfo } from '../../../../../app/features/stateless-optimisers';
+import { OptimiserInfo , updateOptimiserState } from '../../../../../app/features/stateless-optimisers';
+import { useAppDispatch } from '../../../../../app/hooks';
 import { Modal } from '../../../../../components/composite/Modal/Modal';
 import { useWallet } from '../../../../../hooks/useWallet';
 import { doNothing } from '../../../../../utilities/doNothing';
@@ -36,6 +37,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
   onClose = doNothing,
 }) => {
   const { signer } = useWallet();
+  const appDispatch = useAppDispatch();
 
   const [gasCost, setGasCost] = useState(-1);
   const [isConfirmBatchBudgetOpen, setIsConfirmBatchBudgetOpen] = useState(false);
@@ -61,10 +63,16 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
       optimiserId: lpVault.optimiserId,
       signer,
     })
-      .then(() => {
-        dispatch({
+      .then(({ newOptimiserState }) => {
+        void dispatch({
           type: 'batch_success',
         });
+        if (newOptimiserState) {
+          void appDispatch(updateOptimiserState({
+            optimiserId: lpVault.optimiserId,
+            newOptimiserState,
+          }));
+        };
       })
       .catch((err) => {
         const message = typeof err === 'string' ? err : (err as Error)?.message;
@@ -79,7 +87,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
     if (!signer) {
       return;
     }
-    
+
     submitAllBatchesForFee({
       onlyGasEstimate: true,
       optimiserId: lpVault.optimiserId,
