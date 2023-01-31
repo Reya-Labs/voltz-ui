@@ -3,6 +3,8 @@ import TagManager from 'react-gtm-module';
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
 
 import { Page } from './components/interface/Page/Page';
+import { VaultFormRoute as DeprecatedVaultFormRoute } from './routes/DeprecatedLPOptimisers/VaultFormRoute/VaultFormRoute';
+import { Vaults as DeprecatedVaults } from './routes/DeprecatedLPOptimisers/Vaults/Vaults';
 import { FixedBorrower } from './routes/FixedBorrower/FixedBorrower';
 import { VaultFormRoute } from './routes/LPOptimisers/VaultFormRoute/VaultFormRoute';
 import { Vaults } from './routes/LPOptimisers/Vaults/Vaults';
@@ -13,6 +15,7 @@ import { Profile } from './routes/Profile/Profile';
 import { TraderPools } from './routes/TraderPools/TraderPools';
 import { TraderPortfolio } from './routes/TraderPortfolio/TraderPortfolio';
 import { TradingLeague } from './routes/TradingLeague/TradingLeague';
+import { isStatelessSDKEnabled } from './utilities/is-stateless-sdk-enabled';
 import {
   deleteReferrer,
   isRefererStored,
@@ -64,9 +67,9 @@ export const AppRoutes = () => {
           <Route element={<TraderPortfolio />} path={routes.TRADER_PORTFOLIO} />
           <Route element={<LPPools />} path={routes.LP_POOLS} />
           <Route element={<LPPortfolio />} path={routes.LP_PORTFOLIO} />
-          <Route element={<Vaults />} path={routes.LP_OPTIMISERS} />
-          <Route element={<VaultFormRoute />} path={routes.LP_OPTIMISERS_DEPOSIT_FORM} />
-          <Route element={<VaultFormRoute />} path={routes.LP_OPTIMISERS_WITHDRAW_ROLLOVER_FORM} />
+          <Route element={isStatelessSDKEnabled() ? <Vaults /> : <DeprecatedVaults />} path={routes.LP_OPTIMISERS} />
+          <Route element={isStatelessSDKEnabled() ? <VaultFormRoute /> : <DeprecatedVaultFormRoute />} path={routes.LP_OPTIMISERS_DEPOSIT_FORM} />
+          <Route element={isStatelessSDKEnabled() ? <VaultFormRoute /> : <DeprecatedVaultFormRoute />} path={routes.LP_OPTIMISERS_WITHDRAW_ROLLOVER_FORM} />
           <Route element={<FixedBorrower />} path={routes.BORROW_POS} />
           <Route element={<Profile />} path={routes.PROFILE} />
           <Route element={<TradingLeague />} path={routes.TRADING_LEAGUE} />
