@@ -6,6 +6,7 @@ import { OptimiserInfo } from '../../../../app/features/stateless-optimisers';
 import { AutomaticRolloverToggleProps } from '../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
 import { useWallet } from '../../../../hooks/useWallet';
 import { pushEvent } from '../../../../utilities/googleAnalytics';
+import { getSpareWeights } from '../../Helpers/getSpareWeights';
 import { DepositForm, FormProps } from '../Form/DepositForm/DepositForm';
 import { DepositStates, getSubmissionState } from './mappers';
 
@@ -46,9 +47,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
   const weights = distribution === 'automatic' ? automaticWeights : manualWeights;
   const combinedWeightValue = weights.reduce((total, weight) => total + weight.distribution, 0);
 
-  const spareWeights = weights
-    .map((w, index): [string, number] => [vault.vaults[index].vaultId, w.distribution])
-    .filter((w) => w[1] > 0);
+  const spareWeights = getSpareWeights(vault.vaults, weights);
 
   const deposit = () => {
     if (!signer) {
