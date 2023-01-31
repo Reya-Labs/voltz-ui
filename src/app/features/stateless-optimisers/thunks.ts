@@ -23,10 +23,11 @@ export const initialiseOptimisersThunk = createAsyncThunk<
   OptimiserInfo | Awaited<ReturnType<typeof rejectThunkWithError>>,
   {
     signer: ethers.Signer | null;
+    type: 'active' | 'all';
   }
->('stateless-optimisers/getProducts', async ({ signer }, thunkAPI) => {
+>('stateless-optimisers/getProducts', async ({ signer, type }, thunkAPI) => {
   try {
-    const routers = await getAllMellowProducts(signer);
+    const routers = await getAllMellowProducts(signer, type);
 
     const mappedRouters: OptimiserInfo[] = routers.map(mapRouter);
 

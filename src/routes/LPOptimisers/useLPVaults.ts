@@ -8,7 +8,7 @@ import {
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useWallet } from '../../hooks/useWallet';
 
-export const useLPVaults = () => {
+export const useLPVaults = (type: 'active' | 'all') => {
   const { signer } = useWallet();
 
   const vaultsLoaded = useAppSelector(selectOptimisersLoadedState);
@@ -16,7 +16,7 @@ export const useLPVaults = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    void dispatch(initialiseOptimisersThunk({ signer }));
+    void dispatch(initialiseOptimisersThunk({ signer, type }));
   }, [dispatch, signer]);
 
   return {
