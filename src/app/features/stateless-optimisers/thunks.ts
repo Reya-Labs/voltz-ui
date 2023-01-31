@@ -4,9 +4,6 @@ import { ethers } from 'ethers';
 
 import { OptimiserInfo } from './types';
 
-// TODO: enrich this mapping
-const mapRouter = (r: Awaited<ReturnType<typeof getAllMellowProducts>>[0]): OptimiserInfo => r;
-
 const rejectThunkWithError = (
   thunkAPI: {
     rejectWithValue: (value: string | undefined) => unknown;
@@ -29,7 +26,7 @@ export const initialiseOptimisersThunk = createAsyncThunk<
   try {
     const routers = await getAllMellowProducts(signer, type);
 
-    const mappedRouters: OptimiserInfo[] = routers.map(mapRouter);
+    const mappedRouters: OptimiserInfo[] = routers;
 
     return mappedRouters;
   } catch (err) {
