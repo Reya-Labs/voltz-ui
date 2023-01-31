@@ -20,11 +20,11 @@ export const VaultsTable: React.FunctionComponent<VaultsTableProps> = ({
 }: VaultsTableProps) => (
   <VaultsTableBox>
     <Header />
-    {
-      dataLoading && <Panel sx={{ width: '100%' }} variant="grey-dashed">
-      <Loading />
-    </Panel>
-    }
+    {dataLoading && (
+      <Panel sx={{ width: '100%' }} variant="grey-dashed">
+        <Loading />
+      </Panel>
+    )}
     {mellowProducts && (
       <VaultsGrid itemsPerRow={3}>
         {mellowProducts
