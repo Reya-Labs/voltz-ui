@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 
 import { OptimiserInfo } from '../../../../app/features/stateless-optimisers';
 import { useWallet } from '../../../../hooks/useWallet';
+import { getSpareWeights } from '../../Helpers/getSpareWeights';
 import { FormProps } from '../Form/DepositForm/DepositForm';
 import { WithdrawRolloverForm } from '../Form/WithdrawRolloverForm/WithdrawRolloverForm';
 import { getSubmissionState, RolloverStates, WithdrawStates } from './mappers';
@@ -41,9 +42,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
   const weights = distribution === 'automatic' ? automaticWeights : manualWeights;
   const combinedWeightValue = weights.reduce((total, weight) => total + weight.distribution, 0);
 
-  const spareWeights = weights
-    .map((w, index): [string, number] => [vault.vaults[index].vaultId, w.distribution])
-    .filter((w) => w[1] > 0);
+  const spareWeights = getSpareWeights(vault.vaults, weights);
 
   const withdraw = () => {
     if (!signer) {
