@@ -76,6 +76,10 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
   };
 
   useEffect(() => {
+    if (!signer) {
+      return;
+    }
+    
     submitAllBatchesForFee({
       onlyGasEstimate: true,
       optimiserId: lpVault.optimiserId,

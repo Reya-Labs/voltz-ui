@@ -25,7 +25,7 @@ export const VaultsTable: React.FunctionComponent<VaultsTableProps> = ({
         <Loading />
       </Panel>
     )}
-    {mellowProducts && (
+    {!dataLoading && mellowProducts && (
       <VaultsGrid itemsPerRow={3}>
         {mellowProducts
           .filter((mellowProduct) => !mellowProduct.expired)

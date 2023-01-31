@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { depositAndRegister, getAllMellowProducts } from '@voltz-protocol/v1-sdk';
+import { getAllMellowProducts } from '@voltz-protocol/v1-sdk';
 import { ethers } from 'ethers';
 
 import { OptimiserInfo } from './types';
@@ -37,38 +37,4 @@ export const initialiseOptimisersThunk = createAsyncThunk<
   }
 });
 
-export const depositOptimisersThunk = createAsyncThunk<
-  OptimiserInfo | Awaited<ReturnType<typeof rejectThunkWithError>>,
-  {
-    optimiserId: string;
-    amount: number;
-    spareWeights: [string, number][];
-    registration?: boolean;
-    signer: ethers.Signer | null;
-  }
->(
-  'stateless-optimisers/deposit',
-  async ({ optimiserId, amount, spareWeights, registration, signer }, thunkAPI) => {
-    try {
-      if (!signer) {
-        throw new Error('Wallet not connected');
-      }
 
-      const response = await depositAndRegister({
-        optimiserId,
-        amount,
-        spareWeights,
-        registration,
-        signer,
-      });
-
-      if (!response.newOptimiserState) {
-        return rejectThunkWithError(thunkAPI, 'New state not returned');
-      }
-
-      return mapRouter(response.newOptimiserState);
-    } catch (err) {
-      return rejectThunkWithError(thunkAPI, err);
-    }
-  },
-);
