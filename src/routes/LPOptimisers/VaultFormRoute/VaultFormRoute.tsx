@@ -15,10 +15,10 @@ export const VaultFormRoute: React.FunctionComponent = () => {
   const handleGoBack = () => navigate(-1);
   const { vaultId, actions, vaultIndex } = useParams();
   const { signer } = useWallet();
-  const { lpVaults, vaultsInitialised, vaultsInitialisedWithSigner } = useLPVaults(signer);
-  const currentVault = lpVaults.find((v) => v.id === vaultId);
+  const { lpVaults, vaultsLoaded } = useLPVaults();
+  const currentVault = lpVaults.find((v) => v.optimiserId === vaultId);
 
-  const loading = !vaultsInitialised || !vaultsInitialisedWithSigner;
+  const loading = !vaultsLoaded;
   useEffect(() => {
     setPageTitle(actions === 'deposit' ? 'Deposit Form' : 'Rollover/Withdraw Form');
   }, [actions]);
