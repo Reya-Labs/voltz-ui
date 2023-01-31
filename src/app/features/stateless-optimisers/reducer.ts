@@ -24,7 +24,9 @@ export const slice = createSlice({
         newOptimiserState: OptimiserInfo;
       }>,
     ) => {
-      const optimiserIndex = state.optimisers.findIndex((opt) => opt.optimiserId === action.payload.optimiserId);
+      const optimiserIndex = state.optimisers.findIndex(
+        (opt) => opt.optimiserId === action.payload.optimiserId,
+      );
       if (optimiserIndex >= 0) {
         state.optimisers[optimiserIndex] = action.payload.newOptimiserState;
       }
@@ -42,7 +44,7 @@ export const slice = createSlice({
       .addCase(initialiseOptimisersThunk.fulfilled, (state, action) => {
         state.optimisersLoadedState = 'succeeded';
         state.optimisers = action.payload as OptimiserInfo[];
-      })
+      });
   },
 });
 
