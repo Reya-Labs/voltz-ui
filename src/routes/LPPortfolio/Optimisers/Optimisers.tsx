@@ -14,7 +14,7 @@ import { VaultListItem } from './VaultListItem/VaultListItem';
 
 export const Optimisers: React.FunctionComponent = () => {
   const { signer } = useWallet();
-  const { lpVaults, vaultsLoaded } = useLPVaults();
+  const { lpVaults, vaultsLoaded } = useLPVaults('all');
   // TODO: remove this once the entire state is lifted to Redux properly,
   // What is missing it Redux to give us some plain objects and not SDK classes
   const [forcedRerenderCounter, setForcedRerenderCounter] = useState<number>(0);
