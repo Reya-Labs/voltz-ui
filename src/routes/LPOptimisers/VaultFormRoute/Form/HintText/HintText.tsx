@@ -1,21 +1,43 @@
 import React from 'react';
 
 import { Ellipsis } from '../../../../../components/atomic/Ellipsis/Ellipsis';
-import { HintTextTypography, PrefixHintTextSpan } from './HintText.styled';
+import {
+  BaseTextSpan,
+  ErrorTextSpan,
+  HintTextTypography,
+  SuccessTextSpan,
+  WarningTextSpan,
+} from './HintText.styled';
 
-// TODO: remove this and use other HintText
-// Requires some prop refactoring first
 export const HintText: React.FunctionComponent<{
   prefixText?: string;
   text: string;
   suffixText?: string;
-  textColor?: string;
-  loading: boolean;
-}> = ({ loading, prefixText, text, suffixText, textColor }) => {
+  error?: boolean;
+  loading?: boolean;
+  warning?: boolean;
+  success?: boolean;
+}> = ({ error, warning, success, loading, prefixText, text, suffixText }) => {
+  const TextSpanUI = error
+    ? ErrorTextSpan
+    : success
+    ? SuccessTextSpan
+    : warning
+    ? WarningTextSpan
+    : BaseTextSpan;
+
+  const dataTestId = error
+    ? 'ErrorTextSpan'
+    : success
+    ? 'SuccessTextSpan'
+    : warning
+    ? 'WarningTextSpan'
+    : 'BaseTextSpan';
+
   return (
-    <HintTextTypography>
+    <HintTextTypography data-testid="HintText-HintTextTypography">
       {prefixText ? `${prefixText} ` : null}
-      <PrefixHintTextSpan color={textColor}>{text}</PrefixHintTextSpan>
+      <TextSpanUI data-testid={`HintText-${dataTestId}`}>{text}</TextSpanUI>
       {loading ? <Ellipsis /> : null}
       {suffixText ? ` ${suffixText}` : null}
     </HintTextTypography>

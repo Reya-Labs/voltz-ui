@@ -225,7 +225,11 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
         !sufficientFunds || submissionState.disabled || loading || combinedWeightValue !== 100
       }
       distribution={distribution}
-      hintText={submissionState.hintText}
+      hintText={submissionState.hintText.text}
+      hintTextError={submissionState.hintText.error}
+      hintTextPrefixText={submissionState.hintText.prefixText}
+      hintTextSuccess={submissionState.hintText.success}
+      hintTextSuffixText={submissionState.hintText.suffixText}
       isBatchFlowOpen={submissionState.batchFlowOpen}
       isConfirmDepositModalOpen={submissionState.confirmDepositModalOpen}
       isSuccessDepositModalOpen={submissionState.successDepositModalOpen}
