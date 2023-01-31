@@ -53,7 +53,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
     if (!vault.vaults[vaultIndex].withdrawable) {
       return;
     }
-  
+
     setWithdrawOrRolloverState(WithdrawStates.WITHDRAW_PENDING);
     void executeWithdraw({
       optimiserId: vault.optimiserId,
@@ -86,14 +86,14 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
       spareWeights,
       signer,
     }).then(
-        () => {
-          setWithdrawOrRolloverState(RolloverStates.ROLLOVER_DONE);
-        },
-        (err: Error) => {
-          setError(`Rollover failed. ${err.message ?? ''}`);
-          setWithdrawOrRolloverState(RolloverStates.ROLLOVER_FAILED);
-        },
-      );
+      () => {
+        setWithdrawOrRolloverState(RolloverStates.ROLLOVER_DONE);
+      },
+      (err: Error) => {
+        setError(`Rollover failed. ${err.message ?? ''}`);
+        setWithdrawOrRolloverState(RolloverStates.ROLLOVER_FAILED);
+      },
+    );
   };
 
   const submissionState = getSubmissionState({
@@ -122,7 +122,9 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
       rolloverSubmitText={submissionState.rollover.submitText}
       rolloverSuccess={submissionState.rollover.success}
       weights={weights}
-      withdrawDisabled={submissionState.disabled || loading || !vault.vaults[vaultIndex].withdrawable}
+      withdrawDisabled={
+        submissionState.disabled || loading || !vault.vaults[vaultIndex].withdrawable
+      }
       withdrawLoading={submissionState.withdraw.loading}
       withdrawSubmitText={submissionState.withdraw.submitText}
       withdrawSuccess={submissionState.withdraw.success}

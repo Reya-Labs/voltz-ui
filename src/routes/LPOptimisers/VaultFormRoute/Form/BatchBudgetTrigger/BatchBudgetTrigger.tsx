@@ -52,11 +52,11 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
     if (!signer) {
       return;
     }
-  
+
     dispatch({
       type: 'batch_pending',
     });
-  
+
     submitAllBatchesForFee({
       optimiserId: lpVault.optimiserId,
       signer,
