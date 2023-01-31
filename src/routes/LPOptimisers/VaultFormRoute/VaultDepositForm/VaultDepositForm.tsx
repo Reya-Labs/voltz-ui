@@ -1,14 +1,18 @@
-import { MellowProduct } from '@voltz-protocol/v1-sdk';
+import { approveToken, depositAndRegister, isTokenApproved } from '@voltz-protocol/v1-sdk';
+import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
 
+import { OptimiserInfo, updateOptimiserState } from '../../../../app/features/stateless-optimisers';
+import { useAppDispatch } from '../../../../app/hooks';
 import { AutomaticRolloverToggleProps } from '../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
 import { useWallet } from '../../../../hooks/useWallet';
 import { pushEvent } from '../../../../utilities/googleAnalytics';
+import { getSpareWeights } from '../../Helpers/getSpareWeights';
 import { DepositForm, FormProps } from '../Form/DepositForm/DepositForm';
 import { DepositStates, getSubmissionState } from './mappers';
 
 export type VaultDepositFormProps = {
-  vault: MellowProduct;
+  vault: OptimiserInfo;
   onGoBack: () => void;
   loading: boolean;
 };
@@ -18,22 +22,22 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
   vault,
   onGoBack,
 }) => {
-  const { account } = useWallet();
-  const automaticWeights: FormProps['weights'] = vault.metadata.vaults.map((v) => ({
-    distribution: v.weight,
+  const { signer, account } = useWallet();
+  const appDispatch = useAppDispatch();
+
+  const automaticWeights: FormProps['weights'] = vault.vaults.map((v) => ({
+    distribution: v.defaultWeight,
     maturityTimestamp: v.maturityTimestampMS,
     pools: v.pools,
-    vaultDisabled: v.weight === 0,
+    vaultDisabled: v.defaultWeight === 0,
   }));
   const [depositGasCost, setDepositGasCost] = useState(-1);
   const [depositTransactionId, setDepositTransactionId] = useState('');
-  const [depositFeeUSD, setDepositFeeUSD] = useState(-1);
-  const [depositFeeUnderlying, setDepositFeeUnderlying] = useState(-1);
   const [selectedDeposit, setSelectedDeposit] = useState<number>(0);
   const [distribution, setDistribution] = useState<'automatic' | 'manual'>('automatic');
   const [automaticRolloverState, setAutomaticRolloverState] = useState<
     AutomaticRolloverToggleProps['automaticRolloverState']
-  >(Boolean(vault.isRegisteredForAutoRollover) ? 'active' : 'inactive');
+  >(Boolean(vault.isUserRegisteredForAutoRollover) ? 'active' : 'inactive');
   const [manualWeights, setManualWeights] = useState<FormProps['weights']>(
     automaticWeights.map((a) => ({ ...a })),
   );
@@ -46,7 +50,13 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
   const weights = distribution === 'automatic' ? automaticWeights : manualWeights;
   const combinedWeightValue = weights.reduce((total, weight) => total + weight.distribution, 0);
 
+  const spareWeights = getSpareWeights(vault.vaults, weights);
+
   const deposit = () => {
+    if (!signer) {
+      return;
+    }
+
     if (selectedDeposit > 0) {
       pushEvent(account ?? '', {
         event: 'tx_submitted',
@@ -57,39 +67,50 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
         },
       });
       setDepositState(DepositStates.DEPOSITING);
-      void vault
-        .deposit(
-          selectedDeposit,
-          weights.map((w) => w.distribution),
-          hasUserOptedInOutAutoRollover ? automaticRolloverState === 'active' : undefined,
-        )
-        .then(
-          (receipt) => {
-            pushEvent(account ?? '', {
-              event: 'successful_tx',
-              eventValue: {
-                action: 'deposit',
-                amount: selectedDeposit,
-                distribution: distribution,
-              },
-            });
-            setDepositState(DepositStates.DEPOSIT_DONE);
-            setHasUserOptedInOutAutoRollover(false);
-            setDepositTransactionId(receipt.transactionHash);
-          },
-          (err: Error) => {
-            setError(`Deposit failed. ${err.message ?? ''}`);
-            setDepositState(DepositStates.DEPOSIT_FAILED);
-            pushEvent(account ?? '', {
-              event: 'failed_tx',
-              eventValue: {
-                action: 'deposit',
-                amount: selectedDeposit,
-                distribution: distribution,
-              },
-            });
-          },
-        );
+      void depositAndRegister({
+        optimiserId: vault.optimiserId,
+        amount: selectedDeposit,
+        spareWeights,
+        registration: hasUserOptedInOutAutoRollover
+          ? automaticRolloverState === 'active'
+          : undefined,
+        signer,
+      }).then(
+        ({ receipt, newOptimiserState }) => {
+          pushEvent(account ?? '', {
+            event: 'successful_tx',
+            eventValue: {
+              action: 'deposit',
+              amount: selectedDeposit,
+              distribution: distribution,
+            },
+          });
+          setDepositState(DepositStates.DEPOSIT_DONE);
+          setHasUserOptedInOutAutoRollover(false);
+          setDepositTransactionId((receipt as ethers.ContractReceipt).transactionHash);
+
+          if (newOptimiserState) {
+            void appDispatch(
+              updateOptimiserState({
+                optimiserId: vault.optimiserId,
+                newOptimiserState,
+              }),
+            );
+          }
+        },
+        (err: Error) => {
+          setError(`Deposit failed. ${err.message ?? ''}`);
+          setDepositState(DepositStates.DEPOSIT_FAILED);
+          pushEvent(account ?? '', {
+            event: 'failed_tx',
+            eventValue: {
+              action: 'deposit',
+              amount: selectedDeposit,
+              distribution: distribution,
+            },
+          });
+        },
+      );
     } else {
       setError('Please input amount');
       setDepositState(DepositStates.DEPOSIT_FAILED);
@@ -97,8 +118,16 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
   };
 
   const approve = () => {
+    if (!signer) {
+      return;
+    }
+
     setDepositState(DepositStates.APPROVING);
-    void vault.approveToken().then(
+    void approveToken({
+      tokenId: vault.tokenId,
+      to: vault.optimiserId,
+      signer,
+    }).then(
       () => {
         setDepositState(DepositStates.APPROVED);
       },
@@ -108,18 +137,22 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
       },
     );
   };
-  useEffect(() => {
-    if (vault.userInitialized) {
-      setAutomaticRolloverState(vault.isRegisteredForAutoRollover ? 'active' : 'inactive');
-    }
-  }, [vault.userInitialized]);
 
   useEffect(() => {
-    if (loading || !vault?.id) {
+    if (!account) {
       return;
     }
 
-    void vault.isTokenApproved().then(
+    if (loading || !vault?.optimiserId) {
+      return;
+    }
+
+    void isTokenApproved({
+      tokenId: vault.tokenId,
+      to: vault.optimiserId,
+      threshold: selectedDeposit,
+      userAddress: account,
+    }).then(
       (resp) => {
         if (resp) {
           setDepositState(DepositStates.APPROVED);
@@ -132,39 +165,27 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
         setDepositState(DepositStates.PROVIDER_ERROR);
       },
     );
-  }, [vault.id, loading, selectedDeposit]);
+  }, [vault.optimiserId, vault.tokenId, loading, selectedDeposit, account]);
 
   const openDepositModal = () => {
+    if (!signer) {
+      return;
+    }
+
     setDepositState(DepositStates.DEPOSIT_MODAL);
-    vault
-      .getDepositGasCost(
-        selectedDeposit,
-        weights.map((w) => w.distribution),
-        hasUserOptedInOutAutoRollover ? automaticRolloverState === 'active' : undefined,
-      )
-      .then((result) => {
-        setDepositGasCost(result);
+    void depositAndRegister({
+      onlyGasEstimate: true,
+      optimiserId: vault.optimiserId,
+      amount: selectedDeposit,
+      spareWeights,
+      registration: hasUserOptedInOutAutoRollover ? automaticRolloverState === 'active' : undefined,
+      signer,
+    })
+      .then(({ gasEstimateUsd }) => {
+        setDepositGasCost(gasEstimateUsd);
       })
-      .catch((err) => {
+      .catch(() => {
         setDepositGasCost(-1);
-      });
-
-    vault
-      .getDepositFeeUsd()
-      .then((result) => {
-        setDepositFeeUSD(result);
-      })
-      .catch((err) => {
-        setDepositFeeUSD(-1);
-      });
-
-    vault
-      .getDepositFeeUnderlying()
-      .then((result) => {
-        setDepositFeeUnderlying(result);
-      })
-      .catch((err) => {
-        setDepositFeeUnderlying(-1);
       });
   };
 
@@ -176,7 +197,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
     selectedDeposit,
     sufficientFunds,
     error,
-    tokenName: vault.metadata.token,
+    tokenName: vault.tokenName,
     loading,
   });
 
@@ -187,16 +208,16 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
           setAutomaticRolloverState(value);
           const registrationValue = value === 'active';
           setHasUserOptedInOutAutoRollover(
-            registrationValue !== Boolean(vault.isRegisteredForAutoRollover),
+            registrationValue !== Boolean(vault.isUserRegisteredForAutoRollover),
           );
           resolve();
         });
       }}
-      automaticRolloverGasCost={vault.autoRolloverRegistrationGasFeeUSD}
+      automaticRolloverGasCost={vault.autorolloverGasCostInUSD}
       automaticRolloverState={automaticRolloverState}
       combinedWeightValue={combinedWeightValue}
-      depositFeeUnderlying={depositFeeUnderlying}
-      depositFeeUSD={depositFeeUSD}
+      depositFeeUnderlying={vault.feePerDeposit}
+      depositFeeUSD={vault.feePerDepositUSD}
       depositGasCost={depositGasCost}
       depositTransactionId={depositTransactionId}
       depositValue={selectedDeposit}

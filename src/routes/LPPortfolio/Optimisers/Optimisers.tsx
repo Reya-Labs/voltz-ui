@@ -1,5 +1,8 @@
+import { registerForAutoRollover } from '@voltz-protocol/v1-sdk';
 import React, { useState } from 'react';
 
+import { updateOptimiserState } from '../../../app/features/stateless-optimisers';
+import { useAppDispatch } from '../../../app/hooks';
 import { Loading } from '../../../components/atomic/Loading/Loading';
 import { Panel } from '../../../components/atomic/Panel/Panel';
 import { AutomaticRolloverToggleProps } from '../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
@@ -13,11 +16,13 @@ import { VaultListItem } from './VaultListItem/VaultListItem';
 
 export const Optimisers: React.FunctionComponent = () => {
   const { signer } = useWallet();
-  const { lpVaults, vaultsInitialised, vaultsInitialisedWithSigner } = useLPVaults(signer);
+  const appDispatch = useAppDispatch();
+
+  const { lpVaults, vaultsLoaded } = useLPVaults('all');
   // TODO: remove this once the entire state is lifted to Redux properly,
   // What is missing it Redux to give us some plain objects and not SDK classes
   const [forcedRerenderCounter, setForcedRerenderCounter] = useState<number>(0);
-  if (!signer || !vaultsInitialised || !vaultsInitialisedWithSigner) {
+  if (!signer || !vaultsLoaded) {
     return (
       <OptimisersBox>
         <Panel sx={{ width: '100%' }} variant="grey-dashed">
@@ -27,7 +32,7 @@ export const Optimisers: React.FunctionComponent = () => {
     );
   }
 
-  const vaultsWithDeposit = lpVaults.filter((vault) => vault.userDeposit > 0);
+  const vaultsWithDeposit = lpVaults.filter((vault) => vault.userOptimiserDeposit > 0);
 
   if (vaultsWithDeposit.length === 0) {
     return (
@@ -46,12 +51,25 @@ export const Optimisers: React.FunctionComponent = () => {
     value: AutomaticRolloverToggleProps['automaticRolloverState'],
   ) => {
     try {
-      const vault = lpVaults.find((v) => v.id === vaultId);
+      const vault = lpVaults.find((v) => v.optimiserId === vaultId);
       if (!vault) {
         return;
       }
       const registration = value === 'active';
-      await vault.registerForAutoRollover(registration);
+      await registerForAutoRollover({
+        optimiserId: vault.optimiserId,
+        registration,
+        signer,
+      }).then(({ newOptimiserState }) => {
+        if (newOptimiserState) {
+          void appDispatch(
+            updateOptimiserState({
+              optimiserId: vault.optimiserId,
+              newOptimiserState,
+            }),
+          );
+        }
+      });
       setForcedRerenderCounter(forcedRerenderCounter + 1);
     } catch (err) {
       if (typeof err === 'string') {
@@ -67,23 +85,23 @@ export const Optimisers: React.FunctionComponent = () => {
       <Header />
       {vaultsWithDeposit.map((vault) => (
         <VaultListItem
-          key={vault.id}
+          key={vault.optimiserId}
           automaticRolloverState={
-            Boolean(vault.isRegisteredForAutoRollover) ? 'active' : 'inactive'
+            Boolean(vault.isUserRegisteredForAutoRollover) ? 'active' : 'inactive'
           }
           canRegisterUnregister={vault.canRegisterUnregister}
           depositable={vault.depositable}
-          gasCost={vault.autoRolloverRegistrationGasFeeUSD}
-          id={vault.id}
-          token={vault.metadata.token}
-          totalBalance={vault.userDeposit}
-          vaults={vault.metadata.vaults.map((vVaults, vaultIndex) => ({
+          gasCost={vault.autorolloverGasCostInUSD}
+          id={vault.optimiserId}
+          token={vault.tokenName}
+          totalBalance={vault.userOptimiserDeposit}
+          vaults={vault.vaults.map((vVaults) => ({
             maturityTimestampMS: vVaults.maturityTimestampMS,
-            isCompleted: vault.withdrawable(vaultIndex),
+            isCompleted: vVaults.withdrawable,
             poolsCount: vVaults.pools.length,
-            currentBalance: vault.userIndividualDeposits[vaultIndex],
-            distribution: vVaults.weight,
-            canManageVaultPosition: vault.canManageVaultPosition(vaultIndex),
+            currentBalance: vVaults.userVaultDeposit,
+            distribution: vVaults.defaultWeight,
+            canManageVaultPosition: vVaults.canUserManageVault,
           }))}
           onChangeAutomaticRolloverStatePromise={automaticRolloverChangePromise}
         />

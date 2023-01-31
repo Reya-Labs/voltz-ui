@@ -1,7 +1,7 @@
-import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import isUndefined from 'lodash.isundefined';
 import React from 'react';
 
+import { OptimiserInfo } from '../../../../../app/features/stateless-optimisers';
 import { Modal } from '../../../../../components/composite/Modal/Modal';
 import { AutomaticRolloverToggleProps } from '../../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
 import { isCostReductionFlowEnabled } from '../../../../../utilities/is-cost-reduction-flow-enabled';
@@ -20,7 +20,7 @@ import {
 } from '../MaturityDistribution/MaturityDistribution';
 
 export type FormProps = {
-  lpVault: MellowProduct;
+  lpVault: OptimiserInfo;
   onChangeDeposit: (value: number) => void;
   depositValue: number;
   submitText: string;
@@ -87,7 +87,7 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
   const subtext = `WALLET BALANCE: ${
     isUndefined(lpVault.userWalletBalance)
       ? '---'
-      : `${formatCurrency(lpVault.userWalletBalance, true)} ${lpVault.metadata.token}`
+      : `${formatCurrency(lpVault.userWalletBalance, true)} ${lpVault.tokenName}`
   }`;
   return (
     <>
@@ -101,7 +101,7 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
           combinedWeightValue={combinedWeightValue}
           disabledToggle={loading}
           distribution={distribution}
-          isVaultRegisteredForAutoRollover={lpVault.isRegisteredForAutoRollover}
+          isVaultRegisteredForAutoRollover={lpVault.isUserRegisteredForAutoRollover}
           weights={weights}
           onDistributionToggle={onDistributionToggle}
           onManualDistributionsUpdate={onManualDistributionsUpdate}
@@ -109,7 +109,7 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
         <DepositAmountInput
           disabled={false}
           subtext={subtext}
-          token={lpVault.metadata.token}
+          token={lpVault.tokenName}
           value={depositValue}
           onChange={onChangeDeposit}
         />
@@ -145,7 +145,7 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
               loading={loading}
               submitText={submitText}
               success={success}
-              token={lpVault.metadata.token}
+              token={lpVault.tokenName}
               onCancel={onConfirmDepositModalClose}
               onProceed={onSubmit}
             />
