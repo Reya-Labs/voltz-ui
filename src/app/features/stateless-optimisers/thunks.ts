@@ -62,7 +62,7 @@ export const depositOptimisersThunk = createAsyncThunk<
       });
 
       if (!response.newOptimiserState) {
-        throw new Error('New state not returned');
+        return rejectThunkWithError(thunkAPI, 'New state not returned');
       }
 
       return mapRouter(response.newOptimiserState);
