@@ -1,4 +1,3 @@
-import { colors } from '../../../../theme';
 import { isCostReductionFlowEnabled } from '../../../../utilities/is-cost-reduction-flow-enabled';
 
 export enum DepositStates {
@@ -21,7 +20,8 @@ type SubmissionState = {
     prefixText?: string;
     text: string;
     suffixText?: string;
-    textColor?: string;
+    success: boolean;
+    error: boolean;
   };
   action: () => void;
   disabled: boolean;
@@ -59,7 +59,8 @@ export const getSubmissionState = ({
       action: () => {},
       hintText: {
         text: 'Insufficient Funds',
-        textColor: colors.vzCustomRed1.base,
+        error: true,
+        success: false,
       },
       loading: false,
       disabled: true,
@@ -74,6 +75,8 @@ export const getSubmissionState = ({
     action: () => {},
     hintText: {
       text: 'Initialising, please wait',
+      error: false,
+      success: false,
     },
     loading: true,
     disabled: true,
@@ -96,7 +99,8 @@ export const getSubmissionState = ({
         action: () => {},
         hintText: {
           text: error,
-          textColor: colors.vzCustomRed1.base,
+          error: true,
+          success: false,
         },
         loading: false,
         disabled: true,
@@ -112,7 +116,8 @@ export const getSubmissionState = ({
         action: approve,
         hintText: {
           text: error,
-          textColor: colors.vzCustomRed1.base,
+          error: true,
+          success: false,
         },
         loading: false,
         disabled: false,
@@ -128,7 +133,8 @@ export const getSubmissionState = ({
         action: deposit,
         hintText: {
           text: error,
-          textColor: colors.vzCustomRed1.base,
+          error: true,
+          success: false,
         },
         loading: false,
         disabled: false,
@@ -144,6 +150,8 @@ export const getSubmissionState = ({
         action: approve,
         hintText: {
           text: `Please approve ${tokenName === 'ETH' ? 'WETH' : tokenName}`,
+          error: false,
+          success: false,
         },
         loading: false,
         disabled: false,
@@ -159,6 +167,8 @@ export const getSubmissionState = ({
         action: () => {},
         hintText: {
           text: 'Waiting for confirmation',
+          error: false,
+          success: false,
         },
         loading: true,
         disabled: true,
@@ -176,11 +186,14 @@ export const getSubmissionState = ({
           selectedDeposit > 0
             ? {
                 text: tokenName === 'ETH' ? '' : 'Tokens approved.',
-                textColor: colors.vzCustomGreen1.base,
                 suffixText: "Let's deposit.",
+                error: false,
+                success: true,
               }
             : {
                 text: 'Please input amount',
+                error: false,
+                success: false,
               },
         loading: false,
         disabled: !(selectedDeposit > 0),
@@ -196,7 +209,8 @@ export const getSubmissionState = ({
         action: deposit,
         hintText: {
           text: tokenName === 'ETH' ? '' : 'Tokens approved.',
-          textColor: colors.vzCustomGreen1.base,
+          error: false,
+          success: true,
           suffixText: "Let's deposit.",
         },
         loading: false,
@@ -214,7 +228,8 @@ export const getSubmissionState = ({
         hintText: {
           prefixText: 'Depositing',
           text: `${selectedDeposit} ${tokenName}`,
-          textColor: colors.skyBlueCrayola.base,
+          error: false,
+          success: true,
         },
         loading: true,
         disabled: true,
@@ -232,7 +247,8 @@ export const getSubmissionState = ({
           prefixText: 'Deposited',
           text: `${selectedDeposit} ${tokenName}`,
           suffixText: 'successfully',
-          textColor: colors.skyBlueCrayola.base,
+          error: false,
+          success: true,
         },
         loading: false,
         disabled: false,
@@ -250,7 +266,8 @@ export const getSubmissionState = ({
           prefixText: 'Deposited',
           text: `${selectedDeposit} ${tokenName}`,
           suffixText: 'successfully',
-          textColor: colors.skyBlueCrayola.base,
+          error: false,
+          success: true,
         },
         loading: false,
         disabled: false,

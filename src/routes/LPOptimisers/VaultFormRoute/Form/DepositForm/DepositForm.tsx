@@ -24,11 +24,11 @@ export type FormProps = {
   onChangeDeposit: (value: number) => void;
   depositValue: number;
   submitText: string;
-  hintText: {
-    text: string;
-    suffixText?: string;
-    textColor?: string;
-  };
+  hintText: string;
+  hintTextSuccess: boolean;
+  hintTextError: boolean;
+  hintTextPrefixText?: string;
+  hintTextSuffixText?: string;
   onSubmit: () => void;
   disabled: boolean;
   loading: boolean;
@@ -59,6 +59,10 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
   onChangeDeposit,
   submitText,
   hintText,
+  hintTextSuccess,
+  hintTextError,
+  hintTextPrefixText,
+  hintTextSuffixText,
   disabled,
   onSubmit,
   onGoBack,
@@ -128,7 +132,16 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
             <BackButton onClick={onGoBack}>BACK</BackButton>
           </ButtonBox>
 
-          {isCostReductionFlowEnabled() ? null : <HintText {...hintText} loading={loading} />}
+          {isCostReductionFlowEnabled() ? null : (
+            <HintText
+              error={hintTextError}
+              loading={loading}
+              prefixText={hintTextPrefixText}
+              success={hintTextSuccess}
+              suffixText={hintTextSuffixText}
+              text={hintText}
+            />
+          )}
         </FullButtonBox>
 
         <AboutYourFunds depositsText="Deposits" />
@@ -142,6 +155,10 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
               disabled={disabled}
               gasCost={depositGasCost}
               hintText={hintText}
+              hintTextError={hintTextError}
+              hintTextPrefixText={hintTextPrefixText}
+              hintTextSuccess={hintTextSuccess}
+              hintTextSuffixText={hintTextSuffixText}
               loading={loading}
               submitText={submitText}
               success={success}

@@ -14,6 +14,15 @@ export const HintTextTypography = styled(Typography)`
   letter-spacing: 0.02em;
 `;
 
-export const PrefixHintTextSpan = styled('span')<{ color?: string }>`
-  color: ${({ color = 'inherit' }) => color};
+export const BaseTextSpan = styled('span')`
+  color: inherit;
+`;
+export const ErrorTextSpan = styled('span')`
+  color: ${colors.wildStrawberry.base};
+`;
+export const SuccessTextSpan = styled('span')`
+  color: ${colors.skyBlueCrayola.base};
+`;
+export const WarningTextSpan = styled('span')`
+  color: ${colors.orangeYellow.base};
 `;

@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { Loading } from '../../../components/atomic/Loading/Loading';
+import { Panel } from '../../../components/atomic/Panel/Panel';
 import { ConnectWallet } from '../../../components/composite/ConnectWallet/ConnectWallet';
 import { useWallet } from '../../../hooks/useWallet';
 import { setPageTitle } from '../../../utilities/page';
@@ -30,6 +32,24 @@ export const VaultFormRoute: React.FunctionComponent = () => {
         heading="🚫 RESTRICTED"
         subheading="Your wallet needs to be connected before proceeding."
       />
+    );
+  }
+
+  if (loading) {
+    return (
+      <Panel
+        sx={{
+          width: '400px',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          height: '500px',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+        variant="grey-dashed"
+      >
+        <Loading />
+      </Panel>
     );
   }
 

@@ -20,11 +20,11 @@ import {
 type Props = {
   onProceed: () => void;
   onCancel: () => void;
-  hintText: {
-    text: string;
-    suffixText?: string;
-    textColor?: string;
-  };
+  hintText: string;
+  hintTextSuccess: boolean;
+  hintTextError: boolean;
+  hintTextPrefixText?: string;
+  hintTextSuffixText?: string;
   submitText: string;
   disabled: boolean;
   loading: boolean;
@@ -40,13 +40,17 @@ export const ConfirmDepositModalContent: React.FunctionComponent<Props> = ({
   onProceed,
   loading,
   success,
-  hintText,
   submitText,
   disabled,
   gasCost,
   depositFeeUSD,
   depositFeeUnderlying,
   token,
+  hintText,
+  hintTextSuccess,
+  hintTextError,
+  hintTextPrefixText,
+  hintTextSuffixText,
 }) => (
   <ContentBox data-testid="ConfirmDepositModalContent-ContentBox">
     <TitleTypography data-testid="ConfirmDepositModalContent-TitleTypography">
@@ -99,6 +103,13 @@ export const ConfirmDepositModalContent: React.FunctionComponent<Props> = ({
         CANCEL
       </CancelButton>
     </ButtonBox>
-    <HintText {...hintText} loading={loading} />
+    <HintText
+      error={hintTextError}
+      loading={loading}
+      prefixText={hintTextPrefixText}
+      success={hintTextSuccess}
+      suffixText={hintTextSuffixText}
+      text={hintText}
+    />
   </ContentBox>
 );

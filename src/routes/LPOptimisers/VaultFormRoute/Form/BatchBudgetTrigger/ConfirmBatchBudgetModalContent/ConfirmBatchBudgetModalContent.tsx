@@ -3,6 +3,7 @@ import React from 'react';
 import { formatCurrency } from '../../../../../../utilities/number';
 import { FormActionButton } from '../../FormActionButton/FormActionButton';
 import { GasCost } from '../../GasCost/GasCost';
+import { HintText } from '../../HintText/HintText';
 import {
   BatchBudgetTextTypography,
   BatchBudgetUnderlyingTypography,
@@ -15,7 +16,6 @@ import {
   DescriptionTypography,
   TitleTypography,
 } from './ConfirmBatchBudgetModalContent.styled';
-import { HintText } from './HintText/HintText';
 
 type Props = {
   onProceed: () => void;
