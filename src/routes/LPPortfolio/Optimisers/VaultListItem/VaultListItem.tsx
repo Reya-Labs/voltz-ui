@@ -92,7 +92,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
           <AutomaticRolloverToggle
             automaticRolloverState={automaticRolloverState}
             canRegisterUnregister={canRegisterUnregister}
-            disabled={false}
+            disabled={!depositable}
             gasCost={gasCost}
             showTooltip={false}
             triggersOnChainTransaction={true}
