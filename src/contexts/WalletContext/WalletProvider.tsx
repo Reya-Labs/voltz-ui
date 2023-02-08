@@ -9,7 +9,7 @@ import {
   checkForTOSSignature,
   getWalletProvider,
 } from './services';
-import { WalletName, WalletStatus } from './types';
+import { SupportedNetworks, WalletName, WalletStatus } from './types';
 import { WalletContext } from './WalletContext';
 
 export const WalletProvider: React.FunctionComponent = ({ children }) => {
@@ -20,6 +20,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
   const [account, setAccount] = useState<string | null>(null);
   const [name, setName] = useState<WalletName | null>(null);
   const [required, setRequired] = useState<boolean>(false);
+  const [network, setNetwork] = useState<SupportedNetworks>('ethereum');
 
   const disconnect = useCallback(
     (errorMessage: string | null = null) => {
@@ -91,6 +92,13 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     [disconnect, setAccount, setStatus],
   );
 
+  const connectNetwork = useCallback(
+    (networkValue: SupportedNetworks) => {
+      setNetwork(networkValue);
+    },
+    [setNetwork],
+  );
+
   // Reconnect wallet on page load
   useEffect(() => {
     const walletName = localStorage.getItem('connectedWalletName') as WalletName;
@@ -102,6 +110,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
   const value = {
     status,
     connect,
+    connectNetwork,
     disconnect,
     account,
     name,
@@ -110,6 +119,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     required,
     setRequired,
     walletError,
+    network,
   };
 
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;

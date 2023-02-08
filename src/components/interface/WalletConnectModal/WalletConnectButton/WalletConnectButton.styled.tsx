@@ -6,7 +6,6 @@ import { colors } from '../../../../theme';
 import { Button } from '../../../atomic/Button/Button';
 
 export const ButtonBox = styled(Box)`
-  margin-left: ${({ theme }) => theme.spacing(4)};
   display: flex;
 `;
 

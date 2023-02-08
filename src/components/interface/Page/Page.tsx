@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box';
 import React from 'react';
 
+import { NetworkSelector } from '../NetworkSelector/NetworkSelector';
 import { WalletConnectModal } from '../WalletConnectModal/WalletConnectModal';
 import { AlphaBanner } from './AlphaBanner/AlphaBanner';
 import { Background } from './Background/Background';
@@ -22,7 +23,17 @@ export const Page: React.FunctionComponent<PageProps> = ({ children }: PageProps
       }}
     >
       <Nav />
-      <WalletConnectModal />
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          marginLeft: '16px',
+        }}
+      >
+        <NetworkSelector network="ethereum" />
+        <WalletConnectModal />
+      </Box>
     </Box>
 
     <Box
