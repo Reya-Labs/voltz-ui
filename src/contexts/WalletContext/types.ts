@@ -8,10 +8,12 @@ export type WalletStatus =
   | 'connected';
 
 export type WalletName = 'metamask' | 'walletConnect' | 'disconnect';
+export type SupportedNetworks = 'ethereum' | 'arbitrum';
 
 export type Wallet = {
   status: WalletStatus;
   connect: (name: WalletName) => Promise<void>;
+  connectNetwork: (network: SupportedNetworks) => void;
   disconnect: () => void;
   account: string | null;
   name: WalletName | null;
@@ -20,7 +22,7 @@ export type Wallet = {
   required: boolean;
   setRequired: (required: boolean) => void;
   walletError: string | null;
-  networkId?: string;
+  network: SupportedNetworks;
 };
 
 export interface WalletRiskAssessment {
