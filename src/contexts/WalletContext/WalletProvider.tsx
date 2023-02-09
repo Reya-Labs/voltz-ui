@@ -1,3 +1,4 @@
+import { SupportedNetworksEnum } from '@voltz-protocol/v1-sdk';
 import { ethers } from 'ethers';
 import React, { useCallback, useEffect, useState } from 'react';
 
@@ -9,7 +10,7 @@ import {
   checkForTOSSignature,
   getWalletProvider,
 } from './services';
-import { SupportedNetworks, WalletName, WalletStatus } from './types';
+import { WalletName, WalletStatus } from './types';
 import { WalletContext } from './WalletContext';
 
 export const WalletProvider: React.FunctionComponent = ({ children }) => {
@@ -20,7 +21,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
   const [account, setAccount] = useState<string | null>(null);
   const [name, setName] = useState<WalletName | null>(null);
   const [required, setRequired] = useState<boolean>(false);
-  const [network, setNetwork] = useState<SupportedNetworks>('ethereum');
+  const [network, setNetwork] = useState<SupportedNetworksEnum>(SupportedNetworksEnum.mainnet);
 
   const disconnect = useCallback(
     (errorMessage: string | null = null) => {
@@ -93,7 +94,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
   );
 
   const connectNetwork = useCallback(
-    (networkValue: SupportedNetworks) => {
+    (networkValue: SupportedNetworksEnum) => {
       setNetwork(networkValue);
     },
     [setNetwork],

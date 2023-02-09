@@ -31,7 +31,7 @@ export const Page: React.FunctionComponent<PageProps> = ({ children }: PageProps
           marginLeft: '16px',
         }}
       >
-        <NetworkSelector network="ethereum" />
+        <NetworkSelector />
         <WalletConnectModal />
       </Box>
     </Box>

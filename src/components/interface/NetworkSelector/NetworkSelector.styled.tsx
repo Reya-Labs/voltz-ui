@@ -6,6 +6,7 @@ import { Typography } from '../../atomic/Typography/Typography';
 import { ReactComponent as Arbitrum } from './icons/arbitrum.svg';
 import { ReactComponent as Arrow } from './icons/arrow.svg';
 import { ReactComponent as Ethereum } from './icons/ethereum.svg';
+import { ReactComponent as Warning } from './icons/warning.svg';
 
 export const SelectorBox = styled(Box)`
   display: flex;
@@ -34,6 +35,11 @@ export const NetworkSelect = styled('select')`
 export const EthereumIcon = styled(Ethereum)`
   width: 24px;
   height: 24px;
+`;
+
+export const WarningIcon = styled(Warning)`
+  width: 16px;
+  height: 16px;
 `;
 
 export const ArrowIcon = styled(Arrow)`
