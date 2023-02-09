@@ -1,51 +1,52 @@
+import { SupportedNetworksEnum } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
-import { SupportedNetworks } from '../../../contexts/WalletContext/types';
 import { useWallet } from '../../../hooks/useWallet';
+import { isNetworkSelectorFlowEnabled } from '../../../utilities/is-network-selector-flow-enabled';
+import { getNetworkOptions } from './get-network-options';
 import {
-  ArbitrumIcon,
   ArrowIcon,
-  EthereumIcon,
   NetworkSelect,
   NetworkTypography,
   SelectorBox,
+  WarningIcon,
 } from './NetworkSelector.styled';
-
-const networkOptions: Record<
-  SupportedNetworks,
-  {
-    name: string;
-    Icon: React.FunctionComponent;
-  }
-> = {
-  ethereum: {
-    name: 'Ethereum',
-    Icon: EthereumIcon,
-  },
-  arbitrum: {
-    name: 'Arbitrum',
-    Icon: ArbitrumIcon,
-  },
-};
 
 export const NetworkSelector: React.FunctionComponent = () => {
   const { network, connectNetwork } = useWallet();
-  const currentNetwork = networkOptions[network || 'ethereum'];
+
+  if (!isNetworkSelectorFlowEnabled()) {
+    return null;
+  }
+  const networkOptions = getNetworkOptions();
+  if (Object.keys(networkOptions).length === 0) {
+    return null;
+  }
+  const currentNetwork = networkOptions[network];
+
   return (
     <SelectorBox data-testid="NetworkSelector-SelectorBox">
       {currentNetwork ? (
         <React.Fragment>
           <currentNetwork.Icon />
           <NetworkTypography data-testid="NetworkSelector-NetworkTypography">
-            {currentNetwork.name.toUpperCase()}
+            {currentNetwork.name}
           </NetworkTypography>
           <ArrowIcon />
         </React.Fragment>
-      ) : null}
-      <NetworkSelect onChange={(event) => connectNetwork(event.target.value as SupportedNetworks)}>
+      ) : (
+        <React.Fragment>
+          <WarningIcon />
+          <NetworkTypography data-testid="NetworkSelector-UnsupportedTypography">
+            Unsupported
+          </NetworkTypography>
+          <ArrowIcon />
+        </React.Fragment>
+      )}
+      <NetworkSelect onChange={(event) => connectNetwork(parseInt(event.target.value, 10))}>
         {Object.keys(networkOptions).map((key) => (
           <option key={key} value={key}>
-            {networkOptions[key as SupportedNetworks].name}
+            {networkOptions[parseInt(key, 10) as SupportedNetworksEnum].name}
           </option>
         ))}
       </NetworkSelect>

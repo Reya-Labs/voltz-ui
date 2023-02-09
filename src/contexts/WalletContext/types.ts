@@ -1,3 +1,4 @@
+import { SupportedNetworksEnum } from '@voltz-protocol/v1-sdk';
 import { ethers } from 'ethers';
 
 export type WalletStatus =
@@ -8,12 +9,11 @@ export type WalletStatus =
   | 'connected';
 
 export type WalletName = 'metamask' | 'walletConnect' | 'disconnect';
-export type SupportedNetworks = 'ethereum' | 'arbitrum';
 
 export type Wallet = {
   status: WalletStatus;
   connect: (name: WalletName) => Promise<void>;
-  connectNetwork: (network: SupportedNetworks) => void;
+  connectNetwork: (network: SupportedNetworksEnum) => void;
   disconnect: () => void;
   account: string | null;
   name: WalletName | null;
@@ -22,7 +22,7 @@ export type Wallet = {
   required: boolean;
   setRequired: (required: boolean) => void;
   walletError: string | null;
-  network: SupportedNetworks;
+  network: SupportedNetworksEnum;
 };
 
 export interface WalletRiskAssessment {
