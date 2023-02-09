@@ -12,6 +12,7 @@ import { useAgent } from '../../../hooks/useAgent';
 import { getConfig } from '../../../hooks/voltz-config/config';
 import { isAaveV3, isBorrowing } from '../../../utilities/amm';
 import { MATURITY_WINDOW } from '../../../utilities/constants';
+import { Loading } from '../../atomic/Loading/Loading';
 import { Panel } from '../../atomic/Panel/Panel';
 import { AMMTableHead, AMMTableRow } from './components';
 import { commonOverrides } from './styles';
@@ -31,8 +32,14 @@ export const AMMTable: React.FunctionComponent<AMMTableProps> = ({
 }) => {
   const { agent } = useAgent();
   const network = useAppSelector(selectNetwork);
-
-  if (error || loading) {
+  if (loading) {
+    return (
+      <Panel sx={{ width: '100%' }} variant="grey-dashed">
+        <Loading />
+      </Panel>
+    );
+  }
+  if (error) {
     return null;
   }
   const config = getConfig(network);

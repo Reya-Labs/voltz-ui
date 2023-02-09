@@ -69,7 +69,7 @@ export const TraderPools: React.FunctionComponent = () => {
     <>
       {renderMode === 'pools' && (
         <Box sx={{ width: '100%', maxWidth: '800px', margin: '0 auto' }}>
-          <Box sx={{ marginBottom: (theme) => theme.spacing(12) }}>
+          <Box sx={{ marginBottom: (theme) => theme.spacing(6) }}>
             <PageTitleDesc
               desc="Choose a pool and decide whether to trade fixed or variable rates."
               title="Trade Fixed or Variable Rates"
