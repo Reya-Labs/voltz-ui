@@ -1,8 +1,6 @@
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 import { NetworkConfiguration } from '@voltz-protocol/v1-sdk/src/entities/amm/voltz-config/types';
 
-import { getConfig } from '../../hooks/voltz-config/config';
-
 /**
  * Returns the current position that the user has for the given amm
  * @param positions - the array of positions the user has
@@ -18,14 +16,16 @@ export const findCurrentPosition = (positions: Position[], selectedAmmId: string
  * Finds the latest amm that corresponds to the given position.
  * Please note that the returned amm will be for the latest pool, whereas the position amm may correspond to an old (matured) pool.
  * @param amms - the array of available pools
+ * @param pools - The pools object from the network configuration.
  * @param selectedPosition - the selected position to find the current amm for
  */
-export const findCurrentAmm = (amms: AMM[] = [], selectedPosition: Position) => {
+export const findCurrentAmm = (
+  amms: AMM[] = [],
+  pools: NetworkConfiguration['pools'] = [],
+  selectedPosition: Position,
+) => {
   // First see if there's strong preference for some rollover pool
-  const config = getConfig();
-  const pool = config.pools.find(
-    (p) => p.id.toLowerCase() === selectedPosition.amm.id.toLowerCase(),
-  );
+  const pool = pools.find((p) => p.id.toLowerCase() === selectedPosition.amm.id.toLowerCase());
 
   if (pool && pool.rollover) {
     const customRollover = pool.rollover;

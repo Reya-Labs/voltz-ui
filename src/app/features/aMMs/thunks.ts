@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getAMMsV1 } from '@voltz-protocol/v1-sdk';
+import { getAMMsV1, SupportedNetworksEnum } from '@voltz-protocol/v1-sdk';
 
 const rejectThunkWithError = (
   thunkAPI: {
@@ -15,7 +15,9 @@ const rejectThunkWithError = (
 
 export const initialiseAMMsThunk = createAsyncThunk<
   Awaited<ReturnType<typeof getAMMsV1> | ReturnType<typeof rejectThunkWithError>>,
-  void
+  {
+    network: SupportedNetworksEnum;
+  }
 >('aMMs/initialiseAMMs', async (_, thunkAPI) => {
   try {
     const { amms, error } = await getAMMsV1();

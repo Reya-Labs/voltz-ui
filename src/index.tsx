@@ -11,6 +11,7 @@ import './fonts/DM_Sans/DMSans-Regular.woff';
 import './index.css';
 
 import { ThemeProvider } from '@mui/material/styles';
+import { initV1 } from '@voltz-protocol/v1-sdk';
 import { Amplify } from 'aws-amplify';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -19,10 +20,12 @@ import { HashRouter } from 'react-router-dom';
 
 import { store } from './app';
 import { AppRoutes } from './AppRoutes';
+import { getDefaultNetworkId } from './components/interface/NetworkSelector/get-default-network-id';
 import { AgentProvider } from './contexts/AgentContext/AgentProvider';
 import { AMMsProvider } from './contexts/AMMsContext/AMMsContext';
 import { WalletProvider } from './contexts/WalletContext/WalletProvider';
 import { themes } from './theme';
+import { getAlchemyKeyForNetwork } from './utilities/get-alchemy-key-for-network';
 import { initSentryTracker } from './utilities/sentry';
 
 try {
@@ -30,6 +33,11 @@ try {
     Amplify.configure(require('./aws-exports'));
   }
 } catch (_) {}
+
+initV1({
+  network: getDefaultNetworkId(),
+  alchemyApiKey: getAlchemyKeyForNetwork(getDefaultNetworkId()),
+});
 
 initSentryTracker();
 

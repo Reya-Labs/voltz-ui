@@ -76,7 +76,11 @@ describe('utilities/amm', () => {
       const selectedPosition = {
         amm: { id: '1', rateOracle: { id: '1' }, underlyingToken: { id: '1' } },
       } as Position;
-      const result = findCurrentAmm(amms, selectedPosition);
+      const pools = [
+        { id: '1', rollover: 'customRollover1' },
+        { id: '2', rollover: 'customRollover2' },
+      ] as never;
+      const result = findCurrentAmm(amms, pools, selectedPosition);
       expect(result).toEqual(amms[0]);
     });
 
@@ -104,7 +108,11 @@ describe('utilities/amm', () => {
       const selectedPosition = {
         amm: { id: '11', rateOracle: { id: '11' }, underlyingToken: { id: '11' } },
       } as Position;
-      const result = findCurrentAmm(amms, selectedPosition);
+      const pools = [
+        { id: '1', rollover: 'customRollover1' },
+        { id: '2', rollover: 'customRollover2' },
+      ] as never;
+      const result = findCurrentAmm(amms, pools, selectedPosition);
       expect(result).toEqual(amms[2]);
     });
 
@@ -132,7 +140,11 @@ describe('utilities/amm', () => {
       const selectedPosition = {
         amm: { id: '11', rateOracle: { id: '11' }, underlyingToken: { id: '11' } },
       } as Position;
-      const result = findCurrentAmm(amms, selectedPosition);
+      const pools = [
+        { id: '1', rollover: 'customRollover1' },
+        { id: '2', rollover: 'customRollover2' },
+      ] as never;
+      const result = findCurrentAmm(amms, pools, selectedPosition);
       expect(result).toEqual(amms[2]);
     });
   });

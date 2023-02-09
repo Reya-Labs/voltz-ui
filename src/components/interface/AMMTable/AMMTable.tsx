@@ -4,6 +4,8 @@ import TableContainer from '@mui/material/TableContainer';
 import { AMM } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
+import { selectNetwork } from '../../../app/features/network';
+import { useAppSelector } from '../../../app/hooks';
 import { Agents } from '../../../contexts/AgentContext/types';
 import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
 import { useAgent } from '../../../hooks/useAgent';
@@ -28,11 +30,13 @@ export const AMMTable: React.FunctionComponent<AMMTableProps> = ({
   onSelectItem,
 }) => {
   const { agent } = useAgent();
+  const network = useAppSelector(selectNetwork);
 
   if (error || loading) {
     return null;
   }
-
+  const config = getConfig(network);
+  const pools = config ? config.pools : [];
   return (
     <Panel
       borderRadius="large"
@@ -58,7 +62,7 @@ export const AMMTable: React.FunctionComponent<AMMTableProps> = ({
                 <AMMProvider key={amm.id} amm={amm}>
                   <AMMTableRow
                     endDate={amm.endDateTime}
-                    isAaveV3={isAaveV3(getConfig().pools, amm.id)}
+                    isAaveV3={isAaveV3(pools, amm.id)}
                     isBorrowing={isBorrowing(amm.rateOracle.protocolId)}
                     protocol={amm.protocol}
                     startDate={amm.startDateTime}

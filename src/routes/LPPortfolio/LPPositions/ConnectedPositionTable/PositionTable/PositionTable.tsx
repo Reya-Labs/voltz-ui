@@ -1,8 +1,11 @@
 import { Position } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
+import { selectNetwork } from '../../../../../app/features/network';
+import { useAppSelector } from '../../../../../app/hooks';
 import { AMMProvider } from '../../../../../contexts/AMMContext/AMMContext';
 import { useAMMs } from '../../../../../hooks/useAMMs';
+import { getConfig } from '../../../../../hooks/voltz-config/config';
 import { findCurrentAmm, isBorrowing } from '../../../../../utilities/amm';
 import { getRowButtonId } from '../../../../../utilities/googleAnalytics/helpers';
 import { PositionTableHead } from './components/PositionTableHead/PositionTableHead';
@@ -25,6 +28,9 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   onSettle,
 }) => {
   const { aMMs } = useAMMs();
+  const network = useAppSelector(selectNetwork);
+  const config = getConfig(network);
+  const pools = config ? config.pools : [];
 
   const handleSelectRow = (
     position: Position,
@@ -38,7 +44,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   return (
     <PositionsList itemsPerRow={1}>
       {positions.map((position) => {
-        const rolloverAmm = findCurrentAmm(aMMs, position);
+        const rolloverAmm = findCurrentAmm(aMMs, pools, position);
         const rolloverAvailable = rolloverAmm ? rolloverAmm.id !== position.amm.id : false;
 
         return (

@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import { useEffect, useState } from 'react';
 
 import { selectors } from '../../app';
-import { selectAMMs } from '../../app/features/aMMs';
+import { selectAMMs, selectAMMsLoadedState } from '../../app/features/aMMs';
 import { updateTransactionAction } from '../../app/features/transactions';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { Agents } from '../../contexts/AgentContext/types';
@@ -20,7 +20,7 @@ type UsePositionsResult = {
 export const usePositions = (agent: Agents): UsePositionsResult => {
   const { account: userAddress } = useWallet();
   const dispatch = useAppDispatch();
-  const aMMsLoadedState = useAppSelector((state) => state.aMMs.aMMsLoadedState);
+  const aMMsLoadedState = useAppSelector(selectAMMsLoadedState);
   const aMMs = useAppSelector(selectAMMs);
   const [mePositions, setMePositions] = useState<Position[]>([]);
   const [fetchLoading, setFetchLoading] = useState<boolean>(false);

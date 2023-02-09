@@ -1,8 +1,8 @@
 import { SupportedNetworksEnum } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
-import { useWallet } from '../../../hooks/useWallet';
-import { isNetworkSelectorFlowEnabled } from '../../../utilities/is-network-selector-flow-enabled';
+import { selectNetwork, setNetworkAction } from '../../../app/features/network';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { getNetworkOptions } from './get-network-options';
 import {
   ArrowIcon,
@@ -13,11 +13,8 @@ import {
 } from './NetworkSelector.styled';
 
 export const NetworkSelector: React.FunctionComponent = () => {
-  const { network, connectNetwork } = useWallet();
-
-  if (!isNetworkSelectorFlowEnabled()) {
-    return null;
-  }
+  const network = useAppSelector(selectNetwork);
+  const dispatch = useAppDispatch();
   const networkOptions = getNetworkOptions();
   if (Object.keys(networkOptions).length === 0) {
     return null;
@@ -45,7 +42,13 @@ export const NetworkSelector: React.FunctionComponent = () => {
       )}
       <NetworkSelect
         value={network.toString()}
-        onChange={(event) => connectNetwork(parseInt(event.target.value, 10))}
+        onChange={(event) => {
+          dispatch(
+            setNetworkAction({
+              network: parseInt(event.target.value, 10),
+            }),
+          );
+        }}
       >
         {Object.keys(networkOptions).map((key) => (
           <option key={key} value={key}>
