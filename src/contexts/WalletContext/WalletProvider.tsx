@@ -23,7 +23,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
   const [account, setAccount] = useState<string | null>(null);
   const [name, setName] = useState<WalletName | null>(null);
   const [required, setRequired] = useState<boolean>(false);
-  const [network, setNetwork] = useState<SupportedNetworksEnum>(SupportedNetworksEnum.mainnet);
+  const [network, setNetwork] = useState<SupportedNetworksEnum>(getDefaultNetworkId());
 
   const disconnect = useCallback(
     (errorMessage: string | null = null) => {
@@ -113,6 +113,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
   // page loaded initialize SDK
   useEffect(() => {
     const networkId = getDefaultNetworkId();
+    console.log('####', networkId, getAlchemyKeyForNetwork(networkId));
     initV1({
       network: networkId,
       alchemyApiKey: getAlchemyKeyForNetwork(networkId),
