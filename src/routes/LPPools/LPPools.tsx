@@ -76,7 +76,7 @@ export const LPPools: React.FunctionComponent = () => {
     <>
       {renderMode === 'pools' && (
         <Box sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
-          <Box sx={{ marginBottom: (theme) => theme.spacing(12) }}>
+          <Box sx={{ marginBottom: (theme) => theme.spacing(6) }}>
             <PageTitleDesc
               desc="Choose a pool and provide liquidity within your chosen ranges."
               title="Provide Liquidity"
