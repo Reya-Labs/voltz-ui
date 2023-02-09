@@ -1,14 +1,11 @@
-import { getVoltzPoolConfig } from '@voltz-protocol/v1-sdk';
+import { getVoltzPoolConfigV1 } from '@voltz-protocol/v1-sdk';
 
-let cachedConfig: ReturnType<typeof getVoltzPoolConfig> | null = null;
+let cachedConfig: ReturnType<typeof getVoltzPoolConfigV1> | null = null;
 
-export const getConfig = (): ReturnType<typeof getVoltzPoolConfig> => {
+export const getConfig = (): ReturnType<typeof getVoltzPoolConfigV1> => {
   if (cachedConfig) {
     return cachedConfig;
   }
-  cachedConfig = getVoltzPoolConfig({
-    network: process.env.REACT_APP_NETWORK || '',
-    providerURL: process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK || '',
-  });
+  cachedConfig = getVoltzPoolConfigV1();
   return cachedConfig;
 };

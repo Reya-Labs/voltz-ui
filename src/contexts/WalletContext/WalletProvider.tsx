@@ -113,7 +113,6 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
   // page loaded initialize SDK
   useEffect(() => {
     const networkId = getDefaultNetworkId();
-    console.log('####', networkId, getAlchemyKeyForNetwork(networkId));
     initV1({
       network: networkId,
       alchemyApiKey: getAlchemyKeyForNetwork(networkId),

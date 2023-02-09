@@ -57,7 +57,7 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
   variableApy,
   fixedApr,
 }) => {
-  const { account } = useWallet();
+  const { account, network } = useWallet();
   const { agent } = useAgent();
   const cachedMargin = useRef<number | undefined>(margin);
 
@@ -137,7 +137,7 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
   }
 
   const transactionLink: string | undefined = getViewOnEtherScanLink(
-    process.env.REACT_APP_REQUIRED_ETHEREUM_NETWORK,
+    network,
     activeTransaction.txid,
   );
 

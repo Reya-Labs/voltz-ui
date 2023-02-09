@@ -318,6 +318,7 @@ export const getCommunitySbt = (signer: Signer | null) => {
     nextBadgesSubgraphUrl: process.env.REACT_APP_NEXT_SUBGRAPH_BADGES_URL,
     nonProgDbUrl: process.env.REACT_APP_DB_BADGES_URL,
     referralsDbUrl: process.env.REACT_APP_REFERRAL_AND_SIGNATURE_SERVICE_URL,
+    // TODO: Alex deprecate the REACT_APP_SUBGRAPH_URL when network selector is released
     subgraphUrl: process.env.REACT_APP_SUBGRAPH_URL,
     coingeckoKey: process.env.REACT_APP_COINGECKO_API_KEY,
     ignoredWalletIds: ignoredWalletIds,

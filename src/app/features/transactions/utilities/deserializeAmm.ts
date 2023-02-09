@@ -1,4 +1,4 @@
-import { AMM, RateOracle, Token } from '@voltz-protocol/v1-sdk';
+import { AMM, getProvider, RateOracle, Token } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
 import { SerializedAMM } from '../../../types';
@@ -23,7 +23,7 @@ const deserializeAmm = (serializedAmm: SerializedAMM, signer: providers.JsonRpcS
   return new AMM({
     id,
     signer,
-    provider: providers.getDefaultProvider(process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK),
+    provider: getProvider(),
     termStartTimestampInMS: parseInt(termStartTimestampInMS, 10),
     termEndTimestampInMS: parseInt(termEndTimestampInMS, 10),
     tickSpacing: parseInt(tickSpacing, 10),
