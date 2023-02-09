@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getAllMellowProducts } from '@voltz-protocol/v1-sdk';
+import { getAllMellowProducts, SupportedNetworksEnum } from '@voltz-protocol/v1-sdk';
 import { ethers } from 'ethers';
 
 import { OptimiserInfo } from './types';
@@ -21,13 +21,11 @@ export const initialiseOptimisersThunk = createAsyncThunk<
   {
     signer: ethers.Signer | null;
     type: 'active' | 'all';
+    network: SupportedNetworksEnum;
   }
 >('stateless-optimisers/getProducts', async ({ signer, type }, thunkAPI) => {
   try {
-    const routers = await getAllMellowProducts(signer, type);
-
-    const mappedRouters: OptimiserInfo[] = routers;
-
+    const mappedRouters: OptimiserInfo[] = await getAllMellowProducts(signer, type);
     return mappedRouters;
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);

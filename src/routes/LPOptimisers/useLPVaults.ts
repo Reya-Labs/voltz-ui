@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 
+import { selectNetwork } from '../../app/features/network';
 import {
   initialiseOptimisersThunk,
   selectOptimisers,
@@ -10,14 +11,15 @@ import { useWallet } from '../../hooks/useWallet';
 
 export const useLPVaults = (type: 'active' | 'all') => {
   const { signer } = useWallet();
+  const network = useAppSelector(selectNetwork);
 
   const vaultsLoaded = useAppSelector(selectOptimisersLoadedState);
   const lpVaults = useAppSelector(selectOptimisers);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    void dispatch(initialiseOptimisersThunk({ signer, type }));
-  }, [dispatch, signer]);
+    void dispatch(initialiseOptimisersThunk({ network, signer, type }));
+  }, [dispatch, signer, network]);
 
   return {
     lpVaults,
