@@ -1,10 +1,8 @@
-import { rearm } from '@voltz-protocol/v1-sdk';
 import { ethers } from 'ethers';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { selectNetwork } from '../../app/features/network';
 import { useAppSelector } from '../../app/hooks';
-import { getAlchemyKeyForNetwork } from '../../utilities/get-alchemy-key-for-network';
 import { getErrorMessage } from '../../utilities/getErrorMessage';
 import { getSentryTracker } from '../../utilities/sentry';
 import {
@@ -103,14 +101,6 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
       connect(walletName);
     }
   }, []);
-
-  // page loaded initialize SDK
-  useEffect(() => {
-    rearm({
-      network,
-      alchemyApiKey: getAlchemyKeyForNetwork(network),
-    });
-  }, [network]);
 
   const value = {
     status,
