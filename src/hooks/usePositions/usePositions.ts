@@ -1,4 +1,4 @@
-import { getPositions, Position } from '@voltz-protocol/v1-sdk';
+import { getPositionsV1, Position } from '@voltz-protocol/v1-sdk';
 import { DateTime } from 'luxon';
 import { useEffect, useState } from 'react';
 
@@ -32,10 +32,9 @@ export const usePositions = (agent: Agents): UsePositionsResult => {
       setFetchLoading(true);
       setFetchError(false);
 
-      void getPositions({
+      void getPositionsV1({
         userWalletId: userAddress,
         amms: aMMs,
-        subgraphURL: process.env.REACT_APP_SUBGRAPH_URL || '',
         type: agent === Agents.LIQUIDITY_PROVIDER ? 'LP' : 'Trader',
       }).then(({ positions, error }) => {
         setMePositions([...positions]);
