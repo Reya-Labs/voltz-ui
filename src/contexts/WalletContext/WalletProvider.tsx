@@ -1,7 +1,9 @@
-import { SupportedNetworksEnum } from '@voltz-protocol/v1-sdk';
+import { initV1, SupportedNetworksEnum } from '@voltz-protocol/v1-sdk';
 import { ethers } from 'ethers';
 import React, { useCallback, useEffect, useState } from 'react';
 
+import { getDefaultNetworkId } from '../../components/interface/NetworkSelector/get-default-network-id';
+import { getAlchemyKeyForNetwork } from '../../utilities/get-alchemy-key-for-network';
 import { getErrorMessage } from '../../utilities/getErrorMessage';
 import { getSentryTracker } from '../../utilities/sentry';
 import {
@@ -106,6 +108,15 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     if (walletName) {
       connect(walletName);
     }
+  }, []);
+
+  // page loaded initialize SDK
+  useEffect(() => {
+    const networkId = getDefaultNetworkId();
+    initV1({
+      network: networkId,
+      alchemyApiKey: getAlchemyKeyForNetwork(networkId),
+    });
   }, []);
 
   const value = {

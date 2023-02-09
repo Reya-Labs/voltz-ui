@@ -11,7 +11,6 @@ import './fonts/DM_Sans/DMSans-Regular.woff';
 import './index.css';
 
 import { ThemeProvider } from '@mui/material/styles';
-import { init as initSDK } from '@voltz-protocol/v1-sdk';
 import { Amplify } from 'aws-amplify';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -31,11 +30,6 @@ try {
     Amplify.configure(require('./aws-exports'));
   }
 } catch (_) {}
-
-initSDK({
-  network: process.env.REACT_APP_NETWORK || '',
-  providerURL: process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK || '',
-});
 
 initSentryTracker();
 
