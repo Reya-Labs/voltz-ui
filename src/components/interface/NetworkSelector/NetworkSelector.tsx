@@ -43,7 +43,10 @@ export const NetworkSelector: React.FunctionComponent = () => {
           <ArrowIcon />
         </React.Fragment>
       )}
-      <NetworkSelect onChange={(event) => connectNetwork(parseInt(event.target.value, 10))}>
+      <NetworkSelect
+        value={network.toString()}
+        onChange={(event) => connectNetwork(parseInt(event.target.value, 10))}
+      >
         {Object.keys(networkOptions).map((key) => (
           <option key={key} value={key}>
             {networkOptions[parseInt(key, 10) as SupportedNetworksEnum].name}
