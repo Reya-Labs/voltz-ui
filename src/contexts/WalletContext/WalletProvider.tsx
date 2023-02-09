@@ -1,8 +1,6 @@
 import { ethers } from 'ethers';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { selectNetwork } from '../../app/features/network';
-import { useAppSelector } from '../../app/hooks';
 import { getErrorMessage } from '../../utilities/getErrorMessage';
 import { getSentryTracker } from '../../utilities/sentry';
 import {
@@ -22,7 +20,6 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
   const [account, setAccount] = useState<string | null>(null);
   const [name, setName] = useState<WalletName | null>(null);
   const [required, setRequired] = useState<boolean>(false);
-  const network = useAppSelector(selectNetwork);
 
   const disconnect = useCallback(
     (errorMessage: string | null = null) => {

@@ -1,8 +1,9 @@
 import { registerForAutoRollover } from '@voltz-protocol/v1-sdk';
 import React, { useState } from 'react';
 
+import { selectNetwork } from '../../../app/features/network';
 import { updateOptimiserState } from '../../../app/features/stateless-optimisers';
-import { useAppDispatch } from '../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { Loading } from '../../../components/atomic/Loading/Loading';
 import { Panel } from '../../../components/atomic/Panel/Panel';
 import { AutomaticRolloverToggleProps } from '../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
@@ -17,6 +18,7 @@ import { VaultListItem } from './VaultListItem/VaultListItem';
 export const Optimisers: React.FunctionComponent = () => {
   const { signer } = useWallet();
   const appDispatch = useAppDispatch();
+  const network = useAppSelector(selectNetwork);
 
   const { lpVaults, vaultsLoaded } = useLPVaults('all');
   // TODO: remove this once the entire state is lifted to Redux properly,
@@ -66,6 +68,7 @@ export const Optimisers: React.FunctionComponent = () => {
             updateOptimiserState({
               optimiserId: vault.optimiserId,
               newOptimiserState,
+              network,
             }),
           );
         }

@@ -1,11 +1,12 @@
 import { submitAllBatchesForFee } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useReducer, useState } from 'react';
 
+import { selectNetwork } from '../../../../../app/features/network';
 import {
   OptimiserInfo,
   updateOptimiserState,
 } from '../../../../../app/features/stateless-optimisers';
-import { useAppDispatch } from '../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { Modal } from '../../../../../components/composite/Modal/Modal';
 import { useWallet } from '../../../../../hooks/useWallet';
 import { doNothing } from '../../../../../utilities/doNothing';
@@ -41,6 +42,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
 }) => {
   const { signer } = useWallet();
   const appDispatch = useAppDispatch();
+  const network = useAppSelector(selectNetwork);
 
   const [gasCost, setGasCost] = useState(-1);
   const [isConfirmBatchBudgetOpen, setIsConfirmBatchBudgetOpen] = useState(false);
@@ -75,6 +77,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
             updateOptimiserState({
               optimiserId: lpVault.optimiserId,
               newOptimiserState,
+              network,
             }),
           );
         }

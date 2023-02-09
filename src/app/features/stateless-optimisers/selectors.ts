@@ -1,10 +1,13 @@
 import { RootState } from '../../store';
+import { selectNetwork } from '../network';
 import { OptimiserInfo } from './types';
 
 export const selectOptimisers = (state: RootState): OptimiserInfo[] => {
-  return state.statelessOptimisers.optimisers;
+  const network = selectNetwork(state);
+  return state.statelessOptimisers.optimisers[network];
 };
 
 export const selectOptimisersLoadedState = (state: RootState) => {
-  return state.statelessOptimisers.optimisersLoadedState;
+  const network = selectNetwork(state);
+  return state.statelessOptimisers.optimisersLoadedState[network];
 };
