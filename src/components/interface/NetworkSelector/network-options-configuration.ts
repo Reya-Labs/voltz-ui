@@ -14,8 +14,16 @@ export const networkOptionsConfiguration: Record<
     name: 'Ethereum',
     Icon: EthereumIcon,
   },
+  [SupportedNetworksEnum.goerli]: {
+    name: 'Görli',
+    Icon: EthereumIcon,
+  },
   [SupportedNetworksEnum.arbitrum]: {
     name: 'Arbitrum',
+    Icon: ArbitrumIcon,
+  },
+  [SupportedNetworksEnum.arbitrumGoerli]: {
+    name: 'Görli Arbitrum',
     Icon: ArbitrumIcon,
   },
 };

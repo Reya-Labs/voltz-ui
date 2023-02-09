@@ -5,6 +5,8 @@ import TableContainer from '@mui/material/TableContainer';
 import { BorrowAMM, Position } from '@voltz-protocol/v1-sdk';
 import React, { useMemo, useRef } from 'react';
 
+import { selectNetwork } from '../../../../app/features/network';
+import { useAppSelector } from '../../../../app/hooks';
 import { Panel } from '../../../../components/atomic/Panel/Panel';
 import { Typography } from '../../../../components/atomic/Typography/Typography';
 import { BorrowAMMProvider } from '../../../../contexts/BorrowAMMContext/BorrowAMMContext';
@@ -36,6 +38,7 @@ export const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
   onLoaded,
   commonOverrides,
 }) => {
+  const network = useAppSelector(selectNetwork);
   const countLoaded = useRef(-2);
   const counted = useRef({
     fixedRows: false,
@@ -65,7 +68,7 @@ export const BorrowTable: React.FunctionComponent<BorrowTableProps> = ({
   };
 
   const tableData = useMemo(() => {
-    const unfilteredDatum = borrowAmms.map(mapAmmToAmmTableDatum);
+    const unfilteredDatum = borrowAmms.map((bA) => mapAmmToAmmTableDatum(bA, network));
     counted.current.noFixedRows = false;
     counted.current.noVariableRows = false;
     return unfilteredDatum;

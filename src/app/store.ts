@@ -4,6 +4,7 @@ import createSagaMiddleware from 'redux-saga';
 
 import { aMMsReducer } from './features/aMMs';
 import { lpOptimisersReducer } from './features/lp-optimisers';
+import { networkReducer } from './features/network';
 import { statelessOptimisersReducer } from './features/stateless-optimisers';
 import { saga, transactionsReducer } from './features/transactions';
 
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   lpOptimisers: lpOptimisersReducer,
   statelessOptimisers: statelessOptimisersReducer,
   aMMs: aMMsReducer,
+  network: networkReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();

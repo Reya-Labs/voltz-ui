@@ -1,8 +1,9 @@
-import { initV1, SupportedNetworksEnum } from '@voltz-protocol/v1-sdk';
+import { rearm } from '@voltz-protocol/v1-sdk';
 import { ethers } from 'ethers';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { getDefaultNetworkId } from '../../components/interface/NetworkSelector/get-default-network-id';
+import { selectNetwork } from '../../app/features/network';
+import { useAppSelector } from '../../app/hooks';
 import { getAlchemyKeyForNetwork } from '../../utilities/get-alchemy-key-for-network';
 import { getErrorMessage } from '../../utilities/getErrorMessage';
 import { getSentryTracker } from '../../utilities/sentry';
@@ -23,7 +24,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
   const [account, setAccount] = useState<string | null>(null);
   const [name, setName] = useState<WalletName | null>(null);
   const [required, setRequired] = useState<boolean>(false);
-  const [network, setNetwork] = useState<SupportedNetworksEnum>(getDefaultNetworkId());
+  const network = useAppSelector(selectNetwork);
 
   const disconnect = useCallback(
     (errorMessage: string | null = null) => {
@@ -95,13 +96,6 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     [disconnect, setAccount, setStatus],
   );
 
-  const connectNetwork = useCallback(
-    (networkValue: SupportedNetworksEnum) => {
-      setNetwork(networkValue);
-    },
-    [setNetwork],
-  );
-
   // Reconnect wallet on page load
   useEffect(() => {
     const walletName = localStorage.getItem('connectedWalletName') as WalletName;
@@ -112,17 +106,15 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
 
   // page loaded initialize SDK
   useEffect(() => {
-    const networkId = getDefaultNetworkId();
-    initV1({
-      network: networkId,
-      alchemyApiKey: getAlchemyKeyForNetwork(networkId),
+    rearm({
+      network,
+      alchemyApiKey: getAlchemyKeyForNetwork(network),
     });
-  }, []);
+  }, [network]);
 
   const value = {
     status,
     connect,
-    connectNetwork,
     disconnect,
     account,
     name,
@@ -131,7 +123,6 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     required,
     setRequired,
     walletError,
-    network,
   };
 
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;

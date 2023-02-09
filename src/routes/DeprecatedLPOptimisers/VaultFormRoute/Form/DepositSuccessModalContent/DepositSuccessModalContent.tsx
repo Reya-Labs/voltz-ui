@@ -1,7 +1,8 @@
 import { MellowProduct } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
-import { useWallet } from '../../../../../hooks/useWallet';
+import { selectNetwork } from '../../../../../app/features/network';
+import { useAppSelector } from '../../../../../app/hooks';
 import { doNothing } from '../../../../../utilities/doNothing';
 import { getViewOnEtherScanLink } from '../../../../../utilities/getViewOnEtherScanLink';
 import { routes } from '../../../../paths';
@@ -31,7 +32,7 @@ export const DepositSuccessModalContent: React.FunctionComponent<Props> = ({
   isBatchFlowOpen,
   depositTransactionId,
 }) => {
-  const { network } = useWallet();
+  const network = useAppSelector(selectNetwork);
   return (
     <ContentBox
       data-testid="DepositSuccessModalContent-ContentBox"

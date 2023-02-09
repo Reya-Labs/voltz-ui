@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getMellowLPVaultsV1, MellowProduct } from '@voltz-protocol/v1-sdk';
+import { MellowProduct } from '@voltz-protocol/v1-sdk';
 
 import { initialiseVaultsForSignerThunk, initialiseVaultsThunk } from './thunks';
 
@@ -14,7 +14,7 @@ const initialState: SliceState = {
   vaultsLoadedState: 'idle',
   signerLoadedState: 'idle',
   selectedVaultId: undefined,
-  lpVaults: getMellowLPVaultsV1(),
+  lpVaults: [],
 };
 
 export const slice = createSlice({
@@ -23,7 +23,7 @@ export const slice = createSlice({
   reducers: {
     resetVaultsAction: (state) => {
       // TODO: Filip and Costin fix this by not keeping SDK stuff in UI
-      state.lpVaults = getMellowLPVaultsV1() as never;
+      state.lpVaults = [];
     },
   },
   extraReducers: (builder) => {

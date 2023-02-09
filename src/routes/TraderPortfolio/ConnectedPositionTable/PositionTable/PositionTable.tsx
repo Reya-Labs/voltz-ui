@@ -6,6 +6,8 @@ import TableContainer from '@mui/material/TableContainer';
 import { Position } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
+import { selectNetwork } from '../../../../app/features/network';
+import { useAppSelector } from '../../../../app/hooks';
 import { Panel } from '../../../../components/atomic/Panel/Panel';
 import { AMMProvider } from '../../../../contexts/AMMContext/AMMContext';
 import { useAMMs } from '../../../../hooks/useAMMs';
@@ -28,6 +30,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   onSelectItem,
   onSettle,
 }) => {
+  const network = useAppSelector(selectNetwork);
   const { aMMs } = useAMMs();
 
   const commonOverrides: SystemStyleObject<Theme> = {
@@ -88,7 +91,8 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
     onSelectItem(positions[index], mode);
   };
 
-  const config = getConfig();
+  const config = getConfig(network);
+  const pools = config ? config.pools : [];
 
   if (positions.length === 0) {
     return null;
@@ -97,7 +101,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   return (
     <List sx={{ padding: '0', margin: '0' }}>
       {positions.map((pos, index) => {
-        const rolloverAmm = findCurrentAmm(aMMs, pos);
+        const rolloverAmm = findCurrentAmm(aMMs, pools, pos);
         const rolloverAvailable = rolloverAmm ? rolloverAmm.id !== pos.amm.id : false;
         const closeToMaturity =
           Date.now().valueOf() + MATURITY_WINDOW > pos.amm.endDateTime.toMillis();
@@ -118,7 +122,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                 healthFactor={pos.healthFactor}
                 isSettled={pos.isSettled}
                 poolTraderWithdrawable={
-                  config.pools.find((pool) => pool.id === pos.amm.id)?.traderWithdrawable ?? true
+                  pools.find((pool) => pool.id === pos.amm.id)?.traderWithdrawable ?? true
                 }
                 positionType={pos.positionType}
                 rolloverAvailable={rolloverAvailable}
@@ -144,7 +148,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                       <PositionTableRow
                         key={pos.id}
                         index={index}
-                        isAaveV3={isAaveV3(getConfig().pools, pos.amm.id)}
+                        isAaveV3={isAaveV3(pools, pos.amm.id)}
                         position={pos}
                       />
                     </AMMProvider>

@@ -5,6 +5,7 @@ import isUndefined from 'lodash.isundefined';
 import React, { useEffect, useMemo, useRef } from 'react';
 
 import { selectors } from '../../../app';
+import { selectNetwork } from '../../../app/features/network';
 import { useAppSelector } from '../../../app/hooks';
 import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
 import { MintBurnFormLiquidityAction } from '../../../contexts/MintBurnFormContext/MintBurnFormContext';
@@ -57,7 +58,8 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
   variableApy,
   fixedApr,
 }) => {
-  const { account, network } = useWallet();
+  const { account } = useWallet();
+  const network = useAppSelector(selectNetwork);
   const { agent } = useAgent();
   const cachedMargin = useRef<number | undefined>(margin);
 

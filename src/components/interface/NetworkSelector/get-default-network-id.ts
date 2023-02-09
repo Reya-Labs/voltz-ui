@@ -1,15 +1,15 @@
 import { SupportedNetworksEnum } from '@voltz-protocol/v1-sdk';
 
-import { getAllowedNetworks } from '../../../utilities/get-allowed-networks';
+import { getNetworksFromProcessEnv } from '../../../utilities/get-networks-from-process-env';
 import { networkOptionsConfiguration } from './network-options-configuration';
 type SupportedNetworkKeys = keyof typeof SupportedNetworksEnum;
 
 export const getDefaultNetworkId = (): SupportedNetworksEnum => {
-  const allowedNetworks = getAllowedNetworks();
-  const firstSupported = allowedNetworks.filter(
-    (allowedNetwork) =>
-      SupportedNetworksEnum[allowedNetwork as SupportedNetworkKeys] &&
-      networkOptionsConfiguration[SupportedNetworksEnum[allowedNetwork as SupportedNetworkKeys]],
-  )[0];
-  return SupportedNetworksEnum[firstSupported as SupportedNetworkKeys];
+  const allowedNetworks = getNetworksFromProcessEnv();
+  const firstSupportedNetwork = allowedNetworks.find(
+    ({ network }) =>
+      SupportedNetworksEnum[network as SupportedNetworkKeys] &&
+      networkOptionsConfiguration[SupportedNetworksEnum[network as SupportedNetworkKeys]],
+  )?.network;
+  return SupportedNetworksEnum[firstSupportedNetwork as SupportedNetworkKeys];
 };
