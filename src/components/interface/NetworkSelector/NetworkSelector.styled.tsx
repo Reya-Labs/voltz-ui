@@ -40,6 +40,7 @@ export const EthereumIcon = styled(Ethereum)`
 export const WarningIcon = styled(Warning)`
   width: 16px;
   height: 16px;
+  margin-right: 4px;
 `;
 
 export const ArrowIcon = styled(Arrow)`

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import TagManager from 'react-gtm-module';
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
 
-import { Page } from './components/interface/Page/Page';
+import { NetworkProtectedPage } from './components/interface/NetworkProtectedPage/NetworkProtectedPage';
 import { VaultFormRoute as DeprecatedVaultFormRoute } from './routes/DeprecatedLPOptimisers/VaultFormRoute/VaultFormRoute';
 import { Vaults as DeprecatedVaults } from './routes/DeprecatedLPOptimisers/Vaults/Vaults';
 import { FixedBorrower } from './routes/FixedBorrower/FixedBorrower';
@@ -55,44 +55,121 @@ export const AppRoutes = () => {
   }, [searchParamsReferrer]);
 
   return (
-    <Page>
-      <Routes>
-        <Route path="/">
-          <Route element={<Navigate to={routes.TRADER_POOLS} />} index />
-          <Route
-            element={<Navigate replace={true} to={`/${routes.TRADER_POOLS}`} />}
-            path={routes.WELCOME}
-          />
-          <Route element={<TraderPools />} path={routes.TRADER_POOLS} />
-          <Route element={<TraderPortfolio />} path={routes.TRADER_PORTFOLIO} />
-          <Route element={<LPPools />} path={routes.LP_POOLS} />
-          <Route element={<LPPortfolio />} path={routes.LP_PORTFOLIO} />
-          <Route
-            element={isStatelessSDKEnabled() ? <Vaults /> : <DeprecatedVaults />}
-            path={routes.LP_OPTIMISERS}
-          />
-          <Route
-            element={isStatelessSDKEnabled() ? <VaultFormRoute /> : <DeprecatedVaultFormRoute />}
-            path={routes.LP_OPTIMISERS_DEPOSIT_FORM}
-          />
-          <Route
-            element={isStatelessSDKEnabled() ? <VaultFormRoute /> : <DeprecatedVaultFormRoute />}
-            path={routes.LP_OPTIMISERS_WITHDRAW_ROLLOVER_FORM}
-          />
-          <Route element={<FixedBorrower />} path={routes.BORROW_POS} />
-          <Route element={<Profile />} path={routes.PROFILE} />
-          <Route element={<TradingLeague />} path={routes.TRADING_LEAGUE} />
-          {/*deprecated redirects*/}
-          <Route
-            element={<Navigate replace={true} to={`/${routes.LP_OPTIMISERS}`} />}
-            path={routes.DEPRECATED_PRODUCTS}
-          />
-          <Route
-            element={<Navigate replace={true} to={`/${routes.LP_PORTFOLIO}`} />}
-            path={routes.DEPRECATED_LP_PORTFOLIO}
-          />
-        </Route>
-      </Routes>
-    </Page>
+    <Routes>
+      <Route path="/">
+        <Route element={<Navigate to={routes.TRADER_POOLS} />} index />
+        <Route
+          element={<Navigate replace={true} to={`/${routes.TRADER_POOLS}`} />}
+          path={routes.WELCOME}
+        />
+        <Route
+          element={
+            <NetworkProtectedPage>
+              <TraderPools />
+            </NetworkProtectedPage>
+          }
+          path={routes.TRADER_POOLS}
+        />
+        <Route
+          element={
+            <NetworkProtectedPage>
+              <TraderPortfolio />
+            </NetworkProtectedPage>
+          }
+          path={routes.TRADER_PORTFOLIO}
+        />
+        <Route
+          element={
+            <NetworkProtectedPage>
+              <LPPools />
+            </NetworkProtectedPage>
+          }
+          path={routes.LP_POOLS}
+        />
+        <Route
+          element={
+            <NetworkProtectedPage>
+              <LPPortfolio />
+            </NetworkProtectedPage>
+          }
+          path={routes.LP_PORTFOLIO}
+        />
+        <Route
+          element={
+            isStatelessSDKEnabled() ? (
+              <NetworkProtectedPage>
+                <Vaults />
+              </NetworkProtectedPage>
+            ) : (
+              <NetworkProtectedPage>
+                <DeprecatedVaults />
+              </NetworkProtectedPage>
+            )
+          }
+          path={routes.LP_OPTIMISERS}
+        />
+        <Route
+          element={
+            isStatelessSDKEnabled() ? (
+              <NetworkProtectedPage>
+                <VaultFormRoute />
+              </NetworkProtectedPage>
+            ) : (
+              <NetworkProtectedPage>
+                <DeprecatedVaultFormRoute />
+              </NetworkProtectedPage>
+            )
+          }
+          path={routes.LP_OPTIMISERS_DEPOSIT_FORM}
+        />
+        <Route
+          element={
+            isStatelessSDKEnabled() ? (
+              <NetworkProtectedPage>
+                <VaultFormRoute />
+              </NetworkProtectedPage>
+            ) : (
+              <NetworkProtectedPage>
+                <DeprecatedVaultFormRoute />
+              </NetworkProtectedPage>
+            )
+          }
+          path={routes.LP_OPTIMISERS_WITHDRAW_ROLLOVER_FORM}
+        />
+        <Route
+          element={
+            <NetworkProtectedPage>
+              <FixedBorrower />
+            </NetworkProtectedPage>
+          }
+          path={routes.BORROW_POS}
+        />
+        <Route
+          element={
+            <NetworkProtectedPage>
+              <Profile />
+            </NetworkProtectedPage>
+          }
+          path={routes.PROFILE}
+        />
+        <Route
+          element={
+            <NetworkProtectedPage>
+              <TradingLeague />
+            </NetworkProtectedPage>
+          }
+          path={routes.TRADING_LEAGUE}
+        />
+        {/*deprecated redirects*/}
+        <Route
+          element={<Navigate replace={true} to={`/${routes.LP_OPTIMISERS}`} />}
+          path={routes.DEPRECATED_PRODUCTS}
+        />
+        <Route
+          element={<Navigate replace={true} to={`/${routes.LP_PORTFOLIO}`} />}
+          path={routes.DEPRECATED_LP_PORTFOLIO}
+        />
+      </Route>
+    </Routes>
   );
 };
