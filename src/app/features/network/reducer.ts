@@ -5,10 +5,12 @@ import { getDefaultNetworkId } from '../../../components/interface/NetworkSelect
 
 type SliceState = {
   network: SupportedNetworksEnum;
+  isSupportedNetwork: boolean;
 };
 
 const initialState: SliceState = {
   network: getDefaultNetworkId(),
+  isSupportedNetwork: true,
 };
 
 export const slice = createSlice({
@@ -18,18 +20,17 @@ export const slice = createSlice({
     setNetworkAction: (
       state,
       {
-        payload: { network },
+        payload: { network, isSupportedNetwork },
       }: PayloadAction<{
         network: SupportedNetworksEnum;
+        isSupportedNetwork: boolean;
       }>,
     ) => {
       state.network = network;
-    },
-    resetNetworkAction: (state) => {
-      state.network = getDefaultNetworkId();
+      state.isSupportedNetwork = isSupportedNetwork;
     },
   },
 });
 
-export const { resetNetworkAction, setNetworkAction } = slice.actions;
+export const { setNetworkAction } = slice.actions;
 export const networkReducer = slice.reducer;

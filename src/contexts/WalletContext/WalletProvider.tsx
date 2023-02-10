@@ -2,8 +2,9 @@ import { detectNetworkWithChainId } from '@voltz-protocol/v1-sdk';
 import { ethers } from 'ethers';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { resetNetworkAction, selectNetwork, setNetworkAction } from '../../app/features/network';
+import { selectNetwork, setNetworkAction } from '../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { getDefaultNetworkId } from '../../components/interface/NetworkSelector/get-default-network-id';
 import { getErrorMessage } from '../../utilities/getErrorMessage';
 import { getSentryTracker } from '../../utilities/sentry';
 import { checkForRiskyWallet, checkForTOSSignature, getWalletProvider } from './services';
@@ -31,7 +32,6 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
       setAccount(null);
       setStatus('notConnected');
       setWalletError(errorMessage);
-      dispatch(resetNetworkAction());
     },
     [dispatch],
   );
@@ -72,11 +72,18 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
           const providerNetwork = await newProvider.getNetwork();
           const networkValidation = detectNetworkWithChainId(providerNetwork.chainId);
           if (!networkValidation.isSupported) {
+            dispatch(
+              setNetworkAction({
+                network: getDefaultNetworkId(),
+                isSupportedNetwork: false,
+              }),
+            );
             throw new Error('Wrong network');
           } else {
             dispatch(
               setNetworkAction({
                 network: networkValidation.network!,
+                isSupportedNetwork: true,
               }),
             );
           }
@@ -115,7 +122,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     }
   }, []);
 
-  const onNetworkChange = async () => {
+  const onNetworkChangeConnectedWallet = async () => {
     if (!provider) {
       return;
     }
@@ -131,7 +138,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     }
   };
   useEffect(() => {
-    void onNetworkChange();
+    void onNetworkChangeConnectedWallet();
   }, [provider, network]);
 
   const value = {

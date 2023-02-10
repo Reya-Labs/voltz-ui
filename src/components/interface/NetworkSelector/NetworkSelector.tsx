@@ -1,7 +1,11 @@
 import { SupportedNetworksEnum } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
-import { selectNetwork, setNetworkAction } from '../../../app/features/network';
+import {
+  selectIsSupportedNetwork,
+  selectNetwork,
+  setNetworkAction,
+} from '../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { getNetworkOptions } from './get-network-options';
 import {
@@ -14,6 +18,7 @@ import {
 
 export const NetworkSelector: React.FunctionComponent = () => {
   const network = useAppSelector(selectNetwork);
+  const isSupportedNetwork = useAppSelector(selectIsSupportedNetwork);
   const dispatch = useAppDispatch();
   const networkOptions = getNetworkOptions();
   if (Object.keys(networkOptions).length === 0) {
@@ -23,7 +28,7 @@ export const NetworkSelector: React.FunctionComponent = () => {
 
   return (
     <SelectorBox data-testid="NetworkSelector-SelectorBox">
-      {currentNetwork ? (
+      {currentNetwork && isSupportedNetwork ? (
         <React.Fragment>
           <currentNetwork.Icon />
           <NetworkTypography data-testid="NetworkSelector-NetworkTypography">
@@ -41,15 +46,17 @@ export const NetworkSelector: React.FunctionComponent = () => {
         </React.Fragment>
       )}
       <NetworkSelect
-        value={network.toString()}
+        value={isSupportedNetwork ? network.toString() : 'Unsupported'}
         onChange={(event) => {
           dispatch(
             setNetworkAction({
               network: parseInt(event.target.value, 10),
+              isSupportedNetwork: true,
             }),
           );
         }}
       >
+        {!isSupportedNetwork ? <option value="Unsupported">Unsupported</option> : null}
         {Object.keys(networkOptions).map((key) => (
           <option key={key} value={key}>
             {networkOptions[parseInt(key, 10) as SupportedNetworksEnum].name}
