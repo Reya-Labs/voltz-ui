@@ -17,7 +17,7 @@ import { VaultListItem } from './VaultListItem/VaultListItem';
 
 export const Optimisers: React.FunctionComponent = () => {
   const { signer } = useWallet();
-  const appDispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const network = useAppSelector(selectNetwork);
 
   const { lpVaults, vaultsLoaded } = useLPVaults('all');
@@ -64,7 +64,7 @@ export const Optimisers: React.FunctionComponent = () => {
         signer,
       }).then(({ newOptimiserState }) => {
         if (newOptimiserState) {
-          void appDispatch(
+          void dispatch(
             updateOptimiserState({
               optimiserId: vault.optimiserId,
               newOptimiserState,

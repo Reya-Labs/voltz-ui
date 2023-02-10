@@ -24,7 +24,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
   onGoBack,
 }) => {
   const { signer } = useWallet();
-  const appDispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const network = useAppSelector(selectNetwork);
 
   const subvault = vault.vaults[vaultIndex];
@@ -67,7 +67,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
     }).then(
       ({ newOptimiserState }) => {
         if (newOptimiserState) {
-          void appDispatch(
+          void dispatch(
             updateOptimiserState({
               optimiserId: vault.optimiserId,
               newOptimiserState,
@@ -103,7 +103,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
     }).then(
       ({ newOptimiserState }) => {
         if (newOptimiserState) {
-          void appDispatch(
+          void dispatch(
             updateOptimiserState({
               optimiserId: vault.optimiserId,
               newOptimiserState,

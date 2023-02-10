@@ -24,7 +24,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
   onGoBack,
 }) => {
   const { signer, account } = useWallet();
-  const appDispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const network = useAppSelector(selectNetwork);
 
   const automaticWeights: FormProps['weights'] = vault.vaults.map((v) => ({
@@ -92,7 +92,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
           setDepositTransactionId((receipt as ethers.ContractReceipt).transactionHash);
 
           if (newOptimiserState) {
-            void appDispatch(
+            void dispatch(
               updateOptimiserState({
                 optimiserId: vault.optimiserId,
                 newOptimiserState,
