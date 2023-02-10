@@ -117,7 +117,7 @@ export const PoolField = ({
         >
           {tokenInfo[1]}
         </Box>
-        {protocolInfo[0]} - {tokenInfo[0]}
+        {protocolInfo[0]} {tokenInfo[0] ? '-' : null} {tokenInfo[0]}
       </Box>
     </Typography>
   );

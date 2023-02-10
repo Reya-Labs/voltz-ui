@@ -1,3 +1,4 @@
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { useEffect } from 'react';
 import TagManager from 'react-gtm-module';
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
@@ -6,6 +7,7 @@ import { setChainIdThunk } from './app/features/network/thunks';
 import { useAppDispatch } from './app/hooks';
 import { NetworkProtectedPage } from './components/interface/NetworkProtectedPage/NetworkProtectedPage';
 import { getDefaultChainId } from './components/interface/NetworkSelector/get-default-chain-id';
+import { NotFoundPage } from './components/interface/NotFoundPage/NotFoundPage';
 import { useWallet } from './hooks/useWallet';
 import { VaultFormRoute as DeprecatedVaultFormRoute } from './routes/DeprecatedLPOptimisers/VaultFormRoute/VaultFormRoute';
 import { Vaults as DeprecatedVaults } from './routes/DeprecatedLPOptimisers/Vaults/Vaults';
@@ -104,6 +106,7 @@ export const AppRoutes = () => {
 
   return (
     <Routes>
+      <Route element={<NotFoundPage />} path="*" />
       <Route path="/">
         <Route element={<Navigate to={routes.TRADER_POOLS} />} index />
         <Route
@@ -194,7 +197,9 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedPage>
+            <NetworkProtectedPage
+              notRenderedForNetworks={[SupportedChainId.arbitrum, SupportedChainId.arbitrumGoerli]}
+            >
               <Profile />
             </NetworkProtectedPage>
           }
@@ -202,7 +207,9 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedPage>
+            <NetworkProtectedPage
+              notRenderedForNetworks={[SupportedChainId.arbitrum, SupportedChainId.arbitrumGoerli]}
+            >
               <TradingLeague />
             </NetworkProtectedPage>
           }
