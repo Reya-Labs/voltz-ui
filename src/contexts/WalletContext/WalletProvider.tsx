@@ -119,7 +119,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
   useEffect(() => {
     const walletName = localStorage.getItem('connectedWalletName') as WalletName;
     if (walletName) {
-      connect(walletName);
+      void connect(walletName);
     }
   }, []);
 
