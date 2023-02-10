@@ -1,12 +1,12 @@
 import { ethers } from 'ethers';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { selectNetwork } from '../../app/features/network';
-import { setNetworkThunk } from '../../app/features/network/thunks';
+import { selectChainId } from '../../app/features/network';
+import { setChainIdThunk } from '../../app/features/network/thunks';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { getDefaultNetworkId } from '../../components/interface/NetworkSelector/get-default-network-id';
-import { detectIfNetworkSupported } from '../../utilities/detect-if-network-supported';
+import { getDefaultChainId } from '../../components/interface/NetworkSelector/get-default-chain-id';
 import { getErrorMessage } from '../../utilities/getErrorMessage';
+import { detectIfNetworkSupported } from '../../utilities/network/detect-if-network-supported';
 import { getSentryTracker } from '../../utilities/sentry';
 import { checkForRiskyWallet, checkForTOSSignature, getWalletProvider } from './services';
 import { WalletName, WalletStatus } from './types';
@@ -21,7 +21,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
   const [name, setName] = useState<WalletName | null>(null);
   const [required, setRequired] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-  const network = useAppSelector(selectNetwork);
+  const chainId = useAppSelector(selectChainId);
 
   const disconnect = useCallback(
     (errorMessage: string | null = null) => {
@@ -72,18 +72,18 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
           }
           const providerNetwork = await newProvider.getNetwork();
           const networkValidation = detectIfNetworkSupported(providerNetwork.chainId);
-          if (!networkValidation.isSupported) {
+          if (!networkValidation.isSupported || !networkValidation.chainId) {
             await dispatch(
-              setNetworkThunk({
-                network: getDefaultNetworkId(),
+              setChainIdThunk({
+                chainId: getDefaultChainId(),
                 isSupportedNetwork: false,
               }),
             );
             throw new Error('Wrong network');
           } else {
             await dispatch(
-              setNetworkThunk({
-                network: networkValidation.network!,
+              setChainIdThunk({
+                chainId: networkValidation.chainId,
                 isSupportedNetwork: true,
               }),
             );
@@ -130,7 +130,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
 
     try {
       const providerNetwork = await provider.getNetwork();
-      const networkValidation = providerNetwork.chainId === network;
+      const networkValidation = providerNetwork.chainId === chainId;
 
       if (!networkValidation) {
         throw new Error('Wrong network');
@@ -141,7 +141,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
   };
   useEffect(() => {
     void onNetworkChangeConnectedWallet();
-  }, [provider, network]);
+  }, [provider, chainId]);
 
   const value = {
     status,

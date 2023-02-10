@@ -6,8 +6,6 @@ import React, { PropsWithChildren } from 'react';
 import { Provider as ReduxProvider } from 'react-redux';
 
 import { AppStore, RootState, setupStore } from '../app';
-import { getDefaultNetworkId } from '../components/interface/NetworkSelector/get-default-network-id';
-import { getAlchemyKeyForNetwork } from '../utilities/get-alchemy-key-for-network';
 // This type interface extends the default options for render from RTL, as well
 // as allows the user to specify other things such as initialState, store.
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
@@ -24,10 +22,7 @@ export function renderWithProviders(
     ...renderOptions
   }: ExtendedRenderOptions = {},
 ) {
-  initV1({
-    network: getDefaultNetworkId(),
-    alchemyApiKey: getAlchemyKeyForNetwork(getDefaultNetworkId()),
-  });
+  initV1();
   const Wrapper = ({ children }: PropsWithChildren<{}>): JSX.Element => {
     return <ReduxProvider store={store}>{children}</ReduxProvider>;
   };

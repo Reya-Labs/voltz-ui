@@ -3,7 +3,7 @@ import { AMM, Position } from '@voltz-protocol/v1-sdk';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { selectNetwork } from '../../../app/features/network';
+import { selectChainId } from '../../../app/features/network';
 import { useAppSelector } from '../../../app/hooks';
 import { ConnectedMintBurnForm } from '../../../components/containers/ConnectedMintBurnForm/ConnectedMintBurnForm';
 import { Agents } from '../../../contexts/AgentContext/types';
@@ -30,8 +30,8 @@ export const LPPositions: React.FunctionComponent<{
   const [position, setPosition] = useState<Position>();
   const [settling, setSettling] = useState<boolean>(false);
   const { onChangeAgent } = useAgent();
-  const network = useAppSelector(selectNetwork);
-  const config = getConfig(network);
+  const chainId = useAppSelector(selectChainId);
+  const config = getConfig(chainId);
   const pools = config ? config.pools : [];
 
   const { aMMs } = useAMMs();

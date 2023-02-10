@@ -1,17 +1,17 @@
-import { getVoltzPoolConfigV1, SupportedNetworksEnum } from '@voltz-protocol/v1-sdk';
+import { getVoltzPoolConfigV1, SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 type Config = ReturnType<typeof getVoltzPoolConfigV1> | null;
-const cachedConfig: Record<SupportedNetworksEnum, Config> = {
-  [SupportedNetworksEnum.mainnet]: null,
-  [SupportedNetworksEnum.goerli]: null,
-  [SupportedNetworksEnum.arbitrum]: null,
-  [SupportedNetworksEnum.arbitrumGoerli]: null,
+const cachedConfig: Record<SupportedChainId, Config> = {
+  [SupportedChainId.mainnet]: null,
+  [SupportedChainId.goerli]: null,
+  [SupportedChainId.arbitrum]: null,
+  [SupportedChainId.arbitrumGoerli]: null,
 };
 
-export const getConfig = (network: SupportedNetworksEnum): Config => {
-  if (cachedConfig[network]) {
-    return cachedConfig[network];
+export const getConfig = (chainId: SupportedChainId): Config => {
+  if (cachedConfig[chainId]) {
+    return cachedConfig[chainId];
   }
-  cachedConfig[network] = getVoltzPoolConfigV1();
-  return cachedConfig[network];
+  cachedConfig[chainId] = getVoltzPoolConfigV1(chainId);
+  return cachedConfig[chainId];
 };

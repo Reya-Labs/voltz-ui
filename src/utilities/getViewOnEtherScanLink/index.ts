@@ -4,29 +4,29 @@
  * @param {string} [transactionId] - The transaction ID of the transaction you want to link to.
  * @returns A string that is a link to etherscan.io
  */
-import { SupportedNetworksEnum } from '@voltz-protocol/v1-sdk';
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 // TODO: Alex move this to SDK, seems as candidate for SDK
 export const getViewOnEtherScanLink = (
-  ethereumNetworkIdentifier?: SupportedNetworksEnum,
+  ethereumNetworkIdentifier?: SupportedChainId,
   transactionId?: string,
 ) => {
   if (!ethereumNetworkIdentifier || !transactionId) {
     return 'https://etherscan.io/';
   }
-  if (ethereumNetworkIdentifier === SupportedNetworksEnum.goerli) {
+  if (ethereumNetworkIdentifier === SupportedChainId.goerli) {
     return `https://goerli.etherscan.io/tx/${transactionId}`;
   }
 
-  if (ethereumNetworkIdentifier === SupportedNetworksEnum.mainnet) {
+  if (ethereumNetworkIdentifier === SupportedChainId.mainnet) {
     return `https://etherscan.io/tx/${transactionId}`;
   }
 
-  if (ethereumNetworkIdentifier === SupportedNetworksEnum.arbitrum) {
+  if (ethereumNetworkIdentifier === SupportedChainId.arbitrum) {
     return `https://arbiscan.io/tx/${transactionId}`;
   }
 
-  if (ethereumNetworkIdentifier === SupportedNetworksEnum.arbitrumGoerli) {
+  if (ethereumNetworkIdentifier === SupportedChainId.arbitrumGoerli) {
     return `https://goerli.arbiscan.io/tx/${transactionId}`;
   }
   return 'https://etherscan.io/';

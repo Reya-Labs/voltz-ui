@@ -20,12 +20,10 @@ import { HashRouter } from 'react-router-dom';
 
 import { store } from './app';
 import { AppRoutes } from './AppRoutes';
-import { getDefaultNetworkId } from './components/interface/NetworkSelector/get-default-network-id';
 import { AgentProvider } from './contexts/AgentContext/AgentProvider';
 import { AMMsProvider } from './contexts/AMMsContext/AMMsContext';
 import { WalletProvider } from './contexts/WalletContext/WalletProvider';
 import { themes } from './theme';
-import { getAlchemyKeyForNetwork } from './utilities/get-alchemy-key-for-network';
 import { initSentryTracker } from './utilities/sentry';
 
 try {
@@ -34,10 +32,7 @@ try {
   }
 } catch (_) {}
 
-initV1({
-  network: getDefaultNetworkId(),
-  alchemyApiKey: getAlchemyKeyForNetwork(getDefaultNetworkId()),
-});
+initV1();
 
 initSentryTracker();
 

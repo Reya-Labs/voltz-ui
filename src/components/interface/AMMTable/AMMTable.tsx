@@ -4,7 +4,7 @@ import TableContainer from '@mui/material/TableContainer';
 import { AMM } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
-import { selectNetwork } from '../../../app/features/network';
+import { selectChainId } from '../../../app/features/network';
 import { useAppSelector } from '../../../app/hooks';
 import { Agents } from '../../../contexts/AgentContext/types';
 import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
@@ -31,7 +31,7 @@ export const AMMTable: React.FunctionComponent<AMMTableProps> = ({
   onSelectItem,
 }) => {
   const { agent } = useAgent();
-  const network = useAppSelector(selectNetwork);
+  const chainId = useAppSelector(selectChainId);
   if (loading) {
     return (
       <Panel sx={{ width: '100%' }} variant="grey-dashed">
@@ -42,7 +42,7 @@ export const AMMTable: React.FunctionComponent<AMMTableProps> = ({
   if (error) {
     return null;
   }
-  const config = getConfig(network);
+  const config = getConfig(chainId);
   const pools = config ? config.pools : [];
   return (
     <Panel

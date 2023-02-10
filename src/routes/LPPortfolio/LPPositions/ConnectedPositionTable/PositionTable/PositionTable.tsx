@@ -1,7 +1,7 @@
 import { Position } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
-import { selectNetwork } from '../../../../../app/features/network';
+import { selectChainId } from '../../../../../app/features/network';
 import { useAppSelector } from '../../../../../app/hooks';
 import { AMMProvider } from '../../../../../contexts/AMMContext/AMMContext';
 import { useAMMs } from '../../../../../hooks/useAMMs';
@@ -28,8 +28,8 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   onSettle,
 }) => {
   const { aMMs } = useAMMs();
-  const network = useAppSelector(selectNetwork);
-  const config = getConfig(network);
+  const chainId = useAppSelector(selectChainId);
+  const config = getConfig(chainId);
   const pools = config ? config.pools : [];
 
   const handleSelectRow = (

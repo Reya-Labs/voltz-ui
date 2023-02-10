@@ -9,7 +9,7 @@ import {
   selectTraderAMMs,
   setSignerForAMMsAction,
 } from '../../app/features/aMMs';
-import { selectNetwork } from '../../app/features/network';
+import { selectChainId } from '../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useWallet } from '../useWallet';
 
@@ -25,7 +25,7 @@ export const useAMMs = (): UseAMMsResult => {
   const { signer } = useWallet();
 
   const dispatch = useAppDispatch();
-  const network = useAppSelector(selectNetwork);
+  const chainId = useAppSelector(selectChainId);
   const aMMsLoadedState = useAppSelector(selectAMMsLoadedState);
   const aMMs = useAppSelector(selectAMMs);
   const traderAMMs = useAppSelector(selectTraderAMMs);
@@ -38,10 +38,10 @@ export const useAMMs = (): UseAMMsResult => {
     }
     void dispatch(
       initialiseAMMsThunk({
-        network,
+        chainId,
       }),
     );
-  }, [network, aMMsLoadedState, dispatch]);
+  }, [chainId, aMMsLoadedState, dispatch]);
 
   useEffect(() => {
     if (aMMsLoadedState !== 'succeeded') {
@@ -51,10 +51,10 @@ export const useAMMs = (): UseAMMsResult => {
     void dispatch(
       setSignerForAMMsAction({
         signer,
-        network,
+        chainId,
       }),
     );
-  }, [network, aMMsLoadedState, dispatch, signer]);
+  }, [chainId, aMMsLoadedState, dispatch, signer]);
 
   return {
     aMMs,

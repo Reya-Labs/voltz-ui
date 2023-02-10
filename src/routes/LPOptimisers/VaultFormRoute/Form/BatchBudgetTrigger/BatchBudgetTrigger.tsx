@@ -1,7 +1,7 @@
 import { submitAllBatchesForFee } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useReducer, useState } from 'react';
 
-import { selectNetwork } from '../../../../../app/features/network';
+import { selectChainId } from '../../../../../app/features/network';
 import {
   OptimiserInfo,
   updateOptimiserState,
@@ -42,7 +42,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
 }) => {
   const { signer } = useWallet();
   const appDispatch = useAppDispatch();
-  const network = useAppSelector(selectNetwork);
+  const chainId = useAppSelector(selectChainId);
 
   const [gasCost, setGasCost] = useState(-1);
   const [isConfirmBatchBudgetOpen, setIsConfirmBatchBudgetOpen] = useState(false);
@@ -77,7 +77,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
             updateOptimiserState({
               optimiserId: lpVault.optimiserId,
               newOptimiserState,
-              network,
+              chainId,
             }),
           );
         }

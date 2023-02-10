@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { selectNetwork } from '../../../../../app/features/network';
+import { selectChainId } from '../../../../../app/features/network';
 import { OptimiserInfo } from '../../../../../app/features/stateless-optimisers';
 import { useAppSelector } from '../../../../../app/hooks';
 import { doNothing } from '../../../../../utilities/doNothing';
@@ -32,7 +32,7 @@ export const DepositSuccessModalContent: React.FunctionComponent<Props> = ({
   isBatchFlowOpen,
   depositTransactionId,
 }) => {
-  const network = useAppSelector(selectNetwork);
+  const chainId = useAppSelector(selectChainId);
   return (
     <ContentBox
       data-testid="DepositSuccessModalContent-ContentBox"
@@ -45,7 +45,7 @@ export const DepositSuccessModalContent: React.FunctionComponent<Props> = ({
         <TitleTypography>TRANSACTION SUBMITTED</TitleTypography>
         <ViewOnEtherScanLink
           data-testid="DepositSuccessModalContent-ViewOnEtherScanLink"
-          href={getViewOnEtherScanLink(network, depositTransactionId)}
+          href={getViewOnEtherScanLink(chainId, depositTransactionId)}
         >
           VIEW ON ETHERSCAN
         </ViewOnEtherScanLink>

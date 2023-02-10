@@ -1,4 +1,4 @@
-import { BorrowAMM, SupportedNetworksEnum } from '@voltz-protocol/v1-sdk';
+import { BorrowAMM, SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 import { getConfig } from '../../../../hooks/voltz-config/config';
 import { isAaveV3 } from '../../../../utilities/amm';
@@ -6,7 +6,7 @@ import { BorrowAMMTableDatum } from './types';
 
 export const mapAmmToAmmTableDatum = (
   { id, amm }: BorrowAMM,
-  network: SupportedNetworksEnum,
+  network: SupportedChainId,
 ): BorrowAMMTableDatum => ({
   id,
   protocol: amm.protocol,

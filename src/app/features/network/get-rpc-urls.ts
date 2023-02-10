@@ -1,4 +1,4 @@
-import { SupportedNetworksEnum } from '@voltz-protocol/v1-sdk';
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 const INFURA_KEY = process.env.REACT_APP_WALLETCONNECT_INFURA_ID;
 if (typeof INFURA_KEY === 'undefined') {
@@ -15,8 +15,8 @@ if (typeof INFURA_KEY === 'undefined') {
  *
  * These "Safe" URLs are listed first, followed by other fallback URLs, which are taken from chainlist.org.
  */
-export const FALLBACK_URLS: Record<SupportedNetworksEnum, string[]> = {
-  [SupportedNetworksEnum.mainnet]: [
+export const FALLBACK_URLS: Record<SupportedChainId, string[]> = {
+  [SupportedChainId.mainnet]: [
     // "Safe" URLs
     'https://api.mycryptoapi.com/eth',
     'https://cloudflare-eth.com',
@@ -24,19 +24,19 @@ export const FALLBACK_URLS: Record<SupportedNetworksEnum, string[]> = {
     'https://rpc.ankr.com/eth',
     'https://eth-mainnet.public.blastapi.io',
   ],
-  [SupportedNetworksEnum.goerli]: [
+  [SupportedChainId.goerli]: [
     // "Safe" URLs
     'https://rpc.goerli.mudit.blog/',
     // "Fallback" URLs
     'https://rpc.ankr.com/eth_goerli',
   ],
-  [SupportedNetworksEnum.arbitrum]: [
+  [SupportedChainId.arbitrum]: [
     // "Safe" URLs
     'https://arb1.arbitrum.io/rpc',
     // "Fallback" URLs
     'https://arbitrum.public-rpc.com',
   ],
-  [SupportedNetworksEnum.arbitrumGoerli]: [
+  [SupportedChainId.arbitrumGoerli]: [
     // "Safe" URLs
     'https://goerli-rollup.arbitrum.io/rpc',
   ],
@@ -46,26 +46,27 @@ export const FALLBACK_URLS: Record<SupportedNetworksEnum, string[]> = {
  * Known JSON-RPC endpoints.
  * These are the URLs used by the interface when there is not another available source of chain data.
  */
-export const RPC_URLS: Record<SupportedNetworksEnum, string[]> = {
-  [SupportedNetworksEnum.mainnet]: [
+export const RPC_URLS: Record<SupportedChainId, string[]> = {
+  [SupportedChainId.mainnet]: [
     `https://mainnet.infura.io/v3/${INFURA_KEY}`,
-    ...FALLBACK_URLS[SupportedNetworksEnum.mainnet],
+    ...FALLBACK_URLS[SupportedChainId.mainnet],
   ],
-  [SupportedNetworksEnum.goerli]: [
+  [SupportedChainId.goerli]: [
     `https://goerli.infura.io/v3/${INFURA_KEY}`,
-    ...FALLBACK_URLS[SupportedNetworksEnum.goerli],
+    ...FALLBACK_URLS[SupportedChainId.goerli],
   ],
-  [SupportedNetworksEnum.arbitrum]: [
+  [SupportedChainId.arbitrum]: [
     `https://arbitrum-mainnet.infura.io/v3/${INFURA_KEY}`,
-    ...FALLBACK_URLS[SupportedNetworksEnum.arbitrum],
+    ...FALLBACK_URLS[SupportedChainId.arbitrum],
   ],
-  [SupportedNetworksEnum.arbitrumGoerli]: FALLBACK_URLS[SupportedNetworksEnum.arbitrumGoerli],
+  [SupportedChainId.arbitrumGoerli]: FALLBACK_URLS[SupportedChainId.arbitrumGoerli],
 };
 
-export function getRpcUrl(chainId: SupportedNetworksEnum): string {
+// TODO: Alex move to SDK
+export function getRpcUrl(chainId: SupportedChainId): string {
   switch (chainId) {
-    case SupportedNetworksEnum.mainnet:
-    case SupportedNetworksEnum.goerli:
+    case SupportedChainId.mainnet:
+    case SupportedChainId.goerli:
       return RPC_URLS[chainId][0];
     // Attempting to add a chain using an infura URL will not work, as the URL will be unreachable from the MetaMask background page.
     // MetaMask allows switching to any publicly reachable URL, but for novel chains, it will display a warning if it is not on the "Safe" list.

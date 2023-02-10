@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { selectNetwork } from '../../app/features/network';
+import { selectChainId } from '../../app/features/network';
 import {
   initialiseOptimisersThunk,
   selectOptimisers,
@@ -11,15 +11,15 @@ import { useWallet } from '../../hooks/useWallet';
 
 export const useLPVaults = (type: 'active' | 'all') => {
   const { signer } = useWallet();
-  const network = useAppSelector(selectNetwork);
+  const chainId = useAppSelector(selectChainId);
 
   const vaultsLoaded = useAppSelector(selectOptimisersLoadedState);
   const lpVaults = useAppSelector(selectOptimisers);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    void dispatch(initialiseOptimisersThunk({ network, signer, type }));
-  }, [dispatch, signer, network]);
+    void dispatch(initialiseOptimisersThunk({ chainId, signer, type }));
+  }, [dispatch, signer, chainId]);
 
   return {
     lpVaults,
