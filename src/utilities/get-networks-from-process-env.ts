@@ -18,6 +18,7 @@ export const getNetworksFromProcessEnv = (
 
   return networkConfigurationString
     .split(',')
+    .filter((s) => s.trim())
     .map((s) => ({
       network: s.split('/')[0].trim(),
       alchemyKey: s.split('/')[1].trim(),

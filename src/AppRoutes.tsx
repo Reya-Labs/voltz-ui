@@ -6,6 +6,7 @@ import { setNetworkAction } from './app/features/network';
 import { useAppDispatch } from './app/hooks';
 import { NetworkProtectedPage } from './components/interface/NetworkProtectedPage/NetworkProtectedPage';
 import { getDefaultNetworkId } from './components/interface/NetworkSelector/get-default-network-id';
+import { useWallet } from './hooks/useWallet';
 import { VaultFormRoute as DeprecatedVaultFormRoute } from './routes/DeprecatedLPOptimisers/VaultFormRoute/VaultFormRoute';
 import { Vaults as DeprecatedVaults } from './routes/DeprecatedLPOptimisers/Vaults/Vaults';
 import { FixedBorrower } from './routes/FixedBorrower/FixedBorrower';
@@ -33,6 +34,7 @@ export const AppRoutes = () => {
   const [searchParams] = useSearchParams();
   const searchParamsReferrer = searchParams.get(REFERRER_QUERY_PARAM_KEY);
   const dispatch = useAppDispatch();
+  const { connect } = useWallet();
 
   useEffect(() => {
     if (process.env.REACT_APP_GTM_CODE) {
@@ -63,6 +65,7 @@ export const AppRoutes = () => {
       );
     }
     localStorage.removeItem('storedChainId');
+    connect('metamask');
   };
 
   useEffect(() => {
