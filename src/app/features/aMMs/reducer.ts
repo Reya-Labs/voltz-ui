@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AMM, getAMMs, SupportedChainId } from '@voltz-protocol/v1-sdk';
+import { AMM, getAMMsV1, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
 import { initialiseAMMsThunk } from './thunks';
@@ -51,7 +51,7 @@ export const slice = createSlice({
       })
       .addCase(initialiseAMMsThunk.fulfilled, (state, { payload, meta }) => {
         state.aMMsLoadedState[meta.arg.chainId] = 'succeeded';
-        state.aMMs[meta.arg.chainId] = payload as Awaited<ReturnType<typeof getAMMs>>['amms'];
+        state.aMMs[meta.arg.chainId] = payload as Awaited<ReturnType<typeof getAMMsV1>>['amms'];
       });
   },
 });
