@@ -1,11 +1,8 @@
 import { SupportedNetworksEnum } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
-import {
-  selectIsSupportedNetwork,
-  selectNetwork,
-  setNetworkAction,
-} from '../../../app/features/network';
+import { selectIsSupportedNetwork, selectNetwork } from '../../../app/features/network';
+import { setNetworkThunk } from '../../../app/features/network/thunks';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { getNetworkOptions } from './get-network-options';
 import {
@@ -48,8 +45,8 @@ export const NetworkSelector: React.FunctionComponent = () => {
       <NetworkSelect
         value={isSupportedNetwork ? network.toString() : 'Unsupported'}
         onChange={(event) => {
-          dispatch(
-            setNetworkAction({
+          void dispatch(
+            setNetworkThunk({
               network: parseInt(event.target.value, 10),
               isSupportedNetwork: true,
             }),

@@ -1,7 +1,8 @@
 import { ethers } from 'ethers';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { selectNetwork, setNetworkAction } from '../../app/features/network';
+import { selectNetwork } from '../../app/features/network';
+import { setNetworkThunk } from '../../app/features/network/thunks';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getDefaultNetworkId } from '../../components/interface/NetworkSelector/get-default-network-id';
 import { detectIfNetworkSupported } from '../../utilities/detect-if-network-supported';
@@ -72,16 +73,16 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
           const providerNetwork = await newProvider.getNetwork();
           const networkValidation = detectIfNetworkSupported(providerNetwork.chainId);
           if (!networkValidation.isSupported) {
-            dispatch(
-              setNetworkAction({
+            await dispatch(
+              setNetworkThunk({
                 network: getDefaultNetworkId(),
                 isSupportedNetwork: false,
               }),
             );
             throw new Error('Wrong network');
           } else {
-            dispatch(
-              setNetworkAction({
+            await dispatch(
+              setNetworkThunk({
                 network: networkValidation.network!,
                 isSupportedNetwork: true,
               }),
