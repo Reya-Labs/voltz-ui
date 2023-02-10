@@ -13,7 +13,11 @@ export const setChainId = (value: string) => {
  * @returns The chain id from local storage.
  */
 export const getChainId = () => {
-  return localStorage.getItem(CHAIN_ID_LOCAL_STORAGE_KEY);
+  const storedChainId = localStorage.getItem(CHAIN_ID_LOCAL_STORAGE_KEY);
+  if (storedChainId) {
+    return parseInt(storedChainId, 10);
+  }
+  return undefined;
 };
 
 /**

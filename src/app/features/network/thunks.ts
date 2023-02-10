@@ -20,10 +20,10 @@ export const setChainIdThunk = createAsyncThunk<
   Awaited<ReturnType<typeof rejectThunkWithError>>,
   {
     chainId: SupportedChainId;
-    isSupportedNetwork: boolean;
+    isSupportedChain: boolean;
   }
->('network/setChainId', async ({ chainId, isSupportedNetwork }, thunkAPI) => {
-  if (isSupportedNetwork) {
+>('network/setChainId', async ({ chainId, isSupportedChain }, thunkAPI) => {
+  if (isSupportedChain) {
     const provider = window.ethereum as {
       request: (param: { params?: { chainId: string }[]; method: string }) => Promise<string>;
     };

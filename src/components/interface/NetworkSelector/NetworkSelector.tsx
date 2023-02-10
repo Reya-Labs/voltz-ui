@@ -2,9 +2,9 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
 import {
+  selectChainChangeState,
   selectChainId,
-  selectIsSupportedNetwork,
-  selectNetworkChangeState,
+  selectIsSupportedChain,
 } from '../../../app/features/network';
 import { setChainIdThunk } from '../../../app/features/network/thunks';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
@@ -20,22 +20,22 @@ import {
 
 export const NetworkSelector: React.FunctionComponent = () => {
   const chainId = useAppSelector(selectChainId);
-  const isSupportedNetwork = useAppSelector(selectIsSupportedNetwork);
-  const networkChangeState = useAppSelector(selectNetworkChangeState);
+  const isSupportedChain = useAppSelector(selectIsSupportedChain);
+  const chainChangeState = useAppSelector(selectChainChangeState);
   const dispatch = useAppDispatch();
   const networkOptions = getNetworkOptions();
   if (Object.keys(networkOptions).length === 0) {
     return null;
   }
-  const currentNetwork = networkOptions[chainId];
+  const currentNetwork = !chainId ? undefined : networkOptions[chainId];
 
   return (
     <SelectorBox data-testid="NetworkSelector-SelectorBox">
-      {currentNetwork && isSupportedNetwork ? (
+      {currentNetwork && isSupportedChain ? (
         <React.Fragment>
           <currentNetwork.Icon />
           <NetworkTypography data-testid="NetworkSelector-NetworkTypography">
-            {networkChangeState !== 'pending' ? (
+            {chainChangeState !== 'pending' ? (
               currentNetwork.name
             ) : (
               <React.Fragment>
@@ -56,17 +56,17 @@ export const NetworkSelector: React.FunctionComponent = () => {
         </React.Fragment>
       )}
       <NetworkSelect
-        value={isSupportedNetwork ? chainId.toString() : 'Unsupported'}
+        value={!chainId ? 'Loading' : isSupportedChain ? chainId.toString() : 'Unsupported'}
         onChange={(event) => {
           void dispatch(
             setChainIdThunk({
               chainId: parseInt(event.target.value, 10),
-              isSupportedNetwork: true,
+              isSupportedChain: true,
             }),
           );
         }}
       >
-        {!isSupportedNetwork ? <option value="Unsupported">Unsupported</option> : null}
+        {!isSupportedChain ? <option value="Unsupported">Unsupported</option> : null}
         {Object.keys(networkOptions).map((key) => (
           <option key={key} value={key}>
             {networkOptions[parseInt(key, 10) as SupportedChainId].name}

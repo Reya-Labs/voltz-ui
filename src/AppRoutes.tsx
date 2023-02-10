@@ -48,20 +48,19 @@ export const AppRoutes = () => {
     if (!storedChainId) {
       return;
     }
-    const nextChainId = parseInt(storedChainId.replace('0x', ''), 10);
-    const networkValidation = detectIfNetworkSupported(nextChainId);
+    const networkValidation = detectIfNetworkSupported(storedChainId);
     if (!networkValidation.isSupported || !networkValidation.chainId) {
       await dispatch(
         setChainIdThunk({
           chainId: getDefaultChainId(),
-          isSupportedNetwork: false,
+          isSupportedChain: false,
         }),
       );
     } else {
       await dispatch(
         setChainIdThunk({
           chainId: networkValidation.chainId,
-          isSupportedNetwork: true,
+          isSupportedChain: true,
         }),
       );
     }
@@ -79,7 +78,7 @@ export const AppRoutes = () => {
       // Handle the new chain.
       // Correctly handling chain changes can be complicated.
       // We recommend reloading the page unless you have good reason not to.
-      setChainId(chainId);
+      setChainId(parseInt(chainId.replace('0x', ''), 10).toString());
       window.location.reload();
     });
   }, []);

@@ -3,7 +3,7 @@ import React from 'react';
 
 import { ArbitrumIcon, EthereumIcon } from './NetworkSelector.styled';
 
-export const networkOptionsConfiguration: Record<
+export const chainOptionsConfiguration: Record<
   number,
   {
     name: string;

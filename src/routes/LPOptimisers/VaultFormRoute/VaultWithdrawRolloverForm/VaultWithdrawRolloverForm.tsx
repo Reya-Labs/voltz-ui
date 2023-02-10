@@ -55,7 +55,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
   const spareWeights = getSpareWeights(vault.vaults, weights);
 
   const withdraw = () => {
-    if (!signer) {
+    if (!signer || !chainId) {
       return;
     }
 
@@ -92,7 +92,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
   };
 
   const rollover = () => {
-    if (!signer) {
+    if (!signer || !chainId) {
       return;
     }
 

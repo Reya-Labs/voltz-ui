@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { selectIsSupportedNetwork } from '../../../app/features/network';
+import { selectIsSupportedChain } from '../../../app/features/network';
 import { useAppSelector } from '../../../app/hooks';
 import { ConnectSupportedNetwork } from '../../composite/ConnectSupportedNetwork/ConnectSupportedNetwork';
 import { Page } from '../Page/Page';
 
 export const NetworkProtectedPage: React.FunctionComponent = ({ children }) => {
-  const isSupportedNetwork = useAppSelector(selectIsSupportedNetwork);
-  if (!isSupportedNetwork) {
+  const isSupportedChain = useAppSelector(selectIsSupportedChain);
+  if (!isSupportedChain) {
     return (
       <Page>
         <ConnectSupportedNetwork

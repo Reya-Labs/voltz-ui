@@ -1,19 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
-import { getDefaultChainId } from '../../../components/interface/NetworkSelector/get-default-chain-id';
 import { setChainIdThunk } from './thunks';
 
 type SliceState = {
-  chainId: SupportedChainId;
-  isSupportedNetwork: boolean;
-  networkChangeState: 'idle' | 'pending' | 'error' | 'success';
+  chainId: SupportedChainId | null;
+  isSupportedChain: boolean;
+  chainChangeState: 'idle' | 'pending' | 'error' | 'success';
 };
 
 const initialState: SliceState = {
-  chainId: getDefaultChainId(),
-  isSupportedNetwork: true,
-  networkChangeState: 'idle',
+  chainId: null,
+  isSupportedChain: true,
+  chainChangeState: 'idle',
 };
 
 export const slice = createSlice({
@@ -23,15 +22,15 @@ export const slice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(setChainIdThunk.pending, (state) => {
-        state.networkChangeState = 'pending';
+        state.chainChangeState = 'pending';
       })
-      .addCase(setChainIdThunk.rejected, (state, { meta }) => {
-        state.networkChangeState = 'error';
+      .addCase(setChainIdThunk.rejected, (state) => {
+        state.chainChangeState = 'error';
       })
       .addCase(setChainIdThunk.fulfilled, (state, { meta }) => {
         state.chainId = meta.arg.chainId;
-        state.isSupportedNetwork = meta.arg.isSupportedNetwork;
-        state.networkChangeState = 'success';
+        state.isSupportedChain = meta.arg.isSupportedChain;
+        state.chainChangeState = 'success';
       });
   },
 });

@@ -57,7 +57,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
   };
   const [state, dispatch] = useReducer(batchBudgetReducer, initialState);
   const handleOnProceed = () => {
-    if (!signer) {
+    if (!signer || !chainId) {
       return;
     }
 
@@ -95,7 +95,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
   };
 
   useEffect(() => {
-    if (!signer) {
+    if (!signer || !chainId) {
       return;
     }
 

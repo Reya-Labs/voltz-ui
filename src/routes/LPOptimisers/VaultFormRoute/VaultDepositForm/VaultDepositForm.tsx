@@ -56,7 +56,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
   const spareWeights = getSpareWeights(vault.vaults, weights);
 
   const deposit = () => {
-    if (!signer) {
+    if (!signer || !chainId) {
       return;
     }
 
@@ -145,7 +145,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
   };
 
   useEffect(() => {
-    if (!account) {
+    if (!account || !chainId) {
       return;
     }
 
@@ -176,7 +176,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
   }, [vault.optimiserId, vault.tokenId, loading, selectedDeposit, account, vault.feePerDeposit]);
 
   const openDepositModal = () => {
-    if (!signer) {
+    if (!signer || !chainId) {
       return;
     }
 

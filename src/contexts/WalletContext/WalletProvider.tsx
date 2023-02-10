@@ -44,6 +44,8 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     } else if (errorMessage.includes('Risky Account Detected')) {
       errorMessage = 'Risky Account Detected';
       getSentryTracker().captureException(error);
+    } else if (errorMessage.includes('underlying network changed')) {
+      errorMessage = '';
     } else {
       errorMessage = 'Failed connection';
       getSentryTracker().captureException(error);
@@ -76,7 +78,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
             await dispatch(
               setChainIdThunk({
                 chainId: getDefaultChainId(),
-                isSupportedNetwork: false,
+                isSupportedChain: false,
               }),
             );
             throw new Error('Wrong network');
@@ -84,7 +86,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
             await dispatch(
               setChainIdThunk({
                 chainId: networkValidation.chainId,
-                isSupportedNetwork: true,
+                isSupportedChain: true,
               }),
             );
           }
@@ -123,16 +125,16 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     }
   }, []);
 
-  const onNetworkChangeConnectedWallet = async () => {
-    if (!provider) {
+  const onChainChangeConnectedWallet = async () => {
+    if (!provider || !chainId) {
       return;
     }
 
     try {
       const providerNetwork = await provider.getNetwork();
-      const networkValidation = providerNetwork.chainId === chainId;
+      const chainValidation = providerNetwork.chainId === chainId;
 
-      if (!networkValidation) {
+      if (!chainValidation) {
         throw new Error('Wrong network');
       }
     } catch (err) {
@@ -140,7 +142,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     }
   };
   useEffect(() => {
-    void onNetworkChangeConnectedWallet();
+    void onChainChangeConnectedWallet();
   }, [provider, chainId]);
 
   const value = {

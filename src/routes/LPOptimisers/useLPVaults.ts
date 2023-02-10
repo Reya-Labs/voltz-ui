@@ -18,6 +18,9 @@ export const useLPVaults = (type: 'active' | 'all') => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    if (!chainId) {
+      return;
+    }
     void dispatch(initialiseOptimisersThunk({ chainId, signer, type }));
   }, [dispatch, signer, chainId]);
 
