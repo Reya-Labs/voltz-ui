@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import TagManager from 'react-gtm-module';
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
 
-import { setNetworkAction } from './app/features/network';
+import { setNetworkThunk } from './app/features/network/thunks';
 import { useAppDispatch } from './app/hooks';
 import { NetworkProtectedPage } from './components/interface/NetworkProtectedPage/NetworkProtectedPage';
 import { getDefaultNetworkId } from './components/interface/NetworkSelector/get-default-network-id';
@@ -42,7 +42,7 @@ export const AppRoutes = () => {
     }
   }, []);
 
-  const handlePageReloadAfterChainChanged = () => {
+  const handlePageReloadAfterChainChanged = async () => {
     const storedChainId = localStorage.getItem('storedChainId');
     if (!storedChainId) {
       return;
@@ -50,26 +50,26 @@ export const AppRoutes = () => {
     const nextChainId = parseInt(storedChainId.replace('0x', ''), 10);
     const networkValidation = detectIfNetworkSupported(nextChainId);
     if (!networkValidation.isSupported) {
-      dispatch(
-        setNetworkAction({
+      await dispatch(
+        setNetworkThunk({
           network: getDefaultNetworkId(),
           isSupportedNetwork: false,
         }),
       );
     } else {
-      dispatch(
-        setNetworkAction({
+      await dispatch(
+        setNetworkThunk({
           network: networkValidation.network!,
           isSupportedNetwork: true,
         }),
       );
     }
     localStorage.removeItem('storedChainId');
-    connect('metamask');
+    await connect('metamask');
   };
 
   useEffect(() => {
-    handlePageReloadAfterChainChanged();
+    void handlePageReloadAfterChainChanged();
     (
       window.ethereum as {
         on: (event: string, cb: (chainId: string) => void) => void;

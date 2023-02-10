@@ -4,7 +4,7 @@ import createSagaMiddleware from 'redux-saga';
 
 import { aMMsReducer } from './features/aMMs';
 import { lpOptimisersReducer } from './features/lp-optimisers';
-import { networkListenerMiddleware, networkReducer } from './features/network';
+import { networkReducer } from './features/network';
 import { statelessOptimisersReducer } from './features/stateless-optimisers';
 import { saga, transactionsReducer } from './features/transactions';
 
@@ -22,12 +22,7 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
   const store = configureStore({
     reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware()
-        .concat(logger)
-        .concat(sagaMiddleware)
-        // NOTE: Since this can receive actions with functions inside,
-        // it should go before the serializability check middleware
-        .prepend(networkListenerMiddleware.middleware),
+      getDefaultMiddleware().concat(logger).concat(sagaMiddleware),
     preloadedState,
   });
   sagaMiddleware.run(saga);
