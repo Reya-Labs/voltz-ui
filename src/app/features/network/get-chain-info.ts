@@ -28,7 +28,7 @@ const CHAIN_INFO: Record<SupportedChainId, BaseChainInfo> = {
   },
   [SupportedChainId.arbitrumGoerli]: {
     explorer: 'https://goerli.arbiscan.io/',
-    label: 'Görli Arbitrum',
+    label: 'Arbitrum Görli Testnet',
     nativeCurrency: { name: 'Görli Ether', symbol: 'görETH', decimals: 18 },
   },
 };
