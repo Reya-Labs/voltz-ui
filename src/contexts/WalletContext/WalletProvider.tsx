@@ -1,10 +1,10 @@
-import { detectNetworkWithChainId } from '@voltz-protocol/v1-sdk';
 import { ethers } from 'ethers';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { selectNetwork, setNetworkAction } from '../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getDefaultNetworkId } from '../../components/interface/NetworkSelector/get-default-network-id';
+import { detectIfNetworkSupported } from '../../utilities/detect-if-network-supported';
 import { getErrorMessage } from '../../utilities/getErrorMessage';
 import { getSentryTracker } from '../../utilities/sentry';
 import { checkForRiskyWallet, checkForTOSSignature, getWalletProvider } from './services';
@@ -70,7 +70,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
             await checkForTOSSignature(newSigner);
           }
           const providerNetwork = await newProvider.getNetwork();
-          const networkValidation = detectNetworkWithChainId(providerNetwork.chainId);
+          const networkValidation = detectIfNetworkSupported(providerNetwork.chainId);
           if (!networkValidation.isSupported) {
             dispatch(
               setNetworkAction({
@@ -126,6 +126,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     if (!provider) {
       return;
     }
+
     try {
       const providerNetwork = await provider.getNetwork();
       const networkValidation = providerNetwork.chainId === network;
