@@ -1,4 +1,4 @@
-import { submitAllBatchesForFee } from '@voltz-protocol/v1-sdk';
+import { submitAllBatchesForFeeV1 } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useReducer, useState } from 'react';
 
 import { selectChainId } from '../../../../../app/features/network';
@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { Modal } from '../../../../../components/composite/Modal/Modal';
 import { useWallet } from '../../../../../hooks/useWallet';
 import { doNothing } from '../../../../../utilities/doNothing';
+import { getAlchemyKeyForChain } from '../../../../../utilities/network/get-alchemy-key-for-chain';
 import { formatCurrency } from '../../../../../utilities/number';
 import { GasCost } from '../GasCost/GasCost';
 import { batchBudgetReducer, initialState } from './batchBudgetReducer';
@@ -64,9 +65,11 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
       type: 'batch_pending',
     });
 
-    submitAllBatchesForFee({
+    submitAllBatchesForFeeV1({
       optimiserId: lpVault.optimiserId,
       signer,
+      chainId,
+      alchemyApiKey: getAlchemyKeyForChain(chainId),
     })
       .then(({ newOptimiserState }) => {
         void dispatch({
@@ -96,10 +99,12 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
       return;
     }
 
-    submitAllBatchesForFee({
+    submitAllBatchesForFeeV1({
       onlyGasEstimate: true,
       optimiserId: lpVault.optimiserId,
       signer,
+      chainId,
+      alchemyApiKey: getAlchemyKeyForChain(chainId),
     })
       .then(({ gasEstimateUsd }) => {
         setGasCost(gasEstimateUsd);

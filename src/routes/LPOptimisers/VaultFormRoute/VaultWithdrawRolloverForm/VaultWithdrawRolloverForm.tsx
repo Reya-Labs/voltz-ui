@@ -1,10 +1,14 @@
-import { rollover as executeRollover, withdraw as executeWithdraw } from '@voltz-protocol/v1-sdk';
+import {
+  rolloverV1 as executeRollover,
+  withdrawV1 as executeWithdraw,
+} from '@voltz-protocol/v1-sdk';
 import React, { useState } from 'react';
 
 import { selectChainId } from '../../../../app/features/network';
 import { OptimiserInfo, updateOptimiserState } from '../../../../app/features/stateless-optimisers';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useWallet } from '../../../../hooks/useWallet';
+import { getAlchemyKeyForChain } from '../../../../utilities/network/get-alchemy-key-for-chain';
 import { getSpareWeights } from '../../Helpers/getSpareWeights';
 import { FormProps } from '../Form/DepositForm/DepositForm';
 import { WithdrawRolloverForm } from '../Form/WithdrawRolloverForm/WithdrawRolloverForm';
@@ -64,6 +68,8 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
       optimiserId: vault.optimiserId,
       vaultId: subvault.vaultId,
       signer,
+      chainId,
+      alchemyApiKey: getAlchemyKeyForChain(chainId),
     }).then(
       ({ newOptimiserState }) => {
         if (newOptimiserState) {
@@ -100,6 +106,8 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
       vaultId: subvault.vaultId,
       spareWeights,
       signer,
+      chainId,
+      alchemyApiKey: getAlchemyKeyForChain(chainId),
     }).then(
       ({ newOptimiserState }) => {
         if (newOptimiserState) {
