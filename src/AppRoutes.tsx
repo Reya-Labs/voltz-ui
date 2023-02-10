@@ -20,6 +20,7 @@ import { TraderPools } from './routes/TraderPools/TraderPools';
 import { TraderPortfolio } from './routes/TraderPortfolio/TraderPortfolio';
 import { TradingLeague } from './routes/TradingLeague/TradingLeague';
 import { isStatelessSDKEnabled } from './utilities/is-stateless-sdk-enabled';
+import { deleteChainId, getChainId, setChainId } from './utilities/network/chain-store';
 import { detectIfNetworkSupported } from './utilities/network/detect-if-network-supported';
 import {
   deleteReferrer,
@@ -43,7 +44,7 @@ export const AppRoutes = () => {
   }, []);
 
   const handlePageReloadAfterChainChanged = async () => {
-    const storedChainId = localStorage.getItem('storedChainId');
+    const storedChainId = getChainId();
     if (!storedChainId) {
       return;
     }
@@ -64,7 +65,7 @@ export const AppRoutes = () => {
         }),
       );
     }
-    localStorage.removeItem('storedChainId');
+    deleteChainId();
     await connect('metamask');
   };
 
@@ -78,7 +79,7 @@ export const AppRoutes = () => {
       // Handle the new chain.
       // Correctly handling chain changes can be complicated.
       // We recommend reloading the page unless you have good reason not to.
-      localStorage.setItem('storedChainId', chainId);
+      setChainId(chainId);
       window.location.reload();
     });
   }, []);
