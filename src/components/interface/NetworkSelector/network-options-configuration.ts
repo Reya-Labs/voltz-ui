@@ -1,4 +1,4 @@
-import { SupportedNetworksEnum } from '@voltz-protocol/v1-sdk';
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
 import { ArbitrumIcon, EthereumIcon } from './NetworkSelector.styled';
@@ -10,19 +10,19 @@ export const networkOptionsConfiguration: Record<
     Icon: React.FunctionComponent;
   }
 > = {
-  [SupportedNetworksEnum.mainnet]: {
+  [SupportedChainId.mainnet]: {
     name: 'Ethereum',
     Icon: EthereumIcon,
   },
-  [SupportedNetworksEnum.goerli]: {
+  [SupportedChainId.goerli]: {
     name: 'Görli',
     Icon: EthereumIcon,
   },
-  [SupportedNetworksEnum.arbitrum]: {
+  [SupportedChainId.arbitrum]: {
     name: 'Arbitrum',
     Icon: ArbitrumIcon,
   },
-  [SupportedNetworksEnum.arbitrumGoerli]: {
+  [SupportedChainId.arbitrumGoerli]: {
     name: 'Görli Arbitrum',
     Icon: ArbitrumIcon,
   },

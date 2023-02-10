@@ -3,7 +3,7 @@ import { AMM, Position } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { selectNetwork } from '../../app/features/network';
+import { selectChainId } from '../../app/features/network';
 import { useAppSelector } from '../../app/hooks';
 import { ConnectedSwapForm } from '../../components/containers/ConnectedSwapForm/ConnectedSwapForm';
 import { SwapFormModes } from '../../components/interface/SwapForm/types';
@@ -25,8 +25,8 @@ export const TraderPortfolio: React.FunctionComponent = () => {
   const [amm, setAMM] = useState<AMM>();
   const [position, setPosition] = useState<Position>();
   const [settling, setSettling] = useState<boolean>(false);
-  const network = useAppSelector(selectNetwork);
-  const config = getConfig(network);
+  const chainId = useAppSelector(selectChainId);
+  const config = getConfig(chainId);
   const pools = config ? config.pools : [];
   const { traderAMMs } = useAMMs();
   const { onChangeAgent } = useAgent();

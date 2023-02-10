@@ -1,26 +1,26 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { SupportedNetworksEnum } from '@voltz-protocol/v1-sdk';
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 import { initialiseOptimisersThunk } from './thunks';
 import { OptimiserInfo } from './types';
 
 type SliceState = {
-  optimisersLoadedState: Record<SupportedNetworksEnum, 'idle' | 'pending' | 'succeeded' | 'failed'>;
-  optimisers: Record<SupportedNetworksEnum, OptimiserInfo[]>;
+  optimisersLoadedState: Record<SupportedChainId, 'idle' | 'pending' | 'succeeded' | 'failed'>;
+  optimisers: Record<SupportedChainId, OptimiserInfo[]>;
 };
 
 const initialState: SliceState = {
   optimisersLoadedState: {
-    [SupportedNetworksEnum.mainnet]: 'idle',
-    [SupportedNetworksEnum.goerli]: 'idle',
-    [SupportedNetworksEnum.arbitrum]: 'idle',
-    [SupportedNetworksEnum.arbitrumGoerli]: 'idle',
+    [SupportedChainId.mainnet]: 'idle',
+    [SupportedChainId.goerli]: 'idle',
+    [SupportedChainId.arbitrum]: 'idle',
+    [SupportedChainId.arbitrumGoerli]: 'idle',
   },
   optimisers: {
-    [SupportedNetworksEnum.mainnet]: [],
-    [SupportedNetworksEnum.goerli]: [],
-    [SupportedNetworksEnum.arbitrum]: [],
-    [SupportedNetworksEnum.arbitrumGoerli]: [],
+    [SupportedChainId.mainnet]: [],
+    [SupportedChainId.goerli]: [],
+    [SupportedChainId.arbitrum]: [],
+    [SupportedChainId.arbitrumGoerli]: [],
   },
 };
 
@@ -31,33 +31,33 @@ export const slice = createSlice({
     updateOptimiserState: (
       state,
       {
-        payload: { optimiserId, network, newOptimiserState },
+        payload: { optimiserId, chainId, newOptimiserState },
       }: PayloadAction<{
         optimiserId: string;
         newOptimiserState: OptimiserInfo;
-        network: SupportedNetworksEnum;
+        chainId: SupportedChainId;
       }>,
     ) => {
-      const optimiserIndex = state.optimisers[network].findIndex(
+      const optimiserIndex = state.optimisers[chainId].findIndex(
         (opt) => opt.optimiserId === optimiserId,
       );
       if (optimiserIndex >= 0) {
-        state.optimisers[network][optimiserIndex] = newOptimiserState;
+        state.optimisers[chainId][optimiserIndex] = newOptimiserState;
       }
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(initialiseOptimisersThunk.pending, (state, { meta }) => {
-        state.optimisersLoadedState[meta.arg.network] = 'pending';
+        state.optimisersLoadedState[meta.arg.chainId] = 'pending';
       })
       .addCase(initialiseOptimisersThunk.rejected, (state, { meta }) => {
-        state.optimisersLoadedState[meta.arg.network] = 'failed';
-        state.optimisers[meta.arg.network] = [];
+        state.optimisersLoadedState[meta.arg.chainId] = 'failed';
+        state.optimisers[meta.arg.chainId] = [];
       })
       .addCase(initialiseOptimisersThunk.fulfilled, (state, { payload, meta }) => {
-        state.optimisersLoadedState[meta.arg.network] = 'succeeded';
-        state.optimisers[meta.arg.network] = payload as OptimiserInfo[];
+        state.optimisersLoadedState[meta.arg.chainId] = 'succeeded';
+        state.optimisers[meta.arg.chainId] = payload as OptimiserInfo[];
       });
   },
 });

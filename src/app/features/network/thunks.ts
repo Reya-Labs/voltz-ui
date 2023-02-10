@@ -1,7 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { rearm, SupportedNetworksEnum } from '@voltz-protocol/v1-sdk';
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
-import { getAlchemyKeyForNetwork } from '../../../utilities/get-alchemy-key-for-network';
 import { getChainInfo } from './get-chain-info';
 import { getRpcUrl } from './get-rpc-urls';
 
@@ -17,17 +16,13 @@ const rejectThunkWithError = (
   return thunkAPI.rejectWithValue((err as Error)?.message);
 };
 
-export const setNetworkThunk = createAsyncThunk<
+export const setChainIdThunk = createAsyncThunk<
   Awaited<ReturnType<typeof rejectThunkWithError>>,
   {
-    network: SupportedNetworksEnum;
+    chainId: SupportedChainId;
     isSupportedNetwork: boolean;
   }
->('network/setNetwork', async ({ network, isSupportedNetwork }, thunkAPI) => {
-  rearm({
-    network,
-    alchemyApiKey: getAlchemyKeyForNetwork(network),
-  });
+>('network/setChainId', async ({ chainId, isSupportedNetwork }, thunkAPI) => {
   if (isSupportedNetwork) {
     const provider = window.ethereum as {
       request: (param: { params?: { chainId: string }[]; method: string }) => Promise<string>;
@@ -35,10 +30,10 @@ export const setNetworkThunk = createAsyncThunk<
     if (!provider) {
       return rejectThunkWithError(thunkAPI, 'Metamask is not installed, please install!');
     }
-    const chainId = await provider.request({ method: 'eth_chainId' });
+    const providerChainId = await provider.request({ method: 'eth_chainId' });
     // switch to the correct network
-    const networkChainId = `0x${network}`;
-    if (chainId !== networkChainId) {
+    const networkChainId = `0x${chainId}`;
+    if (providerChainId !== networkChainId) {
       try {
         await provider.request({
           method: 'wallet_switchEthereumChain',
@@ -48,14 +43,14 @@ export const setNetworkThunk = createAsyncThunk<
         // This error code indicates that the chain has not been added to MetaMask.
         if ((error as { code: number }).code === 4902) {
           try {
-            const info = getChainInfo(network);
+            const info = getChainInfo(chainId);
             if (!info) {
               return rejectThunkWithError(thunkAPI, 'Unsupported network');
             }
             const addChainParameter = {
-              chainId,
+              chainId: networkChainId,
               chainName: info.label,
-              rpcUrls: [getRpcUrl(network)],
+              rpcUrls: [getRpcUrl(chainId)],
               nativeCurrency: info.nativeCurrency,
               blockExplorerUrls: [info.explorer],
             };

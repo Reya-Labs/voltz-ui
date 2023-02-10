@@ -2,7 +2,7 @@ import { approveToken, depositAndRegister, isTokenApproved } from '@voltz-protoc
 import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
 
-import { selectNetwork } from '../../../../app/features/network';
+import { selectChainId } from '../../../../app/features/network';
 import { OptimiserInfo, updateOptimiserState } from '../../../../app/features/stateless-optimisers';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { AutomaticRolloverToggleProps } from '../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
@@ -25,7 +25,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
 }) => {
   const { signer, account } = useWallet();
   const dispatch = useAppDispatch();
-  const network = useAppSelector(selectNetwork);
+  const chainId = useAppSelector(selectChainId);
 
   const automaticWeights: FormProps['weights'] = vault.vaults.map((v) => ({
     distribution: v.defaultWeight,
@@ -96,7 +96,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
               updateOptimiserState({
                 optimiserId: vault.optimiserId,
                 newOptimiserState,
-                network,
+                chainId,
               }),
             );
           }

@@ -6,7 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import { Position } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
-import { selectNetwork } from '../../../../app/features/network';
+import { selectChainId } from '../../../../app/features/network';
 import { useAppSelector } from '../../../../app/hooks';
 import { Panel } from '../../../../components/atomic/Panel/Panel';
 import { AMMProvider } from '../../../../contexts/AMMContext/AMMContext';
@@ -30,7 +30,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   onSelectItem,
   onSettle,
 }) => {
-  const network = useAppSelector(selectNetwork);
+  const chainId = useAppSelector(selectChainId);
   const { aMMs } = useAMMs();
 
   const commonOverrides: SystemStyleObject<Theme> = {
@@ -91,7 +91,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
     onSelectItem(positions[index], mode);
   };
 
-  const config = getConfig(network);
+  const config = getConfig(chainId);
   const pools = config ? config.pools : [];
 
   if (positions.length === 0) {

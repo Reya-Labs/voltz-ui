@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { selectors } from '../../app';
 import { selectAMMs, selectAMMsLoadedState } from '../../app/features/aMMs';
+import { selectChainId } from '../../app/features/network';
 import { updateTransactionAction } from '../../app/features/transactions';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { Agents } from '../../contexts/AgentContext/types';
@@ -22,6 +23,7 @@ export const usePositions = (agent: Agents): UsePositionsResult => {
   const dispatch = useAppDispatch();
   const aMMsLoadedState = useAppSelector(selectAMMsLoadedState);
   const aMMs = useAppSelector(selectAMMs);
+  const chainId = useAppSelector(selectChainId);
   const [mePositions, setMePositions] = useState<Position[]>([]);
   const [fetchLoading, setFetchLoading] = useState<boolean>(false);
   const [fetchError, setFetchError] = useState<boolean>(false);
@@ -33,6 +35,7 @@ export const usePositions = (agent: Agents): UsePositionsResult => {
       setFetchError(false);
 
       void getPositionsV1({
+        chainId,
         userWalletId: userAddress,
         amms: aMMs,
         type: agent === Agents.LIQUIDITY_PROVIDER ? 'LP' : 'Trader',

@@ -1,7 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getAllMellowProducts, SupportedNetworksEnum } from '@voltz-protocol/v1-sdk';
+import { getAllMellowProductsV1, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { ethers } from 'ethers';
 
+import { getAlchemyKeyForChain } from '../../../utilities/network/get-alchemy-key-for-chain';
 import { OptimiserInfo } from './types';
 
 const rejectThunkWithError = (
@@ -21,11 +22,16 @@ export const initialiseOptimisersThunk = createAsyncThunk<
   {
     signer: ethers.Signer | null;
     type: 'active' | 'all';
-    network: SupportedNetworksEnum;
+    chainId: SupportedChainId;
   }
->('stateless-optimisers/getProducts', async ({ signer, type }, thunkAPI) => {
+>('stateless-optimisers/getProducts', async ({ chainId, signer, type }, thunkAPI) => {
   try {
-    const mappedRouters: OptimiserInfo[] = await getAllMellowProducts(signer, type);
+    const mappedRouters: OptimiserInfo[] = await getAllMellowProductsV1({
+      signer,
+      type,
+      chainId,
+      alchemyApiKey: getAlchemyKeyForChain(chainId),
+    });
     return mappedRouters;
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);

@@ -34,3 +34,4 @@ const localStorageMock = (function () {
 Object.defineProperty(window, 'localStorage', { value: localStorageMock });
 
 process.env.REACT_APP_NETWORK_SELECTOR_NETWORKS = 'goerli/PFrPYX2po6dCYwcDPFxC8seAIX3cLZqI';
+process.env.REACT_APP_WALLETCONNECT_INFURA_ID = 'REACT_APP_WALLETCONNECT_INFURA_ID';

@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 import TagManager from 'react-gtm-module';
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
 
-import { setNetworkThunk } from './app/features/network/thunks';
+import { setChainIdThunk } from './app/features/network/thunks';
 import { useAppDispatch } from './app/hooks';
 import { NetworkProtectedPage } from './components/interface/NetworkProtectedPage/NetworkProtectedPage';
-import { getDefaultNetworkId } from './components/interface/NetworkSelector/get-default-network-id';
+import { getDefaultChainId } from './components/interface/NetworkSelector/get-default-chain-id';
 import { useWallet } from './hooks/useWallet';
 import { VaultFormRoute as DeprecatedVaultFormRoute } from './routes/DeprecatedLPOptimisers/VaultFormRoute/VaultFormRoute';
 import { Vaults as DeprecatedVaults } from './routes/DeprecatedLPOptimisers/Vaults/Vaults';
@@ -19,8 +19,8 @@ import { Profile } from './routes/Profile/Profile';
 import { TraderPools } from './routes/TraderPools/TraderPools';
 import { TraderPortfolio } from './routes/TraderPortfolio/TraderPortfolio';
 import { TradingLeague } from './routes/TradingLeague/TradingLeague';
-import { detectIfNetworkSupported } from './utilities/detect-if-network-supported';
 import { isStatelessSDKEnabled } from './utilities/is-stateless-sdk-enabled';
+import { detectIfNetworkSupported } from './utilities/network/detect-if-network-supported';
 import {
   deleteReferrer,
   isRefererStored,
@@ -49,17 +49,17 @@ export const AppRoutes = () => {
     }
     const nextChainId = parseInt(storedChainId.replace('0x', ''), 10);
     const networkValidation = detectIfNetworkSupported(nextChainId);
-    if (!networkValidation.isSupported) {
+    if (!networkValidation.isSupported || !networkValidation.chainId) {
       await dispatch(
-        setNetworkThunk({
-          network: getDefaultNetworkId(),
+        setChainIdThunk({
+          chainId: getDefaultChainId(),
           isSupportedNetwork: false,
         }),
       );
     } else {
       await dispatch(
-        setNetworkThunk({
-          network: networkValidation.network!,
+        setChainIdThunk({
+          chainId: networkValidation.chainId,
           isSupportedNetwork: true,
         }),
       );

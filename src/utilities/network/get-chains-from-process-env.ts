@@ -1,12 +1,17 @@
-import { isEnvVarProvided } from './isEnvVarProvided';
+import { isEnvVarProvided } from '../isEnvVarProvided';
 
+type NetworkConfigFromProcessENV = {
+  network: string;
+  alchemyKey: string;
+};
+let cachedNetworkConfigs: NetworkConfigFromProcessENV[] | undefined = undefined;
 /**
  * It takes a comma-separated list of network/alchemy-key pairs, and returns an array of objects with network and
  * alchemyKey properties
- * @param networkConfigurationString - This is the string that is passed in from the environment variable.
+ * @param {string} networkConfigurationString - This is the string that is passed in from the environment variable. String of type network1-key1,network2-key2
  * @returns An array of objects with network and alchemyKey properties.
  */
-export const getNetworksFromProcessEnv = (
+export const getChainsFromProcessEnv = (
   networkConfigurationString = process.env.REACT_APP_NETWORK_SELECTOR_NETWORKS,
 ): {
   network: string;
@@ -15,8 +20,11 @@ export const getNetworksFromProcessEnv = (
   if (!networkConfigurationString || !isEnvVarProvided(networkConfigurationString)) {
     return [];
   }
+  if (cachedNetworkConfigs) {
+    return cachedNetworkConfigs;
+  }
 
-  return networkConfigurationString
+  cachedNetworkConfigs = networkConfigurationString
     .split(',')
     .filter((s) => s.trim())
     .map((s) => ({
@@ -24,4 +32,6 @@ export const getNetworksFromProcessEnv = (
       alchemyKey: s.split('/')[1].trim(),
     }))
     .filter(({ network, alchemyKey }) => network && alchemyKey);
+
+  return cachedNetworkConfigs;
 };

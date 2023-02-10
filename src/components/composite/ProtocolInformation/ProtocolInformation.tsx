@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import { DateTime } from 'luxon';
 import React, { useMemo } from 'react';
 
-import { selectNetwork } from '../../../app/features/network';
+import { selectChainId } from '../../../app/features/network';
 import { useAppSelector } from '../../../app/hooks';
 import { Agents } from '../../../contexts/AgentContext/types';
 import { useAMMContext } from '../../../contexts/AMMContext/AMMContext';
@@ -40,8 +40,8 @@ export const ProtocolInformation: React.FunctionComponent<ProtocolInformationPro
   isSettle,
 }) => {
   const { amm } = useAMMContext();
-  const network = useAppSelector(selectNetwork);
-  const config = getConfig(network);
+  const chainId = useAppSelector(selectChainId);
+  const config = getConfig(chainId);
   const pools = config ? config.pools : [];
   const getPoolLabel = () => (
     <>

@@ -1,8 +1,8 @@
-import { SupportedNetworksEnum } from '@voltz-protocol/v1-sdk';
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
-import { selectIsSupportedNetwork, selectNetwork } from '../../../app/features/network';
-import { setNetworkThunk } from '../../../app/features/network/thunks';
+import { selectChainId, selectIsSupportedNetwork } from '../../../app/features/network';
+import { setChainIdThunk } from '../../../app/features/network/thunks';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { getNetworkOptions } from './get-network-options';
 import {
@@ -14,14 +14,14 @@ import {
 } from './NetworkSelector.styled';
 
 export const NetworkSelector: React.FunctionComponent = () => {
-  const network = useAppSelector(selectNetwork);
+  const chainId = useAppSelector(selectChainId);
   const isSupportedNetwork = useAppSelector(selectIsSupportedNetwork);
   const dispatch = useAppDispatch();
   const networkOptions = getNetworkOptions();
   if (Object.keys(networkOptions).length === 0) {
     return null;
   }
-  const currentNetwork = networkOptions[network];
+  const currentNetwork = networkOptions[chainId];
 
   return (
     <SelectorBox data-testid="NetworkSelector-SelectorBox">
@@ -43,11 +43,11 @@ export const NetworkSelector: React.FunctionComponent = () => {
         </React.Fragment>
       )}
       <NetworkSelect
-        value={isSupportedNetwork ? network.toString() : 'Unsupported'}
+        value={isSupportedNetwork ? chainId.toString() : 'Unsupported'}
         onChange={(event) => {
           void dispatch(
-            setNetworkThunk({
-              network: parseInt(event.target.value, 10),
+            setChainIdThunk({
+              chainId: parseInt(event.target.value, 10),
               isSupportedNetwork: true,
             }),
           );
@@ -56,7 +56,7 @@ export const NetworkSelector: React.FunctionComponent = () => {
         {!isSupportedNetwork ? <option value="Unsupported">Unsupported</option> : null}
         {Object.keys(networkOptions).map((key) => (
           <option key={key} value={key}>
-            {networkOptions[parseInt(key, 10) as SupportedNetworksEnum].name}
+            {networkOptions[parseInt(key, 10) as SupportedChainId].name}
           </option>
         ))}
       </NetworkSelect>

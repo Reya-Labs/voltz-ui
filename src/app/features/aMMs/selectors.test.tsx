@@ -1,4 +1,4 @@
-import { SupportedNetworksEnum } from '@voltz-protocol/v1-sdk';
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { DateTime } from 'luxon';
 
 import * as configHook from '../../../hooks/voltz-config/config';
@@ -9,14 +9,14 @@ describe('aMMs.selectors', () => {
     // restore the spy created with spyOn
     jest.restoreAllMocks();
   });
-  const network = SupportedNetworksEnum.goerli;
+  const chainId = SupportedChainId.goerli;
   const state = {
     network: {
-      network,
+      chainId,
     },
     aMMs: {
       aMMs: {
-        [network]: [
+        [chainId]: [
           {
             id: 'pool1',
             rateOracle: { protocolId: 1 },
@@ -47,7 +47,7 @@ describe('aMMs.selectors', () => {
     it('should return all AMMs', () => {
       const config = { apply: false, pools: [] } as never;
       jest.spyOn(configHook, 'getConfig').mockReturnValue(config);
-      expect(selectAMMs(state as never)).toEqual(state.aMMs.aMMs[network]);
+      expect(selectAMMs(state as never)).toEqual(state.aMMs.aMMs[chainId]);
     });
 
     it('should return only AMMs with show.general set to true', () => {
@@ -60,7 +60,7 @@ describe('aMMs.selectors', () => {
         ],
       };
       jest.spyOn(configHook, 'getConfig').mockReturnValue(config as never);
-      expect(selectAMMs(state as never)).toEqual([state.aMMs.aMMs[network][0]]);
+      expect(selectAMMs(state as never)).toEqual([state.aMMs.aMMs[chainId][0]]);
     });
   });
 
@@ -68,7 +68,7 @@ describe('aMMs.selectors', () => {
     it('should return all AMMs', () => {
       const config = { apply: false, pools: [] };
       jest.spyOn(configHook, 'getConfig').mockReturnValue(config as never);
-      expect(selectTraderAMMs(state as never)).toEqual(state.aMMs.aMMs[network]);
+      expect(selectTraderAMMs(state as never)).toEqual(state.aMMs.aMMs[chainId]);
     });
 
     it('should return only AMMs with show.trader set to true', () => {
@@ -82,8 +82,8 @@ describe('aMMs.selectors', () => {
       };
       jest.spyOn(configHook, 'getConfig').mockReturnValue(config as never);
       expect(selectTraderAMMs(state as never)).toEqual([
-        state.aMMs.aMMs[network][0],
-        state.aMMs.aMMs[network][1],
+        state.aMMs.aMMs[chainId][0],
+        state.aMMs.aMMs[chainId][1],
       ]);
     });
   });

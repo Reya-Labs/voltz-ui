@@ -1,32 +1,32 @@
-import { SupportedNetworksEnum } from '@voltz-protocol/v1-sdk';
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
-import { getNetworksFromProcessEnv } from '../../../utilities/get-networks-from-process-env';
+import { getChainsFromProcessEnv } from '../../../utilities/network/get-chains-from-process-env';
 import { networkOptionsConfiguration } from './network-options-configuration';
 
-type SupportedNetworkKeys = keyof typeof SupportedNetworksEnum;
+type SupportedChainIds = keyof typeof SupportedChainId;
 export const getNetworkOptions = (): Record<
-  SupportedNetworksEnum,
+  SupportedChainId,
   {
     name: string;
     Icon: React.FunctionComponent;
   }
 > => {
-  const allowedNetworks = getNetworksFromProcessEnv();
+  const allowedNetworks = getChainsFromProcessEnv();
   return allowedNetworks
     .filter(
       ({ network }) =>
-        SupportedNetworksEnum[network as SupportedNetworkKeys] &&
-        networkOptionsConfiguration[SupportedNetworksEnum[network as SupportedNetworkKeys]],
+        SupportedChainId[network as SupportedChainIds] &&
+        networkOptionsConfiguration[SupportedChainId[network as SupportedChainIds]],
     )
     .reduce(
       (pV, { network }) => ({
         ...pV,
-        [SupportedNetworksEnum[network as SupportedNetworkKeys]]:
-          networkOptionsConfiguration[SupportedNetworksEnum[network as SupportedNetworkKeys]],
+        [SupportedChainId[network as SupportedChainIds]]:
+          networkOptionsConfiguration[SupportedChainId[network as SupportedChainIds]],
       }),
       {} as Record<
-        SupportedNetworksEnum,
+        SupportedChainId,
         {
           name: string;
           Icon: React.FunctionComponent;
