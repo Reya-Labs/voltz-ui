@@ -1,5 +1,4 @@
-import { AMM, Position } from '@voltz-protocol/v1-sdk';
-import { NetworkConfiguration } from '@voltz-protocol/v1-sdk/src/entities/amm/voltz-config/types';
+import { AMM, NetworkConfiguration, Position } from '@voltz-protocol/v1-sdk';
 
 /**
  * Returns the current position that the user has for the given amm
