@@ -1,3 +1,3 @@
-import { getAllMellowProducts } from '@voltz-protocol/v1-sdk';
+import { getAllMellowProductsV1 } from '@voltz-protocol/v1-sdk';
 
-export type OptimiserInfo = Awaited<ReturnType<typeof getAllMellowProducts>>[0];
+export type OptimiserInfo = Awaited<ReturnType<typeof getAllMellowProductsV1>>[0];
