@@ -7,6 +7,9 @@ import { selectChainId } from '../network';
 
 export const selectAMMs = (state: RootState): AMM[] => {
   const chainId = selectChainId(state);
+  if (!chainId) {
+    return [];
+  }
   const config = getConfig(chainId);
   if (!config) {
     return [];
@@ -22,6 +25,9 @@ export const selectAMMs = (state: RootState): AMM[] => {
 
 export const selectTraderAMMs = (state: RootState): AMM[] => {
   const chainId = selectChainId(state);
+  if (!chainId) {
+    return [];
+  }
   const config = getConfig(chainId);
   if (!config) {
     return [];
@@ -37,6 +43,9 @@ export const selectTraderAMMs = (state: RootState): AMM[] => {
 
 export const selectBorrowAMMs = (state: RootState): BorrowAMM[] => {
   const chainId = selectChainId(state);
+  if (!chainId) {
+    return [];
+  }
   const aMMs = state.aMMs.aMMs[chainId];
   const borrowMarkets = aMMs.filter((amm) => isBorrowing(amm.rateOracle.protocolId));
   const liveBorrowMarkets = borrowMarkets.filter(
@@ -47,5 +56,8 @@ export const selectBorrowAMMs = (state: RootState): BorrowAMM[] => {
 
 export const selectAMMsLoadedState = (state: RootState) => {
   const chainId = selectChainId(state);
+  if (!chainId) {
+    return 'idle';
+  }
   return state.aMMs.aMMsLoadedState[chainId];
 };

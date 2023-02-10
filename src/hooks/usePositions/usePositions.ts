@@ -30,7 +30,14 @@ export const usePositions = (agent: Agents): UsePositionsResult => {
 
   useEffect(() => {
     setMePositions([]);
-    if (userAddress && aMMs && aMMs.length > 0 && aMMsLoadedState === 'succeeded' && agent) {
+    if (
+      chainId &&
+      userAddress &&
+      aMMs &&
+      aMMs.length > 0 &&
+      aMMsLoadedState === 'succeeded' &&
+      agent
+    ) {
       setFetchLoading(true);
       setFetchError(false);
 

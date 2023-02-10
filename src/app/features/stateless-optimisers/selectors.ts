@@ -3,11 +3,17 @@ import { selectChainId } from '../network';
 import { OptimiserInfo } from './types';
 
 export const selectOptimisers = (state: RootState): OptimiserInfo[] => {
-  const network = selectChainId(state);
-  return state.statelessOptimisers.optimisers[network];
+  const chainId = selectChainId(state);
+  if (!chainId) {
+    return [];
+  }
+  return state.statelessOptimisers.optimisers[chainId];
 };
 
 export const selectOptimisersLoadedState = (state: RootState) => {
-  const network = selectChainId(state);
-  return state.statelessOptimisers.optimisersLoadedState[network];
+  const chainId = selectChainId(state);
+  if (!chainId) {
+    return 'idle';
+  }
+  return state.statelessOptimisers.optimisersLoadedState[chainId];
 };

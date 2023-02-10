@@ -8,7 +8,7 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 // TODO: Alex move this to SDK, seems as candidate for SDK
 export const getViewOnEtherScanLink = (
-  ethereumNetworkIdentifier?: SupportedChainId,
+  ethereumNetworkIdentifier?: SupportedChainId | null,
   transactionId?: string,
 ) => {
   if (!ethereumNetworkIdentifier || !transactionId) {

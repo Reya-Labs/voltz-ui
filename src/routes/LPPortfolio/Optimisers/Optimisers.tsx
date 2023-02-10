@@ -25,7 +25,7 @@ export const Optimisers: React.FunctionComponent = () => {
   // TODO: remove this once the entire state is lifted to Redux properly,
   // What is missing it Redux to give us some plain objects and not SDK classes
   const [forcedRerenderCounter, setForcedRerenderCounter] = useState<number>(0);
-  if (!signer || !vaultsLoaded) {
+  if (!signer || !vaultsLoaded || !chainId) {
     return (
       <OptimisersBox>
         <Panel sx={{ width: '100%' }} variant="grey-dashed">

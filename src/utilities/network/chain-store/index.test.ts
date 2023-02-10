@@ -18,10 +18,10 @@ describe('chain-store', () => {
 
       expect(retValue).toEqual(undefined);
 
-      setChainId('randomValue');
+      setChainId('10');
       retValue = getChainId();
 
-      expect(retValue).toEqual('randomValue');
+      expect(retValue).toEqual(10);
     });
   });
 
@@ -33,9 +33,9 @@ describe('chain-store', () => {
     });
 
     it('deletechainId should delete from localStorage', () => {
-      setChainId('randomValue');
+      setChainId('10');
 
-      expect(getChainId()).toEqual('randomValue');
+      expect(getChainId()).toEqual(10);
 
       deleteChainId();
 

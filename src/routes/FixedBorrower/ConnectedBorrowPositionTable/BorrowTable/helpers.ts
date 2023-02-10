@@ -6,12 +6,12 @@ import { BorrowAMMTableDatum } from './types';
 
 export const mapAmmToAmmTableDatum = (
   { id, amm }: BorrowAMM,
-  network: SupportedChainId,
+  chainId: SupportedChainId | null,
 ): BorrowAMMTableDatum => ({
   id,
   protocol: amm.protocol,
   underlyingTokenName: amm.underlyingToken.name,
   startDate: amm.startDateTime,
   endDate: amm.endDateTime,
-  isAaveV3: isAaveV3(getConfig(network)?.pools || [], id),
+  isAaveV3: isAaveV3(getConfig(chainId)?.pools || [], id),
 });

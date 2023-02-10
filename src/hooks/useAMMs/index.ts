@@ -32,6 +32,9 @@ export const useAMMs = (): UseAMMsResult => {
   const borrowAMMs = useAppSelector(selectBorrowAMMs);
 
   useEffect(() => {
+    if (!chainId) {
+      return;
+    }
     // only fetch aMMs once per network
     if (aMMsLoadedState !== 'idle') {
       return;
@@ -44,6 +47,9 @@ export const useAMMs = (): UseAMMsResult => {
   }, [chainId, aMMsLoadedState, dispatch]);
 
   useEffect(() => {
+    if (!chainId) {
+      return;
+    }
     if (aMMsLoadedState !== 'succeeded') {
       return;
     }

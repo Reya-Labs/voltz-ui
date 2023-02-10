@@ -8,7 +8,10 @@ const cachedConfig: Record<SupportedChainId, Config> = {
   [SupportedChainId.arbitrumGoerli]: null,
 };
 
-export const getConfig = (chainId: SupportedChainId): Config => {
+export const getConfig = (chainId: SupportedChainId | null): Config => {
+  if (!chainId) {
+    return null;
+  }
   if (cachedConfig[chainId]) {
     return cachedConfig[chainId];
   }
