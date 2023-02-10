@@ -1,12 +1,13 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import React from 'react';
 import { HashRouter } from 'react-router-dom';
 
+import { renderWithProviders } from '../../../../test-helpers/renderWithProviders';
 import { Nav } from './Nav';
 
 describe('<Nav />', () => {
   it('renders the correct number of NavLinks', () => {
-    render(
+    renderWithProviders(
       <HashRouter>
         <Nav />
       </HashRouter>,
@@ -15,7 +16,7 @@ describe('<Nav />', () => {
   });
 
   it('renders the correct text for each NavLink', () => {
-    render(
+    renderWithProviders(
       <HashRouter>
         <Nav />
       </HashRouter>,
@@ -28,7 +29,7 @@ describe('<Nav />', () => {
   });
 
   it('renders the new link indicator for NavLinks with isNew prop', () => {
-    render(
+    renderWithProviders(
       <HashRouter>
         <Nav />
       </HashRouter>,
