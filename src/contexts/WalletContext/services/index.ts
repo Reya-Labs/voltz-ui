@@ -1,4 +1,3 @@
-export * from './checkForCorrectNetwork';
 export * from './checkForRiskyWallet';
 export * from './checkForTOSSignature';
 export * from './getSignature';

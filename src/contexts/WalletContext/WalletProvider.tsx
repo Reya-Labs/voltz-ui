@@ -1,14 +1,12 @@
+import { detectNetworkWithChainId } from '@voltz-protocol/v1-sdk';
 import { ethers } from 'ethers';
 import React, { useCallback, useEffect, useState } from 'react';
 
+import { resetNetworkAction, selectNetwork, setNetworkAction } from '../../app/features/network';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getErrorMessage } from '../../utilities/getErrorMessage';
 import { getSentryTracker } from '../../utilities/sentry';
-import {
-  checkForCorrectNetwork,
-  checkForRiskyWallet,
-  checkForTOSSignature,
-  getWalletProvider,
-} from './services';
+import { checkForRiskyWallet, checkForTOSSignature, getWalletProvider } from './services';
 import { WalletName, WalletStatus } from './types';
 import { WalletContext } from './WalletContext';
 
@@ -20,6 +18,8 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
   const [account, setAccount] = useState<string | null>(null);
   const [name, setName] = useState<WalletName | null>(null);
   const [required, setRequired] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+  const network = useAppSelector(selectNetwork);
 
   const disconnect = useCallback(
     (errorMessage: string | null = null) => {
@@ -31,9 +31,25 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
       setAccount(null);
       setStatus('notConnected');
       setWalletError(errorMessage);
+      dispatch(resetNetworkAction());
     },
-    [setAccount, setStatus],
+    [dispatch],
   );
+
+  const handleError = (error: unknown) => {
+    let errorMessage = getErrorMessage(error).trim();
+    if (errorMessage.includes('Wrong network')) {
+      errorMessage = 'Wrong network';
+    } else if (errorMessage.includes('Risky Account Detected')) {
+      errorMessage = 'Risky Account Detected';
+      getSentryTracker().captureException(error);
+    } else {
+      errorMessage = 'Failed connection';
+      getSentryTracker().captureException(error);
+    }
+
+    disconnect(errorMessage || null);
+  };
 
   const connect = useCallback(
     async (walletName: WalletName) => {
@@ -53,7 +69,18 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
           if (!skipTOSCheck) {
             await checkForTOSSignature(newSigner);
           }
-          await checkForCorrectNetwork(newProvider);
+          const providerNetwork = await newProvider.getNetwork();
+          const networkValidation = detectNetworkWithChainId(providerNetwork.chainId);
+          if (!networkValidation.isSupported) {
+            throw new Error('Wrong network');
+          } else {
+            dispatch(
+              setNetworkAction({
+                network: networkValidation.network!,
+              }),
+            );
+          }
+
           if (!process.env.REACT_APP_SKIP_WALLET_SCREENING) {
             await checkForRiskyWallet(walletAddress);
           }
@@ -74,21 +101,10 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
           setStatus('notConnected');
         }
       } catch (error) {
-        let errorMessage = getErrorMessage(error).trim();
-        if (errorMessage.includes('Wrong network')) {
-          errorMessage = 'Wrong network';
-        } else if (errorMessage.includes('Risky Account Detected')) {
-          errorMessage = 'Risky Account Detected';
-          getSentryTracker().captureException(error);
-        } else {
-          errorMessage = 'Failed connection';
-          getSentryTracker().captureException(error);
-        }
-
-        disconnect(errorMessage || null);
+        handleError(error);
       }
     },
-    [disconnect, setAccount, setStatus],
+    [disconnect, dispatch],
   );
 
   // Reconnect wallet on page load
@@ -98,6 +114,25 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
       connect(walletName);
     }
   }, []);
+
+  const onNetworkChange = async () => {
+    if (!provider) {
+      return;
+    }
+    try {
+      const providerNetwork = await provider.getNetwork();
+      const networkValidation = providerNetwork.chainId === network;
+
+      if (!networkValidation) {
+        throw new Error('Wrong network');
+      }
+    } catch (err) {
+      handleError(err);
+    }
+  };
+  useEffect(() => {
+    void onNetworkChange();
+  }, [provider, network]);
 
   const value = {
     status,
