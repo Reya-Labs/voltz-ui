@@ -1,9 +1,14 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
-import { selectChainId, selectIsSupportedNetwork } from '../../../app/features/network';
+import {
+  selectChainId,
+  selectIsSupportedNetwork,
+  selectNetworkChangeState,
+} from '../../../app/features/network';
 import { setChainIdThunk } from '../../../app/features/network/thunks';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { Ellipsis } from '../../atomic/Ellipsis/Ellipsis';
 import { getNetworkOptions } from './get-network-options';
 import {
   ArrowIcon,
@@ -16,6 +21,7 @@ import {
 export const NetworkSelector: React.FunctionComponent = () => {
   const chainId = useAppSelector(selectChainId);
   const isSupportedNetwork = useAppSelector(selectIsSupportedNetwork);
+  const networkChangeState = useAppSelector(selectNetworkChangeState);
   const dispatch = useAppDispatch();
   const networkOptions = getNetworkOptions();
   if (Object.keys(networkOptions).length === 0) {
@@ -29,7 +35,14 @@ export const NetworkSelector: React.FunctionComponent = () => {
         <React.Fragment>
           <currentNetwork.Icon />
           <NetworkTypography data-testid="NetworkSelector-NetworkTypography">
-            {currentNetwork.name}
+            {networkChangeState !== 'pending' ? (
+              currentNetwork.name
+            ) : (
+              <React.Fragment>
+                Approve in wallet
+                <Ellipsis />
+              </React.Fragment>
+            )}
           </NetworkTypography>
           <ArrowIcon />
         </React.Fragment>

@@ -22,14 +22,10 @@ export const slice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(setChainIdThunk.pending, (state, { meta }) => {
-        state.chainId = meta.arg.chainId;
-        state.isSupportedNetwork = meta.arg.isSupportedNetwork;
+      .addCase(setChainIdThunk.pending, (state) => {
         state.networkChangeState = 'pending';
       })
       .addCase(setChainIdThunk.rejected, (state, { meta }) => {
-        state.chainId = meta.arg.chainId;
-        state.isSupportedNetwork = false;
         state.networkChangeState = 'error';
       })
       .addCase(setChainIdThunk.fulfilled, (state, { meta }) => {

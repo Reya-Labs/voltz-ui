@@ -32,7 +32,7 @@ export const setChainIdThunk = createAsyncThunk<
     }
     const providerChainId = await provider.request({ method: 'eth_chainId' });
     // switch to the correct network
-    const networkChainId = `0x${chainId}`;
+    const networkChainId = `0x${chainId.toString(16)}`;
     if (providerChainId !== networkChainId) {
       try {
         await provider.request({
@@ -67,7 +67,5 @@ export const setChainIdThunk = createAsyncThunk<
         }
       }
     }
-  } else {
-    return rejectThunkWithError(thunkAPI, 'Unsupported network');
   }
 });
