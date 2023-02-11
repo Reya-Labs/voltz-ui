@@ -12,7 +12,7 @@ describe('NavLink', () => {
   it('renders the correct link text', () => {
     (useLocation as jest.Mock).mockReturnValueOnce({ pathname: '/some-link' });
     render(
-      <NavLink isNew={false} link="/some-link">
+      <NavLink hidden={false} isNew={false} link="/some-link">
         Some Link
       </NavLink>,
     );
@@ -22,7 +22,7 @@ describe('NavLink', () => {
   it('renders the new link indicator when isNew is true', () => {
     (useLocation as jest.Mock).mockReturnValueOnce({ pathname: '/some-link' });
     render(
-      <NavLink isNew={true} link="/some-link">
+      <NavLink hidden={false} isNew={true} link="/some-link">
         Some Link
       </NavLink>,
     );
@@ -32,7 +32,7 @@ describe('NavLink', () => {
   it('renders the ActiveNavLinkButton when the link is active', () => {
     (useLocation as jest.Mock).mockReturnValueOnce({ pathname: '/some-link' });
     render(
-      <NavLink isNew={false} link="/some-link">
+      <NavLink hidden={false} isNew={false} link="/some-link">
         Some Link
       </NavLink>,
     );
@@ -43,9 +43,10 @@ describe('NavLink', () => {
     (useLocation as jest.Mock).mockReturnValue({ pathname: '/some-link' });
     render(
       <NavLink
+        hidden={false}
         isNew={false}
         link="/some-link"
-        subLinks={[{ text: 'SubLink 1', link: '/sub-link-1' }]}
+        subLinks={[{ hidden: false, text: 'SubLink 1', link: '/sub-link-1' }]}
       >
         Some Link
       </NavLink>,

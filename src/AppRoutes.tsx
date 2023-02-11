@@ -1,10 +1,10 @@
-import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { useEffect } from 'react';
 import TagManager from 'react-gtm-module';
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
 
+import { selectChainId } from './app/features/network';
 import { setChainIdThunk } from './app/features/network/thunks';
-import { useAppDispatch } from './app/hooks';
+import { useAppDispatch, useAppSelector } from './app/hooks';
 import { NetworkProtectedPage } from './components/interface/NetworkProtectedPage/NetworkProtectedPage';
 import { getDefaultChainId } from './components/interface/NetworkSelector/get-default-chain-id';
 import { NotFoundPage } from './components/interface/NotFoundPage/NotFoundPage';
@@ -24,6 +24,7 @@ import { TradingLeague } from './routes/TradingLeague/TradingLeague';
 import { isStatelessSDKEnabled } from './utilities/is-stateless-sdk-enabled';
 import { deleteChainId, getChainId, setChainId } from './utilities/network/chain-store';
 import { detectIfNetworkSupported } from './utilities/network/detect-if-network-supported';
+import { isArbitrumChain } from './utilities/network/is-arbitrum-chain';
 import {
   deleteReferrer,
   isRefererStored,
@@ -38,6 +39,7 @@ export const AppRoutes = () => {
   const searchParamsReferrer = searchParams.get(REFERRER_QUERY_PARAM_KEY);
   const dispatch = useAppDispatch();
   const { connect } = useWallet();
+  const chainId = useAppSelector(selectChainId);
 
   useEffect(() => {
     if (process.env.REACT_APP_GTM_CODE) {
@@ -76,11 +78,11 @@ export const AppRoutes = () => {
       window.ethereum as {
         on: (event: string, cb: (chainId: string) => void) => void;
       }
-    )?.on('chainChanged', (chainId: string) => {
+    )?.on('chainChanged', (newChainId: string) => {
       // Handle the new chain.
       // Correctly handling chain changes can be complicated.
       // We recommend reloading the page unless you have good reason not to.
-      setChainId(parseInt(chainId.replace('0x', ''), 10).toString());
+      setChainId(parseInt(newChainId.replace('0x', ''), 10).toString());
       window.location.reload();
     });
   }, []);
@@ -148,11 +150,11 @@ export const AppRoutes = () => {
         <Route
           element={
             isStatelessSDKEnabled() ? (
-              <NetworkProtectedPage>
+              <NetworkProtectedPage hidden={isArbitrumChain(chainId)}>
                 <Vaults />
               </NetworkProtectedPage>
             ) : (
-              <NetworkProtectedPage>
+              <NetworkProtectedPage hidden={isArbitrumChain(chainId)}>
                 <DeprecatedVaults />
               </NetworkProtectedPage>
             )
@@ -162,11 +164,11 @@ export const AppRoutes = () => {
         <Route
           element={
             isStatelessSDKEnabled() ? (
-              <NetworkProtectedPage>
+              <NetworkProtectedPage hidden={isArbitrumChain(chainId)}>
                 <VaultFormRoute />
               </NetworkProtectedPage>
             ) : (
-              <NetworkProtectedPage>
+              <NetworkProtectedPage hidden={isArbitrumChain(chainId)}>
                 <DeprecatedVaultFormRoute />
               </NetworkProtectedPage>
             )
@@ -176,11 +178,11 @@ export const AppRoutes = () => {
         <Route
           element={
             isStatelessSDKEnabled() ? (
-              <NetworkProtectedPage>
+              <NetworkProtectedPage hidden={isArbitrumChain(chainId)}>
                 <VaultFormRoute />
               </NetworkProtectedPage>
             ) : (
-              <NetworkProtectedPage>
+              <NetworkProtectedPage hidden={isArbitrumChain(chainId)}>
                 <DeprecatedVaultFormRoute />
               </NetworkProtectedPage>
             )
@@ -197,9 +199,7 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedPage
-              notRenderedForNetworks={[SupportedChainId.arbitrum, SupportedChainId.arbitrumGoerli]}
-            >
+            <NetworkProtectedPage hidden={isArbitrumChain(chainId)}>
               <Profile />
             </NetworkProtectedPage>
           }
@@ -207,9 +207,7 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedPage
-              notRenderedForNetworks={[SupportedChainId.arbitrum, SupportedChainId.arbitrumGoerli]}
-            >
+            <NetworkProtectedPage hidden={isArbitrumChain(chainId)}>
               <TradingLeague />
             </NetworkProtectedPage>
           }
