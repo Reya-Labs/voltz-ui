@@ -191,7 +191,7 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedPage>
+            <NetworkProtectedPage hidden={true}>
               <FixedBorrower />
             </NetworkProtectedPage>
           }

@@ -4,6 +4,7 @@ export const routes = {
   TRADER_PORTFOLIO: 'portfolio',
   TRADER_POOLS: 'trader-pools',
   WELCOME: 'welcome',
+  // todo: remove this route when we perform general cleanup
   BORROW_POS: 'borrow-positions',
   TRADING_LEAGUE: 'trading-league',
   PROFILE: 'profile',
