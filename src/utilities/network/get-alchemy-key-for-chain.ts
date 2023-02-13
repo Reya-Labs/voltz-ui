@@ -26,7 +26,7 @@ export const getAlchemyKeyForChain = (
     (n) => chainId === SupportedChainId[n.network as SupportedChainIds],
   );
 
-  if (!network) {
+  if (!network || !network.alchemyKey) {
     return '';
   }
   CACHED_KEYS[chainId] = network.alchemyKey;

@@ -4,7 +4,7 @@ type NetworkConfigFromProcessENV = {
   network: string;
   alchemyKey: string;
 };
-let cachedNetworkConfigs: NetworkConfigFromProcessENV[] | undefined = undefined;
+const cachedNetworkConfigs: Record<string, NetworkConfigFromProcessENV[] | undefined> = {};
 /**
  * It takes a comma-separated list of network/alchemy-key pairs, and returns an array of objects with network and
  * alchemyKey properties
@@ -20,11 +20,11 @@ export const getChainsFromProcessEnv = (
   if (!networkConfigurationString || !isEnvVarProvided(networkConfigurationString)) {
     return [];
   }
-  if (cachedNetworkConfigs) {
-    return cachedNetworkConfigs;
+  if (cachedNetworkConfigs[networkConfigurationString]) {
+    return cachedNetworkConfigs[networkConfigurationString]!;
   }
 
-  cachedNetworkConfigs = networkConfigurationString
+  cachedNetworkConfigs[networkConfigurationString] = networkConfigurationString
     .split(',')
     .filter((s) => s.trim())
     .map((s) => ({
@@ -33,5 +33,5 @@ export const getChainsFromProcessEnv = (
     }))
     .filter(({ network, alchemyKey }) => network && alchemyKey);
 
-  return cachedNetworkConfigs;
+  return cachedNetworkConfigs[networkConfigurationString]!;
 };
