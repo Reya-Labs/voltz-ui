@@ -1,9 +1,6 @@
-import { AMM, getProviderV1, RateOracle, Token } from '@voltz-protocol/v1-sdk';
+import { AMM, RateOracle, Token } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
-import { getChainId } from '../../../../utilities/network/chain-store';
-import { detectIfNetworkSupported } from '../../../../utilities/network/detect-if-network-supported';
-import { getAlchemyKeyForChain } from '../../../../utilities/network/get-alchemy-key-for-chain';
 import { SerializedAMM } from '../../../types';
 
 const deserializeAmm = (serializedAmm: SerializedAMM, signer: providers.JsonRpcSigner): AMM => {
