@@ -1,8 +1,8 @@
 import { registerForAutoRolloverV1 } from '@voltz-protocol/v1-sdk';
 import React, { useState } from 'react';
 
+import { updateOptimiserState } from '../../../app/features/lp-optimisers';
 import { selectChainId } from '../../../app/features/network';
-import { updateOptimiserState } from '../../../app/features/stateless-optimisers';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { Loading } from '../../../components/atomic/Loading/Loading';
 import { Panel } from '../../../components/atomic/Panel/Panel';

@@ -1,7 +1,7 @@
 import React from 'react';
 
+import { OptimiserInfo } from '../../../../../app/features/lp-optimisers';
 import { selectChainId } from '../../../../../app/features/network';
-import { OptimiserInfo } from '../../../../../app/features/stateless-optimisers';
 import { useAppSelector } from '../../../../../app/hooks';
 import { doNothing } from '../../../../../utilities/doNothing';
 import { getViewOnEtherScanLink } from '../../../../../utilities/getViewOnEtherScanLink';

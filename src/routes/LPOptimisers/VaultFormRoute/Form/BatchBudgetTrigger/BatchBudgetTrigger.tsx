@@ -1,11 +1,8 @@
 import { submitAllBatchesForFeeV1 } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useReducer, useState } from 'react';
 
+import { OptimiserInfo, updateOptimiserState } from '../../../../../app/features/lp-optimisers';
 import { selectChainId } from '../../../../../app/features/network';
-import {
-  OptimiserInfo,
-  updateOptimiserState,
-} from '../../../../../app/features/stateless-optimisers';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { Modal } from '../../../../../components/composite/Modal/Modal';
 import { useWallet } from '../../../../../hooks/useWallet';

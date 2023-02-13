@@ -2,8 +2,8 @@ import { approveToken, depositAndRegisterV1, isTokenApprovedV1 } from '@voltz-pr
 import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
 
+import { OptimiserInfo, updateOptimiserState } from '../../../../app/features/lp-optimisers';
 import { selectChainId } from '../../../../app/features/network';
-import { OptimiserInfo, updateOptimiserState } from '../../../../app/features/stateless-optimisers';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { AutomaticRolloverToggleProps } from '../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
 import { useWallet } from '../../../../hooks/useWallet';

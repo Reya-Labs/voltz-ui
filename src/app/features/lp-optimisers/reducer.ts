@@ -1,53 +1,66 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { MellowProduct } from '@voltz-protocol/v1-sdk';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
-import { initialiseVaultsForSignerThunk, initialiseVaultsThunk } from './thunks';
+import { initialiseOptimisersThunk } from './thunks';
+import { OptimiserInfo } from './types';
 
 type SliceState = {
-  vaultsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
-  signerLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
-  selectedVaultId?: MellowProduct['id'];
-  lpVaults: MellowProduct[];
+  optimisersLoadedState: Record<SupportedChainId, 'idle' | 'pending' | 'succeeded' | 'failed'>;
+  optimisers: Record<SupportedChainId, OptimiserInfo[]>;
 };
 
 const initialState: SliceState = {
-  vaultsLoadedState: 'idle',
-  signerLoadedState: 'idle',
-  selectedVaultId: undefined,
-  lpVaults: [],
+  optimisersLoadedState: {
+    [SupportedChainId.mainnet]: 'idle',
+    [SupportedChainId.goerli]: 'idle',
+    [SupportedChainId.arbitrum]: 'idle',
+    [SupportedChainId.arbitrumGoerli]: 'idle',
+  },
+  optimisers: {
+    [SupportedChainId.mainnet]: [],
+    [SupportedChainId.goerli]: [],
+    [SupportedChainId.arbitrum]: [],
+    [SupportedChainId.arbitrumGoerli]: [],
+  },
 };
 
 export const slice = createSlice({
-  name: 'lpOptimisers',
+  name: 'lp-optimisers',
   initialState,
   reducers: {
-    resetVaultsAction: (state) => {
-      // TODO: Filip and Costin fix this by not keeping SDK stuff in UI
-      state.lpVaults = [];
+    updateOptimiserState: (
+      state,
+      {
+        payload: { optimiserId, chainId, newOptimiserState },
+      }: PayloadAction<{
+        optimiserId: string;
+        newOptimiserState: OptimiserInfo;
+        chainId: SupportedChainId;
+      }>,
+    ) => {
+      const optimiserIndex = state.optimisers[chainId].findIndex(
+        (opt) => opt.optimiserId === optimiserId,
+      );
+      if (optimiserIndex >= 0) {
+        state.optimisers[chainId][optimiserIndex] = newOptimiserState;
+      }
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(initialiseVaultsThunk.pending, (state) => {
-        state.vaultsLoadedState = 'pending';
+      .addCase(initialiseOptimisersThunk.pending, (state, { meta }) => {
+        state.optimisersLoadedState[meta.arg.chainId] = 'pending';
       })
-      .addCase(initialiseVaultsThunk.rejected, (state) => {
-        state.vaultsLoadedState = 'failed';
+      .addCase(initialiseOptimisersThunk.rejected, (state, { meta }) => {
+        state.optimisersLoadedState[meta.arg.chainId] = 'failed';
+        state.optimisers[meta.arg.chainId] = [];
       })
-      .addCase(initialiseVaultsThunk.fulfilled, (state) => {
-        state.vaultsLoadedState = 'succeeded';
-      })
-      .addCase(initialiseVaultsForSignerThunk.pending, (state) => {
-        state.signerLoadedState = 'pending';
-      })
-      .addCase(initialiseVaultsForSignerThunk.rejected, (state) => {
-        state.signerLoadedState = 'failed';
-      })
-      .addCase(initialiseVaultsForSignerThunk.fulfilled, (state) => {
-        state.signerLoadedState = 'succeeded';
+      .addCase(initialiseOptimisersThunk.fulfilled, (state, { payload, meta }) => {
+        state.optimisersLoadedState[meta.arg.chainId] = 'succeeded';
+        state.optimisers[meta.arg.chainId] = payload as OptimiserInfo[];
       });
   },
 });
 
-export const { resetVaultsAction } = slice.actions;
+export const { updateOptimiserState } = slice.actions;
 export const lpOptimisersReducer = slice.reducer;

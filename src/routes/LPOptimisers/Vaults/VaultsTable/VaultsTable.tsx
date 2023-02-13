@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { OptimiserInfo } from '../../../../app/features/stateless-optimisers';
+import { OptimiserInfo } from '../../../../app/features/lp-optimisers';
 import { Loading } from '../../../../components/atomic/Loading/Loading';
 import { Panel } from '../../../../components/atomic/Panel/Panel';
 import { Header } from '../Header/Header';

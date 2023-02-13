@@ -7,7 +7,7 @@ export const selectOptimisers = (state: RootState): OptimiserInfo[] => {
   if (!chainId) {
     return [];
   }
-  return state.statelessOptimisers.optimisers[chainId];
+  return state.lpOptimisers.optimisers[chainId];
 };
 
 export const selectOptimisersLoadedState = (state: RootState) => {
@@ -15,5 +15,5 @@ export const selectOptimisersLoadedState = (state: RootState) => {
   if (!chainId) {
     return 'idle';
   }
-  return state.statelessOptimisers.optimisersLoadedState[chainId];
+  return state.lpOptimisers.optimisersLoadedState[chainId];
 };

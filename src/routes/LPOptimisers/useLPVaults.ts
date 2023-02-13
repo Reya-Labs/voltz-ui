@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 
-import { selectChainId } from '../../app/features/network';
 import {
   initialiseOptimisersThunk,
   selectOptimisers,
   selectOptimisersLoadedState,
-} from '../../app/features/stateless-optimisers';
+} from '../../app/features/lp-optimisers';
+import { selectChainId } from '../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useWallet } from '../../hooks/useWallet';
 

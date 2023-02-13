@@ -4,8 +4,8 @@ import {
 } from '@voltz-protocol/v1-sdk';
 import React, { useState } from 'react';
 
+import { OptimiserInfo, updateOptimiserState } from '../../../../app/features/lp-optimisers';
 import { selectChainId } from '../../../../app/features/network';
-import { OptimiserInfo, updateOptimiserState } from '../../../../app/features/stateless-optimisers';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useWallet } from '../../../../hooks/useWallet';
 import { getAlchemyKeyForChain } from '../../../../utilities/network/get-alchemy-key-for-chain';

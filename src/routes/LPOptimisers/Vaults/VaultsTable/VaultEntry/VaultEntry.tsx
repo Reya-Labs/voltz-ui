@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { OptimiserInfo } from '../../../../../app/features/stateless-optimisers';
+import { OptimiserInfo } from '../../../../../app/features/lp-optimisers';
 import { isCostReductionFlowEnabled } from '../../../../../utilities/is-cost-reduction-flow-enabled';
 import { VaultField } from '../../../VaultField/VaultField';
 import { BatchBudgetTrigger } from '../../../VaultFormRoute/Form/BatchBudgetTrigger/BatchBudgetTrigger';

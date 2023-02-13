@@ -9,8 +9,6 @@ import { NetworkProtectedPage } from './components/interface/NetworkProtectedPag
 import { getDefaultChainId } from './components/interface/NetworkSelector/get-default-chain-id';
 import { NotFoundPage } from './components/interface/NotFoundPage/NotFoundPage';
 import { useWallet } from './hooks/useWallet';
-import { VaultFormRoute as DeprecatedVaultFormRoute } from './routes/DeprecatedLPOptimisers/VaultFormRoute/VaultFormRoute';
-import { Vaults as DeprecatedVaults } from './routes/DeprecatedLPOptimisers/Vaults/Vaults';
 import { FixedBorrower } from './routes/FixedBorrower/FixedBorrower';
 import { VaultFormRoute } from './routes/LPOptimisers/VaultFormRoute/VaultFormRoute';
 import { Vaults } from './routes/LPOptimisers/Vaults/Vaults';
@@ -21,7 +19,6 @@ import { Profile } from './routes/Profile/Profile';
 import { TraderPools } from './routes/TraderPools/TraderPools';
 import { TraderPortfolio } from './routes/TraderPortfolio/TraderPortfolio';
 import { TradingLeague } from './routes/TradingLeague/TradingLeague';
-import { isStatelessSDKEnabled } from './utilities/is-stateless-sdk-enabled';
 import { deleteChainId, getChainId, setChainId } from './utilities/network/chain-store';
 import { detectIfNetworkSupported } from './utilities/network/detect-if-network-supported';
 import { isArbitrumChain } from './utilities/network/is-arbitrum-chain';
@@ -149,43 +146,25 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            isStatelessSDKEnabled() ? (
-              <NetworkProtectedPage hidden={isArbitrumChain(chainId)}>
-                <Vaults />
-              </NetworkProtectedPage>
-            ) : (
-              <NetworkProtectedPage hidden={isArbitrumChain(chainId)}>
-                <DeprecatedVaults />
-              </NetworkProtectedPage>
-            )
+            <NetworkProtectedPage hidden={isArbitrumChain(chainId)}>
+              <Vaults />
+            </NetworkProtectedPage>
           }
           path={routes.LP_OPTIMISERS}
         />
         <Route
           element={
-            isStatelessSDKEnabled() ? (
-              <NetworkProtectedPage hidden={isArbitrumChain(chainId)}>
-                <VaultFormRoute />
-              </NetworkProtectedPage>
-            ) : (
-              <NetworkProtectedPage hidden={isArbitrumChain(chainId)}>
-                <DeprecatedVaultFormRoute />
-              </NetworkProtectedPage>
-            )
+            <NetworkProtectedPage hidden={isArbitrumChain(chainId)}>
+              <VaultFormRoute />
+            </NetworkProtectedPage>
           }
           path={routes.LP_OPTIMISERS_DEPOSIT_FORM}
         />
         <Route
           element={
-            isStatelessSDKEnabled() ? (
-              <NetworkProtectedPage hidden={isArbitrumChain(chainId)}>
-                <VaultFormRoute />
-              </NetworkProtectedPage>
-            ) : (
-              <NetworkProtectedPage hidden={isArbitrumChain(chainId)}>
-                <DeprecatedVaultFormRoute />
-              </NetworkProtectedPage>
-            )
+            <NetworkProtectedPage hidden={isArbitrumChain(chainId)}>
+              <VaultFormRoute />
+            </NetworkProtectedPage>
           }
           path={routes.LP_OPTIMISERS_WITHDRAW_ROLLOVER_FORM}
         />

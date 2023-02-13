@@ -6,9 +6,7 @@ import { useAppSelector } from '../../app/hooks';
 import { ConnectWallet } from '../../components/composite/ConnectWallet/ConnectWallet';
 import { MintBurnFormModes } from '../../contexts/MintBurnFormContext/MintBurnFormContext';
 import { useWallet } from '../../hooks/useWallet';
-import { isStatelessSDKEnabled } from '../../utilities/is-stateless-sdk-enabled';
 import { isArbitrumChain } from '../../utilities/network/is-arbitrum-chain';
-import { Optimisers as DeprecatedOptimisers } from './DeprecatedOptimisers/Optimisers';
 import { ContentBox, LPPortfolioBox, Split } from './LPPortfolio.styled';
 import { LPPositions } from './LPPositions/LPPositions';
 import { Optimisers } from './Optimisers/Optimisers';
@@ -46,7 +44,7 @@ export const LPPortfolio: React.FunctionComponent = () => {
             display: Boolean(formMode) || hasActiveTransactions ? 'none' : undefined,
           }}
         >
-          {isStatelessSDKEnabled() ? <Optimisers /> : <DeprecatedOptimisers />}
+          <Optimisers />
         </ContentBox>
       )}
     </LPPortfolioBox>
