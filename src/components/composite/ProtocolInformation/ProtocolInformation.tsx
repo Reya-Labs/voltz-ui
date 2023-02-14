@@ -14,6 +14,7 @@ import { ReactComponent as Aave } from '../PoolField/aave-icon.svg';
 import { ReactComponent as Compound } from '../PoolField/compound-icon.svg';
 import { ReactComponent as DAI } from '../PoolField/dai-icon.svg';
 import { ReactComponent as ETH } from '../PoolField/eth-icon.svg';
+import { ReactComponent as GLP } from '../PoolField/glp-icon.svg';
 import { ReactComponent as Lido } from '../PoolField/lido-icon.svg';
 import { ReactComponent as Rocket } from '../PoolField/rocket-icon.svg';
 import { ReactComponent as USDC } from '../PoolField/usdc-icon.svg';
@@ -75,6 +76,8 @@ export const ProtocolInformation: React.FunctionComponent<ProtocolInformationPro
           return ['Lido', <Lido key="Lido" height="38" width="38" />];
         case 'r':
           return ['Rocket', <Rocket key="Rocket" height="38" width="38" />];
+        case 'g':
+          return ['GMX:GLP', <GLP key="GLP" />];
         default:
           return ['', ''];
       }
