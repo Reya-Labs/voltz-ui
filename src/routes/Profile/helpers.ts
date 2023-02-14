@@ -1,4 +1,9 @@
-import { CommunitySBT, getSubgraphURL, SubgraphURLEnum, SupportedChainId } from '@voltz-protocol/v1-sdk';
+import {
+  CommunitySBT,
+  getSubgraphURL,
+  SubgraphURLEnum,
+  SupportedChainId,
+} from '@voltz-protocol/v1-sdk';
 import { Signer } from 'ethers';
 
 import { Season } from '../../hooks/season/types';

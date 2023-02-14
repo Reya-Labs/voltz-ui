@@ -1,9 +1,9 @@
 import copy from 'copy-to-clipboard';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
-import { selectChainId } from 'src/app/features/network';
-import { useAppSelector } from 'src/app/hooks';
 
+import { selectChainId } from '../../app/features/network';
+import { useAppSelector } from '../../app/hooks';
 import { ConnectWallet } from '../../components/composite/ConnectWallet/ConnectWallet';
 import { Season } from '../../hooks/season/types';
 import { useCurrentSeason } from '../../hooks/season/useCurrentSeason';
