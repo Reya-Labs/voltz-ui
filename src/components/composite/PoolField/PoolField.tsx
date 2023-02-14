@@ -21,7 +21,13 @@ export type PoolFieldProps = {
   isBorrowTable?: boolean;
 };
 
-export const x = ({ isAaveV3, agent, protocol, isBorrowing, isBorrowTable }: PoolFieldProps) => {
+export const PoolField = ({
+  isAaveV3,
+  agent,
+  protocol,
+  isBorrowing,
+  isBorrowTable,
+}: PoolFieldProps) => {
   const protocolIcon = () => {
     // todo: this seems duplicated in other files as well
     // extract a component
