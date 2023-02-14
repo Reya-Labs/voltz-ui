@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
-import { AMM, Position } from '@voltz-protocol/v1-sdk';
+import { AMM, getViewOnEtherScanLink, Position } from '@voltz-protocol/v1-sdk';
 import isUndefined from 'lodash.isundefined';
 import React, { useEffect, useMemo, useRef } from 'react';
 
@@ -12,7 +12,6 @@ import { MintBurnFormLiquidityAction } from '../../../contexts/MintBurnFormConte
 import { useAgent } from '../../../hooks/useAgent';
 import { useWallet } from '../../../hooks/useWallet';
 import { getAmmProtocol, isBorrowing } from '../../../utilities/amm';
-import { getViewOnEtherScanLink } from '../../../utilities/getViewOnEtherScanLink';
 import { DataLayerEventPayload, pushEvent } from '../../../utilities/googleAnalytics';
 import { getPoolButtonId } from '../../../utilities/googleAnalytics/helpers';
 import { formatCurrency } from '../../../utilities/number';

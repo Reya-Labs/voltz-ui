@@ -1,4 +1,4 @@
-import { CommunitySBT } from '@voltz-protocol/v1-sdk';
+import { CommunitySBT, getSubgraphURL, SubgraphURLEnum, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { Signer } from 'ethers';
 
 import { Season } from '../../hooks/season/types';
@@ -301,7 +301,7 @@ export const getClaimButtonModesForVariants = (
 export const getSeasonUserId = (userId: string, seasonId: Season['id']) =>
   `${userId.toLowerCase()}#${seasonId}`;
 
-export const getCommunitySbt = (signer: Signer | null) => {
+export const getCommunitySbt = (signer: Signer | null, chainId: SupportedChainId | null) => {
   const ignoredWalletIds =
     process.env.REACT_APP_IGNORED_LEAGUE_WALLETS &&
     process.env.REACT_APP_IGNORED_LEAGUE_WALLETS !== 'UNPROVIDED'
@@ -314,12 +314,15 @@ export const getCommunitySbt = (signer: Signer | null) => {
   return new CommunitySBT({
     id: process.env.REACT_APP_COMMUNITY_SBT_ADDRESS || '',
     signer: signer,
-    currentBadgesSubgraphUrl: process.env.REACT_APP_CURRENT_SUBGRAPH_BADGES_URL,
-    nextBadgesSubgraphUrl: process.env.REACT_APP_NEXT_SUBGRAPH_BADGES_URL,
+    currentBadgesSubgraphUrl: chainId
+      ? getSubgraphURL(chainId, SubgraphURLEnum.badgesCurrentSeasonNoIPFS)
+      : '',
+    nextBadgesSubgraphUrl: chainId
+      ? getSubgraphURL(chainId, SubgraphURLEnum.badgesRollingSeason)
+      : '',
     nonProgDbUrl: process.env.REACT_APP_DB_BADGES_URL,
     referralsDbUrl: process.env.REACT_APP_REFERRAL_AND_SIGNATURE_SERVICE_URL,
-    // TODO: Alex deprecate the REACT_APP_SUBGRAPH_URL when network selector is released
-    subgraphUrl: process.env.REACT_APP_SUBGRAPH_URL,
+    subgraphUrl: chainId ? getSubgraphURL(chainId, SubgraphURLEnum.voltzProtocol) : '',
     coingeckoKey: process.env.REACT_APP_COINGECKO_API_KEY,
     ignoredWalletIds: ignoredWalletIds,
     badgesCids: badgesCids,

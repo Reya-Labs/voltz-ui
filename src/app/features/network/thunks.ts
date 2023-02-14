@@ -1,8 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { SupportedChainId } from '@voltz-protocol/v1-sdk';
-
-import { getChainInfo } from './get-chain-info';
-import { getRpcUrl } from './get-rpc-urls';
+import { getChainInfo, SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 const rejectThunkWithError = (
   thunkAPI: {
@@ -50,7 +47,7 @@ export const setChainIdThunk = createAsyncThunk<
             const addChainParameter = {
               chainId: networkChainId,
               chainName: info.label,
-              rpcUrls: [getRpcUrl(chainId)],
+              rpcUrls: [info.defaultRpcUrl],
               nativeCurrency: info.nativeCurrency,
               blockExplorerUrls: [info.explorer],
             };
