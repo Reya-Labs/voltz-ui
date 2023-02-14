@@ -1,8 +1,8 @@
 import { RankType } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useState } from 'react';
-import { selectChainId } from 'src/app/features/network';
-import { useAppSelector } from 'src/app/hooks';
 
+import { selectChainId } from '../../app/features/network';
+import { useAppSelector } from '../../app/hooks';
 import { useCurrentSeason } from '../../hooks/season/useCurrentSeason';
 import { useWallet } from '../../hooks/useWallet';
 import { setPageTitle } from '../../utilities/page';
