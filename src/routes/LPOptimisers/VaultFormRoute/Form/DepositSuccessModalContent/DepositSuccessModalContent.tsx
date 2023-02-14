@@ -1,10 +1,10 @@
+import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
 import { OptimiserInfo } from '../../../../../app/features/lp-optimisers';
 import { selectChainId } from '../../../../../app/features/network';
 import { useAppSelector } from '../../../../../app/hooks';
 import { doNothing } from '../../../../../utilities/doNothing';
-import { getViewOnEtherScanLink } from '../../../../../utilities/getViewOnEtherScanLink';
 import { routes } from '../../../../paths';
 import { BatchBudgetTrigger } from '../BatchBudgetTrigger/BatchBudgetTrigger';
 import {
