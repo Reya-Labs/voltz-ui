@@ -7,6 +7,7 @@ import { ReactComponent as Compound } from './compound-icon.svg';
 import { CustomPoolField } from './CustomPoolField';
 import { ReactComponent as DAI } from './dai-icon.svg';
 import { ReactComponent as ETH } from './eth-icon.svg';
+import { ReactComponent as GLP } from './glp-icon.svg';
 import { ReactComponent as Lido } from './lido-icon.svg';
 import { ReactComponent as Rocket } from './rocket-icon.svg';
 import { ReactComponent as USDC } from './usdc-icon.svg';
@@ -20,13 +21,7 @@ export type PoolFieldProps = {
   isBorrowTable?: boolean;
 };
 
-export const PoolField = ({
-  isAaveV3,
-  agent,
-  protocol,
-  isBorrowing,
-  isBorrowTable,
-}: PoolFieldProps) => {
+export const x = ({ isAaveV3, agent, protocol, isBorrowing, isBorrowTable }: PoolFieldProps) => {
   const protocolIcon = () => {
     // todo: this seems duplicated in other files as well
     // extract a component
@@ -40,6 +35,8 @@ export const PoolField = ({
         return ['Lido', <Lido key="Lido" />];
       case 'r':
         return ['Rocket', <Rocket key="Rocket" />];
+      case 'g':
+        return ['GMX:GLP', <GLP key="GLP" />];
       default:
         return ['', ''];
     }
