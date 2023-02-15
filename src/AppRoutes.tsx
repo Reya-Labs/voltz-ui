@@ -56,6 +56,7 @@ export const AppRoutes = () => {
       );
       return;
     }
+
     const networkValidation = detectIfNetworkSupported(storedChainId);
     if (!networkValidation.isSupported || !networkValidation.chainId) {
       await dispatch(
@@ -73,7 +74,6 @@ export const AppRoutes = () => {
       );
     }
     deleteChainId();
-    await connect('metamask');
   };
 
   useEffect(() => {
