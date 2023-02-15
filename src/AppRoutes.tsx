@@ -8,7 +8,6 @@ import { useAppDispatch, useAppSelector } from './app/hooks';
 import { NetworkProtectedPage } from './components/interface/NetworkProtectedPage/NetworkProtectedPage';
 import { getDefaultChainId } from './components/interface/NetworkSelector/get-default-chain-id';
 import { NotFoundPage } from './components/interface/NotFoundPage/NotFoundPage';
-import { useWallet } from './hooks/useWallet';
 import { FixedBorrower } from './routes/FixedBorrower/FixedBorrower';
 import { VaultFormRoute } from './routes/LPOptimisers/VaultFormRoute/VaultFormRoute';
 import { Vaults } from './routes/LPOptimisers/Vaults/Vaults';
@@ -35,7 +34,6 @@ export const AppRoutes = () => {
   const [searchParams] = useSearchParams();
   const searchParamsReferrer = searchParams.get(REFERRER_QUERY_PARAM_KEY);
   const dispatch = useAppDispatch();
-  const { connect } = useWallet();
   const chainId = useAppSelector(selectChainId);
 
   useEffect(() => {
@@ -56,6 +54,7 @@ export const AppRoutes = () => {
       );
       return;
     }
+
     const networkValidation = detectIfNetworkSupported(storedChainId);
     if (!networkValidation.isSupported || !networkValidation.chainId) {
       await dispatch(
@@ -73,7 +72,6 @@ export const AppRoutes = () => {
       );
     }
     deleteChainId();
-    await connect('metamask');
   };
 
   useEffect(() => {

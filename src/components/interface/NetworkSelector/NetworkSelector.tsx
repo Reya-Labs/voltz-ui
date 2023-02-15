@@ -1,5 +1,5 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {
   selectChainChangeState,
@@ -8,6 +8,7 @@ import {
 } from '../../../app/features/network';
 import { setChainIdThunk } from '../../../app/features/network/thunks';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { setChainId } from '../../../utilities/network/chain-store';
 import { Ellipsis } from '../../atomic/Ellipsis/Ellipsis';
 import { getNetworkOptions } from './get-network-options';
 import {
@@ -24,6 +25,12 @@ export const NetworkSelector: React.FunctionComponent = () => {
   const chainChangeState = useAppSelector(selectChainChangeState);
   const dispatch = useAppDispatch();
   const networkOptions = getNetworkOptions();
+  useEffect(() => {
+    if (!chainId) {
+      return;
+    }
+    setChainId(chainId.toString());
+  }, [chainId]);
   if (Object.keys(networkOptions).length === 0) {
     return null;
   }

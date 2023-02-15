@@ -77,7 +77,7 @@ export const ProtocolInformation: React.FunctionComponent<ProtocolInformationPro
         case 'r':
           return ['Rocket', <Rocket key="Rocket" height="38" width="38" />];
         case 'g':
-          return ['GMX:GLP', <GLP key="GLP" />];
+          return ['GMX:GLP', <GLP key="GLP" height="38" width="38" />];
         default:
           return ['', ''];
       }
