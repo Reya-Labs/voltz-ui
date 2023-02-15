@@ -39,6 +39,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
 
   const handleError = (error: unknown) => {
     let errorMessage = getErrorMessage(error).trim();
+    let shouldDisconnect = true;
     if (errorMessage.includes('Wrong network')) {
       errorMessage = 'Wrong network';
     } else if (errorMessage.includes('Risky Account Detected')) {
@@ -46,19 +47,24 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
       getSentryTracker().captureException(error);
     } else if (errorMessage.includes('underlying network changed')) {
       errorMessage = '';
+      shouldDisconnect = false;
     } else {
       errorMessage = 'Failed connection';
       getSentryTracker().captureException(error);
     }
 
-    disconnect(errorMessage || null);
+    // don't disconnect when underlying network changes...
+    // a page reload will happen and another connect happens
+    if (shouldDisconnect) {
+      disconnect(errorMessage || null);
+    }
   };
 
   const connect = useCallback(
     async (walletName: WalletName) => {
       try {
-        const newProvider = await getWalletProvider(walletName);
         setStatus('connecting');
+        const newProvider = await getWalletProvider(walletName);
 
         if (newProvider) {
           const newSigner = newProvider.getSigner();
