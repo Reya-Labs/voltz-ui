@@ -1,5 +1,5 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {
   selectChainChangeState,
@@ -17,6 +17,7 @@ import {
   SelectorBox,
   WarningIcon,
 } from './NetworkSelector.styled';
+import { setChainId } from '../../../utilities/network/chain-store';
 
 export const NetworkSelector: React.FunctionComponent = () => {
   const chainId = useAppSelector(selectChainId);
@@ -24,6 +25,12 @@ export const NetworkSelector: React.FunctionComponent = () => {
   const chainChangeState = useAppSelector(selectChainChangeState);
   const dispatch = useAppDispatch();
   const networkOptions = getNetworkOptions();
+  useEffect(() => {
+    if (!chainId) {
+      return;
+    }
+    setChainId(chainId.toString());
+  }, [chainId]);
   if (Object.keys(networkOptions).length === 0) {
     return null;
   }
