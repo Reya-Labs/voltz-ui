@@ -1,7 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { providers } from 'ethers';
+import { getAllMellowProductsV1, SupportedChainId } from '@voltz-protocol/v1-sdk';
+import { ethers } from 'ethers';
 
-import { RootState } from '../../store';
+import { getAlchemyKeyForChain } from '../../../utilities/network/get-alchemy-key-for-chain';
+import { OptimiserInfo } from './types';
 
 const rejectThunkWithError = (
   thunkAPI: {
@@ -9,43 +11,28 @@ const rejectThunkWithError = (
   },
   err: unknown,
 ) => {
+  if (typeof err === 'string') {
+    return thunkAPI.rejectWithValue(err);
+  }
   return thunkAPI.rejectWithValue((err as Error)?.message);
 };
 
-export const initialiseVaultsThunk = createAsyncThunk<
-  Promise<unknown>,
-  void,
+export const initialiseOptimisersThunk = createAsyncThunk<
+  OptimiserInfo | Awaited<ReturnType<typeof rejectThunkWithError>>,
   {
-    state: RootState;
+    signer: ethers.Signer | null;
+    type: 'active' | 'all';
+    chainId: SupportedChainId;
   }
->('lp-optimisers/initialiseVaults', async (_, thunkAPI) => {
+>('lp-optimisers/getProducts', async ({ chainId, signer, type }, thunkAPI) => {
   try {
-    const { lpVaults } = thunkAPI.getState().lpOptimisers;
-    await Promise.allSettled(
-      lpVaults.filter((m) => !m.metadata.soon).map((item) => item.vaultInit()),
-    );
-  } catch (err) {
-    return rejectThunkWithError(thunkAPI, err);
-  }
-});
-
-export const initialiseVaultsForSignerThunk = createAsyncThunk<
-  Promise<unknown>,
-  {
-    signer: providers.JsonRpcSigner;
-  },
-  {
-    state: RootState;
-  }
->('lp-optimisers/initialiseVaultsForSigner', async ({ signer }, thunkAPI) => {
-  try {
-    const { lpVaults, vaultsLoadedState } = thunkAPI.getState().lpOptimisers;
-    if (vaultsLoadedState !== 'succeeded') {
-      return;
-    }
-    await Promise.allSettled(
-      lpVaults.filter((m) => !m.metadata.soon).map((item) => item.userInit(signer)),
-    );
+    const mappedRouters: OptimiserInfo[] = await getAllMellowProductsV1({
+      signer,
+      type,
+      chainId,
+      alchemyApiKey: getAlchemyKeyForChain(chainId),
+    });
+    return mappedRouters;
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }

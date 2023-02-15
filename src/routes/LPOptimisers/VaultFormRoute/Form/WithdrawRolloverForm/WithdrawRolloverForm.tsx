@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { OptimiserInfo } from '../../../../../app/features/stateless-optimisers';
+import { OptimiserInfo } from '../../../../../app/features/lp-optimisers';
 import { AboutYourFunds } from '../AboutYourFunds/AboutYourFunds';
 import { BackButton, ButtonBox, FormBox, FullButtonBox } from '../CommonForm.styled';
 import { DepositAmountInput } from '../DepositAmountInput/DepositAmountInput';

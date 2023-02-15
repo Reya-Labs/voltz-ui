@@ -1,6 +1,8 @@
 import { Position } from '@voltz-protocol/v1-sdk';
 import React, { useEffect } from 'react';
 
+import { selectChainId } from '../../../../../../../app/features/network';
+import { useAppSelector } from '../../../../../../../app/hooks';
 import { MaturityInformation } from '../../../../../../../components/composite/MaturityInformation/MaturityInformation';
 import { useAMMContext } from '../../../../../../../contexts/AMMContext/AMMContext';
 import { getConfig } from '../../../../../../../hooks/voltz-config/config';
@@ -21,6 +23,7 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
   position,
   onSelect,
 }) => {
+  const chainId = useAppSelector(selectChainId);
   const { fixedApr } = useAMMContext();
   const { call: callFixedApr } = fixedApr;
 
@@ -39,12 +42,14 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
   // Introduced this so margin and notional show the correct underlying token unit e.g. Eth not stEth, USDC not aUSDC
   const underlyingTokenName = position.amm.underlyingToken.name;
   const hideEdit = position.amm.endDateTime.toMillis() <= Date.now().valueOf() + MATURITY_WINDOW;
+  const config = getConfig(chainId);
+  const pools = config ? config.pools : [];
 
   return (
     <RowBox>
       <CellBox>
         <Pool
-          isAaveV3={isAaveV3(getConfig().pools, position.amm.id)}
+          isAaveV3={isAaveV3(pools, position.amm.id)}
           isBorrowing={isBorrowing(position.amm.rateOracle.protocolId)}
           protocol={position.amm.protocol}
         />

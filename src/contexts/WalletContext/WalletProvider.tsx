@@ -1,14 +1,14 @@
 import { ethers } from 'ethers';
 import React, { useCallback, useEffect, useState } from 'react';
 
+import { selectChainId } from '../../app/features/network';
+import { setChainIdThunk } from '../../app/features/network/thunks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { getDefaultChainId } from '../../components/interface/NetworkSelector/get-default-chain-id';
 import { getErrorMessage } from '../../utilities/getErrorMessage';
+import { detectIfNetworkSupported } from '../../utilities/network/detect-if-network-supported';
 import { getSentryTracker } from '../../utilities/sentry';
-import {
-  checkForCorrectNetwork,
-  checkForRiskyWallet,
-  checkForTOSSignature,
-  getWalletProvider,
-} from './services';
+import { checkForRiskyWallet, checkForTOSSignature, getWalletProvider } from './services';
 import { WalletName, WalletStatus } from './types';
 import { WalletContext } from './WalletContext';
 
@@ -20,6 +20,8 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
   const [account, setAccount] = useState<string | null>(null);
   const [name, setName] = useState<WalletName | null>(null);
   const [required, setRequired] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+  const chainId = useAppSelector(selectChainId);
 
   const disconnect = useCallback(
     (errorMessage: string | null = null) => {
@@ -32,14 +34,37 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
       setStatus('notConnected');
       setWalletError(errorMessage);
     },
-    [setAccount, setStatus],
+    [dispatch],
   );
+
+  const handleError = (error: unknown) => {
+    let errorMessage = getErrorMessage(error).trim();
+    let shouldDisconnect = true;
+    if (errorMessage.includes('Wrong network')) {
+      errorMessage = 'Wrong network';
+    } else if (errorMessage.includes('Risky Account Detected')) {
+      errorMessage = 'Risky Account Detected';
+      getSentryTracker().captureException(error);
+    } else if (errorMessage.includes('underlying network changed')) {
+      errorMessage = '';
+      shouldDisconnect = false;
+    } else {
+      errorMessage = 'Failed connection';
+      getSentryTracker().captureException(error);
+    }
+
+    // don't disconnect when underlying network changes...
+    // a page reload will happen and another connect happens
+    if (shouldDisconnect) {
+      disconnect(errorMessage || null);
+    }
+  };
 
   const connect = useCallback(
     async (walletName: WalletName) => {
       try {
-        const newProvider = await getWalletProvider(walletName);
         setStatus('connecting');
+        const newProvider = await getWalletProvider(walletName);
 
         if (newProvider) {
           const newSigner = newProvider.getSigner();
@@ -53,7 +78,25 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
           if (!skipTOSCheck) {
             await checkForTOSSignature(newSigner);
           }
-          await checkForCorrectNetwork(newProvider);
+          const providerNetwork = await newProvider.getNetwork();
+          const networkValidation = detectIfNetworkSupported(providerNetwork.chainId);
+          if (!networkValidation.isSupported || !networkValidation.chainId) {
+            await dispatch(
+              setChainIdThunk({
+                chainId: getDefaultChainId(),
+                isSupportedChain: false,
+              }),
+            );
+            throw new Error('Wrong network');
+          } else {
+            await dispatch(
+              setChainIdThunk({
+                chainId: networkValidation.chainId,
+                isSupportedChain: true,
+              }),
+            );
+          }
+
           if (!process.env.REACT_APP_SKIP_WALLET_SCREENING) {
             await checkForRiskyWallet(walletAddress);
           }
@@ -74,30 +117,39 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
           setStatus('notConnected');
         }
       } catch (error) {
-        let errorMessage = getErrorMessage(error).trim();
-        if (errorMessage.includes('Wrong network')) {
-          errorMessage = 'Wrong network';
-        } else if (errorMessage.includes('Risky Account Detected')) {
-          errorMessage = 'Risky Account Detected';
-          getSentryTracker().captureException(error);
-        } else {
-          errorMessage = 'Failed connection';
-          getSentryTracker().captureException(error);
-        }
-
-        disconnect(errorMessage || null);
+        handleError(error);
       }
     },
-    [disconnect, setAccount, setStatus],
+    [disconnect, dispatch],
   );
 
   // Reconnect wallet on page load
   useEffect(() => {
     const walletName = localStorage.getItem('connectedWalletName') as WalletName;
     if (walletName) {
-      connect(walletName);
+      void connect(walletName);
     }
   }, []);
+
+  const onChainChangeConnectedWallet = async () => {
+    if (!provider || !chainId) {
+      return;
+    }
+
+    try {
+      const providerNetwork = await provider.getNetwork();
+      const chainValidation = providerNetwork.chainId === chainId;
+
+      if (!chainValidation) {
+        throw new Error('Wrong network');
+      }
+    } catch (err) {
+      handleError(err);
+    }
+  };
+  useEffect(() => {
+    void onChainChangeConnectedWallet();
+  }, [provider, chainId]);
 
   const value = {
     status,

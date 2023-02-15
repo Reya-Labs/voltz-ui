@@ -1,7 +1,7 @@
 import isUndefined from 'lodash.isundefined';
 import React from 'react';
 
-import { OptimiserInfo } from '../../../../../app/features/stateless-optimisers';
+import { OptimiserInfo } from '../../../../../app/features/lp-optimisers';
 import { formatCurrency } from '../../../../../utilities/number';
 import { VaultField } from '../../../VaultField/VaultField';
 import {

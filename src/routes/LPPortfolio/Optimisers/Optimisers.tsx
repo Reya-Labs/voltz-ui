@@ -1,12 +1,14 @@
-import { registerForAutoRollover } from '@voltz-protocol/v1-sdk';
+import { registerForAutoRolloverV1 } from '@voltz-protocol/v1-sdk';
 import React, { useState } from 'react';
 
-import { updateOptimiserState } from '../../../app/features/stateless-optimisers';
-import { useAppDispatch } from '../../../app/hooks';
+import { updateOptimiserState } from '../../../app/features/lp-optimisers';
+import { selectChainId } from '../../../app/features/network';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { Loading } from '../../../components/atomic/Loading/Loading';
 import { Panel } from '../../../components/atomic/Panel/Panel';
 import { AutomaticRolloverToggleProps } from '../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
 import { useWallet } from '../../../hooks/useWallet';
+import { getAlchemyKeyForChain } from '../../../utilities/network/get-alchemy-key-for-chain';
 import { useLPVaults } from '../../LPOptimisers/useLPVaults';
 import { routes } from '../../paths';
 import { NoPositionsOrVaultsFound } from '../NoPositionsOrVaultsFound/NoPositionsOrVaultsFound';
@@ -16,13 +18,14 @@ import { VaultListItem } from './VaultListItem/VaultListItem';
 
 export const Optimisers: React.FunctionComponent = () => {
   const { signer } = useWallet();
-  const appDispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
+  const chainId = useAppSelector(selectChainId);
 
   const { lpVaults, vaultsLoaded } = useLPVaults('all');
   // TODO: remove this once the entire state is lifted to Redux properly,
   // What is missing it Redux to give us some plain objects and not SDK classes
   const [forcedRerenderCounter, setForcedRerenderCounter] = useState<number>(0);
-  if (!signer || !vaultsLoaded) {
+  if (!signer || !vaultsLoaded || !chainId) {
     return (
       <OptimisersBox>
         <Panel sx={{ width: '100%' }} variant="grey-dashed">
@@ -56,16 +59,19 @@ export const Optimisers: React.FunctionComponent = () => {
         return;
       }
       const registration = value === 'active';
-      await registerForAutoRollover({
+      await registerForAutoRolloverV1({
         optimiserId: vault.optimiserId,
         registration,
         signer,
+        chainId,
+        alchemyApiKey: getAlchemyKeyForChain(chainId),
       }).then(({ newOptimiserState }) => {
         if (newOptimiserState) {
-          void appDispatch(
+          void dispatch(
             updateOptimiserState({
               optimiserId: vault.optimiserId,
               newOptimiserState,
+              chainId,
             }),
           );
         }

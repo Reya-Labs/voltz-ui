@@ -4,10 +4,12 @@ import { useEffect } from 'react';
 import {
   initialiseAMMsThunk,
   selectAMMs,
+  selectAMMsLoadedState,
   selectBorrowAMMs,
   selectTraderAMMs,
   setSignerForAMMsAction,
 } from '../../app/features/aMMs';
+import { selectChainId } from '../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useWallet } from '../useWallet';
 
@@ -21,21 +23,33 @@ export type UseAMMsResult = {
 
 export const useAMMs = (): UseAMMsResult => {
   const { signer } = useWallet();
+
   const dispatch = useAppDispatch();
-  const aMMsLoadedState = useAppSelector((state) => state.aMMs.aMMsLoadedState);
+  const chainId = useAppSelector(selectChainId);
+  const aMMsLoadedState = useAppSelector(selectAMMsLoadedState);
   const aMMs = useAppSelector(selectAMMs);
   const traderAMMs = useAppSelector(selectTraderAMMs);
   const borrowAMMs = useAppSelector(selectBorrowAMMs);
 
   useEffect(() => {
-    // only fetch aMMs once
+    if (!chainId) {
+      return;
+    }
+    // only fetch aMMs once per network
     if (aMMsLoadedState !== 'idle') {
       return;
     }
-    void dispatch(initialiseAMMsThunk());
-  }, [aMMsLoadedState, dispatch]);
+    void dispatch(
+      initialiseAMMsThunk({
+        chainId,
+      }),
+    );
+  }, [chainId, aMMsLoadedState, dispatch]);
 
   useEffect(() => {
+    if (!chainId) {
+      return;
+    }
     if (aMMsLoadedState !== 'succeeded') {
       return;
     }
@@ -43,9 +57,10 @@ export const useAMMs = (): UseAMMsResult => {
     void dispatch(
       setSignerForAMMsAction({
         signer,
+        chainId,
       }),
     );
-  }, [aMMsLoadedState, dispatch, signer]);
+  }, [chainId, aMMsLoadedState, dispatch, signer]);
 
   return {
     aMMs,

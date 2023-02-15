@@ -1,9 +1,14 @@
-import { rollover as executeRollover, withdraw as executeWithdraw } from '@voltz-protocol/v1-sdk';
+import {
+  rolloverV1 as executeRollover,
+  withdrawV1 as executeWithdraw,
+} from '@voltz-protocol/v1-sdk';
 import React, { useState } from 'react';
 
-import { OptimiserInfo, updateOptimiserState } from '../../../../app/features/stateless-optimisers';
-import { useAppDispatch } from '../../../../app/hooks';
+import { OptimiserInfo, updateOptimiserState } from '../../../../app/features/lp-optimisers';
+import { selectChainId } from '../../../../app/features/network';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useWallet } from '../../../../hooks/useWallet';
+import { getAlchemyKeyForChain } from '../../../../utilities/network/get-alchemy-key-for-chain';
 import { getSpareWeights } from '../../Helpers/getSpareWeights';
 import { FormProps } from '../Form/DepositForm/DepositForm';
 import { WithdrawRolloverForm } from '../Form/WithdrawRolloverForm/WithdrawRolloverForm';
@@ -23,7 +28,8 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
   onGoBack,
 }) => {
   const { signer } = useWallet();
-  const appDispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
+  const chainId = useAppSelector(selectChainId);
 
   const subvault = vault.vaults[vaultIndex];
 
@@ -49,7 +55,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
   const spareWeights = getSpareWeights(vault.vaults, weights);
 
   const withdraw = () => {
-    if (!signer) {
+    if (!signer || !chainId) {
       return;
     }
 
@@ -62,13 +68,16 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
       optimiserId: vault.optimiserId,
       vaultId: subvault.vaultId,
       signer,
+      chainId,
+      alchemyApiKey: getAlchemyKeyForChain(chainId),
     }).then(
       ({ newOptimiserState }) => {
         if (newOptimiserState) {
-          void appDispatch(
+          void dispatch(
             updateOptimiserState({
               optimiserId: vault.optimiserId,
               newOptimiserState,
+              chainId,
             }),
           );
         }
@@ -83,7 +92,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
   };
 
   const rollover = () => {
-    if (!signer) {
+    if (!signer || !chainId) {
       return;
     }
 
@@ -97,13 +106,16 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
       vaultId: subvault.vaultId,
       spareWeights,
       signer,
+      chainId,
+      alchemyApiKey: getAlchemyKeyForChain(chainId),
     }).then(
       ({ newOptimiserState }) => {
         if (newOptimiserState) {
-          void appDispatch(
+          void dispatch(
             updateOptimiserState({
               optimiserId: vault.optimiserId,
               newOptimiserState,
+              chainId,
             }),
           );
         }

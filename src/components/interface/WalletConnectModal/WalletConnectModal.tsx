@@ -64,11 +64,11 @@ export const WalletConnectModal: React.FunctionComponent = () => {
       setSelecting(true);
     }
   }, [wallet.required]);
-
   return (
     <>
       <WalletConnectButton
         account={wallet?.account}
+        connecting={wallet?.status === 'connecting'}
         error={wallet?.walletError}
         walletName={!wallet?.name || wallet.name === 'disconnect' ? null : wallet.name}
         onClick={handleOpen}

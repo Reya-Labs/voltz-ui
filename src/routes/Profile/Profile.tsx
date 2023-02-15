@@ -2,6 +2,8 @@ import copy from 'copy-to-clipboard';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 
+import { selectChainId } from '../../app/features/network';
+import { useAppSelector } from '../../app/hooks';
 import { ConnectWallet } from '../../components/composite/ConnectWallet/ConnectWallet';
 import { Season } from '../../hooks/season/types';
 import { useCurrentSeason } from '../../hooks/season/useCurrentSeason';
@@ -32,6 +34,8 @@ export const Profile: React.FunctionComponent = () => {
   const currentActiveSeason = useCurrentSeason();
   const [season, setSeason] = React.useState<Season>(currentActiveSeason);
 
+  const chainId = useAppSelector(selectChainId);
+
   const [claimButtonBulkMode, setClaimButtonBulkMode] = useState<ClaimButtonProps['mode']>('claim');
   const [claimButtonModes, setClaimButtonModes] = useState<
     Record<BadgeVariant, ClaimButtonProps['mode']>
@@ -40,7 +44,7 @@ export const Profile: React.FunctionComponent = () => {
   const [copyLinkButtonMode, setCopyLinkButtonMode] = useState<CopyLinkButtonProps['mode']>('copy');
 
   const fetchBadges = async (account: string) => {
-    const sbt = getCommunitySbt(wallet.signer);
+    const sbt = getCommunitySbt(wallet.signer, chainId);
     return await getSeasonBadges({
       userId: account,
       season: season,
@@ -103,7 +107,7 @@ export const Profile: React.FunctionComponent = () => {
     if (!badge?.badgeResponseRaw?.awardedTimestampMs || badge.claimedAt || !owner) {
       return;
     }
-    const communitySBT = getCommunitySbt(wallet.signer);
+    const communitySBT = getCommunitySbt(wallet.signer, chainId);
     setClaimButtonModes((prev) => ({
       ...prev,
       [variant]: 'claiming',
@@ -148,7 +152,7 @@ export const Profile: React.FunctionComponent = () => {
     if (!badges.length || !owner || !subgraphAPI) {
       return;
     }
-    const communitySBT = getCommunitySbt(wallet.signer);
+    const communitySBT = getCommunitySbt(wallet.signer, chainId);
     setClaimButtonBulkMode('claiming');
     setClaimButtonModes((p) => ({
       ...p,

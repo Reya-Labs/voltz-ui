@@ -1,9 +1,14 @@
-import { AMM, RateOracle, Token } from '@voltz-protocol/v1-sdk';
+import { AMM, getProviderV1, RateOracle, SupportedChainId, Token } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
+import { getAlchemyKeyForChain } from '../../../../utilities/network/get-alchemy-key-for-chain';
 import { SerializedAMM } from '../../../types';
 
-const deserializeAmm = (serializedAmm: SerializedAMM, signer: providers.JsonRpcSigner): AMM => {
+const deserializeAmm = (
+  serializedAmm: SerializedAMM,
+  signer: providers.JsonRpcSigner,
+  chainId: SupportedChainId,
+): AMM => {
   const {
     id,
     factoryAddress,
@@ -23,7 +28,7 @@ const deserializeAmm = (serializedAmm: SerializedAMM, signer: providers.JsonRpcS
   return new AMM({
     id,
     signer,
-    provider: providers.getDefaultProvider(process.env.REACT_APP_DEFAULT_PROVIDER_NETWORK),
+    provider: getProviderV1(chainId, getAlchemyKeyForChain(chainId)),
     termStartTimestampInMS: parseInt(termStartTimestampInMS, 10),
     termEndTimestampInMS: parseInt(termEndTimestampInMS, 10),
     tickSpacing: parseInt(tickSpacing, 10),

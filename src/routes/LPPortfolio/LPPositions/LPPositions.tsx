@@ -3,6 +3,8 @@ import { AMM, Position } from '@voltz-protocol/v1-sdk';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
+import { selectChainId } from '../../../app/features/network';
+import { useAppSelector } from '../../../app/hooks';
 import { ConnectedMintBurnForm } from '../../../components/containers/ConnectedMintBurnForm/ConnectedMintBurnForm';
 import { Agents } from '../../../contexts/AgentContext/types';
 import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
@@ -15,6 +17,7 @@ import { useAgent } from '../../../hooks/useAgent';
 import { useAMMs } from '../../../hooks/useAMMs';
 import { usePositions } from '../../../hooks/usePositions/usePositions';
 import { useWallet } from '../../../hooks/useWallet';
+import { getConfig } from '../../../hooks/voltz-config/config';
 import { findCurrentAmm } from '../../../utilities/amm';
 import { setPageTitle } from '../../../utilities/page';
 import { ConnectedPositionTable } from './ConnectedPositionTable/ConnectedPositionTable';
@@ -27,6 +30,9 @@ export const LPPositions: React.FunctionComponent<{
   const [position, setPosition] = useState<Position>();
   const [settling, setSettling] = useState<boolean>(false);
   const { onChangeAgent } = useAgent();
+  const chainId = useAppSelector(selectChainId);
+  const config = getConfig(chainId);
+  const pools = config ? config.pools : [];
 
   const { aMMs } = useAMMs();
   const { key } = useLocation();
@@ -73,7 +79,9 @@ export const LPPositions: React.FunctionComponent<{
     if (mode === 'rollover') newMode = MintBurnFormModes.ROLLOVER;
 
     setFormMode(newMode);
-    setAMM(mode === 'rollover' ? findCurrentAmm(aMMs, selectedPosition) : selectedPosition.amm);
+    setAMM(
+      mode === 'rollover' ? findCurrentAmm(aMMs, pools, selectedPosition) : selectedPosition.amm,
+    );
     setPosition(selectedPosition);
   };
 

@@ -13,8 +13,10 @@ type NavLinkProps = {
     text: string;
     link: string;
     isNew?: boolean;
+    hidden: boolean;
   }[];
   children: string;
+  hidden: boolean;
 };
 
 export const NavLink: React.FunctionComponent<NavLinkProps> = ({
@@ -22,9 +24,11 @@ export const NavLink: React.FunctionComponent<NavLinkProps> = ({
   children,
   link,
   isNew,
+  hidden,
 }) => {
   const { pathname } = useLocation();
-  const hasSubLinks = subLinks && subLinks.length !== 0;
+  const subLinksNotHidden = (subLinks || []).filter((sL) => !sL.hidden);
+  const hasSubLinks = subLinksNotHidden.length !== 0;
   const [anchorPopoverElement, setAnchorPopoverElement] = React.useState<HTMLButtonElement | null>(
     null,
   );
@@ -36,9 +40,13 @@ export const NavLink: React.FunctionComponent<NavLinkProps> = ({
   const isPopoverOpen = Boolean(anchorPopoverElement);
   const isActive = isActiveLink(
     link,
-    subLinks?.map((l) => l.link),
+    subLinksNotHidden?.map((l) => l.link),
     pathname,
   );
+
+  if (hidden) {
+    return null;
+  }
 
   return (
     <React.Fragment>
@@ -69,7 +77,7 @@ export const NavLink: React.FunctionComponent<NavLinkProps> = ({
           open={isPopoverOpen}
           onClose={handlePopoverClose}
         >
-          <SubLinks subLinks={subLinks || []} onClick={handlePopoverClose} />
+          <SubLinks subLinks={subLinksNotHidden || []} onClick={handlePopoverClose} />
         </NavLinkPopover>
       ) : null}
     </React.Fragment>

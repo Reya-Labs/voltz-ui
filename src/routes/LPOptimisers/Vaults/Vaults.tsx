@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 
-import { OptimiserInfo } from '../../../app/features/stateless-optimisers';
+import { OptimiserInfo } from '../../../app/features/lp-optimisers';
 import { useWallet } from '../../../hooks/useWallet';
 import { setPageTitle } from '../../../utilities/page';
 import { routes } from '../../paths';

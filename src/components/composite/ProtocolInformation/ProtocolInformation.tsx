@@ -2,6 +2,8 @@ import Box from '@mui/material/Box';
 import { DateTime } from 'luxon';
 import React, { useMemo } from 'react';
 
+import { selectChainId } from '../../../app/features/network';
+import { useAppSelector } from '../../../app/hooks';
 import { Agents } from '../../../contexts/AgentContext/types';
 import { useAMMContext } from '../../../contexts/AMMContext/AMMContext';
 import { getConfig } from '../../../hooks/voltz-config/config';
@@ -12,6 +14,7 @@ import { ReactComponent as Aave } from '../PoolField/aave-icon.svg';
 import { ReactComponent as Compound } from '../PoolField/compound-icon.svg';
 import { ReactComponent as DAI } from '../PoolField/dai-icon.svg';
 import { ReactComponent as ETH } from '../PoolField/eth-icon.svg';
+import { ReactComponent as GLP } from '../PoolField/glp-icon.svg';
 import { ReactComponent as Lido } from '../PoolField/lido-icon.svg';
 import { ReactComponent as Rocket } from '../PoolField/rocket-icon.svg';
 import { ReactComponent as USDC } from '../PoolField/usdc-icon.svg';
@@ -38,12 +41,15 @@ export const ProtocolInformation: React.FunctionComponent<ProtocolInformationPro
   isSettle,
 }) => {
   const { amm } = useAMMContext();
+  const chainId = useAppSelector(selectChainId);
+  const config = getConfig(chainId);
+  const pools = config ? config.pools : [];
   const getPoolLabel = () => (
     <>
       <Box component="span" sx={{ color: '#9B97AD' }}>
         POOL
       </Box>
-      {amm && isAaveV3(getConfig().pools, amm.id) && (
+      {amm && isAaveV3(pools, amm.id) && (
         <Box component="span" sx={{ color: '#FF4AA9' }}>
           {'  '}
           <strong>AAVE V3</strong>
@@ -70,6 +76,8 @@ export const ProtocolInformation: React.FunctionComponent<ProtocolInformationPro
           return ['Lido', <Lido key="Lido" height="38" width="38" />];
         case 'r':
           return ['Rocket', <Rocket key="Rocket" height="38" width="38" />];
+        case 'g':
+          return ['GMX:GLP', <GLP key="GLP" />];
         default:
           return ['', ''];
       }

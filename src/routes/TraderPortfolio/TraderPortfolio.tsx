@@ -3,6 +3,8 @@ import { AMM, Position } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
+import { selectChainId } from '../../app/features/network';
+import { useAppSelector } from '../../app/hooks';
 import { ConnectedSwapForm } from '../../components/containers/ConnectedSwapForm/ConnectedSwapForm';
 import { SwapFormModes } from '../../components/interface/SwapForm/types';
 import { Agents } from '../../contexts/AgentContext/types';
@@ -13,6 +15,7 @@ import { useAgent } from '../../hooks/useAgent';
 import { useAMMs } from '../../hooks/useAMMs';
 import { usePositions } from '../../hooks/usePositions/usePositions';
 import { useWallet } from '../../hooks/useWallet';
+import { getConfig } from '../../hooks/voltz-config/config';
 import { findCurrentAmm } from '../../utilities/amm';
 import { setPageTitle } from '../../utilities/page';
 import { ConnectedPositionTable } from './ConnectedPositionTable/ConnectedPositionTable';
@@ -22,7 +25,9 @@ export const TraderPortfolio: React.FunctionComponent = () => {
   const [amm, setAMM] = useState<AMM>();
   const [position, setPosition] = useState<Position>();
   const [settling, setSettling] = useState<boolean>(false);
-
+  const chainId = useAppSelector(selectChainId);
+  const config = getConfig(chainId);
+  const pools = config ? config.pools : [];
   const { traderAMMs } = useAMMs();
   const { onChangeAgent } = useAgent();
   const { key } = useLocation();
@@ -73,7 +78,9 @@ export const TraderPortfolio: React.FunctionComponent = () => {
 
     setFormMode(newMode);
     setAMM(
-      mode === 'rollover' ? findCurrentAmm(traderAMMs, selectedPosition) : selectedPosition.amm,
+      mode === 'rollover'
+        ? findCurrentAmm(traderAMMs, pools, selectedPosition)
+        : selectedPosition.amm,
     );
     setPosition(selectedPosition);
   };

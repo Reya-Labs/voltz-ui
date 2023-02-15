@@ -4,12 +4,15 @@ import TableContainer from '@mui/material/TableContainer';
 import { AMM } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
+import { selectChainId } from '../../../app/features/network';
+import { useAppSelector } from '../../../app/hooks';
 import { Agents } from '../../../contexts/AgentContext/types';
 import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
 import { useAgent } from '../../../hooks/useAgent';
 import { getConfig } from '../../../hooks/voltz-config/config';
 import { isAaveV3, isBorrowing } from '../../../utilities/amm';
 import { MATURITY_WINDOW } from '../../../utilities/constants';
+import { Loading } from '../../atomic/Loading/Loading';
 import { Panel } from '../../atomic/Panel/Panel';
 import { AMMTableHead, AMMTableRow } from './components';
 import { commonOverrides } from './styles';
@@ -28,11 +31,19 @@ export const AMMTable: React.FunctionComponent<AMMTableProps> = ({
   onSelectItem,
 }) => {
   const { agent } = useAgent();
-
-  if (error || loading) {
+  const chainId = useAppSelector(selectChainId);
+  if (loading) {
+    return (
+      <Panel sx={{ width: '100%' }} variant="grey-dashed">
+        <Loading />
+      </Panel>
+    );
+  }
+  if (error) {
     return null;
   }
-
+  const config = getConfig(chainId);
+  const pools = config ? config.pools : [];
   return (
     <Panel
       borderRadius="large"
@@ -58,7 +69,7 @@ export const AMMTable: React.FunctionComponent<AMMTableProps> = ({
                 <AMMProvider key={amm.id} amm={amm}>
                   <AMMTableRow
                     endDate={amm.endDateTime}
-                    isAaveV3={isAaveV3(getConfig().pools, amm.id)}
+                    isAaveV3={isAaveV3(pools, amm.id)}
                     isBorrowing={isBorrowing(amm.rateOracle.protocolId)}
                     protocol={amm.protocol}
                     startDate={amm.startDateTime}

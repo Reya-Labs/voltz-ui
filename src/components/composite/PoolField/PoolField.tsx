@@ -7,6 +7,7 @@ import { ReactComponent as Compound } from './compound-icon.svg';
 import { CustomPoolField } from './CustomPoolField';
 import { ReactComponent as DAI } from './dai-icon.svg';
 import { ReactComponent as ETH } from './eth-icon.svg';
+import { ReactComponent as GLP } from './glp-icon.svg';
 import { ReactComponent as Lido } from './lido-icon.svg';
 import { ReactComponent as Rocket } from './rocket-icon.svg';
 import { ReactComponent as USDC } from './usdc-icon.svg';
@@ -40,6 +41,8 @@ export const PoolField = ({
         return ['Lido', <Lido key="Lido" />];
       case 'r':
         return ['Rocket', <Rocket key="Rocket" />];
+      case 'g':
+        return ['GMX:GLP', <GLP key="GLP" />];
       default:
         return ['', ''];
     }
@@ -117,7 +120,7 @@ export const PoolField = ({
         >
           {tokenInfo[1]}
         </Box>
-        {protocolInfo[0]} - {tokenInfo[0]}
+        {protocolInfo[0]} {tokenInfo[0] ? '-' : null} {tokenInfo[0]}
       </Box>
     </Typography>
   );

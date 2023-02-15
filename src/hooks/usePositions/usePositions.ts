@@ -1,9 +1,10 @@
-import { getPositions, Position } from '@voltz-protocol/v1-sdk';
+import { getPositionsV1, Position } from '@voltz-protocol/v1-sdk';
 import { DateTime } from 'luxon';
 import { useEffect, useState } from 'react';
 
 import { selectors } from '../../app';
-import { selectAMMs } from '../../app/features/aMMs';
+import { selectAMMs, selectAMMsLoadedState } from '../../app/features/aMMs';
+import { selectChainId } from '../../app/features/network';
 import { updateTransactionAction } from '../../app/features/transactions';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { Agents } from '../../contexts/AgentContext/types';
@@ -20,22 +21,30 @@ type UsePositionsResult = {
 export const usePositions = (agent: Agents): UsePositionsResult => {
   const { account: userAddress } = useWallet();
   const dispatch = useAppDispatch();
-  const aMMsLoadedState = useAppSelector((state) => state.aMMs.aMMsLoadedState);
+  const aMMsLoadedState = useAppSelector(selectAMMsLoadedState);
   const aMMs = useAppSelector(selectAMMs);
+  const chainId = useAppSelector(selectChainId);
   const [mePositions, setMePositions] = useState<Position[]>([]);
   const [fetchLoading, setFetchLoading] = useState<boolean>(false);
   const [fetchError, setFetchError] = useState<boolean>(false);
 
   useEffect(() => {
     setMePositions([]);
-    if (userAddress && aMMs && aMMs.length > 0 && aMMsLoadedState === 'succeeded' && agent) {
+    if (
+      chainId &&
+      userAddress &&
+      aMMs &&
+      aMMs.length > 0 &&
+      aMMsLoadedState === 'succeeded' &&
+      agent
+    ) {
       setFetchLoading(true);
       setFetchError(false);
 
-      void getPositions({
+      void getPositionsV1({
+        chainId,
         userWalletId: userAddress,
         amms: aMMs,
-        subgraphURL: process.env.REACT_APP_SUBGRAPH_URL || '',
         type: agent === Agents.LIQUIDITY_PROVIDER ? 'LP' : 'Trader',
       }).then(({ positions, error }) => {
         setMePositions([...positions]);

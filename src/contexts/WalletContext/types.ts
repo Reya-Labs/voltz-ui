@@ -20,7 +20,6 @@ export type Wallet = {
   required: boolean;
   setRequired: (required: boolean) => void;
   walletError: string | null;
-  networkId?: string;
 };
 
 export interface WalletRiskAssessment {

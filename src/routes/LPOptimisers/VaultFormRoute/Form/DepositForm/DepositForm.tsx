@@ -1,7 +1,7 @@
 import isUndefined from 'lodash.isundefined';
 import React from 'react';
 
-import { OptimiserInfo } from '../../../../../app/features/stateless-optimisers';
+import { OptimiserInfo } from '../../../../../app/features/lp-optimisers';
 import { Modal } from '../../../../../components/composite/Modal/Modal';
 import { AutomaticRolloverToggleProps } from '../../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
 import { isCostReductionFlowEnabled } from '../../../../../utilities/is-cost-reduction-flow-enabled';

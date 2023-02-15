@@ -1,17 +1,27 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AMM, getAMMs } from '@voltz-protocol/v1-sdk';
+import { AMM, getAMMsV1, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
 import { initialiseAMMsThunk } from './thunks';
 
 type SliceState = {
-  aMMsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
-  aMMs: AMM[];
+  aMMsLoadedState: Record<SupportedChainId, 'idle' | 'pending' | 'succeeded' | 'failed'>;
+  aMMs: Record<SupportedChainId, AMM[]>;
 };
 
 const initialState: SliceState = {
-  aMMsLoadedState: 'idle',
-  aMMs: [],
+  aMMsLoadedState: {
+    [SupportedChainId.mainnet]: 'idle',
+    [SupportedChainId.goerli]: 'idle',
+    [SupportedChainId.arbitrum]: 'idle',
+    [SupportedChainId.arbitrumGoerli]: 'idle',
+  },
+  aMMs: {
+    [SupportedChainId.mainnet]: [],
+    [SupportedChainId.goerli]: [],
+    [SupportedChainId.arbitrum]: [],
+    [SupportedChainId.arbitrumGoerli]: [],
+  },
 };
 
 export const slice = createSlice({
@@ -20,25 +30,28 @@ export const slice = createSlice({
   reducers: {
     setSignerForAMMsAction: (
       state,
-      action: PayloadAction<{
+      {
+        payload: { signer, chainId },
+      }: PayloadAction<{
         signer: providers.JsonRpcSigner | null;
+        chainId: SupportedChainId;
       }>,
     ) => {
-      state.aMMs.forEach((aMM) => (aMM.signer = action.payload.signer));
+      state.aMMs[chainId].forEach((aMM) => (aMM.signer = signer));
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(initialiseAMMsThunk.pending, (state) => {
-        state.aMMsLoadedState = 'pending';
+      .addCase(initialiseAMMsThunk.pending, (state, { meta }) => {
+        state.aMMsLoadedState[meta.arg.chainId] = 'pending';
       })
-      .addCase(initialiseAMMsThunk.rejected, (state) => {
-        state.aMMsLoadedState = 'failed';
-        state.aMMs = [];
+      .addCase(initialiseAMMsThunk.rejected, (state, { meta }) => {
+        state.aMMsLoadedState[meta.arg.chainId] = 'failed';
+        state.aMMs[meta.arg.chainId] = [];
       })
-      .addCase(initialiseAMMsThunk.fulfilled, (state, action) => {
-        state.aMMsLoadedState = 'succeeded';
-        state.aMMs = action.payload as Awaited<ReturnType<typeof getAMMs>>['amms'];
+      .addCase(initialiseAMMsThunk.fulfilled, (state, { payload, meta }) => {
+        state.aMMsLoadedState[meta.arg.chainId] = 'succeeded';
+        state.aMMs[meta.arg.chainId] = payload as Awaited<ReturnType<typeof getAMMsV1>>['amms'];
       });
   },
 });

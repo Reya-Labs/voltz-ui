@@ -1,12 +1,14 @@
-import { approveToken, depositAndRegister, isTokenApproved } from '@voltz-protocol/v1-sdk';
+import { approveToken, depositAndRegisterV1, isTokenApprovedV1 } from '@voltz-protocol/v1-sdk';
 import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
 
-import { OptimiserInfo, updateOptimiserState } from '../../../../app/features/stateless-optimisers';
-import { useAppDispatch } from '../../../../app/hooks';
+import { OptimiserInfo, updateOptimiserState } from '../../../../app/features/lp-optimisers';
+import { selectChainId } from '../../../../app/features/network';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { AutomaticRolloverToggleProps } from '../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
 import { useWallet } from '../../../../hooks/useWallet';
 import { pushEvent } from '../../../../utilities/googleAnalytics';
+import { getAlchemyKeyForChain } from '../../../../utilities/network/get-alchemy-key-for-chain';
 import { getSpareWeights } from '../../Helpers/getSpareWeights';
 import { DepositForm, FormProps } from '../Form/DepositForm/DepositForm';
 import { DepositStates, getSubmissionState } from './mappers';
@@ -23,7 +25,8 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
   onGoBack,
 }) => {
   const { signer, account } = useWallet();
-  const appDispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
+  const chainId = useAppSelector(selectChainId);
 
   const automaticWeights: FormProps['weights'] = vault.vaults.map((v) => ({
     distribution: v.defaultWeight,
@@ -53,7 +56,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
   const spareWeights = getSpareWeights(vault.vaults, weights);
 
   const deposit = () => {
-    if (!signer) {
+    if (!signer || !chainId) {
       return;
     }
 
@@ -67,7 +70,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
         },
       });
       setDepositState(DepositStates.DEPOSITING);
-      void depositAndRegister({
+      void depositAndRegisterV1({
         optimiserId: vault.optimiserId,
         amount: selectedDeposit + vault.feePerDeposit,
         spareWeights,
@@ -75,6 +78,8 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
           ? automaticRolloverState === 'active'
           : undefined,
         signer,
+        chainId,
+        alchemyApiKey: getAlchemyKeyForChain(chainId),
       }).then(
         ({ receipt, newOptimiserState }) => {
           pushEvent(account ?? '', {
@@ -90,10 +95,11 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
           setDepositTransactionId((receipt as ethers.ContractReceipt).transactionHash);
 
           if (newOptimiserState) {
-            void appDispatch(
+            void dispatch(
               updateOptimiserState({
                 optimiserId: vault.optimiserId,
                 newOptimiserState,
+                chainId,
               }),
             );
           }
@@ -139,7 +145,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
   };
 
   useEffect(() => {
-    if (!account) {
+    if (!account || !chainId) {
       return;
     }
 
@@ -147,11 +153,13 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
       return;
     }
 
-    void isTokenApproved({
+    void isTokenApprovedV1({
       tokenId: vault.tokenId,
       to: vault.optimiserId,
       threshold: selectedDeposit + vault.feePerDeposit,
       userAddress: account,
+      chainId,
+      alchemyApiKey: getAlchemyKeyForChain(chainId),
     }).then(
       (resp) => {
         if (resp) {
@@ -168,18 +176,20 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
   }, [vault.optimiserId, vault.tokenId, loading, selectedDeposit, account, vault.feePerDeposit]);
 
   const openDepositModal = () => {
-    if (!signer) {
+    if (!signer || !chainId) {
       return;
     }
 
     setDepositState(DepositStates.DEPOSIT_MODAL);
-    void depositAndRegister({
+    void depositAndRegisterV1({
       onlyGasEstimate: true,
       optimiserId: vault.optimiserId,
       amount: selectedDeposit + vault.feePerDeposit,
       spareWeights,
       registration: hasUserOptedInOutAutoRollover ? automaticRolloverState === 'active' : undefined,
       signer,
+      chainId,
+      alchemyApiKey: getAlchemyKeyForChain(chainId),
     })
       .then(({ gasEstimateUsd }) => {
         setDepositGasCost(gasEstimateUsd);

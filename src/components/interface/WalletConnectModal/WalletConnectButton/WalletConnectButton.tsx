@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Ellipsis } from '../../../atomic/Ellipsis/Ellipsis';
 import { Icon } from '../../../atomic/Icon/Icon';
 import { SupportedIcons } from '../../../atomic/Icon/types';
 import { AvatarAddress } from '../../AvatarAddress/AvatarAddress';
@@ -10,6 +11,7 @@ export type WalletConnectButtonProps = {
   walletName?: 'metamask' | 'walletConnect' | null;
   account?: string | null;
   error?: string | null;
+  connecting?: boolean;
 };
 
 export const WalletConnectButton: React.FunctionComponent<WalletConnectButtonProps> = ({
@@ -17,6 +19,7 @@ export const WalletConnectButton: React.FunctionComponent<WalletConnectButtonPro
   walletName,
   account,
   error,
+  connecting = false,
 }) => {
   if (error) {
     return (
@@ -63,7 +66,13 @@ export const WalletConnectButton: React.FunctionComponent<WalletConnectButtonPro
         variant="dark"
         onClick={onClick}
       >
-        Connect wallet
+        {connecting ? (
+          <>
+            Connecting <Ellipsis />
+          </>
+        ) : (
+          'Connect wallet'
+        )}
       </WalletButton>
     </ButtonBox>
   );
