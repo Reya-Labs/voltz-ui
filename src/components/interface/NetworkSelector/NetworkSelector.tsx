@@ -8,6 +8,7 @@ import {
 } from '../../../app/features/network';
 import { setChainIdThunk } from '../../../app/features/network/thunks';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { setChainId } from '../../../utilities/network/chain-store';
 import { Ellipsis } from '../../atomic/Ellipsis/Ellipsis';
 import { getNetworkOptions } from './get-network-options';
 import {
@@ -17,7 +18,6 @@ import {
   SelectorBox,
   WarningIcon,
 } from './NetworkSelector.styled';
-import { setChainId } from '../../../utilities/network/chain-store';
 
 export const NetworkSelector: React.FunctionComponent = () => {
   const chainId = useAppSelector(selectChainId);
