@@ -47,6 +47,13 @@ export const AppRoutes = () => {
   const handlePageReloadAfterChainChanged = async () => {
     const storedChainId = getChainId();
     if (!storedChainId) {
+      const defaultChainId = getDefaultChainId();
+      await dispatch(
+        setChainIdThunk({
+          chainId: defaultChainId,
+          isSupportedChain: Boolean(defaultChainId),
+        }),
+      );
       return;
     }
     const networkValidation = detectIfNetworkSupported(storedChainId);

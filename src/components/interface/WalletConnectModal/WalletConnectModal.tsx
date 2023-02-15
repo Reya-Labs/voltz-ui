@@ -68,7 +68,7 @@ export const WalletConnectModal: React.FunctionComponent = () => {
     <>
       <WalletConnectButton
         account={wallet?.account}
-        connecting={wallet?.status === 'initializing' || wallet?.status === 'connecting'}
+        connecting={wallet?.status === 'connecting'}
         error={wallet?.walletError}
         walletName={!wallet?.name || wallet.name === 'disconnect' ? null : wallet.name}
         onClick={handleOpen}
