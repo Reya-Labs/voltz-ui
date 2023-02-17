@@ -25,7 +25,7 @@ export const setChainIdThunk = createAsyncThunk<
       request: (param: { params?: { chainId: string }[]; method: string }) => Promise<string>;
     };
     if (!provider) {
-      return rejectThunkWithError(thunkAPI, 'Metamask is not installed, please install!');
+      return;
     }
     const providerChainId = await provider.request({ method: 'eth_chainId' });
     // switch to the correct network
