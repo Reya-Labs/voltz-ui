@@ -1,3 +1,4 @@
+import { WalletConnectButton as BrokoliWalletConnectButton } from 'brokoli-ui';
 import React, { useEffect, useState } from 'react';
 
 import { WalletName } from '../../../contexts/WalletContext/types';
@@ -7,7 +8,9 @@ import { WalletConnectButton } from './WalletConnectButton/WalletConnectButton';
 import { WalletDisplay } from './WalletDisplay/WalletDisplay';
 import { WalletSelect } from './WalletSelect/WalletSelect';
 
-export const WalletConnectModal: React.FunctionComponent = () => {
+export const WalletConnectModal: React.FunctionComponent<{
+  useNewUI: boolean;
+}> = ({ useNewUI }) => {
   const wallet = useWallet();
   const [open, setOpen] = useState(false);
   const [selecting, setSelecting] = useState(true);
@@ -66,13 +69,22 @@ export const WalletConnectModal: React.FunctionComponent = () => {
   }, [wallet.required]);
   return (
     <>
-      <WalletConnectButton
-        account={wallet?.account}
-        connecting={wallet?.status === 'connecting'}
-        error={wallet?.walletError}
-        walletName={!wallet?.name || wallet.name === 'disconnect' ? null : wallet.name}
-        onClick={handleOpen}
-      />
+      {useNewUI ? (
+        <BrokoliWalletConnectButton
+          account={wallet?.account}
+          error={wallet?.walletError}
+          loading={wallet?.status === 'connecting'}
+          onClick={handleOpen}
+        />
+      ) : (
+        <WalletConnectButton
+          account={wallet?.account}
+          connecting={wallet?.status === 'connecting'}
+          error={wallet?.walletError}
+          walletName={!wallet?.name || wallet.name === 'disconnect' ? null : wallet.name}
+          onClick={handleOpen}
+        />
+      )}
       <Modal open={open} onClose={handleClose}>
         {renderContent()}
       </Modal>

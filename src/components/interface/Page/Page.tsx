@@ -32,7 +32,7 @@ export const Page: React.FunctionComponent<PageProps> = ({ children }: PageProps
         }}
       >
         <NetworkSelector />
-        <WalletConnectModal />
+        <WalletConnectModal useNewUI={false} />
       </Box>
     </Box>
 
