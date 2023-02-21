@@ -35,6 +35,7 @@ export type PositionTableHeadProps = {
   fixedRateHealthFactor: HealthFactorStatus;
   fixedApr: number;
   fees: number;
+  isBothTraderAndLP: boolean;
 };
 
 const containerStyles: SystemStyleObject<Theme> = {
@@ -57,6 +58,7 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
   fixedRateHealthFactor,
   fixedApr,
   fees,
+  isBothTraderAndLP,
 }) => {
   const FeesValueTypography = feesPositive
     ? PositiveFeesValueTypography
@@ -72,7 +74,7 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
   return (
     <Box sx={containerStyles}>
       <Box sx={{ display: 'flex' }}>
-        <PositionBadge variant="LP" />
+        <PositionBadge isBothTraderAndLP={isBothTraderAndLP} variant="LP" />
         {!isSettled && (
           <FeesBox>
             <FeesTypography>FEES:&nbsp;</FeesTypography>

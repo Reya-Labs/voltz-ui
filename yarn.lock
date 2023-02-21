@@ -7027,10 +7027,10 @@
     graphql-request "5.0.0"
     lodash.isundefined "3.0.1"
 
-"@voltz-protocol/v1-sdk@1.71.0":
-  version "1.71.0"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.71.0.tgz#c1f26e41c619f073c5a55630868f1839fb88ecee"
-  integrity sha512-aAUAgQSXnrifm65F7Y+ecbp41QASrqg8LK8eyr2wl+q4VmPZraxtUd3EIqstEJ/nFU9RsFhgnypgd05TVAu9tQ==
+"@voltz-protocol/v1-sdk@1.72.0":
+  version "1.72.0"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.72.0.tgz#db1fa581344040daa716ec0b4b27f73246ef180e"
+  integrity sha512-RNDqY5xB6KAs4dzU699F6WcYkSZkSbkjrzGIbZdY4fwOG6YpfGOyWNfHUBTIlaFarunuhCj+91/YJwvfZ3vVMg==
   dependencies:
     "@ethersproject/address" "^5.7.0"
     "@metamask/detect-provider" "^1.2.0"
@@ -7050,7 +7050,6 @@
     lodash "^4.17.21"
     luxon "^2.3.0"
     merkletreejs "^0.3.0"
-    react "^18.2.0"
     tiny-invariant "^1.2.0"
     toformat "^2.0.0"
 
@@ -20066,13 +20065,6 @@ react@17.0.2:
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
-
-react@^18.2.0:
-  version "18.2.0"
-  resolved "https://registry.yarnpkg.com/react/-/react-18.2.0.tgz#555bd98592883255fa00de14f1151a917b5d77d5"
-  integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
-  dependencies:
-    loose-envify "^1.1.0"
 
 read-cmd-shim@^1.0.1, read-cmd-shim@^1.0.5:
   version "1.0.5"
