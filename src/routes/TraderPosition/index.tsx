@@ -19,15 +19,16 @@ import {
 
 export const TraderPositionRoute: React.FunctionComponent = () => {
   return (
-    <BrokoliPage>
-      <PageSectionBox>
-        <LeftSectionBox>
+    <BrokoliPage data-testid="BrokoliPage">
+      <PageSectionBox data-testid="BrokoliPage-PageSectionBox">
+        <LeftSectionBox data-testid="BrokoliPage-LeftSectionBox">
           <VoltzLogo
+            data-testid="BrokoliPage-VoltzLogo"
             onClick={() => {
               window.open('https://voltz.xyz', '_blank');
             }}
           />
-          <CraftedByBox>
+          <CraftedByBox data-testid="BrokoliPage-CraftedByBox">
             <Typography colorToken="lavenderWeb4" typographyToken="primaryBodyXSmallRegular">
               crafted by
             </Typography>
@@ -39,17 +40,17 @@ export const TraderPositionRoute: React.FunctionComponent = () => {
             </Typography>
           </CraftedByBox>
         </LeftSectionBox>
-        <RightPageSectionBox>
-          <TopSectionBox>
+        <RightPageSectionBox data-testid="BrokoliPage-RightPageSectionBox">
+          <TopSectionBox data-testid="BrokoliPage-TopSectionBox">
             <Nav />
-            <TopSectionRightContent>
+            <TopSectionRightContent data-testid="BrokoliPage-TopSectionRightContent">
               <WalletConnectModal useNewUI={true} />
               <ChainSelector />
             </TopSectionRightContent>
           </TopSectionBox>
-          <MainAndFormSectionBox>
-            <MainSectionBox></MainSectionBox>
-            <RightSectionBox></RightSectionBox>
+          <MainAndFormSectionBox data-testid="BrokoliPage-MainAndFormSectionBox">
+            <MainSectionBox data-testid="BrokoliPage-MainSectionBox"></MainSectionBox>
+            <RightSectionBox data-testid="BrokoliPage-RightSectionBox"></RightSectionBox>
           </MainAndFormSectionBox>
         </RightPageSectionBox>
       </PageSectionBox>

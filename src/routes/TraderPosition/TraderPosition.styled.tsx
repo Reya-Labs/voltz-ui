@@ -20,6 +20,7 @@ export const TopSectionBox = styled('div')`
 `;
 
 export const TopSectionRightContent = styled('div')`
+  box-sizing: border-box;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -28,6 +29,7 @@ export const TopSectionRightContent = styled('div')`
 `;
 
 export const PageSectionBox = styled('div')`
+  box-sizing: border-box;
   display: flex;
   flex-direction: row;
   height: 100%;
@@ -35,14 +37,18 @@ export const PageSectionBox = styled('div')`
 `;
 
 export const RightPageSectionBox = styled('div')`
+  box-sizing: border-box;
   flex: 1;
-  height: 100%;
+
+  display: flex;
+  flex-direction: column;
 `;
 
 export const MainAndFormSectionBox = styled('div')`
+  box-sizing: border-box;
   display: flex;
   flex-direction: row;
-  height: 100%;
+  flex: 1;
 `;
 
 export const LeftSectionBox = styled('div')`
@@ -63,10 +69,12 @@ export const LeftSectionBox = styled('div')`
   backdrop-filter: blur(2px);
 `;
 export const MainSectionBox = styled('div')`
+  box-sizing: border-box;
   flex: 1;
   height: 100%;
 `;
 export const RightSectionBox = styled('div')`
+  box-sizing: border-box;
   width: 416px;
   height: 100%;
 
@@ -74,6 +82,7 @@ export const RightSectionBox = styled('div')`
   backdrop-filter: blur(2px);
 `;
 export const CraftedByBox = styled('div')`
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
