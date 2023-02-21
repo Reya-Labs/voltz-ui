@@ -44,8 +44,8 @@ export const TraderPositionRoute: React.FunctionComponent = () => {
           <TopSectionBox data-testid="BrokoliPage-TopSectionBox">
             <Nav />
             <TopSectionRightContent data-testid="BrokoliPage-TopSectionRightContent">
-              <WalletConnectModal useNewUI={true} />
               <ChainSelector />
+              <WalletConnectModal useNewUI={true} />
             </TopSectionRightContent>
           </TopSectionBox>
           <MainAndFormSectionBox data-testid="BrokoliPage-MainAndFormSectionBox">
