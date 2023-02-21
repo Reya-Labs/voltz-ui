@@ -26,6 +26,7 @@ export type PositionTableHeadProps = {
   onSelect?: (mode: 'margin' | 'liquidity' | 'notional') => void;
   beforeMaturity?: boolean;
   healthFactor?: number;
+  isBothTraderAndLP: boolean;
 };
 
 const containerStyles: SystemStyleObject<Theme> = {
@@ -46,6 +47,7 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
   onSelect,
   beforeMaturity,
   healthFactor,
+  isBothTraderAndLP,
 }) => {
   const handleEditNotional = () => {
     onSelect && onSelect('notional');
@@ -54,7 +56,10 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
   return (
     <Box sx={containerStyles}>
       <Box sx={{ display: 'flex' }}>
-        <PositionBadge variant={getPositionBadgeVariant(positionType)} />
+        <PositionBadge
+          isBothTraderAndLP={isBothTraderAndLP}
+          variant={getPositionBadgeVariant(positionType)}
+        />
       </Box>
 
       <Box sx={{ display: 'flex' }}>
