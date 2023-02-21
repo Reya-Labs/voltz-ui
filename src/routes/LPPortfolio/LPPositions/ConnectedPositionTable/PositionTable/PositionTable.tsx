@@ -64,6 +64,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                   isBorrowing(position.amm.rateOracle.protocolId),
                 )}
                 healthFactor={position.healthFactor}
+                isBothTraderAndLP={position.isBothTraderAndLP ?? false}
                 isSettled={position.isSettled}
                 rolloverAvailable={rolloverAvailable}
                 onRollover={() => handleSelectRow(position, 'rollover')}

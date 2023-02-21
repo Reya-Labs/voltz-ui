@@ -12,4 +12,5 @@ const Template: ComponentStory<typeof PositionBadge> = (args) => <PositionBadge 
 export const Primary = Template.bind({});
 Primary.args = {
   variant: 'FT',
+  isBothTraderAndLP: false,
 };

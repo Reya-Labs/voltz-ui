@@ -120,6 +120,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                   isBorrowing(pos.amm.rateOracle.protocolId),
                 )}
                 healthFactor={pos.healthFactor}
+                isBothTraderAndLP={pos.isBothTraderAndLP ?? false}
                 isSettled={pos.isSettled}
                 poolTraderWithdrawable={
                   pools.find((pool) => pool.id === pos.amm.id)?.traderWithdrawable ?? true
