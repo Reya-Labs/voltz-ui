@@ -5,10 +5,8 @@ export const selectNotionalAmount = (state: RootState) =>
   state.swapForm.prospectiveSwap.notionalAmount;
 
 // ------------ Cashflow Calculator Selectors ------------
-export const selectCashflowCalculatorInitialised = (state: RootState) =>
-  state.swapForm.cashflowCalculator.initialised;
-export const selectCashflowCalculatorErrorState = (state: RootState) =>
-  state.swapForm.cashflowCalculator.error;
+export const selectCashflowCalculatorStatus = (state: RootState) =>
+  state.swapForm.cashflowCalculator.status;
 export const selectPredictedApy = (state: RootState) =>
   state.swapForm.cashflowCalculator.predictedApy;
 export const selectAdditionalCashflow = (state: RootState) =>
