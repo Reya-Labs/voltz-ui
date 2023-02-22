@@ -12,7 +12,7 @@ export const CashFlowCalculatorBox = styled('div')`
   position: relative;
   height: 80px;
 
-  background: linear-gradient(90.95deg, #0b0911 0.66%, #181524 99.34%);
+  background: linear-gradient(90.95deg, ${colors.liberty8} 0.66%, ${colors.lavenderWeb8} 99.34%);
   opacity: 0.9;
   backdrop-filter: blur(2px);
 
