@@ -87,25 +87,23 @@ export const PositionBadge = ({
 }: PositionBadgeProps) => {
   if (variant)
     return (
-      <Box display="flex" flexDirection="row">
-        <Box sx={{ ...sx, ...styles[variant] }}>
-          <Typography
-            sx={{ color: 'unset', fontSize: size === 'small' ? '12px' : '14px', lineHeight: '1' }}
-            variant="body2"
-          >
-            {isBothTraderAndLP ? (
-              <IconLabel
-                icon="information-circle"
-                info={
-                  'Note that for this pool, the margin of your trade positions will be shared with the margin of your LP position opened between 1% and 997.9%, since this represents the default range for trade positions.'
-                }
-                label={text || labels[variant]}
-              />
-            ) : (
-              text || labels[variant]
-            )}
-          </Typography>
-        </Box>
+      <Box sx={{ ...sx, ...styles[variant] }}>
+        <Typography
+          sx={{ color: 'unset', fontSize: size === 'small' ? '12px' : '14px', lineHeight: '1' }}
+          variant="body2"
+        >
+          {isBothTraderAndLP ? (
+            <IconLabel
+              icon="information-circle"
+              info={
+                'Note that for this pool, the margin of your trade positions will be shared with the margin of your LP position opened between 1% and 997.9%, since this represents the default range for trade positions.'
+              }
+              label={text || labels[variant]}
+            />
+          ) : (
+            text || labels[variant]
+          )}
+        </Typography>
       </Box>
     );
 
