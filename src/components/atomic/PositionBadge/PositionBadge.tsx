@@ -1,8 +1,8 @@
 import Box from '@mui/material/Box';
 import { SystemStyleObject, Theme } from '@mui/system';
-import React from 'react';
 
 import { colors } from '../../../theme';
+import { IconLabel } from '../../composite/IconLabel/IconLabel';
 import { Typography } from '../Typography/Typography';
 
 type PositionBadgeVariant = 'FT' | 'VT' | 'LP' | 'FC';
@@ -12,6 +12,7 @@ export type PositionBadgeProps = {
   size?: 'small' | 'medium';
   text?: string;
   variant?: PositionBadgeVariant;
+  isBothTraderAndLP: boolean;
 };
 
 const labels: Record<PositionBadgeVariant, string> = {
@@ -77,7 +78,13 @@ export const getPositionBadgeVariant = (positionType: number) => {
   }
 };
 
-export const PositionBadge = ({ size = 'medium', sx = {}, text, variant }: PositionBadgeProps) => {
+export const PositionBadge = ({
+  size = 'medium',
+  sx = {},
+  text,
+  variant,
+  isBothTraderAndLP,
+}: PositionBadgeProps) => {
   if (variant)
     return (
       <Box sx={{ ...sx, ...styles[variant] }}>
@@ -85,7 +92,17 @@ export const PositionBadge = ({ size = 'medium', sx = {}, text, variant }: Posit
           sx={{ color: 'unset', fontSize: size === 'small' ? '12px' : '14px', lineHeight: '1' }}
           variant="body2"
         >
-          {text || labels[variant]}
+          {isBothTraderAndLP ? (
+            <IconLabel
+              icon="information-circle"
+              info={
+                'Note that for this pool, the margin of your trade positions will be shared with the margin of your LP position opened between 1% and 997.9%, since this represents the default range for trade positions.'
+              }
+              label={text || labels[variant]}
+            />
+          ) : (
+            text || labels[variant]
+          )}
         </Typography>
       </Box>
     );

@@ -146,6 +146,7 @@ export const MintBurnCurrentPosition: React.FunctionComponent<MintBurnCurrentPos
           sx={{ display: 'flex', alignItems: 'center', marginBottom: (theme) => theme.spacing(6) }}
         >
           <PositionBadge
+            isBothTraderAndLP={position?.isBothTraderAndLP ?? false}
             size="small"
             sx={{ display: 'inline-block', marginLeft: 0 }}
             text={currentPositionBadgeText}
