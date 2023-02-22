@@ -81,7 +81,7 @@ export const removeFormat = (formattedValue: string | undefined): string | undef
  */
 export const toUSFormat = (value: string | undefined): string | undefined => {
   if (withCommaDecimalSeparator()) {
-    return value?.split('.').join('-').split(',').join('.').split('-').join(',');
+    return value?.split('.').join('#').split(',').join('.').split('#').join(',');
   }
   return value;
 };

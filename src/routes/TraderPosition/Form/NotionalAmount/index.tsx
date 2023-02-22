@@ -1,12 +1,20 @@
 import { CurrencyField, Typography } from 'brokoli-ui';
 import React, { useCallback } from 'react';
 
-import { selectNotionalAmount, setNotionalAmountAction } from '../../../../app/features/swap-form';
+import {
+  refreshCashflows,
+  selectNotionalAmount,
+  setNotionalAmountAction,
+} from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { useAMMs } from '../../../../hooks/useAMMs';
 import { NotionalAmountBox } from './NotionalAmount.styled';
 type NotionalAmountProps = {};
 
 export const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = () => {
+  //TODO Alex: get AMM as selected for this swap form
+  const { aMMs, loading, error } = useAMMs();
+
   const notionalAmount = useAppSelector(selectNotionalAmount);
   const dispatch = useAppDispatch();
   const handleOnChange = useCallback(
@@ -19,8 +27,15 @@ export const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = () =
           value,
         }),
       );
+      if (!loading && !error && aMMs.length > 0) {
+        dispatch(
+          refreshCashflows({
+            amm: aMMs[0],
+          }),
+        );
+      }
     },
-    [dispatch],
+    [dispatch, aMMs, loading, error],
   );
 
   return (

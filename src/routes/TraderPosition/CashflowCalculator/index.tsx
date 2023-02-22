@@ -1,6 +1,18 @@
 import { CurrencyField, LabelTokenTypography, Typography } from 'brokoli-ui';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
+import {
+  refreshCashflows,
+  selectAdditionalCashflow,
+  selectCashflowCalculatorErrorState,
+  selectCashflowCalculatorInitialised,
+  selectPredictedApy,
+  selectTotalCashflow,
+  setPredictedApyAction,
+} from '../../../app/features/swap-form';
+import { initialiseCashflowCalculator } from '../../../app/features/swap-form/thunks';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { useAMMs } from '../../../hooks/useAMMs';
 import {
   AdditionalCashFlowBox,
   CashFlowCalculatorBox,
@@ -13,12 +25,45 @@ import {
 type CashFlowCalculatorProps = {};
 
 export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps> = () => {
-  const [expectedVariableAPY, setExpectedVariableAPY] = useState<string | undefined>('0');
-  // todo: alex read the 3 variables from the swapForm feature
+  const dispatch = useAppDispatch();
+  //TODO Alex: get AMM as selected for this swap form
+  const { aMMs, loading, error } = useAMMs();
+
+  const initialised = useAppSelector(selectCashflowCalculatorInitialised);
+  const predictedApy = useAppSelector(selectPredictedApy);
+  const cashflowCalculatorError = useAppSelector(selectCashflowCalculatorErrorState);
+
+  const additonalCashflow = useAppSelector(selectAdditionalCashflow);
+  const totalCashflow = useAppSelector(selectTotalCashflow);
+
+  //TODO Alex
   useEffect(() => {
-    // dispatch a thunk
-    // todo: initialiseCashflowCalculatorThunk
-  }, []);
+    if (!loading && !error && aMMs.length > 0 && !initialised) {
+      void dispatch(initialiseCashflowCalculator({ amm: aMMs[0] }));
+    }
+  }, [aMMs, loading, error]);
+
+  const handleOnChange = useCallback(
+    (value?: string) => {
+      if (!value) {
+        return;
+      }
+      dispatch(
+        setPredictedApyAction({
+          value,
+        }),
+      );
+      if (!loading && !error && aMMs.length > 0) {
+        //TODO Alex
+        dispatch(
+          refreshCashflows({
+            amm: aMMs[0],
+          }),
+        );
+      }
+    },
+    [dispatch, aMMs],
+  );
 
   return (
     <CashFlowCalculatorBox>
@@ -32,7 +77,13 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
           <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
             Expected Variable APY
           </Typography>
-          <CurrencyField suffix="%" value={expectedVariableAPY} onChange={setExpectedVariableAPY} />
+          <CurrencyField
+            disabled={!initialised}
+            error={cashflowCalculatorError}
+            suffix="%"
+            value={predictedApy}
+            onChange={handleOnChange}
+          />
         </ExpectedApyBox>
         <AdditionalCashFlowBox>
           <LabelTokenTypography
@@ -42,7 +93,7 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
             labelTypographyToken="primaryBodyXSmallRegular"
             token=" USDC"
             typographyToken="secondaryBodySmallRegular"
-            value="+0.00"
+            value={additonalCashflow}
           />
         </AdditionalCashFlowBox>
         <TotalCashFlowBox>
@@ -53,7 +104,7 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
             labelTypographyToken="primaryBodyXSmallRegular"
             token=" USDC"
             typographyToken="secondaryBodySmallRegular"
-            value="+0.00"
+            value={totalCashflow}
           />
         </TotalCashFlowBox>
       </CashFlowCalculatorRightBox>
