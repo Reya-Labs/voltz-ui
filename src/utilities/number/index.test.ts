@@ -122,13 +122,37 @@ describe('number', () => {
   });
 
   describe('stringToBigFloat', () => {
+    let languageGetter: ReturnType<typeof jest.spyOn>;
+
+    beforeEach(() => {
+      languageGetter = jest.spyOn(window.navigator, 'language', 'get');
+    });
+
     test.each([
-      ['1,00', 100],
-      ['100', 100],
-      ['1,2345', 12345],
+      ['1,00', 'en-US', 100],
+      ['100', 'en-US', 100],
+      ['1,2345', 'en-US', 12345],
+      ['1.0', 'en-US', 1],
+      ['-1.0', 'en-US', -1],
+      ['1.2', 'en-US', 1.2],
+      ['-1.2', 'en-US', -1.2],
+      ['1,123.0', 'en-US', 1123],
+      ['-1,123.0', 'en-US', -1123],
+      ['1,123.5', 'en-US', 1123.5],
+      ['-1,123.5', 'en-US', -1123.5],
+      ['1,0', 'en-DE', 1],
+      ['-1,0', 'en-DE', -1],
+      ['1,2', 'en-DE', 1.2],
+      ['-1,2', 'en-DE', -1.2],
+      ['1.123,0', 'en-DE', 1123],
+      ['-1.123,0', 'en-DE', -1123],
+      ['1.123,5', 'en-DE', 1123.5],
+      ['-1.123,5', 'en-DE', -1123.5],
     ])(
       'given stringValue=%p - stringToBigFloat should return expected output',
-      (stringValue, expected) => {
+      (stringValue, mockedNavigatorLanguage, expected) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+        languageGetter.mockReturnValue(mockedNavigatorLanguage);
         const retValue = stringToBigFloat(stringValue);
         expect(retValue).toEqual(expected);
       },

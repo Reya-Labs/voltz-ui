@@ -2,9 +2,9 @@ import { CurrencyField, Typography } from 'brokoli-ui';
 import React, { useCallback } from 'react';
 
 import {
-  refreshCashflows,
   selectNotionalAmount,
   setNotionalAmountAction,
+  updateCashflowCalculatorAction,
 } from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useAMMs } from '../../../../hooks/useAMMs';
@@ -29,7 +29,7 @@ export const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = () =
       );
       if (!loading && !error && aMMs.length > 0) {
         dispatch(
-          refreshCashflows({
+          updateCashflowCalculatorAction({
             amm: aMMs[0],
           }),
         );

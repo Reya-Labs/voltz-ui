@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 
-import { formatCurrency, toUSFormat } from '../../../utilities/number';
+import { stringToBigFloat } from '../../../utilities/number';
 import { initialiseCashflowCalculator } from './thunks';
 
 type SliceState = {
@@ -9,23 +9,21 @@ type SliceState = {
   position: Position | undefined;
   // State of prospective swap
   prospectiveSwap: {
-    // user-inputted notional amount
+    // User-inputted notional amount
     notionalAmount: string;
   };
   // State of cashflow calculator
   cashflowCalculator: {
-    // user-inputted predicted variable apy
+    // User-inputted predicted variable apy
     predictedApy: string;
-    // cached variable factor from termStart to now
+    // Cached variable factor from termStart to now
     variableFactorStartNow: number;
-    // Additional cashflow resulted from prospective swap, form now to termEnd.
-    additionalCashflow: string;
-    // Total cashflow resulted from past and prospective swaps, from termStart to termEnd.
-    totalCashflow: string;
-    // Flag that signals whether cashflow calculator was initialised
-    initialised: boolean;
-    // Flag that signals potential errors in cashflow calculation
-    error: boolean;
+    // Additional cashflow resulted from prospective swap, form now to termEnd
+    additionalCashflow: number;
+    // Total cashflow resulted from past and prospective swaps, from termStart to termEnd
+    totalCashflow: number;
+    // Status of cashflow calculation
+    status: 'idle' | 'pending' | 'succeeded' | 'failed';
   };
 };
 
@@ -38,10 +36,9 @@ const initialState: SliceState = {
   cashflowCalculator: {
     predictedApy: '0',
     variableFactorStartNow: 0,
-    additionalCashflow: '+0.00',
-    totalCashflow: '+0.00',
-    initialised: false,
-    error: false,
+    additionalCashflow: 0,
+    totalCashflow: 0,
+    status: 'idle',
   },
 };
 
@@ -68,13 +65,13 @@ export const slice = createSlice({
       }>,
     ) => {
       state.cashflowCalculator.predictedApy = value;
-      if (parseFloat(toUSFormat(value) as string) < 0) {
-        state.cashflowCalculator.error = true;
+      if (stringToBigFloat(state.cashflowCalculator.predictedApy) < 0) {
+        state.cashflowCalculator.status = 'failed';
       } else {
-        state.cashflowCalculator.error = false;
+        state.cashflowCalculator.status = 'succeeded';
       }
     },
-    refreshCashflows: (
+    updateCashflowCalculatorAction: (
       state,
       {
         payload: { amm },
@@ -82,7 +79,7 @@ export const slice = createSlice({
         amm: AMM; //TODO Alex: remove amm and use amm from state
       }>,
     ) => {
-      if (state.cashflowCalculator.error) {
+      if (state.cashflowCalculator.status === 'failed') {
         return;
       }
 
@@ -91,33 +88,27 @@ export const slice = createSlice({
         fixedTokenDeltaBalance: Number(state.prospectiveSwap.notionalAmount), //TODO Alex
         variableTokenDeltaBalance: -Number(state.prospectiveSwap.notionalAmount), //TODO Alex
         variableFactorStartNow: state.cashflowCalculator.variableFactorStartNow,
-        predictedVariableApy: Number(state.cashflowCalculator.predictedApy), //TODO Alex
+        predictedVariableApy: stringToBigFloat(state.cashflowCalculator.predictedApy), //TODO Alex
       });
 
-      state.cashflowCalculator.additionalCashflow = formatCurrency(
-        additionalCashflow,
-        true,
-        true,
-        2,
-        4,
-      );
-
-      state.cashflowCalculator.totalCashflow = formatCurrency(totalCashflow, true, true, 2, 4);
+      state.cashflowCalculator.additionalCashflow = additionalCashflow;
+      state.cashflowCalculator.totalCashflow = totalCashflow;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(initialiseCashflowCalculator.pending, (state, {}) => {
-        state.cashflowCalculator.initialised = false;
+        state.cashflowCalculator.status = 'pending';
       })
       .addCase(initialiseCashflowCalculator.rejected, (state, {}) => {
-        state.cashflowCalculator.error = true;
+        state.cashflowCalculator.status = 'failed';
       })
       .addCase(initialiseCashflowCalculator.fulfilled, (state, { payload }) => {
         state.cashflowCalculator.variableFactorStartNow = payload as number;
-        state.cashflowCalculator.initialised = true;
+        state.cashflowCalculator.status = 'succeeded';
       });
   },
 });
-export const { setNotionalAmountAction, setPredictedApyAction, refreshCashflows } = slice.actions;
+export const { setNotionalAmountAction, setPredictedApyAction, updateCashflowCalculatorAction } =
+  slice.actions;
 export const swapFormReducer = slice.reducer;

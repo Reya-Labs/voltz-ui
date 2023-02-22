@@ -92,9 +92,9 @@ export const toUSFormat = (value: string | undefined): string | undefined => {
  * @returns A function that takes a string and returns a number.
  */
 export const stringToBigFloat = (stringValue: string): number => {
-  let formattedValue = stringValue;
-  if (stringValue.includes(',')) {
-    formattedValue = stringValue.split(',').join('');
+  let formattedValue = toUSFormat(stringValue) as string;
+  if (formattedValue.includes(',')) {
+    formattedValue = formattedValue.split(',').join('');
   }
   return parseFloat(formattedValue);
 };
