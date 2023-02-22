@@ -8,11 +8,7 @@ import { useWallet } from '../../../../hooks/useWallet';
 import { colors } from '../../../../theme';
 import { getAmmProtocol } from '../../../../utilities/amm';
 import { DataLayerEventPayload, pushEvent } from '../../../../utilities/googleAnalytics';
-import {
-  formatNumber,
-  removeFormat,
-  stringToBigFloat,
-} from '../../../../utilities/number';
+import { formatNumber, removeFormat, stringToBigFloat } from '../../../../utilities/number';
 import { Typography } from '../../../atomic/Typography/Typography';
 import { IconLabel } from '../../../composite/IconLabel/IconLabel';
 import { MaskedIntegerField } from '../../../composite/MaskedIntegerField/MaskedIntegerField';
