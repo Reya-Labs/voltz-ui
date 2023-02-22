@@ -49,6 +49,7 @@ export type State = {
 
 export type SerializedAMM = {
   id: string;
+  peripheryAddress: string;
   factoryAddress: string;
   marginEngineAddress: string;
   termStartTimestampInMS: string;
