@@ -1,5 +1,5 @@
 import { CurrencyField, LabelTokenTypography, Typography } from 'brokoli-ui';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   AdditionalCashFlowBox,
@@ -14,6 +14,12 @@ type CashFlowCalculatorProps = {};
 
 export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps> = () => {
   const [expectedVariableAPY, setExpectedVariableAPY] = useState<string | undefined>('0');
+  // todo: alex read the 3 variables from the swapForm feature
+  useEffect(() => {
+    // dispatch a thunk
+    // todo: initialiseCashflowCalculatorThunk
+  }, []);
+
   return (
     <CashFlowCalculatorBox>
       <CashFlowCalculatorLeftBox>
@@ -26,7 +32,7 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
           <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
             Expected Variable APY
           </Typography>
-          <CurrencyField value={expectedVariableAPY} onChange={setExpectedVariableAPY} />
+          <CurrencyField suffix="%" value={expectedVariableAPY} onChange={setExpectedVariableAPY} />
         </ExpectedApyBox>
         <AdditionalCashFlowBox>
           <LabelTokenTypography
