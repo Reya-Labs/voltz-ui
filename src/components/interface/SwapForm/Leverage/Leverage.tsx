@@ -9,7 +9,6 @@ import {
   formatNumber,
   removeFormat,
   stringToBigFloat,
-  toUSFormat,
 } from '../../../../utilities/number';
 import { IconLabel } from '../../../composite/IconLabel/IconLabel';
 import { MaskedIntegerField } from '../../../composite/MaskedIntegerField/MaskedIntegerField';
@@ -83,8 +82,7 @@ export const Leverage = ({
 
   const handleChangeInput = (inputVal: string | undefined) => {
     if (inputVal) {
-      const usFormatted = toUSFormat(inputVal);
-      const newValue = usFormatted ? stringToBigFloat(usFormatted) : NaN;
+      const newValue = stringToBigFloat(inputVal);
       if (!isNaN(newValue)) {
         setInputValue(inputVal);
         window.clearInterval(timer.current);
