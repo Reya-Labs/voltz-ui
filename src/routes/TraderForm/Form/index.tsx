@@ -1,7 +1,14 @@
 import { Typography } from 'brokoli-ui';
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
 
-import { FormBox, FormOuterBox, TitleBox } from './Form.styled';
+import {
+  selectFixedRateInfo,
+  selectMode,
+  selectVariableRateInfo,
+  setModeAction,
+} from '../../../app/features/swap-form';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { FormBox, , FormOuterBox, TitleBox } from './Form.styled';
 import { LeverageField } from './LeverageField';
 import { MarginAmountField } from './MarginAmountField';
 import { NotionalAmountField } from './NotionalAmountField';
@@ -10,8 +17,27 @@ import { SubmitButton } from './SubmitButton';
 import { TransactionDetails } from './TransactionDetails';
 
 export const Form: React.FunctionComponent = () => {
+  const dispatch = useAppDispatch();
+
+  const fixedRateInfo = useAppSelector(selectFixedRateInfo);
+  const variableRateInfo = useAppSelector(selectVariableRateInfo);
+  const mode = useAppSelector(selectMode);
+
+  const handleOnChange = useCallback(
+    (value?: 'fixed' | 'variable') => {
+      if (!value) {
+        return;
+      }
+      dispatch(
+        setModeAction({
+          value,
+        }),
+      );
+    },
+    [dispatch],
+  );
+
   // TODO: move the mode to the redux store
-  const [mode, setMode] = useState<'fixed' | 'variable'>('fixed');
   return (
     <FormOuterBox>
       <TitleBox>
@@ -20,7 +46,11 @@ export const Form: React.FunctionComponent = () => {
         </Typography>
       </TitleBox>
       <FormBox>
-        <NotionalSwap fixedRate={5.49} mode={mode} variableRate={2.49} onSwap={setMode} />
+        <NotionalSwap fixedRate={fixedRateInfo.value}
+                      mode={mode}
+                      variableRate={variableRateInfo.value}
+                      onSwap={handleOnChange}
+        />
         <NotionalAmountField />
         <LeverageField />
         <MarginAmountField />
