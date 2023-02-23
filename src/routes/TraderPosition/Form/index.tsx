@@ -14,7 +14,7 @@ export const Form: React.FunctionComponent = () => {
       </Typography>
       <NotionalSwap fixedRate={5.49} mode={mode} variableRate={2.49} onSwap={setMode} />
 
-      <Typography typographyToken="primaryBodyExtraLargeRegular">
+      <Typography colorToken="lavenderWeb" typographyToken="primaryBodyExtraLargeRegular">
         Engineers at work 👨🛠📋 <Ellipsis />
       </Typography>
     </FormBox>

@@ -2,10 +2,10 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { ChainSelector as BrokoliChainSelector } from 'brokoli-ui';
 import React, { useCallback, useEffect, useMemo } from 'react';
 
-import { selectChainChangeState, selectChainId } from '../../../app/features/network';
-import { setChainIdThunk } from '../../../app/features/network/thunks';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { setChainId } from '../../../utilities/network/chain-store';
+import { selectChainChangeState, selectChainId } from '../../../../app/features/network';
+import { setChainIdThunk } from '../../../../app/features/network/thunks';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { setChainId } from '../../../../utilities/network/chain-store';
 import { getChainOptions } from './get-chain-options';
 
 export const ChainSelector: React.FunctionComponent = () => {
